@@ -1,482 +1,242 @@
 import numpy as np
-import numdifftools as nd
-from scipy.optimize import root, least_squares
 from gekko import GEKKO
-import pyomo.environ as pyo
 
-def PC_SAFT_GEKKO(T, z, m, σ, ϵ_k, k_ij, η=None, phase='liquid', P_sys=None, κ_AB=None, ϵ_AB_k=None):
 
-    model = GEKKO()
+def PC_SAFT_bubble_T(x, yg, T, Pg, m_seg, σ, ϵ_k, k_ij, κ_AB=None, ϵ_AB_k=None):
 
-    a_ni = model.Const(np.array([[0.9105631445, -0.3084016918, -0.0906148351],
-                             [0.6361281449, 0.1860531159, 0.4527842806],
-                             [2.6861347891, -2.5030047259, 0.5962700728],
-                             [-26.547362491, 21.419793629, -1.7241829131],
-                             [97.759208784, -65.255885330, -4.1302112531],
-                             [-159.59154087, 83.318680481, 13.776631870],
-                             [91.297774084, -33.746922930, -8.6728470368]]).T)
+    def get_i_name(name_i):
+        names = [m._intermediates[i].name for i in range(len(m._intermediates))]
+        if name_i in names:
+            count = sum([name_i in name for name in names])
+            name_i += ' - ' + str(count)
+        return name_i
 
-    b_ni = model.Const(np.array([[0.7240946941, -0.5755498075, 0.0976883116],
+    def f_m_bar(m, z):
+        return m.Intermediate(sum([z[i] * m_seg[i] for i in range(k)]))
+
+    def f_v(m, z, eta, T):
+        ρ = f_ρ(m, z, eta, T)
+        return N_A * 10 ** -30 / ρ
+
+    def f_d(m, T):
+
+        return [m.Intermediate(σ[i] * (1 - .12 * exp(-3 * ϵ_k[i] / T))) for i in
+                range(k)]
+
+    def f_ρ(m, z, eta, T):
+        d = f_d(m, T)
+        return m.Intermediate(6 / π * eta * sum([(z[i] * m_seg[i] * d[i] ** 3) for i in range(k)]) ** (-1))
+
+    def f_ξ(m, z, T, ρ):
+        d = f_d(m, T)
+        return [m.Intermediate(π / 6 * ρ * sum([z[i] * m_seg[i] * d[i] ** n for i in range(k)])) for n in range(4)]
+
+    def f_g_hs_ij(m, z, T, ρ):
+        d = f_d(m, T)
+        ξ = f_ξ(m, z, T, ρ)
+        return [[m.Intermediate((1 / (1 - ξ[3])) +
+                                ((d[i] * d[j] / (d[i] + d[j])) * 3 * ξ[2] / (1 - ξ[3]) ** 2) +
+                                ((d[i] * d[j] / (d[i] + d[j])) ** 2 * 2 * ξ[2] ** 2 / (1 - ξ[3]) ** 3))
+                 for j in range(k)]
+                for i in range(k)]
+
+    def f_d_ij(m, d):
+        return [[m.Intermediate(1 / 2 * (d[i] + d[j])) for j in range(k)] for i in
+                range(k)]
+
+    # Δ_AB_ij = m.Intermediate(
+    #     [[d_ij[i][j] ** 3 * g_hs_ij[i][j] * m.κ_AB_ij[i][j] * (exp(m.ϵ_AB_ij[i][j] / T) - 1)
+    #                for j in range(k)] for i in range(k)])
+
+    def f_a_hs(m, z, T, ρ):
+        ξ = f_ξ(m, z, T, ρ)
+        return m.Intermediate(1 / ξ[0] * (3 * ξ[1] * ξ[2] / (1 - ξ[3]) + ξ[2] ** 3 / (ξ[3] * (1 - ξ[3]) ** 2) + (
+                ξ[2] ** 3 / ξ[3] ** 2 - ξ[0]) * log(1 - ξ[3])))
+
+    def f_a_hc(m, z, T, ρ):
+        m_bar = f_m_bar(m, z)
+        g_hs_ij = f_g_hs_ij(m, z, T, ρ)
+        a_hs = f_a_hs(m, z, T, ρ)
+        return m.Intermediate(m_bar * a_hs - sum([z[i] * (m_seg[i] - 1) * log(g_hs_ij[i][i]) for i in range(k)]))
+
+    def f_a_disp(m, z, T, ρ):
+        m_bar = f_m_bar(m, z)
+        eta = f_ξ(m, z, T, ρ)[-1]
+
+        a = [
+            a_ni[0, i] + (m_bar - 1) / m_bar * a_ni[1, i] + (m_bar - 1) / m_bar * (m_bar - 2) / m_bar * a_ni[2, i]
+            for i in range(7)]
+        b = [
+            b_ni[0, i] + (m_bar - 1) / m_bar * b_ni[1, i] + (m_bar - 1) / m_bar * (m_bar - 2) / m_bar * b_ni[2, i]
+            for i in range(7)]
+
+        I1 = sum([a[i] * eta ** i for i in range(7)])
+        I2 = sum([b[i] * eta ** i for i in range(7)])
+
+        Σ_1 = sum([sum([z[i] * z[j] * m_seg[i] * m_seg[j] * (ϵ_ij[i][j] / T) * σ_ij[i][j] ** 3
+                        for j in range(k)])
+                   for i in range(k)])
+        Σ_2 = sum([sum([z[i] * z[j] * m_seg[i] * m_seg[j] * (ϵ_ij[i][j] / T) ** 2 * σ_ij[i][j] ** 3
+                        for j in range(k)])
+                   for i in range(k)])
+
+        C1 = (1 + m_bar * (8 * eta - 2 * eta ** 2) / (1 - eta) ** 4 +
+              (1 - m_bar) * (20 * eta - 27 * eta ** 2 + 12 * eta ** 3 - 2 * eta ** 4) / (
+                          (1 - eta) * (2 - eta)) ** 2) ** -1
+        return m.Intermediate(-2 * π * ρ * I1 * Σ_1 - π * ρ * m_bar * C1 * I2 * Σ_2)
+
+    def f_a_res(m, z, T, ρ):
+
+        a_hc = f_a_hc(m, z, T, ρ)
+        a_disp = f_a_disp(m, z, T, ρ)
+        return m.Intermediate(a_hc + a_disp)
+
+    def f_da_res_deta(m, z, eta, T):
+        δ = .0001
+        h = eta * δ
+        eta1 = eta - 2 * h
+        eta2 = eta - 1 * h
+        eta3 = eta + 1 * h
+        eta4 = eta + 2 * h
+        a_res_1 = f_a_res(m, z, T, f_ρ(m, z, eta1, T))
+        a_res_2 = f_a_res(m, z, T, f_ρ(m, z, eta2, T))
+        a_res_3 = f_a_res(m, z, T, f_ρ(m, z, eta3, T))
+        a_res_4 = f_a_res(m, z, T, f_ρ(m, z, eta4, T))
+        return m.Intermediate((a_res_1 - 8 * a_res_2 + 8 * a_res_3 - a_res_4) / (12 * h))
+
+    def f_da_res_dT(m, z, eta, T):
+        δ = .0001
+        h = T * δ
+        ρ = f_ρ(m, z, eta, T)
+        a_res_1 = f_a_res(m, z, T - 2 * h, ρ)
+        a_res_2 = f_a_res(m, z, T - 1 * h, ρ)
+        a_res_3 = f_a_res(m, z, T + 1 * h, ρ)
+        a_res_4 = f_a_res(m, z, T + 2 * h, ρ)
+
+        return m.Intermediate((a_res_1 - 8 * a_res_2 + 8 * a_res_3 - a_res_4) / (12 * h))
+
+    def f_da_res_dz(m, z, eta, T, j):
+        δ = .0001
+        h = z[j] * δ
+
+        diff = [-2 * h, -h, h, 2 * h]
+        z_new = m.Array(m.Param, (4, 3))
+        for n in range(4):
+            for i in range(len(z)):
+                if i == j:
+                    z_new[n, i] = z[i] + diff[n]
+                else:
+                    z_new[n, i] = z[i]
+
+        a_res_1 = f_a_res(m, z_new[0], T, f_ρ(m, z, eta, T))
+        a_res_2 = f_a_res(m, z_new[1], T, f_ρ(m, z, eta, T))
+        a_res_3 = f_a_res(m, z_new[2], T, f_ρ(m, z, eta, T))
+        a_res_4 = f_a_res(m, z_new[3], T, f_ρ(m, z, eta, T))
+        return m.Intermediate((a_res_1 - 8 * a_res_2 + 8 * a_res_3 - a_res_4) / (12 * h))
+
+    def f_Z(m, z, eta, T):
+        da_res_deta = f_da_res_deta(m, z, eta, T)
+        return m.Intermediate(1 + eta * da_res_deta)
+
+    def f_P(m, z, eta, T):
+        Z = f_Z(m, z, eta, T)
+        ρ = f_ρ(m, z, eta, T)
+        return m.Intermediate(Z * kb * T * ρ * 10 ** 30)
+
+    def f_h_res_RT(m, z, eta, T):
+        da_res_dT = f_da_res_dT(m, z, eta, T)
+        Z = f_Z(m, z, eta, T)
+
+        return m.Intermediate(-T * da_res_dT + (Z - 1))
+
+    def f_s_res_RT(m, z, eta, T):
+        ρ = f_ρ(m, z, eta, T)
+        da_res_dT = f_da_res_dT(m, z, eta, T)
+        a_res = f_a_res(m, z, T, ρ)
+        Z = f_Z(m, z, eta, T)
+
+        return m.Intermediate(-T * (da_res_dT + a_res / T) + log(Z))
+
+    def f_g_res_RT(m, z, eta, T):
+        ρ = f_ρ(m, z, eta, T)
+        a_res = f_a_res(m, z, T, ρ)
+        Z = f_Z(m, z, eta, T)
+        name = get_i_name('g_res_RT')
+        return m.Intermediate(a_res + (Z - 1) - log(Z))
+
+    def f_μ_res_kT(m, z, eta, T):
+        ρ = f_ρ(m, z, eta, T)
+        a_res = f_a_res(m, z, T, ρ)
+        Z = f_Z(m, z, eta, T)
+        da_res_z = [f_da_res_dz(m, z, eta, T, i) for i in range(len(z))]
+        Σ = sum([z[i] * da_res_z[i] for i in range(len(z))])
+        μ_res = [m.Intermediate((a_res + (Z - 1) + da_res_z[i] - Σ)) for i in
+                 range(len(z))]
+
+        return μ_res
+
+    def f_φ(m, z, eta, T):
+
+        μ_res_kT = f_μ_res_kT(m, z, eta, T)
+        Z = f_Z(m, z, eta, T)
+        return [m.Intermediate(exp(μ_res_kT[i] - log(Z))) for i in range(3)]
+
+    a_ni = np.array([[0.9105631445, -0.3084016918, -0.0906148351],
+                     [0.6361281449, 0.1860531159, 0.4527842806],
+                     [2.6861347891, -2.5030047259, 0.5962700728],
+                     [-26.547362491, 21.419793629, -1.7241829131],
+                     [97.759208784, -65.255885330, -4.1302112531],
+                     [-159.59154087, 83.318680481, 13.776631870],
+                     [91.297774084, -33.746922930, -8.6728470368]]).T
+
+    b_ni = np.array([[0.7240946941, -0.5755498075, 0.0976883116],
                      [2.2382791861, 0.6995095521, -0.2557574982],
                      [-4.0025849485, 3.8925673390, -9.1558561530],
                      [-21.003576815, -17.215471648, 20.642075974],
                      [26.855641363, 192.67226447, -38.804430052],
                      [206.55133841, -161.82646165, 93.626774077],
-                     [-355.60235612, -165.20769346, -29.666905585]]).T)
-
-
-    kb = model.Const(1.380649e-23)  # J/K
-    N_A = model.Const(6.0221e23)  # 1/mol
-    R = model.Const(8.314)  # J/mol-K
-    π = model.Const(np.pi)
-
-    # Parameters
-    T = model.Param(T)
-    T_og = model.Param(T)
-    z = model.Param(z)
-    z_og = model.Param(z)
-    m = model.Param(m)
-    k = model.Param(len(σ))
-    σ = model.Param(σ)
-    ϵ_k = model.Param(ϵ_k)
-    κ_AB = model.Param(κ_AB)
-    ϵ_AB_k = model.Param(ϵ_AB_k)
-    η_diff = model.Param(False)
-    T_diff = model.Param(False)
-    x_diff = model.Param(False)
-    d_static = model.Param(σ * (1 - .12 * np.exp(-3 * ϵ_k / T)))
-
-
-    if κ_AB is None:
-        κ_AB = model.Param(np.zeros(k))
-
-    if ϵ_AB_k is None:
-        ϵ_AB_k = model.Param(np.zeros(k))
-
-    # --------------------------------------- Intermediates --------------------------------------- #
-
-    σ_ij = model.Intermediate(np.array([[1 / 2 * (σ[i] + σ[j]) for j in range(k)] for i in range(k)]))
-    ϵ_ij = model.Intermediate(np.array([[(ϵ_k[i] * ϵ_k[j]) ** (1 / 2) * (1 - k_ij[i][j]) for j in range(k)] for i in range(k)]))
-    κ_AB_ij = model.Intermediate(np.array([[(κ_AB[i] * κ_AB[j]) ** (1 / 2) * ((σ[i] * σ[j]) / (1 / 2 * (σ[i] * σ[j]))) ** 3 for j in range(k)] for i in range(k)]))
-    ϵ_AB_ij = model.Intermediate(np.array([[(ϵ_AB_k[i] + ϵ_AB_k[j]) / 2 for j in range(k)] for i in range(k)]))
-
-    if P_sys is not None:
-        P_sys = model.Param(P_sys)
-        phase = model.Param(phase)
-        model.find_η()
-    elif P_sys is None and η is not None:
-        model.η = η
-    elif P_sys is None and η is None:
-        if phase == 'liquid':
-            model.η = .4
-        elif phase == 'vapor':
-            model.η = .01
-        print(
-            'Warning, a default η had to be defined based on the given phase since so system pressure was given to iteratively find η')
-
-
-    def m_bar(model):
-        z = model.z
-        m = model.m
-
-        return sum(z * m)
-
-
-    def d(model):
-        T = model.T
-        σ = model.σ
-        ϵ_k = model.ϵ_k
-
-        return σ * (1 - .12 * np.exp(-3 * ϵ_k / T))
-
-
-    def d_og(model):
-        T = model.T_og
-        σ = model.σ
-        ϵ_k = model.ϵ_k
-
-        return σ * (1 - .12 * np.exp(-3 * ϵ_k / T))
-
-
-    def ρ(model):
-        z = model.z_og
-        η = model.η
-        d = model.d_static
-        m = model.m
-        k = model.k
-        return 6 / model.π * η * (sum([z[i] * m[i] * d[i] ** 3 for i in range(k)])) ** (-1)
-
-
-    def v(model):
-        ρ = model.ρ()
-        return model.N_A * 10 ** -30 / ρ
-
-
-    def ξ(model):
-        z = model.z
-        d = model.d()
-        ρ = model.ρ()
-        m = model.m
-        return np.array([model.π / 6 * ρ * np.sum([z[i] * m[i] * d[i] ** n for i in range(model.k)]) for n in range(4)])
-
-
-    def g_hs_ij(model):
-        d = model.d()
-        ξ = model.ξ()
-
-        return np.array([[(1 / (1 - ξ[3])) +
-                          ((d[i] * d[j] / (d[i] + d[j])) * 3 * ξ[2] / (1 - ξ[3]) ** 2) +
-                          ((d[i] * d[j] / (d[i] + d[j])) ** 2 * 2 * ξ[2] ** 2 / (1 - ξ[3]) ** 3)
-                          for j in range(model.k)]
-                         for i in range(model.k)])
-
-
-    def d_ij(model):
-        d = model.d()
-        return np.array([[1 / 2 * (d[i] + d[j]) for j in range(model.k)] for i in range(model.k)])
-
-
-    def Δ_AB_ij(model):
-        T = model.T
-        d_ij = model.d_ij()
-        g_hs_ij = model.g_hs_ij()
-        return np.array([[d_ij[i][j] ** 3 * g_hs_ij[i][j] * model.κ_AB_ij[i][j] * (np.exp(model.ϵ_AB_ij[i][j] / T) - 1)
-                          for j in range(model.k)] for i in range(model.k)])
-
-
-    def a_hs(model):
-        ξ = model.ξ()
-        return 1 / ξ[0] * (3 * ξ[1] * ξ[2] / (1 - ξ[3]) + ξ[2] ** 3 / (ξ[3] * (1 - ξ[3]) ** 2) + (
-                ξ[2] ** 3 / ξ[3] ** 2 - ξ[0]) * np.log(1 - ξ[3]))
-
-
-    def a_hc(model):
-        z = model.z
-
-        k = model.k
-        m = model.m
-        m_bar = model.m_bar()
-        g_hs_ij = model.g_hs_ij()
-        a_hs = model.a_hs()
-
-        return m_bar * a_hs - sum([z[i] * (m[i] - 1) * np.log(g_hs_ij[i][i]) for i in range(k)])
-
-
-    def a_disp(model):
-        T = model.T
-        z = model.z
-        η = model.ξ()[-1]
-
-        a_ni = model.a_ni
-        b_ni = model.b_ni
-        π = model.π
-        k = model.k
-        ρ = model.ρ()
-        m = model.m
-        m̄ = model.m_bar()
-        ϵ_ij = model.ϵ_ij
-        σ_ij = model.σ_ij
-
-        a = a_ni[0] + (m̄ - 1) / m̄ * a_ni[1] + (m̄ - 1) / m̄ * (m̄ - 2) / m̄ * a_ni[2]
-        b = b_ni[0] + (m̄ - 1) / m̄ * b_ni[1] + (m̄ - 1) / m̄ * (m̄ - 2) / m̄ * b_ni[2]
-
-        I1 = [a[i] * η ** i for i in range(7)]
-        I2 = [b[i] * η ** i for i in range(7)]
-
-        I1 = np.sum(I1)
-        I2 = np.sum(I2)
-
-        Σ_i = 0
-        for i in range(k):
-            Σ_j = 0
-            for j in range(k):
-                Σ_j += z[i] * z[j] * m[i] * m[j] * (ϵ_ij[i][j] / T) * σ_ij[i][j] ** 3
-            Σ_i += Σ_j
-        Σ_1 = Σ_i
-
-        Σ_i = 0
-        for i in range(k):
-            Σ_j = 0
-            for j in range(k):
-                Σ_j += z[i] * z[j] * m[i] * m[j] * (ϵ_ij[i][j] / T) ** 2 * σ_ij[i][j] ** 3
-            Σ_i += Σ_j
-        Σ_2 = Σ_i
-
-        C1 = (1 + m̄ * (8 * η - 2 * η ** 2) / (1 - η) ** 4 + (1 - m̄) * (
-                20 * η - 27 * η ** 2 + 12 * η ** 3 - 2 * η ** 4) / ((1 - η) * (2 - η)) ** 2) ** -1
-
-        return -2 * π * ρ * I1 * Σ_1 - π * ρ * m̄ * C1 * I2 * Σ_2
-
-
-    def a_assoc(model):
-        z = model.z
-        k = model.k
-        ρ = model.ρ()
-        ϵ_AB_k = model.ϵ_AB_k
-        Δ_AB_ij = model.Δ_AB_ij()
-
-        def XA_find(XA_guess, n, Δ_AB_ij, ρ, z):
-            # m = int(XA_guess.shape[1] / n)
-            AB_matrix = np.asarray([[0., 1.],
-                                    [1., 0.]])
-            Σ_2 = np.zeros((n,), dtype='float_')
-            XA = np.zeros_like(XA_guess)
-
-            for i in range(n):
-                Σ_2 = 0 * Σ_2
-                for j in range(n):
-                    Σ_2 += z[j] * (XA_guess[j, :] @ (Δ_AB_ij[i][j] * AB_matrix))
-                XA[i, :] = 1 / (1 + ρ * Σ_2)
-
-            return XA
-
-        a_sites = 2  # 2B association?
-        i_assoc = np.nonzero(ϵ_AB_k)
-        n_assoc = len(i_assoc)
-        if n_assoc == 0 or n_assoc == 1:
-            return 0
-        XA = np.zeros((n_assoc, a_sites), dtype='float_')
-
-        ctr = 0
-        dif = 1000.
-        XA_old = np.copy(XA)
-        while (ctr < 500) and (dif > 1e-9):
-            ctr += 1
-            XA = XA_find(XA, n_assoc, Δ_AB_ij, ρ, z[i_assoc])
-            dif = np.sum(abs(XA - XA_old))
-            XA_old[:] = XA
-        XA = XA.flatten()
-
-        return sum([z[i] * sum([np.log(XA[j] - 1 / 2 * XA[j] + 1 / 2) for j in range(len(XA))]) for i in range(k)])
-
-
-    def a_ion(model):
-        return 0
-
-
-    def a_res(model):
-        a_hc = model.a_hc()
-        a_disp = model.a_disp()
-        a_assoc = model.a_assoc()
-        a_ion = model.a_ion()
-
-        return a_hc + a_disp + a_assoc + a_ion
-
-
-    def da_dη(model):
-        η = model.η
-
-        model.η_og = model.η
-
-        def f(η_diff):
-            model.η = η_diff
-            return model.a_res()
-
-        model.η = model.η_og
-
-        return nd.Derivative(f)(η)
-
-
-    def da_dx(model):
-        z = model.z
-        model.z_og = model.z
-        da_dx = []
-        for k in range(len(z)):
-
-            def f(zk):
-
-                z_new = []
-                for i in range(len(z)):
-                    if i == k:
-                        z_new.append(zk)
-                    else:
-                        z_new.append(z[i])
-
-                model.z = z_new
-
-                return model.a_res()
-
-            model.z = model.z_og
-
-            da_dx.append(nd.Derivative(f)(z[k]))
-
-        model.z = model.z_og
-
-        return np.array(da_dx)
-
-
-    def da_dT(model):
-        T = model.T
-        model.T_og = model.T
-
-        def f(T_diff):
-            model.T = T_diff
-            return model.a_res()
-
-        model.T = model.T_og
-        return nd.Derivative(f)(T)
-
-
-    def Z(model):
-        η = model.η
-
-        da_dη = model.da_dη()
-
-        model.η = model.η_og
-
-        return 1 + η * da_dη
-
-
-    def P(model):
-        T = model.T
-        Z = model.Z()
-        ρ = model.ρ()
-        kb = model.kb
-
-        return Z * kb * T * ρ * 10 ** 30
-
-
-    def find_η(model):
-        def f(ηg):
-            model.η = float(ηg)
-            P = model.P()
-            P_sys = model.P_sys
-            return (P - P_sys) / 100000
-
-        phase = model.phase
-        if phase == 'liquid':
-            ηg = .5
-        elif phase == 'vapor':
-            ηg = 10e-10
-        else:
-            print('Phase spelling probably wrong or phase is missing')
-            ηg = .01
-        η = root(f, np.array([ηg])).x[0]
-
-        model.η = η
-
-
-    def h_res(model):
-        T = model.T
-        model.T_og = model.T
-
-        Z = model.Z()
-        da_dT = model.da_dT()
-
-        model.T = model.T_og
-
-        return -T * da_dT + (Z - 1)
-
-
-    def s_res(model):
-        T = model.T
-        model.T_og = model.T
-
-        a_res = model.a_res()
-        Z = model.Z()
-        da_dT = model.da_dT()
-
-        model.T = model.T_og
-
-        return -T * (da_dT + a_res / T) + np.log(Z)
-
-
-    def g_res(model):
-        a_res = model.a_res()
-        Z = model.Z()
-        return a_res + (Z - 1) - np.log(Z)
-
-
-    def μ_res(model):
-        z = model.z
-        T = model.T
-
-        a_res = model.a_res()
-        Z = model.Z()
-        da_dx = model.da_dx()
-
-        Σ = np.sum([z[j] * da_dx[j] for j in range(len(z))])
-
-        μ_res = [(a_res + (Z - 1) + da_dx[i] - Σ) * model.kb * T for i in range(len(z))]
-
-        return np.array(μ_res)
-
-
-    def φ(model):
-        T = model.T
-        μ_res = model.μ_res()
-        Z = model.Z()
-
-        return np.exp(μ_res / model.kb / T - np.log(Z))
-
-
-def flash(x, y, T, P, m, σ, ϵ_k, k_ij, flash_type='Bubble_T', κ_AB=None, ϵ_AB_k=None):
-    def eqs_to_solve(x, y, T, P, flash_type):
-
-        mix_l = PCSAFT(T, x, m, σ, ϵ_k, k_ij, phase='liquid', P_sys=P, κ_AB=κ_AB, ϵ_AB_k=ϵ_AB_k)
-        mix_v = PCSAFT(T, y, m, σ, ϵ_k, k_ij, phase='vapor', P_sys=P, κ_AB=κ_AB, ϵ_AB_k=ϵ_AB_k)
-
-        φ_l = mix_l.φ()
-        φ_v = mix_v.φ()
-
-        eqs = [(y[i] * φ_v[i] - x[i] * φ_l[i]) for i in range(len(y))]
-        if flash_type[:-2] == 'Bubble':
-            eqs.append(1 - np.sum([y[i] for i in range(len(y))]))
-        elif flash_type[:-2] == 'Dew':
-            eqs.append(1 - np.sum([x[i] for i in range(len(x))]))
-        else:
-            print('Wrong Flash Type')
-
-        return eqs
-
-    def f(w):
-        if flash_type == 'Bubble_T':
-            return eqs_to_solve(x, w[:-1], T, w[-1], flash_type)
-        elif flash_type == 'Bubble_P':
-            return eqs_to_solve(x, w[:-1], w[-1], P, flash_type)
-        elif flash_type == 'Dew_T':
-            return eqs_to_solve(w[:-1], y, T, w[-1], flash_type)
-        elif flash_type == 'Dew_P':
-            return eqs_to_solve(w[:-1], y, w[-1], P, flash_type)
-        else:
-            print('Wrong Flash Type')
-            return None
-
-    if flash_type == 'Bubble_T':
-        guesses = list(y) + [P]
-    elif flash_type == 'Bubble_P':
-        guesses = list(y) + [T]
-    elif flash_type == 'Dew_T':
-        guesses = list(x) + [P]
-    elif flash_type == 'Dew_P':
-        guesses = list(x) + [T]
-    else:
-        print('Wrong Flash Type')
-        guesses = []
-    options = {'xtol': 1e-4, }
-    ans = root(f, np.array([guesses]), options=options).x
-    return ans[:-1], ans[-1]
-
-
-def BPT_gekko(x, y, T, P, m, σ, ϵ_k, k_ij, κ_AB=None, ϵ_AB_k=None):
-    def fun(z):
-        y1, y2, y3, P = z
-        y = np.array([y1, y2, y3])
-
-        mix_l = PCSAFT(T, x, m, σ, ϵ_k, k_ij, phase='liquid', P_sys=P, κ_AB=κ_AB, ϵ_AB_k=ϵ_AB_k)
-        mix_v = PCSAFT(T, y, m, σ, ϵ_k, k_ij, phase='vapor', P_sys=P, κ_AB=κ_AB, ϵ_AB_k=ϵ_AB_k)
-
-        φ_l = mix_l.φ()
-        φ_v = mix_v.φ()
-
-        eqs = [(y[i] * φ_v[i] - x[i] * φ_l[i]) for i in range(len(y))]
-        eqs.append(1 - np.sum([y[i] for i in range(len(y))]))
-
-        return eqs
-
-    bnds = ([0.0, 0.0, 0.0, 0.0], [1.0, 1.0, 1.0, np.inf])
-    guesses = np.array([y[0], y[1], y[2], P])
-    res = least_squares(fun, guesses, bounds=bnds, ftol=1e-3, xtol=1e-3)
-    ans = res.x
-
-    return ans[:-1], ans[-1]
+                     [-355.60235612, -165.20769346, -29.666905585]]).T
+
+    k = len(x)
+
+    σ_ij = [[1 / 2 * (σ[i] + σ[j]) for j in range(k)] for i in range(k)]
+    ϵ_ij = [[(ϵ_k[i] * ϵ_k[j]) ** (1 / 2) * (1 - k_ij[i][j]) for j in range(k)] for i in range(k)]
+    # κ_AB_ij = [[(κ_AB[i] * κ_AB[j]) ** (1 / 2) * ((σ[i] * σ[j]) / (1 / 2 * (σ[i] * σ[j]))) ** 3 for j in range(k)]
+    #     for i in range(k)]
+    # ϵ_AB_ij = [[(ϵ_AB_k[i] + ϵ_AB_k[j]) / 2 for j in range(k)] for i in range(k)]
+
+    # if κ_AB is None:
+    #     κ_AB = np.zeros(k)
+    #
+    # if ϵ_AB_k is None:
+    #     ϵ_AB_k = np.zeros(k)
+
+    kb = 1.380649e-23  # J/K
+    N_A = 6.0221e23  # 1/mol
+    π = np.pi
+    m = GEKKO(remote=False)
+
+    # Gekko Functions
+    exp = m.exp
+    log = m.log
+    sum = np.sum
+
+    # etal = m.Var(value=.5)
+    # etav = m.Var(value=10e-10)
+    etal = .39490600
+    etav = .00145987
+    y = [m.Var(value=yg[i], lb=0, ub=1, name=f'y_{i + 1}') for i in range(len(yg))]
+    # P = m.Var(value=5e5, lb=0, ub=1e7, name=f'P')
+    φv = [m.Intermediate(f_φ(m, y, etav, T)[i]) for i in range(len(yg))]
+    φl = [m.Intermediate(f_φ(m, x, etal, T)[i]) for i in range(len(yg))]
+
+    # m.Equation(f_P(m, y, etav, T)/1e6 == P/1e6)
+    # m.Equation(f_P(m, x, etal, T)/1e6 == P/1e6)
+    m.Equation([y[i] * φv[i] == x[i] * φl[i] for i in range(3)])
+    # m.Equation(1 == sum(y))
+    m.options.IMODE = 1
+    m.options.SOLVER = 3
+    m.open_folder()
+    m.solve(disp=True)
+    print(y[0].value[0], y[1].value[0], y[2].value[0])
+    return φl[0].value[0]
