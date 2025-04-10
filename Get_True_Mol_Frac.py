@@ -27,14 +27,14 @@ def solve_ChemEQ_gekko(Cl_0, Tl, guesses=array([.001, 1800, 39500, 1300, 1300, 2
 
     Tl = m.Param(Tl)
 
-    # a1, b1, c1 = m.Param(233.4), m.Param(-3410), m.Param(-36.8)
-    # a2, b2, c2 = m.Param(176.72), m.Param(-2909), m.Param(-28.46)
-
+    a1, b1, c1 = m.Param(233.4), m.Param(-3410), m.Param(-36.8)
+    a2, b2, c2 = m.Param(176.72), m.Param(-2909), m.Param(-28.46)
+    #
     # a1, b1, c1 = m.Param(234.4), m.Param(-899.9), m.Param(-37.5)
     # a2, b2, c2 = m.Param(176.2), m.Param(-1947.9), m.Param(-28.2)
 
-    a1, b1, c1, d1 = m.Param(234.2), m.Param(-1434.4), m.Param(-36.8), m.Param(-.0074)
-    a2, b2, c2, d2 = m.Param(176.8), m.Param(-991.2), m.Param(-29.5), m.Param(.0129)
+    # a1, b1, c1, d1 = m.Param(234.2), m.Param(-1434.4), m.Param(-36.8), m.Param(-.0074)
+    # a2, b2, c2, d2 = m.Param(176.8), m.Param(-991.2), m.Param(-29.5), m.Param(.0129)
 
     K1 = m.Intermediate(m.exp(a1 + b1 / Tl + c1 * m.log(Tl) + d1 * Tl) / 1000)  # kmol -> mol
     K2 = m.Intermediate(m.exp(a2 + b2 / Tl + c2 * m.log(Tl) + d2 * Tl) / 1000)  # kmol -> mol
@@ -83,17 +83,14 @@ def get_true_mol_frac(alpha, w_MEA, Tl):
         Cl_MEACOO = guesses[4]
         Cl_HCO3 = guesses[5]
 
-        # a1, b1, c1, d1 = 234.2, -1434.4, -36.8, -.0074
-        # a2, b2, c2, d2 = 176.8, -991.2, -29.5, .0129
+        a1, b1, c1, d1 = 234.2, -1434.4, -36.8, -.0074
+        a2, b2, c2, d2 = 176.8, -991.2, -29.5, .0129
 
         # a1, b1, c1, d1 = 233.4, -3410, -36.8, 0
         # a2, b2, c2, d2 = 176.72, -2909, -28.46, 0
 
-        a1, b1, c1, d1 = 233.4, -899.9, -37.5, 0
-        a2, b2, c2, d2 = 176.72, -1947.9, -28.2, 0
-
-        # a1, b1, c1 = m.Param(234.4), m.Param(-899.9), m.Param(-37.5)
-        # a2, b2, c2 = m.Param(176.2), m.Param(-1947.9), m.Param(-28.2)
+        # a1, b1, c1, d1 = 233.4, -899.9, -37.5, 0
+        # a2, b2, c2, d2 = 176.72, -1947.9, -28.2, 0
 
         K1 = np.exp(a1 + b1 / Tl + c1 * np.log(Tl) + d1 * Tl) / 1000  # kmol -> mol
         K2 = np.exp(a2 + b2 / Tl + c2 * np.log(Tl) + d2 * Tl) / 1000  # kmol -> mol
@@ -187,9 +184,8 @@ def get_true_mol_frac(alpha, w_MEA, Tl):
 
     return np.array(x_true_return)
 
-
-# if __name__ == '__main__':
-#     print(get_true_mol_frac(.8, .3, 40))
+if __name__ == '__main__':
+    print(get_true_mol_frac(.3, .3, 40 + 273.15))
 
 # if __name__ == '__main__':
 #     alpha = np.linspace(0.01, 1, 100)

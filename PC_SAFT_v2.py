@@ -468,15 +468,26 @@ def flash_v2(x, y, T, P, prop_dic, flash_type='Bubble_T'):
         print('Wrong Flash Type')
         guesses = []
     options = {'xtol': 1e-4, }
-    ans = root(f, np.array([guesses]), options=options).x
-    y_CO2, y_MEA, y_H2O = ans[:-1]
-    P = ans[-1]
-    P_CO2 = y_CO2*P
+    result = root(f, np.array([guesses]), options=options).x
+
+    ans, success = result.x, result.success
+
+    if not success:
+        print('failed')
+        return np.nan, [np.nan, np.nan, np.nan]
 
     # mix_l = PCSAFT(T, x, m, σ, ϵ_k, k_ij, phase='liquid', P_sys=P, κ_AB=κ_AB, ϵ_AB_k=ϵ_AB_k)
     # mix_v = PCSAFT(T, y, m, σ, ϵ_k, k_ij, phase='vapor', P_sys=P, κ_AB=κ_AB, ϵ_AB_k=ϵ_AB_k)
 
-    return P_CO2
+    return ans[-1], ans[:-1]
+    # y_CO2, y_MEA, y_H2O = ans[:-1]
+    # P = ans[-1]
+    # P_CO2 = y_CO2*P
+    #
+    # # mix_l = PCSAFT(T, x, m, σ, ϵ_k, k_ij, phase='liquid', P_sys=P, κ_AB=κ_AB, ϵ_AB_k=ϵ_AB_k)
+    # # mix_v = PCSAFT(T, y, m, σ, ϵ_k, k_ij, phase='vapor', P_sys=P, κ_AB=κ_AB, ϵ_AB_k=ϵ_AB_k)
+    #
+    # return P_CO2
 
 
 
@@ -504,4 +515,4 @@ if __name__ == '__main__':
     k_ij = np.array([[0.00E+00, 3.00E-04, 1.15E-02],
                      [3.00E-04, 0.00E+00, 5.10E-03],
                      [1.15E-02, 5.10E-03, 0.00E+00]])
-    print(flash(x, yg, T, Pg, prop_dic, k_ij))
+    print(flash_v2(x, yg, T, Pg, prop_dic, k_ij))
