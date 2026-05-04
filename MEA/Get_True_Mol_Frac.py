@@ -8,6 +8,7 @@ import time
 import pandas as pd
 from matplotlib.animation import FuncAnimation, PillowWriter
 from Density import density
+from plot_export import save_plot
 
 
 # From Akula Appendix of Model Development, Validation, and Part-Load Optimization of a
@@ -142,7 +143,7 @@ if __name__ == '__main__':
     ax.set_yticks(y_range)
 
     plt.tick_params(labelsize=12)
-    plt.show()
+    save_plot(fig, __file__)
 
 
 # if __name__ == '__main__':

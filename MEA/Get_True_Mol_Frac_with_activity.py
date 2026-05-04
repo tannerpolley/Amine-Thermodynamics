@@ -9,8 +9,10 @@ import pandas as pd
 from matplotlib.animation import FuncAnimation, PillowWriter
 import importlib.util
 import pathlib
+from pathlib import Path
 from Density import density
 from convex_optimization_gekko import get_x_guess
+from plot_export import save_plot
 
 
 def chemical_equilibrium(Fl, Tl, γ):
@@ -93,12 +95,6 @@ def get_true_mol_frac_with_activity(alpha, w_MEA_unloaded, Tl, γ):
     return chemical_equilibrium(Fl, Tl, γ)
 
 if __name__ == '__main__':
-    alpha = .1
-    w_MEA = .3
-    Tl = 315
-    get_true_mol_frac(alpha, w_MEA, Tl)
-
-if __name__ == '__main__':
 
     w_MEA = .3
     Tl = 273.15
@@ -109,9 +105,9 @@ if __name__ == '__main__':
     fig, ax = plt.subplots(figsize=(10, 10))
     x_true_arr = []
     alpha = np.linspace(.002, 1.0, 100)
+    gamma = np.ones(6)
     for a in alpha:
-        get_true_mol_frac(a, w_MEA, Tl)
-        output = get_true_mol_frac(a, w_MEA, Tl)
+        output = get_true_mol_frac_with_activity(a, w_MEA, Tl, gamma)
         x_true_arr.append(output)
     x_true_arr = np.array(x_true_arr)
     x_true_arr = x_true_arr.T
@@ -130,4 +126,4 @@ if __name__ == '__main__':
     ax.set_yticks(y_range)
 
     plt.tick_params(labelsize=12)
-    plt.show()
+    save_plot(fig, __file__)

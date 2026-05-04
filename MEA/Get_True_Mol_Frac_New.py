@@ -11,6 +11,7 @@ import importlib.util
 import pathlib
 from Density import density
 from convex_optimization_gekko import get_x_guess, solve_ChEq
+from plot_export import save_plot
 
 
 def chemical_equilibrium(Fl, Tl):
@@ -162,4 +163,4 @@ if __name__ == '__main__':
     ax.set_yticks(y_range)
 
     plt.tick_params(labelsize=12)
-    plt.show()
+    save_plot(fig, __file__)

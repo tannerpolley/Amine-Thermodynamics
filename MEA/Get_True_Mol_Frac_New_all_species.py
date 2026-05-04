@@ -2,9 +2,14 @@ import numpy as np
 from scipy.optimize import minimize, root
 import pandas as pd
 import matplotlib.pyplot as plt
+from pathlib import Path
 from sympy.physics.quantum.matrixutils import to_numpy
 
 from convex_optimization_gekko import get_x_guess, solve_ChEq
+from plot_export import save_plot
+
+
+DATA_ROOT = Path(__file__).resolve().parents[1] / "data" / "MEA"
 
 
 def chemical_equilibrium(Fl, Tl):
@@ -197,7 +202,7 @@ if __name__ == '__main__':
     x_true_arr = x_true_arr.T
     x_true_arr = np.vstack([x_true_arr, x_true_arr[1] + x_true_arr[3]])
 
-    df = pd.read_csv(r'../data/MEA/ChEq/Combined_ChEq.csv')
+    df = pd.read_csv(DATA_ROOT / "ChEq" / "Combined_ChEq.csv")
     df = df[
         (df['temperature'] == (Tl - 273.15)) &
         (df['MEA_weight_fraction'] == .30)
@@ -245,4 +250,4 @@ if __name__ == '__main__':
     ax.set_yticks(y_range)
 
     plt.tick_params(labelsize=12)
-    plt.show()
+    save_plot(fig, __file__)
