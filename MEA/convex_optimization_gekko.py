@@ -1,5 +1,22 @@
+import os
+from pathlib import Path
+
 from gekko import GEKKO
 import numpy as np
+
+
+def _configure_repo_tmp() -> None:
+    repo_tmp = Path(__file__).resolve().parents[1] / "out" / "tmp" / "gekko"
+    current_tmp = os.environ.get("TMP") or os.environ.get("TEMP") or ""
+    if "MEA-Thermodynamics" in current_tmp and "\\out\\tmp\\" in current_tmp:
+        return
+    repo_tmp.mkdir(parents=True, exist_ok=True)
+    for key in ("TEMP", "TMP", "TMPDIR"):
+        os.environ[key] = str(repo_tmp)
+
+
+_configure_repo_tmp()
+
 
 def get_x_guess(x_0, log_k_eq, v_ij):
     m = GEKKO(remote=False)
@@ -46,7 +63,19 @@ def get_x_guess(x_0, log_k_eq, v_ij):
     return x_sol, eps_sol
 
 
-def solve_ChEq(x_0, x_guess, log_k_eq, v_ij, s_ij, scales):
+def solve_ChEq(
+    x_0,
+    x_guess,
+    log_k_eq,
+    v_ij,
+    s_ij,
+    scales,
+    *,
+    lower_bound=1e-12,
+    max_iter=5000,
+    rtol=1e-2,
+    otol=1e-2,
+):
 
     m = GEKKO(remote=False)
     m.options.IMODE = 1
@@ -56,7 +85,7 @@ def solve_ChEq(x_0, x_guess, log_k_eq, v_ij, s_ij, scales):
     x = []
     for i in range(len(x_guess)):
         x_scaled[i].value = x_guess[i]
-        x_scaled[i].lower = 0.0
+        x_scaled[i].lower = lower_bound
         x.append(m.Intermediate(x_scaled[i] * scales[i]))
 
     # linear mass-balance constraints
@@ -73,12 +102,12 @@ def solve_ChEq(x_0, x_guess, log_k_eq, v_ij, s_ij, scales):
         if i < 3:
             eqs.append(0.0 == (float(x_0[i]) - sum_i) / float(x_0[i]))
         else:
-            eqs.append(0.0 == (float(x_0[i]) - sum_i) / x[3]*s_ij[i, 3])
+            eqs.append(0.0 == (float(x_0[i]) - sum_i) / (x[3] * s_ij[i, 3]))
 
     m.Equations(eqs)
-    m.options.MAX_ITER = 5000
-    m.options.RTOL = 1e-2
-    m.options.OTOL = 1e-2
+    m.options.MAX_ITER = max_iter
+    m.options.RTOL = rtol
+    m.options.OTOL = otol
     m.options.NODES = 2
     m.solve(disp=False)
 

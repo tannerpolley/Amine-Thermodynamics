@@ -13,9 +13,14 @@ SCRIPT_NAMES = [
     "Get_True_Mol_Frac_New.py",
     "Get_True_Mol_Frac_New_all_species.py",
     "Get_True_Mol_Frac_with_activity.py",
+    "PC_SAFT_test.py",
     "epcsaft_diagnostics.py",
     "epcsaft_present_plots.py",
 ]
+OPTIONAL_EPCSAFT_SCRIPTS = {
+    "epcsaft_diagnostics.py",
+    "epcsaft_present_plots.py",
+}
 DEFAULT_TIMEOUT_SECONDS = 180
 SCRIPT_TIMEOUT_SECONDS = {
     "legacy_pcsaft_baseline.py": 240,
@@ -23,6 +28,7 @@ SCRIPT_TIMEOUT_SECONDS = {
     "Get_True_Mol_Frac_New.py": 240,
     "Get_True_Mol_Frac_New_all_species.py": 240,
     "Get_True_Mol_Frac_with_activity.py": 240,
+    "PC_SAFT_test.py": 600,
     "epcsaft_diagnostics.py": 180,
     "epcsaft_present_plots.py": 240,
 }
@@ -30,6 +36,16 @@ SCRIPT_TIMEOUT_SECONDS = {
 
 def _script_command(script_name: str) -> list[str]:
     return [sys.executable, script_name]
+
+
+def _epcsaft_runtime_available() -> tuple[bool, str]:
+    try:
+        from epcsaft_runtime import load_epcsaft
+
+        load_epcsaft()
+    except Exception as exc:
+        return False, str(exc).splitlines()[0]
+    return True, ""
 
 
 def main() -> int:
@@ -44,8 +60,15 @@ def main() -> int:
     env["TMP"] = str(RUNTIME_TMP)
     env["TMPDIR"] = str(RUNTIME_TMP)
 
+    epcsaft_available, epcsaft_skip_reason = _epcsaft_runtime_available()
     failures = []
+    skipped = []
     for script_name in SCRIPT_NAMES:
+        if script_name in OPTIONAL_EPCSAFT_SCRIPTS and not epcsaft_available:
+            skipped.append(script_name)
+            print(f"[SKIP] {script_name} ({epcsaft_skip_reason})")
+            continue
+
         command = _script_command(script_name)
         print(f"[RUN] {script_name} ({sys.executable})")
         timeout_seconds = SCRIPT_TIMEOUT_SECONDS.get(script_name, DEFAULT_TIMEOUT_SECONDS)
@@ -93,7 +116,8 @@ def main() -> int:
                 print(f"  {line}")
 
     print("\nSummary")
-    print(f"  Successful: {len(SCRIPT_NAMES) - len(failures)}/{len(SCRIPT_NAMES)}")
+    print(f"  Successful: {len(SCRIPT_NAMES) - len(failures) - len(skipped)}/{len(SCRIPT_NAMES)}")
+    print(f"  Skipped: {', '.join(skipped) if skipped else 'none'}")
     print(f"  Failed: {', '.join(failures) if failures else 'none'}")
     return 1 if failures else 0
 
