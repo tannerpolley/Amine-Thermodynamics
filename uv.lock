@@ -196,6 +196,7 @@ build = [
     { name = "scikit-build-core", specifier = ">=0.12" },
 ]
 dev = [
+    { name = "black", specifier = ">=24.0" },
     { name = "build", specifier = ">=1.2" },
     { name = "cibuildwheel", specifier = ">=2.23" },
     { name = "cmake", specifier = ">=3.20" },
@@ -204,7 +205,14 @@ dev = [
     { name = "ninja", specifier = ">=1.11" },
     { name = "pybind11", specifier = ">=3.0" },
     { name = "pytest", specifier = ">=8.0" },
+    { name = "ruff", specifier = ">=0.5" },
     { name = "scikit-build-core", specifier = ">=0.12" },
+    { name = "sphinx", specifier = ">=7.0" },
+]
+docs = [{ name = "sphinx", specifier = ">=7.0" }]
+style = [
+    { name = "black", specifier = ">=24.0" },
+    { name = "ruff", specifier = ">=0.5" },
 ]
 test = [
     { name = "matplotlib", specifier = ">=3.8" },

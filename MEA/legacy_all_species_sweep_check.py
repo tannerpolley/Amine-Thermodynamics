@@ -7,7 +7,7 @@ import sys
 import numpy as np
 import pandas as pd
 
-from Get_True_Mol_Frac_New_all_species import result_rows, solve_all_species_series
+from plot_all_species_diagnostic import result_rows, solve_all_species_series
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

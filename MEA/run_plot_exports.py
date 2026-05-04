@@ -8,12 +8,10 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parents[0]
 RUNTIME_TMP = REPO_ROOT / "out" / "tmp" / "plot_exports"
 SCRIPT_NAMES = [
-    "legacy_pcsaft_baseline.py",
-    "Get_True_Mol_Frac.py",
-    "Get_True_Mol_Frac_New.py",
-    "Get_True_Mol_Frac_New_all_species.py",
-    "Get_True_Mol_Frac_with_activity.py",
-    "PC_SAFT_test.py",
+    "plot_legacy_speciation.py",
+    "plot_legacy_pressure.py",
+    "plot_all_species_diagnostic.py",
+    "plot_all_species_pressure_diagnostic.py",
     "epcsaft_diagnostics.py",
     "epcsaft_present_plots.py",
 ]
@@ -23,12 +21,10 @@ OPTIONAL_EPCSAFT_SCRIPTS = {
 }
 DEFAULT_TIMEOUT_SECONDS = 180
 SCRIPT_TIMEOUT_SECONDS = {
-    "legacy_pcsaft_baseline.py": 240,
-    "Get_True_Mol_Frac.py": 240,
-    "Get_True_Mol_Frac_New.py": 240,
-    "Get_True_Mol_Frac_New_all_species.py": 240,
-    "Get_True_Mol_Frac_with_activity.py": 240,
-    "PC_SAFT_test.py": 600,
+    "plot_legacy_speciation.py": 240,
+    "plot_legacy_pressure.py": 240,
+    "plot_all_species_diagnostic.py": 240,
+    "plot_all_species_pressure_diagnostic.py": 600,
     "epcsaft_diagnostics.py": 180,
     "epcsaft_present_plots.py": 240,
 }
