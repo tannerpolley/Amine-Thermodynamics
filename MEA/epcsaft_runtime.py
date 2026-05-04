@@ -66,7 +66,7 @@ def load_epcsaft():
                     "Unable to import the sibling ePC-SAFT package. Build/install it first, "
                     "for example from C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT with "
                     "`uv sync --no-install-project` and `uv run python scripts\\build_epcsaft.py`, "
-                    "or run this workflow in the existing `ePC-SAFT` conda environment."
+                    "then run this repository with `uv sync` and `uv run python MEA\\run_plot_exports.py`."
                 ) from second_exc
         raise RuntimeError("Unable to import epcsaft and the sibling source checkout was not found.") from first_exc
 

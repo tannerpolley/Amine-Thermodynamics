@@ -16,19 +16,6 @@ SCRIPT_NAMES = [
     "epcsaft_diagnostics.py",
     "epcsaft_present_plots.py",
 ]
-LEGACY_REFERENCE_SCRIPT_NAMES = [
-    "Get_True_Mol_Frac.py",
-    "Get_True_Mol_Frac_New.py",
-    "Get_True_Mol_Frac_New_all_species.py",
-    "Get_True_Mol_Frac_with_activity.py",
-    "PC_SAFT_test.py",
-]
-CONDA_ENV = os.environ.get("MEA_EPCSAFT_CONDA_ENV", "ePC-SAFT")
-LEGACY_CONDA_ENV = os.environ.get("MEA_LEGACY_CONDA_ENV", "MEA-Thermodynamics")
-DEFAULT_EPCSAFT_PYTHON = Path(r"C:\ProgramData\Miniconda3\envs\ePC-SAFT\python.exe")
-DEFAULT_LEGACY_PYTHON = Path(r"C:\ProgramData\Miniconda3\envs\MEA-Thermodynamics\python.exe")
-EPCSAFT_PYTHON = Path(os.environ.get("MEA_EPCSAFT_PYTHON", str(DEFAULT_EPCSAFT_PYTHON)))
-LEGACY_PYTHON = Path(os.environ.get("MEA_LEGACY_PYTHON", str(DEFAULT_LEGACY_PYTHON)))
 DEFAULT_TIMEOUT_SECONDS = 180
 SCRIPT_TIMEOUT_SECONDS = {
     "legacy_pcsaft_baseline.py": 240,
@@ -39,32 +26,10 @@ SCRIPT_TIMEOUT_SECONDS = {
     "epcsaft_diagnostics.py": 180,
     "epcsaft_present_plots.py": 240,
 }
-SCRIPT_CONDA_ENV = {
-    "legacy_pcsaft_baseline.py": LEGACY_CONDA_ENV,
-    "Get_True_Mol_Frac.py": LEGACY_CONDA_ENV,
-    "Get_True_Mol_Frac_New.py": LEGACY_CONDA_ENV,
-    "Get_True_Mol_Frac_New_all_species.py": LEGACY_CONDA_ENV,
-    "Get_True_Mol_Frac_with_activity.py": LEGACY_CONDA_ENV,
-}
-SCRIPT_PYTHON = {
-    "legacy_pcsaft_baseline.py": LEGACY_PYTHON,
-    "Get_True_Mol_Frac.py": LEGACY_PYTHON,
-    "Get_True_Mol_Frac_New.py": LEGACY_PYTHON,
-    "Get_True_Mol_Frac_New_all_species.py": LEGACY_PYTHON,
-    "Get_True_Mol_Frac_with_activity.py": LEGACY_PYTHON,
-}
-
-
-def _python_executable(script_name: str) -> Path:
-    return SCRIPT_PYTHON.get(script_name, EPCSAFT_PYTHON)
 
 
 def _script_command(script_name: str) -> list[str]:
-    python_executable = _python_executable(script_name)
-    if python_executable.exists():
-        return [str(python_executable), script_name]
-    conda_env = SCRIPT_CONDA_ENV.get(script_name, CONDA_ENV)
-    return ["conda", "run", "-n", conda_env, "python", script_name]
+    return [sys.executable, script_name]
 
 
 def main() -> int:
@@ -82,7 +47,7 @@ def main() -> int:
     failures = []
     for script_name in SCRIPT_NAMES:
         command = _script_command(script_name)
-        print(f"[RUN] {script_name} ({command[0]})")
+        print(f"[RUN] {script_name} ({sys.executable})")
         timeout_seconds = SCRIPT_TIMEOUT_SECONDS.get(script_name, DEFAULT_TIMEOUT_SECONDS)
         try:
             result = subprocess.run(

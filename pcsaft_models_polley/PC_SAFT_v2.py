@@ -228,7 +228,7 @@ class PCSAFT_v2:
             # m = int(XA_guess.shape[1] / n)
             AB_matrix = np.asarray([[0., 1.],
                                     [1., 0.]])
-            Σ_2 = np.zeros((n,), dtype='float_')
+            Σ_2 = np.zeros((n,), dtype=float)
             XA = np.zeros_like(XA_guess)
 
             for i in range(n):
@@ -251,7 +251,7 @@ class PCSAFT_v2:
         if n_assoc == 0 or n_assoc == 1:
             return 0
 
-        XA = np.zeros((n_assoc, a_sites), dtype='float_')
+        XA = np.zeros((n_assoc, a_sites), dtype=float)
         ctr = 0
         dif = 1000.
         XA_old = np.copy(XA)

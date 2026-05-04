@@ -743,6 +743,7 @@ def pcsaft_p(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm=None,
         Pressure (Pa)
     """
     check_input(x, 'density', rho, 'temperature', t)
+    rho = float(np.asarray(rho, dtype=float).reshape(-1)[0])
 
     kb = 1.380648465952442093e-23  # Boltzmann constant, J K^-1
     N_AV = 6.022140857e23  # Avagadro's number
@@ -819,11 +820,11 @@ def pcsaft_dadt(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm=No
     den = rho * N_AV / 1.0e30
 
     if type(k_ij) != np.ndarray:
-        k_ij = np.zeros((ncomp, ncomp), dtype='float_')
+        k_ij = np.zeros((ncomp, ncomp), dtype=float)
 
-    zeta = np.zeros((4,), dtype='float_')
+    zeta = np.zeros((4,), dtype=float)
     dzeta_dt = np.zeros_like(zeta)
-    ghs = np.zeros((ncomp, ncomp), dtype='float_')
+    ghs = np.zeros((ncomp, ncomp), dtype=float)
     dghs_dt = np.zeros_like(ghs)
     e_ij = np.zeros_like(ghs)
     s_ij = np.zeros_like(ghs)
@@ -976,9 +977,9 @@ def pcsaft_dadt(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm=No
         a_sites = 2
         iA = np.nonzero(e_assoc)[0]  #indices of associating compounds
         ncA = iA.shape[0]  # number of associating compounds in the fluid
-        XA = np.zeros((ncA, a_sites), dtype='float_')
+        XA = np.zeros((ncA, a_sites), dtype=float)
 
-        eABij = np.zeros((ncA, ncA), dtype='float_')
+        eABij = np.zeros((ncA, ncA), dtype=float)
         volABij = np.zeros_like(eABij)
         delta_ij = np.zeros_like(eABij)
         ddelta_dt = np.zeros_like(eABij)
@@ -1293,14 +1294,14 @@ def pcsaft_fugcoef(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm
     den = rho * N_AV / 1.0e30
 
     if type(k_ij) != np.ndarray:
-        k_ij = np.zeros((ncomp, ncomp), dtype='float_')
+        k_ij = np.zeros((ncomp, ncomp), dtype=float)
 
-    zeta = np.zeros((4,), dtype='float_')
-    ghs = np.zeros((ncomp, ncomp), dtype='float_')
+    zeta = np.zeros((4,), dtype=float)
+    ghs = np.zeros((ncomp, ncomp), dtype=float)
     e_ij = np.zeros_like(ghs)
     s_ij = np.zeros_like(ghs)
     denghs = np.zeros_like(ghs)
-    dghs_dx = np.zeros((ncomp, ncomp), dtype='float_')
+    dghs_dx = np.zeros((ncomp, ncomp), dtype=float)
     dahs_dx = np.zeros_like(x)
     mu = np.zeros_like(x)
     mu_hc = np.zeros_like(x)
@@ -1537,12 +1538,12 @@ def pcsaft_fugcoef(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm
         iA = np.nonzero(e_assoc)[0]  #indices of associating compounds
         ncA = iA.shape[0]  # number of associating compounds in the fluid
         mu_assoc = np.zeros_like(x)
-        XA = np.ones((ncA, a_sites), dtype='float_')
+        XA = np.ones((ncA, a_sites), dtype=float)
 
-        eABij = np.zeros((ncA, ncA), dtype='float_')
+        eABij = np.zeros((ncA, ncA), dtype=float)
         volABij = np.zeros_like(eABij)
         delta_ij = np.zeros_like(eABij)
-        ddelta_dd = np.zeros((ncA, ncA, ncomp), dtype='float_')
+        ddelta_dd = np.zeros((ncA, ncA, ncomp), dtype=float)
 
         for i in range(ncA):
             for j in range(ncA):
@@ -1675,6 +1676,7 @@ def pcsaft_Z(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm=None,
         Compressibility factor
     """
     check_input(x, 'density', rho, 'temperature', t)
+    rho = float(np.asarray(rho, dtype=float).reshape(-1)[0])
 
     ncomp = x.shape[0]  # number of components
     kb = 1.380648465952442093e-23  # Boltzmann constant, J K^-1
@@ -1688,10 +1690,10 @@ def pcsaft_Z(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm=None,
     den = rho * N_AV / 1.0e30
 
     if type(k_ij) != np.ndarray:
-        k_ij = np.zeros((ncomp, ncomp), dtype='float_')
+        k_ij = np.zeros((ncomp, ncomp), dtype=float)
 
-    zeta = np.zeros((4,), dtype='float_')
-    ghs = np.zeros((ncomp, ncomp), dtype='float_')
+    zeta = np.zeros((4,), dtype=float)
+    ghs = np.zeros((ncomp, ncomp), dtype=float)
     e_ij = np.zeros_like(ghs)
     s_ij = np.zeros_like(ghs)
     denghs = np.zeros_like(ghs)
@@ -1829,12 +1831,12 @@ def pcsaft_Z(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm=None,
         iA = np.nonzero(e_assoc)[0]  #indices of associating compounds
         ncA = iA.shape[0]  # number of associating compounds in the fluid
 
-        XA = np.zeros((ncA, a_sites), dtype='float_')
+        XA = np.zeros((ncA, a_sites), dtype=float)
 
-        eABij = np.zeros((ncA, ncA), dtype='float_')
+        eABij = np.zeros((ncA, ncA), dtype=float)
         volABij = np.zeros_like(eABij)
         delta_ij = np.zeros_like(eABij)
-        ddelta_dd = np.zeros((ncA, ncA, ncomp), dtype='float_')
+        ddelta_dd = np.zeros((ncA, ncA, ncomp), dtype=float)
 
         for i in range(ncA):
             for j in range(ncA):
@@ -1968,10 +1970,10 @@ def pcsaft_ares(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm=No
     den = rho * N_AV / 1.0e30
 
     if type(k_ij) != np.ndarray:
-        k_ij = np.zeros((ncomp, ncomp), dtype='float_')
+        k_ij = np.zeros((ncomp, ncomp), dtype=float)
 
-    zeta = np.zeros((4,), dtype='float_')
-    ghs = np.zeros((ncomp, ncomp), dtype='float_')
+    zeta = np.zeros((4,), dtype=float)
+    ghs = np.zeros((ncomp, ncomp), dtype=float)
     e_ij = np.zeros_like(ghs)
     s_ij = np.zeros_like(ghs)
     m2es3 = 0.
@@ -2039,9 +2041,9 @@ def pcsaft_ares(x, m, s, e, t, rho, k_ij=None, e_assoc=None, vol_a=None, dipm=No
         iA = np.nonzero(e_assoc)[0]  #indices of associating compounds
 
         ncA = iA.shape[0]  # number of associating compounds in the fluid
-        XA = np.zeros((ncA, a_sites), dtype='float_')
+        XA = np.zeros((ncA, a_sites), dtype=float)
 
-        eABij = np.zeros((ncA, ncA), dtype='float_')
+        eABij = np.zeros((ncA, ncA), dtype=float)
         volABij = np.zeros_like(eABij)
         delta_ij = np.zeros_like(eABij)
 
@@ -2169,7 +2171,7 @@ def XA_find(XA_guess, ncomp, delta_ij, den, x):
     n_sites = int(XA_guess.shape[1] / ncomp)
     ABmatrix = np.asarray([[0., 1.],
                            [1., 0.]])  # using this matrix ensures that A-A and B-B associations are set to zero
-    summ2 = np.zeros((n_sites,), dtype='float_')
+    summ2 = np.zeros((n_sites,), dtype=float)
     XA = np.zeros_like(XA_guess)
 
     # print(XA_guess)
@@ -2186,8 +2188,8 @@ def XA_find(XA_guess, ncomp, delta_ij, den, x):
 
 def dXA_find(ncA, ncomp, iA, delta_ij, den, XA, ddelta_dd, x, n_sites):
     """Solve for the derivative of XA with respect to density."""
-    B = np.zeros((n_sites * ncA * ncomp,), dtype='float_')
-    A = np.zeros((n_sites * ncA * ncomp, n_sites * ncA * ncomp), dtype='float_')
+    B = np.zeros((n_sites * ncA * ncomp,), dtype=float)
+    A = np.zeros((n_sites * ncA * ncomp, n_sites * ncA * ncomp), dtype=float)
 
     indx4 = -1
     indx3 = -1
@@ -2225,8 +2227,8 @@ def dXA_find(ncA, ncomp, iA, delta_ij, den, XA, ddelta_dd, x, n_sites):
 
 def dXAdt_find(ncA, delta_ij, den, XA, ddelta_dt, x, n_sites):
     """Solve for the derivative of XA with respect to temperature."""
-    B = np.zeros((n_sites * ncA,), dtype='float_')
-    A = np.zeros((n_sites * ncA, n_sites * ncA), dtype='float_')
+    B = np.zeros((n_sites * ncA,), dtype=float)
+    A = np.zeros((n_sites * ncA, n_sites * ncA), dtype=float)
 
     i_out = -1  # index of outer iteration loop (follows row of matrices)
     for i in range(ncA):
@@ -2248,8 +2250,8 @@ def dXAdt_find(ncA, delta_ij, den, XA, ddelta_dt, x, n_sites):
 
 def d2XAdt_find(ncA, delta_ij, den, XA, dXA_dt, ddelta_dt, d2delta_dt, x, n_sites):
     """Solve for the second derivative of XA with respect to temperature."""
-    B = np.zeros((n_sites * ncA,), dtype='float_')
-    A = np.zeros((n_sites * ncA, n_sites * ncA), dtype='float_')
+    B = np.zeros((n_sites * ncA,), dtype=float)
+    A = np.zeros((n_sites * ncA, n_sites * ncA), dtype=float)
 
     i_out = -1  # index of outer iteration loop (follows row of matrices)
     for i in range(ncA):
@@ -2475,8 +2477,8 @@ def pcsaft_fit_pure(params, prop, T, P, molden, **kwargs):
         Molar density (mol m^{-3}) (for vapor pressure this is not needed and
         any number can be used as a placeholder)
     """
-    error = np.zeros((prop.shape[0],), dtype='float_')
-    x = np.ones((1,), dtype='float_')
+    error = np.zeros((prop.shape[0],), dtype=float)
+    x = np.ones((1,), dtype=float)
 
     for i in range(prop.shape[0]):
         if prop[i] == 0:

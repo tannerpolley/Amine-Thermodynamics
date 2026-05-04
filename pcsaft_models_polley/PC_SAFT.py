@@ -259,7 +259,7 @@ class PCSAFT:
         if n_assoc == 0 or n_assoc == 1:
             return 0
 
-        XA_guess = np.zeros(k, dtype='float_')
+        XA_guess = np.zeros(k, dtype=float)
         for i in range(k):
             if Δ_AB_ij[i, i] == 0.:
                 XA_guess[i] = 0.
