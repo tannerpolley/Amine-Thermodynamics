@@ -1,19 +1,20 @@
 from __future__ import annotations
 
-import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from legacy_pcsaft_parameters import get_prop_dict
-from plot_all_species_diagnostic import solve_all_species_series
-from plot_export import default_output_dir, save_plot
+from MEA.common.config import CANONICAL_MEA_WEIGHT_FRACTION, JOU_TEMPERATURES_C, REPO_ROOT
+from MEA.common.data_access import load_combined_vle_data
+from MEA.common.plot_export import default_output_dir, save_plot
+from MEA.common.reporting import write_csv_report, write_json_report
+from MEA.nine_species.chemistry import solve_all_species_series
+from MEA.nine_species.pcsaft_parameters import get_prop_dict
 
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
@@ -27,18 +28,16 @@ except ImportError as exc:
     ) from exc
 
 
-DATA_ROOT = REPO_ROOT / "data" / "MEA"
 PCSAFT_SPECIES = ["CO2", "MEA-2B", "H2O-2B-CC", "MEAH+", "MEACOO-", "HCO3-", "CO32-", "H3O+", "OH-"]
-TEMPERATURES_C = (40, 60, 80, 100, 120)
+TEMPERATURES_C = JOU_TEMPERATURES_C
 
 
 def _load_vle_data(temperature_C: float) -> pd.DataFrame:
-    df = pd.read_csv(DATA_ROOT / "VLE" / "Combined_VLE.csv")
-    return df[
-        (df["temperature"] == temperature_C)
-        & (df["MEA_weight_fraction"] == 0.3)
-        & (df["CO2_loading"] < 0.6)
-    ].sort_values("CO2_loading")
+    return load_combined_vle_data(
+        temperature_C=temperature_C,
+        mea_weight_fraction=CANONICAL_MEA_WEIGHT_FRACTION,
+        loading_max=0.6,
+    )
 
 
 def _pressure_rows_for_temperature(temperature_C: float) -> list[dict[str, object]]:
@@ -47,15 +46,15 @@ def _pressure_rows_for_temperature(temperature_C: float) -> list[dict[str, objec
         return []
 
     loadings = np.linspace(float(df["CO2_loading"].min()), float(df["CO2_loading"].max()), 21)
-    chemistry_results = solve_all_species_series(loadings, 0.3, 273.15 + temperature_C)
-    params = get_prop_dict(PCSAFT_SPECIES, temperature_C)
+    chemistry_results = solve_all_species_series(loadings, CANONICAL_MEA_WEIGHT_FRACTION, 273.15 + temperature_C)
+    params = get_prop_dict(PCSAFT_SPECIES, 273.15 + temperature_C)
 
     rows: list[dict[str, object]] = []
     for result in chemistry_results:
         observed = float(np.interp(result.loading, df["CO2_loading"].to_numpy(), df["CO2_pressure"].to_numpy()))
         row: dict[str, object] = {
             "temperature_C": temperature_C,
-            "MEA_weight_fraction": 0.3,
+            "MEA_weight_fraction": CANONICAL_MEA_WEIGHT_FRACTION,
             "CO2_loading": result.loading,
             "observed_CO2_pressure_kPa": observed,
             "chemistry_success": result.success,
@@ -87,22 +86,11 @@ def _pressure_rows_for_temperature(temperature_C: float) -> list[dict[str, objec
     return rows
 
 
-def _json_safe(value):
-    if isinstance(value, float) and not np.isfinite(value):
-        return None
-    if isinstance(value, dict):
-        return {key: _json_safe(item) for key, item in value.items()}
-    if isinstance(value, list):
-        return [_json_safe(item) for item in value]
-    return value
-
-
 def write_pressure_diagnostics(rows: list[dict[str, object]], output_dir: Path) -> tuple[Path, Path]:
-    output_dir.mkdir(parents=True, exist_ok=True)
     csv_path = output_dir / "all_species_pcsaft_pressure_diagnostics.csv"
     json_path = output_dir / "all_species_pcsaft_pressure_summary.json"
     frame = pd.DataFrame(rows)
-    frame.to_csv(csv_path, index=False)
+    write_csv_report(csv_path, frame)
     success_rows = frame[frame["pressure_success"] == True] if not frame.empty else frame
     payload = {
         "n_points": int(len(frame)),
@@ -116,7 +104,7 @@ def write_pressure_diagnostics(rows: list[dict[str, object]], output_dir: Path) 
         ),
         "failures": frame[frame["pressure_success"] == False].to_dict("records") if not frame.empty else [],
     }
-    json_path.write_text(json.dumps(_json_safe(payload), indent=2, allow_nan=False), encoding="utf-8")
+    write_json_report(json_path, payload)
     return csv_path, json_path
 
 

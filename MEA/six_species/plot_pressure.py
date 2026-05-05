@@ -1,27 +1,31 @@
 from __future__ import annotations
 
-import json
 import sys
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from legacy_chemical_equilibrium import (
+from MEA.common.config import (
+    CANONICAL_MEA_WEIGHT_FRACTION,
+    CANONICAL_TEMPERATURE_C,
+    JOU_TEMPERATURES_C,
+    LEGACY_BASELINE_OUT,
+    REPO_ROOT,
+)
+from MEA.common.data_access import load_jou_vle_data
+from MEA.common.plot_export import save_plot
+from MEA.common.reporting import write_csv_report, write_json_report
+from MEA.six_species.chemistry import (
     APPARENT_SPECIES_3,
     LEGACY_SPECIES_6,
     collapse_to_apparent_ternary,
     legacy_true_mole_fractions,
     smoke_check,
 )
-from plot_export import save_plot
 
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parents[0]
-DATA_ROOT = REPO_ROOT / "data" / "MEA"
-BASELINE_OUT = REPO_ROOT / "out" / "legacy_baseline"
+BASELINE_OUT = LEGACY_BASELINE_OUT
 
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
@@ -41,7 +45,7 @@ except ImportError as exc:
 K_CO2_MEA = 0.16
 K_CO2_H2O = 0.15
 K_MEA_H2O = -0.18
-TEMPERATURES_C = (40, 60, 80, 100, 120)
+TEMPERATURES_C = JOU_TEMPERATURES_C
 EXPECTED_MEDIAN_ABS_LOG10_ERROR = {
     40: 0.39155729207995144,
     60: 0.3060402645017894,
@@ -85,8 +89,7 @@ def predict_co2_pressure_kpa(loading: float, mea_weight_fraction: float, tempera
 
 
 def _load_jou_data() -> pd.DataFrame:
-    df = pd.read_csv(DATA_ROOT / "VLE" / "Jou_1995_VLE.csv")
-    return df[(df["MEA_weight_fraction"] == 0.3) & (df["CO2_loading"] > 0.1) & (df["CO2_loading"] < 0.6)].copy()
+    return load_jou_vle_data(mea_weight_fraction=CANONICAL_MEA_WEIGHT_FRACTION)
 
 
 def compute_jou_metrics() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
@@ -100,7 +103,7 @@ def compute_jou_metrics() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         loadings = np.linspace(float(t_df["CO2_loading"].iloc[0]), float(t_df["CO2_loading"].iloc[-1]), 21)
         curve_pressures = []
         for loading in loadings:
-            pred = predict_co2_pressure_kpa(float(loading), 0.3, float(temperature_C))
+            pred = predict_co2_pressure_kpa(float(loading), CANONICAL_MEA_WEIGHT_FRACTION, float(temperature_C))
             curve_pressures.append(pred["pressure_kPa"])
             curve_rows.append(
                 {
@@ -166,7 +169,11 @@ def write_smoke_result() -> Path:
     BASELINE_OUT.mkdir(parents=True, exist_ok=True)
     path = BASELINE_OUT / "legacy_chemistry_smoke.json"
     payload = {
-        "case": {"MEA_weight_fraction": 0.3, "temperature_C": 40.0, "CO2_loading": 0.3},
+        "case": {
+            "MEA_weight_fraction": CANONICAL_MEA_WEIGHT_FRACTION,
+            "temperature_C": CANONICAL_TEMPERATURE_C,
+            "CO2_loading": 0.3,
+        },
         "species": list(LEGACY_SPECIES_6),
         "mole_fractions": [float(v) for v in check.mole_fractions],
         "apparent_ternary_x": [float(v) for v in check.apparent_ternary_x],
@@ -174,8 +181,7 @@ def write_smoke_result() -> Path:
         "true_concentrations_mol_m3": [float(v) for v in check.concentrations],
         "residuals": check.residuals,
     }
-    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    return path
+    return write_json_report(path, payload)
 
 
 def plot_jou_comparison(curves: pd.DataFrame, summary: pd.DataFrame) -> Path:
@@ -215,9 +221,9 @@ def main() -> int:
     metrics_path = BASELINE_OUT / "legacy_pcsaft_jou_fit_metrics.csv"
     summary_path = BASELINE_OUT / "legacy_pcsaft_jou_fit_summary.csv"
     curves_path = BASELINE_OUT / "legacy_pcsaft_jou_fit_curves.csv"
-    metrics.to_csv(metrics_path, index=False)
-    summary.to_csv(summary_path, index=False)
-    curves.to_csv(curves_path, index=False)
+    write_csv_report(metrics_path, metrics)
+    write_csv_report(summary_path, summary)
+    write_csv_report(curves_path, curves)
     plot_path = plot_jou_comparison(curves, summary)
 
     print("Legacy chemical-equilibrium smoke:", smoke_path)

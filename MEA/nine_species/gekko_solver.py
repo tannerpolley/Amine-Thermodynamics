@@ -1,12 +1,13 @@
 import os
-from pathlib import Path
 
 from gekko import GEKKO
 import numpy as np
 
+from MEA.common.config import REPO_ROOT
+
 
 def _configure_repo_tmp() -> None:
-    repo_tmp = Path(__file__).resolve().parents[1] / "out" / "tmp" / "gekko"
+    repo_tmp = REPO_ROOT / "out" / "tmp" / "gekko"
     current_tmp = os.environ.get("TMP") or os.environ.get("TEMP") or ""
     if "MEA-Thermodynamics" in current_tmp and "\\out\\tmp\\" in current_tmp:
         return

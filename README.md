@@ -2,11 +2,10 @@
 
 Legacy and diagnostic workflows for the `CO2-MEA-H2O` thermodynamic system.
 
-The active project is organized around one canonical legacy workflow:
+The active project is organized around two separate legacy ecosystems:
 
-- six-species MEA speciation
-- legacy PC-SAFT Jou CO2 vapor-pressure baseline
-- all-species chemistry and pressure diagnostics
+- `MEA.six_species`: canonical six-species MEA speciation and Jou CO2 vapor-pressure baseline
+- `MEA.nine_species`: diagnostic nine-species chemistry and pressure workflow
 
 Older scripts and data copies live under `archive/` for reference only.
 
@@ -45,33 +44,44 @@ uv run python MEA\run_plot_exports.py
 Run the focused all-species sweep check:
 
 ```powershell
-uv run python MEA\legacy_all_species_sweep_check.py
+uv run python -m MEA.nine_species.sweep_check
+```
+
+Run individual package entrypoints:
+
+```powershell
+uv run python -m MEA.six_species.plot_speciation
+uv run python -m MEA.six_species.plot_pressure
+uv run python -m MEA.nine_species.plot_speciation_diagnostic
+uv run python -m MEA.nine_species.plot_pressure_diagnostic
 ```
 
 ## Active Outputs
 
 Canonical plot artifacts are committed only for the active workflow:
 
-- `out/plots/MEA/plot_legacy_speciation/plot_legacy_speciation.png`
-- `out/plots/MEA/plot_legacy_pressure/legacy_pcsaft_jou_recomputed_fit.png`
-- `out/plots/MEA/plot_all_species_diagnostic/plot_all_species_diagnostic.png`
-- `out/plots/MEA/plot_all_species_pressure_diagnostic/co2_partial_pressure.png`
+- `out/plots/MEA/six_species/speciation/speciation.png`
+- `out/plots/MEA/six_species/pressure/legacy_pcsaft_jou_recomputed_fit.png`
+- `out/plots/MEA/nine_species/speciation_diagnostic/speciation_diagnostic.png`
+- `out/plots/MEA/nine_species/pressure_diagnostic/co2_partial_pressure.png`
 
 Canonical evidence files live under:
 
 - `out/legacy_baseline/`
-- `out/plots/MEA/plot_all_species_diagnostic/`
-- `out/plots/MEA/plot_all_species_pressure_diagnostic/`
+- `out/plots/MEA/nine_species/speciation_diagnostic/`
+- `out/plots/MEA/nine_species/pressure_diagnostic/`
 
 ## Model Roles
 
-`MEA/plot_legacy_speciation.py` is the canonical legacy speciation plot. It uses the shared six-species solver in `MEA/legacy_chemical_equilibrium.py` and overlays the available 40 C, 30 wt% MEA speciation data.
+`MEA.six_species.plot_speciation` is the canonical legacy speciation plot. It uses the six-species solver in `MEA.six_species.chemistry` and overlays the available 40 C, 30 wt% MEA speciation data.
 
-`MEA/plot_legacy_pressure.py` is the canonical Jou vapor-pressure gate. It uses six-species legacy chemistry collapsed to apparent `CO2/MEA/H2O` and verifies the expected median absolute `log10(model/data)` pressure errors.
+`MEA.six_species.plot_pressure` is the canonical Jou vapor-pressure gate. It uses six-species legacy chemistry collapsed to apparent `CO2/MEA/H2O` and verifies the expected median absolute `log10(model/data)` pressure errors.
 
-`MEA/plot_all_species_diagnostic.py` and `MEA/plot_all_species_pressure_diagnostic.py` are diagnostic only. They keep the nine-species chemistry path visible, record failed loadings explicitly, and should not be treated as the canonical pressure fit.
+`MEA.nine_species.plot_speciation_diagnostic` and `MEA.nine_species.plot_pressure_diagnostic` are diagnostic only. They keep the nine-species chemistry path visible, record failed loadings explicitly, and should not be treated as the canonical pressure fit.
 
 `MEA/epcsaft_diagnostics.py` and `MEA/epcsaft_present_plots.py` are optional. The default runner skips them when the sibling ePC-SAFT runtime is unavailable.
+
+Shared code under `MEA/common/` is limited to neutral workflow infrastructure: paths, dataset loading, report writing, and plot export. Six-species and nine-species chemistry/model code stay in their own subpackages.
 
 ## Archive Policy
 

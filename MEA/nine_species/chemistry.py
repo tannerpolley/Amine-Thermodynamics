@@ -1,18 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-import json
-from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
-from convex_optimization_gekko import get_x_guess, solve_ChEq
-from plot_export import default_output_dir, save_plot
+from MEA.nine_species.gekko_solver import get_x_guess, solve_ChEq
 
 
-DATA_ROOT = Path(__file__).resolve().parents[1] / "data" / "MEA"
 TRACE_FLOOR = 1e-14
 RESIDUAL_TOL = 1e-3
 LOG_RESIDUAL_TOL = 5e-2
@@ -88,7 +82,7 @@ def reaction_matrix() -> np.ndarray:
 def balance_matrix() -> np.ndarray:
     return np.array(
         [
-            [1, 0, 0, 0, 1, -1, 1, 0, 0],
+            [1, 0, 0, 0, 1, 1, 1, 0, 0],
             [0, 1, 0, 1, 1, 0, 0, 0, 0],
             [0, 0, 1, 0, 0, 1, 1, 1, 1],
             [0, 0, 0, 1, -1, -1, -2, 1, -1],
@@ -151,7 +145,7 @@ def _residual_success(x: np.ndarray, residuals: dict[str, float]) -> tuple[bool,
         return False, "nonfinite species mole fraction"
     if np.any(x < -1e-12):
         return False, "negative species mole fraction"
-    balance_keys = ("model_carbon_balance", "mea_balance", "water_balance", "charge_balance")
+    balance_keys = ("physical_carbon_balance", "mea_balance", "water_balance", "charge_balance")
     max_balance = max(abs(residuals[key]) for key in balance_keys)
     max_log = max(abs(value) for key, value in residuals.items() if key.startswith("logK_residual_"))
     if max_balance > RESIDUAL_TOL:
@@ -317,112 +311,3 @@ def result_rows(results: list[AllSpeciesChemistryResult]) -> list[dict[str, floa
             row[key] = value
         rows.append(row)
     return rows
-
-
-def _json_safe(value):
-    if isinstance(value, float) and not np.isfinite(value):
-        return None
-    if isinstance(value, dict):
-        return {key: _json_safe(item) for key, item in value.items()}
-    if isinstance(value, list):
-        return [_json_safe(item) for item in value]
-    return value
-
-
-def write_diagnostics(results: list[AllSpeciesChemistryResult], output_dir: Path) -> tuple[Path, Path]:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    rows = result_rows(results)
-    csv_path = output_dir / "all_species_solver_diagnostics.csv"
-    json_path = output_dir / "all_species_solver_summary.json"
-    pd.DataFrame(rows).to_csv(csv_path, index=False)
-    failures = [row for row in rows if not bool(row["success"])]
-    payload = {
-        "n_points": len(rows),
-        "n_success": len(rows) - len(failures),
-        "n_failed": len(failures),
-        "failed_loadings": [row["CO2_loading"] for row in failures],
-        "failures": failures,
-    }
-    json_path.write_text(json.dumps(_json_safe(payload), indent=2, allow_nan=False), encoding="utf-8")
-    return csv_path, json_path
-
-
-def _plot_failed_loadings(ax, results: list[AllSpeciesChemistryResult], y_value: float) -> None:
-    failed_loadings = [result.loading for result in results if not result.success]
-    if failed_loadings:
-        ax.scatter(
-            failed_loadings,
-            np.full(len(failed_loadings), y_value),
-            marker="x",
-            color="black",
-            label="solver failed",
-            zorder=5,
-        )
-
-
-def main() -> int:
-    w_MEA = 0.3
-    temperature_K = 273.15 + 40.0
-    colors = [
-        "tab:green",
-        "tab:blue",
-        "tab:orange",
-        "tab:olive",
-        "tab:red",
-        "tab:cyan",
-        "tab:purple",
-        "tab:brown",
-        "tab:gray",
-        "tab:pink",
-    ]
-
-    alpha = np.linspace(0.001, 0.8, 101)
-    results = solve_all_species_series(alpha, w_MEA, temperature_K)
-    output_dir = default_output_dir(__file__)
-    csv_path, json_path = write_diagnostics(results, output_dir)
-
-    x_rows = []
-    for result in results:
-        x_rows.append(result.x if result.success else np.full(len(SPECIES), np.nan, dtype=float))
-    x_true_arr = np.asarray(x_rows, dtype=float).T
-    x_true_arr = np.vstack([x_true_arr, x_true_arr[1] + x_true_arr[3]])
-
-    fig, ax = plt.subplots(figsize=(10, 10))
-    for species, x_true, color in zip(PLOT_SPECIES, x_true_arr, colors):
-        if species == "H2O":
-            continue
-        ax.semilogy(alpha, x_true, "--", color=color, label=PLOT_LABELS[species])
-
-    df = pd.read_csv(DATA_ROOT / "ChEq" / "Combined_ChEq.csv")
-    df = df[(df["temperature"] == (temperature_K - 273.15)) & (df["MEA_weight_fraction"] == 0.30)]
-    data_species = list(df.columns[3:-1])
-    for species, color in zip(PLOT_SPECIES, colors):
-        if species in data_species:
-            ax.semilogy(df["CO2_loading"].to_numpy(), df[species].to_numpy(), "o", color=color)
-
-    finite_positive = x_true_arr[np.isfinite(x_true_arr) & (x_true_arr > 0.0)]
-    y_floor = 1e-12 if finite_positive.size == 0 else 10.0 ** np.floor(np.log10(float(np.min(finite_positive))))
-    _plot_failed_loadings(ax, results, y_floor)
-
-    ax.legend(loc="lower center")
-    x_range = np.linspace(0.0, float(np.max(alpha)), 11)
-    y_range = np.logspace(np.log10(y_floor), 0, int(abs(np.log10(y_floor))) + 1)
-    ax.set_xlim(x_range[0], x_range[-1])
-    ax.set_ylim(y_range[0], y_range[-1])
-    ax.set_xticks(x_range)
-    ax.set_yticks(y_range)
-    ax.set_xlabel("CO2 loading, mol CO2/mol MEA")
-    ax.set_ylabel("True-species mole fraction")
-    plt.tick_params(labelsize=12)
-    plot_path = save_plot(fig, __file__)
-
-    n_failed = sum(not result.success for result in results)
-    print(f"All-species diagnostics: {csv_path}")
-    print(f"All-species summary: {json_path}")
-    print(f"All-species plot: {plot_path}")
-    print(f"All-species solver points: {len(results) - n_failed}/{len(results)} successful, {n_failed} failed")
-    return 0 if any(result.success for result in results) else 1
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

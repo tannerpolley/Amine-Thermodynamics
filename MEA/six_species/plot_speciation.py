@@ -1,21 +1,24 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from legacy_chemical_equilibrium import LEGACY_SPECIES_6, legacy_true_mole_fractions
-from plot_export import save_plot
+from MEA.common.config import (
+    CANONICAL_MEA_WEIGHT_FRACTION,
+    CANONICAL_TEMPERATURE_C,
+    CANONICAL_TEMPERATURE_K,
+    SIX_SPECIES_ALPHA_GRID,
+)
+from MEA.common.data_access import load_speciation_data as load_measured_speciation_data
+from MEA.common.plot_export import save_plot
+from MEA.six_species.chemistry import LEGACY_SPECIES_6, legacy_true_mole_fractions
 
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-DATA_ROOT = REPO_ROOT / "data" / "MEA"
-TEMPERATURE_C = 40.0
-TEMPERATURE_K = TEMPERATURE_C + 273.15
-MEA_WEIGHT_FRACTION = 0.3
-ALPHA_GRID = np.linspace(0.002, 0.8, 101)
+TEMPERATURE_C = CANONICAL_TEMPERATURE_C
+TEMPERATURE_K = CANONICAL_TEMPERATURE_K
+MEA_WEIGHT_FRACTION = CANONICAL_MEA_WEIGHT_FRACTION
+ALPHA_GRID = SIX_SPECIES_ALPHA_GRID
 PLOT_SPECIES = LEGACY_SPECIES_6 + ("MEA + MEAH+",)
 DATA_SPECIES_MAP = {
     "CO2": "CO2",
@@ -52,11 +55,10 @@ def compute_legacy_speciation_grid() -> pd.DataFrame:
 
 
 def load_speciation_data() -> pd.DataFrame:
-    df = pd.read_csv(DATA_ROOT / "ChEq" / "Combined_ChEq.csv")
-    return df[
-        (df["temperature"] == TEMPERATURE_C)
-        & (df["MEA_weight_fraction"] == MEA_WEIGHT_FRACTION)
-    ].sort_values("CO2_loading")
+    return load_measured_speciation_data(
+        temperature_C=TEMPERATURE_C,
+        mea_weight_fraction=MEA_WEIGHT_FRACTION,
+    )
 
 
 def plot_legacy_speciation(curves: pd.DataFrame, data: pd.DataFrame) -> Path:
@@ -101,7 +103,7 @@ def plot_legacy_speciation(curves: pd.DataFrame, data: pd.DataFrame) -> Path:
     ax.set_yticks(np.logspace(-8, 0, 9))
     ax.legend(loc="lower center", ncol=2)
     fig.tight_layout()
-    return save_plot(fig, __file__)
+    return save_plot(fig, __file__, "speciation")
 
 
 def main() -> int:
