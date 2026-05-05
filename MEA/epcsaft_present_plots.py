@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import minimize
 
-from epcsaft_runtime import REPO_ROOT, SPECIES, build_mixture, diagnostic_composition, output_dir
-from plot_export import save_plot
+from MEA.common.plot_export import save_plot
+from MEA.epcsaft_runtime import REPO_ROOT, SPECIES, build_mixture, diagnostic_composition, output_dir
 
 
 DATA_ROOT = REPO_ROOT / "data" / "MEA"

@@ -6,8 +6,8 @@ from time import perf_counter
 
 import numpy as np
 
-from epcsaft_data_inventory import load_inventory, write_inventory
-from epcsaft_runtime import (
+from MEA.epcsaft_data_inventory import load_inventory, write_inventory
+from MEA.epcsaft_runtime import (
     SPECIES,
     build_mixture,
     dataset_label,

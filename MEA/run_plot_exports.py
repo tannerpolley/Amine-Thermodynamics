@@ -1,35 +1,46 @@
 import os
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parents[0]
 RUNTIME_TMP = REPO_ROOT / "out" / "tmp" / "plot_exports"
-SCRIPT_NAMES = [
-    "legacy_pcsaft_baseline.py",
-    "Get_True_Mol_Frac.py",
-    "Get_True_Mol_Frac_New.py",
-    "Get_True_Mol_Frac_New_all_species.py",
-    "Get_True_Mol_Frac_with_activity.py",
-    "epcsaft_diagnostics.py",
-    "epcsaft_present_plots.py",
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+
+@dataclass(frozen=True)
+class ScriptJob:
+    module: str
+    timeout_seconds: int = 180
+    optional_runtime: str | None = None
+
+
+SCRIPT_JOBS = [
+    ScriptJob("MEA.six_species.plot_speciation", 240),
+    ScriptJob("MEA.six_species.plot_pressure", 240),
+    ScriptJob("MEA.nine_species.plot_speciation_diagnostic", 240),
+    ScriptJob("MEA.nine_species.plot_pressure_diagnostic", 600),
+    ScriptJob("MEA.epcsaft_diagnostics", 180, "epcsaft"),
+    ScriptJob("MEA.epcsaft_present_plots", 240, "epcsaft"),
 ]
-DEFAULT_TIMEOUT_SECONDS = 180
-SCRIPT_TIMEOUT_SECONDS = {
-    "legacy_pcsaft_baseline.py": 240,
-    "Get_True_Mol_Frac.py": 240,
-    "Get_True_Mol_Frac_New.py": 240,
-    "Get_True_Mol_Frac_New_all_species.py": 240,
-    "Get_True_Mol_Frac_with_activity.py": 240,
-    "epcsaft_diagnostics.py": 180,
-    "epcsaft_present_plots.py": 240,
-}
 
 
-def _script_command(script_name: str) -> list[str]:
-    return [sys.executable, script_name]
+def _script_command(job: ScriptJob) -> list[str]:
+    return [sys.executable, "-m", job.module]
+
+
+def _epcsaft_runtime_available() -> tuple[bool, str]:
+    try:
+        from MEA.epcsaft_runtime import load_epcsaft
+
+        load_epcsaft()
+    except Exception as exc:
+        return False, str(exc).splitlines()[0]
+    return True, ""
 
 
 def main() -> int:
@@ -44,19 +55,25 @@ def main() -> int:
     env["TMP"] = str(RUNTIME_TMP)
     env["TMPDIR"] = str(RUNTIME_TMP)
 
+    epcsaft_available, epcsaft_skip_reason = _epcsaft_runtime_available()
     failures = []
-    for script_name in SCRIPT_NAMES:
-        command = _script_command(script_name)
-        print(f"[RUN] {script_name} ({sys.executable})")
-        timeout_seconds = SCRIPT_TIMEOUT_SECONDS.get(script_name, DEFAULT_TIMEOUT_SECONDS)
+    skipped = []
+    for job in SCRIPT_JOBS:
+        if job.optional_runtime == "epcsaft" and not epcsaft_available:
+            skipped.append(job.module)
+            print(f"[SKIP] {job.module} ({epcsaft_skip_reason})")
+            continue
+
+        command = _script_command(job)
+        print(f"[RUN] {job.module} ({sys.executable})")
         try:
             result = subprocess.run(
                 command,
-                cwd=str(SCRIPT_DIR),
+                cwd=str(REPO_ROOT),
                 env=env,
                 capture_output=True,
                 text=True,
-                timeout=timeout_seconds,
+                timeout=job.timeout_seconds,
             )
             timed_out = False
         except subprocess.TimeoutExpired as exc:
@@ -75,15 +92,15 @@ def main() -> int:
         ]
 
         if result.returncode == 0:
-            print(f"[OK] {script_name}")
+            print(f"[OK] {job.module}")
             for path in saved_paths:
                 print(f"  PNG: {path}")
         else:
-            failures.append(script_name)
+            failures.append(job.module)
             if timed_out:
-                print(f"[TIMEOUT] {script_name} ({timeout_seconds}s)")
+                print(f"[TIMEOUT] {job.module} ({job.timeout_seconds}s)")
             else:
-                print(f"[FAIL] {script_name}")
+                print(f"[FAIL] {job.module}")
             for path in saved_paths:
                 print(f"  PNG: {path}")
             stderr_lines = [line for line in result.stderr.splitlines() if line.strip()]
@@ -93,7 +110,8 @@ def main() -> int:
                 print(f"  {line}")
 
     print("\nSummary")
-    print(f"  Successful: {len(SCRIPT_NAMES) - len(failures)}/{len(SCRIPT_NAMES)}")
+    print(f"  Successful: {len(SCRIPT_JOBS) - len(failures) - len(skipped)}/{len(SCRIPT_JOBS)}")
+    print(f"  Skipped: {', '.join(skipped) if skipped else 'none'}")
     print(f"  Failed: {', '.join(failures) if failures else 'none'}")
     return 1 if failures else 0
 

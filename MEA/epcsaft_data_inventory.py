@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
-from epcsaft_runtime import REPO_ROOT, output_dir
+from MEA.epcsaft_runtime import REPO_ROOT, output_dir
 
 
 DATA_ROOT = REPO_ROOT / "data" / "MEA"

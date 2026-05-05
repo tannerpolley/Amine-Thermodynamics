@@ -174,12 +174,14 @@ version = "1.5.0"
 source = { virtual = "../ePC-SAFT" }
 dependencies = [
     { name = "numpy" },
+    { name = "pandas" },
     { name = "scipy" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "numpy", specifier = ">=2.0" },
+    { name = "pandas", specifier = ">=2.2" },
     { name = "scipy", specifier = ">=1.13.1" },
 ]
 
@@ -194,6 +196,7 @@ build = [
     { name = "scikit-build-core", specifier = ">=0.12" },
 ]
 dev = [
+    { name = "black", specifier = ">=24.0" },
     { name = "build", specifier = ">=1.2" },
     { name = "cibuildwheel", specifier = ">=2.23" },
     { name = "cmake", specifier = ">=3.20" },
@@ -202,7 +205,14 @@ dev = [
     { name = "ninja", specifier = ">=1.11" },
     { name = "pybind11", specifier = ">=3.0" },
     { name = "pytest", specifier = ">=8.0" },
+    { name = "ruff", specifier = ">=0.5" },
     { name = "scikit-build-core", specifier = ">=0.12" },
+    { name = "sphinx", specifier = ">=7.0" },
+]
+docs = [{ name = "sphinx", specifier = ">=7.0" }]
+style = [
+    { name = "black", specifier = ">=24.0" },
+    { name = "ruff", specifier = ">=0.5" },
 ]
 test = [
     { name = "matplotlib", specifier = ">=3.8" },
