@@ -171,7 +171,7 @@ wheels = [
 [[package]]
 name = "epcsaft"
 version = "1.5.0"
-source = { virtual = "../ePC-SAFT" }
+source = { directory = "C:/Users/Tanner/Documents/git/ePC-SAFT" }
 dependencies = [
     { name = "numpy" },
     { name = "pandas" },
@@ -525,13 +525,13 @@ idaes = [
 
 [package.metadata]
 requires-dist = [
-    { name = "epcsaft", virtual = "../ePC-SAFT" },
+    { name = "epcsaft", directory = "C:/Users/Tanner/Documents/git/ePC-SAFT" },
     { name = "gekko", specifier = ">=1.3" },
     { name = "matplotlib", specifier = ">=3.10" },
     { name = "numdifftools", specifier = ">=0.9" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "pandas", specifier = ">=2.2" },
-    { name = "pcsaft", directory = "../PC-SAFT" },
+    { name = "pcsaft", directory = "C:/Users/Tanner/Documents/git/PC-SAFT" },
     { name = "pillow", specifier = ">=11" },
     { name = "plotly", specifier = ">=6" },
     { name = "scipy", specifier = ">=1.15" },
@@ -653,7 +653,7 @@ wheels = [
 [[package]]
 name = "pcsaft"
 version = "1.5.0"
-source = { directory = "../PC-SAFT" }
+source = { directory = "C:/Users/Tanner/Documents/git/PC-SAFT" }
 dependencies = [
     { name = "numpy" },
     { name = "scipy" },
