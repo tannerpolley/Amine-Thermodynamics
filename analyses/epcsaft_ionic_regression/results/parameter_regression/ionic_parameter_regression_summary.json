@@ -1,0 +1,154 @@
+{
+  "dataset": "C:\\Users\\Tanner\\.codex\\worktrees\\b185\\MEA-Thermodynamics\\data\\epcsaft_datasets\\MEA_CO2_H2O_ionic_fit",
+  "source_dataset": "data/reference/epcsaft_datasets/MEA_CO2_H2O_draft",
+  "advanced_born_user_options": {
+    "elec_model": {
+      "rel_perm": {
+        "rule": "empirical",
+        "differential_mode": "numerical"
+      },
+      "born_model": {
+        "d_Born_mode": 3,
+        "solvation_shell_model": true,
+        "dielectric_saturation": true,
+        "mu_born_model": {
+          "differential_mode": "numerical",
+          "comp_dep_delta_d": true
+        }
+      }
+    }
+  },
+  "target_counts": {
+    "vle": 3,
+    "speciation": 3
+  },
+  "optimizer": {
+    "success": false,
+    "status": 0,
+    "message": "The maximum number of function evaluations is exceeded.",
+    "nfev": 1,
+    "cost": 0.567382271015443,
+    "initial_residual_norm": 1.1240674719241737,
+    "final_residual_norm": 1.1240674719241737
+  },
+  "initial_values": {
+    "MEA__m": 3.0353,
+    "MEA__s": 3.0435,
+    "MEA__e": 277.174,
+    "MEAH+__s": 3.563,
+    "MEAH+__e": 228.71,
+    "MEAH+__d_born": 3.563,
+    "MEACOO-__s": 3.5605,
+    "MEACOO-__e": 533.11,
+    "MEACOO-__d_born": 3.5605,
+    "HCO3-__s": 2.9296,
+    "HCO3-__e": 70.0,
+    "HCO3-__d_born": 3.0,
+    "k_ij__CO2__MEA": 0.0,
+    "k_ij__CO2__MEAH+": 0.0,
+    "k_ij__CO2__MEACOO-": 0.0,
+    "k_ij__MEA__H2O": -0.052,
+    "k_ij__MEAH+__MEACOO-": 0.0,
+    "k_ij__MEAH+__HCO3-": 0.0
+  },
+  "fitted_values": {
+    "MEA__m": 3.0353,
+    "MEA__s": 3.0435,
+    "MEA__e": 277.174,
+    "MEAH+__s": 3.563,
+    "MEAH+__e": 228.71,
+    "MEAH+__d_born": 3.563,
+    "MEACOO-__s": 3.5605,
+    "MEACOO-__e": 533.11,
+    "MEACOO-__d_born": 3.5605,
+    "HCO3-__s": 2.9296,
+    "HCO3-__e": 70.0,
+    "HCO3-__d_born": 3.0,
+    "k_ij__CO2__MEA": 0.0,
+    "k_ij__CO2__MEAH+": 0.0,
+    "k_ij__CO2__MEACOO-": 0.0,
+    "k_ij__MEA__H2O": -0.052,
+    "k_ij__MEAH+__MEACOO-": 0.0,
+    "k_ij__MEAH+__HCO3-": 0.0
+  },
+  "initial_metrics": {
+    "vle_log10_rmse": 0.33019461997476157,
+    "vle_median_abs_log10_error": 0.3797569935680999,
+    "vle_max_abs_log10_error": 0.40574337289934337,
+    "reaction_ln_rmse": {
+      "R1_water_autoionization": 1.2516121284935041e-08,
+      "R2_CO2_to_HCO3": 2.9739878163250008e-08,
+      "R3_HCO3_to_CO3": 5.79462523107444e-08,
+      "R4_MEACOO_hydrolysis": 5.874995106739194e-08,
+      "R5_MEAH_dissociation": 2.171677744210708e-08
+    },
+    "reaction_ln_median_abs": {
+      "R1_water_autoionization": 5.516810119843285e-09,
+      "R2_CO2_to_HCO3": 3.408102600133134e-08,
+      "R3_HCO3_to_CO3": 6.851252010164899e-08,
+      "R4_MEACOO_hydrolysis": 5.496611077404623e-08,
+      "R5_MEAH_dissociation": 6.575824329502211e-09
+    },
+    "speciation_log10_rmse": {
+      "CO2": 3.9620185351974793,
+      "MEA": 0.5810106231659518,
+      "MEAH+": 0.11697499112558896,
+      "MEACOO-": 0.13661021775124524,
+      "HCO3-": 0.972281405992322,
+      "CO3^2-": 5.4872192636151
+    },
+    "speciation_log10_median_abs": {
+      "CO2": 1.333843805587652,
+      "MEA": 0.49439244726702414,
+      "MEAH+": 0.013878475090142312,
+      "MEACOO-": 0.10745970072788119,
+      "HCO3-": 0.07410210266070173,
+      "CO3^2-": 0.7053970562933237
+    },
+    "failure_count": 0,
+    "failures": []
+  },
+  "final_metrics": {
+    "vle_log10_rmse": 0.33019461997476157,
+    "vle_median_abs_log10_error": 0.3797569935680999,
+    "vle_max_abs_log10_error": 0.40574337289934337,
+    "reaction_ln_rmse": {
+      "R1_water_autoionization": 1.2516121284935041e-08,
+      "R2_CO2_to_HCO3": 2.9739878163250008e-08,
+      "R3_HCO3_to_CO3": 5.79462523107444e-08,
+      "R4_MEACOO_hydrolysis": 5.874995106739194e-08,
+      "R5_MEAH_dissociation": 2.171677744210708e-08
+    },
+    "reaction_ln_median_abs": {
+      "R1_water_autoionization": 5.516810119843285e-09,
+      "R2_CO2_to_HCO3": 3.408102600133134e-08,
+      "R3_HCO3_to_CO3": 6.851252010164899e-08,
+      "R4_MEACOO_hydrolysis": 5.496611077404623e-08,
+      "R5_MEAH_dissociation": 6.575824329502211e-09
+    },
+    "speciation_log10_rmse": {
+      "CO2": 3.9620185351974793,
+      "MEA": 0.5810106231659518,
+      "MEAH+": 0.11697499112558896,
+      "MEACOO-": 0.13661021775124524,
+      "HCO3-": 0.972281405992322,
+      "CO3^2-": 5.4872192636151
+    },
+    "speciation_log10_median_abs": {
+      "CO2": 1.333843805587652,
+      "MEA": 0.49439244726702414,
+      "MEAH+": 0.013878475090142312,
+      "MEACOO-": 0.10745970072788119,
+      "HCO3-": 0.07410210266070173,
+      "CO3^2-": 0.7053970562933237
+    },
+    "failure_count": 0,
+    "failures": []
+  },
+  "written_dataset_paths": [
+    "C:\\Users\\Tanner\\.codex\\worktrees\\b185\\MEA-Thermodynamics\\data\\epcsaft_datasets\\MEA_CO2_H2O_ionic_fit\\pure\\any_solvent.csv",
+    "C:\\Users\\Tanner\\.codex\\worktrees\\b185\\MEA-Thermodynamics\\data\\epcsaft_datasets\\MEA_CO2_H2O_ionic_fit\\mixed\\binary_interaction\\k_ij.csv"
+  ],
+  "method_note": "Bounded scipy least-squares around public ePC-SAFT state/activity/fugacity APIs. The fit uses fixed/reconciled liquid speciation targets, CO2 fugacity-pressure residuals, activity-based reaction residuals, Born SSM+DS user options, and regularization to literature/legacy seeds."
+}
+

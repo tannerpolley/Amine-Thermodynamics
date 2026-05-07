@@ -1,0 +1,29 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+import numpy as np
+
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+SRC_ROOT = REPO_ROOT / "src"
+MEA_DIR = SRC_ROOT / "MEA"
+REFERENCE_DATA_ROOT = REPO_ROOT / "data" / "reference"
+DATA_ROOT = REFERENCE_DATA_ROOT / "MEA"
+EPCSAFT_DATASET_ROOT = REFERENCE_DATA_ROOT / "epcsaft_datasets"
+ANALYSES_ROOT = REPO_ROOT / "analyses"
+
+SIX_SPECIES_ANALYSIS = ANALYSES_ROOT / "six_species_legacy"
+EPCSAFT_NEUTRAL_ANALYSIS = ANALYSES_ROOT / "epcsaft_neutral_parity"
+EPCSAFT_IONIC_ANALYSIS = ANALYSES_ROOT / "epcsaft_ionic_regression"
+BAYGI_ANALYSIS = ANALYSES_ROOT / "2015_baygi"
+
+LEGACY_BASELINE_OUT = SIX_SPECIES_ANALYSIS / "results" / "pressure"
+SIX_SPECIES_PROCESSED = SIX_SPECIES_ANALYSIS / "data" / "processed"
+
+CANONICAL_TEMPERATURE_C = 40.0
+CANONICAL_TEMPERATURE_K = CANONICAL_TEMPERATURE_C + 273.15
+CANONICAL_MEA_WEIGHT_FRACTION = 0.3
+JOU_TEMPERATURES_C = (40, 60, 80, 100, 120)
+
+SIX_SPECIES_ALPHA_GRID = np.linspace(0.002, 0.8, 101)

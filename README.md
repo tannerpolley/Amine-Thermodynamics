@@ -1,119 +1,46 @@
 # MEA Thermodynamics
 
-Legacy and diagnostic workflows for the `CO2-MEA-H2O` thermodynamic system.
-
-The active project is organized around two separate legacy ecosystems plus a
-neutral ePC-SAFT parity layer:
-
-- `MEA.six_species`: canonical six-species MEA speciation and Jou CO2 vapor-pressure baseline
-- `MEA.nine_species`: diagnostic nine-species chemistry and pressure workflow
-- `MEA.epcsaft_neutral`: first-pass ePC-SAFT replacement for the neutral apparent `CO2/MEA/H2O` pressure backend
-- `MEA.epcsaft_ionic`: full true-species ionic ePC-SAFT diagnostics and bounded parameter regression with Born SSM+DS
-
-Older scripts and data copies live under `archive/` for reference only.
-
-## Setup
-
-This repository is uv-based and targets Python 3.13.
-
-Required sibling repositories:
-
-- `C:\Users\Tanner\Documents\git\PC-SAFT`
-- `C:\Users\Tanner\Documents\git\ePC-SAFT`
-
-From this repo:
-
-```powershell
-$env:UV_CACHE_DIR = "$PWD\.uv-cache"
-uv sync
-```
-
-The old `pcsaft` package is retained as a reference backend for parity checks.
-The active ePC-SAFT dependency is resolved from the absolute local path above so
-this repository still works when checked out under `.codex\worktrees`.
+MEA-CO2-H2O thermodynamics workflows organized around importable package code in `src/MEA`, reusable reference data in `data/reference`, and durable analysis workspaces in `analyses/<analysis_id>`.
 
 ## Canonical Commands
 
-Compile active scripts:
-
 ```powershell
-uv run python -m compileall MEA
+uv sync
+uv run python scripts\doctor.py
+uv run python scripts\validate_project.py quick
+uv run python scripts\validate_project.py confidence
+uv run python analyses\<analysis_id>\scripts\generate_data.py
+uv run python analyses\<analysis_id>\scripts\render_figures.py
 ```
 
-Regenerate canonical plots and diagnostic artifacts:
+Package imports remain `import MEA...`; source lives under `src/MEA`.
+Old file-path commands such as `uv run python MEA\run_plot_exports.py` are intentionally not preserved.
 
-```powershell
-uv run python MEA\run_plot_exports.py
-```
+## Layout
 
-Run the focused all-species sweep check:
+- `src/MEA/`: importable model, data-loading, ePC-SAFT, and plotting support code.
+- `data/reference/MEA/`: reusable MEA VLE and chemical-equilibrium reference tables.
+- `data/reference/epcsaft_datasets/`: reusable ePC-SAFT parameter datasets.
+- `analyses/six_species_legacy/`: retained six-species legacy PC-SAFT pressure/speciation baseline needed for neutral parity checks.
+- `analyses/epcsaft_neutral_parity/`: neutral apparent-component ePC-SAFT parity artifacts.
+- `analyses/epcsaft_ionic_regression/`: full ionic ePC-SAFT regression, pressure, and speciation artifacts.
+- `analyses/2015_baygi/`: Baygi 2015 parameter-table and neutral parity reproduction.
+- `scripts/`: root doctor, validation, and plot orchestration entrypoints.
 
-```powershell
-uv run python -m MEA.nine_species.sweep_check
-```
+The removed nine-species/Gekko diagnostic workflow remains available on `legacy/main-legacy`; it is not part of active `main` validation.
 
-Run individual package entrypoints:
+Each analysis owns local `data/raw/`, `data/processed/`, and `results/<plot_set>/` folders. Curated plot sets keep the exact plotted CSV snapshot, `.mpl.yaml` style sidecar, PNG preview, and SVG figure together. Disposable run output belongs under ignored `analyses/**/results/runs/`.
 
-```powershell
-uv run python -m MEA.six_species.plot_speciation
-uv run python -m MEA.six_species.plot_pressure
-uv run python -m MEA.epcsaft_neutral.plot_pressure
-uv run python -m MEA.epcsaft_ionic.regress_parameters
-uv run python -m MEA.epcsaft_ionic.plot_results
-uv run python -m MEA.nine_species.plot_speciation_diagnostic
-uv run python -m MEA.nine_species.plot_pressure_diagnostic
-```
+## Key Artifact Paths
 
-## Active Outputs
+- `analyses/six_species_legacy/results/pressure/legacy_pcsaft_jou_recomputed_fit.png`
+- `analyses/six_species_legacy/results/pressure/legacy_pcsaft_jou_recomputed_fit.svg`
+- `analyses/six_species_legacy/results/speciation/speciation.png`
+- `analyses/epcsaft_neutral_parity/results/pressure/epcsaft_neutral_pcsaft_parity.png`
+- `analyses/epcsaft_ionic_regression/results/pressure/ionic_epcsaft_co2_pressure.png`
+- `analyses/epcsaft_ionic_regression/results/speciation/ionic_epcsaft_speciation_activity.png`
+- `analyses/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.png`
 
-Canonical plot artifacts are committed only for the active workflow:
+## Model Boundaries
 
-- `out/plots/MEA/six_species/speciation/speciation.png`
-- `out/plots/MEA/six_species/pressure/legacy_pcsaft_jou_recomputed_fit.png`
-- `out/plots/MEA/epcsaft_neutral/pressure/epcsaft_neutral_pcsaft_parity.png`
-- `out/plots/MEA/epcsaft_ionic/pressure/ionic_epcsaft_co2_pressure.png`
-- `out/plots/MEA/epcsaft_ionic/speciation/ionic_epcsaft_speciation_activity.png`
-- `out/plots/MEA/nine_species/speciation_diagnostic/speciation_diagnostic.png`
-- `out/plots/MEA/nine_species/pressure_diagnostic/co2_partial_pressure.png`
-
-Canonical evidence files live under:
-
-- `out/legacy_baseline/`
-- `out/epcsaft/neutral_parity/`
-- `out/epcsaft/ionic_regression/`
-- `out/plots/MEA/nine_species/speciation_diagnostic/`
-- `out/plots/MEA/nine_species/pressure_diagnostic/`
-
-## Model Roles
-
-`MEA.six_species.plot_speciation` is the canonical legacy speciation plot. It uses the six-species solver in `MEA.six_species.chemistry` and overlays the available 40 C, 30 wt% MEA speciation data.
-
-`MEA.six_species.plot_pressure` is the canonical Jou vapor-pressure gate. It uses six-species legacy chemistry collapsed to apparent `CO2/MEA/H2O` and verifies the expected median absolute `log10(model/data)` pressure errors.
-
-`MEA.epcsaft_neutral.plot_pressure` is the first ePC-SAFT migration gate. It
-uses the same six-species chemistry and apparent liquid composition, then solves
-the neutral apparent `CO2/MEA/H2O` pressure with the sibling `epcsaft` package.
-It writes old-PC-SAFT vs neutral-ePC-SAFT parity CSV/JSON evidence and must match
-the legacy Jou pressure metrics within the same tolerance before any ionic
-ePC-SAFT workflow becomes canonical.
-
-`MEA.epcsaft_ionic.regress_parameters` fits the full ionic true-species
-parameter set against local VLE/speciation targets using the public sibling
-`epcsaft` state/activity/fugacity APIs, Born SSM+DS user options, fitted `d_born`
-variables for ions, and regularization to literature/legacy seeds.
-`MEA.epcsaft_ionic.plot_results` evaluates the fitted ionic dataset, writes raw
-and calibrated CO2 pressure diagnostics, and regenerates ionic pressure and
-speciation plots. The calibrated pressure curve is explicit and reproducible; the
-raw fugacity residuals remain in the CSV/JSON reports.
-
-`MEA.nine_species.plot_speciation_diagnostic` and `MEA.nine_species.plot_pressure_diagnostic` are diagnostic only. They keep the nine-species chemistry path visible, record failed loadings explicitly, and should not be treated as the canonical pressure fit.
-
-`MEA/epcsaft_diagnostics.py` and `MEA/epcsaft_present_plots.py` are optional. The default runner skips them when the sibling ePC-SAFT runtime is unavailable.
-
-`analysis/2015_Baygi/` contains the restored Baygi and Pahlavanzadeh markdown plus a small reproduction harness for Table 2/Table 3 parameter summaries and neutral pressure parity plots.
-
-Shared code under `MEA/common/` is limited to neutral workflow infrastructure: paths, dataset loading, report writing, and plot export. Six-species and nine-species chemistry/model code stay in their own subpackages.
-
-## Archive Policy
-
-`archive/` contains historical scripts, old root-level experiments, old duplicate data copies, old fit artifacts, and previous in-repo PC-SAFT fallback code. These files are preserved for reference but are not maintained workflow entrypoints.
+The active package-centered path is the full ionic ePC-SAFT workflow. The neutral ePC-SAFT workflow checks apparent `CO2/MEA/H2O` parity against the retained six-species baseline. The removed nine-species/Gekko workflow was diagnostic-only legacy material and is preserved on `legacy/main-legacy`.
