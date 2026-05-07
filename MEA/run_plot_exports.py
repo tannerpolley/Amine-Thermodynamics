@@ -23,6 +23,7 @@ SCRIPT_JOBS = [
     ScriptJob("MEA.six_species.plot_speciation", 240),
     ScriptJob("MEA.six_species.plot_pressure", 240),
     ScriptJob("MEA.epcsaft_neutral.plot_pressure", 360),
+    ScriptJob("MEA.epcsaft_ionic.plot_results", 360),
     ScriptJob("MEA.nine_species.plot_speciation_diagnostic", 240),
     ScriptJob("MEA.nine_species.plot_pressure_diagnostic", 600),
     ScriptJob("MEA.epcsaft_diagnostics", 180, "epcsaft"),

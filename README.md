@@ -8,6 +8,7 @@ neutral ePC-SAFT parity layer:
 - `MEA.six_species`: canonical six-species MEA speciation and Jou CO2 vapor-pressure baseline
 - `MEA.nine_species`: diagnostic nine-species chemistry and pressure workflow
 - `MEA.epcsaft_neutral`: first-pass ePC-SAFT replacement for the neutral apparent `CO2/MEA/H2O` pressure backend
+- `MEA.epcsaft_ionic`: full true-species ionic ePC-SAFT diagnostics and bounded parameter regression with Born SSM+DS
 
 Older scripts and data copies live under `archive/` for reference only.
 
@@ -57,6 +58,8 @@ Run individual package entrypoints:
 uv run python -m MEA.six_species.plot_speciation
 uv run python -m MEA.six_species.plot_pressure
 uv run python -m MEA.epcsaft_neutral.plot_pressure
+uv run python -m MEA.epcsaft_ionic.regress_parameters
+uv run python -m MEA.epcsaft_ionic.plot_results
 uv run python -m MEA.nine_species.plot_speciation_diagnostic
 uv run python -m MEA.nine_species.plot_pressure_diagnostic
 ```
@@ -68,6 +71,8 @@ Canonical plot artifacts are committed only for the active workflow:
 - `out/plots/MEA/six_species/speciation/speciation.png`
 - `out/plots/MEA/six_species/pressure/legacy_pcsaft_jou_recomputed_fit.png`
 - `out/plots/MEA/epcsaft_neutral/pressure/epcsaft_neutral_pcsaft_parity.png`
+- `out/plots/MEA/epcsaft_ionic/pressure/ionic_epcsaft_co2_pressure.png`
+- `out/plots/MEA/epcsaft_ionic/speciation/ionic_epcsaft_speciation_activity.png`
 - `out/plots/MEA/nine_species/speciation_diagnostic/speciation_diagnostic.png`
 - `out/plots/MEA/nine_species/pressure_diagnostic/co2_partial_pressure.png`
 
@@ -75,6 +80,7 @@ Canonical evidence files live under:
 
 - `out/legacy_baseline/`
 - `out/epcsaft/neutral_parity/`
+- `out/epcsaft/ionic_regression/`
 - `out/plots/MEA/nine_species/speciation_diagnostic/`
 - `out/plots/MEA/nine_species/pressure_diagnostic/`
 
@@ -90,6 +96,15 @@ the neutral apparent `CO2/MEA/H2O` pressure with the sibling `epcsaft` package.
 It writes old-PC-SAFT vs neutral-ePC-SAFT parity CSV/JSON evidence and must match
 the legacy Jou pressure metrics within the same tolerance before any ionic
 ePC-SAFT workflow becomes canonical.
+
+`MEA.epcsaft_ionic.regress_parameters` fits the full ionic true-species
+parameter set against local VLE/speciation targets using the public sibling
+`epcsaft` state/activity/fugacity APIs, Born SSM+DS user options, fitted `d_born`
+variables for ions, and regularization to literature/legacy seeds.
+`MEA.epcsaft_ionic.plot_results` evaluates the fitted ionic dataset, writes raw
+and calibrated CO2 pressure diagnostics, and regenerates ionic pressure and
+speciation plots. The calibrated pressure curve is explicit and reproducible; the
+raw fugacity residuals remain in the CSV/JSON reports.
 
 `MEA.nine_species.plot_speciation_diagnostic` and `MEA.nine_species.plot_pressure_diagnostic` are diagnostic only. They keep the nine-species chemistry path visible, record failed loadings explicitly, and should not be treated as the canonical pressure fit.
 
