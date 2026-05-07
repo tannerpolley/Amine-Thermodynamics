@@ -17,6 +17,7 @@ Required sibling repositories:
 
 - `C:\Users\Tanner\Documents\git\PC-SAFT`
 - `C:\Users\Tanner\Documents\git\ePC-SAFT` for optional ePC-SAFT diagnostics
+- `C:\Users\Tanner\Documents\git\LaTeX-Projects\MEA-Thermodynamics-LaTeX` for the external LaTeX paper checkout
 
 From this repo:
 

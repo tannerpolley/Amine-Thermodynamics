@@ -1,0 +1,300 @@
+\section{MEA System Modeling Results}\label{sec:mea-system-modeling-results}
+
+This section summarizes the current modeling workflow for the aqueous
+\MEA--\COtwo--\HtwoO system.  The purpose at this stage is to define the data
+basis, chemical speciation model, baseline pressure calculation, and regression
+path for a true-species electrolyte PC-SAFT representation.  The workflow uses
+the experimental VLE and speciation data collected in the project repository and
+maps those measurements onto a nine-species reactive liquid basis suitable for
+ePC-SAFT.
+
+\subsection{Experimental Data Basis}
+
+The raw data used for the MEA system are separated into vapor-liquid equilibrium
+data and chemical speciation data.  The VLE data contain unloaded MEA
+mass fraction, temperature, \COtwo loading, and measured \COtwo partial pressure.
+The assembled VLE table contains measurements from Aronu et al., Hilliard,
+Jou et al., Mamun et al., and Xu et al.~\cite{Aronu2011,Hilliard2008,Jou1995,Mamun2005,Xu2011}.
+The speciation table contains NMR-derived true-species mole fractions for
+aqueous loaded MEA, including measurements from Boettinger et al., Jakobsen
+et al., and Matin et al.~\cite{Bottinger2008,Jakobsen2005,Matin2012}.  These
+two data families are treated as complementary: VLE data constrain the gas-phase
+\COtwo pressure response, while speciation data constrain the distribution of
+neutral MEA, protonated MEA, carbamate, bicarbonate, and carbonate in the liquid.
+
+\begin{table}[t]
+    \centering
+    \caption{Raw MEA data currently used by the modeling workflow.}
+    \label{tab:mea-data-inventory}
+    \begin{tabularx}{\linewidth}{lclX}
+        \toprule
+        Data family & Records & Primary sources & Observables \\
+        \midrule
+        VLE & 161 &
+        \cite{Aronu2011,Hilliard2008,Jou1995,Mamun2005,Xu2011} &
+        $\MEA$ mass fraction, temperature, \COtwo loading, and \COtwo partial pressure \\
+        Speciation & 74 &
+        \cite{Bottinger2008,Jakobsen2005,Matin2012} &
+        \MEA, \MEAH, \MEACOO, \HCOthree, and \ce{CO3^2-} true-species mole fractions \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+The figures in this section are generated from the project data and stored as
+manuscript artifacts.  They document the current analysis path and identify the
+comparisons that will be replaced or supplemented by the final fitted ePC-SAFT
+results.
+
+\subsection{Reactive Species Basis}
+
+The apparent liquid feed is defined from the unloaded MEA mass fraction
+$w_{\MEA}$ and the \COtwo loading $\alpha$, where $\alpha$ is the number of
+moles of absorbed \COtwo per mole of total MEA.  For an unloaded solution basis,
+the apparent MEA mole fraction is computed from molecular-weight conversion as
+\begin{equation}
+    x_{\MEA,0}
+    =
+    \frac{w_{\MEA}}
+    {M_{\MEA}/M_{\HtwoO} + w_{\MEA}\left(1-M_{\MEA}/M_{\HtwoO}\right)} ,
+    \label{eq:mea-unloaded-mole-fraction}
+\end{equation}
+with $x_{\HtwoO,0}=1-x_{\MEA,0}$.  The apparent charged solution is then formed
+by adding absorbed \COtwo according to
+\begin{equation}
+    n_{\COtwo,0} = \alpha n_{\MEA,0},
+    \qquad
+    x_{i,0} = \frac{n_{i,0}}{n_{\COtwo,0}+n_{\MEA,0}+n_{\HtwoO,0}} .
+    \label{eq:mea-apparent-feed}
+\end{equation}
+This apparent ternary state is converted into a true-species liquid composition.
+The current diagnostic model uses the nine-species set
+\begin{equation}
+    \boldsymbol{x}
+    =
+    \left(
+    x_{\COtwo},
+    x_{\MEA},
+    x_{\HtwoO},
+    x_{\MEAH},
+    x_{\MEACOO},
+    x_{\HCOthree},
+    x_{\ce{CO3^2-}},
+    x_{\ce{H3O+}},
+    x_{\ce{OH-}}
+    \right).
+    \label{eq:mea-nine-species-vector}
+\end{equation}
+This species basis makes the electrolyte character of the loaded solvent
+explicit and is therefore the basis used for the ePC-SAFT parameter folder.
+
+\subsection{Chemical Equilibrium Model}
+
+The true-species calculation is formulated as a simultaneous reaction-equilibrium
+and conservation problem.  For each independent reaction $r$, the equilibrium
+condition is written in mole-fraction form as
+\begin{equation}
+    \sum_i \nu_{r i}\ln x_i = \ln K_r(T),
+    \label{eq:mea-log-equilibrium}
+\end{equation}
+where $\nu_{ri}$ is the stoichiometric coefficient of species $i$ in reaction
+$r$.  The temperature dependence of each equilibrium constant follows the
+correlation form
+\begin{equation}
+    \ln K_r(T) = a_r + \frac{b_r}{T} + c_r \ln T + d_r T.
+    \label{eq:mea-equilibrium-temperature}
+\end{equation}
+The current nine-species solver includes water autoionization, bicarbonate and
+carbonate equilibria, carbamate hydrolysis, and MEA protonation/carbamate
+formation.  The equations are solved with element and charge balances:
+\begin{align}
+    x_{\COtwo,0} &= x_{\COtwo}+x_{\MEACOO}+x_{\HCOthree}+x_{\ce{CO3^2-}}, \\
+    x_{\MEA,0} &= x_{\MEA}+x_{\MEAH}+x_{\MEACOO}, \\
+    x_{\HtwoO,0} &= x_{\HtwoO}+x_{\HCOthree}+x_{\ce{CO3^2-}}+x_{\ce{H3O+}}+x_{\ce{OH-}}, \\
+    x_{\MEAH}+x_{\ce{H3O+}} &= x_{\MEACOO}+x_{\HCOthree}+2x_{\ce{CO3^2-}}+x_{\ce{OH-}}.
+    \label{eq:mea-nine-species-balances}
+\end{align}
+This model is intentionally more detailed than the older six-species baseline.
+The six-species model is useful as a continuity check because it preserves the
+legacy chemistry and pressure path, while the nine-species model is the more
+natural bridge into ePC-SAFT because it carries the ions required by the
+electrolyte term.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\linewidth]{Figures/mea_six_species_speciation.png}
+    \caption{Six-species legacy speciation baseline for 30 wt\% MEA.  The curves
+    show the reconstructed major liquid species as a function of \COtwo loading;
+    markers show the assembled experimental speciation data.}
+    \label{fig:mea-six-species-speciation}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\linewidth]{Figures/mea_nine_species_speciation_diagnostic.png}
+    \caption{Nine-species diagnostic speciation model for 30 wt\% MEA.  The
+    expanded liquid basis includes bicarbonate, carbonate, hydronium, and
+    hydroxide so that the composition can be passed directly to the ePC-SAFT
+    electrolyte model.}
+    \label{fig:mea-nine-species-speciation}
+\end{figure}
+
+The all-species sweep currently solves all 101 diagnostic speciation states
+without failed loadings.  This is an important practical result because it
+allows the ePC-SAFT calculation to be driven from a continuous, charge-balanced
+composition path rather than from isolated measured points.  The present
+speciation calculation should still be interpreted as a diagnostic chemistry
+model.  In the final parameter-estimation workflow, these speciation states are
+expected to become either direct fitting targets or fixed liquid-state inputs
+for early-stage VLE parameter regression.
+
+\subsection{Baseline Pressure Model}
+
+The pressure baseline is used to check that the chemistry path produces plausible
+\COtwo pressure trends before the ePC-SAFT regression is applied.  In the legacy
+pressure calculation, the liquid composition is collapsed from the reactive
+species basis back to an apparent \COtwo--\MEA--\HtwoO composition and evaluated
+with a PC-SAFT pressure model.  The resulting residuals are reported on a
+logarithmic scale,
+\begin{equation}
+    \epsilon_P =
+    \log_{10}\left(\frac{P_{\COtwo}^{\mathrm{model}}}
+    {P_{\COtwo}^{\mathrm{exp}}}\right),
+    \label{eq:mea-pressure-residual}
+\end{equation}
+because the measured \COtwo partial pressures span several orders of magnitude.
+The objective of this baseline is not to replace the ePC-SAFT model, but to
+verify that the raw data, loading convention, and species reconstruction are
+internally consistent.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\linewidth]{Figures/mea_six_species_pressure_jou.png}
+    \caption{Legacy six-species pressure baseline against the 30 wt\% MEA Jou
+    VLE data.  The median absolute log residuals are approximately 0.39, 0.31,
+    0.15, 0.06, and 0.08 at 40, 60, 80, 100, and \SI{120}{\degreeCelsius},
+    respectively.}
+    \label{fig:mea-six-species-pressure}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\linewidth]{Figures/mea_nine_species_pressure_diagnostic.png}
+    \caption{Nine-species pressure diagnostic using the expanded liquid
+    composition basis.  The current diagnostic sweep solved 105 chemistry and
+    pressure states with no chemistry or pressure failures and a median absolute
+    log residual of approximately 0.46.}
+    \label{fig:mea-nine-species-pressure}
+\end{figure}
+
+The pressure figures show the expected steep increase in \COtwo partial pressure
+with loading.  This behavior is important for carbon capture process simulation:
+small changes in loading near the rich end of the solvent cycle can correspond
+to large changes in equilibrium pressure and therefore large changes in absorber
+or stripper driving force.  The diagnostic pressure results also show why
+parameter regression is required.  The chemistry model gives a stable
+composition path, but an electrolyte equation of state must still be calibrated
+against both pressure and speciation information before it can be used as a
+predictive thermodynamic engine.
+
+\subsection{ePC-SAFT Parameterization Workflow}
+
+The working ePC-SAFT dataset represents the liquid using the nine species in
+\cref{eq:mea-nine-species-vector}.  Neutral species retain PC-SAFT segment,
+diameter, dispersion, and association parameters, while charged species require
+ion diameter, dispersion, charge, and Born-radius parameters.  The working
+parameter table currently includes explicit entries for \COtwo, \MEA, \HtwoO,
+\MEAH, \MEACOO, \HCOthree, \ce{CO3^2-}, \ce{H3O+}, and \ce{OH-}.  The current
+regression focus is on the species most directly controlled by the MEA reaction
+chemistry: \MEA, \MEAH, and \MEACOO.
+
+\begin{table}[t]
+    \centering
+    \caption{Representative working ePC-SAFT parameters for the fitted MEA-family
+    species in the current parameter folder.}
+    \label{tab:mea-working-epcsaft-parameters}
+    \begin{tabularx}{\linewidth}{lrrrrX}
+        \toprule
+        Species & $m$ & $\sigma$ & $\epsilon/k$ & $d_{\mathrm{Born}}$ & Notes \\
+        \midrule
+        \MEA & 5.035 & 2.300 & 404.46 & 0.000 & Neutral associating amine, 2B association scheme \\
+        \MEAH & 1.000 & 5.499 & 892.87 & 1.441 & Protonated amine cation \\
+        \MEACOO & 1.000 & 5.490 & 52.00 & 6.489 & Carbamate anion \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+Binary interaction parameters are included for the pairs most likely to control
+the VLE response in the preliminary model.  The current parameter set contains nonzero
+$k_{ij}$ values for \COtwo--\MEA, \COtwo--\MEAH, \COtwo--\MEACOO, and
+\MEA--\HtwoO.  Hydrogen-bonding cross-interaction parameters are not yet active
+in the working table.  This produces a deliberately simple first regression
+surface: tune the dominant pure-ion and binary-interaction degrees of freedom
+before adding additional cross association or composition-dependent dielectric
+terms.
+
+The ePC-SAFT regression target can be expressed as a weighted least-squares
+problem over VLE and speciation records:
+\begin{equation}
+    \Phi(\boldsymbol{\theta}) =
+    \sum_{j\in\mathcal{D}_{P}}
+    w_{P,j}
+    \left[
+    \log_{10}P_{\COtwo,j}^{\mathrm{model}}(\boldsymbol{\theta})
+    -
+    \log_{10}P_{\COtwo,j}^{\mathrm{exp}}
+    \right]^2
+    +
+    \sum_{j\in\mathcal{D}_{x}}
+    \sum_{i\in\mathcal{S}_{x}}
+    w_{x,ij}
+    \left[
+    x_{ij}^{\mathrm{model}}(\boldsymbol{\theta})
+    -
+    x_{ij}^{\mathrm{exp}}
+    \right]^2 ,
+    \label{eq:mea-regression-objective}
+\end{equation}
+where $\boldsymbol{\theta}$ is the vector of adjustable ePC-SAFT parameters,
+$\mathcal{D}_{P}$ is the VLE data set, $\mathcal{D}_{x}$ is the speciation data
+set, and $\mathcal{S}_{x}$ is the set of measured liquid species.  The pressure
+term is written in logarithmic form to avoid over-weighting high-pressure rich
+loading data.  The speciation term provides an independent constraint on the
+chemical distribution, preventing the regression from matching pressure through
+unphysical species partitioning.
+
+For the first complete ePC-SAFT workflow, the practical regression sequence is:
+\begin{enumerate}
+    \item Build a charge-balanced liquid composition path from the raw
+    speciation data and the nine-species reaction model.
+    \item Fit the adjustable \MEA, \MEAH, and \MEACOO pure-component parameters
+    against the speciation-informed liquid states.
+    \item Fit the dominant binary interaction parameters against the VLE partial
+    pressures, beginning with \COtwo--\MEA, \COtwo--\MEAH, \COtwo--\MEACOO, and
+    \MEA--\HtwoO.
+    \item Recompute the VLE and speciation figures using the fitted parameter
+    folder and compare the residuals in \cref{eq:mea-pressure-residual} and
+    \cref{eq:mea-regression-objective}.
+\end{enumerate}
+This ordering separates numerical stability from thermodynamic calibration.
+The current chemistry and pressure plots demonstrate that the raw MEA data can
+be converted into a continuous true-species path.  The next modeling task is to
+use that path as the fitting basis for the electrolyte equation of state rather
+than treating the existing diagnostic pressure model as the final result.
+
+\subsection{Current Interpretation and Next Modeling Step}
+
+The present results establish three points.  First, the raw VLE and speciation
+data have been organized into a consistent loading and species convention.
+Second, the nine-species chemistry model is sufficiently robust for a continuous
+30 wt\% MEA loading sweep, which is necessary for process-simulation use.
+Third, the pressure diagnostics reproduce the correct qualitative trend but
+still require ePC-SAFT regression before the model can be considered predictive.
+
+The final results section should replace the diagnostic pressure comparison with
+a fitted ePC-SAFT comparison.  The expected final evidence set
+should include: (i) the fitted pure and binary parameters, (ii) parity or
+residual plots for \COtwo pressure, (iii) overlays of measured and predicted
+liquid speciation, and (iv) a short uncertainty or sensitivity discussion
+showing which parameters control pressure and which control speciation.  Section
+4 can then use the completed thermodynamic model as the property package for
+the absorption-column simulation.

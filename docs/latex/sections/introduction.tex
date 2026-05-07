@@ -1,0 +1,76 @@
+\section{Introduction}\label{sec:introduction}
+Post-combustion carbon capture (PCC) is a vital technology for mitigating
+$\COtwo$ emissions, with amine-based absorption using monoethanolamine (\MEA)
+remaining one of the most established routes for \COtwo removal from dilute flue
+gas streams.  Understanding the thermodynamics of the \MEA--\HtwoO--\COtwo
+system is essential for designing efficient absorption and desorption processes.
+Traditional models, including electrolyte NRTL, extended UNIQUAC, and empirical
+correlations, have long been used to correlate vapor-liquid equilibrium (VLE),
+reactive speciation, and other properties of these mixtures.  In recent years,
+molecular-based equations of state, including the statistical associating fluid
+theory (SAFT) family and its PC-SAFT and ePC-SAFT variants, have become
+attractive alternatives for complex associating and electrolyte systems.  These
+equations of state offer a more physical parameterization than purely empirical
+models while retaining the computational efficiency required for process
+simulation.
+
+\subsection{Prior Work on MEA Thermodynamics, VLE, and Solubility}
+Monoethanolamine has long been the benchmark solvent for post-combustion
+\ce{CO2} capture due to its high reactivity with acidic gases and relatively low
+cost.  Accurate representation of its thermodynamics, including VLE, heats of
+absorption, and speciation, is therefore essential for predictive process
+modeling.  Early empirical and activity coefficient models such as
+Kent-Eisenberg and Deshmukh-Mather provided approximate frameworks but suffered
+from limited extrapolation capability~\cite{Liu1999,Song2009,Akula2023a}.  The
+electrolyte nonrandom two-liquid (eNRTL) model became a standard in commercial
+simulators and has been refined in several studies for
+\MEA--\ce{CO2}--\ce{H2O} systems~\cite{Zhang2011,Morgan2017b,Mouhoubi2020,Hilliard2008}.
+Experimental studies have further provided high-quality solubility and
+calorimetric data for MEA solutions, establishing reliable baselines for model
+development and validation~\cite{Zhu2022,Kim2021}.  Despite this progress,
+activity coefficient models typically require large numbers of fitted binary
+parameters and have limited transferability outside the conditions used for
+parameter estimation.
+
+\subsection{Prior Applications of PC-SAFT and ePC-SAFT to Amine Systems}
+Equations of state (EOS), and in particular the SAFT family, provide a more
+molecularly grounded alternative to excess Gibbs energy approaches.  The
+perturbed-chain SAFT (PC-SAFT) equation of state has been widely used to model
+associating systems, including alkanolamine solutions.  Applications include
+the work of Nasrifar and co-workers on MEA and other
+ethanolamines~\cite{Nasrifar2010}, as well as extensions to solubility and
+calorimetric data for \MEA--\ce{CO2}--\ce{H2O}~\cite{Baygi2015,Najafloo2018}.
+More recent efforts have expanded SAFT-based modeling to multiple alkanolamines
+and mixtures, with PC-SAFT, SAFT-HR, and P$\rho$T-SAFT-HR formulations evaluated
+across pure, binary, and ternary systems~\cite{Pakravesh2025}.  These studies
+highlight the promise of SAFT-type EOSs for reducing reliance on empirical
+fitting while retaining predictive capability for VLE, enthalpy, and density
+properties.
+
+The electrolyte extension, ePC-SAFT, incorporates explicit treatment of charged
+species, enabling physically consistent modeling of aqueous electrolyte
+solutions.  ePC-SAFT has demonstrated success in systems containing ionic
+liquids and mixed solvents~\cite{Sun2019,Bulow2021}.  Thus, while PC-SAFT has
+shown predictive capability for \ce{CO2}-loaded alkanolamines, the explicit
+electrolyte treatment of ePC-SAFT offers an attractive pathway to capture the
+speciation and solvation effects inherent in loaded MEA systems.
+
+\subsection{Research Gap and Objective}
+Although MEA has been extensively studied using empirical, activity
+coefficient, and PC-SAFT approaches, there remains a gap in the systematic
+application of the ePC-SAFT framework to the
+\MEA--\ce{CO2}--\ce{H2O} system.  Existing PC-SAFT studies provide valuable
+benchmarks, but they do not explicitly represent electrolyte contributions,
+limiting their ability to capture speciation and solvation thermodynamics at
+high loadings.  Conversely, electrolyte activity coefficient models such as
+eNRTL provide engineering utility but require extensive parameterization and
+offer limited predictive transferability.
+
+The objective of this work is therefore to build a thermodynamic modeling
+workflow for the MEA system using ePC-SAFT.  The present manuscript organizes
+the experimental VLE and speciation data, defines a charge-balanced
+true-species liquid basis, reports baseline chemistry and pressure diagnostics,
+and establishes the parameter-regression structure needed for the final
+ePC-SAFT model.  Once the fitted parameters are finalized, the resulting model
+will provide the thermodynamic foundation for rigorous process simulation of
+amine-based \ce{CO2} capture.
