@@ -1,0 +1,90 @@
+\section{Thermodynamic Model and Regression Framework}\label{sec:model-framework}
+The modeling target is a reacting electrolyte vapor--liquid equilibrium problem.  At specified temperature, apparent amine concentration, and total absorbed \COtwo loading, the model must determine a charge-balanced true-species liquid composition and the corresponding vapor-phase \COtwo partial pressure.  The liquid composition is not an auxiliary bookkeeping variable; it controls ePC-SAFT fugacity coefficients, activity coefficients, and Born/electrostatic contributions.
+
+\subsection{ePC-SAFT Residual Helmholtz Energy}
+ePC-SAFT is formulated as a residual Helmholtz-energy equation of state.  The reduced residual Helmholtz energy is represented schematically as
+\begin{equation}
+    a^{\mathrm{res}}
+    = a^{\mathrm{hc}} + a^{\mathrm{disp}} + a^{\mathrm{assoc}}
+    + a^{\mathrm{ion}} + a^{\mathrm{Born}},
+    \label{eq:epcsaft-residual-split}
+\end{equation}
+where the hard-chain and dispersion terms describe chain-molecule repulsion and attraction, the association term describes site-specific hydrogen bonding, the ionic term describes long-range electrostatic interactions, and the Born contribution describes ion solvation.  Neutral \MEA and \HtwoO require association parameters, whereas ions require charge and Born-radius information in addition to size and dispersion parameters.
+
+For a liquid state at temperature $T$, pressure $P$, and mole-fraction vector $\boldsymbol{x}$, ePC-SAFT provides residual chemical potentials and fugacity coefficients.  Molecular vapor--liquid equilibrium is expressed through fugacity equality,
+\begin{equation}
+    f_i^{\liq}(T,P,\boldsymbol{x}^{\liq})
+    =
+    f_i^{\vap}(T,P,\boldsymbol{y}^{\vap}),
+    \qquad i \in \{\COtwo,\HtwoO,\MEA\},
+    \label{eq:fugacity-equality}
+\end{equation}
+while ionic species are constrained to the liquid phase.
+
+\subsection{True-Species Chemical Equilibrium}
+The apparent feed is defined by the unloaded \MEA mass fraction $w_{\MEA}$ and \COtwo loading $\alpha$, with $\alpha$ equal to moles of absorbed \COtwo per mole of total amine.  The unloaded apparent liquid composition is computed from molecular-weight conversion as
+\begin{equation}
+    x_{\MEA,0}
+    =
+    \frac{w_{\MEA}}
+    {M_{\MEA}/M_{\HtwoO}+w_{\MEA}\left(1-M_{\MEA}/M_{\HtwoO}\right)},
+    \qquad
+    x_{\HtwoO,0}=1-x_{\MEA,0}.
+    \label{eq:unloaded-mea-composition}
+\end{equation}
+Absorbed \COtwo is then added according to $n_{\COtwo,0}=\alpha n_{\MEA,0}$ and the total apparent state is normalized.
+
+The true-species liquid basis is
+\begin{equation}
+    \boldsymbol{x}
+    =
+    \left(
+    x_{\COtwo},x_{\MEA},x_{\HtwoO},x_{\MEAH},x_{\MEACOO},
+    x_{\HCOthree},x_{\COthree},x_{\HthreeO},x_{\Hydroxide}
+    \right).
+    \label{eq:true-species-vector}
+\end{equation}
+The independent reactions include water autoionization, carbonic-acid dissociation to bicarbonate and carbonate, carbamate hydrolysis, and protonated-amine dissociation.  For reaction $r$, thermodynamic equilibrium is written with activities rather than bare mole fractions,
+\begin{equation}
+    \sum_i \nu_{ri}\ln a_i = \ln K_r(T),
+    \qquad
+    a_i = \gamma_i^{\mathrm{ePC-SAFT}} x_i,
+    \label{eq:activity-reaction-equilibrium}
+\end{equation}
+where $\nu_{ri}$ is the stoichiometric coefficient and $\gamma_i^{\mathrm{ePC-SAFT}}$ is the activity coefficient evaluated from the ePC-SAFT liquid state.  This activity-coupled form is the key distinction from a diagnostic ideal-speciation model.
+
+The liquid composition also satisfies carbon, amine, water, and charge balances:
+\begin{align}
+    x_{\COtwo,0} &= x_{\COtwo}+x_{\MEACOO}+x_{\HCOthree}+x_{\COthree}, \\
+    x_{\MEA,0} &= x_{\MEA}+x_{\MEAH}+x_{\MEACOO}, \\
+    x_{\HtwoO,0} &= x_{\HtwoO}+x_{\HCOthree}+x_{\COthree}+x_{\HthreeO}+x_{\Hydroxide}, \\
+    x_{\MEAH}+x_{\HthreeO} &= x_{\MEACOO}+x_{\HCOthree}+2x_{\COthree}+x_{\Hydroxide}.
+    \label{eq:true-species-balances}
+\end{align}
+
+\subsection{Advanced Born and Permittivity Treatment}
+The ePC-SAFT calculations in this work use the advanced electrolyte options associated with concentration-dependent permittivity and modified Born solvation.  The enabled options correspond to an empirical relative-permittivity rule, numerical composition derivatives, Born-radius mode 3, solvation-shell modeling, dielectric saturation, and composition-dependent Born chemical-potential corrections.  In physical terms, this means that the liquid dielectric environment is not treated as a fixed pure-water constant.  Instead, the ion solvation contribution responds to solvent composition and ionic strength, which is essential for a loaded amine solution whose polarity and ion population change strongly with \COtwo loading.
+
+\subsection{Parameter Regression Objective}
+The parameter vector $\boldsymbol{\theta}$ includes selected pure-component parameters for \MEA-family species and selected binary interaction parameters.  The pressure residual is expressed on a logarithmic basis,
+\begin{equation}
+    \epsilon_{P,j}
+    =
+    \log_{10}\left(\frac{P_{\COtwo,j}^{\mathrm{model}}}{P_{\COtwo,j}^{\mathrm{exp}}}\right),
+    \label{eq:pressure-log-residual}
+\end{equation}
+because measured \COtwo partial pressures span several orders of magnitude.  The full regression target combines pressure residuals, speciation residuals, reaction-equilibrium residuals, and regularization to physically plausible seeds:
+\begin{equation}
+    \Phi(\boldsymbol{\theta}) =
+    \sum_{j\in\mathcal{D}_P} w_{P,j}\epsilon_{P,j}^{2}
+    +
+    \sum_{j\in\mathcal{D}_x}\sum_{i\in\mathcal{S}_x} w_{x,ij}
+    \left[\log_{10}\left(\frac{x_{ij}^{\mathrm{model}}}{x_{ij}^{\mathrm{exp}}}\right)\right]^2
+    +
+    \sum_{j\in\mathcal{D}_x}\sum_r w_{K,rj}
+    \left(\sum_i \nu_{ri}\ln a_{ij}-\ln K_r\right)^2
+    +
+    \lambda\lVert \boldsymbol{\theta}-\boldsymbol{\theta}_0\rVert^2.
+    \label{eq:regression-objective}
+\end{equation}
+This objective is intentionally multi-observable.  A pressure-only fit can hide a poor liquid composition, while a speciation-only fit cannot guarantee the correct gas-phase driving force.  The final predictive model must satisfy both.

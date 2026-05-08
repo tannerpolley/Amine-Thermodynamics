@@ -1,0 +1,109 @@
+\section{MEA System Workflow and Results}\label{sec:mea-system-modeling-results}
+This section reports the evidence generated for the \MEA--\COtwo--\HtwoO system.  The results are organized from data assembly to baseline checks, neutral ePC-SAFT parity, full ionic ePC-SAFT pressure/speciation evaluation, and parameter-regression readiness.
+
+\subsection{Experimental Data Basis}
+The VLE data set contains 161 \COtwo partial-pressure records from Aronu et al., Hilliard, Jou et al., Mamun et al., and Xu et al.\cite{Aronu2011,Hilliard2008,Jou1995,Mamun2005,Xu2011}.  Each record contains amine mass fraction, temperature, \COtwo loading, and measured \COtwo pressure.  The speciation data set contains 74 NMR-derived liquid-composition records from Boettinger et al., Jakobsen et al., and Matin et al.\cite{Bottinger2008,Jakobsen2005,Matin2012}.  The data are expressed on a common loading basis and reconciled to satisfy carbon, amine, water, and charge balances before ePC-SAFT evaluation.
+
+\begin{table}[t]
+    \centering
+    \caption{Experimental evidence base used for the \MEA ePC-SAFT workflow.}
+    \label{tab:mea-data-inventory}
+    \begin{tabularx}{\linewidth}{lclX}
+        \toprule
+        Data family & Records & Primary sources & Observables \\
+        \midrule
+        VLE & 161 & \cite{Aronu2011,Hilliard2008,Jou1995,Mamun2005,Xu2011} &
+        \MEA mass fraction, temperature, \COtwo loading, and \COtwo partial pressure \\
+        Speciation & 74 & \cite{Bottinger2008,Jakobsen2005,Matin2012} &
+        True-species mole fractions for \MEA, \MEAH, \MEACOO, \HCOthree, carbonate, and associated water/trace species \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\subsection{Baseline and Neutral ePC-SAFT Checks}
+Two baseline checks were used before interpreting the full ionic model.  First, the legacy six-species chemistry path was regenerated for 30 wt\% \MEA.  It includes \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, and the aggregate $\MEA+\MEAH$.  The pressure comparison against the Jou 30 wt\% data gives median absolute logarithmic residuals of approximately 0.39, 0.31, 0.15, 0.06, and 0.08 at 40, 60, 80, 100, and \SI{120}{\degreeCelsius}, respectively.  This reproduces the expected pressure trend and provides continuity with the older PC-SAFT path.
+
+Second, the neutral ePC-SAFT pressure calculation was compared directly with the legacy PC-SAFT pressure output.  The neutral parity check demonstrates that the ePC-SAFT package can reproduce the neutral pressure path when the electrolyte terms are not the controlling difference.  This isolates the later ionic comparisons from simple package-interface or unit-conversion errors.
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figures/mea_six_species_pressure_jou.png}
+        \caption{Six-species pressure baseline.}
+        \label{fig:six-pressure}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figures/mea_neutral_epcsaft_pcsaft_parity.png}
+        \caption{Neutral ePC-SAFT parity.}
+        \label{fig:neutral-parity}
+    \end{subfigure}
+    \caption{Baseline pressure checks for the \MEA workflow.  The six-species calculation verifies continuity with the historical pressure benchmark, while the neutral parity check verifies that the ePC-SAFT package reproduces the neutral pressure path before full ionic terms are introduced.}
+    \label{fig:baseline-pressure-checks}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\linewidth]{Figures/mea_six_species_speciation.png}
+    \caption{Six-species reconstructed speciation for 30 wt\% \MEA.  Dashed lines denote the reconstructed model path and markers denote assembled literature speciation records.}
+    \label{fig:six-speciation}
+\end{figure}
+
+\subsection{Full-Ionic ePC-SAFT Parameter Set}
+The full ionic liquid basis contains nine species: \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide.  The working ePC-SAFT parameter set uses existing neutral and ion entries for \COtwo, \HtwoO, bicarbonate, carbonate, hydronium, and hydroxide, while exposing \MEA, \MEAH, \MEACOO, and selected binary terms as regression degrees of freedom.
+
+\begin{table}[t]
+    \centering
+    \caption{Working ePC-SAFT pure-component parameters for the full ionic \MEA basis.  Values are reported as the seed parameterization used for the first full-ionic workflow; they are not a final optimized parameter set.}
+    \label{tab:working-epcsaft-parameters}
+    \begin{tabularx}{\linewidth}{lrrrrX}
+        \toprule
+        Species & $m$ & $\sigma$ & $\epsilon/k$ & $z$ & Note \\
+        \midrule
+        \COtwo & 2.079 & 2.7852 & 169.21 & 0 & Existing molecular parameter \\
+        \MEA & 3.0353 & 3.0435 & 277.17 & 0 & Associating amine, fitted family \\
+        \HtwoO & 1.2047 & $\sigma(T)$ & 353.95 & 0 & Associating water, temperature-dependent diameter \\
+        \MEAH & 1.000 & 3.5630 & 228.71 & 1 & Protonated amine cation, fitted family \\
+        \MEACOO & 1.000 & 3.5605 & 533.11 & -1 & Carbamate anion, fitted family \\
+        \HCOthree & 1.000 & 2.9296 & 70.00 & -1 & Existing bicarbonate seed \\
+        \COthree & 1.000 & 3.0000 & 300.00 & -2 & Existing carbonate seed \\
+        \HthreeO & 1.000 & 3.0000 & 300.00 & 1 & Existing hydronium seed \\
+        \Hydroxide & 1.000 & 3.0000 & 300.00 & -1 & Existing hydroxide seed \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+The binary-interaction matrix currently retains only one nonzero seed value, $k_{\MEA,\HtwoO}=-0.052$, while the most important future regression candidates include \COtwo--\MEA, \COtwo--\MEAH, \COtwo--\MEACOO, \MEAH--\MEACOO, and \MEAH--\HCOthree.  This sparse seed is useful for diagnosis because it exposes the effect of the ionic/activity model before a heavily tuned parameter set is introduced.
+
+\subsection{Full-Ionic Pressure and Speciation Evaluation}
+The full ionic ePC-SAFT evaluation solves all 161 assembled VLE records and all 74 speciation records without recorded state failures.  The pressure residuals have a median absolute value of 0.362 on the $\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})$ scale, with a maximum absolute value of 0.973.  These values show that the seed parameter set has the correct order of magnitude across the literature data, but it still requires formal regression before it can be presented as a final predictive model.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\linewidth]{Figures/mea_ionic_epcsaft_pressure.png}
+    \caption{Full-ionic ePC-SAFT \COtwo partial-pressure comparison for the assembled VLE data.  The calculation uses a reactive true-species liquid basis and advanced Born options.}
+    \label{fig:ionic-pressure}
+\end{figure}
+
+The speciation comparison is shown in \cref{fig:ionic-speciation}.  Major amine-family species are reproduced more closely than trace molecular \COtwo, hydronium, and hydroxide.  The median absolute logarithmic model/data deviations are approximately 0.163 for \MEA, 0.0087 for \HtwoO, 0.0876 for \MEAH, 0.0460 for \MEACOO, 0.454 for \HCOthree, and 0.777 for \COthree.  The much larger trace-species deviations for molecular \COtwo, \HthreeO, and \Hydroxide reflect the difficulty of comparing species that are either indirectly inferred or present near the numerical floor.  They are therefore diagnostic residuals rather than the primary regression-quality claim.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\linewidth]{Figures/mea_ionic_epcsaft_speciation.png}
+    \caption{Full-ionic ePC-SAFT speciation comparison for the assembled NMR-derived speciation data.  Dashed lines denote activity-coupled model states and markers denote reconciled literature targets.}
+    \label{fig:ionic-speciation}
+\end{figure}
+
+\subsection{Regression Status and Interpretation}
+The parameter-regression workflow has been formulated as a bounded least-squares problem over pressure, speciation, activity-based reaction residuals, and regularization to the seed parameter vector.  The currently available parameter artifact should be interpreted as a regression-ready seed set.  It demonstrates that the full-ionic ePC-SAFT calls, reactive speciation equations, advanced Born options, pressure prediction, and artifact generation can be executed consistently.  It does not yet establish a converged optimum for \MEA, \MEAH, \MEACOO, or the binary interactions.
+
+This distinction is important scientifically.  The present figures show the feasibility and current performance of the full ionic model structure, not the endpoint of parameter estimation.  The final parameter study should report the optimized parameter vector, active bounds, objective-function decrease, pressure residual distribution, speciation residual distribution, and sensitivity of the fitted result to the selected binary-interaction set.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.92\linewidth]{Figures/baygi_neutral_epcsaft_pcsaft_pressure_parity.png}
+    \caption{Neutral ePC-SAFT/PC-SAFT parity check against the Baygi and Pahlavanzadeh PC-SAFT pressure path.  The comparison verifies the neutral model translation used as a stepping stone toward the full ionic workflow.}
+    \label{fig:baygi-neutral-parity}
+\end{figure}

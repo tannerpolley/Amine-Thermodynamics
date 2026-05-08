@@ -8,6 +8,7 @@ The repo has been cut over to the cross-project architecture standard:
 - Reusable source data lives in `data/reference`.
 - Durable workflows live in separate `analyses/<analysis_id>` folders.
 - Curated plot artifacts live in `analyses/<analysis_id>/results/<plot_set>/`.
+- Manuscript source lives in `docs/latex` as a normal writable folder, not a submodule.
 - Top-level `out/` is no longer a canonical tracked output location.
 
 ## Canonical Commands
@@ -34,6 +35,19 @@ The nine-species/Gekko diagnostic workflow was removed from active `main`. It re
 
 Each plot set should contain its plotted CSV snapshot, `.mpl.yaml`, PNG, and SVG.
 
+## Manuscript
+
+The active article draft is `docs/latex/main.tex`. The separate Overleaf-connected checkout is still `C:\Users\Tanner\Documents\git\LaTeX-Projects\MEA-Thermodynamics-LaTeX`; keep it as a separate Git repo and sync from `docs/latex` with `docs\latex\sync_to_overleaf_mirror.ps1`.
+
+Build check:
+
+```powershell
+cd docs\latex
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+```
+
+Current draft scope: full-ionic ePC-SAFT workflow, literature context, data basis, six-species baseline, neutral parity, ionic pressure/speciation figures, and an explicit note that the current parameter artifact is regression-ready rather than a converged final optimum.
+
 ## Plot Style
 
 `src/MEA/common/plot_style.py` is the shared style contract for Jou temperature colors and pressure plot line styles.
@@ -41,6 +55,8 @@ Each plot set should contain its plotted CSV snapshot, `.mpl.yaml`, PNG, and SVG
 ## Current Scientific Boundaries
 
 The active ePC-SAFT-centered workflow is `analyses/epcsaft_ionic_regression`, which exercises the full true-species reactive electrolyte package path. `analyses/epcsaft_neutral_parity` is apparent-component parity. The six-species workflow is retained only as the small legacy baseline needed by neutral parity/Baygi reproduction.
+
+The current regression-completion handoff for another downstream/upstream Codex agent is `docs/ePC-SAFT/mea-ionic-regression-completion-handoff.md`.
 
 ## Validation
 

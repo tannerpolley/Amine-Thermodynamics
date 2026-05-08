@@ -25,6 +25,7 @@ Old file-path commands such as `uv run python MEA\run_plot_exports.py` are inten
 - `analyses/epcsaft_neutral_parity/`: neutral apparent-component ePC-SAFT parity artifacts.
 - `analyses/epcsaft_ionic_regression/`: full ionic ePC-SAFT regression, pressure, and speciation artifacts.
 - `analyses/2015_baygi/`: Baygi 2015 parameter-table and neutral parity reproduction.
+- `docs/latex/`: writable manuscript source mirrored from the separate Overleaf Git checkout.
 - `scripts/`: root doctor, validation, and plot orchestration entrypoints.
 
 The removed nine-species/Gekko diagnostic workflow remains available on `legacy/main-legacy`; it is not part of active `main` validation.
@@ -40,6 +41,25 @@ Each analysis owns local `data/raw/`, `data/processed/`, and `results/<plot_set>
 - `analyses/epcsaft_ionic_regression/results/pressure/ionic_epcsaft_co2_pressure.png`
 - `analyses/epcsaft_ionic_regression/results/speciation/ionic_epcsaft_speciation_activity.png`
 - `analyses/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.png`
+
+## Manuscript
+
+The article draft source lives under `docs/latex/`. It is a normal folder in this repo, not a submodule. The independent Overleaf-connected mirror checkout remains:
+
+`C:\Users\Tanner\Documents\git\LaTeX-Projects\MEA-Thermodynamics-LaTeX`
+
+Build the local manuscript with:
+
+```powershell
+cd docs\latex
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+```
+
+Sync the local manuscript source back to the Overleaf mirror with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File docs\latex\sync_to_overleaf_mirror.ps1
+```
 
 ## Model Boundaries
 

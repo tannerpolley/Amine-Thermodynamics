@@ -1,0 +1,103 @@
+\documentclass[a4paper,fleqn]{styles/cas-sc}
+\usepackage[pagewise]{lineno}
+% \linenumbers
+
+\usepackage[numbers]{natbib}
+\usepackage{subfiles}
+\usepackage[version=4]{mhchem}
+\usepackage{cleveref}
+\usepackage{subcaption}
+\usepackage{longtable}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{xspace}
+\renewcommand\cellalign{tl}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage{siunitx}
+\graphicspath{{figures/}{Figures/}}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+    frame=tb,
+    language=Python,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    numbers=none,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3
+}
+
+\newcommand{\Ha}{\text{Ha}}
+\newcommand{\COtwo}{\ce{CO2}\xspace}
+\newcommand{\HtwoO}{\ce{H2O}\xspace}
+\newcommand{\MEA}{\ce{MEA}\xspace}
+\newcommand{\MEAH}{\ce{MEAH+}\xspace}
+\newcommand{\MEACOO}{\ce{MEACOO-}\xspace}
+\newcommand{\HCOthree}{\ce{HCO3-}\xspace}
+\newcommand{\COthree}{\ce{CO3^2-}\xspace}
+\newcommand{\HthreeO}{\ce{H3O+}\xspace}
+\newcommand{\Hydroxide}{\ce{OH-}\xspace}
+\newcommand{\Ntwo}{\ce{N2}\xspace}
+\newcommand{\Otwo}{\ce{O2}\xspace}
+\newcommand{\NtwoO}{\ce{N2O}\xspace}
+
+\newcommand{\A}{\text{A}}
+\newcommand{\B}{\text{B}}
+\newcommand{\C}{\text{C}}
+\newcommand{\D}{\text{D}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\liq}{\ell}
+\newcommand{\vap}{v}
+
+\begin{document}
+
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{Full-Ionic ePC-SAFT for Aqueous MEA}
+\shortauthors{Polley et al.}
+
+\title[mode = title]{Toward a Full-Ionic ePC-SAFT Description of Aqueous Monoethanolamine for \texorpdfstring{\COtwo}{CO2} Capture}
+
+\author[1]{Tanner W. Polley}
+\ead{tannerwpolley@gmail.com}
+
+\begin{abstract}
+Aqueous monoethanolamine remains a benchmark solvent for post-combustion \COtwo capture, but its process behavior is controlled by a coupled vapor--liquid, chemical-equilibrium, and electrolyte-speciation problem. This work develops a first full-ionic electrolyte PC-SAFT workflow for the loaded \MEA--\HtwoO--\COtwo system using a true-species liquid basis and the advanced ePC-SAFT electrolyte framework with concentration-dependent permittivity and solvation-shell/dielectric-saturation Born contributions. Literature vapor--liquid-equilibrium and NMR speciation data are assembled on a common \COtwo-loading basis, transformed into charge-balanced liquid states containing \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide, and evaluated through ePC-SAFT activity, fugacity, and reactive bubble-pressure calculations. The workflow reproduces the legacy six-species pressure benchmark, verifies neutral ePC-SAFT parity against the older PC-SAFT pressure path, and produces full-ionic pressure and speciation artifacts for all assembled VLE and speciation records. The current fitted-parameter artifact should be interpreted as a regression-ready seed set rather than a completed final optimum; it nevertheless demonstrates the full thermodynamic coupling required for later parameter estimation. The resulting manuscript framework identifies the literature basis, governing equations, regression targets, and figure set needed for a final predictive ePC-SAFT model of loaded aqueous MEA.
+\end{abstract}
+
+\begin{keywords}
+ePC-SAFT\sep{}monoethanolamine\sep{}carbon capture\sep{}vapor--liquid equilibrium\sep{}electrolyte speciation\sep{}Born solvation
+\end{keywords}
+
+\maketitle
+
+\input{sections/introduction}
+\input{sections/epc_saft_equation_of_state}
+\input{sections/mea_system_modeling_results}
+\input{sections/case_study_absorption_column_simulation}
+\input{sections/conclusion}
+
+\clearpage
+\bibliographystyle{styles/model1-num-names}
+\bibliography{references}
+
+\end{document}
