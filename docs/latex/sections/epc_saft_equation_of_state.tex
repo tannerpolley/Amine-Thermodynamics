@@ -63,7 +63,9 @@ The liquid composition also satisfies carbon, amine, water, and charge balances:
 \end{align}
 
 \subsection{Advanced Born and Permittivity Treatment}
-The ePC-SAFT calculations in this work use the advanced electrolyte options associated with concentration-dependent permittivity and modified Born solvation.  The enabled options correspond to an empirical relative-permittivity rule, numerical composition derivatives, Born-radius mode 3, solvation-shell modeling, dielectric saturation, and composition-dependent Born chemical-potential corrections.  In physical terms, this means that the liquid dielectric environment is not treated as a fixed pure-water constant.  Instead, the ion solvation contribution responds to solvent composition and ionic strength, which is essential for a loaded amine solution whose polarity and ion population change strongly with \COtwo loading.
+The ePC-SAFT calculations in this work use the advanced electrolyte options associated with concentration-dependent permittivity and modified Born solvation.  The enabled options correspond to an empirical relative-permittivity rule, numerical composition derivatives, Born-radius mode 3, solvation-shell modeling, dielectric saturation, and composition-dependent Born chemical-potential corrections.  This is the SSM+DS form introduced for the modified Born contribution, in which an ion-specific Born diameter is combined with a solvent-shell correction and a radially simplified dielectric-saturation term \cite{Figiel2025}.  The corresponding ePC-SAFT literature treats the pure-ion relative permittivity as $\varepsilon_r=8$, sets $f_k=1$ for ions, and fits the solvent $f_k$ parameter to electrolyte activity data; water, methanol, and ethanol have reported $f_k$ values of 1.5, 1.4, and 1.6, respectively \cite{Figiel2025}.  Loaded 30 wt\% \MEA also has direct dielectric-dispersion measurements, which show that static permittivity changes with both temperature and carbonation ratio \cite{Hajj2024}.  Those data motivate, but do not yet fully identify, an MEA-specific solvent-shell parameter.
+
+In physical terms, the liquid dielectric environment is not treated as a fixed pure-water constant.  Instead, the ion solvation contribution responds to solvent composition and ionic strength, which is essential for a loaded amine solution whose polarity and ion population change strongly with \COtwo loading.  The parameter table in \cref{tab:full-ionic-ssm-ds-parameters} therefore distinguishes fitted MEA-family ion parameters from SSM+DS conventions transferred from electrolyte literature.
 
 \subsection{Parameter Regression Objective}
 The parameter vector $\boldsymbol{\theta}$ includes selected pure-component parameters for \MEA-family species and selected binary interaction parameters.  The pressure residual is expressed on a logarithmic basis,
@@ -88,3 +90,5 @@ because measured \COtwo partial pressures span several orders of magnitude.  The
     \label{eq:regression-objective}
 \end{equation}
 This objective is intentionally multi-observable.  A pressure-only fit can hide a poor liquid composition, while a speciation-only fit cannot guarantee the correct gas-phase driving force.  The final predictive model must satisfy both.
+
+

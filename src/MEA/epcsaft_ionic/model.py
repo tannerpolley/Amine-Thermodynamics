@@ -72,7 +72,7 @@ DIAGNOSTIC_REACTION_CONSTANTS = {
     "R5_MEAH_dissociation": (2.1211, -8189.38, 0.0, -0.007484),
 }
 
-FIT_COMPONENTS = ("MEA", "MEAH+", "MEACOO-", "HCO3-")
+FIT_COMPONENTS = ("MEA", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-")
 BINARY_FIT_PAIRS = (
     ("CO2", "MEA"),
     ("CO2", "MEAH+"),
@@ -95,6 +95,15 @@ DEFAULT_INITIAL_GUESS = {
     "HCO3-__s": 2.9296,
     "HCO3-__e": 70.0,
     "HCO3-__d_born": 3.0,
+    "CO3^2-__s": 2.4422,
+    "CO3^2-__e": 249.26,
+    "CO3^2-__d_born": 3.0,
+    "H3O+__s": 3.4654,
+    "H3O+__e": 500.0,
+    "H3O+__d_born": 1.218,
+    "OH-__s": 2.0177,
+    "OH-__e": 650.0,
+    "OH-__d_born": 3.08107689400404,
     "k_ij__CO2__MEA": 0.0,
     "k_ij__CO2__MEAH+": 0.0,
     "k_ij__CO2__MEACOO-": 0.0,
@@ -116,6 +125,15 @@ BOUNDS = {
     "HCO3-__s": (2.0, 5.8),
     "HCO3-__e": (50.0, 900.0),
     "HCO3-__d_born": (1.0, 7.0),
+    "CO3^2-__s": (2.0, 5.8),
+    "CO3^2-__e": (50.0, 1200.0),
+    "CO3^2-__d_born": (1.0, 8.0),
+    "H3O+__s": (1.0, 5.8),
+    "H3O+__e": (50.0, 1200.0),
+    "H3O+__d_born": (0.5, 5.0),
+    "OH-__s": (1.0, 5.8),
+    "OH-__e": (50.0, 1200.0),
+    "OH-__d_born": (1.0, 7.0),
     "k_ij__CO2__MEA": (-2.0, 2.0),
     "k_ij__CO2__MEAH+": (-2.0, 2.0),
     "k_ij__CO2__MEACOO-": (-2.0, 2.0),

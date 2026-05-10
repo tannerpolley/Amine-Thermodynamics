@@ -20,7 +20,7 @@
 \usepackage{xcolor}
 \usepackage{color}
 \usepackage{siunitx}
-\graphicspath{{figures/}{Figures/}}
+\graphicspath{{figures/}}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -75,13 +75,13 @@
 \shorttitle{Full-Ionic ePC-SAFT for Aqueous MEA}
 \shortauthors{Polley et al.}
 
-\title[mode = title]{Toward a Full-Ionic ePC-SAFT Description of Aqueous Monoethanolamine for \texorpdfstring{\COtwo}{CO2} Capture}
+\title[mode = title]{Full-Ionic ePC-SAFT Parameterization and Validation for Aqueous Monoethanolamine \texorpdfstring{\COtwo}{CO2} Capture}
 
 \author[1]{Tanner W. Polley}
 \ead{tannerwpolley@gmail.com}
 
 \begin{abstract}
-Aqueous monoethanolamine remains a benchmark solvent for post-combustion \COtwo capture, but its process behavior is controlled by a coupled vapor--liquid, chemical-equilibrium, and electrolyte-speciation problem. This work develops a first full-ionic electrolyte PC-SAFT workflow for the loaded \MEA--\HtwoO--\COtwo system using a true-species liquid basis and the advanced ePC-SAFT electrolyte framework with concentration-dependent permittivity and solvation-shell/dielectric-saturation Born contributions. Literature vapor--liquid-equilibrium and NMR speciation data are assembled on a common \COtwo-loading basis, transformed into charge-balanced liquid states containing \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide, and evaluated through ePC-SAFT activity, fugacity, and reactive bubble-pressure calculations. The workflow reproduces the legacy six-species pressure benchmark, verifies neutral ePC-SAFT parity against the older PC-SAFT pressure path, and produces full-ionic pressure and speciation artifacts for all assembled VLE and speciation records. The current fitted-parameter artifact should be interpreted as a regression-ready seed set rather than a completed final optimum; it nevertheless demonstrates the full thermodynamic coupling required for later parameter estimation. The resulting manuscript framework identifies the literature basis, governing equations, regression targets, and figure set needed for a final predictive ePC-SAFT model of loaded aqueous MEA.
+Aqueous monoethanolamine remains a benchmark solvent for post-combustion \COtwo capture, but its process behavior is controlled by a coupled vapor--liquid, chemical-equilibrium, and electrolyte-speciation problem. This work develops a full-ionic electrolyte PC-SAFT parameterization for the loaded \MEA--\HtwoO--\COtwo system using a true-species liquid basis and the advanced ePC-SAFT electrolyte framework with concentration-dependent permittivity and solvation-shell/dielectric-saturation Born contributions. Literature vapor--liquid-equilibrium and NMR speciation data are assembled on a common \COtwo-loading basis, transformed into charge-balanced liquid states containing \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide, and evaluated through ePC-SAFT activity, fugacity, and reactive bubble-pressure calculations. The parameter basis combines inherited molecular PC-SAFT values, SSM+DS Born and dielectric conventions from recent ePC-SAFT literature, and a promoted real-data regression for \MEAH and \MEACOO against direct liquid-speciation measurements. The reported parameter evidence matrix, regression statistics, speciation comparison, and \COtwo partial-pressure validation data define the present accuracy and identifiability of the full-ionic model.
 \end{abstract}
 
 \begin{keywords}
@@ -90,6 +90,7 @@ ePC-SAFT\sep{}monoethanolamine\sep{}carbon capture\sep{}vapor--liquid equilibriu
 
 \maketitle
 
+\input{sections/nomenclature}
 \input{sections/introduction}
 \input{sections/epc_saft_equation_of_state}
 \input{sections/mea_system_modeling_results}
@@ -101,3 +102,4 @@ ePC-SAFT\sep{}monoethanolamine\sep{}carbon capture\sep{}vapor--liquid equilibriu
 \bibliography{references}
 
 \end{document}
+

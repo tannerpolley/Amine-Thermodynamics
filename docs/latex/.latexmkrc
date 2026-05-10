@@ -1,2 +1,2 @@
-$out_dir = 'out';
-$aux_dir = 'out';
+$out_dir = 'builds';
+$aux_dir = 'builds';

@@ -147,6 +147,7 @@ docs/latex/references.bib
 Downstream outputs to inspect:
 
 ```text
+data/reference/MEA/ion_parameter_regression_sources.csv
 data/reference/epcsaft_datasets/MEA_CO2_H2O_ionic_fit/pure/any_solvent.csv
 data/reference/epcsaft_datasets/MEA_CO2_H2O_ionic_fit/mixed/binary_interaction/k_ij.csv
 analyses/epcsaft_ionic_regression/results/parameter_regression/ionic_parameter_regression_summary.json
@@ -677,6 +678,7 @@ analyses/epcsaft_ionic_regression/results/summary/ionic_evaluation_summary.json
 analyses/epcsaft_ionic_regression/results/pressure/ionic_pressure_comparison.csv
 analyses/epcsaft_ionic_regression/results/speciation/ionic_speciation_activity_residuals.csv
 docs/ePC-SAFT/mea-ionic-regression-completion-handoff.md
+docs/ePC-SAFT/meah-meacoo-real-data-regression-plan.md
 ```
 
 ## What The Downstream Agent Must Report Back

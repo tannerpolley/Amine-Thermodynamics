@@ -28,6 +28,7 @@ CURATED_REQUIREMENTS = {
     "analyses/epcsaft_neutral_parity/results/pressure": ["epcsaft_neutral_jou_parity_curves.csv", "epcsaft_neutral_pcsaft_parity.mpl.yaml", "epcsaft_neutral_pcsaft_parity.png", "epcsaft_neutral_pcsaft_parity.svg"],
     "analyses/epcsaft_ionic_regression/results/pressure": ["ionic_pressure_comparison.csv", "ionic_epcsaft_co2_pressure.mpl.yaml", "ionic_epcsaft_co2_pressure.png", "ionic_epcsaft_co2_pressure.svg"],
     "analyses/epcsaft_ionic_regression/results/speciation": ["ionic_speciation_activity_residuals.csv", "ionic_speciation_plot_data.csv", "ionic_epcsaft_speciation_activity.mpl.yaml", "ionic_epcsaft_speciation_activity.png", "ionic_epcsaft_speciation_activity.svg"],
+    "analyses/epcsaft_ionic_regression/results/ion_parameter_regression": ["ion_parameter_fit_summary.json", "ion_parameter_fit_values.csv", "ion_parameter_fit_statistics.csv", "ion_parameter_speciation_fit_data.csv", "meah_meacoo_speciation_parity.mpl.yaml", "meah_meacoo_speciation_parity.png", "meah_meacoo_speciation_parity.svg", "meah_meacoo_loading_curves.mpl.yaml", "meah_meacoo_loading_curves.png", "meah_meacoo_loading_curves.svg"],
     "analyses/2015_baygi/results/neutral_parity": ["baygi_neutral_epcsaft_pcsaft_pressure_parity_plot_data.csv", "baygi_neutral_epcsaft_pcsaft_pressure_parity.mpl.yaml", "baygi_neutral_epcsaft_pcsaft_pressure_parity.png", "baygi_neutral_epcsaft_pcsaft_pressure_parity.svg"],
 }
 

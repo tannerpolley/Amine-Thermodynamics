@@ -57,6 +57,7 @@ Current draft scope: full-ionic ePC-SAFT workflow, literature context, data basi
 The active ePC-SAFT-centered workflow is `analyses/epcsaft_ionic_regression`, which exercises the full true-species reactive electrolyte package path. `analyses/epcsaft_neutral_parity` is apparent-component parity. The six-species workflow is retained only as the small legacy baseline needed by neutral parity/Baygi reproduction.
 
 The current regression-completion handoff for another downstream/upstream Codex agent is `docs/ePC-SAFT/mea-ionic-regression-completion-handoff.md`.
+The MEAH+/MEACOO- real-data regression data contract is `docs/ePC-SAFT/meah-meacoo-real-data-regression-plan.md`, with a machine-readable source manifest at `data/reference/MEA/ion_parameter_regression_sources.csv`.
 
 ## Validation
 

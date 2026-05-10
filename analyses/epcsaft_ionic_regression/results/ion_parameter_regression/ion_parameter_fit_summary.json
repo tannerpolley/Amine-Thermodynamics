@@ -1,0 +1,171 @@
+{
+  "fit_tier": "tier_a_local_speciation",
+  "source_manifest": "data/reference/MEA/ion_parameter_regression_sources.csv",
+  "target_sources": [
+    "Bottinger",
+    "Jakobsen",
+    "Matin"
+  ],
+  "target_row_count": 8,
+  "target_residual_count": 22,
+  "fit_parameters": [
+    "MEAH+__s",
+    "MEAH+__e",
+    "MEAH+__d_born",
+    "MEACOO-__s",
+    "MEACOO-__e",
+    "MEACOO-__d_born",
+    "k_ij__MEAH+__MEACOO-"
+  ],
+  "optimizer": {
+    "success": true,
+    "status": 3,
+    "message": "`xtol` termination condition is satisfied.",
+    "nfev": 13,
+    "cost": 0.03566207137968602,
+    "initial_residual_norm": 0.271444549584188,
+    "final_residual_norm": 0.26765769640830644
+  },
+  "initial_values": {
+    "MEAH+__s": 3.563,
+    "MEAH+__e": 228.71,
+    "MEAH+__d_born": 3.563,
+    "MEACOO-__s": 3.5605,
+    "MEACOO-__e": 533.11,
+    "MEACOO-__d_born": 3.5605,
+    "k_ij__MEAH+__MEACOO-": 0.0
+  },
+  "fitted_values": {
+    "MEAH+__s": 3.48508556586174,
+    "MEAH+__e": 232.6872016451942,
+    "MEAH+__d_born": 3.533229271464668,
+    "MEACOO-__s": 3.535435257213276,
+    "MEACOO-__e": 453.26524438401077,
+    "MEACOO-__d_born": 3.5410703082156436,
+    "k_ij__MEAH+__MEACOO-": -0.002018134576435147
+  },
+  "parameters_at_bounds": {
+    "MEAH+__s": false,
+    "MEAH+__e": false,
+    "MEAH+__d_born": false,
+    "MEACOO-__s": false,
+    "MEACOO-__e": false,
+    "MEACOO-__d_born": false,
+    "k_ij__MEAH+__MEACOO-": false
+  },
+  "initial_metrics": {
+    "row_count": 8,
+    "residual_count": 22,
+    "source_counts": {
+      "Bottinger": 8,
+      "Jakobsen": 8,
+      "Matin": 6
+    },
+    "overall_rmse_log10": 0.271444549584188,
+    "overall_mae_log10": 0.17389503252592373,
+    "overall_median_abs_log10": 0.1010484260531472,
+    "by_species": {
+      "CO3^2-": {
+        "count": 2,
+        "rmse_log10": 0.5675086260175974,
+        "mae_log10": 0.46634369177220103,
+        "median_abs_log10": 0.46634369177220103,
+        "r2_log10": -39.36136512465198
+      },
+      "HCO3-": {
+        "count": 4,
+        "rmse_log10": 0.45407425716014815,
+        "mae_log10": 0.40578914125758575,
+        "median_abs_log10": 0.41216025138933365,
+        "r2_log10": 0.6277554386515565
+      },
+      "MEA + MEAH+": {
+        "count": 4,
+        "rmse_log10": 0.10685110801489277,
+        "mae_log10": 0.09634263870480703,
+        "median_abs_log10": 0.09412083619185962,
+        "r2_log10": -0.19665506255991438
+      },
+      "MEACOO-": {
+        "count": 8,
+        "rmse_log10": 0.09008297983975543,
+        "mae_log10": 0.06855763836984816,
+        "median_abs_log10": 0.04248908563659662,
+        "r2_log10": 0.8876738274090447
+      },
+      "MEAH+": {
+        "count": 4,
+        "rmse_log10": 0.10192297154682052,
+        "mae_log10": 0.08400377630439082,
+        "median_abs_log10": 0.0581945677496939,
+        "r2_log10": 0.6553265859383761
+      }
+    },
+    "failure_count": 0,
+    "failures": []
+  },
+  "final_metrics": {
+    "row_count": 8,
+    "residual_count": 22,
+    "source_counts": {
+      "Bottinger": 8,
+      "Jakobsen": 8,
+      "Matin": 6
+    },
+    "overall_rmse_log10": 0.2676573035774338,
+    "overall_mae_log10": 0.17024731540172555,
+    "overall_median_abs_log10": 0.09884572828236765,
+    "by_species": {
+      "CO3^2-": {
+        "count": 2,
+        "rmse_log10": 0.5605801934174895,
+        "mae_log10": 0.4807013649043265,
+        "median_abs_log10": 0.4807013649043265,
+        "r2_log10": -38.381876934555876
+      },
+      "HCO3-": {
+        "count": 4,
+        "rmse_log10": 0.4483803032230866,
+        "mae_log10": 0.3957269103135335,
+        "median_abs_log10": 0.4246439279446711,
+        "r2_log10": 0.6370325739910908
+      },
+      "MEA + MEAH+": {
+        "count": 4,
+        "rmse_log10": 0.10975565484485737,
+        "mae_log10": 0.10003086297774923,
+        "median_abs_log10": 0.10003376084476347,
+        "r2_log10": -0.2625969414476317
+      },
+      "MEACOO-": {
+        "count": 8,
+        "rmse_log10": 0.08282423434436105,
+        "mae_log10": 0.05890480761500252,
+        "median_abs_log10": 0.034888546312248254,
+        "r2_log10": 0.9050466408808331
+      },
+      "MEAH+": {
+        "count": 4,
+        "rmse_log10": 0.100431033881859,
+        "mae_log10": 0.08244216373603933,
+        "median_abs_log10": 0.05633896500746165,
+        "r2_log10": 0.6653433193502851
+      }
+    },
+    "failure_count": 2,
+    "failures": []
+  },
+  "artifacts": {
+    "values_csv": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\ion_parameter_fit_values.csv",
+    "statistics_csv": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\ion_parameter_fit_statistics.csv",
+    "speciation_fit_data_csv": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\ion_parameter_speciation_fit_data.csv",
+    "pressure_fit_data_csv": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\ion_parameter_pressure_fit_data.csv",
+    "speciation_plot_png": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\meah_meacoo_speciation_parity.png",
+    "speciation_plot_svg": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\meah_meacoo_speciation_parity.svg",
+    "loading_curves_png": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\meah_meacoo_loading_curves.png",
+    "loading_curves_svg": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\meah_meacoo_loading_curves.svg",
+    "pressure_plot_png": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\ion_parameter_pressure_parity.png",
+    "pressure_plot_svg": "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\analyses\\epcsaft_ionic_regression\\results\\ion_parameter_regression\\ion_parameter_pressure_parity.svg"
+  },
+  "claim_boundary": "This fit proves the MEAH+/MEACOO- parameters are optimized against real Tier A liquid-speciation data. It is not by itself the final full VLE pressure regression; pressure parity must be regenerated with the promoted parameter set."
+}

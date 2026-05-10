@@ -52,7 +52,12 @@ def _load_fitted_values() -> dict[str, float]:
             "Missing ionic regression values. Run `uv run python -m MEA.epcsaft_ionic.regress_parameters` first."
         )
     frame = pd.read_csv(values_path)
-    return {str(row["parameter"]): float(row["fitted"]) for _, row in frame.iterrows()}
+    values = {str(row["parameter"]): float(row["fitted"]) for _, row in frame.iterrows()}
+    promoted_ion_values = IONIC_PLOT_ROOT / "ion_parameter_regression" / "ion_parameter_fit_values.csv"
+    if promoted_ion_values.exists():
+        ion_frame = pd.read_csv(promoted_ion_values)
+        values.update({str(row["parameter"]): float(row["fitted"]) for _, row in ion_frame.iterrows()})
+    return values
 
 
 def pressure_rows(values: dict[str, float]) -> list[dict[str, object]]:
