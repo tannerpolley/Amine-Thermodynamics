@@ -1,0 +1,88 @@
+{
+  "split_rule": {
+    "pressure_train_sources": [
+      "Aronu",
+      "Hilliard",
+      "Idris",
+      "Mamun"
+    ],
+    "pressure_validation_sources": [
+      "Jou",
+      "Xu"
+    ],
+    "speciation_train_sources": [
+      "Bottinger",
+      "Matin"
+    ],
+    "speciation_validation_sources": [
+      "Jakobsen"
+    ]
+  },
+  "parameter_set": "promoted_ionic_fit",
+  "pressure": {
+    "train": {
+      "row_count": 95,
+      "success_count": 95,
+      "median_abs_log10": 0.2952168581741564,
+      "max_abs_log10": 0.9774957143734262,
+      "rmse_log10": 0.364235551024697
+    },
+    "validation": {
+      "row_count": 66,
+      "success_count": 66,
+      "median_abs_log10": 0.37550535597297907,
+      "max_abs_log10": 0.7101781789290713,
+      "rmse_log10": 0.3900995346020766
+    }
+  },
+  "speciation": {
+    "train": {
+      "row_count": 58,
+      "residual_count": 232,
+      "CO3^2-": {
+        "count": 58,
+        "median_abs_log10": 0.9059489757952202,
+        "rmse_log10": 5.735072372970607
+      },
+      "HCO3-": {
+        "count": 58,
+        "median_abs_log10": 0.561139048127353,
+        "rmse_log10": 3.9911078864948024
+      },
+      "MEACOO-": {
+        "count": 58,
+        "median_abs_log10": 0.05405095645246355,
+        "rmse_log10": 0.07418436111834481
+      },
+      "MEAH+": {
+        "count": 58,
+        "median_abs_log10": 0.09243502580735119,
+        "rmse_log10": 0.09672108534012318
+      }
+    },
+    "validation": {
+      "row_count": 16,
+      "residual_count": 64,
+      "CO3^2-": {
+        "count": 16,
+        "median_abs_log10": 0.6876770259982796,
+        "rmse_log10": 0.8235863562791562
+      },
+      "HCO3-": {
+        "count": 16,
+        "median_abs_log10": 0.33075363492381826,
+        "rmse_log10": 0.49376409408865934
+      },
+      "MEACOO-": {
+        "count": 16,
+        "median_abs_log10": 0.08668263259656689,
+        "rmse_log10": 0.235239308906577
+      },
+      "MEAH+": {
+        "count": 16,
+        "median_abs_log10": 0.11580999529920491,
+        "rmse_log10": 0.16319290864916325
+      }
+    }
+  }
+}

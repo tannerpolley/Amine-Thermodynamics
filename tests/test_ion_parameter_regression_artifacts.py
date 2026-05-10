@@ -251,12 +251,16 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
         self.assertTrue(LATEX_MAIN.exists(), msg="Missing docs/latex/main.tex")
         self.assertTrue(LATEX_ROOT.joinpath(".latexmkrc").exists())
         self.assertTrue(LATEX_ROOT.joinpath("builds").exists())
+        self.assertTrue(LATEX_ROOT.joinpath("tables", "literature_model_comparison.tex").exists())
+        self.assertTrue(LATEX_ROOT.joinpath("tables", "regression_bounds.tex").exists())
+        self.assertTrue(LATEX_ROOT.joinpath("sections", "data_code_availability.tex").exists())
 
         latex_text = LATEX_MAIN.read_text(encoding="utf-8")
         self.assertIn(r"\documentclass", latex_text)
         self.assertIn(r"\begin{document}", latex_text)
         self.assertIn(r"\end{document}", latex_text)
         self.assertIn(r"\input{sections/", latex_text)
+        self.assertIn(r"\input{sections/data_code_availability}", latex_text)
 
         latexmkrc = LATEX_ROOT.joinpath(".latexmkrc").read_text(encoding="utf-8")
         self.assertIn("out_dir = 'builds'", latexmkrc)
@@ -266,6 +270,9 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
         builds_pdf = LATEX_ROOT / "builds" / "main.pdf"
         self.assertFalse(root_pdf.exists(), msg="main.pdf should not be written at docs/latex root")
         self.assertTrue(builds_pdf.exists(), msg="docs/latex/builds/main.pdf is missing")
+
+        intro_text = LATEX_ROOT.joinpath("sections", "introduction.tex").read_text(encoding="utf-8")
+        self.assertIn(r"\input{tables/literature_model_comparison}", intro_text)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,21 @@
+\begin{table*}
+    \centering
+    \scriptsize
+    \caption{Positioning of the present \MEA thermodynamic workflow relative to representative SAFT-family and electrolyte-model studies.}
+    \label{tab:literature-model-comparison}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{p{2.4cm}p{2.1cm}p{1.8cm}p{2.3cm}p{2.6cm}p{2.7cm}p{2.8cm}p{2.6cm}}
+        \toprule
+        Study & System & Model & Species basis & Electrolyte/Born treatment & Data used & Fitted quantities & Validation reported \\
+        \midrule
+        Nasrifar and Tafazzol\cite{Nasrifar2010} & \MEA--\HtwoO and acid-gas mixtures & PC-SAFT & Apparent/neutral mixture focus & No explicit electrolyte Born treatment & Pure and VLE/property data & Molecular PC-SAFT parameters and binary interactions & Pure and mixture thermodynamic properties \\
+        Baygi and Pahlavanzadeh\cite{Baygi2015} & \MEA--\HtwoO--\COtwo & PC-SAFT + external chemistry & Six-species reconstructed liquid & No explicit ionic ePC-SAFT liquid activity coupling & \COtwo pressure data with reconstructed speciation & Molecular/binary parameters in neutral PC-SAFT path & \COtwo pressure curves and reconstructed speciation \\
+        Uyan et al.\cite{Uyan2015} & MDEA--\HtwoO--\COtwo & ePC-SAFT & Explicit ionic true species & Electrolyte PC-SAFT with activity-coupled chemistry & Solubility and independent parameter sources & Selected ion and binary parameters from electrolyte/amine sources & Predictive ternary acid-gas solubility checks \\
+        Wangler et al.\cite{Wangler2018} & MDEA amine systems & ePC-SAFT & Explicit ionic true species & Electrolyte PC-SAFT with fitted binary interactions & Osmotic, solubility, and speciation-adjacent data & Selected binary interactions and supporting pure-ion quantities & Acid-gas solubility and related validation data \\
+        Buelow et al.\cite{Bulow2020,Bulow2021} & Electrolyte and mixed-solvent systems & Advanced ePC-SAFT & Explicit ionic true species & Concentration-dependent permittivity and advanced Born corrections & Electrolyte solution and salt-solubility data & Advanced dielectric/Born framework terms & Electrolyte and salt-solubility validation \\
+        Figiel et al.\cite{Figiel2025} & Electrolyte and organic solvent systems & Modified-Born ePC-SAFT & Explicit ionic true species & SSM+DS modified Born treatment & Electrolyte activity and solubility data & Born, dielectric, and solvent-shell conventions & Activity, solubility, and consistency checks \\
+        This work & \MEA--\HtwoO--\COtwo & Advanced ePC-SAFT & Nine-species explicit ionic basis & SSM+DS Born plus concentration-dependent permittivity & 161 VLE rows and 74 NMR-derived speciation rows & Direct \MEAH/\MEACOO ion regression plus bounded coupled-regression attempt & Pressure parity, speciation parity, train/validation split, residual diagnostics, and sensitivity screen \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+\end{table*}
