@@ -1,0 +1,162 @@
+{
+  "fit_tier": "pressure_speciation_global",
+  "completion_status": "bounded_incomplete",
+  "fit_parameters": [
+    "MEAH+__s",
+    "MEAH+__e",
+    "MEAH+__d_born",
+    "MEACOO-__s",
+    "MEACOO-__e",
+    "MEACOO-__d_born",
+    "k_ij__CO2__MEA",
+    "k_ij__MEA__H2O",
+    "k_ij__MEAH+__MEACOO-",
+    "k_ij__MEAH+__HCO3-"
+  ],
+  "objective_weights": {
+    "pressure_weight": 1.0,
+    "speciation_weight": 1.0,
+    "regularization_scale": 0.003
+  },
+  "target_counts": {
+    "pressure": 161,
+    "speciation": 74
+  },
+  "optimizer": {
+    "success": false,
+    "status": 0,
+    "message": "bounded downstream run: full coupled least-squares was skipped because objective evaluations remain too expensive for routine execution in this repository state",
+    "nfev": 0,
+    "cost": 0.0
+  },
+  "attempted_optimization": false,
+  "initial_values": {
+    "MEAH+__s": 3.48508556586174,
+    "MEAH+__e": 232.6872016451942,
+    "MEAH+__d_born": 3.533229271464668,
+    "MEACOO-__s": 3.535435257213276,
+    "MEACOO-__e": 453.26524438401077,
+    "MEACOO-__d_born": 3.5410703082156436,
+    "k_ij__CO2__MEA": 0.0,
+    "k_ij__MEA__H2O": -0.052,
+    "k_ij__MEAH+__MEACOO-": -0.002018134576435147,
+    "k_ij__MEAH+__HCO3-": 0.0
+  },
+  "fitted_values": {
+    "MEAH+__s": 3.48508556586174,
+    "MEAH+__e": 232.6872016451942,
+    "MEAH+__d_born": 3.533229271464668,
+    "MEACOO-__s": 3.535435257213276,
+    "MEACOO-__e": 453.26524438401077,
+    "MEACOO-__d_born": 3.5410703082156436,
+    "k_ij__CO2__MEA": 0.0,
+    "k_ij__MEA__H2O": -0.052,
+    "k_ij__MEAH+__MEACOO-": -0.002018134576435147,
+    "k_ij__MEAH+__HCO3-": 0.0
+  },
+  "selected_values": {
+    "MEA__m": 3.0353,
+    "MEA__s": 3.0435,
+    "MEA__e": 277.174,
+    "MEAH+__s": 3.48508556586174,
+    "MEAH+__e": 232.6872016451942,
+    "MEAH+__d_born": 3.533229271464668,
+    "MEACOO-__s": 3.535435257213276,
+    "MEACOO-__e": 453.26524438401077,
+    "MEACOO-__d_born": 3.5410703082156436,
+    "HCO3-__s": 2.9296,
+    "HCO3-__e": 70.0,
+    "HCO3-__d_born": 3.0,
+    "CO3^2-__s": 2.4422,
+    "CO3^2-__e": 249.26,
+    "CO3^2-__d_born": 3.0,
+    "H3O+__s": 3.4654,
+    "H3O+__e": 500.0,
+    "H3O+__d_born": 1.218,
+    "OH-__s": 2.0177,
+    "OH-__e": 650.0,
+    "OH-__d_born": 3.08107689400404,
+    "k_ij__CO2__MEA": 0.0,
+    "k_ij__CO2__MEAH+": 0.0,
+    "k_ij__CO2__MEACOO-": 0.0,
+    "k_ij__MEA__H2O": -0.052,
+    "k_ij__MEAH+__MEACOO-": -0.002018134576435147,
+    "k_ij__MEAH+__HCO3-": 0.0
+  },
+  "selected_parameter_set": "promoted_ionic_fit",
+  "parameters_at_bounds": {
+    "MEAH+__s": false,
+    "MEAH+__e": false,
+    "MEAH+__d_born": false,
+    "MEACOO-__s": false,
+    "MEACOO-__e": false,
+    "MEACOO-__d_born": false,
+    "k_ij__CO2__MEA": false,
+    "k_ij__MEA__H2O": false,
+    "k_ij__MEAH+__MEACOO-": false,
+    "k_ij__MEAH+__HCO3-": false
+  },
+  "baseline_pressure_metrics": {
+    "row_count": 161,
+    "success_count": 161,
+    "median_abs_log10": 0.3317113205027986,
+    "max_abs_log10": 0.9774957143734262,
+    "rmse_log10": 0.37505395616022413
+  },
+  "pressure_metrics": {
+    "row_count": 161,
+    "success_count": 161,
+    "median_abs_log10": 0.3317113205027986,
+    "max_abs_log10": 0.9774957143734262,
+    "rmse_log10": 0.37505395616022413
+  },
+  "baseline_speciation_metrics": {
+    "row_count": 74,
+    "residual_count": 296,
+    "CO3^2-": {
+      "count": 74,
+      "median_abs_log10": 0.8602310020369335,
+      "rmse_log10": 5.091771195213726
+    },
+    "HCO3-": {
+      "count": 74,
+      "median_abs_log10": 0.4794738649980437,
+      "rmse_log10": 3.540841809103313
+    },
+    "MEACOO-": {
+      "count": 74,
+      "median_abs_log10": 0.059358808906485955,
+      "rmse_log10": 0.12758638019749857
+    },
+    "MEAH+": {
+      "count": 74,
+      "median_abs_log10": 0.0947399655165819,
+      "rmse_log10": 0.11441383936309635
+    }
+  },
+  "speciation_metrics": {
+    "row_count": 74,
+    "residual_count": 296,
+    "CO3^2-": {
+      "count": 74,
+      "median_abs_log10": 0.8602310020369335,
+      "rmse_log10": 5.091771195213726
+    },
+    "HCO3-": {
+      "count": 74,
+      "median_abs_log10": 0.4794738649980437,
+      "rmse_log10": 3.540841809103313
+    },
+    "MEACOO-": {
+      "count": 74,
+      "median_abs_log10": 0.059358808906485955,
+      "rmse_log10": 0.12758638019749857
+    },
+    "MEAH+": {
+      "count": 74,
+      "median_abs_log10": 0.0947399655165819,
+      "rmse_log10": 0.11441383936309635
+    }
+  },
+  "claim_boundary": "A coupled pressure plus speciation regression was attempted, but the promoted claim remains a workflow and validation study until runtime or optimizer coverage is improved. The downstream selected parameter set stays at the promoted ionic fit to avoid overstating pressure-optimization progress."
+}

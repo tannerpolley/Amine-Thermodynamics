@@ -151,11 +151,32 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
   local speciation data only; full pressure-weighted global re-optimization remains
   the next optimization step.
 
+## 2026-05-10 Validation Snapshot
+
+| Requirement | Concrete artifact | Command used | Observed result | Pass/fail | Residual risk |
+| --- | --- | --- | --- | --- | --- |
+| Full nine-species basis | `src/MEA/epcsaft_runtime.py`, `data/reference/MEA/epcsaft_species_parameter_evidence.csv` | `python -m unittest tests.test_ion_parameter_regression_artifacts -v` | Species basis and parameter-scope tests passed | Pass | None beyond normal maintenance |
+| Literature/fitted parameter provenance | `docs/ePC-SAFT/full-component-parameter-source-audit.md`, promoted dataset CSVs | `python -m unittest tests.test_ion_parameter_regression_artifacts -v` | Trace-ion promotion and audit tests passed | Pass | Source audit remains narrative-heavy rather than database-backed |
+| SSM+DS Born and dielectric handling | `docs/latex/sections/epc_saft_equation_of_state.tex`, promoted dataset, OH and carbonate Born artifacts | `python -m unittest tests.test_ion_parameter_regression_artifacts -v` | Born-radius audit tests passed; manuscript section updated | Pass | Carbonate and hydroxide support remain bounded by available data |
+| MEAH+/MEACOO- real-data regression | `analyses/epcsaft_ionic_regression/results/ion_parameter_regression/*` | `python -m unittest tests.test_ion_parameter_regression_artifacts -v` | Promoted fit reduced residual norm and moved fitted ion parameters off seeds | Pass | Fit is still local-speciation-led rather than pressure-coupled |
+| HCO3-/CO3^2- Born identifiability | `analyses/epcsaft_ionic_regression/results/trace_carbonate_born_regression/*` | `python analyses/epcsaft_ionic_regression/scripts/fit_trace_carbonate_born.py` | Deterministic full-data seed scan retained `3.0/3.0` as the promoted pair | Pass | Not a full multivariate global identifiability proof |
+| H3O+/OH- literature or derivation support | `analyses/epcsaft_ionic_regression/results/oh_born_derivation/*` | `python -m unittest tests.test_ion_parameter_regression_artifacts -v` | H3O+ and OH- support artifacts passed | Pass | No direct MEA-system hydronium/hydroxide fit data |
+| Pressure + speciation global regression | `analyses/epcsaft_ionic_regression/results/global_regression/*` | `python analyses/epcsaft_ionic_regression/scripts/fit_global_pressure_speciation.py --promote` | Coupled objective and parity artifacts were written; summary status is `bounded_incomplete` and selected parameter set remains `promoted_ionic_fit` | Pass with boundary | Final all-row least-squares remains runtime-bounded |
+| Train/validation split | `analyses/epcsaft_ionic_regression/results/train_validation/*` | `python analyses/epcsaft_ionic_regression/scripts/evaluate_train_validation_split.py` | Deterministic source-held-out split summary written for pressure and speciation | Pass | Validation is source-held-out, not random or temperature-fold cross-validation |
+| Sensitivity/uncertainty | `analyses/epcsaft_ionic_regression/results/sensitivity/*` | `python analyses/epcsaft_ionic_regression/scripts/compute_parameter_sensitivity.py` | Finite-difference sensitivity and identifiability tables written | Pass | Sensitivity uses a reduced live subset because full-data finite differences remain costly |
+| Literature model comparison | `docs/latex/tables/literature_model_comparison.tex` | `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` | Table included and citations resolved | Pass | Table still produces layout warnings that could be polished further |
+| Pressure/speciation/residual figures | `analyses/epcsaft_ionic_regression/results/{pressure,speciation}`, `docs/latex/figures/mea_ionic_*residuals*` | `python analyses/epcsaft_ionic_regression/scripts/render_figures.py` | Residual plots added and copied into manuscript figure set | Pass | Figure styling is consistent but not yet warning-free in all table/figure placements |
+| Submission-safe manuscript prose | `docs/latex/main.tex`, `docs/latex/sections/*.tex`, `docs/latex/tables/*.tex` | `Select-String ... -Pattern 'Codex|agent|worktree|repo|repository-facing|local path|C:\\Users|artifact|handoff'` | No direct Codex, agent, worktree, handoff, or local-path leakage; `repo` produced false-positive substring matches such as `reported` and `reproduce` | Pass with note | Grep pattern is over-broad for `repo` substring matches |
+| PDF build | `docs/latex/builds/main.pdf` | `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` | PDF built successfully with no undefined citations or references | Pass | Overfull/underfull layout warnings remain in the log |
+
 ## Result Log
 
 - 2026-05-10: Audit file strengthened with explicit checks for species coverage,
   per-species parameter completeness, non-seed fit movement, artifact format
   completeness, and LaTeX build conventions.
+- 2026-05-10: Added bounded global-regression, train/validation, and sensitivity
+  artifact families plus manuscript coverage for the comparison table, regression
+  bounds table, residual diagnostics, and data/code availability section.
 - 2026-05-10: Full component parameter audit added to the gate. HCO3-, CO3^2-,
   H3O+, and OH- sigma/dispersion values and water-ion interactions were promoted
   from Held/Uyan tables; H3O+ uses Figiel2025 `d_born=1.218`. Ionic pressure
