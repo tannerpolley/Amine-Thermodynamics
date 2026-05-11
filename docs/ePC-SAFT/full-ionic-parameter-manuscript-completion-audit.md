@@ -133,11 +133,13 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 - Promotion tier: `tier_a_local_speciation`
 - Fitted parameters: 8 rows (`MEAH+__s`, `MEAH+__e`, `MEAH+__d_born`,
   `MEACOO-__s`, `MEACOO-__e`, `MEACOO-__d_born`, `k_ij__MEAH+__MEACOO-`)
-- Trace-carbonate Born scan: `HCO3-__d_born = 3.0`,
-  `CO3^2-__d_born = 3.0`, retained as promoted values because the available
-  Tier A rows reject substantial alternatives. Full-data residual norms:
-  `3.0/3.0 = 0.702107882`, `4.5/4.5 = 0.837568995`,
-  `6.5/7.5 = 1.061379851`, and `1.05/1.05 = 1.913497055`.
+- Trace-carbonate Born diagnostic: the regularized promoted values remain
+  `HCO3-__d_born = 3.0` and `CO3^2-__d_born = 3.0`, with full-data residual
+  norm `0.702107882`. An unanchored multistart diagnostic found a lower
+  trace-only residual at `HCO3-__d_born = 6.802941` and
+  `CO3^2-__d_born = 2.997442`, with norm `0.682870531`; this is retained as an
+  identifiability warning rather than promoted before pressure-weighted global
+  re-optimization.
 - OH- Born derivation: `d_born = 3.0810768940040356` from Born hydration-energy
   inversion using an absolute hydroxide hydration free energy of `106.4 kcal/mol`.
 - Optimizer: success, `final_residual_norm 0.2677 < initial_residual_norm 0.2714`
@@ -159,7 +161,7 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 | Literature/fitted parameter provenance | `docs/ePC-SAFT/full-component-parameter-source-audit.md`, promoted dataset CSVs | `python -m unittest tests.test_ion_parameter_regression_artifacts -v` | Trace-ion promotion and audit tests passed | Pass | Source audit remains narrative-heavy rather than database-backed |
 | SSM+DS Born and dielectric handling | `docs/latex/sections/epc_saft_equation_of_state.tex`, promoted dataset, OH and carbonate Born artifacts | `python -m unittest tests.test_ion_parameter_regression_artifacts -v` | Born-radius audit tests passed; manuscript section updated | Pass | Carbonate and hydroxide support remain bounded by available data |
 | MEAH+/MEACOO- real-data regression | `analyses/epcsaft_ionic_regression/results/ion_parameter_regression/*` | `python -m unittest tests.test_ion_parameter_regression_artifacts -v` | Promoted fit reduced residual norm and moved fitted ion parameters off seeds | Pass | Fit is still local-speciation-led rather than pressure-coupled |
-| HCO3-/CO3^2- Born identifiability | `analyses/epcsaft_ionic_regression/results/trace_carbonate_born_regression/*` | `python analyses/epcsaft_ionic_regression/scripts/fit_trace_carbonate_born.py` | Deterministic full-data seed scan retained `3.0/3.0` as the promoted pair | Pass | Not a full multivariate global identifiability proof |
+| HCO3-/CO3^2- Born identifiability | `analyses/epcsaft_ionic_regression/results/trace_carbonate_born_regression/*` | `python analyses/epcsaft_ionic_regression/scripts/fit_trace_carbonate_born.py` | Regularized fit retained `3.0/3.0`; unanchored multistart found a lower-residual HCO3-sensitive alternative near `6.80/3.00` | Pass with boundary | Not a full multivariate or pressure-coupled global identifiability proof |
 | H3O+/OH- literature or derivation support | `analyses/epcsaft_ionic_regression/results/oh_born_derivation/*` | `python -m unittest tests.test_ion_parameter_regression_artifacts -v` | H3O+ and OH- support artifacts passed | Pass | No direct MEA-system hydronium/hydroxide fit data |
 | Pressure + speciation global regression | `analyses/epcsaft_ionic_regression/results/global_regression/*` | `python analyses/epcsaft_ionic_regression/scripts/fit_global_pressure_speciation.py --promote` | Coupled objective and parity artifacts were written; summary status is `bounded_incomplete` and selected parameter set remains `promoted_ionic_fit` | Pass with boundary | Final all-row least-squares remains runtime-bounded |
 | Train/validation split | `analyses/epcsaft_ionic_regression/results/train_validation/*` | `python analyses/epcsaft_ionic_regression/scripts/evaluate_train_validation_split.py` | Deterministic source-held-out split summary written for pressure and speciation | Pass | Validation is source-held-out, not random or temperature-fold cross-validation |
@@ -181,10 +183,10 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
   H3O+, and OH- sigma/dispersion values and water-ion interactions were promoted
   from Held/Uyan tables; H3O+ uses Figiel2025 `d_born=1.218`. Ionic pressure
   and speciation artifacts were regenerated against the updated dataset.
-- 2026-05-10: Added trace-carbonate Born regression artifacts. HCO3- and
-  CO3^2- Born radii converge back to the promoted 3.0 values against Tier A
-  rows that report those species. OH- remains literature/convention-only because
-  the local target set does not directly report hydroxide.
+- 2026-05-11: Refreshed trace-carbonate Born interpretation after the latest
+  multistart diagnostic. The regularized promoted values remain 3.0/3.0, while
+  an unanchored trace-only fit found an HCO3-sensitive lower-residual
+  alternative near 6.80/3.00; this is documented as an identifiability boundary.
 - 2026-05-10: Added OH- Born derivation artifact and promoted `d_born=3.081076894`.
   This satisfies the parameter-evidence requirement as a literature-backed Born
   estimate, not as an MEA-system regression.

@@ -110,16 +110,30 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
         )
         self.assertFalse(any(summary["parameters_at_bounds"].values()))
         self.assertEqual(set(summary["fit_parameters"]), {"HCO3-__d_born", "CO3^2-__d_born"})
+        # The promoted/canonical trace-carbonate fit remains regularized near the
+        # Held/Uyan 3.0 Angstrom value, while the multistart diagnostic is allowed
+        # to expose lower-residual unanchored candidates for manuscript discussion.
+        fitted = summary["fitted_values"]
+        self.assertAlmostEqual(float(fitted["HCO3-__d_born"]), 3.0, places=4)
+        self.assertAlmostEqual(float(fitted["CO3^2-__d_born"]), 3.0, places=4)
         diagnostic = summary["multistart_diagnostic"]
         self.assertGreaterEqual(diagnostic["attempt_count"], 4)
         best = diagnostic["best_attempt"]
-        self.assertAlmostEqual(float(best["fitted_HCO3_d_born"]), 3.0, places=6)
-        self.assertAlmostEqual(float(best["fitted_CO3_d_born"]), 3.0, places=6)
-        substantial = diagnostic["best_substantial_attempt"]
-        self.assertGreater(
-            float(substantial["final_data_residual_norm"]),
+        self.assertTrue(best["optimizer_success"])
+        self.assertLessEqual(
             float(best["final_data_residual_norm"]),
+            float(summary["optimizer"]["initial_residual_norm"]),
         )
+        substantial = diagnostic["best_substantial_attempt"]
+        if substantial:
+            threshold = float(diagnostic["substantial_threshold_angstrom"])
+            self.assertTrue(
+                abs(float(substantial["fitted_HCO3_d_born"]) - 3.0) >= threshold
+                or abs(float(substantial["fitted_CO3_d_born"]) - 3.0) >= threshold
+            )
+            self.assertTrue(substantial["optimizer_success"])
+            self.assertFalse(substantial["at_lower_bound_HCO3"] or substantial["at_upper_bound_HCO3"])
+            self.assertFalse(substantial["at_lower_bound_CO3"] or substantial["at_upper_bound_CO3"])
 
     def test_oh_born_derivation_artifact_contract(self) -> None:
         required = [

@@ -120,12 +120,12 @@ The promoted ion-parameter regression uses the direct Tier A speciation subset f
     \label{fig:ion-regression-results}
 \end{figure}
 
-The carbonate-family and trace-water ions have a different evidence status.  \HCOthree and \COthree are observed in the speciation data, so their SSM+DS Born radii were tested against all Tier A rows that report either species.  A direct full-data scan retained $d_{\HCOthree}^{\mathrm{Born}}=3.0$ and $d_{\COthree}^{\mathrm{Born}}=3.0$ as the lowest-residual pair among the tested candidates; the residual norm increased from 0.702 at 3.0/3.0 to 0.838 at 4.5/4.5, 1.061 at 6.5/7.5, and 1.913 at 1.05/1.05.  The available bicarbonate/carbonate targets therefore do not support a substantially different Born diameter in this parameter set.  \HthreeO and \Hydroxide are present mainly through charge balance and water autoionization and are not independently identifiable from the available NMR targets.  They are therefore retained as literature-backed SSM+DS/proton-activity values rather than reported as independently regressed species.
+The carbonate-family and trace-water ions have a different evidence status.  \HCOthree and \COthree are observed in the speciation data, so their SSM+DS Born radii were tested against all Tier A rows that report either species.  The regularized promoted trace-carbonate fit remains essentially at the adopted $d_{\HCOthree}^{\mathrm{Born}}=3.0$ and $d_{\COthree}^{\mathrm{Born}}=3.0$ values, with a residual norm of 0.702.  An unanchored multistart diagnostic, however, found a lower-residual bicarbonate-sensitive alternative near $d_{\HCOthree}^{\mathrm{Born}}=6.80$ and $d_{\COthree}^{\mathrm{Born}}=3.00$, decreasing the trace-carbonate residual norm to 0.683.  This alternative is reported as an identifiability warning rather than promoted, because it is fitted only to carbonate-family trace residuals and is not yet coupled to the full pressure/speciation objective.  \HthreeO and \Hydroxide are present mainly through charge balance and water autoionization and are not independently identifiable from the available NMR targets.  They are therefore retained as literature-backed SSM+DS/proton-activity values rather than reported as independently regressed species.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.72\linewidth]{figures/trace_carbonate_born_parity.png}
-    \caption{Trace-carbonate Born-radius check for \HCOthree and \COthree.  The available bicarbonate/carbonate speciation rows favor the adopted value of 3.0 over substantially smaller or larger Born diameters.}
+    \caption{Trace-carbonate Born-radius check for \HCOthree and \COthree.  The regularized promoted fit remains at the adopted 3.0/3.0 pair, while the unanchored multistart diagnostic indicates residual sensitivity to the bicarbonate Born diameter.}
     \label{fig:trace-carbonate-born-regression}
 \end{figure}
 

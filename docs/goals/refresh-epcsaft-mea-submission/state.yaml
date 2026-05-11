@@ -1,0 +1,438 @@
+version: 2
+
+goal:
+  title: "Refresh ePC-SAFT MEA Submission Workflow"
+  slug: "refresh-epcsaft-mea-submission"
+  kind: specific
+  tranche: "Refresh latest local ePC-SAFT into MEA, rerun data/regression/figure/manuscript workflow, fix friction, and audit submission readiness."
+  status: done
+  intake:
+    original_request: "Reinstall latest ePC-SAFT, rerun/retry all MEA project actions/tests/scripts, fix friction, and validate data-to-regression-to-LaTeX manuscript workflow."
+    interpreted_outcome: "The merged MEA main branch is validated against the latest local ePC-SAFT package and has fresh, internally consistent regression artifacts, figures, tests, and manuscript build evidence."
+    input_shape: specific
+    audience: "User and future MEA/ePC-SAFT manuscript agents"
+    authority: requested
+    proof_type: artifact
+    completion_proof: "Final audit shows package install evidence, script/test/build outputs, refreshed or intentionally unchanged artifacts, bounded scientific claims, and no unresolved local friction."
+    likely_misfire: "Only run a few green tests or rebuild the PDF without proving package reinstall effects, stale-artifact status, regression drift, manuscript claim boundaries, and data provenance."
+    blind_spots_considered:
+      - "Local ePC-SAFT may have unmerged or dirty changes that should not be overwritten."
+      - "The latest ePC-SAFT API may alter solver behavior or package metadata."
+      - "Global pressure/speciation regression may remain bounded-incomplete due reactive objective cost."
+      - "Generated figures may become stale after reinstall."
+      - "LaTeX manuscript may build while still containing overclaims or internal workflow language."
+      - "Zotero-owned references.bib must not be manually edited."
+    existing_plan_facts:
+      - "Root `plan.md` documents submission-readiness phases."
+      - "Merged main contains global regression, train/validation, sensitivity, residual diagnostics, literature comparison, and manuscript availability artifacts."
+      - "Use `.venv\\Scripts\\python.exe` directly in MEA unless a task proves another environment is required."
+      - "`docs/latex` is the source of truth; Overleaf mirror sync is not required unless explicitly selected."
+
+rules:
+  pm_owns_state: true
+  one_active_task: true
+  max_write_workers: 1
+  no_implementation_without_worker_or_pm_task: true
+  no_completion_without_judge_or_pm_audit: true
+  planning_is_not_completion: true
+  queued_required_worker_blocks_completion: true
+  continuous_until_full_outcome: true
+  missing_input_or_credentials_do_not_stop_goal: true
+  preserve_and_validate_existing_plan: true
+  intake_misfire_must_be_audited: true
+
+agents:
+  scout: installed
+  worker: installed
+  judge: installed
+
+active_task: null
+
+tasks:
+  - id: T001
+    type: scout
+    assignee: Scout
+    status: done
+    reasoning_hint: default
+    objective: "Map the current MEA and local ePC-SAFT states, package install method, validation commands, and likely friction points before any writes."
+    inputs:
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics"
+      - "C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT"
+      - "plan.md"
+      - "docs/ePC-SAFT/full-ionic-parameter-manuscript-completion-audit.md"
+      - "docs/.codex-journal/project_memory.md"
+    constraints:
+      - "Read-only."
+      - "Do not reinstall or edit files."
+      - "Use bounded command output."
+      - "Identify exact commands to run in later Worker tasks."
+    expected_output:
+      - "Current branch and dirty state for both repos."
+      - "How MEA currently imports/installs ePC-SAFT."
+      - "Exact reinstall command candidate."
+      - "Exact validation command list."
+      - "Ranked friction risks."
+      - "Candidate next Worker task with allowed_files, verify, and stop_if."
+    receipt:
+      result: done
+      summary: "Mapped current MEA/ePC-SAFT repo state, install source, missing pip friction, reinstall candidates, validation commands, and risks."
+      evidence:
+        - "MEA repo: `main...origin/main`; only `docs/goals/` untracked from board creation."
+        - "ePC-SAFT repo: `main...origin/main`, clean; latest commit `544a6b8 Merge pull request #50 from tannerpolley/codex/issues-45-46-completion`."
+        - "MEA `.venv` imports `epcsaft` from `.venv\\Lib\\site-packages\\epcsaft\\__init__.py`, version `1.5.2`."
+        - "`epcsaft-1.5.2.dist-info/direct_url.json` points to `file:///C:/Users/Tanner/Documents/git/ePC-SAFT` with `editable=false`."
+        - "MEA `.venv` has no `python -m pip`, no `pip.exe`, and no `pip3.exe`; pyvenv was created by uv 0.11.7."
+        - "MEA `pyproject.toml` depends on `epcsaft @ file:///C:/Users/Tanner/Documents/git/ePC-SAFT`."
+        - "Merged main includes global regression, train/validation, sensitivity, residual diagnostics, and tests."
+      reinstall_candidate:
+        - "Prefer `uv pip install --python .venv\\Scripts\\python.exe --reinstall --no-deps C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT` if uv is available."
+        - "Fallback if uv is unavailable: bootstrap pip with `.venv\\Scripts\\python.exe -m ensurepip --upgrade`, then `.venv\\Scripts\\python.exe -m pip install --force-reinstall --no-deps C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT`."
+      validation_candidates:
+        - ".venv\\Scripts\\python.exe -c \"import epcsaft; print(epcsaft.__version__, epcsaft.__file__)\""
+        - ".venv\\Scripts\\python.exe scripts\\doctor.py"
+        - ".venv\\Scripts\\python.exe -m unittest discover tests -v"
+        - ".venv\\Scripts\\python.exe scripts\\validate_project.py quick"
+      ranked_friction_risks:
+        - "Missing pip in `.venv` can block direct package reinstall."
+        - "Local source install is non-editable, so ePC-SAFT source changes are not reflected until reinstall."
+        - "Native ePC-SAFT build may need build dependencies or uv build cache."
+        - "All-row reactive/global regression may be slow or bounded-incomplete."
+        - "Artifact refresh may change metrics and require manuscript claim-boundary review."
+      candidate_next_worker:
+        objective: "Reinstall latest local ePC-SAFT into MEA `.venv` using the safest available installer, then verify import path/version and doctor."
+        allowed_files:
+          - ".venv/**"
+          - "docs/goals/refresh-epcsaft-mea-submission/state.yaml"
+        verify:
+          - ".venv\\Scripts\\python.exe -c \"import epcsaft; print(epcsaft.__version__, epcsaft.__file__)\""
+          - ".venv\\Scripts\\python.exe scripts\\doctor.py"
+        stop_if:
+          - "ePC-SAFT source repo becomes dirty or needs destructive cleanup."
+          - "Installer requires credentials or destructive environment recreation."
+          - "Import path/version cannot be verified after reinstall."
+
+  - id: T002
+    type: judge
+    assignee: Judge
+    status: done
+    reasoning_hint: high
+    objective: "Review Scout evidence and choose the safest reinstall-and-baseline Worker slice."
+    inputs:
+      - "T001 receipt"
+    constraints:
+      - "Read-only."
+      - "Do not implement."
+      - "Prefer reversible package reinstall and baseline checks before artifact regeneration."
+    expected_output:
+      - "Decision."
+      - "Exact Worker objective."
+      - "allowed_files."
+      - "verify commands."
+      - "stop_if conditions."
+    receipt:
+      result: done
+      summary: "Selected uv-based reinstall as the safest first Worker slice because the venv lacks pip but uv 0.11.7 is available and the dependency is already a local file dependency."
+      decision: "Run `uv pip install --python .venv\\Scripts\\python.exe --reinstall --no-deps C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT`, then verify `epcsaft` import path/version and `scripts\\doctor.py`."
+      worker_objective: "Reinstall the latest local ePC-SAFT package into the MEA environment and run baseline import/package checks."
+      allowed_files:
+        - ".venv/**"
+        - "docs/goals/refresh-epcsaft-mea-submission/state.yaml"
+        - "docs/goals/refresh-epcsaft-mea-submission/notes/**"
+      verify:
+        - ".venv\\Scripts\\python.exe -c \"import epcsaft; print(getattr(epcsaft, '__version__', 'no-version')); print(getattr(epcsaft, '__file__', 'no-file'))\""
+        - ".venv\\Scripts\\python.exe scripts\\doctor.py"
+      stop_if:
+        - "Local ePC-SAFT repo has unexpected dirty changes that would be overwritten."
+        - "uv reinstall fails because build dependencies or native build are unavailable."
+        - "Import path/version cannot be verified after reinstall."
+
+  - id: T003
+    type: worker
+    assignee: Worker
+    status: done
+    reasoning_hint: default
+    objective: "Reinstall the latest local ePC-SAFT package into the MEA environment and run baseline import/package checks."
+    allowed_files:
+      - ".venv/**"
+      - "docs/goals/refresh-epcsaft-mea-submission/state.yaml"
+      - "docs/goals/refresh-epcsaft-mea-submission/notes/**"
+    verify:
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe -m pip show epcsaft"
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe -c \"import epcsaft, inspect; print(getattr(epcsaft, '__file__', 'no-file'))\""
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe scripts\\doctor.py"
+    stop_if:
+      - "Local ePC-SAFT repo has unexpected dirty changes that would be overwritten."
+      - "pip install needs network credentials or destructive environment cleanup."
+      - "Import path does not point to the intended local ePC-SAFT package after reinstall."
+    receipt:
+      result: done
+      summary: "Reinstalled the latest local ePC-SAFT source into the MEA `.venv` with uv and verified baseline package imports."
+      changed_files:
+        - ".venv/**"
+      commands:
+        - command: "uv pip install --python .venv\\Scripts\\python.exe --reinstall --no-deps C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT"
+          status: pass
+        - command: ".venv\\Scripts\\python.exe -c \"import epcsaft; print(epcsaft.__version__); print(epcsaft.__file__)\""
+          status: pass
+        - command: ".venv\\Scripts\\python.exe scripts\\doctor.py"
+          status: pass
+      observed:
+        - "Built and installed `epcsaft==1.5.2` from `file:///C:/Users/Tanner/Documents/git/ePC-SAFT`."
+        - "Import verified from `C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Lib\\site-packages\\epcsaft\\__init__.py`."
+        - "`scripts\\doctor.py` reported all OK."
+        - "MEA and ePC-SAFT git states remain clean except GoalBuddy board files."
+
+  - id: T004
+    type: worker
+    assignee: Worker
+    status: done
+    reasoning_hint: default
+    objective: "Run the MEA test suite and project quick validation against the refreshed package, fixing only local friction needed for commands to pass."
+    allowed_files:
+      - "scripts/**"
+      - "src/MEA/**"
+      - "tests/**"
+      - "scripts/**"
+      - "docs/ePC-SAFT/**"
+      - "docs/latex/figures/**"
+      - "docs/goals/refresh-epcsaft-mea-submission/state.yaml"
+      - "docs/goals/refresh-epcsaft-mea-submission/notes/**"
+    verify:
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe -m unittest discover tests -v"
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe scripts\\validate_project.py quick"
+    stop_if:
+      - "Tests fail due package-side behavior requiring edits in C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT."
+      - "A fix requires changing scientific claims without corresponding artifacts."
+      - "Verification fails twice for the same unexplained reason."
+    receipt:
+      result: done
+      summary: "Ran full MEA tests and quick validation against refreshed ePC-SAFT; fixed the trace-carbonate artifact test so it distinguishes canonical regularized values from unanchored multistart diagnostics."
+      changed_files:
+        - "tests/**"
+      commands:
+        - command: ".venv\\Scripts\\python.exe -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_trace_carbonate_born_fit_artifact_contract -v"
+          status: pass
+        - command: ".venv\\Scripts\\python.exe -m unittest discover tests -v"
+          status: pass
+        - command: ".venv\\Scripts\\python.exe scripts\\validate_project.py quick"
+          status: pass
+      observed:
+        - "Initial run exposed one failure: old test expected diagnostic best HCO3 d_born to equal 3.0, but refreshed artifact has unanchored best HCO3 d_born 6.802941 with lower residual."
+        - "Canonical promoted trace-carbonate fitted values remain near 3.0/3.0 in `fitted_values`."
+        - "After test update, all 18 tests pass and quick validation passes."
+
+  - id: T005
+    type: worker
+    assignee: Worker
+    status: done
+    reasoning_hint: default
+    objective: "Rerun package-dependent MEA analysis scripts and refresh curated artifacts only when outputs are stale or changed by the new package."
+    allowed_files:
+      - "analyses/epcsaft_ionic_regression/**"
+      - "analyses/epcsaft_neutral_parity/**"
+      - "analyses/six_species_legacy/**"
+      - "analyses/2015_baygi/**"
+      - "src/MEA/**"
+      - "tests/**"
+      - "scripts/**"
+      - "docs/ePC-SAFT/**"
+      - "docs/latex/figures/**"
+      - "docs/goals/refresh-epcsaft-mea-submission/state.yaml"
+      - "docs/goals/refresh-epcsaft-mea-submission/notes/**"
+    verify:
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe analyses\\epcsaft_ionic_regression\\scripts\\fit_global_pressure_speciation.py --max-nfev 40 --promote"
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe analyses\\epcsaft_ionic_regression\\scripts\\evaluate_train_validation_split.py"
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe analyses\\epcsaft_ionic_regression\\scripts\\compute_parameter_sensitivity.py"
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe analyses\\epcsaft_ionic_regression\\scripts\\render_figures.py"
+      - "C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Scripts\\python.exe -m unittest tests.test_global_regression_artifacts tests.test_ion_parameter_regression_artifacts -v"
+    stop_if:
+      - "Full global regression exceeds practical runtime; record bounded-incomplete evidence and continue validation scripts."
+      - "Generated metrics materially worsen and require scientific claim changes."
+      - "A package-side bug is confirmed and cannot be worked around downstream."
+    receipt:
+      result: done
+      summary: "Refreshed the package-dependent ionic MEA workflow after reinstall, regenerated curated ionic figures, reran train/validation and sensitivity diagnostics, and verified focused artifact tests."
+      changed_files:
+        - "analyses/epcsaft_ionic_regression/**"
+        - "docs/latex/figures/**"
+        - "scripts/**"
+        - "src/MEA/**"
+        - "tests/**"
+      commands:
+        - command: ".venv\\Scripts\\python.exe analyses\\epcsaft_ionic_regression\\scripts\\fit_global_pressure_speciation.py --max-nfev 40 --promote"
+          status: pass
+        - command: ".venv\\Scripts\\python.exe analyses\\epcsaft_ionic_regression\\scripts\\evaluate_train_validation_split.py"
+          status: pass
+        - command: ".venv\\Scripts\\python.exe analyses\\epcsaft_ionic_regression\\scripts\\compute_parameter_sensitivity.py"
+          status: pass
+        - command: ".venv\\Scripts\\python.exe analyses\\epcsaft_ionic_regression\\scripts\\render_figures.py"
+          status: pass
+        - command: ".venv\\Scripts\\python.exe -m unittest tests.test_global_regression_artifacts tests.test_ion_parameter_regression_artifacts -v"
+          status: pass
+        - command: "Remove generated Python __pycache__ folders under src, tests, scripts, and analyses."
+          status: pass
+      observed:
+        - "Global pressure/speciation rerun remains intentionally bounded-incomplete: objective evaluations are still too expensive for routine full coupled least-squares."
+        - "Promoted ionic fit selected `promoted_ionic_fit`; train pressure median abs log10 residual is 0.2952 and validation pressure median abs log10 residual is 0.3755."
+        - "Sensitivity baseline pressure median abs log10 residual is 0.2851; largest normalized sensitivity is 1.2217."
+        - "Rendered ionic pressure/speciation figures, residual figures, global regression figures, train/validation residual figure, sensitivity heatmap, and manuscript figure copies."
+        - "Focused global-regression and ion-parameter artifact tests passed."
+
+  - id: T006
+    type: worker
+    assignee: Worker
+    status: done
+    reasoning_hint: default
+    objective: "Rebuild and submission-safety check the LaTeX manuscript after refreshed figures/tables, fixing bounded manuscript integration issues."
+    allowed_files:
+      - "docs/latex/main.tex"
+      - "docs/latex/sections/**"
+      - "docs/latex/tables/**"
+      - "docs/latex/figures/**"
+      - "docs/latex/source_log.md"
+      - "docs/latex/.latexmkrc"
+      - "docs/latex/.gitignore"
+      - "docs/ePC-SAFT/**"
+      - "docs/goals/refresh-epcsaft-mea-submission/state.yaml"
+      - "docs/goals/refresh-epcsaft-mea-submission/notes/**"
+    verify:
+      - "latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex"
+      - "Submission-safety scan over docs/latex/main.tex, docs/latex/sections/*.tex, and docs/latex/tables/*.tex."
+      - "Check every includegraphics target exists under docs/latex/figures."
+    stop_if:
+      - "Need to manually edit docs/latex/references.bib."
+      - "Need new literature claims not supported by local references or Zotero."
+      - "LaTeX build fails twice after bounded fixes."
+    receipt:
+      result: done
+      summary: "Updated the manuscript and supporting source/audit notes for the refreshed carbonate Born diagnostic, verified figure references, ran a submission-safety scan, and rebuilt the manuscript PDF."
+      changed_files:
+        - "docs/latex/sections/**"
+        - "docs/latex/tables/**"
+        - "docs/latex/figures/**"
+        - "docs/latex/source_log.md"
+        - "docs/ePC-SAFT/**"
+      commands:
+        - command: "Check every includegraphics target exists under docs/latex/figures."
+          status: pass
+        - command: "Submission-safety scan over docs/latex/main.tex, docs/latex/sections/*.tex, and docs/latex/tables/*.tex."
+          status: pass
+        - command: "latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex"
+          status: pass
+        - command: "Check docs/latex/builds/main.pdf exists and docs/latex/main.pdf does not exist."
+          status: pass
+      observed:
+        - "Manuscript now distinguishes the regularized promoted carbonate Born pair at 3.0/3.0 from the unanchored lower-residual HCO3-sensitive diagnostic near 6.80/3.00."
+        - "Updated the parameter evidence table, full-ionic parameter table notes, conclusion, results interpretation, source log, and ePC-SAFT audit notes."
+        - "LaTeX built `docs/latex/builds/main.pdf` successfully with existing underfull-box/layout warnings and one footnote destination warning, but no fatal errors."
+        - "No manual edit was made to `docs/latex/references.bib`."
+
+  - id: T007
+    type: judge
+    assignee: Judge
+    status: done
+    reasoning_hint: high
+    objective: "Audit scientific readiness after reruns: data provenance, model inputs, regression metrics, sensitivity, train/validation, figures, and manuscript claim boundaries."
+    inputs:
+      - "Receipts from T003 through T006."
+      - "Current result summaries."
+      - "Current manuscript PDF/build log."
+    constraints:
+      - "Read-only."
+      - "Reject completion if claims exceed evidence."
+      - "Identify any required Worker follow-up."
+    expected_output:
+      - "complete | not_complete."
+      - "Prompt-to-artifact checklist."
+      - "Missing evidence or follow-up Worker task."
+      - "Whether Overleaf sync is recommended or should remain unsynced."
+    receipt:
+      result: done
+      decision: "complete"
+      summary: "Scientific readiness audit passes for the requested refresh scope: the latest local ePC-SAFT package was reinstalled and verified, tests and project validation passed, package-dependent ionic artifacts were regenerated, manuscript figures and prose were updated, and the LaTeX manuscript builds."
+      prompt_to_artifact_checklist:
+        - "Latest local ePC-SAFT installed into MEA `.venv` from `C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT`; import version/path and doctor checks passed."
+        - "Full test suite and quick project validation passed after updating the carbonate diagnostic test for refreshed multistart behavior."
+        - "Full ionic evaluation solves 161 pressure rows and 74 speciation rows; pressure median absolute log10 residual is 0.331711."
+        - "Train/validation diagnostics are refreshed: pressure validation median absolute log10 residual is 0.375505; held-out Jakobsen speciation medians are 0.115810 for MEAH+ and 0.086683 for MEACOO-."
+        - "Global pressure/speciation least-squares remains bounded-incomplete by design; manuscript and audit documents state that boundary explicitly."
+        - "Trace-carbonate interpretation is now bounded correctly: regularized promoted pair remains 3.0/3.0, while an unanchored HCO3-sensitive diagnostic near 6.80/3.00 is documented but not promoted."
+        - "Manuscript figure targets exist, submission-safety scan passed, and `docs/latex/builds/main.pdf` builds successfully."
+      missing_evidence_or_followup: "No bounded local follow-up Worker is required for this refresh. Remaining limitations are scientific scope boundaries rather than fixable local integration gaps."
+      overleaf_sync_recommendation: "Do not sync the Overleaf mirror in this goal unless the user explicitly asks; `docs/latex` is the source of truth and the local build is current."
+      residual_risks:
+        - "Final all-row pressure-weighted global regression is still not complete because coupled reactive objective evaluations remain too expensive for routine execution."
+        - "HCO3-/CO3^2- Born values have a documented identifiability boundary and should not be described as independently globally optimized."
+        - "LaTeX build retains non-fatal underfull-box/layout warnings and one footnote destination warning."
+
+  - id: T008
+    type: worker
+    assignee: Worker
+    status: done
+    reasoning_hint: default
+    objective: "Execute one bounded follow-up selected by T007 if the audit finds fixable local gaps."
+    allowed_files: []
+    verify: []
+    stop_if:
+      - "Need files outside allowed_files."
+      - "Need user decision about scientific claim scope."
+      - "Need package-side implementation rather than downstream MEA fix."
+    receipt:
+      result: done
+      summary: "No follow-up worker action was required after the T007 audit; the remaining items are documented scientific boundaries rather than bounded local fixes."
+      changed_files: []
+      commands:
+        - command: "T007 audit selected no bounded local follow-up."
+          status: pass
+
+  - id: T999
+    type: pm
+    assignee: PM
+    status: done
+    reasoning_hint: high
+    objective: "Final audit and closeout: prove the full refresh outcome is complete or record exact blockers."
+    inputs:
+      - "All done task receipts."
+      - "Final git status."
+      - "Final validation commands."
+      - "Final LaTeX build."
+    constraints:
+      - "Do not implement."
+      - "Do not mark complete if required Worker work remains queued/active."
+      - "Do not treat tests alone as completion."
+    expected_output:
+      - "complete | not_complete"
+      - "full_outcome_complete: true | false"
+      - "Final evidence map."
+      - "Residual risks."
+    receipt:
+      result: done
+      decision: "complete"
+      full_outcome_complete: true
+      summary: "The requested refresh workflow is complete: latest local ePC-SAFT is installed into MEA, tests and project validation pass, ionic analysis artifacts and manuscript figures are refreshed, manuscript claims match the refreshed diagnostics, and the LaTeX PDF builds from `docs/latex`."
+      final_evidence_map:
+        - "Package evidence: `epcsaft` imports as version 1.5.2 from `C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Lib\\site-packages\\epcsaft\\__init__.py` after uv reinstall from local `C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT`."
+        - "Validation evidence: `.venv\\Scripts\\python.exe -m unittest discover tests -v` passed 18 tests; `.venv\\Scripts\\python.exe scripts\\validate_project.py quick` passed."
+        - "Analysis evidence: ionic global workflow rerun remains bounded-incomplete by design, while train/validation, sensitivity, residual, and render scripts completed and refreshed curated SVG/manuscript figure copies."
+        - "Scientific claim evidence: manuscript and audit documents now state that the promoted carbonate Born pair is regularized 3.0/3.0 and that the unanchored HCO3-sensitive lower-residual diagnostic is not promoted without pressure/speciation refit."
+        - "Manuscript evidence: every includegraphics target exists, submission-safety scan passed, and `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` built `docs/latex/builds/main.pdf`."
+        - "Cleanliness evidence: no `__pycache__` folders remain under `src`, `tests`, `scripts`, or `analyses`; `docs/latex/main.pdf` is absent."
+      final_commands:
+        - ".venv\\Scripts\\python.exe -m unittest discover tests -v"
+        - ".venv\\Scripts\\python.exe scripts\\validate_project.py quick"
+        - "latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex"
+        - "Submission-safety scan over rendered manuscript source files"
+        - "includegraphics target existence check"
+        - "GoalBuddy state checker"
+      residual_risks:
+        - "Full coupled all-row pressure/speciation least-squares remains runtime-bounded and is not claimed as a final global optimum."
+        - "Carbonate Born identifiability remains weak; HCO3 has an unanchored trace-only alternative near 6.80 that should be revisited when coupled objective runtime improves."
+        - "LaTeX build has non-fatal underfull-box/layout warnings and one footnote destination warning."
+        - "Overleaf mirror sync was intentionally not performed; `docs/latex` remains the source of truth."
+
+checks:
+  dirty_fingerprint: "Initial `$goal-prep` observed MEA main clean and local ePC-SAFT main clean before board creation."
+  last_verification:
+    result: unknown
+    task: null
+    commands: []
