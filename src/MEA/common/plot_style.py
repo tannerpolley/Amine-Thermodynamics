@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from pathlib import Path
 
+import matplotlib as mpl
 import numpy as np
 
 
@@ -13,37 +15,40 @@ SPECIATION_XLIM = (0.0, 0.8)
 SPECIATION_YLIM = (1.0e-12, 1.0)
 
 JOU_TEMPERATURE_COLORS: dict[int, str] = {
-    40: "tab:blue",
-    60: "tab:orange",
-    80: "tab:green",
-    100: "tab:red",
-    120: "tab:purple",
+    40: "#1f5aa6",
+    60: "#d47a00",
+    80: "#16805a",
+    100: "#b6312c",
+    120: "#6f4aa8",
 }
 
 JOU_DATA_MARKER = "x"
+JOU_DATA_MARKERSIZE = 6
+MODEL_LINEWIDTH = 2.2
+REFERENCE_LINEWIDTH = 1.7
 LEGACY_PCSAFT_LINESTYLE = ":"
 EPCSAFT_NEUTRAL_LINESTYLE = "-"
 EPCSAFT_IONIC_LINESTYLE = "-"
 SPECIATION_MODEL_LINESTYLE = "--"
 SPECIATION_TARGET_MARKER = "o"
-SPECIATION_TARGET_ALPHA = 0.55
+SPECIATION_TARGET_ALPHA = 0.62
 SPECIATION_TARGET_MARKERSIZE = 5
 
 TRUE_SPECIES_COLORS: dict[str, str] = {
-    "CO2": "tab:green",
-    "MEA": "tab:blue",
-    "H2O": "tab:gray",
-    "MEAH+": "tab:orange",
-    "MEAH^+": "tab:orange",
-    "MEACOO-": "tab:red",
-    "MEACOO^-": "tab:red",
-    "HCO3-": "tab:cyan",
-    "HCO3^-": "tab:cyan",
-    "CO3^2-": "tab:purple",
-    "H3O+": "tab:brown",
-    "OH-": "tab:olive",
-    "MEA + MEAH+": "tab:pink",
-    "MEA + MEAH^+": "tab:pink",
+    "CO2": "#16805a",
+    "MEA": "#1f5aa6",
+    "H2O": "#707070",
+    "MEAH+": "#d47a00",
+    "MEAH^+": "#d47a00",
+    "MEACOO-": "#b6312c",
+    "MEACOO^-": "#b6312c",
+    "HCO3-": "#008c9e",
+    "HCO3^-": "#008c9e",
+    "CO3^2-": "#6f4aa8",
+    "H3O+": "#8a5a2b",
+    "OH-": "#6b7f16",
+    "MEA + MEAH+": "#b44f86",
+    "MEA + MEAH^+": "#b44f86",
 }
 
 TRUE_SPECIES_LABELS: dict[str, str] = {
@@ -64,6 +69,27 @@ TRUE_SPECIES_LABELS: dict[str, str] = {
 }
 
 
+def apply_plot_theme() -> None:
+    mpl.rcParams.update(
+        {
+            "font.family": "serif",
+            "font.serif": ["Cambria", "Times New Roman", "DejaVu Serif"],
+            "mathtext.fontset": "dejavuserif",
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "axes.titleweight": "semibold",
+            "axes.titlepad": 10,
+            "axes.labelsize": 11,
+            "axes.titlesize": 13,
+            "legend.frameon": False,
+            "legend.fontsize": 8.5,
+            "xtick.direction": "out",
+            "ytick.direction": "out",
+            "savefig.facecolor": "white",
+        }
+    )
+
+
 def temperature_color(temperature_C: float | int) -> str:
     return JOU_TEMPERATURE_COLORS[int(round(float(temperature_C)))]
 
@@ -80,20 +106,60 @@ def species_label(species: str) -> str:
     return TRUE_SPECIES_LABELS.get(species, species)
 
 
-def apply_pressure_axes(ax, *, ylabel: str = "CO2 partial pressure, kPa") -> None:
-    ax.set_xlabel("CO2 loading, mol CO2/mol MEA")
+def finish_axes(ax, *, title: str | None = None, grid_axis: str = "both") -> None:
+    apply_plot_theme()
+    if title:
+        ax.set_title(title)
+    ax.grid(True, which="major", axis=grid_axis, alpha=0.22, linewidth=0.8)
+    ax.tick_params(length=4.0, width=0.8)
+
+
+def apply_pressure_axes(ax, *, ylabel: str = "$CO_2$ partial pressure, kPa", title: str | None = None) -> None:
+    ax.set_xlabel("$CO_2$ loading, mol $CO_2$/mol MEA")
     ax.set_ylabel(ylabel)
     ax.set_xlim(*PRESSURE_XLIM)
     ax.set_ylim(*PRESSURE_YLIM)
     ax.set_yscale("log")
-    ax.grid(True, which="both", alpha=0.25)
+    finish_axes(ax, title=title)
 
 
-def apply_speciation_axes(ax) -> None:
-    ax.set_xlabel("CO2 loading, mol CO2/mol MEA")
+def apply_speciation_axes(ax, *, title: str | None = None) -> None:
+    ax.set_xlabel("$CO_2$ loading, mol $CO_2$/mol MEA")
     ax.set_ylabel("True-species mole fraction")
     ax.set_xlim(*SPECIATION_XLIM)
     ax.set_ylim(*SPECIATION_YLIM)
+    ax.set_yscale("log")
     ax.set_xticks(np.linspace(SPECIATION_XLIM[0], SPECIATION_XLIM[1], 9))
     ax.set_yticks(np.logspace(-12, 0, 13))
-    ax.grid(True, which="both", alpha=0.25)
+    finish_axes(ax, title=title)
+
+
+def write_mpl_sidecar(
+    path: Path,
+    *,
+    png_name: str,
+    svg_name: str,
+    title: str,
+    description: str,
+    style_source: str = "src/MEA/common/plot_style.py",
+    dpi: int = 300,
+) -> None:
+    path.write_text(
+        "\n".join(
+            [
+                "figure:",
+                f"  title: {title}",
+                f"  description: {description}",
+                f"  png: {png_name}",
+                f"  svg: {svg_name}",
+                f"  dpi: {dpi}",
+                "style:",
+                f"  source: {style_source}",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+
+apply_plot_theme()

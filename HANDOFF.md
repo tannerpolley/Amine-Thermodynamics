@@ -18,9 +18,13 @@ uv sync
 uv run python scripts\doctor.py
 uv run python scripts\validate_project.py quick
 uv run python scripts\validate_project.py confidence
+uv run python scripts\render_all_plots.py
+uv run python scripts\generate_all_analysis_data.py
 uv run python analyses\<analysis_id>\scripts\generate_data.py
 uv run python analyses\<analysis_id>\scripts\render_figures.py
 ```
+
+`scripts\render_all_plots.py` is the canonical single command for regenerating all curated figures from existing processed CSVs. It must stay render-only. `scripts\generate_all_analysis_data.py` is the separate data-refresh orchestrator; its default path avoids full ionic regeneration, while `--include-ionic-full` and `--include-expensive` explicitly opt into slow recomputation.
 
 Old path commands such as `uv run python MEA\run_plot_exports.py` were deliberately removed.
 

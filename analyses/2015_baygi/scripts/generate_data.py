@@ -10,7 +10,6 @@ ANALYSIS_DIR = Path(__file__).resolve().parents[1]
 REPO_ROOT = ANALYSIS_DIR.parents[1]
 SRC_ROOT = REPO_ROOT / "src"
 OUT_DIR = ANALYSIS_DIR / "data" / "processed"
-RESULTS_DIR = ANALYSIS_DIR / "results" / "neutral_parity"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
@@ -50,9 +49,6 @@ def main() -> int:
         summary.to_csv(summary_path, index=False)
     else:
         curves = pd.read_csv(pressure_path)
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    curves.to_csv(RESULTS_DIR / "baygi_neutral_epcsaft_pcsaft_pressure_parity_plot_data.csv", index=False)
-
     print(f"Baygi pure parameters: {pure_path}")
     print(f"Baygi MEA-H2O association comparison: {binary_path}")
     print(f"Neutral ePC-SAFT pressure parity raw data: {pressure_path}")

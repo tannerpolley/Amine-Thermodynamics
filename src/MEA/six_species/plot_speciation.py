@@ -14,6 +14,7 @@ from MEA.common.data_access import load_speciation_data as load_measured_speciat
 from MEA.common.plot_export import default_output_dir
 from MEA.common.plot_export import save_plot
 from MEA.common.plot_style import (
+    MODEL_LINEWIDTH,
     SPECIATION_FIGSIZE,
     SPECIATION_MODEL_LINESTYLE,
     SPECIATION_TARGET_ALPHA,
@@ -65,6 +66,11 @@ def load_speciation_data() -> pd.DataFrame:
 
 
 def plot_legacy_speciation(curves: pd.DataFrame, data: pd.DataFrame) -> Path:
+    title = "Six-species chemical-equilibrium speciation at 40 C"
+    description = (
+        "Six-species legacy chemical-equilibrium model curves and measured true-species "
+        "speciation points are shown on a shared semilog mole-fraction axis."
+    )
     fig, ax = plt.subplots(figsize=SPECIATION_FIGSIZE)
     loading_min = float(data["CO2_loading"].min()) if not data.empty else float(curves["CO2_loading"].min())
     loading_max = min(0.8, float(data["CO2_loading"].max()) if not data.empty else float(curves["CO2_loading"].max()))
@@ -78,6 +84,7 @@ def plot_legacy_speciation(curves: pd.DataFrame, data: pd.DataFrame) -> Path:
             visible_curves[species],
             SPECIATION_MODEL_LINESTYLE,
             color=color,
+            linewidth=MODEL_LINEWIDTH,
             label=species_label(species),
         )
         for row in visible_curves[["CO2_loading", species]].to_dict("records"):
@@ -98,11 +105,11 @@ def plot_legacy_speciation(curves: pd.DataFrame, data: pd.DataFrame) -> Path:
                 for row in measured.to_dict("records"):
                     snapshot_rows.append({"source": "reference", "species": species, "CO2_loading": row["CO2_loading"], "mole_fraction": row[data_column]})
 
-    apply_speciation_axes(ax)
-    ax.legend(loc="lower center", ncol=2)
+    apply_speciation_axes(ax, title=title)
+    ax.legend(loc="lower center", ncol=2, title="Model curves; markers are reference data")
     fig.tight_layout()
     write_csv_report(default_output_dir(__file__) / "speciation_plot_data.csv", snapshot_rows)
-    return save_plot(fig, __file__, "speciation")
+    return save_plot(fig, __file__, "speciation", title=title, description=description)
 
 
 def main() -> int:

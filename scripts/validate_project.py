@@ -15,11 +15,7 @@ QUICK_COMMANDS = [
 ]
 
 PLOT_COMMANDS = [
-    [PY, "analyses/six_species_legacy/scripts/render_figures.py"],
-    [PY, "analyses/epcsaft_neutral_parity/scripts/render_figures.py"],
-    [PY, "analyses/epcsaft_ionic_regression/scripts/render_figures.py"],
-    [PY, "analyses/2015_baygi/scripts/generate_data.py"],
-    [PY, "analyses/2015_baygi/scripts/render_figures.py"],
+    [PY, "scripts/render_all_plots.py"],
 ]
 
 CURATED_REQUIREMENTS = {

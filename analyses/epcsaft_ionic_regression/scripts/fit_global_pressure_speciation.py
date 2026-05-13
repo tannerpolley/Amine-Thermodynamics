@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import sys
 from pathlib import Path
 
@@ -10,6 +11,7 @@ SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
+from MEA.epcsaft_ionic.approval_check import write_global_regression_approval
 from MEA.epcsaft_ionic.global_regression import GLOBAL_RESULTS_DIR, attempt_global_regression, write_global_artifacts
 
 
@@ -35,10 +37,30 @@ def main() -> int:
         regularization_scale=args.regularization_scale,
         verbose=args.verbose,
     )
-    output_dir = GLOBAL_RESULTS_DIR if args.promote else (GLOBAL_RESULTS_DIR.parent / "runs" / "global_regression" / (args.output_label or "smoke"))
+    output_dir = GLOBAL_RESULTS_DIR.parent / "runs" / "global_regression" / (args.output_label or "smoke")
     summary = write_global_artifacts(payload, output_dir)
+    approval = write_global_regression_approval(summary, output_dir)
+    if args.promote:
+        if not approval["approved"]:
+            print(json.dumps(approval, indent=2, sort_keys=True))
+            print(json.dumps({"promotion": "rejected", "candidate_dir": str(output_dir)}, indent=2))
+            return 2
+        if GLOBAL_RESULTS_DIR.exists():
+            shutil.rmtree(GLOBAL_RESULTS_DIR)
+        shutil.copytree(output_dir, GLOBAL_RESULTS_DIR)
+        output_dir = GLOBAL_RESULTS_DIR
     print(json.dumps(summary["optimizer"], indent=2))
-    print(json.dumps({"completion_status": summary["completion_status"], "selected_parameter_set": summary["selected_parameter_set"]}, indent=2))
+    print(
+        json.dumps(
+            {
+                "completion_status": summary["completion_status"],
+                "selected_parameter_set": summary["selected_parameter_set"],
+                "promotion_approval": approval["decision"],
+                "output_dir": str(output_dir),
+            },
+            indent=2,
+        )
+    )
     return 0
 
 

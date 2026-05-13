@@ -11,9 +11,9 @@ from typing import Any, Iterable
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy.optimize import least_squares
 
-from MEA.common.plot_style import species_color, species_label
+from MEA.common.plot_style import finish_axes, species_color, species_label, write_mpl_sidecar
+from MEA.epcsaft_ionic import native_regression
 from MEA.epcsaft_ionic.model import (
     BOUNDS,
     DEFAULT_INITIAL_GUESS,
@@ -22,6 +22,7 @@ from MEA.epcsaft_ionic.model import (
     SPECIES_INDEX,
     VLETarget,
     SpeciationTarget,
+    load_epcsaft,
     load_speciation_targets,
     load_vle_targets,
     solve_activity_speciation,
@@ -295,9 +296,8 @@ def attempt_global_regression(
     vle_targets, spec_targets = load_global_targets(max_pressure_records=max_pressure_records, max_speciation_records=max_speciation_records)
     base = load_initial_values()
     x0 = np.asarray([base[name] for name in GLOBAL_FIT_NAMES], dtype=float)
-    lower, upper = fit_bounds()
     initial_values = fit_vector_to_values(x0, base=base)
-    attempted_optimization = int(max_nfev) >= 2 and len(vle_targets) <= 3 and len(spec_targets) <= 3
+    attempted_optimization = int(max_nfev) >= 1 and len(vle_targets) <= 3 and len(spec_targets) <= 3
     if attempted_optimization:
         initial_residuals, initial_pressure, initial_speciation = objective_residuals(
             initial_values,
@@ -312,24 +312,31 @@ def attempt_global_regression(
         initial_speciation = cached_speciation_rows()
         initial_residuals = np.asarray([], dtype=float)
     if attempted_optimization:
-        result = least_squares(
-            lambda vector: objective_residuals(
-                fit_vector_to_values(np.asarray(vector, dtype=float), base=base),
-                vle_targets,
-                spec_targets,
-                pressure_weight=pressure_weight,
-                speciation_weight=speciation_weight,
-                regularization_scale=regularization_scale,
-            )[0],
-            x0,
-            bounds=(lower, upper),
-            loss="soft_l1",
-            f_scale=1.0,
-            x_scale=np.maximum(np.abs(x0), 1.0),
-            max_nfev=int(max_nfev),
-            verbose=2 if verbose else 0,
+        problem = native_regression.build_native_regression_problem(
+            max_pressure_records=max_pressure_records,
+            max_speciation_records=max_speciation_records,
+            include_carbonate_born=True,
         )
-        fitted_values = fit_vector_to_values(result.x, base=base)
+        native_initial, native_lower, native_upper = native_regression.parameter_maps(problem)
+        native_initial.update({key: float(base[key]) for key in native_initial if key in base})
+        batch = native_regression.to_epcsaft_batch(problem)
+        epcsaft = load_epcsaft()
+        native_result = epcsaft.fit_reactive_electrolyte_parameters(
+            batch,
+            initial_parameters=native_initial,
+            lower_bounds=native_lower,
+            upper_bounds=native_upper,
+            max_iterations=int(max_nfev),
+            tolerance=1.0e-6,
+            damping=1.0,
+            jacobian_mode="central",
+            relative_step=1.0e-4,
+            log_parameters=True,
+        )
+        native_summary = epcsaft.summarize_regression_result(native_result)
+        package_values = dict(getattr(native_result, "parameter_map", native_summary.get("parameter_map", {})))
+        fitted_values = dict(base)
+        fitted_values.update({key: float(value) for key, value in package_values.items() if key in BOUNDS})
         final_residuals, final_pressure, final_speciation = objective_residuals(
             fitted_values,
             vle_targets,
@@ -338,17 +345,33 @@ def attempt_global_regression(
             speciation_weight=speciation_weight,
             regularization_scale=regularization_scale,
         )
+        result = SimpleNamespace(
+            success=bool(native_summary.get("fit_success", getattr(native_result, "success", False))),
+            status=1 if bool(native_summary.get("fit_success", getattr(native_result, "success", False))) else 0,
+            message=str(native_summary.get("fit_message", getattr(native_result, "message", ""))),
+            nfev=int(native_summary.get("fit_iterations", getattr(native_result, "iterations", 0)) or 0),
+            cost=float(0.5 * np.sum(final_residuals * final_residuals)),
+            x=np.asarray([fitted_values[name] for name in GLOBAL_FIT_NAMES], dtype=float),
+            native_summary=native_summary,
+            native_result=(
+                native_result.to_dict()
+                if hasattr(native_result, "to_dict")
+                else {"parameter_map": package_values}
+            ),
+        )
     else:
         result = SimpleNamespace(
             success=False,
             status=0,
             message=(
-                "bounded downstream run: full coupled least-squares was skipped because objective evaluations remain too expensive "
-                "for routine execution in this repository state"
+                "package native fit not completed: full coupled native ePC-SAFT regression was skipped because objective "
+                "evaluations remain too expensive for routine execution in this repository state"
             ),
             nfev=0,
             cost=float(0.5 * np.sum(initial_residuals * initial_residuals)),
             x=x0,
+            native_summary={},
+            native_result={},
         )
         fitted_values = dict(initial_values)
         final_residuals = initial_residuals
@@ -367,7 +390,7 @@ def attempt_global_regression(
     meacoo_ok = float(final_speciation_metrics.get("MEACOO-", {}).get("median_abs_log10", np.inf)) <= 0.10
     moved_count = sum(abs(float(fitted_values[name]) - float(initial_values[name])) > 1.0e-6 for name in GLOBAL_FIT_NAMES)
     completed = bool(result.success) and pressure_improved and meah_ok and meacoo_ok and moved_count >= 3
-    completion_status = "completed" if completed else "bounded_incomplete"
+    completion_status = "completed" if completed else "package_fit_not_completed"
     selected_values = dict(fitted_values if completed else initial_values)
     selected_parameter_set = "global_regression" if completed else "promoted_ionic_fit"
     claim_boundary = (
@@ -461,12 +484,16 @@ def write_global_artifacts(payload: dict[str, Any], output_dir: Path) -> dict[st
             "speciation": len(payload["spec_targets"]),
         },
         "optimizer": {
+            "owner": "epcsaft",
+            "native_function": "fit_reactive_electrolyte_parameters",
             "success": bool(payload["result"].success),
             "status": int(payload["result"].status),
             "message": str(payload["result"].message),
             "nfev": int(payload["result"].nfev),
             "cost": float(payload["result"].cost),
         },
+        "native_regression_summary": getattr(payload["result"], "native_summary", {}),
+        "native_regression_result": getattr(payload["result"], "native_result", {}),
         "attempted_optimization": bool(payload["attempted_optimization"]),
         "initial_values": {name: float(payload["initial_values"][name]) for name in GLOBAL_FIT_NAMES},
         "fitted_values": {name: float(payload["fitted_values"][name]) for name in GLOBAL_FIT_NAMES},
@@ -480,12 +507,15 @@ def write_global_artifacts(payload: dict[str, Any], output_dir: Path) -> dict[st
         "claim_boundary": payload["claim_boundary"],
     }
     write_json(output_dir / "global_regression_summary.json", summary)
-    write_pressure_parity(selected_pressure, output_dir)
-    write_speciation_parity(selected_speciation, output_dir)
     return summary
 
 
 def write_pressure_parity(frame: pd.DataFrame, output_dir: Path) -> None:
+    title = "Global pressure parity for selected full-ionic parameter set"
+    description = (
+        "Observed and model carbon-dioxide partial pressures are compared on log axes for the "
+        "selected full-ionic parameter set."
+    )
     fig, ax = plt.subplots(figsize=(6.5, 6.5))
     finite = frame[["observed_pressure_Pa", "model_pressure_Pa", "source"]].replace([np.inf, -np.inf], np.nan).dropna()
     for source, subset in finite.groupby("source"):
@@ -505,21 +535,30 @@ def write_pressure_parity(frame: pd.DataFrame, output_dir: Path) -> None:
         ax.set_yscale("log")
         ax.set_xlim(lo, hi)
         ax.set_ylim(lo, hi)
-    ax.set_xlabel("Observed CO2 pressure, Pa")
-    ax.set_ylabel("Model CO2 pressure, Pa")
-    ax.grid(True, which="both", alpha=0.25)
-    ax.legend(fontsize=8)
+    ax.set_xlabel("Observed $CO_2$ pressure, Pa")
+    ax.set_ylabel("Model $CO_2$ pressure, Pa")
+    finish_axes(ax, title=title)
+    ax.legend(fontsize=8, title="Literature source")
     fig.tight_layout()
     fig.savefig(output_dir / "global_regression_pressure_parity.png", dpi=300, bbox_inches="tight")
     fig.savefig(output_dir / "global_regression_pressure_parity.svg", bbox_inches="tight")
     plt.close(fig)
-    (output_dir / "global_regression_pressure_parity.mpl.yaml").write_text(
-        "figure:\n  png: global_regression_pressure_parity.png\n  svg: global_regression_pressure_parity.svg\n  dpi: 300\n",
-        encoding="utf-8",
+    write_mpl_sidecar(
+        output_dir / "global_regression_pressure_parity.mpl.yaml",
+        png_name="global_regression_pressure_parity.png",
+        svg_name="global_regression_pressure_parity.svg",
+        title=title,
+        description=description,
+        style_source="src/MEA/epcsaft_ionic/global_regression.py",
     )
 
 
 def write_speciation_parity(frame: pd.DataFrame, output_dir: Path) -> None:
+    title = "Global speciation parity for selected full-ionic parameter set"
+    description = (
+        "Observed and model true-species mole fractions are compared on log axes for the "
+        "selected full-ionic parameter set."
+    )
     fig, ax = plt.subplots(figsize=(6.5, 6.5))
     finite = frame[["observed_mole_fraction", "model_mole_fraction", "species"]].replace([np.inf, -np.inf], np.nan).dropna()
     for species, subset in finite.groupby("species"):
@@ -540,17 +579,21 @@ def write_speciation_parity(frame: pd.DataFrame, output_dir: Path) -> None:
         ax.set_yscale("log")
         ax.set_xlim(lo, hi)
         ax.set_ylim(lo, hi)
-    ax.set_xlabel("Observed mole fraction")
-    ax.set_ylabel("Model mole fraction")
-    ax.grid(True, which="both", alpha=0.25)
-    ax.legend(fontsize=8)
+    ax.set_xlabel("Observed true-species mole fraction")
+    ax.set_ylabel("Model true-species mole fraction")
+    finish_axes(ax, title=title)
+    ax.legend(fontsize=8, title="Species")
     fig.tight_layout()
     fig.savefig(output_dir / "global_regression_speciation_parity.png", dpi=300, bbox_inches="tight")
     fig.savefig(output_dir / "global_regression_speciation_parity.svg", bbox_inches="tight")
     plt.close(fig)
-    (output_dir / "global_regression_speciation_parity.mpl.yaml").write_text(
-        "figure:\n  png: global_regression_speciation_parity.png\n  svg: global_regression_speciation_parity.svg\n  dpi: 300\n",
-        encoding="utf-8",
+    write_mpl_sidecar(
+        output_dir / "global_regression_speciation_parity.mpl.yaml",
+        png_name="global_regression_speciation_parity.png",
+        svg_name="global_regression_speciation_parity.svg",
+        title=title,
+        description=description,
+        style_source="src/MEA/epcsaft_ionic/global_regression.py",
     )
 
 
@@ -599,7 +642,6 @@ def write_train_validation_artifacts() -> dict[str, Any]:
         metrics = speciation_metrics(subset).get(str(species), {})
         speciation_by_species.append({"split": split, "species": species, **metrics})
     write_csv(TRAIN_VALIDATION_DIR / "train_validation_speciation_by_species.csv", speciation_by_species)
-    write_train_validation_plot(pressure_frame)
 
     summary = {
         "split_rule": {
@@ -623,6 +665,11 @@ def write_train_validation_artifacts() -> dict[str, Any]:
 
 
 def write_train_validation_plot(frame: pd.DataFrame) -> None:
+    title = "Train-validation pressure residuals by split"
+    description = (
+        "Pressure residuals for the deterministic train/validation source split are shown as "
+        "log10(model/data) deviations."
+    )
     fig, ax = plt.subplots(figsize=(8.0, 5.0))
     x_positions = {"train": 0, "validation": 1}
     for split, subset in frame.groupby("split"):
@@ -634,16 +681,20 @@ def write_train_validation_plot(frame: pd.DataFrame) -> None:
         )
     ax.axhline(0.0, color="black", linestyle=":", linewidth=1.0)
     ax.set_xticks([0, 1], ["Train", "Validation"])
-    ax.set_ylabel("log10(model/data) pressure residual")
-    ax.grid(True, axis="y", alpha=0.25)
-    ax.legend()
+    ax.set_ylabel("$\\log_{10}$(model/data) pressure residual")
+    finish_axes(ax, title=title, grid_axis="y")
+    ax.legend(title="Split")
     fig.tight_layout()
     fig.savefig(TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.png", dpi=300, bbox_inches="tight")
     fig.savefig(TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.svg", bbox_inches="tight")
     plt.close(fig)
-    (TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.mpl.yaml").write_text(
-        "figure:\n  png: train_validation_pressure_residuals.png\n  svg: train_validation_pressure_residuals.svg\n  dpi: 300\n",
-        encoding="utf-8",
+    write_mpl_sidecar(
+        TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.mpl.yaml",
+        png_name="train_validation_pressure_residuals.png",
+        svg_name="train_validation_pressure_residuals.svg",
+        title=title,
+        description=description,
+        style_source="src/MEA/epcsaft_ionic/global_regression.py",
     )
 
 
@@ -737,7 +788,6 @@ def write_sensitivity_artifacts() -> dict[str, Any]:
             }
         )
     write_csv(SENSITIVITY_DIR / "parameter_identifiability.csv", ident_rows)
-    write_sensitivity_heatmap(ordered, vectors)
     summary = {
         "parameter_set": parameter_set,
         "baseline_metrics": baseline,
@@ -750,6 +800,11 @@ def write_sensitivity_artifacts() -> dict[str, Any]:
 
 
 def write_sensitivity_heatmap(parameters: list[str], vectors: dict[str, list[float]]) -> None:
+    title = "Local parameter sensitivity across reported metrics"
+    description = (
+        "Finite-difference local sensitivities are displayed by parameter and reported metric "
+        "to screen dominant pressure and speciation directions."
+    )
     matrix = np.asarray([vectors[name] for name in parameters], dtype=float)
     fig, ax = plt.subplots(figsize=(10.5, 6.5))
     image = ax.imshow(matrix, aspect="auto", cmap="coolwarm")
@@ -757,14 +812,19 @@ def write_sensitivity_heatmap(parameters: list[str], vectors: dict[str, list[flo
     ax.set_xticks(range(len(SENSITIVITY_METRICS)), SENSITIVITY_METRICS, rotation=35, ha="right")
     ax.set_xlabel("Reported metric")
     ax.set_ylabel("Parameter")
+    ax.set_title(title)
     fig.colorbar(image, ax=ax, label="Finite-difference sensitivity")
     fig.tight_layout()
     fig.savefig(SENSITIVITY_DIR / "parameter_sensitivity_heatmap.png", dpi=300, bbox_inches="tight")
     fig.savefig(SENSITIVITY_DIR / "parameter_sensitivity_heatmap.svg", bbox_inches="tight")
     plt.close(fig)
-    (SENSITIVITY_DIR / "parameter_sensitivity_heatmap.mpl.yaml").write_text(
-        "figure:\n  png: parameter_sensitivity_heatmap.png\n  svg: parameter_sensitivity_heatmap.svg\n  dpi: 300\n",
-        encoding="utf-8",
+    write_mpl_sidecar(
+        SENSITIVITY_DIR / "parameter_sensitivity_heatmap.mpl.yaml",
+        png_name="parameter_sensitivity_heatmap.png",
+        svg_name="parameter_sensitivity_heatmap.svg",
+        title=title,
+        description=description,
+        style_source="src/MEA/epcsaft_ionic/global_regression.py",
     )
 
 

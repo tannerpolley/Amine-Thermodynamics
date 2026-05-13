@@ -7,7 +7,7 @@ Date: 2026-05-11
 This plan resolves two linked blockers in the MEA ePC-SAFT manuscript workflow:
 
 1. The promoted carbonate Born pair remains regularized at `HCO3- d_born = 3.0` and `CO3^2- d_born = 3.0`, but an unanchored trace-only diagnostic found a lower residual near `HCO3- d_born = 6.80294` and `CO3^2- d_born = 2.99744`.
-2. The full coupled all-row pressure/speciation least-squares objective remains runtime-bounded, so carbonate Born identifiability cannot yet be resolved in the same objective that supports the final pressure and speciation claims.
+2. The full coupled all-row pressure/speciation package-native candidate has not passed the promotion gate, so carbonate Born identifiability cannot yet be resolved in the same approved objective that supports the final pressure and speciation claims.
 
 The target outcome is a defensible promoted parameter decision for carbonate-family Born diameters and a completed or explicitly bounded coupled pressure/speciation regression workflow that is fast enough to rerun, test, and document.
 
@@ -77,7 +77,7 @@ Interpretation:
 
 ### Runtime Blocker
 
-The current all-row coupled objective is too expensive for routine least-squares. The present global regression artifact is intentionally `bounded_incomplete`.
+The current all-row coupled package-native objective has not produced an approved full-fit result. The present global regression artifact is intentionally `package_fit_not_completed`, which means promotion is blocked by package-fit status rather than accepted as a scientific optimum.
 
 ## Completion Criteria
 
@@ -85,7 +85,7 @@ The issue is solved only when all criteria below are met.
 
 ### Package Runtime Criteria
 
-- A coupled pressure/speciation objective evaluation is fast enough to run tens to hundreds of least-squares evaluations in a normal local development session.
+- A coupled pressure/speciation package-native candidate is fast enough to run normal local development smoke and candidate fits.
 - Objective evaluation produces structured timing diagnostics by pressure rows, speciation rows, bubble-pressure calls, activity/fugacity calls, and failures.
 - Repeated evaluations avoid redundant work where state, composition, temperature, pressure, and parameter set are unchanged or differ only in finite-difference perturbations.
 - Failure handling is deterministic and returns penalized residuals with diagnostics rather than hanging or silently dropping rows.
@@ -170,104 +170,124 @@ Checks:
 
 - Tests pass.
 - Quick validation passes.
-- `analyses/epcsaft_ionic_regression/results/global_regression/global_regression_summary.json` still documents `bounded_incomplete`.
+- `analyses/epcsaft_ionic_regression/results/global_regression/global_regression_summary.json` documents `package_fit_not_completed`.
 - `analyses/epcsaft_ionic_regression/results/trace_carbonate_born_regression/trace_carbonate_born_fit_summary.json` still contains the `6.80294 / 2.99744` unanchored diagnostic.
 
 Deliverable:
 
 - A short baseline note in `docs/ePC-SAFT/full-ionic-parameter-manuscript-completion-audit.md` or a goal receipt describing the current exact package commit and metrics.
 
-### Phase 2: Open or Link an Upstream ePC-SAFT Issue
+### Phase 2: Link MEA-Thermodynamics Issue #3
 
-Purpose: Track package-side work where it belongs.
+Purpose: Track this work in the MEA-Thermodynamics project, where the implementation scope belongs.
 
-Suggested issue title:
+Correct GitHub issue:
 
-```text
-Improve coupled MEA pressure/speciation objective runtime and diagnostics for carbonate Born identifiability
-```
+- https://github.com/tannerpolley/MEA-Thermodynamics/issues/3
 
-Suggested issue body:
+The mistakenly opened upstream issue was closed:
 
-```markdown
-## Problem
+- https://github.com/tannerpolley/ePC-SAFT/issues/52
 
-The downstream MEA-Thermodynamics workflow needs a full coupled pressure/speciation least-squares fit with active carbonate Born parameters. The current objective can evaluate pressure/speciation artifacts, but all-row coupled least-squares remains too expensive for routine optimization, so the downstream manuscript must treat carbonate Born movement as an identifiability warning rather than a promoted global-fit result.
+Issue #3 requires MEA-Thermodynamics to become the data, target-construction, artifact, validation, and manuscript evidence repo. MEA should not own production optimization loops with SciPy. MEA should build native regression problems, call the ePC-SAFT native regression API, consume structured package fit results, and run approval/promotion checks.
 
-## Current downstream evidence
+### Phase 3: Remove MEA Production Optimizer Ownership
 
-- Promoted regularized carbonate pair: `HCO3- d_born = 3.0`, `CO3^2- d_born = 3.0`.
-- Unanchored trace-carbonate diagnostic: `HCO3- d_born ≈ 6.80294`, `CO3^2- d_born ≈ 2.99744`.
-- Trace-only residual norm improves from approximately `0.702107` to `0.682871`.
-- Full pressure/speciation global artifact remains `bounded_incomplete` because repeated reactive bubble-pressure and activity-speciation evaluations are too slow.
-
-## Needed package improvements
-
-- Structured timing diagnostics for reactive bubble pressure and activity/fugacity/speciation calls.
-- Deterministic failure/penalty return path for optimizer objectives.
-- Reuse/caching hooks for repeated objective evaluations at shared state points.
-- Batch or vectorized evaluation helpers where practical.
-- Optional warm-start/state continuation hooks for repeated parameter perturbations.
-- Minimal profiling benchmark that can be run from downstream MEA to prove improvement.
-
-## Acceptance criteria
-
-- Downstream MEA can run a coupled objective with active `MEAH+`, `MEACOO-`, `HCO3-`, `CO3^2-`, and key `k_ij` variables for tens to hundreds of evaluations without timing out.
-- Objective diagnostics report per-row success/failure and timing.
-- The downstream workflow can decide whether the unanchored bicarbonate Born movement is promotable under pressure/speciation tradeoff gates.
-```
-
-### Phase 3: Add Package-Side Profiling and Diagnostics
-
-Repository:
-
-```powershell
-C:\Users\Tanner\Documents\git\ePC-SAFT
-```
+Purpose: eliminate local SciPy optimizer ownership from MEA production fitting.
 
 Tasks:
 
-- Add timing instrumentation around the functions used by MEA for:
-  - reactive speciation solve
-  - activity coefficient / fugacity calls
-  - bubble-pressure solve
-  - residual assembly
-- Add a small benchmark entrypoint or test fixture that evaluates representative MEA rows.
-- Add structured return diagnostics rather than relying on log text.
-- Ensure diagnostics can be disabled during normal package use.
+- Refactor `src/MEA/epcsaft_ionic/regress_parameters.py` so production regression no longer imports or calls:
+  - `scipy.optimize.least_squares`
+  - `scipy.optimize.minimize`
+  - `scipy.optimize.differential_evolution`
+- Keep MEA-owned responsibilities:
+  - load and reconcile VLE/speciation data
+  - build target rows
+  - define parameter specs, bounds, scales, and provenance
+  - define train/validation splits
+  - call the ePC-SAFT native regression API
+  - write downstream artifacts and manuscript tables
+- Move legacy SciPy diagnostic code, if still useful, behind an explicitly non-production diagnostic path or remove it.
 
 Acceptance checks:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\ePC-SAFT
-uv run python -m pytest
+cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+.venv\Scripts\python.exe -m unittest tests.test_epcsaft_ionic_native_regression -v
 ```
 
-If the package does not use pytest for the relevant tests, run the established ePC-SAFT validation command instead.
+### Phase 4: Build Native Regression Problem in MEA
 
-### Phase 4: Optimize the Coupled Objective Evaluation
+Purpose: translate MEA data and scientific fit windows into a structured native regression problem owned by the downstream project.
 
-Package-side improvements to investigate:
+Required MEA functions:
 
-- Cache pure-component parameters and invariant species metadata outside row loops.
-- Cache composition-to-state preprocessing when only parameter perturbations change.
-- Add optional warm starts for repeated bubble/speciation solves.
-- Avoid recomputing activity coefficients more than necessary inside one residual evaluation.
-- Add row-level timeout or iteration caps that return penalized residuals.
-- Support a reduced objective mode that uses the same code path as full mode but a deterministic row subset.
+```python
+build_pressure_target_rows(...)
+build_speciation_target_rows(...)
+build_parameter_specs(...)
+build_regularization_terms(...)
+build_native_regression_problem(...)
+```
 
-MEA-side improvements to investigate:
+Each target row must preserve:
 
-- Split objective construction from objective evaluation.
-- Persist exact row payloads used by optimization in `analyses/epcsaft_ionic_regression/data/processed/`.
-- Add `--row-limit`, `--source-filter`, `--max-nfev`, `--profile`, and `--objective-variant` CLI flags.
-- Save each optimization attempt under `analyses/epcsaft_ionic_regression/results/runs/`, then promote only curated summaries/figures into `results/<plot_set>/`.
+- `row_id`
+- `T`
+- `P` or `P_seed`
+- `loading`
+- `initial_x`
+- apparent totals
+- reaction definitions
+- volatile and nonvolatile species mapping
+- target values
+- source
+- train/validation split
+- metadata needed for audit and manuscript tables
+
+The native regression problem must preserve advanced SSM+DS/Born options rather than silently falling back to a numerical derivative fitting path.
 
 Acceptance checks:
 
-- A 5-evaluation smoke optimization completes quickly.
-- A 40-evaluation bounded optimization completes without manual interruption.
-- Runtime report identifies dominant cost and failure rows.
+- MEA can build and serialize `native_regression_problem.json` without running an optimizer.
+- Source labels and split assignments are preserved.
+- Target names are stable and traceable to original data.
+- The species basis remains `CO2`, `MEA`, `H2O`, `MEAH+`, `MEACOO-`, `HCO3-`, `CO3^2-`, `H3O+`, and `OH-`.
+
+### Phase 4B: Consume Native Package Fit Results
+
+Purpose: make package results the source of truth for convergence, residuals, bounds, and promotion eligibility.
+
+MEA should consume package result fields such as:
+
+- `fit.status`
+- `fit.success`
+- `fit.message`
+- `fit.objective_initial`
+- `fit.objective_final`
+- `fit.residuals`
+- `fit.residual_names`
+- `fit.row_results`
+- `fit.metrics`
+- `fit.active_bounds`
+- `fit.parameter_map`
+- `fit.timing`
+
+Acceptance checks:
+
+- MEA no longer computes residual vectors for optimizer use.
+- MEA can still compute independent reporting metrics after a package fit.
+- Nonconverged package statuses are written as specific statuses, not vague `package_fit_not_completed` language.
+- Curated artifacts update only with explicit `--promote` and a passing approval check.
+
+Current MEA implementation checkpoint on 2026-05-11:
+
+- `src/MEA/epcsaft_ionic/regress_parameters.py` delegates production fitting to `epcsaft.fit_reactive_electrolyte_parameters`.
+- `src/MEA/epcsaft_ionic/global_regression.py` no longer owns a SciPy optimizer loop for the pressure/speciation production path.
+- `src/MEA/epcsaft_ionic/approval_check.py` blocks curated promotion unless the package-native fit is completed, selected as the global parameter set, reports zero row failures, avoids active bounds, and has coupled pressure/speciation evidence for any non-3.0 carbonate Born movement.
+- A promoted run of `analyses/epcsaft_ionic_regression/scripts/fit_global_pressure_speciation.py --max-nfev 40 --promote` was rejected by the approval gate and written only as a run candidate under `analyses/epcsaft_ionic_regression/results/runs/global_regression/smoke/`. The rejection reasons were `completion_status_not_completed`, `selected_parameter_set_not_global_regression`, `native_fit_success_not_true`, and `native_row_failure_count_missing`.
+- Because the approval gate failed, curated global artifacts and manuscript claims should remain at the regularized `3.0 / 3.0` carbonate Born pair with the `6.80294 / 2.99744` trace-only result treated as an identifiability warning.
 
 ### Phase 5: Run Designed Carbonate Identifiability Experiments
 
@@ -391,31 +411,35 @@ Additional checks:
 - Submission-safety scan has no `Codex`, `agent`, `worktree`, `handoff`, local path, or internal workflow language in rendered manuscript sources.
 - Goal or handoff state documents clearly report whether the coupled objective completed or remains bounded.
 
-## Proposed Upstream Issue
+## GitHub Issue
 
-This plan supports opening an ePC-SAFT issue because the blocker is primarily package-side runtime/diagnostics, not just downstream MEA scripting.
+This plan is tracked in the MEA-Thermodynamics project because the implementation scope is downstream MEA target construction, native regression delegation, package-result consumption, artifact promotion, and manuscript validation.
 
-Posted issue:
+Correct issue:
+
+- https://github.com/tannerpolley/MEA-Thermodynamics/issues/3
+
+Misplaced issue closed:
 
 - https://github.com/tannerpolley/ePC-SAFT/issues/52
 
-Recommended action:
+Do not reopen the ePC-SAFT issue unless Scout/Judge evidence during implementation proves the package API itself is missing required native regression capability.
+
+Recommended action for this repo:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\ePC-SAFT
-gh issue create --title "Improve coupled MEA pressure/speciation objective runtime and diagnostics for carbonate Born identifiability" --body-file <issue-body-file>
+cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+/goal Follow docs/goals/issue-3-native-regression-carbonate/goal.md.
 ```
-
-Post the issue before package implementation begins so the acceptance criteria are recorded at the package source of truth.
 
 ## Grill-Me Decision Tree
 
 These are the decisions that should be resolved before implementation.
 
-1. Should the next work happen as a package-first branch in `ePC-SAFT`, or as downstream-only MEA script optimization?
-   - Recommended answer: package-first, because the current blocker is repeated thermodynamic objective runtime and diagnostics.
+1. Should the next work happen in `MEA-Thermodynamics`, or as package-first work in `ePC-SAFT`?
+   - Recommended answer: MEA-Thermodynamics first, because issue #3 is about MEA target construction, native regression delegation, artifact promotion, and manuscript evidence. Escalate to ePC-SAFT only if the required native API is absent or broken.
 2. Should ePC-SAFT be cloned into MEA for local edits?
-   - Recommended answer: no. Use sibling ePC-SAFT checkout or an ePC-SAFT-owned worktree.
+   - Recommended answer: no. Use the sibling ePC-SAFT checkout as the package dependency; do not vendor a hidden package fork inside MEA.
 3. Should the non-3.0 HCO3 diagnostic be promoted before full coupled regression?
    - Recommended answer: no. It is trace-only evidence.
 4. Should the full all-row objective be the first optimization target?
@@ -424,3 +448,7 @@ These are the decisions that should be resolved before implementation.
    - Recommended answer: use explicit objective variants and report tradeoffs; do not hide a subjective weighting choice.
 6. Should the manuscript wait for this work before submission?
    - Recommended answer: yes if the paper claims final fitted carbonate Born parameters or final global pressure-optimized parameters; no if the paper is explicitly framed as a transparent bounded validation workflow with carbonate identifiability as a limitation.
+
+
+
+

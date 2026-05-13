@@ -65,7 +65,11 @@ def main() -> None:
         writer.writeheader()
         writer.writerow(payload)
     (OUT_DIR / "oh_born_derivation.mpl.yaml").write_text(
-        "artifact:\n  csv: oh_born_derivation.csv\n  json: oh_born_derivation.json\n",
+        "artifact:\n"
+        "  title: Hydroxide Born diameter derivation\n"
+        "  description: Tabular literature-backed Born hydration-energy inversion for the promoted hydroxide Born diameter.\n"
+        "  csv: oh_born_derivation.csv\n"
+        "  json: oh_born_derivation.json\n",
         encoding="utf-8",
     )
     print(json.dumps(payload, indent=2))

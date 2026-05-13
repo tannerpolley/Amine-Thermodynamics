@@ -76,18 +76,18 @@
     "vle_median_abs_log10_error": 0.3797569935680999,
     "vle_max_abs_log10_error": 0.40574337289934337,
     "reaction_ln_rmse": {
-      "R1_water_autoionization": 1.2516121284935041e-08,
-      "R2_CO2_to_HCO3": 2.9739878163250008e-08,
-      "R3_HCO3_to_CO3": 5.79462523107444e-08,
-      "R4_MEACOO_hydrolysis": 5.874995106739194e-08,
-      "R5_MEAH_dissociation": 2.171677744210708e-08
+      "R1_water_autoionization": 1.2516121284935041E-08,
+      "R2_CO2_to_HCO3": 2.9739878163250008E-08,
+      "R3_HCO3_to_CO3": 5.79462523107444E-08,
+      "R4_MEACOO_hydrolysis": 5.874995106739194E-08,
+      "R5_MEAH_dissociation": 2.171677744210708E-08
     },
     "reaction_ln_median_abs": {
-      "R1_water_autoionization": 5.516810119843285e-09,
-      "R2_CO2_to_HCO3": 3.408102600133134e-08,
-      "R3_HCO3_to_CO3": 6.851252010164899e-08,
-      "R4_MEACOO_hydrolysis": 5.496611077404623e-08,
-      "R5_MEAH_dissociation": 6.575824329502211e-09
+      "R1_water_autoionization": 5.516810119843285E-09,
+      "R2_CO2_to_HCO3": 3.408102600133134E-08,
+      "R3_HCO3_to_CO3": 6.851252010164899E-08,
+      "R4_MEACOO_hydrolysis": 5.496611077404623E-08,
+      "R5_MEAH_dissociation": 6.575824329502211E-09
     },
     "speciation_log10_rmse": {
       "CO2": 3.9620185351974793,
@@ -113,18 +113,18 @@
     "vle_median_abs_log10_error": 0.3797569935680999,
     "vle_max_abs_log10_error": 0.40574337289934337,
     "reaction_ln_rmse": {
-      "R1_water_autoionization": 1.2516121284935041e-08,
-      "R2_CO2_to_HCO3": 2.9739878163250008e-08,
-      "R3_HCO3_to_CO3": 5.79462523107444e-08,
-      "R4_MEACOO_hydrolysis": 5.874995106739194e-08,
-      "R5_MEAH_dissociation": 2.171677744210708e-08
+      "R1_water_autoionization": 1.2516121284935041E-08,
+      "R2_CO2_to_HCO3": 2.9739878163250008E-08,
+      "R3_HCO3_to_CO3": 5.79462523107444E-08,
+      "R4_MEACOO_hydrolysis": 5.874995106739194E-08,
+      "R5_MEAH_dissociation": 2.171677744210708E-08
     },
     "reaction_ln_median_abs": {
-      "R1_water_autoionization": 5.516810119843285e-09,
-      "R2_CO2_to_HCO3": 3.408102600133134e-08,
-      "R3_HCO3_to_CO3": 6.851252010164899e-08,
-      "R4_MEACOO_hydrolysis": 5.496611077404623e-08,
-      "R5_MEAH_dissociation": 6.575824329502211e-09
+      "R1_water_autoionization": 5.516810119843285E-09,
+      "R2_CO2_to_HCO3": 3.408102600133134E-08,
+      "R3_HCO3_to_CO3": 6.851252010164899E-08,
+      "R4_MEACOO_hydrolysis": 5.496611077404623E-08,
+      "R5_MEAH_dissociation": 6.575824329502211E-09
     },
     "speciation_log10_rmse": {
       "CO2": 3.9620185351974793,
@@ -149,6 +149,5 @@
     "C:\\Users\\Tanner\\.codex\\worktrees\\b185\\MEA-Thermodynamics\\data\\epcsaft_datasets\\MEA_CO2_H2O_ionic_fit\\pure\\any_solvent.csv",
     "C:\\Users\\Tanner\\.codex\\worktrees\\b185\\MEA-Thermodynamics\\data\\epcsaft_datasets\\MEA_CO2_H2O_ionic_fit\\mixed\\binary_interaction\\k_ij.csv"
   ],
-  "method_note": "Bounded scipy least-squares around public ePC-SAFT state/activity/fugacity APIs. The fit uses fixed/reconciled liquid speciation targets, CO2 fugacity-pressure residuals, activity-based reaction residuals, Born SSM+DS user options, and regularization to literature/legacy seeds."
+  "method_note": "Historical pre-issue-3 downstream artifact retained for audit only. Current MEA production fitting builds native pressure/speciation target rows and delegates parameter optimization to epcsaft.fit_reactive_electrolyte_parameters; curated promotion is blocked unless approval_check passes."
 }
-

@@ -10,11 +10,9 @@ SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from MEA.common.plot_style import species_color, species_label
 from MEA.epcsaft_ionic.ion_parameter_regression import load_tier_a_targets
 from MEA.epcsaft_ionic.model import (
     DEFAULT_INITIAL_GUESS,
@@ -130,41 +128,6 @@ def metrics(frame: pd.DataFrame) -> dict[str, object]:
     return output
 
 
-def write_plots(frame: pd.DataFrame) -> None:
-    final = frame[frame["fit_stage"] == "final"]
-    fig, ax = plt.subplots(figsize=(6.5, 6.5))
-    for species, subset in final.groupby("species"):
-        ax.scatter(
-            subset["observed_mole_fraction"],
-            subset["model_mole_fraction"],
-            label=species_label(species),
-            color=species_color(species),
-            edgecolor="black",
-            linewidth=0.35,
-            alpha=0.8,
-        )
-    finite = final[["observed_mole_fraction", "model_mole_fraction"]].replace([np.inf, -np.inf], np.nan).dropna()
-    lo = max(1.0e-8, float(finite.min().min()) * 0.7) if not finite.empty else 1.0e-8
-    hi = min(1.0, float(finite.max().max()) * 1.3) if not finite.empty else 1.0
-    ax.plot([lo, hi], [lo, hi], color="black", linestyle=":", label="1:1")
-    ax.set_xscale("log")
-    ax.set_yscale("log")
-    ax.set_xlim(lo, hi)
-    ax.set_ylim(lo, hi)
-    ax.set_xlabel("Observed mole fraction")
-    ax.set_ylabel("Model mole fraction")
-    ax.grid(True, which="both", alpha=0.25)
-    ax.legend(fontsize=8)
-    fig.tight_layout()
-    fig.savefig(OUT_DIR / "trace_carbonate_born_parity.png", dpi=300, bbox_inches="tight")
-    fig.savefig(OUT_DIR / "trace_carbonate_born_parity.svg", bbox_inches="tight")
-    plt.close(fig)
-    (OUT_DIR / "trace_carbonate_born_parity.mpl.yaml").write_text(
-        "figure:\n  png: trace_carbonate_born_parity.png\n  svg: trace_carbonate_born_parity.svg\n  dpi: 300\n",
-        encoding="utf-8",
-    )
-
-
 def run_multistart(base: dict[str, float], target_rows, lower: np.ndarray, upper: np.ndarray) -> tuple[pd.DataFrame, dict[str, object]]:
     attempts: list[dict[str, object]] = []
     x0_default = np.asarray([base[name] for name in FIT_NAMES], dtype=float)
@@ -273,7 +236,6 @@ def main() -> None:
         for name, initial, fitted, lo, hi in zip(FIT_NAMES, x0, final_vector, lower, upper)
     ]
     write_csv(OUT_DIR / "trace_carbonate_born_fit_values.csv", values_rows)
-    write_plots(plotted)
     summary = {
         "fit_tier": "tier_a_trace_carbonate_born",
         "target_species": list(TARGET_SPECIES),

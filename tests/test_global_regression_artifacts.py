@@ -33,7 +33,7 @@ class GlobalRegressionArtifactTests(unittest.TestCase):
     def test_global_regression_summary_has_submission_metrics(self) -> None:
         summary = json.loads((GLOBAL / "global_regression_summary.json").read_text(encoding="utf-8"))
         self.assertEqual(summary["fit_tier"], "pressure_speciation_global")
-        self.assertIn(summary["completion_status"], {"completed", "bounded_incomplete"})
+        self.assertIn(summary["completion_status"], {"completed", "package_fit_not_completed"})
         self.assertIn("fit_parameters", summary)
         self.assertIn("objective_weights", summary)
         self.assertIn("pressure_metrics", summary)
@@ -102,3 +102,4 @@ class SensitivityArtifactTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

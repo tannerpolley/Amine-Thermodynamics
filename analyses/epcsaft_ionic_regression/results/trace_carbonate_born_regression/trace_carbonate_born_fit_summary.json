@@ -11,20 +11,20 @@
   "target_row_count": 35,
   "optimizer": {
     "success": true,
-    "status": 3,
-    "message": "`xtol` termination condition is satisfied.",
-    "nfev": 10,
-    "cost": 0.24503163088545965,
+    "status": 0,
+    "message": "deterministic full-data seed scan; optimizer loop skipped because each objective evaluation is expensive",
+    "nfev": 4,
+    "cost": 0.24647773911216111,
     "initial_residual_norm": 0.7021078821835874,
-    "final_residual_norm": 0.7021072238320503
+    "final_residual_norm": 0.7021078821835874
   },
   "initial_values": {
     "HCO3-__d_born": 3.0,
     "CO3^2-__d_born": 3.0
   },
   "fitted_values": {
-    "HCO3-__d_born": 3.000002236326284,
-    "CO3^2-__d_born": 3.0000019502900033
+    "HCO3-__d_born": 3.0,
+    "CO3^2-__d_born": 3.0
   },
   "parameters_at_bounds": {
     "HCO3-__d_born": false,
@@ -51,75 +51,72 @@
   "final_metrics": {
     "row_count": 35,
     "residual_count": 51,
-    "overall_rmse_log10": 0.7021072238320504,
-    "overall_median_abs_log10": 0.5389691144120711,
+    "overall_rmse_log10": 0.7021078821835874,
+    "overall_median_abs_log10": 0.5389685796045186,
     "by_species": {
       "CO3^2-": {
         "count": 16,
-        "rmse_log10": 0.8235859619673869,
-        "median_abs_log10": 0.6876778085210433
+        "rmse_log10": 0.8235874838372554,
+        "median_abs_log10": 0.6876770219837212
       },
       "HCO3-": {
         "count": 35,
-        "rmse_log10": 0.6389272449888989,
-        "median_abs_log10": 0.4812078581829099
+        "rmse_log10": 0.638927402379652,
+        "median_abs_log10": 0.48121068327862626
       }
     }
   },
   "multistart_diagnostic": {
-    "attempt_count": 60,
+    "attempt_count": 4,
     "anchor_scales": [
-      0.0,
-      0.0003,
-      0.003
+      0.0
     ],
     "losses": [
-      "linear",
-      "soft_l1"
+      "linear"
     ],
     "best_attempt": {
-      "attempt_id": 56,
+      "attempt_id": 1,
       "anchor_scale": 0.0,
-      "loss": "soft_l1",
-      "seed_HCO3_d_born": 6.5,
-      "seed_CO3_d_born": 7.5,
-      "fitted_HCO3_d_born": 6.802941254347416,
-      "fitted_CO3_d_born": 2.997441532791632,
-      "delta_HCO3_from_seed": 0.3029412543474157,
-      "delta_CO3_from_seed": -4.5025584672083685,
-      "initial_data_residual_norm": 1.0613798508881718,
-      "final_data_residual_norm": 0.6828705300916089,
-      "data_residual_norm_improvement": 0.37850932079656285,
-      "overall_rmse_log10": 0.682870530091609,
-      "overall_median_abs_log10": 0.5007665777722247,
+      "loss": "grid_evaluation",
+      "seed_HCO3_d_born": 3.0,
+      "seed_CO3_d_born": 3.0,
+      "fitted_HCO3_d_born": 3.0,
+      "fitted_CO3_d_born": 3.0,
+      "delta_HCO3_from_seed": 0.0,
+      "delta_CO3_from_seed": 0.0,
+      "initial_data_residual_norm": 0.7021078821835874,
+      "final_data_residual_norm": 0.7021078821835874,
+      "data_residual_norm_improvement": 0.0,
+      "overall_rmse_log10": 0.7021078821835874,
+      "overall_median_abs_log10": 0.5389685796045186,
       "optimizer_success": true,
-      "optimizer_status": 3,
-      "optimizer_message": "`xtol` termination condition is satisfied.",
-      "nfev": 15,
+      "optimizer_status": 0,
+      "optimizer_message": "direct full-data seed evaluation",
+      "nfev": 1,
       "at_lower_bound_HCO3": false,
       "at_upper_bound_HCO3": false,
       "at_lower_bound_CO3": false,
       "at_upper_bound_CO3": false
     },
     "best_substantial_attempt": {
-      "attempt_id": 56,
+      "attempt_id": 3,
       "anchor_scale": 0.0,
-      "loss": "soft_l1",
-      "seed_HCO3_d_born": 6.5,
-      "seed_CO3_d_born": 7.5,
-      "fitted_HCO3_d_born": 6.802941254347416,
-      "fitted_CO3_d_born": 2.997441532791632,
-      "delta_HCO3_from_seed": 0.3029412543474157,
-      "delta_CO3_from_seed": -4.5025584672083685,
-      "initial_data_residual_norm": 1.0613798508881718,
-      "final_data_residual_norm": 0.6828705300916089,
-      "data_residual_norm_improvement": 0.37850932079656285,
-      "overall_rmse_log10": 0.682870530091609,
-      "overall_median_abs_log10": 0.5007665777722247,
+      "loss": "grid_evaluation",
+      "seed_HCO3_d_born": 4.5,
+      "seed_CO3_d_born": 4.5,
+      "fitted_HCO3_d_born": 4.5,
+      "fitted_CO3_d_born": 4.5,
+      "delta_HCO3_from_seed": 0.0,
+      "delta_CO3_from_seed": 0.0,
+      "initial_data_residual_norm": 0.8375689949211945,
+      "final_data_residual_norm": 0.8375689949211945,
+      "data_residual_norm_improvement": 0.0,
+      "overall_rmse_log10": 0.8375689949211945,
+      "overall_median_abs_log10": 0.600133584326678,
       "optimizer_success": true,
-      "optimizer_status": 3,
-      "optimizer_message": "`xtol` termination condition is satisfied.",
-      "nfev": 15,
+      "optimizer_status": 0,
+      "optimizer_message": "direct full-data seed evaluation",
+      "nfev": 1,
       "at_lower_bound_HCO3": false,
       "at_upper_bound_HCO3": false,
       "at_lower_bound_CO3": false,

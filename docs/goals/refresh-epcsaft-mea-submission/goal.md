@@ -20,7 +20,7 @@ After merging the recent MEA submission-artifact changes, reinstall the latest e
 - Existing plan facts:
   - Root plan exists at `plan.md`.
   - Current merged main includes global regression, train/validation, sensitivity, residual diagnostic, literature comparison, availability, and LaTeX manuscript artifacts.
-  - Local project memory says global fit may be `bounded_incomplete` if the all-row reactive objective remains too expensive.
+  - Local project memory says global fit may be `package_fit_not_completed` if the all-row reactive objective remains too expensive.
   - Use repo `.venv` Python directly unless the user explicitly asks for `uv run`.
   - `docs/latex` is source of truth; do not manually edit Zotero-owned `references.bib`.
 
@@ -83,3 +83,4 @@ On every `/goal` continuation:
 6. Write compact receipts into `state.yaml`.
 7. Activate the next safe task when the previous task is verified.
 8. End only with a final audit receipt that maps evidence back to the original user outcome and records `full_outcome_complete: true`.
+

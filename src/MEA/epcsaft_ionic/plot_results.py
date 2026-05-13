@@ -12,6 +12,8 @@ from MEA.common.plot_export import save_plot
 from MEA.common.plot_style import (
     EPCSAFT_IONIC_LINESTYLE,
     JOU_DATA_MARKER,
+    JOU_DATA_MARKERSIZE,
+    MODEL_LINEWIDTH,
     PRESSURE_FIGSIZE,
     SPECIATION_FIGSIZE,
     apply_pressure_axes,
@@ -136,6 +138,11 @@ def speciation_rows(values: dict[str, float]) -> list[dict[str, object]]:
 
 
 def plot_pressure(rows: list[dict[str, object]]):
+    title = "Full-ionic ePC-SAFT $CO_2$ pressure validation"
+    description = (
+        "Full-ionic ePC-SAFT pressure predictions are compared with 30 wt% MEA literature "
+        "carbon-dioxide partial pressures across the Jou temperature set."
+    )
     frame = pd.DataFrame(rows)
     fig, ax = plt.subplots(figsize=PRESSURE_FIGSIZE)
     for temperature_C in JOU_TEMPERATURES_C:
@@ -146,7 +153,16 @@ def plot_pressure(rows: list[dict[str, object]]):
         )
         color = temperature_color(temperature_C)
         if not data.empty:
-            ax.plot(data["CO2_loading"], data["CO2_pressure"], JOU_DATA_MARKER, color=color)
+            ax.plot(
+                data["CO2_loading"],
+                data["CO2_pressure"],
+                linestyle="none",
+                marker=JOU_DATA_MARKER,
+                markersize=JOU_DATA_MARKERSIZE,
+                color=color,
+                alpha=0.9,
+                label=f"{temperature_C} C literature data",
+            )
         subset = frame[np.isclose(frame["temperature_C"].astype(float), float(temperature_C))].sort_values("CO2_loading")
         ok = subset[subset["success"] == True]
         if not ok.empty:
@@ -156,15 +172,28 @@ def plot_pressure(rows: list[dict[str, object]]):
                 ok["raw_pred_CO2_pressure_kPa"],
                 EPCSAFT_IONIC_LINESTYLE,
                 color=color,
+                linewidth=MODEL_LINEWIDTH,
                 label=f"{temperature_C} C, med |log10 err|={med:.2f}",
             )
-    apply_pressure_axes(ax)
-    ax.legend()
+    apply_pressure_axes(ax, title=title)
+    ax.legend(ncol=2, title="Temperature and role")
     fig.tight_layout()
-    return save_plot(fig, __file__, "ionic_epcsaft_co2_pressure", workflow_name="epcsaft_ionic/pressure")
+    return save_plot(
+        fig,
+        __file__,
+        "ionic_epcsaft_co2_pressure",
+        workflow_name="epcsaft_ionic/pressure",
+        title=title,
+        description=description,
+    )
 
 
 def plot_speciation(rows: list[dict[str, object]]):
+    title = "Full-ionic ePC-SAFT true-species speciation at 40 C"
+    description = (
+        "Full-ionic ePC-SAFT true-species activity-equilibrium predictions are compared "
+        "with measured speciation targets at 40 C using shared species colors."
+    )
     frame = pd.DataFrame(rows)
     subset = frame[np.isclose(frame["temperature_C"].astype(float), 40.0)].sort_values("CO2_loading")
     fig, ax = plt.subplots(figsize=SPECIATION_FIGSIZE)
@@ -201,15 +230,23 @@ def plot_speciation(rows: list[dict[str, object]]):
                 model[model_column],
                 SPECIATION_MODEL_LINESTYLE,
                 color=color,
+                linewidth=MODEL_LINEWIDTH,
                 label=species_label(species),
             )
             for row in model.to_dict("records"):
                 snapshot_rows.append({"source": "model", "species": species, "CO2_loading": row["CO2_loading"], "mole_fraction": row[model_column]})
-    apply_speciation_axes(ax)
+    apply_speciation_axes(ax, title=title)
     write_csv(SPECIATION_OUT_DIR / "ionic_speciation_plot_data.csv", snapshot_rows)
-    ax.legend(loc="lower center", ncol=3)
+    ax.legend(loc="lower center", ncol=3, title="Model curves; markers are targets")
     fig.tight_layout()
-    return save_plot(fig, __file__, "ionic_epcsaft_speciation_activity", workflow_name="epcsaft_ionic/speciation")
+    return save_plot(
+        fig,
+        __file__,
+        "ionic_epcsaft_speciation_activity",
+        workflow_name="epcsaft_ionic/speciation",
+        title=title,
+        description=description,
+    )
 
 
 def main() -> int:

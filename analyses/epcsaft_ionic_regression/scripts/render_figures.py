@@ -13,13 +13,25 @@ SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-from MEA.common.plot_style import species_color, species_label  # noqa: E402
-from MEA.epcsaft_ionic.global_regression import copy_manuscript_residual_figures  # noqa: E402
+from MEA.common.plot_style import finish_axes, species_color, species_label, write_mpl_sidecar  # noqa: E402
+from MEA.epcsaft_ionic.global_regression import (  # noqa: E402
+    GLOBAL_RESULTS_DIR,
+    SENSITIVITY_DIR,
+    SENSITIVITY_METRICS,
+    TRAIN_VALIDATION_DIR,
+    copy_manuscript_residual_figures,
+    write_pressure_parity,
+    write_sensitivity_heatmap,
+    write_speciation_parity,
+    write_train_validation_plot,
+)
 from MEA.epcsaft_ionic.plot_results import plot_pressure, plot_speciation  # noqa: E402
+from fit_trace_carbonate_born import OUT_DIR as TRACE_CARBONATE_DIR  # noqa: E402
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
-PRESSURE_CSV = ANALYSIS_DIR / "results" / "pressure" / "ionic_pressure_comparison.csv"
-SPECIATION_CSV = ANALYSIS_DIR / "results" / "speciation" / "ionic_speciation_activity_residuals.csv"
+PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
+PRESSURE_CSV = PROCESSED_DIR / "ionic_pressure_comparison.csv"
+SPECIATION_CSV = PROCESSED_DIR / "ionic_speciation_activity_residuals.csv"
 PRESSURE_DIR = ANALYSIS_DIR / "results" / "pressure"
 SPECIATION_DIR = ANALYSIS_DIR / "results" / "speciation"
 LATEX_FIGURES_DIR = REPO_ROOT / "docs" / "latex" / "figures"
@@ -32,6 +44,11 @@ def write_pressure_residual_plot(pressure_rows: list[dict[str, object]]) -> tupl
     )
     residual_csv = PRESSURE_DIR / "ionic_pressure_residuals_by_loading.csv"
     residual_frame.to_csv(residual_csv, index=False)
+    title = "Full-ionic pressure residuals by loading"
+    description = (
+        "Logarithmic carbon-dioxide pressure residuals are plotted against loading, "
+        "with marker shape keyed to nominal temperature and color keyed to data source."
+    )
     fig, ax = plt.subplots(figsize=(9.5, 6.0))
     markers = {40: "o", 60: "s", 80: "^", 100: "D", 120: "P"}
     for source, subset in residual_frame.groupby("source"):
@@ -43,19 +60,23 @@ def write_pressure_residual_plot(pressure_rows: list[dict[str, object]]) -> tupl
             marker=markers.get(int(round(float(subset["temperature_C"].median()))), "o"),
         )
     ax.axhline(0.0, color="black", linestyle=":", linewidth=1.0)
-    ax.set_xlabel("CO2 loading, mol CO2/mol MEA")
-    ax.set_ylabel("log10(model/data) pressure residual")
-    ax.grid(True, which="both", alpha=0.25)
-    ax.legend(fontsize=8)
+    ax.set_xlabel("$CO_2$ loading, mol $CO_2$/mol MEA")
+    ax.set_ylabel("$\\log_{10}$(model/data) pressure residual")
+    finish_axes(ax, title=title)
+    ax.legend(fontsize=8, title="Literature source")
     fig.tight_layout()
     png = PRESSURE_DIR / "ionic_pressure_residuals_by_loading.png"
     svg = PRESSURE_DIR / "ionic_pressure_residuals_by_loading.svg"
     fig.savefig(png, dpi=300, bbox_inches="tight")
     fig.savefig(svg, bbox_inches="tight")
     plt.close(fig)
-    (PRESSURE_DIR / "ionic_pressure_residuals_by_loading.mpl.yaml").write_text(
-        "figure:\n  png: ionic_pressure_residuals_by_loading.png\n  svg: ionic_pressure_residuals_by_loading.svg\n  dpi: 300\n",
-        encoding="utf-8",
+    write_mpl_sidecar(
+        PRESSURE_DIR / "ionic_pressure_residuals_by_loading.mpl.yaml",
+        png_name=png.name,
+        svg_name=svg.name,
+        title=title,
+        description=description,
+        style_source="analyses/epcsaft_ionic_regression/scripts/render_figures.py",
     )
     return png, svg
 
@@ -79,6 +100,10 @@ def write_speciation_residual_plot(speciation_rows: list[dict[str, object]]) -> 
     residual_frame = pd.DataFrame(melted_rows)
     residual_csv = SPECIATION_DIR / "ionic_speciation_residuals_by_species.csv"
     residual_frame.to_csv(residual_csv, index=False)
+    title = "Full-ionic speciation residual distribution by species"
+    description = (
+        "Absolute log10 true-species residuals are shown by species; black bars mark species medians."
+    )
     fig, ax = plt.subplots(figsize=(10.5, 6.0))
     order = list(species_names)
     positions = {species: idx for idx, species in enumerate(order)}
@@ -94,19 +119,102 @@ def write_speciation_residual_plot(speciation_rows: list[dict[str, object]]) -> 
         median = float(np.median(subset["abs_log10_residual"]))
         ax.hlines(median, positions[str(species)] - 0.3, positions[str(species)] + 0.3, colors="black", linewidth=2.0)
     ax.set_xticks(range(len(order)), [species_label(species) for species in order], rotation=30, ha="right")
-    ax.set_ylabel("Absolute log10(model/data) residual")
-    ax.grid(True, axis="y", alpha=0.25)
+    ax.set_ylabel("Absolute $\\log_{10}$(model/data) residual")
+    finish_axes(ax, title=title, grid_axis="y")
     fig.tight_layout()
     png = SPECIATION_DIR / "ionic_speciation_residuals_by_species.png"
     svg = SPECIATION_DIR / "ionic_speciation_residuals_by_species.svg"
     fig.savefig(png, dpi=300, bbox_inches="tight")
     fig.savefig(svg, bbox_inches="tight")
     plt.close(fig)
-    (SPECIATION_DIR / "ionic_speciation_residuals_by_species.mpl.yaml").write_text(
-        "figure:\n  png: ionic_speciation_residuals_by_species.png\n  svg: ionic_speciation_residuals_by_species.svg\n  dpi: 300\n",
-        encoding="utf-8",
+    write_mpl_sidecar(
+        SPECIATION_DIR / "ionic_speciation_residuals_by_species.mpl.yaml",
+        png_name=png.name,
+        svg_name=svg.name,
+        title=title,
+        description=description,
+        style_source="analyses/epcsaft_ionic_regression/scripts/render_figures.py",
     )
     return png, svg
+
+
+def write_trace_carbonate_plot(frame: pd.DataFrame) -> None:
+    title = "Trace-carbonate Born diagnostic parity"
+    description = (
+        "Trace bicarbonate and carbonate model mole fractions are compared against observed targets "
+        "for the carbonate Born-diameter diagnostic."
+    )
+    final = frame[frame["fit_stage"] == "final"]
+    fig, ax = plt.subplots(figsize=(6.5, 6.5))
+    for species, subset in final.groupby("species"):
+        ax.scatter(
+            subset["observed_mole_fraction"],
+            subset["model_mole_fraction"],
+            label=species_label(species),
+            color=species_color(species),
+            edgecolor="black",
+            linewidth=0.35,
+            alpha=0.8,
+        )
+    finite = final[["observed_mole_fraction", "model_mole_fraction"]].replace([np.inf, -np.inf], np.nan).dropna()
+    lo = max(1.0e-8, float(finite.min().min()) * 0.7) if not finite.empty else 1.0e-8
+    hi = min(1.0, float(finite.max().max()) * 1.3) if not finite.empty else 1.0
+    ax.plot([lo, hi], [lo, hi], color="black", linestyle=":", label="1:1")
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_xlim(lo, hi)
+    ax.set_ylim(lo, hi)
+    ax.set_xlabel("Observed true-species mole fraction")
+    ax.set_ylabel("Model true-species mole fraction")
+    finish_axes(ax, title=title)
+    ax.legend(fontsize=8, title="Species")
+    fig.tight_layout()
+    png = TRACE_CARBONATE_DIR / "trace_carbonate_born_parity.png"
+    svg = TRACE_CARBONATE_DIR / "trace_carbonate_born_parity.svg"
+    fig.savefig(png, dpi=300, bbox_inches="tight")
+    fig.savefig(svg, bbox_inches="tight")
+    plt.close(fig)
+    write_mpl_sidecar(
+        TRACE_CARBONATE_DIR / "trace_carbonate_born_parity.mpl.yaml",
+        png_name=png.name,
+        svg_name=svg.name,
+        title=title,
+        description=description,
+        style_source="analyses/epcsaft_ionic_regression/scripts/render_figures.py",
+    )
+
+
+def render_optional_global_diagnostics() -> None:
+    pressure_residuals = GLOBAL_RESULTS_DIR / "global_regression_pressure_residuals.csv"
+    speciation_residuals = GLOBAL_RESULTS_DIR / "global_regression_speciation_residuals.csv"
+    train_validation_pressure = TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.csv"
+    sensitivity_matrix = SENSITIVITY_DIR / "parameter_sensitivity_matrix.csv"
+    trace_carbonate = TRACE_CARBONATE_DIR / "trace_carbonate_born_fit_data.csv"
+    if pressure_residuals.exists():
+        write_pressure_parity(pd.read_csv(pressure_residuals), GLOBAL_RESULTS_DIR)
+    if speciation_residuals.exists():
+        write_speciation_parity(pd.read_csv(speciation_residuals), GLOBAL_RESULTS_DIR)
+    if train_validation_pressure.exists():
+        write_train_validation_plot(pd.read_csv(train_validation_pressure))
+    if sensitivity_matrix.exists():
+        matrix = pd.read_csv(sensitivity_matrix)
+        if not matrix.empty:
+            parameters = list(dict.fromkeys(matrix["parameter"].astype(str).tolist()))
+            vectors = {
+                parameter: [
+                    float(
+                        matrix[
+                            (matrix["parameter"].astype(str) == parameter)
+                            & (matrix["metric"].astype(str) == metric)
+                        ]["sensitivity"].iloc[0]
+                    )
+                    for metric in SENSITIVITY_METRICS
+                ]
+                for parameter in parameters
+            }
+            write_sensitivity_heatmap(parameters, vectors)
+    if trace_carbonate.exists():
+        write_trace_carbonate_plot(pd.read_csv(trace_carbonate))
 
 
 def main() -> int:
@@ -118,10 +226,13 @@ def main() -> int:
         return 1
     pressure_rows = pd.read_csv(PRESSURE_CSV).to_dict("records")
     speciation_rows = pd.read_csv(SPECIATION_CSV).to_dict("records")
+    pd.DataFrame(pressure_rows).to_csv(PRESSURE_DIR / "ionic_pressure_comparison.csv", index=False)
+    pd.DataFrame(speciation_rows).to_csv(SPECIATION_DIR / "ionic_speciation_activity_residuals.csv", index=False)
     pressure_plot = plot_pressure(pressure_rows)
     speciation_plot = plot_speciation(speciation_rows)
     pressure_residual_png, pressure_residual_svg = write_pressure_residual_plot(pressure_rows)
     speciation_residual_png, speciation_residual_svg = write_speciation_residual_plot(speciation_rows)
+    render_optional_global_diagnostics()
     copy_manuscript_residual_figures(
         pressure_residual_png,
         pressure_residual_svg,

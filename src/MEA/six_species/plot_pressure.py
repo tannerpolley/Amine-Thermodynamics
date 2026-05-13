@@ -17,7 +17,9 @@ from MEA.common.data_access import load_jou_vle_data
 from MEA.common.plot_export import save_plot
 from MEA.common.plot_style import (
     JOU_DATA_MARKER,
+    JOU_DATA_MARKERSIZE,
     LEGACY_PCSAFT_LINESTYLE,
+    MODEL_LINEWIDTH,
     PRESSURE_FIGSIZE,
     apply_pressure_axes,
     temperature_color,
@@ -192,6 +194,11 @@ def write_smoke_result() -> Path:
 
 
 def plot_jou_comparison(curves: pd.DataFrame, summary: pd.DataFrame) -> Path:
+    title = "Six-species PC-SAFT reproduction against Jou $CO_2$ pressure data"
+    description = (
+        "Recomputed six-species legacy PC-SAFT curves are compared against Jou et al. "
+        "30 wt% MEA carbon-dioxide partial-pressure data at five temperatures."
+    )
     fig, ax = plt.subplots(figsize=PRESSURE_FIGSIZE)
     data = _load_jou_data()
     for temperature_C in TEMPERATURES_C:
@@ -200,21 +207,37 @@ def plot_jou_comparison(curves: pd.DataFrame, summary: pd.DataFrame) -> Path:
         if t_data.empty or t_curve.empty:
             continue
         color = temperature_color(temperature_C)
-        ax.plot(t_data["CO2_loading"], t_data["CO2_pressure"], JOU_DATA_MARKER, color=color)
+        ax.plot(
+            t_data["CO2_loading"],
+            t_data["CO2_pressure"],
+            linestyle="none",
+            marker=JOU_DATA_MARKER,
+            markersize=JOU_DATA_MARKERSIZE,
+            color=color,
+            alpha=0.9,
+            label=f"{temperature_C} C Jou data",
+        )
         summary_row = summary[summary["temperature_C"] == temperature_C].iloc[0]
-        label = f"{temperature_C} C, med |log10 err|={summary_row['median_abs_log10_error']:.2f}"
+        label = f"{temperature_C} C PC-SAFT, med |log10 err|={summary_row['median_abs_log10_error']:.2f}"
         ax.plot(
             t_curve["CO2_loading"],
             t_curve["pred_CO2_pressure_kPa"],
             LEGACY_PCSAFT_LINESTYLE,
             color=color,
+            linewidth=MODEL_LINEWIDTH,
             label=label,
         )
 
-    apply_pressure_axes(ax)
-    ax.legend()
+    apply_pressure_axes(ax, title=title)
+    ax.legend(ncol=2, title="Temperature and role")
     fig.tight_layout()
-    return save_plot(fig, __file__, "legacy_pcsaft_jou_recomputed_fit")
+    return save_plot(
+        fig,
+        __file__,
+        "legacy_pcsaft_jou_recomputed_fit",
+        title=title,
+        description=description,
+    )
 
 
 def main() -> int:

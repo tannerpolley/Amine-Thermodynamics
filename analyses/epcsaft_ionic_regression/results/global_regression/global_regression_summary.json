@@ -1,6 +1,6 @@
 {
   "fit_tier": "pressure_speciation_global",
-  "completion_status": "bounded_incomplete",
+  "completion_status": "package_fit_not_completed",
   "fit_parameters": [
     "MEAH+__s",
     "MEAH+__e",
@@ -25,9 +25,11 @@
   "optimizer": {
     "success": false,
     "status": 0,
-    "message": "bounded downstream run: full coupled least-squares was skipped because objective evaluations remain too expensive for routine execution in this repository state",
+    "message": "package native fit not completed: full coupled native ePC-SAFT regression was skipped because objective evaluations remain too expensive for routine execution in this repository state",
     "nfev": 0,
-    "cost": 0.0
+    "cost": 0.0,
+    "owner": "epcsaft",
+    "native_function": "fit_reactive_electrolyte_parameters"
   },
   "attempted_optimization": false,
   "initial_values": {

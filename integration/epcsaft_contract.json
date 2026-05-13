@@ -1,0 +1,51 @@
+{
+  "package": {
+    "name": "epcsaft",
+    "minimum_version": "1.5.2",
+    "default_mode": "stable",
+    "allowed_sources": {
+      "stable": [
+        "pinned_git",
+        "release"
+      ],
+      "dev": [
+        "live_worktree"
+      ],
+      "final": [
+        "release",
+        "pinned_git",
+        "repo_owned_data"
+      ]
+    },
+    "shared_checkout_root": "C:/Users/Tanner/Documents/git/ePC-SAFT",
+    "dev_worktree_root": "C:/Users/Tanner/.codex/worktrees/epcsaft-dev/ePC-SAFT"
+  },
+  "required_public_symbols": [
+    "ePCSAFTMixture",
+    "capabilities",
+    "runtime_build_info",
+    "solve_reactive_speciation",
+    "solve_reactive_electrolyte_bubble"
+  ],
+  "forbidden_import_prefixes": [
+    "epcsaft._"
+  ],
+  "allowed_direct_import_paths": [
+    "src/MEA/epcsaft_runtime.py",
+    "src/MEA/epcsaft_diagnostics.py",
+    "src/MEA/epcsaft_neutral/runtime.py",
+    "src/MEA/epcsaft_ionic/smoke.py"
+  ],
+  "scan_roots": [
+    "src",
+    "scripts",
+    "tests"
+  ],
+  "smoke": {
+    "kind": "diagnostic_function",
+    "runtime_module": "MEA.epcsaft_runtime",
+    "runtime_callable": "load_epcsaft",
+    "module": "MEA.epcsaft_diagnostics",
+    "callable": "run_smoke_case"
+  }
+}

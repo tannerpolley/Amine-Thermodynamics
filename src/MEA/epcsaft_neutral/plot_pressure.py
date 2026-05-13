@@ -14,7 +14,10 @@ from MEA.common.plot_export import save_plot
 from MEA.common.plot_style import (
     EPCSAFT_NEUTRAL_LINESTYLE,
     JOU_DATA_MARKER,
+    JOU_DATA_MARKERSIZE,
     LEGACY_PCSAFT_LINESTYLE,
+    MODEL_LINEWIDTH,
+    REFERENCE_LINEWIDTH,
     PRESSURE_FIGSIZE,
     apply_pressure_axes,
     temperature_color,
@@ -149,6 +152,11 @@ def compute_neutral_parity() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
 
 
 def plot_parity(curves: pd.DataFrame) -> Path:
+    title = "Neutral ePC-SAFT parity against legacy PC-SAFT pressure curves"
+    description = (
+        "Neutral ePC-SAFT and legacy PC-SAFT pressure curves are compared against Jou et al. "
+        "30 wt% MEA carbon-dioxide partial-pressure data using a shared temperature palette."
+    )
     data = _jou_data()
     fig, ax = plt.subplots(figsize=PRESSURE_FIGSIZE)
     for temperature_C in TEMPERATURES_C:
@@ -157,25 +165,44 @@ def plot_parity(curves: pd.DataFrame) -> Path:
         t_curve = curves[curves["temperature_C"] == temperature_C]
         if t_data.empty or t_curve.empty:
             continue
-        ax.plot(t_data["CO2_loading"], t_data["CO2_pressure"], JOU_DATA_MARKER, color=color)
+        ax.plot(
+            t_data["CO2_loading"],
+            t_data["CO2_pressure"],
+            linestyle="none",
+            marker=JOU_DATA_MARKER,
+            markersize=JOU_DATA_MARKERSIZE,
+            color=color,
+            alpha=0.9,
+            label=f"{temperature_C} C Jou data",
+        )
         ax.plot(
             t_curve["CO2_loading"],
             t_curve["legacy_pcsaft_CO2_pressure_kPa"],
             LEGACY_PCSAFT_LINESTYLE,
             color=color,
             alpha=0.65,
+            linewidth=REFERENCE_LINEWIDTH,
+            label=f"{temperature_C} C legacy PC-SAFT",
         )
         ax.plot(
             t_curve["CO2_loading"],
             t_curve["epcsaft_CO2_pressure_kPa"],
             EPCSAFT_NEUTRAL_LINESTYLE,
             color=color,
+            linewidth=MODEL_LINEWIDTH,
             label=f"{temperature_C} C ePC-SAFT neutral",
         )
-    apply_pressure_axes(ax)
-    ax.legend()
+    apply_pressure_axes(ax, title=title)
+    ax.legend(ncol=2, title="Temperature and role")
     fig.tight_layout()
-    return save_plot(fig, __file__, "epcsaft_neutral_pcsaft_parity", workflow_name="epcsaft_neutral/pressure")
+    return save_plot(
+        fig,
+        __file__,
+        "epcsaft_neutral_pcsaft_parity",
+        workflow_name="epcsaft_neutral/pressure",
+        title=title,
+        description=description,
+    )
 
 
 def main() -> int:
