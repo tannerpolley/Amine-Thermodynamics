@@ -98,10 +98,10 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
             max_vle_records=1,
             max_speciation_records=1,
             exclude_carbonate_born=False,
+            backend="ceres",
+            derivative_backend="autodiff",
             tolerance=1.0e-6,
             damping=1.0,
-            jacobian_mode="forward",
-            relative_step=1.0e-4,
             verbose=False,
         )
         with tempfile.TemporaryDirectory() as tmp:
@@ -122,6 +122,10 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
                 fake_epcsaft.fit_reactive_electrolyte_parameters.assert_called_once()
                 _, kwargs = fake_epcsaft.fit_reactive_electrolyte_parameters.call_args
                 self.assertEqual(kwargs["max_iterations"], 1)
+                self.assertEqual(kwargs["optimizer_backend"], "ceres")
+                self.assertEqual(kwargs["derivative_backend"], "autodiff")
+                self.assertNotIn("jacobian_mode", kwargs)
+                self.assertNotIn("relative_step", kwargs)
                 self.assertIn("HCO3-__d_born", kwargs["initial_parameters"])
                 self.assertIn("CO3^2-__d_born", kwargs["initial_parameters"])
                 self.assertEqual(summary["native_regression"]["owner"], "epcsaft")

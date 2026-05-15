@@ -22,6 +22,9 @@ class NativeRegressionProblemTests(unittest.TestCase):
         )
         self.assertEqual(decoded["metadata"]["pressure_row_count"], 2)
         self.assertEqual(decoded["metadata"]["speciation_row_count"], 2)
+        self.assertEqual(decoded["metadata"]["optimizer_owner"], "epcsaft")
+        self.assertEqual(decoded["metadata"]["optimizer_backend"], "ceres")
+        self.assertEqual(decoded["metadata"]["derivative_backend"], "autodiff")
         self.assertEqual(len(decoded["rows"]), 4)
         self.assertIn("advanced_born_user_options", decoded)
 

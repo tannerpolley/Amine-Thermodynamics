@@ -326,11 +326,11 @@ def attempt_global_regression(
             initial_parameters=native_initial,
             lower_bounds=native_lower,
             upper_bounds=native_upper,
+            optimizer_backend="ceres",
+            derivative_backend="autodiff",
             max_iterations=int(max_nfev),
             tolerance=1.0e-6,
             damping=1.0,
-            jacobian_mode="central",
-            relative_step=1.0e-4,
             log_parameters=True,
         )
         native_summary = epcsaft.summarize_regression_result(native_result)

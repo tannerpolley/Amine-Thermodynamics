@@ -74,11 +74,11 @@ Forbidden claim:
 
 > final globally regressed parameter set.
 
-If global fit was skipped, bounded incomplete, or used inconsistent pressure/speciation artifacts.
+If global fitting was skipped, returned a specific nonconverged package status, or used inconsistent pressure/speciation artifacts.
 
 Current status:
 
 - Not accepted.
-- `analyses/epcsaft_ionic_regression/results/global_regression/global_regression_summary.json` reports `package_fit_not_completed`, `attempted_optimization=false`, and `selected_parameter_set=promoted_ionic_fit`.
+- `analyses/epcsaft_ionic_regression/results/global_regression/global_regression_summary.json` reports a nonpromoted package-native candidate with `attempted_optimization=false` and `selected_parameter_set=promoted_ionic_fit`.
 - Phase 3 remains blocked until generic ePC-SAFT regression support can complete the coupled objective and emit the required artifacts.
 - The configured local dev dependency path is currently missing; before reattempting Phase 3, restore or repin `epcsaft`, then run `uv sync`, `uv run python scripts/check_epcsaft_integration.py --mode dev`, and `uv run python scripts/check_epcsaft_integration.py --mode final`.

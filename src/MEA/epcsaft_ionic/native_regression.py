@@ -236,6 +236,8 @@ def build_native_regression_problem(
                 "validation": sorted(SPECIATION_VALIDATION_SOURCES),
             },
             "optimizer_owner": "epcsaft",
+            "optimizer_backend": "ceres",
+            "derivative_backend": "autodiff",
             "downstream_role": "target_construction_and_result_artifacts",
         },
     )
