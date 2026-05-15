@@ -29,6 +29,7 @@ CURATED_REQUIREMENTS = {
     "analyses/epcsaft_ionic_regression/results/train_validation": ["train_validation_summary.json", "train_validation_pressure_residuals.csv", "train_validation_speciation_residuals.csv", "train_validation_pressure_by_source.csv", "train_validation_speciation_by_species.csv", "train_validation_pressure_residuals.mpl.yaml", "train_validation_pressure_residuals.png", "train_validation_pressure_residuals.svg"],
     "analyses/epcsaft_ionic_regression/results/sensitivity": ["parameter_sensitivity_summary.json", "parameter_sensitivity_matrix.csv", "parameter_identifiability.csv", "parameter_sensitivity_heatmap.mpl.yaml", "parameter_sensitivity_heatmap.png", "parameter_sensitivity_heatmap.svg"],
     "analyses/2015_baygi/results/neutral_parity": ["baygi_neutral_epcsaft_pcsaft_pressure_parity_plot_data.csv", "baygi_neutral_epcsaft_pcsaft_pressure_parity.mpl.yaml", "baygi_neutral_epcsaft_pcsaft_pressure_parity.png", "baygi_neutral_epcsaft_pcsaft_pressure_parity.svg"],
+    "analyses/phase1_smith_missen_baseline/results": ["phase1_pressure_results.csv", "phase1_pressure_metrics.csv", "phase1_speciation_results.csv", "phase1_speciation_metrics.csv", "phase1_parameter_table.csv", "phase1_reaction_constant_table.csv", "phase1_pressure_vs_loading.mpl.yaml", "phase1_pressure_vs_loading.png", "phase1_pressure_vs_loading.svg", "phase1_speciation_vs_loading.mpl.yaml", "phase1_speciation_vs_loading.png", "phase1_speciation_vs_loading.svg"],
 }
 
 

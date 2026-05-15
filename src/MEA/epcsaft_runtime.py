@@ -31,14 +31,14 @@ ADVANCED_BORN_USER_OPTIONS = {
     "elec_model": {
         "rel_perm": {
             "rule": "empirical",
-            "differential_mode": "numerical",
+            "differential_mode": "auto",
         },
         "born_model": {
             "d_Born_mode": 3,
             "solvation_shell_model": True,
             "dielectric_saturation": True,
             "mu_born_model": {
-                "differential_mode": "numerical",
+                "differential_mode": "auto",
                 "comp_dep_delta_d": True,
             },
         },

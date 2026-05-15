@@ -10,7 +10,25 @@ Current check on 2026-05-13:
 
 - The lockfile path `C:\Users\Tanner\.codex\worktrees\epcsaft-dev\ePC-SAFT` is not present.
 - The shared checkout `C:\Users\Tanner\Documents\git\ePC-SAFT` is present.
+- `pyproject.toml` and `uv.lock` both point `epcsaft` at the missing worktree-backed path.
 - `uv run python scripts/check_epcsaft_integration.py --mode dev --self-only` fails during package metadata generation until the missing dev worktree is restored or the dependency is repinned.
+
+Package-dependent Phase 2/3 execution is therefore gated behind one of these unblock actions:
+
+1. Restore the dev worktree at `C:\Users\Tanner\.codex\worktrees\epcsaft-dev\ePC-SAFT`.
+2. Repin `epcsaft` to a stable Git ref, release, or approved local package source and refresh `uv.lock`.
+
+After the dependency is restored or repinned, rerun from this repository root:
+
+```powershell
+Test-Path C:\Users\Tanner\.codex\worktrees\epcsaft-dev\ePC-SAFT
+uv sync
+uv run python scripts/check_epcsaft_integration.py --mode dev --self-only
+uv run python scripts/check_epcsaft_integration.py --mode dev
+uv run python scripts/check_epcsaft_integration.py --mode final
+```
+
+Only after those pass should a GoalBuddy run attempt package-dependent Phase 2/3 figure regeneration, coupled pressure/speciation validation, or final manuscript/archive acceptance checks.
 
 ## Clean-checkout strategy
 

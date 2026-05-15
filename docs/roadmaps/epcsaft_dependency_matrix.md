@@ -43,6 +43,8 @@ The repo has an explicit integration contract at `integration/epcsaft_contract.j
 
 Current local development still uses a machine-local ePC-SAFT worktree path in `pyproject.toml`/`uv.lock`. That is acceptable for `dev` mode but not for final manuscript or archive results. See `docs/roadmaps/reproducibility_dependency_note.md`.
 
+Current 2026-05-13 blocker: the configured dev path `C:\Users\Tanner\.codex\worktrees\epcsaft-dev\ePC-SAFT` is missing. Package-dependent Phase 2/3 work must stay blocked until that path is restored or `epcsaft` is repinned and the integration checker passes.
+
 Phase status:
 
 - Phase 1: can proceed with repo-owned data and existing baseline scripts; it must not depend on unavailable package features.

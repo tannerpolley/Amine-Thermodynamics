@@ -62,6 +62,12 @@ Current diagnostic artifacts exist for:
 - Global-regression diagnostics under `analyses/epcsaft_ionic_regression/results/global_regression/`.
 - Sensitivity diagnostics under `analyses/epcsaft_ionic_regression/results/sensitivity/`.
 
+The machine-readable status for these planned and diagnostic figures is `data/reference/MEA/manifests/figure_artifact_manifest.csv`. It records the current artifact directory, the current parameter artifact, and whether the figure is publication-ready or diagnostic-only.
+
+The file-level companion manifest `data/reference/MEA/manifests/figure_artifact_file_manifest.csv` records the concrete existing CSV, PNG, SVG, and sidecar files for current diagnostic figures F08-F14. Planned figures without current artifacts remain absent from that file-level manifest until their figure assets exist.
+
 Publication-facing final figures must all identify one final parameter artifact. The current selected artifact is `promoted_ionic_fit`; the global pressure/speciation fit did not complete and must not be described as a final globally regressed parameter set.
+
+Latest claim/path audit: manuscript source sections contain no local Windows paths or Codex/worktree language in the checked text. Roadmap-local references to the missing dev worktree are retained only as development dependency notes, not submission claims.
 
 No roadmap or manuscript text should paste full article text. Extract source data from `docs/papers/md/` into machine-readable files and cite only the extracted data/provenance needed for the claim.

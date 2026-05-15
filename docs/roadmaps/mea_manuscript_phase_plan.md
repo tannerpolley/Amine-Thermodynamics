@@ -70,7 +70,9 @@ Forbidden claim:
 
 Current repo note:
 
-- The retained six-species and neutral-parity workflows can support this baseline after provenance and figure mapping are checked.
+- The reproducible repo-owned baseline is now consolidated under `analyses/phase1_smith_missen_baseline/`.
+- The supporting provenance files are `data/reference/MEA/manifests/phase1_data_inventory.csv`, `data/reference/MEA/manifests/phase1_parameter_provenance.csv`, and `data/reference/MEA/manifests/reaction_constant_manifest.csv`.
+- The retained six-species and neutral-parity workflows remain the implementation anchors used by that consolidated analysis.
 
 ## Phase 2 — Activity-based ePC-SAFT speciation and VLE
 

@@ -7,7 +7,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
-from MEA.epcsaft_ionic import global_regression, regress_parameters
+from MEA.epcsaft_ionic import global_regression, ion_parameter_regression, regress_parameters
 
 
 class FakeReactiveFitResult:
@@ -137,8 +137,13 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
                 ):
                     self.assertTrue((output_dir / name).exists(), name)
 
+    def test_disabled_local_ion_fit_redirects_to_native_entrypoint(self) -> None:
+        args = SimpleNamespace(max_records=4, max_nfev=4, output_label="smoke", promote=False, verbose=False)
+        with self.assertRaisesRegex(RuntimeError, "disabled by MEA-Thermodynamics issue #3"):
+            ion_parameter_regression.run_fit(args)
+
     def test_production_regression_modules_do_not_import_or_call_scipy_optimizers(self) -> None:
-        for module in (regress_parameters, global_regression):
+        for module in (regress_parameters, global_regression, ion_parameter_regression):
             with self.subTest(module=module.__name__):
                 source_path = Path(module.__file__)
                 tree = ast.parse(source_path.read_text(encoding="utf-8-sig"))

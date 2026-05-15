@@ -1,16 +1,16 @@
-figure_id,short_name,phase,required_csv,required_png,required_svg,required_sidecar,status,notes
-F01,literature_modeling_roadmap,Phase 4,yes,yes,yes,yes,planned,
-F02,reactive_species_model_architecture,Phase 4,yes,yes,yes,yes,planned,
-F03,born_ssm_ds_schematic,Phase 4,yes,yes,yes,yes,planned,
-F04,data_map_temperature_loading_pressure,Phase 0/4,yes,yes,yes,yes,planned,
-F05,pure_mea_baseline,Phase 1,yes,yes,yes,yes,planned,
-F06,binary_neutral_validation,Phase 1,yes,yes,yes,yes,planned,
-F07,meah_meacoo_parameter_movement,Phase 3,yes,yes,yes,yes,planned,
-F08,meah_meacoo_speciation_parity,Phase 2/3,yes,yes,yes,yes,current_diagnostic,Existing artifact under analyses/epcsaft_ionic_regression/results/ion_parameter_regression uses selected-row promoted fit.
-F09,meah_meacoo_loading_curves,Phase 2/3,yes,yes,yes,yes,current_diagnostic,Existing artifact under analyses/epcsaft_ionic_regression/results/ion_parameter_regression uses selected-row promoted fit.
-F10,full_speciation_vs_loading,Phase 2/3,yes,yes,yes,yes,current_diagnostic,Existing artifact under analyses/epcsaft_ionic_regression/results/speciation uses promoted_ionic_fit; final publication requires single final parameter artifact.
-F11,co2_pressure_vs_loading,Phase 2/3,yes,yes,yes,yes,current_diagnostic,Existing artifact under analyses/epcsaft_ionic_regression/results/pressure uses promoted_ionic_fit; not a completed Phase 3 regression result.
-F12,co2_pressure_parity,Phase 2/3,yes,yes,yes,yes,current_diagnostic,Global-regression parity exists but selected_parameter_set remains promoted_ionic_fit because package native fit did not complete.
-F13,residuals_by_loading_temperature_source,Phase 2/3,yes,yes,yes,yes,current_diagnostic,Existing pressure/speciation residual plots are diagnostic until final artifact gating passes.
-F14,sensitivity_identifiability,Phase 3,yes,yes,yes,yes,current_diagnostic,Existing sensitivity heatmap is diagnostic support; Phase 3 requires completed coupled fit artifacts.
-F15,literature_model_comparison,Phase 4,yes,yes,yes,yes,planned,
+figure_id,short_name,phase,required_csv,required_png,required_svg,required_sidecar,status,current_artifact_dir,current_parameter_artifact,publication_status,notes
+F01,literature_modeling_roadmap,Phase 4,yes,yes,yes,yes,planned,TBD,TBD,not_started,
+F02,reactive_species_model_architecture,Phase 4,yes,yes,yes,yes,planned,TBD,TBD,not_started,
+F03,born_ssm_ds_schematic,Phase 4,yes,yes,yes,yes,planned,TBD,TBD,not_started,
+F04,data_map_temperature_loading_pressure,Phase 0/4,yes,yes,yes,yes,planned,TBD,TBD,not_started,
+F05,pure_mea_baseline,Phase 1,yes,yes,yes,yes,planned,TBD,TBD,not_started,
+F06,binary_neutral_validation,Phase 1,yes,yes,yes,yes,planned,TBD,TBD,not_started,
+F07,meah_meacoo_parameter_movement,Phase 3,yes,yes,yes,yes,planned,TBD,TBD,blocked_until_phase3_fit,
+F08,meah_meacoo_speciation_parity,Phase 2/3,yes,yes,yes,yes,current_diagnostic,analyses/epcsaft_ionic_regression/results/ion_parameter_regression,selected_row_promoted_fit,diagnostic_only,Existing artifact uses selected-row promoted fit.
+F09,meah_meacoo_loading_curves,Phase 2/3,yes,yes,yes,yes,current_diagnostic,analyses/epcsaft_ionic_regression/results/ion_parameter_regression,selected_row_promoted_fit,diagnostic_only,Existing artifact uses selected-row promoted fit.
+F10,full_speciation_vs_loading,Phase 2/3,yes,yes,yes,yes,current_diagnostic,analyses/epcsaft_ionic_regression/results/speciation,promoted_ionic_fit,diagnostic_only,Final publication requires one final parameter artifact.
+F11,co2_pressure_vs_loading,Phase 2/3,yes,yes,yes,yes,current_diagnostic,analyses/epcsaft_ionic_regression/results/pressure,promoted_ionic_fit,diagnostic_only,Not a completed Phase 3 regression result.
+F12,co2_pressure_parity,Phase 2/3,yes,yes,yes,yes,current_diagnostic,analyses/epcsaft_ionic_regression/results/global_regression,promoted_ionic_fit__package_fit_not_completed,diagnostic_only,Global-regression parity exists but package native fit did not complete.
+F13,residuals_by_loading_temperature_source,Phase 2/3,yes,yes,yes,yes,current_diagnostic,analyses/epcsaft_ionic_regression/results/pressure;analyses/epcsaft_ionic_regression/results/speciation;analyses/epcsaft_ionic_regression/results/train_validation,promoted_ionic_fit,diagnostic_only,Pressure/speciation residual plots remain diagnostic until final artifact gating passes.
+F14,sensitivity_identifiability,Phase 3,yes,yes,yes,yes,current_diagnostic,analyses/epcsaft_ionic_regression/results/sensitivity,promoted_ionic_fit,diagnostic_only,Diagnostic support only; Phase 3 requires completed coupled fit artifacts.
+F15,literature_model_comparison,Phase 4,yes,yes,yes,yes,planned,TBD,TBD,not_started,

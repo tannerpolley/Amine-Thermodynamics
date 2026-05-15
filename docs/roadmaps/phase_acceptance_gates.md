@@ -22,8 +22,10 @@ Forbidden claim:
 
 Current status:
 
-- Partially available through the retained six-species and neutral-parity workflows.
-- Not yet publication-final until source/parameter provenance, reaction-constant conventions, and figure artifact mapping are audited against the 15-figure plan.
+- Accepted for the reproducible repository baseline.
+- The consolidated Phase 1 workflow now lives under `analyses/phase1_smith_missen_baseline/`.
+- Provenance and convention audits are captured in `data/reference/MEA/manifests/phase1_data_inventory.csv`, `data/reference/MEA/manifests/phase1_parameter_provenance.csv`, and `data/reference/MEA/manifests/reaction_constant_manifest.csv`.
+- This acceptance closes only the ideal/apparent Smith-Missen baseline. It does not promote any Phase 2 or Phase 3 activity-based or coupled-fit claim.
 
 ## Phase 2 — Activity-based ePC-SAFT speciation and VLE
 
@@ -79,3 +81,4 @@ Current status:
 - Not accepted.
 - `analyses/epcsaft_ionic_regression/results/global_regression/global_regression_summary.json` reports `package_fit_not_completed`, `attempted_optimization=false`, and `selected_parameter_set=promoted_ionic_fit`.
 - Phase 3 remains blocked until generic ePC-SAFT regression support can complete the coupled objective and emit the required artifacts.
+- The configured local dev dependency path is currently missing; before reattempting Phase 3, restore or repin `epcsaft`, then run `uv sync`, `uv run python scripts/check_epcsaft_integration.py --mode dev`, and `uv run python scripts/check_epcsaft_integration.py --mode final`.
