@@ -6,6 +6,8 @@ owner: project
 inputs:
   - path: data/reference/MEA/manifests/phase2_reaction_constant_manifest.csv
     kind: reaction_constant_manifest
+  - path: data/reference/MEA/manifests/phase2_reaction_constant_source_verification.csv
+    kind: reaction_constant_source_verification
   - path: data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2
     kind: parameter_artifact
 outputs:
@@ -15,6 +17,8 @@ outputs:
     kind: status_comparison
   - path: analyses/phase2_activity_epcsaft/results/phase2_required_output_status.csv
     kind: output_status
+  - path: analyses/phase2_activity_epcsaft/results/phase2_bounded_incomplete_report.md
+    kind: bounded_incomplete_report
 commands:
   generate:
     - uv run python analyses/phase2_activity_epcsaft/scripts/generate_data.py
@@ -25,6 +29,8 @@ tracked_results:
   - analyses/phase2_activity_epcsaft/results/phase2_activity_speciation_problem.json
   - analyses/phase2_activity_epcsaft/results/phase2_comparison_to_phase1.md
   - analyses/phase2_activity_epcsaft/results/phase2_required_output_status.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_bounded_incomplete_report.md
+  - analyses/phase2_activity_epcsaft/results/phase2_reaction_constant_source_verification.csv
 references:
   - docs/roadmaps/phase2_activity_speciation_design.md
   - docs/roadmaps/phase2_reaction_constant_basis.md

@@ -11,7 +11,7 @@ Phase 1 uses the Smith-Missen-style ideal/apparent chemistry convention. Activit
 
 ## Retained-solver note
 
-The retained six-species code in [chemistry.py](/C:/Users/Tanner/Documents/git/MEA-Thermodynamics/src/MEA/six_species/chemistry.py) solves a reduced apparent-equilibrium system and exposes only two composite equilibrium relations directly. That is acceptable for the reproducible Phase 1 baseline as long as the full five-reaction literature basis stays documented in the manifest.
+The retained six-species code in [chemistry.py](src/MEA/six_species/chemistry.py) solves a reduced apparent-equilibrium system and exposes only two composite equilibrium relations directly. That is acceptable for the reproducible Phase 1 baseline as long as the full five-reaction literature basis stays documented in the manifest.
 
 ## Phase 1 rule
 
@@ -19,5 +19,5 @@ Do not mix these Phase 1 mole-fraction or apparent constants with later activity
 
 ## Files
 
-- Reaction manifest: [reaction_constant_manifest.csv](/C:/Users/Tanner/Documents/git/MEA-Thermodynamics/data/reference/MEA/manifests/reaction_constant_manifest.csv)
-- Phase 1 analysis reaction table: [phase1_reaction_constant_table.csv](/C:/Users/Tanner/Documents/git/MEA-Thermodynamics/analyses/phase1_smith_missen_baseline/results/phase1_reaction_constant_table.csv)
+- Reaction manifest: [reaction_constant_manifest.csv](data/reference/MEA/manifests/reaction_constant_manifest.csv)
+- Phase 1 analysis reaction table: [phase1_reaction_constant_table.csv](analyses/phase1_smith_missen_baseline/results/phase1_reaction_constant_table.csv)

@@ -102,7 +102,7 @@ Allowed claim:
 
 Forbidden claim:
 
-> This is a final coupled regression.
+> This is a finalized joint-regression result.
 
 Current repo note:
 

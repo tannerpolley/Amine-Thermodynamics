@@ -6,14 +6,14 @@ This checkout currently uses a stable pinned Git ePC-SAFT source in `pyproject.t
 
 `epcsaft @ git+https://github.com/tannerpolley/ePC-SAFT.git@e9510abae528016bd2513f12069fc0534b252bea`
 
-Local Windows paths also appear in runtime fallback modules and helper scripts that are development-facing, not manuscript text. The LaTeX source files under `docs/latex/sections/` do not depend on `C:\Users\...` paths.
+Local Windows paths previously appeared in runtime fallback modules and helper scripts that are development-facing, not manuscript text. The LaTeX source files under `docs/latex/sections/` do not depend on local user-profile paths.
 
 Current check on 2026-05-15:
 
 - `pyproject.toml` and `uv.lock` point `epcsaft` at the upstream Git commit `e9510abae528016bd2513f12069fc0534b252bea`.
 - This keeps the downstream workflow in stable pinned-Git mode while retaining the public API surface required by the current MEA tests.
 - `uv run python scripts/check_epcsaft_integration.py` passes in stable mode and reports `source kind: pinned_git`.
-- The local `C:\Users\Tanner\.codex\worktrees\epcsaft-dev\ePC-SAFT` path is not required for routine downstream validation.
+- The local `<epcsaft-dev-worktree>` path is not required for routine downstream validation.
 
 Package-dependent Phase 2/3 execution should use stable mode unless intentional upstream/downstream co-development is explicitly requested.
 

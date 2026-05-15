@@ -13,33 +13,33 @@ The target outcome is a defensible promoted parameter decision for carbonate-fam
 
 ## Recommendation on ePC-SAFT Checkout Strategy
 
-Do not clone or vendor a separate copy of `ePC-SAFT` inside `C:\Users\Tanner\Documents\git\MEA-Thermodynamics`.
+Do not clone or vendor a separate copy of `ePC-SAFT` inside `<repo-root>`.
 
 Use the sibling package checkout:
 
 ```powershell
-C:\Users\Tanner\Documents\git\ePC-SAFT
+<upstream-ePC-SAFT>
 ```
 
 If isolation is needed, create a branch or git worktree owned by the ePC-SAFT repo, not inside MEA:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\ePC-SAFT
+cd <upstream-ePC-SAFT>
 git switch -c codex/mea-coupled-objective-runtime
 ```
 
 or, if parallel agents need separate working directories:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\ePC-SAFT
+cd <upstream-ePC-SAFT>
 git worktree add .worktrees\mea-coupled-objective -b codex/mea-coupled-objective-runtime
 ```
 
 Then reinstall that package into the MEA environment:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
-uv pip install --python .venv\Scripts\python.exe --reinstall --no-deps C:\Users\Tanner\Documents\git\ePC-SAFT
+cd <repo-root>
+uv pip install --python .venv\Scripts\python.exe --reinstall --no-deps <upstream-ePC-SAFT>
 ```
 
 Rationale:
@@ -160,7 +160,7 @@ Purpose: Make the current state reproducible before package changes.
 Commands:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+cd <repo-root>
 .venv\Scripts\python.exe -c "import epcsaft; print(epcsaft.__version__); print(epcsaft.__file__)"
 .venv\Scripts\python.exe -m unittest discover tests -v
 .venv\Scripts\python.exe scripts\validate_project.py quick
@@ -213,7 +213,7 @@ Tasks:
 Acceptance checks:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+cd <repo-root>
 .venv\Scripts\python.exe -m unittest tests.test_epcsaft_ionic_native_regression -v
 ```
 
@@ -341,8 +341,8 @@ runtime_status:
 Commands:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
-uv pip install --python .venv\Scripts\python.exe --reinstall --no-deps C:\Users\Tanner\Documents\git\ePC-SAFT
+cd <repo-root>
+uv pip install --python .venv\Scripts\python.exe --reinstall --no-deps <upstream-ePC-SAFT>
 .venv\Scripts\python.exe analyses\epcsaft_ionic_regression\scripts\fit_global_pressure_speciation.py --max-nfev 40 --promote
 .venv\Scripts\python.exe analyses\epcsaft_ionic_regression\scripts\evaluate_train_validation_split.py
 .venv\Scripts\python.exe analyses\epcsaft_ionic_regression\scripts\compute_parameter_sensitivity.py
@@ -395,11 +395,11 @@ Do not manually edit:
 Commands:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+cd <repo-root>
 .venv\Scripts\python.exe -m unittest discover tests -v
 .venv\Scripts\python.exe scripts\validate_project.py quick
 
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics\docs\latex
+cd <repo-root>\docs\latex
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
@@ -428,7 +428,7 @@ Do not reopen the ePC-SAFT issue unless Scout/Judge evidence during implementati
 Recommended action for this repo:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+cd <repo-root>
 /goal Follow docs/goals/issue-3-native-regression-carbonate/goal.md.
 ```
 

@@ -28,27 +28,27 @@ Phase 2 evaluates MEA-CO2-H2O with a true-species ePC-SAFT liquid basis and ePC-
 
 | ID | Reaction | Current Phase 2 use |
 |---|---|---|
-| R1 | `2 H2O <-> H3O+ + OH-` | Source-ready fixed input from Austgen Table V; activity solve is blocked by upstream ePC-SAFT issue #115. |
-| R2 | `CO2 + 2 H2O <-> HCO3- + H3O+` | Source-ready fixed input from Austgen Table V; activity solve is blocked by upstream ePC-SAFT issue #115. |
-| R3 | `HCO3- + H2O <-> CO3^2- + H3O+` | Source-ready fixed input from Austgen Table V; activity solve is blocked by upstream ePC-SAFT issue #115. |
-| R4 | `MEACOO- + H2O <-> MEA + HCO3-` | Source-ready fixed input from Austgen reaction 7a; activity solve is blocked by upstream ePC-SAFT issue #115. |
-| R5 | `MEAH+ + H2O <-> MEA + H3O+` | Source-ready fixed input from Austgen reaction 6a; activity solve is blocked by upstream ePC-SAFT issue #115. |
+| R1 | `2 H2O <-> H3O+ + OH-` | Source value verified against repo-local Nasrifar Table 1, which traces the value family to Austgen 1991; activity solve is blocked by upstream ePC-SAFT issue #115. |
+| R2 | `CO2 + 2 H2O <-> HCO3- + H3O+` | Source value verified against repo-local Nasrifar Table 1, which traces the value family to Austgen 1991; activity solve is blocked by upstream ePC-SAFT issue #115. |
+| R3 | `HCO3- + H2O <-> CO3^2- + H3O+` | Source value verified against repo-local Nasrifar Table 1, which traces the value family to Austgen 1991; activity solve is blocked by upstream ePC-SAFT issue #115. |
+| R4 | `MEACOO- + H2O <-> MEA + HCO3-` | Source value verified against repo-local Nasrifar Table 1 k9; activity solve is blocked by upstream ePC-SAFT issue #115. |
+| R5 | `MEAH+ + H2O <-> MEA + H3O+` | Source value verified against repo-local Nasrifar Table 1 k7; activity solve is blocked by upstream ePC-SAFT issue #115. |
 
-The reaction-constant source table is [phase2_reaction_constant_manifest.csv](/C:/Users/Tanner/Documents/git/MEA-Thermodynamics/data/reference/MEA/manifests/phase2_reaction_constant_manifest.csv). Phase 2 must not pass apparent mole-fraction constants into thermodynamic-activity equations as if they were converted constants.
+The reaction-constant source table is `data/reference/MEA/manifests/phase2_reaction_constant_manifest.csv`, and the value-level source audit is `data/reference/MEA/manifests/phase2_reaction_constant_source_verification.csv`. Phase 2 must not pass apparent mole-fraction constants into thermodynamic-activity equations as if they were residual-validated activity-equilibrium results.
 
 ## Balances
 
 The Phase 2 problem definition uses these conserved quantities:
 
-- Total amine: `MEA + MEAH+ + MEACOO-`.
-- Total carbon: `CO2 + MEACOO- + HCO3- + CO3^2-`.
-- Liquid electroneutrality: `MEAH+ + H3O+ - MEACOO- - HCO3- - 2 CO3^2- - OH- = 0`.
+- Material balance, total amine: `MEA + MEAH+ + MEACOO-`.
+- Material balance, total carbon: `CO2 + MEACOO- + HCO3- + CO3^2-`.
+- Constraint, liquid electroneutrality: `MEAH+ + H3O+ - MEACOO- - HCO3- - 2 CO3^2- - OH- = 0`.
 - Water appears explicitly in all hydrolysis/proton reactions and remains the dominant liquid solvent.
 
 ## Activity convention
 
 - Needed Phase 2 basis: thermodynamic activity constants with explicit reference states.
-- Current manifest status: Austgen Table V verifies R1-R5 on an unsymmetric mole-fraction activity basis with H3O+ reactions and pure-liquid solvent reference states.
+- Current manifest status: repo-local Nasrifar Table 1 verifies R1-R5 source values on the mole-fraction equilibrium-constant family traced to Austgen 1991; it does not by itself validate an activity-coupled ePC-SAFT equilibrium solve.
 - Allowed current use: problem definition, convention audit, parameter-artifact validation, and fixed-composition ePC-SAFT diagnostics.
 - Blocked current use: a claimed activity-based speciation solve until upstream ePC-SAFT issue #115 provides the required native activity-coupled solver backend.
 

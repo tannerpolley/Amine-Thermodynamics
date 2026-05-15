@@ -34,9 +34,9 @@ Complete a refresh-and-hardening pass on the current merged `main`: update/reins
 
 ## Non-Negotiable Constraints
 
-- Work from `C:\Users\Tanner\Documents\git\MEA-Thermodynamics` unless a task explicitly targets `C:\Users\Tanner\Documents\git\ePC-SAFT`.
-- Treat `C:\Users\Tanner\Documents\git\ePC-SAFT` as the local upstream package source of truth.
-- Use `C:\Users\Tanner\Documents\git\MEA-Thermodynamics\.venv\Scripts\python.exe` for MEA commands unless a Worker proves a different environment is required.
+- Work from `<repo-root>` unless a task explicitly targets `<upstream-ePC-SAFT>`.
+- Treat `<upstream-ePC-SAFT>` as the local upstream package source of truth.
+- Use `<repo-root>\.venv\Scripts\python.exe` for MEA commands unless a Worker proves a different environment is required.
 - Do not manually edit `docs/latex/references.bib`.
 - Keep submission-facing manuscript text free of Codex, agent, branch, worktree, local-path, artifact-process, and unsupported novelty/readiness claims.
 - Do not create repo-local temp/scratch folders.

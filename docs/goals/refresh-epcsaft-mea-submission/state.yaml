@@ -80,9 +80,9 @@ tasks:
         - "MEA repo: `main...origin/main`; only `docs/goals/` untracked from board creation."
         - "ePC-SAFT repo: `main...origin/main`, clean; latest commit `544a6b8 Merge pull request #50 from tannerpolley/codex/issues-45-46-completion`."
         - "MEA `.venv` imports `epcsaft` from `.venv\\Lib\\site-packages\\epcsaft\\__init__.py`, version `1.5.2`."
-        - "`epcsaft-1.5.2.dist-info/direct_url.json` points to `file:///C:/Users/Tanner/Documents/git/ePC-SAFT` with `editable=false`."
+        - "`epcsaft-1.5.2.dist-info/direct_url.json` points to `file:///<upstream-ePC-SAFT>` with `editable=false`."
         - "MEA `.venv` has no `python -m pip`, no `pip.exe`, and no `pip3.exe`; pyvenv was created by uv 0.11.7."
-        - "MEA `pyproject.toml` depends on `epcsaft @ file:///C:/Users/Tanner/Documents/git/ePC-SAFT`."
+        - "MEA `pyproject.toml` depends on `epcsaft @ file:///<upstream-ePC-SAFT>`."
         - "Merged main includes global regression, train/validation, sensitivity, residual diagnostics, and tests."
       reinstall_candidate:
         - "Prefer `uv pip install --python .venv\\Scripts\\python.exe --reinstall --no-deps C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT` if uv is available."
@@ -177,7 +177,7 @@ tasks:
         - command: ".venv\\Scripts\\python.exe scripts\\doctor.py"
           status: pass
       observed:
-        - "Built and installed `epcsaft==1.5.2` from `file:///C:/Users/Tanner/Documents/git/ePC-SAFT`."
+        - "Built and installed `epcsaft==1.5.2` from `file:///<upstream-ePC-SAFT>`."
         - "Import verified from `C:\\Users\\Tanner\\Documents\\git\\MEA-Thermodynamics\\.venv\\Lib\\site-packages\\epcsaft\\__init__.py`."
         - "`scripts\\doctor.py` reported all OK."
         - "MEA and ePC-SAFT git states remain clean except GoalBuddy board files."

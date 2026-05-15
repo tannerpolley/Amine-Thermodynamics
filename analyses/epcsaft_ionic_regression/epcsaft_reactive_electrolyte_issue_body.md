@@ -50,7 +50,7 @@ The regression objective should match the prediction path. Otherwise the model i
 From the MEA-Thermodynamics branch:
 
 ```text
-C:\Users\Tanner\.codex\worktrees\b185\MEA-Thermodynamics
+<repo-worktree>
 branch: codex/epcsaft-with-electrolyte-born-terms
 ```
 

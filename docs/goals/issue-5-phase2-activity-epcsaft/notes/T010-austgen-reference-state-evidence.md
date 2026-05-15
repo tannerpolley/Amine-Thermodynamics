@@ -2,8 +2,8 @@
 
 ## Source
 
-- PDF: `C:\Users\Tanner\Zotero\storage\UNTA6KIT\Austgen et al. - 1991 - Model of Vapor-Liquid Equilibria for Aqueous Acid Gas-Alkanolamine Systems.pdf`
-- Extracted markdown: `C:\Users\Tanner\Documents\git\Lithium_Extraction\data\Austgen et al. - 1991 - Model of Vapor-Liquid Equilibria for Aqueous Acid Gas-Alkanolamine Systems.md`
+- PDF: `local Zotero Austgen PDF outside this repo`
+- Extracted markdown: `external Austgen source outside this repo`
 
 ## Verified Claims
 

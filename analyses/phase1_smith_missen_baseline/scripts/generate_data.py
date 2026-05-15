@@ -169,7 +169,7 @@ REACTION_CONSTANT_ROWS = [
         "correlation_form": "ln K = A + B/T + C ln(T) + D T",
         "A": 132.899,
         "B": -13445.9,
-        "C": 22.4773,
+        "C": -22.4773,
         "D": 0.0,
         "temperature_range_K": "273.15-498.15",
         "source_key": "Edwards1978_via_Baygi2015",
@@ -400,6 +400,128 @@ def _phase1_speciation_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
     return results, metrics
 
 
+def _pressure_acceptance_rows(pressure_results: pd.DataFrame) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+
+    groups: list[tuple[str, object, pd.DataFrame]] = []
+    for (model_family, temperature_C), subset in pressure_results.groupby(["model_family", "temperature_C"], sort=True):
+        groups.append((str(model_family), temperature_C, subset))
+    for model_family, subset in pressure_results.groupby("model_family", sort=True):
+        groups.append((str(model_family), "overall", subset))
+
+    for model_family, temperature_C, subset in groups:
+        residual = subset["log10_pred_over_obs"].to_numpy(dtype=float)
+        observed = subset["observed_CO2_pressure_kPa"].to_numpy(dtype=float)
+        predicted = subset["predicted_CO2_pressure_kPa"].to_numpy(dtype=float)
+        aad_percent = float(np.nanmean(np.abs(predicted - observed) / observed) * 100.0)
+        median_abs = float(np.nanmedian(np.abs(residual)))
+        rmse_log10 = float(np.sqrt(np.nanmean(residual * residual)))
+        max_abs = float(np.nanmax(np.abs(residual)))
+        pressure_pass = aad_percent <= 50.0 or median_abs <= 0.25
+        for metric, actual, threshold in (
+            ("AAD_percent", aad_percent, "pass if AAD_percent <= 50 OR median_abs_log10_error <= 0.25"),
+            ("median_abs_log10_error", median_abs, "pass if AAD_percent <= 50 OR median_abs_log10_error <= 0.25"),
+            ("RMSE_log10", rmse_log10, "reported; no independent pass threshold"),
+            ("max_abs_log10_error", max_abs, "reported; no independent pass threshold"),
+        ):
+            rows.append(
+                {
+                    "target_family": "pressure",
+                    "source_or_model": model_family,
+                    "temperature_C": temperature_C,
+                    "species_or_property": "CO2_pressure",
+                    "metric": metric,
+                    "threshold": threshold,
+                    "actual_value": actual,
+                    "passes": str(pressure_pass).lower(),
+                    "claim_allowed": str(pressure_pass).lower(),
+                    "failure_reason": "" if pressure_pass else "pressure residual gate failed",
+                    "recommended_manuscript_use": (
+                        "retained baseline pressure comparison"
+                        if pressure_pass
+                        else "diagnostic only; do not cite as validated pressure reproduction"
+                    ),
+                }
+            )
+    return rows
+
+
+def _speciation_acceptance_rows(speciation_results: pd.DataFrame) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    trace_or_diagnostic_species = {"CO2", "CO3^2-", "H3O+", "OH-"}
+
+    groups: list[tuple[object, str, pd.DataFrame]] = []
+    for (temperature_C, species), subset in speciation_results.groupby(["temperature_C", "species"], sort=True):
+        groups.append((temperature_C, str(species), subset))
+    for species, subset in speciation_results.groupby("species", sort=True):
+        groups.append(("overall", str(species), subset))
+
+    for temperature_C, species, subset in groups:
+        residual = subset["log10_model_over_data"].to_numpy(dtype=float)
+        median_abs = float(np.nanmedian(np.abs(residual)))
+        mae = float(np.nanmean(np.abs(residual)))
+        rmse = float(np.sqrt(np.nanmean(residual * residual)))
+        residual_pass = median_abs <= 0.50 and mae <= 0.75
+        diagnostic_only = species in trace_or_diagnostic_species
+        claim_allowed = residual_pass and not diagnostic_only
+        failure_reason = ""
+        if diagnostic_only:
+            failure_reason = "trace or unsupported species is diagnostic only"
+        elif not residual_pass:
+            failure_reason = "speciation residual gate failed"
+        for metric, actual, threshold in (
+            ("median_abs_log10_error", median_abs, "median_abs_log10_error <= 0.50 AND mae_log10 <= 0.75"),
+            ("mae_log10", mae, "median_abs_log10_error <= 0.50 AND mae_log10 <= 0.75"),
+            ("RMSE_log10", rmse, "reported; no independent pass threshold"),
+        ):
+            rows.append(
+                {
+                    "target_family": "speciation",
+                    "source_or_model": "retained_six_species_apparent_solver",
+                    "temperature_C": temperature_C,
+                    "species_or_property": species,
+                    "metric": metric,
+                    "threshold": threshold,
+                    "actual_value": actual,
+                    "passes": str(residual_pass).lower(),
+                    "claim_allowed": str(claim_allowed).lower(),
+                    "failure_reason": failure_reason,
+                    "recommended_manuscript_use": (
+                        "major-species retained baseline comparison"
+                        if claim_allowed
+                        else "diagnostic only; do not cite as validated speciation reproduction"
+                    ),
+                }
+            )
+
+    for species in ("H3O+", "OH-"):
+        rows.append(
+            {
+                "target_family": "speciation",
+                "source_or_model": "retained_six_species_apparent_solver",
+                "temperature_C": "overall",
+                "species_or_property": species,
+                "metric": "not_evaluated",
+                "threshold": "not directly supported by retained reduced apparent solver",
+                "actual_value": np.nan,
+                "passes": "false",
+                "claim_allowed": "false",
+                "failure_reason": "unsupported explicit-ion species in retained reduced apparent solver",
+                "recommended_manuscript_use": "diagnostic only; do not cite as validated speciation reproduction",
+            }
+        )
+    return rows
+
+
+def _phase1_residual_acceptance_audit(
+    pressure_results: pd.DataFrame,
+    speciation_results: pd.DataFrame,
+) -> pd.DataFrame:
+    rows = _pressure_acceptance_rows(pressure_results)
+    rows.extend(_speciation_acceptance_rows(speciation_results))
+    return pd.DataFrame(rows)
+
+
 def main() -> int:
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -407,6 +529,7 @@ def main() -> int:
     speciation_results, speciation_metrics = _phase1_speciation_tables()
     parameter_table = pd.DataFrame(PURE_PARAMETER_ROWS)
     reaction_table = pd.DataFrame(REACTION_CONSTANT_ROWS)
+    residual_acceptance_audit = _phase1_residual_acceptance_audit(pressure_results, speciation_results)
 
     outputs = {
         "phase1_pressure_results.csv": pressure_results,
@@ -415,6 +538,7 @@ def main() -> int:
         "phase1_speciation_metrics.csv": speciation_metrics,
         "phase1_parameter_table.csv": parameter_table,
         "phase1_reaction_constant_table.csv": reaction_table,
+        "phase1_residual_acceptance_audit.csv": residual_acceptance_audit,
     }
     for name, frame in outputs.items():
         frame.to_csv(PROCESSED_DIR / name, index=False)

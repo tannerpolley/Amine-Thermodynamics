@@ -23,7 +23,7 @@ Tasks:
 Acceptance:
 
 - A clean-checkout dependency strategy is documented.
-- Manuscript-facing documents do not depend on `C:\Users\...`.
+- Manuscript-facing documents do not depend on local user-profile paths.
 
 ## Step 2 — Inventory and extract high-priority data
 

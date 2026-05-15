@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -10,8 +11,7 @@ import numpy as np
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-EPCSAFT_REPO = Path(r"C:\Users\Tanner\Documents\git\ePC-SAFT")
-EPCSAFT_SRC = EPCSAFT_REPO / "src"
+EPCSAFT_SRC = Path(os.environ["EPCSAFT_SRC"]) if "EPCSAFT_SRC" in os.environ else None
 DATASET_DIR = REPO_ROOT / "data" / "reference" / "epcsaft_datasets" / "MEA_CO2_H2O_draft"
 EPCSAFT_OUT_DIR = REPO_ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "diagnostics"
 
@@ -53,7 +53,7 @@ def load_epcsaft():
 
         return epcsaft
     except Exception as first_exc:
-        if EPCSAFT_SRC.exists():
+        if EPCSAFT_SRC is not None and EPCSAFT_SRC.exists():
             src_text = str(EPCSAFT_SRC)
             if src_text not in sys.path:
                 sys.path.insert(0, src_text)
@@ -63,12 +63,13 @@ def load_epcsaft():
                 return epcsaft
             except Exception as second_exc:
                 raise RuntimeError(
-                    "Unable to import the sibling ePC-SAFT package. Build/install it first, "
-                    "for example from C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT with "
-                    "`uv sync --no-install-project` and `uv run python scripts\\build_epcsaft.py`, "
+                    "Unable to import the ePC-SAFT package from EPCSAFT_SRC. Build/install the package first, "
                     "then run this repository with `uv sync` and `uv run python scripts\\validate_project.py quick`."
                 ) from second_exc
-        raise RuntimeError("Unable to import epcsaft and the sibling source checkout was not found.") from first_exc
+        raise RuntimeError(
+            "Unable to import epcsaft. Install the pinned dependency with `uv sync` or set EPCSAFT_SRC "
+            "to a local ePC-SAFT/src checkout."
+        ) from first_exc
 
 
 def dataset_label() -> str:

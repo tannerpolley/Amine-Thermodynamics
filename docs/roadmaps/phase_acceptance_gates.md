@@ -12,9 +12,9 @@ Required:
 - CO2 pressure/speciation plots generated,
 - limitations explicit.
 
-Allowed claim:
+Allowed current claim:
 
-> ideal/apparent-speciation reproduction baseline.
+> retained ideal/apparent-speciation baseline audit.
 
 Forbidden claim:
 
@@ -22,10 +22,10 @@ Forbidden claim:
 
 Current status:
 
-- Accepted for the reproducible repository baseline.
+- Generated for a retained-baseline audit; not validated as an independent Phase 1 reproduction.
 - The consolidated Phase 1 workflow now lives under `analyses/phase1_smith_missen_baseline/`.
 - Provenance and convention audits are captured in `data/reference/MEA/manifests/phase1_data_inventory.csv`, `data/reference/MEA/manifests/phase1_parameter_provenance.csv`, and `data/reference/MEA/manifests/reaction_constant_manifest.csv`.
-- This acceptance closes only the ideal/apparent Smith-Missen baseline. It does not promote any Phase 2 or Phase 3 activity-based or coupled-fit claim.
+- This PR must not close the Phase 1 validation gate until residual and source gates allow it.
 
 ## Phase 2 — Activity-based ePC-SAFT speciation and VLE
 
@@ -37,19 +37,19 @@ Required:
 - pressure/speciation outputs generated from one parameter artifact,
 - unsupported ePC-SAFT package paths listed as package dependencies.
 
-Allowed claim:
+Allowed current claim:
 
-> activity-based true-species ePC-SAFT evaluation.
+> true-species ePC-SAFT problem-definition scaffold.
 
 Forbidden claim:
 
-> final coupled regression.
+> finalized joint-regression result.
 
 Current status:
 
 - Diagnostic artifacts exist for full-ionic pressure and speciation using `promoted_ionic_fit`.
 - Wong 2015 high-pressure Raman data are present as Markdown and must be extracted before being used as validation.
-- Final Phase 2 figures must all name the same parameter artifact and include CSV/PNG/SVG/sidecar outputs.
+- Phase 2 equilibrium and residual artifacts remain blocked until upstream issue #115 and the residual gates pass.
 
 ## Phase 3 — Coupled regression mode
 

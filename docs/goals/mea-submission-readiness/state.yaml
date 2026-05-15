@@ -396,7 +396,7 @@ tasks:
           output: "False"
         - cmd: "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"$env:USERPROFILE\\.codex\\hooks\\codex-cleanup.ps1\" -RepoRoot ."
           status: pass
-          output: "No matching leftover Codex processes under: C:/Users/Tanner/Documents/git/MEA-Thermodynamics"
+          output: "No matching leftover Codex processes under: <repo-root>"
       summary: "Added PR-ready tranche summary with changed files, validation run/skipped, ePC-SAFT blocker, and next commands. Cleanup hook ran successfully."
   - id: T999
     type: judge

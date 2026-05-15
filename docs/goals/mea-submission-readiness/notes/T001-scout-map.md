@@ -26,7 +26,7 @@ Read-only Scout pass completed on 2026-05-13.
 
 ## Package-Dependent Blockers
 
-- `uv.lock` points `epcsaft` at `C:/Users/Tanner/.codex/worktrees/epcsaft-dev/ePC-SAFT`.
+- `uv.lock` points `epcsaft` at `<epcsaft-dev-worktree>`.
 - That path is missing in the current environment.
 - Phase 2/3 package execution and final-mode package validation should remain blocked until the worktree/build is restored.
 - `global_regression_summary.json` reports `completion_status=package_fit_not_completed`, `attempted_optimization=false`, and `selected_parameter_set=promoted_ionic_fit`.

@@ -14,12 +14,16 @@ project. Use -WhatIf to preview the sync without writing to the mirror.
 
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
-    [string]$MirrorRoot = 'C:\Users\Tanner\Documents\git\LaTeX-Projects\MEA-Thermodynamics-LaTeX',
+    [string]$MirrorRoot = $env:MEA_OVERLEAF_MIRROR,
     [string[]]$AssetDirectories = @('Figures', 'out', 'sections', 'styles', 'thumbnails'),
     [switch]$CleanBuildFiles
 )
 
 $ErrorActionPreference = 'Stop'
+
+if ([string]::IsNullOrWhiteSpace($MirrorRoot)) {
+    throw 'Set MEA_OVERLEAF_MIRROR or pass -MirrorRoot to the Overleaf mirror checkout.'
+}
 
 function Resolve-RequiredPath {
     param(

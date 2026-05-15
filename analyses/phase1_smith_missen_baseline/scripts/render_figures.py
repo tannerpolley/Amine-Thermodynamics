@@ -66,7 +66,7 @@ def normalize_svg(path: Path) -> None:
     path.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")
 
 
-def _write_curated_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
+def _write_curated_tables() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     pressure_results = require_csv("phase1_pressure_results.csv")
     pressure_metrics = require_csv("phase1_pressure_metrics.csv")
@@ -74,6 +74,9 @@ def _write_curated_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
     speciation_metrics = require_csv("phase1_speciation_metrics.csv")
     parameter_table = require_csv("phase1_parameter_table.csv")
     reaction_table = require_csv("phase1_reaction_constant_table.csv")
+    residual_acceptance_audit = require_csv("phase1_residual_acceptance_audit.csv")
+    for flag_column in ("passes", "claim_allowed"):
+        residual_acceptance_audit[flag_column] = residual_acceptance_audit[flag_column].astype(str).str.lower()
     for frame, name in (
         (pressure_results, "phase1_pressure_results.csv"),
         (pressure_metrics, "phase1_pressure_metrics.csv"),
@@ -81,9 +84,10 @@ def _write_curated_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
         (speciation_metrics, "phase1_speciation_metrics.csv"),
         (parameter_table, "phase1_parameter_table.csv"),
         (reaction_table, "phase1_reaction_constant_table.csv"),
+        (residual_acceptance_audit, "phase1_residual_acceptance_audit.csv"),
     ):
         frame.to_csv(OUT_DIR / name, index=False)
-    return pressure_results, speciation_results
+    return pressure_results, speciation_results, residual_acceptance_audit
 
 
 def plot_pressure(pressure_results: pd.DataFrame) -> None:
@@ -181,10 +185,11 @@ def plot_pressure(pressure_results: pd.DataFrame) -> None:
 
 
 def plot_speciation(speciation_results: pd.DataFrame) -> None:
-    title = "Phase 1 Smith-Missen baseline speciation reproduction"
+    title = "Phase 1 Smith-Missen baseline speciation diagnostic"
     description = (
         "Measured 30 wt% MEA speciation points at 20 C and 40 C are compared against the retained ideal/apparent "
-        "Smith-Missen baseline for the major apparent species. Trace-species diagnostics are reported in the metrics table."
+        "Smith-Missen baseline for major apparent species. The residual audit, not this diagnostic plot, controls "
+        "whether any species can be cited as validated."
     )
     temperatures = sorted(speciation_results["temperature_C"].dropna().unique())
     fig, axes = plt.subplots(1, len(temperatures), figsize=PHASE1_SPECIATION_FIGSIZE, sharey=True)
@@ -243,14 +248,22 @@ def plot_speciation(speciation_results: pd.DataFrame) -> None:
         bbox_to_anchor=(0.5, 0.0),
     )
     fig.subplots_adjust(left=0.08, right=0.98, top=0.82, bottom=0.26, wspace=0.12)
-    png = OUT_DIR / "phase1_speciation_vs_loading.png"
-    svg = OUT_DIR / "phase1_speciation_vs_loading.svg"
+    for old_name in (
+        "phase1_speciation_vs_loading.png",
+        "phase1_speciation_vs_loading.svg",
+        "phase1_speciation_vs_loading.mpl.yaml",
+    ):
+        old_path = OUT_DIR / old_name
+        if old_path.exists():
+            old_path.unlink()
+    png = OUT_DIR / "phase1_speciation_vs_loading_diagnostic.png"
+    svg = OUT_DIR / "phase1_speciation_vs_loading_diagnostic.svg"
     fig.savefig(png, dpi=300, bbox_inches="tight")
     fig.savefig(svg, bbox_inches="tight")
     normalize_svg(svg)
     plt.close(fig)
     write_mpl_sidecar(
-        OUT_DIR / "phase1_speciation_vs_loading.mpl.yaml",
+        OUT_DIR / "phase1_speciation_vs_loading_diagnostic.mpl.yaml",
         png_name=png.name,
         svg_name=svg.name,
         title=title,
@@ -259,10 +272,65 @@ def plot_speciation(speciation_results: pd.DataFrame) -> None:
     )
 
 
+def write_phase1_reports(residual_acceptance_audit: pd.DataFrame) -> None:
+    failed = residual_acceptance_audit[
+        (residual_acceptance_audit["passes"].astype(str).str.lower() != "true")
+        | (residual_acceptance_audit["claim_allowed"].astype(str).str.lower() != "true")
+    ]
+    failed_targets = (
+        failed[["target_family", "temperature_C", "species_or_property"]]
+        .drop_duplicates()
+        .sort_values(["target_family", "temperature_C", "species_or_property"])
+    )
+    failed_lines = [
+        f"- {row.target_family}: {row.species_or_property} at {row.temperature_C}"
+        for row in failed_targets.itertuples(index=False)
+    ]
+    if not failed_lines:
+        failed_lines = ["- No residual acceptance failures were detected by this audit."]
+
+    lineage = """# Phase 1 Model Lineage
+
+lineage_status: retained_baseline_audit
+phase1_status: model_ran_but_failed_validation
+
+This artifact is a retained-baseline audit, not an independent Smith-Missen reproduction. It copies the repo's historical six-species apparent-equilibrium pressure/speciation outputs and the neutral ePC-SAFT parity outputs into a Phase 1 comparison surface.
+
+The analysis records the Baygi/Nasrifar-style reaction-constant table and selected neutral parameter options, but the retained solver does not solve the full five-reaction explicit-ion Smith-Missen problem in this Phase 1 script. Claims must therefore be limited by `phase1_residual_acceptance_audit.csv`.
+"""
+    (OUT_DIR / "phase1_model_lineage.md").write_text(lineage, encoding="utf-8")
+
+    claim_boundary = "\n".join(
+        [
+            "# Phase 1 Claim Boundary",
+            "",
+            "phase1_status: model_ran_but_failed_validation",
+            "lineage_status: retained_baseline_audit",
+            "",
+            "Allowed claims:",
+            "- The retained baseline artifacts were regenerated and audited against explicit pressure and speciation residual gates.",
+            "- Pressure comparisons may be discussed only where `phase1_residual_acceptance_audit.csv` has `claim_allowed=true`.",
+            "- Speciation comparisons may be discussed only as species-specific retained-baseline diagnostics unless the audit row for that species has `claim_allowed=true`.",
+            "",
+            "Forbidden claims:",
+            "- Do not claim Phase 1 has passed validation.",
+            "- Do not claim an independent full five-reaction Smith-Missen reproduction.",
+            "- Do not use trace or unsupported species as successful validation evidence.",
+            "- Do not promote this retained-baseline audit to a finalized joint-regression parameter set.",
+            "",
+            "Residual-gate failures or diagnostic-only targets:",
+            *failed_lines,
+            "",
+        ]
+    )
+    (OUT_DIR / "phase1_claim_boundary.md").write_text(claim_boundary, encoding="utf-8")
+
+
 def main() -> int:
-    pressure_results, speciation_results = _write_curated_tables()
+    pressure_results, speciation_results, residual_acceptance_audit = _write_curated_tables()
     plot_pressure(pressure_results)
     plot_speciation(speciation_results)
+    write_phase1_reports(residual_acceptance_audit)
     print(f"Phase 1 curated artifacts: {OUT_DIR}")
     return 0
 

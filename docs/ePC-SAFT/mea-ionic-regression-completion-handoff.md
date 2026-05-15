@@ -4,7 +4,7 @@
 
 **Goal:** Finish the full ionic MEA-CO2-H2O ePC-SAFT regression workflow so the manuscript can honestly claim a package-backed reactive electrolyte VLE/speciation calculation with fitted MEA-system parameters.
 
-**Architecture:** MEA-Thermodynamics is the downstream consumer and evidence repo. `C:\Users\Tanner\Documents\git\ePC-SAFT` is the upstream package repo that owns reusable solver, regression, and diagnostics capabilities. The MEA repo should keep domain data, target construction, artifacts, manuscript text, and acceptance checks; the ePC-SAFT package should own generic reactive-electrolyte equilibrium, sweeps, regression terms, and fast/robust solver internals.
+**Architecture:** MEA-Thermodynamics is the downstream consumer and evidence repo. `<upstream-ePC-SAFT>` is the upstream package repo that owns reusable solver, regression, and diagnostics capabilities. The MEA repo should keep domain data, target construction, artifacts, manuscript text, and acceptance checks; the ePC-SAFT package should own generic reactive-electrolyte equilibrium, sweeps, regression terms, and fast/robust solver internals.
 
 **Tech Stack:** Windows PowerShell, `uv`, Python 3.13, local `epcsaft` package, SciPy least squares, Matplotlib artifacts, LaTeX manuscript mirror.
 
@@ -15,13 +15,13 @@
 Run downstream commands from:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+cd <repo-root>
 ```
 
 Use this upstream package path for package fixes:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\ePC-SAFT
+cd <upstream-ePC-SAFT>
 ```
 
 Current downstream workflow:
@@ -68,7 +68,7 @@ The package API surface is now present in the downstream environment:
 
 ```text
 epcsaft version: 1.5.0
-epcsaft package path: C:\Users\Tanner\Documents\git\MEA-Thermodynamics\.venv\Lib\site-packages\epcsaft\__init__.py
+epcsaft package path: <repo-root>\.venv\Lib\site-packages\epcsaft\__init__.py
 ReactiveSpeciationOptions: present
 ReactiveElectrolyteBubbleOptions: present
 solve_reactive_speciation: present
@@ -165,13 +165,13 @@ analyses/epcsaft_ionic_regression/results/summary/ionic_evaluation_summary.json
 Upstream package files to inspect first:
 
 ```text
-C:\Users\Tanner\Documents\git\ePC-SAFT\src\epcsaft\equilibrium.py
-C:\Users\Tanner\Documents\git\ePC-SAFT\src\epcsaft\regression.py
-C:\Users\Tanner\Documents\git\ePC-SAFT\src\epcsaft\bindings.cpp
-C:\Users\Tanner\Documents\git\ePC-SAFT\src\epcsaft\native\epcsaft_chemical_equilibrium.cpp
-C:\Users\Tanner\Documents\git\ePC-SAFT\src\epcsaft\native\epcsaft_equilibrium.cpp
-C:\Users\Tanner\Documents\git\ePC-SAFT\tests\api\test_reactive_speciation.py
-C:\Users\Tanner\Documents\git\ePC-SAFT\docs\pages\electrolyte_vle_reactive_workflow.rst
+<upstream-ePC-SAFT>\src\epcsaft\equilibrium.py
+<upstream-ePC-SAFT>\src\epcsaft\regression.py
+<upstream-ePC-SAFT>\src\epcsaft\bindings.cpp
+<upstream-ePC-SAFT>\src\epcsaft\native\epcsaft_chemical_equilibrium.cpp
+<upstream-ePC-SAFT>\src\epcsaft\native\epcsaft_equilibrium.cpp
+<upstream-ePC-SAFT>\tests\api\test_reactive_speciation.py
+<upstream-ePC-SAFT>\docs\pages\electrolyte_vle_reactive_workflow.rst
 ```
 
 ## Exact Commands To Run
@@ -179,7 +179,7 @@ C:\Users\Tanner\Documents\git\ePC-SAFT\docs\pages\electrolyte_vle_reactive_workf
 ### 1. Capture Downstream State
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+cd <repo-root>
 git status --short
 git rev-parse --show-toplevel HEAD --abbrev-ref HEAD
 uv --version
@@ -350,7 +350,7 @@ No new canonical artifacts appear under top-level out/.
 ### 9. Build Manuscript After Final Metrics Are Ready
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics\docs\latex
+cd <repo-root>\docs\latex
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
@@ -365,7 +365,7 @@ The text does not claim a final converged regression until the acceptance gates 
 Sync to the Overleaf-connected mirror only after the source build is good:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+cd <repo-root>
 powershell -NoProfile -ExecutionPolicy Bypass -File docs\latex\sync_to_overleaf_mirror.ps1
 ```
 
@@ -456,7 +456,7 @@ Return per-record diagnostics and timing.
 Downstream proof command after the package fix:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+cd <repo-root>
 uv run python -m MEA.epcsaft_ionic.regress_parameters --max-vle-records 18 --max-speciation-records 18 --max-nfev 24 --verbose
 ```
 
@@ -519,7 +519,7 @@ The MEA repo uses Python 3.13 through uv. Package-side C++/pybind changes must b
 Required package commands:
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\ePC-SAFT
+cd <upstream-ePC-SAFT>
 uv sync
 uv run python scripts\build_epcsaft.py
 uv run python -c "import epcsaft; import epcsaft.regression; print(epcsaft.__version__)"
@@ -647,9 +647,9 @@ Use this contract in a GitHub issue, GitHub discussion, handoff comment, or dire
 
 ```text
 Coordination contract:
-- Upstream package: ePC-SAFT (C:\Users\Tanner\Documents\git\ePC-SAFT)
+- Upstream package: ePC-SAFT (<upstream-ePC-SAFT>)
 - Upstream fixer thread: unknown unless user provides one
-- Downstream consumer: MEA-Thermodynamics (C:\Users\Tanner\Documents\git\MEA-Thermodynamics)
+- Downstream consumer: MEA-Thermodynamics (<repo-root>)
 - Downstream tester thread: current MEA regression completion thread
 - Shared discussion: <issue/discussion URL or local handoff path>
 - Baseline: <timestamp and latest downstream command output processed>
