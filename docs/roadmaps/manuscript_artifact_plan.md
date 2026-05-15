@@ -68,6 +68,6 @@ The file-level companion manifest `data/reference/MEA/manifests/figure_artifact_
 
 Publication-facing final figures must all identify one final parameter artifact. The current selected artifact is `promoted_ionic_fit`; the global pressure/speciation fit did not complete and must not be described as a final globally regressed parameter set.
 
-Latest claim/path audit: manuscript source sections contain no local Windows paths or Codex/worktree language in the checked text. Roadmap-local references to the missing dev worktree are retained only as development dependency notes, not submission claims.
+Latest claim/path audit: manuscript source sections contain no local Windows paths or Codex/worktree language in the checked text. Roadmap-local package notes now point routine downstream validation at the pinned `epcsaft` Git dependency, with local worktrees reserved for explicit co-development.
 
 No roadmap or manuscript text should paste full article text. Extract source data from `docs/papers/md/` into machine-readable files and cite only the extracted data/provenance needed for the claim.

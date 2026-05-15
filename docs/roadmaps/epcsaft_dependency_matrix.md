@@ -18,6 +18,23 @@ MEA-Thermodynamics must use generic ePC-SAFT APIs. It must not request applicati
 | Generic regression backend | ePC-SAFT | 3 | coupled regression | current `global_regression_summary.json` says package native fit did not complete; Phase 3 blocked |
 | Literature benchmark suite | ePC-SAFT | 2-3 | package confidence | expected Task L / #95 dependency; MEA owns only MEA-specific validation |
 
+## Phase 2 package inspection on 2026-05-15
+
+The current MEA environment imports `epcsaft` version `1.5.2` from a stable pinned Git dependency:
+
+`epcsaft @ git+https://github.com/tannerpolley/ePC-SAFT.git@e9510abae528016bd2513f12069fc0534b252bea`
+
+`uv run python scripts/check_epcsaft_integration.py` reports `source kind: pinned_git` at commit `e9510abae528016bd2513f12069fc0534b252bea`.
+
+| Issue #5 capability | Current package status | Phase 2 action |
+|---|---|---|
+| Generic activity-based speciation | API present but runtime-blocked on the pinned dependency for activity-coupled standard states: `solve_reactive_speciation` raises `backend_unavailable` for the native activity/concentration residual Jacobian path. | Track upstream issue #115; do not add a MEA-owned nonlinear solver workaround. |
+| Generic VLE/fugacity equilibrium | Present: `electrolyte_bubble` and `ElectrolyteBubbleResult` are importable; package capabilities list reactive electrolyte bubble pressure for fixed liquid composition with neutral vapor species. | Use for volatile `CO2`, `H2O`, and `MEA`; ions remain liquid-only. |
+| Reaction constant convention layer | Partial: `ReactionDefinition` accepts `standard_state` and convention metadata; no `ReactionSet` symbol is exposed. | Keep MEA reaction-source mapping local and block unsupported apparent-to-activity conversion. |
+| Implicit solved-state sensitivities | Partial: package capabilities report production speciation implicit sensitivities, but bubble-pressure implicit sensitivities are still unavailable. | Do not claim Phase 3-quality coupled derivative coverage from Phase 2. |
+| Generic TargetDataset schema | Present: `TargetDataset`, `ReactiveElectrolyteBatch`, `ReactiveElectrolyteRow`, and `ReactiveRegressionObjective` are importable. | Use for future target-row construction; keep MEA data ownership downstream. |
+| Generic regression backend | Present but not a Phase 2 claim: reactive electrolyte batch regression status fields are exposed, while current MEA global artifacts still show package fit not completed. | Keep Phase 3 regression blocked until a coupled package fit passes approval gates. |
+
 ## Do not implement in MEA-Thermodynamics
 
 - residual Helmholtz equation internals,
@@ -41,9 +58,9 @@ MEA-Thermodynamics must use generic ePC-SAFT APIs. It must not request applicati
 
 The repo has an explicit integration contract at `integration/epcsaft_contract.json` and a checker at `scripts/check_epcsaft_integration.py`.
 
-Current local development still uses a machine-local ePC-SAFT worktree path in `pyproject.toml`/`uv.lock`. That is acceptable for `dev` mode but not for final manuscript or archive results. See `docs/roadmaps/reproducibility_dependency_note.md`.
+Current local development uses the stable-mode pinned Git dependency in `pyproject.toml` and `uv.lock`. Use the local `epcsaft-dev` worktree only for intentional upstream/downstream co-development, not routine downstream validation. See `docs/roadmaps/reproducibility_dependency_note.md`.
 
-Current 2026-05-13 blocker: the configured dev path `C:\Users\Tanner\.codex\worktrees\epcsaft-dev\ePC-SAFT` is missing. Package-dependent Phase 2/3 work must stay blocked until that path is restored or `epcsaft` is repinned and the integration checker passes.
+Current 2026-05-15 status: stable integration validation passes against the pinned Git dependency. Final manuscript or archive results still require final-mode validation, but they no longer depend on a mutable local package path.
 
 Phase status:
 

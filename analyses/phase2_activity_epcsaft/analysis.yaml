@@ -1,0 +1,30 @@
+id: phase2_activity_epcsaft
+title: Phase 2 Activity-Based ePC-SAFT Evaluation
+status: active
+summary: True-species MEA-CO2-H2O Phase 2 workflow scaffold with convention-safe reaction constants and one parameter artifact.
+owner: project
+inputs:
+  - path: data/reference/MEA/manifests/phase2_reaction_constant_manifest.csv
+    kind: reaction_constant_manifest
+  - path: data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2
+    kind: parameter_artifact
+outputs:
+  - path: analyses/phase2_activity_epcsaft/results/phase2_activity_speciation_problem.json
+    kind: problem_definition
+  - path: analyses/phase2_activity_epcsaft/results/phase2_comparison_to_phase1.md
+    kind: status_comparison
+  - path: analyses/phase2_activity_epcsaft/results/phase2_required_output_status.csv
+    kind: output_status
+commands:
+  generate:
+    - uv run python analyses/phase2_activity_epcsaft/scripts/generate_data.py
+runtime:
+  quick_seconds: 5
+  full_seconds: null
+tracked_results:
+  - analyses/phase2_activity_epcsaft/results/phase2_activity_speciation_problem.json
+  - analyses/phase2_activity_epcsaft/results/phase2_comparison_to_phase1.md
+  - analyses/phase2_activity_epcsaft/results/phase2_required_output_status.csv
+references:
+  - docs/roadmaps/phase2_activity_speciation_design.md
+  - docs/roadmaps/phase2_reaction_constant_basis.md

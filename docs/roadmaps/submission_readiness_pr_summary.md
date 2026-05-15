@@ -54,16 +54,16 @@ This tranche advances MEA-Thermodynamics submission readiness without requiring 
 - Roadmaps continue to state that Phase 3/global regression is not complete.
 - Manuscript source sections were checked for local Windows/Codex/worktree leakage and Phase 3 acceptance overclaims; matches are limited to roadmap dependency notes or explicit blocked-status language.
 
-## ePC-SAFT package blocker
+## ePC-SAFT package status
 
-The configured dev dependency path is missing:
+Superseded 2026-05-15: the downstream dependency has been repinned to stable mode:
 
 ```powershell
-Test-Path C:\Users\Tanner\.codex\worktrees\epcsaft-dev\ePC-SAFT
-# False
+uv run python scripts\check_epcsaft_integration.py
+# source kind: pinned_git
 ```
 
-`pyproject.toml` and `uv.lock` both point `epcsaft` at that worktree-backed path. Package-dependent Phase 2/3 work stays blocked until the dev worktree is restored or `epcsaft` is repinned.
+`pyproject.toml` and `uv.lock` now point `epcsaft` at `git+https://github.com/tannerpolley/ePC-SAFT.git@e9510abae528016bd2513f12069fc0534b252bea`. Package-dependent Phase 2/3 work should use the stable-mode pinned Git dependency unless intentional local upstream/downstream co-development is explicitly requested.
 
 This tranche does not request MEA-specific public APIs from `epcsaft`. Package-side blockers are generic ePC-SAFT solver/regression/readiness dependencies.
 
@@ -72,10 +72,8 @@ This tranche does not request MEA-specific public APIs from `epcsaft`. Package-s
 Run from the repository root:
 
 ```powershell
-Test-Path C:\Users\Tanner\.codex\worktrees\epcsaft-dev\ePC-SAFT
 uv sync
-uv run python scripts/check_epcsaft_integration.py --mode dev --self-only
-uv run python scripts/check_epcsaft_integration.py --mode dev
+uv run python scripts/check_epcsaft_integration.py
 uv run python scripts/check_epcsaft_integration.py --mode final
 ```
 
@@ -91,5 +89,5 @@ Only after those pass should a later GoalBuddy run attempt package-dependent Pha
 
 ## Validation intentionally skipped
 
-- ePC-SAFT integration and package-dependent validation were skipped because the configured dev worktree path is missing.
+- ePC-SAFT integration is now available through the stable pinned Git dependency; final-mode validation is still required before publication/archive claims.
 - No web search was performed for source-pending pH/electrochemical or direct ionic-activity data.

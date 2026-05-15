@@ -12,6 +12,7 @@ GENERATE_SCRIPTS = [
     ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "generate_data.py",
     ROOT / "analyses" / "2015_baygi" / "scripts" / "generate_data.py",
     ROOT / "analyses" / "phase1_smith_missen_baseline" / "scripts" / "generate_data.py",
+    ROOT / "analyses" / "phase2_activity_epcsaft" / "scripts" / "generate_data.py",
     ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "evaluate_train_validation_split.py",
     ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "compute_parameter_sensitivity.py",
     ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "fit_trace_carbonate_born.py",

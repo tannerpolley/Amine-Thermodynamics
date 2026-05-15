@@ -1,0 +1,11 @@
+artifact,status,blocking_requirement,next_action
+phase2_activity_speciation_problem.json,generated,none,Use as the source problem definition for the next implementation slice.
+phase2_equilibrium_results.csv,blocked_upstream_solver_backend_unavailable,upstream ePC-SAFT issue #115 native activity-coupled speciation support,Rerun after upstream issue #115 exposes the required activity-coupled solver path.
+phase2_pressure_speciation_parity.csv,blocked_pending_phase2_equilibrium_results,phase2_equilibrium_results.csv,Generate only from convention-safe Phase 2 equilibrium rows.
+phase2_pressure_metrics.csv,blocked_pending_phase2_equilibrium_results,phase2_equilibrium_results.csv,Compute only after pressure predictions exist.
+phase2_speciation_metrics.csv,blocked_pending_phase2_equilibrium_results,phase2_equilibrium_results.csv,Compute only after speciation predictions exist.
+phase2_pH_validation.csv,blocked_source_data_missing,convention-compatible pH data and activity-state mapping,Use pH only as validation/anchor data after scale and method are recorded.
+phase2_density_viscosity_validation.csv,data_available_model_not_evaluated,Phase 2 liquid states and validation formulas,Use Amundsen density/viscosity only as an external validation or regularization candidate.
+phase2_comparison_to_phase1.md,generated,none,Update after convention-safe Phase 2 equilibrium outputs exist.
+phase2_dielectric_policy,schema_only_no_observations,direct MEA-H2O dielectric/permittivity observations,Keep MEA f_solv fixed or sensitivity-only until direct evidence exists.
+phase2_ionic_activity_policy,blocked_source_data_missing,direct MEAH+ or MEACOO- salt osmotic/activity data,Do not treat analog electrolyte data as direct MEA ion evidence.

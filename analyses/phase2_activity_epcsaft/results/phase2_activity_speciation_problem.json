@@ -1,0 +1,132 @@
+{
+  "analysis": "phase2_activity_epcsaft",
+  "status": "problem_definition_ready_upstream_solver_backend_blocks_activity_solve",
+  "species": [
+    "CO2",
+    "MEA",
+    "H2O",
+    "MEAH+",
+    "MEACOO-",
+    "HCO3-",
+    "CO3^2-",
+    "H3O+",
+    "OH-"
+  ],
+  "charges": {
+    "CO2": 0,
+    "MEA": 0,
+    "H2O": 0,
+    "MEAH+": 1,
+    "MEACOO-": -1,
+    "HCO3-": -1,
+    "CO3^2-": -2,
+    "H3O+": 1,
+    "OH-": -1
+  },
+  "volatile_species": [
+    "CO2",
+    "H2O",
+    "MEA"
+  ],
+  "nonvolatile_species": [
+    "MEAH+",
+    "MEACOO-",
+    "HCO3-",
+    "CO3^2-",
+    "H3O+",
+    "OH-"
+  ],
+  "balances": {
+    "total_amine": {
+      "MEA": 1.0,
+      "MEAH+": 1.0,
+      "MEACOO-": 1.0
+    },
+    "total_carbon": {
+      "CO2": 1.0,
+      "MEACOO-": 1.0,
+      "HCO3-": 1.0,
+      "CO3^2-": 1.0
+    },
+    "charge": {
+      "MEAH+": 1.0,
+      "H3O+": 1.0,
+      "MEACOO-": -1.0,
+      "HCO3-": -1.0,
+      "CO3^2-": -2.0,
+      "OH-": -1.0
+    }
+  },
+  "activity_convention": {
+    "needed_basis": "thermodynamic_activity",
+    "current_manifest_conversion_status": [
+      "thermodynamic_activity"
+    ],
+    "candidate_manifest": "data/reference/MEA/manifests/phase2_activity_constant_candidates.csv",
+    "candidate_status_counts": {
+      "promoted_reference_state_verified": 5
+    },
+    "solve_policy": "do_not_run_activity_solve_until_upstream_issue_115_activity_backend_is_available"
+  },
+  "parameter_artifact": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2",
+  "dielectric_option": "sensitivity_only_unless_direct_MEA_H2O_dielectric_evidence_supports_fit",
+  "born_option": "advanced_Born_SSM_DS_with_promoted_regularized_carbonate_pair",
+  "solver_route": [
+    "Build true-species problem definition from this JSON and the reaction manifest.",
+    "Use epcsaft.solve_reactive_speciation only after upstream activity-coupled solver support is available.",
+    "Use package electrolyte bubble/fugacity support for volatile species after a liquid state is convention-safe.",
+    "Record package/data blockers explicitly instead of adding downstream workarounds."
+  ],
+  "reactions": [
+    {
+      "reaction_id": "R1",
+      "source": "Austgen1991_TableV_verified",
+      "basis_in_source": "unsymmetric_mole_fraction_activity_h3o_basis",
+      "activity_basis_needed": "thermodynamic_activity",
+      "conversion_status": "thermodynamic_activity",
+      "used_in_phase2": "fixed_input_pending_upstream_activity_solver",
+      "regularization_role_in_phase3": "fixed_constant_after_conversion",
+      "notes": "Austgen 1991 verifies the unsymmetric standard-state convention and mole-fraction activity expression for the H3O+ water-autoprotolysis basis; use is blocked only by upstream activity-coupled solver support."
+    },
+    {
+      "reaction_id": "R2",
+      "source": "Austgen1991_TableV_verified",
+      "basis_in_source": "unsymmetric_mole_fraction_activity_h3o_basis",
+      "activity_basis_needed": "thermodynamic_activity",
+      "conversion_status": "thermodynamic_activity",
+      "used_in_phase2": "fixed_input_pending_upstream_activity_solver",
+      "regularization_role_in_phase3": "fixed_constant_after_conversion",
+      "notes": "Austgen 1991 verifies the CO2 + 2H2O -> HCO3- + H3O+ constant on the unsymmetric mole-fraction activity basis; use is blocked only by upstream activity-coupled solver support."
+    },
+    {
+      "reaction_id": "R3",
+      "source": "Austgen1991_TableV_verified",
+      "basis_in_source": "unsymmetric_mole_fraction_activity_h3o_basis",
+      "activity_basis_needed": "thermodynamic_activity",
+      "conversion_status": "thermodynamic_activity",
+      "used_in_phase2": "fixed_input_pending_upstream_activity_solver",
+      "regularization_role_in_phase3": "fixed_constant_after_conversion",
+      "notes": "Austgen 1991 verifies the HCO3- + H2O -> CO3^2- + H3O+ constant on the unsymmetric mole-fraction activity basis; carbonate activity behavior remains a Phase 2/3 sensitivity risk."
+    },
+    {
+      "reaction_id": "R4",
+      "source": "Austgen1991_TableV_verified",
+      "basis_in_source": "unsymmetric_mole_fraction_activity_h3o_basis",
+      "activity_basis_needed": "thermodynamic_activity",
+      "conversion_status": "thermodynamic_activity",
+      "used_in_phase2": "fixed_input_pending_upstream_activity_solver",
+      "regularization_role_in_phase3": "fixed_constant_after_conversion",
+      "notes": "Austgen 1991 verifies MEA carbamate reversion to bicarbonate as reaction 7a with a fitted VLE-data constant on the same unsymmetric mole-fraction activity basis; no Tong molality conversion is used in Phase 2."
+    },
+    {
+      "reaction_id": "R5",
+      "source": "Austgen1991_TableV_verified",
+      "basis_in_source": "unsymmetric_mole_fraction_activity_h3o_basis",
+      "activity_basis_needed": "thermodynamic_activity",
+      "conversion_status": "thermodynamic_activity",
+      "used_in_phase2": "fixed_input_pending_upstream_activity_solver",
+      "regularization_role_in_phase3": "fixed_constant_after_conversion",
+      "notes": "Austgen 1991 verifies protonated MEA dissociation as reaction 6a and states the constant is corrected to the pure amine reference state; use is blocked only by upstream activity-coupled solver support."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+requirement,status,evidence,notes
+true_species_basis,ready,docs/roadmaps/phase2_activity_speciation_design.md,Nine liquid species and three volatile vapor species are documented.
+one_parameter_artifact,ready,data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2,The Phase 2 parameter artifact is separated from earlier ionic-fit outputs.
+activity_reaction_constants,ready_reference_state_verified,data/reference/MEA/manifests/phase2_reaction_constant_manifest.csv,5 of 5 constants are source-verified for thermodynamic-activity use.
+activity_constant_candidates,promoted_austgen_reference_state_verified,data/reference/MEA/manifests/phase2_activity_constant_candidates.csv,R1-R5 have Austgen Table V constants on the unsymmetric mole-fraction activity H3O+ basis; equilibrium rows remain blocked by upstream solver support.
+vle_fugacity_route,package_route_documented,docs/roadmaps/epcsaft_dependency_matrix.md,Use generic reactive speciation and electrolyte bubble/fugacity support; do not add MEA-specific package APIs.
+phase3_claim_boundary,ready,docs/roadmaps/phase2_activity_speciation_design.md,"Phase 2 is an activity-based evaluation, not a final coupled regression."
