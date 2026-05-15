@@ -1,7 +1,7 @@
 id: phase2_activity_epcsaft
 title: Phase 2 Activity-Based ePC-SAFT Evaluation
 status: active
-summary: True-species MEA-CO2-H2O Phase 2 workflow scaffold with convention-safe reaction constants and one parameter artifact.
+summary: True-species MEA-CO2-H2O Phase 2 native ePC-SAFT activity-equilibrium run with solver-success-only curves and target-role residual-gated claims.
 owner: project
 inputs:
   - path: data/reference/MEA/manifests/phase2_reaction_constant_manifest.csv
@@ -17,20 +17,49 @@ outputs:
     kind: status_comparison
   - path: analyses/phase2_activity_epcsaft/results/phase2_required_output_status.csv
     kind: output_status
-  - path: analyses/phase2_activity_epcsaft/results/phase2_bounded_incomplete_report.md
-    kind: bounded_incomplete_report
+  - path: analyses/phase2_activity_epcsaft/results/phase2_solver_claim_boundary_report.md
+    kind: solver_and_claim_boundary_report
+  - path: analyses/phase2_activity_epcsaft/results/phase2_speciation_reference_points.csv
+    kind: reference_target_table
+  - path: analyses/phase2_activity_epcsaft/results/phase2_speciation_target_roles.csv
+    kind: target_role_validation_table
+  - path: analyses/phase2_activity_epcsaft/results/phase2_equilibrium_results.csv
+    kind: native_solver_speciation_rows
+  - path: analyses/phase2_activity_epcsaft/results/phase2_pressure_results.csv
+    kind: native_solver_pressure_rows
+  - path: analyses/phase2_activity_epcsaft/results/phase2_residual_acceptance_audit.csv
+    kind: claim_gate_audit
+  - path: analyses/phase2_activity_epcsaft/results/phase2_speciation_activity_curves.csv
+    kind: native_solver_curve_rows
 commands:
   generate:
     - uv run python analyses/phase2_activity_epcsaft/scripts/generate_data.py
+  render:
+    - uv run python analyses/phase2_activity_epcsaft/scripts/render_figures.py
 runtime:
-  quick_seconds: 5
-  full_seconds: null
+  quick_seconds: null
+  full_seconds: 420
 tracked_results:
   - analyses/phase2_activity_epcsaft/results/phase2_activity_speciation_problem.json
   - analyses/phase2_activity_epcsaft/results/phase2_comparison_to_phase1.md
   - analyses/phase2_activity_epcsaft/results/phase2_required_output_status.csv
-  - analyses/phase2_activity_epcsaft/results/phase2_bounded_incomplete_report.md
+  - analyses/phase2_activity_epcsaft/results/phase2_solver_claim_boundary_report.md
   - analyses/phase2_activity_epcsaft/results/phase2_reaction_constant_source_verification.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_speciation_reference_points.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_speciation_target_roles.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_equilibrium_results.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_pressure_results.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_pressure_speciation_parity.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_pressure_metrics.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_speciation_metrics.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_solver_diagnostics.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_residual_acceptance_audit.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_speciation_activity_curves.csv
+figures:
+  speciation:
+    input: analyses/phase2_activity_epcsaft/figures/speciation/input
+    output: analyses/phase2_activity_epcsaft/figures/speciation/output
+    scripts: analyses/phase2_activity_epcsaft/figures/speciation/scripts
 references:
   - docs/roadmaps/phase2_activity_speciation_design.md
   - docs/roadmaps/phase2_reaction_constant_basis.md

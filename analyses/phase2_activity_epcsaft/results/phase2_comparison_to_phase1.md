@@ -1,7 +1,12 @@
 # Phase 2 Comparison To Phase 1
 
-Phase 1 is a retained ideal/apparent Smith-Missen baseline audit. It uses documented reaction constants without ePC-SAFT activity coefficients, but it is not an independent completed reproduction.
+Phase 1 now solves the explicit five-reaction, nine-species ideal Smith-Missen speciation system with documented reaction constants and activities set equal to mole fractions. It remains distinct from Phase 2 because Phase 2 requires ePC-SAFT activity coefficients and package-native residual/source-validation gates.
 
-Phase 2 uses the nine-species liquid basis and one ePC-SAFT parameter artifact. The current Phase 2 output is a source-verified problem definition and bounded-incomplete scaffold, not a claimed activity-based equilibrium result, because the pinned upstream ePC-SAFT package lacks the required native activity-coupled speciation backend tracked in upstream issue #115.
+Phase 2 now uses pinned ePC-SAFT commit `9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785` and the native activity-coupled reactive speciation / reactive electrolyte bubble route. The generated rows are real solver outputs, not scaffold or diagnostic curves.
 
-Next required implementation: generate pressure/speciation tables only after upstream issue #115 lands in a pinned ePC-SAFT dependency, or keep the package blocker explicit.
+phase2_status: model_ran_success
+phase2_validation_status: validated
+
+Phase 2 activity-evaluation claims are controlled by `phase2_residual_acceptance_audit.csv`. Failed gates:
+
+- none

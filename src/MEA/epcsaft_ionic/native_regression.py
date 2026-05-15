@@ -162,12 +162,14 @@ def build_speciation_target_rows(targets: Iterable[SpeciationTarget]) -> list[di
                     "speciation": target_speciation,
                 },
                 "target_speciation": target_speciation,
+                "target_roles": dict(target.target_roles),
                 "source": source,
                 "split": _speciation_split(source),
                 "metadata": {
                     "target_family": "speciation",
                     "co2_loading": float(target.loading),
                     "temperature_C": float(target.T) - 273.15,
+                    "target_roles": dict(target.target_roles),
                 },
             }
         )

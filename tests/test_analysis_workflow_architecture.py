@@ -25,6 +25,7 @@ RENDER_SCRIPTS = [
     ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "render_figures.py",
     ROOT / "analyses" / "2015_baygi" / "scripts" / "render_figures.py",
     ROOT / "analyses" / "phase1_smith_missen_baseline" / "scripts" / "render_figures.py",
+    ROOT / "analyses" / "phase2_activity_epcsaft" / "scripts" / "render_figures.py",
 ]
 
 
@@ -80,6 +81,28 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
         self.assertIn("epcsaft_neutral_parity", source)
         self.assertNotIn("compute_jou_metrics", source)
         self.assertNotIn("compute_neutral_parity", source)
+
+    def test_phase1_phase2_figures_have_architecture_owned_io_folders(self) -> None:
+        required = [
+            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "pressure" / "input" / "source_manifest.csv",
+            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "pressure" / "output" / "phase1_pressure_plot_data.csv",
+            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "pressure" / "scripts" / "render_figure.py",
+            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "speciation" / "input" / "source_manifest.csv",
+            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "speciation" / "output" / "phase1_speciation_40C_plot_data.csv",
+            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "speciation" / "scripts" / "render_figure.py",
+            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "input" / "source_manifest.csv",
+            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_reference_points.csv",
+            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_target_roles.csv",
+            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_activity_curves.csv",
+            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C_plot_data.csv",
+            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.png",
+            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.svg",
+            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.mpl.yaml",
+            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "scripts" / "render_figure.py",
+        ]
+        for path in required:
+            with self.subTest(path=path):
+                self.assertTrue(path.exists(), path)
 
 
 if __name__ == "__main__":

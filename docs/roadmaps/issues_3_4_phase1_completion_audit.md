@@ -36,8 +36,8 @@ Scores use a 10-point scale. The visual score covers figure, table, and presenta
 | Issue #4 parameter audit | 9.4 | 9.1 | 9.0 | 9.5 | Baygi 3B MEA / 4C water and `k_ij=-0.0520` are separated from the retained repo parity path. |
 | Issue #4 reaction-constant audit | 9.5 | 9.2 | 9.0 | 9.6 | R1--R5 include mole-fraction basis, temperature function, source, and conversion status. |
 | Issue #4 Smith-Missen pressure baseline | 9.2 | 9.3 | 9.1 | 9.4 | Pressure metrics and parity curves reproduce the retained baseline, and the revised figure separates temperature and role legends. |
-| Issue #4 Smith-Missen speciation baseline | 9.0 | 9.1 | 9.0 | 9.3 | The baseline runs reproducibly, reports trace-species limits in metrics, and the revised figure focuses on the major apparent species that support the Phase 1 comparison. |
-| Issue #4 limitation and claim boundary | 9.5 | 9.2 | 9.0 | 9.6 | Phase 1 is described as an ideal/apparent reproduction baseline and does not promote Phase 2/3 activity-based or coupled-fit claims. |
+| Issue #4 Smith-Missen speciation baseline | 9.5 | 9.3 | 9.4 | 9.6 | The baseline now solves the explicit five-reaction, nine-species ideal Smith-Missen system, reports trace/unobserved limits, and renders full-coverage continuous curves. |
+| Issue #4 limitation and claim boundary | 9.5 | 9.2 | 9.0 | 9.6 | Phase 1 is described as an explicit ideal-speciation baseline with pressure and trace-species limits; it does not promote Phase 2/3 activity-based or coupled-fit claims. |
 
 ## Completion standard
 

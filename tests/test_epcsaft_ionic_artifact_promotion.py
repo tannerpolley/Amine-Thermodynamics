@@ -122,8 +122,9 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
                 fake_epcsaft.fit_reactive_electrolyte_parameters.assert_called_once()
                 _, kwargs = fake_epcsaft.fit_reactive_electrolyte_parameters.call_args
                 self.assertEqual(kwargs["max_iterations"], 1)
-                self.assertEqual(kwargs["optimizer_backend"], "ceres")
-                self.assertEqual(kwargs["derivative_backend"], "autodiff")
+                self.assertNotIn("optimizer_backend", kwargs)
+                self.assertNotIn("derivative_backend", kwargs)
+                self.assertNotIn("log_parameters", kwargs)
                 self.assertNotIn("jacobian_mode", kwargs)
                 self.assertNotIn("relative_step", kwargs)
                 self.assertIn("HCO3-__d_born", kwargs["initial_parameters"])

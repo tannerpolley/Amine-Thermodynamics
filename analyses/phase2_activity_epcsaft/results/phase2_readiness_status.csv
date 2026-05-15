@@ -1,7 +1,7 @@
 requirement,status,evidence,notes
-true_species_basis,scaffold_ready,docs/roadmaps/phase2_activity_speciation_design.md,Nine liquid species and three volatile vapor species are documented.
+true_species_basis,basis_verified,docs/roadmaps/phase2_activity_speciation_design.md,Nine liquid species and three volatile vapor species are documented.
 one_parameter_artifact,data_inventory_ready,data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2,The Phase 2 parameter artifact is separated from earlier ionic-fit outputs.
-activity_reaction_constants,source_verified_but_solver_blocked,data/reference/MEA/manifests/phase2_reaction_constant_source_verification.csv,5 of 5 constants have repo-local source values; no equilibrium solve is claimed.
-activity_constant_candidates,source_verified_but_solver_blocked,data/reference/MEA/manifests/phase2_activity_constant_candidates.csv,R1-R5 source values are carried as fixed candidate inputs; equilibrium rows remain blocked by upstream solver support and residual gates.
-vle_fugacity_route,scaffold_ready_blocked_by_epcsaft_issue_115,docs/roadmaps/epcsaft_dependency_matrix.md,Use generic reactive speciation and electrolyte bubble/fugacity support; do not add MEA-specific package APIs.
-phase3_claim_boundary,bounded_incomplete,docs/roadmaps/phase2_activity_speciation_design.md,"Phase 2 is an activity-based evaluation, not a finalized joint-regression result."
+activity_reaction_constants,source_verified_solver_ready,data/reference/MEA/manifests/phase2_reaction_constant_source_verification.csv,5 of 5 constants have repo-local source values; solver use is gated by generated residual diagnostics.
+activity_constant_candidates,fixed_input_candidate_used,data/reference/MEA/manifests/phase2_activity_constant_candidates.csv,R1-R5 source values are carried as fixed activity-basis candidate inputs in the Phase 2 native solver run.
+vle_fugacity_route,native_epcsaft_solver_available,docs/roadmaps/epcsaft_dependency_matrix.md,Using pinned ePC-SAFT commit 9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785 with generic reactive speciation and electrolyte bubble support.
+phase3_claim_boundary,phase3_out_of_scope,docs/roadmaps/phase2_activity_speciation_design.md,"Phase 2 is an activity-based evaluation, not a finalized joint-regression result."

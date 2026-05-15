@@ -72,7 +72,7 @@ Current repo note:
 
 - The reproducible repo-owned baseline is now consolidated under `analyses/phase1_smith_missen_baseline/`.
 - The supporting provenance files are `data/reference/MEA/manifests/phase1_data_inventory.csv`, `data/reference/MEA/manifests/phase1_parameter_provenance.csv`, and `data/reference/MEA/manifests/reaction_constant_manifest.csv`.
-- The retained six-species and neutral-parity workflows remain the implementation anchors used by that consolidated analysis.
+- Speciation is now the explicit five-reaction, nine-species ideal Smith-Missen solve; retained six-species and neutral-parity workflows remain only the pressure/parity anchors.
 
 ## Phase 2 — Activity-based ePC-SAFT speciation and VLE
 
@@ -106,7 +106,9 @@ Forbidden claim:
 
 Current repo note:
 
-- Existing full-ionic pressure/speciation artifacts are diagnostic and use `promoted_ionic_fit`.
+- Phase 2 now has native ePC-SAFT activity-equilibrium, pressure, diagnostics, residual-audit, and smooth solver-success-only curve artifacts under `analyses/phase2_activity_epcsaft/`.
+- Phase 2 model-run status is `model_ran_success`; the target-role residual audit controls which species/properties can be claimed as validated.
+- Existing older full-ionic pressure/speciation artifacts remain diagnostic unless they are regenerated through the Phase 2 workflow.
 - Wong 2015 should be validation-first after extraction.
 
 ## Phase 3 — Coupled regression mode

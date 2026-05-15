@@ -22,13 +22,13 @@ MEA-Thermodynamics must use generic ePC-SAFT APIs. It must not request applicati
 
 The current MEA environment imports `epcsaft` version `1.5.2` from a stable pinned Git dependency:
 
-`epcsaft @ git+https://github.com/tannerpolley/ePC-SAFT.git@e9510abae528016bd2513f12069fc0534b252bea`
+`epcsaft @ git+https://github.com/tannerpolley/ePC-SAFT.git@9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785`
 
-`uv run python scripts/check_epcsaft_integration.py` reports `source kind: pinned_git` at commit `e9510abae528016bd2513f12069fc0534b252bea`.
+`uv run python scripts/check_epcsaft_integration.py --mode stable` and `--mode final` report `source kind: pinned_git` at commit `9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785`.
 
 | Issue #5 capability | Current package status | Phase 2 action |
 |---|---|---|
-| Generic activity-based speciation | API present but runtime-blocked on the pinned dependency for activity-coupled standard states: `solve_reactive_speciation` raises `backend_unavailable` for the native activity/concentration residual Jacobian path. | Track upstream issue #115; do not add a MEA-owned nonlinear solver workaround. |
+| Generic activity-based speciation | Present and used by Phase 2 through the native reactive electrolyte solver path. Current MEA Phase 2 artifacts record `model_ran_success`. | Keep residual validation in MEA-owned `phase2_residual_acceptance_audit.csv`; do not collapse validation outcomes into solver-run status. |
 | Generic VLE/fugacity equilibrium | Present: `electrolyte_bubble` and `ElectrolyteBubbleResult` are importable; package capabilities list reactive electrolyte bubble pressure for fixed liquid composition with neutral vapor species. | Use for volatile `CO2`, `H2O`, and `MEA`; ions remain liquid-only. |
 | Reaction constant convention layer | Partial: `ReactionDefinition` accepts `standard_state` and convention metadata; no `ReactionSet` symbol is exposed. | Keep MEA reaction-source mapping local and block unsupported apparent-to-activity conversion. |
 | Implicit solved-state sensitivities | Partial: package capabilities report production speciation implicit sensitivities, but bubble-pressure implicit sensitivities are still unavailable. | Do not claim Phase 3-quality coupled derivative coverage from Phase 2. |

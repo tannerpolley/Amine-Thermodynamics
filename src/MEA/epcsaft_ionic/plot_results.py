@@ -62,6 +62,12 @@ def _load_fitted_values() -> dict[str, float]:
     return values
 
 
+def _success_mask(frame: pd.DataFrame) -> pd.Series:
+    if "success" not in frame:
+        return pd.Series(False, index=frame.index)
+    return frame["success"].astype(str).str.lower().isin({"true", "1", "yes"})
+
+
 def pressure_rows(values: dict[str, float]) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     targets = load_vle_targets(None)
@@ -128,10 +134,12 @@ def speciation_rows(values: dict[str, float]) -> list[dict[str, object]]:
                 row[f"mass_balance_{name}"] = float(value)
             row["charge_residual"] = chemistry.charge_residual
             row["state_failure_count"] = chemistry.state_failure_count
-            row["success"] = True
+            row["success"] = bool(chemistry.success)
+            row["model_role"] = "activity_equilibrium" if chemistry.success else "failed_best_effort_diagnostic"
             row["message"] = chemistry.message
         except Exception as exc:
             row["success"] = False
+            row["model_role"] = "failed_exception"
             row["message"] = f"{type(exc).__name__}: {str(exc).splitlines()[0]}"
         rows.append(row)
     return rows
@@ -206,6 +214,7 @@ def plot_speciation(rows: list[dict[str, object]]):
         subset["target_x_MEA + MEAH+"] = subset["target_x_MEA"].astype(float) + subset["target_x_MEAH+"].astype(float)
     if {"model_x_MEA", "model_x_MEAH+"}.issubset(subset.columns):
         subset["model_x_MEA + MEAH+"] = subset["model_x_MEA"].astype(float) + subset["model_x_MEAH+"].astype(float)
+    solver_success = _success_mask(subset)
 
     for species in ("CO2", "MEA", "H2O", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-", "MEA + MEAH+"):
         color = species_color(species)
@@ -222,9 +231,20 @@ def plot_speciation(rows: list[dict[str, object]]):
                 markersize=SPECIATION_TARGET_MARKERSIZE,
             )
             for row in target.to_dict("records"):
-                snapshot_rows.append({"source": "reference", "species": species, "CO2_loading": row["CO2_loading"], "mole_fraction": row[target_column]})
+                snapshot_rows.append(
+                    {
+                        "source": "reference",
+                        "species": species,
+                        "CO2_loading": row["CO2_loading"],
+                        "mole_fraction": row[target_column],
+                        "solver_success": "",
+                        "message": "",
+                    }
+                )
         if model_column in subset:
-            model = subset[["CO2_loading", model_column]].dropna()
+            model = subset[["CO2_loading", model_column, "message"]].copy()
+            model["solver_success"] = solver_success
+            model.loc[~model["solver_success"], model_column] = np.nan
             ax.semilogy(
                 model["CO2_loading"],
                 model[model_column],
@@ -234,7 +254,16 @@ def plot_speciation(rows: list[dict[str, object]]):
                 label=species_label(species),
             )
             for row in model.to_dict("records"):
-                snapshot_rows.append({"source": "model", "species": species, "CO2_loading": row["CO2_loading"], "mole_fraction": row[model_column]})
+                snapshot_rows.append(
+                    {
+                        "source": "model",
+                        "species": species,
+                        "CO2_loading": row["CO2_loading"],
+                        "mole_fraction": row[model_column],
+                        "solver_success": bool(row["solver_success"]),
+                        "message": row.get("message", ""),
+                    }
+                )
     apply_speciation_axes(ax, title=title)
     write_csv(SPECIATION_OUT_DIR / "ionic_speciation_plot_data.csv", snapshot_rows)
     ax.legend(loc="lower center", ncol=3, title="Model curves; markers are targets")

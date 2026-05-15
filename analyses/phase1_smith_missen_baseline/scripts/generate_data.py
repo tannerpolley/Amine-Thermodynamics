@@ -12,7 +12,7 @@ if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 from MEA.common.data_access import load_speciation_data
-from MEA.six_species.chemistry import legacy_true_mole_fractions
+from MEA.smith_missen.ideal_speciation import SPECIES_9, solve_ideal_speciation_grid
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
 PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
@@ -20,6 +20,7 @@ LEGACY_PROCESSED_DIR = REPO_ROOT / "analyses" / "six_species_legacy" / "data" / 
 NEUTRAL_PROCESSED_DIR = REPO_ROOT / "analyses" / "epcsaft_neutral_parity" / "data" / "processed"
 MEA_WEIGHT_FRACTION = 0.3
 SPECIATION_TEMPERATURES_C = (20.0, 40.0)
+SPECIATION_CURVE_LOADINGS = tuple(float(value) for value in np.linspace(0.0, 0.8, 161))
 SPECIATION_SPECIES = (
     ("CO2", "CO2"),
     ("MEA", "MEA"),
@@ -28,6 +29,17 @@ SPECIATION_SPECIES = (
     ("MEACOO-", "MEACOO^-"),
     ("HCO3-", "HCO3^-"),
     ("CO3^2-", "CO3^2-"),
+)
+SPECIATION_CURVE_SPECIES = (
+    "CO2",
+    "MEA",
+    "MEAH+",
+    "MEACOO-",
+    "HCO3-",
+    "CO3^2-",
+    "H3O+",
+    "OH-",
+    "MEA + MEAH+",
 )
 
 PURE_PARAMETER_ROWS = [
@@ -174,8 +186,8 @@ REACTION_CONSTANT_ROWS = [
         "temperature_range_K": "273.15-498.15",
         "source_key": "Edwards1978_via_Baygi2015",
         "conversion_required": "no",
-        "implemented_in_retained_phase1_solver": "reduced_apparent_solver",
-        "notes": "Full five-reaction Phase 1 literature basis. The retained six-species solver exposes a reduced apparent-equilibrium representation rather than five explicit equations.",
+        "implemented_in_phase1_solver": "explicit_ideal_nine_species_solver",
+        "notes": "Full five-reaction Phase 1 literature basis. The Phase 1 Smith-Missen workflow solves this explicit ideal nine-species system with activities equal to mole fractions.",
     },
     {
         "reaction_id": "R2",
@@ -189,7 +201,7 @@ REACTION_CONSTANT_ROWS = [
         "temperature_range_K": "273.15-498.15",
         "source_key": "Edwards1978_via_Baygi2015",
         "conversion_required": "no",
-        "implemented_in_retained_phase1_solver": "reduced_apparent_solver",
+        "implemented_in_phase1_solver": "explicit_ideal_nine_species_solver",
         "notes": "CO2 hydration to bicarbonate in the Baygi 2015 Smith-Missen literature basis.",
     },
     {
@@ -204,7 +216,7 @@ REACTION_CONSTANT_ROWS = [
         "temperature_range_K": "273.15-498.15",
         "source_key": "Edwards1978_via_Baygi2015",
         "conversion_required": "no",
-        "implemented_in_retained_phase1_solver": "reduced_apparent_solver",
+        "implemented_in_phase1_solver": "explicit_ideal_nine_species_solver",
         "notes": "Bicarbonate dissociation to carbonate in the Baygi 2015 Smith-Missen literature basis.",
     },
     {
@@ -219,7 +231,7 @@ REACTION_CONSTANT_ROWS = [
         "temperature_range_K": "293.15-323.15",
         "source_key": "Tong2012_via_Baygi2015",
         "conversion_required": "reported_molality_based_then_converted",
-        "implemented_in_retained_phase1_solver": "reduced_apparent_solver",
+        "implemented_in_phase1_solver": "explicit_ideal_nine_species_solver",
         "notes": "Baygi 2015 states that the original literature form was converted from molality to mole-fraction basis for the ideal-speciation workflow.",
     },
     {
@@ -234,7 +246,7 @@ REACTION_CONSTANT_ROWS = [
         "temperature_range_K": "273.15-323.15",
         "source_key": "Bates1951_via_Baygi2015",
         "conversion_required": "no",
-        "implemented_in_retained_phase1_solver": "reduced_apparent_solver",
+        "implemented_in_phase1_solver": "explicit_ideal_nine_species_solver",
         "notes": "Protonated-amine dissociation in the Baygi 2015 Smith-Missen literature basis.",
     },
 ]
@@ -335,36 +347,28 @@ def _phase1_pressure_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
     return pressure_results, pressure_metrics
 
 
-def _model_species_map(loading: float, temperature_C: float) -> dict[str, float]:
-    x = legacy_true_mole_fractions(float(loading), MEA_WEIGHT_FRACTION, float(temperature_C) + 273.15)
-    model = {
-        "CO2": float(x[0]),
-        "MEA": float(x[1]),
-        "H2O": float(x[2]),
-        "MEAH+": float(x[3]),
-        "MEACOO-": float(x[4]),
-        "HCO3-": float(x[5]),
-    }
-    model["CO3^2-"] = 0.0
-    model["MEA + MEAH+"] = model["MEA"] + model["MEAH+"]
-    return model
-
-
 def _phase1_speciation_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
     rows: list[dict[str, object]] = []
     for temperature_C in SPECIATION_TEMPERATURES_C:
         measured = load_speciation_data(
             temperature_C=temperature_C,
             mea_weight_fraction=MEA_WEIGHT_FRACTION,
+        ).sort_values("CO2_loading")
+        solutions = solve_ideal_speciation_grid(
+            measured["CO2_loading"].astype(float).to_numpy(),
+            MEA_WEIGHT_FRACTION,
+            float(temperature_C) + 273.15,
         )
-        for record in measured.to_dict("records"):
-            model = _model_species_map(float(record["CO2_loading"]), float(temperature_C))
+        for record, solution in zip(measured.to_dict("records"), solutions):
+            model = solution.species_map()
             source = record.get("source", "Jakobsen")
             for species, column in SPECIATION_SPECIES:
                 observed = record.get(column)
                 if observed is None or pd.isna(observed):
                     continue
                 observed_value = float(observed)
+                if observed_value <= 0.0:
+                    continue
                 model_value = float(model[species])
                 rows.append(
                     {
@@ -378,6 +382,8 @@ def _phase1_speciation_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
                         "log10_model_over_data": float(
                             np.log10(max(model_value, 1.0e-30) / max(observed_value, 1.0e-30))
                         ),
+                        "solver_success": str(solution.success).lower(),
+                        "solver_max_abs_residual": solution.max_abs_residual,
                     }
                 )
 
@@ -398,6 +404,49 @@ def _phase1_speciation_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
         )
     metrics = pd.DataFrame(metric_rows).sort_values(["temperature_C", "species"]).reset_index(drop=True)
     return results, metrics
+
+
+def _phase1_speciation_curve_table() -> pd.DataFrame:
+    rows: list[dict[str, object]] = []
+    for temperature_C in SPECIATION_TEMPERATURES_C:
+        solutions = solve_ideal_speciation_grid(
+            SPECIATION_CURVE_LOADINGS,
+            MEA_WEIGHT_FRACTION,
+            float(temperature_C) + 273.15,
+        )
+        for loading, solution in zip(SPECIATION_CURVE_LOADINGS, solutions):
+            model = solution.species_map()
+            for species in SPECIATION_CURVE_SPECIES:
+                rows.append(
+                    {
+                        "temperature_C": float(temperature_C),
+                        "MEA_weight_fraction": MEA_WEIGHT_FRACTION,
+                        "CO2_loading": float(loading),
+                        "species": species,
+                        "mole_fraction": float(max(model.get(species, 0.0), 1.0e-30)),
+                        "curve_role": "explicit_ideal_equilibrium_curve",
+                        "solver_success": str(solution.success).lower(),
+                        "solver_max_abs_residual": solution.max_abs_residual,
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
+def _phase1_speciation_reference_points(speciation_results: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for row in speciation_results.to_dict("records"):
+        rows.append(
+            {
+                "source": row["source"],
+                "temperature_C": row["temperature_C"],
+                "MEA_weight_fraction": row["MEA_weight_fraction"],
+                "CO2_loading": row["CO2_loading"],
+                "species": row["species"],
+                "mole_fraction": row["observed_mole_fraction"],
+                "point_role": "reference_point",
+            }
+        )
+    return pd.DataFrame(rows)
 
 
 def _pressure_acceptance_rows(pressure_results: pd.DataFrame) -> list[dict[str, object]]:
@@ -448,7 +497,7 @@ def _pressure_acceptance_rows(pressure_results: pd.DataFrame) -> list[dict[str, 
 
 def _speciation_acceptance_rows(speciation_results: pd.DataFrame) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
-    trace_or_diagnostic_species = {"CO2", "CO3^2-", "H3O+", "OH-"}
+    trace_or_unobserved_species = {"CO2", "CO3^2-", "H3O+", "OH-"}
 
     groups: list[tuple[object, str, pd.DataFrame]] = []
     for (temperature_C, species), subset in speciation_results.groupby(["temperature_C", "species"], sort=True):
@@ -462,11 +511,15 @@ def _speciation_acceptance_rows(speciation_results: pd.DataFrame) -> list[dict[s
         mae = float(np.nanmean(np.abs(residual)))
         rmse = float(np.sqrt(np.nanmean(residual * residual)))
         residual_pass = median_abs <= 0.50 and mae <= 0.75
-        diagnostic_only = species in trace_or_diagnostic_species
-        claim_allowed = residual_pass and not diagnostic_only
+        trace_limited = species in trace_or_unobserved_species
+        claim_allowed = residual_pass and not trace_limited
         failure_reason = ""
-        if diagnostic_only:
-            failure_reason = "trace or unsupported species is diagnostic only"
+        if trace_limited:
+            failure_reason = (
+                "trace species is solved and plotted but is not used as major-species validation evidence"
+                if residual_pass
+                else "trace species residual gate failed"
+            )
         elif not residual_pass:
             failure_reason = "speciation residual gate failed"
         for metric, actual, threshold in (
@@ -477,9 +530,10 @@ def _speciation_acceptance_rows(speciation_results: pd.DataFrame) -> list[dict[s
             rows.append(
                 {
                     "target_family": "speciation",
-                    "source_or_model": "retained_six_species_apparent_solver",
+                    "source_or_model": "explicit_ideal_nine_species_smith_missen_solver",
                     "temperature_C": temperature_C,
                     "species_or_property": species,
+                    "target_role": "trace_species" if trace_limited else "major_fit_or_validation_species",
                     "metric": metric,
                     "threshold": threshold,
                     "actual_value": actual,
@@ -489,7 +543,7 @@ def _speciation_acceptance_rows(speciation_results: pd.DataFrame) -> list[dict[s
                     "recommended_manuscript_use": (
                         "major-species retained baseline comparison"
                         if claim_allowed
-                        else "diagnostic only; do not cite as validated speciation reproduction"
+                        else "do not cite as major validated species evidence"
                     ),
                 }
             )
@@ -498,16 +552,17 @@ def _speciation_acceptance_rows(speciation_results: pd.DataFrame) -> list[dict[s
         rows.append(
             {
                 "target_family": "speciation",
-                "source_or_model": "retained_six_species_apparent_solver",
+                "source_or_model": "explicit_ideal_nine_species_smith_missen_solver",
                 "temperature_C": "overall",
                 "species_or_property": species,
+                "target_role": "explicitly_solved_unobserved_species",
                 "metric": "not_evaluated",
-                "threshold": "not directly supported by retained reduced apparent solver",
+                "threshold": "no direct observed Phase 1 reference data in current target table",
                 "actual_value": np.nan,
                 "passes": "false",
                 "claim_allowed": "false",
-                "failure_reason": "unsupported explicit-ion species in retained reduced apparent solver",
-                "recommended_manuscript_use": "diagnostic only; do not cite as validated speciation reproduction",
+                "failure_reason": "explicitly solved and plotted but not directly observed in Phase 1 reference rows",
+                "recommended_manuscript_use": "plot as equilibrium trace curve only; do not cite as observed validation evidence",
             }
         )
     return rows
@@ -527,6 +582,8 @@ def main() -> int:
 
     pressure_results, pressure_metrics = _phase1_pressure_tables()
     speciation_results, speciation_metrics = _phase1_speciation_tables()
+    speciation_curve = _phase1_speciation_curve_table()
+    speciation_reference_points = _phase1_speciation_reference_points(speciation_results)
     parameter_table = pd.DataFrame(PURE_PARAMETER_ROWS)
     reaction_table = pd.DataFrame(REACTION_CONSTANT_ROWS)
     residual_acceptance_audit = _phase1_residual_acceptance_audit(pressure_results, speciation_results)
@@ -536,6 +593,8 @@ def main() -> int:
         "phase1_pressure_metrics.csv": pressure_metrics,
         "phase1_speciation_results.csv": speciation_results,
         "phase1_speciation_metrics.csv": speciation_metrics,
+        "phase1_speciation_curve.csv": speciation_curve,
+        "phase1_speciation_reference_points.csv": speciation_reference_points,
         "phase1_parameter_table.csv": parameter_table,
         "phase1_reaction_constant_table.csv": reaction_table,
         "phase1_residual_acceptance_audit.csv": residual_acceptance_audit,

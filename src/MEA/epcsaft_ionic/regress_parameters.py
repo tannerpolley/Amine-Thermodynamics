@@ -116,12 +116,9 @@ def run_regression(args: argparse.Namespace) -> dict[str, object]:
         initial_parameters=initial,
         lower_bounds=lower,
         upper_bounds=upper,
-        optimizer_backend=str(getattr(args, "backend", "ceres")),
-        derivative_backend=str(getattr(args, "derivative_backend", "autodiff")),
         max_iterations=int(getattr(args, "max_iterations", getattr(args, "max_nfev", 6))),
         tolerance=float(getattr(args, "tolerance", 1.0e-6)),
         damping=float(getattr(args, "damping", 1.0)),
-        log_parameters=True,
     )
 
     result_payload = _result_payload(result)

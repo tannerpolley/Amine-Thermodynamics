@@ -22,11 +22,11 @@ The value-level source verification ledger is:
 
 | ID | Source basis | Activity basis needed | Conversion status | Phase 2 use |
 |---|---|---|---|---|
-| R1 | Repo-local Nasrifar Table 1 via Austgen 1991 | thermodynamic activity | source_verified | not_yet_solver_blocked |
-| R2 | Repo-local Nasrifar Table 1 via Austgen 1991 | thermodynamic activity | source_verified | not_yet_solver_blocked |
-| R3 | Repo-local Nasrifar Table 1 via Austgen 1991 | thermodynamic activity | source_verified | not_yet_solver_blocked |
-| R4 | Repo-local Nasrifar Table 1 k9 via Austgen 1991 | thermodynamic activity | source_verified | not_yet_solver_blocked |
-| R5 | Repo-local Nasrifar Table 1 k7 via Austgen 1991 | thermodynamic activity | source_verified | not_yet_solver_blocked |
+| R1 | Repo-local Nasrifar Table 1 via Austgen 1991 | thermodynamic activity | source_verified | used_in_native_solver_residual_gated |
+| R2 | Repo-local Nasrifar Table 1 via Austgen 1991 | thermodynamic activity | source_verified | used_in_native_solver_residual_gated |
+| R3 | Repo-local Nasrifar Table 1 via Austgen 1991 | thermodynamic activity | source_verified | used_in_native_solver_residual_gated |
+| R4 | Repo-local Nasrifar Table 1 k9 via Austgen 1991 | thermodynamic activity | source_verified | used_in_native_solver_residual_gated |
+| R5 | Repo-local Nasrifar Table 1 k7 via Austgen 1991 | thermodynamic activity | source_verified | used_in_native_solver_residual_gated |
 
 ## Local activity-constant candidates
 
@@ -38,7 +38,7 @@ The MDEA ePC-SAFT literature path (`Uyan et al.md`, `Wangler et al.md`, `Bülow 
 
 ## Implementation consequence
 
-The first Phase 2 artifacts can define species, balances, constraints, package routes, one parameter artifact, and source-verified R1-R5 fixed-input rows. A claimed activity-based speciation result must wait on upstream ePC-SAFT issue #115 because the pinned package raises `backend_unavailable` for the activity-coupled native chemical-equilibrium backend.
+The Phase 2 artifacts define species, balances, constraints, package routes, one parameter artifact, and source-verified R1-R5 fixed-input rows. The pinned native ePC-SAFT activity solve now runs successfully; validation and manuscript use are controlled by `phase2_residual_acceptance_audit.csv`, not by a separate residual-failure status.
 
 ## Phase 3 role
 

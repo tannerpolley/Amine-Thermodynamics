@@ -28,11 +28,11 @@ Phase 2 evaluates MEA-CO2-H2O with a true-species ePC-SAFT liquid basis and ePC-
 
 | ID | Reaction | Current Phase 2 use |
 |---|---|---|
-| R1 | `2 H2O <-> H3O+ + OH-` | Source value verified against repo-local Nasrifar Table 1, which traces the value family to Austgen 1991; activity solve is blocked by upstream ePC-SAFT issue #115. |
-| R2 | `CO2 + 2 H2O <-> HCO3- + H3O+` | Source value verified against repo-local Nasrifar Table 1, which traces the value family to Austgen 1991; activity solve is blocked by upstream ePC-SAFT issue #115. |
-| R3 | `HCO3- + H2O <-> CO3^2- + H3O+` | Source value verified against repo-local Nasrifar Table 1, which traces the value family to Austgen 1991; activity solve is blocked by upstream ePC-SAFT issue #115. |
-| R4 | `MEACOO- + H2O <-> MEA + HCO3-` | Source value verified against repo-local Nasrifar Table 1 k9; activity solve is blocked by upstream ePC-SAFT issue #115. |
-| R5 | `MEAH+ + H2O <-> MEA + H3O+` | Source value verified against repo-local Nasrifar Table 1 k7; activity solve is blocked by upstream ePC-SAFT issue #115. |
+| R1 | `2 H2O <-> H3O+ + OH-` | Source value verified against repo-local Nasrifar Table 1, which traces the value family to Austgen 1991; used as a fixed input in the pinned native ePC-SAFT activity solve. |
+| R2 | `CO2 + 2 H2O <-> HCO3- + H3O+` | Source value verified against repo-local Nasrifar Table 1, which traces the value family to Austgen 1991; used as a fixed input in the pinned native ePC-SAFT activity solve. |
+| R3 | `HCO3- + H2O <-> CO3^2- + H3O+` | Source value verified against repo-local Nasrifar Table 1, which traces the value family to Austgen 1991; used as a fixed input in the pinned native ePC-SAFT activity solve. |
+| R4 | `MEACOO- + H2O <-> MEA + HCO3-` | Source value verified against repo-local Nasrifar Table 1 k9; used as a fixed input in the pinned native ePC-SAFT activity solve. |
+| R5 | `MEAH+ + H2O <-> MEA + H3O+` | Source value verified against repo-local Nasrifar Table 1 k7; used as a fixed input in the pinned native ePC-SAFT activity solve. |
 
 The reaction-constant source table is `data/reference/MEA/manifests/phase2_reaction_constant_manifest.csv`, and the value-level source audit is `data/reference/MEA/manifests/phase2_reaction_constant_source_verification.csv`. Phase 2 must not pass apparent mole-fraction constants into thermodynamic-activity equations as if they were residual-validated activity-equilibrium results.
 
@@ -48,9 +48,9 @@ The Phase 2 problem definition uses these conserved quantities:
 ## Activity convention
 
 - Needed Phase 2 basis: thermodynamic activity constants with explicit reference states.
-- Current manifest status: repo-local Nasrifar Table 1 verifies R1-R5 source values on the mole-fraction equilibrium-constant family traced to Austgen 1991; it does not by itself validate an activity-coupled ePC-SAFT equilibrium solve.
-- Allowed current use: problem definition, convention audit, parameter-artifact validation, and fixed-composition ePC-SAFT diagnostics.
-- Blocked current use: a claimed activity-based speciation solve until upstream ePC-SAFT issue #115 provides the required native activity-coupled solver backend.
+- Current manifest status: repo-local Nasrifar Table 1 verifies R1-R5 source values on the mole-fraction equilibrium-constant family traced to Austgen 1991; the values are used as fixed inputs in the pinned native ePC-SAFT activity solve.
+- Allowed current use: model-run evidence from solver-success rows plus target-role residual-gated pressure/speciation comparisons.
+- Blocked current use: final joint-regression claims before Phase 3 package-native regression and approval gates pass.
 
 ## Reference states
 
@@ -91,10 +91,11 @@ The earlier trace-only alternative remains an identifiability warning, not a pro
 ## Solver route
 
 1. Build the true-species problem definition from this document, the reaction manifest, and the Phase 2 parameter artifact.
-2. Use `epcsaft.solve_reactive_speciation` only after upstream issue #115 lands in the pinned `epcsaft` dependency.
+2. Use the pinned native ePC-SAFT activity speciation route for liquid equilibrium rows.
 3. Use package electrolyte bubble/fugacity support for volatile species after a liquid state is convention-safe.
-4. Write package/data blockers explicitly instead of adding downstream MEA-specific workarounds.
+4. Write solver diagnostics and residual gates explicitly; validation outcomes do not rewrite model-run success.
+5. Use `phase2_speciation_target_roles.csv` to keep direct positive targets, reported-zero upper bounds, and balance-inferred context rows separate before plotting or metric calculation.
 
 ## Package dependency status
 
-Current package inspection found generic reactive speciation, electrolyte bubble/fugacity, target dataset, and reactive electrolyte batch regression surfaces. A runtime smoke with the pinned package still fails for activity-coupled standard states with `backend_unavailable: analytic/CppAD/implicit chemical-equilibrium residual jacobian is unavailable for activity- or concentration-coupled standard states.` The remaining Phase 2 package blocker is upstream issue #115, not missing MEA-specific public APIs.
+Current package inspection found generic reactive speciation, electrolyte bubble/fugacity, target dataset, and reactive electrolyte batch regression surfaces. The pinned package commit `9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785` runs the Phase 2 native activity-equilibrium and reactive bubble paths successfully. Remaining limits are residual/claim gates and Phase 3 coupled-regression readiness, not a Phase 2 solver availability blocker.

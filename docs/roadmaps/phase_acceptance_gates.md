@@ -14,7 +14,7 @@ Required:
 
 Allowed current claim:
 
-> retained ideal/apparent-speciation baseline audit.
+> explicit ideal Smith-Missen major-species speciation baseline, with pressure and trace-species limits.
 
 Forbidden claim:
 
@@ -22,10 +22,11 @@ Forbidden claim:
 
 Current status:
 
-- Generated for a retained-baseline audit; not validated as an independent Phase 1 reproduction.
+- The speciation workflow solves the explicit five-reaction, nine-species ideal Smith-Missen system and passes major observed species gates.
+- Pressure rows and trace/unobserved species remain limited by the residual audit.
 - The consolidated Phase 1 workflow now lives under `analyses/phase1_smith_missen_baseline/`.
 - Provenance and convention audits are captured in `data/reference/MEA/manifests/phase1_data_inventory.csv`, `data/reference/MEA/manifests/phase1_parameter_provenance.csv`, and `data/reference/MEA/manifests/reaction_constant_manifest.csv`.
-- This PR must not close the Phase 1 validation gate until residual and source gates allow it.
+- Phase 1 claims must stay aligned with `analyses/phase1_smith_missen_baseline/results/phase1_residual_acceptance_audit.csv`.
 
 ## Phase 2 — Activity-based ePC-SAFT speciation and VLE
 
@@ -39,7 +40,7 @@ Required:
 
 Allowed current claim:
 
-> true-species ePC-SAFT problem-definition scaffold.
+> true-species ePC-SAFT activity-equilibrium model run with residual-gated pressure/speciation claims.
 
 Forbidden claim:
 
@@ -47,9 +48,9 @@ Forbidden claim:
 
 Current status:
 
-- Diagnostic artifacts exist for full-ionic pressure and speciation using `promoted_ionic_fit`.
+- Native Phase 2 equilibrium, pressure, solver-diagnostic, residual-audit, and activity-curve artifacts exist under `analyses/phase2_activity_epcsaft/results/`.
 - Wong 2015 high-pressure Raman data are present as Markdown and must be extracted before being used as validation.
-- Phase 2 equilibrium and residual artifacts remain blocked until upstream issue #115 and the residual gates pass.
+- Phase 2 solver run status is `model_ran_success`; target-role residual audit rows control validation/manuscript claims but do not revise model-run status.
 
 ## Phase 3 — Coupled regression mode
 

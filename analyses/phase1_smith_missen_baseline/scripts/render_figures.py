@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 import sys
 from pathlib import Path
 
@@ -19,28 +20,22 @@ from MEA.common.plot_style import (
     LEGACY_PCSAFT_LINESTYLE,
     MODEL_LINEWIDTH,
     REFERENCE_LINEWIDTH,
-    SPECIATION_MODEL_LINESTYLE,
-    SPECIATION_TARGET_ALPHA,
-    SPECIATION_TARGET_MARKER,
-    SPECIATION_TARGET_MARKERSIZE,
     apply_pressure_axes,
-    finish_axes,
-    species_color,
-    species_label,
     temperature_color,
     write_mpl_sidecar,
 )
+from MEA.common.speciation_figures import write_speciation_plot
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
 PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
 OUT_DIR = ANALYSIS_DIR / "results"
+PRESSURE_FIGURE_OUT = ANALYSIS_DIR / "figures" / "pressure" / "output"
+SPECIATION_FIGURE_OUT = ANALYSIS_DIR / "figures" / "speciation" / "output"
 PRESSURE_MODEL_LABELS = {
     "legacy_pcsaft_smith_missen": ("Legacy PC-SAFT Smith-Missen", LEGACY_PCSAFT_LINESTYLE, REFERENCE_LINEWIDTH),
     "neutral_epcsaft_parity": ("Neutral ePC-SAFT parity", EPCSAFT_NEUTRAL_LINESTYLE, MODEL_LINEWIDTH),
 }
-MAJOR_SPECIATION_SPECIES = ("MEA + MEAH+", "MEACOO-", "HCO3-")
 PHASE1_PRESSURE_FIGSIZE = (9.2, 5.4)
-PHASE1_SPECIATION_FIGSIZE = (10.8, 4.8)
 
 
 def _data_xlim(frame: pd.DataFrame, column: str, *, pad: float = 0.035) -> tuple[float, float]:
@@ -66,12 +61,16 @@ def normalize_svg(path: Path) -> None:
     path.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")
 
 
-def _write_curated_tables() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def _write_curated_tables() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    PRESSURE_FIGURE_OUT.mkdir(parents=True, exist_ok=True)
+    SPECIATION_FIGURE_OUT.mkdir(parents=True, exist_ok=True)
     pressure_results = require_csv("phase1_pressure_results.csv")
     pressure_metrics = require_csv("phase1_pressure_metrics.csv")
     speciation_results = require_csv("phase1_speciation_results.csv")
     speciation_metrics = require_csv("phase1_speciation_metrics.csv")
+    speciation_curve = require_csv("phase1_speciation_curve.csv")
+    speciation_reference_points = require_csv("phase1_speciation_reference_points.csv")
     parameter_table = require_csv("phase1_parameter_table.csv")
     reaction_table = require_csv("phase1_reaction_constant_table.csv")
     residual_acceptance_audit = require_csv("phase1_residual_acceptance_audit.csv")
@@ -82,12 +81,17 @@ def _write_curated_tables() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         (pressure_metrics, "phase1_pressure_metrics.csv"),
         (speciation_results, "phase1_speciation_results.csv"),
         (speciation_metrics, "phase1_speciation_metrics.csv"),
+        (speciation_curve, "phase1_speciation_curve.csv"),
+        (speciation_reference_points, "phase1_speciation_reference_points.csv"),
         (parameter_table, "phase1_parameter_table.csv"),
         (reaction_table, "phase1_reaction_constant_table.csv"),
         (residual_acceptance_audit, "phase1_residual_acceptance_audit.csv"),
     ):
         frame.to_csv(OUT_DIR / name, index=False)
-    return pressure_results, speciation_results, residual_acceptance_audit
+    pressure_results.to_csv(PRESSURE_FIGURE_OUT / "phase1_pressure_plot_data.csv", index=False)
+    speciation_curve.to_csv(SPECIATION_FIGURE_OUT / "phase1_speciation_curve.csv", index=False)
+    speciation_reference_points.to_csv(SPECIATION_FIGURE_OUT / "phase1_speciation_reference_points.csv", index=False)
+    return pressure_results, speciation_results, residual_acceptance_audit, speciation_curve, speciation_reference_points
 
 
 def plot_pressure(pressure_results: pd.DataFrame) -> None:
@@ -182,97 +186,84 @@ def plot_pressure(pressure_results: pd.DataFrame) -> None:
         description=description,
         style_source="analyses/phase1_smith_missen_baseline/scripts/render_figures.py",
     )
+    for path in (png, svg, OUT_DIR / "phase1_pressure_vs_loading.mpl.yaml"):
+        shutil.copy2(path, PRESSURE_FIGURE_OUT / path.name)
 
 
-def plot_speciation(speciation_results: pd.DataFrame) -> None:
-    title = "Phase 1 Smith-Missen baseline speciation diagnostic"
+def plot_speciation(speciation_curve: pd.DataFrame, speciation_reference_points: pd.DataFrame) -> None:
+    title = "Phase 1 ideal Smith-Missen speciation, 40 C"
     description = (
-        "Measured 30 wt% MEA speciation points at 20 C and 40 C are compared against the retained ideal/apparent "
-        "Smith-Missen baseline for major apparent species. The residual audit, not this diagnostic plot, controls "
-        "whether any species can be cited as validated."
+        "Measured 30 wt% MEA speciation points are compared against continuous explicit nine-species "
+        "ideal Smith-Missen equilibrium curves. The residual audit controls which species are validation evidence."
     )
-    temperatures = sorted(speciation_results["temperature_C"].dropna().unique())
-    fig, axes = plt.subplots(1, len(temperatures), figsize=PHASE1_SPECIATION_FIGSIZE, sharey=True)
-    if len(temperatures) == 1:
-        axes = [axes]
-    xlim = _data_xlim(speciation_results, "CO2_loading")
-    for ax, temperature_C in zip(axes, temperatures):
-        subset = speciation_results[speciation_results["temperature_C"] == temperature_C]
-        for species in MAJOR_SPECIATION_SPECIES:
-            species_df = subset[subset["species"] == species].sort_values("CO2_loading")
-            if species_df.empty:
-                continue
-            color = species_color(species)
-            ax.semilogy(
-                species_df["CO2_loading"],
-                species_df["model_mole_fraction"],
-                SPECIATION_MODEL_LINESTYLE,
-                color=color,
-                linewidth=MODEL_LINEWIDTH,
-            )
-            ax.semilogy(
-                species_df["CO2_loading"],
-                species_df["observed_mole_fraction"],
-                SPECIATION_TARGET_MARKER,
-                color=color,
-                alpha=SPECIATION_TARGET_ALPHA,
-                markersize=SPECIATION_TARGET_MARKERSIZE,
-                linestyle="none",
-            )
-        ax.set_xlim(*xlim)
-        ax.set_ylim(1.0e-3, 2.0e-1)
-        ax.set_yscale("log")
-        ax.set_xlabel("$CO_2$ loading, mol $CO_2$/mol MEA")
-        if ax is axes[0]:
-            ax.set_ylabel("Mole fraction")
-        finish_axes(ax, title=f"{temperature_C:g} C")
-    species_handles = [
-        Line2D(
-            [0],
-            [0],
-            color=species_color(species),
-            linestyle=SPECIATION_MODEL_LINESTYLE,
-            marker=SPECIATION_TARGET_MARKER,
-            markersize=SPECIATION_TARGET_MARKERSIZE,
-            linewidth=MODEL_LINEWIDTH,
-            label=species_label(species),
-        )
-        for species in MAJOR_SPECIATION_SPECIES
-    ]
-    fig.suptitle(title, y=0.98, fontsize=13, fontweight="semibold")
-    fig.legend(
-        handles=species_handles,
-        title="Lines are model curves; markers are reference data",
-        ncol=3,
-        loc="lower center",
-        bbox_to_anchor=(0.5, 0.0),
-    )
-    fig.subplots_adjust(left=0.08, right=0.98, top=0.82, bottom=0.26, wspace=0.12)
     for old_name in (
-        "phase1_speciation_vs_loading.png",
-        "phase1_speciation_vs_loading.svg",
-        "phase1_speciation_vs_loading.mpl.yaml",
+        "phase1_speciation_vs_loading_diagnostic.png",
+        "phase1_speciation_vs_loading_diagnostic.svg",
+        "phase1_speciation_vs_loading_diagnostic.mpl.yaml",
+        "phase1_speciation_vs_loading_diagnostic_plot_data.csv",
     ):
         old_path = OUT_DIR / old_name
         if old_path.exists():
             old_path.unlink()
-    png = OUT_DIR / "phase1_speciation_vs_loading_diagnostic.png"
-    svg = OUT_DIR / "phase1_speciation_vs_loading_diagnostic.svg"
-    fig.savefig(png, dpi=300, bbox_inches="tight")
-    fig.savefig(svg, bbox_inches="tight")
-    normalize_svg(svg)
-    plt.close(fig)
-    write_mpl_sidecar(
-        OUT_DIR / "phase1_speciation_vs_loading_diagnostic.mpl.yaml",
-        png_name=png.name,
-        svg_name=svg.name,
+
+    write_speciation_plot(
+        curve_frame=speciation_curve,
+        point_frame=speciation_reference_points,
+        output_dir=OUT_DIR,
+        stem="phase1_speciation_vs_loading",
         title=title,
         description=description,
+        style_source="analyses/phase1_smith_missen_baseline/scripts/render_figures.py",
+        temperature_C=40.0,
+    )
+    for temperature_C in sorted(speciation_curve["temperature_C"].dropna().unique()):
+        for suffix in (".png", ".svg", ".mpl.yaml", "_plot_data.csv"):
+            old_path = SPECIATION_FIGURE_OUT / f"phase1_speciation_{int(round(float(temperature_C)))}C_diagnostic{suffix}"
+            if old_path.exists():
+                old_path.unlink()
+        write_speciation_plot(
+            curve_frame=speciation_curve,
+            point_frame=speciation_reference_points,
+            output_dir=SPECIATION_FIGURE_OUT,
+            stem=f"phase1_speciation_{int(round(float(temperature_C)))}C",
+            title=f"Phase 1 ideal Smith-Missen speciation, {temperature_C:g} C",
+            description=(
+                "Continuous explicit nine-species ideal Smith-Missen equilibrium curves are shown with "
+                "measured reference points. Major-species validation is controlled by the residual audit."
+            ),
+            style_source="analyses/phase1_smith_missen_baseline/scripts/render_figures.py",
+            temperature_C=float(temperature_C),
+        )
+    write_mpl_sidecar(
+        SPECIATION_FIGURE_OUT / "phase1_speciation_figure_family.mpl.yaml",
+        png_name="phase1_speciation_40C.png",
+        svg_name="phase1_speciation_40C.svg",
+        title="Phase 1 Smith-Missen baseline speciation figure family",
+        description="Figure-owned Phase 1 explicit ideal-equilibrium speciation outputs; one full-coverage plot is generated per temperature.",
         style_source="analyses/phase1_smith_missen_baseline/scripts/render_figures.py",
     )
 
 
 def write_phase1_reports(residual_acceptance_audit: pd.DataFrame) -> None:
+    speciation_rows = residual_acceptance_audit[residual_acceptance_audit["target_family"] == "speciation"].copy()
+    if "target_role" not in speciation_rows.columns:
+        speciation_rows["target_role"] = ""
+    major_speciation_failures = speciation_rows[
+        (speciation_rows["target_role"].astype(str) == "major_fit_or_validation_species")
+        & (speciation_rows["passes"].astype(str).str.lower() != "true")
+    ]
+    pressure_rows = residual_acceptance_audit[residual_acceptance_audit["target_family"] == "pressure"].copy()
+    pressure_failures = pressure_rows[
+        (pressure_rows["temperature_C"].astype(str).str.lower() != "overall")
+        & (pressure_rows["passes"].astype(str).str.lower() != "true")
+    ]
+    if not major_speciation_failures.empty:
+        phase1_status = "model_ran_but_failed_speciation_validation"
+    elif not pressure_failures.empty:
+        phase1_status = "validated_major_species_speciation_with_pressure_limits"
+    else:
+        phase1_status = "validated"
+
     failed = residual_acceptance_audit[
         (residual_acceptance_audit["passes"].astype(str).str.lower() != "true")
         | (residual_acceptance_audit["claim_allowed"].astype(str).str.lower() != "true")
@@ -291,34 +282,33 @@ def write_phase1_reports(residual_acceptance_audit: pd.DataFrame) -> None:
 
     lineage = """# Phase 1 Model Lineage
 
-lineage_status: retained_baseline_audit
-phase1_status: model_ran_but_failed_validation
+lineage_status: explicit_ideal_smith_missen_reproduction
+phase1_status: {phase1_status}
 
-This artifact is a retained-baseline audit, not an independent Smith-Missen reproduction. It copies the repo's historical six-species apparent-equilibrium pressure/speciation outputs and the neutral ePC-SAFT parity outputs into a Phase 1 comparison surface.
+This artifact solves the explicit five-reaction, nine-species ideal Smith-Missen speciation problem for the Phase 1 speciation surface. Activities are set equal to mole fractions, and the solved species are CO2, MEA, H2O, MEAH+, MEACOO-, HCO3-, CO3^2-, H3O+, and OH-.
 
-The analysis records the Baygi/Nasrifar-style reaction-constant table and selected neutral parameter options, but the retained solver does not solve the full five-reaction explicit-ion Smith-Missen problem in this Phase 1 script. Claims must therefore be limited by `phase1_residual_acceptance_audit.csv`.
-"""
+The pressure comparison remains a retained legacy PC-SAFT and neutral ePC-SAFT parity surface against Jou data. Pressure claims remain limited by `phase1_residual_acceptance_audit.csv`, especially the lower-temperature rows.
+""".format(phase1_status=phase1_status)
     (OUT_DIR / "phase1_model_lineage.md").write_text(lineage, encoding="utf-8")
 
     claim_boundary = "\n".join(
         [
             "# Phase 1 Claim Boundary",
             "",
-            "phase1_status: model_ran_but_failed_validation",
-            "lineage_status: retained_baseline_audit",
+            f"phase1_status: {phase1_status}",
+            "lineage_status: explicit_ideal_smith_missen_reproduction",
             "",
             "Allowed claims:",
-            "- The retained baseline artifacts were regenerated and audited against explicit pressure and speciation residual gates.",
+            "- The Phase 1 speciation workflow solves the explicit five-reaction, nine-species ideal Smith-Missen equilibrium system.",
+            "- Major observed speciation species may be used as Phase 1 validation evidence where `phase1_residual_acceptance_audit.csv` has `claim_allowed=true`.",
             "- Pressure comparisons may be discussed only where `phase1_residual_acceptance_audit.csv` has `claim_allowed=true`.",
-            "- Speciation comparisons may be discussed only as species-specific retained-baseline diagnostics unless the audit row for that species has `claim_allowed=true`.",
             "",
             "Forbidden claims:",
-            "- Do not claim Phase 1 has passed validation.",
-            "- Do not claim an independent full five-reaction Smith-Missen reproduction.",
-            "- Do not use trace or unsupported species as successful validation evidence.",
-            "- Do not promote this retained-baseline audit to a finalized joint-regression parameter set.",
+            "- Do not use trace or unobserved species as successful major-species validation evidence.",
+            "- Do not present the lower-temperature pressure rows as validated where their audit rows fail.",
+            "- Do not promote this Phase 1 baseline to a finalized joint-regression parameter set.",
             "",
-            "Residual-gate failures or diagnostic-only targets:",
+            "Residual-gate failures, trace limits, or unobserved targets:",
             *failed_lines,
             "",
         ]
@@ -327,9 +317,9 @@ The analysis records the Baygi/Nasrifar-style reaction-constant table and select
 
 
 def main() -> int:
-    pressure_results, speciation_results, residual_acceptance_audit = _write_curated_tables()
+    pressure_results, _, residual_acceptance_audit, speciation_curve, speciation_reference_points = _write_curated_tables()
     plot_pressure(pressure_results)
-    plot_speciation(speciation_results)
+    plot_speciation(speciation_curve, speciation_reference_points)
     write_phase1_reports(residual_acceptance_audit)
     print(f"Phase 1 curated artifacts: {OUT_DIR}")
     return 0

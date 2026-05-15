@@ -1,8 +1,8 @@
 # Phase 1 Model Lineage
 
-lineage_status: retained_baseline_audit
-phase1_status: model_ran_but_failed_validation
+lineage_status: explicit_ideal_smith_missen_reproduction
+phase1_status: validated_major_species_speciation_with_pressure_limits
 
-This artifact is a retained-baseline audit, not an independent Smith-Missen reproduction. It copies the repo's historical six-species apparent-equilibrium pressure/speciation outputs and the neutral ePC-SAFT parity outputs into a Phase 1 comparison surface.
+This artifact solves the explicit five-reaction, nine-species ideal Smith-Missen speciation problem for the Phase 1 speciation surface. Activities are set equal to mole fractions, and the solved species are CO2, MEA, H2O, MEAH+, MEACOO-, HCO3-, CO3^2-, H3O+, and OH-.
 
-The analysis records the Baygi/Nasrifar-style reaction-constant table and selected neutral parameter options, but the retained solver does not solve the full five-reaction explicit-ion Smith-Missen problem in this Phase 1 script. Claims must therefore be limited by `phase1_residual_acceptance_audit.csv`.
+The pressure comparison remains a retained legacy PC-SAFT and neutral ePC-SAFT parity surface against Jou data. Pressure claims remain limited by `phase1_residual_acceptance_audit.csv`, especially the lower-temperature rows.

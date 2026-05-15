@@ -72,7 +72,7 @@ def evaluate(values: dict[str, float], target_rows, anchor_scale: float = 0.003)
         try:
             prediction = solve_activity_speciation(target.loading, target.T, target.P, target.x, values)
             prediction_x = prediction.x
-            success = "did not converge" not in prediction.message.lower()
+            success = bool(prediction.success)
             message = prediction.message
         except Exception as exc:
             prediction_x = np.full(len(SPECIES_INDEX), np.nan, dtype=float)
