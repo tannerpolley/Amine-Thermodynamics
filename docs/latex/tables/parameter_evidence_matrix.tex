@@ -1,28 +1,41 @@
-\begingroup
-\scriptsize
-\setlength{\tabcolsep}{2pt}
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.38\linewidth}}
-\caption{Parameter-evidence matrix for the full ionic MEA ePC-SAFT basis.}\label{tab:parameter-evidence-matrix}\\
-\toprule
-Species & Parameter scope & Evidence status & Data or basis \\
-\midrule
-\endfirsthead
-\toprule
-Species & Parameter scope & Evidence status & Data or basis \\
-\midrule
-\endhead
-CO2 & \makecell[l]{m, s, e, dielc,\\MW} & molecular PC-SAFT seed & Non-electrolyte CO2 parameterization used as the inherited molecular component. \\
-MEA & \makecell[l]{m, s, e, e\_assoc,\\vol\_a, assoc\_scheme,\\MW} & molecular PC-SAFT seed & Associating neutral amine parameterization retained as the MEA molecular basis. \\
-MEA & f\_solv & not included as an adjusted MEA solvent-shell parameter & Figiel et al. report solvent $f_k$ values near 1.5 for water and alcohol solvents, but an MEA transfer value degraded the speciation calculation; the adopted parameter set therefore keeps $f\_solv=1$ pending direct MEA dielectric and activity regression. \\
-H2O & \makecell[l]{m, s(T), e, e\_assoc,\\vol\_a, dielc, f\_solv,\\MW} & SSM+DS solvent parameter & Water PC-SAFT parameters and SSM+DS $f_k=1.5$ from modified Born ePC-SAFT literature. \\
-MEAH+ & \makecell[l]{s, e,\\d\_born} & fitted to MEA speciation data & Direct MEAH+ NMR/speciation targets in Tier A local data. \\
-MEAH+ & \makecell[l]{dielc, f\_solv,\\z, MW} & ionic conventions & All ions use relative dielectric constant 8 and $f\_solv=1$ in SSM+DS; charge and molecular weight come from the species definition. \\
-MEACOO- & \makecell[l]{s, e, d\_born,\\k\_ij(MEAH+,\\MEACOO-)} & fitted to MEA speciation data & Direct carbamate NMR/speciation targets in Tier A local data; the MEAH+/MEACOO- interaction was fitted with the same subset. \\
-MEACOO- & \makecell[l]{dielc, f\_solv,\\z, MW} & ionic conventions plus corrected molecular weight & All ions use relative dielectric constant 8 and $f\_solv=1$ in SSM+DS; MW is corrected to MEA+CO2-H = 0.10408 kg/mol. \\
-HCO3- & \makecell[l]{s, e, d\_born,\\dielc, f\_solv,\\z, MW} & literature-backed diagnostic set plus trace Born fit & HCO3- uses Held/Uyan $\sigma=2.9296$, $\epsilon/k=70.00$, and water-ion $k_{ij}=0.0$; the regularized Tier A fit remains at 3.0, while an unanchored diagnostic gives a lower-residual HCO3-sensitive value near 6.80 that is not promoted. \\
-CO3\textasciicircum{}2- & \makecell[l]{s, e, d\_born,\\dielc, f\_solv,\\z, MW} & literature-backed diagnostic set plus trace Born fit & CO3\textasciicircum{}2- uses Held/Uyan $\sigma=2.4422$, $\epsilon/k=249.26$, and water-ion $k_{ij}=-0.25$; the regularized Tier A fit remains at 3.0, and the unanchored diagnostic did not move carbonate away from approximately 3.0. \\
-H3O+ & \makecell[l]{s, e, d\_born,\\dielc, f\_solv,\\z, MW} & literature-backed diagnostic set with SSM+DS Born value & H3O+ is the runtime proton carrier for H+ activity; it uses Held/Uyan $\sigma=3.4654$, $\epsilon/k=500.00$, water-ion $k_{ij}=0.25$, and Figiel $d\_born=1.218$. \\
-OH- & \makecell[l]{s, e, d\_born,\\dielc, f\_solv,\\z, MW} & literature-backed diagnostic set plus hydration Born derivation & OH- uses Held/Uyan $\sigma=2.0177$, $\epsilon/k=650.00$, and water-ion $k_{ij}=-0.25$; $d\_born=3.0811$ is derived by Born hydration-energy inversion and is not an MEA-system regression. \\
-\bottomrule
-\end{longtable}
-\endgroup
+\begin{table*}[t]
+    \centering
+    \scriptsize
+    \setlength{\tabcolsep}{3pt}
+    \renewcommand{\arraystretch}{1.08}
+    \caption{Parameter-evidence matrix for the primary true-species \MEA ePC-SAFT basis.}
+    \label{tab:parameter-evidence-matrix}
+    \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{3.2cm}X}
+        \toprule
+        Species & Parameter scope & Evidence status & Data or basis \\
+        \midrule
+        \COtwo & \makecell[l]{$m$, $\sigma$, $\epsilon/k$,\\$\varepsilon_r$, MW} & Molecular PC-SAFT value & Non-electrolyte \COtwo parameterization used as the inherited molecular component. \\
+        \MEA & \makecell[l]{$m$, $\sigma$, $\epsilon/k$,\\association terms, MW} & Molecular PC-SAFT value & Associating neutral amine parameterization retained as the \MEA molecular basis. \\
+        \MEA & $f_k$ & Not adjusted in this work & Figiel et al. report solvent $f_k$ values near 1.5 for water and alcohol solvents, but the adopted \MEA calculation keeps $f_k=1$ until direct \MEA dielectric and activity evidence supports changing it. \\
+        \HtwoO & \makecell[l]{$m$, $\sigma(T)$, $\epsilon/k$,\\association terms,\\$\varepsilon_r$, $f_k$, MW} & SSM+DS solvent parameter & Water PC-SAFT parameters and SSM+DS $f_k=1.5$ from modified-Born ePC-SAFT literature. \\
+        \MEAH & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$} & Fitted to \MEA speciation data & Direct \MEAH NMR/speciation targets in the selected amine-ion data subset. \\
+        \MEAH & \makecell[l]{$\varepsilon_r$, $f_k$,\\$z$, MW} & Ionic conventions & All ions use relative dielectric constant 8 and $f_k=1$ in SSM+DS; charge and molecular weight come from the species definition. \\
+        \MEACOO & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$,\\$k_{ij}(\MEAH,\MEACOO)$} & Fitted to \MEA speciation data & Direct carbamate NMR/speciation targets in the selected amine-ion data subset; the \MEAH/\MEACOO interaction was fitted with the same subset. \\
+        \MEACOO & \makecell[l]{$\varepsilon_r$, $f_k$,\\$z$, MW} & Ionic conventions plus corrected molecular weight & All ions use relative dielectric constant 8 and $f_k=1$ in SSM+DS; MW is corrected to \MEA+\COtwo-H = 0.10408 kg/mol. \\
+        \bottomrule
+    \end{tabularx}
+\end{table*}
+
+\begin{table*}[t]
+    \centering
+    \scriptsize
+    \setlength{\tabcolsep}{3pt}
+    \renewcommand{\arraystretch}{1.08}
+    \caption{Trace-species parameter evidence retained for the true-species \MEA ePC-SAFT basis.}
+    \label{tab:trace-parameter-evidence}
+    \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{1.5cm}>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{3.2cm}X}
+        \toprule
+        Species & Parameter scope & Evidence status & Data or basis \\
+        \midrule
+        \HCOthree & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$,\\$\varepsilon_r$, $f_k$,\\$z$, MW} & Literature-backed trace-species set plus Born sensitivity & \HCOthree uses Held/Uyan $\sigma=2.9296$, $\epsilon/k=70.00$, and water-ion $k_{ij}=0.0$; the regularized calculation retains $d^{\mathrm{Born}}=3.0$, while an unanchored sensitivity check gives a lower-residual bicarbonate-sensitive value near 6.80. \\
+        \COthree & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$,\\$\varepsilon_r$, $f_k$,\\$z$, MW} & Literature-backed trace-species set plus Born sensitivity & \COthree uses Held/Uyan $\sigma=2.4422$, $\epsilon/k=249.26$, and water-ion $k_{ij}=-0.25$; the regularized calculation retains $d^{\mathrm{Born}}=3.0$. \\
+        \HthreeO & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$,\\$\varepsilon_r$, $f_k$,\\$z$, MW} & Literature-backed proton-carrier value & \HthreeO represents the proton carrier for acid--base equilibria; it uses Held/Uyan $\sigma=3.4654$, $\epsilon/k=500.00$, water-ion $k_{ij}=0.25$, and Figiel $d^{\mathrm{Born}}=1.218$. \\
+        \Hydroxide & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$,\\$\varepsilon_r$, $f_k$,\\$z$, MW} & Literature-backed hydroxide value plus hydration estimate & \Hydroxide uses Held/Uyan $\sigma=2.0177$, $\epsilon/k=650.00$, and water-ion $k_{ij}=-0.25$; $d^{\mathrm{Born}}=3.0811$ is derived by Born hydration-energy inversion and is not an \MEA-system regression. \\
+        \bottomrule
+    \end{tabularx}
+\end{table*}

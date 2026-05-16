@@ -1,15 +1,147 @@
-\section{Thermodynamic Model and Regression Framework}\label{sec:model-framework}
+\section{Thermodynamic Model and Residual Evaluation}\label{sec:model-framework}
 The modeling target is a reacting electrolyte vapor--liquid equilibrium problem.  At specified temperature, apparent amine concentration, and total absorbed \COtwo loading, the model must determine a charge-balanced true-species liquid composition and the corresponding vapor-phase \COtwo partial pressure.  The liquid composition is not an auxiliary bookkeeping variable; it controls ePC-SAFT fugacity coefficients, activity coefficients, and Born/electrostatic contributions.
 
 \subsection{ePC-SAFT Residual Helmholtz Energy}
-ePC-SAFT is formulated as a residual Helmholtz-energy equation of state.  The reduced residual Helmholtz energy is represented schematically as
+ePC-SAFT is formulated as a residual Helmholtz-energy equation of state.  For a state defined by temperature \(T\), molar density \(\rho\), and mole-fraction vector \(\boldsymbol{x}\), the reduced residual Helmholtz energy \(\tilde{a}^{\mathrm{res}}=a^{\mathrm{res}}/(RT)\) is assembled from hard-chain, dispersion, association, Debye--Huckel, and Born terms \cite{Gross2001,Gross2002,Cameretti2005,Bulow2021a,Figiel2025}:
 \begin{equation}
-    a^{\mathrm{res}}
-    = a^{\mathrm{hc}} + a^{\mathrm{disp}} + a^{\mathrm{assoc}}
-    + a^{\mathrm{ion}} + a^{\mathrm{Born}},
+    \tilde{a}^{\mathrm{res}}
+    =
+    \tilde{a}^{\mathrm{hc}}
+    +\tilde{a}^{\mathrm{disp}}
+    +\tilde{a}^{\mathrm{assoc}}
+    +\tilde{a}^{\mathrm{DH}}
+    +\tilde{a}^{\mathrm{Born}} ,
     \label{eq:epcsaft-residual-split}
 \end{equation}
-where the hard-chain and dispersion terms describe chain-molecule repulsion and attraction, the association term describes site-specific hydrogen bonding, the ionic term describes long-range electrostatic interactions, and the Born contribution describes ion solvation.  Neutral \MEA and \HtwoO require association parameters, whereas ions require charge and Born-radius information in addition to size and dispersion parameters.
+where the hard-chain contribution gives the repulsive chain reference, the dispersion contribution gives short-range attraction, the association contribution gives site-specific hydrogen bonding, the Debye--Huckel term gives long-range electrostatics, and the Born term gives electrostatic solvation.  Neutral \MEA and \HtwoO therefore require segment, dispersion, and association parameters, whereas charged species also require charge, dielectric, and Born-diameter information.
+
+The hard-chain reference is built from packing-fraction moments
+\begin{equation}
+    \zeta_n=\frac{\pi}{6}\rho\sum_i x_i m_i d_i^n,\qquad n\in\{0,1,2,3\},
+    \label{eq:epcsaft-zeta-moments}
+\end{equation}
+where \(m_i\) is the segment number and \(d_i\) is the temperature-dependent segment diameter.  With \(\bar{m}=\sum_i x_i m_i\), the chain correction subtracts the connectivity penalty from the hard-sphere reference,
+\begin{equation}
+    \tilde{a}^{\mathrm{hc}}
+    =
+    \bar{m}\tilde{a}^{\mathrm{hs}}
+    -
+    \sum_i x_i(m_i-1)\ln g_{ii}^{\mathrm{hs}}(\sigma_{ii}) .
+    \label{eq:epcsaft-hard-chain}
+\end{equation}
+This term controls excluded volume and the density scale used by all subsequent residual derivatives.
+
+The dispersion term introduces attractive perturbations through mixture moments of segment energy and size,
+\begin{equation}
+    \tilde{a}^{\mathrm{disp}}
+    =
+    -2\pi\rho I_1(\eta,\bar{m})\overline{m^2\epsilon\sigma^3}
+    -\pi\rho\bar{m}C_1 I_2(\eta,\bar{m})
+    \overline{m^2\epsilon^2\sigma^3},
+    \label{eq:epcsaft-dispersion}
+\end{equation}
+where \(\eta=\zeta_3\), \(I_1\) and \(I_2\) are the PC-SAFT dispersion integrals, and the overbars denote the corresponding pair-mixed composition averages.  Binary interaction parameters enter this contribution through the mixed dispersion energy \(\epsilon_{ij}\), so pressure residuals can be sensitive to neutral--neutral and ion--molecule dispersion choices.
+
+Association is represented through site fractions \(X^{A_i}\),
+\begin{equation}
+    \tilde{a}^{\mathrm{assoc}}
+    =
+    \sum_i x_i \sum_{A_i}
+    \left[
+        \ln X^{A_i}
+        -\frac{X^{A_i}}{2}
+        +\frac{1}{2}
+    \right],
+    \label{eq:epcsaft-association}
+\end{equation}
+with association strengths proportional to
+\begin{equation}
+    \Delta^{A_iB_j}_{ij}
+    =
+    d_{ij}^{3}g_{ij}^{\mathrm{hs}}
+    \kappa^{A_iB_j}_{ij}
+    \left[
+        \exp\left(\frac{\epsilon^{A_iB_j}_{ij}}{k_{\mathrm{B}}T}\right)-1
+    \right].
+    \label{eq:epcsaft-association-strength}
+\end{equation}
+This is the contribution that carries the hydrogen-bonding physics of water and alkanolamines; it is absent for ions without association sites.
+
+For charged species, the Debye--Huckel contribution uses the dielectric state and the inverse Debye length,
+\begin{align}
+    \kappa
+    &=
+    \left[
+        \frac{\rho e^2}{k_{\mathrm{B}}T\varepsilon_0\varepsilon_r}
+        \sum_j x_j z_j^2
+    \right]^{1/2},
+    \label{eq:epcsaft-debye-kappa} \\
+    \tilde{a}^{\mathrm{DH}}
+    &=
+    -\frac{\kappa e^2}{12\pi\varepsilon_0\varepsilon_r k_{\mathrm{B}}T}
+    \sum_i x_i z_i^2\chi_i ,
+    \label{eq:epcsaft-debye-helmholtz}
+\end{align}
+where \(z_i\) is the ionic charge and \(\chi_i\) is the finite-ion-size correction.  The same relative permittivity \(\varepsilon_r\) also enters the Born term, making the dielectric rule a coupled electrostatic input rather than a separate post-processing correction.
+
+The Born contribution is evaluated in modular form:
+\begin{equation}
+    \tilde{a}^{\mathrm{Born}}
+    =
+    -\frac{e^2}{4\pi\varepsilon_0 k_{\mathrm{B}}T}
+    \sum_i x_i z_i^2
+    \sum_{\delta\in\mathcal{D}}
+    \left(1-\frac{1}{\varepsilon_{r,m_\delta}}\right)
+    D_{i,\delta}^{(m_\delta)} .
+    \label{eq:epcsaft-born-modular}
+\end{equation}
+The active set \(\mathcal{D}\) always contains the base Born term and may also include the solvation-shell-modeling (SSM) and dielectric-saturation (DS) corrections,
+\begin{equation}
+    \mathcal{D}
+    =
+    \{\mathrm{Born}\}\cup\mathcal{D}_{\mathrm{add}},
+    \qquad
+    \mathcal{D}_{\mathrm{add}}\subseteq\{\mathrm{SSM},\mathrm{DS}\}.
+    \label{eq:epcsaft-born-active-set}
+\end{equation}
+For the SSM+DS option used in this work, \(\mathcal{D}_{\mathrm{add}}=\{\mathrm{SSM},\mathrm{DS}\}\).  The base Born and SSM terms use the bulk dielectric medium, while the DS term uses the ion-local dielectric medium:
+\begin{equation}
+    m_\delta=
+    \begin{cases}
+        \mathrm{bulk}, & \delta\in\{\mathrm{Born},\mathrm{SSM}\},\\
+        \mathrm{ion}, & \delta=\mathrm{DS}.
+    \end{cases}
+    \label{eq:epcsaft-born-medium}
+\end{equation}
+The inverse-diameter terms are
+\begin{align}
+    D_{i,\mathrm{Born}}^{(\mathrm{bulk})}
+    &=
+    \frac{1}{d_i^{\mathrm{Born}}},
+    \label{eq:epcsaft-born-base-dterm}\\
+    D_{i,\mathrm{SSM}}^{(\mathrm{bulk})}
+    &=
+    \frac{1}{d_i^{\mathrm{Born}}+\Delta d_i}
+    -
+    \frac{1}{d_i^{\mathrm{Born}}},
+    \label{eq:epcsaft-born-ssm-dterm}\\
+    D_{i,\mathrm{DS}}^{(\mathrm{ion})}
+    &=
+    \frac{1}{d_i^{\mathrm{Born}}}
+    -
+    \frac{1}{d_i^{\mathrm{Born}}+\Delta d_i},
+    \label{eq:epcsaft-born-ds-dterm}
+\end{align}
+with shell shift
+\begin{equation}
+    \Delta d_i
+    =
+    \frac{f_{\mathrm{mix}}-1}{|z_i|}\,d_i^{\mathrm{Born}},
+    \qquad
+    f_{\mathrm{mix}}=\sum_k x_k f_k .
+    \label{eq:epcsaft-born-shell-shift}
+\end{equation}
+The SSM term changes the effective Born radius used with the bulk medium, whereas the DS term transfers the complementary radius increment into the ion-local dielectric medium.  This split is important for loaded \MEA because carbonation changes both the ionic population and the solvent environment.
 
 For a liquid state at temperature $T$, pressure $P$, and mole-fraction vector $\boldsymbol{x}$, ePC-SAFT provides residual chemical potentials and fugacity coefficients.  Molecular vapor--liquid equilibrium is expressed through fugacity equality,
 \begin{equation}
@@ -19,7 +151,18 @@ For a liquid state at temperature $T$, pressure $P$, and mole-fraction vector $\
     \qquad i \in \{\COtwo,\HtwoO,\MEA\},
     \label{eq:fugacity-equality}
 \end{equation}
-while ionic species are constrained to the liquid phase.
+while ionic species are constrained to the liquid phase.  The residual Helmholtz contribution enters this relation through
+\begin{equation}
+    \ln\varphi_k
+    =
+    \tilde{\mu}_k^{\mathrm{res}}-\ln Z,
+    \qquad
+    \ln\gamma_i^{*}
+    =
+    \ln\varphi_i-\ln\varphi_i^{\infty},
+    \label{eq:epcsaft-phi-gamma-link}
+\end{equation}
+so each residual contribution affects both phase equilibrium and the activity coefficients used in the true-species reaction equations.
 
 \subsection{True-Species Chemical Equilibrium}
 The apparent feed is defined by the unloaded \MEA mass fraction $w_{\MEA}$ and \COtwo loading $\alpha$, with $\alpha$ equal to moles of absorbed \COtwo per mole of total amine.  The unloaded apparent liquid composition is computed from molecular-weight conversion as
@@ -51,7 +194,7 @@ The independent reactions include water autoionization, carbonic-acid dissociati
     a_i = \gamma_i^{\mathrm{ePC-SAFT}} x_i,
     \label{eq:activity-reaction-equilibrium}
 \end{equation}
-where $\nu_{ri}$ is the stoichiometric coefficient and $\gamma_i^{\mathrm{ePC-SAFT}}$ is the activity coefficient evaluated from the ePC-SAFT liquid state.  This activity-coupled form is the key distinction from a diagnostic ideal-speciation model.
+where $\nu_{ri}$ is the stoichiometric coefficient and $\gamma_i^{\mathrm{ePC-SAFT}}$ is the activity coefficient evaluated from the ePC-SAFT liquid state.  This activity-coupled form is the key distinction from the ideal-equilibrium baseline.
 
 The liquid composition also satisfies carbon, amine, water, and charge balances:
 \begin{align}
@@ -63,11 +206,11 @@ The liquid composition also satisfies carbon, amine, water, and charge balances:
 \end{align}
 
 \subsection{Advanced Born and Permittivity Treatment}
-The ePC-SAFT calculations in this work use the advanced electrolyte options associated with concentration-dependent permittivity and modified Born solvation.  The enabled options correspond to an empirical relative-permittivity rule with package-native automatic differential-mode selection, Born-radius mode 3, solvation-shell modeling, dielectric saturation, and composition-dependent Born chemical-potential corrections.  This is the SSM+DS form introduced for the modified Born contribution, in which an ion-specific Born diameter is combined with a solvent-shell correction and a radially simplified dielectric-saturation term \cite{Figiel2025}.  The corresponding ePC-SAFT literature treats the pure-ion relative permittivity as $\varepsilon_r=8$, sets $f_k=1$ for ions, and fits the solvent $f_k$ parameter to electrolyte activity data; water, methanol, and ethanol have reported $f_k$ values of 1.5, 1.4, and 1.6, respectively \cite{Figiel2025}.  Loaded 30 wt\% \MEA also has direct dielectric-dispersion measurements, which show that static permittivity changes with both temperature and carbonation ratio \cite{Hajj2024}.  Those data motivate, but do not yet fully identify, an MEA-specific solvent-shell parameter.
+The ePC-SAFT calculations in this work use concentration-dependent permittivity and modified Born solvation.  The electrolyte model uses an empirical relative-permittivity rule, Born-radius mode 3, solvation-shell modeling, dielectric saturation, and composition-dependent Born chemical-potential corrections.  This is the SSM+DS form introduced for the modified Born contribution, in which an ion-specific Born diameter is combined with a solvent-shell correction and a radially simplified dielectric-saturation term \cite{Figiel2025}.  The corresponding ePC-SAFT literature treats the pure-ion relative permittivity as $\varepsilon_r=8$, sets $f_k=1$ for ions, and fits the solvent $f_k$ parameter to electrolyte activity data; water, methanol, and ethanol have reported $f_k$ values of 1.5, 1.4, and 1.6, respectively \cite{Figiel2025}.  Loaded 30 wt\% \MEA also has direct dielectric-dispersion measurements, which show that static permittivity changes with both temperature and carbonation ratio \cite{Hajj2024}.  Those data motivate, but do not yet fully identify, an MEA-specific solvent-shell parameter.
 
 In physical terms, the liquid dielectric environment is not treated as a fixed pure-water constant.  Instead, the ion solvation contribution responds to solvent composition and ionic strength, which is essential for a loaded amine solution whose polarity and ion population change strongly with \COtwo loading.  The parameter table in \cref{tab:full-ionic-ssm-ds-parameters} therefore distinguishes fitted MEA-family ion parameters from SSM+DS conventions transferred from electrolyte literature.
 
-\subsection{Parameter Regression Objective}
+\subsection{Residual Metrics and Parameter Status}
 The parameter vector $\boldsymbol{\theta}$ includes selected pure-component parameters for \MEA-family species and selected binary interaction parameters.  The pressure residual is expressed on a logarithmic basis,
 \begin{equation}
     \epsilon_{P,j}
@@ -89,11 +232,11 @@ because measured \COtwo partial pressures span several orders of magnitude.  The
     \lambda\lVert \boldsymbol{\theta}-\boldsymbol{\theta}_0\rVert^2.
     \label{eq:regression-objective}
 \end{equation}
-This objective is intentionally multi-observable.  A pressure-only fit can hide a poor liquid composition, while a speciation-only fit cannot guarantee the correct gas-phase driving force.  The final predictive model must satisfy both.
+This objective is multi-observable.  A pressure-only fit can hide a poor liquid composition, while a speciation-only fit cannot guarantee the correct gas-phase driving force.  A jointly regressed predictive model must satisfy both.
 
 \input{tables/regression_bounds}
 
-In the present calculation, the direct \MEAH/\MEACOO speciation evidence is fully reproducible, whereas the final all-row coupled package-native pressure/speciation candidate did not satisfy the convergence and promotion criteria.  We therefore report the native target set, the parameter window in \cref{tab:regression-bounds}, and the resulting package-fit claim boundary explicitly, rather than implying that an approved pressure-optimized global parameter set has already been obtained.
+In the present calculation, the direct \MEAH/\MEACOO speciation fit is reproducible and is reported as part of the parameter evidence.  The all-row coupled pressure/speciation regression is not reported as a completed parameter optimization because the available ePC-SAFT regression method does not yet provide the sensitivity information needed to accept a joint fit.  We therefore report the target set, the parameter window in \cref{tab:regression-bounds}, and the residual-qualified activity-based evaluation, rather than presenting a pressure-optimized global parameter set.
 
 
 
