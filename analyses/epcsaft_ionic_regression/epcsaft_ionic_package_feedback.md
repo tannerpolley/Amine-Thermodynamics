@@ -258,7 +258,7 @@ InputError: Neutral equilibrium does not support ion-containing mixtures.
 ```
 
 The source-side reason is explicit in
-`C:/Users/Tanner/Documents/git/ePC-SAFT/src/epcsaft/equilibrium.py`:
+`<upstream-ePC-SAFT>/src/epcsaft/equilibrium.py`:
 
 ```text
 line 752: def _reject_ion_containing_mixture(mixture: Any) -> None:

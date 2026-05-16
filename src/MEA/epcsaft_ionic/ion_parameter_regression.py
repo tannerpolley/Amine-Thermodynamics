@@ -129,7 +129,7 @@ def evaluate_fit_values(values: dict[str, float], targets: list[IonRegressionTar
         try:
             prediction = solve_activity_speciation(target.loading, target.T, target.P, target.x, values)
             prediction_x = prediction.x
-            success = "did not converge" not in prediction.message.lower()
+            success = prediction.success
             message = prediction.message
         except Exception as exc:
             prediction_x = np.full(len(SPECIES), np.nan, dtype=float)

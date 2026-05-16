@@ -1,0 +1,14 @@
+column,required,unit_or_domain,description
+source_key,yes,Amundsen2009,Stable source identifier.
+row_status,yes,extracted|staged|ambiguous|excluded,Extraction status for this row.
+property,yes,density|dynamic_viscosity|kinematic_viscosity,Measured property.
+temperature_C,yes,degC,Reported temperature.
+mea_mass_fraction,yes,mass fraction,MEA mass fraction in the liquid solution.
+co2_loading_mol_per_mol_mea,no,mol CO2/mol MEA,CO2 loading for loaded mixtures; blank for unloaded binary MEA-water data.
+pressure_kPa,no,kPa,Pressure if reported.
+value,yes,reported unit,Measured property value.
+value_unit,yes,kg/m^3|mPa*s|mm^2/s|other,Unit reported by the source table.
+source_table_or_figure,yes,text,Source table/figure/caption identifier from repo-local Markdown.
+source_line_start,no,line number,First line in repo-local Markdown used for traceability.
+source_line_end,no,line number,Last line in repo-local Markdown used for traceability.
+notes,no,text,Short extraction note; do not paste article text.

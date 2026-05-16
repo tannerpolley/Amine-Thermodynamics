@@ -10,6 +10,8 @@ COMMANDS = [
     [sys.executable, "analyses/epcsaft_neutral_parity/scripts/render_figures.py"],
     [sys.executable, "analyses/epcsaft_ionic_regression/scripts/render_figures.py"],
     [sys.executable, "analyses/2015_baygi/scripts/render_figures.py"],
+    [sys.executable, "analyses/phase1_smith_missen_baseline/scripts/render_figures.py"],
+    [sys.executable, "analyses/phase2_activity_epcsaft/scripts/render_figures.py"],
 ]
 
 

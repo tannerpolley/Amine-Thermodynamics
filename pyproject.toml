@@ -5,12 +5,11 @@ description = "MEA-CO2-H2O thermodynamics workflows, diagnostics, and plot regen
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
 dependencies = [
-    "epcsaft @ file:///C:/Users/Tanner/.codex/worktrees/epcsaft-dev/ePC-SAFT",
+    "epcsaft",
     "matplotlib>=3.10",
     "numdifftools>=0.9",
     "numpy>=2.0",
     "pandas>=2.2",
-    "pcsaft",
     "pillow>=11",
     "plotly>=6",
     "scipy>=1.15",
@@ -38,4 +37,4 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.uv.sources]
-pcsaft = { path = "C:/Users/Tanner/Documents/git/PC-SAFT" }
+epcsaft = { git = "https://github.com/tannerpolley/ePC-SAFT.git", rev = "9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785" }

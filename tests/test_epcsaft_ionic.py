@@ -5,6 +5,7 @@ import unittest
 import numpy as np
 
 from MEA.epcsaft_ionic.model import DEFAULT_INITIAL_GUESS, load_speciation_targets, load_vle_targets, predict_co2_pressure_kPa
+from MEA.epcsaft_runtime import ADVANCED_BORN_USER_OPTIONS
 
 
 class IonicEPCSAFTWorkflowTests(unittest.TestCase):
@@ -23,6 +24,12 @@ class IonicEPCSAFTWorkflowTests(unittest.TestCase):
         pressure = predict_co2_pressure_kPa(target.x, target.T, target.P, dict(DEFAULT_INITIAL_GUESS))
         self.assertTrue(np.isfinite(pressure))
         self.assertGreater(pressure, 0.0)
+
+    def test_advanced_born_options_use_supported_package_differential_modes(self) -> None:
+        rel_perm = ADVANCED_BORN_USER_OPTIONS["elec_model"]["rel_perm"]
+        mu_born = ADVANCED_BORN_USER_OPTIONS["elec_model"]["born_model"]["mu_born_model"]
+        self.assertEqual(rel_perm["differential_mode"], "auto")
+        self.assertEqual(mu_born["differential_mode"], "auto")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,11 @@
+species,parameter,status,source_or_basis,fit_artifact,phase,notes
+CO2,"m,sigma,epsilon,MW,dielc",literature_or_existing_repo,Gross/legacy PC-SAFT; repo parameter table,,Phase 1,
+MEA,"m,sigma,epsilon,association,MW",literature_or_existing_repo,Baygi/Nasrifar/legacy MEA parameter set,,Phase 1,Association scheme must be documented.
+MEA,f_solv,not_promoted_until_dielectric_data,MEA–H2O dielectric/activity evidence required,,Phase 2/3,Do not fit from pressure data alone.
+H2O,"m,sigma(T),epsilon,association,dielc,f_solv",literature,Held/Figiel SSM+DS water basis,,Phase 2,
+MEAH+,"sigma,epsilon,d_born",selected_row_fit_promoted,MEA speciation data,analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_fit_summary.json,Phase 2/3,Current promoted artifact uses 8 selected Tier-A rows and 22 residuals from Matin/Jakobsen/Bottinger; full-row Tier-A fit remains required before final claim.
+MEACOO-,"sigma,epsilon,d_born",selected_row_fit_promoted,MEA speciation data,analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_fit_summary.json,Phase 2/3,Current promoted artifact uses 8 selected Tier-A rows and 22 residuals from Matin/Jakobsen/Bottinger; full-row Tier-A fit remains required before final claim.
+HCO3-,d_born,fit_capable_staged,literature seed + carbonate/speciation sensitivity,,Phase 2/3,Fixed in Phase 1; sensitivity in Phase 2; movable in Phase 3 if identifiable.
+CO3^2-,d_born,fit_capable_staged,literature seed + carbonate/speciation sensitivity,,Phase 2/3,Fixed in Phase 1; sensitivity in Phase 2; movable in Phase 3 if identifiable.
+H3O+,d_born,fixed_or_regularized_initially,Figiel/Held/Uyan convention,,Phase 2/3,Needs pH/electrochemical support before strong fit claim.
+OH-,d_born,fixed_or_regularized_initially,hydration-derived or literature,,Phase 2/3,Needs pH/electrochemical support before strong fit claim.

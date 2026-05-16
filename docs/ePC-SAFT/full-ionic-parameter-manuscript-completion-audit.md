@@ -36,7 +36,7 @@ verified against explicit evidence and reproducible checks:
 Run:
 
 ```powershell
-$py = 'C:\Users\Tanner\Documents\git\MEA-Thermodynamics\.venv\Scripts\python.exe'
+$py = '<repo-root>\.venv\Scripts\python.exe'
 & $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_full_species_and_parameter_scope_is_complete -v
 ```
 
@@ -51,7 +51,7 @@ Expected behavior:
 Run:
 
 ```powershell
-$py = 'C:\Users\Tanner\Documents\git\MEA-Thermodynamics\.venv\Scripts\python.exe'
+$py = '<repo-root>\.venv\Scripts\python.exe'
 & $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_promoted_ion_fit_is_not_seed_only -v
 ```
 
@@ -66,7 +66,7 @@ Expected behavior:
 Run:
 
 ```powershell
-$py = 'C:\Users\Tanner\Documents\git\MEA-Thermodynamics\.venv\Scripts\python.exe'
+$py = '<repo-root>\.venv\Scripts\python.exe'
 & $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_trace_ion_literature_values_are_promoted -v
 ```
 
@@ -82,7 +82,7 @@ Expected behavior:
 Run:
 
 ```powershell
-$py = 'C:\Users\Tanner\Documents\git\MEA-Thermodynamics\.venv\Scripts\python.exe'
+$py = '<repo-root>\.venv\Scripts\python.exe'
 & $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_full_ionic_plot_artifacts_include_expected_formats -v
 ```
 
@@ -100,7 +100,7 @@ Expected behavior:
 Run:
 
 ```powershell
-$py = 'C:\Users\Tanner\Documents\git\MEA-Thermodynamics\.venv\Scripts\python.exe'
+$py = '<repo-root>\.venv\Scripts\python.exe'
 & $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_latex_source_and_output_conventions -v
 & $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_active_runtime_species_are_complete -v
 ```
@@ -115,16 +115,16 @@ Expected behavior:
 ### 5) Full suite acceptance for this audit
 
 ```powershell
-$py = 'C:\Users\Tanner\Documents\git\MEA-Thermodynamics\.venv\Scripts\python.exe'
+$py = '<repo-root>\.venv\Scripts\python.exe'
 & $py -m unittest tests.test_ion_parameter_regression_artifacts -v
 ```
 
 ### 6) Human-readable build and quant evidence (informational)
 
 ```powershell
-$py = 'C:\Users\Tanner\Documents\git\MEA-Thermodynamics\.venv\Scripts\python.exe'
+$py = '<repo-root>\.venv\Scripts\python.exe'
 & $py scripts\doctor.py
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics\docs\latex
+cd <repo-root>\docs\latex
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 

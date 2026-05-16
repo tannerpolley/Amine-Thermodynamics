@@ -2,7 +2,7 @@
 
 ## Repo
 
-- `C:\Users\Tanner\Documents\git\MEA-Thermodynamics`
+- `<repo-root>`
 
 ## Package source
 

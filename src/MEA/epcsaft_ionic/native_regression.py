@@ -162,12 +162,14 @@ def build_speciation_target_rows(targets: Iterable[SpeciationTarget]) -> list[di
                     "speciation": target_speciation,
                 },
                 "target_speciation": target_speciation,
+                "target_roles": dict(target.target_roles),
                 "source": source,
                 "split": _speciation_split(source),
                 "metadata": {
                     "target_family": "speciation",
                     "co2_loading": float(target.loading),
                     "temperature_C": float(target.T) - 273.15,
+                    "target_roles": dict(target.target_roles),
                 },
             }
         )
@@ -236,6 +238,8 @@ def build_native_regression_problem(
                 "validation": sorted(SPECIATION_VALIDATION_SOURCES),
             },
             "optimizer_owner": "epcsaft",
+            "optimizer_backend": "ceres",
+            "derivative_backend": "autodiff",
             "downstream_role": "target_construction_and_result_artifacts",
         },
     )

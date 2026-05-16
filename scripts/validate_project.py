@@ -10,6 +10,7 @@ PY = sys.executable
 
 QUICK_COMMANDS = [
     [PY, "scripts/doctor.py"],
+    [PY, "scripts/check_no_local_paths.py"],
     [PY, "-m", "compileall", "-x", r"results[\\/]+runs", "src", "tests", "scripts", "analyses"],
     [PY, "-m", "unittest", "discover", "tests", "-v"],
 ]
@@ -29,6 +30,14 @@ CURATED_REQUIREMENTS = {
     "analyses/epcsaft_ionic_regression/results/train_validation": ["train_validation_summary.json", "train_validation_pressure_residuals.csv", "train_validation_speciation_residuals.csv", "train_validation_pressure_by_source.csv", "train_validation_speciation_by_species.csv", "train_validation_pressure_residuals.mpl.yaml", "train_validation_pressure_residuals.png", "train_validation_pressure_residuals.svg"],
     "analyses/epcsaft_ionic_regression/results/sensitivity": ["parameter_sensitivity_summary.json", "parameter_sensitivity_matrix.csv", "parameter_identifiability.csv", "parameter_sensitivity_heatmap.mpl.yaml", "parameter_sensitivity_heatmap.png", "parameter_sensitivity_heatmap.svg"],
     "analyses/2015_baygi/results/neutral_parity": ["baygi_neutral_epcsaft_pcsaft_pressure_parity_plot_data.csv", "baygi_neutral_epcsaft_pcsaft_pressure_parity.mpl.yaml", "baygi_neutral_epcsaft_pcsaft_pressure_parity.png", "baygi_neutral_epcsaft_pcsaft_pressure_parity.svg"],
+    "analyses/phase1_smith_missen_baseline/results": ["phase1_pressure_results.csv", "phase1_pressure_metrics.csv", "phase1_speciation_results.csv", "phase1_speciation_metrics.csv", "phase1_speciation_curve.csv", "phase1_speciation_reference_points.csv", "phase1_parameter_table.csv", "phase1_reaction_constant_table.csv", "phase1_residual_acceptance_audit.csv", "phase1_model_lineage.md", "phase1_claim_boundary.md", "phase1_pressure_vs_loading.mpl.yaml", "phase1_pressure_vs_loading.png", "phase1_pressure_vs_loading.svg", "phase1_speciation_vs_loading.mpl.yaml", "phase1_speciation_vs_loading.png", "phase1_speciation_vs_loading.svg", "phase1_speciation_vs_loading_plot_data.csv"],
+    "analyses/phase1_smith_missen_baseline/figures/pressure/input": ["source_manifest.csv"],
+    "analyses/phase1_smith_missen_baseline/figures/pressure/output": ["phase1_pressure_plot_data.csv", "phase1_pressure_vs_loading.mpl.yaml", "phase1_pressure_vs_loading.png", "phase1_pressure_vs_loading.svg"],
+    "analyses/phase1_smith_missen_baseline/figures/speciation/input": ["source_manifest.csv"],
+    "analyses/phase1_smith_missen_baseline/figures/speciation/output": ["phase1_speciation_curve.csv", "phase1_speciation_reference_points.csv", "phase1_speciation_20C.mpl.yaml", "phase1_speciation_20C.png", "phase1_speciation_20C.svg", "phase1_speciation_20C_plot_data.csv", "phase1_speciation_40C.mpl.yaml", "phase1_speciation_40C.png", "phase1_speciation_40C.svg", "phase1_speciation_40C_plot_data.csv"],
+    "analyses/phase2_activity_epcsaft/results": ["phase2_activity_speciation_problem.json", "phase2_solver_claim_boundary_report.md", "phase2_required_output_status.csv", "phase2_speciation_reference_points.csv", "phase2_speciation_target_roles.csv", "phase2_equilibrium_results.csv", "phase2_pressure_results.csv", "phase2_pressure_speciation_parity.csv", "phase2_pressure_metrics.csv", "phase2_speciation_metrics.csv", "phase2_solver_diagnostics.csv", "phase2_residual_acceptance_audit.csv", "phase2_speciation_activity_curves.csv", "phase2_speciation_activity_plot.mpl.yaml", "phase2_speciation_activity_plot.png", "phase2_speciation_activity_plot.svg", "phase2_speciation_activity_plot_plot_data.csv"],
+    "analyses/phase2_activity_epcsaft/figures/speciation/input": ["source_manifest.csv"],
+    "analyses/phase2_activity_epcsaft/figures/speciation/output": ["phase2_speciation_reference_points.csv", "phase2_speciation_activity_curves.csv", "phase2_speciation_20C.mpl.yaml", "phase2_speciation_20C.png", "phase2_speciation_20C.svg", "phase2_speciation_20C_plot_data.csv", "phase2_speciation_40C.mpl.yaml", "phase2_speciation_40C.png", "phase2_speciation_40C.svg", "phase2_speciation_40C_plot_data.csv", "phase2_speciation_60C.mpl.yaml", "phase2_speciation_60C.png", "phase2_speciation_60C.svg", "phase2_speciation_60C_plot_data.csv", "phase2_speciation_80C.mpl.yaml", "phase2_speciation_80C.png", "phase2_speciation_80C.svg", "phase2_speciation_80C_plot_data.csv", "phase2_speciation_figure_family.mpl.yaml"],
 }
 
 

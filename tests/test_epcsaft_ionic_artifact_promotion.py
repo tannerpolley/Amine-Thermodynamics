@@ -7,7 +7,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
-from MEA.epcsaft_ionic import global_regression, regress_parameters
+from MEA.epcsaft_ionic import global_regression, ion_parameter_regression, regress_parameters
 
 
 class FakeReactiveFitResult:
@@ -98,10 +98,10 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
             max_vle_records=1,
             max_speciation_records=1,
             exclude_carbonate_born=False,
+            backend="ceres",
+            derivative_backend="autodiff",
             tolerance=1.0e-6,
             damping=1.0,
-            jacobian_mode="forward",
-            relative_step=1.0e-4,
             verbose=False,
         )
         with tempfile.TemporaryDirectory() as tmp:
@@ -122,6 +122,11 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
                 fake_epcsaft.fit_reactive_electrolyte_parameters.assert_called_once()
                 _, kwargs = fake_epcsaft.fit_reactive_electrolyte_parameters.call_args
                 self.assertEqual(kwargs["max_iterations"], 1)
+                self.assertNotIn("optimizer_backend", kwargs)
+                self.assertNotIn("derivative_backend", kwargs)
+                self.assertNotIn("log_parameters", kwargs)
+                self.assertNotIn("jacobian_mode", kwargs)
+                self.assertNotIn("relative_step", kwargs)
                 self.assertIn("HCO3-__d_born", kwargs["initial_parameters"])
                 self.assertIn("CO3^2-__d_born", kwargs["initial_parameters"])
                 self.assertEqual(summary["native_regression"]["owner"], "epcsaft")
@@ -137,8 +142,13 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
                 ):
                     self.assertTrue((output_dir / name).exists(), name)
 
+    def test_disabled_local_ion_fit_redirects_to_native_entrypoint(self) -> None:
+        args = SimpleNamespace(max_records=4, max_nfev=4, output_label="smoke", promote=False, verbose=False)
+        with self.assertRaisesRegex(RuntimeError, "disabled by MEA-Thermodynamics issue #3"):
+            ion_parameter_regression.run_fit(args)
+
     def test_production_regression_modules_do_not_import_or_call_scipy_optimizers(self) -> None:
-        for module in (regress_parameters, global_regression):
+        for module in (regress_parameters, global_regression, ion_parameter_regression):
             with self.subTest(module=module.__name__):
                 source_path = Path(module.__file__)
                 tree = ast.parse(source_path.read_text(encoding="utf-8-sig"))

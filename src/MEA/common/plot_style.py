@@ -12,7 +12,7 @@ SPECIATION_FIGSIZE = (10, 7)
 PRESSURE_XLIM = (0.0, 0.8)
 PRESSURE_YLIM = (1.0e-4, 5.0e3)
 SPECIATION_XLIM = (0.0, 0.8)
-SPECIATION_YLIM = (1.0e-12, 1.0)
+SPECIATION_YLIM = (1.0e-14, 1.0)
 
 JOU_TEMPERATURE_COLORS: dict[int, str] = {
     40: "#1f5aa6",
@@ -31,24 +31,24 @@ EPCSAFT_NEUTRAL_LINESTYLE = "-"
 EPCSAFT_IONIC_LINESTYLE = "-"
 SPECIATION_MODEL_LINESTYLE = "--"
 SPECIATION_TARGET_MARKER = "o"
-SPECIATION_TARGET_ALPHA = 0.62
-SPECIATION_TARGET_MARKERSIZE = 5
+SPECIATION_TARGET_ALPHA = 0.78
+SPECIATION_TARGET_MARKERSIZE = 6.8
 
 TRUE_SPECIES_COLORS: dict[str, str] = {
     "CO2": "#16805a",
     "MEA": "#1f5aa6",
     "H2O": "#707070",
-    "MEAH+": "#d47a00",
-    "MEAH^+": "#d47a00",
-    "MEACOO-": "#b6312c",
-    "MEACOO^-": "#b6312c",
-    "HCO3-": "#008c9e",
-    "HCO3^-": "#008c9e",
-    "CO3^2-": "#6f4aa8",
-    "H3O+": "#8a5a2b",
-    "OH-": "#6b7f16",
-    "MEA + MEAH+": "#b44f86",
-    "MEA + MEAH^+": "#b44f86",
+    "MEAH+": "#bcbd22",
+    "MEAH^+": "#bcbd22",
+    "MEACOO-": "#d62728",
+    "MEACOO^-": "#d62728",
+    "HCO3-": "#17becf",
+    "HCO3^-": "#17becf",
+    "CO3^2-": "#9467bd",
+    "H3O+": "#8c564b",
+    "OH-": "#7f7f7f",
+    "MEA + MEAH+": "#e377c2",
+    "MEA + MEAH^+": "#e377c2",
 }
 
 TRUE_SPECIES_LABELS: dict[str, str] = {

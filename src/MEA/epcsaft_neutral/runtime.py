@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -9,8 +10,7 @@ import numpy as np
 from MEA.epcsaft_neutral.parameters import SPECIES, legacy_neutral_params
 
 
-EPCSAFT_REPO = Path(r"C:\Users\Tanner\Documents\git\ePC-SAFT")
-EPCSAFT_SRC = EPCSAFT_REPO / "src"
+EPCSAFT_SRC = Path(os.environ["EPCSAFT_SRC"]) if "EPCSAFT_SRC" in os.environ else None
 
 
 def load_epcsaft():
@@ -19,7 +19,7 @@ def load_epcsaft():
 
         return epcsaft
     except Exception as first_exc:
-        if EPCSAFT_SRC.exists():
+        if EPCSAFT_SRC is not None and EPCSAFT_SRC.exists():
             src_text = str(EPCSAFT_SRC)
             if src_text not in sys.path:
                 sys.path.insert(0, src_text)
@@ -29,12 +29,13 @@ def load_epcsaft():
                 return epcsaft
             except Exception as second_exc:
                 raise RuntimeError(
-                    "Unable to import the sibling ePC-SAFT package. From this repository run "
-                    "`uv sync`, or build the sibling package from "
-                    "C:\\Users\\Tanner\\Documents\\git\\ePC-SAFT with "
-                    "`uv sync --no-install-project` and `uv run python scripts\\build_epcsaft.py`."
+                    "Unable to import the ePC-SAFT package from EPCSAFT_SRC. From this repository run "
+                    "`uv sync`, or build the local source checkout and set EPCSAFT_SRC to its src directory."
                 ) from second_exc
-        raise RuntimeError("Unable to import epcsaft and the sibling source checkout was not found.") from first_exc
+        raise RuntimeError(
+            "Unable to import epcsaft. Install the pinned dependency with `uv sync` or set EPCSAFT_SRC "
+            "to a local ePC-SAFT/src checkout."
+        ) from first_exc
 
 
 def build_neutral_mixture(params: dict[str, Any] | None = None):

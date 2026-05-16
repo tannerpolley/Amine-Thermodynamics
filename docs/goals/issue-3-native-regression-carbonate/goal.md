@@ -33,11 +33,11 @@ MEA must not promote that alternative from trace-only evidence. Promotion requir
 
 ## Source Anchors
 
-- MEA repo: `C:\Users\Tanner\Documents\git\MEA-Thermodynamics`
+- MEA repo: `<repo-root>`
 - Correct issue: `https://github.com/tannerpolley/MEA-Thermodynamics/issues/3`
 - Plan: `docs/ePC-SAFT/carbonate-global-regression-resolution-plan.md`
 - Trace diagnostic: `analyses/epcsaft_ionic_regression/results/trace_carbonate_born_regression/trace_carbonate_born_fit_summary.json`
-- Current package dependency: sibling `C:\Users\Tanner\Documents\git\ePC-SAFT`
+- Current package dependency: sibling `<upstream-ePC-SAFT>`
 
 ## Completion Proof
 
@@ -54,7 +54,7 @@ A final PM/Judge audit must show:
 ## Starter Command
 
 ```powershell
-cd C:\Users\Tanner\Documents\git\MEA-Thermodynamics
+cd <repo-root>
 /goal Follow docs/goals/issue-3-native-regression-carbonate/goal.md.
 ```
 

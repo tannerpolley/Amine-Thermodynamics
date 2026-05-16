@@ -65,12 +65,6 @@ def initial_all_species_mole_fractions(loading: float, mea_weight_fraction: floa
     total = n_co2 + n_mea + n_h2o
     return np.array([n_co2 / total, n_mea / total, n_h2o / total, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype=float)
 
-DIAGNOSTIC_REACTION_CONSTANTS = {
-    "R2_CO2_to_HCO3": (216.049, -12431.70, -35.4819, 0.0),
-    "R3_HCO3_to_CO3": (-1.8652, -1545.3, 0.0, 0.0),
-    "R4_MEACOO_hydrolysis": (-1.8652, -1545.3, 0.0, 0.0),
-    "R5_MEAH_dissociation": (2.1211, -8189.38, 0.0, -0.007484),
-}
 
 FIT_COMPONENTS = ("MEA", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-")
 BINARY_FIT_PAIRS = (
@@ -162,10 +156,12 @@ class SpeciationTarget:
     loading: float
     x: np.ndarray
     source: str
+    target_roles: dict[str, str]
 
 
 @dataclass(frozen=True)
 class ReactiveSpeciationPrediction:
+    success: bool
     x: np.ndarray
     activity_coefficients: dict[str, float]
     mass_balance_residuals: dict[str, float]
@@ -323,9 +319,36 @@ def load_speciation_targets(limit: int | None = None) -> list[SpeciationTarget]:
             loading=float(_as_float(row, "CO2_loading")),
             x=reconcile_speciation_row(row),
             source=str(row.get("source", "")),
+            target_roles=speciation_target_roles(row),
         )
         for idx, row in enumerate(rows)
     ]
+
+
+def speciation_target_roles(row: dict[str, str]) -> dict[str, str]:
+    roles: dict[str, str] = {}
+    columns = {
+        "CO2": "CO2",
+        "MEA": "MEA",
+        "MEAH+": "MEAH^+",
+        "MEACOO-": "MEACOO^-",
+        "HCO3-": "HCO3^-",
+        "CO3^2-": "CO3^2-",
+    }
+    for species, column in columns.items():
+        value = _as_float(row, column)
+        if np.isfinite(value):
+            roles[species] = "direct_positive" if value > 0.0 else "direct_zero"
+        else:
+            roles[species] = "balance_inferred"
+    aggregate = _as_float(row, "MEA + MEAH^+")
+    if np.isfinite(aggregate):
+        roles["MEA + MEAH+"] = "aggregate_direct_positive" if aggregate > 0.0 else "aggregate_direct_zero"
+    else:
+        roles["MEA + MEAH+"] = "balance_inferred"
+    for species in ("H2O", "H3O+", "OH-"):
+        roles[species] = "balance_inferred"
+    return roles
 
 
 def _base_params(x: np.ndarray, T: float, dataset: Path = DATASET_DIR) -> dict[str, Any]:
@@ -366,19 +389,33 @@ def state_for_x(x: np.ndarray, T: float, P: float, values: dict[str, float], dat
     return mixture_for_x(x, T, values, dataset).state(T, x, P=P, phase="liq")
 
 
-def reaction_definitions(T: float):
+def reaction_definitions_from_coefficients(
+    T: float,
+    coefficients: dict[str, tuple[float, float, float, float]],
+    *,
+    source_by_name: dict[str, str] | None = None,
+    standard_state: str = "mole_fraction_activity",
+):
     epcsaft = load_epcsaft()
-    log_k = equilibrium_log_constants(T)
+    names = tuple(coefficients)
+    constants = np.array([coefficients[name] for name in names], dtype=float)
+    a, b, c, d = constants.T
+    log_k = a + b / float(T) + c * np.log(float(T)) + d * float(T)
     rows = reaction_matrix()
-    names = tuple(REACTION_CONSTANTS)
     return [
-        epcsaft.ReactionDefinition(
+        epcsaft.ReactionDefinition.from_literature_constant(
             stoichiometry={species: float(coeff) for species, coeff in zip(SPECIES, row) if abs(float(coeff)) > 0.0},
             log_equilibrium_constant=float(log_k[idx]),
             name=names[idx],
+            standard_state=standard_state,
+            source=(source_by_name or {}).get(names[idx], ""),
         )
         for idx, row in enumerate(rows)
     ]
+
+
+def reaction_definitions(T: float):
+    return reaction_definitions_from_coefficients(T, REACTION_CONSTANTS)
 
 
 def apparent_totals(loading: float) -> dict[str, float]:
@@ -405,8 +442,17 @@ def solve_activity_speciation(
     initial_x: np.ndarray,
     values: dict[str, float],
     dataset: Path = DATASET_DIR,
+    reactions=None,
+    max_iterations: int = 80,
+    tolerance: float = 1.0e-7,
+    damping: float = 0.5,
+    min_mole_fraction: float = 1.0e-14,
+    mass_tolerance: float = 1.0e-7,
+    charge_tolerance: float = 1.0e-6,
+    reaction_tolerance: float = 1.0e-7,
 ) -> ReactiveSpeciationPrediction:
     epcsaft = load_epcsaft()
+    active_reactions = tuple(reactions or reaction_definitions(float(T)))
 
     def make_mixture(x: np.ndarray, temperature: float, pressure: float):
         return mixture_for_x(np.asarray(x, dtype=float), float(temperature), values, dataset)
@@ -418,25 +464,29 @@ def solve_activity_speciation(
         P=float(P),
         balances=reactive_balances(),
         totals=apparent_totals(float(loading)),
-        reactions=reaction_definitions(float(T)),
+        reactions=active_reactions,
         initial_x=np.asarray(initial_x, dtype=float),
         options=epcsaft.ReactiveSpeciationOptions(
-            max_iterations=80,
-            tolerance=1.0e-7,
-            damping=0.5,
-            min_mole_fraction=1.0e-14,
+            max_iterations=int(max_iterations),
+            tolerance=float(tolerance),
+            damping=float(damping),
+            min_mole_fraction=float(min_mole_fraction),
             return_best_effort=True,
-            mass_tolerance=1.0e-7,
-            charge_tolerance=1.0e-6,
-            reaction_tolerance=1.0e-7,
+            mass_tolerance=float(mass_tolerance),
+            charge_tolerance=float(charge_tolerance),
+            reaction_tolerance=float(reaction_tolerance),
         ),
     )
     return ReactiveSpeciationPrediction(
+        success=bool(result.success),
         x=np.asarray([result.x[species] for species in SPECIES], dtype=float),
         activity_coefficients=dict(result.activity_coefficients),
         mass_balance_residuals=dict(result.mass_balance_residuals),
         charge_residual=float(result.charge_residual),
-        reaction_residuals={reaction.name or f"R{idx + 1}": float(value) for idx, (reaction, value) in enumerate(zip(reaction_definitions(float(T)), result.reaction_residuals))},
+        reaction_residuals={
+            reaction.name or f"R{idx + 1}": float(value)
+            for idx, (reaction, value) in enumerate(zip(active_reactions, result.reaction_residuals))
+        },
         state_failure_count=int(result.state_failure_count),
         message=str(result.message),
     )
@@ -487,8 +537,9 @@ def predict_target_co2_pressure_kPa(target: VLETarget, values: dict[str, float],
     return float(result.partial_pressures.get("CO2", 0.0)) / 1000.0
 
 
-def solve_reactive_bubble_target(target: VLETarget, values: dict[str, float], dataset: Path = DATASET_DIR):
+def solve_reactive_bubble_target(target: VLETarget, values: dict[str, float], dataset: Path = DATASET_DIR, reactions=None):
     epcsaft = load_epcsaft()
+    active_reactions = tuple(reactions or reaction_definitions(target.T))
 
     def make_mixture(x: np.ndarray, temperature: float, pressure: float):
         return mixture_for_x(np.asarray(x, dtype=float), float(temperature), values, dataset)
@@ -501,7 +552,7 @@ def solve_reactive_bubble_target(target: VLETarget, values: dict[str, float], da
         P_seed=pressure_seed,
         balances=reactive_balances(),
         totals=apparent_totals(target.loading),
-        reactions=reaction_definitions(target.T),
+        reactions=active_reactions,
         initial_x=target.x,
         vapor_species=["CO2", "H2O", "MEA"],
         nonvolatile_species=["MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-"],
@@ -509,7 +560,12 @@ def solve_reactive_bubble_target(target: VLETarget, values: dict[str, float], da
     )
 
 
-def solve_reactive_bubble_targets(targets: list[VLETarget], values: dict[str, float], dataset: Path = DATASET_DIR):
+def solve_reactive_bubble_targets(
+    targets: list[VLETarget],
+    values: dict[str, float],
+    dataset: Path = DATASET_DIR,
+    reactions_by_temperature: dict[float, object] | None = None,
+):
     epcsaft = load_epcsaft()
 
     def make_mixture(x: np.ndarray, temperature: float, pressure: float):
@@ -537,7 +593,11 @@ def solve_reactive_bubble_targets(targets: list[VLETarget], values: dict[str, fl
                     mixture_factory=make_mixture,
                     points=points,
                     balances=reactive_balances(),
-                    reactions=reaction_definitions(float(temperature)),
+                    reactions=(
+                        reactions_by_temperature.get(float(temperature))
+                        if reactions_by_temperature and float(temperature) in reactions_by_temperature
+                        else reaction_definitions(float(temperature))
+                    ),
                     vapor_species=["CO2", "H2O", "MEA"],
                     nonvolatile_species=["MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-"],
                     options=reactive_electrolyte_options(1.0e5),
@@ -547,31 +607,13 @@ def solve_reactive_bubble_targets(targets: list[VLETarget], values: dict[str, fl
         except Exception:
             for target in group:
                 try:
-                    results.append(solve_reactive_bubble_target(target, values, dataset))
+                    fallback_reactions = None
+                    if reactions_by_temperature and float(round(target.T, 8)) in reactions_by_temperature:
+                        fallback_reactions = reactions_by_temperature[float(round(target.T, 8))]
+                    results.append(solve_reactive_bubble_target(target, values, dataset, reactions=fallback_reactions))
                 except Exception as exc:
                     results.append(exc)
     return results
-
-
-def _ln_k(name: str, T: float) -> float:
-    a, b, c, d = DIAGNOSTIC_REACTION_CONSTANTS[name]
-    return float(a + b / T + c * math.log(T) + d * T)
-
-
-def activity_reaction_residuals(x: np.ndarray, T: float, P: float, values: dict[str, float], dataset: Path = DATASET_DIR) -> dict[str, float]:
-    state = state_for_x(x, T, P, values, dataset)
-    gamma = state.activity_coefficient(species=SPECIES)
-
-    def log_activity(species: str) -> float:
-        return math.log(max(float(x[SPECIES_INDEX[species]]) * float(gamma[species]), 1.0e-30))
-
-    logs = {name: log_activity(name) for name in SPECIES}
-    return {
-        "R2_CO2_to_HCO3": logs["H3O+"] + logs["HCO3-"] - logs["CO2"] - 2.0 * logs["H2O"] - _ln_k("R2_CO2_to_HCO3", T),
-        "R3_HCO3_to_CO3": logs["H3O+"] + logs["CO3^2-"] - logs["HCO3-"] - logs["H2O"] - _ln_k("R3_HCO3_to_CO3", T),
-        "R4_MEACOO_hydrolysis": logs["HCO3-"] + logs["MEA"] - logs["MEACOO-"] - logs["H2O"] - _ln_k("R4_MEACOO_hydrolysis", T),
-        "R5_MEAH_dissociation": logs["H3O+"] + logs["MEA"] - logs["MEAH+"] - logs["H2O"] - _ln_k("R5_MEAH_dissociation", T),
-    }
 
 
 def evaluate_values(values: dict[str, float], vle_targets: list[VLETarget], spec_targets: list[SpeciationTarget], dataset: Path = DATASET_DIR) -> tuple[np.ndarray, dict[str, Any]]:

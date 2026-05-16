@@ -161,7 +161,7 @@ def speciation_rows(values: dict[str, float], targets: list[SpeciationTarget], s
         try:
             prediction = solve_activity_speciation(target.loading, target.T, target.P, target.x, values, FIT_DATASET_DIR)
             prediction_x = prediction.x
-            success = "did not converge" not in prediction.message.lower()
+            success = bool(prediction.success)
             message = prediction.message
         except Exception as exc:
             prediction_x = np.full(len(SPECIES_INDEX), np.nan, dtype=float)
@@ -189,6 +189,10 @@ def speciation_rows(values: dict[str, float], targets: list[SpeciationTarget], s
     return pd.DataFrame(rows)
 
 
+def _success_value(value: object) -> bool:
+    return str(value).strip().lower() in {"true", "1", "yes"}
+
+
 def cached_pressure_rows() -> pd.DataFrame:
     frame = pd.read_csv(BASELINE_PRESSURE_CSV)
     return pd.DataFrame(
@@ -201,7 +205,7 @@ def cached_pressure_rows() -> pd.DataFrame:
             "observed_pressure_Pa": frame["observed_CO2_pressure_kPa"].astype(float) * 1000.0,
             "model_pressure_Pa": frame["raw_pred_CO2_pressure_kPa"].astype(float) * 1000.0,
             "log10_model_over_data": frame["raw_log10_model_over_data"].astype(float),
-            "success": frame["success"].astype(bool),
+            "success": frame["success"].map(_success_value),
             "message": frame["message"].astype(str),
         }
     )
@@ -221,7 +225,7 @@ def cached_speciation_rows(species_names: Iterable[str] = GLOBAL_SPECIATION_SPEC
                 "observed_mole_fraction": row[f"target_x_{species}"],
                 "model_mole_fraction": row[f"model_x_{species}"],
                 "log10_model_over_data": row[f"log10_model_over_target_{species}"],
-                "success": bool(row["success"]),
+                "success": _success_value(row["success"]),
                 "message": str(row["message"]),
             }
             for row in frame.to_dict("records")
@@ -326,11 +330,11 @@ def attempt_global_regression(
             initial_parameters=native_initial,
             lower_bounds=native_lower,
             upper_bounds=native_upper,
+            optimizer_backend="ceres",
+            derivative_backend="autodiff",
             max_iterations=int(max_nfev),
             tolerance=1.0e-6,
             damping=1.0,
-            jacobian_mode="central",
-            relative_step=1.0e-4,
             log_parameters=True,
         )
         native_summary = epcsaft.summarize_regression_result(native_result)

@@ -1,4 +1,5 @@
-\documentclass[a4paper,fleqn]{styles/cas-sc}
+\PassOptionsToPackage{hyperfootnotes=false}{hyperref}
+\documentclass[a4paper,fleqn]{cas-sc}
 \usepackage[pagewise]{lineno}
 % \linenumbers
 
@@ -72,16 +73,16 @@
 \def\floatpagepagefraction{1}
 \def\textpagefraction{.001}
 
-\shorttitle{Full-Ionic ePC-SAFT for Aqueous MEA}
+\shorttitle{Activity-Based ePC-SAFT for Aqueous MEA}
 \shortauthors{Polley et al.}
 
-\title[mode = title]{Full-Ionic ePC-SAFT Parameterization and Validation for Aqueous Monoethanolamine \texorpdfstring{\COtwo}{CO2} Capture}
+\title[mode = title]{\texorpdfstring{Activity-Based ePC-SAFT for Aqueous MEA--\ce{CO2}--\ce{H2O}}{Activity-Based ePC-SAFT for Aqueous MEA--CO2--H2O}}
 
-\author[1]{Tanner W. Polley}
+\author{Tanner W. Polley}
 \ead{tannerwpolley@gmail.com}
 
 \begin{abstract}
-Aqueous monoethanolamine remains a benchmark solvent for post-combustion \COtwo capture, but its process behavior is controlled by a coupled vapor--liquid, chemical-equilibrium, and electrolyte-speciation problem. This work develops a full-ionic electrolyte PC-SAFT parameterization for the loaded \MEA--\HtwoO--\COtwo system using a true-species liquid basis and the advanced ePC-SAFT electrolyte framework with concentration-dependent permittivity and solvation-shell/dielectric-saturation Born contributions. Literature vapor--liquid-equilibrium and NMR speciation data are assembled on a common \COtwo-loading basis, transformed into charge-balanced liquid states containing \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide, and evaluated through ePC-SAFT activity, fugacity, and reactive bubble-pressure calculations. The parameter basis combines inherited molecular PC-SAFT values, SSM+DS Born and dielectric conventions from recent ePC-SAFT literature, and a promoted real-data regression for \MEAH and \MEACOO against direct liquid-speciation measurements. The reported parameter evidence matrix, regression statistics, speciation comparison, and \COtwo partial-pressure validation data define the present accuracy and identifiability of the full-ionic model.
+Aqueous monoethanolamine (\MEA) remains a benchmark solvent for post-combustion carbon dioxide (\COtwo) capture, but loaded \MEA solutions require a thermodynamic description that couples vapor--liquid equilibrium with ionic chemical speciation. This work evaluates \MEA--\HtwoO--\COtwo thermodynamics with a true-species liquid basis containing \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide. Literature vapor--liquid-equilibrium and NMR speciation data are placed on a common \COtwo-loading basis and tested in two calculations. An ideal Smith--Missen-style baseline solves the five-reaction, nine-species equilibrium system and gives accepted major-species median absolute $\log_{10}$ residuals of 0.055 for \MEA, 0.044 for \MEAH, 0.029 for \MEACOO, and 0.227 for \HCOthree. A second calculation evaluates the same chemistry with ePC-SAFT activities, fugacities, concentration-dependent permittivity, and solvation-shell/dielectric-saturation Born terms. That activity-based calculation solves all 161 pressure records and all 74 speciation records. Its accepted residual metrics are 0.493 for \COtwo pressure, 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, 0.461 for direct positive \HCOthree targets, and 0.066 for \ce{MEA + MEAH+}. Carbonate-family and trace water-ion quantities remain the main limitation, so the results support a residual-qualified activity-based evaluation rather than a finalized jointly regressed parameter set.
 \end{abstract}
 
 \begin{keywords}
@@ -90,17 +91,20 @@ ePC-SAFT\sep{}monoethanolamine\sep{}carbon capture\sep{}vapor--liquid equilibriu
 
 \maketitle
 
-\input{sections/nomenclature}
+\setcounter{table}{1}
 \input{sections/introduction}
 \input{sections/epc_saft_equation_of_state}
 \input{sections/mea_system_modeling_results}
-\input{sections/case_study_absorption_column_simulation}
 \input{sections/conclusion}
 \input{sections/data_code_availability}
 
 \clearpage
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references}
+
+\clearpage
+\setcounter{table}{0}
+\input{sections/nomenclature}
 
 \end{document}
 

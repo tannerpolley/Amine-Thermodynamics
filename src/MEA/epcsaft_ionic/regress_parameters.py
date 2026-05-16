@@ -119,9 +119,6 @@ def run_regression(args: argparse.Namespace) -> dict[str, object]:
         max_iterations=int(getattr(args, "max_iterations", getattr(args, "max_nfev", 6))),
         tolerance=float(getattr(args, "tolerance", 1.0e-6)),
         damping=float(getattr(args, "damping", 1.0)),
-        jacobian_mode=str(getattr(args, "jacobian_mode", "central")),
-        relative_step=float(getattr(args, "relative_step", 1.0e-4)),
-        log_parameters=True,
     )
 
     result_payload = _result_payload(result)
@@ -183,16 +180,20 @@ def run_regression(args: argparse.Namespace) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Delegate full ionic MEA-CO2-H2O regression to native ePC-SAFT.")
+    parser.add_argument("--target-set", choices=("reduced", "full"), default="reduced")
     parser.add_argument("--max-iterations", "--max-nfev", dest="max_iterations", type=int, default=6)
     parser.add_argument("--max-vle-records", type=int, default=18)
     parser.add_argument("--max-speciation-records", type=int, default=18)
     parser.add_argument("--exclude-carbonate-born", action="store_true")
+    parser.add_argument("--backend", choices=("ceres",), default="ceres")
+    parser.add_argument("--derivative-backend", choices=("autodiff",), default="autodiff")
     parser.add_argument("--tolerance", type=float, default=1.0e-6)
     parser.add_argument("--damping", type=float, default=1.0)
-    parser.add_argument("--jacobian-mode", choices=("forward", "central"), default="central")
-    parser.add_argument("--relative-step", type=float, default=1.0e-4)
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
+    if args.target_set == "full":
+        args.max_vle_records = None
+        args.max_speciation_records = None
 
     summary = run_regression(args)
     native_status = summary["native_regression"]
