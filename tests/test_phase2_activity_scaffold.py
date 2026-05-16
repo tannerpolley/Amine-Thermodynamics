@@ -101,6 +101,7 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         self.assertEqual(rows["phase2_pressure_speciation_parity.csv"]["status"], "model_ran_success")
         self.assertEqual(rows["phase2_pressure_metrics.csv"]["status"], "model_ran_success")
         self.assertEqual(rows["phase2_speciation_metrics.csv"]["status"], "model_ran_success")
+        self.assertEqual(rows["phase2_source_residual_summary.csv"]["status"], "model_ran_success")
         self.assertEqual(rows["phase2_solver_diagnostics.csv"]["status"], "generated")
         self.assertEqual(rows["phase2_residual_acceptance_audit.csv"]["status"], "model_ran_success")
         self.assertEqual(rows["phase2_speciation_activity_curves.csv"]["status"], "generated_from_native_epcsaft_activity_solver")
@@ -207,6 +208,69 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
             for row in _rows(ROOT / "analyses" / "phase2_activity_epcsaft" / "results" / "phase2_required_output_status.csv")
         }
         self.assertEqual(status_rows["phase2_residual_acceptance_audit.csv"]["status"], "model_ran_success")
+
+    def test_source_residual_summary_closes_source_accounting(self) -> None:
+        path = ROOT / "analyses" / "phase2_activity_epcsaft" / "results" / "phase2_source_residual_summary.csv"
+        rows = _rows(path)
+        self.assertGreater(len(rows), 0)
+        required_columns = {
+            "phase",
+            "model_family",
+            "observable_family",
+            "source",
+            "species_or_property",
+            "target_role",
+            "state_count",
+            "target_count",
+            "solver_success_count",
+            "median_abs_log10",
+            "rmse_log10",
+            "max_abs_log10",
+        }
+        self.assertTrue(required_columns.issubset(rows[0].keys()))
+
+        pressure_rows = [
+            row
+            for row in rows
+            if row["observable_family"] == "pressure" and row["target_role"] == "measured_pressure"
+        ]
+        self.assertEqual({row["source"] for row in pressure_rows}, {"Aronu", "Hilliard", "Idris", "Jou", "Mamun", "Xu"})
+        self.assertEqual(sum(int(row["target_count"]) for row in pressure_rows), 161)
+        self.assertEqual(sum(int(row["state_count"]) for row in pressure_rows), 161)
+        self.assertEqual(sum(int(row["solver_success_count"]) for row in pressure_rows), 161)
+        self.assertTrue(all(row["median_abs_log10"] for row in pressure_rows))
+
+        state_rows = [
+            row
+            for row in rows
+            if row["observable_family"] == "speciation" and row["target_role"] == "state_record"
+        ]
+        self.assertEqual({row["source"] for row in state_rows}, {"Bottinger", "Jakobsen", "Matin"})
+        self.assertEqual(sum(int(row["target_count"]) for row in state_rows), 74)
+        self.assertEqual(sum(int(row["state_count"]) for row in state_rows), 74)
+        self.assertEqual(sum(int(row["solver_success_count"]) for row in state_rows), 74)
+
+        speciation_rows = [
+            row
+            for row in rows
+            if row["observable_family"] == "speciation" and row["target_role"] != "state_record"
+        ]
+        self.assertIn("direct_positive", {row["target_role"] for row in speciation_rows})
+        self.assertIn("aggregate_direct_positive", {row["target_role"] for row in speciation_rows})
+        self.assertIn("direct_zero", {row["target_role"] for row in speciation_rows})
+        self.assertIn("balance_inferred", {row["target_role"] for row in speciation_rows})
+        for row in speciation_rows:
+            if row["target_role"] in {"direct_positive", "aggregate_direct_positive"}:
+                self.assertTrue(row["median_abs_log10"])
+                self.assertTrue(row["rmse_log10"])
+                self.assertTrue(row["max_abs_log10"])
+            elif row["target_role"] == "direct_zero":
+                self.assertEqual(row["median_abs_log10"], "")
+                self.assertTrue(row["max_model_mole_fraction_for_reported_zero"])
+            elif row["target_role"] == "balance_inferred":
+                self.assertEqual(row["median_abs_log10"], "")
+                self.assertEqual(row["rmse_log10"], "")
+                self.assertEqual(row["max_abs_log10"], "")
 
 
 if __name__ == "__main__":

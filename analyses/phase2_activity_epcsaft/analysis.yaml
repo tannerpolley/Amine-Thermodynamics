@@ -27,6 +27,8 @@ outputs:
     kind: native_solver_speciation_rows
   - path: analyses/phase2_activity_epcsaft/results/phase2_pressure_results.csv
     kind: native_solver_pressure_rows
+  - path: analyses/phase2_activity_epcsaft/results/phase2_source_residual_summary.csv
+    kind: source_resolved_residual_summary
   - path: analyses/phase2_activity_epcsaft/results/phase2_residual_acceptance_audit.csv
     kind: claim_gate_audit
   - path: analyses/phase2_activity_epcsaft/results/phase2_speciation_activity_curves.csv
@@ -34,6 +36,7 @@ outputs:
 commands:
   generate:
     - uv run python analyses/phase2_activity_epcsaft/scripts/generate_data.py
+    - uv run python analyses/phase2_activity_epcsaft/scripts/generate_source_residual_summary.py
   render:
     - uv run python analyses/phase2_activity_epcsaft/scripts/render_figures.py
 runtime:
@@ -52,6 +55,7 @@ tracked_results:
   - analyses/phase2_activity_epcsaft/results/phase2_pressure_speciation_parity.csv
   - analyses/phase2_activity_epcsaft/results/phase2_pressure_metrics.csv
   - analyses/phase2_activity_epcsaft/results/phase2_speciation_metrics.csv
+  - analyses/phase2_activity_epcsaft/results/phase2_source_residual_summary.csv
   - analyses/phase2_activity_epcsaft/results/phase2_solver_diagnostics.csv
   - analyses/phase2_activity_epcsaft/results/phase2_residual_acceptance_audit.csv
   - analyses/phase2_activity_epcsaft/results/phase2_speciation_activity_curves.csv

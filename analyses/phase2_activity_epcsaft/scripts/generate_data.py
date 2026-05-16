@@ -77,6 +77,24 @@ CURVE_MAX_LOADING_BY_TEMPERATURE_C = {
     80.0: 0.8,
 }
 MAJOR_SPECIATION_SPECIES = ("MEA", "MEAH+", "MEACOO-", "HCO3-", "MEA + MEAH+")
+PHASE2_PRESSURE_SOURCES = ("Aronu", "Hilliard", "Idris", "Jou", "Mamun", "Xu")
+PHASE2_SPECIATION_SOURCES = ("Bottinger", "Jakobsen", "Matin")
+SOURCE_RESIDUAL_SUMMARY_FIELDNAMES = [
+    "phase",
+    "model_family",
+    "observable_family",
+    "source",
+    "species_or_property",
+    "target_role",
+    "state_count",
+    "target_count",
+    "solver_success_count",
+    "median_abs_log10",
+    "rmse_log10",
+    "max_abs_log10",
+    "max_model_mole_fraction_for_reported_zero",
+    "metric",
+]
 PRESSURE_MEDIAN_ABS_LOG10_THRESHOLD = 0.5
 SPECIATION_MEDIAN_ABS_LOG10_THRESHOLD = 0.5
 SPECIATION_REPORTED_ZERO_ABS_THRESHOLD = 0.002
@@ -587,6 +605,141 @@ def pressure_metrics_rows(pressure_rows: list[dict[str, object]]) -> list[dict[s
     return rows
 
 
+def _finite_float_values(rows: list[dict[str, object]], key: str) -> list[float]:
+    values: list[float] = []
+    for row in rows:
+        try:
+            value = float(row.get(key, ""))
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(value):
+            values.append(value)
+    return values
+
+
+def _residual_summary_values(values: list[float]) -> dict[str, object]:
+    abs_values = [abs(value) for value in values]
+    return {
+        "median_abs_log10": float(np.median(abs_values)) if abs_values else "",
+        "rmse_log10": float(np.sqrt(np.mean(np.square(values)))) if values else "",
+        "max_abs_log10": float(np.max(abs_values)) if abs_values else "",
+    }
+
+
+def source_residual_summary_rows(
+    pressure_rows: list[dict[str, object]],
+    speciation_rows: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    """Summarize Phase 2 residuals by source without mixing observable families or target roles."""
+    rows: list[dict[str, object]] = []
+
+    pressure_by_source: dict[str, list[dict[str, object]]] = {}
+    for row in pressure_rows:
+        pressure_by_source.setdefault(str(row["source"]), []).append(row)
+    missing_pressure = [source for source in PHASE2_PRESSURE_SOURCES if source not in pressure_by_source]
+    if missing_pressure:
+        raise RuntimeError(f"Missing Phase 2 pressure source rows: {missing_pressure}")
+
+    for source in PHASE2_PRESSURE_SOURCES:
+        group_rows = pressure_by_source[source]
+        residuals = _finite_float_values(group_rows, "log10_model_over_data")
+        rows.append(
+            {
+                "phase": "phase2",
+                "model_family": "phase2_epcsaft_reactive_bubble",
+                "observable_family": "pressure",
+                "source": source,
+                "species_or_property": "CO2_pressure",
+                "target_role": "measured_pressure",
+                "state_count": len({str(row["row_id"]) for row in group_rows}),
+                "target_count": len(group_rows),
+                "solver_success_count": sum(1 for row in group_rows if str(row.get("solver_success", "")).lower() == "true"),
+                **_residual_summary_values(residuals),
+                "max_model_mole_fraction_for_reported_zero": "",
+                "metric": "log10_model_over_data",
+            }
+        )
+
+    speciation_by_source: dict[str, list[dict[str, object]]] = {}
+    for row in speciation_rows:
+        speciation_by_source.setdefault(str(row["source"]), []).append(row)
+    missing_speciation = [source for source in PHASE2_SPECIATION_SOURCES if source not in speciation_by_source]
+    if missing_speciation:
+        raise RuntimeError(f"Missing Phase 2 speciation source rows: {missing_speciation}")
+
+    role_order = [
+        "direct_positive",
+        "aggregate_direct_positive",
+        "direct_zero",
+        "aggregate_direct_zero",
+        "balance_inferred",
+    ]
+    for source in PHASE2_SPECIATION_SOURCES:
+        source_rows = speciation_by_source[source]
+        rows.append(
+            {
+                "phase": "phase2",
+                "model_family": "phase2_epcsaft_activity_speciation",
+                "observable_family": "speciation",
+                "source": source,
+                "species_or_property": "all_speciation_states",
+                "target_role": "state_record",
+                "state_count": len({str(row["row_id"]) for row in source_rows}),
+                "target_count": len({str(row["row_id"]) for row in source_rows}),
+                "solver_success_count": sum(1 for row in source_rows if str(row.get("solver_success", "")).lower() == "true"),
+                "median_abs_log10": "",
+                "rmse_log10": "",
+                "max_abs_log10": "",
+                "max_model_mole_fraction_for_reported_zero": "",
+                "metric": "state_accounting",
+            }
+        )
+        for species in SPECIATION_PLOT_SPECIES:
+            species_roles = {
+                str(row.get(f"target_role_{species}", "balance_inferred"))
+                for row in source_rows
+            }
+            for target_role in role_order:
+                if target_role not in species_roles:
+                    continue
+                group_rows = [
+                    row
+                    for row in source_rows
+                    if str(row.get(f"target_role_{species}", "balance_inferred")) == target_role
+                ]
+                residuals: list[float] = []
+                zero_model_values: list[float] = []
+                metric = "context_count_only"
+                if target_role in LOG_RESIDUAL_TARGET_ROLES:
+                    residuals = _finite_float_values(group_rows, f"log10_model_over_target_{species}")
+                    metric = "log10_model_over_target"
+                elif target_role in ZERO_TARGET_ROLES:
+                    zero_model_values = _finite_float_values(group_rows, f"model_x_{species}")
+                    metric = "max_model_mole_fraction_for_reported_zero"
+                residual_summary = _residual_summary_values(residuals)
+                rows.append(
+                    {
+                        "phase": "phase2",
+                        "model_family": "phase2_epcsaft_activity_speciation",
+                        "observable_family": "speciation",
+                        "source": source,
+                        "species_or_property": species,
+                        "target_role": target_role,
+                        "state_count": len({str(row["row_id"]) for row in group_rows}),
+                        "target_count": len(group_rows),
+                        "solver_success_count": sum(
+                            1 for row in group_rows if str(row.get("solver_success", "")).lower() == "true"
+                        ),
+                        **residual_summary,
+                        "max_model_mole_fraction_for_reported_zero": (
+                            float(np.max(zero_model_values)) if zero_model_values else ""
+                        ),
+                        "metric": metric,
+                    }
+                )
+    return rows
+
+
 def residual_acceptance_rows(
     speciation_metrics: list[dict[str, object]],
     pressure_metrics: list[dict[str, object]],
@@ -729,6 +882,12 @@ def required_output_status_rows(reactions: list[dict[str, str]], phase2_status: 
             "status": phase2_status,
             "blocking_requirement": "speciation residual thresholds",
             "next_action": "Major-species speciation claims are limited to passing audit rows.",
+        },
+        {
+            "artifact": "phase2_source_residual_summary.csv",
+            "status": phase2_status,
+            "blocking_requirement": "source residual accounting",
+            "next_action": "Use this table for source-resolved pressure and speciation residual accounting without mixing target roles.",
         },
         {
             "artifact": "phase2_solver_diagnostics.csv",
@@ -892,6 +1051,7 @@ Evidence now present:
 - {source_count} of {len(source_rows)} R1-R5 source-value rows are verified against repo-local source text in `phase2_reaction_constant_source_verification.csv`.
 - The generated problem definition separates material balances from electroneutrality constraints.
 - `phase2_equilibrium_results.csv`, `phase2_pressure_speciation_parity.csv`, metrics, `phase2_solver_diagnostics.csv`, and activity-curve rows are generated from the native ePC-SAFT solver.
+- `phase2_source_residual_summary.csv` records source-resolved pressure and speciation residual accounting without mixing nonzero, zero-reported, and balance-inferred target roles.
 - `phase2_speciation_activity_curves.csv` contains only solver-success curve rows.
 - `phase2_speciation_target_roles.csv` prevents reported-zero and balance-inferred rows from being treated as direct log-residual targets.
 
@@ -926,6 +1086,7 @@ def main() -> int:
     ]
     speciation_metrics = speciation_metrics_rows(speciation_equilibrium)
     pressure_metrics = pressure_metrics_rows(pressure_equilibrium)
+    source_residual_summary = source_residual_summary_rows(pressure_equilibrium, speciation_equilibrium)
     residual_audit = residual_acceptance_rows(speciation_metrics, pressure_metrics, solver_diagnostics)
     phase2_status = phase2_status_from_solver(speciation_equilibrium, pressure_equilibrium, speciation_curves)
     output_status = required_output_status_rows(reactions, phase2_status)
@@ -974,6 +1135,16 @@ def main() -> int:
     write_rows(RESULTS_DIR / "phase2_pressure_metrics.csv", pressure_metrics)
     write_rows(PROCESSED_DIR / "phase2_speciation_metrics.csv", speciation_metrics)
     write_rows(RESULTS_DIR / "phase2_speciation_metrics.csv", speciation_metrics)
+    write_csv(
+        PROCESSED_DIR / "phase2_source_residual_summary.csv",
+        source_residual_summary,
+        SOURCE_RESIDUAL_SUMMARY_FIELDNAMES,
+    )
+    write_csv(
+        RESULTS_DIR / "phase2_source_residual_summary.csv",
+        source_residual_summary,
+        SOURCE_RESIDUAL_SUMMARY_FIELDNAMES,
+    )
     write_rows(PROCESSED_DIR / "phase2_solver_diagnostics.csv", solver_diagnostics)
     write_rows(RESULTS_DIR / "phase2_solver_diagnostics.csv", solver_diagnostics)
     write_rows(PROCESSED_DIR / "phase2_residual_acceptance_audit.csv", residual_audit)

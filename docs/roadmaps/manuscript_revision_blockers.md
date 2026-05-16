@@ -16,9 +16,9 @@ This file records unresolved evidence gates for the Major Revision pass controll
 - No archive DOI is verified. The manuscript now states that no archival DOI has been minted.
 - No release tag is verified. `git tag --list` returned no tags during this revision pass.
 - Submission-facing condition ranges are not verified from the required roadmap set because the roadmap files listed above are missing. The manuscript therefore avoids adding new numeric temperature, loading, pressure, or composition ranges beyond existing record counts and residual values.
-- Full source-by-source residual tables for the final manuscript evidence set were not verified. A train/validation pressure-by-source file exists, but a complete pressure-plus-speciation source-by-source residual table was not found in this pass.
 
 ## Resolved Evidence Gates
 
 - Residual threshold evidence exists in `analyses/phase2_activity_epcsaft/results/phase2_residual_acceptance_audit.csv` and `analyses/phase1_smith_missen_baseline/results/phase1_residual_acceptance_audit.csv`; the revised manuscript still removes undefined "accepted" terminology and reports neutral residual language.
 - The repository URL is verified from `git remote -v` as `https://github.com/tannerpolley/MEA-Thermodynamics.git`.
+- Source-resolved Phase 2 pressure/speciation residual accounting now exists at `analyses/phase2_activity_epcsaft/results/phase2_source_residual_summary.csv`. The table accounts for 161 pressure records and 74 speciation state records while keeping pressure, nonzero measured targets, measurements reported as zero, and balance-inferred quantities in separate rows.

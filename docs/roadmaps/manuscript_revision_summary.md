@@ -13,8 +13,17 @@ Date: 2026-05-15 local
 - `docs/latex/sections/data_code_availability.tex`
 - `docs/latex/sections/nomenclature.tex`
 - `docs/latex/tables/regression_bounds.tex`
+- `docs/roadmaps/phase2_activity_speciation_design.md`
+- `docs/roadmaps/phase2_reaction_constant_basis.md`
 - `docs/roadmaps/manuscript_revision_blockers.md`
 - `docs/roadmaps/manuscript_revision_summary.md`
+- `analyses/phase2_activity_epcsaft/analysis.yaml`
+- `analyses/phase2_activity_epcsaft/scripts/generate_data.py`
+- `analyses/phase2_activity_epcsaft/scripts/generate_source_residual_summary.py`
+- Regenerated Phase 2 processed/result CSV artifacts under `analyses/phase2_activity_epcsaft/data/processed` and `analyses/phase2_activity_epcsaft/results`
+- `analyses/phase2_activity_epcsaft/results/phase2_source_residual_summary.csv`
+- `analyses/phase2_activity_epcsaft/data/processed/phase2_source_residual_summary.csv`
+- `tests/test_phase2_activity_scaffold.py`
 
 ## Follow-Up Self-Review Fixes
 
@@ -30,6 +39,7 @@ Date: 2026-05-15 local
 - Limited Phase 3 language to one Methods boundary statement and one Conclusion boundary statement.
 - Removed unsupported archive/release wording from Data and Code Availability.
 - Avoided adding unverified condition ranges or source-by-source residual claims.
+- Closed the prior source-by-source residual-table blocker by adding a generated Phase 2 source-resolved pressure/speciation CSV and limiting the manuscript reference to data availability rather than adding an unreadable full LaTeX table.
 
 ## Terms Replaced
 
@@ -59,11 +69,16 @@ Date: 2026-05-15 local
 - `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` from `docs/latex`
 - `git diff --check`
 - Restricted-term search over `docs/latex/main.tex`, `docs/latex/sections`, and `docs/latex/tables`
-- Abstract word-count check: 172 words by local macro-stripped count.
+- Abstract word-count check: 165 words by local macro-stripped count.
 - Raw DOI URL and local-path search over manuscript source.
 - Manuscript figure target existence check.
 - Build-log scan for undefined references, missing figures, missing citations, font/encoding warnings, overfull boxes, and underfull boxes.
 - `pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\hooks\codex-cleanup.ps1" -RepoRoot .`
+- `uv run python analyses/phase2_activity_epcsaft/scripts/generate_source_residual_summary.py`
+- `uv run python analyses/phase2_activity_epcsaft/scripts/generate_data.py`
+- PowerShell source-residual accounting check summing measured-pressure and speciation state-record rows.
+- `uv run python -m pytest tests/test_phase2_activity_scaffold.py::Phase2ActivityNativeSolverTests::test_source_residual_summary_closes_source_accounting -q`
+- `uv run python -m pytest tests/test_phase2_activity_scaffold.py -q`
 
 ## Validation Results
 
@@ -74,8 +89,10 @@ Date: 2026-05-15 local
 - Build-log scan found one remaining underfull hbox in the abstract. No undefined references, missing citations, missing figures, font/encoding warnings, or overfull boxes were found in the final log scan.
 - `git diff --check` passed after the follow-up whitespace fix.
 - Cleanup hook passed: no matching leftover Codex processes under the repository root.
+- The source-resolved residual summary accounts for 161 pressure records and 74 speciation state records. Pressure, nonzero measured targets, measurements reported as zero, and balance-inferred quantities are kept in separate target-role rows.
+- The Phase 2 scaffold test suite passed with 13 tests.
 
 ## Validation Skipped
 
-- No new data generation or figure regeneration was run. The revision was constrained to existing repo-local evidence and existing figure/table artifacts.
+- No figure regeneration was run; this change added residual-accounting data and manuscript/data-availability references only.
 - No web search was performed.
