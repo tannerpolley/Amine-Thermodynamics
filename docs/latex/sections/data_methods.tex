@@ -20,7 +20,7 @@ The pressure data set contains 161 \COtwo partial-pressure records from Aronu et
 \end{table}
 
 \subsection{Species Basis and Parameter Hierarchy}
-The activity-based calculation uses the nine-species liquid basis defined in \cref{eq:true-species-vector}.  The parameter hierarchy separates inherited molecular parameters, SSM+DS ion conventions from modified-Born ePC-SAFT literature, direct \MEA-system regression for \MEAH and \MEACOO, and trace-ion quantities that are retained from literature-backed or diagnostic calculations.  This hierarchy is used to evaluate a fixed parameter set; it is not a pressure-optimized model.
+The activity-based calculation uses the nine-species liquid basis defined in \cref{eq:true-species-vector}.  The parameter hierarchy separates inherited molecular parameters, SSM+DS ion conventions from modified-Born ePC-SAFT literature, direct \MEA-system regression for \MEAH and \MEACOO, and trace-ion quantities that are retained from literature-backed or diagnostic calculations.  This hierarchy is used to evaluate a fixed parameter set; it is not a pressure-only fitted model.
 
 \input{tables/full_ionic_ssm_ds_parameters}
 
@@ -50,12 +50,12 @@ k_{\HtwoO,\COthree} &= -0.25.
 \end{align*}
 The remaining \MEA-specific ion--molecule and ion--ion terms are held at zero for this evaluation.  This sparse interaction structure tests the selected activity model before introducing a broader optimized binary-interaction matrix.
 
-\subsection{MEAH+ and MEACOO- Regression Evidence}
+\subsection{MEAH+ and MEACOO- regression}
 The direct amine-ion regression uses the NMR/speciation source subset from Matin et al., Jakobsen et al., and Boettinger et al.\cite{Matin2012,Jakobsen2005,Bottinger2008}.  The fitted variables are \(\sigma\), \(\epsilon/k\), and \(d^{\mathrm{Born}}\) for \MEAH and \MEACOO, plus \(k_{\MEAH,\MEACOO}\).  The retained fit decreases the residual norm from 0.2714 to 0.2677 and changes the median absolute \(\log_{10}(\mathrm{model}/\mathrm{data})\) error from 0.1010 to 0.0988.  The fitted \MEAH \(R^2\) changes from 0.655 to 0.665, and the fitted \MEACOO \(R^2\) changes from 0.888 to 0.905.  No retained fit parameter is at a bound.
 
 \input{tables/regression_bounds}
 
-\subsection{Residual Definitions and Objective Function}
+\subsection{Coupled pressure/speciation objective}
 The pressure residual is expressed on a logarithmic basis,
 \begin{equation}
     \epsilon_{P,j}
@@ -81,5 +81,5 @@ The multi-observable target combines pressure residuals, speciation residuals, r
 \end{equation}
 A pressure-only fit can hide a poor liquid composition, while a speciation-only fit cannot guarantee the correct gas-phase driving force.  A model intended for pressure and speciation use must therefore satisfy both observable families.
 
-\subsection{Computational Implementation and Reproducibility Boundaries}
+\subsection{Computational implementation and reproducibility}
 The Phase 1 calculation is an ideal Smith--Missen-style five-reaction, nine-species baseline with activities set equal to mole fractions.  The Phase 2 calculation evaluates the same reaction network with ePC-SAFT activities, fugacities, concentration-dependent permittivity, and SSM+DS Born corrections.  The present work does not report a completed coupled pressure/speciation regression.  The reported parameter set is therefore evaluated as a fixed activity-based parameter set with explicit residuals.

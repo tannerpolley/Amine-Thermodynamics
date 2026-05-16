@@ -16,6 +16,13 @@ Date: 2026-05-15 local
 - `docs/roadmaps/manuscript_revision_blockers.md`
 - `docs/roadmaps/manuscript_revision_summary.md`
 
+## Follow-Up Self-Review Fixes
+
+- Corrected the Theory, Data and Methods, and Results subsection names/order to match the grounding-gate roadmap more closely.
+- Reduced repeated pressure-optimization limitation wording while preserving the required fixed-activity-set and process-design boundaries.
+- Converted the Phase 2 pressure and trace-carbonate sensitivity graphics from forced inline caption blocks to regular figures after the self-review build exposed an overfull page.
+- Removed an extra blank line at end of file in the Theory source caught by `git diff --check`.
+
 ## Claims Removed or Softened
 
 - Reframed the manuscript title, abstract, results opener, and conclusions as a residual-qualified activity-based ePC-SAFT evaluation.
@@ -42,12 +49,15 @@ Date: 2026-05-15 local
 
 - `git status --short` before editing: no output; working tree was clean.
 - Required file existence check for the listed manuscript files and roadmap files.
+- Self-review `git status --short`: the follow-up pass touched `introduction.tex`, `epc_saft_equation_of_state.tex`, `data_methods.tex`, `mea_system_modeling_results.tex`, and `data_code_availability.tex`.
 - `Import-Csv data/reference/MEA/manifests/figure_artifact_manifest.csv | Group-Object publication_status`
 - `Import-Csv data/reference/MEA/manifests/figure_artifact_file_manifest.csv | Group-Object publication_status`
 - `Import-Csv data/reference/MEA/manifests/regression_artifact_manifest.csv`
 - `git remote -v`
 - `git tag --list`
+- `Test-Path docs/latex/scripts/build_main.ps1` and build-command search; no build wrapper was found, while `.latexmkrc` and repo-local planning files support the `latexmk` command below.
 - `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` from `docs/latex`
+- `git diff --check`
 - Restricted-term search over `docs/latex/main.tex`, `docs/latex/sections`, and `docs/latex/tables`
 - Abstract word-count check: 172 words by local macro-stripped count.
 - Raw DOI URL and local-path search over manuscript source.
@@ -61,7 +71,8 @@ Date: 2026-05-15 local
 - Raw DOI URL and local Windows path search passed with no matches in manuscript source.
 - All referenced manuscript figures exist under `docs/latex/figures`.
 - Build succeeded and wrote `docs/latex/builds/main.pdf`.
-- Build-log scan found one remaining underfull hbox in the abstract. No undefined references, missing citations, missing figures, or overfull boxes were found in the final log scan.
+- Build-log scan found one remaining underfull hbox in the abstract. No undefined references, missing citations, missing figures, font/encoding warnings, or overfull boxes were found in the final log scan.
+- `git diff --check` passed after the follow-up whitespace fix.
 - Cleanup hook passed: no matching leftover Codex processes under the repository root.
 
 ## Validation Skipped

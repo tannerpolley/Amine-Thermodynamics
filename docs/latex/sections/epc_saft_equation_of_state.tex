@@ -1,7 +1,7 @@
 \section{Theory}\label{sec:theory}
 The modeling target is a reacting electrolyte vapor--liquid equilibrium problem.  At specified temperature, apparent amine concentration, and total absorbed \COtwo loading, the model must determine a charge-balanced true-species liquid composition and the corresponding vapor-phase \COtwo partial pressure.  The liquid composition enters the EOS derivatives directly through ePC-SAFT fugacity coefficients, activity coefficients, and Born/electrostatic contributions.
 
-\subsection{ePC-SAFT Residual Helmholtz Energy}
+\subsection{PC-SAFT residual Helmholtz energy}
 ePC-SAFT is formulated as a residual Helmholtz-energy equation of state.  For a state defined by temperature \(T\), molar density \(\rho\), and mole-fraction vector \(\boldsymbol{x}\), the reduced residual Helmholtz energy \(\tilde{a}^{\mathrm{res}}=a^{\mathrm{res}}/(RT)\) is assembled from hard-chain, dispersion, association, Debye--Huckel, and Born terms \cite{Gross2001,Gross2002,Cameretti2005,Bulow2021a,Figiel2025}:
 \begin{equation}
     \tilde{a}^{\mathrm{res}}
@@ -67,6 +67,7 @@ with association strengths proportional to
 \end{equation}
 This is the contribution that carries the hydrogen-bonding physics of water and alkanolamines; it is absent for ions without association sites.
 
+\subsection{Electrolyte PC-SAFT and ion activity coefficients}
 For charged species, the Debye--Huckel contribution uses the dielectric state and the inverse Debye length,
 \begin{align}
     \kappa
@@ -82,8 +83,9 @@ For charged species, the Debye--Huckel contribution uses the dielectric state an
     \sum_i x_i z_i^2\chi_i ,
     \label{eq:epcsaft-debye-helmholtz}
 \end{align}
-where \(z_i\) is the ionic charge and \(\chi_i\) is the finite-ion-size correction.  The same relative permittivity \(\varepsilon_r\) also enters the Born term, making the dielectric rule a coupled electrostatic input rather than a separate post-processing correction.
+where \(z_i\) is the ionic charge and \(\chi_i\) is the finite-ion-size correction.  The same relative permittivity \(\varepsilon_r\) also enters the Born term, making the dielectric rule a coupled electrostatic input rather than a separate post-processing correction.  These electrolyte residual terms enter the residual chemical potentials used to compute ePC-SAFT activity coefficients for the liquid reaction equations.
 
+\subsection{Modified Born term with solvation shell and dielectric saturation}
 The Born contribution is evaluated in modular form:
 \begin{equation}
     \tilde{a}^{\mathrm{Born}}
@@ -143,28 +145,11 @@ with shell shift
 \end{equation}
 The SSM term changes the effective Born radius used with the bulk medium, whereas the DS term transfers the complementary radius increment into the ion-local dielectric medium.  This split is important for loaded \MEA because carbonation changes both the ionic population and the solvent environment.
 
-For a liquid state at temperature \(T\), pressure \(P\), and mole-fraction vector \(\boldsymbol{x}\), ePC-SAFT provides residual chemical potentials and fugacity coefficients.  Molecular vapor--liquid equilibrium is expressed through fugacity equality,
-\begin{equation}
-    f_i^{\liq}(T,P,\boldsymbol{x}^{\liq})
-    =
-    f_i^{\vap}(T,P,\boldsymbol{y}^{\vap}),
-    \qquad i \in \{\COtwo,\HtwoO,\MEA\},
-    \label{eq:fugacity-equality}
-\end{equation}
-while ionic species are constrained to the liquid phase.  The residual Helmholtz contribution enters this relation through
-\begin{equation}
-    \ln\varphi_k
-    =
-    \tilde{\mu}_k^{\mathrm{res}}-\ln Z,
-    \qquad
-    \ln\gamma_i^{*}
-    =
-    \ln\varphi_i-\ln\varphi_i^{\infty},
-    \label{eq:epcsaft-phi-gamma-link}
-\end{equation}
-where \(\varphi_i^{\infty}\) is the corresponding infinite-dilution reference fugacity coefficient used for the liquid-phase activity coefficient.  This reference-state convention keeps neutral and ionic liquid activities on the same true-species reaction basis.  Each residual contribution therefore affects both phase equilibrium and the activity coefficients used in the reaction equations.
+The ePC-SAFT calculations in this work use concentration-dependent permittivity and modified Born solvation.  The selected modified-Born convention combines an ion-specific Born diameter with solvation-shell modeling, dielectric saturation, and composition-dependent Born chemical-potential corrections.  This is the SSM+DS form introduced for the modified Born contribution, in which an ion-specific Born diameter is combined with a solvent-shell correction and a radially simplified dielectric-saturation term \cite{Figiel2025}.  The corresponding ePC-SAFT literature treats the pure-ion relative permittivity as $\varepsilon_r=8$, sets $f_k=1$ for ions, and fits the solvent $f_k$ parameter to electrolyte activity data; water, methanol, and ethanol have reported $f_k$ values of 1.5, 1.4, and 1.6, respectively \cite{Figiel2025}.  Loaded 30 wt\% \MEA also has direct dielectric-dispersion measurements, which show that static permittivity changes with both temperature and carbonation ratio \cite{Hajj2024}.  Those data motivate, but do not yet fully identify, an MEA-specific solvent-shell parameter.
 
-\subsection{True-Species Chemical Equilibrium}
+In physical terms, the liquid dielectric environment is not treated as a fixed pure-water constant.  Instead, the ion solvation contribution responds to solvent composition and ionic strength, which is essential for a loaded amine solution whose polarity and ion population change strongly with \COtwo loading.  The parameter table in \cref{tab:full-ionic-ssm-ds-parameters} therefore distinguishes fitted MEA-family ion parameters from SSM+DS conventions transferred from electrolyte literature.
+
+\subsection{MEA--CO2--H2O reaction network}
 The apparent feed is defined by the unloaded \MEA mass fraction $w_{\MEA}$ and \COtwo loading $\alpha$, with $\alpha$ equal to moles of absorbed \COtwo per mole of total amine.  The unloaded apparent liquid composition is computed from molecular-weight conversion as
 \begin{equation}
     x_{\MEA,0}
@@ -205,10 +190,25 @@ The liquid composition also satisfies carbon, amine, water, and charge balances:
     \label{eq:true-species-balances}
 \end{align}
 
-\subsection{Advanced Born and Permittivity Treatment}
-The ePC-SAFT calculations in this work use concentration-dependent permittivity and modified Born solvation.  The selected modified-Born convention combines an ion-specific Born diameter with solvation-shell modeling, dielectric saturation, and composition-dependent Born chemical-potential corrections.  This is the SSM+DS form introduced for the modified Born contribution, in which an ion-specific Born diameter is combined with a solvent-shell correction and a radially simplified dielectric-saturation term \cite{Figiel2025}.  The corresponding ePC-SAFT literature treats the pure-ion relative permittivity as $\varepsilon_r=8$, sets $f_k=1$ for ions, and fits the solvent $f_k$ parameter to electrolyte activity data; water, methanol, and ethanol have reported $f_k$ values of 1.5, 1.4, and 1.6, respectively \cite{Figiel2025}.  Loaded 30 wt\% \MEA also has direct dielectric-dispersion measurements, which show that static permittivity changes with both temperature and carbonation ratio \cite{Hajj2024}.  Those data motivate, but do not yet fully identify, an MEA-specific solvent-shell parameter.
-
-In physical terms, the liquid dielectric environment is not treated as a fixed pure-water constant.  Instead, the ion solvation contribution responds to solvent composition and ionic strength, which is essential for a loaded amine solution whose polarity and ion population change strongly with \COtwo loading.  The parameter table in \cref{tab:full-ionic-ssm-ds-parameters} therefore distinguishes fitted MEA-family ion parameters from SSM+DS conventions transferred from electrolyte literature.
-
-
+\subsection{Phase-equilibrium conditions and reference states}
+For a liquid state at temperature \(T\), pressure \(P\), and mole-fraction vector \(\boldsymbol{x}\), ePC-SAFT provides residual chemical potentials and fugacity coefficients.  Molecular vapor--liquid equilibrium is expressed through fugacity equality,
+\begin{equation}
+    f_i^{\liq}(T,P,\boldsymbol{x}^{\liq})
+    =
+    f_i^{\vap}(T,P,\boldsymbol{y}^{\vap}),
+    \qquad i \in \{\COtwo,\HtwoO,\MEA\},
+    \label{eq:fugacity-equality}
+\end{equation}
+while ionic species are constrained to the liquid phase.  The residual Helmholtz contribution enters this relation through
+\begin{equation}
+    \ln\varphi_k
+    =
+    \tilde{\mu}_k^{\mathrm{res}}-\ln Z,
+    \qquad
+    \ln\gamma_i^{*}
+    =
+    \ln\varphi_i-\ln\varphi_i^{\infty},
+    \label{eq:epcsaft-phi-gamma-link}
+\end{equation}
+where \(\varphi_i^{\infty}\) is the corresponding infinite-dilution reference fugacity coefficient used for the liquid-phase activity coefficient.  This reference-state convention keeps neutral and ionic liquid activities on the same true-species reaction basis.  Each residual contribution therefore affects both phase equilibrium and the activity coefficients used in the reaction equations.
 
