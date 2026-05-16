@@ -912,7 +912,7 @@ Keep PR #7 draft. Do not mark Phase 1 or Phase 2 complete.
 Patch the PR as follows:
 
 1. Remove all local absolute paths from tracked files.
-   - Replace `C:/Users/Tanner/Documents/git/Lithium_Extraction/...` with repo-local paths or `source_pending`.
+   - Replace absolute user-machine paths with repo-local paths or `source_pending`.
    - Add a no-local-path test to quick validation.
 
 2. Fix the Phase 1 R1 reaction constant coefficient.

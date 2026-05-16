@@ -101,7 +101,7 @@ source values verified -> model outputs generated -> residuals checked against t
 Search the repo for:
 
 ```powershell
-rg -n "C:/Users|C:\\Users|/Users/|Documents/git" .
+rg -n "<absolute-user-path-patterns>" .
 ```
 
 Fix every tracked occurrence in:
@@ -118,7 +118,7 @@ src/MEA/
 For `data/reference/MEA/manifests/phase2_activity_constant_candidates.csv`, replace local paths such as:
 
 ```text
-C:/Users/Tanner/Documents/git/Lithium_Extraction/data/Austgen...
+<absolute-user-path>/Lithium_Extraction/data/Austgen...
 ```
 
 with repo-local paths if the source exists under:
