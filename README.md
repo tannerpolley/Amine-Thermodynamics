@@ -1,6 +1,6 @@
 # MEA Thermodynamics
 
-MEA-CO2-H2O thermodynamics workflows organized around importable package code in `src/MEA`, reusable reference data in `data/reference`, and durable analysis workspaces in `analyses/<analysis_id>`.
+MEA-CO2-H2O thermodynamics workflows organized around importable package code in `src/MEA`, reusable reference data in `data/reference`, and durable analysis workspaces in `analyses/<category>/<analysis_id>`.
 
 ## Canonical Commands
 
@@ -11,8 +11,8 @@ uv run python scripts\validate_project.py quick
 uv run python scripts\validate_project.py confidence
 uv run python scripts\render_all_plots.py
 uv run python scripts\generate_all_analysis_data.py
-uv run python analyses\<analysis_id>\scripts\generate_data.py
-uv run python analyses\<analysis_id>\scripts\render_figures.py
+uv run python analyses\<category>\<analysis_id>\scripts\generate_data.py
+uv run python analyses\<category>\<analysis_id>\scripts\render_figures.py
 ```
 
 `scripts\render_all_plots.py` is the single figure-regeneration command. It only calls analysis-local `render_figures.py` scripts, which read already generated CSV inputs and write curated plot snapshots plus PNG/SVG outputs. `scripts\generate_all_analysis_data.py` refreshes processed CSV/JSON data tables without rendering figures; expensive ionic regeneration is opt-in with `--include-ionic-full` and `--include-expensive`.
@@ -25,10 +25,12 @@ Old file-path commands such as `uv run python MEA\run_plot_exports.py` are inten
 - `src/MEA/`: importable model, data-loading, ePC-SAFT, and plotting support code.
 - `data/reference/MEA/`: reusable MEA VLE and chemical-equilibrium reference tables.
 - `data/reference/epcsaft_datasets/`: reusable ePC-SAFT parameter datasets.
-- `analyses/six_species_legacy/`: retained six-species legacy PC-SAFT pressure/speciation baseline needed for neutral parity checks.
-- `analyses/epcsaft_neutral_parity/`: neutral apparent-component ePC-SAFT parity artifacts.
-- `analyses/epcsaft_ionic_regression/`: full ionic ePC-SAFT regression, pressure, and speciation artifacts.
-- `analyses/2015_baygi/`: Baygi 2015 parameter-table and neutral parity reproduction.
+- `analyses/paper_validation/2015_baygi/`: Baygi 2015 figure, parameter-table, and neutral parity reproduction.
+- `analyses/phase1/six_species_baseline/`: retained six-species PC-SAFT pressure/speciation baseline needed for neutral parity checks.
+- `analyses/phase1/neutral_epcsaft_parity/`: neutral apparent-component ePC-SAFT parity artifacts.
+- `analyses/phase1/smith_missen_baseline/`: Phase 1 Smith-Missen pressure/speciation baseline.
+- `analyses/phase2/activity_epcsaft/`: Phase 2 true-species activity-based ePC-SAFT evaluation.
+- `analyses/phase3/ionic_epcsaft_regression/`: full ionic ePC-SAFT regression, pressure, and speciation artifacts.
 - `docs/latex/`: writable manuscript source mirrored from the separate Overleaf Git checkout.
 - `scripts/`: root doctor, validation, and plot orchestration entrypoints.
 
@@ -38,13 +40,13 @@ Each analysis owns local `data/raw/`, `data/processed/`, and `results/<plot_set>
 
 ## Key Artifact Paths
 
-- `analyses/six_species_legacy/results/pressure/legacy_pcsaft_jou_recomputed_fit.png`
-- `analyses/six_species_legacy/results/pressure/legacy_pcsaft_jou_recomputed_fit.svg`
-- `analyses/six_species_legacy/results/speciation/speciation.png`
-- `analyses/epcsaft_neutral_parity/results/pressure/epcsaft_neutral_pcsaft_parity.png`
-- `analyses/epcsaft_ionic_regression/results/pressure/ionic_epcsaft_co2_pressure.png`
-- `analyses/epcsaft_ionic_regression/results/speciation/ionic_epcsaft_speciation_activity.png`
-- `analyses/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.png`
+- `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.png`
+- `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.svg`
+- `analyses/phase1/six_species_baseline/results/speciation/speciation.png`
+- `analyses/phase1/neutral_epcsaft_parity/results/pressure/epcsaft_neutral_pcsaft_parity.png`
+- `analyses/phase3/ionic_epcsaft_regression/results/pressure/ionic_epcsaft_co2_pressure.png`
+- `analyses/phase3/ionic_epcsaft_regression/results/speciation/ionic_epcsaft_speciation_activity.png`
+- `analyses/paper_validation/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.png`
 
 ## Manuscript
 

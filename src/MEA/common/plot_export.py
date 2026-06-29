@@ -6,6 +6,7 @@ from .config import (
     SIX_SPECIES_ANALYSIS,
 )
 from .plot_style import write_mpl_sidecar
+from .plot_style import save_figure_bundle
 
 
 _ANALYSIS_BY_PACKAGE = {
@@ -38,6 +39,7 @@ def _write_default_sidecar(
     *,
     png_name: str,
     svg_name: str,
+    pdf_name: str,
     title: str,
     description: str,
     dpi: int,
@@ -46,6 +48,7 @@ def _write_default_sidecar(
         sidecar_path,
         png_name=png_name,
         svg_name=svg_name,
+        pdf_name=pdf_name,
         title=title,
         description=description,
         dpi=dpi,
@@ -72,11 +75,13 @@ def save_plot(
 
     output_path = output_dir / f"{stem}.png"
     svg_path = output_dir / f"{stem}.svg"
+    pdf_path = output_dir / f"{stem}.pdf"
     sidecar_path = output_dir / f"{stem}.mpl.yaml"
     _write_default_sidecar(
         sidecar_path,
         png_name=output_path.name,
         svg_name=svg_path.name,
+        pdf_name=pdf_path.name,
         title=title or stem.replace("_", " "),
         description=description or f"Matplotlib render metadata for {stem}.",
         dpi=int(dpi),
@@ -85,10 +90,12 @@ def save_plot(
         output_path.unlink()
     if svg_path.exists():
         svg_path.unlink()
-    fig.savefig(output_path, dpi=dpi, bbox_inches="tight")
-    fig.savefig(svg_path, bbox_inches="tight")
+    if pdf_path.exists():
+        pdf_path.unlink()
+    save_figure_bundle(fig, output_dir / stem, dpi=int(dpi))
     print(f"Saved plot: {output_path}")
     print(f"Saved SVG: {svg_path}")
+    print(f"Saved PDF: {pdf_path}")
     print(f"Plot style sidecar: {sidecar_path}")
 
     if close:

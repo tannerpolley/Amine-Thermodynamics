@@ -89,12 +89,12 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
             self.assertIn(phrase, text)
 
     def test_analysis_declares_single_parameter_artifact(self) -> None:
-        text = (ROOT / "analyses" / "phase2_activity_epcsaft" / "analysis.yaml").read_text(encoding="utf-8")
+        text = (ROOT / "analyses" / "phase2" / "activity_epcsaft" / "analysis.yaml").read_text(encoding="utf-8")
         self.assertIn("data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2", text)
         self.assertIn("generate_data.py", text)
 
     def test_required_output_status_records_native_model_success_outputs(self) -> None:
-        path = ROOT / "analyses" / "phase2_activity_epcsaft" / "results" / "phase2_required_output_status.csv"
+        path = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_required_output_status.csv"
         rows = {row["artifact"]: row for row in _rows(path)}
         self.assertEqual(rows["phase2_activity_speciation_problem.json"]["status"], "problem_definition_generated")
         self.assertEqual(rows["phase2_equilibrium_results.csv"]["status"], "model_ran_success")
@@ -109,10 +109,10 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         self.assertEqual(rows["phase2_speciation_activity_plot.png"]["status"], "render_input_ready")
         self.assertEqual(rows["phase2_density_viscosity_validation.csv"]["status"], "optional_validation_inventory_ready")
         self.assertNotIn(OLD_FAILED_VALIDATION_LABEL, "\n".join(row["next_action"] for row in rows.values()))
-        self.assertTrue((ROOT / "analyses" / "phase2_activity_epcsaft" / "results" / "phase2_equilibrium_results.csv").exists())
+        self.assertTrue((ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_equilibrium_results.csv").exists())
 
     def test_generated_problem_definition_records_native_solver_contract(self) -> None:
-        path = ROOT / "analyses" / "phase2_activity_epcsaft" / "results" / "phase2_activity_speciation_problem.json"
+        path = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_activity_speciation_problem.json"
         payload = json.loads(path.read_text(encoding="utf-8"))
         self.assertEqual(payload["status"], "problem_definition_generated")
         self.assertIn("material_balances", payload)
@@ -136,7 +136,7 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         self.assertEqual(payload["epcsaft_dependency"]["commit_id"], PINNED_EPCSAFT_COMMIT)
 
     def test_solver_report_separates_model_run_success_from_residual_claims(self) -> None:
-        path = ROOT / "analyses" / "phase2_activity_epcsaft" / "results" / "phase2_solver_claim_boundary_report.md"
+        path = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_solver_claim_boundary_report.md"
         text = path.read_text(encoding="utf-8")
         self.assertIn("phase2_status: model_ran_success", text)
         self.assertIn("solver_status: native_epcsaft_activity_solver_ran", text)
@@ -149,13 +149,14 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         self.assertNotIn(OLD_ISSUE_BLOCKER, text)
 
     def test_phase2_emits_native_solver_curves_not_scaffold_curves(self) -> None:
-        output = ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output"
-        results = ROOT / "analyses" / "phase2_activity_epcsaft" / "results"
+        output = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output"
+        results = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results"
         for name in (
             "phase2_speciation_reference_points.csv",
             "phase2_speciation_activity_curves.csv",
             "phase2_speciation_40C.png",
             "phase2_speciation_40C.svg",
+            "phase2_speciation_40C.pdf",
             "phase2_speciation_40C.mpl.yaml",
         ):
             self.assertTrue((output / name).exists(), name)
@@ -181,7 +182,7 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         self.assertGreaterEqual(max(loadings), 0.799)
 
     def test_reference_points_only_use_direct_positive_targets(self) -> None:
-        results = ROOT / "analyses" / "phase2_activity_epcsaft" / "results"
+        results = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results"
         points = _rows(results / "phase2_speciation_reference_points.csv")
         roles = _rows(results / "phase2_speciation_target_roles.csv")
         self.assertGreater(len(points), 0)
@@ -197,7 +198,7 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         self.assertTrue(all(row["validation_use"] == "absolute_upper_bound" for row in hco3_zero_roles))
 
     def test_residual_audit_claim_gates_do_not_change_model_run_status(self) -> None:
-        audit = _rows(ROOT / "analyses" / "phase2_activity_epcsaft" / "results" / "phase2_residual_acceptance_audit.csv")
+        audit = _rows(ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_residual_acceptance_audit.csv")
         by_metric = {(row["species_or_property"], row["metric"]): row for row in audit}
         self.assertEqual(by_metric[("curve_grid_success_fraction", "success_fraction")]["passes"].lower(), "true")
         self.assertEqual(by_metric[("HCO3-", "direct_positive_median_abs_log10_error")]["passes"].lower(), "true")
@@ -205,12 +206,12 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         self.assertEqual(by_metric[("CO2_pressure", "median_abs_log10_error")]["passes"].lower(), "true")
         status_rows = {
             row["artifact"]: row
-            for row in _rows(ROOT / "analyses" / "phase2_activity_epcsaft" / "results" / "phase2_required_output_status.csv")
+            for row in _rows(ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_required_output_status.csv")
         }
         self.assertEqual(status_rows["phase2_residual_acceptance_audit.csv"]["status"], "model_ran_success")
 
     def test_source_residual_summary_closes_source_accounting(self) -> None:
-        path = ROOT / "analyses" / "phase2_activity_epcsaft" / "results" / "phase2_source_residual_summary.csv"
+        path = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_source_residual_summary.csv"
         rows = _rows(path)
         self.assertGreater(len(rows), 0)
         required_columns = {

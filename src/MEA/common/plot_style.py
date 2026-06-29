@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from pathlib import Path
+from typing import Any
 
 import matplotlib as mpl
 import numpy as np
@@ -139,27 +140,45 @@ def write_mpl_sidecar(
     *,
     png_name: str,
     svg_name: str,
+    pdf_name: str | None = None,
     title: str,
     description: str,
     style_source: str = "src/MEA/common/plot_style.py",
     dpi: int = 300,
 ) -> None:
+    lines = [
+        "figure:",
+        f"  title: {title}",
+        f"  description: {description}",
+        f"  png: {png_name}",
+        f"  svg: {svg_name}",
+    ]
+    if pdf_name is not None:
+        lines.append(f"  pdf: {pdf_name}")
+    lines.extend(
+        [
+            f"  dpi: {dpi}",
+            "style:",
+            f"  source: {style_source}",
+            "",
+        ]
+    )
     path.write_text(
-        "\n".join(
-            [
-                "figure:",
-                f"  title: {title}",
-                f"  description: {description}",
-                f"  png: {png_name}",
-                f"  svg: {svg_name}",
-                f"  dpi: {dpi}",
-                "style:",
-                f"  source: {style_source}",
-                "",
-            ]
-        ),
+        "\n".join(lines),
         encoding="utf-8",
     )
+
+
+def save_figure_bundle(fig: Any, stem_path: Path, *, dpi: int = 300) -> tuple[Path, Path, Path]:
+    png = stem_path.with_suffix(".png")
+    svg = stem_path.with_suffix(".svg")
+    pdf = stem_path.with_suffix(".pdf")
+    fig.savefig(png, dpi=dpi, bbox_inches="tight")
+    fig.savefig(svg, bbox_inches="tight")
+    fig.savefig(pdf, bbox_inches="tight")
+    svg_lines = svg.read_text(encoding="utf-8").splitlines()
+    svg.write_text("\n".join(line.rstrip() for line in svg_lines) + "\n", encoding="utf-8")
+    return png, svg, pdf
 
 
 apply_plot_theme()

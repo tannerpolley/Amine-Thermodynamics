@@ -1,5 +1,5 @@
 \section{Theory}\label{sec:theory}
-The modeling target is a reacting electrolyte vapor--liquid equilibrium problem.  At specified temperature, apparent amine concentration, and total absorbed \COtwo loading, the model must determine a charge-balanced true-species liquid composition and the corresponding vapor-phase \COtwo partial pressure.  The liquid composition enters the EOS derivatives directly through ePC-SAFT fugacity coefficients, activity coefficients, and Born/electrostatic contributions.
+The \COtwo-solubility modeling target is a reacting electrolyte vapor--liquid equilibrium problem.  At specified temperature, apparent amine concentration, and total absorbed \COtwo loading, the model must determine a charge-balanced true-species liquid composition and the corresponding vapor-phase \COtwo partial pressure.  The liquid composition enters the EOS derivatives directly through ePC-SAFT fugacity coefficients, activity coefficients, and Born/electrostatic contributions.
 
 \subsection{PC-SAFT residual Helmholtz energy}
 ePC-SAFT is formulated as a residual Helmholtz-energy equation of state.  For a state defined by temperature \(T\), molar density \(\rho\), and mole-fraction vector \(\boldsymbol{x}\), the reduced residual Helmholtz energy \(\tilde{a}^{\mathrm{res}}=a^{\mathrm{res}}/(RT)\) is assembled from hard-chain, dispersion, association, Debye--Huckel, and Born terms \cite{Gross2001,Gross2002,Cameretti2005,Bulow2021a,Figiel2025}:
@@ -13,7 +13,7 @@ ePC-SAFT is formulated as a residual Helmholtz-energy equation of state.  For a 
     +\tilde{a}^{\mathrm{Born}} ,
     \label{eq:epcsaft-residual-split}
 \end{equation}
-where the hard-chain contribution gives the repulsive chain reference, the dispersion contribution gives short-range attraction, the association contribution gives site-specific hydrogen bonding, the Debye--Huckel term gives long-range electrostatics, and the Born term gives electrostatic solvation.  Neutral \MEA and \HtwoO therefore require segment, dispersion, and association parameters, whereas charged species also require charge, dielectric, and Born-diameter information.
+where the hard-chain contribution gives the repulsive chain reference, the dispersion contribution gives short-range attraction, the association contribution gives site-specific hydrogen bonding, the Debye--Huckel term gives long-range electrostatics, and the Born term gives electrostatic solvation.  This split is central for loaded \MEA because neutral solvent structure, ionic strength, and solvation all change with \COtwo loading.  Neutral \MEA and \HtwoO therefore require segment, dispersion, and association parameters, whereas charged species also require charge, dielectric, and Born-diameter information.
 
 The hard-chain reference is built from packing-fraction moments
 \begin{equation}
@@ -29,7 +29,7 @@ where \(m_i\) is the segment number and \(d_i\) is the temperature-dependent seg
     \sum_i x_i(m_i-1)\ln g_{ii}^{\mathrm{hs}}(\sigma_{ii}) .
     \label{eq:epcsaft-hard-chain}
 \end{equation}
-This term controls excluded volume and the density scale used by all subsequent residual derivatives.
+This term controls excluded volume and the density scale used by all subsequent residual derivatives, so it influences both fugacity coefficients and liquid-state activity coefficients.
 
 The dispersion term introduces attractive perturbations through mixture moments of segment energy and size,
 \begin{equation}
@@ -65,7 +65,7 @@ with association strengths proportional to
     \right].
     \label{eq:epcsaft-association-strength}
 \end{equation}
-This is the contribution that carries the hydrogen-bonding physics of water and alkanolamines; it is absent for ions without association sites.
+This contribution carries the hydrogen-bonding physics of water and alkanolamines; ions without assigned association sites do not contribute association-site balances in this formulation.
 
 \subsection{Electrolyte PC-SAFT and ion activity coefficients}
 For charged species, the Debye--Huckel contribution uses the dielectric state and the inverse Debye length,
@@ -106,7 +106,7 @@ The active set \(\mathcal{D}\) always contains the base Born term and may also i
     \mathcal{D}_{\mathrm{add}}\subseteq\{\mathrm{SSM},\mathrm{DS}\}.
     \label{eq:epcsaft-born-active-set}
 \end{equation}
-For the SSM+DS option used in this work, \(\mathcal{D}_{\mathrm{add}}=\{\mathrm{SSM},\mathrm{DS}\}\).  The base Born and SSM terms use the bulk dielectric medium, while the DS term uses the ion-local dielectric medium:
+For the solvation-shell modeling plus dielectric-saturation (SSM+DS) option used in this work, \(\mathcal{D}_{\mathrm{add}}=\{\mathrm{SSM},\mathrm{DS}\}\).  The base Born and SSM terms use the bulk dielectric medium, while the DS term uses the ion-local dielectric medium:
 \begin{equation}
     m_\delta=
     \begin{cases}
@@ -147,7 +147,7 @@ The SSM term changes the effective Born radius used with the bulk medium, wherea
 
 The ePC-SAFT calculations in this work use concentration-dependent permittivity and modified Born solvation.  The selected modified-Born convention combines an ion-specific Born diameter with solvation-shell modeling, dielectric saturation, and composition-dependent Born chemical-potential corrections.  This is the SSM+DS form introduced for the modified Born contribution, in which an ion-specific Born diameter is combined with a solvent-shell correction and a radially simplified dielectric-saturation term \cite{Figiel2025}.  The corresponding ePC-SAFT literature treats the pure-ion relative permittivity as $\varepsilon_r=8$, sets $f_k=1$ for ions, and fits the solvent $f_k$ parameter to electrolyte activity data; water, methanol, and ethanol have reported $f_k$ values of 1.5, 1.4, and 1.6, respectively \cite{Figiel2025}.  Loaded 30 wt\% \MEA also has direct dielectric-dispersion measurements, which show that static permittivity changes with both temperature and carbonation ratio \cite{Hajj2024}.  Those data motivate, but do not yet fully identify, an MEA-specific solvent-shell parameter.
 
-In physical terms, the liquid dielectric environment is not treated as a fixed pure-water constant.  Instead, the ion solvation contribution responds to solvent composition and ionic strength, which is essential for a loaded amine solution whose polarity and ion population change strongly with \COtwo loading.  The parameter table in \cref{tab:full-ionic-ssm-ds-parameters} therefore distinguishes fitted MEA-family ion parameters from SSM+DS conventions transferred from electrolyte literature.
+In physical terms, the liquid dielectric environment is not treated as a fixed pure-water constant.  Instead, the ion solvation contribution responds to solvent composition and ionic strength, which is essential for a loaded amine solution whose polarity, carbamate concentration, and carbonate-family ion population change strongly with \COtwo loading.  The parameter table in \cref{tab:full-ionic-ssm-ds-parameters} therefore distinguishes fitted \MEA-family ion parameters from SSM+DS conventions transferred from electrolyte literature.
 
 \subsection{MEA--CO2--H2O reaction network}
 The apparent feed is defined by the unloaded \MEA mass fraction $w_{\MEA}$ and \COtwo loading $\alpha$, with $\alpha$ equal to moles of absorbed \COtwo per mole of total amine.  The unloaded apparent liquid composition is computed from molecular-weight conversion as
@@ -160,9 +160,9 @@ The apparent feed is defined by the unloaded \MEA mass fraction $w_{\MEA}$ and \
     x_{\HtwoO,0}=1-x_{\MEA,0}.
     \label{eq:unloaded-mea-composition}
 \end{equation}
-Absorbed \COtwo is then added according to $n_{\COtwo,0}=\alpha n_{\MEA,0}$ and the total apparent state is normalized.
+Absorbed \COtwo is then added according to \(n_{\COtwo,0}=\alpha n_{\MEA,0}\), and the total apparent state is normalized before the reaction solve.
 
-The true-species liquid basis is
+The true-species liquid basis resolves the apparent \MEA and \COtwo inventory into molecular and ionic species needed for acid--base and solubility calculations:
 \begin{equation}
     \boldsymbol{x}
     =
@@ -172,16 +172,23 @@ The true-species liquid basis is
     \right).
     \label{eq:true-species-vector}
 \end{equation}
-The independent reactions include water autoionization, carbonic-acid dissociation to bicarbonate and carbonate, carbamate hydrolysis, and protonated-amine dissociation.  For reaction $r$, thermodynamic equilibrium is written with activities rather than bare mole fractions,
+The fixed speciation calculation uses the five independent liquid reactions listed in \cref{tab:reaction-equilibrium-constants}.  For reaction $r$, thermodynamic equilibrium is written with activities rather than bare mole fractions,
 \begin{equation}
     \sum_i \nu_{ri}\ln a_i = \ln K_r(T),
     \qquad
     a_i = \gamma_i^{\mathrm{ePC-SAFT}} x_i,
     \label{eq:activity-reaction-equilibrium}
 \end{equation}
-where $\nu_{ri}$ is the stoichiometric coefficient and $\gamma_i^{\mathrm{ePC-SAFT}}$ is the activity coefficient evaluated from the ePC-SAFT liquid state.  This activity-coupled form is the key distinction from the ideal-equilibrium baseline.
+where $\nu_{ri}$ is the stoichiometric coefficient and $\gamma_i^{\mathrm{ePC-SAFT}}$ is the activity coefficient evaluated from the ePC-SAFT liquid state.  The reaction constants are represented as
+\begin{equation}
+    \ln K_r(T)=A_r+\frac{B_r}{T}+C_r\ln T+D_rT,
+    \label{eq:reaction-equilibrium-constant-temperature}
+\end{equation}
+with \(T\) in kelvin and a mole-fraction activity convention.  The reported temperature ranges in \cref{tab:reaction-equilibrium-constants} are the source ranges for the coefficient correlations; rows outside a listed range are retained as fixed-basis residual tests rather than as refitted reaction-constant evidence.  This activity-coupled form is the key distinction from the ideal-equilibrium baseline.
 
-The liquid composition also satisfies carbon, amine, water, and charge balances:
+\input{tables/reaction_equilibrium_constants}
+
+The liquid composition also satisfies carbon, amine, and water pseudo-component balances plus electroneutrality:
 \begin{align}
     x_{\COtwo,0} &= x_{\COtwo}+x_{\MEACOO}+x_{\HCOthree}+x_{\COthree}, \\
     x_{\MEA,0} &= x_{\MEA}+x_{\MEAH}+x_{\MEACOO}, \\
@@ -199,7 +206,7 @@ For a liquid state at temperature \(T\), pressure \(P\), and mole-fraction vecto
     \qquad i \in \{\COtwo,\HtwoO,\MEA\},
     \label{eq:fugacity-equality}
 \end{equation}
-while ionic species are constrained to the liquid phase.  The residual Helmholtz contribution enters this relation through
+while ionic species are constrained to the liquid phase.  The residual Helmholtz contribution connects the phase-equilibrium calculation to the activity coefficients used in the reaction equations through
 \begin{equation}
     \ln\varphi_k
     =

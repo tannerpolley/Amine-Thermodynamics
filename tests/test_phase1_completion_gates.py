@@ -16,7 +16,7 @@ def _rows(path: Path) -> list[dict[str, str]]:
 
 class Phase1CompletionGateTests(unittest.TestCase):
     def test_phase1_reaction_constant_signs_match_source_values(self) -> None:
-        path = ROOT / "analyses" / "phase1_smith_missen_baseline" / "results" / "phase1_reaction_constant_table.csv"
+        path = ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "results" / "phase1_reaction_constant_table.csv"
         by_id = {row["reaction_id"]: row for row in _rows(path)}
         self.assertAlmostEqual(float(by_id["R1"]["C"]), -22.4773, places=4)
         self.assertAlmostEqual(float(by_id["R2"]["A"]), 231.465, places=3)
@@ -24,7 +24,7 @@ class Phase1CompletionGateTests(unittest.TestCase):
         self.assertAlmostEqual(float(by_id["R5"]["D"]), -0.007484, places=6)
 
     def test_phase1_residual_audit_records_pass_and_claim_gates(self) -> None:
-        path = ROOT / "analyses" / "phase1_smith_missen_baseline" / "results" / "phase1_residual_acceptance_audit.csv"
+        path = ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "results" / "phase1_residual_acceptance_audit.csv"
         rows = _rows(path)
         self.assertTrue(rows)
         required_columns = {
@@ -73,10 +73,10 @@ class Phase1CompletionGateTests(unittest.TestCase):
 
     def test_phase1_claim_boundary_keeps_status_bounded(self) -> None:
         lineage = (
-            ROOT / "analyses" / "phase1_smith_missen_baseline" / "results" / "phase1_model_lineage.md"
+            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "results" / "phase1_model_lineage.md"
         ).read_text(encoding="utf-8")
         claim_boundary = (
-            ROOT / "analyses" / "phase1_smith_missen_baseline" / "results" / "phase1_claim_boundary.md"
+            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "results" / "phase1_claim_boundary.md"
         ).read_text(encoding="utf-8")
         self.assertIn("lineage_status: explicit_ideal_smith_missen_reproduction", lineage)
         self.assertIn("phase1_status: validated_major_species_speciation_with_pressure_limits", claim_boundary)
@@ -84,17 +84,19 @@ class Phase1CompletionGateTests(unittest.TestCase):
         self.assertNotIn("phase1_status: model_ran_but_" + "failed_validation", claim_boundary)
 
     def test_phase1_speciation_figure_is_full_ideal_equilibrium_output(self) -> None:
-        result_dir = ROOT / "analyses" / "phase1_smith_missen_baseline" / "results"
+        result_dir = ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "results"
         self.assertTrue((result_dir / "phase1_speciation_vs_loading.png").exists())
         self.assertTrue((result_dir / "phase1_speciation_vs_loading.svg").exists())
+        self.assertTrue((result_dir / "phase1_speciation_vs_loading.pdf").exists())
         self.assertTrue((result_dir / "phase1_speciation_vs_loading.mpl.yaml").exists())
         self.assertTrue((result_dir / "phase1_speciation_vs_loading_plot_data.csv").exists())
         self.assertFalse((result_dir / "phase1_speciation_vs_loading_diagnostic.png").exists())
         self.assertFalse((result_dir / "phase1_speciation_vs_loading_diagnostic.svg").exists())
+        self.assertFalse((result_dir / "phase1_speciation_vs_loading_diagnostic.pdf").exists())
         self.assertFalse((result_dir / "phase1_speciation_vs_loading_diagnostic.mpl.yaml").exists())
 
     def test_phase1_speciation_output_has_full_continuous_species_curves(self) -> None:
-        output = ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "speciation" / "output"
+        output = ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "output"
         rows = _rows(output / "phase1_speciation_curve.csv")
         selected = [row for row in rows if row["temperature_C"] == "40.0" and row["species"] == "MEA + MEAH+"]
         self.assertGreaterEqual(len(selected), 150)

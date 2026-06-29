@@ -1,30 +1,36 @@
 \section{Data and Methods}\label{sec:data-methods}
 
-\subsection{Experimental Data Inventory}
-The pressure data set contains 161 \COtwo partial-pressure records from Aronu et al., Hilliard, Jou et al., Mamun et al., and Xu et al.\cite{Aronu2011,Hilliard2008,Jou1995,Mamun2005,Xu2011}.  Each record contains amine mass fraction, temperature, \COtwo loading, and measured \COtwo pressure.  The speciation data set contains 74 NMR-derived liquid-composition records from Boettinger et al., Jakobsen et al., and Matin et al.\cite{Bottinger2008,Jakobsen2005,Matin2012}.  The speciation records are expressed on a common loading basis and reconciled to satisfy carbon, amine, water, and charge balances before model comparison.
+\subsection{Experimental Solubility and Speciation Data}
+The \COtwo-solubility data set contains 161 equilibrium partial-pressure records compiled from five VLE sources\cite{Aronu2011,Hilliard2008,Jou1995,Mamun2005,Xu2011}.  Each record contains amine mass fraction, temperature, \COtwo loading, and measured \COtwo pressure, which together define the solubility-pressure relation.  The speciation data set contains 74 NMR-derived liquid-composition records compiled from three spectroscopic studies\cite{Bottinger2008,Jakobsen2005,Matin2012}.  The speciation records are expressed on a common loading basis and reconciled to satisfy carbon, amine, water, and charge balances before model comparison.
 
-\begin{table}
+\begin{center}
+    \begin{minipage}{\linewidth}
     \centering
-    \caption{Experimental evidence base used for the \MEA ePC-SAFT evaluation.}
+    \captionsetup{hypcap=false}
+    \captionof{table}{Experimental evidence base used for the \MEA \COtwo-solubility and speciation evaluation.}
     \label{tab:mea-data-inventory}
-    \begin{tabularx}{\linewidth}{lclX}
+    \small
+    \begin{tabularx}{\linewidth}{lclXX}
         \toprule
-        Data family & Records & Primary sources & Observables \\
+        Data family & Records & Primary sources & Conditions & Observables and residual role \\
         \midrule
         VLE & 161 & \cite{Aronu2011,Hilliard2008,Jou1995,Mamun2005,Xu2011} &
-        \MEA mass fraction, temperature, \COtwo loading, and \COtwo partial pressure \\
+        30 wt\% \MEA, 40--\SI{120}{\degreeCelsius}, \(\alpha=0.003\)--0.689, \(P_{\COtwo}=1.5\times10^{-3}\)--\(2.804\times10^3\) kPa &
+        Measured \COtwo pressure at fixed loading; logarithmic solubility residual \\
         Speciation & 74 & \cite{Bottinger2008,Jakobsen2005,Matin2012} &
-        True-species mole fractions for \MEA, \MEAH, \MEACOO, \HCOthree, carbonate-family species, and water-balance species \\
+        30 wt\% \MEA, 20--\SI{80}{\degreeCelsius}, \(\alpha=0.064\)--0.990 &
+        True-species mole fractions; direct-positive, reported-zero, and balance-inferred target roles \\
         \bottomrule
     \end{tabularx}
-\end{table}
+    \end{minipage}
+\end{center}
 
 \subsection{Species Basis and Parameter Hierarchy}
-The activity-based calculation uses the nine-species liquid basis defined in \cref{eq:true-species-vector}.  The parameter hierarchy separates inherited molecular parameters, SSM+DS ion conventions from modified-Born ePC-SAFT literature, direct \MEA-system regression for \MEAH and \MEACOO, and trace-ion quantities that are retained from literature-backed or diagnostic calculations.  This hierarchy is used to evaluate a fixed parameter set; it is not a pressure-only fitted model.
+The activity-based calculation uses the nine-species liquid basis defined in \cref{eq:true-species-vector}.  The parameter hierarchy separates inherited molecular parameters, SSM+DS ion conventions from modified-Born ePC-SAFT literature, direct \MEA-system regression for \MEAH and \MEACOO, and trace-ion quantities that are retained from literature-backed or diagnostic calculations.  This hierarchy is used to evaluate a fixed advanced-Born parameter set for \COtwo-solubility modeling; it is not a pressure-only fitted model.
 
 \input{tables/full_ionic_ssm_ds_parameters}
 
-The parameter-evidence matrix in \cref{tab:parameter-evidence-matrix,tab:trace-parameter-evidence} distinguishes fitted amine-family ion parameters from trace-species quantities that are not independently identified by the available NMR targets.
+The parameter-evidence matrix in \cref{tab:parameter-evidence-matrix,tab:trace-parameter-evidence} distinguishes fitted amine-family ion parameters from trace-species quantities that are not independently identified by the available NMR targets.  The available speciation data identify \MEAH and \MEACOO most directly; bicarbonate, carbonate, hydronium, and hydroxide parameters require additional caution because they are constrained by fewer direct targets or by balance relationships.
 
 \input{tables/parameter_evidence_matrix}
 
@@ -36,26 +42,16 @@ The molecular \COtwo, \MEA, and \HtwoO parameters are inherited from the cited P
 \end{equation}
 where \(T\) is in kelvin and \(\sigma_{\HtwoO}\) is in angstroms.  Rows marked ``This work'' contain parameters fitted or derived in the present analysis; cited rows use literature values.
 
-The binary-interaction matrix is intentionally sparse.  It retains the inherited molecular term and the directly fitted amine-ion term,
-\begin{align*}
-k_{\MEA,\HtwoO} &= -0.052, &
-k_{\MEAH,\MEACOO} &= -0.002018,
-\end{align*}
-and uses literature water--ion interactions for the proton/carbonate family,
-\begin{align*}
-k_{\HtwoO,\HthreeO} &= 0.25, &
-k_{\HtwoO,\Hydroxide} &= -0.25,\\
-k_{\HtwoO,\HCOthree} &= 0, &
-k_{\HtwoO,\COthree} &= -0.25.
-\end{align*}
-The remaining \MEA-specific ion--molecule and ion--ion terms are held at zero for this evaluation.  This sparse interaction structure tests the selected activity model before introducing a broader optimized binary-interaction matrix.
+The binary-interaction matrix is intentionally sparse.  \Cref{tab:binary-interaction-parameters} lists the nonzero interactions, the zero-valued candidate interactions retained for the fixed activity-based evaluation, and the transferred water--ion terms.  The remaining \MEA-specific ion--molecule and ion--ion terms are held at zero.  This sparse interaction structure tests the selected activity model before introducing a broader optimized binary-interaction matrix.
+
+\input{tables/binary_interaction_parameters}
 
 \subsection{MEAH+ and MEACOO- regression}
-The direct amine-ion regression uses the NMR/speciation source subset from Matin et al., Jakobsen et al., and Boettinger et al.\cite{Matin2012,Jakobsen2005,Bottinger2008}.  The fitted variables are \(\sigma\), \(\epsilon/k\), and \(d^{\mathrm{Born}}\) for \MEAH and \MEACOO, plus \(k_{\MEAH,\MEACOO}\).  The retained fit decreases the residual norm from 0.2714 to 0.2677 and changes the median absolute \(\log_{10}(\mathrm{model}/\mathrm{data})\) error from 0.1010 to 0.0988.  The fitted \MEAH \(R^2\) changes from 0.655 to 0.665, and the fitted \MEACOO \(R^2\) changes from 0.888 to 0.905.  No retained fit parameter is at a bound.
+The direct amine-ion regression uses the NMR/speciation subset from the cited spectroscopic studies\cite{Matin2012,Jakobsen2005,Bottinger2008}.  These data constrain the \MEA-family ions most specific to a primary amine: protonated amine and carbamate.  The fitted variables are \(\sigma\), \(\epsilon/k\), and \(d^{\mathrm{Born}}\) for \MEAH and \MEACOO, plus \(k_{\MEAH,\MEACOO}\).  The retained fit decreases the residual norm from 0.2714 to 0.2677 and changes the median absolute \(\log_{10}(\mathrm{model}/\mathrm{data})\) error from 0.1010 to 0.0988.  The fitted \MEAH \(R^2\) changes from 0.655 to 0.665, and the fitted \MEACOO \(R^2\) changes from 0.888 to 0.905.  No retained fit parameter is at a bound.
 
 \input{tables/regression_bounds}
 
-\subsection{Coupled pressure/speciation objective}
+\subsection{Coupled CO2 Solubility and Speciation Objective}
 The pressure residual is expressed on a logarithmic basis,
 \begin{equation}
     \epsilon_{P,j}
@@ -63,23 +59,27 @@ The pressure residual is expressed on a logarithmic basis,
     \log_{10}\left(\frac{P_{\COtwo,j}^{\mathrm{model}}}{P_{\COtwo,j}^{\mathrm{exp}}}\right),
     \label{eq:pressure-log-residual}
 \end{equation}
-because measured \COtwo partial pressures span several orders of magnitude.  Speciation residuals use the same \(\log_{10}(\mathrm{model}/\mathrm{data})\) form for nonzero measured targets.  Measurements reported as zero and treated as upper-bound targets are evaluated separately with modeled mole-fraction upper bounds, and quantities inferred from balance constraints are used as context rather than direct logarithmic targets.
+because measured \COtwo partial pressures span several orders of magnitude across the solubility data.  Speciation residuals use the same \(\log_{10}(\mathrm{model}/\mathrm{data})\) form for nonzero measured targets.  Measurements reported as zero and treated as upper-bound targets are evaluated separately with modeled mole-fraction upper bounds, and quantities inferred from balance constraints are used as context rather than direct logarithmic targets.
 
 The multi-observable target combines pressure residuals, speciation residuals, reaction-equilibrium residuals, and regularization to the parameter seed:
 \begin{equation}
-    \Phi(\boldsymbol{\theta}) =
-    \sum_{j\in\mathcal{D}_P} w_{P,j}\epsilon_{P,j}^{2}
-    +
+    \begin{aligned}
+    \Phi(\boldsymbol{\theta}) ={}&
+    \sum_{j\in\mathcal{D}_P} w_{P,j}\epsilon_{P,j}^{2} \\
+    &+
     \sum_{j\in\mathcal{D}_x}\sum_{i\in\mathcal{S}_x} w_{x,ij}
-    \left[\log_{10}\left(\frac{x_{ij}^{\mathrm{model}}}{x_{ij}^{\mathrm{exp}}}\right)\right]^2
-    +
+    \left[\log_{10}\left(\frac{x_{ij}^{\mathrm{model}}}{x_{ij}^{\mathrm{exp}}}\right)\right]^2 \\
+    &+
     \sum_{j\in\mathcal{D}_x}\sum_r w_{K,rj}
-    \left(\sum_i \nu_{ri}\ln a_{ij}-\ln K_r\right)^2
-    +
-    \lambda\lVert \boldsymbol{\theta}-\boldsymbol{\theta}_0\rVert^2.
+    \left(\sum_i \nu_{ri}\ln a_{ij}-\ln K_r(T_j)\right)^2 \\
+    &+
+    \lambda\lVert \boldsymbol{\theta}-\boldsymbol{\theta}_0\rVert^2 .
+    \end{aligned}
     \label{eq:regression-objective}
 \end{equation}
-A pressure-only fit can hide a poor liquid composition, while a speciation-only fit cannot guarantee the correct gas-phase driving force.  A model intended for pressure and speciation use must therefore satisfy both observable families.
+The \(K_r(T)\) values are the fixed reaction constants listed in \cref{tab:reaction-equilibrium-constants}.  A solubility-pressure-only fit can hide a poor liquid composition, while a speciation-only fit cannot guarantee the correct vapor-phase pressure.  A thermodynamic model intended for reactive \COtwo solubility and liquid speciation must therefore satisfy both observable families.
 
 \subsection{Computational implementation and reproducibility}
-The Phase 1 calculation is an ideal Smith--Missen-style five-reaction, nine-species baseline with activities set equal to mole fractions.  The Phase 2 calculation evaluates the same reaction network with ePC-SAFT activities, fugacities, concentration-dependent permittivity, and SSM+DS Born corrections.  The present work does not report a completed coupled pressure/speciation regression.  The reported parameter set is therefore evaluated as a fixed activity-based parameter set with explicit residuals.
+The baseline calculation is an ideal Smith--Missen-style five-reaction, nine-species equilibrium solve with activities set equal to mole fractions.  The activity-based calculation evaluates the same reaction network with ePC-SAFT activities, fugacities, concentration-dependent permittivity, and SSM+DS Born corrections.  The present work does not report a completed coupled solubility/speciation regression.  The reported parameter set is therefore evaluated as a fixed activity-based parameter set with explicit pressure and speciation residuals.  \Cref{tab:residual-summary} summarizes the residual metrics that define the manuscript claims.
+
+\input{tables/residual_summary}

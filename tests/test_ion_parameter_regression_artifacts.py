@@ -8,9 +8,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RESULTS = ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "ion_parameter_regression"
-TRACE_BORN_RESULTS = ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "trace_carbonate_born_regression"
-OH_BORN_RESULTS = ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "oh_born_derivation"
+RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "ion_parameter_regression"
+TRACE_BORN_RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "trace_carbonate_born_regression"
+OH_BORN_RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "oh_born_derivation"
 RUNTIME = ROOT / "src" / "MEA" / "epcsaft_runtime.py"
 SPECIES_EVIDENCE = ROOT / "data" / "reference" / "MEA" / "epcsaft_species_parameter_evidence.csv"
 IONIC_PARAMETER_CSV = (
@@ -28,8 +28,8 @@ IONIC_KIJ_CSV = (
 )
 FULL_SPECIES = ("CO2", "MEA", "H2O", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-")
 IONIC_SPECIES = ("MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-")
-PRESSURE_RESULTS = ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "pressure"
-SPECIATION_RESULTS = ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "speciation"
+PRESSURE_RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "pressure"
+SPECIATION_RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "speciation"
 LATEX_ROOT = ROOT / "docs" / "latex"
 LATEX_MAIN = LATEX_ROOT / "main.tex"
 
@@ -78,12 +78,15 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
             "meah_meacoo_speciation_parity.mpl.yaml",
             "meah_meacoo_speciation_parity.png",
             "meah_meacoo_speciation_parity.svg",
+            "meah_meacoo_speciation_parity.pdf",
             "meah_meacoo_loading_curves.mpl.yaml",
             "meah_meacoo_loading_curves.png",
             "meah_meacoo_loading_curves.svg",
+            "meah_meacoo_loading_curves.pdf",
             "ion_parameter_pressure_parity.mpl.yaml",
             "ion_parameter_pressure_parity.png",
             "ion_parameter_pressure_parity.svg",
+            "ion_parameter_pressure_parity.pdf",
         ]
         missing = [name for name in required if not (RESULTS / name).exists()]
         self.assertEqual(missing, [])
@@ -97,6 +100,7 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
             "trace_carbonate_born_parity.mpl.yaml",
             "trace_carbonate_born_parity.png",
             "trace_carbonate_born_parity.svg",
+            "trace_carbonate_born_parity.pdf",
         ]
         missing = [name for name in required if not (TRACE_BORN_RESULTS / name).exists()]
         self.assertEqual(missing, [])
@@ -229,11 +233,11 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
 
     def test_full_ionic_plot_artifacts_include_expected_formats(self) -> None:
         required_with_formats = {
-            "meah_meacoo_speciation_parity": ("csv", "png", "svg", "mpl.yaml"),
-            "meah_meacoo_loading_curves": ("csv", "png", "svg", "mpl.yaml"),
-            "ion_parameter_pressure_parity": ("csv", "png", "svg", "mpl.yaml"),
-            "ionic_epcsaft_co2_pressure": ("csv", "png", "svg", "mpl.yaml"),
-            "ionic_epcsaft_speciation_activity": ("csv", "png", "svg", "mpl.yaml"),
+            "meah_meacoo_speciation_parity": ("csv", "png", "svg", "pdf", "mpl.yaml"),
+            "meah_meacoo_loading_curves": ("csv", "png", "svg", "pdf", "mpl.yaml"),
+            "ion_parameter_pressure_parity": ("csv", "png", "svg", "pdf", "mpl.yaml"),
+            "ionic_epcsaft_co2_pressure": ("csv", "png", "svg", "pdf", "mpl.yaml"),
+            "ionic_epcsaft_speciation_activity": ("csv", "png", "svg", "pdf", "mpl.yaml"),
         }
         csv_by_stem = {
             "meah_meacoo_speciation_parity": "ion_parameter_speciation_fit_data.csv",

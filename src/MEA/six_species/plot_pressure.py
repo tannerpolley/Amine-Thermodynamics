@@ -47,7 +47,7 @@ except ImportError as exc:
     raise RuntimeError(
         "The legacy Jou pressure baseline requires the sibling/local pcsaft package. "
         "Confirm C:\\Users\\Tanner\\Documents\\git\\PC-SAFT exists, then run `uv sync` from this "
-        "repository before running `uv run python analyses\\six_species_legacy\\scripts\\render_figures.py`."
+        "repository before running `uv run python analyses\\six_species_baseline\\scripts\\render_figures.py`."
     ) from exc
 
 

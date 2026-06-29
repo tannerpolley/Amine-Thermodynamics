@@ -2,7 +2,7 @@
 
 Date: 2026-05-15 local
 
-This roadmap records the fixed Phase 2 activity-based ePC-SAFT speciation and pressure-evaluation design represented by `analyses/phase2_activity_epcsaft/results/phase2_activity_speciation_problem.json` and the generated Phase 2 CSV artifacts. It is not a Phase 3 coupled pressure/speciation regression plan.
+This roadmap records the fixed Phase 2 activity-based ePC-SAFT speciation and pressure-evaluation design represented by `analyses/phase2/activity_epcsaft/results/phase2_activity_speciation_problem.json` and the generated Phase 2 CSV artifacts. It is not a Phase 3 coupled pressure/speciation regression plan.
 
 ## Species
 
@@ -50,4 +50,4 @@ The generated problem definition records the pinned `epcsaft` commit `9f51afd0f9
 
 ## Source-resolved residual accounting
 
-The source-level accounting table is `analyses/phase2_activity_epcsaft/results/phase2_source_residual_summary.csv`. It accounts for the 161 pressure records and 74 speciation state records while keeping measured pressure, nonzero measured speciation, zero-reported targets, and balance-inferred quantities in separate rows.
+The source-level accounting table is `analyses/phase2/activity_epcsaft/results/phase2_source_residual_summary.csv`. It accounts for the 161 pressure records and 74 speciation state records while keeping measured pressure, nonzero measured speciation, zero-reported targets, and balance-inferred quantities in separate rows.

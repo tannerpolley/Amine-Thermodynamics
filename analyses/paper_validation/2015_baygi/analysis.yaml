@@ -1,0 +1,7 @@
+id: 2015_baygi
+title: Baygi 2015 Neutral Parity
+layout: analyses/paper_validation/2015_baygi
+commands:
+  generate_data: uv run python analyses/paper_validation/2015_baygi/scripts/generate_data.py
+  render_figures: uv run python analyses/paper_validation/2015_baygi/scripts/render_figures.py
+results_policy: Track curated CSV snapshots, .mpl.yaml sidecars, PNG previews, SVG figures, and PDF LaTeX artifacts under results/neutral_parity/.

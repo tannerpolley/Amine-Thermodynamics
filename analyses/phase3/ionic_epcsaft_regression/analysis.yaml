@@ -1,0 +1,7 @@
+id: ionic_epcsaft_regression
+title: Full Ionic ePC-SAFT Regression
+layout: analyses/phase3/ionic_epcsaft_regression
+commands:
+  generate_data: uv run python analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py
+  render_figures: uv run python analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py
+results_policy: Track curated CSV snapshots, .mpl.yaml sidecars, PNG previews, SVG figures, and PDF LaTeX artifacts under results/<plot_set>/; keep disposable run output under ignored results/runs/.

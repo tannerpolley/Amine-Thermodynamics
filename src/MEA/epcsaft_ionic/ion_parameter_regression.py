@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from MEA.common.plot_style import finish_axes, species_color, species_label, write_mpl_sidecar
+from MEA.common.plot_style import finish_axes, save_figure_bundle, species_color, species_label, write_mpl_sidecar
 from MEA.epcsaft_ionic.model import (
     BOUNDS,
     DEFAULT_INITIAL_GUESS,
@@ -240,7 +240,14 @@ def _statistics_rows(initial_metrics: dict[str, Any], final_metrics: dict[str, A
 
 
 def _write_sidecar(path: Path, stem: str, *, title: str, description: str) -> None:
-    write_mpl_sidecar(path, png_name=f"{stem}.png", svg_name=f"{stem}.svg", title=title, description=description)
+    write_mpl_sidecar(
+        path,
+        png_name=f"{stem}.png",
+        svg_name=f"{stem}.svg",
+        pdf_name=f"{stem}.pdf",
+        title=title,
+        description=description,
+    )
 
 
 def plot_speciation_parity(frame: pd.DataFrame, output_dir: Path) -> Path:
@@ -279,8 +286,7 @@ def plot_speciation_parity(frame: pd.DataFrame, output_dir: Path) -> Path:
     ax.legend(fontsize=8, title="Species and source")
     fig.tight_layout()
     path = output_dir / "meah_meacoo_speciation_parity.png"
-    fig.savefig(path, dpi=300, bbox_inches="tight")
-    fig.savefig(path.with_suffix(".svg"), bbox_inches="tight")
+    save_figure_bundle(fig, path.with_suffix(""))
     plt.close(fig)
     _write_sidecar(path.with_suffix(".mpl.yaml"), path.stem, title=title, description=description)
     return path
@@ -321,8 +327,7 @@ def plot_loading_curves(frame: pd.DataFrame, output_dir: Path) -> Path:
     ax.legend(fontsize=8, title="Species and role")
     fig.tight_layout()
     path = output_dir / "meah_meacoo_loading_curves.png"
-    fig.savefig(path, dpi=300, bbox_inches="tight")
-    fig.savefig(path.with_suffix(".svg"), bbox_inches="tight")
+    save_figure_bundle(fig, path.with_suffix(""))
     plt.close(fig)
     _write_sidecar(path.with_suffix(".mpl.yaml"), path.stem, title=title, description=description)
     return path
@@ -345,8 +350,7 @@ def plot_pressure_placeholder(output_dir: Path) -> Path:
         va="center",
     )
     path = output_dir / "ion_parameter_pressure_parity.png"
-    fig.savefig(path, dpi=300, bbox_inches="tight")
-    fig.savefig(path.with_suffix(".svg"), bbox_inches="tight")
+    save_figure_bundle(fig, path.with_suffix(""))
     plt.close(fig)
     _write_sidecar(path.with_suffix(".mpl.yaml"), path.stem, title=title, description=description)
     return path

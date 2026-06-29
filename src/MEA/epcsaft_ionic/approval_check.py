@@ -148,7 +148,7 @@ def write_global_regression_approval(summary: dict[str, Any], output_dir: Path) 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Check full-ionic ePC-SAFT MEA global-regression promotion gates.")
-    parser.add_argument("summary", type=Path, nargs="?", default=Path("analyses/epcsaft_ionic_regression/results/global_regression/global_regression_summary.json"))
+    parser.add_argument("summary", type=Path, nargs="?", default=Path("analyses/phase3/ionic_epcsaft_regression/results/global_regression/global_regression_summary.json"))
     args = parser.parse_args()
     summary = json.loads(args.summary.read_text(encoding="utf-8"))
     approval = evaluate_global_regression_approval(summary)

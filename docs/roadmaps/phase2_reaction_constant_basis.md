@@ -8,8 +8,8 @@ This roadmap records the repo-local evidence gate for the fixed R1-R5 reaction c
 
 - `data/reference/MEA/manifests/phase2_reaction_constant_manifest.csv` records the R1-R5 manifest rows and their Phase 2 use status.
 - `data/reference/MEA/manifests/phase2_reaction_constant_source_verification.csv` records the repo-local source checks for the R1-R5 numerical coefficients.
-- `analyses/phase2_activity_epcsaft/results/phase2_reaction_constant_basis.csv` is the generated copy of the manifest basis used by the Phase 2 run.
-- `analyses/phase2_activity_epcsaft/results/phase2_activity_speciation_problem.json` records the reaction rows in the generated problem definition.
+- `analyses/phase2/activity_epcsaft/results/phase2_reaction_constant_basis.csv` is the generated copy of the manifest basis used by the Phase 2 run.
+- `analyses/phase2/activity_epcsaft/results/phase2_activity_speciation_problem.json` records the reaction rows in the generated problem definition.
 
 ## Reaction Rows
 

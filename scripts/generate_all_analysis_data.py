@@ -7,20 +7,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FAST_COMMANDS = [
-    [sys.executable, "analyses/six_species_legacy/scripts/generate_data.py"],
-    [sys.executable, "analyses/epcsaft_neutral_parity/scripts/generate_data.py"],
-    [sys.executable, "analyses/2015_baygi/scripts/generate_data.py"],
-    [sys.executable, "analyses/phase1_smith_missen_baseline/scripts/generate_data.py"],
-    [sys.executable, "analyses/phase2_activity_epcsaft/scripts/generate_data.py"],
+    [sys.executable, "analyses/phase1/six_species_baseline/scripts/generate_data.py"],
+    [sys.executable, "analyses/phase1/neutral_epcsaft_parity/scripts/generate_data.py"],
+    [sys.executable, "analyses/paper_validation/2015_baygi/scripts/generate_data.py"],
+    [sys.executable, "analyses/phase1/smith_missen_baseline/scripts/generate_data.py"],
+    [sys.executable, "analyses/phase2/activity_epcsaft/scripts/generate_data.py"],
 ]
 IONIC_FULL_COMMANDS = [
-    [sys.executable, "analyses/epcsaft_ionic_regression/scripts/generate_data.py"],
+    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py"],
 ]
 EXPENSIVE_DIAGNOSTIC_COMMANDS = [
-    [sys.executable, "analyses/epcsaft_ionic_regression/scripts/evaluate_train_validation_split.py"],
-    [sys.executable, "analyses/epcsaft_ionic_regression/scripts/compute_parameter_sensitivity.py"],
-    [sys.executable, "analyses/epcsaft_ionic_regression/scripts/fit_trace_carbonate_born.py"],
-    [sys.executable, "analyses/epcsaft_ionic_regression/scripts/derive_oh_born_parameter.py"],
+    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/evaluate_train_validation_split.py"],
+    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/compute_parameter_sensitivity.py"],
+    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/fit_trace_carbonate_born.py"],
+    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/derive_oh_born_parameter.py"],
 ]
 
 

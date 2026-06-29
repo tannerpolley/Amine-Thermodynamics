@@ -170,8 +170,8 @@ Checks:
 
 - Tests pass.
 - Quick validation passes.
-- `analyses/epcsaft_ionic_regression/results/global_regression/global_regression_summary.json` documents `package_fit_not_completed`.
-- `analyses/epcsaft_ionic_regression/results/trace_carbonate_born_regression/trace_carbonate_born_fit_summary.json` still contains the `6.80294 / 2.99744` unanchored diagnostic.
+- `analyses/phase3/ionic_epcsaft_regression/results/global_regression/global_regression_summary.json` documents `package_fit_not_completed`.
+- `analyses/phase3/ionic_epcsaft_regression/results/trace_carbonate_born_regression/trace_carbonate_born_fit_summary.json` still contains the `6.80294 / 2.99744` unanchored diagnostic.
 
 Deliverable:
 
@@ -286,7 +286,7 @@ Current MEA implementation checkpoint on 2026-05-11:
 - `src/MEA/epcsaft_ionic/regress_parameters.py` delegates production fitting to `epcsaft.fit_reactive_electrolyte_parameters`.
 - `src/MEA/epcsaft_ionic/global_regression.py` no longer owns a SciPy optimizer loop for the pressure/speciation production path.
 - `src/MEA/epcsaft_ionic/approval_check.py` blocks curated promotion unless the package-native fit is completed, selected as the global parameter set, reports zero row failures, avoids active bounds, and has coupled pressure/speciation evidence for any non-3.0 carbonate Born movement.
-- A promoted run of `analyses/epcsaft_ionic_regression/scripts/fit_global_pressure_speciation.py --max-nfev 40 --promote` was rejected by the approval gate and written only as a run candidate under `analyses/epcsaft_ionic_regression/results/runs/global_regression/smoke/`. The rejection reasons were `completion_status_not_completed`, `selected_parameter_set_not_global_regression`, `native_fit_success_not_true`, and `native_row_failure_count_missing`.
+- A promoted run of `analyses/phase3/ionic_epcsaft_regression/scripts/fit_global_pressure_speciation.py --max-nfev 40 --promote` was rejected by the approval gate and written only as a run candidate under `analyses/phase3/ionic_epcsaft_regression/results/runs/global_regression/smoke/`. The rejection reasons were `completion_status_not_completed`, `selected_parameter_set_not_global_regression`, `native_fit_success_not_true`, and `native_row_failure_count_missing`.
 - Because the approval gate failed, curated global artifacts and manuscript claims should remain at the regularized `3.0 / 3.0` carbonate Born pair with the `6.80294 / 2.99744` trace-only result treated as an identifiability warning.
 
 ### Phase 5: Run Designed Carbonate Identifiability Experiments
@@ -343,22 +343,22 @@ Commands:
 ```powershell
 cd <repo-root>
 uv pip install --python .venv\Scripts\python.exe --reinstall --no-deps <upstream-ePC-SAFT>
-.venv\Scripts\python.exe analyses\epcsaft_ionic_regression\scripts\fit_global_pressure_speciation.py --max-nfev 40 --promote
-.venv\Scripts\python.exe analyses\epcsaft_ionic_regression\scripts\evaluate_train_validation_split.py
-.venv\Scripts\python.exe analyses\epcsaft_ionic_regression\scripts\compute_parameter_sensitivity.py
-.venv\Scripts\python.exe analyses\epcsaft_ionic_regression\scripts\render_figures.py
+.venv\Scripts\python.exe analyses\phase3\ionic_epcsaft_regression\scripts\fit_global_pressure_speciation.py --max-nfev 40 --promote
+.venv\Scripts\python.exe analyses\phase3\ionic_epcsaft_regression\scripts\evaluate_train_validation_split.py
+.venv\Scripts\python.exe analyses\phase3\ionic_epcsaft_regression\scripts\compute_parameter_sensitivity.py
+.venv\Scripts\python.exe analyses\phase3\ionic_epcsaft_regression\scripts\render_figures.py
 .venv\Scripts\python.exe -m unittest discover tests -v
 .venv\Scripts\python.exe scripts\validate_project.py quick
 ```
 
 Expected artifact updates:
 
-- `analyses/epcsaft_ionic_regression/results/global_regression/`
-- `analyses/epcsaft_ionic_regression/results/train_validation/`
-- `analyses/epcsaft_ionic_regression/results/sensitivity/`
-- `analyses/epcsaft_ionic_regression/results/trace_carbonate_born_regression/`
-- `analyses/epcsaft_ionic_regression/results/pressure/`
-- `analyses/epcsaft_ionic_regression/results/speciation/`
+- `analyses/phase3/ionic_epcsaft_regression/results/global_regression/`
+- `analyses/phase3/ionic_epcsaft_regression/results/train_validation/`
+- `analyses/phase3/ionic_epcsaft_regression/results/sensitivity/`
+- `analyses/phase3/ionic_epcsaft_regression/results/trace_carbonate_born_regression/`
+- `analyses/phase3/ionic_epcsaft_regression/results/pressure/`
+- `analyses/phase3/ionic_epcsaft_regression/results/speciation/`
 - `docs/latex/figures/`
 
 ### Phase 8: Update Manuscript and Audit Documents

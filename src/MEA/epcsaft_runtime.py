@@ -13,7 +13,7 @@ import numpy as np
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EPCSAFT_SRC = Path(os.environ["EPCSAFT_SRC"]) if "EPCSAFT_SRC" in os.environ else None
 DATASET_DIR = REPO_ROOT / "data" / "reference" / "epcsaft_datasets" / "MEA_CO2_H2O_draft"
-EPCSAFT_OUT_DIR = REPO_ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "diagnostics"
+EPCSAFT_OUT_DIR = REPO_ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "diagnostics"
 
 SPECIES = (
     "CO2",

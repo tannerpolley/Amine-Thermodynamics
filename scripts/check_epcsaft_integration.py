@@ -10,7 +10,6 @@ import re
 import sys
 from pathlib import Path
 from typing import Any
-from urllib.parse import unquote, urlparse
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -41,13 +40,6 @@ def _direct_url_payload(dist) -> dict[str, Any] | None:
     return json.loads(text)
 
 
-def _url_to_path(url: str) -> Path | None:
-    parsed = urlparse(url)
-    if parsed.scheme != "file":
-        return None
-    return Path(unquote(parsed.path.lstrip("/")))
-
-
 def resolve_epcsaft(contract: dict[str, Any]) -> dict[str, Any]:
     runtime_module = importlib.import_module(contract["smoke"]["runtime_module"])
     getattr(runtime_module, contract["smoke"]["runtime_callable"])()
@@ -56,29 +48,15 @@ def resolve_epcsaft(contract: dict[str, Any]) -> dict[str, Any]:
     direct_url = _direct_url_payload(dist)
     module_path = Path(epcsaft.__file__).resolve()
     version = getattr(epcsaft, "__version__", None)
-    shared_checkout_root = Path(contract["package"]["shared_checkout_root"]).resolve()
-    dev_worktree_root = Path(contract["package"]["dev_worktree_root"]).resolve()
 
     source_kind = "release"
     source_detail = str(module_path)
-    if module_path.is_relative_to(dev_worktree_root):
-        source_kind = "live_worktree"
-    elif module_path.is_relative_to(shared_checkout_root):
-        source_kind = "shared_checkout"
-    elif direct_url and "vcs_info" in direct_url:
+    if direct_url and "vcs_info" in direct_url:
         source_kind = "pinned_git"
-        source_detail = str(direct_url)
+        source_detail = json.dumps(direct_url, sort_keys=True)
     elif direct_url and direct_url.get("url"):
-        local_path = _url_to_path(direct_url["url"])
-        if local_path is not None:
-            local_path = local_path.resolve()
-            source_detail = str(local_path)
-            if local_path == dev_worktree_root:
-                source_kind = "live_worktree"
-            elif local_path == shared_checkout_root:
-                source_kind = "shared_checkout"
-            else:
-                source_kind = "local_file"
+        source_kind = "local_file" if str(direct_url["url"]).startswith("file:") else "direct_url"
+        source_detail = json.dumps(direct_url, sort_keys=True)
 
     return {
         "module_path": str(module_path),

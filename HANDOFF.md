@@ -6,8 +6,8 @@ The repo has been cut over to the cross-project architecture standard:
 
 - Importable code lives in `src/MEA`.
 - Reusable source data lives in `data/reference`.
-- Durable workflows live in separate `analyses/<analysis_id>` folders.
-- Curated plot artifacts live in `analyses/<analysis_id>/results/<plot_set>/`.
+- Durable workflows live in separate `analyses/<category>/<analysis_id>` folders.
+- Curated plot artifacts live in `analyses/<category>/<analysis_id>/results/<plot_set>/` or analysis-owned `figures/<figure_id>/output/` folders.
 - Manuscript source lives in `docs/latex` as a normal writable folder, not a submodule.
 - Top-level `out/` is no longer a canonical tracked output location.
 
@@ -20,8 +20,8 @@ uv run python scripts\validate_project.py quick
 uv run python scripts\validate_project.py confidence
 uv run python scripts\render_all_plots.py
 uv run python scripts\generate_all_analysis_data.py
-uv run python analyses\<analysis_id>\scripts\generate_data.py
-uv run python analyses\<analysis_id>\scripts\render_figures.py
+uv run python analyses\<category>\<analysis_id>\scripts\generate_data.py
+uv run python analyses\<category>\<analysis_id>\scripts\render_figures.py
 ```
 
 `scripts\render_all_plots.py` is the canonical single command for regenerating all curated figures from existing processed CSVs. It must stay render-only. `scripts\generate_all_analysis_data.py` is the separate data-refresh orchestrator; its default path avoids full ionic regeneration, while `--include-ionic-full` and `--include-expensive` explicitly opt into slow recomputation.
@@ -30,10 +30,12 @@ Old path commands such as `uv run python MEA\run_plot_exports.py` were deliberat
 
 ## Analysis Ownership
 
-- `analyses/six_species_legacy`: retained six-species PC-SAFT pressure/speciation baseline for neutral parity checks.
-- `analyses/epcsaft_neutral_parity`: neutral apparent-component ePC-SAFT parity.
-- `analyses/epcsaft_ionic_regression`: full ionic ePC-SAFT regression, pressure, and speciation.
-- `analyses/2015_baygi`: Baygi 2015 parameter and neutral parity reproduction.
+- `analyses/phase1/six_species_baseline`: retained six-species PC-SAFT pressure/speciation baseline for neutral parity checks.
+- `analyses/phase1/neutral_epcsaft_parity`: neutral apparent-component ePC-SAFT parity.
+- `analyses/phase1/smith_missen_baseline`: Phase 1 Smith-Missen pressure/speciation baseline.
+- `analyses/phase2/activity_epcsaft`: Phase 2 true-species activity-based ePC-SAFT evaluation.
+- `analyses/phase3/ionic_epcsaft_regression`: full ionic ePC-SAFT regression, pressure, and speciation.
+- `analyses/paper_validation/2015_baygi`: Baygi 2015 parameter and neutral parity reproduction.
 
 The nine-species/Gekko diagnostic workflow was removed from active `main`. It remains on `legacy/main-legacy` with its code, tests, and old artifacts under `out/plots/MEA/nine_species` and `out/legacy_baseline/all_species_*`.
 
@@ -58,7 +60,7 @@ Current draft scope: full-ionic ePC-SAFT workflow, literature context, data basi
 
 ## Current Scientific Boundaries
 
-The active ePC-SAFT-centered workflow is `analyses/epcsaft_ionic_regression`, which exercises the full true-species reactive electrolyte package path. `analyses/epcsaft_neutral_parity` is apparent-component parity. The six-species workflow is retained only as the small legacy baseline needed by neutral parity/Baygi reproduction.
+The active ePC-SAFT-centered workflow is `analyses/phase3/ionic_epcsaft_regression`, which exercises the full true-species reactive electrolyte package path. `analyses/phase1/neutral_epcsaft_parity` is apparent-component parity. The six-species workflow is retained only as the small legacy baseline needed by neutral parity/Baygi reproduction.
 
 The current regression-completion handoff for another downstream/upstream Codex agent is `docs/ePC-SAFT/mea-ionic-regression-completion-handoff.md`.
 The MEAH+/MEACOO- real-data regression data contract is `docs/ePC-SAFT/meah-meacoo-real-data-regression-plan.md`, with a machine-readable source manifest at `data/reference/MEA/ion_parameter_regression_sources.csv`.

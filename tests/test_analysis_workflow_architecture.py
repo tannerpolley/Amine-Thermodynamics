@@ -7,25 +7,25 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 GENERATE_SCRIPTS = [
-    ROOT / "analyses" / "six_species_legacy" / "scripts" / "generate_data.py",
-    ROOT / "analyses" / "epcsaft_neutral_parity" / "scripts" / "generate_data.py",
-    ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "generate_data.py",
-    ROOT / "analyses" / "2015_baygi" / "scripts" / "generate_data.py",
-    ROOT / "analyses" / "phase1_smith_missen_baseline" / "scripts" / "generate_data.py",
-    ROOT / "analyses" / "phase2_activity_epcsaft" / "scripts" / "generate_data.py",
-    ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "evaluate_train_validation_split.py",
-    ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "compute_parameter_sensitivity.py",
-    ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "fit_trace_carbonate_born.py",
-    ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "derive_oh_born_parameter.py",
+    ROOT / "analyses" / "phase1" / "six_species_baseline" / "scripts" / "generate_data.py",
+    ROOT / "analyses" / "phase1" / "neutral_epcsaft_parity" / "scripts" / "generate_data.py",
+    ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "generate_data.py",
+    ROOT / "analyses" / "paper_validation" / "2015_baygi" / "scripts" / "generate_data.py",
+    ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "scripts" / "generate_data.py",
+    ROOT / "analyses" / "phase2" / "activity_epcsaft" / "scripts" / "generate_data.py",
+    ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "evaluate_train_validation_split.py",
+    ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "compute_parameter_sensitivity.py",
+    ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "fit_trace_carbonate_born.py",
+    ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "derive_oh_born_parameter.py",
 ]
 
 RENDER_SCRIPTS = [
-    ROOT / "analyses" / "six_species_legacy" / "scripts" / "render_figures.py",
-    ROOT / "analyses" / "epcsaft_neutral_parity" / "scripts" / "render_figures.py",
-    ROOT / "analyses" / "epcsaft_ionic_regression" / "scripts" / "render_figures.py",
-    ROOT / "analyses" / "2015_baygi" / "scripts" / "render_figures.py",
-    ROOT / "analyses" / "phase1_smith_missen_baseline" / "scripts" / "render_figures.py",
-    ROOT / "analyses" / "phase2_activity_epcsaft" / "scripts" / "render_figures.py",
+    ROOT / "analyses" / "phase1" / "six_species_baseline" / "scripts" / "render_figures.py",
+    ROOT / "analyses" / "phase1" / "neutral_epcsaft_parity" / "scripts" / "render_figures.py",
+    ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "render_figures.py",
+    ROOT / "analyses" / "paper_validation" / "2015_baygi" / "scripts" / "render_figures.py",
+    ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "scripts" / "render_figures.py",
+    ROOT / "analyses" / "phase2" / "activity_epcsaft" / "scripts" / "render_figures.py",
 ]
 
 
@@ -51,7 +51,7 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
         self.assertIn("--include-ionic-full", source)
         self.assertIn("--include-expensive", source)
         fast_paths = _assigned_string_constants(source, "FAST_COMMANDS")
-        self.assertFalse(any("epcsaft_ionic_regression/scripts/generate_data.py" in path for path in fast_paths))
+        self.assertFalse(any("ionic_epcsaft_regression/scripts/generate_data.py" in path for path in fast_paths))
 
     def test_generation_scripts_do_not_render_figures(self) -> None:
         forbidden = ("fig.savefig", ".savefig(", "save_plot(", "write_mpl_sidecar(", "plt.subplots(")
@@ -76,33 +76,48 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
         self.assertNotIn("generate_data.py", plot_section)
 
     def test_phase1_generation_reuses_processed_pressure_artifacts(self) -> None:
-        source = _source(ROOT / "analyses" / "phase1_smith_missen_baseline" / "scripts" / "generate_data.py")
-        self.assertIn("six_species_legacy", source)
-        self.assertIn("epcsaft_neutral_parity", source)
+        source = _source(ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "scripts" / "generate_data.py")
+        self.assertIn("six_species_baseline", source)
+        self.assertIn("neutral_epcsaft_parity", source)
         self.assertNotIn("compute_jou_metrics", source)
         self.assertNotIn("compute_neutral_parity", source)
 
     def test_phase1_phase2_figures_have_architecture_owned_io_folders(self) -> None:
         required = [
-            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "pressure" / "input" / "source_manifest.csv",
-            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "pressure" / "output" / "phase1_pressure_plot_data.csv",
-            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "pressure" / "scripts" / "render_figure.py",
-            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "speciation" / "input" / "source_manifest.csv",
-            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "speciation" / "output" / "phase1_speciation_40C_plot_data.csv",
-            ROOT / "analyses" / "phase1_smith_missen_baseline" / "figures" / "speciation" / "scripts" / "render_figure.py",
-            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "input" / "source_manifest.csv",
-            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_reference_points.csv",
-            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_target_roles.csv",
-            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_activity_curves.csv",
-            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C_plot_data.csv",
-            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.png",
-            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.svg",
-            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.mpl.yaml",
-            ROOT / "analyses" / "phase2_activity_epcsaft" / "figures" / "speciation" / "scripts" / "render_figure.py",
+            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "pressure" / "input" / "source_manifest.csv",
+            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "pressure" / "output" / "phase1_pressure_plot_data.csv",
+            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "pressure" / "scripts" / "render_figure.py",
+            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "input" / "source_manifest.csv",
+            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "output" / "phase1_speciation_40C_plot_data.csv",
+            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "scripts" / "render_figure.py",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "input" / "source_manifest.csv",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_reference_points.csv",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_target_roles.csv",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_activity_curves.csv",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C_plot_data.csv",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.png",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.svg",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.pdf",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.mpl.yaml",
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "scripts" / "render_figure.py",
         ]
         for path in required:
             with self.subTest(path=path):
                 self.assertTrue(path.exists(), path)
+
+    def test_analysis_scripts_use_category_depth_repo_roots(self) -> None:
+        forbidden_root_assignments = (
+            "REPO_ROOT = Path(__file__).resolve().parents[3]",
+            "REPO_ROOT = Path(__file__).resolve().parents[5]",
+            "REPO_ROOT = ANALYSIS_DIR.parents[1]",
+        )
+        for path in (ROOT / "analyses").rglob("*.py"):
+            with self.subTest(path=path):
+                source = _source(path)
+                self.assertFalse(any(assignment in source for assignment in forbidden_root_assignments), path)
+
+    def test_rendering_does_not_create_analysis_local_docs_tree(self) -> None:
+        self.assertFalse((ROOT / "analyses" / "docs").exists())
 
 
 if __name__ == "__main__":

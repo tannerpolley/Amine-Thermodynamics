@@ -1,0 +1,21 @@
+\begin{table*}[t]
+    \centering
+    \scriptsize\rmfamily
+    \setlength{\tabcolsep}{3pt}
+    \renewcommand{\arraystretch}{1.12}
+    \caption{Liquid-phase reaction network and equilibrium-constant coefficients used for the activity-coupled speciation solve.  The constants use \(\ln K_r(T)=A_r+B_r/T+C_r\ln T+D_rT\), with \(T\) in kelvin and \(a_i=\gamma_i x_i\) on a mole-fraction activity basis.  Coefficients are taken from the acid-gas/ethanolamine reaction basis used in PC-SAFT calculations~\cite{Nasrifar2010}.}
+    \label{tab:reaction-equilibrium-constants}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabularx}{\textwidth}{@{}c>{\raggedright\arraybackslash}Xcccccc@{}}
+        \toprule
+        ID & Liquid reaction & Source constant & \(A_r\) & \(B_r\) & \(C_r\) & \(D_r\) & Source range (K) \\
+        \midrule
+        R1 & \(2\HtwoO \rightleftharpoons \HthreeO+\Hydroxide\) & \(k_1^x\) & 132.899 & -13445.9 & -22.4773 & 0 & 273--498 \\
+        R2 & \(\COtwo+2\HtwoO \rightleftharpoons \HCOthree+\HthreeO\) & \(k_2^x\) & 231.456 & -12092.1 & -36.7816 & 0 & 273--498 \\
+        R3 & \(\HCOthree+\HtwoO \rightleftharpoons \COthree+\HthreeO\) & \(k_3^x\) & 216.049 & -12431.7 & -35.4819 & 0 & 273--498 \\
+        R4 & \(\MEACOO+\HtwoO \rightleftharpoons \MEA+\HCOthree\) & \(k_9^x\) & 2.8898 & -3635.09 & 0 & 0 & 298--393 \\
+        R5 & \(\MEAH+\HtwoO \rightleftharpoons \MEA+\HthreeO\) & \(k_7^x\) & 2.1211 & -8189.38 & 0 & -0.007484 & 273--323 \\
+        \bottomrule
+    \end{tabularx}
+    \end{adjustbox}
+\end{table*}

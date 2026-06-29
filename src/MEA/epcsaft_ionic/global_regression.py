@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import math
-import shutil
 import time
 from pathlib import Path
 from types import SimpleNamespace
@@ -12,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from MEA.common.plot_style import finish_axes, species_color, species_label, write_mpl_sidecar
+from MEA.common.plot_style import finish_axes, save_figure_bundle, species_color, species_label, write_mpl_sidecar
 from MEA.epcsaft_ionic import native_regression
 from MEA.epcsaft_ionic.model import (
     BOUNDS,
@@ -544,13 +543,13 @@ def write_pressure_parity(frame: pd.DataFrame, output_dir: Path) -> None:
     finish_axes(ax, title=title)
     ax.legend(fontsize=8, title="Literature source")
     fig.tight_layout()
-    fig.savefig(output_dir / "global_regression_pressure_parity.png", dpi=300, bbox_inches="tight")
-    fig.savefig(output_dir / "global_regression_pressure_parity.svg", bbox_inches="tight")
+    png, svg, pdf = save_figure_bundle(fig, output_dir / "global_regression_pressure_parity")
     plt.close(fig)
     write_mpl_sidecar(
         output_dir / "global_regression_pressure_parity.mpl.yaml",
-        png_name="global_regression_pressure_parity.png",
-        svg_name="global_regression_pressure_parity.svg",
+        png_name=png.name,
+        svg_name=svg.name,
+        pdf_name=pdf.name,
         title=title,
         description=description,
         style_source="src/MEA/epcsaft_ionic/global_regression.py",
@@ -588,13 +587,13 @@ def write_speciation_parity(frame: pd.DataFrame, output_dir: Path) -> None:
     finish_axes(ax, title=title)
     ax.legend(fontsize=8, title="Species")
     fig.tight_layout()
-    fig.savefig(output_dir / "global_regression_speciation_parity.png", dpi=300, bbox_inches="tight")
-    fig.savefig(output_dir / "global_regression_speciation_parity.svg", bbox_inches="tight")
+    png, svg, pdf = save_figure_bundle(fig, output_dir / "global_regression_speciation_parity")
     plt.close(fig)
     write_mpl_sidecar(
         output_dir / "global_regression_speciation_parity.mpl.yaml",
-        png_name="global_regression_speciation_parity.png",
-        svg_name="global_regression_speciation_parity.svg",
+        png_name=png.name,
+        svg_name=svg.name,
+        pdf_name=pdf.name,
         title=title,
         description=description,
         style_source="src/MEA/epcsaft_ionic/global_regression.py",
@@ -689,13 +688,13 @@ def write_train_validation_plot(frame: pd.DataFrame) -> None:
     finish_axes(ax, title=title, grid_axis="y")
     ax.legend(title="Split")
     fig.tight_layout()
-    fig.savefig(TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.png", dpi=300, bbox_inches="tight")
-    fig.savefig(TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.svg", bbox_inches="tight")
+    png, svg, pdf = save_figure_bundle(fig, TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals")
     plt.close(fig)
     write_mpl_sidecar(
         TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.mpl.yaml",
-        png_name="train_validation_pressure_residuals.png",
-        svg_name="train_validation_pressure_residuals.svg",
+        png_name=png.name,
+        svg_name=svg.name,
+        pdf_name=pdf.name,
         title=title,
         description=description,
         style_source="src/MEA/epcsaft_ionic/global_regression.py",
@@ -819,22 +818,14 @@ def write_sensitivity_heatmap(parameters: list[str], vectors: dict[str, list[flo
     ax.set_title(title)
     fig.colorbar(image, ax=ax, label="Finite-difference sensitivity")
     fig.tight_layout()
-    fig.savefig(SENSITIVITY_DIR / "parameter_sensitivity_heatmap.png", dpi=300, bbox_inches="tight")
-    fig.savefig(SENSITIVITY_DIR / "parameter_sensitivity_heatmap.svg", bbox_inches="tight")
+    png, svg, pdf = save_figure_bundle(fig, SENSITIVITY_DIR / "parameter_sensitivity_heatmap")
     plt.close(fig)
     write_mpl_sidecar(
         SENSITIVITY_DIR / "parameter_sensitivity_heatmap.mpl.yaml",
-        png_name="parameter_sensitivity_heatmap.png",
-        svg_name="parameter_sensitivity_heatmap.svg",
+        png_name=png.name,
+        svg_name=svg.name,
+        pdf_name=pdf.name,
         title=title,
         description=description,
         style_source="src/MEA/epcsaft_ionic/global_regression.py",
     )
-
-
-def copy_manuscript_residual_figures(pressure_png: Path, pressure_svg: Path, spec_png: Path, spec_svg: Path, latex_figures_dir: Path) -> None:
-    latex_figures_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(pressure_png, latex_figures_dir / "mea_ionic_pressure_residuals_by_loading.png")
-    shutil.copy2(pressure_svg, latex_figures_dir / "mea_ionic_pressure_residuals_by_loading.svg")
-    shutil.copy2(spec_png, latex_figures_dir / "mea_ionic_speciation_residuals_by_species.png")
-    shutil.copy2(spec_svg, latex_figures_dir / "mea_ionic_speciation_residuals_by_species.svg")

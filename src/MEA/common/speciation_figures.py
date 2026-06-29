@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from matplotlib.lines import Line2D
 
+from MEA.common.analysis_io import normalize_svg
 from MEA.common.plot_style import (
     MODEL_LINEWIDTH,
     SPECIATION_MODEL_LINESTYLE,
@@ -19,6 +20,7 @@ from MEA.common.plot_style import (
     apply_plot_theme,
     species_color,
     species_label,
+    save_figure_bundle,
     write_mpl_sidecar,
 )
 
@@ -76,7 +78,7 @@ def write_speciation_plot(
     plot_order: Sequence[str] | None = None,
     ylabel: str = "True-species mole fraction",
     dpi: int = 300,
-) -> tuple[Path, Path, Path]:
+) -> tuple[Path, Path, Path, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     curves = curve_frame.copy()
     points = point_frame.copy()
@@ -166,21 +168,24 @@ def write_speciation_plot(
     )
     legend.get_frame().set_alpha(0.88)
     fig.subplots_adjust(left=0.11, right=0.985, top=0.985, bottom=0.12)
-    png = output_dir / f"{stem}.png"
-    svg = output_dir / f"{stem}.svg"
+    figure_stem = output_dir / stem
+    png = figure_stem.with_suffix(".png")
+    svg = figure_stem.with_suffix(".svg")
+    pdf = figure_stem.with_suffix(".pdf")
     sidecar = output_dir / f"{stem}.mpl.yaml"
     plot_data = output_dir / f"{stem}_plot_data.csv"
     pd.DataFrame(plot_rows).to_csv(plot_data, index=False)
-    fig.savefig(png, dpi=dpi, bbox_inches="tight")
-    fig.savefig(svg, bbox_inches="tight")
+    save_figure_bundle(fig, figure_stem, dpi=dpi)
+    normalize_svg(svg)
     plt.close(fig)
     write_mpl_sidecar(
         sidecar,
         png_name=png.name,
         svg_name=svg.name,
+        pdf_name=pdf.name,
         title=title,
         description=description,
         style_source=style_source,
         dpi=dpi,
     )
-    return png, svg, sidecar
+    return png, svg, pdf, sidecar

@@ -20,8 +20,8 @@ FORBIDDEN_CLAIMS = (
 CLAIM_SCAN_TARGETS = (
     "docs/roadmaps",
     "docs/latex",
-    "analyses/phase1_smith_missen_baseline",
-    "analyses/phase2_activity_epcsaft",
+    "analyses/phase1/smith_missen_baseline",
+    "analyses/phase2/activity_epcsaft",
 )
 
 

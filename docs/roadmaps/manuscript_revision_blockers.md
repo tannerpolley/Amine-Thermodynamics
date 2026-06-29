@@ -12,13 +12,13 @@ This file records unresolved evidence gates for the Major Revision pass controll
   `docs/roadmaps/mea_manuscript_phase_plan.md`, and
   `docs/roadmaps/submission_readiness_pr_summary.md`.
 - Publication-ready figure status is not verified. `data/reference/MEA/manifests/figure_artifact_manifest.csv` currently groups as 7 `diagnostic_only`, 7 `not_started`, and 1 `blocked_until_phase3_fit`; `data/reference/MEA/manifests/figure_artifact_file_manifest.csv` currently lists 37 existing files as `diagnostic_only`.
-- No completed Phase 3/global-regression artifact is verified. `data/reference/MEA/manifests/regression_artifact_manifest.csv` lists Phase 3 artifacts as `planned` or `blocked_by_package_runtime`; `analyses/epcsaft_ionic_regression/results/global_regression/global_regression_summary.json` reports `completion_status: package_fit_not_completed` and `attempted_optimization: false`.
+- No completed Phase 3/global-regression artifact is verified. `data/reference/MEA/manifests/regression_artifact_manifest.csv` lists Phase 3 artifacts as `planned` or `blocked_by_package_runtime`; `analyses/phase3/ionic_epcsaft_regression/results/global_regression/global_regression_summary.json` reports `completion_status: package_fit_not_completed` and `attempted_optimization: false`.
 - No archive DOI is verified. The manuscript now states that no archival DOI has been minted.
 - No release tag is verified. `git tag --list` returned no tags during this revision pass.
 - Submission-facing condition ranges are not verified from the required roadmap set because the roadmap files listed above are missing. The manuscript therefore avoids adding new numeric temperature, loading, pressure, or composition ranges beyond existing record counts and residual values.
 
 ## Resolved Evidence Gates
 
-- Residual threshold evidence exists in `analyses/phase2_activity_epcsaft/results/phase2_residual_acceptance_audit.csv` and `analyses/phase1_smith_missen_baseline/results/phase1_residual_acceptance_audit.csv`; the revised manuscript still removes undefined "accepted" terminology and reports neutral residual language.
+- Residual threshold evidence exists in `analyses/phase2/activity_epcsaft/results/phase2_residual_acceptance_audit.csv` and `analyses/phase1/smith_missen_baseline/results/phase1_residual_acceptance_audit.csv`; the revised manuscript still removes undefined "accepted" terminology and reports neutral residual language.
 - The repository URL is verified from `git remote -v` as `https://github.com/tannerpolley/MEA-Thermodynamics.git`.
-- Source-resolved Phase 2 pressure/speciation residual accounting now exists at `analyses/phase2_activity_epcsaft/results/phase2_source_residual_summary.csv`. The table accounts for 161 pressure records and 74 speciation state records while keeping pressure, nonzero measured targets, measurements reported as zero, and balance-inferred quantities in separate rows.
+- Source-resolved Phase 2 pressure/speciation residual accounting now exists at `analyses/phase2/activity_epcsaft/results/phase2_source_residual_summary.csv`. The table accounts for 161 pressure records and 74 speciation state records while keeping pressure, nonzero measured targets, measurements reported as zero, and balance-inferred quantities in separate rows.

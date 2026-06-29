@@ -82,7 +82,7 @@ Important caveat: the public `fit_mea_co2_h2o_electrolyte(...)` docstring still 
 Current saved parameter regression summary:
 
 ```text
-file: analyses/epcsaft_ionic_regression/results/parameter_regression/ionic_parameter_regression_summary.json
+file: analyses/phase3/ionic_epcsaft_regression/results/parameter_regression/ionic_parameter_regression_summary.json
 target_counts: vle=3, speciation=3
 optimizer.success: false
 optimizer.message: The maximum number of function evaluations is exceeded.
@@ -98,7 +98,7 @@ This is a smoke/seed artifact, not a completed regression.
 Current saved full-grid evaluation summary built from the current parameter CSV:
 
 ```text
-file: analyses/epcsaft_ionic_regression/results/summary/ionic_evaluation_summary.json
+file: analyses/phase3/ionic_epcsaft_regression/results/summary/ionic_evaluation_summary.json
 pressure_success_count: 161
 pressure_count: 161
 raw_pressure_median_abs_log10_error: 0.36235971627584945
@@ -135,10 +135,10 @@ src/MEA/epcsaft_ionic/model.py
 src/MEA/epcsaft_ionic/regress_parameters.py
 src/MEA/epcsaft_ionic/plot_results.py
 tests/test_epcsaft_ionic.py
-analyses/epcsaft_ionic_regression/scripts/generate_data.py
-analyses/epcsaft_ionic_regression/scripts/render_figures.py
-analyses/epcsaft_ionic_regression/epcsaft_ionic_package_feedback.md
-analyses/epcsaft_ionic_regression/epcsaft_reactive_electrolyte_issue_body.md
+analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py
+analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py
+analyses/phase3/ionic_epcsaft_regression/epcsaft_ionic_package_feedback.md
+analyses/phase3/ionic_epcsaft_regression/epcsaft_reactive_electrolyte_issue_body.md
 scripts/validate_project.py
 docs/latex/main.tex
 docs/latex/references.bib
@@ -150,16 +150,16 @@ Downstream outputs to inspect:
 data/reference/MEA/ion_parameter_regression_sources.csv
 data/reference/epcsaft_datasets/MEA_CO2_H2O_ionic_fit/pure/any_solvent.csv
 data/reference/epcsaft_datasets/MEA_CO2_H2O_ionic_fit/mixed/binary_interaction/k_ij.csv
-analyses/epcsaft_ionic_regression/results/parameter_regression/ionic_parameter_regression_summary.json
-analyses/epcsaft_ionic_regression/results/parameter_regression/ionic_parameter_regression_values.csv
-analyses/epcsaft_ionic_regression/results/pressure/ionic_pressure_comparison.csv
-analyses/epcsaft_ionic_regression/results/pressure/ionic_epcsaft_co2_pressure.png
-analyses/epcsaft_ionic_regression/results/pressure/ionic_epcsaft_co2_pressure.svg
-analyses/epcsaft_ionic_regression/results/speciation/ionic_speciation_activity_residuals.csv
-analyses/epcsaft_ionic_regression/results/speciation/ionic_speciation_plot_data.csv
-analyses/epcsaft_ionic_regression/results/speciation/ionic_epcsaft_speciation_activity.png
-analyses/epcsaft_ionic_regression/results/speciation/ionic_epcsaft_speciation_activity.svg
-analyses/epcsaft_ionic_regression/results/summary/ionic_evaluation_summary.json
+analyses/phase3/ionic_epcsaft_regression/results/parameter_regression/ionic_parameter_regression_summary.json
+analyses/phase3/ionic_epcsaft_regression/results/parameter_regression/ionic_parameter_regression_values.csv
+analyses/phase3/ionic_epcsaft_regression/results/pressure/ionic_pressure_comparison.csv
+analyses/phase3/ionic_epcsaft_regression/results/pressure/ionic_epcsaft_co2_pressure.png
+analyses/phase3/ionic_epcsaft_regression/results/pressure/ionic_epcsaft_co2_pressure.svg
+analyses/phase3/ionic_epcsaft_regression/results/speciation/ionic_speciation_activity_residuals.csv
+analyses/phase3/ionic_epcsaft_regression/results/speciation/ionic_speciation_plot_data.csv
+analyses/phase3/ionic_epcsaft_regression/results/speciation/ionic_epcsaft_speciation_activity.png
+analyses/phase3/ionic_epcsaft_regression/results/speciation/ionic_epcsaft_speciation_activity.svg
+analyses/phase3/ionic_epcsaft_regression/results/summary/ionic_evaluation_summary.json
 ```
 
 Upstream package files to inspect first:
@@ -234,8 +234,8 @@ import json
 from pathlib import Path
 
 paths = [
-    Path("analyses/epcsaft_ionic_regression/results/parameter_regression/ionic_parameter_regression_summary.json"),
-    Path("analyses/epcsaft_ionic_regression/results/summary/ionic_evaluation_summary.json"),
+    Path("analyses/phase3/ionic_epcsaft_regression/results/parameter_regression/ionic_parameter_regression_summary.json"),
+    Path("analyses/phase3/ionic_epcsaft_regression/results/summary/ionic_evaluation_summary.json"),
 ]
 for path in paths:
     print(f"\n--- {path}")
@@ -312,7 +312,7 @@ No fitted parameter silently hits a bound without being called out.
 ### 7. Regenerate Ionic Figures And Full-Grid Evaluation
 
 ```powershell
-uv run python analyses\epcsaft_ionic_regression\scripts\render_figures.py
+uv run python analyses\phase3\ionic_epcsaft_regression\scripts\render_figures.py
 ```
 
 Equivalent module call:
@@ -324,10 +324,10 @@ uv run python -m MEA.epcsaft_ionic.plot_results
 Check for:
 
 ```text
-analyses/epcsaft_ionic_regression/results/pressure/ionic_pressure_comparison.csv exists.
-analyses/epcsaft_ionic_regression/results/speciation/ionic_speciation_activity_residuals.csv exists.
-analyses/epcsaft_ionic_regression/results/summary/ionic_evaluation_summary.json exists.
-PNG and SVG figures are regenerated.
+analyses/phase3/ionic_epcsaft_regression/results/pressure/ionic_pressure_comparison.csv exists.
+analyses/phase3/ionic_epcsaft_regression/results/speciation/ionic_speciation_activity_residuals.csv exists.
+analyses/phase3/ionic_epcsaft_regression/results/summary/ionic_evaluation_summary.json exists.
+PNG, SVG, and PDF figures are regenerated.
 pressure_success_count equals pressure_count.
 speciation_success_count equals speciation_count.
 ```
@@ -343,7 +343,7 @@ Check for:
 ```text
 Quick validation passes.
 All curated plot-set contracts pass.
-The ionic pressure and speciation folders contain CSV snapshot, .mpl.yaml, PNG, and SVG.
+The ionic pressure and speciation folders contain CSV snapshot, .mpl.yaml, PNG, SVG, and PDF.
 No new canonical artifacts appear under top-level out/.
 ```
 
@@ -409,7 +409,7 @@ The fitted dataset files match the values in ionic_parameter_regression_values.c
 Artifact gate:
 
 ```text
-Each curated plot set contains the exact plotted CSV snapshot, .mpl.yaml sidecar, PNG, and SVG.
+Each curated plot set contains the exact plotted CSV snapshot, .mpl.yaml sidecar, PNG, SVG, and PDF.
 The pressure plot compares against Jou data with consistent temperature colors.
 The speciation plot shows all modeled species that are scientifically relevant and does not hide failed species.
 The manuscript figure copies are updated only from accepted plot artifacts.
@@ -572,13 +572,13 @@ Add it to `scripts/validate_project.py confidence` only after the threshold logi
 Problem:
 
 ```text
-The current regression script writes directly to analyses/epcsaft_ionic_regression/results/parameter_regression even for tiny smoke runs.
+The current regression script writes directly to analyses/phase3/ionic_epcsaft_regression/results/parameter_regression even for tiny smoke runs.
 ```
 
 Required behavior:
 
 ```text
-Smoke runs write under analyses/epcsaft_ionic_regression/results/runs/<timestamp-or-label>/.
+Smoke runs write under analyses/phase3/ionic_epcsaft_regression/results/runs/<timestamp-or-label>/.
 Curated final regression artifacts are written to results/parameter_regression only when the run is intentionally promoted.
 The command has an explicit --promote or --output-label option.
 The final report states which run was promoted and why.
@@ -617,7 +617,7 @@ tests/test_epcsaft_ionic.py
 Problem:
 
 ```text
-analyses/epcsaft_ionic_regression/epcsaft_ionic_package_feedback.md contains older statements from before the package exposed the reactive-electrolyte APIs. Later sections are newer, so the file is internally inconsistent.
+analyses/phase3/ionic_epcsaft_regression/epcsaft_ionic_package_feedback.md contains older statements from before the package exposed the reactive-electrolyte APIs. Later sections are newer, so the file is internally inconsistent.
 ```
 
 Required behavior:
@@ -637,7 +637,7 @@ Add tests for:
 Approval check fails on the current smoke-only regression summary.
 Approval check passes on a tiny synthetic/fixture summary that satisfies thresholds.
 Regression residual vector length is stable when a pressure or speciation record returns a package failure result.
-Generated ionic plot artifacts contain CSV, .mpl.yaml, PNG, and SVG.
+Generated ionic plot artifacts contain CSV, .mpl.yaml, PNG, SVG, and PDF.
 The fitted dataset CSV values match ionic_parameter_regression_values.csv.
 ```
 
@@ -672,11 +672,11 @@ The package must provide fast batch/sweep evaluation, warm starts, fixed-shape f
 Attach or link these downstream files:
 
 ```text
-analyses/epcsaft_ionic_regression/results/parameter_regression/ionic_parameter_regression_summary.json
-analyses/epcsaft_ionic_regression/results/parameter_regression/ionic_parameter_regression_values.csv
-analyses/epcsaft_ionic_regression/results/summary/ionic_evaluation_summary.json
-analyses/epcsaft_ionic_regression/results/pressure/ionic_pressure_comparison.csv
-analyses/epcsaft_ionic_regression/results/speciation/ionic_speciation_activity_residuals.csv
+analyses/phase3/ionic_epcsaft_regression/results/parameter_regression/ionic_parameter_regression_summary.json
+analyses/phase3/ionic_epcsaft_regression/results/parameter_regression/ionic_parameter_regression_values.csv
+analyses/phase3/ionic_epcsaft_regression/results/summary/ionic_evaluation_summary.json
+analyses/phase3/ionic_epcsaft_regression/results/pressure/ionic_pressure_comparison.csv
+analyses/phase3/ionic_epcsaft_regression/results/speciation/ionic_speciation_activity_residuals.csv
 docs/ePC-SAFT/mea-ionic-regression-completion-handoff.md
 docs/ePC-SAFT/meah-meacoo-real-data-regression-plan.md
 ```

@@ -1,0 +1,7 @@
+id: six_species_baseline
+title: Six-Species Baseline
+layout: analyses/phase1/six_species_baseline
+commands:
+  generate_data: uv run python analyses/phase1/six_species_baseline/scripts/generate_data.py
+  render_figures: uv run python analyses/phase1/six_species_baseline/scripts/render_figures.py
+results_policy: Track curated CSV snapshots, .mpl.yaml sidecars, PNG previews, SVG figures, and PDF LaTeX artifacts under results/<plot_set>/; keep disposable run output under ignored results/runs/.

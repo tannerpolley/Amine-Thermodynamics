@@ -1,6 +1,6 @@
 # Source Log
 
-This source log records the manuscript's verified citation anchors and intended use. Bibliographic entries are stored in `references.bib`.
+This source log records the manuscript's verified citation anchors and intended use. Bibliographic entries are stored in `references.bib`; official web/report records that are not Zotero-managed are stored in `official_sources.bib`.
 
 | Citation key | Status | Use in manuscript |
 | --- | --- | --- |
@@ -22,10 +22,14 @@ This source log records the manuscript's verified citation anchors and intended 
 | `Pakravesh2025a` | Peer-reviewed article | Recent SAFT-family alkanolamine thermodynamic modeling context. |
 | `Aronu2011`, `Hilliard2008`, `Jou1995`, `Mamun2005`, `Xu2011` | Literature data sources | VLE evidence basis. |
 | `Bottinger2008`, `Jakobsen2005`, `Matin2012` | Literature data sources | NMR/speciation evidence basis. |
+| `EIA2026NaturalGasExplained` | Official government web source | Raw natural gas contains nonhydrocarbon components removed during processing before sales-gas delivery or end use. |
+| `NETL2022IndustrialCO2CaptureCosts` | Official government technical report | Natural-gas processing as a high-purity industrial CO2 source; representative CO2 discharge-stream composition range. |
+| `IPCC2005SRCCSChapter3` | Intergovernmental technical report chapter | Capture-process context identifying chemical solvents, including MEA and MDEA, for CO2 removal from natural gas or shifted syngas. |
+| `Equinor2026CCUS` | Operator web source | Sleipner example for geological storage of CO2 separated from produced natural gas. |
 
 ## Parameter Audit Notes
 
 - Held/Uyan ion tables provide the promoted diagnostic sigma/dispersion values for `H3O+`, `OH-`, `HCO3-`, and `CO3^2-`; the promoted water-ion interaction values are `0.25`, `-0.25`, `0.0`, and `-0.25`, respectively.
 - Figiel2025 provides the SSM+DS Born diameter for the proton carrier (`H+` represented in the runtime as `H3O+`) as `d_born=1.218`.
-- No local ePC-SAFT table value was found for SSM+DS `d_born` of `OH-`. The promoted value is now `d_born=3.081076894`, derived by Born hydration-energy inversion from an absolute hydroxide hydration free energy of `106.4 kcal/mol`; the derivation artifact is `analyses/epcsaft_ionic_regression/results/oh_born_derivation/`.
+- No local ePC-SAFT table value was found for SSM+DS `d_born` of `OH-`. The promoted value is now `d_born=3.081076894`, derived by Born hydration-energy inversion from an absolute hydroxide hydration free energy of `106.4 kcal/mol`; the derivation artifact is `analyses/phase3/ionic_epcsaft_regression/results/oh_born_derivation/`.
 - No local table value was found for SSM+DS `d_born` of `HCO3-` or `CO3^2-`. The regularized Tier A trace-carbonate Born fit remains at the promoted `3.0/3.0` pair, while an unanchored multistart diagnostic found a lower trace-only residual near `HCO3- d_born=6.80294` and `CO3^2- d_born=2.99744`; this is treated as an identifiability boundary rather than a promoted parameter set.

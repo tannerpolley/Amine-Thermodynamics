@@ -6,9 +6,9 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-GLOBAL = ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "global_regression"
-TRAIN_VALIDATION = ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "train_validation"
-SENSITIVITY = ROOT / "analyses" / "epcsaft_ionic_regression" / "results" / "sensitivity"
+GLOBAL = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "global_regression"
+TRAIN_VALIDATION = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "train_validation"
+SENSITIVITY = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "sensitivity"
 
 
 class GlobalRegressionArtifactTests(unittest.TestCase):
@@ -23,9 +23,11 @@ class GlobalRegressionArtifactTests(unittest.TestCase):
             "global_regression_pressure_parity.mpl.yaml",
             "global_regression_pressure_parity.png",
             "global_regression_pressure_parity.svg",
+            "global_regression_pressure_parity.pdf",
             "global_regression_speciation_parity.mpl.yaml",
             "global_regression_speciation_parity.png",
             "global_regression_speciation_parity.svg",
+            "global_regression_speciation_parity.pdf",
         ]
         missing = [name for name in required if not (GLOBAL / name).exists()]
         self.assertEqual(missing, [])
@@ -74,6 +76,7 @@ class TrainValidationArtifactTests(unittest.TestCase):
             "train_validation_pressure_residuals.mpl.yaml",
             "train_validation_pressure_residuals.png",
             "train_validation_pressure_residuals.svg",
+            "train_validation_pressure_residuals.pdf",
         ]
         missing = [name for name in required if not (TRAIN_VALIDATION / name).exists()]
         self.assertEqual(missing, [])
@@ -95,6 +98,7 @@ class SensitivityArtifactTests(unittest.TestCase):
             "parameter_sensitivity_heatmap.mpl.yaml",
             "parameter_sensitivity_heatmap.png",
             "parameter_sensitivity_heatmap.svg",
+            "parameter_sensitivity_heatmap.pdf",
         ]
         missing = [name for name in required if not (SENSITIVITY / name).exists()]
         self.assertEqual(missing, [])

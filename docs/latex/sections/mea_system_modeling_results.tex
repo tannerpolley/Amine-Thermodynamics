@@ -1,61 +1,55 @@
 \section{Results and Discussion}\label{sec:mea-system-modeling-results}
-The main result is that the ideal baseline verifies the reaction and balance conventions, and the activity-coupled ePC-SAFT calculation converges on the assembled pressure and speciation records with explicit residuals.  \MEA, \MEAH, and \MEACOO are the strongest supported liquid observables.  Bicarbonate, carbonate, and trace water ions remain limiting observables, and the pressure residuals are reported as a fixed activity-based evaluation rather than a pressure-optimized model.
+The main result is a fixed-parameter SSM+DS modified-Born ePC-SAFT evaluation of reactive \MEA \COtwo solubility against both pressure and speciation data.  The ideal baseline verifies the reaction and balance conventions, and the activity-coupled ePC-SAFT calculation converges on the assembled \COtwo-solubility pressure and speciation records with explicit residuals.  \MEA, \MEAH, and \MEACOO are the strongest supported liquid observables.  Bicarbonate, carbonate, and trace water ions remain limiting observables, and the pressure residuals are reported as a fixed activity-based \COtwo-solubility evaluation rather than a pressure-optimized model.
 
-\subsection{Neutral baseline validation}
+\subsection{Ideal CO2 Solubility Baseline}
 The ideal Smith--Missen-style baseline uses the same five-reaction, nine-species liquid equilibrium problem with activities set equal to mole fractions.  It provides a convention check for the reaction set before ePC-SAFT activity coefficients are introduced.  For major observed species, the overall median absolute $\log_{10}(\mathrm{model}/\mathrm{data})$ residuals are 0.055 for \MEA, 0.044 for \MEAH, 0.029 for \MEACOO, 0.227 for \HCOthree, and 0.0087 for the aggregate \ce{MEA + MEAH+}.  Molecular \COtwo and \COthree are solved and plotted, but their residual rows are not used as major-species evidence.
 
-The corresponding pressure baseline gives an overall median absolute $\log_{10}$ pressure residual of 0.160.  The temperature-resolved pressure comparison is uneven: the 40 and \SI{60}{\degreeCelsius} rows have larger residuals, whereas the 80, 100, and \SI{120}{\degreeCelsius} rows have smaller residuals.  The baseline is therefore used as a reproducibility and convention check, not as the final activity-based thermodynamic result.
+The corresponding solubility-pressure baseline gives an overall median absolute $\log_{10}$ pressure residual of 0.160.  The temperature-resolved pressure comparison is uneven: the 40 and \SI{60}{\degreeCelsius} rows have larger residuals, whereas the 80, 100, and \SI{120}{\degreeCelsius} rows have smaller residuals.  The baseline is therefore used as a reproducibility and convention check, not as the final activity-based solubility result.
 
 \begin{center}
     \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/mea_phase1_pressure_vs_loading.png}
+    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/mea_ideal_pressure_vs_loading.pdf}
     \captionsetup{hypcap=false}
-    \captionof{figure}{Ideal-equilibrium pressure baseline for 30 wt\% \MEA.  The comparison reproduces the overall trend in the Jou loading series but shows larger low-temperature pressure deviations than the high-temperature rows with smaller residuals.}
-    \label{fig:phase1-pressure}
+    \captionof{figure}{Ideal-equilibrium \COtwo-solubility pressure baseline for 30 wt\% \MEA.  The comparison reproduces the overall trend in the cited loading series but shows larger low-temperature pressure deviations than the high-temperature rows with smaller residuals.}
+    \label{fig:ideal-pressure}
     \end{minipage}
 \end{center}
 
-A neutral ePC-SAFT/PC-SAFT pressure parity check is retained as a model-translation check before ionic activity terms are introduced.
 \begin{center}
     \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=0.62\linewidth,height=0.34\textheight,keepaspectratio]{figures/baygi_neutral_epcsaft_pcsaft_pressure_parity.png}
-    \captionsetup{hypcap=false}
-    \captionof{figure}{Neutral ePC-SAFT/PC-SAFT parity check against the Baygi and Pahlavanzadeh PC-SAFT pressure path.  The comparison checks the neutral model translation used as a reference calculation before introducing ionic activity terms.}
-    \label{fig:baygi-neutral-parity}
-    \end{minipage}
-\end{center}
-
-\begin{figure*}
-    \centering
-    \begin{subfigure}{0.47\textwidth}
+    \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/mea_phase1_speciation_20C.png}
-        \caption{\SI{20}{\degreeCelsius}}
-    \end{subfigure}
+        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/mea_ideal_speciation_20C.pdf}
+        \par\smallskip
+        \small (a) \SI{20}{\degreeCelsius}
+    \end{minipage}
     \hfill
-    \begin{subfigure}{0.47\textwidth}
+    \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/mea_phase1_speciation_40C.png}
-        \caption{\SI{40}{\degreeCelsius}}
-    \end{subfigure}
-    \caption{Ideal-equilibrium true-species baseline for 30 wt\% \MEA.  Smooth curves show the five-reaction, nine-species equilibrium calculation; markers show reconciled literature speciation targets.  The panel set reports the residual comparison for major observed amine and bicarbonate species while trace species document the solved equilibrium state.}
-    \label{fig:phase1-speciation}
-\end{figure*}
+        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/mea_ideal_speciation_40C.pdf}
+        \par\smallskip
+        \small (b) \SI{40}{\degreeCelsius}
+    \end{minipage}
+    \captionsetup{hypcap=false}
+    \captionof{figure}{Ideal-equilibrium true-species baseline for 30 wt\% \MEA.  Smooth curves show the five-reaction, nine-species equilibrium calculation; markers show reconciled literature speciation targets.  The panel set reports the residual comparison for major observed amine and bicarbonate species while trace species document the solved equilibrium state.}
+    \label{fig:ideal-speciation}
+    \end{minipage}
+\end{center}
 
-\subsection{Full ionic parameter set}
-The fixed activity-based evaluation uses the nine-species liquid basis and parameter hierarchy reported in \cref{sec:data-methods}.  The parameter set combines inherited neutral molecular values, SSM+DS conventions for ions, direct \MEA-system evidence for \MEAH and \MEACOO, and trace-ion quantities retained as literature-backed or sensitivity-limited inputs.  The engineering implication is that pressure and speciation are evaluated together for a single fixed activity model, without treating the parameter set as a process-design pressure model.
+\subsection{Activity-Based CO2 Solubility Model}
+The fixed activity-based evaluation uses the nine-species liquid basis and parameter hierarchy reported in \cref{sec:data-methods}.  The parameter set combines inherited neutral molecular values, SSM+DS conventions for ions, direct \MEA-system evidence for \MEAH and \MEACOO, and trace-ion quantities retained as literature-backed or sensitivity-limited inputs.  This places the modified-Born transfer at the center of the \COtwo-solubility calculation: as loading changes, the model updates the ionic composition, the dielectric environment, and the solvation contribution used in the activity coefficients.  The thermodynamic implication is that \COtwo solubility pressure and speciation are evaluated together for a single fixed activity model, without treating the parameter set as a pressure-only VLE correlation.
 
 \subsection{MEAH+ and MEACOO- regression results}
-The \MEAH and \MEACOO regression evidence supports the amine-family ion parameter choices more strongly than the carbonate-family and trace water-ion quantities.  The fit metrics reported in \cref{sec:data-methods} show small residual changes, so the result is used as parameter evidence rather than as a broad performance claim.
+The \MEAH and \MEACOO regression evidence supports the amine-family ion parameter choices more strongly than the carbonate-family and trace water-ion quantities.  These two ions carry the primary-amine carbamate pathway, so they provide the most MEA-specific test of the SSM+DS parameterization.  The fit metrics reported in \cref{sec:data-methods} show small residual changes, so the result is used as parameter evidence rather than as a broad performance claim.
 
 \begin{center}
     \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=0.45\linewidth,height=0.32\textheight,keepaspectratio]{figures/meah_meacoo_speciation_parity.png}
+    \includegraphics[width=0.45\linewidth,height=0.32\textheight,keepaspectratio]{figures/meah_meacoo_speciation_parity.pdf}
     \hfill
-    \includegraphics[width=0.45\linewidth,height=0.32\textheight,keepaspectratio]{figures/meah_meacoo_loading_curves.png}
+    \includegraphics[width=0.45\linewidth,height=0.32\textheight,keepaspectratio]{figures/meah_meacoo_loading_curves.pdf}
     \captionsetup{hypcap=false}
     \captionof{figure}{Direct regression results for the \MEAH and \MEACOO SSM+DS ion parameters.  Left: parity against nonzero measured speciation targets.  Right: loading-resolved fitted trends.}
     \label{fig:ion-regression-results}
@@ -65,59 +59,72 @@ The \MEAH and \MEACOO regression evidence supports the amine-family ion paramete
 \subsection{Chemical speciation}
 The nonzero measured-target speciation metrics are 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, 0.461 for \HCOthree, and 0.066 for the aggregate \ce{MEA + MEAH+}, all on the median absolute $\log_{10}(\mathrm{model}/\mathrm{data})$ scale.  Measurements reported as zero and treated as upper-bound targets remain below a maximum modeled \HCOthree mole fraction of 0.00128.  Carbonate nonzero measured targets have a larger median residual of 0.599 and are retained as a limiting species family.
 
-\begin{figure*}
+\begin{center}
+    \begin{minipage}{\linewidth}
     \centering
-    \begin{subfigure}{0.47\textwidth}
+    \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_phase2_speciation_20C.png}
-        \caption{\SI{20}{\degreeCelsius}}
-    \end{subfigure}
+        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_activity_speciation_20C.pdf}
+        \par\smallskip
+        \small (a) \SI{20}{\degreeCelsius}
+    \end{minipage}
     \hfill
-    \begin{subfigure}{0.47\textwidth}
+    \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_phase2_speciation_40C.png}
-        \caption{\SI{40}{\degreeCelsius}}
-    \end{subfigure}
+        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_activity_speciation_40C.pdf}
+        \par\smallskip
+        \small (b) \SI{40}{\degreeCelsius}
+    \end{minipage}
     \par\medskip
-    \begin{subfigure}{0.47\textwidth}
+    \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_phase2_speciation_60C.png}
-        \caption{\SI{60}{\degreeCelsius}}
-    \end{subfigure}
+        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_activity_speciation_60C.pdf}
+        \par\smallskip
+        \small (c) \SI{60}{\degreeCelsius}
+    \end{minipage}
     \hfill
-    \begin{subfigure}{0.47\textwidth}
+    \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_phase2_speciation_80C.png}
-        \caption{\SI{80}{\degreeCelsius}}
-    \end{subfigure}
-    \caption{Activity-coupled ePC-SAFT speciation residual comparison for 30 wt\% \MEA.  Curves are from converged activity-coupled ePC-SAFT states, and markers are nonzero measured speciation targets.  Measurements reported as zero and treated as upper-bound targets, along with quantities inferred from balance constraints, are evaluated separately.  The figure is a residual comparison, not proof of a finalized global regression.}
-    \label{fig:phase2-speciation}
-\end{figure*}
+        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_activity_speciation_80C.pdf}
+        \par\smallskip
+        \small (d) \SI{80}{\degreeCelsius}
+    \end{minipage}
+    \captionsetup{hypcap=false}
+    \captionof{figure}{Activity-coupled ePC-SAFT speciation residual comparison for 30 wt\% \MEA.  Curves are from converged activity-coupled ePC-SAFT states, and markers are nonzero measured speciation targets.  Measurements reported as zero and treated as upper-bound targets, along with quantities inferred from balance constraints, are evaluated separately.  The figure is a residual comparison, not proof of a completed coupled pressure/speciation regression.}
+    \label{fig:activity-speciation}
+    \end{minipage}
+\end{center}
 
-\subsection{CO2 partial pressure}
-The true-species ePC-SAFT activity calculation converged for all 161 assembled VLE records and all 74 speciation records.  The pressure residual is a median absolute $\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})$ value of 0.493 across the pressure data.  Because \(10^{0.493}\approx 3.1\), the median pressure error corresponds to about a factor of 3.1.  This supports a diagnostic activity-based evaluation with quantified residuals, not a standalone process-design pressure correlation.
+\subsection{CO2 Solubility Pressure Response}
+The true-species ePC-SAFT activity calculation converged for all 161 assembled \COtwo-solubility VLE records and all 74 speciation records.  The pressure residual is a median absolute $\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})$ value of 0.493 across the solubility data.  Because \(10^{0.493}\approx 3.1\), the median pressure error corresponds to about a factor of 3.1.  This supports fixed-parameter \COtwo-solubility modeling with quantified residuals, not a pressure-optimized VLE correlation.
 
-Temperature-resolved pressure errors remain largest between 40 and \SI{80}{\degreeCelsius} and decrease at \SI{120}{\degreeCelsius}.  The pressure comparison therefore quantifies the fixed activity-based calculation without treating it as a process-design pressure model.
+Temperature-resolved pressure errors remain largest between 40 and \SI{80}{\degreeCelsius} and decrease at \SI{120}{\degreeCelsius}.  The paired pressure and speciation accounting is central to the result: the pressure comparison tests gas--liquid equilibrium, while the NMR residuals test whether the liquid chemistry supporting that pressure remains plausible.  The pressure comparison therefore quantifies the fixed activity-based solubility calculation without treating it as a completed pressure/speciation regression.
 
-\begin{figure}
+\begin{center}
+    \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/mea_phase2_pressure_vs_loading.png}
-    \caption{Activity-coupled ePC-SAFT \COtwo pressure evaluation for 30 wt\% \MEA.  Connected curves show converged ePC-SAFT pressure rows at the assembled VLE loadings, and markers show the corresponding literature pressure records.  The figure is a residual comparison, not a process-design pressure correlation.}
-    \label{fig:phase2-pressure}
-\end{figure}
+    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/mea_activity_pressure_vs_loading.pdf}
+    \captionsetup{hypcap=false}
+    \captionof{figure}{Activity-coupled ePC-SAFT \COtwo-solubility pressure evaluation for 30 wt\% \MEA.  Connected curves show converged ePC-SAFT pressure rows at the assembled VLE loadings, and markers show the corresponding literature pressure records.  The figure is a fixed-parameter solubility residual comparison.}
+    \label{fig:activity-pressure}
+    \end{minipage}
+\end{center}
 
 \subsection{Sensitivity and identifiability}
-\HCOthree and \COthree are observed in the speciation data, but their parameter movement is less stable than the amine-family ions.  The regularized trace-carbonate fit retains \(d_{\HCOthree}^{\mathrm{Born}}=3.0\) and \(d_{\COthree}^{\mathrm{Born}}=3.0\), with a residual norm of 0.702.  A separate unanchored multistart check finds a lower residual near \(d_{\HCOthree}^{\mathrm{Born}}=6.80\) and \(d_{\COthree}^{\mathrm{Born}}=3.00\), decreasing the trace-carbonate residual norm to 0.683.  That alternative is not used in the reported activity-based evaluation because it is fitted only to carbonate-family residuals and is not coupled to the pressure/speciation objective.  \HthreeO and \Hydroxide are controlled mainly by charge balance and water autoionization and are not independently identifiable from the available NMR targets.
+\HCOthree and \COthree are observed in the speciation data, but their parameter movement is less stable than the amine-family ions.  This sensitivity is a useful identifiability result for SSM+DS transfer: the amine-family ions have direct \MEA-system evidence, whereas carbonate-family Born diameters remain less constrained by the available measurements.  The regularized trace-carbonate fit retains \(d_{\HCOthree}^{\mathrm{Born}}=3.0\) and \(d_{\COthree}^{\mathrm{Born}}=3.0\), with a residual norm of 0.702.  A separate unanchored multistart check finds a lower residual near \(d_{\HCOthree}^{\mathrm{Born}}=6.80\) and \(d_{\COthree}^{\mathrm{Born}}=3.00\), decreasing the trace-carbonate residual norm to 0.683.  That alternative is not used in the reported activity-based evaluation because it is fitted only to carbonate-family residuals and is not coupled to the pressure/speciation objective.  \HthreeO and \Hydroxide are controlled mainly by charge balance and water autoionization and are not independently identifiable from the available NMR targets.
 
-\begin{figure}
+\begin{center}
+    \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=0.64\linewidth,height=0.36\textheight,keepaspectratio]{figures/trace_carbonate_born_parity.png}
-    \caption{Trace-carbonate Born-radius sensitivity for \HCOthree and \COthree.  The retained calculation uses the regularized 3.0/3.0 Born-diameter pair, while the unanchored check shows that bicarbonate residuals remain sensitive to the bicarbonate Born diameter.}
+    \includegraphics[width=0.64\linewidth,height=0.36\textheight,keepaspectratio]{figures/trace_carbonate_born_parity.pdf}
+    \captionsetup{hypcap=false}
+    \captionof{figure}{Trace-carbonate Born-radius sensitivity for \HCOthree and \COthree.  The retained calculation uses the regularized 3.0/3.0 Born-diameter pair, while the unanchored check shows that bicarbonate residuals remain sensitive to the bicarbonate Born diameter.}
     \label{fig:trace-carbonate-born-regression}
-\end{figure}
+    \end{minipage}
+\end{center}
 
 \subsection{Comparison with literature models}
-The literature comparison in \cref{tab:literature-model-comparison} separates apparent-chemistry PC-SAFT treatments, explicit-ion ePC-SAFT amine models, and advanced Born electrolyte models.  The present calculation follows the explicit-ion activity-coupled route while reporting fixed-parameter pressure and speciation residuals for the assembled records.
+The literature comparison in \cref{tab:literature-model-comparison} separates apparent-chemistry PC-SAFT treatments, explicit-ion ePC-SAFT amine models, and advanced Born electrolyte models for gas solubility.  The present calculation follows the explicit-ion activity-coupled route while adding the SSM+DS modified-Born treatment to a carbamate-forming \MEA system.  The validation structure follows prior explicit-ion ePC-SAFT amine-solubility studies that separate parameter provenance from final VLE checks, but it extends the comparison by placing measured \MEA speciation residuals beside the solubility-pressure residuals~\cite{Uyan2015,Wangler2018}.
 
 \subsection{Model limitations and transferability}
-The deterministic split analysis uses Aronu, Hilliard, Idris, and Mamun as pressure-training families with Jou and Xu held out for pressure validation; Matin and Boettinger are used for speciation training with Jakobsen held out for validation.  The held-out results show stronger transfer for directly fitted amine-family species than for carbonate-family species.  A reduced finite-difference sensitivity screen identifies \(k_{\MEA,\HtwoO}\), \(k_{\COtwo,\MEA}\), and \(d_{\COthree}^{\mathrm{Born}}\) as the strongest tracked directions in the reported objective neighborhood, while \(d_{\HthreeO}^{\mathrm{Born}}\) remains near-zero on the reported metrics.  These results indicate that additional pressure-weighted fitting should move binary interaction parameters and carbonate Born terms only under a multi-observable objective that preserves the reported amine-speciation behavior.
+The deterministic split analysis holds out two solubility-pressure sources and one speciation source for validation.  The held-out results show stronger transfer for directly fitted amine-family species than for carbonate-family species.  A reduced finite-difference sensitivity screen identifies \(k_{\MEA,\HtwoO}\), \(k_{\COtwo,\MEA}\), and \(d_{\COthree}^{\mathrm{Born}}\) as the strongest tracked directions in the reported objective neighborhood, while \(d_{\HthreeO}^{\mathrm{Born}}\) remains near-zero on the reported metrics.  These results indicate that additional pressure-weighted fitting should move binary interaction parameters and carbonate Born terms only under a multi-observable objective that preserves the reported amine-speciation behavior.

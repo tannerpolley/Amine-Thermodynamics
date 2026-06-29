@@ -19,7 +19,7 @@ MEACOO-: m=1, s=3.5605, e=533.11, d_born=3.5605
 The current saved parameter-regression summary is not proof of final fitted ion parameters:
 
 ```text
-analyses/epcsaft_ionic_regression/results/parameter_regression/ionic_parameter_regression_summary.json
+analyses/phase3/ionic_epcsaft_regression/results/parameter_regression/ionic_parameter_regression_summary.json
 target_counts: vle=3, speciation=3
 optimizer.success: false
 optimizer.nfev: 1
@@ -138,7 +138,7 @@ dilute validation residuals from Barzagli 2009
 Create a new curated result folder:
 
 ```text
-analyses/epcsaft_ionic_regression/results/ion_parameter_regression/
+analyses/phase3/ionic_epcsaft_regression/results/ion_parameter_regression/
 ```
 
 Required files:
@@ -186,7 +186,7 @@ The plot captions and JSON summary must say which rows were used for fitting and
 The current promoted artifact folder is:
 
 ```text
-analyses/epcsaft_ionic_regression/results/ion_parameter_regression/
+analyses/phase3/ionic_epcsaft_regression/results/ion_parameter_regression/
 ```
 
 It is a real-data Tier A speciation fit, not a final full VLE-approved parameter set. It uses eight evenly selected local Tier A rows from Matin, Jakobsen, and Böttinger to prove the workflow and produce non-seed fitted values.
@@ -231,16 +231,16 @@ No Wong 2015 Raman or Amundsen 2009 density data has been imported yet.
 Preferred final interface:
 
 ```powershell
-uv run python analyses\epcsaft_ionic_regression\scripts\generate_ion_parameter_data.py
-uv run python analyses\epcsaft_ionic_regression\scripts\fit_ion_parameters.py --fit-tier tier_a --max-nfev 80 --promote
-uv run python analyses\epcsaft_ionic_regression\scripts\render_ion_parameter_figures.py
+uv run python analyses\phase3\ionic_epcsaft_regression\scripts\generate_ion_parameter_data.py
+uv run python analyses\phase3\ionic_epcsaft_regression\scripts\fit_ion_parameters.py --fit-tier tier_a --max-nfev 80 --promote
+uv run python analyses\phase3\ionic_epcsaft_regression\scripts\render_ion_parameter_figures.py
 uv run python -m MEA.epcsaft_ionic.approval_check
 ```
 
 The `--promote` flag is important. Smoke runs should write to:
 
 ```text
-analyses/epcsaft_ionic_regression/results/runs/<label>/
+analyses/phase3/ionic_epcsaft_regression/results/runs/<label>/
 ```
 
 Curated final artifacts should be promoted only after the statistics and plots pass.
