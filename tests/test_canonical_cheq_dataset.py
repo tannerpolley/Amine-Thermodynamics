@@ -55,8 +55,17 @@ class CanonicalChEqDatasetTests(unittest.TestCase):
 
         self.assertEqual(set(wong["reported_basis"]), {"mol_per_kg_source_basis"})
         self.assertTrue(wong["value_mol_per_kg_source_basis"].notna().all())
-        self.assertTrue(wong["value_mole_fraction"].isna().all())
-        self.assertTrue(wong["value_mol_per_kg_unloaded_solution"].isna().all())
+        self.assertTrue(wong["value_mole_fraction"].notna().all())
+        self.assertTrue(wong["value_mol_per_kg_unloaded_solution"].notna().all())
+        self.assertTrue(wong["value_mol_per_kg_initial_water"].notna().all())
+        self.assertTrue(wong["value_mol_per_kg_loaded_solution"].notna().all())
+        self.assertTrue((wong["value_mole_fraction"] > 0.0).all())
+        self.assertTrue((wong["value_mole_fraction"] < 1.0).all())
+        pd.testing.assert_series_equal(
+            wong["value_mol_per_kg_loaded_solution"].reset_index(drop=True),
+            wong["value_mol_per_kg_source_basis"].reset_index(drop=True),
+            check_names=False,
+        )
 
     def test_generator_reproduces_tracked_schema_and_row_shape(self) -> None:
         module = _load_generator()

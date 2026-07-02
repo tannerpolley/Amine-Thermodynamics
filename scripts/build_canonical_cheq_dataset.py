@@ -14,6 +14,7 @@ SCHEMA_PATH = CHEQ_DIR / "Canonical_Combined_ChEq_schema.csv"
 
 MW_MEA_G_PER_MOL = 61.084
 MW_CO2_G_PER_MOL = 44.01
+MW_WATER_G_PER_MOL = 18.01528
 
 LEGACY_SPECIES_COLUMNS = {
     "CO2": "CO2",
@@ -94,7 +95,7 @@ SCHEMA_ROWS = [
     ("reported_unit", "yes", "unit text", "Reported unit label."),
     ("value_mole_fraction", "no", "mole fraction", "Reported or directly standardized true-species mole fraction."),
     ("value_mol_per_kg_source_basis", "no", "mol/kg", "Reported mol/kg value when the source reports mol/kg."),
-    ("value_mol_per_kg_unloaded_solution", "no", "mol/kg", "Computed mol per kg unloaded MEA-water feed when chemically determined from mole fraction data."),
+    ("value_mol_per_kg_unloaded_solution", "no", "mol/kg", "Computed mol per kg unloaded MEA-water feed."),
     ("value_mol_per_kg_initial_water", "no", "mol/kg", "Computed mol per kg initial water in the unloaded MEA-water feed."),
     ("value_mol_per_kg_loaded_solution", "no", "mol/kg", "Computed mol per kg loaded liquid, using absorbed CO2 mass from the reported loading."),
     ("feed_mea_mol_per_kg_unloaded_solution", "yes", "mol/kg", "MEA feed moles per kg unloaded MEA-water solution."),
@@ -224,9 +225,70 @@ def _legacy_rows(source: LegacySource) -> list[dict[str, object]]:
     return rows
 
 
+def _wong_meacoo_curve(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
+    rows = df[df["species"].astype(str) == "MEACOO-"].copy()
+    rows["loading"] = pd.to_numeric(rows["co2_loading_mol_per_mol_mea"], errors="coerce")
+    rows["concentration"] = pd.to_numeric(rows["value"], errors="coerce")
+    rows = rows.dropna(subset=["loading", "concentration"])
+    rows = rows[rows["concentration"] >= 0.0]
+    rows = pd.concat(
+        [
+            pd.DataFrame({"loading": [0.0], "concentration": [0.0]}),
+            rows[["loading", "concentration"]],
+        ],
+        ignore_index=True,
+    )
+    rows = rows.groupby("loading", as_index=False)["concentration"].mean().sort_values("loading", kind="stable")
+    if len(rows) < 2:
+        raise ValueError("Wong MEACOO- rows are required to convert Wong mol/kg values to mole fractions.")
+    return rows["loading"].to_numpy(dtype=float), rows["concentration"].to_numpy(dtype=float)
+
+
+def _interpolated_wong_meacoo(loading: float, curve: tuple[np.ndarray, np.ndarray]) -> float:
+    loadings, concentrations = curve
+    jitter = 0.005
+    if loading < loadings[0] - jitter or loading > loadings[-1] + jitter:
+        raise ValueError(f"Wong loading {loading} is outside the MEACOO- interpolation domain.")
+    bounded_loading = float(np.clip(loading, loadings[0], loadings[-1]))
+    return float(np.interp(bounded_loading, loadings, concentrations))
+
+
+def _wong_conversion_values(
+    *,
+    value_mol_per_kg_loaded: float,
+    mea_mass_fraction: float,
+    loading: float,
+    meacoo_curve: tuple[np.ndarray, np.ndarray],
+) -> dict[str, float]:
+    context = _feed_context(mea_mass_fraction, loading)
+    loaded_mass = context["loaded_solution_mass_kg_per_kg_unloaded_solution"]
+    water_mol_per_kg_unloaded = (1.0 - mea_mass_fraction) * 1000.0 / MW_WATER_G_PER_MOL
+    water_mol_per_kg_loaded = water_mol_per_kg_unloaded / loaded_mass
+    amine_mol_per_kg_loaded = context["feed_mea_mol_per_kg_unloaded_solution"] / loaded_mass
+    carbon_mol_per_kg_loaded = context["feed_co2_mol_per_kg_unloaded_solution"] / loaded_mass
+    meacoo_mol_per_kg_loaded = _interpolated_wong_meacoo(loading, meacoo_curve)
+    total_moles_per_kg_loaded = (
+        water_mol_per_kg_loaded
+        + amine_mol_per_kg_loaded
+        + carbon_mol_per_kg_loaded
+        - meacoo_mol_per_kg_loaded
+    )
+    if total_moles_per_kg_loaded <= 0.0:
+        raise ValueError(f"Wong mole-fraction denominator must be positive at loading {loading}.")
+    value_mol_per_kg_unloaded = value_mol_per_kg_loaded * loaded_mass
+    return {
+        "value_mole_fraction": value_mol_per_kg_loaded / total_moles_per_kg_loaded,
+        "value_mol_per_kg_unloaded_solution": value_mol_per_kg_unloaded,
+        "value_mol_per_kg_initial_water": value_mol_per_kg_unloaded / (1.0 - mea_mass_fraction),
+        "value_mol_per_kg_loaded_solution": value_mol_per_kg_loaded,
+        "conversion_total_moles_per_kg_unloaded_solution": total_moles_per_kg_loaded * loaded_mass,
+    }
+
+
 def _wong_rows() -> list[dict[str, object]]:
     source_path = CHEQ_DIR / "Wong_2015_Raman_speciation.csv"
     df = pd.read_csv(source_path)
+    meacoo_curve = _wong_meacoo_curve(df)
     rows: list[dict[str, object]] = []
     for row_number, row in enumerate(df.to_dict("records"), start=1):
         mea_mass_fraction = _finite_or_blank(row["mea_mass_fraction"])
@@ -234,13 +296,19 @@ def _wong_rows() -> list[dict[str, object]]:
         temperature_C = _finite_or_blank(row["temperature_C"])
         value = _finite_or_blank(row["value"])
         context = _feed_context(mea_mass_fraction, loading)
+        converted = _wong_conversion_values(
+            value_mol_per_kg_loaded=value,
+            mea_mass_fraction=mea_mass_fraction,
+            loading=loading,
+            meacoo_curve=meacoo_curve,
+        )
         source_species = str(row["species"])
         species = "CO2" if source_species == "CO2(aq)" else source_species
         row_status = str(row["row_status"])
         notes = str(row.get("notes", "")).strip()
         if notes:
             notes += " "
-        notes += "Source reports concentration in mol/kg; the local Markdown does not identify the kg denominator more specifically, so mole-fraction conversions are blank."
+        notes += "Source mol/kg values are standardized as mol/kg loaded liquid; mole fractions use feed water, reported loading, and the Wong MEACOO- concentration curve for the total true-species denominator."
         rows.append(
             {
                 "record_id": "",
@@ -260,14 +328,10 @@ def _wong_rows() -> list[dict[str, object]]:
                 "reported_value": value,
                 "reported_basis": "mol_per_kg_source_basis",
                 "reported_unit": "mol/kg",
-                "value_mole_fraction": _blank(),
+                **converted,
                 "value_mol_per_kg_source_basis": value,
-                "value_mol_per_kg_unloaded_solution": _blank(),
-                "value_mol_per_kg_initial_water": _blank(),
-                "value_mol_per_kg_loaded_solution": _blank(),
                 **context,
-                "conversion_total_moles_per_kg_unloaded_solution": _blank(),
-                "conversion_basis": "reported_mol_per_kg_source_basis",
+                "conversion_basis": "reported_mol_per_kg_loaded_solution_scaled_by_feed_water_loading_and_wong_meacoo_curve",
                 "source_table_or_figure": row.get("source_table_or_figure", ""),
                 "source_line_start": row.get("source_line_start", ""),
                 "source_line_end": row.get("source_line_end", ""),

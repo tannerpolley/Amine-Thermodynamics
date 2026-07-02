@@ -66,18 +66,12 @@ def write_plot_data() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     canonical = _canonical_frame()
 
-    mole_fraction = _positive_rows(
-        canonical[canonical["reported_basis"] == "mole_fraction"],
-        "value_mole_fraction",
-    )
+    mole_fraction = _positive_rows(canonical, "value_mole_fraction")
     mole_fraction["plot_basis"] = "liquid_mole_fraction"
     mole_fraction.to_csv(MOLE_FRACTION_PLOT_DATA, index=False)
 
-    loaded_molkg = _positive_rows(
-        canonical[canonical["reported_basis"] == "mole_fraction"],
-        "value_mol_per_kg_loaded_solution",
-    )
-    loaded_molkg["plot_basis"] = "mol_per_kg_loaded_solution_from_mole_fraction"
+    loaded_molkg = _positive_rows(canonical, "value_mol_per_kg_loaded_solution")
+    loaded_molkg["plot_basis"] = "mol_per_kg_loaded_solution"
     loaded_molkg.to_csv(LOADED_MOLKG_PLOT_DATA, index=False)
 
     wong = _positive_rows(

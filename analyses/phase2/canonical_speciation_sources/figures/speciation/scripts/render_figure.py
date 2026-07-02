@@ -55,14 +55,6 @@ def _read_plot_data(path: Path) -> pd.DataFrame:
     return frame.dropna(subset=["temperature_C", "mea_mass_percent", "co2_loading_mol_per_mol_mea", "plot_value"])
 
 
-def _temperature_columns(frame: pd.DataFrame) -> list[float]:
-    return sorted(float(value) for value in frame["temperature_C"].dropna().unique())
-
-
-def _mass_fraction_rows(frame: pd.DataFrame) -> list[float]:
-    return sorted(float(value) for value in frame["mea_mass_percent"].dropna().unique())
-
-
 def _style_axes(ax, *, ylim: tuple[float, float]) -> None:
     ax.set_xlim(*GRID_XLIM)
     ax.set_ylim(*ylim)
@@ -104,48 +96,53 @@ def _source_handles(source_values: list[str]) -> list[Line2D]:
 
 def _plot_grid(frame: pd.DataFrame, *, stem: str, title: str, ylabel: str, ylim: tuple[float, float], description: str) -> tuple[Path, Path, Path, Path]:
     apply_plot_theme()
-    temperatures = _temperature_columns(frame)
-    mass_fractions = _mass_fraction_rows(frame)
-    if not temperatures or not mass_fractions:
+    panels = (
+        frame[["mea_mass_percent", "temperature_C"]]
+        .drop_duplicates()
+        .sort_values(["mea_mass_percent", "temperature_C"], kind="stable")
+        .to_records(index=False)
+    )
+    panel_keys = [(float(mass_percent), float(temperature_C)) for mass_percent, temperature_C in panels]
+    if not panel_keys:
         raise RuntimeError(f"No positive canonical speciation rows are available for {stem}.")
 
+    columns = min(4, len(panel_keys))
+    rows = int(np.ceil(len(panel_keys) / columns))
     fig, axes = plt.subplots(
-        len(mass_fractions),
-        len(temperatures),
-        figsize=(3.55 * len(temperatures), 2.7 * len(mass_fractions)),
+        rows,
+        columns,
+        figsize=(3.55 * columns, 2.7 * rows),
         sharex=True,
         sharey=True,
         squeeze=False,
     )
-    for row_index, mass_percent in enumerate(mass_fractions):
-        for col_index, temperature_C in enumerate(temperatures):
-            ax = axes[row_index, col_index]
-            subset = frame[
-                np.isclose(frame["mea_mass_percent"], mass_percent)
-                & np.isclose(frame["temperature_C"], temperature_C)
-            ].copy()
-            if subset.empty:
-                ax.set_axis_off()
+    flat_axes = axes.ravel()
+    for ax, (mass_percent, temperature_C) in zip(flat_axes, panel_keys, strict=False):
+        subset = frame[
+            np.isclose(frame["mea_mass_percent"], mass_percent)
+            & np.isclose(frame["temperature_C"], temperature_C)
+        ].copy()
+        for species in SPECIES_ORDER:
+            species_rows = subset[subset["species"] == species]
+            if species_rows.empty:
                 continue
-            for species in SPECIES_ORDER:
-                species_rows = subset[subset["species"] == species]
-                if species_rows.empty:
-                    continue
-                for source in sorted(species_rows["source_key"].astype(str).unique()):
-                    source_rows = species_rows[species_rows["source_key"].astype(str) == source]
-                    ax.plot(
-                        source_rows["co2_loading_mol_per_mol_mea"],
-                        source_rows["plot_value"],
-                        linestyle="none",
-                        marker=SOURCE_MARKERS.get(source, "o"),
-                        markersize=5.4,
-                        markerfacecolor=species_color(species),
-                        markeredgecolor="white",
-                        markeredgewidth=0.45,
-                        alpha=0.88,
-                    )
-            ax.set_title(f"{mass_percent:g} wt% MEA, {temperature_C:g} °C", fontsize=10.5)
-            _style_axes(ax, ylim=ylim)
+            for source in sorted(species_rows["source_key"].astype(str).unique()):
+                source_rows = species_rows[species_rows["source_key"].astype(str) == source]
+                ax.plot(
+                    source_rows["co2_loading_mol_per_mol_mea"],
+                    source_rows["plot_value"],
+                    linestyle="none",
+                    marker=SOURCE_MARKERS.get(source, "o"),
+                    markersize=5.4,
+                    markerfacecolor=species_color(species),
+                    markeredgecolor="white",
+                    markeredgewidth=0.45,
+                    alpha=0.88,
+                )
+        ax.set_title(f"{mass_percent:g} wt% MEA, {temperature_C:g} °C", fontsize=10.5)
+        _style_axes(ax, ylim=ylim)
+    for ax in flat_axes[len(panel_keys) :]:
+        ax.set_axis_off()
 
     species_values = [species for species in SPECIES_ORDER if species in set(frame["species"].astype(str))]
     source_values = [source for source in SOURCE_LABELS if source in set(frame["source_key"].astype(str))]
@@ -265,7 +262,7 @@ def main() -> int:
             title="Canonical MEA Speciation Sources, Mole-Fraction Basis",
             ylabel="True-species liquid mole fraction",
             ylim=MOLE_FRACTION_YLIM,
-            description="Böttinger, Jakobsen, and Matin source rows from the canonical combined speciation dataset on their reported liquid mole-fraction basis.",
+            description="Böttinger, Jakobsen, Matin, and Wong source rows from the canonical combined speciation dataset on a liquid mole-fraction basis.",
         ),
         _plot_grid(
             loaded_molkg,
@@ -273,7 +270,7 @@ def main() -> int:
             title="Canonical MEA Speciation Sources, Loaded-Solution mol/kg",
             ylabel="Computed species amount, mol/kg loaded solution",
             ylim=MOLKG_YLIM,
-            description="Böttinger, Jakobsen, and Matin mole-fraction rows converted by the canonical dataset to mol/kg loaded solution.",
+            description="Böttinger, Jakobsen, Matin, and Wong source rows from the canonical combined speciation dataset on a loaded-solution mol/kg basis.",
         ),
         _plot_wong(wong_molkg),
     ]

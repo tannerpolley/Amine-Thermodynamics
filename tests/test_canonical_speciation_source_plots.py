@@ -39,16 +39,16 @@ class CanonicalSpeciationSourcePlotTests(unittest.TestCase):
         loaded = pd.read_csv(OUTPUT / "canonical_speciation_loaded_molkg_grid_plot_data.csv")
         wong = pd.read_csv(OUTPUT / "canonical_speciation_wong_source_molkg_plot_data.csv")
 
-        self.assertEqual(set(mole["source_key"]), {"Bottinger2008", "Jakobsen2005", "Matin2012"})
-        self.assertEqual(set(loaded["source_key"]), {"Bottinger2008", "Jakobsen2005", "Matin2012"})
+        self.assertEqual(set(mole["source_key"]), {"Bottinger2008", "Jakobsen2005", "Matin2012", "Wong2015"})
+        self.assertEqual(set(loaded["source_key"]), {"Bottinger2008", "Jakobsen2005", "Matin2012", "Wong2015"})
         self.assertEqual(set(wong["source_key"]), {"Wong2015"})
-        self.assertEqual(len(mole), 308)
-        self.assertEqual(len(loaded), 308)
+        self.assertEqual(len(mole), 379)
+        self.assertEqual(len(loaded), 379)
         self.assertEqual(len(wong), 71)
         self.assertEqual(len(canonical), 571)
 
         self.assertTrue((mole["plot_basis"] == "liquid_mole_fraction").all())
-        self.assertTrue((loaded["plot_basis"] == "mol_per_kg_loaded_solution_from_mole_fraction").all())
+        self.assertTrue((loaded["plot_basis"] == "mol_per_kg_loaded_solution").all())
         self.assertTrue((wong["plot_basis"] == "source_reported_mol_per_kg").all())
         self.assertGreaterEqual(int((wong["row_status"] == "ambiguous").sum()), 1)
 
