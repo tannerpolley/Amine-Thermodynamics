@@ -49,7 +49,7 @@ Direct local sources:
 | source | local path | MEAH+ | MEACOO- | role |
 |---|---|---:|---:|---|
 | Matin 2012 | `data/reference/MEA/ChEq/Matin_2012_ChEq.csv` | 19 | 19 | primary direct speciation target |
-| Jakobsen 2005 | `data/reference/MEA/ChEq/Jakobsen_2005_ChEq.csv` | 8 | 8 | independent NMR speciation target |
+| Jakobsen 2005 | `data/reference/MEA/ChEq/Jakobsen_2005_ChEq.csv` | 24 | 24 | independent NMR speciation target; 16 rows are the 30 wt% subset used in `Combined_ChEq.csv` |
 | Böttinger 2008 | `data/reference/MEA/ChEq/Bottinger_2007_ChEq.csv` | 0 direct, 68 combined MEA+MEAH+ | 68 | MEACOO- target and MEAH+ indirect constraint |
 
 Do not claim Böttinger directly identifies `MEAH+`; it reports the rapidly exchanging amine/protonated-amine pool together.
@@ -64,7 +64,7 @@ Use for direct `MEAH+` and `MEACOO-` composition residuals at 30 wt% MEA. The so
 
 2. Jakobsen et al. 2005, `Jakobsen2005`, DOI `10.1021/ie048813+`.
 
-Use for independent NMR `MEAH+` and `MEACOO-` residuals at 20 and 40 C. Treat reported uncertainty as about 5-10%.
+Use for independent NMR `MEAH+` and `MEACOO-` residuals at 20 and 40 C. The standalone source file includes 15 wt% and 30 wt% MEA rows; the 30 wt% subset is the portion already carried into `Combined_ChEq.csv`. Treat reported uncertainty as about 5-10%.
 
 3. Böttinger et al. 2008, `Bottinger2008`, DOI `10.1016/j.fluid.2007.09.017`.
 
