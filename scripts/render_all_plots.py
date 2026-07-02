@@ -12,6 +12,7 @@ COMMANDS = [
     [sys.executable, "analyses/paper_validation/2015_baygi/scripts/render_figures.py"],
     [sys.executable, "analyses/phase1/smith_missen_baseline/scripts/render_figures.py"],
     [sys.executable, "analyses/phase2/activity_epcsaft/scripts/render_figures.py"],
+    [sys.executable, "analyses/phase2/canonical_speciation_sources/scripts/render_figures.py"],
 ]
 
 

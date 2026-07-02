@@ -1,0 +1,22 @@
+id: canonical_speciation_sources
+title: Canonical MEA Speciation Source Plots
+layout: analyses/phase2/canonical_speciation_sources
+commands:
+  generate_data: uv run python analyses/phase2/canonical_speciation_sources/scripts/generate_data.py
+  render_figures: uv run python analyses/phase2/canonical_speciation_sources/scripts/render_figures.py
+results_policy: Track canonical source-data CSV snapshots, .mpl.yaml sidecars, PNG previews, SVG figures, and PDF artifacts under figures/speciation/output/.
+inputs:
+  - path: data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv
+    kind: canonical_reference_data
+outputs:
+  - path: analyses/phase2/canonical_speciation_sources/figures/speciation/output/canonical_speciation_mole_fraction_grid.svg
+    kind: figure
+  - path: analyses/phase2/canonical_speciation_sources/figures/speciation/output/canonical_speciation_loaded_molkg_grid.svg
+    kind: figure
+  - path: analyses/phase2/canonical_speciation_sources/figures/speciation/output/canonical_speciation_wong_source_molkg.svg
+    kind: figure
+figures:
+  speciation:
+    input: analyses/phase2/canonical_speciation_sources/figures/speciation/input
+    output: analyses/phase2/canonical_speciation_sources/figures/speciation/output
+    scripts: analyses/phase2/canonical_speciation_sources/figures/speciation/scripts

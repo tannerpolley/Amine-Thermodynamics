@@ -12,6 +12,7 @@ analyses/
     smith_missen_baseline/
   phase2/
     activity_epcsaft/
+    canonical_speciation_sources/
   phase3/
     ionic_epcsaft_regression/
 ```

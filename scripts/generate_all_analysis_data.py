@@ -12,6 +12,7 @@ FAST_COMMANDS = [
     [sys.executable, "analyses/paper_validation/2015_baygi/scripts/generate_data.py"],
     [sys.executable, "analyses/phase1/smith_missen_baseline/scripts/generate_data.py"],
     [sys.executable, "analyses/phase2/activity_epcsaft/scripts/generate_data.py"],
+    [sys.executable, "analyses/phase2/canonical_speciation_sources/scripts/generate_data.py"],
 ]
 IONIC_FULL_COMMANDS = [
     [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py"],

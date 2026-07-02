@@ -13,6 +13,7 @@ GENERATE_SCRIPTS = [
     ROOT / "analyses" / "paper_validation" / "2015_baygi" / "scripts" / "generate_data.py",
     ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "scripts" / "generate_data.py",
     ROOT / "analyses" / "phase2" / "activity_epcsaft" / "scripts" / "generate_data.py",
+    ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "scripts" / "generate_data.py",
     ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "evaluate_train_validation_split.py",
     ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "compute_parameter_sensitivity.py",
     ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "fit_trace_carbonate_born.py",
@@ -26,6 +27,14 @@ RENDER_SCRIPTS = [
     ROOT / "analyses" / "paper_validation" / "2015_baygi" / "scripts" / "render_figures.py",
     ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "scripts" / "render_figures.py",
     ROOT / "analyses" / "phase2" / "activity_epcsaft" / "scripts" / "render_figures.py",
+    ROOT
+    / "analyses"
+    / "phase2"
+    / "canonical_speciation_sources"
+    / "figures"
+    / "speciation"
+    / "scripts"
+    / "render_figure.py",
 ]
 
 
@@ -64,10 +73,15 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
         for path in RENDER_SCRIPTS:
             with self.subTest(path=path):
                 source = _source(path)
-                self.assertIn("data", source)
-                self.assertIn("processed", source)
-                self.assertIn("results", source)
-                self.assertIn(".to_csv", source)
+                if "canonical_speciation_sources" in str(path):
+                    self.assertIn("plot_data", source)
+                    self.assertIn("save_figure_bundle", source)
+                    self.assertIn("read_required_csv", source)
+                else:
+                    self.assertIn("data", source)
+                    self.assertIn("processed", source)
+                    self.assertIn("results", source)
+                    self.assertIn(".to_csv", source)
 
     def test_confidence_validation_uses_render_orchestrator_not_data_generation(self) -> None:
         source = _source(ROOT / "scripts" / "validate_project.py")
@@ -100,6 +114,14 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
             ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.pdf",
             ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.mpl.yaml",
             ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "scripts" / "render_figure.py",
+            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "input" / "source_manifest.csv",
+            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid_plot_data.csv",
+            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid.png",
+            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid.svg",
+            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid.pdf",
+            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid.mpl.yaml",
+            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "scripts" / "generate_data.py",
+            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "scripts" / "render_figure.py",
         ]
         for path in required:
             with self.subTest(path=path):

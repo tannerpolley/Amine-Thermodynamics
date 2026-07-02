@@ -157,6 +157,16 @@ CURATED_REQUIREMENTS = {
         "phase2_speciation_80C_plot_data.csv",
         "phase2_speciation_figure_family.mpl.yaml",
     ],
+    "analyses/phase2/canonical_speciation_sources/figures/speciation/input": ["source_manifest.csv"],
+    "analyses/phase2/canonical_speciation_sources/figures/speciation/output": [
+        "canonical_speciation_mole_fraction_grid_plot_data.csv",
+        *plot_bundle("canonical_speciation_mole_fraction_grid"),
+        "canonical_speciation_loaded_molkg_grid_plot_data.csv",
+        *plot_bundle("canonical_speciation_loaded_molkg_grid"),
+        "canonical_speciation_wong_source_molkg_plot_data.csv",
+        *plot_bundle("canonical_speciation_wong_source_molkg"),
+        "canonical_speciation_source_summary.csv",
+    ],
 }
 
 
