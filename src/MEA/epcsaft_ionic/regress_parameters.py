@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 from typing import Any
 
+from MEA.common.analysis_io import repo_relative_path
 from MEA.epcsaft_ionic import native_regression
 from MEA.epcsaft_ionic.model import (
     ADVANCED_BORN_USER_OPTIONS,
@@ -153,7 +154,7 @@ def run_regression(args: argparse.Namespace) -> dict[str, object]:
     artifact_paths.append(values_path)
 
     summary = {
-        "dataset": str(FIT_DATASET_DIR),
+        "dataset": repo_relative_path(FIT_DATASET_DIR),
         "source_dataset": "data/reference/epcsaft_datasets/MEA_CO2_H2O_draft",
         "advanced_born_user_options": ADVANCED_BORN_USER_OPTIONS,
         "target_counts": {
@@ -165,8 +166,8 @@ def run_regression(args: argparse.Namespace) -> dict[str, object]:
         "package_summary": package_summary,
         "initial_values": initial,
         "fitted_values": fitted,
-        "written_dataset_paths": [str(path) for path in written_dataset_paths],
-        "written_artifacts": [str(path) for path in artifact_paths],
+        "written_dataset_paths": [repo_relative_path(path) for path in written_dataset_paths],
+        "written_artifacts": [repo_relative_path(path) for path in artifact_paths],
         "method_note": (
             "MEA constructs pressure/speciation target rows, parameter bounds, and artifacts, but production "
             "parameter optimization is delegated to epcsaft.fit_reactive_electrolyte_parameters. No local "

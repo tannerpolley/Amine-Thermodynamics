@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from MEA.common.analysis_io import repo_relative_path
 from MEA.common.config import CANONICAL_MEA_WEIGHT_FRACTION, JOU_TEMPERATURES_C
 from MEA.common.data_access import load_combined_vle_data
 from MEA.common.plot_export import save_plot
@@ -189,6 +190,7 @@ def plot_pressure(rows: list[dict[str, object]]):
         workflow_name="epcsaft_ionic/pressure",
         title=title,
         description=description,
+        data_path=PRESSURE_OUT_DIR / "ionic_pressure_comparison.csv",
     )
 
 
@@ -261,7 +263,7 @@ def plot_speciation(rows: list[dict[str, object]]):
                     }
                 )
     apply_speciation_axes(ax, title=title)
-    write_csv(SPECIATION_OUT_DIR / "ionic_speciation_plot_data.csv", snapshot_rows)
+    plot_data_path = write_csv(SPECIATION_OUT_DIR / "ionic_speciation_plot_data.csv", snapshot_rows)
     ax.legend(loc="lower center", ncol=3, title="Model curves; markers are targets")
     fig.tight_layout()
     return save_plot(
@@ -271,6 +273,7 @@ def plot_speciation(rows: list[dict[str, object]]):
         workflow_name="epcsaft_ionic/speciation",
         title=title,
         description=description,
+        data_path=plot_data_path,
     )
 
 
@@ -290,11 +293,11 @@ def main() -> int:
     reaction_cols = [name for name in s_frame.columns if name.startswith("reaction_")]
     speciation_cols = [name for name in s_frame.columns if name.startswith("log10_model_over_target_")]
     summary = {
-        "dataset": str(FIT_DATASET_DIR),
-        "pressure_csv": str(pressure_csv),
-        "speciation_csv": str(speciation_csv),
-        "pressure_plot": str(pressure_plot),
-        "speciation_plot": str(speciation_plot),
+        "dataset": repo_relative_path(FIT_DATASET_DIR),
+        "pressure_csv": repo_relative_path(pressure_csv),
+        "speciation_csv": repo_relative_path(speciation_csv),
+        "pressure_plot": repo_relative_path(pressure_plot),
+        "speciation_plot": repo_relative_path(speciation_plot),
         "pressure_method": "ePC-SAFT reactive speciation plus electrolyte bubble pressure",
         "pressure_accepted_count": int(p_frame["accepted"].astype(bool).sum()),
         "pressure_count": int(len(p_frame)),
@@ -323,7 +326,7 @@ def main() -> int:
     print(f"Raw pressure median |log10(model/data)|: {summary['raw_pressure_median_abs_log10_error']}")
     print(f"Pressure accepted: {summary['pressure_accepted_count']}/{summary['pressure_count']}")
     print(f"Speciation activity accepted: {summary['speciation_accepted_count']}/{summary['speciation_count']}")
-    return 0 if summary["pressure_success_count"] > 0 and summary["speciation_success_count"] > 0 else 1
+    return 0 if summary["pressure_accepted_count"] > 0 and summary["speciation_accepted_count"] > 0 else 1
 
 
 if __name__ == "__main__":

@@ -13,12 +13,12 @@ if str(SRC_ROOT) not in sys.path:
 
 from MEA.common.data_access import load_speciation_data
 from MEA.common.analysis_io import read_required_csv
-from MEA.smith_missen.ideal_speciation import SPECIES_9, solve_ideal_speciation_grid
+from MEA.smith_missen.ideal_speciation import solve_ideal_speciation_grid
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
-PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
-LEGACY_PROCESSED_DIR = REPO_ROOT / "analyses" / "phase1" / "six_species_baseline" / "data" / "processed"
-NEUTRAL_PROCESSED_DIR = REPO_ROOT / "analyses" / "phase1" / "neutral_epcsaft_parity" / "data" / "processed"
+RESULTS_DIR = ANALYSIS_DIR / "results"
+LEGACY_RESULTS_DIR = REPO_ROOT / "analyses" / "phase1" / "six_species_baseline" / "results" / "pressure"
+NEUTRAL_RESULTS_DIR = REPO_ROOT / "analyses" / "phase1" / "neutral_epcsaft_parity" / "results" / "pressure"
 MEA_WEIGHT_FRACTION = 0.3
 SPECIATION_TEMPERATURES_C = (20.0, 40.0)
 SPECIATION_CURVE_LOADINGS = tuple(float(value) for value in np.linspace(0.0, 0.8, 161))
@@ -295,8 +295,8 @@ def _summarize_pressure(
 
 
 def _phase1_pressure_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
-    legacy_metrics = _require_csv(LEGACY_PROCESSED_DIR / "legacy_pcsaft_jou_fit_metrics.csv")
-    neutral_metrics = _require_csv(NEUTRAL_PROCESSED_DIR / "epcsaft_neutral_jou_parity_metrics.csv")
+    legacy_metrics = _require_csv(LEGACY_RESULTS_DIR / "legacy_pcsaft_jou_fit_metrics.csv")
+    neutral_metrics = _require_csv(NEUTRAL_RESULTS_DIR / "epcsaft_neutral_jou_parity_metrics.csv")
 
     legacy = legacy_metrics.rename(
         columns={
@@ -577,7 +577,7 @@ def _phase1_residual_acceptance_audit(
 
 
 def main() -> int:
-    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
     pressure_results, pressure_metrics = _phase1_pressure_tables()
     speciation_results, speciation_metrics = _phase1_speciation_tables()
@@ -599,9 +599,9 @@ def main() -> int:
         "phase1_residual_acceptance_audit.csv": residual_acceptance_audit,
     }
     for name, frame in outputs.items():
-        frame.to_csv(PROCESSED_DIR / name, index=False)
+        frame.to_csv(RESULTS_DIR / name, index=False)
 
-    print(f"Phase 1 processed tables: {PROCESSED_DIR}")
+    print(f"Canonical Phase 1 result tables: {RESULTS_DIR}")
     return 0
 
 

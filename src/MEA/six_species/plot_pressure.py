@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -236,6 +237,7 @@ def plot_jou_comparison(curves: pd.DataFrame, summary: pd.DataFrame) -> Path:
         "legacy_pcsaft_jou_recomputed_fit",
         title=title,
         description=description,
+        data_path=BASELINE_OUT / "legacy_pcsaft_jou_fit_curves.csv",
     )
 
 

@@ -24,11 +24,10 @@ from MEA.common.plot_style import (
     temperature_color,
     write_mpl_sidecar,
 )
-from MEA.common.analysis_io import copy_file_as, copy_files, normalize_svg, read_required_csv
+from MEA.common.analysis_io import copy_file_as, normalize_svg, read_required_csv
 from MEA.common.speciation_figures import write_speciation_plot
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
-PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
 OUT_DIR = ANALYSIS_DIR / "results"
 PRESSURE_FIGURE_OUT = ANALYSIS_DIR / "figures" / "pressure" / "output"
 SPECIATION_FIGURE_OUT = ANALYSIS_DIR / "figures" / "speciation" / "output"
@@ -51,7 +50,7 @@ def _data_xlim(frame: pd.DataFrame, column: str, *, pad: float = 0.035) -> tuple
 
 def require_csv(name: str) -> pd.DataFrame:
     return read_required_csv(
-        PROCESSED_DIR / name,
+        OUT_DIR / name,
         hint="Run `uv run python analyses/phase1/smith_missen_baseline/scripts/generate_data.py` first",
     )
 
@@ -61,31 +60,12 @@ def _write_curated_tables() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, p
     PRESSURE_FIGURE_OUT.mkdir(parents=True, exist_ok=True)
     SPECIATION_FIGURE_OUT.mkdir(parents=True, exist_ok=True)
     pressure_results = require_csv("phase1_pressure_results.csv")
-    pressure_metrics = require_csv("phase1_pressure_metrics.csv")
     speciation_results = require_csv("phase1_speciation_results.csv")
-    speciation_metrics = require_csv("phase1_speciation_metrics.csv")
     speciation_curve = require_csv("phase1_speciation_curve.csv")
     speciation_reference_points = require_csv("phase1_speciation_reference_points.csv")
-    parameter_table = require_csv("phase1_parameter_table.csv")
-    reaction_table = require_csv("phase1_reaction_constant_table.csv")
     residual_acceptance_audit = require_csv("phase1_residual_acceptance_audit.csv")
     for flag_column in ("passes", "claim_allowed"):
         residual_acceptance_audit[flag_column] = residual_acceptance_audit[flag_column].astype(str).str.lower()
-    for frame, name in (
-        (pressure_results, "phase1_pressure_results.csv"),
-        (pressure_metrics, "phase1_pressure_metrics.csv"),
-        (speciation_results, "phase1_speciation_results.csv"),
-        (speciation_metrics, "phase1_speciation_metrics.csv"),
-        (speciation_curve, "phase1_speciation_curve.csv"),
-        (speciation_reference_points, "phase1_speciation_reference_points.csv"),
-        (parameter_table, "phase1_parameter_table.csv"),
-        (reaction_table, "phase1_reaction_constant_table.csv"),
-        (residual_acceptance_audit, "phase1_residual_acceptance_audit.csv"),
-    ):
-        frame.to_csv(OUT_DIR / name, index=False)
-    pressure_results.to_csv(PRESSURE_FIGURE_OUT / "phase1_pressure_plot_data.csv", index=False)
-    speciation_curve.to_csv(SPECIATION_FIGURE_OUT / "phase1_speciation_curve.csv", index=False)
-    speciation_reference_points.to_csv(SPECIATION_FIGURE_OUT / "phase1_speciation_reference_points.csv", index=False)
     return pressure_results, speciation_results, residual_acceptance_audit, speciation_curve, speciation_reference_points
 
 
@@ -167,29 +147,26 @@ def plot_pressure(pressure_results: pd.DataFrame) -> None:
     ax.add_artist(temperature_legend)
     ax.legend(handles=role_handles, title="Role", ncol=1, loc="lower left", bbox_to_anchor=(1.02, 0.0))
     fig.subplots_adjust(right=0.72)
-    figure_stem = OUT_DIR / "phase1_pressure_vs_loading"
+    plot_data_path = PRESSURE_FIGURE_OUT / "phase1_pressure_plot_data.csv"
+    pressure_results.to_csv(plot_data_path, index=False)
+    figure_stem = PRESSURE_FIGURE_OUT / "phase1_pressure_vs_loading"
     png, svg, pdf = save_figure_bundle(fig, figure_stem)
     normalize_svg(svg)
     plt.close(fig)
     write_mpl_sidecar(
-        OUT_DIR / "phase1_pressure_vs_loading.mpl.yaml",
+        PRESSURE_FIGURE_OUT / "phase1_pressure_vs_loading.mpl.yaml",
         png_name=png.name,
         svg_name=svg.name,
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=plot_data_path,
         style_source="analyses/phase1/smith_missen_baseline/scripts/render_figures.py",
     )
-    copy_files((png, svg, pdf, OUT_DIR / "phase1_pressure_vs_loading.mpl.yaml"), PRESSURE_FIGURE_OUT)
     copy_file_as(pdf, LATEX_FIGURES_DIR / "mea_ideal_pressure_vs_loading.pdf")
 
 
 def plot_speciation(speciation_curve: pd.DataFrame, speciation_reference_points: pd.DataFrame) -> None:
-    title = "Ideal Smith-Missen speciation, 40 C"
-    description = (
-        "Measured 30 wt% MEA speciation points are compared against continuous explicit nine-species "
-        "ideal Smith-Missen equilibrium curves. The residual audit controls which species are validation evidence."
-    )
     for old_name in (
         "phase1_speciation_vs_loading_diagnostic.png",
         "phase1_speciation_vs_loading_diagnostic.svg",
@@ -201,16 +178,6 @@ def plot_speciation(speciation_curve: pd.DataFrame, speciation_reference_points:
         if old_path.exists():
             old_path.unlink()
 
-    write_speciation_plot(
-        curve_frame=speciation_curve,
-        point_frame=speciation_reference_points,
-        output_dir=OUT_DIR,
-        stem="phase1_speciation_vs_loading",
-        title=title,
-        description=description,
-        style_source="analyses/phase1/smith_missen_baseline/scripts/render_figures.py",
-        temperature_C=40.0,
-    )
     for temperature_C in sorted(speciation_curve["temperature_C"].dropna().unique()):
         for suffix in (".png", ".svg", ".pdf", ".mpl.yaml", "_plot_data.csv"):
             old_path = SPECIATION_FIGURE_OUT / f"phase1_speciation_{int(round(float(temperature_C)))}C_diagnostic{suffix}"
@@ -238,6 +205,7 @@ def plot_speciation(speciation_curve: pd.DataFrame, speciation_reference_points:
         pdf_name="phase1_speciation_40C.pdf",
         title="Smith-Missen baseline speciation figure family",
         description="Figure-owned explicit ideal-equilibrium speciation outputs; one full-coverage plot is generated per temperature.",
+        data_path=SPECIATION_FIGURE_OUT / "phase1_speciation_40C_plot_data.csv",
         style_source="analyses/phase1/smith_missen_baseline/scripts/render_figures.py",
     )
 

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
+from pathlib import Path
 
 from MEA.common.config import (
     CANONICAL_MEA_WEIGHT_FRACTION,
@@ -108,8 +108,8 @@ def plot_legacy_speciation(curves: pd.DataFrame, data: pd.DataFrame) -> Path:
     apply_speciation_axes(ax, title=title)
     ax.legend(loc="lower center", ncol=2, title="Model curves; markers are reference data")
     fig.tight_layout()
-    write_csv_report(default_output_dir(__file__) / "speciation_plot_data.csv", snapshot_rows)
-    return save_plot(fig, __file__, "speciation", title=title, description=description)
+    plot_data_path = write_csv_report(default_output_dir(__file__) / "speciation_plot_data.csv", snapshot_rows)
+    return save_plot(fig, __file__, "speciation", title=title, description=description, data_path=plot_data_path)
 
 
 def main() -> int:

@@ -245,6 +245,7 @@ def _save_bundle(fig, *, stem: str, title: str, description: str) -> tuple[Path,
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=OUTPUT_DIR / f"{stem}_plot_data.csv",
         style_source="src/MEA/common/plot_style.py",
     )
     plt.close(fig)

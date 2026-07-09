@@ -9,6 +9,7 @@ from typing import Any
 import numpy as np
 
 from MEA.common.analysis_io import read_csv_rows as read_csv
+from MEA.common.analysis_io import repo_relative_path
 from MEA.common.analysis_io import remove_matching_files, write_csv_rows as write_csv
 from MEA.common.analysis_io import write_json_file as write_json
 from MEA.common.reaction_catalog import (
@@ -28,7 +29,6 @@ from MEA.smith_missen.ideal_speciation import solve_ideal_speciation
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
-PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
 RESULTS_DIR = ANALYSIS_DIR / "results"
 REACTION_MANIFEST = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "phase2_reaction_constant_manifest.csv"
 ACTIVITY_CANDIDATES = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "phase2_activity_constant_candidates.csv"
@@ -78,7 +78,7 @@ CURVE_MAX_LOADING_BY_TEMPERATURE_C = {
     80.0: 0.8,
 }
 MAJOR_SPECIATION_SPECIES = ("MEA", "MEAH+", "MEACOO-", "HCO3-", "MEA + MEAH+")
-PHASE2_PRESSURE_SOURCES = ("Aronu", "Hilliard", "Idris", "Jou", "Mamun", "Xu")
+PHASE2_PRESSURE_SOURCES = ("Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011")
 PHASE2_SPECIATION_SOURCES = ("Bottinger", "Jakobsen", "Matin")
 SOURCE_RESIDUAL_SUMMARY_FIELDNAMES = [
     "phase",
@@ -108,16 +108,14 @@ ZERO_TARGET_ROLES = {"direct_zero", "aggregate_direct_zero"}
 
 
 def remove_stale_scaffold_outputs() -> None:
-    remove_matching_files((PROCESSED_DIR, RESULTS_DIR), STALE_SCAFFOLD_PATTERNS)
+    remove_matching_files((RESULTS_DIR,), STALE_SCAFFOLD_PATTERNS)
 
 
-def write_dual_json(name: str, payload: dict[str, Any]) -> None:
-    write_json(PROCESSED_DIR / name, payload)
+def write_result_json(name: str, payload: dict[str, Any]) -> None:
     write_json(RESULTS_DIR / name, payload)
 
 
-def write_dual_rows(name: str, rows: list[dict[str, Any]], fieldnames: list[str] | None = None) -> None:
-    write_csv(PROCESSED_DIR / name, rows, fieldnames)
+def write_result_rows(name: str, rows: list[dict[str, Any]], fieldnames: list[str] | None = None) -> None:
     write_csv(RESULTS_DIR / name, rows, fieldnames)
 
 
@@ -935,7 +933,7 @@ def problem_definition(
         "activity_convention": {
             "needed_basis": "mole_fraction_activity",
             "current_manifest_conversion_status": sorted({row["conversion_status"] for row in reactions}),
-            "candidate_manifest": str(ACTIVITY_CANDIDATES.relative_to(REPO_ROOT)).replace("\\", "/"),
+            "candidate_manifest": repo_relative_path(ACTIVITY_CANDIDATES),
             "candidate_status_counts": candidate_status_counts,
             "solve_policy": "run_only_with_pinned_epcsaft_native_activity_solver_and_generated_residual_gates",
             "standard_state_used": "mole_fraction_activity",
@@ -944,7 +942,7 @@ def problem_definition(
             "commit_id": epcsaft_commit_id(),
             "direct_url": epcsaft_source_detail(),
         },
-        "parameter_artifact": str(PARAMETER_DATASET.relative_to(REPO_ROOT)).replace("\\", "/"),
+        "parameter_artifact": repo_relative_path(PARAMETER_DATASET),
         "dielectric_option": "sensitivity_only_unless_direct_MEA_H2O_dielectric_evidence_supports_fit",
         "born_option": "advanced_Born_SSM_DS_with_promoted_regularized_carbonate_pair",
         "solver_route": [
@@ -1026,7 +1024,6 @@ Failed gates:
 
 
 def main() -> int:
-    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     remove_stale_scaffold_outputs()
 
@@ -1054,7 +1051,7 @@ def main() -> int:
     phase2_status = phase2_status_from_solver(speciation_equilibrium, pressure_equilibrium, speciation_curves)
     output_status = required_output_status_rows(reactions, phase2_status)
 
-    write_dual_json("phase2_activity_speciation_problem.json", problem)
+    write_result_json("phase2_activity_speciation_problem.json", problem)
     for name, rows in (
         ("phase2_reaction_constant_basis.csv", reactions),
         ("phase2_reaction_constant_source_verification.csv", source_rows),
@@ -1073,8 +1070,8 @@ def main() -> int:
         ("phase2_residual_acceptance_audit.csv", residual_audit),
         ("phase2_speciation_activity_curves.csv", speciation_curves),
     ):
-        write_dual_rows(name, rows)
-    write_dual_rows("phase2_source_residual_summary.csv", source_residual_summary, SOURCE_RESIDUAL_SUMMARY_FIELDNAMES)
+        write_result_rows(name, rows)
+    write_result_rows("phase2_source_residual_summary.csv", source_residual_summary, SOURCE_RESIDUAL_SUMMARY_FIELDNAMES)
     write_comparison(RESULTS_DIR / "phase2_comparison_to_phase1.md", phase2_status, residual_audit)
     write_claim_boundary_report(RESULTS_DIR / "phase2_solver_claim_boundary_report.md", source_rows, phase2_status, residual_audit)
 

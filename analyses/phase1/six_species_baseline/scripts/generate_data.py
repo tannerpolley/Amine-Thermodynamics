@@ -12,22 +12,24 @@ from MEA.six_species.plot_pressure import compute_jou_metrics
 from MEA.six_species.plot_speciation import compute_legacy_speciation_grid, load_speciation_data
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
-PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
+PRESSURE_RESULTS_DIR = ANALYSIS_DIR / "results" / "pressure"
+SPECIATION_RESULTS_DIR = ANALYSIS_DIR / "results" / "speciation"
 
 
 def main() -> int:
-    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+    PRESSURE_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    SPECIATION_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     metrics, summary, curves = compute_jou_metrics()
     speciation_curves = compute_legacy_speciation_grid()
     speciation_data = load_speciation_data()
 
-    metrics.to_csv(PROCESSED_DIR / "legacy_pcsaft_jou_fit_metrics.csv", index=False)
-    summary.to_csv(PROCESSED_DIR / "legacy_pcsaft_jou_fit_summary.csv", index=False)
-    curves.to_csv(PROCESSED_DIR / "legacy_pcsaft_jou_fit_curves.csv", index=False)
-    speciation_curves.to_csv(PROCESSED_DIR / "six_species_speciation_curves.csv", index=False)
-    speciation_data.to_csv(PROCESSED_DIR / "six_species_speciation_reference.csv", index=False)
+    metrics.to_csv(PRESSURE_RESULTS_DIR / "legacy_pcsaft_jou_fit_metrics.csv", index=False)
+    summary.to_csv(PRESSURE_RESULTS_DIR / "legacy_pcsaft_jou_fit_summary.csv", index=False)
+    curves.to_csv(PRESSURE_RESULTS_DIR / "legacy_pcsaft_jou_fit_curves.csv", index=False)
+    speciation_curves.to_csv(SPECIATION_RESULTS_DIR / "six_species_speciation_curves.csv", index=False)
+    speciation_data.to_csv(SPECIATION_RESULTS_DIR / "six_species_speciation_reference.csv", index=False)
 
-    print(f"Processed six-species tables: {PROCESSED_DIR}")
+    print(f"Canonical six-species result tables: {ANALYSIS_DIR / 'results'}")
     return 0
 
 

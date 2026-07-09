@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import shutil
 from collections.abc import Iterable, Sequence
@@ -8,6 +9,27 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+
+from .config import REPO_ROOT
+
+
+def repo_relative_path(path: Path, *, repo_root: Path = REPO_ROOT) -> str:
+    resolved_root = repo_root.resolve()
+    resolved_path = path.resolve()
+    try:
+        return resolved_path.relative_to(resolved_root).as_posix()
+    except ValueError as exc:
+        raise ValueError(f"Artifact path is outside repository: {resolved_path}") from exc
+
+
+def file_sha256(path: Path) -> str:
+    if not path.is_file():
+        raise RuntimeError(f"Cannot hash missing artifact: {path}")
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def read_required_csv(path: Path, *, hint: str | None = None) -> pd.DataFrame:

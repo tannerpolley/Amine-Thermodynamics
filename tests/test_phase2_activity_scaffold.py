@@ -152,14 +152,15 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         output = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output"
         results = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results"
         for name in (
-            "phase2_speciation_reference_points.csv",
-            "phase2_speciation_activity_curves.csv",
             "phase2_speciation_40C.png",
             "phase2_speciation_40C.svg",
             "phase2_speciation_40C.pdf",
             "phase2_speciation_40C.mpl.yaml",
         ):
             self.assertTrue((output / name).exists(), name)
+        self.assertFalse((output / "phase2_speciation_reference_points.csv").exists())
+        self.assertFalse((output / "phase2_speciation_activity_curves.csv").exists())
+        self.assertTrue((results / "phase2_speciation_reference_points.csv").exists())
         self.assertTrue((results / "phase2_speciation_activity_curves.csv").exists())
         self.assertTrue((results / "phase2_speciation_target_roles.csv").exists())
         forbidden = [

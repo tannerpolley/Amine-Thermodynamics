@@ -185,6 +185,7 @@ def write_speciation_plot(
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=plot_data,
         style_source=style_source,
         dpi=dpi,
     )

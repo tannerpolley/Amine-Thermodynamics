@@ -113,6 +113,11 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
                 patch.object(regress_parameters, "load_epcsaft", return_value=fake_epcsaft),
                 patch.object(
                     regress_parameters,
+                    "repo_relative_path",
+                    side_effect=lambda path: Path(path).relative_to(output_dir).as_posix(),
+                ),
+                patch.object(
+                    regress_parameters,
                     "write_fitted_dataset",
                     return_value=[output_dir / "dataset" / "pure" / "any_solvent.csv"],
                 ),

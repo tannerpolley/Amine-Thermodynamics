@@ -7,6 +7,8 @@ from typing import Any
 import matplotlib as mpl
 import numpy as np
 
+from MEA.common.analysis_io import file_sha256, repo_relative_path
+
 
 PRESSURE_FIGSIZE = (10, 7)
 SPECIATION_FIGSIZE = (10, 7)
@@ -143,6 +145,7 @@ def write_mpl_sidecar(
     pdf_name: str | None = None,
     title: str,
     description: str,
+    data_path: Path,
     style_source: str = "src/MEA/common/plot_style.py",
     dpi: int = 300,
 ) -> None:
@@ -152,6 +155,8 @@ def write_mpl_sidecar(
         f"  description: {description}",
         f"  png: {png_name}",
         f"  svg: {svg_name}",
+        f"  data_path: {repo_relative_path(data_path)}",
+        f"  data_sha256: {file_sha256(data_path)}",
     ]
     if pdf_name is not None:
         lines.append(f"  pdf: {pdf_name}")

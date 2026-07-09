@@ -34,7 +34,6 @@ from MEA.common.plot_style import (
 from MEA.six_species.plot_speciation import DATA_SPECIES_MAP, PLOT_SPECIES
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
-PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
 PRESSURE_DIR = ANALYSIS_DIR / "results" / "pressure"
 SPECIATION_DIR = ANALYSIS_DIR / "results" / "speciation"
 
@@ -46,13 +45,11 @@ def require(path: Path) -> Path:
 
 
 def render_pressure() -> Path:
-    metrics = pd.read_csv(require(PROCESSED_DIR / "legacy_pcsaft_jou_fit_metrics.csv"))
-    summary = pd.read_csv(require(PROCESSED_DIR / "legacy_pcsaft_jou_fit_summary.csv"))
-    curves = pd.read_csv(require(PROCESSED_DIR / "legacy_pcsaft_jou_fit_curves.csv"))
+    metrics = pd.read_csv(require(PRESSURE_DIR / "legacy_pcsaft_jou_fit_metrics.csv"))
+    summary = pd.read_csv(require(PRESSURE_DIR / "legacy_pcsaft_jou_fit_summary.csv"))
+    curves_path = require(PRESSURE_DIR / "legacy_pcsaft_jou_fit_curves.csv")
+    curves = pd.read_csv(curves_path)
     PRESSURE_DIR.mkdir(parents=True, exist_ok=True)
-    metrics.to_csv(PRESSURE_DIR / "legacy_pcsaft_jou_fit_metrics.csv", index=False)
-    summary.to_csv(PRESSURE_DIR / "legacy_pcsaft_jou_fit_summary.csv", index=False)
-    curves.to_csv(PRESSURE_DIR / "legacy_pcsaft_jou_fit_curves.csv", index=False)
 
     title = "Six-species PC-SAFT reproduction against Jou $CO_2$ pressure data"
     description = "Recomputed six-species legacy PC-SAFT curves are compared against Jou et al. 30 wt% MEA carbon-dioxide partial-pressure data at five temperatures."
@@ -78,13 +75,14 @@ def render_pressure() -> Path:
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=curves_path,
     )
     return png
 
 
 def render_speciation() -> Path:
-    curves = pd.read_csv(require(PROCESSED_DIR / "six_species_speciation_curves.csv"))
-    data = pd.read_csv(require(PROCESSED_DIR / "six_species_speciation_reference.csv"))
+    curves = pd.read_csv(require(SPECIATION_DIR / "six_species_speciation_curves.csv"))
+    data = pd.read_csv(require(SPECIATION_DIR / "six_species_speciation_reference.csv"))
     SPECIATION_DIR.mkdir(parents=True, exist_ok=True)
     title = "Six-species chemical-equilibrium speciation at 40 C"
     description = "Six-species legacy chemical-equilibrium model curves and measured true-species speciation points are shown on a shared semilog mole-fraction axis."
@@ -106,7 +104,8 @@ def render_speciation() -> Path:
                 ax.semilogy(measured["CO2_loading"], measured[data_column], SPECIATION_TARGET_MARKER, color=color, alpha=SPECIATION_TARGET_ALPHA, markersize=SPECIATION_TARGET_MARKERSIZE)
                 for row in measured.to_dict("records"):
                     snapshot_rows.append({"source": "reference", "species": species, "CO2_loading": row["CO2_loading"], "mole_fraction": row[data_column]})
-    pd.DataFrame(snapshot_rows).to_csv(SPECIATION_DIR / "speciation_plot_data.csv", index=False)
+    plot_data_path = SPECIATION_DIR / "speciation_plot_data.csv"
+    pd.DataFrame(snapshot_rows).to_csv(plot_data_path, index=False)
     apply_speciation_axes(ax, title=title)
     ax.legend(loc="lower center", ncol=2, title="Model curves; markers are reference data")
     fig.tight_layout()
@@ -119,6 +118,7 @@ def render_speciation() -> Path:
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=plot_data_path,
     )
     return png
 

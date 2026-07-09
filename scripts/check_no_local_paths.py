@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import json
 import re
 import subprocess
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,9 +15,9 @@ TARGETS = (
     "src/MEA",
 )
 FORBIDDEN_PATTERNS = (
-    re.compile(r"C:/Users/", re.IGNORECASE),
-    re.compile(r"C:\\Users\\", re.IGNORECASE),
+    re.compile(r"C:[\\/]Users[\\/]", re.IGNORECASE),
     re.compile(r"/Users/[^/\s]+/"),
+    re.compile(r"/home/[^/\s]+/"),
     re.compile(r"Documents[\\/]git[\\/]", re.IGNORECASE),
 )
 SKIP_SUFFIXES = {
@@ -45,6 +45,20 @@ def tracked_files() -> list[Path]:
     return [ROOT / name for name in names if name]
 
 
+def _contains_forbidden_path(value: str) -> bool:
+    return any(pattern.search(value) for pattern in FORBIDDEN_PATTERNS)
+
+
+def _json_strings(value: object) -> list[str]:
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        return [text for item in value for text in _json_strings(item)]
+    if isinstance(value, dict):
+        return [text for item in value.values() for text in _json_strings(item)]
+    return []
+
+
 def scan_file(path: Path) -> list[tuple[int, str]]:
     if path.suffix.lower() in SKIP_SUFFIXES:
         return []
@@ -54,8 +68,17 @@ def scan_file(path: Path) -> list[tuple[int, str]]:
         text = path.read_text(encoding="utf-8", errors="ignore")
     violations: list[tuple[int, str]] = []
     for line_number, line in enumerate(text.splitlines(), start=1):
-        if any(pattern.search(line) for pattern in FORBIDDEN_PATTERNS):
+        if _contains_forbidden_path(line):
             violations.append((line_number, line.strip()))
+    if path.suffix.lower() == ".json":
+        try:
+            payload = json.loads(text)
+        except json.JSONDecodeError:
+            payload = None
+        if payload is not None:
+            for value in _json_strings(payload):
+                if _contains_forbidden_path(value) and not any(value in line for _, line in violations):
+                    violations.append((1, value))
     return violations
 
 

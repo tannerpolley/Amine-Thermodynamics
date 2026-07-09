@@ -79,6 +79,7 @@ def main() -> int:
         pdf_name=pdf_path.name,
         title=title,
         description=description,
+        data_path=derived_path,
         style_source="analyses/paper_validation/2015_baygi/scripts/render_figures.py",
     )
     save_figure_bundle(fig, OUT_DIR / "baygi_neutral_epcsaft_pcsaft_pressure_parity")

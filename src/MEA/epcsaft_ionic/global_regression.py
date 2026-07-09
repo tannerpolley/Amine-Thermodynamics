@@ -565,6 +565,7 @@ def write_pressure_parity(frame: pd.DataFrame, output_dir: Path) -> None:
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=output_dir / "global_regression_pressure_fit_data.csv",
         style_source="src/MEA/epcsaft_ionic/global_regression.py",
     )
 
@@ -609,6 +610,7 @@ def write_speciation_parity(frame: pd.DataFrame, output_dir: Path) -> None:
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=output_dir / "global_regression_speciation_fit_data.csv",
         style_source="src/MEA/epcsaft_ionic/global_regression.py",
     )
 
@@ -739,5 +741,6 @@ def write_sensitivity_heatmap(parameters: list[str], vectors: dict[str, list[flo
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=SENSITIVITY_DIR / "parameter_sensitivity_matrix.csv",
         style_source="src/MEA/epcsaft_ionic/global_regression.py",
     )

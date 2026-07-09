@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import csv
-import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -23,6 +22,7 @@ from MEA.common.plot_style import (
     temperature_color,
 )
 from MEA.common.reporting import write_csv_report, write_json_report
+from MEA.common.analysis_io import repo_relative_path
 from MEA.epcsaft_neutral.parameters import DATASET_DIR, SPECIES, legacy_neutral_dataset_rows
 from MEA.epcsaft_neutral.pressure import NeutralPressureResult, predict_co2_pressure_kpa
 from MEA.six_species.chemistry import LEGACY_SPECIES_6, collapse_to_apparent_ternary, legacy_true_mole_fractions
@@ -202,6 +202,7 @@ def plot_parity(curves: pd.DataFrame) -> Path:
         workflow_name="epcsaft_neutral/pressure",
         title=title,
         description=description,
+        data_path=OUT_DIR / "epcsaft_neutral_jou_parity_curves.csv",
     )
 
 
@@ -220,15 +221,15 @@ def main() -> int:
     write_json_report(
         summary_json_path,
         {
-            "dataset_paths": [str(path) for path in dataset_paths],
-            "metrics": str(metrics_path),
-            "summary": str(summary_path),
-            "curves": str(curves_path),
-            "plot": str(plot_path),
+            "dataset_paths": [repo_relative_path(path) for path in dataset_paths],
+            "metrics": repo_relative_path(metrics_path),
+            "summary": repo_relative_path(summary_path),
+            "curves": repo_relative_path(curves_path),
+            "plot": repo_relative_path(plot_path),
             "acceptance": {
                 "max_abs_epcsaft_delta_vs_expected_limit": 0.03,
                 "max_abs_epcsaft_delta_vs_expected": float(summary["epcsaft_delta_vs_expected"].abs().max()),
-                "all_curve_points_solved": bool((curves["epcsaft_success"] == True).all()) if not curves.empty else False,
+                "all_curve_points_solved": bool(curves["epcsaft_success"].astype(bool).all()) if not curves.empty else False,
             },
         },
     )
@@ -241,7 +242,7 @@ def main() -> int:
     print(summary.to_string(index=False))
 
     max_delta = float(summary["epcsaft_delta_vs_expected"].abs().max())
-    all_solved = bool((curves["epcsaft_success"] == True).all()) if not curves.empty else False
+    all_solved = bool(curves["epcsaft_success"].astype(bool).all()) if not curves.empty else False
     if not all_solved:
         print("ERROR: not all neutral ePC-SAFT curve points solved.")
         return 1

@@ -36,7 +36,7 @@ Old file-path commands such as `uv run python MEA/run_plot_exports.py` are inten
 
 The removed nine-species/Gekko diagnostic workflow remains available on `legacy/main-legacy`; it is not part of active `main` validation.
 
-Each analysis owns local `data/raw/`, `data/processed/`, and `results/<plot_set>/` folders. Curated plot sets keep the exact plotted CSV snapshot, `.mpl.yaml` style sidecar, PNG preview, and SVG figure together. Disposable run output belongs under ignored `analyses/**/results/runs/`.
+Each analysis owns its canonical generated tables under `results/`. Figure output folders contain only the exact plotted CSV subset and render bundle; every `.mpl.yaml` sidecar records the repository-relative plotted-data path and SHA-256 digest. Disposable run output belongs under ignored `analyses/**/results/runs/`.
 
 ## Key Artifact Paths
 

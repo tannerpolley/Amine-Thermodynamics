@@ -277,7 +277,12 @@ def plot_vle_overview(vle_rows: list[dict[str, str]], series_rows: list[dict[str
     ax.set_title("MEA-CO2-H2O VLE data and unregressed ePC-SAFT surrogate")
     ax.grid(True, which="both", alpha=0.25)
     ax.legend(title="30 wt% MEA", ncols=2, fontsize=8)
-    return save_plot(fig, __file__, "epcsaft_vle_data_overview")
+    return save_plot(
+        fig,
+        __file__,
+        "epcsaft_vle_data_overview",
+        data_path=output_dir("diagnostics") / "vle_surrogate_comparison_30wt_40C.csv",
+    )
 
 
 def plot_speciation_overlay(cheq_rows: list[dict[str, str]], series_rows: list[dict[str, float]]) -> Path:
@@ -328,7 +333,12 @@ def plot_speciation_overlay(cheq_rows: list[dict[str, str]], series_rows: list[d
     ax.set_title("Speciation data with data-informed ePC-SAFT state path")
     ax.grid(True, which="both", alpha=0.25)
     ax.legend(fontsize=8, ncols=2)
-    return save_plot(fig, __file__, "epcsaft_speciation_diagnostic_overlay")
+    return save_plot(
+        fig,
+        __file__,
+        "epcsaft_speciation_diagnostic_overlay",
+        data_path=output_dir("diagnostics") / "diagnostic_series.csv",
+    )
 
 
 def plot_epcsaft_diagnostics(series_rows: list[dict[str, float]]) -> Path:
@@ -358,7 +368,12 @@ def plot_epcsaft_diagnostics(series_rows: list[dict[str, float]]) -> Path:
         ax.grid(True, alpha=0.25)
     fig.suptitle("ePC-SAFT diagnostics on 30 wt% MEA, 40 C data-informed states")
     fig.tight_layout()
-    return save_plot(fig, __file__, "epcsaft_liquid_diagnostics")
+    return save_plot(
+        fig,
+        __file__,
+        "epcsaft_liquid_diagnostics",
+        data_path=output_dir("diagnostics") / "diagnostic_series.csv",
+    )
 
 
 def main() -> int:

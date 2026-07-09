@@ -68,6 +68,7 @@ def write_pressure_residual_plot(pressure_rows: list[dict[str, object]]) -> tupl
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=residual_csv,
         style_source="analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py",
     )
     return png, svg, pdf
@@ -124,6 +125,7 @@ def write_speciation_residual_plot(speciation_rows: list[dict[str, object]]) -> 
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=residual_csv,
         style_source="analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py",
     )
     return png, svg, pdf
@@ -170,6 +172,7 @@ def write_trace_carbonate_plot(frame: pd.DataFrame) -> None:
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=TRACE_CARBONATE_DIR / "trace_carbonate_born_fit_data.csv",
         style_source="analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py",
     )
     copy_file_as(pdf, LATEX_FIGURES_DIR / "trace_carbonate_born_parity.pdf")

@@ -84,20 +84,16 @@ class Phase1CompletionGateTests(unittest.TestCase):
         self.assertNotIn("phase1_status: model_ran_but_" + "failed_validation", claim_boundary)
 
     def test_phase1_speciation_figure_is_full_ideal_equilibrium_output(self) -> None:
-        result_dir = ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "results"
-        self.assertTrue((result_dir / "phase1_speciation_vs_loading.png").exists())
-        self.assertTrue((result_dir / "phase1_speciation_vs_loading.svg").exists())
-        self.assertTrue((result_dir / "phase1_speciation_vs_loading.pdf").exists())
-        self.assertTrue((result_dir / "phase1_speciation_vs_loading.mpl.yaml").exists())
-        self.assertTrue((result_dir / "phase1_speciation_vs_loading_plot_data.csv").exists())
-        self.assertFalse((result_dir / "phase1_speciation_vs_loading_diagnostic.png").exists())
-        self.assertFalse((result_dir / "phase1_speciation_vs_loading_diagnostic.svg").exists())
-        self.assertFalse((result_dir / "phase1_speciation_vs_loading_diagnostic.pdf").exists())
-        self.assertFalse((result_dir / "phase1_speciation_vs_loading_diagnostic.mpl.yaml").exists())
+        output = ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "output"
+        for suffix in ("png", "svg", "pdf", "mpl.yaml"):
+            self.assertTrue((output / f"phase1_speciation_40C.{suffix}").exists())
+        self.assertTrue((output / "phase1_speciation_40C_plot_data.csv").exists())
+        self.assertFalse(any(output.glob("phase1_speciation_vs_loading_diagnostic*")))
 
     def test_phase1_speciation_output_has_full_continuous_species_curves(self) -> None:
         output = ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "output"
-        rows = _rows(output / "phase1_speciation_curve.csv")
+        results = ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "results"
+        rows = _rows(results / "phase1_speciation_curve.csv")
         selected = [row for row in rows if row["temperature_C"] == "40.0" and row["species"] == "MEA + MEAH+"]
         self.assertGreaterEqual(len(selected), 150)
         loadings = [float(row["CO2_loading"]) for row in selected]

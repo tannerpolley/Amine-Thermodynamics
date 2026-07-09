@@ -42,6 +42,7 @@ def _write_default_sidecar(
     pdf_name: str,
     title: str,
     description: str,
+    data_path: Path,
     dpi: int,
 ) -> None:
     write_mpl_sidecar(
@@ -51,6 +52,7 @@ def _write_default_sidecar(
         pdf_name=pdf_name,
         title=title,
         description=description,
+        data_path=data_path,
         dpi=dpi,
     )
 
@@ -65,6 +67,7 @@ def save_plot(
     close=True,
     title: str | None = None,
     description: str | None = None,
+    data_path: Path,
 ) -> Path:
     script = Path(script_path).resolve()
     output_dir = default_output_dir(script, workflow_name)
@@ -84,6 +87,7 @@ def save_plot(
         pdf_name=pdf_path.name,
         title=title or stem.replace("_", " "),
         description=description or f"Matplotlib render metadata for {stem}.",
+        data_path=data_path,
         dpi=int(dpi),
     )
     if output_path.exists():

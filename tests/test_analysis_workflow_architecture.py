@@ -68,19 +68,20 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
                 source = _source(path)
                 self.assertFalse(any(token in source for token in forbidden), f"{path} mixes generation with rendering")
 
-    def test_render_scripts_use_processed_data_and_snapshot_results(self) -> None:
+    def test_render_scripts_use_canonical_results_and_write_plot_snapshots(self) -> None:
         for path in RENDER_SCRIPTS:
             with self.subTest(path=path):
                 source = _source(path)
+                self.assertIn("write_mpl_sidecar", source)
+                self.assertIn("data_path=", source)
                 if "canonical_speciation_sources" in str(path):
                     self.assertIn("plot_data", source)
                     self.assertIn("save_figure_bundle", source)
                     self.assertIn("read_required_csv", source)
                 else:
-                    self.assertIn("data", source)
-                    self.assertIn("processed", source)
                     self.assertIn("results", source)
-                    self.assertIn(".to_csv", source)
+                    if "/phase3/" not in path.as_posix() and "/paper_validation/" not in path.as_posix():
+                        self.assertNotIn("PROCESSED_DIR", source)
 
     def test_confidence_validation_uses_render_orchestrator_not_data_generation(self) -> None:
         source = _source(ROOT / "scripts" / "validate_project.py")
@@ -88,10 +89,11 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
         plot_section = source.split("PLOT_COMMANDS = [", 1)[1].split("]", 1)[0]
         self.assertNotIn("generate_data.py", plot_section)
 
-    def test_phase1_generation_reuses_processed_pressure_artifacts(self) -> None:
+    def test_phase1_generation_reuses_canonical_pressure_results(self) -> None:
         source = _source(ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "scripts" / "generate_data.py")
         self.assertIn("six_species_baseline", source)
         self.assertIn("neutral_epcsaft_parity", source)
+        self.assertIn("RESULTS_DIR", source)
         self.assertNotIn("compute_jou_metrics", source)
         self.assertNotIn("compute_neutral_parity", source)
 
@@ -104,9 +106,6 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
             ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "output" / "phase1_speciation_40C_plot_data.csv",
             ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "scripts" / "render_figure.py",
             ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "input" / "source_manifest.csv",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_reference_points.csv",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_target_roles.csv",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_activity_curves.csv",
             ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C_plot_data.csv",
             ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.png",
             ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.svg",

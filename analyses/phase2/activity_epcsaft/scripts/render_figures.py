@@ -12,7 +12,7 @@ SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-from MEA.common.analysis_io import copy_file_as, copy_files, normalize_svg, read_required_csv, remove_matching_files  # noqa: E402
+from MEA.common.analysis_io import copy_file_as, normalize_svg, read_required_csv, remove_matching_files  # noqa: E402
 from MEA.common.plot_style import (  # noqa: E402
     EPCSAFT_IONIC_LINESTYLE,
     JOU_DATA_MARKER,
@@ -27,7 +27,6 @@ from MEA.common.plot_style import (  # noqa: E402
 from MEA.common.speciation_figures import write_speciation_plot  # noqa: E402
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
-PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
 RESULTS_DIR = ANALYSIS_DIR / "results"
 PRESSURE_FIGURE_OUT = ANALYSIS_DIR / "figures" / "pressure" / "output"
 SPECIATION_FIGURE_OUT = ANALYSIS_DIR / "figures" / "speciation" / "output"
@@ -44,7 +43,7 @@ STALE_SCAFFOLD_PATTERNS = (
 
 def require_csv(name: str) -> pd.DataFrame:
     return read_required_csv(
-        PROCESSED_DIR / name,
+        RESULTS_DIR / name,
         hint="Run `uv run python analyses/phase2/activity_epcsaft/scripts/generate_data.py` first",
     )
 
@@ -86,8 +85,8 @@ def plot_pressure(pressure_results: pd.DataFrame) -> None:
     frame = _numeric_pressure_frame(pressure_results)
     plot_data = frame.copy()
     plot_data["plot_role"] = "solver_success_pressure_row"
-    plot_data.to_csv(RESULTS_DIR / "phase2_pressure_plot_data.csv", index=False)
-    plot_data.to_csv(PRESSURE_FIGURE_OUT / "phase2_pressure_plot_data.csv", index=False)
+    plot_data_path = PRESSURE_FIGURE_OUT / "phase2_pressure_plot_data.csv"
+    plot_data.to_csv(plot_data_path, index=False)
 
     fig, ax = plt.subplots(figsize=PRESSURE_FIGSIZE)
     temperatures = sorted(frame["temperature_C"].dropna().unique())
@@ -144,20 +143,20 @@ def plot_pressure(pressure_results: pd.DataFrame) -> None:
     ax.legend(handles=role_handles, title="Role", ncol=1, loc="lower right")
     fig.tight_layout()
 
-    figure_stem = RESULTS_DIR / "phase2_pressure_vs_loading"
+    figure_stem = PRESSURE_FIGURE_OUT / "phase2_pressure_vs_loading"
     png, svg, pdf = save_figure_bundle(fig, figure_stem)
     normalize_svg(svg)
     plt.close(fig)
     write_mpl_sidecar(
-        RESULTS_DIR / "phase2_pressure_vs_loading.mpl.yaml",
+        PRESSURE_FIGURE_OUT / "phase2_pressure_vs_loading.mpl.yaml",
         png_name=png.name,
         svg_name=svg.name,
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=plot_data_path,
         style_source="analyses/phase2/activity_epcsaft/scripts/render_figures.py",
     )
-    copy_files((png, svg, pdf, RESULTS_DIR / "phase2_pressure_vs_loading.mpl.yaml"), PRESSURE_FIGURE_OUT)
     copy_file_as(pdf, LATEX_FIGURES_DIR / "mea_activity_pressure_vs_loading.pdf")
 
 
@@ -167,33 +166,9 @@ def main() -> int:
     SPECIATION_FIGURE_OUT.mkdir(parents=True, exist_ok=True)
     remove_stale_scaffold_outputs()
     pressure = require_csv("phase2_pressure_results.csv")
-    pressure_metrics = require_csv("phase2_pressure_metrics.csv")
     points = require_csv("phase2_speciation_reference_points.csv")
-    target_roles = require_csv("phase2_speciation_target_roles.csv")
     curves = require_csv("phase2_speciation_activity_curves.csv")
-    pressure.to_csv(PRESSURE_FIGURE_OUT / "phase2_pressure_results.csv", index=False)
-    pressure_metrics.to_csv(PRESSURE_FIGURE_OUT / "phase2_pressure_metrics.csv", index=False)
-    points.to_csv(SPECIATION_FIGURE_OUT / "phase2_speciation_reference_points.csv", index=False)
-    points.to_csv(RESULTS_DIR / "phase2_speciation_reference_points.csv", index=False)
-    target_roles.to_csv(SPECIATION_FIGURE_OUT / "phase2_speciation_target_roles.csv", index=False)
-    target_roles.to_csv(RESULTS_DIR / "phase2_speciation_target_roles.csv", index=False)
-    curves.to_csv(SPECIATION_FIGURE_OUT / "phase2_speciation_activity_curves.csv", index=False)
-    curves.to_csv(RESULTS_DIR / "phase2_speciation_activity_curves.csv", index=False)
     plot_pressure(pressure)
-    write_speciation_plot(
-        curve_frame=curves,
-        point_frame=points,
-        output_dir=RESULTS_DIR,
-        stem="phase2_speciation_activity_plot",
-        title="Activity-based ePC-SAFT speciation, 40 C",
-        description=(
-            "Continuous curves are activity-coupled ePC-SAFT equilibrium solutions from the fixed "
-            "parameter set; markers are measured reference points. Residual acceptance is controlled "
-            "by phase2_residual_acceptance_audit.csv."
-        ),
-        style_source="analyses/phase2/activity_epcsaft/scripts/render_figures.py",
-        temperature_C=40.0,
-    )
     for temperature_C in sorted(curves["temperature_C"].dropna().unique()):
         png, svg, pdf, sidecar = write_speciation_plot(
             curve_frame=curves,
@@ -217,6 +192,7 @@ def main() -> int:
         pdf_name="phase2_speciation_40C.pdf",
         title="Activity-based ePC-SAFT speciation figure family",
         description="Figure-owned activity-coupled ePC-SAFT equilibrium speciation outputs; one full-coverage plot is generated per temperature.",
+        data_path=SPECIATION_FIGURE_OUT / "phase2_speciation_40C_plot_data.csv",
         style_source="analyses/phase2/activity_epcsaft/scripts/render_figures.py",
     )
     print(f"Phase 2 activity-speciation plot artifacts: {SPECIATION_FIGURE_OUT}")

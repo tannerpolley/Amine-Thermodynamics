@@ -73,7 +73,7 @@ def load_epcsaft():
 
 
 def dataset_label() -> str:
-    return str(DATASET_DIR)
+    return DATASET_DIR.resolve().relative_to(REPO_ROOT.resolve()).as_posix()
 
 
 def output_dir(*parts: str) -> Path:

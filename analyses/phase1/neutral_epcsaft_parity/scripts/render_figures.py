@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 
@@ -13,6 +12,7 @@ if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 from MEA.common.config import JOU_TEMPERATURES_C
+from MEA.common.analysis_io import repo_relative_path, write_json_file
 from MEA.common.plot_style import (
     EPCSAFT_NEUTRAL_LINESTYLE,
     JOU_DATA_MARKER,
@@ -29,7 +29,6 @@ from MEA.common.plot_style import (
 from MEA.epcsaft_neutral.parameters import DATASET_DIR
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
-PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
 OUT_DIR = ANALYSIS_DIR / "results" / "pressure"
 
 
@@ -41,12 +40,11 @@ def require(path: Path) -> Path:
 
 def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    metrics = pd.read_csv(require(PROCESSED_DIR / "epcsaft_neutral_jou_parity_metrics.csv"))
-    summary = pd.read_csv(require(PROCESSED_DIR / "epcsaft_neutral_jou_parity_summary.csv"))
-    curves = pd.read_csv(require(PROCESSED_DIR / "epcsaft_neutral_jou_parity_curves.csv"))
-    metrics.to_csv(OUT_DIR / "epcsaft_neutral_jou_parity_metrics.csv", index=False)
-    summary.to_csv(OUT_DIR / "epcsaft_neutral_jou_parity_summary.csv", index=False)
-    curves.to_csv(OUT_DIR / "epcsaft_neutral_jou_parity_curves.csv", index=False)
+    metrics_path = require(OUT_DIR / "epcsaft_neutral_jou_parity_metrics.csv")
+    summary_path = require(OUT_DIR / "epcsaft_neutral_jou_parity_summary.csv")
+    curves_path = require(OUT_DIR / "epcsaft_neutral_jou_parity_curves.csv")
+    metrics = pd.read_csv(metrics_path)
+    curves = pd.read_csv(curves_path)
 
     title = "Neutral ePC-SAFT parity against legacy PC-SAFT pressure curves"
     description = "Neutral ePC-SAFT and legacy PC-SAFT pressure curves are compared against Jou et al. 30 wt% MEA carbon-dioxide partial-pressure data using a shared temperature palette."
@@ -72,15 +70,16 @@ def main() -> int:
         pdf_name=pdf.name,
         title=title,
         description=description,
+        data_path=curves_path,
     )
     summary_json = {
-        "dataset_dir": str(DATASET_DIR),
-        "metrics": str(OUT_DIR / "epcsaft_neutral_jou_parity_metrics.csv"),
-        "summary": str(OUT_DIR / "epcsaft_neutral_jou_parity_summary.csv"),
-        "curves": str(OUT_DIR / "epcsaft_neutral_jou_parity_curves.csv"),
-        "plot": str(png),
+        "dataset_dir": repo_relative_path(DATASET_DIR),
+        "metrics": repo_relative_path(metrics_path),
+        "summary": repo_relative_path(summary_path),
+        "curves": repo_relative_path(curves_path),
+        "plot": repo_relative_path(png),
     }
-    (OUT_DIR / "epcsaft_neutral_jou_parity_summary.json").write_text(json.dumps(summary_json, indent=2) + "\n", encoding="utf-8")
+    write_json_file(OUT_DIR / "epcsaft_neutral_jou_parity_summary.json", summary_json)
     print(f"Neutral ePC-SAFT pressure plot: {png}")
     return 0
 
