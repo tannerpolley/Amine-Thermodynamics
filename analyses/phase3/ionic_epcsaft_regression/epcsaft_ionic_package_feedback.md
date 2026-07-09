@@ -181,11 +181,11 @@ Recommended package changes:
 
 From this worktree:
 
-```powershell
+```bash
 uv run python -m MEA.epcsaft_ionic.regress_parameters
 uv run python -m MEA.epcsaft_ionic.plot_results
 uv run python -m unittest tests.test_epcsaft_ionic -v
-uv run python scripts\render_all_plots.py
+uv run python scripts/render_all_plots.py
 ```
 
 Fresh results:
@@ -220,8 +220,8 @@ The public state API works for the 9-species liquid state and provides
 fugacity/activity coefficients. The public TP flash path rejects the same
 ion-containing mixture before any VLE calculation:
 
-```powershell
-$env:UV_CACHE_DIR = "$PWD\.uv-cache"
+```bash
+$env:UV_CACHE_DIR = "$PWD/.uv-cache"
 @'
 import numpy as np
 from MEA.epcsaft_ionic.model import FIT_DATASET_DIR, SPECIES, load_vle_targets
@@ -416,11 +416,11 @@ It should support:
 
 This MEA branch uses Python 3.13 via uv. When trying to rely on newer source
 features, rebuilding the ePC-SAFT extension may be required. The package should
-support a reliable Windows uv build path for this workflow, ideally with:
+support a reliable Linux uv build path for this workflow, ideally with:
 
-```powershell
+```bash
 uv sync
-uv run python scripts\build_epcsaft.py
+uv run python scripts/build_epcsaft.py
 uv run python -c "import epcsaft; import epcsaft.regression"
 ```
 

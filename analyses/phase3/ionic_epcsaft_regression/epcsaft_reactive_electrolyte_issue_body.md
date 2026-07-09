@@ -56,8 +56,8 @@ branch: codex/epcsaft-with-electrolyte-born-terms
 
 Relevant command:
 
-```powershell
-$env:UV_CACHE_DIR = "$PWD\.uv-cache"
+```bash
+$env:UV_CACHE_DIR = "$PWD/.uv-cache"
 uv run python -m MEA.epcsaft_ionic.plot_results
 ```
 
@@ -376,7 +376,7 @@ continuation path solves more points than cold isolated solving
 
 Gate a heavier real MEA regression behind an environment variable:
 
-```powershell
+```bash
 EPCSAFT_RUN_MEA_REACTIVE_VLE=1
 ```
 
