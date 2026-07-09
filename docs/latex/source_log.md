@@ -1,6 +1,6 @@
 # Source Log
 
-This source log records the manuscript's verified citation anchors and intended use. Bibliographic entries are stored in `references.bib`; official web/report records that are not Zotero-managed are stored in `official_sources.bib`.
+This source log records the manuscript's verified citation anchors and intended use. Zotero-managed bibliographic entries are stored in `references.bib`; repo-curated journal entries not present in that export are stored in `project_sources.bib`; official web/report records are stored in `official_sources.bib`.
 
 | Citation key | Status | Use in manuscript |
 | --- | --- | --- |
@@ -20,7 +20,7 @@ This source log records the manuscript's verified citation anchors and intended 
 | `Nasrifar2010` | Peer-reviewed article | PC-SAFT modeling of acid-gas aqueous ethanolamine systems. |
 | `Baygi2015` | Peer-reviewed article | PC-SAFT CO2 solubility in aqueous MEA and neutral parity comparison. |
 | `Pakravesh2025a` | Peer-reviewed article | Recent SAFT-family alkanolamine thermodynamic modeling context. |
-| `Aronu2011`, `Hilliard2008`, `Jou1995`, `Mamun2005`, `Xu2011` | Literature data sources | VLE evidence basis. |
+| `Aronu2011`, `Hilliard2008`, `Idris2014`, `Jou1995`, `Mamun2005`, `Xu2011` | Literature data sources | VLE evidence basis. Idris metadata and Table 2 locator were verified against the publication record; untranscribed uncertainty cells remain blank rather than being treated as zero. |
 | `Bottinger2008`, `Jakobsen2005`, `Matin2012` | Literature data sources | NMR/speciation evidence basis. |
 | `EIA2026NaturalGasExplained` | Official government web source | Raw natural gas contains nonhydrocarbon components removed during processing before sales-gas delivery or end use. |
 | `NETL2022IndustrialCO2CaptureCosts` | Official government technical report | Natural-gas processing as a high-purity industrial CO2 source; representative CO2 discharge-stream composition range. |

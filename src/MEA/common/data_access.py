@@ -38,6 +38,20 @@ def load_combined_vle_data(
     loading_max: float | None = None,
 ) -> pd.DataFrame:
     df = pd.read_csv(DATA_ROOT / "VLE" / "Combined_VLE.csv")
+    required_columns = {
+        "row_id",
+        "source_key",
+        "source_file",
+        "source_row",
+        "MEA_weight_fraction",
+        "temperature",
+        "CO2_loading",
+        "CO2_pressure",
+        "paper",
+    }
+    missing_columns = required_columns.difference(df.columns)
+    if missing_columns:
+        raise RuntimeError(f"Canonical VLE data set is missing columns: {sorted(missing_columns)}")
     filtered = df[
         (df["temperature"] == temperature_C)
         & (df["MEA_weight_fraction"] == mea_weight_fraction)

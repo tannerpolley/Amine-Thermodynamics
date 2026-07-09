@@ -8,7 +8,7 @@ import numpy as np
 from scipy.optimize import minimize
 
 from MEA.common.plot_export import save_plot
-from MEA.epcsaft_runtime import REPO_ROOT, SPECIES, build_mixture, diagnostic_composition, output_dir
+from MEA.epcsaft_runtime import REPO_ROOT, build_mixture, diagnostic_composition, output_dir
 
 
 DATA_ROOT = REPO_ROOT / "data" / "reference" / "MEA"
@@ -199,6 +199,8 @@ def write_vle_comparison(vle_rows: list[dict[str, str]], series_rows: list[dict[
         writer = csv.DictWriter(
             handle,
             fieldnames=[
+                "row_id",
+                "source_key",
                 "CO2_loading",
                 "CO2_pressure_data_kPa",
                 "liquid_fugacity_CO2_surrogate_kPa",
@@ -215,6 +217,8 @@ def write_vle_comparison(vle_rows: list[dict[str, str]], series_rows: list[dict[
             surrogate = float(np.interp(loading, loadings, fugacity))
             writer.writerow(
                 {
+                    "row_id": row["row_id"],
+                    "source_key": row["source_key"],
                     "CO2_loading": loading,
                     "CO2_pressure_data_kPa": pressure,
                     "liquid_fugacity_CO2_surrogate_kPa": surrogate,

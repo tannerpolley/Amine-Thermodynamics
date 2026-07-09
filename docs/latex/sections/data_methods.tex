@@ -1,7 +1,7 @@
 \section{Data and Methods}\label{sec:data-methods}
 
 \subsection{Experimental Solubility and Speciation Data}
-The \COtwo-solubility data set contains 161 equilibrium partial-pressure records compiled from five VLE sources\cite{Aronu2011,Hilliard2008,Jou1995,Mamun2005,Xu2011}.  Each record contains amine mass fraction, temperature, \COtwo loading, and measured \COtwo pressure, which together define the solubility-pressure relation.  The speciation data set contains 74 NMR-derived liquid-composition records compiled from three spectroscopic studies\cite{Bottinger2008,Jakobsen2005,Matin2012}.  The speciation records are expressed on a common loading basis and reconciled to satisfy carbon, amine, water, and charge balances before model comparison.
+The \COtwo-solubility data set contains 161 equilibrium partial-pressure records compiled from six VLE sources\cite{Aronu2011,Hilliard2008,Idris2014,Jou1995,Mamun2005,Xu2011}.  Each canonical record retains a stable source key, source filename, and one-based source-row identity in addition to amine mass fraction, temperature, \COtwo loading, and measured \COtwo pressure.  The aggregate is generated from a row-level inclusion manifest; six Xu records carry explicit nominal-temperature normalization from 100.5--\SI{101.1}{\degreeCelsius} to \SI{100}{\degreeCelsius} or 120.4--\SI{121.8}{\degreeCelsius} to \SI{120}{\degreeCelsius}.  The speciation data set contains 74 NMR-derived liquid-composition records compiled from three spectroscopic studies\cite{Bottinger2008,Jakobsen2005,Matin2012}.  The speciation records are expressed on a common loading basis and reconciled to satisfy carbon, amine, water, and charge balances before model comparison.
 
 \begin{center}
     \begin{minipage}{\linewidth}
@@ -14,7 +14,7 @@ The \COtwo-solubility data set contains 161 equilibrium partial-pressure records
         \toprule
         Data family & Records & Primary sources & Conditions & Observables and residual role \\
         \midrule
-        VLE & 161 & \cite{Aronu2011,Hilliard2008,Jou1995,Mamun2005,Xu2011} &
+        VLE & 161 & \cite{Aronu2011,Hilliard2008,Idris2014,Jou1995,Mamun2005,Xu2011} &
         30 wt\% \MEA, 40--\SI{120}{\degreeCelsius}, \(\alpha=0.003\)--0.689, \(P_{\COtwo}=1.5\times10^{-3}\)--\(2.804\times10^3\) kPa &
         Measured \COtwo pressure at fixed loading; logarithmic solubility residual \\
         Speciation & 74 & \cite{Bottinger2008,Jakobsen2005,Matin2012} &

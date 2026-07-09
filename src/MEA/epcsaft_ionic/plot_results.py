@@ -65,6 +65,7 @@ def pressure_rows(values: dict[str, float]) -> list[dict[str, object]]:
             "temperature_C": target.T - 273.15,
             "CO2_loading": target.loading,
             "observed_CO2_pressure_kPa": target.pressure_kPa,
+            "source_key": target.source_key,
             "paper": target.paper,
         }
         try:

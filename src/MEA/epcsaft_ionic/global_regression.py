@@ -123,7 +123,7 @@ def pressure_rows(values: dict[str, float], targets: list[VLETarget]) -> pd.Data
     for target, result in zip(targets, results):
         row: dict[str, Any] = {
             "row_id": target.row_id,
-            "source": target.paper,
+            "source": target.source_key,
             "temperature_C": target.T - 273.15,
             "MEA_weight_fraction": float(target.x[1]),
             "CO2_loading": target.loading,
@@ -203,7 +203,7 @@ def cached_pressure_rows() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "row_id": frame["row_id"],
-            "source": frame["paper"],
+            "source": frame["source_key"],
             "temperature_C": frame["temperature_C"],
             "MEA_weight_fraction": np.nan,
             "CO2_loading": frame["CO2_loading"],

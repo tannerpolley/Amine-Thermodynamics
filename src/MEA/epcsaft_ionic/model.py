@@ -133,6 +133,7 @@ BOUNDS = {
 @dataclass(frozen=True)
 class VLETarget:
     row_id: str
+    source_key: str
     T: float
     P: float
     loading: float
@@ -291,13 +292,14 @@ def load_vle_targets(limit: int | None = None) -> list[VLETarget]:
     ]
     rows = _select_evenly(sorted(rows, key=lambda row: (_as_float(row, "temperature"), _as_float(row, "CO2_loading"))), limit)
     targets = []
-    for idx, row in enumerate(rows):
+    for row in rows:
         temperature_C = float(_as_float(row, "temperature"))
         pressure_kPa = float(_as_float(row, "CO2_pressure"))
         loading = float(_as_float(row, "CO2_loading"))
         targets.append(
             VLETarget(
-                row_id=f"vle_{idx:04d}",
+                row_id=str(row["row_id"]),
+                source_key=str(row["source_key"]),
                 T=temperature_C + 273.15,
                 P=max(101325.0, pressure_kPa * 1000.0),
                 loading=loading,

@@ -23,8 +23,8 @@ from MEA.epcsaft_ionic.model import (
     to_jsonable,
 )
 
-PRESSURE_TRAIN_SOURCES = frozenset({"Aronu", "Hilliard", "Idris", "Mamun"})
-PRESSURE_VALIDATION_SOURCES = frozenset({"Jou", "Xu"})
+PRESSURE_TRAIN_SOURCES = frozenset({"Aronu2011", "Hilliard2008", "Idris2014", "Mamun2005"})
+PRESSURE_VALIDATION_SOURCES = frozenset({"Jou1995", "Xu2011"})
 SPECIATION_TRAIN_SOURCES = frozenset({"Bottinger", "Matin"})
 SPECIATION_VALIDATION_SOURCES = frozenset({"Jakobsen"})
 VAPOR_SPECIES = ("CO2", "H2O", "MEA")
@@ -105,7 +105,7 @@ def _speciation_split(source: str) -> str:
 def build_pressure_target_rows(targets: Iterable[VLETarget]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for target in targets:
-        source = str(target.paper)
+        source = target.source_key
         rows.append(
             {
                 "row_id": target.row_id,
@@ -129,6 +129,7 @@ def build_pressure_target_rows(targets: Iterable[VLETarget]) -> list[dict[str, A
                 "split": _pressure_split(source),
                 "metadata": {
                     "target_family": "pressure",
+                    "source_label": target.paper,
                     "pressure_kPa": float(target.pressure_kPa),
                     "co2_loading": float(target.loading),
                     "temperature_C": float(target.T) - 273.15,
