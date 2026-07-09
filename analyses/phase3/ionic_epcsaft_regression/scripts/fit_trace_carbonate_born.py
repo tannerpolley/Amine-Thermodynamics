@@ -72,16 +72,24 @@ def evaluate(values: dict[str, float], target_rows, anchor_scale: float = 0.003)
         try:
             prediction = solve_activity_speciation(target.loading, target.T, target.P, target.x, values)
             prediction_x = prediction.x
-            success = bool(prediction.success)
+            solver_returned = prediction.solver_returned_success
+            accepted = prediction.accepted
+            rejection_reason = prediction.rejection_reason
             message = prediction.message
         except Exception as exc:
             prediction_x = np.full(len(SPECIES_INDEX), np.nan, dtype=float)
-            success = False
+            solver_returned = False
+            accepted = False
+            rejection_reason = "exception"
             message = f"{type(exc).__name__}: {str(exc).splitlines()[0]}"
         for species in species_names:
             observed = float(target.x[SPECIES_INDEX[species]])
             predicted = float(prediction_x[SPECIES_INDEX[species]]) if np.isfinite(prediction_x[SPECIES_INDEX[species]]) else np.nan
-            raw = math.log10(max(predicted, 1.0e-30) / max(observed, 1.0e-30)) if np.isfinite(predicted) else 8.0
+            raw = (
+                math.log10(max(predicted, 1.0e-30) / max(observed, 1.0e-30))
+                if accepted and np.isfinite(predicted)
+                else 8.0
+            )
             residuals.append(scale * raw)
             rows.append(
                 {
@@ -93,7 +101,9 @@ def evaluate(values: dict[str, float], target_rows, anchor_scale: float = 0.003)
                     "observed_mole_fraction": observed,
                     "model_mole_fraction": predicted,
                     "log10_model_over_data": raw,
-                    "success": bool(success),
+                    "solver_returned": solver_returned,
+                    "accepted": accepted,
+                    "rejection_reason": rejection_reason,
                     "message": message,
                 }
             )

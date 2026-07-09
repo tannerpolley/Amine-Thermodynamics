@@ -13,6 +13,7 @@ import pandas as pd
 
 from MEA.common.config import CANONICAL_MEA_WEIGHT_FRACTION, EPCSAFT_DATASET_ROOT, EPCSAFT_IONIC_ANALYSIS
 from MEA.common.reaction_catalog import activity_coefficient_map
+from MEA.common.solver_acceptance import evaluate_solver_acceptance
 from MEA.epcsaft_present_plots import _as_float, load_cheq_rows, load_vle_rows, reconcile_speciation_row
 from MEA.epcsaft_runtime import ADVANCED_BORN_USER_OPTIONS, DATASET_DIR, SPECIES, load_epcsaft, to_jsonable
 
@@ -153,7 +154,9 @@ class SpeciationTarget:
 
 @dataclass(frozen=True)
 class ReactiveSpeciationPrediction:
-    success: bool
+    solver_returned_success: bool
+    accepted: bool
+    rejection_reason: str
     x: np.ndarray
     activity_coefficients: dict[str, float]
     mass_balance_residuals: dict[str, float]
@@ -172,6 +175,18 @@ class BubblePressurePrediction:
     fugacity_residual_norm: float
     charge_residual: float
     message: str
+
+
+def reactive_bubble_acceptance(result: Any):
+    return evaluate_solver_acceptance(
+        solver_returned_success=bool(result.success),
+        message=str(result.message),
+        x=np.asarray([result.x_liq[species] for species in SPECIES], dtype=float),
+        mass_balance_residuals=dict(result.mass_balance_residuals),
+        charge_residual=float(result.charge_residual),
+        reaction_residuals=dict(result.named_reaction_residuals),
+        state_failure_count=int(result.state_failure_count),
+    )
 
 
 def reactive_electrolyte_options(initial_pressure: float):
@@ -469,16 +484,33 @@ def solve_activity_speciation(
             reaction_tolerance=float(reaction_tolerance),
         ),
     )
-    return ReactiveSpeciationPrediction(
-        success=bool(result.success),
-        x=np.asarray([result.x[species] for species in SPECIES], dtype=float),
-        activity_coefficients=dict(result.activity_coefficients),
-        mass_balance_residuals=dict(result.mass_balance_residuals),
+    x = np.asarray([result.x[species] for species in SPECIES], dtype=float)
+    mass_balance_residuals = dict(result.mass_balance_residuals)
+    reaction_residuals = {
+        reaction.name or f"R{idx + 1}": float(value)
+        for idx, (reaction, value) in enumerate(zip(active_reactions, result.reaction_residuals))
+    }
+    decision = evaluate_solver_acceptance(
+        solver_returned_success=bool(result.success),
+        message=str(result.message),
+        x=x,
+        mass_balance_residuals=mass_balance_residuals,
         charge_residual=float(result.charge_residual),
-        reaction_residuals={
-            reaction.name or f"R{idx + 1}": float(value)
-            for idx, (reaction, value) in enumerate(zip(active_reactions, result.reaction_residuals))
-        },
+        reaction_residuals=reaction_residuals,
+        state_failure_count=int(result.state_failure_count),
+        mass_balance_tolerance=float(mass_tolerance),
+        charge_tolerance=float(charge_tolerance),
+        reaction_tolerance=float(reaction_tolerance),
+    )
+    return ReactiveSpeciationPrediction(
+        solver_returned_success=bool(result.success),
+        accepted=decision.accepted,
+        rejection_reason=decision.rejection_reason,
+        x=x,
+        activity_coefficients=dict(result.activity_coefficients),
+        mass_balance_residuals=mass_balance_residuals,
+        charge_residual=float(result.charge_residual),
+        reaction_residuals=reaction_residuals,
         state_failure_count=int(result.state_failure_count),
         message=str(result.message),
     )

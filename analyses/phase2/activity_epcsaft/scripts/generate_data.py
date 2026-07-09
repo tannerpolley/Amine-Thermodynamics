@@ -353,7 +353,9 @@ def speciation_equilibrium_rows() -> list[dict[str, object]]:
             row["charge_residual"] = float(result.charge_residual)
             row["max_abs_reaction_residual"] = max(abs(float(value)) for value in result.reaction_residuals.values())
             row["state_failure_count"] = int(result.state_failure_count)
-            row["solver_success"] = bool(result.success)
+            row["solver_returned"] = result.solver_returned_success
+            row["solver_success"] = result.accepted
+            row["rejection_reason"] = result.rejection_reason
             row["message"] = result.message
         except Exception as exc:
             for species in SPECIATION_PLOT_SPECIES:
@@ -362,7 +364,9 @@ def speciation_equilibrium_rows() -> list[dict[str, object]]:
             row["charge_residual"] = ""
             row["max_abs_reaction_residual"] = ""
             row["state_failure_count"] = ""
+            row["solver_returned"] = False
             row["solver_success"] = False
+            row["rejection_reason"] = "exception"
             row["message"] = f"{type(exc).__name__}: {str(exc).splitlines()[0]}"
         rows.append(row)
     return rows
@@ -383,7 +387,9 @@ def speciation_activity_curve_rows() -> tuple[list[dict[str, object]], list[dict
                 "temperature_C": float(temperature_C),
                 "CO2_loading": float(loading),
                 "effective_CO2_loading": float(effective_loading),
+                "solver_returned": False,
                 "solver_success": False,
+                "rejection_reason": "",
                 "message": "",
             }
             try:
@@ -397,12 +403,14 @@ def speciation_activity_curve_rows() -> tuple[list[dict[str, object]], list[dict
                     reactions=phase2_reactions(temperature_K),
                     **phase2_speciation_kwargs(),
                 )
-                diagnostic["solver_success"] = bool(result.success)
+                diagnostic["solver_returned"] = result.solver_returned_success
+                diagnostic["solver_success"] = result.accepted
+                diagnostic["rejection_reason"] = result.rejection_reason
                 diagnostic["message"] = result.message
                 diagnostic["charge_residual"] = float(result.charge_residual)
                 diagnostic["max_abs_reaction_residual"] = max(abs(float(value)) for value in result.reaction_residuals.values())
                 diagnostic["state_failure_count"] = int(result.state_failure_count)
-                if result.success:
+                if result.accepted:
                     previous_x = result.x
                     values = _species_values(result.x)
                     for species in SPECIATION_PLOT_SPECIES:
@@ -419,6 +427,7 @@ def speciation_activity_curve_rows() -> tuple[list[dict[str, object]], list[dict
                         )
             except Exception as exc:
                 previous_x = None
+                diagnostic["rejection_reason"] = "exception"
                 diagnostic["message"] = f"{type(exc).__name__}: {str(exc).splitlines()[0]}"
             diagnostic_rows.append(diagnostic)
     return curve_rows, diagnostic_rows

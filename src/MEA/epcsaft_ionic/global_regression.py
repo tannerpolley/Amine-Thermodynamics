@@ -24,6 +24,7 @@ from MEA.epcsaft_ionic.model import (
     load_epcsaft,
     load_speciation_targets,
     load_vle_targets,
+    reactive_bubble_acceptance,
     solve_activity_speciation,
     solve_reactive_bubble_targets,
     write_csv,
@@ -140,14 +141,19 @@ def pressure_rows(values: dict[str, float], targets: list[VLETarget]) -> pd.Data
             predicted_pa = float(result.partial_pressures.get("CO2", np.nan))
             if not np.isfinite(predicted_pa) or predicted_pa <= 0.0:
                 raise RuntimeError(result.message)
+            decision = reactive_bubble_acceptance(result)
             row["model_pressure_Pa"] = predicted_pa
             row["log10_model_over_data"] = math.log10(max(predicted_pa, 1.0e-30) / max(row["observed_pressure_Pa"], 1.0e-30))
-            row["success"] = bool(result.success)
+            row["solver_returned"] = bool(result.success)
+            row["accepted"] = decision.accepted
+            row["rejection_reason"] = decision.rejection_reason
             row["message"] = result.message
         except Exception as exc:
             row["model_pressure_Pa"] = np.nan
             row["log10_model_over_data"] = np.nan
-            row["success"] = False
+            row["solver_returned"] = False
+            row["accepted"] = False
+            row["rejection_reason"] = "exception"
             row["message"] = f"{type(exc).__name__}: {str(exc).splitlines()[0]}"
         rows.append(row)
     return pd.DataFrame(rows)
@@ -160,11 +166,15 @@ def speciation_rows(values: dict[str, float], targets: list[SpeciationTarget], s
         try:
             prediction = solve_activity_speciation(target.loading, target.T, target.P, target.x, values, FIT_DATASET_DIR)
             prediction_x = prediction.x
-            success = bool(prediction.success)
+            solver_returned = prediction.solver_returned_success
+            accepted = prediction.accepted
+            rejection_reason = prediction.rejection_reason
             message = prediction.message
         except Exception as exc:
             prediction_x = np.full(len(SPECIES_INDEX), np.nan, dtype=float)
-            success = False
+            solver_returned = False
+            accepted = False
+            rejection_reason = "exception"
             message = f"{type(exc).__name__}: {str(exc).splitlines()[0]}"
         for species in species_tuple:
             observed = float(target.x[SPECIES_INDEX[species]])
@@ -181,14 +191,16 @@ def speciation_rows(values: dict[str, float], targets: list[SpeciationTarget], s
                     "log10_model_over_data": (
                         math.log10(max(predicted, 1.0e-30) / max(observed, 1.0e-30)) if np.isfinite(predicted) else np.nan
                     ),
-                    "success": bool(success),
+                    "solver_returned": solver_returned,
+                    "accepted": accepted,
+                    "rejection_reason": rejection_reason,
                     "message": message,
                 }
             )
     return pd.DataFrame(rows)
 
 
-def _success_value(value: object) -> bool:
+def _bool_value(value: object) -> bool:
     return str(value).strip().lower() in {"true", "1", "yes"}
 
 
@@ -204,7 +216,9 @@ def cached_pressure_rows() -> pd.DataFrame:
             "observed_pressure_Pa": frame["observed_CO2_pressure_kPa"].astype(float) * 1000.0,
             "model_pressure_Pa": frame["raw_pred_CO2_pressure_kPa"].astype(float) * 1000.0,
             "log10_model_over_data": frame["raw_log10_model_over_data"].astype(float),
-            "success": frame["success"].map(_success_value),
+            "solver_returned": frame["solver_returned"].map(_bool_value),
+            "accepted": frame["accepted"].map(_bool_value),
+            "rejection_reason": frame["rejection_reason"].astype(str),
             "message": frame["message"].astype(str),
         }
     )
@@ -224,7 +238,9 @@ def cached_speciation_rows(species_names: Iterable[str] = GLOBAL_SPECIATION_SPEC
                 "observed_mole_fraction": row[f"target_x_{species}"],
                 "model_mole_fraction": row[f"model_x_{species}"],
                 "log10_model_over_data": row[f"log10_model_over_target_{species}"],
-                "success": _success_value(row["success"]),
+                "solver_returned": _bool_value(row["solver_returned"]),
+                "accepted": _bool_value(row["accepted"]),
+                "rejection_reason": str(row["rejection_reason"]),
                 "message": str(row["message"]),
             }
             for row in frame.to_dict("records")
@@ -233,11 +249,12 @@ def cached_speciation_rows(species_names: Iterable[str] = GLOBAL_SPECIATION_SPEC
 
 
 def pressure_metrics(frame: pd.DataFrame) -> dict[str, Any]:
-    finite = frame[np.isfinite(frame["log10_model_over_data"].astype(float))] if not frame.empty else frame
+    accepted = frame[frame["accepted"].astype(bool)] if not frame.empty else frame
+    finite = accepted[np.isfinite(accepted["log10_model_over_data"].astype(float))] if not accepted.empty else accepted
     residual = finite["log10_model_over_data"].astype(float).to_numpy() if not finite.empty else np.asarray([])
     return {
         "row_count": int(frame["row_id"].nunique()) if not frame.empty else 0,
-        "success_count": int((frame["success"] == True).sum()) if not frame.empty else 0,
+        "accepted_count": int(frame["accepted"].astype(bool).sum()) if not frame.empty else 0,
         "median_abs_log10": float(np.median(np.abs(residual))) if residual.size else None,
         "max_abs_log10": float(np.max(np.abs(residual))) if residual.size else None,
         "rmse_log10": float(np.sqrt(np.mean(residual * residual))) if residual.size else None,
@@ -245,7 +262,8 @@ def pressure_metrics(frame: pd.DataFrame) -> dict[str, Any]:
 
 
 def speciation_metrics(frame: pd.DataFrame) -> dict[str, Any]:
-    finite = frame[np.isfinite(frame["log10_model_over_data"].astype(float))] if not frame.empty else frame
+    accepted = frame[frame["accepted"].astype(bool)] if not frame.empty else frame
+    finite = accepted[np.isfinite(accepted["log10_model_over_data"].astype(float))] if not accepted.empty else accepted
     output: dict[str, Any] = {
         "row_count": int(frame["row_id"].nunique()) if not frame.empty else 0,
         "residual_count": int(len(frame)),
@@ -276,10 +294,12 @@ def objective_residuals(
     residuals: list[float] = []
     pressure_scale = math.sqrt(max(float(pressure_weight), 0.0) / max(len(pressure_frame), 1))
     speciation_scale = math.sqrt(max(float(speciation_weight), 0.0) / max(len(speciation_frame), 1))
-    for raw in pressure_frame["log10_model_over_data"].astype(float).to_numpy():
-        residuals.append(pressure_scale * (float(raw) if np.isfinite(raw) else 8.0))
-    for raw in speciation_frame["log10_model_over_data"].astype(float).to_numpy():
-        residuals.append(speciation_scale * (float(raw) if np.isfinite(raw) else 8.0))
+    for row in pressure_frame.to_dict("records"):
+        raw = float(row["log10_model_over_data"])
+        residuals.append(pressure_scale * (raw if bool(row["accepted"]) and np.isfinite(raw) else 8.0))
+    for row in speciation_frame.to_dict("records"):
+        raw = float(row["log10_model_over_data"])
+        residuals.append(speciation_scale * (raw if bool(row["accepted"]) and np.isfinite(raw) else 8.0))
     for name in GLOBAL_FIT_NAMES:
         seed = DEFAULT_INITIAL_GUESS[name]
         residuals.append(regularization_scale * (float(values[name]) - seed) / max(abs(seed), 1.0))

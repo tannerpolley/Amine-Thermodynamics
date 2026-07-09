@@ -37,11 +37,9 @@ from MEA.epcsaft_ionic.model import (
     SPECIES_INDEX,
     load_speciation_targets,
     load_vle_targets,
-    predict_bubble_pressure,
-    predict_co2_pressure_kPa,
+    reactive_bubble_acceptance,
     solve_reactive_bubble_targets,
     solve_activity_speciation,
-    theta_to_map,
     write_csv,
     write_json,
 )
@@ -62,10 +60,10 @@ def _load_fitted_values() -> dict[str, float]:
     return values
 
 
-def _success_mask(frame: pd.DataFrame) -> pd.Series:
-    if "success" not in frame:
+def _accepted_mask(frame: pd.DataFrame) -> pd.Series:
+    if "accepted" not in frame:
         return pd.Series(False, index=frame.index)
-    return frame["success"].astype(str).str.lower().isin({"true", "1", "yes"})
+    return frame["accepted"].astype(str).str.lower().isin({"true", "1", "yes"})
 
 
 def pressure_rows(values: dict[str, float]) -> list[dict[str, object]]:
@@ -93,18 +91,22 @@ def pressure_rows(values: dict[str, float]) -> list[dict[str, object]]:
             row["chemical_charge_residual"] = result.charge_residual
             row["chemical_max_reaction_residual"] = max((abs(value) for value in result.named_reaction_residuals.values()), default=np.nan)
             row["penalty_residual_count"] = len(result.penalty_residuals)
-            row["diagnostic_success"] = bool(result.success)
+            decision = reactive_bubble_acceptance(result)
             for species in SPECIES:
                 x_value = result.x_liq.get(species, np.nan)
                 row[f"model_x_{species}"] = float(x_value)
             for species, y_value in result.y_vap.items():
                 row[f"y_{species}"] = float(y_value)
-            row["success"] = bool(result.success)
+            row["solver_returned"] = bool(result.success)
+            row["accepted"] = decision.accepted
+            row["rejection_reason"] = decision.rejection_reason
             row["message"] = result.message
         except Exception as exc:
             row["raw_pred_CO2_pressure_kPa"] = np.nan
             row["raw_log10_model_over_data"] = np.nan
-            row["success"] = False
+            row["solver_returned"] = False
+            row["accepted"] = False
+            row["rejection_reason"] = "exception"
             row["message"] = f"{type(exc).__name__}: {str(exc).splitlines()[0]}"
         rows.append(row)
     return rows
@@ -134,12 +136,16 @@ def speciation_rows(values: dict[str, float]) -> list[dict[str, object]]:
                 row[f"mass_balance_{name}"] = float(value)
             row["charge_residual"] = chemistry.charge_residual
             row["state_failure_count"] = chemistry.state_failure_count
-            row["success"] = bool(chemistry.success)
-            row["model_role"] = "activity_equilibrium" if chemistry.success else "failed_best_effort_diagnostic"
+            row["solver_returned"] = chemistry.solver_returned_success
+            row["accepted"] = chemistry.accepted
+            row["rejection_reason"] = chemistry.rejection_reason
+            row["model_role"] = "activity_equilibrium" if chemistry.accepted else "rejected_best_effort_diagnostic"
             row["message"] = chemistry.message
         except Exception as exc:
-            row["success"] = False
-            row["model_role"] = "failed_exception"
+            row["solver_returned"] = False
+            row["accepted"] = False
+            row["rejection_reason"] = "exception"
+            row["model_role"] = "rejected_exception"
             row["message"] = f"{type(exc).__name__}: {str(exc).splitlines()[0]}"
         rows.append(row)
     return rows
@@ -172,7 +178,7 @@ def plot_pressure(rows: list[dict[str, object]]):
                 label=f"{temperature_C} C literature data",
             )
         subset = frame[np.isclose(frame["temperature_C"].astype(float), float(temperature_C))].sort_values("CO2_loading")
-        ok = subset[subset["success"] == True]
+        ok = subset[subset["accepted"].astype(bool)]
         if not ok.empty:
             med = float(np.nanmedian(np.abs(ok["raw_log10_model_over_data"].astype(float))))
             ax.plot(
@@ -214,7 +220,7 @@ def plot_speciation(rows: list[dict[str, object]]):
         subset["target_x_MEA + MEAH+"] = subset["target_x_MEA"].astype(float) + subset["target_x_MEAH+"].astype(float)
     if {"model_x_MEA", "model_x_MEAH+"}.issubset(subset.columns):
         subset["model_x_MEA + MEAH+"] = subset["model_x_MEA"].astype(float) + subset["model_x_MEAH+"].astype(float)
-    solver_success = _success_mask(subset)
+    accepted = _accepted_mask(subset)
 
     for species in ("CO2", "MEA", "H2O", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-", "MEA + MEAH+"):
         color = species_color(species)
@@ -237,14 +243,14 @@ def plot_speciation(rows: list[dict[str, object]]):
                         "species": species,
                         "CO2_loading": row["CO2_loading"],
                         "mole_fraction": row[target_column],
-                        "solver_success": "",
+                        "accepted": "",
                         "message": "",
                     }
                 )
         if model_column in subset:
             model = subset[["CO2_loading", model_column, "message"]].copy()
-            model["solver_success"] = solver_success
-            model.loc[~model["solver_success"], model_column] = np.nan
+            model["accepted"] = accepted
+            model.loc[~model["accepted"], model_column] = np.nan
             ax.semilogy(
                 model["CO2_loading"],
                 model[model_column],
@@ -260,7 +266,7 @@ def plot_speciation(rows: list[dict[str, object]]):
                         "species": species,
                         "CO2_loading": row["CO2_loading"],
                         "mole_fraction": row[model_column],
-                        "solver_success": bool(row["solver_success"]),
+                        "accepted": bool(row["accepted"]),
                         "message": row.get("message", ""),
                     }
                 )
@@ -290,7 +296,8 @@ def main() -> int:
     speciation_plot = plot_speciation(s_rows)
     p_frame = pd.DataFrame(p_rows)
     s_frame = pd.DataFrame(s_rows)
-    ok_pressure = p_frame[p_frame["success"] == True]
+    ok_pressure = p_frame[p_frame["accepted"].astype(bool)]
+    ok_speciation = s_frame[s_frame["accepted"].astype(bool)]
     reaction_cols = [name for name in s_frame.columns if name.startswith("reaction_")]
     speciation_cols = [name for name in s_frame.columns if name.startswith("log10_model_over_target_")]
     summary = {
@@ -300,19 +307,23 @@ def main() -> int:
         "pressure_plot": str(pressure_plot),
         "speciation_plot": str(speciation_plot),
         "pressure_method": "ePC-SAFT reactive speciation plus electrolyte bubble pressure",
-        "pressure_success_count": int((p_frame["success"] == True).sum()),
+        "pressure_accepted_count": int(p_frame["accepted"].astype(bool).sum()),
         "pressure_count": int(len(p_frame)),
         "raw_pressure_median_abs_log10_error": float(np.nanmedian(np.abs(ok_pressure["raw_log10_model_over_data"].astype(float)))) if not ok_pressure.empty else None,
         "raw_pressure_max_abs_log10_error": float(np.nanmax(np.abs(ok_pressure["raw_log10_model_over_data"].astype(float)))) if not ok_pressure.empty else None,
-        "speciation_success_count": int((s_frame["success"] == True).sum()),
+        "speciation_accepted_count": int(s_frame["accepted"].astype(bool).sum()),
         "speciation_count": int(len(s_frame)),
         "reaction_median_abs_ln_residuals": {
-            col: float(np.nanmedian(np.abs(s_frame[col].astype(float)))) for col in reaction_cols if col in s_frame
+            col: float(np.nanmedian(np.abs(ok_speciation[col].astype(float))))
+            for col in reaction_cols
+            if col in ok_speciation
         },
         "speciation_median_abs_log10_model_over_target": {
-            col.replace("log10_model_over_target_", ""): float(np.nanmedian(np.abs(s_frame[col].astype(float))))
+            col.replace("log10_model_over_target_", ""): float(
+                np.nanmedian(np.abs(ok_speciation[col].astype(float)))
+            )
             for col in speciation_cols
-            if col in s_frame
+            if col in ok_speciation
         },
     }
     write_json(SUMMARY_OUT_DIR / "ionic_evaluation_summary.json", summary)
@@ -321,8 +332,8 @@ def main() -> int:
     print(f"Ionic pressure plot: {pressure_plot}")
     print(f"Ionic speciation plot: {speciation_plot}")
     print(f"Raw pressure median |log10(model/data)|: {summary['raw_pressure_median_abs_log10_error']}")
-    print(f"Pressure successes: {summary['pressure_success_count']}/{summary['pressure_count']}")
-    print(f"Speciation activity successes: {summary['speciation_success_count']}/{summary['speciation_count']}")
+    print(f"Pressure accepted: {summary['pressure_accepted_count']}/{summary['pressure_count']}")
+    print(f"Speciation activity accepted: {summary['speciation_accepted_count']}/{summary['speciation_count']}")
     return 0 if summary["pressure_success_count"] > 0 and summary["speciation_success_count"] > 0 else 1
 
 
