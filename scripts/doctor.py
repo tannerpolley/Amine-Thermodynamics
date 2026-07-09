@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import importlib.util
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +23,8 @@ def main() -> int:
         check("reference ePC-SAFT datasets", (REFERENCE / "epcsaft_datasets").exists(), str(REFERENCE / "epcsaft_datasets")),
         check("analyses root", ANALYSES.exists(), str(ANALYSES)),
         check("MEA import spec", importlib.util.find_spec("MEA") is not None),
+        check("locked PC-SAFT import spec", importlib.util.find_spec("pcsaft") is not None),
+        check("locked ePC-SAFT import spec", importlib.util.find_spec("epcsaft") is not None),
     ]
     return 0 if all(checks) else 1
 

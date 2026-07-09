@@ -7,19 +7,16 @@ requires-python = ">=3.13,<3.14"
 dependencies = [
     "epcsaft",
     "matplotlib>=3.10",
-    "numdifftools>=0.9",
     "numpy>=2.0",
     "pandas>=2.2",
-    "pillow>=11",
-    "plotly>=6",
+    "pcsaft",
     "scipy>=1.15",
-    "streamlit>=1.45",
-    "sympy>=1.13",
 ]
 
 [dependency-groups]
 test = [
     "pytest>=8.0",
+    "ruff>=0.15",
 ]
 dev = [
     { include-group = "test" },
@@ -38,3 +35,23 @@ where = ["src"]
 
 [tool.uv.sources]
 epcsaft = { git = "https://github.com/tannerpolley/ePC-SAFT.git", rev = "9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785" }
+pcsaft = { git = "https://github.com/tannerpolley/PC-SAFT.git", rev = "eec3e7e4999c928e5015d2342b974c59a75d01d6" }
+
+[tool.uv.extra-build-dependencies]
+pcsaft = ["Cython>=3.0", "numpy>=2.0"]
+
+[tool.ruff]
+target-version = "py313"
+src = ["src", "scripts", "analyses", "tests"]
+
+[tool.ruff.lint.per-file-ignores]
+"analyses/phase1/neutral_epcsaft_parity/scripts/generate_data.py" = ["E402"]
+"analyses/phase1/neutral_epcsaft_parity/scripts/render_figures.py" = ["E402"]
+"analyses/phase1/six_species_baseline/scripts/generate_data.py" = ["E402"]
+"analyses/phase1/six_species_baseline/scripts/render_figures.py" = ["E402"]
+"analyses/phase1/smith_missen_baseline/scripts/generate_data.py" = ["E402"]
+"analyses/phase1/smith_missen_baseline/scripts/render_figures.py" = ["E402"]
+"analyses/phase3/ionic_epcsaft_regression/scripts/compute_parameter_sensitivity.py" = ["E402"]
+"analyses/phase3/ionic_epcsaft_regression/scripts/derive_oh_born_parameter.py" = ["E402"]
+"analyses/phase3/ionic_epcsaft_regression/scripts/fit_global_pressure_speciation.py" = ["E402"]
+"analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py" = ["E402"]

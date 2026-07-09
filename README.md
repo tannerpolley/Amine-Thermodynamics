@@ -5,7 +5,8 @@ MEA-CO2-H2O thermodynamics workflows organized around importable package code in
 ## Canonical Commands
 
 ```bash
-uv sync
+uv sync --locked --group test
+uv run ruff check src scripts analyses tests
 uv run python scripts/doctor.py
 uv run python scripts/validate_project.py quick
 uv run python scripts/validate_project.py confidence
@@ -13,9 +14,13 @@ uv run python scripts/render_all_plots.py
 uv run python scripts/generate_all_analysis_data.py
 uv run python analyses/<category>/<analysis_id>/scripts/generate_data.py
 uv run python analyses/<category>/<analysis_id>/scripts/render_figures.py
+bash scripts/build_manuscript.sh
+uv run python scripts/check_manuscript_freshness.py
 ```
 
-`scripts/render_all_plots.py` is the single figure-regeneration command. It only calls analysis-local `render_figures.py` scripts, which read already generated CSV inputs and write curated plot snapshots plus PNG/SVG outputs. `scripts/generate_all_analysis_data.py` refreshes processed CSV/JSON data tables without rendering figures; expensive ionic regeneration is opt-in with `--include-ionic-full` and `--include-expensive`.
+`scripts/render_all_plots.py` is the single figure-regeneration command. It only calls analysis-local `render_figures.py` scripts, which read already generated result tables and write curated plot snapshots plus PNG/SVG/PDF outputs. `scripts/generate_all_analysis_data.py` refreshes canonical CSV/JSON result tables without rendering figures; expensive ionic regeneration is opt-in with `--include-ionic-full` and `--include-expensive`.
+
+The locked runtime includes separate immutable Git revisions for the current `epcsaft` implementation and the legacy `pcsaft.flashTQ` baseline. The legacy dependency declares its omitted Cython/NumPy build requirements through `tool.uv.extra-build-dependencies`, so a clean `uv sync --locked --group test` builds the same extension without a sibling checkout.
 
 Package imports remain `import MEA...`; source lives under `src/MEA`.
 Old file-path commands such as `uv run python MEA/run_plot_exports.py` are intentionally not preserved.
@@ -52,12 +57,14 @@ Each analysis owns its canonical generated tables under `results/`. Figure outpu
 
 The article draft source lives under `docs/latex/`. It is a normal folder in this repo, not a submodule. Set `MEA_OVERLEAF_MIRROR` to the absolute path of the independent Overleaf-connected mirror checkout.
 
-Build the local manuscript with:
+Build and hash-verify the local manuscript with:
 
 ```bash
-cd docs/latex
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+bash scripts/build_manuscript.sh
+uv run python scripts/check_manuscript_freshness.py
 ```
+
+The build is written only to `docs/latex/builds/`. The tracked `manuscript_references.bib`, `project_sources.bib`, and `official_sources.bib` files make citations reproducible in a clean clone; a full personal-library `references.bib` export remains ignored.
 
 Sync the local manuscript source back to the Overleaf mirror with:
 

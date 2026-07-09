@@ -7,8 +7,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PY = sys.executable
+RUFF = str(Path(PY).with_name("ruff"))
 
 QUICK_COMMANDS = [
+    [RUFF, "check", "src", "scripts", "analyses", "tests"],
     [PY, "scripts/doctor.py"],
     [PY, "scripts/check_no_local_paths.py"],
     [PY, "-m", "compileall", "-x", r"results[\\/]+runs", "src", "tests", "scripts", "analyses"],

@@ -43,11 +43,11 @@ if str(REPO_ROOT) not in sys.path:
 try:
     from pcsaft import flashTQ
 
-    PCSAFT_SOURCE = "sibling/local pcsaft package"
+    PCSAFT_SOURCE = "locked pcsaft Git dependency"
 except ImportError as exc:
     raise RuntimeError(
-        "The legacy Jou pressure baseline requires the pinned ePC-SAFT dependency. Run `uv sync`, then "
-        "`uv run python analyses/phase1/six_species_baseline/scripts/render_figures.py`."
+        "The legacy Jou pressure baseline requires the locked pcsaft dependency. Run `uv sync --locked`, then "
+        "`uv run python analyses/phase1/six_species_baseline/scripts/generate_data.py`."
     ) from exc
 
 
