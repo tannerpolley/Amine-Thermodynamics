@@ -11,6 +11,11 @@ import numpy as np
 from MEA.common.analysis_io import read_csv_rows as read_csv
 from MEA.common.analysis_io import remove_matching_files, write_csv_rows as write_csv
 from MEA.common.analysis_io import write_json_file as write_json
+from MEA.common.reaction_catalog import (
+    activity_coefficient_map,
+    activity_source_map,
+    reaction_catalog_sha256,
+)
 from MEA.epcsaft_ionic.model import (
     SPECIES_INDEX,
     load_speciation_targets,
@@ -59,13 +64,6 @@ CONSTRAINTS = {
     },
 }
 SPECIATION_PLOT_SPECIES = tuple(species for species in SPECIES if species != "H2O") + ("MEA + MEAH+",)
-REACTION_NAME_BY_ID = {
-    "R1": "R1_water_autoionization",
-    "R2": "R2_CO2_to_HCO3",
-    "R3": "R3_HCO3_to_CO3",
-    "R4": "R4_MEACOO_hydrolysis",
-    "R5": "R5_MEAH_dissociation",
-}
 CURVE_LOADINGS = np.linspace(0.0, 0.8, 161)
 CURVE_MIN_LOADING_BY_TEMPERATURE_C = {
     20.0: 0.02,
@@ -177,34 +175,11 @@ def epcsaft_commit_id() -> str:
     return str(vcs.get("commit_id", "unknown"))
 
 
-def phase2_reaction_coefficients(activity_candidates: list[dict[str, str]]) -> dict[str, tuple[float, float, float, float]]:
-    coefficients: dict[str, tuple[float, float, float, float]] = {}
-    for row in activity_candidates:
-        reaction_name = REACTION_NAME_BY_ID[row["reaction_id"]]
-        coefficients[reaction_name] = (
-            float(row["c1"]),
-            float(row["c2"]),
-            float(row["c3"]),
-            float(row["c4"]),
-        )
-    missing = [REACTION_NAME_BY_ID[item] for item in ("R1", "R2", "R3", "R4", "R5") if REACTION_NAME_BY_ID[item] not in coefficients]
-    if missing:
-        raise RuntimeError(f"Missing Phase 2 reaction coefficient rows: {missing}")
-    return coefficients
-
-
-def phase2_source_by_reaction(activity_candidates: list[dict[str, str]]) -> dict[str, str]:
-    return {
-        REACTION_NAME_BY_ID[row["reaction_id"]]: f"{row['candidate_source']}|{row['source_files']}"
-        for row in activity_candidates
-    }
-
-
-def phase2_reactions(T: float, activity_candidates: list[dict[str, str]]):
+def phase2_reactions(T: float):
     return reaction_definitions_from_coefficients(
         T,
-        phase2_reaction_coefficients(activity_candidates),
-        source_by_name=phase2_source_by_reaction(activity_candidates),
+        activity_coefficient_map(),
+        source_by_name=activity_source_map(),
         standard_state="mole_fraction_activity",
     )
 
@@ -335,7 +310,7 @@ def _species_values(values: np.ndarray) -> dict[str, float]:
     return by_species
 
 
-def speciation_equilibrium_rows(activity_candidates: list[dict[str, str]]) -> list[dict[str, object]]:
+def speciation_equilibrium_rows() -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for target in load_speciation_targets(None):
         row: dict[str, object] = {
@@ -359,7 +334,7 @@ def speciation_equilibrium_rows(activity_candidates: list[dict[str, str]]) -> li
                 target.x,
                 {},
                 PARAMETER_DATASET,
-                reactions=phase2_reactions(target.T, activity_candidates),
+                reactions=phase2_reactions(target.T),
                 **phase2_speciation_kwargs(),
             )
             model_values = _species_values(result.x)
@@ -393,7 +368,7 @@ def speciation_equilibrium_rows(activity_candidates: list[dict[str, str]]) -> li
     return rows
 
 
-def speciation_activity_curve_rows(activity_candidates: list[dict[str, str]]) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+def speciation_activity_curve_rows() -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     reference_targets = load_speciation_targets(None)
     temperatures_C = sorted({round(float(target.T - 273.15), 8) for target in reference_targets})
     curve_rows: list[dict[str, object]] = []
@@ -419,7 +394,7 @@ def speciation_activity_curve_rows(activity_candidates: list[dict[str, str]]) ->
                     initial_x,
                     {},
                     PARAMETER_DATASET,
-                    reactions=phase2_reactions(temperature_K, activity_candidates),
+                    reactions=phase2_reactions(temperature_K),
                     **phase2_speciation_kwargs(),
                 )
                 diagnostic["solver_success"] = bool(result.success)
@@ -449,10 +424,10 @@ def speciation_activity_curve_rows(activity_candidates: list[dict[str, str]]) ->
     return curve_rows, diagnostic_rows
 
 
-def pressure_equilibrium_rows(activity_candidates: list[dict[str, str]]) -> list[dict[str, object]]:
+def pressure_equilibrium_rows() -> list[dict[str, object]]:
     targets = load_vle_targets(None)
     reactions_by_temperature = {
-        float(round(target.T, 8)): phase2_reactions(target.T, activity_candidates)
+        float(round(target.T, 8)): phase2_reactions(target.T)
         for target in targets
     }
     results = solve_reactive_bubble_targets(targets, {}, PARAMETER_DATASET, reactions_by_temperature=reactions_by_temperature)
@@ -941,6 +916,7 @@ def problem_definition(
     return {
         "analysis": "activity_epcsaft",
         "status": "problem_definition_generated",
+        "reaction_catalog_sha256": reaction_catalog_sha256(),
         "species": species,
         "charges": CHARGES,
         "volatile_species": list(VOLATILE_SPECIES),
@@ -1054,9 +1030,9 @@ def main() -> int:
     problem = problem_definition(reactions, activity_candidates, species)
     reference_points = speciation_reference_points()
     target_roles = speciation_target_role_rows()
-    speciation_equilibrium = speciation_equilibrium_rows(activity_candidates)
-    speciation_curves, solver_diagnostics = speciation_activity_curve_rows(activity_candidates)
-    pressure_equilibrium = pressure_equilibrium_rows(activity_candidates)
+    speciation_equilibrium = speciation_equilibrium_rows()
+    speciation_curves, solver_diagnostics = speciation_activity_curve_rows()
+    pressure_equilibrium = pressure_equilibrium_rows()
     pressure_speciation_parity = [
         {**row, "parity_family": "speciation"} for row in speciation_equilibrium
     ] + [

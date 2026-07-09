@@ -216,7 +216,7 @@ The training receipt lists only training source IDs; a separate evaluation comma
 
 **Evidence (verified)**
 
-- `scripts/check_no_local_paths.py:17-22` matches literal `C:\Users\` text but not JSON-escaped `C:\\Users\\` sequences.
+- `scripts/check_no_local_paths.py:17-22` matches an unescaped drive-letter user-home path but not the equivalent JSON-escaped sequence.
 - Tracked Phase 3 JSON files contain stale absolute paths, including `results/summary/ionic_evaluation_summary.json:2-6`, `results/parameter_regression/ionic_parameter_regression_summary.json:2,148-150`, and `results/ion_parameter_regression/ion_parameter_fit_summary.json:159-168`.
 - Some stored paths point to obsolete pre-category analysis layouts or a disposable Codex worktree.
 - The generating code serializes absolute `Path` values in `src/MEA/epcsaft_ionic/plot_results.py:296-301` and `src/MEA/epcsaft_ionic/regress_parameters.py:155-169`.

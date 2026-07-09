@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 
 from MEA.common.config import CANONICAL_MEA_WEIGHT_FRACTION, EPCSAFT_DATASET_ROOT, EPCSAFT_IONIC_ANALYSIS
+from MEA.common.reaction_catalog import activity_coefficient_map
 from MEA.epcsaft_present_plots import _as_float, load_cheq_rows, load_vle_rows, reconcile_speciation_row
 from MEA.epcsaft_runtime import ADVANCED_BORN_USER_OPTIONS, DATASET_DIR, SPECIES, load_epcsaft, to_jsonable
 
@@ -26,18 +27,9 @@ PARAMETER_CSV = FIT_DATASET_DIR / "pure" / "any_solvent.csv"
 K_IJ_CSV = FIT_DATASET_DIR / "mixed" / "binary_interaction" / "k_ij.csv"
 
 
-REACTION_CONSTANTS = {
-    "R1_water_autoionization": (132.899, -13445.9, -22.4773, 0.0),
-    "R2_CO2_to_HCO3": (231.465, -12092.1, -36.7816, 0.0),
-    "R3_HCO3_to_CO3": (216.049, -12431.0, -35.4891, 0.0),
-    "R4_MEACOO_hydrolysis": (-1.8652, -1543.3, 0.0, 0.0),
-    "R5_MEAH_dissociation": (2.1211, -8189.38, 0.0, -0.007484),
-}
-
-
 def equilibrium_log_constants(temperature_K: float) -> np.ndarray:
     """Return log equilibrium constants for the true-species MEA reactions."""
-    constants = np.array(list(REACTION_CONSTANTS.values()), dtype=float)
+    constants = np.array(list(activity_coefficient_map().values()), dtype=float)
     a, b, c, d = constants.T
     return a + b / temperature_K + c * np.log(temperature_K) + d * temperature_K
 
@@ -415,7 +407,7 @@ def reaction_definitions_from_coefficients(
 
 
 def reaction_definitions(T: float):
-    return reaction_definitions_from_coefficients(T, REACTION_CONSTANTS)
+    return reaction_definitions_from_coefficients(T, activity_coefficient_map())
 
 
 def apparent_totals(loading: float) -> dict[str, float]:
@@ -619,7 +611,8 @@ def solve_reactive_bubble_targets(
 def evaluate_values(values: dict[str, float], vle_targets: list[VLETarget], spec_targets: list[SpeciationTarget], dataset: Path = DATASET_DIR) -> tuple[np.ndarray, dict[str, Any]]:
     residuals: list[float] = []
     vle_raw: list[float] = []
-    reaction_raw: dict[str, list[float]] = {name: [] for name in REACTION_CONSTANTS}
+    reaction_names = tuple(activity_coefficient_map())
+    reaction_raw: dict[str, list[float]] = {name: [] for name in reaction_names}
     speciation_raw: dict[str, list[float]] = {name: [] for name in ("CO2", "MEA", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-")}
     failures: list[str] = []
 
@@ -644,7 +637,7 @@ def evaluate_values(values: dict[str, float], vle_targets: list[VLETarget], spec
             rxn = chemistry.reaction_residuals
         except Exception as exc:
             failures.append(f"{target.row_id}: {type(exc).__name__}: {str(exc).splitlines()[0]}")
-            rxn = {name: 20.0 for name in REACTION_CONSTANTS}
+            rxn = {name: 20.0 for name in reaction_names}
         for name, raw in rxn.items():
             reaction_raw[name].append(float(raw))
             residuals.append(reaction_scale * float(raw))
