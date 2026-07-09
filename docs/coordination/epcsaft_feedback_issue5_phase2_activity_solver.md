@@ -28,7 +28,7 @@ Pinned dependency:
 epcsaft @ git+https://github.com/tannerpolley/ePC-SAFT.git@e9510abae528016bd2513f12069fc0534b252bea
 ```
 
-`uv run python scripts\check_epcsaft_integration.py --mode final` passes, but a Phase 2 activity-coupled speciation smoke using the promoted Austgen constants fails before producing equilibrium rows:
+`uv run python scripts/check_epcsaft_integration.py --mode final` passes, but a Phase 2 activity-coupled speciation smoke using the promoted Austgen constants fails before producing equilibrium rows:
 
 ```text
 backend_unavailable: analytic/CppAD/implicit chemical-equilibrium residual jacobian is unavailable for activity- or concentration-coupled standard states.

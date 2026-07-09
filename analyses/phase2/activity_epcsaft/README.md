@@ -6,9 +6,9 @@ Current status: native ePC-SAFT activity-equilibrium model run succeeded with re
 
 ## Commands
 
-```powershell
-uv run python analyses\phase2\activity_epcsaft\scripts\generate_data.py
-uv run python analyses\phase2\activity_epcsaft\scripts\render_figures.py
+```bash
+uv run python analyses/phase2/activity_epcsaft/scripts/generate_data.py
+uv run python analyses/phase2/activity_epcsaft/scripts/render_figures.py
 ```
 
 Render commands read generated CSV tables from `data/processed/` and must not rerun solver calculations. Figure-owned source manifests live under `figures/speciation/input/`; Phase 2 writes reference target snapshots, native ePC-SAFT activity curves, plot-data CSVs, PNGs, SVGs, PDFs, and `.mpl.yaml` sidecars under `figures/speciation/output/`.

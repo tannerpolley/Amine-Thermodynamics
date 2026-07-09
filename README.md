@@ -4,21 +4,21 @@ MEA-CO2-H2O thermodynamics workflows organized around importable package code in
 
 ## Canonical Commands
 
-```powershell
+```bash
 uv sync
-uv run python scripts\doctor.py
-uv run python scripts\validate_project.py quick
-uv run python scripts\validate_project.py confidence
-uv run python scripts\render_all_plots.py
-uv run python scripts\generate_all_analysis_data.py
-uv run python analyses\<category>\<analysis_id>\scripts\generate_data.py
-uv run python analyses\<category>\<analysis_id>\scripts\render_figures.py
+uv run python scripts/doctor.py
+uv run python scripts/validate_project.py quick
+uv run python scripts/validate_project.py confidence
+uv run python scripts/render_all_plots.py
+uv run python scripts/generate_all_analysis_data.py
+uv run python analyses/<category>/<analysis_id>/scripts/generate_data.py
+uv run python analyses/<category>/<analysis_id>/scripts/render_figures.py
 ```
 
-`scripts\render_all_plots.py` is the single figure-regeneration command. It only calls analysis-local `render_figures.py` scripts, which read already generated CSV inputs and write curated plot snapshots plus PNG/SVG outputs. `scripts\generate_all_analysis_data.py` refreshes processed CSV/JSON data tables without rendering figures; expensive ionic regeneration is opt-in with `--include-ionic-full` and `--include-expensive`.
+`scripts/render_all_plots.py` is the single figure-regeneration command. It only calls analysis-local `render_figures.py` scripts, which read already generated CSV inputs and write curated plot snapshots plus PNG/SVG outputs. `scripts/generate_all_analysis_data.py` refreshes processed CSV/JSON data tables without rendering figures; expensive ionic regeneration is opt-in with `--include-ionic-full` and `--include-expensive`.
 
 Package imports remain `import MEA...`; source lives under `src/MEA`.
-Old file-path commands such as `uv run python MEA\run_plot_exports.py` are intentionally not preserved.
+Old file-path commands such as `uv run python MEA/run_plot_exports.py` are intentionally not preserved.
 
 ## Layout
 
@@ -50,21 +50,19 @@ Each analysis owns local `data/raw/`, `data/processed/`, and `results/<plot_set>
 
 ## Manuscript
 
-The article draft source lives under `docs/latex/`. It is a normal folder in this repo, not a submodule. The independent Overleaf-connected mirror checkout remains:
-
-`C:\Users\Tanner\Documents\git\LaTeX-Projects\MEA-Thermodynamics-LaTeX`
+The article draft source lives under `docs/latex/`. It is a normal folder in this repo, not a submodule. Set `MEA_OVERLEAF_MIRROR` to the absolute path of the independent Overleaf-connected mirror checkout.
 
 Build the local manuscript with:
 
-```powershell
-cd docs\latex
+```bash
+cd docs/latex
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
 Sync the local manuscript source back to the Overleaf mirror with:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File docs\latex\sync_to_overleaf_mirror.ps1
+```bash
+bash docs/latex/scripts/sync_to_overleaf_mirror.sh
 ```
 
 ## Model Boundaries

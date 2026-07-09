@@ -35,7 +35,7 @@ OUT_DIR = ANALYSIS_DIR / "results" / "pressure"
 
 def require(path: Path) -> Path:
     if not path.exists():
-        raise RuntimeError(f"Missing {path}. Run analyses\\neutral_epcsaft_parity\\scripts\\generate_data.py first.")
+        raise RuntimeError(f"Missing {path}. Run analyses/phase1/neutral_epcsaft_parity/scripts/generate_data.py first.")
     return path
 
 

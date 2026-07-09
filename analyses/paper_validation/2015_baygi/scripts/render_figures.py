@@ -28,7 +28,7 @@ def main() -> int:
     raw_path = PROCESSED_DIR / "baygi_neutral_epcsaft_pcsaft_pressure_parity_raw.csv"
     if not raw_path.exists():
         raise RuntimeError(
-            f"Missing {raw_path}. Run `uv run python analyses\\2015_baygi\\scripts\\generate_data.py` first."
+            f"Missing {raw_path}. Run `uv run python analyses/paper_validation/2015_baygi/scripts/generate_data.py` first."
         )
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     data = pd.read_csv(raw_path)

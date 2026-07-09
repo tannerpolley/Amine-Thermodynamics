@@ -258,9 +258,9 @@ If `git remote -v` verifies a repository URL, it may be included. If a release t
 Correct these notation problems:
 
 - `k_{ij}` = binary dispersion interaction parameter.
-- `\kappa^{A_iB_j}_{ij}` = association-volume parameter.
-- `\kappa` = inverse Debye length, if used in Debye--Huckel equations.
-- Do not define `\kappa_{ij}` as a binary interaction parameter.
+- `/kappa^{A_iB_j}_{ij}` = association-volume parameter.
+- `/kappa` = inverse Debye length, if used in Debye--Huckel equations.
+- Do not define `/kappa_{ij}` as a binary interaction parameter.
 
 ## 13. Validation checklist
 

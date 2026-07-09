@@ -3,27 +3,27 @@
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `chemical-engineer` for thermodynamic/regression judgment. Use `coordination` when handing findings to the upstream ePC-SAFT package agent. Use `superpowers:subagent-driven-development` or `superpowers:executing-plans` if implementing the MEA-side tasks from this document.
 
 **Goal:** Finish the full ionic MEA-CO2-H2O ePC-SAFT regression workflow so the manuscript can honestly claim a package-backed reactive electrolyte VLE/speciation calculation with fitted MEA-system parameters.
-
+uv run python - <<'PY'
 **Architecture:** MEA-Thermodynamics is the downstream consumer and evidence repo. `<upstream-ePC-SAFT>` is the upstream package repo that owns reusable solver, regression, and diagnostics capabilities. The MEA repo should keep domain data, target construction, artifacts, manuscript text, and acceptance checks; the ePC-SAFT package should own generic reactive-electrolyte equilibrium, sweeps, regression terms, and fast/robust solver internals.
-
-**Tech Stack:** Windows PowerShell, `uv`, Python 3.13, local `epcsaft` package, SciPy least squares, Matplotlib artifacts, LaTeX manuscript mirror.
-
+uv run python - <<'PY'
+**Tech Stack:** Bash, `uv`, Python 3.13, local `epcsaft` package, SciPy least squares, Matplotlib artifacts, LaTeX manuscript mirror.
+uv run python - <<'PY'
 ---
-
+uv run python - <<'PY'
 ## Repos And Roles
-
+uv run python - <<'PY'
 Run downstream commands from:
-
-```powershell
+uv run python - <<'PY'
+```bash
 cd <repo-root>
 ```
-
+uv run python - <<'PY'
 Use this upstream package path for package fixes:
-
-```powershell
+uv run python - <<'PY'
+```bash
 cd <upstream-ePC-SAFT>
 ```
-
+uv run python - <<'PY'
 Current downstream workflow:
 
 ```text
@@ -68,7 +68,7 @@ The package API surface is now present in the downstream environment:
 
 ```text
 epcsaft version: 1.5.0
-epcsaft package path: <repo-root>\.venv\Lib\site-packages\epcsaft\__init__.py
+epcsaft package path: <repo-root>/.venv/Lib/site-packages/epcsaft/__init__.py
 ReactiveSpeciationOptions: present
 ReactiveElectrolyteBubbleOptions: present
 solve_reactive_speciation: present
@@ -165,20 +165,20 @@ analyses/phase3/ionic_epcsaft_regression/results/summary/ionic_evaluation_summar
 Upstream package files to inspect first:
 
 ```text
-<upstream-ePC-SAFT>\src\epcsaft\equilibrium.py
-<upstream-ePC-SAFT>\src\epcsaft\regression.py
-<upstream-ePC-SAFT>\src\epcsaft\bindings.cpp
-<upstream-ePC-SAFT>\src\epcsaft\native\epcsaft_chemical_equilibrium.cpp
-<upstream-ePC-SAFT>\src\epcsaft\native\epcsaft_equilibrium.cpp
-<upstream-ePC-SAFT>\tests\api\test_reactive_speciation.py
-<upstream-ePC-SAFT>\docs\pages\electrolyte_vle_reactive_workflow.rst
+<upstream-ePC-SAFT>/src/epcsaft/equilibrium.py
+<upstream-ePC-SAFT>/src/epcsaft/regression.py
+<upstream-ePC-SAFT>/src/epcsaft/bindings.cpp
+<upstream-ePC-SAFT>/src/epcsaft/native/epcsaft_chemical_equilibrium.cpp
+<upstream-ePC-SAFT>/src/epcsaft/native/epcsaft_equilibrium.cpp
+<upstream-ePC-SAFT>/tests/api/test_reactive_speciation.py
+<upstream-ePC-SAFT>/docs/pages/electrolyte_vle_reactive_workflow.rst
 ```
 
 ## Exact Commands To Run
-
+uv run python - <<'PY'
 ### 1. Capture Downstream State
-
-```powershell
+uv run python - <<'PY'
+```bash
 cd <repo-root>
 git status --short
 git rev-parse --show-toplevel HEAD --abbrev-ref HEAD
@@ -193,13 +193,13 @@ The branch and commit are recorded in the final report.
 Uncommitted user work is not reverted.
 No destructive Git commands are used.
 ```
-
+uv run python - <<'PY'
 ### 2. Probe The Installed ePC-SAFT API
-
-```powershell
+uv run python - <<'PY'
+```bash
 uv run python -c "import epcsaft, epcsaft.regression as r; print(epcsaft.__version__); print(epcsaft.__file__); print(hasattr(epcsaft, 'solve_reactive_electrolyte_bubble_sweep')); print(hasattr(r, 'fit_mea_co2_h2o_electrolyte'))"
 ```
-
+uv run python - <<'PY'
 Check for:
 
 ```text
@@ -208,13 +208,13 @@ The package path is the expected installed package in the MEA virtual environmen
 The reactive electrolyte sweep API exists.
 The regression helper exists, but do not assume it solves the coupled MEA target until inspected.
 ```
-
+uv run python - <<'PY'
 ### 3. Run Cheap Structural Validation
-
-```powershell
-uv run python scripts\doctor.py
+uv run python - <<'PY'
+```bash
+uv run python scripts/doctor.py
 uv run python -m unittest tests.test_epcsaft_ionic -v
-uv run python scripts\validate_project.py quick
+uv run python scripts/validate_project.py quick
 ```
 
 Check for:
@@ -225,10 +225,10 @@ Ionic target vectors are length 9.
 The ionic pressure smoke is finite and positive.
 Quick validation exits 0.
 ```
-
+uv run python - <<'PY'
 ### 4. Read Current Metrics Before Changing Anything
-
-```powershell
+uv run python - <<'PY'
+```bash
 @'
 import json
 from pathlib import Path
@@ -238,7 +238,7 @@ paths = [
     Path("analyses/phase3/ionic_epcsaft_regression/results/summary/ionic_evaluation_summary.json"),
 ]
 for path in paths:
-    print(f"\n--- {path}")
+    print(f"/n--- {path}")
     data = json.loads(path.read_text())
     if "optimizer" in data:
         print("target_counts:", data["target_counts"])
@@ -268,13 +268,13 @@ The full-grid pressure/speciation evaluation is recorded before overwriting arti
 ```
 
 ### 5. Run A Regression Smoke Only When You Are Ready To Overwrite Parameter Artifacts
-
+uv run python - <<'PY'
 Current script writes directly to curated parameter-regression outputs. Do not run this casually if you need to preserve the current CSV.
-
-```powershell
+uv run python - <<'PY'
+```bash
 uv run python -m MEA.epcsaft_ionic.regress_parameters --max-vle-records 3 --max-speciation-records 3 --max-nfev 1 --verbose
 ```
-
+uv run python - <<'PY'
 Check for:
 
 ```text
@@ -285,19 +285,19 @@ The summary JSON records target counts, nfev, success, initial metrics, final me
 ```
 
 ### 6. Run A Candidate Regression
-
+uv run python - <<'PY'
 Start smaller than full-grid but larger than smoke:
-
-```powershell
+uv run python - <<'PY'
+```bash
 uv run python -m MEA.epcsaft_ionic.regress_parameters --max-vle-records 18 --max-speciation-records 18 --max-nfev 24 --verbose
 ```
-
+uv run python - <<'PY'
 If that is still slow, run this diagnostic size and report timing:
-
-```powershell
+uv run python - <<'PY'
+```bash
 uv run python -m MEA.epcsaft_ionic.regress_parameters --max-vle-records 6 --max-speciation-records 6 --max-nfev 6 --verbose
 ```
-
+uv run python - <<'PY'
 Check for:
 
 ```text
@@ -308,19 +308,19 @@ vle_median_abs_log10_error lower than initial value.
 failure_count remains 0 or every failure has a compact diagnostic and fixed residual penalty.
 No fitted parameter silently hits a bound without being called out.
 ```
-
+uv run python - <<'PY'
 ### 7. Regenerate Ionic Figures And Full-Grid Evaluation
-
-```powershell
-uv run python analyses\phase3\ionic_epcsaft_regression\scripts\render_figures.py
+uv run python - <<'PY'
+```bash
+uv run python analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py
 ```
-
+uv run python - <<'PY'
 Equivalent module call:
-
-```powershell
+uv run python - <<'PY'
+```bash
 uv run python -m MEA.epcsaft_ionic.plot_results
 ```
-
+uv run python - <<'PY'
 Check for:
 
 ```text
@@ -331,13 +331,13 @@ PNG, SVG, and PDF figures are regenerated.
 pressure_success_count equals pressure_count.
 speciation_success_count equals speciation_count.
 ```
-
+uv run python - <<'PY'
 ### 8. Run Full Project Confidence Check
-
-```powershell
-uv run python scripts\validate_project.py confidence
+uv run python - <<'PY'
+```bash
+uv run python scripts/validate_project.py confidence
 ```
-
+uv run python - <<'PY'
 Check for:
 
 ```text
@@ -346,11 +346,11 @@ All curated plot-set contracts pass.
 The ionic pressure and speciation folders contain CSV snapshot, .mpl.yaml, PNG, SVG, and PDF.
 No new canonical artifacts appear under top-level out/.
 ```
-
+uv run python - <<'PY'
 ### 9. Build Manuscript After Final Metrics Are Ready
-
-```powershell
-cd <repo-root>\docs\latex
+uv run python - <<'PY'
+```bash
+cd <repo-root>/docs/latex
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
@@ -361,14 +361,14 @@ The build uses references.bib, not library.bib.
 No undefined citations or references.
 The text does not claim a final converged regression until the acceptance gates below pass.
 ```
-
+uv run python - <<'PY'
 Sync to the Overleaf-connected mirror only after the source build is good:
-
-```powershell
+uv run python - <<'PY'
+```bash
 cd <repo-root>
-powershell -NoProfile -ExecutionPolicy Bypass -File docs\latex\sync_to_overleaf_mirror.ps1
+bash docs/latex/scripts/sync_to_overleaf_mirror.sh
 ```
-
+uv run python - <<'PY'
 ## Acceptance Gates
 
 Do not mark the overall scientific goal complete unless all required gates pass.
@@ -452,10 +452,10 @@ Honor user_options for Born SSM+DS and concentration-dependent dielectric behavi
 Return fixed-length residual vectors even when some records fail.
 Return per-record diagnostics and timing.
 ```
-
+uv run python - <<'PY'
 Downstream proof command after the package fix:
-
-```powershell
+uv run python - <<'PY'
+```bash
 cd <repo-root>
 uv run python -m MEA.epcsaft_ionic.regress_parameters --max-vle-records 18 --max-speciation-records 18 --max-nfev 24 --verbose
 ```
@@ -508,20 +508,20 @@ Bad or difficult points produce fixed penalty residuals and diagnostic rows in i
 The residual vector length does not depend on which rows fail.
 ```
 
-### Package Fix 4: Windows uv Build Reliability
+### Package Fix 4: Linux uv Build Reliability
 
 Problem:
 
 ```text
 The MEA repo uses Python 3.13 through uv. Package-side C++/pybind changes must be installable and importable on this machine.
 ```
-
+uv run python - <<'PY'
 Required package commands:
-
-```powershell
+uv run python - <<'PY'
+```bash
 cd <upstream-ePC-SAFT>
 uv sync
-uv run python scripts\build_epcsaft.py
+uv run python scripts/build_epcsaft.py
 uv run python -c "import epcsaft; import epcsaft.regression; print(epcsaft.__version__)"
 ```
 
@@ -558,13 +558,13 @@ Fail with exit code 1 when acceptance gates are not met.
 Print exact failing metric names, observed values, thresholds, and artifact paths.
 Exit 0 only when regression, full-grid evaluation, and artifact gates pass.
 ```
-
+uv run python - <<'PY'
 Expected command:
-
-```powershell
+uv run python - <<'PY'
+```bash
 uv run python -m MEA.epcsaft_ionic.approval_check
 ```
-
+uv run python - <<'PY'
 Add it to `scripts/validate_project.py confidence` only after the threshold logic is stable.
 
 ### MEA Fix 2: Separate Smoke Runs From Curated Final Parameter Artifacts
@@ -739,7 +739,7 @@ The package regression helper cannot express the coupled MEA target.
 A representative regression run is dominated by package solve runtime.
 A package result throws instead of returning fixed-shape diagnostics in normal recoverable failures.
 The downstream residual vector length depends on which records fail.
-The package cannot be rebuilt/imported under Windows uv/Python 3.13.
+The package must rebuild and import under Linux uv/Python 3.13.
 ```
 
 Stop and hand off downstream when:

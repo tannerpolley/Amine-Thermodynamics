@@ -13,20 +13,20 @@ The repo has been cut over to the cross-project architecture standard:
 
 ## Canonical Commands
 
-```powershell
+```bash
 uv sync
-uv run python scripts\doctor.py
-uv run python scripts\validate_project.py quick
-uv run python scripts\validate_project.py confidence
-uv run python scripts\render_all_plots.py
-uv run python scripts\generate_all_analysis_data.py
-uv run python analyses\<category>\<analysis_id>\scripts\generate_data.py
-uv run python analyses\<category>\<analysis_id>\scripts\render_figures.py
+uv run python scripts/doctor.py
+uv run python scripts/validate_project.py quick
+uv run python scripts/validate_project.py confidence
+uv run python scripts/render_all_plots.py
+uv run python scripts/generate_all_analysis_data.py
+uv run python analyses/<category>/<analysis_id>/scripts/generate_data.py
+uv run python analyses/<category>/<analysis_id>/scripts/render_figures.py
 ```
 
-`scripts\render_all_plots.py` is the canonical single command for regenerating all curated figures from existing processed CSVs. It must stay render-only. `scripts\generate_all_analysis_data.py` is the separate data-refresh orchestrator; its default path avoids full ionic regeneration, while `--include-ionic-full` and `--include-expensive` explicitly opt into slow recomputation.
+`scripts/render_all_plots.py` is the canonical single command for regenerating all curated figures from existing processed CSVs. It must stay render-only. `scripts/generate_all_analysis_data.py` is the separate data-refresh orchestrator; its default path avoids full ionic regeneration, while `--include-ionic-full` and `--include-expensive` explicitly opt into slow recomputation.
 
-Old path commands such as `uv run python MEA\run_plot_exports.py` were deliberately removed.
+Old path commands such as `uv run python MEA/run_plot_exports.py` were deliberately removed.
 
 ## Analysis Ownership
 
@@ -43,12 +43,12 @@ Each plot set should contain its plotted CSV snapshot, `.mpl.yaml`, PNG, and SVG
 
 ## Manuscript
 
-The active article draft is `docs/latex/main.tex`. The separate Overleaf-connected checkout is still `C:\Users\Tanner\Documents\git\LaTeX-Projects\MEA-Thermodynamics-LaTeX`; keep it as a separate Git repo and sync from `docs/latex` with `docs\latex\sync_to_overleaf_mirror.ps1`.
+The active article draft is `docs/latex/main.tex`. Set `MEA_OVERLEAF_MIRROR` to the separate Overleaf-connected checkout and keep it as a separate Git repo and sync from `docs/latex` with `docs/latex/scripts/sync_to_overleaf_mirror.sh`.
 
 Build check:
 
-```powershell
-cd docs\latex
+```bash
+cd docs/latex
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
@@ -67,4 +67,4 @@ The MEAH+/MEACOO- real-data regression data contract is `docs/ePC-SAFT/meah-meac
 
 ## Validation
 
-Use `uv run python scripts\validate_project.py quick` for compile/import/unit checks. Use `uv run python scripts\validate_project.py confidence` to also regenerate representative curated plot sets and verify the artifact contract.
+Use `uv run python scripts/validate_project.py quick` for compile/import/unit checks. Use `uv run python scripts/validate_project.py confidence` to also regenerate representative curated plot sets and verify the artifact contract.

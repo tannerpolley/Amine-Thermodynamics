@@ -230,10 +230,10 @@ No Wong 2015 Raman or Amundsen 2009 density data has been imported yet.
 
 Preferred final interface:
 
-```powershell
-uv run python analyses\phase3\ionic_epcsaft_regression\scripts\generate_ion_parameter_data.py
-uv run python analyses\phase3\ionic_epcsaft_regression\scripts\fit_ion_parameters.py --fit-tier tier_a --max-nfev 80 --promote
-uv run python analyses\phase3\ionic_epcsaft_regression\scripts\render_ion_parameter_figures.py
+```bash
+uv run python analyses/phase3/ionic_epcsaft_regression/scripts/generate_ion_parameter_data.py
+uv run python analyses/phase3/ionic_epcsaft_regression/scripts/fit_ion_parameters.py --fit-tier tier_a --max-nfev 80 --promote
+uv run python analyses/phase3/ionic_epcsaft_regression/scripts/render_ion_parameter_figures.py
 uv run python -m MEA.epcsaft_ionic.approval_check
 ```
 

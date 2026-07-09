@@ -27,7 +27,7 @@ verified against explicit evidence and reproducible checks:
 | Regression artifact contract | Values/statistics/fit data + plot family CSV/PNG/SVG/YAML exist | `analyses/phase3/ionic_epcsaft_regression/results/ion_parameter_regression/*` | Required |
 | Full ionic speciation/pressure outputs | CSV + plot package for ionic pressure/speciation deliverables exists | `analyses/phase3/ionic_epcsaft_regression/results/{pressure,speciation}` | Required |
 | LaTeX source/build convention | `docs/latex/main.tex` is source; PDF is under `docs/latex/builds/main.pdf`; build dir is configured by `.latexmkrc` | `docs/latex/main.tex`, `docs/latex/.latexmkrc`, `docs/latex/builds/main.pdf` | Required |
-| Validation hygiene | Validation executed via repository `.venv` Python, not `uv run` cache mode | `.venv\\Scripts\\python.exe` | Required |
+| Validation hygiene | Validation executed via repository `.venv` Python, not `uv run` cache mode | `.venv//Scripts//python.exe` | Required |
 
 ## Explicit Deliverable Checks
 
@@ -35,9 +35,9 @@ verified against explicit evidence and reproducible checks:
 
 Run:
 
-```powershell
-$py = '<repo-root>\.venv\Scripts\python.exe'
-& $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_full_species_and_parameter_scope_is_complete -v
+```bash
+py='<repo-root>/.venv/bin/python'
+"$py" -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_full_species_and_parameter_scope_is_complete -v
 ```
 
 Expected behavior:
@@ -50,9 +50,9 @@ Expected behavior:
 
 Run:
 
-```powershell
-$py = '<repo-root>\.venv\Scripts\python.exe'
-& $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_promoted_ion_fit_is_not_seed_only -v
+```bash
+py='<repo-root>/.venv/bin/python'
+"$py" -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_promoted_ion_fit_is_not_seed_only -v
 ```
 
 Expected behavior:
@@ -65,9 +65,9 @@ Expected behavior:
 
 Run:
 
-```powershell
-$py = '<repo-root>\.venv\Scripts\python.exe'
-& $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_trace_ion_literature_values_are_promoted -v
+```bash
+py='<repo-root>/.venv/bin/python'
+"$py" -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_trace_ion_literature_values_are_promoted -v
 ```
 
 Expected behavior:
@@ -81,9 +81,9 @@ Expected behavior:
 
 Run:
 
-```powershell
-$py = '<repo-root>\.venv\Scripts\python.exe'
-& $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_full_ionic_plot_artifacts_include_expected_formats -v
+```bash
+py='<repo-root>/.venv/bin/python'
+"$py" -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_full_ionic_plot_artifacts_include_expected_formats -v
 ```
 
 Expected behavior:
@@ -99,32 +99,32 @@ Expected behavior:
 
 Run:
 
-```powershell
-$py = '<repo-root>\.venv\Scripts\python.exe'
-& $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_latex_source_and_output_conventions -v
-& $py -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_active_runtime_species_are_complete -v
+```bash
+py='<repo-root>/.venv/bin/python'
+"$py" -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_latex_source_and_output_conventions -v
+"$py" -m unittest tests.test_ion_parameter_regression_artifacts.IonParameterRegressionArtifactTests.test_active_runtime_species_are_complete -v
 ```
 
 Expected behavior:
 
-- `docs/latex/main.tex` contains `\documentclass`, `\begin{document}`, `\end{document}` and sections inputs,
+- `docs/latex/main.tex` contains `/documentclass`, `/begin{document}`, `/end{document}` and sections inputs,
 - `.latexmkrc` sets both `out_dir` and `aux_dir` to `builds`,
 - `docs/latex/main.pdf` does not exist at repo root level,
 - `docs/latex/builds/main.pdf` exists.
 
 ### 5) Full suite acceptance for this audit
 
-```powershell
-$py = '<repo-root>\.venv\Scripts\python.exe'
-& $py -m unittest tests.test_ion_parameter_regression_artifacts -v
+```bash
+py='<repo-root>/.venv/bin/python'
+"$py" -m unittest tests.test_ion_parameter_regression_artifacts -v
 ```
 
 ### 6) Human-readable build and quant evidence (informational)
 
-```powershell
-$py = '<repo-root>\.venv\Scripts\python.exe'
-& $py scripts\doctor.py
-cd <repo-root>\docs\latex
+```bash
+py='<repo-root>/.venv/bin/python'
+"$py" scripts/doctor.py
+cd <repo-root>/docs/latex
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
@@ -168,7 +168,7 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 | Sensitivity/uncertainty | `analyses/phase3/ionic_epcsaft_regression/results/sensitivity/*` | `python analyses/phase3/ionic_epcsaft_regression/scripts/compute_parameter_sensitivity.py` | Finite-difference sensitivity and identifiability tables written | Pass | Sensitivity uses a reduced live subset because full-data finite differences remain costly |
 | Literature model comparison | `docs/latex/tables/literature_model_comparison.tex` | `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` | Table included and citations resolved | Pass | Table still produces layout warnings that could be polished further |
 | Pressure/speciation/residual figures | `analyses/phase3/ionic_epcsaft_regression/results/{pressure,speciation}`, `docs/latex/figures/mea_ionic_*residuals*` | `python analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py` | Residual plots added and copied into manuscript figure set | Pass | Figure styling is consistent but not yet warning-free in all table/figure placements |
-| Submission-safe manuscript prose | `docs/latex/main.tex`, `docs/latex/sections/*.tex`, `docs/latex/tables/*.tex` | `Select-String ... -Pattern 'Codex|agent|worktree|repo|repository-facing|local path|C:\\Users|artifact|handoff'` | No direct Codex, agent, worktree, handoff, or local-path leakage; `repo` produced false-positive substring matches such as `reported` and `reproduce` | Pass with note | Grep pattern is over-broad for `repo` substring matches |
+| Submission-safe manuscript prose | `docs/latex/main.tex`, `docs/latex/sections/*.tex`, `docs/latex/tables/*.tex` | `Select-String ... -Pattern 'Codex|agent|worktree|repo|repository-facing|local path|C://Users|artifact|handoff'` | No direct Codex, agent, worktree, handoff, or local-path leakage; `repo` produced false-positive substring matches such as `reported` and `reproduce` | Pass with note | Grep pattern is over-broad for `repo` substring matches |
 | PDF build | `docs/latex/builds/main.pdf` | `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` | PDF built successfully with no undefined citations or references | Pass | Overfull/underfull layout warnings remain in the log |
 
 ## Result Log

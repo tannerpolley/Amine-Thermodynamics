@@ -17,29 +17,29 @@ Do not clone or vendor a separate copy of `ePC-SAFT` inside `<repo-root>`.
 
 Use the sibling package checkout:
 
-```powershell
+```bash
 <upstream-ePC-SAFT>
 ```
 
 If isolation is needed, create a branch or git worktree owned by the ePC-SAFT repo, not inside MEA:
 
-```powershell
+```bash
 cd <upstream-ePC-SAFT>
 git switch -c codex/mea-coupled-objective-runtime
 ```
 
 or, if parallel agents need separate working directories:
 
-```powershell
+```bash
 cd <upstream-ePC-SAFT>
-git worktree add .worktrees\mea-coupled-objective -b codex/mea-coupled-objective-runtime
+git worktree add .worktrees/mea-coupled-objective -b codex/mea-coupled-objective-runtime
 ```
 
 Then reinstall that package into the MEA environment:
 
-```powershell
+```bash
 cd <repo-root>
-uv pip install --python .venv\Scripts\python.exe --reinstall --no-deps <upstream-ePC-SAFT>
+uv pip install --python .venv/bin/python --reinstall --no-deps <upstream-ePC-SAFT>
 ```
 
 Rationale:
@@ -159,11 +159,11 @@ Purpose: Make the current state reproducible before package changes.
 
 Commands:
 
-```powershell
+```bash
 cd <repo-root>
-.venv\Scripts\python.exe -c "import epcsaft; print(epcsaft.__version__); print(epcsaft.__file__)"
-.venv\Scripts\python.exe -m unittest discover tests -v
-.venv\Scripts\python.exe scripts\validate_project.py quick
+.venv/bin/python -c "import epcsaft; print(epcsaft.__version__); print(epcsaft.__file__)"
+.venv/bin/python -m unittest discover tests -v
+.venv/bin/python scripts/validate_project.py quick
 ```
 
 Checks:
@@ -212,9 +212,9 @@ Tasks:
 
 Acceptance checks:
 
-```powershell
+```bash
 cd <repo-root>
-.venv\Scripts\python.exe -m unittest tests.test_epcsaft_ionic_native_regression -v
+.venv/bin/python -m unittest tests.test_epcsaft_ionic_native_regression -v
 ```
 
 ### Phase 4: Build Native Regression Problem in MEA
@@ -340,15 +340,15 @@ runtime_status:
 
 Commands:
 
-```powershell
+```bash
 cd <repo-root>
-uv pip install --python .venv\Scripts\python.exe --reinstall --no-deps <upstream-ePC-SAFT>
-.venv\Scripts\python.exe analyses\phase3\ionic_epcsaft_regression\scripts\fit_global_pressure_speciation.py --max-nfev 40 --promote
-.venv\Scripts\python.exe analyses\phase3\ionic_epcsaft_regression\scripts\evaluate_train_validation_split.py
-.venv\Scripts\python.exe analyses\phase3\ionic_epcsaft_regression\scripts\compute_parameter_sensitivity.py
-.venv\Scripts\python.exe analyses\phase3\ionic_epcsaft_regression\scripts\render_figures.py
-.venv\Scripts\python.exe -m unittest discover tests -v
-.venv\Scripts\python.exe scripts\validate_project.py quick
+uv pip install --python .venv/bin/python --reinstall --no-deps <upstream-ePC-SAFT>
+.venv/bin/python analyses/phase3/ionic_epcsaft_regression/scripts/fit_global_pressure_speciation.py --max-nfev 40 --promote
+.venv/bin/python analyses/phase3/ionic_epcsaft_regression/scripts/evaluate_train_validation_split.py
+.venv/bin/python analyses/phase3/ionic_epcsaft_regression/scripts/compute_parameter_sensitivity.py
+.venv/bin/python analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py
+.venv/bin/python -m unittest discover tests -v
+.venv/bin/python scripts/validate_project.py quick
 ```
 
 Expected artifact updates:
@@ -394,12 +394,12 @@ Do not manually edit:
 
 Commands:
 
-```powershell
+```bash
 cd <repo-root>
-.venv\Scripts\python.exe -m unittest discover tests -v
-.venv\Scripts\python.exe scripts\validate_project.py quick
+.venv/bin/python -m unittest discover tests -v
+.venv/bin/python scripts/validate_project.py quick
 
-cd <repo-root>\docs\latex
+cd <repo-root>/docs/latex
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
@@ -407,7 +407,7 @@ Additional checks:
 
 - No `__pycache__` folders under `src`, `tests`, `scripts`, or `analyses`.
 - No `docs/latex/main.pdf`; canonical PDF remains `docs/latex/builds/main.pdf`.
-- All `\includegraphics{figures/...}` targets exist.
+- All `/includegraphics{figures/...}` targets exist.
 - Submission-safety scan has no `Codex`, `agent`, `worktree`, `handoff`, local path, or internal workflow language in rendered manuscript sources.
 - Goal or handoff state documents clearly report whether the coupled objective completed or remains bounded.
 
@@ -427,7 +427,7 @@ Do not reopen the ePC-SAFT issue unless Scout/Judge evidence during implementati
 
 Recommended action for this repo:
 
-```powershell
+```bash
 cd <repo-root>
 /goal Follow docs/goals/issue-3-native-regression-carbonate/goal.md.
 ```

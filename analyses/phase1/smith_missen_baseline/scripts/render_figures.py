@@ -52,7 +52,7 @@ def _data_xlim(frame: pd.DataFrame, column: str, *, pad: float = 0.035) -> tuple
 def require_csv(name: str) -> pd.DataFrame:
     return read_required_csv(
         PROCESSED_DIR / name,
-        hint="Run `uv run python analyses\\smith_missen_baseline\\scripts\\generate_data.py` first",
+        hint="Run `uv run python analyses/phase1/smith_missen_baseline/scripts/generate_data.py` first",
     )
 
 

@@ -64,7 +64,7 @@ def load_epcsaft():
             except Exception as second_exc:
                 raise RuntimeError(
                     "Unable to import the ePC-SAFT package from EPCSAFT_SRC. Build/install the package first, "
-                    "then run this repository with `uv sync` and `uv run python scripts\\validate_project.py quick`."
+                    "then run this repository with `uv sync` and `uv run python scripts/validate_project.py quick`."
                 ) from second_exc
         raise RuntimeError(
             "Unable to import epcsaft. Install the pinned dependency with `uv sync` or set EPCSAFT_SRC "

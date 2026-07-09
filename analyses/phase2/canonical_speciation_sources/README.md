@@ -14,7 +14,7 @@ The plots intentionally separate basis families:
 
 Run:
 
-```powershell
+```bash
 uv run python analyses/phase2/canonical_speciation_sources/scripts/generate_data.py
 uv run python analyses/phase2/canonical_speciation_sources/scripts/render_figures.py
 ```

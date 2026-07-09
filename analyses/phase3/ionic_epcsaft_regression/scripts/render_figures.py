@@ -237,7 +237,7 @@ def main() -> int:
     if missing:
         for path in missing:
             print(f"Missing ionic plot snapshot: {path}")
-        print("Run `uv run python analyses\\ionic_epcsaft_regression\\scripts\\generate_data.py` first.")
+        print("Run `uv run python analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py` first.")
         return 1
     pressure_rows = pd.read_csv(PRESSURE_CSV).to_dict("records")
     speciation_rows = pd.read_csv(SPECIATION_CSV).to_dict("records")

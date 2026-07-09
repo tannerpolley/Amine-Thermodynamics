@@ -11,7 +11,7 @@
 
 ## Command
 
-```powershell
+```bash
 <command>
 ```
 
@@ -33,7 +33,7 @@
 
 ## Downstream validation command
 
-```powershell
+```bash
 <smallest useful validation>
 ```
 

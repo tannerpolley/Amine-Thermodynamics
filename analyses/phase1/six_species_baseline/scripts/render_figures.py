@@ -41,7 +41,7 @@ SPECIATION_DIR = ANALYSIS_DIR / "results" / "speciation"
 
 def require(path: Path) -> Path:
     if not path.exists():
-        raise RuntimeError(f"Missing {path}. Run analyses\\six_species_baseline\\scripts\\generate_data.py first.")
+        raise RuntimeError(f"Missing {path}. Run analyses/phase1/six_species_baseline/scripts/generate_data.py first.")
     return path
 
 

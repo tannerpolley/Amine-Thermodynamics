@@ -45,7 +45,7 @@ STALE_SCAFFOLD_PATTERNS = (
 def require_csv(name: str) -> pd.DataFrame:
     return read_required_csv(
         PROCESSED_DIR / name,
-        hint="Run `uv run python analyses\\activity_epcsaft\\scripts\\generate_data.py` first",
+        hint="Run `uv run python analyses/phase2/activity_epcsaft/scripts/generate_data.py` first",
     )
 
 
