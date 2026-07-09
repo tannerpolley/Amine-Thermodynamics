@@ -26,11 +26,11 @@ The \COtwo-solubility data set contains 161 equilibrium partial-pressure records
 \end{center}
 
 \subsection{Species Basis and Parameter Hierarchy}
-The activity-based calculation uses the nine-species liquid basis defined in \cref{eq:true-species-vector}.  The parameter hierarchy separates inherited molecular parameters, SSM+DS ion conventions from modified-Born ePC-SAFT literature, direct \MEA-system regression for \MEAH and \MEACOO, and trace-ion quantities that are retained from literature-backed or diagnostic calculations.  This hierarchy is used to evaluate a fixed advanced-Born parameter set for \COtwo-solubility modeling; it is not a pressure-only fitted model.
+The activity-based calculation uses the nine-species liquid basis defined in \cref{eq:true-species-vector}.  The parameter hierarchy separates inherited molecular parameters, SSM+DS ion conventions from modified-Born ePC-SAFT literature, provisional fixed inputs for \MEAH and \MEACOO, and trace-ion quantities retained from literature-backed or diagnostic calculations.  This hierarchy is used to evaluate a fixed advanced-Born parameter set for \COtwo-solubility modeling; it is not a pressure-only fitted model.
 
 \input{tables/full_ionic_ssm_ds_parameters}
 
-The parameter-evidence matrix in \cref{tab:parameter-evidence-matrix,tab:trace-parameter-evidence} distinguishes fitted amine-family ion parameters from trace-species quantities that are not independently identified by the available NMR targets.  The available speciation data identify \MEAH and \MEACOO most directly; bicarbonate, carbonate, hydronium, and hydroxide parameters require additional caution because they are constrained by fewer direct targets or by balance relationships.
+The parameter-evidence matrix in \cref{tab:parameter-evidence-matrix,tab:trace-parameter-evidence} distinguishes the evidentiary status of the retained inputs from trace-species quantities that are not independently identified by the available NMR targets.  The available speciation data test \MEAH and \MEACOO most directly; bicarbonate, carbonate, hydronium, and hydroxide quantities require additional caution because they are constrained by fewer direct targets or by balance relationships.
 
 \input{tables/parameter_evidence_matrix}
 
@@ -40,16 +40,14 @@ The molecular \COtwo, \MEA, and \HtwoO parameters are inherited from the cited P
     \sigma_{\HtwoO}(T)=2.7927+10.11\exp(-0.01775T)-1.417\exp(-0.01146T),
     \label{eq:water-sigma-temperature}
 \end{equation}
-where \(T\) is in kelvin and \(\sigma_{\HtwoO}\) is in angstroms.  Rows marked ``This work'' contain parameters fitted or derived in the present analysis; cited rows use literature values.
+where \(T\) is in kelvin and \(\sigma_{\HtwoO}\) is in angstroms.  The final column of \cref{tab:full-ionic-ssm-ds-parameters} reports a source or status for every retained value; provisional inputs are explicitly distinguished from literature values.
 
 The binary-interaction matrix is intentionally sparse.  \Cref{tab:binary-interaction-parameters} lists the nonzero interactions, the zero-valued candidate interactions retained for the fixed activity-based evaluation, and the transferred water--ion terms.  The remaining \MEA-specific ion--molecule and ion--ion terms are held at zero.  This sparse interaction structure tests the selected activity model before introducing a broader optimized binary-interaction matrix.
 
 \input{tables/binary_interaction_parameters}
 
-\subsection{MEAH+ and MEACOO- regression}
-The direct amine-ion regression uses the NMR/speciation subset from the cited spectroscopic studies\cite{Matin2012,Jakobsen2005,Bottinger2008}.  These data constrain the \MEA-family ions most specific to a primary amine: protonated amine and carbamate.  The fitted variables are \(\sigma\), \(\epsilon/k\), and \(d^{\mathrm{Born}}\) for \MEAH and \MEACOO, plus \(k_{\MEAH,\MEACOO}\).  The retained fit decreases the residual norm from 0.2714 to 0.2677 and changes the median absolute \(\log_{10}(\mathrm{model}/\mathrm{data})\) error from 0.1010 to 0.0988.  The fitted \MEAH \(R^2\) changes from 0.655 to 0.665, and the fitted \MEACOO \(R^2\) changes from 0.888 to 0.905.  No retained fit parameter is at a bound.
-
-\input{tables/regression_bounds}
+\subsection{Fixed parameter evidence boundary}
+The coupled native regression was not completed.  The retained \MEAH and \MEACOO values are provisional fixed inputs inherited from an exploratory historical calculation, not a reproducible parameter fit executed by the current workflow.  The NMR/speciation studies\cite{Matin2012,Jakobsen2005,Bottinger2008} are therefore used only to evaluate the resulting fixed-parameter speciation residuals.  Historical local-fit bounds, improvement metrics, and parity plots are excluded because they do not establish a current parameter-estimation result.  A future parameter claim requires an executed package-native, multi-observable regression with complete row provenance and held-out evidence defined before fitting.
 
 \subsection{Coupled CO2 Solubility and Speciation Objective}
 The pressure residual is expressed on a logarithmic basis,

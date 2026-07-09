@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -8,9 +7,6 @@ import numpy as np
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-SRC_ROOT = REPO_ROOT / "src"
-if str(SRC_ROOT) not in sys.path:
-    sys.path.insert(0, str(SRC_ROOT))
 
 from MEA.common.analysis_io import copy_file_as  # noqa: E402
 from MEA.common.plot_style import finish_axes, save_figure_bundle, species_color, species_label, write_mpl_sidecar  # noqa: E402
@@ -18,17 +14,9 @@ from MEA.epcsaft_ionic.global_regression import (  # noqa: E402
     GLOBAL_RESULTS_DIR,
     SENSITIVITY_DIR,
     SENSITIVITY_METRICS,
-    TRAIN_VALIDATION_DIR,
     write_pressure_parity,
     write_sensitivity_heatmap,
     write_speciation_parity,
-    write_train_validation_plot,
-)
-from MEA.epcsaft_ionic.ion_parameter_regression import (  # noqa: E402
-    OUT_DIR as ION_PARAMETER_DIR,
-    plot_loading_curves,
-    plot_pressure_placeholder,
-    plot_speciation_parity,
 )
 from MEA.epcsaft_ionic.plot_results import plot_pressure, plot_speciation  # noqa: E402
 from fit_trace_carbonate_born import OUT_DIR as TRACE_CARBONATE_DIR  # noqa: E402
@@ -187,30 +175,15 @@ def write_trace_carbonate_plot(frame: pd.DataFrame) -> None:
     copy_file_as(pdf, LATEX_FIGURES_DIR / "trace_carbonate_born_parity.pdf")
 
 
-def render_ion_parameter_evidence() -> None:
-    fit_data = ION_PARAMETER_DIR / "ion_parameter_speciation_fit_data.csv"
-    if not fit_data.exists():
-        return
-    frame = pd.read_csv(fit_data)
-    speciation_png = plot_speciation_parity(frame, ION_PARAMETER_DIR)
-    loading_png = plot_loading_curves(frame, ION_PARAMETER_DIR)
-    plot_pressure_placeholder(ION_PARAMETER_DIR)
-    copy_file_as(speciation_png.with_suffix(".pdf"), LATEX_FIGURES_DIR / "meah_meacoo_speciation_parity.pdf")
-    copy_file_as(loading_png.with_suffix(".pdf"), LATEX_FIGURES_DIR / "meah_meacoo_loading_curves.pdf")
-
-
 def render_optional_global_diagnostics() -> None:
     pressure_residuals = GLOBAL_RESULTS_DIR / "global_regression_pressure_residuals.csv"
     speciation_residuals = GLOBAL_RESULTS_DIR / "global_regression_speciation_residuals.csv"
-    train_validation_pressure = TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.csv"
     sensitivity_matrix = SENSITIVITY_DIR / "parameter_sensitivity_matrix.csv"
     trace_carbonate = TRACE_CARBONATE_DIR / "trace_carbonate_born_fit_data.csv"
     if pressure_residuals.exists():
         write_pressure_parity(pd.read_csv(pressure_residuals), GLOBAL_RESULTS_DIR)
     if speciation_residuals.exists():
         write_speciation_parity(pd.read_csv(speciation_residuals), GLOBAL_RESULTS_DIR)
-    if train_validation_pressure.exists():
-        write_train_validation_plot(pd.read_csv(train_validation_pressure))
     if sensitivity_matrix.exists():
         matrix = pd.read_csv(sensitivity_matrix)
         if not matrix.empty:
@@ -247,7 +220,6 @@ def main() -> int:
     speciation_plot = plot_speciation(speciation_rows)
     pressure_residual_png, _, _ = write_pressure_residual_plot(pressure_rows)
     speciation_residual_png, _, _ = write_speciation_residual_plot(speciation_rows)
-    render_ion_parameter_evidence()
     render_optional_global_diagnostics()
     print(f"Ionic pressure plot: {pressure_plot}")
     print(f"Ionic speciation plot: {speciation_plot}")

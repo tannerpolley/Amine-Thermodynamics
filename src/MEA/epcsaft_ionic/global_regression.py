@@ -33,11 +33,9 @@ from MEA.epcsaft_ionic.model import (
 
 GLOBAL_RESULTS_DIR = EPCSAFT_IONIC_ANALYSIS / "results" / "global_regression"
 GLOBAL_RUNS_DIR = EPCSAFT_IONIC_ANALYSIS / "results" / "runs" / "global_regression"
-TRAIN_VALIDATION_DIR = EPCSAFT_IONIC_ANALYSIS / "results" / "train_validation"
 SENSITIVITY_DIR = EPCSAFT_IONIC_ANALYSIS / "results" / "sensitivity"
 BASELINE_PRESSURE_CSV = EPCSAFT_IONIC_ANALYSIS / "results" / "pressure" / "ionic_pressure_comparison.csv"
 BASELINE_SPECIATION_CSV = EPCSAFT_IONIC_ANALYSIS / "results" / "speciation" / "ionic_speciation_activity_residuals.csv"
-PROMOTED_ION_SUMMARY = EPCSAFT_IONIC_ANALYSIS / "results" / "ion_parameter_regression" / "ion_parameter_fit_summary.json"
 IONIC_EVALUATION_SUMMARY = EPCSAFT_IONIC_ANALYSIS / "results" / "summary" / "ionic_evaluation_summary.json"
 GLOBAL_SUMMARY_PATH = GLOBAL_RESULTS_DIR / "global_regression_summary.json"
 
@@ -84,16 +82,12 @@ def _select_evenly(items: list[Any], limit: int | None) -> list[Any]:
 
 
 def load_initial_values() -> dict[str, float]:
-    values = dict(DEFAULT_INITIAL_GUESS)
-    if PROMOTED_ION_SUMMARY.exists():
-        summary = json.loads(PROMOTED_ION_SUMMARY.read_text(encoding="utf-8"))
-        values.update({key: float(value) for key, value in summary.get("fitted_values", {}).items()})
-    return values
+    return dict(DEFAULT_INITIAL_GUESS)
 
 
 def load_working_parameter_set() -> tuple[str, dict[str, float]]:
     values = load_initial_values()
-    label = "promoted_ionic_fit"
+    label = "fixed_provisional_parameter_set"
     if GLOBAL_SUMMARY_PATH.exists():
         summary = json.loads(GLOBAL_SUMMARY_PATH.read_text(encoding="utf-8"))
         selected = summary.get("selected_values")
@@ -415,14 +409,13 @@ def attempt_global_regression(
     completed = bool(result.success) and pressure_improved and meah_ok and meacoo_ok and moved_count >= 3
     completion_status = "completed" if completed else "package_fit_not_completed"
     selected_values = dict(fitted_values if completed else initial_values)
-    selected_parameter_set = "global_regression" if completed else "promoted_ionic_fit"
+    selected_parameter_set = "global_regression" if completed else "fixed_provisional_parameter_set"
     claim_boundary = (
         "Coupled pressure plus speciation regression completed with a selected fitted parameter set."
         if completed
         else (
-            "A coupled pressure plus speciation regression was attempted, but the promoted claim remains a workflow and "
-            "validation study until runtime or optimizer coverage is improved. The downstream selected parameter set stays "
-            "at the promoted ionic fit to avoid overstating pressure-optimization progress."
+            "A coupled pressure plus speciation regression was not completed. The selected parameter set remains the "
+            "fixed provisional input set, and its results are reported only as fixed-parameter residual diagnostics."
         )
     )
     return {
@@ -620,113 +613,12 @@ def write_speciation_parity(frame: pd.DataFrame, output_dir: Path) -> None:
     )
 
 
-def load_global_or_promoted_values() -> tuple[str, dict[str, float]]:
-    return load_working_parameter_set()
-
-
-def split_targets() -> dict[str, set[str]]:
-    pressure_sources = {target.paper for target in load_vle_targets(None)}
-    speciation_sources = {target.source for target in load_speciation_targets(None)}
-    return {
-        "pressure_train": {source for source in pressure_sources if source not in {"Jou", "Xu"}},
-        "pressure_validation": {source for source in pressure_sources if source in {"Jou", "Xu"}},
-        "speciation_train": {source for source in speciation_sources if source in {"Matin", "Bottinger"}},
-        "speciation_validation": {source for source in speciation_sources if source in {"Jakobsen"}},
-    }
-
-
-def write_train_validation_artifacts() -> dict[str, Any]:
-    parameter_set, values = load_global_or_promoted_values()
-    splits = split_targets()
-    pressure_frame = cached_pressure_rows() if parameter_set == "promoted_ionic_fit" else pressure_rows(values, load_vle_targets(None))
-    pressure_frame.insert(
-        0,
-        "split",
-        pressure_frame["source"].map(lambda source: "validation" if source in splits["pressure_validation"] else "train"),
-    )
-    speciation_frame = cached_speciation_rows() if parameter_set == "promoted_ionic_fit" else speciation_rows(values, load_speciation_targets(None))
-    speciation_frame.insert(
-        0,
-        "split",
-        speciation_frame["source"].map(lambda source: "validation" if source in splits["speciation_validation"] else "train"),
-    )
-    TRAIN_VALIDATION_DIR.mkdir(parents=True, exist_ok=True)
-    write_csv(TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.csv", pressure_frame)
-    write_csv(TRAIN_VALIDATION_DIR / "train_validation_speciation_residuals.csv", speciation_frame)
-
-    pressure_by_source = []
-    for (split, source), subset in pressure_frame.groupby(["split", "source"]):
-        metrics = pressure_metrics(subset)
-        pressure_by_source.append({"split": split, "source": source, **metrics})
-    write_csv(TRAIN_VALIDATION_DIR / "train_validation_pressure_by_source.csv", pressure_by_source)
-
-    speciation_by_species = []
-    for (split, species), subset in speciation_frame.groupby(["split", "species"]):
-        metrics = speciation_metrics(subset).get(str(species), {})
-        speciation_by_species.append({"split": split, "species": species, **metrics})
-    write_csv(TRAIN_VALIDATION_DIR / "train_validation_speciation_by_species.csv", speciation_by_species)
-
-    summary = {
-        "split_rule": {
-            "pressure_train_sources": sorted(splits["pressure_train"]),
-            "pressure_validation_sources": sorted(splits["pressure_validation"]),
-            "speciation_train_sources": sorted(splits["speciation_train"]),
-            "speciation_validation_sources": sorted(splits["speciation_validation"]),
-        },
-        "parameter_set": parameter_set,
-        "pressure": {
-            "train": pressure_metrics(pressure_frame[pressure_frame["split"] == "train"]),
-            "validation": pressure_metrics(pressure_frame[pressure_frame["split"] == "validation"]),
-        },
-        "speciation": {
-            "train": speciation_metrics(speciation_frame[speciation_frame["split"] == "train"]),
-            "validation": speciation_metrics(speciation_frame[speciation_frame["split"] == "validation"]),
-        },
-    }
-    write_json(TRAIN_VALIDATION_DIR / "train_validation_summary.json", summary)
-    return summary
-
-
-def write_train_validation_plot(frame: pd.DataFrame) -> None:
-    title = "Train-validation pressure residuals by split"
-    description = (
-        "Pressure residuals for the deterministic train/validation source split are shown as "
-        "log10(model/data) deviations."
-    )
-    fig, ax = plt.subplots(figsize=(8.0, 5.0))
-    x_positions = {"train": 0, "validation": 1}
-    for split, subset in frame.groupby("split"):
-        ax.scatter(
-            [x_positions[str(split)]] * len(subset),
-            subset["log10_model_over_data"].astype(float),
-            alpha=0.65,
-            label=str(split).title(),
-        )
-    ax.axhline(0.0, color="black", linestyle=":", linewidth=1.0)
-    ax.set_xticks([0, 1], ["Train", "Validation"])
-    ax.set_ylabel("$\\log_{10}$(model/data) pressure residual")
-    finish_axes(ax, title=title, grid_axis="y")
-    ax.legend(title="Split")
-    fig.tight_layout()
-    png, svg, pdf = save_figure_bundle(fig, TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals")
-    plt.close(fig)
-    write_mpl_sidecar(
-        TRAIN_VALIDATION_DIR / "train_validation_pressure_residuals.mpl.yaml",
-        png_name=png.name,
-        svg_name=svg.name,
-        pdf_name=pdf.name,
-        title=title,
-        description=description,
-        style_source="src/MEA/epcsaft_ionic/global_regression.py",
-    )
-
-
 def compute_summary_metrics(values: dict[str, float], live_subset: tuple[int, int] | None = None) -> dict[str, float]:
     if live_subset is None:
-        parameter_set, _ = load_global_or_promoted_values()
+        parameter_set, _ = load_working_parameter_set()
     else:
         parameter_set = "live_subset"
-    if parameter_set == "promoted_ionic_fit":
+    if parameter_set == "fixed_provisional_parameter_set":
         pressure = cached_pressure_rows()
         speciation = cached_speciation_rows()
     else:
@@ -744,7 +636,7 @@ def compute_summary_metrics(values: dict[str, float], live_subset: tuple[int, in
 
 
 def write_sensitivity_artifacts() -> dict[str, Any]:
-    parameter_set, base_values = load_global_or_promoted_values()
+    parameter_set, base_values = load_working_parameter_set()
     baseline = compute_summary_metrics(base_values, live_subset=(2, 2))
     rows: list[dict[str, Any]] = []
     vectors: dict[str, list[float]] = {}

@@ -8,7 +8,6 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "ion_parameter_regression"
 TRACE_BORN_RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "trace_carbonate_born_regression"
 OH_BORN_RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "oh_born_derivation"
 RUNTIME = ROOT / "src" / "MEA" / "epcsaft_runtime.py"
@@ -35,62 +34,6 @@ LATEX_MAIN = LATEX_ROOT / "main.tex"
 
 
 class IonParameterRegressionArtifactTests(unittest.TestCase):
-    def test_real_data_source_manifest_is_present(self) -> None:
-        path = ROOT / "data" / "reference" / "MEA" / "ion_parameter_regression_sources.csv"
-        with path.open(encoding="utf-8", newline="") as handle:
-            rows = list(csv.DictReader(handle))
-        self.assertGreaterEqual(len(rows), 7)
-        by_id = {row["source_id"]: row for row in rows}
-        self.assertEqual(by_id["matin_2012_speciation"]["meah_direct"], "yes")
-        self.assertEqual(by_id["matin_2012_speciation"]["meacoo_direct"], "yes")
-        self.assertEqual(by_id["bottinger_2008_online_nmr"]["meah_direct"], "no")
-        self.assertEqual(by_id["bottinger_2008_online_nmr"]["meacoo_direct"], "yes")
-
-    def test_promoted_ion_fit_is_not_seed_only(self) -> None:
-        summary = json.loads((RESULTS / "ion_parameter_fit_summary.json").read_text(encoding="utf-8"))
-        self.assertEqual(summary["fit_tier"], "tier_a_local_speciation")
-        self.assertGreaterEqual(summary["target_row_count"], 8)
-        self.assertIn("Matin", summary["target_sources"])
-        self.assertIn("Jakobsen", summary["target_sources"])
-        self.assertTrue(summary["optimizer"]["success"])
-        self.assertLess(
-            summary["optimizer"]["final_residual_norm"],
-            summary["optimizer"]["initial_residual_norm"],
-        )
-        changed = [
-            name
-            for name, initial in summary["initial_values"].items()
-            if abs(float(summary["fitted_values"][name]) - float(initial)) > 1.0e-6
-        ]
-        self.assertIn("MEAH+__s", changed)
-        self.assertIn("MEACOO-__s", changed)
-        self.assertIn("MEAH+__d_born", changed)
-        self.assertIn("MEACOO-__e", changed)
-        self.assertFalse(any(summary["parameters_at_bounds"].values()))
-
-    def test_promoted_ion_fit_artifact_contract(self) -> None:
-        required = [
-            "ion_parameter_fit_summary.json",
-            "ion_parameter_fit_values.csv",
-            "ion_parameter_fit_statistics.csv",
-            "ion_parameter_speciation_fit_data.csv",
-            "ion_parameter_pressure_fit_data.csv",
-            "meah_meacoo_speciation_parity.mpl.yaml",
-            "meah_meacoo_speciation_parity.png",
-            "meah_meacoo_speciation_parity.svg",
-            "meah_meacoo_speciation_parity.pdf",
-            "meah_meacoo_loading_curves.mpl.yaml",
-            "meah_meacoo_loading_curves.png",
-            "meah_meacoo_loading_curves.svg",
-            "meah_meacoo_loading_curves.pdf",
-            "ion_parameter_pressure_parity.mpl.yaml",
-            "ion_parameter_pressure_parity.png",
-            "ion_parameter_pressure_parity.svg",
-            "ion_parameter_pressure_parity.pdf",
-        ]
-        missing = [name for name in required if not (RESULTS / name).exists()]
-        self.assertEqual(missing, [])
-
     def test_trace_carbonate_born_fit_artifact_contract(self) -> None:
         required = [
             "trace_carbonate_born_fit_summary.json",
@@ -233,22 +176,16 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
 
     def test_full_ionic_plot_artifacts_include_expected_formats(self) -> None:
         required_with_formats = {
-            "meah_meacoo_speciation_parity": ("csv", "png", "svg", "pdf", "mpl.yaml"),
-            "meah_meacoo_loading_curves": ("csv", "png", "svg", "pdf", "mpl.yaml"),
-            "ion_parameter_pressure_parity": ("csv", "png", "svg", "pdf", "mpl.yaml"),
             "ionic_epcsaft_co2_pressure": ("csv", "png", "svg", "pdf", "mpl.yaml"),
             "ionic_epcsaft_speciation_activity": ("csv", "png", "svg", "pdf", "mpl.yaml"),
         }
         csv_by_stem = {
-            "meah_meacoo_speciation_parity": "ion_parameter_speciation_fit_data.csv",
-            "meah_meacoo_loading_curves": "ion_parameter_speciation_fit_data.csv",
-            "ion_parameter_pressure_parity": "ion_parameter_pressure_fit_data.csv",
             "ionic_epcsaft_co2_pressure": "ionic_pressure_comparison.csv",
             "ionic_epcsaft_speciation_activity": "ionic_speciation_plot_data.csv",
         }
 
         for stem, exts in required_with_formats.items():
-            base_dir = RESULTS
+            base_dir = PRESSURE_RESULTS
             if stem.startswith("ionic_epcsaft_co2_pressure"):
                 base_dir = PRESSURE_RESULTS
             elif stem.startswith("ionic_epcsaft_speciation_activity"):
@@ -268,9 +205,7 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
     def test_latex_source_and_output_conventions(self) -> None:
         self.assertTrue(LATEX_MAIN.exists(), msg="Missing docs/latex/main.tex")
         self.assertTrue(LATEX_ROOT.joinpath(".latexmkrc").exists())
-        self.assertTrue(LATEX_ROOT.joinpath("builds").exists())
         self.assertTrue(LATEX_ROOT.joinpath("tables", "literature_model_comparison.tex").exists())
-        self.assertTrue(LATEX_ROOT.joinpath("tables", "regression_bounds.tex").exists())
         self.assertTrue(LATEX_ROOT.joinpath("sections", "data_code_availability.tex").exists())
 
         latex_text = LATEX_MAIN.read_text(encoding="utf-8")
@@ -285,9 +220,7 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
         self.assertIn("aux_dir = 'builds'", latexmkrc)
 
         root_pdf = LATEX_ROOT / "main.pdf"
-        builds_pdf = LATEX_ROOT / "builds" / "main.pdf"
         self.assertFalse(root_pdf.exists(), msg="main.pdf should not be written at docs/latex root")
-        self.assertTrue(builds_pdf.exists(), msg="docs/latex/builds/main.pdf is missing")
 
         intro_text = LATEX_ROOT.joinpath("sections", "introduction.tex").read_text(encoding="utf-8")
         self.assertIn(r"\input{tables/literature_model_comparison}", intro_text)

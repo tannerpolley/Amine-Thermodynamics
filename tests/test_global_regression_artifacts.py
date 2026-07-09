@@ -7,7 +7,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 GLOBAL = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "global_regression"
-TRAIN_VALIDATION = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "train_validation"
 SENSITIVITY = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "sensitivity"
 
 
@@ -51,7 +50,7 @@ class GlobalRegressionArtifactTests(unittest.TestCase):
             self.assertLessEqual(summary["speciation_metrics"]["MEAH+"]["median_abs_log10"], 0.15)
             self.assertLessEqual(summary["speciation_metrics"]["MEACOO-"]["median_abs_log10"], 0.10)
         else:
-            self.assertEqual(summary["selected_parameter_set"], "promoted_ionic_fit")
+            self.assertEqual(summary["selected_parameter_set"], "fixed_provisional_parameter_set")
             self.assertIn("workflow", summary["claim_boundary"].lower())
 
     def test_global_regression_values_are_not_seed_only_when_completed(self) -> None:
@@ -63,30 +62,6 @@ class GlobalRegressionArtifactTests(unittest.TestCase):
             self.assertGreaterEqual(len(moved), 3)
         else:
             self.assertGreaterEqual(len(rows), 10)
-
-
-class TrainValidationArtifactTests(unittest.TestCase):
-    def test_train_validation_artifacts_exist(self) -> None:
-        required = [
-            "train_validation_summary.json",
-            "train_validation_pressure_residuals.csv",
-            "train_validation_speciation_residuals.csv",
-            "train_validation_pressure_by_source.csv",
-            "train_validation_speciation_by_species.csv",
-            "train_validation_pressure_residuals.mpl.yaml",
-            "train_validation_pressure_residuals.png",
-            "train_validation_pressure_residuals.svg",
-            "train_validation_pressure_residuals.pdf",
-        ]
-        missing = [name for name in required if not (TRAIN_VALIDATION / name).exists()]
-        self.assertEqual(missing, [])
-
-    def test_train_validation_has_both_splits(self) -> None:
-        summary = json.loads((TRAIN_VALIDATION / "train_validation_summary.json").read_text(encoding="utf-8"))
-        self.assertIn("train", summary["pressure"])
-        self.assertIn("validation", summary["pressure"])
-        self.assertIn("train", summary["speciation"])
-        self.assertIn("validation", summary["speciation"])
 
 
 class SensitivityArtifactTests(unittest.TestCase):

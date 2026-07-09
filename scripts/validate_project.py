@@ -50,16 +50,6 @@ CURATED_REQUIREMENTS = {
         "ionic_speciation_residuals_by_species.csv",
         *plot_bundle("ionic_speciation_residuals_by_species"),
     ],
-    "analyses/phase3/ionic_epcsaft_regression/results/ion_parameter_regression": [
-        "ion_parameter_fit_summary.json",
-        "ion_parameter_fit_values.csv",
-        "ion_parameter_fit_statistics.csv",
-        "ion_parameter_speciation_fit_data.csv",
-        "ion_parameter_pressure_fit_data.csv",
-        *plot_bundle("meah_meacoo_speciation_parity"),
-        *plot_bundle("meah_meacoo_loading_curves"),
-        *plot_bundle("ion_parameter_pressure_parity"),
-    ],
     "analyses/phase3/ionic_epcsaft_regression/results/global_regression": [
         "global_regression_summary.json",
         "global_regression_values.csv",
@@ -69,14 +59,6 @@ CURATED_REQUIREMENTS = {
         "global_regression_speciation_residuals.csv",
         *plot_bundle("global_regression_pressure_parity"),
         *plot_bundle("global_regression_speciation_parity"),
-    ],
-    "analyses/phase3/ionic_epcsaft_regression/results/train_validation": [
-        "train_validation_summary.json",
-        "train_validation_pressure_residuals.csv",
-        "train_validation_speciation_residuals.csv",
-        "train_validation_pressure_by_source.csv",
-        "train_validation_speciation_by_species.csv",
-        *plot_bundle("train_validation_pressure_residuals"),
     ],
     "analyses/phase3/ionic_epcsaft_regression/results/sensitivity": [
         "parameter_sensitivity_summary.json",

@@ -18,7 +18,6 @@ IONIC_FULL_COMMANDS = [
     [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py"],
 ]
 EXPENSIVE_DIAGNOSTIC_COMMANDS = [
-    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/evaluate_train_validation_split.py"],
     [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/compute_parameter_sensitivity.py"],
     [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/fit_trace_carbonate_born.py"],
     [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/derive_oh_born_parameter.py"],

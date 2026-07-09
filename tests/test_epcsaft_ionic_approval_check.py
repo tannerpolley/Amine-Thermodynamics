@@ -52,7 +52,7 @@ class EpcsaftIonicApprovalCheckTests(unittest.TestCase):
     def test_rejects_package_fit_not_completed_curated_summary(self) -> None:
         summary = completed_summary()
         summary["completion_status"] = "package_fit_not_completed"
-        summary["selected_parameter_set"] = "promoted_ionic_fit"
+        summary["selected_parameter_set"] = "fixed_provisional_parameter_set"
         approval = evaluate_global_regression_approval(summary)
         self.assertFalse(approval["approved"])
         self.assertIn("completion_status_not_completed", approval["reasons"])

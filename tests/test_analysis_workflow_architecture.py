@@ -14,7 +14,6 @@ GENERATE_SCRIPTS = [
     ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "scripts" / "generate_data.py",
     ROOT / "analyses" / "phase2" / "activity_epcsaft" / "scripts" / "generate_data.py",
     ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "scripts" / "generate_data.py",
-    ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "evaluate_train_validation_split.py",
     ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "compute_parameter_sensitivity.py",
     ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "fit_trace_carbonate_born.py",
     ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "derive_oh_born_parameter.py",

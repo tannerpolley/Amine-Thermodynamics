@@ -2,22 +2,16 @@ from __future__ import annotations
 
 import json
 import math
-import sys
-from pathlib import Path
-
-REPO_ROOT = Path(__file__).resolve().parents[4]
-SRC_ROOT = REPO_ROOT / "src"
-if str(SRC_ROOT) not in sys.path:
-    sys.path.insert(0, str(SRC_ROOT))
+from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
 
-from MEA.epcsaft_ionic.ion_parameter_regression import load_tier_a_targets
 from MEA.epcsaft_ionic.model import (
     DEFAULT_INITIAL_GUESS,
     EPCSAFT_IONIC_ANALYSIS,
     SPECIES_INDEX,
+    load_speciation_targets,
     solve_activity_speciation,
     write_csv,
     write_json,
@@ -30,7 +24,6 @@ FIT_BOUNDS = {
 }
 TARGET_SPECIES = ("HCO3-", "CO3^2-")
 OUT_DIR = EPCSAFT_IONIC_ANALYSIS / "results" / "trace_carbonate_born_regression"
-PROMOTED_ION_SUMMARY = EPCSAFT_IONIC_ANALYSIS / "results" / "ion_parameter_regression" / "ion_parameter_fit_summary.json"
 ANCHOR_SCALES = (0.0,)
 LOSSES = ("linear",)
 SEED_GRID = (
@@ -41,12 +34,19 @@ SEED_GRID = (
 )
 
 
+@dataclass(frozen=True)
+class CarbonateTarget:
+    row_id: str
+    source: str
+    T: float
+    P: float
+    loading: float
+    x: np.ndarray
+    species_targets: tuple[str, ...]
+
+
 def baseline_values() -> dict[str, float]:
-    values = dict(DEFAULT_INITIAL_GUESS)
-    if PROMOTED_ION_SUMMARY.exists():
-        summary = json.loads(PROMOTED_ION_SUMMARY.read_text(encoding="utf-8"))
-        values.update({key: float(value) for key, value in summary.get("fitted_values", {}).items()})
-    return values
+    return dict(DEFAULT_INITIAL_GUESS)
 
 
 def fit_vector_to_values(vector: np.ndarray, base: dict[str, float]) -> dict[str, float]:
@@ -57,10 +57,27 @@ def fit_vector_to_values(vector: np.ndarray, base: dict[str, float]) -> dict[str
 
 def _target_rows():
     rows = []
-    for target in load_tier_a_targets(None):
-        species = tuple(name for name in TARGET_SPECIES if name in target.species_targets)
+    for target in load_speciation_targets(None):
+        species = tuple(
+            name
+            for name in TARGET_SPECIES
+            if target.target_roles.get(name) == "direct_positive"
+        )
         if species:
-            rows.append((target, species))
+            rows.append(
+                (
+                    CarbonateTarget(
+                        row_id=target.row_id,
+                        source=target.source,
+                        T=target.T,
+                        P=target.P,
+                        loading=target.loading,
+                        x=target.x,
+                        species_targets=species,
+                    ),
+                    species,
+                )
+            )
     return rows
 
 

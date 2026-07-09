@@ -7,7 +7,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW_DOCS = (
     ROOT / "README.md",
-    ROOT / "HANDOFF.md",
     *sorted((ROOT / "analyses").glob("**/README.md")),
     *sorted((ROOT / "docs" / "ePC-SAFT").glob("*.md")),
     *sorted((ROOT / "docs" / "coordination").glob("*.md")),

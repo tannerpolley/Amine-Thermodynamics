@@ -29,7 +29,7 @@ from MEA.common.plot_style import (
 from MEA.epcsaft_ionic.model import (
     FIT_DATASET_DIR,
     IONIC_PLOT_ROOT,
-    OUT_DIR,
+    DEFAULT_INITIAL_GUESS,
     PRESSURE_OUT_DIR,
     SPECIATION_OUT_DIR,
     SUMMARY_OUT_DIR,
@@ -45,19 +45,8 @@ from MEA.epcsaft_ionic.model import (
 )
 
 
-def _load_fitted_values() -> dict[str, float]:
-    values_path = OUT_DIR / "ionic_parameter_regression_values.csv"
-    if not values_path.exists():
-        raise RuntimeError(
-            "Missing ionic regression values. Run `uv run python -m MEA.epcsaft_ionic.regress_parameters` first."
-        )
-    frame = pd.read_csv(values_path)
-    values = {str(row["parameter"]): float(row["fitted"]) for _, row in frame.iterrows()}
-    promoted_ion_values = IONIC_PLOT_ROOT / "ion_parameter_regression" / "ion_parameter_fit_values.csv"
-    if promoted_ion_values.exists():
-        ion_frame = pd.read_csv(promoted_ion_values)
-        values.update({str(row["parameter"]): float(row["fitted"]) for _, row in ion_frame.iterrows()})
-    return values
+def _load_fixed_values() -> dict[str, float]:
+    return dict(DEFAULT_INITIAL_GUESS)
 
 
 def _accepted_mask(frame: pd.DataFrame) -> pd.Series:
@@ -285,8 +274,7 @@ def plot_speciation(rows: list[dict[str, object]]):
 
 
 def main() -> int:
-    values = _load_fitted_values()
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    values = _load_fixed_values()
     IONIC_PLOT_ROOT.mkdir(parents=True, exist_ok=True)
     p_rows = pressure_rows(values)
     s_rows = speciation_rows(values)
