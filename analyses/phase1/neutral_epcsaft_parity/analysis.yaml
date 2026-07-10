@@ -1,7 +1,23 @@
 id: neutral_epcsaft_parity
 title: Neutral ePC-SAFT Parity
-layout: analyses/phase1/neutral_epcsaft_parity
+status: baseline
+summary: Evaluates the neutral ePC-SAFT runtime against the legacy PC-SAFT pressure curves on the shared Jou loading grid.
+owner: project
+inputs:
+  - path: analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_fit_curves.csv
+    kind: canonical_pressure_reference
+  - path: data/reference/MEA/VLE/Canonical_Combined_VLE.csv
+    kind: experimental_vle_dataset
+outputs:
+  - path: analyses/phase1/neutral_epcsaft_parity/results/pressure
+    kind: canonical_pressure_results_and_plot_bundle
 commands:
-  generate_data: uv run python analyses/phase1/neutral_epcsaft_parity/scripts/generate_data.py
-  render_figures: uv run python analyses/phase1/neutral_epcsaft_parity/scripts/render_figures.py
-results_policy: Track curated CSV snapshots, .mpl.yaml sidecars, PNG previews, SVG figures, and PDF LaTeX artifacts under results/<plot_set>/; keep disposable run output under ignored results/runs/.
+  generate:
+    - uv run python analyses/phase1/neutral_epcsaft_parity/scripts/generate_data.py
+  render:
+    - uv run python analyses/phase1/neutral_epcsaft_parity/scripts/render_figures.py
+runtime:
+  class: quick
+  expected_seconds: 5
+manuscript_consumers: []
+results_policy: Track one canonical pressure result set and its exact plotted-data CSV, sidecar, PNG, SVG, and PDF bundle under results/pressure.

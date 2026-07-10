@@ -1,16 +1,31 @@
 id: smith_missen_baseline
 title: Phase 1 Smith-Missen Baseline
-layout: analyses/phase1/smith_missen_baseline
+status: manuscript_evidence
+summary: Curates the Phase 1 pressure and ideal-activity speciation evidence from the canonical baseline calculations into manuscript-owned tables and figures.
+owner: project
+inputs:
+  - path: analyses/phase1/six_species_baseline/results
+    kind: canonical_six_species_results
+  - path: analyses/phase1/neutral_epcsaft_parity/results/pressure
+    kind: canonical_neutral_parity_results
+  - path: data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv
+    kind: experimental_speciation_dataset
+outputs:
+  - path: analyses/phase1/smith_missen_baseline/results
+    kind: curated_phase1_tables
+  - path: analyses/phase1/smith_missen_baseline/figures/pressure/output
+    kind: pressure_plot_bundle
+  - path: analyses/phase1/smith_missen_baseline/figures/speciation/output
+    kind: speciation_plot_bundles
 commands:
-  generate_data: uv run python analyses/phase1/smith_missen_baseline/scripts/generate_data.py
-  render_figures: uv run python analyses/phase1/smith_missen_baseline/scripts/render_figures.py
-results_policy: Track compatibility CSV snapshots, .mpl.yaml sidecars, PNG previews, SVG figures, and PDF LaTeX artifacts under results/ while keeping figure-owned input/output folders under figures/<figure_id>/.
-figures:
-  pressure:
-    input: analyses/phase1/smith_missen_baseline/figures/pressure/input
-    output: analyses/phase1/smith_missen_baseline/figures/pressure/output
-    scripts: analyses/phase1/smith_missen_baseline/figures/pressure/scripts
-  speciation:
-    input: analyses/phase1/smith_missen_baseline/figures/speciation/input
-    output: analyses/phase1/smith_missen_baseline/figures/speciation/output
-    scripts: analyses/phase1/smith_missen_baseline/figures/speciation/scripts
+  generate:
+    - uv run python analyses/phase1/smith_missen_baseline/scripts/generate_data.py
+  render:
+    - uv run python analyses/phase1/smith_missen_baseline/scripts/render_figures.py
+runtime:
+  class: quick
+  expected_seconds: 5
+manuscript_consumers:
+  - docs/latex/sections/data_methods.tex
+  - docs/latex/sections/mea_system_modeling_results.tex
+results_policy: Track curated Phase 1 tables under results and figure-specific inputs, exact plotted-data snapshots, sidecars, PNGs, SVGs, and PDFs under figures; never mirror whole calculation tables into figure outputs.

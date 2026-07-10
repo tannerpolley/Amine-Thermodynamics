@@ -8,12 +8,15 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import matplotlib.pyplot as plt
+
 from MEA.common.analysis_io import file_sha256, repo_relative_path
-from MEA.common.plot_style import write_mpl_sidecar
+from MEA.common.plot_style import save_figure_bundle, write_mpl_sidecar
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PATH_CHECK_PATH = ROOT / "scripts" / "check_no_local_paths.py"
+ANALYSIS_MANIFESTS = sorted((ROOT / "analyses").glob("**/analysis.yaml"))
 
 
 def _load_path_check():
@@ -60,6 +63,17 @@ class PortableArtifactTests(unittest.TestCase):
             self.assertIn(f"data_path: {repo_relative_path(data_path)}", sidecar)
             self.assertIn(f"data_sha256: {file_sha256(data_path)}", sidecar)
 
+    def test_figure_bundle_is_byte_deterministic(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as temporary_directory:
+            directory = Path(temporary_directory)
+            fig, ax = plt.subplots()
+            ax.plot([0.0, 1.0], [1.0, 0.0])
+            first = save_figure_bundle(fig, directory / "first")
+            second = save_figure_bundle(fig, directory / "second")
+            plt.close(fig)
+
+            self.assertEqual([file_sha256(path) for path in first], [file_sha256(path) for path in second])
+
 
 class ArtifactOwnershipTests(unittest.TestCase):
     def test_phase1_and_phase2_sidecars_match_plotted_data(self) -> None:
@@ -79,9 +93,15 @@ class ArtifactOwnershipTests(unittest.TestCase):
                 self.assertTrue(data_path.is_file(), data_path)
                 self.assertEqual(hash_match.group(1), file_sha256(data_path))
 
-    def test_phase1_and_phase2_have_no_tracked_processed_result_mirrors(self) -> None:
+    def test_active_phases_have_no_tracked_processed_result_mirrors(self) -> None:
         result = subprocess.run(
-            ["git", "ls-files", "analyses/phase1/**/data/processed/**", "analyses/phase2/**/data/processed/**"],
+            [
+                "git",
+                "ls-files",
+                "analyses/phase1/**/data/processed/**",
+                "analyses/phase2/**/data/processed/**",
+                "analyses/phase3/**/data/processed/**",
+            ],
             cwd=ROOT,
             check=True,
             capture_output=True,
@@ -150,6 +170,67 @@ class ArtifactOwnershipTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
 
         self.assertNotIn("write_dual", source)
+        self.assertNotIn("PROCESSED_DIR", source)
+
+
+class AnalysisManifestTests(unittest.TestCase):
+    def test_all_analysis_manifests_use_the_complete_contract(self) -> None:
+        self.assertEqual(len(ANALYSIS_MANIFESTS), 7)
+        required_top_level = (
+            "id:",
+            "title:",
+            "status:",
+            "summary:",
+            "owner:",
+            "inputs:",
+            "outputs:",
+            "commands:",
+            "runtime:",
+            "manuscript_consumers:",
+            "results_policy:",
+        )
+        for path in ANALYSIS_MANIFESTS:
+            with self.subTest(path=path):
+                text = path.read_text(encoding="utf-8")
+                top_level = {line.split(":", 1)[0] + ":" for line in text.splitlines() if line and not line[0].isspace()}
+                self.assertTrue(set(required_top_level).issubset(top_level))
+                self.assertRegex(text, r"(?m)^  - path: .+$")
+                self.assertRegex(text, r"(?m)^    kind: .+$")
+                self.assertRegex(text, r"(?m)^  class: (quick|standard|expensive)$")
+
+    def test_plot_registry_matches_current_svg_bundles_exactly(self) -> None:
+        manifest = (ROOT / ".mplgallery" / "manifest.yaml").read_text(encoding="utf-8")
+        registered_svgs = {
+            match.group(1).strip()
+            for match in re.finditer(r"(?m)^  svg_path:\s*(.+)$", manifest)
+        }
+        registered_sidecars = {
+            match.group(1).strip()
+            for match in re.finditer(r"(?m)^  sidecar_path:\s*(.+)$", manifest)
+        }
+        data_paths = [
+            match.group(1).strip()
+            for match in re.finditer(r"(?m)^  data_path:\s*(.+)$", manifest)
+        ]
+        expected_svgs = {
+            path.relative_to(ROOT).as_posix() for path in (ROOT / "analyses").rglob("*.svg")
+        }
+        expected_sidecars = {str(Path(path).with_suffix(".mpl.yaml")) for path in expected_svgs}
+
+        self.assertEqual(registered_svgs, expected_svgs)
+        self.assertEqual(registered_sidecars, expected_sidecars)
+        self.assertEqual(len(data_paths), len(expected_svgs))
+        self.assertTrue(all((ROOT / path).is_file() for path in data_paths))
+
+    def test_phase3_generator_writes_only_canonical_results(self) -> None:
+        source = (
+            ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "generate_data.py"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("PRESSURE_DIR", source)
+        self.assertIn("SPECIATION_DIR", source)
+        self.assertIn("_load_fixed_values", source)
+        self.assertNotIn("_load_fitted_values", source)
         self.assertNotIn("PROCESSED_DIR", source)
 
 

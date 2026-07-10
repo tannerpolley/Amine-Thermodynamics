@@ -7,7 +7,7 @@
 
 ## Executive assessment
 
-The repository has a credible scientific core and a substantially developed manuscript, but it is not submission-ready. The strongest part is the Phase 2 activity-based evaluation: it uses source-verified reaction constants, the pinned upstream `epcsaft` package passes its final integration check, and all 644 retained Phase 2 speciation states report convergence. The main pressure and speciation residuals quoted in the abstract are traceable to those Phase 2 artifacts.
+The repository has a credible scientific core and a substantially developed manuscript, but it is not submission-ready. The strongest part is the Phase 2 activity-based evaluation: it uses source-verified reaction constants, the pinned upstream `epcsaft` package passes its final integration check, and the 161 pressure plus 74 speciation evidence rows converge. After the local reaction gate was aligned to the canonical $10^{-7}$ tolerance, 642 of 644 auxiliary plotting-grid states are accepted and two are retained as explicit rejected diagnostics. The main pressure and speciation residuals quoted in the abstract are traceable to the accepted Phase 2 artifacts.
 
 The blocking problem is that the repository currently tells two incompatible scientific stories. Phase 2 and the manuscript table use one source-verified reaction-constant basis, while the active Phase 3 package code uses materially different hard-coded constants. Phase 3 also promotes and plots an eight-row local SciPy fit that the current code explicitly calls a historical snapshot and refuses to rerun. Tests then certify the stale files as a “promoted” fit. Those contradictions undermine the manuscript's direct ion-parameter, sensitivity, and validation claims even though they do not invalidate the retained Phase 2 pressure result by themselves.
 
@@ -31,7 +31,7 @@ Recommended disposition: retain Phase 2 as the current defensible result, quaran
 
 - **Verified:** `uv run python scripts/validate_project.py quick` passed 68 unit tests, the doctor, local-path guard, and compilation in 2.225 s.
 - **Verified:** `uv run python scripts/check_epcsaft_integration.py --mode final` passed against pinned `epcsaft` commit `9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785` and version 1.5.2.
-- **Verified:** the Phase 2 solver diagnostics contain 644/644 `solver_success=True`, 644/644 `message=converged`, maximum absolute charge residual $4.46\times10^{-10}$, and no state failures in the retained pressure/speciation campaign.
+- **Verified after repair:** the Phase 2 solver diagnostics contain 642 accepted and two explicitly rejected plotting-grid states under the canonical $10^{-7}$ reaction gate. Accepted rows have maximum absolute reaction residual below $10^{-7}$, maximum absolute charge residual $1.12\times10^{-10}$, and no state failures; all 161 pressure and 74 speciation evidence rows remain converged.
 - **Verified:** the manuscript builds to a 19-page PDF with no undefined citations or cross-references; the build produced only two underfull-box warnings.
 - **Verified:** all citation keys used by the manuscript exist, and the submission-safety text scan found no internal AI/tooling language in manuscript `.tex` files.
 - **Verified:** the repository already has useful central seams for upstream integration (`epcsaft_runtime.py`, diagnostics modules), source/processed/result analysis folders, plot sidecars, and explicit claim-boundary artifacts.
@@ -102,7 +102,7 @@ Do not retain the current mixed state.
 - `src/MEA/epcsaft_ionic/model.py:185-209,460-491` sets `return_best_effort=True` and copies `result.success` and `result.message` without imposing a message/residual acceptance gate.
 - `analyses/phase3/ionic_epcsaft_regression/data/processed/ionic_speciation_activity_residuals.csv` has 74 rows marked `success=True`, but 10 have `message=chemical equilibrium did not converge`.
 - The same contradiction propagates to 40 of 296 global-regression speciation residual rows and 40 of 296 so-called train-validation residual rows.
-- The Phase 2 artifacts do not show this defect: their retained 644 states all report `message=converged`.
+- The Phase 2 artifacts do not accept this defect: 642 plotting-grid states report convergence, while the two nonconverged states are retained with rejection reasons and excluded from curves and metrics.
 
 **Impact**
 

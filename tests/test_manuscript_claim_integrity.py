@@ -46,6 +46,15 @@ class ManuscriptClaimIntegrityTests(unittest.TestCase):
         self.assertFalse((PHASE3_ROOT / "scripts" / "evaluate_train_validation_split.py").exists())
         self.assertFalse((PHASE3_ROOT / "results" / "train_validation").exists())
 
+    def test_single_author_and_loading_symbol_are_consistent(self) -> None:
+        main = (LATEX_ROOT / "main.tex").read_text(encoding="utf-8-sig")
+        nomenclature = (LATEX_ROOT / "sections" / "nomenclature.tex").read_text(encoding="utf-8-sig")
+
+        self.assertIn(r"\shortauthors{Polley}", main)
+        self.assertNotIn(r"\shortauthors{Polley et al.}", main)
+        self.assertIn(r"\(\alpha\) & \COtwo loading", nomenclature)
+        self.assertNotIn(r"\(L\) & \COtwo loading", nomenclature)
+
 
 if __name__ == "__main__":
     unittest.main()

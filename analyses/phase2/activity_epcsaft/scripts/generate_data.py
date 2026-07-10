@@ -17,6 +17,7 @@ from MEA.common.reaction_catalog import (
     activity_source_map,
     reaction_catalog_sha256,
 )
+from MEA.common.solver_acceptance import REACTION_TOLERANCE
 from MEA.epcsaft_ionic.model import (
     SPECIES_INDEX,
     load_speciation_targets,
@@ -101,8 +102,6 @@ SPECIATION_MEDIAN_ABS_LOG10_THRESHOLD = 0.5
 SPECIATION_REPORTED_ZERO_ABS_THRESHOLD = 0.002
 SOLVER_SUCCESS_FRACTION_THRESHOLD = 1.0
 PHASE2_SPECIES_INITIAL_MIN = 1.0e-8
-PHASE2_SOLVER_TOLERANCE = 1.0e-6
-PHASE2_REACTION_TOLERANCE = 1.0e-6
 LOG_RESIDUAL_TARGET_ROLES = {"direct_positive", "aggregate_direct_positive"}
 ZERO_TARGET_ROLES = {"direct_zero", "aggregate_direct_zero"}
 
@@ -185,8 +184,8 @@ def phase2_reactions(T: float):
 def phase2_speciation_kwargs() -> dict[str, float | int]:
     return {
         "max_iterations": 200,
-        "tolerance": PHASE2_SOLVER_TOLERANCE,
-        "reaction_tolerance": PHASE2_REACTION_TOLERANCE,
+        "tolerance": REACTION_TOLERANCE,
+        "reaction_tolerance": REACTION_TOLERANCE,
     }
 
 
@@ -442,7 +441,7 @@ def pressure_equilibrium_rows() -> list[dict[str, object]]:
     for target, result in zip(targets, results):
         row: dict[str, object] = {
             "row_id": target.row_id,
-            "source": target.paper,
+            "source": target.source_key,
             "temperature_C": float(target.T - 273.15),
             "MEA_weight_fraction": 0.3,
             "CO2_loading": float(target.loading),

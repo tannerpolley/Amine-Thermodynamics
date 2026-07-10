@@ -1,7 +1,7 @@
 # Phase 2 Solver And Claim Boundary Report
 
 phase2_status: model_ran_success
-phase2_validation_status: validated
+phase2_validation_status: residual_limited
 source_status: source_verified
 solver_status: native_epcsaft_activity_solver_ran
 
@@ -19,4 +19,4 @@ Evidence now present:
 - `phase2_speciation_target_roles.csv` prevents reported-zero and balance-inferred rows from being treated as direct log-residual targets.
 
 Failed gates:
-- none
+- solver: curve_grid_success_fraction success_fraction=0.9968944099378882 threshold=1.0

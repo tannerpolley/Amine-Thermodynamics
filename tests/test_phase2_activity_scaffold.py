@@ -111,6 +111,26 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         self.assertNotIn(OLD_FAILED_VALIDATION_LABEL, "\n".join(row["next_action"] for row in rows.values()))
         self.assertTrue((ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_equilibrium_results.csv").exists())
 
+    def test_phase2_curve_states_apply_the_canonical_reaction_gate(self) -> None:
+        rows = _rows(
+            ROOT
+            / "analyses"
+            / "phase2"
+            / "activity_epcsaft"
+            / "results"
+            / "phase2_solver_diagnostics.csv"
+        )
+
+        accepted = [row for row in rows if row["solver_success"] == "True"]
+        rejected = [row for row in rows if row["solver_success"] == "False"]
+
+        self.assertEqual(len(rows), 644)
+        self.assertEqual(len(accepted), 642)
+        self.assertEqual(len(rejected), 2)
+        self.assertLessEqual(max(abs(float(row["max_abs_reaction_residual"])) for row in accepted), 1.0e-7)
+        self.assertTrue(all("reaction_residual_exceeds_tolerance" in row["rejection_reason"] for row in rejected))
+        self.assertTrue(all(row["message"] != "converged" for row in rejected))
+
     def test_generated_problem_definition_records_native_solver_contract(self) -> None:
         path = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_activity_speciation_problem.json"
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -236,7 +256,10 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
             for row in rows
             if row["observable_family"] == "pressure" and row["target_role"] == "measured_pressure"
         ]
-        self.assertEqual({row["source"] for row in pressure_rows}, {"Aronu", "Hilliard", "Idris", "Jou", "Mamun", "Xu"})
+        self.assertEqual(
+            {row["source"] for row in pressure_rows},
+            {"Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011"},
+        )
         self.assertEqual(sum(int(row["target_count"]) for row in pressure_rows), 161)
         self.assertEqual(sum(int(row["state_count"]) for row in pressure_rows), 161)
         self.assertEqual(sum(int(row["solver_success_count"]) for row in pressure_rows), 161)
@@ -273,6 +296,16 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
                 self.assertEqual(row["median_abs_log10"], "")
                 self.assertEqual(row["rmse_log10"], "")
                 self.assertEqual(row["max_abs_log10"], "")
+
+    def test_pressure_generation_preserves_canonical_source_keys(self) -> None:
+        source = (
+            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "scripts" / "generate_data.py"
+        ).read_text(encoding="utf-8")
+        pressure_function = source.split("def pressure_equilibrium_rows()", 1)[1].split(
+            "def speciation_metrics_rows", 1
+        )[0]
+        self.assertIn('"source": target.source_key', pressure_function)
+        self.assertNotIn('"source": target.paper', pressure_function)
 
 
 if __name__ == "__main__":

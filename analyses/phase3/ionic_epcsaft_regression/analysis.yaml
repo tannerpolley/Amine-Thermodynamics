@@ -1,7 +1,30 @@
 id: ionic_epcsaft_regression
-title: Full Ionic ePC-SAFT Regression
-layout: analyses/phase3/ionic_epcsaft_regression
+title: Full-Ionic ePC-SAFT Diagnostic Evaluation
+status: provisional_diagnostic
+summary: Evaluates the full-ionic model with fixed provisional ion parameters, retaining rejected states for diagnosis while excluding them from metrics and plots.
+owner: project
+inputs:
+  - path: data/reference/MEA/manifests/reaction_equilibrium_catalog.csv
+    kind: canonical_reaction_catalog
+  - path: data/reference/MEA/VLE/Canonical_Combined_VLE.csv
+    kind: experimental_vle_dataset
+  - path: data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv
+    kind: experimental_speciation_dataset
+  - path: src/MEA/epcsaft_ionic/plot_results.py
+    kind: fixed_provisional_parameter_definition
+outputs:
+  - path: analyses/phase3/ionic_epcsaft_regression/results/pressure
+    kind: accepted_and_rejected_pressure_diagnostics
+  - path: analyses/phase3/ionic_epcsaft_regression/results/speciation
+    kind: accepted_and_rejected_speciation_diagnostics
 commands:
-  generate_data: uv run python analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py
-  render_figures: uv run python analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py
-results_policy: Track curated CSV snapshots, .mpl.yaml sidecars, PNG previews, SVG figures, and PDF LaTeX artifacts under results/<plot_set>/; keep disposable run output under ignored results/runs/.
+  generate:
+    - uv run python analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py
+  render:
+    - uv run python analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py
+runtime:
+  class: expensive
+  expected_seconds: 300
+manuscript_consumers:
+  - docs/latex/sections/mea_system_modeling_results.tex
+results_policy: Track canonical diagnostic rows and exact plotted-data bundles under results; preserve rejected rows with reasons, exclude them from metrics and plots, and make no fitted-parameter claim.

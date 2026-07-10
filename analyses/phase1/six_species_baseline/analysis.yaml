@@ -1,7 +1,28 @@
 id: six_species_baseline
 title: Six-Species Baseline
-layout: analyses/phase1/six_species_baseline
+status: baseline
+summary: Recomputes the ideal-activity six-species Smith-Missen equilibrium and legacy PC-SAFT pressure baseline used to establish Phase 1 behavior.
+owner: project
+inputs:
+  - path: data/reference/MEA/VLE/Canonical_Combined_VLE.csv
+    kind: experimental_vle_dataset
+  - path: data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv
+    kind: experimental_speciation_dataset
+  - path: data/reference/MEA/manifests/reaction_equilibrium_catalog.csv
+    kind: canonical_reaction_catalog
+outputs:
+  - path: analyses/phase1/six_species_baseline/results/pressure
+    kind: canonical_pressure_results_and_plot_bundle
+  - path: analyses/phase1/six_species_baseline/results/speciation
+    kind: canonical_speciation_results_and_plot_bundle
 commands:
-  generate_data: uv run python analyses/phase1/six_species_baseline/scripts/generate_data.py
-  render_figures: uv run python analyses/phase1/six_species_baseline/scripts/render_figures.py
-results_policy: Track curated CSV snapshots, .mpl.yaml sidecars, PNG previews, SVG figures, and PDF LaTeX artifacts under results/<plot_set>/; keep disposable run output under ignored results/runs/.
+  generate:
+    - uv run python analyses/phase1/six_species_baseline/scripts/generate_data.py
+  render:
+    - uv run python analyses/phase1/six_species_baseline/scripts/render_figures.py
+runtime:
+  class: quick
+  expected_seconds: 5
+manuscript_consumers:
+  - docs/latex/sections/mea_system_modeling_results.tex
+results_policy: Track the single owned pressure and speciation result sets plus their exact plotted-data CSV, sidecar, PNG, SVG, and PDF bundles.

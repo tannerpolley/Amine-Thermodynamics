@@ -22,16 +22,16 @@ from MEA.epcsaft_ionic.plot_results import plot_pressure, plot_speciation  # noq
 from fit_trace_carbonate_born import OUT_DIR as TRACE_CARBONATE_DIR  # noqa: E402
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
-PROCESSED_DIR = ANALYSIS_DIR / "data" / "processed"
-PRESSURE_CSV = PROCESSED_DIR / "ionic_pressure_comparison.csv"
-SPECIATION_CSV = PROCESSED_DIR / "ionic_speciation_activity_residuals.csv"
 PRESSURE_DIR = ANALYSIS_DIR / "results" / "pressure"
 SPECIATION_DIR = ANALYSIS_DIR / "results" / "speciation"
+PRESSURE_CSV = PRESSURE_DIR / "ionic_pressure_comparison.csv"
+SPECIATION_CSV = SPECIATION_DIR / "ionic_speciation_activity_residuals.csv"
 LATEX_FIGURES_DIR = REPO_ROOT / "docs" / "latex" / "figures"
 
 
 def write_pressure_residual_plot(pressure_rows: list[dict[str, object]]) -> tuple[Path, Path, Path]:
     frame = pd.DataFrame(pressure_rows)
+    frame = frame.loc[frame["accepted"]].copy()
     residual_frame = frame[["row_id", "paper", "temperature_C", "CO2_loading", "raw_log10_model_over_data"]].rename(
         columns={"paper": "source", "raw_log10_model_over_data": "log10_model_over_data"}
     )
@@ -76,6 +76,7 @@ def write_pressure_residual_plot(pressure_rows: list[dict[str, object]]) -> tupl
 
 def write_speciation_residual_plot(speciation_rows: list[dict[str, object]]) -> tuple[Path, Path, Path]:
     frame = pd.DataFrame(speciation_rows)
+    frame = frame.loc[frame["accepted"]].copy()
     melted_rows = []
     species_names = ("CO2", "MEA", "H2O", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-")
     for row in frame.to_dict("records"):
@@ -217,8 +218,6 @@ def main() -> int:
         return 1
     pressure_rows = pd.read_csv(PRESSURE_CSV).to_dict("records")
     speciation_rows = pd.read_csv(SPECIATION_CSV).to_dict("records")
-    pd.DataFrame(pressure_rows).to_csv(PRESSURE_DIR / "ionic_pressure_comparison.csv", index=False)
-    pd.DataFrame(speciation_rows).to_csv(SPECIATION_DIR / "ionic_speciation_activity_residuals.csv", index=False)
     pressure_plot = plot_pressure(pressure_rows)
     speciation_plot = plot_speciation(speciation_rows)
     pressure_residual_png, _, _ = write_pressure_residual_plot(pressure_rows)

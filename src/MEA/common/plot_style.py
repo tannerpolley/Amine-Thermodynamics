@@ -86,6 +86,7 @@ def apply_plot_theme() -> None:
             "axes.titlesize": 13,
             "legend.frameon": False,
             "legend.fontsize": 8.5,
+            "svg.hashsalt": "MEA-Thermodynamics",
             "xtick.direction": "out",
             "ytick.direction": "out",
             "savefig.facecolor": "white",
@@ -179,8 +180,8 @@ def save_figure_bundle(fig: Any, stem_path: Path, *, dpi: int = 300) -> tuple[Pa
     svg = stem_path.with_suffix(".svg")
     pdf = stem_path.with_suffix(".pdf")
     fig.savefig(png, dpi=dpi, bbox_inches="tight")
-    fig.savefig(svg, bbox_inches="tight")
-    fig.savefig(pdf, bbox_inches="tight")
+    fig.savefig(svg, bbox_inches="tight", metadata={"Date": None})
+    fig.savefig(pdf, bbox_inches="tight", metadata={"CreationDate": None, "ModDate": None})
     svg_lines = svg.read_text(encoding="utf-8").splitlines()
     svg.write_text("\n".join(line.rstrip() for line in svg_lines) + "\n", encoding="utf-8")
     return png, svg, pdf

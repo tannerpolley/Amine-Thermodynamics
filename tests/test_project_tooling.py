@@ -43,6 +43,10 @@ class ProjectToolingTests(unittest.TestCase):
         self.assertIn("manuscript_references", main)
         self.assertNotIn("bibliography{references,", main)
 
+        build_script = (ROOT / "scripts" / "build_manuscript.sh").read_text(encoding="utf-8")
+        self.assertIn("latexmk -g -pdf", build_script)
+        self.assertIn("SOURCE_DATE_EPOCH", build_script)
+
         workflow = (ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         for command in (
             "uv sync --locked --group test",

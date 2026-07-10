@@ -80,8 +80,15 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
                     self.assertIn("read_required_csv", source)
                 else:
                     self.assertIn("results", source)
-                    if "/phase3/" not in path.as_posix() and "/paper_validation/" not in path.as_posix():
+                    if "/paper_validation/" not in path.as_posix():
                         self.assertNotIn("PROCESSED_DIR", source)
+
+    def test_phase3_residual_rendering_excludes_rejected_states(self) -> None:
+        source = _source(
+            ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "render_figures.py"
+        )
+
+        self.assertEqual(source.count('frame = frame.loc[frame["accepted"]].copy()'), 2)
 
     def test_confidence_validation_uses_render_orchestrator_not_data_generation(self) -> None:
         source = _source(ROOT / "scripts" / "validate_project.py")

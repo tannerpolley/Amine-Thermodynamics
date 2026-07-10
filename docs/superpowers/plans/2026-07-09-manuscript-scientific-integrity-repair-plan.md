@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Preserve the verified Phase 2 activity campaign: 161 pressure records, 74 speciation records, 644/644 converged retained solver states, and source-verified Nasrifar/Austgen activity constants.
+- Preserve the verified Phase 2 activity campaign: 161 converged pressure records, 74 converged speciation records, strict acceptance for all auxiliary curve states, and source-verified Nasrifar/Austgen activity constants.
 - Treat the disabled eight-row SciPy fit and every dependent fit/sensitivity/validation claim as non-publication evidence; do not invent a replacement fit.
 - Use repository-relative POSIX artifact paths and fail loudly on nonconvergence, missing provenance, stale artifacts, or unsupported promotion.
 - Keep ideal-baseline and activity-model reaction bases explicitly named; do not force genuinely different literature conventions into one unlabeled coefficient set.
@@ -88,7 +88,7 @@
 | Historical fit handling | Audit P0 evidence + repository no-legacy policy | Remove publication claims and obsolete fit figures/artifacts; keep no compatibility path. | Parameter values remain explicitly provisional fixed inputs, not a current regression result. | No | parameter-provenance maintainer |
 | VLE Idris rows | Audit primary-source verification | Retain the 10 rows, add source CSV/citation/row lineage, and rebuild the 161-row table deterministically. | Preserves current Phase 2 counts while correcting provenance. | No | data-provenance maintainer |
 | Artifact owner | Audit duplicate/hash evidence | Canonical numerical outputs live once under analysis `results/`; figure folders own only plotted snapshots and render bundles. | Eliminates drift and clarifies calculation-to-figure lineage. | No | analysis-artifact maintainer |
-| Test-complete threshold | Source artifacts + Auto Mode recorded default | Require 161 pressure rows, 74 speciation rows, 644 accepted Phase 2 states, charge residual ≤1e-6, reaction residual ≤1e-7, no nonconverged accepted rows, and deterministic rebuild. | Converts manuscript claims into executable gates. | No | validation maintainer |
+| Test-complete threshold | Source artifacts + Auto Mode recorded default | Require 161 converged pressure rows, 74 converged speciation rows, 642 accepted plus 2 explicitly rejected auxiliary curve states, accepted charge residual ≤1e-6, accepted reaction residual ≤1e-7, no nonconverged accepted rows, and deterministic rebuild. | Converts manuscript claims into executable gates without hiding strict-gate failures. | No | validation maintainer |
 | TDD policy | Required planning method | Use red/green focused tests before every code-path repair; diagnostic regeneration follows systematic debugging on failure. | Prevents artifact-led changes from masking broken contracts. | No | implementation maintainer |
 | Branch/topology | Auto Mode authorization + multi-agent restriction | Use `codex/manuscript-scientific-integrity-repair`, inline execution, no subagents. | Keeps changes isolated while respecting current collaboration policy. | No | implementation maintainer |
 | Publish/merge behavior | Auto Mode authorization | No push; local merge is preauthorized only after clean premerge proof and verification. | Prevents unverified external mutation. | No | merge maintainer |
@@ -104,7 +104,7 @@ Test complete means all of the following are true:
 2. `ruff check src scripts analyses tests` reports zero violations.
 3. `uv run python scripts/validate_project.py quick` passes.
 4. `uv run python scripts/check_epcsaft_integration.py --mode final` passes at the pinned commit.
-5. Phase 2 regenerated summaries contain exactly 161 pressure rows, 74 speciation targets, and 644 accepted/converged diagnostics; maximum absolute charge residual is at most `1e-6`, maximum absolute reaction residual is at most `1e-7`, and accepted nonconverged rows equal zero.
+5. Phase 2 regenerated summaries contain exactly 161 converged pressure rows, 74 converged speciation targets, 642 accepted and 2 explicitly rejected auxiliary curve diagnostics; accepted maximum absolute charge residual is at most `1e-6`, accepted maximum absolute reaction residual is at most `1e-7`, and accepted nonconverged rows equal zero.
 6. The canonical VLE builder produces 161 unique rows from six cited sources with exactly 10 Idris rows; a second build produces no diff.
 7. No tracked parsed JSON value contains a local home/worktree path.
 8. No current manuscript source contains “direct amine-ion regression,” “train-validation split,” or a “This work” label for MEAH+/MEACOO- fitted values.
@@ -501,33 +501,33 @@ git commit -m "build: add scientific manuscript validation gates"
 - Consumes: Tasks 1–6 canonical code/data/contracts.
 - Produces: current deterministic artifacts with catalog/data hashes and one final publication receipt.
 
-- [ ] **Step 1: Run Phase 1/2 data generation under systematic-debugging discipline**
+- [x] **Step 1: Run Phase 1/2 data generation under systematic-debugging discipline**
 
 Run: `uv run python scripts/generate_all_analysis_data.py`
-Expected: Phase 1/2 complete; Phase 2 remains 161 pressure, 74 speciation, 644 accepted states. Any metric change stops execution for root-cause analysis.
+Expected: Phase 1/2 complete; Phase 2 remains 161 converged pressure rows and 74 converged speciation rows, with 642 accepted plus 2 explicitly rejected auxiliary curve states at the canonical reaction gate. Any metric change stops execution for root-cause analysis.
 
-- [ ] **Step 2: Regenerate Phase 3 diagnostic evaluation with corrected chemistry**
+- [x] **Step 2: Regenerate Phase 3 diagnostic evaluation with corrected chemistry**
 
 Run only the active non-fit diagnostic generator. Do not call the disabled local fit or claim promotion. Verify rejected/nonconverged counts are explicit and excluded from accepted metrics.
 
-- [ ] **Step 3: Render all plots and update manuscript figure copies**
+- [x] **Step 3: Render all plots and update manuscript figure copies**
 
 Run: `uv run python scripts/render_all_plots.py`
 Expected: plot sidecar hashes match plotted data; no historical direct-fit figure is copied to the manuscript.
 
-- [ ] **Step 4: Normalize analysis manifests and plot registry**
+- [x] **Step 4: Normalize analysis manifests and plot registry**
 
 Give every manifest `id`, `title`, `status`, `summary`, `owner`, typed `inputs`, typed `outputs`, `commands`, runtime class, manuscript consumers, and results policy. Add the missing Smith-Missen README and regenerate MPLGallery after duplicate removal.
 
-- [ ] **Step 5: Rebuild and visually inspect the PDF**
+- [x] **Step 5: Rebuild and visually inspect the PDF**
 
 Run the canonical build, render all pages, and inspect title metadata, figure text, floats, and nomenclature. Correct the single-author running head and loading notation; do not add venue-specific author fields.
 
-- [ ] **Step 6: Prove deterministic second regeneration**
+- [x] **Step 6: Prove deterministic second regeneration**
 
 Repeat VLE build, analysis generation, render, and manuscript build; run `git diff --exit-code` against the first regenerated state. Any diff blocks completion.
 
-- [ ] **Step 7: Commit regenerated evidence**
+- [x] **Step 7: Commit regenerated evidence**
 
 ```bash
 git add analyses data docs .mplgallery README.md tests scripts

@@ -1,7 +1,25 @@
 id: 2015_baygi
-title: Baygi 2015 Neutral Parity
-layout: analyses/paper_validation/2015_baygi
+title: Baygi 2015 Neutral-Parity Reproduction
+status: validation
+summary: Reproduces the Baygi and Pahlavanzadeh parameter tables and compares neutral ePC-SAFT against the legacy PC-SAFT pressure calculation.
+owner: project
+inputs:
+  - path: analyses/paper_validation/2015_baygi/data/input_baygi_2015.md
+    kind: literature_transcription
+  - path: analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_fit_curves.csv
+    kind: canonical_pressure_results
+outputs:
+  - path: analyses/paper_validation/2015_baygi/data/processed
+    kind: reproduced_parameter_tables
+  - path: analyses/paper_validation/2015_baygi/results/neutral_parity
+    kind: plotted_validation_bundle
 commands:
-  generate_data: uv run python analyses/paper_validation/2015_baygi/scripts/generate_data.py
-  render_figures: uv run python analyses/paper_validation/2015_baygi/scripts/render_figures.py
-results_policy: Track curated CSV snapshots, .mpl.yaml sidecars, PNG previews, SVG figures, and PDF LaTeX artifacts under results/neutral_parity/.
+  generate:
+    - uv run python analyses/paper_validation/2015_baygi/scripts/generate_data.py
+  render:
+    - uv run python analyses/paper_validation/2015_baygi/scripts/render_figures.py
+runtime:
+  class: quick
+  expected_seconds: 5
+manuscript_consumers: []
+results_policy: Track the reproduced Baygi tables and the exact plotted-data CSV, sidecar, PNG, SVG, and PDF parity bundle; do not duplicate these outputs elsewhere.

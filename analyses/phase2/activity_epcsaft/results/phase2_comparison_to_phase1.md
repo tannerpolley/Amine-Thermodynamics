@@ -5,8 +5,8 @@ Phase 1 now solves the explicit five-reaction, nine-species ideal Smith-Missen s
 Phase 2 now uses pinned ePC-SAFT commit `9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785` and the native activity-coupled reactive speciation / reactive electrolyte bubble route. The generated rows are real solver outputs, not scaffold or diagnostic curves.
 
 phase2_status: model_ran_success
-phase2_validation_status: validated
+phase2_validation_status: residual_limited
 
 Phase 2 activity-evaluation claims are controlled by `phase2_residual_acceptance_audit.csv`. Failed gates:
 
-- none
+- solver: curve_grid_success_fraction success_fraction=0.9968944099378882 threshold=1.0
