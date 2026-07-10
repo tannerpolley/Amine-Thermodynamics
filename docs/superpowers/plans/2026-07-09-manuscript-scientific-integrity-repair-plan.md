@@ -582,7 +582,7 @@ git add docs/superpowers docs/.codex-journal/project_memory.md
 git commit -m "chore: record scientific integrity verification"
 ```
 
-- [ ] **Step 5: Enter the bounded Auto Mode clean-premerge route**
+- [x] **Step 5: Enter the bounded Auto Mode clean-premerge route**
 
 Use `superpowers:verification-before-completion`, validate the Auto Mode ledger again, produce the merge-ready handoff, and merge locally only if the branch and target are clean. Do not push, open a PR, or claim GitHub issue closure.
 
