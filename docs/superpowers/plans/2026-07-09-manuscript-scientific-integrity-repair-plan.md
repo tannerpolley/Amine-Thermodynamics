@@ -551,7 +551,7 @@ git commit -m "docs: regenerate verified manuscript evidence"
 - Consumes: completed branch and all prior proof artifacts.
 - Produces: clean-premerge proof suitable for bounded Auto Mode local merge.
 
-- [ ] **Step 1: Run the complete proof oracle**
+- [x] **Step 1: Run the complete proof oracle**
 
 ```bash
 ruff check src scripts analyses tests
@@ -567,15 +567,15 @@ git diff --check
 
 Expected: all exit zero; exact counts/tolerances match `## Test Complete and Metrics`.
 
-- [ ] **Step 2: Record structured readiness evidence**
+- [x] **Step 2: Record structured readiness evidence**
 
 Write `final-verification.json` with branch/commit list, catalog/data/parameter hashes, row/acceptance counts, residual maxima, test totals, PDF hash/page count, cleanup state, `plan_alignment`, `correctness`, `maintainability`, and `reality_evidence` all true.
 
-- [ ] **Step 3: Verify branch state and deferred blockers**
+- [x] **Step 3: Verify branch state and deferred blockers**
 
 Confirm no unrelated changes, no untracked temp files, no local paths, and only the license/DOI/journal/new-fit decisions remain deferred to named owners.
 
-- [ ] **Step 4: Commit plan/verification bookkeeping**
+- [x] **Step 4: Commit plan/verification bookkeeping**
 
 ```bash
 git add docs/superpowers docs/.codex-journal/project_memory.md

@@ -221,7 +221,10 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
     def test_residual_audit_claim_gates_do_not_change_model_run_status(self) -> None:
         audit = _rows(ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_residual_acceptance_audit.csv")
         by_metric = {(row["species_or_property"], row["metric"]): row for row in audit}
-        self.assertEqual(by_metric[("curve_grid_success_fraction", "success_fraction")]["passes"].lower(), "true")
+        curve_gate = by_metric[("curve_grid_success_fraction", "success_fraction")]
+        self.assertEqual(curve_gate["passes"].lower(), "false")
+        self.assertEqual(curve_gate["claim_allowed"].lower(), "false")
+        self.assertEqual(curve_gate["failure_reason"], "not_all_curve_grid_points_converged")
         self.assertEqual(by_metric[("HCO3-", "direct_positive_median_abs_log10_error")]["passes"].lower(), "true")
         self.assertEqual(by_metric[("HCO3-", "reported_zero_max_model_mole_fraction")]["passes"].lower(), "true")
         self.assertEqual(by_metric[("CO2_pressure", "median_abs_log10_error")]["passes"].lower(), "true")
