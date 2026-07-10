@@ -138,7 +138,7 @@ Test complete means all of the following are true:
 - Consumes: `phase2_reaction_constant_source_verification.csv` with `reaction_id`, `source_value_A..D`, `source_verified`, and provenance fields.
 - Produces: `ReactionCoefficient`, `load_activity_reaction_catalog() -> tuple[ReactionCoefficient, ...]`, `activity_coefficient_map() -> dict[str, tuple[float,float,float,float]]`, and `reaction_catalog_sha256() -> str`.
 
-- [ ] **Step 1: Write failing catalog contract tests**
+- [x] **Step 1: Write failing catalog contract tests**
 
 ```python
 def test_runtime_activity_coefficients_equal_verified_manifest():
@@ -154,12 +154,12 @@ def test_unverified_or_duplicate_catalog_fails_loudly(tmp_path):
         load_activity_reaction_catalog(bad)
 ```
 
-- [ ] **Step 2: Run the focused tests and confirm coefficient ownership fails**
+- [x] **Step 2: Run the focused tests and confirm coefficient ownership fails**
 
 Run: `uv run python -m unittest tests.test_reaction_catalog -v`
 Expected: failure because the catalog module and runtime seam do not exist.
 
-- [ ] **Step 3: Implement the pure-data catalog and replace hard-coded Phase 3 constants**
+- [x] **Step 3: Implement the pure-data catalog and replace hard-coded Phase 3 constants**
 
 ```python
 @dataclass(frozen=True)
@@ -178,12 +178,12 @@ class ReactionCoefficient:
 
 Load and validate the five rows, map `R1..R5` to the existing reaction names, compute the catalog hash from normalized JSON, import the catalog in `model.py`, and remove `REACTION_CONSTANTS`. Refactor the Phase 2 generator to consume the same map rather than parse coefficients independently.
 
-- [ ] **Step 4: Run focused and Phase 2 scaffold tests**
+- [x] **Step 4: Run focused and Phase 2 scaffold tests**
 
 Run: `uv run python -m unittest tests.test_reaction_catalog tests.test_phase2_activity_scaffold -v`
 Expected: pass with R4 `(2.8898, -3635.09, 0.0, 0.0)` and all five runtime rows equal to the manifest.
 
-- [ ] **Step 5: Commit the catalog cutover**
+- [x] **Step 5: Commit the catalog cutover**
 
 ```bash
 git add src/MEA/common/reaction_catalog.py src/MEA/epcsaft_ionic/model.py analyses/phase2/activity_epcsaft/scripts/generate_data.py tests/test_reaction_catalog.py tests/test_phase2_activity_scaffold.py
@@ -210,7 +210,7 @@ git commit -m "fix: unify activity reaction constants"
 - Consumes: solver boolean/message, state vector, mass residuals, charge residual, reaction residuals, state-failure count, and configured tolerances.
 - Produces: `AcceptanceDecision(accepted: bool, rejection_reasons: tuple[str, ...])` and explicit `solver_returned`, `accepted`, `rejection_reason` artifact columns.
 
-- [ ] **Step 1: Write failing acceptance tests**
+- [x] **Step 1: Write failing acceptance tests**
 
 ```python
 def test_nonconverged_best_effort_is_rejected():
@@ -227,21 +227,21 @@ def test_nonconverged_best_effort_is_rejected():
     assert "nonconverged_status" in decision.rejection_reasons
 ```
 
-- [ ] **Step 2: Run focused tests and confirm permissive behavior fails**
+- [x] **Step 2: Run focused tests and confirm permissive behavior fails**
 
 Run: `uv run python -m unittest tests.test_solver_acceptance -v`
 Expected: failure because no acceptance module exists.
 
-- [ ] **Step 3: Implement thresholds and cut aggregators over to `accepted`**
+- [x] **Step 3: Implement thresholds and cut aggregators over to `accepted`**
 
 Use `mass_tolerance=1e-7`, `charge_tolerance=1e-6`, and `reaction_tolerance=1e-7`; require normalized finite positive composition and `state_failure_count == 0`. Preserve raw solver return fields separately and delete equality-to-`True` pandas checks.
 
-- [ ] **Step 4: Run focused tests plus affected ionic tests**
+- [x] **Step 4: Run focused tests plus affected ionic tests**
 
 Run: `uv run python -m unittest tests.test_solver_acceptance tests.test_epcsaft_ionic_approval_check tests.test_global_regression_artifacts -v`
 Expected: all acceptance cases pass; no accepted nonconverged fixture remains.
 
-- [ ] **Step 5: Commit strict acceptance semantics**
+- [x] **Step 5: Commit strict acceptance semantics**
 
 ```bash
 git add src/MEA/common/solver_acceptance.py src/MEA/epcsaft_ionic tests/test_solver_acceptance.py tests/test_epcsaft_ionic_approval_check.py tests/test_global_regression_artifacts.py analyses/phase3/ionic_epcsaft_regression/scripts
@@ -271,7 +271,7 @@ git commit -m "fix: reject nonconverged ionic states"
 - Consumes: Phase 2 residual tables and current parameter dataset.
 - Produces: manuscript prose/tables containing only executed claims and a static claim-integrity guard.
 
-- [ ] **Step 1: Write failing forbidden-claim tests**
+- [x] **Step 1: Write failing forbidden-claim tests**
 
 ```python
 def test_manuscript_does_not_promote_historical_fit():
@@ -281,25 +281,25 @@ def test_manuscript_does_not_promote_historical_fit():
     assert "fixed provisional input" in manuscript
 ```
 
-- [ ] **Step 2: Run the test and verify current prose fails**
+- [x] **Step 2: Run the test and verify current prose fails**
 
 Run: `uv run python -m unittest tests.test_manuscript_claim_integrity -v`
 Expected: failure on current direct-fit and train-validation language.
 
-- [ ] **Step 3: Remove historical promotion and rewrite the parameter-evidence boundary**
+- [x] **Step 3: Remove historical promotion and rewrite the parameter-evidence boundary**
 
 Delete the direct-fit results subsection/figure and post hoc validation claim. Replace the regression-method section with an explicit statement that a coupled/native regression was not completed and the retained MEAH+/MEACOO- values are provisional fixed inputs inherited from an exploratory historical calculation. Remove “This work” and rename table columns to `Retained value`, `Source/status`, and bounds only where bounds remain scientifically relevant.
 
-- [ ] **Step 4: Remove obsolete artifact contracts and files**
+- [x] **Step 4: Remove obsolete artifact contracts and files**
 
 Delete historical publication plot copies from `docs/latex/figures`, remove them from `scripts/validate_project.py`, replace `test_promoted_ion_fit_*` with nonpromotion guards, and remove dead local-fit code/imports that have no active diagnostic owner.
 
-- [ ] **Step 5: Run manuscript claim and affected artifact tests**
+- [x] **Step 5: Run manuscript claim and affected artifact tests**
 
 Run: `uv run python -m unittest tests.test_manuscript_claim_integrity tests.test_ion_parameter_regression_artifacts tests.test_epcsaft_ionic_artifact_promotion -v`
 Expected: manuscript claim guard passes and no test calls the historical artifact promoted.
 
-- [ ] **Step 6: Commit the publication-scope cutover**
+- [x] **Step 6: Commit the publication-scope cutover**
 
 ```bash
 git add docs/latex data/reference/MEA/manifests scripts/validate_project.py tests src/MEA/epcsaft_ionic
@@ -328,7 +328,7 @@ git commit -m "fix: scope manuscript to verified phase2 evidence"
 - Consumes: six source-specific VLE CSVs and an inclusion manifest keyed by source plus source-row identity.
 - Produces: deterministic `Combined_VLE.csv` with existing model columns plus `row_id`, `source_key`, `source_file`, and `source_row` provenance.
 
-- [ ] **Step 1: Write failing source-count and lineage tests**
+- [x] **Step 1: Write failing source-count and lineage tests**
 
 ```python
 def test_combined_vle_has_complete_source_lineage():
@@ -339,29 +339,29 @@ def test_combined_vle_has_complete_source_lineage():
     assert not frame[["row_id", "source_file", "source_row"]].isna().any().any()
 ```
 
-- [ ] **Step 2: Run the tests and confirm the missing Idris/source columns fail**
+- [x] **Step 2: Run the tests and confirm the missing Idris/source columns fail**
 
 Run: `uv run python -m unittest tests.test_canonical_vle_dataset -v`
 Expected: failure because only five source CSVs exist and the combined table lacks lineage.
 
-- [ ] **Step 3: Add the Idris source and inclusion manifest**
+- [x] **Step 3: Add the Idris source and inclusion manifest**
 
 Enter the 10 retained 30 wt%/40 °C rows exactly as published/retained, with loading, pressure, uncertainty where available, table locator, DOI, and source row. Build the inclusion manifest for all 161 currently approved rows by exact numeric/source matching.
 
-- [ ] **Step 4: Implement the deterministic builder**
+- [x] **Step 4: Implement the deterministic builder**
 
 The builder must normalize headers/units, require one exact source match per inclusion row, preserve the approved ordering, generate stable `vle_0001..vle_0161` IDs, and write through the repository CSV helper. It must never use the existing combined output as an input.
 
-- [ ] **Step 5: Update data consumers and manuscript citations**
+- [x] **Step 5: Update data consumers and manuscript citations**
 
 Keep the existing `MEA_weight_fraction`, `temperature`, `CO2_loading`, `CO2_pressure`, and `paper` compatibility-free public columns as actual canonical fields, while teaching loaders to use `source_key`. Change “five” to “six” and cite `Idris2014` in text/table.
 
-- [ ] **Step 6: Prove deterministic regeneration**
+- [x] **Step 6: Prove deterministic regeneration**
 
 Run: `uv run python scripts/build_canonical_vle_dataset.py && uv run python -m unittest tests.test_canonical_vle_dataset -v && git diff --exit-code data/reference/MEA/VLE/Combined_VLE.csv`
 Expected: 161 rows, six sources, 10 Idris rows, tests pass, no second-build diff.
 
-- [ ] **Step 7: Commit VLE provenance**
+- [x] **Step 7: Commit VLE provenance**
 
 ```bash
 git add data/reference/MEA/VLE data/reference/MEA/manifests/source_status_manifest.csv scripts/build_canonical_vle_dataset.py tests/test_canonical_vle_dataset.py docs/latex/references.bib docs/latex/sections/data_methods.tex src/MEA/common/data_access.py
@@ -390,7 +390,7 @@ git commit -m "fix: make vle provenance reproducible"
 - Consumes: absolute or repository-relative `Path` objects and canonical result IDs.
 - Produces: `repo_relative_path(path: Path) -> str`, parsed-JSON path validation, and sidecars with `data_path` plus `data_sha256`.
 
-- [ ] **Step 1: Write failing path and duplicate-owner tests**
+- [x] **Step 1: Write failing path and duplicate-owner tests**
 
 ```python
 def test_json_escaped_windows_path_is_rejected(tmp_path):
@@ -403,24 +403,24 @@ def test_repo_relative_path_rejects_external_path():
         repo_relative_path(Path("/tmp/result.csv"))
 ```
 
-- [ ] **Step 2: Run focused tests and verify current guard misses escaped JSON**
+- [x] **Step 2: Run focused tests and verify current guard misses escaped JSON**
 
 Run: `uv run python -m unittest tests.test_project_structure -v` (or the exact new test module)
 Expected: failure on escaped-path and duplicate-owner fixtures.
 
-- [ ] **Step 3: Implement relative-path serialization and parsed JSON scanning**
+- [x] **Step 3: Implement relative-path serialization and parsed JSON scanning**
 
 Use `Path.resolve().relative_to(REPO_ROOT.resolve()).as_posix()` with a loud `ValueError` outside the repository. Recursively inspect parsed JSON strings and raw text. Replace all `str(path)` artifact writes.
 
-- [ ] **Step 4: Cut result ownership over and delete mirrors**
+- [x] **Step 4: Cut result ownership over and delete mirrors**
 
 Keep canonical calculation outputs under `results/`; retain only plotted subsets and render bundles in figure output. Add upstream relative path/hash to `.mpl.yaml`. Remove mirrored whole-table writes and update manifests/validation requirements atomically.
 
-- [ ] **Step 5: Regenerate affected lightweight artifacts and test lineage**
+- [x] **Step 5: Regenerate affected lightweight artifacts and test lineage**
 
 Run the Phase 1/2 generation and render commands, then assert no duplicate logical artifact IDs, no local paths, and matching sidecar hashes.
 
-- [ ] **Step 6: Commit artifact ownership repair**
+- [x] **Step 6: Commit artifact ownership repair**
 
 ```bash
 git add src scripts analyses tests
@@ -450,32 +450,32 @@ git commit -m "refactor: enforce portable artifact ownership"
 - Consumes: locked dependencies, validated canonical artifacts, LaTeX source/figures.
 - Produces: zero-warning Ruff gate, `docs/latex/builds/main.pdf`, freshness result, and CI receipts.
 
-- [ ] **Step 1: Add Ruff configuration and run the expected red check**
+- [x] **Step 1: Add Ruff configuration and run the expected red check**
 
 Configure target version `py313`, source roots, and narrow intentional E402 per-file ignores only for scripts that must bootstrap `src`. Run `ruff check src scripts analyses tests`; expected initial result is the audited 51 violations.
 
-- [ ] **Step 2: Remove dead imports and fix unresolved names without broad suppressions**
+- [x] **Step 2: Remove dead imports and fix unresolved names without broad suppressions**
 
 Delete unused imports/code and add required `Path` imports only where the path-returning functions remain active. Re-run Ruff until zero violations.
 
-- [ ] **Step 3: Prove or remove unused dependencies**
+- [x] **Step 3: Prove or remove unused dependencies**
 
 Remove `numdifftools`, `pillow`, `plotly`, `streamlit`, and `sympy` from runtime dependencies unless a tracked command/import proves ownership; retain IDAES/Pyomo only as the documented optional `idaes` group. Run `uv lock` and `uv sync --locked`.
 
-- [ ] **Step 4: Implement canonical manuscript build/freshness scripts**
+- [x] **Step 4: Implement canonical manuscript build/freshness scripts**
 
 `build_manuscript.sh` must run `latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir=builds main.tex` from `docs/latex`. The freshness checker must compare `main.pdf` mtime/hash against tracked `.tex`, `.bib`, table, and figure inputs and fail on undefined citations/references or a stale PDF.
 
-- [ ] **Step 5: Add CI and tiered validation**
+- [x] **Step 5: Add CI and tiered validation**
 
 CI runs `uv sync --locked --group test`, Ruff, quick validation, final pinned integration smoke, and manuscript build/freshness where TeX is available. Label expensive Phase 3 regeneration explicitly as a manual final-release gate.
 
-- [ ] **Step 6: Run all new gates**
+- [x] **Step 6: Run all new gates**
 
 Run: `ruff check src scripts analyses tests && uv run python scripts/validate_project.py quick && bash scripts/build_manuscript.sh && uv run python scripts/check_manuscript_freshness.py`
 Expected: all pass; output PDF is `docs/latex/builds/main.pdf`.
 
-- [ ] **Step 7: Commit validation infrastructure**
+- [x] **Step 7: Commit validation infrastructure**
 
 ```bash
 git add pyproject.toml uv.lock src scripts analyses tests .github README.md .gitignore docs/latex
