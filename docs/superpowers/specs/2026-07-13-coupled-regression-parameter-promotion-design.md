@@ -2,11 +2,12 @@
 
 ## Context
 
-The current MEAH+ and MEACOO- values are provisional fixed inputs from a historical calculation. A full model paper requires a reproducible current multi-observable regression and an explicit promotion decision.
+The current MEAH+ and MEACOO- values are provisional fixed inputs from a historical calculation. A full model paper requires a reproducible current multi-observable regression and an explicit promotion decision. The split upstream regression package does not yet publicly admit this reactive pressure/speciation problem, so preregistration may proceed while execution remains blocked.
 
 ## Goals
 
 - Preregister target sets, parameter window, bounds, scaling, regularization, split, metrics, budgets, and stopping rules.
+- Require upstream capability-report admission for the reactive target families, native Ceres hot loop, derivative path, and complete result diagnostics before execution.
 - Execute the package-native coupled pressure/speciation fit from a clean pinned environment.
 - Promote one immutable parameter artifact only when convergence, improvement, row coverage, bounds, plausibility, and artifact checks pass.
 
@@ -24,7 +25,7 @@ The current MEAH+ and MEACOO- values are provisional fixed inputs from a histori
 
 ## Selected design
 
-One signed-off problem definition drives a package-native run. Candidate outputs remain run-local. The promotion checker compares initial/final objectives, row success, source metrics, speciation metrics, bounds, parameter movement, and provenance before copying approved values into the curated parameter artifact.
+One signed-off problem definition is frozen independently of the result. Execution begins only after #12 proves the admitted public contract from immutable package sources. Candidate outputs remain run-local. The promotion checker compares initial/final objectives, row success, source metrics, speciation metrics, bounds, parameter movement, and provenance before copying approved values into the curated parameter artifact.
 
 ## Interfaces
 
@@ -38,11 +39,12 @@ Freeze preregistration → hash inputs → execute fit → validate package resu
 
 ## Error handling
 
-Reject nonconvergence, zero evaluation, objective non-improvement, missing rows, disallowed active bounds, implausible parameters, mutable dependencies, or hash changes.
+Reject absent upstream capability admission, nonconvergence, zero evaluation, objective non-improvement, missing rows, disallowed active bounds, implausible parameters, mutable dependencies, or hash changes.
 
 ## Testing and proof
 
 - Synthetic pass/fail promotion fixtures.
+- Capability preflight proving public reactive targets, native Ceres execution, derivative support, result diagnostics, and immutable package identities.
 - Reduced smoke cannot touch curated artifacts.
 - Full run receipt includes exact status, evaluations, runtime, hashes, metrics, and parameter deltas.
 - Approval check must pass before successor work starts.
@@ -63,4 +65,3 @@ Exact compute budget is set during plan execution from measured reduced-run thro
 | Fit scope | User-selected full-model paper | Joint pressure and speciation regression. | Makes MEA-ion parameters reproducible and claimable. | No | regression owner |
 | Promotion | Scientific audit | Promote only a converged, improved, plausible, fully evidenced candidate. | Keeps failed runs out of publication artifacts. | No | parameter-provenance maintainer |
 | Compute budget | Runtime evidence | Size the budget from reduced-run throughput while retaining all gates. | Makes execution practical without redefining success. | Yes | regression owner |
-

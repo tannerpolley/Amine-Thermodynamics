@@ -13,6 +13,7 @@
 - Describe executed algorithms only.
 - Trace every critical value to code/config or a generated receipt.
 - Preserve package commit/version and final integration proof.
+- Encode unresolved Phase 3 fields as `pending_not_executed`; they must block issue closeout and manuscript execution claims.
 
 ## Source Evidence
 
@@ -22,14 +23,14 @@
 
 **Intent:** Make the computational thermodynamics method reproducible from the paper and repository.
 **Current Behavior:** The methods subsection omits solver, continuation, tolerance, failure, permittivity, runtime, and package details.
-**Expected Outcome:** One generated inventory and revised text fully describe the executed method.
+**Expected Outcome:** One generated inventory distinguishes executed and pending fields; after Phase 3 closeout, revised text fully describes the executed method with no pending entries.
 **Target Output:** Method inventory, generator/test, revised sections/table, commands, and fresh PDF.
 **Owner:** Reproducibility maintainer.
 **Interface:** `build_method_inventory() -> dict` and `docs/latex/generated/method_inventory.json`.
 **Cutover:** Manuscript values derive from the inventory instead of manual prose constants.
 **Replaced Path:** Retire undocumented defaults and untested duplicated settings.
 **Evidence:** RED/GREEN consistency tests, inventory diff, final integration receipt, and PDF build.
-**Acceptance Proof:** Inventory covers every required field and manuscript/runtime values match exactly.
+**Acceptance Proof:** Inventory covers every required field, pending entries cannot render as executed, final Phase 3 replaces them, and manuscript/runtime values match exactly.
 **Stop Criteria:** Stop on conflicting sources, hidden defaults, unpinned package state, or missing final Phase 3 algorithm.
 **Avoid:** No prospective method presented as executed or exhaustive settings dumped without explanation.
 **Risk:** Final Phase 3 changes can stale the inventory; bind it to hashes.
@@ -56,6 +57,7 @@
 ## Test Complete and Metrics
 
 - Required method fields have source paths and values.
+- Pending Phase 3 fields are schema-valid but fail the publication/closeout gate until replaced by executed receipts.
 - Manuscript consistency tests pass.
 - Clean build records pinned ePC-SAFT and runtime commands.
 
@@ -72,8 +74,8 @@
 - Consumes: runtime/config values.
 - Produces: stable inventory schema.
 
-- [ ] **Step 1: RED** — add tests requiring algorithms, initialization, continuation, limits, damping, tolerances, failures, bubble-pressure, permittivity, version, and runtime; expect failures.
-- [ ] **Step 2: GREEN** — implement minimal inventory collection with source locators and hashes.
+- [ ] **Step 1: RED** — add tests requiring algorithms, initialization, continuation, limits, damping, tolerances, failures, bubble-pressure, permittivity, version, runtime, and explicit execution state; expect failures.
+- [ ] **Step 2: GREEN** — implement minimal inventory collection with source locators, hashes, and `pending_not_executed` Phase 3 entries.
 - [ ] **Step 3: Verify/refactor** — run focused tests twice and ensure deterministic JSON.
 - [ ] **Step 4: Checkpoint commit** — commit as `feat: generate computational method inventory`.
 
@@ -89,8 +91,7 @@
 - Consumes: method inventory.
 - Produces: complete methods narrative and table.
 
-- [ ] **Step 1: RED** — add manuscript tests for inventory-backed values; verify current prose fails coverage.
-- [ ] **Step 2: GREEN** — revise sections and generated table.
+- [ ] **Step 1: RED** — add manuscript tests for inventory-backed values and rejection of pending execution claims; verify current prose fails coverage.
+- [ ] **Step 2: GREEN** — after #6 closes, replace every pending Phase 3 entry from its immutable receipt and revise sections/generated table.
 - [ ] **Step 3: Verify** — run focused tests, final integration, and manuscript build; expect PASS.
 - [ ] **Step 4: Checkpoint commit** — commit as `docs: document computational method`.
-

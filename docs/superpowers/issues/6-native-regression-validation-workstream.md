@@ -12,22 +12,22 @@ Executable: false
 ## Outcome Summary
 
 **Outcome Source:** docs/superpowers/plans/2026-07-13-phase3-regression-validation-workstream-plan.md#outcome-proof
-**Intent:** Replace overlapping Phase 3 queues with one dependency-ordered regression and validation workstream.
-**Target Output:** Updated #6 mirror/body, three child links, dependency graph, and #3 closure receipt.
+**Intent:** Replace overlapping Phase 3 queues with one dependency-ordered upstream adoption, regression, and validation workstream.
+**Target Output:** Three child closeout receipts, upstream admission proof, and a final immutable split-package integration receipt.
 **Owner:** Phase 3 maintainer.
 **Interface:** This mirror, GitHub #6, and child closeout receipts.
 **Cutover:** Replace duplicate #3/#6 active scope with one parent graph.
 **Replaced Path:** Retire #3 as an active work queue while preserving its historical discussion.
-**Acceptance Proof:** #6 has exactly three intended children in order and #3 links to the native-contract child before closure.
-**Stop Criteria:** Stop if any child is missing, dependency direction is wrong, or #3 transfer is incomplete.
+**Acceptance Proof:** Exactly three ordered children close with upstream admission, eligible parameter promotion, independent validation, and final pinned integration proof.
+**Stop Criteria:** Stop if upstream reactive regression is not publicly admitted, any child is missing, dependency direction is wrong, or final source state is mutable.
 **Avoid:** Do not close #6 or claim fitting progress from scaffolding.
 
 ## Acceptance Criteria
 
-- [ ] #12 proves the native request/result/status contract.
-- [ ] #13 executes and conditionally promotes the coupled regression only after #12.
+- [ ] #12 adopts and proves the admitted public split-package reactive-regression contract.
+- [ ] #13 executes and conditionally promotes the coupled regression only after #12 and upstream admission.
 - [ ] #14 proves independent validation and identifiability only after #13.
-- [ ] #3 is closed as superseded with links to #6 and #12.
+- [ ] Final Phase 3 evidence passes integration from released or immutable pinned ePC-SAFT package sources.
 
 ## Blocked by
 
@@ -42,5 +42,5 @@ Executable: false
 
 ## Proof Oracle
 
-- Structured GitHub read-back for milestone, labels, three-child hierarchy, and #3 closure.
-- Child closeout receipts and final ePC-SAFT integration proof.
+- Structured GitHub read-back for milestone, labels, and the exact three-child hierarchy.
+- Upstream capability receipt, child closeout receipts, and final immutable ePC-SAFT integration proof.

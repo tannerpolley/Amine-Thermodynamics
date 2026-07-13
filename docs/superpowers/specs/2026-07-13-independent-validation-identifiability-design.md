@@ -2,7 +2,7 @@
 
 ## Context
 
-Optimizer convergence alone does not establish predictive value or parameter identifiability. The promoted candidate must be tested on evidence that did not determine its fitted values.
+Optimizer convergence alone does not establish predictive value or parameter identifiability. The validation split, leakage checks, and failure-accounting policy must be frozen before fitting; candidate-dependent conclusions wait for the immutable #13 result.
 
 ## Goals
 
@@ -24,7 +24,7 @@ Optimizer convergence alone does not establish predictive value or parameter ide
 
 ## Selected design
 
-Reserve grouped evidence by source/condition before fit execution. Report validation metrics separately from training. Combine local sensitivity, multistart/perturbation evidence, active-bound analysis, and parameter plausibility into an approval decision with explicit limitations.
+Stage A reserves grouped evidence by source/condition, freezes failure accounting, and proves leakage guards before fit execution. Stage B binds the immutable candidate hash, reports validation metrics separately from training, and combines local sensitivity, multistart/perturbation evidence, active-bound analysis, and parameter plausibility into an approval decision with explicit limitations. Stage A alone cannot close the issue.
 
 ## Interfaces
 
@@ -34,7 +34,7 @@ Reserve grouped evidence by source/condition before fit execution. Report valida
 
 ## Data flow
 
-Verify candidate hash → load untouched validation groups → predict → apply acceptance gates → compute metrics → run sensitivity/robustness → approve, reject, or require refit.
+Freeze split/policy/tests before fit → wait for immutable candidate → verify candidate hash → load untouched validation groups → predict → apply acceptance gates → compute metrics → run sensitivity/robustness → approve, reject, or require refit.
 
 ## Error handling
 
@@ -43,13 +43,14 @@ Fail on split leakage, candidate hash drift, missing groups, post hoc relabeling
 ## Testing and proof
 
 - Split leakage and determinism tests.
+- Receipt proving the split and failure policy predate the full-fit result.
 - Validation metrics recompute from saved predictions.
 - Adversarial fixtures for active bounds, failed rows, and nonidentifiable directions.
 - Manuscript tests distinguish training, validation, and sensitivity language.
 
 ## Risks
 
-Available data may not support strong independent claims; the outcome must narrow claims or block submission rather than fabricate certainty.
+Available data may not support strong independent claims; the outcome must narrow claims or block submission rather than fabricate certainty. Infrastructure can be prepared while upstream work proceeds, but it is not candidate validation.
 
 ## Unresolved decisions
 
@@ -62,4 +63,3 @@ The exact grouped holdout composition is finalized in the plan from source cover
 | Validation design | Manuscript audit | Use preregistered grouped holdout evidence. | Prevents leakage and post hoc validation claims. | No | model-validation maintainer |
 | Identifiability claim | Scientific standards | Require sensitivity, robustness, bounds, and plausibility evidence. | Separates optimizer convergence from parameter trust. | No | statistics maintainer |
 | Holdout membership | Canonical source coverage | Freeze exact groups before full fit execution. | Preserves independence. | Yes | model-validation maintainer |
-

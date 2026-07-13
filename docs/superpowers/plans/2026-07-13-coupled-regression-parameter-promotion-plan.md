@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Execute a preregistered package-native joint pressure/speciation fit and promote only a converged, improved, plausible parameter set.
+**Goal:** Freeze a preregistered coupled pressure/speciation fit, then execute and promote it only after upstream public capability admission and every scientific/artifact gate pass.
 
 **Architecture:** Immutable preregistration and input hashes drive a run-local package fit; an approval checker alone may copy an approved candidate into curated parameters.
 
@@ -13,6 +13,7 @@
 - Full-model endpoint; joint pressure/speciation evidence is mandatory.
 - Freeze targets, split, parameters, bounds, weights, and gates before full execution.
 - Failed/smoke runs cannot mutate curated artifacts.
+- Full execution is blocked until #12 proves public reactive target admission, native Ceres ownership, supported derivatives, complete diagnostics, and immutable package sources.
 
 ## Source Evidence
 
@@ -22,7 +23,7 @@
 ## Outcome Proof
 
 **Intent:** Replace provisional historical parameters with a reproducible current fit.
-**Current Behavior:** Global summary reports `success=false`, `nfev=0`, and a fixed provisional set.
+**Current Behavior:** Global summary reports `success=false`, `nfev=0`, and a fixed provisional set; the upstream split regression surface is not yet admitted for this problem.
 **Expected Outcome:** A preregistered full run either promotes an approved candidate or records a specific scientific failure.
 **Target Output:** Preregistration, immutable run bundle, package result, diagnostics, promotion decision, and curated parameter artifact on pass.
 **Owner:** Regression maintainer.
@@ -31,7 +32,7 @@
 **Replaced Path:** Retire historical/provisional promotion semantics and zero-evaluation global summaries as current fit evidence.
 **Evidence:** RED/GREEN promotion tests, full run receipts, hashes, metrics, bounds, and parameter deltas.
 **Acceptance Proof:** Package reports convergence/success, objective improves, all required rows succeed, gates pass, and promotion is atomic.
-**Stop Criteria:** Stop on contract failure, nonconvergence, missing rows, disallowed bounds, implausibility, or mutable dependency state.
+**Stop Criteria:** Stop on absent upstream admission, contract failure, nonconvergence, missing rows, disallowed bounds, implausibility, or mutable dependency state.
 **Avoid:** No threshold tuning after results, pressure-only promotion, or manual artifact editing.
 **Risk:** Scientific nonidentifiability or runtime cost may prevent promotion and therefore block the selected paper endpoint.
 
@@ -79,7 +80,7 @@
 - [ ] **Step 3: Verify/refactor** — rerun focused tests; expect PASS and no duplicated gate logic.
 - [ ] **Step 4: Checkpoint commit** — commit as `test: preregister coupled fit promotion`.
 
-### Task 2: Execute, assess, and promote the full fit
+### Task 2: Preflight upstream admission, then execute and promote the full fit
 
 **Use Cases:**
 - The target-perspective result is visible whether promotion passes or the old provisional path remains displaced.
@@ -91,8 +92,8 @@
 - Consumes: validated native contract and preregistration.
 - Produces: immutable run and promotion receipt.
 
-- [ ] **Step 1: Benchmark** — run the reduced problem and record throughput, status, and evaluations.
-- [ ] **Step 2: Execute** — run the full preregistered package-native fit with the measured budget.
-- [ ] **Step 3: Verify** — run approval; expect explicit PASS or a recorded scientific blocker, never an inferred success.
-- [ ] **Step 4: Promote if eligible** — atomically update curated artifacts and rerun deterministic generation.
-- [ ] **Step 5: Checkpoint commit** — commit approved artifacts/receipt or the failed-run diagnostic without claim promotion.
+- [ ] **Step 1: Preflight** — require #12 closeout and verify capability admission, native Ceres/derivative metadata, complete result schema, and immutable package identities.
+- [ ] **Step 2: Benchmark** — run the reduced public problem and record throughput, status, evaluations, and package refs.
+- [ ] **Step 3: Execute** — run the full preregistered package-native fit with the measured budget.
+- [ ] **Step 4: Verify/promote if eligible** — require explicit PASS, atomically update curated artifacts, and rerun deterministic generation; otherwise preserve a failed-run diagnostic without claim promotion.
+- [ ] **Step 5: Checkpoint commit** — commit the approved receipt/artifacts or the honest blocker evidence.

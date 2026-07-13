@@ -24,7 +24,7 @@ The manuscript's computational implementation subsection omits solver mechanics 
 
 ## Selected design
 
-Create a canonical method-inventory artifact populated from declared runtime/config sources. Manuscript text and tables cite or reproduce its stable fields. Tests compare critical prose/table values against the inventory and reject stale package revisions or tolerances.
+Create a canonical method-inventory artifact populated from declared runtime/config sources. Work may begin before Phase 3 by encoding unresolved entries as `pending_not_executed`; those entries cannot render as current methods or satisfy closeout. Manuscript text and tables cite or reproduce stable executed fields. Tests reject stale package revisions, tolerances, or prospective/current conflation.
 
 ## Interfaces
 
@@ -38,7 +38,7 @@ Collect declared settings → validate against executable sources → generate i
 
 ## Error handling
 
-Fail on undocumented defaults, conflicting values, unpinned package state, missing failure policy, prospective/current method conflation, or manuscript values without a source.
+Fail on undocumented defaults, conflicting values, unpinned package state, missing failure policy, prospective/current method conflation, pending entries presented as executed, or manuscript values without a source.
 
 ## Testing and proof
 
@@ -60,4 +60,3 @@ Final placement between main text and supplement depends on the selected journal
 | --- | --- | --- | --- | --- | --- |
 | Method source | Repository audit | Generate one canonical method inventory from executable declarations. | Prevents prose/config drift. | No | reproducibility maintainer |
 | Reporting depth | Submission review | Main text is sufficient; exhaustive settings may move to supplement. | Balances rigor and readability. | Yes | corresponding author |
-

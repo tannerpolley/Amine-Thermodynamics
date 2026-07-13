@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Prove or reject predictive validity and practical identifiability of the immutable Phase 3 candidate on preregistered reserved evidence.
+**Goal:** Freeze validation infrastructure before fitting, then prove or reject predictive validity and practical identifiability of the immutable Phase 3 candidate on reserved evidence.
 
 **Architecture:** Grouped holdout membership is frozen before fitting; validation, sensitivity, robustness, bounds, and plausibility operate on the candidate hash and write separate evidence lanes.
 
@@ -13,6 +13,7 @@
 - No split leakage or post hoc relabeling.
 - Training, validation, and sensitivity language remain distinct.
 - Failed predictions remain visible and penalized according to the preregistered policy.
+- Split, leakage tests, and failure accounting may proceed before #13; candidate metrics and issue closeout may not.
 
 ## Source Evidence
 
@@ -23,14 +24,14 @@
 
 **Intent:** Distinguish optimizer convergence from predictive and parameter trust.
 **Current Behavior:** Existing split/sensitivity artifacts are post hoc diagnostics on provisional values.
-**Expected Outcome:** Reserved groups test an immutable candidate and identifiability claims are evidence-bounded.
+**Expected Outcome:** Pre-fit infrastructure is frozen before results exist; reserved groups then test an immutable candidate and identifiability claims are evidence-bounded.
 **Target Output:** Frozen split, validation predictions/metrics, sensitivity/robustness artifacts, and approval receipt.
 **Owner:** Model-validation maintainer.
 **Interface:** `evaluate_candidate(candidate_hash, split_manifest) -> ValidationBundle`.
 **Cutover:** Manuscript validation claims consume the new reserved-evidence artifacts.
 **Replaced Path:** Demote post hoc train-validation wording and provisional sensitivity as current validation proof.
 **Evidence:** Leakage tests, deterministic predictions, grouped metrics, perturbation/multistart results, and candidate hash checks.
-**Acceptance Proof:** No leakage; all reserved rows accounted for; metrics/uncertainty/failed rows visible; identifiability decision names weak directions.
+**Acceptance Proof:** Pre-fit receipts prove no post hoc split; after #13, all reserved rows, metrics, uncertainty, and failures are visible and the identifiability decision names weak directions.
 **Stop Criteria:** Stop on candidate drift, leakage, missing groups, failed-row omission, or singular analyses overstated as identified.
 **Avoid:** No training residuals presented as validation or unsupported confidence intervals.
 **Risk:** Data may be insufficient; the correct outcome may be claim narrowing or a blocked paper.
@@ -60,7 +61,7 @@
 - Validation rows reconcile by source/condition and expose failures.
 - Identifiability report records correlations, weak directions, bounds, and perturbation stability.
 
-### Task 1: Freeze and prove independent validation
+### Task 1: Freeze validation infrastructure before fitting
 
 **Use Cases:**
 - Acceptance evidence is target-perspective and post hoc old-path validation is displaced at cutover.
@@ -73,12 +74,29 @@
 - Consumes: immutable candidate hash and grouped split.
 - Produces: validation bundle with complete row accounting.
 
-- [ ] **Step 1: RED** — add leakage, changed-candidate, missing-group, and failed-row tests; run focused tests and expect failures.
-- [ ] **Step 2: GREEN** — implement frozen split validation and complete prediction accounting.
-- [ ] **Step 3: Verify** — rerun tests and deterministic validation generation; expect PASS and no diff on repeat.
-- [ ] **Step 4: Checkpoint commit** — commit as `feat: add independent phase 3 validation`.
+- [ ] **Step 1: RED** — add leakage, post-fit split mutation, missing-group, and failed-row-policy tests; run focused tests and expect failures.
+- [ ] **Step 2: GREEN** — freeze grouped membership, hashes, failure accounting, and candidate-binding rules without producing candidate metrics.
+- [ ] **Step 3: Verify** — rerun infrastructure tests and prove deterministic manifests; expect PASS and no diff on repeat.
+- [ ] **Step 4: Checkpoint commit** — commit as `test: freeze phase 3 validation design`.
 
-### Task 2: Gate identifiability and claims
+### Task 2: Evaluate the immutable candidate
+
+**Use Cases:**
+- Reserved evidence is evaluated only after #13 supplies one immutable promoted candidate.
+
+**Files:**
+- Modify: validation entrypoint, prediction artifacts, metrics tests, and approval receipt.
+
+**Interfaces:**
+- Consumes: immutable candidate hash and frozen grouped split.
+- Produces: validation bundle with complete row accounting.
+
+- [ ] **Step 1: Bind** — require #13 receipt and verify the candidate hash against the frozen manifest.
+- [ ] **Step 2: Predict** — evaluate every reserved row and preserve all failures under the preregistered policy.
+- [ ] **Step 3: Verify** — recompute grouped metrics from saved predictions and rerun deterministically.
+- [ ] **Step 4: Checkpoint commit** — commit as `feat: evaluate independent phase 3 validation`.
+
+### Task 3: Gate identifiability and claims
 
 **Use Cases:**
 - Reviewers see proof of weak directions and migration away from provisional sensitivity claims.
@@ -94,4 +112,3 @@
 - [ ] **Step 2: GREEN** — add correlation, perturbation, and plausibility gates with explicit limitations.
 - [ ] **Step 3: Verify** — regenerate sensitivity/robustness twice and run manuscript claim tests.
 - [ ] **Step 4: Checkpoint commit** — commit as `feat: gate phase 3 identifiability`.
-
