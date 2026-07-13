@@ -106,6 +106,22 @@ class ManuscriptClaimIntegrityTests(unittest.TestCase):
         self.assertIn("the activity model is less accurate", conclusion)
         self.assertIn("15 reported-zero targets", conclusion)
 
+    def test_controlled_comparison_figure_is_submission_safe(self) -> None:
+        results = (
+            LATEX_ROOT / "sections" / "mea_system_modeling_results.tex"
+        ).read_text(encoding="utf-8-sig")
+
+        figure_path = r"figures/mea_controlled_pressure_comparison.pdf"
+        self.assertIn(figure_path, results)
+        self.assertIn(r"\label{fig:controlled-pressure-comparison}", results)
+        figure_start = results.index(figure_path)
+        figure_end = results.index(r"\end{center}", figure_start)
+        figure_block = results[figure_start:figure_end]
+        self.assertIn("same 31 Jou1995", figure_block)
+        self.assertIn("present fixed activity-based", figure_block)
+        for internal_word in ("artifact", "generated", "script", "workflow"):
+            self.assertNotIn(internal_word, figure_block.lower())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -85,6 +85,16 @@ The digitized Wong Raman rows remain source-basis data pending review of the ove
 \subsection{CO2 Solubility Pressure Response}
 The primary pressure comparison evaluates both models on the same 31 Jou1995 records.  On that intersection, the ideal baseline has median absolute, signed median, and RMSE $\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})$ residuals of 0.160, \(-0.024\), and 0.297, respectively; the activity model gives 0.495, 0.226, and 0.565.  On an absolute row-residual basis, the activity model improves 4 of the 31 paired rows and worsens 27, with no ties.  Thus, adding the present fixed activity treatment does not improve pressure accuracy on the controlled subset; this result diagnoses the current parameterization and is not a general test of ePC-SAFT activity corrections.
 
+\begin{center}
+    \begin{minipage}{\linewidth}
+    \centering
+    \includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{figures/mea_controlled_pressure_comparison.pdf}
+    \captionsetup{hypcap=false}
+    \captionof{figure}{Controlled pressure evaluation using the same 31 Jou1995 records.  Panel (a) compares observed pressure with predictions from the ideal Smith--Missen baseline and the present fixed activity-based ePC-SAFT calculation.  Panel (b) compares their absolute \(\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})\) residuals; points below the one-to-one line favor the activity calculation.  The activity treatment reduces the absolute residual for 4 records and increases it for 27 records.}
+    \label{fig:controlled-pressure-comparison}
+    \end{minipage}
+\end{center}
+
 As separate coverage context, the activity calculation converged for all 161 assembled \COtwo-solubility VLE records.  Across that six-source set, its median absolute, signed median, and RMSE pressure residuals are 0.493, \(-0.288\), and 0.645, respectively.  The 161-row summary is not compared directly with the 31-row ideal-baseline summary.  No pressure uncertainty is reported for any canonical VLE row, so uncertainty-weighted metrics are not calculated.  Temperature-resolved full-set pressure errors remain largest between 40 and \SI{80}{\degreeCelsius} and decrease at \SI{120}{\degreeCelsius}.  The pressure and speciation evidence are complementary: the pressure comparison tests gas--liquid equilibrium, while the NMR residuals test whether the liquid chemistry supporting that pressure remains plausible.  Together they quantify a fixed activity-based calculation without treating it as a completed pressure/speciation regression.
 
 \begin{center}
