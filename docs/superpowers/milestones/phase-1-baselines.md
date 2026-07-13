@@ -18,7 +18,7 @@ Future plans live in `docs/superpowers/plans` and should link back to this page 
 
 ## Related Issues
 
-- [#4 Phase 1: Reproduce Smith-Missen MEA baseline and lock data/provenance inventory](https://github.com/tannerpolley/MEA-Thermodynamics/issues/4)
+- [#4 Phase 1: Reproduce Smith-Missen MEA baseline and lock data/provenance inventory](https://github.com/tannerpolley/MEA-Thermodynamics/issues/4) — completed 2026-07-13; retained in GitHub history.
 
 ## Success Criteria
 

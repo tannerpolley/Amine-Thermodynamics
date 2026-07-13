@@ -18,7 +18,7 @@ Future plans live in `docs/superpowers/plans` and should link back to this page 
 
 ## Related Issues
 
-- [#9 Paper Validation: lock Baygi 2015 recreation acceptance gate](https://github.com/tannerpolley/MEA-Thermodynamics/issues/9)
+- [#9 Paper Validation: lock Baygi 2015 recreation acceptance gate](https://github.com/tannerpolley/MEA-Thermodynamics/issues/9) — completed 2026-07-13; retained in GitHub history.
 
 ## Success Criteria
 

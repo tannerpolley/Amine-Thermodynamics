@@ -18,7 +18,7 @@ Future plans live in `docs/superpowers/plans` and should link back to this page 
 
 ## Related Issues
 
-- [#8 Modernize the containerized dev workflow for MEA thermodynamics validation](https://github.com/tannerpolley/MEA-Thermodynamics/issues/8)
+- [#8 Modernize the containerized dev workflow for MEA thermodynamics validation](https://github.com/tannerpolley/MEA-Thermodynamics/issues/8) — closed not planned 2026-07-13; retained as historical infrastructure discussion.
 
 ## Success Criteria
 
