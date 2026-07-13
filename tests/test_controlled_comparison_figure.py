@@ -7,6 +7,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from MEA.common.analysis_io import file_sha256
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PAIRED_ROWS = (
@@ -26,6 +28,16 @@ RENDER_PATH = (
     / "scripts"
     / "render_figures.py"
 )
+OUTPUT = (
+    ROOT
+    / "analyses"
+    / "phase2"
+    / "activity_epcsaft"
+    / "figures"
+    / "controlled_comparison"
+    / "output"
+)
+MANIFEST = ROOT / ".mplgallery" / "manifest.yaml"
 
 
 def _load_renderer():
@@ -71,6 +83,36 @@ class ControlledComparisonFigureTests(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "accepted and eligible"):
             self.render.prepare_controlled_comparison_plot_data(rows)
+
+    def test_retained_bundle_is_complete_and_registered(self) -> None:
+        expected = {
+            "controlled_pressure_comparison.png",
+            "controlled_pressure_comparison.svg",
+            "controlled_pressure_comparison.pdf",
+            "controlled_pressure_comparison_plot_data.csv",
+            "controlled_pressure_comparison.mpl.yaml",
+        }
+        self.assertEqual(
+            {path.name for path in OUTPUT.iterdir() if path.is_file()},
+            expected,
+        )
+
+        plotted_data = OUTPUT / "controlled_pressure_comparison_plot_data.csv"
+        sidecar = (OUTPUT / "controlled_pressure_comparison.mpl.yaml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(f"data_sha256: {file_sha256(plotted_data)}", sidecar)
+
+        manifest = MANIFEST.read_text(encoding="utf-8")
+        for path in (
+            "analyses/phase2/activity_epcsaft/figures/controlled_comparison/"
+            "output/controlled_pressure_comparison.svg",
+            "analyses/phase2/activity_epcsaft/figures/controlled_comparison/"
+            "output/controlled_pressure_comparison.mpl.yaml",
+            "analyses/phase2/activity_epcsaft/figures/controlled_comparison/"
+            "output/controlled_pressure_comparison_plot_data.csv",
+        ):
+            self.assertIn(path, manifest)
 
 
 if __name__ == "__main__":
