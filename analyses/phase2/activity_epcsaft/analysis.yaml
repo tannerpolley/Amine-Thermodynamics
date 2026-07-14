@@ -4,12 +4,14 @@ status: manuscript_evidence
 summary: Runs the true-species MEA-CO2-H2O activity-equilibrium model with fixed reaction constants, strict solver acceptance, and residual-gated manuscript claims.
 owner: project
 inputs:
-  - path: data/reference/MEA/manifests/reaction_equilibrium_catalog.csv
-    kind: canonical_reaction_catalog
-  - path: data/reference/MEA/VLE/Canonical_Combined_VLE.csv
-    kind: experimental_vle_dataset
+  - path: data/reference/MEA/manifests/phase2_reaction_constant_source_verification.csv
+    kind: verified_activity_reaction_catalog
+  - path: data/reference/MEA/VLE/Combined_VLE.csv
+    kind: active_v1_experimental_vle_view
+  - path: data/reference/MEA/ChEq/Combined_ChEq.csv
+    kind: active_v1_experimental_speciation_view
   - path: data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv
-    kind: experimental_speciation_dataset
+    kind: full_canonical_speciation_registry
   - path: data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2
     kind: fixed_parameter_artifact
 outputs:
