@@ -5,6 +5,7 @@ from typing import Any, Iterable
 
 import numpy as np
 
+from MEA.common.data_access import load_regression_readiness_summary, regression_split_hash
 from MEA.epcsaft_ionic.model import (
     ADVANCED_BORN_USER_OPTIONS,
     BOUNDS,
@@ -23,10 +24,6 @@ from MEA.epcsaft_ionic.model import (
     to_jsonable,
 )
 
-PRESSURE_TRAIN_SOURCES = frozenset({"Aronu2011", "Hilliard2008", "Idris2014", "Mamun2005"})
-PRESSURE_VALIDATION_SOURCES = frozenset({"Jou1995", "Xu2011"})
-SPECIATION_TRAIN_SOURCES = frozenset({"Bottinger", "Matin"})
-SPECIATION_VALIDATION_SOURCES = frozenset({"Jakobsen"})
 VAPOR_SPECIES = ("CO2", "H2O", "MEA")
 NONVOLATILE_SPECIES = ("MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-")
 VOLATILE_SPECIES = VAPOR_SPECIES
@@ -86,22 +83,6 @@ def _reaction_payload(temperature_K: float) -> list[dict[str, Any]]:
     ]
 
 
-def _pressure_split(source: str) -> str:
-    if source in PRESSURE_VALIDATION_SOURCES:
-        return "validation"
-    if source in PRESSURE_TRAIN_SOURCES:
-        return "train"
-    return "unspecified"
-
-
-def _speciation_split(source: str) -> str:
-    if source in SPECIATION_VALIDATION_SOURCES:
-        return "validation"
-    if source in SPECIATION_TRAIN_SOURCES:
-        return "train"
-    return "unspecified"
-
-
 def build_pressure_target_rows(targets: Iterable[VLETarget]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for target in targets:
@@ -126,9 +107,10 @@ def build_pressure_target_rows(targets: Iterable[VLETarget]) -> list[dict[str, A
                 },
                 "target_partial_pressures": {"CO2": float(target.pressure_kPa) * 1000.0},
                 "source": source,
-                "split": _pressure_split(source),
+                "split": target.split,
                 "metadata": {
                     "target_family": "pressure",
+                    "group_id": target.group_id,
                     "source_label": target.paper,
                     "pressure_kPa": float(target.pressure_kPa),
                     "co2_loading": float(target.loading),
@@ -165,9 +147,10 @@ def build_speciation_target_rows(targets: Iterable[SpeciationTarget]) -> list[di
                 "target_speciation": target_speciation,
                 "target_roles": dict(target.target_roles),
                 "source": source,
-                "split": _speciation_split(source),
+                "split": target.split,
                 "metadata": {
                     "target_family": "speciation",
+                    "group_id": target.group_id,
                     "co2_loading": float(target.loading),
                     "temperature_C": float(target.T) - 273.15,
                     "target_roles": dict(target.target_roles),
@@ -216,6 +199,7 @@ def build_native_regression_problem(
     max_speciation_records: int | None = None,
     include_carbonate_born: bool = True,
 ) -> NativeRegressionProblem:
+    readiness = load_regression_readiness_summary()
     pressure_targets = load_vle_targets(max_pressure_records)
     speciation_targets = load_speciation_targets(max_speciation_records)
     parameter_specs = build_parameter_specs(include_carbonate_born=include_carbonate_born)
@@ -230,17 +214,13 @@ def build_native_regression_problem(
         metadata={
             "pressure_row_count": len(pressure_targets),
             "speciation_row_count": len(speciation_targets),
-            "pressure_split_rule": {
-                "train": sorted(PRESSURE_TRAIN_SOURCES),
-                "validation": sorted(PRESSURE_VALIDATION_SOURCES),
-            },
-            "speciation_split_rule": {
-                "train": sorted(SPECIATION_TRAIN_SOURCES),
-                "validation": sorted(SPECIATION_VALIDATION_SOURCES),
-            },
+            "split_hash": regression_split_hash(),
+            "split_source": "grouped_split_manifest.csv",
             "optimizer_owner": "epcsaft",
-            "optimizer_backend": "ceres",
-            "derivative_backend": "autodiff",
+            "requested_optimizer_backend": "native_ceres",
+            "requested_derivative_backend": "production_autodiff_and_implicit",
+            "execution_admitted": bool(readiness["upstream_execution_admitted"]),
+            "execution_gate": "issue_12_split_package_contract",
             "downstream_role": "target_construction_and_result_artifacts",
         },
     )

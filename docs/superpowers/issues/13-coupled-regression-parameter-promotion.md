@@ -36,6 +36,15 @@ Executable: true
 - https://github.com/tannerpolley/MEA-Thermodynamics/issues/12
 - https://github.com/ePC-SAFT/ePC-SAFT/issues/468
 
+## Frozen Data Readiness Prerequisite
+
+- Target admission: `data/reference/MEA/manifests/target_admission_manifest.csv`
+- Grouped split: `data/reference/MEA/manifests/grouped_split_manifest.csv`
+- Readiness receipt: `analyses/phase3/ionic_epcsaft_regression/results/readiness/regression_readiness_summary.json`
+- Split hash: `e7bc893dab825007d009260d2c1f6f5dd42e75ebddbdb4972d52a5ec4f0c1aa0`
+
+Pressure and speciation construction are admitted. Execution remains blocked by Issue #12 because the public capability receipt does not yet admit the required production native Ceres hot loop and derivative contract. Density, dielectric, pH, ionic-activity, viscosity, and calorimetry targets remain explicitly non-admitted.
+
 ## Non-goals
 
 - Tune gates after observing results.

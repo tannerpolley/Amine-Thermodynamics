@@ -1,14 +1,22 @@
 column,required,unit_or_domain,description
 source_key,yes,Amundsen2009,Stable source identifier.
 row_status,yes,extracted|staged|ambiguous|excluded,Extraction status for this row.
-property,yes,density|dynamic_viscosity|kinematic_viscosity,Measured property.
+property,yes,density|dynamic_viscosity,Measured property.
 temperature_C,yes,degC,Reported temperature.
-mea_mass_fraction,yes,mass fraction,MEA mass fraction in the liquid solution.
+mea_mass_fraction,yes,unloaded-solution mass fraction,MEA mass fraction; loaded tables explicitly use the unloaded-solution basis.
 co2_loading_mol_per_mol_mea,no,mol CO2/mol MEA,CO2 loading for loaded mixtures; blank for unloaded binary MEA-water data.
 pressure_kPa,no,kPa,Pressure if reported.
 value,yes,reported unit,Measured property value.
-value_unit,yes,kg/m^3|mPa*s|mm^2/s|other,Unit reported by the source table.
-source_table_or_figure,yes,text,Source table/figure/caption identifier from repo-local Markdown.
-source_line_start,no,line number,First line in repo-local Markdown used for traceability.
-source_line_end,no,line number,Last line in repo-local Markdown used for traceability.
-notes,no,text,Short extraction note; do not paste article text.
+value_unit,yes,g/cm^3|mPa*s,Unit reported by the source table.
+uncertainty_value,yes,reported uncertainty,Combined absolute or relative uncertainty attached to the property family.
+uncertainty_unit,yes,g/cm^3|percent,Unit for uncertainty_value.
+uncertainty_type,yes,combined_absolute|combined_relative,Source uncertainty classification.
+temperature_uncertainty_K,yes,K,Estimated temperature uncertainty reported by the source.
+mea_mass_fraction_relative_uncertainty_percent,yes,percent,Estimated relative uncertainty of MEA mass fraction.
+co2_loading_relative_uncertainty_percent,no,percent,Estimated relative loading uncertainty; blank for unloaded rows.
+measurement_role,yes,direct_positive,Reported positive measurement role.
+lifecycle_status,yes,property_target_candidate|validation_only,Density is candidate property evidence; viscosity remains transport validation only.
+source_table_or_figure,yes,Table 1 through Table 8,Source table identifier in repo-local Markdown.
+source_line_start,yes,line number,First source line covering the table.
+source_line_end,yes,line number,Last source line covering the table.
+notes,no,text,Short basis and use restriction.

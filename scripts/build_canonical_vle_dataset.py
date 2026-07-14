@@ -11,6 +11,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 VLE_DIR = REPO_ROOT / "data" / "reference" / "MEA" / "VLE"
 INCLUSION_PATH = VLE_DIR / "Combined_VLE_inclusion.csv"
 OUTPUT_PATH = VLE_DIR / "Combined_VLE.csv"
+OBSERVATION_PATH = VLE_DIR / "Canonical_VLE_Observations.csv"
+DISPOSITION_PATH = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "vle_row_disposition.csv"
 
 SOURCE_FILES = {
     "Aronu2011": "Aronu_2011_VLE.csv",
@@ -46,6 +48,43 @@ OUTPUT_FIELDS = (
     "paper",
 )
 EXPECTED_ROW_COUNT = 161
+EXPECTED_OBSERVATION_COUNT = 327
+OBSERVATION_FIELDS = (
+    "observation_id",
+    "source_key",
+    "source_file",
+    "source_row",
+    "source_table_or_figure",
+    "doi",
+    "MEA_weight_fraction",
+    "temperature_reported_C",
+    "temperature_canonical_C",
+    "temperature_normalized",
+    "CO2_loading",
+    "CO2_pressure",
+    "MEA_pressure",
+    "H2O_pressure",
+    "pressure_MEA_raoult",
+    "total_pressure",
+    "CO2_loading_uncertainty",
+    "CO2_pressure_uncertainty",
+    "replicate_group",
+    "normalization_group",
+    "active_view_member",
+    "active_row_id",
+    "lifecycle_status",
+    "disposition_reason",
+    "notes",
+)
+DISPOSITION_FIELDS = (
+    "source_key",
+    "source_file",
+    "source_row",
+    "active_view_member",
+    "active_row_id",
+    "lifecycle_status",
+    "disposition_reason",
+)
 
 
 def _read_rows(path: Path) -> list[dict[str, str]]:
@@ -92,6 +131,8 @@ def build_dataset(
     *,
     inclusion_path: Path = INCLUSION_PATH,
     output_path: Path = OUTPUT_PATH,
+    observation_path: Path = OBSERVATION_PATH,
+    disposition_path: Path = DISPOSITION_PATH,
 ) -> list[dict[str, str | int]]:
     inclusion_rows = _read_rows(inclusion_path)
     if len(inclusion_rows) != EXPECTED_ROW_COUNT:
@@ -187,7 +228,118 @@ def build_dataset(
         raise RuntimeError("Canonical VLE data set does not include every declared source")
 
     write_csv_rows(output_path, generated, fieldnames=OUTPUT_FIELDS)
+    _write_full_registry(
+        sources,
+        generated,
+        observation_path=observation_path,
+        disposition_path=disposition_path,
+    )
     return generated
+
+
+def _write_full_registry(
+    sources: dict[str, list[dict[str, str]]],
+    active_rows: list[dict[str, str | int]],
+    *,
+    observation_path: Path,
+    disposition_path: Path,
+) -> None:
+    active_lookup = {
+        (str(row["source_key"]), int(row["source_row"])): row
+        for row in active_rows
+    }
+    observations: list[dict[str, str | int]] = []
+    dispositions: list[dict[str, str | int]] = []
+    sequence = 0
+    for source_key, source_file in SOURCE_FILES.items():
+        for source_row, source in enumerate(sources[source_key], start=1):
+            sequence += 1
+            context = f"{source_key} source row {source_row}"
+            if "source_row" in source and int(source["source_row"]) != source_row:
+                raise RuntimeError(f"Embedded source_row does not match physical row for {context}")
+            _validate_measurement(source, context=context)
+
+            active = active_lookup.get((source_key, source_row))
+            active_member = "yes" if active is not None else "no"
+            active_row_id = str(active["row_id"]) if active is not None else ""
+            canonical_temperature = str(active["temperature"]) if active is not None else ""
+            temperature_normalized = (
+                "yes"
+                if active is not None and canonical_temperature != source["temperature"]
+                else "no"
+            )
+            if active is not None:
+                lifecycle_status = "active_v1"
+                disposition_reason = "Retained in the byte-stable Combined_VLE.csv active-v1 view."
+            elif source_key in {"Aronu2011", "Hilliard2008"}:
+                lifecycle_status = "validation_reserved_candidate"
+                disposition_reason = (
+                    "Non-30-wt% composition-transfer evidence reserved for grouped validation review."
+                )
+            elif source_key in {"Jou1995", "Xu2011"}:
+                lifecycle_status = "qa_pending_domain_review"
+                disposition_reason = (
+                    "Temperature, phase, apparatus, and current model-domain eligibility require review."
+                )
+            else:
+                raise RuntimeError(f"Unaccounted non-active VLE row: {context}")
+
+            replicate_group = (
+                f"{source_key}|w={source['MEA_weight_fraction']}|T={source['temperature']}"
+            )
+            normalization_group = (
+                f"{source_key}|nominal_T={canonical_temperature}"
+                if temperature_normalized == "yes"
+                else ""
+            )
+            observations.append(
+                {
+                    "observation_id": f"vle_obs_{sequence:04d}",
+                    "source_key": source_key,
+                    "source_file": source_file,
+                    "source_row": source_row,
+                    "source_table_or_figure": source.get("source_table_or_figure", ""),
+                    "doi": source.get("doi", ""),
+                    "MEA_weight_fraction": source["MEA_weight_fraction"],
+                    "temperature_reported_C": source["temperature"],
+                    "temperature_canonical_C": canonical_temperature,
+                    "temperature_normalized": temperature_normalized,
+                    "CO2_loading": source["CO2_loading"],
+                    "CO2_pressure": source["CO2_pressure"],
+                    "MEA_pressure": source.get("MEA_pressure", ""),
+                    "H2O_pressure": source.get("H2O_pressure", ""),
+                    "pressure_MEA_raoult": source.get("pressure_MEA_raoult", ""),
+                    "total_pressure": source.get("total_pressure", ""),
+                    "CO2_loading_uncertainty": source.get("CO2_loading_uncertainty", ""),
+                    "CO2_pressure_uncertainty": source.get("CO2_pressure_uncertainty", ""),
+                    "replicate_group": replicate_group,
+                    "normalization_group": normalization_group,
+                    "active_view_member": active_member,
+                    "active_row_id": active_row_id,
+                    "lifecycle_status": lifecycle_status,
+                    "disposition_reason": disposition_reason,
+                    "notes": source.get("notes", ""),
+                }
+            )
+            dispositions.append(
+                {
+                    "source_key": source_key,
+                    "source_file": source_file,
+                    "source_row": source_row,
+                    "active_view_member": active_member,
+                    "active_row_id": active_row_id,
+                    "lifecycle_status": lifecycle_status,
+                    "disposition_reason": disposition_reason,
+                }
+            )
+
+    if len(observations) != EXPECTED_OBSERVATION_COUNT:
+        raise RuntimeError(
+            f"Full VLE registry must contain {EXPECTED_OBSERVATION_COUNT} rows; "
+            f"found {len(observations)}"
+        )
+    write_csv_rows(observation_path, observations, fieldnames=OBSERVATION_FIELDS)
+    write_csv_rows(disposition_path, dispositions, fieldnames=DISPOSITION_FIELDS)
 
 
 if __name__ == "__main__":

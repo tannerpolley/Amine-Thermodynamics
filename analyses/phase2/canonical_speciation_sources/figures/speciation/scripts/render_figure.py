@@ -263,7 +263,7 @@ def main() -> int:
             title="Canonical MEA Speciation Sources, Mole-Fraction Basis",
             ylabel="True-species liquid mole fraction",
             ylim=MOLE_FRACTION_YLIM,
-            description="Böttinger, Jakobsen, Matin, and Wong source rows from the canonical combined speciation dataset on a liquid mole-fraction basis.",
+            description="Böttinger, Jakobsen, and Matin source rows with reported liquid mole fractions; Wong remains on its separately reported source mol/kg basis.",
         ),
         _plot_grid(
             loaded_molkg,
@@ -271,7 +271,7 @@ def main() -> int:
             title="Canonical MEA Speciation Sources, Loaded-Solution mol/kg",
             ylabel="Computed species amount, mol/kg loaded solution",
             ylim=MOLKG_YLIM,
-            description="Böttinger, Jakobsen, Matin, and Wong source rows from the canonical combined speciation dataset on a loaded-solution mol/kg basis.",
+            description="Böttinger, Jakobsen, and Matin source rows with verified loaded-solution denominator conversions; Wong remains on its separately reported source mol/kg basis.",
         ),
         _plot_wong(wong_molkg),
     ]

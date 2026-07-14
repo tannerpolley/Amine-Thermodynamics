@@ -12,7 +12,10 @@ mea_mass_fraction,yes,mass fraction,MEA mass fraction for the aqueous MEA feed o
 co2_loading_mol_per_mol_mea,yes,mol/mol,CO2 loading as mol CO2 per mol MEA.
 species,yes,species label,Canonical species label.
 source_species,yes,text,Species label or source column before canonical normalization.
-measurement_role,yes,direct_positive|direct_zero|aggregate_direct_positive|aggregate_direct_zero|ambiguous_positive|ambiguous_zero,How the value should be treated as a measured target.
+measurement_role,yes,direct_positive|direct_zero|aggregate_direct_positive|aggregate_direct_zero|ambiguous,How the value should be treated as measured or unresolved evidence.
+conversion_eligible,yes,true|false,Whether the reported basis has enough verified denominator information for normalized conversion.
+lifecycle_status,yes,canonical_eligible|validation_reserved|diagnostic_only|qa_pending,Row-level evidence lifecycle state.
+target_membership,yes,active_v1|transferability_candidate|diagnostic_only_basis_unverified,Current target or holdout membership without implying upstream admission.
 reported_value,yes,source basis,Numeric value exactly on the source-file basis.
 reported_basis,yes,mole_fraction|mol_per_kg_source_basis,Basis of reported_value.
 reported_unit,yes,unit text,Reported unit label.
