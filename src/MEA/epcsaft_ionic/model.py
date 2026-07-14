@@ -12,9 +12,10 @@ import numpy as np
 import pandas as pd
 
 from MEA.common.config import CANONICAL_MEA_WEIGHT_FRACTION, EPCSAFT_DATASET_ROOT, EPCSAFT_IONIC_ANALYSIS
+from MEA.common.data_access import load_regression_speciation_view, load_regression_vle_view
 from MEA.common.reaction_catalog import activity_coefficient_map
 from MEA.common.solver_acceptance import evaluate_solver_acceptance
-from MEA.epcsaft_present_plots import _as_float, load_cheq_rows, load_vle_rows, reconcile_speciation_row
+from MEA.epcsaft_present_plots import _as_float, reconcile_speciation_row
 from MEA.epcsaft_runtime import ADVANCED_BORN_USER_OPTIONS, DATASET_DIR, SPECIES, load_epcsaft, to_jsonable
 
 SPECIES_INDEX = {name: idx for idx, name in enumerate(SPECIES)}
@@ -140,6 +141,8 @@ class VLETarget:
     pressure_kPa: float
     x: np.ndarray
     paper: str
+    split: str
+    group_id: str
 
 
 @dataclass(frozen=True)
@@ -151,6 +154,8 @@ class SpeciationTarget:
     x: np.ndarray
     source: str
     target_roles: dict[str, str]
+    split: str
+    group_id: str
 
 
 @dataclass(frozen=True)
@@ -280,12 +285,11 @@ def _speciation_interpolator(cheq_rows: list[dict[str, str]], temperature_C: flo
 
 
 def load_vle_targets(limit: int | None = None) -> list[VLETarget]:
-    cheq_rows = load_cheq_rows()
+    cheq_rows = load_regression_speciation_view().to_dict(orient="records")
     rows = [
         row
-        for row in load_vle_rows()
-        if abs(_as_float(row, "MEA_weight_fraction") - CANONICAL_MEA_WEIGHT_FRACTION) < 1.0e-9
-        and np.isfinite(_as_float(row, "temperature"))
+        for row in load_regression_vle_view().to_dict(orient="records")
+        if np.isfinite(_as_float(row, "temperature"))
         and np.isfinite(_as_float(row, "CO2_loading"))
         and np.isfinite(_as_float(row, "CO2_pressure"))
         and _as_float(row, "CO2_pressure") > 1.0e-4
@@ -306,6 +310,8 @@ def load_vle_targets(limit: int | None = None) -> list[VLETarget]:
                 pressure_kPa=pressure_kPa,
                 x=_speciation_interpolator(cheq_rows, temperature_C, loading),
                 paper=str(row.get("paper", "")),
+                split=str(row["split"]),
+                group_id=str(row["group_id"]),
             )
         )
     return targets
@@ -314,23 +320,24 @@ def load_vle_targets(limit: int | None = None) -> list[VLETarget]:
 def load_speciation_targets(limit: int | None = None) -> list[SpeciationTarget]:
     rows = [
         row
-        for row in load_cheq_rows()
-        if abs(_as_float(row, "MEA_weight_fraction") - CANONICAL_MEA_WEIGHT_FRACTION) < 1.0e-9
-        and np.isfinite(_as_float(row, "temperature"))
+        for row in load_regression_speciation_view().to_dict(orient="records")
+        if np.isfinite(_as_float(row, "temperature"))
         and np.isfinite(_as_float(row, "CO2_loading"))
     ]
     rows = _select_evenly(sorted(rows, key=lambda row: (_as_float(row, "temperature"), _as_float(row, "CO2_loading"), row.get("source", ""))), limit)
     return [
         SpeciationTarget(
-            row_id=f"cheq_{idx:04d}",
+            row_id=str(row["state_id"]),
             T=float(_as_float(row, "temperature")) + 273.15,
             P=101325.0,
             loading=float(_as_float(row, "CO2_loading")),
             x=reconcile_speciation_row(row),
             source=str(row.get("source", "")),
             target_roles=speciation_target_roles(row),
+            split=str(row["split"]),
+            group_id=str(row["group_id"]),
         )
-        for idx, row in enumerate(rows)
+        for row in rows
     ]
 
 

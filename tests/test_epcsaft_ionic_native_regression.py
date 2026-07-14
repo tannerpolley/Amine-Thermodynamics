@@ -23,10 +23,17 @@ class NativeRegressionProblemTests(unittest.TestCase):
         self.assertEqual(decoded["metadata"]["pressure_row_count"], 2)
         self.assertEqual(decoded["metadata"]["speciation_row_count"], 2)
         self.assertEqual(decoded["metadata"]["optimizer_owner"], "epcsaft")
-        self.assertEqual(decoded["metadata"]["optimizer_backend"], "ceres")
-        self.assertEqual(decoded["metadata"]["derivative_backend"], "autodiff")
+        self.assertEqual(decoded["metadata"]["requested_optimizer_backend"], "native_ceres")
+        self.assertEqual(
+            decoded["metadata"]["requested_derivative_backend"],
+            "production_autodiff_and_implicit",
+        )
+        self.assertFalse(decoded["metadata"]["execution_admitted"])
+        self.assertEqual(decoded["metadata"]["execution_gate"], "issue_12_split_package_contract")
         self.assertEqual(len(decoded["rows"]), 4)
         self.assertIn("advanced_born_user_options", decoded)
+        self.assertIn("split_hash", decoded["metadata"])
+        self.assertEqual(decoded["metadata"]["split_source"], "grouped_split_manifest.csv")
 
         pressure = next(row for row in decoded["rows"] if row["mode"] == "bubble")
         speciation = next(row for row in decoded["rows"] if row["mode"] == "speciation")
@@ -34,6 +41,8 @@ class NativeRegressionProblemTests(unittest.TestCase):
             self.assertIn("row_id", row)
             self.assertIn("source", row)
             self.assertIn("split", row)
+            self.assertIn(row["split"], {"training", "validation"})
+            self.assertIn("group_id", row["metadata"])
             self.assertIn("loading", row)
             self.assertEqual(set(row["initial_x"]), set(decoded["species"]))
             self.assertEqual(row["vapor_species"], ["CO2", "H2O", "MEA"])

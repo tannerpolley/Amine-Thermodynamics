@@ -34,6 +34,14 @@ Executable: true
 
 - https://github.com/tannerpolley/MEA-Thermodynamics/issues/13
 
+## Frozen Validation Infrastructure
+
+- Grouped split: `data/reference/MEA/manifests/grouped_split_manifest.csv`
+- Readiness receipt: `analyses/phase3/ionic_epcsaft_regression/results/readiness/regression_readiness_summary.json`
+- Split hash: `e7bc893dab825007d009260d2c1f6f5dd42e75ebddbdb4972d52a5ec4f0c1aa0`
+
+The frozen manifest contains complete source/composition/temperature groups, including 15/20 wt% speciation transfer groups and non-30-wt% VLE groups. Its failed-row policy counts every attempted reserved row as a validation outcome; omission is forbidden. Candidate-bound validation still waits for Issue #13.
+
 ## Non-goals
 
 - Present training residuals as validation.

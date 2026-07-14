@@ -51,7 +51,7 @@ def _positive_rows(frame: pd.DataFrame, value_column: str) -> pd.DataFrame:
     rows = frame.copy()
     rows[value_column] = pd.to_numeric(rows[value_column], errors="coerce")
     rows = rows[rows[value_column].notna() & (rows[value_column] > 0.0)].copy()
-    rows = rows[rows["measurement_role"].isin({"direct_positive", "aggregate_direct_positive", "ambiguous_positive"})]
+    rows = rows[rows["measurement_role"].isin({"direct_positive", "aggregate_direct_positive", "ambiguous"})]
     rows["plot_value"] = rows[value_column].astype(float)
     rows["mea_mass_percent"] = (rows["mea_mass_fraction"].astype(float) * 100.0).round(6)
     rows["source_key"] = _ordered_category(rows["source_key"], SOURCE_ORDER)

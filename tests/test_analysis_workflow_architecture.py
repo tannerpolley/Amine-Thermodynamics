@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import ast
+import hashlib
+import json
 import unittest
 from pathlib import Path
+
+from MEA.common.data_access import load_regression_speciation_view, load_regression_vle_view
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -48,6 +52,36 @@ def _assigned_string_constants(source: str, name: str) -> list[str]:
 
 
 class AnalysisWorkflowArchitectureTests(unittest.TestCase):
+    def test_regression_views_match_frozen_active_membership(self) -> None:
+        split_path = ROOT / "data" / "reference" / "MEA" / "manifests" / "grouped_split_manifest.csv"
+        summary_path = (
+            ROOT
+            / "analyses"
+            / "phase3"
+            / "ionic_epcsaft_regression"
+            / "results"
+            / "readiness"
+            / "regression_readiness_summary.json"
+        )
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        vle = load_regression_vle_view()
+        speciation = load_regression_speciation_view()
+
+        self.assertEqual(len(vle), 161)
+        self.assertEqual(len(speciation), 74)
+        self.assertEqual(set(vle["split"]), {"training", "validation"})
+        self.assertEqual(set(speciation["split"]), {"training", "validation"})
+        self.assertTrue(vle["observation_id"].is_unique)
+        self.assertTrue(speciation["state_id"].is_unique)
+        self.assertEqual(hashlib.sha256(split_path.read_bytes()).hexdigest(), summary["split_hash"])
+
+    def test_native_regression_uses_manifest_splits_not_source_sets(self) -> None:
+        source = _source(ROOT / "src" / "MEA" / "epcsaft_ionic" / "native_regression.py")
+        self.assertNotIn("PRESSURE_TRAIN_SOURCES", source)
+        self.assertNotIn("PRESSURE_VALIDATION_SOURCES", source)
+        self.assertNotIn("SPECIATION_TRAIN_SOURCES", source)
+        self.assertIn('"split": target.split', source)
+
     def test_render_all_plots_only_runs_render_scripts(self) -> None:
         command_paths = _assigned_string_constants(_source(ROOT / "scripts" / "render_all_plots.py"), "COMMANDS")
         self.assertGreaterEqual(len(command_paths), 4)
