@@ -116,6 +116,13 @@ CURATED_REQUIREMENTS = {
         "phase2_pressure_plot_data.csv",
         *plot_bundle("phase2_pressure_vs_loading"),
     ],
+    "analyses/phase2/activity_epcsaft/figures/controlled_comparison/input": [
+        "source_manifest.csv",
+    ],
+    "analyses/phase2/activity_epcsaft/figures/controlled_comparison/output": [
+        "controlled_pressure_comparison_plot_data.csv",
+        *plot_bundle("controlled_pressure_comparison"),
+    ],
     "analyses/phase2/activity_epcsaft/figures/speciation/input": ["source_manifest.csv"],
     "analyses/phase2/activity_epcsaft/figures/speciation/output": [
         *plot_bundle("phase2_speciation_20C"),

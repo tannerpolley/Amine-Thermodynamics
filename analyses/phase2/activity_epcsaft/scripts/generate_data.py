@@ -7,11 +7,13 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+import pandas as pd
 
 from MEA.common.analysis_io import read_csv_rows as read_csv
 from MEA.common.analysis_io import repo_relative_path
 from MEA.common.analysis_io import remove_matching_files, write_csv_rows as write_csv
 from MEA.common.analysis_io import write_json_file as write_json
+from MEA.common.model_comparison import build_controlled_comparison
 from MEA.common.reaction_catalog import (
     activity_coefficient_map,
     activity_source_map,
@@ -31,6 +33,16 @@ from MEA.smith_missen.ideal_speciation import solve_ideal_speciation
 REPO_ROOT = Path(__file__).resolve().parents[4]
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
 RESULTS_DIR = ANALYSIS_DIR / "results"
+CONTROLLED_COMPARISON_DIR = RESULTS_DIR / "controlled_comparison"
+CANONICAL_VLE = REPO_ROOT / "data" / "reference" / "MEA" / "VLE" / "Combined_VLE.csv"
+PHASE1_PRESSURE_RESULTS = (
+    REPO_ROOT
+    / "analyses"
+    / "phase1"
+    / "smith_missen_baseline"
+    / "results"
+    / "phase1_pressure_results.csv"
+)
 REACTION_MANIFEST = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "phase2_reaction_constant_manifest.csv"
 ACTIVITY_CANDIDATES = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "phase2_activity_constant_candidates.csv"
 SOURCE_VERIFICATION = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "phase2_reaction_constant_source_verification.csv"
@@ -116,6 +128,50 @@ def write_result_json(name: str, payload: dict[str, Any]) -> None:
 
 def write_result_rows(name: str, rows: list[dict[str, Any]], fieldnames: list[str] | None = None) -> None:
     write_csv(RESULTS_DIR / name, rows, fieldnames)
+
+
+def write_controlled_comparison(
+    pressure_rows: list[dict[str, object]],
+    target_role_rows: list[dict[str, object]],
+) -> None:
+    bundle = build_controlled_comparison(
+        pd.read_csv(CANONICAL_VLE),
+        pd.read_csv(PHASE1_PRESSURE_RESULTS),
+        pd.DataFrame(pressure_rows),
+        pd.DataFrame(target_role_rows),
+    )
+    CONTROLLED_COMPARISON_DIR.mkdir(parents=True, exist_ok=True)
+    write_csv(
+        CONTROLLED_COMPARISON_DIR / "paired_pressure_rows.csv",
+        bundle.paired_rows.to_dict(orient="records"),
+        list(bundle.paired_rows.columns),
+    )
+    write_csv(
+        CONTROLLED_COMPARISON_DIR / "metrics.csv",
+        bundle.metrics.to_dict(orient="records"),
+        list(bundle.metrics.columns),
+    )
+    write_csv(
+        CONTROLLED_COMPARISON_DIR / "uncertainty_coverage.csv",
+        bundle.uncertainty_coverage.to_dict(orient="records"),
+        list(bundle.uncertainty_coverage.columns),
+    )
+    write_csv(
+        CONTROLLED_COMPARISON_DIR / "speciation_role_counts.csv",
+        bundle.role_counts.to_dict(orient="records"),
+        list(bundle.role_counts.columns),
+    )
+    write_json(
+        CONTROLLED_COMPARISON_DIR / "metrics.json",
+        {
+            "summary": bundle.summary,
+            "metrics": bundle.metrics.to_dict(orient="records"),
+            "uncertainty_coverage": bundle.uncertainty_coverage.to_dict(
+                orient="records"
+            ),
+            "speciation_role_counts": bundle.role_counts.to_dict(orient="records"),
+        },
+    )
 
 
 def dataset_species() -> list[str]:
@@ -1071,6 +1127,7 @@ def main() -> int:
     ):
         write_result_rows(name, rows)
     write_result_rows("phase2_source_residual_summary.csv", source_residual_summary, SOURCE_RESIDUAL_SUMMARY_FIELDNAMES)
+    write_controlled_comparison(pressure_equilibrium, target_roles)
     write_comparison(RESULTS_DIR / "phase2_comparison_to_phase1.md", phase2_status, residual_audit)
     write_claim_boundary_report(RESULTS_DIR / "phase2_solver_claim_boundary_report.md", source_rows, phase2_status, residual_audit)
 
