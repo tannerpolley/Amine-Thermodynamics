@@ -11,11 +11,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 CHEQ_DIR = REPO_ROOT / "data" / "reference" / "MEA" / "ChEq"
 OUTPUT_PATH = CHEQ_DIR / "Canonical_Combined_ChEq.csv"
 SCHEMA_PATH = CHEQ_DIR / "Canonical_Combined_ChEq_schema.csv"
+ACTIVE_VIEW_PATH = CHEQ_DIR / "Combined_ChEq.csv"
+MEMBERSHIP_PATH = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "speciation_target_membership.csv"
 
 MW_MEA_G_PER_MOL = 61.084
 MW_CO2_G_PER_MOL = 44.01
-MW_WATER_G_PER_MOL = 18.01528
-
 LEGACY_SPECIES_COLUMNS = {
     "CO2": "CO2",
     "MEA": "MEA",
@@ -41,6 +41,9 @@ CANONICAL_COLUMNS = [
     "species",
     "source_species",
     "measurement_role",
+    "conversion_eligible",
+    "lifecycle_status",
+    "target_membership",
     "reported_value",
     "reported_basis",
     "reported_unit",
@@ -89,7 +92,10 @@ SCHEMA_ROWS = [
     ("co2_loading_mol_per_mol_mea", "yes", "mol/mol", "CO2 loading as mol CO2 per mol MEA."),
     ("species", "yes", "species label", "Canonical species label."),
     ("source_species", "yes", "text", "Species label or source column before canonical normalization."),
-    ("measurement_role", "yes", "direct_positive|direct_zero|aggregate_direct_positive|aggregate_direct_zero|ambiguous_positive|ambiguous_zero", "How the value should be treated as a measured target."),
+    ("measurement_role", "yes", "direct_positive|direct_zero|aggregate_direct_positive|aggregate_direct_zero|ambiguous", "How the value should be treated as measured or unresolved evidence."),
+    ("conversion_eligible", "yes", "true|false", "Whether the reported basis has enough verified denominator information for normalized conversion."),
+    ("lifecycle_status", "yes", "canonical_eligible|validation_reserved|diagnostic_only|qa_pending", "Row-level evidence lifecycle state."),
+    ("target_membership", "yes", "active_v1|transferability_candidate|diagnostic_only_basis_unverified", "Current target or holdout membership without implying upstream admission."),
     ("reported_value", "yes", "source basis", "Numeric value exactly on the source-file basis."),
     ("reported_basis", "yes", "mole_fraction|mol_per_kg_source_basis", "Basis of reported_value."),
     ("reported_unit", "yes", "unit text", "Reported unit label."),
@@ -124,10 +130,10 @@ def _finite_or_blank(value: object) -> float:
 
 
 def _measurement_role(species: str, value: float, row_status: str) -> str:
-    prefix = "aggregate" if species == "MEA + MEAH+" else "direct"
-    suffix = "positive" if value > 0.0 else "zero"
     if row_status == "ambiguous":
-        return f"ambiguous_{suffix}"
+        return "ambiguous"
+    prefix = "aggregate_direct" if species == "MEA + MEAH+" else "direct"
+    suffix = "positive" if value > 0.0 else "zero"
     return f"{prefix}_{suffix}"
 
 
@@ -204,6 +210,17 @@ def _legacy_rows(source: LegacySource) -> list[dict[str, object]]:
                     "species": species,
                     "source_species": column,
                     "measurement_role": _measurement_role(species, value, "reported"),
+                    "conversion_eligible": "true",
+                    "lifecycle_status": (
+                        "canonical_eligible"
+                        if abs(mea_mass_fraction - 0.3) < 1.0e-12
+                        else "validation_reserved"
+                    ),
+                    "target_membership": (
+                        "active_v1"
+                        if abs(mea_mass_fraction - 0.3) < 1.0e-12
+                        else "transferability_candidate"
+                    ),
                     "reported_value": value,
                     "reported_basis": "mole_fraction",
                     "reported_unit": "mole_fraction",
@@ -225,70 +242,9 @@ def _legacy_rows(source: LegacySource) -> list[dict[str, object]]:
     return rows
 
 
-def _wong_meacoo_curve(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
-    rows = df[df["species"].astype(str) == "MEACOO-"].copy()
-    rows["loading"] = pd.to_numeric(rows["co2_loading_mol_per_mol_mea"], errors="coerce")
-    rows["concentration"] = pd.to_numeric(rows["value"], errors="coerce")
-    rows = rows.dropna(subset=["loading", "concentration"])
-    rows = rows[rows["concentration"] >= 0.0]
-    rows = pd.concat(
-        [
-            pd.DataFrame({"loading": [0.0], "concentration": [0.0]}),
-            rows[["loading", "concentration"]],
-        ],
-        ignore_index=True,
-    )
-    rows = rows.groupby("loading", as_index=False)["concentration"].mean().sort_values("loading", kind="stable")
-    if len(rows) < 2:
-        raise ValueError("Wong MEACOO- rows are required to convert Wong mol/kg values to mole fractions.")
-    return rows["loading"].to_numpy(dtype=float), rows["concentration"].to_numpy(dtype=float)
-
-
-def _interpolated_wong_meacoo(loading: float, curve: tuple[np.ndarray, np.ndarray]) -> float:
-    loadings, concentrations = curve
-    jitter = 0.005
-    if loading < loadings[0] - jitter or loading > loadings[-1] + jitter:
-        raise ValueError(f"Wong loading {loading} is outside the MEACOO- interpolation domain.")
-    bounded_loading = float(np.clip(loading, loadings[0], loadings[-1]))
-    return float(np.interp(bounded_loading, loadings, concentrations))
-
-
-def _wong_conversion_values(
-    *,
-    value_mol_per_kg_loaded: float,
-    mea_mass_fraction: float,
-    loading: float,
-    meacoo_curve: tuple[np.ndarray, np.ndarray],
-) -> dict[str, float]:
-    context = _feed_context(mea_mass_fraction, loading)
-    loaded_mass = context["loaded_solution_mass_kg_per_kg_unloaded_solution"]
-    water_mol_per_kg_unloaded = (1.0 - mea_mass_fraction) * 1000.0 / MW_WATER_G_PER_MOL
-    water_mol_per_kg_loaded = water_mol_per_kg_unloaded / loaded_mass
-    amine_mol_per_kg_loaded = context["feed_mea_mol_per_kg_unloaded_solution"] / loaded_mass
-    carbon_mol_per_kg_loaded = context["feed_co2_mol_per_kg_unloaded_solution"] / loaded_mass
-    meacoo_mol_per_kg_loaded = _interpolated_wong_meacoo(loading, meacoo_curve)
-    total_moles_per_kg_loaded = (
-        water_mol_per_kg_loaded
-        + amine_mol_per_kg_loaded
-        + carbon_mol_per_kg_loaded
-        - meacoo_mol_per_kg_loaded
-    )
-    if total_moles_per_kg_loaded <= 0.0:
-        raise ValueError(f"Wong mole-fraction denominator must be positive at loading {loading}.")
-    value_mol_per_kg_unloaded = value_mol_per_kg_loaded * loaded_mass
-    return {
-        "value_mole_fraction": value_mol_per_kg_loaded / total_moles_per_kg_loaded,
-        "value_mol_per_kg_unloaded_solution": value_mol_per_kg_unloaded,
-        "value_mol_per_kg_initial_water": value_mol_per_kg_unloaded / (1.0 - mea_mass_fraction),
-        "value_mol_per_kg_loaded_solution": value_mol_per_kg_loaded,
-        "conversion_total_moles_per_kg_unloaded_solution": total_moles_per_kg_loaded * loaded_mass,
-    }
-
-
 def _wong_rows() -> list[dict[str, object]]:
     source_path = CHEQ_DIR / "Wong_2015_Raman_speciation.csv"
     df = pd.read_csv(source_path)
-    meacoo_curve = _wong_meacoo_curve(df)
     rows: list[dict[str, object]] = []
     for row_number, row in enumerate(df.to_dict("records"), start=1):
         mea_mass_fraction = _finite_or_blank(row["mea_mass_fraction"])
@@ -296,19 +252,13 @@ def _wong_rows() -> list[dict[str, object]]:
         temperature_C = _finite_or_blank(row["temperature_C"])
         value = _finite_or_blank(row["value"])
         context = _feed_context(mea_mass_fraction, loading)
-        converted = _wong_conversion_values(
-            value_mol_per_kg_loaded=value,
-            mea_mass_fraction=mea_mass_fraction,
-            loading=loading,
-            meacoo_curve=meacoo_curve,
-        )
         source_species = str(row["species"])
         species = "CO2" if source_species == "CO2(aq)" else source_species
         row_status = str(row["row_status"])
         notes = str(row.get("notes", "")).strip()
         if notes:
             notes += " "
-        notes += "Source mol/kg values are standardized as mol/kg loaded liquid; mole fractions use feed water, reported loading, and the Wong MEACOO- concentration curve for the total true-species denominator."
+        notes += "Source mol/kg denominator is not verified; no mole-fraction or alternate mol/kg conversion is eligible. Feed and loading context are retained as diagnostic metadata only."
         rows.append(
             {
                 "record_id": "",
@@ -325,13 +275,20 @@ def _wong_rows() -> list[dict[str, object]]:
                 "species": species,
                 "source_species": source_species,
                 "measurement_role": _measurement_role(species, value, row_status),
+                "conversion_eligible": "false",
+                "lifecycle_status": "qa_pending" if row_status == "ambiguous" else "diagnostic_only",
+                "target_membership": "diagnostic_only_basis_unverified",
                 "reported_value": value,
                 "reported_basis": "mol_per_kg_source_basis",
                 "reported_unit": "mol/kg",
-                **converted,
+                "value_mole_fraction": _blank(),
                 "value_mol_per_kg_source_basis": value,
+                "value_mol_per_kg_unloaded_solution": _blank(),
+                "value_mol_per_kg_initial_water": _blank(),
+                "value_mol_per_kg_loaded_solution": _blank(),
                 **context,
-                "conversion_basis": "reported_mol_per_kg_loaded_solution_scaled_by_feed_water_loading_and_wong_meacoo_curve",
+                "conversion_total_moles_per_kg_unloaded_solution": _blank(),
+                "conversion_basis": "not_converted_unverified_source_kg_denominator",
                 "source_table_or_figure": row.get("source_table_or_figure", ""),
                 "source_line_start": row.get("source_line_start", ""),
                 "source_line_end": row.get("source_line_end", ""),
@@ -355,13 +312,172 @@ def build_schema() -> pd.DataFrame:
     return pd.DataFrame(SCHEMA_ROWS, columns=["column", "required", "unit_or_domain", "description"])
 
 
+TARGET_ROLE_SPECIES = (
+    "CO2",
+    "MEA",
+    "MEAH+",
+    "MEACOO-",
+    "HCO3-",
+    "CO3^2-",
+    "H3O+",
+    "OH-",
+    "MEA + MEAH+",
+)
+ACTIVE_SOURCE_KEYS = {
+    "Bottinger": "Bottinger2008",
+    "Jakobsen": "Jakobsen2005",
+    "Matin": "Matin2012",
+}
+
+
+def _normalized_role(role: str) -> str:
+    return {
+        "aggregate_positive": "aggregate_direct_positive",
+        "aggregate_zero": "aggregate_direct_zero",
+        "ambiguous_positive": "ambiguous",
+        "ambiguous_zero": "ambiguous",
+    }.get(role, role)
+
+
+def _roles_from_long_group(group: pd.DataFrame) -> dict[str, str]:
+    roles = {species: "balance_inferred" for species in TARGET_ROLE_SPECIES}
+    for row in group.to_dict("records"):
+        roles[str(row["species"])] = _normalized_role(str(row["measurement_role"]))
+    return roles
+
+
+def _roles_from_active_row(row: dict[str, object]) -> dict[str, str]:
+    columns = {
+        "CO2": "CO2",
+        "MEA": "MEA",
+        "MEAH+": "MEAH^+",
+        "MEACOO-": "MEACOO^-",
+        "HCO3-": "HCO3^-",
+        "CO3^2-": "CO3^2-",
+        "MEA + MEAH+": "MEA + MEAH^+",
+    }
+    roles = {species: "balance_inferred" for species in TARGET_ROLE_SPECIES}
+    for species, column in columns.items():
+        value = _finite_or_blank(row.get(column, ""))
+        if np.isfinite(value):
+            roles[species] = _measurement_role(species, value, "reported")
+    return roles
+
+
+def _active_roles(dataset: pd.DataFrame) -> dict[tuple[str, int], dict[str, str]]:
+    active = pd.read_csv(ACTIVE_VIEW_PATH)
+    roles: dict[tuple[str, int], dict[str, str]] = {}
+    legacy = dataset[dataset["source_key"] != "Wong2015"]
+    for row in active.to_dict("records"):
+        source_key = ACTIVE_SOURCE_KEYS[str(row["source"])]
+        candidates = legacy[
+            (legacy["source_key"] == source_key)
+            & np.isclose(legacy["mea_mass_fraction"].astype(float), float(row["MEA_weight_fraction"]))
+            & np.isclose(legacy["temperature_C"].astype(float), float(row["temperature"]))
+            & np.isclose(
+                legacy["co2_loading_mol_per_mol_mea"].astype(float),
+                float(row["CO2_loading"]),
+            )
+        ]
+        source_rows = candidates["source_row_index"].unique()
+        if len(source_rows) != 1:
+            raise ValueError(f"Active speciation state does not map uniquely to its source row: {row}")
+        roles[(source_key, int(source_rows[0]))] = _roles_from_active_row(row)
+    if len(roles) != 74:
+        raise ValueError(f"Active-v1 speciation membership must contain 74 states; found {len(roles)}")
+    return roles
+
+
+def build_membership(dataset: pd.DataFrame) -> pd.DataFrame:
+    active_roles = _active_roles(dataset)
+    rows: list[dict[str, object]] = []
+    legacy = dataset[dataset["source_key"] != "Wong2015"]
+    for (source_key, source_row), group in legacy.groupby(
+        ["source_key", "source_row_index"], sort=False
+    ):
+        state_key = (str(source_key), int(source_row))
+        is_active = state_key in active_roles
+        roles = active_roles[state_key] if is_active else _roles_from_long_group(group)
+        first = group.iloc[0]
+        state_id = f"{source_key}_state_{int(source_row):03d}"
+        for species in TARGET_ROLE_SPECIES:
+            role = roles[species]
+            rows.append(
+                {
+                    "membership_id": f"{state_id}|{species}",
+                    "state_id": state_id,
+                    "source_key": source_key,
+                    "source_file": first["source_file"],
+                    "source_row_index": int(source_row),
+                    "row_status": "reported",
+                    "temperature_C": first["temperature_C"],
+                    "mea_mass_fraction": first["mea_mass_fraction"],
+                    "co2_loading_mol_per_mol_mea": first["co2_loading_mol_per_mol_mea"],
+                    "species": species,
+                    "measurement_role": role,
+                    "reported_basis": "mole_fraction" if role != "balance_inferred" else "",
+                    "conversion_eligible": "true",
+                    "lifecycle_status": "canonical_eligible" if is_active else "validation_reserved",
+                    "target_membership": "active_v1" if is_active else "transferability_candidate",
+                    "target_eligible": (
+                        "yes"
+                        if is_active
+                        and role
+                        in {
+                            "direct_positive",
+                            "direct_zero",
+                            "aggregate_direct_positive",
+                            "aggregate_direct_zero",
+                        }
+                        else "no"
+                    ),
+                    "eligibility_reason": (
+                        "Direct active-v1 source observation."
+                        if is_active and role != "balance_inferred"
+                        else "Balance-inferred context is not an independent measurement."
+                        if role == "balance_inferred"
+                        else "Non-30-wt% state is reserved for composition-transfer review."
+                    ),
+                }
+            )
+
+    wong = dataset[dataset["source_key"] == "Wong2015"]
+    for row in wong.to_dict("records"):
+        state_id = f"Wong2015_point_{int(row['source_row_index']):03d}"
+        rows.append(
+            {
+                "membership_id": f"{state_id}|{row['species']}",
+                "state_id": state_id,
+                "source_key": "Wong2015",
+                "source_file": row["source_file"],
+                "source_row_index": int(row["source_row_index"]),
+                "row_status": row["row_status"],
+                "temperature_C": row["temperature_C"],
+                "mea_mass_fraction": row["mea_mass_fraction"],
+                "co2_loading_mol_per_mol_mea": row["co2_loading_mol_per_mol_mea"],
+                "species": row["species"],
+                "measurement_role": row["measurement_role"],
+                "reported_basis": row["reported_basis"],
+                "conversion_eligible": "false",
+                "lifecycle_status": row["lifecycle_status"],
+                "target_membership": "diagnostic_only_basis_unverified",
+                "target_eligible": "no",
+                "eligibility_reason": "Source kg denominator is not verified; normalized target conversion fails closed.",
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def main() -> int:
     dataset = build_dataset()
     schema = build_schema()
+    membership = build_membership(dataset)
     dataset.to_csv(OUTPUT_PATH, index=False, float_format="%.12g")
     schema.to_csv(SCHEMA_PATH, index=False)
+    membership.to_csv(MEMBERSHIP_PATH, index=False, float_format="%.12g")
     print(f"Wrote {OUTPUT_PATH} ({len(dataset)} rows)")
     print(f"Wrote {SCHEMA_PATH} ({len(schema)} rows)")
+    print(f"Wrote {MEMBERSHIP_PATH} ({len(membership)} rows)")
     return 0
 
 
