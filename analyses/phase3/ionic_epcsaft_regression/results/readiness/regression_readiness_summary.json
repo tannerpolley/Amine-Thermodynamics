@@ -1,0 +1,223 @@
+{
+  "admitted_target_families": [
+    "vle_pressure",
+    "speciation"
+  ],
+  "blocking_conditions": {
+    "upstream_admission": "The public capability report does not admit a production native Ceres hot loop with production pressure and speciation derivatives; Issue 12 remains the execution gate."
+  },
+  "capability_receipt_hash": "a5e86618fe6f634167008c1a3b5994a742c9e11a85d2ffedb1572261ebd897d8",
+  "claim_boundary": "This receipt freezes data admission and grouped splits only. It is not a completed fit, parameter promotion, independent-validation result, or submission claim.",
+  "failed_row_policy": "Every attempted reserved row remains in validation accounting; solver failure is a failed prediction and may not be omitted or replaced.",
+  "leakage_findings": [],
+  "lifecycle_counts": {
+    "active_v1": 161,
+    "canonical_eligible": 74,
+    "validation_reserved": 37,
+    "validation_reserved_candidate": 95
+  },
+  "package_version": "1.5.2",
+  "parameter_coverage": [
+    {
+      "current_hole": "no primary measured pure-MEA package covering all fitted ranges and association observables",
+      "direct_evidence": "repo-local pure-component parameter provenance and unloaded Amundsen density",
+      "indirect_evidence": "mixture VLE sensitivity and literature correlations",
+      "owner": "Paper Validation",
+      "parameter_family": "MEA_pure_and_association",
+      "priority": "high",
+      "promotion_restriction": "Do not refit pure parameters until measured target identity units ranges and covariance are frozen."
+    },
+    {
+      "current_hole": "binary MEA-water VLE leads are not yet transcribed from Cai Park or Kim primary tables",
+      "direct_evidence": "327-row canonical VLE registry including binary/CO2-loaded solution sources",
+      "indirect_evidence": "unloaded density and published parameter comparisons",
+      "owner": "Paper Validation",
+      "parameter_family": "k_ij_MEA_H2O",
+      "priority": "high",
+      "promotion_restriction": "Promotion requires primary-table extraction with composition basis pressure uncertainty and grouped source splits."
+    },
+    {
+      "current_hole": "physical CO2/N2O solubility excess enthalpy and heat-of-absorption packages remain unextracted",
+      "direct_evidence": "161-row active VLE view plus Idris uncertainty and Wong paired loading evidence",
+      "indirect_evidence": "Amundsen loaded density; physical-solubility and calorimetry leads",
+      "owner": "Phase 3",
+      "parameter_family": "k_ij_CO2_MEA",
+      "priority": "high",
+      "promotion_restriction": "Fit only admitted VLE families until public ePC-SAFT capabilities and primary evidence admit additional observables."
+    },
+    {
+      "current_hole": "no independent direct ionic species property data sufficient to isolate segment parameters",
+      "direct_evidence": "74 active-v1 speciation states with explicit membership",
+      "indirect_evidence": "37 non-30-wt-percent transferability states and balance-inferred species",
+      "owner": "Phase 3",
+      "parameter_family": "MEAH_MEACOO_segment_parameters",
+      "priority": "high",
+      "promotion_restriction": "Require identifiability evidence and reserved-group validation; inferred balances cannot be promoted as direct observations."
+    },
+    {
+      "current_hole": "no verified static relative-permittivity table across composition temperature and loading",
+      "direct_evidence": "none admitted",
+      "indirect_evidence": "Hajj microwave-dispersion metadata and unresolved Hsieh Floriano Nascimento leads",
+      "owner": "Paper Validation",
+      "parameter_family": "Born_solvation_and_dielectric",
+      "priority": "critical",
+      "promotion_restriction": "MEA solvation promotion is blocked until frequency basis static-limit method and primary values are verified."
+    },
+    {
+      "current_hole": "direct osmotic or mean-activity evidence for the target ion pair is absent",
+      "direct_evidence": "no direct MEAH+/MEACOO- activity dataset identified",
+      "indirect_evidence": "analog electrolyte data only",
+      "owner": "Phase 3",
+      "parameter_family": "ion_interaction_parameters",
+      "priority": "critical",
+      "promotion_restriction": "Analog counterions must remain labeled analog and cannot directly promote MEAH+-MEACOO- interaction parameters."
+    },
+    {
+      "current_hole": "Fan and Du Preez primary numeric speciation plus calibrated loaded-MEA equilibrium pH are unavailable",
+      "direct_evidence": "canonical reaction-constant sources and direct aggregate speciation roles",
+      "indirect_evidence": "Fan pH/dissociation-derived species and provisional literature estimates",
+      "owner": "Paper Validation",
+      "parameter_family": "reaction_constants",
+      "priority": "high",
+      "promotion_restriction": "Preserve direct inferred and model-derived roles; no abstract or process-monitoring pH may enter regression."
+    }
+  ],
+  "readiness_decision": "preregistration_ready_upstream_execution_blocked",
+  "role_counts": {
+    "active_training": 147,
+    "reserved_validation": 220
+  },
+  "row_counts": {
+    "speciation": 111,
+    "vle_pressure": 256
+  },
+  "schema_version": 1,
+  "source_hashes": {
+    "data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv": "bfec6e62c1faf23aec2d82744811c35a5d8ef90177be0b2e7df150dabdc2061b",
+    "data/reference/MEA/VLE/Canonical_VLE_Observations.csv": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
+    "data/reference/MEA/manifests/observation_contract.csv": "dad553bcc76bb4f77ad4de17f313353d85fe3f5c1aa2090d403e1da3451b66fb",
+    "data/reference/MEA/manifests/parameter_observable_coverage.csv": "387785052b6a9cf195e2a7438dc10db4774e76488c79705d6db8e8458ce43233",
+    "data/reference/MEA/manifests/speciation_target_membership.csv": "46964ee99ab7305a16152abb923a08055253c62411355c213cbb78cf83374b0c",
+    "data/reference/MEA/manifests/vle_row_disposition.csv": "a09fe2b5cf76ba0f098791078234ad6c841f639919af2f288482bd646882bec0"
+  },
+  "split_hash": "e7bc893dab825007d009260d2c1f6f5dd42e75ebddbdb4972d52a5ec4f0c1aa0",
+  "target_admission": [
+    {
+      "admission_reason": "Canonical pressure rows and public target support are present; execution remains gated separately.",
+      "admitted": "yes",
+      "capability_key": "regression.reactive_electrolyte_batch_context.bounded_mixed_pressure_speciation_regression.supports_pressure_targets",
+      "downstream_supported": "yes",
+      "evidence_status": "canonical_active_and_reserved",
+      "observable": "CO2 partial pressure over loaded MEA",
+      "package_supported": "yes",
+      "reference_path": "data/reference/MEA/VLE/Canonical_VLE_Observations.csv",
+      "role": "active_training_and_reserved_validation",
+      "target_family": "vle_pressure",
+      "weight": "log-pressure family weight frozen at preregistration"
+    },
+    {
+      "admission_reason": "Only membership-approved direct and aggregate observations are targets; inferred context stays non-target.",
+      "admitted": "yes",
+      "capability_key": "regression.reactive_electrolyte_batch_context.bounded_mixed_pressure_speciation_regression.supports_speciation_targets",
+      "downstream_supported": "yes",
+      "evidence_status": "canonical_active_and_reserved",
+      "observable": "liquid true-species composition",
+      "package_supported": "yes",
+      "reference_path": "data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv",
+      "role": "active_training_and_reserved_validation",
+      "target_family": "speciation",
+      "weight": "species-family weight frozen at preregistration"
+    },
+    {
+      "admission_reason": "The package reports density-target support but the approved MEA adapter and target schema do not implement it.",
+      "admitted": "no",
+      "capability_key": "regression.reactive_electrolyte_batch_context.bounded_mixed_pressure_speciation_regression.supports_density_targets",
+      "downstream_supported": "no",
+      "evidence_status": "primary_table_property_candidate",
+      "observable": "CO2-loaded MEA liquid density",
+      "package_supported": "yes",
+      "reference_path": "data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv",
+      "role": "future_target",
+      "target_family": "density",
+      "weight": "not_assigned"
+    },
+    {
+      "admission_reason": "No public reactive-regression viscosity target capability is reported.",
+      "admitted": "no",
+      "capability_key": "unreported",
+      "downstream_supported": "no",
+      "evidence_status": "primary_table_validation_only",
+      "observable": "CO2-loaded MEA dynamic viscosity",
+      "package_supported": "no",
+      "reference_path": "data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv",
+      "role": "validation_only",
+      "target_family": "viscosity",
+      "weight": "not_assigned"
+    },
+    {
+      "admission_reason": "Public target support exists but no verified static-permittivity dataset or approved downstream adapter exists.",
+      "admitted": "no",
+      "capability_key": "regression.reactive_electrolyte_batch_context.bounded_mixed_pressure_speciation_regression.supports_relative_permittivity_targets",
+      "downstream_supported": "no",
+      "evidence_status": "primary_values_missing",
+      "observable": "MEA-water and loaded-MEA static relative permittivity",
+      "package_supported": "yes",
+      "reference_path": "data/reference/MEA/dielectric/MEA_H2O_dielectric.csv",
+      "role": "blocked_evidence",
+      "target_family": "relative_permittivity",
+      "weight": "not_assigned"
+    },
+    {
+      "admission_reason": "The screened process-monitoring lead is not an equilibrium pH target and the public target family is unreported.",
+      "admitted": "no",
+      "capability_key": "unreported",
+      "downstream_supported": "no",
+      "evidence_status": "no_equilibrium_primary_dataset",
+      "observable": "calibrated equilibrium pH of loaded MEA",
+      "package_supported": "no",
+      "reference_path": "data/reference/MEA/pH/loaded_MEA_pH.csv",
+      "role": "blocked_evidence",
+      "target_family": "loaded_ph",
+      "weight": "not_assigned"
+    },
+    {
+      "admission_reason": "Generic activity support cannot substitute for absent direct target-ion evidence or an approved adapter.",
+      "admitted": "no",
+      "capability_key": "regression.reactive_electrolyte_batch_context.bounded_mixed_pressure_speciation_regression.supports_activity_targets",
+      "downstream_supported": "no",
+      "evidence_status": "negative_direct_source_search",
+      "observable": "MEAH+ and MEACOO- activity or osmotic evidence",
+      "package_supported": "yes",
+      "reference_path": "data/reference/MEA/ionic_activity/direct_ionic_activity.csv",
+      "role": "blocked_evidence",
+      "target_family": "ionic_activity",
+      "weight": "not_assigned"
+    },
+    {
+      "admission_reason": "No public reactive-regression calorimetry target capability or frozen primary dataset is available.",
+      "admitted": "no",
+      "capability_key": "unreported",
+      "downstream_supported": "no",
+      "evidence_status": "primary_extraction_pending",
+      "observable": "excess enthalpy and heat of CO2 absorption",
+      "package_supported": "no",
+      "reference_path": "data/reference/MEA/calorimetry/",
+      "role": "future_target",
+      "target_family": "calorimetry",
+      "weight": "not_assigned"
+    }
+  ],
+  "uncertainty_coverage": {
+    "speciation_rows_with_numeric_uncertainty": 0,
+    "vle_rows_with_reported_loading_or_pressure_uncertainty": 10
+  },
+  "unsupported_target_families": [
+    "density",
+    "viscosity",
+    "relative_permittivity",
+    "loaded_ph",
+    "ionic_activity",
+    "calorimetry"
+  ],
+  "upstream_execution_admitted": false
+}
