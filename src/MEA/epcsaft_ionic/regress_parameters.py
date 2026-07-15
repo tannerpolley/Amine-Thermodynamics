@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from MEA.common.analysis_io import repo_relative_path
+from MEA.common.data_access import require_regression_execution_admitted
 from MEA.epcsaft_ionic import native_regression
 from MEA.epcsaft_ionic.model import (
     ADVANCED_BORN_USER_OPTIONS,
@@ -96,7 +97,6 @@ def _write_package_tables(epcsaft: Any, result: Any, output_dir: Path) -> list[P
 
 
 def run_regression(args: argparse.Namespace) -> dict[str, object]:
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
     problem = native_regression.build_native_regression_problem(
         max_pressure_records=args.max_vle_records,
         max_speciation_records=args.max_speciation_records,
@@ -104,6 +104,8 @@ def run_regression(args: argparse.Namespace) -> dict[str, object]:
     )
     if not problem.rows:
         raise RuntimeError("No pressure or speciation targets were available for native ePC-SAFT regression.")
+    require_regression_execution_admitted()
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     initial, lower, upper = native_regression.parameter_maps(problem)
     batch = native_regression.to_epcsaft_batch(problem)
@@ -126,7 +128,11 @@ def run_regression(args: argparse.Namespace) -> dict[str, object]:
     package_summary = _fit_summary(epcsaft, result)
     status = _package_status(package_summary, result_payload)
     fitted = dict(package_summary.get("parameter_map") or result_payload.get("parameter_map") or initial)
-    written_dataset_paths = write_fitted_dataset({key: float(value) for key, value in fitted.items()}, reset=True)
+    written_dataset_paths = (
+        write_fitted_dataset({key: float(value) for key, value in fitted.items()}, reset=True)
+        if status["fit_success"] is True
+        else []
+    )
 
     artifact_paths = [
         write_json(OUT_DIR / "native_regression_problem.json", problem.to_dict()),

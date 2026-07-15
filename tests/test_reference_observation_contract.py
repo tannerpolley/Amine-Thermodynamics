@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import csv
 import unittest
 from pathlib import Path
 
+from MEA.common import reference_observations
 from MEA.common.reference_observations import (
     LIFECYCLE_STATUSES,
     MEASUREMENT_ROLES,
@@ -114,6 +116,44 @@ class ReferenceObservationContractTests(unittest.TestCase):
             "lifecycle_status",
         ):
             self.assertIn(field, text)
+
+    def test_real_reference_tables_adapt_to_the_common_observation_contract(self) -> None:
+        cases = (
+            (
+                ROOT / "data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv",
+                "adapt_speciation_rows",
+                "speciation",
+                571,
+            ),
+            (
+                ROOT / "data/reference/MEA/VLE/Canonical_VLE_Observations.csv",
+                "adapt_vle_pressure_rows",
+                "vle_pressure",
+                327,
+            ),
+            (
+                ROOT / "data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv",
+                "adapt_loaded_property_rows",
+                "loaded_property",
+                213,
+            ),
+            (
+                ROOT / "data/reference/MEA/VLE/Wong_2015_high_pressure_loading.csv",
+                "adapt_paired_loading_rows",
+                "loading_cross_method",
+                82,
+            ),
+        )
+        for path, adapter_name, family, expected_count in cases:
+            with self.subTest(path=path):
+                with path.open(newline="", encoding="utf-8") as handle:
+                    rows = list(csv.DictReader(handle))
+                adapter = getattr(reference_observations, adapter_name)
+                adapted = adapter(rows, source_file=path.relative_to(ROOT).as_posix())
+                report = validate_observation_records(adapted, family)
+
+                self.assertTrue(report.ok, report.errors[:5])
+                self.assertEqual(report.row_count, expected_count)
 
     def test_analysis_manifests_name_live_runtime_sources(self) -> None:
         manifests = [

@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from MEA.common.data_access import require_regression_execution_admitted
 from MEA.common.plot_style import finish_axes, save_figure_bundle, species_color, species_label, write_mpl_sidecar
 from MEA.epcsaft_ionic import native_regression
 from MEA.epcsaft_ionic.model import (
@@ -112,8 +113,8 @@ def fit_vector_to_values(vector: Iterable[float], fit_names: Iterable[str] = GLO
 
 def load_global_targets(max_pressure_records: int | None = None, max_speciation_records: int | None = None) -> tuple[list[VLETarget], list[SpeciationTarget]]:
     return (
-        _select_evenly(load_vle_targets(None), max_pressure_records),
-        _select_evenly(load_speciation_targets(None), max_speciation_records),
+        _select_evenly(load_vle_targets(None, role="active_training"), max_pressure_records),
+        _select_evenly(load_speciation_targets(None, role="active_training"), max_speciation_records),
     )
 
 
@@ -315,6 +316,8 @@ def attempt_global_regression(
     x0 = np.asarray([base[name] for name in GLOBAL_FIT_NAMES], dtype=float)
     initial_values = fit_vector_to_values(x0, base=base)
     attempted_optimization = int(max_nfev) >= 1 and len(vle_targets) <= 3 and len(spec_targets) <= 3
+    if attempted_optimization:
+        require_regression_execution_admitted()
     if attempted_optimization:
         initial_residuals, initial_pressure, initial_speciation = objective_residuals(
             initial_values,

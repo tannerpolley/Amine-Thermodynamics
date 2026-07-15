@@ -110,6 +110,7 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
                 patch.object(regress_parameters, "OUT_DIR", output_dir),
                 patch.object(regress_parameters, "FIT_DATASET_DIR", output_dir / "dataset"),
                 patch.object(regress_parameters.native_regression, "to_epcsaft_batch", return_value="batch-sentinel"),
+                patch.object(regress_parameters, "require_regression_execution_admitted"),
                 patch.object(regress_parameters, "load_epcsaft", return_value=fake_epcsaft),
                 patch.object(
                     regress_parameters,
@@ -146,6 +147,37 @@ class EpcsaftIonicArtifactPromotionTests(unittest.TestCase):
                     "ionic_parameter_regression_values.csv",
                 ):
                     self.assertTrue((output_dir / name).exists(), name)
+
+    def test_unsuccessful_fit_does_not_promote_a_fitted_dataset(self) -> None:
+        result = FakeReactiveFitResult()
+        result.success = False
+        result.message = "optimizer did not converge"
+        fake_epcsaft = FakeEpcsaft(result)
+        args = SimpleNamespace(
+            max_iterations=1,
+            max_vle_records=1,
+            max_speciation_records=1,
+            exclude_carbonate_born=False,
+            tolerance=1.0e-6,
+            damping=1.0,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            output_dir = Path(tmp)
+            dataset_writer = Mock(return_value=[])
+            with (
+                patch.object(regress_parameters, "OUT_DIR", output_dir),
+                patch.object(regress_parameters, "FIT_DATASET_DIR", output_dir / "dataset"),
+                patch.object(regress_parameters.native_regression, "to_epcsaft_batch", return_value="batch"),
+                patch.object(regress_parameters, "require_regression_execution_admitted"),
+                patch.object(regress_parameters, "load_epcsaft", return_value=fake_epcsaft),
+                patch.object(regress_parameters, "repo_relative_path", side_effect=lambda path: str(path)),
+                patch.object(regress_parameters, "write_fitted_dataset", dataset_writer),
+            ):
+                summary = regress_parameters.run_regression(args)
+
+        dataset_writer.assert_not_called()
+        self.assertFalse(summary["native_regression"]["fit_success"])
+        self.assertEqual(summary["written_dataset_paths"], [])
 
     def test_production_regression_modules_do_not_import_or_call_scipy_optimizers(self) -> None:
         for module in (regress_parameters, global_regression):
