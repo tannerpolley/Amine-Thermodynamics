@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 
+from MEA.common import data_access
 from MEA.epcsaft_ionic import native_regression
 
 
@@ -31,6 +32,8 @@ class NativeRegressionProblemTests(unittest.TestCase):
         self.assertFalse(decoded["metadata"]["execution_admitted"])
         self.assertEqual(decoded["metadata"]["execution_gate"], "issue_12_split_package_contract")
         self.assertEqual(len(decoded["rows"]), 4)
+        self.assertEqual({row["split"] for row in decoded["rows"]}, {"training"})
+        self.assertEqual(decoded["metadata"]["target_role"], "active_training")
         self.assertIn("advanced_born_user_options", decoded)
         self.assertIn("split_hash", decoded["metadata"])
         self.assertEqual(decoded["metadata"]["split_source"], "grouped_split_manifest.csv")
@@ -53,7 +56,14 @@ class NativeRegressionProblemTests(unittest.TestCase):
         self.assertIn("target_partial_pressures", pressure)
         self.assertIn("CO2", pressure["target_partial_pressures"])
         self.assertIn("target_speciation", speciation)
-        self.assertEqual(set(speciation["target_speciation"]), set(decoded["species"]))
+        self.assertTrue(speciation["target_speciation"])
+        self.assertTrue(all(value > 0.0 for value in speciation["target_speciation"].values()))
+        self.assertTrue(
+            all(speciation["target_roles"][species] == "direct_positive" for species in speciation["target_speciation"])
+        )
+        self.assertTrue(set(speciation["target_speciation"]).isdisjoint(speciation["zero_upper_bound_species"]))
+        self.assertIn("aggregate_targets", speciation["metadata"])
+        self.assertNotIn("MEA + MEAH+", speciation["target_speciation"])
 
     def test_parameter_specs_include_carbonate_born_window(self) -> None:
         problem = native_regression.build_native_regression_problem(
@@ -90,6 +100,26 @@ class NativeRegressionProblemTests(unittest.TestCase):
         self.assertEqual(batch.species, problem.species)
         self.assertEqual(len(batch.rows), 2)
         self.assertEqual(batch.rows[0].source, problem.rows[0]["source"])
+
+    def test_validation_problem_uses_only_reserved_validation_rows(self) -> None:
+        problem = native_regression.build_native_regression_problem(
+            max_pressure_records=2,
+            max_speciation_records=None,
+            target_role="reserved_validation",
+        )
+
+        self.assertEqual({row["split"] for row in problem.rows}, {"validation"})
+        self.assertEqual(problem.metadata["target_role"], "reserved_validation")
+        self.assertTrue(any(row["metadata"]["mea_weight_fraction"] != 0.3 for row in problem.rows))
+        self.assertEqual(problem.metadata["direct_targetless_speciation_row_count"], 1)
+        self.assertGreater(problem.metadata["aggregate_target_row_count"], 0)
+        self.assertGreater(problem.metadata["zero_bound_row_count"], 0)
+
+    def test_execution_gate_fails_closed_before_upstream_fit(self) -> None:
+        with self.assertRaisesRegex(RuntimeError, "upstream execution is blocked"):
+            data_access.require_regression_execution_admitted({"upstream_execution_admitted": False})
+
+        data_access.require_regression_execution_admitted({"upstream_execution_admitted": True})
 
 if __name__ == "__main__":
     unittest.main()

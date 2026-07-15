@@ -96,7 +96,7 @@ def build_pressure_target_rows(targets: Iterable[VLETarget]) -> list[dict[str, A
                 "P_seed": max(float(target.P), float(target.pressure_kPa) * 1000.0, 1.0e3),
                 "loading": float(target.loading),
                 "initial_x": _species_map(np.asarray(target.x, dtype=float)),
-                "apparent_totals": apparent_totals(float(target.loading)),
+                "apparent_totals": apparent_totals(float(target.loading), float(target.mea_weight_fraction)),
                 "balances": reactive_balances(),
                 "reactions": _reaction_payload(float(target.T)),
                 "vapor_species": list(VAPOR_SPECIES),
@@ -114,6 +114,7 @@ def build_pressure_target_rows(targets: Iterable[VLETarget]) -> list[dict[str, A
                     "source_label": target.paper,
                     "pressure_kPa": float(target.pressure_kPa),
                     "co2_loading": float(target.loading),
+                    "mea_weight_fraction": float(target.mea_weight_fraction),
                     "temperature_C": float(target.T) - 273.15,
                 },
             }
@@ -125,7 +126,8 @@ def build_speciation_target_rows(targets: Iterable[SpeciationTarget]) -> list[di
     rows: list[dict[str, Any]] = []
     for target in targets:
         source = str(target.source)
-        target_speciation = _species_map(np.asarray(target.x, dtype=float))
+        initial_speciation = _species_map(np.asarray(target.x, dtype=float))
+        target_speciation = dict(target.target_speciation)
         rows.append(
             {
                 "row_id": target.row_id,
@@ -134,8 +136,8 @@ def build_speciation_target_rows(targets: Iterable[SpeciationTarget]) -> list[di
                 "P": float(target.P),
                 "P_seed": float(target.P),
                 "loading": float(target.loading),
-                "initial_x": target_speciation,
-                "apparent_totals": apparent_totals(float(target.loading)),
+                "initial_x": initial_speciation,
+                "apparent_totals": apparent_totals(float(target.loading), float(target.mea_weight_fraction)),
                 "balances": reactive_balances(),
                 "reactions": _reaction_payload(float(target.T)),
                 "vapor_species": list(VAPOR_SPECIES),
@@ -146,14 +148,18 @@ def build_speciation_target_rows(targets: Iterable[SpeciationTarget]) -> list[di
                 },
                 "target_speciation": target_speciation,
                 "target_roles": dict(target.target_roles),
+                "zero_upper_bound_species": list(target.zero_upper_bound_species),
                 "source": source,
                 "split": target.split,
                 "metadata": {
                     "target_family": "speciation",
                     "group_id": target.group_id,
                     "co2_loading": float(target.loading),
+                    "mea_weight_fraction": float(target.mea_weight_fraction),
                     "temperature_C": float(target.T) - 273.15,
                     "target_roles": dict(target.target_roles),
+                    "zero_upper_bound_species": list(target.zero_upper_bound_species),
+                    "aggregate_targets": dict(target.aggregate_targets),
                 },
             }
         )
@@ -198,10 +204,11 @@ def build_native_regression_problem(
     max_pressure_records: int | None = None,
     max_speciation_records: int | None = None,
     include_carbonate_born: bool = True,
+    target_role: str = "active_training",
 ) -> NativeRegressionProblem:
     readiness = load_regression_readiness_summary()
-    pressure_targets = load_vle_targets(max_pressure_records)
-    speciation_targets = load_speciation_targets(max_speciation_records)
+    pressure_targets = load_vle_targets(max_pressure_records, role=target_role)
+    speciation_targets = load_speciation_targets(max_speciation_records, role=target_role)
     parameter_specs = build_parameter_specs(include_carbonate_born=include_carbonate_born)
     rows = build_pressure_target_rows(pressure_targets) + build_speciation_target_rows(speciation_targets)
     return NativeRegressionProblem(
@@ -214,8 +221,14 @@ def build_native_regression_problem(
         metadata={
             "pressure_row_count": len(pressure_targets),
             "speciation_row_count": len(speciation_targets),
+            "direct_targetless_speciation_row_count": sum(
+                not target.target_speciation for target in speciation_targets
+            ),
+            "aggregate_target_row_count": sum(bool(target.aggregate_targets) for target in speciation_targets),
+            "zero_bound_row_count": sum(bool(target.zero_upper_bound_species) for target in speciation_targets),
             "split_hash": regression_split_hash(),
             "split_source": "grouped_split_manifest.csv",
+            "target_role": target_role,
             "optimizer_owner": "epcsaft",
             "requested_optimizer_backend": "native_ceres",
             "requested_derivative_backend": "production_autodiff_and_implicit",

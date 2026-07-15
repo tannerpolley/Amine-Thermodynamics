@@ -8,6 +8,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from MEA.common import data_access
+
 
 ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_ROOT = ROOT / "data" / "reference" / "MEA"
@@ -104,6 +106,29 @@ class RegressionReadinessTests(unittest.TestCase):
         findings = self.module.find_source_hash_drift(REFERENCE_ROOT, expected)
         self.assertTrue(findings)
         self.assertIn("source hash drift", findings[0])
+
+    def test_runtime_verifies_every_readiness_source_hash(self) -> None:
+        verified = data_access.verify_regression_readiness_sources()
+        expected = json.loads(SUMMARY.read_text(encoding="utf-8"))["source_hashes"]
+
+        self.assertEqual(verified, expected)
+
+    def test_runtime_source_hash_verification_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "source.csv"
+            source.write_text("value\n1\n", encoding="utf-8")
+
+            with self.assertRaisesRegex(RuntimeError, "Regression readiness source hash drift"):
+                data_access.verify_source_hashes({"source.csv": "0" * 64}, repo_root=root)
+
+    def test_readiness_builder_validates_real_observation_contract(self) -> None:
+        row_counts = self.module.validate_reference_observation_contract(REFERENCE_ROOT)
+
+        self.assertEqual(
+            row_counts,
+            {"speciation": 571, "vle_pressure": 327, "loaded_property": 213, "loading_cross_method": 82},
+        )
 
     def test_generator_reproduces_all_tracked_outputs_byte_for_byte(self) -> None:
         bundle = self.module.build_regression_readiness(REFERENCE_ROOT, self.module.public_capability_receipt())

@@ -12,7 +12,11 @@ import numpy as np
 import pandas as pd
 
 from MEA.common.config import CANONICAL_MEA_WEIGHT_FRACTION, EPCSAFT_DATASET_ROOT, EPCSAFT_IONIC_ANALYSIS
-from MEA.common.data_access import load_regression_speciation_view, load_regression_vle_view
+from MEA.common.data_access import (
+    load_regression_speciation_view,
+    load_regression_vle_view,
+    load_speciation_target_membership,
+)
 from MEA.common.reaction_catalog import activity_coefficient_map
 from MEA.common.solver_acceptance import evaluate_solver_acceptance
 from MEA.epcsaft_present_plots import _as_float, reconcile_speciation_row
@@ -138,6 +142,7 @@ class VLETarget:
     T: float
     P: float
     loading: float
+    mea_weight_fraction: float
     pressure_kPa: float
     x: np.ndarray
     paper: str
@@ -151,9 +156,13 @@ class SpeciationTarget:
     T: float
     P: float
     loading: float
+    mea_weight_fraction: float
     x: np.ndarray
     source: str
     target_roles: dict[str, str]
+    target_speciation: dict[str, float]
+    zero_upper_bound_species: tuple[str, ...]
+    aggregate_targets: dict[str, float]
     split: str
     group_id: str
 
@@ -255,14 +264,33 @@ def _select_evenly(rows: list[dict[str, str]], limit: int | None) -> list[dict[s
     return [rows[int(round(position))] for position in positions]
 
 
-def _speciation_interpolator(cheq_rows: list[dict[str, str]], temperature_C: float, loading: float) -> np.ndarray:
+def _speciation_interpolator(
+    cheq_rows: list[dict[str, str]], temperature_C: float, loading: float, mea_weight_fraction: float
+) -> np.ndarray:
     candidates = [
         row
         for row in cheq_rows
-        if abs(_as_float(row, "MEA_weight_fraction") - CANONICAL_MEA_WEIGHT_FRACTION) < 1.0e-9
-        and np.isfinite(_as_float(row, "temperature"))
+        if np.isfinite(_as_float(row, "temperature"))
         and np.isfinite(_as_float(row, "CO2_loading"))
     ]
+    matching_composition = [
+        row
+        for row in candidates
+        if abs(_as_float(row, "MEA_weight_fraction") - mea_weight_fraction) < 1.0e-9
+    ]
+    if len(matching_composition) >= 2:
+        candidates = matching_composition
+    elif candidates:
+        nearest_composition = min(
+            candidates,
+            key=lambda row: abs(_as_float(row, "MEA_weight_fraction") - mea_weight_fraction),
+        )
+        nearest_weight_fraction = _as_float(nearest_composition, "MEA_weight_fraction")
+        candidates = [
+            row
+            for row in candidates
+            if abs(_as_float(row, "MEA_weight_fraction") - nearest_weight_fraction) < 1.0e-9
+        ]
     exact = [row for row in candidates if abs(_as_float(row, "temperature") - temperature_C) <= 1.0e-9]
     by_temperature = exact if len(exact) >= 2 else sorted(candidates, key=lambda row: abs(_as_float(row, "temperature") - temperature_C))
     if not exact and by_temperature:
@@ -284,11 +312,14 @@ def _speciation_interpolator(cheq_rows: list[dict[str, str]], temperature_C: flo
     return np.clip(x / float(np.sum(x)), 1.0e-30, None)
 
 
-def load_vle_targets(limit: int | None = None) -> list[VLETarget]:
-    cheq_rows = load_regression_speciation_view().to_dict(orient="records")
+def load_vle_targets(limit: int | None = None, *, role: str | None = None) -> list[VLETarget]:
+    cheq_views = [load_regression_speciation_view()]
+    if role == "reserved_validation":
+        cheq_views.append(load_regression_speciation_view(role="reserved_validation"))
+    cheq_rows = pd.concat(cheq_views, ignore_index=True).to_dict(orient="records")
     rows = [
         row
-        for row in load_regression_vle_view().to_dict(orient="records")
+        for row in load_regression_vle_view(role=role).to_dict(orient="records")
         if np.isfinite(_as_float(row, "temperature"))
         and np.isfinite(_as_float(row, "CO2_loading"))
         and np.isfinite(_as_float(row, "CO2_pressure"))
@@ -300,6 +331,7 @@ def load_vle_targets(limit: int | None = None) -> list[VLETarget]:
         temperature_C = float(_as_float(row, "temperature"))
         pressure_kPa = float(_as_float(row, "CO2_pressure"))
         loading = float(_as_float(row, "CO2_loading"))
+        mea_weight_fraction = float(_as_float(row, "MEA_weight_fraction"))
         targets.append(
             VLETarget(
                 row_id=str(row["row_id"]),
@@ -307,8 +339,9 @@ def load_vle_targets(limit: int | None = None) -> list[VLETarget]:
                 T=temperature_C + 273.15,
                 P=max(101325.0, pressure_kPa * 1000.0),
                 loading=loading,
+                mea_weight_fraction=mea_weight_fraction,
                 pressure_kPa=pressure_kPa,
-                x=_speciation_interpolator(cheq_rows, temperature_C, loading),
+                x=_speciation_interpolator(cheq_rows, temperature_C, loading, mea_weight_fraction),
                 paper=str(row.get("paper", "")),
                 split=str(row["split"]),
                 group_id=str(row["group_id"]),
@@ -317,28 +350,63 @@ def load_vle_targets(limit: int | None = None) -> list[VLETarget]:
     return targets
 
 
-def load_speciation_targets(limit: int | None = None) -> list[SpeciationTarget]:
+def load_speciation_targets(limit: int | None = None, *, role: str | None = None) -> list[SpeciationTarget]:
     rows = [
         row
-        for row in load_regression_speciation_view().to_dict(orient="records")
+        for row in load_regression_speciation_view(role=role).to_dict(orient="records")
         if np.isfinite(_as_float(row, "temperature"))
         and np.isfinite(_as_float(row, "CO2_loading"))
     ]
     rows = _select_evenly(sorted(rows, key=lambda row: (_as_float(row, "temperature"), _as_float(row, "CO2_loading"), row.get("source", ""))), limit)
-    return [
-        SpeciationTarget(
-            row_id=str(row["state_id"]),
-            T=float(_as_float(row, "temperature")) + 273.15,
-            P=101325.0,
-            loading=float(_as_float(row, "CO2_loading")),
-            x=reconcile_speciation_row(row),
-            source=str(row.get("source", "")),
-            target_roles=speciation_target_roles(row),
-            split=str(row["split"]),
-            group_id=str(row["group_id"]),
+    membership = load_speciation_target_membership(state_ids=(str(row["state_id"]) for row in rows))
+    by_state = {
+        state_id: group.set_index("species")["measurement_role"].to_dict()
+        for state_id, group in membership.groupby("state_id")
+    }
+    columns = {
+        "CO2": "CO2",
+        "MEA": "MEA",
+        "MEAH+": "MEAH^+",
+        "MEACOO-": "MEACOO^-",
+        "HCO3-": "HCO3^-",
+        "CO3^2-": "CO3^2-",
+    }
+    targets: list[SpeciationTarget] = []
+    for row in rows:
+        state_id = str(row["state_id"])
+        roles = {str(species): str(measurement_role) for species, measurement_role in by_state[state_id].items()}
+        target_speciation = {
+            species: float(value)
+            for species, column in columns.items()
+            if roles.get(species) == "direct_positive"
+            and np.isfinite(value := _as_float(row, column))
+            and value > 0.0
+        }
+        zero_upper_bound_species = tuple(
+            species for species in SPECIES if roles.get(species) in {"direct_zero", "below_detection"}
         )
-        for row in rows
-    ]
+        aggregate_value = _as_float(row, "MEA + MEAH^+")
+        aggregate_targets = {}
+        if roles.get("MEA + MEAH+") == "aggregate_direct_positive" and np.isfinite(aggregate_value):
+            aggregate_targets["MEA + MEAH+"] = float(aggregate_value)
+        targets.append(
+            SpeciationTarget(
+                row_id=state_id,
+                T=float(_as_float(row, "temperature")) + 273.15,
+                P=101325.0,
+                loading=float(_as_float(row, "CO2_loading")),
+                mea_weight_fraction=float(_as_float(row, "MEA_weight_fraction")),
+                x=reconcile_speciation_row(row),
+                source=str(row.get("source", "")),
+                target_roles=roles,
+                target_speciation=target_speciation,
+                zero_upper_bound_species=zero_upper_bound_species,
+                aggregate_targets=aggregate_targets,
+                split=str(row["split"]),
+                group_id=str(row["group_id"]),
+            )
+        )
+    return targets
 
 
 def speciation_target_roles(row: dict[str, str]) -> dict[str, str]:
@@ -434,8 +502,10 @@ def reaction_definitions(T: float):
     return reaction_definitions_from_coefficients(T, activity_coefficient_map())
 
 
-def apparent_totals(loading: float) -> dict[str, float]:
-    apparent = initial_all_species_mole_fractions(float(loading), CANONICAL_MEA_WEIGHT_FRACTION)
+def apparent_totals(
+    loading: float, mea_weight_fraction: float = CANONICAL_MEA_WEIGHT_FRACTION
+) -> dict[str, float]:
+    apparent = initial_all_species_mole_fractions(float(loading), float(mea_weight_fraction))
     return {
         "carbon_total": float(apparent[0]),
         "mea_total": float(apparent[1]),

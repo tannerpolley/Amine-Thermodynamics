@@ -9,6 +9,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
+from MEA.common.reference_observations import (
+    adapt_loaded_property_rows,
+    adapt_paired_loading_rows,
+    adapt_speciation_rows,
+    adapt_vle_pressure_rows,
+    validate_observation_records,
+)
 from MEA.epcsaft_runtime import load_epcsaft
 
 
@@ -457,11 +464,38 @@ def _vle_uncertainty_count(split_rows: Iterable[Mapping[str, str]]) -> int:
     return sum(1 for row in split_rows if row["target_family"] == "vle_pressure" and row["source_key"] == "Idris2014")
 
 
+def validate_reference_observation_contract(reference_root: Path) -> dict[str, int]:
+    root = Path(reference_root)
+    cases = (
+        ("speciation", root / "ChEq" / "Canonical_Combined_ChEq.csv", adapt_speciation_rows),
+        ("vle_pressure", root / "VLE" / "Canonical_VLE_Observations.csv", adapt_vle_pressure_rows),
+        (
+            "loaded_property",
+            root / "density_viscosity" / "Amundsen_2009_density_viscosity.csv",
+            adapt_loaded_property_rows,
+        ),
+        (
+            "loading_cross_method",
+            root / "VLE" / "Wong_2015_high_pressure_loading.csv",
+            adapt_paired_loading_rows,
+        ),
+    )
+    row_counts: dict[str, int] = {}
+    for family, path, adapter in cases:
+        source_file = path.relative_to(ROOT).as_posix()
+        report = validate_observation_records(adapter(_read_rows(path), source_file=source_file), family)
+        if not report.ok:
+            raise RuntimeError(f"{family} observations violate the common observation contract: {report.errors[:5]}")
+        row_counts[family] = report.row_count
+    return row_counts
+
+
 def build_regression_readiness(
     reference_root: Path,
     capability_receipt: Mapping[str, Any],
 ) -> RegressionReadinessBundle:
     reference_root = Path(reference_root)
+    validate_reference_observation_contract(reference_root)
     source_hashes = tuple(
         (_relative_source_path(relative), _sha256(reference_root / relative)) for relative in SOURCE_PATHS
     )

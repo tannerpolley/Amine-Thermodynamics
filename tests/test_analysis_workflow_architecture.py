@@ -75,6 +75,21 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
         self.assertTrue(speciation["state_id"].is_unique)
         self.assertEqual(hashlib.sha256(split_path.read_bytes()).hexdigest(), summary["split_hash"])
 
+    def test_regression_views_expose_disjoint_frozen_training_and_validation_roles(self) -> None:
+        training_vle = load_regression_vle_view(role="active_training")
+        validation_vle = load_regression_vle_view(role="reserved_validation")
+        training_speciation = load_regression_speciation_view(role="active_training")
+        validation_speciation = load_regression_speciation_view(role="reserved_validation")
+
+        self.assertEqual((len(training_vle), len(training_speciation)), (89, 58))
+        self.assertEqual((len(validation_vle), len(validation_speciation)), (167, 53))
+        self.assertEqual(set(training_vle["split"]), {"training"})
+        self.assertEqual(set(training_speciation["split"]), {"training"})
+        self.assertEqual(set(validation_vle["split"]), {"validation"})
+        self.assertEqual(set(validation_speciation["split"]), {"validation"})
+        self.assertTrue(set(training_vle["observation_id"]).isdisjoint(validation_vle["observation_id"]))
+        self.assertTrue(set(training_speciation["state_id"]).isdisjoint(validation_speciation["state_id"]))
+
     def test_native_regression_uses_manifest_splits_not_source_sets(self) -> None:
         source = _source(ROOT / "src" / "MEA" / "epcsaft_ionic" / "native_regression.py")
         self.assertNotIn("PRESSURE_TRAIN_SOURCES", source)
