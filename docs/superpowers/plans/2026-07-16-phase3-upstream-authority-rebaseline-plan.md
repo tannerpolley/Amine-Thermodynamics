@@ -48,7 +48,7 @@
 ## Implementation Boundaries
 
 **Files To Create:** `tests/test_phase3_authority_rebaseline.py` and this implementation plan.
-**Files To Modify:** `AGENTS.md`, active ePC-SAFT coordination/roadmap files, Phase 3 milestone, issue mirrors #5/#12/#13/#14/#18, and the design spec only if review finds a contradiction.
+**Files To Modify:** Local ignored `AGENTS.md`, active tracked ePC-SAFT coordination/roadmap files, Phase 3 milestone, issue mirrors #5/#12/#13/#14/#18, and the design spec only if review finds a contradiction.
 **Files To Avoid:** `pyproject.toml`, `uv.lock`, `integration/epcsaft_contract.json`, all canonical data/manifests, readiness/result artifacts, analysis outputs, figures, manuscript sources, and every ePC-SAFT repository.
 **Source Of Truth:** Ecosystem doctrine revision 2 and migration status define ownership; the MEA readiness receipt defines downstream execution admission.
 **Read Path:** Read doctrine/migration/clean-repository context, then active MEA coordination, issue, milestone, dependency, pin, and readiness artifacts.
@@ -130,7 +130,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ACTIVE_AUTHORITY_FILES = (
-    ROOT / "AGENTS.md",
     ROOT / "docs/coordination/epcsaft_feedback_reactive_regression_admission.md",
     ROOT / "docs/roadmaps/epcsaft_dependency_matrix.md",
     ROOT / "docs/superpowers/issues/12-native-regression-result-contract.md",
@@ -151,6 +150,17 @@ def test_active_phase3_docs_use_current_upstream_authority() -> None:
     assert "ePC-SAFT/ePC-SAFT-regression" in active_text
     assert "stage-approved" in active_text
     assert "governance-only skeleton" in active_text
+
+
+def test_local_agent_policy_uses_current_upstream_authority_when_present() -> None:
+    agents = ROOT / "AGENTS.md"
+    if not agents.exists():
+        return
+
+    text = agents.read_text(encoding="utf-8")
+    assert "preserved personal lab" in text
+    assert "ePC-SAFT-project" in text
+    assert "stage-approved" in text
 
 
 def test_rebaseline_preserves_pin_and_fail_closed_readiness() -> None:
@@ -180,7 +190,7 @@ Expected: the authority test fails because active files still contain the old #4
 
 Apply these exact semantic changes:
 
-- `AGENTS.md`: rename `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT` as the historical lab/transitional source; name `ePC-SAFT-project/ePC-SAFT`, `ePC-SAFT-regression`, and `ePC-SAFT-migration` as clean owner/control roots; allow development only after stage approval; preserve stable/final pinned behavior.
+- Local ignored `AGENTS.md`: rename `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT` as the historical lab/transitional source; name `ePC-SAFT-project/ePC-SAFT`, `ePC-SAFT-regression`, and `ePC-SAFT-migration` as clean owner/control roots; allow development only after stage approval; preserve stable/final pinned behavior. Do not force-add this local policy file.
 - Coordination note: add an authority-status section, move lab #468 under historical evidence, name the migration transfer plan as the next gate, and retain the existing required native Ceres/Jacobian/result evidence.
 - Dependency matrix: split provider and regression owners, mark 1.5.2 as immutable historical evaluation evidence, remove obsolete task-number expectations, and state that Phase 3 waits on stage-approved clean promotion.
 - Issue #12 mirror: replace old #468 under `Blocked by` with the migration transfer gate and clean regression skeleton; retain lab #468 only under a `Historical evidence` heading.
@@ -202,7 +212,7 @@ Expected: tests pass and the protected scientific/runtime paths have no diff.
 - [ ] **Step 5: Commit Task 1.**
 
 ```bash
-git add AGENTS.md tests/test_phase3_authority_rebaseline.py docs/coordination/epcsaft_feedback_reactive_regression_admission.md docs/roadmaps/epcsaft_dependency_matrix.md docs/superpowers/issues/12-native-regression-result-contract.md docs/superpowers/issues/13-coupled-regression-parameter-promotion.md docs/superpowers/issues/14-independent-validation-identifiability.md docs/superpowers/milestones/phase-3-ionic-regression.md
+git add tests/test_phase3_authority_rebaseline.py docs/coordination/epcsaft_feedback_reactive_regression_admission.md docs/roadmaps/epcsaft_dependency_matrix.md docs/superpowers/issues/12-native-regression-result-contract.md docs/superpowers/issues/13-coupled-regression-parameter-promotion.md docs/superpowers/issues/14-independent-validation-identifiability.md docs/superpowers/milestones/phase-3-ionic-regression.md docs/superpowers/plans/2026-07-16-phase3-upstream-authority-rebaseline-plan.md
 git commit -m "docs: rebaseline Phase 3 upstream authority"
 ```
 

@@ -15,6 +15,7 @@ Complete the ionic ePC-SAFT evidence chain: parameter evidence, package-native r
 - `docs/superpowers/specs/2026-07-13-coupled-regression-parameter-promotion-design.md`
 - `docs/superpowers/specs/2026-07-13-independent-validation-identifiability-design.md`
 - `docs/superpowers/specs/2026-07-14-data-acquisition-regression-readiness-design.md`
+- `docs/superpowers/specs/2026-07-16-phase3-upstream-authority-rebaseline-design.md`
 
 ## Related Plans
 
@@ -23,6 +24,7 @@ Complete the ionic ePC-SAFT evidence chain: parameter evidence, package-native r
 - `docs/superpowers/plans/2026-07-13-coupled-regression-parameter-promotion-plan.md`
 - `docs/superpowers/plans/2026-07-13-independent-validation-identifiability-plan.md`
 - `docs/superpowers/plans/2026-07-14-data-acquisition-regression-readiness-plan.md`
+- `docs/superpowers/plans/2026-07-16-phase3-upstream-authority-rebaseline-plan.md`
 
 ## Related Issues
 
@@ -30,6 +32,7 @@ Complete the ionic ePC-SAFT evidence chain: parameter evidence, package-native r
 - [#12 Finalize the native regression result and status contract](https://github.com/tannerpolley/MEA-Thermodynamics/issues/12)
 - [#13 Execute coupled regression and promote eligible parameters](https://github.com/tannerpolley/MEA-Thermodynamics/issues/13)
 - [#14 Prove independent validation and parameter identifiability](https://github.com/tannerpolley/MEA-Thermodynamics/issues/14)
+- [#22 Rebaseline Phase 3 upstream authority](https://github.com/tannerpolley/MEA-Thermodynamics/issues/22)
 
 Historical issue #3 is superseded by #6 and #12; its discussion remains in GitHub history.
 
@@ -41,6 +44,13 @@ Historical issue #3 is superseded by #6 and #12; its discussion remains in GitHu
 - Split hash: `e7bc893dab825007d009260d2c1f6f5dd42e75ebddbdb4972d52a5ec4f0c1aa0`
 
 The receipt is preregistration-ready but execution-blocked: the pinned public package supports pressure/speciation target construction, while Issue #12 still gates the required production native Ceres hot loop and derivative/result contract.
+
+## Upstream Authority Status
+
+- The current `epcsaft` 1.5.2 pin is immutable historical evaluation evidence.
+- `tannerpolley/ePC-SAFT-lab#468` preserves the original request but is not an actionable production dependency.
+- Clean `ePC-SAFT/ePC-SAFT-regression` is the future production owner and is currently a governance-only skeleton.
+- The next upstream gate is a stage-approved runtime-slice plan in the ePC-SAFT migration control plane; no clean regression issue or capability may be inferred before that approval.
 
 ## Success Criteria
 

@@ -3,9 +3,16 @@
 ## Downstream repository
 
 - Repository: `tannerpolley/MEA-Thermodynamics`
-- Current stable package source: monolithic `epcsaft` 1.5.2 at Git commit `9f51afd`
-- Upstream issue: https://github.com/ePC-SAFT/ePC-SAFT/issues/468
-- Upstream milestone: `M5 - Regression`
+- Current immutable evaluation source: monolithic `epcsaft` 1.5.2 at Git commit `9f51afd`
+- Historical request: https://github.com/tannerpolley/ePC-SAFT-lab/issues/468
+- Future production owner: `ePC-SAFT/ePC-SAFT-regression`
+- Current authority gate: a stage-approved runtime-slice plan in the ePC-SAFT migration control plane
+
+## Authority status
+
+The repository and tracker that originally owned issue #468 were renamed and transferred to `tannerpolley/ePC-SAFT-lab`. The lab retains that issue as historical design evidence, but it does not own current issue intake, roadmap state, production distributions, or clean capability admission.
+
+Clean `ePC-SAFT/ePC-SAFT-regression` is the permanent regression owner and is currently a governance-only skeleton. Migration Phase 5 provider promotion has not started, so a new clean regression issue or implementation is premature until the migration control plane approves the owning slice. MEA must keep execution fail-closed in the meantime.
 
 ## Command
 
@@ -15,7 +22,7 @@ Current downstream final-lane proof:
 uv run python scripts/check_epcsaft_integration.py --mode final
 ```
 
-The reduced split-package reproduction should use only public provider, equilibrium, regression, and capability-report APIs from immutable refs. The exact command belongs in the upstream spec once those public entrypoints are admitted.
+The future reduced clean-package reproduction must use only installed public provider, regression, and capability-report APIs from immutable refs. Its exact command belongs in a stage-approved upstream spec once those public entrypoints are admitted.
 
 ## Minimal reproduction
 
@@ -32,12 +39,12 @@ The production downstream proof later expands to 161 pressure rows plus 74 speci
 ## Observed behavior
 
 - The pinned monolithic package exposes `fit_reactive_electrolyte_parameters`, but its capability report identifies Python-orchestrated bounded Gauss-Newton behavior and does not prove a native optimization hot loop.
-- The split provider/equilibrium/regression architecture does not currently expose a public production capability for coupled reactive pressure/speciation regression.
+- Clean `ePC-SAFT-regression` is a governance-only skeleton and does not expose a public production capability for coupled reactive pressure/speciation regression.
 - Current equilibrium public scope is insufficient to infer this regression surface, and private implementation modules are not a downstream contract.
 
 ## Expected behavior
 
-The public regression package should admit a generic coupled reactive problem and report:
+After stage approval and provider promotion, the public clean regression package should admit a generic coupled reactive problem and report:
 
 - native Ceres ownership of the optimization hot loop;
 - the supported CppAD or implicit-Jacobian derivative path;
@@ -73,9 +80,9 @@ uv run python scripts/check_epcsaft_integration.py --mode final
 
 ## Upstream dependency context
 
-This request is blocked by the current public equilibrium/admission and regression readmission foundations:
+Historical lab issue #468 referenced earlier lab dependencies:
 
-- https://github.com/ePC-SAFT/ePC-SAFT/issues/330
-- https://github.com/ePC-SAFT/ePC-SAFT/issues/451
+- https://github.com/tannerpolley/ePC-SAFT-lab/issues/330
+- https://github.com/tannerpolley/ePC-SAFT-lab/issues/451
 
-These links document prerequisites; they do not imply that either issue already schedules or delivers the reactive regression capability requested here.
+These links preserve provenance only. They do not schedule clean production work. The actionable upstream gate is a stage-approved transfer plan owned by the migration control plane, followed by an accepted clean-package promotion receipt.
