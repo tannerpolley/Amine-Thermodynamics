@@ -117,7 +117,7 @@ Create it with existing labels `superpowers:issue`, `kind:deliverable`, `area:re
 - A regression attempt remains blocked until immutable clean capability evidence passes the existing acceptance proof.
 - The cutover removes the displaced active blocker while retaining historical provenance.
 
-- [ ] **Step 1: Add the failing authority contract test.**
+- [x] **Step 1: Add the failing authority contract test.**
 
 Create `tests/test_phase3_authority_rebaseline.py` with:
 
@@ -176,7 +176,7 @@ def test_rebaseline_preserves_pin_and_fail_closed_readiness() -> None:
     assert readiness["source_hashes"]
 ```
 
-- [ ] **Step 2: Verify RED.**
+- [x] **Step 2: Verify RED.**
 
 Run:
 
@@ -186,7 +186,7 @@ uv run pytest tests/test_phase3_authority_rebaseline.py -q
 
 Expected: the authority test fails because active files still contain the old #468 URL and do not consistently name the clean owner/migration gate; the immutable pin/readiness test passes.
 
-- [ ] **Step 3: Update the active authority surface.**
+- [x] **Step 3: Update the active authority surface.**
 
 Apply these exact semantic changes:
 
@@ -198,7 +198,7 @@ Apply these exact semantic changes:
 - Issue #14 mirror: keep #13 as its only active blocker and state that candidate-bound validation requires an immutable candidate produced through the clean admitted contract.
 - Phase 3 milestone: link this spec, plan, and returned rebaseline issue URL; describe the current authority chain and preserve the readiness hashes.
 
-- [ ] **Step 4: Verify GREEN and immutable inputs.**
+- [x] **Step 4: Verify GREEN and immutable inputs.**
 
 Run:
 
@@ -209,7 +209,7 @@ git diff --exit-code -- pyproject.toml uv.lock integration/epcsaft_contract.json
 
 Expected: tests pass and the protected scientific/runtime paths have no diff.
 
-- [ ] **Step 5: Commit Task 1.**
+- [x] **Step 5: Commit Task 1.**
 
 ```bash
 git add tests/test_phase3_authority_rebaseline.py docs/coordination/epcsaft_feedback_reactive_regression_admission.md docs/roadmaps/epcsaft_dependency_matrix.md docs/superpowers/issues/12-native-regression-result-contract.md docs/superpowers/issues/13-coupled-regression-parameter-promotion.md docs/superpowers/issues/14-independent-validation-identifiability.md docs/superpowers/milestones/phase-3-ionic-regression.md docs/superpowers/plans/2026-07-16-phase3-upstream-authority-rebaseline-plan.md
@@ -232,7 +232,7 @@ git commit -m "docs: rebaseline Phase 3 upstream authority"
 - Editorial work remains blocked only by open validation work, not by a closed child.
 - GitHub evidence visibly matches the rebaseline cutover and repository acceptance contract.
 
-- [ ] **Step 1: Extend the tracker contract test.**
+- [x] **Step 1: Extend the tracker contract test.**
 
 Add to `tests/test_phase3_authority_rebaseline.py`:
 
@@ -252,7 +252,7 @@ def test_local_tracker_mirrors_do_not_keep_completed_issue_11_as_a_blocker() -> 
     assert "https://github.com/tannerpolley/MEA-Thermodynamics/issues/14" in editorial
 ```
 
-- [ ] **Step 2: Verify RED.**
+- [x] **Step 2: Verify RED.**
 
 Run:
 
@@ -262,12 +262,12 @@ uv run pytest tests/test_phase3_authority_rebaseline.py::test_local_tracker_mirr
 
 Expected: failure because #5 is still blocked and #18 still lists #11.
 
-- [ ] **Step 3: Update local mirrors.**
+- [x] **Step 3: Update local mirrors.**
 
 - In #5, remove `status:blocked`, mark all three acceptance criteria complete, replace `Blocked by` with `- None.`, and add a closeout note naming merged PR #19 and the passing controlled-comparison proof.
 - In #18, remove #11 from `Blocked by` and retain #14 unchanged.
 
-- [ ] **Step 4: Verify local GREEN.**
+- [x] **Step 4: Verify local GREEN.**
 
 Run:
 
@@ -277,7 +277,7 @@ uv run pytest tests/test_phase3_authority_rebaseline.py -q
 
 Expected: all authority and tracker mirror tests pass.
 
-- [ ] **Step 5: Update live GitHub issues from validated mirrors.**
+- [x] **Step 5: Update live GitHub issues from validated mirrors.**
 
 Run:
 
@@ -292,7 +292,7 @@ gh issue close 5 -R tannerpolley/MEA-Thermodynamics --reason completed --comment
 
 Expected: all edits succeed and #5 closes as completed.
 
-- [ ] **Step 6: Read back live state.**
+- [x] **Step 6: Read back live state.**
 
 Run structured `gh issue view` calls for the rebaseline issue and #5/#12/#13/#14/#18. Verify:
 

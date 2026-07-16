@@ -32,7 +32,6 @@ Executable: true
 
 ## Blocked by
 
-- https://github.com/tannerpolley/MEA-Thermodynamics/issues/11
 - https://github.com/tannerpolley/MEA-Thermodynamics/issues/14
 
 ## Non-goals

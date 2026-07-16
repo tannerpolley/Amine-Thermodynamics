@@ -58,3 +58,24 @@ def test_rebaseline_preserves_pin_and_fail_closed_readiness() -> None:
     )
     assert readiness["split_hash"] == SPLIT_HASH
     assert readiness["source_hashes"]
+
+
+def test_local_tracker_mirrors_do_not_keep_completed_issue_11_as_a_blocker() -> None:
+    phase2_parent = (
+        ROOT / "docs/superpowers/issues/5-activity-model-comparison-workstream.md"
+    ).read_text(encoding="utf-8")
+    editorial = (
+        ROOT / "docs/superpowers/issues/18-publication-figures-editorial.md"
+    ).read_text(encoding="utf-8")
+
+    assert "status:blocked" not in phase2_parent
+    assert "- [x] #11 is the only" in phase2_parent
+    assert "## Blocked by\n\n- None." in phase2_parent
+    editorial_blockers = editorial.split("## Blocked by", maxsplit=1)[1].split(
+        "## Non-goals", maxsplit=1
+    )[0]
+    assert "issues/11" not in editorial_blockers
+    assert (
+        "https://github.com/tannerpolley/MEA-Thermodynamics/issues/14"
+        in editorial_blockers
+    )
