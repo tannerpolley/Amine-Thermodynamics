@@ -26,8 +26,8 @@
 - Current downstream gate: `src/MEA/common/data_access.py::require_regression_execution_admitted` and `scripts/build_regression_readiness.py`.
 - Frozen receipt: `analyses/phase3/ionic_epcsaft_regression/results/readiness/regression_readiness_summary.json`.
 - Historical lab issue: `https://github.com/tannerpolley/ePC-SAFT-lab/issues/468`.
-- Clean regression authority: `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-project/ePC-SAFT-regression/{AGENTS.md,CONTEXT.md}`.
-- Migration status: `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-project/ePC-SAFT-migration/MIGRATION.md`.
+- Clean regression authority: `ePC-SAFT/ePC-SAFT-regression` repository `AGENTS.md` and `CONTEXT.md`.
+- Migration status: `ePC-SAFT-migration/MIGRATION.md` in the migration control-plane repository.
 
 ## Outcome Proof
 
@@ -190,7 +190,7 @@ Expected: the authority test fails because active files still contain the old #4
 
 Apply these exact semantic changes:
 
-- Local ignored `AGENTS.md`: rename `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT` as the historical lab/transitional source; name `ePC-SAFT-project/ePC-SAFT`, `ePC-SAFT-regression`, and `ePC-SAFT-migration` as clean owner/control roots; allow development only after stage approval; preserve stable/final pinned behavior. Do not force-add this local policy file.
+- Local ignored `AGENTS.md`: identify the configured historical lab checkout as transitional source only; name the clean provider, regression, and migration repositories as owner/control roots; allow development only after stage approval; preserve stable/final pinned behavior. Do not force-add this local policy file.
 - Coordination note: add an authority-status section, move lab #468 under historical evidence, name the migration transfer plan as the next gate, and retain the existing required native Ceres/Jacobian/result evidence.
 - Dependency matrix: split provider and regression owners, mark 1.5.2 as immutable historical evaluation evidence, remove obsolete task-number expectations, and state that Phase 3 waits on stage-approved clean promotion.
 - Issue #12 mirror: replace old #468 under `Blocked by` with the migration transfer gate and clean regression skeleton; retain lab #468 only under a `Historical evidence` heading.
@@ -304,7 +304,7 @@ Run structured `gh issue view` calls for the rebaseline issue and #5/#12/#13/#14
 
 Stop without further GitHub writes if any read-back differs.
 
-- [ ] **Step 7: Commit Task 2.**
+- [x] **Step 7: Commit Task 2.**
 
 ```bash
 git add tests/test_phase3_authority_rebaseline.py docs/superpowers/issues/5-activity-model-comparison-workstream.md docs/superpowers/issues/18-publication-figures-editorial.md
@@ -326,7 +326,7 @@ git commit -m "chore: reconcile project tracker state"
 - Hosted CI proves the documentation/test changes do not weaken manuscript or package evidence.
 - Final cleanup removes the task branch without recreating the forbidden repo-local worktree path.
 
-- [ ] **Step 1: Run focused and repository validation.**
+- [x] **Step 1: Run focused and repository validation.**
 
 ```bash
 uv run ruff check tests/test_phase3_authority_rebaseline.py
@@ -339,7 +339,7 @@ git diff --exit-code main...HEAD -- pyproject.toml uv.lock integration/epcsaft_c
 
 Expected: all commands pass; final integration reports package 1.5.2 at pinned commit `9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785`; protected paths have no diff.
 
-- [ ] **Step 2: Run cleanup audit before publication.**
+- [x] **Step 2: Run cleanup audit before publication.**
 
 ```bash
 bash "$HOME/.codex/hooks/codex-cleanup.sh" --repo-root .
