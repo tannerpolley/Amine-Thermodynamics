@@ -42,6 +42,8 @@ Executable: true
 
 The frozen manifest contains complete source/composition/temperature groups, including 15/20 wt% speciation transfer groups and non-30-wt% VLE groups. Its failed-row policy counts every attempted reserved row as a validation outcome; omission is forbidden. Candidate-bound validation still waits for Issue #13.
 
+The immutable candidate must be produced through the clean, admitted `ePC-SAFT/ePC-SAFT-regression` contract after its stage-approved promotion. Historical lab output, scaffolding, and zero-evaluation summaries cannot satisfy this prerequisite.
+
 ## Non-goals
 
 - Present training residuals as validation.

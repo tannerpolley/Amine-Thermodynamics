@@ -4,7 +4,7 @@
 **GitHub Milestone:** Phase 2 Activity ePC-SAFT
 **Source Spec:** docs/superpowers/specs/2026-07-13-phase2-model-comparison-workstream-design.md
 **Source Plan:** docs/superpowers/plans/2026-07-13-phase2-model-comparison-workstream-plan.md
-**Labels:** superpowers:issue, kind:workstream, area:model-comparison, priority:submission-blocker, status:blocked, type:analysis
+**Labels:** superpowers:issue, kind:workstream, area:model-comparison, priority:submission-blocker, type:analysis
 Sub-Issue Role: parent
 Executable: false
 **Goal Command:** Not executable; close only after child evidence passes.
@@ -24,13 +24,17 @@ Executable: false
 
 ## Acceptance Criteria
 
-- [ ] #11 is the only remaining sub-issue and carries the model-comparison implementation scope.
-- [ ] Completed Phase 2 pressure/speciation evidence remains linked and reproducible.
-- [ ] #5 closes only after the controlled-comparison proof oracle passes.
+- [x] #11 is the only intended sub-issue and carries the model-comparison implementation scope.
+- [x] Completed Phase 2 pressure/speciation evidence remains linked and reproducible.
+- [x] #5 closes only after the controlled-comparison proof oracle passes.
 
 ## Blocked by
 
-- https://github.com/tannerpolley/MEA-Thermodynamics/issues/11
+- None.
+
+## Closeout evidence
+
+Issue #11 closed after merged PR #19 produced the controlled 31-row comparison, corrected the reported-zero count to 15, regenerated deterministic artifacts, and passed its manuscript proof. No Phase 2 implementation remains under this parent.
 
 ## Non-goals
 

@@ -4,23 +4,25 @@
 
 MEA-Thermodynamics must use generic ePC-SAFT APIs. It must not request application-specific public APIs.
 
+The preserved `tannerpolley/ePC-SAFT-lab` is historical/transitional evidence, not a production or tracker owner. Clean `ePC-SAFT/ePC-SAFT` owns future provider capabilities, clean `ePC-SAFT/ePC-SAFT-regression` owns future Ceres regression, and the migration control plane owns stage sequencing until accepted promotion receipts transfer runtime authority.
+
 ## Dependency table
 
-| Package capability | ePC-SAFT owner | MEA phase affected | Required for | Current action |
+| Package capability | Production owner | MEA phase affected | Required for | Current action |
 |---|---|---:|---|---|
-| Derivative coverage gates | ePC-SAFT | 0-3 | honest capability reporting | verify with `scripts/check_epcsaft_integration.py` and package `capabilities()` |
-| Reaction/equilibrium-constant convention layer | ePC-SAFT | 1-3 | basis-safe reaction constants | use generic `ReactionSet`/convention support if available; keep MEA mapping local |
-| Generic TargetRow / TargetDataset schema | ePC-SAFT | 3 | generic regression data input | local code currently maps MEA rows through `src/MEA/epcsaft_ionic/native_regression.py` |
-| Explicit CppAD parameter derivatives | ePC-SAFT | 3 | native regression derivatives | required before routine coupled pressure/speciation fitting is credible |
-| Generic implicit solved-state sensitivities | ePC-SAFT | 2-3 | speciation/VLE/regression derivatives | expected Task C / #86 dependency; do not reimplement in MEA |
-| Generic activity-based speciation solver | ePC-SAFT | 2-3 | Phase 2 speciation | current MEA workflow calls generic package speciation symbols through `src/MEA/epcsaft_runtime.py` |
-| Generic VLE/fugacity equilibrium solver | ePC-SAFT | 2-3 | pressure calculations | current MEA workflow calls generic reactive electrolyte bubble support |
-| Generic regression backend | ePC-SAFT | 3 | coupled regression | current `global_regression_summary.json` says package native fit did not complete; Phase 3 blocked |
-| Literature benchmark suite | ePC-SAFT | 2-3 | package confidence | expected Task L / #95 dependency; MEA owns only MEA-specific validation |
+| Provider derivative coverage gates | Clean `ePC-SAFT/ePC-SAFT` after promotion | 0-3 | honest capability reporting | preserve the pinned historical lane; require a clean capability receipt before cutover |
+| Reaction/equilibrium-constant convention layer | Clean provider/equilibrium owners after promotion | 1-3 | basis-safe reaction constants | keep MEA mapping local until a generic admitted contract exists |
+| Generic target dataset schema | Clean `ePC-SAFT/ePC-SAFT-regression` after promotion | 3 | generic regression data input | MEA maps frozen rows locally; no clean production schema is admitted yet |
+| Exact CppAD residual Jacobians | Clean provider plus regression owners after promotion | 3 | native regression derivatives | required before coupled pressure/speciation execution is admitted |
+| Generic implicit solved-state sensitivities | Clean provider owner after promotion | 2-3 | speciation/VLE/regression derivatives | do not reimplement in MEA or infer from historical lab scope |
+| Generic activity-based speciation solver | Current immutable 1.5.2 evidence; future clean owners | 2-3 | Phase 2 speciation | current MEA workflow consumes the pinned public symbols through `src/MEA/epcsaft_runtime.py` |
+| Generic VLE/fugacity equilibrium solver | Current immutable 1.5.2 evidence; future clean owners | 2-3 | pressure calculations | current fixed-evaluation workflow consumes the pinned reactive electrolyte bubble support |
+| Generic regression backend | Clean `ePC-SAFT/ePC-SAFT-regression` after promotion | 3 | coupled regression | migration stage approval and immutable clean capability evidence are absent; Phase 3 execution stays blocked |
+| Literature and installed-artifact acceptance | Clean `ePC-SAFT/ePC-SAFT-validation` after promotion | 2-3 | package confidence | MEA owns only MEA-specific validation and final pinned-source checks |
 
-## Phase 2 package inspection on 2026-05-15
+## Immutable Phase 2 evaluation inspection on 2026-05-15
 
-The current MEA environment imports `epcsaft` version `1.5.2` from a stable pinned Git dependency:
+The current MEA environment imports `epcsaft` version `1.5.2` from a stable pinned Git dependency. This is immutable historical evaluation evidence, not proof that the lab owns future clean production:
 
 `epcsaft @ git+https://github.com/tannerpolley/ePC-SAFT.git@9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785`
 
@@ -58,7 +60,9 @@ The current MEA environment imports `epcsaft` version `1.5.2` from a stable pinn
 
 The repo has an explicit integration contract at `integration/epcsaft_contract.json` and a checker at `scripts/check_epcsaft_integration.py`.
 
-Current local development uses the stable-mode pinned Git dependency in `pyproject.toml` and `uv.lock`. Use the local `epcsaft-dev` worktree only for intentional upstream/downstream co-development, not routine downstream validation. See `docs/roadmaps/reproducibility_dependency_note.md`.
+Current local validation uses the stable-mode pinned Git dependency in `pyproject.toml` and `uv.lock`; routine downstream validation must not resolve through a mutable sibling checkout. See `docs/roadmaps/reproducibility_dependency_note.md`.
+
+New clean-package co-development requires a stage-approved migration transfer plan and an explicit worktree outside this repository. The clean regression repository is currently a governance-only skeleton, so no development checkout or clean capability can yet satisfy Issue #12.
 
 Current 2026-05-15 status: stable integration validation passes against the pinned Git dependency. Final manuscript or archive results still require final-mode validation, but they no longer depend on a mutable local package path.
 
@@ -66,6 +70,6 @@ Phase status:
 
 - Phase 1: can proceed with repo-owned data and existing baseline scripts; it must not depend on unavailable package features.
 - Phase 2: depends on generic activity-based speciation and reactive VLE/fugacity support from `epcsaft`.
-- Phase 3: depends on generic native regression backend support that can complete the coupled pressure/speciation fit at routine cost.
+- Phase 3: depends on a stage-approved clean regression slice, exact residual Jacobians, a production native Ceres loop, structured diagnostics, and an immutable installed-artifact receipt. Until then, `upstream_execution_admitted` remains false.
 
 Do not request MEA-specific public APIs from `epcsaft`; convert recurring needs into generic reaction, equilibrium, target-dataset, or regression capabilities.

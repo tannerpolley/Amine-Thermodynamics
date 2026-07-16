@@ -14,9 +14,9 @@ Executable: true
 
 **Outcome Source:** docs/superpowers/plans/2026-07-13-native-regression-result-contract-plan.md#outcome-proof
 **Intent:** Move MEA from the legacy monolithic regression surface to an admitted, public, fail-closed split-package contract.
-**Target Output:** Compatibility matrix, upstream admission receipt, versioned adapter/schema, adversarial tests, reduced public smoke, and final pinned integration receipt.
+**Target Output:** Compatibility matrix, stage-approved clean upstream admission receipt, versioned adapter/schema, adversarial tests, reduced public smoke, and final pinned integration receipt.
 **Owner:** Cross-repo integration maintainer.
-**Interface:** Public provider/equilibrium/regression package APIs through one approved MEA adapter.
+**Interface:** Installed public clean provider/regression package APIs through one approved MEA adapter.
 **Cutover:** Preserve the pinned `epcsaft` 1.5.2 final lane until the admitted split-package contract passes the reduced smoke and final-mode checks.
 **Replaced Path:** Retire root-package regression calls, private imports, opportunistic field access, and implicit status coercion at cutover.
 **Acceptance Proof:** Capability report admits the required reactive target families and native hot loop; known result fixtures map correctly; malformed results fail; the public reduced smoke writes no curated files.
@@ -32,13 +32,18 @@ Executable: true
 
 ## Blocked by
 
-- https://github.com/ePC-SAFT/ePC-SAFT/issues/468
+- A stage-approved runtime-slice plan in the ePC-SAFT migration control plane.
+- Clean `ePC-SAFT/ePC-SAFT-regression` is currently a governance-only skeleton with no admitted production capability.
+
+## Historical evidence
+
+- https://github.com/tannerpolley/ePC-SAFT-lab/issues/468 records the original request but is not an actionable production dependency.
 
 ## Non-goals
 
 - Execute the full coupled MEA fit.
 - Import private upstream modules or preserve both package architectures behind a permanent compatibility layer.
-- Consume the dirty shared ePC-SAFT checkout as manuscript evidence.
+- Consume the ePC-SAFT lab or another mutable checkout as manuscript evidence.
 
 ## Proof Oracle
 
