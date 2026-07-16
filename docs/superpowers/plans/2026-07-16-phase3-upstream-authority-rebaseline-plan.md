@@ -348,7 +348,7 @@ git status --short --branch
 
 Expected: cleanup reports clean except for committed branch divergence; worktree has no uncommitted files.
 
-- [ ] **Step 3: Push and create the PR.**
+- [x] **Step 3: Push and create the PR.**
 
 ```bash
 git push -u origin codex/phase3-authority-rebaseline
