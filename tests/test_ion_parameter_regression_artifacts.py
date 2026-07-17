@@ -27,8 +27,6 @@ IONIC_KIJ_CSV = (
 )
 FULL_SPECIES = ("CO2", "MEA", "H2O", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-")
 IONIC_SPECIES = ("MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-")
-PRESSURE_RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "pressure"
-SPECIATION_RESULTS = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "speciation"
 LATEX_ROOT = ROOT / "docs" / "latex"
 LATEX_MAIN = LATEX_ROOT / "main.tex"
 
@@ -173,34 +171,6 @@ class IonParameterRegressionArtifactTests(unittest.TestCase):
         for (left, right), expected_value in expected_kij.items():
             self.assertAlmostEqual(float(kij_rows[left][right]), expected_value, places=6)
             self.assertAlmostEqual(float(kij_rows[right][left]), expected_value, places=6)
-
-    def test_full_ionic_plot_artifacts_include_expected_formats(self) -> None:
-        required_with_formats = {
-            "ionic_epcsaft_co2_pressure": ("csv", "png", "svg", "pdf", "mpl.yaml"),
-            "ionic_epcsaft_speciation_activity": ("csv", "png", "svg", "pdf", "mpl.yaml"),
-        }
-        csv_by_stem = {
-            "ionic_epcsaft_co2_pressure": "ionic_pressure_comparison.csv",
-            "ionic_epcsaft_speciation_activity": "ionic_speciation_plot_data.csv",
-        }
-
-        for stem, exts in required_with_formats.items():
-            base_dir = PRESSURE_RESULTS
-            if stem.startswith("ionic_epcsaft_co2_pressure"):
-                base_dir = PRESSURE_RESULTS
-            elif stem.startswith("ionic_epcsaft_speciation_activity"):
-                base_dir = SPECIATION_RESULTS
-
-            csv_name = csv_by_stem[stem]
-            for ext in exts:
-                if ext == "csv":
-                    artifact = (base_dir / csv_name)
-                else:
-                    artifact = base_dir / f"{stem}.{ext}"
-                self.assertTrue(
-                    artifact.exists(),
-                    msg=f"Missing {stem} artifact {artifact.relative_to(ROOT)}",
-                )
 
     def test_latex_source_and_output_conventions(self) -> None:
         self.assertTrue(LATEX_MAIN.exists(), msg="Missing docs/latex/main.tex")

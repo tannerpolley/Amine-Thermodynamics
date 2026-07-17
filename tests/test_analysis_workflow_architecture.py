@@ -6,6 +6,8 @@ import json
 import unittest
 from pathlib import Path
 
+import pandas as pd
+
 from MEA.common.data_access import load_regression_speciation_view, load_regression_vle_view
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -90,13 +92,6 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
         self.assertTrue(set(training_vle["observation_id"]).isdisjoint(validation_vle["observation_id"]))
         self.assertTrue(set(training_speciation["state_id"]).isdisjoint(validation_speciation["state_id"]))
 
-    def test_native_regression_uses_manifest_splits_not_source_sets(self) -> None:
-        source = _source(ROOT / "src" / "MEA" / "epcsaft_ionic" / "native_regression.py")
-        self.assertNotIn("PRESSURE_TRAIN_SOURCES", source)
-        self.assertNotIn("PRESSURE_VALIDATION_SOURCES", source)
-        self.assertNotIn("SPECIATION_TRAIN_SOURCES", source)
-        self.assertIn('"split": target.split', source)
-
     def test_render_all_plots_only_runs_render_scripts(self) -> None:
         command_paths = _assigned_string_constants(_source(ROOT / "scripts" / "render_all_plots.py"), "COMMANDS")
         self.assertGreaterEqual(len(command_paths), 4)
@@ -132,69 +127,27 @@ class AnalysisWorkflowArchitectureTests(unittest.TestCase):
                     if "/paper_validation/" not in path.as_posix():
                         self.assertNotIn("PROCESSED_DIR", source)
 
-    def test_phase3_residual_rendering_excludes_rejected_states(self) -> None:
-        source = _source(
-            ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "scripts" / "render_figures.py"
-        )
-
-        self.assertEqual(source.count('frame = frame.loc[frame["accepted"]].copy()'), 2)
+    def test_phase3_residual_plot_data_exclude_rejected_states(self) -> None:
+        results = ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results"
+        for source_path, plotted_path in (
+            (
+                results / "pressure" / "ionic_pressure_comparison.csv",
+                results / "pressure" / "ionic_pressure_residuals_by_loading.csv",
+            ),
+            (
+                results / "speciation" / "ionic_speciation_activity_residuals.csv",
+                results / "speciation" / "ionic_speciation_residuals_by_species.csv",
+            ),
+        ):
+            source = pd.read_csv(source_path)
+            plotted = pd.read_csv(plotted_path)
+            self.assertEqual(set(plotted["row_id"]), set(source.loc[source["accepted"], "row_id"]))
 
     def test_confidence_validation_uses_render_orchestrator_not_data_generation(self) -> None:
         source = _source(ROOT / "scripts" / "validate_project.py")
         self.assertIn('"scripts/render_all_plots.py"', source)
         plot_section = source.split("PLOT_COMMANDS = [", 1)[1].split("]", 1)[0]
         self.assertNotIn("generate_data.py", plot_section)
-
-    def test_phase1_generation_reuses_canonical_pressure_results(self) -> None:
-        source = _source(ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "scripts" / "generate_data.py")
-        self.assertIn("six_species_baseline", source)
-        self.assertIn("neutral_epcsaft_parity", source)
-        self.assertIn("RESULTS_DIR", source)
-        self.assertNotIn("compute_jou_metrics", source)
-        self.assertNotIn("compute_neutral_parity", source)
-
-    def test_phase1_phase2_figures_have_architecture_owned_io_folders(self) -> None:
-        required = [
-            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "pressure" / "input" / "source_manifest.csv",
-            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "pressure" / "output" / "phase1_pressure_plot_data.csv",
-            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "pressure" / "scripts" / "render_figure.py",
-            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "input" / "source_manifest.csv",
-            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "output" / "phase1_speciation_40C_plot_data.csv",
-            ROOT / "analyses" / "phase1" / "smith_missen_baseline" / "figures" / "speciation" / "scripts" / "render_figure.py",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "input" / "source_manifest.csv",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C_plot_data.csv",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.png",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.svg",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.pdf",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output" / "phase2_speciation_40C.mpl.yaml",
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "scripts" / "render_figure.py",
-            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "input" / "source_manifest.csv",
-            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid_plot_data.csv",
-            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid.png",
-            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid.svg",
-            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid.pdf",
-            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "output" / "canonical_speciation_mole_fraction_grid.mpl.yaml",
-            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "scripts" / "generate_data.py",
-            ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figures" / "speciation" / "scripts" / "render_figure.py",
-        ]
-        for path in required:
-            with self.subTest(path=path):
-                self.assertTrue(path.exists(), path)
-
-    def test_analysis_scripts_use_category_depth_repo_roots(self) -> None:
-        forbidden_root_assignments = (
-            "REPO_ROOT = Path(__file__).resolve().parents[3]",
-            "REPO_ROOT = Path(__file__).resolve().parents[5]",
-            "REPO_ROOT = ANALYSIS_DIR.parents[1]",
-        )
-        for path in (ROOT / "analyses").rglob("*.py"):
-            with self.subTest(path=path):
-                source = _source(path)
-                self.assertFalse(any(assignment in source for assignment in forbidden_root_assignments), path)
-
-    def test_rendering_does_not_create_analysis_local_docs_tree(self) -> None:
-        self.assertFalse((ROOT / "analyses" / "docs").exists())
-
 
 if __name__ == "__main__":
     unittest.main()

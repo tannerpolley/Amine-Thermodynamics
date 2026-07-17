@@ -17,10 +17,10 @@ commands:
   pinned:
     - uv run python analyses/phase3/reactive_speciation_feasibility/scripts/run_experiment.py --lane pinned
   clean:
-    - Run the clean lane with PYTHONPATH, CLEAN_PROVIDER_ROOT, and CLEAN_PROVIDER_WHEEL bound to the recorded clean-provider artifact.
+    - Run the clean lane with PYTHONPATH and CLEAN_PROVIDER_WHEEL bound to the immutable clean-provider artifact.
 runtime:
   class: standard
   expected_seconds: 60
 manuscript_consumers: []
-results_policy: Track the pinned reference, final provenance-rich receipt, and bounded summary; never use this diagnostic to admit regression execution, promote parameters, or replace final integration.
+results_policy: Track one pinned reference, a final receipt that binds it by path and SHA-256, and the bounded summary; never use this diagnostic to admit regression execution, promote parameters, or replace final integration.
 claim_boundary: does_not_admit_regression_execution_or_promote_parameters

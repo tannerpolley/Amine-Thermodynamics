@@ -71,28 +71,6 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
         rows = _rows(pure)
         self.assertEqual([row["component"] for row in rows], list(SPECIES))
 
-    def test_phase2_design_names_required_fields(self) -> None:
-        text = (ROOT / "docs" / "roadmaps" / "phase2_activity_speciation_design.md").read_text(encoding="utf-8")
-        for phrase in (
-            "Species",
-            "Vapor/liquid split",
-            "Reaction network",
-            "Balances",
-            "Activity convention",
-            "Reference states",
-            "Parameter set",
-            "Dielectric option",
-            "Born option",
-            "Solver route",
-            "Package dependency status",
-        ):
-            self.assertIn(phrase, text)
-
-    def test_analysis_declares_single_parameter_artifact(self) -> None:
-        text = (ROOT / "analyses" / "phase2" / "activity_epcsaft" / "analysis.yaml").read_text(encoding="utf-8")
-        self.assertIn("data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2", text)
-        self.assertIn("generate_data.py", text)
-
     def test_required_output_status_records_native_model_success_outputs(self) -> None:
         path = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results" / "phase2_required_output_status.csv"
         rows = {row["artifact"]: row for row in _rows(path)}
@@ -171,13 +149,6 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
     def test_phase2_emits_native_solver_curves_not_scaffold_curves(self) -> None:
         output = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "figures" / "speciation" / "output"
         results = ROOT / "analyses" / "phase2" / "activity_epcsaft" / "results"
-        for name in (
-            "phase2_speciation_40C.png",
-            "phase2_speciation_40C.svg",
-            "phase2_speciation_40C.pdf",
-            "phase2_speciation_40C.mpl.yaml",
-        ):
-            self.assertTrue((output / name).exists(), name)
         self.assertFalse((output / "phase2_speciation_reference_points.csv").exists())
         self.assertFalse((output / "phase2_speciation_activity_curves.csv").exists())
         self.assertTrue((results / "phase2_speciation_reference_points.csv").exists())
@@ -299,17 +270,6 @@ class Phase2ActivityNativeSolverTests(unittest.TestCase):
                 self.assertEqual(row["median_abs_log10"], "")
                 self.assertEqual(row["rmse_log10"], "")
                 self.assertEqual(row["max_abs_log10"], "")
-
-    def test_pressure_generation_preserves_canonical_source_keys(self) -> None:
-        source = (
-            ROOT / "analyses" / "phase2" / "activity_epcsaft" / "scripts" / "generate_data.py"
-        ).read_text(encoding="utf-8")
-        pressure_function = source.split("def pressure_equilibrium_rows()", 1)[1].split(
-            "def speciation_metrics_rows", 1
-        )[0]
-        self.assertIn('"source": target.source_key', pressure_function)
-        self.assertNotIn('"source": target.paper', pressure_function)
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,18 +1,16 @@
 from __future__ import annotations
 
 import argparse
-import csv
-import hashlib
 import json
 import math
 import os
-import subprocess
 from pathlib import Path
 from time import perf_counter
 from typing import Any
 
 import numpy as np
 
+from MEA.common.analysis_io import file_sha256, read_csv_rows, repo_relative_path, write_json_file
 from MEA.epcsaft_ionic.speciation_feasibility import ActivityState, solve_activity_speciation
 from MEA.smith_missen.ideal_speciation import REACTION_IDS, REACTION_MATRIX, SPECIES_9, solve_ideal_speciation
 
@@ -43,56 +41,9 @@ CLEAN_COMPONENT_IDS = (
 )
 
 
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def _jsonable(value: Any) -> Any:
-    if isinstance(value, dict):
-        return {str(key): _jsonable(item) for key, item in value.items()}
-    if isinstance(value, (list, tuple)):
-        return [_jsonable(item) for item in value]
-    if isinstance(value, np.ndarray):
-        return [_jsonable(item) for item in value.tolist()]
-    if isinstance(value, (np.integer, np.floating)):
-        return value.item()
-    if isinstance(value, Path):
-        return value.as_posix()
-    return value
-
-
-def _write_json(path: Path, payload: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(_jsonable(payload), indent=2, sort_keys=True) + "\n", encoding="utf-8")
-
-
-def _git_identity(path: Path) -> dict[str, Any]:
-    def run(*args: str) -> str:
-        return subprocess.run(
-            ("git", "-C", str(path), *args),
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-
-    status = run("status", "--short")
-    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(status), "status": status}
-
-
-def _read_pure_rows() -> list[dict[str, str]]:
-    with PURE_CSV.open(newline="", encoding="utf-8") as handle:
-        return list(csv.DictReader(handle))
-
-
 def _read_kij() -> dict[tuple[str, str], float]:
-    with KIJ_CSV.open(newline="", encoding="utf-8") as handle:
-        rows = list(csv.DictReader(handle))
     values: dict[tuple[str, str], float] = {}
-    for row in rows:
+    for row in read_csv_rows(KIJ_CSV):
         left = str(row["component"])
         for right in SPECIES_9:
             if left == right:
@@ -170,7 +121,7 @@ def _build_clean_eos():
         ValidityDomain,
     )
 
-    pure_rows = _read_pure_rows()
+    pure_rows = read_csv_rows(PURE_CSV)
     by_species = {row["component"]: row for row in pure_rows}
     component_by_species = dict(zip(SPECIES_9, CLEAN_COMPONENT_IDS))
     provenance = {
@@ -528,7 +479,7 @@ def _source_hashes() -> dict[str, str]:
         ROOT / "src" / "MEA" / "epcsaft_ionic" / "speciation_feasibility.py",
         Path(__file__).resolve(),
     )
-    return {path.relative_to(ROOT).as_posix(): _sha256(path) for path in paths}
+    return {repo_relative_path(path): file_sha256(path) for path in paths}
 
 
 def main() -> None:
@@ -537,7 +488,7 @@ def main() -> None:
     args = parser.parse_args()
     if args.lane == "pinned":
         payload = _pinned_lane()
-        _write_json(PINNED_RECEIPT, payload)
+        write_json_file(PINNED_RECEIPT, payload)
         print(PINNED_RECEIPT)
         return
 
@@ -545,13 +496,11 @@ def main() -> None:
         raise FileNotFoundError(f"run --lane pinned first: {PINNED_RECEIPT}")
     pinned = json.loads(PINNED_RECEIPT.read_text(encoding="utf-8"))
     clean = _clean_lane(pinned)
-    provider_root_text = os.environ.get("CLEAN_PROVIDER_ROOT")
-    provider_identity = _git_identity(Path(provider_root_text)) if provider_root_text else None
     wheel_text = os.environ.get("CLEAN_PROVIDER_WHEEL")
     wheel = Path(wheel_text) if wheel_text else None
     conclusion = "feasible" if clean["all_runs_successful"] else "blocked"
     receipt = {
-        "schema_version": 1,
+        "schema_version": 2,
         "experiment": "lightweight_mea_reactive_speciation_over_clean_provider",
         "conclusion": conclusion,
         "claim_boundary": "diagnostic_reference_oracle_and_seed_generator_only",
@@ -564,14 +513,15 @@ def main() -> None:
             "loadings": LOADINGS,
         },
         "source_hashes": _source_hashes(),
-        "mea_repository": _git_identity(ROOT),
-        "clean_provider_repository": provider_identity,
         "clean_provider_wheel": (
-            {"filename": wheel.name, "sha256": _sha256(wheel)}
+            {"filename": wheel.name, "sha256": file_sha256(wheel)}
             if wheel is not None and wheel.is_file()
             else None
         ),
-        "pinned_lane": pinned,
+        "pinned_lane": {
+            "path": repo_relative_path(PINNED_RECEIPT),
+            "sha256": file_sha256(PINNED_RECEIPT),
+        },
         "clean_lane": clean,
         "tasks": {
             "1_public_parameter_construction": "completed",
@@ -581,7 +531,7 @@ def main() -> None:
             "5_perturbed_seed_cost_measurement": "completed",
         },
     }
-    _write_json(FINAL_RECEIPT, receipt)
+    write_json_file(FINAL_RECEIPT, receipt)
     print(FINAL_RECEIPT)
 
 

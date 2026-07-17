@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+from MEA.common.analysis_io import file_sha256
 from MEA.epcsaft_ionic.speciation_feasibility import ActivityState, solve_activity_speciation
 from MEA.smith_missen.ideal_speciation import SPECIES_9, solve_ideal_speciation
 
@@ -65,6 +66,9 @@ def test_generic_solver_reproduces_ideal_smith_missen_solution() -> None:
 
 def test_generic_solver_rejects_unproven_or_nonfinite_activities() -> None:
     class InvalidEvaluator:
+        def __init__(self, state: ActivityState) -> None:
+            self.state = state
+
         def evaluate(
             self,
             temperature_K: float,
@@ -72,20 +76,35 @@ def test_generic_solver_rejects_unproven_or_nonfinite_activities() -> None:
             mole_fractions: np.ndarray,
         ) -> ActivityState:
             del temperature_K, pressure_Pa, mole_fractions
-            return ActivityState(
-                log_activities=np.full(len(SPECIES_9), np.nan),
+            return self.state
+
+    invalid_states = (
+        (
+            ActivityState(
+                log_activities=np.zeros(len(SPECIES_9)),
                 convention="residual_chemical_potential_unknown_standard_state",
                 diagnostics={},
+            ),
+            "mole_fraction_activity",
+        ),
+        (
+            ActivityState(
+                log_activities=np.full(len(SPECIES_9), np.nan),
+                convention="mole_fraction_activity",
+                diagnostics={},
+            ),
+            "nonfinite log activities",
+        ),
+    )
+    for state, message in invalid_states:
+        with pytest.raises(ValueError, match=message):
+            solve_activity_speciation(
+                loading=0.4,
+                mea_weight_fraction=0.3,
+                temperature_K=313.15,
+                pressure_Pa=101325.0,
+                evaluator=InvalidEvaluator(state),
             )
-
-    with pytest.raises(ValueError, match="mole_fraction_activity"):
-        solve_activity_speciation(
-            loading=0.4,
-            mea_weight_fraction=0.3,
-            temperature_K=313.15,
-            pressure_Pa=101325.0,
-            evaluator=InvalidEvaluator(),
-        )
 
 
 def test_feasibility_receipt_is_nonpromoting_and_accounts_for_all_runs() -> None:
@@ -102,6 +121,9 @@ def test_feasibility_receipt_is_nonpromoting_and_accounts_for_all_runs() -> None
     assert receipt["conclusion"] == "feasible"
     assert receipt["regression_execution_admitted"] is False
     assert receipt["parameter_promotion_allowed"] is False
+    assert receipt["schema_version"] == 2
+    pinned = ROOT / receipt["pinned_lane"]["path"]
+    assert receipt["pinned_lane"]["sha256"] == file_sha256(pinned)
     assert set(receipt["tasks"].values()) == {"completed"}
     assert receipt["clean_lane"]["all_runs_successful"] is True
     for state in receipt["clean_lane"]["states"]:
