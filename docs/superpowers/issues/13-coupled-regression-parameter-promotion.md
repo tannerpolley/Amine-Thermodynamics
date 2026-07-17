@@ -5,6 +5,7 @@
 Parent Issue: https://github.com/tannerpolley/MEA-Thermodynamics/issues/6
 **Source Spec:** docs/superpowers/specs/2026-07-13-coupled-regression-parameter-promotion-design.md
 **Source Plan:** docs/superpowers/plans/2026-07-13-coupled-regression-parameter-promotion-plan.md
+**Submission Sprint:** docs/superpowers/plans/2026-07-17-fluid-phase-equilibria-submission-sprint-plan.md
 **Labels:** superpowers:issue, kind:deliverable, area:regression, priority:submission-blocker, status:blocked, type:analysis
 Sub-Issue Role: leaf
 Executable: true
@@ -49,6 +50,10 @@ Issue #12 can close only after a stage-approved clean `ePC-SAFT/ePC-SAFT-regress
 - Split hash: `e7bc893dab825007d009260d2c1f6f5dd42e75ebddbdb4972d52a5ec4f0c1aa0`
 
 Pressure and speciation construction are admitted. Execution remains blocked by Issue #12 because no stage-approved clean capability receipt admits the required production native Ceres hot loop and exact residual-Jacobian contract. Density, dielectric, pH, ionic-activity, viscosity, and calorimetry targets remain explicitly non-admitted.
+
+## Submission Sprint Role
+
+Saturday work freezes and tests the preregistration contract without fabricating an execution budget or admission receipt. After #12 closes, Monday execution must use exactly the validated 147-row training problem and may promote only a candidate whose native diagnostics and preregistered gates all pass.
 
 ## Non-goals
 

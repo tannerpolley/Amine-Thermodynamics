@@ -5,6 +5,7 @@
 Parent Issue: https://github.com/tannerpolley/MEA-Thermodynamics/issues/6
 **Source Spec:** docs/superpowers/specs/2026-07-13-native-regression-result-contract-design.md
 **Source Plan:** docs/superpowers/plans/2026-07-13-native-regression-result-contract-plan.md
+**Submission Sprint:** docs/superpowers/plans/2026-07-17-fluid-phase-equilibria-submission-sprint-plan.md
 **Labels:** superpowers:issue, kind:deliverable, area:regression, priority:submission-blocker, status:blocked, type:analysis
 Sub-Issue Role: leaf
 Executable: true
@@ -38,6 +39,10 @@ Executable: true
 ## Historical evidence
 
 - https://github.com/tannerpolley/ePC-SAFT-lab/issues/468 records the original request but is not an actionable production dependency.
+
+## Submission Sprint Role
+
+This is the Sunday, July 19 scientific execution gate. MEA work may prepare fail-closed adapters and tests, but it must not move or reproduce upstream implementation here. Only an immutable admitted public capability receipt can release #13; until then `upstream_execution_admitted=false` remains correct.
 
 ## Non-goals
 
