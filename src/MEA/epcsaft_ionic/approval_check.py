@@ -177,6 +177,7 @@ def evaluate_global_regression_approval(
         "carbonate_movement_threshold": CARBONATE_MOVEMENT_THRESHOLD,
         "required_major_speciation_gates": MAJOR_SPECIATION_GATES,
         "preregistration_sha256": recorded_preregistration_sha256,
+        "candidate_sha256": canonical_sha256(summary),
     }
 
 
