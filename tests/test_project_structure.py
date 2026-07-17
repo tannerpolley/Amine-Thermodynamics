@@ -175,7 +175,7 @@ class ArtifactOwnershipTests(unittest.TestCase):
 
 class AnalysisManifestTests(unittest.TestCase):
     def test_all_analysis_manifests_use_the_complete_contract(self) -> None:
-        self.assertEqual(len(ANALYSIS_MANIFESTS), 7)
+        self.assertEqual(len(ANALYSIS_MANIFESTS), 8)
         required_top_level = (
             "id:",
             "title:",
