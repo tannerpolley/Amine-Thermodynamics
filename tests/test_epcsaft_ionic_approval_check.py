@@ -3,6 +3,7 @@ from __future__ import annotations
 import unittest
 
 from MEA.epcsaft_ionic.approval_check import evaluate_global_regression_approval
+from MEA.epcsaft_ionic.preregistration import canonical_sha256
 
 
 def completed_summary() -> dict[str, object]:
@@ -88,6 +89,46 @@ class EpcsaftIonicApprovalCheckTests(unittest.TestCase):
         approval = evaluate_global_regression_approval(completed_summary())
         self.assertTrue(approval["approved"])
         self.assertEqual(approval["decision"], "approve_global_regression_promotion")
+
+    def test_final_candidate_requires_matching_preregistration_hash(self) -> None:
+        summary = completed_summary()
+        contract = {
+            "parameters": [{"name": name} for name in summary["fitted_values"]],
+            "target_counts": {"pressure": 10, "speciation": 10},
+            "objective": {
+                "target_weights": {"pressure": 1.0, "speciation": 1.0},
+                "regularization_scale": 0.003,
+            },
+        }
+        contract_sha256 = canonical_sha256(contract)
+        summary["preregistration_contract"] = contract
+        summary["preregistration_sha256"] = contract_sha256
+        summary["fit_parameters"] = list(summary["fitted_values"])
+        summary["target_counts"] = contract["target_counts"]
+        summary["objective_weights"] = {
+            "pressure_weight": 1.0,
+            "speciation_weight": 1.0,
+            "regularization_scale": 0.003,
+        }
+        summary["wall_time_seconds"] = 10.0
+        summary["wall_time_ceiling_seconds"] = 20.0
+
+        missing = evaluate_global_regression_approval(summary, require_preregistration=True)
+        mismatch = evaluate_global_regression_approval(
+            summary,
+            require_preregistration=True,
+            expected_preregistration_sha256="0" * 64,
+        )
+        matching = evaluate_global_regression_approval(
+            summary,
+            require_preregistration=True,
+            expected_preregistration_sha256=contract_sha256,
+        )
+
+        self.assertIn("validated_preregistration_hash_missing", missing["reasons"])
+        self.assertIn("preregistration_hash_mismatch", mismatch["reasons"])
+        self.assertTrue(matching["approved"])
+        self.assertEqual(matching["preregistration_sha256"], contract_sha256)
 
 
 if __name__ == "__main__":

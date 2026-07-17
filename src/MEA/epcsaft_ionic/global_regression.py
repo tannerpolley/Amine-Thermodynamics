@@ -51,11 +51,11 @@ GLOBAL_FIT_NAMES = (
     "k_ij__MEA__H2O",
     "k_ij__MEAH+__MEACOO-",
     "k_ij__MEAH+__HCO3-",
+    "HCO3-__d_born",
+    "CO3^2-__d_born",
 )
 GLOBAL_SPECIATION_SPECIES = ("MEAH+", "MEACOO-", "HCO3-", "CO3^2-")
 SENSITIVITY_PARAMETERS = GLOBAL_FIT_NAMES + (
-    "HCO3-__d_born",
-    "CO3^2-__d_born",
     "H3O+__d_born",
     "OH-__d_born",
 )
@@ -309,13 +309,15 @@ def attempt_global_regression(
     pressure_weight: float,
     speciation_weight: float,
     regularization_scale: float,
+    execution_authorized: bool = False,
+    preregistration: dict[str, Any] | None = None,
     verbose: bool = False,
 ) -> dict[str, Any]:
     vle_targets, spec_targets = load_global_targets(max_pressure_records=max_pressure_records, max_speciation_records=max_speciation_records)
     base = load_initial_values()
     x0 = np.asarray([base[name] for name in GLOBAL_FIT_NAMES], dtype=float)
     initial_values = fit_vector_to_values(x0, base=base)
-    attempted_optimization = int(max_nfev) >= 1 and len(vle_targets) <= 3 and len(spec_targets) <= 3
+    attempted_optimization = bool(execution_authorized) and int(max_nfev) >= 1
     if attempted_optimization:
         require_regression_execution_admitted()
     if attempted_optimization:
@@ -451,6 +453,7 @@ def attempt_global_regression(
             "regularization_scale": float(regularization_scale),
         },
         "attempted_optimization": attempted_optimization,
+        "preregistration": preregistration,
     }
 
 
@@ -525,6 +528,12 @@ def write_global_artifacts(payload: dict[str, Any], output_dir: Path) -> dict[st
         "speciation_metrics": payload["speciation_metrics"],
         "claim_boundary": payload["claim_boundary"],
     }
+    preregistration = payload.get("preregistration")
+    if isinstance(preregistration, dict):
+        summary["preregistration_sha256"] = preregistration["sha256"]
+        summary["preregistration_contract"] = preregistration["payload"]
+        summary["wall_time_seconds"] = preregistration.get("wall_time_seconds")
+        summary["wall_time_ceiling_seconds"] = preregistration.get("wall_time_ceiling_seconds")
     write_json(output_dir / "global_regression_summary.json", summary)
     return summary
 

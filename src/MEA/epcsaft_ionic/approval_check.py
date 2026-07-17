@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from MEA.epcsaft_ionic.model import write_json
+from MEA.epcsaft_ionic.preregistration import canonical_sha256
 
 CARBONATE_BORN_PARAMETERS = ("HCO3-__d_born", "CO3^2-__d_born")
 MAJOR_SPECIATION_GATES = {
@@ -56,13 +57,54 @@ def _native_summary(summary: dict[str, Any]) -> dict[str, Any]:
     return native if isinstance(native, dict) else {}
 
 
-def evaluate_global_regression_approval(summary: dict[str, Any]) -> dict[str, Any]:
+def evaluate_global_regression_approval(
+    summary: dict[str, Any],
+    *,
+    require_preregistration: bool = False,
+    expected_preregistration_sha256: str | None = None,
+) -> dict[str, Any]:
     reasons: list[str] = []
     warnings: list[str] = []
     native = _native_summary(summary)
     optimizer = summary.get("optimizer", {}) if isinstance(summary.get("optimizer"), dict) else {}
     active_bounds = _active_bounds(summary)
     values = _fit_values(summary)
+
+    recorded_preregistration_sha256 = summary.get("preregistration_sha256")
+    if require_preregistration:
+        contract = summary.get("preregistration_contract")
+        if expected_preregistration_sha256 is None:
+            reasons.append("validated_preregistration_hash_missing")
+        elif recorded_preregistration_sha256 != expected_preregistration_sha256:
+            reasons.append("preregistration_hash_mismatch")
+        if not isinstance(contract, dict):
+            reasons.append("preregistration_contract_missing")
+        else:
+            if canonical_sha256(contract) != recorded_preregistration_sha256:
+                reasons.append("preregistration_contract_hash_mismatch")
+            parameter_names = [
+                parameter.get("name")
+                for parameter in contract.get("parameters", [])
+                if isinstance(parameter, dict)
+            ]
+            if summary.get("fit_parameters") != parameter_names:
+                reasons.append("preregistered_parameter_order_mismatch")
+            if summary.get("target_counts") != contract.get("target_counts"):
+                reasons.append("preregistered_target_counts_mismatch")
+            contract_objective = contract.get("objective", {})
+            expected_weights = {
+                "pressure_weight": contract_objective.get("target_weights", {}).get("pressure"),
+                "speciation_weight": contract_objective.get("target_weights", {}).get("speciation"),
+                "regularization_scale": contract_objective.get("regularization_scale"),
+            }
+            if summary.get("objective_weights") != expected_weights:
+                reasons.append("preregistered_objective_mismatch")
+        elapsed = _as_float(summary.get("wall_time_seconds"))
+        ceiling = _as_float(summary.get("wall_time_ceiling_seconds"))
+        if elapsed is None or ceiling is None:
+            reasons.append("preregistered_wall_time_accounting_missing")
+        elif elapsed > ceiling:
+            reasons.append("preregistered_wall_time_ceiling_exceeded")
 
     if summary.get("completion_status") != "completed":
         reasons.append("completion_status_not_completed")
@@ -74,6 +116,10 @@ def evaluate_global_regression_approval(summary: dict[str, Any]) -> dict[str, An
         reasons.append("native_fit_function_missing")
     if native.get("fit_success") is not True:
         reasons.append("native_fit_success_not_true")
+    if require_preregistration:
+        for diagnostic in ("fit_success", "failure_count", "active_bounds", "by_target_type"):
+            if diagnostic not in native:
+                reasons.append(f"required_native_diagnostic_missing:{diagnostic}")
 
     failure_count = native.get("failure_count", summary.get("failure_count"))
     if failure_count is None:
@@ -130,6 +176,7 @@ def evaluate_global_regression_approval(summary: dict[str, Any]) -> dict[str, An
         "warnings": warnings,
         "carbonate_movement_threshold": CARBONATE_MOVEMENT_THRESHOLD,
         "required_major_speciation_gates": MAJOR_SPECIATION_GATES,
+        "preregistration_sha256": recorded_preregistration_sha256,
     }
 
 
@@ -140,8 +187,18 @@ def assert_global_regression_promotion_allowed(summary: dict[str, Any]) -> dict[
     return approval
 
 
-def write_global_regression_approval(summary: dict[str, Any], output_dir: Path) -> dict[str, Any]:
-    approval = evaluate_global_regression_approval(summary)
+def write_global_regression_approval(
+    summary: dict[str, Any],
+    output_dir: Path,
+    *,
+    require_preregistration: bool = False,
+    expected_preregistration_sha256: str | None = None,
+) -> dict[str, Any]:
+    approval = evaluate_global_regression_approval(
+        summary,
+        require_preregistration=require_preregistration,
+        expected_preregistration_sha256=expected_preregistration_sha256,
+    )
     write_json(output_dir / "global_regression_approval.json", approval)
     return approval
 
