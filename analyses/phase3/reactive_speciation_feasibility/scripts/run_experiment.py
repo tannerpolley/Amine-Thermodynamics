@@ -1,0 +1,589 @@
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+import math
+import os
+import subprocess
+from pathlib import Path
+from time import perf_counter
+from typing import Any
+
+import numpy as np
+
+from MEA.epcsaft_ionic.speciation_feasibility import ActivityState, solve_activity_speciation
+from MEA.smith_missen.ideal_speciation import REACTION_IDS, REACTION_MATRIX, SPECIES_9, solve_ideal_speciation
+
+ROOT = Path(__file__).resolve().parents[4]
+ANALYSIS_ROOT = ROOT / "analyses" / "phase3" / "reactive_speciation_feasibility"
+RESULTS = ANALYSIS_ROOT / "results"
+PINNED_RECEIPT = RESULTS / "pinned_reference.json"
+FINAL_RECEIPT = RESULTS / "reactive_speciation_feasibility_receipt.json"
+PARAMETER_ROOT = ROOT / "data" / "reference" / "epcsaft_datasets" / "MEA_CO2_H2O_phase2"
+PURE_CSV = PARAMETER_ROOT / "pure" / "any_solvent.csv"
+KIJ_CSV = PARAMETER_ROOT / "mixed" / "binary_interaction" / "k_ij.csv"
+TEMPERATURE_K = 313.15
+PRESSURE_PA = 101325.0
+MEA_WEIGHT_FRACTION = 0.30
+LOADINGS = (0.20, 0.40, 0.60)
+PERTURBATION_SEED = 20260717
+
+CLEAN_COMPONENT_IDS = (
+    "carbon-dioxide",
+    "monoethanolamine",
+    "water",
+    "protonated-monoethanolamine",
+    "carbamate-anion",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion",
+)
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _jsonable(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {str(key): _jsonable(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_jsonable(item) for item in value]
+    if isinstance(value, np.ndarray):
+        return [_jsonable(item) for item in value.tolist()]
+    if isinstance(value, (np.integer, np.floating)):
+        return value.item()
+    if isinstance(value, Path):
+        return value.as_posix()
+    return value
+
+
+def _write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(_jsonable(payload), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _git_identity(path: Path) -> dict[str, Any]:
+    def run(*args: str) -> str:
+        return subprocess.run(
+            ("git", "-C", str(path), *args),
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+
+    status = run("status", "--short")
+    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(status), "status": status}
+
+
+def _read_pure_rows() -> list[dict[str, str]]:
+    with PURE_CSV.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
+
+
+def _read_kij() -> dict[tuple[str, str], float]:
+    with KIJ_CSV.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    values: dict[tuple[str, str], float] = {}
+    for row in rows:
+        left = str(row["component"])
+        for right in SPECIES_9:
+            if left == right:
+                continue
+            values[tuple(sorted((left, right)))] = float(row[right])
+    return values
+
+
+def _pinned_lane() -> dict[str, Any]:
+    import epcsaft
+
+    from MEA.epcsaft_ionic.model import solve_activity_speciation as solve_pinned
+    from MEA.epcsaft_ionic.model import state_for_x
+
+    states = []
+    for loading in LOADINGS:
+        seed = solve_ideal_speciation(loading, MEA_WEIGHT_FRACTION, TEMPERATURE_K).mole_fractions
+        started = perf_counter()
+        prediction = solve_pinned(
+            loading,
+            TEMPERATURE_K,
+            PRESSURE_PA,
+            seed,
+            {},
+            dataset=PARAMETER_ROOT,
+        )
+        elapsed = perf_counter() - started
+        state = state_for_x(seed, TEMPERATURE_K, PRESSURE_PA, {}, dataset=PARAMETER_ROOT)
+        gamma_map = state.activity_coefficient()
+        ln_phi = np.asarray(state.fugacity_coefficient(natural_log=True), dtype=float)
+        log_gamma = np.asarray([math.log(float(gamma_map[name])) for name in SPECIES_9])
+        states.append(
+            {
+                "loading": loading,
+                "seed_mole_fractions": dict(zip(SPECIES_9, seed.tolist())),
+                "accepted": prediction.accepted,
+                "solver_returned_success": prediction.solver_returned_success,
+                "rejection_reason": prediction.rejection_reason,
+                "message": prediction.message,
+                "mole_fractions": dict(zip(SPECIES_9, prediction.x.tolist())),
+                "activity_coefficients": prediction.activity_coefficients,
+                "reaction_residuals": prediction.reaction_residuals,
+                "mass_balance_residuals": prediction.mass_balance_residuals,
+                "charge_residual": prediction.charge_residual,
+                "state_failure_count": prediction.state_failure_count,
+                "elapsed_seconds": elapsed,
+                "seed_log_fugacity_coefficients": dict(zip(SPECIES_9, ln_phi.tolist())),
+                "seed_log_activity_coefficients": dict(zip(SPECIES_9, log_gamma.tolist())),
+                "seed_reference_log_fugacity": dict(zip(SPECIES_9, (ln_phi - log_gamma).tolist())),
+            }
+        )
+    return {
+        "lane": "pinned_epcsaft_1_5_2",
+        "epcsaft_version": epcsaft.__version__,
+        "epcsaft_module_file": Path(epcsaft.__file__).name,
+        "temperature_K": TEMPERATURE_K,
+        "pressure_Pa": PRESSURE_PA,
+        "mea_weight_fraction": MEA_WEIGHT_FRACTION,
+        "states": states,
+    }
+
+
+def _build_clean_eos():
+    from epcsaft import EPCSAFT, ParameterBundle, unit_registry as u
+    from epcsaft.records import (
+        AssociationParameterRecord,
+        ComponentRecord,
+        ConstantPlusSumOfExponentialsCorrelation,
+        ExponentialTerm,
+        ModelParameterRecord,
+        PairParameterRecord,
+        SingleParameterRecord,
+        SiteRecord,
+        SourceRecord,
+        ValidityDomain,
+    )
+
+    pure_rows = _read_pure_rows()
+    by_species = {row["component"]: row for row in pure_rows}
+    component_by_species = dict(zip(SPECIES_9, CLEAN_COMPONENT_IDS))
+    provenance = {
+        "source_id": "mea-phase-two-artifact",
+        "locator": "MEA Phase 2 nonpromoted parameter artifact",
+        "domain_id": "diagnostic-domain",
+    }
+    components = tuple(
+        ComponentRecord(component_id, name=species, aliases=(species,))
+        for species, component_id in component_by_species.items()
+    )
+    singles = []
+    correlations = []
+    for species, component_id in component_by_species.items():
+        row = by_species[species]
+        slug = component_id
+        singles.extend(
+            (
+                SingleParameterRecord(f"{slug}-molar-mass", component_id, "molar_mass", float(row["MW"]) * u.kilogram / u.mole, **provenance),
+                SingleParameterRecord(f"{slug}-segment-count", component_id, "segment_count", float(row["m"]), **provenance),
+                SingleParameterRecord(f"{slug}-dispersion-energy", component_id, "dispersion_energy_over_k", float(row["e"]) * u.kelvin, **provenance),
+                SingleParameterRecord(f"{slug}-charge", component_id, "charge_number", int(row["z"]), **provenance),
+                SingleParameterRecord(f"{slug}-solvation-factor", component_id, "solvation_factor", float(row["f_solv"]), **provenance),
+            )
+        )
+        if species == "H2O":
+            correlations.append(
+                ConstantPlusSumOfExponentialsCorrelation(
+                    f"{slug}-segment-diameter",
+                    component_id,
+                    "segment_diameter",
+                    2.7927 * u.angstrom,
+                    (
+                        ExponentialTerm(10.11 * u.angstrom, -0.01775 / u.kelvin),
+                        ExponentialTerm(-1.417 * u.angstrom, -0.01146 / u.kelvin),
+                    ),
+                    **provenance,
+                )
+            )
+        else:
+            singles.append(
+                SingleParameterRecord(
+                    f"{slug}-segment-diameter",
+                    component_id,
+                    "segment_diameter",
+                    float(row["s"]) * u.angstrom,
+                    **provenance,
+                )
+            )
+        if int(row["z"]) == 0:
+            singles.append(
+                SingleParameterRecord(
+                    f"{slug}-relative-permittivity",
+                    component_id,
+                    "relative_permittivity",
+                    float(row["dielc"]),
+                    **provenance,
+                )
+            )
+        else:
+            singles.append(
+                SingleParameterRecord(
+                    f"{slug}-born-diameter",
+                    component_id,
+                    "born_diameter",
+                    float(row["d_born"]) * u.angstrom,
+                    **provenance,
+                )
+            )
+
+    kij = _read_kij()
+    pairs = []
+    for left_index, left in enumerate(SPECIES_9):
+        for right in SPECIES_9[left_index + 1 :]:
+            left_id = component_by_species[left]
+            right_id = component_by_species[right]
+            pairs.append(
+                PairParameterRecord(
+                    f"kij-{left_id}-{right_id}",
+                    left_id,
+                    right_id,
+                    "k_ij",
+                    kij[tuple(sorted((left, right)))],
+                    **provenance,
+                )
+            )
+
+    associating = ("MEA", "H2O")
+    sites = tuple(
+        SiteRecord(
+            f"{component_by_species[species]}-site-{site}",
+            component_by_species[species],
+            site,
+            site,
+            1,
+            **provenance,
+        )
+        for species in associating
+        for site in ("a", "b")
+    )
+    associations = []
+    for species in associating:
+        row = by_species[species]
+        component_id = component_by_species[species]
+        for family, value, unit in (
+            ("association_energy_over_k", float(row["e_assoc"]), u.kelvin),
+            ("association_volume", float(row["vol_a"]), 1.0),
+        ):
+            associations.append(
+                AssociationParameterRecord(
+                    f"{component_id}-self-{family.replace('_', '-')}",
+                    component_id,
+                    "a",
+                    component_id,
+                    "b",
+                    family,
+                    value * unit,
+                    **provenance,
+                )
+            )
+    water_sigma = 2.7927 + 10.11 * math.exp(-0.01775 * TEMPERATURE_K) - 1.417 * math.exp(-0.01146 * TEMPERATURE_K)
+    mea_sigma = float(by_species["MEA"]["s"])
+    cross_energy = 0.5 * (float(by_species["H2O"]["e_assoc"]) + float(by_species["MEA"]["e_assoc"]))
+    cross_volume = math.sqrt(float(by_species["H2O"]["vol_a"]) * float(by_species["MEA"]["vol_a"])) * (
+        math.sqrt(water_sigma * mea_sigma) / (0.5 * (water_sigma + mea_sigma))
+    ) ** 3
+    for water_site, mea_site in (("a", "b"), ("b", "a")):
+        for family, value, unit in (
+            ("association_energy_over_k", cross_energy, u.kelvin),
+            ("association_volume", cross_volume, 1.0),
+        ):
+            associations.append(
+                AssociationParameterRecord(
+                    f"water-{water_site}-mea-{mea_site}-{family.replace('_', '-')}",
+                    component_by_species["H2O"],
+                    water_site,
+                    component_by_species["MEA"],
+                    mea_site,
+                    family,
+                    value * unit,
+                    **provenance,
+                )
+            )
+
+    models = (
+        ModelParameterRecord("dielectric-ion-suppression", "dielectric_ion_suppression_coefficient", 7.01, **provenance),
+        ModelParameterRecord("ionic-region-permittivity", "ionic_region_relative_permittivity", 8.0, **provenance),
+    )
+    bundle = ParameterBundle.from_records(
+        bundle_id="mea-reactive-speciation-feasibility",
+        bundle_version=1,
+        purpose="package-test-fixture",
+        sources=(
+            SourceRecord(
+                "mea-phase-two-artifact",
+                "MEA-Thermodynamics Phase 2 parameter artifact",
+                "nonpromoted diagnostic translation through the clean provider public record API",
+            ),
+        ),
+        domains=(ValidityDomain("diagnostic-domain", "unknown"),),
+        components=components,
+        singles=tuple(singles),
+        pairs=tuple(pairs),
+        sites=sites,
+        associations=tuple(associations),
+        correlations=tuple(correlations),
+        models=models,
+    )
+    selected = bundle.select(CLEAN_COMPONENT_IDS)
+    return EPCSAFT(selected), bundle.fingerprint, selected.fingerprint
+
+
+class CleanProviderActivityEvaluator:
+    def __init__(self, eos: Any, unit_registry: Any) -> None:
+        self.eos = eos
+        self.u = unit_registry
+        self.evaluation_count = 0
+        self.eos_evaluation_count = 0
+
+    def _evaluate_log_phi(self, x: np.ndarray) -> tuple[np.ndarray, Any]:
+        from scipy.optimize import brentq
+
+        def pressure_residual(molar_density: float) -> float:
+            self.eos_evaluation_count += 1
+            trial = self.eos.evaluate(
+                temperature=TEMPERATURE_K * self.u.kelvin,
+                molar_density=molar_density * self.u.mole / self.u.meter**3,
+                mole_fractions=tuple(float(value) for value in x),
+            )
+            return float(trial.pressure.to("pascal").magnitude) - PRESSURE_PA
+
+        density = brentq(pressure_residual, 20000.0, 60000.0, xtol=1.0e-8)
+        self.eos_evaluation_count += 1
+        result = self.eos.evaluate(
+            temperature=TEMPERATURE_K * self.u.kelvin,
+            molar_density=density * self.u.mole / self.u.meter**3,
+            mole_fractions=tuple(float(value) for value in x),
+        )
+        if result.log_fugacity_coefficient is None:
+            raise ValueError("clean provider did not return log fugacity coefficients")
+        values = np.asarray(result.log_fugacity_coefficient, dtype=float)
+        if not np.all(np.isfinite(values)):
+            raise ValueError("clean provider returned nonfinite log fugacity coefficients")
+        return values, result
+
+    def evaluate(
+        self,
+        temperature_K: float,
+        pressure_Pa: float,
+        mole_fractions: np.ndarray,
+    ) -> ActivityState:
+        if temperature_K != TEMPERATURE_K or pressure_Pa != PRESSURE_PA:
+            raise ValueError("feasibility evaluator is fixed to the preregistered state conditions")
+        self.evaluation_count += 1
+        x = np.asarray(mole_fractions, dtype=float)
+        ln_phi, result = self._evaluate_log_phi(x)
+        reference_x = x.copy()
+        reference_x[3:] = 0.0
+        reference_x /= float(np.sum(reference_x))
+        reference_ln_phi, reference_result = self._evaluate_log_phi(reference_x)
+        log_gamma = ln_phi - reference_ln_phi
+        return ActivityState(
+            log_activities=np.log(np.clip(x, 1.0e-300, None)) + log_gamma,
+            convention="mole_fraction_activity",
+            diagnostics={
+                "mapping": "ln(a_i)=ln(x_i)+ln(phi_i)-ln(phi_i,infinite-dilution-neutral-pool)",
+                "density_mol_m3": float(result.molar_density.to("mole / meter ** 3").magnitude),
+                "reference_density_mol_m3": float(reference_result.molar_density.to("mole / meter ** 3").magnitude),
+                "pressure_residual_Pa": float(result.pressure.to("pascal").magnitude) - PRESSURE_PA,
+                "reference_pressure_residual_Pa": float(reference_result.pressure.to("pascal").magnitude) - PRESSURE_PA,
+            },
+        )
+
+    def convention_probe(self, x: np.ndarray) -> dict[str, dict[str, float]]:
+        ln_phi, _ = self._evaluate_log_phi(x)
+        reference_x = x.copy()
+        reference_x[3:] = 0.0
+        reference_x /= float(np.sum(reference_x))
+        reference_ln_phi, _ = self._evaluate_log_phi(reference_x)
+        return {
+            "log_fugacity_coefficients": dict(zip(SPECIES_9, ln_phi.tolist())),
+            "reference_log_fugacity": dict(zip(SPECIES_9, reference_ln_phi.tolist())),
+            "log_activity_coefficients": dict(zip(SPECIES_9, (ln_phi - reference_ln_phi).tolist())),
+        }
+
+
+def _perturbed_seeds(seed: np.ndarray, rng: np.random.Generator) -> list[tuple[str, np.ndarray]]:
+    seeds = [("phase1_nominal", seed)]
+    for index, scale in enumerate((0.20, 0.45), start=1):
+        perturbed = seed * np.exp(rng.normal(0.0, scale, size=seed.size))
+        perturbed /= float(np.sum(perturbed))
+        seeds.append((f"lognormal_{index}_scale_{scale:.2f}", perturbed))
+    return seeds
+
+
+def _clean_lane(pinned: dict[str, Any]) -> dict[str, Any]:
+    import epcsaft
+    from epcsaft import unit_registry as u
+
+    eos, bundle_fingerprint, parameter_fingerprint = _build_clean_eos()
+    evaluator = CleanProviderActivityEvaluator(eos, u)
+    pinned_by_loading = {float(row["loading"]): row for row in pinned["states"]}
+    rng = np.random.default_rng(PERTURBATION_SEED)
+    states = []
+    all_success = True
+    for loading in LOADINGS:
+        ideal = solve_ideal_speciation(loading, MEA_WEIGHT_FRACTION, TEMPERATURE_K)
+        runs = []
+        for seed_label, seed in _perturbed_seeds(ideal.mole_fractions, rng):
+            before_activity = evaluator.evaluation_count
+            before_eos = evaluator.eos_evaluation_count
+            result = solve_activity_speciation(
+                loading=loading,
+                mea_weight_fraction=MEA_WEIGHT_FRACTION,
+                temperature_K=TEMPERATURE_K,
+                pressure_Pa=PRESSURE_PA,
+                evaluator=evaluator,
+                initial_mole_fractions=seed,
+            )
+            all_success = all_success and result.success
+            runs.append(
+                {
+                    "seed": seed_label,
+                    "success": result.success,
+                    "message": result.message,
+                    "mole_fractions": dict(zip(SPECIES_9, result.mole_fractions.tolist())),
+                    "residuals": result.residuals,
+                    "max_abs_residual": result.max_abs_residual,
+                    "activity_evaluations": result.provider_evaluations,
+                    "activity_evaluator_count_delta": evaluator.evaluation_count - before_activity,
+                    "public_eos_evaluations": evaluator.eos_evaluation_count - before_eos,
+                    "elapsed_seconds": result.elapsed_seconds,
+                    "activity_diagnostics": result.activity_diagnostics,
+                }
+            )
+        nominal_x = np.asarray([runs[0]["mole_fractions"][name] for name in SPECIES_9])
+        repeat_x = np.asarray([[run["mole_fractions"][name] for name in SPECIES_9] for run in runs])
+        pinned_row = pinned_by_loading[loading]
+        pinned_x = np.asarray([pinned_row["mole_fractions"][name] for name in SPECIES_9])
+        states.append(
+            {
+                "loading": loading,
+                "runs": runs,
+                "max_repeat_mole_fraction_spread": float(np.max(np.ptp(repeat_x, axis=0))),
+                "nominal_minus_pinned_mole_fractions": dict(zip(SPECIES_9, (nominal_x - pinned_x).tolist())),
+                "max_abs_nominal_minus_pinned": float(np.max(np.abs(nominal_x - pinned_x))),
+                "pinned_reaction_residuals": pinned_row["reaction_residuals"],
+                "pinned_mass_balance_residuals": pinned_row["mass_balance_residuals"],
+                "pinned_charge_residual": pinned_row["charge_residual"],
+            }
+        )
+
+    probe_seed = np.asarray(
+        [pinned_by_loading[0.40]["seed_mole_fractions"][name] for name in SPECIES_9],
+        dtype=float,
+    )
+    probe = evaluator.convention_probe(probe_seed)
+    pinned_probe = pinned_by_loading[0.40]
+    clean_gamma = np.asarray([probe["log_activity_coefficients"][name] for name in SPECIES_9])
+    pinned_gamma = np.asarray([pinned_probe["seed_log_activity_coefficients"][name] for name in SPECIES_9])
+    clean_reference = np.asarray([probe["reference_log_fugacity"][name] for name in SPECIES_9])
+    pinned_reference = np.asarray([pinned_probe["seed_reference_log_fugacity"][name] for name in SPECIES_9])
+    reaction_gamma_difference = REACTION_MATRIX @ (clean_gamma - pinned_gamma)
+    return {
+        "lane": "clean_provider_public_python_api",
+        "epcsaft_version": getattr(epcsaft, "__version__", "unknown"),
+        "epcsaft_module_file": Path(epcsaft.__file__).name,
+        "bundle_fingerprint": bundle_fingerprint,
+        "parameter_fingerprint": parameter_fingerprint,
+        "activity_convention_probe": {
+            **probe,
+            "pinned_log_activity_coefficients": pinned_probe["seed_log_activity_coefficients"],
+            "pinned_reference_log_fugacity": pinned_probe["seed_reference_log_fugacity"],
+            "max_abs_log_gamma_difference": float(np.max(np.abs(clean_gamma - pinned_gamma))),
+            "max_abs_reference_log_fugacity_difference": float(np.max(np.abs(clean_reference - pinned_reference))),
+            "reaction_log_activity_coefficient_difference": dict(
+                zip(REACTION_IDS, reaction_gamma_difference.tolist())
+            ),
+            "max_abs_reaction_log_activity_coefficient_difference": float(
+                np.max(np.abs(reaction_gamma_difference))
+            ),
+            "standard_state_evidence": "Pinned 1.5.2 defines gamma_i as phi_i divided by the same-pressure infinite-dilution neutral-pool reference; the clean lane evaluates the zero-ion limit through public EPCSAFT.evaluate.",
+        },
+        "states": states,
+        "all_runs_successful": all_success,
+    }
+
+
+def _source_hashes() -> dict[str, str]:
+    paths = (
+        PURE_CSV,
+        KIJ_CSV,
+        PARAMETER_ROOT / "mixed" / "binary_interaction" / "k_hb_ij.csv",
+        PARAMETER_ROOT / "user_options.json",
+        ROOT / "src" / "MEA" / "epcsaft_ionic" / "speciation_feasibility.py",
+        Path(__file__).resolve(),
+    )
+    return {path.relative_to(ROOT).as_posix(): _sha256(path) for path in paths}
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--lane", required=True, choices=("pinned", "clean"))
+    args = parser.parse_args()
+    if args.lane == "pinned":
+        payload = _pinned_lane()
+        _write_json(PINNED_RECEIPT, payload)
+        print(PINNED_RECEIPT)
+        return
+
+    if not PINNED_RECEIPT.is_file():
+        raise FileNotFoundError(f"run --lane pinned first: {PINNED_RECEIPT}")
+    pinned = json.loads(PINNED_RECEIPT.read_text(encoding="utf-8"))
+    clean = _clean_lane(pinned)
+    provider_root_text = os.environ.get("CLEAN_PROVIDER_ROOT")
+    provider_identity = _git_identity(Path(provider_root_text)) if provider_root_text else None
+    wheel_text = os.environ.get("CLEAN_PROVIDER_WHEEL")
+    wheel = Path(wheel_text) if wheel_text else None
+    conclusion = "feasible" if clean["all_runs_successful"] else "blocked"
+    receipt = {
+        "schema_version": 1,
+        "experiment": "lightweight_mea_reactive_speciation_over_clean_provider",
+        "conclusion": conclusion,
+        "claim_boundary": "diagnostic_reference_oracle_and_seed_generator_only",
+        "regression_execution_admitted": False,
+        "parameter_promotion_allowed": False,
+        "conditions": {
+            "temperature_K": TEMPERATURE_K,
+            "pressure_Pa": PRESSURE_PA,
+            "mea_weight_fraction": MEA_WEIGHT_FRACTION,
+            "loadings": LOADINGS,
+        },
+        "source_hashes": _source_hashes(),
+        "mea_repository": _git_identity(ROOT),
+        "clean_provider_repository": provider_identity,
+        "clean_provider_wheel": (
+            {"filename": wheel.name, "sha256": _sha256(wheel)}
+            if wheel is not None and wheel.is_file()
+            else None
+        ),
+        "pinned_lane": pinned,
+        "clean_lane": clean,
+        "tasks": {
+            "1_public_parameter_construction": "completed",
+            "2_finite_convention_correct_activities": "completed",
+            "3_three_state_solve_from_phase1_seed": "completed" if clean["all_runs_successful"] else "blocked",
+            "4_composition_and_residual_comparison": "completed",
+            "5_perturbed_seed_cost_measurement": "completed",
+        },
+    }
+    _write_json(FINAL_RECEIPT, receipt)
+    print(FINAL_RECEIPT)
+
+
+if __name__ == "__main__":
+    main()

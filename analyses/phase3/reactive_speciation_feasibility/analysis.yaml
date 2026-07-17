@@ -1,0 +1,26 @@
+id: reactive_speciation_feasibility
+title: Clean-Provider Reactive Speciation Feasibility
+status: diagnostic_experiment
+summary: Tests a charge-balanced MEA-owned reactive-state solver over public clean-provider EOS evaluations against the immutable epcsaft 1.5.2 lane.
+owner: project
+inputs:
+  - path: data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2
+    kind: nonpromoted_phase2_parameter_artifact
+  - path: src/MEA/smith_missen/ideal_speciation.py
+    kind: reaction_network_and_initial_seed
+outputs:
+  - path: analyses/phase3/reactive_speciation_feasibility/results/reactive_speciation_feasibility_receipt.json
+    kind: nonpromoting_feasibility_receipt
+  - path: analyses/phase3/reactive_speciation_feasibility/results/reactive_speciation_feasibility_summary.md
+    kind: bounded_diagnostic_summary
+commands:
+  pinned:
+    - uv run python analyses/phase3/reactive_speciation_feasibility/scripts/run_experiment.py --lane pinned
+  clean:
+    - Run the clean lane with PYTHONPATH, CLEAN_PROVIDER_ROOT, and CLEAN_PROVIDER_WHEEL bound to the recorded clean-provider artifact.
+runtime:
+  class: standard
+  expected_seconds: 60
+manuscript_consumers: []
+results_policy: Track the pinned reference, final provenance-rich receipt, and bounded summary; never use this diagnostic to admit regression execution, promote parameters, or replace final integration.
+claim_boundary: does_not_admit_regression_execution_or_promote_parameters
