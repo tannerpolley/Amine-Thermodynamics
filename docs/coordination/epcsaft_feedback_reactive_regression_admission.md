@@ -65,7 +65,7 @@ Optimizer ownership, derivative support, public request/result schemas, capabili
 ## Downstream validation commands
 
 ```bash
-uv run pytest tests/test_epcsaft_ionic_native_regression.py
+uv run pytest tests/test_reactive_speciation_numerics.py tests/test_phase2_numerics.py -q
 uv run python scripts/check_epcsaft_integration.py --mode final
 ```
 
