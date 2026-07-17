@@ -1,21 +1,13 @@
 from __future__ import annotations
 
-import csv
-from pathlib import Path
 from time import perf_counter
 
-import numpy as np
-
-from MEA.epcsaft_data_inventory import load_inventory, write_inventory
 from MEA.epcsaft_runtime import (
     SPECIES,
     build_mixture,
     dataset_label,
     diagnostic_composition,
     is_finite_payload,
-    output_dir,
-    to_jsonable,
-    write_json,
 )
 
 
@@ -88,54 +80,3 @@ def run_smoke_case(
         "diagnostic_errors": errors,
         "runtime_ms": elapsed_ms,
     }
-
-
-def write_species_summary(payload: dict, out_path: Path) -> Path:
-    fugacity = payload["optional"].get("fugacity_coefficient_ln")
-    totals = None
-    terms = {}
-    if isinstance(fugacity, dict):
-        totals = fugacity.get("total")
-        terms = fugacity.get("terms", {})
-
-    rows = []
-    for i, species in enumerate(payload["species"]):
-        row = {
-            "species": species,
-            "x": payload["x"][species],
-        }
-        if totals is not None:
-            row["ln_phi_total"] = float(np.asarray(totals, dtype=float)[i])
-        if isinstance(terms, dict):
-            for term_name, values in terms.items():
-                row[f"ln_phi_{term_name}"] = float(np.asarray(values, dtype=float)[i])
-        rows.append(row)
-
-    keys = list(rows[0].keys()) if rows else ["species", "x"]
-    with out_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=keys)
-        writer.writeheader()
-        writer.writerows(rows)
-    return out_path
-
-
-def main() -> int:
-    out = output_dir("diagnostics")
-    inventory = load_inventory()
-    inventory_path = write_inventory(inventory)
-    payload = run_smoke_case()
-    json_path = write_json(out / "smoke_state.json", payload)
-    csv_path = write_species_summary(to_jsonable(payload), out / "smoke_species_terms.csv")
-    print(f"Inventory records: {len(inventory)}")
-    print(f"Wrote inventory: {inventory_path}")
-    print(f"Wrote diagnostics: {json_path}")
-    print(f"Wrote species terms: {csv_path}")
-    print(f"Smoke pressure Pa: {payload['required']['pressure_Pa']:.6g}")
-    print(f"Smoke density kg/m3: {payload['required']['mass_density_kg_m3']:.6g}")
-    if payload["diagnostic_errors"]:
-        print(f"Optional diagnostic errors: {len(payload['diagnostic_errors'])}")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
