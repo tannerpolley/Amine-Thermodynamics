@@ -3,26 +3,11 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from MEA.common.config import CANONICAL_MEA_WEIGHT_FRACTION, EPCSAFT_NEUTRAL_ANALYSIS, JOU_TEMPERATURES_C
+from MEA.common.config import CANONICAL_MEA_WEIGHT_FRACTION, JOU_TEMPERATURES_C
 from MEA.common.data_access import load_jou_vle_data
-from MEA.common.plot_export import save_plot
-from MEA.common.plot_style import (
-    EPCSAFT_NEUTRAL_LINESTYLE,
-    JOU_DATA_MARKER,
-    JOU_DATA_MARKERSIZE,
-    LEGACY_PCSAFT_LINESTYLE,
-    MODEL_LINEWIDTH,
-    REFERENCE_LINEWIDTH,
-    PRESSURE_FIGSIZE,
-    apply_pressure_axes,
-    temperature_color,
-)
-from MEA.common.reporting import write_csv_report, write_json_report
-from MEA.common.analysis_io import repo_relative_path
 from MEA.epcsaft_neutral.parameters import DATASET_DIR, SPECIES, legacy_neutral_dataset_rows
 from MEA.epcsaft_neutral.pressure import NeutralPressureResult, predict_co2_pressure_kpa
 from MEA.six_species.chemistry import LEGACY_SPECIES_6, collapse_to_apparent_ternary, legacy_true_mole_fractions
@@ -30,7 +15,6 @@ from MEA.six_species.plot_pressure import EXPECTED_MEDIAN_ABS_LOG10_ERROR
 from MEA.six_species.plot_pressure import predict_co2_pressure_kpa as predict_legacy_pcsaft_pressure_kpa
 
 
-OUT_DIR = EPCSAFT_NEUTRAL_ANALYSIS / "results" / "pressure"
 TEMPERATURES_C = JOU_TEMPERATURES_C
 
 
@@ -149,108 +133,3 @@ def compute_neutral_parity() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     summary["epcsaft_delta_vs_expected"] = summary["epcsaft_median_abs_log10_error"] - summary["expected_legacy_median_abs_log10_error"]
     summary["legacy_delta_vs_expected"] = summary["legacy_median_abs_log10_error"] - summary["expected_legacy_median_abs_log10_error"]
     return metrics, summary, pd.DataFrame(curve_rows)
-
-
-def plot_parity(curves: pd.DataFrame) -> Path:
-    title = "Neutral ePC-SAFT parity against legacy PC-SAFT pressure curves"
-    description = (
-        "Neutral ePC-SAFT and legacy PC-SAFT pressure curves are compared against Jou et al. "
-        "30 wt% MEA carbon-dioxide partial-pressure data using a shared temperature palette."
-    )
-    data = _jou_data()
-    fig, ax = plt.subplots(figsize=PRESSURE_FIGSIZE)
-    for temperature_C in TEMPERATURES_C:
-        color = temperature_color(temperature_C)
-        t_data = data[data["temperature"] == temperature_C]
-        t_curve = curves[curves["temperature_C"] == temperature_C]
-        if t_data.empty or t_curve.empty:
-            continue
-        ax.plot(
-            t_data["CO2_loading"],
-            t_data["CO2_pressure"],
-            linestyle="none",
-            marker=JOU_DATA_MARKER,
-            markersize=JOU_DATA_MARKERSIZE,
-            color=color,
-            alpha=0.9,
-            label=f"{temperature_C} C Jou data",
-        )
-        ax.plot(
-            t_curve["CO2_loading"],
-            t_curve["legacy_pcsaft_CO2_pressure_kPa"],
-            LEGACY_PCSAFT_LINESTYLE,
-            color=color,
-            alpha=0.65,
-            linewidth=REFERENCE_LINEWIDTH,
-            label=f"{temperature_C} C legacy PC-SAFT",
-        )
-        ax.plot(
-            t_curve["CO2_loading"],
-            t_curve["epcsaft_CO2_pressure_kPa"],
-            EPCSAFT_NEUTRAL_LINESTYLE,
-            color=color,
-            linewidth=MODEL_LINEWIDTH,
-            label=f"{temperature_C} C ePC-SAFT neutral",
-        )
-    apply_pressure_axes(ax, title=title)
-    ax.legend(ncol=2, title="Temperature and role")
-    fig.tight_layout()
-    return save_plot(
-        fig,
-        __file__,
-        "epcsaft_neutral_pcsaft_parity",
-        workflow_name="epcsaft_neutral/pressure",
-        title=title,
-        description=description,
-        data_path=OUT_DIR / "epcsaft_neutral_jou_parity_curves.csv",
-    )
-
-
-def main() -> int:
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    dataset_paths = write_neutral_dataset()
-    metrics, summary, curves = compute_neutral_parity()
-    metrics_path = OUT_DIR / "epcsaft_neutral_jou_parity_metrics.csv"
-    summary_path = OUT_DIR / "epcsaft_neutral_jou_parity_summary.csv"
-    curves_path = OUT_DIR / "epcsaft_neutral_jou_parity_curves.csv"
-    write_csv_report(metrics_path, metrics)
-    write_csv_report(summary_path, summary)
-    write_csv_report(curves_path, curves)
-    plot_path = plot_parity(curves)
-    summary_json_path = OUT_DIR / "epcsaft_neutral_jou_parity_summary.json"
-    write_json_report(
-        summary_json_path,
-        {
-            "dataset_paths": [repo_relative_path(path) for path in dataset_paths],
-            "metrics": repo_relative_path(metrics_path),
-            "summary": repo_relative_path(summary_path),
-            "curves": repo_relative_path(curves_path),
-            "plot": repo_relative_path(plot_path),
-            "acceptance": {
-                "max_abs_epcsaft_delta_vs_expected_limit": 0.03,
-                "max_abs_epcsaft_delta_vs_expected": float(summary["epcsaft_delta_vs_expected"].abs().max()),
-                "all_curve_points_solved": bool(curves["epcsaft_success"].astype(bool).all()) if not curves.empty else False,
-            },
-        },
-    )
-
-    print(f"Neutral ePC-SAFT dataset: {DATASET_DIR}")
-    print(f"Neutral ePC-SAFT metrics: {metrics_path}")
-    print(f"Neutral ePC-SAFT summary: {summary_path}")
-    print(f"Neutral ePC-SAFT curves: {curves_path}")
-    print(f"Neutral ePC-SAFT plot: {plot_path}")
-    print(summary.to_string(index=False))
-
-    max_delta = float(summary["epcsaft_delta_vs_expected"].abs().max())
-    all_solved = bool(curves["epcsaft_success"].astype(bool).all()) if not curves.empty else False
-    if not all_solved:
-        print("ERROR: not all neutral ePC-SAFT curve points solved.")
-        return 1
-    if max_delta > 0.03:
-        print(f"ERROR: neutral ePC-SAFT metrics drifted by {max_delta:.4f}, above +/-0.03 acceptance.")
-        return 1
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

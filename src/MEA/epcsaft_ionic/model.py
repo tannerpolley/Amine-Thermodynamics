@@ -10,6 +10,7 @@ from typing import Any, Iterable
 
 import numpy as np
 import pandas as pd
+from scipy.optimize import minimize
 
 from MEA.common.config import CANONICAL_MEA_WEIGHT_FRACTION, EPCSAFT_DATASET_ROOT, EPCSAFT_IONIC_ANALYSIS
 from MEA.common.data_access import (
@@ -19,8 +20,14 @@ from MEA.common.data_access import (
 )
 from MEA.common.reaction_catalog import activity_coefficient_map
 from MEA.common.solver_acceptance import evaluate_solver_acceptance
-from MEA.epcsaft_present_plots import _as_float, reconcile_speciation_row
-from MEA.epcsaft_runtime import ADVANCED_BORN_USER_OPTIONS, DATASET_DIR, SPECIES, load_epcsaft, to_jsonable
+from MEA.epcsaft_runtime import (
+    ADVANCED_BORN_USER_OPTIONS,
+    DATASET_DIR,
+    SPECIES,
+    diagnostic_composition,
+    load_epcsaft,
+    to_jsonable,
+)
 
 SPECIES_INDEX = {name: idx for idx, name in enumerate(SPECIES)}
 FIT_DATASET_DIR = EPCSAFT_DATASET_ROOT / "MEA_CO2_H2O_ionic_fit"
@@ -31,6 +38,83 @@ SPECIATION_OUT_DIR = EPCSAFT_IONIC_ANALYSIS / "results" / "speciation"
 SUMMARY_OUT_DIR = EPCSAFT_IONIC_ANALYSIS / "results" / "summary"
 PARAMETER_CSV = FIT_DATASET_DIR / "pure" / "any_solvent.csv"
 K_IJ_CSV = FIT_DATASET_DIR / "mixed" / "binary_interaction" / "k_ij.csv"
+
+
+def _as_float(row: dict[str, str], key: str) -> float:
+    value = row.get(key, "")
+    return float(value) if value not in ("", None) else np.nan
+
+
+def reconcile_speciation_row(row: dict[str, str]) -> np.ndarray:
+    loading = _as_float(row, "CO2_loading")
+    prior = diagnostic_composition(float(loading))
+    measured = {
+        "MEA": _as_float(row, "MEA"),
+        "MEAH+": _as_float(row, "MEAH^+"),
+        "MEACOO-": _as_float(row, "MEACOO^-"),
+        "HCO3-": _as_float(row, "HCO3^-"),
+        "CO3^2-": _as_float(row, "CO3^2-"),
+    }
+    species_indices = {
+        "CO2": 0,
+        "MEA": 1,
+        "MEAH+": 3,
+        "MEACOO-": 4,
+        "HCO3-": 5,
+        "CO3^2-": 6,
+    }
+    names = ["CO2", "MEA", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-"]
+    x0 = np.array([prior[species_indices[name]] for name in names], dtype=float)
+    for name, value in measured.items():
+        if np.isfinite(value):
+            x0[names.index(name)] = max(float(value), 1.0e-12)
+    x0 = np.clip(x0, 1.0e-12, 0.9)
+
+    def unpack(values: np.ndarray) -> np.ndarray:
+        x_co2, x_mea, x_meah, x_meacoo, x_hco3, x_co3 = values
+        anion_charge = x_meacoo + x_hco3 + 2.0 * x_co3
+        cation_charge = x_meah
+        if anion_charge > cation_charge:
+            x_h3o = anion_charge - cation_charge
+            x_oh = 1.0e-12
+        else:
+            x_h3o = 1.0e-12
+            x_oh = cation_charge - anion_charge
+        x_h2o = 1.0 - float(np.sum(values)) - x_h3o - x_oh
+        return np.array(
+            [x_co2, x_mea, x_h2o, x_meah, x_meacoo, x_hco3, x_co3, x_h3o, x_oh],
+            dtype=float,
+        )
+
+    def objective(values: np.ndarray) -> float:
+        full = unpack(values)
+        cost = 0.0
+        for name, measured_value in measured.items():
+            if np.isfinite(measured_value):
+                idx = species_indices[name]
+                scale = max(abs(float(measured_value)), 0.002)
+                cost += ((full[idx] - float(measured_value)) / scale) ** 2
+        total_mea = full[1] + full[3] + full[4]
+        total_carbon = full[0] + full[4] + full[5] + full[6]
+        balance_scale = max(float(loading) * max(total_mea, 1.0e-8), 0.002)
+        cost += 100.0 * ((total_carbon - float(loading) * total_mea) / balance_scale) ** 2
+        water_penalty = max(0.0, 0.05 - full[2])
+        cost += 1000.0 * water_penalty**2
+        cost += 0.01 * float(np.sum(((values - x0) / np.maximum(x0, 0.002)) ** 2))
+        return float(cost)
+
+    result = minimize(
+        objective,
+        x0,
+        method="SLSQP",
+        bounds=[(1.0e-12, 0.9)] * len(x0),
+        options={"maxiter": 500, "ftol": 1.0e-12},
+    )
+    values = result.x if result.success else x0
+    full = unpack(np.asarray(values, dtype=float))
+    if full[2] <= 0 or not np.all(np.isfinite(full)):
+        return prior
+    return full / float(np.sum(full))
 
 
 def equilibrium_log_constants(temperature_K: float) -> np.ndarray:
