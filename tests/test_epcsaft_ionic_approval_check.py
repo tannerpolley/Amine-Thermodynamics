@@ -86,9 +86,11 @@ class EpcsaftIonicApprovalCheckTests(unittest.TestCase):
         self.assertIn("carbonate_movement_without_coupled_pressure_speciation_evidence", approval["reasons"])
 
     def test_approves_completed_coupled_package_fit(self) -> None:
-        approval = evaluate_global_regression_approval(completed_summary())
+        summary = completed_summary()
+        approval = evaluate_global_regression_approval(summary)
         self.assertTrue(approval["approved"])
         self.assertEqual(approval["decision"], "approve_global_regression_promotion")
+        self.assertEqual(approval["candidate_sha256"], canonical_sha256(summary))
 
     def test_final_candidate_requires_matching_preregistration_hash(self) -> None:
         summary = completed_summary()
