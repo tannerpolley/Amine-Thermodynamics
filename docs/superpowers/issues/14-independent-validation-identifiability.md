@@ -5,6 +5,7 @@
 Parent Issue: https://github.com/tannerpolley/MEA-Thermodynamics/issues/6
 **Source Spec:** docs/superpowers/specs/2026-07-13-independent-validation-identifiability-design.md
 **Source Plan:** docs/superpowers/plans/2026-07-13-independent-validation-identifiability-plan.md
+**Submission Sprint:** docs/superpowers/plans/2026-07-17-fluid-phase-equilibria-submission-sprint-plan.md
 **Labels:** superpowers:issue, kind:deliverable, area:validation, priority:submission-blocker, status:blocked, type:analysis
 Sub-Issue Role: leaf
 Executable: true
@@ -43,6 +44,10 @@ Executable: true
 The frozen manifest contains complete source/composition/temperature groups, including 15/20 wt% speciation transfer groups and non-30-wt% VLE groups. Its failed-row policy counts every attempted reserved row as a validation outcome; omission is forbidden. Candidate-bound validation still waits for Issue #13.
 
 The immutable candidate must be produced through the clean, admitted `ePC-SAFT/ePC-SAFT-regression` contract after its stage-approved promotion. Historical lab output, scaffolding, and zero-evaluation summaries cannot satisfy this prerequisite.
+
+## Submission Sprint Role
+
+This is the Tuesday, July 21 scientific freeze gate. It consumes the exact promoted #13 candidate, evaluates all 220 reserved observations with failures retained, and issues the only validation/identifiability receipt that #16 and #18 may use.
 
 ## Non-goals
 

@@ -5,6 +5,7 @@
 Parent Issue: https://github.com/tannerpolley/MEA-Thermodynamics/issues/15
 **Source Spec:** docs/superpowers/specs/2026-07-13-submission-metadata-archive-design.md
 **Source Plan:** docs/superpowers/plans/2026-07-13-submission-metadata-archive-plan.md
+**Submission Sprint:** docs/superpowers/plans/2026-07-17-fluid-phase-equilibria-submission-sprint-plan.md
 **Labels:** superpowers:issue, kind:deliverable, area:release, priority:submission-blocker, status:hitl, type:manuscript
 Sub-Issue Role: leaf
 Executable: true
@@ -34,6 +35,10 @@ Executable: true
 
 - Human metadata and legal decisions.
 - Final scientific closeout before irreversible release/archive publication.
+
+## Submission Sprint Role
+
+Author-controlled metadata collection proceeds in parallel with the scientific chain. No ledger value is inferred, and no tag, release, archive deposit, license decision, or DOI publication occurs without explicit author approval after the scientific freeze.
 
 ## Non-goals
 

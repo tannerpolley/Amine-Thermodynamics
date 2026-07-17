@@ -4,6 +4,7 @@
 **GitHub Milestone:** Manuscript Submission
 **Source Spec:** docs/superpowers/specs/2026-07-13-manuscript-package-release-workstream-design.md
 **Source Plan:** docs/superpowers/plans/2026-07-13-manuscript-package-release-workstream-plan.md
+**Submission Sprint:** docs/superpowers/plans/2026-07-17-fluid-phase-equilibria-submission-sprint-plan.md
 **Labels:** superpowers:issue, kind:workstream, area:reproducibility, priority:submission-blocker, status:blocked, type:manuscript
 Sub-Issue Role: parent
 Executable: false
@@ -34,6 +35,10 @@ Executable: false
 - https://github.com/tannerpolley/MEA-Thermodynamics/issues/16
 - https://github.com/tannerpolley/MEA-Thermodynamics/issues/17
 - https://github.com/tannerpolley/MEA-Thermodynamics/issues/18
+
+## Submission Sprint Role
+
+This workstream aggregates the Wednesday scientific manuscript freeze and Thursday publication freeze. It closes only when #16–18 have mutually consistent receipts; it does not permit a fixed-parameter or incomplete-regression submission fallback.
 
 ## Non-goals
 

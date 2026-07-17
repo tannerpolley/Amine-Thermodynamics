@@ -4,6 +4,7 @@
 **GitHub Milestone:** Manuscript Submission
 **Source Spec:** docs/superpowers/specs/2026-07-13-final-submission-readiness-gate-design.md
 **Source Plan:** docs/superpowers/plans/2026-07-13-final-submission-readiness-gate-plan.md
+**Submission Sprint:** docs/superpowers/plans/2026-07-17-fluid-phase-equilibria-submission-sprint-plan.md
 **Labels:** superpowers:issue, kind:workstream, priority:submission-blocker, status:hitl, type:manuscript
 Sub-Issue Role: parent
 Executable: false
@@ -29,6 +30,10 @@ Executable: false
 - [ ] #15 closes with methods, metadata/archive, visual, and editorial evidence.
 - [ ] Final confidence validation, pinned ePC-SAFT integration, deterministic PDF, metadata, and archive checks pass.
 - [ ] The corresponding author records an explicit submit or hold decision.
+
+## Submission Sprint Role
+
+This is the Friday, July 24 submit-or-hold gate. It may open only after #6 and #15 have immutable closeout receipts and all final proof lanes have been rerun from the frozen submission commit. Portal submission remains an explicit human action.
 
 ## Blocked by
 

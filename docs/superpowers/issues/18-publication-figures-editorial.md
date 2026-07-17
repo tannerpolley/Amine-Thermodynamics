@@ -5,6 +5,7 @@
 Parent Issue: https://github.com/tannerpolley/MEA-Thermodynamics/issues/15
 **Source Spec:** docs/superpowers/specs/2026-07-13-publication-figures-editorial-design.md
 **Source Plan:** docs/superpowers/plans/2026-07-13-publication-figures-editorial-plan.md
+**Submission Sprint:** docs/superpowers/plans/2026-07-17-fluid-phase-equilibria-submission-sprint-plan.md
 **Labels:** superpowers:issue, kind:deliverable, area:editorial, priority:submission-blocker, status:blocked, type:manuscript
 Sub-Issue Role: leaf
 Executable: true
@@ -33,6 +34,10 @@ Executable: true
 ## Blocked by
 
 - https://github.com/tannerpolley/MEA-Thermodynamics/issues/14
+
+## Submission Sprint Role
+
+Final scientific visuals begin only after Tuesday's #14 receipt. Figure, table, caption, and narrative edits must consume the immutable promoted candidate and reserved-validation outputs; no provisional or zero-evaluation artifact may survive the Wednesday manuscript freeze.
 
 ## Non-goals
 
