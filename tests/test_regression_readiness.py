@@ -150,6 +150,7 @@ class RegressionReadinessTests(unittest.TestCase):
     def test_tracked_summary_is_fail_closed_and_auditable(self) -> None:
         payload = json.loads(SUMMARY.read_text(encoding="utf-8"))
         self.assertEqual(payload["leakage_findings"], [])
+        self.assertFalse(payload["upstream_execution_admitted"])
         self.assertEqual(payload["readiness_decision"], "preregistration_ready_upstream_execution_blocked")
         self.assertIn("upstream_admission", payload["blocking_conditions"])
         self.assertGreater(payload["role_counts"]["active_training"], 0)

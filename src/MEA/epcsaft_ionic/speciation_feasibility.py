@@ -15,6 +15,8 @@ from MEA.smith_missen.ideal_speciation import (
     SOLVER_TOLERANCE,
     SPECIES_9,
     SPECIES_INDEX,
+    _component_totals,
+    _named_residuals,
     equilibrium_log_constants,
     solve_ideal_speciation,
     unloaded_water_to_amine_ratio,
@@ -109,14 +111,6 @@ def _to_charge_balanced_variables(mole_fractions: np.ndarray) -> np.ndarray:
     )
 
 
-def _component_totals(x: np.ndarray) -> tuple[float, float, float, float]:
-    carbon_total = x[SPECIES_INDEX["CO2"]] + x[SPECIES_INDEX["MEACOO-"]] + x[SPECIES_INDEX["HCO3-"]] + x[SPECIES_INDEX["CO3^2-"]]
-    amine_total = x[SPECIES_INDEX["MEA"]] + x[SPECIES_INDEX["MEAH+"]] + x[SPECIES_INDEX["MEACOO-"]]
-    water_total = x[SPECIES_INDEX["H2O"]] + x[SPECIES_INDEX["HCO3-"]] + x[SPECIES_INDEX["CO3^2-"]] + x[SPECIES_INDEX["H3O+"]] + x[SPECIES_INDEX["OH-"]]
-    charge = x[SPECIES_INDEX["MEAH+"]] + x[SPECIES_INDEX["H3O+"]] - x[SPECIES_INDEX["MEACOO-"]] - x[SPECIES_INDEX["HCO3-"]] - 2.0 * x[SPECIES_INDEX["CO3^2-"]] - x[SPECIES_INDEX["OH-"]]
-    return float(carbon_total), float(amine_total), float(water_total), float(charge)
-
-
 def _validate_activity_state(state: ActivityState) -> np.ndarray:
     if state.convention != ACTIVITY_CONVENTION:
         raise ValueError(
@@ -154,17 +148,6 @@ def _raw_residuals(
         dtype=float,
     )
     return np.concatenate([reaction_residuals, balance_residuals]), activity_state
-
-
-def _named_residuals(raw: np.ndarray) -> dict[str, float]:
-    named = {
-        f"{reaction_id}_ln_residual": float(value)
-        for reaction_id, value in zip(REACTION_IDS, raw[: len(REACTION_IDS)])
-    }
-    named["carbon_loading_residual"] = float(raw[5])
-    named["water_amine_ratio_residual"] = float(raw[6])
-    named["electroneutrality_residual"] = float(raw[7])
-    return named
 
 
 def solve_activity_speciation(

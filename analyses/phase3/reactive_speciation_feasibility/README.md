@@ -13,4 +13,4 @@ PYTHONPATH=/path/to/clean/provider/site-packages:src \
   uv run --no-sync python analyses/phase3/reactive_speciation_feasibility/scripts/run_experiment.py --lane clean
 ```
 
-The clean run writes `results/reactive_speciation_feasibility_receipt.json`.
+The clean run writes `results/reactive_speciation_feasibility_receipt.json`, which hash-binds the separately tracked pinned-lane receipt instead of duplicating it.

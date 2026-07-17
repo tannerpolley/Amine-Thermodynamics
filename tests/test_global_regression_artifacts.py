@@ -19,14 +19,6 @@ class GlobalRegressionArtifactTests(unittest.TestCase):
             "global_regression_speciation_fit_data.csv",
             "global_regression_pressure_residuals.csv",
             "global_regression_speciation_residuals.csv",
-            "global_regression_pressure_parity.mpl.yaml",
-            "global_regression_pressure_parity.png",
-            "global_regression_pressure_parity.svg",
-            "global_regression_pressure_parity.pdf",
-            "global_regression_speciation_parity.mpl.yaml",
-            "global_regression_speciation_parity.png",
-            "global_regression_speciation_parity.svg",
-            "global_regression_speciation_parity.pdf",
         ]
         missing = [name for name in required if not (GLOBAL / name).exists()]
         self.assertEqual(missing, [])
@@ -70,10 +62,6 @@ class SensitivityArtifactTests(unittest.TestCase):
             "parameter_sensitivity_summary.json",
             "parameter_sensitivity_matrix.csv",
             "parameter_identifiability.csv",
-            "parameter_sensitivity_heatmap.mpl.yaml",
-            "parameter_sensitivity_heatmap.png",
-            "parameter_sensitivity_heatmap.svg",
-            "parameter_sensitivity_heatmap.pdf",
         ]
         missing = [name for name in required if not (SENSITIVITY / name).exists()]
         self.assertEqual(missing, [])

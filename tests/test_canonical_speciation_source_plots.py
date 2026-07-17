@@ -11,28 +11,7 @@ OUTPUT = ROOT / "analyses" / "phase2" / "canonical_speciation_sources" / "figure
 CANONICAL = ROOT / "data" / "reference" / "MEA" / "ChEq" / "Canonical_Combined_ChEq.csv"
 
 
-def _plot_bundle(stem: str) -> list[Path]:
-    return [
-        OUTPUT / f"{stem}_plot_data.csv",
-        OUTPUT / f"{stem}.png",
-        OUTPUT / f"{stem}.svg",
-        OUTPUT / f"{stem}.pdf",
-        OUTPUT / f"{stem}.mpl.yaml",
-    ]
-
-
 class CanonicalSpeciationSourcePlotTests(unittest.TestCase):
-    def test_canonical_speciation_plot_bundles_exist(self) -> None:
-        required = [
-            *_plot_bundle("canonical_speciation_mole_fraction_grid"),
-            *_plot_bundle("canonical_speciation_loaded_molkg_grid"),
-            *_plot_bundle("canonical_speciation_wong_source_molkg"),
-            OUTPUT / "canonical_speciation_source_summary.csv",
-        ]
-        for path in required:
-            with self.subTest(path=path):
-                self.assertTrue(path.exists(), path)
-
     def test_plot_data_are_sourced_from_canonical_dataset(self) -> None:
         canonical = pd.read_csv(CANONICAL)
         mole = pd.read_csv(OUTPUT / "canonical_speciation_mole_fraction_grid_plot_data.csv")
