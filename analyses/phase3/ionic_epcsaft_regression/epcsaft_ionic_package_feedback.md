@@ -463,7 +463,7 @@ diagnostic trend.
 src/MEA/epcsaft_ionic/model.py
 src/MEA/epcsaft_ionic/regress_parameters.py
 src/MEA/epcsaft_ionic/plot_results.py
-tests/test_epcsaft_ionic.py
+tests/test_reactive_speciation_numerics.py
 analyses/phase3/ionic_epcsaft_regression/results/summary/ionic_evaluation_summary.json
 ```
 

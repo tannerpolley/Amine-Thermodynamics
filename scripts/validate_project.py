@@ -14,7 +14,7 @@ QUICK_COMMANDS = [
     [PY, "scripts/doctor.py"],
     [PY, "scripts/check_no_local_paths.py"],
     [PY, "-m", "compileall", "-x", r"results[\\/]+runs", "src", "tests", "scripts", "analyses"],
-    [PY, "-m", "unittest", "discover", "tests", "-v"],
+    [PY, "-m", "pytest", "-q"],
 ]
 
 PLOT_COMMANDS = [
