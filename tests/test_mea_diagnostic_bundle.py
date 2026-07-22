@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import json
+import math
 from pathlib import Path
 
 import pytest
@@ -12,6 +14,12 @@ pytest.importorskip(
 )
 
 from epcsaft.records import SingleParameterRecord  # noqa: E402
+from epcsaft import (  # noqa: E402
+    EPCSAFT,
+    ParameterBundle,
+    native_sdk,
+    unit_registry as u,
+)
 
 from MEA.epcsaft_ionic.diagnostic_bundle import (  # noqa: E402
     COMPONENT_IDS,
@@ -27,6 +35,18 @@ CANONICAL_BUNDLE = (
     / "epcsaft_bundles"
     / "mea-co2-h2o-nine-species-diagnostic"
     / "1"
+)
+RECEIPT = CANONICAL_BUNDLE.parent / "1.receipt.json"
+DIAGNOSTIC_COMPOSITION = (
+    0.02,
+    0.10,
+    0.8025,
+    0.03,
+    0.02,
+    0.01,
+    0.0025,
+    0.01,
+    0.005,
 )
 
 
@@ -79,11 +99,13 @@ def test_mea_bundle_has_exact_species_charge_and_provenance_contract() -> None:
         assert record.source_id in source_ids
         assert record.domain_id in domain_ids
         assert record.locator.strip()
+    assert any(
+        "provisional-historical-evaluation" in record.locator
+        for record in bundle.records
+    )
 
 
 def test_user_bundle_round_trip_matches_canonical_artifact(tmp_path: Path) -> None:
-    from epcsaft import ParameterBundle
-
     bundle = build_mea_diagnostic_bundle(purpose="user-provided")
     emitted = tmp_path / "bundle"
     bundle.to_path(emitted)
@@ -96,3 +118,53 @@ def test_user_bundle_round_trip_matches_canonical_artifact(tmp_path: Path) -> No
     ).fingerprint
     assert CANONICAL_BUNDLE.is_dir()
     assert _file_hashes(emitted) == _file_hashes(CANONICAL_BUNDLE)
+
+
+def test_installed_provider_executes_canonical_bundle_and_exposes_native_sdk() -> None:
+    bundle = ParameterBundle.from_path(CANONICAL_BUNDLE)
+    model = EPCSAFT(bundle.select(COMPONENT_IDS))
+    state = model.evaluate(
+        temperature=313.15 * u.kelvin,
+        molar_density=40000 * u.mole / u.meter**3,
+        mole_fractions=DIAGNOSTIC_COMPOSITION,
+    )
+    capsule = native_sdk(model)
+    receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
+
+    assert model.component_ids == COMPONENT_IDS
+    assert math.fsum(DIAGNOSTIC_COMPOSITION) == 1.0
+    assert math.fsum(
+        fraction * charge
+        for fraction, charge in zip(
+            DIAGNOSTIC_COMPOSITION,
+            receipt["charges"],
+            strict=True,
+        )
+    ) == pytest.approx(0.0, abs=2e-18)
+    assert all(
+        math.isfinite(value)
+        for value in (
+            state.residual_helmholtz,
+            state.compressibility_factor,
+            state.pressure.to("pascal").magnitude,
+            *state.residual_chemical_potential_over_rt,
+        )
+    )
+    assert type(capsule).__name__ == "PyCapsule"
+    assert receipt["provider"]["commit"] == (
+        "5c4cd54b3596e51331ca9f6c871daec34a72eb4f"
+    )
+    assert receipt["smoke_state"]["temperature_k"] == 313.15
+    assert receipt["smoke_state"]["molar_density_mol_per_m3"] == 40000.0
+    assert receipt["smoke_state"]["mole_fractions"] == list(
+        DIAGNOSTIC_COMPOSITION
+    )
+    assert receipt["smoke_state"]["pressure_pa"] == pytest.approx(
+        state.pressure.to("pascal").magnitude
+    )
+    assert receipt["smoke_state"]["residual_helmholtz"] == pytest.approx(
+        state.residual_helmholtz
+    )
+    assert receipt["smoke_state"]["native_sdk_capsule"] == (
+        "epcsaft.native_sdk.v1"
+    )

@@ -28,8 +28,9 @@ PARAMETER_ROOT = (
 )
 PURE_CSV = PARAMETER_ROOT / "pure" / "any_solvent.csv"
 KIJ_CSV = PARAMETER_ROOT / "mixed" / "binary_interaction" / "k_ij.csv"
+USER_OPTIONS = PARAMETER_ROOT / "user_options.json"
 SOURCE_AUDIT = REPO_ROOT / "docs" / "ePC-SAFT" / "full-component-parameter-source-audit.md"
-SOURCE_PATHS = (PURE_CSV, KIJ_CSV, SOURCE_AUDIT)
+SOURCE_PATHS = (PURE_CSV, KIJ_CSV, USER_OPTIONS, SOURCE_AUDIT)
 COMPONENT_IDS = (
     "carbon-dioxide",
     "monoethanolamine",
@@ -252,8 +253,8 @@ def build_mea_diagnostic_bundle(
             "dielectric_ion_suppression_coefficient",
             7.01,
             **_provenance(
-                "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/"
-                "user_options.json:dielectric_saturation:status=retained-diagnostic"
+                f"{USER_OPTIONS.relative_to(REPO_ROOT).as_posix()}:"
+                "dielectric_saturation:status=retained-diagnostic"
             ),
         ),
         ModelParameterRecord(

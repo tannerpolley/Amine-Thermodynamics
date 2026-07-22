@@ -1,6 +1,6 @@
 {
   "bundle_fingerprint": "sha256:7b38f85711562a251b2e0e261762b130eaff4366a57e82bb47896787b73222ea",
-  "bundle_path": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-diagnostic/1",
+  "bundle_path": ".tmp-mea-bundle/1",
   "charges": [
     0,
     0,
@@ -33,12 +33,12 @@
     "single.csv": "ae3ff19fe4d29905212cdd84e8fc7a61fba8fe5f2f78a873b53223c3cd6ca6a9",
     "sites.csv": "5591e05a7e016e81675a1757a60250126a437e3608af2b576fdad318981c5b82"
   },
-  "mea_source_commit": "462fa91cdb0e073c16fa591dbe178699641615f2",
+  "mea_source_commit": "d228f289bb9688de9441945dc798650bf98f3179",
   "provider": {
-    "commit": "b4499ed05f90511dc984a29f1cfb32f139600501",
+    "commit": "5c4cd54b3596e51331ca9f6c871daec34a72eb4f",
     "version": "0.1.0.dev0",
-    "wheel_path": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-project/artifacts/provider-user-bundle-v1/b4499ed/epcsaft-0.1.0.dev0-cp313-cp313-linux_x86_64.whl",
-    "wheel_sha256": "bd3ab8e5b38ac781be381325d39bdf84e0bd9c64b58a0c43506213fd62d20a23"
+    "wheel_filename": "epcsaft-0.1.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "3bd36c7bdf946a11eadf407dbfc0262ced73fbd80e8431478a104b835fc55f4a"
   },
   "schema_version": 1,
   "scientific_limits": [
@@ -47,9 +47,31 @@
     "the bundle is not source-complete or predictive"
   ],
   "selected_parameter_fingerprint": "sha256:a89481803f4d9f3009feed3c77bc06e815dbe512b592c838eae14505694cc78f",
+  "smoke_state": {
+    "charge_residual": -1.734723475976807e-18,
+    "compressibility_factor": -1.9922171313583186,
+    "interpretation": "finite_transport_smoke_not_physical_acceptance",
+    "molar_density_mol_per_m3": 40000.0,
+    "mole_fractions": [
+      0.02,
+      0.1,
+      0.8025,
+      0.03,
+      0.02,
+      0.01,
+      0.0025,
+      0.01,
+      0.005
+    ],
+    "native_sdk_capsule": "epcsaft.native_sdk.v1",
+    "pressure_pa": -207483355.41055426,
+    "residual_helmholtz": -23.852634363232156,
+    "temperature_k": 313.15
+  },
   "source_hashes": {
     "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv": "3966b65ce2494728f6529724feca286b1852a82eec1cd2dd27b77d08c81adfea",
     "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv": "e6264444c4a5a9311dbaec1bcbf37cc6df37a20d79f2c03fe9e3f6177f593e5c",
+    "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/user_options.json": "0213b8bdae8dd38fdfde5ccbcc9fbd7b38598b3af4461cf269a9793ff3d7dfe0",
     "docs/ePC-SAFT/full-component-parameter-source-audit.md": "c0da0e7a327cb00a30823bdcb85d93ea7127e2c7c6fbfac749125ce7e8273fc5"
   },
   "status": "diagnostic_nonpredictive"

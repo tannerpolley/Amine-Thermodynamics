@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import ctypes
 import hashlib
 from importlib import metadata
 import json
@@ -8,7 +9,7 @@ from pathlib import Path
 import subprocess
 from urllib.parse import unquote, urlparse
 
-from epcsaft import ParameterBundle
+from epcsaft import EPCSAFT, ParameterBundle, native_sdk, unit_registry as u
 from epcsaft.records import SingleParameterRecord
 
 from MEA.epcsaft_ionic.diagnostic_bundle import (
@@ -18,8 +19,11 @@ from MEA.epcsaft_ionic.diagnostic_bundle import (
 )
 
 
-PROVIDER_COMMIT = "b4499ed05f90511dc984a29f1cfb32f139600501"
+PROVIDER_COMMIT = "5c4cd54b3596e51331ca9f6c871daec34a72eb4f"
 EXPECTED_CHARGES = (0, 0, 0, 1, -1, -1, -2, 1, -1)
+SMOKE_TEMPERATURE_K = 313.15
+SMOKE_DENSITY_MOL_PER_M3 = 40000.0
+SMOKE_COMPOSITION = (0.02, 0.10, 0.8025, 0.03, 0.02, 0.01, 0.0025, 0.01, 0.005)
 
 
 def _sha256(path: Path) -> str:
@@ -66,6 +70,16 @@ def _git_head(repo_root: Path) -> str:
     ).stdout.strip()
 
 
+def _capsule_name(capsule: object) -> str:
+    get_name = ctypes.pythonapi.PyCapsule_GetName
+    get_name.argtypes = (ctypes.py_object,)
+    get_name.restype = ctypes.c_char_p
+    name = get_name(capsule)
+    if name is None:
+        raise RuntimeError("Provider returned an unnamed native SDK capsule")
+    return name.decode()
+
+
 def build_artifact(*, output: Path, receipt: Path, provider_wheel: Path) -> None:
     output = output.resolve()
     receipt = receipt.resolve()
@@ -86,6 +100,13 @@ def build_artifact(*, output: Path, receipt: Path, provider_wheel: Path) -> None
         raise RuntimeError("bundle fingerprint changed after persistence")
     if _charges(loaded) != EXPECTED_CHARGES:
         raise RuntimeError("persisted bundle charge contract changed")
+    model = EPCSAFT(selected)
+    state = model.evaluate(
+        temperature=SMOKE_TEMPERATURE_K * u.kelvin,
+        molar_density=SMOKE_DENSITY_MOL_PER_M3 * u.mole / u.meter**3,
+        mole_fractions=SMOKE_COMPOSITION,
+    )
+    capsule_name = _capsule_name(native_sdk(model))
 
     repo_root = Path(__file__).resolve().parents[1]
     record = {
@@ -99,7 +120,7 @@ def build_artifact(*, output: Path, receipt: Path, provider_wheel: Path) -> None
         "provider": {
             "commit": PROVIDER_COMMIT,
             "version": metadata.version("epcsaft"),
-            "wheel_path": str(provider_wheel),
+            "wheel_filename": provider_wheel.name,
             "wheel_sha256": _sha256(provider_wheel),
         },
         "mea_source_commit": _git_head(repo_root),
@@ -107,6 +128,22 @@ def build_artifact(*, output: Path, receipt: Path, provider_wheel: Path) -> None
             path.relative_to(repo_root).as_posix(): _sha256(path) for path in SOURCE_PATHS
         },
         "emitted_file_hashes": _file_hashes(output),
+        "smoke_state": {
+            "interpretation": "finite_transport_smoke_not_physical_acceptance",
+            "temperature_k": SMOKE_TEMPERATURE_K,
+            "molar_density_mol_per_m3": SMOKE_DENSITY_MOL_PER_M3,
+            "mole_fractions": list(SMOKE_COMPOSITION),
+            "charge_residual": sum(
+                fraction * charge
+                for fraction, charge in zip(
+                    SMOKE_COMPOSITION, EXPECTED_CHARGES, strict=True
+                )
+            ),
+            "residual_helmholtz": state.residual_helmholtz,
+            "compressibility_factor": state.compressibility_factor,
+            "pressure_pa": state.pressure.to("pascal").magnitude,
+            "native_sdk_capsule": capsule_name,
+        },
         "scientific_limits": [
             "MEAH+ and MEACOO- parameters remain provisional historical evaluation inputs",
             "transferred trace-ion values are diagnostic rather than MEA-system fits",

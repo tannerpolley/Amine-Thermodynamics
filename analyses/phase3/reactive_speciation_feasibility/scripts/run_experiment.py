@@ -277,6 +277,7 @@ def _source_hashes() -> dict[str, str]:
         KIJ_CSV,
         PARAMETER_ROOT / "mixed" / "binary_interaction" / "k_hb_ij.csv",
         PARAMETER_ROOT / "user_options.json",
+        ROOT / "src" / "MEA" / "epcsaft_ionic" / "diagnostic_bundle.py",
         ROOT / "src" / "MEA" / "epcsaft_ionic" / "speciation_feasibility.py",
         Path(__file__).resolve(),
     )
