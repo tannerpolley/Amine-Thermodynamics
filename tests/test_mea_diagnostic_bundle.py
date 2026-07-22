@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import hashlib
+from pathlib import Path
+
 import pytest
 
 
@@ -12,8 +15,27 @@ from epcsaft.records import SingleParameterRecord  # noqa: E402
 
 from MEA.epcsaft_ionic.diagnostic_bundle import (  # noqa: E402
     COMPONENT_IDS,
+    REPO_ROOT,
     build_mea_diagnostic_bundle,
 )
+
+
+CANONICAL_BUNDLE = (
+    REPO_ROOT
+    / "data"
+    / "reference"
+    / "epcsaft_bundles"
+    / "mea-co2-h2o-nine-species-diagnostic"
+    / "1"
+)
+
+
+def _file_hashes(path: Path) -> dict[str, str]:
+    return {
+        item.relative_to(path).as_posix(): hashlib.sha256(item.read_bytes()).hexdigest()
+        for item in sorted(path.rglob("*"))
+        if item.is_file()
+    }
 
 
 def test_mea_bundle_has_exact_species_charge_and_provenance_contract() -> None:
@@ -57,3 +79,20 @@ def test_mea_bundle_has_exact_species_charge_and_provenance_contract() -> None:
         assert record.source_id in source_ids
         assert record.domain_id in domain_ids
         assert record.locator.strip()
+
+
+def test_user_bundle_round_trip_matches_canonical_artifact(tmp_path: Path) -> None:
+    from epcsaft import ParameterBundle
+
+    bundle = build_mea_diagnostic_bundle(purpose="user-provided")
+    emitted = tmp_path / "bundle"
+    bundle.to_path(emitted)
+    loaded = ParameterBundle.from_path(emitted)
+
+    assert loaded.purpose == "user-provided"
+    assert loaded.fingerprint == bundle.fingerprint
+    assert loaded.select(COMPONENT_IDS).fingerprint == bundle.select(
+        COMPONENT_IDS
+    ).fingerprint
+    assert CANONICAL_BUNDLE.is_dir()
+    assert _file_hashes(emitted) == _file_hashes(CANONICAL_BUNDLE)
