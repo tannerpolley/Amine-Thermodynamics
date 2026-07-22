@@ -10,7 +10,7 @@ from typing import Any
 
 import numpy as np
 
-from MEA.common.analysis_io import file_sha256, read_csv_rows, repo_relative_path, write_json_file
+from MEA.common.analysis_io import file_sha256, repo_relative_path, write_json_file
 from MEA.epcsaft_ionic.speciation_feasibility import ActivityState, solve_activity_speciation
 from MEA.smith_missen.ideal_speciation import REACTION_IDS, REACTION_MATRIX, SPECIES_9, solve_ideal_speciation
 
@@ -27,30 +27,6 @@ PRESSURE_PA = 101325.0
 MEA_WEIGHT_FRACTION = 0.30
 LOADINGS = (0.20, 0.40, 0.60)
 PERTURBATION_SEED = 20260717
-
-CLEAN_COMPONENT_IDS = (
-    "carbon-dioxide",
-    "monoethanolamine",
-    "water",
-    "protonated-monoethanolamine",
-    "carbamate-anion",
-    "bicarbonate-anion",
-    "carbonate-anion",
-    "hydronium-cation",
-    "hydroxide-anion",
-)
-
-
-def _read_kij() -> dict[tuple[str, str], float]:
-    values: dict[tuple[str, str], float] = {}
-    for row in read_csv_rows(KIJ_CSV):
-        left = str(row["component"])
-        for right in SPECIES_9:
-            if left == right:
-                continue
-            values[tuple(sorted((left, right)))] = float(row[right])
-    return values
-
 
 def _pinned_lane() -> dict[str, Any]:
     import epcsaft
@@ -107,190 +83,15 @@ def _pinned_lane() -> dict[str, Any]:
 
 
 def _build_clean_eos():
-    from epcsaft import EPCSAFT, ParameterBundle, unit_registry as u
-    from epcsaft.records import (
-        AssociationParameterRecord,
-        ComponentRecord,
-        ConstantPlusSumOfExponentialsCorrelation,
-        ExponentialTerm,
-        ModelParameterRecord,
-        PairParameterRecord,
-        SingleParameterRecord,
-        SiteRecord,
-        SourceRecord,
-        ValidityDomain,
+    from epcsaft import EPCSAFT
+
+    from MEA.epcsaft_ionic.diagnostic_bundle import (
+        COMPONENT_IDS,
+        build_mea_diagnostic_bundle,
     )
 
-    pure_rows = read_csv_rows(PURE_CSV)
-    by_species = {row["component"]: row for row in pure_rows}
-    component_by_species = dict(zip(SPECIES_9, CLEAN_COMPONENT_IDS))
-    provenance = {
-        "source_id": "mea-phase-two-artifact",
-        "locator": "MEA Phase 2 nonpromoted parameter artifact",
-        "domain_id": "diagnostic-domain",
-    }
-    components = tuple(
-        ComponentRecord(component_id, name=species, aliases=(species,))
-        for species, component_id in component_by_species.items()
-    )
-    singles = []
-    correlations = []
-    for species, component_id in component_by_species.items():
-        row = by_species[species]
-        slug = component_id
-        singles.extend(
-            (
-                SingleParameterRecord(f"{slug}-molar-mass", component_id, "molar_mass", float(row["MW"]) * u.kilogram / u.mole, **provenance),
-                SingleParameterRecord(f"{slug}-segment-count", component_id, "segment_count", float(row["m"]), **provenance),
-                SingleParameterRecord(f"{slug}-dispersion-energy", component_id, "dispersion_energy_over_k", float(row["e"]) * u.kelvin, **provenance),
-                SingleParameterRecord(f"{slug}-charge", component_id, "charge_number", int(row["z"]), **provenance),
-                SingleParameterRecord(f"{slug}-solvation-factor", component_id, "solvation_factor", float(row["f_solv"]), **provenance),
-            )
-        )
-        if species == "H2O":
-            correlations.append(
-                ConstantPlusSumOfExponentialsCorrelation(
-                    f"{slug}-segment-diameter",
-                    component_id,
-                    "segment_diameter",
-                    2.7927 * u.angstrom,
-                    (
-                        ExponentialTerm(10.11 * u.angstrom, -0.01775 / u.kelvin),
-                        ExponentialTerm(-1.417 * u.angstrom, -0.01146 / u.kelvin),
-                    ),
-                    **provenance,
-                )
-            )
-        else:
-            singles.append(
-                SingleParameterRecord(
-                    f"{slug}-segment-diameter",
-                    component_id,
-                    "segment_diameter",
-                    float(row["s"]) * u.angstrom,
-                    **provenance,
-                )
-            )
-        if int(row["z"]) == 0:
-            singles.append(
-                SingleParameterRecord(
-                    f"{slug}-relative-permittivity",
-                    component_id,
-                    "relative_permittivity",
-                    float(row["dielc"]),
-                    **provenance,
-                )
-            )
-        else:
-            singles.append(
-                SingleParameterRecord(
-                    f"{slug}-born-diameter",
-                    component_id,
-                    "born_diameter",
-                    float(row["d_born"]) * u.angstrom,
-                    **provenance,
-                )
-            )
-
-    kij = _read_kij()
-    pairs = []
-    for left_index, left in enumerate(SPECIES_9):
-        for right in SPECIES_9[left_index + 1 :]:
-            left_id = component_by_species[left]
-            right_id = component_by_species[right]
-            pairs.append(
-                PairParameterRecord(
-                    f"kij-{left_id}-{right_id}",
-                    left_id,
-                    right_id,
-                    "k_ij",
-                    kij[tuple(sorted((left, right)))],
-                    **provenance,
-                )
-            )
-
-    associating = ("MEA", "H2O")
-    sites = tuple(
-        SiteRecord(
-            f"{component_by_species[species]}-site-{site}",
-            component_by_species[species],
-            site,
-            site,
-            1,
-            **provenance,
-        )
-        for species in associating
-        for site in ("a", "b")
-    )
-    associations = []
-    for species in associating:
-        row = by_species[species]
-        component_id = component_by_species[species]
-        for family, value, unit in (
-            ("association_energy_over_k", float(row["e_assoc"]), u.kelvin),
-            ("association_volume", float(row["vol_a"]), 1.0),
-        ):
-            associations.append(
-                AssociationParameterRecord(
-                    f"{component_id}-self-{family.replace('_', '-')}",
-                    component_id,
-                    "a",
-                    component_id,
-                    "b",
-                    family,
-                    value * unit,
-                    **provenance,
-                )
-            )
-    water_sigma = 2.7927 + 10.11 * math.exp(-0.01775 * TEMPERATURE_K) - 1.417 * math.exp(-0.01146 * TEMPERATURE_K)
-    mea_sigma = float(by_species["MEA"]["s"])
-    cross_energy = 0.5 * (float(by_species["H2O"]["e_assoc"]) + float(by_species["MEA"]["e_assoc"]))
-    cross_volume = math.sqrt(float(by_species["H2O"]["vol_a"]) * float(by_species["MEA"]["vol_a"])) * (
-        math.sqrt(water_sigma * mea_sigma) / (0.5 * (water_sigma + mea_sigma))
-    ) ** 3
-    for water_site, mea_site in (("a", "b"), ("b", "a")):
-        for family, value, unit in (
-            ("association_energy_over_k", cross_energy, u.kelvin),
-            ("association_volume", cross_volume, 1.0),
-        ):
-            associations.append(
-                AssociationParameterRecord(
-                    f"water-{water_site}-mea-{mea_site}-{family.replace('_', '-')}",
-                    component_by_species["H2O"],
-                    water_site,
-                    component_by_species["MEA"],
-                    mea_site,
-                    family,
-                    value * unit,
-                    **provenance,
-                )
-            )
-
-    models = (
-        ModelParameterRecord("dielectric-ion-suppression", "dielectric_ion_suppression_coefficient", 7.01, **provenance),
-        ModelParameterRecord("ionic-region-permittivity", "ionic_region_relative_permittivity", 8.0, **provenance),
-    )
-    bundle = ParameterBundle.from_records(
-        bundle_id="mea-reactive-speciation-feasibility",
-        bundle_version=1,
-        purpose="package-test-fixture",
-        sources=(
-            SourceRecord(
-                "mea-phase-two-artifact",
-                "MEA-Thermodynamics Phase 2 parameter artifact",
-                "nonpromoted diagnostic translation through the clean provider public record API",
-            ),
-        ),
-        domains=(ValidityDomain("diagnostic-domain", "unknown"),),
-        components=components,
-        singles=tuple(singles),
-        pairs=tuple(pairs),
-        sites=sites,
-        associations=tuple(associations),
-        correlations=tuple(correlations),
-        models=models,
-    )
-    selected = bundle.select(CLEAN_COMPONENT_IDS)
+    bundle = build_mea_diagnostic_bundle(purpose="package-test-fixture")
+    selected = bundle.select(COMPONENT_IDS)
     return EPCSAFT(selected), bundle.fingerprint, selected.fingerprint
 
 
@@ -476,6 +277,7 @@ def _source_hashes() -> dict[str, str]:
         KIJ_CSV,
         PARAMETER_ROOT / "mixed" / "binary_interaction" / "k_hb_ij.csv",
         PARAMETER_ROOT / "user_options.json",
+        ROOT / "src" / "MEA" / "epcsaft_ionic" / "diagnostic_bundle.py",
         ROOT / "src" / "MEA" / "epcsaft_ionic" / "speciation_feasibility.py",
         Path(__file__).resolve(),
     )

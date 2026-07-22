@@ -1,0 +1,14 @@
+schema_version = 1
+bundle_id = "mea-co2-h2o-nine-species-diagnostic"
+bundle_version = 1
+purpose = "user-provided"
+files = ["components.csv", "single.csv", "pair.csv", "sites.csv", "association.csv", "model.csv", "correlations.toml"]
+
+[[sources]]
+source_id = "mea-retained-phase-two-artifact"
+citation = "MEA-Thermodynamics retained Phase 2 parameter artifact"
+use_basis = "diagnostic nonpredictive evaluation input; exact literature lineage and provisional rows are audited in docs/ePC-SAFT/full-component-parameter-source-audit.md"
+
+[[domains]]
+domain_id = "diagnostic-domain"
+kind = "unknown"
