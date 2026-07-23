@@ -103,6 +103,32 @@ The Table 5 footnote says K5 was converted from the original correlation to Tong
 
 `basis warning`: Tong's K5 is molality/activity-coefficient based and is not interchangeable with Austgen/Nasrifar's mole-fraction-based R4. The older retained ideal-speciation value `A=-1.8652, B=-1545.3` was described as a conversion from molality to mole fraction; this audit does not validate that conversion. The later Nasrifar/Austgen R4 (`2.8898, -3635.09`) is a different source/reference convention and must not be mixed with Tong K5 without an explicit standard-state transformation.
 
+## Exact common aqueous-molality source convention
+
+The selected R1--R3 records use Austgen's unsymmetric mole-fraction activity
+for solutes at infinite dilution in water. R4 and R5 use the thermodynamic
+aqueous molality scale. At infinite dilution in water, these dimensionless
+solute activities are related exactly by
+
+`m_i / m° = x_i / (M_H2O m°)`.
+
+With `m° = 1 mol/kg` and `M_H2O = 0.01801528 kg/mol`, the common
+per-solute log activity-scale factor is
+`ln(M_H2O m°) = -4.016534992299479`; solvent water has factor zero.
+Converting R1--R3 into the common molality convention therefore adds
+`-Delta nu_solute ln(M_H2O m°)` to their source `ln K`, where
+`Delta nu_solute = (2, 1, 1)`. R4--R5 need no source-to-common conversion
+because their selected records already use that scale. The resulting 298.15 K
+common-source anchors are
+`(-32.2322902493, -14.6422904909, -23.7921480209, -3.0319615965,
+-21.8657461729)`.
+
+This is a standard-state conversion, not a parameter fit. It supplies one
+shared component scale vector for the generic Equilibrium transform and uses
+no artificial solvent composition. The final Provider contractions still
+cannot be evaluated until the nine-species bundle has a qualified
+applicability domain.
+
 ## Böttinger 2008: fitted molality convention and oxazolidone onset
 
 `verified`: Böttinger's chemistry section (printed p. 133, Eqs. I--VI) uses:
@@ -145,7 +171,7 @@ The 0.150 value is the pressure-drop/Raman “Calculated” result; it is not th
 
 ## Canonical-use consequences
 
-1. Preserve reaction direction, basis, and reference identity as separate fields. In particular, do not mix Tong/Aroua molality K5 with Nasrifar/Austgen mole-fraction R4 without a proven conversion into the Provider Helmholtz reference basis.
+1. Preserve reaction direction, basis, and reference identity as separate fields. Normalize the selected Austgen R1--R3 and Tong/Bates R4--R5 records to the explicit common aqueous-molality scale before applying the generic Provider neutral-reference contractions.
 2. Record the R2 coefficient as a source conflict: Austgen 1991 prints `231.465`; Nasrifar 2010 prints `231.456`. The new source contract selects the original Austgen value; the legacy Phase 2 manifest retains the later Nasrifar value and must not describe it as a proven correction.
 3. Keep R5/Bates source coverage at 273--323 K unless an independent direct source is admitted. The official NIST primary PDF supplies the admitted equation even though Zotero does not contain a local copy.
 4. Keep Tong/Aroua K5 coverage at 293--323 K. Do not extrapolate it to 333.15 or 353.15 K without a new source.
@@ -158,5 +184,5 @@ The 0.150 value is the pressure-drop/Raman “Calculated” result; it is not th
   Markdown; the official NIST PDF was independently verified and fingerprinted
   as recorded above.
 - Local Zotero search did not contain Aroua, Benamor & Haji-Sulaiman (1999), *J. Chem. Eng. Data* 44, 887--891. Tong Table 5 is the available primary paper for the converted molality coefficients.
-- No source in this audit transforms the mole-fraction or molality constants into the installed Provider's exact Helmholtz standard-state vector. That conversion remains a required Equilibrium/Provider contract test.
+- The source-to-common aqueous-molality conversion is now explicit. The final contraction into the Provider Helmholtz basis remains unavailable because the provisional nine-species bundle has no qualified applicability domain.
 - Böttinger and Wong give different observable bases (true mole fractions versus mol/kg/Raman calibration) and different temperature/pressure protocols. They must not be joined by inferred row pressure or denominator conversion.

@@ -191,18 +191,77 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
     if temperature_intersection[0] > temperature_intersection[1]:
         raise ValueError("MEA reaction source temperature domains do not intersect")
 
+    common = contract.get("common_source_standard_state", {})
+    if (
+        common.get("identity") != "aqueous-molality-infinite-dilution-water-v1"
+        or common.get("ready") is not True
+        or common.get("solvent") != "H2O"
+        or float(common.get("solute_standard_molality_mol_per_kg", 0.0)) != 1.0
+    ):
+        raise ValueError("MEA common source standard state is incomplete")
+    water_molar_mass = float(common["water_molar_mass_kg_per_mol"])
+    log_scale = math.log(
+        water_molar_mass * float(common["solute_standard_molality_mol_per_kg"])
+    )
+    expected_scales = [
+        0.0 if species_id == "H2O" else log_scale
+        for species_id in EXPECTED_SPECIES_ORDER
+    ]
+    if any(
+        abs(actual - expected) > 5.0e-15
+        for actual, expected in zip(
+            common["log_activity_scale_factors_by_species"],
+            expected_scales,
+            strict=True,
+        )
+    ):
+        raise ValueError("MEA common source activity-scale vector is inconsistent")
+    molar_mass_path = REPO_ROOT / common["water_molar_mass_source"]
+    if _sha256(molar_mass_path) != common["water_molar_mass_source_sha256"]:
+        raise ValueError("MEA common source water-molar-mass fingerprint does not match")
+    exponents = list(map(int, common["source_to_common_solute_stoichiometric_exponents"]))
+    if exponents != [2, 1, 1, 0, 0]:
+        raise ValueError("MEA source-to-common reaction exponents are inconsistent")
+    offsets = [-exponent * log_scale for exponent in exponents]
+    if any(
+        abs(actual - expected) > 5.0e-15
+        for actual, expected in zip(
+            common["source_to_common_ln_k_offsets"], offsets, strict=True
+        )
+    ):
+        raise ValueError("MEA source-to-common lnK offsets are inconsistent")
+    common_ln_k = [
+        anchor + offset
+        for anchor, offset in zip(
+            PRIMARY_ANCHORS_298_15_K.values(), offsets, strict=True
+        )
+    ]
+    if any(
+        abs(actual - expected) > 5.0e-15
+        for actual, expected in zip(
+            common["common_ln_k_298_15_k"], common_ln_k, strict=True
+        )
+    ):
+        raise ValueError("MEA common-source lnK anchors are inconsistent")
+
     provider_transform = contract.get("provider_transform", {})
     blockers = provider_transform.get("blockers")
-    if provider_transform.get("ready") is not False or blockers != [
-        "common-source-standard-state-conversion-missing",
-        "provider-reference-contractions-missing",
-    ]:
+    if (
+        provider_transform.get("ready") is not False
+        or provider_transform.get("required_common_source_convention")
+        != common["identity"]
+        or blockers
+        != ["provider-neutral-reference-unavailable-until-qualified-bundle-domain"]
+    ):
         raise ValueError("MEA Provider transformation must retain its exact unresolved blockers")
     return {
         "reaction_count": len(reactions),
         "reaction_rank": reaction_rank,
         "balance_rank": balance_rank,
         "temperature_intersection_k": temperature_intersection,
+        "common_source_standard_state": common["identity"],
+        "common_ln_k_298_15_k": common_ln_k,
+        "source_conversion_ready": True,
         "provider_transform_ready": False,
         "blockers": blockers,
     }
@@ -310,7 +369,6 @@ def validate_sentinel_contract(
     expected_blockers = [
         "provider-parameter-bundle-provisional",
         "provider-applicability-domain-unknown",
-        "source-to-provider-standard-state-transform-incomplete",
     ]
     if state.get("equilibrium_ready") is not False or blockers != expected_blockers:
         raise ValueError("MEA sentinel must fail closed on its unresolved scientific blockers")

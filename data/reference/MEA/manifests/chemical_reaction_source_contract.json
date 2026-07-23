@@ -190,13 +190,50 @@
       "local_pdf_sha256": null
     }
   ],
+  "common_source_standard_state": {
+    "identity": "aqueous-molality-infinite-dilution-water-v1",
+    "ready": true,
+    "solvent": "H2O",
+    "solute_standard_molality_mol_per_kg": 1.0,
+    "water_molar_mass_kg_per_mol": 0.01801528,
+    "water_molar_mass_source": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-diagnostic/1/single.csv",
+    "water_molar_mass_source_sha256": "ae3ff19fe4d29905212cdd84e8fc7a61fba8fe5f2f78a873b53223c3cd6ca6a9",
+    "infinite_dilution_relation": "m_i/m_standard = x_i/(M_H2O*m_standard)",
+    "log_activity_scale_factor_definition": "ln(M_H2O*m_standard) for every non-water solute and zero for solvent water",
+    "log_activity_scale_factors_by_species": [
+      -4.016534992299479,
+      -4.016534992299479,
+      0.0,
+      -4.016534992299479,
+      -4.016534992299479,
+      -4.016534992299479,
+      -4.016534992299479,
+      -4.016534992299479,
+      -4.016534992299479
+    ],
+    "source_to_common_solute_stoichiometric_exponents": [2, 1, 1, 0, 0],
+    "source_to_common_ln_k_offsets": [
+      8.033069984598958,
+      4.016534992299479,
+      4.016534992299479,
+      0.0,
+      0.0
+    ],
+    "common_ln_k_298_15_k": [
+      -32.23229024933365,
+      -14.642290490877887,
+      -23.79214802087026,
+      -3.031961596511823,
+      -21.86574617291778
+    ],
+    "scope": "R1-R3 are converted from Austgen aqueous infinite-dilution mole-fraction activities; R4-R5 are already on the selected aqueous molality scale"
+  },
   "provider_transform": {
     "ready": false,
-    "required_common_source_convention": "one explicit component standard-state scale vector shared by all five reactions",
+    "required_common_source_convention": "aqueous-molality-infinite-dilution-water-v1",
     "required_provider_record": "installed Provider neutral-reference contractions at the exact T,P, component order, and parameter fingerprint",
     "blockers": [
-      "common-source-standard-state-conversion-missing",
-      "provider-reference-contractions-missing"
+      "provider-neutral-reference-unavailable-until-qualified-bundle-domain"
     ]
   }
 }

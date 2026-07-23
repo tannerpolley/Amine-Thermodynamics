@@ -21,10 +21,18 @@ def test_reaction_contract_preserves_primary_source_anchors_and_rejects_conflict
         "reaction_rank": 5,
         "balance_rank": 4,
         "temperature_intersection_k": [293.15, 323.15],
+        "common_source_standard_state": "aqueous-molality-infinite-dilution-water-v1",
+        "common_ln_k_298_15_k": [
+            -32.23229024933365,
+            -14.642290490877887,
+            -23.79214802087026,
+            -3.031961596511823,
+            -21.86574617291778,
+        ],
+        "source_conversion_ready": True,
         "provider_transform_ready": False,
         "blockers": [
-            "common-source-standard-state-conversion-missing",
-            "provider-reference-contractions-missing",
+            "provider-neutral-reference-unavailable-until-qualified-bundle-domain",
         ],
     }
     assert summary["reaction_rank"] + summary["balance_rank"] == 9
@@ -59,7 +67,6 @@ def test_wong_sentinel_recomputes_feed_and_remains_fail_closed() -> None:
     assert summary["blockers"] == [
         "provider-parameter-bundle-provisional",
         "provider-applicability-domain-unknown",
-        "source-to-provider-standard-state-transform-incomplete",
     ]
 
     corrupted = copy.deepcopy(sentinel)
