@@ -122,9 +122,9 @@ Define one acceptance predicate requiring solver success, an accepted convergenc
 
 **Evidence (verified)**
 
-- `data/reference/MEA/VLE/Combined_VLE.csv:43-52` contains 10 records labeled `Idris`.
+- `data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv:43-52` contains 10 records labeled `Idris`.
 - `docs/latex/sections/data_methods.tex:4,17` says the 161 records come from five sources and cites Aronu, Hilliard, Jou, Ma'mun, and Xu only.
-- No Idris entry exists in `docs/latex/references.bib`, no Idris source CSV exists in `data/reference/MEA/VLE/`, and no builder/schema records how `Combined_VLE.csv` was assembled.
+- No Idris entry exists in `docs/latex/references.bib`, no Idris source CSV exists in `data/reference/MEA/observations/vapor_liquid_equilibrium/`, and no builder/schema records how `Combined_VLE.csv` was assembled.
 - Independent source verification identifies these points as Z. Idris, K. J. Jens, and D. A. Eimer, “Speciation of MEA–CO2 adducts at equilibrium using Raman spectroscopy,” *Energy Procedia* 63 (2014) 1424–1431, DOI `10.1016/j.egypro.2014.11.152`. The source reports new 30/40/50 wt% MEA VLE data at 40 °C, and its table includes the retained 0.460 loading / 0.813 kPa point.
 
 **Impact**

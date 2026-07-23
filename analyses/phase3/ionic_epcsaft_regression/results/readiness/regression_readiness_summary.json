@@ -46,13 +46,13 @@
       "promotion_restriction": "Fit only admitted VLE families until public ePC-SAFT capabilities and primary evidence admit additional observables."
     },
     {
-      "current_hole": "no independent direct ionic species property data sufficient to isolate segment parameters",
-      "direct_evidence": "74 active-v1 speciation states with explicit membership",
-      "indirect_evidence": "37 non-30-wt-percent transferability states and balance-inferred species",
+      "current_hole": "no direct exact-salt volumetric data and no independently sourced covariance for the analog counterion terms",
+      "direct_evidence": "128 direct exact-cation analog densities; 103 Amundsen densities; 74 active-v1 speciation states with explicit membership",
+      "indirect_evidence": "44 reported-derived excess molar volumes; Maiti bulk carbamation context; 37 non-30-wt-percent transferability states and balance-inferred species",
       "owner": "Phase 3",
       "parameter_family": "MEAH_MEACOO_segment_parameters",
       "priority": "high",
-      "promotion_restriction": "Require identifiability evidence and reserved-group validation; inferred balances cannot be promoted as direct observations."
+      "promotion_restriction": "Use the frozen parameter-observable map and grouped validation; analog salts cannot uniquely identify single-ion terms and inferred balances cannot become direct observations."
     },
     {
       "current_hole": "no verified static relative-permittivity table across composition temperature and loading",
@@ -93,14 +93,14 @@
   },
   "schema_version": 1,
   "source_hashes": {
-    "data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv": "bfec6e62c1faf23aec2d82744811c35a5d8ef90177be0b2e7df150dabdc2061b",
-    "data/reference/MEA/VLE/Canonical_VLE_Observations.csv": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
     "data/reference/MEA/manifests/observation_contract.csv": "dad553bcc76bb4f77ad4de17f313353d85fe3f5c1aa2090d403e1da3451b66fb",
-    "data/reference/MEA/manifests/parameter_observable_coverage.csv": "387785052b6a9cf195e2a7438dc10db4774e76488c79705d6db8e8458ce43233",
-    "data/reference/MEA/manifests/speciation_target_membership.csv": "46964ee99ab7305a16152abb923a08055253c62411355c213cbb78cf83374b0c",
-    "data/reference/MEA/manifests/vle_row_disposition.csv": "a09fe2b5cf76ba0f098791078234ad6c841f639919af2f288482bd646882bec0"
+    "data/reference/MEA/manifests/parameter_observable_coverage.csv": "f21c1389aff7f053fdf04e77e7e9ec6d63096eec7e772787560db5819dbccc2d",
+    "data/reference/MEA/manifests/speciation_target_membership.csv": "1e267adc62a6572d029caf92cfa39529cd38c9c0475fdf2f66a9546dc92c8f9b",
+    "data/reference/MEA/manifests/vle_row_disposition.csv": "a09fe2b5cf76ba0f098791078234ad6c841f639919af2f288482bd646882bec0",
+    "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73"
   },
-  "split_hash": "e7bc893dab825007d009260d2c1f6f5dd42e75ebddbdb4972d52a5ec4f0c1aa0",
+  "split_hash": "af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804",
   "target_admission": [
     {
       "admission_reason": "Canonical pressure rows and public target support are present; execution remains gated separately.",
@@ -110,7 +110,7 @@
       "evidence_status": "canonical_active_and_reserved",
       "observable": "CO2 partial pressure over loaded MEA",
       "package_supported": "yes",
-      "reference_path": "data/reference/MEA/VLE/Canonical_VLE_Observations.csv",
+      "reference_path": "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
       "role": "active_training_and_reserved_validation",
       "target_family": "vle_pressure",
       "weight": "log-pressure family weight frozen at preregistration"
@@ -123,7 +123,7 @@
       "evidence_status": "canonical_active_and_reserved",
       "observable": "liquid true-species composition",
       "package_supported": "yes",
-      "reference_path": "data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv",
+      "reference_path": "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv",
       "role": "active_training_and_reserved_validation",
       "target_family": "speciation",
       "weight": "species-family weight frozen at preregistration"
@@ -136,7 +136,7 @@
       "evidence_status": "primary_table_property_candidate",
       "observable": "CO2-loaded MEA liquid density",
       "package_supported": "yes",
-      "reference_path": "data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv",
+      "reference_path": "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
       "role": "future_target",
       "target_family": "density",
       "weight": "not_assigned"
@@ -149,7 +149,7 @@
       "evidence_status": "primary_table_validation_only",
       "observable": "CO2-loaded MEA dynamic viscosity",
       "package_supported": "no",
-      "reference_path": "data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv",
+      "reference_path": "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
       "role": "validation_only",
       "target_family": "viscosity",
       "weight": "not_assigned"
@@ -162,7 +162,7 @@
       "evidence_status": "primary_values_missing",
       "observable": "MEA-water and loaded-MEA static relative permittivity",
       "package_supported": "yes",
-      "reference_path": "data/reference/MEA/dielectric/MEA_H2O_dielectric.csv",
+      "reference_path": "data/reference/MEA/observations/dielectric/MEA_H2O_dielectric.csv",
       "role": "blocked_evidence",
       "target_family": "relative_permittivity",
       "weight": "not_assigned"
@@ -175,7 +175,7 @@
       "evidence_status": "no_equilibrium_primary_dataset",
       "observable": "calibrated equilibrium pH of loaded MEA",
       "package_supported": "no",
-      "reference_path": "data/reference/MEA/pH/loaded_MEA_pH.csv",
+      "reference_path": "data/reference/MEA/observations/ph/loaded_MEA_pH.csv",
       "role": "blocked_evidence",
       "target_family": "loaded_ph",
       "weight": "not_assigned"
@@ -188,7 +188,7 @@
       "evidence_status": "negative_direct_source_search",
       "observable": "MEAH+ and MEACOO- activity or osmotic evidence",
       "package_supported": "yes",
-      "reference_path": "data/reference/MEA/ionic_activity/direct_ionic_activity.csv",
+      "reference_path": "data/reference/MEA/observations/ionic_activity/direct_ionic_activity.csv",
       "role": "blocked_evidence",
       "target_family": "ionic_activity",
       "weight": "not_assigned"

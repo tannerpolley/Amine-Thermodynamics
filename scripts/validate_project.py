@@ -13,6 +13,7 @@ QUICK_COMMANDS = [
     [RUFF, "check", "src", "scripts", "analyses", "tests"],
     [PY, "scripts/doctor.py"],
     [PY, "scripts/check_no_local_paths.py"],
+    [PY, "scripts/validate_mea_data_library.py"],
     [PY, "-m", "compileall", "-x", r"results[\\/]+runs", "src", "tests", "scripts", "analyses"],
     [PY, "-m", "pytest", "-q"],
 ]

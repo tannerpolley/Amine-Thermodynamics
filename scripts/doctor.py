@@ -19,7 +19,17 @@ def check(label: str, ok: bool, detail: str = "") -> bool:
 def main() -> int:
     checks = [
         check("src package", (SRC / "MEA" / "__init__.py").exists(), str(SRC / "MEA")),
-        check("reference MEA data", (REFERENCE / "MEA" / "VLE" / "Jou_1995_VLE.csv").exists(), str(REFERENCE / "MEA")),
+        check(
+            "reference MEA data",
+            (
+                REFERENCE
+                / "MEA"
+                / "observations"
+                / "vapor_liquid_equilibrium"
+                / "Jou_1995_VLE.csv"
+            ).exists(),
+            str(REFERENCE / "MEA"),
+        ),
         check("reference ePC-SAFT datasets", (REFERENCE / "epcsaft_datasets").exists(), str(REFERENCE / "epcsaft_datasets")),
         check("analyses root", ANALYSES.exists(), str(ANALYSES)),
         check("MEA import spec", importlib.util.find_spec("MEA") is not None),

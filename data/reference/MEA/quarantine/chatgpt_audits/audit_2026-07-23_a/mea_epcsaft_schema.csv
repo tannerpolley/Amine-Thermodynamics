@@ -1,0 +1,78 @@
+﻿column_name,data_type,required,definition,example
+row_id,string,yes,Unique audit row identifier; not a source identifier.,R00001
+source_id,string,yes,Foreign key to mea_epcsaft_sources.csv.,S001
+data_family,enum,yes,Audited data family/subfamily; no implicit conversion between families.,binary_MEA_H2O_VLE
+observable,string,yes,Measured or reported observable exactly classified.,isobaric_VLE_Txy
+target_species,string,yes,Species or unresolved aggregate to which the observation pertains.,MEA; H2O
+parameter_family,string,yes,Model parameter family potentially informed; not a fitted result.,neutral_MEA_H2O_binary_and_association
+classification,enum,yes,"One or more of direct measurement, aggregate measurement, balance-inferred, calibration-derived, model-derived, fitted.",direct measurement
+source_status,enum,yes,found; found but unusable; or not found.,found
+source_complete,boolean-like,yes,"yes only when exact source file, locator, basis, method, and hash are complete.",no
+regression_ready,boolean-like,yes,yes only after all qualification gates pass.,no
+qualification_status,string,yes,"Reason row is qualified, quarantined, or rejected.",quarantined_pending_exact_source_file_and_sha256
+source_locator,string,yes,Exact table/figure/page/SI locator.,p. 1101 Table 2
+table_row_label,string,no,Source row or audit grouping label.,1
+source_url,URL,yes,Primary DOI URL or repository URL; mirrored retrieval URLs are in source table.,https://doi.org/...
+source_file_sha256,hex string,no,SHA-256 of exact source file. Blank here because bytes were unavailable.,
+hash_status,enum,yes,computed_exact_source_file; not_computed_remote_source_bytes_unavailable; or not_applicable.,not_computed_remote_source_bytes_unavailable
+local_source_path,path,no,"Local path to exact source file, if available.",
+temperature_value,source-form numeric string,no,Temperature exactly as printed; no °C/K conversion.,443.38
+temperature_unit,string,conditional,Printed temperature unit.,K
+temperature_uncertainty,string,no,Reported temperature uncertainty/calibration.,±0.1 K
+pressure_total_value,source-form numeric string,no,Total pressure as printed; may be text 'atmospheric' when no numeric value was stated.,101.33
+pressure_total_unit,string,conditional,Printed total-pressure unit.,kPa
+pressure_total_uncertainty,string,no,Reported total-pressure uncertainty.,±0.133 kPa
+pressure_co2_value,source-form numeric string,no,CO2 partial pressure as printed; blank if not reported.,2.30
+pressure_co2_unit,string,conditional,Printed CO2 partial-pressure unit.,kPa
+pressure_co2_uncertainty,string,no,Reported/propagated uncertainty text for pCO2.,0.4
+pressure_co2_classification,enum/string,no,"direct, calibration-derived, model-derived, or not reported.",calibration-derived
+liquid_component_1,species string,no,Component associated with liquid_x1.,H2O
+liquid_x1,source-form numeric string,no,Printed liquid mole fraction; never rebased.,0.0736
+vapor_component_1,species string,no,Component associated with vapor_y1.,H2O
+vapor_y1,source-form numeric string,no,Printed vapor mole fraction; never rebased.,0.3411
+mea_mass_fraction_unloaded,source-form string,no,Unloaded MEA mass fraction or explicitly nominal campaign label.,0.30
+mea_mass_fraction_unit,string,conditional,Usually mass fraction; label states if nominal.,mass fraction
+mea_molality,source-form numeric string,no,MEA molality exactly as printed.,2.856
+mea_molality_unit,string,conditional,Printed molality basis.,mol/kg H2O
+co2_molality,source-form numeric string,no,CO2 molality exactly as printed.,2.863
+co2_molality_unit,string,conditional,Printed molality basis.,mol/kg H2O
+loading_value,source-form numeric string,no,Primary loading value exactly as printed.,0.56
+loading_basis,string,conditional,Exact loading definition or explicit 'source-defined; pending definition'.,mol CO2/mol MEA
+loading_method,string,no,Method producing primary loading.,gas chromatography
+loading_uncertainty,string,no,Uncertainty of primary loading.,±2%
+loading_value_secondary,source-form numeric string,no,"Second determination at same equilibrium state, retained without duplication.",1.331
+loading_secondary_method,string,no,Method producing second loading.,BaCO3 precipitation–titration
+loading_secondary_uncertainty,string,no,Uncertainty of second loading.,±3%
+measured_value,source-form numeric string,no,Scalar measured property when not represented by a dedicated field.,1.0106
+measured_unit,string,conditional,Unit of measured_value.,g/cm3
+frequency_min,source-form numeric string,no,Lower frequency of a dielectric spectrum.,0.05
+frequency_max,source-form numeric string,no,Upper frequency of a dielectric spectrum.,89
+frequency_unit,string,conditional,Frequency unit.,GHz
+conductivity_value,source-form numeric string,no,Measured/fitted conductivity if reported.,
+conductivity_unit,string,conditional,Conductivity unit.,S/m
+epsilon_real,source-form numeric string,no,Frequency-specific real permittivity.,
+epsilon_imag,source-form numeric string,no,Frequency-specific imaginary permittivity.,
+epsilon_static,source-form numeric string,no,Static/zero-frequency relative permittivity if legitimately available.,
+epsilon_static_status,enum/string,no,measured_static; fitted_dispersion_limit; microwave_only; not_available.,not_available
+ph_value,source-form numeric string,no,Reported equilibrium pH.,
+ph_scale,string,conditional,pH scale/reference convention.,
+ph_calibration,string,conditional,Calibration standards and traceability.,
+electrode_method,string,conditional,Electrode/cell method.,
+ionic_strength_handling,string,conditional,Ionic-strength correction or extrapolation.,
+composition_basis,string,yes,Verbatim/precise definition of all composition fields; no silent conversion.,mole fraction in each phase
+composition_json,JSON string,no,Machine-readable source columns and unresolved aggregates.,"{""liquid"":{""H2O"":"".0736""}}"
+standard_state,string,no,"Standard state, when relevant and declared.",
+heat_definition,string,no,"Differential, integral, semi-differential, excess, apparent, etc.",
+sign_convention,string,no,Source sign convention for heat/enthalpy.,
+method,string,yes,Measurement apparatus and analytical method.,modified Rose–Williams still
+uncertainty_text,string,yes,All recovered uncertainty/calibration details without invented propagation.,maximum composition error 0.001
+covariance,string,yes,Reported covariance or explicit 'not reported'.,not reported
+byproducts_assayed,string,no,Which possible degradation/byproduct species were assayed.,HEIA; HEEDA; OZD
+byproducts_observed,string,no,Observed byproducts kept separate.,HEIA
+sequence_id,string,no,Experimental loading/unloading or sequence grouping.,60_seq2
+phase_boundary_flag,string,no,Bubble/dew/other source footnote.,bubble
+extraction_quality,string,yes,"Primary-PDF, mirror, OCR, figure, or secondary-encoding status.",manual transcription; verify
+recommended_split,string,yes,Training/validation grouping recommendation.,hold out whole source
+leakage_group,string,yes,"Rows sharing apparatus, batch, calibration, or fit.",S001_Cai1996_101.33kPa
+raw_source_values,string,yes,Compact unconverted rendering of the source row.,T=...
+notes,string,no,Additional restrictions and unresolved metadata.,model columns excluded

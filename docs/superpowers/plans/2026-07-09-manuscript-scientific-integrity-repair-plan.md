@@ -58,7 +58,7 @@
 
 ## Implementation Boundaries
 
-**Files To Create:** `src/MEA/common/reaction_catalog.py`, `src/MEA/common/solver_acceptance.py`, `scripts/build_canonical_vle_dataset.py`, `scripts/build_manuscript.sh`, `scripts/check_manuscript_freshness.py`, `tests/test_reaction_catalog.py`, `tests/test_solver_acceptance.py`, `tests/test_canonical_vle_dataset.py`, `tests/test_manuscript_claim_integrity.py`, `.github/workflows/validate.yml`, `data/reference/MEA/VLE/Idris_2014_VLE.csv`, `data/reference/MEA/VLE/Combined_VLE_inclusion.csv`, and `docs/latex/builds/verification-receipt.json` (generated/ignored as appropriate).
+**Files To Create:** `src/MEA/common/reaction_catalog.py`, `src/MEA/common/solver_acceptance.py`, `scripts/build_canonical_vle_dataset.py`, `scripts/build_manuscript.sh`, `scripts/check_manuscript_freshness.py`, `tests/test_reaction_catalog.py`, `tests/test_solver_acceptance.py`, `tests/test_canonical_vle_dataset.py`, `tests/test_manuscript_claim_integrity.py`, `.github/workflows/validate.yml`, `data/reference/MEA/observations/vapor_liquid_equilibrium/Idris_2014_VLE.csv`, `data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE_inclusion.csv`, and `docs/latex/builds/verification-receipt.json` (generated/ignored as appropriate).
 
 **Files To Modify:** `src/MEA/epcsaft_ionic/model.py`, Phase 2/3 generators and renderers, artifact/path helpers, validation scripts, analysis manifests, parameter provenance tables, manuscript sections/tables, bibliography, README, `pyproject.toml`, `uv.lock`, `.gitignore`, and affected tests.
 
@@ -315,11 +315,11 @@ git commit -m "fix: scope manuscript to verified phase2 evidence"
 - Manuscript source counts and citations equal dataset source counts.
 
 **Files:**
-- Create: `data/reference/MEA/VLE/Idris_2014_VLE.csv`
-- Create: `data/reference/MEA/VLE/Combined_VLE_inclusion.csv`
+- Create: `data/reference/MEA/observations/vapor_liquid_equilibrium/Idris_2014_VLE.csv`
+- Create: `data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE_inclusion.csv`
 - Create: `scripts/build_canonical_vle_dataset.py`
 - Create: `tests/test_canonical_vle_dataset.py`
-- Modify: `data/reference/MEA/VLE/Combined_VLE.csv`
+- Modify: `data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv`
 - Modify: `data/reference/MEA/manifests/source_status_manifest.csv`
 - Modify: `docs/latex/references.bib`
 - Modify: `docs/latex/sections/data_methods.tex`
@@ -358,13 +358,13 @@ Keep the existing `MEA_weight_fraction`, `temperature`, `CO2_loading`, `CO2_pres
 
 - [x] **Step 6: Prove deterministic regeneration**
 
-Run: `uv run python scripts/build_canonical_vle_dataset.py && uv run python -m unittest tests.test_canonical_vle_dataset -v && git diff --exit-code data/reference/MEA/VLE/Combined_VLE.csv`
+Run: `uv run python scripts/build_canonical_vle_dataset.py && uv run python -m unittest tests.test_canonical_vle_dataset -v && git diff --exit-code data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv`
 Expected: 161 rows, six sources, 10 Idris rows, tests pass, no second-build diff.
 
 - [x] **Step 7: Commit VLE provenance**
 
 ```bash
-git add data/reference/MEA/VLE data/reference/MEA/manifests/source_status_manifest.csv scripts/build_canonical_vle_dataset.py tests/test_canonical_vle_dataset.py docs/latex/references.bib docs/latex/sections/data_methods.tex src/MEA/common/data_access.py
+git add data/reference/MEA/observations/vapor_liquid_equilibrium data/reference/MEA/manifests/source_status_manifest.csv scripts/build_canonical_vle_dataset.py tests/test_canonical_vle_dataset.py docs/latex/references.bib docs/latex/sections/data_methods.tex src/MEA/common/data_access.py
 git commit -m "fix: make vle provenance reproducible"
 ```
 

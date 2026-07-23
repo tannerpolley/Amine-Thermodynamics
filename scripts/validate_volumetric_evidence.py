@@ -11,10 +11,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DENSITY = ROOT / "data/reference/MEA/volumetric/ethanolammonium_carboxylate_density.csv"
-DERIVED = ROOT / "data/reference/MEA/volumetric/ethanolammonium_carboxylate_excess_molar_volume.csv"
-SOURCES = ROOT / "data/reference/MEA/volumetric/volumetric_source_manifest.csv"
-AMUNDSEN = ROOT / "data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv"
+DENSITY = ROOT / "data/reference/MEA/observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_density.csv"
+DERIVED = ROOT / "data/reference/MEA/observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_excess_molar_volume.csv"
+SOURCES = ROOT / "data/reference/MEA/observations/ionic_analog_volumetrics/volumetric_source_manifest.csv"
+AMUNDSEN = ROOT / "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv"
 SPECIATION = ROOT / "data/reference/MEA/manifests/speciation_target_membership.csv"
 CONTRACT = ROOT / "data/reference/MEA/manifests/ionic_volumetric_observation_contract.csv"
 SPLIT = ROOT / "data/reference/MEA/manifests/volumetric_grouped_split_manifest.csv"

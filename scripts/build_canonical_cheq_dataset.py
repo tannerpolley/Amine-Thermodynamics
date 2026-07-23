@@ -8,7 +8,7 @@ import pandas as pd
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CHEQ_DIR = REPO_ROOT / "data" / "reference" / "MEA" / "ChEq"
+CHEQ_DIR = REPO_ROOT / "data" / "reference" / "MEA" / "observations" / "liquid_speciation"
 OUTPUT_PATH = CHEQ_DIR / "Canonical_Combined_ChEq.csv"
 SCHEMA_PATH = CHEQ_DIR / "Canonical_Combined_ChEq_schema.csv"
 ACTIVE_VIEW_PATH = CHEQ_DIR / "Combined_ChEq.csv"
@@ -199,7 +199,7 @@ def _legacy_rows(source: LegacySource) -> list[dict[str, object]]:
                     "record_id": "",
                     "source_key": source.source_key,
                     "source": source.source,
-                    "source_file": f"data/reference/MEA/ChEq/{source.filename}",
+                    "source_file": f"data/reference/MEA/observations/liquid_speciation/{source.filename}",
                     "source_row_index": row_number,
                     "row_status": "reported",
                     "temperature_C": temperature_C,
@@ -264,7 +264,7 @@ def _wong_rows() -> list[dict[str, object]]:
                 "record_id": "",
                 "source_key": "Wong2015",
                 "source": "Wong 2015",
-                "source_file": "data/reference/MEA/ChEq/Wong_2015_Raman_speciation.csv",
+                "source_file": "data/reference/MEA/observations/liquid_speciation/Wong_2015_Raman_speciation.csv",
                 "source_row_index": row_number,
                 "row_status": row_status,
                 "temperature_C": temperature_C,
