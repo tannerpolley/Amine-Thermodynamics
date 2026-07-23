@@ -3,8 +3,8 @@ CO2,"m,sigma,epsilon,MW,dielc",literature_or_existing_repo,Gross/legacy PC-SAFT;
 MEA,"m,sigma,epsilon,association,MW",literature_or_existing_repo,Baygi/Nasrifar/legacy MEA parameter set,,Phase 1,Association scheme must be documented.
 MEA,f_solv,not_promoted_until_dielectric_data,MEA–H2O dielectric/activity evidence required,,Phase 2/3,Do not fit from pressure data alone.
 H2O,"m,sigma(T),epsilon,association,dielc,f_solv",literature,Held/Figiel SSM+DS water basis,,Phase 2,
-MEAH+,"sigma,epsilon,d_born",provisional_fixed_historical_input,Exploratory historical calculation; not reproduced by the current workflow,,Phase 2/3,Retained only for fixed-parameter evaluation against Matin/Jakobsen/Bottinger speciation data; no current fit claim.
-MEACOO-,"sigma,epsilon,d_born",provisional_fixed_historical_input,Exploratory historical calculation; not reproduced by the current workflow,,Phase 2/3,Retained only for fixed-parameter evaluation against Matin/Jakobsen/Bottinger speciation data; no current fit claim.
+MEAH+,"sigma,epsilon,d_born",provisional_fixed_historical_input,Exploratory historical calculation; not reproduced by the current workflow,,Phase 2/3,"Retained as a seed only. Exact-cation carboxylate analog density is now curated for a future regularized shared-cation fit; it does not promote these values."
+MEACOO-,"sigma,epsilon,d_born",provisional_fixed_historical_input,Exploratory historical calculation; not reproduced by the current workflow,,Phase 2/3,"Retained as a seed only. Bulk carbamation and acetate analog evidence remain coupled/contextual and do not reproduce or promote these values."
 HCO3-,d_born,fixed_literature_sensitivity_input,literature basis + carbonate/speciation sensitivity,,Phase 2/3,Fixed for the reported evaluation; sensitivity is diagnostic only.
 CO3^2-,d_born,fixed_literature_sensitivity_input,literature basis + carbonate/speciation sensitivity,,Phase 2/3,Fixed for the reported evaluation; sensitivity is diagnostic only.
 H3O+,d_born,fixed_or_regularized_initially,Figiel/Held/Uyan convention,,Phase 2/3,Needs pH/electrochemical support before strong fit claim.
