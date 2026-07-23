@@ -130,7 +130,11 @@ def load_regression_vle_view(*, role: str | None = None) -> pd.DataFrame:
         split = split.loc[split["role"] == role].copy()
     if split.empty:
         raise ValueError(f"No VLE records have regression role {role!r}")
-    canonical = pd.read_csv(DATA_ROOT / "VLE" / "Canonical_VLE_Observations.csv", dtype=str, keep_default_na=False)
+    canonical = pd.read_csv(
+        DATA_ROOT / "observations" / "vapor_liquid_equilibrium" / "Canonical_VLE_Observations.csv",
+        dtype=str,
+        keep_default_na=False,
+    )
     if role == "reserved_validation":
         membership = split.merge(
             canonical,
@@ -168,7 +172,7 @@ def load_regression_vle_view(*, role: str | None = None) -> pd.DataFrame:
         ["observation_id", "active_row_id"],
     ]
     membership = split.merge(identity, left_on="record_id", right_on="observation_id", validate="one_to_one")
-    active = pd.read_csv(DATA_ROOT / "VLE" / "Combined_VLE.csv")
+    active = pd.read_csv(DATA_ROOT / "observations" / "vapor_liquid_equilibrium" / "Combined_VLE.csv")
     view = active.merge(
         membership[["observation_id", "active_row_id", "group_id", "split", "role"]],
         left_on="row_id",
@@ -235,7 +239,7 @@ def load_regression_speciation_view(*, role: str | None = None) -> pd.DataFrame:
         return pd.DataFrame(rows).sort_values("state_id").reset_index(drop=True)
 
     source_keys = {"Bottinger": "Bottinger2008", "Jakobsen": "Jakobsen2005", "Matin": "Matin2012"}
-    active = pd.read_csv(DATA_ROOT / "ChEq" / "Combined_ChEq.csv")
+    active = pd.read_csv(DATA_ROOT / "observations" / "liquid_speciation" / "Combined_ChEq.csv")
     active["source_key"] = active["source"].map(source_keys)
     if active["source_key"].isna().any():
         unknown = sorted(active.loc[active["source_key"].isna(), "source"].unique())
@@ -261,7 +265,7 @@ def load_speciation_data(
     temperature_C: float,
     mea_weight_fraction: float = CANONICAL_MEA_WEIGHT_FRACTION,
 ) -> pd.DataFrame:
-    df = pd.read_csv(DATA_ROOT / "ChEq" / "Combined_ChEq.csv")
+    df = pd.read_csv(DATA_ROOT / "observations" / "liquid_speciation" / "Combined_ChEq.csv")
     return df[
         (df["temperature"] == temperature_C)
         & (df["MEA_weight_fraction"] == mea_weight_fraction)
@@ -274,7 +278,7 @@ def load_jou_vle_data(
     loading_min: float = 0.1,
     loading_max: float = 0.6,
 ) -> pd.DataFrame:
-    df = pd.read_csv(DATA_ROOT / "VLE" / "Jou_1995_VLE.csv")
+    df = pd.read_csv(DATA_ROOT / "observations" / "vapor_liquid_equilibrium" / "Jou_1995_VLE.csv")
     return df[
         (df["MEA_weight_fraction"] == mea_weight_fraction)
         & (df["CO2_loading"] > loading_min)
@@ -288,7 +292,7 @@ def load_combined_vle_data(
     mea_weight_fraction: float = CANONICAL_MEA_WEIGHT_FRACTION,
     loading_max: float | None = None,
 ) -> pd.DataFrame:
-    df = pd.read_csv(DATA_ROOT / "VLE" / "Combined_VLE.csv")
+    df = pd.read_csv(DATA_ROOT / "observations" / "vapor_liquid_equilibrium" / "Combined_VLE.csv")
     required_columns = {
         "row_id",
         "source_key",

@@ -8,7 +8,7 @@ from MEA.common.analysis_io import write_csv_rows
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-VLE_DIR = REPO_ROOT / "data" / "reference" / "MEA" / "VLE"
+VLE_DIR = REPO_ROOT / "data" / "reference" / "MEA" / "observations" / "vapor_liquid_equilibrium"
 INCLUSION_PATH = VLE_DIR / "Combined_VLE_inclusion.csv"
 OUTPUT_PATH = VLE_DIR / "Combined_VLE.csv"
 OBSERVATION_PATH = VLE_DIR / "Canonical_VLE_Observations.csv"

@@ -59,9 +59,9 @@ remains an explicit acquisition gap.
 
 All source identities, licenses, artifact hashes, table locators, and admission
 limits are in
-`data/reference/MEA/volumetric/volumetric_source_manifest.csv`. The 128 direct
+`data/reference/MEA/observations/ionic_analog_volumetrics/volumetric_source_manifest.csv`. The 128 direct
 analog densities and 44 reported-derived volumes are retained in separate raw
-and derived CSVs under `data/reference/MEA/volumetric/`.
+and derived CSVs under `data/reference/MEA/observations/ionic_analog_volumetrics/`.
 
 ### Bulk reactive-MEA evidence
 

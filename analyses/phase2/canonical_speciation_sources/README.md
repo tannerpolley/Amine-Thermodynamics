@@ -3,7 +3,7 @@
 This analysis renders data-only speciation plots from the canonical combined MEA
 chemical-equilibrium dataset:
 
-`data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv`
+`data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv`
 
 The plots intentionally separate basis families:
 

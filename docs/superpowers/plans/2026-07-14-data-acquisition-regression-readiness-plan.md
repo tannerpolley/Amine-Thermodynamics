@@ -26,8 +26,8 @@
 - Approved design: `docs/superpowers/specs/2026-07-14-data-acquisition-regression-readiness-design.md`.
 - Source lifecycle: `data/reference/MEA/manifests/source_status_manifest.csv`.
 - Extraction targets: `data/reference/MEA/manifests/extraction_target_manifest.csv`.
-- Existing VLE sources: `data/reference/MEA/VLE/`.
-- Existing speciation sources: `data/reference/MEA/ChEq/`.
+- Existing VLE sources: `data/reference/MEA/observations/vapor_liquid_equilibrium/`.
+- Existing speciation sources: `data/reference/MEA/observations/liquid_speciation/`.
 - Loaded-property source: `docs/papers/md/Amundsen et al. - 2009 - Density and viscosity of monoethanolamine + water + carbon dioxide from (25 to 80) °C.md`.
 - Wong source: `docs/papers/md/Wong et al. - 2015 - Chemical speciation of CO2 absorption in aqueous monoethanolamine investigated by in situ Raman spec.md`.
 - Sensitivity evidence: `analyses/phase3/ionic_epcsaft_regression/results/sensitivity/parameter_identifiability.csv`.
@@ -147,7 +147,7 @@
 
 **Files:**
 
-- Create: `data/reference/MEA/VLE/Canonical_VLE_Observations.csv`
+- Create: `data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv`
 - Create: `data/reference/MEA/manifests/vle_row_disposition.csv`
 - Modify: `scripts/build_canonical_vle_dataset.py`
 - Modify: `tests/test_canonical_vle_dataset.py`
@@ -183,8 +183,8 @@
 
 - Create: `data/reference/MEA/manifests/speciation_target_membership.csv`
 - Modify: `scripts/build_canonical_cheq_dataset.py`
-- Modify: `data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv`
-- Modify: `data/reference/MEA/ChEq/Canonical_Combined_ChEq_schema.csv`
+- Modify: `data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv`
+- Modify: `data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq_schema.csv`
 - Modify: `tests/test_canonical_cheq_dataset.py`
 - Modify: `data/reference/MEA/manifests/source_status_manifest.csv`
 
@@ -216,8 +216,8 @@
 
 **Files:**
 
-- Modify: `data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv`
-- Create: `data/reference/MEA/VLE/Wong_2015_high_pressure_loading.csv`
+- Modify: `data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv`
+- Create: `data/reference/MEA/observations/vapor_liquid_equilibrium/Wong_2015_high_pressure_loading.csv`
 - Create: `tests/test_loaded_property_extractions.py`
 - Modify: `data/reference/MEA/manifests/extraction_target_manifest.csv`
 - Modify: `data/reference/MEA/manifests/source_status_manifest.csv`

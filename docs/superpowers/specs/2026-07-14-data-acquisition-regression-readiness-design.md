@@ -6,7 +6,7 @@ The project has enough experimental evidence to support model diagnostics, but n
 
 The repository audit found that the immediate bottleneck is not simply a lack of literature. A substantial reserve of already-local evidence is excluded from active targets or remains embedded in source transcriptions:
 
-- `verified`: Six raw VLE tables contain 327 observations, while `data/reference/MEA/VLE/Combined_VLE.csv` selects 161 observations, all at 30 wt% MEA. The 166 unselected rows include concentration and temperature regimes that are directly relevant to transferability.
+- `verified`: Six raw VLE tables contain 327 observations, while `data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv` selects 161 observations, all at 30 wt% MEA. The 166 unselected rows include concentration and temperature regimes that are directly relevant to transferability.
 - `verified`: The source speciation tables contain 111 state rows and the Wong Raman extraction contains 71 species points. Active regression-facing code uses only 74 states at 30 wt% MEA, leaving 37 tabulated 15/20 wt% states unused and all Wong rows outside the active target path.
 - `verified`: The local Amundsen transcription contains 68 loaded-density and 75 loaded-viscosity measurements in addition to the 70 unloaded measurements already machine-readable.
 - `verified`: The local Wong transcription contains 41 high-pressure loading observations at 303.15--323.15 K and pressures up to about 60 bar, but no Wong VLE CSV exists.

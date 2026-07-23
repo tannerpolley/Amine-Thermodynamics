@@ -62,8 +62,8 @@ SPLIT_FIELDS = (
     "reason",
 )
 SOURCE_PATHS = (
-    "ChEq/Canonical_Combined_ChEq.csv",
-    "VLE/Canonical_VLE_Observations.csv",
+    "observations/liquid_speciation/Canonical_Combined_ChEq.csv",
+    "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
     "manifests/observation_contract.csv",
     "manifests/parameter_observable_coverage.csv",
     "manifests/speciation_target_membership.csv",
@@ -207,7 +207,7 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
         (
             "vle_pressure",
             "CO2 partial pressure over loaded MEA",
-            "data/reference/MEA/VLE/Canonical_VLE_Observations.csv",
+            "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
             "canonical_active_and_reserved",
             _regression_capability_key("supports_pressure_targets"),
             True,
@@ -219,7 +219,7 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
         (
             "speciation",
             "liquid true-species composition",
-            "data/reference/MEA/ChEq/Canonical_Combined_ChEq.csv",
+            "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv",
             "canonical_active_and_reserved",
             _regression_capability_key("supports_speciation_targets"),
             True,
@@ -231,7 +231,7 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
         (
             "density",
             "CO2-loaded MEA liquid density",
-            "data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv",
+            "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
             "primary_table_property_candidate",
             _regression_capability_key("supports_density_targets"),
             True,
@@ -243,7 +243,7 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
         (
             "viscosity",
             "CO2-loaded MEA dynamic viscosity",
-            "data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv",
+            "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
             "primary_table_validation_only",
             "unreported",
             False,
@@ -255,7 +255,7 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
         (
             "relative_permittivity",
             "MEA-water and loaded-MEA static relative permittivity",
-            "data/reference/MEA/dielectric/MEA_H2O_dielectric.csv",
+            "data/reference/MEA/observations/dielectric/MEA_H2O_dielectric.csv",
             "primary_values_missing",
             _regression_capability_key("supports_relative_permittivity_targets"),
             True,
@@ -267,7 +267,7 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
         (
             "loaded_ph",
             "calibrated equilibrium pH of loaded MEA",
-            "data/reference/MEA/pH/loaded_MEA_pH.csv",
+            "data/reference/MEA/observations/ph/loaded_MEA_pH.csv",
             "no_equilibrium_primary_dataset",
             "unreported",
             False,
@@ -279,7 +279,7 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
         (
             "ionic_activity",
             "MEAH+ and MEACOO- activity or osmotic evidence",
-            "data/reference/MEA/ionic_activity/direct_ionic_activity.csv",
+            "data/reference/MEA/observations/ionic_activity/direct_ionic_activity.csv",
             "negative_direct_source_search",
             _regression_capability_key("supports_activity_targets"),
             True,
@@ -330,7 +330,9 @@ def _normalized_number(value: str) -> str:
 
 
 def _vle_split_rows(reference_root: Path, source_hash: str) -> list[dict[str, str]]:
-    rows = _read_rows(reference_root / "VLE" / "Canonical_VLE_Observations.csv")
+    rows = _read_rows(
+        reference_root / "observations" / "vapor_liquid_equilibrium" / "Canonical_VLE_Observations.csv"
+    )
     included = [
         row
         for row in rows
@@ -371,7 +373,9 @@ def _vle_split_rows(reference_root: Path, source_hash: str) -> list[dict[str, st
                     "split": split,
                     "role": role,
                     "weight": "1",
-                    "source_path": _relative_source_path("VLE/Canonical_VLE_Observations.csv"),
+                    "source_path": _relative_source_path(
+                        "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv"
+                    ),
                     "source_hash": source_hash,
                     "reason": reason,
                 }
@@ -416,7 +420,9 @@ def _speciation_split_rows(reference_root: Path, source_hash: str) -> list[dict[
                     "split": split,
                     "role": role,
                     "weight": "1",
-                    "source_path": _relative_source_path("ChEq/Canonical_Combined_ChEq.csv"),
+                    "source_path": _relative_source_path(
+                        "observations/liquid_speciation/Canonical_Combined_ChEq.csv"
+                    ),
                     "source_hash": source_hash,
                     "reason": (
                         "Held as a complete source/composition/temperature curve; every state must be accounted for."
@@ -467,16 +473,24 @@ def _vle_uncertainty_count(split_rows: Iterable[Mapping[str, str]]) -> int:
 def validate_reference_observation_contract(reference_root: Path) -> dict[str, int]:
     root = Path(reference_root)
     cases = (
-        ("speciation", root / "ChEq" / "Canonical_Combined_ChEq.csv", adapt_speciation_rows),
-        ("vle_pressure", root / "VLE" / "Canonical_VLE_Observations.csv", adapt_vle_pressure_rows),
+        (
+            "speciation",
+            root / "observations" / "liquid_speciation" / "Canonical_Combined_ChEq.csv",
+            adapt_speciation_rows,
+        ),
+        (
+            "vle_pressure",
+            root / "observations" / "vapor_liquid_equilibrium" / "Canonical_VLE_Observations.csv",
+            adapt_vle_pressure_rows,
+        ),
         (
             "loaded_property",
-            root / "density_viscosity" / "Amundsen_2009_density_viscosity.csv",
+            root / "observations" / "density_viscosity" / "Amundsen_2009_density_viscosity.csv",
             adapt_loaded_property_rows,
         ),
         (
             "loading_cross_method",
-            root / "VLE" / "Wong_2015_high_pressure_loading.csv",
+            root / "observations" / "vapor_liquid_equilibrium" / "Wong_2015_high_pressure_loading.csv",
             adapt_paired_loading_rows,
         ),
     )
@@ -502,10 +516,12 @@ def build_regression_readiness(
     source_hash_map = dict(source_hashes)
     split_rows = _vle_split_rows(
         reference_root,
-        source_hash_map[_relative_source_path("VLE/Canonical_VLE_Observations.csv")],
+        source_hash_map[
+            _relative_source_path("observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv")
+        ],
     ) + _speciation_split_rows(
         reference_root,
-        source_hash_map[_relative_source_path("ChEq/Canonical_Combined_ChEq.csv")],
+        source_hash_map[_relative_source_path("observations/liquid_speciation/Canonical_Combined_ChEq.csv")],
     )
     split_rows.sort(key=lambda row: (row["target_family"], row["group_id"], row["record_id"]))
     package = capability_receipt.get("package", {})

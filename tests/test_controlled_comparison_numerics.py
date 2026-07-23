@@ -15,7 +15,7 @@ CONTROLLED = RESULTS / "controlled_comparison"
 
 def test_controlled_comparison_recomputes_persisted_metrics() -> None:
     bundle = build_controlled_comparison(
-        pd.read_csv(ROOT / "data/reference/MEA/VLE/Combined_VLE.csv"),
+        pd.read_csv(ROOT / "data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv"),
         pd.read_csv(ROOT / "analyses/phase1/smith_missen_baseline/results/phase1_pressure_results.csv"),
         pd.read_csv(RESULTS / "phase2_pressure_results.csv"),
         pd.read_csv(RESULTS / "phase2_speciation_target_roles.csv"),
