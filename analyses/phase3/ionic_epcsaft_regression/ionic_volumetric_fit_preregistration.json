@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0",
+  "issue": 39,
+  "created_utc": "2026-07-23",
+  "status": "preregistered_execution_blocked",
+  "disposition": "additional-data-required",
+  "claim_boundary": "This contract prepares a future effective, analog-informed MEA-system fit. It does not execute a regression, promote a parameter, establish a unique single-ion volume, or support a predictive/source-complete claim.",
+  "execution_admission": {
+    "admitted": false,
+    "missing_preconditions": [
+      "Immutable source-bound or jointly regularized parameters and covariance for every acetate, propionate, butanoate, pentanoate, and hexanoate counterion used in the shared-cation stage",
+      "Installed native Regression density target with exact Provider reference basis, residual Jacobians, multistart diagnostics, and immutable receipt",
+      "Installed same-state Equilibrium plus Provider derivatives for reactive density and speciation constraints",
+      "A recorded identifiability amendment if the active set or objective changes"
+    ]
+  },
+  "frozen_inputs": [
+    {
+      "path": "data/reference/MEA/volumetric/ethanolammonium_carboxylate_density.csv",
+      "sha256": "36c8f0220b7350bdce11c119464d1491aebe3d824a3b952c0c131f5a227633cd",
+      "role": "direct analog density"
+    },
+    {
+      "path": "data/reference/MEA/volumetric/ethanolammonium_carboxylate_excess_molar_volume.csv",
+      "sha256": "5b016b6d841455bf707b550d91d82b104ab27b2d42e037f464a913750165ee15",
+      "role": "reported-derived diagnostic; never an independent residual beside its parent density"
+    },
+    {
+      "path": "data/reference/MEA/density_viscosity/Amundsen_2009_density_viscosity.csv",
+      "sha256": "9047efb0281bff93d1769b12a3df50420d0b01ddd44ffd5041749ec0fb1fe622",
+      "role": "35 unloaded and 68 loaded direct density observations"
+    },
+    {
+      "path": "data/reference/MEA/manifests/speciation_target_membership.csv",
+      "sha256": "46964ee99ab7305a16152abb923a08055253c62411355c213cbb78cf83374b0c",
+      "role": "row-level speciation roles and eligibility"
+    },
+    {
+      "path": "data/reference/MEA/manifests/grouped_split_manifest.csv",
+      "sha256": "e7bc893dab825007d009260d2c1f6f5dd42e75ebddbdb4972d52a5ec4f0c1aa0",
+      "role": "existing frozen 147-training/220-validation pressure and speciation split"
+    },
+    {
+      "path": "data/reference/MEA/manifests/ionic_volumetric_observation_contract.csv",
+      "sha256": "45285fb8920d00bd39ea330c4dfa357db1c571e8a53c7b40f9715a3e2c55b447",
+      "role": "1301-row combined observation contract"
+    },
+    {
+      "path": "data/reference/MEA/manifests/volumetric_grouped_split_manifest.csv",
+      "sha256": "a7bca85b145d17fb0ecf27ed47d372c4ce9c2c6c2e24e7832b8592439018489e",
+      "role": "frozen 153-training/78-validation volumetric split"
+    },
+    {
+      "path": "data/reference/MEA/manifests/ionic_parameter_observable_map.csv",
+      "sha256": "f8436265de1ed34d89da09bd85805233ca0900e2aadca910edc696f7f1071cc4",
+      "role": "pre-fit identifiability decisions"
+    }
+  ],
+  "component_contract": {
+    "required_order": [
+      "CO2",
+      "MEA",
+      "H2O",
+      "MEAH+",
+      "MEACOO-",
+      "HCO3-",
+      "CO3^2-",
+      "H3O+",
+      "OH-"
+    ],
+    "charges": [0, 0, 0, 1, -1, -1, -2, 1, -1],
+    "one_segment_ions": ["MEAH+", "MEACOO-"],
+    "provider_bundle_requirement": "immutable installed artifact with component, parameter-source, domain, and tensor fingerprints"
+  },
+  "stages": [
+    {
+      "name": "shared_cation_analog",
+      "state_problem": "Single liquid phase at reported T, P, solvent identity, and ionic-liquid mole fraction; enforce the supplied electroneutral salt stoichiometry and evaluate mixture density.",
+      "observations": "Role-eligible training rows from ethanolammonium_carboxylate_density only; the four repeated Dhage pure-water endpoint rows remain contextual.",
+      "active_parameters": ["MEAH+::sigma", "MEAH+::epsilon_over_k"],
+      "fixed_parameters": ["MEAH+::m", "MEAH+::d_born", "all water terms", "all counterion terms and interactions"],
+      "objective": "Sum squared density residuals divided by squared observation scales, then divide by the number of admitted rows in each salt/source family so no densely sampled family dominates.",
+      "observation_scale": "Augusto2022: max(row standard deviation, reported relative standard uncertainty times density). Dhage2026: reported combined absolute uncertainty 0.0005 g/cm^3.",
+      "derived_quantity_policy": "Excess molar volumes are recomputation and identifiability diagnostics only because they are derived from the same density rows; they are not simultaneous independent residuals.",
+      "stop_condition": "Stop as additional-data-required if fixed counterion priors/covariance are unavailable, if held-out salt curves fail uncertainty-scaled validation, or if MEAH+ size and dispersion cannot be distinguished from counterion terms."
+    },
+    {
+      "name": "carbamate_correction",
+      "state_problem": "No isolated-ion state is permitted. The correction is evaluated only through an electroneutral reactive MEA liquid state.",
+      "observations": "Maiti bulk volume-change evidence is a directional plausibility constraint; Amundsen loaded density becomes a numerical target only in the same-state reactive stage.",
+      "active_parameters": ["MEACOO-::sigma"],
+      "fixed_parameters": ["MEACOO-::m", "MEACOO-::epsilon_over_k", "MEACOO-::d_born", "MEAH+::MEACOO-::k_ij"],
+      "regularization": "Quadratic penalty about the recorded provisional MEACOO- sigma prior. Its scale must be supplied by an immutable acetate-transfer uncertainty before execution; no default scale is authorized.",
+      "stop_condition": "Stop as additional-data-required if the prior scale is absent or if the correction cannot be distinguished from reaction constants and other mixture parameters."
+    },
+    {
+      "name": "reactive_mea_refinement",
+      "state_problem": "At fixed reported T, pressure, unloaded MEA mass fraction, and CO2 loading, jointly solve reaction equilibria, elemental material balances, electroneutrality, and one liquid-phase EOS state. Evaluate density and eligible speciation observations from that identical converged state.",
+      "observations": "Training Amundsen density groups plus role-eligible training speciation targets from the existing frozen grouped split.",
+      "active_parameters": ["MEAH+::sigma", "MEAH+::epsilon_over_k", "MEACOO-::sigma"],
+      "conditional_parameter": "MEAH+::MEACOO-::k_ij remains fixed. It may replace, not augment, an active correction only after a pre-fit amendment shows structured residuals and independent sensitivity.",
+      "fixed_parameters": "All reaction constants, Born diameters, trace-ion parameters, other component parameters, and all unlisted binary interactions.",
+      "objective": "Equal-weight family blocks for uncertainty-scaled density and eligible species/aggregate residuals, with exact zeros treated as upper-bound residuals and balance-inferred, ambiguous, contextual, diagnostic, and excluded records barred from the fitting objective.",
+      "constraints": "Elemental carbon and MEA balances, charge balance, reaction-equilibrium residuals, positive compositions, exact species order, and Provider applicability must all pass independently of optimizer termination.",
+      "stop_condition": "Reject if density improves while held-out speciation worsens, if mass/charge/reaction constraints fail, or if any active parameter remains prior- or bound-dominated."
+    },
+    {
+      "name": "independent_validation",
+      "observations": "Only groups marked validation in the frozen volumetric and existing pressure/speciation split manifests.",
+      "metrics": [
+        "density residual and residual divided by reported experimental uncertainty",
+        "species-specific and aggregate speciation residuals by measurement role",
+        "material, charge, and reaction-equilibrium residual norms",
+        "active-bound distance and start-to-start parameter spread",
+        "residual Jacobian singular values, Fisher conditioning, parameter correlations, and profile likelihoods"
+      ],
+      "acceptance": "Every predeclared gate must pass; optimizer success or a lower training objective is insufficient."
+    }
+  ],
+  "parameter_bounds": {
+    "source": "Existing downstream BOUNDS in src/MEA/epcsaft_ionic/model.py are retained only as broad numerical safeguards, not as physical evidence.",
+    "MEAH+::sigma": [2.0, 5.8],
+    "MEAH+::epsilon_over_k": [50.0, 950.0],
+    "MEACOO-::sigma": [2.0, 5.8],
+    "rule": "A solution materially dependent on a safeguard bound fails; tightening a bound requires a source-bound preregistration amendment."
+  },
+  "initial_values": {
+    "MEAH+::sigma": 3.48508556586,
+    "MEAH+::epsilon_over_k": 232.687201645,
+    "MEACOO-::sigma": 3.53543525721,
+    "source": "Current provisional historical-evaluation rows; seeds only."
+  },
+  "multistart": {
+    "design": "32 deterministic scrambled-Sobol starts in scaled active-parameter space plus the recorded provisional seed",
+    "seed": 390035,
+    "report": "All starts, terminations, final objectives, constraints, active bounds, parameter vectors, and immutable receipts.",
+    "material_dependence_rule": "Reject when scientifically distinct parameter vectors achieve indistinguishable objectives or the accepted result is not reproduced across the best basin."
+  },
+  "convergence_gates": {
+    "optimizer": "native Regression successful termination with finite objective and exact receipt",
+    "equilibrium": "every state carries an admitted Equilibrium certificate; failed states cannot be omitted or penalized into acceptance",
+    "constraints": "mass, charge, and reaction residual tolerances must be declared by the installed Equilibrium contract before execution",
+    "provider": "installed tensor shape, component order, charge, reference basis, applicability domain, and derivative checks pass",
+    "identifiability": "full-rank or explicitly profile-supported active block with reported conditioning; no material prior/start/bound dependence"
+  },
+  "immutable_successor_receipt": [
+    "Provider version and artifact fingerprint",
+    "component order and charge vector",
+    "parameter identities, values, units, bounds, sources, and fitted domain",
+    "observation and split hashes",
+    "reaction/reference identities",
+    "Regression termination and multistart diagnostics",
+    "Equilibrium certificates",
+    "training and held-out residual artifacts",
+    "bundle fingerprint"
+  ]
+}
