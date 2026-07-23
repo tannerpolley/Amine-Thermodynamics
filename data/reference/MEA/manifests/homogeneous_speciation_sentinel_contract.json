@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "identity": "mea-homogeneous-fixed-tp-sentinel-contract-v1",
+  "status": "source_defined_not_equilibrium_ready",
+  "species_order": [
+    "CO2",
+    "MEA",
+    "H2O",
+    "MEAH+",
+    "MEACOO-",
+    "HCO3-",
+    "CO3--",
+    "H3O+",
+    "OH-"
+  ],
+  "molar_mass_basis": {
+    "source_file": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-diagnostic/1/single.csv",
+    "source_file_sha256": "ae3ff19fe4d29905212cdd84e8fc7a61fba8fe5f2f78a873b53223c3cd6ca6a9",
+    "unit": "kilogram / mole",
+    "values": {"CO2": 0.04401, "MEA": 0.06108, "H2O": 0.01801528},
+    "use_limit": "molar masses only; no diagnostic EOS parameter is promoted"
+  },
+  "states": [
+    {
+      "state_id": "wong2015-table5-313.15k-1bar-alpha0.150",
+      "source_file": "data/reference/MEA/VLE/Wong_2015_high_pressure_loading.csv",
+      "source_record_id": "wong_table5_014",
+      "source_locator": "Wong et al. (2015), Table 5",
+      "temperature_k": 313.15,
+      "pressure_pa": 100000.0,
+      "mea_mass_fraction_unloaded": 0.3,
+      "loading_mol_co2_per_mol_mea": 0.15,
+      "feed_basis": "one mole unloaded MEA; unloaded solvent mass fraction before CO2 addition",
+      "feed_amounts_mol": [0.15, 1.0, 7.911062165006594, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+      "initial_charge_equivalents_mol": 0.0,
+      "pressure_convention": "published nominal total pressure for the closed-feed batch row",
+      "reported_observations": {
+        "calculated_loading": 0.15,
+        "raman_loading": 0.144,
+        "mse": 0.000033,
+        "mse_role": "reported squared agreement metric, not a measurement uncertainty"
+      },
+      "uncertainty_status": "no row-specific standard uncertainty reported",
+      "observation_roles": {
+        "calculated_loading_0.150": "direct_closed_feed_input_from_gas_pressure_drop",
+        "raman_loading_0.144": "calibration_derived_context_only",
+        "species_concentrations": "not_available_for_this_row_and_not_predictive_acceptance",
+        "equilibrium_capacity": "not_claimed"
+      },
+      "oxazolidone_rule": {
+        "source": "Böttinger et al. (2008), p. 128 discussion of Figs. 6-7",
+        "excluded_when_loading_below": 0.5,
+        "threshold_basis": "2-oxazolidone reported in quantifiable amounts above about 0.5 mol CO2/mol MEA",
+        "passed": true
+      },
+      "reaction_contract": "mea-nine-species-reaction-source-contract-v1",
+      "reaction_domain_passed": true,
+      "provider_applicability_domain": "unknown",
+      "equilibrium_ready": false,
+      "blockers": [
+        "provider-parameter-bundle-provisional",
+        "provider-applicability-domain-unknown",
+        "source-to-provider-standard-state-transform-incomplete"
+      ]
+    }
+  ],
+  "source_records": [
+    {
+      "source_id": "Wong2015",
+      "doi": "10.1016/j.ijggc.2015.05.016",
+      "locator": "Table 5, 313.15 K first 1 bar batch row",
+      "local_pdf_sha256": "312ea8218c98bf6b78289c5f43baf4e524442efd3943f1dfaf74270ff1292954"
+    },
+    {
+      "source_id": "Bottinger2008",
+      "doi": "10.1016/j.fluid.2007.09.017",
+      "locator": "experimental pressure range and p. 128 oxazolidone discussion",
+      "local_pdf_sha256": "dd0c6986cbd058ec0a2343ac5097439862281492cd2dac01823144233f0fc0f4"
+    }
+  ]
+}

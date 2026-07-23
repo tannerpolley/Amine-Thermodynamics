@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "identity": "mea-nine-species-reaction-source-contract-v1",
+  "status": "source_adjudicated_provider_transform_blocked",
+  "species_order": [
+    "CO2",
+    "MEA",
+    "H2O",
+    "MEAH+",
+    "MEACOO-",
+    "HCO3-",
+    "CO3--",
+    "H3O+",
+    "OH-"
+  ],
+  "species": [
+    {"name": "CO2", "formula": {"C": 1, "H": 0, "N": 0, "O": 2}, "charge": 0},
+    {"name": "MEA", "formula": {"C": 2, "H": 7, "N": 1, "O": 1}, "charge": 0},
+    {"name": "H2O", "formula": {"C": 0, "H": 2, "N": 0, "O": 1}, "charge": 0},
+    {"name": "MEAH+", "formula": {"C": 2, "H": 8, "N": 1, "O": 1}, "charge": 1},
+    {"name": "MEACOO-", "formula": {"C": 3, "H": 6, "N": 1, "O": 3}, "charge": -1},
+    {"name": "HCO3-", "formula": {"C": 1, "H": 1, "N": 0, "O": 3}, "charge": -1},
+    {"name": "CO3--", "formula": {"C": 1, "H": 0, "N": 0, "O": 3}, "charge": -2},
+    {"name": "H3O+", "formula": {"C": 0, "H": 3, "N": 0, "O": 1}, "charge": 1},
+    {"name": "OH-", "formula": {"C": 0, "H": 1, "N": 0, "O": 1}, "charge": -1}
+  ],
+  "balance_row_order": ["C", "H", "N", "O"],
+  "declared_balance_rank": 4,
+  "declared_reaction_rank": 5,
+  "reactions": [
+    {
+      "reaction_id": "R1",
+      "equation": "2 H2O <=> H3O+ + OH-",
+      "stoichiometry": [0, 0, -2, 0, 0, 0, 0, 1, 1],
+      "selected_source": "Austgen1991_TableV_reaction_1a",
+      "source_record_ids": ["Austgen1991"],
+      "source_role": "primary_selected",
+      "dimensionless": true,
+      "contract_logarithm": "natural",
+      "activity_convention": "mole_fraction_unsymmetric",
+      "source_standard_state": "H2O and MEA pure liquid at system T,P; molecular and ionic solutes ideal infinitely dilute aqueous solution at system T,P",
+      "pressure_binding": "source correlation is temperature-only; standard states are evaluated at system pressure",
+      "correlation": {
+        "kind": "ln_a_plus_b_over_t_plus_c_ln_t_plus_d_t",
+        "a": 132.899,
+        "b_k": -13445.9,
+        "c": -22.4773,
+        "d_per_k": 0.0
+      },
+      "temperature_range_k": [273.15, 498.15],
+      "anchor_temperature_k": 298.15,
+      "anchor_ln_k": -40.26536023393261,
+      "anchor_abs_tolerance": 5e-13
+    },
+    {
+      "reaction_id": "R2",
+      "equation": "CO2 + 2 H2O <=> HCO3- + H3O+",
+      "stoichiometry": [-1, 0, -2, 0, 0, 1, 0, 1, 0],
+      "selected_source": "Austgen1991_TableV_reaction_4a",
+      "source_record_ids": ["Austgen1991"],
+      "source_role": "primary_selected_over_later_Nasrifar_231.456_conflict_without_claimed_erratum",
+      "dimensionless": true,
+      "contract_logarithm": "natural",
+      "activity_convention": "mole_fraction_unsymmetric",
+      "source_standard_state": "H2O and MEA pure liquid at system T,P; molecular and ionic solutes ideal infinitely dilute aqueous solution at system T,P",
+      "pressure_binding": "source correlation is temperature-only; standard states are evaluated at system pressure",
+      "correlation": {
+        "kind": "ln_a_plus_b_over_t_plus_c_ln_t_plus_d_t",
+        "a": 231.465,
+        "b_k": -12092.1,
+        "c": -36.7816,
+        "d_per_k": 0.0
+      },
+      "temperature_range_k": [273.15, 498.15],
+      "anchor_temperature_k": 298.15,
+      "anchor_ln_k": -18.658825483177367,
+      "anchor_abs_tolerance": 5e-13
+    },
+    {
+      "reaction_id": "R3",
+      "equation": "HCO3- + H2O <=> CO3-- + H3O+",
+      "stoichiometry": [0, 0, -1, 0, 0, -1, 1, 1, 0],
+      "selected_source": "Austgen1991_TableV_reaction_5a",
+      "source_record_ids": ["Austgen1991"],
+      "source_role": "primary_selected",
+      "dimensionless": true,
+      "contract_logarithm": "natural",
+      "activity_convention": "mole_fraction_unsymmetric",
+      "source_standard_state": "H2O and MEA pure liquid at system T,P; molecular and ionic solutes ideal infinitely dilute aqueous solution at system T,P",
+      "pressure_binding": "source correlation is temperature-only; standard states are evaluated at system pressure",
+      "correlation": {
+        "kind": "ln_a_plus_b_over_t_plus_c_ln_t_plus_d_t",
+        "a": 216.049,
+        "b_k": -12431.7,
+        "c": -35.4819,
+        "d_per_k": 0.0
+      },
+      "temperature_range_k": [273.15, 498.15],
+      "anchor_temperature_k": 298.15,
+      "anchor_ln_k": -27.80868301316974,
+      "anchor_abs_tolerance": 5e-13
+    },
+    {
+      "reaction_id": "R4",
+      "equation": "MEACOO- + H2O <=> HCO3- + MEA",
+      "stoichiometry": [0, 1, -1, 0, -1, 1, 0, 0, 0],
+      "selected_source": "Tong2012_Table5_K5_MEA_via_Aroua1999",
+      "source_record_ids": ["Tong2012", "Aroua1999"],
+      "source_role": "qualified_secondary_selected_for_primary_infinite_dilution_measurement",
+      "dimensionless": true,
+      "contract_logarithm": "natural",
+      "activity_convention": "molality_1_mol_per_kg_infinite_dilution_water_solvent",
+      "source_standard_state": "thermodynamic molality standard for solutes; solvent water omitted from the reported K5 expression",
+      "pressure_binding": "source correlation is temperature-only and carries no explicit pressure term; first use is restricted to the 1 bar sentinel pending the Provider-basis transformation",
+      "correlation": {
+        "kind": "ln_a_plus_b_over_t",
+        "a": 2.151,
+        "b_k": -1545.3
+      },
+      "temperature_range_k": [293.15, 323.15],
+      "anchor_temperature_k": 298.15,
+      "anchor_ln_k": -3.031961596511823,
+      "anchor_abs_tolerance": 5e-13,
+      "alternative": {
+        "source": "Austgen1991_TableV_reaction_7a",
+        "role": "model_specific_vle_fitted_mole_fraction_alternative_not_selected",
+        "correlation": {"kind": "ln_a_plus_b_over_t", "a": 2.8898, "b_k": -3635.09}
+      }
+    },
+    {
+      "reaction_id": "R5",
+      "equation": "MEAH+ + H2O <=> MEA + H3O+",
+      "stoichiometry": [0, 1, -1, -1, 0, 0, 0, 1, 0],
+      "selected_source": "BatesPinching1951_equation_7",
+      "source_record_ids": ["BatesPinching1951"],
+      "source_role": "primary_selected_original_aqueous_standard_state",
+      "dimensionless": true,
+      "contract_logarithm": "natural",
+      "activity_convention": "thermodynamic_aqueous_molality",
+      "source_standard_state": "aqueous thermodynamic standard state for monoethanolammonium acid dissociation; solvent water omitted from K",
+      "pressure_binding": "source correlation is temperature-only and carries no explicit pressure term; first use is restricted to the 1 bar sentinel pending the Provider-basis transformation",
+      "correlation": {
+        "kind": "ln_from_negative_log10_a_over_t_plus_b_plus_c_t",
+        "a_k": 2677.91,
+        "b": 0.3869,
+        "c_per_k": 0.0004277
+      },
+      "temperature_range_k": [273.15, 323.15],
+      "anchor_temperature_k": 298.15,
+      "anchor_ln_k": -21.86574617291778,
+      "anchor_abs_tolerance": 5e-13,
+      "alternative": {
+        "source": "Austgen1991_TableV_reaction_6a",
+        "role": "pure_amine_reference_corrected_mole_fraction_alternative_not_selected",
+        "correlation": {
+          "kind": "ln_a_plus_b_over_t_plus_c_ln_t_plus_d_t",
+          "a": 2.1211,
+          "b_k": -8189.38,
+          "c": 0.0,
+          "d_per_k": -0.007484
+        }
+      }
+    }
+  ],
+  "source_records": [
+    {
+      "source_id": "Austgen1991",
+      "doi": "10.1021/ie00051a007",
+      "locator": "pp. 545-547, Standard States, Eq. 3, Eq. 7, Table V",
+      "local_pdf_sha256": "8c0a6a57e5bf9e28b1f9da8022d54290506fe04b4286b6494ef8a44fd924f8db"
+    },
+    {
+      "source_id": "Tong2012",
+      "doi": "10.1016/j.ijggc.2011.11.005",
+      "locator": "pp. 43-44, Eqs. 5-9 and 12, Table 5",
+      "local_pdf_sha256": "78af3d67d58ff610dcc7c34fd55a75763470b7cd5bac0f3e39c256c7d7ffd61c"
+    },
+    {
+      "source_id": "Aroua1999",
+      "doi": "10.1021/je980290n",
+      "locator": "abstract and pp. 887-891; log10 Kformation = -0.934 + 671/T at infinite dilution",
+      "local_pdf_sha256": null
+    },
+    {
+      "source_id": "BatesPinching1951",
+      "doi": "10.6028/jres.046.039",
+      "locator": "p. 349 and Eq. 7; -log10 K = 2677.91/T + 0.3869 + 0.0004277 T",
+      "official_pdf": "https://nvlpubs.nist.gov/nistpubs/jres/46/jresv46n5p349_A1b.pdf",
+      "official_pdf_sha256": "aff8621efd41dbce106bb189fd104840a1513d9d163f4f57dfb1abbf53a30db1",
+      "local_pdf_sha256": null
+    }
+  ],
+  "provider_transform": {
+    "ready": false,
+    "required_common_source_convention": "one explicit component standard-state scale vector shared by all five reactions",
+    "required_provider_record": "installed Provider neutral-reference contractions at the exact T,P, component order, and parameter fingerprint",
+    "blockers": [
+      "common-source-standard-state-conversion-missing",
+      "provider-reference-contractions-missing"
+    ]
+  }
+}
