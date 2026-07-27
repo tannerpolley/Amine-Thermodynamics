@@ -41,6 +41,13 @@ Old file-path commands such as `uv run python MEA/run_plot_exports.py` are inten
 
 The removed nine-species/Gekko diagnostic workflow remains available on `legacy/main-legacy`; it is not part of active `main` validation.
 
+## License and Citation
+
+Repository software and original project documentation are available under the
+[MIT License](LICENSE). Third-party experimental data and source material retain
+their original terms and provenance; the repository license does not relicense
+those works. Cite the exact version used through [CITATION.cff](CITATION.cff).
+
 Each analysis owns its canonical generated tables under `results/`. Figure output folders contain only the exact plotted CSV subset and render bundle; every `.mpl.yaml` sidecar records the repository-relative plotted-data path and SHA-256 digest. Disposable run output belongs under ignored `analyses/**/results/runs/`.
 
 ## Key Artifact Paths
