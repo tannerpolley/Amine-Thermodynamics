@@ -22,8 +22,9 @@ Scientific lane: fixed-parameter evaluation, not parameter regression.
 The corresponding author approved the committed front matter and declarations,
 *Fluid Phase Equilibria* as the target venue, the MIT repository license, and
 GitHub release `v1.0.0` as the versioned repository record on 2026-07-27. No
-Zenodo record or DOI will be minted. The release may be published only from the
-merged commit after the final scientific proof oracle passes.
+Zenodo record or DOI was minted. The release was published from verified merge
+commit `92a032a7de3233575233a75fb86bba0cf98b43c7` at
+<https://github.com/tannerpolley/MEA-Thermodynamics/releases/tag/v1.0.0>.
 
 ## Final proof oracle
 
