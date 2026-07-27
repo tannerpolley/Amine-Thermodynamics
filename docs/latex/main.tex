@@ -73,10 +73,10 @@
 \def\floatpagepagefraction{1}
 \def\textpagefraction{.001}
 
-\shorttitle{SSM+DS ePC-SAFT Modeling of CO2 Solubility in Aqueous MEA}
+\shorttitle{SSM+DS ePC-SAFT Evaluation for Aqueous MEA}
 \shortauthors{Polley}
 
-\title[mode = title]{\texorpdfstring{SSM+DS Modified-Born ePC-SAFT Modeling of \ce{CO2} Solubility in Aqueous Monoethanolamine with Speciation Constraints}{SSM+DS Modified-Born ePC-SAFT Modeling of CO2 Solubility in Aqueous Monoethanolamine with Speciation Constraints}}
+\title[mode = title]{\texorpdfstring{Evaluation of SSM+DS Modified-Born ePC-SAFT for \ce{CO2} Solubility and Speciation in Aqueous Monoethanolamine}{Evaluation of SSM+DS Modified-Born ePC-SAFT for CO2 Solubility and Speciation in Aqueous Monoethanolamine}}
 
 \author[1]{Tanner W. Polley}[orcid=0009-0008-5957-4152]
 \cormark[1]
@@ -93,7 +93,7 @@
 \cortext[cor1]{Corresponding author.}
 
 \begin{abstract}
-Carbon dioxide (\COtwo) solubility in aqueous monoethanolamine (\MEA) is usually reported through the equilibrium \COtwo partial pressure at fixed solvent loading, but the pressure depends on the ionic liquid composition formed by carbamate and carbonate reactions.  We extend solvation-shell modeling plus dielectric-saturation (SSM+DS) modified-Born electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) to loaded \MEA--\HtwoO--\COtwo using a true-species liquid basis containing \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide.  Literature vapor--liquid-equilibrium (VLE) solubility records and nuclear magnetic resonance (NMR) speciation data were converted to a common loading basis over 30 wt\% \MEA, 20--\SI{120}{\degreeCelsius}, and \COtwo loading 0.003--0.990.  An ideal Smith--Missen five-reaction baseline reproduced major amine-speciation trends, with median absolute \(\log_{10}(\mathrm{model}/\mathrm{data})\) residuals of 0.055 for \MEA, 0.044 for \MEAH, 0.029 for \MEACOO, and 0.227 for \HCOthree.  The same reaction network was then evaluated with ePC-SAFT activities, fugacities, concentration-dependent permittivity, and SSM+DS Born terms.  On the 31-record intersection, median absolute pressure residuals were 0.160 for the ideal baseline and 0.495 for the activity model, so the present fixed activity treatment did not improve pressure accuracy.  The activity calculation nevertheless converged for all 161 solubility-pressure records, for which its contextual median residual was 0.493, and for 74 speciation records; direct-positive speciation residuals were 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, and 0.461 for \HCOthree.  The fixed parameter set provides a residual-qualified advanced-Born ePC-SAFT test for \COtwo solubility in loaded \MEA; carbonate-family Born identifiability remains the main limitation.
+Reactive \COtwo absorption couples the equilibrium gas pressure to the aqueous electrolyte composition.  We evaluated a fixed solvation-shell-modeling plus dielectric-saturation (SSM+DS) modified-Born electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) parameter set for \COtwo solubility and speciation in 30 wt\% aqueous monoethanolamine (\MEA).  A five-reaction liquid model resolved \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide.  The evidence comprised 161 vapor--liquid-equilibrium pressure records and 74 nuclear magnetic resonance speciation states over 20--\SI{120}{\degreeCelsius} and \COtwo loadings of 0.003--0.990.  An ideal-activity calculation established the reaction and material-balance baseline; an activity calculation added ePC-SAFT activities and fugacities, concentration-dependent permittivity, and SSM+DS Born terms.  On 31 Jou et al.\ measurements common to both calculations, the median absolute \(\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})\) residual was 0.160 for the ideal baseline and 0.495 for the activity model, which improved only 4 of 31 records.  The activity calculation converged for all 161 pressure records and all 74 speciation states.  Median absolute residuals for positive measured species values were 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, and 0.461 for \HCOthree.  The fixed set described amine-family speciation more closely than pressure or carbonate speciation.  Its limited \MEAH/\MEACOO parameter provenance and carbonate-solvation sensitivity do not support transfer as a predictive parameterization and define the evidence needed for a future joint regression.
 \end{abstract}
 
 \begin{keywords}
@@ -103,7 +103,7 @@ Carbon dioxide (\COtwo) solubility in aqueous monoethanolamine (\MEA) is usually
 \maketitle
 
 \hypersetup{
-    pdftitle={SSM+DS Modified-Born ePC-SAFT Modeling of CO2 Solubility in Aqueous Monoethanolamine with Speciation Constraints},
+    pdftitle={Evaluation of SSM+DS Modified-Born ePC-SAFT for CO2 Solubility and Speciation in Aqueous Monoethanolamine},
     pdfauthor={Tanner W. Polley},
     pdfsubject={Fixed-parameter thermodynamic evaluation of reactive aqueous MEA-CO2-H2O},
     pdfkeywords={carbon dioxide, monoethanolamine, ePC-SAFT, modified Born, speciation, vapor-liquid equilibrium}
@@ -120,6 +120,7 @@ Carbon dioxide (\COtwo) solubility in aqueous monoethanolamine (\MEA) is usually
 \bibliographystyle{styles/model1-num-names}
 \bibliography{manuscript_references,project_sources,official_sources}
 
+\clearpage
 \input{sections/nomenclature}
 
 \end{document}
