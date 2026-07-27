@@ -10,16 +10,15 @@ mandatory result.
 
 ## Acceptance criteria
 
-- [ ] #15 closes with methods, metadata/archive, and visual/editorial evidence.
-- [ ] Confidence validation passes on the final commit.
-- [ ] Final integration proves the immutable `epcsaft` 1.5.2 evaluation lane.
-- [ ] The deterministic PDF and submission package match the final commit and
+- [x] #15 closes with methods, metadata/archive, and visual/editorial evidence.
+- [x] Confidence validation passes on the final commit.
+- [x] Final integration proves the immutable `epcsaft` 1.5.2 evaluation lane.
+- [x] The deterministic PDF and submission package match the final commit and
   approved metadata.
 - [ ] The corresponding author records an explicit submit or hold decision.
 
 ## Blocked by
 
-- #15
 - Corresponding-author submit/hold authority.
 
 Issues #6 and #12-14 remain future regression work and do not block submission
