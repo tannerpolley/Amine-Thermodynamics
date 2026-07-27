@@ -17,13 +17,13 @@ Scientific lane: fixed-parameter evaluation, not parameter regression.
 - The current figure set displays the pressure and speciation evidence used by
   the manuscript; no prospective regression figure is presented as a result.
 
-## Human-owned gate
+## Author-approved publication route
 
-The committed front matter and declarations are transcribed in
-`submission_metadata.yml`, but require final corresponding-author
-confirmation. The target venue, repository license, release tag, archive
-provider, and DOI remain unset. No tag, release, or archive should be published
-until those choices are explicit and the final scientific proof oracle passes.
+The corresponding author approved the committed front matter and declarations,
+*Fluid Phase Equilibria* as the target venue, the MIT repository license, and
+GitHub release `v1.0.0` as the versioned repository record on 2026-07-27. No
+Zenodo record or DOI will be minted. The release may be published only from the
+merged commit after the final scientific proof oracle passes.
 
 ## Final proof oracle
 
