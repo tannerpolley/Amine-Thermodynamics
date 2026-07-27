@@ -49,7 +49,7 @@ The binary-interaction matrix is intentionally sparse.  \Cref{tab:binary-interac
 \subsection{Fixed parameter evidence boundary}
 The coupled native regression was not completed.  The retained \MEAH and \MEACOO values are provisional fixed inputs inherited from an exploratory historical calculation, not a reproducible parameter fit executed by the current workflow.  The NMR/speciation studies\cite{Matin2012,Jakobsen2005,Bottinger2008} are therefore used only to evaluate the resulting fixed-parameter speciation residuals.  Historical local-fit bounds, improvement metrics, and parity plots are excluded because they do not establish a current parameter-estimation result.  A future parameter claim requires an executed package-native, multi-observable regression with complete row provenance and held-out evidence defined before fitting.
 
-\subsection{Coupled CO2 Solubility and Speciation Objective}
+\subsection{Evaluation residuals and future coupled objective}
 The pressure residual is expressed on a logarithmic basis,
 \begin{equation}
     \epsilon_{P,j}
@@ -59,7 +59,7 @@ The pressure residual is expressed on a logarithmic basis,
 \end{equation}
 because measured \COtwo partial pressures span several orders of magnitude across the solubility data.  Speciation residuals use the same \(\log_{10}(\mathrm{model}/\mathrm{data})\) form for nonzero measured targets.  Measurements reported as zero and treated as upper-bound targets are evaluated separately with modeled mole-fraction upper bounds, and quantities inferred from balance constraints are used as context rather than direct logarithmic targets.
 
-The multi-observable target combines pressure residuals, speciation residuals, reaction-equilibrium residuals, and regularization to the parameter seed:
+For a future jointly fitted model, the preregistered multi-observable target would combine pressure residuals, speciation residuals, reaction-equilibrium residuals, and regularization to the parameter seed:
 \begin{equation}
     \begin{aligned}
     \Phi(\boldsymbol{\theta}) ={}&
@@ -75,9 +75,13 @@ The multi-observable target combines pressure residuals, speciation residuals, r
     \end{aligned}
     \label{eq:regression-objective}
 \end{equation}
-The \(K_r(T)\) values are the fixed reaction constants listed in \cref{tab:reaction-equilibrium-constants}.  A solubility-pressure-only fit can hide a poor liquid composition, while a speciation-only fit cannot guarantee the correct vapor-phase pressure.  A thermodynamic model intended for reactive \COtwo solubility and liquid speciation must therefore satisfy both observable families.
+Equation~\eqref{eq:regression-objective} is not minimized in the present work and supplies no fitted-parameter claim.  The \(K_r(T)\) values are the fixed reaction constants listed in \cref{tab:reaction-equilibrium-constants}.  A solubility-pressure-only fit can hide a poor liquid composition, while a speciation-only fit cannot guarantee the correct vapor-phase pressure.  A future thermodynamic regression intended for reactive \COtwo solubility and liquid speciation must therefore satisfy both observable families.
 
 \subsection{Computational implementation and reproducibility}
-The baseline calculation is an ideal Smith--Missen-style five-reaction, nine-species equilibrium solve with activities set equal to mole fractions.  The activity-based calculation evaluates the same reaction network with ePC-SAFT activities, fugacities, concentration-dependent permittivity, and SSM+DS Born corrections.  The present work does not report a completed coupled solubility/speciation regression.  The reported parameter set is therefore evaluated as a fixed activity-based parameter set with explicit pressure and speciation residuals.  \Cref{tab:residual-summary} summarizes the residual metrics that define the manuscript claims.
+The ideal baseline solves eight reaction, balance, and charge residuals in an eight-variable softmax representation using SciPy nonlinear least squares.  The first loading uses a chemistry-informed positive composition; subsequent points at the same temperature use the previous accepted composition as a continuation start.  The solve permits at most 1000 residual evaluations, uses \(10^{-11}\) function, step, and gradient tolerances, and is accepted only when the largest unscaled residual is at most \(10^{-8}\).
+
+The activity-based calculation uses the same ordered nine-species basis with the pinned \texttt{epcsaft} 1.5.2 source at Git commit \texttt{9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785}.  Native reactive-speciation calls use at most 80 iterations, a \(10^{-7}\) solver tolerance, damping 0.5, and a minimum mole fraction of \(10^{-14}\).  Acceptance additionally requires mass-balance residuals no larger than \(10^{-7}\), charge residual no larger than \(10^{-6}\), reaction residuals no larger than \(10^{-7}\), finite positive normalized compositions, and zero state-evaluation failures.  Reactive bubble calculations use at most 120 iterations, a \(10^{-6}\) fugacity tolerance, and pressure bounds from \(10^{-3}\) to \(10^{8}\) Pa.  Best-effort solver returns are retained as diagnostics but are excluded from metrics and plots unless every acceptance condition passes.
+
+The present work does not execute or report a coupled solubility/speciation regression.  The reported parameter set is evaluated as a fixed activity-based parameter set with explicit pressure and speciation residuals; no optimizer settings or runtime are therefore claimed for parameter estimation.  \Cref{tab:residual-summary} summarizes the residual metrics that define the manuscript claims.
 
 \input{tables/residual_summary}
