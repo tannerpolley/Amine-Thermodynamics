@@ -6,7 +6,7 @@ Parent Issue: https://github.com/tannerpolley/MEA-Thermodynamics/issues/15
 **Source Spec:** docs/superpowers/specs/2026-07-13-submission-metadata-archive-design.md
 **Source Plan:** docs/superpowers/plans/2026-07-13-submission-metadata-archive-plan.md
 **Submission Sprint:** docs/superpowers/plans/2026-07-17-fluid-phase-equilibria-submission-sprint-plan.md
-**Labels:** superpowers:issue, kind:deliverable, area:release, priority:submission-blocker, status:in-progress, type:manuscript
+**Labels:** superpowers:issue, kind:deliverable, area:release, status:done, type:manuscript
 Sub-Issue Role: leaf
 Executable: true
 **Goal Command:** Publish GitHub release `v1.0.0` from the verified merged commit and confirm that its URL resolves.
@@ -27,10 +27,10 @@ Executable: true
 ## Acceptance Criteria
 
 - [x] Collect author-approved affiliation, corresponding-author, ORCID, funding, venue, and license values.
-- [ ] Validate manuscript, citation, repository, and PDF metadata for exact agreement.
+- [x] Validate manuscript, citation, repository, and PDF metadata for exact agreement.
 - [x] Require final scientific proof and explicit approval before tag/release publication.
-- [ ] Publish GitHub release `v1.0.0` from the verified merged commit.
-- [ ] Confirm the release URL resolves and record it in the availability text.
+- [x] Publish GitHub release `v1.0.0` from the verified merged commit.
+- [x] Confirm the release URL resolves and record it in the availability text.
 
 ## Authority and route
 
@@ -40,9 +40,11 @@ GitHub-only release route. No Zenodo record or DOI will be created.
 
 ## Submission Sprint Role
 
-The metadata decisions and final scientific proof are complete. The remaining
-execution sequence is repository review, merge, post-merge verification, and
-publication of `v1.0.0` from the verified merge commit.
+The metadata decisions and final scientific proof are complete. GitHub release
+`v1.0.0` was published from verified merge commit
+`92a032a7de3233575233a75fb86bba0cf98b43c7` on 2026-07-27. Its manuscript PDF
+asset has SHA-256
+`462485922a40b9cb8988561f6f30756c49b8306c567dda39e77e9dcf54694db7`.
 
 ## Non-goals
 
