@@ -26,11 +26,11 @@ The speciation evidence contains 74 NMR states from three studies\cite{Bottinger
 \end{table*}
 
 \subsection{Species basis and parameter hierarchy}
-The activity calculation uses the nine-species liquid basis in \cref{eq:true-species-vector}.  Its parameters comprise inherited molecular values, SSM+DS ion conventions from modified-Born ePC-SAFT literature, fixed \MEAH and \MEACOO values from the Phase 2 artifact described below, and literature-based or sensitivity-tested trace-ion quantities.
+The activity calculation uses the nine-species liquid basis in \cref{eq:true-species-vector}.  Its parameters comprise inherited molecular values, SSM+DS ion conventions from modified-Born ePC-SAFT literature, fixed \MEAH and \MEACOO values from the versioned parameter tables described below, and literature-based or sensitivity-tested trace-ion quantities.
 
 \input{tables/full_ionic_ssm_ds_parameters}
 
-The NMR data directly measure \MEACOO at all 74 states and measure \MEA and \MEAH separately at 35 states each; the \ce{MEA + MEAH+} aggregate is available at all 74 states.  They also contain 53 positive and 15 source-reported zero \HCOthree observations and 16 positive \COthree observations.  \HthreeO and \Hydroxide occur only as balance-derived values.  The parameter-evidence matrix in \cref{tab:parameter-evidence-matrix,tab:trace-parameter-evidence} relates this measurement coverage to the retained inputs.
+The NMR data directly measure \MEACOO at all 74 states and measure \MEA and \MEAH separately at 35 states each; the \ce{MEA + MEAH+} aggregate is available at all 74 states.  They also contain 53 positive and 15 source-reported zero \HCOthree observations and 16 positive \COthree observations.  \HthreeO and \Hydroxide occur only as balance-derived values.  The parameter-evidence matrix in \cref{tab:parameter-evidence-matrix,tab:trace-parameter-evidence} relates this measurement coverage to the fixed inputs.
 
 \input{tables/parameter_evidence_matrix}
 
@@ -40,14 +40,14 @@ The molecular \COtwo, \MEA, and \HtwoO parameters are inherited from the cited P
     \sigma_{\HtwoO}(T)=2.7927+10.11\exp(-0.01775T)-1.417\exp(-0.01146T),
     \label{eq:water-sigma-temperature}
 \end{equation}
-where \(T\) is in kelvin and \(\sigma_{\HtwoO}\) is in angstroms.  The final column of \cref{tab:full-ionic-ssm-ds-parameters} identifies the source or evidentiary status of each value.
+where \(T\) is in kelvin and \(\sigma_{\HtwoO}\) is in angstroms.  The final column of \cref{tab:full-ionic-ssm-ds-parameters} identifies the source or treatment of each value.
 
 The binary-interaction matrix is sparse.  \Cref{tab:binary-interaction-parameters} lists the nonzero interactions, transferred water--ion terms, and candidate interactions fixed at zero.  All other \MEA-specific ion--molecule and ion--ion terms are zero.
 
 \input{tables/binary_interaction_parameters}
 
 \subsection{Parameter provenance and scope}
-The fixed \MEAH, \MEACOO, and \MEAH--\MEACOO interaction values come from bundle receipt \path{mea-co2-h2o-nine-species-diagnostic/1} in GitHub release \texttt{v1.0.0}.  The receipt hashes the source pure-component, binary-interaction, and option tables.  No reproducible parameter-estimation history accompanies these values.  We therefore use the artifact as a fixed diagnostic input and report no newly estimated parameters.
+The fixed \MEAH, \MEACOO, and \MEAH--\MEACOO interaction values come from the versioned parameter tables in GitHub release \texttt{v1.0.0}.  The release records SHA-256 hashes for the pure-component, binary-interaction, and option tables.  No reproducible parameter-estimation history accompanies these values.  We hold them fixed and report no new parameter estimates.
 
 \subsection{Evaluation residuals}
 The pressure residual is expressed on a logarithmic basis,
