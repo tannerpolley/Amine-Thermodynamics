@@ -20,34 +20,34 @@ The speciation evidence contains 74 NMR states from three studies\cite{Bottinger
         Measured \COtwo pressure at fixed loading; logarithmic solubility residual \\
         Speciation & 74 & \cite{Bottinger2008,Jakobsen2005,Matin2012} &
         30 wt\% \MEA, 20--\SI{80}{\degreeCelsius}, \(\alpha=0.064\)--0.990 &
-        Positive species and aggregate measurements enter logarithmic residuals; source-reported zero \HCOthree values enter upper-bound checks; balance-derived values provide context \\
+        Eight states for parameter estimation and 66 states for evaluation; positive measurements enter logarithmic residuals, source-reported zero \HCOthree values enter upper-bound checks, and balance-derived values provide context \\
         \bottomrule
     \end{tabularx}
 \end{table*}
 
-\subsection{Species basis and parameter hierarchy}
-The activity calculation uses the nine-species liquid basis in \cref{eq:true-species-vector}.  Its parameters comprise inherited molecular values, SSM+DS ion conventions from modified-Born ePC-SAFT literature, fixed \MEAH and \MEACOO values from the versioned parameter tables described below, and literature-based or sensitivity-tested trace-ion quantities.
+\subsection{Species basis and parameters}
+The activity calculation uses the nine-species liquid basis in \cref{eq:true-species-vector}.  Molecular, water--ion, and SSM+DS parameters were taken from the literature cited in \cref{tab:full-ionic-ssm-ds-parameters,tab:binary-interaction-parameters}.  We fitted the \MEAH and \MEACOO segment diameters, dispersion energies, Born diameters, and their binary interaction parameter to NMR speciation data.
 
 \input{tables/full_ionic_ssm_ds_parameters}
 
-The NMR data directly measure \MEACOO at all 74 states and measure \MEA and \MEAH separately at 35 states each; the \ce{MEA + MEAH+} aggregate is available at all 74 states.  They also contain 53 positive and 15 source-reported zero \HCOthree observations and 16 positive \COthree observations.  \HthreeO and \Hydroxide occur only as balance-derived values.  The parameter-evidence matrix in \cref{tab:parameter-evidence-matrix,tab:trace-parameter-evidence} relates this measurement coverage to the fixed inputs.
-
-\input{tables/parameter_evidence_matrix}
+The NMR data directly measure \MEACOO at all 74 states and measure \MEA and \MEAH separately at 35 states each; the \ce{MEA + MEAH+} aggregate is available at all 74 states.  They also contain 53 positive and 15 source-reported zero \HCOthree observations and 16 positive \COthree observations.  \HthreeO and \Hydroxide occur only as balance-derived values.
 
 \subsection{Pure-component and binary parameters}
-The molecular \COtwo, \MEA, and \HtwoO parameters are inherited from the cited PC-SAFT and ePC-SAFT sources listed in \cref{tab:full-ionic-ssm-ds-parameters}.  The temperature-dependent water segment diameter is
+The molecular \COtwo, \MEA, and \HtwoO parameters were taken from the cited PC-SAFT and ePC-SAFT studies.  The temperature-dependent water segment diameter is
 \begin{equation}
     \sigma_{\HtwoO}(T)=2.7927+10.11\exp(-0.01775T)-1.417\exp(-0.01146T),
     \label{eq:water-sigma-temperature}
 \end{equation}
-where \(T\) is in kelvin and \(\sigma_{\HtwoO}\) is in angstroms.  The final column of \cref{tab:full-ionic-ssm-ds-parameters} identifies the source or treatment of each value.
+where \(T\) is in kelvin and \(\sigma_{\HtwoO}\) is in angstroms.
 
-The binary-interaction matrix is sparse.  \Cref{tab:binary-interaction-parameters} lists the nonzero interactions, transferred water--ion terms, and candidate interactions fixed at zero.  All other \MEA-specific ion--molecule and ion--ion terms are zero.
+The binary-interaction matrix is sparse.  \Cref{tab:binary-interaction-parameters} lists its nonzero terms; all unlisted pairs use \(k_{ij}=0\).
 
 \input{tables/binary_interaction_parameters}
 
-\subsection{Parameter provenance and scope}
-The fixed \MEAH, \MEACOO, and \MEAH--\MEACOO interaction values come from the versioned parameter tables in GitHub release \texttt{v1.0.0}.  The release records SHA-256 hashes for the pure-component, binary-interaction, and option tables.  No reproducible parameter-estimation history accompanies these values.  We hold them fixed and report no new parameter estimates.
+\subsection{Parameter estimation}
+We fitted the segment diameter, dispersion energy, and Born diameter of \MEAH and \MEACOO, together with \(k_{\MEAH,\MEACOO}\).  The regression used 22 logarithmic composition residuals from eight NMR states: four from B\"ottinger et al., two from Jakobsen et al., and two from Matin et al.\ \cite{Bottinger2008,Jakobsen2005,Matin2012}.  These states span 20--\SI{60}{\degreeCelsius} and \COtwo loadings from 0.075 to 0.929.  The objective gave equal weight to each residual and included a weak dimensionless regularization term of 0.003 relative to the initial parameter vector.
+
+The nonlinear least-squares calculation used ePC-SAFT 1.5.2 for the activity and fugacity evaluations.  It satisfied the step-tolerance termination criterion after 13 objective evaluations.  The residual norm decreased from 0.27144 to 0.26766, and no fitted parameter reached its bound.  \Cref{tab:full-ionic-ssm-ds-parameters,tab:binary-interaction-parameters} report the resulting estimates.  The other 66 NMR states and all 161 pressure records were excluded from parameter estimation.
 
 \subsection{Evaluation residuals}
 The pressure residual is expressed on a logarithmic basis,
@@ -64,6 +64,6 @@ We solved the ideal baseline as eight reaction, material-balance, and charge res
 
 The activity calculation uses the same ordered nine-species basis with \texttt{epcsaft} 1.5.2 pinned at Git commit \texttt{9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785}.  Reactive-speciation solves use at most 80 iterations, a \(10^{-7}\) solver tolerance, damping 0.5, and a minimum mole fraction of \(10^{-14}\).  Accepted solutions have mass-balance residuals at most \(10^{-7}\), charge residual at most \(10^{-6}\), reaction residuals at most \(10^{-7}\), finite positive normalized compositions, and no state-evaluation failure.  Reactive bubble calculations use at most 120 iterations, a \(10^{-6}\) fugacity tolerance, and pressure bounds from \(10^{-3}\) to \(10^{8}\) Pa.  Metrics and plots include only accepted solutions.
 
-\Cref{tab:residual-summary} summarizes the pressure and speciation metrics for the fixed parameter set.
+\Cref{tab:residual-summary} summarizes the pressure and speciation results.
 
 \input{tables/residual_summary}

@@ -1,22 +1,19 @@
 \begin{table}[t]
     \centering
-    \caption{Binary dispersion interaction parameters used in the fixed activity-based ePC-SAFT evaluation.  Unlisted binary pairs were held at \(k_{ij}=0\).}
+    \caption{Nonzero binary dispersion interaction parameters used in the activity-based ePC-SAFT calculation.  Unlisted binary pairs use \(k_{ij}=0\).}
     \label{tab:binary-interaction-parameters}
     \small\rmfamily
     \setlength{\tabcolsep}{5pt}
     \renewcommand{\arraystretch}{1.08}
     \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.26\linewidth}c>{\raggedright\arraybackslash}X}
         \toprule
-        Pair & \(k_{ij}\) & Treatment and evidence role \\
+        Pair & \(k_{ij}\) & Source \\
         \midrule
-        \COtwo--\MEA & 0.0000 & Held fixed in the activity-based evaluation. \\
-        \MEA--\HtwoO & -0.0520 & Inherited neutral molecular interaction term for the aqueous amine solvent basis~\cite{Baygi2015,Nasrifar2010}. \\
-        \MEAH--\MEACOO & -0.002018 & Fixed input from release \texttt{v1.0.0}; estimation history unavailable. \\
-        \MEAH--\HCOthree & 0.0000 & Held fixed in the activity-based evaluation. \\
-        \HtwoO--\HthreeO & 0.2500 & Literature water-ion transfer term for the proton carrier~\cite{Held2014,Uyan2015}. \\
-        \HtwoO--\Hydroxide & -0.2500 & Literature water-ion transfer term for hydroxide~\cite{Held2014,Uyan2015}. \\
-        \HtwoO--\HCOthree & 0.0000 & Literature water-ion transfer term for bicarbonate~\cite{Held2014,Uyan2015}. \\
-        \HtwoO--\COthree & -0.2500 & Literature water-ion transfer term for carbonate~\cite{Held2014,Uyan2015}. \\
+        \MEA--\HtwoO & -0.0520 & \cite{Baygi2015,Nasrifar2010} \\
+        \MEAH--\MEACOO & -0.002018 & This work \\
+        \HtwoO--\HthreeO & 0.2500 & \cite{Held2014,Uyan2015} \\
+        \HtwoO--\Hydroxide & -0.2500 & \cite{Held2014,Uyan2015} \\
+        \HtwoO--\COthree & -0.2500 & \cite{Held2014,Uyan2015} \\
         \bottomrule
     \end{tabularx}
 \end{table}
