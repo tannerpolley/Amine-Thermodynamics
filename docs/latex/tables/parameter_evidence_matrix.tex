@@ -13,9 +13,9 @@
         \MEA & \makecell[l]{$m$, $\sigma$, $\epsilon/k$,\\association terms, MW} & Molecular PC-SAFT value & Associating neutral amine parameterization used as the \MEA molecular basis. \\
         \MEA & $f_k$ & Fixed at 1 & The cited SSM+DS study reports solvent \(f_k\) values near 1.5 for water and alcohols.  Direct \MEA dielectric and activity evidence is unavailable for estimating \(f_{\MEA}\)~\cite{Figiel2025}. \\
         \HtwoO & \makecell[l]{$m$, $\sigma(T)$, $\epsilon/k$,\\association terms,\\$\varepsilon_r$, $f_k$, MW} & SSM+DS solvent parameter & Water PC-SAFT parameters and SSM+DS $f_k=1.5$ from modified-Born ePC-SAFT literature. \\
-        \MEAH & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$} & Fixed diagnostic input & Phase 2 artifact in release \texttt{v1.0.0}; 35 direct \MEAH and 74 direct \ce{MEA + MEAH+} aggregate observations evaluate the result, but the parameter estimation history is unavailable. \\
+        \MEAH & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$} & Fixed input & Release \texttt{v1.0.0}; 35 direct \MEAH and 74 direct \ce{MEA + MEAH+} aggregate observations evaluate the result, but the parameter estimation history is unavailable. \\
         \MEAH & \makecell[l]{$\varepsilon_r$, $f_k$,\\$z$, MW} & Ionic conventions & All ions use relative dielectric constant 8 and $f_k=1$ in SSM+DS; charge and molecular weight come from the species definition. \\
-        \MEACOO & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$,\\$k_{ij}(\MEAH,\MEACOO)$} & Fixed diagnostic input & Phase 2 artifact in release \texttt{v1.0.0}; 74 direct carbamate observations evaluate the result, but the parameter estimation history is unavailable. \\
+        \MEACOO & \makecell[l]{$\sigma$, $\epsilon/k$,\\$d^{\mathrm{Born}}$,\\$k_{ij}(\MEAH,\MEACOO)$} & Fixed input & Release \texttt{v1.0.0}; 74 direct carbamate observations evaluate the result, but the parameter estimation history is unavailable. \\
         \MEACOO & \makecell[l]{$\varepsilon_r$, $f_k$,\\$z$, MW} & Ionic conventions plus corrected molecular weight & All ions use relative dielectric constant 8 and $f_k=1$ in SSM+DS; MW is corrected to \MEA+\COtwo-H = 0.10408 kg/mol. \\
         \bottomrule
     \end{tabularx}
