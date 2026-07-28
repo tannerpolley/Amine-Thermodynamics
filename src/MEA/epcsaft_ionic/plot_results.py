@@ -115,7 +115,15 @@ def speciation_rows(values: dict[str, float]) -> list[dict[str, object]]:
         for species, x_value in zip(SPECIES, target.x):
             row[f"target_x_{species}"] = float(x_value)
         try:
-            chemistry = solve_activity_speciation(target.loading, target.T, target.P, target.x, values, FIT_DATASET_DIR)
+            chemistry = solve_activity_speciation(
+                target.loading,
+                target.T,
+                target.P,
+                target.x,
+                values,
+                FIT_DATASET_DIR,
+                target.mea_weight_fraction,
+            )
             for species, x_value in zip(SPECIES, chemistry.x):
                 row[f"model_x_{species}"] = float(x_value)
                 row[f"log10_model_over_target_{species}"] = math.log10(

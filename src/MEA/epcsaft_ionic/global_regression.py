@@ -159,7 +159,15 @@ def speciation_rows(values: dict[str, float], targets: list[SpeciationTarget], s
     species_tuple = tuple(species_names)
     for target in targets:
         try:
-            prediction = solve_activity_speciation(target.loading, target.T, target.P, target.x, values, FIT_DATASET_DIR)
+            prediction = solve_activity_speciation(
+                target.loading,
+                target.T,
+                target.P,
+                target.x,
+                values,
+                FIT_DATASET_DIR,
+                target.mea_weight_fraction,
+            )
             prediction_x = prediction.x
             solver_returned = prediction.solver_returned_success
             accepted = prediction.accepted

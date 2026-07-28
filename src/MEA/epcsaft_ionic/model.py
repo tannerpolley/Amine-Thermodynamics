@@ -612,6 +612,7 @@ def solve_activity_speciation(
     initial_x: np.ndarray,
     values: dict[str, float],
     dataset: Path = DATASET_DIR,
+    mea_weight_fraction: float = CANONICAL_MEA_WEIGHT_FRACTION,
     reactions=None,
     max_iterations: int = 80,
     tolerance: float = 1.0e-7,
@@ -633,7 +634,7 @@ def solve_activity_speciation(
         T=float(T),
         P=float(P),
         balances=reactive_balances(),
-        totals=apparent_totals(float(loading)),
+        totals=apparent_totals(float(loading), float(mea_weight_fraction)),
         reactions=active_reactions,
         initial_x=np.asarray(initial_x, dtype=float),
         options=epcsaft.ReactiveSpeciationOptions(
@@ -828,7 +829,15 @@ def evaluate_values(values: dict[str, float], vle_targets: list[VLETarget], spec
     for target in spec_targets:
         chemistry: ReactiveSpeciationPrediction | None = None
         try:
-            chemistry = solve_activity_speciation(target.loading, target.T, target.P, target.x, values, dataset)
+            chemistry = solve_activity_speciation(
+                target.loading,
+                target.T,
+                target.P,
+                target.x,
+                values,
+                dataset,
+                target.mea_weight_fraction,
+            )
             rxn = chemistry.reaction_residuals
         except Exception as exc:
             failures.append(f"{target.row_id}: {type(exc).__name__}: {str(exc).splitlines()[0]}")

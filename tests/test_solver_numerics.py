@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from MEA.common.solver_acceptance import evaluate_solver_acceptance
+from MEA.epcsaft_ionic.model import apparent_totals
 
 
 def _valid_inputs() -> dict[str, object]:
@@ -54,3 +56,13 @@ def test_rejects_nonconverged_nonfinite_or_out_of_tolerance_states() -> None:
         decision = evaluate_solver_acceptance(**inputs)
         assert not decision.accepted
         assert expected_reasons <= set(decision.rejection_reasons)
+
+
+def test_reactive_material_totals_retain_mea_weight_fraction() -> None:
+    dilute = apparent_totals(loading=0.4, mea_weight_fraction=0.2)
+    concentrated = apparent_totals(loading=0.4, mea_weight_fraction=0.6)
+
+    assert dilute["carbon_total"] / dilute["mea_total"] == pytest.approx(0.4)
+    assert concentrated["carbon_total"] / concentrated["mea_total"] == pytest.approx(0.4)
+    assert concentrated["mea_total"] > dilute["mea_total"]
+    assert concentrated["water_total"] < dilute["water_total"]

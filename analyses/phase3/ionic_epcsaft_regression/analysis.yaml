@@ -16,6 +16,10 @@ inputs:
     kind: fail_closed_target_admission
   - path: data/reference/MEA/manifests/grouped_split_manifest.csv
     kind: frozen_grouped_training_and_validation_assignments
+  - path: data/reference/MEA/manifests/ionic_volumetric_observation_contract.csv
+    kind: loaded_density_observation_contract
+  - path: data/reference/MEA/manifests/volumetric_grouped_split_manifest.csv
+    kind: frozen_volumetric_training_and_validation_assignments
   - path: analyses/phase3/ionic_epcsaft_regression/results/readiness/regression_readiness_summary.json
     kind: deterministic_readiness_and_source_hash_receipt
   - path: src/MEA/epcsaft_ionic/plot_results.py
@@ -27,14 +31,18 @@ outputs:
     kind: accepted_and_rejected_speciation_diagnostics
   - path: analyses/phase3/ionic_epcsaft_regression/results/readiness
     kind: target_admission_split_and_upstream_gate_receipt
+  - path: analyses/phase3/ionic_epcsaft_regression/results/scipy_regression_experiment
+    kind: rejected_downstream_regression_experiment
 commands:
   generate:
     - uv run python analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py
   render:
     - uv run python analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py
+  regression_experiment:
+    - uv run python analyses/phase3/ionic_epcsaft_regression/scripts/run_scipy_regression_experiment.py --max-nfev 12
 runtime:
   class: expensive
-  expected_seconds: 300
+  expected_seconds: 1200
 manuscript_consumers:
   - docs/latex/sections/mea_system_modeling_results.tex
 results_policy: Track canonical diagnostic rows and exact plotted-data bundles under results; consume only manifest-assigned targets and splits; preserve rejected rows with reasons, exclude them from metrics and plots, and make no fitted-parameter claim.

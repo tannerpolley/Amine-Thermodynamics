@@ -269,7 +269,15 @@ def evaluate_reserved_predictions(values: Mapping[str, float]) -> list[dict[str,
         observed.update({f"{species}__upper_bound": 0.0 for species in target.zero_upper_bound_species})
         target_count = len(observed)
         try:
-            prediction = solve_activity_speciation(target.loading, target.T, target.P, target.x, dict(values), FIT_DATASET_DIR)
+            prediction = solve_activity_speciation(
+                target.loading,
+                target.T,
+                target.P,
+                target.x,
+                dict(values),
+                FIT_DATASET_DIR,
+                target.mea_weight_fraction,
+            )
             if not prediction.accepted:
                 raise RuntimeError(prediction.rejection_reason or prediction.message)
             predicted: dict[str, float] = {
