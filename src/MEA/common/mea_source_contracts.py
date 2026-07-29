@@ -726,6 +726,15 @@ def validate_sentinel_contract(
         raise ValueError("Unexpected MEA sentinel contract identity")
     if contract.get("source_records") != EXPECTED_SENTINEL_SOURCE_RECORDS:
         raise ValueError("MEA sentinel source records have drifted")
+    if contract.get("source_artifact_verification") != {
+        "role": "external_provenance_metadata",
+        "runtime_file_dependency": False,
+        "verification_limit": (
+            "PDF identities are retained from source acquisition; package "
+            "validation does not locate or re-hash external PDF bytes"
+        ),
+    }:
+        raise ValueError("MEA sentinel external source-verification limit drifted")
     if tuple(contract.get("species_order", ())) != EXPECTED_SPECIES_ORDER:
         raise ValueError("MEA sentinel species order does not match the reaction contract")
     if (
