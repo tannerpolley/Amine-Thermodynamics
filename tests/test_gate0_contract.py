@@ -77,9 +77,56 @@ def test_gate0_preregistration_freezes_three_coordinates_without_admitting_fit()
     }
     assert contract["regularization"]["status"] == "NOT_ADMITTED_NO_IMMUTABLE_SCALE"
     assert contract["heat_of_absorption"]["status"] == "NOT_ADMITTED"
-    assert contract["tracer"]["selected_state_ids"] == []
+    tracer = contract["tracer"]
+    assert tracer["selected_state_ids"] == [
+        "vle_obs_0137",
+        "Bottinger2008_state_049",
+    ]
+    assert [row["identity"] for row in tracer["active_coordinates"]] == [
+        "MEAH+::sigma",
+        "MEACOO-::sigma",
+    ]
+    assert tracer["regularization"] == {
+        "status": "NOT_REQUIRED_FOR_REDUCED_TRACER",
+        "scale": None,
+    }
+    assert tracer["numerical_acceptance"]["required_row_accounting"] == {
+        "input": 2,
+        "evaluated": 2,
+        "dropped": 0,
+        "skipped": 0,
+        "failed": 0,
+    }
+    assert tracer["observations"][0]["source_observed_value"] == 0.574
+    assert tracer["observations"][0]["source_observed_unit"] == "kPa"
+    assert tracer["observations"][0]["observed_value"] == 574.0
+    assert tracer["observations"][0]["observed_unit"] == "Pa"
+    assert tracer["observations"][1]["observed_value"] == 0.0502
+    assert tracer["observations"][1]["observed_unit"] == "mole_fraction"
 
     drifted = copy.deepcopy(contract)
     drifted["fixed_terms"][0] = "arbitrary"
     with pytest.raises(PreregistrationError, match="frozen contract drifted"):
         validate_gate0_preregistration(drifted)
+
+    source_drift = copy.deepcopy(contract)
+    source_drift["tracer"]["observations"][0]["source_file_sha256"] = "0" * 64
+    with pytest.raises(PreregistrationError, match="pressure source row"):
+        validate_gate0_preregistration(source_drift)
+
+    unit_drift = copy.deepcopy(contract)
+    unit_drift["tracer"]["observations"][0]["source_observed_unit"] = "Pa"
+    with pytest.raises(PreregistrationError, match="unit conversion"):
+        validate_gate0_preregistration(unit_drift)
+
+    speciation_drift = copy.deepcopy(contract)
+    speciation_drift["tracer"]["observations"][1]["observed_value"] = 0.0503
+    with pytest.raises(PreregistrationError, match="speciation source row"):
+        validate_gate0_preregistration(speciation_drift)
+
+    accounting_drift = copy.deepcopy(contract)
+    accounting_drift["tracer"]["numerical_acceptance"]["required_row_accounting"][
+        "dropped"
+    ] = 1
+    with pytest.raises(PreregistrationError, match="tracer evidence"):
+        validate_gate0_preregistration(accounting_drift)

@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "identity": "mea-nine-species-reaction-source-contract-v2",
-  "status": "source_adjudicated_provider_transform_blocked",
+  "status": "source_adjudicated_provider_transform_frozen",
   "species_order": [
     "CO2",
     "MEA",
@@ -14,26 +14,26 @@
     "OH-"
   ],
   "provider_species_order": [
-    "CO2",
-    "MEA",
-    "H2O",
-    "MEAH+",
-    "MEACOO-",
-    "HCO3-",
-    "CO3^2-",
-    "H3O+",
-    "OH-"
+    "carbon-dioxide",
+    "monoethanolamine",
+    "water",
+    "protonated-monoethanolamine",
+    "carbamate-anion",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion"
   ],
   "source_to_provider_species_identity": [
-    {"source_identity": "CO2", "provider_identity": "CO2", "charge": 0},
-    {"source_identity": "MEA", "provider_identity": "MEA", "charge": 0},
-    {"source_identity": "H2O", "provider_identity": "H2O", "charge": 0},
-    {"source_identity": "MEAH+", "provider_identity": "MEAH+", "charge": 1},
-    {"source_identity": "MEACOO-", "provider_identity": "MEACOO-", "charge": -1},
-    {"source_identity": "HCO3-", "provider_identity": "HCO3-", "charge": -1},
-    {"source_identity": "CO3--", "provider_identity": "CO3^2-", "charge": -2},
-    {"source_identity": "H3O+", "provider_identity": "H3O+", "charge": 1},
-    {"source_identity": "OH-", "provider_identity": "OH-", "charge": -1}
+    {"source_identity": "CO2", "provider_identity": "carbon-dioxide", "charge": 0},
+    {"source_identity": "MEA", "provider_identity": "monoethanolamine", "charge": 0},
+    {"source_identity": "H2O", "provider_identity": "water", "charge": 0},
+    {"source_identity": "MEAH+", "provider_identity": "protonated-monoethanolamine", "charge": 1},
+    {"source_identity": "MEACOO-", "provider_identity": "carbamate-anion", "charge": -1},
+    {"source_identity": "HCO3-", "provider_identity": "bicarbonate-anion", "charge": -1},
+    {"source_identity": "CO3--", "provider_identity": "carbonate-anion", "charge": -2},
+    {"source_identity": "H3O+", "provider_identity": "hydronium-cation", "charge": 1},
+    {"source_identity": "OH-", "provider_identity": "hydroxide-anion", "charge": -1}
   ],
   "species": [
     {"name": "CO2", "formula": {"C": 1, "H": 0, "N": 0, "O": 2}, "charge": 0},
@@ -133,7 +133,7 @@
       "contract_logarithm": "natural",
       "activity_convention": "molality_1_mol_per_kg_infinite_dilution_water_solvent",
       "source_standard_state": "thermodynamic molality standard for solutes; solvent water omitted from the reported K5 expression",
-      "pressure_binding": "source correlation is temperature-only and carries no explicit pressure term; first use is restricted to the 1 bar sentinel pending the Provider-basis transformation",
+      "pressure_binding": "source correlation is temperature-only with source standard/reference pressure p°=100 kPa; installed Provider neutral-reference contractions are re-evaluated at every receipt-admitted trial system pressure",
       "correlation": {
         "kind": "ln_a_plus_b_over_t",
         "a": 2.151,
@@ -160,7 +160,7 @@
       "contract_logarithm": "natural",
       "activity_convention": "thermodynamic_aqueous_molality",
       "source_standard_state": "aqueous thermodynamic standard state for monoethanolammonium acid dissociation; solvent water omitted from K",
-      "pressure_binding": "source correlation is temperature-only and carries no explicit pressure term; first use is restricted to the 1 bar sentinel pending the Provider-basis transformation",
+      "pressure_binding": "source correlation is temperature-only with source standard/reference pressure p°=100 kPa; installed Provider neutral-reference contractions are re-evaluated at every receipt-admitted trial system pressure",
       "correlation": {
         "kind": "ln_from_negative_log10_a_over_t_plus_b_plus_c_t",
         "a_k": 2677.91,
@@ -218,8 +218,8 @@
     "solvent": "H2O",
     "solute_standard_molality_mol_per_kg": 1.0,
     "water_molar_mass_kg_per_mol": 0.01801528,
-    "water_molar_mass_source": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-diagnostic/1/single.csv",
-    "water_molar_mass_source_sha256": "ae3ff19fe4d29905212cdd84e8fc7a61fba8fe5f2f78a873b53223c3cd6ca6a9",
+    "water_molar_mass_source": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/single.csv",
+    "water_molar_mass_source_sha256": "feb86ed20feca7956e640845f0a1a1e14fde956bdad9900908fca560a6743c9a",
     "infinite_dilution_relation": "m_i/m_standard = x_i/(M_H2O*m_standard)",
     "log_activity_scale_factor_definition": "ln(M_H2O*m_standard) for every non-water solute and zero for solvent water",
     "log_activity_scale_factors_by_species": [
@@ -251,28 +251,142 @@
     "scope": "R1-R3 are converted from Austgen aqueous infinite-dilution mole-fraction activities; R4-R5 are already on the selected aqueous molality scale"
   },
   "provider_transform": {
-    "ready": false,
+    "ready": true,
+    "identity": "mea-five-reaction-provider-neutral-basis-transform-v1",
     "required_common_source_convention": "aqueous-molality-infinite-dilution-water-v1",
-    "required_provider_input_record": {
+    "deterministic_payload": {
+      "state": {"temperature_k": 313.15, "pressure_pa": 100000.0},
+      "numerical_anchor_role": "the retained vector is the fixed liquid sentinel anchor; source correlations are re-evaluated at trial temperature and installed Provider neutral-reference contractions are re-evaluated at every receipt-admitted trial pressure",
+      "source_standard_reference_pressure_pa": 100000.0,
+      "source_correlation_temperature_domain_k": [293.15, 323.15],
+      "installed_provider_executable_temperature_domain_k": [313.15, 313.15],
+      "provider_component_order": [
+        "carbon-dioxide",
+        "monoethanolamine",
+        "water",
+        "protonated-monoethanolamine",
+        "carbamate-anion",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion"
+      ],
+      "reaction_order": ["R1", "R2", "R3", "R4", "R5"],
+      "reaction_matrix_provider_order": [
+        [0, 0, -2, 0, 0, 0, 0, 1, 1],
+        [-1, 0, -2, 0, 0, 1, 0, 1, 0],
+        [0, 0, -1, 0, 0, -1, 1, 1, 0],
+        [0, 1, -1, 0, -1, 1, 0, 0, 0],
+        [0, 1, -1, -1, 0, 0, 0, 1, 0]
+      ],
+      "source_activity_scale_log_factors_provider_order": [
+        -4.016534992299479,
+        -4.016534992299479,
+        0.0,
+        -4.016534992299479,
+        -4.016534992299479,
+        -4.016534992299479,
+        -4.016534992299479,
+        -4.016534992299479,
+        -4.016534992299479
+      ],
+      "provider_neutral_basis": {
+        "row_order": [
+          "neutral:carbon-dioxide",
+          "neutral:monoethanolamine",
+          "neutral:water",
+          "salt:protonated-monoethanolamine+carbamate-anion",
+          "salt:protonated-monoethanolamine+bicarbonate-anion",
+          "salt:2protonated-monoethanolamine+carbonate-anion",
+          "salt:protonated-monoethanolamine+hydroxide-anion",
+          "salt:hydronium-cation+carbamate-anion"
+        ],
+        "matrix": [
+          [1, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 1, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 1, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 1, 1, 0, 0, 0, 0],
+          [0, 0, 0, 1, 0, 1, 0, 0, 0],
+          [0, 0, 0, 2, 0, 0, 1, 0, 0],
+          [0, 0, 0, 1, 0, 0, 0, 0, 1],
+          [0, 0, 0, 0, 1, 0, 0, 1, 0]
+        ],
+        "contraction_order_and_unit": "ordered dimensionless natural-log fugacity-coefficient contractions returned by the installed Provider neutral-reference callback",
+        "basis_identity": "A_over_RT_reference_amount:n_ref=1mol:rho_ref=1mol_per_m3"
+      },
+      "reaction_to_neutral_basis_matrix": [
+        [0, 0, -2, -1, 0, 0, 1, 1],
+        [-1, 0, -2, -1, 1, 0, 0, 1],
+        [0, 0, -1, -1, -1, 1, 0, 1],
+        [0, 1, -1, -1, 1, 0, 0, 0],
+        [0, 1, -1, -1, 0, 0, 0, 1]
+      ],
+      "common_ln_k_at_state": [
+        -31.17540213354659,
+        -14.505037067112742,
+        -23.53653838436904,
+        -2.7836958326680508,
+        -20.889878783626997
+      ],
+      "source_activity_scale_projection_by_reaction": [
+        -8.033069984598958,
+        -4.016534992299479,
+        -4.016534992299479,
+        -4.016534992299479,
+        -4.016534992299479
+      ],
+      "provider_affine_base_ln_k_at_state": [
+        -39.20847211814555,
+        -18.52157205941222,
+        -27.55307337666852,
+        -6.80023082496753,
+        -24.906413775926477
+      ],
+      "transformed_vector_definition": "ln_K_provider = provider_affine_base_ln_k_at_state + reaction_to_neutral_basis_matrix @ provider_neutral_reference_log_fugacity_contractions",
+      "logarithm": "natural",
+      "equilibrium_constants": "dimensionless",
+      "source_record_ids_by_reaction": [
+        ["Austgen1991"],
+        ["Austgen1991"],
+        ["Austgen1991"],
+        ["Tong2012", "Aroua1999"],
+        ["BatesPinching1951"]
+      ],
+      "source_records_sha256": "4a02cb8e321cfd1fcf08afbaa8d4d4468f507ef7149b59aedd85f9648850124a"
+    },
+    "deterministic_payload_sha256": "7817d533f40d5dbe04abe6b6c0c0177da42b7b369da7b79a4a6b877e2c5c366f",
+    "required_provider_receipt": {
+      "canonical_owner": {
+        "path": "data/reference/MEA/manifests/homogeneous_speciation_sentinel_contract.json",
+        "identity": "mea-homogeneous-fixed-tp-sentinel-contract-v1",
+        "field": "provider_regression_input"
+      },
       "temperature_unit": "K",
       "pressure_unit": "Pa",
-      "species_order_field": "provider_species_order",
-      "reaction_order": ["R1", "R2", "R3", "R4", "R5"],
       "required_immutable_identities": [
+        "provider_distribution",
         "provider_version",
+        "provider_commit",
+        "provider_tree",
         "installed_artifact_sha256",
-        "parameter_bundle_sha256",
+        "bundle_id",
+        "bundle_version",
+        "bundle_sha256",
+        "parameter_fingerprint",
+        "topology_fingerprint",
         "component_order_sha256",
-        "reference_state_identity"
+        "source_domain_identity",
+        "reference_state_identity",
+        "helmholtz_basis_identity"
       ],
       "required_outputs": [
-        "neutral_reference_chemical_potentials_J_per_mol",
-        "temperature_derivative_J_per_mol_K",
-        "pressure_derivative_m3_per_mol"
+        "neutral_basis_matrix",
+        "neutral_reference_log_fugacity_contractions",
+        "reference_composition",
+        "reference_molality_mol_per_kg",
+        "reference_convergence_error"
       ]
     },
-    "blockers": [
-      "provider-neutral-reference-unavailable-until-qualified-bundle-domain"
-    ]
+    "blockers": []
   }
 }

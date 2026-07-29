@@ -230,8 +230,55 @@ def validate() -> list[str]:
         errors.append("Gate 0 active coordinate order has drifted")
     if preregistration["regularization"]["scale"] is not None:
         errors.append("Gate 0 invents an unsupported regularization scale")
-    if preregistration["tracer"]["selected_state_ids"]:
-        errors.append("Gate 0 selects tracer states before their contracts are complete")
+    tracer = preregistration["tracer"]
+    if tracer["selected_state_ids"] != [
+        "vle_obs_0137",
+        "Bottinger2008_state_049",
+    ]:
+        errors.append("Gate 0 reduced tracer identities have drifted")
+    if [row["identity"] for row in tracer["active_coordinates"]] != [
+        "MEAH+::sigma",
+        "MEACOO-::sigma",
+    ]:
+        errors.append("Gate 0 reduced tracer coordinate order has drifted")
+    if tracer["regularization"] != {
+        "status": "NOT_REQUIRED_FOR_REDUCED_TRACER",
+        "scale": None,
+    }:
+        errors.append("Gate 0 reduced tracer invents or requires regularization")
+    if (
+        tracer["provider_regression_input"]["status"]
+        != "REGRESSION_INPUT_EXECUTABLE"
+        or tracer["observations"][1]["search_bounds_pa"]
+        != [6105.45, 300000.0]
+        or tracer["observations"][0]["source_observed_unit"] != "kPa"
+        or tracer["observations"][0]["observed_unit"] != "Pa"
+        or tracer["observations"][0]["source_to_residual_factor"] != 1000.0
+        or tracer["observations"][1]["observed_unit"] != "mole_fraction"
+    ):
+        errors.append("Gate 0 reduced tracer Provider input has drifted")
+    if [
+        (row["family"], row["state_id"])
+        for row in tracer["observations"]
+    ] != [
+        ("pco2", "vle_obs_0137"),
+        ("speciation", "Bottinger2008_state_049"),
+    ]:
+        errors.append("Gate 0 reduced tracer observation contract has drifted")
+    if tracer["numerical_acceptance"]["required_row_accounting"] != {
+        "input": 2,
+        "evaluated": 2,
+        "dropped": 0,
+        "skipped": 0,
+        "failed": 0,
+    }:
+        errors.append("Gate 0 reduced tracer accounting has drifted")
+    if preregistration["execution_admission"]["blockers"] != [
+        "equilibrium_coupled_derivative_receipt_missing",
+        "regression_mixed_observation_receipt_missing",
+        "tracer_rank_preflight_pending",
+    ]:
+        errors.append("Gate 0 retains a resolved reduced-tracer blocker")
 
     return errors
 

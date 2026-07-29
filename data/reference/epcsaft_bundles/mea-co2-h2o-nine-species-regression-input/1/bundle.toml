@@ -1,0 +1,20 @@
+schema_version = 1
+bundle_id = "mea-co2-h2o-nine-species-regression-input"
+bundle_version = 1
+purpose = "user-provided"
+files = ["components.csv", "single.csv", "pair.csv", "sites.csv", "association.csv", "model.csv", "correlations.toml"]
+
+[[sources]]
+source_id = "mea-retained-phase-two-artifact"
+citation = "MEA-Thermodynamics retained Phase 2 parameter artifact"
+use_basis = "authority-neutral regression starts and fixed model inputs; row-level literature lineage, transfer limits, and provisional statuses are audited in docs/ePC-SAFT/full-component-parameter-source-audit.md"
+
+[[domains]]
+domain_id = "mea-tracer-313-15-k-fit-range"
+kind = "fit-range"
+temperature_min = 313.15
+temperature_max = 313.15
+temperature_unit = "kelvin"
+pressure_min = 6105.45
+pressure_max = 300000
+pressure_unit = "pascal"

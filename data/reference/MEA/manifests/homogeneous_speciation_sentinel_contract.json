@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "identity": "mea-homogeneous-fixed-tp-sentinel-contract-v1",
-  "status": "source_defined_not_equilibrium_ready",
+  "status": "source_defined_regression_input_executable",
   "species_order": [
     "CO2",
     "MEA",
@@ -13,11 +13,89 @@
     "H3O+",
     "OH-"
   ],
+  "provider_component_order": [
+    "carbon-dioxide",
+    "monoethanolamine",
+    "water",
+    "protonated-monoethanolamine",
+    "carbamate-anion",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion"
+  ],
+  "bubble_pressure_search": {
+    "status": "TRACER_INTERVAL_EXECUTABLE_FULL_CAMPAIGN_BLOCKED",
+    "reference_pressure_convention": {
+      "standard_reference_pressure_pa": 100000.0,
+      "role": "source standard/reference anchor only; not the trial-pressure applicability interval"
+    },
+    "full_campaign_application_domain": {
+      "identity": "mea-reactive-bubble-admitted-pressure-envelope-v1",
+      "pressure_unit": "Pa",
+      "lower_bound_pa": 6105.45,
+      "upper_bound_pa": 3000000.0,
+      "temperature_range_k": [
+        313.15,
+        393.15
+      ],
+      "mea_mass_fraction_unloaded_range": [
+        0.17,
+        0.4
+      ],
+      "loading_mol_co2_per_mol_mea_range": [
+        0.00333,
+        0.689
+      ],
+      "admitted_pressure_row_count": 121,
+      "source_manifest": "data/reference/MEA/manifests/pco2_metrology_manifest.csv",
+      "source_manifest_sha256": "0d14803873a60534ec5d7df382cfbd0ae03e4aaeba68bb5d54be7e4def8397cc",
+      "state_manifest": "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
+      "state_manifest_sha256": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
+      "eligibility_filter": "target_eligible=yes with row_reported_total_pressure",
+      "lower_endpoint_observation_id": "vle_obs_0150",
+      "upper_endpoint_observation_id": "vle_obs_0233",
+      "evidence_role": "measured-state pressure magnitude and application/model-domain evidence, not experimental uncertainty",
+      "root_search_policy": "search in log pressure on the closed admitted envelope; initialize each row from its source-reported total pressure; fail closed on domain exit, missing sign change, unresolved multiple roots, or incomplete declared search"
+    },
+    "full_campaign_application_domain_sha256": "adf053f0efebade37936b05139655037b4a05614410d06954dd402270f11d48f",
+    "tracer_domain": {
+      "status": "REGRESSION_INPUT_EXECUTABLE",
+      "receipt_path": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1.receipt.json",
+      "domain_fingerprint": "93510b66543e4e9e49c409a658b1bf7a01599ccd9ce3feef41bbab6b6eb668ab",
+      "temperature_k": [
+        313.15,
+        313.15
+      ],
+      "pressure_pa": [
+        6105.45,
+        300000.0
+      ],
+      "root_search_policy": "search in log pressure on the closed 313.15 K admitted-row envelope; initialize from the paired source-reported total pressure; fail closed on domain exit, missing sign change, unresolved multiple roots, or incomplete search"
+    },
+    "provider_evidence": {
+      "provider_pr": "https://github.com/ePC-SAFT/ePC-SAFT/pull/44",
+      "provider_commit": "033f283eb8fb3c97d5d7a01db9c732d13bbe8c98",
+      "provider_tree": "5c57b8b910abb8cd66fc9912dd36748dc5841391",
+      "public_consumer_receipt": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1.receipt.json"
+    },
+    "equilibrium_trial_rule": "keep the source standard/reference convention anchored at 1 bar while re-evaluating installed Provider neutral-reference contractions and exact pressure retransformation at every trial system pressure; never reuse the 1 bar transformed vector",
+    "coordination_issue": "https://github.com/ePC-SAFT/ePC-SAFT-equilibrium/issues/37",
+    "tracer_blockers": [],
+    "full_campaign_blockers": [
+      "provider-full-campaign-temperature-pressure-domain-missing",
+      "reaction-source-correlation-temperature-domain-missing-above-323.15-k"
+    ]
+  },
   "molar_mass_basis": {
-    "source_file": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-diagnostic/1/single.csv",
-    "source_file_sha256": "ae3ff19fe4d29905212cdd84e8fc7a61fba8fe5f2f78a873b53223c3cd6ca6a9",
+    "source_file": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/single.csv",
+    "source_file_sha256": "feb86ed20feca7956e640845f0a1a1e14fde956bdad9900908fca560a6743c9a",
     "unit": "kilogram / mole",
-    "values": {"CO2": 0.04401, "MEA": 0.06108, "H2O": 0.01801528},
+    "values": {
+      "CO2": 0.04401,
+      "MEA": 0.06108,
+      "H2O": 0.01801528
+    },
     "use_limit": "molar masses only; no diagnostic EOS parameter is promoted"
   },
   "states": [
@@ -31,7 +109,17 @@
       "mea_mass_fraction_unloaded": 0.3,
       "loading_mol_co2_per_mol_mea": 0.15,
       "feed_basis": "one mole unloaded MEA; unloaded solvent mass fraction before CO2 addition",
-      "feed_amounts_mol": [0.15, 1.0, 7.911062165006594, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+      "feed_amounts_mol": [
+        0.15,
+        1.0,
+        7.911062165006594,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
       "initial_charge_equivalents_mol": 0.0,
       "pressure_convention": "published nominal total pressure for the closed-feed batch row",
       "reported_observations": {
@@ -55,12 +143,10 @@
       },
       "reaction_contract": "mea-nine-species-reaction-source-contract-v2",
       "reaction_domain_passed": true,
-      "provider_applicability_domain": "unknown",
-      "equilibrium_ready": false,
-      "blockers": [
-        "provider-parameter-bundle-provisional",
-        "provider-applicability-domain-unknown"
-      ]
+      "provider_applicability_domain": "authority-neutral regression-input receipt covers 313.15 K and 6105.45-300000 Pa",
+      "source_input_ready": true,
+      "blockers": [],
+      "readiness_scope": "source-complete fixed-T,P input payload only; Equilibrium solve, sensitivity, and predictive acceptance are not established"
     }
   ],
   "source_records": [
@@ -76,5 +162,64 @@
       "locator": "experimental pressure range and p. 128 oxazolidone discussion",
       "local_pdf_sha256": "dd0c6986cbd058ec0a2343ac5097439862281492cd2dac01823144233f0fc0f4"
     }
-  ]
+  ],
+  "provider_regression_input": {
+    "identity": "mea-nine-species-regression-input-v1",
+    "status": "REGRESSION_INPUT_EXECUTABLE",
+    "bundle_path": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1",
+    "receipt_path": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1.receipt.json",
+    "receipt_sha256": "4efb0a751ed2c6b494b38aba137e881d7ca67ac29a2114ea182f49fb322215ca",
+    "immutable_identities": {
+      "bundle_id": "mea-co2-h2o-nine-species-regression-input",
+      "bundle_version": 1,
+      "bundle_fingerprint": "sha256:741673651fa0120f6f6427a750674b0f7929a3da571dd6d1dd84d40485ae2553",
+      "bundle_file_manifest_sha256": "9633f197cb09afa8b4c36fba12fad17099fc0688b210c0d6254feb2553e860ea",
+      "bundle_file_hashes": {
+        "association.csv": "195a8047403fc20ed414f29835d9f8d936e349e5baf4fb4264b7f2acb412b83e",
+        "bundle.toml": "ef19afb3e5495e1128edf751f177a308c1e5a3ca6f8ad2948f25718f829cf96d",
+        "components.csv": "3baa84d19c6db2252f8bfb29685821ec72a21171975a3f0239da62d77f347b75",
+        "correlations.toml": "733d92b4c348a5ad3f8aef3fed468f209ab0b99c82da43c6bfe471006a262114",
+        "model.csv": "3f8a40d5015a69fcca82769ec9bbaa979494728a3f2c5288b567cd9a4b4421f4",
+        "pair.csv": "f82391721156dd228356fc5b27f69d5768338eddb5ddd2d56e5abc95423ee112",
+        "single.csv": "feb86ed20feca7956e640845f0a1a1e14fde956bdad9900908fca560a6743c9a",
+        "sites.csv": "67b27bd84679bdf513a36ec4f1ca9e3dd1ee5923bab4fb5851cb64a1fe60ba8b"
+      },
+      "component_ids": [
+        "carbon-dioxide",
+        "monoethanolamine",
+        "water",
+        "protonated-monoethanolamine",
+        "carbamate-anion",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion"
+      ],
+      "component_order_sha256": "246049d6caa54cf752ab0e6257812c39d4e9deb5f079db3dd96280bd2ae05e85",
+      "parameter_fingerprint": "sha256:3773585e061b37643f5c7794e18424b83c86b82fa658983a0ee13fd8f1876fd6",
+      "topology_fingerprint": "sha256:4cd30249026b7361ee68b618f7437de081b0339e5a7b0cc41165930a01a4e762",
+      "domain_id": "mea-tracer-313-15-k-fit-range",
+      "domain_fingerprint": "93510b66543e4e9e49c409a658b1bf7a01599ccd9ce3feef41bbab6b6eb668ab",
+      "temperature_k": [
+        313.15,
+        313.15
+      ],
+      "pressure_pa": [
+        6105.45,
+        300000.0
+      ],
+      "provider_commit": "033f283eb8fb3c97d5d7a01db9c732d13bbe8c98",
+      "provider_tree": "5c57b8b910abb8cd66fc9912dd36748dc5841391",
+      "provider_wheel_sha256": "667a86258f979697a87b315f23ab2583dfb39f7b1e4aa6f837280a897a316b93",
+      "provider_header_sha256": "bd95cd061e0fa4c45e7d23737ce85cf2d4f03a37408fa142b7070e36df6b1c6b"
+    },
+    "purpose": "user-provided",
+    "authority": "regression starts and fixed model inputs only; not predictive or scientifically accepted parameters",
+    "legacy_diagnostic_bundle": {
+      "path": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-diagnostic/1",
+      "preserved_unchanged": true
+    },
+    "readiness_scope": "fixed liquid sentinel and reduced tracer over the receipt-bound 313.15 K fit range",
+    "blockers": []
+  }
 }
