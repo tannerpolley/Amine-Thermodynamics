@@ -26,6 +26,8 @@ Executable: true
 
 ## Acceptance Criteria
 
+- [x] Freeze the MEA-owned Gate 0 v2 request contract on exactly three shared coordinates:
+  `MEAH+::sigma`, `MEAH+::epsilon_over_k`, and `MEACOO-::sigma`.
 - [ ] Record the legacy-to-split-package compatibility matrix and preserve a passing pinned stable lane during migration.
 - [ ] Obtain upstream public admission for generic coupled reactive pressure/speciation regression with a native Ceres hot loop and supported derivatives.
 - [ ] Validate the admitted request/result/status schema, including termination, evaluations, parameter movement, active bounds, row diagnostics, and source/target summaries.
@@ -34,7 +36,7 @@ Executable: true
 ## Blocked by
 
 - A stage-approved runtime-slice plan in the ePC-SAFT migration control plane.
-- Clean `ePC-SAFT/ePC-SAFT-regression` is currently a governance-only skeleton with no admitted production capability.
+- An immutable clean-package receipt admitting the generic mixed-observation and derivative contract.
 
 ## Historical evidence
 

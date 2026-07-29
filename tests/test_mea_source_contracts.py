@@ -31,6 +31,17 @@ def test_reaction_contract_preserves_primary_source_anchors_and_rejects_conflict
         ],
         "source_conversion_ready": True,
         "provider_transform_ready": False,
+        "provider_species_order": [
+            "CO2",
+            "MEA",
+            "H2O",
+            "MEAH+",
+            "MEACOO-",
+            "HCO3-",
+            "CO3^2-",
+            "H3O+",
+            "OH-",
+        ],
         "blockers": [
             "provider-neutral-reference-unavailable-until-qualified-bundle-domain",
         ],
@@ -46,6 +57,18 @@ def test_reaction_contract_preserves_primary_source_anchors_and_rejects_conflict
     del incomplete["reactions"][3]["activity_convention"]
     with pytest.raises(ValueError, match="R4.*metadata"):
         validate_reaction_contract(incomplete)
+
+    aliased = copy.deepcopy(contract)
+    aliased["source_to_provider_species_identity"][6]["alias"] = "carbonate"
+    with pytest.raises(ValueError, match="identity map"):
+        validate_reaction_contract(aliased)
+
+    wrong_provider_input = copy.deepcopy(contract)
+    wrong_provider_input["provider_transform"]["required_provider_input_record"][
+        "required_outputs"
+    ][0] = "arbitrary_output"
+    with pytest.raises(ValueError, match="Provider transformation"):
+        validate_reaction_contract(wrong_provider_input)
 
 
 def test_wong_sentinel_recomputes_feed_and_remains_fail_closed() -> None:

@@ -26,6 +26,17 @@ EXPECTED_SPECIES_ORDER = (
     "H3O+",
     "OH-",
 )
+EXPECTED_PROVIDER_SPECIES_ORDER = (
+    "CO2",
+    "MEA",
+    "H2O",
+    "MEAH+",
+    "MEACOO-",
+    "HCO3-",
+    "CO3^2-",
+    "H3O+",
+    "OH-",
+)
 PRIMARY_ANCHORS_298_15_K = {
     "R1": -40.26536023393261,
     "R2": -18.658825483177367,
@@ -109,11 +120,24 @@ def _evaluate_ln_k(reaction: dict[str, Any], temperature_k: float) -> float:
 
 
 def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
-    if contract.get("identity") != "mea-nine-species-reaction-source-contract-v1":
+    if contract.get("identity") != "mea-nine-species-reaction-source-contract-v2":
         raise ValueError("Unexpected MEA reaction contract identity")
     species_order = tuple(contract.get("species_order", ()))
     if species_order != EXPECTED_SPECIES_ORDER:
         raise ValueError("MEA reaction species order does not match the nine-species contract")
+    provider_species_order = tuple(contract.get("provider_species_order", ()))
+    mappings = contract.get("source_to_provider_species_identity", [])
+    if (
+        provider_species_order != EXPECTED_PROVIDER_SPECIES_ORDER
+        or any(set(row) != {"source_identity", "provider_identity", "charge"} for row in mappings)
+        or [row.get("source_identity") for row in mappings]
+        != list(EXPECTED_SPECIES_ORDER)
+        or [row.get("provider_identity") for row in mappings]
+        != list(EXPECTED_PROVIDER_SPECIES_ORDER)
+        or [int(row.get("charge", 99)) for row in mappings]
+        != [0, 0, 0, 1, -1, -1, -2, 1, -1]
+    ):
+        raise ValueError("MEA source-to-Provider species identity map is incomplete")
 
     species = contract.get("species", [])
     if [row.get("name") for row in species] != list(EXPECTED_SPECIES_ORDER):
@@ -246,12 +270,32 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
 
     provider_transform = contract.get("provider_transform", {})
     blockers = provider_transform.get("blockers")
+    required_input = provider_transform.get("required_provider_input_record", {})
+    expected_provider_identities = [
+        "provider_version",
+        "installed_artifact_sha256",
+        "parameter_bundle_sha256",
+        "component_order_sha256",
+        "reference_state_identity",
+    ]
+    expected_provider_outputs = [
+        "neutral_reference_chemical_potentials_J_per_mol",
+        "temperature_derivative_J_per_mol_K",
+        "pressure_derivative_m3_per_mol",
+    ]
     if (
         provider_transform.get("ready") is not False
         or provider_transform.get("required_common_source_convention")
         != common["identity"]
         or blockers
         != ["provider-neutral-reference-unavailable-until-qualified-bundle-domain"]
+        or required_input.get("species_order_field") != "provider_species_order"
+        or required_input.get("temperature_unit") != "K"
+        or required_input.get("pressure_unit") != "Pa"
+        or required_input.get("reaction_order") != ["R1", "R2", "R3", "R4", "R5"]
+        or required_input.get("required_immutable_identities")
+        != expected_provider_identities
+        or required_input.get("required_outputs") != expected_provider_outputs
     ):
         raise ValueError("MEA Provider transformation must retain its exact unresolved blockers")
     return {
@@ -263,6 +307,7 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
         "common_ln_k_298_15_k": common_ln_k,
         "source_conversion_ready": True,
         "provider_transform_ready": False,
+        "provider_species_order": list(provider_species_order),
         "blockers": blockers,
     }
 

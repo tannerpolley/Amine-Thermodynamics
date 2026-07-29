@@ -167,14 +167,21 @@ def validate() -> list[str]:
     objective_roles = {row["objective_role"] for row in speciation_contract}
     required_roles = {
         "direct_measurement",
-        "upper_bound_or_reported_zero",
         "aggregate_measurement",
         "inferred_not_independent",
         "calibration_contextual",
+        "contextual",
         "held_out",
     }
     if not required_roles <= objective_roles:
         errors.append(f"speciation objective-role coverage is incomplete: {objective_roles}")
+    executable_zeros = [
+        row["observation_id"]
+        for row in speciation_contract
+        if "zero" in row["measurement_role"] and row["target_eligible"] == "yes"
+    ]
+    if executable_zeros:
+        errors.append(f"speciation zeros lack source-backed censor bounds: {executable_zeros}")
 
     split = rows(SPLIT)
     if len(split) != 231:
@@ -211,16 +218,20 @@ def validate() -> list[str]:
 
     preregistration = json.loads(PREREGISTRATION.read_text(encoding="utf-8"))
     if (
-        preregistration["status"] != "preregistered_execution_blocked"
+        preregistration["status"] != "GATE_0_FROZEN_EXECUTION_BLOCKED"
         or preregistration["execution_admission"]["admitted"] is not False
     ):
         errors.append("preregistration does not fail closed")
-    for artifact in preregistration["frozen_inputs"]:
-        path = ROOT / artifact["path"]
-        if not path.is_file():
-            errors.append(f"missing frozen input {artifact['path']}")
-        elif sha256(path) != artifact["sha256"]:
-            errors.append(f"frozen input hash mismatch: {artifact['path']}")
+    if [row["identity"] for row in preregistration["active_coordinates"]] != [
+        "MEAH+::sigma",
+        "MEAH+::epsilon_over_k",
+        "MEACOO-::sigma",
+    ]:
+        errors.append("Gate 0 active coordinate order has drifted")
+    if preregistration["regularization"]["scale"] is not None:
+        errors.append("Gate 0 invents an unsupported regularization scale")
+    if preregistration["tracer"]["selected_state_ids"]:
+        errors.append("Gate 0 selects tracer states before their contracts are complete")
 
     return errors
 

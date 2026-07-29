@@ -36,6 +36,16 @@ EXPECTED_POLICIES = {
 EXPECTED_DIAGNOSTICS = ["fit_success", "failure_count", "active_bounds", "by_target_type"]
 EXPECTED_MAJOR_SPECIATION_GATES = {"MEAH+": 0.15, "MEACOO-": 0.10}
 EXPECTED_ENTRYPOINT = "analyses/phase3/ionic_epcsaft_regression/scripts/fit_global_pressure_speciation.py"
+GATE0_PREREGISTRATION_PATH = (
+    Path(__file__).resolve().parents[3]
+    / "analyses"
+    / "phase3"
+    / "ionic_epcsaft_regression"
+    / "ionic_volumetric_fit_preregistration.json"
+)
+EXPECTED_GATE0_CANONICAL_SHA256 = (
+    "a5daa2b41aef2a4977eb51a05ccff8d837008d7b648ac2a6ecf7b89f7e05f2e2"
+)
 
 
 class PreregistrationError(RuntimeError):
@@ -91,6 +101,54 @@ def load_preregistration(path: Path) -> dict[str, Any]:
         raise PreregistrationError(f"cannot load final-fit preregistration {path}: {exc}") from exc
     if not isinstance(payload, dict):
         raise PreregistrationError("final-fit preregistration must be a JSON object")
+    return payload
+
+
+def load_gate0_preregistration(
+    path: Path = GATE0_PREREGISTRATION_PATH,
+) -> dict[str, Any]:
+    return validate_gate0_preregistration(load_preregistration(path))
+
+
+def validate_gate0_preregistration(payload: Mapping[str, Any]) -> dict[str, Any]:
+    payload = dict(payload)
+    if (
+        payload.get("schema_version") != 2
+        or payload.get("identity") != "mea-gate0-v2-mixed-observation-preregistration"
+        or payload.get("status") != "GATE_0_FROZEN_EXECUTION_BLOCKED"
+    ):
+        raise PreregistrationError("Gate 0 v2 preregistration identity is invalid")
+    coordinates = payload.get("active_coordinates", [])
+    expected = (
+        ("MEAH+::sigma", 3.48508556586, [2.0, 5.8], 1.9),
+        ("MEAH+::epsilon_over_k", 232.687201645, [50.0, 950.0], 450.0),
+        ("MEACOO-::sigma", 3.53543525721, [2.0, 5.8], 1.9),
+    )
+    actual = tuple(
+        (
+            row.get("identity"),
+            row.get("start"),
+            row.get("bounds"),
+            row.get("affine_scale"),
+        )
+        for row in coordinates
+    )
+    if actual != expected:
+        raise PreregistrationError("Gate 0 active coordinate order or scaling drifted")
+    if payload.get("state_partition", {}).get("grouped_split_sha256") != (
+        "af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804"
+    ):
+        raise PreregistrationError("Gate 0 grouped split identity drifted")
+    if payload.get("execution_admission", {}).get("admitted") is not False:
+        raise PreregistrationError("Gate 0 must not admit regression execution")
+    if payload.get("regularization", {}).get("scale") is not None:
+        raise PreregistrationError("Gate 0 may not invent a regularization scale")
+    actual_sha256 = canonical_sha256(payload)
+    if actual_sha256 != EXPECTED_GATE0_CANONICAL_SHA256:
+        raise PreregistrationError(
+            f"Gate 0 frozen contract drifted: expected {EXPECTED_GATE0_CANONICAL_SHA256}, "
+            f"actual {actual_sha256}"
+        )
     return payload
 
 

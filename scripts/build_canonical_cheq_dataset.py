@@ -400,8 +400,58 @@ def build_membership(dataset: pd.DataFrame) -> pd.DataFrame:
         roles = active_roles[state_key] if is_active else _roles_from_long_group(group)
         first = group.iloc[0]
         state_id = f"{source_key}_state_{int(source_row):03d}"
+        source_measurements = {
+            str(row["species"]): str(row["record_id"])
+            for row in group.to_dict("records")
+        }
+        oxazolidone_excluded = (
+            str(source_key) == "Bottinger2008"
+            and float(first["co2_loading_mol_per_mol_mea"]) >= 0.5
+        )
         for species in TARGET_ROLE_SPECIES:
             role = roles[species]
+            positive_measurement = role in {
+                "direct_positive",
+                "aggregate_direct_positive",
+            }
+            measurement_identity = source_measurements.get(species, "")
+            independent_aggregate = (
+                roles["MEA + MEAH+"] == "aggregate_direct_positive"
+                and bool(source_measurements.get("MEA + MEAH+"))
+            )
+            redundant_constituent = species in {"MEA", "MEAH+"} and independent_aggregate
+            target_eligible = (
+                is_active
+                and positive_measurement
+                and bool(measurement_identity)
+                and not redundant_constituent
+                and not oxazolidone_excluded
+            )
+            if role in {"direct_zero", "aggregate_direct_zero", "below_detection"}:
+                reason = (
+                    "Reported zero has no source-backed detection or censor bound and is "
+                    "retained as context only."
+                )
+            elif oxazolidone_excluded and role != "balance_inferred":
+                reason = (
+                    "Böttinger reports quantifiable 2-oxazolidone above about 0.5 mol CO2/mol "
+                    "MEA; the nine-species model omits that byproduct."
+                )
+            elif role == "aggregate_direct_positive" and not measurement_identity:
+                reason = (
+                    "No independent source aggregate record exists; the derived sum is not a target."
+                )
+            elif redundant_constituent:
+                reason = (
+                    "The independently reported MEA + MEAH+ aggregate is used instead of "
+                    "its correlated constituent values."
+                )
+            elif target_eligible:
+                reason = "Positive source observation admitted by the Gate 0 v2 contract."
+            elif role == "balance_inferred":
+                reason = "Balance-inferred context is not an independent measurement."
+            else:
+                reason = "Observation is outside the executable active target contract."
             rows.append(
                 {
                     "membership_id": f"{state_id}|{species}",
@@ -419,25 +469,22 @@ def build_membership(dataset: pd.DataFrame) -> pd.DataFrame:
                     "conversion_eligible": "true",
                     "lifecycle_status": "canonical_eligible" if is_active else "validation_reserved",
                     "target_membership": "active_v1" if is_active else "transferability_candidate",
-                    "target_eligible": (
-                        "yes"
-                        if is_active
-                        and role
-                        in {
-                            "direct_positive",
-                            "direct_zero",
-                            "aggregate_direct_positive",
-                            "aggregate_direct_zero",
-                        }
-                        else "no"
+                    "target_eligible": "yes" if target_eligible else "no",
+                    "eligibility_reason": reason,
+                    "measurement_identity": measurement_identity,
+                    "linear_coefficients": (
+                        '{"MEA":1.0,"MEAH+":1.0}'
+                        if role.startswith("aggregate_direct")
+                        else ""
                     ),
-                    "eligibility_reason": (
-                        "Direct active-v1 source observation."
-                        if is_active and role != "balance_inferred"
-                        else "Balance-inferred context is not an independent measurement."
-                        if role == "balance_inferred"
-                        else "Non-30-wt% state is reserved for composition-transfer review."
+                    "covariance_status": (
+                        "source_covariance_not_reported"
+                        if positive_measurement
+                        else "not_applicable"
                     ),
+                    "censor_bound_value": "",
+                    "censor_bound_unit": "",
+                    "censor_bound_source_locator": "",
                 }
             )
 
@@ -463,6 +510,12 @@ def build_membership(dataset: pd.DataFrame) -> pd.DataFrame:
                 "target_membership": "diagnostic_only_basis_unverified",
                 "target_eligible": "no",
                 "eligibility_reason": "Source kg denominator is not verified; normalized target conversion fails closed.",
+                "measurement_identity": row["record_id"],
+                "linear_coefficients": "",
+                "covariance_status": "source_covariance_not_reported",
+                "censor_bound_value": "",
+                "censor_bound_unit": "",
+                "censor_bound_source_locator": "",
             }
         )
     return pd.DataFrame(rows)

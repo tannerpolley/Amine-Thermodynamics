@@ -247,6 +247,8 @@ class SpeciationTarget:
     target_speciation: dict[str, float]
     zero_upper_bound_species: tuple[str, ...]
     aggregate_targets: dict[str, float]
+    aggregate_coefficients: dict[str, dict[str, float]]
+    covariance_status: dict[str, str]
     split: str
     group_id: str
 
@@ -421,7 +423,7 @@ def load_vle_targets(limit: int | None = None, *, role: str | None = None) -> li
                 row_id=str(row["row_id"]),
                 source_key=str(row["source_key"]),
                 T=temperature_C + 273.15,
-                P=max(101325.0, pressure_kPa * 1000.0),
+                P=float(row["state_pressure_pa"]),
                 loading=loading,
                 mea_weight_fraction=mea_weight_fraction,
                 pressure_kPa=pressure_kPa,
@@ -444,7 +446,7 @@ def load_speciation_targets(limit: int | None = None, *, role: str | None = None
     rows = _select_evenly(sorted(rows, key=lambda row: (_as_float(row, "temperature"), _as_float(row, "CO2_loading"), row.get("source", ""))), limit)
     membership = load_speciation_target_membership(state_ids=(str(row["state_id"]) for row in rows))
     by_state = {
-        state_id: group.set_index("species")["measurement_role"].to_dict()
+        state_id: group.set_index("species").to_dict(orient="index")
         for state_id, group in membership.groupby("state_id")
     }
     columns = {
@@ -458,7 +460,11 @@ def load_speciation_targets(limit: int | None = None, *, role: str | None = None
     targets: list[SpeciationTarget] = []
     for row in rows:
         state_id = str(row["state_id"])
-        roles = {str(species): str(measurement_role) for species, measurement_role in by_state[state_id].items()}
+        state_membership = by_state[state_id]
+        roles = {
+            str(species): str(record["measurement_role"])
+            for species, record in state_membership.items()
+        }
         target_speciation = {
             species: float(value)
             for species, column in columns.items()
@@ -471,8 +477,16 @@ def load_speciation_targets(limit: int | None = None, *, role: str | None = None
         )
         aggregate_value = _as_float(row, "MEA + MEAH^+")
         aggregate_targets = {}
+        aggregate_coefficients: dict[str, dict[str, float]] = {}
+        covariance_status: dict[str, str] = {}
         if roles.get("MEA + MEAH+") == "aggregate_direct_positive" and np.isfinite(aggregate_value):
             aggregate_targets["MEA + MEAH+"] = float(aggregate_value)
+            aggregate_record = state_membership["MEA + MEAH+"]
+            coefficients = json.loads(str(aggregate_record["linear_coefficients"]))
+            if coefficients != {"MEA": 1.0, "MEAH+": 1.0}:
+                raise RuntimeError(f"Unsupported aggregate coefficients for {state_id}")
+            aggregate_coefficients["MEA + MEAH+"] = coefficients
+            covariance_status["MEA + MEAH+"] = str(aggregate_record["covariance_status"])
         targets.append(
             SpeciationTarget(
                 row_id=state_id,
@@ -486,6 +500,8 @@ def load_speciation_targets(limit: int | None = None, *, role: str | None = None
                 target_speciation=target_speciation,
                 zero_upper_bound_species=zero_upper_bound_species,
                 aggregate_targets=aggregate_targets,
+                aggregate_coefficients=aggregate_coefficients,
+                covariance_status=covariance_status,
                 split=str(row["split"]),
                 group_id=str(row["group_id"]),
             )

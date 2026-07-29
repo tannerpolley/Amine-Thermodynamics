@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "identity": "mea-nine-species-reaction-source-contract-v1",
+  "schema_version": 2,
+  "identity": "mea-nine-species-reaction-source-contract-v2",
   "status": "source_adjudicated_provider_transform_blocked",
   "species_order": [
     "CO2",
@@ -12,6 +12,28 @@
     "CO3--",
     "H3O+",
     "OH-"
+  ],
+  "provider_species_order": [
+    "CO2",
+    "MEA",
+    "H2O",
+    "MEAH+",
+    "MEACOO-",
+    "HCO3-",
+    "CO3^2-",
+    "H3O+",
+    "OH-"
+  ],
+  "source_to_provider_species_identity": [
+    {"source_identity": "CO2", "provider_identity": "CO2", "charge": 0},
+    {"source_identity": "MEA", "provider_identity": "MEA", "charge": 0},
+    {"source_identity": "H2O", "provider_identity": "H2O", "charge": 0},
+    {"source_identity": "MEAH+", "provider_identity": "MEAH+", "charge": 1},
+    {"source_identity": "MEACOO-", "provider_identity": "MEACOO-", "charge": -1},
+    {"source_identity": "HCO3-", "provider_identity": "HCO3-", "charge": -1},
+    {"source_identity": "CO3--", "provider_identity": "CO3^2-", "charge": -2},
+    {"source_identity": "H3O+", "provider_identity": "H3O+", "charge": 1},
+    {"source_identity": "OH-", "provider_identity": "OH-", "charge": -1}
   ],
   "species": [
     {"name": "CO2", "formula": {"C": 1, "H": 0, "N": 0, "O": 2}, "charge": 0},
@@ -231,7 +253,24 @@
   "provider_transform": {
     "ready": false,
     "required_common_source_convention": "aqueous-molality-infinite-dilution-water-v1",
-    "required_provider_record": "installed Provider neutral-reference contractions at the exact T,P, component order, and parameter fingerprint",
+    "required_provider_input_record": {
+      "temperature_unit": "K",
+      "pressure_unit": "Pa",
+      "species_order_field": "provider_species_order",
+      "reaction_order": ["R1", "R2", "R3", "R4", "R5"],
+      "required_immutable_identities": [
+        "provider_version",
+        "installed_artifact_sha256",
+        "parameter_bundle_sha256",
+        "component_order_sha256",
+        "reference_state_identity"
+      ],
+      "required_outputs": [
+        "neutral_reference_chemical_potentials_J_per_mol",
+        "temperature_derivative_J_per_mol_K",
+        "pressure_derivative_m3_per_mol"
+      ]
+    },
     "blockers": [
       "provider-neutral-reference-unavailable-until-qualified-bundle-domain"
     ]
