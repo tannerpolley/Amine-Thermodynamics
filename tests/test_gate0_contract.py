@@ -103,6 +103,9 @@ def test_gate0_preregistration_freezes_three_coordinates_without_admitting_fit()
     assert tracer["observations"][0]["observed_unit"] == "Pa"
     assert tracer["observations"][1]["observed_value"] == 0.0502
     assert tracer["observations"][1]["observed_unit"] == "mole_fraction"
+    assert tracer["equilibrium_input"]["wheel_sha256"] == (
+        "874d737d8fe219066b8257d3be847e1a3d9a15cf6056f56b4a0e82b08cd501aa"
+    )
 
     drifted = copy.deepcopy(contract)
     drifted["fixed_terms"][0] = "arbitrary"
@@ -130,3 +133,28 @@ def test_gate0_preregistration_freezes_three_coordinates_without_admitting_fit()
     ] = 1
     with pytest.raises(PreregistrationError, match="tracer evidence"):
         validate_gate0_preregistration(accounting_drift)
+
+
+@pytest.mark.parametrize(
+    ("observation_index", "field", "replacement"),
+    [
+        (0, "temperature_k", 313.16),
+        (0, "mea_mass_fraction_unloaded", 0.31),
+        (0, "loading_mol_co2_per_mol_mea", 0.467),
+        (0, "partition", "reserved"),
+        (1, "temperature_k", 313.16),
+        (1, "mea_mass_fraction_unloaded", 0.31),
+        (1, "loading_mol_co2_per_mol_mea", 0.467),
+        (1, "provider_domain_fingerprint", "0" * 64),
+    ],
+)
+def test_gate0_tracer_rejects_state_metadata_drift(
+    observation_index: int,
+    field: str,
+    replacement: object,
+) -> None:
+    contract = load_gate0_preregistration()
+    drifted = copy.deepcopy(contract)
+    drifted["tracer"]["observations"][observation_index][field] = replacement
+    with pytest.raises(PreregistrationError, match="source row|tracer evidence"):
+        validate_gate0_preregistration(drifted)

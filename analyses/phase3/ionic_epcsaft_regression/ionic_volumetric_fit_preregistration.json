@@ -106,7 +106,7 @@
     "source_locator": "Böttinger et al. (2008), p. 128 discussion of Figs. 6-7"
   },
   "tracer": {
-    "status": "FROZEN_PROVIDER_INPUT_EXECUTABLE_EQUILIBRIUM_PENDING",
+    "status": "FROZEN_PROVIDER_INPUT_EXECUTABLE_EQUILIBRIUM_ARTIFACT_AVAILABLE_COMPOSED_OBSERVABLE_PENDING",
     "maximum_state_count": 2,
     "active_coordinates": [
       {
@@ -193,14 +193,10 @@
         "role": "active_training",
         "group_id": "speciation|Bottinger2008|w=0.3|T=40",
         "temperature_k": 313.15,
-        "pressure_role": "coupled reactive-bubble pressure at the same temperature, unloaded MEA fraction, and loading",
-        "paired_pressure_observation_id": "vle_obs_0137",
-        "paired_pressure_source_independence": "Böttinger speciation and Hilliard pressure are independent experiments with identical state coordinates; the Hilliard pressure initializes the model solve and is not relabeled as a Böttinger measurement",
-        "initial_pressure_pa": 7326.7,
-        "search_bounds_pa": [
-          6105.45,
-          300000.0
-        ],
+        "pressure_role": "caller-supplied fixed total-pressure evaluation input; not a Böttinger pressure measurement",
+        "evaluation_pressure_pa": 7326.7,
+        "evaluation_pressure_source_observation_id": "vle_obs_0137",
+        "evaluation_pressure_source_role": "independent Hilliard total-pressure state anchor at matching temperature, unloaded MEA fraction, and loading; not a paired experiment or speciation target",
         "mea_mass_fraction_unloaded": 0.3,
         "loading_mol_co2_per_mol_mea": 0.466,
         "measurement_role": "direct_positive",
@@ -288,6 +284,17 @@
         "field": "provider_regression_input"
       },
       "domain_fingerprint": "93510b66543e4e9e49c409a658b1bf7a01599ccd9ce3feef41bbab6b6eb668ab"
+    },
+    "equilibrium_input": {
+      "status": "RETAINED_INSTALLED_ARTIFACT_AVAILABLE",
+      "commit": "ab2086abd480a161fb5c22cf3635776129363976",
+      "tree": "7b02b78b50bca18b63dc80faa02bb25a672d055b",
+      "merge_commit": "dd2a72650f0224eac431aa06019cea3a7cae358e",
+      "wheel_filename": "epcsaft_equilibrium-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+      "wheel_sha256": "874d737d8fe219066b8257d3be847e1a3d9a15cf6056f56b4a0e82b08cd501aa",
+      "provider_wheel_sha256": "4cee10a9158576307cda93f611b6ade3a7cf8819df44f83efe8cbc61ab038789",
+      "operation": "homogeneous_fixed_tp_chemical_equilibrium_with_exact_active_parameter_sensitivities",
+      "scope": "state values and exact amount/volume sensitivities only; composed observables remain downstream-owned"
     }
   },
   "heat_of_absorption": {
@@ -297,7 +304,7 @@
   "execution_admission": {
     "admitted": false,
     "blockers": [
-      "equilibrium_coupled_derivative_receipt_missing",
+      "composed_homogeneous_liquid_observable_receipt_missing",
       "regression_mixed_observation_receipt_missing",
       "tracer_rank_preflight_pending"
     ]

@@ -110,6 +110,31 @@ EXPECTED_REACTION_SOURCE_RECORDS = [
         "local_pdf_sha256": None,
     },
 ]
+EXPECTED_REACTION_SOURCE_IDS = {
+    "R1": ["Austgen1991"],
+    "R2": ["Austgen1991"],
+    "R3": ["Austgen1991"],
+    "R4": ["Tong2012", "Aroua1999"],
+    "R5": ["BatesPinching1951"],
+}
+EXPECTED_SENTINEL_SOURCE_RECORDS = [
+    {
+        "source_id": "Wong2015",
+        "doi": "10.1016/j.ijggc.2015.05.016",
+        "locator": "Table 5, 313.15 K first 1 bar batch row",
+        "local_pdf_sha256": (
+            "312ea8218c98bf6b78289c5f43baf4e524442efd3943f1dfaf74270ff1292954"
+        ),
+    },
+    {
+        "source_id": "Bottinger2008",
+        "doi": "10.1016/j.fluid.2007.09.017",
+        "locator": "experimental pressure range and p. 128 oxazolidone discussion",
+        "local_pdf_sha256": (
+            "dd0c6986cbd058ec0a2343ac5097439862281492cd2dac01823144233f0fc0f4"
+        ),
+    },
+]
 EXPECTED_PROVIDER_INPUT = {
     "identity": "mea-nine-species-regression-input-v1",
     "bundle_path": (
@@ -121,7 +146,7 @@ EXPECTED_PROVIDER_INPUT = {
         "mea-co2-h2o-nine-species-regression-input/1.receipt.json"
     ),
     "receipt_sha256": (
-        "4efb0a751ed2c6b494b38aba137e881d7ca67ac29a2114ea182f49fb322215ca"
+        "3f8da81a07bd51178f4e929b17b92379c28e58799a889262a076f00bee3bcaf2"
     ),
     "bundle_id": "mea-co2-h2o-nine-species-regression-input",
     "bundle_version": 1,
@@ -146,14 +171,21 @@ EXPECTED_PROVIDER_INPUT = {
     ),
     "temperature_k": [313.15, 313.15],
     "pressure_pa": [6105.45, 300000.0],
-    "provider_commit": "033f283eb8fb3c97d5d7a01db9c732d13bbe8c98",
-    "provider_tree": "5c57b8b910abb8cd66fc9912dd36748dc5841391",
+    "provider_commit": "d88e9af12c6d7e4d5ef5d916c4d610920348e5a2",
+    "provider_tree": "a6a1bcecce3521f5b2d32f9c819e6b882c9a3f42",
     "provider_wheel_sha256": (
-        "667a86258f979697a87b315f23ab2583dfb39f7b1e4aa6f837280a897a316b93"
+        "4cee10a9158576307cda93f611b6ade3a7cf8819df44f83efe8cbc61ab038789"
     ),
     "provider_header_sha256": (
-        "bd95cd061e0fa4c45e7d23737ce85cf2d4f03a37408fa142b7070e36df6b1c6b"
+        "bb46f103b7116efcc31f000cd07082f2d79c36a3236265d3e1d9ab4d27cc733f"
     ),
+    "provider_distribution_record_sha256": (
+        "ba7dc8df2d9e96c03ec1e37c260f775420718ce1cacddf1b35b9f5248043dec6"
+    ),
+    "provider_installed_module_sha256": (
+        "e3378b0b773be60da75aa4eaee36bb3078b3bfccca3b41def0c4e84ed849939e"
+    ),
+    "provider_capability_count": 17,
 }
 EXPECTED_BUNDLE_FILE_HASHES = {
     "association.csv": "195a8047403fc20ed414f29835d9f8d936e349e5baf4fb4264b7f2acb412b83e",
@@ -276,7 +308,12 @@ def _expected_immutable_identities() -> dict[str, Any]:
 
 
 def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
-    if contract.get("identity") != "mea-nine-species-reaction-source-contract-v2":
+    if (
+        contract.get("schema_version") != 2
+        or contract.get("identity") != "mea-nine-species-reaction-source-contract-v2"
+        or contract.get("status")
+        != "source_adjudicated_provider_transform_frozen"
+    ):
         raise ValueError("Unexpected MEA reaction contract identity")
     species_order = tuple(contract.get("species_order", ()))
     if species_order != EXPECTED_SPECIES_ORDER:
@@ -338,8 +375,8 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
             any(not reaction.get(field) for field in required_metadata)
             or reaction.get("dimensionless") is not True
             or reaction.get("contract_logarithm") != "natural"
-            or not reaction.get("source_record_ids")
-            or not set(reaction["source_record_ids"]) <= source_ids
+            or reaction.get("source_record_ids")
+            != EXPECTED_REACTION_SOURCE_IDS[reaction_id]
         ):
             raise ValueError(f"{reaction_id} source metadata is incomplete")
         if reaction.get("correlation") != EXPECTED_REACTION_CORRELATIONS[reaction_id]:
@@ -680,8 +717,15 @@ def validate_sentinel_contract(
     contract: dict[str, Any], reaction_contract: dict[str, Any]
 ) -> dict[str, Any]:
     reaction_summary = validate_reaction_contract(reaction_contract)
-    if contract.get("identity") != "mea-homogeneous-fixed-tp-sentinel-contract-v1":
+    if (
+        contract.get("schema_version") != 1
+        or contract.get("identity")
+        != "mea-homogeneous-fixed-tp-sentinel-contract-v1"
+        or contract.get("status") != "source_defined_regression_input_executable"
+    ):
         raise ValueError("Unexpected MEA sentinel contract identity")
+    if contract.get("source_records") != EXPECTED_SENTINEL_SOURCE_RECORDS:
+        raise ValueError("MEA sentinel source records have drifted")
     if tuple(contract.get("species_order", ())) != EXPECTED_SPECIES_ORDER:
         raise ValueError("MEA sentinel species order does not match the reaction contract")
     if (
@@ -751,6 +795,12 @@ def validate_sentinel_contract(
         != EXPECTED_PROVIDER_INPUT["provider_header_sha256"]
         or provider.get("artifact_header_sha256")
         != provider.get("installed_header_sha256")
+        or provider.get("distribution_record_sha256")
+        != EXPECTED_PROVIDER_INPUT["provider_distribution_record_sha256"]
+        or provider.get("installed_module_sha256")
+        != EXPECTED_PROVIDER_INPUT["provider_installed_module_sha256"]
+        or provider.get("capability_count")
+        != EXPECTED_PROVIDER_INPUT["provider_capability_count"]
         or consumer.get("source_sha256") != _sha256(consumer_source)
         or consumer.get("harness_sha256") != _sha256(consumer_harness)
         or consumer.get("expected_domain_statuses")
@@ -763,161 +813,38 @@ def validate_sentinel_contract(
     ):
         raise ValueError("MEA regression-input bundle or public receipt is inconsistent")
 
-    bubble = contract.get("bubble_pressure_search", {})
-    application_domain = bubble.get("full_campaign_application_domain", {})
-    tracer_domain = bubble.get("tracer_domain", {})
-    metrology_path = REPO_ROOT / application_domain.get("source_manifest", "")
-    state_manifest_path = REPO_ROOT / application_domain.get("state_manifest", "")
-    with metrology_path.open(newline="", encoding="utf-8") as handle:
-        pressure_rows = [
-            row
-            for row in csv.DictReader(handle)
-            if row["target_eligible"] == "yes"
-            and row["pressure_specification"] == "row_reported_total_pressure"
-        ]
-    with state_manifest_path.open(newline="", encoding="utf-8") as handle:
-        state_rows = {
-            row["observation_id"]: row
-            for row in csv.DictReader(handle)
-            if row["observation_id"] in {item["observation_id"] for item in pressure_rows}
-        }
-    pressure_by_id = {
-        row["observation_id"]: float(row["state_pressure_pa"])
-        for row in pressure_rows
-    }
-    pressure_values = list(pressure_by_id.values())
-    pressure_endpoints = {
-        row["observation_id"]: float(row["state_pressure_pa"])
-        for row in pressure_rows
-        if float(row["state_pressure_pa"]) in {min(pressure_values), max(pressure_values)}
-    }
-    temperature_values = [
-        float(
-            row["temperature_canonical_C"]
-            or row["temperature_reported_C"]
-        )
-        + 273.15
-        for row in state_rows.values()
-    ]
-    mass_fraction_values = [
-        float(row["MEA_weight_fraction"]) for row in state_rows.values()
-    ]
-    loading_values = [float(row["CO2_loading"]) for row in state_rows.values()]
-    tracer_states = {
-        observation_id: row
-        for observation_id, row in state_rows.items()
-        if abs(
-            float(
-                row["temperature_canonical_C"]
-                or row["temperature_reported_C"]
-            )
-            + 273.15
-            - 313.15
-        )
-        < 1.0e-12
-    }
-    tracer_pressures = [pressure_by_id[observation_id] for observation_id in tracer_states]
-    receipt_domain = receipt.get("domain", {})
-    derivative_probe = receipt.get("neutral_reference", {}).get(
-        "tracer_derivative_probe", {}
-    )
-    value_probes = receipt.get("neutral_reference", {}).get("value_probes", [])
-    neutral_basis = reaction_contract["provider_transform"]["deterministic_payload"][
-        "provider_neutral_basis"
-    ]["matrix"]
-    neutral_basis_sha256 = _canonical_sha256(
-        [float(value) for row in neutral_basis for value in row]
-    )
-    expected_full_blockers = [
-        "provider-full-campaign-temperature-pressure-domain-missing",
-        "reaction-source-correlation-temperature-domain-missing-above-323.15-k",
-    ]
+    pressure = contract.get("pressure_observable_convention", {})
+    pressure_source = REPO_ROOT / pressure.get("source_manifest", "")
+    pressure_states = REPO_ROOT / pressure.get("state_manifest", "")
+    provider_evidence = pressure.get("provider_evidence", {})
     if (
-        bubble.get("status")
-        != "TRACER_INTERVAL_EXECUTABLE_FULL_CAMPAIGN_BLOCKED"
-        or bubble.get("reference_pressure_convention", {}).get(
-            "standard_reference_pressure_pa"
-        )
-        != 100_000.0
-        or application_domain.get("identity")
-        != "mea-reactive-bubble-admitted-pressure-envelope-v1"
-        or application_domain.get("admitted_pressure_row_count")
-        != len(pressure_rows)
-        or len(state_rows) != len(pressure_rows)
-        or application_domain.get("lower_bound_pa") != min(pressure_values)
-        or application_domain.get("upper_bound_pa") != max(pressure_values)
-        or pressure_endpoints
+        pressure.get("status") != "TRACER_LIQUID_FUGACITY_EQUIVALENT"
+        or pressure.get("target_observation_id") != "vle_obs_0137"
+        or pressure.get("observed_pco2_pa") != 574.0
+        or pressure.get("fixed_total_pressure_pa") != 7326.7
+        or pressure.get("reported_pressure_relation")
+        != "predicted_pco2_pa = liquid_co2_fugacity_pa"
+        or pressure.get("vapor_fugacity_coefficient") != 1.0
+        or pressure.get("no_phase_equilibrium") is not True
+        or pressure.get("blockers")
+        != ["composed_homogeneous_liquid_observable_receipt_missing"]
+        or pressure.get("source_manifest_sha256") != _sha256(pressure_source)
+        or pressure.get("state_manifest_sha256") != _sha256(pressure_states)
+        or provider_evidence
         != {
-            application_domain.get("lower_endpoint_observation_id"): min(
-                pressure_values
-            ),
-            application_domain.get("upper_endpoint_observation_id"): max(
-                pressure_values
-            ),
+            "provider_pr": "https://github.com/ePC-SAFT/ePC-SAFT/pull/44",
+            "provider_commit": EXPECTED_PROVIDER_INPUT["provider_commit"],
+            "provider_tree": EXPECTED_PROVIDER_INPUT["provider_tree"],
+            "provider_wheel_sha256": EXPECTED_PROVIDER_INPUT[
+                "provider_wheel_sha256"
+            ],
+            "provider_header_sha256": EXPECTED_PROVIDER_INPUT[
+                "provider_header_sha256"
+            ],
+            "public_consumer_receipt": EXPECTED_PROVIDER_INPUT["receipt_path"],
         }
-        or application_domain.get("temperature_range_k")
-        != [min(temperature_values), max(temperature_values)]
-        or application_domain.get("mea_mass_fraction_unloaded_range")
-        != [min(mass_fraction_values), max(mass_fraction_values)]
-        or application_domain.get("loading_mol_co2_per_mol_mea_range")
-        != [min(loading_values), max(loading_values)]
-        or application_domain.get("source_manifest_sha256")
-        != _sha256(metrology_path)
-        or application_domain.get("state_manifest_sha256")
-        != _sha256(state_manifest_path)
-        or bubble.get("full_campaign_application_domain_sha256")
-        != _canonical_sha256(application_domain)
-        or len(tracer_states) != 44
-        or tracer_domain.get("status") != "REGRESSION_INPUT_EXECUTABLE"
-        or tracer_domain.get("temperature_k")
-        != EXPECTED_PROVIDER_INPUT["temperature_k"]
-        or tracer_domain.get("pressure_pa")
-        != [min(tracer_pressures), max(tracer_pressures)]
-        or tracer_domain.get("domain_fingerprint")
-        != EXPECTED_PROVIDER_INPUT["domain_fingerprint"]
-        or receipt_domain.get("domain_id") != EXPECTED_PROVIDER_INPUT["domain_id"]
-        or receipt_domain.get("fingerprint")
-        != EXPECTED_PROVIDER_INPUT["domain_fingerprint"]
-        or receipt_domain.get("temperature_k")
-        != EXPECTED_PROVIDER_INPUT["temperature_k"]
-        or receipt_domain.get("pressure_pa")
-        != EXPECTED_PROVIDER_INPUT["pressure_pa"]
-        or receipt_domain.get("source_row_count") != len(tracer_states)
-        or receipt_domain.get("pressure_pa")
-        != [min(tracer_pressures), max(tracer_pressures)]
-        or derivative_probe.get("status") != 0
-        or derivative_probe.get("value_status") != 0
-        or derivative_probe.get("source_pressure_min_pa") != min(tracer_pressures)
-        or derivative_probe.get("source_pressure_max_pa") != max(tracer_pressures)
-        or derivative_probe.get("parameter_fingerprint")
-        != receipt_bundle.get("parameter_fingerprint")
-        or derivative_probe.get("topology_fingerprint")
-        != receipt_bundle.get("topology_fingerprint")
-        or derivative_probe.get("neutral_basis_sha256")
-        != neutral_basis_sha256
-        or [
-            (
-                probe.get("role"),
-                probe.get("status"),
-                probe.get("temperature_k"),
-                probe.get("pressure_pa"),
-            )
-            for probe in value_probes
-        ]
-        != [
-            ("interior-1bar", 0, 313.15, 100_000),
-            ("arithmetic-center", 0, 313.15, 153_052.725),
-            ("below-pressure-domain", 3, 313.15, 6_105.44),
-            ("above-pressure-domain", 3, 313.15, 300_000.01),
-            ("below-temperature-domain", 3, 313.14, 100_000),
-            ("above-temperature-domain", 3, 313.16, 100_000),
-        ]
-        or bubble.get("tracer_blockers") != []
-        or bubble.get("full_campaign_blockers") != expected_full_blockers
-        or "every trial system pressure"
-        not in bubble.get("equilibrium_trial_rule", "")
     ):
-        raise ValueError("MEA reactive-bubble pressure-domain contract is inconsistent")
+        raise ValueError("MEA homogeneous-liquid pressure Provider evidence is inconsistent")
 
     states = contract.get("states", [])
     if len(states) != 1:
@@ -1051,13 +978,7 @@ def validate_sentinel_contract(
         "equilibrium_solver_ready": False,
         "equilibrium_sensitivity_ready": False,
         "blockers": blockers,
-        "bubble_application_interval_frozen": True,
-        "bubble_full_campaign_pressure_range_pa": [
-            application_domain["lower_bound_pa"],
-            application_domain["upper_bound_pa"],
-        ],
-        "bubble_tracer_pressure_range_pa": tracer_domain["pressure_pa"],
-        "bubble_tracer_ready": True,
-        "bubble_full_campaign_ready": False,
-        "bubble_full_campaign_blockers": expected_full_blockers,
+        "pressure_observable_status": pressure["status"],
+        "pressure_no_phase_equilibrium": pressure["no_phase_equilibrium"],
+        "pressure_observable_blockers": pressure["blockers"],
     }

@@ -252,6 +252,7 @@ int main(int argc, char** argv) {
     std::cout
         << "{\"abi_version\":" << sdk->abi_version
         << ",\"table_size\":" << sdk->table_size
+        << ",\"capability_count\":" << sdk->capability_count
         << ",\"component_count\":" << sdk->component_count
         << ",\"neutral_basis_row_count\":" << sdk->neutral_reference_basis_row_count
         << ",\"neutral_reference_result_size\":" << sdk->neutral_reference_result_size

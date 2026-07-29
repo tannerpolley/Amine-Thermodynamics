@@ -92,6 +92,13 @@ def replay(wheel: Path) -> dict[str, Any]:
         module_origin = Path(exported["module_origin"])
         if not module_origin.is_relative_to(venv):
             raise RuntimeError("Provider module did not load from the isolated wheel environment")
+        distribution_record = next(
+            module_origin.parent.parent.glob("epcsaft-*.dist-info/RECORD")
+        )
+        if _sha256(module_origin) != provider["installed_module_sha256"]:
+            raise RuntimeError("installed Provider module differs from the frozen receipt")
+        if _sha256(distribution_record) != provider["distribution_record_sha256"]:
+            raise RuntimeError("installed Provider distribution record differs from the frozen receipt")
         if exported["parameter_fingerprint"] != receipt["bundle"]["parameter_fingerprint"]:
             raise RuntimeError("public bundle load changed the parameter fingerprint")
         if exported["bundle_fingerprint"] != receipt["bundle"]["bundle_fingerprint"]:
@@ -148,6 +155,7 @@ def replay(wheel: Path) -> dict[str, Any]:
         expected = {
             "abi_version": provider["abi_version"],
             "table_size": provider["table_size"],
+            "capability_count": provider["capability_count"],
             "component_count": len(COMPONENTS),
             "neutral_basis_row_count": provider["neutral_basis_row_count"],
             "neutral_reference_result_size": provider["neutral_reference_result_size"],

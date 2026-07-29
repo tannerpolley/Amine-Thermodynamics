@@ -45,7 +45,7 @@ GATE0_PREREGISTRATION_PATH = (
     / "ionic_volumetric_fit_preregistration.json"
 )
 EXPECTED_GATE0_CANONICAL_SHA256 = (
-    "3c81025fafcbe3d593e1feb268e49400c4ff3681f9fc05194cdc152e096f93dc"
+    "ee38cd533ac4647fb20cb05e06694306c2c0fd8aabedcfd09655e9592c76f454"
 )
 GATE0_REPO_ROOT = Path(__file__).resolve().parents[3]
 EXPECTED_TRACER_SOURCES = {
@@ -165,7 +165,11 @@ def _validate_gate0_tracer_sources(tracer: Mapping[str, Any]) -> None:
     pressure_source_kpa = float(pressure_canonical["CO2_pressure"])
     pressure_value_pa = pressure_source_kpa * 1000.0
     if (
-        pressure.get("source_file") != pressure_sources["canonical_path"]
+        pressure.get("family") != "pco2"
+        or pressure.get("state_id") != "vle_obs_0137"
+        or pressure.get("row_id") != "vle_0036"
+        or pressure.get("source_id") != "Hilliard2008"
+        or pressure.get("source_file") != pressure_sources["canonical_path"]
         or pressure.get("source_file_sha256") != pressure_sources["canonical_sha256"]
         or pressure.get("canonical_record_id") != "vle_obs_0137"
         or pressure.get("raw_source_file") != pressure_sources["raw_path"]
@@ -174,6 +178,18 @@ def _validate_gate0_tracer_sources(tracer: Mapping[str, Any]) -> None:
         or pressure.get("metrology_manifest") != pressure_sources["manifest_path"]
         or pressure.get("metrology_manifest_sha256")
         != pressure_sources["manifest_sha256"]
+        or pressure.get("source_locator")
+        != "Hilliard (2008), apparatus Sections 2.3.4-2.3.5 and VLE appendices"
+        or pressure.get("partition") != "training"
+        or pressure.get("role") != "active_training"
+        or pressure.get("group_id") != "vle|Hilliard2008|w=0.3|T=40"
+        or pressure.get("temperature_k") != 313.15
+        or pressure.get("mea_mass_fraction_unloaded") != 0.3
+        or pressure.get("loading_mol_co2_per_mol_mea") != 0.466
+        or pressure.get("measurement_origin")
+        != "calibration_derived_partial_pressure"
+        or pressure.get("measured_primitive")
+        != "calibrated_gas_composition_and_total_pressure"
         or pressure_canonical.get("source_key") != "Hilliard2008"
         or pressure_canonical.get("source_file") != "Hilliard_2008_VLE.csv"
         or pressure_canonical.get("source_row") != "31"
@@ -222,7 +238,13 @@ def _validate_gate0_tracer_sources(tracer: Mapping[str, Any]) -> None:
     )
     speciation_raw = _csv_rows(GATE0_REPO_ROOT / speciation_sources["raw_path"])[48]
     if (
-        speciation.get("source_file") != speciation_sources["canonical_path"]
+        speciation.get("family") != "speciation"
+        or speciation.get("state_id") != "Bottinger2008_state_049"
+        or speciation.get("measurement_identity") != "cheq_canon_00194"
+        or speciation.get("membership_id")
+        != "Bottinger2008_state_049|MEACOO-"
+        or speciation.get("source_id") != "Bottinger2008"
+        or speciation.get("source_file") != speciation_sources["canonical_path"]
         or speciation.get("source_file_sha256")
         != speciation_sources["canonical_sha256"]
         or speciation.get("canonical_record_id") != "cheq_canon_00194"
@@ -234,8 +256,31 @@ def _validate_gate0_tracer_sources(tracer: Mapping[str, Any]) -> None:
         != speciation_sources["manifest_path"]
         or speciation.get("membership_manifest_sha256")
         != speciation_sources["manifest_sha256"]
+        or speciation.get("source_locator")
+        != "Böttinger et al. (2008), source row 49"
+        or speciation.get("partition") != "training"
+        or speciation.get("role") != "active_training"
+        or speciation.get("group_id")
+        != "speciation|Bottinger2008|w=0.3|T=40"
+        or speciation.get("temperature_k") != 313.15
+        or speciation.get("pressure_role")
+        != (
+            "caller-supplied fixed total-pressure evaluation input; "
+            "not a Böttinger pressure measurement"
+        )
+        or speciation.get("evaluation_pressure_pa") != 7326.7
+        or speciation.get("evaluation_pressure_source_observation_id")
+        != "vle_obs_0137"
+        or speciation.get("mea_mass_fraction_unloaded") != 0.3
+        or speciation.get("loading_mol_co2_per_mol_mea") != 0.466
+        or speciation.get("measurement_role") != "direct_positive"
+        or speciation.get("species") != "MEACOO-"
         or speciation_canonical.get("source_key") != "Bottinger2008"
         or speciation_canonical.get("source_row_index") != "49"
+        or speciation_canonical.get("temperature_C") != "40"
+        or speciation_canonical.get("temperature_K") != "313.15"
+        or speciation_canonical.get("mea_mass_fraction") != "0.3"
+        or speciation_canonical.get("co2_loading_mol_per_mol_mea") != "0.466"
         or speciation_canonical.get("species") != "MEACOO-"
         or speciation_canonical.get("measurement_role") != "direct_positive"
         or speciation_canonical.get("reported_value") != "0.0502"
@@ -244,9 +289,13 @@ def _validate_gate0_tracer_sources(tracer: Mapping[str, Any]) -> None:
         or speciation_membership.get("measurement_identity") != "cheq_canon_00194"
         or speciation_membership.get("reported_basis") != "mole_fraction"
         or speciation_membership.get("target_eligible") != "yes"
+        or speciation_membership.get("lifecycle_status") != "canonical_eligible"
+        or speciation_membership.get("target_membership") != "active_v1"
         or speciation.get("observed_value") != 0.0502
         or speciation.get("reported_basis") != "mole_fraction"
         or speciation.get("observed_unit") != "mole_fraction"
+        or speciation.get("provider_domain_fingerprint")
+        != "93510b66543e4e9e49c409a658b1bf7a01599ccd9ce3feef41bbab6b6eb668ab"
     ):
         raise PreregistrationError("Gate 0 speciation source row or unit drifted")
 
@@ -403,6 +452,7 @@ def validate_gate0_preregistration(payload: Mapping[str, Any]) -> dict[str, Any]
         "field": "provider_regression_input",
     }
     provider_input = tracer.get("provider_regression_input", {})
+    equilibrium_input = tracer.get("equilibrium_input", {})
     owner = provider_input.get("canonical_owner", {})
     owner_contract = json.loads(
         (GATE0_REPO_ROOT / owner_reference["path"]).read_text(encoding="utf-8")
@@ -410,7 +460,10 @@ def validate_gate0_preregistration(payload: Mapping[str, Any]) -> dict[str, Any]
     owner_input = owner_contract.get(owner_reference["field"], {})
     if (
         tracer.get("status")
-        != "FROZEN_PROVIDER_INPUT_EXECUTABLE_EQUILIBRIUM_PENDING"
+        != (
+            "FROZEN_PROVIDER_INPUT_EXECUTABLE_EQUILIBRIUM_ARTIFACT_AVAILABLE_"
+            "COMPOSED_OBSERVABLE_PENDING"
+        )
         or tracer.get("selected_state_ids")
         != ["vle_obs_0137", "Bottinger2008_state_049"]
         or tracer.get("active_coordinates") != tracer_coordinates
@@ -418,9 +471,9 @@ def validate_gate0_preregistration(payload: Mapping[str, Any]) -> dict[str, Any]
         != ["vle_obs_0137", "Bottinger2008_state_049"]
         or tracer.get("regularization")
         != {"status": "NOT_REQUIRED_FOR_REDUCED_TRACER", "scale": None}
-        or observations[1].get("paired_pressure_observation_id")
+        or observations[1].get("evaluation_pressure_pa") != 7326.7
+        or observations[1].get("evaluation_pressure_source_observation_id")
         != "vle_obs_0137"
-        or observations[1].get("search_bounds_pa") != [6105.45, 300_000.0]
         or observations[0].get("residual") != "log10(predicted_pco2_pa/574.0)"
         or observations[0].get("residual_scale") != 1.0
         or observations[1].get("residual")
@@ -437,13 +490,37 @@ def validate_gate0_preregistration(payload: Mapping[str, Any]) -> dict[str, Any]
         != owner_input.get("immutable_identities", {}).get("domain_fingerprint")
         or owner_input.get("immutable_identities", {}).get("temperature_k")
         != [313.15, 313.15]
+        or equilibrium_input
+        != {
+            "status": "RETAINED_INSTALLED_ARTIFACT_AVAILABLE",
+            "commit": "ab2086abd480a161fb5c22cf3635776129363976",
+            "tree": "7b02b78b50bca18b63dc80faa02bb25a672d055b",
+            "merge_commit": "dd2a72650f0224eac431aa06019cea3a7cae358e",
+            "wheel_filename": (
+                "epcsaft_equilibrium-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
+            ),
+            "wheel_sha256": (
+                "874d737d8fe219066b8257d3be847e1a3d9a15cf6056f56b4a0e82b08cd501aa"
+            ),
+            "provider_wheel_sha256": (
+                "4cee10a9158576307cda93f611b6ade3a7cf8819df44f83efe8cbc61ab038789"
+            ),
+            "operation": (
+                "homogeneous_fixed_tp_chemical_equilibrium_with_exact_"
+                "active_parameter_sensitivities"
+            ),
+            "scope": (
+                "state values and exact amount/volume sensitivities only; "
+                "composed observables remain downstream-owned"
+            ),
+        }
     ):
         raise PreregistrationError("Gate 0 tracer evidence or typed blocker drifted")
     blockers = payload.get("execution_admission", {}).get("blockers", [])
     if (
         blockers
         != [
-            "equilibrium_coupled_derivative_receipt_missing",
+            "composed_homogeneous_liquid_observable_receipt_missing",
             "regression_mixed_observation_receipt_missing",
             "tracer_rank_preflight_pending",
         ]

@@ -9,6 +9,11 @@ import hashlib
 import json
 from pathlib import Path
 
+from MEA.epcsaft_ionic.preregistration import (
+    PreregistrationError,
+    validate_gate0_preregistration,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DENSITY = ROOT / "data/reference/MEA/observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_density.csv"
@@ -217,6 +222,10 @@ def validate() -> list[str]:
         errors.append(f"unexpected preregistered active parameter map: {active}")
 
     preregistration = json.loads(PREREGISTRATION.read_text(encoding="utf-8"))
+    try:
+        validate_gate0_preregistration(preregistration)
+    except PreregistrationError as exc:
+        errors.append(f"canonical Gate 0 preregistration failed: {exc}")
     if (
         preregistration["status"] != "GATE_0_FROZEN_EXECUTION_BLOCKED"
         or preregistration["execution_admission"]["admitted"] is not False
@@ -249,8 +258,11 @@ def validate() -> list[str]:
     if (
         tracer["provider_regression_input"]["status"]
         != "REGRESSION_INPUT_EXECUTABLE"
-        or tracer["observations"][1]["search_bounds_pa"]
-        != [6105.45, 300000.0]
+        or tracer["observations"][1]["evaluation_pressure_pa"] != 7326.7
+        or tracer["observations"][1][
+            "evaluation_pressure_source_observation_id"
+        ]
+        != "vle_obs_0137"
         or tracer["observations"][0]["source_observed_unit"] != "kPa"
         or tracer["observations"][0]["observed_unit"] != "Pa"
         or tracer["observations"][0]["source_to_residual_factor"] != 1000.0
@@ -274,7 +286,7 @@ def validate() -> list[str]:
     }:
         errors.append("Gate 0 reduced tracer accounting has drifted")
     if preregistration["execution_admission"]["blockers"] != [
-        "equilibrium_coupled_derivative_receipt_missing",
+        "composed_homogeneous_liquid_observable_receipt_missing",
         "regression_mixed_observation_receipt_missing",
         "tracer_rank_preflight_pending",
     ]:

@@ -101,6 +101,16 @@ def test_reaction_contract_preserves_primary_source_anchors_and_rejects_conflict
     with pytest.raises(ValueError, match="Provider transformation"):
         validate_reaction_contract(overclaimed_domain)
 
+    status_drift = copy.deepcopy(contract)
+    status_drift["status"] = "unreviewed"
+    with pytest.raises(ValueError, match="reaction contract identity"):
+        validate_reaction_contract(status_drift)
+
+    source_mapping_drift = copy.deepcopy(contract)
+    source_mapping_drift["reactions"][3]["source_record_ids"] = ["Austgen1991"]
+    with pytest.raises(ValueError, match="R4.*source"):
+        validate_reaction_contract(source_mapping_drift)
+
 
 def test_wong_sentinel_recomputes_feed_and_remains_fail_closed() -> None:
     reactions = load_reaction_contract()
@@ -122,17 +132,12 @@ def test_wong_sentinel_recomputes_feed_and_remains_fail_closed() -> None:
     assert summary["equilibrium_solver_ready"] is False
     assert summary["equilibrium_sensitivity_ready"] is False
     assert summary["blockers"] == []
-    assert summary["bubble_application_interval_frozen"] is True
-    assert summary["bubble_full_campaign_pressure_range_pa"] == [
-        6105.45,
-        3_000_000.0,
-    ]
-    assert summary["bubble_tracer_pressure_range_pa"] == [6105.45, 300_000.0]
-    assert summary["bubble_tracer_ready"] is True
-    assert summary["bubble_full_campaign_ready"] is False
-    assert summary["bubble_full_campaign_blockers"] == [
-        "provider-full-campaign-temperature-pressure-domain-missing",
-        "reaction-source-correlation-temperature-domain-missing-above-323.15-k",
+    assert summary["pressure_observable_status"] == (
+        "TRACER_LIQUID_FUGACITY_EQUIVALENT"
+    )
+    assert summary["pressure_no_phase_equilibrium"] is True
+    assert summary["pressure_observable_blockers"] == [
+        "composed_homogeneous_liquid_observable_receipt_missing"
     ]
 
     corrupted = copy.deepcopy(sentinel)
@@ -165,3 +170,20 @@ def test_wong_sentinel_recomputes_feed_and_remains_fail_closed() -> None:
     molar_mass_drift["molar_mass_basis"]["values"]["H2O"] = 0.018
     with pytest.raises(ValueError, match="molar-mass artifact"):
         validate_sentinel_contract(molar_mass_drift, reactions)
+
+    status_drift = copy.deepcopy(sentinel)
+    status_drift["status"] = "draft"
+    with pytest.raises(ValueError, match="sentinel contract identity"):
+        validate_sentinel_contract(status_drift, reactions)
+
+    source_drift = copy.deepcopy(sentinel)
+    source_drift["source_records"][0]["local_pdf_sha256"] = "0" * 64
+    with pytest.raises(ValueError, match="sentinel source records"):
+        validate_sentinel_contract(source_drift, reactions)
+
+    provider_evidence_drift = copy.deepcopy(sentinel)
+    provider_evidence_drift["pressure_observable_convention"]["provider_evidence"][
+        "provider_commit"
+    ] = "0" * 40
+    with pytest.raises(ValueError, match="Provider evidence"):
+        validate_sentinel_contract(provider_evidence_drift, reactions)

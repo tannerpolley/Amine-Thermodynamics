@@ -169,12 +169,12 @@
   "predictive_authority": false,
   "provider": {
     "abi_version": 1,
-    "artifact_header_sha256": "bd95cd061e0fa4c45e7d23737ce85cf2d4f03a37408fa142b7070e36df6b1c6b",
+    "artifact_header_sha256": "bb46f103b7116efcc31f000cd07082f2d79c36a3236265d3e1d9ab4d27cc733f",
     "capability_count": 17,
     "distribution": "epcsaft",
-    "distribution_record_sha256": "91da40e078a48400cbcdba7c7612afb6619079be412455a52606796c9b7123c0",
+    "distribution_record_sha256": "ba7dc8df2d9e96c03ec1e37c260f775420718ce1cacddf1b35b9f5248043dec6",
     "installed_header_relative_path": "epcsaft/include/epcsaft/native_sdk_v1.h",
-    "installed_header_sha256": "bd95cd061e0fa4c45e7d23737ce85cf2d4f03a37408fa142b7070e36df6b1c6b",
+    "installed_header_sha256": "bb46f103b7116efcc31f000cd07082f2d79c36a3236265d3e1d9ab4d27cc733f",
     "native_sdk_capsule": "epcsaft.native_sdk.v1",
     "neutral_basis_row_count": 8,
     "neutral_reference_derivative_result_size": 968,
@@ -182,9 +182,9 @@
     "table_size": 424,
     "version": "0.2.0.dev0",
     "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
-    "wheel_sha256": "667a86258f979697a87b315f23ab2583dfb39f7b1e4aa6f837280a897a316b93",
-    "commit": "033f283eb8fb3c97d5d7a01db9c732d13bbe8c98",
-    "tree": "5c57b8b910abb8cd66fc9912dd36748dc5841391",
+    "wheel_sha256": "4cee10a9158576307cda93f611b6ade3a7cf8819df44f83efe8cbc61ab038789",
+    "commit": "d88e9af12c6d7e4d5ef5d916c4d610920348e5a2",
+    "tree": "a6a1bcecce3521f5b2d32f9c819e6b882c9a3f42",
     "installed_module_origin": "isolated-wheel-site-packages/epcsaft/__init__.py",
     "installed_module_sha256": "e3378b0b773be60da75aa4eaee36bb3078b3bfccca3b41def0c4e84ed849939e"
   },
@@ -197,10 +197,10 @@
       "libc.so.6",
       "ld-linux-x86-64.so.2"
     ],
-    "binary_sha256": "55e188c3f0f146b5723521629f683405fcf341de72f0aa6d74ce9d69ab07b6ed",
+    "binary_sha256": "f6831c9ced38d4f703dfa0221ebc40a7c12a4b2c51260bbef74b92d8a3f6e2f2",
     "compile_command": "cmake -S $TEMP_CMAKE_SOURCE -B $TEMP_BUILD -Depcsaft_DIR=$INSTALLED_EPCSAFT_CMAKE -DPROBE_SOURCE=$REPO_ROOT/scripts/dev/mea_gate0_provider_probe.cpp && cmake --build $TEMP_BUILD --config Release",
     "harness_path": "scripts/dev/replay_mea_gate0_provider.py",
-    "harness_sha256": "bdc4a601e91815fe40c0f373264d9233ca75fe4d55822a226c16553c13b429ea",
+    "harness_sha256": "91bd8dfbc9c19c2d9ab6c5a27064526bb556c9c5df1429dcabb239aebbb32cbe",
     "expected_domain_statuses": {
       "outside_pressure": 3,
       "outside_temperature": 3
@@ -209,7 +209,7 @@
     "python_executable": "fresh CPython 3.13 uv environment containing only the retained wheel and runtime dependencies",
     "run_command": "uv run python scripts/check_epcsaft_integration.py --mode final --gate0-provider-wheel $PROVIDER_WHEEL",
     "source_path": "scripts/dev/mea_gate0_provider_probe.cpp",
-    "source_sha256": "96508882ade998475121c72a8b207ae10786bc10faa6a436b6208fb6c8c2c506",
+    "source_sha256": "79c64451aacf91671622b02d4b94b4be91e926aaefa559f5537f01224745ff4f",
     "compiler": {
       "identity": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0; CMake Release build linked only through installed epcsaft::native_sdk",
       "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769"
