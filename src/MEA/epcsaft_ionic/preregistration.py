@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 from dataclasses import dataclass
@@ -36,6 +37,61 @@ EXPECTED_POLICIES = {
 EXPECTED_DIAGNOSTICS = ["fit_success", "failure_count", "active_bounds", "by_target_type"]
 EXPECTED_MAJOR_SPECIATION_GATES = {"MEAH+": 0.15, "MEACOO-": 0.10}
 EXPECTED_ENTRYPOINT = "analyses/phase3/ionic_epcsaft_regression/scripts/fit_global_pressure_speciation.py"
+GATE0_PREREGISTRATION_PATH = (
+    Path(__file__).resolve().parents[3]
+    / "analyses"
+    / "phase3"
+    / "ionic_epcsaft_regression"
+    / "ionic_volumetric_fit_preregistration.json"
+)
+EXPECTED_GATE0_CANONICAL_SHA256 = (
+    "ee38cd533ac4647fb20cb05e06694306c2c0fd8aabedcfd09655e9592c76f454"
+)
+GATE0_REPO_ROOT = Path(__file__).resolve().parents[3]
+EXPECTED_TRACER_SOURCES = {
+    "pressure": {
+        "canonical_path": (
+            "data/reference/MEA/observations/vapor_liquid_equilibrium/"
+            "Canonical_VLE_Observations.csv"
+        ),
+        "canonical_sha256": (
+            "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73"
+        ),
+        "raw_path": (
+            "data/reference/MEA/observations/vapor_liquid_equilibrium/"
+            "Hilliard_2008_VLE.csv"
+        ),
+        "raw_sha256": (
+            "4039394233367cbe491f6f97c3e5adcd5f6975fc696a3fde00cd4ca5af44da6c"
+        ),
+        "manifest_path": "data/reference/MEA/manifests/pco2_metrology_manifest.csv",
+        "manifest_sha256": (
+            "0d14803873a60534ec5d7df382cfbd0ae03e4aaeba68bb5d54be7e4def8397cc"
+        ),
+    },
+    "speciation": {
+        "canonical_path": (
+            "data/reference/MEA/observations/liquid_speciation/"
+            "Canonical_Combined_ChEq.csv"
+        ),
+        "canonical_sha256": (
+            "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e"
+        ),
+        "raw_path": (
+            "data/reference/MEA/observations/liquid_speciation/"
+            "Bottinger_2007_ChEq.csv"
+        ),
+        "raw_sha256": (
+            "6c4c1e14c2a417bcbd2ff54c5f3978cb1560e7c831a9f931178d021d71b003f5"
+        ),
+        "manifest_path": (
+            "data/reference/MEA/manifests/speciation_target_membership.csv"
+        ),
+        "manifest_sha256": (
+            "a89a3f0373a86813482158f180939cf57f74be038cd59f244dfadcb689923190"
+        ),
+    },
+}
 
 
 class PreregistrationError(RuntimeError):
@@ -58,6 +114,190 @@ class ValidatedPreregistration:
 def canonical_sha256(payload: Mapping[str, Any]) -> str:
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
+
+
+def _file_sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _csv_rows(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8-sig") as handle:
+        return list(csv.DictReader(handle))
+
+
+def _one_csv_row(path: Path, key: str, value: str) -> dict[str, str]:
+    rows = [row for row in _csv_rows(path) if row.get(key) == value]
+    if len(rows) != 1:
+        raise PreregistrationError(
+            f"Gate 0 source binding expected one {key}={value!r} row in {path}"
+        )
+    return rows[0]
+
+
+def _validate_gate0_tracer_sources(tracer: Mapping[str, Any]) -> None:
+    observations = tracer.get("observations", [])
+    if not isinstance(observations, list) or len(observations) != 2:
+        raise PreregistrationError("Gate 0 tracer must bind exactly two source rows")
+    pressure, speciation = observations
+    pressure_sources = EXPECTED_TRACER_SOURCES["pressure"]
+    speciation_sources = EXPECTED_TRACER_SOURCES["speciation"]
+    for sources in (pressure_sources, speciation_sources):
+        for path_key, hash_key in (
+            ("canonical_path", "canonical_sha256"),
+            ("raw_path", "raw_sha256"),
+            ("manifest_path", "manifest_sha256"),
+        ):
+            path = GATE0_REPO_ROOT / sources[path_key]
+            if _file_sha256(path) != sources[hash_key]:
+                raise PreregistrationError(f"Gate 0 tracer source artifact drifted: {path}")
+
+    pressure_canonical = _one_csv_row(
+        GATE0_REPO_ROOT / pressure_sources["canonical_path"],
+        "observation_id",
+        "vle_obs_0137",
+    )
+    pressure_metrology = _one_csv_row(
+        GATE0_REPO_ROOT / pressure_sources["manifest_path"],
+        "observation_id",
+        "vle_obs_0137",
+    )
+    pressure_raw = _csv_rows(GATE0_REPO_ROOT / pressure_sources["raw_path"])[30]
+    pressure_source_kpa = float(pressure_canonical["CO2_pressure"])
+    pressure_value_pa = pressure_source_kpa * 1000.0
+    if (
+        pressure.get("family") != "pco2"
+        or pressure.get("state_id") != "vle_obs_0137"
+        or pressure.get("row_id") != "vle_0036"
+        or pressure.get("source_id") != "Hilliard2008"
+        or pressure.get("source_file") != pressure_sources["canonical_path"]
+        or pressure.get("source_file_sha256") != pressure_sources["canonical_sha256"]
+        or pressure.get("canonical_record_id") != "vle_obs_0137"
+        or pressure.get("raw_source_file") != pressure_sources["raw_path"]
+        or pressure.get("raw_source_file_sha256") != pressure_sources["raw_sha256"]
+        or pressure.get("raw_source_row_index") != 31
+        or pressure.get("metrology_manifest") != pressure_sources["manifest_path"]
+        or pressure.get("metrology_manifest_sha256")
+        != pressure_sources["manifest_sha256"]
+        or pressure.get("source_locator")
+        != "Hilliard (2008), apparatus Sections 2.3.4-2.3.5 and VLE appendices"
+        or pressure.get("partition") != "training"
+        or pressure.get("role") != "active_training"
+        or pressure.get("group_id") != "vle|Hilliard2008|w=0.3|T=40"
+        or pressure.get("temperature_k") != 313.15
+        or pressure.get("mea_mass_fraction_unloaded") != 0.3
+        or pressure.get("loading_mol_co2_per_mol_mea") != 0.466
+        or pressure.get("measurement_origin")
+        != "calibration_derived_partial_pressure"
+        or pressure.get("measured_primitive")
+        != "calibrated_gas_composition_and_total_pressure"
+        or pressure_canonical.get("source_key") != "Hilliard2008"
+        or pressure_canonical.get("source_file") != "Hilliard_2008_VLE.csv"
+        or pressure_canonical.get("source_row") != "31"
+        or pressure_canonical.get("active_row_id") != "vle_0036"
+        or pressure_canonical.get("active_view_member") != "yes"
+        or float(pressure_canonical["MEA_weight_fraction"]) != 0.3
+        or float(pressure_canonical["temperature_canonical_C"]) != 40.0
+        or float(pressure_canonical["CO2_loading"]) != 0.466
+        or pressure_source_kpa != 0.574
+        or float(pressure_canonical["total_pressure"]) != 7.3267
+        or pressure_raw != {
+            "MEA_weight_fraction": "0.3",
+            "temperature": "40",
+            "CO2_loading": "0.466",
+            "CO2_pressure": "0.574",
+            "MEA_pressure": "0.0027",
+            "H2O_pressure": "6.75",
+            "total_pressure": "7.3267",
+        }
+        or pressure_metrology.get("measurement_origin")
+        != "calibration_derived_partial_pressure"
+        or pressure_metrology.get("observed_pco2_kpa") != "0.574"
+        or pressure_metrology.get("state_pressure_pa") != "7326.7"
+        or pressure_metrology.get("pressure_specification")
+        != "row_reported_total_pressure"
+        or pressure_metrology.get("target_eligible") != "yes"
+        or pressure.get("source_observed_value") != pressure_source_kpa
+        or pressure.get("source_observed_unit") != "kPa"
+        or pressure.get("source_to_residual_factor") != 1000.0
+        or pressure.get("observed_value") != pressure_value_pa
+        or pressure.get("observed_unit") != "Pa"
+        or pressure.get("state_pressure_pa")
+        != float(pressure_metrology["state_pressure_pa"])
+    ):
+        raise PreregistrationError("Gate 0 pressure source row or unit conversion drifted")
+
+    speciation_canonical = _one_csv_row(
+        GATE0_REPO_ROOT / speciation_sources["canonical_path"],
+        "record_id",
+        "cheq_canon_00194",
+    )
+    speciation_membership = _one_csv_row(
+        GATE0_REPO_ROOT / speciation_sources["manifest_path"],
+        "membership_id",
+        "Bottinger2008_state_049|MEACOO-",
+    )
+    speciation_raw = _csv_rows(GATE0_REPO_ROOT / speciation_sources["raw_path"])[48]
+    if (
+        speciation.get("family") != "speciation"
+        or speciation.get("state_id") != "Bottinger2008_state_049"
+        or speciation.get("measurement_identity") != "cheq_canon_00194"
+        or speciation.get("membership_id")
+        != "Bottinger2008_state_049|MEACOO-"
+        or speciation.get("source_id") != "Bottinger2008"
+        or speciation.get("source_file") != speciation_sources["canonical_path"]
+        or speciation.get("source_file_sha256")
+        != speciation_sources["canonical_sha256"]
+        or speciation.get("canonical_record_id") != "cheq_canon_00194"
+        or speciation.get("raw_source_file") != speciation_sources["raw_path"]
+        or speciation.get("raw_source_file_sha256")
+        != speciation_sources["raw_sha256"]
+        or speciation.get("raw_source_row_index") != 49
+        or speciation.get("membership_manifest")
+        != speciation_sources["manifest_path"]
+        or speciation.get("membership_manifest_sha256")
+        != speciation_sources["manifest_sha256"]
+        or speciation.get("source_locator")
+        != "Böttinger et al. (2008), source row 49"
+        or speciation.get("partition") != "training"
+        or speciation.get("role") != "active_training"
+        or speciation.get("group_id")
+        != "speciation|Bottinger2008|w=0.3|T=40"
+        or speciation.get("temperature_k") != 313.15
+        or speciation.get("pressure_role")
+        != (
+            "caller-supplied fixed total-pressure evaluation input; "
+            "not a Böttinger pressure measurement"
+        )
+        or speciation.get("evaluation_pressure_pa") != 7326.7
+        or speciation.get("evaluation_pressure_source_observation_id")
+        != "vle_obs_0137"
+        or speciation.get("mea_mass_fraction_unloaded") != 0.3
+        or speciation.get("loading_mol_co2_per_mol_mea") != 0.466
+        or speciation.get("measurement_role") != "direct_positive"
+        or speciation.get("species") != "MEACOO-"
+        or speciation_canonical.get("source_key") != "Bottinger2008"
+        or speciation_canonical.get("source_row_index") != "49"
+        or speciation_canonical.get("temperature_C") != "40"
+        or speciation_canonical.get("temperature_K") != "313.15"
+        or speciation_canonical.get("mea_mass_fraction") != "0.3"
+        or speciation_canonical.get("co2_loading_mol_per_mol_mea") != "0.466"
+        or speciation_canonical.get("species") != "MEACOO-"
+        or speciation_canonical.get("measurement_role") != "direct_positive"
+        or speciation_canonical.get("reported_value") != "0.0502"
+        or speciation_canonical.get("reported_unit") != "mole_fraction"
+        or speciation_raw.get("MEACOO^-") != "0.0502"
+        or speciation_membership.get("measurement_identity") != "cheq_canon_00194"
+        or speciation_membership.get("reported_basis") != "mole_fraction"
+        or speciation_membership.get("target_eligible") != "yes"
+        or speciation_membership.get("lifecycle_status") != "canonical_eligible"
+        or speciation_membership.get("target_membership") != "active_v1"
+        or speciation.get("observed_value") != 0.0502
+        or speciation.get("reported_basis") != "mole_fraction"
+        or speciation.get("observed_unit") != "mole_fraction"
+        or speciation.get("provider_domain_fingerprint")
+        != "93510b66543e4e9e49c409a658b1bf7a01599ccd9ce3feef41bbab6b6eb668ab"
+    ):
+        raise PreregistrationError("Gate 0 speciation source row or unit drifted")
 
 
 def _mapping(payload: Mapping[str, Any], key: str) -> dict[str, Any]:
@@ -91,6 +331,207 @@ def load_preregistration(path: Path) -> dict[str, Any]:
         raise PreregistrationError(f"cannot load final-fit preregistration {path}: {exc}") from exc
     if not isinstance(payload, dict):
         raise PreregistrationError("final-fit preregistration must be a JSON object")
+    return payload
+
+
+def load_gate0_preregistration(
+    path: Path = GATE0_PREREGISTRATION_PATH,
+) -> dict[str, Any]:
+    return validate_gate0_preregistration(load_preregistration(path))
+
+
+def validate_gate0_preregistration(payload: Mapping[str, Any]) -> dict[str, Any]:
+    payload = dict(payload)
+    if (
+        payload.get("schema_version") != 2
+        or payload.get("identity") != "mea-gate0-v2-mixed-observation-preregistration"
+        or payload.get("status") != "GATE_0_FROZEN_EXECUTION_BLOCKED"
+    ):
+        raise PreregistrationError("Gate 0 v2 preregistration identity is invalid")
+    coordinates = payload.get("active_coordinates", [])
+    expected = (
+        ("MEAH+::sigma", 3.48508556586, [2.0, 5.8], 1.9),
+        ("MEAH+::epsilon_over_k", 232.687201645, [50.0, 950.0], 450.0),
+        ("MEACOO-::sigma", 3.53543525721, [2.0, 5.8], 1.9),
+    )
+    actual = tuple(
+        (
+            row.get("identity"),
+            row.get("start"),
+            row.get("bounds"),
+            row.get("affine_scale"),
+        )
+        for row in coordinates
+    )
+    if actual != expected:
+        raise PreregistrationError("Gate 0 active coordinate order or scaling drifted")
+    if payload.get("state_partition", {}).get("grouped_split_sha256") != (
+        "af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804"
+    ):
+        raise PreregistrationError("Gate 0 grouped split identity drifted")
+    if payload.get("execution_admission", {}).get("admitted") is not False:
+        raise PreregistrationError("Gate 0 must not admit regression execution")
+    if payload.get("regularization", {}).get("scale") is not None:
+        raise PreregistrationError("Gate 0 may not invent a regularization scale")
+    tracer = payload.get("tracer", {})
+    observations = tracer.get("observations", [])
+    _validate_gate0_tracer_sources(tracer)
+    tracer_coordinates = [
+        {
+            "identity": "MEAH+::sigma",
+            "unit": "angstrom",
+            "start": 3.48508556586,
+            "bounds": [2.0, 5.8],
+            "affine_origin": 3.48508556586,
+            "affine_scale": 1.9,
+        },
+        {
+            "identity": "MEACOO-::sigma",
+            "unit": "angstrom",
+            "start": 3.53543525721,
+            "bounds": [2.0, 5.8],
+            "affine_origin": 3.53543525721,
+            "affine_scale": 1.9,
+        },
+    ]
+    expected_residual_vector = {
+        "order": [
+            "vle_obs_0137::pco2",
+            "Bottinger2008_state_049::MEACOO-",
+        ],
+        "definition": [
+            "log10(predicted_pco2_pa/574.0)/1.0",
+            "log10(predicted_meacoo_mole_fraction/0.0502)/1.0",
+        ],
+        "jacobian_columns": ["MEAH+::sigma", "MEACOO-::sigma"],
+    }
+    expected_numerical_acceptance = {
+        "rank": 2,
+        "condition_number_kind": "singular_value_2_norm",
+        "maximum_condition_number": 1_000_000.0,
+        "active_bound_margin_affine": 1.0e-7,
+        "active_bound_rule": (
+            "reject if either fitted affine coordinate is within 1e-7 "
+            "of either affine bound"
+        ),
+        "declared_starts": [
+            {
+                "role": "primary",
+                "affine_coordinates": [0.0, 0.0],
+                "parameter_values": [3.48508556586, 3.53543525721],
+            },
+            {
+                "role": "confirmation",
+                "affine_coordinates": [-0.5, 0.5],
+                "parameter_values": [2.53508556586, 4.48543525721],
+            },
+        ],
+        "confirmation_rule": {
+            "maximum_affine_parameter_infinity_norm": 1.0e-6,
+            "maximum_residual_vector_infinity_norm": 1.0e-8,
+            "require_same_active_set": True,
+        },
+        "required_row_accounting": {
+            "input": 2,
+            "evaluated": 2,
+            "dropped": 0,
+            "skipped": 0,
+            "failed": 0,
+        },
+        "failure_rule": (
+            "any rank, conditioning, active-bound, confirmation, "
+            "or row-accounting failure rejects the tracer"
+        ),
+    }
+    owner_reference = {
+        "path": (
+            "data/reference/MEA/manifests/"
+            "homogeneous_speciation_sentinel_contract.json"
+        ),
+        "identity": "mea-homogeneous-fixed-tp-sentinel-contract-v1",
+        "field": "provider_regression_input",
+    }
+    provider_input = tracer.get("provider_regression_input", {})
+    equilibrium_input = tracer.get("equilibrium_input", {})
+    owner = provider_input.get("canonical_owner", {})
+    owner_contract = json.loads(
+        (GATE0_REPO_ROOT / owner_reference["path"]).read_text(encoding="utf-8")
+    )
+    owner_input = owner_contract.get(owner_reference["field"], {})
+    if (
+        tracer.get("status")
+        != (
+            "FROZEN_PROVIDER_INPUT_EXECUTABLE_EQUILIBRIUM_ARTIFACT_AVAILABLE_"
+            "COMPOSED_OBSERVABLE_PENDING"
+        )
+        or tracer.get("selected_state_ids")
+        != ["vle_obs_0137", "Bottinger2008_state_049"]
+        or tracer.get("active_coordinates") != tracer_coordinates
+        or [row.get("state_id") for row in observations]
+        != ["vle_obs_0137", "Bottinger2008_state_049"]
+        or tracer.get("regularization")
+        != {"status": "NOT_REQUIRED_FOR_REDUCED_TRACER", "scale": None}
+        or observations[1].get("evaluation_pressure_pa") != 7326.7
+        or observations[1].get("evaluation_pressure_source_observation_id")
+        != "vle_obs_0137"
+        or observations[0].get("residual") != "log10(predicted_pco2_pa/574.0)"
+        or observations[0].get("residual_scale") != 1.0
+        or observations[1].get("residual")
+        != "log10(predicted_meacoo_mole_fraction/0.0502)"
+        or observations[1].get("residual_scale") != 1.0
+        or tracer.get("residual_vector") != expected_residual_vector
+        or tracer.get("numerical_acceptance") != expected_numerical_acceptance
+        or provider_input.get("status") != "REGRESSION_INPUT_EXECUTABLE"
+        or owner != owner_reference
+        or owner_contract.get("identity") != owner_reference["identity"]
+        or owner_input.get("identity") != "mea-nine-species-regression-input-v1"
+        or owner_input.get("status") != "REGRESSION_INPUT_EXECUTABLE"
+        or provider_input.get("domain_fingerprint")
+        != owner_input.get("immutable_identities", {}).get("domain_fingerprint")
+        or owner_input.get("immutable_identities", {}).get("temperature_k")
+        != [313.15, 313.15]
+        or equilibrium_input
+        != {
+            "status": "RETAINED_INSTALLED_ARTIFACT_AVAILABLE",
+            "commit": "ab2086abd480a161fb5c22cf3635776129363976",
+            "tree": "7b02b78b50bca18b63dc80faa02bb25a672d055b",
+            "merge_commit": "dd2a72650f0224eac431aa06019cea3a7cae358e",
+            "wheel_filename": (
+                "epcsaft_equilibrium-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
+            ),
+            "wheel_sha256": (
+                "874d737d8fe219066b8257d3be847e1a3d9a15cf6056f56b4a0e82b08cd501aa"
+            ),
+            "provider_wheel_sha256": (
+                "4cee10a9158576307cda93f611b6ade3a7cf8819df44f83efe8cbc61ab038789"
+            ),
+            "operation": (
+                "homogeneous_fixed_tp_chemical_equilibrium_with_exact_"
+                "active_parameter_sensitivities"
+            ),
+            "scope": (
+                "state values and exact amount/volume sensitivities only; "
+                "composed observables remain downstream-owned"
+            ),
+        }
+    ):
+        raise PreregistrationError("Gate 0 tracer evidence or typed blocker drifted")
+    blockers = payload.get("execution_admission", {}).get("blockers", [])
+    if (
+        blockers
+        != [
+            "composed_homogeneous_liquid_observable_receipt_missing",
+            "regression_mixed_observation_receipt_missing",
+            "tracer_rank_preflight_pending",
+        ]
+    ):
+        raise PreregistrationError("Gate 0 execution blockers are inconsistent")
+    actual_sha256 = canonical_sha256(payload)
+    if actual_sha256 != EXPECTED_GATE0_CANONICAL_SHA256:
+        raise PreregistrationError(
+            f"Gate 0 frozen contract drifted: expected {EXPECTED_GATE0_CANONICAL_SHA256}, "
+            f"actual {actual_sha256}"
+        )
     return payload
 
 

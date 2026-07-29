@@ -7,6 +7,7 @@ import importlib.metadata
 import json
 import math
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -165,6 +166,11 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Check MEA-Thermodynamics ePC-SAFT integration contract.")
     parser.add_argument("--mode", choices=("stable", "dev", "final"), default=None, help="Select the package source lane.")
     parser.add_argument("--self-only", action="store_true", help="Skip the repo-specific smoke step.")
+    parser.add_argument(
+        "--gate0-provider-wheel",
+        type=Path,
+        help="Also replay the frozen Gate 0 bundle through this exact public Provider wheel.",
+    )
     args = parser.parse_args(argv)
 
     contract = load_contract()
@@ -211,6 +217,23 @@ def main(argv: list[str] | None = None) -> int:
     if smoke_payload is not None:
         print(f"smoke pressure Pa: {smoke_payload['pressure_Pa']:.6g}")
         print(f"smoke density kg/m3: {smoke_payload['mass_density_kg_m3']:.6g}")
+    if args.gate0_provider_wheel is not None:
+        replay = subprocess.run(
+            [
+                sys.executable,
+                str(REPO_ROOT / "scripts/dev/replay_mea_gate0_provider.py"),
+                "--wheel",
+                str(args.gate0_provider_wheel.resolve()),
+            ],
+            cwd=REPO_ROOT,
+            check=False,
+            text=True,
+            capture_output=True,
+        )
+        if replay.returncode:
+            errors.append(f"Gate 0 public Provider replay failed:\n{replay.stderr}")
+        else:
+            print(replay.stdout.rstrip())
 
     if errors:
         for error in errors:

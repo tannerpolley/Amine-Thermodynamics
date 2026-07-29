@@ -1,157 +1,312 @@
 {
-  "schema_version": "1.0",
-  "issue": 39,
-  "created_utc": "2026-07-23",
-  "status": "preregistered_execution_blocked",
-  "disposition": "additional-data-required",
-  "claim_boundary": "This contract prepares a future effective, analog-informed MEA-system fit. It does not execute a regression, promote a parameter, establish a unique single-ion volume, or support a predictive/source-complete claim.",
+  "schema_version": 2,
+  "identity": "mea-gate0-v2-mixed-observation-preregistration",
+  "status": "GATE_0_FROZEN_EXECUTION_BLOCKED",
+  "canonical_regression_plan": {
+    "commit": "fa09ace9d0185cf59c736fdb6dc5790bfe3e5976",
+    "tree": "1863caa6814330e329b752c988aa05d3f059433b",
+    "path": "docs/science/mea-coupled-regression-master-plan.md"
+  },
+  "state_partition": {
+    "training_states": 147,
+    "reserved_states": 220,
+    "grouped_split_sha256": "af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804",
+    "loading_role": "fixed_state_input_not_target"
+  },
+  "active_coordinates": [
+    {
+      "identity": "MEAH+::sigma",
+      "unit": "angstrom",
+      "start": 3.48508556586,
+      "bounds": [
+        2.0,
+        5.8
+      ],
+      "affine_origin": 3.48508556586,
+      "affine_scale": 1.9,
+      "sharing": "shared_across_all_admitted_states"
+    },
+    {
+      "identity": "MEAH+::epsilon_over_k",
+      "unit": "K",
+      "start": 232.687201645,
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "affine_origin": 232.687201645,
+      "affine_scale": 450.0,
+      "sharing": "shared_across_all_admitted_states"
+    },
+    {
+      "identity": "MEACOO-::sigma",
+      "unit": "angstrom",
+      "start": 3.53543525721,
+      "bounds": [
+        2.0,
+        5.8
+      ],
+      "affine_origin": 3.53543525721,
+      "affine_scale": 1.9,
+      "sharing": "shared_across_all_admitted_states"
+    }
+  ],
+  "affine_definition": "u=(theta-affine_origin)/affine_scale; sigma scales are half the 2.0-5.8 safeguard span and epsilon/k scale is half the 50-950 K safeguard span",
+  "fixed_terms": [
+    "MEAH+::m",
+    "MEAH+::d_born",
+    "MEACOO-::m",
+    "MEACOO-::epsilon_over_k",
+    "MEACOO-::d_born",
+    "all reaction constants",
+    "all trace-ion parameters",
+    "all binary interaction parameters"
+  ],
+  "density_residual_scaling": [
+    {
+      "source": "Augusto2022",
+      "scale": "max(row_standard_deviation,reported_relative_standard_uncertainty_times_density)"
+    },
+    {
+      "source": "Dhage2026",
+      "scale": "0.0005 g/cm^3"
+    },
+    {
+      "source": "Amundsen2009",
+      "unloaded_scale": "0.0005 g/cm^3",
+      "loaded_scale": "0.002 g/cm^3"
+    }
+  ],
+  "family_normalization": "divide each source/salt-family squared-residual sum by its admitted observation count",
+  "multistart": {
+    "count": 32,
+    "design": "scrambled_sobol_in_affine_coordinates",
+    "seed": 390035,
+    "include_provisional_seed": true
+  },
+  "regularization": {
+    "status": "NOT_ADMITTED_NO_IMMUTABLE_SCALE",
+    "identity": "MEACOO-::sigma acetate-transfer quadratic prior",
+    "scale": null,
+    "blocker": "immutable_acetate_transfer_uncertainty_scale_missing",
+    "scope": "later three-coordinate stage only; not required or applied in the reduced tracer"
+  },
+  "pressure_prediction": {
+    "observable": "pCO2=yCO2*P_bubble",
+    "vapor_fugacity": "Provider fugacity evaluation; no ideal-vapor shortcut",
+    "model_derived_measurements": "excluded"
+  },
+  "speciation": {
+    "positive_targets": "target_eligible direct measurements only",
+    "linear_aggregates": "explicit coefficients and measurement identity required",
+    "reported_zero_or_censored": "requires source-backed bound; otherwise demoted"
+  },
+  "oxazolidone": {
+    "rule": "exclude Böttinger states at loading >=0.5 mol CO2/mol MEA unless 2-oxazolidone is explicitly represented",
+    "source_locator": "Böttinger et al. (2008), p. 128 discussion of Figs. 6-7"
+  },
+  "tracer": {
+    "status": "FROZEN_PROVIDER_INPUT_EXECUTABLE_EQUILIBRIUM_ARTIFACT_AVAILABLE_COMPOSED_OBSERVABLE_PENDING",
+    "maximum_state_count": 2,
+    "active_coordinates": [
+      {
+        "identity": "MEAH+::sigma",
+        "unit": "angstrom",
+        "start": 3.48508556586,
+        "bounds": [
+          2.0,
+          5.8
+        ],
+        "affine_origin": 3.48508556586,
+        "affine_scale": 1.9
+      },
+      {
+        "identity": "MEACOO-::sigma",
+        "unit": "angstrom",
+        "start": 3.53543525721,
+        "bounds": [
+          2.0,
+          5.8
+        ],
+        "affine_origin": 3.53543525721,
+        "affine_scale": 1.9
+      }
+    ],
+    "selected_state_ids": [
+      "vle_obs_0137",
+      "Bottinger2008_state_049"
+    ],
+    "observations": [
+      {
+        "family": "pco2",
+        "state_id": "vle_obs_0137",
+        "row_id": "vle_0036",
+        "source_id": "Hilliard2008",
+        "source_file": "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
+        "source_file_sha256": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
+        "canonical_record_id": "vle_obs_0137",
+        "raw_source_file": "data/reference/MEA/observations/vapor_liquid_equilibrium/Hilliard_2008_VLE.csv",
+        "raw_source_file_sha256": "4039394233367cbe491f6f97c3e5adcd5f6975fc696a3fde00cd4ca5af44da6c",
+        "raw_source_row_index": 31,
+        "metrology_manifest": "data/reference/MEA/manifests/pco2_metrology_manifest.csv",
+        "metrology_manifest_sha256": "0d14803873a60534ec5d7df382cfbd0ae03e4aaeba68bb5d54be7e4def8397cc",
+        "source_locator": "Hilliard (2008), apparatus Sections 2.3.4-2.3.5 and VLE appendices",
+        "partition": "training",
+        "role": "active_training",
+        "group_id": "vle|Hilliard2008|w=0.3|T=40",
+        "temperature_k": 313.15,
+        "state_pressure_pa": 7326.7,
+        "mea_mass_fraction_unloaded": 0.3,
+        "loading_mol_co2_per_mol_mea": 0.466,
+        "measurement_origin": "calibration_derived_partial_pressure",
+        "measured_primitive": "calibrated_gas_composition_and_total_pressure",
+        "source_observed_value": 0.574,
+        "source_observed_unit": "kPa",
+        "source_to_residual_factor": 1000.0,
+        "source_to_residual_definition": "observed_value_pa = source_observed_value_kpa * 1000 Pa/kPa",
+        "observed_value": 574.0,
+        "observed_unit": "Pa",
+        "uncertainty_status": "source_numeric_uncertainty_not_transcribed",
+        "covariance_status": "source_covariance_not_reported",
+        "residual": "log10(predicted_pco2_pa/574.0)",
+        "residual_scale": 1.0,
+        "residual_scale_unit": "log10_decade",
+        "residual_scale_role": "caller-owned dimensionless numerical scale, not experimental uncertainty",
+        "family_weight": 1.0
+      },
+      {
+        "family": "speciation",
+        "state_id": "Bottinger2008_state_049",
+        "measurement_identity": "cheq_canon_00194",
+        "membership_id": "Bottinger2008_state_049|MEACOO-",
+        "source_id": "Bottinger2008",
+        "source_file": "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv",
+        "source_file_sha256": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
+        "canonical_record_id": "cheq_canon_00194",
+        "raw_source_file": "data/reference/MEA/observations/liquid_speciation/Bottinger_2007_ChEq.csv",
+        "raw_source_file_sha256": "6c4c1e14c2a417bcbd2ff54c5f3978cb1560e7c831a9f931178d021d71b003f5",
+        "raw_source_row_index": 49,
+        "membership_manifest": "data/reference/MEA/manifests/speciation_target_membership.csv",
+        "membership_manifest_sha256": "a89a3f0373a86813482158f180939cf57f74be038cd59f244dfadcb689923190",
+        "source_locator": "Böttinger et al. (2008), source row 49",
+        "partition": "training",
+        "role": "active_training",
+        "group_id": "speciation|Bottinger2008|w=0.3|T=40",
+        "temperature_k": 313.15,
+        "pressure_role": "caller-supplied fixed total-pressure evaluation input; not a Böttinger pressure measurement",
+        "evaluation_pressure_pa": 7326.7,
+        "evaluation_pressure_source_observation_id": "vle_obs_0137",
+        "evaluation_pressure_source_role": "independent Hilliard total-pressure state anchor at matching temperature, unloaded MEA fraction, and loading; not a paired experiment or speciation target",
+        "mea_mass_fraction_unloaded": 0.3,
+        "loading_mol_co2_per_mol_mea": 0.466,
+        "measurement_role": "direct_positive",
+        "species": "MEACOO-",
+        "reported_basis": "mole_fraction",
+        "observed_value": 0.0502,
+        "observed_unit": "mole_fraction",
+        "uncertainty_status": "source_numeric_uncertainty_not_transcribed",
+        "covariance_status": "source_covariance_not_reported",
+        "residual": "log10(predicted_meacoo_mole_fraction/0.0502)",
+        "residual_scale": 1.0,
+        "residual_scale_unit": "log10_decade",
+        "residual_scale_role": "caller-owned dimensionless numerical scale, not experimental uncertainty",
+        "family_weight": 1.0,
+        "provider_domain_fingerprint": "93510b66543e4e9e49c409a658b1bf7a01599ccd9ce3feef41bbab6b6eb668ab"
+      }
+    ],
+    "regularization": {
+      "status": "NOT_REQUIRED_FOR_REDUCED_TRACER",
+      "scale": null
+    },
+    "residual_vector": {
+      "order": [
+        "vle_obs_0137::pco2",
+        "Bottinger2008_state_049::MEACOO-"
+      ],
+      "definition": [
+        "log10(predicted_pco2_pa/574.0)/1.0",
+        "log10(predicted_meacoo_mole_fraction/0.0502)/1.0"
+      ],
+      "jacobian_columns": [
+        "MEAH+::sigma",
+        "MEACOO-::sigma"
+      ]
+    },
+    "numerical_acceptance": {
+      "rank": 2,
+      "condition_number_kind": "singular_value_2_norm",
+      "maximum_condition_number": 1000000.0,
+      "active_bound_margin_affine": 1e-07,
+      "active_bound_rule": "reject if either fitted affine coordinate is within 1e-7 of either affine bound",
+      "declared_starts": [
+        {
+          "role": "primary",
+          "affine_coordinates": [
+            0.0,
+            0.0
+          ],
+          "parameter_values": [
+            3.48508556586,
+            3.53543525721
+          ]
+        },
+        {
+          "role": "confirmation",
+          "affine_coordinates": [
+            -0.5,
+            0.5
+          ],
+          "parameter_values": [
+            2.53508556586,
+            4.48543525721
+          ]
+        }
+      ],
+      "confirmation_rule": {
+        "maximum_affine_parameter_infinity_norm": 1e-06,
+        "maximum_residual_vector_infinity_norm": 1e-08,
+        "require_same_active_set": true
+      },
+      "required_row_accounting": {
+        "input": 2,
+        "evaluated": 2,
+        "dropped": 0,
+        "skipped": 0,
+        "failed": 0
+      },
+      "failure_rule": "any rank, conditioning, active-bound, confirmation, or row-accounting failure rejects the tracer"
+    },
+    "provider_regression_input": {
+      "status": "REGRESSION_INPUT_EXECUTABLE",
+      "canonical_owner": {
+        "path": "data/reference/MEA/manifests/homogeneous_speciation_sentinel_contract.json",
+        "identity": "mea-homogeneous-fixed-tp-sentinel-contract-v1",
+        "field": "provider_regression_input"
+      },
+      "domain_fingerprint": "93510b66543e4e9e49c409a658b1bf7a01599ccd9ce3feef41bbab6b6eb668ab"
+    },
+    "equilibrium_input": {
+      "status": "RETAINED_INSTALLED_ARTIFACT_AVAILABLE",
+      "commit": "ab2086abd480a161fb5c22cf3635776129363976",
+      "tree": "7b02b78b50bca18b63dc80faa02bb25a672d055b",
+      "merge_commit": "dd2a72650f0224eac431aa06019cea3a7cae358e",
+      "wheel_filename": "epcsaft_equilibrium-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+      "wheel_sha256": "874d737d8fe219066b8257d3be847e1a3d9a15cf6056f56b4a0e82b08cd501aa",
+      "provider_wheel_sha256": "4cee10a9158576307cda93f611b6ade3a7cf8819df44f83efe8cbc61ab038789",
+      "operation": "homogeneous_fixed_tp_chemical_equilibrium_with_exact_active_parameter_sensitivities",
+      "scope": "state values and exact amount/volume sensitivities only; composed observables remain downstream-owned"
+    }
+  },
+  "heat_of_absorption": {
+    "status": "NOT_ADMITTED",
+    "reason": "no frozen source-complete definition, sign, reference state, basis, uncertainty, and covariance contract"
+  },
   "execution_admission": {
     "admitted": false,
-    "missing_preconditions": [
-      "Immutable source-bound or jointly regularized parameters and covariance for every acetate, propionate, butanoate, pentanoate, and hexanoate counterion used in the shared-cation stage",
-      "Installed native Regression density target with exact Provider reference basis, residual Jacobians, multistart diagnostics, and immutable receipt",
-      "Installed same-state Equilibrium plus Provider derivatives for reactive density and speciation constraints",
-      "A recorded identifiability amendment if the active set or objective changes"
+    "blockers": [
+      "composed_homogeneous_liquid_observable_receipt_missing",
+      "regression_mixed_observation_receipt_missing",
+      "tracer_rank_preflight_pending"
     ]
-  },
-  "frozen_inputs": [
-    {
-      "path": "data/reference/MEA/observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_density.csv",
-      "sha256": "36c8f0220b7350bdce11c119464d1491aebe3d824a3b952c0c131f5a227633cd",
-      "role": "direct analog density"
-    },
-    {
-      "path": "data/reference/MEA/observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_excess_molar_volume.csv",
-      "sha256": "5b016b6d841455bf707b550d91d82b104ab27b2d42e037f464a913750165ee15",
-      "role": "reported-derived diagnostic; never an independent residual beside its parent density"
-    },
-    {
-      "path": "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
-      "sha256": "9047efb0281bff93d1769b12a3df50420d0b01ddd44ffd5041749ec0fb1fe622",
-      "role": "35 unloaded and 68 loaded direct density observations"
-    },
-    {
-      "path": "data/reference/MEA/manifests/speciation_target_membership.csv",
-      "sha256": "1e267adc62a6572d029caf92cfa39529cd38c9c0475fdf2f66a9546dc92c8f9b",
-      "role": "row-level speciation roles and eligibility"
-    },
-    {
-      "path": "data/reference/MEA/manifests/grouped_split_manifest.csv",
-      "sha256": "af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804",
-      "role": "existing frozen 147-training/220-validation pressure and speciation split"
-    },
-    {
-      "path": "data/reference/MEA/manifests/ionic_volumetric_observation_contract.csv",
-      "sha256": "a05500e49244f9ef165ce84b71776b8ceaac444815f09f5b13bc9fdfcec82e00",
-      "role": "1301-row combined observation contract"
-    },
-    {
-      "path": "data/reference/MEA/manifests/volumetric_grouped_split_manifest.csv",
-      "sha256": "156681e9cefc554314124b99daa9ffe9a45aa1ab02c167fa080d12405501dacd",
-      "role": "frozen 153-training/78-validation volumetric split"
-    },
-    {
-      "path": "data/reference/MEA/manifests/ionic_parameter_observable_map.csv",
-      "sha256": "f8436265de1ed34d89da09bd85805233ca0900e2aadca910edc696f7f1071cc4",
-      "role": "pre-fit identifiability decisions"
-    }
-  ],
-  "component_contract": {
-    "required_order": [
-      "CO2",
-      "MEA",
-      "H2O",
-      "MEAH+",
-      "MEACOO-",
-      "HCO3-",
-      "CO3^2-",
-      "H3O+",
-      "OH-"
-    ],
-    "charges": [0, 0, 0, 1, -1, -1, -2, 1, -1],
-    "one_segment_ions": ["MEAH+", "MEACOO-"],
-    "provider_bundle_requirement": "immutable installed artifact with component, parameter-source, domain, and tensor fingerprints"
-  },
-  "stages": [
-    {
-      "name": "shared_cation_analog",
-      "state_problem": "Single liquid phase at reported T, P, solvent identity, and ionic-liquid mole fraction; enforce the supplied electroneutral salt stoichiometry and evaluate mixture density.",
-      "observations": "Role-eligible training rows from ethanolammonium_carboxylate_density only; the four repeated Dhage pure-water endpoint rows remain contextual.",
-      "active_parameters": ["MEAH+::sigma", "MEAH+::epsilon_over_k"],
-      "fixed_parameters": ["MEAH+::m", "MEAH+::d_born", "all water terms", "all counterion terms and interactions"],
-      "objective": "Sum squared density residuals divided by squared observation scales, then divide by the number of admitted rows in each salt/source family so no densely sampled family dominates.",
-      "observation_scale": "Augusto2022: max(row standard deviation, reported relative standard uncertainty times density). Dhage2026: reported combined absolute uncertainty 0.0005 g/cm^3.",
-      "derived_quantity_policy": "Excess molar volumes are recomputation and identifiability diagnostics only because they are derived from the same density rows; they are not simultaneous independent residuals.",
-      "stop_condition": "Stop as additional-data-required if fixed counterion priors/covariance are unavailable, if held-out salt curves fail uncertainty-scaled validation, or if MEAH+ size and dispersion cannot be distinguished from counterion terms."
-    },
-    {
-      "name": "carbamate_correction",
-      "state_problem": "No isolated-ion state is permitted. The correction is evaluated only through an electroneutral reactive MEA liquid state.",
-      "observations": "Maiti bulk volume-change evidence is a directional plausibility constraint; Amundsen loaded density becomes a numerical target only in the same-state reactive stage.",
-      "active_parameters": ["MEACOO-::sigma"],
-      "fixed_parameters": ["MEACOO-::m", "MEACOO-::epsilon_over_k", "MEACOO-::d_born", "MEAH+::MEACOO-::k_ij"],
-      "regularization": "Quadratic penalty about the recorded provisional MEACOO- sigma prior. Its scale must be supplied by an immutable acetate-transfer uncertainty before execution; no default scale is authorized.",
-      "stop_condition": "Stop as additional-data-required if the prior scale is absent or if the correction cannot be distinguished from reaction constants and other mixture parameters."
-    },
-    {
-      "name": "reactive_mea_refinement",
-      "state_problem": "At fixed reported T, pressure, unloaded MEA mass fraction, and CO2 loading, jointly solve reaction equilibria, elemental material balances, electroneutrality, and one liquid-phase EOS state. Evaluate density and eligible speciation observations from that identical converged state.",
-      "observations": "Training Amundsen density groups plus role-eligible training speciation targets from the existing frozen grouped split.",
-      "active_parameters": ["MEAH+::sigma", "MEAH+::epsilon_over_k", "MEACOO-::sigma"],
-      "conditional_parameter": "MEAH+::MEACOO-::k_ij remains fixed. It may replace, not augment, an active correction only after a pre-fit amendment shows structured residuals and independent sensitivity.",
-      "fixed_parameters": "All reaction constants, Born diameters, trace-ion parameters, other component parameters, and all unlisted binary interactions.",
-      "objective": "Equal-weight family blocks for uncertainty-scaled density and eligible species/aggregate residuals, with exact zeros treated as upper-bound residuals and balance-inferred, ambiguous, contextual, diagnostic, and excluded records barred from the fitting objective.",
-      "constraints": "Elemental carbon and MEA balances, charge balance, reaction-equilibrium residuals, positive compositions, exact species order, and Provider applicability must all pass independently of optimizer termination.",
-      "stop_condition": "Reject if density improves while held-out speciation worsens, if mass/charge/reaction constraints fail, or if any active parameter remains prior- or bound-dominated."
-    },
-    {
-      "name": "independent_validation",
-      "observations": "Only groups marked validation in the frozen volumetric and existing pressure/speciation split manifests.",
-      "metrics": [
-        "density residual and residual divided by reported experimental uncertainty",
-        "species-specific and aggregate speciation residuals by measurement role",
-        "material, charge, and reaction-equilibrium residual norms",
-        "active-bound distance and start-to-start parameter spread",
-        "residual Jacobian singular values, Fisher conditioning, parameter correlations, and profile likelihoods"
-      ],
-      "acceptance": "Every predeclared gate must pass; optimizer success or a lower training objective is insufficient."
-    }
-  ],
-  "parameter_bounds": {
-    "source": "Existing downstream BOUNDS in src/MEA/epcsaft_ionic/model.py are retained only as broad numerical safeguards, not as physical evidence.",
-    "MEAH+::sigma": [2.0, 5.8],
-    "MEAH+::epsilon_over_k": [50.0, 950.0],
-    "MEACOO-::sigma": [2.0, 5.8],
-    "rule": "A solution materially dependent on a safeguard bound fails; tightening a bound requires a source-bound preregistration amendment."
-  },
-  "initial_values": {
-    "MEAH+::sigma": 3.48508556586,
-    "MEAH+::epsilon_over_k": 232.687201645,
-    "MEACOO-::sigma": 3.53543525721,
-    "source": "Current provisional historical-evaluation rows; seeds only."
-  },
-  "multistart": {
-    "design": "32 deterministic scrambled-Sobol starts in scaled active-parameter space plus the recorded provisional seed",
-    "seed": 390035,
-    "report": "All starts, terminations, final objectives, constraints, active bounds, parameter vectors, and immutable receipts.",
-    "material_dependence_rule": "Reject when scientifically distinct parameter vectors achieve indistinguishable objectives or the accepted result is not reproduced across the best basin."
-  },
-  "convergence_gates": {
-    "optimizer": "native Regression successful termination with finite objective and exact receipt",
-    "equilibrium": "every state carries an admitted Equilibrium certificate; failed states cannot be omitted or penalized into acceptance",
-    "constraints": "mass, charge, and reaction residual tolerances must be declared by the installed Equilibrium contract before execution",
-    "provider": "installed tensor shape, component order, charge, reference basis, applicability domain, and derivative checks pass",
-    "identifiability": "full-rank or explicitly profile-supported active block with reported conditioning; no material prior/start/bound dependence"
-  },
-  "immutable_successor_receipt": [
-    "Provider version and artifact fingerprint",
-    "component order and charge vector",
-    "parameter identities, values, units, bounds, sources, and fitted domain",
-    "observation and split hashes",
-    "reaction/reference identities",
-    "Regression termination and multistart diagnostics",
-    "Equilibrium certificates",
-    "training and held-out residual artifacts",
-    "bundle fingerprint"
-  ]
+  }
 }

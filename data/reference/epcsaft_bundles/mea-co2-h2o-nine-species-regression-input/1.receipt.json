@@ -1,0 +1,233 @@
+{
+  "bundle": {
+    "bundle_fingerprint": "sha256:741673651fa0120f6f6427a750674b0f7929a3da571dd6d1dd84d40485ae2553",
+    "bundle_id": "mea-co2-h2o-nine-species-regression-input",
+    "bundle_version": 1,
+    "component_ids": [
+      "carbon-dioxide",
+      "monoethanolamine",
+      "water",
+      "protonated-monoethanolamine",
+      "carbamate-anion",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion"
+    ],
+    "component_order_sha256": "246049d6caa54cf752ab0e6257812c39d4e9deb5f079db3dd96280bd2ae05e85",
+    "file_hashes": {
+      "association.csv": "195a8047403fc20ed414f29835d9f8d936e349e5baf4fb4264b7f2acb412b83e",
+      "bundle.toml": "ef19afb3e5495e1128edf751f177a308c1e5a3ca6f8ad2948f25718f829cf96d",
+      "components.csv": "3baa84d19c6db2252f8bfb29685821ec72a21171975a3f0239da62d77f347b75",
+      "correlations.toml": "733d92b4c348a5ad3f8aef3fed468f209ab0b99c82da43c6bfe471006a262114",
+      "model.csv": "3f8a40d5015a69fcca82769ec9bbaa979494728a3f2c5288b567cd9a4b4421f4",
+      "pair.csv": "f82391721156dd228356fc5b27f69d5768338eddb5ddd2d56e5abc95423ee112",
+      "single.csv": "feb86ed20feca7956e640845f0a1a1e14fde956bdad9900908fca560a6743c9a",
+      "sites.csv": "67b27bd84679bdf513a36ec4f1ca9e3dd1ee5923bab4fb5851cb64a1fe60ba8b"
+    },
+    "file_manifest_sha256": "9633f197cb09afa8b4c36fba12fad17099fc0688b210c0d6254feb2553e860ea",
+    "parameter_fingerprint": "sha256:3773585e061b37643f5c7794e18424b83c86b82fa658983a0ee13fd8f1876fd6",
+    "path": "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1",
+    "purpose": "user-provided",
+    "topology_fingerprint": "sha256:4cd30249026b7361ee68b618f7437de081b0339e5a7b0cc41165930a01a4e762"
+  },
+  "catalog_persistence": false,
+  "domain": {
+    "canonical_vle_sha256": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
+    "domain_id": "mea-tracer-313-15-k-fit-range",
+    "fingerprint": "93510b66543e4e9e49c409a658b1bf7a01599ccd9ce3feef41bbab6b6eb668ab",
+    "kind": "fit-range",
+    "lower_endpoint_observation_id": "vle_obs_0150",
+    "pco2_metrology_manifest_sha256": "0d14803873a60534ec5d7df382cfbd0ae03e4aaeba68bb5d54be7e4def8397cc",
+    "pressure_pa": [
+      6105.45,
+      300000
+    ],
+    "source_role": "313.15 K admitted-row pressure magnitude envelope, not experimental uncertainty",
+    "source_row_count": 44,
+    "temperature_k": [
+      313.15,
+      313.15
+    ],
+    "upper_endpoint_observation_id": "vle_obs_0188"
+  },
+  "limitations": [
+    "MEAH+ and MEACOO- active values are regression starts, not accepted parameters",
+    "fixed transferred values retain the limitations encoded in their row-level source locators",
+    "executability is limited to the frozen reduced-tracer fit range and does not establish predictive validity",
+    "no Provider catalog entry is created or modified"
+  ],
+  "neutral_reference": {
+    "tracer_derivative_probe": {
+      "active_parameter_derivatives_sha256": "e64c0fa728c2e33265c570cb46a9cb59b54cfa42d96a95025a03be8a8fc5a991",
+      "contractions_sha256": "8cada1c40535f491c9135a452a80d068a290f2df275d69945c9ee7516c7aca8c",
+      "derivative_availability": 10,
+      "helmholtz_basis_identity": "A_over_RT_reference_amount:n_ref=1mol:rho_ref=1mol_per_m3",
+      "neutral_basis_sha256": "855b73b9106567da8eb864aa378d59f9704858f3864b5a6c4ac7eac9701c8cf7",
+      "parameter_fingerprint": "sha256:3773585e061b37643f5c7794e18424b83c86b82fa658983a0ee13fd8f1876fd6",
+      "pressure_derivatives_sha256": "ccab47c5a22a4393452fca63b873a5dd3663bee03e7217c537a4df134be4fa5f",
+      "pressure_pa": 7326.7,
+      "reference_branch": "liquid",
+      "reference_composition_sha256": "fbac63b29020d084ca35d18c9ac4c14d52557e21475b84dbcb6dbe79e2faaac8",
+      "reference_convergence_error": 0.000009849654048821321,
+      "reference_derivative_convergence_error": 7.685985181637989e-11,
+      "source_pressure_max_pa": 300000,
+      "source_pressure_min_pa": 6105.45,
+      "status": 0,
+      "temperature_k": 313.15,
+      "topology_fingerprint": "sha256:4cd30249026b7361ee68b618f7437de081b0339e5a7b0cc41165930a01a4e762",
+      "value_status": 0
+    },
+    "value_probes": [
+      {
+        "error": "",
+        "helmholtz_basis_identity": "A_over_RT_reference_amount:n_ref=1mol:rho_ref=1mol_per_m3",
+        "parameter_fingerprint": "sha256:3773585e061b37643f5c7794e18424b83c86b82fa658983a0ee13fd8f1876fd6",
+        "pressure_pa": 100000,
+        "reference_convergence_error": 0.00000984975838491664,
+        "role": "interior-1bar",
+        "status": 0,
+        "temperature_k": 313.15
+      },
+      {
+        "error": "",
+        "helmholtz_basis_identity": "A_over_RT_reference_amount:n_ref=1mol:rho_ref=1mol_per_m3",
+        "parameter_fingerprint": "sha256:3773585e061b37643f5c7794e18424b83c86b82fa658983a0ee13fd8f1876fd6",
+        "pressure_pa": 153052.725,
+        "reference_convergence_error": 0.000009849816677842682,
+        "role": "arithmetic-center",
+        "status": 0,
+        "temperature_k": 313.15
+      },
+      {
+        "error": "standard-reference state is outside the parameter source domain",
+        "helmholtz_basis_identity": "",
+        "parameter_fingerprint": "",
+        "pressure_pa": 6105.44,
+        "reference_convergence_error": null,
+        "role": "below-pressure-domain",
+        "status": 3,
+        "temperature_k": 313.15
+      },
+      {
+        "error": "standard-reference state is outside the parameter source domain",
+        "helmholtz_basis_identity": "",
+        "parameter_fingerprint": "",
+        "pressure_pa": 300000.01,
+        "reference_convergence_error": null,
+        "role": "above-pressure-domain",
+        "status": 3,
+        "temperature_k": 313.15
+      },
+      {
+        "error": "standard-reference state is outside the parameter source domain",
+        "helmholtz_basis_identity": "",
+        "parameter_fingerprint": "",
+        "pressure_pa": 100000,
+        "reference_convergence_error": null,
+        "role": "below-temperature-domain",
+        "status": 3,
+        "temperature_k": 313.14
+      },
+      {
+        "error": "standard-reference state is outside the parameter source domain",
+        "helmholtz_basis_identity": "",
+        "parameter_fingerprint": "",
+        "pressure_pa": 100000,
+        "reference_convergence_error": null,
+        "role": "above-temperature-domain",
+        "status": 3,
+        "temperature_k": 313.16
+      }
+    ]
+  },
+  "parameter_roles": {
+    "active_starts_not_authority": [
+      {
+        "identity": "MEAH+::sigma",
+        "record_id": "protonated-monoethanolamine-segment-diameter",
+        "unit": "angstrom",
+        "value": 3.48508556586
+      },
+      {
+        "identity": "MEAH+::epsilon_over_k",
+        "record_id": "protonated-monoethanolamine-dispersion-energy",
+        "unit": "kelvin",
+        "value": 232.687201645
+      },
+      {
+        "identity": "MEACOO-::sigma",
+        "record_id": "carbamate-anion-segment-diameter",
+        "unit": "angstrom",
+        "value": 3.53543525721
+      }
+    ],
+    "fixed_inputs": "all other records retain their row-level source locator and status without scientific promotion",
+    "provisional_single_record_count": 14,
+    "transferred_single_record_count": 28
+  },
+  "predictive_authority": false,
+  "provider": {
+    "abi_version": 1,
+    "artifact_header_sha256": "bb46f103b7116efcc31f000cd07082f2d79c36a3236265d3e1d9ab4d27cc733f",
+    "capability_count": 17,
+    "distribution": "epcsaft",
+    "distribution_record_sha256": "ba7dc8df2d9e96c03ec1e37c260f775420718ce1cacddf1b35b9f5248043dec6",
+    "installed_header_relative_path": "epcsaft/include/epcsaft/native_sdk_v1.h",
+    "installed_header_sha256": "bb46f103b7116efcc31f000cd07082f2d79c36a3236265d3e1d9ab4d27cc733f",
+    "native_sdk_capsule": "epcsaft.native_sdk.v1",
+    "neutral_basis_row_count": 8,
+    "neutral_reference_derivative_result_size": 968,
+    "neutral_reference_result_size": 440,
+    "table_size": 424,
+    "version": "0.2.0.dev0",
+    "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "4cee10a9158576307cda93f611b6ade3a7cf8819df44f83efe8cbc61ab038789",
+    "commit": "d88e9af12c6d7e4d5ef5d916c4d610920348e5a2",
+    "tree": "a6a1bcecce3521f5b2d32f9c819e6b882c9a3f42",
+    "installed_module_origin": "isolated-wheel-site-packages/epcsaft/__init__.py",
+    "installed_module_sha256": "e3378b0b773be60da75aa4eaee36bb3078b3bfccca3b41def0c4e84ed849939e"
+  },
+  "public_consumer": {
+    "binary_dynamic_dependencies": [
+      "linux-vdso.so.1",
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6",
+      "ld-linux-x86-64.so.2"
+    ],
+    "binary_sha256": "f6831c9ced38d4f703dfa0221ebc40a7c12a4b2c51260bbef74b92d8a3f6e2f2",
+    "compile_command": "cmake -S $TEMP_CMAKE_SOURCE -B $TEMP_BUILD -Depcsaft_DIR=$INSTALLED_EPCSAFT_CMAKE -DPROBE_SOURCE=$REPO_ROOT/scripts/dev/mea_gate0_provider_probe.cpp && cmake --build $TEMP_BUILD --config Release",
+    "harness_path": "scripts/dev/replay_mea_gate0_provider.py",
+    "harness_sha256": "91bd8dfbc9c19c2d9ab6c5a27064526bb556c9c5df1429dcabb239aebbb32cbe",
+    "expected_domain_statuses": {
+      "outside_pressure": 3,
+      "outside_temperature": 3
+    },
+    "provider_source_checkout_on_python_path": false,
+    "python_executable": "fresh CPython 3.13 uv environment containing only the retained wheel and runtime dependencies",
+    "run_command": "uv run python scripts/check_epcsaft_integration.py --mode final --gate0-provider-wheel $PROVIDER_WHEEL",
+    "source_path": "scripts/dev/mea_gate0_provider_probe.cpp",
+    "source_sha256": "79c64451aacf91671622b02d4b94b4be91e926aaefa559f5537f01224745ff4f",
+    "compiler": {
+      "identity": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0; CMake Release build linked only through installed epcsaft::native_sdk",
+      "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769"
+    },
+    "environment": {
+      "INSTALLED_EPCSAFT_CMAKE": "Path(epcsaft.__file__).parent / \"cmake\" from the retained wheel",
+      "PROVIDER_WHEEL": "retained epcsaft-0.2.0.dev0 wheel with the recorded SHA-256",
+      "REPO_ROOT": "clean MEA-Thermodynamics checkout containing the tracked probe and bundle"
+    },
+    "python_path_classification": [
+      "tracked MEA public-consumer harness",
+      "CPython 3.13 standard library",
+      "isolated-wheel site-packages"
+    ],
+    "provider_test_module_imported": false,
+    "exploratory_test_helper_receipt_retained": false
+  },
+  "schema_version": 1,
+  "scientific_acceptance": "NOT_ESTABLISHED",
+  "status": "REGRESSION_INPUT_EXECUTABLE"
+}

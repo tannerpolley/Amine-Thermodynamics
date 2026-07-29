@@ -47,13 +47,30 @@ Issue #12 can close only after a stage-approved clean `ePC-SAFT/ePC-SAFT-regress
 - Target admission: `data/reference/MEA/manifests/target_admission_manifest.csv`
 - Grouped split: `data/reference/MEA/manifests/grouped_split_manifest.csv`
 - Readiness receipt: `analyses/phase3/ionic_epcsaft_regression/results/readiness/regression_readiness_summary.json`
-- Split hash: `e7bc893dab825007d009260d2c1f6f5dd42e75ebddbdb4972d52a5ec4f0c1aa0`
+- Split hash: `af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804`
+- Frozen state membership: 147 training and 220 reserved states.
+- Executable Gate 0 v2 observations: 24 training and 97 reserved pressure rows;
+  131 training and 67 reserved speciation scalars.
+- Active coordinates: `MEAH+::sigma`, `MEAH+::epsilon_over_k`, and
+  `MEACOO-::sigma`, in that order.
 
-Pressure and speciation construction are admitted. Execution remains blocked by Issue #12 because no stage-approved clean capability receipt admits the required production native Ceres hot loop and exact residual-Jacobian contract. Density, dielectric, pH, ionic-activity, viscosity, and calorimetry targets remain explicitly non-admitted.
+Loading is a state input, not an observation target. Heat of absorption is
+`NOT_ADMITTED` until its definition, sign, reference state, basis, uncertainty,
+and covariance are source-complete. Reported-zero speciation rows without
+source-backed detection bounds, model-derived pressure rows, and Böttinger
+states at or above 0.5 loading are not executable. No tracer row is selected
+until both its pressure and speciation contracts are complete.
+
+Execution remains blocked by Issue #12 and by the typed Gate 0 preregistration
+blockers. Density is staged under its frozen source-specific scales; dielectric,
+pH, ionic activity, viscosity, calorimetry, and heat targets remain non-admitted.
 
 ## Submission Sprint Role
 
-Saturday work freezes and tests the preregistration contract without fabricating an execution budget or admission receipt. After #12 closes, Monday execution must use exactly the validated 147-row training problem and may promote only a candidate whose native diagnostics and preregistered gates all pass.
+Gate 0 freezes and tests the application contract without running a fit. A
+later execution must preserve the 147-state training membership while consuming
+only observation rows that remain executable under the frozen metrology and
+speciation rules.
 
 ## Non-goals
 

@@ -67,6 +67,9 @@ SOURCE_PATHS = (
     "manifests/observation_contract.csv",
     "manifests/parameter_observable_coverage.csv",
     "manifests/speciation_target_membership.csv",
+    "manifests/pco2_metrology_manifest.csv",
+    "manifests/chemical_reaction_source_contract.json",
+    "manifests/homogeneous_speciation_sentinel_contract.json",
     "manifests/vle_row_disposition.csv",
 )
 
@@ -81,6 +84,7 @@ class RegressionReadinessBundle:
     package_version: str
     upstream_execution_admitted: bool
     parameter_coverage: tuple[dict[str, str], ...]
+    executable_counts: dict[str, dict[str, int]]
 
     @property
     def split_hash(self) -> str:
@@ -116,6 +120,7 @@ class RegressionReadinessBundle:
             "split_hash": self.split_hash,
             "row_counts": dict(sorted(target_counts.items())),
             "role_counts": dict(sorted(role_counts.items())),
+            "executable_observation_counts": self.executable_counts,
             "lifecycle_counts": dict(sorted(lifecycle_counts.items())),
             "uncertainty_coverage": {
                 "vle_rows_with_reported_loading_or_pressure_uncertainty": _vle_uncertainty_count(self.grouped_split),
@@ -526,6 +531,28 @@ def build_regression_readiness(
     split_rows.sort(key=lambda row: (row["target_family"], row["group_id"], row["record_id"]))
     package = capability_receipt.get("package", {})
     package_version = str(package.get("version", "unknown")) if isinstance(package, Mapping) else "unknown"
+    split_role = {
+        (row["target_family"], row["record_id"]): row["role"]
+        for row in split_rows
+    }
+    pco2_rows = _read_rows(reference_root / "manifests" / "pco2_metrology_manifest.csv")
+    speciation_rows = _read_rows(
+        reference_root / "manifests" / "speciation_target_membership.csv"
+    )
+    executable_counts: dict[str, Counter[str]] = {
+        "vle_pressure": Counter(),
+        "speciation": Counter(),
+    }
+    for row in pco2_rows:
+        if row["target_eligible"] == "yes":
+            role = split_role.get(("vle_pressure", row["observation_id"]))
+            if role:
+                executable_counts["vle_pressure"][role] += 1
+    for row in speciation_rows:
+        if row["target_eligible"] == "yes":
+            role = split_role.get(("speciation", row["state_id"]))
+            if role:
+                executable_counts["speciation"][role] += 1
     return RegressionReadinessBundle(
         source_hashes=source_hashes,
         target_admission=_admission_rows(capability_receipt),
@@ -537,6 +564,10 @@ def build_regression_readiness(
         parameter_coverage=tuple(
             _read_rows(reference_root / "manifests" / "parameter_observable_coverage.csv")
         ),
+        executable_counts={
+            family: dict(sorted(counts.items()))
+            for family, counts in executable_counts.items()
+        },
     )
 
 

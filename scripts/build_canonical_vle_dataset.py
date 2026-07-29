@@ -13,6 +13,7 @@ INCLUSION_PATH = VLE_DIR / "Combined_VLE_inclusion.csv"
 OUTPUT_PATH = VLE_DIR / "Combined_VLE.csv"
 OBSERVATION_PATH = VLE_DIR / "Canonical_VLE_Observations.csv"
 DISPOSITION_PATH = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "vle_row_disposition.csv"
+METROLOGY_PATH = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "pco2_metrology_manifest.csv"
 
 SOURCE_FILES = {
     "Aronu2011": "Aronu_2011_VLE.csv",
@@ -85,6 +86,112 @@ DISPOSITION_FIELDS = (
     "lifecycle_status",
     "disposition_reason",
 )
+METROLOGY_FIELDS = (
+    "observation_id",
+    "measurement_origin",
+    "measured_primitive",
+    "derivation_or_correction",
+    "observed_pco2_kpa",
+    "uncertainty_value",
+    "uncertainty_unit",
+    "uncertainty_status",
+    "covariance_status",
+    "source_locator",
+    "state_pressure_pa",
+    "pressure_specification",
+    "target_eligible",
+    "eligibility_reason",
+)
+
+
+def _pco2_metrology(row: dict[str, str | int]) -> dict[str, str | int]:
+    source = str(row["source_key"])
+    temperature = float(str(row["temperature_reported_C"]))
+    total_pressure = str(row["total_pressure"]).strip()
+    source_locator = str(row["source_table_or_figure"]).strip() or {
+        "Aronu2011": "Aronu et al. (2011), Tables 3-6; corrected columns per 2012 corrigendum",
+        "Hilliard2008": "Hilliard (2008), apparatus Sections 2.3.4-2.3.5 and VLE appendices",
+        "Idris2014": "Idris et al. (2014), Table 2",
+        "Jou1995": "Jou et al. (1995), Table 2",
+        "Mamun2005": "Ma'mun et al. (2005), MEA equilibrium table",
+        "Xu2011": "Xu et al. (2011), Eq. (1) and equilibrium table",
+    }[source]
+    origin = {
+        "Aronu2011": "direct_partial_pressure" if temperature <= 80.0 else "model_derived",
+        "Hilliard2008": "calibration_derived_partial_pressure",
+        "Idris2014": "unresolved",
+        "Jou1995": "calibration_derived_partial_pressure",
+        "Mamun2005": "direct_partial_pressure",
+        "Xu2011": "total_pressure_derived",
+    }[source]
+    primitive = {
+        "Aronu2011": "equilibrium_gas_CO2_partial_pressure",
+        "Hilliard2008": "calibrated_gas_composition_and_total_pressure",
+        "Idris2014": "unresolved_primary_metrology",
+        "Jou1995": "total_pressure_and_calibrated_gas_composition",
+        "Mamun2005": "equilibrium_gas_CO2_partial_pressure",
+        "Xu2011": "measured_total_pressure",
+    }[source]
+    correction = {
+        "Aronu2011": (
+            "none"
+            if origin == "direct_partial_pressure"
+            else "extended_UNIQUAC value reported by the source; excluded"
+        ),
+        "Hilliard2008": "CO2 concentration from calibrated FTIR/IR response combined with measured total pressure",
+        "Idris2014": "primary pressure-metrology description not source-complete in the local record",
+        "Jou1995": "gas analysis and solvent-vapor correction reported by the source",
+        "Mamun2005": "none",
+        "Xu2011": "source Eq. (1): measured total pressure corrected for N2 and calculated solvent vapor pressures",
+    }[source]
+    if total_pressure:
+        state_pressure_pa = f"{float(total_pressure) * 1000.0:.12g}"
+        pressure_specification = "row_reported_total_pressure"
+    else:
+        state_pressure_pa = ""
+        pressure_specification = "missing_source_pressure_contract"
+    eligible_lifecycle = row["lifecycle_status"] in {
+        "active_v1",
+        "validation_reserved_candidate",
+    }
+    eligible = (
+        eligible_lifecycle
+        and origin not in {"model_derived", "unresolved"}
+        and bool(state_pressure_pa)
+        and bool(source_locator)
+    )
+    if origin == "model_derived":
+        reason = "Model-derived pCO2 is excluded from executable observations."
+    elif origin == "unresolved":
+        reason = "Primary measurement origin is unresolved."
+    elif not state_pressure_pa:
+        reason = "No source-backed state pressure or pressure convention is frozen."
+    elif not source_locator:
+        reason = "The source locator is incomplete."
+    elif not eligible_lifecycle:
+        reason = "The row is outside the frozen active/reserved state membership."
+    else:
+        reason = "Gate 0 v2 pressure metrology and state-pressure contract are complete."
+    return {
+        "observation_id": row["observation_id"],
+        "measurement_origin": origin,
+        "measured_primitive": primitive,
+        "derivation_or_correction": correction,
+        "observed_pco2_kpa": row["CO2_pressure"],
+        "uncertainty_value": row["CO2_pressure_uncertainty"],
+        "uncertainty_unit": "kPa" if row["CO2_pressure_uncertainty"] else "",
+        "uncertainty_status": (
+            "source_row_value_retained"
+            if row["CO2_pressure_uncertainty"]
+            else "source_numeric_uncertainty_not_transcribed"
+        ),
+        "covariance_status": "source_covariance_not_reported",
+        "source_locator": source_locator,
+        "state_pressure_pa": state_pressure_pa,
+        "pressure_specification": pressure_specification,
+        "target_eligible": "yes" if eligible else "no",
+        "eligibility_reason": reason,
+    }
 
 
 def _read_rows(path: Path) -> list[dict[str, str]]:
@@ -340,6 +447,11 @@ def _write_full_registry(
         )
     write_csv_rows(observation_path, observations, fieldnames=OBSERVATION_FIELDS)
     write_csv_rows(disposition_path, dispositions, fieldnames=DISPOSITION_FIELDS)
+    write_csv_rows(
+        METROLOGY_PATH,
+        [_pco2_metrology(row) for row in observations],
+        fieldnames=METROLOGY_FIELDS,
+    )
 
 
 if __name__ == "__main__":

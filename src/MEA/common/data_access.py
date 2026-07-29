@@ -105,27 +105,73 @@ def load_regression_split_manifest(*, target_family: str | None = None) -> pd.Da
     return frame
 
 
-def load_speciation_target_membership(*, state_ids: Iterable[str] | None = None) -> pd.DataFrame:
+def load_speciation_target_membership(
+    *,
+    state_ids: Iterable[str] | None = None,
+    executable_only: bool = True,
+) -> pd.DataFrame:
     verify_regression_readiness_sources()
     frame = pd.read_csv(
         MANIFEST_ROOT / "speciation_target_membership.csv",
         dtype=str,
         keep_default_na=False,
     )
-    required = {"state_id", "species", "measurement_role", "target_eligible"}
+    required = {
+        "state_id",
+        "species",
+        "measurement_role",
+        "target_eligible",
+        "measurement_identity",
+        "linear_coefficients",
+        "covariance_status",
+        "censor_bound_value",
+    }
     missing = required.difference(frame.columns)
     if missing:
         raise RuntimeError(f"Speciation target membership is missing columns: {sorted(missing)}")
     if state_ids is not None:
         selected = set(state_ids)
         frame = frame.loc[frame["state_id"].isin(selected)].copy()
+    if executable_only:
+        frame = frame.loc[frame["target_eligible"] == "yes"].copy()
     return frame
 
 
-def load_regression_vle_view(*, role: str | None = None) -> pd.DataFrame:
+def load_pco2_metrology_manifest(*, executable_only: bool = True) -> pd.DataFrame:
+    verify_regression_readiness_sources()
+    frame = pd.read_csv(
+        MANIFEST_ROOT / "pco2_metrology_manifest.csv",
+        dtype=str,
+        keep_default_na=False,
+    )
+    required = {
+        "observation_id",
+        "measurement_origin",
+        "measured_primitive",
+        "derivation_or_correction",
+        "uncertainty_value",
+        "uncertainty_status",
+        "covariance_status",
+        "source_locator",
+        "state_pressure_pa",
+        "target_eligible",
+    }
+    missing = required.difference(frame.columns)
+    if missing:
+        raise RuntimeError(f"pCO2 metrology manifest is missing columns: {sorted(missing)}")
+    if executable_only:
+        frame = frame.loc[frame["target_eligible"] == "yes"].copy()
+    return frame
+
+
+def load_regression_vle_view(
+    *,
+    role: str | None = None,
+    executable_only: bool = True,
+) -> pd.DataFrame:
     split = load_regression_split_manifest(target_family="vle_pressure")
     if role is None:
-        split = split.loc[split["lifecycle_status"] == "active_v1"].copy()
+        split = split.loc[split["role"] == "active_training"].copy()
     else:
         split = split.loc[split["role"] == role].copy()
     if split.empty:
@@ -150,7 +196,7 @@ def load_regression_vle_view(*, role: str | None = None) -> pd.DataFrame:
         )
         membership["paper"] = membership["source_key_x"]
         membership["source_key"] = membership["source_key_x"]
-        return membership[
+        view = membership[
             [
                 "row_id",
                 "observation_id",
@@ -167,32 +213,51 @@ def load_regression_vle_view(*, role: str | None = None) -> pd.DataFrame:
                 "role",
             ]
         ].sort_values("observation_id").reset_index(drop=True)
-    identity = canonical.loc[
-        canonical["active_view_member"] == "yes",
-        ["observation_id", "active_row_id"],
-    ]
-    membership = split.merge(identity, left_on="record_id", right_on="observation_id", validate="one_to_one")
-    active = pd.read_csv(DATA_ROOT / "observations" / "vapor_liquid_equilibrium" / "Combined_VLE.csv")
-    view = active.merge(
-        membership[["observation_id", "active_row_id", "group_id", "split", "role"]],
-        left_on="row_id",
-        right_on="active_row_id",
-        validate="one_to_one",
-    )
-    if len(view) != len(split):
-        raise RuntimeError(f"Active VLE membership mismatch: manifest={len(split)}, active_view={len(view)}")
-    return view.drop(columns=["active_row_id"]).sort_values("row_id").reset_index(drop=True)
+    else:
+        identity = canonical.loc[
+            canonical["active_view_member"] == "yes",
+            ["observation_id", "active_row_id"],
+        ]
+        membership = split.merge(
+            identity,
+            left_on="record_id",
+            right_on="observation_id",
+            validate="one_to_one",
+        )
+        active = pd.read_csv(
+            DATA_ROOT / "observations" / "vapor_liquid_equilibrium" / "Combined_VLE.csv"
+        )
+        view = active.merge(
+            membership[["observation_id", "active_row_id", "group_id", "split", "role"]],
+            left_on="row_id",
+            right_on="active_row_id",
+            validate="one_to_one",
+        )
+        if len(view) != len(split):
+            raise RuntimeError(
+                f"Active VLE membership mismatch: manifest={len(split)}, active_view={len(view)}"
+            )
+        view = view.drop(columns=["active_row_id"])
+    metrology = load_pco2_metrology_manifest(executable_only=False)
+    view = view.merge(metrology, on="observation_id", validate="one_to_one")
+    if executable_only:
+        view = view.loc[view["target_eligible"] == "yes"].copy()
+    return view.sort_values("row_id").reset_index(drop=True)
 
 
-def load_regression_speciation_view(*, role: str | None = None) -> pd.DataFrame:
+def load_regression_speciation_view(
+    *,
+    role: str | None = None,
+    executable_only: bool = True,
+) -> pd.DataFrame:
     split = load_regression_split_manifest(target_family="speciation")
     if role is None:
-        split = split.loc[split["lifecycle_status"] == "canonical_eligible"].copy()
+        split = split.loc[split["role"] == "active_training"].copy()
     else:
         split = split.loc[split["role"] == role].copy()
     if split.empty:
         raise ValueError(f"No speciation records have regression role {role!r}")
-    membership = load_speciation_target_membership()
+    membership = load_speciation_target_membership(executable_only=executable_only)
     states = membership.loc[
         membership["state_id"].isin(split["record_id"]),
         [
