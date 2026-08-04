@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "identity": "mea-pure-water-source-reference-transfer-v1",
+  "canonical_reaction_contract": {
+    "path": "data/reference/MEA/manifests/chemical_reaction_source_contract.json",
+    "identity": "mea-nine-species-reaction-source-contract-v2",
+    "common_source_standard_state": "aqueous-molality-infinite-dilution-water-v1"
+  },
+  "source_reference": {
+    "kind": "declared-salt-free-solvent-composition",
+    "composition_basis": "mole-fraction",
+    "species_order": [
+      "CO2",
+      "MEA",
+      "H2O",
+      "MEAH+",
+      "MEACOO-",
+      "HCO3-",
+      "CO3--",
+      "H3O+",
+      "OH-"
+    ],
+    "provider_component_order": [
+      "carbon-dioxide",
+      "monoethanolamine",
+      "water",
+      "protonated-monoethanolamine",
+      "carbamate-anion",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion"
+    ],
+    "mole_fractions": [0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    "solvent_species": ["H2O"],
+    "nonwater_solute_standard": "infinite-dilution-in-declared-solvent",
+    "activity_convention_id": "molality-infinite-dilution-v1",
+    "solute_standard_molality_mol_per_kg": 1.0,
+    "ionic_reference_contraction": "charge-neutral",
+    "source_reference_pressure_pa": 100000.0
+  },
+  "provider_reference": {
+    "role": "computational-gauge",
+    "may_differ_from_source_reference": true
+  },
+  "required_public_capability": {
+    "identity": "exact-charge-neutral-source-to-provider-reference-transfer-v1",
+    "required_semantics": [
+      "caller-declared salt-free source solvent composition",
+      "exact transfer from source reference to Provider computational gauge",
+      "charge-neutral ionic contractions",
+      "evaluation at the admitted temperature and pressure",
+      "immutable Provider parameter and reference-state identity"
+    ],
+    "equilibrium_standard_state_field": "source_reference_solvent_composition",
+    "public_operation_name": "source_reference_transfer"
+  },
+  "failure_status": "BLOCKED_UNSUPPORTED_SOURCE_REFERENCE_TRANSFER",
+  "claim_boundary": "This contract declares the source reference and the required public transfer semantics. It does not supply Provider-basis equilibrium constants or authorize an approximate transfer."
+}

@@ -1,0 +1,151 @@
+{
+  "active_bound": false,
+  "analysis_partition_sha256": "c5678af00fe466ef231ffb5f1b1d0af2386aff0a6d65cd8e4e52c37c069d9b30",
+  "base_bundle_files": {
+    "association.csv": "195a8047403fc20ed414f29835d9f8d936e349e5baf4fb4264b7f2acb412b83e",
+    "bundle.toml": "ef19afb3e5495e1128edf751f177a308c1e5a3ca6f8ad2948f25718f829cf96d",
+    "components.csv": "3baa84d19c6db2252f8bfb29685821ec72a21171975a3f0239da62d77f347b75",
+    "correlations.toml": "733d92b4c348a5ad3f8aef3fed468f209ab0b99c82da43c6bfe471006a262114",
+    "model.csv": "3f8a40d5015a69fcca82769ec9bbaa979494728a3f2c5288b567cd9a4b4421f4",
+    "pair.csv": "f82391721156dd228356fc5b27f69d5768338eddb5ddd2d56e5abc95423ee112",
+    "single.csv": "feb86ed20feca7956e640845f0a1a1e14fde956bdad9900908fca560a6743c9a",
+    "sites.csv": "67b27bd84679bdf513a36ec4f1ca9e3dd1ee5923bab4fb5851cb64a1fe60ba8b"
+  },
+  "carbamate_role": "source-interpolated comparison only; excluded from the objective",
+  "correlation": "lnK4(T) = A + B/T + C ln(T) + D T",
+  "derivative_audit": {
+    "absolute_tolerance": 2e-06,
+    "directional_step": 1e-05,
+    "relative_tolerance": 0.005
+  },
+  "eos_sensitivity": {
+    "capability_fingerprint": "sha256:5b8e61769753c48aa58dd57aa7e186f3a6eca1b9ac976c572f921286d66e7c77",
+    "context_identity": "sha256:ae010bd3567bd59f2b6a80b96ee45457e6d97a54cfb3128056d210eae987deb0",
+    "contract_fingerprint": "sha256:2509177e79afe5e02f1463e7c5cbc75d3eac9533f78d131d58b84d397a96e23b",
+    "failed_rows": 0,
+    "parameter_ids": [
+      "segment_diameter;component;protonated-monoethanolamine",
+      "dispersion_energy_over_k;component;protonated-monoethanolamine",
+      "segment_diameter;component;carbamate-anion"
+    ],
+    "parameter_units": [
+      "angstrom",
+      "kelvin",
+      "angstrom"
+    ],
+    "row_count": 20,
+    "state_count": 15
+  },
+  "fit_method": "one group-normalized exact-sensitivity Gauss-Newton update in column-scaled A/B/C/D coordinates; candidate retained only if the evaluated training objective improves",
+  "fitted": {
+    "a": 32032.62180599853,
+    "b_k": -987556.1401891113,
+    "c": -5435.370627375245,
+    "d_per_k": 7.498546416837179
+  },
+  "fitted_all_row_log10_pressure_rmse": 1.4822294794213187,
+  "fitted_group_normalized_training_log10_pressure_rmse": 1.3952542284100358,
+  "fitted_training_log10_pressure_rmse": 1.4448778298156584,
+  "generated_bundle_files": {
+    "association.csv": "98c0397d5f80a4020c1b700d30347aa0bd7ca6c5e040b57d9abaf3a5ff67b63a",
+    "bundle.toml": "468cc4053e92a2eb70ddea9087fbce9ff33a1f829f9fe12a963f234f87c9fa9f",
+    "components.csv": "3baa84d19c6db2252f8bfb29685821ec72a21171975a3f0239da62d77f347b75",
+    "correlations.toml": "733d92b4c348a5ad3f8aef3fed468f209ab0b99c82da43c6bfe471006a262114",
+    "model.csv": "d25dd0163418970ae97016e03c040379287bf409b2aebcec747a052371a25e07",
+    "pair.csv": "f82391721156dd228356fc5b27f69d5768338eddb5ddd2d56e5abc95423ee112",
+    "single.csv": "7ec944b3fa9f0b8d8a520b77b974d97b0341cb12282f0fb7613b5e6027c1d407",
+    "sites.csv": "5b847cd2a49f59300d6ec35bbec0dd046486f82eb4074d430aa04d0768cbd26b"
+  },
+  "identifiability": {
+    "interpretation": "A/B/C/D are numerically fitted but are not separately identifiable when the scaled Jacobian remains ill-conditioned.",
+    "jacobian_rank": 4,
+    "raw_jacobian_condition_number": 1258049884.0072572,
+    "scaled_jacobian_condition_number": 343018.91081614135,
+    "unique_training_temperatures": [
+      313.15,
+      333.15,
+      353.15,
+      373.15,
+      393.15
+    ]
+  },
+  "initial_all_row_log10_pressure_rmse": 2.068574321763516,
+  "initial_group_normalized_training_log10_pressure_rmse": 1.6583529283370617,
+  "initial_training_log10_pressure_rmse": 1.9879789278120847,
+  "installed_artifacts": {
+    "equilibrium": {
+      "name": "epcsaft-equilibrium",
+      "record_sha256": "2718d1395ec219e4fd9b69d88255f5997a7451b827ffb5214fefabf71a3bf07b",
+      "version": "0.2.0.dev0",
+      "wheel_sha256": "397f0745fc692d33ea3a2d855a33346c516038bfd221798bc05f8ca02fde9b77"
+    },
+    "provider": {
+      "name": "epcsaft",
+      "record_sha256": "99986b14dfc31d96ee241308a30e3e05979f73e7ee8c17bcc97106f14858a78d",
+      "version": "0.2.0.dev0",
+      "wheel_sha256": "1622162b929cb8cd1a10d7c582a6b913babb8580a9f2188ee4fdf324d92f2772"
+    }
+  },
+  "literature": {
+    "a": 2.151,
+    "b_k": -1545.3,
+    "c": 0.0,
+    "d_per_k": 0.0
+  },
+  "objective": "group-normalized Hilliard-40C and Jou-40C-to-120C pCO2 regression",
+  "partition_role": "Analysis-local override for this nonpromoting experiment; the canonical 147/220 split is unchanged.",
+  "promotion_allowed": false,
+  "provider_domain_role": "The authority-neutral M5 input bundle uses the source-row 313.15--393.15 K and 6105.45--3000000 Pa fit range only inside a temporary application-owned copy.",
+  "regularization": "none",
+  "row_counts": {
+    "failure_records": 10,
+    "fitted_evaluated": 116,
+    "literature_evaluated": 116,
+    "reserved_validation": 49,
+    "training_admitted": 72,
+    "training_failed": 4,
+    "training_fit_evaluated": 68
+  },
+  "row_weighting": "equal total weight per source/temperature group; equal weight within each group",
+  "safeguard": {
+    "ln_k4_over_training_temperatures": [
+      -20.0,
+      10.0
+    ]
+  },
+  "source_domain_limit": "The selected R4 and R5 literature correlations end at 323.15 K. R5 is extrapolated for Jou rows above 323.15 K, so this R4-only fit cannot be promoted.",
+  "source_files": {
+    "analyses/phase3/r4_correlation_diagnostic/data/input/r4_training_partition.json": "c5678af00fe466ef231ffb5f1b1d0af2386aff0a6d65cd8e4e52c37c069d9b30",
+    "analyses/phase3/r4_correlation_diagnostic/source_reference_transfer_contract.json": "2f885f1a9b17631457f0f0df2ceda85e78302783002ee4c9ee67ce7809951ad5",
+    "data/reference/MEA/manifests/chemical_reaction_source_contract.json": "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55",
+    "data/reference/MEA/manifests/grouped_split_manifest.csv": "af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804",
+    "data/reference/MEA/manifests/homogeneous_speciation_sentinel_contract.json": "dae9863b4576845383dcf35336220800cbbebccc0d04b2cb9d385eab107f3b9d",
+    "data/reference/MEA/manifests/pco2_metrology_manifest.csv": "0d14803873a60534ec5d7df382cfbd0ae03e4aaeba68bb5d54be7e4def8397cc",
+    "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73"
+  },
+  "source_reference_transfer": {
+    "artifact_fingerprints": [
+      "sha256:44cb9aa3e53caf06582e9127e82f3db4ba977ea633894aa6c3129ebfe4b354d3"
+    ],
+    "convergence_tolerance": 5e-05,
+    "domain_fingerprints": [
+      "sha256:ee0f06431b9dbd74b3b157325eb9fd50d84fb93931da6a2ccd82fa1a9b3f9d27"
+    ],
+    "evaluated_state_count": 116,
+    "maximum_reference_convergence_error": 4.938254619446525e-05,
+    "reference_state_fingerprints": [
+      "sha256:7ffdd15390c3fe5e3c3709515855684aacd03da4fb3837b71973438f16f203d1"
+    ]
+  },
+  "canonical_split_sha256": "af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804",
+  "status": "diagnostic_multisource_regression",
+  "training_groups": {
+    "vle|Hilliard2008|w=0.3|T=40": 21,
+    "vle|Jou1995|w=0.3|T=100": 10,
+    "vle|Jou1995|w=0.3|T=120": 9,
+    "vle|Jou1995|w=0.3|T=40": 8,
+    "vle|Jou1995|w=0.3|T=60": 9,
+    "vle|Jou1995|w=0.3|T=80": 11
+  }
+}

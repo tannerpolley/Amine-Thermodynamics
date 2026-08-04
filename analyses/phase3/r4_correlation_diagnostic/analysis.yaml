@@ -1,0 +1,43 @@
+id: r4_correlation_diagnostic
+title: Multisource R4 correlation diagnostic
+status: draft
+manuscript_integration: excluded
+inputs:
+  - data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1
+  - data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv
+  - data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv
+  - data/reference/MEA/manifests/pco2_metrology_manifest.csv
+  - data/reference/MEA/manifests/grouped_split_manifest.csv
+  - data/reference/MEA/manifests/chemical_reaction_source_contract.json
+  - data/reference/MEA/manifests/homogeneous_speciation_sentinel_contract.json
+  - analyses/phase3/r4_correlation_diagnostic/data/input/r4_training_partition.json
+  - analyses/phase3/r4_correlation_diagnostic/source_reference_transfer_contract.json
+outputs:
+  - analyses/phase3/r4_correlation_diagnostic/figures/r4_diagnostic/output/r4_correlation_fit_rows.csv
+  - analyses/phase3/r4_correlation_diagnostic/results/r4_correlation_fit_parameters.csv
+  - analyses/phase3/r4_correlation_diagnostic/results/r4_correlation_fit_metrics.csv
+  - analyses/phase3/r4_correlation_diagnostic/figures/r4_diagnostic/output/r4_reaction_sensitivity_rows.csv
+  - analyses/phase3/r4_correlation_diagnostic/figures/r4_diagnostic/output/r4_eos_sensitivity_rows.csv
+  - analyses/phase3/r4_correlation_diagnostic/results/r4_state_failures.csv
+  - analyses/phase3/r4_correlation_diagnostic/results/r4_correlation_fit_receipt.json
+  - analyses/phase3/r4_correlation_diagnostic/figures/r4_diagnostic/output/r4_correlation_fit_pco2.png
+  - analyses/phase3/r4_correlation_diagnostic/figures/r4_diagnostic/output/r4_correlation_fit_pco2.mpl.yaml
+  - analyses/phase3/r4_correlation_diagnostic/figures/r4_diagnostic/output/r4_correlation_fit_residual_structure.png
+  - analyses/phase3/r4_correlation_diagnostic/figures/r4_diagnostic/output/r4_correlation_fit_residual_structure.mpl.yaml
+  - analyses/phase3/r4_correlation_diagnostic/figures/r4_diagnostic/output/r4_correlation_fit_sensitivity.png
+  - analyses/phase3/r4_correlation_diagnostic/figures/r4_diagnostic/output/r4_correlation_fit_sensitivity.mpl.yaml
+commands:
+  generate:
+    - PYTHONPATH=src "$MEA_R4_PYTHON" analyses/phase3/r4_correlation_diagnostic/scripts/run_analysis.py
+  render:
+    - PYTHONPATH=src uv run --no-sync python analyses/phase3/r4_correlation_diagnostic/scripts/render_figures.py
+  validate:
+    - PYTHONPATH=src uv run --no-sync python analyses/phase3/r4_correlation_diagnostic/scripts/validate_results.py
+runtime:
+  full_seconds: 14400
+environment:
+  kind: external_exact_candidate_wheels
+  repository_lock_unchanged: true
+  provider_wheel_sha256: 1622162b929cb8cd1a10d7c582a6b913babb8580a9f2188ee4fdf324d92f2772
+  equilibrium_wheel_sha256: 397f0745fc692d33ea3a2d855a33346c516038bfd221798bc05f8ca02fde9b77
+claim_boundary: The pressure-only four-coefficient R4 update is ill-conditioned and cannot separate R2/R4/R5 chemistry from selected ionic EOS coordinates. It is a falsification experiment, not a promoted correlation or predictive model.
