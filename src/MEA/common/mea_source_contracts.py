@@ -221,6 +221,27 @@ def load_sentinel_contract(
     return _load_json(path)
 
 
+def common_source_ln_k(
+    temperature_k: float,
+    contract: dict[str, Any] | None = None,
+) -> tuple[float, ...]:
+    """Evaluate the five source constants on the frozen common activity scale."""
+
+    contract = load_reaction_contract() if contract is None else contract
+    source = validate_reaction_contract(contract)
+    lower, upper = source["temperature_intersection_k"]
+    if not lower <= temperature_k <= upper:
+        raise ValueError("temperature lies outside the common reaction-source domain")
+    reactions = contract["reactions"]
+    offsets = contract["common_source_standard_state"][
+        "source_to_common_ln_k_offsets"
+    ]
+    return tuple(
+        _evaluate_ln_k(reaction, temperature_k) + float(offset)
+        for reaction, offset in zip(reactions, offsets, strict=True)
+    )
+
+
 def _exact_rank(matrix: list[list[int]]) -> int:
     work = [[Fraction(value) for value in row] for row in matrix]
     if not work:
