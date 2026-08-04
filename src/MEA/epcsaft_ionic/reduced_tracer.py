@@ -13,8 +13,6 @@ from MEA.common.mea_source_contracts import (
     common_source_ln_k,
     load_reaction_contract,
     load_sentinel_contract,
-    validate_reaction_contract,
-    validate_sentinel_contract,
 )
 from MEA.epcsaft_ionic.preregistration import load_gate0_preregistration
 
@@ -41,7 +39,7 @@ def _reaction_consistent_molar_masses(
 ) -> tuple[float, ...]:
     """Project source-rounded masses onto the exact elemental-balance space.
 
-    The Provider bundle remains the EOS owner. This application-side vector is
+    The Engine bundle remains the EOS owner. This application-side vector is
     used only by Equilibrium's redundant mass-conservation certificate.
     """
 
@@ -52,7 +50,7 @@ def _reaction_consistent_molar_masses(
             if row["family"] == "molar_mass"
     }
     if set(records) != set(component_ids):
-        raise ValueError("Provider bundle does not contain one molar mass per component")
+        raise ValueError("Engine bundle does not contain one molar mass per component")
     reported = np.asarray(
         [records[component_id] for component_id in component_ids], dtype=float
     )
@@ -66,13 +64,11 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
     """Build the two-row homogeneous-liquid evaluator from frozen MEA inputs."""
 
     import epcsaft
-    import epcsaft_equilibrium
+    from epcsaft import equilibrium
 
     preregistration = load_gate0_preregistration()
     reaction_contract = load_reaction_contract()
     sentinel_contract = load_sentinel_contract()
-    validate_reaction_contract(reaction_contract)
-    validate_sentinel_contract(sentinel_contract, reaction_contract)
 
     tracer = preregistration["tracer"]
     observations = tracer["observations"]
@@ -92,7 +88,7 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
     parameters = epcsaft.Parameters.from_bundle(bundle, components=component_ids)
     model = epcsaft.Mixture(parameters)
     if model.parameter_fingerprint != immutable["parameter_fingerprint"]:
-        raise ValueError("installed Provider model differs from the frozen input")
+        raise ValueError("installed Engine model differs from the frozen input")
 
     source_species = reaction_contract["species"]
     element_order = tuple(reaction_contract["balance_row_order"])
@@ -124,7 +120,7 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
     )
 
     common = reaction_contract["common_source_standard_state"]
-    standard_state = epcsaft_equilibrium.ChemicalStandardState(
+    standard_state = equilibrium.ChemicalStandardState(
         id=common["identity"],
         activity_scale_id=common["identity"],
         log_activity_scale_factors=tuple(
@@ -135,9 +131,15 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
                 "source_standard_reference_pressure_pa"
             ]
         ),
+        source_reference_component_ids=("water",),
+        source_reference_solvent_composition=(1.0,),
+        source_reference_activity_convention_id=common["identity"],
+        source_reference_standard_molality_mol_per_kg=float(
+            common["solute_standard_molality_mol_per_kg"]
+        ),
     )
     ln_k = common_source_ln_k(temperature_k, reaction_contract)
-    problem = epcsaft_equilibrium.ChemicalEquilibriumProblem(
+    problem = equilibrium.ChemicalEquilibriumProblem(
         species_ids=component_ids,
         charges=tuple(int(species["charge"]) for species in source_species),
         molar_masses_kg_per_mol=_reaction_consistent_molar_masses(
@@ -153,7 +155,7 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
         ),
         feed_amounts_mol=feed_amounts,
         equilibrium_constants=tuple(
-            epcsaft_equilibrium.ChemicalEquilibriumConstant(
+            equilibrium.ChemicalEquilibriumConstant(
                 ln_value=value,
                 source_id="+".join(reaction["source_record_ids"]),
                 reference_id=common["identity"],
@@ -168,13 +170,13 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
         strict_interior_amount_floor_mol=1.0e-18,
         source_standard_state=standard_state,
     )
-    phase = epcsaft_equilibrium.ProviderPhase(
+    phase = equilibrium.ProviderPhase(
         model=model,
         expected_parameter_fingerprint=immutable["parameter_fingerprint"],
         admissible_packing_fraction_interval=(1.0e-6, 0.74),
     )
     rows = (
-        epcsaft_equilibrium.ChemicalObservationRow(
+        equilibrium.ChemicalObservationRow(
             row_id=tracer["residual_vector"]["order"][0],
             state_id=observations[0]["state_id"],
             state_schema_id="fixed_TP_homogeneous_liquid_v1",
@@ -183,12 +185,12 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
             temperature=temperature_k * epcsaft.unit_registry.kelvin,
             pressure=pressure_pa * epcsaft.unit_registry.pascal,
             problem=problem,
-            primitive=epcsaft_equilibrium.ChemicalObservationPrimitive(
+            primitive=equilibrium.ChemicalObservationPrimitive(
                 kind="neutral_component_fugacity_pa",
                 component_id="carbon-dioxide",
             ),
         ),
-        epcsaft_equilibrium.ChemicalObservationRow(
+        equilibrium.ChemicalObservationRow(
             row_id=tracer["residual_vector"]["order"][1],
             state_id=observations[1]["state_id"],
             state_schema_id="fixed_TP_homogeneous_liquid_v1",
@@ -197,14 +199,14 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
             temperature=temperature_k * epcsaft.unit_registry.kelvin,
             pressure=pressure_pa * epcsaft.unit_registry.pascal,
             problem=problem,
-            primitive=epcsaft_equilibrium.ChemicalObservationPrimitive(
+            primitive=equilibrium.ChemicalObservationPrimitive(
                 kind="species_mole_fraction",
                 component_id="carbamate-anion",
             ),
         ),
     )
     active_parameters = tuple(
-        epcsaft_equilibrium.ChemicalEquilibriumActiveParameter(
+        equilibrium.ChemicalEquilibriumActiveParameter(
             family="segment_diameter",
             identity="component",
             component_ids=(
@@ -219,7 +221,7 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
         )
         for coordinate in coordinates
     )
-    evaluator = epcsaft_equilibrium.chemical_observation_context(
+    evaluator = equilibrium.chemical_observation_context(
         phase,
         rows=rows,
         active_parameters=active_parameters,

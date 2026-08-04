@@ -25,8 +25,8 @@ jobs:
         run: uv run ruff check src scripts analyses tests
       - name: Quick validation
         run: uv run python scripts/validate_project.py quick
-      - name: Verify pinned ePC-SAFT integration
-        run: uv run python scripts/check_epcsaft_integration.py --mode final
+      - name: Verify unified Engine environment
+        run: uv run python scripts/validate_engine_environment.py
       - name: Build manuscript
         run: bash scripts/build_manuscript.sh
       - name: Verify manuscript freshness

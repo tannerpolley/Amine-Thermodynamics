@@ -1,5 +1,10 @@
 # ePC-SAFT Package Dependency Matrix for MEA-Thermodynamics
 
+Historical status: this matrix records the former split-package and pinned-Git
+lane. The live cutover target is one immutable `epcsaft` Engine wheel exposing
+`epcsaft`, `epcsaft.equilibrium`, and `epcsaft.regression`; see the repository
+`AGENTS.md` and `.codex/environments/README.md` for current setup.
+
 ## Policy
 
 MEA-Thermodynamics must use generic ePC-SAFT APIs. It must not request application-specific public APIs.

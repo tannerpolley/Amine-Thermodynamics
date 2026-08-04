@@ -160,7 +160,7 @@ EXPECTED_PROVIDER_INPUT = {
         "246049d6caa54cf752ab0e6257812c39d4e9deb5f079db3dd96280bd2ae05e85"
     ),
     "parameter_fingerprint": (
-        "sha256:3773585e061b37643f5c7794e18424b83c86b82fa658983a0ee13fd8f1876fd6"
+        "sha256:7ac9cf016af9086a8f1c70189b524cbad1e29a75bb742862106d34ba7ab44ae0"
     ),
     "topology_fingerprint": (
         "sha256:4cd30249026b7361ee68b618f7437de081b0339e5a7b0cc41165930a01a4e762"
