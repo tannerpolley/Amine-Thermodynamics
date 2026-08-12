@@ -1,0 +1,250 @@
+{
+  "acceptance_gates": {
+    "active_jacobian_nonzero": true,
+    "local_neighborhood_failure_free": true,
+    "multistart_stable": true,
+    "no_active_parameter_bound": true,
+    "optimizer_success": true,
+    "reserved_pressure_evaluated": true,
+    "reserved_pressure_preserved": false,
+    "reserved_validation_objective_improved": true,
+    "training_failure_free": true,
+    "validation_failure_free": true
+  },
+  "active_parameter_identifiability": {
+    "parameter": "shared_ion_sigma",
+    "scaled_jacobian_norm": 0.7596700564360006
+  },
+  "candidate_eos_values": {
+    "MEACOO-__s": 5.334530692417894,
+    "MEAH+__s": 5.334530692417894
+  },
+  "candidate_values": {
+    "shared_ion_sigma": 5.334530692417894
+  },
+  "claim_boundary": "This is an MEA-owned SciPy identifiability and regression experiment. It does not satisfy the production native-regression gate or promote a parameter bundle.",
+  "fixed_contract": {
+    "active_set_rationale": "Fit one shared effective segment diameter for MEAH+ and MEACOO-. Bulk electroneutral density cannot separately identify the cation and anion diameters. Keep dispersion energies, Born diameters, reaction constants, and ion-pair interactions fixed because the admitted evidence does not independently identify them.",
+    "failed_state_policy": "Each failed state receives fixed residual 8; any final training or validation failure rejects the candidate.",
+    "fit_parameters": [
+      "shared_ion_sigma"
+    ],
+    "fixed_parameters": [
+      "MEA__m",
+      "MEA__s",
+      "MEA__e",
+      "MEAH+__e",
+      "MEAH+__d_born",
+      "MEACOO-__e",
+      "MEACOO-__d_born",
+      "HCO3-__s",
+      "HCO3-__e",
+      "HCO3-__d_born",
+      "CO3^2-__s",
+      "CO3^2-__e",
+      "CO3^2-__d_born",
+      "H3O+__s",
+      "H3O+__e",
+      "H3O+__d_born",
+      "OH-__s",
+      "OH-__e",
+      "OH-__d_born",
+      "k_ij__CO2__MEA",
+      "k_ij__CO2__MEAH+",
+      "k_ij__CO2__MEACOO-",
+      "k_ij__MEA__H2O",
+      "k_ij__MEAH+__MEACOO-",
+      "k_ij__MEAH+__HCO3-"
+    ],
+    "objective": "Equal density/speciation family weights; speciation sources, states, and measured positive targets are normalized equally; density groups and rows are normalized equally.",
+    "pressure_speciation_split_sha256": "af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804",
+    "training_counts": {
+      "loaded_density_rows": 42,
+      "speciation_states": 58
+    },
+    "validation_counts": {
+      "loaded_density_rows": 26,
+      "speciation_states": 53
+    },
+    "volumetric_split_path": "data/reference/MEA/manifests/volumetric_grouped_split_manifest.csv",
+    "zero_observation_policy": "Reported zeros remain validation diagnostics but are not optimized because the sources do not provide numerical detection limits."
+  },
+  "local_neighborhood_robustness": {
+    "all_states_accepted": true,
+    "evaluations": [
+      {
+        "cost": 0.01799502070765559,
+        "direction": "lower",
+        "failure_state_count": 0,
+        "scaled_step": 0.0001
+      },
+      {
+        "cost": 0.017995020962584766,
+        "direction": "upper",
+        "failure_state_count": 0,
+        "scaled_step": 0.0001
+      }
+    ],
+    "scaled_step": 0.0001
+  },
+  "multistart_stability": {
+    "near_best_attempt_count": 3,
+    "near_best_cost_fraction": 0.01,
+    "scaled_parameter_spread": 0.015257925097088508
+  },
+  "optimizer": {
+    "baseline_cost": 0.0696314277845142,
+    "candidate_cost": 0.017995018967074814,
+    "message": "`ftol` termination condition is satisfied.",
+    "nfev": 6,
+    "njev": 6,
+    "status": 2,
+    "success": true
+  },
+  "pressure": {
+    "baseline_active_training": {
+      "accepted_count": 88,
+      "failure_count": 1,
+      "max_abs_log10": 1.4820857985086915,
+      "median_abs_log10": 0.43205615489440297,
+      "record_count": 89,
+      "rmse_log10": 0.618580682953044
+    },
+    "baseline_reserved_validation": {
+      "accepted_count": 166,
+      "failure_count": 1,
+      "max_abs_log10": 1.534195625183962,
+      "median_abs_log10": 0.5424019168403308,
+      "record_count": 167,
+      "rmse_log10": 0.6639447263794848
+    },
+    "candidate_active_training": {
+      "accepted_count": 88,
+      "failure_count": 1,
+      "max_abs_log10": 1.5429424320611818,
+      "median_abs_log10": 0.8688167785569891,
+      "record_count": 89,
+      "rmse_log10": 0.9901585048115829
+    },
+    "candidate_reserved_validation": {
+      "accepted_count": 166,
+      "failure_count": 1,
+      "max_abs_log10": 1.5690635855416326,
+      "median_abs_log10": 0.7304691820842064,
+      "record_count": 167,
+      "rmse_log10": 0.8319102458963517
+    }
+  },
+  "runtime": {
+    "epcsaft_version": "1.5.2",
+    "fit_objective_evaluations": 61
+  },
+  "schema_version": 1,
+  "status": "experiment_did_not_establish_publishable_parameters",
+  "training": {
+    "baseline": {
+      "density": {
+        "accepted_residual_count": 42,
+        "failure_residual_count": 0,
+        "max_abs_log10": 0.11943511637955315,
+        "median_abs_log10": 0.04578385915709377,
+        "median_abs_relative_percent": 11.118259801302177,
+        "record_count": 42,
+        "residual_count": 42,
+        "rmse_log10": 0.054681613956313636,
+        "rmse_relative_percent": 13.75256988746182,
+        "rmse_standardized": 75.28725544231492
+      },
+      "failure_state_count": 0,
+      "failure_states": [],
+      "speciation": {
+        "accepted_residual_count": 194,
+        "failure_residual_count": 0,
+        "max_abs_log10": 2.411070048595808,
+        "median_abs_log10": 0.03088468011260992,
+        "record_count": 58,
+        "residual_count": 194,
+        "rmse_log10": 0.5210727580972845
+      }
+    },
+    "candidate": {
+      "density": {
+        "accepted_residual_count": 42,
+        "failure_residual_count": 0,
+        "max_abs_log10": 0.02322052823153147,
+        "median_abs_log10": 0.008680578386270323,
+        "median_abs_relative_percent": 1.9788140014457223,
+        "record_count": 42,
+        "residual_count": 42,
+        "rmse_log10": 0.011002010658450192,
+        "rmse_relative_percent": 2.490059351491407,
+        "rmse_standardized": 13.590663563017008
+      },
+      "failure_state_count": 0,
+      "failure_states": [],
+      "speciation": {
+        "accepted_residual_count": 194,
+        "failure_residual_count": 0,
+        "max_abs_log10": 1.71649363527303,
+        "median_abs_log10": 0.07501806067769795,
+        "record_count": 58,
+        "residual_count": 194,
+        "rmse_log10": 0.27246595712540006
+      }
+    }
+  },
+  "validation": {
+    "baseline": {
+      "density": {
+        "accepted_residual_count": 26,
+        "failure_residual_count": 0,
+        "max_abs_log10": 0.09565985708973886,
+        "median_abs_log10": 0.043736705242948884,
+        "median_abs_relative_percent": 10.595465313000796,
+        "record_count": 26,
+        "residual_count": 26,
+        "rmse_log10": 0.05123543287676252,
+        "rmse_relative_percent": 12.788692640779015,
+        "rmse_standardized": 69.02462230309638
+      },
+      "failure_state_count": 0,
+      "failure_states": [],
+      "speciation": {
+        "accepted_residual_count": 225,
+        "failure_residual_count": 0,
+        "max_abs_log10": 1.4878035163314962,
+        "median_abs_log10": 0.07583223434264795,
+        "record_count": 53,
+        "residual_count": 225,
+        "rmse_log10": 0.38129621721615625
+      }
+    },
+    "baseline_cost": 0.02873890631361757,
+    "candidate": {
+      "density": {
+        "accepted_residual_count": 26,
+        "failure_residual_count": 0,
+        "max_abs_log10": 0.022010964973773403,
+        "median_abs_log10": 0.00809811662161969,
+        "median_abs_relative_percent": 1.8473649608749365,
+        "record_count": 26,
+        "residual_count": 26,
+        "rmse_log10": 0.01060153841676649,
+        "rmse_relative_percent": 2.4006476356459636,
+        "rmse_standardized": 12.938669895569456
+      },
+      "failure_state_count": 0,
+      "failure_states": [],
+      "speciation": {
+        "accepted_residual_count": 225,
+        "failure_residual_count": 0,
+        "max_abs_log10": 1.5129370569371925,
+        "median_abs_log10": 0.12211428678624375,
+        "record_count": 53,
+        "residual_count": 225,
+        "rmse_log10": 0.37821762850399615
+      }
+    },
+    "candidate_cost": 0.027030026181207794
+  }
+}

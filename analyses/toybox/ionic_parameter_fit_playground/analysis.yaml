@@ -1,0 +1,21 @@
+schema_version: 1
+analysis_id: ionic_parameter_fit_playground
+category: toybox
+status: exploratory_only
+publication_eligible: false
+parameter_promotion_eligible: false
+source_branch: codex/manuscript-parameter-fit-provenance
+source_commits:
+  - 58660ed9a051d701fb9295f97cd71d86adcb984a
+  - aaa638427f50fbd63acb90de54c9ee94186d8b02
+commands:
+  shared_ion_size:
+    - .venv/bin/python analyses/toybox/ionic_parameter_fit_playground/scripts/run_shared_ion_size_scipy_experiment.py --confirm-toybox --max-nfev 12
+outputs:
+  - path: analyses/toybox/ionic_parameter_fit_playground/results/historical_seven_parameter_fit
+    role: immutable_historical_snapshot
+  - path: analyses/toybox/ionic_parameter_fit_playground/results/shared_ion_size_scipy
+    role: rejected_toy_experiment_snapshot
+claim_boundary: >-
+  Exploratory numerical evidence only. These outputs cannot supply manuscript
+  claims, promoted parameter values, or predictive-model qualification.

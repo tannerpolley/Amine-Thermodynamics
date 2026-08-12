@@ -4,6 +4,8 @@ This directory contains source-controlled scientific analysis, validation, and f
 
 ```text
 analyses/
+  toybox/
+    ionic_parameter_fit_playground/
   paper_validation/
     2015_baygi/
   phase1/
@@ -16,6 +18,11 @@ analyses/
   phase3/
     ionic_epcsaft_regression/
 ```
+
+`toybox/` contains explicitly exploratory calculations that may use expedient
+numerical methods to answer design questions. Toybox outputs are excluded from
+parameter promotion, manuscript inputs, and predictive-model claims unless a
+separate governed workflow reproduces and admits the result.
 
 `paper_validation/` is reserved for paper-matching reproduction work: figures, tables, and parameters should be recreated to match the cited paper artifact as directly as possible. The phase folders are project-stage analyses: Phase 1 keeps retained neutral and Smith-Missen baselines, Phase 2 keeps activity-based true-species ePC-SAFT evaluation, and Phase 3 keeps full ionic ePC-SAFT regression and diagnostics.
 
