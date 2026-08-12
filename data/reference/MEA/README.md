@@ -18,14 +18,18 @@ The modeled species are CO₂, MEA, H₂O, MEAH⁺, MEACOO⁻, HCO₃⁻, CO₃�
 | `observations/ph/` | Equilibrium pH evidence gap | No source-complete loaded-MEA pH matrix is admitted |
 | `observations/ionic_analog_volumetrics/` | Ethanolammonium carboxylate density and derived excess-volume evidence | Analog evidence only; not direct MEAH⁺/MEACOO⁻ measurement |
 | `parameters/` | ePC-SAFT parameter evidence and source audit | Provenance evidence; not parameter promotion |
-| `manifests/` | Admission, provenance, split, source-status, and observation contracts | Authoritative machine-readable policy |
+| `manifests/` | Admission, provenance, source status, model configuration, fit stages, and observation contracts | Authoritative machine-readable policy |
 | `quarantine/chatgpt_audits/` | Exact artifacts from the two supplied audit bundles | **Never admitted** without independent source-file verification |
 
 `manifests/data_library_inventory.csv` inventories every file, its hash, row count when applicable, and its library/admission tier.
 
 ## Admission model
 
-Location in `observations/` does not by itself make a row a regression target. The authoritative roles remain in `target_admission_manifest.csv`, `grouped_split_manifest.csv`, `speciation_target_membership.csv`, `vle_row_disposition.csv`, and the related source/provenance contracts. The frozen native-regression split remains 147 training and 220 reserved-validation records.
+Location in `observations/` does not by itself make a row a regression target. Measurement eligibility remains governed by `pco2_metrology_manifest.csv`, `speciation_target_membership.csv`, `vle_row_disposition.csv`, and the related source/provenance contracts.
+
+`grouped_split_manifest.csv` preserves the immutable 147-training/220-reserved Gate-0 history. It is not the selection policy for the new predictive reactive-VLE campaign. The current mixed reactive-observation planning contract is `reactive_vle_cross_validation.csv`: every eligible pCO₂ and speciation candidate enters a whole-campaign fold, but none is yet a scoring row because the residual scales and immutable Data-packet identity are not frozen. After those gates close, every admissible in-domain row enters campaign-blocked selection and then the final refit after model form and active coordinates are frozen. Neutral pure, binary, volumetric, dielectric, and activity families retain their own admission gates and require stage-specific partitions when their source packages close. Cross-validation results and all-data calibration residuals must be reported separately.
+
+`reactive_vle_model_configurations.json` defines the factorized polar, association, and electrostatic comparisons. `reactive_vle_parameter_stages.json` defines the fit order and fail-closed upstream gates. These are planning and data contracts, not evidence that reactive fitting is currently executable.
 
 The quarantine tier is deliberately visible so useful leads, rejection logs, and extracted values are not lost. It is isolated because the two supplied audits conflict with each other and neither bundle contains all exact primary-source bytes needed to verify its strongest claims. Quarantined rows cannot enter canonical builders, readiness hashes, fitting, validation, figures, or manuscript claims.
 
