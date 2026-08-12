@@ -1,80 +1,48 @@
-# ePC-SAFT Package Dependency Matrix for MEA-Thermodynamics
+# Unified ePC-SAFT dependency matrix
 
-Historical status: this matrix records the former split-package and pinned-Git
-lane. The live cutover target is one immutable `epcsaft` Engine wheel exposing
-`epcsaft`, `epcsaft.equilibrium`, and `epcsaft.regression`; see the repository
-`AGENTS.md` and `.codex/environments/README.md` for current setup.
+Status: planning contract. No Engine wheel or Data packet is bound by this document.
 
-## Policy
+MEA-Thermodynamics will consume one immutable installed `epcsaft` Engine wheel exposing `epcsaft`, `epcsaft.equilibrium`, and `epcsaft.regression`. It must not import a sibling source checkout or use split-package compatibility interfaces.
 
-MEA-Thermodynamics must use generic ePC-SAFT APIs. It must not request application-specific public APIs.
+## Current boundary
 
-The preserved `tannerpolley/ePC-SAFT-lab` is historical/transitional evidence, not a production or tracker owner. Clean `ePC-SAFT/ePC-SAFT` owns future provider capabilities, clean `ePC-SAFT/ePC-SAFT-regression` owns future Ceres regression, and the migration control plane owns stage sequencing until accepted promotion receipts transfer runtime authority.
+| Capability | Owner | Current status | MEA use |
+|---|---|---|---|
+| PC-SAFT, association, DD/QQ/DQ polar terms, Debye–Hückel, corrected SSM+DS Born, and relative-permittivity formulations | Engine EOS | Implemented for value and supported derivative evaluation | Evaluate explicit model configurations from immutable parameter records |
+| Pure-saturation and fixed-state-pressure observations | Engine EOS and Regression | Publicly admitted | Neutral pure-component and qualified fixed-state preparation |
+| Fixed-T,P homogeneous chemical equilibrium and sensitivities | Engine Equilibrium | Public solve exists; Regression observation family is absent | Direct evaluation only; regression blocked by [Engine #30](https://github.com/tannerpolley/ePC-SAFT/issues/30) |
+| Nonreactive phase equilibrium | Engine Equilibrium | Public solve exists; Regression observation families were deferred | Evaluation only; no neutral VLE fit through current Regression |
+| Coupled reactive bubble/VLE | Engine Equilibrium | Missing | Predictive reactive VLE blocked by [Engine #31](https://github.com/tannerpolley/ePC-SAFT/issues/31) |
+| Generic optimizer, residual mapping, weights, bounds, and diagnostics | Engine Regression | Implemented for admitted owner observations | Consume only owner-advertised observation families |
+| MEA source rows, reactions, campaign blocks, fit stages, residual policy, model selection, and promotion | MEA-Thermodynamics | Application-owned | Materialize an immutable Data packet; never move these policies into Engine |
 
-## Dependency table
+The old 1.5.2 pinned evaluation lane and split-repository plans are historical evidence. They do not define current capability and must not be used to justify a new fit.
 
-| Package capability | Production owner | MEA phase affected | Required for | Current action |
-|---|---|---:|---|---|
-| Provider derivative coverage gates | Clean `ePC-SAFT/ePC-SAFT` after promotion | 0-3 | honest capability reporting | preserve the pinned historical lane; require a clean capability receipt before cutover |
-| Reaction/equilibrium-constant convention layer | Clean provider/equilibrium owners after promotion | 1-3 | basis-safe reaction constants | keep MEA mapping local until a generic admitted contract exists |
-| Generic target dataset schema | Clean `ePC-SAFT/ePC-SAFT-regression` after promotion | 3 | generic regression data input | MEA maps frozen rows locally; no clean production schema is admitted yet |
-| Exact CppAD residual Jacobians | Clean provider plus regression owners after promotion | 3 | native regression derivatives | required before coupled pressure/speciation execution is admitted |
-| Generic implicit solved-state sensitivities | Clean provider owner after promotion | 2-3 | speciation/VLE/regression derivatives | do not reimplement in MEA or infer from historical lab scope |
-| Generic activity-based speciation solver | Current immutable 1.5.2 evidence; future clean owners | 2-3 | Phase 2 speciation | current MEA workflow consumes the pinned public symbols through `src/MEA/epcsaft_runtime.py` |
-| Generic VLE/fugacity equilibrium solver | Current immutable 1.5.2 evidence; future clean owners | 2-3 | pressure calculations | current fixed-evaluation workflow consumes the pinned reactive electrolyte bubble support |
-| Generic regression backend | Clean `ePC-SAFT/ePC-SAFT-regression` after promotion | 3 | coupled regression | migration stage approval and immutable clean capability evidence are absent; Phase 3 execution stays blocked |
-| Literature and installed-artifact acceptance | Clean `ePC-SAFT/ePC-SAFT-validation` after promotion | 2-3 | package confidence | MEA owns only MEA-specific validation and final pinned-source checks |
+## Required upstream sequence
 
-## Immutable Phase 2 evaluation inspection on 2026-05-15
+1. Finish the current Engine hard cutover and produce one immutable wheel.
+2. Admit the source-neutral fixed-T,P homogeneous reactive Observation Family in Engine #30.
+3. Admit the fixed-topology reactive bubble/VLE Observation Family in Engine #31.
+4. Consume those families from MEA with exact Data-packet, wheel, parameter, topology, reference, and domain fingerprints.
 
-The current MEA environment imports `epcsaft` version `1.5.2` from a stable pinned Git dependency. This is immutable historical evaluation evidence, not proof that the lab owns future clean production:
+Issue #30 must expose certified local reacting-state values and exact total selected-parameter Jacobians with typed non-evaluable trials. Issue #31 must couple reaction equilibrium and phase equilibrium, use EOS fugacities for caller-declared neutral vapor species, preserve phase and branch identity, and state its local/global certificate scope.
 
-`epcsaft @ git+https://github.com/tannerpolley/ePC-SAFT.git@9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785`
+## MEA responsibilities
 
-`uv run python scripts/check_epcsaft_integration.py --mode stable` and `--mode final` report `source kind: pinned_git` at commit `9f51afd0f9c11a6497ddca05c8b2dd0ea0ffa785`.
+- curate the nine species, five reactions, source standard states, and reaction-correlation sources;
+- preserve direct, aggregate, calibration-derived, model-derived, and censored observation roles;
+- freeze campaign-blocked cross-validation and the later all-admissible-data refit;
+- provide source-valued molecular moments and induced-association topology records;
+- decide the discrete relative-permittivity and Born formulation;
+- choose staged active parameter blocks, scales, bounds, priors, and scientific promotion gates;
+- generate figures, uncertainty evidence, and manuscript claims only from accepted results.
 
-| Issue #5 capability | Current package status | Phase 2 action |
-|---|---|---|
-| Generic activity-based speciation | Present and used by Phase 2 through the native reactive electrolyte solver path. Current MEA Phase 2 artifacts record `model_ran_success`. | Keep residual validation in MEA-owned `phase2_residual_acceptance_audit.csv`; do not collapse validation outcomes into solver-run status. |
-| Generic VLE/fugacity equilibrium | Present: `electrolyte_bubble` and `ElectrolyteBubbleResult` are importable; package capabilities list reactive electrolyte bubble pressure for fixed liquid composition with neutral vapor species. | Use for volatile `CO2`, `H2O`, and `MEA`; ions remain liquid-only. |
-| Reaction constant convention layer | Partial: `ReactionDefinition` accepts `standard_state` and convention metadata; no `ReactionSet` symbol is exposed. | Keep MEA reaction-source mapping local and block unsupported apparent-to-activity conversion. |
-| Implicit solved-state sensitivities | Partial: package capabilities report production speciation implicit sensitivities, but bubble-pressure implicit sensitivities are still unavailable. | Do not claim Phase 3-quality coupled derivative coverage from Phase 2. |
-| Generic TargetDataset schema | Present: `TargetDataset`, `ReactiveElectrolyteBatch`, `ReactiveElectrolyteRow`, and `ReactiveRegressionObjective` are importable. | Use for future target-row construction; keep MEA data ownership downstream. |
-| Generic regression backend | Present but not a Phase 2 claim: reactive electrolyte batch regression status fields are exposed, while current MEA global artifacts still show package fit not completed. | Keep Phase 3 regression blocked until a coupled package fit passes approval gates. |
+## Do not implement downstream
 
-## Do not implement in MEA-Thermodynamics
+- residual Helmholtz equations or polar, association, dielectric, Debye–Hückel, or Born kernels;
+- generic chemical- or phase-equilibrium algorithms;
+- implicit solved-state derivative plumbing;
+- a second application-owned optimizer;
+- compatibility imports, sibling-source discovery, numeric failure penalties presented as observations, or MEA-specific Engine branches.
 
-- residual Helmholtz equation internals,
-- CppAD derivative plumbing,
-- generic equilibrium solver internals,
-- generic regression optimizer internals,
-- generic TargetRow schema implementation,
-- generic Ceres backend implementation.
-
-## Do implement in MEA-Thermodynamics
-
-- MEA data curation,
-- MEA reaction network selection,
-- MEA source manifests,
-- MEA figure generation,
-- MEA manuscript text,
-- MEA phase-specific workflow scripts,
-- MEA-specific wrappers around generic APIs if useful.
-
-## Current dependency status
-
-The repo has an explicit integration contract at `integration/epcsaft_contract.json` and a checker at `scripts/check_epcsaft_integration.py`.
-
-Current local validation uses the stable-mode pinned Git dependency in `pyproject.toml` and `uv.lock`; routine downstream validation must not resolve through a mutable sibling checkout. See `docs/roadmaps/reproducibility_dependency_note.md`.
-
-New clean-package co-development requires a stage-approved migration transfer plan and an explicit worktree outside this repository. The clean regression repository is currently a governance-only skeleton, so no development checkout or clean capability can yet satisfy Issue #12.
-
-Current 2026-05-15 status: stable integration validation passes against the pinned Git dependency. Final manuscript or archive results still require final-mode validation, but they no longer depend on a mutable local package path.
-
-Phase status:
-
-- Phase 1: can proceed with repo-owned data and existing baseline scripts; it must not depend on unavailable package features.
-- Phase 2: depends on generic activity-based speciation and reactive VLE/fugacity support from `epcsaft`.
-- Phase 3: depends on a stage-approved clean regression slice, exact residual Jacobians, a production native Ceres loop, structured diagnostics, and an immutable installed-artifact receipt. Until then, `upstream_execution_admitted` remains false.
-
-Do not request MEA-specific public APIs from `epcsaft`; convert recurring needs into generic reaction, equilibrium, target-dataset, or regression capabilities.
+The current executable regression boundary is intentionally narrower than the planned model. See `predictive_reactive_vle_regression.md` and the machine-readable contracts under `data/reference/MEA/manifests/`.
