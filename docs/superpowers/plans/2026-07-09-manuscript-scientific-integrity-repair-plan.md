@@ -6,7 +6,7 @@
 
 **Architecture:** A pure-data reaction catalog becomes the single chemistry source for activity-based workflows, while a separate acceptance module owns solver-result admissibility. Canonical result tables live under each analysis `results/` root; figure folders retain only plotted snapshots and render artifacts with upstream hashes. The manuscript is cut over to the verified Phase 2 fixed-parameter campaign and generated/validated from pinned code and data.
 
-**Tech Stack:** Python 3.13, `uv`, `unittest`, NumPy, pandas, pinned `epcsaft` 1.5.2, Matplotlib, Ruff, Bash, LaTeX/`latexmk`, GitHub Actions.
+**Tech Stack:** Python 3.13, `uv`, `unittest`, NumPy, pandas, pinned `epcsaft` 1.5.2, Matplotlib, Ruff, Bash, LaTeX/`latexmk`.
 
 ## Global Constraints
 

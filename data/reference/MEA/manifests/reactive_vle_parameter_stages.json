@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "identity": "mea-reactive-vle-parameter-stages-v1",
+  "execution_issue": "https://github.com/tannerpolley/MEA-Thermodynamics/issues/53",
+  "execution_status": "PREPARATION_ONLY_NO_REACTIVE_FIT_ADMITTED",
+  "temperature_domain": {
+    "planned_first_joint_qualification_K": [
+      313.15,
+      353.15
+    ],
+    "current_R4_R5_source_domain_K": [
+      293.15,
+      323.15
+    ],
+    "low_temperature_support": "Below 313.15 K; speciation support without matching admitted pCO2 coverage, but still inside the current R4/R5 source domain where applicable.",
+    "reaction_domain_extension": "323.15-353.15 K data enter the joint fit only after S5 qualifies new R4/R5 coefficients over that domain.",
+    "high_temperature_challenge": "Above 353.15 K; withheld from the first joint fit until reaction-correlation and model domains are qualified."
+  },
+  "selection_policy": {
+    "model_selection": "Five-fold campaign-blocked cross-validation over every admissible row after source-backed residual scales and immutable packet identity are frozen; current rows are candidate partitions only.",
+    "final_estimation": "After model form and active coordinates are frozen, refit on all admissible in-domain rows.",
+    "claim_boundary": "Cross-validation supports transfer assessment; all-data residuals support calibration assessment only.",
+    "residual_scaling": "Use source uncertainty in the reported basis. When unavailable, acquire or preregister a source/method-backed scale before execution; do not tune scales against fit quality.",
+    "acceptance": "Assess pCO2, speciation, volumetric, dielectric, and activity families separately; no single aggregate objective can promote a model.",
+    "uncertainty": "Use rank and conditioning first, then profile likelihoods and campaign-blocked bootstrap where computationally feasible."
+  },
+  "stages": [
+    {
+      "stage_id": "S0",
+      "name": "Freeze data and Engine identities",
+      "active_coordinates": [],
+      "data": "Canonical source rows, measurement roles, campaign blocks, reaction sources, and immutable Data-packet and Engine-wheel identities.",
+      "gate": "No unresolved basis, model-derived target, unbounded censor, duplicate derivative, mutable sibling import, or unhashed source file."
+    },
+    {
+      "stage_id": "S1",
+      "name": "Requalify neutral pure components by polar configuration",
+      "active_coordinates": [
+        "CO2/H2O/MEA segment_count",
+        "CO2/H2O/MEA segment_diameter",
+        "CO2/H2O/MEA dispersion_energy_over_k",
+        "source-justified fixed-topology association energy and volume"
+      ],
+      "fixed": [
+        "physical dipole and quadrupole moments",
+        "ionic parameters",
+        "reaction correlations",
+        "Born and relative-permittivity formulation"
+      ],
+      "data": "Pure saturation and fixed-state pressure-at-measured-density observations, grouped by source and temperature.",
+      "gate": "BLOCKED until the pure-MEA measurement package and source-fixed moment records are complete; refit separately for every polar configuration to avoid double counting."
+    },
+    {
+      "stage_id": "S2",
+      "name": "Fit neutral binary interactions and test induced association",
+      "active_coordinates": [
+        "one k_ij at a time for MEA-H2O, CO2-H2O, and CO2-MEA",
+        "l_ij only when profile rank supports it",
+        "one k_hb_ij correction only after source-fixed induced-association topology is qualified"
+      ],
+      "fixed": [
+        "S1 pure parameters",
+        "physical moments",
+        "ionic parameters",
+        "reaction correlations"
+      ],
+      "data": "Binary MEA-H2O VLE, physical CO2 solubility, neutral mixture density, and association-sensitive evidence.",
+      "gate": "Phase-equilibrium observations are not admitted by current Engine Regression. Never fit k_ij and k_hb_ij for the same pair without profile-identifiability evidence."
+    },
+    {
+      "stage_id": "S3",
+      "name": "Certify the homogeneous reactive tracer",
+      "active_coordinates": [],
+      "fixed": "All parameters and reaction correlations from the selected neutral configuration.",
+      "data": "Admissible fixed-T,P speciation and neutral-fugacity tracer rows.",
+      "gate": "BLOCKED_BY_epcsaft_issue_30; requires certified local homogeneous equilibrium and exact total selected-parameter sensitivities. This stage is not VLE evidence."
+    },
+    {
+      "stage_id": "S4",
+      "name": "Constrain the target ionic pair",
+      "active_coordinates": [
+        "MEAH+ segment_diameter",
+        "MEACOO- segment_diameter",
+        "MEAH+ dispersion_energy_over_k only if profiles separate it from size"
+      ],
+      "fixed": [
+        "MEAH+/MEACOO- segment_count",
+        "MEAH+/MEACOO- Born diameter",
+        "relative-permittivity parameters",
+        "trace-ion parameters",
+        "reaction correlations"
+      ],
+      "data": "Direct and aggregate speciation plus source-qualified same-state volumetric evidence; analog salts remain analog constraints.",
+      "gate": "Require exact counterion ownership, source-backed priors where needed, full-rank Jacobian, acceptable conditioning, and profile-likelihood support."
+    },
+    {
+      "stage_id": "S5",
+      "name": "Re-estimate carbamate and protonation reaction correlations",
+      "active_coordinates": [
+        "R4 A/B/C/D candidate coefficients",
+        "R5 A/B/C/D candidate coefficients"
+      ],
+      "fixed": [
+        "R1-R3 source correlations",
+        "selected EOS, association, ionic, Born, and permittivity parameters"
+      ],
+      "data": "Grouped multi-temperature direct or declared aggregate speciation, calibrated equilibrium pH when acquired, and pCO2.",
+      "gate": "Activate only the coefficient subset supported by rank and profiles. Do not use delta offsets. Current R4/R5 source domains end at 323.15 K; qualifying new coefficients through 353.15 K is a prerequisite for using the 333.15 K and 353.15 K observations in the joint fit."
+    },
+    {
+      "stage_id": "S6",
+      "name": "Fit true reactive bubble and VLE observations",
+      "active_coordinates": "Only the smallest unresolved block identified by S1-S5 profiles; never reopen every parameter family together.",
+      "fixed": "Frozen model configuration and all previously qualified parameter blocks.",
+      "data": "Admissible pCO2, total pressure or vapor composition when direct, and same-state speciation across the qualified domain.",
+      "gate": "BLOCKED_BY_epcsaft_issue_31; require coupled reaction and phase-equilibrium certificates, EOS vapor fugacities for neutral CO2/H2O/MEA, exact total Jacobians, and typed non-evaluable trials."
+    },
+    {
+      "stage_id": "S7",
+      "name": "Select, refit, quantify uncertainty, and promote",
+      "active_coordinates": "Frozen after campaign-blocked selection.",
+      "data": "All admissible in-domain observations for the final refit after cross-validated model selection.",
+      "gate": "Require all-row accounting, campaign-blocked residual structure, multistart agreement, no unsupported active bounds, rank and conditioning, profile likelihoods, campaign-blocked bootstrap where feasible, immutable packet and wheel fingerprints, and one promoted primary parameter set."
+    }
+  ],
+  "global_rules": [
+    "Loading is a state input, never a fitted observation.",
+    "Heat of absorption remains excluded until a source-complete definition and Engine observation family exist.",
+    "No generic numeric failure penalty may be reported as an evaluated model residual.",
+    "No regularization is admitted without a named source-backed prior identity and scale.",
+    "The manuscript remains unchanged until the final predictive gates pass."
+  ]
+}
