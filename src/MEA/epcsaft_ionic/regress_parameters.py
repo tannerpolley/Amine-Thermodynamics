@@ -97,6 +97,10 @@ def _write_package_tables(epcsaft: Any, result: Any, output_dir: Path) -> list[P
 
 
 def run_regression(args: argparse.Namespace) -> dict[str, object]:
+    raise RuntimeError(
+        "This pre-unification regression entrypoint is retired. Use the installed "
+        "unified Engine's epcsaft.regression.fit with typed Equilibrium observations."
+    )
     problem = native_regression.build_native_regression_problem(
         max_pressure_records=args.max_vle_records,
         max_speciation_records=args.max_speciation_records,

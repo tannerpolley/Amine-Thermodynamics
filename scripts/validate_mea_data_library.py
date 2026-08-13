@@ -162,8 +162,12 @@ def _resolve_source_file(source_file: str, observation_family: str) -> Path:
     declared = ROOT / source_file
     if not declared.is_file() and Path(source_file).name == source_file:
         declared = family_root / source_file
-    if not declared.is_file() or not declared.resolve().is_relative_to(family_root.resolve()):
-        raise ValueError(f"Source file does not exist in its declared observation family: {source_file}")
+    if not declared.is_file() or not declared.resolve().is_relative_to(
+        family_root.resolve()
+    ):
+        raise ValueError(
+            f"Source file does not exist in its declared observation family: {source_file}"
+        )
     return declared
 
 
@@ -181,18 +185,30 @@ def _domain_role(temperature_c: str) -> str:
 def cross_validation_rows() -> list[dict[str, str]]:
     vle_rows = {
         row["observation_id"]: row
-        for row in _read_dicts(LIBRARY / "observations" / "vapor_liquid_equilibrium" / "Canonical_VLE_Observations.csv")
+        for row in _read_dicts(
+            LIBRARY
+            / "observations"
+            / "vapor_liquid_equilibrium"
+            / "Canonical_VLE_Observations.csv"
+        )
     }
     speciation_rows = {
         row["record_id"]: row
-        for row in _read_dicts(LIBRARY / "observations" / "liquid_speciation" / "Canonical_Combined_ChEq.csv")
+        for row in _read_dicts(
+            LIBRARY
+            / "observations"
+            / "liquid_speciation"
+            / "Canonical_Combined_ChEq.csv"
+        )
     }
     rows: list[dict[str, str]] = []
     for metrology in _read_dicts(LIBRARY / "manifests" / "pco2_metrology_manifest.csv"):
         if metrology["target_eligible"] != "yes":
             continue
         observation = vle_rows[metrology["observation_id"]]
-        source_path = _resolve_source_file(observation["source_file"], "vapor_liquid_equilibrium")
+        source_path = _resolve_source_file(
+            observation["source_file"], "vapor_liquid_equilibrium"
+        )
         temperature_c = observation["temperature_reported_C"]
         rows.append(
             {
@@ -223,10 +239,14 @@ def cross_validation_rows() -> list[dict[str, str]]:
                 "admission_blockers": "residual_scale_missing;immutable_data_packet_missing",
             }
         )
-    for membership in _read_dicts(LIBRARY / "manifests" / "speciation_target_membership.csv"):
+    for membership in _read_dicts(
+        LIBRARY / "manifests" / "speciation_target_membership.csv"
+    ):
         if membership["target_eligible"] != "yes":
             continue
-        source_path = _resolve_source_file(membership["source_file"], "liquid_speciation")
+        source_path = _resolve_source_file(
+            membership["source_file"], "liquid_speciation"
+        )
         measurement = speciation_rows[membership["measurement_identity"]]
         temperature_c = membership["temperature_C"]
         rows.append(
@@ -242,14 +262,18 @@ def cross_validation_rows() -> list[dict[str, str]]:
                 "temperature_reported_C": temperature_c,
                 "temperature_conversion": "canonical_source_temperature_K",
                 "mea_mass_fraction": membership["mea_mass_fraction"],
-                "co2_loading_mol_per_mol_mea": membership["co2_loading_mol_per_mol_mea"],
+                "co2_loading_mol_per_mol_mea": membership[
+                    "co2_loading_mol_per_mol_mea"
+                ],
                 "measurement_role": membership["measurement_role"],
                 "measurement_identity": membership["measurement_identity"],
                 "observed_value": measurement["reported_value"],
                 "reported_basis": membership["reported_basis"],
                 "linear_coefficients": membership["linear_coefficients"],
                 "state_pressure_pa": (
-                    f"{float(measurement['pressure_bar']) * 100000:.12g}" if measurement["pressure_bar"] else ""
+                    f"{float(measurement['pressure_bar']) * 100000:.12g}"
+                    if measurement["pressure_bar"]
+                    else ""
                 ),
                 "uncertainty_status": "source_uncertainty_not_bound_in_membership_contract",
                 "covariance_status": membership["covariance_status"],
@@ -268,18 +292,25 @@ def cross_validation_rows() -> list[dict[str, str]]:
     group_fold: dict[str, int] = {}
     for family in sorted({row["observable_family"] for row in rows}):
         grouped = Counter(
-            row["campaign_block_id"] for row in rows if row["observable_family"] == family
+            row["campaign_block_id"]
+            for row in rows
+            if row["observable_family"] == family
         )
         fold_load = [0] * 5
-        for group, size in sorted(grouped.items(), key=lambda item: (-item[1], item[0])):
-            fold = min(range(5), key=lambda candidate: (fold_load[candidate], candidate))
+        for group, size in sorted(
+            grouped.items(), key=lambda item: (-item[1], item[0])
+        ):
+            fold = min(
+                range(5), key=lambda candidate: (fold_load[candidate], candidate)
+            )
             group_fold[group] = fold + 1
             fold_load[fold] += size
     for row in rows:
         row["cross_validation_fold"] = f"fold_{group_fold[row['campaign_block_id']]}"
         row["model_selection_role"] = (
             "candidate_partition_only_pending_residual_scale"
-            if row["domain_role"] in {"low_temperature_support", "current_R4_R5_source_domain"}
+            if row["domain_role"]
+            in {"low_temperature_support", "current_R4_R5_source_domain"}
             else "non_scoring_domain_extension"
         )
         row["final_fit_role"] = {
@@ -288,12 +319,16 @@ def cross_validation_rows() -> list[dict[str, str]]:
             "planned_absorber_domain_requires_R4_R5_extension": "after_R4_R5_domain_extension",
             "high_temperature_challenge": "future_high_temperature_extension",
         }[row["domain_role"]]
-    return sorted(rows, key=lambda row: (row["observable_family"], row["observation_id"]))
+    return sorted(
+        rows, key=lambda row: (row["observable_family"], row["observation_id"])
+    )
 
 
 def cross_validation_bytes() -> bytes:
     stream = io.StringIO(newline="")
-    writer = csv.DictWriter(stream, fieldnames=CROSS_VALIDATION_FIELDS, lineterminator="\n")
+    writer = csv.DictWriter(
+        stream, fieldnames=CROSS_VALIDATION_FIELDS, lineterminator="\n"
+    )
     writer.writeheader()
     writer.writerows(cross_validation_rows())
     return stream.getvalue().encode()
@@ -308,23 +343,56 @@ def validate() -> list[str]:
     if not INVENTORY.is_file():
         errors.append(f"Missing generated inventory: {INVENTORY.relative_to(ROOT)}")
     elif INVENTORY.read_bytes() != inventory_bytes():
-        errors.append("data_library_inventory.csv is stale; run this script with --write")
+        errors.append(
+            "data_library_inventory.csv is stale; run this script with --write"
+        )
 
     for relative, expected in EXPECTED_ROWS.items():
         path = LIBRARY / relative
         if not path.is_file():
             errors.append(f"Missing row-count sentinel: {relative}")
         elif _csv_rows(path) != expected:
-            errors.append(f"Scientific row-count drift in {relative}: expected {expected}, found {_csv_rows(path)}")
+            errors.append(
+                f"Scientific row-count drift in {relative}: expected {expected}, found {_csv_rows(path)}"
+            )
 
     if not MODEL_CONFIGURATIONS.is_file():
         errors.append("Missing predictive reactive-VLE model-configuration contract")
     else:
         configurations = json.loads(MODEL_CONFIGURATIONS.read_text(encoding="utf-8"))
-        if configurations.get("execution_status") != "UPSTREAM_OBSERVATION_FAMILIES_BLOCKED":
-            errors.append("Model-configuration contract does not fail closed on the current Engine boundary")
-        if len(configurations.get("polar_configurations", [])) != 4:
-            errors.append("Model-configuration contract must define the four factorized polar comparisons")
+        if (
+            configurations.get("execution_status")
+            != "ENGINE_OBSERVATIONS_ADMITTED_APPLICATION_INPUTS_INCOMPLETE"
+        ):
+            errors.append(
+                "Model-configuration contract must distinguish admitted Engine "
+                "support from incomplete application inputs"
+            )
+        variants = configurations.get("configurations", [])
+        variant_ids = [variant.get("configuration_id") for variant in variants]
+        if variant_ids != [f"M{index}" for index in range(6)]:
+            errors.append(
+                f"Model-configuration identities must be nested M0 through M5: {variant_ids}"
+            )
+        expected_polar_terms = (
+            (),
+            ("CO2_QQ",),
+            ("CO2_QQ", "MEA_DD", "H2O_DD"),
+            ("CO2_QQ", "MEA_DD", "H2O_DD", "ALL_DECLARED_DQ"),
+            ("CO2_QQ", "MEA_DD", "H2O_DD", "ALL_DECLARED_DQ"),
+            ("CO2_QQ", "MEA_DD", "H2O_DD", "ALL_DECLARED_DQ"),
+        )
+        if (
+            tuple(tuple(variant.get("polar_terms", ())) for variant in variants)
+            != expected_polar_terms
+        ):
+            errors.append(
+                "M0-M5 polar contributions are not the declared nested hierarchy"
+            )
+        if any(variant.get("promotion_eligible") is not False for variant in variants):
+            errors.append(
+                "No M0-M5 variant may be promotion-eligible before row admission"
+            )
 
     if not PARAMETER_STAGES.is_file():
         errors.append("Missing predictive reactive-VLE parameter-stage contract")
@@ -332,64 +400,124 @@ def validate() -> list[str]:
         stages = json.loads(PARAMETER_STAGES.read_text(encoding="utf-8"))
         stage_ids = [stage["stage_id"] for stage in stages.get("stages", [])]
         if stage_ids != [f"S{index}" for index in range(8)]:
-            errors.append(f"Parameter-stage identities must be S0 through S7 in order: {stage_ids}")
+            errors.append(
+                f"Parameter-stage identities must be S0 through S7 in order: {stage_ids}"
+            )
 
     if not CROSS_VALIDATION.is_file():
         errors.append("Missing campaign-blocked reactive-VLE cross-validation manifest")
     elif CROSS_VALIDATION.read_bytes() != cross_validation_bytes():
-        errors.append("reactive_vle_cross_validation.csv is stale; run this script with --write")
+        errors.append(
+            "reactive_vle_cross_validation.csv is stale; run this script with --write"
+        )
     else:
         cross_validation = _read_dicts(CROSS_VALIDATION)
         family_counts = Counter(row["observable_family"] for row in cross_validation)
         if family_counts != Counter({"speciation": 198, "pco2": 121}):
-            errors.append(f"Admissible reactive-observation count drift: {dict(family_counts)}")
-        if any(not row["source_locator"] or not row["source_file_sha256"] for row in cross_validation):
-            errors.append("Every cross-validation row must retain a source locator and source-file hash")
-        if any(not row["observed_value"] or not row["reported_basis"] for row in cross_validation):
-            errors.append("Every cross-validation row must retain the observed value and reported basis")
-        if any(row["model_selection_role"] == "campaign_blocked_cross_validation" for row in cross_validation):
-            errors.append("Candidate observations cannot become scoring rows before residual scales are frozen")
-        if any(row["admission_status"] != "candidate_not_executable" for row in cross_validation):
-            errors.append("Cross-validation candidates cannot be marked executable before admission gates close")
+            errors.append(
+                f"Admissible reactive-observation count drift: {dict(family_counts)}"
+            )
+        if any(
+            not row["source_locator"] or not row["source_file_sha256"]
+            for row in cross_validation
+        ):
+            errors.append(
+                "Every cross-validation row must retain a source locator and source-file hash"
+            )
+        if any(
+            not row["observed_value"] or not row["reported_basis"]
+            for row in cross_validation
+        ):
+            errors.append(
+                "Every cross-validation row must retain the observed value and reported basis"
+            )
+        if any(
+            row["model_selection_role"] == "campaign_blocked_cross_validation"
+            for row in cross_validation
+        ):
+            errors.append(
+                "Candidate observations cannot become scoring rows before residual scales are frozen"
+            )
+        if any(
+            row["admission_status"] != "candidate_not_executable"
+            for row in cross_validation
+        ):
+            errors.append(
+                "Cross-validation candidates cannot be marked executable before admission gates close"
+            )
         group_folds: dict[str, set[str]] = {}
         for row in cross_validation:
-            group_folds.setdefault(row["campaign_block_id"], set()).add(row["cross_validation_fold"])
-        leaking = sorted(group for group, folds in group_folds.items() if len(folds) != 1)
+            group_folds.setdefault(row["campaign_block_id"], set()).add(
+                row["cross_validation_fold"]
+            )
+        leaking = sorted(
+            group for group, folds in group_folds.items() if len(folds) != 1
+        )
         if leaking:
-            errors.append(f"Campaign blocks leak across cross-validation folds: {leaking}")
+            errors.append(
+                f"Campaign blocks leak across cross-validation folds: {leaking}"
+            )
         family_folds = {
-            family: {row["cross_validation_fold"] for row in cross_validation if row["observable_family"] == family}
+            family: {
+                row["cross_validation_fold"]
+                for row in cross_validation
+                if row["observable_family"] == family
+            }
             for family in family_counts
         }
         expected_folds = {f"fold_{index}" for index in range(1, 6)}
-        incomplete_families = {family: folds for family, folds in family_folds.items() if folds != expected_folds}
+        incomplete_families = {
+            family: folds
+            for family, folds in family_folds.items()
+            if folds != expected_folds
+        }
         if incomplete_families:
-            errors.append(f"Every observable family must span all five campaign folds: {incomplete_families}")
+            errors.append(
+                f"Every observable family must span all five campaign folds: {incomplete_families}"
+            )
 
     split = _read_dicts(LIBRARY / "manifests" / "grouped_split_manifest.csv")
     split_roles = Counter(row["role"] for row in split)
     if split_roles != Counter({"active_training": 147, "reserved_validation": 220}):
         errors.append(f"Frozen regression split drift: {dict(split_roles)}")
-    volumetric_split = _read_dicts(LIBRARY / "manifests" / "volumetric_grouped_split_manifest.csv")
+    volumetric_split = _read_dicts(
+        LIBRARY / "manifests" / "volumetric_grouped_split_manifest.csv"
+    )
     volumetric_roles = Counter(row["role"] for row in volumetric_split)
     if volumetric_roles != Counter({"future_training": 153, "reserved_validation": 78}):
         errors.append(f"Frozen volumetric split drift: {dict(volumetric_roles)}")
 
     receipts = {
-        row["archive_id"]: (row["sha256"], row["artifact_count"], row["principal_row_ledger_rows"])
-        for row in _read_dicts(LIBRARY / "quarantine" / "chatgpt_audits" / "archive_receipts.csv")
+        row["archive_id"]: (
+            row["sha256"],
+            row["artifact_count"],
+            row["principal_row_ledger_rows"],
+        )
+        for row in _read_dicts(
+            LIBRARY / "quarantine" / "chatgpt_audits" / "archive_receipts.csv"
+        )
     }
     if receipts != ARCHIVE_RECEIPTS:
-        errors.append("Quarantine archive receipts do not match the supplied ZIP hashes and artifact counts")
+        errors.append(
+            "Quarantine archive receipts do not match the supplied ZIP hashes and artifact counts"
+        )
 
     audit_root = LIBRARY / "quarantine" / "chatgpt_audits"
     audit_a = audit_root / "audit_2026-07-23_a"
     for row in _read_dicts(audit_a / "mea_epcsaft_manifest_sha256.csv"):
         artifact = audit_a / row["artifact_filename"]
-        if not artifact.is_file() or _sha256(artifact) != row["sha256"] or str(artifact.stat().st_size) != row["bytes"]:
-            errors.append(f"Audit A artifact integrity failure: {row['artifact_filename']}")
+        if (
+            not artifact.is_file()
+            or _sha256(artifact) != row["sha256"]
+            or str(artifact.stat().st_size) != row["bytes"]
+        ):
+            errors.append(
+                f"Audit A artifact integrity failure: {row['artifact_filename']}"
+            )
     audit_b = audit_root / "audit_2026-07-23_b"
-    audit_b_manifest = json.loads((audit_b / "manifest.json").read_text(encoding="utf-8"))
+    audit_b_manifest = json.loads(
+        (audit_b / "manifest.json").read_text(encoding="utf-8")
+    )
     for row in audit_b_manifest["files"]:
         artifact = audit_b / row["path"]
         if (
@@ -404,10 +532,13 @@ def validate() -> list[str]:
         admitted_quarantine = [
             row["path"]
             for row in inventory
-            if row["library_tier"] == "quarantine" and row["regression_admission"] != "prohibited"
+            if row["library_tier"] == "quarantine"
+            and row["regression_admission"] != "prohibited"
         ]
         if admitted_quarantine:
-            errors.append(f"Quarantine artifacts escaped zero-admission policy: {admitted_quarantine}")
+            errors.append(
+                f"Quarantine artifacts escaped zero-admission policy: {admitted_quarantine}"
+            )
 
     quarantine = LIBRARY / "quarantine"
     for path in ROOT.rglob("*"):
@@ -421,20 +552,32 @@ def validate() -> list[str]:
         text = path.read_text(encoding="utf-8", errors="ignore")
         for stale in STALE_PATHS:
             if stale in text:
-                errors.append(f"Stale evidence path {stale!r} in {path.relative_to(ROOT)}")
+                errors.append(
+                    f"Stale evidence path {stale!r} in {path.relative_to(ROOT)}"
+                )
 
     return errors
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build or validate the MEA evidence-library inventory.")
-    parser.add_argument("--write", action="store_true", help="Regenerate the machine-readable file inventory.")
+    parser = argparse.ArgumentParser(
+        description="Build or validate the MEA evidence-library inventory."
+    )
+    parser.add_argument(
+        "--write",
+        action="store_true",
+        help="Regenerate the machine-readable file inventory.",
+    )
     args = parser.parse_args()
     if args.write:
         CROSS_VALIDATION.write_bytes(cross_validation_bytes())
         INVENTORY.write_bytes(inventory_bytes())
-        print(f"Wrote {CROSS_VALIDATION.relative_to(ROOT)} with {len(cross_validation_rows())} observations.")
-        print(f"Wrote {INVENTORY.relative_to(ROOT)} with {len(inventory_rows())} artifacts.")
+        print(
+            f"Wrote {CROSS_VALIDATION.relative_to(ROOT)} with {len(cross_validation_rows())} observations."
+        )
+        print(
+            f"Wrote {INVENTORY.relative_to(ROOT)} with {len(inventory_rows())} artifacts."
+        )
     errors = validate()
     if errors:
         for error in errors:

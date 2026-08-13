@@ -2,26 +2,32 @@ from __future__ import annotations
 
 import csv
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
-from typing import Any
-
 import numpy as np
 
-from MEA.common.config import REPO_ROOT
 from MEA.common.mea_source_contracts import (
     common_source_ln_k,
     load_reaction_contract,
-    load_sentinel_contract,
 )
 from MEA.epcsaft_ionic.preregistration import load_gate0_preregistration
+from MEA.epcsaft_ionic.parameter_document import (
+    COMPONENT_IDS,
+    PARAMETER_ROOT,
+    load_parameters,
+)
 
 
 @dataclass(frozen=True)
 class ReducedTracerInput:
-    """The source-bound evaluator handle and numerical contract for Gate 0."""
+    """Source-bound CAP-12 problem and numerical contract for Gate 0."""
 
-    evaluator: Any
+    parameters: object
+    problem: object
+    rows: tuple[object, ...]
+    active_parameter_identities: tuple[str, str]
+    temperature_k: float
+    pressure_pa: float
     observed_values: tuple[float, float]
     natural_log_scales: tuple[float, float]
     affine_origins: tuple[float, float]
@@ -48,7 +54,7 @@ def _reaction_consistent_molar_masses(
             row["component_id"]: float(row["value"])
             for row in csv.DictReader(handle)
             if row["family"] == "molar_mass"
-    }
+        }
     if set(records) != set(component_ids):
         raise ValueError("Engine bundle does not contain one molar mass per component")
     reported = np.asarray(
@@ -60,6 +66,15 @@ def _reaction_consistent_molar_masses(
     return tuple(float(value) for value in projected)
 
 
+def _reported_molar_masses(bundle: Path) -> dict[str, float]:
+    with (bundle / "single.csv").open(newline="", encoding="utf-8") as handle:
+        return {
+            row["component_id"]: float(row["value"])
+            for row in csv.DictReader(handle)
+            if row["family"] == "molar_mass"
+        }
+
+
 def build_reduced_tracer_input() -> ReducedTracerInput:
     """Build the two-row homogeneous-liquid evaluator from frozen MEA inputs."""
 
@@ -68,27 +83,20 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
 
     preregistration = load_gate0_preregistration()
     reaction_contract = load_reaction_contract()
-    sentinel_contract = load_sentinel_contract()
 
     tracer = preregistration["tracer"]
     observations = tracer["observations"]
     coordinates = tracer["active_coordinates"]
     temperature_k = float(observations[0]["temperature_k"])
     pressure_pa = float(observations[0]["state_pressure_pa"])
-    if (
-        temperature_k != float(observations[1]["temperature_k"])
-        or pressure_pa != float(observations[1]["evaluation_pressure_pa"])
+    if temperature_k != float(observations[1]["temperature_k"]) or pressure_pa != float(
+        observations[1]["evaluation_pressure_pa"]
     ):
         raise ValueError("reduced tracer rows do not share the frozen fixed state")
 
-    provider_input = sentinel_contract["provider_regression_input"]
-    immutable = provider_input["immutable_identities"]
-    component_ids = tuple(sentinel_contract["provider_component_order"])
-    bundle = REPO_ROOT / provider_input["bundle_path"]
-    parameters = epcsaft.Parameters.from_bundle(bundle, components=component_ids)
+    component_ids = COMPONENT_IDS
+    parameters = load_parameters()
     model = epcsaft.Mixture(parameters)
-    if model.parameter_fingerprint != immutable["parameter_fingerprint"]:
-        raise ValueError("installed Engine model differs from the frozen input")
 
     source_species = reaction_contract["species"]
     element_order = tuple(reaction_contract["balance_row_order"])
@@ -104,17 +112,28 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
     )
     loading = float(observations[0]["loading_mol_co2_per_mol_mea"])
     mass_fraction = float(observations[0]["mea_mass_fraction_unloaded"])
-    molar_mass = sentinel_contract["molar_mass_basis"]["values"]
+    molar_mass = _reported_molar_masses(PARAMETER_ROOT)
     water_amount = (
         (1.0 - mass_fraction)
         / mass_fraction
-        * float(molar_mass["MEA"])
-        / float(molar_mass["H2O"])
+        * molar_mass["monoethanolamine"]
+        / molar_mass["water"]
     )
-    feed_amounts = (loading, 1.0, water_amount, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    source_feed_amounts = (
+        loading,
+        1.0,
+        water_amount,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+    )
     conserved_totals = tuple(
         math.fsum(
-            row[index] * feed_amounts[index] for index in range(len(feed_amounts))
+            row[index] * source_feed_amounts[index]
+            for index in range(len(source_feed_amounts))
         )
         for row in balance_matrix
     )
@@ -131,28 +150,73 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
                 "source_standard_reference_pressure_pa"
             ]
         ),
-        source_reference_component_ids=("water",),
-        source_reference_solvent_composition=(1.0,),
-        source_reference_activity_convention_id=common["identity"],
+        source_reference_component_ids=component_ids,
+        source_reference_solvent_composition=(
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ),
+        source_reference_ion_pairs=(
+            epcsaft.SourceReferenceIonPair(
+                ("protonated-monoethanolamine", "carbamate-anion"), (1, 1)
+            ),
+            epcsaft.SourceReferenceIonPair(
+                ("protonated-monoethanolamine", "bicarbonate-anion"), (1, 1)
+            ),
+            epcsaft.SourceReferenceIonPair(
+                ("protonated-monoethanolamine", "carbonate-anion"), (2, 1)
+            ),
+            epcsaft.SourceReferenceIonPair(
+                ("protonated-monoethanolamine", "hydroxide-anion"), (1, 1)
+            ),
+            epcsaft.SourceReferenceIonPair(
+                ("hydronium-cation", "carbamate-anion"), (1, 1)
+            ),
+        ),
+        source_reference_phase="liquid",
+        source_reference_convention="molality-infinite-dilution",
+        source_reference_activity_convention_id="molality-infinite-dilution-v1",
         source_reference_standard_molality_mol_per_kg=float(
             common["solute_standard_molality_mol_per_kg"]
         ),
     )
     ln_k = common_source_ln_k(temperature_k, reaction_contract)
+    reaction_matrix = tuple(
+        tuple(float(value) for value in reaction["stoichiometry"])
+        for reaction in reaction_contract["reactions"]
+    )
+    # The source feed defines the conserved totals. The equivalent strictly
+    # positive seed below is generated only by declared reaction extents so
+    # CAP-13 can form its exact fixed-support derivative chart without an
+    # epsilon floor or changed material state.
+    seed_extents = (1.0e-5, 1.0e-4, 1.0e-5, -1.0e-5, -1.0e-5)
+    feed_amounts = tuple(
+        source_feed_amounts[species_index]
+        + math.fsum(
+            reaction_matrix[reaction_index][species_index] * extent
+            for reaction_index, extent in enumerate(seed_extents)
+        )
+        for species_index in range(len(source_feed_amounts))
+    )
+    if any(value <= 0.0 for value in feed_amounts):
+        raise ValueError("reaction-generated solver seed is not strictly positive")
     problem = equilibrium.ChemicalEquilibriumProblem(
         species_ids=component_ids,
         charges=tuple(int(species["charge"]) for species in source_species),
         molar_masses_kg_per_mol=_reaction_consistent_molar_masses(
-            bundle,
+            PARAMETER_ROOT,
             component_ids,
             elemental_balance_matrix,
         ),
         balance_matrix=balance_matrix,
         conserved_totals=conserved_totals,
-        reaction_matrix=tuple(
-            tuple(float(value) for value in reaction["stoichiometry"])
-            for reaction in reaction_contract["reactions"]
-        ),
+        reaction_matrix=reaction_matrix,
         feed_amounts_mol=feed_amounts,
         equilibrium_constants=tuple(
             equilibrium.ChemicalEquilibriumConstant(
@@ -167,83 +231,69 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
                 reaction_contract["reactions"], ln_k, strict=True
             )
         ),
-        strict_interior_amount_floor_mol=1.0e-18,
+        strict_interior_amount_floor_mol=1.0e-12,
         source_standard_state=standard_state,
     )
-    phase = equilibrium.ProviderPhase(
-        model=model,
-        expected_parameter_fingerprint=immutable["parameter_fingerprint"],
-        admissible_packing_fraction_interval=(1.0e-6, 0.74),
+    phase = equilibrium.ProviderPhase(model, (1.0e-6, 0.74))
+    unanchored = equilibrium.HomogeneousReactiveObservationProblem(
+        identity="mea-gate0-stage3-homogeneous-tracer",
+        phase_identity="mea-nine-species-liquid",
+        phase_role="liquid",
+        phase=phase,
+        reaction_system=problem,
+        continuation_identity="mea-gate0-local-liquid-branch",
+        branch_policy="local_certified_role_selected_state",
+    )
+    continuation_reference = equilibrium.certify_homogeneous_continuation_reference(
+        unanchored,
+        temperature_k * epcsaft.unit_registry.kelvin,
+        pressure_pa * epcsaft.unit_registry.pascal,
+        maximum_log_composition_distance=0.5,
+        maximum_log_volume_distance=0.5,
+    )
+    observation_problem = replace(
+        unanchored, continuation_reference=continuation_reference
     )
     rows = (
-        equilibrium.ChemicalObservationRow(
-            row_id=tracer["residual_vector"]["order"][0],
-            state_id=observations[0]["state_id"],
-            state_schema_id="fixed_TP_homogeneous_liquid_v1",
-            source_id=observations[0]["source_id"],
-            transform_id="natural_log",
-            temperature=temperature_k * epcsaft.unit_registry.kelvin,
-            pressure=pressure_pa * epcsaft.unit_registry.pascal,
-            problem=problem,
-            primitive=equilibrium.ChemicalObservationPrimitive(
-                kind="neutral_component_fugacity_pa",
-                component_id="carbon-dioxide",
-            ),
+        equilibrium.HomogeneousReactiveObservationRow(
+            tracer["residual_vector"]["order"][0],
+            "fugacity_pa",
+            (1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+            support="positive",
         ),
-        equilibrium.ChemicalObservationRow(
-            row_id=tracer["residual_vector"]["order"][1],
-            state_id=observations[1]["state_id"],
-            state_schema_id="fixed_TP_homogeneous_liquid_v1",
-            source_id=observations[1]["source_id"],
-            transform_id="natural_log",
-            temperature=temperature_k * epcsaft.unit_registry.kelvin,
-            pressure=pressure_pa * epcsaft.unit_registry.pascal,
-            problem=problem,
-            primitive=equilibrium.ChemicalObservationPrimitive(
-                kind="species_mole_fraction",
-                component_id="carbamate-anion",
-            ),
+        equilibrium.HomogeneousReactiveObservationRow(
+            tracer["residual_vector"]["order"][1],
+            "mole_fraction",
+            (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0),
+            support="positive",
         ),
     )
-    active_parameters = tuple(
-        equilibrium.ChemicalEquilibriumActiveParameter(
-            family="segment_diameter",
-            identity="component",
-            component_ids=(
-                (
-                    "protonated-monoethanolamine"
-                    if coordinate["identity"] == "MEAH+::sigma"
-                    else "carbamate-anion"
-                ),
-            ),
-            value=float(coordinate["start"]),
-            unit="angstrom",
-        )
-        for coordinate in coordinates
+    active_parameter_identities = (
+        "component/protonated-monoethanolamine/segment_diameter",
+        "component/carbamate-anion/segment_diameter",
     )
-    evaluator = equilibrium.chemical_observation_context(
-        phase,
-        rows=rows,
-        active_parameters=active_parameters,
+    active = epcsaft.ActiveParameterSet(parameters, active_parameter_identities)
+    equilibrium.homogeneous_reactive_observation_descriptor(
+        observation_problem, rows, active_parameters=active
     )
-    expected_parameter_ids = (
-        "segment_diameter;component;protonated-monoethanolamine",
-        "segment_diameter;component;carbamate-anion",
-    )
-    if evaluator.parameter_ids != expected_parameter_ids:
-        raise ValueError("installed evaluator changed the frozen parameter order")
     starts = tracer["numerical_acceptance"]["declared_starts"]
     return ReducedTracerInput(
-        evaluator=evaluator,
+        parameters=parameters,
+        problem=observation_problem,
+        rows=rows,
+        active_parameter_identities=active_parameter_identities,
+        temperature_k=temperature_k,
+        pressure_pa=pressure_pa,
         observed_values=tuple(float(row["observed_value"]) for row in observations),
         natural_log_scales=tuple(
-            float(row["residual_scale"]) * math.log(10.0)
-            for row in observations
+            float(row["residual_scale"]) * math.log(10.0) for row in observations
         ),
         affine_origins=tuple(float(row["affine_origin"]) for row in coordinates),
         affine_scales=tuple(float(row["affine_scale"]) for row in coordinates),
         lower_bounds=tuple(float(row["bounds"][0]) for row in coordinates),
         upper_bounds=tuple(float(row["bounds"][1]) for row in coordinates),
         primary_start=tuple(float(value) for value in starts[0]["parameter_values"]),
-        confirmation_start=tuple(float(value) for value in starts[1]["parameter_values"]),
+        confirmation_start=tuple(
+            float(value) for value in starts[1]["parameter_values"]
+        ),
     )

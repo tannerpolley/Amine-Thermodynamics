@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import json
 import math
-import os
-import sys
 from pathlib import Path
 from typing import Any
 
@@ -11,9 +9,17 @@ import numpy as np
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-EPCSAFT_SRC = Path(os.environ["EPCSAFT_SRC"]) if "EPCSAFT_SRC" in os.environ else None
-DATASET_DIR = REPO_ROOT / "data" / "reference" / "epcsaft_datasets" / "MEA_CO2_H2O_draft"
-EPCSAFT_OUT_DIR = REPO_ROOT / "analyses" / "phase3" / "ionic_epcsaft_regression" / "results" / "diagnostics"
+DATASET_DIR = (
+    REPO_ROOT / "data" / "reference" / "epcsaft_datasets" / "MEA_CO2_H2O_draft"
+)
+EPCSAFT_OUT_DIR = (
+    REPO_ROOT
+    / "analyses"
+    / "phase3"
+    / "ionic_epcsaft_regression"
+    / "results"
+    / "diagnostics"
+)
 
 SPECIES = (
     "CO2",
@@ -47,29 +53,17 @@ ADVANCED_BORN_USER_OPTIONS = {
 
 
 def load_epcsaft():
-    """Import the sibling ePC-SAFT package with a clear setup failure."""
+    """Import the installed unified Engine wheel only."""
     try:
         import epcsaft  # type: ignore
 
         return epcsaft
-    except Exception as first_exc:
-        if EPCSAFT_SRC is not None and EPCSAFT_SRC.exists():
-            src_text = str(EPCSAFT_SRC)
-            if src_text not in sys.path:
-                sys.path.insert(0, src_text)
-            try:
-                import epcsaft  # type: ignore
-
-                return epcsaft
-            except Exception as second_exc:
-                raise RuntimeError(
-                    "Unable to import the ePC-SAFT package from EPCSAFT_SRC. Build/install the package first, "
-                    "then run this repository with `uv sync` and `uv run python scripts/validate_project.py quick`."
-                ) from second_exc
+    except Exception as exc:
         raise RuntimeError(
-            "Unable to import epcsaft. Install the pinned dependency with `uv sync` or set EPCSAFT_SRC "
-            "to a local ePC-SAFT/src checkout."
-        ) from first_exc
+            "Unable to import the exact installed epcsaft Engine wheel. Run the "
+            "repository environment setup with EPCSAFT_ENGINE_WHEEL and "
+            "EPCSAFT_ENGINE_SHA256; source-checkout imports are forbidden."
+        ) from exc
 
 
 def dataset_label() -> str:
@@ -119,18 +113,18 @@ def diagnostic_composition(
     n_mea = max(n_mea_total - n_meah - n_meacoo, 1.0e-12)
     n_h2o = max(n_h2o_total - n_hco3 - n_co3 - n_h3o - n_oh, 1.0e-12)
 
-    amounts = np.array([n_co2, n_mea, n_h2o, n_meah, n_meacoo, n_hco3, n_co3, n_h3o, n_oh], dtype=float)
+    amounts = np.array(
+        [n_co2, n_mea, n_h2o, n_meah, n_meacoo, n_hco3, n_co3, n_h3o, n_oh], dtype=float
+    )
     return amounts / float(np.sum(amounts))
 
 
 def build_mixture(T: float, x: np.ndarray):
-    epcsaft = load_epcsaft()
-    return epcsaft.ePCSAFTMixture.from_dataset(
-        DATASET_DIR,
-        SPECIES,
-        np.asarray(x, dtype=float),
-        float(T),
-        user_options=ADVANCED_BORN_USER_OPTIONS,
+    del T, x
+    raise RuntimeError(
+        "The retired ePCSAFTMixture diagnostic path is quarantined. Use the "
+        "installed unified Engine through MEA.epcsaft_ionic.parameter_document "
+        "and the typed Equilibrium observation problems."
     )
 
 
