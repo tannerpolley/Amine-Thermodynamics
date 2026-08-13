@@ -15,11 +15,9 @@ PACKET = RESULTS / "pressure_candidate_packet.csv"
 PREDICTIONS = RESULTS / "fixed_pressure_fugacity_screen_predictions.csv"
 COUPLED_TIMEOUT = RESULTS / "coupled_timeout_evidence.json"
 FIT_TIMEOUT = RESULTS / "fixed_pressure_fugacity_screen_timeout.json"
-ENGINE_RECEIPT = (
-    ROOT
-    / "analyses/phase3/ionic_epcsaft_regression/results/reactive_vle_vertical_slice"
-    / "installed_homogeneous_tracer_receipt.json"
-)
+FIT_RESULT = RESULTS / "fixed_pressure_fugacity_screen_result.json"
+REACTIVE_BUBBLE = RESULTS / "reactive_bubble_pressure_diagnostic.json"
+ENGINE_LOCK = ROOT / "data/reference/MEA/manifests/engine_artifact_lock.json"
 
 
 def _sha256(path: Path) -> str:
@@ -59,20 +57,27 @@ def _write_parameter_table(prediction: pd.Series) -> None:
     ).to_csv(RESULTS / "diagnostic_parameter_table.csv", index=False, lineterminator="\n")
 
 
-def _write_model_comparison() -> None:
+def _write_model_comparison(*, exact_bubble_rows: int) -> None:
     rows = [
         {
-            "model": "M0",
-            "physical_configuration": "baseline nonpolar retained parameter document",
-            "evaluation": "one fixed-pressure ideal-vapor closure value/Jacobian",
-            "evaluated_rows": 1,
-            "fitted_parameter_available": False,
-            "predicted_pco2_available": False,
+            "model": "diagnostic_current_parameter_document",
+            "physical_configuration": (
+                "retained provisional ionic and permittivity inputs; not an admitted "
+                "M0-M5 selection candidate"
+            ),
+            "evaluation": "exact nonideal one-liquid/one-vapor pressure closure",
+            "evaluated_rows": exact_bubble_rows,
+            "fitted_parameter_available": True,
+            "predicted_pco2_available": True,
             "status": "diagnostic_non_promotable",
-            "reason": "coupled pressure closure and nonlinear screen timed out",
+            "reason": (
+                "parameter originated in the fixed-pressure screen and the six-row "
+                "curve has a material loading trend"
+            ),
         }
     ]
     for model, configuration in (
+        ("M0", "baseline nonpolar"),
         ("M1", "CO2 quadrupole"),
         ("M2", "neutral dipoles plus CO2 quadrupole"),
         ("M3", "full neutral DD/QQ/DQ"),
@@ -136,10 +141,12 @@ def main() -> None:
         raise ValueError("bounded diagnostic must retain exactly one evaluated point")
     coupled_timeout = json.loads(COUPLED_TIMEOUT.read_text())
     fit_timeout = json.loads(FIT_TIMEOUT.read_text())
-    engine_receipt = json.loads(ENGINE_RECEIPT.read_text())
+    fit_result = json.loads(FIT_RESULT.read_text())
+    bubble = json.loads(REACTIVE_BUBBLE.read_text())
+    engine = json.loads(ENGINE_LOCK.read_text())
     _write_parameter_table(predictions.iloc[0])
-    _write_model_comparison()
-    _write_support_screen(engine_receipt["engine"])
+    _write_model_comparison(exact_bubble_rows=bubble["metrics"]["evaluated_rows"])
+    _write_support_screen(engine)
     predictions[
         [
             "observation_id",
@@ -165,8 +172,8 @@ def main() -> None:
             ),
         },
         "engine": {
-            **engine_receipt["engine"],
-            "installed_tracer_receipt_sha256": engine_receipt["receipt_sha256"],
+            **engine,
+            "exact_bubble_receipt_sha256": bubble["receipt_sha256"],
         },
         "support_preflight": {
             "input_rows": 44,
@@ -184,31 +191,51 @@ def main() -> None:
             "prediction_table_sha256": _sha256(PREDICTIONS),
         },
         "nonlinear_diagnostic_fit": {
-            "status": "timed_out_no_FitResult",
-            "elapsed_seconds": fit_timeout["elapsed_seconds"],
-            "fitted_parameter_available": False,
-            "receipt_sha256": fit_timeout["receipt_sha256"],
+            "status": "completed_exact_jacobian_fixed_pressure_screen",
+            "fitted_parameter_available": True,
+            "fitted_parameter_identity": fit_result["fitted_values"][0]["identity"],
+            "fitted_parameter_value": fit_result["fitted_values"][0]["value"],
+            "attempted_starts": fit_result["accounting"]["attempted_starts"],
+            "accepted_starts": fit_result["accounting"]["accepted_starts"],
+            "optimizer_basin_count": len(
+                {start["optimizer_basin"] for start in fit_result["starts"]}
+            ),
+            "fit_result_digest": fit_result["digest"],
+            "claim_status": "diagnostic_non_promotable",
         },
         "coupled_promotion_lane": {
-            "status": "timed_out_no_pressure_root_result",
-            "elapsed_seconds": coupled_timeout["elapsed_seconds"],
-            "receipt_sha256": coupled_timeout["receipt_sha256"],
+            "status": "six_exact_pressure_roots_completed_diagnostic_only",
+            "phase_count": bubble["topology"]["phase_count"],
+            "phase_count_search": bubble["topology"]["phase_count_search"],
+            "liquid_branch_rediscovery": bubble["topology"][
+                "liquid_branch_rediscovery"
+            ],
+            "metrics": bubble["metrics"],
+            "receipt_sha256": bubble["receipt_sha256"],
+        },
+        "historical_superseded_route": {
+            "coupled_timeout_seconds": coupled_timeout["elapsed_seconds"],
+            "coupled_timeout_receipt_sha256": coupled_timeout["receipt_sha256"],
+            "fixed_pressure_timeout_seconds": fit_timeout["elapsed_seconds"],
+            "fixed_pressure_timeout_receipt_sha256": fit_timeout["receipt_sha256"],
         },
         "promotion_decision": "not_promoted",
         "promotion_blockers": [
-            "coupled reactive-bubble pressure closure returned no result",
-            "fixed-pressure nonlinear regression returned no FitResult",
-            "only 1 of 36 training/model-selection rows has a retained exact closure point",
+            "the fitted parameter originated in a fixed-pressure screening residual",
+            "only 6 of 36 training/model-selection rows have exact pressure roots",
+            "the six-row exact pressure residuals retain a material loading trend",
             "residual scales are provisional diagnostic weights, not source uncertainties",
             "M1-M5 source-fixed inputs are not qualified",
             "held-out campaign selection and reserved validation were not scored",
         ],
         "next_method_decision": (
-            "profile and reduce the certified chemical-equilibrium owner cost before "
-            "any further optimizer execution"
+            "qualify the smallest pure/binary parameter block and reduce the certified "
+            "liquid-equilibrium cost before a grouped exact-pressure multistart fit"
         ),
         "manuscript_changed": False,
-        "residual_trend_claim": "unavailable_one_point_is_insufficient",
+        "residual_trend_claim": (
+            "material loading trend on the Hilliard 17 wt% MEA 40 C diagnostic subset"
+        ),
     }
     decision["receipt_sha256"] = _canonical_sha256(decision)
     (RESULTS / "pressure_first_scientific_decision.json").write_text(

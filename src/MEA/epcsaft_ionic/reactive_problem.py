@@ -14,6 +14,9 @@ from MEA.common.mea_source_contracts import (
 from MEA.epcsaft_ionic.parameter_document import COMPONENT_IDS, PARAMETER_ROOT
 
 
+VAPOR_COMPONENT_IDS = ("carbon-dioxide", "monoethanolamine", "water")
+
+
 def _reaction_consistent_molar_masses(
     bundle: Path,
     component_ids: tuple[str, ...],
@@ -75,7 +78,9 @@ def build_homogeneous_reactive_problem(
         and math.isfinite(loading_mol_co2_per_mol_mea)
         and loading_mol_co2_per_mol_mea > 0.0
     ):
-        raise ValueError("reactive liquid state inputs are outside their physical support")
+        raise ValueError(
+            "reactive liquid state inputs are outside their physical support"
+        )
 
     reaction_contract = load_reaction_contract()
     source_species = reaction_contract["species"]
@@ -229,4 +234,58 @@ def build_homogeneous_reactive_problem(
     return replace(unanchored, continuation_reference=reference)
 
 
-__all__ = ("build_homogeneous_reactive_problem",)
+def build_reactive_bubble_problem(
+    parameters: object,
+    *,
+    identity: str,
+    liquid_phase_identity: str,
+    vapor_phase_identity: str,
+    liquid_continuation_identity: str,
+    bubble_continuation_identity: str,
+    temperature_k: float,
+    liquid_reference_pressure_pa: float,
+    mea_mass_fraction_unloaded: float,
+    loading_mol_co2_per_mol_mea: float,
+    pressure_interval_pa: tuple[float, float],
+    pressure_starts_pa: tuple[float, ...],
+    maximum_log_composition_distance: float = 0.5,
+    maximum_log_volume_distance: float = 0.5,
+) -> object:
+    """Build the declared one-liquid/one-vapor reactive bubble problem.
+
+    The homogeneous owner certifies the reacting liquid branch. The bubble
+    owner consumes that exact state and solves only the declared neutral vapor
+    and pressure closure; it does not perform phase-count or liquid-root search.
+    """
+
+    from epcsaft import equilibrium
+
+    liquid = build_homogeneous_reactive_problem(
+        parameters,
+        identity=f"{identity}-liquid",
+        phase_identity=liquid_phase_identity,
+        continuation_identity=liquid_continuation_identity,
+        temperature_k=temperature_k,
+        pressure_pa=liquid_reference_pressure_pa,
+        mea_mass_fraction_unloaded=mea_mass_fraction_unloaded,
+        loading_mol_co2_per_mol_mea=loading_mol_co2_per_mol_mea,
+        maximum_log_composition_distance=maximum_log_composition_distance,
+        maximum_log_volume_distance=maximum_log_volume_distance,
+    )
+    return equilibrium.ReactiveBubbleVLEProblem(
+        identity=identity,
+        liquid_problem=liquid,
+        vapor_phase_identity=vapor_phase_identity,
+        vapor_component_ids=VAPOR_COMPONENT_IDS,
+        vapor_model=equilibrium.ProviderNonidealVapor("installed-provider-eos"),
+        pressure_interval_pa=pressure_interval_pa,
+        pressure_starts_pa=pressure_starts_pa,
+        continuation_identity=bubble_continuation_identity,
+    )
+
+
+__all__ = (
+    "VAPOR_COMPONENT_IDS",
+    "build_homogeneous_reactive_problem",
+    "build_reactive_bubble_problem",
+)
