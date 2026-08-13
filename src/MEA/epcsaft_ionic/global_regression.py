@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from MEA.common.data_access import require_regression_execution_admitted
 from MEA.common.plot_style import finish_axes, save_figure_bundle, species_color, species_label, write_mpl_sidecar
 from MEA.epcsaft_ionic import native_regression
 from MEA.epcsaft_ionic.model import (
@@ -327,7 +326,12 @@ def attempt_global_regression(
     initial_values = fit_vector_to_values(x0, base=base)
     attempted_optimization = bool(execution_authorized) and int(max_nfev) >= 1
     if attempted_optimization:
-        require_regression_execution_admitted()
+        raise RuntimeError(
+            "The pre-unification reactive-electrolyte fit entrypoint is retired. "
+            "Use epcsaft.regression.fit with typed Equilibrium observations and "
+            "the immutable Engine wheel; exploratory SciPy fits live under "
+            "analyses/toybox only."
+        )
     if attempted_optimization:
         initial_residuals, initial_pressure, initial_speciation = objective_residuals(
             initial_values,
@@ -658,6 +662,10 @@ def compute_summary_metrics(values: dict[str, float], live_subset: tuple[int, in
 
 
 def write_sensitivity_artifacts() -> dict[str, Any]:
+    raise RuntimeError(
+        "The pre-unification finite-difference sensitivity campaign is retired; "
+        "exploratory finite differences are retained only under analyses/toybox."
+    )
     parameter_set, base_values = load_working_parameter_set()
     baseline = compute_summary_metrics(base_values, live_subset=(2, 2))
     rows: list[dict[str, Any]] = []

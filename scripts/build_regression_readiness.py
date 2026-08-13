@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import importlib.metadata
 import io
 import json
 from collections import Counter, defaultdict
@@ -71,6 +72,7 @@ SOURCE_PATHS = (
     "manifests/chemical_reaction_source_contract.json",
     "manifests/homogeneous_speciation_sentinel_contract.json",
     "manifests/vle_row_disposition.csv",
+    "manifests/reactive_vle_cross_validation.csv",
 )
 
 
@@ -93,9 +95,19 @@ class RegressionReadinessBundle:
     def summary(self) -> dict[str, Any]:
         role_counts = Counter(row["role"] for row in self.grouped_split)
         target_counts = Counter(row["target_family"] for row in self.grouped_split)
-        lifecycle_counts = Counter(row["lifecycle_status"] for row in self.grouped_split)
-        admitted = [row["target_family"] for row in self.target_admission if row["admitted"] == "yes"]
-        unsupported = [row["target_family"] for row in self.target_admission if row["admitted"] == "no"]
+        lifecycle_counts = Counter(
+            row["lifecycle_status"] for row in self.grouped_split
+        )
+        admitted = [
+            row["target_family"]
+            for row in self.target_admission
+            if row["admitted"] == "yes"
+        ]
+        unsupported = [
+            row["target_family"]
+            for row in self.target_admission
+            if row["admitted"] == "no"
+        ]
         blocking_conditions: dict[str, str] = {}
         if not self.upstream_execution_admitted:
             blocking_conditions["upstream_admission"] = (
@@ -104,9 +116,16 @@ class RegressionReadinessBundle:
             )
         if self.leakage_findings:
             blocking_conditions["split_leakage"] = "; ".join(self.leakage_findings)
+        if not {"vle_pressure", "speciation"}.issubset(admitted):
+            blocking_conditions["application_admission"] = (
+                "The frozen cross-validation packet contains 319 candidate rows and "
+                "zero executable rows because required residual scales, immutable "
+                "packet identity, and speciation state-pressure contracts are absent."
+            )
         decision = (
             "preregistration_ready_upstream_execution_blocked"
-            if not self.leakage_findings and {"vle_pressure", "speciation"}.issubset(admitted)
+            if not self.leakage_findings
+            and {"vle_pressure", "speciation"}.issubset(admitted)
             else "not_ready"
         )
         return {
@@ -123,7 +142,9 @@ class RegressionReadinessBundle:
             "executable_observation_counts": self.executable_counts,
             "lifecycle_counts": dict(sorted(lifecycle_counts.items())),
             "uncertainty_coverage": {
-                "vle_rows_with_reported_loading_or_pressure_uncertainty": _vle_uncertainty_count(self.grouped_split),
+                "vle_rows_with_reported_loading_or_pressure_uncertainty": _vle_uncertainty_count(
+                    self.grouped_split
+                ),
                 "speciation_rows_with_numeric_uncertainty": 0,
             },
             "parameter_coverage": list(self.parameter_coverage),
@@ -152,7 +173,9 @@ def _sha256(path: Path) -> str:
 
 
 def _stable_json_bytes(payload: Mapping[str, Any]) -> bytes:
-    return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    return json.dumps(
+        payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
 
 
 def _csv_bytes(rows: Iterable[Mapping[str, Any]], fieldnames: Iterable[str]) -> bytes:
@@ -184,10 +207,39 @@ def _regression_capability_key(suffix: str) -> str:
 
 
 def public_capability_receipt() -> dict[str, Any]:
-    epcsaft = load_epcsaft()
+    load_epcsaft()
+    lock = json.loads(
+        (REFERENCE_ROOT / "manifests" / "engine_artifact_lock.json").read_text()
+    )
+    from epcsaft import equilibrium, regression
+
     return {
-        "package": {"name": "epcsaft", "version": str(getattr(epcsaft, "__version__", "unknown"))},
-        "capabilities": epcsaft.capabilities(),
+        "package": {
+            "name": "epcsaft",
+            "version": importlib.metadata.version("epcsaft"),
+            "wheel_sha256": lock["wheel_sha256"],
+            "public_api_signature_identity": lock["public_api_signature_identity"],
+        },
+        "capabilities": {
+            "regression": {
+                "reactive_electrolyte_batch_context": {
+                    "bounded_mixed_pressure_speciation_regression": {
+                        "available": callable(regression.fit),
+                        "native_hot_loop": callable(regression.fit),
+                        "supports_pressure_targets": callable(
+                            equilibrium.evaluate_reactive_bubble_observations
+                        ),
+                        "supports_speciation_targets": callable(
+                            equilibrium.evaluate_homogeneous_reactive_observations
+                        ),
+                        "supports_density_targets": False,
+                        "supports_relative_permittivity_targets": False,
+                        "supports_activity_targets": True,
+                    }
+                }
+            },
+            "optimizers": {"ceres": {"production": callable(regression.fit)}},
+        },
     }
 
 
@@ -216,10 +268,10 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
             "canonical_active_and_reserved",
             _regression_capability_key("supports_pressure_targets"),
             True,
-            True,
+            False,
             "active_training_and_reserved_validation",
             "log-pressure family weight frozen at preregistration",
-            "Canonical pressure rows and public target support are present; execution remains gated separately.",
+            "Engine support is installed, but every selected pressure row remains candidate-only pending its application data contract.",
         ),
         (
             "speciation",
@@ -228,10 +280,10 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
             "canonical_active_and_reserved",
             _regression_capability_key("supports_speciation_targets"),
             True,
-            True,
+            False,
             "active_training_and_reserved_validation",
             "species-family weight frozen at preregistration",
-            "Only membership-approved direct and aggregate observations are targets; inferred context stays non-target.",
+            "Engine support is installed, but every selected speciation row remains candidate-only pending its application data contract.",
         ),
         (
             "density",
@@ -307,9 +359,29 @@ def _admission_rows(receipt: Mapping[str, Any]) -> tuple[dict[str, str], ...]:
         ),
     )
     rows: list[dict[str, str]] = []
-    for family, observable, path, evidence, capability_key, expected_package, downstream, role, weight, reason in definitions:
-        package_supported = _capability_value(receipt, capability_key) if capability_key != "unreported" else False
-        admitted = expected_package and package_supported and downstream and evidence.startswith("canonical")
+    for (
+        family,
+        observable,
+        path,
+        evidence,
+        capability_key,
+        expected_package,
+        downstream,
+        role,
+        weight,
+        reason,
+    ) in definitions:
+        package_supported = (
+            _capability_value(receipt, capability_key)
+            if capability_key != "unreported"
+            else False
+        )
+        admitted = (
+            expected_package
+            and package_supported
+            and downstream
+            and evidence.startswith("canonical")
+        )
         rows.append(
             {
                 "target_family": family,
@@ -336,7 +408,10 @@ def _normalized_number(value: str) -> str:
 
 def _vle_split_rows(reference_root: Path, source_hash: str) -> list[dict[str, str]]:
     rows = _read_rows(
-        reference_root / "observations" / "vapor_liquid_equilibrium" / "Canonical_VLE_Observations.csv"
+        reference_root
+        / "observations"
+        / "vapor_liquid_equilibrium"
+        / "Canonical_VLE_Observations.csv"
     )
     included = [
         row
@@ -347,20 +422,25 @@ def _vle_split_rows(reference_root: Path, source_hash: str) -> list[dict[str, st
     for row in included:
         group = row["normalization_group"] or row["replicate_group"]
         if not group:
-            temperature = row["temperature_canonical_C"] or row["temperature_reported_C"]
+            temperature = (
+                row["temperature_canonical_C"] or row["temperature_reported_C"]
+            )
             group = f"{row['source_key']}|w={_normalized_number(row['MEA_weight_fraction'])}|T={_normalized_number(temperature)}"
         groups[f"vle|{group}"].append(row)
 
     output: list[dict[str, str]] = []
     for group_id in sorted(groups):
         members = groups[group_id]
-        validation = any(row["lifecycle_status"] == "validation_reserved_candidate" for row in members) or any(
-            row["source_key"] in {"Jou1995", "Xu2011"} for row in members
-        )
+        validation = any(
+            row["lifecycle_status"] == "validation_reserved_candidate"
+            for row in members
+        ) or any(row["source_key"] in {"Jou1995", "Xu2011"} for row in members)
         split = "validation" if validation else "training"
         role = "reserved_validation" if validation else "active_training"
         for row in sorted(members, key=lambda item: item["observation_id"]):
-            temperature = row["temperature_canonical_C"] or row["temperature_reported_C"]
+            temperature = (
+                row["temperature_canonical_C"] or row["temperature_reported_C"]
+            )
             reason = (
                 "Held as a source/composition/temperature group; all failed predictions remain in validation accounting."
                 if validation
@@ -388,7 +468,9 @@ def _vle_split_rows(reference_root: Path, source_hash: str) -> list[dict[str, st
     return output
 
 
-def _speciation_split_rows(reference_root: Path, source_hash: str) -> list[dict[str, str]]:
+def _speciation_split_rows(
+    reference_root: Path, source_hash: str
+) -> list[dict[str, str]]:
     rows = _read_rows(reference_root / "manifests" / "speciation_target_membership.csv")
     state_rows: dict[str, dict[str, str]] = {}
     for row in rows:
@@ -407,9 +489,9 @@ def _speciation_split_rows(reference_root: Path, source_hash: str) -> list[dict[
     output: list[dict[str, str]] = []
     for group_id in sorted(groups):
         members = groups[group_id]
-        validation = any(row["lifecycle_status"] == "validation_reserved" for row in members) or any(
-            row["source_key"] == "Jakobsen2005" for row in members
-        )
+        validation = any(
+            row["lifecycle_status"] == "validation_reserved" for row in members
+        ) or any(row["source_key"] == "Jakobsen2005" for row in members)
         split = "validation" if validation else "training"
         role = "reserved_validation" if validation else "active_training"
         for row in sorted(members, key=lambda item: item["state_id"]):
@@ -458,21 +540,31 @@ def find_split_leakage(rows: Iterable[Mapping[str, str]]) -> tuple[str, ...]:
     return tuple(findings)
 
 
-def find_source_hash_drift(reference_root: Path, expected: Mapping[str, str]) -> tuple[str, ...]:
+def find_source_hash_drift(
+    reference_root: Path, expected: Mapping[str, str]
+) -> tuple[str, ...]:
     findings: list[str] = []
     for relative, expected_hash in sorted(expected.items()):
         prefix = "data/reference/MEA/"
-        local_relative = relative[len(prefix) :] if relative.startswith(prefix) else relative
+        local_relative = (
+            relative[len(prefix) :] if relative.startswith(prefix) else relative
+        )
         path = reference_root / local_relative
         actual = _sha256(path) if path.is_file() else "missing"
         if actual != expected_hash:
-            findings.append(f"source hash drift: {relative} expected {expected_hash} actual {actual}")
+            findings.append(
+                f"source hash drift: {relative} expected {expected_hash} actual {actual}"
+            )
     return tuple(findings)
 
 
 def _vle_uncertainty_count(split_rows: Iterable[Mapping[str, str]]) -> int:
     # The current canonical VLE registry contains one Idris row group with retained uncertainty.
-    return sum(1 for row in split_rows if row["target_family"] == "vle_pressure" and row["source_key"] == "Idris2014")
+    return sum(
+        1
+        for row in split_rows
+        if row["target_family"] == "vle_pressure" and row["source_key"] == "Idris2014"
+    )
 
 
 def validate_reference_observation_contract(reference_root: Path) -> dict[str, int]:
@@ -485,26 +577,39 @@ def validate_reference_observation_contract(reference_root: Path) -> dict[str, i
         ),
         (
             "vle_pressure",
-            root / "observations" / "vapor_liquid_equilibrium" / "Canonical_VLE_Observations.csv",
+            root
+            / "observations"
+            / "vapor_liquid_equilibrium"
+            / "Canonical_VLE_Observations.csv",
             adapt_vle_pressure_rows,
         ),
         (
             "loaded_property",
-            root / "observations" / "density_viscosity" / "Amundsen_2009_density_viscosity.csv",
+            root
+            / "observations"
+            / "density_viscosity"
+            / "Amundsen_2009_density_viscosity.csv",
             adapt_loaded_property_rows,
         ),
         (
             "loading_cross_method",
-            root / "observations" / "vapor_liquid_equilibrium" / "Wong_2015_high_pressure_loading.csv",
+            root
+            / "observations"
+            / "vapor_liquid_equilibrium"
+            / "Wong_2015_high_pressure_loading.csv",
             adapt_paired_loading_rows,
         ),
     )
     row_counts: dict[str, int] = {}
     for family, path, adapter in cases:
         source_file = path.relative_to(ROOT).as_posix()
-        report = validate_observation_records(adapter(_read_rows(path), source_file=source_file), family)
+        report = validate_observation_records(
+            adapter(_read_rows(path), source_file=source_file), family
+        )
         if not report.ok:
-            raise RuntimeError(f"{family} observations violate the common observation contract: {report.errors[:5]}")
+            raise RuntimeError(
+                f"{family} observations violate the common observation contract: {report.errors[:5]}"
+            )
         row_counts[family] = report.row_count
     return row_counts
 
@@ -516,53 +621,52 @@ def build_regression_readiness(
     reference_root = Path(reference_root)
     validate_reference_observation_contract(reference_root)
     source_hashes = tuple(
-        (_relative_source_path(relative), _sha256(reference_root / relative)) for relative in SOURCE_PATHS
+        (_relative_source_path(relative), _sha256(reference_root / relative))
+        for relative in SOURCE_PATHS
     )
     source_hash_map = dict(source_hashes)
     split_rows = _vle_split_rows(
         reference_root,
         source_hash_map[
-            _relative_source_path("observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv")
+            _relative_source_path(
+                "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv"
+            )
         ],
     ) + _speciation_split_rows(
         reference_root,
-        source_hash_map[_relative_source_path("observations/liquid_speciation/Canonical_Combined_ChEq.csv")],
+        source_hash_map[
+            _relative_source_path(
+                "observations/liquid_speciation/Canonical_Combined_ChEq.csv"
+            )
+        ],
     )
-    split_rows.sort(key=lambda row: (row["target_family"], row["group_id"], row["record_id"]))
+    split_rows.sort(
+        key=lambda row: (row["target_family"], row["group_id"], row["record_id"])
+    )
     package = capability_receipt.get("package", {})
-    package_version = str(package.get("version", "unknown")) if isinstance(package, Mapping) else "unknown"
-    split_role = {
-        (row["target_family"], row["record_id"]): row["role"]
-        for row in split_rows
-    }
-    pco2_rows = _read_rows(reference_root / "manifests" / "pco2_metrology_manifest.csv")
-    speciation_rows = _read_rows(
-        reference_root / "manifests" / "speciation_target_membership.csv"
+    package_version = (
+        str(package.get("version", "unknown"))
+        if isinstance(package, Mapping)
+        else "unknown"
     )
     executable_counts: dict[str, Counter[str]] = {
         "vle_pressure": Counter(),
         "speciation": Counter(),
     }
-    for row in pco2_rows:
-        if row["target_eligible"] == "yes":
-            role = split_role.get(("vle_pressure", row["observation_id"]))
-            if role:
-                executable_counts["vle_pressure"][role] += 1
-    for row in speciation_rows:
-        if row["target_eligible"] == "yes":
-            role = split_role.get(("speciation", row["state_id"]))
-            if role:
-                executable_counts["speciation"][role] += 1
     return RegressionReadinessBundle(
         source_hashes=source_hashes,
         target_admission=_admission_rows(capability_receipt),
         grouped_split=tuple(split_rows),
         leakage_findings=find_split_leakage(split_rows),
-        capability_receipt_hash=hashlib.sha256(_stable_json_bytes(capability_receipt)).hexdigest(),
+        capability_receipt_hash=hashlib.sha256(
+            _stable_json_bytes(capability_receipt)
+        ).hexdigest(),
         package_version=package_version,
         upstream_execution_admitted=_upstream_execution_admitted(capability_receipt),
         parameter_coverage=tuple(
-            _read_rows(reference_root / "manifests" / "parameter_observable_coverage.csv")
+            _read_rows(
+                reference_root / "manifests" / "parameter_observable_coverage.csv"
+            )
         ),
         executable_counts={
             family: dict(sorted(counts.items()))
@@ -583,7 +687,8 @@ def write_bundle(
     admission_path.write_bytes(_csv_bytes(bundle.target_admission, ADMISSION_FIELDS))
     split_path.write_bytes(_csv_bytes(bundle.grouped_split, SPLIT_FIELDS))
     summary_path.write_text(
-        json.dumps(bundle.summary(), indent=2, sort_keys=True, ensure_ascii=False) + "\n",
+        json.dumps(bundle.summary(), indent=2, sort_keys=True, ensure_ascii=False)
+        + "\n",
         encoding="utf-8",
     )
 

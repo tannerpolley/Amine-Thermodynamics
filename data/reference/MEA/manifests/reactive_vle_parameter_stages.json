@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "identity": "mea-reactive-vle-parameter-stages-v1",
-  "execution_issue": "https://github.com/tannerpolley/MEA-Thermodynamics/issues/53",
-  "execution_status": "PREPARATION_ONLY_NO_REACTIVE_FIT_ADMITTED",
+  "execution_issue": "https://github.com/tannerpolley/MEA-Thermodynamics/issues/13",
+  "execution_status": "ENGINE_READY_APPLICATION_SCIENTIFIC_GATES_BLOCKED",
   "temperature_domain": {
     "planned_first_joint_qualification_K": [
       313.15,
@@ -48,7 +48,8 @@
         "Born and relative-permittivity formulation"
       ],
       "data": "Pure saturation and fixed-state pressure-at-measured-density observations, grouped by source and temperature.",
-      "gate": "BLOCKED until the pure-MEA measurement package and source-fixed moment records are complete; refit separately for every polar configuration to avoid double counting."
+      "gate": "BLOCKED until the pure-MEA measurement package and source-fixed moment records are complete; refit separately for every polar configuration to avoid double counting.",
+      "execution_status": "blocked_missing_primary_inputs"
     },
     {
       "stage_id": "S2",
@@ -65,7 +66,8 @@
         "reaction correlations"
       ],
       "data": "Binary MEA-H2O VLE, physical CO2 solubility, neutral mixture density, and association-sensitive evidence.",
-      "gate": "Phase-equilibrium observations are not admitted by current Engine Regression. Never fit k_ij and k_hb_ij for the same pair without profile-identifiability evidence."
+      "gate": "Engine phase-equilibrium observations are admitted. Execution remains blocked by the S1 gate and incomplete neutral-binary evidence. Never fit k_ij and k_hb_ij for the same pair without profile-identifiability evidence.",
+      "execution_status": "not_started_S1_gate_not_passed"
     },
     {
       "stage_id": "S3",
@@ -73,7 +75,8 @@
       "active_coordinates": [],
       "fixed": "All parameters and reaction correlations from the selected neutral configuration.",
       "data": "Admissible fixed-T,P speciation and neutral-fugacity tracer rows.",
-      "gate": "BLOCKED_BY_epcsaft_issue_30; requires certified local homogeneous equilibrium and exact total selected-parameter sensitivities. This stage is not VLE evidence."
+      "gate": "Engine issue #30 is admitted. The installed-wheel MEA run is a mathematical and sensitivity tracer only; it is not VLE evidence or parameter promotion.",
+      "execution_status": "diagnostic_installed_wheel_tracer"
     },
     {
       "stage_id": "S4",
@@ -95,25 +98,27 @@
     },
     {
       "stage_id": "S5",
-      "name": "Re-estimate carbamate and protonation reaction correlations",
+      "name": "Fit true reactive bubble and VLE observations",
+      "active_coordinates": "Only the smallest ionic block identified by S4 rank and profiles; never reopen every parameter family together.",
+      "fixed": "Frozen model configuration, qualified neutral blocks, and source-backed R1-R5 correlations.",
+      "data": "Admissible pCO2, total pressure or vapor composition when direct, and same-state speciation across the qualified domain.",
+      "gate": "Engine issue #31 is admitted. Application scoring remains blocked until pressure/speciation rows have complete state and residual-scale contracts and S1-S4 pass.",
+      "execution_status": "not_started_application_rows_not_executable"
+    },
+    {
+      "stage_id": "S6",
+      "name": "Review reaction correlations after EOS qualification",
       "active_coordinates": [
-        "R4 A/B/C/D candidate coefficients",
-        "R5 A/B/C/D candidate coefficients"
+        "R4 A/B/C/D candidate coefficients only if independently identifiable",
+        "R5 A/B/C/D candidate coefficients only if independently identifiable"
       ],
       "fixed": [
         "R1-R3 source correlations",
         "selected EOS, association, ionic, Born, and permittivity parameters"
       ],
       "data": "Grouped multi-temperature direct or declared aggregate speciation, calibrated equilibrium pH when acquired, and pCO2.",
-      "gate": "Activate only the coefficient subset supported by rank and profiles. Do not use delta offsets. Current R4/R5 source domains end at 323.15 K; qualifying new coefficients through 353.15 K is a prerequisite for using the 333.15 K and 353.15 K observations in the joint fit."
-    },
-    {
-      "stage_id": "S6",
-      "name": "Fit true reactive bubble and VLE observations",
-      "active_coordinates": "Only the smallest unresolved block identified by S1-S5 profiles; never reopen every parameter family together.",
-      "fixed": "Frozen model configuration and all previously qualified parameter blocks.",
-      "data": "Admissible pCO2, total pressure or vapor composition when direct, and same-state speciation across the qualified domain.",
-      "gate": "BLOCKED_BY_epcsaft_issue_31; require coupled reaction and phase-equilibrium certificates, EOS vapor fugacities for neutral CO2/H2O/MEA, exact total Jacobians, and typed non-evaluable trials."
+      "gate": "Retain source R1-R5 initially. Activate coefficients only for systematic residuals that remain after physical-model qualification and only when rank, profiles, and held-out temperatures support them; never absorb EOS or activity errors.",
+      "execution_status": "not_started_S5_gate_not_passed"
     },
     {
       "stage_id": "S7",

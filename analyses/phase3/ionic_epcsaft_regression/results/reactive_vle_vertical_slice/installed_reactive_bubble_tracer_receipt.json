@@ -1,0 +1,207 @@
+{
+  "engine": {
+    "distribution": "epcsaft",
+    "engine_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+    "engine_repository": "https://github.com/tannerpolley/ePC-SAFT",
+    "engine_tree": "30fc48f188508c92acb39397a1730a56f39562c8",
+    "identity": "mea-reactive-vle-engine-artifact-lock-v1",
+    "installation_policy": "noneditable_local_wheel_only_no_source_checkout_discovery",
+    "mea_diagnostic_parameter_document": {
+      "domain_fingerprint": "sha256:2312093d987f8dd0057db5c603a9383aca8178cedd2197d1c0d9b0d549d76f29",
+      "model_family_fingerprint": "sha256:4724b991c46551e4f08841c92ee757c53b2b8e2bc3423ab176e0085b905b7d5c",
+      "parameter_fingerprint": "sha256:c621cd37257fdaa8946653cf3e3f36329f6b4a07af10afc082db8f22f7e911a7",
+      "scientific_status": "diagnostic_nonpredictive_provisional_ionic_and_permittivity_inputs",
+      "topology_fingerprint": "sha256:36bbf19d2ac182f414fef9fcf7fb5a196d1b50799f4cb7d1b92952aea0427ef5"
+    },
+    "public_api_signature_identity": "sha256:6c6ad454b5080780841cabfe843307860e35bcd0a1ae90b9fbd21eede78ae309",
+    "public_header_sha256": {
+      "epcsaft": "9bbc6af72a2671c653969de24f28f63f925c7756ea01e1ac64fc7fff676c1c79",
+      "epcsaft.equilibrium": "1df60cddae35533791a38f64cd5a72c18fbdab7f37c361989281c96e8bfa185e",
+      "epcsaft.regression": "9485f2c2b2050ff3c19117cda589c33b23dec98196b7409d7f83c9bd0e13d534"
+    },
+    "schema_version": 1,
+    "upstream_admissions": {
+      "homogeneous_reactive_observations": {
+        "issue": 30,
+        "merge_commit": "2a24e7e744bba4c23cd8a96baf38472d46b42890",
+        "pull_request": 32
+      },
+      "positive_trace_phase_role_followup": {
+        "issue": 34,
+        "merge_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+        "pull_request": 35
+      },
+      "reactive_bubble_vle_observations": {
+        "issue": 31,
+        "merge_commit": "b4bcd2dd8f2a6ef4b4e984a172cd789977751bf9",
+        "pull_request": 33
+      }
+    },
+    "version": "0.2.0.dev0",
+    "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "b030f0f649b67f02421decdb761c7b45dd5b2656759ab2ae91bb5a6c7531dd88"
+  },
+  "failure": {
+    "code": "branch_loss",
+    "diagnostic": "no certified basin remains inside the immutable continuation region"
+  },
+  "fingerprints": {
+    "descriptor": "sha256:f2ca4c8f429e144a4aadd9760fffc1b778593a1a7eb94632f454b0d6c36aa67f",
+    "domain": "sha256:406c5626775d213b56a19456e6bae7667e2d27243877fdf794093a273e34cbe7",
+    "parameter": "sha256:c621cd37257fdaa8946653cf3e3f36329f6b4a07af10afc082db8f22f7e911a7",
+    "partner_parameter": "sha256:ad03606bbff95343a1486652de5b1904897e711ee4211f6606c2d3f5611ce0b6",
+    "problem": "sha256:e2d4e4392c39eb69618bf128528fc3a0c6f8de097a215a8fbe6bc211c31f7530",
+    "reaction": "sha256:c174031968a515f2c9465aa0c763dd83171a8b042601b431fffc40e78a05db8e",
+    "reference": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "topology": "sha256:8517b08c66fc4ff70543fc10cfa104d1b5f4f41d0a67950fc7e2b9059a7c5dfe"
+  },
+  "identity": "mea-installed-cap13-reactive-bubble-tracer-v1",
+  "input": {
+    "active_parameter_identities": [],
+    "liquid_component_ids": [
+      "carbon-dioxide",
+      "monoethanolamine",
+      "water",
+      "protonated-monoethanolamine",
+      "carbamate-anion",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion"
+    ],
+    "pressure_interval_pa": [
+      6105.45,
+      300000.0
+    ],
+    "pressure_starts_pa": [
+      7326.7,
+      15000.0,
+      50000.0,
+      150000.0
+    ],
+    "temperature_k": 313.15,
+    "vapor_component_ids": [
+      "carbon-dioxide",
+      "monoethanolamine",
+      "water"
+    ],
+    "vapor_model": "ProviderNonidealVapor"
+  },
+  "receipt_sha256": "c12f9047ee7c0e7a4190a7d405883273a5a593dd9922b16fbb8cd328de6a0fd7",
+  "rows": [
+    {
+      "failure": {
+        "code": "branch_loss",
+        "diagnostic": "no certified basin remains inside the immutable continuation region"
+      },
+      "identity": "mea-gate0-bubble-pressure",
+      "jacobian": null,
+      "status": "non_evaluable",
+      "unit": "pascal",
+      "value": null
+    },
+    {
+      "failure": {
+        "code": "branch_loss",
+        "diagnostic": "no certified basin remains inside the immutable continuation region"
+      },
+      "identity": "mea-gate0-co2-partial-pressure",
+      "jacobian": null,
+      "status": "non_evaluable",
+      "unit": "pascal",
+      "value": null
+    },
+    {
+      "failure": {
+        "code": "branch_loss",
+        "diagnostic": "no certified basin remains inside the immutable continuation region"
+      },
+      "identity": "mea-gate0-carbamate-liquid-fraction",
+      "jacobian": null,
+      "status": "non_evaluable",
+      "unit": "dimensionless",
+      "value": null
+    }
+  ],
+  "runtime_seconds": 460.932653803,
+  "schema_version": 1,
+  "scientific_decision": "This installed-wheel calculation is a coupled-solver tracer only. No MEA parameter is fitted or promoted because the application has no admitted pressure/speciation scoring rows or qualified Stage-1 packet.",
+  "scope": "stage_5_coupled_solver_tracer_not_parameter_fit_or_model_score",
+  "search": {
+    "accepted_candidate_count": 0,
+    "attempts": [
+      {
+        "diagnostic": "no deterministic coexistence start produced a certified branch",
+        "failure_code": "no_incipient_phase",
+        "final_pressure_pa": null,
+        "final_residual": null,
+        "iteration_count": 1,
+        "ordinal": 0,
+        "start_identity": "sha256:71060973d031df94d10bbcf25c2877bd397d45832ac54ba2a7b8bc24dd64b216",
+        "start_pressure_pa": 6105.45,
+        "status": "rejected"
+      },
+      {
+        "diagnostic": "no deterministic coexistence start produced a certified branch",
+        "failure_code": "no_incipient_phase",
+        "final_pressure_pa": null,
+        "final_residual": null,
+        "iteration_count": 1,
+        "ordinal": 1,
+        "start_identity": "sha256:0b00018efee5bf180d43952fd32fb1f0420c5aa9e346a403772fa28489e6a631",
+        "start_pressure_pa": 7326.7,
+        "status": "rejected"
+      },
+      {
+        "diagnostic": "no deterministic coexistence start produced a certified branch",
+        "failure_code": "no_incipient_phase",
+        "final_pressure_pa": null,
+        "final_residual": null,
+        "iteration_count": 1,
+        "ordinal": 2,
+        "start_identity": "sha256:ce76fe0716ddbc386b4b18e97378f3a3c12aca710fea854814300320d92353a8",
+        "start_pressure_pa": 15000.0,
+        "status": "rejected"
+      },
+      {
+        "diagnostic": "no deterministic coexistence start produced a certified branch",
+        "failure_code": "no_incipient_phase",
+        "final_pressure_pa": null,
+        "final_residual": null,
+        "iteration_count": 1,
+        "ordinal": 3,
+        "start_identity": "sha256:5c5a932120c571c352921f9a48554d960988f0b0f0428fe1cac2fc3cd74c65d3",
+        "start_pressure_pa": 50000.0,
+        "status": "rejected"
+      },
+      {
+        "diagnostic": "no certified basin remains inside the immutable continuation region",
+        "failure_code": "branch_loss",
+        "final_pressure_pa": null,
+        "final_residual": null,
+        "iteration_count": 1,
+        "ordinal": 4,
+        "start_identity": "sha256:04fa6e17249f1c88f06e82e16cda65419d6239ef3d8fe2cb7be86810032f8a56",
+        "start_pressure_pa": 150000.0,
+        "status": "rejected"
+      },
+      {
+        "diagnostic": "no certified basin remains inside the immutable continuation region",
+        "failure_code": "branch_loss",
+        "final_pressure_pa": null,
+        "final_residual": null,
+        "iteration_count": 1,
+        "ordinal": 5,
+        "start_identity": "sha256:285fefbdac52f7a9b934566bd65696899fea5373852d5409ee1942ecd33d8f7c",
+        "start_pressure_pa": 300000.0,
+        "status": "rejected"
+      }
+    ],
+    "closure_evaluation_count": 0,
+    "completeness_claim": "finite_declared_starts_only",
+    "distinct_branch_count": 0,
+    "provider_evaluation_count": 0,
+    "selected_branch_ordinal": null
+  },
+  "status": "non_evaluable"
+}
