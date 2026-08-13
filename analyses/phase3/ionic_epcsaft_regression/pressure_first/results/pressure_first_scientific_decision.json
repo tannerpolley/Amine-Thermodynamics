@@ -1,8 +1,18 @@
 {
   "coupled_promotion_lane": {
-    "elapsed_seconds": 1022.08,
-    "receipt_sha256": "8d573326e348479bf2a577823bb84b3130c4ed9d9eb4d82e6871a25876134805",
-    "status": "timed_out_no_pressure_root_result"
+    "liquid_branch_rediscovery": "not_performed",
+    "metrics": {
+      "evaluated_rows": 6,
+      "failed_rows": 0,
+      "input_rows": 6,
+      "log10_bias": 0.19058426798512249,
+      "log10_mae": 0.28147949891086665,
+      "log10_rmse": 0.30952374503493046
+    },
+    "phase_count": 2,
+    "phase_count_search": "not_performed",
+    "receipt_sha256": "d0b424b12a3e537defcee5242c1c6773c2bd6cb0ef45e2638a847b87ed1b0f7f",
+    "status": "six_exact_pressure_roots_completed_diagnostic_only"
   },
   "diagnostic_evaluation": {
     "available_scoring_rows": 36,
@@ -16,12 +26,12 @@
   },
   "engine": {
     "distribution": "epcsaft",
-    "engine_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+    "engine_commit": "12b99e0eb8336e8df2b98795fdab5f963a43e0a7",
     "engine_repository": "https://github.com/tannerpolley/ePC-SAFT",
-    "engine_tree": "30fc48f188508c92acb39397a1730a56f39562c8",
+    "engine_tree": "3c8d069d0ffe5a613a949aef29e941ddc6bbd109",
+    "exact_bubble_receipt_sha256": "d0b424b12a3e537defcee5242c1c6773c2bd6cb0ef45e2638a847b87ed1b0f7f",
     "identity": "mea-reactive-vle-engine-artifact-lock-v1",
     "installation_policy": "noneditable_local_wheel_only_no_source_checkout_discovery",
-    "installed_tracer_receipt_sha256": "67575536d21a4e55eba443970363add208b739542adabf807647dbd72458098e",
     "mea_diagnostic_parameter_document": {
       "domain_fingerprint": "sha256:2312093d987f8dd0057db5c603a9383aca8178cedd2197d1c0d9b0d549d76f29",
       "model_family_fingerprint": "sha256:4724b991c46551e4f08841c92ee757c53b2b8e2bc3423ab176e0085b905b7d5c",
@@ -55,16 +65,27 @@
     },
     "version": "0.2.0.dev0",
     "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
-    "wheel_sha256": "b030f0f649b67f02421decdb761c7b45dd5b2656759ab2ae91bb5a6c7531dd88"
+    "wheel_sha256": "9cfb297b485bc38eb0dc5c0e039f0cec48f67e1e8bb5f1fc26c932f712da4379"
+  },
+  "historical_superseded_route": {
+    "coupled_timeout_receipt_sha256": "8d573326e348479bf2a577823bb84b3130c4ed9d9eb4d82e6871a25876134805",
+    "coupled_timeout_seconds": 1022.08,
+    "fixed_pressure_timeout_receipt_sha256": "99c7e74f620f45c0fa0222e76c53819f22138b03b60a986ae61a417b74ba623f",
+    "fixed_pressure_timeout_seconds": 3810.0
   },
   "identity": "mea-pressure-first-scientific-decision-v1",
   "manuscript_changed": false,
-  "next_method_decision": "profile and reduce the certified chemical-equilibrium owner cost before any further optimizer execution",
+  "next_method_decision": "qualify the smallest pure/binary parameter block and reduce the certified liquid-equilibrium cost before a grouped exact-pressure multistart fit",
   "nonlinear_diagnostic_fit": {
-    "elapsed_seconds": 3810.0,
-    "fitted_parameter_available": false,
-    "receipt_sha256": "99c7e74f620f45c0fa0222e76c53819f22138b03b60a986ae61a417b74ba623f",
-    "status": "timed_out_no_FitResult"
+    "accepted_starts": 3,
+    "attempted_starts": 3,
+    "claim_status": "diagnostic_non_promotable",
+    "fit_result_digest": "sha256:8ced45c3dba992b39e89a1fc45933d315cab0bb30500b937ccc3aa33502c9f7d",
+    "fitted_parameter_available": true,
+    "fitted_parameter_identity": "pair/carbon-dioxide/water/k_ij",
+    "fitted_parameter_value": 0.007409544921385848,
+    "optimizer_basin_count": 1,
+    "status": "completed_exact_jacobian_fixed_pressure_screen"
   },
   "packet": {
     "domain_challenge": 77,
@@ -75,16 +96,16 @@
     "training": 30
   },
   "promotion_blockers": [
-    "coupled reactive-bubble pressure closure returned no result",
-    "fixed-pressure nonlinear regression returned no FitResult",
-    "only 1 of 36 training/model-selection rows has a retained exact closure point",
+    "the fitted parameter originated in a fixed-pressure screening residual",
+    "only 6 of 36 training/model-selection rows have exact pressure roots",
+    "the six-row exact pressure residuals retain a material loading trend",
     "residual scales are provisional diagnostic weights, not source uncertainties",
     "M1-M5 source-fixed inputs are not qualified",
     "held-out campaign selection and reserved validation were not scored"
   ],
   "promotion_decision": "not_promoted",
-  "receipt_sha256": "d7ca6b26122f1d4d3892a81ff36e522605ec93c4a9f6d1cc4df8b5793afdb1c1",
-  "residual_trend_claim": "unavailable_one_point_is_insufficient",
+  "receipt_sha256": "905f7ea9b29ad95d5f73da4c15f83e5f81037ec29a826c45aa66689d6de95b4f",
+  "residual_trend_claim": "material loading trend on the Hilliard 17 wt% MEA 40 C diagnostic subset",
   "schema_version": 1,
   "support_preflight": {
     "certified_rows": 38,

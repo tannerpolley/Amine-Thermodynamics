@@ -151,8 +151,45 @@ def test_pressure_first_diagnostic_keeps_observed_pressure_as_input() -> None:
     )
     assert decision["promotion_decision"] == "not_promoted"
     assert decision["diagnostic_evaluation"]["predicted_pco2_available"] is False
-    assert decision["nonlinear_diagnostic_fit"]["status"] == "timed_out_no_FitResult"
+    assert decision["nonlinear_diagnostic_fit"]["status"] == (
+        "completed_exact_jacobian_fixed_pressure_screen"
+    )
+    assert decision["nonlinear_diagnostic_fit"]["attempted_starts"] == 3
+    assert decision["nonlinear_diagnostic_fit"]["accepted_starts"] == 3
+    assert decision["nonlinear_diagnostic_fit"]["optimizer_basin_count"] == 1
+    assert decision["coupled_promotion_lane"]["status"] == (
+        "six_exact_pressure_roots_completed_diagnostic_only"
+    )
     assert decision["manuscript_changed"] is False
+
+    bubble = _assert_self_hash(
+        PRESSURE_FIRST / "reactive_bubble_pressure_diagnostic.json"
+    )
+    assert bubble["claim_status"] == (
+        "diagnostic_non_promotable_exact_reactive_bubble"
+    )
+    assert bubble["topology"] == {
+        "phase_count": 2,
+        "liquid": "one_certified_reacting_nine_species_branch",
+        "vapor": "one_declared_incipient_three-neutral_nonideal_branch",
+        "vapor_component_ids": [
+            "carbon-dioxide",
+            "monoethanolamine",
+            "water",
+        ],
+        "phase_count_search": "not_performed",
+        "liquid_branch_rediscovery": "not_performed",
+    }
+    assert bubble["metrics"]["input_rows"] == 6
+    assert bubble["metrics"]["evaluated_rows"] == 6
+    assert bubble["metrics"]["failed_rows"] == 0
+    assert bubble["metrics"]["log10_rmse"] > 0.3
+    assert all(result["search"]["attempted"] == 1 for result in bubble["results"])
+    assert all(result["search"]["accepted"] == 1 for result in bubble["results"])
+    assert all(
+        result["search"]["distinct_branches"] == 1 for result in bubble["results"]
+    )
+    assert all(result["bubble_closure_abs"] < 2.0e-10 for result in bubble["results"])
 
     with (
         PRESSURE_FIRST / "figures/pco2_closure_diagnostic_plot_data.csv"
