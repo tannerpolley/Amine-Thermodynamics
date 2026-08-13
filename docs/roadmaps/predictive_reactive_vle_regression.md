@@ -4,7 +4,7 @@ MEA execution issue: [MEA-Thermodynamics #53](https://github.com/tannerpolley/ME
 
 ## Decision
 
-The planned endpoint is one predictive, coupled reactive-VLE parameterization for MEA–H₂O–CO₂. The current unified Engine can evaluate the required polar, dielectric, and Born physics, but it cannot yet regress the coupled reactive observations. Its public Regression interface currently admits only pure-saturation and fixed-state-pressure observations. Engine issues [#30](https://github.com/tannerpolley/ePC-SAFT/issues/30) and [#31](https://github.com/tannerpolley/ePC-SAFT/issues/31) own the missing general observation families.
+The planned endpoint is one predictive, coupled reactive-VLE parameterization for MEA–H₂O–CO₂. The unified Engine now admits the generic homogeneous and coupled reactive observation families from Engine issues [#30](https://github.com/tannerpolley/ePC-SAFT/issues/30) and [#31](https://github.com/tannerpolley/ePC-SAFT/issues/31). Application execution remains a separate scientific gate: the current coupled MEA pressure solve did not return a root within its bounded 1,022.08 s diagnostic attempt.
 
 No current MEA result establishes a predictive M5 parameterization. The retained M0–M5 calculations are diagnostics. The current planning identifiers in `reactive_vle_model_configurations.json` replace those informal labels with explicit physics factors.
 
@@ -24,7 +24,7 @@ SSM+DS is a fixed model choice, not a continuous fit coordinate. MEA Born and re
 
 ## Data use
 
-The current mixed-observation candidate set contains 121 pCO₂ rows and 198 direct-positive or explicit aggregate speciation observations. `reactive_vle_cross_validation.csv` assigns every candidate to one of five whole-campaign folds, but does not yet admit any row for scoring because source-backed residual scales and an immutable Data-packet identity remain open. After those gates close, model form and active coordinates are chosen using campaign-blocked cross-validation. The final estimation then uses every admissible in-domain row.
+The current mixed-observation candidate set contains 121 pCO₂ rows and 198 direct-positive or explicit aggregate speciation observations. The pressure-first diagnostic freezes all 121 pressure rows into an immutable packet: 30 training, 6 model-selection, 8 reserved, and 77 non-scoring domain challenges. It uses preregistered provisional log scales only for a non-promotable fixed-observed-pressure closure screen. Source-backed uncertainty remains open, and the experimental total pressure supplied to that screen is a state input—not a predicted pressure. Speciation remains outside this diagnostic until its same-state pressure and residual contracts close.
 
 The planned first joint qualification domain is 313.15–353.15 K because it contains both admitted pCO₂ and speciation evidence. It is not all executable under the present reaction sources: R4 and R5 currently end at 323.15 K. The 333.15 K and 353.15 K rows therefore remain assigned to campaign folds but cannot enter the joint fit until S5 qualifies new R4/R5 coefficients over that domain. Lower-temperature speciation is support evidence. Pressure data above 353.15 K are a later domain-extension challenge. Cross-validation metrics support transfer claims; residuals after the all-data refit support calibration claims only.
 
@@ -47,6 +47,6 @@ Fitting every table entry simultaneously is excluded. It would let neutral dispe
 
 ## Immediate work
 
-The next executable scientific task is source closure for S1 and S2: complete the pure-MEA property package, bind source-valued molecular moments, and finish primary binary MEA–H₂O and physical CO₂-solubility tables. These inputs can qualify neutral parameters without waiting for reactive regression. In parallel, the upstream Engine issues can admit the two generic observation families. No application-owned optimizer or copied thermodynamic equation should be added here.
+The promotion lane is blocked on source closure for S1 and S2, source-backed residual scales, and a tractable coupled pressure root with complete failure accounting. The next qualification work is to complete the pure-MEA property package, bind source-valued molecular moments, and finish primary binary MEA–H₂O and physical CO₂-solubility tables. The retained pressure-first fixed-pressure screen is useful for sensitivity and runtime diagnosis only; it cannot promote a parameter or substitute for the coupled bubble calculation.
 
 The manuscript remains unchanged until the coupled fit, cross-validation, uncertainty, immutable-artifact replay, and predictive gates pass.
