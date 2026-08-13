@@ -17,6 +17,8 @@ SCREEN = RESULTS / "fixed_pressure_fugacity_screen_predictions.csv"
 FIGURES = RESULTS / "figures"
 PLOT_DATA = FIGURES / "pco2_closure_diagnostic_plot_data.csv"
 FIGURE_STEM = FIGURES / "pco2_closure_diagnostic"
+BUBBLE_TABLE = FIGURES / "reactive_bubble_pressure_plot_data.csv"
+BUBBLE_FIGURE_STEM = FIGURES / "reactive_bubble_pressure_diagnostic"
 
 SOURCE_ORDER = ("Hilliard2008", "Jou1995", "Xu2011")
 SOURCE_LABELS = {
@@ -42,7 +44,9 @@ def _build_plot_data() -> pd.DataFrame:
             "claim_status",
         ]
     ]
-    frame = packet.merge(modeled, on="observation_id", how="left", validate="one_to_one")
+    frame = packet.merge(
+        modeled, on="observation_id", how="left", validate="one_to_one"
+    )
     frame["observed_pco2_kpa"] = frame["observed_pco2_pa"] / 1000.0
     frame["temperature_C"] = frame["temperature_K"] - 273.15
     frame["observed_pressure_plot_role"] = (
@@ -113,6 +117,70 @@ def _plot_closure(ax: object, frame: pd.DataFrame) -> None:
     ax.legend(handles=[note], fontsize=7.2)
 
 
+def _render_reactive_bubble_diagnostic() -> tuple[Path, Path, Path]:
+    frame = pd.read_csv(BUBBLE_TABLE)
+    evaluated = frame.loc[frame["status"] == "evaluated_diagnostic"].copy()
+    if evaluated.empty:
+        raise RuntimeError("reactive bubble diagnostic contains no evaluated rows")
+    evaluated = evaluated.sort_values("loading_mol_co2_per_mol_mea")
+    evaluated["observed_pco2_kpa"] = evaluated["observed_pco2_pa"] / 1000.0
+    evaluated["predicted_pco2_kpa"] = evaluated["predicted_pco2_pa"] / 1000.0
+
+    fig, ax = plt.subplots(figsize=(7.4, 5.2))
+    ax.scatter(
+        evaluated["loading_mol_co2_per_mol_mea"],
+        evaluated["observed_pco2_kpa"],
+        color="#28659c",
+        edgecolor="black",
+        linewidth=0.45,
+        s=48,
+        label="Hilliard (2008) experiment",
+        zorder=3,
+    )
+    ax.plot(
+        evaluated["loading_mol_co2_per_mol_mea"],
+        evaluated["predicted_pco2_kpa"],
+        color="#b6312c",
+        marker="s",
+        markersize=4.5,
+        linewidth=1.6,
+        label="Exact reactive-bubble diagnostic",
+    )
+    ax.set_yscale("log")
+    ax.set_xlabel("$CO_2$ loading, mol $CO_2$/mol MEA")
+    ax.set_ylabel("$P_{CO_2}$, kPa")
+    finish_axes(
+        ax,
+        title="17 wt% MEA, 40 °C — diagnostic / non-promotable",
+    )
+    ax.legend(fontsize=8.0)
+    fig.suptitle(
+        "Declared one-liquid/one-vapor reactive ePC-SAFT pressure closure\n"
+        "Liquid branch is certified once; the bubble owner solves only vapor and pressure",
+        fontsize=11.5,
+        fontweight="semibold",
+    )
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.91))
+    png, svg, pdf = save_figure_bundle(fig, BUBBLE_FIGURE_STEM)
+    plt.close(fig)
+    write_mpl_sidecar(
+        BUBBLE_FIGURE_STEM.with_suffix(".mpl.yaml"),
+        png_name=png.name,
+        svg_name=svg.name,
+        pdf_name=pdf.name,
+        title="Diagnostic exact reactive-bubble PCO2 comparison",
+        description=(
+            "Measured and exact reactive-bubble predicted CO2 partial pressure for the "
+            "Hilliard 17 wt% MEA, 40 C subset. The parameter came from the fixed-pressure "
+            "screening lane, so the curve is diagnostic and non-promotable. Phase count "
+            "and roles are declared; no liquid phase is rediscovered."
+        ),
+        data_path=BUBBLE_TABLE,
+        style_source=str(Path(__file__).relative_to(ROOT)),
+    )
+    return png, svg, pdf
+
+
 def main() -> None:
     missing = [path for path in (PACKET, SCREEN) if not path.exists()]
     if missing:
@@ -153,6 +221,10 @@ def main() -> None:
     print(svg.relative_to(ROOT))
     print(pdf.relative_to(ROOT))
     print(PLOT_DATA.relative_to(ROOT))
+    if BUBBLE_TABLE.exists():
+        for path in _render_reactive_bubble_diagnostic():
+            print(path.relative_to(ROOT))
+        print(BUBBLE_TABLE.relative_to(ROOT))
 
 
 if __name__ == "__main__":
