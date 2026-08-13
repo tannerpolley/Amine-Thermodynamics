@@ -99,6 +99,9 @@ def test_pressure_first_diagnostic_keeps_observed_pressure_as_input() -> None:
     assert len(packet) == 121
     assert len({row["canonical_row_identity"] for row in packet}) == 121
     assert packet_receipt["packet"]["sha256"] == _sha256(packet_path)
+    assert packet_receipt["preregistration_sha256"] == _sha256(
+        PRESSURE_FIRST.parent / "config/preregistration.json"
+    )
     assert Counter(row["analysis_role"] for row in packet) == {
         "training": 30,
         "model_selection": 6,
