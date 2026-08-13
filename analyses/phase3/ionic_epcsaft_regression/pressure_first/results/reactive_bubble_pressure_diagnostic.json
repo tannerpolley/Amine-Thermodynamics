@@ -1,0 +1,305 @@
+{
+  "claim_status": "diagnostic_non_promotable_exact_reactive_bubble",
+  "engine": {
+    "distribution": "epcsaft",
+    "engine_commit": "12b99e0eb8336e8df2b98795fdab5f963a43e0a7",
+    "engine_repository": "https://github.com/tannerpolley/ePC-SAFT",
+    "engine_tree": "3c8d069d0ffe5a613a949aef29e941ddc6bbd109",
+    "identity": "mea-reactive-vle-engine-artifact-lock-v1",
+    "installation_policy": "noneditable_local_wheel_only_no_source_checkout_discovery",
+    "mea_diagnostic_parameter_document": {
+      "domain_fingerprint": "sha256:2312093d987f8dd0057db5c603a9383aca8178cedd2197d1c0d9b0d549d76f29",
+      "model_family_fingerprint": "sha256:4724b991c46551e4f08841c92ee757c53b2b8e2bc3423ab176e0085b905b7d5c",
+      "parameter_fingerprint": "sha256:c621cd37257fdaa8946653cf3e3f36329f6b4a07af10afc082db8f22f7e911a7",
+      "scientific_status": "diagnostic_nonpredictive_provisional_ionic_and_permittivity_inputs",
+      "topology_fingerprint": "sha256:36bbf19d2ac182f414fef9fcf7fb5a196d1b50799f4cb7d1b92952aea0427ef5"
+    },
+    "public_api_signature_identity": "sha256:6c6ad454b5080780841cabfe843307860e35bcd0a1ae90b9fbd21eede78ae309",
+    "public_header_sha256": {
+      "epcsaft": "9bbc6af72a2671c653969de24f28f63f925c7756ea01e1ac64fc7fff676c1c79",
+      "epcsaft.equilibrium": "1df60cddae35533791a38f64cd5a72c18fbdab7f37c361989281c96e8bfa185e",
+      "epcsaft.regression": "9485f2c2b2050ff3c19117cda589c33b23dec98196b7409d7f83c9bd0e13d534"
+    },
+    "schema_version": 1,
+    "upstream_admissions": {
+      "homogeneous_reactive_observations": {
+        "issue": 30,
+        "merge_commit": "2a24e7e744bba4c23cd8a96baf38472d46b42890",
+        "pull_request": 32
+      },
+      "positive_trace_phase_role_followup": {
+        "issue": 34,
+        "merge_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+        "pull_request": 35
+      },
+      "reactive_bubble_vle_observations": {
+        "issue": 31,
+        "merge_commit": "b4bcd2dd8f2a6ef4b4e984a172cd789977751bf9",
+        "pull_request": 33
+      }
+    },
+    "version": "0.2.0.dev0",
+    "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "9cfb297b485bc38eb0dc5c0e039f0cec48f67e1e8bb5f1fc26c932f712da4379"
+  },
+  "identity": "mea-exact-reactive-bubble-pressure-diagnostic-v1",
+  "method": "The observed total pressure is used only to certify the local liquid continuation anchor and declare a bounded pressure start. The reported prediction is the independently closed reactive bubble root. Exact Engine implicit derivatives are retained. The fitted parameter remains diagnostic because it originated in the fixed-pressure screening lane.",
+  "metrics": {
+    "evaluated_rows": 6,
+    "failed_rows": 0,
+    "input_rows": 6,
+    "log10_bias": 0.19058426798512249,
+    "log10_mae": 0.28147949891086665,
+    "log10_rmse": 0.30952374503493046
+  },
+  "parameter": {
+    "identity": "pair/carbon-dioxide/water/k_ij",
+    "provenance": "fixed_pressure_diagnostic_fit_non_promotable",
+    "unit": "dimensionless",
+    "value": 0.007409544921385848
+  },
+  "receipt_sha256": "d0b424b12a3e537defcee5242c1c6773c2bd6cb0ef45e2638a847b87ed1b0f7f",
+  "results": [
+    {
+      "bubble_closure_abs": 5.165867733580853e-13,
+      "failure": null,
+      "loading_mol_co2_per_mol_mea": 0.121,
+      "mea_mass_fraction": 0.17,
+      "observation_id": "vle_obs_0107",
+      "observed_pco2_pa": 5.55,
+      "observed_total_pressure_pa": 6889.46,
+      "pco2_parameter_derivative_pa": 81.49878267664299,
+      "predicted_pco2_pa": 4.074629367739841,
+      "predicted_total_pressure_pa": 6897.056741251758,
+      "pressure_parameter_derivative_pa": 81.82805502106895,
+      "residual_log10_predicted_over_observed": -0.1342048720996577,
+      "runtime_seconds": 67.51523243400152,
+      "search": {
+        "accepted": 1,
+        "attempted": 1,
+        "attempts": [
+          {
+            "failure_code": null,
+            "iterations": 3,
+            "start_identity": "sha256:8b0fafb0285dc8cb7ec73261e7d3f5f3acc33e5ff125eb2a2b4258ae69b5537f",
+            "start_pressure_pa": 6889.46,
+            "status": "accepted"
+          }
+        ],
+        "closure_evaluations": 3,
+        "distinct_branches": 1,
+        "provider_evaluations": 6
+      },
+      "status": "evaluated_diagnostic",
+      "temperature_K": 313.15,
+      "vapor_mole_fractions": [
+        0.0005907779971374181,
+        0.0008176460910783168,
+        0.9985915759117842
+      ]
+    },
+    {
+      "bubble_closure_abs": 1.6275869541004795e-12,
+      "failure": null,
+      "loading_mol_co2_per_mol_mea": 0.212,
+      "mea_mass_fraction": 0.17,
+      "observation_id": "vle_obs_0108",
+      "observed_pco2_pa": 14.0,
+      "observed_total_pressure_pa": 6988.41,
+      "pco2_parameter_derivative_pa": 464.9444340827485,
+      "predicted_pco2_pa": 23.310111685528522,
+      "predicted_total_pressure_pa": 6912.181665920324,
+      "pressure_parameter_derivative_pa": 466.81214679567313,
+      "residual_log10_predicted_over_observed": 0.2214163186785697,
+      "runtime_seconds": 66.9583437859983,
+      "search": {
+        "accepted": 1,
+        "attempted": 1,
+        "attempts": [
+          {
+            "failure_code": null,
+            "iterations": 3,
+            "start_identity": "sha256:82792474da465d620c3affb9202e02d7c9ce219e7bd1956b8887f14664eb0ded",
+            "start_pressure_pa": 6988.41,
+            "status": "accepted"
+          }
+        ],
+        "closure_evaluations": 3,
+        "distinct_branches": 1,
+        "provider_evaluations": 6
+      },
+      "status": "evaluated_diagnostic",
+      "temperature_K": 313.15,
+      "vapor_mole_fractions": [
+        0.0033723233578272704,
+        0.0006162383062778106,
+        0.9960114383358948
+      ]
+    },
+    {
+      "bubble_closure_abs": 7.377098931726778e-12,
+      "failure": null,
+      "loading_mol_co2_per_mol_mea": 0.3,
+      "mea_mass_fraction": 0.17,
+      "observation_id": "vle_obs_0109",
+      "observed_pco2_pa": 36.2,
+      "observed_total_pressure_pa": 7019.01,
+      "pco2_parameter_derivative_pa": 1991.5386206332028,
+      "predicted_pco2_pa": 100.95065108943788,
+      "predicted_total_pressure_pa": 6978.340049858781,
+      "pressure_parameter_derivative_pa": 1999.3634616087181,
+      "residual_log10_predicted_over_observed": 0.44540055377312177,
+      "runtime_seconds": 69.4188986299996,
+      "search": {
+        "accepted": 1,
+        "attempted": 1,
+        "attempts": [
+          {
+            "failure_code": null,
+            "iterations": 3,
+            "start_identity": "sha256:d4a2b91dbae34cf1f7ddb4b910f61f6ce226a1bdebd4c0e7a74c2710386a682a",
+            "start_pressure_pa": 7019.01,
+            "status": "accepted"
+          }
+        ],
+        "closure_evaluations": 3,
+        "distinct_branches": 1,
+        "provider_evaluations": 6
+      },
+      "status": "evaluated_diagnostic",
+      "temperature_K": 313.15,
+      "vapor_mole_fractions": [
+        0.01446628429800878,
+        0.0004292477149495439,
+        0.9851044679870417
+      ]
+    },
+    {
+      "bubble_closure_abs": 2.961342282503665e-11,
+      "failure": null,
+      "loading_mol_co2_per_mol_mea": 0.369,
+      "mea_mass_fraction": 0.17,
+      "observation_id": "vle_obs_0110",
+      "observed_pco2_pa": 116.0,
+      "observed_total_pressure_pa": 7142.24,
+      "pco2_parameter_derivative_pa": 6168.446242235048,
+      "predicted_pco2_pa": 322.0313894951206,
+      "predicted_total_pressure_pa": 7185.311463499973,
+      "pressure_parameter_derivative_pa": 6191.296284901202,
+      "residual_log10_predicted_over_observed": 0.4434402166928455,
+      "runtime_seconds": 64.14447136099625,
+      "search": {
+        "accepted": 1,
+        "attempted": 1,
+        "attempts": [
+          {
+            "failure_code": null,
+            "iterations": 3,
+            "start_identity": "sha256:bf6eebed2d44dc06cce83dfd5f2c42c13a07c7486f4878fa86ef742432017790",
+            "start_pressure_pa": 7142.24,
+            "status": "accepted"
+          }
+        ],
+        "closure_evaluations": 3,
+        "distinct_branches": 1,
+        "provider_evaluations": 6
+      },
+      "status": "evaluated_diagnostic",
+      "temperature_K": 313.15,
+      "vapor_mole_fractions": [
+        0.04481801396237022,
+        0.0002895685776659919,
+        0.9548924174599639
+      ]
+    },
+    {
+      "bubble_closure_abs": 3.012901039767257e-11,
+      "failure": null,
+      "loading_mol_co2_per_mol_mea": 0.467,
+      "mea_mass_fraction": 0.17,
+      "observation_id": "vle_obs_0111",
+      "observed_pco2_pa": 879.0,
+      "observed_total_pressure_pa": 7938.68,
+      "pco2_parameter_derivative_pa": 29503.952428868142,
+      "predicted_pco2_pa": 1777.9645053368508,
+      "predicted_total_pressure_pa": 8613.922786460931,
+      "pressure_parameter_derivative_pa": 29582.30729383917,
+      "residual_log10_predicted_over_observed": 0.3059342115434304,
+      "runtime_seconds": 76.83874329800892,
+      "search": {
+        "accepted": 1,
+        "attempted": 1,
+        "attempts": [
+          {
+            "failure_code": null,
+            "iterations": 4,
+            "start_identity": "sha256:b573bae0dfbb1e67a504152aef6619d16f091018bff8ca675e2878d8a0b5d12f",
+            "start_pressure_pa": 7938.68,
+            "status": "accepted"
+          }
+        ],
+        "closure_evaluations": 4,
+        "distinct_branches": 1,
+        "provider_evaluations": 8
+      },
+      "status": "evaluated_diagnostic",
+      "temperature_K": 313.15,
+      "vapor_mole_fractions": [
+        0.20640590232958608,
+        0.00011796546359760337,
+        0.7934761322068162
+      ]
+    },
+    {
+      "bubble_closure_abs": 1.4271039905366933e-10,
+      "failure": null,
+      "loading_mol_co2_per_mol_mea": 0.552,
+      "mea_mass_fraction": 0.17,
+      "observation_id": "vle_obs_0112",
+      "observed_pco2_pa": 8560.0,
+      "observed_total_pressure_pa": 15688.98,
+      "pco2_parameter_derivative_pa": 84444.10414674185,
+      "predicted_pco2_pa": 6222.9017471280395,
+      "predicted_total_pressure_pa": 13027.842660542487,
+      "pressure_parameter_derivative_pa": 84557.07438926227,
+      "residual_log10_predicted_over_observed": -0.13848082067757483,
+      "runtime_seconds": 81.94271517300513,
+      "search": {
+        "accepted": 1,
+        "attempted": 1,
+        "attempts": [
+          {
+            "failure_code": null,
+            "iterations": 4,
+            "start_identity": "sha256:32269d7435bb5852ede2eb14296d6c57199a1e9590c9bd1ed57e384554b8ee11",
+            "start_pressure_pa": 15688.98,
+            "status": "accepted"
+          }
+        ],
+        "closure_evaluations": 4,
+        "distinct_branches": 1,
+        "provider_evaluations": 8
+      },
+      "status": "evaluated_diagnostic",
+      "temperature_K": 313.15,
+      "vapor_mole_fractions": [
+        0.4776617210749239,
+        3.680525547815323e-05,
+        0.522301473669598
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "topology": {
+    "liquid": "one_certified_reacting_nine_species_branch",
+    "liquid_branch_rediscovery": "not_performed",
+    "phase_count": 2,
+    "phase_count_search": "not_performed",
+    "vapor": "one_declared_incipient_three-neutral_nonideal_branch",
+    "vapor_component_ids": [
+      "carbon-dioxide",
+      "monoethanolamine",
+      "water"
+    ]
+  }
+}
