@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from MEA.common.data_access import load_regression_readiness_summary
-from MEA.epcsaft_ionic.native_regression import build_native_regression_problem
 
 
 EXPECTED_TOP_LEVEL_KEYS = {
@@ -537,6 +536,8 @@ def validate_gate0_preregistration(payload: Mapping[str, Any]) -> dict[str, Any]
 
 @lru_cache(maxsize=1)
 def _native_training_contract() -> tuple[dict[str, int], list[dict[str, Any]]]:
+    from MEA.epcsaft_ionic.native_regression import build_native_regression_problem
+
     problem = build_native_regression_problem(target_role="active_training")
     target_counts = {
         "pressure": int(problem.metadata["pressure_row_count"]),

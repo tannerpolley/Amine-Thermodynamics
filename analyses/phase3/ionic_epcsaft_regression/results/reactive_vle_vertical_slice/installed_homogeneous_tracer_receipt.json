@@ -1,0 +1,265 @@
+{
+  "accounting": {
+    "dropped_rows": 0,
+    "evaluated_rows": 2,
+    "evaluated_trials": 3,
+    "failed_rows": 0,
+    "input_rows": 2,
+    "non_evaluable_trials": 2,
+    "rejected_rows": 0
+  },
+  "certification": {
+    "balance_inf_norm": 1.9986840886318687e-16,
+    "charge_inf_norm": 3.77761871398841e-17,
+    "globality_status": "not_guaranteed",
+    "kkt_stationarity_inf_norm": 1.5631940186722204e-13,
+    "local_minimum_status": "passed",
+    "numerical_status": "passed",
+    "physical_status": "passed",
+    "pressure_relative_residual": 1.0692691876395468e-10,
+    "reaction_affinity_inf_norm": 2.842170943040401e-14,
+    "reduced_hessian_status": "certified_local_minimum",
+    "search_basin_count": 1,
+    "trace_status": "interior"
+  },
+  "engine": {
+    "distribution": "epcsaft",
+    "engine_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+    "engine_repository": "https://github.com/tannerpolley/ePC-SAFT",
+    "engine_tree": "30fc48f188508c92acb39397a1730a56f39562c8",
+    "identity": "mea-reactive-vle-engine-artifact-lock-v1",
+    "installation_policy": "noneditable_local_wheel_only_no_source_checkout_discovery",
+    "mea_diagnostic_parameter_document": {
+      "domain_fingerprint": "sha256:2312093d987f8dd0057db5c603a9383aca8178cedd2197d1c0d9b0d549d76f29",
+      "model_family_fingerprint": "sha256:4724b991c46551e4f08841c92ee757c53b2b8e2bc3423ab176e0085b905b7d5c",
+      "parameter_fingerprint": "sha256:c621cd37257fdaa8946653cf3e3f36329f6b4a07af10afc082db8f22f7e911a7",
+      "scientific_status": "diagnostic_nonpredictive_provisional_ionic_and_permittivity_inputs",
+      "topology_fingerprint": "sha256:36bbf19d2ac182f414fef9fcf7fb5a196d1b50799f4cb7d1b92952aea0427ef5"
+    },
+    "public_api_signature_identity": "sha256:6c6ad454b5080780841cabfe843307860e35bcd0a1ae90b9fbd21eede78ae309",
+    "public_header_sha256": {
+      "epcsaft": "9bbc6af72a2671c653969de24f28f63f925c7756ea01e1ac64fc7fff676c1c79",
+      "epcsaft.equilibrium": "1df60cddae35533791a38f64cd5a72c18fbdab7f37c361989281c96e8bfa185e",
+      "epcsaft.regression": "9485f2c2b2050ff3c19117cda589c33b23dec98196b7409d7f83c9bd0e13d534"
+    },
+    "schema_version": 1,
+    "upstream_admissions": {
+      "homogeneous_reactive_observations": {
+        "issue": 30,
+        "merge_commit": "2a24e7e744bba4c23cd8a96baf38472d46b42890",
+        "pull_request": 32
+      },
+      "positive_trace_phase_role_followup": {
+        "issue": 34,
+        "merge_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+        "pull_request": 35
+      },
+      "reactive_bubble_vle_observations": {
+        "issue": 31,
+        "merge_commit": "b4bcd2dd8f2a6ef4b4e984a172cd789977751bf9",
+        "pull_request": 33
+      }
+    },
+    "version": "0.2.0.dev0",
+    "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "b030f0f649b67f02421decdb761c7b45dd5b2656759ab2ae91bb5a6c7531dd88"
+  },
+  "fingerprints": {
+    "active_trial": "sha256:6fde2387831da4c1ab2514041fcd3806a23a045e72acf6ffbcd015cc99c55465",
+    "certified_state": "sha256:6cfb3ef31230517fcebb708ea5ae6a15f7b12ae26481308b9380f453018a5013",
+    "descriptor": "sha256:652a4eaa05925b36d3aed57768f42d23d1f08ff46092220eebc02cce4488beb9",
+    "domain": "sha256:e59ee64f1a442e65d7e719c8b54c8be1839b8ddd61a31556324e8037a82a23a0",
+    "parameter": "sha256:c621cd37257fdaa8946653cf3e3f36329f6b4a07af10afc082db8f22f7e911a7",
+    "physical_branch": "sha256:38a8985c1c708efb30ea63703d5edf3b7132df0bed844e41c47d9c964d31cd47",
+    "problem": "sha256:eb5610e548270180caf584996dc6d2f7211cfbfbe98c31c52f7f6665e94aac67",
+    "reaction": "sha256:c174031968a515f2c9465aa0c763dd83171a8b042601b431fffc40e78a05db8e",
+    "reference": "sha256:079b17751eee924472fed39a8d451b47d1b7c76fd4909ee85aff32ae57ec457b",
+    "topology": "sha256:ec05626779a3e1184603614ce5477f3747f3562a6255e89092cd5d0ac4cab346"
+  },
+  "identifiability": {
+    "bounds": [
+      [
+        2.0,
+        5.8
+      ],
+      [
+        2.0,
+        5.8
+      ]
+    ],
+    "condition_number_2": 7.613426212762703,
+    "linearized_parameter_values": [
+      2.126527544119357,
+      0.3421569025565758
+    ],
+    "linearized_step_inside_bounds": false,
+    "linearized_unconstrained_step": [
+      -1.358558021740643,
+      -3.1932783546534242
+    ],
+    "promotion_status": "not_applicable_tracer_only",
+    "rank": 2,
+    "singular_values": [
+      0.7923199430976501,
+      0.10406877547055637
+    ]
+  },
+  "identity": "mea-installed-cap12-homogeneous-tracer-v1",
+  "observation": {
+    "active_parameter_identities": [
+      "component/protonated-monoethanolamine/segment_diameter",
+      "component/carbamate-anion/segment_diameter"
+    ],
+    "active_parameter_units": [
+      "angstrom",
+      "angstrom"
+    ],
+    "active_parameter_values": [
+      3.48508556586,
+      3.53543525721
+    ],
+    "central_difference_log_residual_jacobian": [
+      [
+        0.7373112802966374,
+        0.28658675272907885
+      ],
+      [
+        0.07919380426990585,
+        -0.08105083257881063
+      ]
+    ],
+    "central_difference_step": 1e-05,
+    "difference_schemes": [
+      "forward_support_boundary",
+      "backward_support_boundary"
+    ],
+    "exact_log_residual_jacobian": [
+      [
+        0.7373115852180833,
+        0.2865866247936547
+      ],
+      [
+        0.07919383618272054,
+        -0.08105104170488515
+      ]
+    ],
+    "exact_raw_total_jacobian": [
+      [
+        2877.6121928967614,
+        1118.5029265251858
+      ],
+      [
+        0.003417567708986364,
+        -0.00349771442150142
+      ]
+    ],
+    "independent_difference_status": "all_coordinates_checked",
+    "maximum_scaled_derivative_error": 3.0492144587057624e-07,
+    "observed_values": [
+      574.0,
+      0.0502
+    ],
+    "perturbation_trials": [
+      {
+        "coordinate": "component/protonated-monoethanolamine/segment_diameter",
+        "direction": "lower",
+        "failure": {
+          "code": "provider_domain_rejection",
+          "diagnostic": "physical_domain_failure: first failed physical criterion=trace_status; search status=domain_rejected"
+        },
+        "status": "non_evaluable"
+      },
+      {
+        "coordinate": "component/protonated-monoethanolamine/segment_diameter",
+        "direction": "upper",
+        "failure": null,
+        "status": "evaluated"
+      },
+      {
+        "coordinate": "component/carbamate-anion/segment_diameter",
+        "direction": "lower",
+        "failure": null,
+        "status": "evaluated"
+      },
+      {
+        "coordinate": "component/carbamate-anion/segment_diameter",
+        "direction": "upper",
+        "failure": {
+          "code": "provider_domain_rejection",
+          "diagnostic": "physical_domain_failure: first failed physical criterion=trace_status; search status=domain_rejected"
+        },
+        "status": "non_evaluable"
+      }
+    ],
+    "predicted_values": [
+      3902.844130742387,
+      0.04315446597511903
+    ],
+    "row_identities": [
+      "vle_obs_0137::pco2",
+      "Bottinger2008_state_049::MEACOO-"
+    ],
+    "row_units": [
+      "pascal",
+      "dimensionless"
+    ]
+  },
+  "receipt_sha256": "67575536d21a4e55eba443970363add208b739542adabf807647dbd72458098e",
+  "runtime": {
+    "evaluation_seconds": [
+      63.89652676899277,
+      30.142379099008394,
+      77.44632820900006,
+      71.19162332400447,
+      29.100292609000462
+    ],
+    "total_seconds": 329.69664006200037
+  },
+  "schema_version": 1,
+  "scientific_decision": "The installed CAP-12 path evaluates the exact nine-species state and total Jacobian on one stable local branch. This tracer does not qualify parameters; its source rows lack experimental uncertainty and the unconstrained linearized two-row correction leaves the declared physical bounds.",
+  "scope": "stage_3_mathematical_and_sensitivity_tracer_not_parameter_fit",
+  "state": {
+    "amounts_mol": [
+      0.0001467247000778246,
+      0.14611127430121004,
+      7.829766065642132,
+      0.4693302648707649,
+      0.38455846082802486,
+      0.0778191093899707,
+      0.003475705081927361,
+      2.018252087827692e-10,
+      1.2846907398583137e-06
+    ],
+    "branch_family_identity": "sha256:feb203f77a268ee32ae901211457ddb622bdd0cd63e6c5a0860499a875460b04",
+    "branch_family_invariant_for_perturbations": true,
+    "component_ids": [
+      "carbon-dioxide",
+      "monoethanolamine",
+      "water",
+      "protonated-monoethanolamine",
+      "carbamate-anion",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion"
+    ],
+    "globality_claim": "not_established",
+    "mole_fractions": [
+      1.6465184678512716e-05,
+      0.016396347129734888,
+      0.8786424112093574,
+      0.05266740693430358,
+      0.04315446597511903,
+      0.008732721940775002,
+      0.0003900374376749426,
+      2.2648465688633702e-11,
+      1.441657081276883e-07
+    ],
+    "physical_branch_identity": "sha256:38a8985c1c708efb30ea63703d5edf3b7132df0bed844e41c47d9c964d31cd47",
+    "pressure_pa": 7326.7,
+    "state_identity": "sha256:92127f8149e579b5b8b2d90919819049c7251f62efa3871ebbd42e2965c5ab84",
+    "temperature_k": 313.15,
+    "volume_m3": 0.00017039842612903206
+  },
+  "status": "evaluated"
+}
