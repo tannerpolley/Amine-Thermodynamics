@@ -1,0 +1,40 @@
+{
+  "claim_boundary": "diagnostic packet with provisional weights; no parameter-promotion eligibility",
+  "counts": {
+    "by_measurement_role": {
+      "calibration_derived_partial_pressure": 103,
+      "total_pressure_derived": 18
+    },
+    "by_role": {
+      "model_selection": 6,
+      "non_scoring_domain_challenge": 77,
+      "reserved": 8,
+      "training": 30
+    },
+    "by_source": {
+      "Hilliard2008": 55,
+      "Jou1995": 48,
+      "Xu2011": 18
+    }
+  },
+  "identity": "mea-pressure-first-packet-receipt-v1",
+  "input_hashes": {
+    "data/reference/MEA/manifests/pco2_metrology_manifest.csv": "0d14803873a60534ec5d7df382cfbd0ae03e4aaeba68bb5d54be7e4def8397cc",
+    "data/reference/MEA/manifests/reactive_vle_cross_validation.csv": "12258108a3a6301e80ce9cc920c3f48bbb30369fdef6180f0f15863e94a3f61e"
+  },
+  "packet": {
+    "path": "analyses/phase3/ionic_epcsaft_regression/pressure_first/results/pressure_candidate_packet.csv",
+    "rows": 121,
+    "sha256": "9ede05532c142f52ea5e765b9a8b0894a37c588a5c92f87d5b0b807b2c90cbcd",
+    "unique_rows": 121
+  },
+  "preregistration_sha256": "a35ededb004c2f7a64fa6da48f0affb1b9b4c2605dc467f525304bb5fc39cdbc",
+  "receipt_sha256": "f7ae5c7240007e8b8c7958b32d9a9edd08135f9c4f21b2d670e14f618d7790c1",
+  "reserved_policy": "reserved observed values are not consumed by fitting or model selection",
+  "schema_version": 1,
+  "source_hashes": {
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Hilliard_2008_VLE.csv": "4039394233367cbe491f6f97c3e5adcd5f6975fc696a3fde00cd4ca5af44da6c",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Jou_1995_VLE.csv": "ed376aec2bda38348ed5387197215b744e15719f1f6041e998913991ca1a213a",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Xu_2011_VLE.csv": "3118395550de0e3bcf18562670ac443d26f3cc87dac0a85a4438914bb5e55574"
+  }
+}

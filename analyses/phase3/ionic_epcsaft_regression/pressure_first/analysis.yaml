@@ -1,0 +1,30 @@
+id: pressure_first_reactive_vle
+title: Pressure-first MEA reactive-VLE diagnostic
+status: provisional_diagnostic
+summary: Freeze pressure candidates, retain one exact-Jacobian fixed-pressure closure point, and document why nonlinear regression is not yet computationally admissible.
+owner: MEA-Thermodynamics Issue #13
+inputs:
+  - path: data/reference/MEA/manifests/reactive_vle_cross_validation.csv
+    kind: curated_input
+  - path: data/reference/MEA/manifests/pco2_metrology_manifest.csv
+    kind: curated_input
+outputs:
+  - path: results/pressure_candidate_packet.csv
+    kind: immutable_packet
+  - path: results/fixed_pressure_fugacity_screen_timeout.json
+    kind: diagnostic_fit_timeout
+  - path: results/figures/pco2_closure_diagnostic.svg
+    kind: figure
+commands:
+  generate:
+    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/build_packet.py
+    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/evaluate_closure_points.py
+    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/summarize_results.py
+  render:
+    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/render_figures.py
+runtime:
+  class: expensive
+  quick_seconds: 5
+  full_seconds: 7200
+manuscript_consumers: []
+results_policy: Retain the immutable 121-row packet, one exact fixed-pressure ideal-vapor closure value/Jacobian, both runtime blockers, exact plotted-data table, and PNG/SVG/PDF figure bundle; do not report a fitted parameter or represent closure residuals as predicted pressure.

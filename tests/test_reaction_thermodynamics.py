@@ -9,7 +9,7 @@ from MEA.common.mea_source_contracts import (
     common_source_ln_k,
     load_reaction_contract,
 )
-from MEA.epcsaft_ionic.reduced_tracer import _reaction_consistent_molar_masses
+from MEA.epcsaft_ionic.reactive_problem import _reaction_consistent_molar_masses
 
 
 def test_common_source_constants_reproduce_the_313_15_k_vector() -> None:

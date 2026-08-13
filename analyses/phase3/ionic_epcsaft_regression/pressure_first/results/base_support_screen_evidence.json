@@ -1,0 +1,70 @@
+{
+  "accounting": {
+    "certified": 38,
+    "failed": 0,
+    "input": 44,
+    "rejected": 6
+  },
+  "engine": {
+    "distribution": "epcsaft",
+    "engine_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+    "engine_repository": "https://github.com/tannerpolley/ePC-SAFT",
+    "engine_tree": "30fc48f188508c92acb39397a1730a56f39562c8",
+    "identity": "mea-reactive-vle-engine-artifact-lock-v1",
+    "installation_policy": "noneditable_local_wheel_only_no_source_checkout_discovery",
+    "mea_diagnostic_parameter_document": {
+      "domain_fingerprint": "sha256:2312093d987f8dd0057db5c603a9383aca8178cedd2197d1c0d9b0d549d76f29",
+      "model_family_fingerprint": "sha256:4724b991c46551e4f08841c92ee757c53b2b8e2bc3423ab176e0085b905b7d5c",
+      "parameter_fingerprint": "sha256:c621cd37257fdaa8946653cf3e3f36329f6b4a07af10afc082db8f22f7e911a7",
+      "scientific_status": "diagnostic_nonpredictive_provisional_ionic_and_permittivity_inputs",
+      "topology_fingerprint": "sha256:36bbf19d2ac182f414fef9fcf7fb5a196d1b50799f4cb7d1b92952aea0427ef5"
+    },
+    "public_api_signature_identity": "sha256:6c6ad454b5080780841cabfe843307860e35bcd0a1ae90b9fbd21eede78ae309",
+    "public_header_sha256": {
+      "epcsaft": "9bbc6af72a2671c653969de24f28f63f925c7756ea01e1ac64fc7fff676c1c79",
+      "epcsaft.equilibrium": "1df60cddae35533791a38f64cd5a72c18fbdab7f37c361989281c96e8bfa185e",
+      "epcsaft.regression": "9485f2c2b2050ff3c19117cda589c33b23dec98196b7409d7f83c9bd0e13d534"
+    },
+    "schema_version": 1,
+    "upstream_admissions": {
+      "homogeneous_reactive_observations": {
+        "issue": 30,
+        "merge_commit": "2a24e7e744bba4c23cd8a96baf38472d46b42890",
+        "pull_request": 32
+      },
+      "positive_trace_phase_role_followup": {
+        "issue": 34,
+        "merge_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+        "pull_request": 35
+      },
+      "reactive_bubble_vle_observations": {
+        "issue": 31,
+        "merge_commit": "b4bcd2dd8f2a6ef4b4e984a172cd789977751bf9",
+        "pull_request": 33
+      }
+    },
+    "version": "0.2.0.dev0",
+    "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "b030f0f649b67f02421decdb761c7b45dd5b2656759ab2ae91bb5a6c7531dd88"
+  },
+  "identity": "mea-pressure-base-support-screen-v1",
+  "parameter_state": "retained M0 diagnostic parameter document",
+  "receipt_sha256": "908423a58427ad49bfb8c408cb35dbc780435ba08988d451d6acef95371473a5",
+  "rejected_rows": [
+    "vle_obs_0107",
+    "vle_obs_0126",
+    "vle_obs_0128",
+    "vle_obs_0141",
+    "vle_obs_0151",
+    "vle_obs_0154"
+  ],
+  "reserved_use": "support certification only; no observed residual, metric, or selection decision was evaluated",
+  "schema_version": 1,
+  "scope": "44 rows in current R4/R5 source domain",
+  "typed_rejection": {
+    "exception": "ChemicalEquilibriumError",
+    "failure_kind": "physical_domain_failure",
+    "first_failed_physical_criterion": "trace_status",
+    "search_status": "domain_rejected"
+  }
+}

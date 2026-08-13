@@ -1,0 +1,94 @@
+{
+  "coupled_promotion_lane": {
+    "elapsed_seconds": 1022.08,
+    "receipt_sha256": "8d573326e348479bf2a577823bb84b3130c4ed9d9eb4d82e6871a25876134805",
+    "status": "timed_out_no_pressure_root_result"
+  },
+  "diagnostic_evaluation": {
+    "available_scoring_rows": 36,
+    "closure_comparison": "ideal-vapor fugacity assumed equal to observed PCO2",
+    "evaluated_rows": 1,
+    "modeled_quantity": "liquid_CO2_fugacity_at_observed_T_and_total_P",
+    "observed_pressure_is_model_input": true,
+    "predicted_pco2_available": false,
+    "prediction_table_sha256": "43980e966607d8dd4566311d65587329857465760346b8c98e0ba6d37cb2d5d1",
+    "status": "one_unfitted_origin_value_and_exact_jacobian"
+  },
+  "engine": {
+    "distribution": "epcsaft",
+    "engine_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+    "engine_repository": "https://github.com/tannerpolley/ePC-SAFT",
+    "engine_tree": "30fc48f188508c92acb39397a1730a56f39562c8",
+    "identity": "mea-reactive-vle-engine-artifact-lock-v1",
+    "installation_policy": "noneditable_local_wheel_only_no_source_checkout_discovery",
+    "installed_tracer_receipt_sha256": "67575536d21a4e55eba443970363add208b739542adabf807647dbd72458098e",
+    "mea_diagnostic_parameter_document": {
+      "domain_fingerprint": "sha256:2312093d987f8dd0057db5c603a9383aca8178cedd2197d1c0d9b0d549d76f29",
+      "model_family_fingerprint": "sha256:4724b991c46551e4f08841c92ee757c53b2b8e2bc3423ab176e0085b905b7d5c",
+      "parameter_fingerprint": "sha256:c621cd37257fdaa8946653cf3e3f36329f6b4a07af10afc082db8f22f7e911a7",
+      "scientific_status": "diagnostic_nonpredictive_provisional_ionic_and_permittivity_inputs",
+      "topology_fingerprint": "sha256:36bbf19d2ac182f414fef9fcf7fb5a196d1b50799f4cb7d1b92952aea0427ef5"
+    },
+    "public_api_signature_identity": "sha256:6c6ad454b5080780841cabfe843307860e35bcd0a1ae90b9fbd21eede78ae309",
+    "public_header_sha256": {
+      "epcsaft": "9bbc6af72a2671c653969de24f28f63f925c7756ea01e1ac64fc7fff676c1c79",
+      "epcsaft.equilibrium": "1df60cddae35533791a38f64cd5a72c18fbdab7f37c361989281c96e8bfa185e",
+      "epcsaft.regression": "9485f2c2b2050ff3c19117cda589c33b23dec98196b7409d7f83c9bd0e13d534"
+    },
+    "schema_version": 1,
+    "upstream_admissions": {
+      "homogeneous_reactive_observations": {
+        "issue": 30,
+        "merge_commit": "2a24e7e744bba4c23cd8a96baf38472d46b42890",
+        "pull_request": 32
+      },
+      "positive_trace_phase_role_followup": {
+        "issue": 34,
+        "merge_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+        "pull_request": 35
+      },
+      "reactive_bubble_vle_observations": {
+        "issue": 31,
+        "merge_commit": "b4bcd2dd8f2a6ef4b4e984a172cd789977751bf9",
+        "pull_request": 33
+      }
+    },
+    "version": "0.2.0.dev0",
+    "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "b030f0f649b67f02421decdb761c7b45dd5b2656759ab2ae91bb5a6c7531dd88"
+  },
+  "identity": "mea-pressure-first-scientific-decision-v1",
+  "manuscript_changed": false,
+  "next_method_decision": "profile and reduce the certified chemical-equilibrium owner cost before any further optimizer execution",
+  "nonlinear_diagnostic_fit": {
+    "elapsed_seconds": 3810.0,
+    "fitted_parameter_available": false,
+    "receipt_sha256": "99c7e74f620f45c0fa0222e76c53819f22138b03b60a986ae61a417b74ba623f",
+    "status": "timed_out_no_FitResult"
+  },
+  "packet": {
+    "domain_challenge": 77,
+    "model_selection": 6,
+    "reserved": 8,
+    "rows": 121,
+    "sha256": "9ede05532c142f52ea5e765b9a8b0894a37c588a5c92f87d5b0b807b2c90cbcd",
+    "training": 30
+  },
+  "promotion_blockers": [
+    "coupled reactive-bubble pressure closure returned no result",
+    "fixed-pressure nonlinear regression returned no FitResult",
+    "only 1 of 36 training/model-selection rows has a retained exact closure point",
+    "residual scales are provisional diagnostic weights, not source uncertainties",
+    "M1-M5 source-fixed inputs are not qualified",
+    "held-out campaign selection and reserved validation were not scored"
+  ],
+  "promotion_decision": "not_promoted",
+  "receipt_sha256": "d7ca6b26122f1d4d3892a81ff36e522605ec93c4a9f6d1cc4df8b5793afdb1c1",
+  "residual_trend_claim": "unavailable_one_point_is_insufficient",
+  "schema_version": 1,
+  "support_preflight": {
+    "certified_rows": 38,
+    "input_rows": 44,
+    "typed_rejections": 6
+  }
+}
