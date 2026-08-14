@@ -1,6 +1,6 @@
 {
   "accounting": {
-    "independent_binary_diagnostic_fits_started": 3,
+    "independent_binary_diagnostic_fits_started": 2,
     "model_selection_rows_used": 0,
     "nonlinear_fits_started": 0,
     "numeric_failure_penalties": 0,
@@ -207,7 +207,7 @@
     "cai_model_selection_rows": 13,
     "cai_source_sha256": "091edb997b7bddf3c791a0a2dff9ac03ade971a7f580f6b3ab7cbf85a305b70a",
     "cai_training_rows": 12,
-    "finding": "all three exact fixed-state closure fits are rank-one, interior, and multistart-consistent, but none passes source-scale residual and trend gates. Baygi's reported kij values were fitted with Eq. 12 Bubble-T and Dew-T composition objectives, which the Engine does not expose as an exact-Jacobian generic observation family",
+    "finding": "both source-consistent fixed-state closure fits are rank-one, interior, and multistart-consistent, but neither passes source-scale residual and trend gates. Baygi's reported kij values were fitted with Eq. 12 Bubble-T and Dew-T composition objectives, which the Engine does not expose as an exact-Jacobian generic observation family",
     "fit_receipts": {
       "baygi_3b2b": {
         "admitted_model_selection_rows": 13,
@@ -236,20 +236,6 @@
         "selected_diagnostic_k_ij": -0.010020294187485635,
         "sha256": "3dd7f056d3867ed1a339b365d22f31515709ec455a981c45479659f9ba06ff44",
         "training_normalized_rmse": 14.572885207665339
-      },
-      "current_2b_held": {
-        "admitted_model_selection_rows": 0,
-        "admitted_training_rows": 3,
-        "all_gates_pass": false,
-        "all_starts_same_solution": true,
-        "condition_number": 1.0,
-        "model_selection_normalized_rmse": null,
-        "path": "analyses/phase3/ionic_epcsaft_regression/pressure_first/results/cai_mea_water_binary_fit.json",
-        "rank": 1,
-        "receipt_sha256": "565eea21ad2b341472712122334dd3c9c99663ecc4e8a2a0a89dcafae11f7579",
-        "selected_diagnostic_k_ij": -0.05782530272717928,
-        "sha256": "13a58cc666d3bbefeb02b5c4989ea97ac51912f4b567a14f32491d88acbf0f14",
-        "training_normalized_rmse": 7.740285849183776
       }
     }
   },
@@ -307,11 +293,11 @@
     "principal ionic coordinates require same-state speciation or independent volumetric/activity evidence",
     "B\u00f6ttinger direct speciation lacks exact per-sample pressure and includes an omitted measured byproduct; Matin species are balance-inferred without the required covariance contract",
     "M2-M5 source-fixed molecular, association, permittivity, or Born inputs remain incomplete",
-    "the current, Baygi 3B/2B, and Baygi 3B/4C neutral formulations all fail the exact fixed-state Cai source-scale residual/trend gates",
+    "the Baygi 3B/2B and Baygi 3B/4C neutral formulations both fail the exact fixed-state Cai source-scale residual/trend gates",
     "Engine exposes exact fixed-pressure fugacity blocks but not Baygi Eq. 12 Bubble-T/Dew-T composition observations with exact total parameter Jacobians"
   ],
   "promotion_decision": "not_promoted",
-  "receipt_sha256": "0ffeb0cc66b6cf23fb1751dace0631e9c8fbc0baa851de4bb04819de7b1ec876",
+  "receipt_sha256": "d36ed222d65793997ddc574880e1574ad87ef09bbc27d28da174964812932081",
   "schema_version": 1,
   "screen_receipts": {
     "M0_MEA_water_direction": {

@@ -19,7 +19,6 @@ from MEA.epcsaft_ionic.parameter_document import parameter_mapping
 
 ROOT = Path(__file__).resolve().parents[5]
 ANALYSIS = ROOT / "analyses/phase3/ionic_epcsaft_regression/pressure_first"
-DEFAULT_CONFIG_PATH = ANALYSIS / "config/cai_mea_water_binary_fit.json"
 ENGINE_LOCK = ROOT / "data/reference/MEA/manifests/engine_artifact_lock.json"
 
 
@@ -395,7 +394,7 @@ def _unavailable_metrics(reason: str) -> dict[str, object]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG_PATH)
+    parser.add_argument("--config", type=Path, required=True)
     args = parser.parse_args()
     config_path = args.config.resolve()
     config = cast(dict[str, Any], json.loads(config_path.read_text(encoding="utf-8")))
