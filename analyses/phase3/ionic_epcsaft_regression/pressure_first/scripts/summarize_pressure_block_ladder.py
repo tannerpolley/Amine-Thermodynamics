@@ -22,7 +22,6 @@ OUTPUT = RESULTS / "pressure_block_ladder_decision.json"
 TABLE = RESULTS / "pressure_block_ladder_summary.csv"
 PLOT_DATA = FIGURES / "pressure_block_ladder_plot_data.csv"
 BINARY_FITS = {
-    "current_2b_held": RESULTS / "cai_mea_water_binary_fit.json",
     "baygi_3b2b": RESULTS / "cai_baygi_3b2b_binary_fit.json",
     "baygi_3b4c": RESULTS / "cai_baygi_3b4c_binary_fit.json",
 }
@@ -346,8 +345,9 @@ def main() -> None:
                 fit["all_gates_pass"] for fit in binary_fits.values()
             ),
             "finding": (
-                "all three exact fixed-state closure fits are rank-one, interior, and "
-                "multistart-consistent, but none passes source-scale residual and trend "
+                "both source-consistent fixed-state closure fits are rank-one, "
+                "interior, and multistart-consistent, but neither passes source-scale "
+                "residual and trend "
                 "gates. Baygi's reported kij values were fitted with Eq. 12 Bubble-T and "
                 "Dew-T composition objectives, which the Engine does not expose as an "
                 "exact-Jacobian generic observation family"
@@ -370,7 +370,7 @@ def main() -> None:
             "principal ionic coordinates require same-state speciation or independent volumetric/activity evidence",
             "Böttinger direct speciation lacks exact per-sample pressure and includes an omitted measured byproduct; Matin species are balance-inferred without the required covariance contract",
             "M2-M5 source-fixed molecular, association, permittivity, or Born inputs remain incomplete",
-            "the current, Baygi 3B/2B, and Baygi 3B/4C neutral formulations all fail the exact fixed-state Cai source-scale residual/trend gates",
+            "the Baygi 3B/2B and Baygi 3B/4C neutral formulations both fail the exact fixed-state Cai source-scale residual/trend gates",
             "Engine exposes exact fixed-pressure fugacity blocks but not Baygi Eq. 12 Bubble-T/Dew-T composition observations with exact total parameter Jacobians",
         ],
         "smallest_unresolved_scientific_decision": (
