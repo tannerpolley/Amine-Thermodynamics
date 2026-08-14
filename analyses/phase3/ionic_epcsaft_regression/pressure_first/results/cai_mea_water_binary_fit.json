@@ -1,0 +1,219 @@
+{
+  "accounting": {
+    "admitted_model_selection_rows": 0,
+    "admitted_training_rows": 3,
+    "domain_challenge_rows": 22,
+    "numeric_failure_penalties": 0,
+    "optimizer_phase_evaluations": 132,
+    "pure_endpoint_context_rows": 4,
+    "selection_phase_evaluations": 0,
+    "source_rows": 29
+  },
+  "active_bounds": [],
+  "active_coordinate": {
+    "bounds": [
+      -0.2,
+      0.2
+    ],
+    "identity": "pair/monoethanolamine/water/k_ij",
+    "origin": -0.052,
+    "scale": 0.05,
+    "unit": "dimensionless"
+  },
+  "all_gates_pass": false,
+  "claim_status": "independent_neutral_binary_diagnostic",
+  "condition_number": 1.0,
+  "config_sha256": "97e53106ab6372d0bd59059b6b0e9a22779a501cd6e755d24512f4b4c5b186ff",
+  "covariance": {
+    "degrees_of_freedom": null,
+    "status": "unavailable_missing_component_covariance_and_statistical_uncertainty_model"
+  },
+  "derivative_checks": [
+    {
+      "center_values": [
+        1.7166315505934666,
+        11.66718596131022
+      ],
+      "central_difference": [
+        98.40412033240708,
+        659.7935821836209
+      ],
+      "exact": [
+        98.40412280185615,
+        659.7937049534834
+      ],
+      "maximum_scaled_relative_error": 1.8607313837162086e-07,
+      "roles": [
+        "monoethanolamine",
+        "water"
+      ],
+      "row_id": "cai1996_06666_012"
+    },
+    {
+      "center_values": [
+        1.141740235244166,
+        -12.957627544598916
+      ],
+      "central_difference": [
+        88.56584299790082,
+        561.1124951467872
+      ],
+      "exact": [
+        88.5658473570675,
+        561.1127683139232
+      ],
+      "maximum_scaled_relative_error": 4.868313188138095e-07,
+      "roles": [
+        "monoethanolamine",
+        "water"
+      ],
+      "row_id": "cai1996_06666_013"
+    }
+  ],
+  "domain_challenge_row_ids": [
+    "cai1996_10133_002",
+    "cai1996_10133_003",
+    "cai1996_10133_004",
+    "cai1996_10133_005",
+    "cai1996_10133_006",
+    "cai1996_10133_007",
+    "cai1996_10133_008",
+    "cai1996_10133_009",
+    "cai1996_10133_010",
+    "cai1996_10133_011",
+    "cai1996_10133_012",
+    "cai1996_10133_013",
+    "cai1996_06666_002",
+    "cai1996_06666_003",
+    "cai1996_06666_004",
+    "cai1996_06666_005",
+    "cai1996_06666_006",
+    "cai1996_06666_007",
+    "cai1996_06666_008",
+    "cai1996_06666_009",
+    "cai1996_06666_010",
+    "cai1996_06666_011"
+  ],
+  "engine": {
+    "distribution": "epcsaft",
+    "engine_commit": "12b99e0eb8336e8df2b98795fdab5f963a43e0a7",
+    "engine_repository": "https://github.com/tannerpolley/ePC-SAFT",
+    "engine_tree": "3c8d069d0ffe5a613a949aef29e941ddc6bbd109",
+    "identity": "mea-reactive-vle-engine-artifact-lock-v1",
+    "installation_policy": "noneditable_local_wheel_only_no_source_checkout_discovery",
+    "mea_diagnostic_parameter_document": {
+      "domain_fingerprint": "sha256:2312093d987f8dd0057db5c603a9383aca8178cedd2197d1c0d9b0d549d76f29",
+      "model_family_fingerprint": "sha256:4724b991c46551e4f08841c92ee757c53b2b8e2bc3423ab176e0085b905b7d5c",
+      "parameter_fingerprint": "sha256:c621cd37257fdaa8946653cf3e3f36329f6b4a07af10afc082db8f22f7e911a7",
+      "scientific_status": "diagnostic_nonpredictive_provisional_ionic_and_permittivity_inputs",
+      "topology_fingerprint": "sha256:36bbf19d2ac182f414fef9fcf7fb5a196d1b50799f4cb7d1b92952aea0427ef5"
+    },
+    "public_api_signature_identity": "sha256:6c6ad454b5080780841cabfe843307860e35bcd0a1ae90b9fbd21eede78ae309",
+    "public_header_sha256": {
+      "epcsaft": "9bbc6af72a2671c653969de24f28f63f925c7756ea01e1ac64fc7fff676c1c79",
+      "epcsaft.equilibrium": "1df60cddae35533791a38f64cd5a72c18fbdab7f37c361989281c96e8bfa185e",
+      "epcsaft.regression": "9485f2c2b2050ff3c19117cda589c33b23dec98196b7409d7f83c9bd0e13d534"
+    },
+    "schema_version": 1,
+    "upstream_admissions": {
+      "homogeneous_reactive_observations": {
+        "issue": 30,
+        "merge_commit": "2a24e7e744bba4c23cd8a96baf38472d46b42890",
+        "pull_request": 32
+      },
+      "positive_trace_phase_role_followup": {
+        "issue": 34,
+        "merge_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+        "pull_request": 35
+      },
+      "reactive_bubble_vle_observations": {
+        "issue": 31,
+        "merge_commit": "b4bcd2dd8f2a6ef4b4e984a172cd789977751bf9",
+        "pull_request": 33
+      }
+    },
+    "version": "0.2.0.dev0",
+    "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "9cfb297b485bc38eb0dc5c0e039f0cec48f67e1e8bb5f1fc26c932f712da4379"
+  },
+  "gates": {
+    "all_admitted_rows_evaluated": true,
+    "all_starts_same_solution": true,
+    "condition_number": true,
+    "exact_jacobian_check": true,
+    "independent_pressure_level_validation": false,
+    "no_material_composition_trend": false,
+    "rank": true,
+    "strictly_interior": true,
+    "training_normalized_rmse": false
+  },
+  "identity": "cai-1996-mea-water-binary-qualification-v1-result",
+  "model_selection_metrics": {
+    "reason": "unavailable: no internal 101.33 kPa Cai row is at or below the Held 2008 373.15 K qualification limit",
+    "residual_count": 0,
+    "status": "unavailable"
+  },
+  "origin_metrics": {
+    "model_selection_normalized_rmse": null,
+    "training_normalized_rmse": 8.01980488761624
+  },
+  "parameter_fingerprint": "sha256:d0dbec5860f2eebe2a32e86bc5545f7bdbb1d411fc1301ced694bc1857fee69d",
+  "parameter_mapping_sha256": "ba1af004b5c3bcd64120d133eaebf3fccdcd999596651366cf74778a7f6ef017",
+  "pressure_level_validation_status": "unavailable: no internal 101.33 kPa Cai row is at or below the Held 2008 373.15 K qualification limit",
+  "promotion_decision": "not_promoted",
+  "promotion_reason": "one or more preregistered scientific gates failed",
+  "rank": 1,
+  "receipt_sha256": "565eea21ad2b341472712122334dd3c9c99663ecc4e8a2a0a89dcafae11f7579",
+  "runtime_seconds": 31.128822879007203,
+  "schema_version": 1,
+  "selected_value": -0.05782530272717928,
+  "singular_values_affine": [
+    44.14313734379781
+  ],
+  "source_csv_sha256": "c7857f045757881662f1836913e25216f808bc9fdcf5c74f3b4d03c76c134a8b",
+  "starts": [
+    {
+      "cost": 179.73607508824344,
+      "final_value": -0.0578253027362761,
+      "function_evaluations": 7,
+      "identity": "negative-wide",
+      "initial_value": -0.15,
+      "jacobian_evaluations": 6,
+      "message": "`xtol` termination condition is satisfied.",
+      "optimality": 8.895939947128099e-07,
+      "status": 3,
+      "success": true
+    },
+    {
+      "cost": 179.73607511143706,
+      "final_value": -0.05782530272139283,
+      "function_evaluations": 7,
+      "identity": "retained-origin",
+      "initial_value": -0.052,
+      "jacobian_evaluations": 5,
+      "message": "`xtol` termination condition is satisfied.",
+      "optimality": 1.2629852703685624e-06,
+      "status": 3,
+      "success": true
+    },
+    {
+      "cost": 179.73607508122382,
+      "final_value": -0.05782530272717928,
+      "function_evaluations": 8,
+      "identity": "positive",
+      "initial_value": 0.05,
+      "jacobian_evaluations": 8,
+      "message": "`xtol` termination condition is satisfied.",
+      "optimality": 1.2811152457633804e-06,
+      "status": 3,
+      "success": true
+    }
+  ],
+  "training_metrics": {
+    "composition_slope": -52.17428593875739,
+    "normalized_mae": 5.782101427311541,
+    "normalized_max_abs": 12.957627544598916,
+    "normalized_rmse": 7.740285849183776,
+    "residual_count": 6
+  }
+}
