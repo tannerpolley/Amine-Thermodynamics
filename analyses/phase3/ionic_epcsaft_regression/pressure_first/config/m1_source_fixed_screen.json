@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "identity": "mea-pressure-m1-source-fixed-screen-v1",
+  "issue": "https://github.com/tannerpolley/MEA-Thermodynamics/issues/13",
+  "frozen_before_evaluation": true,
+  "engine_wheel_lock": "data/reference/MEA/manifests/engine_artifact_lock.json",
+  "scientific_question": "Does a source-consistent fixed CO2 quadrupolar pure-component model remove the pressure residual curvature sufficiently for a one-coordinate CO2-water k_ij fit?",
+  "model_configuration": "M1",
+  "polar_formulation": "point-multipole",
+  "additional_sources": [
+    {
+      "source_id": "gross-2005-qq",
+      "citation": "Gross, J. An Equation-of-State Contribution for Polar Components: Quadrupolar Molecules. AIChE Journal 2005, 51, 2556-2568. DOI 10.1002/aic.10502.",
+      "use_basis": "Literature quadrupole moment and its corresponding first-row PCP-SAFT pure-component parameter set from Table A1."
+    }
+  ],
+  "additional_domains": [
+    {
+      "domain_id": "gross-2005-qq-pure-carbon-dioxide",
+      "kind": "unknown"
+    }
+  ],
+  "fixed_component_overrides": {
+    "carbon-dioxide": {
+      "quadrupole_moment": {
+        "value": {
+          "magnitude": 4.4,
+          "unit": "debye * angstrom"
+        },
+        "provenance": {
+          "source_id": "gross-2005-qq",
+          "locator": "Table A1, first carbon-dioxide row; literature quadrupole moment",
+          "domain_id": "gross-2005-qq-pure-carbon-dioxide"
+        }
+      }
+    }
+  },
+  "coefficient_record_overrides": {
+    "component/carbon-dioxide/segment_count": {
+      "value": {"magnitude": 1.5131, "unit": "dimensionless"},
+      "provenance": {
+        "source_id": "gross-2005-qq",
+        "locator": "Table A1, first carbon-dioxide row",
+        "domain_id": "gross-2005-qq-pure-carbon-dioxide"
+      }
+    },
+    "component/carbon-dioxide/segment_diameter": {
+      "value": {"magnitude": 3.1869, "unit": "angstrom"},
+      "provenance": {
+        "source_id": "gross-2005-qq",
+        "locator": "Table A1, first carbon-dioxide row",
+        "domain_id": "gross-2005-qq-pure-carbon-dioxide"
+      }
+    },
+    "component/carbon-dioxide/dispersion_energy_over_k": {
+      "value": {"magnitude": 163.33, "unit": "kelvin"},
+      "provenance": {
+        "source_id": "gross-2005-qq",
+        "locator": "Table A1, first carbon-dioxide row",
+        "domain_id": "gross-2005-qq-pure-carbon-dioxide"
+      }
+    }
+  },
+  "fixed_input_source": {
+    "citation": "Gross, J. An Equation-of-State Contribution for Polar Components: Quadrupolar Molecules. AIChE Journal 2005, 51, 2556-2568.",
+    "doi": "10.1002/aic.10502",
+    "source_sha256": "cfd73fa388bec051b91e4f51e1c2e16ddf2f2140b6c037996ab33290887c5d50",
+    "locators": [
+      "Table A1, first carbon-dioxide row: m=1.5131, sigma=3.1869 angstrom, epsilon/k=163.33 K, |Q|=4.4 D angstrom",
+      "pp. 2562-2563: literature Q=4.4 D angstrom used directly and pure-property comparison",
+      "Table A1 note: first row uses the literature quadrupole moment; second row fits Q and is excluded"
+    ],
+    "parameter_policy": "The complete first-row PCP-SAFT CO2 set is used. The fitted-Q second row is excluded, and Q is not an active regression coordinate."
+  },
+  "training_screen": {
+    "campaign_identity": "pco2|Hilliard2008|w=0.17|T=40",
+    "row_ids": [
+      "vle_obs_0107",
+      "vle_obs_0108",
+      "vle_obs_0109",
+      "vle_obs_0110",
+      "vle_obs_0111",
+      "vle_obs_0112"
+    ],
+    "selection_use": "exact-Jacobian M1 direction screen",
+    "all_rows_required": true
+  },
+  "model_selection": {
+    "campaign_identity": "pco2|Hilliard2008|w=0.4|T=40",
+    "row_ids": [
+      "vle_obs_0150",
+      "vle_obs_0151",
+      "vle_obs_0152",
+      "vle_obs_0153",
+      "vle_obs_0154",
+      "vle_obs_0155"
+    ],
+    "use_before_training_block_passes": false
+  },
+  "reserved": {
+    "campaign_identity": "pco2|Jou1995|w=0.3|T=40",
+    "row_ids": [
+      "vle_obs_0186",
+      "vle_obs_0187",
+      "vle_obs_0188",
+      "vle_obs_0189",
+      "vle_obs_0190",
+      "vle_obs_0191",
+      "vle_obs_0192",
+      "vle_obs_0193"
+    ],
+    "policy": "untouched_until_a_candidate_passes_training_and_model_selection"
+  },
+  "measurement_scale": {
+    "basis": "source-backed expanded/resolution scale in log10 predicted-over-observed PCO2",
+    "formula": "sqrt(0.02^2 + (640 Pa / observed total pressure)^2) / ln(10)",
+    "vapor_composition_relative_expanded_uncertainty": 0.02,
+    "reactor_pressure_accuracy_pa": 640.0,
+    "loading_relative_standard_uncertainty": 0.02,
+    "loading_treatment": "state-input uncertainty reported separately; it is not hidden in the pressure residual weight",
+    "source_sha256": "728f506faaca36a0f5b3ec4162c1aa6f8ffc49af98871bb2da2fe573fc39df61",
+    "scale_sensitivity_factors": [0.5, 1.0, 2.0],
+    "statistical_claim": "engineering expanded/resolution scale, not a covariance matrix or one-standard-deviation model"
+  },
+  "coordinate_screen": [
+    {
+      "identity": "pair/carbon-dioxide/water/k_ij",
+      "role": "only_active_coordinate",
+      "origin": 0.0,
+      "scale": 0.05,
+      "bounds": [-0.2, 0.2],
+      "unit": "dimensionless"
+    }
+  ],
+  "nested_blocks": [
+    ["pair/carbon-dioxide/water/k_ij"]
+  ],
+  "screen_gates": {
+    "all_rows_evaluated": true,
+    "full_scaled_rank": true,
+    "maximum_condition_number": 10000.0,
+    "linearized_step_inside_bounds": true,
+    "absolute_quadratic_loading_curvature_must_improve": true,
+    "residual_range_must_improve": true,
+    "typed_failure_penalties_allowed": false,
+    "advance_to_model_selection_only_if_training_gates_pass": true
+  },
+  "claim_boundary": "Source-fixed M1 comparison and exact-Jacobian direction screen; not a fitted or promoted parameter result.",
+  "thermodynamic_tolerances": "unchanged_from_the_installed_Engine_owner"
+}
