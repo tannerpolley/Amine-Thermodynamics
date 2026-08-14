@@ -19,6 +19,17 @@ PLOT_DATA = FIGURES / "pco2_closure_diagnostic_plot_data.csv"
 FIGURE_STEM = FIGURES / "pco2_closure_diagnostic"
 BUBBLE_TABLE = FIGURES / "reactive_bubble_pressure_plot_data.csv"
 BUBBLE_FIGURE_STEM = FIGURES / "reactive_bubble_pressure_diagnostic"
+LADDER_TABLE = FIGURES / "pressure_block_ladder_plot_data.csv"
+LADDER_FIGURE_STEM = FIGURES / "pressure_block_ladder_diagnostic"
+BINARY_INPUT = RESULTS / "cai_mea_water_binary_predictions.csv"
+BINARY_TABLE = FIGURES / "cai_mea_water_binary_plot_data.csv"
+BINARY_FIGURE_STEM = FIGURES / "cai_mea_water_binary_diagnostic"
+BAYGI_BINARY_INPUTS = {
+    "Baygi 3B/2B": RESULTS / "cai_baygi_3b2b_binary_predictions.csv",
+    "Baygi 3B/4C": RESULTS / "cai_baygi_3b4c_binary_predictions.csv",
+}
+BAYGI_BINARY_TABLE = FIGURES / "cai_baygi_binary_model_comparison_plot_data.csv"
+BAYGI_BINARY_FIGURE_STEM = FIGURES / "cai_baygi_binary_model_comparison_diagnostic"
 
 SOURCE_ORDER = ("Hilliard2008", "Jou1995", "Xu2011")
 SOURCE_LABELS = {
@@ -181,6 +192,226 @@ def _render_reactive_bubble_diagnostic() -> tuple[Path, Path, Path]:
     return png, svg, pdf
 
 
+def _render_pressure_block_ladder() -> tuple[Path, Path, Path]:
+    frame = pd.read_csv(LADDER_TABLE)
+    if set(frame["analysis_role"]) != {"training"}:
+        raise RuntimeError("pressure block ladder plot may contain training rows only")
+    models = {
+        "M0": ("#28659c", "s", "M0 exact origin"),
+        "M1": ("#b6312c", "^", "M1 exact source-fixed origin"),
+    }
+    fig, (pressure_ax, residual_ax) = plt.subplots(1, 2, figsize=(11.2, 4.8))
+    observations = frame.loc[frame["model"] == "M0"].sort_values(
+        "loading_mol_co2_per_mol_mea"
+    )
+    pressure_ax.scatter(
+        observations["loading_mol_co2_per_mol_mea"],
+        observations["observed_pco2_pa"] / 1000.0,
+        color="white",
+        edgecolor="black",
+        linewidth=0.8,
+        s=48,
+        label="Hilliard (2008) experiment",
+        zorder=4,
+    )
+    for model, (color, marker, label) in models.items():
+        subset = frame.loc[frame["model"] == model].sort_values(
+            "loading_mol_co2_per_mol_mea"
+        )
+        pressure_ax.plot(
+            subset["loading_mol_co2_per_mol_mea"],
+            subset["predicted_pco2_pa"] / 1000.0,
+            color=color,
+            marker=marker,
+            linewidth=1.5,
+            markersize=4.5,
+            label=label,
+        )
+        residual_ax.plot(
+            subset["loading_mol_co2_per_mol_mea"],
+            subset["residual_log10"],
+            color=color,
+            marker=marker,
+            linewidth=1.5,
+            markersize=4.5,
+            label=label,
+        )
+    pressure_ax.set_yscale("log")
+    pressure_ax.set_xlabel("$CO_2$ loading, mol $CO_2$/mol MEA")
+    pressure_ax.set_ylabel("$P_{CO_2}$, kPa")
+    finish_axes(pressure_ax, title="Exact reactive-bubble pressure roots")
+    pressure_ax.legend(fontsize=7.5)
+    residual_ax.axhline(0.0, color="black", linestyle=":", linewidth=1.0)
+    residual_ax.set_xlabel("$CO_2$ loading, mol $CO_2$/mol MEA")
+    residual_ax.set_ylabel("$\\log_{10}(P_{CO_2}^{model}/P_{CO_2}^{obs})$")
+    finish_axes(residual_ax, title="Loading-dependent pressure residual")
+    residual_ax.legend(fontsize=7.5)
+    fig.suptitle(
+        "17 wt% MEA, 40 °C — bounded M0/M1 direction screen\n"
+        "Exact origins only; linearized candidates are not plotted as predictions",
+        fontsize=11.5,
+        fontweight="semibold",
+    )
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.90))
+    png, svg, pdf = save_figure_bundle(fig, LADDER_FIGURE_STEM)
+    plt.close(fig)
+    write_mpl_sidecar(
+        LADDER_FIGURE_STEM.with_suffix(".mpl.yaml"),
+        png_name=png.name,
+        svg_name=svg.name,
+        pdf_name=pdf.name,
+        title="Diagnostic exact reactive-bubble M0/M1 pressure screen",
+        description=(
+            "Experimental and exact independently rooted reactive-bubble CO2 partial "
+            "pressures for the Hilliard 17 wt% MEA, 40 C training subset. M0 uses the "
+            "current nonpolar diagnostic origin; M1 uses the source-fixed Gross 2005 "
+            "CO2 quadrupolar origin. No linearized parameter candidate is presented as "
+            "an exact pressure prediction. Both models are diagnostic and non-promotable; "
+            "model-selection and reserved campaigns remain unevaluated."
+        ),
+        data_path=LADDER_TABLE,
+        style_source=str(Path(__file__).relative_to(ROOT)),
+    )
+    return png, svg, pdf
+
+
+def _render_cai_binary_diagnostic() -> tuple[Path, Path, Path]:
+    frame = pd.read_csv(BINARY_INPUT)
+    if set(frame["fit_role"]) != {"binary_training"}:
+        raise RuntimeError(
+            "Cai diagnostic plot may contain admitted training rows only"
+        )
+    frame.to_csv(BINARY_TABLE, index=False, lineterminator="\n")
+    component_titles = {
+        "monoethanolamine": "MEA fugacity closure",
+        "water": "Water fugacity closure",
+    }
+    state_styles = {
+        "retained_origin": ("#666666", "--", "o", "retained origin"),
+        "fitted_diagnostic": ("#28659c", "-", "s", "fitted diagnostic"),
+    }
+    fig, axes = plt.subplots(1, 2, figsize=(10.8, 4.6), sharex=True)
+    for ax, component in zip(axes, component_titles, strict=True):
+        component_frame = frame.loc[frame["component_id"] == component]
+        for state, (color, line_style, marker, label) in state_styles.items():
+            subset = component_frame.loc[
+                component_frame["parameter_state"] == state
+            ].sort_values("water_liquid_mole_fraction")
+            parameter = float(subset["k_ij_mea_water"].iloc[0])
+            ax.plot(
+                subset["water_liquid_mole_fraction"],
+                subset["normalized_residual"],
+                color=color,
+                linestyle=line_style,
+                marker=marker,
+                linewidth=1.5,
+                markersize=5,
+                label=f"{label}, $k_{{ij}}={parameter:.5f}$",
+            )
+        ax.axhline(0.0, color="black", linestyle=":", linewidth=1.0)
+        ax.set_xlabel("Liquid water mole fraction")
+        ax.set_ylabel("Normalized log-fugacity closure residual")
+        finish_axes(ax, title=component_titles[component])
+        ax.legend(fontsize=7.3)
+    fig.suptitle(
+        "Cai (1996) MEA–water binary qualification diagnostic\n"
+        "66.66 kPa admitted subset; measured $T$, $P$, $x$, and $y$ are inputs",
+        fontsize=11.5,
+        fontweight="semibold",
+    )
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.90))
+    png, svg, pdf = save_figure_bundle(fig, BINARY_FIGURE_STEM)
+    plt.close(fig)
+    write_mpl_sidecar(
+        BINARY_FIGURE_STEM.with_suffix(".mpl.yaml"),
+        png_name=png.name,
+        svg_name=svg.name,
+        pdf_name=pdf.name,
+        title="Diagnostic Cai MEA-water binary fugacity closure",
+        description=(
+            "Exact liquid/vapor fixed-pressure component fugacity-closure residuals "
+            "for the three Cai 1996 internal rows inside the current Held-water "
+            "source domain. The fitted neutral interaction is identifiable and "
+            "multistart-consistent but fails residual-trend and held-out-pressure-level "
+            "qualification gates. It is diagnostic and non-promotable."
+        ),
+        data_path=BINARY_TABLE,
+        style_source=str(Path(__file__).relative_to(ROOT)),
+    )
+    return png, svg, pdf
+
+
+def _render_baygi_binary_comparison() -> tuple[Path, Path, Path]:
+    frames: list[pd.DataFrame] = []
+    for model, path in BAYGI_BINARY_INPUTS.items():
+        frame = pd.read_csv(path)
+        frame = frame.loc[frame["parameter_state"] == "fitted_diagnostic"].copy()
+        frame["model"] = model
+        frames.append(frame)
+    combined = pd.concat(frames, ignore_index=True)
+    combined.to_csv(BAYGI_BINARY_TABLE, index=False, lineterminator="\n")
+    components = ("monoethanolamine", "water")
+    titles = {"monoethanolamine": "MEA closure", "water": "Water closure"}
+    role_styles = {
+        "binary_training": ("#28659c", "o", "101.33 kPa training"),
+        "binary_model_selection": ("#b6312c", "^", "66.66 kPa held-out"),
+    }
+    fig, axes = plt.subplots(2, 2, figsize=(10.8, 8.1), sharex=True)
+    for row_index, model in enumerate(BAYGI_BINARY_INPUTS):
+        for column_index, component in enumerate(components):
+            ax = axes[row_index, column_index]
+            subset = combined.loc[
+                (combined["model"] == model) & (combined["component_id"] == component)
+            ]
+            for role, (color, marker, label) in role_styles.items():
+                role_rows = subset.loc[subset["fit_role"] == role].sort_values(
+                    "water_liquid_mole_fraction"
+                )
+                ax.plot(
+                    role_rows["water_liquid_mole_fraction"],
+                    role_rows["normalized_residual"],
+                    color=color,
+                    marker=marker,
+                    linewidth=1.2,
+                    markersize=4.5,
+                    label=label,
+                )
+            parameter = float(subset["k_ij_mea_water"].iloc[0])
+            ax.axhline(0.0, color="black", linestyle=":", linewidth=1.0)
+            ax.set_xlabel("Liquid water mole fraction")
+            ax.set_ylabel("Normalized log-fugacity closure")
+            finish_axes(
+                ax, title=f"{model}: {titles[component]}, $k_{{ij}}={parameter:.5f}$"
+            )
+            ax.legend(fontsize=6.8)
+    fig.suptitle(
+        "Cai (1996) source-consistent Baygi binary diagnostics — non-promotable\n"
+        "Measured $T$, $P$, $x$, and $y$ are inputs; no Bubble-T/Dew-T prediction is claimed",
+        fontsize=11.5,
+        fontweight="semibold",
+    )
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.92))
+    png, svg, pdf = save_figure_bundle(fig, BAYGI_BINARY_FIGURE_STEM)
+    plt.close(fig)
+    write_mpl_sidecar(
+        BAYGI_BINARY_FIGURE_STEM.with_suffix(".mpl.yaml"),
+        png_name=png.name,
+        svg_name=svg.name,
+        pdf_name=pdf.name,
+        title="Diagnostic Cai Baygi binary-model fugacity closure comparison",
+        description=(
+            "Exact declared-liquid/declared-vapor fixed-state closure residuals for "
+            "Baygi's 3B-MEA/2B-water and 3B-MEA/4C-water parameterizations. Both "
+            "complete Cai pressure levels are shown. The fits are identifiable and "
+            "multistart-consistent but fail source-scale residual and trend gates; "
+            "Baygi's Bubble-T/Dew-T Eq. 12 objective is not claimed."
+        ),
+        data_path=BAYGI_BINARY_TABLE,
+        style_source=str(Path(__file__).relative_to(ROOT)),
+    )
+    return png, svg, pdf
+
+
 def main() -> None:
     missing = [path for path in (PACKET, SCREEN) if not path.exists()]
     if missing:
@@ -225,6 +456,18 @@ def main() -> None:
         for path in _render_reactive_bubble_diagnostic():
             print(path.relative_to(ROOT))
         print(BUBBLE_TABLE.relative_to(ROOT))
+    if LADDER_TABLE.exists():
+        for path in _render_pressure_block_ladder():
+            print(path.relative_to(ROOT))
+        print(LADDER_TABLE.relative_to(ROOT))
+    if BINARY_INPUT.exists():
+        for path in _render_cai_binary_diagnostic():
+            print(path.relative_to(ROOT))
+        print(BINARY_TABLE.relative_to(ROOT))
+    if all(path.exists() for path in BAYGI_BINARY_INPUTS.values()):
+        for path in _render_baygi_binary_comparison():
+            print(path.relative_to(ROOT))
+        print(BAYGI_BINARY_TABLE.relative_to(ROOT))
 
 
 if __name__ == "__main__":
