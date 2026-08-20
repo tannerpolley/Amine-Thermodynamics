@@ -15,7 +15,7 @@ Repository Profile: scientific-computing
 
 ## ePC-SAFT Cross-Repo Integration
 
-- This is an official downstream application under ePC-SAFT Governance D-037.
+- This is an official downstream application under ePC-SAFT Governance D-038.
 - Engine governance lives at `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-project/governance`; the generic runtime lives in that repository's `engine/` directory.
 - The Unified Engine is one `epcsaft` wheel with `epcsaft`, `epcsaft.equilibrium`, and `epcsaft.regression`. Do not install split packages or use compatibility imports.
 - Prefer uv-managed workflows. Use `.venv/bin/python` only for interpreter-specific debugging or repo-local troubleshooting.
