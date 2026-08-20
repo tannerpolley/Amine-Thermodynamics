@@ -11,7 +11,9 @@ for required_command in git python3 realpath sha256sum uv; do
     }
 done
 
-governance_root="$(dirname "$repo_root")/ePC-SAFT-project/ePC-SAFT-governance"
+git_common_dir="$(realpath "$(git rev-parse --git-common-dir)")"
+workspace_root="$(dirname "$(dirname "$git_common_dir")")"
+governance_root="$workspace_root/ePC-SAFT-project/governance"
 artifact_tool="$governance_root/tools/artifact_store.py"
 engine_wheel="${EPCSAFT_ENGINE_WHEEL:-$(python3 "$artifact_tool" resolve --distribution epcsaft)}"
 engine_wheel="$(realpath "$engine_wheel")"
