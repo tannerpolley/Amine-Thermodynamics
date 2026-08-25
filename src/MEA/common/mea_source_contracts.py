@@ -1,17 +1,18 @@
 from __future__ import annotations
 
 import csv
-from fractions import Fraction
 import hashlib
 import json
 import math
+from fractions import Fraction
 from pathlib import Path
 from typing import Any
 
 from MEA.common.config import DATA_ROOT, REPO_ROOT
 
-
-REACTION_CONTRACT_PATH = DATA_ROOT / "manifests" / "chemical_reaction_source_contract.json"
+REACTION_CONTRACT_PATH = (
+    DATA_ROOT / "manifests" / "chemical_reaction_source_contract.json"
+)
 SENTINEL_CONTRACT_PATH = (
     DATA_ROOT / "manifests" / "homogeneous_speciation_sentinel_contract.json"
 )
@@ -101,8 +102,7 @@ EXPECTED_REACTION_SOURCE_RECORDS = [
         "doi": "10.6028/jres.046.039",
         "locator": "p. 349 and Eq. 7; -log10 K = 2677.91/T + 0.3869 + 0.0004277 T",
         "official_pdf": (
-            "https://nvlpubs.nist.gov/nistpubs/jres/46/"
-            "jresv46n5p349_A1b.pdf"
+            "https://nvlpubs.nist.gov/nistpubs/jres/46/jresv46n5p349_A1b.pdf"
         ),
         "official_pdf_sha256": (
             "aff8621efd41dbce106bb189fd104840a1513d9d163f4f57dfb1abbf53a30db1"
@@ -138,8 +138,7 @@ EXPECTED_SENTINEL_SOURCE_RECORDS = [
 EXPECTED_PROVIDER_INPUT = {
     "identity": "mea-nine-species-regression-input-v1",
     "bundle_path": (
-        "data/reference/epcsaft_bundles/"
-        "mea-co2-h2o-nine-species-regression-input/1"
+        "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1"
     ),
     "receipt_path": (
         "data/reference/epcsaft_bundles/"
@@ -224,18 +223,18 @@ def load_sentinel_contract(
 def common_source_ln_k(
     temperature_k: float,
     contract: dict[str, Any] | None = None,
+    *,
+    allow_extrapolation: bool = False,
 ) -> tuple[float, ...]:
     """Evaluate the five source constants on the frozen common activity scale."""
 
     contract = load_reaction_contract() if contract is None else contract
     source = validate_reaction_contract(contract)
     lower, upper = source["temperature_intersection_k"]
-    if not lower <= temperature_k <= upper:
+    if not allow_extrapolation and not lower <= temperature_k <= upper:
         raise ValueError("temperature lies outside the common reaction-source domain")
     reactions = contract["reactions"]
-    offsets = contract["common_source_standard_state"][
-        "source_to_common_ln_k_offsets"
-    ]
+    offsets = contract["common_source_standard_state"]["source_to_common_ln_k_offsets"]
     return tuple(
         _evaluate_ln_k(reaction, temperature_k) + float(offset)
         for reaction, offset in zip(reactions, offsets, strict=True)
@@ -312,9 +311,7 @@ def _expected_immutable_identities() -> dict[str, Any]:
         ],
         "bundle_file_hashes": EXPECTED_BUNDLE_FILE_HASHES,
         "component_ids": list(EXPECTED_PROVIDER_SPECIES_ORDER),
-        "component_order_sha256": EXPECTED_PROVIDER_INPUT[
-            "component_order_sha256"
-        ],
+        "component_order_sha256": EXPECTED_PROVIDER_INPUT["component_order_sha256"],
         "parameter_fingerprint": EXPECTED_PROVIDER_INPUT["parameter_fingerprint"],
         "topology_fingerprint": EXPECTED_PROVIDER_INPUT["topology_fingerprint"],
         "domain_id": EXPECTED_PROVIDER_INPUT["domain_id"],
@@ -332,18 +329,22 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
     if (
         contract.get("schema_version") != 2
         or contract.get("identity") != "mea-nine-species-reaction-source-contract-v2"
-        or contract.get("status")
-        != "source_adjudicated_provider_transform_frozen"
+        or contract.get("status") != "source_adjudicated_provider_transform_frozen"
     ):
         raise ValueError("Unexpected MEA reaction contract identity")
     species_order = tuple(contract.get("species_order", ()))
     if species_order != EXPECTED_SPECIES_ORDER:
-        raise ValueError("MEA reaction species order does not match the nine-species contract")
+        raise ValueError(
+            "MEA reaction species order does not match the nine-species contract"
+        )
     provider_species_order = tuple(contract.get("provider_species_order", ()))
     mappings = contract.get("source_to_provider_species_identity", [])
     if (
         provider_species_order != EXPECTED_PROVIDER_SPECIES_ORDER
-        or any(set(row) != {"source_identity", "provider_identity", "charge"} for row in mappings)
+        or any(
+            set(row) != {"source_identity", "provider_identity", "charge"}
+            for row in mappings
+        )
         or [row.get("source_identity") for row in mappings]
         != list(EXPECTED_SPECIES_ORDER)
         or [row.get("provider_identity") for row in mappings]
@@ -370,12 +371,16 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
     source_records = contract.get("source_records", [])
     source_ids = {row.get("source_id") for row in source_records}
     if None in source_ids or len(source_ids) != len(source_records):
-        raise ValueError("MEA reaction source records must have unique source identities")
+        raise ValueError(
+            "MEA reaction source records must have unique source identities"
+        )
     if source_records != EXPECTED_REACTION_SOURCE_RECORDS:
         raise ValueError("MEA reaction source artifact identities have drifted")
     reaction_matrix = [list(map(int, row["stoichiometry"])) for row in reactions]
     if any(len(row) != len(species) for row in reaction_matrix):
-        raise ValueError("MEA reaction stoichiometry dimensions do not match species order")
+        raise ValueError(
+            "MEA reaction stoichiometry dimensions do not match species order"
+        )
     reaction_rank = _exact_rank(reaction_matrix)
     if reaction_rank != contract.get("declared_reaction_rank"):
         raise ValueError("MEA reaction matrix rank does not match its declaration")
@@ -401,7 +406,9 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
         ):
             raise ValueError(f"{reaction_id} source metadata is incomplete")
         if reaction.get("correlation") != EXPECTED_REACTION_CORRELATIONS[reaction_id]:
-            raise ValueError(f"{reaction_id} primary-source correlation coefficients drifted")
+            raise ValueError(
+                f"{reaction_id} primary-source correlation coefficients drifted"
+            )
         if reaction_id in {"R4", "R5"} and (
             "p°=100 kPa" not in reaction["pressure_binding"]
             or "every receipt-admitted trial system pressure"
@@ -421,9 +428,13 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
         for balance in balance_rows:
             if sum(
                 coefficient * amount
-                for coefficient, amount in zip(balance, reaction["stoichiometry"], strict=True)
+                for coefficient, amount in zip(
+                    balance, reaction["stoichiometry"], strict=True
+                )
             ):
-                raise ValueError(f"{reaction_id} does not conserve the declared elements")
+                raise ValueError(
+                    f"{reaction_id} does not conserve the declared elements"
+                )
         if sum(
             int(row["charge"]) * amount
             for row, amount in zip(species, reaction["stoichiometry"], strict=True)
@@ -477,8 +488,12 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
         or water_molar_mass_row.get("unit") != "kilogram / mole"
         or float(water_molar_mass_row.get("value", 0.0)) != water_molar_mass
     ):
-        raise ValueError("MEA common source water-molar-mass fingerprint does not match")
-    exponents = list(map(int, common["source_to_common_solute_stoichiometric_exponents"]))
+        raise ValueError(
+            "MEA common source water-molar-mass fingerprint does not match"
+        )
+    exponents = list(
+        map(int, common["source_to_common_solute_stoichiometric_exponents"])
+    )
     if exponents != [2, 1, 1, 0, 0]:
         raise ValueError("MEA source-to-common reaction exponents are inconsistent")
     offsets = [-exponent * log_scale for exponent in exponents]
@@ -575,9 +590,7 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
     expected_scale_projection = [
         sum(
             coefficient * scale
-            for coefficient, scale in zip(
-                row, source_activity_scales, strict=True
-            )
+            for coefficient, scale in zip(row, source_activity_scales, strict=True)
         )
         for row in reaction_matrix
     ]
@@ -598,9 +611,7 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
     receipt_path = REPO_ROOT / owner_input.get("receipt_path", "")
     provider_receipt = _load_json(receipt_path)
     receipt_domain = provider_receipt.get("domain", {})
-    source_temperature_domain = payload.get(
-        "source_correlation_temperature_domain_k"
-    )
+    source_temperature_domain = payload.get("source_correlation_temperature_domain_k")
     executable_temperature_domain = payload.get(
         "installed_provider_executable_temperature_domain_k"
     )
@@ -633,8 +644,7 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
         or payload.get("reaction_matrix_provider_order") != reaction_matrix
         or payload.get("provider_neutral_basis", {}).get("matrix")
         != expected_neutral_basis
-        or payload.get("reaction_to_neutral_basis_matrix")
-        != expected_reaction_to_basis
+        or payload.get("reaction_to_neutral_basis_matrix") != expected_reaction_to_basis
         or reconstructed_reactions != reaction_matrix
         or len(source_activity_scales) != len(EXPECTED_PROVIDER_SPECIES_ORDER)
         or any(
@@ -668,8 +678,7 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
                 strict=True,
             )
         )
-        or payload.get("source_records_sha256")
-        != _canonical_sha256(source_records)
+        or payload.get("source_records_sha256") != _canonical_sha256(source_records)
         or provider_transform.get("deterministic_payload_sha256")
         != _canonical_sha256(payload)
         or required_receipt.get("temperature_unit") != "K"
@@ -684,8 +693,7 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
         or owner_input.get("receipt_path") != EXPECTED_PROVIDER_INPUT["receipt_path"]
         or owner_input.get("receipt_sha256")
         != EXPECTED_PROVIDER_INPUT["receipt_sha256"]
-        or owner_input.get("immutable_identities")
-        != _expected_immutable_identities()
+        or owner_input.get("immutable_identities") != _expected_immutable_identities()
         or _sha256(receipt_path) != EXPECTED_PROVIDER_INPUT["receipt_sha256"]
         or provider_receipt.get("status") != "REGRESSION_INPUT_EXECUTABLE"
         or provider_receipt.get("scientific_acceptance") != "NOT_ESTABLISHED"
@@ -702,9 +710,7 @@ def validate_reaction_contract(contract: dict[str, Any]) -> dict[str, Any]:
         "source_conversion_ready": True,
         "provider_transform_ready": True,
         "provider_species_order": list(provider_species_order),
-        "provider_transform_sha256": provider_transform[
-            "deterministic_payload_sha256"
-        ],
+        "provider_transform_sha256": provider_transform["deterministic_payload_sha256"],
         "blockers": [],
     }
 
@@ -728,7 +734,9 @@ def _directory_manifest_sha256(path: Path) -> str:
 
 def _source_row(path: Path, record_id: str) -> dict[str, str]:
     with path.open(newline="", encoding="utf-8-sig") as handle:
-        matches = [row for row in csv.DictReader(handle) if row["record_id"] == record_id]
+        matches = [
+            row for row in csv.DictReader(handle) if row["record_id"] == record_id
+        ]
     if len(matches) != 1:
         raise ValueError(f"Expected one source row {record_id} in {path}")
     return matches[0]
@@ -740,8 +748,7 @@ def validate_sentinel_contract(
     reaction_summary = validate_reaction_contract(reaction_contract)
     if (
         contract.get("schema_version") != 1
-        or contract.get("identity")
-        != "mea-homogeneous-fixed-tp-sentinel-contract-v1"
+        or contract.get("identity") != "mea-homogeneous-fixed-tp-sentinel-contract-v1"
         or contract.get("status") != "source_defined_regression_input_executable"
     ):
         raise ValueError("Unexpected MEA sentinel contract identity")
@@ -757,7 +764,9 @@ def validate_sentinel_contract(
     }:
         raise ValueError("MEA sentinel external source-verification limit drifted")
     if tuple(contract.get("species_order", ())) != EXPECTED_SPECIES_ORDER:
-        raise ValueError("MEA sentinel species order does not match the reaction contract")
+        raise ValueError(
+            "MEA sentinel species order does not match the reaction contract"
+        )
     if (
         tuple(contract.get("provider_component_order", ()))
         != EXPECTED_PROVIDER_SPECIES_ORDER
@@ -801,8 +810,7 @@ def validate_sentinel_contract(
         or receipt_bundle.get("bundle_version")
         != EXPECTED_PROVIDER_INPUT["bundle_version"]
         or receipt_bundle.get("purpose") != "user-provided"
-        or receipt_bundle.get("component_ids")
-        != list(EXPECTED_PROVIDER_SPECIES_ORDER)
+        or receipt_bundle.get("component_ids") != list(EXPECTED_PROVIDER_SPECIES_ORDER)
         or receipt_bundle.get("component_order_sha256")
         != EXPECTED_PROVIDER_INPUT["component_order_sha256"]
         or receipt_bundle.get("bundle_fingerprint")
@@ -841,7 +849,9 @@ def validate_sentinel_contract(
         or consumer.get("provider_test_module_imported") is not False
         or consumer.get("exploratory_test_helper_receipt_retained") is not False
     ):
-        raise ValueError("MEA regression-input bundle or public receipt is inconsistent")
+        raise ValueError(
+            "MEA regression-input bundle or public receipt is inconsistent"
+        )
 
     pressure = contract.get("pressure_observable_convention", {})
     pressure_source = REPO_ROOT / pressure.get("source_manifest", "")
@@ -865,20 +875,20 @@ def validate_sentinel_contract(
             "provider_pr": "https://github.com/ePC-SAFT/ePC-SAFT/pull/44",
             "provider_commit": EXPECTED_PROVIDER_INPUT["provider_commit"],
             "provider_tree": EXPECTED_PROVIDER_INPUT["provider_tree"],
-            "provider_wheel_sha256": EXPECTED_PROVIDER_INPUT[
-                "provider_wheel_sha256"
-            ],
-            "provider_header_sha256": EXPECTED_PROVIDER_INPUT[
-                "provider_header_sha256"
-            ],
+            "provider_wheel_sha256": EXPECTED_PROVIDER_INPUT["provider_wheel_sha256"],
+            "provider_header_sha256": EXPECTED_PROVIDER_INPUT["provider_header_sha256"],
             "public_consumer_receipt": EXPECTED_PROVIDER_INPUT["receipt_path"],
         }
     ):
-        raise ValueError("MEA homogeneous-liquid pressure Provider evidence is inconsistent")
+        raise ValueError(
+            "MEA homogeneous-liquid pressure Provider evidence is inconsistent"
+        )
 
     states = contract.get("states", [])
     if len(states) != 1:
-        raise ValueError("MEA sentinel contract must contain exactly one source-bound state")
+        raise ValueError(
+            "MEA sentinel contract must contain exactly one source-bound state"
+        )
     state = states[0]
 
     source_path = REPO_ROOT / state["source_file"]
@@ -893,7 +903,8 @@ def validate_sentinel_contract(
         or pressure_pa != float(state["pressure_pa"])
         or loading != float(state["loading_mol_co2_per_mol_mea"])
         or mass_fraction != float(state["mea_mass_fraction_unloaded"])
-        or float(source["calculated_loading"]) != float(reported.get("calculated_loading"))
+        or float(source["calculated_loading"])
+        != float(reported.get("calculated_loading"))
         or float(source["predicted_loading"]) != float(reported.get("raman_loading"))
         or float(source["mse"]) != float(reported.get("mse"))
     ):
@@ -906,7 +917,9 @@ def validate_sentinel_contract(
         or reported.get("mse_role")
         != "reported squared agreement metric, not a measurement uncertainty"
     ):
-        raise ValueError("MEA sentinel pressure or uncertainty convention is incomplete")
+        raise ValueError(
+            "MEA sentinel pressure or uncertainty convention is incomplete"
+        )
 
     molar_mass = contract["molar_mass_basis"]
     molar_mass_path = REPO_ROOT / molar_mass["source_file"]
@@ -921,9 +934,7 @@ def validate_sentinel_contract(
     }
     if (
         molar_mass.get("source_file")
-        != reaction_contract["common_source_standard_state"][
-            "water_molar_mass_source"
-        ]
+        != reaction_contract["common_source_standard_state"]["water_molar_mass_source"]
         or molar_mass.get("source_file_sha256")
         != reaction_contract["common_source_standard_state"][
             "water_molar_mass_source_sha256"
@@ -947,7 +958,9 @@ def validate_sentinel_contract(
         abs(actual - expected) > 2.0e-15
         for actual, expected in zip(actual_feed, expected_feed, strict=True)
     ):
-        raise ValueError("MEA sentinel feed amounts do not match the source-bound mass basis")
+        raise ValueError(
+            "MEA sentinel feed amounts do not match the source-bound mass basis"
+        )
 
     charges = [int(row["charge"]) for row in reaction_contract["species"]]
     charge = sum(

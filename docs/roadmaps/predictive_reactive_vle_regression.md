@@ -1,52 +1,53 @@
 # Predictive reactive VLE regression roadmap
 
-MEA execution issue: [MEA-Thermodynamics #53](https://github.com/tannerpolley/MEA-Thermodynamics/issues/53), child of the coupled-regression workstream issue #13.
+The endpoint is one nine-species MEA-H2O-CO2 parameterization that predicts
+CO2 partial pressure and liquid speciation on source-separated observations.
+The Engine already supplies the generic homogeneous and reactive-bubble
+equilibrium calculations. The remaining work is parameter qualification and
+efficient multi-observation regression.
 
-## Decision
+## Retained model
 
-The planned endpoint is one predictive, coupled reactive-VLE parameterization for MEA–H₂O–CO₂. The unified Engine now admits the generic homogeneous and coupled reactive observation families from Engine issues [#30](https://github.com/tannerpolley/ePC-SAFT/issues/30) and [#31](https://github.com/tannerpolley/ePC-SAFT/issues/31). Application execution remains a separate scientific gate: the current coupled MEA pressure solve did not return a root within its bounded 1,022.08 s diagnostic attempt.
+The liquid contains CO2, MEA, H2O, MEAH+, MEACOO-, HCO3-, CO3^2-, H3O+, and
+OH-. The incipient vapor contains the declared neutral species. The calculation
+uses PC-SAFT hard-chain, dispersion, general-site association, Debye-Huckel,
+Born solvation, and a composition-dependent relative-permittivity model.
 
-No current MEA result establishes a predictive M5 parameterization. The retained M0–M5 calculations are diagnostics. The current planning identifiers in `reactive_vle_model_configurations.json` replace those informal labels with explicit physics factors.
+CO2-water induced association is fixed throughout the remaining program. It
+uses the Schick-Pabsch reciprocal 2B topology, a cross energy of 1212.85 K,
+and a cross volume of 0.04509. The only retained structural comparison is
+direct Born with solvent-only permittivity versus screened Born with
+ion-fraction suppression.
 
-## Scientific model
+## Data and residuals
 
-The final calculation solves the five-reaction, nine-species liquid together with a vapor containing neutral CO₂, H₂O, and MEA. Ions remain liquid-only. Vapor fugacities come from the EOS; ideal vapor is allowed only as an explicitly compared low-pressure approximation.
+The reusable pressure collection contains 121 CO2 partial-pressure rows; the
+speciation collection contains 198 direct-positive or declared aggregate
+observations. Training, model-selection, and reserved campaigns remain grouped
+by source. Each residual stays in its reported basis and uses source-backed
+uncertainty where available. A missing uncertainty is resolved from the source
+or measurement method before a row enters parameter selection.
 
-The physics comparison is factorized:
+## Parameter sequence
 
-- neutral polarity: no explicit multipoles, CO₂ quadrupole only, H₂O/MEA dipoles only, and full DD+QQ+DQ;
-- association: current fixed topology versus a source-fixed CO₂ induced-association topology;
-- electrostatics: the retained diagnostic basis versus corrected SSM+DS Born with a qualified relative-permittivity model.
+1. Freeze source rows, campaign groups, reaction definitions, and the immutable
+   Engine wheel identity.
+2. Qualify the retained H2O and MEA pure-component and ordinary-association
+   parameters.
+3. Fit `k_MEA,H2O`, `k_CO2,H2O(T)`, and `k_CO2,MEA` on their physical binary
+   observations, one pair at a time, with induced association fixed.
+4. Compare the two retained Born and permittivity formulations using independent
+   dielectric, solvation, and activity evidence.
+5. Constrain MEAH+ and MEACOO- size and dispersion directions with direct or
+   aggregate speciation and volumetric observations.
+6. Fit the smallest identifiable reactive parameter block to coupled pressure
+   and same-state speciation observations.
+7. Reopen reaction-correlation coefficients only when systematic
+   multi-temperature residuals remain after EOS and ion qualification.
+8. Select by source-blocked validation, refit on all admitted observations,
+   quantify uncertainty, and retain one complete parameter table.
 
-DD, QQ, and DQ are not three independent fit switches. With all physical moments present, DQ follows automatically. Molecular moments stay fixed to source values. The neutral segment and association parameters must be refitted for each polar formulation so dispersion does not continue to hide the polarity that the explicit term now represents.
-
-SSM+DS is a fixed model choice, not a continuous fit coordinate. MEA Born and relative-permittivity parameters cannot be promoted from the current pressure and speciation rows: the library still lacks qualified loaded static-permittivity and direct MEAH⁺/MEACOO⁻ activity evidence. The inherited MEA relative-permittivity value of 32 is therefore provisional and cannot qualify the corrected electrostatic configuration.
-
-## Data use
-
-The current mixed-observation candidate set contains 121 pCO₂ rows and 198 direct-positive or explicit aggregate speciation observations. The pressure-first diagnostic freezes all 121 pressure rows into an immutable packet: 30 training, 6 model-selection, 8 reserved, and 77 non-scoring domain challenges. It uses preregistered provisional log scales only for a non-promotable fixed-observed-pressure closure screen. Source-backed uncertainty remains open, and the experimental total pressure supplied to that screen is a state input—not a predicted pressure. Speciation remains outside this diagnostic until its same-state pressure and residual contracts close.
-
-The planned first joint qualification domain is 313.15–353.15 K because it contains both admitted pCO₂ and speciation evidence. It is not all executable under the present reaction sources: R4 and R5 currently end at 323.15 K. The 333.15 K and 353.15 K rows therefore remain assigned to campaign folds but cannot enter the joint fit until S5 qualifies new R4/R5 coefficients over that domain. Lower-temperature speciation is support evidence. Pressure data above 353.15 K are a later domain-extension challenge. Cross-validation metrics support transfer claims; residuals after the all-data refit support calibration claims only.
-
-Residuals retain each observable's reported basis and use source uncertainty where available. A missing uncertainty does not authorize an arbitrary tuning weight: the source or measurement method must support a preregistered scale before execution. Promotion is decided separately for pCO₂, speciation, volumetric, dielectric, and activity evidence rather than by one aggregate objective that can hide a failed family. Rank and conditioning are checked before profile likelihoods and campaign-blocked bootstrap uncertainty.
-
-## Parameter order
-
-The executable order is frozen in `reactive_vle_parameter_stages.json`:
-
-1. freeze source rows, campaign blocks, and immutable Data/Engine identities;
-2. refit neutral pure parameters separately for each polar formulation;
-3. fit neutral binary interactions, then test induced association only after its source topology is complete;
-4. certify a fixed-T,P homogeneous reactive tracer through Engine issue #30;
-5. constrain the MEAH⁺/MEACOO⁻ segment block while Born and reaction terms remain fixed;
-6. reconsider physically named R4/R5 A/B/C/D coefficients only after the EOS and ion blocks are qualified;
-7. fit true bubble/VLE observations through Engine issue #31;
-8. select by campaign-blocked evidence, refit on all admissible in-domain data, quantify uncertainty, and promote one parameter set.
-
-Fitting every table entry simultaneously is excluded. It would let neutral dispersion, polar attraction, association, ionic solvation, binary interactions, and reaction constants compensate for one another while matching the same pCO₂ curve.
-
-## Immediate work
-
-The promotion lane is blocked on source closure for S1 and S2, source-backed residual scales, and a tractable coupled pressure root with complete failure accounting. The next qualification work is to complete the pure-MEA property package, bind source-valued molecular moments, and finish primary binary MEA–H₂O and physical CO₂-solubility tables. The retained pressure-first fixed-pressure screen is useful for sensitivity and runtime diagnosis only; it cannot promote a parameter or substitute for the coupled bubble calculation.
-
-The manuscript remains unchanged until the coupled fit, cross-validation, uncertainty, immutable-artifact replay, and predictive gates pass.
+The immediate calculation is the Cai MEA-water binary qualification under the
+retained neutral family. It is followed by physical CO2-water qualification,
+then the two Born formulations. Reactive pressure fitting does not determine
+neutral binary, Born, or relative-permittivity parameters by itself.

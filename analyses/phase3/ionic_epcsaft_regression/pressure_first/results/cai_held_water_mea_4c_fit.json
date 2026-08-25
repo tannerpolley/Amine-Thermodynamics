@@ -1,0 +1,212 @@
+{
+  "accounting": {
+    "admitted_model_selection_rows": 13,
+    "admitted_training_rows": 12,
+    "domain_challenge_rows": 0,
+    "numeric_failure_penalties": 0,
+    "optimizer_phase_evaluations": 360,
+    "pure_endpoint_context_rows": 4,
+    "selection_phase_evaluations": 52,
+    "source_rows": 29
+  },
+  "active_bounds": [],
+  "active_coordinate": {
+    "bounds": [
+      -0.2,
+      0.2
+    ],
+    "identity": "pair/monoethanolamine/water/k_ij",
+    "origin": -0.0362,
+    "scale": 0.05,
+    "unit": "dimensionless"
+  },
+  "all_gates_pass": false,
+  "claim_status": "independent_neutral_binary_diagnostic",
+  "condition_number": 1.0,
+  "config_sha256": "ec6fc93fd90a5189448756f62a25c1638539463b0d9d9490d16bb2785e592916",
+  "covariance": {
+    "degrees_of_freedom": null,
+    "status": "unavailable_missing_component_covariance_and_statistical_uncertainty_model"
+  },
+  "derivative_checks": [
+    {
+      "center_values": [
+        -35.79152528889122,
+        -1.4075044324942692
+      ],
+      "central_difference": [
+        4.722609776308673,
+        604.8800014086141
+      ],
+      "exact": [
+        4.722655736580534,
+        604.8800089496214
+      ],
+      "maximum_scaled_relative_error": 9.731964747918604e-06,
+      "roles": [
+        "monoethanolamine",
+        "water"
+      ],
+      "row_id": "cai1996_10133_002"
+    },
+    {
+      "center_values": [
+        -33.30552788737374,
+        -0.519602697496007
+      ],
+      "central_difference": [
+        16.62493808893828,
+        1054.3865992778678
+      ],
+      "exact": [
+        16.62479920128343,
+        1054.3865518154794
+      ],
+      "maximum_scaled_relative_error": 8.35417576329748e-06,
+      "roles": [
+        "monoethanolamine",
+        "water"
+      ],
+      "row_id": "cai1996_10133_003"
+    }
+  ],
+  "domain_challenge_row_ids": [],
+  "engine": {
+    "distribution": "epcsaft",
+    "engine_commit": "a9638c2bccb25383f788ab7ab18fda62b36c76ff",
+    "engine_repository": "https://github.com/tannerpolley/ePC-SAFT",
+    "engine_tree": "63d466c58b871fa517028ba6e3a0f6db46042157",
+    "identity": "mea-reactive-vle-engine-artifact-lock-v1",
+    "installation_policy": "noneditable_local_wheel_only_no_source_checkout_discovery",
+    "mea_diagnostic_parameter_document": {
+      "domain_fingerprint": "sha256:2312093d987f8dd0057db5c603a9383aca8178cedd2197d1c0d9b0d549d76f29",
+      "model_family_fingerprint": "sha256:4724b991c46551e4f08841c92ee757c53b2b8e2bc3423ab176e0085b905b7d5c",
+      "parameter_fingerprint": "sha256:c621cd37257fdaa8946653cf3e3f36329f6b4a07af10afc082db8f22f7e911a7",
+      "scientific_status": "diagnostic_nonpredictive_provisional_ionic_and_permittivity_inputs",
+      "topology_fingerprint": "sha256:36bbf19d2ac182f414fef9fcf7fb5a196d1b50799f4cb7d1b92952aea0427ef5"
+    },
+    "public_api_signature_identity": "sha256:6c6ad454b5080780841cabfe843307860e35bcd0a1ae90b9fbd21eede78ae309",
+    "public_header_sha256": {
+      "epcsaft": "fef47a5e86f2f1a6e7026b63d227cda116439284b69f8bba2d00589c36c18f61",
+      "epcsaft.equilibrium": "4b461e53a76d6a19fea6bf53b0eee773b0209350e4a4b9aef68260d6fe07a87f",
+      "epcsaft.regression": "171527d7a0b360b26130af45174a68d5fc07f532bbaee5c42b835d65fcc59b94"
+    },
+    "schema_version": 1,
+    "upstream_admissions": {
+      "declared_liquid_density_branch_followup": {
+        "issue": 40,
+        "merge_commit": "1d5b42615c0ec528156c3f079231dbef18e180d5",
+        "pull_request": 41,
+        "subject_commit": "ffe7ff0f5ca93bd14479f633118ee7053f14d882"
+      },
+      "declared_vapor_density_branch_followup": {
+        "issue": 38,
+        "merge_commit": "b3c3465761f610fce4958d52b2774bb34392b24d",
+        "pull_request": 39,
+        "subject_commit": "302a2b1f008b22d32e22f2bf21a4bc0b3c459193"
+      },
+      "homogeneous_reactive_observations": {
+        "issue": 30,
+        "merge_commit": "2a24e7e744bba4c23cd8a96baf38472d46b42890",
+        "pull_request": 32
+      },
+      "positive_trace_phase_role_followup": {
+        "issue": 34,
+        "merge_commit": "9c57de1fee9e951490037dce995381ba7f38862d",
+        "pull_request": 35
+      },
+      "reactive_bubble_vle_observations": {
+        "issue": 31,
+        "merge_commit": "b4bcd2dd8f2a6ef4b4e984a172cd789977751bf9",
+        "pull_request": 33
+      }
+    },
+    "version": "0.2.0.dev0",
+    "wheel_filename": "epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "cfe8e2a0d5af8d35227a49246dc1590de64ab55bf033e3416b6f80e1ff8f410e"
+  },
+  "gates": {
+    "all_admitted_rows_evaluated": true,
+    "all_starts_same_solution": true,
+    "condition_number": true,
+    "exact_jacobian_check": true,
+    "independent_pressure_level_validation": true,
+    "model_selection_normalized_rmse": true,
+    "model_selection_not_worse_than_training": true,
+    "no_material_composition_trend": false,
+    "rank": true,
+    "strictly_interior": true,
+    "training_normalized_rmse": true
+  },
+  "identity": "cai-1996-held-water-baygi-4c-mea-qualification-v1-result",
+  "model_selection_metrics": {
+    "composition_slope": -14.452426026390285,
+    "normalized_mae": 12.228434945181371,
+    "normalized_max_abs": 36.71634662048987,
+    "normalized_rmse": 16.572718738451172,
+    "residual_count": 26
+  },
+  "origin_metrics": {
+    "model_selection_normalized_rmse": 16.632366512828753,
+    "training_normalized_rmse": 12.354799080117836
+  },
+  "parameter_fingerprint": "sha256:3bbc179ce71bcfa290256acc0b760587c0fd3f11c399bfda5bb68f39d2b9661e",
+  "parameter_mapping_sha256": "8c21a62fe1308eecc9cc9a8a72db4e98c353991bad345cbf20f0c15ec60678b8",
+  "pressure_level_validation_status": "101.33 kPa trains; 66.66 kPa tests transfer",
+  "promotion_decision": "not_promoted",
+  "promotion_reason": "one or more preregistered scientific gates failed",
+  "rank": 1,
+  "receipt_sha256": "238bcf8d2e22edd192641c770b80188a6b6fe260f49a3cfc2e1b45d501c12b3d",
+  "runtime_seconds": 34.37346176899882,
+  "schema_version": 1,
+  "selected_value": -0.036274404052164935,
+  "singular_values_affine": [
+    283.8312718592166
+  ],
+  "source_csv_sha256": "c7857f045757881662f1836913e25216f808bc9fdcf5c74f3b4d03c76c134a8b",
+  "starts": [
+    {
+      "cost": 1831.6035270721309,
+      "final_value": -0.03627440858964409,
+      "function_evaluations": 6,
+      "identity": "negative-wide",
+      "initial_value": -0.15,
+      "jacobian_evaluations": 5,
+      "message": "`xtol` termination condition is satisfied.",
+      "optimality": 0.03458727251732676,
+      "status": 3,
+      "success": true
+    },
+    {
+      "cost": 1831.603527202216,
+      "final_value": -0.036274373388532934,
+      "function_evaluations": 3,
+      "identity": "source-reference",
+      "initial_value": -0.0362,
+      "jacobian_evaluations": 2,
+      "message": "`xtol` termination condition is satisfied.",
+      "optimality": 0.16175891317044694,
+      "status": 3,
+      "success": true
+    },
+    {
+      "cost": 1831.603527055491,
+      "final_value": -0.036274404052164935,
+      "function_evaluations": 6,
+      "identity": "positive",
+      "initial_value": 0.05,
+      "jacobian_evaluations": 6,
+      "message": "`ftol` termination condition is satisfied.",
+      "optimality": 3.116110999514866e-05,
+      "status": 2,
+      "success": true
+    }
+  ],
+  "training_metrics": {
+    "composition_slope": 7.750247500439727,
+    "normalized_mae": 7.465267663806997,
+    "normalized_max_abs": 35.79152528889122,
+    "normalized_rmse": 12.354498259930438,
+    "residual_count": 24
+  }
+}

@@ -1,0 +1,347 @@
+{
+  "claim_boundary": "Diagnostic fixed-configuration and candidate evidence only; no predictive MEA parameter set or column transfer is authorized.",
+  "decision": {
+    "independent_validation": "blocked_no_untouched_replacement_partition",
+    "parameter_set_adopted": false,
+    "predictive_export": "prohibited",
+    "reasons": [
+      "the predictive-training optimizer terminated NO_CONVERGENCE",
+      "the active scaled Jacobian is weakly identified",
+      "rows formerly marked reserved were opened during model selection",
+      "the fitted-candidate wheel hash does not match the frozen Engine lock",
+      "the direct Wong challenge contains NaClO4 outside the nine-species chemistry",
+      "calorimetry lacks an accepted reference-state derivative and covariance model"
+    ],
+    "status": "supported_negative"
+  },
+  "diagnostic_candidate": {
+    "active_coordinates": {
+      "coordinates": {
+        "component/carbamate-anion/segment_diameter": {
+          "bounds": [
+            1.5,
+            5.8
+          ],
+          "origin": 3.0087679808913896,
+          "scale": 2.15
+        },
+        "component/protonated-monoethanolamine/segment_diameter": {
+          "bounds": [
+            1.5,
+            5.8
+          ],
+          "origin": 2.7780278555578346,
+          "scale": 2.15
+        },
+        "pair/carbon-dioxide/monoethanolamine/k_ij": {
+          "bounds": [
+            -1.0,
+            1.0
+          ],
+          "origin": -0.5505189993010621,
+          "scale": 0.5
+        }
+      },
+      "identities": [
+        "pair/carbon-dioxide/monoethanolamine/k_ij",
+        "component/protonated-monoethanolamine/segment_diameter",
+        "component/carbamate-anion/segment_diameter"
+      ],
+      "ties": []
+    },
+    "fit_result_identity": {
+      "artifact_fingerprint": "sha256:d8c9284a7cd33efc835c72b6c9f9d097ddf5cfd049b808c25286a8d92f31a852",
+      "candidate_parameter_identity": "sha256:9bf4b62ebbc836f3e0163a6742e5e26c0d1f78e674a76afc79159eb995e6e04d",
+      "digest": "sha256:3ec03b3b17da09e3faed408be5c267563e7c83480a70306079b04faad566822a",
+      "evaluated_row_table_hash": "sha256:5195fb26774ab6ddf9226a3fabeb2ab331e7064ee7de880fe061cb3685371848",
+      "package_fingerprint": "sha256:a5adad7e97c8d2c3a375f263c657a3868dda016001eee162ed66bdd43024e780",
+      "schema": "epcsaft.fit-result",
+      "schema_version": 2
+    },
+    "settings": {
+      "accounting": {
+        "equilibrium_state_count": 119,
+        "failure_count": 0,
+        "target_count": 257
+      },
+      "co2_water_binary_interaction": {
+        "anchor_basis": "zero interaction retained at the 313.15 K MEA calibration temperature",
+        "form": "k_CO2,H2O(T) = 3.016e-4 K^-1 * (T - 313.15 K)",
+        "slope_source": "Pabsch et al. (2020), Table 6, DOI 10.1021/acs.jced.0c00704"
+      },
+      "co2_water_induced_association": {
+        "directions": [
+          "carbon-dioxide/a -> water/b",
+          "carbon-dioxide/b -> water/a"
+        ],
+        "energy_over_k_kelvin": 1212.85,
+        "volume": 0.04509
+      },
+      "engine_wheel_sha256": "e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23",
+      "evaluation_performance": {
+        "aggregate_cpu_percent": 935,
+        "blas_threads_per_worker": 1,
+        "changed_state_count": 70,
+        "homogeneous_multistart_budgets": [
+          2,
+          10
+        ],
+        "solver_convergence_tolerance": 1e-06,
+        "wall_seconds": 264.9,
+        "workers": 12
+      },
+      "fixed_structure": {
+        "born": "shell",
+        "co2_water_induced_association": true,
+        "polar_term": false,
+        "relative_permittivity": "ion-specific-suppression",
+        "water_relative_permittivity": "Archer-Wang temperature correlation"
+      },
+      "ion_specific_suppression_coefficients": {
+        "bicarbonate-anion": 7.89,
+        "carbamate-anion": 7.01,
+        "carbonate-anion": 7.89,
+        "hydronium-cation": 9.55,
+        "hydroxide-anion": 13.96,
+        "protonated-monoethanolamine": 2.6
+      },
+      "limitations": [
+        "The pair-temperature transformation is currently applied by the downstream state compiler rather than represented as a native Engine pair correlation.",
+        "The reaction correlations above 323.15 K remain source extrapolations.",
+        "The retained candidate improves but does not eliminate structured high-temperature pressure residuals."
+      ],
+      "metrics": {
+        "reserved_pressure_rms_factor": 2.2814257653346655,
+        "reserved_speciation_rms_factor": 2.3352783387808986,
+        "temperature_challenge_pressure_rms_factor": 2.2103494864331537,
+        "training_pressure_rms_factor": 2.0208254448297613,
+        "training_speciation_rms_factor": 1.6899874808057742
+      },
+      "schema": "mea.retained-predictive-parameter-settings.v1",
+      "shared_parameters": {
+        "component/carbamate-anion/segment_diameter_angstrom": 3.017079292071164,
+        "component/protonated-monoethanolamine/segment_diameter_angstrom": 2.7533328530317225,
+        "pair/carbon-dioxide/monoethanolamine/k_ij": -0.1957268589414558
+      },
+      "status": "retained_predictive_candidate"
+    },
+    "solver": {
+      "controls": {
+        "function_tolerance": 1e-06,
+        "gradient_tolerance": 1e-06,
+        "maximum_iterations": 1,
+        "parameter_tolerance": 1e-06
+      },
+      "multistart": {
+        "affine_bound_margin": 1e-07,
+        "starts": [
+          {
+            "identity": "best-structure-warm-start",
+            "values": [
+              -0.5505189993010621,
+              2.7780278555578346,
+              3.0087679808913896
+            ]
+          }
+        ]
+      }
+    },
+    "summary": {
+      "accounting": {
+        "accepted_starts": 1,
+        "attempted_starts": 1,
+        "dropped_rows": 0,
+        "evaluated_row_trials": 155,
+        "failed_row_trials": 0,
+        "failed_starts": 0,
+        "included_rows": 155,
+        "input_rows": 155,
+        "non_evaluable_trials": 5,
+        "rejected_row_trials": 0
+      },
+      "active": {
+        "coordinates": {
+          "component/carbamate-anion/segment_diameter": {
+            "bounds": [
+              1.5,
+              5.8
+            ],
+            "origin": 3.0087679808913896,
+            "scale": 2.15
+          },
+          "component/protonated-monoethanolamine/segment_diameter": {
+            "bounds": [
+              1.5,
+              5.8
+            ],
+            "origin": 2.7780278555578346,
+            "scale": 2.15
+          },
+          "pair/carbon-dioxide/monoethanolamine/k_ij": {
+            "bounds": [
+              -1.0,
+              1.0
+            ],
+            "origin": -0.5505189993010621,
+            "scale": 0.5
+          }
+        },
+        "identities": [
+          "pair/carbon-dioxide/monoethanolamine/k_ij",
+          "component/protonated-monoethanolamine/segment_diameter",
+          "component/carbamate-anion/segment_diameter"
+        ],
+        "ties": []
+      },
+      "engine_wheel_path": "wheel-cache://sha256/e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+      "engine_wheel_sha256": "e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23",
+      "final_cost": 0.38512774998234584,
+      "fit_result_identity": {
+        "artifact_fingerprint": "sha256:d8c9284a7cd33efc835c72b6c9f9d097ddf5cfd049b808c25286a8d92f31a852",
+        "candidate_parameter_identity": "sha256:9bf4b62ebbc836f3e0163a6742e5e26c0d1f78e674a76afc79159eb995e6e04d",
+        "digest": "sha256:3ec03b3b17da09e3faed408be5c267563e7c83480a70306079b04faad566822a",
+        "evaluated_row_table_hash": "sha256:5195fb26774ab6ddf9226a3fabeb2ab331e7064ee7de880fe061cb3685371848",
+        "package_fingerprint": "sha256:a5adad7e97c8d2c3a375f263c657a3868dda016001eee162ed66bdd43024e780",
+        "schema": "epcsaft.fit-result",
+        "schema_version": 2
+      },
+      "fitted_values": {
+        "component/carbamate-anion/segment_diameter": 3.017079292071164,
+        "component/protonated-monoethanolamine/segment_diameter": 2.7533328530317225,
+        "pair/carbon-dioxide/monoethanolamine/k_ij": -0.1957268589414558
+      },
+      "jacobian_condition_number": 4745.948551920873,
+      "jacobian_singular_values": [
+        2.0252173550788237,
+        0.9245766351318805,
+        0.0004267255181810048
+      ],
+      "parameter_candidate": {
+        "base_parameter_mapping": "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/broader_candidate/best_fixed_candidate_parameters.json",
+        "domain": {
+          "pressure_range_pa": [
+            10.0,
+            3000000.0
+          ],
+          "temperature_range_k": [
+            293.15,
+            394.95
+          ]
+        },
+        "sha256": "sha256:66837ab1c9625f28cf143a8adfea5855db70d3e070d44258d7e6f5f3e133c63b"
+      },
+      "pressure_formulation": "full specified liquid-plus-incipient-vapor reactive bubble GREPE",
+      "pressure_metrics": {
+        "log_rmse": 0.7035060639984765,
+        "mean_log_bias": 0.40246733679066443,
+        "median_factor": 1.8870280144325815,
+        "rms_factor": 2.0208254448297613
+      },
+      "pressure_row_count": 24,
+      "schema": "mea.full-predictive-pressure-speciation-refinement.v1",
+      "solver": {
+        "controls": {
+          "function_tolerance": 1e-06,
+          "gradient_tolerance": 1e-06,
+          "maximum_iterations": 1,
+          "parameter_tolerance": 1e-06
+        },
+        "multistart": {
+          "affine_bound_margin": 1e-07,
+          "starts": [
+            {
+              "identity": "best-structure-warm-start",
+              "values": [
+                -0.5505189993010621,
+                2.7780278555578346,
+                3.0087679808913896
+              ]
+            }
+          ]
+        }
+      },
+      "speciation_metrics": {
+        "log_rmse": 0.524723468011545,
+        "mean_log_bias": -0.12904797096790263,
+        "median_factor": 1.1050424019340224,
+        "rms_factor": 1.6899914470610342
+      },
+      "speciation_target_count": 131,
+      "status": "completed",
+      "termination": "Ceres Solver Report: Iterations: 2, Initial cost: 3.911790e-01, Final cost: 3.851277e-01, Termination: NO_CONVERGENCE"
+    },
+    "value_status": "estimated_in_this_work_diagnostic_not_adopted"
+  },
+  "downstream_transfer": {
+    "property_coverage": "analyses/phase3/ionic_epcsaft_regression/results/issue_70/downstream_property_coverage.csv",
+    "record": "analyses/phase3/ionic_epcsaft_regression/results/issue_70/downstream_transfer_refusal.json",
+    "status": "refused"
+  },
+  "fixed_configuration": {
+    "materialized_views": [
+      "analyses/phase3/ionic_epcsaft_regression/results/issue_70/species_parameter_table.csv",
+      "analyses/phase3/ionic_epcsaft_regression/results/issue_70/binary_association_table.csv"
+    ],
+    "parameter_sources": [
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/association.csv",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/bundle.toml",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/components.csv",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/correlations.toml",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/model.csv",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/pair.csv",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/single.csv",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/sites.csv"
+    ],
+    "retained_settings": "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/retained_predictive_parameter_settings.json"
+  },
+  "generated_views": [
+    "analyses/phase3/ionic_epcsaft_regression/results/issue_70/species_parameter_table.csv",
+    "analyses/phase3/ionic_epcsaft_regression/results/issue_70/binary_association_table.csv",
+    "analyses/phase3/ionic_epcsaft_regression/results/issue_70/reaction_correlation_table.csv",
+    "analyses/phase3/ionic_epcsaft_regression/results/issue_70/comparison_evidence_table.csv",
+    "analyses/phase3/ionic_epcsaft_regression/results/issue_70/downstream_property_coverage.csv"
+  ],
+  "identity": "mea-issue-70-supported-negative-v1",
+  "identity_checks": {
+    "fitted_candidate_wheel_sha256": "e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23",
+    "frozen_engine_lock_wheel_sha256": "cfe8e2a0d5af8d35227a49246dc1590de64ab55bf033e3416b6f80e1ff8f410e",
+    "input_file_sha256": {
+      "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/independent_evidence_comparison/summary.json": "eef017aa632d4d225cedb0a1a1bf7544e56cf5ad560ee8c482754dc9c64eda8b",
+      "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/predictive_training_refinement/summary.json": "6662479cd011ad1e2712d1c860d6331009dc1ea45142f6b25ef8278d59bcb710",
+      "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/retained_predictive_candidate_summary.json": "f8d97647d7d0845c907e011276e0f5334204571b53807105915fc03010e3bed0",
+      "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/retained_predictive_parameter_settings.json": "e92f3627b8af6191fcd65a2694c2d9647686558632d2e02f6f122f8aed174f65",
+      "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/summary.json": "b1d8a7e067083b393d831d862faffad172051faf99d15e042a8dc1802a1edca3",
+      "analyses/phase3/ionic_epcsaft_regression/co2_water_induced_association/results/summary.json": "79fa19c8056c3718eb9fddd631a079f4637d28b6491ded484b75f3247f29c82b",
+      "data/reference/MEA/manifests/chemical_reaction_source_contract.json": "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55",
+      "data/reference/MEA/manifests/engine_artifact_lock.json": "88ca0d5a78a065bf9811edce9b3e0d6926a5283830bf5c356c44a71ed6afe353",
+      "data/reference/MEA/manifests/reactive_vle_model_configurations.json": "c5fb56c4865529c5aafd372cbb35315a1a0cdd7223dfa76dfa29c5dec992f3b1",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/association.csv": "195a8047403fc20ed414f29835d9f8d936e349e5baf4fb4264b7f2acb412b83e",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/bundle.toml": "ef19afb3e5495e1128edf751f177a308c1e5a3ca6f8ad2948f25718f829cf96d",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/components.csv": "3baa84d19c6db2252f8bfb29685821ec72a21171975a3f0239da62d77f347b75",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/correlations.toml": "733d92b4c348a5ad3f8aef3fed468f209ab0b99c82da43c6bfe471006a262114",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/model.csv": "3f8a40d5015a69fcca82769ec9bbaa979494728a3f2c5288b567cd9a4b4421f4",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/pair.csv": "f82391721156dd228356fc5b27f69d5768338eddb5ddd2d56e5abc95423ee112",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/single.csv": "feb86ed20feca7956e640845f0a1a1e14fde956bdad9900908fca560a6743c9a",
+      "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/sites.csv": "67b27bd84679bdf513a36ec4f1ca9e3dd1ee5923bab4fb5851cb64a1fe60ba8b"
+    },
+    "wheel_identity_matches": false
+  },
+  "ordered_species": [
+    "carbon-dioxide",
+    "monoethanolamine",
+    "water",
+    "protonated-monoethanolamine",
+    "carbamate-anion",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion"
+  ],
+  "reaction_contract": {
+    "materialized_view": "analyses/phase3/ionic_epcsaft_regression/results/issue_70/reaction_correlation_table.csv",
+    "path": "data/reference/MEA/manifests/chemical_reaction_source_contract.json",
+    "sha256": "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55"
+  },
+  "schema": "mea.predictive-parameter-decision",
+  "schema_version": 1
+}

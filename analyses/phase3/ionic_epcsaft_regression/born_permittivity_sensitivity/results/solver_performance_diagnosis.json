@@ -1,0 +1,41 @@
+{
+  "schema": "mea.predictive-solver-performance-diagnosis.v1",
+  "status": "completed",
+  "hardware_logical_cpus": 12,
+  "retained_candidate_replay": {
+    "changed_state_count": 70,
+    "workers": 12,
+    "blas_threads_per_worker": 1,
+    "wall_seconds": 264.9,
+    "aggregate_cpu_percent": 935,
+    "peak_resident_set_kb": 138644,
+    "failure_count": 0
+  },
+  "representative_hard_pressure_state": {
+    "identity": "vle_obs_0213",
+    "temperature_k": 353.15,
+    "loading_mol_co2_per_mol_mea": 0.689,
+    "profile_wall_seconds": 27.508,
+    "native_chemical_equilibrium_cumulative_seconds": 14.291,
+    "homogeneous_reactive_observation_cumulative_seconds": 7.755,
+    "source_reference_transfer_cumulative_seconds": 5.377,
+    "parameter_mapping_seconds": 0.027
+  },
+  "multistart_check": {
+    "primary_start_budget_1": "failed certification after 3.77 s",
+    "primary_start_budget_2": "certified after 13.32 s",
+    "budget_2_pressure_pa": 486487.8947839783,
+    "prior_budget_5_pressure_pa": 486487.8947840081,
+    "retained_search_sequence": [
+      {
+        "primary_start_budget": 2,
+        "maximum_iterations": 50
+      },
+      {
+        "primary_start_budget": 10,
+        "maximum_iterations": 100
+      }
+    ]
+  },
+  "conclusion": "The remaining runtime is dominated by native equilibrium and standard-state work. Python parameter/model construction is negligible. The next material speed slice is a certified warm-start or prepared-state path across nearby parameter evaluations."
+}

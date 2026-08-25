@@ -14,6 +14,10 @@ TRACERS = (
     / "analyses/phase3/ionic_epcsaft_regression/results/reactive_vle_vertical_slice"
 )
 PRESSURE = ROOT / "analyses/phase3/ionic_epcsaft_regression/pressure_first/results"
+CO2_WATER = (
+    ROOT
+    / "analyses/phase3/ionic_epcsaft_regression/co2_water_induced_association/results"
+)
 
 
 def _canonical_sha256(payload: object) -> str:
@@ -40,7 +44,7 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_candidate_inventory_and_model_hierarchy_fail_closed() -> None:
+def test_candidate_inventory_and_retained_model_family_fail_closed() -> None:
     with (MANIFESTS / "reactive_vle_cross_validation.csv").open(newline="") as handle:
         rows = list(csv.DictReader(handle))
     assert Counter(row["observable_family"] for row in rows) == {
@@ -59,13 +63,12 @@ def test_candidate_inventory_and_model_hierarchy_fail_closed() -> None:
         (MANIFESTS / "reactive_vle_model_configurations.json").read_text()
     )["configurations"]
     assert [model["configuration_id"] for model in models] == [
-        "M0",
-        "M1",
-        "M2",
-        "M3",
-        "M4",
-        "M5",
+        "SHELL_BORN_SOLVENT_ONLY_INDUCED",
+        "SHELL_BORN_ION_SUPPRESSED_INDUCED",
     ]
+    assert {model["association"] for model in models} == {
+        "Schick-Pabsch reciprocal CO2-water 2B topology"
+    }
     assert all(model["promotion_eligible"] is False for model in models)
 
 
@@ -109,28 +112,9 @@ def test_pressure_packet_is_immutable_and_leakage_grouped() -> None:
     assert all(row["promotion_eligibility"] == "no" for row in rows)
 
 
-def test_retained_pressure_and_binary_evidence_supports_non_promotion() -> None:
-    decision = _self_hashed(PRESSURE / "pressure_block_ladder_decision.json")
-    assert len(decision["blocks"]) == 6
-    assert decision["accounting"]["passed_blocks"] == 0
-    assert decision["accounting"]["model_selection_rows_used"] == 0
-    assert decision["accounting"]["reserved_rows_used"] == 0
-    assert decision["promotion_decision"] == "not_promoted"
-    assert decision["manuscript_changed"] is False
-
-    with (PRESSURE / "figures/pressure_block_ladder_plot_data.csv").open(
-        newline=""
-    ) as handle:
-        pressure_rows = list(csv.DictReader(handle))
-    assert len(pressure_rows) == 12
-    assert {row["model"] for row in pressure_rows} == {"M0", "M1"}
-    assert {row["prediction_status"] for row in pressure_rows} == {
-        "exact_reactive_bubble_root"
-    }
-    assert {row["analysis_role"] for row in pressure_rows} == {"training"}
-
-    for model in ("3b2b", "3b4c"):
-        fit_path = PRESSURE / f"cai_baygi_{model}_binary_fit.json"
+def test_retained_neutral_binary_evidence_is_complete() -> None:
+    for model in ("2b", "3b", "4c"):
+        fit_path = PRESSURE / f"cai_held_water_mea_{model}_fit.json"
         fit = _self_hashed(fit_path)
         assert fit["accounting"]["admitted_training_rows"] == 12
         assert fit["accounting"]["admitted_model_selection_rows"] == 13
@@ -143,13 +127,21 @@ def test_retained_pressure_and_binary_evidence_supports_non_promotion() -> None:
         assert fit["all_gates_pass"] is False
         assert fit["promotion_decision"] == "not_promoted"
 
-    with (PRESSURE / "figures/cai_baygi_binary_model_comparison_plot_data.csv").open(
+    with (PRESSURE / "figures/cai_held_water_mea_family_plot_data.csv").open(
         newline=""
     ) as handle:
         binary_rows = list(csv.DictReader(handle))
-    assert len(binary_rows) == 100
+    assert len(binary_rows) == 150
     assert {row["model"] for row in binary_rows} == {
-        "Baygi 3B/2B",
-        "Baygi 3B/4C",
+        "Held water + 2B MEA",
+        "Held water + 3B MEA",
+        "Held water + 4C MEA",
     }
     assert {row["parameter_state"] for row in binary_rows} == {"fitted_diagnostic"}
+
+    co2_summary = json.loads((CO2_WATER / "summary.json").read_text())
+    assert co2_summary["row_count"] == 39
+    assert co2_summary["log_pressure_rmse"] < 0.22
+    assert co2_summary["median_multiplicative_error"] < 1.18
+    assert co2_summary["maximum_pressure_residual_inf"] < 1.0e-8
+    assert co2_summary["maximum_chemical_potential_residual_inf"] < 2.0e-8

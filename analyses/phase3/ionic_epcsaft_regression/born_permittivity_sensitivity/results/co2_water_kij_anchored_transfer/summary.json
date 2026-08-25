@@ -1,0 +1,58 @@
+{
+  "anchor_basis": "zero interaction retained at the 313.15 K MEA calibration temperature",
+  "failure_count": 0,
+  "form": "k_CO2,H2O(T) = 3.016e-4 K^-1 * (T - 313.15 K)",
+  "metrics": [
+    {
+      "block": "pressure",
+      "log_rmse": 0.7035060639984765,
+      "mean_log_bias": 0.40246733679066443,
+      "median_factor": 1.8870280144325815,
+      "partition": "training",
+      "rms_factor": 2.0208254448297613,
+      "target_count": 24
+    },
+    {
+      "block": "speciation",
+      "log_rmse": 0.524721121100307,
+      "mean_log_bias": -0.1290508668474904,
+      "median_factor": 1.1050526928533562,
+      "partition": "training",
+      "rms_factor": 1.689987480805769,
+      "target_count": 131
+    },
+    {
+      "block": "pressure",
+      "log_rmse": 0.8248005831985695,
+      "mean_log_bias": 0.05326772338098192,
+      "median_factor": 1.987837217358953,
+      "partition": "reserved",
+      "rms_factor": 2.2814257653346655,
+      "target_count": 8
+    },
+    {
+      "block": "speciation",
+      "log_rmse": 0.8481310869207939,
+      "mean_log_bias": 0.25467076521982723,
+      "median_factor": 1.3833187721038747,
+      "partition": "reserved",
+      "rms_factor": 2.3352783387809213,
+      "target_count": 67
+    },
+    {
+      "block": "pressure",
+      "log_rmse": 0.7931506416845979,
+      "mean_log_bias": -0.2738505110661918,
+      "median_factor": 1.7275664101225285,
+      "partition": "temperature_challenge",
+      "rms_factor": 2.2103494864331545,
+      "target_count": 27
+    }
+  ],
+  "recomputed_state_count": 70,
+  "schema": "mea.co2-water-kij-anchored-transfer.v1",
+  "slope_source": "Pabsch et al. (2020), Table 6, DOI 10.1021/acs.jced.0c00704",
+  "state_count": 119,
+  "status": "completed",
+  "target_count": 257
+}

@@ -1,32 +1,47 @@
-# Pressure-first reactive-VLE screen
+# MEA parameter qualification and reactive regression
 
-This Issue #13 analysis freezes 121 source-resolved candidate CO2-pressure
-rows. The admitted reaction-correlation domain contains 30 training, 6
-model-selection, and 8 reserved rows; 77 higher-temperature rows remain
-non-scoring challenges. Reserved rows were not evaluated.
+This analysis owns the practical parameter sequence that precedes the final
+nine-species reactive fit. CO2-water induced association is fixed in every
+retained parameter document.
 
-The retained reactive calculation compares exact pressure roots for the M0
-nonpolar origin and source-fixed M1 CO2-quadrupole origin on six Hilliard
-training states. Both use the declared one-liquid/one-vapor topology and exact
-total derivatives. Neither model passes the preregistered residual-trend and
-model-selection gates, so no pressure parameter was promoted.
+## Current neutral result
 
-The independent neutral-binary audit evaluates all 29 Cai (1996) MEA-water VLE
-rows with the two source-consistent Baygi (2015) models. Both one-coordinate
-fits are full rank, interior, and multistart-consistent, but both fail the
-source-scale residual and composition-trend gates. Baygi fitted Bubble-T and
-Dew-T composition objectives; the retained fixed-state closure results do not
-claim to reproduce that objective. No fitted interaction was transferred into
-the reactive model.
+The Cai (1996) MEA-water study fits one `k_MEA,H2O` value on the 101.33 kPa
+series and tests it on the independent 66.66 kPa series. Three Baygi MEA
+association candidates are evaluated under the same fixed Held 2B water.
 
-The canonical decision is `results/pressure_block_ladder_decision.json`.
-Exact plotted values are retained beside two diagnostic figure bundles:
+| MEA family | Fitted `k_MEA,H2O` | Fit log-RMSE | Held-out log-RMSE | Held-out typical factor |
+|---|---:|---:|---:|---:|
+| 2B | -0.058566 | 0.06883 | 0.15891 | 1.172 |
+| 3B | -0.019567 | 0.05900 | **0.11123** | **1.118** |
+| 4C | -0.036274 | **0.05244** | 0.12577 | 1.134 |
 
-- `pressure_block_ladder_diagnostic`: experimental versus exact M0/M1 pressure roots;
-- `cai_baygi_binary_model_comparison_diagnostic`: source-consistent binary closure audit.
+All 25 binary rows evaluate, exact derivatives pass the centered-difference
+check, and three starts agree for every candidate. The 3B MEA family gives the
+best pressure-level transfer and is the retained neutral candidate. The
+source-resolution-normalized residuals remain stringent because the source
+reports composition resolution rather than a statistical covariance model;
+selection therefore uses both the raw log closure and the independent pressure
+level.
 
-The manuscript remains unchanged. The next scientific capability is a generic
-declared-one-liquid/one-vapor Bubble-T/Dew-T observation family with exact
-total parameter derivatives.
+The exact plotted rows and the complete comparison table are retained under
+`results/figures/cai_held_water_mea_family_*`.
 
-Regeneration commands are declared in `analysis.yaml`.
+## Reactive calculation
+
+The generic GREPE calculation under `results/grepe_gate0` solves the declared
+nine-species liquid and incipient neutral vapor and exposes exact parameter
+derivatives. Its earlier two-coordinate fit is diagnostic. It is regenerated
+only after the retained neutral packet is updated with the selected 3B MEA
+family and the physical CO2-water interaction is qualified. That binary
+qualification is now complete in `../co2_water_induced_association`.
+
+## Next calculation
+
+Compare direct and screened Born formulations against independent dielectric,
+solvation, and activity observations before reopening MEAH+ and MEACOO-
+parameters. The retained neutral inputs are the Held-water/3B-MEA result above
+and the source CO2-water temperature correlation qualified on all 39 Kiepe
+rows.
+
+Commands and retained outputs are declared in `analysis.yaml`.

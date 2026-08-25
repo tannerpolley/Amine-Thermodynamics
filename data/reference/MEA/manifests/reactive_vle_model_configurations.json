@@ -1,86 +1,50 @@
 {
-  "schema_version": 2,
-  "identity": "mea-reactive-vle-model-configurations-v2",
+  "schema_version": 3,
+  "identity": "mea-reactive-vle-model-configurations-v4",
   "execution_status": "ENGINE_OBSERVATIONS_ADMITTED_APPLICATION_INPUTS_INCOMPLETE",
-  "purpose": "Nested M0-M5 comparison on identical admitted rows and frozen campaign partitions.",
+  "purpose": "Compare two shell-modified Born permittivity formulations with one fixed CO2-water induced-association topology.",
   "engine_boundary": {
     "homogeneous_reactive_observations": "ADMITTED_epcsaft_issue_30_PR_32",
     "reactive_bubble_vle_observations": "ADMITTED_epcsaft_issue_31_PR_33",
     "regression_owner": "canonical_epcsaft.regression.fit_with_opaque_equilibrium_receipts"
   },
-  "comparison_semantics": "nested_physical_hierarchy",
+  "comparison_semantics": "fixed_association_electrostatic_sensitivity",
   "configurations": [
     {
-      "configuration_id": "M0",
-      "name": "baseline nonpolar ePC-SAFT",
-      "polar_terms": [],
-      "association": "retained declared neutral topology",
-      "electrostatic": "retained diagnostic basis",
-      "execution_status": "DIAGNOSTIC_PARAMETER_DOCUMENT_AVAILABLE_NO_ADMITTED_SCORING_ROWS",
+      "configuration_id": "SHELL_BORN_SOLVENT_ONLY_INDUCED",
+      "name": "shell-modified Born with solvent-only permittivity and induced CO2-water association",
+      "association": "Schick-Pabsch reciprocal CO2-water 2B topology",
+      "electrostatic": {
+        "born_c_shell": 1,
+        "born_c_dielectric": 1,
+        "relative_permittivity": "solvent-only"
+      },
+      "execution_status": "DIAGNOSTIC_PARAMETER_DOCUMENT_AVAILABLE",
       "promotion_eligible": false
     },
     {
-      "configuration_id": "M1",
-      "name": "M0 plus CO2 quadrupole",
-      "polar_terms": ["CO2_QQ"],
-      "association": "retained declared neutral topology",
-      "electrostatic": "retained diagnostic basis",
-      "execution_status": "BLOCKED_SOURCE_FIXED_CO2_QUADRUPOLE_RECORD_MISSING",
-      "promotion_eligible": false
-    },
-    {
-      "configuration_id": "M2",
-      "name": "M1 plus neutral MEA and H2O dipoles",
-      "polar_terms": ["CO2_QQ", "MEA_DD", "H2O_DD"],
-      "association": "retained declared neutral topology",
-      "electrostatic": "retained diagnostic basis",
-      "execution_status": "BLOCKED_SOURCE_FIXED_NEUTRAL_MOMENT_RECORDS_MISSING",
-      "promotion_eligible": false
-    },
-    {
-      "configuration_id": "M3",
-      "name": "full neutral DD/QQ/DQ",
-      "polar_terms": ["CO2_QQ", "MEA_DD", "H2O_DD", "ALL_DECLARED_DQ"],
-      "association": "retained declared neutral topology",
-      "electrostatic": "retained diagnostic basis",
-      "execution_status": "BLOCKED_SOURCE_FIXED_NEUTRAL_MOMENT_RECORDS_MISSING",
-      "promotion_eligible": false
-    },
-    {
-      "configuration_id": "M4",
-      "name": "M3 plus source-fixed induced association",
-      "polar_terms": ["CO2_QQ", "MEA_DD", "H2O_DD", "ALL_DECLARED_DQ"],
-      "association": "source-fixed induced/cross-association topology",
-      "electrostatic": "retained diagnostic basis",
-      "execution_status": "BLOCKED_SOURCE_TOPOLOGY_AND_EDGE_VALUES_MISSING",
-      "promotion_eligible": false
-    },
-    {
-      "configuration_id": "M5",
-      "name": "M4 plus corrected SSM+DS Born and qualified relative permittivity",
-      "polar_terms": ["CO2_QQ", "MEA_DD", "H2O_DD", "ALL_DECLARED_DQ"],
-      "association": "source-fixed induced/cross-association topology",
+      "configuration_id": "SHELL_BORN_ION_SUPPRESSED_INDUCED",
+      "name": "shell-modified Born with ion-suppressed permittivity and induced CO2-water association",
+      "association": "Schick-Pabsch reciprocal CO2-water 2B topology",
       "electrostatic": {
         "born_c_shell": 1,
         "born_c_dielectric": 1,
         "coefficient_policy": "fixed discrete model choice",
-        "relative_permittivity": "qualified formulation"
+        "relative_permittivity": "ion-fraction-suppression"
       },
-      "execution_status": "BLOCKED_DIRECT_MEA_PERMITTIVITY_AND_TARGET_ION_EVIDENCE_MISSING",
+      "execution_status": "DIAGNOSTIC_PARAMETER_DOCUMENT_AVAILABLE_DIRECT_ION_EVIDENCE_INCOMPLETE",
       "promotion_eligible": false
     }
   ],
   "fixed_input_policy": {
-    "physical_moments": "source-fixed molecular inputs; never reactive-pressure fit coordinates",
-    "ssm_ds": "fixed discrete model choice",
-    "born_and_permittivity": "not inferable from CO2 pressure alone",
-    "induced_association": "declared generic topology or source-backed cross-association parameter only"
+    "induced_association": "source-fixed CO2-water topology and combining rule",
+    "born_and_permittivity": "constrained by independent solvation, activity, and dielectric evidence before reactive fitting",
+    "neutral_binary_interactions": "qualified on the corresponding physical binary before reactive fitting"
   },
   "source_blockers": [
-    "No promoted source record supplies the CO2 quadrupole and MEA/H2O dipole inputs required by M1-M3.",
-    "No promoted source record supplies the induced-association topology and edge values required by M4.",
     "The retained MEA relative-permittivity value is not qualified by the admitted evidence library.",
-    "No loaded static-permittivity or direct MEAH+/MEACOO- activity dataset supports M5 parameter promotion.",
-    "No candidate pressure or speciation row currently has a complete executable residual-scale and state contract."
+    "Direct MEAH+ and MEACOO- activity or solvation evidence remains incomplete.",
+    "No candidate pressure or speciation row currently has a complete executable residual scale and state definition for final promotion.",
+    "The original-Born solvent-only control is incompatible with the current frozen parameter set and is retained only in the Born/permittivity sensitivity analysis."
   ]
 }

@@ -1,0 +1,39 @@
+{
+  "candidate_preferred_grid_fraction": 0.9718501261890895,
+  "domains": [
+    {
+      "balanced_error": 0.7133071520304859,
+      "balanced_to_retained_error_ratio": 0.8993337640318493,
+      "domain": "pressure_challenge",
+      "quantity": "natural-log pressure RMSE",
+      "retained_error": 0.7931506416845978,
+      "target_count": 27,
+      "unit": "dimensionless"
+    },
+    {
+      "balanced_error": 0.8829861285405957,
+      "balanced_to_retained_error_ratio": 1.0410962906056775,
+      "domain": "reserved_speciation",
+      "quantity": "natural-log mole-fraction RMSE",
+      "retained_error": 0.8481310869207898,
+      "target_count": 67,
+      "unit": "dimensionless"
+    },
+    {
+      "balanced_error": 10.488841905818186,
+      "balanced_to_retained_error_ratio": 0.6657468936083697,
+      "domain": "calorimetry",
+      "quantity": "heat-release RMSE",
+      "retained_error": 15.754999394692362,
+      "target_count": 69,
+      "unit": "kJ/mol CO2"
+    }
+  ],
+  "equal_domain_balanced_to_retained_score": 0.8542276973098804,
+  "interpretation_limit": "domain weights are engineering priorities, not measurement-uncertainty weights",
+  "method": "geometric mean of domain error ratios relative to the retained parameter set",
+  "schema": "mea.independent-evidence-comparison.v1",
+  "status": "completed",
+  "weight_grid_count": 5151,
+  "weight_grid_step": 0.01
+}
