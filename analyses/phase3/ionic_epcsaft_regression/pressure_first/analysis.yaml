@@ -1,38 +1,28 @@
-id: pressure_first_reactive_vle
-title: Pressure-first MEA reactive-VLE model screen
-status: completed_diagnostic_not_promoted
-summary: Freeze the pressure packet, compare exact M0/M1 pressure roots, and audit the neutral MEA-water direction against source-consistent Cai binary evidence.
-owner: MEA-Thermodynamics Issue #13
+id: mea_parameter_qualification
+title: MEA neutral qualification and reactive regression
+status: active
+summary: Qualify neutral binaries with induced CO2-water association fixed, then fit the smallest identifiable nine-species reactive parameter block.
+owner: MEA-Thermodynamics
 inputs:
-  - path: data/reference/MEA/manifests/reactive_vle_cross_validation.csv
-    kind: curated_input
-  - path: data/reference/MEA/manifests/pco2_metrology_manifest.csv
-    kind: curated_input
   - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Cai_1996_MEA_H2O_VLE.csv
     kind: curated_input
+  - path: data/reference/MEA/manifests/reactive_vle_cross_validation.csv
+    kind: curated_input
 outputs:
-  - path: results/pressure_candidate_packet.csv
-    kind: immutable_packet
-  - path: results/pressure_block_ladder_decision.json
-    kind: scientific_decision
-  - path: results/figures/pressure_block_ladder_diagnostic.svg
+  - path: results/figures/cai_held_water_mea_family_summary.csv
+    kind: comparison_table
+  - path: results/figures/cai_held_water_mea_family_comparison.svg
     kind: figure
-  - path: results/figures/cai_baygi_binary_model_comparison_diagnostic.svg
-    kind: figure
+  - path: results/grepe_gate0/summary.json
+    kind: diagnostic_regression_receipt
 commands:
   generate:
-    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/build_packet.py
-    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/screen_pressure_parameter_directions.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/pressure_block_ladder.json
-    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/screen_pressure_parameter_directions.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/m0_mea_water_direction_screen.json
-    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/screen_pressure_parameter_directions.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/m1_source_fixed_screen.json
-    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/fit_cai_mea_water_binary.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/cai_baygi_3b2b_binary_fit.json
-    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/fit_cai_mea_water_binary.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/cai_baygi_3b4c_binary_fit.json
-    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/summarize_pressure_block_ladder.py
+    - .venv/bin/python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/fit_cai_mea_water_binary.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/cai_held_water_mea_2b_fit.json
+    - .venv/bin/python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/fit_cai_mea_water_binary.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/cai_held_water_mea_3b_fit.json
+    - .venv/bin/python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/fit_cai_mea_water_binary.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/cai_held_water_mea_4c_fit.json
   render:
-    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/render_figures.py
+    - .venv/bin/python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/render_figures.py
 runtime:
-  class: expensive
-  quick_seconds: 5
-  full_seconds: 7200
-manuscript_consumers: []
-results_policy: Retain the immutable 121-row packet, exact M0/M1 pressure-root comparison, source-consistent Baygi binary fits, one final decision, and two PNG/SVG/PDF figure bundles. All results remain diagnostic and non-promotable.
+  class: focused
+  full_seconds: 80
+results_policy: Retain the three fit summaries, exact plotted rows, comparison table, and PNG/SVG/PDF figure bundle.

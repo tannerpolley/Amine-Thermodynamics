@@ -1,0 +1,68 @@
+{
+  "binary_qualification": "Kiepe et al. (2002), Table 1, DOI 10.1021/ie020154i",
+  "engine_wheel_path": "wheel-cache://sha256/e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+  "engine_wheel_sha256": "e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23",
+  "failure_count": 0,
+  "fixed_fitted_values": {
+    "component/carbamate-anion/segment_diameter": 3.017079292071164,
+    "component/protonated-monoethanolamine/segment_diameter": 2.7533328530317225,
+    "pair/carbon-dioxide/monoethanolamine/k_ij": -0.1957268589414558
+  },
+  "k_ij": {
+    "form": "k_ref + slope * (T - 298.15 K)",
+    "reference": 0.0122,
+    "slope_per_k": 0.0003016
+  },
+  "metrics": [
+    {
+      "block": "pressure",
+      "log_rmse": 0.9360517772415435,
+      "mean_log_bias": 0.7370216568684018,
+      "median_factor": 2.6366165143110867,
+      "partition": "training",
+      "rms_factor": 2.5498939682860993,
+      "target_count": 24
+    },
+    {
+      "block": "speciation",
+      "log_rmse": 0.5247149245468669,
+      "mean_log_bias": -0.12905981252036153,
+      "median_factor": 1.1050235599213245,
+      "partition": "training",
+      "rms_factor": 1.6899770087404766,
+      "target_count": 131
+    },
+    {
+      "block": "pressure",
+      "log_rmse": 0.910122057921382,
+      "mean_log_bias": 0.3871952802655322,
+      "median_factor": 2.030867962105795,
+      "partition": "reserved",
+      "rms_factor": 2.484625783135925,
+      "target_count": 8
+    },
+    {
+      "block": "speciation",
+      "log_rmse": 0.8462150024532326,
+      "mean_log_bias": 0.2597568904600838,
+      "median_factor": 1.3793404356034817,
+      "partition": "reserved",
+      "rms_factor": 2.330808032338603,
+      "target_count": 67
+    },
+    {
+      "block": "pressure",
+      "log_rmse": 0.7489552759775618,
+      "mean_log_bias": 0.02627621989544149,
+      "median_factor": 1.705981733260172,
+      "partition": "temperature_challenge",
+      "rms_factor": 2.1147894907356166,
+      "target_count": 27
+    }
+  ],
+  "schema": "mea.co2-water-kij-transfer.v1",
+  "source": "Pabsch et al. (2020), Tables 2 and 6, DOI 10.1021/acs.jced.0c00704",
+  "state_count": 119,
+  "status": "completed",
+  "target_count": 257
+}

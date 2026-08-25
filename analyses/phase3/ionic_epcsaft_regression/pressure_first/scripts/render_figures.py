@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import math
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -12,118 +14,70 @@ ROOT = Path(__file__).resolve().parents[5]
 ANALYSIS = ROOT / "analyses/phase3/ionic_epcsaft_regression/pressure_first"
 RESULTS = ANALYSIS / "results"
 FIGURES = RESULTS / "figures"
-LADDER_TABLE = FIGURES / "pressure_block_ladder_plot_data.csv"
-LADDER_STEM = FIGURES / "pressure_block_ladder_diagnostic"
-BINARY_INPUTS = {
-    "Baygi 3B/2B": RESULTS / "cai_baygi_3b2b_binary_predictions.csv",
-    "Baygi 3B/4C": RESULTS / "cai_baygi_3b4c_binary_predictions.csv",
+MODELS = {
+    "Held water + 2B MEA": "cai_held_water_mea_2b",
+    "Held water + 3B MEA": "cai_held_water_mea_3b",
+    "Held water + 4C MEA": "cai_held_water_mea_4c",
 }
-BINARY_TABLE = FIGURES / "cai_baygi_binary_model_comparison_plot_data.csv"
-BINARY_STEM = FIGURES / "cai_baygi_binary_model_comparison_diagnostic"
+PLOT_TABLE = FIGURES / "cai_held_water_mea_family_plot_data.csv"
+SUMMARY_TABLE = FIGURES / "cai_held_water_mea_family_summary.csv"
+FIGURE_STEM = FIGURES / "cai_held_water_mea_family_comparison"
 
 
-def _render_pressure_models() -> tuple[Path, Path, Path]:
-    frame = pd.read_csv(LADDER_TABLE)
-    if set(frame["analysis_role"]) != {"training"}:
-        raise RuntimeError("pressure plot may contain training rows only")
-    styles = {
-        "M0": ("#28659c", "s", "M0 exact origin"),
-        "M1": ("#b6312c", "^", "M1 exact source-fixed origin"),
-    }
-    fig, (pressure_ax, residual_ax) = plt.subplots(1, 2, figsize=(11.2, 4.8))
-    observations = frame.loc[frame["model"] == "M0"].sort_values(
-        "loading_mol_co2_per_mol_mea"
-    )
-    pressure_ax.scatter(
-        observations["loading_mol_co2_per_mol_mea"],
-        observations["observed_pco2_pa"] / 1000.0,
-        color="white",
-        edgecolor="black",
-        linewidth=0.8,
-        s=48,
-        label="Hilliard (2008) experiment",
-        zorder=4,
-    )
-    for model, (color, marker, label) in styles.items():
-        subset = frame.loc[frame["model"] == model].sort_values(
-            "loading_mol_co2_per_mol_mea"
-        )
-        x = subset["loading_mol_co2_per_mol_mea"]
-        pressure_ax.plot(
-            x,
-            subset["predicted_pco2_pa"] / 1000.0,
-            color=color,
-            marker=marker,
-            linewidth=1.5,
-            markersize=4.5,
-            label=label,
-        )
-        residual_ax.plot(
-            x,
-            subset["residual_log10"],
-            color=color,
-            marker=marker,
-            linewidth=1.5,
-            markersize=4.5,
-            label=label,
-        )
-    pressure_ax.set_yscale("log")
-    pressure_ax.set_xlabel("$CO_2$ loading, mol $CO_2$/mol MEA")
-    pressure_ax.set_ylabel("$P_{CO_2}$, kPa")
-    finish_axes(pressure_ax, title="Exact reactive-bubble pressure roots")
-    pressure_ax.legend(fontsize=7.5)
-    residual_ax.axhline(0.0, color="black", linestyle=":", linewidth=1.0)
-    residual_ax.set_xlabel("$CO_2$ loading, mol $CO_2$/mol MEA")
-    residual_ax.set_ylabel("$\\log_{10}(P_{CO_2}^{model}/P_{CO_2}^{obs})$")
-    finish_axes(residual_ax, title="Loading-dependent pressure residual")
-    residual_ax.legend(fontsize=7.5)
-    fig.suptitle(
-        "17 wt% MEA, 40 °C — diagnostic M0/M1 screen\n"
-        "Exact origins only; no fitted pressure curve is promoted",
-        fontsize=11.5,
-        fontweight="semibold",
-    )
-    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.90))
-    paths = save_figure_bundle(fig, LADDER_STEM)
-    plt.close(fig)
-    write_mpl_sidecar(
-        LADDER_STEM.with_suffix(".mpl.yaml"),
-        png_name=paths[0].name,
-        svg_name=paths[1].name,
-        pdf_name=paths[2].name,
-        title="Diagnostic exact reactive-bubble M0/M1 pressure screen",
-        description=(
-            "Experimental and exact independently rooted reactive-bubble CO2 partial "
-            "pressures for the Hilliard 17 wt% MEA, 40 C training subset. Both "
-            "models are diagnostic and non-promotable; reserved data remain unused."
-        ),
-        data_path=LADDER_TABLE,
-        style_source=str(Path(__file__).relative_to(ROOT)),
-    )
-    return paths
-
-
-def _render_binary_models() -> tuple[Path, Path, Path]:
+def _load() -> tuple[pd.DataFrame, pd.DataFrame]:
     frames: list[pd.DataFrame] = []
-    for model, path in BINARY_INPUTS.items():
-        frame = pd.read_csv(path)
+    summaries: list[dict[str, object]] = []
+    for label, stem in MODELS.items():
+        frame = pd.read_csv(RESULTS / f"{stem}_predictions.csv")
         frame = frame.loc[frame["parameter_state"] == "fitted_diagnostic"].copy()
-        frame["model"] = model
+        frame["model"] = label
         frames.append(frame)
-    combined = pd.concat(frames, ignore_index=True)
-    combined.to_csv(BINARY_TABLE, index=False, lineterminator="\n")
+        fit = json.loads((RESULTS / f"{stem}_fit.json").read_text(encoding="utf-8"))
+        training = frame.loc[frame["fit_role"] == "binary_training"]
+        selection = frame.loc[frame["fit_role"] == "binary_model_selection"]
+        training_rmse = float(
+            math.sqrt((training["raw_log_fugacity_residual"] ** 2).mean())
+        )
+        selection_rmse = float(
+            math.sqrt((selection["raw_log_fugacity_residual"] ** 2).mean())
+        )
+        summaries.append(
+            {
+                "model": label,
+                "k_mea_h2o": fit["selected_value"],
+                "training_raw_log_rmse": training_rmse,
+                "training_typical_factor": math.exp(training_rmse),
+                "held_out_raw_log_rmse": selection_rmse,
+                "held_out_typical_factor": math.exp(selection_rmse),
+                "all_rows_evaluated": fit["gates"]["all_admitted_rows_evaluated"],
+                "exact_jacobian_check": fit["gates"]["exact_jacobian_check"],
+                "multistart_agreement": fit["gates"]["all_starts_same_solution"],
+                "runtime_seconds": fit["runtime_seconds"],
+            }
+        )
+    return pd.concat(frames, ignore_index=True), pd.DataFrame(summaries)
+
+
+def main() -> None:
+    FIGURES.mkdir(parents=True, exist_ok=True)
+    combined, summary = _load()
+    combined.to_csv(PLOT_TABLE, index=False, lineterminator="\n")
+    summary.to_csv(SUMMARY_TABLE, index=False, lineterminator="\n")
+
     components = ("monoethanolamine", "water")
     titles = {"monoethanolamine": "MEA closure", "water": "Water closure"}
     roles = {
-        "binary_training": ("#28659c", "o", "101.33 kPa training"),
-        "binary_model_selection": ("#b6312c", "^", "66.66 kPa held-out"),
+        "binary_training": ("#28659c", "o", "101.33 kPa fit"),
+        "binary_model_selection": ("#b6312c", "^", "66.66 kPa held out"),
     }
-    fig, axes = plt.subplots(2, 2, figsize=(10.8, 8.1), sharex=True)
-    for row_index, model in enumerate(BINARY_INPUTS):
+    fig, axes = plt.subplots(len(MODELS), 2, figsize=(10.8, 10.8), sharex=True)
+    for row_index, model in enumerate(MODELS):
+        parameter = float(summary.loc[summary["model"] == model, "k_mea_h2o"].iloc[0])
         for column_index, component in enumerate(components):
             ax = axes[row_index, column_index]
             subset = combined.loc[
-                (combined["model"] == model) & (combined["component_id"] == component)
+                (combined["model"] == model)
+                & (combined["component_id"] == component)
             ]
             for role, (color, marker, label) in roles.items():
                 rows = subset.loc[subset["fit_role"] == role].sort_values(
@@ -131,57 +85,47 @@ def _render_binary_models() -> tuple[Path, Path, Path]:
                 )
                 ax.plot(
                     rows["water_liquid_mole_fraction"],
-                    rows["normalized_residual"],
+                    rows["raw_log_fugacity_residual"],
                     color=color,
                     marker=marker,
                     linewidth=1.2,
                     markersize=4.5,
                     label=label,
                 )
-            parameter = float(subset["k_ij_mea_water"].iloc[0])
             ax.axhline(0.0, color="black", linestyle=":", linewidth=1.0)
             ax.set_xlabel("Liquid water mole fraction")
-            ax.set_ylabel("Normalized log-fugacity closure")
+            ax.set_ylabel("Log-fugacity closure residual")
             finish_axes(
-                ax, title=f"{model}: {titles[component]}, $k_{{ij}}={parameter:.5f}$"
+                ax,
+                title=f"{model}: {titles[component]}, $k_{{ij}}={parameter:.5f}$",
             )
-            ax.legend(fontsize=6.8)
+            ax.legend(fontsize=7)
     fig.suptitle(
-        "Cai (1996) source-consistent Baygi diagnostics — non-promotable\n"
-        "Measured $T$, $P$, $x$, and $y$ are inputs; Bubble-T/Dew-T is not claimed",
-        fontsize=11.5,
+        "Cai (1996) MEA-water qualification under fixed Held 2B water",
+        fontsize=12,
         fontweight="semibold",
     )
-    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.92))
-    paths = save_figure_bundle(fig, BINARY_STEM)
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.97))
+    paths = save_figure_bundle(fig, FIGURE_STEM)
     plt.close(fig)
     write_mpl_sidecar(
-        BINARY_STEM.with_suffix(".mpl.yaml"),
+        FIGURE_STEM.with_suffix(".mpl.yaml"),
         png_name=paths[0].name,
         svg_name=paths[1].name,
         pdf_name=paths[2].name,
-        title="Diagnostic Cai Baygi binary-model fugacity closure comparison",
+        title="Cai MEA-water association-family qualification",
         description=(
-            "Exact fixed-state closure residuals for source-consistent Baygi 3B/2B "
-            "and 3B/4C models. Both fits fail source-scale residual and trend gates."
+            "Measured-state component log-fugacity closure for three Baygi MEA "
+            "association candidates under fixed Held water. The 101.33 kPa series "
+            "fits the binary interaction; the 66.66 kPa series is held out."
         ),
-        data_path=BINARY_TABLE,
+        data_path=PLOT_TABLE,
         style_source=str(Path(__file__).relative_to(ROOT)),
     )
-    return paths
-
-
-def main() -> None:
-    required = (LADDER_TABLE, *BINARY_INPUTS.values())
-    missing = [path for path in required if not path.exists()]
-    if missing:
-        names = ", ".join(str(path.relative_to(ROOT)) for path in missing)
-        raise FileNotFoundError(f"generate retained analysis tables first: {names}")
-    FIGURES.mkdir(parents=True, exist_ok=True)
-    for path in (*_render_pressure_models(), *_render_binary_models()):
+    for path in paths:
         print(path.relative_to(ROOT))
-    print(LADDER_TABLE.relative_to(ROOT))
-    print(BINARY_TABLE.relative_to(ROOT))
+    print(PLOT_TABLE.relative_to(ROOT))
+    print(SUMMARY_TABLE.relative_to(ROOT))
 
 
 if __name__ == "__main__":

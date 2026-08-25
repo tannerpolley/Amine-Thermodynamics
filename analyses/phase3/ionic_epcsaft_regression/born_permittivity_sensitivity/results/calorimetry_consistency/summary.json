@@ -1,0 +1,53 @@
+{
+  "calorimetry_balanced_linearized": {
+    "candidate_r4_delta_ln_k_at_353_15_k": 0.029877891836457147,
+    "candidate_r5_delta_ln_k_at_353_15_k": 0.5350291330862538,
+    "metrics": {
+      "configuration": "calorimetry_balanced_linearized",
+      "mean_bias_kj_per_mol_co2": 0.6169069306302832,
+      "median_absolute_error_kj_per_mol_co2": 5.305369049080609,
+      "rmse_kj_per_mol_co2": 10.422780106533109
+    },
+    "scale_between_retained_and_joint_candidate": 0.5548543049551917
+  },
+  "common_loading_interval": [
+    0.0888,
+    0.642
+  ],
+  "direct_observation_count": 86,
+  "evaluated_observation_count_per_configuration": 69,
+  "held_out_observation_count_per_configuration": 17,
+  "limitations": [
+    "the pressure-volume correction term is neglected; Mathias and O'Connell (2012) show it is small for aqueous MEA",
+    "the curve is a 313.15-353.15 K average temperature derivative rather than a local derivative at each calorimeter temperature",
+    "the derivative uses interpolation of completed model bubble predictions and performs no parameter fitting"
+  ],
+  "method": "common Gibbs-Helmholtz f-term from a linear fit of model ln(f_CO2) versus 1/T at fixed apparent loading",
+  "metrics": [
+    {
+      "configuration": "retained",
+      "mean_bias_kj_per_mol_co2": -11.118033294667878,
+      "median_absolute_error_kj_per_mol_co2": 13.616555460321791,
+      "rmse_kj_per_mol_co2": 15.754999394692362
+    },
+    {
+      "configuration": "joint_r4_r5_temperature_candidate",
+      "mean_bias_kj_per_mol_co2": 10.031555201803892,
+      "median_absolute_error_kj_per_mol_co2": 9.785888799121778,
+      "rmse_kj_per_mol_co2": 14.08822079449511
+    },
+    {
+      "configuration": "calorimetry_balanced_exact",
+      "mean_bias_kj_per_mol_co2": 0.7337191078917134,
+      "median_absolute_error_kj_per_mol_co2": 5.28694902269099,
+      "rmse_kj_per_mol_co2": 10.488841905818186
+    }
+  ],
+  "schema": "mea.calorimetry-consistency.v1",
+  "status": "completed",
+  "temperature_isotherms_k": [
+    313.15,
+    333.15,
+    353.15
+  ]
+}

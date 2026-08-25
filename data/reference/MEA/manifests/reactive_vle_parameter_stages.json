@@ -34,7 +34,7 @@
     },
     {
       "stage_id": "S1",
-      "name": "Requalify neutral pure components by polar configuration",
+      "name": "Qualify the retained neutral pure-component family",
       "active_coordinates": [
         "CO2/H2O/MEA segment_count",
         "CO2/H2O/MEA segment_diameter",
@@ -42,31 +42,28 @@
         "source-justified fixed-topology association energy and volume"
       ],
       "fixed": [
-        "physical dipole and quadrupole moments",
         "ionic parameters",
         "reaction correlations",
         "Born and relative-permittivity formulation"
       ],
       "data": "Pure saturation and fixed-state pressure-at-measured-density observations, grouped by source and temperature.",
-      "gate": "BLOCKED until the pure-MEA measurement package and source-fixed moment records are complete; refit separately for every polar configuration to avoid double counting.",
+      "gate": "BLOCKED until the pure-MEA measurement package is complete and the retained water and MEA association family is qualified on independent pure and binary observations.",
       "execution_status": "blocked_missing_primary_inputs"
     },
     {
       "stage_id": "S2",
-      "name": "Fit neutral binary interactions and test induced association",
+      "name": "Fit neutral binary interactions with induced association fixed",
       "active_coordinates": [
         "one k_ij at a time for MEA-H2O, CO2-H2O, and CO2-MEA",
-        "l_ij only when profile rank supports it",
-        "one k_hb_ij correction only after source-fixed induced-association topology is qualified"
+        "l_ij only when profile rank supports it"
       ],
       "fixed": [
         "S1 pure parameters",
-        "physical moments",
         "ionic parameters",
         "reaction correlations"
       ],
       "data": "Binary MEA-H2O VLE, physical CO2 solubility, neutral mixture density, and association-sensitive evidence.",
-      "gate": "Engine phase-equilibrium observations are admitted. Execution remains blocked by the S1 gate and incomplete neutral-binary evidence. Never fit k_ij and k_hb_ij for the same pair without profile-identifiability evidence.",
+      "gate": "Engine phase-equilibrium observations are admitted. Complete the MEA-H2O and physical CO2-water fits under the fixed association topology before reactive fitting.",
       "execution_status": "not_started_S1_gate_not_passed"
     },
     {

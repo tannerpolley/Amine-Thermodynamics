@@ -1,0 +1,64 @@
+{
+  "schema": "mea.retained-predictive-parameter-settings.v1",
+  "status": "retained_predictive_candidate",
+  "engine_wheel_sha256": "e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23",
+  "fixed_structure": {
+    "born": "shell",
+    "relative_permittivity": "ion-specific-suppression",
+    "co2_water_induced_association": true,
+    "polar_term": false,
+    "water_relative_permittivity": "Archer-Wang temperature correlation"
+  },
+  "ion_specific_suppression_coefficients": {
+    "protonated-monoethanolamine": 2.60,
+    "carbamate-anion": 7.01,
+    "bicarbonate-anion": 7.89,
+    "carbonate-anion": 7.89,
+    "hydronium-cation": 9.55,
+    "hydroxide-anion": 13.96
+  },
+  "co2_water_induced_association": {
+    "energy_over_k_kelvin": 1212.85,
+    "volume": 0.04509,
+    "directions": [
+      "carbon-dioxide/a -> water/b",
+      "carbon-dioxide/b -> water/a"
+    ]
+  },
+  "shared_parameters": {
+    "pair/carbon-dioxide/monoethanolamine/k_ij": -0.1957268589414558,
+    "component/protonated-monoethanolamine/segment_diameter_angstrom": 2.7533328530317225,
+    "component/carbamate-anion/segment_diameter_angstrom": 3.017079292071164
+  },
+  "co2_water_binary_interaction": {
+    "form": "k_CO2,H2O(T) = 3.016e-4 K^-1 * (T - 313.15 K)",
+    "slope_source": "Pabsch et al. (2020), Table 6, DOI 10.1021/acs.jced.0c00704",
+    "anchor_basis": "zero interaction retained at the 313.15 K MEA calibration temperature"
+  },
+  "accounting": {
+    "equilibrium_state_count": 119,
+    "target_count": 257,
+    "failure_count": 0
+  },
+  "metrics": {
+    "training_pressure_rms_factor": 2.0208254448297613,
+    "training_speciation_rms_factor": 1.6899874808057742,
+    "reserved_pressure_rms_factor": 2.2814257653346655,
+    "reserved_speciation_rms_factor": 2.3352783387808986,
+    "temperature_challenge_pressure_rms_factor": 2.2103494864331537
+  },
+  "evaluation_performance": {
+    "changed_state_count": 70,
+    "workers": 12,
+    "blas_threads_per_worker": 1,
+    "wall_seconds": 264.9,
+    "aggregate_cpu_percent": 935,
+    "homogeneous_multistart_budgets": [2, 10],
+    "solver_convergence_tolerance": 1e-06
+  },
+  "limitations": [
+    "The pair-temperature transformation is currently applied by the downstream state compiler rather than represented as a native Engine pair correlation.",
+    "The reaction correlations above 323.15 K remain source extrapolations.",
+    "The retained candidate improves but does not eliminate structured high-temperature pressure residuals."
+  ]
+}

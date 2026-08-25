@@ -1,5 +1,11 @@
 # MEA-Thermodynamics Superpowers Project Context
 
+> **Historical workflow context.** The current scientific authority is
+> [`docs/scientific/CONTEXT.md`](../scientific/CONTEXT.md) and
+> [`docs/scientific/PREDICTIVE_MEA_PROGRAM.md`](../scientific/PREDICTIVE_MEA_PROGRAM.md).
+> Native GitHub issues are the only live work queue. The structure below is
+> retained to interpret older Superpowers artifacts and milestone mirrors.
+
 ## Durable Intent
 
 MEA-Thermodynamics is the downstream evidence, validation, and manuscript repository for monoethanolamine (MEA) thermodynamics work that depends on the upstream `ePC-SAFT` package. The repo owns curated experimental data, target construction, analysis artifacts, plotted evidence, validation gates, and manuscript-ready language. Upstream `ePC-SAFT` owns package-level thermodynamic and regression capabilities.

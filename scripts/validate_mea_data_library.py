@@ -370,28 +370,25 @@ def validate() -> list[str]:
             )
         variants = configurations.get("configurations", [])
         variant_ids = [variant.get("configuration_id") for variant in variants]
-        if variant_ids != [f"M{index}" for index in range(6)]:
+        if variant_ids != [
+            "SHELL_BORN_SOLVENT_ONLY_INDUCED",
+            "SHELL_BORN_ION_SUPPRESSED_INDUCED",
+        ]:
             errors.append(
-                f"Model-configuration identities must be nested M0 through M5: {variant_ids}"
+                "Model-configuration identities must be the two retained "
+                f"induced-association Born formulations: {variant_ids}"
             )
-        expected_polar_terms = (
-            (),
-            ("CO2_QQ",),
-            ("CO2_QQ", "MEA_DD", "H2O_DD"),
-            ("CO2_QQ", "MEA_DD", "H2O_DD", "ALL_DECLARED_DQ"),
-            ("CO2_QQ", "MEA_DD", "H2O_DD", "ALL_DECLARED_DQ"),
-            ("CO2_QQ", "MEA_DD", "H2O_DD", "ALL_DECLARED_DQ"),
-        )
-        if (
-            tuple(tuple(variant.get("polar_terms", ())) for variant in variants)
-            != expected_polar_terms
+        if any(
+            variant.get("association")
+            != "Schick-Pabsch reciprocal CO2-water 2B topology"
+            for variant in variants
         ):
             errors.append(
-                "M0-M5 polar contributions are not the declared nested hierarchy"
+                "Every retained configuration must use the fixed induced-association topology"
             )
         if any(variant.get("promotion_eligible") is not False for variant in variants):
             errors.append(
-                "No M0-M5 variant may be promotion-eligible before row admission"
+                "No retained configuration may be promotion-eligible before row admission"
             )
 
     if not PARAMETER_STAGES.is_file():

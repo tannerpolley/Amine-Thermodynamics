@@ -1,0 +1,91 @@
+{
+  "active_parameters": [
+    "component/protonated-monoethanolamine/segment_diameter",
+    "component/carbamate-anion/segment_diameter"
+  ],
+  "aggregate_rows_excluded": true,
+  "claim": "two-ion-diameter sensitivity fit; no parameter promotion",
+  "configurations": [
+    {
+      "born_c_dielectric": 0.0,
+      "born_c_shell": 0.0,
+      "configuration_id": "original_born_no_induced",
+      "configuration_name": "Original Born, solvent-only permittivity, no induced association",
+      "induced_association": false,
+      "observation_count": 0,
+      "relative_permittivity_formulation": "solvent-only",
+      "state_count": 0,
+      "status": "not_fitted_no_liquid_base_branch"
+    },
+    {
+      "born_c_dielectric": 0.0,
+      "born_c_shell": 0.0,
+      "configuration_id": "original_born_solvent_only",
+      "configuration_name": "Original Born, solvent-only permittivity, induced association",
+      "induced_association": true,
+      "observation_count": 0,
+      "relative_permittivity_formulation": "solvent-only",
+      "state_count": 0,
+      "status": "not_fitted_no_liquid_base_branch"
+    },
+    {
+      "base_log_sse": 34.12752187229562,
+      "born_c_dielectric": 1.0,
+      "born_c_shell": 1.0,
+      "configuration_id": "shell_born_ion_suppressed_no_induced",
+      "configuration_name": "Shell Born, ion-suppressed permittivity, no induced association",
+      "evaluation_count": 10,
+      "final_log_sse": 22.811447828705703,
+      "induced_association": false,
+      "jacobian_condition_number": 3.230156669088211,
+      "jacobian_singular_values": [
+        4.329687476039213,
+        1.3403955038692816
+      ],
+      "log_rmse": 0.8443090338537503,
+      "observation_count": 32,
+      "optimality": 3.277570764617811e-08,
+      "parameter_mapping_sha256": "sha256:7c19e12b716707d4ff3bbe6839219aafbf47e49fc5f972ed8c3222f72e7899bb",
+      "relative_permittivity_formulation": "ion-fraction-suppression",
+      "runtime_seconds": 93.19339328200294,
+      "solver_message": "`gtol` termination condition is satisfied.",
+      "solver_status": 1,
+      "state_count": 6,
+      "status": "completed",
+      "typical_speciation_factor": 1.476904922363423
+    },
+    {
+      "base_log_sse": 34.17312150302578,
+      "born_c_dielectric": 1.0,
+      "born_c_shell": 1.0,
+      "configuration_id": "shell_born_ion_suppressed",
+      "configuration_name": "Shell Born, ion-suppressed permittivity, induced association",
+      "evaluation_count": 10,
+      "final_log_sse": 23.3026776312625,
+      "induced_association": true,
+      "jacobian_condition_number": 3.2129553063981016,
+      "jacobian_singular_values": [
+        4.344041973804157,
+        1.3520393405889188
+      ],
+      "log_rmse": 0.8533514375548641,
+      "observation_count": 32,
+      "optimality": 7.1801519560806825e-06,
+      "parameter_mapping_sha256": "sha256:4f4b69524b3c8d05c455e577d859f2f51790aba7991218ad7494c1962e48b273",
+      "relative_permittivity_formulation": "ion-fraction-suppression",
+      "runtime_seconds": 152.84361741000612,
+      "solver_message": "The maximum number of function evaluations is exceeded.",
+      "solver_status": 0,
+      "state_count": 6,
+      "status": "iteration_limit",
+      "typical_speciation_factor": 1.4424502337007947
+    }
+  ],
+  "engine_wheel_sha256": "cfe8e2a0d5af8d35227a49246dc1590de64ab55bf033e3416b6f80e1ff8f410e",
+  "installed_epcsaft_module_sha256": "fef47a5e86f2f1a6e7026b63d227cda116439284b69f8bba2d00589c36c18f61",
+  "minimum_liquid_density_kg_m3": 500.0,
+  "residual": "unweighted natural-log model/observation for direct-positive Jakobsen rows",
+  "runtime_seconds": 355.94045177599764,
+  "schema": "mea.born-induced-association-ion-diameter-fit.v1",
+  "status": "completed"
+}

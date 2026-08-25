@@ -44,3 +44,11 @@ analyses/<category>/<analysis_id>/
 ```
 
 Only create optional folders when the analysis needs them. Curated Matplotlib plot bundles keep the plotted CSV snapshot, `.mpl.yaml` sidecar, PNG preview, SVG figure, and PDF artifact together in the owning figure or result folder. Disposable run output belongs under ignored `results/runs/`.
+
+Generated results and render products are marked with GitHub Linguist
+attributes; generated SVGs are tracked as binary-style diffs. Review executable
+changes separately with:
+
+```bash
+git diff --stat <base>...HEAD -- src/ tests/ scripts/ ':(glob)analyses/**/scripts/**'
+```

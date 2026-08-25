@@ -1,0 +1,119 @@
+{
+  "analysis_role": "external_challenge_omitted_internal_standard_salt",
+  "balanced_reaction_corrections": {
+    "delta_ln_k_r4_at_353_15_k": 0.029877891836457147,
+    "delta_ln_k_r5_at_353_15_k": 0.5350291330862538,
+    "zero_anchor_temperature_k": 313.15
+  },
+  "candidate_metrics": {
+    "calorimetry_balanced": {
+      "free_co2": {
+        "absolute_average_relative_deviation_percent": 69.86259756675217,
+        "log_rmse": 1.3185111759120318,
+        "mean_log_bias": -1.2662734477518478,
+        "rms_factor": 3.737852228113395,
+        "target_count": 29
+      },
+      "henry_constant": {
+        "absolute_average_relative_deviation_percent": 278.5717407678664,
+        "log_rmse": 1.316480302579927,
+        "mean_log_bias": 1.2647553306129262,
+        "rms_factor": 3.7302688267741884,
+        "target_count": 29
+      }
+    },
+    "retained": {
+      "free_co2": {
+        "absolute_average_relative_deviation_percent": 70.11397212318857,
+        "log_rmse": 1.3311348722769434,
+        "mean_log_bias": -1.277604101137805,
+        "rms_factor": 3.7853368246778207,
+        "target_count": 29
+      },
+      "henry_constant": {
+        "absolute_average_relative_deviation_percent": 283.85302578663374,
+        "log_rmse": 1.3290859918599003,
+        "mean_log_bias": 1.2760859839988838,
+        "rms_factor": 3.7775890620157915,
+        "target_count": 29
+      }
+    }
+  },
+  "evaluated_candidate_state_count": 58,
+  "evidence_pressure_max_pa": 3000000.0,
+  "execution_domain_policy": "input-state union; values above the evidence range are reported as extrapolation rather than rejected",
+  "execution_pressure_max_pa": 6080000.0,
+  "failed_candidate_state_count": 0,
+  "reason_not_scoring": "all source solutions contain 0.517 mol/kg NaClO4, absent from the current nine-species model",
+  "schema": "mea.wong-free-co2-external-challenge.v1",
+  "shared_parameter_settings": {
+    "accounting": {
+      "equilibrium_state_count": 119,
+      "failure_count": 0,
+      "target_count": 257
+    },
+    "co2_water_binary_interaction": {
+      "anchor_basis": "zero interaction retained at the 313.15 K MEA calibration temperature",
+      "form": "k_CO2,H2O(T) = 3.016e-4 K^-1 * (T - 313.15 K)",
+      "slope_source": "Pabsch et al. (2020), Table 6, DOI 10.1021/acs.jced.0c00704"
+    },
+    "co2_water_induced_association": {
+      "directions": [
+        "carbon-dioxide/a -> water/b",
+        "carbon-dioxide/b -> water/a"
+      ],
+      "energy_over_k_kelvin": 1212.85,
+      "volume": 0.04509
+    },
+    "engine_wheel_sha256": "e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23",
+    "evaluation_performance": {
+      "aggregate_cpu_percent": 935,
+      "blas_threads_per_worker": 1,
+      "changed_state_count": 70,
+      "homogeneous_multistart_budgets": [
+        2,
+        10
+      ],
+      "solver_convergence_tolerance": 1e-06,
+      "wall_seconds": 264.9,
+      "workers": 12
+    },
+    "fixed_structure": {
+      "born": "shell",
+      "co2_water_induced_association": true,
+      "polar_term": false,
+      "relative_permittivity": "ion-specific-suppression",
+      "water_relative_permittivity": "Archer-Wang temperature correlation"
+    },
+    "ion_specific_suppression_coefficients": {
+      "bicarbonate-anion": 7.89,
+      "carbamate-anion": 7.01,
+      "carbonate-anion": 7.89,
+      "hydronium-cation": 9.55,
+      "hydroxide-anion": 13.96,
+      "protonated-monoethanolamine": 2.6
+    },
+    "limitations": [
+      "The pair-temperature transformation is currently applied by the downstream state compiler rather than represented as a native Engine pair correlation.",
+      "The reaction correlations above 323.15 K remain source extrapolations.",
+      "The retained candidate improves but does not eliminate structured high-temperature pressure residuals."
+    ],
+    "metrics": {
+      "reserved_pressure_rms_factor": 2.2814257653346655,
+      "reserved_speciation_rms_factor": 2.3352783387808986,
+      "temperature_challenge_pressure_rms_factor": 2.2103494864331537,
+      "training_pressure_rms_factor": 2.0208254448297613,
+      "training_speciation_rms_factor": 1.6899874808057742
+    },
+    "schema": "mea.retained-predictive-parameter-settings.v1",
+    "shared_parameters": {
+      "component/carbamate-anion/segment_diameter_angstrom": 3.017079292071164,
+      "component/protonated-monoethanolamine/segment_diameter_angstrom": 2.7533328530317225,
+      "pair/carbon-dioxide/monoethanolamine/k_ij": -0.1957268589414558
+    },
+    "status": "retained_predictive_candidate"
+  },
+  "source": "Wong et al. (2016), DOI 10.1016/j.jngse.2016.10.029, Table 3",
+  "source_row_count": 29,
+  "status": "completed"
+}
