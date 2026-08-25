@@ -1,0 +1,51 @@
+{
+  "claim_boundary": "historical exploratory evidence only; not a manuscript input, parameter source, or production-regression result",
+  "experiments": {
+    "historical_seven_parameter_fit": {
+      "epcsaft_version": "1.5.2",
+      "final_residual_norm": 0.26765769640830644,
+      "fitted_values": {
+        "MEACOO-__d_born": 3.5410703082156436,
+        "MEACOO-__e": 453.26524438401077,
+        "MEACOO-__s": 3.535435257213276,
+        "MEAH+__d_born": 3.533229271464668,
+        "MEAH+__e": 232.6872016451942,
+        "MEAH+__s": 3.48508556586174,
+        "k_ij__MEAH+__MEACOO-": -0.002018134576435147
+      },
+      "initial_residual_norm": 0.271444549584188,
+      "source_commit": "58660ed9a051d701fb9295f97cd71d86adcb984a",
+      "status": "historical_only_missing_complete_run_receipt",
+      "target_residual_count": 22,
+      "target_state_count": 8
+    },
+    "shared_ion_size_scipy": {
+      "candidate_shared_ion_sigma_angstrom": 5.334530692417894,
+      "density_relative_rmse_percent": {
+        "training_baseline": 13.75256988746182,
+        "training_candidate": 2.490059351491407,
+        "validation_baseline": 12.788692640779015,
+        "validation_candidate": 2.4006476356459636
+      },
+      "pressure_median_abs_log10": {
+        "training_baseline": 0.43205615489440297,
+        "training_candidate": 0.8688167785569891,
+        "validation_baseline": 0.5424019168403308,
+        "validation_candidate": 0.7304691820842064
+      },
+      "pressure_state_failures": {
+        "training_baseline": 1,
+        "training_candidate": 1,
+        "validation_baseline": 1,
+        "validation_candidate": 1
+      },
+      "reason_rejected": "density/speciation-only ion-size fit degraded active and reserved reactive-pressure predictions",
+      "source_commit": "aaa638427f50fbd63acb90de54c9ee94186d8b02",
+      "status": "rejected",
+      "warning": "legacy cross-concentration pressure rows used default 30 wt% apparent totals; only the active 30 wt% degradation is quantitative"
+    }
+  },
+  "schema": "mea.toybox-rejection-receipt.v1",
+  "source_branch": "codex/manuscript-parameter-fit-provenance",
+  "status": "retired"
+}
