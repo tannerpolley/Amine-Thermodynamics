@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import csv
 import math
+from collections.abc import Mapping
 from dataclasses import replace
 from pathlib import Path
+from typing import Literal
 
 import numpy as np
 
@@ -12,7 +14,6 @@ from MEA.common.mea_source_contracts import (
     load_reaction_contract,
 )
 from MEA.epcsaft_ionic.parameter_document import COMPONENT_IDS, PARAMETER_ROOT
-
 
 VAPOR_COMPONENT_IDS = ("carbon-dioxide", "monoethanolamine", "water")
 
@@ -62,6 +63,14 @@ def build_homogeneous_reactive_problem(
     loading_mol_co2_per_mol_mea: float,
     maximum_log_composition_distance: float = 0.5,
     maximum_log_volume_distance: float = 0.5,
+    solver_options: Mapping[str, int | float] | None = None,
+    reaction_ln_k_adjustments: Mapping[str, float] | None = None,
+    allow_reaction_extrapolation: bool = False,
+    branch_policy: Literal[
+        "local_certified_role_selected_state",
+        "lowest_observed_certified_gibbs_state",
+    ] = "local_certified_role_selected_state",
+    initial_reference: object | None = None,
 ) -> object:
     """Build and anchor the canonical nine-species fixed-``T,P`` liquid problem."""
 
@@ -185,7 +194,17 @@ def build_homogeneous_reactive_problem(
     )
     if any(value <= 0.0 for value in feed_amounts):
         raise ValueError("reaction-generated solver seed is not strictly positive")
-    ln_k = common_source_ln_k(temperature_k, reaction_contract)
+    ln_k = common_source_ln_k(
+        temperature_k,
+        reaction_contract,
+        allow_extrapolation=allow_reaction_extrapolation,
+    )
+    adjustments = dict(reaction_ln_k_adjustments or {})
+    reaction_ids = {str(reaction["reaction_id"]) for reaction in reaction_contract["reactions"]}
+    if set(adjustments) - reaction_ids or not all(
+        math.isfinite(float(value)) for value in adjustments.values()
+    ):
+        raise ValueError("reaction ln(K) adjustments must be finite and keyed by R1-R5")
     reaction_system = equilibrium.ChemicalEquilibriumProblem(
         species_ids=COMPONENT_IDS,
         charges=tuple(int(species["charge"]) for species in source_species),
@@ -200,8 +219,13 @@ def build_homogeneous_reactive_problem(
         feed_amounts_mol=feed_amounts,
         equilibrium_constants=tuple(
             equilibrium.ChemicalEquilibriumConstant(
-                ln_value=value,
-                source_id="+".join(reaction["source_record_ids"]),
+                ln_value=value + float(adjustments.get(reaction["reaction_id"], 0.0)),
+                source_id="+".join(reaction["source_record_ids"])
+                + (
+                    f"+ln-k-adjustment:{float(adjustments[reaction['reaction_id']]):+.17g}"
+                    if reaction["reaction_id"] in adjustments
+                    else ""
+                ),
                 reference_id=common["identity"],
                 reaction_orientation="products_positive",
                 conversion_id="source-standard-state-to-provider-neutral-reference",
@@ -213,6 +237,9 @@ def build_homogeneous_reactive_problem(
         ),
         strict_interior_amount_floor_mol=1.0e-12,
         source_standard_state=standard_state,
+        solve_options=equilibrium.ChemicalEquilibriumSolveOptions(
+            **dict(solver_options or {})
+        ),
     )
     model = epcsaft.Mixture(parameters)
     unanchored = equilibrium.HomogeneousReactiveObservationProblem(
@@ -222,7 +249,7 @@ def build_homogeneous_reactive_problem(
         phase=equilibrium.ProviderPhase(model, (1.0e-6, 0.74)),
         reaction_system=reaction_system,
         continuation_identity=continuation_identity,
-        branch_policy="local_certified_role_selected_state",
+        branch_policy=branch_policy,
     )
     reference = equilibrium.certify_homogeneous_continuation_reference(
         unanchored,
@@ -230,6 +257,7 @@ def build_homogeneous_reactive_problem(
         pressure_pa * epcsaft.unit_registry.pascal,
         maximum_log_composition_distance=maximum_log_composition_distance,
         maximum_log_volume_distance=maximum_log_volume_distance,
+        initial_reference=initial_reference,
     )
     return replace(unanchored, continuation_reference=reference)
 
@@ -250,6 +278,8 @@ def build_reactive_bubble_problem(
     pressure_starts_pa: tuple[float, ...],
     maximum_log_composition_distance: float = 0.5,
     maximum_log_volume_distance: float = 0.5,
+    solver_options: Mapping[str, int | float] | None = None,
+    reaction_ln_k_adjustments: Mapping[str, float] | None = None,
 ) -> object:
     """Build the declared one-liquid/one-vapor reactive bubble problem.
 
@@ -271,6 +301,8 @@ def build_reactive_bubble_problem(
         loading_mol_co2_per_mol_mea=loading_mol_co2_per_mol_mea,
         maximum_log_composition_distance=maximum_log_composition_distance,
         maximum_log_volume_distance=maximum_log_volume_distance,
+        solver_options=solver_options,
+        reaction_ln_k_adjustments=reaction_ln_k_adjustments,
     )
     return equilibrium.ReactiveBubbleVLEProblem(
         identity=identity,

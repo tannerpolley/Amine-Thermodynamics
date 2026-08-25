@@ -59,6 +59,11 @@ def build_reduced_tracer_input() -> ReducedTracerInput:
         loading_mol_co2_per_mol_mea=loading,
         maximum_log_composition_distance=0.5,
         maximum_log_volume_distance=0.5,
+        solver_options={
+            "maximum_iterations": 100,
+            "convergence_tolerance": 1.0e-6,
+            "primary_start_budget": 1,
+        },
     )
     rows = (
         equilibrium.HomogeneousReactiveObservationRow(

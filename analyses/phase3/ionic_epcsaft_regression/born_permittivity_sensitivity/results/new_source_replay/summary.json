@@ -1,0 +1,28 @@
+{
+  "engine_wheel_sha256": "e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23",
+  "evaluated_state_count": 42,
+  "failure_count": 12,
+  "metrics": [
+    {
+      "loading_basis": "pressure_drop",
+      "log_rmse": 0.8198378050814045,
+      "mean_log_bias": -0.7718161690779575,
+      "median_factor": 2.147090456922683,
+      "rms_factor": 2.2701316038597086,
+      "state_count": 21
+    },
+    {
+      "loading_basis": "raman",
+      "log_rmse": 0.969608651655298,
+      "mean_log_bias": -0.9488172388300591,
+      "median_factor": 2.501828680668522,
+      "rms_factor": 2.6369123061354682,
+      "state_count": 21
+    }
+  ],
+  "model_role": "frozen independent validation; no parameters fitted",
+  "schema": "mea.new-source-frozen-replay.v1",
+  "source": "Wong et al. (2016), Table 4, DOI 10.1039/C5RA22926J",
+  "source_system_difference": "all source MEA solutions contained 0.517 mol/kg NaClO4; the replay omits Na+ and ClO4-",
+  "status": "completed_with_failures"
+}

@@ -68,6 +68,31 @@ def _set_coefficient(
     )
 
 
+def _association_edge(
+    provenance: dict[str, str],
+    component_a: str,
+    site_a: str,
+    component_b: str,
+    site_b: str,
+    energy: float,
+    volume: float,
+) -> dict[str, object]:
+    prefix = f"association/{component_a}/{site_a}/{component_b}/{site_b}"
+    return {
+        "endpoint_a": {"component_id": component_a, "site_id": site_a},
+        "endpoint_b": {"component_id": component_b, "site_id": site_b},
+        "energy_over_k": {
+            "identity": f"{prefix}/energy_over_k",
+            "value": {"magnitude": energy, "unit": "kelvin"},
+        },
+        "volume": {
+            "identity": f"{prefix}/volume",
+            "value": {"magnitude": volume, "unit": "dimensionless"},
+        },
+        "source": {"kind": "explicit", "provenance": [provenance]},
+    }
+
+
 def _apply_baygi(mapping: dict[str, Any], domain_id: str, *, water_scheme: str) -> None:
     source_id = "baygi-pahlavanzadeh-2015-pcsaft"
     mapping["sources"].append(
@@ -148,29 +173,6 @@ def _apply_baygi(mapping: dict[str, Any], domain_id: str, *, water_scheme: str) 
         "domain_id": domain_id,
     }
 
-    def edge(
-        component_a: str,
-        site_a: str,
-        component_b: str,
-        site_b: str,
-        energy: float,
-        volume: float,
-    ) -> dict[str, object]:
-        prefix = f"association/{component_a}/{site_a}/{component_b}/{site_b}"
-        return {
-            "endpoint_a": {"component_id": component_a, "site_id": site_a},
-            "endpoint_b": {"component_id": component_b, "site_id": site_b},
-            "energy_over_k": {
-                "identity": f"{prefix}/energy_over_k",
-                "value": {"magnitude": energy, "unit": "kelvin"},
-            },
-            "volume": {
-                "identity": f"{prefix}/volume",
-                "value": {"magnitude": volume, "unit": "dimensionless"},
-            },
-            "source": {"kind": "explicit", "provenance": [provenance]},
-        }
-
     mapping["topology"] = {
         "presets": [],
         "sites": [
@@ -204,7 +206,8 @@ def _apply_baygi(mapping: dict[str, Any], domain_id: str, *, water_scheme: str) 
             },
         ],
         "edges": [
-            edge(
+            _association_edge(
+                provenance,
                 "monoethanolamine",
                 "a",
                 "monoethanolamine",
@@ -212,7 +215,8 @@ def _apply_baygi(mapping: dict[str, Any], domain_id: str, *, water_scheme: str) 
                 2383.4744,
                 mea_volume,
             ),
-            edge(
+            _association_edge(
+                provenance,
                 "monoethanolamine",
                 "a",
                 "water",
@@ -220,7 +224,8 @@ def _apply_baygi(mapping: dict[str, Any], domain_id: str, *, water_scheme: str) 
                 cross_energy,
                 cross_volume,
             ),
-            edge(
+            _association_edge(
+                provenance,
                 "monoethanolamine",
                 "b",
                 "water",
@@ -228,7 +233,9 @@ def _apply_baygi(mapping: dict[str, Any], domain_id: str, *, water_scheme: str) 
                 cross_energy,
                 cross_volume,
             ),
-            edge("water", "a", "water", "b", water_energy, water_volume),
+            _association_edge(
+                provenance, "water", "a", "water", "b", water_energy, water_volume
+            ),
         ],
     }
     pair = next(
@@ -247,8 +254,182 @@ def _apply_baygi(mapping: dict[str, Any], domain_id: str, *, water_scheme: str) 
     }
 
 
+def _apply_held_water_baygi_mea(
+    mapping: dict[str, Any], domain_id: str, *, mea_scheme: str
+) -> None:
+    candidates = {
+        "2b": {
+            "segment_count": 3.0353,
+            "segment_diameter": 3.0435,
+            "dispersion_energy_over_k": 277.174,
+            "association_energy_over_k": 2586.3,
+            "association_volume": 0.03747,
+            "multiplicity": (1, 1),
+            "origin": -0.042,
+        },
+        "3b": {
+            "segment_count": 4.5354,
+            "segment_diameter": 2.6019,
+            "dispersion_energy_over_k": 204.0438,
+            "association_energy_over_k": 2383.4744,
+            "association_volume": 0.118488,
+            "multiplicity": (2, 1),
+            "origin": -0.0146,
+        },
+        "4c": {
+            "segment_count": 4.5208,
+            "segment_diameter": 2.6574,
+            "dispersion_energy_over_k": 237.6864,
+            "association_energy_over_k": 989.8984,
+            "association_volume": 0.187533,
+            "multiplicity": (2, 2),
+            "origin": -0.0362,
+        },
+    }
+    if mea_scheme not in candidates:
+        raise ValueError(f"unsupported MEA association scheme: {mea_scheme}")
+    values = candidates[mea_scheme]
+    source_id = "baygi-2015-mea-held-2008-water-qualification"
+    mapping["sources"].append(
+        {
+            "source_id": source_id,
+            "citation": (
+                "Fakouri Baygi and Pahlavanzadeh (2015), Tables 2-3; "
+                "Held, Cameretti, and Sadowski (2008) water family"
+            ),
+            "use_basis": (
+                f"Baygi {mea_scheme.upper()} MEA candidate evaluated with fixed "
+                "Held 2B water"
+            ),
+        }
+    )
+    provenance = {
+        "source_id": source_id,
+        "locator": f"Baygi 2015 Table 2: {mea_scheme.upper()} MEA",
+        "domain_id": domain_id,
+    }
+    for family in (
+        "segment_count",
+        "segment_diameter",
+        "dispersion_energy_over_k",
+    ):
+        _set_coefficient(
+            mapping,
+            "monoethanolamine",
+            family,
+            float(values[family]),
+            "dimensionless"
+            if family == "segment_count"
+            else "angstrom"
+            if family == "segment_diameter"
+            else "kelvin",
+            provenance,
+        )
+
+    water_sigma_ref = (
+        2.7927
+        + 10.11 * math.exp(-0.01775 * 298.15)
+        - 1.417 * math.exp(-0.01146 * 298.15)
+    )
+    mea_sigma = float(values["segment_diameter"])
+    mea_volume = float(values["association_volume"])
+    water_volume = 0.04509
+    cross_volume = math.sqrt(mea_volume * water_volume) * (
+        math.sqrt(mea_sigma * water_sigma_ref)
+        / (0.5 * (mea_sigma + water_sigma_ref))
+    ) ** 3
+    cross_energy = 0.5 * (
+        float(values["association_energy_over_k"]) + 2425.7
+    )
+    mea_a, mea_b = cast(tuple[int, int], values["multiplicity"])
+
+    mapping["topology"] = {
+        "presets": [],
+        "sites": [
+            {
+                "component_id": "monoethanolamine",
+                "site_id": "a",
+                "site_role": "donor",
+                "multiplicity": mea_a,
+                "provenance": provenance,
+            },
+            {
+                "component_id": "monoethanolamine",
+                "site_id": "b",
+                "site_role": "acceptor",
+                "multiplicity": mea_b,
+                "provenance": provenance,
+            },
+            {
+                "component_id": "water",
+                "site_id": "a",
+                "site_role": "donor",
+                "multiplicity": 1,
+                "provenance": provenance,
+            },
+            {
+                "component_id": "water",
+                "site_id": "b",
+                "site_role": "acceptor",
+                "multiplicity": 1,
+                "provenance": provenance,
+            },
+        ],
+        "edges": [
+            _association_edge(
+                provenance,
+                "monoethanolamine",
+                "a",
+                "monoethanolamine",
+                "b",
+                float(values["association_energy_over_k"]),
+                mea_volume,
+            ),
+            _association_edge(
+                provenance,
+                "monoethanolamine",
+                "a",
+                "water",
+                "b",
+                cross_energy,
+                cross_volume,
+            ),
+            _association_edge(
+                provenance,
+                "monoethanolamine",
+                "b",
+                "water",
+                "a",
+                cross_energy,
+                cross_volume,
+            ),
+            _association_edge(
+                provenance, "water", "a", "water", "b", 2425.7, water_volume
+            ),
+        ],
+    }
+    pair = next(
+        item
+        for item in mapping["pairs"]
+        if {item["component_id_a"], item["component_id_b"]}
+        == {"monoethanolamine", "water"}
+    )
+    coefficient = pair["coefficients"][0]
+    coefficient["value"] = {
+        "magnitude": float(values["origin"]),
+        "unit": "dimensionless",
+    }
+    coefficient["provenance"] = {
+        "source_id": source_id,
+        "locator": (
+            f"Baygi 2015 Table 3: {mea_scheme.upper()} MEA / 2B water initial value"
+        ),
+        "domain_id": domain_id,
+    }
+
+
 def _parameters(config: dict[str, Any]) -> epcsaft.Parameters:
-    mapping = cast(dict[str, Any], deepcopy(parameter_mapping(polar="none")))
+    mapping = cast(dict[str, Any], deepcopy(parameter_mapping()))
     domain_id = "cai-1996-admitted-neutral-binary-domain"
     maximum = float(config["data"]["admitted_temperature_max_k"])
     mapping["domains"] = [
@@ -268,6 +449,20 @@ def _parameters(config: dict[str, Any]) -> epcsaft.Parameters:
             mapping,
             domain_id,
             water_scheme="2b" if parameterization == "baygi_3b_mea_2b_water" else "4c",
+        )
+    elif parameterization in {
+        "baygi_2b_mea_held_2b_water",
+        "baygi_3b_mea_held_2b_water",
+        "baygi_4c_mea_held_2b_water",
+    }:
+        _apply_held_water_baygi_mea(
+            mapping,
+            domain_id,
+            mea_scheme={
+                "baygi_2b_mea_held_2b_water": "2b",
+                "baygi_3b_mea_held_2b_water": "3b",
+                "baygi_4c_mea_held_2b_water": "4c",
+            }[parameterization],
         )
     return epcsaft.Parameters.from_mapping(
         mapping, components=("monoethanolamine", "water")
@@ -406,8 +601,20 @@ def main() -> None:
         all_rows = list(csv.DictReader(handle))
     admitted_maximum = float(config["data"]["admitted_temperature_max_k"])
     rows_by_id = {row["row_id"]: row for row in all_rows}
-    training_ids = cast(list[str], config["data"]["admitted_training_row_ids"])
-    selection_ids = cast(list[str], config["data"]["model_selection_row_ids"])
+    training_ids = cast(
+        list[str],
+        config["data"].get("admitted_training_row_ids")
+        or [row["row_id"] for row in all_rows if row["role"] == "binary_training"],
+    )
+    selection_ids = cast(
+        list[str],
+        config["data"].get("model_selection_row_ids")
+        or [
+            row["row_id"]
+            for row in all_rows
+            if row["role"] == "binary_model_selection"
+        ],
+    )
     training = [
         {**rows_by_id[row_id], "fit_role": "binary_training"} for row_id in training_ids
     ]
