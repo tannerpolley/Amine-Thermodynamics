@@ -1,16 +1,10 @@
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import numpy as np
 import pytest
 
 from MEA.epcsaft_ionic.speciation_feasibility import ActivityState, solve_activity_speciation
 from MEA.smith_missen.ideal_speciation import SPECIES_9, solve_ideal_speciation
-
-
-ROOT = Path(__file__).resolve().parents[1]
 
 
 class IdealActivityEvaluator:
@@ -84,14 +78,3 @@ def test_reactive_solver_rejects_invalid_activity_evaluations() -> None:
                 pressure_Pa=101325.0,
                 evaluator=InvalidEvaluator(state),
             )
-
-
-def test_feasibility_runs_converge_repeatably() -> None:
-    path = ROOT / "analyses/phase3/reactive_speciation_feasibility/results/reactive_speciation_feasibility_receipt.json"
-    receipt = json.loads(path.read_text(encoding="utf-8"))
-    assert receipt["clean_lane"]["all_runs_successful"] is True
-    for state in receipt["clean_lane"]["states"]:
-        assert state["max_repeat_mole_fraction_spread"] < 1.0e-10
-        for run in state["runs"]:
-            assert run["success"] is True
-            assert run["max_abs_residual"] < 1.0e-8

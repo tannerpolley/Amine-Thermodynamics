@@ -35,8 +35,6 @@ REQUIRED_DIRECTORIES = (
     "observations/ionic_analog_volumetrics",
     "parameters",
     "manifests",
-    "quarantine/chatgpt_audits/audit_2026-07-23_a",
-    "quarantine/chatgpt_audits/audit_2026-07-23_b",
 )
 EXPECTED_ROWS = {
     "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": 327,
@@ -44,18 +42,6 @@ EXPECTED_ROWS = {
     "observations/liquid_speciation/Canonical_Combined_ChEq.csv": 571,
     "observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_density.csv": 128,
     "observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_excess_molar_volume.csv": 44,
-}
-ARCHIVE_RECEIPTS = {
-    "audit_2026-07-23_a": (
-        "3b3a081ec884d52107168fb19cbe66e0b7f3840b381ef5af6ddf7a160444a1b7",
-        "8",
-        "608",
-    ),
-    "audit_2026-07-23_b": (
-        "da55f7a970b2fe67fed127523666c692de01a862e78e2d1d50d4ff1e95558efb",
-        "20",
-        "434",
-    ),
 }
 TEXT_SUFFIXES = {".csv", ".json", ".md", ".py", ".tex", ".txt", ".yaml", ".yml"}
 STALE_PATHS = (
@@ -110,9 +96,6 @@ def _csv_rows(path: Path) -> int:
 
 def _classification(relative: Path) -> tuple[str, str, str]:
     parts = relative.parts
-    if parts[0] == "quarantine":
-        family = "/".join(parts[:3]) if len(parts) >= 3 else "quarantine"
-        return "quarantine", family, "prohibited"
     if parts[0] == "observations":
         return "verified_observation", "/".join(parts[:2]), "manifest_governed"
     if parts[0] == "parameters":
@@ -484,65 +467,10 @@ def validate() -> list[str]:
     if volumetric_roles != Counter({"future_training": 153, "reserved_validation": 78}):
         errors.append(f"Frozen volumetric split drift: {dict(volumetric_roles)}")
 
-    receipts = {
-        row["archive_id"]: (
-            row["sha256"],
-            row["artifact_count"],
-            row["principal_row_ledger_rows"],
-        )
-        for row in _read_dicts(
-            LIBRARY / "quarantine" / "chatgpt_audits" / "archive_receipts.csv"
-        )
-    }
-    if receipts != ARCHIVE_RECEIPTS:
-        errors.append(
-            "Quarantine archive receipts do not match the supplied ZIP hashes and artifact counts"
-        )
-
-    audit_root = LIBRARY / "quarantine" / "chatgpt_audits"
-    audit_a = audit_root / "audit_2026-07-23_a"
-    for row in _read_dicts(audit_a / "mea_epcsaft_manifest_sha256.csv"):
-        artifact = audit_a / row["artifact_filename"]
-        if (
-            not artifact.is_file()
-            or _sha256(artifact) != row["sha256"]
-            or str(artifact.stat().st_size) != row["bytes"]
-        ):
-            errors.append(
-                f"Audit A artifact integrity failure: {row['artifact_filename']}"
-            )
-    audit_b = audit_root / "audit_2026-07-23_b"
-    audit_b_manifest = json.loads(
-        (audit_b / "manifest.json").read_text(encoding="utf-8")
-    )
-    for row in audit_b_manifest["files"]:
-        artifact = audit_b / row["path"]
-        if (
-            not artifact.is_file()
-            or _sha256(artifact) != row["sha256"]
-            or artifact.stat().st_size != row["bytes"]
-        ):
-            errors.append(f"Audit B artifact integrity failure: {row['path']}")
-
-    if INVENTORY.is_file():
-        inventory = _read_dicts(INVENTORY)
-        admitted_quarantine = [
-            row["path"]
-            for row in inventory
-            if row["library_tier"] == "quarantine"
-            and row["regression_admission"] != "prohibited"
-        ]
-        if admitted_quarantine:
-            errors.append(
-                f"Quarantine artifacts escaped zero-admission policy: {admitted_quarantine}"
-            )
-
-    quarantine = LIBRARY / "quarantine"
     for path in ROOT.rglob("*"):
         if (
             not path.is_file()
             or path == Path(__file__)
-            or path.is_relative_to(quarantine)
             or path.suffix.lower() not in TEXT_SUFFIXES
         ):
             continue

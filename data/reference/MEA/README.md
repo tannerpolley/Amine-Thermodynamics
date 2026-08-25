@@ -19,7 +19,6 @@ The modeled species are CO₂, MEA, H₂O, MEAH⁺, MEACOO⁻, HCO₃⁻, CO₃�
 | `observations/ionic_analog_volumetrics/` | Ethanolammonium carboxylate density and derived excess-volume evidence | Analog evidence only; not direct MEAH⁺/MEACOO⁻ measurement |
 | `parameters/` | ePC-SAFT parameter evidence and source audit | Provenance evidence; not parameter promotion |
 | `manifests/` | Admission, provenance, source status, model configuration, fit stages, and observation contracts | Authoritative machine-readable policy |
-| `quarantine/chatgpt_audits/` | Exact artifacts from the two supplied audit bundles | **Never admitted** without independent source-file verification |
 
 `manifests/data_library_inventory.csv` inventories every file, its hash, row count when applicable, and its library/admission tier.
 
@@ -30,8 +29,6 @@ Location in `observations/` does not by itself make a row a regression target. M
 `grouped_split_manifest.csv` preserves the immutable 147-training/220-reserved Gate-0 history. It is not the selection policy for the new predictive reactive-VLE campaign. The current mixed reactive-observation planning contract is `reactive_vle_cross_validation.csv`. The pressure-first analysis freezes all 121 pCO₂ candidates into a diagnostic-only packet with whole-campaign training, model-selection, reserved, and domain-challenge roles. Its provisional log scales are transparent diagnostic weights, not source uncertainties, and do not admit rows or parameters for promotion. The 198 speciation candidates remain blocked on their same-state pressure and residual contracts. Neutral pure, binary, volumetric, dielectric, and activity families retain their own admission gates and require stage-specific partitions when their source packages close. Cross-validation results and all-data calibration residuals must be reported separately.
 
 `reactive_vle_model_configurations.json` defines the factorized polar, association, and electrostatic comparisons. `reactive_vle_parameter_stages.json` defines the fit order and fail-closed upstream gates. These are planning and data contracts, not evidence that reactive fitting is currently executable.
-
-The quarantine tier is deliberately visible so useful leads, rejection logs, and extracted values are not lost. It is isolated because the two supplied audits conflict with each other and neither bundle contains all exact primary-source bytes needed to verify its strongest claims. Quarantined rows cannot enter canonical builders, readiness hashes, fitting, validation, figures, or manuscript claims.
 
 ## Basis and provenance rules
 

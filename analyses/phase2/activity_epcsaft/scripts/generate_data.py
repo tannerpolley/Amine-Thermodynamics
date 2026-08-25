@@ -268,7 +268,7 @@ def readiness_rows(reactions: list[dict[str, str]], source_rows: list[dict[str, 
         {
             "requirement": "true_species_basis",
             "status": "basis_verified",
-            "evidence": "docs/roadmaps/phase2_activity_speciation_design.md",
+            "evidence": "analyses/phase2/activity_epcsaft/README.md",
             "notes": "Nine liquid species and three volatile vapor species are documented.",
         },
         {
@@ -292,13 +292,13 @@ def readiness_rows(reactions: list[dict[str, str]], source_rows: list[dict[str, 
         {
             "requirement": "vle_fugacity_route",
             "status": "native_epcsaft_solver_available",
-            "evidence": "docs/roadmaps/epcsaft_dependency_matrix.md",
+            "evidence": "analyses/phase2/activity_epcsaft/results/phase2_activity_speciation_problem.json",
             "notes": f"Using pinned ePC-SAFT commit {epcsaft_commit_id()} with generic reactive speciation and electrolyte bubble support.",
         },
         {
             "requirement": "phase3_claim_boundary",
             "status": "phase3_out_of_scope",
-            "evidence": "docs/roadmaps/phase2_activity_speciation_design.md",
+            "evidence": "analyses/phase2/activity_epcsaft/README.md",
             "notes": "Phase 2 is an activity-based evaluation, not a finalized joint-regression result.",
         },
     ]

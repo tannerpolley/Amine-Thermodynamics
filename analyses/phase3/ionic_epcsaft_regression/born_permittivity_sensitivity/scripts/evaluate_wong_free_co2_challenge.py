@@ -13,7 +13,6 @@ import pandas as pd
 from evaluate_anchored_co2_water_kij import _mapping as _anchored_mapping
 from generate import ANALYSIS, COMPONENT_IDS
 from run_full_predictive_refinement import _liquid
-from validate_reaction_temperature_candidate import _adjustments
 from MEA.common.analysis_io import write_csv_rows as _write_csv
 from MEA.common.plot_style import finish_axes, save_figure_bundle
 from MEA.epcsaft_ionic.parameter_document import (
@@ -24,8 +23,7 @@ from MEA.epcsaft_ionic.parameter_document import (
 
 REPO = ANALYSIS.parents[3]
 SOURCE = (
-    REPO
-    / "data/reference/MEA/observations/liquid_speciation/"
+    REPO / "data/reference/MEA/observations/liquid_speciation/"
     "Wong_2016_physical_CO2_solubility_30wt.csv"
 )
 PARAMETERS = ANALYSIS / "results/predictive_training_refinement/summary.json"
@@ -34,9 +32,19 @@ SETTINGS = ANALYSIS / "results/retained_predictive_parameter_settings.json"
 RESULTS = ANALYSIS / "results/wong_free_co2_external_challenge"
 FIGURES = ANALYSIS / "figures"
 REFERENCE_TEMPERATURE_K = 313.15
+HIGH_TEMPERATURE_K = 353.15
 
 
-def _solve(payload: tuple[str, dict[str, object], dict[str, str], dict[str, float]]) -> dict[str, object]:
+def _adjustments(temperature_k: float, r4: float, r5: float) -> dict[str, float]:
+    scale = ((1.0 / temperature_k) - (1.0 / REFERENCE_TEMPERATURE_K)) / (
+        (1.0 / HIGH_TEMPERATURE_K) - (1.0 / REFERENCE_TEMPERATURE_K)
+    )
+    return {"R4": r4 * scale, "R5": r5 * scale}
+
+
+def _solve(
+    payload: tuple[str, dict[str, object], dict[str, str], dict[str, float]],
+) -> dict[str, object]:
     candidate, mapping, row, adjustments = payload
     try:
         parameters = epcsaft.Parameters.from_mapping(mapping, components=COMPONENT_IDS)
@@ -71,7 +79,9 @@ def _solve(payload: tuple[str, dict[str, object], dict[str, str], dict[str, floa
         return {"candidate": candidate, **row, "status": "failed", "reason": str(error)}
 
 
-def _metrics(rows: list[dict[str, object]], predicted: str, observed: str) -> dict[str, float | int]:
+def _metrics(
+    rows: list[dict[str, object]], predicted: str, observed: str
+) -> dict[str, float | int]:
     residuals = [math.log(float(row[predicted]) / float(row[observed])) for row in rows]
     rmse = math.sqrt(math.fsum(value * value for value in residuals) / len(residuals))
     return {
@@ -94,8 +104,6 @@ def _plot(rows: list[dict[str, object]], summary: dict[str, object]) -> None:
     styles = {
         "retained": "-",
         "calorimetry_balanced": "--",
-        "r4_absolute_candidate": ":",
-        "co2_water_activity_candidate": "-.",
     }
     figure, axes = plt.subplots(1, 2, figsize=(12.5, 5.2), constrained_layout=True)
     panels = (
@@ -149,17 +157,7 @@ def _plot(rows: list[dict[str, object]], summary: dict[str, object]) -> None:
     figure.suptitle(
         "Wong et al. (2016) 30 wt% MEA free-CO₂ external challenge\n"
         f"RMS concentration factor: retained {metrics['retained']['free_co2']['rms_factor']:.2f}, "
-        f"balanced {metrics['calorimetry_balanced']['free_co2']['rms_factor']:.2f}"
-        + (
-            f", R4 candidate {metrics['r4_absolute_candidate']['free_co2']['rms_factor']:.2f}"
-            if "r4_absolute_candidate" in metrics
-            else ""
-        )
-        + (
-            f", CO₂–water candidate {metrics['co2_water_activity_candidate']['free_co2']['rms_factor']:.2f}"
-            if "co2_water_activity_candidate" in metrics
-            else ""
-        ),
+        f"balanced {metrics['calorimetry_balanced']['free_co2']['rms_factor']:.2f}",
         fontsize=13,
     )
     save_figure_bundle(figure, FIGURES / "wong_free_co2_external_challenge", dpi=220)
@@ -197,7 +195,12 @@ def main() -> None:
         payloads.append(("retained", state_mapping, row, {}))
         if not math.isclose(temperature, REFERENCE_TEMPERATURE_K):
             payloads.append(
-                ("calorimetry_balanced", state_mapping, row, _adjustments(temperature, r4, r5))
+                (
+                    "calorimetry_balanced",
+                    state_mapping,
+                    row,
+                    _adjustments(temperature, r4, r5),
+                )
             )
 
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
@@ -211,7 +214,13 @@ def main() -> None:
         and math.isclose(float(row["temperature_K"]), REFERENCE_TEMPERATURE_K)
     ]
     evaluated.extend(anchor_rows)
-    evaluated.sort(key=lambda row: (str(row["candidate"]), float(row["temperature_K"]), float(row["pressure_bar"])))
+    evaluated.sort(
+        key=lambda row: (
+            str(row["candidate"]),
+            float(row["temperature_K"]),
+            float(row["pressure_bar"]),
+        )
+    )
 
     RESULTS.mkdir(parents=True, exist_ok=True)
     FIGURES.mkdir(parents=True, exist_ok=True)
