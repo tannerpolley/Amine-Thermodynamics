@@ -10,7 +10,7 @@ from matplotlib.lines import Line2D
 import pandas as pd
 
 from generate import ANALYSIS
-from run_final_shared_refinement import _pressure_rows
+from run_full_predictive_refinement import _pressure_rows
 from MEA.common.analysis_io import read_csv_rows as _csv, read_diagnostic_rows
 from MEA.common.plot_style import finish_axes, save_figure_bundle, write_mpl_sidecar
 from MEA.epcsaft_ionic.model import load_speciation_targets

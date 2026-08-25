@@ -19,14 +19,13 @@ analyses/
     ionic_epcsaft_regression/
 ```
 
-`toybox/` contains explicitly exploratory calculations that may use expedient
-numerical methods to answer design questions. Toybox outputs are excluded from
-parameter promotion, manuscript inputs, and predictive-model claims unless a
-separate governed workflow reproduces and admits the result.
+`toybox/` retains compact rejection receipts from retired exploratory
+calculations. These results are excluded from parameter promotion, manuscript
+inputs, and predictive-model claims.
 
 `paper_validation/` is reserved for paper-matching reproduction work: figures, tables, and parameters should be recreated to match the cited paper artifact as directly as possible. The phase folders are project-stage analyses: Phase 1 keeps retained neutral and Smith-Missen baselines, Phase 2 keeps activity-based true-species ePC-SAFT evaluation, and Phase 3 keeps full ionic ePC-SAFT regression and diagnostics.
 
-Each analysis should remain self-contained:
+Each executable analysis should remain self-contained:
 
 ```text
 analyses/<category>/<analysis_id>/

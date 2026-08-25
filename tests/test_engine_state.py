@@ -26,7 +26,6 @@ def test_compact_parameter_candidates_rebuild_exact_engine_documents() -> None:
     )
     for label in (
         "final_shared_refinement",
-        "full_packet_diagnostic",
         "full_predictive_refinement",
         "predictive_training_refinement",
     ):

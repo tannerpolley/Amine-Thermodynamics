@@ -17,15 +17,7 @@ import epcsaft
 from epcsaft import equilibrium, regression
 
 from generate import ANALYSIS, COMPONENT_IDS, SPECIES_COEFFICIENTS
-from run_final_shared_refinement import (
-    ACTIVE,
-    BOUNDS,
-    SCALES,
-    _output,
-    _pressure_rows,
-    _sha256,
-    _target,
-)
+from run_broader_candidate import PRESSURE_PACKET, _read
 from MEA.common.analysis_io import write_diagnostic_rows
 from MEA.common.data_access import load_regression_speciation_view
 from MEA.epcsaft_ionic.model import load_speciation_targets
@@ -50,6 +42,88 @@ SPEC_SOURCE_FILES = {
     "Jakobsen": ANALYSIS.parents[3]
     / "data/reference/MEA/observations/liquid_speciation/Jakobsen_2005_ChEq.csv",
 }
+ACTIVE = (
+    "pair/carbon-dioxide/monoethanolamine/k_ij",
+    "component/protonated-monoethanolamine/segment_diameter",
+    "component/carbamate-anion/segment_diameter",
+)
+BOUNDS = ((-1.0, 1.0), (1.5, 5.8), (1.5, 5.8))
+SCALES = (0.5, 2.15, 2.15)
+PRIMARY_TEMPERATURES_K = (313.15, 333.15, 353.15)
+
+
+def _all_pressure_rows() -> list[dict[str, str]]:
+    return sorted(
+        _read(PRESSURE_PACKET),
+        key=lambda row: (
+            float(row["mea_mass_fraction"]),
+            float(row["temperature_K"]),
+            row["source_key"],
+            float(row["co2_loading_mol_per_mol_mea"]),
+        ),
+    )
+
+
+def _pressure_rows() -> list[dict[str, str]]:
+    return [
+        row
+        for row in _all_pressure_rows()
+        if math.isclose(float(row["mea_mass_fraction"]), 0.30, abs_tol=1.0e-8)
+        and any(
+            math.isclose(float(row["temperature_K"]), value, abs_tol=1.0e-6)
+            for value in PRIMARY_TEMPERATURES_K
+        )
+    ]
+
+
+def _sha256(payload: bytes) -> str:
+    return f"sha256:{hashlib.sha256(payload).hexdigest()}"
+
+
+def _output(
+    identity: str, coefficients: dict[str, float]
+) -> equilibrium.EquilibriumOutput:
+    return equilibrium.EquilibriumOutput(
+        identity,
+        "phase.mole_fraction",
+        "dimensionless",
+        "true-species-liquid-mole-fraction",
+        "mea-nine-species-liquid",
+        tuple(coefficients.get(component_id, 0.0) for component_id in COMPONENT_IDS),
+        support="positive",
+    )
+
+
+def _target(
+    *,
+    identity: str,
+    prediction_identity: str,
+    observed: float,
+    unit: str,
+    basis: str,
+    source_identity: str,
+    source_hash: str,
+    multiplier: float,
+    classification: str,
+) -> dict[str, object]:
+    return {
+        "identity": identity,
+        "prediction_identity": prediction_identity,
+        "observed": observed,
+        "unit": unit,
+        "residual": "log_ratio",
+        "scale": 1.0,
+        "multiplier": multiplier,
+        "role": "active_training",
+        "measurement_classification": classification,
+        "basis": basis,
+        "source_identity": source_identity,
+        "source_hash": source_hash,
+        "included": True,
+        "drop_reason": None,
+        "aggregate_identity": None,
+        "covariance_identity": None,
+    }
 
 
 def _liquid(
@@ -114,7 +188,9 @@ def _bubble_problem(parameters: epcsaft.Parameters, row: dict[str, object]) -> o
         temperature=equilibrium.Fixed(temperature_k * epcsaft.unit_registry.kelvin),
         pressure=equilibrium.Solved(
             pressure_pa * epcsaft.unit_registry.pascal,
-            tuple(value * epcsaft.unit_registry.pascal for value in pressure_interval_pa),
+            tuple(
+                value * epcsaft.unit_registry.pascal for value in pressure_interval_pa
+            ),
             tuple(value * epcsaft.unit_registry.pascal for value in pressure_starts_pa),
         ),
         phases=(
@@ -508,7 +584,10 @@ def _compile(
             dict(
                 row,
                 pressure_interval_pa=pressure_interval_pa,
-                pressure_starts_pa=(float(row["state_pressure_pa"]), *pressure_starts_pa),
+                pressure_starts_pa=(
+                    float(row["state_pressure_pa"]),
+                    *pressure_starts_pa,
+                ),
                 maximum_log_pressure_distance=maximum_log_pressure_distance,
             )
             for row in pressure_rows
@@ -568,7 +647,9 @@ def _write_result(
     fitted = {row["identity"]: row["value"] for row in payload["fitted_values"]}
     final_mapping = deepcopy(mapping)
     set_parameter_values(final_mapping, fitted)
-    final_payload = (json.dumps(final_mapping, indent=2, sort_keys=True) + "\n").encode()
+    final_payload = (
+        json.dumps(final_mapping, indent=2, sort_keys=True) + "\n"
+    ).encode()
     rows = payload["evaluated_rows"]
     with (results / "fit_rows.csv").open("w", newline="", encoding="utf-8") as stream:
         fields = (
@@ -685,9 +766,7 @@ def main() -> None:
     if args.workers < 1:
         parser.error("--workers must be at least 1")
     pressure_interval_pa = (
-        None
-        if args.pressure_bounds_pa is None
-        else tuple(args.pressure_bounds_pa)
+        None if args.pressure_bounds_pa is None else tuple(args.pressure_bounds_pa)
     )
     if args.pressure_role != "none" and pressure_interval_pa is None:
         parser.error("--pressure-bounds-pa is required when pressure rows are selected")
