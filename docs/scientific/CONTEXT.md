@@ -38,8 +38,8 @@ No predictive parameter set or absorber-column transfer is authorized.
 
 The authoritative scientific plan is
 [`PREDICTIVE_MEA_PROGRAM.md`](PREDICTIVE_MEA_PROGRAM.md). GitHub issues are the
-only work queue. Literature reviews, planned-analysis documents, Superpowers
-plans, issue mirrors, analysis READMEs, and campaign reports provide evidence
+only work queue. Literature reviews, planned-analysis documents, issue mirrors,
+analysis READMEs, and campaign reports provide evidence
 or history; they do not silently supersede that plan or the tracker.
 
 The audited classification of relevant Engine, MEA, Column, Lithium, and IDAES
@@ -79,7 +79,7 @@ documents is [`DOCUMENT_AUTHORITY_INDEX.md`](DOCUMENT_AUTHORITY_INDEX.md).
    `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md`.
 4. Frozen observation identities, dependency manifests, analysis descriptions,
    and exact calculated-value tables.
-5. Historical roadmaps, Superpowers plans, old transfer records, and issue mirrors.
+5. Historical planning documents, old transfer records, and issue mirrors.
 
 The configured project Better BibTeX export is the citation authority.
 `docs/latex/references.bib` is a one-way manuscript projection, not an

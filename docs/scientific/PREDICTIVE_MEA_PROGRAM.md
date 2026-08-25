@@ -250,8 +250,6 @@ adoption.
 | This plan | Model selection, fitting, validation, and manuscript sequence | Authoritative planning record; native GitHub issues own execution |
 | `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md` | Primary/secondary source synthesis and retained-model scientific basis | Current evidence authority |
 | `analyses/phase3/ionic_epcsaft_regression/pressure_first/README.md` | Executed neutral qualification and current practical sequence | Analysis record only |
-| `docs/roadmaps/predictive_reactive_vle_regression.md` | Earlier preregistration snapshot | Historical; superseded here |
-| `docs/superpowers/PROJECT_CONTEXT.md` and `docs/superpowers/**` | Previous planning/milestone system and issue mirrors | Historical organization evidence |
 | Engine GREPE plan | Public equilibrium and regression callable design | Authoritative in the Engine repository |
 | Engine coupled-regression master plan | Pre-GREPE readiness and source inventory | Historical source/provenance record |
 | Column August 27 plan and upstream handoff | Earlier integration sequence | Historical; Engine #30/#31 are closed |

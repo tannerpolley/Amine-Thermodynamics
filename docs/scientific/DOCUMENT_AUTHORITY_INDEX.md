@@ -54,18 +54,7 @@ accepted homogeneous-reactive and reactive-bubble calculation history.
 | `docs/ePC-SAFT/gross_sadowski_2001_appendix_equations.md` | Equation/source companion | Exact literature equation support |
 | `analyses/phase3/ionic_epcsaft_regression/pressure_first/README.md` and `analysis.yaml` | Current analysis record | Neutral binary qualification and practical regression sequence |
 | `analyses/phase3/ionic_epcsaft_regression/README.md` | Analysis-area navigation | Phase-3 analysis structure, not program authority |
-| `analyses/phase3/ionic_epcsaft_regression/epcsaft_reactive_electrolyte_issue_body.md` | Historical issue draft | Earlier proposed scope; native issues supersede it |
-| `docs/roadmaps/predictive_reactive_vle_regression.md` | Historical preregistration | Earlier data/parameter sequence and then-current blockers |
-| `docs/superpowers/PROJECT_CONTEXT.md` | Historical planning record | Explains the retired parallel planning/mirror organization |
-| `docs/superpowers/plans/*.md`, `specs/*.md`, `issues/*.md`, and `milestones/*.md` | Historical planning corpus | Prior repair, reproducibility, comparison, promotion, validation, and submission plans; never a live queue |
 | `docs/revision_notes/manuscript_submission_review.md` | Manuscript review evidence | Earlier submission review findings |
-
-The Superpowers planning corpus includes the July 2026 scientific-integrity,
-computational-methods, model-comparison, coupled-regression, validation,
-figure/editorial, submission, source-acquisition, authority-rebaseline, and
-reactive-speciation plans. They are retained together because individual
-steps may contain useful rationale, but their execution state comes only from
-current calculated values, records, and native issues.
 
 Live issues: #62--#65 and #67 own observation, neutral, electrostatic,
 induced-association, and retained-configuration evidence; #13 owns predictive
