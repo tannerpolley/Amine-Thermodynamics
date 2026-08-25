@@ -1,0 +1,12 @@
+quantity,consumer_scope,status,source_or_owner,uncertainty_status,calculated_by_thermodynamic_parameter_set
+mass density,ePC-SAFT mixture state,calculated_but_not_downstream_accepted,data/reference/MEA/observations/density_viscosity/,reported for admitted source rows; model uncertainty unavailable,yes
+fugacity,ePC-SAFT phase state,calculated_but_not_downstream_accepted,installed Engine equilibrium outputs,numerical certification only; physical uncertainty unavailable,yes
+CO2 partial pressure,reactive bubble output,diagnostic_candidate_only,analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/retained_predictive_candidate_summary.json,no independent untouched validation partition,yes
+liquid speciation,homogeneous reactive output,diagnostic_candidate_only,analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/retained_predictive_candidate_summary.json,no independent untouched validation partition,yes
+enthalpy / heat of absorption,column energy balance,not_accepted,data/reference/MEA/observations/calorimetry/,reference-state derivative and covariance incomplete,no
+heat capacity,column energy balance,separate_downstream_correlation_required,not qualified by Issue 70,not assessed,no
+viscosity,transport,separate_downstream_correlation_required,data/reference/MEA/observations/density_viscosity/,reported source uncertainty; no adopted correlation here,no
+diffusivity,mass transfer,separate_downstream_correlation_required,not qualified by Issue 70,not assessed,no
+surface tension,mass transfer,separate_downstream_correlation_required,not qualified by Issue 70,not assessed,no
+thermal conductivity,column energy transfer,separate_downstream_correlation_required,not qualified by Issue 70,not assessed,no
+enhancement factor,rate model,separate_downstream_model_required,MEA-Absorption-Column ownership,not assessed,no

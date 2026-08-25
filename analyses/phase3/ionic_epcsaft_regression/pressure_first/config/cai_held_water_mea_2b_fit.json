@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "identity": "cai-1996-held-water-baygi-2b-mea-qualification-v1",
+  "output_stem": "cai_held_water_mea_2b",
+  "model": {"parameterization": "baygi_2b_mea_held_2b_water"},
+  "data": {
+    "path": "data/reference/MEA/observations/vapor_liquid_equilibrium/Cai_1996_MEA_H2O_VLE.csv",
+    "admitted_temperature_max_k": 443.15,
+    "pressure_level_validation_status": "101.33 kPa trains; 66.66 kPa tests transfer"
+  },
+  "active_coordinate": {
+    "identity": "pair/monoethanolamine/water/k_ij",
+    "origin": -0.042,
+    "scale": 0.05,
+    "bounds": [-0.2, 0.2],
+    "unit": "dimensionless"
+  },
+  "multistart": {
+    "starts": [
+      {"identity": "negative-wide", "value": -0.15},
+      {"identity": "source-reference", "value": -0.042},
+      {"identity": "positive", "value": 0.05}
+    ],
+    "affine_bound_margin": 1e-7,
+    "same_solution_tolerance": 1e-6
+  },
+  "optimizer": {
+    "maximum_function_evaluations": 20,
+    "function_tolerance": 1e-6,
+    "gradient_tolerance": 1e-6,
+    "parameter_tolerance": 1e-6
+  },
+  "gates": {
+    "maximum_condition_number": 10000.0,
+    "training_normalized_rmse_maximum": 100.0,
+    "model_selection_normalized_rmse_maximum": 100.0,
+    "model_selection_not_worse_than_training_factor": 3.0,
+    "exact_jacobian_check_relative_tolerance": 0.0001
+  }
+}

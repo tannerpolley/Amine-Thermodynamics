@@ -68,6 +68,60 @@ def write_csv_rows(path: Path, rows: list[dict[str, Any]], fieldnames: Sequence[
         writer.writerows(rows)
 
 
+def write_diagnostic_rows(path: Path, rows: list[dict[str, Any]]) -> None:
+    flattened: list[dict[str, Any]] = []
+    for row in rows:
+        targets = row.get("targets")
+        if not isinstance(targets, list) or not targets:
+            flattened.append({key: value for key, value in row.items() if key != "targets"})
+            continue
+        state = {key: value for key, value in row.items() if key != "targets"}
+        state["state_identity"] = state.pop("identity")
+        flattened.extend(
+            {
+                **state,
+                **{f"target_{key}": value for key, value in target.items()},
+            }
+            for target in targets
+        )
+    write_csv_rows(path, flattened, None if flattened else ("identity", "status"))
+
+
+def read_diagnostic_rows(
+    path: Path, *, nested: bool = False
+) -> list[dict[str, Any]]:
+    rows = read_csv_rows(path)
+    if not nested:
+        return rows
+    reconstructed: list[dict[str, Any]] = []
+    states: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        state_identity = row.get("state_identity", "")
+        if not state_identity:
+            reconstructed.append({key: value for key, value in row.items() if value != ""})
+            continue
+        if state_identity not in states:
+            state = {
+                key: value
+                for key, value in row.items()
+                if value != ""
+                and key != "state_identity"
+                and (key == "target_count" or not key.startswith("target_"))
+            }
+            state["identity"] = state_identity
+            state["targets"] = []
+            states[state_identity] = state
+            reconstructed.append(state)
+        states[state_identity]["targets"].append(
+            {
+                key.removeprefix("target_"): value
+                for key, value in row.items()
+                if value != "" and key != "target_count" and key.startswith("target_")
+            }
+        )
+    return reconstructed
+
+
 def normalize_svg(path: Path) -> None:
     lines = path.read_text(encoding="utf-8").splitlines()
     path.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")

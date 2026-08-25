@@ -290,7 +290,7 @@ def build_receipt() -> dict[str, object]:
             "All 319 candidate rows lack a preregistered executable residual scale or uncertainty.",
             "All 198 candidate speciation rows lack a source-backed same-state pressure contract.",
             "The immutable predictive parameter packet required by Stage 1 has not been qualified.",
-            "M1-M3 source-fixed molecular moments, M4 induced-association topology, and M5 dielectric/target-ion evidence are absent.",
+            "The fixed induced-association topology and direct target-ion dielectric evidence are incomplete in this historical receipt.",
         ],
         "claim_boundary": (
             "This receipt proves installed Engine integration, immutable candidate partitions, "
