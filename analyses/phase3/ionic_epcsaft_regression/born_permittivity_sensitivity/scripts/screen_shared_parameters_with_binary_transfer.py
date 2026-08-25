@@ -7,8 +7,9 @@ import math
 import numpy as np
 
 from evaluate_co2_water_kij_transfer import PARAMETERS, RESULTS, _mapping_at_temperature
-from run_final_shared_refinement import ACTIVE, BOUNDS
 from run_full_predictive_refinement import (
+    ACTIVE,
+    BOUNDS,
     _compile_pressure,
     _compile_speciation,
     _pressure_rows,

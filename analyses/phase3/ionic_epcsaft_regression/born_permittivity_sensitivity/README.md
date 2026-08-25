@@ -207,52 +207,16 @@ completed globally fitted MEA parameter set.
 
 ## Superseded fixed-TP shared refinement
 
-The selected fixed structure was refined with three shared parameters:
-`k_CO2,MEA`, the `MEAH+` segment diameter, and the `MEACOO-` segment diameter.
-The primary domain is 30 wt% MEA at 40, 60, and 80 degC. All 59 available
-pressure rows in those profiles were attempted. The fit used one fixed-TP,
-one-liquid GREPE problem per state. Molecular-CO2 liquid fugacity supplied the
-fast pressure residual, and direct Jakobsen species mole fractions supplied
-the speciation residuals. Natural-log residuals were weighted so that pressure
-and speciation contributed equally despite their different row counts.
+The retired fixed-TP surrogate supplied the starting point for the full
+reactive-bubble refinement. Its compact parameter receipt remains at
+`results/final_shared_refinement/summary.json`; the obsolete runner,
+diagnostics, confirmation, and figure bundle are no longer retained.
 
 | Shared parameter | Start | Fitted | Bounds |
 |---|---:|---:|---:|
 | $k_{CO2,MEA}$ | 0 | -0.03182703 | [-1, 1] |
 | $\sigma_{MEAH+}$ (A) | 3.48508557 | 2.68378739 | [1.5, 5.8] |
 | $\sigma_{MEACOO-}$ (A) | 3.53543526 | 3.26931496 | [1.5, 5.8] |
-
-The complete-row one-step refinement reduced the equal-block cost from
-0.9452311 to 0.5460640, a 42.2% reduction in 213 seconds. It is usable but is
-not a formal optimizer convergence claim. No parameter contacted a bound. The
-scaled Jacobian singular values are 2.3285, 1.9298, and 0.03822, giving a
-condition number of 60.9.
-
-Thirty-eight pressure rows and 17 direct speciation targets from three loading
-states were evaluated. Twenty-one pressure states and three speciation states
-failed trace-state certification and remain explicit failures rather than
-fabricated penalties. The pressure surrogate has RMS and median factors of
-2.114 and 2.046; speciation has RMS and median factors of 2.073 and 1.540.
-The other 62 pressure-packet rows are retained as out-of-domain diagnostics.
-The earlier all-composition/all-temperature attempt is preserved under
-`results/full_packet_diagnostic/`; it did not select these parameters.
-
-The independent three-point Hilliard 40 C coupled-bubble check passed all
-numerical and physical criteria. Predicted CO2 partial pressures were 3.812,
-211.65, and 13928.2 Pa against 5.70, 96.60, and 28300 Pa. Its RMS factor is
-1.922. This is the current 30 wt%, 40--80 degC shared pressure--speciation
-candidate. The unresolved limitation is state coverage, not an arbitrary
-parameter bound.
-
-Run and render separately:
-
-```bash
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
-  PYTHONPATH=src:analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/scripts \
-  .venv/bin/python analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/scripts/run_final_shared_refinement.py --maximum-iterations 1
-PYTHONPATH=src:analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/scripts \
-  .venv/bin/python analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/scripts/render_final_shared_refinement.py
-```
 
 ## Complete numerical-coverage diagnostic
 
@@ -303,9 +267,7 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   PYTHONPATH=src:analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/scripts \
   .venv/bin/python analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/scripts/run_full_predictive_refinement.py --fit-existing --maximum-iterations 1
 PYTHONPATH=src:analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/scripts \
-  .venv/bin/python analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/scripts/render_final_shared_refinement.py \
-  --input-directory analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/full_predictive_refinement \
-  --output-stem full_predictive_pressure_speciation_refinement
+  .venv/bin/python analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/scripts/render_full_predictive_refinement.py
 ```
 
 ## Source-partitioned predictive fit
@@ -377,11 +339,11 @@ factor increased from 2.3926 to 9.6479. The 333.15 K and 353.15 K factors were
 rejected, the source R4/R5 correlations remain unchanged, and reaction
 temperature coefficients must not be estimated from speciation alone.
 
-Exact perturbation values are in
-`results/reaction_temperature_sensitivity/perturbation_rows.csv`; summaries
-and complete replay diagnostics are under
-`results/reaction_temperature_sensitivity/` and
-`results/reaction_temperature_validation/`.
+The compact rejection receipt is
+`results/reaction_temperature_rejection.json`. The final retained and
+calorimetry-balanced comparisons remain under
+`results/candidate_speciation_comparison/` and
+`results/calorimetry_balanced_reaction_validation/`.
 
 ## CO2--water binary transfer and retained predictive candidate
 
@@ -589,12 +551,13 @@ reactive-fit intercept evaluates only 11/39 with log-RMSE 0.608 on survivors.
 The positive CO2--water intercept is therefore rejected as compensation for
 physics absent from this comparison, principally the source salt and possibly
 reactive standard-state/model error. The source-compatible induced-association
-and anchored temperature slope remain retained. Exact Wong predictions are
-under `results/wong_*`; the visually verified data/model figure is
-`figures/wong_free_co2_external_challenge.*`, with 116 exact plotted rows in
-`figures/wong_free_co2_external_challenge_plot_data.csv`. Pressure and binary rejection
-evidence is under `results/co2_water_activity_pressure_validation/` and
-`../co2_water_induced_association/results/`.
+and anchored temperature slope remain retained. The compact intercept rejection
+receipt is `results/co2_water_activity_rejection.json`. The retained and
+calorimetry-balanced Wong predictions remain under
+`results/wong_free_co2_external_challenge/`; their verified figure is
+`figures/wong_free_co2_external_challenge.*`, with 58 exact plotted rows in
+`figures/wong_free_co2_external_challenge_plot_data.csv`. Binary evidence is
+under `../co2_water_induced_association/results/`.
 
 ## Generic pressure-domain handling
 

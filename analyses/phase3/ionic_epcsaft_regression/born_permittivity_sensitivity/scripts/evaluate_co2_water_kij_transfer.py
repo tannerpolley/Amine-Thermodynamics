@@ -13,8 +13,8 @@ import epcsaft
 
 from generate import ANALYSIS, COMPONENT_IDS
 from MEA.common.analysis_io import write_csv_rows as _write_csv
-from run_final_shared_refinement import ACTIVE
 from run_full_predictive_refinement import (
+    ACTIVE,
     _evaluate_pressure_reference,
     _evaluate_speciation_reference,
     _metrics,
