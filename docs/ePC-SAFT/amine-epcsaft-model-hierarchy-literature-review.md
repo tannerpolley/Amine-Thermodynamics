@@ -59,7 +59,7 @@ network. A separate CO2-MEA chemical-association edge is not used.
 |---|---|---|
 | Fakouri Baygi and Pahlavanzadeh (2015) | MEA-H2O-CO2 PC-SAFT, MEA association alternatives, Cai MEA-water VLE | Neutral MEA candidates and a source-faithful baseline reproduction |
 | Uyan et al. (2015) | Explicit-ion aqueous MDEA ePC-SAFT with reaction activities and neutral isofugacity | Numerical and formulation comparison for explicit-electrolyte amines |
-| Wängler et al. (2018) | Electrolyte amine phase-equilibrium calculations | Independent reactive-electrolyte implementation comparison |
+| Wangler et al. (2018) | Electrolyte amine phase-equilibrium calculations | Independent reactive-electrolyte implementation comparison |
 | Cleeton et al. (2020) | Competitive MDEA-H2S-CO2 electrolyte calculations | Multi-acid-gas transfer and residual-trend evidence |
 | Bülow et al. (2021) | MDEA, sulfolane, CO2, and H2S with Born solvation and solvent-composition permittivity | Binary-first parameter sequence and high-loading limitation evidence |
 | Schick et al. (2023) | CO2 solubility in aqueous and organic electrolyte solutions | Fixed CO2-water induced-association topology and altered-Born comparison |
@@ -69,6 +69,40 @@ The MDEA sources demonstrate a workable sequence: qualify pure and binary
 properties, freeze those values, then evaluate reactive mixtures. Their amine
 and ion parameters are not transferred to MEA without matching species,
 standard states, and parameter definitions.
+
+### 4.1 Model lineage and evidence dependencies
+
+This is the model-dependency chain used by the project, not a claim that every
+later paper directly cites every earlier paper or that their fitted parameters
+are transferable to MEA:
+
+- Gross and Sadowski (2001, 2002) provide the PC-SAFT chain, dispersion, and
+  association framework.
+  - The MEA neutral-evidence branch runs from the Cai et al. (1996) MEA-water
+    measurements through the source-backed MEA association alternatives
+    evaluated by Fakouri Baygi and Pahlavanzadeh (2015).
+  - The electrolyte branch begins with the Cameretti et al. (2005) aqueous
+    ePC-SAFT extension and reaches reactive amine VLE through Uyan et al.
+    (2015), followed by the independent binary-parameter and multiproperty
+    tests of Wangler et al. (2018) and Cleeton et al. (2020).
+- The electrostatic branch adds composition-dependent permittivity and Born
+  solvation through Bülow, Ascani, and Held (2020, 2021), then combines the
+  Pabsch et al. (2020) CO2-water induced-association treatment with advanced
+  Born electrostatics in Schick et al. (2023).
+- Rueben et al. (2024) and Figiel, Yu, and Held (2025) refine that branch with
+  solvation-shell and dielectric-saturation corrections.
+- The present MEA model joins the neutral-MEA and electrolyte branches: it
+  retains the qualified MEA-water family, explicit carbamate chemistry,
+  Schick-Pabsch CO2-water induced association, and the selected modified-Born
+  formulation in one nine-species calculation.
+
+Each arrow transfers a model choice or an evidence requirement. Numerical
+parameters transfer only when their species definition, water family,
+association topology, standard state, units, and fitted domain also match.
+Canonical citation metadata and DOIs are in
+[`docs/latex/manuscript_references.bib`](../latex/manuscript_references.bib);
+the inspected repository text extractions are under
+[`docs/papers/md`](../papers/md/).
 
 ## 5. Parameter ownership
 
@@ -84,6 +118,25 @@ standard states, and parameter definitions.
 | Born diameters and solvation factors | Solvation, transfer, and activity evidence | Fixed or independently constrained before reactive fitting |
 | Relative-permittivity parameters | Unloaded and loaded solution measurements | Compare direct and screened formulations independently of pressure fitting |
 | Reaction correlations | Source correlations with declared temperature domains | Fixed initially; reopen only after EOS qualification |
+
+### 5.1 Frozen-set handoff
+
+This review fixes the admissible model structure and the provenance rules; it
+does not itself freeze fitted magnitudes. When the final parameter set passes
+the regression and validation gates, its freeze record must bind:
+
+- the immutable Engine wheel and SHA-256 hash;
+- the species, reactions, standard states, association graph, and
+  electrostatic formulation;
+- every parameter identity, value, unit, bound, and evidence status;
+- the exact calibration and untouched-validation row identities and hashes;
+- optimizer termination, rank, conditioning, active bounds, residual
+  summaries, and uncertainty results; and
+- the downstream-property coverage and explicit transfer decision.
+
+The frozen record becomes the numerical authority. This review remains the
+source-chain authority explaining why those parameter blocks and validation
+requirements exist.
 
 ## 6. Neutral qualification
 
@@ -102,11 +155,11 @@ pressure-level transfer. Each measured state contributes component
 log-fugacity equalities. The exact Engine derivative with respect to the active
 binary coordinate is checked against centered finite differences.
 
-The existing Baygi 3B-MEA/2B-water and 3B-MEA/4C-water reproductions are
-diagnostics because their fixed-state residuals retain strong composition
-trends. The next pass evaluates source-backed MEA association candidates under
-the fixed Held water family and retains the smallest candidate that improves
-both pressure levels.
+The source-faithful Baygi reproductions remain diagnostics because their
+fixed-state residuals retain strong composition trends. The completed
+Held-water comparison evaluated source-backed 2B, 3B, and 4C MEA association
+families. The 3B family gives the best transfer to the independent 66.66 kPa
+pressure level and is the retained neutral family.
 
 ### 6.3 CO2-water
 
