@@ -292,7 +292,7 @@ def readiness_rows(reactions: list[dict[str, str]], source_rows: list[dict[str, 
         {
             "requirement": "vle_fugacity_route",
             "status": "native_epcsaft_solver_available",
-            "evidence": "AGENTS.md",
+            "evidence": "analyses/phase2/activity_epcsaft/results/phase2_activity_speciation_problem.json",
             "notes": f"Using pinned ePC-SAFT commit {epcsaft_commit_id()} with generic reactive speciation and electrolyte bubble support.",
         },
         {
