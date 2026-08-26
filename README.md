@@ -57,6 +57,7 @@ format, and raw fit requests/results must remain in ignored `results/runs/`.
 
 ## Key Artifact Paths
 
+- `data/reference/MEA/parameters/best_available_mea_epcsaft/1/freeze.toml`
 - `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.png`
 - `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.svg`
 - `analyses/phase1/six_species_baseline/results/speciation/speciation.png`

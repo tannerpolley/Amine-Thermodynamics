@@ -27,14 +27,18 @@ define MEA thermodynamic equations or parameter adoption here.
 
 The current manuscript is a fixed-parameter transfer and model-form evaluation.
 It is not yet a predictive parameterization manuscript. Existing pressure-first,
-Hilliard-only and fixed-observed-pressure calculations are diagnostic
-unless their own retained evidence explicitly says otherwise. A lower sum of
-squared residuals, optimizer termination, or visually improved curve does not
-justify parameter-set adoption.
+Hilliard-only and fixed-observed-pressure calculations are diagnostic unless
+their own retained evidence explicitly says otherwise. Optimizer termination is
+reported as numerical evidence; it does not by itself accept or reject an
+engineering parameter set.
 
-Issue 70 reached a supported negative decision. The sole decision authority is
-`analyses/phase3/ionic_epcsaft_regression/results/issue_70/predictive_mea_parameter_decision.json`.
-No predictive parameter set or absorber-column transfer is authorized.
+Issue 70 retained a conservative supported-negative predictive decision. A
+subsequent user-directed engineering selection froze the calorimetry-balanced
+configuration as the best available MEA set. Its numerical authority is
+`data/reference/MEA/parameters/best_available_mea_epcsaft/1/freeze.toml`.
+The freeze supports bounded MEA calculations and manuscript comparison while
+preserving the lack of independent validation, parameter uniqueness, and exact
+evaluation-wheel replay. Absorber-column transfer remains unauthorized.
 
 The authoritative scientific plan is
 [`PREDICTIVE_MEA_PROGRAM.md`](PREDICTIVE_MEA_PROGRAM.md). GitHub issues are the
@@ -60,6 +64,9 @@ documents is [`DOCUMENT_AUTHORITY_INDEX.md`](DOCUMENT_AUTHORITY_INDEX.md).
   binary, electrolyte, and model-selection comparisons.
 - **Diagnostic fit:** a transparent optimization useful for sensitivity,
   runtime, or model-form diagnosis but not sufficient for adoption.
+- **Best-available engineering freeze:** one immutable, hash-bound selection
+  for bounded calculations when no candidate satisfies every predictive gate;
+  its limitations remain part of the numerical authority.
 - **Candidate eligible for adoption:** a complete fitted parameter record that
   meets its source, domain, numerical, identifiability, independent-validation,
   and immutable installed-wheel replay criteria.
@@ -74,7 +81,8 @@ documents is [`DOCUMENT_AUTHORITY_INDEX.md`](DOCUMENT_AUTHORITY_INDEX.md).
 
 1. Repository `AGENTS.md`, the pinned Engine identity, and current native
    GitHub issues.
-2. This context and `PREDICTIVE_MEA_PROGRAM.md`.
+2. The frozen best-available parameter record, this context, and
+   `PREDICTIVE_MEA_PROGRAM.md`.
 3. The source synthesis in
    `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md`.
 4. Frozen observation identities, dependency manifests, analysis descriptions,
