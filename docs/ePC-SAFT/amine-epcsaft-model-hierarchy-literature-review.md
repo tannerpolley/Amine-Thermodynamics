@@ -121,22 +121,24 @@ the inspected repository text extractions are under
 
 ### 5.1 Frozen-set handoff
 
-This review fixes the admissible model structure and the provenance rules; it
-does not itself freeze fitted magnitudes. When the final parameter set passes
-the regression and validation gates, its freeze record must bind:
+This review fixes the admissible model structure and provenance rules. The
+current best-available engineering magnitudes are frozen in
+`data/reference/MEA/parameters/best_available_mea_epcsaft/1/freeze.toml`. That
+record binds:
 
 - the immutable Engine wheel and SHA-256 hash;
 - the species, reactions, standard states, association graph, and
   electrostatic formulation;
 - every parameter identity, value, unit, bound, and evidence status;
-- the exact calibration and untouched-validation row identities and hashes;
+- the exact calibration and comparison row identities and hashes;
 - optimizer termination, rank, conditioning, active bounds, residual
   summaries, and uncertainty results; and
 - the downstream-property coverage and explicit transfer decision.
 
-The frozen record becomes the numerical authority. This review remains the
-source-chain authority explaining why those parameter blocks and validation
-requirements exist.
+The frozen record is the numerical authority for bounded MEA calculations. It
+does not claim independent predictive validation, parameter uniqueness, or
+absorber-column transfer. This review remains the source-chain authority
+explaining why those parameter blocks and validation requirements exist.
 
 ## 6. Neutral qualification
 

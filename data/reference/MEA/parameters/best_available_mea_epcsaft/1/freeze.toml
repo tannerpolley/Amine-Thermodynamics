@@ -1,0 +1,81 @@
+schema_version = 1
+set_id = "mea-30wt-best-available-epcsaft"
+set_version = 1
+status = "frozen-best-available-engineering-set"
+selected_configuration = "calorimetry-balanced"
+selection_basis = "equal weighting of pressure challenge, reserved speciation, and calorimetry errors"
+claim_boundary = "Best available MEA engineering parameter set; independent predictive validation, parameter uniqueness, and absorber-column transfer are not established."
+selected_values = "selected_values.csv"
+comparison_metrics = "comparison_metrics.csv"
+resolved_engine_mapping_sha256 = "sha256:66837ab1c9625f28cf143a8adfea5855db70d3e070d44258d7e6f5f3e133c63b"
+limitations = [
+  "No untouched replacement partition remains for independent validation.",
+  "The fitted directions are weakly identified, so parameter uniqueness is not claimed.",
+  "The exact evaluation wheel is hash-bound but is not the repository's current frozen Engine lock.",
+  "The calorimetry comparison lacks a full measurement covariance model.",
+]
+
+[domain]
+mea_mass_fraction = 0.30
+temperature_min_k = 293.15
+temperature_max_k = 353.15
+loading_min_mol_co2_per_mol_mea = 0.0174
+loading_max_mol_co2_per_mol_mea = 0.99
+
+[engine]
+distribution = "epcsaft"
+version = "0.2.0.dev0"
+evaluation_wheel_sha256 = "e14288867d4fb5bc1367dd0de490aeb1551f1613074aced0a8d28432ca762f23"
+
+[numerical_evidence]
+fit_status = "completed"
+optimizer_maximum_iterations = 1
+optimizer_termination = "NO_CONVERGENCE"
+accepted_starts = 1
+failed_starts = 0
+dropped_rows = 0
+interpretation = "The bounded optimizer status is retained as numerical evidence and is not used alone as an engineering rejection criterion."
+
+[temperature_relations]
+co2_water_kij = "3.016e-4 K^-1 * (T - 313.15 K)"
+reaction_delta_ln_k = "delta_ref * ((1/T - 1/313.15 K) / (1/353.15 K - 1/313.15 K))"
+
+[[sources]]
+path = "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/broader_candidate/best_fixed_candidate_parameters.json"
+sha256 = "679a90deb05242938bd3c52a51f2a81bb429344e9aacfdf09b8b566cc005c791"
+role = "complete base Engine parameter mapping"
+
+[[sources]]
+path = "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/predictive_training_refinement/summary.json"
+sha256 = "6662479cd011ad1e2712d1c860d6331009dc1ea45142f6b25ef8278d59bcb710"
+role = "fitted shared values and resolved mapping hash"
+
+[[sources]]
+path = "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/retained_predictive_parameter_settings.json"
+sha256 = "e92f3627b8af6191fcd65a2694c2d9647686558632d2e02f6f122f8aed174f65"
+role = "retained physical structure and temperature-dependent CO2-water interaction"
+
+[[sources]]
+path = "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/calorimetry_consistency/reaction_temperature_candidate.json"
+sha256 = "30ed1dad946dba21698e127fd078b258445624c692bd6697edb26d14d281f9c2"
+role = "selected R4 and R5 temperature corrections"
+
+[[sources]]
+path = "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/calorimetry_balanced_reaction_validation/summary.json"
+sha256 = "135815c336bdcc124c9a9642a89ef84e61cc5fd9e61be79eee873c84d8468201"
+role = "exact nonlinear pressure and speciation evaluation"
+
+[[sources]]
+path = "analyses/phase3/ionic_epcsaft_regression/born_permittivity_sensitivity/results/independent_evidence_comparison/summary.json"
+sha256 = "eef017aa632d4d225cedb0a1a1bf7544e56cf5ad560ee8c482754dc9c64eda8b"
+role = "multiproperty selection comparison"
+
+[[sources]]
+path = "data/reference/MEA/manifests/chemical_reaction_source_contract.json"
+sha256 = "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55"
+role = "five-reaction basis, standard states, and source correlations"
+
+[[sources]]
+path = "data/reference/epcsaft_bundles/mea-co2-h2o-nine-species-regression-input/1/bundle.toml"
+sha256 = "ef19afb3e5495e1128edf751f177a308c1e5a3ca6f8ad2948f25718f829cf96d"
+role = "split CSV/TOML base parameter bundle"
