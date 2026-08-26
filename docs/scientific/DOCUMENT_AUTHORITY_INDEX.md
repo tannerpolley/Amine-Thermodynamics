@@ -45,7 +45,8 @@ accepted homogeneous-reactive and reactive-bubble calculation history.
 | `docs/scientific/CONTEXT.md` | Authoritative scientific definition | Question, ownership, vocabulary, authority, and claim boundary; authority comes from repository guidance and issue #70 |
 | `docs/scientific/PREDICTIVE_MEA_PROGRAM.md` | Authoritative scientific plan | Neutral qualification, electrostatic selection, regression, validation, and manuscript sequence; GitHub issues own execution |
 | This index | Authoritative navigation | Document classification only; it owns no scientific decision or work queue |
-| `analyses/phase3/ionic_epcsaft_regression/results/issue_70/predictive_mea_parameter_decision.json` | Authoritative Issue 70 decision record | Supported-negative parameter decision, exact input hashes, generated tables, and downstream refusal |
+| `data/reference/MEA/parameters/best_available_mea_epcsaft/1/freeze.toml` | Current numerical authority | Hash-bound best-available MEA engineering set, selected values, comparison metrics, evaluated domain, and claim boundary |
+| `analyses/phase3/ionic_epcsaft_regression/results/issue_70/predictive_mea_parameter_decision.json` | Historical Issue 70 gate decision | Conservative supported-negative predictive decision, exact input hashes, generated tables, and downstream refusal before the engineering freeze |
 | `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md` | Current source synthesis | Literature basis for the retained induced-association and Born formulations; not adoption or queue authority |
 | `docs/ePC-SAFT/full-component-parameter-source-audit.md` | Current source audit | Component-level parameter provenance |
 | `docs/ePC-SAFT/mea-reaction-and-sentinel-primary-source-audit.md` | Current source audit | Reaction and sentinel evidence |
@@ -56,12 +57,11 @@ accepted homogeneous-reactive and reactive-bubble calculation history.
 | `analyses/phase3/ionic_epcsaft_regression/README.md` | Analysis-area navigation | Phase-3 analysis structure, not program authority |
 | `docs/revision_notes/manuscript_submission_review.md` | Manuscript review evidence | Earlier submission review findings |
 
-Live issues: #62--#65 and #67 own observation, neutral, electrostatic,
-induced-association, and retained-configuration evidence; #13 owns predictive
-regression; #14 owns replacement independent validation and identifiability;
-#70 owns parameter-record assembly and the predictive-claim decision; #68 owns
-manuscript evolution; and #10 is the final manuscript gate. Issues #61 and #66
-are closed historical records.
+Closed issues #62--#65 and #67 retain observation, neutral, electrostatic,
+induced-association, and configuration evidence. Closed issues #13, #14, and
+#70 retain the regression, validation, and conservative predictive-gate
+decisions. Issue #68 owns manuscript evolution, and #10 is the final manuscript
+gate. Issues #61 and #66 are closed historical records.
 
 ## MEA-Absorption-Column
 
