@@ -50,6 +50,11 @@ those works. Cite the exact version used through [CITATION.cff](CITATION.cff).
 
 Each analysis owns its canonical generated tables under `results/`. Figure output folders contain only the exact plotted CSV subset and render bundle; every `.mpl.yaml` sidecar records the repository-relative plotted-data path and SHA-256 digest. Disposable run output belongs under ignored `analyses/**/results/runs/`.
 
+Tracked JSON is limited to 100 KiB and 3,000 lines. Larger scientific tables
+must use CSV, structured parameter sets must use the split CSV/TOML bundle
+format, and raw fit requests/results must remain in ignored `results/runs/`.
+`scripts/validate_project.py` enforces both limits without exceptions.
+
 ## Key Artifact Paths
 
 - `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.png`

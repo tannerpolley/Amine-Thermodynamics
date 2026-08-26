@@ -8,6 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PY = sys.executable
 RUFF = str(Path(PY).with_name("ruff"))
+MAX_TRACKED_JSON_BYTES = 100 * 1024
+MAX_TRACKED_JSON_LINES = 3_000
 
 QUICK_COMMANDS = [
     [RUFF, "check", "src", "scripts", "analyses", "tests"],
@@ -171,6 +173,40 @@ def verify_artifacts() -> int:
     return 0
 
 
+def json_size_problem(path: Path) -> str | None:
+    byte_count = path.stat().st_size
+    if byte_count > MAX_TRACKED_JSON_BYTES:
+        return f"{byte_count} bytes > {MAX_TRACKED_JSON_BYTES}"
+    with path.open("rb") as stream:
+        line_count = sum(1 for _ in stream)
+    if line_count > MAX_TRACKED_JSON_LINES:
+        return f"{line_count} lines > {MAX_TRACKED_JSON_LINES}"
+    return None
+
+
+def verify_tracked_json_size() -> int:
+    tracked = subprocess.run(
+        ["git", "ls-files", "-z", "--", "*.json"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.split("\0")
+    oversized: list[str] = []
+    for relative in filter(None, tracked):
+        path = ROOT / relative
+        if problem := json_size_problem(path):
+            oversized.append(f"{relative}: {problem}")
+    if oversized:
+        print("Oversized tracked JSON files:")
+        for problem in oversized:
+            print(f"  {problem}")
+        print("Split durable tables/configuration into CSV/TOML; keep raw runs ignored.")
+        return 1
+    print("Tracked JSON size contract passed.")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate the MEA-Thermodynamics project layout and analysis artifacts.")
     parser.add_argument("mode", choices=["quick", "confidence"], help="quick runs structural/tests checks; confidence also regenerates curated plots")
@@ -179,7 +215,9 @@ def main() -> int:
     commands = list(QUICK_COMMANDS)
     if args.mode == "confidence":
         commands.extend(PLOT_COMMANDS)
-    status = 0
+    status = verify_tracked_json_size()
+    if status:
+        return status
     for command in commands:
         status = max(status, run(command))
         if status:
