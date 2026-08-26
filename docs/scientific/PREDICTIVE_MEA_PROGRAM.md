@@ -22,6 +22,13 @@ model selection and replay it through one immutable installed Engine wheel.
 Only a candidate that meets preregistered numerical and independent-comparison
 criteria may support predictive manuscript claims or column-side transfer.
 
+A best-available engineering set may be frozen earlier for bounded calculation
+and comparison when its exact values, source identities, numerical behavior,
+failed-case accounting, and limitations are immutable. This selection does not
+convert a solver termination label into a scientific verdict, and it does not
+inherit the predictive or transfer claims reserved for an independently
+validated set.
+
 The endpoint is not the lowest available sum of squared residuals. It is a
 retained model-form decision and parameter record with an explicit domain,
 source basis, code revision, installed-wheel identity, input hashes,
