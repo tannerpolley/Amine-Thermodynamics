@@ -167,7 +167,7 @@ PURE_PARAMETER_ROWS = [
         "kappa_AB": np.nan,
         "epsilon_AB_K": np.nan,
         "k_ij": -0.1800,
-        "source_key": "src/MEA/epcsaft_neutral/parameters.py",
+        "source_key": "analyses/phase1/neutral_epcsaft_parity/results/pressure/epcsaft_neutral_jou_parity_summary.csv",
         "status": "retained_repo_baseline",
         "phase1_role": "neutral parity continuity check",
         "notes": "The retained repo neutral parity workflow keeps the inherited MEA-H2O k_ij row so the translation check remains comparable to the historical local baseline.",

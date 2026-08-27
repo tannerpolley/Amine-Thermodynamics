@@ -63,14 +63,11 @@ def build_homogeneous_reactive_problem(
     loading_mol_co2_per_mol_mea: float,
     maximum_log_composition_distance: float = 0.5,
     maximum_log_volume_distance: float = 0.5,
-    solver_options: Mapping[str, int | float] | None = None,
     reaction_ln_k_adjustments: Mapping[str, float] | None = None,
     allow_reaction_extrapolation: bool = False,
     branch_policy: Literal[
-        "local_certified_role_selected_state",
-        "lowest_observed_certified_gibbs_state",
+        "local_certified_role_selected_state"
     ] = "local_certified_role_selected_state",
-    initial_reference: object | None = None,
 ) -> object:
     """Build and anchor the canonical nine-species fixed-``T,P`` liquid problem."""
 
@@ -237,9 +234,6 @@ def build_homogeneous_reactive_problem(
         ),
         strict_interior_amount_floor_mol=1.0e-12,
         source_standard_state=standard_state,
-        solve_options=equilibrium.ChemicalEquilibriumSolveOptions(
-            **dict(solver_options or {})
-        ),
     )
     model = epcsaft.Mixture(parameters)
     unanchored = equilibrium.HomogeneousReactiveObservationProblem(
@@ -257,7 +251,6 @@ def build_homogeneous_reactive_problem(
         pressure_pa * epcsaft.unit_registry.pascal,
         maximum_log_composition_distance=maximum_log_composition_distance,
         maximum_log_volume_distance=maximum_log_volume_distance,
-        initial_reference=initial_reference,
     )
     return replace(unanchored, continuation_reference=reference)
 
@@ -278,7 +271,6 @@ def build_reactive_bubble_problem(
     pressure_starts_pa: tuple[float, ...],
     maximum_log_composition_distance: float = 0.5,
     maximum_log_volume_distance: float = 0.5,
-    solver_options: Mapping[str, int | float] | None = None,
     reaction_ln_k_adjustments: Mapping[str, float] | None = None,
 ) -> object:
     """Build the declared one-liquid/one-vapor reactive bubble problem.
@@ -301,7 +293,6 @@ def build_reactive_bubble_problem(
         loading_mol_co2_per_mol_mea=loading_mol_co2_per_mol_mea,
         maximum_log_composition_distance=maximum_log_composition_distance,
         maximum_log_volume_distance=maximum_log_volume_distance,
-        solver_options=solver_options,
         reaction_ln_k_adjustments=reaction_ln_k_adjustments,
     )
     return equilibrium.ReactiveBubbleVLEProblem(
