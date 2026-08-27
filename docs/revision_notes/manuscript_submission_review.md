@@ -4,7 +4,7 @@ This review treats the current manuscript as a scientific submission draft and i
 
 1. Add a compact data-provenance table that maps each pressure and speciation source to temperature, loading, MEA mass fraction, observable type, and row count.
 2. Add a residual summary table for pressure and speciation metrics, including accepted rows, excluded upper-bound rows, and direct-positive rows.
-3. Add an activity-coupled pressure figure analogous to the Phase 1 pressure plot so the 0.493 pressure residual is visually auditable.
+3. Add an activity-coupled pressure figure analogous to the ideal reaction-equilibrium reference pressure plot so the 0.493 pressure residual is visually auditable.
 4. Add a short reaction-basis table listing the five solved reactions, equilibrium constants, units, and temperature convention.
 5. Add an explicit source-basis note for each reaction constant so readers can trace the ideal and activity-coupled calculations to literature values.
 6. Add uncertainty or sensitivity bands for the activity-coupled speciation curves once parameter uncertainty is available.

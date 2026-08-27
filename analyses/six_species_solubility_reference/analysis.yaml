@@ -1,0 +1,30 @@
+id: six_species_solubility_reference
+title: Six-Species Solubility Reference
+status: reference_case
+summary: Recomputes the ideal-activity six-species Smith-Missen equilibrium and legacy PC-SAFT pressure reference used to establish ideal reaction-equilibrium behavior.
+owner: project
+inputs:
+  - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv
+    kind: active_v1_experimental_vle_view
+  - path: data/reference/MEA/observations/liquid_speciation/Combined_ChEq.csv
+    kind: active_v1_experimental_speciation_view
+  - path: data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv
+    kind: full_canonical_speciation_registry
+  - path: data/reference/MEA/manifests/historical_activity_evaluation_reaction_constant_source_verification.csv
+    kind: verified_activity_reaction_catalog
+outputs:
+  - path: analyses/six_species_solubility_reference/results/pressure
+    kind: canonical_pressure_results_and_plot_bundle
+  - path: analyses/six_species_solubility_reference/results/speciation
+    kind: canonical_speciation_results_and_plot_bundle
+commands:
+  generate:
+    - uv run python analyses/six_species_solubility_reference/scripts/generate_data.py
+  render:
+    - uv run python analyses/six_species_solubility_reference/scripts/render_figures.py
+runtime:
+  class: quick
+  expected_seconds: 5
+manuscript_consumers:
+  - docs/latex/sections/mea_system_modeling_results.tex
+results_policy: Track the single owned pressure and speciation result sets plus their exact plotted-data CSV, sidecar, PNG, SVG, and PDF bundles.

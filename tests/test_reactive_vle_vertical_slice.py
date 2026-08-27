@@ -11,12 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFESTS = ROOT / "data/reference/MEA/manifests"
 TRACERS = (
     ROOT
-    / "analyses/phase3/ionic_epcsaft_regression/results/reactive_vle_vertical_slice"
+    / "analyses/reactive_epcsaft_parameter_evidence/results/reactive_vle_vertical_slice"
 )
-PRESSURE = ROOT / "analyses/phase3/ionic_epcsaft_regression/pressure_first/results"
+PRESSURE = ROOT / "analyses/reactive_epcsaft_parameter_evidence/pressure_first/results"
 CO2_WATER = (
     ROOT
-    / "analyses/phase3/ionic_epcsaft_regression/co2_water_induced_association/results"
+    / "analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results"
 )
 
 

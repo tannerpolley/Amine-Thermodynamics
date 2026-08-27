@@ -172,7 +172,7 @@ The 0.150 value is the pressure-drop/Raman “Calculated” result; it is not th
 ## Canonical-use consequences
 
 1. Preserve reaction direction, basis, and reference identity as separate fields. Normalize the selected Austgen R1--R3 and Tong/Bates R4--R5 records to the explicit common aqueous-molality scale before applying the generic Provider neutral-reference contractions.
-2. Record the R2 coefficient as a source conflict: Austgen 1991 prints `231.465`; Nasrifar 2010 prints `231.456`. The new source contract selects the original Austgen value; the legacy Phase 2 manifest retains the later Nasrifar value and must not describe it as a proven correction.
+2. Record the R2 coefficient as a source conflict: Austgen 1991 prints `231.465`; Nasrifar 2010 prints `231.456`. The new source contract selects the original Austgen value; the legacy historical fixed-parameter ePC-SAFT evaluation manifest retains the later Nasrifar value and must not describe it as a proven correction.
 3. Keep R5/Bates source coverage at 273--323 K unless an independent direct source is admitted. The official NIST primary PDF supplies the admitted equation even though Zotero does not contain a local copy.
 4. Keep Tong/Aroua K5 coverage at 293--323 K. Do not extrapolate it to 333.15 or 353.15 K without a new source.
 5. Treat Böttinger's `alpha approximately 0.5` oxazolidone onset as an exclusion/extension boundary. High-loading data without an oxazolidone species and balance record are not source-complete nine-species targets.

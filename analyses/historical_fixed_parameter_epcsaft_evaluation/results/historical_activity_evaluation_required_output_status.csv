@@ -1,0 +1,17 @@
+artifact,status,blocking_requirement,next_action
+historical_activity_evaluation_activity_speciation_problem.json,problem_definition_generated,none,Use as the source problem definition for the next implementation slice.
+historical_activity_evaluation_equilibrium_results.csv,model_ran_success,residual_acceptance_audit,"Treat as actual native ePC-SAFT output, but cite only gates that pass in historical_activity_evaluation_residual_acceptance_audit.csv."
+historical_activity_evaluation_pressure_speciation_parity.csv,model_ran_success,residual_acceptance_audit,Use only for residual-gated comparison with ideal reaction-equilibrium reference and literature targets.
+historical_activity_evaluation_pressure_metrics.csv,model_ran_success,pressure residual threshold,Pressure claims remain disallowed unless the pressure audit row passes.
+historical_activity_evaluation_speciation_metrics.csv,model_ran_success,speciation residual thresholds,Major-species speciation claims are limited to passing audit rows.
+historical_activity_evaluation_source_residual_summary.csv,model_ran_success,source residual accounting,Use this table for source-resolved pressure and speciation residual accounting without mixing target roles.
+historical_activity_evaluation_solver_diagnostics.csv,generated,none,Use this file as the hard gate against best-effort or failed solver rows being presented as model evidence.
+historical_activity_evaluation_residual_acceptance_audit.csv,model_ran_success,none,This file controls validation and claim permission; validation outcomes do not revise model-run status.
+historical_activity_evaluation_speciation_activity_curves.csv,generated_from_native_epcsaft_activity_solver,none,Render smooth historical fixed-parameter ePC-SAFT evaluation curves only from these solver-success rows.
+historical_activity_evaluation_speciation_target_roles.csv,generated,none,"Use this file to distinguish direct positive targets, reported-zero upper bounds, and balance-inferred context rows."
+historical_activity_evaluation_speciation_activity_plot.png,render_input_ready,historical_activity_evaluation_speciation_activity_curves.csv,Render from historical_activity_evaluation_speciation_activity_curves.csv; do not use failed diagnostics as curve rows.
+historical_activity_evaluation_pH_validation.csv,optional_validation_source_absent,none,"Do not use pH as a historical fixed-parameter ePC-SAFT evaluation gate unless scale, method, and activity-state mapping are recorded."
+historical_activity_evaluation_density_viscosity_validation.csv,optional_validation_inventory_ready,none,Use Amundsen density/viscosity only as optional external validation or reactive ePC-SAFT parameter evidence regularization evidence.
+historical_activity_evaluation_comparison_to_ideal_reference.md,problem_definition_generated,none,Update after convention-safe historical fixed-parameter ePC-SAFT evaluation equilibrium outputs exist.
+historical_activity_evaluation_dielectric_policy,fixed_policy_no_historical_activity_evaluation_fit,none,Keep MEA f_solv fixed in historical fixed-parameter ePC-SAFT evaluation; move only in a later fit with direct MEA-H2O dielectric evidence.
+historical_activity_evaluation_ionic_activity_policy,fixed_policy_no_historical_activity_evaluation_fit,none,Do not treat analog electrolyte data as direct MEA ion evidence for historical fixed-parameter ePC-SAFT evaluation.

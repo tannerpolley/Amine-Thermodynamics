@@ -9,8 +9,7 @@ from typing import Any, Mapping
 GATE0_PREREGISTRATION_PATH = (
     Path(__file__).resolve().parents[3]
     / "analyses"
-    / "phase3"
-    / "ionic_epcsaft_regression"
+    / "reactive_epcsaft_parameter_evidence"
     / "ionic_volumetric_fit_preregistration.json"
 )
 EXPECTED_GATE0_CANONICAL_SHA256 = (

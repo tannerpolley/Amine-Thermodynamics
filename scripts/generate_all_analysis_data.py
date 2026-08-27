@@ -7,9 +7,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FAST_COMMANDS = [
-    [sys.executable, "analyses/phase1/six_species_baseline/scripts/generate_data.py"],
-    [sys.executable, "analyses/phase1/smith_missen_baseline/scripts/generate_data.py"],
-    [sys.executable, "analyses/phase2/canonical_speciation_sources/scripts/generate_data.py"],
+    [sys.executable, "analyses/six_species_solubility_reference/scripts/generate_data.py"],
+    [sys.executable, "analyses/ideal_reaction_equilibrium/scripts/generate_data.py"],
+    [sys.executable, "analyses/speciation_evidence_harmonization/scripts/generate_data.py"],
 ]
 
 
