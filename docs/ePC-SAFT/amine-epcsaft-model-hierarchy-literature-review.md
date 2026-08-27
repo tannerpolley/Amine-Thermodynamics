@@ -119,12 +119,12 @@ the inspected repository text extractions are under
 | Relative-permittivity parameters | Unloaded and loaded solution measurements | Compare direct and screened formulations independently of pressure fitting |
 | Reaction correlations | Source correlations with declared temperature domains | Fixed initially; reopen only after EOS qualification |
 
-### 5.1 Frozen-set handoff
+### 5.1 Future packet handoff
 
-This review fixes the admissible model structure and provenance rules. The
-current best-available engineering magnitudes are frozen in
-`data/reference/MEA/parameters/best_available_mea_epcsaft/1/freeze.toml`. That
-record binds:
+This review fixes the admissible model structure and provenance rules. There is
+no active MEA parameter set. Engine Issue #80 must produce and validate the
+next immutable packet before this repository adopts numerical authority. That
+future packet must bind:
 
 - the immutable Engine wheel and SHA-256 hash;
 - the species, reactions, standard states, association graph, and
@@ -135,10 +135,9 @@ record binds:
   summaries, and uncertainty results; and
 - the downstream-property coverage and explicit transfer decision.
 
-The frozen record is the numerical authority for bounded MEA calculations. It
-does not claim independent predictive validation, parameter uniqueness, or
-absorber-column transfer. This review remains the source-chain authority
-explaining why those parameter blocks and validation requirements exist.
+Until that packet is accepted, no bounded MEA calculation authority exists.
+This review remains source-chain evidence explaining why the parameter blocks
+and validation requirements exist.
 
 ## 6. Neutral qualification
 

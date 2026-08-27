@@ -26,7 +26,6 @@ from MEA.common.plot_style import (
     temperature_color,
     write_mpl_sidecar,
 )
-from MEA.epcsaft_neutral.parameters import DATASET_DIR
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
 OUT_DIR = ANALYSIS_DIR / "results" / "pressure"
@@ -73,7 +72,7 @@ def main() -> int:
         data_path=curves_path,
     )
     summary_json = {
-        "dataset_dir": repo_relative_path(DATASET_DIR),
+        "status": "historical_render_only",
         "metrics": repo_relative_path(metrics_path),
         "summary": repo_relative_path(summary_path),
         "curves": repo_relative_path(curves_path),

@@ -10,15 +10,15 @@ uv run ruff check src scripts analyses tests
 uv run python scripts/doctor.py
 uv run python scripts/validate_project.py quick
 uv run python scripts/validate_project.py confidence
-uv run python scripts/render_all_plots.py
-uv run python scripts/generate_all_analysis_data.py
 uv run python analyses/<category>/<analysis_id>/scripts/generate_data.py
 uv run python analyses/<category>/<analysis_id>/scripts/render_figures.py
 bash scripts/build_manuscript.sh
 uv run python scripts/check_manuscript_freshness.py
 ```
 
-`scripts/render_all_plots.py` is the single figure-regeneration command. It only calls analysis-local `render_figures.py` scripts, which read already generated result tables and write curated plot snapshots plus PNG/SVG/PDF outputs. `scripts/generate_all_analysis_data.py` refreshes canonical CSV/JSON result tables without rendering figures; expensive ionic regeneration is opt-in with `--include-ionic-full` and `--include-expensive`.
+Historical calculated tables and figures remain evidence only. New ePC-SAFT
+analysis and validation is developed in the Engine repository; this repository
+replays an accepted immutable packet after upstream acceptance.
 
 The locked runtime includes separate immutable Git revisions for the current `epcsaft` implementation and the legacy `pcsaft.flashTQ` baseline. The legacy dependency declares its omitted Cython/NumPy build requirements through `tool.uv.extra-build-dependencies`, so a clean `uv sync --locked --group test` builds the same extension without a sibling checkout.
 
@@ -29,7 +29,7 @@ Old file-path commands such as `uv run python MEA/run_plot_exports.py` are inten
 
 - `src/MEA/`: importable model, data-loading, ePC-SAFT, and plotting support code.
 - `data/reference/MEA/`: reusable MEA VLE and chemical-equilibrium reference tables.
-- `data/reference/epcsaft_datasets/`: reusable ePC-SAFT parameter datasets.
+- `data/reference/epcsaft_bundles/`: historical, hash-bound Engine input and diagnostic provenance.
 - `analyses/paper_validation/2015_baygi/`: Baygi 2015 figure, parameter-table, and neutral parity reproduction.
 - `analyses/phase1/six_species_baseline/`: retained six-species PC-SAFT pressure/speciation baseline needed for neutral parity checks.
 - `analyses/phase1/neutral_epcsaft_parity/`: neutral apparent-component ePC-SAFT parity artifacts.
@@ -57,7 +57,7 @@ format, and raw fit requests/results must remain in ignored `results/runs/`.
 
 ## Key Artifact Paths
 
-- `data/reference/MEA/parameters/best_available_mea_epcsaft/1/freeze.toml`
+- `analyses/phase3/ionic_epcsaft_regression/results/issue_70/predictive_mea_parameter_decision.json`
 - `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.png`
 - `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.svg`
 - `analyses/phase1/six_species_baseline/results/speciation/speciation.png`
@@ -87,4 +87,8 @@ bash docs/latex/scripts/sync_to_overleaf_mirror.sh
 
 ## Model Boundaries
 
-The active package-centered path is the full ionic ePC-SAFT workflow. The neutral ePC-SAFT workflow checks apparent `CO2/MEA/H2O` parity against the retained six-species baseline. The removed nine-species/Gekko workflow was diagnostic-only legacy material and is preserved on `legacy/main-legacy`.
+There is no active MEA ePC-SAFT parameter set. Engine Issue #80 owns the next
+calculation and validation campaign. This repository retains source evidence,
+the Issue #70 supported-negative decision, and replay/rendering conventions for
+an accepted immutable packet; historical calculated artifacts are not live
+parameter authority.

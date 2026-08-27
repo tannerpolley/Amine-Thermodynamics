@@ -32,13 +32,12 @@ their own retained evidence explicitly says otherwise. Optimizer termination is
 reported as numerical evidence; it does not by itself accept or reject an
 engineering parameter set.
 
-Issue 70 retained a conservative supported-negative predictive decision. A
-subsequent user-directed engineering selection froze the calorimetry-balanced
-configuration as the best available MEA set. Its numerical authority is
-`data/reference/MEA/parameters/best_available_mea_epcsaft/1/freeze.toml`.
-The freeze supports bounded MEA calculations and manuscript comparison while
-preserving the lack of independent validation, parameter uniqueness, and exact
-evaluation-wheel replay. Absorber-column transfer remains unauthorized.
+Issue 70 retained a conservative supported-negative predictive decision. There
+is no active MEA parameter set and no bounded-calculation authority. Engine
+Issue #80 owns the next direct ePC-SAFT analysis and validation campaign. This
+repository may adopt only an accepted immutable packet, identified by exact
+Engine commit, wheel SHA-256, packet path/version, fingerprint, and file hashes.
+Absorber-column transfer remains unauthorized.
 
 The authoritative scientific plan is
 [`PREDICTIVE_MEA_PROGRAM.md`](PREDICTIVE_MEA_PROGRAM.md). GitHub issues are the
@@ -64,9 +63,8 @@ documents is [`DOCUMENT_AUTHORITY_INDEX.md`](DOCUMENT_AUTHORITY_INDEX.md).
   binary, electrolyte, and model-selection comparisons.
 - **Diagnostic fit:** a transparent optimization useful for sensitivity,
   runtime, or model-form diagnosis but not sufficient for adoption.
-- **Best-available engineering freeze:** one immutable, hash-bound selection
-  for bounded calculations when no candidate satisfies every predictive gate;
-  its limitations remain part of the numerical authority.
+- **Accepted immutable packet:** an Engine-produced, reviewed, hash-bound
+  calculation packet replayed here only after its scientific gates pass.
 - **Candidate eligible for adoption:** a complete fitted parameter record that
   meets its source, domain, numerical, identifiability, independent-validation,
   and immutable installed-wheel replay criteria.
@@ -81,8 +79,8 @@ documents is [`DOCUMENT_AUTHORITY_INDEX.md`](DOCUMENT_AUTHORITY_INDEX.md).
 
 1. Repository `AGENTS.md`, the pinned Engine identity, and current native
    GitHub issues.
-2. The frozen best-available parameter record, this context, and
-   `PREDICTIVE_MEA_PROGRAM.md`.
+2. This context, `PREDICTIVE_MEA_PROGRAM.md`, and any future accepted immutable
+   Engine packet.
 3. The source synthesis in
    `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md`.
 4. Frozen observation identities, dependency manifests, analysis descriptions,

@@ -8,19 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FAST_COMMANDS = [
     [sys.executable, "analyses/phase1/six_species_baseline/scripts/generate_data.py"],
-    [sys.executable, "analyses/phase1/neutral_epcsaft_parity/scripts/generate_data.py"],
-    [sys.executable, "analyses/paper_validation/2015_baygi/scripts/generate_data.py"],
     [sys.executable, "analyses/phase1/smith_missen_baseline/scripts/generate_data.py"],
-    [sys.executable, "analyses/phase2/activity_epcsaft/scripts/generate_data.py"],
     [sys.executable, "analyses/phase2/canonical_speciation_sources/scripts/generate_data.py"],
-]
-IONIC_FULL_COMMANDS = [
-    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py"],
-]
-EXPENSIVE_DIAGNOSTIC_COMMANDS = [
-    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/compute_parameter_sensitivity.py"],
-    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/fit_trace_carbonate_born.py"],
-    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/derive_oh_born_parameter.py"],
 ]
 
 
@@ -36,14 +25,8 @@ def run_commands(commands: list[list[str]]) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate analysis CSV/JSON data tables without rendering figures.")
-    parser.add_argument("--include-ionic-full", action="store_true", help="Regenerate full ionic pressure/speciation CSVs; this can take many minutes.")
-    parser.add_argument("--include-expensive", action="store_true", help="Also regenerate slow ionic diagnostic CSV/JSON tables used by optional plots.")
-    args = parser.parse_args()
+    parser.parse_args()
     commands = list(FAST_COMMANDS)
-    if args.include_ionic_full:
-        commands.extend(IONIC_FULL_COMMANDS)
-    if args.include_expensive:
-        commands.extend(EXPENSIVE_DIAGNOSTIC_COMMANDS)
     return run_commands(commands)
 
 
