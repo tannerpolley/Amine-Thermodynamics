@@ -1,28 +1,19 @@
-id: mea_parameter_qualification
-title: MEA neutral qualification and reactive regression
-status: active
-summary: Qualify neutral binaries with induced CO2-water association fixed, then fit the smallest identifiable nine-species reactive parameter block.
+id: mea_neutral_qualification
+title: Historical MEA Neutral Qualification
+status: historical_evidence
+summary: Retains the Held-water 2B, 3B, and 4C MEA-family qualification and exact plotted rows; no neutral candidate is active.
 owner: MEA-Thermodynamics
 inputs:
   - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Cai_1996_MEA_H2O_VLE.csv
-    kind: curated_input
-  - path: data/reference/MEA/manifests/reactive_vle_cross_validation.csv
-    kind: curated_input
+    kind: curated_source_observations
 outputs:
   - path: results/figures/cai_held_water_mea_family_summary.csv
-    kind: comparison_table
+    kind: historical_comparison_table
   - path: results/figures/cai_held_water_mea_family_comparison.svg
-    kind: figure
-  - path: results/grepe_gate0/summary.json
-    kind: diagnostic_regression_receipt
+    kind: historical_figure
 commands:
-  generate:
-    - .venv/bin/python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/fit_cai_mea_water_binary.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/cai_held_water_mea_2b_fit.json
-    - .venv/bin/python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/fit_cai_mea_water_binary.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/cai_held_water_mea_3b_fit.json
-    - .venv/bin/python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/fit_cai_mea_water_binary.py --config analyses/phase3/ionic_epcsaft_regression/pressure_first/config/cai_held_water_mea_4c_fit.json
   render:
-    - .venv/bin/python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/render_figures.py
+    - uv run python analyses/phase3/ionic_epcsaft_regression/pressure_first/scripts/render_figures.py
 runtime:
-  class: focused
-  full_seconds: 80
-results_policy: Retain the three fit summaries, exact plotted rows, comparison table, and PNG/SVG/PDF figure bundle.
+  class: render_only
+results_policy: Preserve the three retained Held-water family summaries, exact plotted rows, and figure bundle as historical evidence only.
