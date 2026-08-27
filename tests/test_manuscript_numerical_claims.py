@@ -10,7 +10,7 @@ LATEX = ROOT / "docs/latex"
 
 def test_manuscript_numbers_match_computed_comparison() -> None:
     comparison = json.loads(
-        (ROOT / "analyses/phase2/activity_epcsaft/results/controlled_comparison/metrics.json").read_text(
+        (ROOT / "analyses/historical_fixed_parameter_epcsaft_evaluation/results/controlled_comparison/metrics.json").read_text(
             encoding="utf-8"
         )
     )

@@ -14,8 +14,7 @@ MANIFEST_ROOT = DATA_ROOT / "manifests"
 READINESS_SUMMARY = (
     DATA_ROOT.parents[2]
     / "analyses"
-    / "phase3"
-    / "ionic_epcsaft_regression"
+    / "reactive_epcsaft_parameter_evidence"
     / "results"
     / "readiness"
     / "regression_readiness_summary.json"

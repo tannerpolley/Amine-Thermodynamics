@@ -26,7 +26,7 @@ SPLIT = ROOT / "data/reference/MEA/manifests/volumetric_grouped_split_manifest.c
 PARAMETER_MAP = ROOT / "data/reference/MEA/manifests/ionic_parameter_observable_map.csv"
 PREREGISTRATION = (
     ROOT
-    / "analyses/phase3/ionic_epcsaft_regression/ionic_volumetric_fit_preregistration.json"
+    / "analyses/reactive_epcsaft_parameter_evidence/ionic_volumetric_fit_preregistration.json"
 )
 
 

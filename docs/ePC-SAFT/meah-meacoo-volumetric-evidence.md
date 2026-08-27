@@ -145,7 +145,7 @@ replace, not simply enlarge, the active correction block.
 
 The complete objectives, scaling, bounds and their limited status, deterministic
 multistart policy, diagnostics, receipts, and stop conditions are frozen in
-`analyses/phase3/ionic_epcsaft_regression/ionic_volumetric_fit_preregistration.json`.
+`analyses/reactive_epcsaft_parameter_evidence/ionic_volumetric_fit_preregistration.json`.
 
 ## Direct measurement path
 

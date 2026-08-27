@@ -9,16 +9,16 @@ from MEA.common.model_comparison import build_controlled_comparison
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RESULTS = ROOT / "analyses/phase2/activity_epcsaft/results"
+RESULTS = ROOT / "analyses/historical_fixed_parameter_epcsaft_evaluation/results"
 CONTROLLED = RESULTS / "controlled_comparison"
 
 
 def test_controlled_comparison_recomputes_persisted_metrics() -> None:
     bundle = build_controlled_comparison(
         pd.read_csv(ROOT / "data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv"),
-        pd.read_csv(ROOT / "analyses/phase1/smith_missen_baseline/results/phase1_pressure_results.csv"),
-        pd.read_csv(RESULTS / "phase2_pressure_results.csv"),
-        pd.read_csv(RESULTS / "phase2_speciation_target_roles.csv"),
+        pd.read_csv(ROOT / "analyses/ideal_reaction_equilibrium/results/ideal_reference_pressure_results.csv"),
+        pd.read_csv(RESULTS / "historical_activity_evaluation_pressure_results.csv"),
+        pd.read_csv(RESULTS / "historical_activity_evaluation_speciation_target_roles.csv"),
     )
     persisted_pairs = pd.read_csv(CONTROLLED / "paired_pressure_rows.csv")
     persisted_pairs["rejection_reason"] = persisted_pairs["rejection_reason"].fillna("")

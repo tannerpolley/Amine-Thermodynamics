@@ -6,11 +6,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 COMMANDS = [
-    [sys.executable, "analyses/phase1/six_species_baseline/scripts/render_figures.py"],
-    [sys.executable, "analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py"],
+    [sys.executable, "analyses/six_species_solubility_reference/scripts/render_figures.py"],
+    [sys.executable, "analyses/reactive_epcsaft_parameter_evidence/scripts/render_figures.py"],
     [sys.executable, "analyses/paper_validation/2015_baygi/scripts/render_figures.py"],
-    [sys.executable, "analyses/phase1/smith_missen_baseline/scripts/render_figures.py"],
-    [sys.executable, "analyses/phase2/canonical_speciation_sources/scripts/render_figures.py"],
+    [sys.executable, "analyses/ideal_reaction_equilibrium/scripts/render_figures.py"],
+    [sys.executable, "analyses/speciation_evidence_harmonization/scripts/render_figures.py"],
 ]
 
 

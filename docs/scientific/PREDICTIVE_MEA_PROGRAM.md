@@ -255,7 +255,7 @@ adoption.
 | `docs/scientific/CONTEXT.md` | MEA question, vocabulary, authority, claims | Authoritative scientific definition named by repository guidance and issue #70 |
 | This plan | Model selection, fitting, validation, and manuscript sequence | Authoritative planning record; native GitHub issues own execution |
 | `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md` | Primary/secondary source synthesis and retained-model scientific basis | Current evidence authority |
-| `analyses/phase3/ionic_epcsaft_regression/pressure_first/README.md` | Executed neutral qualification and current practical sequence | Analysis record only |
+| `analyses/reactive_epcsaft_parameter_evidence/pressure_first/README.md` | Executed neutral qualification and current practical sequence | Analysis record only |
 | Engine GREPE plan | Public equilibrium and regression callable design | Authoritative in the Engine repository |
 | Engine coupled-regression master plan | Pre-GREPE readiness and source inventory | Historical source/provenance record |
 | Column August 27 plan and upstream handoff | Earlier integration sequence | Historical; Engine #30/#31 are closed |

@@ -16,7 +16,7 @@ ACTIVITY_REACTION_MANIFEST = (
     / "reference"
     / "MEA"
     / "manifests"
-    / "phase2_reaction_constant_source_verification.csv"
+    / "historical_activity_evaluation_reaction_constant_source_verification.csv"
 )
 REACTION_NAMES = {
     "R1": "R1_water_autoionization",
