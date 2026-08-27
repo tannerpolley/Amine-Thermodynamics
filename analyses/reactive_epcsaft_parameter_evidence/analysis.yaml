@@ -1,0 +1,27 @@
+id: reactive_epcsaft_parameter_evidence
+title: Reactive ePC-SAFT Parameter Evidence
+status: historical_evidence
+summary: Retains the Issue 70 supported-negative decision, readiness receipts, and bounded diagnostic evidence; no active MEA parameter set exists.
+owner: MEA-Thermodynamics
+inputs:
+  - path: data/reference/MEA/manifests/historical_activity_evaluation_reaction_constant_source_verification.csv
+    kind: verified_reaction_catalog
+  - path: data/reference/MEA/manifests/target_admission_manifest.csv
+    kind: target_admission_evidence
+  - path: data/reference/MEA/manifests/grouped_split_manifest.csv
+    kind: historical_partition_evidence
+outputs:
+  - path: analyses/reactive_epcsaft_parameter_evidence/results/issue_70
+    kind: supported_negative_decision
+  - path: analyses/reactive_epcsaft_parameter_evidence/results/readiness
+    kind: readiness_and_source_hash_receipts
+  - path: analyses/reactive_epcsaft_parameter_evidence/results/reactive_vle_vertical_slice
+    kind: retained_bounded_diagnostic
+commands:
+  render:
+    - uv run python analyses/reactive_epcsaft_parameter_evidence/scripts/render_figures.py
+runtime:
+  class: render_only
+manuscript_consumers:
+  - docs/latex/sections/mea_system_modeling_results.tex
+results_policy: Preserve evidence and exact receipts only. Historical calculations do not define an active parameter set.

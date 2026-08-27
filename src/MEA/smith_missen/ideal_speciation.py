@@ -60,7 +60,7 @@ class SmithMissenIdealSpeciationResult:
 
 
 def equilibrium_log_constants(temperature_K: float) -> np.ndarray:
-    """Return mole-fraction-basis log equilibrium constants for Phase 1."""
+    """Return mole-fraction-basis log equilibrium constants for ideal reaction-equilibrium reference."""
     constants = REACTION_CONSTANTS
     a, b, c, d = constants.T
     temperature = float(temperature_K)
@@ -206,7 +206,7 @@ def solve_ideal_speciation(
     message = str(solution.message)
     if not success:
         raise RuntimeError(
-            "Phase 1 ideal Smith-Missen speciation solve failed "
+            "ideal reaction-equilibrium reference ideal Smith-Missen speciation solve failed "
             f"at loading={loading:g}, T={temperature_K:g} K, max_abs_residual={max_abs_residual:.3e}: {message}"
         )
     return SmithMissenIdealSpeciationResult(

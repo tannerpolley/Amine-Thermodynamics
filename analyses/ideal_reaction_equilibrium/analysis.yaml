@@ -1,0 +1,31 @@
+id: ideal_reaction_equilibrium
+title: Ideal Reaction-Equilibrium Reference
+status: manuscript_evidence
+summary: Curates ideal reaction-equilibrium pressure and ideal-activity speciation evidence into manuscript-owned tables and figures.
+owner: project
+inputs:
+  - path: analyses/six_species_solubility_reference/results
+    kind: canonical_six_species_results
+  - path: analyses/neutral_pcsaft_pressure_reference/results/pressure
+    kind: canonical_neutral_parity_results
+  - path: data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv
+    kind: experimental_speciation_dataset
+outputs:
+  - path: analyses/ideal_reaction_equilibrium/results
+    kind: curated_ideal_reference_tables
+  - path: analyses/ideal_reaction_equilibrium/figures/pressure/output
+    kind: pressure_plot_bundle
+  - path: analyses/ideal_reaction_equilibrium/figures/speciation/output
+    kind: speciation_plot_bundles
+commands:
+  generate:
+    - uv run python analyses/ideal_reaction_equilibrium/scripts/generate_data.py
+  render:
+    - uv run python analyses/ideal_reaction_equilibrium/scripts/render_figures.py
+runtime:
+  class: quick
+  expected_seconds: 5
+manuscript_consumers:
+  - docs/latex/sections/data_methods.tex
+  - docs/latex/sections/mea_system_modeling_results.tex
+results_policy: Track curated ideal reaction-equilibrium reference tables under results and figure-specific inputs, exact plotted-data snapshots, sidecars, PNGs, SVGs, and PDFs under figures; never mirror whole calculation tables into figure outputs.

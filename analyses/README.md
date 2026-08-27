@@ -8,22 +8,23 @@ analyses/
     ionic_parameter_fit_playground/
   paper_validation/
     2015_baygi/
-  phase1/
-    six_species_baseline/
-    neutral_epcsaft_parity/
-    smith_missen_baseline/
-  phase2/
-    activity_epcsaft/
-    canonical_speciation_sources/
-  phase3/
-    ionic_epcsaft_regression/
+  six_species_solubility_reference/
+  neutral_pcsaft_pressure_reference/
+  ideal_reaction_equilibrium/
+  speciation_evidence_harmonization/
+  historical_fixed_parameter_epcsaft_evaluation/
+  reactive_epcsaft_parameter_evidence/
 ```
 
 `toybox/` retains compact rejection receipts from retired exploratory
 calculations. These results are excluded from parameter promotion, manuscript
 inputs, and predictive-model claims.
 
-`paper_validation/` is reserved for paper-matching reproduction work: figures, tables, and parameters should be recreated to match the cited paper artifact as directly as possible. The phase folders are project-stage analyses: Phase 1 keeps retained neutral and Smith-Missen baselines, Phase 2 keeps activity-based true-species ePC-SAFT evaluation, and Phase 3 keeps historical full-ionic evidence and dormant methods awaiting an accepted immutable parameter packet.
+`paper_validation/` is reserved for paper-matching reproduction work: figures,
+tables, and parameters should be recreated to match the cited paper artifact as
+directly as possible. The other analysis names describe their scientific role,
+not a project stage. Historical fixed-parameter evidence remains explicitly
+separate from future reactive ePC-SAFT parameter evidence.
 
 There is no active analysis research notebook. After Review Pass, a future
 accepted packet may be summarized in `analyses/<short-id>/notebook.qmd`; that
@@ -32,7 +33,7 @@ notebook must read retained results and must not become calculation authority.
 Each executable analysis should remain self-contained:
 
 ```text
-analyses/<category>/<analysis_id>/
+analyses/<short-id>/
   README.md
   analysis.yaml
   data/

@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 
-PHASE1_MODEL_FAMILY = "legacy_pcsaft_smith_missen"
+IDEAL_REFERENCE_MODEL_FAMILY = "legacy_pcsaft_smith_missen"
 CANONICAL_IDENTITY_COLUMNS = (
     "temperature_C",
     "MEA_weight_fraction",
@@ -78,26 +78,26 @@ def _canonical_frame(canonical_vle: pd.DataFrame) -> pd.DataFrame:
     return canonical
 
 
-def _map_phase1_to_canonical(
-    canonical: pd.DataFrame, phase1_pressure: pd.DataFrame
+def _map_ideal_reference_to_canonical(
+    canonical: pd.DataFrame, ideal_reference_pressure: pd.DataFrame
 ) -> pd.DataFrame:
     _require_columns(
-        phase1_pressure,
+        ideal_reference_pressure,
         {
             "model_family",
             *CANONICAL_IDENTITY_COLUMNS,
             "predicted_CO2_pressure_kPa",
             "log10_pred_over_obs",
         },
-        "Phase 1 pressure data",
+        "ideal reaction-equilibrium reference pressure data",
     )
-    phase1 = phase1_pressure.loc[
-        phase1_pressure["model_family"] == PHASE1_MODEL_FAMILY
+    ideal_reference = ideal_reference_pressure.loc[
+        ideal_reference_pressure["model_family"] == IDEAL_REFERENCE_MODEL_FAMILY
     ].copy()
-    if phase1.empty:
-        raise ValueError(f"Phase 1 model family is missing: {PHASE1_MODEL_FAMILY}")
-    if phase1.duplicated(list(CANONICAL_IDENTITY_COLUMNS)).any():
-        raise ValueError("duplicate Phase 1 comparison identity")
+    if ideal_reference.empty:
+        raise ValueError(f"ideal reaction-equilibrium reference model family is missing: {IDEAL_REFERENCE_MODEL_FAMILY}")
+    if ideal_reference.duplicated(list(CANONICAL_IDENTITY_COLUMNS)).any():
+        raise ValueError("duplicate ideal reaction-equilibrium reference comparison identity")
 
     canonical_columns = [
         "row_id",
@@ -106,7 +106,7 @@ def _map_phase1_to_canonical(
         "uncertainty_kPa",
         "uncertainty_available",
     ]
-    mapped = phase1.merge(
+    mapped = ideal_reference.merge(
         canonical[canonical_columns],
         on=list(CANONICAL_IDENTITY_COLUMNS),
         how="left",
@@ -115,7 +115,7 @@ def _map_phase1_to_canonical(
     )
     unmatched = mapped.loc[mapped["_merge"] != "both", list(CANONICAL_IDENTITY_COLUMNS)]
     if not unmatched.empty:
-        raise ValueError(f"unmatched Phase 1 records: {unmatched.to_dict('records')}")
+        raise ValueError(f"unmatched ideal reaction-equilibrium reference records: {unmatched.to_dict('records')}")
     return mapped.drop(columns="_merge").sort_values("row_id").reset_index(drop=True)
 
 
@@ -125,9 +125,9 @@ def _truthy(value: object) -> bool:
     return str(value).strip().lower() in {"true", "1", "yes"}
 
 
-def _validated_phase2(canonical: pd.DataFrame, phase2_pressure: pd.DataFrame) -> pd.DataFrame:
+def _validated_historical_activity_evaluation(canonical: pd.DataFrame, historical_activity_evaluation_pressure: pd.DataFrame) -> pd.DataFrame:
     _require_columns(
-        phase2_pressure,
+        historical_activity_evaluation_pressure,
         {
             "row_id",
             "source",
@@ -140,12 +140,12 @@ def _validated_phase2(canonical: pd.DataFrame, phase2_pressure: pd.DataFrame) ->
             "solver_success",
             "message",
         },
-        "Phase 2 pressure data",
+        "historical fixed-parameter ePC-SAFT evaluation pressure data",
     )
-    if phase2_pressure["row_id"].duplicated().any():
-        raise ValueError("duplicate Phase 2 row_id")
+    if historical_activity_evaluation_pressure["row_id"].duplicated().any():
+        raise ValueError("duplicate historical fixed-parameter ePC-SAFT evaluation row_id")
 
-    checked = phase2_pressure.merge(
+    checked = historical_activity_evaluation_pressure.merge(
         canonical[
             [
                 "row_id",
@@ -163,7 +163,7 @@ def _validated_phase2(canonical: pd.DataFrame, phase2_pressure: pd.DataFrame) ->
     )
     if (checked["_merge"] != "both").any():
         missing = checked.loc[checked["_merge"] != "both", "row_id"].tolist()
-        raise ValueError(f"Phase 2 row IDs are absent from canonical VLE data: {missing}")
+        raise ValueError(f"historical fixed-parameter ePC-SAFT evaluation row IDs are absent from canonical VLE data: {missing}")
 
     mismatched = checked["source"] != checked["source_canonical"]
     for column in CANONICAL_IDENTITY_COLUMNS:
@@ -176,7 +176,7 @@ def _validated_phase2(canonical: pd.DataFrame, phase2_pressure: pd.DataFrame) ->
         )
     if mismatched.any():
         raise ValueError(
-            "Phase 2 values do not match canonical records: "
+            "historical fixed-parameter ePC-SAFT evaluation values do not match canonical records: "
             f"{checked.loc[mismatched, 'row_id'].tolist()}"
         )
     return checked.drop(columns="_merge").sort_values("row_id").reset_index(drop=True)
@@ -282,40 +282,40 @@ def _uncertainty_rows(
 
 def build_controlled_comparison(
     canonical_vle: pd.DataFrame,
-    phase1_pressure: pd.DataFrame,
-    phase2_pressure: pd.DataFrame,
+    ideal_reference_pressure: pd.DataFrame,
+    historical_activity_evaluation_pressure: pd.DataFrame,
     speciation_roles: pd.DataFrame,
 ) -> ComparisonBundle:
     """Build a same-record ideal/activity pressure comparison with explicit coverage."""
     canonical = _canonical_frame(canonical_vle)
-    phase1 = _map_phase1_to_canonical(canonical, phase1_pressure)
-    phase2 = _validated_phase2(canonical, phase2_pressure)
+    ideal_reference = _map_ideal_reference_to_canonical(canonical, ideal_reference_pressure)
+    historical_activity_evaluation = _validated_historical_activity_evaluation(canonical, historical_activity_evaluation_pressure)
     _require_columns(
         speciation_roles,
         {"target_role", "validation_use"},
         "speciation target roles",
     )
 
-    phase1_valid = _valid_residual(
-        phase1["observed_CO2_pressure_kPa"],
-        phase1["predicted_CO2_pressure_kPa"],
-        phase1["log10_pred_over_obs"],
+    ideal_reference_valid = _valid_residual(
+        ideal_reference["observed_CO2_pressure_kPa"],
+        ideal_reference["predicted_CO2_pressure_kPa"],
+        ideal_reference["log10_pred_over_obs"],
     )
-    phase1["phase1_status"] = np.where(phase1_valid, "accepted", "rejected")
-    phase1["phase1_accepted"] = phase1_valid
+    ideal_reference["ideal_reference_status"] = np.where(ideal_reference_valid, "accepted", "rejected")
+    ideal_reference["ideal_reference_accepted"] = ideal_reference_valid
 
-    phase2_valid = _valid_residual(
-        phase2["observed_CO2_pressure_kPa"],
-        phase2["model_CO2_pressure_kPa"],
-        phase2["log10_model_over_data"],
-    ) & phase2["solver_success"].map(_truthy)
-    phase2["phase2_status"] = np.where(phase2_valid, "accepted", "rejected")
-    phase2["phase2_accepted"] = phase2_valid
+    historical_activity_evaluation_valid = _valid_residual(
+        historical_activity_evaluation["observed_CO2_pressure_kPa"],
+        historical_activity_evaluation["model_CO2_pressure_kPa"],
+        historical_activity_evaluation["log10_model_over_data"],
+    ) & historical_activity_evaluation["solver_success"].map(_truthy)
+    historical_activity_evaluation["historical_activity_evaluation_status"] = np.where(historical_activity_evaluation_valid, "accepted", "rejected")
+    historical_activity_evaluation["historical_activity_evaluation_accepted"] = historical_activity_evaluation_valid
 
-    phase1_for_pair = phase1.rename(
+    ideal_reference_for_pair = ideal_reference.rename(
         columns={
-            "predicted_CO2_pressure_kPa": "phase1_model_pressure_kPa",
-            "log10_pred_over_obs": "phase1_log10_residual",
+            "predicted_CO2_pressure_kPa": "ideal_reference_model_pressure_kPa",
+            "log10_pred_over_obs": "ideal_reference_log10_residual",
         }
     )[
         [
@@ -324,57 +324,57 @@ def build_controlled_comparison(
             *CANONICAL_IDENTITY_COLUMNS,
             "uncertainty_kPa",
             "uncertainty_available",
-            "phase1_model_pressure_kPa",
-            "phase1_log10_residual",
-            "phase1_status",
-            "phase1_accepted",
+            "ideal_reference_model_pressure_kPa",
+            "ideal_reference_log10_residual",
+            "ideal_reference_status",
+            "ideal_reference_accepted",
         ]
     ]
-    phase2_for_pair = phase2.rename(
+    historical_activity_evaluation_for_pair = historical_activity_evaluation.rename(
         columns={
-            "model_CO2_pressure_kPa": "phase2_model_pressure_kPa",
-            "log10_model_over_data": "phase2_log10_residual",
-            "message": "phase2_message",
+            "model_CO2_pressure_kPa": "historical_activity_evaluation_model_pressure_kPa",
+            "log10_model_over_data": "historical_activity_evaluation_log10_residual",
+            "message": "historical_activity_evaluation_message",
         }
     )[
         [
             "row_id",
-            "phase2_model_pressure_kPa",
-            "phase2_log10_residual",
-            "phase2_status",
-            "phase2_accepted",
-            "phase2_message",
+            "historical_activity_evaluation_model_pressure_kPa",
+            "historical_activity_evaluation_log10_residual",
+            "historical_activity_evaluation_status",
+            "historical_activity_evaluation_accepted",
+            "historical_activity_evaluation_message",
         ]
     ]
-    paired = phase1_for_pair.merge(
-        phase2_for_pair,
+    paired = ideal_reference_for_pair.merge(
+        historical_activity_evaluation_for_pair,
         on="row_id",
         how="left",
         validate="one_to_one",
         indicator=True,
     )
-    missing_phase2 = paired["_merge"] != "both"
-    paired.loc[missing_phase2, "phase2_status"] = "missing"
-    paired["phase2_accepted"] = paired["phase2_accepted"].fillna(False).astype(bool)
+    missing_historical_activity_evaluation = paired["_merge"] != "both"
+    paired.loc[missing_historical_activity_evaluation, "historical_activity_evaluation_status"] = "missing"
+    paired["historical_activity_evaluation_accepted"] = paired["historical_activity_evaluation_accepted"].fillna(False).astype(bool)
     paired["comparison_eligible"] = (
-        paired["phase1_accepted"].astype(bool) & paired["phase2_accepted"]
+        paired["ideal_reference_accepted"].astype(bool) & paired["historical_activity_evaluation_accepted"]
     )
 
     def rejection_reason(row: pd.Series) -> str:
         reasons: list[str] = []
-        if not bool(row["phase1_accepted"]):
-            reasons.append("phase1: invalid or nonfinite pressure result")
-        if row["phase2_status"] == "missing":
-            reasons.append("phase2: prediction missing")
-        elif not bool(row["phase2_accepted"]):
-            message = str(row.get("phase2_message") or "invalid or nonfinite pressure result")
-            reasons.append(f"phase2: {message}")
+        if not bool(row["ideal_reference_accepted"]):
+            reasons.append("ideal_reference: invalid or nonfinite pressure result")
+        if row["historical_activity_evaluation_status"] == "missing":
+            reasons.append("historical_activity_evaluation: prediction missing")
+        elif not bool(row["historical_activity_evaluation_accepted"]):
+            message = str(row.get("historical_activity_evaluation_message") or "invalid or nonfinite pressure result")
+            reasons.append(f"historical_activity_evaluation: {message}")
         return "; ".join(reasons)
 
     paired["rejection_reason"] = paired.apply(rejection_reason, axis=1)
     paired["activity_minus_ideal_abs_log10_error"] = (
-        paired["phase2_log10_residual"].abs()
-        - paired["phase1_log10_residual"].abs()
+        paired["historical_activity_evaluation_log10_residual"].abs()
+        - paired["ideal_reference_log10_residual"].abs()
     ).where(paired["comparison_eligible"])
     paired["preferred_model_on_row"] = np.where(
         ~paired["comparison_eligible"],
@@ -391,9 +391,9 @@ def build_controlled_comparison(
     )
     paired = paired.drop(columns="_merge").sort_values("row_id").reset_index(drop=True)
 
-    phase2_context = phase2.rename(
+    historical_activity_evaluation_context = historical_activity_evaluation.rename(
         columns={
-            "log10_model_over_data": "phase2_log10_residual",
+            "log10_model_over_data": "historical_activity_evaluation_log10_residual",
             "temperature_C_canonical": "temperature_C_context",
         }
     ).copy()
@@ -402,29 +402,29 @@ def build_controlled_comparison(
             paired,
             scope="paired",
             model="ideal_baseline",
-            residual_column="phase1_log10_residual",
+            residual_column="ideal_reference_log10_residual",
             accepted_column="comparison_eligible",
         )
         + _metric_rows(
             paired,
             scope="paired",
             model="activity_model",
-            residual_column="phase2_log10_residual",
+            residual_column="historical_activity_evaluation_log10_residual",
             accepted_column="comparison_eligible",
         )
         + _metric_rows(
-            phase1.rename(columns={"log10_pred_over_obs": "phase1_log10_residual"}),
+            ideal_reference.rename(columns={"log10_pred_over_obs": "ideal_reference_log10_residual"}),
             scope="full_context",
             model="ideal_baseline",
-            residual_column="phase1_log10_residual",
-            accepted_column="phase1_accepted",
+            residual_column="ideal_reference_log10_residual",
+            accepted_column="ideal_reference_accepted",
         )
         + _metric_rows(
-            phase2_context,
+            historical_activity_evaluation_context,
             scope="full_context",
             model="activity_model",
-            residual_column="phase2_log10_residual",
-            accepted_column="phase2_accepted",
+            residual_column="historical_activity_evaluation_log10_residual",
+            accepted_column="historical_activity_evaluation_accepted",
         )
     ).sort_values(["scope", "model", "group_type", "group_value"], kind="stable")
     metrics = metrics.reset_index(drop=True)
@@ -442,14 +442,14 @@ def build_controlled_comparison(
     preferences = eligible["preferred_model_on_row"].value_counts()
     summary = {
         "comparison_basis": "same_canonical_vle_record_intersection",
-        "phase1_model_family": PHASE1_MODEL_FAMILY,
+        "ideal_reference_model_family": IDEAL_REFERENCE_MODEL_FAMILY,
         "paired_row_count": int(len(paired)),
         "paired_eligible_count": int(paired["comparison_eligible"].sum()),
         "paired_rejected_or_missing_count": int((~paired["comparison_eligible"]).sum()),
         "activity_better_row_count": int(preferences.get("activity_model", 0)),
         "ideal_better_row_count": int(preferences.get("ideal_baseline", 0)),
         "tied_row_count": int(preferences.get("tie", 0)),
-        "phase2_full_context_row_count": int(len(phase2)),
+        "historical_activity_evaluation_full_context_row_count": int(len(historical_activity_evaluation)),
         "reported_zero_target_count": zero_count,
         "pressure_uncertainty_available_count": int(
             canonical["uncertainty_available"].sum()
