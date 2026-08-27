@@ -31,11 +31,12 @@ Old file-path commands such as `uv run python MEA/run_plot_exports.py` are inten
 - `src/MEA/`: importable model, data-loading, ePC-SAFT, and plotting support code.
 - `data/reference/MEA/`: reusable MEA VLE and chemical-equilibrium reference tables.
 - `analyses/paper_validation/2015_baygi/`: Baygi 2015 figure, parameter-table, and neutral parity reproduction.
-- `analyses/phase1/six_species_baseline/`: retained six-species PC-SAFT pressure/speciation baseline needed for neutral parity checks.
-- `analyses/phase1/neutral_epcsaft_parity/`: neutral apparent-component ePC-SAFT parity artifacts.
-- `analyses/phase1/smith_missen_baseline/`: Phase 1 Smith-Missen pressure/speciation baseline.
-- `analyses/phase2/activity_epcsaft/`: Phase 2 true-species activity-based ePC-SAFT evaluation.
-- `analyses/phase3/ionic_epcsaft_regression/`: Issue #70 refusal evidence, bounded historical diagnostics, and dormant Phase 3 methods.
+- `analyses/six_species_solubility_reference/`: retained six-species pressure and speciation reference calculation.
+- `analyses/neutral_pcsaft_pressure_reference/`: neutral PC-SAFT pressure reference artifacts.
+- `analyses/ideal_reaction_equilibrium/`: ideal reaction-equilibrium manuscript evidence.
+- `analyses/speciation_evidence_harmonization/`: basis-separated experimental speciation source evidence.
+- `analyses/historical_fixed_parameter_epcsaft_evaluation/`: historical true-species fixed-parameter ePC-SAFT evidence.
+- `analyses/reactive_epcsaft_parameter_evidence/`: Issue #70 refusal evidence, bounded historical diagnostics, and dormant parameter-evaluation methods.
 - `docs/latex/`: writable manuscript source mirrored from the separate Overleaf Git checkout.
 - `scripts/`: root doctor, validation, and plot orchestration entrypoints.
 
@@ -57,13 +58,13 @@ format, and raw fit requests/results must remain in ignored `results/runs/`.
 
 ## Key Artifact Paths
 
-- `analyses/phase3/ionic_epcsaft_regression/results/issue_70/predictive_mea_parameter_decision.json`
-- `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.png`
-- `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.svg`
-- `analyses/phase1/six_species_baseline/results/speciation/speciation.png`
-- `analyses/phase1/neutral_epcsaft_parity/results/pressure/epcsaft_neutral_pcsaft_parity.png`
-- `analyses/phase3/ionic_epcsaft_regression/results/issue_70/comparison_evidence_table.csv`
-- `analyses/phase3/ionic_epcsaft_regression/co2_water_induced_association/results/summary.json`
+- `analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json`
+- `analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_recomputed_fit.png`
+- `analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_recomputed_fit.svg`
+- `analyses/six_species_solubility_reference/results/speciation/speciation.png`
+- `analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_pcsaft_parity.png`
+- `analyses/reactive_epcsaft_parameter_evidence/results/issue_70/comparison_evidence_table.csv`
+- `analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/summary.json`
 - `analyses/paper_validation/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.png`
 
 ## Manuscript

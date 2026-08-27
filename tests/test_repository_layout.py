@@ -32,5 +32,5 @@ def test_cse_layout_keeps_cas_and_retires_central_notebook():
     assert (ROOT / "docs/latex/figures/generated").is_dir()
     assert (
         ROOT
-        / "analyses/phase3/ionic_epcsaft_regression/co2_water_induced_association/scripts/generate.py"
+        / "analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/scripts/generate.py"
     ).is_file()

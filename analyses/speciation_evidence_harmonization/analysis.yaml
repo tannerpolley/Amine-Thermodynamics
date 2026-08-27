@@ -1,0 +1,21 @@
+id: speciation_evidence_harmonization
+title: Speciation Evidence Harmonization
+status: source_audit
+summary: Renders basis-separated, data-only plots from the canonical experimental MEA speciation dataset for literature-source inspection.
+owner: project
+inputs:
+  - path: data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv
+    kind: experimental_speciation_dataset
+outputs:
+  - path: analyses/speciation_evidence_harmonization/figures/speciation/output
+    kind: source_plot_bundles
+commands:
+  generate:
+    - uv run python analyses/speciation_evidence_harmonization/scripts/generate_data.py
+  render:
+    - uv run python analyses/speciation_evidence_harmonization/scripts/render_figures.py
+runtime:
+  class: quick
+  expected_seconds: 10
+manuscript_consumers: []
+results_policy: Track only source summaries, exact plotted-data snapshots, sidecars, PNGs, SVGs, and PDFs under the figure-owned output directory.

@@ -46,15 +46,15 @@ accepted homogeneous-reactive and reactive-bubble calculation history.
 | `docs/scientific/PREDICTIVE_MEA_PROGRAM.md` | Authoritative scientific plan | Neutral qualification, electrostatic selection, regression, validation, and manuscript sequence; GitHub issues own execution |
 | This index | Authoritative navigation | Document classification only; it owns no scientific decision or work queue |
 | Engine Issue #80 and its future reviewed packet | Upstream method and current parameter-campaign authority | Builds and debugs the generic method; MEA reproduction is allowed after an immutable packet is accepted |
-| `analyses/phase3/ionic_epcsaft_regression/results/issue_70/predictive_mea_parameter_decision.json` | Historical Issue 70 gate decision | Conservative supported-negative predictive decision, exact input hashes, generated tables, and downstream refusal |
+| `analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json` | Historical Issue 70 gate decision | Conservative supported-negative predictive decision, exact input hashes, generated tables, and downstream refusal |
 | `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md` | Current source synthesis | Literature basis for the retained induced-association and Born formulations; not adoption or queue authority |
 | `docs/ePC-SAFT/full-component-parameter-source-audit.md` | Current source audit | Component-level parameter provenance |
 | `docs/ePC-SAFT/mea-reaction-and-sentinel-primary-source-audit.md` | Current source audit | Reaction and sentinel evidence |
 | `docs/ePC-SAFT/meah-meacoo-volumetric-evidence.md` | Current evidence synthesis | Volumetric information for MEAH+/MEACOO- |
 | `docs/ePC-SAFT/meah-meacoo-direct-density-request.md` | Evidence acquisition note | Missing direct-density need, not a live plan |
 | `docs/ePC-SAFT/gross_sadowski_2001_appendix_equations.md` | Equation/source companion | Exact literature equation support |
-| `analyses/phase3/ionic_epcsaft_regression/pressure_first/README.md` and `analysis.yaml` | Historical analysis record | Retained neutral-family qualification evidence; no active candidate |
-| `analyses/phase3/ionic_epcsaft_regression/README.md` | Analysis-area navigation | Phase-3 analysis structure, not program authority |
+| `analyses/reactive_epcsaft_parameter_evidence/pressure_first/README.md` and `analysis.yaml` | Historical analysis record | Retained neutral-family qualification evidence; no active candidate |
+| `analyses/reactive_epcsaft_parameter_evidence/README.md` | Analysis-area navigation | Reactive parameter-evidence structure, not program authority |
 | `docs/revision_notes/manuscript_submission_review.md` | Manuscript review evidence | Earlier submission review findings |
 
 Closed issues #62--#65 and #67 retain observation, neutral, electrostatic,

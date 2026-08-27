@@ -1,0 +1,35 @@
+id: historical_fixed_parameter_epcsaft_evaluation
+title: Historical Fixed-Parameter ePC-SAFT Evaluation
+status: historical_evidence
+summary: Retains the historical true-species activity-evaluation evidence; it is not a live parameter authority.
+owner: project
+inputs:
+  - path: data/reference/MEA/manifests/historical_activity_evaluation_reaction_constant_source_verification.csv
+    kind: verified_activity_reaction_catalog
+  - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv
+    kind: active_v1_experimental_vle_view
+  - path: data/reference/MEA/observations/liquid_speciation/Combined_ChEq.csv
+    kind: active_v1_experimental_speciation_view
+  - path: data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv
+    kind: full_canonical_speciation_registry
+  - path: data/reference/MEA/manifests/speciation_target_membership.csv
+    kind: canonical_speciation_membership_and_measurement_roles
+  - path: data/reference/MEA/manifests/target_admission_manifest.csv
+    kind: regression_target_capability_boundary_reference
+outputs:
+  - path: analyses/historical_fixed_parameter_epcsaft_evaluation/results
+    kind: canonical_solver_results_diagnostics_and_claim_gates
+  - path: analyses/historical_fixed_parameter_epcsaft_evaluation/figures/pressure/output
+    kind: pressure_plot_bundle
+  - path: analyses/historical_fixed_parameter_epcsaft_evaluation/figures/speciation/output
+    kind: speciation_plot_bundles
+commands:
+  render:
+    - uv run python analyses/historical_fixed_parameter_epcsaft_evaluation/scripts/render_figures.py
+runtime:
+  class: render_only
+manuscript_consumers:
+  - docs/latex/sections/data_methods.tex
+  - docs/latex/sections/mea_system_modeling_results.tex
+  - docs/latex/tables/residual_summary.tex
+results_policy: Track canonical solver tables and claim-gate reports under results, and only exact plotted-data snapshots with sidecar, PNG, SVG, and PDF bundles under figures.
