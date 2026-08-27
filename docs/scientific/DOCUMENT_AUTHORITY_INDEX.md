@@ -45,8 +45,8 @@ accepted homogeneous-reactive and reactive-bubble calculation history.
 | `docs/scientific/CONTEXT.md` | Authoritative scientific definition | Question, ownership, vocabulary, authority, and claim boundary; authority comes from repository guidance and issue #70 |
 | `docs/scientific/PREDICTIVE_MEA_PROGRAM.md` | Authoritative scientific plan | Neutral qualification, electrostatic selection, regression, validation, and manuscript sequence; GitHub issues own execution |
 | This index | Authoritative navigation | Document classification only; it owns no scientific decision or work queue |
-| `data/reference/MEA/parameters/best_available_mea_epcsaft/1/freeze.toml` | Current numerical authority | Hash-bound best-available MEA engineering set, selected values, comparison metrics, evaluated domain, and claim boundary |
-| `analyses/phase3/ionic_epcsaft_regression/results/issue_70/predictive_mea_parameter_decision.json` | Historical Issue 70 gate decision | Conservative supported-negative predictive decision, exact input hashes, generated tables, and downstream refusal before the engineering freeze |
+| Engine Issue #80 and its future reviewed packet | Upstream calculation authority | Direct ePC-SAFT analysis and validation; no MEA packet is accepted yet |
+| `analyses/phase3/ionic_epcsaft_regression/results/issue_70/predictive_mea_parameter_decision.json` | Historical Issue 70 gate decision | Conservative supported-negative predictive decision, exact input hashes, generated tables, and downstream refusal |
 | `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md` | Current source synthesis | Literature basis for the retained induced-association and Born formulations; not adoption or queue authority |
 | `docs/ePC-SAFT/full-component-parameter-source-audit.md` | Current source audit | Component-level parameter provenance |
 | `docs/ePC-SAFT/mea-reaction-and-sentinel-primary-source-audit.md` | Current source audit | Reaction and sentinel evidence |

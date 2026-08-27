@@ -30,7 +30,7 @@ def main() -> int:
             ).exists(),
             str(REFERENCE / "MEA"),
         ),
-        check("reference ePC-SAFT datasets", (REFERENCE / "epcsaft_datasets").exists(), str(REFERENCE / "epcsaft_datasets")),
+        check("reference MEA manifests", (REFERENCE / "MEA" / "manifests").exists(), str(REFERENCE / "MEA" / "manifests")),
         check("analyses root", ANALYSES.exists(), str(ANALYSES)),
         check("MEA import spec", importlib.util.find_spec("MEA") is not None),
         check("locked PC-SAFT import spec", importlib.util.find_spec("pcsaft") is not None),

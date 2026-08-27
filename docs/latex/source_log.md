@@ -29,6 +29,9 @@ This source log records the manuscript's verified citation anchors and intended 
 
 ## Parameter Audit Notes
 
+The numerical values below are historical source-audit evidence, not an active
+MEA parameter set. Engine Issue #80 owns the next calculation packet.
+
 - Held/Uyan ion tables provide the promoted diagnostic sigma/dispersion values for `H3O+`, `OH-`, `HCO3-`, and `CO3^2-`; the promoted water-ion interaction values are `0.25`, `-0.25`, `0.0`, and `-0.25`, respectively.
 - Figiel2025 provides the SSM+DS Born diameter for the proton carrier (`H+` represented in the runtime as `H3O+`) as `d_born=1.218`.
 - No local ePC-SAFT table value was found for SSM+DS `d_born` of `OH-`. The promoted value is now `d_born=3.081076894`, derived by Born hydration-energy inversion from an absolute hydroxide hydration free energy of `106.4 kcal/mol`; the derivation artifact is `analyses/phase3/ionic_epcsaft_regression/results/oh_born_derivation/`.

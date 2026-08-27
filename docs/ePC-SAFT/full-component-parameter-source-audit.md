@@ -4,12 +4,13 @@ Scope:
 - Local source digests in `docs/papers/md/*.md`
 - `docs/latex/source_log.md`
 - `docs/latex/references.bib`
-- Current parameter CSVs under `data/reference/MEA/` and `data/reference/epcsaft_datasets/MEA_CO2_H2O_ionic_fit/`
+- Historical parameter evidence under `data/reference/MEA/` and retained analysis results
 
 Rules used for this audit:
 - Do not fabricate missing parameter values.
 - If a markdown digest mentions a parameter set but does not print the table values, treat it as "check cited table/reference".
-- Treat `data/reference/epcsaft_datasets/MEA_CO2_H2O_ionic_fit/pure/any_solvent.csv` and the matching binary CSVs as the retained fixed values used for evaluation.
+- Deleted local parameter CSV paths below are historical locators only; they are not active parameter authority.
+- Engine Issue #80 owns the next direct calculation and validated immutable packet.
 
 ## Summary
 

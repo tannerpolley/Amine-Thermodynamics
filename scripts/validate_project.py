@@ -15,7 +15,6 @@ QUICK_COMMANDS = [
     [RUFF, "check", "src", "scripts", "analyses", "tests"],
     [PY, "scripts/doctor.py"],
     [PY, "scripts/check_no_local_paths.py"],
-    [PY, "scripts/check_frozen_mea_parameter_set.py"],
     [PY, "scripts/validate_mea_data_library.py"],
     [PY, "-m", "compileall", "-x", r"results[\\/]+runs", "src", "tests", "scripts", "analyses"],
     [PY, "-m", "pytest", "-q"],
@@ -38,39 +37,6 @@ CURATED_REQUIREMENTS = {
     "analyses/phase1/six_species_baseline/results/speciation": [
         "speciation_plot_data.csv",
         *plot_bundle("speciation"),
-    ],
-    "analyses/phase1/neutral_epcsaft_parity/results/pressure": [
-        "epcsaft_neutral_jou_parity_curves.csv",
-        *plot_bundle("epcsaft_neutral_pcsaft_parity"),
-    ],
-    "analyses/phase3/ionic_epcsaft_regression/results/pressure": [
-        "ionic_pressure_comparison.csv",
-        *plot_bundle("ionic_epcsaft_co2_pressure"),
-        "ionic_pressure_residuals_by_loading.csv",
-        *plot_bundle("ionic_pressure_residuals_by_loading"),
-    ],
-    "analyses/phase3/ionic_epcsaft_regression/results/speciation": [
-        "ionic_speciation_activity_residuals.csv",
-        "ionic_speciation_plot_data.csv",
-        *plot_bundle("ionic_epcsaft_speciation_activity"),
-        "ionic_speciation_residuals_by_species.csv",
-        *plot_bundle("ionic_speciation_residuals_by_species"),
-    ],
-    "analyses/phase3/ionic_epcsaft_regression/results/global_regression": [
-        "global_regression_summary.json",
-        "global_regression_values.csv",
-        "global_regression_pressure_fit_data.csv",
-        "global_regression_speciation_fit_data.csv",
-        "global_regression_pressure_residuals.csv",
-        "global_regression_speciation_residuals.csv",
-        *plot_bundle("global_regression_pressure_parity"),
-        *plot_bundle("global_regression_speciation_parity"),
-    ],
-    "analyses/phase3/ionic_epcsaft_regression/results/sensitivity": [
-        "parameter_sensitivity_summary.json",
-        "parameter_sensitivity_matrix.csv",
-        "parameter_identifiability.csv",
-        *plot_bundle("parameter_sensitivity_heatmap"),
     ],
     "analyses/paper_validation/2015_baygi/results/neutral_parity": [
         "baygi_neutral_epcsaft_pcsaft_pressure_parity_plot_data.csv",
