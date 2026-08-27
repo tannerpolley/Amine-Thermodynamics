@@ -26,7 +26,7 @@ The speciation evidence contains 74 NMR states from three studies\cite{Bottinger
 \end{table*}
 
 \subsection{Species basis and parameter hierarchy}
-The activity calculation uses the nine-species liquid basis in \cref{eq:true-species-vector}.  Its parameters comprise inherited molecular values, SSM+DS ion conventions from modified-Born ePC-SAFT literature, fixed \MEAH and \MEACOO values from the versioned parameter tables described below, and literature-based or sensitivity-tested trace-ion quantities.
+The historical activity calculation uses the nine-species liquid basis in \cref{eq:true-species-vector}.  Its retired inputs comprise inherited molecular values, SSM+DS ion conventions from modified-Born ePC-SAFT literature, fixed \MEAH and \MEACOO values from the versioned parameter tables described below, and literature-based or sensitivity-tested trace-ion quantities. They are retained to document the calculation and are not active parameter authority.
 
 \input{tables/full_ionic_ssm_ds_parameters}
 
@@ -47,7 +47,7 @@ The binary-interaction matrix is sparse.  \Cref{tab:binary-interaction-parameter
 \input{tables/binary_interaction_parameters}
 
 \subsection{Parameter provenance and scope}
-The fixed \MEAH, \MEACOO, and \MEAH--\MEACOO interaction values come from the versioned parameter tables in GitHub release \texttt{v1.0.0}.  The release records SHA-256 hashes for the pure-component, binary-interaction, and option tables.  No reproducible parameter-estimation history accompanies these values.  We hold them fixed and report no new parameter estimates.
+The historical \MEAH, \MEACOO, and \MEAH--\MEACOO interaction values came from the versioned parameter tables in GitHub release \texttt{v1.0.0}.  The release records SHA-256 hashes for the pure-component, binary-interaction, and option tables.  No reproducible parameter-estimation history accompanies these retired values.  We report no new parameter estimates and do not treat the release as current authority.
 
 \subsection{Evaluation residuals}
 The pressure residual is expressed on a logarithmic basis,

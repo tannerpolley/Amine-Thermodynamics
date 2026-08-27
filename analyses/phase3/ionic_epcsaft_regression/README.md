@@ -1,15 +1,29 @@
-# Full Ionic ePC-SAFT Regression
+# Full Ionic ePC-SAFT Historical Evidence
 
-Historical results are retained for provenance. New direct ePC-SAFT analysis
-and validation is owned by Engine Issue #80. After an immutable packet is
-accepted upstream, this directory may replay it and render parameter-agnostic
-figures from its retained tables.
+This directory retains the Issue #70 supported-negative decision, source and
+readiness receipts, and bounded diagnostic evidence. There is no active MEA
+parameter set.
 
-Render-only command:
+New generic ePC-SAFT methods are built and debugged first in
+`ePC-SAFT-project/analysis/` or `validation/`. This repository may then run the
+pinned public Engine method directly against MEA-owned inputs and an accepted
+immutable parameter packet. Engine Issue #80 owns the current campaign.
+
+The following Born/permittivity scripts are retained as dormant Phase 3
+methods:
+
+- `run_ion_coefficient_blocks.py`
+- `evaluate_calorimetry_consistency.py`
+- `compare_independent_evidence.py`
+
+They are not current entry points and will require the accepted packet and its
+retained input tables before they can run. Candidate-specific renderers and
+superseded result trees were removed.
+
+The Kiepe CO2--water induced-association calculation remains a valid local
+Engine reproduction with qualified source evidence. Render-only retained
+figures with:
 
 ```bash
 uv run python analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py
 ```
-
-Curated artifacts live under `results/<plot_set>/` with plotted CSV snapshots, `.mpl.yaml` style sidecars, PNG previews, SVG figures, and PDF LaTeX artifacts.
-Disposable solver/run output belongs under ignored `results/runs/`.
