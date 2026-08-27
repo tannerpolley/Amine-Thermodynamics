@@ -9,7 +9,7 @@ For the 31 Jou et al.\ measurements used in the controlled comparison, the press
 \begin{center}
     \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/mea_ideal_pressure_vs_loading.pdf}
+    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/generated/mea_ideal_pressure_vs_loading.pdf}
     \captionsetup{hypcap=false}
     \captionof{figure}{Ideal-equilibrium \COtwo-solubility pressure baseline for 30 wt\% \MEA.  Predicted pressure increases with loading at every temperature, with larger deviations at 40 and \SI{60}{\degreeCelsius} than at 80, 100, and \SI{120}{\degreeCelsius}.}
     \label{fig:ideal-pressure}
@@ -21,14 +21,14 @@ For the 31 Jou et al.\ measurements used in the controlled comparison, the press
     \centering
     \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/mea_ideal_speciation_20C.pdf}
+        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/generated/mea_ideal_speciation_20C.pdf}
         \par\smallskip
         \small (a) \SI{20}{\degreeCelsius}
     \end{minipage}
     \hfill
     \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/mea_ideal_speciation_40C.pdf}
+        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/generated/mea_ideal_speciation_40C.pdf}
         \par\smallskip
         \small (b) \SI{40}{\degreeCelsius}
     \end{minipage}
@@ -38,8 +38,8 @@ For the 31 Jou et al.\ measurements used in the controlled comparison, the press
     \end{minipage}
 \end{center}
 
-\subsection{Activity-based CO2 solubility model}
-The activity calculation uses the nine-species basis and parameter hierarchy in \cref{sec:data-methods}.  As loading changes, it updates ionic composition, bulk permittivity, and modified-Born solvation within the activity coefficients.  The resulting liquid composition enters the \COtwo fugacity calculation, so one fixed thermodynamic state determines both pressure and speciation.
+\subsection{Historical activity-based CO2 solubility calculation}
+The historical fixed-parameter activity calculation uses the nine-species basis and parameter hierarchy in \cref{sec:data-methods}.  As loading changes, it updates ionic composition, bulk permittivity, and modified-Born solvation within the activity coefficients.  The resulting liquid composition enters the \COtwo fugacity calculation, so one fixed thermodynamic state determines both pressure and speciation. The evaluated values are retired diagnostic inputs, not an active MEA parameter set.
 
 \subsection{Chemical speciation}
 For positive measured species and aggregate values, median absolute \(\log_{10}(\mathrm{model}/\mathrm{data})\) residuals are 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, 0.461 for \HCOthree, 0.599 for \COthree, and 0.066 for \ce{MEA + MEAH+}.  At the 15 states where the source reports zero \HCOthree, the largest modeled mole fraction is 0.00128.  These values are upper-bound checks because the sources give no detection limits.
@@ -51,28 +51,28 @@ We excluded digitized Wong Raman values from the residual metrics because overla
     \centering
     \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_activity_speciation_20C.pdf}
+        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/generated/mea_activity_speciation_20C.pdf}
         \par\smallskip
         \small (a) \SI{20}{\degreeCelsius}
     \end{minipage}
     \hfill
     \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_activity_speciation_40C.pdf}
+        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/generated/mea_activity_speciation_40C.pdf}
         \par\smallskip
         \small (b) \SI{40}{\degreeCelsius}
     \end{minipage}
     \par\medskip
     \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_activity_speciation_60C.pdf}
+        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/generated/mea_activity_speciation_60C.pdf}
         \par\smallskip
         \small (c) \SI{60}{\degreeCelsius}
     \end{minipage}
     \hfill
     \begin{minipage}{0.47\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/mea_activity_speciation_80C.pdf}
+        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/generated/mea_activity_speciation_80C.pdf}
         \par\smallskip
         \small (d) \SI{80}{\degreeCelsius}
     \end{minipage}
@@ -88,7 +88,7 @@ The controlled pressure comparison uses the same 31 Jou et al.\ measurements for
 \begin{center}
     \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{figures/mea_controlled_pressure_comparison.pdf}
+    \includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{figures/generated/mea_controlled_pressure_comparison.pdf}
     \captionsetup{hypcap=false}
     \captionof{figure}{Controlled pressure evaluation using the same 31 Jou et al.\ measurements.  Panel (a) compares observed pressure with the ideal Smith--Missen baseline and fixed activity-based ePC-SAFT calculation.  Panel (b) compares their absolute \(\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})\) residuals; points below the one-to-one line favor the activity calculation.  The activity treatment reduces the absolute residual for 4 records and increases it for 27 records.}
     \label{fig:controlled-pressure-comparison}
@@ -100,7 +100,7 @@ Across all 161 VLE records from six sources, the activity calculation gives medi
 \begin{center}
     \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/mea_activity_pressure_vs_loading.pdf}
+    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/generated/mea_activity_pressure_vs_loading.pdf}
     \captionsetup{hypcap=false}
     \captionof{figure}{Activity-coupled ePC-SAFT \COtwo-solubility pressure evaluation for 30 wt\% \MEA.  Connected curves show converged ePC-SAFT pressure rows at the assembled VLE loadings, and markers show the corresponding literature pressure records.  The figure is a fixed-parameter solubility residual comparison.}
     \label{fig:activity-pressure}
@@ -108,12 +108,12 @@ Across all 161 VLE records from six sources, the activity calculation gives medi
 \end{center}
 
 \subsection{Sensitivity and identifiability}
-The carbonate-family parameters are less identifiable than the amine-family parameters.  The NMR data include 53 positive \HCOthree and 16 positive \COthree observations, compared with 74 direct \MEACOO observations and 74 direct \ce{MEA + MEAH+} aggregate observations.  The reported calculation uses \(d_{\HCOthree}^{\mathrm{Born}}=3.0\) and \(d_{\COthree}^{\mathrm{Born}}=3.0\).  A carbonate-only sensitivity scan lowers the carbonate residual near \(d_{\HCOthree}^{\mathrm{Born}}=6.80\) and \(d_{\COthree}^{\mathrm{Born}}=3.00\).  We retain the 3.0/3.0 pair because the alternative is identified only by the carbonate observations used in the scan and lacks an independent pressure/speciation test.  \HthreeO and \Hydroxide are determined mainly by electroneutrality and water autoionization; the available NMR data provide no independent observations for either ion.
+The carbonate-family parameters are less identifiable than the amine-family parameters.  The NMR data include 53 positive \HCOthree and 16 positive \COthree observations, compared with 74 direct \MEACOO observations and 74 direct \ce{MEA + MEAH+} aggregate observations.  The historical calculation used \(d_{\HCOthree}^{\mathrm{Born}}=3.0\) and \(d_{\COthree}^{\mathrm{Born}}=3.0\).  A carbonate-only sensitivity scan lowered the carbonate residual near \(d_{\HCOthree}^{\mathrm{Born}}=6.80\) and \(d_{\COthree}^{\mathrm{Born}}=3.00\).  Neither pair is active: the alternative is identified only by the carbonate observations used in the scan and lacks an independent pressure/speciation test.  \HthreeO and \Hydroxide are determined mainly by electroneutrality and water autoionization; the available NMR data provide no independent observations for either ion.
 
 \begin{center}
     \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=0.64\linewidth,height=0.36\textheight,keepaspectratio]{figures/trace_carbonate_born_parity.pdf}
+    \includegraphics[width=0.64\linewidth,height=0.36\textheight,keepaspectratio]{figures/generated/trace_carbonate_born_parity.pdf}
     \captionsetup{hypcap=false}
     \captionof{figure}{Carbonate-only Born-diameter sensitivity for \HCOthree and \COthree.  The reported calculation uses the 3.0/3.0 pair; the sensitivity scan shows that bicarbonate residuals vary strongly with the bicarbonate Born diameter.}
     \label{fig:trace-carbonate-born-regression}

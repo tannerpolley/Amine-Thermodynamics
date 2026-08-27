@@ -4,7 +4,6 @@
 % \linenumbers
 
 \usepackage[numbers]{natbib}
-\usepackage{subfiles}
 \usepackage[version=4]{mhchem}
 \usepackage{cleveref}
 \usepackage{subcaption}
@@ -17,33 +16,9 @@
 \usepackage{xspace}
 \renewcommand\cellalign{tl}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
-\usepackage{listings}
 \usepackage{xcolor}
-\usepackage{color}
 \usepackage{siunitx}
-\graphicspath{{figures/}}
-
-\definecolor{dkgreen}{rgb}{0,0.6,0}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82}
-
-\lstset{
-    frame=tb,
-    language=Python,
-    aboveskip=3mm,
-    belowskip=3mm,
-    showstringspaces=false,
-    columns=flexible,
-    basicstyle={\small\ttfamily},
-    numbers=none,
-    numberstyle=\tiny\color{gray},
-    keywordstyle=\color{blue},
-    commentstyle=\color{dkgreen},
-    stringstyle=\color{mauve},
-    breaklines=true,
-    breakatwhitespace=true,
-    tabsize=3
-}
+\graphicspath{{figures/generated/}}
 
 \newcommand{\Ha}{\text{Ha}}
 \newcommand{\COtwo}{\ce{CO2}\xspace}
@@ -93,7 +68,7 @@
 \cortext[cor1]{Corresponding author.}
 
 \begin{abstract}
-Reactive \COtwo absorption couples the equilibrium gas pressure to the aqueous electrolyte composition.  We evaluated a fixed solvation-shell-modeling plus dielectric-saturation (SSM+DS) modified-Born electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) parameter set for \COtwo solubility and speciation in 30 wt\% aqueous monoethanolamine (\MEA).  A five-reaction liquid model resolved \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide.  The evidence comprised 161 vapor--liquid-equilibrium pressure records and 74 nuclear magnetic resonance speciation states over 20--\SI{120}{\degreeCelsius} and \COtwo loadings of 0.003--0.990.  An ideal-activity calculation established the reaction and material-balance baseline; an activity calculation added ePC-SAFT activities and fugacities, concentration-dependent permittivity, and SSM+DS Born terms.  On 31 Jou et al.\ measurements common to both calculations, the median absolute \(\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})\) residual was 0.160 for the ideal baseline and 0.495 for the activity model, which improved only 4 of 31 records.  The activity calculation converged for all 161 pressure records and all 74 speciation states.  Median absolute residuals for positive measured species values were 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, and 0.461 for \HCOthree.  The fixed set described amine-family speciation more closely than pressure or carbonate speciation.  Its limited \MEAH/\MEACOO parameter provenance and carbonate-solvation sensitivity do not support transfer as a predictive parameterization and define the evidence needed for a future joint regression.
+Reactive \COtwo absorption couples the equilibrium gas pressure to the aqueous electrolyte composition.  We evaluated a now-retired fixed solvation-shell-modeling plus dielectric-saturation (SSM+DS) modified-Born electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) parameter set for \COtwo solubility and speciation in 30 wt\% aqueous monoethanolamine (\MEA).  A five-reaction liquid model resolved \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide.  The evidence comprised 161 vapor--liquid-equilibrium pressure records and 74 nuclear magnetic resonance speciation states over 20--\SI{120}{\degreeCelsius} and \COtwo loadings of 0.003--0.990.  An ideal-activity calculation established the reaction and material-balance baseline; an activity calculation added ePC-SAFT activities and fugacities, concentration-dependent permittivity, and SSM+DS Born terms.  On 31 Jou et al.\ measurements common to both calculations, the median absolute \(\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})\) residual was 0.160 for the ideal baseline and 0.495 for the activity model, which improved only 4 of 31 records.  The activity calculation converged for all 161 pressure records and all 74 speciation states.  Median absolute residuals for positive measured species values were 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, and 0.461 for \HCOthree.  The historical set described amine-family speciation more closely than pressure or carbonate speciation.  Its limited \MEAH/\MEACOO parameter provenance and carbonate-solvation sensitivity do not support transfer as a predictive parameterization and define the evidence needed for a future joint regression. No values evaluated here constitute an active MEA parameter set.
 \end{abstract}
 
 \begin{keywords}
@@ -105,7 +80,7 @@ Reactive \COtwo absorption couples the equilibrium gas pressure to the aqueous e
 \hypersetup{
     pdftitle={Evaluation of SSM+DS Modified-Born ePC-SAFT for CO2 Solubility and Speciation in Aqueous Monoethanolamine},
     pdfauthor={Tanner W. Polley},
-    pdfsubject={Fixed-parameter thermodynamic evaluation of reactive aqueous MEA-CO2-H2O},
+    pdfsubject={Historical fixed-parameter thermodynamic evaluation of reactive aqueous MEA-CO2-H2O},
     pdfkeywords={carbon dioxide, monoethanolamine, ePC-SAFT, modified Born, speciation, vapor-liquid equilibrium}
 }
 

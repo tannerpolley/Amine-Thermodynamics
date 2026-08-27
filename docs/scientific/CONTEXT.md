@@ -1,105 +1,85 @@
-# Scientific context
+# MEA scientific context
 
-Status: official ePC-SAFT downstream application under Governance D-038.
-This repository remains a separate sibling Git repository and consumes a
-commit- and SHA-256-identified non-editable Engine wheel.
+- Status: authoritative repository definition under ePC-SAFT Governance D-038
+- Scope: aqueous monoethanolamine (MEA)--water--carbon dioxide thermodynamics
+- Current parameter status: no active MEA parameter set
 
 ## Question and intended use
 
-Determine which source-supported electrolyte Perturbed-Chain Statistical
-Associating Fluid Theory (ePC-SAFT) model form and parameter set can predict
-carbon-dioxide (CO2) pressure and liquid speciation for aqueous 30 mass %
-monoethanolamine (MEA) from 315 to 360 K and, when the measured quantity and
-thermodynamic derivative are
-accepted, caloric quantities. Transfer a parameter set to the absorber-column
-application only after it meets preregistered criteria on independent
-observations within a declared pressure and CO2-loading domain.
+This repository asks which declared ePC-SAFT model, chemistry, and parameter
+record can reproduce source-backed pressure, speciation, and supporting
+observations for aqueous MEA within an explicit domain. A parameter record may
+support predictive or downstream claims only after its numerical, scientific,
+and independent-comparison gates pass.
+
+## Project terminology
+
+| Avoid | Prefer | Meaning | Scope | Exceptions | Evidence |
+|---|---|---|---|---|---|
+| best available parameter set | active MEA parameter set | A parameter packet accepted after the repository's declared scientific gates | README, authority documents, analyses, and manuscript claims | Historical quotation and immutable Git history | Issue #70 decision; Engine Issue #80 |
+| promoted parameter | historical diagnostic parameter | A value retained to explain an earlier calculation, not current calculation authority | Historical result tables, audits, and captions | A future reviewed packet may explicitly adopt a value | Source audit and Issue #70 refusal record |
+| validation | diagnostic comparison | A comparison that has not met the declared independence and preregistration requirements | Analysis and manuscript prose | Use validation only for a genuinely independent, preregistered comparison | Predictive program and Issue #70 decision |
+| upstream-only calculation | upstream-first method, MEA reproduction | A new generic method is built and debugged upstream; MEA may then execute the pinned Engine method directly against MEA-owned inputs | ePC-SAFT calculations and validation work | MEA chemistry, data, model selection, adoption, figures, and manuscript remain MEA-owned | Governance D-038 and Engine Issue #80 |
+
+## Scientific map
+
+- **Formulation:** `docs/latex/sections/epc_saft_equation_of_state.tex` and
+  `docs/ePC-SAFT/` describe the selected equations and their literature basis.
+- **Methods:** `docs/latex/sections/data_methods.tex`, analysis scripts, and the
+  installed `epcsaft` public APIs own executable methods.
+- **Verification and decisions:** analysis receipts, exact result tables, and
+  GitHub issues own numerical evidence and gate outcomes.
+- **Source data:** `data/reference/MEA/` and its manifests preserve observations,
+  transformations, locators, and hashes.
+- **Analyses:** each populated directory under `analyses/` owns one bounded
+  reproduction, diagnostic, or retained evidence set.
+- **Research notebooks:** none are active. After Review Pass, a future accepted
+  immutable parameter packet may be summarized in
+  `analyses/<short-id>/notebook.qmd`; it must read retained results rather than
+  become calculation authority.
+- **Manuscript:** the CAS journal source is `docs/latex/main.tex`.
+- **Bibliography:** tracked CAS inputs are `docs/latex/manuscript_references.bib`,
+  `docs/latex/project_sources.bib`, and `docs/latex/official_sources.bib`;
+  Better BibTeX remains the upstream citation export.
+
+## Calculation ownership
+
+The installed Engine wheel owns generic equations, equilibrium compilation,
+exact derivatives, and regression mechanics. New generic ePC-SAFT methods are
+first built and debugged in `ePC-SAFT-project/analysis/` or `validation/`.
+
+MEA-Thermodynamics may call those public Engine methods directly to reproduce
+an accepted calculation, evaluate MEA observations, and generate retained
+tables or figures. Such work records the Engine wheel and method identity,
+input and packet identity, and hashes. This upstream-first rule does not ban
+direct Engine calculations here.
 
 This repository owns MEA chemistry hypotheses, source translations, data
-partitions, model selection, parameter estimation, validation, uncertainty,
-plots, and manuscript claims. The installed `epcsaft` wheel owns
-equation-of-state evaluation, General Reactive Equilibrium and Phase
-Equilibrium (GREPE), exact derivatives, and the public regression calculation.
-The column and lithium repositories are downstream applications; they do not
-define MEA thermodynamic equations or parameter adoption here.
+roles, model selection, the regression question, validation design, parameter
+adoption, scientific figures, and the manuscript. It does not copy generic
+Engine equations, restore retired APIs, or maintain local generic runtime or
+regression wrappers.
 
-## Current scientific status
+## Source and evidence authority
 
-The current manuscript is a fixed-parameter transfer and model-form evaluation.
-It is not yet a predictive parameterization manuscript. Existing pressure-first,
-Hilliard-only and fixed-observed-pressure calculations are diagnostic unless
-their own retained evidence explicitly says otherwise. Optimizer termination is
-reported as numerical evidence; it does not by itself accept or reject an
-engineering parameter set.
+Authority descends from primary source material and verified locators to
+retained observations and transformations, then to immutable calculation
+inputs and results, and finally to bounded manuscript claims. Generated plots
+and prose are consumers, never upstream evidence.
 
-Issue 70 retained a conservative supported-negative predictive decision. There
-is no active MEA parameter set and no bounded-calculation authority. Engine
-Issue #80 owns the next direct ePC-SAFT analysis and validation campaign. This
-repository may adopt only an accepted immutable packet, identified by exact
-Engine commit, wheel SHA-256, packet path/version, fingerprint, and file hashes.
-Absorber-column transfer remains unauthorized.
+Issue #70 records a supported negative decision and downstream refusal. Its
+raw evidence, exact hashes, and decision record remain authoritative history.
+The qualified Kiepe CO2--water induced-association evidence is also retained.
+Engine Issue #80 owns the current method and parameter campaign. Until that
+campaign succeeds and MEA accepts an immutable packet, this repository has no
+active MEA parameter set. Once such inputs exist, MEA may reproduce the pinned
+calculation directly through the installed Engine API.
 
-The authoritative scientific plan is
-[`PREDICTIVE_MEA_PROGRAM.md`](PREDICTIVE_MEA_PROGRAM.md). GitHub issues are the
-only work queue. Literature reviews, planned-analysis documents, issue mirrors,
-analysis READMEs, and campaign reports provide evidence
-or history; they do not silently supersede that plan or the tracker.
+## Claim boundary
 
-The audited classification of relevant Engine, MEA, Column, Lithium, and IDAES
-documents is [`DOCUMENT_AUTHORITY_INDEX.md`](DOCUMENT_AUTHORITY_INDEX.md).
-
-## Shared vocabulary
-
-- **Neutral reference:** Held water plus one source-backed MEA association
-  family and physical binary interaction parameters.
-- **Induced association:** the fixed reciprocal Schick--Pabsch CO2--water 2B
-  topology used throughout the MEA analyses.
-- **Shell Born, solvent-only:** solvation-shell-modified Born with the
-  solvent-composition relative permittivity.
-- **Shell Born, ion-suppressed:** the same Born formulation with
-  ion-fraction-suppressed relative permittivity.
-- **Retained physical configuration:** the neutral, association,
-  electrostatic, ionic, and reaction equations retained after the named
-  binary, electrolyte, and model-selection comparisons.
-- **Diagnostic fit:** a transparent optimization useful for sensitivity,
-  runtime, or model-form diagnosis but not sufficient for adoption.
-- **Accepted immutable packet:** an Engine-produced, reviewed, hash-bound
-  calculation packet replayed here only after its scientific gates pass.
-- **Candidate eligible for adoption:** a complete fitted parameter record that
-  meets its source, domain, numerical, identifiability, independent-validation,
-  and immutable installed-wheel replay criteria.
-- **Reduced-space regression:** shared parameters are optimized outside one
-  GREPE solve per unique condition; each solve reports separate
-  solver-convergence, numerical-convergence, and physical-validity statuses.
-- **Full-space regression:** local equilibrium states and global fitted
-  parameters are solved in one sparse multi-experiment nonlinear program
-  (NLP). This is a planned numerical backend, not a different physical model.
-
-## Authority map
-
-1. Repository `AGENTS.md`, the pinned Engine identity, and current native
-   GitHub issues.
-2. This context, `PREDICTIVE_MEA_PROGRAM.md`, and any future accepted immutable
-   Engine packet.
-3. The source synthesis in
-   `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md`.
-4. Frozen observation identities, dependency manifests, analysis descriptions,
-   and exact calculated-value tables.
-5. Historical planning documents, old transfer records, and issue mirrors.
-
-The configured project Better BibTeX export is the citation authority.
-`docs/latex/references.bib` is a one-way manuscript projection, not an
-independent bibliography.
-
-## Claim boundaries
-
-This plan may ultimately support a predictive MEA parameterization inside a
-declared temperature, composition, loading, pressure, and model-form domain,
-with separate results for parameter estimation, model selection, and
-independent validation. It may then supply a new thermodynamic parameter set
-for separate column-side mapping and comparison in MEA-Absorption-Column.
-
-It may not infer unique ionic, reaction, association, or electrostatic
-parameters from pressure alone; treat source extrapolation as in-domain
-evidence; call a local fixed-topology solve a global phase-stability proof; or
-rewrite either manuscript's claims before its stated evidence gates pass.
+Historical fixed-parameter calculations may support only statements about the
+observed behavior of those exact calculations. They do not establish an active
+parameter set, predictive validity, independent validation, or transfer to a
+process model. Predictive and downstream claims require the declared gates,
+complete failure accounting, exact plotted rows, parameter and Engine
+identity, uncertainty treatment, and an accepted immutable packet.

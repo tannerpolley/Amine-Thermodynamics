@@ -7,6 +7,7 @@ VALIDATOR = runpy.run_path(
 MAX_TRACKED_JSON_BYTES = VALIDATOR["MAX_TRACKED_JSON_BYTES"]
 MAX_TRACKED_JSON_LINES = VALIDATOR["MAX_TRACKED_JSON_LINES"]
 json_size_problem = VALIDATOR["json_size_problem"]
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_tracked_json_size_boundaries(tmp_path):
@@ -21,3 +22,15 @@ def test_tracked_json_size_boundaries(tmp_path):
     overlong = tmp_path / "overlong.json"
     overlong.write_text("{}\n" * (MAX_TRACKED_JSON_LINES + 1))
     assert "lines" in json_size_problem(overlong)
+
+
+def test_cse_layout_keeps_cas_and_retires_central_notebook():
+    assert not (ROOT / "docs/scientific/notebook").exists()
+    main = (ROOT / "docs/latex/main.tex").read_text()
+    assert r"\documentclass[a4paper,fleqn]{cas-sc}" in main
+    assert r"\graphicspath{{figures/generated/}}" in main
+    assert (ROOT / "docs/latex/figures/generated").is_dir()
+    assert (
+        ROOT
+        / "analyses/phase3/ionic_epcsaft_regression/co2_water_induced_association/scripts/generate.py"
+    ).is_file()

@@ -24,8 +24,9 @@ criteria may support predictive manuscript claims or column-side transfer.
 
 Direct analysis and validation whose calculation is performed by ePC-SAFT is
 first built and debugged in `ePC-SAFT-project/analysis/` or `validation/`.
-MEA-Thermodynamics later replays only an accepted immutable packet. Engine
-Issue #80 owns that campaign; no active MEA parameter set exists meanwhile.
+MEA-Thermodynamics may then reproduce the pinned method directly with an
+accepted immutable packet and MEA-owned inputs. Engine Issue #80 owns the
+current campaign; no active MEA parameter set exists meanwhile.
 
 The endpoint is not the lowest available sum of squared residuals. It is a
 retained model-form decision and parameter record with an explicit domain,
@@ -64,9 +65,9 @@ and retained physical interactions. This plan applies it as follows:
 3. Qualify `k_MEA,H2O`, `k_CO2,H2O(T)`, and, when supported by physical neutral
    evidence, `k_CO2,MEA` before reactive fitting.
 4. Retain shell-modified Born with ion-fraction-suppressed relative
-   permittivity for practical MEA calculations; the fixed-parameter sensitivity
-   rejects solvent-only and original-Born controls under the current parameter
-   set.
+   permittivity as a historical diagnostic formulation; the retired
+   fixed-parameter sensitivity rejected solvent-only and original-Born controls
+   for that exact historical set.
 5. Constrain the retained electrostatic parameters with direct evidence before
    the final reactive regression.
 
