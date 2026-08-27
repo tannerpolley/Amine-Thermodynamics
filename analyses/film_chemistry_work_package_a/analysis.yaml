@@ -1,0 +1,17 @@
+id: film_chemistry_work_package_a
+title: Film Chemistry Work Package A
+status: reviewed_supported_negative
+summary: Source-complete reaction and transport input contract with unsupported numerical inputs rejected explicitly.
+owner: MEA-Thermodynamics
+inputs:
+  - path: data/reference/MEA/film_chemistry_inputs/1
+    kind: versioned_input_contract
+outputs:
+  - path: analyses/film_chemistry_work_package_a/results/validation_report.json
+    kind: invariant_validation_report
+commands:
+  analyze:
+    - uv run python -m MEA.common.film_chemistry_inputs --write-report analyses/film_chemistry_work_package_a/results/validation_report.json
+runtime:
+  class: source_contract_validation_only
+results_policy: No ePC-SAFT equilibrium, Provider activity correction, or film-flux calculation is permitted in Work Package A.
