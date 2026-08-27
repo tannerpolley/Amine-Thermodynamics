@@ -1,40 +1,27 @@
 id: ionic_epcsaft_regression
-title: Full-Ionic ePC-SAFT Diagnostic Evaluation
-status: provisional_diagnostic
-summary: Evaluates the full-ionic model with fixed provisional ion parameters, retaining rejected states for diagnosis while excluding them from metrics and plots.
-owner: project
+title: Full-Ionic ePC-SAFT Historical Evidence
+status: historical_evidence
+summary: Retains the Issue 70 supported-negative decision, readiness receipts, and bounded diagnostic evidence; no active MEA parameter set exists.
+owner: MEA-Thermodynamics
 inputs:
   - path: data/reference/MEA/manifests/phase2_reaction_constant_source_verification.csv
-    kind: verified_activity_reaction_catalog
-  - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv
-    kind: active_v1_experimental_vle_view
-  - path: data/reference/MEA/observations/liquid_speciation/Combined_ChEq.csv
-    kind: active_v1_experimental_speciation_view
-  - path: data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv
-    kind: full_canonical_speciation_registry
+    kind: verified_reaction_catalog
   - path: data/reference/MEA/manifests/target_admission_manifest.csv
-    kind: fail_closed_target_admission
+    kind: target_admission_evidence
   - path: data/reference/MEA/manifests/grouped_split_manifest.csv
-    kind: frozen_grouped_training_and_validation_assignments
-  - path: analyses/phase3/ionic_epcsaft_regression/results/readiness/regression_readiness_summary.json
-    kind: deterministic_readiness_and_source_hash_receipt
-  - path: src/MEA/epcsaft_ionic/plot_results.py
-    kind: fixed_provisional_parameter_definition
+    kind: historical_partition_evidence
 outputs:
-  - path: analyses/phase3/ionic_epcsaft_regression/results/pressure
-    kind: accepted_and_rejected_pressure_diagnostics
-  - path: analyses/phase3/ionic_epcsaft_regression/results/speciation
-    kind: accepted_and_rejected_speciation_diagnostics
+  - path: analyses/phase3/ionic_epcsaft_regression/results/issue_70
+    kind: supported_negative_decision
   - path: analyses/phase3/ionic_epcsaft_regression/results/readiness
-    kind: target_admission_split_and_upstream_gate_receipt
+    kind: readiness_and_source_hash_receipts
+  - path: analyses/phase3/ionic_epcsaft_regression/results/reactive_vle_vertical_slice
+    kind: retained_bounded_diagnostic
 commands:
-  generate:
-    - uv run python analyses/phase3/ionic_epcsaft_regression/scripts/generate_data.py
   render:
     - uv run python analyses/phase3/ionic_epcsaft_regression/scripts/render_figures.py
 runtime:
-  class: expensive
-  expected_seconds: 300
+  class: render_only
 manuscript_consumers:
   - docs/latex/sections/mea_system_modeling_results.tex
-results_policy: Track canonical diagnostic rows and exact plotted-data bundles under results; consume only manifest-assigned targets and splits; preserve rejected rows with reasons, exclude them from metrics and plots, and make no fitted-parameter claim.
+results_policy: Preserve evidence and exact receipts only. Historical calculations do not define an active parameter set.

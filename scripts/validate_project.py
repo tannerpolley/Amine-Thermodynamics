@@ -162,6 +162,8 @@ def verify_tracked_json_size() -> int:
     oversized: list[str] = []
     for relative in filter(None, tracked):
         path = ROOT / relative
+        if not path.is_file():
+            continue
         if problem := json_size_problem(path):
             oversized.append(f"{relative}: {problem}")
     if oversized:

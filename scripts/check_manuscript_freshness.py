@@ -35,7 +35,10 @@ def manuscript_inputs() -> list[Path]:
     inputs = sorted(
         ROOT / path
         for path in relative_paths
-        if path.suffix.lower() in INPUT_SUFFIXES and "builds" not in path.parts and "out" not in path.parts
+        if (ROOT / path).is_file()
+        and path.suffix.lower() in INPUT_SUFFIXES
+        and "builds" not in path.parts
+        and "out" not in path.parts
     )
     if not inputs:
         raise RuntimeError("No tracked manuscript inputs were found.")

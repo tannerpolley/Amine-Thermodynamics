@@ -16,9 +16,10 @@ bash scripts/build_manuscript.sh
 uv run python scripts/check_manuscript_freshness.py
 ```
 
-Historical calculated tables and figures remain evidence only. New ePC-SAFT
-analysis and validation is developed in the Engine repository; this repository
-replays an accepted immutable packet after upstream acceptance.
+Historical calculated tables and figures remain evidence only. New generic
+ePC-SAFT methods are built and debugged first in the Engine repository. After
+upstream acceptance, this repository may reproduce the pinned method directly
+against MEA-owned inputs and an accepted immutable packet.
 
 The locked runtime includes separate immutable Git revisions for the current `epcsaft` implementation and the legacy `pcsaft.flashTQ` baseline. The legacy dependency declares its omitted Cython/NumPy build requirements through `tool.uv.extra-build-dependencies`, so a clean `uv sync --locked --group test` builds the same extension without a sibling checkout.
 
@@ -29,17 +30,16 @@ Old file-path commands such as `uv run python MEA/run_plot_exports.py` are inten
 
 - `src/MEA/`: importable model, data-loading, ePC-SAFT, and plotting support code.
 - `data/reference/MEA/`: reusable MEA VLE and chemical-equilibrium reference tables.
-- `data/reference/epcsaft_bundles/`: historical, hash-bound Engine input and diagnostic provenance.
 - `analyses/paper_validation/2015_baygi/`: Baygi 2015 figure, parameter-table, and neutral parity reproduction.
 - `analyses/phase1/six_species_baseline/`: retained six-species PC-SAFT pressure/speciation baseline needed for neutral parity checks.
 - `analyses/phase1/neutral_epcsaft_parity/`: neutral apparent-component ePC-SAFT parity artifacts.
 - `analyses/phase1/smith_missen_baseline/`: Phase 1 Smith-Missen pressure/speciation baseline.
 - `analyses/phase2/activity_epcsaft/`: Phase 2 true-species activity-based ePC-SAFT evaluation.
-- `analyses/phase3/ionic_epcsaft_regression/`: full ionic ePC-SAFT regression, pressure, and speciation artifacts.
+- `analyses/phase3/ionic_epcsaft_regression/`: Issue #70 refusal evidence, bounded historical diagnostics, and dormant Phase 3 methods.
 - `docs/latex/`: writable manuscript source mirrored from the separate Overleaf Git checkout.
 - `scripts/`: root doctor, validation, and plot orchestration entrypoints.
 
-The removed nine-species/Gekko diagnostic workflow remains available on `legacy/main-legacy`; it is not part of active `main` validation.
+Removed diagnostic workflows remain recoverable from Git history and archival tags; they are not part of active `main` validation.
 
 ## License and Citation
 
@@ -62,8 +62,8 @@ format, and raw fit requests/results must remain in ignored `results/runs/`.
 - `analyses/phase1/six_species_baseline/results/pressure/legacy_pcsaft_jou_recomputed_fit.svg`
 - `analyses/phase1/six_species_baseline/results/speciation/speciation.png`
 - `analyses/phase1/neutral_epcsaft_parity/results/pressure/epcsaft_neutral_pcsaft_parity.png`
-- `analyses/phase3/ionic_epcsaft_regression/results/pressure/ionic_epcsaft_co2_pressure.png`
-- `analyses/phase3/ionic_epcsaft_regression/results/speciation/ionic_epcsaft_speciation_activity.png`
+- `analyses/phase3/ionic_epcsaft_regression/results/issue_70/comparison_evidence_table.csv`
+- `analyses/phase3/ionic_epcsaft_regression/co2_water_induced_association/results/summary.json`
 - `analyses/paper_validation/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.png`
 
 ## Manuscript
@@ -89,6 +89,6 @@ bash docs/latex/scripts/sync_to_overleaf_mirror.sh
 
 There is no active MEA ePC-SAFT parameter set. Engine Issue #80 owns the next
 calculation and validation campaign. This repository retains source evidence,
-the Issue #70 supported-negative decision, and replay/rendering conventions for
-an accepted immutable packet; historical calculated artifacts are not live
+the Issue #70 supported-negative decision, and reproduction/rendering conventions
+for an accepted immutable packet; historical calculated artifacts are not live
 parameter authority.
