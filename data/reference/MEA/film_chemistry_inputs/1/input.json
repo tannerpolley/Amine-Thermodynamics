@@ -86,15 +86,17 @@
     }
   ],
   "source_standard_conversion": {
-    "identity": "mea-five-reaction-provider-neutral-basis-transform-v1",
+    "provider_transform_identity": "mea-five-reaction-provider-neutral-basis-transform-v1",
     "source_contract": "data/reference/MEA/manifests/chemical_reaction_source_contract.json",
+    "source_contract_identity": "mea-nine-species-reaction-source-contract-v2",
     "source_contract_sha256": "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55",
     "common_source_identity": "aqueous-molality-infinite-dilution-water-v1",
     "source_relation": "m_i/m_standard = x_i/(M_H2O*m_standard)",
     "algebraic_identity": "ln_K_provider = provider_affine_base_ln_k_at_state + reaction_to_neutral_basis_matrix @ provider_neutral_reference_log_fugacity_contractions",
     "provider_activity_correction_ran": false,
     "status": "algebraic_identity_only",
-    "blocker": "No active MEA parameter packet exists; ePC-SAFT Issue #80 remains open."
+    "blocker": "No active MEA parameter packet exists; ePC-SAFT Issue #80 remains open.",
+    "blocker_authority": "tannerpolley/ePC-SAFT#80"
   },
   "kinetic_correlations": [
     {
@@ -110,6 +112,8 @@
       "reason": "The source prints s^-2, but its concentration powers and kmol m^-3 s^-1 rate require s^-1.",
       "temperature_domain_k": [293.15, 343.15],
       "uncertainty_status": "not_reported",
+      "source_record_id": "Putta2016",
+      "source_locator": "journal p. 345, Rate constant correlations, Eqs. (I)-(II)",
       "evaluation_anchors": [{"temperature_k": 293.15, "expected": 154.18655966835323}, {"temperature_k": 323.15, "expected": 736.2055771939572}]
     },
     {
@@ -125,6 +129,8 @@
       "reason": "The source prints s^-2, but its concentration powers and kmol m^-3 s^-1 rate require s^-1.",
       "temperature_domain_k": [293.15, 343.15],
       "uncertainty_status": "not_reported",
+      "source_record_id": "Putta2016",
+      "source_locator": "journal p. 345, Rate constant correlations, Eqs. (I)-(II)",
       "evaluation_anchors": [{"temperature_k": 293.15, "expected": 181.5327898451538}, {"temperature_k": 323.15, "expected": 624.2225480550902}]
     },
     {
@@ -140,6 +146,8 @@
       "reason": "The coefficient is tied to the source e-NRTL activity basis, the source prints s^-2, and no Provider activity correction ran.",
       "temperature_domain_k": [293.15, 343.15],
       "uncertainty_status": "not_reported",
+      "source_record_id": "Putta2016",
+      "source_locator": "journal p. 345, Rate constant correlations, Eqs. (I)-(II)",
       "evaluation_anchors": [{"temperature_k": 293.15, "expected": 968.0615799877255}, {"temperature_k": 323.15, "expected": 6176.086188517876}]
     },
     {
@@ -155,6 +163,8 @@
       "reason": "The coefficient is tied to the source e-NRTL activity basis, the source prints s^-2, and no Provider activity correction ran.",
       "temperature_domain_k": [293.15, 343.15],
       "uncertainty_status": "not_reported",
+      "source_record_id": "Putta2016",
+      "source_locator": "journal p. 345, Rate constant correlations, Eqs. (I)-(II)",
       "evaluation_anchors": [{"temperature_k": 293.15, "expected": 623.6179688375988}, {"temperature_k": 323.15, "expected": 1326.1135214488854}]
     }
   ],

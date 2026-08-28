@@ -22,6 +22,10 @@ REACTION_CONTRACT_PATH = (
 REACTION_CONTRACT_RELATIVE = (
     "data/reference/MEA/manifests/chemical_reaction_source_contract.json"
 )
+REACTION_CONTRACT_IDENTITY = "mea-nine-species-reaction-source-contract-v2"
+REACTION_CONTRACT_SHA256 = (
+    "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55"
+)
 BASE_COMMIT = "9f7c83d80900a10fbff7007c2137d126e92d9b3d"
 SPECIES_ORDER = tuple("CO2 MEA H2O MEAH+ MEACOO- HCO3- CO3-- H3O+ OH-".split())
 REACTION_ORDER = tuple("R1 R2 R3 R4 R5".split())
@@ -76,7 +80,7 @@ FINITE_FIELDS = _fields(
     "reaction_id equation stoichiometry source_basis_projection forward_direction reverse_direction classification_status rate_equation concentration_basis rate_unit standard_concentration coefficient_status uncertainty_status domain source_record_id source_locator"
 )
 CORRELATION_FIELDS = _fields(
-    "correlation_id reaction_id basis equation A B_k source_reported_unit dimensionally_required_unit admission_status reason temperature_domain_k uncertainty_status evaluation_anchors"
+    "correlation_id reaction_id basis equation A B_k source_reported_unit dimensionally_required_unit admission_status reason temperature_domain_k uncertainty_status source_record_id source_locator evaluation_anchors"
 )
 TRANSPORT_FIELDS = _fields(
     "input_id species unit source_record_id source_locator uncertainty_status admission_status reason"
@@ -105,19 +109,40 @@ ROW_FIELDS = {
     "transport_numeric_candidates": OBSERVATION_FIELDS
     | {"admitted", "rejected", "source_record_ids"},
 }
+# Equation, rate equation, source id, exact source locator.
+# fmt: off
 REACTION_SEMANTICS = {
-    "F1": (
-        "CO2 + 2 MEA <=> MEACOO- + MEAH+",
-        "r_F1,c = k_MEA,c [MEA]^2 [CO2] - (k_MEA,c/K_eq9,c) [MEAH+] [MEACOO-]",
-    ),
-    "F2": (
-        "CO2 + MEA + H2O <=> MEACOO- + H3O+",
-        "r_F2,c = k_H2O,c [H2O] [MEA] [CO2] - (k_H2O,c/K_eq10,c) [H3O+] [MEACOO-]",
-    ),
-    "F3": (
-        "CO2 + OH- <=> HCO3-",
-        "r_F3,c = k_14,c(T) [CO2] [OH-] - (k_14,c(T)/K_eq14,c(T)) [HCO3-]",
-    ),
+    "F1": ("CO2 + 2 MEA <=> MEACOO- + MEAH+", "r_F1,c = k_MEA,c [MEA]^2 [CO2] - (k_MEA,c/K_eq9,c) [MEAH+] [MEACOO-]", "Putta2016", "journal pp. 341-342, reactions 9 and Eqs. 15-18; nomenclature p. 339"),
+    "F2": ("CO2 + MEA + H2O <=> MEACOO- + H3O+", "r_F2,c = k_H2O,c [H2O] [MEA] [CO2] - (k_H2O,c/K_eq10,c) [H3O+] [MEACOO-]", "Putta2016", "journal pp. 341-342, reaction 10 and Eqs. 15-18; nomenclature p. 339"),
+    "F3": ("CO2 + OH- <=> HCO3-", "r_F3,c = k_14,c(T) [CO2] [OH-] - (k_14,c(T)/K_eq14,c(T)) [HCO3-]", "Putta2016", "journal p. 341, reaction 14; the cited Gondal et al. coefficient source is not retained locally"),
+}
+# fmt: on
+CORRELATION_LOCATOR = "journal p. 345, Rate constant correlations, Eqs. (I)-(II)"
+CONCENTRATION_UNIT = "m^6 kmol^-2 s^-1"
+ACTIVITY_UNIT = "model-specific activity form; not transferable without a complete standard-state derivation"
+UNIT_REJECTION = "rejected_source_unit_inconsistency"
+ACTIVITY_REJECTION = "rejected_model_specific_activity_and_source_unit_inconsistency"
+# One source row per line keeps this scientific lock auditable.
+# fmt: off
+CORRELATION_EXPECTED = {
+    "Putta2016_k_MEA_c": ("F1", "concentration", 3173200000.0, 4936.6, CONCENTRATION_UNIT, UNIT_REJECTION),
+    "Putta2016_k_H2O_c": ("F2", "concentration", 108820000.0, 3900.0, CONCENTRATION_UNIT, UNIT_REJECTION),
+    "Putta2016_k_MEA_a": ("F1", "e-NRTL activity", 451910000000.0, 5851.7, ACTIVITY_UNIT, ACTIVITY_REJECTION),
+    "Putta2016_k_H2O_a": ("F2", "e-NRTL activity", 2110500.0, 2382.4, ACTIVITY_UNIT, ACTIVITY_REJECTION),
+}
+# fmt: on
+CONVERSION_EXPECTED = {
+    "provider_transform_identity": "mea-five-reaction-provider-neutral-basis-transform-v1",
+    "source_contract": REACTION_CONTRACT_RELATIVE,
+    "source_contract_identity": REACTION_CONTRACT_IDENTITY,
+    "source_contract_sha256": REACTION_CONTRACT_SHA256,
+    "common_source_identity": "aqueous-molality-infinite-dilution-water-v1",
+    "source_relation": "m_i/m_standard = x_i/(M_H2O*m_standard)",
+    "algebraic_identity": "ln_K_provider = provider_affine_base_ln_k_at_state + reaction_to_neutral_basis_matrix @ provider_neutral_reference_log_fugacity_contractions",
+    "provider_activity_correction_ran": False,
+    "status": "algebraic_identity_only",
+    "blocker": "No active MEA parameter packet exists; ePC-SAFT Issue #80 remains open.",
+    "blocker_authority": "tannerpolley/ePC-SAFT#80",
 }
 SUPPORTED_REACTION_DOMAIN = {
     "scope": "local_reaction_source_domain",
@@ -327,7 +352,12 @@ def _validate_reactions(
             raise ValueError("Finite-reaction projection or balance drifted")
         valid = (
             stoichiometry[0] < 0
-            and (reaction["equation"], reaction["rate_equation"])
+            and (
+                reaction["equation"],
+                reaction["rate_equation"],
+                reaction["source_record_id"],
+                reaction["source_locator"],
+            )
             == REACTION_SEMANTICS[reaction_id]
             and reaction["domain"]
             == (
@@ -352,7 +382,6 @@ def _validate_reactions(
 
 def _validate_correlations(payload: dict[str, Any]) -> int:
     ids = "Putta2016_k_MEA_c Putta2016_k_H2O_c Putta2016_k_MEA_a Putta2016_k_H2O_a".split()
-    reaction_ids = dict(zip(ids, ("F1", "F2", "F1", "F2"), strict=True))
     rows = _rows(
         payload["kinetic_correlations"], ids, "correlation_id", CORRELATION_FIELDS
     )
@@ -374,12 +403,23 @@ def _validate_correlations(payload: dict[str, Any]) -> int:
     for row in rows:
         lower, upper = _interval(row["temperature_domain_k"], "correlation domain")
         anchors = row["evaluation_anchors"]
+        expected = CORRELATION_EXPECTED[row["correlation_id"]]
         valid = (
-            row["equation"] == "k = A exp(-B/T)"
-            and row["reaction_id"] == reaction_ids[row["correlation_id"]]
+            (
+                row["reaction_id"],
+                row["basis"],
+                row["A"],
+                row["B_k"],
+                row["dimensionally_required_unit"],
+                row["admission_status"],
+            )
+            == expected
+            and row["equation"] == "k = A exp(-B/T)"
             and row["source_reported_unit"] == "m^6 kmol^-2 s^-2"
+            and row["temperature_domain_k"] == [293.15, 343.15]
             and row["uncertainty_status"] == "not_reported"
-            and row["admission_status"].startswith("rejected")
+            and row["source_record_id"] == "Putta2016"
+            and row["source_locator"] == CORRELATION_LOCATOR
             and isinstance(anchors, list)
             and len(anchors) == 2
         )
@@ -575,7 +615,12 @@ def _validate_sources(payload: dict[str, Any]) -> None:
             raise ValueError("Source availability or gap disposition drifted")
     referenced = {
         row["source_record_id"]
-        for key in ("finite_reactions", "transport_inputs", "property_inputs")
+        for key in (
+            "finite_reactions",
+            "kinetic_correlations",
+            "transport_inputs",
+            "property_inputs",
+        )
         for row in payload[key]
     }
     referenced.update(
@@ -605,19 +650,23 @@ def validate_film_chemistry_inputs() -> dict[str, Any]:
     conversion = _keys(
         payload["source_standard_conversion"],
         _fields(
-            "identity source_contract source_contract_sha256 common_source_identity source_relation algebraic_identity provider_activity_correction_ran status blocker"
+            "provider_transform_identity source_contract source_contract_identity source_contract_sha256 common_source_identity source_relation algebraic_identity provider_activity_correction_ran status blocker blocker_authority"
         ),
         "source-standard conversion",
     )
     provider = source_contract["provider_transform"]
+    if source_contract.get("identity") != REACTION_CONTRACT_IDENTITY:
+        raise ValueError("Reaction source contract identity drifted")
     if (
-        conversion["source_contract"] != REACTION_CONTRACT_RELATIVE
-        or conversion["source_contract_sha256"] != _sha256(REACTION_CONTRACT_PATH)
-        or conversion["provider_activity_correction_ran"] is not False
-        or conversion["status"] != "algebraic_identity_only"
-        or conversion["identity"] != provider["identity"]
-        or conversion["algebraic_identity"]
-        != provider["deterministic_payload"]["transformed_vector_definition"]
+        _sha256(REACTION_CONTRACT_PATH) != REACTION_CONTRACT_SHA256
+        or conversion != CONVERSION_EXPECTED
+        or provider["identity"] != CONVERSION_EXPECTED["provider_transform_identity"]
+        or source_contract["common_source_standard_state"]["identity"]
+        != CONVERSION_EXPECTED["common_source_identity"]
+        or source_contract["common_source_standard_state"]["infinite_dilution_relation"]
+        != CONVERSION_EXPECTED["source_relation"]
+        or provider["deterministic_payload"]["transformed_vector_definition"]
+        != CONVERSION_EXPECTED["algebraic_identity"]
     ):
         raise ValueError("Source-standard conversion drifted")
     exclusions = _keys(
@@ -640,12 +689,12 @@ def validate_film_chemistry_inputs() -> dict[str, Any]:
             "common_application_domain_and_guards",
             "species_reaction_order_classification_and_source_hash",
             "source_basis_projection_element_charge_semantics_local_domain_and_uncertainty",
-            "correlation_evaluation_transcription_and_dimensional_rejection",
+            "published_correlation_inputs_provenance_evaluation_and_dimensional_rejection",
             "transport_fail_closed",
             "property_provenance_domain_and_uncertainty",
             "observation_metadata",
             "source_gap_disposition_and_reference_coverage",
-            "algebraic_conversion_without_provider_evaluation",
+            "source_contract_identity_and_algebraic_conversion_without_provider_evaluation",
             "explicit_exclusions_and_no_column_fit",
         ],
         "finite_reaction_count": 3,
