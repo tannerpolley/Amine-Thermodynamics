@@ -1,0 +1,64 @@
+{
+  "admitted_fast_equilibrium_reactions": [],
+  "admitted_numeric_transport_inputs": [],
+  "admitted_property_inputs": [
+    "liquid_density_unloaded",
+    "liquid_density_loaded",
+    "liquid_dynamic_viscosity"
+  ],
+  "checks": [
+    "accepted_input_schema_hashes_structure_and_receipt",
+    "common_application_domain_and_guards",
+    "species_reaction_order_classification_and_source_hash",
+    "source_basis_projection_element_charge_semantics_local_domain_and_uncertainty",
+    "published_correlation_inputs_provenance_evaluation_and_dimensional_rejection",
+    "transport_fail_closed",
+    "property_provenance_domain_and_uncertainty",
+    "observation_metadata",
+    "source_gap_disposition_and_reference_coverage",
+    "source_contract_identity_and_algebraic_conversion_without_provider_evaluation",
+    "explicit_exclusions_and_no_column_fit"
+  ],
+  "common_application_domain": {
+    "downstream_admission_rule": "A state must satisfy all three limits; broader local source domains remain provenance only.",
+    "loading_mol_co2_per_mol_mea": {
+      "guard": "reject_loading_greater_than_or_equal_to_0.5",
+      "maximum_exclusive": 0.5,
+      "minimum_inclusive": 0.0,
+      "reason": "Oxazolidone treatment is not included."
+    },
+    "mea_molarity_mol_l": {
+      "admission_rule": "exact_discrete_cases_only",
+      "basis": "source-complete Putta2016 fit-corpus endpoints",
+      "supported_discrete": [
+        1.0,
+        5.0
+      ]
+    },
+    "temperature_k": {
+      "basis": "retained R4/R5 source-domain intersection",
+      "maximum_inclusive": 323.15,
+      "minimum_inclusive": 293.15
+    }
+  },
+  "correlation_evaluation_anchor_count": 8,
+  "finite_reaction_count": 3,
+  "input_identity": "mea-film-chemistry-work-package-a-input-v1",
+  "input_sha256": "f62df1eec0176fb9196d84c6523371beab576f7154c07498f16a0d977626abe5",
+  "limitations": [
+    "Published kinetic coefficient units are dimensionally inconsistent with the published rate unit.",
+    "Source-complete CO2, free-MEA, and ionic diffusivity coefficients are unavailable.",
+    "Luo2015 and PachecoRochelle1998 remain unavailable and not adjudicated at locator level.",
+    "No active MEA parameter packet exists; Work Package B remains blocked by ePC-SAFT Issue #80."
+  ],
+  "net_carbamate_balance": {
+    "C": 0,
+    "H": 0,
+    "N": 0,
+    "O": 0,
+    "charge": 0
+  },
+  "provider_activity_correction_ran": false,
+  "schema_sha256": "d6cd1f51275b9c12681d9a901300dd8ab89d585e48f8de15302d8ff8b352eed9",
+  "status": "pass"
+}
