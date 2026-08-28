@@ -129,3 +129,58 @@ def test_admission_classification_drift_is_rejected(
     )
     with pytest.raises(ValueError):
         contract.validate_film_chemistry_inputs()
+
+
+def test_finite_reaction_domain_drift_is_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+    _mutate(
+        input_path,
+        receipt_path,
+        lambda payload: payload["finite_reactions"][0]["domain"].pop("temperature_k"),
+    )
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+def test_source_contract_path_drift_is_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+    _mutate(
+        input_path,
+        receipt_path,
+        lambda payload: payload["source_standard_conversion"].update(
+            source_contract="wrong/path.json"
+        ),
+    )
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+@pytest.mark.parametrize("field", ["equation", "rate_equation"])
+def test_finite_reaction_semantic_text_drift_is_rejected(
+    field: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+    _mutate(
+        input_path,
+        receipt_path,
+        lambda payload: payload["finite_reactions"][0].update({field: "wrong"}),
+    )
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+def test_correlation_reaction_mapping_drift_is_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+    _mutate(
+        input_path,
+        receipt_path,
+        lambda payload: payload["kinetic_correlations"][0].update(reaction_id="F2"),
+    )
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()

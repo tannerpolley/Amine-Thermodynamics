@@ -19,6 +19,9 @@ RECEIPT_PATH = DATA_ROOT / "film_chemistry_inputs" / "1.receipt.json"
 REACTION_CONTRACT_PATH = (
     DATA_ROOT / "manifests" / "chemical_reaction_source_contract.json"
 )
+REACTION_CONTRACT_RELATIVE = (
+    "data/reference/MEA/manifests/chemical_reaction_source_contract.json"
+)
 BASE_COMMIT = "9f7c83d80900a10fbff7007c2137d126e92d9b3d"
 SPECIES_ORDER = tuple("CO2 MEA H2O MEAH+ MEACOO- HCO3- CO3-- H3O+ OH-".split())
 REACTION_ORDER = tuple("R1 R2 R3 R4 R5".split())
@@ -70,7 +73,7 @@ def _fields(names: str) -> set[str]:
 
 CLASSIFICATION_FIELDS = _fields("reaction_id film_role admission_status reason")
 FINITE_FIELDS = _fields(
-    "reaction_id equation stoichiometry source_basis_projection forward_direction reverse_direction classification_status rate_equation concentration_basis rate_unit standard_concentration coefficient_status uncertainty_status source_record_id source_locator"
+    "reaction_id equation stoichiometry source_basis_projection forward_direction reverse_direction classification_status rate_equation concentration_basis rate_unit standard_concentration coefficient_status uncertainty_status domain source_record_id source_locator"
 )
 CORRELATION_FIELDS = _fields(
     "correlation_id reaction_id basis equation A B_k source_reported_unit dimensionally_required_unit admission_status reason temperature_domain_k uncertainty_status evaluation_anchors"
@@ -101,6 +104,38 @@ ROW_FIELDS = {
     | {"metric", "rows", "column_order", "source_record_id", "source_locator"},
     "transport_numeric_candidates": OBSERVATION_FIELDS
     | {"admitted", "rejected", "source_record_ids"},
+}
+REACTION_SEMANTICS = {
+    "F1": (
+        "CO2 + 2 MEA <=> MEACOO- + MEAH+",
+        "r_F1,c = k_MEA,c [MEA]^2 [CO2] - (k_MEA,c/K_eq9,c) [MEAH+] [MEACOO-]",
+    ),
+    "F2": (
+        "CO2 + MEA + H2O <=> MEACOO- + H3O+",
+        "r_F2,c = k_H2O,c [H2O] [MEA] [CO2] - (k_H2O,c/K_eq10,c) [H3O+] [MEACOO-]",
+    ),
+    "F3": (
+        "CO2 + OH- <=> HCO3-",
+        "r_F3,c = k_14,c(T) [CO2] [OH-] - (k_14,c(T)/K_eq14,c(T)) [HCO3-]",
+    ),
+}
+SUPPORTED_REACTION_DOMAIN = {
+    "scope": "local_reaction_source_domain",
+    "status": "available_source_summary",
+    "temperature_k": [293.15, 343.15],
+    "mea_molarity_mol_l": [1.0, 5.0],
+    "loading_mol_co2_per_mol_mea": [0.0, 0.4],
+    "source_locator": "journal p. 345, Rate constant correlations",
+    "common_downstream_admission_domain_ref": "common_application_domain",
+}
+UNAVAILABLE_REACTION_DOMAIN = {
+    "scope": "local_reaction_source_domain",
+    "status": "unavailable_not_adjudicated",
+    "temperature_k": None,
+    "mea_molarity_mol_l": None,
+    "loading_mol_co2_per_mol_mea": None,
+    "source_locator": "journal p. 341, reaction 14; cited Gondal et al. coefficient source unavailable locally",
+    "common_downstream_admission_domain_ref": "common_application_domain",
 }
 
 
@@ -266,6 +301,7 @@ def _validate_reactions(
     }
     balances: dict[str, dict[str, int]] = {}
     for reaction in reactions:
+        reaction_id = reaction["reaction_id"]
         projection = _keys(
             reaction["source_basis_projection"], set(REACTION_ORDER), "projection"
         )
@@ -291,6 +327,14 @@ def _validate_reactions(
             raise ValueError("Finite-reaction projection or balance drifted")
         valid = (
             stoichiometry[0] < 0
+            and (reaction["equation"], reaction["rate_equation"])
+            == REACTION_SEMANTICS[reaction_id]
+            and reaction["domain"]
+            == (
+                SUPPORTED_REACTION_DOMAIN
+                if reaction_id in {"F1", "F2"}
+                else UNAVAILABLE_REACTION_DOMAIN
+            )
             and "CO2 consumption" in reaction["forward_direction"]
             and "CO2 release" in reaction["reverse_direction"]
             and reaction["classification_status"] == "admitted_finite_reaction"
@@ -298,7 +342,9 @@ def _validate_reactions(
             and reaction["uncertainty_status"] == "not_reported"
         )
         if not valid:
-            raise ValueError("Finite-reaction direction, unit, or status drifted")
+            raise ValueError(
+                "Finite-reaction semantics, domain, unit, direction, or status drifted"
+            )
     if reactions[0]["stoichiometry"] != [-1, -2, 0, 1, 1, 0, 0, 0, 0]:
         raise ValueError("Net carbamate projection drifted")
     return balances
@@ -306,6 +352,7 @@ def _validate_reactions(
 
 def _validate_correlations(payload: dict[str, Any]) -> int:
     ids = "Putta2016_k_MEA_c Putta2016_k_H2O_c Putta2016_k_MEA_a Putta2016_k_H2O_a".split()
+    reaction_ids = dict(zip(ids, ("F1", "F2", "F1", "F2"), strict=True))
     rows = _rows(
         payload["kinetic_correlations"], ids, "correlation_id", CORRELATION_FIELDS
     )
@@ -329,6 +376,7 @@ def _validate_correlations(payload: dict[str, Any]) -> int:
         anchors = row["evaluation_anchors"]
         valid = (
             row["equation"] == "k = A exp(-B/T)"
+            and row["reaction_id"] == reaction_ids[row["correlation_id"]]
             and row["source_reported_unit"] == "m^6 kmol^-2 s^-2"
             and row["uncertainty_status"] == "not_reported"
             and row["admission_status"].startswith("rejected")
@@ -563,7 +611,8 @@ def validate_film_chemistry_inputs() -> dict[str, Any]:
     )
     provider = source_contract["provider_transform"]
     if (
-        conversion["source_contract_sha256"] != _sha256(REACTION_CONTRACT_PATH)
+        conversion["source_contract"] != REACTION_CONTRACT_RELATIVE
+        or conversion["source_contract_sha256"] != _sha256(REACTION_CONTRACT_PATH)
         or conversion["provider_activity_correction_ran"] is not False
         or conversion["status"] != "algebraic_identity_only"
         or conversion["identity"] != provider["identity"]
@@ -590,7 +639,7 @@ def validate_film_chemistry_inputs() -> dict[str, Any]:
             "schema_structure_and_receipt_hashes",
             "common_application_domain_and_guards",
             "species_reaction_order_classification_and_source_hash",
-            "source_basis_projection_element_charge_direction_and_uncertainty",
+            "source_basis_projection_element_charge_semantics_local_domain_and_uncertainty",
             "correlation_evaluation_transcription_and_dimensional_rejection",
             "transport_fail_closed",
             "property_provenance_domain_and_uncertainty",
