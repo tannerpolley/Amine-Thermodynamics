@@ -1,8 +1,14 @@
 {
   "schema_version": 1,
   "identity": "mea-film-chemistry-work-package-a-input-v1",
-  "status": "source_complete_nonexecutable_input_contract",
+  "status": "source_validated_deferred_inputs",
   "base_commit": "9f7c83d80900a10fbff7007c2137d126e92d9b3d",
+  "common_application_domain": {
+    "temperature_k": {"minimum_inclusive": 293.15, "maximum_inclusive": 323.15, "basis": "retained R4/R5 source-domain intersection"},
+    "mea_molarity_mol_l": {"supported_discrete": [1.0, 5.0], "admission_rule": "exact_discrete_cases_only", "basis": "source-complete Putta2016 fit-corpus endpoints"},
+    "loading_mol_co2_per_mol_mea": {"minimum_inclusive": 0.0, "maximum_exclusive": 0.5, "guard": "reject_loading_greater_than_or_equal_to_0.5", "reason": "Oxazolidone treatment is not included."},
+    "downstream_admission_rule": "A state must satisfy all three limits; broader local source domains remain provenance only."
+  },
   "species_order": ["CO2", "MEA", "H2O", "MEAH+", "MEACOO-", "HCO3-", "CO3--", "H3O+", "OH-"],
   "species": [
     {"id": "CO2", "formula": {"C": 1, "H": 0, "N": 0, "O": 2}, "charge": 0},
@@ -37,6 +43,7 @@
       "rate_unit": "kmol m^-3 s^-1",
       "standard_concentration": "not_applicable_dimensional_concentration_power_law",
       "coefficient_status": "rejected_source_unit_inconsistency",
+      "uncertainty_status": "not_reported",
       "source_record_id": "Putta2016",
       "source_locator": "journal pp. 341-342, reactions 9 and Eqs. 15-18; nomenclature p. 339"
     },
@@ -53,6 +60,7 @@
       "rate_unit": "kmol m^-3 s^-1",
       "standard_concentration": "not_applicable_dimensional_concentration_power_law",
       "coefficient_status": "rejected_source_unit_inconsistency",
+      "uncertainty_status": "not_reported",
       "source_record_id": "Putta2016",
       "source_locator": "journal pp. 341-342, reaction 10 and Eqs. 15-18; nomenclature p. 339"
     },
@@ -69,6 +77,7 @@
       "rate_unit": "kmol m^-3 s^-1",
       "standard_concentration": "not_applicable_dimensional_concentration_power_law",
       "coefficient_status": "rejected_primary_coefficient_source_unavailable",
+      "uncertainty_status": "not_reported",
       "source_record_id": "Putta2016",
       "source_locator": "journal p. 341, reaction 14; the cited Gondal et al. coefficient source is not retained locally"
     }
@@ -98,7 +107,7 @@
       "reason": "The source prints s^-2, but its concentration powers and kmol m^-3 s^-1 rate require s^-1.",
       "temperature_domain_k": [293.15, 343.15],
       "uncertainty_status": "not_reported",
-      "anchors": [{"temperature_k": 293.15, "expected": 154.18655966835323}, {"temperature_k": 323.15, "expected": 736.2055771939572}]
+      "evaluation_anchors": [{"temperature_k": 293.15, "expected": 154.18655966835323}, {"temperature_k": 323.15, "expected": 736.2055771939572}]
     },
     {
       "correlation_id": "Putta2016_k_H2O_c",
@@ -113,7 +122,7 @@
       "reason": "The source prints s^-2, but its concentration powers and kmol m^-3 s^-1 rate require s^-1.",
       "temperature_domain_k": [293.15, 343.15],
       "uncertainty_status": "not_reported",
-      "anchors": [{"temperature_k": 293.15, "expected": 181.5327898451538}, {"temperature_k": 323.15, "expected": 624.2225480550902}]
+      "evaluation_anchors": [{"temperature_k": 293.15, "expected": 181.5327898451538}, {"temperature_k": 323.15, "expected": 624.2225480550902}]
     },
     {
       "correlation_id": "Putta2016_k_MEA_a",
@@ -128,7 +137,7 @@
       "reason": "The coefficient is tied to the source e-NRTL activity basis, the source prints s^-2, and no Provider activity correction ran.",
       "temperature_domain_k": [293.15, 343.15],
       "uncertainty_status": "not_reported",
-      "anchors": [{"temperature_k": 293.15, "expected": 968.0615799877255}, {"temperature_k": 323.15, "expected": 6176.086188517876}]
+      "evaluation_anchors": [{"temperature_k": 293.15, "expected": 968.0615799877255}, {"temperature_k": 323.15, "expected": 6176.086188517876}]
     },
     {
       "correlation_id": "Putta2016_k_H2O_a",
@@ -143,7 +152,7 @@
       "reason": "The coefficient is tied to the source e-NRTL activity basis, the source prints s^-2, and no Provider activity correction ran.",
       "temperature_domain_k": [293.15, 343.15],
       "uncertainty_status": "not_reported",
-      "anchors": [{"temperature_k": 293.15, "expected": 623.6179688375988}, {"temperature_k": 323.15, "expected": 1326.1135214488854}]
+      "evaluation_anchors": [{"temperature_k": 293.15, "expected": 623.6179688375988}, {"temperature_k": 323.15, "expected": 1326.1135214488854}]
     }
   ],
   "transport_inputs": [
@@ -186,15 +195,32 @@
   ],
   "property_inputs": [
     {
-      "input_id": "liquid_density",
+      "input_id": "liquid_density_unloaded",
       "source_record_id": "Amundsen2009",
       "data_path": "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
       "data_sha256": "9047efb0281bff93d1769b12a3df50420d0b01ddd44ffd5041749ec0fb1fe622",
-      "source_locator": "Tables 1-4; measurement uncertainty on journal p. 175",
-      "domain": {"temperature_k": [298.15, 353.15], "loaded_mea_mass_fraction": [0.2, 0.4], "loading_mol_co2_per_mol_mea": [0.0, 0.5]},
-      "source_reported_uncertainty": {"value": 0.00005, "unit": "g cm^-3", "type": "estimated_absolute"},
-      "admission_status": "rejected_repo_extraction_uncertainty_mismatch",
-      "reason": "The retained CSV records 0.0005 g cm^-3 while the primary source reports 0.00005 g cm^-3; Work Package A does not mutate the preserved observation table."
+      "source_locator": "journal p. 175 instrument uncertainty and Table 1; retained source companion rows",
+      "loading_state": "unloaded",
+      "domain": {"temperature_k": [298.15, 353.15], "mea_mass_fraction_supported": [0.2, 0.3, 0.4, 0.5, 0.7, 0.9, 1.0], "loading_mol_co2_per_mol_mea": [0.0]},
+      "instrument_uncertainty": {"value": 0.00005, "unit": "g cm^-3", "type": "estimated_measurement_absolute"},
+      "applicable_uncertainty": {"value": 0.0005, "unit": "g cm^-3", "type": "combined_absolute"},
+      "uncertainty_status": "reported_combined",
+      "admission_status": "admitted_observation_source_not_interpolator",
+      "reason": "The retained unloaded rows use the applicable combined uncertainty; no interpolation law is introduced."
+    },
+    {
+      "input_id": "liquid_density_loaded",
+      "source_record_id": "Amundsen2009",
+      "data_path": "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
+      "data_sha256": "9047efb0281bff93d1769b12a3df50420d0b01ddd44ffd5041749ec0fb1fe622",
+      "source_locator": "journal p. 175 instrument uncertainty and Tables 2-4; retained source companion rows",
+      "loading_state": "loaded",
+      "domain": {"temperature_k": [298.15, 353.15], "mea_mass_fraction_supported": [0.2, 0.3, 0.4], "loading_mol_co2_per_mol_mea_supported": [0.1, 0.2, 0.3, 0.4, 0.5]},
+      "instrument_uncertainty": {"value": 0.00005, "unit": "g cm^-3", "type": "estimated_measurement_absolute"},
+      "applicable_uncertainty": {"value": 0.002, "unit": "g cm^-3", "type": "combined_absolute"},
+      "uncertainty_status": "reported_combined",
+      "admission_status": "admitted_observation_source_not_interpolator",
+      "reason": "The retained loaded rows use the applicable combined uncertainty; no interpolation law is introduced."
     },
     {
       "input_id": "liquid_dynamic_viscosity",
@@ -202,8 +228,10 @@
       "data_path": "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
       "data_sha256": "9047efb0281bff93d1769b12a3df50420d0b01ddd44ffd5041749ec0fb1fe622",
       "source_locator": "Tables 5-8; measurement uncertainty on journal p. 177",
-      "domain": {"temperature_k": [298.15, 353.15], "loaded_mea_mass_fraction": [0.2, 0.4], "loading_mol_co2_per_mol_mea": [0.0, 0.5]},
-      "source_reported_uncertainty": {"value": 0.01, "unit": "mPa s", "type": "estimated_absolute"},
+      "domain": {"temperature_k": [298.15, 353.15], "unloaded_mea_mass_fraction_supported": [0.2, 0.3, 0.4, 0.5, 0.7, 0.9, 1.0], "loaded_mea_mass_fraction_supported": [0.2, 0.3, 0.4], "loading_mol_co2_per_mol_mea_supported": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]},
+      "instrument_uncertainty": {"value": 0.01, "unit": "mPa s", "type": "estimated_measurement_absolute"},
+      "applicable_uncertainty_by_loading_state": [{"loading_state": "unloaded", "value": 1.0, "unit": "percent", "type": "combined_relative"}, {"loading_state": "loaded", "value": 3.0, "unit": "percent", "type": "combined_relative"}],
+      "uncertainty_status": "reported_combined",
       "admission_status": "admitted_observation_source_not_interpolator",
       "reason": "The primary paper, retained table, domain, and reported uncertainty agree; no interpolation law is introduced."
     }
@@ -214,6 +242,7 @@
       "kind": "kinetic_fit_summary",
       "value": 198,
       "unit": "wetted-wall-column rate points",
+      "uncertainty_status": "not_reported",
       "domain": {"temperature_k": [293.15, 343.15], "mea_molarity_mol_l": [1.0, 5.0], "loading": [0.0, 0.4], "log_mean_pressure_difference_kpa": [0.58, 14.7]},
       "admission_status": "admitted_source_summary_not_raw_rows",
       "reason": "The aggregate count and domain are primary-source observations; the underlying rows are not retained and are not reconstructed.",
@@ -224,6 +253,9 @@
       "observation_id": "Putta2016_external_AARD_table",
       "kind": "model_comparison_summary",
       "metric": "AARD percent as defined by the source",
+      "unit": "percent",
+      "uncertainty_status": "not_reported",
+      "domain": {"comparison_data_sets": ["Luo_SDC", "Luo_WWC", "Puxty_WWC", "Aboudheir_laminar_jet"], "raw_state_rows": "unavailable_not_reconstructed"},
       "rows": [{"model": "Aboudheir concentration", "aard_percent": [24.3, 15.6, 37.8, 15.0]}, {"model": "Luo concentration", "aard_percent": [17.3, 19.3, 37.2, 38.2]}, {"model": "Luo activity", "aard_percent": [15.0, 18.6, 36.3, 32.2]}, {"model": "Putta concentration", "aard_percent": [14.2, 14.0, 12.4, 13.7]}, {"model": "Putta activity", "aard_percent": [18.9, 14.8, 13.8, 10.2]}],
       "column_order": ["Luo_SDC", "Luo_WWC", "Puxty_WWC", "Aboudheir_laminar_jet"],
       "admission_status": "admitted_source_summary_not_raw_rows",
@@ -234,21 +266,28 @@
     {
       "observation_id": "transport_numeric_candidates",
       "kind": "transport_input_screen",
+      "unit": "m^2 s^-1",
+      "uncertainty_status": "not_reported",
+      "domain": {"downstream_application_domain_ref": "common_application_domain", "local_source_domains_may_be_broader": true},
       "admitted": [],
       "rejected": ["D_CO2_effective_fick", "D_MEA_free_effective_fick", "D_ions_smallest_documented_approximation"],
+      "source_record_ids": ["Putta2016", "Putta2017", "Gaspar2015"],
+      "admission_status": "rejected_numeric_inputs",
       "reason": "The retained primary sources give identities/domains but not a source-complete executable coefficient chain."
     }
   ],
   "source_records": [
-    {"source_id": "Putta2016", "doi": "10.1016/j.ijggc.2016.08.009", "zotero_parent_key": "VR43Z4ZX", "zotero_attachment_key": "BSUB8BSF", "local_pdf_sha256": "fac3789d1ff6baa53e226638a2505ee3f3ff10433e4af89ef0a8e27785771e99", "locators": "journal pp. 339-349, nomenclature, reactions 9-14, Eqs. 15-25, Tables 1, 3, and 4"},
-    {"source_id": "Putta2017", "doi": "10.1016/j.cej.2017.06.134", "zotero_parent_key": "WMNI4QQ6", "zotero_attachment_key": "YPM9CEQV", "local_pdf_sha256": "fb96a6909f2ddf099e19c60f9a0873dc622f6f6894c0c8ed0de5a5a27afeef1a", "locators": "journal pp. 468-469, Eqs. 12-13 and Table 4"},
-    {"source_id": "Gaspar2015", "doi": "10.1016/j.ces.2015.08.023", "zotero_parent_key": "PPDL8269", "zotero_attachment_key": "PW5C8YSL", "local_pdf_sha256": "1af00f78519bcb56bf4d754fd01297b555cb0c6e8ff6afe11b2a5ea034d4cdf7", "locators": "journal pp. 204-209, Eqs. 1-24 and equal-diffusivity comparison"},
-    {"source_id": "Amundsen2009", "doi": "10.1021/je900188m", "zotero_parent_key": "3QJR6RHH", "zotero_attachment_key": "NGQVTDX7", "repo_markdown_path": "docs/papers/md/Amundsen et al. - 2009 - Density and viscosity of monoethanolamine + water + carbon dioxide from (25 to 80) °C.md", "repo_markdown_sha256": "4b585de0d9d73a1f7ac142882cdbafeaa37d780c36f795f40bac627b1d7ec1ce", "locators": "journal pp. 175-181, Tables 1-12 and Eqs. 1-10"}
+    {"source_id": "Putta2016", "doi": "10.1016/j.ijggc.2016.08.009", "availability_status": "available_adjudicated", "zotero_parent_key": "VR43Z4ZX", "zotero_attachment_key": "BSUB8BSF", "local_pdf_sha256": "fac3789d1ff6baa53e226638a2505ee3f3ff10433e4af89ef0a8e27785771e99", "locators": "journal pp. 339-349, nomenclature, reactions 9-14, Eqs. 15-25, Tables 1, 3, and 4"},
+    {"source_id": "Putta2017", "doi": "10.1016/j.cej.2017.06.134", "availability_status": "available_adjudicated", "zotero_parent_key": "WMNI4QQ6", "zotero_attachment_key": "YPM9CEQV", "local_pdf_sha256": "fb96a6909f2ddf099e19c60f9a0873dc622f6f6894c0c8ed0de5a5a27afeef1a", "locators": "journal pp. 468-469, Eqs. 12-13 and Table 4"},
+    {"source_id": "Gaspar2015", "doi": "10.1016/j.ces.2015.08.023", "availability_status": "available_adjudicated", "zotero_parent_key": "PPDL8269", "zotero_attachment_key": "PW5C8YSL", "local_pdf_sha256": "1af00f78519bcb56bf4d754fd01297b555cb0c6e8ff6afe11b2a5ea034d4cdf7", "locators": "journal pp. 204-209, Eqs. 1-24 and equal-diffusivity comparison"},
+    {"source_id": "Amundsen2009", "doi": "10.1021/je900188m", "availability_status": "available_adjudicated", "zotero_parent_key": "3QJR6RHH", "zotero_attachment_key": "NGQVTDX7", "repo_markdown_path": "docs/papers/md/Amundsen et al. - 2009 - Density and viscosity of monoethanolamine + water + carbon dioxide from (25 to 80) °C.md", "repo_markdown_sha256": "4b585de0d9d73a1f7ac142882cdbafeaa37d780c36f795f40bac627b1d7ec1ce", "locators": "journal pp. 175-181, Tables 1-12 and Eqs. 1-10"},
+    {"source_id": "Luo2015", "doi": "10.1016/j.ces.2014.10.013", "availability_status": "unavailable_not_adjudicated", "locators": null, "coefficients": null, "reason": "Issue #72 names this primary source, but no retained local source evidence is available for locator-level adjudication."},
+    {"source_id": "PachecoRochelle1998", "doi": "10.1021/ie980123g", "availability_status": "unavailable_not_adjudicated", "locators": null, "coefficients": null, "reason": "Issue #72 names this primary source, but no retained local source evidence is available for locator-level adjudication."}
   ],
   "validation_policy": {
-    "correlation_anchor_relative_tolerance": 1e-12,
-    "correlation_anchor_absolute_tolerance": 0.0,
-    "correlation_tolerance_rationale": "The anchors reproduce printed decimal coefficients with binary64 exp evaluation; 1e-12 is a numerical transcription check, not an experimental-agreement or coefficient-uncertainty claim.",
+    "correlation_evaluation_relative_tolerance": 1e-12,
+    "correlation_evaluation_absolute_tolerance": 0.0,
+    "correlation_evaluation_rationale": "The evaluation anchors are calculated from the same printed A/B coefficients with binary64 exp evaluation; 1e-12 checks deterministic transcription/evaluation only and is not independent physical agreement or coefficient uncertainty.",
     "stoichiometry_balance_hash_and_order_tolerance": "exact",
     "aard_metric_policy": "AARD values and the metric definition are retained verbatim as source summaries; no tolerance is assigned because raw observations are unavailable and the metric is not recomputed."
   },

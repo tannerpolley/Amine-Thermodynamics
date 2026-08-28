@@ -8,6 +8,7 @@
     "identity",
     "status",
     "base_commit",
+    "common_application_domain",
     "species_order",
     "species",
     "source_reaction_order",
@@ -25,21 +26,91 @@
   "properties": {
     "schema_version": {"const": 1},
     "identity": {"const": "mea-film-chemistry-work-package-a-input-v1"},
-    "status": {"const": "source_complete_nonexecutable_input_contract"},
-    "base_commit": {"pattern": "^[0-9a-f]{40}$"},
+    "status": {"const": "source_validated_deferred_inputs"},
+    "base_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "common_application_domain": {
+      "type": "object",
+      "required": ["temperature_k", "mea_molarity_mol_l", "loading_mol_co2_per_mol_mea", "downstream_admission_rule"],
+      "additionalProperties": false
+    },
     "species_order": {"type": "array", "minItems": 9, "maxItems": 9, "uniqueItems": true},
-    "species": {"type": "array", "minItems": 9, "maxItems": 9},
+    "species": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {"$ref": "#/$defs/species"}
+    },
     "source_reaction_order": {"const": ["R1", "R2", "R3", "R4", "R5"]},
-    "film_classification": {"type": "array", "minItems": 5},
-    "finite_reactions": {"type": "array", "minItems": 3},
-    "source_standard_conversion": {"type": "object"},
-    "kinetic_correlations": {"type": "array", "minItems": 4},
-    "transport_inputs": {"type": "array", "minItems": 3},
-    "property_inputs": {"type": "array", "minItems": 2},
-    "observations": {"type": "array", "minItems": 3},
-    "source_records": {"type": "array", "minItems": 4},
-    "validation_policy": {"type": "object"},
-    "exclusions": {"type": "object"}
+    "film_classification": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/classification"}
+    },
+    "finite_reactions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/finite_reaction"}
+    },
+    "source_standard_conversion": {"type": "object", "minProperties": 9, "maxProperties": 9},
+    "kinetic_correlations": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/kinetic_correlation"}
+    },
+    "transport_inputs": {"type": "array", "minItems": 3, "maxItems": 3},
+    "property_inputs": {"type": "array", "minItems": 3, "maxItems": 3},
+    "observations": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/observation"}
+    },
+    "source_records": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {"$ref": "#/$defs/source_record"}
+    },
+    "validation_policy": {"type": "object", "minProperties": 5, "maxProperties": 5},
+    "exclusions": {"type": "object", "minProperties": 3, "maxProperties": 3}
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "species": {
+      "type": "object",
+      "required": ["id", "formula", "charge"],
+      "additionalProperties": false
+    },
+    "classification": {
+      "type": "object",
+      "required": ["reaction_id", "film_role", "admission_status", "reason"],
+      "additionalProperties": false
+    },
+    "finite_reaction": {
+      "type": "object",
+      "required": ["reaction_id", "equation", "stoichiometry", "source_basis_projection", "forward_direction", "reverse_direction", "classification_status", "rate_equation", "concentration_basis", "rate_unit", "standard_concentration", "coefficient_status", "uncertainty_status", "source_record_id", "source_locator"],
+      "additionalProperties": false
+    },
+    "evaluation_anchor": {
+      "type": "object",
+      "required": ["temperature_k", "expected"],
+      "additionalProperties": false
+    },
+    "kinetic_correlation": {
+      "type": "object",
+      "required": ["correlation_id", "reaction_id", "basis", "equation", "A", "B_k", "source_reported_unit", "dimensionally_required_unit", "admission_status", "reason", "temperature_domain_k", "uncertainty_status", "evaluation_anchors"],
+      "additionalProperties": false
+    },
+    "observation": {
+      "type": "object",
+      "required": ["observation_id", "kind", "unit", "uncertainty_status", "domain", "admission_status", "reason"]
+    },
+    "source_record": {
+      "type": "object",
+      "required": ["source_id", "doi", "availability_status"]
+    }
+  }
 }
