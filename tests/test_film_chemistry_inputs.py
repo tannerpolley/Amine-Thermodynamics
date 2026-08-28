@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import shutil
 from collections.abc import Callable
 from pathlib import Path
@@ -16,15 +17,18 @@ def _sandbox(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> tuple[Path, Pat
     input_path = tmp_path / "input.json"
     schema_path = tmp_path / "schema.json"
     receipt_path = tmp_path / "receipt.json"
+    source_contract_path = tmp_path / "source_contract.json"
     for source, target in (
         (contract.INPUT_PATH, input_path),
         (contract.SCHEMA_PATH, schema_path),
         (contract.RECEIPT_PATH, receipt_path),
+        (contract.REACTION_CONTRACT_PATH, source_contract_path),
     ):
         shutil.copyfile(source, target)
     monkeypatch.setattr(contract, "INPUT_PATH", input_path)
     monkeypatch.setattr(contract, "SCHEMA_PATH", schema_path)
     monkeypatch.setattr(contract, "RECEIPT_PATH", receipt_path)
+    monkeypatch.setattr(contract, "REACTION_CONTRACT_PATH", source_contract_path)
     return input_path, receipt_path
 
 
@@ -181,6 +185,112 @@ def test_correlation_reaction_mapping_drift_is_rejected(
         input_path,
         receipt_path,
         lambda payload: payload["kinetic_correlations"][0].update(reaction_id="F2"),
+    )
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "provider_transform_identity",
+        "common_source_identity",
+        "source_relation",
+        "source_contract_identity",
+    ],
+)
+def test_conversion_identity_drift_is_rejected(
+    field: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+    _mutate(
+        input_path,
+        receipt_path,
+        lambda payload: payload["source_standard_conversion"].update({field: "wrong"}),
+    )
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+def test_loaded_source_contract_identity_drift_is_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _sandbox(tmp_path, monkeypatch)
+    payload = json.loads(contract.REACTION_CONTRACT_PATH.read_text(encoding="utf-8"))
+    payload["identity"] = "wrong"
+    contract.REACTION_CONTRACT_PATH.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match="source contract identity"):
+        contract.validate_film_chemistry_inputs()
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("source_record_id", "Putta2017"),
+        ("source_locator", ""),
+        ("source_locator", "wrong"),
+    ],
+)
+def test_finite_reaction_provenance_drift_is_rejected(
+    field: str, value: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+    _mutate(
+        input_path,
+        receipt_path,
+        lambda payload: payload["finite_reactions"][0].update({field: value}),
+    )
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+@pytest.mark.parametrize("field", ["A", "B_k"])
+def test_correlation_coefficients_cannot_drift_with_refreshed_anchors(
+    field: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+
+    def mutate(payload: dict[str, Any]) -> None:
+        row = payload["kinetic_correlations"][0]
+        row[field] += 1.0
+        for anchor in row["evaluation_anchors"]:
+            anchor["expected"] = row["A"] * math.exp(
+                -row["B_k"] / anchor["temperature_k"]
+            )
+
+    _mutate(input_path, receipt_path, mutate)
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["source_reported_unit", "dimensionally_required_unit", "temperature_domain_k"],
+)
+def test_correlation_unit_or_domain_drift_is_rejected(
+    field: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+    _mutate(
+        input_path,
+        receipt_path,
+        lambda payload: payload["kinetic_correlations"][0].update(
+            {field: [293.15, 323.15] if field == "temperature_domain_k" else "wrong"}
+        ),
+    )
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+@pytest.mark.parametrize("field", ["source_record_id", "source_locator"])
+def test_correlation_source_linkage_drift_is_rejected(
+    field: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+    _mutate(
+        input_path,
+        receipt_path,
+        lambda payload: payload["kinetic_correlations"][0].update({field: "wrong"}),
     )
     with pytest.raises(ValueError):
         contract.validate_film_chemistry_inputs()
