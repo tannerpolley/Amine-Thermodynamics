@@ -163,15 +163,23 @@ def test_source_contract_path_drift_is_rejected(
         contract.validate_film_chemistry_inputs()
 
 
-@pytest.mark.parametrize("field", ["equation", "rate_equation"])
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("equation", "wrong"),
+        ("rate_equation", "wrong"),
+        ("forward_direction", "CO2 consumption"),
+        ("reverse_direction", "CO2 release"),
+    ],
+)
 def test_finite_reaction_semantic_text_drift_is_rejected(
-    field: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    field: str, value: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
     _mutate(
         input_path,
         receipt_path,
-        lambda payload: payload["finite_reactions"][0].update({field: "wrong"}),
+        lambda payload: payload["finite_reactions"][0].update({field: value}),
     )
     with pytest.raises(ValueError):
         contract.validate_film_chemistry_inputs()
@@ -292,5 +300,79 @@ def test_correlation_source_linkage_drift_is_rejected(
         receipt_path,
         lambda payload: payload["kinetic_correlations"][0].update({field: "wrong"}),
     )
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+@pytest.mark.parametrize(
+    "case", ["domain", "species", "candidate_identity", "source_id", "source_locator"]
+)
+def test_coordinated_transport_provenance_drift_is_rejected(
+    case: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+
+    def mutate(payload: dict[str, Any]) -> None:
+        row = payload["transport_inputs"][0]
+        if case == "domain":
+            row["domains"][0]["temperature_k"] = [303.15, 323.15]
+        elif case == "species":
+            row["species"] = ["MEA"]
+        elif case == "candidate_identity":
+            row["candidate_identities"][0] = "wrong"
+        elif case == "source_id":
+            row["source_record_id"] = "Putta2016"
+        else:
+            row["source_locator"] = "wrong"
+
+    _mutate(input_path, receipt_path, mutate)
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        "source_pdf_hash",
+        "source_zotero_key",
+        "source_markdown_hash",
+        "observation_kind",
+        "observation_source_locator",
+    ],
+)
+def test_coordinated_source_or_observation_drift_is_rejected(
+    case: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+
+    def mutate(payload: dict[str, Any]) -> None:
+        if case == "source_pdf_hash":
+            payload["source_records"][0]["local_pdf_sha256"] = "0" * 64
+        elif case == "source_zotero_key":
+            payload["source_records"][0]["zotero_parent_key"] = "WRONG"
+        elif case == "source_markdown_hash":
+            payload["source_records"][3]["repo_markdown_sha256"] = "0" * 64
+        elif case == "observation_kind":
+            payload["observations"][0]["kind"] = "wrong"
+        else:
+            payload["observations"][0]["source_locator"] = "wrong"
+
+    _mutate(input_path, receipt_path, mutate)
+    with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+def test_coordinated_nested_schema_drift_is_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _, receipt_path = _sandbox(tmp_path, monkeypatch)
+    schema = json.loads(contract.SCHEMA_PATH.read_text(encoding="utf-8"))
+    schema["$defs"]["kinetic_correlation"]["required"].remove("source_locator")
+    contract.SCHEMA_PATH.write_text(json.dumps(schema), encoding="utf-8")
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["files"]["1/schema.json"] = hashlib.sha256(
+        contract.SCHEMA_PATH.read_bytes()
+    ).hexdigest()
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
     with pytest.raises(ValueError):
         contract.validate_film_chemistry_inputs()

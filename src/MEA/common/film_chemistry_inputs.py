@@ -26,6 +26,10 @@ REACTION_CONTRACT_IDENTITY = "mea-nine-species-reaction-source-contract-v2"
 REACTION_CONTRACT_SHA256 = (
     "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55"
 )
+ACCEPTED_BUNDLE_HASHES = {
+    "1/input.json": "f62df1eec0176fb9196d84c6523371beab576f7154c07498f16a0d977626abe5",
+    "1/schema.json": "d6cd1f51275b9c12681d9a901300dd8ab89d585e48f8de15302d8ff8b352eed9",
+}
 BASE_COMMIT = "9f7c83d80900a10fbff7007c2137d126e92d9b3d"
 SPECIES_ORDER = tuple("CO2 MEA H2O MEAH+ MEACOO- HCO3- CO3-- H3O+ OH-".split())
 REACTION_ORDER = tuple("R1 R2 R3 R4 R5".split())
@@ -112,9 +116,9 @@ ROW_FIELDS = {
 # Equation, rate equation, source id, exact source locator.
 # fmt: off
 REACTION_SEMANTICS = {
-    "F1": ("CO2 + 2 MEA <=> MEACOO- + MEAH+", "r_F1,c = k_MEA,c [MEA]^2 [CO2] - (k_MEA,c/K_eq9,c) [MEAH+] [MEACOO-]", "Putta2016", "journal pp. 341-342, reactions 9 and Eqs. 15-18; nomenclature p. 339"),
-    "F2": ("CO2 + MEA + H2O <=> MEACOO- + H3O+", "r_F2,c = k_H2O,c [H2O] [MEA] [CO2] - (k_H2O,c/K_eq10,c) [H3O+] [MEACOO-]", "Putta2016", "journal pp. 341-342, reaction 10 and Eqs. 15-18; nomenclature p. 339"),
-    "F3": ("CO2 + OH- <=> HCO3-", "r_F3,c = k_14,c(T) [CO2] [OH-] - (k_14,c(T)/K_eq14,c(T)) [HCO3-]", "Putta2016", "journal p. 341, reaction 14; the cited Gondal et al. coefficient source is not retained locally"),
+    "F1": ("CO2 + 2 MEA <=> MEACOO- + MEAH+", "r_F1,c = k_MEA,c [MEA]^2 [CO2] - (k_MEA,c/K_eq9,c) [MEAH+] [MEACOO-]", "CO2 consumption and carbamate formation", "carbamate reversion and CO2 release", "Putta2016", "journal pp. 341-342, reactions 9 and Eqs. 15-18; nomenclature p. 339"),
+    "F2": ("CO2 + MEA + H2O <=> MEACOO- + H3O+", "r_F2,c = k_H2O,c [H2O] [MEA] [CO2] - (k_H2O,c/K_eq10,c) [H3O+] [MEACOO-]", "CO2 consumption and water-base carbamate formation", "carbamate reversion and CO2 release", "Putta2016", "journal pp. 341-342, reaction 10 and Eqs. 15-18; nomenclature p. 339"),
+    "F3": ("CO2 + OH- <=> HCO3-", "r_F3,c = k_14,c(T) [CO2] [OH-] - (k_14,c(T)/K_eq14,c(T)) [HCO3-]", "CO2 consumption and bicarbonate formation", "bicarbonate reversion and CO2 release", "Putta2016", "journal p. 341, reaction 14; the cited Gondal et al. coefficient source is not retained locally"),
 }
 # fmt: on
 CORRELATION_LOCATOR = "journal p. 345, Rate constant correlations, Eqs. (I)-(II)"
@@ -274,6 +278,8 @@ def _validate_schema_receipt(
         "1/input.json": _sha256(INPUT_PATH),
         "1/schema.json": _sha256(SCHEMA_PATH),
     }
+    if hashes != ACCEPTED_BUNDLE_HASHES:
+        raise ValueError("Accepted input or schema hash drifted")
     expected = {
         "schema_version": 1,
         "identity": "mea-film-chemistry-work-package-a-receipt-v1",
@@ -355,6 +361,8 @@ def _validate_reactions(
             and (
                 reaction["equation"],
                 reaction["rate_equation"],
+                reaction["forward_direction"],
+                reaction["reverse_direction"],
                 reaction["source_record_id"],
                 reaction["source_locator"],
             )
@@ -365,8 +373,6 @@ def _validate_reactions(
                 if reaction_id in {"F1", "F2"}
                 else UNAVAILABLE_REACTION_DOMAIN
             )
-            and "CO2 consumption" in reaction["forward_direction"]
-            and "CO2 release" in reaction["reverse_direction"]
             and reaction["classification_status"] == "admitted_finite_reaction"
             and reaction["rate_unit"] == "kmol m^-3 s^-1"
             and reaction["uncertainty_status"] == "not_reported"
@@ -685,7 +691,7 @@ def validate_film_chemistry_inputs() -> dict[str, Any]:
         "input_sha256": hashes["1/input.json"],
         "schema_sha256": hashes["1/schema.json"],
         "checks": [
-            "schema_structure_and_receipt_hashes",
+            "accepted_input_schema_hashes_structure_and_receipt",
             "common_application_domain_and_guards",
             "species_reaction_order_classification_and_source_hash",
             "source_basis_projection_element_charge_semantics_local_domain_and_uncertainty",
