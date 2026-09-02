@@ -28,8 +28,8 @@ BASELINE = ANALYSIS / "results/selected-current-best-parameters.json"
 STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
 FOUNDATION = ANALYSIS / "data/input/parameters.json"
 RESULTS = ANALYSIS / "results/born-permittivity-study"
-ENGINE_COMMIT = "406cd4e942a1e96260debafdc23c4b8baf7c6226"
-ENGINE_WHEEL_SHA256 = "529051a41e5fe2e3a8f944500d1fc2ddf4deaf57cc54f151d1d68d13b6f67a4a"
+ENGINE_COMMIT = "d8e02e4c6aab99669d17123248a1ac9729b47213"
+ENGINE_WHEEL_SHA256 = "2a95e27415b948149d69f92870a8ea0bbaca2ff9e32d39b9bc938ec0a77b46dd"
 ION_IDS = {
     "protonated-monoethanolamine",
     "carbamate-anion",
@@ -187,7 +187,7 @@ def variant_mapping(variant: str) -> dict[str, object]:
                     "relative_permittivity",
                     32.0,
                     "uyan-2015-permittivity-transfer",
-                    "Uyan et al. 2015, Table 3",
+                    "Uyan et al. 2015, Eq. 5 mixing form transferred from MDEA to MEA; retained MEA scalar",
                 )
             )
         elif component_id in ION_IDS and rule in {"B", "C", "D"}:

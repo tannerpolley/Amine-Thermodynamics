@@ -40,14 +40,14 @@ COLORS = {
     "I-SSMDS": "#B42318",
 }
 LABELS = {
-    "A-ORG": "Uyan + original Born",
+    "A-ORG": "Uyan-style H$_2$O/MEA transfer + original Born",
     "D-ORG": "Ascani combined + original Born",
     "E-SSMDS": "Figiel SSM+DS, $f_{MEA}=1.0$",
     "E-SSMDS-f1.4": "Figiel SSM+DS, $f_{MEA}=1.4$",
     "E-SSMDS-f1.5": "Figiel SSM+DS, $f_{MEA}=1.5$",
     "E-SSMDS-f1.6": "Figiel SSM+DS, $f_{MEA}=1.6$",
-    "E-SSMDS-f1.6-noCO2": "Figiel SSM+DS, $f_{MEA}=1.6$, CO$_2$ excluded",
-    "I-SSMDS": "Ion-specific $\\alpha_i$ + SSM+DS",
+    "E-SSMDS-f1.6-noCO2": "Figiel SSM+DS, $f_{MEA}=1.6$, CO$_2$ omitted from both pools",
+    "I-SSMDS": "Zuber analog/fallback $\\alpha_i$ + SSM+DS",
 }
 
 
@@ -150,12 +150,15 @@ def failure_characterization(states: list[dict[str, str]]) -> Path:
         if row["status"] == "evaluated":
             continue
         diagnostic = row["failure_diagnostic"]
-        if diagnostic == "native GREPE numerical policy is invalid":
-            stage = "request-policy-validation"
+        if diagnostic == "bubble Newton iteration limit reached":
+            stage = "bubble-pressure-iteration"
+            interpretation = "pressure_coupling_robustness_failure"
         elif "certificate_failed" in diagnostic:
-            stage = "solution-certification"
+            stage = "candidate-certification"
+            interpretation = "candidate_not_certified_no_physical_absence_inference"
         else:
             stage = "equilibrium-solve"
+            interpretation = "inner_solver_execution_failure"
         output.append(
             {
                 "variant": row["variant"],
@@ -167,6 +170,7 @@ def failure_characterization(states: list[dict[str, str]]) -> Path:
                 "failure_code": row["failure_code"],
                 "failure_diagnostic": diagnostic,
                 "failure_stage": stage,
+                "scientific_interpretation": interpretation,
                 "continuation_present": row["continuation_present"],
                 "liquid_start_present": row["liquid_start_present"],
                 "pressure_start_count": row["pressure_start_count"],
@@ -177,6 +181,45 @@ def failure_characterization(states: list[dict[str, str]]) -> Path:
         writer = csv.DictWriter(
             stream, fieldnames=tuple(output[0]), lineterminator="\n"
         )
+        writer.writeheader()
+        writer.writerows(output)
+    return path
+
+
+def common_row_statistics(targets: list[dict[str, str]]) -> Path:
+    variants = set(COLORS)
+    evaluated: dict[tuple[str, str, str], dict[str, float]] = defaultdict(dict)
+    for row in targets:
+        if row["log10_predicted_over_observed"]:
+            key = (row["family"], row["observation_id"], row["target"])
+            evaluated[key][row["variant"]] = float(
+                row["log10_predicted_over_observed"]
+            )
+    common = {key: values for key, values in evaluated.items() if set(values) == variants}
+    output = []
+    for family in ("pressure", "speciation"):
+        for variant in COLORS:
+            errors = [
+                values[variant]
+                for key, values in common.items()
+                if key[0] == family
+            ]
+            output.append(
+                {
+                    "family": family,
+                    "variant": variant,
+                    "common_positive_targets": len(errors),
+                    "log10_rmse": math.sqrt(
+                        statistics.fmean(error * error for error in errors)
+                    ),
+                    "median_factor": 10
+                    ** statistics.median(abs(error) for error in errors),
+                    "mean_log10_bias": statistics.fmean(errors),
+                }
+            )
+    path = RESULTS / "full-common-row-statistics.csv"
+    with path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=tuple(output[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(output)
     return path
@@ -210,7 +253,9 @@ def overview(summary: list[dict[str, str]], states: list[dict[str, str]]) -> Non
         color=[COLORS[v] for v in variants],
     )
     axes[1].set(
-        xlim=(0, 102), xlabel="Evaluated states (%)", title="Numerical coverage"
+        xlim=(0, 102),
+        xlabel="Evaluated attempts (%)",
+        title="Solver outcome (descriptive)",
     )
     axes[1].grid(axis="x", alpha=0.22)
 
@@ -263,7 +308,7 @@ def overview(summary: list[dict[str, str]], states: list[dict[str, str]]) -> Non
         fig,
         "born-permittivity-overview",
         "Fixed-parameter Born–permittivity comparison",
-        "Simultaneous pressure/speciation error, retained-state coverage, and predicted bulk relative permittivity for every promoted configuration.",
+        "Pressure/speciation error, descriptive evaluated-attempt fraction, and predicted bulk relative permittivity for every promoted configuration; the attempt fraction is not a formulation-ranking criterion.",
         RESULTS / "full-summary.csv",
     )
 
@@ -399,9 +444,8 @@ def diagnostics(summary: list[dict[str, str]], states: list[dict[str, str]]) -> 
     axes[0].grid(alpha=0.2)
 
     classes = (
-        ("ValueError", "policy validation", "#78716C"),
-        ("numerical_convergence_failure", "numerical certificate", "#B45309"),
-        ("physical_rejection", "physical rejection", "#B42318"),
+        ("numerical_convergence_failure", "numerical convergence", "#B45309"),
+        ("physical_rejection", "candidate rejected", "#B42318"),
     )
     left = np.zeros(len(variants))
     summary_by_variant = {row["variant"]: row for row in summary}
@@ -416,7 +460,7 @@ def diagnostics(summary: list[dict[str, str]], states: list[dict[str, str]]) -> 
         left += values
     axes[1].set(
         xlabel="Failed states",
-        title="Failures: gray policy, orange numerical, red physical",
+        title="Preserved non-evaluable attempts",
     )
     axes[1].grid(axis="x", alpha=0.2)
 
@@ -542,7 +586,7 @@ def study_summary(summary: list[dict[str, str]], failures: list[dict[str, str]])
     for row in failures:
         failure_stages[row["failure_stage"]] += 1
     payload = {
-        "scientific_question": "Which source-consistent Born formulation and composition-dependent relative-permittivity rule gives the best fixed-parameter reactive MEA pressure, speciation, dielectric-response, phase-identity, and numerical-coverage evidence?",
+        "scientific_question": "Which source-consistent Born formulation and composition-dependent relative-permittivity rule gives the best fixed-parameter reactive MEA pressure, speciation, dielectric-response, and phase-identity evidence?",
         "active_parameter_sha256": receipt["parameter_sha256"],
         "state_packet_sha256": receipt["state_packet_sha256"],
         "pressure_catalog_sha256": receipt["pressure_catalog_sha256"],
@@ -562,17 +606,17 @@ def study_summary(summary: list[dict[str, str]], failures: list[dict[str, str]])
         ),
         "decision": {
             "active_bundle_changed": False,
-            "retained_formulation": "A-ORG: Uyan solvent-only relative permittivity with original Born",
-            "reason": "No alternative simultaneously improves pressure, speciation, dielectric plausibility, accepted phase identity, and evaluated-state coverage.",
-            "best_species_error_and_coverage_alternative": "E-SSMDS with f_solv,MEA=1.0",
+            "retained_formulation": "A-ORG: Uyan-style H2O/MEA mass-fraction transfer with original Born",
+            "reason": "No alternative simultaneously improves pressure, speciation, dielectric plausibility, and accepted phase identity on the fixed-parameter comparison. Solver failures are excluded from formulation ranking and remain an Engine robustness acceptance set.",
+            "best_speciation_error_alternative": "E-SSMDS with f_solv,MEA=1.0",
             "best_universal_figiel_pressure_alternative": "E-SSMDS with f_solv,MEA=1.6 and molecular CO2 excluded from both neutral pools",
-            "coupled_co2_exclusion_effect": "Pressure log10 RMSE changes from 0.389898 to 0.387514, speciation log10 RMSE is unchanged to 2e-7, and evaluated-state coverage falls from 182 to 181 of 205.",
-            "next_experiment": "Compare against independent static-permittivity observations for loaded aqueous MEA, then replay preserved failures after the Engine pressure-coupling correction.",
+            "coupled_co2_exclusion_effect": "Removing molecular CO2 from both f_mix and the salt-free neutral-permittivity pool changes pressure log10 RMSE from 0.389898 to 0.387514 and speciation log10 RMSE by less than 2e-7 on evaluated rows.",
+            "next_experiment": "Use the 181 bubble-pressure iteration-limit rows as the acceptance set for a branch-aware pressure-in-KKT Engine solve, then repeat the complete comparison and compare against independent loaded-MEA static-permittivity observations.",
         },
         "limitations": [
             "No admitted independent static-permittivity observations exist for loaded aqueous MEA in the retained data.",
-            "Failed formulation-state attempts are preserved with their request-policy, solution-certification, or equilibrium-solve stopping stage.",
-            "The fast candidate changes evaluation cost and required permittivity-rule support; it does not change the active handoff Engine wheel.",
+            "Failed formulation-state attempts are preserved as bubble-pressure iteration, candidate-certificate, or inner-solver failures; they are not formulation evidence.",
+            "The immutable fast study wheel remains installed and retained by commit and SHA-256; no slower-wheel restoration was performed.",
         ],
     }
     (RESULTS / "study-summary.json").write_text(
@@ -586,6 +630,7 @@ def main() -> None:
     targets = rows(RESULTS / "full-targets.csv")
     grouped_path = grouped_statistics(targets)
     grouped = rows(grouped_path)
+    common_row_statistics(targets)
     factorial_effects()
     failure_path = failure_characterization(states)
     failures = rows(failure_path)
