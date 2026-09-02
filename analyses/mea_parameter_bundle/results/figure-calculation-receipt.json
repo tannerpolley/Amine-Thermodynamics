@@ -1,0 +1,80 @@
+{
+  "attempted_canonical_pressure_states": 161,
+  "attempted_speciation_grid_states": 184,
+  "attempted_speciation_packet_states": 44,
+  "attempted_states": 389,
+  "display_speciation_observations": 332,
+  "display_speciation_source_sha256": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
+  "engine_distribution_version": "0.2.0.dev0",
+  "engine_source_commit": "38e91823b6d4f26c1d549f07aaef24a089d8e16d",
+  "engine_wheel_sha256": "d7b4fc5ba5cbf0e979b65af83442d565496d11b771bb559233ad9dc3a4f8414a",
+  "evaluated_pressure_states": 125,
+  "evaluated_speciation_grid_states": 184,
+  "evaluated_speciation_states": 44,
+  "failed_states": 36,
+  "failure_table": "results/figure-calculation-failures.csv",
+  "fit_residual_table": "results/current-best-fit-residuals.csv",
+  "fit_statistics_table": "results/current-best-fit-statistics.csv",
+  "parameter_document_sha256": "d4187951f69964ea6210a6a4bb73a61d7e731377b58b2667193e84b4ce0d2b4d",
+  "parameter_fingerprint": "sha256:b5a08ef575be314190e0c7aa0ec917cf725330d216e963e7fed9f00edfe4e0df",
+  "pressure_observation_source_sha256": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
+  "pressure_states": 161,
+  "pressure_template_states": 79,
+  "reaction_standard_state_correction": {
+    "ln_k_offsets": [
+      8.0330699846,
+      4.0165349923,
+      4.0165349923
+    ],
+    "reaction_ids": [
+      "R1",
+      "R2",
+      "R3"
+    ],
+    "reason": "the retained state packet contains raw Austgen R1-R3 values already labeled as common molality",
+    "resulting_standard_state": "aqueous-molality-infinite-dilution-water-v1"
+  },
+  "schema_version": 1,
+  "selected_permittivity_variant": "uyan_co2_excluding",
+  "source_continuation_parameter_fingerprints": [
+    "sha256:927cc368a166c5503566778d997e847f04a51c3e4d54b548fb3a0afe474640e1"
+  ],
+  "speciation_grid_ranges": {
+    "20": [
+      0.075,
+      1.0
+    ],
+    "40": [
+      0.11,
+      1.0
+    ],
+    "60": [
+      0.131,
+      1.0
+    ],
+    "80": [
+      0.064,
+      1.0
+    ]
+  },
+  "speciation_grid_temperatures_C": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "speciation_states": 44,
+  "state_packet_observations": 123,
+  "state_packet_sha256": "41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef",
+  "status": "pre_campaign_speciation_grid_pressure_outputs_superseded",
+  "scope_note": "This receipt remains authoritative for the retained pre-campaign speciation smooth grid. Current pressure outputs and fit tables are derived from the selected scenario in results/best-in-slot-campaign/final-full-validation-evaluations.csv.",
+  "current_parameter_document_sha256": "2666914f0f9cfebdf230e96565de843f9aadc9424035c940883147ff66af035c",
+  "current_pressure_scenario": "local-p0.15-db-350-eps+0.025",
+  "current_evaluated_pressure_states": 130,
+  "successful_fingerprints_match_bundle": true,
+  "temperature_balanced_log10_rmse": {
+    "pressure": 0.35690291206102365,
+    "speciation": 0.16679009763147926
+  },
+  "warm_start_policy": "source continuation values projected to mass-balanced finite starts, with the strictly positive feed used when projection crosses the interior boundary; continuation identity and state cleared before every solve"
+}

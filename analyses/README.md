@@ -14,6 +14,7 @@ analyses/
   speciation_evidence_harmonization/
   historical_fixed_parameter_epcsaft_evaluation/
   reactive_epcsaft_parameter_evidence/
+  mea_parameter_bundle/
 ```
 
 `toybox/` retains compact rejection receipts from retired exploratory
@@ -26,9 +27,9 @@ directly as possible. The other analysis names describe their scientific role,
 not a project stage. Historical fixed-parameter evidence remains explicitly
 separate from future reactive ePC-SAFT parameter evidence.
 
-There is no active analysis research notebook. After Review Pass, a future
-accepted packet may be summarized in `analyses/<short-id>/notebook.qmd`; that
-notebook must read retained results and must not become calculation authority.
+`mea_parameter_bundle/` is the update-in-place research notebook for the
+nine-species parameter bundle. It owns the active MEA mapping, retained
+calculations, figures, fit statistics, and next experiments.
 
 Each executable analysis should remain self-contained:
 
