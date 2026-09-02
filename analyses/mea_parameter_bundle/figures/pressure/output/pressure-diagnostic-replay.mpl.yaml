@@ -1,0 +1,16 @@
+figure:
+  title: 30 wt% MEA carbon-dioxide pressure replay
+  description: Smooth lines through successfully evaluated reactive ionic Engine states and all 161 active-v1 observations from Aronu, Hilliard, Idris, Jou, Mamun, and Xu at 40--120 degrees Celsius.
+  png: pressure-diagnostic-replay.png
+  svg: pressure-diagnostic-replay.svg
+  data_path: analyses/mea_parameter_bundle/figures/pressure/output/pressure-model-lines.csv
+  data_sha256: f5a1214b06407a36de92ce0a4ca601b4ed9243b9af33d1aed19b461f6b2cbd40
+  pdf: pressure-diagnostic-replay.pdf
+  dpi: 300
+style:
+  source: src/MEA/common/plot_style.py
+observations_path: analyses/mea_parameter_bundle/figures/pressure/output/pressure-observations.csv
+observations_sha256: fd0c3c6250bf3869b17121c18f852a323752fbed2bc94a26fde5c6e3ebdd84c0
+engine_states_path: analyses/mea_parameter_bundle/figures/pressure/output/pressure-model.csv
+engine_states_sha256: 04815f4a4adcdc497fa5988589808853508077fbec047a3be464899881ecb9c6
+line_method: PCHIP interpolation of log10(model response)

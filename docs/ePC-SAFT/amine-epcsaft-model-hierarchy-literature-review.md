@@ -119,12 +119,15 @@ the inspected repository text extractions are under
 | Relative-permittivity parameters | Unloaded and loaded solution measurements | Compare direct and screened formulations independently of pressure fitting |
 | Reaction correlations | Source correlations with declared temperature domains | Fixed initially; reopen only after EOS qualification |
 
-### 5.1 Future packet handoff
+### 5.1 Current bundle and future promotion
 
 This review fixes the admissible model structure and provenance rules. There is
-no active MEA parameter set. Engine Issue #80 must produce and validate the
-next immutable packet before this repository adopts numerical authority. That
-future packet must bind:
+now an active MEA mapping under
+`analyses/mea_parameter_bundle/results/selected-current-best-parameters.json`:
+the full retained-state comparison selects Uyan solvent-only dielectric mixing
+for the working nine-species bundle. It is calculation authority for the
+bounded notebook replay. A future replacement
+bundle must bind:
 
 - the immutable Engine wheel and SHA-256 hash;
 - the species, reactions, standard states, association graph, and
@@ -135,9 +138,10 @@ future packet must bind:
   summaries, and uncertainty results; and
 - the downstream-property coverage and explicit transfer decision.
 
-Until that packet is accepted, no bounded MEA calculation authority exists.
-This review remains source-chain evidence explaining why the parameter blocks
-and validation requirements exist.
+Until those checks pass, the current bundle retains its stated 69/79 pressure
+and 44/44 speciation coverage and its reported error limits. This review
+remains source-chain evidence explaining why the parameter blocks and
+validation requirements exist.
 
 ## 6. Neutral qualification
 
@@ -159,8 +163,10 @@ binary coordinate is checked against centered finite differences.
 The source-faithful Baygi reproductions remain diagnostics because their
 fixed-state residuals retain strong composition trends. The completed
 Held-water comparison evaluated source-backed 2B, 3B, and 4C MEA association
-families. The 3B family gives the best transfer to the independent 66.66 kPa
-pressure level and is the retained neutral family.
+families. The 3B family gave the best transfer to the independent 66.66 kPa
+pressure level in that historical comparison. Upstream PR 132 superseded that
+selection for the current foundation by selecting the MEA 2B scheme; 3B is not
+the retained neutral authority.
 
 ### 6.3 CO2-water
 

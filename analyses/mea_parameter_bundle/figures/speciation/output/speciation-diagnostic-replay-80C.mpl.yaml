@@ -1,0 +1,16 @@
+figure:
+  title: 80 C MEA liquid-equilibrium replay with full retained observations
+  description: Broken log scale starts 30% below the lowest positive HCO3- model or observation value (0.000156435) and ends 3% above the displayed maximum (0.111652). Dashed lines connect 46 direct pinned-Engine evaluations of the five principal species plus the MEA plus MEAH+ observation operator through loading 1.0. Markers show every positive retained 80 C, 30 wt% value for those series; exact reported zeros remain in the source snapshot but are omitted from the visual. Trace ions remain in the calculation and source snapshot but are omitted from the visual.
+  png: speciation-diagnostic-replay-80C.png
+  svg: speciation-diagnostic-replay-80C.svg
+  data_path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-model-lines-80C.csv
+  data_sha256: 818d009ff4aa8794df25816257a4ba389ed851862a225b558b68b1f0d2aab735
+  pdf: speciation-diagnostic-replay-80C.pdf
+  dpi: 300
+style:
+  source: src/MEA/common/plot_style.py
+observations_path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-display-observations.csv
+observations_sha256: 1950440fa18860efbf842f1db152e6b3873d3eaac266278aab2652512feeb77d
+engine_states_path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-model-grid.csv
+engine_states_sha256: c10e103ce40e7fca176b492d6aa653638a9d17ebaeb76c21cfb1aa2152de844a
+line_method: piecewise connection of 46 direct pinned-Engine evaluations; no interpolation

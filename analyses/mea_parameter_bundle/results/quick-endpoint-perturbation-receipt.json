@@ -1,0 +1,23 @@
+{
+  "study_id": "current-bundle-direct-bubble-endpoint-screen-v1",
+  "qualification": "diagnostic",
+  "claim_limit": "One state per available temperature and family; aggregate pressure RMSE values use unequal evaluable rows and are not parameter-selection statistics. Only vle_obs_0208 was evaluable for every scenario.",
+  "parameter_path": "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json",
+  "parameter_sha256": "d4187951f69964ea6210a6a4bb73a61d7e731377b58b2667193e84b4ce0d2b4d",
+  "state_packet_path": "analyses/mea_parameter_bundle/data/input/state-packet.json",
+  "state_packet_sha256": "41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef",
+  "engine_wheel_path": "analyses/mea_parameter_bundle/data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+  "engine_wheel_sha256": "d7b4fc5ba5cbf0e979b65af83442d565496d11b771bb559233ad9dc3a4f8414a",
+  "method": "Full Engine reactive bubble-point solve for every endpoint and state. Reaction endpoints modify the authoritative coefficient_values metadata before Engine problem compilation.",
+  "pressure_states": ["vle_obs_0128", "vle_obs_0145", "vle_obs_0208", "vle_obs_0217", "vle_obs_0228"],
+  "speciation_states": ["Bottinger2008_state_033", "Bottinger2008_state_045", "Bottinger2008_state_057", "Bottinger2008_state_066"],
+  "scipy_spot_check": {
+    "state": "vle_obs_0128",
+    "method": "Five reaction extents with Engine fixed-pressure composition derivatives, initialized at 0.999 times the Engine-root extents and evaluated at the Engine bubble pressure.",
+    "iterations": 8,
+    "initial_max_affinity_residual": 7.217427679422599,
+    "final_max_affinity_residual": 3.306206508568721e-08,
+    "max_absolute_liquid_mole_fraction_difference": 3.300484885393473e-13,
+    "claim_limit": "Confirms reaction-equation and nonlinear-root consistency at one state; it is not an independent EOS or bubble-point validation."
+  }
+}

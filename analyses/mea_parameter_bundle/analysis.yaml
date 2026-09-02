@@ -1,0 +1,97 @@
+id: mea_parameter_bundle
+title: Nine-Species MEA ePC-SAFT Parameter Bundle
+status: active
+summary: Live update-in-place research record of the active bundle, retained results, interpretation, limitations, and next experiments.
+owner: MEA-Thermodynamics
+inputs:
+  - path: docs/ePC-SAFT/full-component-parameter-source-audit.md
+    kind: local_parameter_provenance
+  - path: docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md
+    kind: selected_model_structure
+  - path: analyses/mea_parameter_bundle/references.bib
+    kind: zotero_better_bibtex_snapshot
+  - path: analyses/mea_parameter_bundle/data/input/parameters.json
+    kind: immutable_parameter_snapshot
+  - path: analyses/mea_parameter_bundle/data/input/state-packet.json
+    kind: immutable_reactive_state_packet
+  - path: data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv
+    kind: canonical_speciation_observations
+  - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv
+    kind: canonical_vle_observations
+  - path: analyses/mea_parameter_bundle/data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl
+    kind: immutable_engine_wheel
+  - uri: https://github.com/tannerpolley/ePC-SAFT/issues/80
+    kind: upstream_campaign
+  - uri: https://github.com/tannerpolley/ePC-SAFT/issues/119
+    kind: upstream_refinement_scope
+  - uri: https://github.com/tannerpolley/ePC-SAFT/pull/134
+    kind: unmerged_frozen_foundation_evidence
+outputs:
+  - path: analyses/mea_parameter_bundle/results/notebook.pdf
+    kind: research_notebook
+  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-diagnostic-replay.pdf
+    kind: canonical_speciation_figure
+  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-model-lines.csv
+    kind: plotted_model_line_snapshot
+  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-diagnostic-replay-40C.pdf
+    kind: additional_temperature_speciation_figure
+  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-diagnostic-replay-60C.pdf
+    kind: additional_temperature_speciation_figure
+  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-diagnostic-replay-80C.pdf
+    kind: additional_temperature_speciation_figure
+  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-display-observations.csv
+    kind: plotted_observation_snapshot
+  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-model-grid.csv
+    kind: direct_engine_model_grid
+  - path: analyses/mea_parameter_bundle/figures/pressure/output/pressure-diagnostic-replay.pdf
+    kind: canonical_pressure_figure
+  - path: analyses/mea_parameter_bundle/figures/pressure/output/pressure-model-lines.csv
+    kind: plotted_model_line_snapshot
+  - path: analyses/mea_parameter_bundle/results/figure-calculation-receipt.json
+    kind: calculation_receipt
+  - path: analyses/mea_parameter_bundle/results/current-best-fit-residuals.csv
+    kind: evaluated_target_residuals
+  - path: analyses/mea_parameter_bundle/results/current-best-fit-statistics.csv
+    kind: grouped_fit_statistics
+  - path: analyses/mea_parameter_bundle/results/parameter-start-comparison.csv
+    kind: retained_parameter_comparison
+  - path: analyses/mea_parameter_bundle/results/parameter-sensitivity-screen.csv
+    kind: retained_parameter_sensitivity
+  - path: analyses/mea_parameter_bundle/results/quick-endpoint-perturbation-screen.csv
+    kind: retained_direct_bubble_endpoint_screen
+  - path: analyses/mea_parameter_bundle/results/quick-endpoint-perturbation-receipt.json
+    kind: retained_endpoint_screen_receipt
+  - path: analyses/mea_parameter_bundle/results/best-in-slot-campaign/final-full-validation-summary.csv
+    kind: selected_candidate_full_validation_summary
+  - path: analyses/mea_parameter_bundle/results/best-in-slot-campaign/final-full-validation-evaluations.csv
+    kind: selected_candidate_row_level_validation
+  - path: analyses/mea_parameter_bundle/results/best-in-slot-campaign/bounded-slope-screen-summary.csv
+    kind: retained_slope_boundary_diagnostic
+  - path: analyses/mea_parameter_bundle/results/permittivity-formulation-comparison.json
+    kind: retained_permittivity_model_comparison
+  - path: analyses/mea_parameter_bundle/results/permittivity-formulation-states.csv
+    kind: retained_permittivity_state_results
+  - path: analyses/mea_parameter_bundle/results/permittivity-formulation-targets.csv
+    kind: retained_permittivity_target_results
+  - path: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json
+    kind: active_parameter_mapping
+  - path: analyses/mea_parameter_bundle/figures/permittivity_comparison/output/permittivity-formulation-parity.pdf
+    kind: retained_permittivity_comparison_figure
+  - path: analyses/mea_parameter_bundle/figures/permittivity_comparison/output/permittivity-formulation-parity.csv
+    kind: plotted_permittivity_comparison_snapshot
+  - path: analyses/mea_parameter_bundle/results/handoff/mea-reactive-epcsaft-parameter-bundle.zip
+    kind: absorption_agent_handoff
+  - path: analyses/mea_parameter_bundle/results/handoff/mea-reactive-epcsaft-parameter-bundle.zip.sha256
+    kind: handoff_archive_checksum
+commands:
+  analyze:
+    - /tmp/mea-parameter-bundle-engine/bin/python scripts/compare_permittivity_formulations.py
+    - /tmp/mea-parameter-bundle-engine/bin/python scripts/generate_figure_data.py
+    - /tmp/mea-parameter-bundle-engine/bin/python scripts/run_direct_parameter_campaign.py --phase PHASE --preset PRESET --workers 8
+    - uv run python scripts/render_figures.py
+    - uv run python scripts/build_absorption_handoff.py
+  render:
+    - latexmk -lualatex -interaction=nonstopmode -halt-on-error -outdir=results notebook.tex
+runtime:
+  class: pinned_engine_replay
+results_policy: Keep one present-state notebook and PDF; replace superseded interpretation in place when evidence or campaign state changes, while retaining calculation authority in the identified inputs and results.
