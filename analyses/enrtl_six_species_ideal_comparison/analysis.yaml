@@ -1,0 +1,61 @@
+id: enrtl_six_species_ideal_comparison
+title: Matched six- and nine-species comparison
+status: diagnostic_comparison
+summary: Compares an exact ideal-liquid six-species projection with a nine-species reference, retains a separate fixed-temperature/pressure ePC-SAFT liquid lane solved by a disposable SciPy equilibrium bridge using Engine EOS evaluations, and records the corrected apparent-pressure identifiability diagnostic.
+owner: project
+inputs:
+  - path: data/reference/MEA/manifests/reaction_constant_manifest.csv
+    kind: source_controlled_ideal_reaction_correlations
+  - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv
+    kind: canonical_vle_state_coordinates
+  - path: data/reference/MEA/observations/liquid_speciation/Combined_ChEq.csv
+    kind: canonical_speciation_state_coordinates
+  - path: analyses/enrtl_six_species_ideal_comparison/results/epcsaft_scipy_packet_manifest.csv
+    kind: retained_engine_packet_and_source_contract_manifest
+  - path: analyses/enrtl_six_species_ideal_comparison/results/uq_parameter_inventory.csv
+    kind: all_parameter_screening_inventory
+  - path: analyses/enrtl_six_species_ideal_comparison/results/uq_lhc_samples.csv
+    kind: retained_smart_latin_hypercube_engine_samples
+  - path: analyses/enrtl_six_species_ideal_comparison/results/uq_global_sensitivity.csv
+    kind: retained_rank_based_global_sensitivity
+  - path: analyses/enrtl_six_species_ideal_comparison/results/uq_uncertainty_summary.csv
+    kind: screening_prior_propagated_output_intervals
+outputs:
+  - path: analyses/enrtl_six_species_ideal_comparison/notebook.qmd
+    kind: working_analysis_research_notebook
+  - path: analyses/enrtl_six_species_ideal_comparison/notebook.pdf
+    kind: LuaLaTeX_working_notebook_render
+  - path: analyses/enrtl_six_species_ideal_comparison/notebook.html
+    kind: HTML_working_notebook_render
+  - path: analyses/enrtl_six_species_ideal_comparison/results
+    kind: retained_comparison_tables_diagnostics_and_lineage
+  - path: analyses/enrtl_six_species_ideal_comparison/figures/output
+    kind: claim_led_comparison_plot_bundles
+  - path: analyses/enrtl_six_species_ideal_comparison/figures/output/uq_global_importance.png
+    kind: claim_led_uq_sensitivity_figure
+  - path: analyses/enrtl_six_species_ideal_comparison/figures/output/uq_binary_interaction_sensitivity.png
+    kind: claim_led_binary_sensitivity_figure
+  - path: analyses/enrtl_six_species_ideal_comparison/figures/output/uq_output_uncertainty.png
+    kind: screening_prior_uncertainty_figure
+commands:
+  generate_ideal:
+    - uv run python analyses/enrtl_six_species_ideal_comparison/scripts/generate_data.py
+  corrected_apparent_pressure:
+    - uv run python analyses/enrtl_six_species_ideal_comparison/scripts/generate_corrected_apparent_pressure.py
+  corrected_apparent_sensitivity:
+    - uv run python analyses/enrtl_six_species_ideal_comparison/scripts/generate_corrected_apparent_sensitivity.py
+  render_figures:
+    - uv run python analyses/enrtl_six_species_ideal_comparison/scripts/render_figures.py
+  render_uq_figures:
+    - uv run python analyses/enrtl_six_species_ideal_comparison/scripts/render_uq_figures.py
+  render_notebook:
+    - quarto render analyses/enrtl_six_species_ideal_comparison/notebook.qmd --to html
+    - quarto render analyses/enrtl_six_species_ideal_comparison/notebook.qmd --to pdf
+  epcsaft_bridge:
+    - disposable installed-Engine-wheel plus SciPy equilibrium bridge; retained outputs are authoritative
+  all_parameter_uq:
+    - checkpointed smart-LHC phase over all continuous packet groups; aggregate-lhc; finalize; render_uq_figures
+runtime:
+  class: moderate
+  expected_seconds: 7200
+results_policy: Keep ideal and ePC-SAFT source contracts, model fingerprints, residuals, omitted inventory, and claim limits separate. Do not promote the provisional Engine packet or either reaction set to an active MEA parameter set.
