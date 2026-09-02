@@ -27,7 +27,7 @@
 \definecolor{ClassTwo}{HTML}{B45309}
 \definecolor{ClassThree}{HTML}{7E22CE}
 \definecolor{ClassFour}{HTML}{B42318}
-\hypersetup{colorlinks=true,linkcolor=Ink,urlcolor=Slate,pdfauthor={MEA-Thermodynamics},pdftitle={Best-Available Nine-Species MEA ePC-SAFT Parameter Bundle}}
+\hypersetup{colorlinks=true,linkcolor=Ink,urlcolor=Slate,pdfauthor={MEA-Thermodynamics},pdftitle={Nine-Species MEA ePC-SAFT Parameter Bundle}}
 \setmainfont{TeX Gyre Pagella}
 \setsansfont{TeX Gyre Heros}
 \setmonofont{Latin Modern Mono}
@@ -891,6 +891,44 @@ contribution $(2x_{\ce{CO3^2-}}+x_{\ce{OH-}}-x_{\ce{H3O+}})/x_{\ce{MEAH+}}$
 is 0.01949 at B\"ottinger state 030. These values are calculated directly
 from \path{figures/speciation/output/speciation-model.csv}.
 
+The complete matched comparison is retained under
+\path{../enrtl_six_species_ideal_comparison/}; its Quarto source and rendered
+PDF are the detailed calculation record. In its ideal-liquid lane, all 232
+unique canonical coordinates and 464 model rows converged with a maximum
+equation residual of $1.9895\times10^{-13}$. The largest difference among the
+six shared species was $6.5100\times10^{-3}$ mol per mol initial MEA, and
+carbonate dominated the omitted inventory. In its fixed-$T,P$ Engine/SciPy
+lane at \SI{100}{\kilo\pascal}, the carbonate amounts at 293.15, 313.15, and
+323.15 K were $2.99\times10^{-4}$, $1.56\times10^{-4}$, and
+$1.10\times10^{-4}$ mol per mol initial MEA; the largest shared-species changes
+were approximately $2.9\times10^{-4}$ mol per mol initial MEA. That lane is a
+liquid-composition calculation, not a bubble-pressure calculation.
+
+\textbf{verified structural result:} when the six- and nine-species states are
+both projected to the same conserved apparent totals, their neutral apparent
+pressure inputs agree to $1.321165\times10^{-14}$. The neutral
+\texttt{flashTQ} route converged for only 1 of 161 pressure observations and
+predicted \SI{2038.38}{\kilo\pascal} for an observed
+\SI{0.00202}{\kilo\pascal}. A neutral apparent flash therefore cannot reveal
+the internal reaction or ionic parameters; the pressure calculation must keep
+the reactive species allocation coupled to the EOS.
+
+The companion sensitivity survey evaluated 143 parameter identities grouped
+into 113 continuous directions with 128 Latin-hypercube samples, of which 123
+were usable. Its strongest recurring directions were R5 $a_K$, R4 $b_K$, the
+water segment-diameter temperature terms, \ce{MEAH+} dispersion and ionic
+terms, and selected \ce{CO2}--water, carbonate--water, MEA--\ce{MEAH+},
+\ce{MEAH+}--water, carbamate--hydronium, and bicarbonate--\ce{CO2} binary
+interactions. Those numerical ranks belong to parameter packet
+\nolinkurl{0e7c5ac63c078be9d32c15f316ecdb2b0de67de6f495358ab5955450f0271c6a}
+and Engine-wheel hash
+\nolinkurl{05cca73463b9b44dcb3a77dfd239b767ec63aafce7d18b85b2a66b80773847a5};
+the separate fixed-$T,P$ lane used packet
+\nolinkurl{12e380a27eb615e25bae580f8c1ec852020879917b08fa16a5821ae76311550d}.
+Neither is the active bundle in Tables~1--4, so the
+ranking must be replayed with the active parameter file before its numerical
+ordering is used in the manuscript.
+
 \textbf{inference:} the three omitted trace ions have small direct abundance
 over this replay, which makes a six-species ablation useful as a cheap
 conditioning test. It does not prove that they are dispensable: the
@@ -899,6 +937,20 @@ contribution of a monovalent ion, and the omitted species preserve carbonate,
 autoprotolysis, pH, charge, and extrapolation structure. Removing them also
 removes weakly identified ionic parameters, so an apparent fit improvement may
 come from reduced flexibility rather than better physics.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.27\textwidth}YY@{}}
+\toprule
+Retained finding & Present use & Remaining action \\
+\midrule
+Exact R2--R4--R5 and R2--R5 projection & Methods description for a controlled six-species ablation & None for the algebra; cite the retained reaction table. \\
+Ideal and fixed-$T,P$ species comparison & Evidence that carbonate is the dominant omitted species and that the reduction is not simple deletion & Repeat the coupled bubble calculation with the active bundle before using pressure-error conclusions. \\
+Neutral apparent-pressure invariance & Methods/diagnostic explanation of why total absorbed carbon cannot be passed directly to a neutral \ce{CO2} flash & Keep as a route-rejection result; do not present the 1/161 flash as a model fit. \\
+Packet-specific sensitivity survey & Prioritizes the first active-bundle sensitivity directions & Replay the same screen with the active parameter mapping and wheel before reporting ranks or intervals. \\
+\bottomrule
+\end{tabularx}
+\end{center}
 
 \section{Interpretation}
 
@@ -1023,13 +1075,13 @@ row-level residuals. Test a held-out-source or held-out-temperature replay
 before changing another coordinate. Do not extend the R4 slope beyond the
 tested bound: that direction ceased improving the screen and began losing
 speciation evaluations.
-\item Before adding parameters, run one preregistered $2\times2$ structural
-ablation on identical states and the same fixed parameter vector: nine versus
-six liquid species, crossed with ePC-SAFT versus ideal vapor. Report state
-evaluability, pressure and species metrics, charge/balance closure, and the
-change by pressure range and temperature. The six-species cases use the exact
-net constants above. This is a diagnostic; it cannot replace the nine-species
-campaign or establish a final model by lower calibration error alone.
+\item Complete the remaining coupled bubble-pressure ablation with the active
+parameter file: nine versus six liquid species, crossed with ePC-SAFT versus
+ideal vapor. The retained comparison has already established the exact
+six-species reaction projection, ideal-liquid behavior, fixed-$T,P$ liquid
+behavior, and the failure of the neutral apparent-flash shortcut. Report state
+evaluability, pressure and species metrics, charge/balance closure, and changes
+by pressure range and temperature.
 \item Admit independent physical-solubility evidence before expanding the
 model. Jiru et al. measure physical \ce{CO2} solubility in MEA--water by the
 \ce{N2O} analogy over 298.15--323.15 K \cite{Jiru2012}; Hartono et al. report
@@ -1057,7 +1109,8 @@ acceptance gate.
 \end{enumerate}
 
 \textbf{unknown:} whether ideal vapor, reduced chemistry, or neither materially
-changes the pressure residual has not been tested with the current bundle.
+changes the coupled bubble-pressure residual has not been tested with the
+active bundle.
 
 Replace the current numerical foundation in place when a better MEA-owned
 regression or validation result passes the stated comparison gates. Every
@@ -1098,6 +1151,7 @@ Permittivity model comparison & \path{results/permittivity-formulation-compariso
 Selected live mapping & \path{results/selected-current-best-parameters.json}; Uyan solvent-only formulation with the selected Class 3 R4--\ce{CO2} fit. \\
 Trace-species abundance & \path{figures/speciation/output/speciation-model.csv}; retained 44-state calculated values summarized in Section~\ref{sec:pressure-identifiability}. \\
 Current IDAES comparison & Official public \href{https://github.com/IDAES/idaes-pse/blob/main/idaes/models_extra/column_models/properties/MEA_solvent.py}{MEA solvent} and \href{https://github.com/IDAES/idaes-pse/blob/main/idaes/models_extra/column_models/properties/MEA_vapor.py}{MEA vapor} property files; used only to define the proposed structural ablation. \\
+Matched species comparison & \path{../enrtl_six_species_ideal_comparison/notebook.qmd} and \path{../enrtl_six_species_ideal_comparison/notebook.pdf}; exact ideal projection, fixed-$T,P$ Engine/SciPy comparison, corrected apparent-pressure diagnostic, parameter inventory, sensitivity survey, UQ checkpoints, and figures. \\
 \bottomrule
 \end{tabularx}
 
