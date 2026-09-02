@@ -984,80 +984,327 @@ trace-carbonate result does not establish independent identifiability.
 \subsection{Full-domain permittivity selection}
 \label{sec:permittivity-comparison}
 
-\textbf{verified:} a full retained-state Engine comparison evaluated the former
-ion-specific baseline, Schick component mixing, and Uyan solvent-only mixing
-without fitting any parameter. Each candidate attempted all 79 pressure states
-from 313.15 to 393.15 K and all 44 speciation states from 293.15 to 353.15 K.
-All variants used the same base vector, corrected R1--R3 constants, reciprocal
-induced association, state packet, and pinned Engine wheel.
+This fixed-parameter structure study asks whether the current Uyan
+solvent-only permittivity with original Born remains the best available
+combined description of reactive MEA pressure, speciation, dielectric
+response, physical branch identity, and numerical coverage. It changes no
+reaction, molecular, ionic, association, binary, vapor, tolerance, or
+initialization input. Reciprocal induced \ce{CO2}--\ce{H2O} association and
+the unique Born diameters in Table~2 remain active in every calculation. No
+parameter was fitted.
 
-The Schick transfer uses the component-mixing relation
+\subsubsection{Equations, pools, units, and derivatives}
+
+Let $N=\{\ce{H2O},\ce{MEA},\ce{CO2}\}$, $I$ be the six charged species in
+Table~2, $x_N=\sum_{j\in N}x_j$, and
+$w_j^N=x_jM_j/\sum_{k\in N}x_kM_k$. Rule A intentionally uses
+$N_A=\{\ce{H2O},\ce{MEA}\}$ because that is the adopted Uyan transfer; Rules
+B--E include molecular \ce{CO2} explicitly. No rule silently removes or
+renormalizes another component. The screened bulk relative-permittivity rules
+are
+\begin{align}
+\epsilon_r^A &= \sum_{j\in N_A}w_j^{N_A}\epsilon_{r,j},
+&\text{Uyan solvent-only},\label{eq:eps-a}\\
+\epsilon_r^B &= \sum_{j\in N\cup I}x_j\epsilon_{r,j},
+&\text{B\"ulow mole-fraction mixing},\label{eq:eps-b}\\
+\epsilon_r^C &= \frac{\sum_{j\in N\cup I}x_jM_j\epsilon_{r,j}}
+{\sum_{j\in N\cup I}x_jM_j},
+&\text{Ascani mass-fraction mixing},\label{eq:eps-c}\\
+\epsilon_r^D &= x_N\sum_{j\in N}w_j^N\epsilon_{r,j}
+ +\sum_{i\in I}x_i\epsilon_{r,i},
+&\text{Ascani combined rule},\label{eq:eps-d}\\
+\epsilon_r^E &= \frac{\epsilon_{r,N}^{\mathrm{salt\text{-}free}}}
+{1+7.01x_I},\qquad x_I=\sum_{i\in I}x_i,
+&\text{Figiel nonlinear rule}.\label{eq:eps-e}
+\end{align}
+Rules B--D use $\epsilon_{r,i}=8$ for every ion. The pure-component inputs
+are the retained water correlation, $\epsilon_{r,\mathrm{MEA}}=32$, and the
+Schick transfer
+$\epsilon_{r,\ce{CO2}}(T)=1.4122-0.0036(T-293\,\mathrm{K})$
+\cite[Table~2]{Schick2023}. Equations~\ref{eq:eps-b}--\ref{eq:eps-d} follow
+B\"ulow and Ascani's linear component formulations
+\cite{Bulow2020,Bulow2021b,Ascani2021}; Equation~\ref{eq:eps-e} is Figiel's
+empirical electrolyte suppression fitted at \SI{298.15}{K}
+\cite[Eqns.~11--12]{Figiel2025}. Relative permittivity, $f_{\mathrm{solv}}$,
+$c_{\mathrm{shell}}$, and $c_{\mathrm{dielectric}}$ are dimensionless;
+$d_i^{\mathrm{Born}}$ is stored in \si{\angstrom} and converted to metres.
+The exact source locators are B\"ulow's original-Born Eq.~2 and
+composition-derivative Eqs.~3--5, with the linear dielectric discussion around
+Eq.~7; the B\"ulow corrigendum's correction to the input used in Figs.~6--7;
+Ascani's Born Eq.~10 and mixing Eqs.~11--13; and Figiel's SSM+DS Eqs.~6--10,
+nonlinear dielectric Eqs.~11--12, and Supporting Information Table~1,
+Table~S2, and Figs.~S1--S6. The corrigendum reports that the corrected figures
+do not change B\"ulow's conclusions. The full receipt records separate
+SHA-256 identities for the B\"ulow article, its corrigendum, the Ascani
+article, the Figiel article, and the Figiel Supporting Information rather
+than treating any pair as one source.
+
+For rules with temperature-dependent pure-component values, the exact Engine
+automatic derivatives follow the declared algebra. For example,
+$\partial\epsilon_r^B/\partial x_i=\epsilon_{r,i}$ and, if
+$\epsilon_r^C=N_C/M_C$,
+$\partial\epsilon_r^C/\partial x_i=M_i(\epsilon_{r,i}M_C-N_C)/M_C^2$.
+The corresponding temperature derivatives sum the pure-component
+$\partial\epsilon_{r,j}/\partial T$ terms; all five rules have
+$\partial\epsilon_r/\partial\rho=0$. Rules D and E use exact quotient and
+chain derivatives rather than frozen-composition approximations.
+
+The original Born residual is
 \begin{equation}
-\epsilon_r=
-\left(\sum_{j\in\mathrm{neutral}}\epsilon_{r,j}(T)w_j^{\mathrm{neutral}}\right)
-x_{\mathrm{neutral}}+\sum_{j\in\mathrm{ion}}8x_j,
+\frac{a^{\mathrm{Born}}}{RT}=-\frac{e^2}{4\pi\epsilon_0k_BT}
+\sum_{i\in I}x_i z_i^2\frac{1-1/\epsilon_r}{d_i^{\mathrm{Born}}}.
+\label{eq:born-original}
 \end{equation}
-with \ce{CO2} included and
-$\epsilon_{r,\ce{CO2}}(T)=-0.0036T+2.467$
-\cite[Eq.~18 and Table~2]{Schick2023}, while retaining the current bundle's
-water correlation rather than replacing it with Schick's water input. The
-Uyan transfer uses the earlier
-\ce{CO2}- and ion-independent solvent relation
+The corrected Engine SSM+DS form first defines
 \begin{equation}
-\epsilon_r=\epsilon_{r,\ce{H2O}}(T)w_{\ce{H2O}}^*
-{}+{}32\,w_{\mathrm{MEA}}^*,
+d_i^{\mathrm{out}}=d_i^{\mathrm{Born}}
+\left[1+c_{\mathrm{shell}}\frac{f_{\mathrm{mix}}-1}{|z_i|}\right],
+\qquad f_{\mathrm{mix}}=
+\frac{\sum_{j\in S}x_jf_{\mathrm{solv},j}}{\sum_{j\in S}x_j},
 \end{equation}
-where the starred mass fractions are renormalized over MEA and water only,
-following Uyan et al.'s Eq.~5 with MEA and its retained constant
-$\epsilon_r=32$ substituted for Uyan's temperature-dependent MDEA input
-\cite[Eq.~5]{Uyan2015}. Neither transfer reproduces the source paper's full
-parameterization.
+and replaces the radial factor in Equation~\ref{eq:born-original} by
+\begin{equation}
+\frac{1-1/\epsilon_r}{d_i^{\mathrm{out}}}
++c_{\mathrm{dielectric}}\left(1-\frac{1}{\epsilon_{r,i}^{\mathrm{local}}}\right)
+\left(\frac{1}{d_i^{\mathrm{Born}}}-\frac{1}{d_i^{\mathrm{out}}}\right),
+\qquad \epsilon_{r,i}^{\mathrm{local}}=8.
+\label{eq:ssmds-corrected}
+\end{equation}
+Original Born sets both switches to zero; corrected SSM+DS sets both to one.
+$S$ is the explicit solvation pool: every component with a declared
+$f_{\mathrm{solv},j}$. The primary Figiel calculations include all nine
+species in $S$; the coupled \ce{CO2}-exclusion calculation omits molecular
+\ce{CO2} from both $S$ and the salt-free neutral-permittivity pool. No
+composition is silently renormalized outside the denominators shown above.
+Equation~\ref{eq:ssmds-corrected} is the Engine's corrected nested radial
+charging expression, not the misprinted ordering in Figiel's printed Eq.~7.
+The Engine differentiates Equations~\ref{eq:born-original}--
+\ref{eq:ssmds-corrected} with respect to temperature, density, composition,
+and active parameters.
 
-Figure~\ref{fig:permittivity-parity} is the primary comparison view. Every
-marker is a successfully evaluated observed--predicted target and the dashed
-diagonal is exact agreement. Legend RMSE values are first calculated within
-each temperature and then averaged equally across temperature so a densely
-sampled isotherm cannot dominate selection.
+The retained derivative audit independently perturbed one interior
+composition direction for Rules B and C. Analytic and centered finite-
+difference derivatives agree to relative errors of
+$2.21\times10^{-11}$ and $1.95\times10^{-12}$, respectively; the exact
+inputs and step are retained in
+\path{results/born-permittivity-study/component-permittivity-derivative-check.json}.
 
-\setcounter{figure}{2}
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/permittivity_comparison/output/permittivity-formulation-parity.pdf}
-\caption{Full-domain parity view for the former ion-specific baseline, Schick
-component mixing, and Uyan solvent-only mixing. Legend values are
-temperature-balanced positive-target log$_{10}$ RMSE and evaluated-state
-coverage. Uyan has the lowest pressure error; Schick and Uyan have nearly
-identical speciation error. No candidate was refitted.}
-\label{fig:permittivity-parity}
-\end{figure}
+\subsubsection{Sparse structure screen}
 
-The exact aggregate values underlying the visual comparison are:
+The first screen used 12 retained states: low, middle, and high loading at the
+two best-covered pressure temperatures (40 and \SI{60}{\celsius}) and the two
+best-covered speciation temperatures (20 and \SI{40}{\celsius}). All five
+permittivity rules were crossed with original Born and SSM+DS. Table~5 reports
+state coverage and positive-target log$_{10}$ RMSE; it is a simultaneous
+comparison, not an acceptance cutoff.
 
 \begin{center}
-\begin{tabular}{@{}lrrr@{}}
+\small
+\begin{tabular}{@{}lrrrrr@{}}
 \toprule
-Quantity & Ion-specific & Schick mixing & Uyan solvent-only \\
+Variant & States & $\epsilon_r$ range & $p_{\ce{CO2}}$ RMSE & Pressure factor & Species RMSE \\
 \midrule
-Pressure states & 76/79 & 69/79 & 69/79 \\
-Pressure balanced log$_{10}$ RMSE & 1.0879 & 0.5053 & \textbf{0.3487} \\
-Speciation states & 44/44 & 44/44 & 44/44 \\
-Speciation balanced log$_{10}$ RMSE & 0.1803 & 0.1670 & \textbf{0.1668} \\
+A original & 12/12 & 57.13--79.29 & 0.2704 & 1.4008 & 0.0551 \\
+A SSM+DS & 10/12 & 57.13--79.08 & 0.4910 & 2.7414 & 0.1358 \\
+B original & 12/12 & 57.98--74.39 & 0.5017 & 2.6384 & 0.0728 \\
+B SSM+DS & 9/12 & 57.57--74.28 & 0.5742 & 4.3025 & 0.1451 \\
+C original & 12/12 & 43.03--63.78 & 0.9231 & 8.2675 & 0.0761 \\
+C SSM+DS & 12/12 & 42.55--63.73 & 0.4020 & 2.4929 & 0.1317 \\
+D original & 12/12 & 56.51--70.73 & 0.4645 & 2.8418 & 0.0514 \\
+D SSM+DS & 11/12 & 56.50--69.66 & 0.5251 & 3.8518 & 0.1193 \\
+E original & 11/12 & 34.63--60.22 & 1.3375 & 26.3051 & 0.0299 \\
+E SSM+DS & 12/12 & 32.68--60.03 & 0.4669 & 2.2065 & 0.0960 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-At every retained pressure temperature, Uyan improves the log$_{10}$ RMSE
-relative to the ion-specific baseline: 0.5331, 0.3579, 0.1947, 0.2594, and
-0.3007 from 313.15 through 393.15 K, compared with 1.4383, 1.2618, 0.8917,
-0.9625, and 0.7313. Its 44-state speciation score is within 0.2\% of Schick's
-and better than the former baseline. It therefore passes the preregistered
-per-temperature pressure guardrail and the 10\% speciation guardrail.
+SSM+DS does not improve every dielectric rule. It increases both errors and
+loses coverage for A, B, and D; it reduces the pressure RMSE by 0.5211 for C
+while increasing the species RMSE by 0.0555; and it reduces the E-rule pressure
+RMSE by 0.8705 while recovering one failed state, but increases the species
+RMSE by 0.0660. Thus the apparent rescue of the Figiel package is primarily
+the corrected SSM+DS radial work, whereas the large baseline differences among
+A--E arise from the permittivity rule itself. This interaction rules out a
+single independent ``Born correction'' effect.
 
-\textbf{decision:} retain Uyan solvent-only mixing in the active bundle.
-The subsequent bounded campaign fits R4
-and $\epsilon_{\ce{CO2}}/k$ under this formulation; Schick and the former ion-
-specific form remain retained comparison evidence rather than live
-coordinates in Tables~1--4.
+Because E--SSM+DS completed the sparse screen, the permitted follow-up tested
+universal 7.01 against supported ion-specific $\alpha_i$, and
+$f_{\mathrm{solv},\mathrm{MEA}}=1.0,1.4,1.5,1.6$. The 1.5 sparse case lost two
+states despite its smaller pressure RMSE; 1.4 and 1.6 completed all 12. An
+exact post-solve pool crossover at the 12 converged 1.6 compositions found
+$x_{\ce{CO2}}\leq0.002918$, $|\Delta\epsilon_r|\leq0.2663$ (0.813\%), and
+$|\Delta f_{\mathrm{mix}}|\leq0.001249$ when \ce{CO2} was excluded. That
+algebraic result was used only as a cheap preliminary screen. The promoted
+comparison below then re-solved every state with molecular \ce{CO2} removed
+from both pools so pressure, speciation, phase identity, and convergence were
+tested in the coupled system.
+
+\subsubsection{Complete retained-state comparison}
+
+The promoted configurations attempted all 161 active pressure observations
+from 313.15 to 393.15 K and all 44 speciation states from 293.15 to 353.15 K:
+1,640 configuration--state attempts in total. The candidate
+Engine wheel preserves the known-state result to numerical precision and
+reduces that solve from 12.375 to 1.472 s (8.41 times). This parity timing was
+measured on the immediate predecessor candidate at Engine commit
+\nolinkurl{355d950}; the complete comparison used the final
+\nolinkurl{406cd4e} candidate, which adds only explicit neutral-pool exclusion
+and its tested derivatives. The same solver path, tolerances, and starts were
+used with 12 workers.
+
+The Engine's fixed-pressure density anchor was measured separately at
+\texttt{vle\_obs\_0140}. Eight single-threaded repetitions reduced median
+\texttt{Mixture.state} time from 58.98 to 14.76 ms and density iterations from
+30 to 1 (4.00 times), with zero pressure or density difference. The present
+reactive equilibrium callable owns its density closure and does not expose
+this anchor, so the measurement did not alter the formulation campaign.
+
+The separate 319-row cross-validation inventory remains non-executable: all
+319 rows lack a residual scale and immutable data packet, and the 198
+speciation rows also lack a fixed-pressure definition. The 123-state immutable
+packet used here is already executable and is not evidence that those broader
+admission decisions are resolved.
+
+\setcounter{figure}{2}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/born_permittivity/output/born-permittivity-overview.pdf}
+\caption{Fixed-parameter trade-off, numerical coverage, and bulk relative
+permittivity for every promoted configuration. The open circles apply
+Figiel's Eq.~11 to A-original solved compositions; they are a crossover, not
+independent loaded-MEA dielectric observations.}
+\label{fig:born-permittivity-overview}
+\end{figure}
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Variant & States & $p_{\ce{CO2}}$ RMSE & Pressure factor & Mean bias & Species RMSE \\
+\midrule
+A original & 170/205 & \textbf{0.3583} & \textbf{1.9577} & 0.0956 & 0.2664 \\
+D original & 172/205 & 0.4892 & 2.5954 & 0.2763 & 0.2670 \\
+E SSM+DS, $f_{\mathrm{MEA}}=1.0$ & \textbf{183/205} & 0.5204 & 2.7461 & 0.2372 & \textbf{0.2315} \\
+E SSM+DS, $f_{\mathrm{MEA}}=1.4$ & 182/205 & 0.4321 & 2.2891 & 0.2177 & 0.2535 \\
+E SSM+DS, $f_{\mathrm{MEA}}=1.5$ & 181/205 & 0.4092 & 2.1997 & 0.2114 & 0.2616 \\
+E SSM+DS, $f_{\mathrm{MEA}}=1.6$ & 182/205 & 0.3899 & 2.1264 & 0.2074 & 0.2659 \\
+E SSM+DS, $f_{\mathrm{MEA}}=1.6$, no \ce{CO2} & 181/205 & 0.3875 & 2.1090 & 0.2066 & 0.2659 \\
+Ion-specific $\alpha_i$ SSM+DS & 169/205 & 0.4376 & 2.3821 & \textbf{0.0710} & 0.2372 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Figure~\ref{fig:born-permittivity-residuals} shows that every configuration
+shares the same principal pressure pattern: negative low-loading residuals,
+positive middle-loading residuals, and a temperature-dependent high-loading
+return. The speciation statistic is dominated by underprediction of
+\ce{HCO3-}; the other reported quantities cluster near zero residual. The
+grouped heat map makes the temperature, source, and species dependence
+explicit.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\textwidth]{figures/born_permittivity/output/born-permittivity-residuals.pdf}
+\caption{All positive observed--predicted pressure and speciation residuals.
+Every point is a direct retained Engine evaluation; no curve or failed state
+has been interpolated.}
+\label{fig:born-permittivity-residuals}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/born_permittivity/output/born-permittivity-grouped-residuals.pdf}
+\caption{Log$_{10}$ RMSE grouped by pressure temperature and source, and by
+speciation temperature and reported quantity. Missing groups remain missing
+rather than being imputed.}
+\label{fig:born-permittivity-grouped}
+\end{figure}
+
+Every evaluated liquid state is on an accepted liquid mechanical branch, and
+every incipient vapor is on its accepted vapor branch. Maximum absolute charge
+closure is below $2.4\times10^{-17}$, material closure below
+$2.8\times10^{-13}$, reaction-affinity closure below
+$1.3\times10^{-11}$, and relative pressure closure below
+$6.4\times10^{-10}$. Figure~\ref{fig:born-permittivity-diagnostics} retains
+the density range, closure values, and all 220 failed attempts. Of those,
+181 stop at Engine request-policy validation, 38 during finite-phase solution
+certification, and one during the equilibrium solve. The complete row-by-row
+table records source, temperature, loading, continuation and start
+availability, and stopping point. These are execution boundaries, not evidence
+that a physical formulation is false.
+
+\begin{center}
+\small
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Source & Temperature (\si{\celsius}) & Policy & Certification & Solve \\
+\midrule
+Aronu 2011 & 40, 60, 80 & 0 & 14 & 0 \\
+B\"ottinger 2008 & 20 & 0 & 1 & 0 \\
+Hilliard 2008 & 40 & 0 & 13 & 1 \\
+Idris 2014 & 40 & 0 & 1 & 0 \\
+Jou 1995 & 40, 60, 80, 120 & 42 & 5 & 0 \\
+Mamun 2005 & 120 & 70 & 1 & 0 \\
+Xu 2011 & 100, 120 & 69 & 3 & 0 \\
+\midrule
+Total & & 181 & 38 & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These counts are formulation--state attempts over 60 distinct observations.
+All failures had a continuation value. Of the 181 policy stops, 165 used one
+pressure start without a liquid start and 16 also had a liquid start. Of the
+39 later stops, 38 used one pressure start and one certification failure had
+no pressure start. The exact loading and per-variant record remains in
+\path{results/born-permittivity-study/full-failure-characterization.csv}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/born_permittivity/output/born-permittivity-diagnostics.pdf}
+\caption{Accepted liquid density, preserved failure classes, and maximum
+charge, material, reaction-affinity, and pressure closure for every promoted
+configuration.}
+\label{fig:born-permittivity-diagnostics}
+\end{figure}
+
+At the common \SI{40}{\celsius}, loading 0.389 state, A-original has
+$(a^{\mathrm{Born}},a^{\mathrm{DH}},a^{\mathrm{res}})/(RT)=
+(-13.8158,-0.0577,-22.4172)$; E--SSM+DS with $f_{\mathrm{MEA}}=1.6$ gives
+$(-12.7242,-0.0989,-21.3758)$. The separated axes in
+Figure~\ref{fig:born-permittivity-contributions} expose the otherwise hidden
+Debye--H\"uckel change.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/born_permittivity/output/born-permittivity-contributions.pdf}
+\caption{Born, Debye--H\"uckel, and total residual Helmholtz contributions at
+one common representative state. Each panel has its own ordinate scale.}
+\label{fig:born-permittivity-contributions}
+\end{figure}
+
+The retained dielectric folder contains no admitted static-permittivity data
+for loaded aqueous MEA. The plotted Figiel relation is therefore a
+literature-form crossover evaluated at this study's solved compositions, not
+independent MEA validation. Within that limit, E predicts 26.54--60.19,
+ion-specific suppression predicts 30.36--62.15, D predicts 44.00--70.80, and
+A predicts 45.32--79.29 across successful states. Coupled molecular-
+\ce{CO2} exclusion changes the universal-1.6 pressure log RMSE from 0.389898
+to 0.387514, changes species log RMSE by less than $2\times10^{-7}$, and
+reduces coverage from 182 to 181 of 205 states. Its small pressure change does
+not outweigh the lost state.
+
+\textbf{decision:} no alternative simultaneously improves pressure,
+speciation, dielectric plausibility, branch identity, and coverage. Retain
+A-original (Uyan solvent-only with original Born) in the active bundle and do
+not change the handoff ZIP. E--SSM+DS at $f_{\mathrm{MEA}}=1.0$ is the best
+species-error/coverage alternative, while $f_{\mathrm{MEA}}=1.6$ is the best
+pressure/coverage member of the universal-Figiel family; neither improves the
+current pressure result. Explicit \ce{CO2} exclusion is not material at the
+present compositions. The next discriminating experiment is an independent
+loaded-MEA static-permittivity comparison, followed by replay of the preserved
+failure rows after the Engine pressure-coupling correction. Broad parameter
+fitting remains deferred.
 
 \section{Current conclusions and next experiments}
 \label{sec:next-experiments}
@@ -1090,12 +1337,11 @@ directly measure dissolved molecular \ce{CO2} and Henry behavior
 \cite{wongSituMeasurementPhysical2016}, but every retained row contains
 0.517 mol kg$^{-1}$ \ce{NaClO4}, which the nine-species model omits; use those
 rows as an external challenge unless the salt is represented explicitly.
-\item Keep Uyan solvent-only mixing as the baseline while testing an SSM+DS
-extension against the retained Schick component-mixing challenge. Compare MEA
-$f_{\mathrm{solv}}=1.0,1.4,1.5,1.6$ with 1.5 as the primary start. Only if
-the \ce{CO2} treatment remains material should a separate \ce{CO2} factor be
-considered. Evaluate both speciation and pressure so a compensating pressure
-improvement cannot be mistaken for physical validation.
+\item Acquire or digitize independent static-permittivity observations for
+loaded aqueous MEA. The completed fixed-parameter comparison cannot select
+between the A and E dielectric responses from pressure and speciation alone,
+and the Figiel relation is not an independent MEA measurement. Keep A-original
+as the baseline until that evidence exists.
 \item With R1--R5, the ion block, and independently accepted
 $k_{\ce{CO2},\ce{H2O}}$ fixed, compare only physical dissolved-\ce{CO2}
 alternatives that the new data can distinguish: a \ce{CO2}--MEA association
@@ -1147,7 +1393,8 @@ Corrected start comparison & \path{results/parameter-start-comparison.csv}; full
 Bounded sensitivity screen & \path{results/parameter-sensitivity-screen.csv}; common-row \ce{CO2}--MEA and \ce{CO2}--water perturbation results used in Section~\ref{sec:start-decision}. \\
 Quick direct endpoint screen & \path{results/quick-endpoint-perturbation-screen.csv} and its JSON receipt; full reactive bubble-point endpoints and the bounded SciPy reaction-root spot check. \\
 Best-in-slot campaign & \path{results/best-in-slot-campaign/}; centered sensitivity, R4 pivot--slope grids, full validations, boundary diagnostics, exact receipts, and the selected candidate's row-level Engine evaluations. \\
-Permittivity model comparison & \path{results/permittivity-formulation-comparison.json} with full state and target CSVs; Figure~\ref{fig:permittivity-parity} is rendered from the target CSV without new Engine evaluations. \\
+Born--permittivity structure study & \path{results/born-permittivity-study/}; exact sparse and complete state/target tables, failure characterization, grouped statistics, Engine parity and density-anchor timings, deterministic formulation construction, and hashes. Figures~\ref{fig:born-permittivity-overview}--\ref{fig:born-permittivity-contributions} read these retained values without rerunning the Engine. \\
+Candidate Engine wheel & \path{data/input/engine-candidates/406cd4e/}; Engine commit \nolinkurl{406cd4e942a1e96260debafdc23c4b8baf7c6226} and wheel SHA-256 \nolinkurl{529051a41e5fe2e3a8f944500d1fc2ddf4deaf57cc54f151d1d68d13b6f67a4a}. The 8.41-times parity timing was measured on immediate predecessor \nolinkurl{355d950}; the physical result was unchanged. \\
 Selected live mapping & \path{results/selected-current-best-parameters.json}; Uyan solvent-only formulation with the selected Class 3 R4--\ce{CO2} fit. \\
 Trace-species abundance & \path{figures/speciation/output/speciation-model.csv}; retained 44-state calculated values summarized in Section~\ref{sec:pressure-identifiability}. \\
 Current IDAES comparison & Official public \href{https://github.com/IDAES/idaes-pse/blob/main/idaes/models_extra/column_models/properties/MEA_solvent.py}{MEA solvent} and \href{https://github.com/IDAES/idaes-pse/blob/main/idaes/models_extra/column_models/properties/MEA_vapor.py}{MEA vapor} property files; used only to define the proposed structural ablation. \\
