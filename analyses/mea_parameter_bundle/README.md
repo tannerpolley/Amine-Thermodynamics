@@ -11,7 +11,11 @@ starting vector comes from ePC-SAFT Issues #80 and #119 and closed, unmerged PR
 #134; a full 123-state comparison then selected Uyan solvent-only dielectric
 mixing over the former ion-specific baseline and Schick component mixing. A
 bounded direct-Engine campaign subsequently selected the displayed R4 and
-carbon-dioxide dispersion-energy values. The notebook is the live MEA
+carbon-dioxide dispersion-energy values. The current fixed-parameter
+Born--permittivity study confirms that no tested literature package improves
+pressure, speciation, dielectric plausibility, branch identity, and numerical
+coverage simultaneously, so the active Uyan/original-Born choice remains
+unchanged. The notebook is the live MEA
 authority for that parameter set and its recorded results.
 
 The retained state packet contains raw Austgen R1--R3 values in records already
@@ -69,11 +73,15 @@ representative-state full bubble-point endpoint diagnostic and the single
 SciPy reaction-root consistency check. The complete superseding sensitivity,
 pivot--slope, refinement, full-validation, and boundary results are retained
 under `results/best-in-slot-campaign/`.
-`permittivity-formulation-comparison.json` and its state/target CSVs retain the
-full ion-specific/Schick/Uyan comparison. The selected live mapping is
-`results/selected-current-best-parameters.json`. The renderer turns every
-successfully evaluated target into the pressure/speciation parity figure
-without rerunning the Engine.
+`results/born-permittivity-study/` supersedes the narrower dielectric
+comparison for structure selection. It retains the A--E original-Born screen,
+the original-versus-SSM+DS factorial, Figiel factor and ion-specific screens,
+the complete 161-pressure plus 44-speciation comparison, a coupled molecular-CO2
+pool-exclusion check, failures, grouped residuals, Engine parity, density-anchor
+timing, deterministic formulation construction, and hashes. The selected live mapping
+remains `results/selected-current-best-parameters.json`; the active handoff ZIP
+was not rebuilt. `scripts/render_born_permittivity_study.py` reads retained
+tables and creates the selected figures without rerunning the Engine.
 
 Render from this directory with:
 

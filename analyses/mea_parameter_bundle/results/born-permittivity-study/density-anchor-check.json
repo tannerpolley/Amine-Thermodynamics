@@ -1,0 +1,53 @@
+{
+  "observation_id": "vle_obs_0140",
+  "variant": "A-ORG",
+  "engine_commit": "355d95029711362bb6925542fd2c46305b6aca86",
+  "engine_wheel_sha256": "138fdcacf8db44c1d51c0ee34d49c848f4aff34a7405defca8cad3416bfcad44",
+  "state_packet_sha256": "41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef",
+  "temperature_K": 313.15,
+  "target_pressure_pa": 70624.42875287148,
+  "samples_per_case": 8,
+  "omp_num_threads": 1,
+  "results": {
+    "cold": {
+      "elapsed_s_samples": [
+        0.060302416008198634,
+        0.05898796999827027,
+        0.05943821099936031,
+        0.059084530017571524,
+        0.05825328698847443,
+        0.058337274997029454,
+        0.058972891012672335,
+        0.05716054601361975
+      ],
+      "elapsed_s_median": 0.058980430505471304,
+      "density_iterations": 30,
+      "anchor_status": "not_supplied",
+      "certificate_kind": "global_stable_root",
+      "molar_density_mol_m3": 52381.284013878496,
+      "pressure_pa": 70624.42875287148
+    },
+    "anchored": {
+      "elapsed_s_samples": [
+        0.014765435014851391,
+        0.014898232999257743,
+        0.014772978000110015,
+        0.014702437008963898,
+        0.014751056995010003,
+        0.01428117000614293,
+        0.014825756981736049,
+        0.014687870017951354
+      ],
+      "elapsed_s_median": 0.014758246004930697,
+      "density_iterations": 1,
+      "anchor_status": "accepted",
+      "certificate_kind": "local_continuation",
+      "molar_density_mol_m3": 52381.284013878496,
+      "pressure_pa": 70624.42875287148
+    }
+  },
+  "speedup": 3.996439040639794,
+  "density_absolute_difference_mol_m3": 0.0,
+  "pressure_absolute_difference_pa": 0.0,
+  "scope": "fixed-pressure Mixture.state only; reactive equilibrium solver owns its density closure and did not expose this anchor in the present campaign"
+}
