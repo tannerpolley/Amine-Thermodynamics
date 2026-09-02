@@ -8,13 +8,16 @@ do not accumulate candidate-specific notebook copies or parallel status notes.
 
 The current document owns the active MEA bundle. Its molecular
 starting vector comes from ePC-SAFT Issues #80 and #119 and closed, unmerged PR
-#134; a full 123-state comparison then selected Uyan solvent-only dielectric
-mixing over the former ion-specific baseline and Schick component mixing. A
+#134; a full 123-state comparison then selected a Uyan-style H2O/MEA
+mass-fraction transfer over the former ion-specific baseline and Schick
+component mixing. Uyan's source system is MDEA; only its solvent-only mixing
+form is transferred here. A
 bounded direct-Engine campaign subsequently selected the displayed R4 and
 carbon-dioxide dispersion-energy values. The current fixed-parameter
-Born--permittivity study confirms that no tested literature package improves
-pressure, speciation, dielectric plausibility, branch identity, and numerical
-coverage simultaneously, so the active Uyan/original-Born choice remains
+Born--permittivity study finds that no tested literature package improves
+pressure, speciation, dielectric plausibility, and branch identity
+simultaneously on the paired fixed-parameter evidence, so the active
+Uyan-style/original-Born choice remains
 unchanged. The notebook is the live MEA
 authority for that parameter set and its recorded results.
 
@@ -75,10 +78,15 @@ pivot--slope, refinement, full-validation, and boundary results are retained
 under `results/best-in-slot-campaign/`.
 `results/born-permittivity-study/` supersedes the narrower dielectric
 comparison for structure selection. It retains the A--E original-Born screen,
-the original-versus-SSM+DS factorial, Figiel factor and ion-specific screens,
+the original-versus-SSM+DS factorial, Figiel factor and Zuber
+analog/fallback-ion screens,
 the complete 161-pressure plus 44-speciation comparison, a coupled molecular-CO2
-pool-exclusion check, failures, grouped residuals, Engine parity, density-anchor
-timing, deterministic formulation construction, and hashes. The selected live mapping
+pool-exclusion check, paired common-row statistics, preserved bubble-pressure
+and certificate failures, grouped residuals, Engine parity, density-anchor
+timing, deterministic formulation construction, and hashes. Molecular CO2
+pool exclusion means exclusion from both SSM $f_{mix}$ and the salt-free
+neutral-permittivity pool while CO2 remains a reacting EOS component. The
+selected live mapping
 remains `results/selected-current-best-parameters.json`; the active handoff ZIP
 was not rebuilt. `scripts/render_born_permittivity_study.py` reads retained
 tables and creates the selected figures without rerunning the Engine.
