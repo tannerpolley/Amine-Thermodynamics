@@ -14,6 +14,7 @@ analyses/
   speciation_evidence_harmonization/
   historical_fixed_parameter_epcsaft_evaluation/
   reactive_epcsaft_parameter_evidence/
+  enrtl_six_species_ideal_comparison/
   mea_parameter_bundle/
 ```
 
@@ -29,7 +30,11 @@ separate from future reactive ePC-SAFT parameter evidence.
 
 `mea_parameter_bundle/` is the update-in-place research notebook for the
 nine-species parameter bundle. It owns the active MEA mapping, retained
-calculations, figures, fit statistics, and next experiments.
+calculations, figures, fit statistics, cross-analysis interpretation, and next
+experiments. `enrtl_six_species_ideal_comparison/` retains the complete matched
+six-/nine-species calculation packet, rendered notebook, UQ tables, and figures;
+its packet-specific results are summarized, rather than duplicated, in the live
+parameter notebook.
 
 Each executable analysis should remain self-contained:
 

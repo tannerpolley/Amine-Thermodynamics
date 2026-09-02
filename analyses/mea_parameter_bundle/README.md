@@ -85,6 +85,16 @@ latexmk -lualatex -interaction=nonstopmode -halt-on-error \
 The durable output is `results/notebook.pdf`. LaTeX intermediates are ignored
 by the repository.
 
+## Related species-reduction and sensitivity analysis
+
+`../enrtl_six_species_ideal_comparison/` retains the complete six-/nine-species
+comparison, including its Quarto source, self-contained HTML and PDF notebooks,
+calculation scripts, exact packet receipts, row-level tables, UQ checkpoints,
+and figure bundles. This notebook summarizes the conclusions that affect the
+active bundle and records which results can be used in the manuscript. The
+companion notebook remains the detailed calculation record so its results are
+not copied into parallel status files.
+
 Build the deterministic absorption-agent handoff with:
 
 ```bash
