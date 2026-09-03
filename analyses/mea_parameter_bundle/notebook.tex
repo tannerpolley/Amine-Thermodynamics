@@ -203,10 +203,10 @@ Species & \textbf{\ce{CO2}} & \textbf{MEA} & \textbf{\ce{H2O}} & \textbf{\ce{MEA
 \ce{CO2} & \textcolor{Slate}{---} & \classone{0.0000} & \classone{0.0133} & \classone{0.0000} & \classone{0.0000} & \classtwo{0.0000} & \classtwo{0.0000} & \classone{0.0000} & \classone{0.0000} \\
 MEA & & \textcolor{Slate}{---} & \classone{$-0.0735$} & \classtwo{0.0000} & \classone{0.0000} & \classone{0.0000} & \classone{0.0000} & \classone{0.0000} & \classone{0.0000} \\
 \ce{H2O} & & & \textcolor{Slate}{---} & \classtwo{0.0000} & \classone{0.0000} & \classone{0.0000} & \classtwo{$-0.2500$} & \classtwo{0.2500} & \classtwo{$-0.2500$} \\
-\ce{MEAH+} & & & & \textcolor{Slate}{---} & \classthree{$-0.0020$} & \classone{0.0000} & \classone{0.0000} & \classone{0.0000} & \classtwo{0.0000} \\
-\ce{MEACOO-} & & & & & \textcolor{Slate}{---} & \classone{0.0000} & \classone{0.0000} & \classtwo{0.0000} & \classone{0.0000} \\
-\ce{HCO3-} & & & & & & \textcolor{Slate}{---} & \classone{0.0000} & \classone{0.0000} & \classone{0.0000} \\
-\ce{CO3^2-} & & & & & & & \textcolor{Slate}{---} & \classtwo{0.0000} & \classone{0.0000} \\
+\ce{MEAH+} & & & & \textcolor{Slate}{---} & \classthree{$-0.0020$} & \classone{0.0000} & \classone{0.0000} & \classone{1.0000} & \classtwo{0.0000} \\
+\ce{MEACOO-} & & & & & \textcolor{Slate}{---} & \classone{1.0000} & \classone{1.0000} & \classtwo{0.0000} & \classone{1.0000} \\
+\ce{HCO3-} & & & & & & \textcolor{Slate}{---} & \classone{1.0000} & \classone{0.0000} & \classone{1.0000} \\
+\ce{CO3^2-} & & & & & & & \textcolor{Slate}{---} & \classtwo{0.0000} & \classone{1.0000} \\
 \ce{H3O+} & & & & & & & & \textcolor{Slate}{---} & \classone{0.0000} \\
 \ce{OH-} & & & & & & & & & \textcolor{Slate}{---} \\
 \bottomrule
@@ -1530,17 +1530,17 @@ Each promoted configuration is one complete nine-species parameter bundle.
 Every configuration attempted the same 161 active pressure observations from
 313.15 to 393.15 K and the same 44 speciation states from 293.15 to 353.15 K;
 only the stated permittivity or Born coordinates differ among rows. This gives
-1,640 configuration--state attempts in total. The candidate
-Engine wheel preserves the known-state result to numerical precision and
-reduces that solve from 12.375 to 1.472 s (8.41 times). This parity timing was
+1,640 configuration--state attempts in total. The Engine wheel used for that
+historical screen preserved the known-state result to numerical precision.
+Its parity timing was
 measured on the immediate predecessor candidate at Engine commit
 \nolinkurl{355d950}; the complete comparison used the final
 \nolinkurl{d8e02e4} immutable study wheel, which adds explicit neutral-pool
 exclusion, its tested derivatives, and preservation of final partial evidence
 at the unchanged bubble-iteration limit. The same solver path, tolerances,
-and starts were used with 12 workers. The faster wheel remains installed; no
-scientific hierarchy is inferred from whether an Engine commit has merged to
-main.
+and starts were used. Those timings are retained only as historical
+reproducibility metadata; the reaction-synchronized scientific comparison
+below uses the current wheel and a three-CPU execution cap.
 
 The Engine's fixed-pressure density anchor was measured separately at
 \texttt{vle\_obs\_0140}. Eight single-threaded repetitions reduced median
@@ -1601,28 +1601,69 @@ speciation log RMSE (0.2333). No row is selected from only one observation
 family. The complete common-observation table is retained in
 \path{results/born-permittivity-study/full-common-row-statistics.csv}.
 
-The corrected switch-free active mapping was then replayed over the same
-complete 205 states with Engine commit
-\nolinkurl{d782cc9de6d7dc3011de27362eb79feb4668c68e}. It evaluated 120/161
-pressure states and 42/44 speciation states. Across its successful rows,
-pressure log$_{10}$ RMSE is 0.4950, median factor 2.3473, and mean log bias
-$-0.3956$; the 125 positive speciation targets have log$_{10}$ RMSE 0.2643
-and median factor 1.2157. On the exact common targets with A--original
-($n_p=112$, $n_x=125$), pressure RMSE changes from 0.3513 to 0.5075 while
-species RMSE changes from 0.2718 to 0.2643. Thus automatic SSM+DS gives a
-small aggregate species-RMSE improvement but a large pressure deterioration
-and bias reversal with the present unique diameters. This does not justify
-silently turning the populated extended parameters off; it identifies their
-joint calibration as the next model task.
+\paragraph{Current reaction-synchronized result.}
+The preceding eight-configuration screen is retained as model-structure
+history, but its observation requests embedded an older R4 correlation and
+therefore do not describe the present parameter bundle. The current comparison
+rebuilds every request from the displayed R1--R5 correlations and uses Engine
+commit \nolinkurl{8007a70815efcd277f06eddc4df9fffdd8cdca48}. Each complete
+nine-species configuration was evaluated against the same 205 states. Metrics
+below use the exact intersection of 100 positive pressure targets and 123
+positive speciation targets evaluated by all four configurations; coverage is
+reported separately, so no configuration benefits from silently dropping a
+difficult observation.
 
-The active replay preserves 43 failed states: 10 numerical-convergence
-failures, two physical rejections, and 31 wrapper exceptions reporting an
-empty native numerical-policy record after the long-running bubble attempt.
-Twenty-nine of the 31 exceptions are at \SI{120}{\celsius}. They remain in the
-retained state table and are excluded neither from the failure count nor from
-future Engine acceptance evidence. The complete receipt and row-level values
-are retained under
-\path{results/born-permittivity-study/automatic-extended-full-*}.
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}Yrrrrrr@{}}
+\toprule
+Complete configuration & States & $p_{\ce{CO2}}$ RMSE & Factor & Bias & Species RMSE & Species factor \\
+\midrule
+Solvent-only mixing, original Born & 171/205 & \textbf{0.3386} & \textbf{1.8652} & 0.0982 & 0.2734 & 1.0713 \\
+Solvent-only mixing, SSM+DS, current R5 & 161/205 & 0.4930 & 2.4745 & $-0.4073$ & 0.2676 & 1.2281 \\
+Solvent-only mixing, SSM+DS, R5 $a_K-80$ K & 164/205 & 0.3456 & 1.8672 & $-0.1532$ & 0.2442 & 1.1466 \\
+Nonlinear suppression, SSM+DS, R5 $a_K+80$ K & \textbf{174/205} & 0.4417 & 2.3122 & \textbf{$-0.0199$} & \textbf{0.2440} & \textbf{1.0961} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/born_permittivity/output/current-fast-born-reaction-comparison.pdf}
+\caption{Current reaction-synchronized comparison. Pressure and speciation
+log$_{10}$ RMSE use observations evaluated by all four configurations
+($n_p=100$, $n_x=123$); the right panel reports all successful states out of
+205 attempts. Lower RMSE is better.}
+\label{fig:current-born-reaction-comparison}
+\end{figure}
+
+No single row wins every quantity. Original Born gives the smallest common-row
+pressure RMSE. Nonlinear suppression with SSM+DS and R5 $a_K+80$ K gives the
+largest evaluated-state count, nearly zero mean pressure bias, and the smallest
+species RMSE, but its pressure scatter remains larger. The best tested balance
+is solvent-only mixing with SSM+DS and R5 $a_K-80$ K: relative to original
+Born, its pressure RMSE is only 0.0070 larger while its species RMSE is 0.0292
+smaller. Relative to the unadjusted SSM+DS bundle, it reduces pressure RMSE by
+0.1474 and species RMSE by 0.0233.
+
+The opposite useful R5 directions under the two permittivity rules are the
+central result. R5 is not an independent correction that can be transferred
+unchanged between Born/permittivity formulations: reaction speciation changes
+liquid composition and CO2 activity, which changes bubble pressure, while the
+electrostatic formulation changes the activities entering R5. The fixed-R5
+comparison therefore diagnosed coupling rather than proving that original Born
+is intrinsically superior. A defensible next fit must estimate R5 together with
+the uncertain ion Born diameters and neutral solvation factors under one chosen
+permittivity formulation, using both pressure and speciation residuals.
+
+The four current calculations preserve 34, 44, 41, and 31 failed states,
+respectively. The nonlinear-suppression row improves coverage but does not
+eliminate the high-temperature pressure failures. Those states remain solver
+evidence and must be recovered before the formulation comparison is considered
+complete. Exact values are retained in the Born--permittivity study results
+directory: \texttt{current-fast-common-comparison.csv}, with row-level states
+and targets in the \texttt{corrected-reaction-full} and
+\texttt{figiel-r5-positive-full} result families.
 
 Figure~\ref{fig:born-permittivity-residuals} shows that every configuration
 shares the same principal pressure pattern: negative low-loading residuals,
@@ -1753,23 +1794,17 @@ pool changes the universal-1.6 pressure log RMSE from 0.389898
 to 0.387514, changes species log RMSE by less than $2\times10^{-7}$, and
 has negligible effect on the present common-observation residuals.
 
-\textbf{decision:} no permittivity alternative simultaneously improves
-pressure, speciation, dielectric plausibility, and branch identity on the
-evaluated fixed-parameter evidence, so retain solvent-only mass-fraction
-mixing. The model-definition correction makes the populated unique Born
-diameters and non-unit water solvation factor active through automatic SSM+DS.
-The complete replay is retained and the handoff ZIP now carries the same
-switch-free mapping and Engine wheel.
-E--SSM+DS at $f_{\mathrm{MEA}}=1.0$ is the best
-species-error alternative, while $f_{\mathrm{MEA}}=1.6$ is the best pressure
-member of the universal-Figiel family; their pressure--species tradeoff
-prevents either dielectric package from replacing the solvent-only rule.
-Explicit \ce{CO2} exclusion is not material at the
-present compositions. The next discriminating experiment is the Engine
-pressure-in-KKT robustness correction using all 181 preserved bubble failures
-as acceptance evidence, followed by a complete rerun and independent
-loaded-MEA static-permittivity comparison. Broad parameter fitting remains
-deferred until that structural comparison has complete row behavior.
+\textbf{Current interpretation:} populated unique Born diameters and non-unit
+neutral solvation factors activate SSM+DS. With the unadjusted R5 correlation,
+that formulation worsens pressure. A bounded R5 movement nearly recovers the
+original-Born pressure result and improves speciation, so the discrepancy is a
+coupled reaction/electrostatic calibration problem rather than evidence for
+turning SSM+DS off. Solvent-only mixing with SSM+DS and R5 $a_K-80$ K is the
+best balanced configuration tested so far; nonlinear suppression with R5
+$a_K+80$ K is the coverage and pressure-bias leader. Neither settles the
+permittivity model without loaded-MEA dielectric observations and a consistent
+Born-diameter/R5 fit. Explicit \ce{CO2} exclusion remains immaterial at the
+present compositions.
 
 \section{Current conclusions and next experiments}
 \label{sec:next-experiments}
@@ -1905,7 +1940,7 @@ Bounded sensitivity screen & \path{results/parameter-sensitivity-screen.csv}; co
 Quick direct endpoint screen & \path{results/quick-endpoint-perturbation-screen.csv} and its JSON receipt; full reactive bubble-point endpoints and the bounded SciPy reaction-root spot check. \\
 Best-in-slot campaign & \path{results/best-in-slot-campaign/}; centered sensitivity, R4 pivot--slope grids, full validations, boundary diagnostics, exact receipts, and the selected candidate's row-level Engine evaluations. \\
 Born--permittivity structure study & \path{results/born-permittivity-study/}; exact sparse and complete state/target tables, failure characterization, grouped statistics, Engine parity and density-anchor timings, deterministic formulation construction, and hashes. Figures~\ref{fig:born-permittivity-overview}--\ref{fig:born-permittivity-contributions} read these retained values without rerunning the Engine. \\
-Candidate Engine wheel & \path{data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl}; Engine commit \nolinkurl{d782cc9de6d7dc3011de27362eb79feb4668c68e} and wheel SHA-256 \nolinkurl{11634405821c028a1f85033e495563ae6dc15fc8c19829f73c18ef39d5340989}. \\
+Current Engine wheel & \path{data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl}; Engine commit \nolinkurl{8007a70815efcd277f06eddc4df9fffdd8cdca48} and wheel SHA-256 \nolinkurl{f6e5b51dad79741c759393688f7daa547c9eb73f5944d5f877b3b32b1e56714a}. \\
 Selected live mapping & \path{results/selected-current-best-parameters.json}; solvent-only mass-fraction mixing, automatic SSM+DS activation, and the selected Class 3 R4--\ce{CO2} fit. \\
 Trace-species abundance & \path{figures/speciation/output/speciation-model.csv}; retained 44-state calculated values summarized in Section~\ref{sec:pressure-identifiability}. \\
 Current IDAES comparison & Official public \href{https://github.com/IDAES/idaes-pse/blob/main/idaes/models_extra/column_models/properties/MEA_solvent.py}{MEA solvent} and \href{https://github.com/IDAES/idaes-pse/blob/main/idaes/models_extra/column_models/properties/MEA_vapor.py}{MEA vapor} property files; used only to define the proposed structural ablation. \\

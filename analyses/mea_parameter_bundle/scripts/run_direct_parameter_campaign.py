@@ -7,6 +7,7 @@ import copy
 import csv
 import json
 import math
+import os
 import statistics
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -50,6 +51,15 @@ BOUNDS = {
     "hco3_fsolv": (0.5, 1.5),
     "hco3_born": (2.5, 3.5),
 }
+
+
+def quarter_cpu_affinity() -> tuple[int, ...]:
+    """Restrict this process and inherited workers to at most 25% of host CPUs."""
+    available = sorted(os.sched_getaffinity(0))
+    limit = max(1, (os.cpu_count() or 1) // 4)
+    selected = tuple(available[:limit])
+    os.sched_setaffinity(0, selected)
+    return selected
 
 
 @lru_cache(maxsize=1)
@@ -454,6 +464,8 @@ def run(scenarios: list[tuple[str, dict[str, float]]], phase: str, full: bool, w
     assert sha256(STATE_PACKET) == STATE_PACKET_SHA256
     assert sha256(ENGINE_WHEEL) == ENGINE_WHEEL_SHA256
     assert sha256(installed_wheel()) == ENGINE_WHEEL_SHA256
+    cpu_affinity = quarter_cpu_affinity()
+    workers = min(workers, len(cpu_affinity))
     tasks = [(scenario, values, full) for scenario, values in scenarios]
     outputs = []
     with ProcessPoolExecutor(max_workers=min(workers, len(tasks))) as pool:
@@ -474,6 +486,8 @@ def run(scenarios: list[tuple[str, dict[str, float]]], phase: str, full: bool, w
         "speciation_state_count": len(speciation_catalog()),
         "scenario_count": len(scenarios),
         "workers": min(workers, len(tasks)),
+        "cpu_affinity": cpu_affinity,
+        "cpu_limit_fraction": 0.25,
         "parameter_path": str(BASELINE.relative_to(ANALYSIS)),
         "parameter_sha256": sha256(BASELINE),
         "state_packet_sha256": sha256(STATE_PACKET),
@@ -504,7 +518,7 @@ def main() -> None:
         default="sensitivity",
     )
     parser.add_argument("--full", action="store_true")
-    parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 1) // 4))
     args = parser.parse_args()
     if args.scenarios:
         scenarios = load_scenarios(args.scenarios)

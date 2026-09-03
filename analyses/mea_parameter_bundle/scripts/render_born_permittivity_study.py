@@ -544,6 +544,112 @@ def contributions(states: list[dict[str, str]]) -> None:
     )
 
 
+def current_fast_comparison() -> None:
+    """Render the current common-row comparison from the retained fast-wheel runs."""
+    variants = {
+        "A-ORG": "Solvent-only mixing, original Born",
+        "A-AUTO": "Solvent-only mixing, SSM+DS",
+        "A-AUTO-r5am80": "Solvent-only mixing, SSM+DS, R5 -80 K",
+        "E-AUTO-r5ap80": "Nonlinear suppression, SSM+DS, R5 +80 K",
+    }
+    targets = rows(RESULTS / "corrected-reaction-full-targets.csv")
+    targets.extend(rows(RESULTS / "figiel-r5-positive-full-targets.csv"))
+    summaries = rows(RESULTS / "corrected-reaction-full-summary.csv")
+    summaries.extend(rows(RESULTS / "figiel-r5-positive-full-summary.csv"))
+    summary_by_variant = {row["variant"]: row for row in summaries}
+    errors: dict[str, dict[str, dict[tuple[str, str], float]]] = {}
+    for family in ("pressure", "speciation"):
+        errors[family] = {
+            variant: {
+                (row["observation_id"], row["target"]): float(
+                    row["log10_predicted_over_observed"]
+                )
+                for row in targets
+                if row["variant"] == variant
+                and row["family"] == family
+                and row["log10_predicted_over_observed"]
+            }
+            for variant in variants
+        }
+    output = []
+    for variant, label in variants.items():
+        result = {
+            "variant": variant,
+            "label": label,
+            "evaluated_states": int(summary_by_variant[variant]["evaluated_states"]),
+            "attempted_states": int(summary_by_variant[variant]["attempted_states"]),
+        }
+        for family in ("pressure", "speciation"):
+            common = set.intersection(
+                *(set(values) for values in errors[family].values())
+            )
+            values = [errors[family][variant][key] for key in common]
+            result[f"{family}_common_targets"] = len(values)
+            result[f"{family}_log10_rmse"] = math.sqrt(
+                statistics.fmean(value * value for value in values)
+            )
+            result[f"{family}_median_factor"] = 10 ** statistics.median(
+                abs(value) for value in values
+            )
+            result[f"{family}_mean_log10_bias"] = statistics.fmean(values)
+        output.append(result)
+
+    data_path = RESULTS / "current-fast-common-comparison.csv"
+    with data_path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=tuple(output[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(output)
+
+    apply_plot_theme()
+    fig, axes = plt.subplots(1, 2, figsize=(11.8, 4.8))
+    y = np.arange(len(output))
+    axes[0].scatter(
+        [row["pressure_log10_rmse"] for row in output],
+        y - 0.12,
+        marker="o",
+        s=65,
+        color="#006D8F",
+        label="CO$_2$ pressure (100 common targets)",
+    )
+    axes[0].scatter(
+        [row["speciation_log10_rmse"] for row in output],
+        y + 0.12,
+        marker="s",
+        s=58,
+        color="#B45309",
+        label="Speciation (123 common targets)",
+    )
+    axes[0].set_yticks(y, [row["label"] for row in output])
+    axes[0].invert_yaxis()
+    axes[0].set_xlabel("log$_{10}$ RMSE (lower is better)")
+    axes[0].set_title("Agreement on identical observations")
+    axes[0].grid(axis="x", alpha=0.22)
+    axes[0].legend(fontsize=8)
+
+    evaluated = [row["evaluated_states"] for row in output]
+    axes[1].barh(y, evaluated, color="#2E8B57")
+    axes[1].set_yticks(y, [row["variant"] for row in output])
+    axes[1].invert_yaxis()
+    axes[1].set_xlim(150, 205)
+    axes[1].set_xlabel("Evaluated states out of 205")
+    axes[1].set_title("Numerical coverage")
+    axes[1].grid(axis="x", alpha=0.22)
+    for index, value in enumerate(evaluated):
+        axes[1].text(value + 1, index, str(value), va="center", fontsize=8)
+
+    fig.suptitle(
+        "R5 adjustment recovers extended-Born pressure while improving speciation"
+    )
+    fig.tight_layout()
+    save(
+        fig,
+        "current-fast-born-reaction-comparison",
+        "Current fast-wheel Born and reaction comparison",
+        "Pressure and speciation log10 RMSE on targets shared by all four complete nine-species configurations, with evaluated-state counts shown separately.",
+        data_path,
+    )
+
+
 def study_summary(summary: list[dict[str, str]], failures: list[dict[str, str]]) -> None:
     receipt = json.loads((RESULTS / "automatic-extended-full-receipt.json").read_text())
     automatic = rows(RESULTS / "automatic-extended-full-summary.csv")
@@ -641,6 +747,7 @@ def main() -> None:
     grouped_residuals(grouped)
     diagnostics(summary, states)
     contributions(states)
+    current_fast_comparison()
     study_summary(summary, failures)
 
 

@@ -7,6 +7,7 @@ import csv
 import hashlib
 import json
 import math
+import os
 import statistics
 import time
 from collections import Counter, defaultdict
@@ -16,10 +17,12 @@ from pathlib import Path
 import epcsaft
 from epcsaft import equilibrium
 
-from generate_figure_data import corrected_request, failure_fields, prepared_problem
+from generate_figure_data import failure_fields, prepared_problem
 from run_direct_parameter_campaign import (
     CANONICAL_VLE,
     pressure_catalog as complete_pressure_catalog,
+    quarter_cpu_affinity,
+    request_with_reactions,
 )
 
 
@@ -28,8 +31,8 @@ BASELINE = ANALYSIS / "results/selected-current-best-parameters.json"
 STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
 FOUNDATION = ANALYSIS / "data/input/parameters.json"
 RESULTS = ANALYSIS / "results/born-permittivity-study"
-ENGINE_COMMIT = "d782cc9de6d7dc3011de27362eb79feb4668c68e"
-ENGINE_WHEEL_SHA256 = "11634405821c028a1f85033e495563ae6dc15fc8c19829f73c18ef39d5340989"
+ENGINE_COMMIT = "8007a70815efcd277f06eddc4df9fffdd8cdca48"
+ENGINE_WHEEL_SHA256 = "f6e5b51dad79741c759393688f7daa547c9eb73f5944d5f877b3b32b1e56714a"
 ION_IDS = {
     "protonated-monoethanolamine",
     "carbamate-anion",
@@ -52,6 +55,20 @@ BORN_MODIFIERS = {
     "dH3Op10": ("hydronium-cation", 1.1),
     "dOHm10": ("hydroxide-anion", 0.9),
     "dOHp10": ("hydroxide-anion", 1.1),
+}
+REACTION_MODIFIERS = {
+    "r4am0p1": ("R4", "reaction:R4:correlation:a", -0.1),
+    "r4ap0p1": ("R4", "reaction:R4:correlation:a", 0.1),
+    "r4bm100": ("R4", "reaction:R4:correlation:b_k", -100.0),
+    "r4bp100": ("R4", "reaction:R4:correlation:b_k", 100.0),
+    "r5am80": ("R5", "reaction:R5:correlation:a_k", -80.0),
+    "r5am160": ("R5", "reaction:R5:correlation:a_k", -160.0),
+    "r5am240": ("R5", "reaction:R5:correlation:a_k", -240.0),
+    "r5am277p91": ("R5", "reaction:R5:correlation:a_k", -277.91),
+    "r5ap80": ("R5", "reaction:R5:correlation:a_k", 80.0),
+    "r5ap160": ("R5", "reaction:R5:correlation:a_k", 160.0),
+    "r5ap240": ("R5", "reaction:R5:correlation:a_k", 240.0),
+    "r5ap322p09": ("R5", "reaction:R5:correlation:a_k", 322.09),
 }
 FORMULATIONS = {
     "A": "solvent-only",
@@ -280,6 +297,19 @@ def variant_mapping(variant: str) -> dict[str, object]:
                 f"local ±10% sensitivity about the retained ion-specific d_Born; factor={factor}",
             )
             record["source_sha256"] = f"sha256:{SOURCE_SHA256['figiel-2025']}"
+        elif modifier in REACTION_MODIFIERS:
+            reaction_id, identity, delta = REACTION_MODIFIERS[modifier]
+            reaction = next(
+                row
+                for row in mapping["reaction_correlations"]
+                if row["reaction_id"] == reaction_id
+            )
+            record = next(
+                row for row in reaction["coefficients"] if row["identity"] == identity
+            )
+            record["value"]["magnitude"] = (
+                float(record["value"]["magnitude"]) + delta
+            )
         elif modifier == "dDH":
             for component in mapping["components"]:
                 for record in component["coefficients"]:
@@ -310,8 +340,10 @@ def variant_mapping(variant: str) -> dict[str, object]:
     return epcsaft.Parameters.from_mapping(mapping).to_mapping()
 
 
-def _request(raw: dict[str, object]) -> dict[str, object]:
-    request = corrected_request(raw)
+def _request(
+    raw: dict[str, object], reaction_values: dict[str, float]
+) -> dict[str, object]:
+    request = request_with_reactions(raw, reaction_values)
     for phase in request["phases"]:
         phase["model"]["kind"] = "eos"
         phase["model"]["reference_id"] = "installed-eos"
@@ -474,7 +506,17 @@ def evaluate_variant(
     task: tuple[str, str, int, int],
 ) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     variant, phase, shard, shard_count = task
-    model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(variant_mapping(variant)))
+    parameters = epcsaft.Parameters.from_mapping(variant_mapping(variant))
+    model = epcsaft.Mixture(parameters)
+    specs = {spec.identity: spec for spec in parameters.parameter_specs}
+    reaction_values = {
+        name: float(specs[identity].value.magnitude)
+        for name, identity in {
+            "r4_a": "reaction:R4:correlation:a",
+            "r4_b": "reaction:R4:correlation:b_k",
+            "r5_a": "reaction:R5:correlation:a_k",
+        }.items()
+    }
     reference = epcsaft.Mixture(
         epcsaft.Parameters.from_mapping(variant_mapping("E-ORG"))
     )
@@ -493,7 +535,7 @@ def evaluate_variant(
         )
         try:
             problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                _request(observation["request"])
+                _request(observation["request"], reaction_values)
             )
             problem = prepared_problem(
                 problem, f"{observation['observation_id']}-{variant}"
@@ -701,6 +743,8 @@ def run(
 ) -> None:
     if any(variant.startswith(("B-", "C-")) for variant in variants):
         retain_component_permittivity_derivative_check()
+    cpu_affinity = quarter_cpu_affinity()
+    workers = min(workers, len(cpu_affinity))
     shard_count = min(workers, 8)
     tasks = [
         (variant, phase, shard, shard_count)
@@ -736,6 +780,8 @@ def run(
         "phase": phase,
         "variants": variants,
         "workers": min(workers, len(tasks)),
+        "cpu_affinity": cpu_affinity,
+        "cpu_limit_fraction": 0.25,
         "parameter_sha256": sha256(BASELINE),
         "state_packet_sha256": sha256(STATE_PACKET),
         "pressure_catalog_sha256": sha256(CANONICAL_VLE),
@@ -758,7 +804,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", choices=("sparse", "full"), required=True)
     parser.add_argument("--variants", nargs="+", default=[])
-    parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 1) // 4))
     parser.add_argument("--output-prefix")
     args = parser.parse_args()
     variants = args.variants or [

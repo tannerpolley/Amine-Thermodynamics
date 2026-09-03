@@ -93,6 +93,10 @@ outputs:
     kind: joint_born_diameter_and_solvation_factor_sensitivity
   - path: analyses/mea_parameter_bundle/results/born-permittivity-study/automatic-extended-full-summary.csv
     kind: active_automatic_extended_born_full_replay
+  - path: analyses/mea_parameter_bundle/results/born-permittivity-study/current-fast-common-comparison.csv
+    kind: reaction_synchronized_common_target_comparison
+  - path: analyses/mea_parameter_bundle/figures/born_permittivity/output/current-fast-born-reaction-comparison.pdf
+    kind: reaction_synchronized_born_and_reaction_comparison_figure
   - path: analyses/mea_parameter_bundle/figures/permittivity_comparison/output/permittivity-formulation-parity.pdf
     kind: retained_permittivity_comparison_figure
   - path: analyses/mea_parameter_bundle/figures/permittivity_comparison/output/permittivity-formulation-parity.csv
@@ -106,7 +110,7 @@ commands:
     - uv run python scripts/prepare_calorimetry_partition.py
     - /tmp/mea-parameter-bundle-engine/bin/python scripts/compare_permittivity_formulations.py
     - /tmp/mea-parameter-bundle-engine/bin/python scripts/generate_figure_data.py
-    - /tmp/mea-parameter-bundle-engine/bin/python scripts/run_direct_parameter_campaign.py --phase PHASE --preset PRESET --workers 8
+    - /tmp/mea-parameter-bundle-engine/bin/python scripts/run_direct_parameter_campaign.py --phase PHASE --preset PRESET
     - uv run python scripts/render_figures.py
     - uv run python scripts/build_absorption_handoff.py
   render:
