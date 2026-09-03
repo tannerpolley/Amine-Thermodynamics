@@ -6,12 +6,12 @@
   "display_speciation_observations": 332,
   "display_speciation_source_sha256": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
   "engine_distribution_version": "0.2.0.dev0",
-  "engine_source_commit": "8007a70815efcd277f06eddc4df9fffdd8cdca48",
-  "engine_wheel_sha256": "f6e5b51dad79741c759393688f7daa547c9eb73f5944d5f877b3b32b1e56714a",
-  "evaluated_pressure_states": 120,
+  "engine_source_commit": "8438ce5f94a547189c91c4ec180a7782d60879d6",
+  "engine_wheel_sha256": "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805",
+  "evaluated_pressure_states": 161,
   "evaluated_speciation_grid_states": 181,
-  "evaluated_speciation_states": 44,
-  "failed_states": 44,
+  "evaluated_speciation_states": 42,
+  "failed_states": 5,
   "failure_table": "results/figure-calculation-failures.csv",
   "fit_residual_table": "results/current-best-fit-residuals.csv",
   "fit_statistics_table": "results/current-best-fit-statistics.csv",
@@ -35,7 +35,7 @@
     "resulting_standard_state": "aqueous-molality-infinite-dilution-water-v1"
   },
   "schema_version": 1,
-  "selected_permittivity_variant": "uyan_co2_excluding",
+  "selected_permittivity_variant": "solvent_only_mass_fraction_co2_excluded",
   "source_continuation_parameter_fingerprints": [
     "sha256:927cc368a166c5503566778d997e847f04a51c3e4d54b548fb3a0afe474640e1"
   ],
@@ -69,8 +69,8 @@
   "status": "active_current_best_bundle",
   "successful_fingerprints_match_bundle": true,
   "temperature_balanced_log10_rmse": {
-    "pressure": 0.3702783975295324,
-    "speciation": 0.16386761610704303
+    "pressure": 0.34072468497626784,
+    "speciation": 0.40679760150981276
   },
-  "warm_start_policy": "source continuation values projected to mass-balanced finite starts, with the strictly positive feed used when projection crosses the interior boundary; continuation identity and state cleared before every solve"
+  "warm_start_policy": "source continuation values are projected to mass-balanced finite starts; pressure observations then reuse certified states across nearby loadings, fall back to the independent source start, and use neighboring-temperature certified states when the local branch is otherwise missed"
 }

@@ -65,8 +65,18 @@ outputs:
     kind: calorimetry_partition_provenance_and_checks
   - path: analyses/mea_parameter_bundle/results/calorimetry/current-selected-gibbs-helmholtz-summary.json
     kind: selected_bundle_absorption_heat_diagnostic
+  - path: analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-summary.json
+    kind: selected_bundle_direct_total_enthalpy_summary
+  - path: analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-comparison.csv
+    kind: selected_bundle_direct_total_enthalpy_comparison
+  - path: analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-attempts.csv
+    kind: selected_bundle_direct_total_enthalpy_solver_attempts
+  - path: analyses/mea_parameter_bundle/results/calorimetry/current-selected-reference-thermochemistry.json
+    kind: reaction_consistent_reference_thermochemistry
   - path: analyses/mea_parameter_bundle/figures/calorimetry/output/current-selected-calorimetry-diagnostic.pdf
     kind: selected_bundle_absorption_heat_figure
+  - path: analyses/mea_parameter_bundle/figures/calorimetry/output/current-selected-direct-enthalpy.pdf
+    kind: selected_bundle_direct_total_enthalpy_figure
   - path: analyses/mea_parameter_bundle/results/parameter-start-comparison.csv
     kind: retained_parameter_comparison
   - path: analyses/mea_parameter_bundle/results/parameter-sensitivity-screen.csv
@@ -121,6 +131,7 @@ commands:
   analyze:
     - uv run python scripts/prepare_calorimetry_partition.py
     - uv run python scripts/evaluate_absorption_heat_diagnostic.py
+    - uv run python scripts/evaluate_direct_absorption_heat.py
     - /tmp/mea-parameter-bundle-engine/bin/python scripts/compare_permittivity_formulations.py
     - /tmp/mea-parameter-bundle-engine/bin/python scripts/generate_figure_data.py
     - /tmp/mea-parameter-bundle-engine/bin/python scripts/run_direct_parameter_campaign.py --phase PHASE --preset PRESET
