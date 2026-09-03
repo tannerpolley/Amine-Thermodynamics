@@ -49,9 +49,9 @@ ideal-gas CO2 enthalpy on one reference basis for both dose endpoints.
 `data/input/parameters.json` and `data/input/state-packet.json` are immutable
 local snapshots from ePC-SAFT commit
 `38e91823b6d4f26c1d549f07aaef24a089d8e16d`. The retained Engine wheel is the
-automatic-extended-Born candidate at commit
-`d782cc9de6d7dc3011de27362eb79feb4668c68e`; its SHA-256 is
-`11634405821c028a1f85033e495563ae6dc15fc8c19829f73c18ef39d5340989`.
+combined fast Born/permittivity implementation at commit
+`8007a70815efcd277f06eddc4df9fffdd8cdca48`; its SHA-256 is
+`f6e5b51dad79741c759393688f7daa547c9eb73f5944d5f877b3b32b1e56714a`.
 Generate numerical tables with that exact wheel, then render with the MEA
 environment. The state packet intentionally excludes the source fit request's
 parameter declaration; this replay binds the separately hashed notebook vector.
