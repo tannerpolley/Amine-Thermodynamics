@@ -514,7 +514,7 @@ def render_permittivity_comparison() -> None:
     styles = {
         "current_ion_specific": ("Ion-specific baseline", "#666666", "^"),
         "schick_temperature_mixing": ("Schick mixing", "#0072B2", "o"),
-        "uyan_co2_excluding": ("Uyan solvent-only", "#D55E00", "s"),
+        "uyan_co2_excluding": ("Solvent-only mass fraction", "#D55E00", "s"),
     }
     metrics = comparison["variants"]
     apply_plot_theme()

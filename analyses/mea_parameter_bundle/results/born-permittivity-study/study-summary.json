@@ -1,10 +1,10 @@
 {
   "scientific_question": "Which source-consistent Born formulation and composition-dependent relative-permittivity rule gives the best fixed-parameter reactive MEA pressure, speciation, dielectric-response, and phase-identity evidence?",
-  "active_parameter_sha256": "2666914f0f9cfebdf230e96565de843f9aadc9424035c940883147ff66af035c",
+  "active_parameter_sha256": "0ea2ab19015c96472f98982181ac8753e1a238c1cb18d0ff78426820525310c8",
   "state_packet_sha256": "41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef",
   "pressure_catalog_sha256": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
-  "engine_commit": "d8e02e4c6aab99669d17123248a1ac9729b47213",
-  "engine_wheel_sha256": "2a95e27415b948149d69f92870a8ea0bbaca2ff9e32d39b9bc938ec0a77b46dd",
+  "engine_commit": "d782cc9de6d7dc3011de27362eb79feb4668c68e",
+  "engine_wheel_sha256": "11634405821c028a1f85033e495563ae6dc15fc8c19829f73c18ef39d5340989",
   "source_sha256": {
     "uyan-2015-permittivity-transfer": "1ae7cabd2a7b84f7c543999106be3fa4387e566739cb8defb5e567405b20d9d6",
     "schick-et-al-2023": "958d21b21def89c9d704a0844a01c506809f3a86b5405bda4e07b05d7a3939d3",
@@ -183,6 +183,27 @@
       "material_balance_closure_max": 1.4088730182493236e-13,
       "reaction_affinity_closure_max": 2.1600499167107046e-12,
       "pressure_closure_max": 3.810327250132727e-10
+    },
+    "A-AUTO": {
+      "attempted_states": 205,
+      "compiled_states": 205,
+      "evaluated_states": 162,
+      "failed_states": 43,
+      "pressure_positive_targets": 120,
+      "pressure_log10_rmse": 0.4950057112455756,
+      "pressure_median_factor": 2.347258937340849,
+      "pressure_mean_log10_bias": -0.3955813220154775,
+      "speciation_positive_targets": 125,
+      "speciation_log10_rmse": 0.26434482762130757,
+      "speciation_median_factor": 1.2157236566781933,
+      "speciation_mean_log10_bias": -0.08379939552044041,
+      "bulk_relative_permittivity_min": 45.32581240089822,
+      "bulk_relative_permittivity_median": 64.63511711572431,
+      "bulk_relative_permittivity_max": 79.07622568128726,
+      "charge_closure_max": 2.95250717741541e-17,
+      "material_balance_closure_max": 6.836198274129401e-14,
+      "reaction_affinity_closure_max": 6.536993168992922e-13,
+      "pressure_closure_max": 4.16634501450091e-10
     }
   },
   "failure_stages": {
@@ -449,17 +470,18 @@
     "max_abs_f_mix_difference": 0.0012494837608527654
   },
   "decision": {
-    "active_bundle_changed": false,
-    "retained_formulation": "A-ORG: Uyan-style H2O/MEA mass-fraction transfer with original Born",
-    "reason": "No alternative simultaneously improves pressure, speciation, dielectric plausibility, and accepted phase identity on the fixed-parameter comparison. Solver failures are excluded from formulation ranking and remain an Engine robustness acceptance set.",
+    "active_bundle_changed": true,
+    "retained_formulation": "A-AUTO: solvent-only mass-fraction mixing with automatically activated corrected SSM+DS",
+    "reason": "The populated unique Born diameters and non-unit water solvation factor are active model parameters, so redundant switches were removed. Original Born is recovered by zero Born diameters inheriting the Debye-Huckel diameters.",
     "best_speciation_error_alternative": "E-SSMDS with f_solv,MEA=1.0",
     "best_universal_figiel_pressure_alternative": "E-SSMDS with f_solv,MEA=1.6 and molecular CO2 excluded from both neutral pools",
     "coupled_co2_exclusion_effect": "Removing molecular CO2 from both f_mix and the salt-free neutral-permittivity pool changes pressure log10 RMSE from 0.389898 to 0.387514 and speciation log10 RMSE by less than 2e-7 on evaluated rows.",
-    "next_experiment": "Use the 181 bubble-pressure iteration-limit rows as the acceptance set for a branch-aware pressure-in-KKT Engine solve, then repeat the complete comparison and compare against independent loaded-MEA static-permittivity observations."
+    "next_experiment": "Profile the MEA solvation factor jointly with the MEAH+ and bicarbonate Born diameters, then repeat the complete comparison after the branch-aware pressure solve is available."
   },
   "limitations": [
     "No admitted independent static-permittivity observations exist for loaded aqueous MEA in the retained data.",
     "Failed formulation-state attempts are preserved as bubble-pressure iteration, candidate-certificate, or inner-solver failures; they are not formulation evidence.",
+    "The active automatic-SSM+DS replay preserves 43 failures, including 31 empty-native-policy wrapper exceptions concentrated at 120 C.",
     "The immutable fast study wheel remains installed and retained by commit and SHA-256; no slower-wheel restoration was performed."
   ]
 }

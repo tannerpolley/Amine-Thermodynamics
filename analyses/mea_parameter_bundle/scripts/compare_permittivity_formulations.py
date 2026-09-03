@@ -182,8 +182,8 @@ def main(*, resume: bool = False) -> None:
     summary: dict[str, object] = {
         "question": (
             "Select the live permittivity treatment by comparing the current "
-            "ion-specific formulation, Schick component mixing, and Uyan "
-            "solvent-only mixing over every retained pressure and speciation state."
+            "ion-specific formulation, all-component mixing, and solvent-only "
+            "mass-fraction mixing over every retained pressure and speciation state."
         ),
         "immutable_parameter_input": str(PARAMETERS.relative_to(ANALYSIS)),
         "immutable_state_input": str(STATE_PACKET.relative_to(ANALYSIS)),
@@ -216,8 +216,8 @@ def main(*, resume: bool = False) -> None:
                 "source_id": UYAN_SOURCE_ID,
                 "source_sha256": UYAN_SOURCE_SHA256,
                 "scope": (
-                    "Uyan solvent-only equation transferred from MDEA to MEA "
-                    "using the current bundle's constant MEA epsilon_r=32 and water input"
+                    "Solvent-only mass-fraction rule using the current bundle's "
+                    "constant MEA epsilon_r=32 and water input"
                 ),
             },
         },

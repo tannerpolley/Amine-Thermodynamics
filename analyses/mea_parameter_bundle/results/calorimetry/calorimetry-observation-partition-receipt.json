@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "canonical_source": "data/reference/MEA/observations/calorimetry/MEA_heat_of_absorption_observations.csv",
+  "canonical_source_sha256": "1e6588339538cca09664911e265ef6dcaced7f1d33e547a10af5617bed3de380",
+  "materialized_view": "analyses/mea_parameter_bundle/data/input/calorimetry-observation-partition.csv",
+  "materialized_view_sha256": "175e55ff7e238ee19957da9b028e0d957bd99b35aa5ec4145926a055542725d3",
+  "row_count": 113,
+  "partition_counts": {
+    "calibration": 66,
+    "model_selection_comparison": 27,
+    "temperature_holdout": 20
+  },
+  "pair_group_count": 9,
+  "pairing_rule": "adjacent loading endpoints within source, table, temperature, MEA mass fraction, and run",
+  "first_endpoint_assumption": {
+    "co2_loading_mol_per_mol_mea": 0.003,
+    "required_sensitivity": "perturb before parameter adoption"
+  },
+  "source_typo_sensitivity_record_id": "kim2007_t40_r1_0.041",
+  "heat_sign": "reported positive heat-release magnitude",
+  "heat_unit": "kJ/mol CO2",
+  "engine_requirement": "paired-state total reactive-liquid enthalpy owner with compatible incoming ideal-gas CO2 enthalpy and typed endpoint failures",
+  "engine_requirement_state": "not present at inspected ePC-SAFT-project commit 9eccbfd9d4c3cd308a37906a0342908e4efed87e"
+}

@@ -19,13 +19,13 @@ ENGINE = (
     / "data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 )
 EXPECTED_PARAMETER_SHA256 = (
-    "2666914f0f9cfebdf230e96565de843f9aadc9424035c940883147ff66af035c"
+    "0ea2ab19015c96472f98982181ac8753e1a238c1cb18d0ff78426820525310c8"
 )
 EXPECTED_STATE_PACKET_SHA256 = (
     "41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef"
 )
 EXPECTED_ENGINE_SHA256 = (
-    "d7b4fc5ba5cbf0e979b65af83442d565496d11b771bb559233ad9dc3a4f8414a"
+    "11634405821c028a1f85033e495563ae6dc15fc8c19829f73c18ef39d5340989"
 )
 R123_OFFSETS = (8.0330699846, 4.0165349923, 4.0165349923)
 
@@ -94,8 +94,8 @@ def reaction_definition() -> bytes:
         "model_choices": {
             "base": "pc-saft",
             "association": "general-site with reciprocal induced carbon-dioxide--water association",
-            "electrolyte": "Debye--Huckel plus original Born",
-            "relative_permittivity": "Uyan solvent-only MEA--water mixing",
+            "electrolyte": "Debye--Huckel plus automatically activated corrected SSM+DS",
+            "relative_permittivity": "solvent-only MEA--water mass-fraction mixing",
             "vapor": "neutral incipient vapor evaluated by the pinned ePC-SAFT Engine",
         },
     }
@@ -114,8 +114,8 @@ Verified model choices:
 
 - species: CO2, MEA, H2O, MEAH+, MEACOO-, HCO3-, CO3^2-, H3O+, and OH-;
 - reciprocal induced CO2--H2O association and no CO2 self-association;
-- Debye--Huckel plus original Born electrostatics;
-- Uyan solvent-only MEA--water relative-permittivity mixing;
+- Debye--Huckel plus automatically activated corrected SSM+DS electrostatics;
+- solvent-only MEA--water mass-fraction relative-permittivity mixing;
 - selected R4: ln(K) = 3.3515778178 - 1895.3/T;
 - selected CO2 dispersion energy: epsilon/k = 173.44025 K;
 - all other coordinates are the values in parameters/parameters.json.
@@ -155,22 +155,16 @@ initial conditions.
 
 ## Fit summary
 
-Relative to the previous parameter set:
+The automatic-SSM+DS replay evaluates 120/161 pressure states with log10 RMSE
+0.4950 and median factor 2.3473. It evaluates 42/44 speciation states and 125
+positive targets with log10 RMSE 0.2643. Every one of the 43 failed states is
+retained in validation/automatic-extended-full-states.csv.
 
-- pressure log10 RMSE improved from 0.3974 to 0.3540;
-- temperature-balanced pressure log10 RMSE improved from 0.3569 to 0.3185;
-- pressure coverage improved from 125/161 to 130/161 states;
-- all 131/131 observed speciation targets evaluated, with log10 RMSE 0.2658.
-
-The pressure residual remains temperature-dependent: the model overpredicts
-at 40--60 C and underpredicts at 80--120 C. Only 12/39 pressure states at
-120 C evaluated. The 31 states listed in validation/non-evaluable-states.csv
-did not solve and should remain marked as such. Record any change to the vapor
-model, species set, or reaction standard state separately.
-
-The numerical authority is validation/fit-residuals.csv. The
-research notebook records the parameter evidence, bounded campaign, and next
-experiments.
+The populated unique Born diameters and non-unit water solvation factor
+activate SSM+DS without separate switches. A zero Born diameter inherits the
+same ion diameter used by Debye--Huckel, recovering original Born. The
+research notebook records the parameter evidence, structural comparison,
+sensitivity results, and next experiments.
 """
 
 
@@ -223,6 +217,18 @@ def payloads() -> dict[str, bytes]:
         "validation/final-candidate-comparison.csv": source(
             ANALYSIS
             / "results/best-in-slot-campaign/final-full-validation-summary.csv"
+        ),
+        "validation/automatic-extended-full-states.csv": source(
+            ANALYSIS
+            / "results/born-permittivity-study/automatic-extended-full-states.csv"
+        ),
+        "validation/automatic-extended-full-targets.csv": source(
+            ANALYSIS
+            / "results/born-permittivity-study/automatic-extended-full-targets.csv"
+        ),
+        "validation/automatic-extended-full-summary.csv": source(
+            ANALYSIS
+            / "results/born-permittivity-study/automatic-extended-full-summary.csv"
         ),
         "figures/pressure.pdf": source(
             ANALYSIS
