@@ -8,17 +8,17 @@ do not accumulate candidate-specific notebook copies or parallel status notes.
 
 The current document owns the active MEA bundle. Its molecular
 starting vector comes from ePC-SAFT Issues #80 and #119 and closed, unmerged PR
-#134; a full 123-state comparison then selected a Uyan-style H2O/MEA
-mass-fraction transfer over the former ion-specific baseline and Schick
-component mixing. Uyan's source system is MDEA; only its solvent-only mixing
-form is transferred here. A
+#134; a full 123-state comparison then selected solvent-only mass-fraction
+mixing over the former ion-specific baseline and all-component mixing. The
+selected rule uses the normalized salt-free-solvent average in Ascani and
+Held's Equation 13 with water and MEA as the explicit solvent pool. A
 bounded direct-Engine campaign subsequently selected the displayed R4 and
 carbon-dioxide dispersion-energy values. The current fixed-parameter
-Born--permittivity study finds that no tested literature package improves
-pressure, speciation, dielectric plausibility, and branch identity
-simultaneously on the paired fixed-parameter evidence, so the active
-Uyan-style/original-Born choice remains
-unchanged. The notebook is the live MEA
+Born--permittivity study retains solvent-only mass-fraction dielectric mixing.
+The active mapping omits redundant formulation switches: positive unique ion
+Born diameters together with a non-unit neutral solvation factor automatically
+activate corrected SSM+DS, while a zero Born diameter inherits that ion's
+Debye--Hückel diameter and recovers original Born. The notebook is the live MEA
 authority for that parameter set and its recorded results.
 
 The retained state packet contains raw Austgen R1--R3 values in records already
@@ -27,10 +27,32 @@ audited source-to-common shifts before constructing each Engine problem. The
 uncorrected packet remains immutable input evidence; the correction and its
 numerical consequences are documented in the notebook and calculation receipt.
 
+The calorimetry preparation step reads the canonical MEA observation table and
+materializes only the declared paired-state campaign rows. It retains 66
+Kim--Svendsen 40/80 C calibration observations, 20 Kim--Svendsen 120 C
+temperature-holdout observations, and 27 Kim et al. 2014 Table A1-1
+model-selection comparison observations. It also records each preceding
+endpoint within the same source, temperature, concentration, and run. Generate
+and verify that view with:
+
+```bash
+uv run python scripts/prepare_calorimetry_partition.py
+```
+
+The selected input is `data/input/calorimetry-observation-partition.csv`; its
+source hash, selected-view hash, row counts, pairing rule, assumed initial
+loading, and first-row exclusion sensitivity are recorded under
+`results/calorimetry/`. No absorption-enthalpy prediction is generated yet:
+the pinned Engine must first expose total reactive-liquid enthalpy and incoming
+ideal-gas CO2 enthalpy on one reference basis for both dose endpoints.
+
 `data/input/parameters.json` and `data/input/state-packet.json` are immutable
 local snapshots from ePC-SAFT commit
-`38e91823b6d4f26c1d549f07aaef24a089d8e16d`. Generate the retained numerical
-tables with the exact retained Engine wheel, then render with the MEA
+`38e91823b6d4f26c1d549f07aaef24a089d8e16d`. The retained Engine wheel is the
+automatic-extended-Born candidate at commit
+`d782cc9de6d7dc3011de27362eb79feb4668c68e`; its SHA-256 is
+`11634405821c028a1f85033e495563ae6dc15fc8c19829f73c18ef39d5340989`.
+Generate numerical tables with that exact wheel, then render with the MEA
 environment. The state packet intentionally excludes the source fit request's
 parameter declaration; this replay binds the separately hashed notebook vector.
 Nested continuation values are converted to finite warm starts, after which
@@ -88,7 +110,10 @@ pool exclusion means exclusion from both SSM $f_{mix}$ and the salt-free
 neutral-permittivity pool while CO2 remains a reacting EOS component. The
 selected live mapping
 remains `results/selected-current-best-parameters.json`; the active handoff ZIP
-was not rebuilt. `scripts/render_born_permittivity_study.py` reads retained
+contains the same switch-free mapping and candidate Engine wheel. The
+automatic-activation sparse replay and the six-ion
+Born-diameter/MEA-solvation-factor sensitivity are retained in the same
+directory. `scripts/render_born_permittivity_study.py` reads retained
 tables and creates the selected figures without rerunning the Engine.
 
 Render from this directory with:

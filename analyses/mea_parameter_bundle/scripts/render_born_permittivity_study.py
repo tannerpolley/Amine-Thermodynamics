@@ -40,14 +40,14 @@ COLORS = {
     "I-SSMDS": "#B42318",
 }
 LABELS = {
-    "A-ORG": "Uyan-style H$_2$O/MEA transfer + original Born",
-    "D-ORG": "Ascani combined + original Born",
-    "E-SSMDS": "Figiel SSM+DS, $f_{MEA}=1.0$",
-    "E-SSMDS-f1.4": "Figiel SSM+DS, $f_{MEA}=1.4$",
-    "E-SSMDS-f1.5": "Figiel SSM+DS, $f_{MEA}=1.5$",
-    "E-SSMDS-f1.6": "Figiel SSM+DS, $f_{MEA}=1.6$",
-    "E-SSMDS-f1.6-noCO2": "Figiel SSM+DS, $f_{MEA}=1.6$, CO$_2$ omitted from both pools",
-    "I-SSMDS": "Zuber analog/fallback $\\alpha_i$ + SSM+DS",
+    "A-ORG": "Solvent-only mass fraction + original Born",
+    "D-ORG": "Combined solvent-mass/ion-mole + original Born",
+    "E-SSMDS": "Nonlinear suppression + SSM+DS, $f_{MEA}=1.0$",
+    "E-SSMDS-f1.4": "Nonlinear suppression + SSM+DS, $f_{MEA}=1.4$",
+    "E-SSMDS-f1.5": "Nonlinear suppression + SSM+DS, $f_{MEA}=1.5$",
+    "E-SSMDS-f1.6": "Nonlinear suppression + SSM+DS, $f_{MEA}=1.6$",
+    "E-SSMDS-f1.6-noCO2": "Nonlinear suppression + SSM+DS, $f_{MEA}=1.6$, CO$_2$ omitted from both pools",
+    "I-SSMDS": "Ion-specific analog/fallback $\\alpha_i$ + SSM+DS",
 }
 
 
@@ -284,7 +284,7 @@ def overview(summary: list[dict[str, str]], states: list[dict[str, str]]) -> Non
         facecolors="none",
         edgecolors="#333333",
         alpha=0.55,
-        label="Figiel Eq. 11 at solved compositions",
+        label="Nonlinear suppression at solved compositions",
     )
     axes[2].set(
         xlabel="CO$_2$ loading (mol mol$^{-1}$ MEA)",
@@ -545,7 +545,8 @@ def contributions(states: list[dict[str, str]]) -> None:
 
 
 def study_summary(summary: list[dict[str, str]], failures: list[dict[str, str]]) -> None:
-    receipt = json.loads((RESULTS / "full-receipt.json").read_text())
+    receipt = json.loads((RESULTS / "automatic-extended-full-receipt.json").read_text())
+    automatic = rows(RESULTS / "automatic-extended-full-summary.csv")
     integer_fields = {
         "attempted_states",
         "compiled_states",
@@ -580,7 +581,7 @@ def study_summary(summary: list[dict[str, str]], failures: list[dict[str, str]])
             field: int(row[field]) if field in integer_fields else float(row[field])
             for field in numeric_fields
         }
-        for row in summary
+        for row in summary + automatic
     }
     failure_stages: dict[str, int] = defaultdict(int)
     for row in failures:
@@ -605,17 +606,18 @@ def study_summary(summary: list[dict[str, str]], failures: list[dict[str, str]])
             (RESULTS / "co2-pool-exclusion-check.json").read_text()
         ),
         "decision": {
-            "active_bundle_changed": False,
-            "retained_formulation": "A-ORG: Uyan-style H2O/MEA mass-fraction transfer with original Born",
-            "reason": "No alternative simultaneously improves pressure, speciation, dielectric plausibility, and accepted phase identity on the fixed-parameter comparison. Solver failures are excluded from formulation ranking and remain an Engine robustness acceptance set.",
+            "active_bundle_changed": True,
+            "retained_formulation": "A-AUTO: solvent-only mass-fraction mixing with automatically activated corrected SSM+DS",
+            "reason": "The populated unique Born diameters and non-unit water solvation factor are active model parameters, so redundant switches were removed. Original Born is recovered by zero Born diameters inheriting the Debye-Huckel diameters.",
             "best_speciation_error_alternative": "E-SSMDS with f_solv,MEA=1.0",
             "best_universal_figiel_pressure_alternative": "E-SSMDS with f_solv,MEA=1.6 and molecular CO2 excluded from both neutral pools",
             "coupled_co2_exclusion_effect": "Removing molecular CO2 from both f_mix and the salt-free neutral-permittivity pool changes pressure log10 RMSE from 0.389898 to 0.387514 and speciation log10 RMSE by less than 2e-7 on evaluated rows.",
-            "next_experiment": "Use the 181 bubble-pressure iteration-limit rows as the acceptance set for a branch-aware pressure-in-KKT Engine solve, then repeat the complete comparison and compare against independent loaded-MEA static-permittivity observations.",
+            "next_experiment": "Profile the MEA solvation factor jointly with the MEAH+ and bicarbonate Born diameters, then repeat the complete comparison after the branch-aware pressure solve is available.",
         },
         "limitations": [
             "No admitted independent static-permittivity observations exist for loaded aqueous MEA in the retained data.",
             "Failed formulation-state attempts are preserved as bubble-pressure iteration, candidate-certificate, or inner-solver failures; they are not formulation evidence.",
+            "The active automatic-SSM+DS replay preserves 43 failures, including 31 empty-native-policy wrapper exceptions concentrated at 120 C.",
             "The immutable fast study wheel remains installed and retained by commit and SHA-256; no slower-wheel restoration was performed.",
         ],
     }

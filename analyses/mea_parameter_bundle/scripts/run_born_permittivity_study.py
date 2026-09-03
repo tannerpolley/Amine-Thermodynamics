@@ -28,8 +28,8 @@ BASELINE = ANALYSIS / "results/selected-current-best-parameters.json"
 STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
 FOUNDATION = ANALYSIS / "data/input/parameters.json"
 RESULTS = ANALYSIS / "results/born-permittivity-study"
-ENGINE_COMMIT = "d8e02e4c6aab99669d17123248a1ac9729b47213"
-ENGINE_WHEEL_SHA256 = "2a95e27415b948149d69f92870a8ea0bbaca2ff9e32d39b9bc938ec0a77b46dd"
+ENGINE_COMMIT = "d782cc9de6d7dc3011de27362eb79feb4668c68e"
+ENGINE_WHEEL_SHA256 = "11634405821c028a1f85033e495563ae6dc15fc8c19829f73c18ef39d5340989"
 ION_IDS = {
     "protonated-monoethanolamine",
     "carbamate-anion",
@@ -39,6 +39,20 @@ ION_IDS = {
     "hydroxide-anion",
 }
 NEUTRAL_IDS = {"water", "monoethanolamine", "carbon-dioxide"}
+BORN_MODIFIERS = {
+    "dMEAHm10": ("protonated-monoethanolamine", 0.9),
+    "dMEAHp10": ("protonated-monoethanolamine", 1.1),
+    "dMEACOOm10": ("carbamate-anion", 0.9),
+    "dMEACOOp10": ("carbamate-anion", 1.1),
+    "dHCO3m10": ("bicarbonate-anion", 0.9),
+    "dHCO3p10": ("bicarbonate-anion", 1.1),
+    "dCO3m10": ("carbonate-anion", 0.9),
+    "dCO3p10": ("carbonate-anion", 1.1),
+    "dH3Om10": ("hydronium-cation", 0.9),
+    "dH3Op10": ("hydronium-cation", 1.1),
+    "dOHm10": ("hydroxide-anion", 0.9),
+    "dOHp10": ("hydroxide-anion", 1.1),
+}
 FORMULATIONS = {
     "A": "solvent-only",
     "B": "mole-fraction-component-mixing",
@@ -151,8 +165,12 @@ def variant_mapping(variant: str) -> dict[str, object]:
         f for f in mapping["model_families"] if f["kind"] == "electrolyte"
     )
     permittivity["choice"] = FORMULATIONS[rule]
-    electrolyte["c_shell"] = 0.0 if born == "ORG" else 1.0
-    electrolyte["c_dielectric"] = 0.0 if born == "ORG" else 1.0
+    if born == "AUTO":
+        electrolyte.pop("c_shell", None)
+        electrolyte.pop("c_dielectric", None)
+    else:
+        electrolyte["c_shell"] = 0.0 if born == "ORG" else 1.0
+        electrolyte["c_dielectric"] = 0.0 if born == "ORG" else 1.0
 
     mapping["model_coefficients"] = [
         row
@@ -246,6 +264,27 @@ def variant_mapping(variant: str) -> dict[str, object]:
                 "figiel-2025", f"Figiel SSM+DS MEA transfer sensitivity f_solv={value}"
             )
             record["source_sha256"] = f"sha256:{SOURCE_SHA256['figiel-2025']}"
+        elif modifier in BORN_MODIFIERS:
+            component_id, factor = BORN_MODIFIERS[modifier]
+            component = next(
+                row for row in mapping["components"] if row["component_id"] == component_id
+            )
+            record = next(
+                row
+                for row in component["coefficients"]
+                if row["family"] == "born_diameter"
+            )
+            record["value"]["magnitude"] = float(record["value"]["magnitude"]) * factor
+            record["provenance"] = _provenance(
+                "figiel-2025",
+                f"local ±10% sensitivity about the retained ion-specific d_Born; factor={factor}",
+            )
+            record["source_sha256"] = f"sha256:{SOURCE_SHA256['figiel-2025']}"
+        elif modifier == "dDH":
+            for component in mapping["components"]:
+                for record in component["coefficients"]:
+                    if record["family"] == "born_diameter":
+                        record["value"]["magnitude"] = 0.0
         elif modifier == "noCO2":
             mapping["correlations"] = [
                 row
@@ -660,8 +699,9 @@ def summarize(
 def run(
     phase: str, variants: list[str], workers: int, output_prefix: str | None = None
 ) -> None:
-    retain_component_permittivity_derivative_check()
-    shard_count = 2 if phase == "full" and workers > len(variants) else 1
+    if any(variant.startswith(("B-", "C-")) for variant in variants):
+        retain_component_permittivity_derivative_check()
+    shard_count = min(workers, 8)
     tasks = [
         (variant, phase, shard, shard_count)
         for variant in variants
