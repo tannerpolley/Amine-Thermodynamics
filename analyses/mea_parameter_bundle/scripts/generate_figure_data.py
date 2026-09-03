@@ -140,14 +140,41 @@ def prepared_problem(problem: object, identity: str) -> object:
     )
 
 
-def corrected_request(request: dict[str, object]) -> dict[str, object]:
-    """Apply the audited Austgen source-to-common-molality shifts to R1--R3."""
+def corrected_request(
+    request: dict[str, object], reaction_values: dict[str, float] | None = None
+) -> dict[str, object]:
+    """Apply reaction-basis corrections and current Engine model names."""
 
     corrected = copy.deepcopy(request)
+    for phase in corrected["phases"]:
+        phase["model"]["kind"] = "eos"
+        phase["model"]["reference_id"] = "installed-eos"
     records = corrected["reaction_system"]["equilibrium_constants"]
     for index, offset in enumerate(R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS):
         records[index][0] = float(records[index][0]) + offset
         records[index][1] = "Austgen1991_converted_to_common_molality"
+    for record in records:
+        record[4] = "source-standard-state-to-eos-neutral-reference"
+        if reaction_values is None or len(record) < 7 or not record[6]:
+            continue
+        metadata = record[6]
+        identities = metadata.get("coefficient_identities", [])
+        coefficients = list(metadata.get("coefficient_values", []))
+        for index, identity in enumerate(identities):
+            if identity in reaction_values:
+                coefficients[index] = reaction_values[identity]
+        metadata["coefficient_values"] = coefficients
+        if metadata["kind"] == "ln-k-a-plus-b-over-t":
+            record[0] = coefficients[0] + coefficients[1] / float(
+                corrected["temperature"]["value"]
+            )
+        elif metadata["kind"] == "negative-log10-temperature-polynomial":
+            temperature_k = float(corrected["temperature"]["value"])
+            record[0] = -math.log(10.0) * (
+                coefficients[0] / temperature_k
+                + coefficients[1]
+                + coefficients[2] * temperature_k
+            )
     return corrected
 
 
@@ -257,6 +284,11 @@ def main() -> None:
         )
     parameters = epcsaft.Parameters.from_json(PARAMETERS)
     model = epcsaft.Mixture(parameters)
+    reaction_values = {
+        spec.identity: float(spec.value.magnitude)
+        for spec in parameters.parameter_specs
+        if spec.identity.startswith("reaction:")
+    }
     fit = json.loads(STATE_PACKET.read_text(encoding="utf-8"))
 
     speciation_model: list[dict[str, object]] = []
@@ -270,7 +302,7 @@ def main() -> None:
 
     for index, observation in enumerate(fit["observations"], start=1):
         problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-            corrected_request(observation["request"])
+            corrected_request(observation["request"], reaction_values)
         )
         temperature_c = float(problem.temperature.value.to("kelvin").magnitude) - 273.15
         loading = float(problem.reaction_system.feed_amounts_mol[0])
@@ -401,7 +433,7 @@ def main() -> None:
         ]
         identity = row["observation_id"]
         problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-            corrected_request(request)
+            corrected_request(request, reaction_values)
         )
         problem = prepared_problem(problem, f"{identity}-notebook-bundle")
         try:
@@ -508,7 +540,7 @@ def main() -> None:
                 for balance in reaction_system["balance_matrix"]
             ]
             problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                corrected_request(request)
+                corrected_request(request, reaction_values)
             )
             problem = prepared_problem(problem, grid_id)
             try:

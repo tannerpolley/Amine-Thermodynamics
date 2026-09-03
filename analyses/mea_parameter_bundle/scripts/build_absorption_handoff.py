@@ -19,7 +19,7 @@ ENGINE = (
     / "data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 )
 EXPECTED_PARAMETER_SHA256 = (
-    "0ea2ab19015c96472f98982181ac8753e1a238c1cb18d0ff78426820525310c8"
+    "00049473d53c7e8088ef3e2dbbc6a1bab058f6dc4de963ee98936b4cd9bda25e"
 )
 EXPECTED_STATE_PACKET_SHA256 = (
     "41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef"
@@ -40,6 +40,14 @@ def source(path: Path) -> bytes:
 
 def reaction_definition() -> bytes:
     packet = json.loads(STATE_PACKET.read_text(encoding="utf-8"))
+    parameters = json.loads(PARAMETERS.read_text(encoding="utf-8"))
+    coefficients = {
+        row["reaction_id"]: {
+            item["name"]: item["value"]["magnitude"]
+            for item in row["coefficients"]
+        }
+        for row in parameters["reaction_correlations"]
+    }
     system = packet["observations"][0]["request"]["reaction_system"]
     reactions = [
         {
@@ -70,7 +78,7 @@ def reaction_definition() -> bytes:
             "reaction_id": "R4",
             "stoichiometry": system["reaction_matrix"][3],
             "ln_k_form": "a + b_k / T",
-            "coefficients": {"a": 3.3515778177997895, "b_k": -1895.3},
+            "coefficients": coefficients["R4"],
             "temperature_domain_k": [293.15, 393.15],
             "qualification": "fitted jointly to the retained pressure and speciation data; evaluated over 293.15--393.15 K",
         },
@@ -78,7 +86,7 @@ def reaction_definition() -> bytes:
             "reaction_id": "R5",
             "stoichiometry": system["reaction_matrix"][4],
             "ln_k_form": "-ln(10) * (a_k / T + b + c_per_k * T)",
-            "coefficients": {"a_k": 2677.91, "b": 0.3869, "c_per_k": 0.0004277},
+            "coefficients": coefficients["R5"],
             "temperature_domain_k": [273.15, 323.15],
         },
     ]
@@ -192,6 +200,7 @@ specs = {spec.identity: spec for spec in parameters.parameter_specs}
 assert float(specs["component/carbon-dioxide/dispersion_energy_over_k"].value.magnitude) == 173.44025
 assert abs(float(specs["reaction:R4:correlation:a"].value.magnitude) - 3.3515778177997895) < 1e-14
 assert float(specs["reaction:R4:correlation:b_k"].value.magnitude) == -1895.3
+assert float(specs["reaction:R5:correlation:a_k"].value.magnitude) == 2597.91
 print("bundle hashes and ePC-SAFT parameter load: ok")
 print(f"parameter fingerprint: {parameters.fingerprint}")
 '''

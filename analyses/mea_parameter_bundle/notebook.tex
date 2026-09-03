@@ -54,14 +54,12 @@
 \vspace{2pt}\hrule\vspace{5pt}
 
 \statusbox{\textbf{Status: active MEA parameter bundle.}
-This repository owns the live MEA bundle recorded here. A bounded, direct
-Engine campaign retains solvent-only mass-fraction dielectric mixing and selects the
-displayed R4 carbamate-hydrolysis correlation and
-$\epsilon_{\ce{CO2}}/k$. Relative to the previous bundle, the selected result
-improves full-data pressure log$_{10}$ RMSE from 0.3974 to 0.3540,
-temperature-balanced pressure RMSE from 0.3569 to 0.3185, and pressure
-coverage from 125/161 to 130/161 while retaining all 131/131 observed
-speciation targets.
+This repository owns the live MEA bundle recorded here. It uses solvent-only
+mass-fraction dielectric mixing, automatically activated extended Born
+(SSM+DS), the displayed R4 carbamate-hydrolysis correlation,
+$\epsilon_{\ce{CO2}}/k$, and R5 $a_K=2597.91$ K. The exact active replay
+evaluates 120/161 pressure states with log$_{10}$ RMSE 0.3341 and all 131/131
+observed speciation targets with log$_{10}$ RMSE 0.2373.
 Value color alone identifies one of the four evidence classes; parameter
 values use regular weight so typography does not imply a second status system.
 This PDF is the live present-state view: new accepted evidence replaces the
@@ -75,9 +73,9 @@ nine-species model structure, pure-component values, association graph, sparse
 binary interactions, electrostatic choices, reaction correlations, and known
 non-adopted diagnostics in one reviewable view. Section~\ref{sec:pressure-replay}
 replays the exact active vector after the audited R1--R3 standard-state
-correction using its pinned Engine wheel; Section~\ref{sec:spec-replay}
-identifies the retained pre-campaign smooth-grid visual. The reported results
-use the parameter set shown in Tables~1--3.
+correction using its pinned Engine wheel; Section~\ref{sec:spec-replay} shows
+its current direct-Engine speciation grid. The reported results use the
+parameter set shown in Tables~1--4.
 
 The liquid species are \ce{CO2}, MEA, \ce{H2O}, \ce{MEAH+}, \ce{MEACOO-},
 \ce{HCO3-}, \ce{CO3^2-}, \ce{H3O+}, and \ce{OH-}. The neutral vapor species
@@ -98,10 +96,10 @@ manuscript use.
 \toprule
 Evidence & Present state & Meaning \\
 \midrule
-\textbf{verified} & Parameter set & Tables~1--3 contain the active
+\textbf{verified} & Parameter set & Tables~1--4 contain the active
 nine-species vector retained here. \\
 \textbf{verified} & Current replay & The automatic-SSM+DS replay evaluates
-120/161 pressure states and 42/44 speciation states (125 positive targets).
+120/161 pressure states and all 44 speciation states (131 positive targets).
 Current fixed-structure metrics and every failed attempt are reported in
 Section~\ref{sec:permittivity-comparison}. \\
 \textbf{verified} & Upstream work & ePC-SAFT Issues \#80, \#119, \#126, and
@@ -120,8 +118,8 @@ Choice & Current foundation \\
 Residual Helmholtz terms & PC-SAFT hard-chain and dispersion; general-site association; Debye--Hückel and Born electrostatics. \\
 Association topology & Reciprocal induced \ce{CO2}-\ce{H2O} cross association plus ordinary MEA and water association. No \ce{CO2} self-association and no separate \ce{CO2}-MEA chemical-association edge. \\
 Permittivity and Born formulation & Solvent-only mass-fraction mixing: normalized MEA--water mass fractions determine bulk $\epsilon_r$; dissolved \ce{CO2} and ions do not enter the mixing rule. Populated unique Born diameters and the non-unit water solvation factor automatically select corrected SSM+DS; no independent on/off switches are stored. \\
-Parameter identity & Active solvent-only-mass-fraction/automatic-SSM+DS bundle. Parameter SHA-256:\par\vspace{2pt}\nolinkurl{0ea2ab19015c96472f98982181ac8753e1a238c1cb18d0ff78426820525310c8}. \\
-Refinement boundary & The campaign changes only R4 and $\epsilon_{\ce{CO2}}/k$ from the prior bundle. R1--R3, R5, the ion block, association topology, and all binary interactions remain fixed. \\
+Parameter identity & Active solvent-only-mass-fraction/automatic-SSM+DS bundle with the selected R5 adjustment. Parameter fingerprint:\par\vspace{2pt}\nolinkurl{sha256:163ea97a97d3a6ee0c135ed0cad891fd33689ca135c53e694097fad1c21e4788}. \\
+Refinement boundary & The selected bundle changes R4, R5 $a_K$, and $\epsilon_{\ce{CO2}}/k$ from the literature-initialized foundation. R1--R3, the remaining R5 coefficients, ion block, association topology, and binary interactions remain fixed. \\
 \bottomrule
 \end{tabularx}
 
@@ -221,6 +219,45 @@ MEA & & \textcolor{Slate}{---} & \classone{$-0.0735$} & \classtwo{0.0000} & \cla
 \classfour{\textbf{Class 4}}: missing value, default, or indirect analog
 \end{tabularx}
 \end{center}
+\normalsize
+\clearpage
+
+\section{Reaction parameter block}
+
+For R1--R3, the Austgen source form is
+$\ln K_{r,\mathrm{source}}=A+B/T+C\ln T+DT$. Before constructing an Engine
+problem, the replay evaluates
+\begin{equation}
+\ln K_{r,\mathrm{common}}(T)=\ln K_{r,\mathrm{source}}(T)+\Delta_r,
+\qquad r\in\{\mathrm{R1,R2,R3}\},
+\label{eq:r123-standard-state}
+\end{equation}
+with $(\Delta_1,\Delta_2,\Delta_3)=(8.0330699846,\allowbreak
+4.0165349923,\allowbreak4.0165349923)$. These audited shifts convert the
+Austgen mixed mole-fraction reference to
+\texttt{aqueous-molality-infinite-dilution-water-v1}. R4 and R5 use their
+declared common-molality forms.
+
+\begin{center}
+{\sffamily\bfseries Table 4. Reaction-equilibrium parameters.}\par\vspace{3pt}
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.07\textwidth}rrrrp{0.18\textwidth}Y@{}}
+\toprule
+ID & $A$ & $B$ & $C$ & $D$ & Domain (K) & Definition \\
+\midrule
+R1 & 132.899 & $-13445.9$ & $-22.4773$ & 0 & 273.15--498.15 & Water autoprotolysis. \\
+R2 & 231.465 & $-12092.1$ & $-36.7816$ & 0 & 273.15--498.15 & \ce{CO2} hydration to bicarbonate. \\
+R3 & 216.049 & $-12431.7$ & $-35.4819$ & 0 & 273.15--498.15 & Bicarbonate dissociation. \\
+R4 & \multicolumn{4}{l}{$\ln K=3.3515778-1895.3/T$} & 293.15--393.15$^{a}$ & Carbamate hydrolysis; selected fit. \\
+R5 & \multicolumn{4}{l}{$\ln K=-\ln(10)[2597.91/T+0.3869+0.0004277T]$} & 273.15--323.15 & \ce{MEAH+} dissociation; selected $a_K$. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\footnotesize $^{a}$The source correlation was qualified over
+293.15--323.15 K. The displayed fit evaluates it through 393.15 K.
+R2 uses Austgen's printed $A=231.465$; the later 231.456 transcription is
+retained only as a documented source discrepancy.
 \normalsize
 \clearpage
 
@@ -526,42 +563,6 @@ MEA--\ce{H2O} & reciprocal $a$--$b$ & 2506.00 & 0.0411037990944876 & Combined cr
 \bottomrule
 \end{tabularx}
 
-\section{Reaction correlations}
-
-For R1--R3, the Austgen source form is
-$\ln K_{r,\mathrm{source}}=A+B/T+C\ln T+DT$. Before constructing an Engine
-problem, the replay evaluates
-\begin{equation}
-\ln K_{r,\mathrm{common}}(T)=\ln K_{r,\mathrm{source}}(T)+\Delta_r,
-\qquad r\in\{\mathrm{R1,R2,R3}\},
-\label{eq:r123-standard-state}
-\end{equation}
-with $(\Delta_1,\Delta_2,\Delta_3)=(8.0330699846,\allowbreak
-4.0165349923,\allowbreak4.0165349923)$. These are the audited shifts from the
-Austgen mixed mole-fraction reference to
-\texttt{aqueous-molality-infinite-dilution-water-v1}. R4 and R5 already retain
-their declared common-molality forms. All five reactions remain fixed while
-physical parameter blocks are qualified.
-
-\begin{tabularx}{\textwidth}{@{}p{0.08\textwidth}rrrrp{0.19\textwidth}Y@{}}
-\toprule
-ID & $A$ & $B$ & $C$ & $D$ & Domain (K) & Source definition \\
-\midrule
-R1 & 132.899 & $-13445.9$ & $-22.4773$ & 0 & 273.15--498.15 & Water autoprotolysis. \\
-R2 & 231.465 & $-12092.1$ & $-36.7816$ & 0 & 273.15--498.15 & \ce{CO2} hydration to bicarbonate. \\
-R3 & 216.049 & $-12431.7$ & $-35.4819$ & 0 & 273.15--498.15 & Bicarbonate dissociation. \\
-R4 & \multicolumn{4}{l}{$\ln K=3.3515778-1895.3/T$} & 293.15--393.15$^{a}$ & Carbamate hydrolysis; joint fit. \\
-R5 & \multicolumn{4}{l}{$\ln K=-\ln(10)[2677.91/T+0.3869+0.0004277T]$} & 273.15--323.15 & \ce{MEAH+} acid dissociation. \\
-\bottomrule
-\end{tabularx}
-
-\footnotesize $^{a}$The source correlation was qualified over
-293.15--323.15 K. The displayed fit evaluates it through 393.15 K.
-R2 uses Austgen's printed $A=231.465$, which is also the value encoded in the
-validated state packet; the later 231.456 transcription is retained only as a
-documented source discrepancy.
-\normalsize
-
 \section{Corrected replay and parameter-start decision}
 \label{sec:start-decision}
 \begingroup
@@ -703,8 +704,8 @@ at \SI{80}{\celsius}, 0.2315 to 0.1971 at \SI{100}{\celsius}, and 0.4280 to
 0.3809 at \SI{120}{\celsius}. The sign pattern remains diagnostic: mean
 log residuals are +0.4014 and +0.1698 at 40 and \SI{60}{\celsius}, then
 $-0.1052$, $-0.0552$, and $-0.3661$ at 80, 100, and \SI{120}{\celsius}.
-Thus the current model still overpredicts low-temperature pressure and
-underpredicts high-temperature pressure. Extending the R4 slope to its present
+Thus that pre-Born-selection model overpredicted low-temperature pressure and
+underpredicted high-temperature pressure. Extending the R4 slope to its present
 bound did not improve the screen and began losing speciation evaluations, so
 the bounded direction is closed rather than extrapolated farther.
 
@@ -718,11 +719,8 @@ spot-check root only; no SciPy-derived parameter score is retained.
 \section{Nine-species equilibrium replay}
 \label{sec:spec-replay}
 
-Figure 1 retains the pre-campaign smooth-grid visual baseline generated with
-the corrected replay and retained PR \#134 state packet. The bounded campaign
-did not rerun the additional smooth grid because the 131 observed targets were
-sufficient for candidate selection; exact selected-bundle statistics follow
-in Section~\ref{sec:pressure-replay}. The single \SI{20}{\celsius},
+Figure 1 is the current smooth-grid visual generated with the exact selected
+Tables~1--4 bundle and corrected replay. The single \SI{20}{\celsius},
 30 wt\% MEA panel is the densest retained same-condition comparison: 149
 positive values
 for the five principal species and the MEA$+$\ce{MEAH+} observation operator
@@ -746,7 +744,7 @@ interpolated curves.
 \begin{center}
 \includegraphics[width=\textwidth]{figures/speciation/output/speciation-diagnostic-replay.pdf}
 
-\small\textbf{Figure 1.} Pre-campaign smooth-grid diagnostic for the full
+\small\textbf{Figure 1.} Current smooth-grid diagnostic for the full
 nine-species liquid-equilibrium replay at \SI{20}{\celsius} and 30 wt\% MEA.
 Symbols show
 all positive retained B\"ottinger, Jakobsen, and Matin values for the displayed
@@ -754,9 +752,7 @@ series; symbol shape identifies source and color identifies species. The broken
 logarithmic axis expands
 the $5.6248\times10^{-5}$--0.1134 principal-species region and compresses the
 $10^{-10}$--$5.6248\times10^{-5}$ range. Dashed lines connect direct Engine
-evaluations of the immediately preceding bundle through loading 1.0; they are
-retained for qualitative context and are not the authority for the selected-
-bundle statistics.
+evaluations of the selected bundle through loading 1.0.
 \end{center}
 
 \clearpage
@@ -775,9 +771,8 @@ speedups do not establish a speedup for this homogeneous-liquid owner.
 
 Figure 2 shows all 161 active-v1 30 wt\% MEA pressure observations from
 Aronu, Hilliard, Idris, Jou, Mamun, and Xu at 40--\SI{120}{\celsius}. The
-selected replay evaluated 130 states and returned 31 explicit numerical
-convergence failures. Its full-data log$_{10}$ RMSE is 0.3540 and the
-equal-temperature value is 0.3185. Lines interpolate the 130 evaluated
+selected replay evaluated 120 states and returned 41 explicit numerical
+convergence failures. Its full-data log$_{10}$ RMSE is 0.3341. Lines interpolate the 120 evaluated
 selected-bundle observation states; no additional smooth-grid Engine campaign
 was required, and every experimental point remains shown.
 
@@ -794,7 +789,7 @@ observation remains visible even when its corresponding model state did not eval
 \subsection{Current-bundle fit and coverage statistics}
 
 These are replay/agreement statistics for the exact bundle in
-Tables~1--3. Log residuals are
+Tables~1--4. Log residuals are
 $\log_{10}(y_{\mathrm{model}}/y_{\mathrm{obs}})$; the RMSE factor is
 $10^{\mathrm{RMSE}_{\log_{10}}}$. Native pressure errors are in kPa and
 native speciation errors are mole fractions.
@@ -805,8 +800,8 @@ native speciation errors are mole fractions.
 \toprule
 Family & Coverage & log RMSE & RMSE factor & MAPE (\%) & MAE & Native RMSE \\
 \midrule
-Pressure & 130/161 & 0.3540 & 2.259 & 105.04 & 18.6330 & 99.9354 \\
-Speciation targets & 131/131 & 0.2658 & 1.844 & 16.88 & 0.002643 & 0.003426 \\
+Pressure & 120/161 & 0.3341 & 2.158 & 55.53 & 27.2939 & 106.7186 \\
+Speciation targets & 131/131 & 0.2373 & 1.727 & 22.16 & 0.004611 & 0.006154 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -820,11 +815,11 @@ temperature:
 \toprule
 $T$ (\si{\celsius}) & Coverage & log RMSE & RMSE factor & MAPE (\%) & Median APE (\%) \\
 \midrule
-40  & 56/59 & 0.4445 & 2.783 & 176.41 & 178.56 \\
-60  & 23/24 & 0.2683 & 1.855 & 75.68  & 38.99 \\
-80  & 21/21 & 0.2314 & 1.704 & 35.43  & 38.26 \\
-100 & 18/18 & 0.1971 & 1.574 & 34.71  & 29.15 \\
-120 & 12/39 & 0.3809 & 2.404 & 55.63  & 59.32 \\
+40  & 51/59 & 0.2738 & 1.878 & 66.30 & 59.91 \\
+60  & 20/24 & 0.2297 & 1.697 & 34.70 & 34.96 \\
+80  & 21/21 & 0.4074 & 2.555 & 49.62 & 58.19 \\
+100 & 17/18 & 0.3461 & 2.219 & 46.62 & 50.25 \\
+120 & 11/39 & 0.5216 & 3.323 & 68.57 & 69.67 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -838,11 +833,11 @@ amine/carbamate coordinates, dominates the speciation log score:
 \toprule
 Target & Coverage & log RMSE & RMSE factor & MAPE (\%) \\
 \midrule
-MEA & 19/19 & 0.0575 & 1.141 & 10.07 \\
-\ce{MEAH+} & 19/19 & 0.0498 & 1.121 & 11.38 \\
-MEA + \ce{MEAH+} & 25/25 & 0.0221 & 1.052 & 3.36 \\
-\ce{MEACOO-} & 44/44 & 0.0317 & 1.076 & 6.07 \\
-\ce{HCO3-} & 24/24 & 0.6154 & 4.125 & 60.53 \\
+MEA & 19/19 & 0.0574 & 1.141 & 9.66 \\
+\ce{MEAH+} & 19/19 & 0.0945 & 1.243 & 23.29 \\
+MEA + \ce{MEAH+} & 25/25 & 0.0367 & 1.088 & 6.65 \\
+\ce{MEACOO-} & 44/44 & 0.0713 & 1.178 & 12.95 \\
+\ce{HCO3-} & 24/24 & 0.5356 & 3.432 & 64.19 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1136,6 +1131,28 @@ Kim et al. 2014, Table A1-1 & 27 & Model-selection comparison & The earlier eNRT
 \end{tabularx}
 \end{center}
 
+The selected bundle has also been compared with the retained 30 wt\% MEA heat
+observations through a pressure-derived Gibbs--Helmholtz diagnostic. A linear
+fit of $\ln p_{\ce{CO2}}$ against $1/T$ at each loading uses the selected-bundle
+40, 60, and \SI{80}{\celsius} curves. Of 86 eligible Kim--Svendsen
+observations at 40 and \SI{80}{\celsius}, 69 lie inside the common modeled
+loading interval 0.0888--0.6420. The diagnostic gives RMSE 19.64, mean bias
+$-16.82$, and median absolute error 18.05
+\si{\kilo\joule\per\mole} \ce{CO2}. The negative bias is systematic: the
+present pressure-temperature slope underpredicts heat release, especially
+below about 0.5 loading. Absorption heat is therefore a useful discriminator
+for the remaining R4/R5 temperature dependence.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/calorimetry/output/current-selected-calorimetry-diagnostic.pdf}
+\caption{Retained direct calorimetry observations and the selected bundle's
+Gibbs--Helmholtz pressure-slope diagnostic. Points are measurements; the line
+is calculated from the same active Tables~1--4 bundle used for the pressure
+and speciation figures.}
+\label{fig:current-selected-calorimetry}
+\end{figure}
+
 For adjacent loading endpoints $i-1$ and $i$ in one source, temperature,
 MEA concentration, and experimental run, the modeled positive heat-release
 magnitude must be
@@ -1163,17 +1180,16 @@ Equation~\ref{eq:calorimetry-paired-state}. Before calorimetry enters a fit,
 ePC-SAFT-project must supply one application-independent calculation returning
 both equilibrium endpoints, compatible ideal/reference and residual enthalpy,
 incoming-gas enthalpy, exact or independently checked parameter derivatives,
-and a typed non-evaluable result for either failed endpoint. The existing
-Gibbs--Helmholtz interpolation remains a diagnostic comparison; it is not a
-replacement for this calculation.
+and a typed non-evaluable result for either failed endpoint. The
+Gibbs--Helmholtz result in Figure~\ref{fig:current-selected-calorimetry} is the
+current thermodynamic-slope diagnostic, not a replacement for this direct
+paired-state calculation.
 
-For the present bundle, calorimetry should first be evaluated without changing
-any parameter. Its main identifying value is the temperature dependence of the
-reaction block because the current pressure residual reverses sign with
-temperature while bicarbonate remains the largest species residual. It cannot
-identify inactive original-Born $f_{\mathrm{solv}}$ coordinates, and it does
-not justify reopening the neutral or association block. If the no-fit replay
-shows a systematic temperature residual, estimate only the smallest supported
+For the present bundle, the no-fit Gibbs--Helmholtz replay already shows a
+systematic temperature residual. Its main identifying value is the temperature
+dependence of the reaction block because the current pressure residual reverses
+sign with temperature while bicarbonate remains the largest species residual.
+The direct paired-state replay should therefore estimate only the smallest supported
 R1--R5 temperature-coordinate subset in physical
 $\ln K_{\mathrm{ref}}$, $\Delta H_{\mathrm{ref}}$, and $\Delta C_p$
 coordinates, with the other blocks fixed. Preserve raw heat residuals, use the
@@ -1242,14 +1258,14 @@ coordinate. \tabularnewline
 \toprule
 Evidence lane & Assessment & Present evidence & Consequence \tabularnewline
 \midrule
-Pressure and numerical coverage & Not complete & Pressure log-RMSE is 0.3540
-for 130/161 states. Coverage falls to 12/39 at \SI{120}{\celsius}, and the mean
-residual changes from positive at 40--\SI{60}{\celsius} to negative at
-80--\SI{120}{\celsius}. & Recover and classify all 31 failed states before
+Pressure and numerical coverage & Not complete & Pressure log-RMSE is 0.3341
+for 120/161 states. Coverage falls to 11/39 at \SI{120}{\celsius}, and the mean
+residual is positive at \SI{40}{\celsius} and negative from 60 through
+\SI{120}{\celsius}. & Recover and classify all 41 failed states before
 using the surviving rows to choose another parameter direction. \tabularnewline
 Speciation & Mixed & All 131 observed targets evaluate. MEA, \ce{MEAH+}, and
-\ce{MEACOO-} log-RMSE values are 0.0575, 0.0498, and 0.0317; \ce{HCO3-} is the
-dominant error at 0.6154. & Preserve the successful major-species block and
+\ce{MEACOO-} log-RMSE values are 0.0574, 0.0945, and 0.0713; \ce{HCO3-} is the
+dominant error at 0.5356. & Preserve the successful major-species block and
 focus new information on bicarbonate rather than globally refitting every ion.
 \tabularnewline
 Permittivity and solvation & Conditional & The active bundle uses solvent-only
@@ -1408,7 +1424,7 @@ The six fixed MEA-study Born diameters are
 every structure comparison. Figiel et al. instead fitted aqueous
 infinite-dilution solvation data for \ce{H+}, \ce{Li+}, \ce{Na+}, \ce{K+},
 \ce{VO2+}, \ce{V^3+}, \ce{Cl-}, \ce{Br-}, \ce{I-}, and \ce{SO4^2-}; their
-Table~3 diameters are respectively 1.218, 2.784, 3.445, 4.150, 2.930, 2.940,
+Table~2 diameters are respectively 1.218, 2.784, 3.445, 4.150, 2.930, 2.940,
 4.100, 4.480, 4.985, and \SI{4.953}{\angstrom} \cite{Figiel2025}. Only the
 \ce{H3O+}/\ce{H+} value in the present bundle is an exact overlap. Figiel
 does not supply diameters for \ce{MEAH+}, \ce{MEACOO-}, \ce{HCO3-},
@@ -1435,50 +1451,70 @@ inputs and step are retained in
 
 \subsubsection{Automatic activation and unique-diameter sensitivity}
 
-The switch-free active mapping exactly reproduces the former explicitly
-switched A--SSM+DS sparse result: 10 of 12 states evaluate, with pressure
-log$_{10}$ RMSE 0.4910 and species log$_{10}$ RMSE 0.1358. This parity proves
-that removing the redundant switches changes the parameter contract, not the
-calculated model.
+The current screen starts from the selected bundle in Tables~1--4: solvent-only
+mass-fraction permittivity, automatically activated SSM+DS, and R5
+$a_K=2597.91$ K. It evaluates the complete parameter bundle against the same
+12 retained sparse states for every perturbation. Each unique ion Born
+diameter was moved by $\pm10\%$; $f_{\mathrm{solv},\mathrm{MEA}}$ was tested
+at 1.0, 1.4, 1.5, and 1.6; and the $f_{\mathrm{solv},\mathrm{MEA}}=1.5$
+case was crossed with each diameter movement. Pairwise statistics use only
+the exact positive targets shared by the perturbed and selected bundles, while
+failed states remain in the state table.
 
-A second 12-state screen perturbed each of the six unique Born diameters by
-$\pm10\%$, varied $f_{\mathrm{solv},\mathrm{MEA}}$ over 1.4, 1.5, and 1.6,
-and set every unique diameter to zero in one original-Born comparison. Metrics
-were recomputed on the exact targets shared with the unperturbed active bundle.
-\ce{H3O+} and \ce{OH-} diameter movements were numerically flat. The
-\ce{MEAH+}, \ce{MEACOO-}, \ce{HCO3-}, and \ce{CO3^2-} movements changed one
-or both observation families and remain genuine coupled refinement
-coordinates. The MEA solvation-factor values reduced paired pressure RMSE by
-0.0565--0.0626 and paired species RMSE by 0.0315--0.0333, with 1.5 giving the
-smallest paired species RMSE and 1.6 the smallest paired pressure RMSE.
-Consequently no single MEA factor is promoted from this sparse screen.
+The selected bundle evaluates all 12 states. Its sparse pressure and species
+log$_{10}$ RMSE are 0.4300 and 0.1246. Changing the \ce{H3O+} or \ce{OH-}
+diameter is numerically flat at this resolution. Individually, a 10\% larger
+\ce{HCO3-} diameter gives the clearest ion-radius direction, although two
+states fail and its pairwise improvements are only 0.0191 for pressure and
+0.0033 for species. The MEA solvation-factor series is much more informative:
+1.4, 1.5, and 1.6 all reduce both errors on all shared targets; 1.6 gives the
+smallest species RMSE and 1.4 the smallest pressure RMSE in that one-coordinate
+series.
 
-The bounded joint follow-up combined
-$f_{\mathrm{solv},\mathrm{MEA}}=1.5$ with 10\% larger \ce{MEAH+} and
-\ce{HCO3-} Born diameters. The three-coordinate combination completed all 12
-states and, on the same common targets, reduced pressure RMSE by 0.1091 and
-species RMSE by 0.0381 relative to the active start. It is the best tested
-extended-Born direction in this small screen, but remains worse than the
-all-diameter-inheritance original-Born comparison (0.3819 versus 0.2752 for
-pressure; 0.0977 versus 0.0520 for species). The result is retained as a
-direction for a source-bounded diameter/solvation profile, not adopted as a
-three-parameter endpoint.
+The strongest fully evaluated joint direction is
+$f_{\mathrm{solv},\mathrm{MEA}}=1.5$ with a 10\% larger \ce{HCO3-} Born
+diameter. It retains all 12 states and changes pressure RMSE from 0.4300 to
+0.3795 and species RMSE from 0.1246 to 0.0771. This is a screening direction,
+not a replacement parameter bundle; it is promoted below to the complete
+205-state replay before any parameter is changed.
 
-Setting all unique diameters to zero automatically selected original Born and
-used the corresponding Debye--H\"uckel diameters. It completed all 12 states
-and reduced paired pressure RMSE from 0.4910 to 0.2752 and paired species RMSE
-from 0.1358 to 0.0520. This is the strongest sparse structural direction, but
-it moves six radii and removes both SSM and DS simultaneously; it is not an
-ion-specific regression result. Exact row-level values and failures are
-retained under
-\path{results/born-permittivity-study/automatic-extended-sensitivity-*.csv}.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/born_permittivity/output/selected-bundle-joint-sensitivity.pdf}
+\caption{Pairwise common-target sensitivity about the selected extended-Born
+and R5-adjusted bundle. Negative changes improve agreement. The lower-left
+quadrant improves pressure and speciation simultaneously.}
+\label{fig:selected-bundle-joint-sensitivity}
+\end{figure}
+
+Exact row-level values, failures, pairwise comparisons, and the immutable
+receipt are retained under
+\path{results/born-permittivity-study/selected-bundle-joint-sensitivity-*}.
+
+The complete replay changes the decision. On the 108 positive pressure
+targets evaluated by both bundles, the joint candidate reduces pressure
+log$_{10}$ RMSE from 0.3424 to 0.2842 and median factor from 1.8364 to 1.5477.
+On all 131 common species targets, however, it increases speciation RMSE from
+0.2373 to 0.2600. Numerical coverage changes only from 164 to 165 of 205
+states. The direction is therefore useful for a later joint pressure,
+speciation, and calorimetry fit, but it does not replace the selected balanced
+bundle in Tables~1--4.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/born_permittivity/output/selected-bundle-full-candidate-comparison.pdf}
+\caption{Complete 205-state comparison of the selected bundle and the best
+sparse Born/solvation direction. The pressure gain is real on identical
+targets, but it comes with worse full speciation.}
+\label{fig:selected-bundle-full-candidate}
+\end{figure}
 
 \subsubsection{Sparse structure screen}
 
 The first screen used 12 retained states: low, middle, and high loading at the
 two best-covered pressure temperatures (40 and \SI{60}{\celsius}) and the two
 best-covered speciation temperatures (20 and \SI{40}{\celsius}). All five
-permittivity rules were crossed with original Born and SSM+DS. Table~4 reports
+permittivity rules were crossed with original Born and SSM+DS. The following table reports
 evaluated attempts and positive-target log$_{10}$ RMSE. The attempt count is
 a solver diagnostic, not an acceptance cutoff or scientific ranking
 coordinate.
@@ -1620,8 +1656,8 @@ difficult observation.
 Complete configuration & States & $p_{\ce{CO2}}$ RMSE & Factor & Bias & Species RMSE & Species factor \\
 \midrule
 Solvent-only mixing, original Born & 171/205 & \textbf{0.3386} & \textbf{1.8652} & 0.0982 & 0.2734 & 1.0713 \\
-Solvent-only mixing, SSM+DS, current R5 & 161/205 & 0.4930 & 2.4745 & $-0.4073$ & 0.2676 & 1.2281 \\
-Solvent-only mixing, SSM+DS, R5 $a_K-80$ K & 164/205 & 0.3456 & 1.8672 & $-0.1532$ & 0.2442 & 1.1466 \\
+Solvent-only mixing, SSM+DS, literature R5 & 161/205 & 0.4930 & 2.4745 & $-0.4073$ & 0.2676 & 1.2281 \\
+Selected: solvent-only mixing, SSM+DS, R5 $a_K=2597.91$ K & 164/205 & 0.3456 & 1.8672 & $-0.1532$ & 0.2442 & 1.1466 \\
 Nonlinear suppression, SSM+DS, R5 $a_K+80$ K & \textbf{174/205} & 0.4417 & 2.3122 & \textbf{$-0.0199$} & \textbf{0.2440} & \textbf{1.0961} \\
 \bottomrule
 \end{tabularx}
@@ -1641,7 +1677,8 @@ No single row wins every quantity. Original Born gives the smallest common-row
 pressure RMSE. Nonlinear suppression with SSM+DS and R5 $a_K+80$ K gives the
 largest evaluated-state count, nearly zero mean pressure bias, and the smallest
 species RMSE, but its pressure scatter remains larger. The best tested balance
-is solvent-only mixing with SSM+DS and R5 $a_K-80$ K: relative to original
+and the selected active bundle is solvent-only mixing with SSM+DS and
+R5 $a_K=2597.91$ K: relative to original
 Born, its pressure RMSE is only 0.0070 larger while its species RMSE is 0.0292
 smaller. Relative to the unadjusted SSM+DS bundle, it reduces pressure RMSE by
 0.1474 and species RMSE by 0.0233.
@@ -1799,8 +1836,8 @@ neutral solvation factors activate SSM+DS. With the unadjusted R5 correlation,
 that formulation worsens pressure. A bounded R5 movement nearly recovers the
 original-Born pressure result and improves speciation, so the discrepancy is a
 coupled reaction/electrostatic calibration problem rather than evidence for
-turning SSM+DS off. Solvent-only mixing with SSM+DS and R5 $a_K-80$ K is the
-best balanced configuration tested so far; nonlinear suppression with R5
+turning SSM+DS off. Solvent-only mixing with SSM+DS and
+R5 $a_K=2597.91$ K is the selected active configuration; nonlinear suppression with R5
 $a_K+80$ K is the coverage and pressure-bias leader. Neither settles the
 permittivity model without loaded-MEA dielectric observations and a consistent
 Born-diameter/R5 fit. Explicit \ce{CO2} exclusion remains immaterial at the
@@ -1941,7 +1978,7 @@ Quick direct endpoint screen & \path{results/quick-endpoint-perturbation-screen.
 Best-in-slot campaign & \path{results/best-in-slot-campaign/}; centered sensitivity, R4 pivot--slope grids, full validations, boundary diagnostics, exact receipts, and the selected candidate's row-level Engine evaluations. \\
 Born--permittivity structure study & \path{results/born-permittivity-study/}; exact sparse and complete state/target tables, failure characterization, grouped statistics, Engine parity and density-anchor timings, deterministic formulation construction, and hashes. Figures~\ref{fig:born-permittivity-overview}--\ref{fig:born-permittivity-contributions} read these retained values without rerunning the Engine. \\
 Current Engine wheel & \path{data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl}; Engine commit \nolinkurl{8007a70815efcd277f06eddc4df9fffdd8cdca48} and wheel SHA-256 \nolinkurl{f6e5b51dad79741c759393688f7daa547c9eb73f5944d5f877b3b32b1e56714a}. \\
-Selected live mapping & \path{results/selected-current-best-parameters.json}; solvent-only mass-fraction mixing, automatic SSM+DS activation, and the selected Class 3 R4--\ce{CO2} fit. \\
+Selected live mapping & \path{results/selected-current-best-parameters.json}; solvent-only mass-fraction mixing, automatic SSM+DS activation, the selected Class 3 R4--\ce{CO2} fit, and R5 $a_K=2597.91$ K. \\
 Trace-species abundance & \path{figures/speciation/output/speciation-model.csv}; retained 44-state calculated values summarized in Section~\ref{sec:pressure-identifiability}. \\
 Current IDAES comparison & Official public \href{https://github.com/IDAES/idaes-pse/blob/main/idaes/models_extra/column_models/properties/MEA_solvent.py}{MEA solvent} and \href{https://github.com/IDAES/idaes-pse/blob/main/idaes/models_extra/column_models/properties/MEA_vapor.py}{MEA vapor} property files; used only to define the proposed structural ablation. \\
 Matched species comparison & \path{../enrtl_six_species_ideal_comparison/notebook.qmd} and \path{../enrtl_six_species_ideal_comparison/notebook.pdf}; exact ideal projection, fixed-$T,P$ Engine/SciPy comparison, corrected apparent-pressure diagnostic, parameter inventory, sensitivity survey, UQ checkpoints, and figures. \\
