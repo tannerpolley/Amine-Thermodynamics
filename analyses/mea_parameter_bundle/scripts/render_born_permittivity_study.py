@@ -12,6 +12,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import Line2D
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -192,17 +193,15 @@ def common_row_statistics(targets: list[dict[str, str]]) -> Path:
     for row in targets:
         if row["log10_predicted_over_observed"]:
             key = (row["family"], row["observation_id"], row["target"])
-            evaluated[key][row["variant"]] = float(
-                row["log10_predicted_over_observed"]
-            )
-    common = {key: values for key, values in evaluated.items() if set(values) == variants}
+            evaluated[key][row["variant"]] = float(row["log10_predicted_over_observed"])
+    common = {
+        key: values for key, values in evaluated.items() if set(values) == variants
+    }
     output = []
     for family in ("pressure", "speciation"):
         for variant in COLORS:
             errors = [
-                values[variant]
-                for key, values in common.items()
-                if key[0] == family
+                values[variant] for key, values in common.items() if key[0] == family
             ]
             output.append(
                 {
@@ -219,7 +218,9 @@ def common_row_statistics(targets: list[dict[str, str]]) -> Path:
             )
     path = RESULTS / "full-common-row-statistics.csv"
     with path.open("w", newline="", encoding="utf-8") as stream:
-        writer = csv.DictWriter(stream, fieldnames=tuple(output[0]), lineterminator="\n")
+        writer = csv.DictWriter(
+            stream, fieldnames=tuple(output[0]), lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(output)
     return path
@@ -596,7 +597,9 @@ def current_fast_comparison() -> None:
 
     data_path = RESULTS / "current-fast-common-comparison.csv"
     with data_path.open("w", newline="", encoding="utf-8") as stream:
-        writer = csv.DictWriter(stream, fieldnames=tuple(output[0]), lineterminator="\n")
+        writer = csv.DictWriter(
+            stream, fieldnames=tuple(output[0]), lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(output)
 
@@ -650,7 +653,229 @@ def current_fast_comparison() -> None:
     )
 
 
-def study_summary(summary: list[dict[str, str]], failures: list[dict[str, str]]) -> None:
+def selected_bundle_sensitivity() -> None:
+    """Compare each bounded perturbation with the selected bundle on shared targets."""
+    source = RESULTS / "selected-bundle-joint-sensitivity-targets.csv"
+    targets = rows(source)
+    baseline = {
+        family: {
+            (row["observation_id"], row["target"]): float(
+                row["log10_predicted_over_observed"]
+            )
+            for row in targets
+            if row["variant"] == "A-AUTO"
+            and row["family"] == family
+            and row["log10_predicted_over_observed"]
+        }
+        for family in ("pressure", "speciation")
+    }
+    output = []
+    for variant in sorted({row["variant"] for row in targets}):
+        record = {"variant": variant}
+        for family in ("pressure", "speciation"):
+            candidate = {
+                (row["observation_id"], row["target"]): float(
+                    row["log10_predicted_over_observed"]
+                )
+                for row in targets
+                if row["variant"] == variant
+                and row["family"] == family
+                and row["log10_predicted_over_observed"]
+            }
+            common = sorted(set(baseline[family]) & set(candidate))
+            base_rmse = math.sqrt(
+                statistics.fmean(baseline[family][key] ** 2 for key in common)
+            )
+            candidate_rmse = math.sqrt(
+                statistics.fmean(candidate[key] ** 2 for key in common)
+            )
+            record[f"{family}_common_targets"] = len(common)
+            record[f"{family}_baseline_log10_rmse"] = base_rmse
+            record[f"{family}_candidate_log10_rmse"] = candidate_rmse
+            record[f"{family}_log10_rmse_change"] = candidate_rmse - base_rmse
+        output.append(record)
+
+    data_path = RESULTS / "selected-bundle-joint-sensitivity-common-targets.csv"
+    with data_path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(
+            stream, fieldnames=tuple(output[0]), lineterminator="\n"
+        )
+        writer.writeheader()
+        writer.writerows(output)
+
+    apply_plot_theme()
+    fig, ax = plt.subplots(figsize=(8.3, 6.0))
+    colors = []
+    for row in output:
+        variant = row["variant"]
+        if variant == "A-AUTO":
+            colors.append("#334155")
+        elif "r5" in variant:
+            colors.append("#B45309")
+        elif "f1.5-d" in variant:
+            colors.append("#7E22CE")
+        elif "-f" in variant:
+            colors.append("#2E8B57")
+        else:
+            colors.append("#006D8F")
+    x = [float(row["pressure_log10_rmse_change"]) for row in output]
+    y = [float(row["speciation_log10_rmse_change"]) for row in output]
+    ax.scatter(x, y, c=colors, s=54, alpha=0.86, edgecolors="white", linewidths=0.5)
+    ax.axhline(0, color="#64748B", linewidth=0.8)
+    ax.axvline(0, color="#64748B", linewidth=0.8)
+    ax.set(
+        xlabel="Change in pressure log$_{10}$ RMSE",
+        ylabel="Change in speciation log$_{10}$ RMSE",
+        title="Bounded sensitivity about the selected extended-Born bundle",
+    )
+    ax.grid(alpha=0.18)
+    annotations = {
+        "A-AUTO-r5am80": (7, 5),
+        "A-AUTO-dHCO3p10": (7, 5),
+        "A-AUTO-f1.5": (7, -14),
+        "A-AUTO-f1.6": (7, 5),
+        "A-AUTO-f1.5-dHCO3p10": (7, 5),
+    }
+    for row in output:
+        if row["variant"] not in annotations:
+            continue
+        label = row["variant"].removeprefix("A-AUTO-")
+        ax.annotate(
+            label,
+            (
+                float(row["pressure_log10_rmse_change"]),
+                float(row["speciation_log10_rmse_change"]),
+            ),
+            xytext=annotations[row["variant"]],
+            textcoords="offset points",
+            fontsize=7,
+        )
+    ax.legend(
+        handles=[
+            Line2D([], [], marker="o", linestyle="", color=color, label=label)
+            for color, label in (
+                ("#B45309", "R5"),
+                ("#2E8B57", "$f_{solv,MEA}$"),
+                ("#006D8F", "one Born diameter"),
+                ("#7E22CE", "$f_{solv,MEA}=1.5$ + one Born diameter"),
+            )
+        ],
+        fontsize=8,
+        loc="upper left",
+    )
+    fig.tight_layout()
+    save(
+        fig,
+        "selected-bundle-joint-sensitivity",
+        "Selected-bundle Born diameter and solvation-factor sensitivity",
+        "Pairwise common-target changes in pressure and speciation log10 RMSE for bounded perturbations around the selected extended-Born and R5-adjusted bundle.",
+        data_path,
+    )
+
+
+def selected_bundle_full_candidate() -> None:
+    """Compare the selected bundle and promoted sensitivity direction fairly."""
+    baseline_rows = rows(ANALYSIS / "results/current-best-fit-residuals.csv")
+    candidate_rows = rows(RESULTS / "selected-bundle-f1p5-hco3p10-full-targets.csv")
+    errors: dict[str, dict[str, dict[tuple[str, str], float]]] = {
+        family: {"selected": {}, "candidate": {}}
+        for family in ("pressure", "speciation")
+    }
+    for row in baseline_rows:
+        if (
+            row["observed"]
+            and row["predicted"]
+            and float(row["observed"]) > 0
+            and float(row["predicted"]) > 0
+        ):
+            errors[row["family"]]["selected"][
+                (row["observation_id"], row["target"])
+            ] = math.log10(float(row["predicted"]) / float(row["observed"]))
+    for row in candidate_rows:
+        if row["log10_predicted_over_observed"]:
+            errors[row["family"]]["candidate"][
+                (row["observation_id"], row["target"])
+            ] = float(row["log10_predicted_over_observed"])
+    output = []
+    for configuration, evaluated_states in (("selected", 164), ("candidate", 165)):
+        record: dict[str, object] = {
+            "configuration": configuration,
+            "evaluated_states": evaluated_states,
+            "attempted_states": 205,
+        }
+        for family in ("pressure", "speciation"):
+            common = set(errors[family]["selected"]) & set(errors[family]["candidate"])
+            values = [errors[family][configuration][key] for key in common]
+            record[f"{family}_common_targets"] = len(values)
+            record[f"{family}_log10_rmse"] = math.sqrt(
+                statistics.fmean(value * value for value in values)
+            )
+            record[f"{family}_median_factor"] = 10 ** statistics.median(
+                abs(value) for value in values
+            )
+            record[f"{family}_mean_log10_bias"] = statistics.fmean(values)
+        output.append(record)
+    data_path = RESULTS / "selected-bundle-f1p5-hco3p10-full-common-comparison.csv"
+    with data_path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(
+            stream, fieldnames=tuple(output[0]), lineterminator="\n"
+        )
+        writer.writeheader()
+        writer.writerows(output)
+
+    apply_plot_theme()
+    fig, axes = plt.subplots(1, 2, figsize=(9.4, 4.2))
+    labels = ["Selected bundle", r"$f_{solv,MEA}=1.5$, $d_{Born,HCO_3^-}+10\%$"]
+    y = np.arange(2)
+    axes[0].scatter(
+        [row["pressure_log10_rmse"] for row in output],
+        y - 0.1,
+        color="#006D8F",
+        s=60,
+        label="Pressure",
+    )
+    axes[0].scatter(
+        [row["speciation_log10_rmse"] for row in output],
+        y + 0.1,
+        color="#B45309",
+        marker="s",
+        s=55,
+        label="Speciation",
+    )
+    axes[0].set_yticks(y, labels)
+    axes[0].invert_yaxis()
+    axes[0].set_xlabel("Common-target log$_{10}$ RMSE")
+    axes[0].set_title("Fit trade-off")
+    axes[0].grid(axis="x", alpha=0.2)
+    axes[0].legend(fontsize=8)
+    axes[1].barh(y, [row["evaluated_states"] for row in output], color="#2E8B57")
+    axes[1].set_yticks(y, ["Selected", "Candidate"])
+    axes[1].invert_yaxis()
+    axes[1].set_xlim(155, 205)
+    axes[1].set_xlabel("Evaluated states out of 205")
+    axes[1].set_title("Numerical coverage")
+    axes[1].grid(axis="x", alpha=0.2)
+    for index, row in enumerate(output):
+        axes[1].text(
+            float(row["evaluated_states"]) + 1,
+            index,
+            str(row["evaluated_states"]),
+            va="center",
+        )
+    fig.suptitle("Full replay rejects the sparse candidate as a balanced replacement")
+    fig.tight_layout()
+    save(
+        fig,
+        "selected-bundle-full-candidate-comparison",
+        "Selected bundle and full Born/solvation candidate comparison",
+        "Common-target pressure and speciation errors plus numerical coverage over the complete 205-state replay.",
+        data_path,
+    )
+
+
+def study_summary(
+    summary: list[dict[str, str]], failures: list[dict[str, str]]
+) -> None:
     receipt = json.loads((RESULTS / "automatic-extended-full-receipt.json").read_text())
     automatic = rows(RESULTS / "automatic-extended-full-summary.csv")
     integer_fields = {
@@ -707,7 +932,9 @@ def study_summary(summary: list[dict[str, str]], failures: list[dict[str, str]])
             (RESULTS / "component-permittivity-derivative-check.json").read_text()
         ),
         "engine_parity": json.loads((RESULTS / "engine-speed-parity.json").read_text()),
-        "density_anchor": json.loads((RESULTS / "density-anchor-check.json").read_text()),
+        "density_anchor": json.loads(
+            (RESULTS / "density-anchor-check.json").read_text()
+        ),
         "co2_pool_exclusion_preliminary": json.loads(
             (RESULTS / "co2-pool-exclusion-check.json").read_text()
         ),
@@ -748,6 +975,8 @@ def main() -> None:
     diagnostics(summary, states)
     contributions(states)
     current_fast_comparison()
+    selected_bundle_sensitivity()
+    selected_bundle_full_candidate()
     study_summary(summary, failures)
 
 

@@ -63,6 +63,10 @@ outputs:
     kind: grouped_fit_statistics
   - path: analyses/mea_parameter_bundle/results/calorimetry/calorimetry-observation-partition-receipt.json
     kind: calorimetry_partition_provenance_and_checks
+  - path: analyses/mea_parameter_bundle/results/calorimetry/current-selected-gibbs-helmholtz-summary.json
+    kind: selected_bundle_absorption_heat_diagnostic
+  - path: analyses/mea_parameter_bundle/figures/calorimetry/output/current-selected-calorimetry-diagnostic.pdf
+    kind: selected_bundle_absorption_heat_figure
   - path: analyses/mea_parameter_bundle/results/parameter-start-comparison.csv
     kind: retained_parameter_comparison
   - path: analyses/mea_parameter_bundle/results/parameter-sensitivity-screen.csv
@@ -97,6 +101,14 @@ outputs:
     kind: reaction_synchronized_common_target_comparison
   - path: analyses/mea_parameter_bundle/figures/born_permittivity/output/current-fast-born-reaction-comparison.pdf
     kind: reaction_synchronized_born_and_reaction_comparison_figure
+  - path: analyses/mea_parameter_bundle/results/born-permittivity-study/selected-bundle-joint-sensitivity-common-targets.csv
+    kind: selected_bundle_born_and_solvation_sensitivity
+  - path: analyses/mea_parameter_bundle/figures/born_permittivity/output/selected-bundle-joint-sensitivity.pdf
+    kind: selected_bundle_born_and_solvation_sensitivity_figure
+  - path: analyses/mea_parameter_bundle/results/born-permittivity-study/selected-bundle-f1p5-hco3p10-full-common-comparison.csv
+    kind: full_selected_bundle_and_born_solvation_candidate_comparison
+  - path: analyses/mea_parameter_bundle/figures/born_permittivity/output/selected-bundle-full-candidate-comparison.pdf
+    kind: full_selected_bundle_and_born_solvation_candidate_figure
   - path: analyses/mea_parameter_bundle/figures/permittivity_comparison/output/permittivity-formulation-parity.pdf
     kind: retained_permittivity_comparison_figure
   - path: analyses/mea_parameter_bundle/figures/permittivity_comparison/output/permittivity-formulation-parity.csv
@@ -108,6 +120,7 @@ outputs:
 commands:
   analyze:
     - uv run python scripts/prepare_calorimetry_partition.py
+    - uv run python scripts/evaluate_absorption_heat_diagnostic.py
     - /tmp/mea-parameter-bundle-engine/bin/python scripts/compare_permittivity_formulations.py
     - /tmp/mea-parameter-bundle-engine/bin/python scripts/generate_figure_data.py
     - /tmp/mea-parameter-bundle-engine/bin/python scripts/run_direct_parameter_campaign.py --phase PHASE --preset PRESET
