@@ -1,9 +1,18 @@
 from __future__ import annotations
 
 import csv
+import argparse
 import json
 import sys
 from pathlib import Path
+
+from result_freshness import (
+    FIGURE_DATA,
+    FIGURES,
+    require_results,
+    source_hashes,
+    stamp_results,
+)
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -466,10 +475,10 @@ def render_pressure() -> None:
     )
 
 
-def render_permittivity_comparison() -> None:
-    source = ANALYSIS / "results/permittivity-formulation-targets.csv"
+def render_permittivity_comparison(results: Path) -> None:
+    source = results / "permittivity-formulation-targets.csv"
     comparison = json.loads(
-        (ANALYSIS / "results/permittivity-formulation-comparison.json").read_text(
+        (results / "permittivity-formulation-comparison.json").read_text(
             encoding="utf-8"
         )
     )
@@ -592,7 +601,45 @@ def render_permittivity_comparison() -> None:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Render verified retained tables; never run the Engine"
+    )
+    parser.add_argument(
+        "--permittivity-comparison",
+        type=Path,
+        help="Explicit directory of retained comparison results",
+    )
+    args = parser.parse_args()
+    if args.permittivity_comparison:
+        render_permittivity_comparison(args.permittivity_comparison)
+        raise SystemExit(0)
+    require_results(FIGURE_DATA)
+    inputs = source_hashes(
+        Path(__file__),
+        FIGURE_DATA,
+        ROOT / "src/MEA/common/plot_style.py",
+        ROOT / "src/MEA/common/analysis_io.py",
+    )
     for temperature in (20, 40, 60, 80):
         render_speciation(temperature)
     render_pressure()
-    render_permittivity_comparison()
+    require_results(FIGURE_DATA)
+    outputs = []
+    for family, stems in (
+        ("pressure", ["pressure-diagnostic-replay"]),
+        (
+            "speciation",
+            [
+                "speciation-diagnostic-replay" + suffix
+                for suffix in ("", "-40C", "-60C", "-80C")
+            ],
+        ),
+    ):
+        output = ANALYSIS / "figures" / family / "output"
+        outputs.extend(
+            output / (stem + extension)
+            for stem in stems
+            for extension in (".svg", ".png", ".pdf", ".mpl.yaml")
+        )
+        outputs.extend(sorted(output.glob(f"{family}-model-lines*.csv")))
+    stamp_results(FIGURES, outputs, inputs=inputs)

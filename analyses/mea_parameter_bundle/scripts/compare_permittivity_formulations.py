@@ -9,22 +9,19 @@ import statistics
 from pathlib import Path
 
 import epcsaft
-from epcsaft import equilibrium
-
-from generate_figure_data import (
+from shared_evaluation import (
     ENGINE_WHEEL,
     ENGINE_WHEEL_SHA256,
-    corrected_request,
     installed_wheel,
-    prepared_problem,
     sha256,
+    evaluate_state,
+    anchor_from,
 )
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
-PARAMETERS = ANALYSIS / "data/input/parameters.json"
 STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
-RESULTS = ANALYSIS / "results"
+RESULTS = ANALYSIS / "results/permittivity-comparison"
 VARIANTS = {
     "current_ion_specific": "ion-specific-suppression",
     "schick_temperature_mixing": "component-permittivity-mixing",
@@ -66,7 +63,9 @@ def variant_parameters(
     if variant_id == "current_ion_specific":
         return epcsaft.Parameters.from_mapping(mapping)
     next(
-        family for family in mapping["model_families"] if family["kind"] == "permittivity"
+        family
+        for family in mapping["model_families"]
+        if family["kind"] == "permittivity"
     )["choice"] = choice
 
     if choice == "component-permittivity-mixing":
@@ -149,43 +148,38 @@ def variant_parameters(
 
 
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
+    if not rows:
+        path.write_text("", encoding="utf-8")
+        return
     with path.open("w", newline="", encoding="utf-8") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
 
 
-def read_csv(path: Path) -> list[dict[str, object]]:
-    if not path.exists():
-        return []
-    with path.open(newline="", encoding="utf-8") as stream:
-        return list(csv.DictReader(stream))
-
-
-def main(*, resume: bool = False) -> None:
+def main(parameter_path: Path) -> None:
     assert sha256(ENGINE_WHEEL) == ENGINE_WHEEL_SHA256
     assert sha256(installed_wheel()) == ENGINE_WHEEL_SHA256
-    source_parameters = json.loads(PARAMETERS.read_text(encoding="utf-8"))
+    source_parameters = json.loads(parameter_path.read_text(encoding="utf-8"))
     packet = json.loads(STATE_PACKET.read_text(encoding="utf-8"))
     RESULTS.mkdir(parents=True, exist_ok=True)
     target_path = RESULTS / "permittivity-formulation-targets.csv"
     state_path = RESULTS / "permittivity-formulation-states.csv"
-    target_rows = read_csv(target_path) if resume else []
-    state_rows = read_csv(state_path) if resume else []
-    completed = {
-        (str(row["variant_id"]), str(row["observation_id"])) for row in state_rows
-    }
+    target_rows = []
+    state_rows = []
 
     def checkpoint() -> None:
         write_csv(target_path, target_rows)
         write_csv(state_path, state_rows)
+
     summary: dict[str, object] = {
         "question": (
             "Select the live permittivity treatment by comparing the current "
             "ion-specific formulation, all-component mixing, and solvent-only "
             "mass-fraction mixing over every retained pressure and speciation state."
         ),
-        "immutable_parameter_input": str(PARAMETERS.relative_to(ANALYSIS)),
+        "parameter_input": str(parameter_path.resolve()),
+        "parameter_sha256": sha256(parameter_path),
         "immutable_state_input": str(STATE_PACKET.relative_to(ANALYSIS)),
         "engine_wheel_sha256": ENGINE_WHEEL_SHA256,
         "state_selection": (
@@ -232,25 +226,28 @@ def main(*, resume: bool = False) -> None:
         model = epcsaft.Mixture(parameters)
         failures = 0
         evaluated = 0
+        anchors = []
+        reactions = {
+            spec.identity: float(spec.value.magnitude)
+            for spec in parameters.parameter_specs
+            if spec.identity.startswith("reaction:")
+        }
         for index, observation in enumerate(observations, start=1):
-            if (variant_id, str(observation["identity"])) in completed:
-                continue
-            problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                corrected_request(observation["request"])
-            )
             family = "pressure" if len(observation["targets"]) == 1 else "speciation"
-            temperature_k = float(problem.temperature.value.to("kelvin").magnitude)
-            loading = float(problem.reaction_system.feed_amounts_mol[0])
-            problem = prepared_problem(
-                problem, f"{problem.identity}-{variant_id}-comparison"
+            temperature_k = float(observation["request"]["temperature"]["value"])
+            loading = float(
+                observation["request"]["reaction_system"]["feed_amounts_mol"][0]
             )
-            try:
-                result = equilibrium.solve(model, problem)
-                status = result.status
-            except Exception as exc:
-                result = None
-                status = f"exception:{type(exc).__name__}"
-            if status != "evaluated" or result is None or result.continuation_state is None:
+            record = evaluate_state(
+                model,
+                observation["request"],
+                reactions,
+                f"{observation['identity']}-{variant_id}",
+                anchors,
+                budget_s=45,
+            )
+            status = record["status"]
+            if status != "evaluated":
                 failures += 1
                 state_rows.append(
                     {
@@ -260,6 +257,9 @@ def main(*, resume: bool = False) -> None:
                         "temperature_k": temperature_k,
                         "loading_mol_co2_per_mol_mea": loading,
                         "status": status,
+                        "failure_code": record["failure_code"],
+                        "failure_diagnostic": record["failure_diagnostic"],
+                        "parameter_fingerprint": parameters.fingerprint,
                         "bulk_relative_permittivity": "",
                         "born_a_over_rt": "",
                     }
@@ -268,14 +268,12 @@ def main(*, resume: bool = False) -> None:
                 continue
 
             evaluated += 1
-            liquid = next(
-                phase
-                for phase in result.continuation_state.phases
-                if phase.role == "liquid"
-            )
+            liquid = anchor_from(record)
+            if family == "pressure":
+                anchors.append(liquid)
             state = model.state(
                 T=temperature_k * epcsaft.unit_registry.kelvin,
-                rho=liquid.molar_density_mol_m3
+                rho=(1.0 / liquid.molar_volume_m3_per_mol)
                 * epcsaft.unit_registry.mole
                 / epcsaft.unit_registry.meter**3,
                 x=liquid.mole_fractions,
@@ -288,11 +286,14 @@ def main(*, resume: bool = False) -> None:
                     "temperature_k": temperature_k,
                     "loading_mol_co2_per_mol_mea": loading,
                     "status": status,
+                    "failure_code": "",
+                    "failure_diagnostic": "",
+                    "parameter_fingerprint": parameters.fingerprint,
                     "bulk_relative_permittivity": state.bulk_relative_permittivity,
                     "born_a_over_rt": state.born,
                 }
             )
-            predictions = {row.identity: float(row.value) for row in result.rows}
+            predictions = record["predictions"]
             for target in observation["targets"]:
                 predicted = predictions[target["prediction_identity"]]
                 observed = float(target["observed"])
@@ -333,12 +334,18 @@ def main(*, resume: bool = False) -> None:
                 and row["family"] == family
                 and row["log10_predicted_over_observed"] != ""
             ]
-            errors = [float(row["log10_predicted_over_observed"]) for row in family_rows]
+            errors = [
+                float(row["log10_predicted_over_observed"]) for row in family_rows
+            ]
             metrics[f"{family}_positive_targets"] = len(errors)
-            metrics[f"{family}_log10_rmse"] = math.sqrt(
-                math.fsum(error * error for error in errors) / len(errors)
+            metrics[f"{family}_log10_rmse"] = (
+                math.sqrt(math.fsum(error * error for error in errors) / len(errors))
+                if errors
+                else None
             )
-            metrics[f"{family}_median_log10_bias"] = statistics.median(errors)
+            metrics[f"{family}_median_log10_bias"] = (
+                statistics.median(errors) if errors else None
+            )
             by_temperature: dict[float, list[float]] = {}
             for row in family_rows:
                 by_temperature.setdefault(float(row["temperature_k"]), []).append(
@@ -353,8 +360,10 @@ def main(*, resume: bool = False) -> None:
                 temperature: math.sqrt(value)
                 for temperature, value in temperature_mse.items()
             }
-            metrics[f"{family}_temperature_balanced_log10_rmse"] = math.sqrt(
-                math.fsum(temperature_mse.values()) / len(temperature_mse)
+            metrics[f"{family}_temperature_balanced_log10_rmse"] = (
+                math.sqrt(math.fsum(temperature_mse.values()) / len(temperature_mse))
+                if temperature_mse
+                else None
             )
             family_states = [
                 row
@@ -371,9 +380,11 @@ def main(*, resume: bool = False) -> None:
             if row["variant_id"] == variant_id
             and row["bulk_relative_permittivity"] != ""
         ]
-        metrics["bulk_relative_permittivity_min"] = min(epsilon)
-        metrics["bulk_relative_permittivity_median"] = statistics.median(epsilon)
-        metrics["bulk_relative_permittivity_max"] = max(epsilon)
+        metrics["bulk_relative_permittivity_min"] = min(epsilon, default=None)
+        metrics["bulk_relative_permittivity_median"] = (
+            statistics.median(epsilon) if epsilon else None
+        )
+        metrics["bulk_relative_permittivity_max"] = max(epsilon, default=None)
         summary["variants"][variant_id] = metrics
         checkpoint()
 
@@ -409,11 +420,24 @@ def main(*, resume: bool = False) -> None:
         paired[family] = {
             "paired_targets": len(log_ratios),
             "closer_target_counts": wins,
-            "median_log10_schick_over_uyan": statistics.median(log_ratios),
-            "minimum_log10_schick_over_uyan": min(log_ratios),
-            "maximum_log10_schick_over_uyan": max(log_ratios),
+            "median_log10_schick_over_uyan": statistics.median(log_ratios)
+            if log_ratios
+            else None,
+            "minimum_log10_schick_over_uyan": min(log_ratios, default=None),
+            "maximum_log10_schick_over_uyan": max(log_ratios, default=None),
         }
     summary["paired_comparison"] = paired
+
+    if any(metrics["failed_states"] for metrics in summary["variants"].values()):
+        summary["candidate_selection"] = {
+            "status": "incomplete",
+            "reason": "Failed states prevent candidate selection; any prior candidate is historical.",
+        }
+        checkpoint()
+        (RESULTS / "permittivity-formulation-comparison.json").write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        return
 
     baseline = summary["variants"]["current_ion_specific"]
     best_speciation = min(
@@ -442,12 +466,12 @@ def main(*, resume: bool = False) -> None:
         ],
         default="current_ion_specific",
     )
-    selected_parameters = RESULTS / "selected-current-best-parameters.json"
+    selected_parameters = RESULTS / "selected-candidate-parameters.json"
     selected_parameters.write_text(
         json.dumps(variant_mappings[selected_variant], indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    summary["promotion"] = {
+    summary["candidate_selection"] = {
         "selected_variant": selected_variant,
         "eligible_variants": eligible,
         "pressure_metric": "equal-temperature-weighted positive-target log10 RMSE",
@@ -467,7 +491,18 @@ def main(*, resume: bool = False) -> None:
     )
 
 
-if __name__ == "__main__":
+def cli() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--resume", action="store_true")
-    main(resume=parser.parse_args().resume)
+    parser.add_argument(
+        "--parameters",
+        type=Path,
+        required=True,
+        help="Explicit source vector for this model comparison; never adopts a candidate",
+    )
+    main(parser.parse_args().parameters.resolve())
+
+
+if __name__ == "__main__":
+    from refresh_results import bounded_main
+
+    bounded_main(cli)

@@ -88,8 +88,9 @@ bash docs/latex/scripts/sync_to_overleaf_mirror.sh
 
 ## Model Boundaries
 
-There is no active MEA ePC-SAFT parameter set. Engine Issue #80 owns the next
-calculation and validation campaign. This repository retains source evidence,
+There is no accepted MEA ePC-SAFT parameter set. The exploratory incumbent and
+its comparison history live under `analyses/mea_parameter_bundle/results/`;
+Engine Issue #80 owns the acceptance campaign. This repository retains source evidence,
 the Issue #70 supported-negative decision, and reproduction/rendering conventions
 for an accepted immutable packet; historical calculated artifacts are not live
 parameter authority.

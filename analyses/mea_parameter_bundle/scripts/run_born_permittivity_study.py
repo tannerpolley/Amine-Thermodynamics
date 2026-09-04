@@ -7,7 +7,6 @@ import csv
 import hashlib
 import json
 import math
-import os
 import statistics
 import time
 from collections import Counter, defaultdict
@@ -15,14 +14,17 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
 import epcsaft
-from epcsaft import equilibrium
-
-from generate_figure_data import failure_fields, prepared_problem
+from shared_evaluation import (
+    ENGINE_COMMIT,
+    ENGINE_WHEEL_SHA256,
+    evaluate_state,
+    anchor_from,
+    verify_wheel,
+)
 from run_direct_parameter_campaign import (
     CANONICAL_VLE,
     pressure_catalog as complete_pressure_catalog,
     quarter_cpu_affinity,
-    request_with_reactions,
 )
 
 
@@ -31,8 +33,6 @@ BASELINE = ANALYSIS / "results/selected-current-best-parameters.json"
 STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
 FOUNDATION = ANALYSIS / "data/input/parameters.json"
 RESULTS = ANALYSIS / "results/born-permittivity-study"
-ENGINE_COMMIT = "8007a70815efcd277f06eddc4df9fffdd8cdca48"
-ENGINE_WHEEL_SHA256 = "f6e5b51dad79741c759393688f7daa547c9eb73f5944d5f877b3b32b1e56714a"
 ION_IDS = {
     "protonated-monoethanolamine",
     "carbamate-anion",
@@ -284,7 +284,9 @@ def variant_mapping(variant: str) -> dict[str, object]:
         elif modifier in BORN_MODIFIERS:
             component_id, factor = BORN_MODIFIERS[modifier]
             component = next(
-                row for row in mapping["components"] if row["component_id"] == component_id
+                row
+                for row in mapping["components"]
+                if row["component_id"] == component_id
             )
             record = next(
                 row
@@ -307,9 +309,7 @@ def variant_mapping(variant: str) -> dict[str, object]:
             record = next(
                 row for row in reaction["coefficients"] if row["identity"] == identity
             )
-            record["value"]["magnitude"] = (
-                float(record["value"]["magnitude"]) + delta
-            )
+            record["value"]["magnitude"] = float(record["value"]["magnitude"]) + delta
         elif modifier == "dDH":
             for component in mapping["components"]:
                 for record in component["coefficients"]:
@@ -338,18 +338,6 @@ def variant_mapping(variant: str) -> dict[str, object]:
         f"mea-born-permittivity-{variant.lower().replace('.', 'p')}"
     )
     return epcsaft.Parameters.from_mapping(mapping).to_mapping()
-
-
-def _request(
-    raw: dict[str, object], reaction_values: dict[str, float]
-) -> dict[str, object]:
-    request = request_with_reactions(raw, reaction_values)
-    for phase in request["phases"]:
-        phase["model"]["kind"] = "eos"
-        phase["model"]["reference_id"] = "installed-eos"
-    for record in request["reaction_system"]["equilibrium_constants"]:
-        record[4] = "source-standard-state-to-eos-neutral-reference"
-    return request
 
 
 def packet_catalog() -> list[dict[str, object]]:
@@ -418,10 +406,6 @@ def sparse_catalog() -> list[dict[str, object]]:
             for index in {0, len(ordered) // 2, len(ordered) - 1}:
                 selected.append(ordered[index])
     return list({str(row["observation_id"]): row for row in selected}.values())
-
-
-def _evidence(result: object) -> dict[str, object]:
-    return {str(key): value for key, value in result.evidence}
 
 
 def retain_component_permittivity_derivative_check() -> None:
@@ -508,14 +492,10 @@ def evaluate_variant(
     variant, phase, shard, shard_count = task
     parameters = epcsaft.Parameters.from_mapping(variant_mapping(variant))
     model = epcsaft.Mixture(parameters)
-    specs = {spec.identity: spec for spec in parameters.parameter_specs}
-    reaction_values = {
-        name: float(specs[identity].value.magnitude)
-        for name, identity in {
-            "r4_a": "reaction:R4:correlation:a",
-            "r4_b": "reaction:R4:correlation:b_k",
-            "r5_a": "reaction:R5:correlation:a_k",
-        }.items()
+    reactions = {
+        spec.identity: float(spec.value.magnitude)
+        for spec in parameters.parameter_specs
+        if spec.identity.startswith("reaction:")
     }
     reference = epcsaft.Mixture(
         epcsaft.Parameters.from_mapping(variant_mapping("E-ORG"))
@@ -526,6 +506,7 @@ def evaluate_variant(
     ]
     states: list[dict[str, object]] = []
     targets: list[dict[str, object]] = []
+    anchors = []
     for observation in observations:
         started = time.perf_counter()
         compiled = False
@@ -534,18 +515,19 @@ def evaluate_variant(
             phase for phase in raw_request["phases"] if phase["fluid_role"] == "liquid"
         )
         try:
-            problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                _request(observation["request"], reaction_values)
-            )
-            problem = prepared_problem(
-                problem, f"{observation['observation_id']}-{variant}"
-            )
             compiled = True
-            result = equilibrium.solve(model, problem)
-            status = result.status
-            code, diagnostic = failure_fields(result.failure)
+            record = evaluate_state(
+                model,
+                raw_request,
+                reactions,
+                f"{observation['observation_id']}-{variant}",
+                anchors,
+                budget_s=45,
+            )
+            status = record["status"]
+            code, diagnostic = record["failure_code"], record["failure_diagnostic"]
         except Exception as exc:
-            result = None
+            record = None
             status = "exception"
             code = type(exc).__name__
             diagnostic = str(exc)
@@ -569,47 +551,60 @@ def evaluate_variant(
             "failure_code": code,
             "failure_diagnostic": diagnostic,
             "elapsed_s": time.perf_counter() - started,
+            "parameter_fingerprint": parameters.fingerprint,
+            "cache_hit": False if record is None else record["cache_hit"],
         }
-        if result is not None:
+        if record is not None:
             state_row.update(
-                solver_status=result.solver_status,
-                physical_status=result.physical_status,
-                eos_domain_status=result.eos_domain_status,
+                solver_status=record.get("solver_status", ""),
+                physical_status=record.get("physical_status", ""),
+                eos_domain_status=record.get("eos_domain_status", ""),
             )
-        if status == "evaluated" and result is not None:
+        if status == "evaluated" and record is not None:
             liquid = next(
-                candidate for candidate in result.phases if candidate.role == "liquid"
+                candidate
+                for candidate in record["phases"]
+                if candidate["role"] == "liquid"
             )
+            if observation["family"] == "pressure":
+                anchors.append(anchor_from(record))
             state = model.state(
                 T=(float(observation["temperature_C"]) + 273.15)
                 * epcsaft.unit_registry.kelvin,
-                rho=liquid.molar_density_mol_m3
+                rho=liquid["molar_density_mol_m3"]
                 * epcsaft.unit_registry.mole
                 / epcsaft.unit_registry.meter**3,
-                x=liquid.mole_fractions,
+                x=liquid["mole_fractions"],
             )
             reference_state = reference.state(
                 T=(float(observation["temperature_C"]) + 273.15)
                 * epcsaft.unit_registry.kelvin,
-                rho=liquid.molar_density_mol_m3
+                rho=liquid["molar_density_mol_m3"]
                 * epcsaft.unit_registry.mole
                 / epcsaft.unit_registry.meter**3,
-                x=liquid.mole_fractions,
+                x=liquid["mole_fractions"],
             )
-            evidence = _evidence(result)
+            evidence = dict(record["evidence"])
             charges = (0, 0, 0, 1, -1, -1, -2, 1, -1)
             vapor = next(
-                (candidate for candidate in result.phases if candidate.role == "vapor"),
+                (
+                    candidate
+                    for candidate in record["phases"]
+                    if candidate["role"] == "vapor"
+                ),
                 None,
             )
             state_row.update(
-                liquid_density_mol_m3=liquid.molar_density_mol_m3,
-                liquid_packing_fraction=liquid.packing_fraction,
-                liquid_mole_fractions=json.dumps(liquid.mole_fractions),
-                liquid_mechanical_class=liquid.mechanical_class,
-                vapor_mechanical_class="" if vapor is None else vapor.mechanical_class,
+                liquid_density_mol_m3=liquid["molar_density_mol_m3"],
+                liquid_packing_fraction=liquid["packing_fraction"],
+                liquid_mole_fractions=json.dumps(liquid["mole_fractions"]),
+                liquid_mechanical_class=liquid["mechanical_class"],
+                vapor_mechanical_class=""
+                if vapor is None
+                else vapor["mechanical_class"],
                 charge_closure=math.fsum(
-                    x * z for x, z in zip(liquid.mole_fractions, charges, strict=True)
+                    x * z
+                    for x, z in zip(liquid["mole_fractions"], charges, strict=True)
                 ),
                 material_balance_closure=evidence.get("balance_inf_norm", ""),
                 reaction_affinity_closure=evidence.get(
@@ -624,7 +619,7 @@ def evaluate_variant(
                 / (8.31446261815324 * (float(observation["temperature_C"]) + 273.15)),
                 eos_evaluation_count=evidence.get("eos_evaluation_count", ""),
             )
-            predictions = {row.identity: row.value for row in result.rows}
+            predictions = record["predictions"]
             for target in observation["targets"]:
                 predicted = predictions.get(target["prediction_identity"])
                 predicted = (
@@ -741,6 +736,7 @@ def summarize(
 def run(
     phase: str, variants: list[str], workers: int, output_prefix: str | None = None
 ) -> None:
+    verify_wheel()
     if any(variant.startswith(("B-", "C-")) for variant in variants):
         retain_component_permittivity_derivative_check()
     cpu_affinity = quarter_cpu_affinity()
@@ -781,7 +777,7 @@ def run(
         "variants": variants,
         "workers": min(workers, len(tasks)),
         "cpu_affinity": cpu_affinity,
-        "cpu_limit_fraction": 0.25,
+        "cpu_limit_count": 1,
         "parameter_sha256": sha256(BASELINE),
         "state_packet_sha256": sha256(STATE_PACKET),
         "pressure_catalog_sha256": sha256(CANONICAL_VLE),
@@ -804,7 +800,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", choices=("sparse", "full"), required=True)
     parser.add_argument("--variants", nargs="+", default=[])
-    parser.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 1) // 4))
+    parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--output-prefix")
     args = parser.parse_args()
     variants = args.variants or [
@@ -814,4 +810,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    from refresh_results import bounded_main
+
+    bounded_main(main)

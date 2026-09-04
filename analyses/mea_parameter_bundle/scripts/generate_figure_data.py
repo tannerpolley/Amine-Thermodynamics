@@ -1,29 +1,44 @@
 from __future__ import annotations
 
+import argparse
 import csv
 import copy
-import hashlib
 import importlib.metadata
 import json
 import math
 import statistics
-from dataclasses import replace
+from time import perf_counter
 from pathlib import Path
-from urllib.parse import unquote, urlparse
 
 import epcsaft
 from epcsaft import equilibrium
-from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
+from shared_evaluation import (
+    ENGINE_COMMIT,
+    ENGINE_WHEEL,
+    ENGINE_WHEEL_SHA256,
+    PARAMETERS,
+    R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS,
+    SOURCE_CONTRACT,
+    STATE_PACKET,
+    STATE_PACKET_SHA256,
+    EvaluationLimits,
+    EVALUATOR_VERSION,
+    anchor_from,
+    cached_anchors,
+    corrected_request,
+    evaluate_state,
+    sha256,
+    verify_wheel,
+)
+from result_freshness import source_hashes, stamp_results
+from refresh_results import bounded_main
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
 INPUT = ANALYSIS / "data/input"
 SPECIATION_OUTPUT = ANALYSIS / "figures/speciation/output"
 PRESSURE_OUTPUT = ANALYSIS / "figures/pressure/output"
-PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 COMPARISON = ANALYSIS / "results/permittivity-formulation-comparison.json"
-STATE_PACKET = INPUT / "state-packet.json"
-ENGINE_WHEEL = INPUT / "engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 CANONICAL_SPECIATION = (
     ANALYSIS.parents[1]
     / "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv"
@@ -32,9 +47,6 @@ CANONICAL_VLE = (
     ANALYSIS.parents[1]
     / "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv"
 )
-STATE_PACKET_SHA256 = "41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef"
-ENGINE_COMMIT = "8438ce5f94a547189c91c4ec180a7782d60879d6"
-ENGINE_WHEEL_SHA256 = "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805"
 CANONICAL_SPECIATION_SHA256 = (
     "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e"
 )
@@ -43,11 +55,6 @@ CANONICAL_VLE_SHA256 = (
 )
 SPECIATION_GRID_TEMPERATURES_C = (20, 40, 60, 80)
 SPECIATION_GRID_POINTS = 46
-R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS = (
-    8.0330699846,
-    4.0165349923,
-    4.0165349923,
-)
 
 SPECIES_LABELS = {
     "carbon-dioxide": "CO2",
@@ -62,10 +69,6 @@ SPECIES_LABELS = {
 }
 
 
-def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
 def write_csv(
     path: Path, rows: list[dict[str, object]], fields: tuple[str, ...]
 ) -> None:
@@ -74,136 +77,6 @@ def write_csv(
         writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
-
-
-def failure_fields(failure: object | None) -> tuple[str, str]:
-    if failure is None:
-        return "", ""
-    return str(getattr(failure, "code", "unknown")), str(
-        getattr(failure, "diagnostic", failure)
-    )
-
-
-def installed_wheel() -> Path:
-    direct_url = json.loads(
-        importlib.metadata.distribution("epcsaft").read_text("direct_url.json") or "{}"
-    ).get("url", "")
-    path = Path(unquote(urlparse(direct_url).path))
-    if (
-        not direct_url.startswith("file://")
-        or path.suffix != ".whl"
-        or not path.is_file()
-    ):
-        raise RuntimeError("replay requires epcsaft installed from the retained wheel")
-    return path
-
-
-def prepared_problem(problem: object, identity: str) -> object:
-    continuation = problem.continuation_state
-    if continuation is None:
-        raise ValueError("state packet request lacks a continuation warm start")
-    phase = continuation.phases[0]
-    balance = problem.reaction_system.balance_matrix
-    targets = problem.reaction_system.conserved_totals
-    projected = tuple(
-        math.fsum(
-            coefficient * value
-            for coefficient, value in zip(row, phase.mole_fractions, strict=True)
-        )
-        for row in balance
-    )
-    total = targets[1] / projected[1]
-    amounts = [total * value for value in phase.mole_fractions]
-    amounts[0] += targets[0] - math.fsum(
-        coefficient * amount
-        for coefficient, amount in zip(balance[0], amounts, strict=True)
-    )
-    if amounts[0] <= problem.reaction_system.strict_interior_amount_floor_mol:
-        amounts = list(problem.reaction_system.feed_amounts_mol)
-    if amounts[0] <= problem.reaction_system.strict_interior_amount_floor_mol:
-        raise ValueError("continuation warm start cannot satisfy the current feed")
-    start = equilibrium.FinitePhaseStart(
-        tuple(amounts), math.fsum(amounts) * phase.molar_volume_m3_per_mol
-    )
-    phases = tuple(
-        replace(candidate, start=start if candidate.amount_role == "finite" else None)
-        for candidate in problem.phases
-    )
-    return replace(
-        problem,
-        phases=phases,
-        continuation_identity=(
-            identity
-            if any(candidate.amount_role == "incipient" for candidate in phases)
-            else None
-        ),
-        continuation_state=None,
-    )
-
-
-def corrected_request(
-    request: dict[str, object], reaction_values: dict[str, float] | None = None
-) -> dict[str, object]:
-    """Apply reaction-basis corrections and current Engine model names."""
-
-    corrected = copy.deepcopy(request)
-    for phase in corrected["phases"]:
-        phase["model"]["kind"] = "eos"
-        phase["model"]["reference_id"] = "installed-eos"
-    records = corrected["reaction_system"]["equilibrium_constants"]
-    for index, offset in enumerate(R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS):
-        reaction_id = f"R{index + 1}"
-        source = EXPECTED_REACTION_CORRELATIONS[reaction_id]
-        coefficients = (
-            float(source["a"]) + offset,
-            float(source["b_k"]),
-            float(source["c"]),
-            float(source["d_per_k"]),
-        )
-        temperature_k = float(corrected["temperature"]["value"])
-        records[index][0] = (
-            coefficients[0]
-            + coefficients[1] / temperature_k
-            + coefficients[2] * math.log(temperature_k)
-            + coefficients[3] * temperature_k
-        )
-        records[index][1] = "Austgen1991_converted_to_common_molality"
-        records[index].append(
-            {
-                "reaction_id": reaction_id,
-                "kind": "ln-k-a-plus-b-over-t-plus-c-ln-t-plus-d-t",
-                "coefficient_identities": [
-                    f"reaction:{reaction_id}:correlation:a",
-                    f"reaction:{reaction_id}:correlation:b_k",
-                    f"reaction:{reaction_id}:correlation:c",
-                    f"reaction:{reaction_id}:correlation:d_per_k",
-                ],
-                "coefficient_values": list(coefficients),
-            }
-        )
-    for record in records:
-        record[4] = "source-standard-state-to-eos-neutral-reference"
-        if reaction_values is None or len(record) < 7 or not record[6]:
-            continue
-        metadata = record[6]
-        identities = metadata.get("coefficient_identities", [])
-        coefficients = list(metadata.get("coefficient_values", []))
-        for index, identity in enumerate(identities):
-            if identity in reaction_values:
-                coefficients[index] = reaction_values[identity]
-        metadata["coefficient_values"] = coefficients
-        if metadata["kind"] == "ln-k-a-plus-b-over-t":
-            record[0] = coefficients[0] + coefficients[1] / float(
-                corrected["temperature"]["value"]
-            )
-        elif metadata["kind"] == "negative-log10-temperature-polynomial":
-            temperature_k = float(corrected["temperature"]["value"])
-            record[0] = -math.log(10.0) * (
-                coefficients[0] / temperature_k
-                + coefficients[1]
-                + coefficients[2] * temperature_k
-            )
-    return corrected
 
 
 def fit_statistics(
@@ -297,17 +170,42 @@ def fit_statistics(
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--state-timeout-s", type=float, default=60.0)
+    parser.add_argument("--overall-timeout-s", type=float, default=900.0)
+    args = parser.parse_args()
+    freshness_inputs = source_hashes(
+        STATE_PACKET,
+        CANONICAL_SPECIATION,
+        CANONICAL_VLE,
+        COMPARISON,
+        Path(__file__),
+        Path(__file__).with_name("shared_evaluation.py"),
+        SOURCE_CONTRACT,
+    )
     comparison = json.loads(COMPARISON.read_text(encoding="utf-8"))
     parameter_sha256 = sha256(PARAMETERS)
-    assert parameter_sha256 == comparison["promotion"]["selected_parameter_sha256"]
+    adoption = ANALYSIS / "results/reaction-temperature-fit/adoption-receipt.json"
+    accepted = {comparison["promotion"]["selected_parameter_sha256"]}
+    if adoption.exists():
+        accepted.add(
+            json.loads(adoption.read_text(encoding="utf-8")).get(
+                "adopted_parameter_sha256"
+            )
+        )
+    assert parameter_sha256 in accepted, (
+        "parameter document is not a recorded incumbent"
+    )
     assert sha256(STATE_PACKET) == STATE_PACKET_SHA256
     assert sha256(ENGINE_WHEEL) == ENGINE_WHEEL_SHA256
     assert sha256(CANONICAL_SPECIATION) == CANONICAL_SPECIATION_SHA256
     assert sha256(CANONICAL_VLE) == CANONICAL_VLE_SHA256
-    if sha256(installed_wheel()) != ENGINE_WHEEL_SHA256:
-        raise RuntimeError(
-            "installed epcsaft wheel does not match the retained replay wheel"
-        )
+    verify_wheel()
+    limits = EvaluationLimits(
+        state_timeout_s=args.state_timeout_s,
+        overall_timeout_s=args.overall_timeout_s,
+        deadline_monotonic=perf_counter() + args.overall_timeout_s,
+    )
     parameters = epcsaft.Parameters.from_json(PARAMETERS)
     model = epcsaft.Mixture(parameters)
     reaction_values = {
@@ -325,6 +223,7 @@ def main() -> None:
     source_continuation_fingerprints: set[str] = set()
     speciation_templates: dict[int, list[tuple[float, dict[str, object]]]] = {}
     pressure_templates: dict[int, list[tuple[float, dict[str, object]]]] = {}
+    speciation_anchors: dict[int, list[object]] = {}
 
     for index, observation in enumerate(fit["observations"], start=1):
         problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
@@ -354,27 +253,21 @@ def main() -> None:
         )
         if family == "pressure":
             continue
-        problem = prepared_problem(problem, f"{problem.identity}-notebook-bundle")
-        try:
-            result = equilibrium.solve(model, problem)
-            status = result.status
-            code, diagnostic = failure_fields(result.failure)
-        except Exception as exc:
-            result = None
-            status = "exception"
-            code = "engine_exception"
-            diagnostic = f"{type(exc).__name__}: {exc}"
-
-        if status == "evaluated":
-            if result is None or result.continuation_state is None:
-                raise RuntimeError("evaluated result lacks a continuation state")
-            if (
-                result.continuation_state.parameter_fingerprint
-                != parameters.fingerprint
-            ):
-                raise RuntimeError(
-                    "evaluated result does not match the notebook parameter bundle"
-                )
+        temperature_key = round(temperature_c)
+        if temperature_key not in speciation_anchors:
+            speciation_anchors[temperature_key] = cached_anchors({temperature_key})
+        anchors = speciation_anchors[temperature_key]
+        record = evaluate_state(
+            model,
+            observation["request"],
+            reaction_values,
+            f"{observation['identity']}-notebook-bundle",
+            anchors,
+            limits=limits,
+        )
+        status = record["status"]
+        code = record["failure_code"]
+        diagnostic = record["failure_diagnostic"]
 
         if family == "speciation":
             for target in observation["targets"]:
@@ -388,18 +281,24 @@ def main() -> None:
                         "observed_mole_fraction": float(target["observed"]),
                     }
                 )
-            if (
-                status == "evaluated"
-                and result is not None
-                and result.continuation_state is not None
-            ):
+            if status == "evaluated" and record.get("anchor") is not None:
                 liquid = next(
-                    phase
-                    for phase in result.continuation_state.phases
-                    if phase.role == "liquid"
+                    phase for phase in record["phases"] if phase["role"] == "liquid"
+                )
+                speciation_anchors[temperature_key].append(anchor_from(record))
+                species_ids = (
+                    "carbon-dioxide",
+                    "monoethanolamine",
+                    "water",
+                    "protonated-monoethanolamine",
+                    "carbamate-anion",
+                    "bicarbonate-anion",
+                    "carbonate-anion",
+                    "hydronium-cation",
+                    "hydroxide-anion",
                 )
                 for species, value in zip(
-                    liquid.supported_component_ids, liquid.mole_fractions, strict=True
+                    species_ids, liquid["mole_fractions"], strict=True
                 ):
                     speciation_model.append(
                         {
@@ -434,125 +333,68 @@ def main() -> None:
         canonical_vle_rows = [
             row for row in csv.DictReader(stream) if row["active_view_member"] == "yes"
         ]
-    pressure_anchors: dict[int, list[tuple[float, float, object]]] = {}
-    cross_temperature_anchors: list[tuple[int, float, float, object]] = []
-    pressure_outcomes: dict[str, tuple[object | None, str, str, str]] = {}
-    pending = list(enumerate(canonical_vle_rows, start=1))
-    while pending:
-        remaining: list[tuple[int, dict[str, str]]] = []
-        progress = False
-        for pressure_index, row in sorted(
-            pending,
+    pressure_anchors = cached_anchors(
+        {round(float(row["temperature_canonical_C"])) for row in canonical_vle_rows}
+    )
+    pressure_outcomes: dict[str, tuple[dict[str, object], str, str, str]] = {}
+    for pressure_index, row in enumerate(
+        sorted(
+            canonical_vle_rows,
             key=lambda item: (
-                round(float(item[1]["temperature_canonical_C"])),
-                float(item[1]["CO2_loading"]),
-                item[0],
+                round(float(item["temperature_canonical_C"])),
+                float(item["CO2_loading"]),
+                item["observation_id"],
             ),
-        ):
-            temperature_c = round(float(row["temperature_canonical_C"]))
-            loading = float(row["CO2_loading"])
-            if temperature_c not in pressure_templates:
-                raise ValueError(f"missing {temperature_c} C pressure template")
-            _, template = min(
-                pressure_templates[temperature_c],
-                key=lambda candidate: abs(candidate[0] - loading),
+        ),
+        start=1,
+    ):
+        temperature_c = round(float(row["temperature_canonical_C"]))
+        loading = float(row["CO2_loading"])
+        if temperature_c not in pressure_templates:
+            raise ValueError(f"missing {temperature_c} C pressure template")
+        _, template = min(
+            pressure_templates[temperature_c],
+            key=lambda candidate: abs(candidate[0] - loading),
+        )
+        request = copy.deepcopy(template)
+        reaction_system = request["reaction_system"]
+        reaction_system["feed_amounts_mol"][0] = loading
+        reaction_system["conserved_totals"] = [
+            math.fsum(
+                coefficient * amount
+                for coefficient, amount in zip(
+                    balance, reaction_system["feed_amounts_mol"], strict=True
+                )
             )
-            base_request = copy.deepcopy(template)
-            reaction_system = base_request["reaction_system"]
-            reaction_system["feed_amounts_mol"][0] = loading
-            reaction_system["conserved_totals"] = [
-                math.fsum(
-                    coefficient * amount
-                    for coefficient, amount in zip(
-                        balance, reaction_system["feed_amounts_mol"], strict=True
-                    )
-                )
-                for balance in reaction_system["balance_matrix"]
-            ]
-            identity = row["observation_id"]
-            anchors = pressure_anchors.get(temperature_c, [])
-            candidate_anchors = sorted(anchors, key=lambda item: abs(item[0] - loading))
-            cross_candidates = [
-                (anchor_loading, anchor_pressure, anchor_state)
-                for anchor_temperature, anchor_loading, anchor_pressure, anchor_state in sorted(
-                    cross_temperature_anchors,
-                    key=lambda item: (
-                        abs(item[0] - temperature_c),
-                        abs(item[1] - loading),
-                    ),
-                )
-                if anchor_temperature != temperature_c
-            ]
-            attempts = (
-                ([candidate_anchors[0]] if candidate_anchors else [])
-                + [None]
-                + cross_candidates
-                + candidate_anchors[1:]
-            )
-            result = None
-            status = "non_evaluable"
-            code = ""
-            diagnostic = ""
-            for candidate_anchor in attempts:
-                request = copy.deepcopy(base_request)
-                if candidate_anchor is not None:
-                    request["pressure"]["initial"] = candidate_anchor[1]
-                    request["pressure"]["starts"] = [candidate_anchor[1]]
-                problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                    corrected_request(request, reaction_values)
-                )
-                if candidate_anchor is not None:
-                    problem = replace(problem, continuation_state=candidate_anchor[2])
-                problem = prepared_problem(problem, f"{identity}-notebook-bundle")
-                try:
-                    result = equilibrium.solve(model, problem)
-                    status = result.status
-                    code, diagnostic = failure_fields(result.failure)
-                except Exception as exc:
-                    result = None
-                    status = "exception"
-                    code = "engine_exception"
-                    diagnostic = f"{type(exc).__name__}: {exc}"
-                if status == "evaluated":
-                    break
-            pressure_outcomes[identity] = (result, status, code, diagnostic)
-            if status == "evaluated" and result is not None:
-                if (
-                    result.continuation_state is None
-                    or result.continuation_state.parameter_fingerprint
-                    != parameters.fingerprint
-                ):
-                    raise RuntimeError(
-                        "pressure result does not match the notebook bundle"
-                    )
-                pressure_pa = next(
-                    float(result_row.value)
-                    for result_row in result.rows
-                    if result_row.identity == "system-pressure"
-                )
-                pressure_anchors.setdefault(temperature_c, []).append(
-                    (loading, pressure_pa, result.continuation_state)
-                )
-                cross_temperature_anchors.append(
-                    (temperature_c, loading, pressure_pa, result.continuation_state)
-                )
-                progress = True
-            else:
-                remaining.append((pressure_index, row))
-            print(
-                f"pressure {pressure_index:03d}/{len(canonical_vle_rows)}: "
-                f"{identity} {status}"
-            )
-        if not progress or len(remaining) == len(pending):
-            pending = remaining
-            break
-        pending = remaining
+            for balance in reaction_system["balance_matrix"]
+        ]
+        identity = row["observation_id"]
+        record = evaluate_state(
+            model,
+            request,
+            reaction_values,
+            identity,
+            pressure_anchors,
+            limits=limits,
+        )
+        status = str(record["status"])
+        code = str(record["failure_code"])
+        diagnostic = str(record["failure_diagnostic"])
+        pressure_outcomes[identity] = (record, status, code, diagnostic)
+        if status == "evaluated":
+            anchor = anchor_from(record)
+            if anchor is not None:
+                pressure_anchors.append(anchor)
+        print(
+            f"pressure {pressure_index:03d}/{len(canonical_vle_rows)}: "
+            f"{identity} {status}"
+        )
 
     for pressure_index, row in enumerate(canonical_vle_rows, start=1):
         identity = row["observation_id"]
         temperature_c = round(float(row["temperature_canonical_C"]))
         loading = float(row["CO2_loading"])
-        result, status, code, diagnostic = pressure_outcomes[identity]
+        record, status, code, diagnostic = pressure_outcomes[identity]
         pressure_observed.append(
             {
                 "observation_id": identity,
@@ -562,12 +404,8 @@ def main() -> None:
                 "observed_pCO2_kPa": float(row["CO2_pressure"]),
             }
         )
-        if status == "evaluated" and result is not None:
-            predicted = next(
-                result_row.value
-                for result_row in result.rows
-                if result_row.identity == "co2-partial-pressure"
-            )
+        if status == "evaluated":
+            predicted = record["predictions"]["co2-partial-pressure"]
             pressure_model.append(
                 {
                     "observation_id": identity,
@@ -637,31 +475,38 @@ def main() -> None:
                 )
                 for balance in reaction_system["balance_matrix"]
             ]
-            problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                corrected_request(request, reaction_values)
+            if temperature_c not in speciation_anchors:
+                speciation_anchors[temperature_c] = cached_anchors({temperature_c})
+            grid_anchors = speciation_anchors[temperature_c]
+            record = evaluate_state(
+                model,
+                request,
+                reaction_values,
+                grid_id,
+                grid_anchors,
+                limits=limits,
             )
-            problem = prepared_problem(problem, grid_id)
-            try:
-                result = equilibrium.solve(model, problem)
-                status = result.status
-                code, diagnostic = failure_fields(result.failure)
-            except Exception as exc:
-                result = None
-                status = "exception"
-                code = "engine_exception"
-                diagnostic = f"{type(exc).__name__}: {exc}"
-            if (
-                status == "evaluated"
-                and result is not None
-                and result.continuation_state is not None
-            ):
+            status = record["status"]
+            code = record["failure_code"]
+            diagnostic = record["failure_diagnostic"]
+            if status == "evaluated" and record.get("anchor") is not None:
                 liquid = next(
-                    phase
-                    for phase in result.continuation_state.phases
-                    if phase.role == "liquid"
+                    phase for phase in record["phases"] if phase["role"] == "liquid"
+                )
+                grid_anchors.append(anchor_from(record))
+                species_ids = (
+                    "carbon-dioxide",
+                    "monoethanolamine",
+                    "water",
+                    "protonated-monoethanolamine",
+                    "carbamate-anion",
+                    "bicarbonate-anion",
+                    "carbonate-anion",
+                    "hydronium-cation",
+                    "hydroxide-anion",
                 )
                 for species, value in zip(
-                    liquid.supported_component_ids, liquid.mole_fractions, strict=True
+                    species_ids, liquid["mole_fractions"], strict=True
                 ):
                     speciation_grid.append(
                         {
@@ -886,19 +731,15 @@ def main() -> None:
     speciation_packet_count = sum(
         len(observation["targets"]) != 1 for observation in fit["observations"]
     )
-    temperature_balanced_log10_rmse = {
-        family: math.sqrt(
-            statistics.fmean(
-                float(row["rmse_log10_error"]) ** 2
-                for row in statistics_rows
-                if row["family"] == family and row["group_type"] == "temperature_C"
-            )
-        )
-        for family in ("pressure", "speciation")
-    }
+    temperature_balanced_log10_rmse = {}
+    for family in ("pressure", "speciation"):
+        errors = [float(row["rmse_log10_error"]) for row in statistics_rows
+                  if row["family"] == family and row["group_type"] == "temperature_C" and row["rmse_log10_error"] != ""]
+        temperature_balanced_log10_rmse[family] = math.sqrt(statistics.fmean(value * value for value in errors)) if errors else None
     receipt = {
         "schema_version": 1,
-        "status": "active_current_best_bundle",
+        "evaluator_version": EVALUATOR_VERSION,
+        "status": "exploratory_incumbent",
         "engine_source_commit": ENGINE_COMMIT,
         "engine_wheel_sha256": ENGINE_WHEEL_SHA256,
         "engine_distribution_version": importlib.metadata.version("epcsaft"),
@@ -918,7 +759,6 @@ def main() -> None:
         "source_continuation_parameter_fingerprints": sorted(
             source_continuation_fingerprints
         ),
-        "successful_fingerprints_match_bundle": True,
         "warm_start_policy": (
             "source continuation values are projected to mass-balanced finite "
             "starts; pressure observations then reuse certified states across "
@@ -958,7 +798,22 @@ def main() -> None:
     (ANALYSIS / "results/figure-calculation-receipt.json").write_text(
         json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
+    stamp_results(
+        ANALYSIS / "results/figure-calculation-receipt.json",
+        [
+            SPECIATION_OUTPUT / "speciation-model.csv",
+            SPECIATION_OUTPUT / "speciation-observations.csv",
+            SPECIATION_OUTPUT / "speciation-model-grid.csv",
+            SPECIATION_OUTPUT / "speciation-display-observations.csv",
+            PRESSURE_OUTPUT / "pressure-model.csv",
+            PRESSURE_OUTPUT / "pressure-observations.csv",
+            ANALYSIS / "results/figure-calculation-failures.csv",
+            ANALYSIS / "results/current-best-fit-residuals.csv",
+            ANALYSIS / "results/current-best-fit-statistics.csv",
+        ],
+        inputs=freshness_inputs,
+    )
 
 
 if __name__ == "__main__":
-    main()
+    bounded_main(main)
