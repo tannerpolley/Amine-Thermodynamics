@@ -1,0 +1,61 @@
+{
+  "candidate_shifts_kj_mol": {
+    "R1": 0.0018327320770275602,
+    "R2": -0.1589254407889449,
+    "R3": -0.33874163466130386,
+    "R4": 2.500259602389715,
+    "R5": 4.318520274410749
+  },
+  "workers": 3,
+  "cpu_affinity": [
+    0,
+    1,
+    2
+  ],
+  "engine_wheel_sha256": "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805",
+  "parameter_sha256": "00049473d53c7e8088ef3e2dbbc6a1bab058f6dc4de963ee98936b4cd9bda25e",
+  "validation_complete": false,
+  "missing_groups": [
+    "pressure-120",
+    "heat-120"
+  ],
+  "missing_group_reason": "interrupted after prolonged exact solver execution; no result inferred",
+  "summary": {
+    "pressure": {
+      "attempted": 122,
+      "evaluated": 121,
+      "metric_target_count": 121,
+      "rmse": 0.3826326998831685,
+      "bias": -0.15058232884163888,
+      "median_absolute_error": 0.30259180837608146
+    },
+    "speciation": {
+      "attempted": 131,
+      "evaluated": 127,
+      "metric_target_count": 127,
+      "rmse": 0.3917369009964107,
+      "bias": -0.10950626047310544,
+      "median_absolute_error": 0.08829850675418122
+    },
+    "heat": {
+      "attempted": 86,
+      "evaluated": 86,
+      "metric_target_count": 86,
+      "rmse": 13.08566930920081,
+      "bias": -9.149340616272688,
+      "median_absolute_error": 10.588219336084755
+    },
+    "heat_by_partition": {
+      "calibration": {
+        "count": 66,
+        "rmse_kj_mol": 14.044836512544261,
+        "bias_kj_mol": -10.127414601431912
+      },
+      "model_selection_comparison": {
+        "count": 20,
+        "rmse_kj_mol": 9.239039975476336,
+        "bias_kj_mol": -5.921696465247252
+      }
+    }
+  }
+}

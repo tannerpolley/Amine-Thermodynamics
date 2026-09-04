@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import csv
 import copy
+import argparse
 import hashlib
 import json
 import math
 import statistics
-from dataclasses import replace
 from pathlib import Path
+from time import perf_counter
 
 import epcsaft
 import matplotlib.pyplot as plt
@@ -17,17 +18,21 @@ import numpy as np
 from epcsaft import equilibrium
 from scipy.interpolate import PchipInterpolator
 
-from generate_figure_data import (
+from shared_evaluation import (
     ENGINE_COMMIT,
-    ENGINE_WHEEL,
     ENGINE_WHEEL_SHA256,
     PARAMETERS,
+    SOURCE_CONTRACT,
     STATE_PACKET,
+    EvaluationLimits,
+    anchor_from,
+    cached_anchors,
     corrected_request,
-    installed_wheel,
-    prepared_problem,
-    sha256,
+    evaluate_state,
+    verify_wheel,
 )
+from result_freshness import source_hashes, stamp_results
+from refresh_results import bounded_main
 from MEA.common.analysis_io import file_sha256, repo_relative_path
 from MEA.common.plot_style import (
     apply_plot_theme,
@@ -37,6 +42,7 @@ from MEA.common.plot_style import (
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
+COMMON_SOURCE = ANALYSIS.parents[1] / "src/MEA/common"
 OBSERVATIONS = ANALYSIS / "data/input/calorimetry-observation-partition.csv"
 RESULTS = ANALYSIS / "results/calorimetry"
 FIGURES = ANALYSIS / "figures/calorimetry/output"
@@ -52,7 +58,9 @@ def read_rows(path: Path) -> list[dict[str, str]]:
 
 def write_rows(path: Path, rows: list[dict[str, object]]) -> None:
     if not rows:
-        raise ValueError(f"no rows produced for {path}")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("", encoding="utf-8")
+        return
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as stream:
         writer = csv.DictWriter(stream, fieldnames=tuple(rows[0]), lineterminator="\n")
@@ -60,7 +68,7 @@ def write_rows(path: Path, rows: list[dict[str, object]]) -> None:
         writer.writerows(rows)
 
 
-def residual_metrics(rows: list[dict[str, object]]) -> dict[str, float | int]:
+def residual_metrics(rows: list[dict[str, object]]) -> dict[str, float | int | None]:
     evaluated = [row for row in rows if row["status"] == "evaluated"]
     residuals = [float(row["residual_kj_per_mol_CO2"]) for row in evaluated]
     return {
@@ -68,9 +76,13 @@ def residual_metrics(rows: list[dict[str, object]]) -> dict[str, float | int]:
         "evaluated": len(evaluated),
         "rmse_kj_per_mol_CO2": math.sqrt(
             statistics.fmean(value * value for value in residuals)
-        ),
-        "mean_bias_kj_per_mol_CO2": statistics.fmean(residuals),
-        "median_absolute_error_kj_per_mol_CO2": statistics.median(map(abs, residuals)),
+        )
+        if residuals
+        else None,
+        "mean_bias_kj_per_mol_CO2": statistics.fmean(residuals) if residuals else None,
+        "median_absolute_error_kj_per_mol_CO2": statistics.median(map(abs, residuals))
+        if residuals
+        else None,
     }
 
 
@@ -137,70 +149,249 @@ def transformed_reaction_enthalpies(
     return R_J_MOL_K * temperature_k**2 * np.asarray(derivatives)
 
 
+# Neutral thermal anchors. Units: J/mol/K for cp, J/mol for enthalpy, T in K.
+# CO2: ideal-gas Shomate cp (Chase 1998 via NIST WebBook, 298-1200 K) and
+# CODATA gas formation enthalpy; the ideal gas has zero EOS residual.
+# H2O, MEA: pure-liquid cp correlations retained by MEA-Absorption-Column
+# (Hilliard 2008, kJ/kg/K in t = T - 273.15 C) minus the Engine's own pure
+# liquid residual cp at 1 atm, so the model liquid cp equals the correlation
+# and the residual is not counted twice. Formation enthalpies pin the liquid
+# at 298.15 K, 1 atm: CODATA H2O(l) and NIST WebBook (Baroody and Carpenter
+# 1972) MEA(l). Formation constants are conserved-component gauges; the
+# temperature dependence is the physical content.
+ANCHOR_SOURCES = {
+    "carbon-dioxide": {
+        "cp": "NIST WebBook Shomate, Chase 1998, gas, 298-1200 K",
+        "cp_kind": "ideal_gas_shomate",
+        "shomate": (24.99735, 55.18696, -33.69137, 7.948387, -0.136638),
+        "formation_enthalpy_j_per_mol": -393510.0,
+        "formation_source": "CODATA (Cox, Wagman et al. 1984), gas, 298.15 K",
+        "basis": "ideal gas; residual enthalpy zero",
+    },
+    "water": {
+        "cp": "Hilliard 2008 liquid cp polynomial as retained in MEA-Absorption-Column appendix_properties.tex; kJ/kg/K, t in C",
+        "cp_kind": "liquid_correlation_minus_eos_residual",
+        "liquid_cp_kj_kg_k": (4.2107, -1.696e-3, 2.568e-5, -1.095e-7, 3.038e-10),
+        "molar_mass_kg_per_mol": 0.018015,
+        "formation_enthalpy_j_per_mol": -285830.0,
+        "formation_source": "CODATA H2O(l), 298.15 K, 1 atm",
+        "basis": "pure liquid at 101325 Pa; correlation range per Hilliard 2008 not re-verified here",
+    },
+    "monoethanolamine": {
+        "cp": "Hilliard 2008 liquid cp polynomial as retained in MEA-Absorption-Column appendix_properties.tex; kJ/kg/K, t in C",
+        "cp_kind": "liquid_correlation_minus_eos_residual",
+        "liquid_cp_kj_kg_k": (2.6161, 3.706e-3, 3.787e-6, 0.0, 0.0),
+        "molar_mass_kg_per_mol": 0.061084,
+        "formation_enthalpy_j_per_mol": -507500.0,
+        "formation_source": "NIST WebBook, Baroody and Carpenter 1972, MEA(l), 298.15 K",
+        "basis": "pure liquid at 101325 Pa; correlation range per Hilliard 2008 not re-verified here",
+    },
+}
+ANCHOR_PRESSURE_PA = 101325.0
+FORMATION_TEMPERATURE_K = 298.15
+REFERENCE_DOMAIN_K = (
+    293.15,
+    393.15,
+)  # source-reference transfer is outside the EOS domain above 393.15 K at 1 bar
+REFERENCE_GRID_STEP_K = 2.5
+REFERENCE_POLYNOMIAL_DEGREE = 8
+CHARGE_GAUGE = "hydronium reference enthalpy equals water reference enthalpy at every temperature (zero-enthalpy proton)"
+VANT_HOFF_ABS_TOLERANCE_J_PER_MOL = 1.0e-3  # half the Engine admissibility tolerance
+
+
+def _shomate(temperature_k: float, coefficients: tuple[float, ...]) -> float:
+    a, b, c, d, e = coefficients
+    t = temperature_k / 1000.0
+    return a + b * t + c * t * t + d * t**3 + e / (t * t)
+
+
+def anchor_heat_capacity(
+    model: epcsaft.Mixture, component_id: str, temperature_k: float
+) -> float:
+    """Reference cp of one neutral anchor, J/mol/K."""
+    spec = ANCHOR_SOURCES[component_id]
+    if spec["cp_kind"] == "ideal_gas_shomate":
+        return _shomate(temperature_k, spec["shomate"])
+    t = temperature_k - 273.15
+    liquid = (
+        1000.0
+        * spec["molar_mass_kg_per_mol"]
+        * math.fsum(a * t**k for k, a in enumerate(spec["liquid_cp_kj_kg_k"]))
+    )
+    x = [1.0 if c == component_id else 0.0 for c in model.component_ids]
+    state = model.state(
+        T=temperature_k * epcsaft.unit_registry.kelvin,
+        P=ANCHOR_PRESSURE_PA * epcsaft.unit_registry.pascal,
+        x=x,
+        phase="liquid",
+    )
+    residual = state.cpres()
+    if residual is None:
+        raise ValueError(
+            f"EOS residual cp unavailable for {component_id} at {temperature_k} K"
+        )
+    return liquid - float(residual.magnitude)
+
+
+def anchor_enthalpy_at_formation(model: epcsaft.Mixture, component_id: str) -> float:
+    """Reference enthalpy at 298.15 K so the anchored phase carries its formation enthalpy."""
+    spec = ANCHOR_SOURCES[component_id]
+    if spec["cp_kind"] == "ideal_gas_shomate":
+        return float(spec["formation_enthalpy_j_per_mol"])
+    x = [1.0 if c == component_id else 0.0 for c in model.component_ids]
+    state = model.state(
+        T=FORMATION_TEMPERATURE_K * epcsaft.unit_registry.kelvin,
+        P=ANCHOR_PRESSURE_PA * epcsaft.unit_registry.pascal,
+        x=x,
+        phase="liquid",
+    )
+    return float(spec["formation_enthalpy_j_per_mol"]) - float(
+        state._residual_enthalpy.magnitude
+    )
+
+
+def exact_reference_enthalpies(
+    model: epcsaft.Mixture,
+    templates: dict[int, list[tuple[float, dict[str, object]]]],
+    reaction_values: dict[str, float],
+    temperature_k: float,
+    anchor_enthalpies: dict[str, float],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Solve the nine references at one temperature: 5 reactions + 3 anchors + 1 gauge."""
+    request = copy.deepcopy(templates[80][0][1])
+    request["temperature"]["value"] = temperature_k
+    problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
+        corrected_request(request, reaction_values)
+    )
+    rows = np.asarray(problem.reaction_system.reaction_matrix, dtype=float)
+    q_reaction = transformed_reaction_enthalpies(model, problem)
+    ids = list(model.component_ids)
+    anchors = np.eye(len(ids))[[ids.index(c) for c in ANCHOR_SOURCES]]
+    gauge = np.zeros(len(ids))
+    gauge[ids.index("hydronium-cation")] = 1.0
+    gauge[ids.index("water")] = -1.0
+    system = np.vstack([rows, anchors, gauge[None, :]])
+    rhs = np.concatenate(
+        [q_reaction, [anchor_enthalpies[c] for c in ANCHOR_SOURCES], [0.0]]
+    )
+    return np.linalg.solve(system, rhs), q_reaction, rows
+
+
 def build_thermochemistry(
     model: epcsaft.Mixture,
     templates: dict[int, list[tuple[float, dict[str, object]]]],
     reaction_values: dict[str, float],
 ) -> tuple[epcsaft.ReferenceThermochemistry, dict[str, object]]:
-    reaction_rows: np.ndarray | None = None
-    component_enthalpies = []
-    reaction_enthalpies = []
-    for temperature_k in TEMPERATURES_K:
-        temperature_c = round(temperature_k - 273.15)
-        request = copy.deepcopy(templates[temperature_c][0][1])
-        request["temperature"]["value"] = temperature_k
-        problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-            corrected_request(request, reaction_values)
-        )
-        rows = np.asarray(problem.reaction_system.reaction_matrix, dtype=float)
-        reaction_rows = rows if reaction_rows is None else reaction_rows
-        q_reaction = transformed_reaction_enthalpies(model, problem)
-        h_components = rows.T @ np.linalg.solve(rows @ rows.T, q_reaction)
-        if not np.allclose(rows @ h_components, q_reaction, rtol=2.0e-12, atol=2.0e-6):
-            raise ValueError(
-                "component thermochemistry does not span reaction enthalpies"
-            )
-        reaction_enthalpies.append(q_reaction)
-        component_enthalpies.append(h_components)
+    """Continuous anchored species references on the Engine's polynomial form.
 
-    theta = np.asarray(TEMPERATURES_K) - REFERENCE_TEMPERATURE_K
-    values = np.asarray(component_enthalpies)
+    At every grid temperature the nine reference enthalpies are the unique
+    solution of the five typed reaction constraints, three neutral thermal
+    anchors, and one charge gauge.  Each component's h(T) is then fitted with
+    one polynomial whose derivative is the declared cp polynomial, and the
+    fit is verified against fresh exact reaction enthalpies between grid
+    points at half the Engine's van't Hoff tolerance.
+    """
+    from scipy.integrate import cumulative_simpson
+
+    grid = np.arange(
+        REFERENCE_DOMAIN_K[0], REFERENCE_DOMAIN_K[1] + 1e-9, REFERENCE_GRID_STEP_K
+    )
+    formation = {c: anchor_enthalpy_at_formation(model, c) for c in ANCHOR_SOURCES}
+    # cp on a 0.5 K grid, integrated by Simpson from the formation temperature.
+    fine = np.arange(REFERENCE_DOMAIN_K[0], REFERENCE_DOMAIN_K[1] + 1e-9, 0.5)
+    anchor_h: dict[str, dict[float, float]] = {}
+    for c in ANCHOR_SOURCES:
+        cp = np.asarray([anchor_heat_capacity(model, c, float(T)) for T in fine])
+        integral = cumulative_simpson(cp, x=fine, initial=0.0)
+        at_formation = float(np.interp(FORMATION_TEMPERATURE_K, fine, integral))
+        h_fine = formation[c] + integral - at_formation
+        anchor_h[c] = {float(T): float(np.interp(T, fine, h_fine)) for T in grid}
+    exact = []
+    for temperature_k in grid:
+        h, _, rows = exact_reference_enthalpies(
+            model,
+            templates,
+            reaction_values,
+            float(temperature_k),
+            {c: anchor_h[c][float(temperature_k)] for c in ANCHOR_SOURCES},
+        )
+        exact.append(h)
+    exact = np.asarray(exact)
+    theta = grid - REFERENCE_TEMPERATURE_K
     components = []
     component_records = []
     for index, component_id in enumerate(model.component_ids):
-        quadratic, linear, reference = np.polyfit(theta, values[:, index], 2)
-        cp_coefficients = (float(linear), float(2.0 * quadratic))
+        coefficients = np.polynomial.polynomial.polyfit(
+            theta, exact[:, index], REFERENCE_POLYNOMIAL_DEGREE
+        )
+        reference = float(coefficients[0])
+        cp_coefficients = tuple(
+            float((k + 1) * coefficients[k + 1])
+            for k in range(REFERENCE_POLYNOMIAL_DEGREE)
+        )
+        fit_residual = float(
+            np.max(
+                np.abs(
+                    np.polynomial.polynomial.polyval(theta, coefficients)
+                    - exact[:, index]
+                )
+            )
+        )
         component_records.append(
             {
                 "component_id": component_id,
-                "reference_enthalpy_j_per_mol": float(reference),
+                "reference_enthalpy_j_per_mol": reference,
                 "cp_coefficients_j_per_mol_k": list(cp_coefficients),
+                "max_fit_residual_j_per_mol": fit_residual,
+                "role": "neutral_anchor"
+                if component_id in ANCHOR_SOURCES
+                else "reaction_and_gauge_determined",
             }
         )
         components.append(
             epcsaft.ComponentReferenceThermochemistry(
                 component_id,
-                "mea-reaction-consistent-conserved-gauge",
+                "mea-anchored-reaction-consistent-reference-v2",
                 REFERENCE_TEMPERATURE_K,
-                float(reference),
+                reference,
                 epcsaft.IdealHeatCapacityPolynomial(
-                    f"{component_id}-reaction-consistent-cp",
-                    cp_coefficients,
-                    (293.15, 413.15),
+                    f"{component_id}-anchored-cp", cp_coefficients, REFERENCE_DOMAIN_K
                 ),
             )
         )
+    # Verify between grid points against fresh exact reaction enthalpies.
+    worst = 0.0
+    for temperature_k in np.arange(
+        REFERENCE_DOMAIN_K[0] + 1.0, REFERENCE_DOMAIN_K[1], 4.0
+    ):
+        _, q_reaction, rows = exact_reference_enthalpies(
+            model, templates, reaction_values, float(temperature_k), formation
+        )
+        h = np.asarray([c.enthalpy_j_per_mol(float(temperature_k)) for c in components])
+        worst = max(worst, float(np.max(np.abs(rows @ h - q_reaction))))
+    if worst > VANT_HOFF_ABS_TOLERANCE_J_PER_MOL:
+        raise ValueError(
+            f"anchored reference violates reaction consistency between grid points by {worst:.3e} J/mol"
+        )
     payload = {
-        "schema": "mea-reaction-consistent-reference-thermochemistry-v1",
-        "method": "minimum-norm conserved gauge from Engine source-reference transfer and typed R1-R5 temperature derivatives",
+        "schema": "mea-anchored-reaction-consistent-reference-thermochemistry-v2",
+        "method": "continuous solve of 5 typed reaction enthalpies (source correlation + Engine source-reference transfer) + 3 neutral thermal anchors + 1 charge gauge at every grid temperature; degree-8 polynomial per component on the Engine form",
         "engine_source_commit": ENGINE_COMMIT,
         "engine_wheel_sha256": ENGINE_WHEEL_SHA256,
         "reference_temperature_k": REFERENCE_TEMPERATURE_K,
-        "temperature_knots_k": list(TEMPERATURES_K),
+        "temperature_domain_k": list(REFERENCE_DOMAIN_K),
+        "grid_step_k": REFERENCE_GRID_STEP_K,
+        "polynomial_degree": REFERENCE_POLYNOMIAL_DEGREE,
+        "anchor_pressure_pa": ANCHOR_PRESSURE_PA,
+        "anchors": {
+            c: {k: v for k, v in spec.items()} for c, spec in ANCHOR_SOURCES.items()
+        },
+        "charge_gauge": CHARGE_GAUGE,
         "component_ids": list(model.component_ids),
         "components": component_records,
-        "reaction_enthalpies_j_per_mol": [row.tolist() for row in reaction_enthalpies],
-        "gauge": "minimum Euclidean norm; no calorimetry fit",
+        "max_vant_hoff_residual_between_grid_points_j_per_mol": worst,
+        "vant_hoff_check_tolerance_j_per_mol": VANT_HOFF_ABS_TOLERANCE_J_PER_MOL,
+        "gauge": "conserved-component enthalpy constants are formation-enthalpy pinned; their temperature dependence is anchored by thermal data",
     }
     fingerprint = (
         "sha256:"
@@ -210,31 +401,34 @@ def build_thermochemistry(
     )
     payload["scientific_fingerprint"] = fingerprint
     thermochemistry = epcsaft.ReferenceThermochemistry(
-        "mea-r1-r5-reaction-consistent-gauge-v1",
+        "mea-anchored-r1-r5-reaction-consistent-gauge-v2",
         fingerprint,
         tuple(model.component_ids),
         tuple(components),
     )
-    assert reaction_rows is not None
-    for temperature_k, q_reaction in zip(
-        TEMPERATURES_K, reaction_enthalpies, strict=True
-    ):
-        h = np.asarray(
-            thermochemistry.enthalpies_j_per_mol(temperature_k, model.component_ids)
-        )
-        if not np.allclose(reaction_rows @ h, q_reaction, rtol=2.0e-8, atol=2.0e-3):
-            raise ValueError(
-                "fitted reference thermochemistry violates reaction consistency"
-            )
     return thermochemistry, payload
 
 
 def main() -> None:
-    if (
-        sha256(ENGINE_WHEEL) != ENGINE_WHEEL_SHA256
-        or sha256(installed_wheel()) != ENGINE_WHEEL_SHA256
-    ):
-        raise RuntimeError("installed and retained Engine wheels must match")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--state-timeout-s", type=float, default=60.0)
+    parser.add_argument("--overall-timeout-s", type=float, default=900.0)
+    args = parser.parse_args()
+    freshness_inputs = source_hashes(
+        OBSERVATIONS,
+        STATE_PACKET,
+        Path(__file__),
+        Path(__file__).with_name("shared_evaluation.py"),
+        SOURCE_CONTRACT,
+        COMMON_SOURCE / "analysis_io.py",
+        COMMON_SOURCE / "plot_style.py",
+    )
+    verify_wheel()
+    limits = EvaluationLimits(
+        state_timeout_s=args.state_timeout_s,
+        overall_timeout_s=args.overall_timeout_s,
+        deadline_monotonic=perf_counter() + args.overall_timeout_s,
+    )
     parameters = epcsaft.Parameters.from_json(PARAMETERS)
     model = epcsaft.Mixture(parameters)
     reaction_values = {
@@ -272,13 +466,11 @@ def main() -> None:
         )
 
     states: dict[tuple[int, float], tuple[float, float]] = {}
-    continuations: dict[tuple[int, float], object] = {}
     failures: dict[tuple[int, float], tuple[str, str]] = {}
     state_rows: list[dict[str, object]] = []
     attempt_rows: list[dict[str, object]] = []
+    anchors = cached_anchors(set(endpoints))
     for temperature_c in sorted(endpoints):
-        anchor_state = None
-        anchor_pressure = None
         for loading in sorted(endpoints[temperature_c]):
             _, template = min(
                 templates[temperature_c], key=lambda item: abs(item[0] - loading)
@@ -296,151 +488,59 @@ def main() -> None:
                 )
                 for balance in request["reaction_system"]["balance_matrix"]
             ]
-            source_pressure = float(request["pressure"]["initial"])
-            attempts = [
-                ("same-temperature-continuation", anchor_state, source_pressure),
-                ("source-continuation", None, source_pressure),
-            ]
-            if anchor_state is not None and anchor_pressure is not None:
-                attempts.append(
-                    (
-                        "same-temperature-continuation-previous-pressure",
-                        anchor_state,
-                        anchor_pressure,
-                    )
-                )
-            for key in sorted(
-                (
-                    candidate
-                    for candidate in continuations
-                    if candidate[0] != temperature_c
-                ),
-                key=lambda item: (
-                    abs(item[0] - temperature_c),
-                    abs(item[1] - loading),
-                ),
-            )[:8]:
-                attempts.extend(
-                    (
-                        (
-                            f"cross-temperature-{key[0]}C-source-pressure",
-                            continuations[key],
-                            source_pressure,
-                        ),
-                        (
-                            f"cross-temperature-{key[0]}C-anchor-pressure",
-                            continuations[key],
-                            states[key][1],
-                        ),
-                    )
-                )
-            result = None
-            for attempt_index, (start_kind, attempt_state, pressure_start) in enumerate(
-                attempts, start=1
-            ):
-                candidate = copy.deepcopy(request)
-                candidate["pressure"]["initial"] = pressure_start
-                candidate["pressure"]["starts"] = [pressure_start]
-                problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                    corrected_request(candidate, reaction_values)
-                )
-                if attempt_state is not None:
-                    problem = replace(problem, continuation_state=attempt_state)
-                problem = replace(
-                    prepared_problem(
-                        problem, f"calorimetry-{temperature_c}C-{loading:.6f}"
-                    ),
-                    thermochemistry=thermochemistry,
-                )
-                try:
-                    result = equilibrium.solve(model, problem)
-                except Exception as exc:
-                    failures[(temperature_c, loading)] = (
-                        "engine_exception",
-                        f"{type(exc).__name__}: {exc}",
-                    )
-                    attempt_rows.append(
-                        {
-                            "temperature_C": temperature_c,
-                            "loading_mol_CO2_per_mol_MEA": loading,
-                            "attempt": attempt_index,
-                            "start_kind": start_kind,
-                            "pressure_start_pa": pressure_start,
-                            "status": "exception",
-                            "failure_code": "engine_exception",
-                            "failure_diagnostic": f"{type(exc).__name__}: {exc}",
-                        }
-                    )
-                    continue
-                failure = result.failure
-                if result.status == "evaluated" and isinstance(
-                    result.total_enthalpy, epcsaft.NonEvaluableTrial
-                ):
-                    failure = result.total_enthalpy
-                attempt_rows.append(
-                    {
-                        "temperature_C": temperature_c,
-                        "loading_mol_CO2_per_mol_MEA": loading,
-                        "attempt": attempt_index,
-                        "start_kind": start_kind,
-                        "pressure_start_pa": pressure_start,
-                        "status": (
-                            "evaluated"
-                            if result.status == "evaluated"
-                            and isinstance(
-                                result.total_enthalpy, epcsaft.EquilibriumEnthalpy
-                            )
-                            else "failed"
-                        ),
-                        "failure_code": str(getattr(failure, "code", "")),
-                        "failure_diagnostic": str(getattr(failure, "diagnostic", "")),
-                    }
-                )
-                if result.status == "evaluated" and isinstance(
-                    result.total_enthalpy, epcsaft.EquilibriumEnthalpy
-                ):
-                    break
-            if result is None:
-                print(f"{temperature_c:03d} C {loading:.6f}: exception")
-                continue
-            if result.status != "evaluated" or not isinstance(
-                result.total_enthalpy, epcsaft.EquilibriumEnthalpy
-            ):
-                failure = (
-                    result.total_enthalpy
-                    if isinstance(result.total_enthalpy, epcsaft.NonEvaluableTrial)
-                    else result.failure
-                )
-                failures[(temperature_c, loading)] = (
-                    str(getattr(failure, "code", "non_evaluable")),
-                    str(getattr(failure, "diagnostic", failure)),
-                )
-                print(
-                    f"{temperature_c:03d} C {loading:.6f}: non_evaluable "
-                    f"{failures[(temperature_c, loading)]}"
-                )
-                continue
-            anchor_state = result.continuation_state
-            solved_pressure = next(
-                float(row.value)
-                for row in result.rows
-                if row.identity == "system-pressure"
+            record = evaluate_state(
+                model,
+                request,
+                reaction_values,
+                f"calorimetry-{temperature_c}C-{loading:.6f}",
+                anchors,
+                thermochemistry,
+                limits=limits,
             )
-            anchor_pressure = solved_pressure
-            total_enthalpy_j = float(result.total_enthalpy.value.to("joule").magnitude)
+            attempt_rows.extend(
+                {
+                    "temperature_C": temperature_c,
+                    "loading_mol_CO2_per_mol_MEA": loading,
+                    "attempt": attempt_index,
+                    "start_kind": attempt.get("kind", ""),
+                    "anchor": attempt.get("anchor", ""),
+                    "status": attempt.get("status", ""),
+                    "failure_code": attempt.get("failure_code", ""),
+                    "failure_diagnostic": attempt.get("failure_diagnostic", ""),
+                    "wall_s": attempt.get("wall_s", 0.0),
+                }
+                for attempt_index, attempt in enumerate(record["attempts"], start=1)
+            )
+            if record["status"] != "evaluated":
+                failures[(temperature_c, loading)] = (
+                    str(record["failure_code"]),
+                    str(record["failure_diagnostic"]),
+                )
+                print(f"{temperature_c:03d} C {loading:.6f}: {record['status']}")
+                continue
+            solved_pressure = float(record["predictions"]["system-pressure"])
+            total_enthalpy_j = float(record["total_enthalpy_j"])
             states[(temperature_c, loading)] = (total_enthalpy_j, solved_pressure)
-            continuations[(temperature_c, loading)] = result.continuation_state
             failures.pop((temperature_c, loading), None)
-            phase = result.total_enthalpy.phases[0]
+            anchor = anchor_from(record)
+            if anchor is not None:
+                anchors.append(anchor)
+            phase = next(
+                phase for phase in record["phases"] if phase["role"] == "liquid"
+            )
             state_rows.append(
                 {
                     "temperature_C": temperature_c,
                     "loading_mol_CO2_per_mol_MEA": loading,
                     "system_pressure_pa": solved_pressure,
                     "total_liquid_enthalpy_j": total_enthalpy_j,
-                    "liquid_amount_mol": phase.amount_mol,
-                    "reference_molar_enthalpy_j_per_mol": phase.reference_molar_enthalpy_j_per_mol,
-                    "residual_molar_enthalpy_j_per_mol": phase.residual_molar_enthalpy_j_per_mol,
+                    "liquid_amount_mol": record["amount_mol"],
+                    "reference_molar_enthalpy_j_per_mol": phase[
+                        "reference_molar_enthalpy_j_per_mol"
+                    ],
+                    "residual_molar_enthalpy_j_per_mol": phase[
+                        "residual_molar_enthalpy_j_per_mol"
+                    ],
                     "status": "evaluated",
                     "failure_code": "",
                     "failure_diagnostic": "",
@@ -542,7 +642,7 @@ def main() -> None:
         )
 
     evaluated = [row for row in comparison if row["status"] == "evaluated"]
-    residuals = [float(row["residual_kj_per_mol_CO2"]) for row in evaluated]
+    metrics = residual_metrics(comparison)
     summary = {
         "schema": "mea.selected-bundle-direct-total-enthalpy-calorimetry.v1",
         "status": "fixed_bundle_zero_vapor_ideal_co2_feed_reconstruction",
@@ -564,11 +664,11 @@ def main() -> None:
         ),
         "attempted_observations": len(comparison),
         "evaluated_observations": len(evaluated),
-        "rmse_kj_per_mol_CO2": math.sqrt(
-            statistics.fmean(value * value for value in residuals)
-        ),
-        "mean_bias_kj_per_mol_CO2": statistics.fmean(residuals),
-        "median_absolute_error_kj_per_mol_CO2": statistics.median(map(abs, residuals)),
+        "rmse_kj_per_mol_CO2": metrics["rmse_kj_per_mol_CO2"],
+        "mean_bias_kj_per_mol_CO2": metrics["mean_bias_kj_per_mol_CO2"],
+        "median_absolute_error_kj_per_mol_CO2": metrics[
+            "median_absolute_error_kj_per_mol_CO2"
+        ],
         "by_temperature_C": {
             str(temperature): residual_metrics(
                 [row for row in comparison if row["temperature_C"] == temperature]
@@ -671,9 +771,24 @@ def main() -> None:
         stream.write(
             "continuity: model line is a PCHIP interpolation of the scored finite-interval predictions\n"
         )
+    stamp_results(
+        RESULTS / "current-selected-direct-enthalpy-summary.json",
+        [
+            RESULTS / "current-selected-direct-enthalpy-states.csv",
+            RESULTS / "current-selected-direct-enthalpy-attempts.csv",
+            RESULTS / "current-selected-direct-enthalpy-comparison.csv",
+            RESULTS / "current-selected-direct-enthalpy-curve.csv",
+            RESULTS / "current-selected-reference-thermochemistry.json",
+            FIGURES / "current-selected-direct-enthalpy.mpl.yaml",
+            FIGURES / "current-selected-direct-enthalpy.svg",
+            FIGURES / "current-selected-direct-enthalpy.png",
+            FIGURES / "current-selected-direct-enthalpy.pdf",
+        ],
+        inputs=freshness_inputs,
+    )
     plt.close(fig)
     print(json.dumps(summary, indent=2))
 
 
 if __name__ == "__main__":
-    main()
+    bounded_main(main)

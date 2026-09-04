@@ -15,19 +15,17 @@ from functools import lru_cache
 from pathlib import Path
 
 import epcsaft
-from epcsaft import equilibrium
-
-from generate_figure_data import (
+from shared_evaluation import (
     CANONICAL_VLE,
     ENGINE_WHEEL,
     ENGINE_WHEEL_SHA256,
     STATE_PACKET,
     STATE_PACKET_SHA256,
     corrected_request,
-    failure_fields,
     installed_wheel,
-    prepared_problem,
     sha256,
+    evaluate_state,
+    anchor_from,
 )
 
 
@@ -54,9 +52,9 @@ BOUNDS = {
 
 
 def quarter_cpu_affinity() -> tuple[int, ...]:
-    """Restrict this process and inherited workers to at most 25% of host CPUs."""
+    """Restrict this process and inherited workers to one logical CPU."""
     available = sorted(os.sched_getaffinity(0))
-    limit = max(1, (os.cpu_count() or 1) // 4)
+    limit = 1
     selected = tuple(available[:limit])
     os.sched_setaffinity(0, selected)
     return selected
@@ -87,46 +85,28 @@ def parameter_values(mapping: dict[str, float]) -> dict[str, float]:
 def request_with_reactions(
     source: dict[str, object], values: dict[str, float]
 ) -> dict[str, object]:
-    request = corrected_request(source)
-    temperature_k = float(request["temperature"]["value"])
-    records = request["reaction_system"]["equilibrium_constants"]
     reaction_values = {
-        "reaction:R4:correlation:a": values.get("r4_a", origins()["r4_a"]),
-        "reaction:R4:correlation:b_k": values.get("r4_b", origins()["r4_b"]),
-        "reaction:R5:correlation:a_k": values.get("r5_a", origins()["r5_a"]),
+        spec.identity: float(spec.value.magnitude)
+        for spec in epcsaft.Parameters.from_json(BASELINE).parameter_specs
+        if spec.identity.startswith("reaction:")
     }
-    for record in records:
-        if len(record) < 7:
-            continue
-        metadata = record[6]
-        if not metadata:
-            continue
-        identities = metadata.get("coefficient_identities", [])
-        coefficients = list(metadata.get("coefficient_values", []))
-        changed = False
-        for index, identity in enumerate(identities):
-            if identity in reaction_values:
-                coefficients[index] = reaction_values[identity]
-                changed = True
-        if not changed:
-            continue
-        metadata["coefficient_values"] = coefficients
-        if metadata["kind"] == "ln-k-a-plus-b-over-t":
-            record[0] = coefficients[0] + coefficients[1] / temperature_k
-        elif metadata["kind"] == "negative-log10-temperature-polynomial":
-            record[0] = -math.log(10.0) * (
-                coefficients[0] / temperature_k
-                + coefficients[1]
-                + coefficients[2] * temperature_k
-            )
-    return request
+    reaction_values.update(
+        {
+            "reaction:R4:correlation:a": values.get("r4_a", origins()["r4_a"]),
+            "reaction:R4:correlation:b_k": values.get("r4_b", origins()["r4_b"]),
+            "reaction:R5:correlation:a_k": values.get("r5_a", origins()["r5_a"]),
+        }
+    )
+    return corrected_request(source, reaction_values)
 
 
 def load_packet() -> dict[str, object]:
     return json.loads(STATE_PACKET.read_text(encoding="utf-8"))
 
 
-def pressure_templates(packet: dict[str, object]) -> dict[int, list[tuple[float, dict[str, object]]]]:
+def pressure_templates(
+    packet: dict[str, object],
+) -> dict[int, list[tuple[float, dict[str, object]]]]:
     templates: dict[int, list[tuple[float, dict[str, object]]]] = defaultdict(list)
     for observation in packet["observations"]:
         if len(observation["targets"]) != 1:
@@ -142,7 +122,9 @@ def pressure_catalog(full: bool) -> list[dict[str, object]]:
     packet = load_packet()
     templates = pressure_templates(packet)
     with CANONICAL_VLE.open(newline="", encoding="utf-8") as stream:
-        rows = [row for row in csv.DictReader(stream) if row["active_view_member"] == "yes"]
+        rows = [
+            row for row in csv.DictReader(stream) if row["active_view_member"] == "yes"
+        ]
     if not full:
         selected = []
         by_temperature: dict[int, list[dict[str, str]]] = defaultdict(list)
@@ -157,12 +139,16 @@ def pressure_catalog(full: bool) -> list[dict[str, object]]:
     for row in rows:
         temperature_c = round(float(row["temperature_canonical_C"]))
         loading = float(row["CO2_loading"])
-        _, template = min(templates[temperature_c], key=lambda item: abs(item[0] - loading))
+        _, template = min(
+            templates[temperature_c], key=lambda item: abs(item[0] - loading)
+        )
         request = copy.deepcopy(template)
         system = request["reaction_system"]
         system["feed_amounts_mol"][0] = loading
         system["conserved_totals"] = [
-            math.fsum(c * n for c, n in zip(balance, system["feed_amounts_mol"], strict=True))
+            math.fsum(
+                c * n for c, n in zip(balance, system["feed_amounts_mol"], strict=True)
+            )
             for balance in system["balance_matrix"]
         ]
         catalog.append(
@@ -214,7 +200,9 @@ def speciation_catalog() -> list[dict[str, object]]:
     return catalog
 
 
-def evaluate_scenario(task: tuple[str, dict[str, float], bool]) -> tuple[str, dict[str, float], list[dict[str, object]]]:
+def evaluate_scenario(
+    task: tuple[str, dict[str, float], bool],
+) -> tuple[str, dict[str, float], list[dict[str, object]]]:
     scenario, values, full = task
     base = epcsaft.Parameters.from_json(BASELINE)
     model_parameters = (
@@ -228,24 +216,31 @@ def evaluate_scenario(task: tuple[str, dict[str, float], bool]) -> tuple[str, di
     )
     model = epcsaft.Mixture(model_parameters)
     rows: list[dict[str, object]] = []
+    anchors = []
     for state in [*pressure_catalog(full), *speciation_catalog()]:
         request = request_with_reactions(state["request"], values)
-        problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(request)
-        problem = prepared_problem(problem, f"{state['observation_id']}-{scenario}")
-        try:
-            result = equilibrium.solve(model, problem)
-            status = result.status
-            code, diagnostic = failure_fields(result.failure)
-        except Exception as exc:
-            result = None
-            status = "exception"
-            code = "engine_exception"
-            diagnostic = f"{type(exc).__name__}: {exc}"
-        predictions = (
-            {row.identity: float(row.value) for row in result.rows}
-            if status == "evaluated" and result is not None
-            else {}
+        reactions = {
+            identity: value
+            for item in request["reaction_system"]["equilibrium_constants"]
+            for identity, value in zip(
+                item[6]["coefficient_identities"],
+                item[6]["coefficient_values"],
+                strict=True,
+            )
+        }
+        record = evaluate_state(
+            model,
+            state["request"],
+            reactions,
+            f"{state['observation_id']}-{scenario}",
+            anchors,
+            budget_s=45,
         )
+        status = record["status"]
+        code, diagnostic = record["failure_code"], record["failure_diagnostic"]
+        predictions = record["predictions"]
+        if status == "evaluated" and state["family"] == "pressure":
+            anchors.append(anchor_from(record))
         for target in state["targets"]:
             predicted = predictions.get(target["prediction_identity"])
             scale = float(target["unit_scale"])
@@ -263,13 +258,17 @@ def evaluate_scenario(task: tuple[str, dict[str, float], bool]) -> tuple[str, di
                     "status": status,
                     "failure_code": code,
                     "failure_diagnostic": diagnostic,
+                    "parameter_fingerprint": model_parameters.fingerprint,
+                    "cache_hit": record["cache_hit"],
                     **values,
                 }
             )
     return scenario, values, rows
 
 
-def summarize(scenario: str, values: dict[str, float], rows: list[dict[str, object]]) -> dict[str, object]:
+def summarize(
+    scenario: str, values: dict[str, float], rows: list[dict[str, object]]
+) -> dict[str, object]:
     result: dict[str, object] = {"scenario": scenario, **values}
     for family in ("pressure", "speciation"):
         members = [row for row in rows if row["family"] == family]
@@ -281,10 +280,19 @@ def summarize(scenario: str, values: dict[str, float], rows: list[dict[str, obje
         ]
         result[f"{family}_attempted"] = len(members)
         result[f"{family}_evaluated"] = len(evaluated)
-        result[f"{family}_coverage"] = len(evaluated) / len(members)
-        result[f"{family}_log10_rmse"] = math.sqrt(statistics.fmean(x * x for x in logs))
-        result[f"{family}_mae"] = statistics.fmean(
-            abs(float(row["predicted"]) - float(row["observed"])) for row in evaluated
+        result[f"{family}_coverage"] = (
+            len(evaluated) / len(members) if members else None
+        )
+        result[f"{family}_log10_rmse"] = (
+            math.sqrt(statistics.fmean(x * x for x in logs)) if logs else None
+        )
+        result[f"{family}_mae"] = (
+            statistics.fmean(
+                abs(float(row["predicted"]) - float(row["observed"]))
+                for row in evaluated
+            )
+            if evaluated
+            else None
         )
         temperature_rmses = []
         for temperature in sorted({float(row["temperature_C"]) for row in evaluated}):
@@ -296,12 +304,18 @@ def summarize(scenario: str, values: dict[str, float], rows: list[dict[str, obje
                 and float(row["observed"]) > 0
             ]
             if errors:
-                temperature_rmses.append(math.sqrt(statistics.fmean(x * x for x in errors)))
-        result[f"{family}_temperature_balanced_log10_rmse"] = math.sqrt(
-            statistics.fmean(x * x for x in temperature_rmses)
+                temperature_rmses.append(
+                    math.sqrt(statistics.fmean(x * x for x in errors))
+                )
+        result[f"{family}_temperature_balanced_log10_rmse"] = (
+            math.sqrt(statistics.fmean(x * x for x in temperature_rmses))
+            if temperature_rmses
+            else None
         )
     for target in ("MEAH+", "MEACOO-", "HCO3-", "MEA", "MEA + MEAH+"):
-        members = [row for row in rows if row["target"] == target and row["predicted"] != ""]
+        members = [
+            row for row in rows if row["target"] == target and row["predicted"] != ""
+        ]
         if not members:
             continue
         errors = [
@@ -312,7 +326,9 @@ def summarize(scenario: str, values: dict[str, float], rows: list[dict[str, obje
         result[f"{target}_mae"] = statistics.fmean(
             abs(float(row["predicted"]) - float(row["observed"])) for row in members
         )
-        result[f"{target}_log10_rmse"] = math.sqrt(statistics.fmean(x * x for x in errors))
+        result[f"{target}_log10_rmse"] = (
+            math.sqrt(statistics.fmean(x * x for x in errors)) if errors else None
+        )
     return result
 
 
@@ -385,7 +401,9 @@ def refinement_scenarios() -> list[tuple[str, dict[str, float]]]:
                 (
                     f"r4-refine-p{pivot_shift:.2f}-db{b_shift:+.0f}",
                     {
-                        "r4_a": center["r4_a"] + pivot_shift - b_shift / reference_temperature_k,
+                        "r4_a": center["r4_a"]
+                        + pivot_shift
+                        - b_shift / reference_temperature_k,
                         "r4_b": center["r4_b"] + b_shift,
                     },
                 )
@@ -418,7 +436,9 @@ def local_best_scenarios() -> list[tuple[str, dict[str, float]]]:
     center = origins()
     reference_temperature_k = 333.15
 
-    def values(pivot: float, b_shift: float, epsilon_fraction: float) -> dict[str, float]:
+    def values(
+        pivot: float, b_shift: float, epsilon_fraction: float
+    ) -> dict[str, float]:
         return {
             "r4_a": center["r4_a"] + pivot - b_shift / reference_temperature_k,
             "r4_b": center["r4_b"] + b_shift,
@@ -460,7 +480,9 @@ def load_scenarios(path: Path) -> list[tuple[str, dict[str, float]]]:
     return [(item["scenario"], item["values"]) for item in values]
 
 
-def run(scenarios: list[tuple[str, dict[str, float]]], phase: str, full: bool, workers: int) -> None:
+def run(
+    scenarios: list[tuple[str, dict[str, float]]], phase: str, full: bool, workers: int
+) -> None:
     assert sha256(STATE_PACKET) == STATE_PACKET_SHA256
     assert sha256(ENGINE_WHEEL) == ENGINE_WHEEL_SHA256
     assert sha256(installed_wheel()) == ENGINE_WHEEL_SHA256
@@ -476,7 +498,9 @@ def run(scenarios: list[tuple[str, dict[str, float]]], phase: str, full: bool, w
             print(f"{phase}: {scenario} complete", flush=True)
     outputs.sort(key=lambda item: item[0])
     result_rows = [row for _, _, rows in outputs for row in rows]
-    summaries = [summarize(scenario, values, rows) for scenario, values, rows in outputs]
+    summaries = [
+        summarize(scenario, values, rows) for scenario, values, rows in outputs
+    ]
     write_csv(RESULTS / f"{phase}-evaluations.csv", result_rows)
     write_csv(RESULTS / f"{phase}-summary.csv", summaries)
     receipt = {
@@ -487,7 +511,7 @@ def run(scenarios: list[tuple[str, dict[str, float]]], phase: str, full: bool, w
         "scenario_count": len(scenarios),
         "workers": min(workers, len(tasks)),
         "cpu_affinity": cpu_affinity,
-        "cpu_limit_fraction": 0.25,
+        "cpu_limit_count": 1,
         "parameter_path": str(BASELINE.relative_to(ANALYSIS)),
         "parameter_sha256": sha256(BASELINE),
         "state_packet_sha256": sha256(STATE_PACKET),
@@ -518,7 +542,7 @@ def main() -> None:
         default="sensitivity",
     )
     parser.add_argument("--full", action="store_true")
-    parser.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 1) // 4))
+    parser.add_argument("--workers", type=int, default=1)
     args = parser.parse_args()
     if args.scenarios:
         scenarios = load_scenarios(args.scenarios)
@@ -540,4 +564,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    from refresh_results import bounded_main
+
+    bounded_main(main)

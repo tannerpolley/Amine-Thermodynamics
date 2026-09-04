@@ -17,7 +17,7 @@ from pathlib import Path
 import epcsaft
 from epcsaft import equilibrium, regression
 
-from generate_figure_data import corrected_request
+from shared_evaluation import corrected_request, verify_wheel
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
@@ -283,6 +283,7 @@ def run_candidate(candidate: str, smoke: bool) -> None:
 
 
 def main() -> None:
+    verify_wheel()
     parser = argparse.ArgumentParser()
     parser.add_argument("candidate", choices=tuple(CANDIDATES))
     parser.add_argument("--smoke", action="store_true")
@@ -291,4 +292,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    from refresh_results import bounded_main
+    bounded_main(main)
