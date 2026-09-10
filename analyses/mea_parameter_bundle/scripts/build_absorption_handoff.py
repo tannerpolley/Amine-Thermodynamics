@@ -292,18 +292,6 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
         "history/final-candidate-comparison.csv": source(
             ANALYSIS / "results/best-in-slot-campaign/final-full-validation-summary.csv"
         ),
-        "history/automatic-extended-full-states.csv": source(
-            ANALYSIS
-            / "results/born-permittivity-study/automatic-extended-full-states.csv"
-        ),
-        "history/automatic-extended-full-targets.csv": source(
-            ANALYSIS
-            / "results/born-permittivity-study/automatic-extended-full-targets.csv"
-        ),
-        "history/automatic-extended-full-summary.csv": source(
-            ANALYSIS
-            / "results/born-permittivity-study/automatic-extended-full-summary.csv"
-        ),
         "figures/pressure.pdf": source(
             ANALYSIS / "figures/pressure/output/pressure-diagnostic-replay.pdf"
         ),
@@ -344,7 +332,6 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
                 "adoption-receipt.json",
                 "sensitivity-check-receipt.json",
                 "parity-receipt.json",
-                "benchmark-receipt.json",
             )
         },
     }

@@ -241,8 +241,8 @@ Render that experiment with `render_figures.py --permittivity-comparison
 results/permittivity-comparison`. To inspect the retained historical comparison,
 explicitly pass `results` instead; neither is part of the current refresh.
 
-The generation receipt under `results/` anchors the retained speciation grid,
-selected pressure replay, current failure table, and fit tables. The pressure
+The generation receipt under `results/` anchors the selected pressure replay,
+current failure table, and fit tables. The pressure
 replay preserves certified continuation states across nearby loadings and,
 when needed, neighboring temperatures while retaining the original independent
 start as a fallback. The main
@@ -253,9 +253,9 @@ Exact reported zeros remain in the retained observation snapshot but are
 omitted from the plots. Each broken logarithmic axis starts its expanded panel
 30% below the lowest positive HCO3- observation
 or model value, ends 3% above the displayed maximum, and compresses the range
-from 1e-10 to that HCO3- cutoff. The retained speciation line snapshots are
-direct Engine grids generated with the selected extended-Born and reaction-adjusted
-parameter mapping.
+from 1e-10 to that HCO3- cutoff. The plotted line tables are local render
+products regenerated from the selected extended-Born and reaction-adjusted
+parameter mapping when the figures are refreshed.
 Pressure lines are shape-preserving render-time interpolations of the selected
 bundle's reactive Engine evaluations at the active-v1 observation coordinates. The pressure view includes
 Aronu, Hilliard, Idris, Jou, Mamun, and Xu. Current coverage and failed states
@@ -271,26 +271,15 @@ start and reject unsupported parameter substitutions.
 `quick-endpoint-perturbation-screen.csv` and its receipt retain the earlier
 representative-state full bubble-point endpoint diagnostic and the single
 SciPy reaction-root consistency check. The complete superseding sensitivity,
-pivot--slope, refinement, full-validation, and boundary results are retained
-under `results/best-in-slot-campaign/`.
+full-validation summary and selected row-level results are retained under
+`results/best-in-slot-campaign/`; rerunnable trial grids and caches stay local.
 `results/born-permittivity-study/` supersedes the narrower dielectric
-comparison for structure selection. It retains the A--E original-Born screen,
-the original-versus-SSM+DS factorial, Figiel factor and Zuber
-analog/fallback-ion screens,
-the complete 161-pressure plus 44-speciation comparison, a coupled molecular-CO2
-pool-exclusion check, paired common-row statistics, preserved bubble-pressure
-and certificate failures, grouped residuals, Engine parity, density-anchor
-timing, deterministic formulation construction, and hashes. Molecular CO2
-pool exclusion means exclusion from both SSM $f_{mix}$ and the salt-free
-neutral-permittivity pool while CO2 remains a reacting EOS component. The
-selected live mapping
-remains `results/selected-current-best-parameters.json`; the active handoff ZIP
-contains the same switch-free mapping and candidate Engine wheel. The
-automatic-activation sparse replay and the six-ion
-Born-diameter/MEA-solvation-factor sensitivity are retained in the same
-directory, together with the full 205-state replay of the best sparse joint
-direction. `scripts/render_born_permittivity_study.py` reads retained
-tables and creates the selected figures without rerunning the Engine.
+comparison for structure selection. It retains the study summary, paired
+common-row comparisons, and selected sensitivity tables; full trial matrices
+and failure dumps are reproducible and stay local. Molecular CO2 pool exclusion
+means exclusion from both SSM $f_{mix}$ and the salt-free neutral-permittivity
+pool while CO2 remains a reacting EOS component. The selected live mapping
+remains `results/selected-current-best-parameters.json`.
 
 Render from this directory with:
 
@@ -305,8 +294,9 @@ the sidebar links to every child report.
 The wrapper checks result freshness and always passes `--no-execute`, so
 rendering cannot rerun the model. A successful build hashes the source and HTML;
 manual prose remains investigator-reviewed, not inferred from a timestamp.
-The former LaTeX/PDF notebook is retired; historical prose remains in Git,
-while numerical results, bibliography, and all figure bundles remain in place.
+The former LaTeX/PDF notebook is retired; historical prose and selected
+evidence remain in Git, while rerunnable detail tables and plot sidecars stay
+out of the mergeable tree.
 
 ## Related species-reduction and sensitivity analysis
 
@@ -319,7 +309,7 @@ companion notebook remains the detailed calculation record so its results are
 not copied into parallel status files.
 
 The latest shared-driver refresh stopped at pressure state 87/161 after 900
-seconds. The retained figures, HTML, thermal checks, and ZIP are not a current
+seconds. The retained figures, HTML, and thermal checks are not a current
 synchronized publication. The corrected `notebook.qmd` can still be rendered
 for day-to-day discussion with `bash render.sh notebook.qmd --working-copy`.
 That render includes a visible warning, uses the retained figures as labeled,
@@ -337,19 +327,12 @@ retained transfer values remain blue unless a specific test justifies reopening
 them. The working-note callout is part of the Quarto source, preserving the
 normal page margins and table-of-contents sidebar in both render modes.
 
-Build the deterministic absorption-agent handoff with:
+Build the deterministic absorption-agent handoff locally when needed with:
 
 ```bash
 uv run python scripts/build_absorption_handoff.py
 ```
 
-The resulting `results/handoff/mea-reactive-epcsaft-parameter-bundle.zip` contains
-the selected parameter mapping, reaction definition, pinned Engine wheel,
-fit results, figure, notebook, file hashes, and an
-executable verifier. Packaging checks the recorded adoption and the complete
-data → figure → notebook hash chain before atomically replacing the stable ZIP.
-Earlier study comparisons are explicitly packaged under `history/`.
-
-`references.bib` is a byte-for-byte snapshot of the configured Zotero Better
-BibTeX library export at `$HOME/Zotero/exports/references.bib`. Copy that live
-master here after Zotero updates; the notebook prints only cited entries.
+The generated ZIP is intentionally local and is not a checked-in result. The
+packager verifies the selected mapping and current source hashes before writing
+it.
