@@ -3,6 +3,8 @@
 - Status: authoritative scientific plan; native GitHub issues own execution
 - Scope: model selection, regression, validation, and two manuscript boundaries
 - Live work queue: native GitHub issues only
+- Evidence/issue-state reconciliation: 2026-09-08; see the
+  [repository audit](REPOSITORY_AUDIT_2026-09-08.md)
 
 The complete audited document map is
 [`DOCUMENT_AUTHORITY_INDEX.md`](DOCUMENT_AUTHORITY_INDEX.md).
@@ -14,7 +16,9 @@ monoethanolamine (MEA)--water (H2O)--carbon dioxide (CO2) electrolyte
 Perturbed-Chain Statistical Associating Fluid Theory (ePC-SAFT) model that
 predicts source-backed CO2 pressure and speciation observations and,
 when supported, caloric observations. The primary
-application domain is 30 mass % MEA from 315 to 360 K; the pressure and
+application use case is 30 mass % MEA from 315 to 360 K. Engine Issue #80
+requests qualification across 293.15–393.15 K; this is a campaign target,
+not an already validated domain. The pressure and
 CO2-loading intervals are the intersection of the source, equation,
 fitted-parameter, experimental-comparison, and downstream-property domains.
 Compare the frozen candidate with observations not used for estimation or
@@ -26,7 +30,8 @@ Direct analysis and validation whose calculation is performed by ePC-SAFT is
 first built and debugged in `ePC-SAFT-project/analysis/` or `validation/`.
 MEA-Thermodynamics may then reproduce the pinned method directly with an
 accepted immutable packet and MEA-owned inputs. Engine Issue #80 owns the
-current campaign; no active MEA parameter set exists meanwhile.
+current upstream bundle campaign; MEA Issues #83–#86 describe separate local
+diagnostic work. Neither campaign has established an active MEA parameter set.
 
 The endpoint is not the lowest available sum of squared residuals. It is a
 retained model-form decision and parameter record with an explicit domain,
@@ -71,6 +76,15 @@ and retained physical interactions. This plan applies it as follows:
 5. Constrain the retained electrostatic parameters with direct evidence before
    the final reactive regression.
 
+These qualification steps are scientific requirements, not a declaration that
+the historical configuration is the current selected vector. The exploratory
+incumbent in `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json`
+uses extended Born and solvent-only mass-fraction dielectric mixing, with
+reaction-temperature and CO2 dispersion selections. Engine Issue #80 describes
+a distinct source-tier campaign baseline. Preserve both identities; compare
+them only through a declared same-row calculation. A favorable historical
+ablation does not settle model choice for a changed parameter vector.
+
 A paper reproduction is evidence for equations, parameter transfer, numerical
 convergence or failure, or a limited comparison. It is not automatic adoption.
 Methyldiethanolamine (MDEA) papers inform equation selection and failure
@@ -79,10 +93,10 @@ explicit, valid transformation.
 
 ## 4. Data authority and partitions
 
-Issue #62 owns reconciliation of the fixed-evaluation manuscript inventory and
-the predictive inventory. Until it closes, row counts from different analyses
-must retain their exact input-table identity and hash and may not be blended
-into one claimed dataset.
+Closed Issue #62 retains reconciliation of the fixed-evaluation manuscript
+inventory and the predictive inventory. Row counts from different analyses
+still require exact input-table identity and hash; closure does not permit
+blending different inventories into one claimed dataset.
 
 Each observation records source and row identity, reported quantity, unit,
 basis, temperature, apparent composition/loading, uncertainty or a justified
@@ -91,9 +105,14 @@ status, and partition. Structural zeros, measured zeros, aggregate
 observations, inferred context, and censoring remain distinct.
 
 Every row already opened during a candidate comparison is model-selection
-evidence, including rows previously labeled reserved. Issue #14 freezes a
-genuinely untouched replacement partition before access; if none exists, the
-plan records that independent validation is blocked. Domain-challenge rows
+evidence, including rows previously labeled reserved. Closed Issue #14 retains
+the earlier independent-comparison decision; a future campaign must freeze a
+genuinely untouched replacement partition before access. If none exists,
+independent validation remains blocked. The local `holdout-evaluations.csv`
+already records access to Xu pressure and Kim–Svendsen 120 °C heat during
+reaction selection. These are available diagnostic comparisons, not untouched
+validation for that selection. Reconcile exact row access with the Engine
+campaign before accepting its separately declared holdouts. Domain-challenge rows
 remain visible but do not become scoring rows merely because a solver returns
 a value. Plotting uses the immutable evaluated-row table stored by `FitResult`;
 it never reruns thermodynamics.
@@ -200,11 +219,14 @@ promotion evidence.
 
 ### MEA-Thermodynamics
 
-The current fixed-parameter manuscript remains intact until neutral and
-electrostatic qualification freeze a selected model and issues #13 and #14
-complete predictive regression, replacement independent validation,
-identifiability, and uncertainty. Issue #68 then owns the claim-by-claim
-manuscript evolution. Issue #10 is the final submission gate.
+The current manuscript supports fixed-parameter comparisons and the negative
+predictive decision. Issue #68's later scope comment narrows its earlier
+predictive body to that supported-negative account. Closed #13/#14/#70 are
+historical outcomes, not evidence of a predictive fit. A future predictive
+revision requires a newly reviewed candidate, replacement independent
+validation, identifiability and uncertainty evidence. Issue #10 remains the
+final submission gate. No exploratory notebook result is promoted to the
+manuscript by this roadmap update.
 
 The revised paper must distinguish literature reproduction, calibration,
 model selection, independent validation, and domain challenges. Every model-vs-
@@ -223,30 +245,28 @@ not retroactively validate the thermodynamic fit, and the
 thermodynamics paper does not claim absorber CO2 capture, energy duty,
 temperature profile, or hydraulic behavior.
 
-## 9. Live issue graph
+## 9. Issue ownership as checked on 8 September 2026
 
-- #62: observation-inventory reconciliation
-- #63: neutral pure and binary qualification
-- #64: shell-Born permittivity sensitivity and independent electrostatic evidence
-- #65: reciprocal CO2--water induced-association qualification
-- #67: retained physical-configuration freeze
-- #13: predictive regression through the typed public equilibrium and
-  regression callables
-- #14: independent validation and identifiability
-- #70: parameter-record assembly and predictive-claim decision
-- #68: predictive manuscript evolution
-- #10: final predictive-manuscript readiness
+- Closed #62–#65/#67: observation, neutral, electrostatic, induced-association
+  and configuration evidence for the historical campaign.
+- Closed #13/#14/#70: regression, independent-comparison and supported-negative
+  parameter decision. Closed #61/#66 retain superseded hierarchy decisions.
+- Open #83/#84: F/S and ionic screens; later reports retain diagnostic results.
+- Open #85: reviewed shared start-volume correction reported complete in
+  `codex/reaction-partition-fs-study`, not integrated into this checkout.
+- Open #86: corrected v4 ionic comparison reported complete with no
+  non-degrading direction and ten certificate failures. Underlying work is
+  uncommitted in its owning checkout. Open state does not mean it needs rerunning.
+- Open #68/#10: supported-negative manuscript evolution and submission gate.
 
-Issues #61 and #66 are closed historical records for the superseded M-number
-factorial plan and the supported negative polar-model decision, respectively.
-
-Engine issues #44 and #48 own the application-independent and MEA-intensive
-GREPE calculations; #50 owns the current typed-failure defect, and #51 owns the
-optional simultaneous regression backend. Column issue #3 owns its current
-electrolyte-path validation and Column issue #12 owns its context and
-predictive-manuscript revision plan. Lithium issues #58, #73, #76, and
-#78 are a parallel downstream GREPE study and do not gate MEA parameter
-adoption.
+[Engine #80](https://github.com/tannerpolley/ePC-SAFT/issues/80) owns the final
+full-range bundle; [#119](https://github.com/tannerpolley/ePC-SAFT/issues/119)
+owns minimal CO2–MEA calibration using native Ceres, with its own prerequisites
+and immutable wheel. This plan does not replace that issue's parameter block,
+scales, folds or derivative gates with local exploratory choices. Cross-repo
+historical issues in the authority index are navigation, not current task
+state; reread their owners before executing work. No GitHub issue was changed
+by this audit.
 
 ## 10. Document disposition
 
@@ -266,19 +286,26 @@ No document in this table is a second issue tracker. When a decision changes,
 the successor names the superseded document and the GitHub issue records the
 work.
 
-## 11. Immediate sequence
+## 11. Prioritized evidence sequence
 
-1. Close the observation-inventory and equation/parameter prerequisites in
-   #62--#67.
-2. Use #13 to estimate the retained fitted coordinates through the typed public
-   equilibrium and regression callables with complete row, failure, and
-   derivative evidence.
-3. Use #14 to audit row access, freeze replacement independent observations,
-   and assess identifiability and uncertainty.
-4. Use #70 to assemble one parameter record and decide whether the evidence
-   supports predictive pressure and speciation claims.
-5. Revise the thermodynamics manuscript through #68 only after that decision,
-   then begin the column's predictive third lane.
+This is a scientific dependency order, not authorization to run new campaigns.
+
+| Priority | Question and smallest useful work | Evidence required to advance |
+|---|---|---|
+| 1 — numerical identity | Reconcile the reviewed #85 v4 shared correction and #86 result tables with their owner before changing this checkout. Read retained results before rerunning anything. | Exact source/input/wheel hashes, preserved v3 history, rejected snapshots, and confirmation of which code is present. Current v3 publication cannot be relabeled corrected. |
+| 2 — numerical coverage | Resolve the remaining start-sensitive certificate failures under a declared same-model start/branch policy. | Same-row incumbent/candidate predictions, all failed targets and denominators, conservation/reaction/EOS certificates, starts, density and branch diagnostics; no arbitrary density cutoff or claim of global stability. |
+| 3 — source qualification | Reconcile neutral, reaction, ionic, dielectric and caloric evidence and their temperature/concentration domains. | Exact locators and transforms; classify direct observations, inferred context, censored zeros, source uncertainty and extrapolation. MEA–water's fitted high-temperature domain and R4/R5's limited source domain stay explicit. Seek direct ionic/volumetric or dielectric information only where it discriminates the proposed coordinate. |
+| 4 — identifiable estimation | Follow the upstream minimal CO2–MEA fit separately from the local fixed-EOS chemistry studies. For local refinement, select only coordinates distinguished by direct speciation and admitted heat as well as pressure. | Exact derivative checks, scaled weighted Jacobian rank and correlated directions, active bounds, deterministic starts and bounded parameter profiles. Do not fit all tabulated values or trade off groups silently. Failed directions from #86 are not estimates of uncertainty. |
+| 5 — model selection | Compare eligible structures on frozen source/campaign blocks with declared residual scales. | Complete evaluated-row tables, paired masks and failure accounting; pressure, each speciation group and heat reported separately. Calorimetry needs exact paired endpoints, reference/gauge identity and thermodynamic K(T)/enthalpy consistency. |
+| 6 — independent validation | Freeze a candidate and genuinely unused data before evaluating it. | Row-access audit, untouched source/campaign blocks in the intended domain, preregistered error limits and uncertainty; if none are available, retain a calibrated diagnostic claim. Previously opened Xu/120 °C rows cannot supply this gate. |
+| 7 — adoption and delivery | Repair/review the writer before any future adoption, then serialize and replay exactly the scored vector. | R1–R5, EOS, sources, wheel, data and output hashes agree; all selected-vector coverage and scientific gates pass. The old candidate replay changed R1/R3 that the saved vector omitted. Preserve older versions and reasons, then render/package only current verified results. |
+| 8 — intended use | Revise the thermodynamics manuscript from accepted evidence, then allow separately reviewed column integration. | Author-approved manuscript claims and exact figures; column composition/activity/enthalpy mappings, transport/kinetic admission, numerical convergence and independent NCCC comparisons. A ZIP or film-input check alone is not predictive authorization. |
+
+The smallest next scientific action is to inspect the retained #85/#86 corrected
+failure evidence and agree on the treatment of remaining start-sensitive states
+before any joint comparison. Do not repeat the old six-direction screen or
+launch a broad publication refresh from this v3 checkout. Source acquisition,
+fitting, adoption and cross-checkout integration require their own scoped work.
 
 The optional simultaneous full-space formulation can proceed as a separate
 Engine algorithm study with stated problem size, hardware, runtime, memory,

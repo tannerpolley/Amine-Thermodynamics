@@ -99,7 +99,7 @@ Tong's Eq. (12) is `ln K = a_i/(T/K) + b_i ln(T/K) + c_i(T/K) + d_i`. Table 5 (p
 | K4, MEA | -17.3 | 0 | 0.05764 | -38.846 | 293--353 K | Hamborg & Versteeg (2009) |
 | K5, MEA | -1545.3 | 0 | 0 | 2.151 | 293--323 K | **Aroua et al. (1999)** |
 
-The Table 5 footnote says K5 was converted from the original correlation to Tong's Eq. (12) form. Tong's paper is the available local primary evidence for the converted coefficients; the original Aroua et al. (1999) PDF is **not** present in local Zotero storage and remains unresolved here.
+The Table 5 footnote says K5 was converted from the original correlation to Tong's Eq. (12) form. Tong's paper is the available local primary evidence for the converted coefficients; the original Aroua et al. (1999) PDF was subsequently located in Zotero (parent `L8GDWZEW`, attachment `93Y7NVMH`, September 2026). Its coefficients still require comparison with Tong; local availability does not resolve the source-convention question.
 
 `basis warning`: Tong's K5 is molality/activity-coefficient based and is not interchangeable with Austgen/Nasrifar's mole-fraction-based R4. The older retained ideal-speciation value `A=-1.8652, B=-1545.3` was described as a conversion from molality to mole fraction; this audit does not validate that conversion. The later Nasrifar/Austgen R4 (`2.8898, -3635.09`) is a different source/reference convention and must not be mixed with Tong K5 without an explicit standard-state transformation.
 
@@ -183,6 +183,6 @@ The 0.150 value is the pressure-drop/Raman “Calculated” result; it is not th
 - Local Zotero search did not contain the Bates & Pinching (1951) PDF or
   Markdown; the official NIST PDF was independently verified and fingerprinted
   as recorded above.
-- Local Zotero search did not contain Aroua, Benamor & Haji-Sulaiman (1999), *J. Chem. Eng. Data* 44, 887--891. Tong Table 5 is the available primary paper for the converted molality coefficients.
+- Aroua, Benamor & Haji-Sulaiman (1999), *J. Chem. Eng. Data* 44, 887--891, is now locally available as noted above. Comparing the original coefficients and basis with Tong remains unresolved.
 - The source-to-common aqueous-molality conversion is now explicit. The final contraction into the Provider Helmholtz basis remains unavailable because the provisional nine-species bundle has no qualified applicability domain.
 - Böttinger and Wong give different observable bases (true mole fractions versus mol/kg/Raman calibration) and different temperature/pressure protocols. They must not be joined by inferred row pressure or denominator conversion.

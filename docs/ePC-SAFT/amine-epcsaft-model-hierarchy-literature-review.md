@@ -1,8 +1,14 @@
-# Aqueous amine ePC-SAFT evidence and parameterization plan
+# Aqueous amine ePC-SAFT literature and model lineage
 
-## 1. Decision
+This document preserves the literature rationale and historical model choices.
+The [scientific plan](../scientific/PREDICTIVE_MEA_PROGRAM.md) owns the current
+estimation strategy; the [context map](../scientific/CONTEXT.md) connects it to
+completed studies and real gaps. Historical choices below are not instructions
+to reset the current exploratory incumbent.
 
-The MEA program now targets one explicit-electrolyte, nine-species model with
+## 1. Historical model comparison
+
+The historical comparison targeted one explicit-electrolyte, nine-species model with
 CO2-water induced association fixed. Model selection compares only two Born
 and relative-permittivity formulations:
 
@@ -101,8 +107,8 @@ parameters transfer only when their species definition, water family,
 association topology, standard state, units, and fitted domain also match.
 Canonical citation metadata and DOIs are in
 [`docs/latex/manuscript_references.bib`](../latex/manuscript_references.bib);
-the inspected repository text extractions are under
-[`docs/papers/md`](../papers/md/).
+the primary-paper reading copies and exact source identities are in
+[`literature/index.csv`](../../literature/index.csv).
 
 ## 5. Parameter ownership
 
@@ -119,31 +125,18 @@ the inspected repository text extractions are under
 | Relative-permittivity parameters | Unloaded and loaded solution measurements | Compare direct and screened formulations independently of pressure fitting |
 | Reaction correlations | Source correlations with declared temperature domains | Fixed initially; reopen only after EOS qualification |
 
-### 5.1 Current bundle and future promotion
+### 5.1 Parameter adoption and estimation ownership
 
-This review fixes the admissible model structure and provenance rules. There is
-now an active MEA mapping under
-`analyses/mea_parameter_bundle/results/selected-current-best-parameters.json`:
-the full retained-state comparison selects Uyan solvent-only dielectric mixing
-for the working nine-species bundle. It is calculation authority for the
-bounded notebook replay. A future replacement
-bundle must bind:
+The exploratory incumbent is
+`analyses/mea_parameter_bundle/results/selected-current-best-parameters.json`.
+Read its [parameter history](../../analyses/mea_parameter_bundle/results/parameter-record-history.csv)
+and [working notebook](../../analyses/mea_parameter_bundle/notebook.qmd) for the
+later calculations. It is not an accepted MEA parameter set.
+The scientific plan owns the parameter ladder and acceptance requirements;
+the [volumetric synthesis](meah-meacoo-volumetric-evidence.md) and its linked
+preregistration already define the detailed ionic estimation strategy.
 
-- the immutable Engine wheel and SHA-256 hash;
-- the species, reactions, standard states, association graph, and
-  electrostatic formulation;
-- every parameter identity, value, unit, bound, and evidence status;
-- the exact calibration and comparison row identities and hashes;
-- optimizer termination, rank, conditioning, active bounds, residual
-  summaries, and uncertainty results; and
-- the downstream-property coverage and explicit transfer decision.
-
-Until those checks pass, the current bundle retains its stated 69/79 pressure
-and 44/44 speciation coverage and its reported error limits. This review
-remains source-chain evidence explaining why the parameter blocks and
-validation requirements exist.
-
-## 6. Neutral qualification
+## 6. Historical neutral qualification
 
 ### 6.1 Pure components
 
@@ -175,13 +168,13 @@ under the fixed induced-association topology. Fit and challenge pressure ranges
 remain separate. The resulting `k_CO2,H2O(T)` is frozen before any reactive MEA
 fit.
 
-## 7. Electrostatic comparison
+## 7. Historical electrostatic comparison
 
-Both retained configurations use solvation-shell-modified Born. The practical
-MEA candidate uses the Figiel-style ion-fraction suppression law and its
+Both retained configurations use solvation-shell-modified Born. The historical
+MEA candidate used the Figiel-style ion-fraction suppression law and its
 source-fixed discrete choices. A fixed-parameter sensitivity at 313.15 K
 rejected original-Born and shell-Born solvent-only controls because they found
-vapor-scale rather than liquid-scale roots under the current parameter set.
+vapor-scale rather than liquid-scale roots under that historical parameter set.
 Direct dielectric, solvation, transfer, and activity observations are still
 needed to constrain the retained electrostatic parameters independently.
 
@@ -189,42 +182,12 @@ Missing MEAH+ or MEACOO- solvation evidence does not create another freely
 fitted pressure coordinate. It yields a source-centered prior or a retained
 uncertainty interval whose effect is reported explicitly.
 
-## 8. Regression sequence
+## 8. Existing estimation research
 
-1. Freeze observation identities, source groups, reaction definitions, and the
-   immutable Engine wheel.
-2. Select the neutral MEA pure and ordinary-association family.
-3. Fit `k_MEA,H2O`, `k_CO2,H2O(T)`, and `k_CO2,MEA` on physical binary data.
-4. Constrain the retained shell-Born ion-suppressed formulation on independent evidence.
-5. Estimate the smallest full-rank MEAH+/MEACOO- block using speciation and
-   volumetric observations.
-6. Fit coupled reactive pressure and same-state speciation with shared global
-   parameters and local equilibrium states.
-7. Inspect rank, conditioning, active bounds, source-group residuals,
-   temperature trends, and start sensitivity.
-8. Reopen only physically named reaction-correlation coefficients supported by
-   remaining multi-temperature structure.
-9. Select by source-blocked validation, refit on all admitted observations,
-   quantify uncertainty, and retain one complete parameter set.
-
-## 9. Numerical method
-
-The current reduced-space calculation solves each equilibrium state inside the
-parameter objective. It is scientifically valid but expensive. The mature
-formulation should also support one sparse simultaneous NLP: experiment-local
-phase compositions, densities, and reaction coordinates; shared global model
-parameters; and one summed pressure/speciation/caloric objective. Scientific
-parameter staging stays the same under either numerical formulation.
-
-Fast development uses cached compiled states, exact total derivatives, one or
-two workers, and representative rows. Full source collections run only for a
-retained candidate. Solver residual and balance tolerances are not weakened to
-improve fit statistics.
-
-## 10. Manuscript claim boundary
-
-The manuscript may claim a selected predictive MEA parameterization only after
-the complete parameter table, source-separated validation, all-row accounting,
-pressure and speciation results, uncertainty analysis, and immutable-wheel
-replay are available. Until then, the calculations establish formulation and
-parameter sensitivities rather than predictive completion.
+The estimation sequence is already developed in the
+[scientific plan, §§4–7](../scientific/PREDICTIVE_MEA_PROGRAM.md), with the
+[ionic identification strategy](meah-meacoo-volumetric-evidence.md) specifying
+analog data, active coordinates, objectives, uncertainty and staged fitting.
+Completed and blocked calculations are mapped in
+[CONTEXT.md](../scientific/CONTEXT.md). Consult those records before proposing
+another strategy review or treating an old implementation limit as current.
