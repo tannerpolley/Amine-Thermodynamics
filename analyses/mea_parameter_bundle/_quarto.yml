@@ -1,12 +1,18 @@
 project:
   type: default
+  output-dir: _site
   render:
     - notebook.qmd
+    - neutral-mea-water/index.qmd
+    - ionic-speciation-fit/index.qmd
+    - co2-r4-calibration/index.qmd
+    - reaction-temperature-fit/index.qmd
+    - born-permittivity/index.qmd
+    - calorimetry/index.qmd
+    - coupling-and-identification/index.qmd
+    - association-topology/index.qmd
+    - historical-designs/index.qmd
 
 # A normal or release render never executes document code.
 execute:
   enabled: false
-
-format:
-  html:
-    embed-resources: true

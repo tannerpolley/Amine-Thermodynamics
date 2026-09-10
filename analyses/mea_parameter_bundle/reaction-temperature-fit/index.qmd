@@ -1,0 +1,75 @@
+---
+title: "Reaction-temperature fit"
+subtitle: "A two-direction sensitivity fit across pressure, speciation and heat"
+execute:
+  enabled: false
+---
+
+::: {.callout-warning}
+The broader replay below used all five reaction shifts. The selected JSON
+saved only R2/R4/R5; the R1/R3 omission is a known adoption-record limitation.
+:::
+
+# Question
+
+Can temperature-dependent reaction corrections improve the three coupled
+observables—CO₂ pressure, species distribution and absorption heat—without
+reopening the EOS parameters?
+
+# Starting point and strategy
+
+The revised screen retained 33 targets common to all perturbations: five Jou
+1995 pressure rows at 80/120 °C, 22 Böttinger 2008 speciation targets at
+20–80 °C, and six Kim–Svendsen 2007 heat intervals at 40/80 °C. Xu pressure
+and 120 °C heat were excluded from the fitting objective; Kim 2014 heat was a
+comparison, not a fit target. Eight additional target keys were excluded when
+at least one perturbation was non-evaluable.
+
+With EOS parameters fixed, baseline and ±2.5 kJ mol⁻¹ perturbations of all five
+reactions supplied finite-difference sensitivities. The fit preserved each
+reaction's $\ln K$ at 313.15 K, used log-ratio residuals for pressure/speciation
+and kJ mol⁻¹ CO₂ differences for heat, balanced target families and then
+retained two SVD directions. Bounded least squares reached both ±5 kJ mol⁻¹
+direction limits; one recenter tested the unbounded proposal through exact
+Engine calculations.
+
+::: {.parameter-table .reaction-coefficients-table}
+| Reaction | Current coefficients | Adopted enthalpy shift (kJ mol⁻¹) |
+|:--|:--|--:|
+| R2 · CO₂ hydration | $A=232.3314$; $B=-11105.64$ K | −8.2019 |
+| R4 · carbamate hydrolysis | $A=1.5050153742$; $B=-1317.0490$ K | −4.8078 |
+| R5 · MEAH⁺ dissociation | $a=3037.6400$ K; $b=-1.0173151$ | +8.4185 |
+:::
+
+# Numerical result
+
+The exact sparse weighted residual norm changed **1.0000 → 0.7530** for the
+bounded fit and **0.6559** for the selected proposal. The selected sparse
+RMSEs were 0.1634 for pressure, 0.0998 for speciation and 7.1813 kJ mol⁻¹
+CO₂ for heat. Native R4/R5 derivatives differed from finite differences by at
+most 0.22% over 45 checked rows.
+
+::: {.parameter-table .numeric-table}
+| Cohort | Paired targets | Baseline RMSE → candidate RMSE |
+|:--|--:|--:|
+| Pressure calibration, log₁₀ ratio | 143 | 0.3344 → 0.2366 |
+| Xu 2011 pressure comparison | 18 | 0.3096 → 0.1901 |
+| Speciation, log₁₀ ratio | 125 | 0.3702 → 0.3670 |
+| Kim–Svendsen 40/80 °C heat | 66 | 20.01 → 11.84 kJ mol⁻¹ CO₂ |
+| Kim–Svendsen 120 °C heat | 20 | 39.30 → 31.15 kJ mol⁻¹ CO₂ |
+| Kim 2014 heat comparison | 27 | 16.84 → 10.71 kJ mol⁻¹ CO₂ |
+:::
+
+# Conclusion and limits
+
+The two retained directions improved pressure and heat more than speciation.
+Carbamate and bicarbonate partition remained poor, and the 120 °C heat bias
+remained large. The paired table is candidate-replay evidence, not an exact
+replay of the selected JSON because R1/R3 shifts were omitted from that
+document. A hash-matched selected-JSON heat replay gives 11.8497, 31.1500 and
+10.7128 kJ mol⁻¹ CO₂ for the three heat cohorts. No independent identification
+of each coefficient or confidence interval was established.
+
+# Records
+
+[Screen targets, weights and directions](../results/reaction-temperature-fit/screen-receipt.json) · [Candidate result](../results/reaction-temperature-fit/candidate-receipt.json) · [Paired replay and omission record](../results/reaction-temperature-fit/adoption-receipt.json) · [Derivative check](../results/reaction-temperature-fit/sensitivity-check-receipt.json) · [Study README](../results/reaction-temperature-fit/README.md)

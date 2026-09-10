@@ -1,0 +1,67 @@
+---
+title: "Historical ionic/speciation fit"
+subtitle: "What the seven-coordinate MEAH⁺/MEACOO⁻ fit did—and did not—establish"
+execute:
+  enabled: false
+---
+
+::: {.callout-warning}
+This fit is historical evidence behind the exploratory bundle values. It is
+retained for provenance and diagnosis, not as an accepted ionic parameter set.
+:::
+
+# Question
+
+Could a small set of MEAH⁺ and MEACOO⁻ segment, dispersion, Born and mutual
+interaction parameters improve the available MEA speciation data while
+remaining numerically and scientifically interpretable?
+
+# Starting point and strategy
+
+Eight nominally 30 mass% MEA states at ambient pressure supplied 22 species
+residuals. The states came from Böttinger 2008 (four), Jakobsen, Krane &
+Svendsen 2005 (two), and Matin et al. 2012 (two), covering MEAH⁺, carbamate,
+bicarbonate, carbonate and combined free/protonated MEA observations.
+
+The historical ePC-SAFT 1.5.2 runtime was used. A bounded soft-L1 least-squares
+fit used log₁₀(model/data) residuals, scaled parameter coordinates and a weak
+pull toward the starting vector. Seven coordinates moved simultaneously:
+
+::: {.parameter-table .parameter-change-table}
+| Parameter | Starting value → retained value |
+|:--|:--|
+| MEAH⁺ $\sigma$ (Å) | 3.563 → 3.48508556586 |
+| MEAH⁺ $\epsilon/k$ (K) | 228.71 → 232.687201645 |
+| MEAH⁺ $d_B$ (Å) | 3.563 → 3.53322927146 |
+| MEACOO⁻ $\sigma$ (Å) | 3.5605 → 3.53543525721 |
+| MEACOO⁻ $\epsilon/k$ (K) | 533.11 → 453.265244384 |
+| MEACOO⁻ $d_B$ (Å) | 3.5605 → 3.54107030822 |
+| MEAH⁺–MEACOO⁻ $k_{ij}$ | 0 → −0.00201813457644 |
+:::
+
+# Numerical result
+
+Overall log-RMSE changed from **0.27144 to 0.26766** (about 1.4%). Mean
+absolute log residual changed 0.17390 → 0.17025 and median absolute log
+residual changed 0.10105 → 0.09885. Carbamate RMSE improved 0.09008 →
+0.08282, while combined MEA + MEAH⁺ slightly worsened 0.10685 → 0.10976.
+
+Two final residual rows at the Böttinger 20 °C, loading 0.075 state came from
+a nonconverged solve. Best-effort finite predictions remained in the reported
+metrics. The fit was speciation-only: pressure parity was not regenerated, no
+independent validation was run, and no confidence interval was established.
+
+# Conclusion and limits
+
+The fit records a small in-sample improvement, but the improvement is too
+small and too entangled with failed-state predictions to qualify the seven
+coordinates. The retained values are useful historical seeds and a warning
+about the identification problem: speciation alone did not demonstrate that
+MEA ion size, dispersion, Born diameter and mutual interaction can be
+separately estimated. The later volumetric and coupled-fit plans therefore
+kept these roles explicit rather than treating this fit as a solved ionic
+regression.
+
+# Records
+
+[Original fit summary](https://github.com/tannerpolley/MEA-Thermodynamics/blob/897bb6e8842b17016ce5995c30d9021fcf1d44c/analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_fit_summary.json) · [Exact target states](https://github.com/tannerpolley/MEA-Thermodynamics/blob/897bb6e8842b17016ce5995c30d9021fcf1d44c/analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_speciation_fit_data.csv) · [Species statistics](https://github.com/tannerpolley/MEA-Thermodynamics/blob/897bb6e8842b17016ce5995c30d9021fcf1d44c/analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_fit_statistics.csv) · [Current source audit](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/ePC-SAFT/full-component-parameter-source-audit.md#species-audit)

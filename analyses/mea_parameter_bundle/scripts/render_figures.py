@@ -380,6 +380,7 @@ def render_pressure() -> None:
                 line_y,
                 color=color,
                 linewidth=1.8,
+                linestyle="--",
                 label=f"{temperature} °C model",
             )
             line_rows.extend(
@@ -468,7 +469,7 @@ def render_pressure() -> None:
         output,
         "pressure-diagnostic-replay",
         "30 wt% MEA carbon-dioxide pressure replay",
-        "Smooth lines through successfully evaluated reactive ionic Engine states and all 161 active-v1 observations from Aronu, Hilliard, Idris, Jou, Mamun, and Xu at 40--120 degrees Celsius.",
+        "Dashed PCHIP lines through successfully evaluated reactive ionic Engine states and all 161 active-v1 observations from Aronu, Hilliard, Idris, Jou, Mamun, and Xu at 40--120 degrees Celsius.",
         line_data,
         output / "pressure-observations.csv",
         output / "pressure-model.csv",

@@ -1,0 +1,55 @@
+---
+title: "Ideal reaction-equilibrium reference"
+subtitle: "Manuscript-owned baseline results with source-owned six-species and neutral-pressure inputs"
+execute:
+  enabled: false
+---
+
+::: {.callout-note}
+This page presents retained ideal reference evidence. It does not define an
+active ePC-SAFT parameter set and does not rerun the generators during a site
+build.
+:::
+
+## Ownership and question
+
+This analysis owns the curated ideal pressure and ideal-activity speciation
+tables and figures. It asks how the source-controlled reaction system compares
+with the retained pressure and speciation observations over the canonical
+temperature and loading coordinates.
+
+The six-species calculation remains owned by
+`analyses/six_species_solubility_reference/`, and the neutral parity
+calculation remains owned by `analyses/neutral_pcsaft_pressure_reference/`.
+This page summarizes their evidence and keeps the manuscript presentation in
+one place; it does not duplicate or adopt their result ownership.
+
+## Retained results
+
+The ideal pressure table contains 31 observations for both the legacy
+Smith–Missen and neutral reference lanes. Their overall median absolute
+log10 errors are 0.1601 and 0.1601, respectively; the retained rows are
+numerically equivalent within the source/reference precision documented in the
+result tables.
+
+The ideal speciation outputs cover the canonical comparison rows and report
+species-level log10 residual metrics, including the combined MEA + MEAH⁺ and
+carbamate partitions. The retained claim boundary and residual audit are the
+authority for interpretation:
+
+- [claim boundary](results/ideal_reference_claim_boundary.md)
+- [model lineage](results/ideal_reference_model_lineage.md)
+- [pressure metrics](results/ideal_reference_pressure_metrics.csv)
+- [speciation metrics](results/ideal_reference_speciation_metrics.csv)
+- [pressure results](results/ideal_reference_pressure_results.csv)
+- [speciation results](results/ideal_reference_speciation_results.csv)
+
+## Reproduce or render
+
+Numerical generation and figure rendering remain separate from this disabled
+documentation page:
+
+```bash
+uv run python analyses/ideal_reaction_equilibrium/scripts/generate_data.py
+uv run python analyses/ideal_reaction_equilibrium/scripts/render_figures.py
+```

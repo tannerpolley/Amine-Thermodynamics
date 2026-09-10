@@ -1,0 +1,17 @@
+[Unit]
+Description=MEA analyses Quarto site
+After=default.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Workspaces/Engineering/MEA-Thermodynamics/analyses
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=MEA_ANALYSES_HOST=127.0.0.1
+Environment=MEA_ANALYSES_PORT=8770
+Environment=MEA_ANALYSES_TIMEOUT=0
+ExecStart=%h/Workspaces/Engineering/MEA-Thermodynamics/analyses/preview.sh
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target

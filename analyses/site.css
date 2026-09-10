@@ -1,0 +1,80 @@
+main .parameter-table {
+  margin: 1rem 0 1.5rem;
+  overflow-x: auto;
+}
+main .parameter-table table {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  border-collapse: collapse;
+  font-size: .85rem;
+  white-space: nowrap;
+}
+main .parameter-table.species-table table,
+main .parameter-table.binary-interactions-table table,
+main .parameter-table.reaction-table table { min-width: max-content; }
+main .parameter-table th,
+main .parameter-table td {
+  padding: .45rem .55rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  vertical-align: middle;
+}
+main .parameter-table td p,
+main .parameter-table th p { margin: 0; }
+main .parameter-table thead th {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 600;
+}
+main .parameter-table tbody th {
+  text-align: left;
+  font-weight: 600;
+}
+main .parameter-table tbody td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+main .parameter-table tbody td:first-child { text-align: left; }
+main .parameter-table.species-table tbody td:first-child,
+main .parameter-table.reaction-table tbody td:first-child { text-align: right; }
+main .parameter-table .source-reference { text-align: center; }
+main .parameter-table .table-note {
+  display: inline-block;
+  width: 0;
+  position: relative;
+  left: .1em;
+}
+main .parameter-table.summary-table table,
+main .parameter-table.summary-table tbody td,
+main .parameter-table.association-table tbody td:nth-child(4),
+main .parameter-table.association-table tbody td:nth-child(5),
+main .parameter-table.reaction-coefficients-table tbody td:nth-child(2) {
+  white-space: normal;
+  text-align: left;
+}
+main .parameter-table.summary-table tbody td { font-variant-numeric: normal; }
+main .parameter-table .table-expression { font-style: italic; }
+main figure img { width: 100%; height: auto; max-height: none; object-fit: contain; }
+main .figure-caption { font-size: .85rem; }
+main .evidence-1, main .evidence-2, main .evidence-3 {
+  color: #17212b;
+  padding: .08em .22em;
+  border-radius: .2em;
+}
+main .evidence-1 { background: #d9efdf; }
+main .evidence-2 { background: #dceafa; }
+main .evidence-3 { background: #fff0b8; }
+main .fit-star {
+  color: #1464ad;
+  font-size: .65em;
+  vertical-align: super;
+  text-decoration: none;
+  margin: 0 .25em 0 .1em;
+}
+
+@media print {
+  #species-parameters .evidence-1, #species-parameters .evidence-2,
+  #species-parameters .evidence-3 { background: none; }
+}
