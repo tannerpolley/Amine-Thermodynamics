@@ -4,13 +4,8 @@
 exact, hashed inputs for this diagnostic replay. The generator verifies all
 three before calculation.
 
-The Born--permittivity formulation study used the retained candidate wheel at
-`engine-candidates/d8e02e4/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl`
-(SHA-256
-`2a95e27415b948149d69f92870a8ea0bbaca2ff9e32d39b9bc938ec0a77b46dd`).
-Its Engine commit `d8e02e4c6aab99669d17123248a1ac9729b47213` is the verified
-candidate used for the historical comparison. It does not replace
-the pinned wheel used by the active parameter-bundle handoff.
+The active parameter-bundle handoff uses the pinned wheel under `engine/`;
+historical comparison receipts retain their original Engine commit and hash.
 
 The parameter document is retained byte-for-byte. Its
 `data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/...` locator strings are
