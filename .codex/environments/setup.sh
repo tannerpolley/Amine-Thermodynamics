@@ -13,9 +13,27 @@ done
 
 git_common_dir="$(realpath "$(git rev-parse --git-common-dir)")"
 workspace_root="$(dirname "$(dirname "$git_common_dir")")"
-governance_root="$workspace_root/ePC-SAFT-project/governance"
-artifact_tool="$governance_root/tools/artifact_store.py"
-engine_wheel="${EPCSAFT_ENGINE_WHEEL:-$(python3 "$artifact_tool" resolve --distribution epcsaft)}"
+engine_wheel="${EPCSAFT_ENGINE_WHEEL:-}"
+if [[ -z "$engine_wheel" ]]; then
+    engine_wheel_dir="$workspace_root/ePC-SAFT-project/build/environment-wheel"
+    mapfile -t engine_wheels < <(
+        find "$engine_wheel_dir" -maxdepth 1 -type f -name 'epcsaft-*.whl' -print 2>/dev/null | sort
+    )
+    if ((${#engine_wheels[@]} != 1)); then
+        echo "expected exactly one local Engine wheel in $engine_wheel_dir; provide EPCSAFT_ENGINE_WHEEL or build ePC-SAFT locally" >&2
+        exit 1
+    fi
+    engine_wheel="${engine_wheels[0]}"
+    wheel_hash_file="$engine_wheel_dir/wheel.sha256"
+    if [[ -f "$wheel_hash_file" ]]; then
+        actual_sha256="$(sha256sum "$engine_wheel" | cut -d ' ' -f 1)"
+        expected_sha256="$(<"$wheel_hash_file")"
+        [[ "$actual_sha256" == "$expected_sha256" ]] || {
+            echo "local Engine wheel SHA-256 does not match $wheel_hash_file: $actual_sha256" >&2
+            exit 1
+        }
+    fi
+fi
 engine_wheel="$(realpath "$engine_wheel")"
 if [[ -n "${EPCSAFT_ENGINE_SHA256:-}" ]]; then
     actual_sha256="$(sha256sum "$engine_wheel" | cut -d ' ' -f 1)"
