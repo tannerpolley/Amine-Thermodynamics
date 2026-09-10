@@ -17,7 +17,7 @@ from pathlib import Path
 import epcsaft
 from epcsaft import equilibrium, regression
 
-from shared_evaluation import corrected_request, verify_wheel
+from shared_evaluation import corrected_request, load_state_packet, verify_wheel
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
@@ -108,7 +108,7 @@ def baseline_evaluable() -> set[str]:
 
 
 def prepared_observations() -> tuple[list[dict[str, object]], list[dict[str, object]]]:
-    packet = json.loads(STATE_PACKET.read_text(encoding="utf-8"))
+    packet = load_state_packet(STATE_PACKET)
     evaluable = baseline_evaluable()
     grouped: dict[tuple[str, str, int], list[tuple[float, dict[str, object]]]] = defaultdict(list)
     excluded: list[dict[str, object]] = []

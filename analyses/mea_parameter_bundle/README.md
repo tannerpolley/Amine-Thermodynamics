@@ -116,7 +116,7 @@ Verified checkpoint inputs (SHA-256):
 | `results/selected-current-best-parameters.json` | `a9186c93759f2e2c02a6c913350ad06a244fff3f82503820c9962b3df8dd40d9` |
 | `scripts/shared_evaluation.py` | `6bc94e6c628aa212ccc4a6cce32226eed42aadaca6d06692e6c9be6984b6e32d` |
 | `scripts/run_reaction_temperature_fit.py` | `cc83e4291e5d7603acf7b03be72bdacc6f1d557db9a9449e213688c29d4cf5bd` |
-| `data/input/state-packet.json` | `41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef` |
+| `data/input/state-packet.json` | `86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448` |
 | `data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl` | `40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805` |
 
 Before running in a new checkout, install that retained wheel explicitly; do
@@ -159,7 +159,7 @@ Born diameters together with a non-unit neutral solvation factor automatically
 activate corrected SSM+DS, while a zero Born diameter inherits that ion's
 Debye--Hückel diameter and recovers original Born. The notebook summarizes that parameter record and its recorded results.
 
-The retained state packet contains raw Austgen R1--R3 values in records already
+The retained compact state packet contains deduplicated requests and raw Austgen R1--R3 values in records already
 labeled with the common aqueous-molality standard state. The replay applies the
 audited source-to-common shifts before constructing each Engine problem. The
 uncorrected packet remains immutable input evidence; the correction and its
@@ -188,7 +188,7 @@ zero-vapor/ideal-CO2-feed reconstruction. The older Gibbs--Helmholtz
 pressure-slope result remains a historical secondary diagnostic; its summary
 records the input curve hash but does not establish the current parameter identity.
 
-`data/input/parameters.json` and `data/input/state-packet.json` are immutable
+`data/input/parameters.json` and the compact `data/input/state-packet.json` are immutable
 local snapshots from ePC-SAFT commit
 `38e91823b6d4f26c1d549f07aaef24a089d8e16d`. The retained Engine wheel includes
 the fast Born/permittivity implementation and solved-pressure reactive

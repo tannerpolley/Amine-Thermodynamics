@@ -15,6 +15,7 @@ from shared_evaluation import (
     installed_wheel,
     sha256,
     evaluate_state,
+    load_state_packet,
     anchor_from,
 )
 
@@ -161,7 +162,7 @@ def main(parameter_path: Path) -> None:
     assert sha256(ENGINE_WHEEL) == ENGINE_WHEEL_SHA256
     assert sha256(installed_wheel()) == ENGINE_WHEEL_SHA256
     source_parameters = json.loads(parameter_path.read_text(encoding="utf-8"))
-    packet = json.loads(STATE_PACKET.read_text(encoding="utf-8"))
+    packet = load_state_packet(STATE_PACKET)
     RESULTS.mkdir(parents=True, exist_ok=True)
     target_path = RESULTS / "permittivity-formulation-targets.csv"
     state_path = RESULTS / "permittivity-formulation-states.csv"
