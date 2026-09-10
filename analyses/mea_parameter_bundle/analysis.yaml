@@ -45,8 +45,6 @@ inputs:
     kind: local_parameter_provenance
   - path: docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md
     kind: selected_model_structure
-  - path: analyses/mea_parameter_bundle/references.bib
-    kind: zotero_better_bibtex_snapshot
   - path: analyses/mea_parameter_bundle/data/input/parameters.json
     kind: immutable_parameter_snapshot
   - path: analyses/mea_parameter_bundle/data/input/state-packet.json
@@ -78,22 +76,14 @@ outputs:
     kind: research_notebook
   - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-diagnostic-replay.pdf
     kind: canonical_speciation_figure
-  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-model-lines.csv
-    kind: plotted_model_line_snapshot
   - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-diagnostic-replay-40C.pdf
     kind: additional_temperature_speciation_figure
   - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-diagnostic-replay-60C.pdf
     kind: additional_temperature_speciation_figure
   - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-diagnostic-replay-80C.pdf
     kind: additional_temperature_speciation_figure
-  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-display-observations.csv
-    kind: plotted_observation_snapshot
-  - path: analyses/mea_parameter_bundle/figures/speciation/output/speciation-model-grid.csv
-    kind: direct_engine_model_grid
   - path: analyses/mea_parameter_bundle/figures/pressure/output/pressure-diagnostic-replay.pdf
     kind: canonical_pressure_figure
-  - path: analyses/mea_parameter_bundle/figures/pressure/output/pressure-model-lines.csv
-    kind: plotted_model_line_snapshot
   - path: analyses/mea_parameter_bundle/results/figure-calculation-receipt.json
     kind: calculation_receipt
   - path: analyses/mea_parameter_bundle/results/current-best-fit-residuals.csv
@@ -128,24 +118,10 @@ outputs:
     kind: selected_candidate_full_validation_summary
   - path: analyses/mea_parameter_bundle/results/best-in-slot-campaign/final-full-validation-evaluations.csv
     kind: selected_candidate_row_level_validation
-  - path: analyses/mea_parameter_bundle/results/best-in-slot-campaign/bounded-slope-screen-summary.csv
-    kind: retained_slope_boundary_diagnostic
   - path: analyses/mea_parameter_bundle/results/permittivity-formulation-comparison.json
     kind: historical_permittivity_model_comparison
-  - path: analyses/mea_parameter_bundle/results/permittivity-formulation-states.csv
-    kind: historical_permittivity_state_results
-  - path: analyses/mea_parameter_bundle/results/permittivity-formulation-targets.csv
-    kind: historical_permittivity_target_results
   - path: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json
     kind: active_parameter_mapping
-  - path: analyses/mea_parameter_bundle/results/born-permittivity-study/automatic-extended-sparse-summary.csv
-    kind: automatic_extended_born_parity_summary
-  - path: analyses/mea_parameter_bundle/results/born-permittivity-study/automatic-extended-sensitivity-summary.csv
-    kind: born_diameter_and_solvation_factor_sensitivity
-  - path: analyses/mea_parameter_bundle/results/born-permittivity-study/automatic-extended-joint-sensitivity-summary.csv
-    kind: joint_born_diameter_and_solvation_factor_sensitivity
-  - path: analyses/mea_parameter_bundle/results/born-permittivity-study/automatic-extended-full-summary.csv
-    kind: active_automatic_extended_born_full_replay
   - path: analyses/mea_parameter_bundle/results/born-permittivity-study/current-fast-common-comparison.csv
     kind: reaction_synchronized_common_target_comparison
   - path: analyses/mea_parameter_bundle/figures/born_permittivity/output/current-fast-born-reaction-comparison.pdf
@@ -160,18 +136,12 @@ outputs:
     kind: full_selected_bundle_and_born_solvation_candidate_figure
   - path: analyses/mea_parameter_bundle/figures/permittivity_comparison/output/permittivity-formulation-parity.pdf
     kind: retained_permittivity_comparison_figure
-  - path: analyses/mea_parameter_bundle/figures/permittivity_comparison/output/permittivity-formulation-parity.csv
-    kind: plotted_permittivity_comparison_snapshot
   - path: analyses/mea_parameter_bundle/results/reaction-temperature-fit/adoption-receipt.json
     kind: reaction_temperature_fit_adoption_decision
   - path: analyses/mea_parameter_bundle/results/reaction-temperature-fit/full-validation-targets.csv
     kind: reaction_temperature_fit_full_replay_targets
   - path: analyses/mea_parameter_bundle/results/calorimetry/thermal-reference-validation.json
     kind: anchored_thermal_reference_validation
-  - path: analyses/mea_parameter_bundle/results/handoff/mea-reactive-epcsaft-parameter-bundle.zip
-    kind: absorption_agent_handoff
-  - path: analyses/mea_parameter_bundle/results/handoff/mea-reactive-epcsaft-parameter-bundle.zip.sha256
-    kind: handoff_archive_checksum
 commands:
   refresh:
     - uv run python scripts/refresh_results.py

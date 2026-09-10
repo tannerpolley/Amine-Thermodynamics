@@ -21,10 +21,6 @@ from that selected parameter file, not from the state packet. The corrected
 sparse baseline reproduces the retained selected-bundle heat predictions to
 `1.1641532182693481e-9 kJ/mol CO2` maximum absolute difference.
 
-An earlier driver-origin error is documented in the adjacent
-`reaction-temperature-fit-invalid-source-origins/INVALID.md`. All results in
-that directory are invalid for this study and must not be used for selection.
-
 ## Design and sparse result
 
 At the 313.15 K pivot, every ln K is preserved. For R1–R4,
@@ -103,13 +99,9 @@ holdout and Kim et al. 2014 rows are excluded from fitting.
 `parity-receipt.json` / `parity-targets.csv`: 17/17 states reproduce the
 retained baseline to a maximum relative difference of 1.5e-10, including three
 120 C pressure states recovered through cross-temperature anchors.
-`benchmark-receipt.json`: a failed bubble attempt costs 32--50 s against 2--8 s
-for a success; model construction is negligible; two pressure starts in one
-Engine call double the cost without recovering; exact reaction-coefficient
-sensitivities are returned at no extra cost for the R4/R5 coefficients declared
-in the parameter document. The hard Xu 2011 state vle_obs_0279 did not recover
-from the sparse parity anchors alone; it needs the dense ascending-loading
-chain the full replay provides. No screen, candidate, or full replay was rerun.
+Detailed scenario caches and invalid trial runs are intentionally not retained
+in the mergeable tree; the receipts and selected target tables above are the
+reviewable evidence, and rerunning the driver recreates the omitted detail.
 
 
 ## Revised screen, recenter, full replay, and adoption (2026-09-03, evening)
