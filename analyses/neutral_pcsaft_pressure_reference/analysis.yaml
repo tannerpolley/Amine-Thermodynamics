@@ -6,14 +6,16 @@ owner: project
 inputs:
   - path: analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_curves.csv
     kind: canonical_pressure_reference
-  - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_Combined_VLE.csv
-    kind: experimental_vle_dataset
+  - path: analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_curves.csv
+    kind: retained_pressure_curves
+  - path: analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_metrics.csv
+    kind: retained_pressure_metrics
+  - path: analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_summary.csv
+    kind: retained_pressure_summary
 outputs:
   - path: analyses/neutral_pcsaft_pressure_reference/results/pressure
     kind: canonical_pressure_results_and_plot_bundle
 commands:
-  generate:
-    - uv run python analyses/neutral_pcsaft_pressure_reference/scripts/generate_data.py
   render:
     - uv run python analyses/neutral_pcsaft_pressure_reference/scripts/render_figures.py
 runtime:

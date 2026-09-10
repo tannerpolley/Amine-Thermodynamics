@@ -22,6 +22,7 @@ from shared_evaluation import corrected_request, verify_wheel
 
 ANALYSIS = Path(__file__).resolve().parents[1]
 RESULTS = ANALYSIS / "results/best-in-slot-campaign"
+RUNS = ANALYSIS / "results/runs/best-in-slot-campaign"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
 BASELINE_RESIDUALS = ANALYSIS / "results/current-best-fit-residuals.csv"
@@ -237,12 +238,13 @@ def candidate_fit_mapping(candidate: str, smoke: bool) -> dict[str, object]:
 
 def run_candidate(candidate: str, smoke: bool) -> None:
     RESULTS.mkdir(parents=True, exist_ok=True)
+    RUNS.mkdir(parents=True, exist_ok=True)
     fit_mapping = candidate_fit_mapping(candidate, smoke)
     suffix = "-smoke" if smoke else ""
-    input_path = RESULTS / f"{candidate}{suffix}-fit-input.json"
+    input_path = RUNS / f"{candidate}{suffix}-fit-input.json"
     input_path.write_text(json.dumps(fit_mapping, indent=2) + "\n", encoding="utf-8")
     result = regression.fit(fit_mapping, base_path=ANALYSIS)
-    result_path = RESULTS / f"{candidate}{suffix}-fit-result.json"
+    result_path = RUNS / f"{candidate}{suffix}-fit-result.json"
     result.to_json(result_path)
     summary = {
         "candidate": candidate,
@@ -261,7 +263,7 @@ def run_candidate(candidate: str, smoke: bool) -> None:
     }
     if result.best_usable_start is not None:
         candidate_parameters = result.export_candidate_parameters()
-        parameter_path = RESULTS / f"{candidate}{suffix}-parameters.json"
+        parameter_path = RUNS / f"{candidate}{suffix}-parameters.json"
         parameter_path.write_text(
             json.dumps(candidate_parameters.to_mapping(), indent=2) + "\n",
             encoding="utf-8",
