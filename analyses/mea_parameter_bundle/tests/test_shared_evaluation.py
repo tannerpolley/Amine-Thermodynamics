@@ -145,7 +145,7 @@ def test_pinned_engine_state_and_cached_replay(tmp_path, monkeypatch):
     monkeypatch.setattr(shared, "RUNS", tmp_path)
     parameters = shared.epcsaft.Parameters.from_json(shared.PARAMETERS)
     model = shared.epcsaft.Mixture(parameters)
-    request = json.loads(shared.STATE_PACKET.read_text())["observations"][0]["request"]
+    request = shared.load_state_packet()["observations"][0]["request"]
     reactions = {
         spec.identity: float(spec.value.magnitude)
         for spec in parameters.parameter_specs
@@ -165,11 +165,29 @@ def test_pinned_engine_state_and_cached_replay(tmp_path, monkeypatch):
     assert replay["predictions"] == result["predictions"]
 
 
+def test_compact_packet_expands_all_observations_and_isolated_values():
+    packet = shared.load_state_packet()
+    assert len(packet["observations"]) == 123
+    first = packet["observations"][0]["request"]
+    replay = shared.load_state_packet()
+    second = replay["observations"][0]["request"]
+    assert first["reaction_system"] == second["reaction_system"]
+    first["reaction_system"]["feed_amounts_mol"][0] = -1
+    assert second["reaction_system"]["feed_amounts_mol"][0] != -1
+
+
+def test_compact_packet_rejects_bad_reference():
+    document = json.loads(shared.STATE_PACKET.read_text())
+    document["observations"][0]["request"]["temperature"] = 999999
+    with pytest.raises(ValueError, match="out-of-range temperature reference"):
+        shared.expand_state_packet(document)
+
+
 def test_fixed_pressure_warm_start_does_not_gain_unknown_pressure_fields(
     tmp_path, monkeypatch
 ):
     monkeypatch.setattr(shared, "RUNS", tmp_path)
-    packet = json.loads(shared.STATE_PACKET.read_text())
+    packet = shared.load_state_packet()
     request = next(
         o["request"]
         for o in packet["observations"]

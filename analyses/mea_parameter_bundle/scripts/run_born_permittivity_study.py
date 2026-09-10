@@ -18,6 +18,7 @@ from shared_evaluation import (
     ENGINE_COMMIT,
     ENGINE_WHEEL_SHA256,
     evaluate_state,
+    load_state_packet,
     anchor_from,
     verify_wheel,
 )
@@ -341,7 +342,7 @@ def variant_mapping(variant: str) -> dict[str, object]:
 
 
 def packet_catalog() -> list[dict[str, object]]:
-    packet = json.loads(STATE_PACKET.read_text(encoding="utf-8"))
+    packet = load_state_packet(STATE_PACKET)
     output = []
     for observation in packet["observations"]:
         request = observation["request"]

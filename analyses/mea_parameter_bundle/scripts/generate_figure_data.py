@@ -27,6 +27,7 @@ from shared_evaluation import (
     cached_anchors,
     corrected_request,
     evaluate_state,
+    load_state_packet,
     sha256,
     verify_wheel,
 )
@@ -213,7 +214,7 @@ def main() -> None:
         for spec in parameters.parameter_specs
         if spec.identity.startswith("reaction:")
     }
-    fit = json.loads(STATE_PACKET.read_text(encoding="utf-8"))
+    fit = load_state_packet(STATE_PACKET)
 
     speciation_model: list[dict[str, object]] = []
     speciation_observed: list[dict[str, object]] = []

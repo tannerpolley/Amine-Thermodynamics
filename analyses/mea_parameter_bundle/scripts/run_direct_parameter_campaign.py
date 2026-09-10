@@ -23,6 +23,7 @@ from shared_evaluation import (
     STATE_PACKET_SHA256,
     corrected_request,
     installed_wheel,
+    load_state_packet,
     sha256,
     evaluate_state,
     anchor_from,
@@ -101,7 +102,7 @@ def request_with_reactions(
 
 
 def load_packet() -> dict[str, object]:
-    return json.loads(STATE_PACKET.read_text(encoding="utf-8"))
+    return load_state_packet(STATE_PACKET)
 
 
 def pressure_templates(

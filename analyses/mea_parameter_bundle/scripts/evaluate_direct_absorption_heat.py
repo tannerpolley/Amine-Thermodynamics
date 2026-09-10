@@ -29,6 +29,7 @@ from shared_evaluation import (
     cached_anchors,
     corrected_request,
     evaluate_state,
+    load_state_packet,
     verify_wheel,
 )
 from result_freshness import source_hashes, stamp_results
@@ -436,7 +437,7 @@ def main() -> None:
         for spec in parameters.parameter_specs
         if spec.identity.startswith("reaction:")
     }
-    packet = json.loads(STATE_PACKET.read_text(encoding="utf-8"))
+    packet = load_state_packet(STATE_PACKET)
     templates: dict[int, list[tuple[float, dict[str, object]]]] = {}
     for observation in packet["observations"]:
         if len(observation["targets"]) != 1:

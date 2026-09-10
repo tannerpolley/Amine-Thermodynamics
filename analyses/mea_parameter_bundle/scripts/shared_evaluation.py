@@ -34,7 +34,14 @@ ENGINE_WHEEL = INPUT / "engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 ENGINE_WHEEL_SHA256 = "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805"
 ENGINE_COMMIT = "8438ce5f94a547189c91c4ec180a7782d60879d6"
 STATE_PACKET = INPUT / "state-packet.json"
-STATE_PACKET_SHA256 = "41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef"
+STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
+STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
+STATE_PACKET_SCHEMA_VERSION = 1
+STATE_PACKET_REQUEST_FIELDS = (
+    "continuation", "feed", "identity", "intensive_boundaries", "outputs",
+    "phase_reactions", "phases", "pressure", "reaction_phase_ids",
+    "reaction_system", "temperature",
+)
 CANONICAL_SPECIATION = (
     ANALYSIS.parents[1]
     / "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv"
@@ -55,6 +62,51 @@ SOURCE_CONTRACT = ANALYSIS.parents[1] / "src/MEA/common/mea_source_contracts.py"
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load_state_packet(path: Path = STATE_PACKET) -> dict[str, object]:
+    """Load and expand the compact retained packet with strict references."""
+    return expand_state_packet(json.loads(path.read_text(encoding="utf-8")))
+
+
+def expand_state_packet(document: object) -> dict[str, object]:
+    """Expand an already decoded compact packet with strict references."""
+    if not isinstance(document, dict) or set(document) != {
+        "schema", "schema_version", "source", "metadata", "request_tables", "observations"
+    }:
+        raise ValueError("invalid compact state packet fields")
+    if document["schema"] != STATE_PACKET_SCHEMA or document["schema_version"] != STATE_PACKET_SCHEMA_VERSION:
+        raise ValueError("unsupported compact state packet schema")
+    tables = document["request_tables"]
+    if not isinstance(tables, dict) or set(tables) != set(STATE_PACKET_REQUEST_FIELDS):
+        raise ValueError("invalid compact state packet request tables")
+    if not isinstance(document["metadata"], dict) or not isinstance(document["source"], dict):
+        raise ValueError("invalid compact state packet metadata")
+    observations = document["observations"]
+    if not isinstance(observations, list):
+        raise ValueError("invalid compact state packet observations")
+    expanded = []
+    for row in observations:
+        if not isinstance(row, dict) or set(row) != {"family", "identity", "multiplier", "request", "targets"}:
+            raise ValueError("invalid compact state packet observation")
+        refs = row["request"]
+        if not isinstance(refs, dict) or set(refs) != set(STATE_PACKET_REQUEST_FIELDS):
+            raise ValueError("invalid compact state packet references")
+        request = {}
+        for field in STATE_PACKET_REQUEST_FIELDS:
+            ref = refs[field]
+            if isinstance(ref, bool) or not isinstance(ref, int):
+                raise ValueError(f"invalid {field} reference")
+            table = tables[field]
+            if not isinstance(table, list) or ref < 0 or ref >= len(table):
+                raise ValueError(f"out-of-range {field} reference")
+            request[field] = copy.deepcopy(table[ref])
+        expanded.append({
+            "family": row["family"], "identity": row["identity"],
+            "multiplier": row["multiplier"], "request": request,
+            "targets": copy.deepcopy(row["targets"]),
+        })
+    return {**copy.deepcopy(document["metadata"]), "observations": expanded}
 
 
 def write_json(path: Path, payload: object) -> None:

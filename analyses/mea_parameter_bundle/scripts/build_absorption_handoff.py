@@ -9,7 +9,10 @@ from pathlib import Path
 
 from result_freshness import require_current_results, require_hashes
 from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
-from shared_evaluation import R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS as R123_OFFSETS
+from shared_evaluation import (
+    R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS as R123_OFFSETS,
+    expand_state_packet,
+)
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
@@ -20,7 +23,7 @@ PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
 ENGINE = ANALYSIS / "data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 EXPECTED_STATE_PACKET_SHA256 = (
-    "41017bcf727a486a8f3feb280e19c111a15c5dda5a3cca4e8c7dc5b051168fef"
+    "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 )
 EXPECTED_ENGINE_SHA256 = (
     "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805"
@@ -36,7 +39,7 @@ def source(path: Path) -> bytes:
 
 
 def reaction_definition(parameter_bytes: bytes, packet_bytes: bytes) -> bytes:
-    packet = json.loads(packet_bytes)
+    packet = expand_state_packet(json.loads(packet_bytes))
     parameters = json.loads(parameter_bytes)
     coefficients = {
         row["reaction_id"]: {
