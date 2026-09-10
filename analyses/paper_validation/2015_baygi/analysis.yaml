@@ -14,8 +14,6 @@ outputs:
   - path: analyses/paper_validation/2015_baygi/results/neutral_parity
     kind: plotted_validation_bundle
 commands:
-  generate:
-    - uv run python analyses/paper_validation/2015_baygi/scripts/generate_data.py
   render:
     - uv run python analyses/paper_validation/2015_baygi/scripts/render_figures.py
 runtime:

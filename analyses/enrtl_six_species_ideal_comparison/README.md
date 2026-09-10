@@ -1,5 +1,13 @@
 # Matched six- and nine-species comparison
 
+**Reproduction limit (8 September 2026 audit):** the retained all-parameter
+screening uses a historical packet and a temporary local SciPy/Newton
+equilibrium layer. `generate_full_uq.py` defaults to sibling-checkout input
+paths; do not run those defaults as a portable or approved Engine replay.
+Future regeneration needs explicit immutable packet inputs and an Engine-owned
+equilibrium method. Its retained sensitivity results are not posterior
+uncertainty for the current exploratory incumbent.
+
 This analysis holds the feed, reaction source, temperature/loading coordinate,
 and reporting basis fixed while comparing nine explicit species with a six-
 species reduction.
