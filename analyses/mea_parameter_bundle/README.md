@@ -237,9 +237,9 @@ remain evidence of their original input vectors, not current predictions.
 The older permittivity comparison is an explicit experiment, not an update
 step: `compare_permittivity_formulations.py --parameters PATH` writes only
 under `results/permittivity-comparison/` and cannot replace the selected bundle.
-Render that experiment with `render_figures.py --permittivity-comparison
-results/permittivity-comparison`. To inspect the retained historical comparison,
-explicitly pass `results` instead; neither is part of the current refresh.
+Render a newly generated comparison with
+`render_figures.py --permittivity-comparison results/permittivity-comparison`;
+it is not part of the current refresh.
 
 The generation receipt under `results/` anchors the selected pressure replay,
 current failure table, and fit tables. The pressure

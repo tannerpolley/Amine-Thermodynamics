@@ -80,11 +80,11 @@ finished exact work. The run used at most three CPU cores. All task-owned
 processes were stopped at closeout.
 
 The self-check verifies selected reaction origins, pivot preservation, and
-constant reaction-enthalpy shifts at 20/40/80/120 C. `screen-targets.csv`,
-`candidate-targets.csv`, and `full-validation-targets.csv` retain row-level
-evidence; the corresponding receipts retain the SVD, weights, shifts, coverage,
-and incomplete-holdout status. Full-validation aggregate metrics are computed
-only on evaluated rows and must not be compared against a different cohort.
+constant reaction-enthalpy shifts at 20/40/80/120 C. The retained
+`full-validation-targets.csv` provides row-level replay evidence; screen and
+candidate receipts retain their bounded shifts, weights, coverage, and
+incomplete-holdout status. Full-validation aggregate metrics are computed only
+on evaluated rows and must not be compared against a different cohort.
 
 ## Stage 0--2 driver repair, parity, and benchmark (2026-09-03, later)
 
