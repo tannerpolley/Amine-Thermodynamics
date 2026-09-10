@@ -1,0 +1,42 @@
+---
+title: "Reactive ePC-SAFT parameter evidence"
+subtitle: "Issue 70 supported-negative decision and bounded historical diagnostics"
+execute:
+  enabled: false
+---
+
+::: {.callout-warning}
+No active MEA parameter set is authorized. The retained candidate and all
+subanalyses are diagnostic evidence only.
+:::
+
+## Decision and boundary
+
+Issue 70 concluded that predictive export is blocked: the optimizer did not
+converge, the active directions were weakly identified, the untouched
+replacement partition was unavailable, the candidate wheel differed from the
+frozen Engine lock, one challenge used chemistry outside the nine-species
+system, and calorimetry lacked an accepted derivative/covariance model.
+
+Read the exact [Issue 70 decision](results/issue_70/predictive_mea_parameter_decision.json)
+and [readiness receipt](results/readiness/regression_readiness_summary.json).
+They remain the authority for the negative result.
+
+## Retained diagnostic branches
+
+The parent record owns the decision and shared receipts. Its distinct evidence
+branches remain in their original directories:
+
+- `born_permittivity_sensitivity/`: fixed-formulation sensitivity tables and the dormant independent-evidence comparison.
+- `co2_water_induced_association/`: qualified Kiepe/Pabsch source reproduction.
+- `pressure_first/`: retained historical pressure qualification.
+
+The branch results are linked here rather than copied into a second report.
+They do not promote a parameter vector or replace the Engine-owned method
+campaign tracked by Issue #80.
+
+## Render retained figures
+
+```bash
+uv run python analyses/reactive_epcsaft_parameter_evidence/scripts/render_figures.py
+```

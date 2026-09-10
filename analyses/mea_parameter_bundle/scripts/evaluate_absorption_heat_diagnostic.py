@@ -134,7 +134,7 @@ def main() -> None:
 
     apply_plot_theme()
     fig, ax = plt.subplots(figsize=(9.0, 5.7))
-    ax.plot(grid_x, grid_y, color="#111827", linewidth=2.1, label="Selected bundle Gibbs--Helmholtz slope")
+    ax.plot(grid_x, grid_y, color="#111827", linewidth=2.1, linestyle="--", label="Selected bundle Gibbs--Helmholtz slope")
     for temperature_c, marker, color in ((40.0, "o", "#0072B2"), (80.0, "s", "#D55E00")):
         selected = [row for row in comparison if row["temperature_C"] == temperature_c]
         ax.scatter(
@@ -164,7 +164,7 @@ def main() -> None:
         svg_name=svg.name,
         pdf_name=pdf.name,
         title="Selected-bundle absorption-heat diagnostic",
-        description="Retained direct calorimetry observations and the selected bundle's Gibbs--Helmholtz pressure-slope diagnostic.",
+        description="Retained direct calorimetry observations and the selected bundle's dashed Gibbs--Helmholtz pressure-slope diagnostic.",
         data_path=RESULTS / "current-selected-gibbs-helmholtz-comparison.csv",
     )
     with (FIGURES / "current-selected-calorimetry-diagnostic.mpl.yaml").open(

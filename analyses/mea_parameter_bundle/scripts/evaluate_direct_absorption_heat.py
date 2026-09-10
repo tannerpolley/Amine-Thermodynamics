@@ -725,6 +725,7 @@ def main() -> None:
             [row["heat_release_kj_per_mol_CO2"] for row in values],
             color=colors[temperature_c],
             linewidth=2.0,
+            linestyle="--",
             label=f"Model, {temperature_c} °C",
         )
         data = [row for row in comparison if row["temperature_C"] == temperature_c]
@@ -756,7 +757,7 @@ def main() -> None:
         svg_name=svg.name,
         pdf_name=pdf.name,
         title="Current fixed-bundle absorption heat",
-        description="Retained calorimetry observations as points and fixed-bundle total-enthalpy model curves.",
+        description="Retained calorimetry observations as points and dashed fixed-bundle total-enthalpy model curves.",
         data_path=RESULTS / "current-selected-direct-enthalpy-curve.csv",
     )
     with (FIGURES / "current-selected-direct-enthalpy.mpl.yaml").open(

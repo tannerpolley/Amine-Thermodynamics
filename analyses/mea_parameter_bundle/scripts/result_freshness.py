@@ -87,8 +87,11 @@ if __name__ == "__main__":
     parser.add_argument("--expected-fingerprint")
     args = parser.parse_args()
     require_current_results()
+    pages = sorted(
+        path for path in ANALYSIS.rglob("*.qmd") if "_site" not in path.parts
+    )
     inputs = source_hashes(
-        ANALYSIS / "notebook.qmd",
+        *pages,
         ANALYSIS / "_quarto.yml",
         FIGURE_DATA,
         FIGURES,
@@ -108,7 +111,7 @@ if __name__ == "__main__":
             )
         stamp_results(
             NOTEBOOK,
-            [ANALYSIS / "notebook.html"],
+            [page.with_suffix(".html") for page in pages],
             inputs=inputs,
         )
     print("Current result hashes verified; no model execution")
