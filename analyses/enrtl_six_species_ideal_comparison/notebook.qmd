@@ -459,23 +459,10 @@ The claim-led figures can be rendered from retained tables with:
 uv run python analyses/enrtl_six_species_ideal_comparison/scripts/render_figures.py
 ```
 
-The all-parameter UQ is checkpointed in four-row LHC parts so the exact
-128-point design can be resumed safely. Set `EPCSAFT_ENGINE_WHEEL` to the
-explicit wheel used for the run and repeat the `lhc` command over
-`MEA_UQ_BATCH_START`/`MEA_UQ_BATCH_STOP` until `[0,128)` is covered:
+The non-portable all-parameter UQ generator is retired. Its retained tables can
+still be rendered without rerunning the historical SciPy/Newton bridge:
 
 ```bash
-EPCSAFT_ENGINE_WHEEL=/path/to/epcsaft.whl MEA_UQ_PHASE=lhc \\
-  MEA_UQ_SAMPLE_COUNT=128 MEA_UQ_BATCH_START=0 MEA_UQ_BATCH_STOP=4 \\
-  uv run --with /path/to/epcsaft.whl \\
-  python analyses/enrtl_six_species_ideal_comparison/scripts/generate_full_uq.py
-EPCSAFT_ENGINE_WHEEL=/path/to/epcsaft.whl MEA_UQ_PHASE=aggregate-lhc \\
-  MEA_UQ_SAMPLE_COUNT=128 uv run --with /path/to/epcsaft.whl \\
-  python analyses/enrtl_six_species_ideal_comparison/scripts/generate_full_uq.py
-EPCSAFT_ENGINE_WHEEL=/path/to/epcsaft.whl MEA_UQ_PHASE=finalize \\
-  MEA_UQ_SAMPLE_COUNT=128 MEA_UQ_SKIP_ENDPOINTS=1 \\
-  uv run --with /path/to/epcsaft.whl \\
-  python analyses/enrtl_six_species_ideal_comparison/scripts/generate_full_uq.py
 uv run python analyses/enrtl_six_species_ideal_comparison/scripts/render_uq_figures.py
 ```
 
