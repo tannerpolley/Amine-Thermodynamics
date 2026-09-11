@@ -85,6 +85,8 @@ class AdoptedPacket(unittest.TestCase):
             "species",
             "reaction",
             "basis",
+            "interaction_defaults",
+            "solver",
             "domain",
             "baseline",
             "unavailable",
@@ -104,6 +106,10 @@ class AdoptedPacket(unittest.TestCase):
                     manifest["model"]["reaction_order"] = ["wrong"]
                 elif case == "basis":
                     manifest["model"]["bases"]["property_basis"] = "apparent"
+                elif case == "interaction_defaults":
+                    manifest["model"]["interaction_defaults"]["alpha"]["molecule_molecule"]["value"] = 0.2
+                elif case == "solver":
+                    manifest["dependencies"]["solver"]["version"] = "wrong"
                 elif case == "domain":
                     manifest["property_domains"]["calibration_VLE"]["loading"] = "wrong"
                 elif case == "baseline":
