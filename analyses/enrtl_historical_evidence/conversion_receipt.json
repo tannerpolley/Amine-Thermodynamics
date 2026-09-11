@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "identity": "mea-enrtl-historical-evidence-conversion-v1",
+  "source_branch": "codex/enrtl-two-leaf-nine-species",
+  "source_tip_commit": "e514120",
+  "source_commits": ["27f0577", "09c81ae", "6a54772", "e514120"],
+  "retained_classes": [
+    "six-species fixed-state parity",
+    "nine-species interaction topology",
+    "64-point fixed-composition screening",
+    "screening reaction-residual range",
+    "D01 equilibrium continuation"
+  ],
+  "output": "results/historical_evidence.json",
+  "output_sha256": "f96391b2f89a1fa416645fc107af432cd398ce49271b1a014170cbc62ff61967",
+  "policy": {
+    "screening_rows_are_equilibria": false,
+    "d01_is_separate_from_screening": true,
+    "caloric_values_available": false,
+    "protected_analysis_modified": false
+  }
+}
