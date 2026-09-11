@@ -1,0 +1,76 @@
+{
+  "attempted_canonical_pressure_states": 161,
+  "attempted_speciation_grid_states": 184,
+  "attempted_speciation_packet_states": 44,
+  "attempted_states": 389,
+  "display_speciation_observations": 332,
+  "display_speciation_source_sha256": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
+  "engine_distribution_version": "0.2.0.dev0",
+  "engine_source_commit": "8438ce5f94a547189c91c4ec180a7782d60879d6",
+  "engine_wheel_sha256": "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805",
+  "evaluated_pressure_states": 161,
+  "evaluated_speciation_grid_states": 181,
+  "evaluated_speciation_states": 42,
+  "failed_states": 5,
+  "failure_table": "results/figure-calculation-failures.csv",
+  "fit_residual_table": "results/current-best-fit-residuals.csv",
+  "fit_statistics_table": "results/current-best-fit-statistics.csv",
+  "parameter_document_sha256": "00049473d53c7e8088ef3e2dbbc6a1bab058f6dc4de963ee98936b4cd9bda25e",
+  "parameter_fingerprint": "sha256:163ea97a97d3a6ee0c135ed0cad891fd33689ca135c53e694097fad1c21e4788",
+  "pressure_observation_source_sha256": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
+  "pressure_states": 161,
+  "pressure_template_states": 79,
+  "reaction_standard_state_correction": {
+    "ln_k_offsets": [
+      8.0330699846,
+      4.0165349923,
+      4.0165349923
+    ],
+    "reaction_ids": [
+      "R1",
+      "R2",
+      "R3"
+    ],
+    "reason": "the retained state packet contains raw Austgen R1-R3 values already labeled as common molality",
+    "resulting_standard_state": "aqueous-molality-infinite-dilution-water-v1"
+  },
+  "schema_version": 1,
+  "selected_permittivity_variant": "solvent_only_mass_fraction_co2_excluded",
+  "source_continuation_parameter_fingerprints": [
+    "sha256:927cc368a166c5503566778d997e847f04a51c3e4d54b548fb3a0afe474640e1"
+  ],
+  "speciation_grid_ranges": {
+    "20": [
+      0.075,
+      1.0
+    ],
+    "40": [
+      0.11,
+      1.0
+    ],
+    "60": [
+      0.131,
+      1.0
+    ],
+    "80": [
+      0.064,
+      1.0
+    ]
+  },
+  "speciation_grid_temperatures_C": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "speciation_states": 44,
+  "state_packet_observations": 123,
+  "state_packet_sha256": "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448",
+  "status": "active_current_best_bundle",
+  "successful_fingerprints_match_bundle": true,
+  "temperature_balanced_log10_rmse": {
+    "pressure": 0.34072468497626784,
+    "speciation": 0.40679760150981276
+  },
+  "warm_start_policy": "source continuation values are projected to mass-balanced finite starts; pressure observations then reuse certified states across nearby loadings, fall back to the independent source start, and use neighboring-temperature certified states when the local branch is otherwise missed"
+}

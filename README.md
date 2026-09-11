@@ -10,18 +10,25 @@ uv run ruff check src scripts analyses tests
 uv run python scripts/doctor.py
 uv run python scripts/validate_project.py quick
 uv run python scripts/validate_project.py confidence
-uv run python analyses/<category>/<analysis_id>/scripts/generate_data.py
-uv run python analyses/<category>/<analysis_id>/scripts/render_figures.py
 bash scripts/build_manuscript.sh
 uv run python scripts/check_manuscript_freshness.py
 ```
+
+Use each analysis README for its supported calculation or render command.
+Several historical analyses retain rendering only; the parameter notebook has
+its own bounded refresh and render-only commands.
 
 Historical calculated tables and figures remain evidence only. New generic
 ePC-SAFT methods are built and debugged first in the Engine repository. After
 upstream acceptance, this repository may reproduce the pinned method directly
 against MEA-owned inputs and an accepted immutable packet.
 
-The locked runtime includes separate immutable Git revisions for the current `epcsaft` implementation and the legacy `pcsaft.flashTQ` baseline. The legacy dependency declares its omitted Cython/NumPy build requirements through `tool.uv.extra-build-dependencies`, so a clean `uv sync --locked --group test` builds the same extension without a sibling checkout.
+The lockfile pins the legacy `pcsaft.flashTQ` baseline to an immutable Git
+revision and declares its Cython/NumPy build requirements. It does not install
+the notebook's `epcsaft` runtime. That analysis requires its explicitly retained
+immutable wheel; see [the parameter-bundle README](analyses/mea_parameter_bundle/README.md).
+The historical Engine lock under `data/reference/MEA/manifests/` identifies a
+different calculation and must not be substituted for the notebook wheel.
 
 Package imports remain `import MEA...`; source lives under `src/MEA`.
 Old file-path commands such as `uv run python MEA/run_plot_exports.py` are intentionally not preserved.
@@ -32,11 +39,14 @@ Old file-path commands such as `uv run python MEA/run_plot_exports.py` are inten
 - `data/reference/MEA/`: reusable MEA VLE and chemical-equilibrium reference tables.
 - `analyses/paper_validation/2015_baygi/`: Baygi 2015 figure, parameter-table, and neutral parity reproduction.
 - `analyses/six_species_solubility_reference/`: retained six-species pressure and speciation reference calculation.
-- `analyses/neutral_pcsaft_pressure_reference/`: neutral PC-SAFT pressure reference artifacts.
+- `analyses/neutral_pcsaft_pressure_reference/`: neutral PC-SAFT pressure reference tables and figures.
 - `analyses/ideal_reaction_equilibrium/`: ideal reaction-equilibrium manuscript evidence.
 - `analyses/speciation_evidence_harmonization/`: basis-separated experimental speciation source evidence.
 - `analyses/historical_fixed_parameter_epcsaft_evaluation/`: historical true-species fixed-parameter ePC-SAFT evidence.
 - `analyses/reactive_epcsaft_parameter_evidence/`: Issue #70 refusal evidence, bounded historical diagnostics, and dormant parameter-evaluation methods.
+- `analyses/mea_parameter_bundle/`: exploratory incumbent, parameter-first working HTML notebook, and retained comparisons; numerical publication remains incomplete.
+- `analyses/enrtl_six_species_ideal_comparison/`: packet-specific species reduction and sensitivity comparisons.
+- `analyses/film_chemistry_work_package_a/`: bounded film-input source and consistency checks; no accepted thermodynamic packet.
 - `docs/latex/`: writable manuscript source mirrored from the separate Overleaf Git checkout.
 - `scripts/`: root doctor, validation, and plot orchestration entrypoints.
 
@@ -56,7 +66,7 @@ must use CSV, structured parameter sets must use the split CSV/TOML bundle
 format, and raw fit requests/results must remain in ignored `results/runs/`.
 `scripts/validate_project.py` enforces both limits without exceptions.
 
-## Key Artifact Paths
+## Key Evidence Paths
 
 - `analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json`
 - `analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_recomputed_fit.png`
@@ -88,8 +98,17 @@ bash docs/latex/scripts/sync_to_overleaf_mirror.sh
 
 ## Model Boundaries
 
-There is no active MEA ePC-SAFT parameter set. Engine Issue #80 owns the next
-calculation and validation campaign. This repository retains source evidence,
+There is no accepted MEA ePC-SAFT parameter set. The exploratory incumbent and
+its comparison history live under `analyses/mea_parameter_bundle/results/`;
+Engine Issue #80 owns the acceptance campaign. This repository retains source evidence,
 the Issue #70 supported-negative decision, and reproduction/rendering conventions
-for an accepted immutable packet; historical calculated artifacts are not live
+for an accepted immutable packet; historical calculated results are not live
 parameter authority.
+
+The [scientific roadmap](docs/scientific/PREDICTIVE_MEA_PROGRAM.md) separates
+source qualification, estimation, numerical coverage, independent validation,
+and manuscript/absorber use. The [8 September audit](docs/scientific/REPOSITORY_AUDIT_2026-09-08.md)
+records current inconsistencies and conditional removal candidates. This
+checkout still has evaluator v3; the reviewed v4 start-volume correction and
+ionic comparison are reported in MEA Issues #85/#86 in another checkout.
+Reconcile that work before starting new local numerical comparisons.

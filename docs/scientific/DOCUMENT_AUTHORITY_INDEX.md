@@ -1,13 +1,22 @@
 # GREPE and MEA document authority index
 
+Start with [the established-work and gap map](CONTEXT.md). This index locates
+record owners; it does not replace the evidence summarized there.
+
 General Reactive Equilibrium and Phase Equilibrium (GREPE) is the Engine
 calculation used by this aqueous monoethanolamine (MEA) study.
 
-- Audited: 2026-08-25
+- Cross-repository snapshot: 2026-08-25; MEA navigation reconciled 2026-09-08
 - Scope: Engine GREPE, predictive MEA, absorber-column integration, and the
   parallel lithium configured-LLE application
 - Purpose: classify existing planning and evidence documents without creating
   a second work queue
+
+Cross-repository paths and issue lists below retain the August snapshot; they
+are not a claim about today's task states or sibling checkouts. The current
+MEA evidence sequence is in `PREDICTIVE_MEA_PROGRAM.md`; the dated
+`REPOSITORY_AUDIT_2026-09-08.md` records the local/other-checkout boundary and
+conditional removal candidates. GitHub remains authoritative for execution.
 
 ## Authority rule
 
@@ -45,9 +54,12 @@ accepted homogeneous-reactive and reactive-bubble calculation history.
 | `docs/scientific/CONTEXT.md` | Authoritative scientific definition | Question, ownership, vocabulary, authority, and claim boundary; authority comes from repository guidance and issue #70 |
 | `docs/scientific/PREDICTIVE_MEA_PROGRAM.md` | Authoritative scientific plan | Neutral qualification, electrostatic selection, regression, validation, and manuscript sequence; GitHub issues own execution |
 | This index | Authoritative navigation | Document classification only; it owns no scientific decision or work queue |
+| `analyses/mea_parameter_bundle/notebook.qmd` | Active exploratory working notebook | Selected table and retained comparisons; no accepted bundle, numerical publication incomplete |
+| `analyses/enrtl_six_species_ideal_comparison/notebook.qmd` | Packet-specific comparison notebook | Species reduction and sensitivity for its exact packet |
+| `docs/scientific/REPOSITORY_AUDIT_2026-09-08.md` | Dated repository audit | Evidence/ownership discrepancies and conditional removal candidates; not a live queue |
 | Engine Issue #80 and its future reviewed packet | Upstream method and current parameter-campaign authority | Builds and debugs the generic method; MEA reproduction is allowed after an immutable packet is accepted |
 | `analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json` | Historical Issue 70 gate decision | Conservative supported-negative predictive decision, exact input hashes, generated tables, and downstream refusal |
-| `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md` | Current source synthesis | Literature basis for the retained induced-association and Born formulations; not adoption or queue authority |
+| `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md` | Literature and historical model synthesis | Source rationale; current estimation requirements are owned by the scientific plan, not historical model choices |
 | `docs/ePC-SAFT/full-component-parameter-source-audit.md` | Current source audit | Component-level parameter provenance |
 | `docs/ePC-SAFT/mea-reaction-and-sentinel-primary-source-audit.md` | Current source audit | Reaction and sentinel evidence |
 | `docs/ePC-SAFT/meah-meacoo-volumetric-evidence.md` | Current evidence synthesis | Volumetric information for MEAH+/MEACOO- |
@@ -61,7 +73,11 @@ Closed issues #62--#65 and #67 retain observation, neutral, electrostatic,
 induced-association, and configuration evidence. Closed issues #13, #14, and
 #70 retain the regression, validation, and conservative predictive-gate
 decisions. Issue #68 owns manuscript evolution, and #10 is the final manuscript
-gate. Issues #61 and #66 are closed historical records.
+gate. Issues #61 and #66 are closed historical records. MEA #83–#86 are open
+diagnostic tasks with result/correction reports in another checkout. In
+particular #85/#86 report shared evaluator v4 and a corrected negative ionic
+screen; the saved checkout audited here still has v3. Preserve that ownership
+boundary and inspect exact retained work before integrating or recalculating.
 
 ## MEA-Absorption-Column
 

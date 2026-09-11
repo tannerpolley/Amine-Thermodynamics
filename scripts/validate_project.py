@@ -10,6 +10,9 @@ PY = sys.executable
 RUFF = str(Path(PY).with_name("ruff"))
 MAX_TRACKED_JSON_BYTES = 100 * 1024
 MAX_TRACKED_JSON_LINES = 3_000
+MAX_TRACKED_TEXT_BYTES = 1024 * 1024
+MAX_TRACKED_FILE_BYTES = 5 * 1024 * 1024
+TEXT_SUFFIXES = {".bib", ".csv", ".md", ".py", ".svg", ".tex", ".toml", ".tsv", ".txt", ".yaml", ".yml"}
 
 QUICK_COMMANDS = [
     [RUFF, "check", "src", "scripts", "analyses", "tests"],
@@ -17,7 +20,7 @@ QUICK_COMMANDS = [
     [PY, "scripts/check_no_local_paths.py"],
     [PY, "scripts/validate_mea_data_library.py"],
     [PY, "-m", "compileall", "-x", r"results[\\/]+runs", "src", "tests", "scripts", "analyses"],
-    [PY, "-m", "pytest", "-q"],
+    [PY, "-m", "pytest", "-q", "--ignore=upstream"],
 ]
 
 PLOT_COMMANDS = [
@@ -140,20 +143,25 @@ def verify_artifacts() -> int:
     return 0
 
 
-def json_size_problem(path: Path) -> str | None:
+def tracked_size_problem(path: Path) -> str | None:
     byte_count = path.stat().st_size
-    if byte_count > MAX_TRACKED_JSON_BYTES:
+    if path.suffix == ".json" and byte_count > MAX_TRACKED_JSON_BYTES:
         return f"{byte_count} bytes > {MAX_TRACKED_JSON_BYTES}"
-    with path.open("rb") as stream:
-        line_count = sum(1 for _ in stream)
-    if line_count > MAX_TRACKED_JSON_LINES:
-        return f"{line_count} lines > {MAX_TRACKED_JSON_LINES}"
+    if path.suffix == ".json":
+        with path.open("rb") as stream:
+            line_count = sum(1 for _ in stream)
+        if line_count > MAX_TRACKED_JSON_LINES:
+            return f"{line_count} lines > {MAX_TRACKED_JSON_LINES}"
+    if path.suffix.lower() in TEXT_SUFFIXES and byte_count > MAX_TRACKED_TEXT_BYTES:
+        return f"{byte_count} bytes > {MAX_TRACKED_TEXT_BYTES}"
+    if byte_count > MAX_TRACKED_FILE_BYTES:
+        return f"{byte_count} bytes > {MAX_TRACKED_FILE_BYTES}"
     return None
 
 
-def verify_tracked_json_size() -> int:
+def verify_tracked_file_size() -> int:
     tracked = subprocess.run(
-        ["git", "ls-files", "-z", "--", "*.json"],
+        ["git", "ls-files", "-z"],
         cwd=ROOT,
         check=True,
         capture_output=True,
@@ -164,15 +172,15 @@ def verify_tracked_json_size() -> int:
         path = ROOT / relative
         if not path.is_file():
             continue
-        if problem := json_size_problem(path):
+        if problem := tracked_size_problem(path):
             oversized.append(f"{relative}: {problem}")
     if oversized:
-        print("Oversized tracked JSON files:")
+        print("Oversized tracked files:")
         for problem in oversized:
             print(f"  {problem}")
-        print("Split durable tables/configuration into CSV/TOML; keep raw runs ignored.")
+        print("Remove generated files; compact or split durable evidence.")
         return 1
-    print("Tracked JSON size contract passed.")
+    print("Tracked file size contract passed.")
     return 0
 
 
@@ -184,7 +192,7 @@ def main() -> int:
     commands = list(QUICK_COMMANDS)
     if args.mode == "confidence":
         commands.extend(PLOT_COMMANDS)
-    status = verify_tracked_json_size()
+    status = verify_tracked_file_size()
     if status:
         return status
     for command in commands:

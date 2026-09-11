@@ -2,8 +2,19 @@
 
 ## Startup Reads
 
+- For scientific work, use the installed CSE skills and read `docs/scientific/README.md` and `docs/scientific/CONTEXT.md` before choosing research, diagnosis or implementation. The context map identifies established estimation research, completed studies and unresolved questions.
+- Before proposing a search, conversion, fit or repeated study, follow the relevant map entry to its existing source synthesis and retained results. Use Git history for retired records; distinguish an unreadable reference from absent research. Report the precise remaining gap and what new evidence the proposed work would add.
+
 - Read `docs/.codex-journal/user_preferences.md` when it exists.
 - Read `docs/.codex-journal/project_memory.md` when it exists.
+
+## Literature before scientific judgment
+
+- Before making scientific claims, judging a parameter bundle, or proposing modeling, fitting, validation, uncertainty, or absorber-use strategy, read `literature/README.md` and the relevant paper Markdown files it indexes. Read the actual methods, parameter-estimation, results and limitations sections; titles, abstracts, repository summaries and previous agent answers are not substitutes.
+- Establish normal practice from the closest MEA studies first, then relevant MDEA/electrolyte analogs and foundational methods. Identify each paper's model, fitted versus predicted properties, data use, domain and assessment method before recommending a different standard. Distinguish published convention, repository policy and your engineering recommendation; terms such as “predictive,” “validated” and “defensible” require an explicit intended use.
+- Support material literature claims with the paper and a section, equation, table or page locator. State which sources you actually read and what remains inference or unknown. Check equation/table transcriptions against the Zotero PDF when their exact form matters.
+- `literature/` is an ignored local reading copy, not a new source authority. Use `literature/index.csv` for Zotero parent/attachment keys and source hashes; verify relevant companions against current Zotero files before relying on them, and refresh changed copies with provenance. Preserve supplements, corrigenda and distinct versions.
+- If the folder or a required paper/companion is missing, report that gap and inspect the existing Zotero source through the approved source workflow before asserting a literature-backed conclusion. Copying a paper does not mean it has been read. Do not infer missing evidence or impose acceptance thresholds as established practice without sources.
 
 ## Memory Policy
 

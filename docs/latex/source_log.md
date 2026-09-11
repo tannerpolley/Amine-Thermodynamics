@@ -9,7 +9,7 @@ This source log records the manuscript's verified citation anchors and intended 
 | `Cameretti2005` | Peer-reviewed article | Original ePC-SAFT aqueous electrolyte foundation. |
 | `Bulow2020` | Peer-reviewed article | ePC-SAFT advanced concentration-dependent dielectric/Born formulation. |
 | `Bulow2021` | Peer-reviewed article | ePC-SAFT advanced salt-solubility and ion-pairing extension. |
-| `Schick2023` | Peer-reviewed article | ePC-SAFT advanced CO2 solubility in electrolyte solutions. |
+| `Schick2023` | Peer-reviewed article | ePC-SAFT advanced CO2 solubility in electrolyte solutions; Table 2 on PDF page 4 gives $\varepsilon_{r,\mathrm{CO_2}}(T)=-0.0036T+2.467$, from which the historical 1.4122 scalar is the 293 K evaluation. |
 | `Rueben2024` | Peer-reviewed article | Recent permittivity modeling in electrolyte PC-SAFT. |
 | `Figiel2025` | Peer-reviewed article | Modified Born term for ion thermodynamic properties. |
 | `Hajj2024` | Peer-reviewed article | Dielectric-dispersion evidence for loaded 30 wt% MEA; motivates MEA-specific relative-permittivity validation. |
@@ -29,10 +29,12 @@ This source log records the manuscript's verified citation anchors and intended 
 
 ## Parameter Audit Notes
 
-The numerical values below are historical source-audit evidence, not an active
-MEA parameter set. Engine Issue #80 owns the next calculation packet.
+The numerical values below are historical source-audit evidence rather than
+the active table. The live MEA mapping, evidence classes, and retained replay
+are owned by `analyses/mea_parameter_bundle/`; Engine issues own generic method
+work and cross-repository evidence.
 
 - Held/Uyan ion tables provide the historical diagnostic sigma/dispersion values for `H3O+`, `OH-`, `HCO3-`, and `CO3^2-`; the historical water-ion interaction values were `0.25`, `-0.25`, `0.0`, and `-0.25`, respectively.
 - Figiel2025 provides the SSM+DS Born diameter for the proton carrier (`H+` represented in the runtime as `H3O+`) as `d_born=1.218`.
-- No local ePC-SAFT table value was found for SSM+DS `d_born` of `OH-`. The historical diagnostic used `d_born=3.081076894`, derived by Born hydration-energy inversion from an absolute hydroxide hydration free energy of `106.4 kcal/mol`; the derivation artifact is `analyses/reactive_epcsaft_parameter_evidence/results/oh_born_derivation/`.
+- No local ePC-SAFT table value was found for SSM+DS `d_born` of `OH-`. The historical diagnostic used `d_born=3.081076894`, derived by Born hydration-energy inversion from an absolute hydroxide hydration free energy of `106.4 kcal/mol`; the derivation record is `analyses/reactive_epcsaft_parameter_evidence/results/oh_born_derivation/`.
 - No local table value was found for SSM+DS `d_born` of `HCO3-` or `CO3^2-`. The regularized Tier A trace-carbonate Born diagnostic used the `3.0/3.0` pair, while an unanchored multistart diagnostic found a lower trace-only residual near `HCO3- d_born=6.80294` and `CO3^2- d_born=2.99744`; this is an identifiability boundary, not an active parameter set.
