@@ -39,7 +39,7 @@ ANALYSIS = Path(__file__).resolve().parents[1]
 INPUT = ANALYSIS / "data/input"
 SPECIATION_OUTPUT = ANALYSIS / "figures/speciation/output"
 PRESSURE_OUTPUT = ANALYSIS / "figures/pressure/output"
-COMPARISON = ANALYSIS / "results/permittivity-formulation-comparison.json"
+COMPARISON = ANALYSIS / "results/historical/permittivity-formulation-comparison.json"
 CANONICAL_SPECIATION = (
     ANALYSIS.parents[1]
     / "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv"

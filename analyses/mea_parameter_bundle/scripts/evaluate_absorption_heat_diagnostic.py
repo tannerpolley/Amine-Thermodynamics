@@ -17,8 +17,8 @@ ROOT = Path(__file__).resolve().parents[3]
 ANALYSIS = Path(__file__).resolve().parents[1]
 PRESSURE = ANALYSIS / "figures/pressure/output/pressure-model-lines.csv"
 OBSERVATIONS = ANALYSIS / "data/input/calorimetry-observation-partition.csv"
-RESULTS = ANALYSIS / "results/calorimetry"
-FIGURES = ANALYSIS / "figures/calorimetry/output"
+RESULTS = ANALYSIS / "results/historical/calorimetry"
+FIGURES = ANALYSIS / "figures/historical/calorimetry/output"
 TEMPERATURES_C = (40.0, 60.0, 80.0)
 R_J_MOL_K = 8.31446261815324
 
