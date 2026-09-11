@@ -1,0 +1,1098 @@
+{
+  "claim_boundary": [
+    "All values describe the exact historical calculation identities above.",
+    "The 64 design rows are fixed-composition evaluations, not converged equilibria.",
+    "D01 is separate equilibrium continuation evidence.",
+    "This record does not establish a current parameter set or downstream process capability."
+  ],
+  "evidence": {
+    "D01_equilibrium": {
+      "amounts_mol": [
+        8.6340506301227e-07,
+        0.10094007274157,
+        0.59827849815973,
+        0.10078140175743,
+        0.098278525348363,
+        0.00093924073542105,
+        0.00078137108444695,
+        1.3191170666806e-11,
+        8.8875608384829e-07
+      ],
+      "charge_residual_mol": 4.7618572355421e-09,
+      "element_residuals_mol": [
+        2.6802138286541e-10,
+        1.1911485131577e-09,
+        -1.5263629249418e-10,
+        -2.5717650231627e-10
+      ],
+      "identity": "D01 historical nonideal equilibrium continuation endpoint",
+      "max_abs_reaction_residual": 6.0502713949973e-12,
+      "mole_fractions": [
+        9.5933804006848e-07,
+        0.11215552895929,
+        0.66475325015729,
+        0.11197922803465,
+        0.10919825691036,
+        0.0010435998175963,
+        0.00086818926229631,
+        1.4656842258433e-11,
+        9.8750581401888e-07
+      ],
+      "pressure_Pa": 101325.0,
+      "reaction_residuals": [
+        -6.1106675275369e-13,
+        -1.5631940186722e-13,
+        -9.6278540695494e-13,
+        -2.2009061240169e-12,
+        6.0502713949973e-12
+      ],
+      "role": "distinct accepted continuation/equilibrium result",
+      "solver": {
+        "balance_basis": [
+          "C",
+          "H",
+          "N",
+          "O",
+          "charge"
+        ],
+        "charge_enforced": true,
+        "common_standard_state": "aqueous-molality-infinite-dilution-water-v1",
+        "continuation": [
+          {
+            "lambda": 0.0,
+            "max_abs_residual": 1.4210854715202e-14,
+            "nfev": 10,
+            "success": true
+          },
+          {
+            "lambda": 0.2,
+            "max_abs_residual": 8.6107188719332e-10,
+            "nfev": 23,
+            "success": true
+          },
+          {
+            "lambda": 0.4,
+            "max_abs_residual": 3.4128255776977e-12,
+            "nfev": 4,
+            "success": true
+          },
+          {
+            "lambda": 0.6,
+            "max_abs_residual": 1.0658141036402e-14,
+            "nfev": 4,
+            "success": true
+          },
+          {
+            "lambda": 0.8,
+            "max_abs_residual": 3.5527136788005e-15,
+            "nfev": 10,
+            "success": true
+          },
+          {
+            "lambda": 1.0,
+            "max_abs_residual": 5.0878764164726e-10,
+            "nfev": 11,
+            "success": true
+          }
+        ],
+        "message": "`gtol` termination condition is satisfied.",
+        "nfev": 62,
+        "objective_norm": 7.6841358243073e-10,
+        "pressure_invariant": true,
+        "success": true
+      },
+      "source_artifact_sha256": "3d9c6666d7eb474aa69f6de092ca3542f71600b4d23d783fc4690799a60effff",
+      "species_order": [
+        "CO2",
+        "MEA",
+        "H2O",
+        "MEAH+",
+        "MEACOO-",
+        "HCO3-",
+        "CO3--",
+        "H3O+",
+        "OH-"
+      ],
+      "temperature_K": 313.15
+    },
+    "fixed_composition_screening": {
+      "composition_mole_fractions": [
+        0.005,
+        0.2,
+        0.7,
+        0.06,
+        0.02,
+        0.012,
+        0.002,
+        1e-05,
+        0.0001
+      ],
+      "design_count": 64,
+      "evaluation_temperature_K": [
+        313.15
+      ],
+      "factor_coordinate_domain": [
+        -1.0,
+        1.0
+      ],
+      "fit_performed": false,
+      "groups": [
+        {
+          "group_id": "F1",
+          "member_count": 52,
+          "name": "all ion-containing alpha closures"
+        },
+        {
+          "group_id": "F2",
+          "member_count": 18,
+          "name": "A molecule\u2192new P1\u2013P6"
+        },
+        {
+          "group_id": "F3",
+          "member_count": 18,
+          "name": "A new P1\u2013P6\u2192molecule"
+        },
+        {
+          "group_id": "F4",
+          "member_count": 18,
+          "name": "B molecule\u2192new P1\u2013P6"
+        },
+        {
+          "group_id": "F5",
+          "member_count": 18,
+          "name": "B new P1\u2013P6\u2192molecule"
+        },
+        {
+          "group_id": "F6",
+          "member_count": 4,
+          "name": "historical P7/P8 candidate scale"
+        },
+        {
+          "group_id": "F7",
+          "member_count": 28,
+          "name": "A pair-pair lower-ID\u2192higher-ID"
+        },
+        {
+          "group_id": "F8",
+          "member_count": 28,
+          "name": "A pair-pair higher-ID\u2192lower-ID"
+        },
+        {
+          "group_id": "F9",
+          "member_count": 28,
+          "name": "B pair-pair lower-ID\u2192higher-ID"
+        },
+        {
+          "group_id": "F10",
+          "member_count": 28,
+          "name": "B pair-pair higher-ID\u2192lower-ID"
+        },
+        {
+          "group_id": "F11",
+          "member_count": 12,
+          "name": "ionic-radius scenario"
+        },
+        {
+          "group_id": "F12",
+          "member_count": 2,
+          "name": "permittivity response"
+        }
+      ],
+      "identity": "mea-enrtl-nine-species-grouped-screening-v2",
+      "parameter_level_uq": false,
+      "pressure_Pa": [
+        101325.0
+      ],
+      "quantitative_uncertainty": false,
+      "random_seed": 20260902,
+      "role": "finite fixed-composition evaluations; these rows are not equilibria",
+      "source_artifact_sha256": "e7a79890422990cf111de1dfde5481aa958b0ff7d2581e9010308a4e566233d3",
+      "source_temperature_domain_K": [
+        293.15,
+        323.15
+      ],
+      "species_order": [
+        "CO2",
+        "MEA",
+        "H2O",
+        "MEAH+",
+        "MEACOO-",
+        "HCO3-",
+        "CO3--",
+        "H3O+",
+        "OH-"
+      ],
+      "state_status_counts": {
+        "finite_fixed_composition_evaluation": 64,
+        "failed": 0
+      },
+      "states": [
+        {
+          "co2_fugacity_Pa": 1287451.2419120434,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 15.242735694056428,
+          "state_id": "G01",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 3524412.6904031346,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 505.1699040211601,
+          "state_id": "G02",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 894240.1198189142,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 12.887368667738794,
+          "state_id": "G03",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 3470090.642411267,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 29.111484756097493,
+          "state_id": "G04",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1642370.4173572268,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 9.982712310185466,
+          "state_id": "G05",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 527716.3460467868,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 389.47289439113155,
+          "state_id": "G06",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1852870.3619048083,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 86.97850495889028,
+          "state_id": "G07",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1090332.2686501443,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 47.76163815699377,
+          "state_id": "G08",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 2047637.6679195047,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 182.64596711281612,
+          "state_id": "G09",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1249666.8491379442,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 14.940833003714783,
+          "state_id": "G10",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1307694.2463867918,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 15.604494890915,
+          "state_id": "G11",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 2303053.7005440155,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 210.70350806030342,
+          "state_id": "G12",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 13497565.220248546,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 63.21120535703865,
+          "state_id": "G13",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1656403.30557454,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.69697350615079,
+          "state_id": "G14",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 766024.5897986668,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 15.387385726462252,
+          "state_id": "G15",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1283497.4455880926,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 13.374607336329479,
+          "state_id": "G16",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1342702.3471283433,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 30.72203439249907,
+          "state_id": "G17",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1101956.487782338,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 20.889440766749356,
+          "state_id": "G18",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1166492.133794104,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 29.799438776020327,
+          "state_id": "G19",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1057385.1692779555,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 83.34314595670682,
+          "state_id": "G20",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1187975.3488413475,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.340289628558924,
+          "state_id": "G21",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 829620.5768373825,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 12.997949488103643,
+          "state_id": "G22",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 773198.6821078741,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 228.89092225390186,
+          "state_id": "G23",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1217188.1503700933,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 26.55044913288377,
+          "state_id": "G24",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1386588.663257283,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.311869634698184,
+          "state_id": "G25",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1151686.6848986305,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.094009228973803,
+          "state_id": "G26",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 221693.3705582493,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 1378.728981163386,
+          "state_id": "G27",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 982814.4260454399,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 23.544492109240757,
+          "state_id": "G28",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1249630.0097448,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 20.022148124298543,
+          "state_id": "G29",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1433996.3784971954,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 11.734278467940943,
+          "state_id": "G30",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1550234.3635828604,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.82241299704559,
+          "state_id": "G31",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 6358095.212410379,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 51.300555604169716,
+          "state_id": "G32",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 2538537.242196943,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 120.86457328867618,
+          "state_id": "G33",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 980596.371374194,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 70.88450538626816,
+          "state_id": "G34",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1106758.2679929328,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 173.4819039409309,
+          "state_id": "G35",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 5576016.010059056,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 51.625245285975154,
+          "state_id": "G36",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1259745.681042694,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.426178242065482,
+          "state_id": "G37",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1291126.1240303493,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 37.79172090628235,
+          "state_id": "G38",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 969773.4368680303,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.350239877954298,
+          "state_id": "G39",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 880429.2212909552,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 13.268889162699246,
+          "state_id": "G40",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1242823.3020808343,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 16.291554219312523,
+          "state_id": "G41",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1216884.5270902289,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.666044508922447,
+          "state_id": "G42",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 2712848.860730377,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 485.7240929106213,
+          "state_id": "G43",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 2198271.423684329,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 84.75473243130209,
+          "state_id": "G44",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1059135.0952707515,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.54576428006164,
+          "state_id": "G45",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 587383.5994951223,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 507.46764880578905,
+          "state_id": "G46",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1368192.3430105231,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 22.15094373734433,
+          "state_id": "G47",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 749255.2911749056,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 85.49200939204475,
+          "state_id": "G48",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1159061.0157082565,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.214751876103914,
+          "state_id": "G49",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1238487.5321368924,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.095571019177207,
+          "state_id": "G50",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1086384.6995816939,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.104643219649066,
+          "state_id": "G51",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1106473.569426124,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 51.17874164236271,
+          "state_id": "G52",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 935737.922241756,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 66.47370073842366,
+          "state_id": "G53",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 63435.19127418946,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 2352.3306517725086,
+          "state_id": "G54",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 815237.3627948229,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 40.60258152966021,
+          "state_id": "G55",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1282884.9092449672,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 101.52520571444464,
+          "state_id": "G56",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1328734.3573152956,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 19.945228198031486,
+          "state_id": "G57",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 2886641.2045436744,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 175.17174066575413,
+          "state_id": "G58",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 11329024.906757437,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 268.85653121906273,
+          "state_id": "G59",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 2168440.7161941794,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 22.386310737561384,
+          "state_id": "G60",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 894790.823649414,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 15.783502646935329,
+          "state_id": "G61",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 3372702.7895590863,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 31.676616872581803,
+          "state_id": "G62",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 1492283.138504177,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 18.025146778316028,
+          "state_id": "G63",
+          "status": "finite_fixed_composition_evaluation"
+        },
+        {
+          "co2_fugacity_Pa": 960949.3841559682,
+          "finite_activities": true,
+          "finite_derivatives": true,
+          "max_abs_reaction_residual": 26.426811442180618,
+          "state_id": "G64",
+          "status": "finite_fixed_composition_evaluation"
+        }
+      ],
+      "status": "exploratory grouped screening and local sensitivities only"
+    },
+    "nine_species_topology": {
+      "born_radius_baseline": {
+        "CO3--": {
+          "bounds_m": [
+            2e-10,
+            6e-10
+          ],
+          "provenance": "small-ion 3 \u00c5 active baseline",
+          "status": "baseline_closure",
+          "units": "m",
+          "value_m": 3e-10
+        },
+        "H3O+": {
+          "bounds_m": [
+            2e-10,
+            6e-10
+          ],
+          "provenance": "small-ion 3 \u00c5 active baseline",
+          "status": "baseline_closure",
+          "units": "m",
+          "value_m": 3e-10
+        },
+        "HCO3-": {
+          "bounds_m": [
+            2e-10,
+            6e-10
+          ],
+          "provenance": "small-ion 3 \u00c5 active baseline",
+          "status": "baseline_closure",
+          "units": "m",
+          "value_m": 3e-10
+        },
+        "MEACOO-": {
+          "bounds_m": [
+            2.5e-08,
+            3.5e-08
+          ],
+          "provenance": "literal 300 \u00c5 active baseline",
+          "status": "verified_external",
+          "units": "m",
+          "value_m": 3e-08
+        },
+        "MEAH+": {
+          "bounds_m": [
+            2.5e-08,
+            3.5e-08
+          ],
+          "provenance": "literal 300 \u00c5 active baseline",
+          "status": "verified_external",
+          "units": "m",
+          "value_m": 3e-08
+        },
+        "OH-": {
+          "bounds_m": [
+            2e-10,
+            6e-10
+          ],
+          "provenance": "small-ion 3 \u00c5 active baseline",
+          "status": "baseline_closure",
+          "units": "m",
+          "value_m": 3e-10
+        }
+      },
+      "historical_candidates": [
+        {
+          "A_K": 18.588108594566588,
+          "B_K": -1533.6489230168652,
+          "candidate_id": "historical_P1",
+          "left": "H2O",
+          "pair_id": "P7",
+          "provenance": "historical local candidate; excluded from active Leaf B",
+          "right": "P7",
+          "status": "historical_candidate",
+          "units": "K"
+        },
+        {
+          "A_K": 8.5721,
+          "B_K": 0,
+          "candidate_id": "historical_P2",
+          "left": "H2O",
+          "pair_id": "P8",
+          "provenance": "historical local candidate; excluded from active Leaf B",
+          "right": "P8",
+          "status": "historical_candidate",
+          "units": "K"
+        },
+        {
+          "A_K": -7.055694714651596,
+          "B_K": 1224.0939968361579,
+          "candidate_id": "historical_P3",
+          "left": "P7",
+          "pair_id": "P7",
+          "provenance": "historical local candidate; excluded from active Leaf B",
+          "right": "H2O",
+          "status": "historical_candidate",
+          "units": "K"
+        },
+        {
+          "A_K": -4.0092,
+          "B_K": 0,
+          "candidate_id": "historical_P4",
+          "left": "P8",
+          "pair_id": "P8",
+          "provenance": "historical local candidate; excluded from active Leaf B",
+          "right": "H2O",
+          "status": "historical_candidate",
+          "units": "K"
+        }
+      ],
+      "interaction_topology": "eNRTL molecule plus ion-pair topology; no direct ionic species-binary table",
+      "inventory": {
+        "A_terms": 110,
+        "B_terms": 110,
+        "alpha_terms": 55,
+        "extension": {
+          "A_terms": 90,
+          "B_terms": 90,
+          "alpha_terms": 45
+        },
+        "inherited_leaf_a": {
+          "A_terms": 20,
+          "B_terms": 20,
+          "alpha_terms": 10
+        },
+        "ion_pair_pair": {
+          "A_terms": 56,
+          "B_terms": 56,
+          "alpha_terms": 28
+        },
+        "molecule_ion_pair": {
+          "A_terms": 48,
+          "B_terms": 48,
+          "alpha_terms": 24
+        },
+        "molecule_molecule": {
+          "A_terms": 6,
+          "B_terms": 6,
+          "alpha_terms": 3
+        }
+      },
+      "ion_pairs": [
+        {
+          "anion": "CO3--",
+          "anion_charge": -2,
+          "cation": "MEAH+",
+          "charge": 1,
+          "id": "P1",
+          "provenance": "explicit baseline closure",
+          "status": "baseline_closure",
+          "units": "dimensionless"
+        },
+        {
+          "anion": "OH-",
+          "anion_charge": -1,
+          "cation": "MEAH+",
+          "charge": 1,
+          "id": "P2",
+          "provenance": "explicit baseline closure",
+          "status": "baseline_closure",
+          "units": "dimensionless"
+        },
+        {
+          "anion": "MEACOO-",
+          "anion_charge": -1,
+          "cation": "H3O+",
+          "charge": 1,
+          "id": "P3",
+          "provenance": "explicit baseline closure",
+          "status": "baseline_closure",
+          "units": "dimensionless"
+        },
+        {
+          "anion": "HCO3-",
+          "anion_charge": -1,
+          "cation": "H3O+",
+          "charge": 1,
+          "id": "P4",
+          "provenance": "explicit baseline closure",
+          "status": "baseline_closure",
+          "units": "dimensionless"
+        },
+        {
+          "anion": "CO3--",
+          "anion_charge": -2,
+          "cation": "H3O+",
+          "charge": 1,
+          "id": "P5",
+          "provenance": "explicit baseline closure",
+          "status": "baseline_closure",
+          "units": "dimensionless"
+        },
+        {
+          "anion": "OH-",
+          "anion_charge": -1,
+          "cation": "H3O+",
+          "charge": 1,
+          "id": "P6",
+          "provenance": "explicit baseline closure",
+          "status": "baseline_closure",
+          "units": "dimensionless"
+        },
+        {
+          "anion": "MEACOO-",
+          "anion_charge": -1,
+          "cation": "MEAH+",
+          "charge": 1,
+          "id": "P7",
+          "provenance": "explicit baseline closure",
+          "status": "baseline_closure",
+          "units": "dimensionless"
+        },
+        {
+          "anion": "HCO3-",
+          "anion_charge": -1,
+          "cation": "MEAH+",
+          "charge": 1,
+          "id": "P8",
+          "provenance": "explicit baseline closure",
+          "status": "baseline_closure",
+          "units": "dimensionless"
+        }
+      ],
+      "role": "species and interaction topology provenance",
+      "sections": {
+        "ion_pair_pair": {
+          "alpha_term_count": 28,
+          "temperature_term_count": 56
+        },
+        "molecule_ion_pair": {
+          "alpha_term_count": 24,
+          "temperature_term_count": 48
+        },
+        "molecule_molecule": {
+          "alpha_term_count": 3,
+          "temperature_term_count": 6
+        }
+      },
+      "source_artifact_sha256": "3bac770fe339256766450f85eb9ffe3aefafa91e",
+      "species_order": [
+        "CO2",
+        "MEA",
+        "H2O",
+        "MEAH+",
+        "MEACOO-",
+        "HCO3-",
+        "CO3--",
+        "H3O+",
+        "OH-"
+      ]
+    },
+    "screening_reaction_residuals": {
+      "d01_excluded": true,
+      "mean": 134.5601315331901,
+      "quantity": "maximum absolute reaction residual across the five historical reactions",
+      "range": [
+        9.982712310185466,
+        2352.3306517725086
+      ],
+      "role": "diagnostic residual range for the 64 designs",
+      "row_count": 64,
+      "unit": "dimensionless log-activity residual"
+    },
+    "six_species_parity": {
+      "basis": "mole_fraction_x",
+      "excess_terms": {
+        "born": "active",
+        "local_enrtl": "active",
+        "pdh": "active",
+        "poynting": "zero"
+      },
+      "identity": "mea-enrtl-six-species-fixed-state-parity-v1",
+      "poynting_enabled": false,
+      "reaction_matrix": [
+        [
+          -1,
+          -2,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          -1,
+          -1,
+          -1,
+          1,
+          0,
+          1
+        ]
+      ],
+      "reaction_order": [
+        "Ccar",
+        "Cbic"
+      ],
+      "role": "fixed-state parity summary",
+      "source_artifact_sha256": "4ad2f71444e8ba4a78587f19b04b3161b3351d06e4e50b9add5f1812d8c1610b",
+      "species_order": [
+        "CO2",
+        "MEA",
+        "H2O",
+        "MEAH+",
+        "MEACOO-",
+        "HCO3-"
+      ],
+      "standard_state_identity": "pinned-c9-reduced-activity-basis",
+      "state_count": 27,
+      "temperature_domain_K": [
+        313.15,
+        393.15
+      ]
+    }
+  },
+  "identity": "mea-enrtl-historical-evidence-v1",
+  "omitted_from_retained_record": [
+    "executable historical model code",
+    "generated process-facing output",
+    "caloric values not present in the source record",
+    "machine-local paths",
+    "oversized generated JSON"
+  ],
+  "schema_version": 1,
+  "source": {
+    "branch": "codex/enrtl-two-leaf-nine-species",
+    "commits": [
+      {
+        "blob": "4cfcce3efc0dea9849b06cdbe7fa4ea3e5637962",
+        "commit": "27f0577",
+        "file": "data/reference/MEA/parameters/enrtl_six_species_parity_v1.json",
+        "role": "six-species fixed-state parity"
+      },
+      {
+        "blob": "3bac770fe339256766450f85eb9ffe3aefafa91e",
+        "commit": "09c81ae",
+        "file": "data/reference/MEA/parameters/enrtl_nine_species_parameters_v1.json",
+        "role": "nine-species interaction topology"
+      },
+      {
+        "blob": "2acf768e790eb2c2630f0a8ed2a60d39e6157777",
+        "commit": "6a54772",
+        "file": "data/reference/MEA/artifacts/absorber_result_v1.json",
+        "role": "D01 equilibrium continuation evidence"
+      },
+      {
+        "blob": "5b669512430014a963ee6d5c776010c325ea85b8",
+        "commit": "e514120",
+        "file": "analyses/enrtl_nine_species_screening/results/grouped_screening_v1.json",
+        "role": "64-point grouped fixed-composition screening"
+      }
+    ],
+    "fitting_identity": "c9e61fab6ea631c77166ee337f02b83d19b9c9a8",
+    "tip_commit": "e514120"
+  },
+  "status": "historical exploratory evidence only"
+}
