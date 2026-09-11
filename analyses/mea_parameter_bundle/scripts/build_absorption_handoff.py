@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import zipfile
 from pathlib import Path
 
-from result_freshness import require_current_results, require_hashes
+from result_freshness import hashes, require_current_results, require_hashes
 from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
 from shared_evaluation import (
     R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS as R123_OFFSETS,
@@ -20,10 +21,10 @@ REPO = ANALYSIS.parents[1]
 OUTPUT = ANALYSIS / "results/handoff/mea-reactive-epcsaft-parameter-bundle.zip"
 ROOT = "mea-reactive-epcsaft-parameter-bundle"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
-STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
+STATE_PACKET = ANALYSIS / "data/input/state-packet.json.gz"
 ENGINE = ANALYSIS / "data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 EXPECTED_STATE_PACKET_SHA256 = (
-    "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
+    "e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba"
 )
 EXPECTED_ENGINE_SHA256 = (
     "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805"
@@ -39,7 +40,7 @@ def source(path: Path) -> bytes:
 
 
 def reaction_definition(parameter_bytes: bytes, packet_bytes: bytes) -> bytes:
-    packet = expand_state_packet(json.loads(packet_bytes))
+    packet = expand_state_packet(json.loads(gzip.decompress(packet_bytes)))
     parameters = json.loads(parameter_bytes)
     coefficients = {
         row["reaction_id"]: {
@@ -219,7 +220,7 @@ model = epcsaft.Mixture(parameters)
 
 Construct new column states through `epcsaft.equilibrium` using the species
 order and reaction definition in chemistry/reaction-system.json. The retained
-validation/state-packet.json is immutable evidence and contains historical
+validation/state-packet.json.gz is immutable evidence and contains historical
 continuation states; do not reuse those continuation states as process-column
 initial conditions.
 
@@ -271,7 +272,7 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
 
     def source(path: Path) -> bytes:
         data = path.read_bytes()
-        captured[str(path.relative_to(REPO))] = sha256(data)
+        captured.update(hashes((path,)))
         return data
 
     files = {
@@ -279,7 +280,7 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
         "verify_bundle.py": VERIFY.encode(),
         "parameters/parameters.json": source(PARAMETERS),
         "engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl": source(ENGINE),
-        "validation/state-packet.json": source(STATE_PACKET),
+        "validation/state-packet.json.gz": source(STATE_PACKET),
         "validation/fit-residuals.csv": source(
             ANALYSIS / "results/current-best-fit-residuals.csv"
         ),
@@ -336,7 +337,7 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
         },
     }
     files["chemistry/reaction-system.json"] = reaction_definition(
-        files["parameters/parameters.json"], files["validation/state-packet.json"]
+        files["parameters/parameters.json"], files["validation/state-packet.json.gz"]
     )
     return files, captured
 

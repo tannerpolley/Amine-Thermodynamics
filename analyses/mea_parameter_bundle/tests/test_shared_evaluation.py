@@ -177,7 +177,7 @@ def test_compact_packet_expands_all_observations_and_isolated_values():
 
 
 def test_compact_packet_rejects_bad_reference():
-    document = json.loads(shared.STATE_PACKET.read_text())
+    document = json.loads(shared.source_bytes(shared.STATE_PACKET))
     document["observations"][0]["request"]["temperature"] = 999999
     with pytest.raises(ValueError, match="out-of-range temperature reference"):
         shared.expand_state_packet(document)

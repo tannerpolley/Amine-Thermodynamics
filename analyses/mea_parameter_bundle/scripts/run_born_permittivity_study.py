@@ -31,7 +31,7 @@ from run_direct_parameter_campaign import (
 
 ANALYSIS = Path(__file__).resolve().parents[1]
 BASELINE = ANALYSIS / "results/selected-current-best-parameters.json"
-STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
+STATE_PACKET = ANALYSIS / "data/input/state-packet.json.gz"
 FOUNDATION = ANALYSIS / "data/input/parameters.json"
 RESULTS = ANALYSIS / "results/born-permittivity-study"
 ION_IDS = {

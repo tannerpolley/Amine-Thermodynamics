@@ -9,6 +9,7 @@ silently grow a second solver implementation.
 from __future__ import annotations
 
 import copy
+import gzip
 import hashlib
 import importlib.metadata
 import json
@@ -33,7 +34,7 @@ PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 ENGINE_WHEEL = INPUT / "engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 ENGINE_WHEEL_SHA256 = "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805"
 ENGINE_COMMIT = "8438ce5f94a547189c91c4ec180a7782d60879d6"
-STATE_PACKET = INPUT / "state-packet.json"
+STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
 STATE_PACKET_SCHEMA_VERSION = 1
@@ -61,12 +62,17 @@ SOURCE_CONTRACT = ANALYSIS.parents[1] / "src/MEA/common/mea_source_contracts.py"
 
 
 def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(source_bytes(path)).hexdigest()
+
+
+def source_bytes(path: Path) -> bytes:
+    data = path.read_bytes()
+    return gzip.decompress(data) if path.name.endswith(".json.gz") else data
 
 
 def load_state_packet(path: Path = STATE_PACKET) -> dict[str, object]:
     """Load and expand the compact retained packet with strict references."""
-    return expand_state_packet(json.loads(path.read_text(encoding="utf-8")))
+    return expand_state_packet(json.loads(source_bytes(path)))
 
 
 def expand_state_packet(document: object) -> dict[str, object]:

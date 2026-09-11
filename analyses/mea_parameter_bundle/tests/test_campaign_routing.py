@@ -1,7 +1,8 @@
 """Campaigns pass their own parameters and reactions to the shared evaluator."""
 
-import sys
+import gzip
 import json
+import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "scripts"))
@@ -71,7 +72,7 @@ def test_empty_checkpoint_cannot_leave_previous_predictions(tmp_path):
 def test_failed_comparison_retains_failures_without_selecting_candidate(
     tmp_path, monkeypatch
 ):
-    packet = json.loads(comparison.STATE_PACKET.read_text())
+    packet = json.loads(gzip.decompress(comparison.STATE_PACKET.read_bytes()))
     packet["observations"] = packet["observations"][:1]
     packet_path = tmp_path / "packet.json"
     packet_path.write_text(json.dumps(packet))

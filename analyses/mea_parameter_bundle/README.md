@@ -113,11 +113,14 @@ Verified checkpoint inputs (SHA-256):
 
 | Input | SHA-256 |
 |:--|:--|
-| `results/selected-current-best-parameters.json` | `a9186c93759f2e2c02a6c913350ad06a244fff3f82503820c9962b3df8dd40d9` |
-| `scripts/shared_evaluation.py` | `6bc94e6c628aa212ccc4a6cce32226eed42aadaca6d06692e6c9be6984b6e32d` |
-| `scripts/run_reaction_temperature_fit.py` | `cc83e4291e5d7603acf7b03be72bdacc6f1d557db9a9449e213688c29d4cf5bd` |
-| `data/input/state-packet.json` | `86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448` |
+| `results/selected-current-best-parameters.json` | `568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d` |
+| `scripts/shared_evaluation.py` | `6e5e081700207f6e358ef2b034ad70d3c1d6b5f816681f03fc402a3df5c8a371` |
+| `scripts/run_reaction_temperature_fit.py` | `7829d831d681dafc1af6d129b744beb938021669d1b62f2de8ccff12610e63ad` |
+| `data/input/state-packet.json.gz` | `e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba` |
 | `data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl` | `40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805` |
+
+The decompressed state packet retains its original SHA-256,
+`86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448`.
 
 Before running in a new checkout, install that retained wheel explicitly; do
 not substitute a newer sibling Engine build. With that environment prepared,
@@ -188,7 +191,7 @@ zero-vapor/ideal-CO2-feed reconstruction. The older Gibbs--Helmholtz
 pressure-slope result remains a historical secondary diagnostic; its summary
 records the input curve hash but does not establish the current parameter identity.
 
-`data/input/parameters.json` and the compact `data/input/state-packet.json` are immutable
+`data/input/parameters.json` and the compact `data/input/state-packet.json.gz` are immutable
 local snapshots from ePC-SAFT commit
 `38e91823b6d4f26c1d549f07aaef24a089d8e16d`. The retained Engine wheel includes
 the fast Born/permittivity implementation and solved-pressure reactive

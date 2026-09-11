@@ -145,7 +145,8 @@ and 113/113 heat intervals. Every 120 C pressure state evaluated. All adoption
 rules passed (evaluability not below the incumbent, both held-out blocks
 improved, no cohort degraded, interior solution), so
 `results/selected-current-best-parameters.json` now carries the shifted R2,
-R4, and R5 correlations (sha256 `a9186c93...40d9`); the previous record
+R4, and R5 correlations (sha256 `568f7a5f...8524d` after storage-only JSON
+compaction); the previous record
 (`00049473...da25e`) is superseded and listed in
 `results/parameter-record-history.csv`. Holdout use is logged in
 `results/holdout-evaluations.csv`; both blocks have now been scored once.

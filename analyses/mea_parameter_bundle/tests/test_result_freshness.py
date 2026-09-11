@@ -1,5 +1,6 @@
 """Publication must reject stale numerical inputs and altered rendered outputs."""
 
+import gzip
 import importlib.util
 import sys
 import os
@@ -98,10 +99,21 @@ def test_handoff_checks_captured_bytes_not_only_live_receipts(monkeypatch):
     handoff = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(handoff)
     contents = {}
+
+    def fake_bytes(path):
+        data = str(path).encode()
+        if path.name.endswith(".json.gz"):
+            data = gzip.compress(data, mtime=0)
+        return contents.setdefault(path, data)
+
     monkeypatch.setattr(
-        Path, "read_bytes", lambda path: contents.setdefault(path, str(path).encode())
+        Path, "read_bytes", fake_bytes
     )
-    monkeypatch.setattr(Path, "is_file", lambda path: True)
+    monkeypatch.setattr(
+        Path,
+        "is_file",
+        lambda path: path != handoff.STATE_PACKET.with_suffix(""),
+    )
     monkeypatch.setattr(handoff, "require_current_results", lambda **kwargs: None)
     monkeypatch.setattr(
         handoff, "reaction_definition", lambda parameters, packet: parameters + packet
