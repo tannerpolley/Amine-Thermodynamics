@@ -21,7 +21,7 @@ from shared_evaluation import (
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
-STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
+STATE_PACKET = ANALYSIS / "data/input/state-packet.json.gz"
 RESULTS = ANALYSIS / "results/historical/permittivity-comparison"
 VARIANTS = {
     "current_ion_specific": "ion-specific-suppression",

@@ -1692,7 +1692,8 @@ def write_adopted_parameters(
         )
     document["document_version"] = int(document.get("document_version", 1)) + 1
     PARAMETERS.write_text(
-        json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        json.dumps(document, sort_keys=True, separators=(",", ":")) + "\n",
+        encoding="utf-8",
     )
     parameters = epcsaft.Parameters.from_json(PARAMETERS)
     for spec in parameters.parameter_specs:

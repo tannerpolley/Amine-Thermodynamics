@@ -24,7 +24,7 @@ ANALYSIS = Path(__file__).resolve().parents[1]
 RESULTS = ANALYSIS / "results/best-in-slot-campaign"
 RUNS = ANALYSIS / "results/runs/best-in-slot-campaign"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
-STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
+STATE_PACKET = ANALYSIS / "data/input/state-packet.json.gz"
 BASELINE_RESIDUALS = ANALYSIS / "results/current-best-fit-residuals.csv"
 
 COORDINATES = {

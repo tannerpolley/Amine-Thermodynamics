@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -19,12 +20,18 @@ NOTEBOOK = ANALYSIS / "results/notebook-render-receipt.json"
 
 
 def hashes(paths: list[Path] | tuple[Path, ...]) -> dict[str, str]:
-    return {
-        str(path.resolve().relative_to(REPO)): hashlib.sha256(
-            path.read_bytes()
-        ).hexdigest()
-        for path in paths
-    }
+    result = {}
+    for requested in paths:
+        path = requested
+        if not path.is_file() and path.suffix == ".json":
+            path = path.with_suffix(".json.gz")
+        data = path.read_bytes()
+        logical = path
+        if path.name.endswith(".json.gz"):
+            data = gzip.decompress(data)
+            logical = path.with_suffix("")
+        result[str(logical.resolve().relative_to(REPO))] = hashlib.sha256(data).hexdigest()
+    return result
 
 
 def source_hashes(*sources: Path) -> dict[str, str]:
@@ -34,7 +41,9 @@ def source_hashes(*sources: Path) -> dict[str, str]:
 def require_hashes(expected: dict[str, str]) -> None:
     for name, digest in expected.items():
         path = REPO / name
-        if not path.is_file() or hashes((path,))[name] != digest:
+        if not path.is_file() and path.suffix == ".json":
+            path = path.with_suffix(".json.gz")
+        if not path.is_file() or hashes((path,)).get(name) != digest:
             raise ValueError(
                 f"Stale or missing input/output: {name}; regenerate its owning stage"
             )
