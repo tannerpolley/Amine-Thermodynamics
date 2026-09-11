@@ -1,0 +1,59 @@
+---
+title: "Historical designs and discarded strategies"
+subtitle: "July methods retained as lessons, not as the current fitting plan"
+execute:
+  enabled: false
+---
+
+::: {.callout-note}
+The designs on this page are historical. They are included so future agents
+can see what was already considered and why a new study would need a distinct
+question or evidence source.
+:::
+
+# July coupled-regression designs
+
+The 13 July designs specified a joint pressure/speciation objective, frozen
+parameter bounds, grouped data partitions, multistart behavior and explicit
+identification checks. The independent-assessment design separated fitting
+rows from comparison rows and required coverage and failure accounting.
+
+These documents recorded the estimation strategy and acceptance questions at
+that stage. Later studies changed the active coordinates, model choices and
+assessment sequence. The designs were never a parameter adoption and should
+not be rerun simply because their prose is older.
+
+# What was learned afterward
+
+The 28 July shared-ion density/speciation fit produced a stable converged
+solution but worsened pressure. In its exact retained metric, pressure
+training/active median absolute log error changed **0.432 → 0.869** and the
+reserved comparison changed **0.542 → 0.730**. The August pressure-first
+screening explored directions, conditioning, bounds and loading trends without
+resolving the coupled fit. The consolidated Issue 70 comparison therefore
+recorded a supported-negative decision rather than exporting transferable
+parameters.
+
+The later reaction-temperature study changed the question: EOS parameters were
+held fixed while two sensitivity directions spanning pressure, speciation and
+heat were tested. It improved pressure and heat more than speciation and left
+carbamate/bicarbonate partition unresolved. That is the current retained
+lesson from the sequence.
+
+# How to use this history
+
+Use the July records to avoid repeating objective-design work. A new numerical
+study needs to state what changed in the question, inputs, model/Engine
+identity or evidence. It must retain the exact data partition, evaluated and
+failed states, residual definitions, parameter identity and independent
+assessment rule. A historical design is context; it is not permission to
+revive a discarded strategy or to promote its vector.
+
+# Records
+
+- `git show 7953c00:docs/superpowers/specs/2026-07-13-coupled-regression-parameter-promotion-design.md`
+- `git show 7953c00:docs/superpowers/specs/2026-07-13-independent-validation-identifiability-design.md`
+- `git show aaa6384:analyses/phase3/ionic_epcsaft_regression/results/scipy_regression_experiment/experiment_summary.json`
+- [Pressure-first retained evidence](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/analyses/reactive_epcsaft_parameter_evidence/pressure_first/)
+- [Issue 70 decision](../../reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json)
+- [Current scientific context](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/scientific/CONTEXT.md)

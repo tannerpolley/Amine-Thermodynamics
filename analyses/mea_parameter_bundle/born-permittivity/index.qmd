@@ -1,0 +1,62 @@
+---
+title: "Born and permittivity study"
+subtitle: "Dielectric formulation, automatic Born activation and bounded sensitivity evidence"
+execute:
+  enabled: false
+---
+
+::: {.callout-warning}
+This is a formulation and sensitivity study around a fixed exploratory bundle.
+It does not authorize a new parameter adoption or establish a universal
+permittivity model.
+:::
+
+# Question
+
+Which dielectric treatment is consistent with the retained ePC-SAFT
+formulation, and can bounded changes to Born diameters, solvent mixing or
+reaction temperature dependence resolve the pressure/speciation mismatch?
+
+# Starting point and strategy
+
+The study kept the molecular parameter packet, state packet and Engine identity
+fixed while comparing the retained ion-specific formulation with derived
+temperature/component mixing and the Uyan solvent-only mixing transferred from
+MDEA to MEA. The later superseding study also screened original Born against
+SSM+DS activation, Figiel and Zuber analog/fallback-ion choices, CO₂ pool
+inclusion, and bounded joint sensitivity directions.
+
+The active mapping is automatic: positive unique ion Born diameters with a
+non-unit neutral solvation factor activate corrected SSM+DS; a zero Born
+diameter inherits the Debye–Hückel diameter and recovers original Born. CO₂
+remains an EOS component even when excluded from the salt-free neutral
+permittivity pool.
+
+# Numerical result
+
+The earlier three-formulation comparison evaluated 120/123 total states. On
+the common comparison, Uyan solvent-only mixing was closer on 53 pressure
+targets and 77 speciation targets; Schick temperature mixing was closer on 12
+pressure and 54 speciation targets. The comparison used a different parameter
+and Engine identity from the current selected record, so those counts are
+formulation evidence rather than current bundle scores.
+
+The superseding fixed-bundle study retains the complete pressure/speciation
+comparison, failure characterization, paired common-row statistics, parity
+checks, density-anchor timing and bounded Born/solvation-factor sensitivity.
+Its selected live mapping remains the switch-free selected JSON. The retained
+joint direction improved selected rows only within the tested bounded screen;
+it did not demonstrate separate ionic parameter identification.
+
+# Conclusion and limits
+
+Solvent-only mass-fraction dielectric mixing remains the selected working
+formulation because it was the retained comparison choice under its declared
+guards. The evidence supports a formulation decision for this bundle, not a
+claim that Born diameters or dielectric mixing are independently fitted from
+MEA observations. The pressure/speciation trade-off and preserved failures
+must remain visible in any later regression or process-model claim.
+
+# Records
+
+[Superseding study summary](../results/born-permittivity-study/study-summary.json) · [Common-row statistics](../results/born-permittivity-study/full-common-row-statistics.csv) · [Reaction-synchronized comparison](../results/born-permittivity-study/current-fast-common-comparison.csv) · [Joint sensitivity figure](../figures/born_permittivity/output/selected-bundle-joint-sensitivity.svg) · [Earlier formulation comparison](../results/historical/permittivity-formulation-comparison.json)

@@ -1,5 +1,12 @@
 # Matched six- and nine-species comparison
 
+**Reproduction limit (8 September 2026 audit):** the retained all-parameter
+screening used a historical packet and a temporary local SciPy/Newton
+equilibrium layer. That non-portable generator is retired. Future regeneration
+needs explicit immutable packet inputs and an Engine-owned equilibrium method.
+Its retained sensitivity results are not posterior uncertainty for the current
+exploratory incumbent.
+
 This analysis holds the feed, reaction source, temperature/loading coordinate,
 and reporting basis fixed while comparing nine explicit species with a six-
 species reduction.
@@ -71,13 +78,10 @@ quarto render analyses/enrtl_six_species_ideal_comparison/notebook.qmd --to html
 quarto render analyses/enrtl_six_species_ideal_comparison/notebook.qmd --to pdf
 ```
 
-The UQ uses the explicit Engine wheel and is checkpointed in four-row LHC
-parts. Set `EPCSAFT_ENGINE_WHEEL`, run the `lhc` phase for all sample ranges
-`[0,128)`, then run `aggregate-lhc`, `finalize` with
-`MEA_UQ_SKIP_ENDPOINTS=1`, and `render_uq_figures.py`. The retained run uses
-the candidate-3 packet, seed `20260901`, 113 continuous parameter groups, and
-the temporary SciPy/Newton reaction-extents bridge with Engine EOS evaluations.
-It is a screening-prior survey, not a measurement-backed posterior UQ.
+The retained UQ run used the candidate-3 packet, seed `20260901`, 113
+continuous parameter groups, and the temporary SciPy/Newton reaction-extents
+bridge with Engine EOS evaluations. It is historical screening evidence, not a
+measurement-backed posterior UQ or a supported regeneration route.
 
 ## Corrected pressure result
 

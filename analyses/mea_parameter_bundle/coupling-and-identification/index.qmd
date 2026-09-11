@@ -1,0 +1,59 @@
+---
+title: "Coupling and parameter identification"
+subtitle: "What the reductions mean chemically and what the retained fits can identify"
+execute:
+  enabled: false
+---
+
+::: {.callout-note}
+This page connects retained analyses. It does not introduce a new regression or
+replace the exact calculation receipts linked below.
+:::
+
+# Chemical coupling
+
+The six-species comparison derives carbamate formation as R2 − R4 − R5 and
+bicarbonate formation as R2 − R5. Their log equilibrium constants differ by
+−ln K₄. Both net reactions share MEA, CO₂ and MEAH⁺, so carbon, amine and
+charge balances couple their amounts. Activity coefficients also change with
+the shared mixture composition.
+
+The later reaction-temperature fit retained all five reactions and two SVD
+directions. Those two directions reduce fitting freedom; they are not the two
+net reactions. This distinction prevents a numerical rank statement from being
+mistaken for a chemical species reduction.
+
+# What has been tested
+
+The staged work already tested neutral binary VLE, historical ionic/speciation
+regression, bounded CO₂/R4 calibration, dielectric formulations, reaction
+temperature directions and paired heat. A detailed volumetric plan records 128
+analog densities and 103 bulk MEA densities while keeping derived volumes
+separate. It found no numerical exact aqueous MEAH⁺/MEACOO⁻ salt-density
+evidence in the bounded search.
+
+The July coupled designs specified joint pressure/speciation objectives,
+frozen bounds, grouped partitions, multistart and identification requirements.
+The 28 July shared-ion fit converged but worsened pressure; the August
+pressure-first screen did not resolve the fit; Issue 70 retained a supported
+negative decision. These results make the estimation strategy established
+work, not an unresearched gap.
+
+# Remaining identification boundary
+
+The unresolved question is whether the carbamate/bicarbonate split can
+separately identify reaction constants from ionic Born/dispersion and dielectric
+effects under the exact model and data domain. The current reaction-temperature
+fit held EOS parameters fixed and barely changed paired speciation RMSE
+(0.3702 → 0.3670). The earlier ionic fit was not a joint identification study
+of the current selection.
+
+Before another fit, reconcile the reviewed evaluator correction and owner-held
+F/S and ionic-screen results in the [scientific context map](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/scientific/CONTEXT.md)
+and [September audit](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/scientific/REPOSITORY_AUDIT_2026-09-08.md).
+Do not treat a successful solve, a historical fit vector or a two-dimensional
+sensitivity subspace as evidence of independent parameter identification.
+
+# Records
+
+[Six-/nine-species comparison](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/analyses/enrtl_six_species_ideal_comparison/notebook.qmd) · [Volumetric evidence and staged plan](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/ePC-SAFT/meah-meacoo-volumetric-evidence.md) · [Scientific plan](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/scientific/PREDICTIVE_MEA_PROGRAM.md) · [Issue 70 decision](../../reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json) · [Parameter history](../results/parameter-record-history.csv)

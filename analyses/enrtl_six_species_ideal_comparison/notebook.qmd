@@ -4,9 +4,7 @@ subtitle: "Common chemistry, common feed, and two explicitly separated liquid-th
 date: 2026-09-01
 format:
   html:
-    toc: true
     number-sections: true
-    embed-resources: true
   pdf:
     pdf-engine: lualatex
     latex-auto-install: false
@@ -73,7 +71,7 @@ initial MEA, and the feed is 30 wt% MEA in water.
 ### Ideal-liquid lane
 
 The nine-species ideal coefficients come from the local, source-controlled
-[reaction constant manifest](../../data/reference/MEA/manifests/reaction_constant_manifest.csv).
+[reaction constant manifest](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/data/reference/MEA/manifests/reaction_constant_manifest.csv).
 They are the Edwards/Baygi water-carbonate family, the Tong/Baygi carbamate
 hydrolysis entry, and the Bates/Pinching/Baygi protonated-amine dissociation
 entry. The manifest, rather than a fitting-routine output, is the authority
@@ -461,23 +459,10 @@ The claim-led figures can be rendered from retained tables with:
 uv run python analyses/enrtl_six_species_ideal_comparison/scripts/render_figures.py
 ```
 
-The all-parameter UQ is checkpointed in four-row LHC parts so the exact
-128-point design can be resumed safely. Set `EPCSAFT_ENGINE_WHEEL` to the
-explicit wheel used for the run and repeat the `lhc` command over
-`MEA_UQ_BATCH_START`/`MEA_UQ_BATCH_STOP` until `[0,128)` is covered:
+The non-portable all-parameter UQ generator is retired. Its retained tables can
+still be rendered without rerunning the historical SciPy/Newton bridge:
 
 ```bash
-EPCSAFT_ENGINE_WHEEL=/path/to/epcsaft.whl MEA_UQ_PHASE=lhc \\
-  MEA_UQ_SAMPLE_COUNT=128 MEA_UQ_BATCH_START=0 MEA_UQ_BATCH_STOP=4 \\
-  uv run --with /path/to/epcsaft.whl \\
-  python analyses/enrtl_six_species_ideal_comparison/scripts/generate_full_uq.py
-EPCSAFT_ENGINE_WHEEL=/path/to/epcsaft.whl MEA_UQ_PHASE=aggregate-lhc \\
-  MEA_UQ_SAMPLE_COUNT=128 uv run --with /path/to/epcsaft.whl \\
-  python analyses/enrtl_six_species_ideal_comparison/scripts/generate_full_uq.py
-EPCSAFT_ENGINE_WHEEL=/path/to/epcsaft.whl MEA_UQ_PHASE=finalize \\
-  MEA_UQ_SAMPLE_COUNT=128 MEA_UQ_SKIP_ENDPOINTS=1 \\
-  uv run --with /path/to/epcsaft.whl \\
-  python analyses/enrtl_six_species_ideal_comparison/scripts/generate_full_uq.py
 uv run python analyses/enrtl_six_species_ideal_comparison/scripts/render_uq_figures.py
 ```
 

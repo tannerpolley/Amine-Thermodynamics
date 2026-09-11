@@ -1,0 +1,51 @@
+---
+title: "CO₂ dispersion and R4 calibration"
+subtitle: "A bounded coupled screen, not an isolated CO₂ parameter fit"
+execute:
+  enabled: false
+---
+
+::: {.callout-warning}
+The selected grid row predates the current reaction-temperature record. Its
+scores are historical and must not be read as scores for the current JSON.
+:::
+
+# Question
+
+Would a bounded change to CO₂ dispersion energy, coupled with an R4
+carbamate-hydrolysis correlation, improve pressure and speciation together?
+
+# Starting point and strategy
+
+The screen compared direct Engine equilibria over 25 loading/temperature-spread
+pressure states and 44 speciation states (131 positive species targets). The
+broader final request covered 161 pressure observations at 40–120 °C from
+Aronu, Hilliard, Idris, Jou, Mamun and Xu, plus Böttinger and Matin speciation
+through 80 °C.
+
+A 13-scenario refinement grid, nine local candidates and four final candidates
+were compared. The selected row, `local-p0.15-db-350-eps+0.025`, combined a
+2.5% CO₂ dispersion-energy increase with a 0.15 increase in the R4 pivot
+$\ln K$ at 333.15 K and a −350 K slope change. This was a coupled data
+calibration, not an optimizer estimate of CO₂ energy alone.
+
+# Numerical result
+
+The selected row evaluated 130/161 pressure observations with log₁₀ RMSE
+**0.3540** and all 131/131 speciation targets with RMSE **0.2658**. A separate
+two-start optimizer smoke attempt produced zero accepted starts and no fitted
+values. The grid row therefore documents a bounded comparison rather than a
+continuous estimate or confidence interval.
+
+# Conclusion and limits
+
+The screen supplied a useful direction for the exploratory bundle, but the
+result cannot identify CO₂ dispersion independently of the R4 reaction
+correlation. R4 was changed again by the later reaction-temperature fit, so
+this page is provenance for the earlier starred CO₂ value rather than current
+bundle validation. The retained pressure failures and lack of uncertainty
+quantification also remain part of the result.
+
+# Records
+
+[Grid implementation](../scripts/run_direct_parameter_campaign.py) · [Local comparison](../results/best-in-slot-campaign/local-best-grid-summary.csv) · [Final row statistics](../results/best-in-slot-campaign/final-full-validation-summary.csv) · [Exact rows and failures](../results/best-in-slot-campaign/final-full-validation-evaluations.csv) · [Optimizer smoke result](../results/best-in-slot-campaign/co2-epsilon-r4-b-smoke-summary.json)

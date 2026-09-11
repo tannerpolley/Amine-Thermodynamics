@@ -1,0 +1,59 @@
+---
+title: "Calorimetry and thermal assessment"
+subtitle: "Paired absorption-heat data, fit membership and the remaining high-temperature bias"
+execute:
+  enabled: false
+---
+
+::: {.callout-warning}
+Heat values are direct paired-state total-enthalpy comparisons on the retained
+thermal reference. They do not by themselves validate an absorber model.
+:::
+
+# Question
+
+Does the exploratory nine-species bundle reproduce absorption heat across
+loading and temperature, and which heat observations were actually allowed to
+influence the reaction-temperature fit?
+
+# Starting point and strategy
+
+The calorimetry preparation reads the canonical MEA observation table and
+records the preceding endpoint for each finite-loading interval with the same
+source, temperature, concentration and run. The retained partition contains
+66 Kim–Svendsen 40/80 °C calibration intervals, 20 Kim–Svendsen 120 °C
+holdout intervals and 27 Kim et al. 2014 model-selection comparison rows.
+
+Only six 40/80 °C intervals entered the reaction-temperature objective. The
+120 °C block remained outside that fit, and Kim 2014 was comparison evidence.
+The selected-JSON replay uses one reaction-consistent conserved gauge, Engine
+residual enthalpy and an explicit zero-vapor/ideal-CO₂-feed reconstruction.
+
+# Numerical result
+
+::: {.parameter-table .numeric-table}
+| Cohort | Intervals | RMSE (kJ mol⁻¹ CO₂) | Bias (kJ mol⁻¹ CO₂) |
+|:--|--:|--:|--:|
+| Kim–Svendsen 40/80 °C calibration | 66 | 11.8497 | −2.3 |
+| Kim–Svendsen 120 °C holdout | 20 | 31.1500 | −18.8 |
+| Kim 2014 comparison | 27 | 10.7128 | — |
+:::
+
+The retained reaction-temperature candidate reduced the corresponding paired
+errors from 20.01, 39.30 and 16.84 kJ mol⁻¹ CO₂ to 11.84, 31.15 and 10.71.
+The selected-JSON heat replay is hash-matched to the current parameter
+document; the shared-driver pressure/speciation refresh was not completed at
+the same checkpoint.
+
+# Conclusion and limits
+
+The reaction-temperature adjustment improves 40/80 °C heat agreement and the
+120 °C comparison, but the 120 °C under-prediction remains material. Loaded
+solution heat capacities and MEA ideal-gas heat capacity are not retained, so
+solution heat-capacity behavior is predicted rather than independently
+validated. The heat study identifies a remaining thermal discrepancy; it does
+not justify refitting every EOS or reaction parameter.
+
+# Records
+
+[Observation partition receipt](../results/calorimetry/calorimetry-observation-partition-receipt.json) · [Selected-JSON heat summary](../results/calorimetry/current-selected-direct-enthalpy-summary.json) · [Interval comparison](../results/calorimetry/current-selected-direct-enthalpy-comparison.csv) · [Thermal reference](../results/calorimetry/current-selected-reference-thermochemistry.json) · [Thermal checks](../results/calorimetry/thermal-reference-validation.json)

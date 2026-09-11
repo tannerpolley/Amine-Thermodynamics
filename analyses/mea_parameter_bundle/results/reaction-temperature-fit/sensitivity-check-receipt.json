@@ -1,0 +1,24 @@
+{
+  "parameter_sha256": "00049473d53c7e8088ef3e2dbbc6a1bab058f6dc4de963ee98936b4cd9bda25e",
+  "engine_wheel_sha256": "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805",
+  "driver_sha256": "e30c2016597cf07f5f8689511c2b71140843a1ea5173cc6f32afea73eb7aaa12",
+  "policy": "baseline-replay-recovery-v1",
+  "thermochemistry": null,
+  "compared_rows": {
+    "R4": 24,
+    "R5": 21
+  },
+  "max_relative_deviation": {
+    "R4": 0.0017369951310693928,
+    "R5": 0.0021668104911390087
+  },
+  "median_relative_deviation": {
+    "R4": 0.0002437437844653066,
+    "R5": 0.0005364487295136278
+  },
+  "central_difference_step_kj_mol": 2.5,
+  "missing_for_production_use": [
+    "R1-R3 correlation coefficients are not parameter specs in the selected parameter document, so ActiveParameterSet cannot address them; declare reaction:R2:correlation:{a,b_k} (and R1/R3 if ever opened) as typed parameters to expose their sensitivities",
+    "EquilibriumEnthalpy carries no active-parameter Jacobian; heat rows need d(total enthalpy)/d(theta) at fixed reference plus the reference-term derivative sum_i n_i dh_i^ref/d(theta), which MEA can supply analytically from the anchored construction once the Engine exposes the first term"
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "candidate_shifts_kj_mol": {
+    "R1": -0.000679939316315813,
+    "R2": -8.201884540543741,
+    "R3": -0.21602074127857132,
+    "R4": -4.807846566322937,
+    "R5": 8.418523404172149
+  },
+  "workers": 3,
+  "cpu_affinity": [
+    0,
+    1,
+    2
+  ],
+  "parameter_sha256": "00049473d53c7e8088ef3e2dbbc6a1bab058f6dc4de963ee98936b4cd9bda25e",
+  "engine_wheel_sha256": "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805",
+  "driver_sha256": "0dbe2b67810f0cd334a8ed040d657b2fa70d1c4872b6b00895db9f636ba07bd8",
+  "policy": "baseline-replay-recovery-v1",
+  "thermochemistry": null,
+  "validation_complete": true,
+  "missing_groups": [],
+  "summary": {
+    "pressure_calibration": {
+      "attempted": 143,
+      "evaluated": 143,
+      "metric_target_count": 143,
+      "rmse": 0.2365562443181109,
+      "bias": 0.056783150538454,
+      "median_absolute_error": 0.17480024160764945
+    },
+    "pressure_holdout": {
+      "sources": [
+        "Xu2011"
+      ],
+      "attempted": 18,
+      "evaluated": 18,
+      "metric_target_count": 18,
+      "rmse": 0.19014147351899996,
+      "bias": 0.1374207002583239,
+      "median_absolute_error": 0.1377514183759663
+    },
+    "pressure_by_temperature": {
+      "40": {
+        "attempted": 59,
+        "evaluated": 59,
+        "metric_target_count": 59,
+        "rmse": 0.2698185873028729,
+        "bias": 0.12154460600971857,
+        "median_absolute_error": 0.23742361042253946
+      },
+      "60": {
+        "attempted": 24,
+        "evaluated": 24,
+        "metric_target_count": 24,
+        "rmse": 0.24041360283882274,
+        "bias": 0.05618009328648841,
+        "median_absolute_error": 0.1736298075034805
+      },
+      "80": {
+        "attempted": 21,
+        "evaluated": 21,
+        "metric_target_count": 21,
+        "rmse": 0.2415744661547945,
+        "bias": -0.08543966226318316,
+        "median_absolute_error": 0.18087146253677083
+      },
+      "100": {
+        "attempted": 18,
+        "evaluated": 18,
+        "metric_target_count": 18,
+        "rmse": 0.19435859754194107,
+        "bias": 0.07998717785334569,
+        "median_absolute_error": 0.14020876267173948
+      },
+      "120": {
+        "attempted": 39,
+        "evaluated": 39,
+        "metric_target_count": 39,
+        "rmse": 0.16524388897318412,
+        "bias": 0.06227109857349381,
+        "median_absolute_error": 0.0951426853641456
+      }
+    },
+    "speciation": {
+      "attempted": 131,
+      "evaluated": 129,
+      "metric_target_count": 129,
+      "rmse": 0.3629640180142538,
+      "bias": -0.08677132301776737,
+      "median_absolute_error": 0.06880045287768821
+    },
+    "speciation_by_temperature": {
+      "20": {
+        "attempted": 88,
+        "evaluated": 88,
+        "metric_target_count": 88,
+        "rmse": 0.2749199519071421,
+        "bias": -0.10165491874860354,
+        "median_absolute_error": 0.08774619398337163
+      },
+      "40": {
+        "attempted": 20,
+        "evaluated": 18,
+        "metric_target_count": 18,
+        "rmse": 0.7535056642694767,
+        "bias": -0.15089152383302576,
+        "median_absolute_error": 0.06316778619689839
+      },
+      "60": {
+        "attempted": 12,
+        "evaluated": 12,
+        "metric_target_count": 12,
+        "rmse": 0.08899403603521382,
+        "bias": 0.029268440460345158,
+        "median_absolute_error": 0.029054683852711552
+      },
+      "80": {
+        "attempted": 11,
+        "evaluated": 11,
+        "metric_target_count": 11,
+        "rmse": 0.0511607653216271,
+        "bias": 0.010632574914131112,
+        "median_absolute_error": 0.03316609431246779
+      }
+    },
+    "heat_by_partition": {
+      "calibration": {
+        "attempted": 66,
+        "evaluated": 66,
+        "metric_target_count": 66,
+        "rmse": 11.844651609942947,
+        "bias": -2.3408202969469825,
+        "median_absolute_error": 7.650353327502849
+      },
+      "model_selection_comparison": {
+        "attempted": 27,
+        "evaluated": 27,
+        "metric_target_count": 27,
+        "rmse": 10.70966102913145,
+        "bias": -1.520429439797894,
+        "median_absolute_error": 6.144814456313682
+      },
+      "temperature_holdout": {
+        "attempted": 20,
+        "evaluated": 20,
+        "metric_target_count": 20,
+        "rmse": 31.151272034566915,
+        "bias": -18.776197957574528,
+        "median_absolute_error": 21.09912176777074
+      }
+    },
+    "heat_by_temperature": {
+      "40": {
+        "attempted": 48,
+        "evaluated": 48,
+        "metric_target_count": 48,
+        "rmse": 11.540629782474971,
+        "bias": 2.445907635863635,
+        "median_absolute_error": 6.114676453532503
+      },
+      "80": {
+        "attempted": 38,
+        "evaluated": 38,
+        "metric_target_count": 38,
+        "rmse": 11.378409239546976,
+        "bias": -6.172252418941832,
+        "median_absolute_error": 8.294407128298559
+      },
+      "120": {
+        "attempted": 27,
+        "evaluated": 27,
+        "metric_target_count": 27,
+        "rmse": 27.522142324713883,
+        "bias": -16.81213586022961,
+        "median_absolute_error": 18.541692232159093
+      }
+    }
+  }
+}

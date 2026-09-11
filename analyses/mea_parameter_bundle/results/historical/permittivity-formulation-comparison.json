@@ -1,0 +1,166 @@
+{
+  "engine_wheel_sha256": "d7b4fc5ba5cbf0e979b65af83442d565496d11b771bb559233ad9dc3a4f8414a",
+  "immutable_parameter_input": "data/input/parameters.json",
+  "immutable_state_input": "data/input/state-packet.json",
+  "paired_comparison": {
+    "pressure": {
+      "closer_target_counts": {
+        "schick_temperature_mixing": 12,
+        "uyan_co2_excluding": 53
+      },
+      "maximum_log10_schick_over_uyan": 0.3656946807500423,
+      "median_log10_schick_over_uyan": 0.1925227198529145,
+      "minimum_log10_schick_over_uyan": 0.0027103185837159733,
+      "paired_targets": 65
+    },
+    "speciation": {
+      "closer_target_counts": {
+        "schick_temperature_mixing": 54,
+        "uyan_co2_excluding": 77
+      },
+      "maximum_log10_schick_over_uyan": 0.01219975082381006,
+      "median_log10_schick_over_uyan": -0.00037794146674720807,
+      "minimum_log10_schick_over_uyan": -0.012053954423891379,
+      "paired_targets": 131
+    }
+  },
+  "promotion": {
+    "eligible_variants": [
+      "current_ion_specific",
+      "schick_temperature_mixing",
+      "uyan_co2_excluding"
+    ],
+    "pressure_guardrail": "each temperature no more than 10 percent worse than the current baseline",
+    "pressure_metric": "equal-temperature-weighted positive-target log10 RMSE",
+    "selected_parameter_path": "results/selected-current-best-parameters.json",
+    "selected_parameter_sha256": "00049473d53c7e8088ef3e2dbbc6a1bab058f6dc4de963ee98936b4cd9bda25e",
+    "selected_variant": "uyan_co2_excluding",
+    "speciation_guardrail": "all 44 states evaluated and temperature-balanced log10 RMSE no more than 10 percent above the best candidate"
+  },
+  "question": "Select the live permittivity treatment by comparing the current ion-specific formulation, Schick component mixing, and Uyan solvent-only mixing over every retained pressure and speciation state.",
+  "state_selection": "all 79 pressure states across 313.15-393.15 K and all 44 speciation states across 293.15-353.15 K",
+  "variant_provenance": {
+    "current_ion_specific": {
+      "classification": "retained baseline",
+      "scope": "Unmodified frozen-foundation parameter document using its ion-specific-suppression permittivity choice."
+    },
+    "schick_temperature_mixing": {
+      "classification": "derived transfer",
+      "scope": "Schick CO2 temperature correlation and component mixing with ion epsilon_r=8, retaining the current bundle's water input",
+      "source_doi": "10.1016/j.fluid.2022.113714",
+      "source_id": "schick-et-al-2023",
+      "source_sha256": "sha256:958d21b21def89c9d704a0844a01c506809f3a86b5405bda4e07b05d7a3939d3"
+    },
+    "uyan_co2_excluding": {
+      "classification": "derived transfer",
+      "scope": "Uyan solvent-only equation transferred from MDEA to MEA using the current bundle's constant MEA epsilon_r=32 and water input",
+      "source_doi": "10.1016/j.fluid.2015.02.026",
+      "source_id": "uyan-2015-permittivity-transfer",
+      "source_sha256": "sha256:1ae7cabd2a7b84f7c543999106be3fa4387e566739cb8defb5e567405b20d9d6"
+    }
+  },
+  "variants": {
+    "current_ion_specific": {
+      "attempted_states": 123,
+      "bulk_relative_permittivity_max": 62.286068901241656,
+      "bulk_relative_permittivity_median": 48.788149334539185,
+      "bulk_relative_permittivity_min": 32.70368538332399,
+      "evaluated_states": 120,
+      "failed_states": 3,
+      "parameter_fingerprint": "sha256:eae4eeb7c0d64ce6100985f7d0735891b26dbbf9a087727e0f5320bd87cfec75",
+      "pressure_attempted_states": 79,
+      "pressure_evaluated_states": 76,
+      "pressure_log10_rmse": 1.2202398370329,
+      "pressure_median_log10_bias": 1.1391163940336835,
+      "pressure_per_temperature_log10_rmse": {
+        "313.15": 1.4382676829369925,
+        "333.15": 1.2617574377219571,
+        "353.15": 0.8917134078899507,
+        "373.15": 0.9625080873964789,
+        "393.15": 0.7313496559920456
+      },
+      "pressure_positive_targets": 76,
+      "pressure_temperature_balanced_log10_rmse": 1.0878504215986355,
+      "speciation_attempted_states": 44,
+      "speciation_evaluated_states": 44,
+      "speciation_log10_rmse": 0.28825098304922436,
+      "speciation_median_log10_bias": -0.009971132055333495,
+      "speciation_per_temperature_log10_rmse": {
+        "293.15": 0.35023970040037744,
+        "313.15": 0.028015054393993283,
+        "333.15": 0.04186784367533211,
+        "353.15": 0.06948378928033845
+      },
+      "speciation_positive_targets": 131,
+      "speciation_temperature_balanced_log10_rmse": 0.18030086266849993
+    },
+    "schick_temperature_mixing": {
+      "attempted_states": 123,
+      "bulk_relative_permittivity_max": 70.80454348182825,
+      "bulk_relative_permittivity_median": 62.157629228237205,
+      "bulk_relative_permittivity_min": 43.99772574334901,
+      "evaluated_states": 113,
+      "failed_states": 10,
+      "parameter_fingerprint": "sha256:457eabb84f6089cddd044b22e40ca653059e617391e2252a8bca8d02fb65be85",
+      "pressure_attempted_states": 79,
+      "pressure_evaluated_states": 69,
+      "pressure_log10_rmse": 0.5953936678720493,
+      "pressure_median_log10_bias": 0.5181902888063482,
+      "pressure_per_temperature_log10_rmse": {
+        "313.15": 0.7344759116829488,
+        "333.15": 0.5658579271967435,
+        "353.15": 0.3718677799015241,
+        "373.15": 0.4314538935988414,
+        "393.15": 0.3043432630864879
+      },
+      "pressure_positive_targets": 69,
+      "pressure_temperature_balanced_log10_rmse": 0.5053143553137025,
+      "speciation_attempted_states": 44,
+      "speciation_evaluated_states": 44,
+      "speciation_log10_rmse": 0.26695801404657826,
+      "speciation_median_log10_bias": -0.006959365343873693,
+      "speciation_per_temperature_log10_rmse": {
+        "293.15": 0.32391671754836737,
+        "313.15": 0.05697256701704741,
+        "333.15": 0.03169576974430159,
+        "353.15": 0.04843900007804682
+      },
+      "speciation_positive_targets": 131,
+      "speciation_temperature_balanced_log10_rmse": 0.16697220715441355
+    },
+    "uyan_co2_excluding": {
+      "attempted_states": 123,
+      "bulk_relative_permittivity_max": 79.29356618400789,
+      "bulk_relative_permittivity_median": 65.89682886100518,
+      "bulk_relative_permittivity_min": 45.3229003628124,
+      "evaluated_states": 113,
+      "failed_states": 10,
+      "parameter_fingerprint": "sha256:b5a08ef575be314190e0c7aa0ec917cf725330d216e963e7fed9f00edfe4e0df",
+      "pressure_attempted_states": 79,
+      "pressure_evaluated_states": 69,
+      "pressure_log10_rmse": 0.4183520116204207,
+      "pressure_median_log10_bias": 0.23850231249783616,
+      "pressure_per_temperature_log10_rmse": {
+        "313.15": 0.5330616869720889,
+        "333.15": 0.3578611156550412,
+        "353.15": 0.19473466137923517,
+        "373.15": 0.2594068523216201,
+        "393.15": 0.3006911091277104
+      },
+      "pressure_positive_targets": 69,
+      "pressure_temperature_balanced_log10_rmse": 0.348668319954007,
+      "speciation_attempted_states": 44,
+      "speciation_evaluated_states": 44,
+      "speciation_log10_rmse": 0.2663681609802423,
+      "speciation_median_log10_bias": -0.005566668744338211,
+      "speciation_per_temperature_log10_rmse": {
+        "293.15": 0.3230682710552632,
+        "313.15": 0.06040045322468769,
+        "333.15": 0.03339441935901576,
+        "353.15": 0.04625188552873283
+      },
+      "speciation_positive_targets": 131,
+      "speciation_temperature_balanced_log10_rmse": 0.16679009763147923
+    }
+  }
+}
