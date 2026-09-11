@@ -22,7 +22,7 @@ from shared_evaluation import (
 
 ANALYSIS = Path(__file__).resolve().parents[1]
 STATE_PACKET = ANALYSIS / "data/input/state-packet.json"
-RESULTS = ANALYSIS / "results/permittivity-comparison"
+RESULTS = ANALYSIS / "results/historical/permittivity-comparison"
 VARIANTS = {
     "current_ion_specific": "ion-specific-suppression",
     "schick_temperature_mixing": "component-permittivity-mixing",

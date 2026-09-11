@@ -29,7 +29,6 @@ from shared_evaluation import (
     anchor_from,
 )
 
-
 ANALYSIS = Path(__file__).resolve().parents[1]
 RESULTS = ANALYSIS / "results/best-in-slot-campaign"
 BASELINE = ANALYSIS / "results/selected-current-best-parameters.json"
@@ -342,138 +341,48 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         writer.writerows(rows)
 
 
-def sensitivity_scenarios() -> list[tuple[str, dict[str, float]]]:
+def scenario_preset(name: str) -> list[tuple[str, dict[str, float]]]:
+    """Build one named campaign from compact data and a shared filter."""
     center = origins()
-    scenarios = [("baseline", {})]
-    steps = {
-        "co2_epsilon": 0.05 * center["co2_epsilon"],
-        "r4_a": 0.10,
-        "r4_b": 0.05 * abs(center["r4_b"]),
-        "r5_a": 0.03 * center["r5_a"],
-        "hco3_fsolv": 0.10,
-        "hco3_born": 0.10,
-    }
-    for name, step in steps.items():
-        for sign, label in ((-1.0, "minus"), (1.0, "plus")):
-            value = center[name] + sign * step
-            lower, upper = BOUNDS[name]
-            scenarios.append((f"{name}-{label}", {name: min(max(value, lower), upper)}))
-    return scenarios
-
-
-def r4_pivot_scenarios() -> list[tuple[str, dict[str, float]]]:
-    center = origins()
-    reference_temperature_k = 333.15
-    scenarios = [("baseline", {})]
-    for pivot_shift in (0.10, 0.20, 0.30, 0.40):
-        for b_shift in (-150.0, 0.0, 150.0):
-            a_value = center["r4_a"] + pivot_shift - b_shift / reference_temperature_k
-            b_value = center["r4_b"] + b_shift
-            scenarios.append(
-                (
-                    f"r4-p{pivot_shift:.2f}-db{b_shift:+.0f}",
-                    {"r4_a": a_value, "r4_b": b_value},
-                )
-            )
-    return scenarios
-
-
-def validation_scenarios() -> list[tuple[str, dict[str, float]]]:
-    selected = {
-        "r4-p0.10-db+150",
-        "r4-p0.20-db-150",
-        "r4-p0.30-db-150",
-        "r4-p0.40-db-150",
-    }
-    return [
-        item
-        for item in r4_pivot_scenarios()
-        if item[0] == "baseline" or item[0] in selected
-    ]
-
-
-def refinement_scenarios() -> list[tuple[str, dict[str, float]]]:
-    center = origins()
-    reference_temperature_k = 333.15
-    scenarios = [("baseline", {})]
-    for pivot_shift in (0.10, 0.20, 0.30, 0.40):
-        for b_shift in (-300.0, -350.0):
-            scenarios.append(
-                (
-                    f"r4-refine-p{pivot_shift:.2f}-db{b_shift:+.0f}",
-                    {
-                        "r4_a": center["r4_a"]
-                        + pivot_shift
-                        - b_shift / reference_temperature_k,
-                        "r4_b": center["r4_b"] + b_shift,
-                    },
-                )
-            )
-    best = {
-        "r4_a": center["r4_a"] + 0.20 + 300.0 / reference_temperature_k,
-        "r4_b": center["r4_b"] - 300.0,
-    }
-    for fraction in (-0.05, -0.025, 0.025, 0.05):
-        scenarios.append(
+    pivot_temperature = 333.15
+    if name == "sensitivity":
+        steps = {"co2_epsilon": 0.05 * center["co2_epsilon"], "r4_a": 0.10,
+                 "r4_b": 0.05 * abs(center["r4_b"]), "r5_a": 0.03 * center["r5_a"],
+                 "hco3_fsolv": 0.10, "hco3_born": 0.10}
+        return [("baseline", {})] + [
+            (f"{key}-{label}", {key: min(max(center[key] + sign * step, BOUNDS[key][0]), BOUNDS[key][1])})
+            for key, step in steps.items()
+            for sign, label in ((-1.0, "minus"), (1.0, "plus"))
+        ]
+    if name in {"r4-pivot", "validation"}:
+        scenarios = [("baseline", {})] + [
             (
-                f"r4-refine-p0.20-db-300-eps{fraction:+.3f}",
-                {**best, "co2_epsilon": center["co2_epsilon"] * (1.0 + fraction)},
+                f"r4-p{pivot:.2f}-db{shift:+.0f}",
+                {"r4_a": center["r4_a"] + pivot - shift / pivot_temperature,
+                 "r4_b": center["r4_b"] + shift},
             )
-        )
-    return scenarios
-
-
-def refinement_validation_scenarios() -> list[tuple[str, dict[str, float]]]:
-    selected = {
-        "r4-refine-p0.20-db-350",
-        "r4-refine-p0.20-db-300-eps+0.025",
-        "r4-refine-p0.30-db-300",
-        "r4-refine-p0.40-db-350",
-    }
-    return [item for item in refinement_scenarios() if item[0] in selected]
-
-
-def local_best_scenarios() -> list[tuple[str, dict[str, float]]]:
-    center = origins()
-    reference_temperature_k = 333.15
-
-    def values(
-        pivot: float, b_shift: float, epsilon_fraction: float
-    ) -> dict[str, float]:
-        return {
-            "r4_a": center["r4_a"] + pivot - b_shift / reference_temperature_k,
-            "r4_b": center["r4_b"] + b_shift,
-            "co2_epsilon": center["co2_epsilon"] * (1.0 + epsilon_fraction),
-        }
-
-    points = {
-        (0.15, -300.0, 0.025),
-        (0.20, -300.0, 0.025),
-        (0.25, -300.0, 0.025),
-        (0.20, -250.0, 0.025),
-        (0.20, -350.0, 0.025),
-        (0.20, -300.0, 0.015),
-        (0.20, -300.0, 0.035),
-        (0.15, -350.0, 0.025),
-        (0.25, -250.0, 0.025),
-    }
-    return [
-        (
-            f"local-p{pivot:.2f}-db{b_shift:+.0f}-eps{epsilon_fraction:+.3f}",
-            values(pivot, b_shift, epsilon_fraction),
-        )
-        for pivot, b_shift, epsilon_fraction in sorted(points)
-    ]
-
-
-def final_validation_scenarios() -> list[tuple[str, dict[str, float]]]:
-    selected = {
-        "local-p0.20-db-250-eps+0.025",
-        "local-p0.20-db-300-eps+0.035",
-        "local-p0.25-db-250-eps+0.025",
-        "local-p0.15-db-350-eps+0.025",
-    }
-    return [item for item in local_best_scenarios() if item[0] in selected]
+            for pivot in (0.10, 0.20, 0.30, 0.40)
+            for shift in (-150.0, 0.0, 150.0)
+        ]
+        selected = {"r4-p0.10-db+150", "r4-p0.20-db-150", "r4-p0.30-db-150", "r4-p0.40-db-150"}
+        return [item for item in scenarios if name == "r4-pivot" or item[0] == "baseline" or item[0] in selected]
+    if name in {"refinement", "refinement-validation"}:
+        scenarios = [("baseline", {})] + [
+            (f"r4-refine-p{pivot:.2f}-db{shift:+.0f}",
+             {"r4_a": center["r4_a"] + pivot - shift / pivot_temperature,
+              "r4_b": center["r4_b"] + shift})
+            for pivot in (0.10, 0.20, 0.30, 0.40) for shift in (-300.0, -350.0)
+        ]
+        best = {"r4_a": center["r4_a"] + 0.20 + 300.0 / pivot_temperature, "r4_b": center["r4_b"] - 300.0}
+        scenarios += [(f"r4-refine-p0.20-db-300-eps{fraction:+.3f}", {**best, "co2_epsilon": center["co2_epsilon"] * (1 + fraction)}) for fraction in (-0.05, -0.025, 0.025, 0.05)]
+        selected = {"r4-refine-p0.20-db-350", "r4-refine-p0.20-db-300-eps+0.025", "r4-refine-p0.30-db-300", "r4-refine-p0.40-db-350"}
+        return scenarios if name == "refinement" else [item for item in scenarios if item[0] in selected]
+    if name in {"local-best", "final-validation"}:
+        points = {(0.15, -300.0, 0.025), (0.20, -300.0, 0.025), (0.25, -300.0, 0.025), (0.20, -250.0, 0.025), (0.20, -350.0, 0.025), (0.20, -300.0, 0.015), (0.20, -300.0, 0.035), (0.15, -350.0, 0.025), (0.25, -250.0, 0.025)}
+        scenarios = [(f"local-p{pivot:.2f}-db{shift:+.0f}-eps{fraction:+.3f}", {"r4_a": center["r4_a"] + pivot - shift / pivot_temperature, "r4_b": center["r4_b"] + shift, "co2_epsilon": center["co2_epsilon"] * (1 + fraction)}) for pivot, shift, fraction in sorted(points)]
+        selected = {"local-p0.20-db-250-eps+0.025", "local-p0.20-db-300-eps+0.035", "local-p0.25-db-250-eps+0.025", "local-p0.15-db-350-eps+0.025"}
+        return scenarios if name == "local-best" else [item for item in scenarios if item[0] in selected]
+    raise ValueError(f"unknown scenario preset: {name}")
 
 
 def load_scenarios(path: Path) -> list[tuple[str, dict[str, float]]]:
@@ -547,20 +456,8 @@ def main() -> None:
     args = parser.parse_args()
     if args.scenarios:
         scenarios = load_scenarios(args.scenarios)
-    elif args.preset == "r4-pivot":
-        scenarios = r4_pivot_scenarios()
-    elif args.preset == "validation":
-        scenarios = validation_scenarios()
-    elif args.preset == "refinement":
-        scenarios = refinement_scenarios()
-    elif args.preset == "refinement-validation":
-        scenarios = refinement_validation_scenarios()
-    elif args.preset == "local-best":
-        scenarios = local_best_scenarios()
-    elif args.preset == "final-validation":
-        scenarios = final_validation_scenarios()
     else:
-        scenarios = sensitivity_scenarios()
+        scenarios = scenario_preset(args.preset)
     run(scenarios, args.phase, args.full, args.workers)
 
 
