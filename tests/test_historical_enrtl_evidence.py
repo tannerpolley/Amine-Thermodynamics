@@ -41,7 +41,21 @@ def test_historical_record_is_compact_traceable_and_bounded():
     assert screening["role"].endswith("not equilibria")
     assert "converged" not in json.dumps(screening).lower()
     assert record["evidence"]["screening_reaction_residuals"]["d01_excluded"]
-    assert record["evidence"]["D01_equilibrium"]["role"].startswith("distinct accepted")
+    d01 = record["evidence"]["D01_equilibrium"]
+    assert d01["role"].startswith("distinct accepted")
+    assert d01["acceptance"] == {
+        "accepted": True,
+        "finite_activities": True,
+        "finite_derivatives": True,
+        "max_abs_reaction_residual": 6.050271394997253e-12,
+        "normalized": True,
+        "positive": True,
+        "thresholds": {
+            "max_abs_reaction_residual": 1e-6,
+            "minimum_mole_fraction": 0.0,
+            "normalization_abs_error": 1e-12,
+        },
+    }
     assert record["source"]["fitting_identity"] == "c9e61fab6ea631c77166ee337f02b83d19b9c9a8"
     assert all(len(item["blob"]) == 40 for item in record["source"]["commits"])
     assert RECORD.stat().st_size < 100 * 1024
