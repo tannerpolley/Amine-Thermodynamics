@@ -6,22 +6,32 @@ VALIDATOR = runpy.run_path(
 )
 MAX_TRACKED_JSON_BYTES = VALIDATOR["MAX_TRACKED_JSON_BYTES"]
 MAX_TRACKED_JSON_LINES = VALIDATOR["MAX_TRACKED_JSON_LINES"]
-json_size_problem = VALIDATOR["json_size_problem"]
+MAX_TRACKED_TEXT_BYTES = VALIDATOR["MAX_TRACKED_TEXT_BYTES"]
+MAX_TRACKED_FILE_BYTES = VALIDATOR["MAX_TRACKED_FILE_BYTES"]
+tracked_size_problem = VALIDATOR["tracked_size_problem"]
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_tracked_json_size_boundaries(tmp_path):
+def test_tracked_file_size_boundaries(tmp_path):
     compact = tmp_path / "compact.json"
     compact.write_text("{}\n")
-    assert json_size_problem(compact) is None
+    assert tracked_size_problem(compact) is None
 
     oversized = tmp_path / "oversized.json"
     oversized.write_bytes(b" " * (MAX_TRACKED_JSON_BYTES + 1))
-    assert "bytes" in json_size_problem(oversized)
+    assert "bytes" in tracked_size_problem(oversized)
 
     overlong = tmp_path / "overlong.json"
     overlong.write_text("{}\n" * (MAX_TRACKED_JSON_LINES + 1))
-    assert "lines" in json_size_problem(overlong)
+    assert "lines" in tracked_size_problem(overlong)
+
+    large_text = tmp_path / "large.csv"
+    large_text.write_bytes(b"x" * (MAX_TRACKED_TEXT_BYTES + 1))
+    assert "bytes" in tracked_size_problem(large_text)
+
+    large_binary = tmp_path / "large.bin"
+    large_binary.write_bytes(b"x" * (MAX_TRACKED_FILE_BYTES + 1))
+    assert "bytes" in tracked_size_problem(large_binary)
 
 
 def test_cse_layout_keeps_cas_and_retires_central_notebook():
