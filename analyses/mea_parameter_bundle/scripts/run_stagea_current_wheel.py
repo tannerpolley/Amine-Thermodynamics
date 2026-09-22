@@ -7,13 +7,14 @@ import copy
 import csv
 import hashlib
 import json
+import math
 from pathlib import Path
 
 import shared_evaluation as shared
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = ANALYSIS / "results/runs/reaction-temperature-fit/strict-current-wheel"
+DEFAULT_OUTPUT = ANALYSIS / "results/runs/reaction-temperature-fit/current-main-adopted-comparison"
 SENTINELS = (315.0, 330.0, 345.0)
 VLE_IDS = ("vle_obs_0130", "vle_obs_0206")
 
@@ -41,6 +42,16 @@ def _max_abs(values: object) -> float | None:
     return max(abs(float(value)) for value in values)
 
 
+def _raw_stationarity_max(evidence: dict[str, object]) -> float | None:
+    compiled = evidence.get("compiled_point_evaluation")
+    value = (
+        compiled.get("raw_stationarity_max_abs")
+        if isinstance(compiled, dict)
+        else None
+    )
+    return float(value) if value is not None else _max_abs(evidence.get("residuals"))
+
+
 def _row_payload(
     case: str, role: str, request: dict[str, object], record: dict[str, object]
 ) -> list[dict[str, object]]:
@@ -49,12 +60,7 @@ def _row_payload(
     pressure = None
     if phases:
         pressure = phases[0].get("pressure_pa")
-    compiled = evidence.get("compiled_point_evaluation", {})
-    raw_max = (
-        compiled.get("raw_stationarity_max_abs")
-        if isinstance(compiled, dict)
-        else None
-    )
+    raw_max = _raw_stationarity_max(evidence)
     common = {
         "case": case,
         "role": role,
@@ -80,6 +86,83 @@ def _row_payload(
     if not rows:
         rows.append({**common, "prediction_identity": "", "predicted": None})
     return rows
+
+
+def _comparison_payload(
+    case: str,
+    observation: dict[str, object] | None,
+    request: dict[str, object],
+    record: dict[str, object],
+) -> list[dict[str, object]]:
+    if observation is None:
+        return []
+    predictions = {
+        str(row.get("identity", "")): row.get("value")
+        for row in record.get("rows", ())
+    }
+    rows = []
+    for target in observation.get("targets", ()):
+        prediction = predictions.get(str(target["prediction_identity"]))
+        observed = float(target["observed"])
+        predicted = (
+            None
+            if prediction is None
+            else float(prediction) * float(target.get("multiplier", 1.0))
+        )
+        difference = None if predicted is None else predicted - observed
+        residual_kind = str(target["residual"])
+        if predicted is None:
+            residual = None
+        elif residual_kind == "log_ratio":
+            residual = (
+                math.log(predicted / observed)
+                if predicted > 0.0 and observed > 0.0
+                else None
+            )
+        elif residual_kind == "scaled_difference":
+            scale = float(target["scale"])
+            if scale <= 0.0:
+                raise ValueError(f"nonpositive residual scale for {target['identity']}")
+            residual = difference / scale
+        else:
+            raise ValueError(f"unsupported packet residual {residual_kind!r}")
+        rows.append(
+            {
+                "case": case,
+                "source_identity": target.get("source_identity", ""),
+                "target_identity": target.get("identity", ""),
+                "prediction_identity": target.get("prediction_identity", ""),
+                "temperature_k": request["temperature"]["value"],
+                "basis": target.get("basis", ""),
+                "unit": target.get("unit", ""),
+                "packet_role": target.get("role", ""),
+                "packet_measurement_classification": target.get("measurement_classification", ""),
+                "source_hash": target.get("source_hash", ""),
+                "observed": observed,
+                "predicted": predicted,
+                "difference": difference,
+                "residual_kind": residual_kind,
+                "residual_scale": target.get("scale", ""),
+                "residual": residual,
+                "status": record.get("status", ""),
+                "failure_code": record.get("failure_code", ""),
+            }
+        )
+    return rows
+
+
+def _write_comparison_csv(path: Path, rows: list[dict[str, object]]) -> None:
+    fields = (
+        "case", "source_identity", "target_identity", "prediction_identity",
+        "temperature_k", "basis", "unit", "packet_role",
+        "packet_measurement_classification", "source_hash", "observed",
+        "predicted", "difference", "residual_kind", "residual_scale",
+        "residual", "status", "failure_code",
+    )
+    with path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def _write_csv(path: Path, rows: list[dict[str, object]]) -> None:
@@ -116,7 +199,6 @@ def _record_summary(
     output: Path, case: str, role: str, request_sha256: str, record: dict[str, object]
 ) -> dict[str, object]:
     evidence = _evidence(record)
-    compiled = evidence.get("compiled_point_evaluation", {})
     summary: dict[str, object] = {
         "case": case,
         "role": role,
@@ -126,11 +208,7 @@ def _record_summary(
         "failure_diagnostic": record.get("failure_diagnostic", ""),
         "solver_status": record.get("solver_status", ""),
         "requested_tolerance_met": evidence.get("requested_tolerance_met"),
-        "raw_stationarity_max_abs": (
-            compiled.get("raw_stationarity_max_abs")
-            if isinstance(compiled, dict)
-            else None
-        ),
+        "raw_stationarity_max_abs": _raw_stationarity_max(evidence),
         "classified_residual_max_abs": _max_abs(evidence.get("classified_residuals")),
         "state": None if role == "cold-failure" else _state_reference(output, case),
     }
@@ -160,11 +238,16 @@ def run(output: Path, budget_s: float, include_vle: bool) -> None:
     shared.RUNS = output
     shared.verify_wheel()
     packet = shared.load_state_packet()
+    observations = {
+        str(observation["identity"]): observation
+        for observation in packet["observations"]
+    }
     requests = _request_map(packet)
     model = shared.epcsaft.Mixture(shared.load_parameters())
     reactions = shared._selected_reactions()
     cases: list[dict[str, object]] = []
     csv_rows: list[dict[str, object]] = []
+    comparison_rows: list[dict[str, object]] = []
 
     def evaluate(case: str, request: dict[str, object], role: str, anchors: list[shared.Anchor]) -> dict[str, object]:
         record = shared.evaluate_state(
@@ -175,6 +258,9 @@ def run(output: Path, budget_s: float, include_vle: bool) -> None:
         ).hexdigest()
         cases.append(_record_summary(output, case, role, request_sha256, record))
         csv_rows.extend(_row_payload(case, role, request, record))
+        comparison_rows.extend(
+            _comparison_payload(case, observations.get(case), request, record)
+        )
         return record
 
     base = requests["Bottinger2008_state_050"]
@@ -234,10 +320,13 @@ def run(output: Path, budget_s: float, include_vle: bool) -> None:
             "parameter_sha256": shared.sha256(shared.PARAMETERS),
             "state_packet_archive_sha256": archive_sha256,
             "state_packet_decompressed_sha256": shared.sha256(shared.STATE_PACKET),
+            "comparison_csv": "strict-current-wheel-comparison.csv",
+            "comparison_target_rows": len(comparison_rows),
             "records": cases,
         },
     )
     _write_csv(output / "strict-current-wheel-rows.csv", csv_rows)
+    _write_comparison_csv(output / "strict-current-wheel-comparison.csv", comparison_rows)
     heartbeat = output / "heartbeat.json"
     if heartbeat.exists():
         heartbeat.unlink()
