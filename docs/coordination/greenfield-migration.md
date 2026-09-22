@@ -631,11 +631,14 @@ recovery attempts/cache work, at most four unique starts per state, and
 5400 s for the six-case trace. A timeout or cap exhaustion is a typed failure and
 stops the trace; it does not trigger a larger campaign. The only allowed Engine
 runtime is the non-editable wheel with SHA-256
-`7a9a133a8f6744b43c6d35a126663d647071aa79d8a9229a149b69dc374287b0`,
-runtime source `13fe463047de8dd12d28061e1b39e29ca62cc84d`. It is installed from
+`598c37ed62a914f886d746687aec80a42945d66fcdb564d9994e23a92f0ea20f`,
+runtime source `5fb4ab5343babf92b6def99025f8f14689df2e32`. It is installed from
 `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl`.
-Its full fast gate passed and all 444 retained native transport values were
-unchanged. This supersedes the preparation wheel `f7902bf…`; it still lacks
+Its affected installed-wheel gate and full native equilibrium/boundary suites
+passed. All 444 native transport rows satisfy their existing criteria;
+100 neutral-ternary action values moved by small floating-point amounts during
+performance integration, recorded in the Engine performance notebook.
+This supersedes the preparation wheel `f7902bf…` and the preceding `7a9a133a…`; it still lacks
 the #84 reference chain, so physical MEA Build remains gated. Verify the
 identified non-editable wheel; never import Engine source or sibling source.
 
