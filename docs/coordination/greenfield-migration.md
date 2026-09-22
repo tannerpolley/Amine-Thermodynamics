@@ -1014,6 +1014,10 @@ replay JSON, homogeneous rows CSV, per-state diagnostics, cold failure and
 warm recovery retained together. These are bounded working-input replays;
 the adopted parameters are authorized working inputs, while predictive
 accuracy beyond these comparisons remains to be established.
+The packet's direct CO2 partial-pressure targets for 0130 and 0206 are 72.1
+and 99.2 Pa, respectively. The converged predictions are therefore about 55%
+and 43% lower. This is retained model discrepancy for subsequent comparison
+or calibration, not a parameter-adoption or numerical-execution gate.
 
 ## Remaining capability and validation work
 
