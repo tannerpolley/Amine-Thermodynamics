@@ -1,0 +1,343 @@
+{
+  "amount_mol": 8.911872580115476,
+  "anchor": {
+    "loading": 0.4869,
+    "molar_volume_m3_per_mol": 1.9173397666338377e-05,
+    "mole_fractions": [
+      8.025416675355864e-05,
+      0.009904423031467241,
+      0.8797744096771661,
+      0.0556743701543258,
+      0.04663106966965668,
+      0.0068270321891810695,
+      0.0011078471850127782,
+      1.0000487191463842e-08,
+      5.839259496508558e-07
+    ],
+    "pressure_pa": 101325.0,
+    "temperature_c": 72
+  },
+  "anchor_ids": [],
+  "attempt_count": 1,
+  "attempts": [
+    {
+      "anchor": null,
+      "failure_code": "",
+      "failure_diagnostic": "",
+      "kind": "cold-packet-start",
+      "status": "evaluated",
+      "wall_s": 0.7171702929990715
+    }
+  ],
+  "cache_hit": false,
+  "effective_reaction_values_sha256": "a84665f119d2bd5b8650f0b52f99e0f8da615f85019e8c8d6a78a50aa3e01804",
+  "engine_commit": "f55902f457c055390a20a5a5482ae4da13e98d2a",
+  "engine_wheel_sha256": "f4bdcbb919e169800f9efdf3fc96ee2930924d6e2afd9962f395e503353595e9",
+  "eos_domain_status": "",
+  "evaluator_source_sha256": "76713ba7516f917a9aeb3d33f6225fa499344dc1ec38623ae354575e4be8c6bb",
+  "evaluator_version": "shared-evaluation-v3",
+  "evidence": [
+    [
+      "success",
+      true
+    ],
+    [
+      "message",
+      "converged_to_floor: residual 1.8589933090693219e-08 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 16 iterations, contraction absent, floor 2.6950399485824503e-08, amplification 0; requested row tolerance 0.000000 not met by an available floor-limited state"
+    ],
+    [
+      "solver_status",
+      "SUCCESS"
+    ],
+    [
+      "requested_tolerance_met",
+      false
+    ],
+    [
+      "residuals",
+      [
+        -1.95466043351189e-08,
+        -6.714628852932947e-12,
+        -2.842170943040401e-14,
+        4.973799150320701e-14,
+        5.684341886080801e-13,
+        -1.3585577107733116e-11,
+        -4.206412995699793e-11,
+        1.9603146786486434,
+        2.893006865178904e-07,
+        -1.7733961455244935e-12,
+        0.0,
+        1.18133246210576e-17,
+        2.36266492421152e-17,
+        -9.45065969684608e-17,
+        0.0
+      ]
+    ],
+    [
+      "classified_residuals",
+      [
+        -1.4875438913122337e-12,
+        -6.306408087633482e-14,
+        -2.3711137953178572e-14,
+        2.6258773262368803e-15,
+        2.513543730482543e-14,
+        -8.795102781809589e-14,
+        -4.4189862055531035e-14,
+        1.858993309069322e-08,
+        1.6019100158107897e-13,
+        -1.6816539704781347e-12,
+        0.0,
+        1.18133246210576e-17,
+        2.36266492421152e-17,
+        -9.45065969684608e-17,
+        0.0
+      ]
+    ],
+    [
+      "iterations/evaluations/hessian_calls",
+      [
+        16,
+        28,
+        17
+      ]
+    ],
+    [
+      "jacobian_rank/generic_nullity",
+      [
+        15,
+        0
+      ]
+    ],
+    [
+      "reduced_hessian_minimum",
+      2.6383234595040483e-07
+    ],
+    [
+      "topology_event",
+      "None_"
+    ],
+    [
+      "neutral_reference_diagnostics",
+      [
+        {
+          "message": "",
+          "observed_terminal_change": 2.1733300172854797e-05,
+          "reaction_index": 0,
+          "reference_pressure_pa": 101325.0,
+          "status": "Available",
+          "terminal_contraction": -521.9924245399011
+        },
+        {
+          "message": "",
+          "observed_terminal_change": 2.1733284711444867e-05,
+          "reaction_index": 1,
+          "reference_pressure_pa": 101325.0,
+          "status": "Available",
+          "terminal_contraction": -525.7328783572556
+        },
+        {
+          "message": "",
+          "observed_terminal_change": 4.3466575789352646e-05,
+          "reaction_index": 2,
+          "reference_pressure_pa": 101325.0,
+          "status": "Available",
+          "terminal_contraction": -847.9129910463698
+        },
+        {
+          "message": "",
+          "observed_terminal_change": 1.5901946426311042e-11,
+          "reaction_index": 3,
+          "reference_pressure_pa": 100000.0,
+          "status": "Available",
+          "terminal_contraction": -16.978666743150512
+        },
+        {
+          "message": "",
+          "observed_terminal_change": 1.375610736431554e-11,
+          "reaction_index": 4,
+          "reference_pressure_pa": 100000.0,
+          "status": "Available",
+          "terminal_contraction": -252.76709386428095
+        }
+      ]
+    ]
+  ],
+  "failure_code": "",
+  "failure_diagnostic": "",
+  "identity": "MEA_fixedP_sentinel_345K",
+  "loading": 0.4869,
+  "model_parameters_fingerprint": "sha256:568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d",
+  "molar_density_mol_m3": 52155.59690579213,
+  "parameter_role": "selected",
+  "parameter_runtime_defaults": {
+    "c_dielectric": 1.0,
+    "c_shell": 1.0,
+    "ionic_dispersion": "all-ion-pairs"
+  },
+  "parameter_sha256": "568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d",
+  "phases": [
+    {
+      "amount_mol": 8.911872580115476,
+      "identity": "mea-nine-species-liquid",
+      "mechanical_class": "mechanical_class_unavailable",
+      "molar_density_mol_m3": 52155.59690579213,
+      "molar_volume_m3_per_mol": 1.9173397666338377e-05,
+      "mole_fractions": [
+        8.025416675355864e-05,
+        0.009904423031467241,
+        0.8797744096771661,
+        0.0556743701543258,
+        0.04663106966965668,
+        0.0068270321891810695,
+        0.0011078471850127782,
+        1.0000487191463842e-08,
+        5.839259496508558e-07
+      ],
+      "packing_fraction": 0.43652052177964223,
+      "pressure_pa": 101325.0,
+      "role": "liquid",
+      "support": [
+        "carbon-dioxide",
+        "monoethanolamine",
+        "water",
+        "protonated-monoethanolamine",
+        "carbamate-anion",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion"
+      ]
+    }
+  ],
+  "physical_status": "",
+  "predictions": {
+    "Bottinger2008_state_050-hco3": 0.0068270321891810695,
+    "Bottinger2008_state_050-mea_meah": 0.06557879318579304,
+    "Bottinger2008_state_050-meacoo": 0.04663106966965668
+  },
+  "rows": [
+    {
+      "identity": "Bottinger2008_state_050-mea_meah",
+      "status": "available",
+      "unit": "dimensionless",
+      "value": 0.06557879318579304
+    },
+    {
+      "identity": "Bottinger2008_state_050-meacoo",
+      "status": "available",
+      "unit": "dimensionless",
+      "value": 0.04663106966965668
+    },
+    {
+      "identity": "Bottinger2008_state_050-hco3",
+      "status": "available",
+      "unit": "dimensionless",
+      "value": 0.0068270321891810695
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:residual-chemical-potential-over-rt:carbon-dioxide",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "1",
+      "value": 0.06122022637413928
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:residual-chemical-potential-over-rt:monoethanolamine",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "1",
+      "value": -12.622085936475742
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:residual-chemical-potential-over-rt:water",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "1",
+      "value": -8.348894939183849
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:residual-chemical-potential-over-rt:protonated-monoethanolamine",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "1",
+      "value": -133.89806400077356
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:residual-chemical-potential-over-rt:carbamate-anion",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "1",
+      "value": -139.3098596687438
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:residual-chemical-potential-over-rt:bicarbonate-anion",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "1",
+      "value": -151.93632719096863
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:residual-chemical-potential-over-rt:carbonate-anion",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "1",
+      "value": -630.7517491080338
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:residual-chemical-potential-over-rt:hydronium-cation",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "1",
+      "value": -382.70010742077517
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:residual-chemical-potential-over-rt:hydroxide-anion",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "1",
+      "value": -158.93357197022326
+    },
+    {
+      "action": null,
+      "identity": "phase:mea-nine-species-liquid:total-enthalpy",
+      "jacobian": null,
+      "status": "DefiningEquationsNotSatisfied",
+      "unit": "J/mol",
+      "value": null
+    },
+    {
+      "diagnostics": {
+        "central_floor": 2.6950399485824503e-08,
+        "central_residual": 1.858993309069322e-08,
+        "condition_estimate": null,
+        "equation_count": 15,
+        "linear_solves": 0,
+        "maximum_energy_order": 2,
+        "maximum_linear_residual": null,
+        "rank": null,
+        "state_dimension": 15,
+        "state_factorizations": 0
+      },
+      "identity": "action-batch-diagnostics",
+      "status": "diagnostic",
+      "unit": "",
+      "value": null
+    }
+  ],
+  "solver_status": "SUCCESS",
+  "source_contract_sha256": "242973e500e33530a1d0315475fa4a6f974e57c6f7354706081c07bf94820ef5",
+  "status": "evaluated",
+  "temperature_c": 72,
+  "thermochemistry": null,
+  "total_enthalpy_j": null,
+  "wall_s": 0.7171702929990715
+}

@@ -25,26 +25,26 @@ from time import perf_counter  # noqa: E402
 
 import epcsaft  # noqa: E402
 import numpy as np  # noqa: E402
-from epcsaft import equilibrium  # noqa: E402
 from scipy.optimize import lsq_linear  # noqa: E402
 
 from evaluate_direct_absorption_heat import (  # noqa: E402
     build_thermochemistry,
-    reaction_derivative,
 )
 from shared_evaluation import (  # noqa: E402
     ENGINE_WHEEL_SHA256,
     PARAMETERS,
     Anchor,
     attempt_plan,
-    attempt_success_rates,
     cached_anchors,
     corrected_request,
     evaluate_state,
     anchor_from,
-    prepared_problem,
+    EXPECTED_REACTION_CORRELATIONS,
+    load_parameters,
     provenance as shared_provenance,
     sha256,
+    _selected_reactions,
+    _problem_from_request,
     _solve_in_child,
     verify_wheel as shared_verify_wheel,
 )
@@ -150,24 +150,14 @@ def provenance(thermochemistry: object | None = None) -> dict[str, object]:
 
 
 def baseline_reactions() -> dict[str, float]:
-    template = pressure_catalog(True)[0]["request"]
-    selected = {
-        spec.identity: float(spec.value.magnitude)
-        for spec in epcsaft.Parameters.from_json(PARAMETERS).parameter_specs
-        if spec.identity.startswith("reaction:")
-    }
-    records = corrected_request(template, selected)["reaction_system"][
-        "equilibrium_constants"
-    ]
-    return {
-        identity: float(value)
-        for record in records
-        for identity, value in zip(
-            record[6]["coefficient_identities"],
-            record[6]["coefficient_values"],
-            strict=True,
-        )
-    }
+    values = _selected_reactions()
+    for reaction in ("R1", "R3"):
+        source = EXPECTED_REACTION_CORRELATIONS[reaction]
+        for coefficient in ("a", "b_k", "c", "d_per_k"):
+            values[f"reaction:{reaction}:correlation:{coefficient}"] = float(
+                source[coefficient]
+            )
+    return values
 
 
 def shifted_reactions(shifts_kj_mol: dict[str, float]) -> dict[str, float]:
@@ -447,7 +437,7 @@ def make_pivot_phases() -> dict[str, dict[str, object]]:
         if json.loads(receipt_path.read_text(encoding="utf-8")) != expected:
             raise ValueError("pivot phase cache does not match the selected bundle")
         return json.loads(path.read_text(encoding="utf-8"))
-    model = epcsaft.Mixture(epcsaft.Parameters.from_json(PARAMETERS))
+    model = epcsaft.Mixture(load_parameters())
     reactions = shifted_reactions({})
     thermochemistry, _ = build_thermochemistry(model, pressure_templates(), reactions)
     _, phases, failures = solve_heat_endpoints(
@@ -473,7 +463,7 @@ def evaluate_scenario(
     task: tuple[str, dict[str, float], dict[str, dict[str, object]], float],
 ) -> tuple[str, list[dict[str, object]]]:
     scenario, shifts, pivot_phases, budget_s = task
-    model = epcsaft.Mixture(epcsaft.Parameters.from_json(PARAMETERS))
+    model = epcsaft.Mixture(load_parameters())
     reactions = shifted_reactions(shifts)
     pivot_check(reactions)
     thermochemistry, _ = build_thermochemistry(model, pressure_templates(), reactions)
@@ -795,7 +785,7 @@ def full_group(
     task: tuple[str, str, tuple[int, ...], dict[str, float], float],
 ) -> tuple[str, list[dict[str, object]]]:
     group, family, temperatures, shifts, budget_s = task
-    model = epcsaft.Mixture(epcsaft.Parameters.from_json(PARAMETERS))
+    model = epcsaft.Mixture(load_parameters())
     reactions = shifted_reactions(shifts)
     baseline = baseline_lookup()
     rows: list[dict[str, object]] = []
@@ -1012,7 +1002,7 @@ PARITY_HEAT = ((80, 0.137), (80, 0.375))
 
 def run_parity(budget_s: float) -> list[Anchor]:
     """Stage 1: the baseline scenario must reproduce retained values."""
-    model = epcsaft.Mixture(epcsaft.Parameters.from_json(PARAMETERS))
+    model = epcsaft.Mixture(load_parameters())
     reactions = shifted_reactions({})
     baseline = baseline_lookup()
     pressure = {row["observation_id"]: row for row in pressure_catalog(True)}
@@ -1170,7 +1160,7 @@ def timed_solve(
 def run_benchmark(anchors: list[Anchor], budget_s: float) -> None:
     """Stage 2: one easy state and one hard 120 C state, matched inputs."""
     clock = perf_counter()
-    parameters = epcsaft.Parameters.from_json(PARAMETERS)
+    parameters = load_parameters()
     model = epcsaft.Mixture(parameters)
     construction_s = perf_counter() - clock
     reactions = shifted_reactions({})
@@ -1199,38 +1189,23 @@ def run_benchmark(anchors: list[Anchor], budget_s: float) -> None:
             if anchor is not None:
                 candidate["pressure"]["initial"] = anchor.pressure_pa
                 candidate["pressure"]["starts"] = [anchor.pressure_pa]
-            problem = prepared_problem(
-                equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                    candidate
-                ),
-                f"benchmark-{observation_id}",
-                anchor,
-            )
+            problem = _problem_from_request(candidate, anchor)
             variants[kind] = timed_solve(model, problem)
         # Two pressure starts inside one Engine call versus the cold single start.
         candidate = copy.deepcopy(base)
         p0 = float(candidate["pressure"]["initial"])
         candidate["pressure"]["starts"] = [p0, 1.5 * p0]
-        problem = prepared_problem(
-            equilibrium.general_reactive_equilibrium_problem_from_mapping(candidate),
-            f"benchmark-{observation_id}",
-        )
+        problem = _problem_from_request(candidate)
         variants["two-pressure-starts-one-call"] = timed_solve(model, problem)
         if label == "easy":
             identities = tuple(
-                spec.identity
-                for spec in parameters.parameter_specs
-                if spec.identity.split(":")[1:2] in (["R2"], ["R4"], ["R5"])
-                and spec.identity.startswith("reaction:")
+                identity
+                for identity in baseline_reactions()
+                if identity.split(":")[1:2] in (["R2"], ["R4"], ["R5"])
             )
             try:
                 active = epcsaft.ActiveParameterSet(parameters, identities)
-                problem = prepared_problem(
-                    equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                        copy.deepcopy(base)
-                    ),
-                    f"benchmark-{observation_id}",
-                )
+                problem = _problem_from_request(copy.deepcopy(base))
                 variants["cold-with-sensitivities"] = {
                     "identities": list(identities),
                     **timed_solve(model, problem, active),
@@ -1265,7 +1240,7 @@ def run_sensitivity_check(budget_s: float) -> None:
         screen.setdefault(row["scenario"], {})[
             (row["observation_id"], row["target"])
         ] = row
-    parameters = epcsaft.Parameters.from_json(PARAMETERS)
+    parameters = load_parameters()
     model = epcsaft.Mixture(parameters)
     reactions = shifted_reactions({})
     identities = {
@@ -1308,11 +1283,7 @@ def run_sensitivity_check(budget_s: float) -> None:
         if state["family"] == "pressure":
             request["pressure"]["initial"] = warm.pressure_pa
             request["pressure"]["starts"] = [warm.pressure_pa]
-        problem = prepared_problem(
-            equilibrium.general_reactive_equilibrium_problem_from_mapping(request),
-            f"sensitivity-{state['observation_id']}",
-            warm,
-        )
+        problem = _problem_from_request(request, warm)
         clock = perf_counter()
         try:
             result = _solve_in_child(model, problem, min(60.0, budget_s), active)
@@ -1695,23 +1666,14 @@ def write_adopted_parameters(
         json.dumps(document, sort_keys=True, separators=(",", ":")) + "\n",
         encoding="utf-8",
     )
-    parameters = epcsaft.Parameters.from_json(PARAMETERS)
-    for spec in parameters.parameter_specs:
-        if spec.identity.startswith("reaction:"):
-            assert math.isclose(
-                float(spec.value.magnitude),
-                values[spec.identity],
-                rel_tol=0,
-                abs_tol=1e-12,
-            ), spec.identity
+    for identity, value in _selected_reactions().items():
+        assert math.isclose(value, values[identity], rel_tol=0, abs_tol=1e-12), identity
     return sha256(PARAMETERS)
 
 
 def self_check() -> None:
     base = baseline_reactions()
-    for spec in epcsaft.Parameters.from_json(PARAMETERS).parameter_specs:
-        if spec.identity.startswith("reaction:"):
-            assert base[spec.identity] == float(spec.value.magnitude)
+    assert all(base[identity] == value for identity, value in _selected_reactions().items())
     for reaction in REACTIONS:
         trial = shifted_reactions({reaction: STEP_KJ_MOL})
         pivot_check(trial)
@@ -1719,22 +1681,24 @@ def self_check() -> None:
         for temperature_k in (293.15, 313.15, 353.15, 393.15):
             request = copy.deepcopy(pressure_catalog(True)[0]["request"])
             request["temperature"]["value"] = temperature_k
-            old = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                corrected_request(request, base)
-            ).reaction_system.equilibrium_constants
-            new = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-                corrected_request(request, trial)
-            ).reaction_system.equilibrium_constants
+            old = corrected_request(request, base)["reaction_system"]["engine_reactions"]
+            new = corrected_request(request, trial)["reaction_system"]["engine_reactions"]
             for index, (before, after) in enumerate(
                 zip(old, new, strict=True), start=1
             ):
                 expected = 1000.0 * STEP_KJ_MOL if reaction == f"R{index}" else 0.0
+                before_correlation = before["engine_correlation"]
+                after_correlation = after["engine_correlation"]
                 actual = (
                     R
                     * temperature_k**2
                     * (
-                        reaction_derivative(after, temperature_k)
-                        - reaction_derivative(before, temperature_k)
+                        -after_correlation["b"] / temperature_k**2
+                        + after_correlation["c"] / temperature_k
+                        + after_correlation["d"]
+                        + before_correlation["b"] / temperature_k**2
+                        - before_correlation["c"] / temperature_k
+                        - before_correlation["d"]
                     )
                 )
                 assert math.isclose(actual, expected, rel_tol=2e-12, abs_tol=2e-8)
@@ -1768,10 +1732,7 @@ def self_check() -> None:
     assert sorted(kinds) == [
         "cold-packet-start",
         "same-temperature-anchor",
-        "same-temperature-anchor",
     ]
-    rates = attempt_success_rates(120)
-    assert all(0.0 <= v <= 1.0 for v in rates.values())
     print("self-check passed")
 
 

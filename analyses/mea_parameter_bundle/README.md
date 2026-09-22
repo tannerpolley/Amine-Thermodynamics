@@ -92,11 +92,12 @@ No Xu 2011 or 120 °C observations enter this screen. The coordinates are
   then check offsets ±0.1. Twelve baseline plus 48 offset evaluations give a
   60-state ceiling, not a promise that every state finishes in the time limit.
 
-Reuse `shared_evaluation.corrected_request`, `prepared_problem`, and the bounded
-`_solve_in_child(..., active_parameters=active)` path demonstrated in
-`run_reaction_temperature_fit.run_sensitivity_check`. Native row Jacobians are
-in `SolveSnapshot.rows`; `evaluate_state` retains ordinary predictions and
-warm starts but is **not** a cached-Jacobian interface. Do not run the old
+Reuse `shared_evaluation.corrected_request` and its private `_problem_from_request`
+mapping. The bounded `_solve_in_child(..., active_parameters=active)` path
+returns typed `reaction_action_unavailable` because the current Engine has no
+reaction-coefficient action slot. Native row Jacobians are in
+`SolveSnapshot.rows`; `evaluate_state` retains ordinary predictions and warm
+starts but is **not** a cached-Jacobian interface. Do not run the old
 `--sensitivity-check` command for this new experiment: it compares historical
 R4/R5 enthalpy columns, not F/S. Retain new Jacobians, their ordered identities,
 offset results, timings, and failures in the experiment's own results directory.
@@ -114,15 +115,15 @@ Verified checkpoint inputs (SHA-256):
 | Input | SHA-256 |
 |:--|:--|
 | `results/selected-current-best-parameters.json` | `568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d` |
-| `scripts/shared_evaluation.py` | `6e5e081700207f6e358ef2b034ad70d3c1d6b5f816681f03fc402a3df5c8a371` |
-| `scripts/run_reaction_temperature_fit.py` | `7829d831d681dafc1af6d129b744beb938021669d1b62f2de8ccff12610e63ad` |
+| `scripts/shared_evaluation.py` | `8dfe427517918639b8514d2ba267d27b5672d5df9a8aabc6cbf240eb5953a5e2` |
+| `scripts/run_reaction_temperature_fit.py` | `10fb9f96c4546699ac238863f11f6f2ead5fdac8db7d1cd0171cf9cf082ddcab` |
 | `data/input/state-packet.json.gz` | `e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba` |
-| `data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl` | `40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805` |
+| `build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl` | `c87846663349640ab115cb09f9b880caea71be973dfe685dc9bd0f8bf7b11072` |
 
 The decompressed state packet retains its original SHA-256,
 `86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448`.
 
-Before running in a new checkout, install that retained wheel explicitly; do
+Before running in a new checkout, install that final wheel explicitly; do
 not substitute a newer sibling Engine build. With that environment prepared,
 from the repository root:
 
@@ -131,11 +132,11 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 45s uv run --
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 90s uv run --no-sync pytest analyses/mea_parameter_bundle/tests -q
 ```
 
-At this checkpoint, the self-check and all 76 repository/analysis tests pass
-(9.32 seconds for the tests on one CPU). A direct bounded native solve of
-`Bottinger2008_state_050` returned all three requested outputs with both
-R2-a/R4-a derivatives in 0.49 seconds. This confirms the derivative path, not
-the runtime or successful coverage of the unrun 60-state experiment.
+The focused shared-evaluation checks pass 10 tests in 21.51 seconds on one
+CPU. The final bounded replay below verifies the installed wheel, strict 050
+raw stationarity, the 315--360 K sentinel path, and the two free-pressure VLE
+consumer rows. This confirms the bounded runtime path; it does not qualify the
+parameter record or the deferred 60-state experiment.
 The earlier adoption writer still omits scored R1/R3 shifts; do not invoke
 `--adopt`. Repair and re-review that writer before any future adoption. The
 unfinished publication and this known adoption limitation do not block the
@@ -193,11 +194,12 @@ records the input curve hash but does not establish the current parameter identi
 
 `data/input/parameters.json` and the compact `data/input/state-packet.json.gz` are immutable
 local snapshots from ePC-SAFT commit
-`38e91823b6d4f26c1d549f07aaef24a089d8e16d`. The retained Engine wheel includes
-the fast Born/permittivity implementation and solved-pressure reactive
-enthalpy at commit `8438ce5f94a547189c91c4ec180a7782d60879d6`; its
-SHA-256 is
-`40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805`.
+`38e91823b6d4f26c1d549f07aaef24a089d8e16d`. The final replay uses the
+non-editable Engine wheel at commit `3f5d9ac87a70aebbefbbecef47fcb8ba39f56e6c`,
+build fingerprint
+`78937d2876bd90feaebbd7c28ae5ad6a7d1c6323fda9d3dab3440338e84dc202`, with
+SHA-256
+`c87846663349640ab115cb09f9b880caea71be973dfe685dc9bd0f8bf7b11072`.
 Generate numerical tables with that exact wheel, then render with the MEA
 environment. The state packet intentionally excludes the source fit request's
 parameter declaration; this replay binds the separately hashed notebook vector.
@@ -205,6 +207,19 @@ Nested continuation values are converted to finite warm starts, after which
 their continuation identity and state are cleared before every solve. Cache reuse requires matching source, evaluator, EOS parameter, reaction,
 thermal-reference, and request identities. The recorded model identity
 distinguishes selected and candidate evaluations.
+
+The final bounded replay is retained under
+`results/runs/reaction-temperature-fit/final-current-wheel/`. At
+`Bottinger2008_state_050`, the outputs `(MEA+MEAH+, MEACOO-, HCO3-)` are
+`(0.06771945760549275, 0.04449867725550945, 0.005214865150114531)` and the
+hydronium mole fraction is `2.31334915458689e-10`; compiled raw stationarity
+has maximum `1.7053025658242404e-13`. The 315, 330, and 345 K sentinels are
+evaluated, the 360 K cold start retains `budget_exhausted`, and the 345 K warm
+anchor recovers 360 K with raw maximum `1.1368683772161603e-13`. The final
+free-pressure VLE rows return CO2 partial pressures of `32.71498993230467 Pa`
+(`vle_obs_0130`) and `56.32919169070609 Pa` (`vle_obs_0206`), with native vapor
+composition rows retained in the same replay. These are bounded working-input
+results and do not qualify the parameter record for prediction.
 
 Use the repository's pinned uv environment. From this analysis directory:
 
