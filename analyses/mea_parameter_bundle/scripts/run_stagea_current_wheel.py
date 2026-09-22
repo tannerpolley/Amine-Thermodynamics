@@ -95,6 +95,64 @@ def _write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         writer.writerows(rows)
 
 
+def _state_reference(output: Path, case: str) -> dict[str, str] | None:
+    matches = []
+    for path in (output / "states").glob("*.json"):
+        try:
+            if json.loads(path.read_text(encoding="utf-8")).get("identity") == case:
+                matches.append(path)
+        except (OSError, ValueError):
+            continue
+    if not matches:
+        return None
+    path = matches[-1]
+    return {
+        "path": str(path.relative_to(output)),
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+    }
+
+
+def _record_summary(
+    output: Path, case: str, role: str, request_sha256: str, record: dict[str, object]
+) -> dict[str, object]:
+    evidence = _evidence(record)
+    compiled = evidence.get("compiled_point_evaluation", {})
+    summary: dict[str, object] = {
+        "case": case,
+        "role": role,
+        "request_sha256": request_sha256,
+        "status": record.get("status", ""),
+        "failure_code": record.get("failure_code", ""),
+        "failure_diagnostic": record.get("failure_diagnostic", ""),
+        "solver_status": record.get("solver_status", ""),
+        "requested_tolerance_met": evidence.get("requested_tolerance_met"),
+        "raw_stationarity_max_abs": (
+            compiled.get("raw_stationarity_max_abs")
+            if isinstance(compiled, dict)
+            else None
+        ),
+        "classified_residual_max_abs": _max_abs(evidence.get("classified_residuals")),
+        "state": None if role == "cold-failure" else _state_reference(output, case),
+    }
+    if role == "cold-failure":
+        summary["failure"] = {
+            "status": record.get("status", ""),
+            "failure_code": record.get("failure_code", ""),
+            "failure_diagnostic": record.get("failure_diagnostic", ""),
+            "attempts": record.get("attempts", ()),
+        }
+    if role == "warm-recovery":
+        summary["cold_failure"] = next(
+            (
+                attempt
+                for attempt in record.get("attempts", ())
+                if attempt.get("status") != "evaluated"
+            ),
+            None,
+        )
+    return summary
+
+
 def run(output: Path, budget_s: float, include_vle: bool) -> None:
     if output.exists() and any(output.iterdir()):
         raise RuntimeError(f"refusing to mix an existing replay directory: {output}")
@@ -112,14 +170,10 @@ def run(output: Path, budget_s: float, include_vle: bool) -> None:
         record = shared.evaluate_state(
             model, request, reactions, case, anchors, budget_s=budget_s
         )
-        cases.append({
-            "case": case,
-            "role": role,
-            "request_sha256": hashlib.sha256(
-                json.dumps(request, sort_keys=True, separators=(",", ":")).encode()
-            ).hexdigest(),
-            "record": record,
-        })
+        request_sha256 = hashlib.sha256(
+            json.dumps(request, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
+        cases.append(_record_summary(output, case, role, request_sha256, record))
         csv_rows.extend(_row_payload(case, role, request, record))
         return record
 
@@ -145,7 +199,17 @@ def run(output: Path, budget_s: float, include_vle: bool) -> None:
             "failure_diagnostic": "345 K sentinel did not produce a liquid anchor",
             "attempt_count": 0,
         }
-        cases.append({"case": warm_record["case"], "role": "warm-recovery", "record": warm_record})
+        cases.append(
+            _record_summary(
+                output,
+                warm_record["case"],
+                "warm-recovery",
+                hashlib.sha256(
+                    json.dumps(cold_request, sort_keys=True, separators=(",", ":")).encode()
+                ).hexdigest(),
+                warm_record,
+            )
+        )
         csv_rows.extend(_row_payload(warm_record["case"], "warm-recovery", cold_request, warm_record))
     else:
         evaluate(
