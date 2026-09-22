@@ -2,12 +2,15 @@
 
 import importlib.util
 import json
+import math
 import os
 import sys
 import time
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
+from MEA.common.mea_source_contracts import common_source_ln_k
 
 
 SPEC = importlib.util.spec_from_file_location(
@@ -127,42 +130,107 @@ def test_failed_state_cache_policy(tmp_path, monkeypatch, failure_code, reusable
     not hasattr(os, "fork"), reason="hard native timeout requires POSIX fork"
 )
 def test_native_solver_timeout_terminates_owned_child(monkeypatch):
-    original = shared.equilibrium.solve
+    original = shared.equilibrium.solve_equilibrium
 
     def block(*_args, **_kwargs):
         time.sleep(5)
 
-    monkeypatch.setattr(shared.equilibrium, "solve", block)
+    monkeypatch.setattr(shared.equilibrium, "solve_equilibrium", block)
     try:
         with pytest.raises(shared.EvaluationTimeout):
             shared._solve_in_child(object(), object(), 0.05)
     finally:
-        monkeypatch.setattr(shared.equilibrium, "solve", original)
+        monkeypatch.setattr(shared.equilibrium, "solve_equilibrium", original)
 
 
 def test_pinned_engine_state_and_cached_replay(tmp_path, monkeypatch):
     shared.verify_wheel()
     monkeypatch.setattr(shared, "RUNS", tmp_path)
-    parameters = shared.epcsaft.Parameters.from_json(shared.PARAMETERS)
+    parameters = shared.load_parameters()
     model = shared.epcsaft.Mixture(parameters)
-    request = shared.load_state_packet()["observations"][0]["request"]
-    reactions = {
-        spec.identity: float(spec.value.magnitude)
-        for spec in parameters.parameter_specs
-        if spec.identity.startswith("reaction:")
-    }
+    request = next(
+        observation["request"]
+        for observation in shared.load_state_packet()["observations"]
+        if observation["identity"] == "Bottinger2008_state_050"
+    )
+    reactions = shared._selected_reactions()
     result = shared.evaluate_state(
-        model, request, reactions, "native-smoke", [], budget_s=15
+        model, request, reactions, "Bottinger2008_state_050", [], budget_s=60
     )
     assert result["status"] == "evaluated", result["attempts"]
-    assert result["parameter_role"] == "selected"
-    assert result["solver_status"] == "solve_succeeded"
-    assert result["predictions"]["co2-partial-pressure"] > 0
-    replay = shared.evaluate_state(
-        model, request, reactions, "cached-smoke", [], budget_s=15
+    assert result["failure_code"] == ""
+    assert result["predictions"] == pytest.approx(
+        {
+            "Bottinger2008_state_050-hco3": 0.005214865150114531,
+            "Bottinger2008_state_050-mea_meah": 0.06771945760549275,
+            "Bottinger2008_state_050-meacoo": 0.04449867725550945,
+        },
+        rel=5e-8,
+        abs=1e-12,
     )
-    assert replay["cache_hit"]
+    liquid = next(phase for phase in result["phases"] if phase["role"] == "liquid")
+    species = dict(zip(liquid["support"], liquid["mole_fractions"], strict=True))
+    assert species["carbamate-anion"] == pytest.approx(0.04449867725550945, rel=5e-8)
+    assert species["bicarbonate-anion"] == pytest.approx(0.005214865150114531, rel=5e-8)
+    assert species["hydronium-cation"] == pytest.approx(2.31334915458689e-10, rel=5e-6)
+    evidence = dict(result["evidence"])
+    compiled = evidence["compiled_point_evaluation"]
+    assert compiled["raw_stationarity_max_abs"] <= 1e-10
+    assert max(abs(value) for value in evidence["residuals"]) <= 1e-10
+    assert max(abs(value) for value in evidence["classified_residuals"]) <= 1e-10
+    diagnostics = next(
+        row[1] for row in result["evidence"] if row[0] == "neutral_reference_diagnostics"
+    )
+    assert all(item["status"] == "Available" for item in diagnostics)
+    assert max(item["observed_terminal_change"] for item in diagnostics) <= 5.0e-5
+    replay = shared.evaluate_state(
+        model, request, reactions, "Bottinger2008_state_050-replay", [], budget_s=15
+    )
+    assert replay["cache_hit"] is True
     assert replay["predictions"] == result["predictions"]
+
+
+def test_source_normalizer_keeps_common_r2_and_converts_only_log10_form():
+    request = next(
+        o["request"]
+        for o in shared.load_state_packet()["observations"]
+        if o["identity"] == "Bottinger2008_state_050"
+    )
+    selected = shared._engine_reaction_records(request, shared._selected_reactions())
+    r2 = selected[1]
+    assert r2["engine_correlation"]["a"] == pytest.approx(
+        232.33141533884407
+        - 36.7816 * math.log(shared.REACTION_REFERENCE_TEMPERATURE_K)
+    )
+    assert r2["engine_correlation"]["b"] == -11105.640030520277
+    assert r2["engine_correlation"]["reference_temperature"] == 313.15
+    assert r2["engine_correlation"]["standard_state_id"] == (
+        shared.COMMON_SOURCE_STANDARD_STATE_ID
+    )
+    assert r2["engine_reference"]["source_basis"] == "CommonMolalityInfiniteDilution"
+    r5 = selected[4]["engine_correlation"]
+    assert r5["a"] == -math.log(10.0) * -1.0173150837285996
+    assert r5["b"] == -math.log(10.0) * 3037.6399534696106
+    baseline = shared._engine_reaction_records(request, {})
+    assert baseline[1]["engine_correlation"]["a"] == pytest.approx(
+        231.465 - 36.7816 * math.log(shared.REACTION_REFERENCE_TEMPERATURE_K)
+    )
+    assert baseline[1]["engine_reference"]["source_basis"] == "RawMoleFractionInfiniteDilution"
+    selected_r2 = selected[1]["engine_correlation"]
+    shift_j_per_mol = -8201.884540543741
+    gas_constant = 8.31446261815324
+    for temperature in (293.15, 303.15, 313.15):
+        expected = common_source_ln_k(temperature)[1] + shift_j_per_mol / gas_constant * (
+            1.0 / 313.15 - 1.0 / temperature
+        )
+        actual = (
+            selected_r2["a"]
+            + selected_r2["b"] / temperature
+            + selected_r2["c"]
+            * math.log(temperature / selected_r2["reference_temperature"])
+            + selected_r2["d"] * temperature
+        )
+        assert actual == pytest.approx(expected, abs=2.0e-12)
 
 
 def test_compact_packet_expands_all_observations_and_isolated_values():
@@ -187,26 +255,22 @@ def test_fixed_pressure_warm_start_does_not_gain_unknown_pressure_fields(
     tmp_path, monkeypatch
 ):
     monkeypatch.setattr(shared, "RUNS", tmp_path)
-    packet = shared.load_state_packet()
-    request = next(
+    request = deepcopy(next(
         o["request"]
-        for o in packet["observations"]
+        for o in shared.load_state_packet()["observations"]
         if o["request"]["pressure"]["role"] == "fixed"
-    )
-    problem = shared.equilibrium.general_reactive_equilibrium_problem_from_mapping(
-        shared.corrected_request(request)
-    )
-    phase = problem.continuation_state.phases[0]
-    anchor = shared.Anchor(
-        round(request["temperature"]["value"] - 273.15),
-        request["reaction_system"]["feed_amounts_mol"][0],
-        request["pressure"]["value"],
-        phase.mole_fractions,
-        phase.molar_volume_m3_per_mol,
-    )
-    monkeypatch.setattr(shared, "_solve_in_child", lambda *args: _snapshot())
-    result, attempts = shared.solve_with_recovery(
-        _Model(), request, {}, "fixed-pressure", [anchor]
-    )
-    assert result.status == "evaluated"
-    assert attempts[0]["kind"] == "same-temperature-anchor"
+    ))
+    request["reaction_system"]["engine_reactions"] = [
+        {
+            "reaction_id": f"R{i + 1}",
+            "engine_correlation": {
+                "a": 0.0, "b": 0.0, "c": 0.0, "d": 0.0,
+                "reference_temperature": 300.0,
+                "temperature_min": 250.0, "temperature_max": 450.0,
+                "standard_state_id": shared.equilibrium.EOS_STANDARD_STATE_ID,
+            },
+        }
+        for i in range(5)
+    ]
+    problem = shared._problem_from_request(request)
+    assert problem.P == request["pressure"]["value"]
