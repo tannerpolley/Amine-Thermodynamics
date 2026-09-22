@@ -1037,3 +1037,38 @@ without creating acquisition prerequisites.
 No predictive qualification, slow campaign, application transfer or merge was
 performed in this preparation slice; the bounded adapter, current-wheel
 replays and focused checks are present in the application worktree.
+
+
+## Current-main replay and handoff — 2026-09-22
+
+The adopted parameter file remains SHA-256
+`568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d`.
+The bounded replay consumed Engine runtime `892c6687480259a6de6bbc8fa1721a35d06c997f`
+and noneditable wheel `dc1d18d02fa560a5b518f4fb20be7e2254e8aa79dd62b3f6dfddf2107005d2b2`.
+The new `current-main-adopted-comparison` result directory beside the earlier
+`final-current-wheel` receipt retains nine requests, eight successful states,
+one cold 360 K failure and eight packet-target comparisons. Earlier c878 receipts
+are unchanged. Packet calibration labels, selection exposure, source-range
+extrapolation and the Böttinger 058 role conflict limit interpretation; this is
+not independent predictive validation.
+
+The full replay used evaluator v4 before the final diagnostic-only correction.
+The separate `current-main-adopted-comparison-v5-cold-only` receipt qualifies the
+corrected failure serialization: native raw maximum 6.24741216, classified
+maximum 0.00167100625 against 1e-10, requested tolerance false, MAXITER_EXCEEDED,
+and no invented state or pressure. The successful 345-to-360 K warm result retains
+raw/classified maxima 1.14e-13/2.50e-15. Failed-attempt evidence stays with its
+actual attempt; the record-level failure fields all refer to the final attempt.
+The current producer is evaluator v5; the corrected cold-only run was fresh.
+
+The verified sum of per-case attempt times is 35.498388 s: VLE 0130 takes 13.919718 s
+and VLE 0206 takes 17.273847 s. The earlier chat estimate of 26 s was incomplete waiting
+accounting and is not a process benchmark. The separate cold refresh measured
+0.524 s. No wheel build occurred and no further numerical process is running.
+
+The comparison uses this adapter's explicit all-ion-pairs mode. A separate
+old/new benchmark found that the superseded adapter resolves same-sign exclusion;
+identical parameter JSON hashes therefore do not establish identical physical
+models. Mode provenance/parity and the Engine's repeated source-reference work
+remain unresolved. This checkpoint does not qualify a speed improvement or a
+merge of the whole application migration.

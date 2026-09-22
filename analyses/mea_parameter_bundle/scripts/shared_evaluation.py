@@ -35,8 +35,8 @@ ENGINE_WHEEL = Path(
     "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/"
     "build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 )
-ENGINE_WHEEL_SHA256 = "c87846663349640ab115cb09f9b880caea71be973dfe685dc9bd0f8bf7b11072"
-ENGINE_COMMIT = "3f5d9ac87a70aebbefbbecef47fcb8ba39f56e6c"
+ENGINE_WHEEL_SHA256 = "dc1d18d02fa560a5b518f4fb20be7e2254e8aa79dd62b3f6dfddf2107005d2b2"
+ENGINE_COMMIT = "892c6687480259a6de6bbc8fa1721a35d06c997f"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
@@ -74,7 +74,7 @@ REACTION_REFERENCE_TEMPERATURE_K = 313.15
 # Existing cache files remain usable only when their key and record contain
 # this evaluator version.  Old keys did not contain this field, so they are
 # naturally isolated without deleting anyone's retained results.
-EVALUATOR_VERSION = "shared-evaluation-v3"
+EVALUATOR_VERSION = "shared-evaluation-v5"
 RUNS = ANALYSIS / "results/runs/reaction-temperature-fit"
 SOURCE_CONTRACT = ANALYSIS.parents[1] / "src/MEA/common/mea_source_contracts.py"
 
@@ -1071,18 +1071,20 @@ def solve_with_recovery(
                 f"{type(exc).__name__}: {exc}",
             )
         evaluated = result is not None and status == "evaluated"
-        attempts.append(
-            {
-                "kind": kind,
-                "anchor": None
-                if anchor is None
-                else [anchor.temperature_c, anchor.loading],
-                "wall_s": perf_counter() - clock,
-                "status": "evaluated" if evaluated else status,
-                "failure_code": "" if evaluated else code,
-                "failure_diagnostic": "" if evaluated else diagnostic,
-            }
-        )
+        attempt = {
+            "kind": kind,
+            "anchor": None
+            if anchor is None
+            else [anchor.temperature_c, anchor.loading],
+            "wall_s": perf_counter() - clock,
+            "status": "evaluated" if evaluated else status,
+            "failure_code": "" if evaluated else code,
+            "failure_diagnostic": "" if evaluated else diagnostic,
+        }
+        if result is not None:
+            attempt["solver_status"] = result.solver_status
+            attempt["evidence"] = result.evidence
+        attempts.append(attempt)
         if evaluated:
             return result, attempts
         if code == "reference_basis_unavailable":
@@ -1230,6 +1232,12 @@ def evaluate_state(
         "amount_mol": None,
         "cache_hit": False,
     }
+    if not evaluated and attempts:
+        failed_attempt = attempts[-1]
+        if "solver_status" in failed_attempt:
+            record["solver_status"] = failed_attempt["solver_status"]
+        if "evidence" in failed_attempt:
+            record["evidence"] = failed_attempt["evidence"]
     if evaluated:
         record["predictions"] = result.predictions
         record["solver_status"] = result.solver_status
