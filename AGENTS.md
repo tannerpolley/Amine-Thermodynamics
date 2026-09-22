@@ -20,7 +20,7 @@
 
 - Keep user preferences and durable project facts concise, date-stamped, and deduplicated.
 - Do not update memory for routine Q&A or small one-off work.
-- Do not store secrets, add placeholder entries, or create new memory under `.codex` or `$HOME/.codex/projects`.
+- Do not store secrets, add placeholder entries, or create new agent memory, including `.codex`, `$HOME/.codex/projects`, or Claude auto memory.
 
 ## ePC-SAFT Cross-Repo Integration
 
