@@ -31,12 +31,10 @@ from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
 ANALYSIS = Path(__file__).resolve().parents[1]
 INPUT = ANALYSIS / "data/input"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
-ENGINE_WHEEL = Path(
-    "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/"
-    "build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
-)
-ENGINE_WHEEL_SHA256 = "98b9a4fb01e399955bd7a80de7afecc050b2278fe8cf8a31825962adab60dc85"
-ENGINE_COMMIT = "c24261a79843e842a9abb06487d32eec95f9c688"
+# Identity of the non-editable wheel that must be installed; its build path is not
+# retained because Engine rebuilds overwrite it.
+ENGINE_WHEEL_SHA256 = "3a69fd263ba073ea600fa7e45aa866337b11c2e4556329d337bb5e025a0eda9f"
+ENGINE_COMMIT = "cb163066e683f278ab40fb5cf7069e3602119f96"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
@@ -60,6 +58,8 @@ COMPONENT_IDS = (
 )
 R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS = (8.0330699846, 4.0165349923, 4.0165349923)
 NEUTRAL_VAPOR_IDS = COMPONENT_IDS[:3]
+# Shell-modified Born constants of the adopted configuration
+# (data/reference/MEA/manifests/reactive_vle_model_configurations.json).
 MODEL_RUNTIME_DEFAULTS = {"c_shell": 1.0, "c_dielectric": 1.0}
 REACTION_REFERENCE_PRESSURES = {"R1": None, "R2": None, "R3": None, "R4": 1.0e5, "R5": 1.0e5}
 COMMON_SOURCE_STANDARD_STATE_ID = "aqueous-molality-infinite-dilution-water-v1"
@@ -184,11 +184,8 @@ def installed_wheel() -> Path:
 
 
 def verify_wheel() -> None:
-    if (
-        sha256(ENGINE_WHEEL) != ENGINE_WHEEL_SHA256
-        or sha256(installed_wheel()) != ENGINE_WHEEL_SHA256
-    ):
-        raise RuntimeError("installed and retained Engine wheels must match")
+    if sha256(installed_wheel()) != ENGINE_WHEEL_SHA256:
+        raise RuntimeError("installed Engine wheel does not match the pinned SHA-256")
 
 
 class ReferenceBasisUnavailable(RuntimeError):
@@ -206,6 +203,48 @@ def parameter_mapping(path: Path = PARAMETERS) -> dict[str, object]:
 
 def load_parameters(path: Path = PARAMETERS) -> epcsaft.Parameters:
     return epcsaft.Parameters.from_mapping(parameter_mapping(path))
+
+
+def _identified(node: object):
+    """Yield every ``{"identity", "value": {"magnitude"}}`` coefficient node."""
+    if isinstance(node, dict):
+        value = node.get("value")
+        if isinstance(node.get("identity"), str) and isinstance(value, dict) and "magnitude" in value:
+            yield node
+        for child in node.values():
+            yield from _identified(child)
+    elif isinstance(node, list):
+        for child in node:
+            yield from _identified(child)
+
+
+def parameter_values(mapping: dict[str, object]) -> dict[str, float]:
+    """Identified coefficient magnitudes in their record units."""
+    return {node["identity"]: float(node["value"]["magnitude"]) for node in _identified(mapping)}
+
+
+def reaction_values(mapping: dict[str, object]) -> dict[str, float]:
+    return {k: v for k, v in parameter_values(mapping).items() if k.startswith("reaction:")}
+
+
+def with_parameter_values(
+    mapping: dict[str, object], values: dict[str, float]
+) -> dict[str, object]:
+    """Copy of ``mapping`` with the named coefficient magnitudes replaced."""
+    updated = copy.deepcopy(mapping)
+    found = set()
+    for node in _identified(updated):
+        if node["identity"] in values:
+            node["value"]["magnitude"] = values[node["identity"]]
+            found.add(node["identity"])
+    if missing := set(values) - found:
+        raise KeyError(f"unknown parameter identities: {sorted(missing)}")
+    return updated
+
+
+def parameter_fingerprint(mapping: dict[str, object]) -> str:
+    text = json.dumps(mapping, sort_keys=True, separators=(",", ":"))
+    return f"sha256:{hashlib.sha256(text.encode()).hexdigest()}"
 
 
 def corrected_request(
@@ -564,13 +603,7 @@ def _reaction_identity(reactions: dict[str, float]) -> str:
 
 
 def _selected_reactions() -> dict[str, float]:
-    values: dict[str, float] = {}
-    for reaction in parameter_mapping().get("reaction_correlations", ()):
-        for coefficient in reaction.get("coefficients", ()):
-            identity = coefficient.get("identity")
-            if isinstance(identity, str) and identity.startswith("reaction:"):
-                values[identity] = float(coefficient["value"]["magnitude"])
-    return values
+    return reaction_values(parameter_mapping())
 
 
 def provenance(
@@ -1176,12 +1209,16 @@ def evaluate_state(
     thermochemistry: object | None = None,
     budget_s: float = math.inf,
     limits: EvaluationLimits | None = None,
+    model_fingerprint: str | None = None,
 ) -> dict[str, object]:
-    """Evaluate one state with identity-complete cache and bounded recovery."""
+    """Evaluate one state with identity-complete cache and bounded recovery.
+
+    ``model_fingerprint`` identifies a model built from any mapping other than the
+    selected record (see ``parameter_fingerprint``); without it, cached states of a
+    different model would be reused.
+    """
     provenance_data = provenance(thermochemistry, reactions)
-    model_fingerprint = str(
-        getattr(model, "parameter_fingerprint", f"sha256:{sha256(PARAMETERS)}")
-    )
+    model_fingerprint = model_fingerprint or f"sha256:{sha256(PARAMETERS)}"
     corrected = corrected_request(request, reactions)
     provenance_data["parameter_role"] = (
         "selected"

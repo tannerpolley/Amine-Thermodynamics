@@ -14,7 +14,6 @@ import epcsaft
 from epcsaft import equilibrium
 from shared_evaluation import (
     ENGINE_COMMIT,
-    ENGINE_WHEEL,
     ENGINE_WHEEL_SHA256,
     PARAMETERS,
     R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS,
@@ -198,7 +197,6 @@ def main() -> None:
         "parameter document is not a recorded incumbent"
     )
     assert sha256(STATE_PACKET) == STATE_PACKET_SHA256
-    assert sha256(ENGINE_WHEEL) == ENGINE_WHEEL_SHA256
     assert sha256(CANONICAL_SPECIATION) == CANONICAL_SPECIATION_SHA256
     assert sha256(CANONICAL_VLE) == CANONICAL_VLE_SHA256
     verify_wheel()

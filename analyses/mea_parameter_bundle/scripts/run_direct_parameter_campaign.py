@@ -17,16 +17,19 @@ from pathlib import Path
 import epcsaft
 from shared_evaluation import (
     CANONICAL_VLE,
-    ENGINE_WHEEL,
     ENGINE_WHEEL_SHA256,
     STATE_PACKET,
     STATE_PACKET_SHA256,
-    corrected_request,
-    installed_wheel,
     load_state_packet,
+    parameter_fingerprint,
+    parameter_mapping,
+    parameter_values,
+    reaction_values,
     sha256,
     evaluate_state,
     anchor_from,
+    verify_wheel,
+    with_parameter_values,
 )
 
 ANALYSIS = Path(__file__).resolve().parents[1]
@@ -62,19 +65,11 @@ def quarter_cpu_affinity() -> tuple[int, ...]:
 
 @lru_cache(maxsize=1)
 def origins() -> dict[str, float]:
-    parameters = epcsaft.Parameters.from_json(BASELINE)
-    specs = {spec.identity: spec for spec in parameters.parameter_specs}
-    return {
-        name: float(
-            specs[identity].value.to(specs[identity].unit).magnitude
-            if hasattr(specs[identity].value, "to")
-            else specs[identity].value
-        )
-        for name, identity in COORDINATES.items()
-    }
+    values = parameter_values(parameter_mapping(BASELINE))
+    return {name: values[identity] for name, identity in COORDINATES.items()}
 
 
-def parameter_values(mapping: dict[str, float]) -> dict[str, float]:
+def component_values(mapping: dict[str, float]) -> dict[str, float]:
     return {
         COORDINATES[name]: value
         for name, value in mapping.items()
@@ -82,22 +77,16 @@ def parameter_values(mapping: dict[str, float]) -> dict[str, float]:
     }
 
 
-def request_with_reactions(
-    source: dict[str, object], values: dict[str, float]
-) -> dict[str, object]:
-    reaction_values = {
-        spec.identity: float(spec.value.magnitude)
-        for spec in epcsaft.Parameters.from_json(BASELINE).parameter_specs
-        if spec.identity.startswith("reaction:")
-    }
-    reaction_values.update(
+def scenario_reactions(values: dict[str, float]) -> dict[str, float]:
+    reactions = reaction_values(parameter_mapping(BASELINE))
+    reactions.update(
         {
             "reaction:R4:correlation:a": values.get("r4_a", origins()["r4_a"]),
             "reaction:R4:correlation:b_k": values.get("r4_b", origins()["r4_b"]),
             "reaction:R5:correlation:a_k": values.get("r5_a", origins()["r5_a"]),
         }
     )
-    return corrected_request(source, reaction_values)
+    return reactions
 
 
 def load_packet() -> dict[str, object]:
@@ -204,30 +193,13 @@ def evaluate_scenario(
     task: tuple[str, dict[str, float], bool],
 ) -> tuple[str, dict[str, float], list[dict[str, object]]]:
     scenario, values, full = task
-    base = epcsaft.Parameters.from_json(BASELINE)
-    model_parameters = (
-        base.with_values(
-            parameter_values(values),
-            source_id="best-in-slot-bounded-campaign",
-            locator=f"direct Engine scenario {scenario}",
-        )
-        if parameter_values(values)
-        else base
-    )
-    model = epcsaft.Mixture(model_parameters)
+    mapping = with_parameter_values(parameter_mapping(BASELINE), component_values(values))
+    fingerprint = parameter_fingerprint(mapping)
+    model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping))
     rows: list[dict[str, object]] = []
     anchors = []
+    reactions = scenario_reactions(values)
     for state in [*pressure_catalog(full), *speciation_catalog()]:
-        request = request_with_reactions(state["request"], values)
-        reactions = {
-            identity: value
-            for item in request["reaction_system"]["equilibrium_constants"]
-            for identity, value in zip(
-                item[6]["coefficient_identities"],
-                item[6]["coefficient_values"],
-                strict=True,
-            )
-        }
         record = evaluate_state(
             model,
             state["request"],
@@ -235,6 +207,7 @@ def evaluate_scenario(
             f"{state['observation_id']}-{scenario}",
             anchors,
             budget_s=45,
+            model_fingerprint=fingerprint,
         )
         status = record["status"]
         code, diagnostic = record["failure_code"], record["failure_diagnostic"]
@@ -258,7 +231,7 @@ def evaluate_scenario(
                     "status": status,
                     "failure_code": code,
                     "failure_diagnostic": diagnostic,
-                    "parameter_fingerprint": model_parameters.fingerprint,
+                    "parameter_fingerprint": fingerprint,
                     "cache_hit": record["cache_hit"],
                     **values,
                 }
@@ -394,8 +367,7 @@ def run(
     scenarios: list[tuple[str, dict[str, float]]], phase: str, full: bool, workers: int
 ) -> None:
     assert sha256(STATE_PACKET) == STATE_PACKET_SHA256
-    assert sha256(ENGINE_WHEEL) == ENGINE_WHEEL_SHA256
-    assert sha256(installed_wheel()) == ENGINE_WHEEL_SHA256
+    verify_wheel()
     cpu_affinity = quarter_cpu_affinity()
     workers = min(workers, len(cpu_affinity))
     tasks = [(scenario, values, full) for scenario, values in scenarios]
@@ -425,7 +397,7 @@ def run(
         "parameter_path": str(BASELINE.relative_to(ANALYSIS)),
         "parameter_sha256": sha256(BASELINE),
         "state_packet_sha256": sha256(STATE_PACKET),
-        "engine_wheel_sha256": sha256(ENGINE_WHEEL),
+        "engine_wheel_sha256": ENGINE_WHEEL_SHA256,
         "method": "Direct coupled Engine reactive equilibrium solve at every sampled state.",
     }
     (RESULTS / f"{phase}-receipt.json").write_text(

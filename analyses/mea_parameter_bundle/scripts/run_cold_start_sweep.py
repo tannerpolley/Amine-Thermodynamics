@@ -6,7 +6,6 @@ W = Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(W / 'analyses/mea_parameter_bundle/scripts'), str(W / 'src')]
 import shared_evaluation as shared
 label, wheel = sys.argv[1], Path(sys.argv[2])
-shared.ENGINE_WHEEL = wheel
 shared.ENGINE_WHEEL_SHA256 = hashlib.sha256(wheel.read_bytes()).hexdigest()
 shared.verify_wheel()
 shared.RUNS = Path('/tmp/mea-cold-start-sweep') / label
