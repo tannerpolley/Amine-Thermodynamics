@@ -1136,14 +1136,17 @@ Born-study variants B and C use permittivity rules the Engine no longer admits.
 ion solvation and Born diameters) and pCO2 observations are not `regression` coordinates or
 kinds, and the retained grid campaign superseded it. The thermal chain stops on the missing
 reference temperature derivative (Engine #84): `evaluate_direct_absorption_heat.py` and
-`validate_thermal_references.py` raise `THERMAL_REFERENCE_UNAVAILABLE` on entry, and
-`run_reaction_temperature_fit.py` raises it for the screen, candidate, parity and benchmark
-modes and for heat groups of the full replay. Its pressure and speciation full-replay groups,
-partial summary, adoption record and self-check remain. `--sensitivity-check` stops on missing
-reaction-coefficient actions (Engine #61). The code behind these stops (anchored reference
-construction, heat evaluation, thermal validation, screen, candidate, parity, benchmark and
-sensitivity drivers) was deleted rather than kept unreachable; the retained results name
-their producers, which Git history keeps for the #84 and #61 ports. `shared_evaluation` no
+`validate_thermal_references.py` raise `THERMAL_REFERENCE_UNAVAILABLE` on entry. The
+reaction-temperature fit is retired as one unit: every mode of
+`run_reaction_temperature_fit.py` except `--self-check` raises it on entry, because the
+screen, candidate, parity and benchmark consume the thermal reference and the full replay,
+partial summary and adoption require `candidate-receipt.json` and the heat summary, which
+only those blocked stages write for the current parameter file. `--sensitivity-check` stops
+on missing reaction-coefficient actions (Engine #61). `--self-check` remains; it checks the
+reaction-enthalpy shift algebra, cohort roles and recovery attempt plan without an Engine
+solve. The code behind these stops (anchored reference construction, heat evaluation,
+thermal validation and every other fit mode) was deleted rather than kept unreachable; the
+retained results name their producers, which Git history keeps for the #84 and #61 ports. `shared_evaluation` no
 longer accepts a thermochemistry or active-parameter argument, and its records drop the
 always-null `thermochemistry` field; as after any evaluator edit, the evaluator source hash
 in the cache key sends new evaluations to new state records.
