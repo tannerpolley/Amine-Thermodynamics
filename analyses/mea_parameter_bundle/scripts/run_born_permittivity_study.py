@@ -424,10 +424,8 @@ def retain_component_permittivity_derivative_check() -> None:
         def epsilon(values: list[float]) -> float:
             return float(
                 model.state(
-                    T=temperature_k * epcsaft.unit_registry.kelvin,
-                    rho=density_mol_m3
-                    * epcsaft.unit_registry.mole
-                    / epcsaft.unit_registry.meter**3,
+                    T=temperature_k,
+                    rho=density_mol_m3,
                     x=values,
                 ).bulk_relative_permittivity
             )
@@ -570,19 +568,13 @@ def evaluate_variant(
             if observation["family"] == "pressure":
                 anchors.append(anchor_from(record))
             state = model.state(
-                T=(float(observation["temperature_C"]) + 273.15)
-                * epcsaft.unit_registry.kelvin,
-                rho=liquid["molar_density_mol_m3"]
-                * epcsaft.unit_registry.mole
-                / epcsaft.unit_registry.meter**3,
+                T=float(observation["temperature_C"]) + 273.15,
+                rho=liquid["molar_density_mol_m3"],
                 x=liquid["mole_fractions"],
             )
             reference_state = reference.state(
-                T=(float(observation["temperature_C"]) + 273.15)
-                * epcsaft.unit_registry.kelvin,
-                rho=liquid["molar_density_mol_m3"]
-                * epcsaft.unit_registry.mole
-                / epcsaft.unit_registry.meter**3,
+                T=float(observation["temperature_C"]) + 273.15,
+                rho=liquid["molar_density_mol_m3"],
                 x=liquid["mole_fractions"],
             )
             evidence = dict(record["evidence"])
@@ -616,8 +608,7 @@ def evaluate_variant(
                 figiel_reference_permittivity=reference_state.bulk_relative_permittivity,
                 born_a_over_rt=state.born,
                 debye_huckel_a_over_rt=state.debye_huckel,
-                residual_a_over_rt=float(state.ares().to("joule / mole").magnitude)
-                / (8.31446261815324 * (float(observation["temperature_C"]) + 273.15)),
+                residual_a_over_rt=state.residual_helmholtz,
                 eos_evaluation_count=evidence.get("eos_evaluation_count", ""),
             )
             predictions = record["predictions"]
