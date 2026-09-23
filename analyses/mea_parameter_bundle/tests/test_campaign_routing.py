@@ -110,18 +110,9 @@ def test_baseline_requires_current_selection(tmp_path, monkeypatch):
         fit.require_current_baseline()
 
 
-def test_empty_heat_and_selected_handoff_metadata(tmp_path):
-    import evaluate_direct_absorption_heat as heat
+def test_selected_handoff_metadata():
     import build_absorption_handoff as handoff
 
-    output = tmp_path / "curve.csv"
-    output.write_text("old predictions")
-    heat.write_rows(output, [])
-    assert output.read_text() == ""
-    assert (
-        heat.residual_metrics([{"status": "non_evaluable"}])["rmse_kj_per_mol_CO2"]
-        is None
-    )
     selected = json.loads(handoff.PARAMETERS.read_text())
     selected["reaction_correlations"][0]["coefficients"][0]["value"]["magnitude"] += 1.0
     definition = json.loads(

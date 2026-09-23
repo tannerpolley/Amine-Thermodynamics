@@ -606,9 +606,7 @@ def _selected_reactions() -> dict[str, float]:
     return reaction_values(parameter_mapping())
 
 
-def provenance(
-    thermochemistry: object | None = None, reactions: dict[str, float] | None = None
-) -> dict[str, object]:
+def provenance(reactions: dict[str, float] | None = None) -> dict[str, object]:
     values = _selected_reactions() if reactions is None else reactions
     selected = _reaction_identity(_selected_reactions())
     effective = _reaction_identity(values)
@@ -622,9 +620,6 @@ def provenance(
         "parameter_runtime_defaults": MODEL_RUNTIME_DEFAULTS,
         "source_contract_sha256": sha256(SOURCE_CONTRACT),
         "evaluator_source_sha256": sha256(Path(__file__)),
-        "thermochemistry": None
-        if thermochemistry is None
-        else thermochemistry.scientific_fingerprint,
     }
 
 
@@ -936,19 +931,9 @@ def _solve_in_child(
     model: object,
     problem: object,
     timeout_s: float,
-    active_parameters: object | None = None,
     request: dict[str, object] | None = None,
 ) -> SolveSnapshot:
     """Run one Engine call in a forked child so timeout can kill native code."""
-    if active_parameters is not None:
-        return SolveSnapshot(
-            status="unavailable",
-            failure_code="reaction_action_unavailable",
-            failure_diagnostic=(
-                "the current Engine exposes EOS active parameters only; "
-                "reaction-correlation actions are unavailable"
-            ),
-        )
     if not hasattr(os, "fork"):
         raise RuntimeError("hard solver timeout requires POSIX fork support")
     read_fd, write_fd = os.pipe()
@@ -1050,7 +1035,6 @@ def solve_with_recovery(
     reactions: dict[str, float],
     identity: str,
     anchors: list[Anchor],
-    thermochemistry: object | None = None,
     budget_s: float = math.inf,
     limits: EvaluationLimits | None = None,
 ) -> tuple[object | None, list[dict[str, object]]]:
@@ -1206,7 +1190,6 @@ def evaluate_state(
     reactions: dict[str, float],
     identity: str,
     anchors: list[Anchor],
-    thermochemistry: object | None = None,
     budget_s: float = math.inf,
     limits: EvaluationLimits | None = None,
     model_fingerprint: str | None = None,
@@ -1217,7 +1200,7 @@ def evaluate_state(
     selected record (see ``parameter_fingerprint``); without it, cached states of a
     different model would be reused.
     """
-    provenance_data = provenance(thermochemistry, reactions)
+    provenance_data = provenance(reactions)
     model_fingerprint = model_fingerprint or f"sha256:{sha256(PARAMETERS)}"
     corrected = corrected_request(request, reactions)
     provenance_data["parameter_role"] = (
@@ -1270,7 +1253,6 @@ def evaluate_state(
         reactions,
         identity,
         anchors,
-        thermochemistry,
         budget_s,
         limits,
     )
