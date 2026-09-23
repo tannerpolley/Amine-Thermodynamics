@@ -472,9 +472,9 @@ R1–R5 construction uses the public reference-path representation delivered by
 
 The focused checks belong in
 `analyses/mea_parameter_bundle/tests/test_shared_evaluation.py`. Mechanical
-metadata readers in `generate_figure_data.py` and
-`run_best_in_slot_campaign.py` may call the shared request decoder when those
-scripts are brought forward; they are not a second adapter owner.
+metadata readers in `generate_figure_data.py` may call the shared request decoder;
+they are not a second adapter owner. `run_best_in_slot_campaign.py` was deleted in the
+issue #96 port (below).
 `evaluate_direct_absorption_heat.py` and `validate_thermal_references.py`
 remain blocked on the #84 reference-basis decision. The direct calls in
 `run_reaction_temperature_fit.py` remain a separate optional reaction-fit
@@ -1134,11 +1134,19 @@ dilute composition; 38/39 rows reproduce the retained pressures to 4.3e-9 relati
 Born-study variants B and C use permittivity rules the Engine no longer admits.
 `run_best_in_slot_campaign.py` is deleted: its optimizer coordinates (reaction coefficients,
 ion solvation and Born diameters) and pCO2 observations are not `regression` coordinates or
-kinds, and the retained grid campaign superseded it. The thermal chain
-(`evaluate_direct_absorption_heat.py`, `validate_thermal_references.py`,
-`run_reaction_temperature_fit.py`) stops in `transformed_reaction_enthalpies` on the missing
-reference temperature derivative (Engine #84); `--sensitivity-check` stops on missing
-reaction-coefficient actions (Engine #61).
+kinds, and the retained grid campaign superseded it. The thermal chain stops on the missing
+reference temperature derivative (Engine #84): `evaluate_direct_absorption_heat.py` and
+`validate_thermal_references.py` raise `THERMAL_REFERENCE_UNAVAILABLE` on entry, and
+`run_reaction_temperature_fit.py` raises it for the screen, candidate, parity and benchmark
+modes and for heat groups of the full replay. Its pressure and speciation full-replay groups,
+partial summary, adoption record and self-check remain. `--sensitivity-check` stops on missing
+reaction-coefficient actions (Engine #61). The code behind these stops (anchored reference
+construction, heat evaluation, thermal validation, screen, candidate, parity, benchmark and
+sensitivity drivers) was deleted rather than kept unreachable; the retained results name
+their producers, which Git history keeps for the #84 and #61 ports. `shared_evaluation` no
+longer accepts a thermochemistry or active-parameter argument, and its records drop the
+always-null `thermochemistry` field; as after any evaluator edit, the evaluator source hash
+in the cache key sends new evaluations to new state records.
 
 Engine main `83ac1126d8824dd2f1465c194be73c19ebc0cdb5` (wheel
 `3eb502abf74c4bb9f48fcafbbe2f271e7bba7a70152ed2d998f10c4606741252`, 2026-09-23, PR #133 neutral-subset
