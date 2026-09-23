@@ -11,7 +11,6 @@ from time import perf_counter
 from pathlib import Path
 
 import epcsaft
-from epcsaft import equilibrium
 from shared_evaluation import (
     ENGINE_COMMIT,
     ENGINE_WHEEL_SHA256,
@@ -24,10 +23,12 @@ from shared_evaluation import (
     EVALUATOR_VERSION,
     anchor_from,
     cached_anchors,
-    corrected_request,
     evaluate_state,
     load_parameters,
     load_state_packet,
+    parameter_fingerprint,
+    parameter_mapping,
+    reaction_values,
     sha256,
     verify_wheel,
 )
@@ -206,13 +207,8 @@ def main() -> None:
         overall_timeout_s=args.overall_timeout_s,
         deadline_monotonic=perf_counter() + args.overall_timeout_s,
     )
-    parameters = load_parameters()
-    model = epcsaft.Mixture(parameters)
-    reaction_values = {
-        spec.identity: float(spec.value.magnitude)
-        for spec in parameters.parameter_specs
-        if spec.identity.startswith("reaction:")
-    }
+    model = epcsaft.Mixture(load_parameters())
+    reactions = reaction_values(parameter_mapping())
     fit = load_state_packet(STATE_PACKET)
 
     speciation_model: list[dict[str, object]] = []
@@ -226,11 +222,9 @@ def main() -> None:
     speciation_anchors: dict[int, list[object]] = {}
 
     for index, observation in enumerate(fit["observations"], start=1):
-        problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-            corrected_request(observation["request"], reaction_values)
-        )
-        temperature_c = float(problem.temperature.value.to("kelvin").magnitude) - 273.15
-        loading = float(problem.reaction_system.feed_amounts_mol[0])
+        request = observation["request"]
+        temperature_c = float(request["temperature"]["value"]) - 273.15
+        loading = float(request["reaction_system"]["feed_amounts_mol"][0])
         family = "pressure" if len(observation["targets"]) == 1 else "speciation"
         source = str(observation["targets"][0]["source_identity"])
         if (
@@ -244,13 +238,12 @@ def main() -> None:
             pressure_templates.setdefault(round(temperature_c), []).append(
                 (loading, observation["request"])
             )
-        if problem.continuation_state is None:
+        continuation = (request.get("continuation") or {}).get("state")
+        if not continuation:
             raise ValueError(
                 f"{observation['identity']} lacks a continuation warm start"
             )
-        source_continuation_fingerprints.add(
-            problem.continuation_state.parameter_fingerprint
-        )
+        source_continuation_fingerprints.add(continuation["parameter_fingerprint"])
         if family == "pressure":
             continue
         temperature_key = round(temperature_c)
@@ -260,7 +253,7 @@ def main() -> None:
         record = evaluate_state(
             model,
             observation["request"],
-            reaction_values,
+            reactions,
             f"{observation['identity']}-notebook-bundle",
             anchors,
             limits=limits,
@@ -372,7 +365,7 @@ def main() -> None:
         record = evaluate_state(
             model,
             request,
-            reaction_values,
+            reactions,
             identity,
             pressure_anchors,
             limits=limits,
@@ -481,7 +474,7 @@ def main() -> None:
             record = evaluate_state(
                 model,
                 request,
-                reaction_values,
+                reactions,
                 grid_id,
                 grid_anchors,
                 limits=limits,
@@ -755,7 +748,7 @@ def main() -> None:
             "ln_k_offsets": list(R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS),
             "resulting_standard_state": ("aqueous-molality-infinite-dilution-water-v1"),
         },
-        "parameter_fingerprint": parameters.fingerprint,
+        "parameter_fingerprint": parameter_fingerprint(parameter_mapping()),
         "source_continuation_parameter_fingerprints": sorted(
             source_continuation_fingerprints
         ),
