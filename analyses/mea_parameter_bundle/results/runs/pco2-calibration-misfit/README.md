@@ -10,7 +10,7 @@ dominates the misfit: (a) the data, (b) the reaction/reference chain, or (c) the
 
 ## Outcome
 
-**The residual lies outside the local span of the R2/R4/R5 constants.** It therefore points to
+**Plausible (±0.3 in ln K) R2/R4/R5 shifts remove only about 11% of the residual; removing more needs offsetting R2/R5 shifts near −5.5 in a linearized, ill-conditioned fit.** The residual therefore points to
 the non-reaction part of the model. That is either the fitted residual EOS/ionic parameters or
 the ePC-SAFT ionic formulation itself; this work does not test which. The conclusion is reached
 by eliminating (b), not by testing the EOS parameters directly. The data (a) add a floor of
@@ -57,6 +57,10 @@ The result carries over to the newer pin. Open PR #99 (`work/mea-96-port`) pins 
 most 2.3e-11 relative in `co2_partial_pressure_pa`, and `main-cb16` equals this run's fresh base
 solves to 2.8e-12 in ln.
 
+This branch itself pins wheel `3a69fd26…` (Engine `cb163066`). The run above used a local,
+uncommitted pin to `e9fb8a47…`. Rerunning the command on this branch's pin (or on PR #99's pin)
+reproduces the values to about 1e-11 but writes that pin's hash into the wheel column.
+
 Command, run single-threaded:
 
 ```sh
@@ -77,7 +81,7 @@ Files:
   sweep and adoption-time predictions, ln(pred/obs), d ln pCO2 / d ln K for R2/R4/R5, the
   Hilliard-over-Jou interpolation, the pCO2 effect of a 2% loading uncertainty, and the residual
   left after each linear correction.
-- `pco2-misfit-summary.csv`: the aggregates quoted below. The binning-robustness shares in
+- `pco2-misfit-summary.csv`: the aggregates quoted below. The shares under alternative binnings in
   (c-iii) were computed from `pco2-misfit-states.csv` after the run and are not rows in this file.
 
 ## Evidence by hypothesis
@@ -128,7 +132,9 @@ Removing the five loading-bin means takes away 79% of the residual sum of square
 from 0.59 to 0.27. Removing temperature means takes away 12%; removing source means takes away
 13%.
 
-The loading share holds up under other binnings:
+The loading share holds under other binnings. Share = 1 − (within-group sum of squares)/Σ ln²,
+the sum of squares about zero; quantile groups use `pandas.qcut` on loading; the random
+relabelling uses NumPy seed 0:
 
 | grouping | share of sum of squares removed |
 |---|---:|
@@ -163,8 +169,8 @@ beyond 323 K would give a temperature-growing error; that is not seen.
 R2 and R5 act almost uniformly across loading, so they only shift pCO2 up or down. That uniform
 direction already covers a constant shift of the CO2 reference. R4 (carbamate reversion) is the
 one lever whose effect changes sign with loading, but it changes sign only once, from + to −. The
-residual needs up, then down, then up. That shape lies outside the local span of these three
-constants.
+needed correction runs up, then down, then up. Within plausible shifts these three constants do
+not reproduce that shape.
 
 **Linearized corrections (prediction, 77 states):**
 
