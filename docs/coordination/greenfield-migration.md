@@ -1066,9 +1066,17 @@ and VLE 0206 takes 17.273847 s. The earlier chat estimate of 26 s was incomplete
 accounting and is not a process benchmark. The separate cold refresh measured
 0.524 s. No wheel build occurred and no further numerical process is running.
 
-The comparison uses this adapter's explicit all-ion-pairs mode. A separate
-old/new benchmark found that the superseded adapter resolves same-sign exclusion;
-identical parameter JSON hashes therefore do not establish identical physical
-models. Mode provenance/parity and the Engine's repeated source-reference work
-remain unresolved. This checkpoint does not qualify a speed improvement or a
-merge of the whole application migration.
+Resolution (2026-09-22): the adopted coefficients were fitted with the old adapter
+under `exclude-same-sign-ion-pairs` (fit wheel `40fba7cf...`; UQ inventory row 102),
+which is Figiel's like-charge rule including ion self-pairs. The migration's
+`all-ion-pairs` runtime default (commit 8f8e4a2) was never an adoption decision; with
+off-diagonal like-charge `k_ij=1` it kept ionic self-dispersion, a hybrid neither source
+defines. The parameter record now declares exclusion explicitly and drops the seven
+redundant same-sign `k_ij=1` entries (SHA-256 `868a5018...fcb7be`); the adapter injects no
+dispersion default. Engine PR #107 (wheel `4368d0f1...`) removed the repeated
+fixed-pressure reference work with bit-identical results (VLE medians 13.46->8.47 s and
+15.32->8.77 s under the superseded all-pairs model). Under the fitted model, VLE 0206
+from a cold packet start ends locally infeasible (residual 0.698 after 53 iterations),
+while a start from the old Engine's liquid solution converges (residual 2.3e-13) to
+pCO2 84.87 Pa (old Engine 84.93 Pa; observed 99.2 Pa): an initialization failure (#90),
+not a missing equilibrium.

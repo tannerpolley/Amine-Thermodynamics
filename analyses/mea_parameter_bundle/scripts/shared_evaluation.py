@@ -35,8 +35,8 @@ ENGINE_WHEEL = Path(
     "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/"
     "build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 )
-ENGINE_WHEEL_SHA256 = "dc1d18d02fa560a5b518f4fb20be7e2254e8aa79dd62b3f6dfddf2107005d2b2"
-ENGINE_COMMIT = "892c6687480259a6de6bbc8fa1721a35d06c997f"
+ENGINE_WHEEL_SHA256 = "4368d0f1fe4a06deb816c978e6a2880134744cd1c28da39edf87591fde43bd33"
+ENGINE_COMMIT = "f2d1e01f4e904ba43b604035511f45f87fcab8b6"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
@@ -60,7 +60,7 @@ COMPONENT_IDS = (
 )
 R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS = (8.0330699846, 4.0165349923, 4.0165349923)
 NEUTRAL_VAPOR_IDS = COMPONENT_IDS[:3]
-MODEL_RUNTIME_DEFAULTS = {"c_shell": 1.0, "c_dielectric": 1.0, "ionic_dispersion": "all-ion-pairs"}
+MODEL_RUNTIME_DEFAULTS = {"c_shell": 1.0, "c_dielectric": 1.0}
 REACTION_REFERENCE_PRESSURES = {"R1": None, "R2": None, "R3": None, "R4": 1.0e5, "R5": 1.0e5}
 COMMON_SOURCE_STANDARD_STATE_ID = "aqueous-molality-infinite-dilution-water-v1"
 RAW_SOURCE_STANDARD_STATE_ID = "aqueous-mole-fraction-infinite-dilution-water-v1"
