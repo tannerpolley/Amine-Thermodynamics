@@ -13,6 +13,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from result_freshness import FIGURE_DATA, require_results
+from shared_evaluation import ENGINE_COMMIT
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "figures/regression_overview/output"
@@ -48,7 +49,7 @@ def positive(rows):
     return [r for r in rows if r["predicted"] and float(r["observed"]) > 0.0 and float(r["predicted"]) > 0.0]
 
 
-def ln_statistics(family, group_type, group, rows, engine="greenfield 83ac1126"):
+def ln_statistics(family, group_type, group, rows, engine=f"greenfield {ENGINE_COMMIT[:8]}"):
     valid = positive(rows)
     errors = [ln_ratio(r) for r in valid]
     rms_ln = math.sqrt(statistics.fmean(e * e for e in errors))
@@ -249,8 +250,8 @@ def render_heat(heat, title):
     fig.suptitle(title, fontsize=12)
     fig.text(
         0.5, 0.012,
-        "Calculated on the superseded Engine 8438ce5f (wheel 40fba7cf); the greenfield Engine cannot yet "
-        "reproduce it (ePC-SAFT #84). Dashed lines connect calculated intervals; RMSE in kJ/mol CO₂.",
+        "Calculated on the superseded Engine 8438ce5f (wheel 40fba7cf); the MEA heat calculation is not yet "
+        "rebuilt on the pinned Engine (MEA #96). Dashed lines connect calculated intervals; RMSE in kJ/mol CO₂.",
         ha="center", fontsize=8,
     )
     fig.tight_layout(rect=(0, 0.05, 1, 0.93))

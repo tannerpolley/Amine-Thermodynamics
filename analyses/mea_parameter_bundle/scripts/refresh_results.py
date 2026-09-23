@@ -117,8 +117,9 @@ def main() -> None:
             [sys.executable, "scripts/render_figures.py"],
             [sys.executable, "scripts/render_regression_overview.py"],
         ]
-        # Heat and thermal checks stop in transformed_reaction_enthalpies; the
-        # strict render and handoff require their outputs.
+        # The heat and thermal scripts are stubs until the MEA heat calculation is
+        # rebuilt on the Engine calorics (MEA #96); the strict render and handoff
+        # require their outputs.
         blocked = [
             "scripts/evaluate_direct_absorption_heat.py",
             "scripts/validate_thermal_references.py --equilibrium",
@@ -154,9 +155,10 @@ def main() -> None:
         print(
             "Blocked, not run: "
             + "; ".join(blocked)
-            + ". The pinned Engine lacks the reaction-reference temperature derivative "
-            "(tannerpolley/ePC-SAFT#84). Figure data and figures were refreshed; render "
-            "with `bash render.sh notebook.qmd --working-copy`.",
+            + ". The MEA heat calculation has not been rebuilt on the Engine reference "
+            "temperature actions and record-anchored calorics (ePC-SAFT #84, #138; "
+            "MEA #96). Figure data and figures were refreshed; render with "
+            "`bash render.sh notebook.qmd --working-copy`.",
             file=sys.stderr,
         )
         raise SystemExit(1)

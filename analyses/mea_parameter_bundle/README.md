@@ -230,8 +230,9 @@ uv run python scripts/refresh_results.py
 This is the normal update command. It runs figure data, figure rendering and
 the overview figures sequentially, then exits nonzero naming the stages it did
 not run: direct heat, thermal checks, the strict Quarto render and handoff
-packaging need the reaction-reference temperature derivative that the pinned
-Engine lacks (ePC-SAFT #84). Until then render with
+packaging wait for the MEA heat calculation to be rebuilt on the Engine
+reference temperature actions and record-anchored calorics (ePC-SAFT #84,
+#138; MEA #96). Until then render with
 `bash render.sh notebook.qmd --working-copy`. It uses
 one logical CPU, single-threaded BLAS/OpenMP, lower scheduling priority, a
 2 GiB per-process solver address-space limit and a 2 GiB native V8 heap cap
