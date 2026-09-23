@@ -159,20 +159,23 @@ def test_pinned_engine_state_and_cached_replay(tmp_path, monkeypatch):
     )
     assert result["status"] == "evaluated", result["attempts"]
     assert result["failure_code"] == ""
+    # Fitted exclusion-mode record (SHA 868a5018...). The superseded all-ion-pairs record
+    # still reproduces the former pins (hco3 0.005214865, mea_meah 0.06771946, meacoo
+    # 0.04449868) to 6e-14 on this wheel, so the change is the declared model, not the Engine.
     assert result["predictions"] == pytest.approx(
         {
-            "Bottinger2008_state_050-hco3": 0.005214865150114531,
-            "Bottinger2008_state_050-mea_meah": 0.06771945760549275,
-            "Bottinger2008_state_050-meacoo": 0.04449867725550945,
+            "Bottinger2008_state_050-hco3": 0.010779404008693854,
+            "Bottinger2008_state_050-mea_meah": 0.07456750655659783,
+            "Bottinger2008_state_050-meacoo": 0.0376488801816921,
         },
         rel=5e-8,
         abs=1e-12,
     )
     liquid = next(phase for phase in result["phases"] if phase["role"] == "liquid")
     species = dict(zip(liquid["support"], liquid["mole_fractions"], strict=True))
-    assert species["carbamate-anion"] == pytest.approx(0.04449867725550945, rel=5e-8)
-    assert species["bicarbonate-anion"] == pytest.approx(0.005214865150114531, rel=5e-8)
-    assert species["hydronium-cation"] == pytest.approx(2.31334915458689e-10, rel=5e-6)
+    assert species["carbamate-anion"] == pytest.approx(0.0376488801816921, rel=5e-8)
+    assert species["bicarbonate-anion"] == pytest.approx(0.010779404008693854, rel=5e-8)
+    assert species["hydronium-cation"] == pytest.approx(3.906278160355156e-10, rel=5e-6)
     evidence = dict(result["evidence"])
     compiled = evidence["compiled_point_evaluation"]
     assert compiled["raw_stationarity_max_abs"] <= 1e-10
