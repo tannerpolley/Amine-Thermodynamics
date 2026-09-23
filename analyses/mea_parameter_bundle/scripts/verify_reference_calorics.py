@@ -159,15 +159,19 @@ def main() -> None:
     measured = [r for r in csv.DictReader(CALORIMETRY.open())
                 if float(r["temperature_K"]) == 313.15 and r["mea_mass_fraction"] in ("0.30", "0.3")
                 and 0.25 <= float(r["co2_loading_mol_per_mol_mea"]) <= 0.46 and r["source"].startswith("Kim")]
-    target = rows[0]
+    # Both 30 wt% model states near 313 K: vle_obs_0130 (313.15 K) and 058 at 315 K.
+    near = {r["state"]: r for r in rows if r["state"] in ("vle_obs_0130", "058@315K")}
     comparison = [{"source": r["source"], "table": r["source_table"], "loading": float(r["co2_loading_mol_per_mol_mea"]),
                    "measured_kJ_per_mol": float(r["dh_kj_per_mol_co2"]),
                    "uncertainty_kJ_per_mol": float(r["dh_kj_per_mol_co2"]) * float(r["measurement_uncertainty_relative_percent"] or "nan") / 100,
-                   "model_minus_measured_kJ": target["heat_kJ_per_mol"] - float(r["dh_kj_per_mol_co2"])} for r in measured]
+                   **{f"model_{state}_minus_measured_kJ": m["heat_kJ_per_mol"] - float(r["dh_kj_per_mol_co2"])
+                      for state, m in near.items()}} for r in measured]
     hashes = {name: vt.write(name, data) for name, data in (("heat", rows), ("closure", closure), ("calorimetry", comparison))}
     passed = sum(r["identity_rel"] <= IDENTITY_RTOL and r["resolve_rel"] <= RESOLVE_RTOL for r in rows)
     summary = {
         "engine_wheel_sha256": vt.wheel_sha256(), "csv_sha256": hashes,
+        "producer_sha256": shared.sha256(Path(__file__)), "parameter_sha256": shared.sha256(shared.PARAMETERS),
+        "calorimetry_input_sha256": shared.sha256(CALORIMETRY),
         "criteria": {"gibbs_helmholtz_rel": IDENTITY_RTOL, "feed_resolve_rel": RESOLVE_RTOL, "bubble_closure_rel": CLOSURE_RTOL},
         "heat_rows_passed": passed, "heat_rows_total": len(rows),
         "closure_passed": all(c["closure_rel"] <= CLOSURE_RTOL for c in closure),
