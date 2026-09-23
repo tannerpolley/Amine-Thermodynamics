@@ -1101,11 +1101,13 @@ sweep and the state packet), the adopted model gives mean ln(pred/obs) +0.34 / R
 Hilliard2008 (31 states) and +0.05 / RMS 0.60 for Jou1995 (48 states): a model/reference
 discrepancy recorded on Engine #61, not a solver effect.
 
-Engine PR #124 head `d1b4f50c` (wheel `66c5c1a7...`, 2026-09-23; tolerance gate and damped
-association Newton) leaves the adopted-model predictions unchanged: Bottinger 050 is
-bit-identical and the 79-request cold sweep (label `pr124-d1b4`) evaluates 79/79 with P and
-pCO2 within 8.1e-12 relative of `main-c242` (132 s total, median 0.82 s, unbenchmarked
-shared host). The evaluator now pins only the SHA-256 of the installed wheel; it no longer
+Engine main `cb163066e683f278ab40fb5cf7069e3602119f96` (wheel
+`3a69fd263ba073ea600fa7e45aa866337b11c2e4556329d337bb5e025a0eda9f`, 2026-09-23) is the
+current pin after PR #124 merged. Its 79-request cold sweep (`main-cb16`) evaluates 79/79 in
+116.662 s total (median 0.55 s); the maximum relative change in `pressure_pa` and
+`co2_partial_pressure_pa` against the retained `pr124-d1b4` rows is 0.0 for both. Those
+historical rows retain the wheel hash used for that run. The evaluator pins only the
+SHA-256 of the installed wheel; it no longer
 hashes the mutable greenfield `build/environment-wheel/` path, which every Engine rebuild
 overwrites. The current Engine removed `Parameters.parameter_specs`, `with_values`,
 `to_mapping`, `fingerprint` and `Mixture.parameter_fingerprint` and requires explicit Born
