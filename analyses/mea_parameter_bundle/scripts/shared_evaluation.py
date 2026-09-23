@@ -982,8 +982,30 @@ def attempt_plan(
     if same:
         plan.append(("same-temperature-anchor", same[0]))
     plan.append(("cold-packet-start", None))
+    plan.append(("speciated-liquid-start", None))
     plan.extend(("cross-temperature-anchor", a) for a in cross[:2])
     return plan[:4]
+
+
+def _speciated_liquid_anchor(
+    model: epcsaft.Mixture, request: dict[str, object], temperature_c: int, loading: float
+) -> Anchor | None:
+    """Speciate the liquid alone at the packet pressure seed to replace an unspeciated guess.
+
+    Packet liquid guesses can carry molecular CO2 far above its speciated value, which puts
+    the Engine's pinned-vapor pressure seed at the saturation pressure of the wrong liquid.
+    """
+    seed = float(request["pressure"].get("initial", 0.0))
+    liquid = copy.deepcopy(request)
+    liquid["phases"] = [p for p in liquid["phases"] if p["fluid_role"] == "liquid"]
+    liquid["pressure"] = {**liquid["pressure"], "role": "fixed", "value": seed}
+    try:
+        result = equilibrium.solve_equilibrium(model, _problem_from_request(liquid))
+    except Exception:
+        return None
+    if not result.success:
+        return None
+    return Anchor(temperature_c, loading, seed, tuple(map(float, result.mole_fractions)), 0.0)
 
 
 def solve_with_recovery(
@@ -1025,6 +1047,14 @@ def solve_with_recovery(
                 }
             )
             break
+        if kind == "speciated-liquid-start":
+            if base["pressure"]["role"] == "fixed":
+                continue
+            anchor = _speciated_liquid_anchor(
+                model, base, temperature_c, float(base["reaction_system"]["feed_amounts_mol"][0])
+            )
+            if anchor is None:
+                continue
         candidate = copy.deepcopy(base)
         try:
             problem = _problem_from_request(candidate, anchor)
