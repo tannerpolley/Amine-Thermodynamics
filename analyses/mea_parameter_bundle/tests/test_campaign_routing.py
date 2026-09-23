@@ -7,17 +7,17 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "scripts"))
 
-import epcsaft
 import run_born_permittivity_study as born
 import run_direct_parameter_campaign as direct
 import compare_permittivity_formulations as comparison
+from shared_evaluation import parameter_fingerprint, parameter_mapping, reaction_values
 
 
 def test_campaigns_use_candidate_reactions_and_retain_failures(monkeypatch):
     captured = []
 
     def evaluate(model, request, reactions, identity, anchors, **kwargs):
-        captured.append((model.parameter_fingerprint, reactions))
+        captured.append((kwargs["model_fingerprint"], reactions))
         return {
             "status": "non_evaluable",
             "failure_code": "evaluation_timeout",
@@ -31,12 +31,7 @@ def test_campaigns_use_candidate_reactions_and_retain_failures(monkeypatch):
     monkeypatch.setattr(direct, "speciation_catalog", lambda: [])
     monkeypatch.setattr(direct, "evaluate_state", evaluate)
     _, _, rows = direct.evaluate_scenario(("test", {"r4_a": 2.1}, False))
-    selected = epcsaft.Parameters.from_json(direct.BASELINE)
-    specs = {
-        spec.identity: float(spec.value.magnitude)
-        for spec in selected.parameter_specs
-        if spec.identity.startswith("reaction:")
-    }
+    specs = reaction_values(parameter_mapping(direct.BASELINE))
     assert captured[-1][1]["reaction:R4:correlation:a"] == 2.1
     assert (
         captured[-1][1]["reaction:R2:correlation:a"]
@@ -51,13 +46,9 @@ def test_campaigns_use_candidate_reactions_and_retain_failures(monkeypatch):
     monkeypatch.setattr(born, "sparse_catalog", lambda: [observation])
     monkeypatch.setattr(born, "evaluate_state", evaluate)
     states, targets = born.evaluate_variant(("E-ORG", "sparse", 0, 1))
-    candidate = epcsaft.Parameters.from_mapping(born.variant_mapping("E-ORG"))
-    expected = {
-        spec.identity: float(spec.value.magnitude)
-        for spec in candidate.parameter_specs
-        if spec.identity.startswith("reaction:")
-    }
-    assert captured[-1] == (candidate.fingerprint, expected)
+    candidate = born.variant_mapping("E-ORG")
+    assert captured[-1] == (parameter_fingerprint(candidate), reaction_values(candidate))
+    assert captured[-1][0] != parameter_fingerprint(parameter_mapping(direct.BASELINE))
     assert states[0]["failure_code"] == "evaluation_timeout"
     assert not targets
 
@@ -89,7 +80,7 @@ def test_failed_comparison_retains_failures_without_selecting_candidate(
             "cache_hit": False,
         },
     )
-    comparison.main(born.FOUNDATION)
+    comparison.main(direct.BASELINE)
     summary = json.loads(
         (comparison.RESULTS / "permittivity-formulation-comparison.json").read_text()
     )

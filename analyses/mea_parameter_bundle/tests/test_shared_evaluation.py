@@ -33,10 +33,6 @@ def _request() -> dict[str, object]:
     }
 
 
-class _Model:
-    parameter_fingerprint = "sha256:test-model"
-
-
 def _snapshot() -> shared.SolveSnapshot:
     return shared.SolveSnapshot(
         status="evaluated",
@@ -70,21 +66,23 @@ def test_cache_records_model_identity_and_separates_candidate(tmp_path, monkeypa
         lambda *args, **kwargs: (calls.append(1) or _snapshot(), []),
     )
 
-    first = shared.evaluate_state(_Model(), _request(), {}, "first", [])
-    cached = shared.evaluate_state(_Model(), _request(), {}, "second", [])
+    model = "sha256:test-model"
+    first = shared.evaluate_state(None, _request(), {}, "first", [], model_fingerprint=model)
+    cached = shared.evaluate_state(None, _request(), {}, "second", [], model_fingerprint=model)
     candidate = shared.evaluate_state(
-        _Model(), _request(), {"reaction:R1:correlation:a": 1.0}, "candidate", []
+        None, _request(), {"reaction:R1:correlation:a": 1.0}, "candidate", [],
+        model_fingerprint=model,
     )
 
     assert first["status"] == "evaluated"
     assert cached["cache_hit"] is True
     assert candidate["cache_hit"] is False
     assert len(calls) == 2
-    assert first["model_parameters_fingerprint"] == _Model.parameter_fingerprint
+    assert first["model_parameters_fingerprint"] == model
     assert candidate["parameter_role"] == "candidate"
-    other_model = _Model()
-    other_model.parameter_fingerprint = "sha256:different-model"
-    other = shared.evaluate_state(other_model, _request(), {}, "different-model", [])
+    other = shared.evaluate_state(
+        None, _request(), {}, "different-model", [], model_fingerprint="sha256:different-model"
+    )
     assert not other["cache_hit"]
     assert len(calls) == 3
 

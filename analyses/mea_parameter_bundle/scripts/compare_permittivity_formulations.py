@@ -10,13 +10,15 @@ from pathlib import Path
 
 import epcsaft
 from shared_evaluation import (
-    ENGINE_WHEEL,
     ENGINE_WHEEL_SHA256,
-    installed_wheel,
+    parameter_fingerprint,
+    parameter_mapping,
+    reaction_values,
     sha256,
     evaluate_state,
     load_state_packet,
     anchor_from,
+    verify_wheel,
 )
 
 
@@ -58,11 +60,11 @@ def ion_permittivity_record(component_id: str) -> dict[str, object]:
 
 def variant_parameters(
     source: dict[str, object], variant_id: str
-) -> epcsaft.Parameters:
+) -> dict[str, object]:
     mapping = copy.deepcopy(source)
     choice = VARIANTS[variant_id]
     if variant_id == "current_ion_specific":
-        return epcsaft.Parameters.from_mapping(mapping)
+        return mapping
     next(
         family
         for family in mapping["model_families"]
@@ -145,7 +147,7 @@ def variant_parameters(
                 ],
             }
         )
-    return epcsaft.Parameters.from_mapping(mapping)
+    return mapping
 
 
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
@@ -159,9 +161,8 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
 
 
 def main(parameter_path: Path) -> None:
-    assert sha256(ENGINE_WHEEL) == ENGINE_WHEEL_SHA256
-    assert sha256(installed_wheel()) == ENGINE_WHEEL_SHA256
-    source_parameters = json.loads(parameter_path.read_text(encoding="utf-8"))
+    verify_wheel()
+    source_parameters = parameter_mapping(parameter_path)
     packet = load_state_packet(STATE_PACKET)
     RESULTS.mkdir(parents=True, exist_ok=True)
     target_path = RESULTS / "permittivity-formulation-targets.csv"
@@ -222,17 +223,14 @@ def main(parameter_path: Path) -> None:
     observations = packet["observations"]
     variant_mappings: dict[str, dict[str, object]] = {}
     for variant_id in VARIANTS:
-        parameters = variant_parameters(source_parameters, variant_id)
-        variant_mappings[variant_id] = parameters.to_mapping()
-        model = epcsaft.Mixture(parameters)
+        mapping = variant_parameters(source_parameters, variant_id)
+        variant_mappings[variant_id] = mapping
+        fingerprint = parameter_fingerprint(mapping)
+        model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping))
         failures = 0
         evaluated = 0
         anchors = []
-        reactions = {
-            spec.identity: float(spec.value.magnitude)
-            for spec in parameters.parameter_specs
-            if spec.identity.startswith("reaction:")
-        }
+        reactions = reaction_values(mapping)
         for index, observation in enumerate(observations, start=1):
             family = "pressure" if len(observation["targets"]) == 1 else "speciation"
             temperature_k = float(observation["request"]["temperature"]["value"])
@@ -246,6 +244,7 @@ def main(parameter_path: Path) -> None:
                 f"{observation['identity']}-{variant_id}",
                 anchors,
                 budget_s=45,
+                model_fingerprint=fingerprint,
             )
             status = record["status"]
             if status != "evaluated":
@@ -260,7 +259,7 @@ def main(parameter_path: Path) -> None:
                         "status": status,
                         "failure_code": record["failure_code"],
                         "failure_diagnostic": record["failure_diagnostic"],
-                        "parameter_fingerprint": parameters.fingerprint,
+                        "parameter_fingerprint": fingerprint,
                         "bulk_relative_permittivity": "",
                         "born_a_over_rt": "",
                     }
@@ -289,7 +288,7 @@ def main(parameter_path: Path) -> None:
                     "status": status,
                     "failure_code": "",
                     "failure_diagnostic": "",
-                    "parameter_fingerprint": parameters.fingerprint,
+                    "parameter_fingerprint": fingerprint,
                     "bulk_relative_permittivity": state.bulk_relative_permittivity,
                     "born_a_over_rt": state.born,
                 }
@@ -325,7 +324,7 @@ def main(parameter_path: Path) -> None:
             "attempted_states": len(observations),
             "evaluated_states": evaluated,
             "failed_states": failures,
-            "parameter_fingerprint": parameters.fingerprint,
+            "parameter_fingerprint": fingerprint,
         }
         for family in ("pressure", "speciation"):
             family_rows = [
