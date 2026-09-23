@@ -40,7 +40,7 @@ ANALYSIS = Path(__file__).resolve().parents[1]
 INPUT = ANALYSIS / "data/input"
 SPECIATION_OUTPUT = ANALYSIS / "figures/speciation/output"
 PRESSURE_OUTPUT = ANALYSIS / "figures/pressure/output"
-COMPARISON = ANALYSIS / "results/historical/permittivity-formulation-comparison.json"
+PARAMETER_HISTORY = ANALYSIS / "results/parameter-record-history.csv"
 CANONICAL_SPECIATION = (
     ANALYSIS.parents[1]
     / "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv"
@@ -180,23 +180,16 @@ def main() -> None:
         STATE_PACKET,
         CANONICAL_SPECIATION,
         CANONICAL_VLE,
-        COMPARISON,
+        PARAMETER_HISTORY,
         Path(__file__),
         Path(__file__).with_name("shared_evaluation.py"),
         SOURCE_CONTRACT,
     )
-    comparison = json.loads(COMPARISON.read_text(encoding="utf-8"))
     parameter_sha256 = sha256(PARAMETERS)
-    adoption = ANALYSIS / "results/reaction-temperature-fit/adoption-receipt.json"
-    accepted = {comparison["promotion"]["selected_parameter_sha256"]}
-    if adoption.exists():
-        accepted.add(
-            json.loads(adoption.read_text(encoding="utf-8")).get(
-                "adopted_parameter_sha256"
-            )
-        )
-    assert parameter_sha256 in accepted, (
-        "parameter document is not a recorded incumbent"
+    with PARAMETER_HISTORY.open(encoding="utf-8", newline="") as handle:
+        incumbent = list(csv.DictReader(handle))[-1]["candidate_sha256"]
+    assert parameter_sha256 == incumbent, (
+        "parameter document is not the current incumbent in parameter-record-history.csv"
     )
     assert sha256(STATE_PACKET) == STATE_PACKET_SHA256
     assert sha256(CANONICAL_SPECIATION) == CANONICAL_SPECIATION_SHA256

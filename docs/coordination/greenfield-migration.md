@@ -1124,8 +1124,10 @@ permittivity and Kiepe CO2-water scripts now call only the current Engine API; r
 results were not regenerated. `generate_figure_data.py` reads temperature, loading and the
 source continuation fingerprint from the packet request and takes reaction values from
 `parameter_mapping()`; packet state `vle_obs_0186` reproduces the `main-cb16` sweep to
-1.3e-12 in pCO2. It still refuses to run because the parameter file after the exclusion
-correction (`868a5018...`) is not a recorded incumbent. The Kiepe generator uses
+1.3e-12 in pCO2. Its incumbent check now reads the last `candidate_sha256` of
+`results/parameter-record-history.csv`, which already records `868a5018...` (2026-09-22,
+coefficients unchanged); the earlier check read only the historical permittivity comparison and
+adoption record and so rejected the explicit-exclusion file. The Kiepe generator uses
 `bubble_point` with a per-isotherm warm-start chain seeded at the first cold-converging
 dilute composition; 38/39 rows reproduce the retained pressures to 4.3e-9 relative, and
 `kiepe-313.20-13` (retained 22.43 MPa, dense CO2-rich branch) fails without a hand seed.
@@ -1137,3 +1139,11 @@ kinds, and the retained grid campaign superseded it. The thermal chain
 `run_reaction_temperature_fit.py`) stops in `transformed_reaction_enthalpies` on the missing
 reference temperature derivative (Engine #84); `--sensitivity-check` stops on missing
 reaction-coefficient actions (Engine #61).
+
+Engine main `83ac1126d8824dd2f1465c194be73c19ebc0cdb5` (wheel
+`3eb502abf74c4bb9f48fcafbbe2f271e7bba7a70152ed2d998f10c4606741252`, 2026-09-23, PR #133 neutral-subset
+admission fix) is the current pin. Its 79-request cold sweep (`main-83ac`) evaluates 79/79 in
+139.7 s total at host load average 15--18 on 12 cores; the maximum relative change against the
+retained `main-cb16` rows is 7.3e-13 in `pressure_pa` and 2.3e-11 in `co2_partial_pressure_pa`.
+The wall time is not comparable with earlier rows recorded at lower load. The Kiepe CO2-water
+generator gives the same 38/39 result on this wheel (`kiepe-313.20-13` infeasible, residual 0.250).
