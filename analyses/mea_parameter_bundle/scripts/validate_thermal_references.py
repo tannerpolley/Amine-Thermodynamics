@@ -24,7 +24,6 @@ from pathlib import Path  # noqa: E402
 
 import epcsaft  # noqa: E402
 import numpy as np  # noqa: E402
-from epcsaft import equilibrium  # noqa: E402
 
 from evaluate_direct_absorption_heat import (  # noqa: E402
     ANCHOR_PRESSURE_PA,
@@ -35,7 +34,6 @@ from evaluate_direct_absorption_heat import (  # noqa: E402
     transformed_reaction_enthalpies,
 )
 from shared_evaluation import (  # noqa: E402
-    PARAMETERS,
     SOURCE_CONTRACT,
     STATE_PACKET,
     corrected_request,
@@ -57,7 +55,6 @@ from refresh_results import bounded_main  # noqa: E402
 
 ANALYSIS = Path(__file__).resolve().parents[1]
 RESULTS = ANALYSIS / "results/calorimetry"
-U = epcsaft.unit_registry
 # NIST/IAPWS saturated-water values, kJ/mol, used only as an external check.
 STEAM_TABLE = (
     (40, 7384.0, 43.35),
@@ -86,11 +83,9 @@ def consistency_rows(
     ):
         request = copy.deepcopy(templates[80][0][1])
         request["temperature"]["value"] = float(temperature_k)
-        problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-            corrected_request(request, reactions)
-        )
-        matrix = np.asarray(problem.reaction_system.reaction_matrix, dtype=float)
-        q = transformed_reaction_enthalpies(model, problem)
+        request = corrected_request(request, reactions)
+        matrix = np.asarray(request["reaction_system"]["reaction_matrix"], dtype=float)
+        q = transformed_reaction_enthalpies(model, request)
         for name, thermo in references.items():
             h = np.asarray(
                 thermo.enthalpies_j_per_mol(float(temperature_k), model.component_ids)
@@ -114,12 +109,7 @@ def pure_liquid_rows(model, thermo) -> list[dict[str, object]]:
         x = [1.0 if c == component_id else 0.0 for c in model.component_ids]
         for temperature_c in (25, 40, 60, 80, 100, 120):
             temperature_k = temperature_c + 273.15
-            state = model.state(
-                T=temperature_k * U.kelvin,
-                P=ANCHOR_PRESSURE_PA * U.pascal,
-                x=x,
-                phase="liquid",
-            )
+            state = model.state(temperature_k, P=ANCHOR_PRESSURE_PA, x=x, phase="liquid")
             t = temperature_c
             correlation = (
                 1000.0
@@ -127,7 +117,7 @@ def pure_liquid_rows(model, thermo) -> list[dict[str, object]]:
                 * math.fsum(a * t**k for k, a in enumerate(spec["liquid_cp_kj_kg_k"]))
             )
             model_cp = float(state.cp(thermo).to("joule/mole/kelvin").magnitude)
-            residual = float(state.cpres().magnitude)
+            residual = state.residual_isobaric_heat_capacity
             row = {
                 "check": "pure_liquid_cp",
                 "component": component_id,
@@ -153,16 +143,9 @@ def vaporization_rows(model) -> list[dict[str, object]]:
     x = [1.0 if c == "water" else 0.0 for c in model.component_ids]
     for temperature_c, pressure_pa, table in STEAM_TABLE:
         temperature_k = temperature_c + 273.15
-        liquid = model.state(
-            T=temperature_k * U.kelvin, P=pressure_pa * U.pascal, x=x, phase="liquid"
-        )
-        vapor = model.state(
-            T=temperature_k * U.kelvin, P=pressure_pa * U.pascal, x=x, phase="vapor"
-        )
-        model_hvap = (
-            float(vapor._residual_enthalpy.magnitude)
-            - float(liquid._residual_enthalpy.magnitude)
-        ) / 1000.0
+        liquid = model.state(temperature_k, P=pressure_pa, x=x, phase="liquid")
+        vapor = model.state(temperature_k, P=pressure_pa, x=x, phase="vapor")
+        model_hvap = (vapor.residual_enthalpy - liquid.residual_enthalpy) / 1000.0
         rows.append(
             {
                 "check": "water_vaporization_enthalpy",
@@ -215,9 +198,7 @@ def solution_rows(
             x = np.asarray(record["anchor"]["mole_fractions"])
             mass_per_mol = float(x @ masses)
             state = model.state(
-                T=(temperature_c + 273.15) * U.kelvin,
-                rho=record["molar_density_mol_m3"] * U.mole / U.meter**3,
-                x=list(x),
+                temperature_c + 273.15, rho=record["molar_density_mol_m3"], x=list(x)
             )
             row: dict[str, object] = {
                 "check": "solution_cp",
