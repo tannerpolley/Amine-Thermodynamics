@@ -1,14 +1,15 @@
 # Greenfield migration consumer specification — MEA-Thermodynamics
 
-Status: **input contract prepared; qualification and parameter adoption remain
-pending**.
+Status: **notebook incumbent adopted for the authorized #61 working delivery;
+bounded final-wheel replay complete; predictive qualification remains pending**.
 
 This document is the MEA input-preparation handoff for Engine issues #84, #85,
 #87, #89, #90 and #61. It records the current application consumer contract,
 the source and parameter limits that are visible in the repositories, and the
-smallest useful first replay. It does not adopt the exploratory MEA parameter
-candidate, qualify an Engine wheel, change application source, or authorize a
-numerical-kernel implementation.
+smallest useful first replay. The owner adopted the exact notebook incumbent
+for this working delivery; this records an application input decision and does
+not qualify its predictive error or the Engine wheel. The adapter carries the
+remaining reference/action limitations as typed results.
 
 ## Inspection boundary and snapshot identity
 
@@ -17,21 +18,22 @@ The current application repository was inspected read-only at
 `3b2071197e801401162f24ff7d0aa99518369c26` on `main`. The independent draft
 clone was inspected at
 `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/downstream/MEA-Thermodynamics`.
-Only this document in the draft clone is changed by this handoff. The draft
-clone contains older copied analysis inputs; it is not silently treated as the
-current application snapshot.
+The draft clone contains older copied analysis inputs; it is not silently
+treated as the current application snapshot. This worktree now carries the
+bounded adapter and focused checks described below; the main local application
+checkout remains untouched.
 
 The current application evaluator and its retained input identities are:
 
 | item | current path | SHA-256 or identity | role |
 |---|---|---|---|
-| evaluator | `analyses/mea_parameter_bundle/scripts/shared_evaluation.py` | `6e5e081700207f6e358ef2b034ad70d3c1d6b5f816681f03fc402a3df5c8a371` | retained state construction, bounded recovery, output capture and failure receipt; old API consumer |
+| evaluator | `analyses/mea_parameter_bundle/scripts/shared_evaluation.py` | `8dfe427517918639b8514d2ba267d27b5672d5df9a8aabc6cbf240eb5953a5e2` | final-wheel state construction, bounded recovery, output/action capture and typed failure receipt |
 | state packet archive | `analyses/mea_parameter_bundle/data/input/state-packet.json.gz` | `e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba` | current compact input packet |
 | decompressed state packet | same archive, decompressed | `86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448` | byte identity for a replay |
-| selected parameter candidate | `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json` | `568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d` | exploratory incumbent, `document_id=mea-co2-h2o-nine-species-estimation-candidate-v1`, version 2 |
+| selected parameter record | `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json` | `568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d` | owner-adopted working input, `document_id=mea-co2-h2o-nine-species-estimation-candidate-v1`, version 2; predictive error remains a result |
 | source parameter snapshot | `analyses/mea_parameter_bundle/data/input/parameters.json` | `58793d354f393944ca0f5fd1640a11645417ddfe6331b955de728f86f0e0b195` | separate source/input record; not the evaluator's selected-parameter path |
-| Engine wheel | `analyses/mea_parameter_bundle/data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl` | `40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805` | retained non-editable wheel used by the analysis records |
-| Engine commit recorded by analysis | — | `8438ce5f94a547189c91c4ec180a7782d60879d6` | provenance only; it is not current Engine acceptance evidence |
+| Engine wheel | `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl` | `c87846663349640ab115cb09f9b880caea71be973dfe685dc9bd0f8bf7b11072` | final non-editable wheel pinned by this adapter |
+| Engine runtime source | — | `3f5d9ac87a70aebbefbbecef47fcb8ba39f56e6c` | final runtime source; build fingerprint `78937d2876bd90feaebbd7c28ae5ad6a7d1c6323fda9d3dab3440338e84dc202` |
 | reaction source contract | `data/reference/MEA/manifests/chemical_reaction_source_contract.json` | `39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55` | source standard state, reaction rows and conversion metadata |
 | thermal reference | `analyses/mea_parameter_bundle/results/calorimetry/current-selected-reference-thermochemistry.json` | `a24a6b3c8b506fc659fc1bbd8a470b55919ba93da23eea27ffdf882645706185` | current exploratory reaction-consistent thermal reference |
 | calorimetry partition | `analyses/mea_parameter_bundle/data/input/calorimetry-observation-partition.csv` | `175e55ff7e238ee19957da9b028e0d957bd99b35aa5ec4145926a055542725d3` | calibration, holdout and source-lineage partition |
@@ -43,22 +45,24 @@ older selected-parameter file with SHA-256
 `a9186c93759f2e2c02a6c913350ad06a244fff3f82503820c9962b3df8dd40d9`, and an
 older evaluator with SHA-256
 `6bc94e6c628aa212ccc4a6cce32226eed42aadaca6d06692e6c9be6984b6e32d`. Those
-copied files remain untouched because this preparation slice is documentation
-only. A future replay must use and record the current identities above, or
+copied files remain untouched because the main application checkout remains
+read-only. A future replay must use and record the current identities above, or
 explicitly state that it is reproducing the older draft snapshot.
 
-The retained evaluator is not runnable unchanged against merged Engine
-`f909bb21a93171c38465adba8777cd3b0bc6c53d` or wheel
-`9f73aeb466c54eff80c89a8776c90d49cb9c9c2d130f0eb15bf0311c1f76e606`. It calls
-the retired `equilibrium.general_reactive_equilibrium_problem_from_mapping`
-and `equilibrium.solve(..., active_parameters=...)` surfaces. A finite #61
-adapter is therefore required before the first replay: map the retained
+The pre-adapter evaluator was not runnable unchanged against the current
+wheel: it called the retired
+`equilibrium.general_reactive_equilibrium_problem_from_mapping` and
+`equilibrium.solve(..., active_parameters=...)` surfaces. The worktree adapter
+now maps the retained
 requests to current `Problem`/`Phase`/`Amounts`/`Reaction(correlation)`,
 call `solve_equilibrium`, and call `solved_state_actions` for the supported
 state/EOS actions. The adapter must preserve current result statuses and
 failure diagnostics. For heat, map the current phase
 `TotalEnthalpy` observable (J/mol) times phase amount (mol) to extensive
-endpoint `H` (J). No adapter or replay was implemented in this preparation.
+endpoint `H` (J). The adapter emits the current native neutral and
+reaction-reference declarations, including each source basis and pressure.
+`reference_basis_unavailable` is reserved for an absent or malformed native
+record; the first bounded physical replay and its limits are recorded below.
 
 ## Application target and declared topology
 
@@ -72,8 +76,9 @@ prediction; it must not call extrapolated results source-validated.
 
 The first contract keeps the existing nine liquid species, five reactions and
 neutral-only vapor support. Phase discovery is deferred. The selected
-parameter file is an exploratory candidate and remains an input fingerprint,
-not an accepted MEA model.
+parameter file is the owner-adopted working input for this sprint; it remains
+unqualified for predictive process use and its measured prediction error is
+reported separately from numerical convergence.
 
 | index | Engine component id | application symbol | charge |
 |---:|---|---|---:|
@@ -116,6 +121,16 @@ provider contraction remains unqualified. The declared ion pairs, source
 conventions and any provider transfer must remain in the reaction receipt;
 #84 owns the exact thermodynamically consistent conversion.
 
+The current adapter constructs the native neutral reference from the declared
+source ion-pair direction and scales every non-water ratio by `0.125`:
+`[CO2, MEA, MEAH+, MEACOO-, HCO3-, CO3--, H3O+, OH-] =
+[0.125, 0.125, 0.625, 0.25, 0.125, 0.125, 0.125, 0.125]`. The scale preserves the
+positive, charge-neutral dilution direction and keeps the native
+`1e-6,1e-8,1e-10,1e-12,1e-14 mol/kg` witness ladder within its `5e-5` terminal
+criterion for the adopted nine-species parameter set. A second positive
+charge-neutral direction must reproduce the per-reaction terminal contractions
+within that same criterion before this reference path is called qualified.
+
 ## Reaction and thermal reference contract
 
 R1--R3 are retained from Austgen 1991 Table V with the source's unsymmetric
@@ -137,17 +152,27 @@ common all-five source intersection is therefore 293.15--323.15 K. The
 as 36.85 K. That extrapolation is a disclosed model limitation, not an
 automatic rejection and not source validation.
 
-The current reaction-temperature fit changes R2/R4/R5 values in the selected
-candidate and is exploratory. Its reaction-coordinate transformations are
-application-owned candidate metadata: at pivot `T_p=313.15 K`, R1--R4 use
-`Delta a = Delta h/(R*T_p)` and `Delta b = -Delta h/R`; R5 uses
-`Delta a_k = Delta h/(R*ln(10))` and
-`Delta b = -Delta h/(R*T_p*ln(10))`. The current receipt also reports that
-the full replay scored R1/R3 shifts while the selected document omitted those
-shifts. These coordinates need a conditional #61 reaction-fit design; they are
-not current Engine EOS active-parameter actions. No reaction vector is accepted
-until #61 reconciles that history and the source-centered values with a fresh
-application decision.
+The owner adopted the exact selected R2/R4/R5 values in
+`selected-current-best-parameters.json` for this working delivery. They are
+the incumbent reaction input alongside the selected residual EOS values;
+their measured predictive error remains a separate result. The selected
+records are:
+
+| reaction | selected correlation coefficients | source-basis handling |
+|---|---|---|
+| R2 | `a=232.33141533884407`, `b_k=-11105.640030520277`, `c=-36.7816`, `d=0` | already includes the documented `+4.0165349923` common-aqueous-molality offset; do not apply it a second time |
+| R4 | `a=1.505015374192114`, `b_k=-1317.0489707842564` | selected analytic shift is carried with the Tong/Aroua source record |
+| R5 | `a_k=3037.6399534696106`, `b=-1.0173150837285996`, `c=0.0004277` | selected analytic shift is carried with the Bates/Pinching source record |
+
+R1 and R3 remain the source-contract incumbent because the selected document
+does not contain fitted records for them. At pivot `T_p=313.15 K`, the
+reaction-temperature transformations are `Delta a = Delta h/(R*T_p)` and
+`Delta b = -Delta h/R` for R1--R4, and
+`Delta a_k = Delta h/(R*ln(10))` and `Delta b = -Delta h/(R*T_p*ln(10))`
+for R5. These coordinates are not current Engine EOS active-parameter
+actions. #84 still owns the exact source-to-EOS reference conversion; the
+adapter must carry the adopted coefficient records to that conversion without
+silently changing their basis.
 
 The thermal reference payload is
 `mea-anchored-reaction-consistent-reference-thermochemistry-v2`: 293.15--393.15
@@ -399,19 +424,291 @@ required by this slice.
 | reaction-coordinate fit | candidate reaction coefficient identities and order; application-transformed values; T/P/feed coordinates | fixed-candidate output rows; any future reaction-coefficient Jacobian columns | retained fit receipts use old reaction actions. Current `SolvedStateActionDirection.active_parameters` covers EOS model actives only; #61 owns a conditional reaction-fit design and adoption decision. |
 
 The retained old-wheel application evidence consumes values, recovery evidence,
-density and reaction-fit output Jacobians. The current Engine can provide EOS
-model-parameter and state-input actions through `solved_state_actions`, but
-the adapter is still absent and the application does not consume a general
-state-input derivative tensor for every packet row or second-order actions.
-The six built-in regression observation forms therefore do not by themselves
-establish CO2 partial-pressure rows, paired caloric differences, or reaction
-coefficient fitting.
+density and reaction-fit output Jacobians. The current adapter maps the
+retained requests to the public `Problem`/`solve_equilibrium` path and records
+the available EOS/state action rows through `solved_state_actions`. It does not
+invent a derivative tensor for packet rows, second-order actions, or reaction
+coefficients. The six built-in regression observation forms therefore do not by
+themselves establish CO2 partial-pressure rows, paired caloric differences, or
+reaction-coefficient fitting.
 
 Every promoted active-parameter row must preserve caller parameter order,
 output identity, unit and phase. A missing Jacobian block, changed coordinate,
 nonfinite row or status mismatch is a hard derivative failure. Retain finite
 central outputs when a derivative action fails, but mark the derivative result
 unavailable; do not use it as a qualified fit row.
+
+## #61 adapter Design boundary
+
+This section specifies the bounded #61 replacement of the retired evaluator
+surface. The owner authorized Engine plus MEA/Lithium implementation on
+2026-09-22, excluding IDAES, modular-model and association-development work.
+The five findings from the recovered independent review of candidate
+`76ed8b824a9b67859f2590233b351631ca2d1a643ec5855ccad8bdb86d077f6a`
+are corrected below. The owner-adopted notebook incumbent is the working
+parameter input for this sprint. The public native reference chain is delivered
+through the current wheel; predictive qualification still depends on its
+explicit reference/thermal limits and broader evidence.
+
+### Files, ownership and replacement
+
+The sole production owner is
+`analyses/mea_parameter_bundle/scripts/shared_evaluation.py`. The current
+implementation uses `corrected_request`, `_problem_from_request`,
+`_snapshot_from_result`, `_solve_in_child` and `solve_with_recovery` as one
+private request-to-Problem mapping and one result/action-to-snapshot mapping.
+Keep packet expansion, cache identity, provenance, forked timeout handling,
+bounded recovery and failure receipts in this file. The mapping must use only
+the public current interfaces imported from `epcsaft.equilibrium`:
+`Problem`, `Phase`, `Free`, `Pinned`, `Amounts`, `Reaction`,
+`ReactionLogPolynomial`, `SolvedStateObservable`, `SolvedStateObservableKind`,
+`SolvedStateActionDirection`, `SolvedStateActionRequest`, `compile_problem`,
+`solve_equilibrium` and `solved_state_actions`, together with top-level
+`epcsaft.PropertyObservable`. Do not add a
+compatibility shim, restore a retired name, import Engine source or create a
+second solver. This import boundary describes the existing EOS-basis path;
+R1–R5 construction uses the public reference-path representation delivered by
+#84 through the current API below.
+
+The focused checks belong in
+`analyses/mea_parameter_bundle/tests/test_shared_evaluation.py`. Mechanical
+metadata readers in `generate_figure_data.py` and
+`run_best_in_slot_campaign.py` may call the shared request decoder when those
+scripts are brought forward; they are not a second adapter owner.
+`evaluate_direct_absorption_heat.py` and `validate_thermal_references.py`
+remain blocked on the #84 reference-basis decision. The direct calls in
+`run_reaction_temperature_fit.py` remain a separate optional reaction-fit
+extension. None of those three files is part of this adapter Build.
+
+The owner-authorized replacement budget for this delivery is at most **+450
+net lines** in the existing shared evaluator after deleting the retired
+mapping/result path (gross edit ceiling +700); the focused test delta remains
+at most **+100 net lines** (gross edit ceiling +120). This amendment covers the
+full retired-adapter replacement, source-basis transport, typed native failure
+mapping and retained physical evidence path. There are zero new source files
+and zero dependency changes. Exceeding either amended ceiling stops the
+implementation and returns the boundary for review; it does not justify hiding
+code in another owner.
+
+### Mechanical input mapping
+
+The adapter must validate the fixed nine-component order before constructing a
+problem:
+
+`carbon-dioxide`, `monoethanolamine`, `water`,
+`protonated-monoethanolamine`, `carbamate-anion`, `bicarbonate-anion`,
+`carbonate-anion`, `hydronium-cation`, `hydroxide-anion`.
+
+For each request, map the finite `feed_amounts_mol` by component id to
+`Amounts`, map fixed `T` to a float in K, map fixed `P` to a float in Pa, and
+map a solved pressure to `Free(initial)` in Pa. Map the finite liquid to
+`Phase(..., kind="liquid", amount=Free())` and the incipient vapor to
+`Phase(..., kind="vapor", amount=Pinned(0.0))`. Preserve the declared vapor
+support exactly as the three neutral ids and the liquid support as all nine
+ids. `topology_declared=True` remains explicit; phase discovery is not added.
+The old balance matrix, conserved totals, reaction-phase ids and source
+standard-state record stay in the application receipt. Engine compilation
+derives its own balance rows from the five `Reaction` stoichiometries; the
+adapter checks the returned total amounts against the retained balance matrix
+and charge before publishing a snapshot.
+
+The old continuation object has no current public equivalent. A retained
+liquid `Anchor` therefore supplies the liquid `Phase` composition guess; a
+retained three-neutral vapor composition or the explicit packet vapor guess
+must accompany it. Both phase guesses are required by the current initializer.
+Without both, label the attempt as a cold start rather than claiming that an
+anchor was consumed. Pressure closure and packing preparation remain with the
+Engine; the adapter does not reproduce the packing equation. The anchor's
+pressure is the single `Free` pressure guess. The feed remains the source of absolute phase
+amounts, so the old hand-built `FinitePhaseStart` and balance correction are
+deleted. The outer recovery plan keeps at most four unique starts: nearest
+same-temperature anchor, cold packet start, nearest cross-temperature anchor
+and one additional cross-temperature anchor. Duplicate signatures are skipped.
+The packet's closed `[1, 10000000] Pa` interval is enforced on every pressure
+guess and returned pressure. Current `Problem` has no caller-bound field, so
+the adapter cannot constrain the internal iterates; it must refuse publication
+of a returned out-of-interval state with `pressure_outside_packet`. Boundary
+and just-outside numerical pressures falsify the final-state admission rule.
+
+Already accepted EOS-basis polynomial rows may map one-for-one to
+`Reaction(stoichiometry=..., correlation=...)`, with products positive and the
+declared component order. The actual MEA R1–R5 rows stay on their explicit
+source bases and are passed through the native neutral-reference contraction;
+their conversion is not approximated as an application-side T-only polynomial.
+#84 owns the generic reference implementation, including pressure conventions,
+central curvature and the finite-limit witness. Existing infinite-dilution
+offsets and historical pressure contractions remain evidence, not a pointwise
+callback or scalar `equilibrium_constant` substitute. The following transforms
+apply only to the source-form records before native reference evaluation.
+`ReactionLogPolynomial` uses
+`ln K = a + b/T + c ln(T/Tref) + dT` on the Engine EOS standard state. The
+mechanical coordinate transforms are:
+
+- for an input `a_s + b/T + c ln(T/(1 K)) + dT`,
+  `a = a_s + c ln(Tref/(1 K))`, with `b`, `c`, `d` unchanged;
+- R4's `ln K = a + b_k/T` maps to `(a, b_k, 0, 0)`;
+- R5's `-log10 K = a_k/T + b + cT` maps to
+  `(-ln(10)b, -ln(10)a_k, 0, -ln(10)c)`.
+
+`Tref`, each reaction's admitted interval and the source standard-state id are
+explicit fields in the normalized records; the adapter invents none. It carries
+each source correlation and its source standard-state id as request metadata,
+and carries the selected R2/R4/R5 coefficient values with
+`selected_parameter_role="owner-adopted"`; it performs no source-to-EOS
+conversion. The exact selected document therefore remains
+`parameter_role="selected"`; an arbitrary candidate reaction vector remains
+`parameter_role="candidate"`.
+
+The worktree adapter's source-form normalizer emits the current public
+`NeutralReference`/`ReactionReference` records. R1
+and R3 retain the raw mole-fraction source basis and system-pressure path;
+selected R2 is carried on the common aqueous-molality basis with its fitted
+coefficients unchanged; selected R4/R5 use the common molality basis with
+their 100 kPa reference pressure. R5's retained negative-log10 polynomial is
+converted to the native natural-log polynomial representation only as a
+source-form normalization. The native reference owner supplies the EOS
+contraction and adds the declared common-molality scale exactly once.
+
+Because current `Reaction` has no phase-id field, the adapter must verify after
+compilation that all five reactions participate in the liquid support and no
+reaction row is admitted in the neutral-only vapor. A mismatch is typed
+`reaction_phase_support_mismatch` and is not repaired by adding application
+phase logic.
+
+### Result and action mapping
+
+Call `solve_equilibrium(model, problem)` once per recovery attempt, then compile
+the same `model`/`problem` pair and call `solved_state_actions` only for the
+declared observables. Current result arrays are full component width per phase;
+map them by declared phase ordinal and component id, never by a three-species
+vapor slice or a hard-coded offset.
+
+The snapshot preserves these central values and transformations:
+
+| input-contract identity | current source and transformation | unit/status |
+|---|---|---|
+| `system-pressure` | `result.pressure[0]` | Pa, finite only on a successful state |
+| `vapor-y-co2`, `vapor-y-mea`, `vapor-y-water` | neutral vapor `result.mole_fractions` entries | dimensionless |
+| `co2-partial-pressure` | `result.pressure[0] * y_CO2` | Pa; never compare with total pressure |
+| liquid/species outputs | liquid `result.mole_fractions` entries | dimensionless |
+| linear aggregates | stored output coefficient vector dotted with the nine liquid mole fractions | dimensionless |
+| phase anchor | `amounts`, `molar_densities`, `packing_fractions`, `1/rho`, composition and solved pressure | mol, mol/m³, dimensionless, m³/mol, Pa |
+| phase residual chemical potential | central `PhaseResidualChemicalPotentialOverRt` action value | dimensionless; typed unavailable if unsupported |
+| phase reference/residual/total enthalpy | central `PhaseProperty` values for `IdealEnthalpy`, `ResidualEnthalpy` and `TotalEnthalpy` | J/mol; missing thermochemistry stays typed |
+| extensive endpoint enthalpy | liquid amount times `TotalEnthalpy` | J |
+| paired heat | `[Δn_CO2 h_CO2,feed^ref − (H_b−H_a)]/Δn_CO2` | J/mol CO₂, then kJ/mol CO₂ for the existing report |
+
+The adapter materializes output rows from these selectors with
+`identity`, `value`, `status`, `unit` and optional first-order `jacobian`.
+`EquilibriumResult.rows` are solver equations and must not be mistaken for
+application output rows. `result.success`, `solver_status`, `message`,
+`convergence`, `requested_tolerance_met`, raw `residuals`,
+`classified_residuals`, their row metadata, topology event, reduced-Hessian diagnostic and
+action-batch diagnostics become the evidence/failure receipt. A failed solve
+retains finite diagnostics and no fabricated central values; a successful
+central solve retains its values even when an action is unavailable. A finite
+solver-success state missing the requested tolerance remains a warned
+candidate; it cannot be published as an ordinary accepted result.
+
+Preserve the exact `SolvedStateActionStatus` string for every requested action.
+Map native convergence stops to stable receipt codes (`infeasible`,
+`left_domain`, `singular`, `nonfinite`, `stalled`, `budget_exhausted` or
+`not_converged`) and keep the native message as the diagnostic. The old
+`evaluation_timeout` and `engine_exception` codes remain reserved for the
+fork/boundary layer. A phase mechanical class is not exposed by the current
+result; record local-check evidence and typed
+`mechanical_class_unavailable` rather than infer global stability or phase
+discovery.
+
+The base MEA slice consumes central values and **first-order** actions only:
+one full-width all-zero A1 direction to obtain the returned enthalpy/chemical-potential
+central values (empty direction lists are invalid), any explicitly selected state directions
+`(dT [K], dP [Pa], dn_feed[9] [mol])`, and optional EOS active-parameter
+directions in the declared `Mixture` active order. Free-intensive components
+must be zero: a solved-pressure VLE request has `dP=0`, and a free-temperature
+request has `dT=0`. Each A1 Jacobian column is a
+separate request containing one direction; two directions in one request mean
+an A2 mixed action, not two columns. Assemble the single-direction results in
+the declared order and retain each column's availability. Two non-collinear
+directions must independently reproduce their numerical A1 references.
+There is no MEA requirement
+for A2/A3, `PhaseLogActivity` film loading tangents, an outer A2 chain, vapor-Cp
+derivatives or absorber process actions. Those belong to the deferred absorber
+lane. Current `Mixture` active parameters are EOS families only; a reaction
+coefficient identity is typed `reaction_action_unavailable` and is never filled
+by a finite difference.
+
+### Finite adapter cases, falsifiers and cost cap
+
+The first adapter trace uses only these input-contract case ids:
+
+1. `Bottinger2008_state_050` and `Bottinger2008_state_058` for the nine-species
+   balance, aggregate map and lower/target-range liquid bases;
+2. `vle_obs_0130` and `vle_obs_0206` for neutral-vapor support, solved total
+   pressure, CO₂ partial pressure and the carrier-transfer/root diagnostic;
+3. `kim2007_t80_r1_0.047` and `kim2007_t80_r1_0.090` for the two finite
+   enthalpy endpoints.
+
+The pressure-missing Amundsen density observation `AMU-DENS-081` (source
+row 81, contract CSV line 82) remains a separate supporting property datum.
+It is not an equilibrium request or a seventh adapter case.
+
+Before any physical claim, the adapter checks finite positive outputs, phase
+support, material and charge balances, intensive reaction affinities,
+interphase neutral-fugacity equality, unscaled trace-species chemical rows,
+the pCO₂ identity,
+aggregate dot products, `H = n_liquid h_total`, anchor round trips and the
+two independent A1 numerical columns. Independent cold/warm starts
+must agree within the existing diagnostic screens of pCO₂ relative spread
+`1e-4` and liquid-composition absolute spread `1e-6`; disagreement remains a
+typed branch/root result for #89/#90. Physical screens remain the existing
+proposals: pCO₂ median absolute log-ratio `≤0.20` dex with 90% within `0.30`
+dex, speciation aggregate/minor-ion screens as specified above, density relative
+error `≤1.6%` at the supporting case, and paired-heat median absolute error
+`≤10 kJ/mol CO₂` for calibration and `≤15 kJ/mol CO₂` for a later comparison.
+These are separate from solver residual tolerances; the notebook incumbent's
+measured prediction error remains a reported result rather than a convergence
+or qualification gate.
+
+The hard execution cap is 60 s per forked child, 900 s per state including all
+recovery attempts/cache work, at most four unique starts per state, and
+5400 s for the six-case trace. A timeout or cap exhaustion is a typed failure and
+stops the trace; it does not trigger a larger campaign. The only allowed Engine
+runtime is the non-editable wheel with SHA-256
+`c87846663349640ab115cb09f9b880caea71be973dfe685dc9bd0f8bf7b11072`,
+runtime source `3f5d9ac87a70aebbefbbecef47fcb8ba39f56e6c` (build fingerprint
+`78937d2876bd90feaebbd7c28ae5ad6a7d1c6323fda9d3dab3440338e84dc202`). It is installed from
+`/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl`.
+Its affected installed-wheel gate and full native equilibrium/boundary suites
+passed. All 444 native transport rows satisfy their existing criteria;
+100 neutral-ternary action values moved by small floating-point amounts during
+performance integration, recorded in the Engine performance notebook.
+This supersedes the preparation wheel `f7902bf…` and the preceding `7a9a133a…`.
+The current reference API is now the declared #84 boundary, and the final
+bounded adapter replay is retained below. The earlier `f4bd…` replay remains a
+historical baseline; current numerical claims carry the final pinned wheel
+identity and achieved raw tolerance status. Verify the identified non-editable
+wheel; never import Engine source or sibling source.
+
+### Independent blockers and optional work
+
+The adapter mechanics are independently specified, and the bounded runtime
+evidence is retained below. It does not establish predictive or physical
+qualification. The native records carry the row-specific source-to-EOS boundary,
+including R1--R3 system-`T,P` versus R4/R5 100 kPa conventions, finite
+molality, thermal reference identities and gauge. The adapter reports
+`reference_basis_unavailable` only when those records are absent or malformed;
+it must not replace them with historical offsets, trial-pressure contraction or
+a scalar K.
+
+The owner-adopted reaction values are prepared inputs for this delivery.
+Reaction-coefficient actions and any new reaction-coordinate fit remain a
+separate optional #61 Design. The candidate transformations for an enthalpy
+shift at pivot `T_p` remain provenance only:
+`Δa=Δh/(R T_p)`, `Δb=-Δh/R` for R1--R4 and
+`Δa_k=Δh/(R ln 10)`, `Δb=-Δh/(R T_p ln 10)` for R5. No reaction vector is
+relabeled as a reaction action, and no predictive qualification is implied by
+the parameter adoption.
 
 ### Reaction-coefficient action status
 
@@ -424,9 +721,10 @@ model actives declared on the `Mixture`; `ReactionLogPolynomial` coefficients
 passed through `Reaction(correlation)` have no current reaction-coefficient
 action slot. No current R4/R5 or R1--R3 reaction action is therefore available.
 
-A fixed candidate reaction value can remain a prepared value input for a future
-replay after the adapter maps it, but any further reaction-coordinate fit
-requires a conditional #61 design and adoption decision. #84's generic
+A fixed adopted reaction value is carried as a prepared source record until
+the adapter maps it through #84's accepted reference path. Any further
+reaction-coordinate fit requires a conditional #61 design and adoption
+decision. #84's generic
 reference chain and #85's EOS-family inventory must not silently absorb that
 reaction-fitting extension. Do not substitute finite differences for the
 missing consumed action or waive the action requirement.
@@ -445,12 +743,13 @@ diagnostic old-wheel evidence, not current qualification.
 
 ### Finite replay and resource budget
 
-The proposed replay is not runnable unchanged: it first needs the finite #61
-adapter described above. The fixed nine-species/five-reaction candidate values
-and neutral-vapor topology can be prepared through that adapter, but the
-retained R4 reaction-action receipt remains old-wheel evidence and is not a
-current action check. A current reaction-coefficient action is unavailable
-until #61 settles its conditional design and adoption boundary.
+The bounded replay is runnable through the finite #61 adapter and its Stage-A
+JSON/CSV/state records are retained below. The fixed nine-species/five-reaction
+candidate values and neutral-vapor topology are evaluated through the current
+public path. The retained R4 reaction-action receipt remains old-wheel evidence
+and is not a current action check; a current reaction-coefficient action is
+reported as the typed `reaction_action_unavailable` result until #61 settles a
+separate design and adoption boundary.
 
 The first replay is limited to the following cases: `Bottinger2008_state_058`
 for the exact in-range liquid basis, `vle_obs_0130` for Hilliard pCO2,
@@ -478,7 +777,7 @@ parameter or temperature campaign is authorized by this contract.
 | measured/direct | Jou/Hilliard pCO2 rows; Böttinger NMR MEA+MEAH aggregate, MEACOO- and HCO3- rows; Matin titration inputs; Kim/Svendsen direct calorimetry; Amundsen density; Hilliard/Weiland solution-Cp observations | pCO2 uncertainty/covariance is unspecified; Böttinger has aggregate/proton-transfer basis; Matin species are derived from measured titration quantities; Amundsen pressure is blank; solution-Cp source values have their own stated mass bases |
 | derived | finite molality from `x_i/(x_water*M_water)`; retained R1--R3 infinite-dilution scale offsets; reaction balance totals; aggregate coefficient maps; normalized finite feed and ionic seed vector; calorimetry endpoint pairing; reaction-consistent thermal reference polynomial | finite source-to-provider conversion and reference identities remain a #84 boundary; derived values are not independent measurements |
 | assumed | ionic seed floors; fixed 101325 Pa all-liquid sentinel; retained pressure starts and recovery order; neutral-only vapor; zero finite vapor inventory and ideal incoming CO2 reference enthalpy; hydronium gauge; historical trial-pressure provider contraction | source p° and system-`T,P` conventions are source facts; packet assumptions can affect consumed predictions and must be disclosed or falsified separately |
-| fitted/candidate | exploratory candidate residual EOS, association, Born/Debye-Huckel, packing, solvation, permittivity, interaction and reaction-coordinate values | candidate is `candidate_extrapolation`; no accepted MEA parameter packet exists |
+| fitted/candidate | owner-adopted notebook residual EOS, association, Born/Debye-Huckel, packing, solvation, permittivity, interaction and reaction-coordinate values for this delivery | input adoption is explicit; scientific qualification remains `candidate_extrapolation`, with measured predictive error and source extrapolation disclosed as results |
 | missing/unqualified | direct MEAH+/activity evidence, exact-salt ionic density, a verified MEA-water static relative-permittivity table over temperature/composition/loading, VLE uncertainty/covariance and density pressure metadata | do not fill with zeros, defaults or analog transfer; source PDFs are retained in Zotero storage, so missing local Markdown is not a source-acquisition gap |
 
 The local literature README's missing-Markdown entries do not mean that the
@@ -556,7 +855,7 @@ The following are the smallest concrete handoffs from this application slice:
 | #87 trace/action accuracy | Trace pCO2 and true-species/aggregate rows, nonunit scales, partial-result retention, status/failure meaning, current EOS active-parameter row Jacobians and the missing paired-heat/reference derivative action. | a caller-level trace shows each consumed row/action/status and a typed failure; no silent finite-difference or dropped failure remains |
 | #89 density and pressure roots | Reproduce pressure-root/branch behavior on `vle_obs_0206`, including the solved bounds and retained start, and on any high-loading examples. Distinguish a missed root from a legitimately ambiguous branch. Reuse the existing density owner and retain the Amundsen pressure-missing limitation. | reviewed reproduction classifies each failure/branch and states whether an implementation change is authorized |
 | #90 initialization/continuation | Reproduce the known equilibrium-temperature start sensitivity using the evaluator's same-temperature, cold, cross-temperature and continuation anchors. | bounded start/continuation diagnosis identifies a reproducible failure class or establishes that no Engine change is required for the selected cases |
-| #61 MEA application adoption | Provide the finite adapter from the retained evaluator to current Engine APIs; decide whether any application-owned reaction recalibration is adopted. Reconcile selected exploratory R2/R4/R5 shifts with source-centered correlations and the omitted R1/R3 fit records. Any reaction-coefficient action/fit remains conditional on this design. | explicit adapter/status mapping and candidate/reference decision with calibration, transfer and limitation language; no silent parameter promotion |
+| #61 MEA application adoption | Provide the finite adapter from the retained evaluator to current Engine APIs using the owner-adopted notebook incumbent. Reconcile selected R2/R4/R5 shifts with source-centered correlations and the omitted R1/R3 fit records. Any reaction-coefficient action/fit remains conditional on this design. | explicit adapter/status mapping with calibration, transfer and limitation language; no silent reaction-action promotion |
 
 There is no demonstrated need here for PH/PS/UV, phase discovery, transport,
 finite-rate chemistry, a broad optimization-domain campaign, or new physics.
@@ -565,15 +864,15 @@ contracts without adding those capabilities.
 
 ## First replay and dependency boundary
 
-After #61 supplies the finite adapter, the parent authorizes the bounded replay
-and a current wheel is installed, the first reviewable evidence block is:
+With the finite adapter implemented and the current wheel identified, the first
+reviewable evidence block from the native reference path is:
 
 1. `Bottinger2008_state_050` for species order, balance, aggregate map and
    source basis, with `Bottinger2008_state_058` as the exact 333.15 K
    application-range speciation row;
 2. `vle_obs_0130` and `vle_obs_0206` for solved pressure, neutral vapor
    support, CO2 partial pressure, source-basis/carrier-transfer assumptions and
-   pressure-root diagnostics. Fixed candidate reaction values may be mapped;
+   pressure-root diagnostics. Fixed adopted reaction values may be mapped;
    the retained R4 action receipt is old-wheel provenance, not a current action;
 3. the Kim/Svendsen 353.15 K pair for endpoint enthalpy and finite heat
    pairing; and
@@ -589,12 +888,12 @@ source-basis/carrier assumptions are stated in the receipt.
 
 The dependency boundary is deliberately narrow:
 
-- generic #87/#89/#90 diagnosis can proceed before a settled MEA parameter
-  adoption decision;
+- generic #87/#89/#90 diagnosis can proceed with the owner-adopted notebook
+  working input;
 - #84 consumes the source/reference definitions in this document;
 - #85 receives the finite family inventory and may close with no code;
-- #61 owns the evaluator adapter, application candidate selection,
-  reaction-coordinate adoption and any conditional reaction-action design;
+- #61 owns the evaluator adapter, the adopted working-input record and any
+  conditional reaction-action design;
 - MEA input preparation and qualification are independent of lithium;
 - absorber physical qualification consumes accepted MEA thermodynamics, while
   absorber interface preparation can proceed earlier.
@@ -604,33 +903,191 @@ The dependency boundary is deliberately narrow:
 - The exact finite source-to-provider conversion remains with #84; the
   infinite-dilution R1--R3 offsets and the historical R4/R5 trial-pressure
   contraction are not accepted finite-state mappings.
-- The retained evaluator cannot run against current f909/wheel-9f73 without the
-  finite #61 adapter and current status/enthalpy mapping.
+- The worktree adapter now runs the current status/enthalpy mapping against the
+  retained request shape and emits the native reference records; the first
+  nine-species replay and its finite-limit diagnostics are recorded below.
 - Current solved-state actions expose EOS model actives, not reaction
   correlation coefficients; reaction fitting remains a conditional #61 design
   and adoption decision.
 - Zhang's MEA ideal-gas Cp correlation is a source-backed candidate with
   unreported uncertainty; it is not an experiment or adopted thermal input.
-- No replay, qualification or parameter adoption has been performed.
+- No predictive qualification has been performed; notebook parameter adoption
+  and the final bounded replay for this working delivery are complete.
 
-## Decisions still required
+## First bounded MEA replay (historical f4bd baseline)
 
-Only these material decisions remain after the source inspection:
+The first bounded replays used the adopted parameter record
+`568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d`, packet
+`86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448` after
+decompression, and wheel
+`f4bdcbb919e169800f9efdf3fc96ee2930924d6e2afd9962f395e503353595e9`. Both
+states were fixed-`T,P` cold starts through the current adapter and returned a
+finite all-nine liquid state with no material-balance, charge-balance or
+pressure-range validation error. These original files retain their recorded
+wheel hash; their `engine_commit` field names the preceding checkout rather
+than the then-uncommitted runtime and must not be used as an exact source
+identity. The final replay below has an exact committed runtime identity.
 
-1. Review and accept, revise or reject the proposed observable-specific
-   physical screens before new acceptance predictions.
-2. Have #84 define and qualify the generic reference/action boundary for the
-   row-specific source conventions.
-3. Have #61 provide/approve the finite adapter and choose the
-   reaction-coordinate candidate/reference treatment; any reaction action
-   remains conditional on that design.
-4. Have #85/#87 state the exact EOS active-parameter family/order and the
-   separate heat derivative action or an owner-approved heat-fit deferral.
+| state | `T` / `P` | requested outputs `(MEA+MEAH+, MEACOO-, HCO3-)` | liquid density / amount | maximum reference terminal change |
+|---|---:|---:|---:|---:|
+| `Bottinger2008_state_050` | `313.15 K` / `101325 Pa` | `(0.06771945435, 0.04449868051, 0.005214861586)` | `53402.2745654 mol/m³` / `8.91121565360 mol` | `4.06398024e-5` |
+| `Bottinger2008_state_058` | `333.15 K` / `101325 Pa` | `(0.06949829276, 0.04271999906, 0.002420751756)` | `51307.3088194 mol/m³` / `8.91120318997 mol` | `4.23485551e-5` |
+
+All five reaction diagnostics in each state were `Available`. R1--R3 used the
+system pressure `101325 Pa`; R4--R5 used their declared `100000 Pa` source
+pressure. The native solver reached its available floor (`3.57e-8` classified
+residual against the requested `1e-10` row tolerance), so the adapter retains
+`requested_tolerance_met=false` as evidence while classifying the state as
+evaluated from the finite physical checks. These values are working replay
+results; the notebook's measured prediction error remains a result and no
+predictive qualification is claimed.
+
+As a finite-reference direction check, the same 050 feed, parameters, source
+correlations, `T` and `P` were evaluated with the positive charge-neutral
+vector
+`[0.03125, 0.03125, 0.15625, 0.0625, 0.03125, 0.03125, 0.03125, 0.03125]`
+for `[CO2, MEA, MEAH+, MEACOO-, HCO3-, CO3--, H3O+, OH-]`. Its per-reaction
+terminal contractions differed from the adopted `1/8` vector by at most
+`2.26e-7`, with every witness below `5e-5` (`R1=1.0160e-5`,
+`R2=1.0160e-5`, `R3=2.0320e-5`, `R4=3.75e-12`, `R5=3.87e-12`). This is a
+reference-path consistency check only; it does not introduce a second
+equilibrium or parameter fallback.
+
+The sequential Stage-A artifact also contains the 315--360 K fixed-pressure
+sentinel grid at the 050 feed, with empirical-extrapolation labels retained:
+
+| sentinel | status | `(MEA+MEAH+, MEACOO-, HCO3-)` | liquid density / maximum reference change |
+|---|---|---:|---:|
+| `315 K` | evaluated | `(0.06735473631, 0.04486327385, 0.005306073714)` | `53333.1842869 mol/m³` / `4.07876e-5` |
+| `330 K` | evaluated | `(0.06581899338, 0.04639698405, 0.006064820369)` | `52763.3116723 mol/m³` / `4.20638e-5` |
+| `345 K` | evaluated | `(0.06557879319, 0.04663106967, 0.006827032189)` | `52155.5969058 mol/m³` / `4.34666e-5` |
+| `360 K` | `non_evaluable: budget_exhausted` | unavailable | 200 iterations; failure retained |
+
+The artifact records the fixed-`T,P` source packet, residual and classified
+residual rows, solver attempts, reference diagnostics and physical phase data
+once in compact JSON plus homogeneous CSV form:
+`results/runs/reaction-temperature-fit/stagea-current-wheel/`
+(`stagea-current-wheel-replay.json` and `stagea-current-wheel-rows.csv`).
+The exact historical f4bd 050 state record is
+`results/runs/reaction-temperature-fit/stagea-current-wheel/states/c8f363da921c24fbfa049cb77b129b7b1de23cf87299a8c4e8c06879c4cde16d.json`
+(SHA-256 `d2c8a1359a40c70604174dac7bd54b3515cba5856a4e4d0d7f75b7aebdbbe3b2`).
+Pure-water branch checks at 313.15 K returned `Liquid`, `stable_root_count=2`
+and `converged` density roots: `55069.7257442 mol/m³` at 101325 Pa and
+`55069.7089139 mol/m³` at 100000 Pa. These are source-reference and sentinel
+results, not predictive qualification.
+
+## Final current-wheel MEA replay
+
+The final bounded producer used the adopted parameter record
+`568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d`, packet
+`86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448`, Engine
+commit `3f5d9ac87a70aebbefbbecef47fcb8ba39f56e6c`, and wheel
+`c87846663349640ab115cb09f9b880caea71be973dfe685dc9bd0f8bf7b11072`. The
+replay retained the compiled raw stationarity vector from
+`compiled_problem.evaluate(result.coordinates)` for every successful state;
+all evaluated rows below have raw maxima below `1e-10` and native requested
+tolerance met.
+
+| case | result and raw stationarity maximum | retained values |
+|---|---|---|
+| `Bottinger2008_state_050` | evaluated; `1.7053025658242404e-13` | `(MEA+MEAH+, MEACOO-, HCO3-) = (0.06771945760549275, 0.04449867725550945, 0.005214865150114531)`; hydronium `2.31334915458689e-10` |
+| `Bottinger2008_state_058` | evaluated; `1.7763568394002505e-13` | `(0.06949829335217282, 0.04271999846289983, 0.002420752508060337)` |
+| `315 K` sentinel | evaluated; `1.4210854715202004e-13` | `(0.06735473960064955, 0.044863270560672026, 0.0053060772812227805)` |
+| `330 K` sentinel | evaluated; `2.2737367544323206e-13` | `(0.06581899676215526, 0.046396980663928215, 0.0060648238778367265)` |
+| `345 K` sentinel | evaluated; `1.1368683772161603e-13` | `(0.06557879639989843, 0.046631066446415965, 0.006827035407960529)` |
+| `360 K` cold | `non_evaluable: budget_exhausted` | retained as the cold-start failure |
+| `360 K` warm from 345 K | evaluated after the retained cold failure; `1.1368683772161603e-13` | `(0.06589580914322377, 0.04629691404387695, 0.007525040310383141)` |
+
+The same final replay solved the free-pressure neutral-vapor cases. The vapor
+composition comes from the native pinned zero-amount phase block, and the
+partial pressure is the native vapor CO2 mole fraction times the solved system
+pressure:
+
+| case | solved pressure (Pa) | vapor `(yCO2, yMEA, yH2O)` | CO2 partial pressure (Pa) | raw maximum |
+|---|---:|---:|---:|---:|
+| `vle_obs_0130` | `6745.3292512713515` | `(0.004850021209289166, 0.00033854874057571494, 0.9948114300501352)` | `32.71498993230467` | `8.526512829121202e-14` |
+| `vle_obs_0206` | `41385.4021244` | `(0.0013610884224680645, 0.002396067635315561, 0.9962428439422164)` | `56.32919169070609` | `1.7053025658242404e-13` |
+
+The complete final producer records are under
+`results/runs/reaction-temperature-fit/final-current-wheel/`, with the compact
+replay JSON, homogeneous rows CSV, per-state diagnostics, cold failure and
+warm recovery retained together. These are bounded working-input replays;
+the adopted parameters are authorized working inputs, while predictive
+accuracy beyond these comparisons remains to be established.
+The packet's direct CO2 partial-pressure targets for 0130 and 0206 are 72.1
+and 99.2 Pa, respectively. The converged predictions are therefore about 55%
+and 43% lower. This is retained model discrepancy for subsequent comparison
+or calibration, not a parameter-adoption or numerical-execution gate.
+
+## Remaining capability and validation work
+
+1. Compare the adopted model against the observable-specific physical screens
+   and quantify model discrepancy over the broader retained data.
+2. Extend #84's delivered fixed-temperature value/pressure boundary to the
+   temperature, parameter and caloric responses consumed by the application.
+3. Qualify reaction-correlation and EOS-parameter actions before using them in
+   thermal or parameter fitting. Their present unavailability does not block
+   the implemented central speciation and VLE calculations.
 
 Matin's direct-to-derived classification is resolved by this handoff as
 evidence, not left as an owner question. Missing pCO2 covariance, unspecified
 source gauge precision and blank Amundsen pressure remain disclosed limitations
 without creating acquisition prerequisites.
 
-No predictive qualification, Engine build/install, slow campaign, application
-transfer, merge or source-code edit was performed in this preparation slice.
+No predictive qualification, slow campaign, application transfer or merge was
+performed in this preparation slice; the bounded adapter, current-wheel
+replays and focused checks are present in the application worktree.
+
+
+## Current-main replay and handoff — 2026-09-22
+
+The adopted parameter file remains SHA-256
+`568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d`.
+The bounded replay consumed Engine runtime `892c6687480259a6de6bbc8fa1721a35d06c997f`
+and noneditable wheel `dc1d18d02fa560a5b518f4fb20be7e2254e8aa79dd62b3f6dfddf2107005d2b2`.
+The new `current-main-adopted-comparison` result directory beside the earlier
+`final-current-wheel` receipt retains nine requests, eight successful states,
+one cold 360 K failure and eight packet-target comparisons. Earlier c878 receipts
+are unchanged. Packet calibration labels, selection exposure, source-range
+extrapolation and the Böttinger 058 role conflict limit interpretation; this is
+not independent predictive validation.
+
+The full replay used evaluator v4 before the final diagnostic-only correction.
+The separate `current-main-adopted-comparison-v5-cold-only` receipt qualifies the
+corrected failure serialization: native raw maximum 6.24741216, classified
+maximum 0.00167100625 against 1e-10, requested tolerance false, MAXITER_EXCEEDED,
+and no invented state or pressure. The successful 345-to-360 K warm result retains
+raw/classified maxima 1.14e-13/2.50e-15. Failed-attempt evidence stays with its
+actual attempt; the record-level failure fields all refer to the final attempt.
+The current producer is evaluator v5; the corrected cold-only run was fresh.
+
+The verified sum of per-case attempt times is 35.498388 s: VLE 0130 takes 13.919718 s
+and VLE 0206 takes 17.273847 s. The earlier chat estimate of 26 s was incomplete waiting
+accounting and is not a process benchmark. The separate cold refresh measured
+0.524 s. No wheel build occurred and no further numerical process is running.
+
+Resolution (2026-09-22): the adopted coefficients were fitted with the old adapter
+under `exclude-same-sign-ion-pairs` (fit wheel `40fba7cf...`; UQ inventory row 102),
+which is Figiel's like-charge rule including ion self-pairs. The migration's
+`all-ion-pairs` runtime default (commit 8f8e4a2) was never an adoption decision; with
+off-diagonal like-charge `k_ij=1` it kept ionic self-dispersion, a hybrid neither source
+defines. The parameter record now declares exclusion explicitly and drops the seven
+redundant same-sign `k_ij=1` entries (SHA-256 `868a5018...fcb7be`); the adapter injects no
+dispersion default. Engine PR #107 (wheel `4368d0f1...`) removed the repeated
+fixed-pressure reference work with bit-identical results (VLE medians 13.46->8.47 s and
+15.32->8.77 s under the superseded all-pairs model). Under the fitted model, VLE 0206
+from a cold packet start ends locally infeasible (residual 0.698 after 53 iterations),
+while a start from the old Engine's liquid solution converges (residual 2.3e-13) to
+pCO2 84.87 Pa (old Engine 84.93 Pa; observed 99.2 Pa): an initialization failure (#90),
+not a missing equilibrium. Engine PR #109 (main `832380ad`, wheel `6cb2c2f0...`) moves the
+pinned-vapor pressure seed by one fugacity step; the nine-case replay then evaluates 9/9
+(`fitted-exclusion-6cb2`, 31.2 s, VLE 0206 cold at the warm-anchor state). Over all 79
+solved-pressure requests from cold (`cold-start-sweep/cold-start-sweep.csv`, producer
+`scripts/run_cold_start_sweep.py`), 69 -> 76 evaluate and total time falls 556 -> 380 s;
+0128/0145/0227 regress and 0129-0131/0208 slow down because the packet liquid guesses
+carry unspeciated molecular CO2 (x_CO2 8.9e-5 to 1.4e-3 against ~1e-6 speciated), so the
+seed is the saturation pressure of a wrong liquid. The adapter's recovery plan now adds a
+`speciated-liquid-start` after a failed cold packet start for solved-pressure requests: the
+liquid alone is speciated at the packet pressure seed and replaces the packet liquid guess.
+It recovers 0128, 0145 and 0227 at the baseline states (P and pCO2 within 1e-11 relative),
+so all 79 requests evaluate from cold without anchors; earlier attempts are unchanged.
