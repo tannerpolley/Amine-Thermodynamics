@@ -373,10 +373,8 @@ def reused_enthalpy(
     model: epcsaft.Mixture, thermochemistry: object, phase: dict[str, object]
 ) -> float:
     state = model.state(
-        T=(float(phase["temperature_C"]) + 273.15) * epcsaft.unit_registry.kelvin,
-        rho=float(phase["molar_density_mol_m3"])
-        * epcsaft.unit_registry.mole
-        / epcsaft.unit_registry.meter**3,
+        float(phase["temperature_C"]) + 273.15,
+        rho=float(phase["molar_density_mol_m3"]),
         x=phase["mole_fractions"],
     )
     molar_h = float(state.h(thermochemistry).to("joule / mole").magnitude)
@@ -1160,8 +1158,7 @@ def timed_solve(
 def run_benchmark(anchors: list[Anchor], budget_s: float) -> None:
     """Stage 2: one easy state and one hard 120 C state, matched inputs."""
     clock = perf_counter()
-    parameters = load_parameters()
-    model = epcsaft.Mixture(parameters)
+    model = epcsaft.Mixture(load_parameters())
     construction_s = perf_counter() - clock
     reactions = shifted_reactions({})
     baseline = baseline_lookup()
@@ -1203,18 +1200,11 @@ def run_benchmark(anchors: list[Anchor], budget_s: float) -> None:
                 for identity in baseline_reactions()
                 if identity.split(":")[1:2] in (["R2"], ["R4"], ["R5"])
             )
-            try:
-                active = epcsaft.ActiveParameterSet(parameters, identities)
-                problem = _problem_from_request(copy.deepcopy(base))
-                variants["cold-with-sensitivities"] = {
-                    "identities": list(identities),
-                    **timed_solve(model, problem, active),
-                }
-            except Exception as exc:
-                variants["cold-with-sensitivities"] = {
-                    "status": "unsupported",
-                    "failure_diagnostic": f"{type(exc).__name__}: {exc}",
-                }
+            problem = _problem_from_request(copy.deepcopy(base))
+            variants["cold-with-sensitivities"] = {
+                "identities": list(identities),
+                **timed_solve(model, problem, identities),
+            }
         for value in variants.values():
             if isinstance(value, dict) and value.get("pco2_pa") is not None:
                 value["relative_difference_to_retained"] = (
@@ -1235,6 +1225,11 @@ def run_sensitivity_check(budget_s: float) -> None:
     rows also depend on the reference thermochemistry, whose derivative with
     respect to the shift is not exposed by the Engine.
     """
+    raise RuntimeError(
+        "reaction-coefficient equilibrium actions are unavailable in the pinned Engine "
+        "(active parameters address EOS families only; tannerpolley/ePC-SAFT#61); "
+        "the retained sensitivity-check results are left unchanged"
+    )
     screen = {}
     for row in read_csv(RESULTS / "screen-targets.csv"):
         screen.setdefault(row["scenario"], {})[
@@ -1251,7 +1246,7 @@ def run_sensitivity_check(budget_s: float) -> None:
         "R4": (1000.0 / (R * PIVOT_K), -1000.0 / R),
         "R5": (1000.0 / (R * math.log(10.0)), -1000.0 / (R * PIVOT_K * math.log(10.0))),
     }
-    active = epcsaft.ActiveParameterSet(parameters, identities["R4"] + identities["R5"])
+    active = identities["R4"] + identities["R5"]
     rows: list[dict[str, object]] = []
     anchors: list[Anchor] = []
     for state in sorted(

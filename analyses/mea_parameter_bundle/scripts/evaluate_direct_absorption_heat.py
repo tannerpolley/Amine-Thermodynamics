@@ -15,7 +15,6 @@ from time import perf_counter
 import epcsaft
 import matplotlib.pyplot as plt
 import numpy as np
-from epcsaft import equilibrium
 from scipy.interpolate import PchipInterpolator
 
 from shared_evaluation import (
@@ -31,6 +30,8 @@ from shared_evaluation import (
     evaluate_state,
     load_parameters,
     load_state_packet,
+    parameter_mapping,
+    reaction_values as selected_reaction_values,
     verify_wheel,
 )
 from result_freshness import source_hashes, stamp_results
@@ -50,7 +51,6 @@ RESULTS = ANALYSIS / "results/calorimetry"
 FIGURES = ANALYSIS / "figures/calorimetry/output"
 TEMPERATURES_K = (313.15, 353.15, 393.15)
 REFERENCE_TEMPERATURE_K = 353.15
-R_J_MOL_K = 8.31446261815324
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -88,67 +88,22 @@ def residual_metrics(rows: list[dict[str, object]]) -> dict[str, float | int | N
     }
 
 
-def reaction_derivative(
-    record: equilibrium.ChemicalEquilibriumConstant, temperature_k: float
-) -> float:
-    values = record.coefficient_values
-    if record.correlation_kind == "ln-k-a-plus-b-over-t":
-        return -values[1] / temperature_k**2
-    if record.correlation_kind == "ln-k-a-plus-b-over-t-plus-c-ln-t-plus-d-t":
-        return -values[1] / temperature_k**2 + values[2] / temperature_k + values[3]
-    if record.correlation_kind == "negative-log10-temperature-polynomial":
-        return math.log(10.0) * (values[0] / temperature_k**2 - values[2])
-    raise ValueError(f"untyped reaction correlation: {record.reaction_id}")
-
-
 def transformed_reaction_enthalpies(
-    model: epcsaft.Mixture,
-    problem: equilibrium.GeneralReactiveEquilibriumProblem,
+    model: epcsaft.Mixture, request: dict[str, object]
 ) -> np.ndarray:
-    reaction = problem.reaction_system
-    standard = reaction.source_standard_state
-    if standard is None:
-        raise ValueError("MEA reaction system lacks its source standard state")
-    transfer = epcsaft.source_reference_transfer(
-        model,
-        epcsaft.SourceReferenceDeclaration(
-            reference_state_id=standard.id,
-            component_ids=standard.source_reference_component_ids,
-            solvent_mole_fractions=standard.source_reference_solvent_composition,
-            ion_pairs=standard.source_reference_ion_pairs,
-            phase=standard.source_reference_phase,
-            reference_convention=standard.source_reference_convention,
-            activity_convention_id=standard.source_reference_activity_convention_id,
-            standard_molality_mol_per_kg=standard.source_reference_standard_molality_mol_per_kg,
-            reference_pressure_pa=standard.reference_pressure_pa,
-            required_derivatives=("temperature",),
-            pure_components=standard.source_reference_pure_components,
-        ),
-        T=problem.temperature.value,
-        P=standard.reference_pressure_pa * epcsaft.unit_registry.pascal,
+    """EOS-standard-state reaction enthalpies RT^2 d ln K_rho/dT at the request temperature.
+
+    d ln K_rho/dT needs the temperature derivative of the source-to-EOS
+    reference transfer, sum_i nu_i dLambda_i/dT|_P (Engine EqID
+    ``standard_state_transfer_temperature_derivative``).  The pinned Engine
+    does not expose it; Engine issue #84 owns that chain.
+    """
+    raise RuntimeError(
+        "reaction-reference temperature derivatives are unavailable in the pinned "
+        "Engine (tannerpolley/ePC-SAFT#84, EqID "
+        "standard_state_transfer_temperature_derivative); the anchored thermal "
+        "reference and every heat calculation that consumes it cannot be evaluated"
     )
-    basis = np.asarray(transfer.neutral_basis, dtype=float)
-    source_derivatives = np.asarray(transfer.temperature_derivatives_per_k, dtype=float)
-    rows = np.asarray(reaction.reaction_matrix, dtype=float)
-    derivatives = []
-    for row, record in zip(rows, reaction.equilibrium_constants, strict=True):
-        coordinates, *_ = np.linalg.lstsq(basis.T, row, rcond=None)
-        mismatch = np.max(np.abs(coordinates @ basis - row))
-        if mismatch > 1.0e-10:
-            raise ValueError(
-                f"reaction {record.reaction_id} is outside the neutral basis"
-            )
-        derivative = (
-            reaction_derivative(
-                record, float(problem.temperature.value.to("kelvin").magnitude)
-            )
-            + float(coordinates @ source_derivatives)
-            - float(np.sum(row))
-            / float(problem.temperature.value.to("kelvin").magnitude)
-        )
-        derivatives.append(derivative)
-    temperature_k = float(problem.temperature.value.to("kelvin").magnitude)
-    return R_J_MOL_K * temperature_k**2 * np.asarray(derivatives)
 
 
 # Neutral thermal anchors. Units: J/mol/K for cp, J/mol for enthalpy, T in K.
@@ -221,18 +176,13 @@ def anchor_heat_capacity(
         * math.fsum(a * t**k for k, a in enumerate(spec["liquid_cp_kj_kg_k"]))
     )
     x = [1.0 if c == component_id else 0.0 for c in model.component_ids]
-    state = model.state(
-        T=temperature_k * epcsaft.unit_registry.kelvin,
-        P=ANCHOR_PRESSURE_PA * epcsaft.unit_registry.pascal,
-        x=x,
-        phase="liquid",
-    )
-    residual = state.cpres()
+    state = model.state(temperature_k, P=ANCHOR_PRESSURE_PA, x=x, phase="liquid")
+    residual = state.residual_isobaric_heat_capacity
     if residual is None:
         raise ValueError(
             f"EOS residual cp unavailable for {component_id} at {temperature_k} K"
         )
-    return liquid - float(residual.magnitude)
+    return liquid - residual
 
 
 def anchor_enthalpy_at_formation(model: epcsaft.Mixture, component_id: str) -> float:
@@ -241,15 +191,8 @@ def anchor_enthalpy_at_formation(model: epcsaft.Mixture, component_id: str) -> f
     if spec["cp_kind"] == "ideal_gas_shomate":
         return float(spec["formation_enthalpy_j_per_mol"])
     x = [1.0 if c == component_id else 0.0 for c in model.component_ids]
-    state = model.state(
-        T=FORMATION_TEMPERATURE_K * epcsaft.unit_registry.kelvin,
-        P=ANCHOR_PRESSURE_PA * epcsaft.unit_registry.pascal,
-        x=x,
-        phase="liquid",
-    )
-    return float(spec["formation_enthalpy_j_per_mol"]) - float(
-        state._residual_enthalpy.magnitude
-    )
+    state = model.state(FORMATION_TEMPERATURE_K, P=ANCHOR_PRESSURE_PA, x=x, phase="liquid")
+    return float(spec["formation_enthalpy_j_per_mol"]) - state.residual_enthalpy
 
 
 def exact_reference_enthalpies(
@@ -262,11 +205,9 @@ def exact_reference_enthalpies(
     """Solve the nine references at one temperature: 5 reactions + 3 anchors + 1 gauge."""
     request = copy.deepcopy(templates[80][0][1])
     request["temperature"]["value"] = temperature_k
-    problem = equilibrium.general_reactive_equilibrium_problem_from_mapping(
-        corrected_request(request, reaction_values)
-    )
-    rows = np.asarray(problem.reaction_system.reaction_matrix, dtype=float)
-    q_reaction = transformed_reaction_enthalpies(model, problem)
+    request = corrected_request(request, reaction_values)
+    rows = np.asarray(request["reaction_system"]["reaction_matrix"], dtype=float)
+    q_reaction = transformed_reaction_enthalpies(model, request)
     ids = list(model.component_ids)
     anchors = np.eye(len(ids))[[ids.index(c) for c in ANCHOR_SOURCES]]
     gauge = np.zeros(len(ids))
@@ -431,13 +372,8 @@ def main() -> None:
         overall_timeout_s=args.overall_timeout_s,
         deadline_monotonic=perf_counter() + args.overall_timeout_s,
     )
-    parameters = load_parameters()
-    model = epcsaft.Mixture(parameters)
-    reaction_values = {
-        spec.identity: float(spec.value.magnitude)
-        for spec in parameters.parameter_specs
-        if spec.identity.startswith("reaction:")
-    }
+    model = epcsaft.Mixture(load_parameters())
+    reaction_values = selected_reaction_values(parameter_mapping())
     packet = load_state_packet(STATE_PACKET)
     templates: dict[int, list[tuple[float, dict[str, object]]]] = {}
     for observation in packet["observations"]:
