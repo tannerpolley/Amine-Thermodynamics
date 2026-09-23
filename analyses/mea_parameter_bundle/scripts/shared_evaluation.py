@@ -57,7 +57,6 @@ COMPONENT_IDS = (
     "carbamate-anion", "bicarbonate-anion", "carbonate-anion", "hydronium-cation", "hydroxide-anion",
 )
 R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS = (8.0330699846, 4.0165349923, 4.0165349923)
-NEUTRAL_VAPOR_IDS = COMPONENT_IDS[:3]
 # Shell-modified Born constants of the adopted configuration
 # (data/reference/MEA/manifests/reactive_vle_model_configurations.json).
 MODEL_RUNTIME_DEFAULTS = {"c_shell": 1.0, "c_dielectric": 1.0}
