@@ -114,11 +114,16 @@ def main() -> None:
         started = time.monotonic()
         commands = [
             [sys.executable, "scripts/generate_figure_data.py"],
-            [sys.executable, "scripts/evaluate_direct_absorption_heat.py"],
-            [sys.executable, "scripts/validate_thermal_references.py", "--equilibrium"],
             [sys.executable, "scripts/render_figures.py"],
-            ["bash", "render.sh", "notebook.qmd"],
-            [sys.executable, "scripts/build_absorption_handoff.py"],
+            [sys.executable, "scripts/render_regression_overview.py"],
+        ]
+        # Heat and thermal checks stop in transformed_reaction_enthalpies; the
+        # strict render and handoff require their outputs.
+        blocked = [
+            "scripts/evaluate_direct_absorption_heat.py",
+            "scripts/validate_thermal_references.py --equilibrium",
+            "render.sh notebook.qmd",
+            "scripts/build_absorption_handoff.py",
         ]
         try:
             for command in commands:
@@ -147,9 +152,14 @@ def main() -> None:
             )
             raise SystemExit(1) from exc
         print(
-            "Selected data, figures, notebook, and handoff refreshed and hash-checked",
-            flush=True,
+            "Blocked, not run: "
+            + "; ".join(blocked)
+            + ". The pinned Engine lacks the reaction-reference temperature derivative "
+            "(tannerpolley/ePC-SAFT#84). Figure data and figures were refreshed; render "
+            "with `bash render.sh notebook.qmd --working-copy`.",
+            file=sys.stderr,
         )
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
