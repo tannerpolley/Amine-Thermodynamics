@@ -2070,3 +2070,13 @@ G,derivatives,reaction_reference_temperature,native_availability,1,unavailable,,
 S,fit_objective_capability,adopted-fit-objective,fit_objective_capability,1,could_evaluate,,,,retained_evidence,No timing taken. full-validation-targets.csv retains 113 evaluated heat rows from the superseded wheel 40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805; file_sha256=10977052cf96e1325caca994a2bc840db57bee1b3528e2b03b2e13bc845e40f3.
 G,fit_objective_capability,adopted-fit-objective,fit_objective_capability,1,not_measurable,,,,blocked,"No timing taken: the adopted objective includes absorption-heat rows, and the current Greenfield path lacks the required reference-enthalpy actions (Engine #84)."
 S_vs_G,engine_pair,co2-partial-pressure,max_abs_ln_greenfield_over_superseded,1,0.00906837925752713,0.00906837925752713,0.00906837925752713,absolute ln ratio,summarized,state=vle_obs_0233; n_common_states=66
+G,addendum_value_check,selected-five-state-pass,evaluated_state_count,5,5,,,states,summarized,b66 first pass; all five statuses evaluated; no time claim
+G,addendum_value_check,selected-five-state-pass,max_relative_difference_vs_3eb502ab,21,0.0,0.0,0.0,relative,equal,21 matching predictions; state=Bottinger2008_state_050; metric=prediction:Bottinger2008_state_050-hco3; baseline median over three old runs
+G,addendum_derivatives,temperature,native_availability,1,available,,,status,available,native solved-state temperature action; compared with centered re-solves
+G,addendum_derivatives,pressure,native_availability,1,available,,,status,available,native solved-state pressure action; compared with centered re-solves
+G,addendum_derivatives,eos_parameter,native_availability,1,unavailable,,,status,unavailable,CO2-water kij status from solved_state_actions
+G,addendum_derivatives,reaction_coefficient,native_availability,1,unavailable,,,status,unavailable,reaction-coefficient directions remain unavailable under Engine #61
+G,addendum_derivatives,reaction_reference_temperature,native_availability,1,available,,,status,available,Engine #84 R1-R5 reference-temperature chain is included in the available source-referenced temperature action
+G,addendum_derivatives,temperature,native_vs_fd_relative_error,1,1.0977241303922117e-07,,,relative,evaluated,native=0.00017227801260069343; fd=0.00017227803151206866
+G,addendum_derivatives,pressure,native_vs_fd_relative_error,1,1.205646643679656e-07,,,relative,evaluated,native=6.429815004866553e-11; fd=6.429814229658159e-11
+G,addendum_derivatives,kij,native_vs_fd_relative_error,1,,,,relative,not_applicable,native=unavailable; fd=-9.328707702149774e-06
