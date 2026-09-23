@@ -2,7 +2,7 @@
 
 - Status: authoritative repository definition under ePC-SAFT Governance D-038
 - Scope: aqueous monoethanolamine (MEA)--water--carbon dioxide thermodynamics
-- Current parameter status: no active (accepted) MEA parameter set; the exploratory incumbent used for comparisons and fixed-chemistry diagnostics is `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json` (sha256 `568f7a5f...8524d`, storage-compacted 2026-09-11), tracked in `analyses/mea_parameter_bundle/results/parameter-record-history.csv`
+- Current parameter status: no active (accepted) MEA parameter set; the exploratory incumbent used for comparisons and fixed-chemistry diagnostics is `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json` (sha256 `868a5018...fcb7be`; explicit `exclude-same-sign-ion-pairs` since 2026-09-22), tracked in `analyses/mea_parameter_bundle/results/parameter-record-history.csv`
 
 ## Question and intended use
 
