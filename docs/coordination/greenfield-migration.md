@@ -1118,3 +1118,22 @@ mapping fingerprint to the state cache so candidate models cannot reuse selected
 states. The frozen foundation `data/input/parameters.json` declares no ionic-dispersion rule
 and the Born study's `AUTO` variants declare no Born constants; both now fail explicitly
 rather than receive an invented default.
+
+Issue #96 port on Engine main `7fa8aaf4` (wheel `e9fb8a47...3e62`, 2026-09-23): the figure,
+permittivity and Kiepe CO2-water scripts now call only the current Engine API; retained
+results were not regenerated. `generate_figure_data.py` reads temperature, loading and the
+source continuation fingerprint from the packet request and takes reaction values from
+`parameter_mapping()`; packet state `vle_obs_0186` reproduces the `main-cb16` sweep to
+1.3e-12 in pCO2. It still refuses to run because the parameter file after the exclusion
+correction (`868a5018...`) is not a recorded incumbent. The Kiepe generator uses
+`bubble_point` with a per-isotherm warm-start chain seeded at the first cold-converging
+dilute composition; 38/39 rows reproduce the retained pressures to 4.3e-9 relative, and
+`kiepe-313.20-13` (retained 22.43 MPa, dense CO2-rich branch) fails without a hand seed.
+Born-study variants B and C use permittivity rules the Engine no longer admits.
+`run_best_in_slot_campaign.py` is deleted: its optimizer coordinates (reaction coefficients,
+ion solvation and Born diameters) and pCO2 observations are not `regression` coordinates or
+kinds, and the retained grid campaign superseded it. The thermal chain
+(`evaluate_direct_absorption_heat.py`, `validate_thermal_references.py`,
+`run_reaction_temperature_fit.py`) stops in `transformed_reaction_enthalpies` on the missing
+reference temperature derivative (Engine #84); `--sensitivity-check` stops on missing
+reaction-coefficient actions (Engine #61).
