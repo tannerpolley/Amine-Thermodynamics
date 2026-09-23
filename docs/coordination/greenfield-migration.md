@@ -1120,7 +1120,7 @@ and the Born study's `AUTO` variants declare no Born constants; both now fail ex
 rather than receive an invented default.
 
 Issue #96 port on Engine main `7fa8aaf4` (wheel `e9fb8a47...3e62`, 2026-09-23): the figure,
-permittivity and Kiepe CO2-water scripts now call only the current Engine API; retained
+permittivity and Kiepe CO2-water scripts now call only current Engine callables; retained
 results were not regenerated. `generate_figure_data.py` reads temperature, loading and the
 source continuation fingerprint from the packet request and takes reaction values from
 `parameter_mapping()`; packet state `vle_obs_0186` reproduces the `main-cb16` sweep to
