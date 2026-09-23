@@ -20,6 +20,8 @@ from shared_evaluation import (
     evaluate_state,
     load_state_packet,
     anchor_from,
+    parameter_fingerprint,
+    reaction_values,
     verify_wheel,
 )
 from run_direct_parameter_campaign import (
@@ -338,7 +340,7 @@ def variant_mapping(variant: str) -> dict[str, object]:
     mapping["document_id"] = (
         f"mea-born-permittivity-{variant.lower().replace('.', 'p')}"
     )
-    return epcsaft.Parameters.from_mapping(mapping).to_mapping()
+    return mapping
 
 
 def packet_catalog() -> list[dict[str, object]]:
@@ -491,13 +493,10 @@ def evaluate_variant(
     task: tuple[str, str, int, int],
 ) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     variant, phase, shard, shard_count = task
-    parameters = epcsaft.Parameters.from_mapping(variant_mapping(variant))
-    model = epcsaft.Mixture(parameters)
-    reactions = {
-        spec.identity: float(spec.value.magnitude)
-        for spec in parameters.parameter_specs
-        if spec.identity.startswith("reaction:")
-    }
+    mapping = variant_mapping(variant)
+    fingerprint = parameter_fingerprint(mapping)
+    model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping))
+    reactions = reaction_values(mapping)
     reference = epcsaft.Mixture(
         epcsaft.Parameters.from_mapping(variant_mapping("E-ORG"))
     )
@@ -524,6 +523,7 @@ def evaluate_variant(
                 f"{observation['observation_id']}-{variant}",
                 anchors,
                 budget_s=45,
+                model_fingerprint=fingerprint,
             )
             status = record["status"]
             code, diagnostic = record["failure_code"], record["failure_diagnostic"]
@@ -552,7 +552,7 @@ def evaluate_variant(
             "failure_code": code,
             "failure_diagnostic": diagnostic,
             "elapsed_s": time.perf_counter() - started,
-            "parameter_fingerprint": parameters.fingerprint,
+            "parameter_fingerprint": fingerprint,
             "cache_hit": False if record is None else record["cache_hit"],
         }
         if record is not None:
