@@ -14,10 +14,14 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-import epcsaft
 from epcsaft import equilibrium, regression
 
-from shared_evaluation import corrected_request, load_state_packet, verify_wheel
+from shared_evaluation import (
+    corrected_request,
+    load_parameters,
+    load_state_packet,
+    verify_wheel,
+)
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
@@ -90,7 +94,7 @@ def numeric(value: object, unit: str) -> float:
 
 
 def parameter_origins() -> dict[str, float]:
-    parameters = epcsaft.Parameters.from_json(PARAMETERS)
+    parameters = load_parameters()
     specs = {spec.identity: spec for spec in parameters.parameter_specs}
     return {
         name: numeric(specs[record["identity"]].value, specs[record["identity"]].unit)

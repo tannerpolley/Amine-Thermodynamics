@@ -1107,7 +1107,7 @@ current pin after PR #124 merged. Its 79-request cold sweep (`main-cb16`) evalua
 116.662 s total (median 0.55 s); the maximum relative change in `pressure_pa` and
 `co2_partial_pressure_pa` against the retained `pr124-d1b4` rows is 0.0 for both. Those
 historical rows retain the wheel hash used for that run. The evaluator pins only the
-SHA-256 of the installed wheel; it no longer
+SHA-256 of the wheel file at the recorded install URL (`direct_url.json`); it no longer
 hashes the mutable greenfield `build/environment-wheel/` path, which every Engine rebuild
 overwrites. The current Engine removed `Parameters.parameter_specs`, `with_values`,
 `to_mapping`, `fingerprint` and `Mixture.parameter_fingerprint` and requires explicit Born
