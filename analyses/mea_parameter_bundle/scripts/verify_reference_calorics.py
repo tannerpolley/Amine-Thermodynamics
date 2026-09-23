@@ -17,15 +17,22 @@ from __future__ import annotations
 
 import csv
 import json
-import math
 from math import comb
 from pathlib import Path
 
 import shared_evaluation as shared
 import verify_temperature_reference as vt
-from epcsaft import (GAS_CONSTANT_J_PER_MOL_K as R, IdealCorrelation, IdealInterval, IdealPolynomial,
-                     IdealShomate, Mixture, PropertyObservable, ThermochemistryRecord)
-from epcsaft import equilibrium
+from epcsaft import GAS_CONSTANT_J_PER_MOL_K as R
+from epcsaft import (
+    IdealCorrelation,
+    IdealInterval,
+    IdealPolynomial,
+    IdealShomate,
+    Mixture,
+    PropertyObservable,
+    ThermochemistryRecord,
+    equilibrium,
+)
 
 OUTPUT = Path(__file__).resolve().parents[1] / "results" / "reference-calorics"
 CALORIMETRY = Path(__file__).resolve().parents[3] / "data/reference/MEA/observations/calorimetry/MEA_heat_of_absorption_observations.csv"
