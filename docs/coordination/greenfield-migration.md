@@ -1086,5 +1086,8 @@ solved-pressure requests from cold (`cold-start-sweep/cold-start-sweep.csv`, pro
 `scripts/run_cold_start_sweep.py`), 69 -> 76 evaluate and total time falls 556 -> 380 s;
 0128/0145/0227 regress and 0129-0131/0208 slow down because the packet liquid guesses
 carry unspeciated molecular CO2 (x_CO2 8.9e-5 to 1.4e-3 against ~1e-6 speciated), so the
-seed is the saturation pressure of a wrong liquid. Speciated packet liquid guesses are the
-remaining application-side repair.
+seed is the saturation pressure of a wrong liquid. The adapter's recovery plan now adds a
+`speciated-liquid-start` after a failed cold packet start for solved-pressure requests: the
+liquid alone is speciated at the packet pressure seed and replaces the packet liquid guess.
+It recovers 0128, 0145 and 0227 at the baseline states (P and pCO2 within 1e-11 relative),
+so all 79 requests evaluate from cold without anchors; earlier attempts are unchanged.
