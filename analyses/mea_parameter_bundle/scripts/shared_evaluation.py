@@ -968,7 +968,7 @@ def _solve_in_child(
 
 
 def attempt_plan(
-    temperature_c: int, loading: float, anchors: list[Anchor]
+    temperature_c: int, loading: float, anchors: list[Anchor], solved_pressure: bool = False
 ) -> list[tuple[str, Anchor | None]]:
     same = sorted(
         (a for a in anchors if a.temperature_c == temperature_c),
@@ -982,30 +982,33 @@ def attempt_plan(
     if same:
         plan.append(("same-temperature-anchor", same[0]))
     plan.append(("cold-packet-start", None))
-    plan.append(("speciated-liquid-start", None))
+    if solved_pressure:
+        plan.append(("speciated-liquid-start", None))
     plan.extend(("cross-temperature-anchor", a) for a in cross[:2])
     return plan[:4]
 
 
 def _speciated_liquid_anchor(
-    model: epcsaft.Mixture, request: dict[str, object], temperature_c: int, loading: float
-) -> Anchor | None:
+    model: epcsaft.Mixture, request: dict[str, object], temperature_c: int, loading: float,
+    timeout_s: float,
+) -> tuple[Anchor | None, str, str]:
     """Speciate the liquid alone at the packet pressure seed to replace an unspeciated guess.
 
     Packet liquid guesses can carry molecular CO2 far above its speciated value, which puts
     the Engine's pinned-vapor pressure seed at the saturation pressure of the wrong liquid.
     """
-    seed = float(request["pressure"].get("initial", 0.0))
     liquid = copy.deepcopy(request)
     liquid["phases"] = [p for p in liquid["phases"] if p["fluid_role"] == "liquid"]
-    liquid["pressure"] = {**liquid["pressure"], "role": "fixed", "value": seed}
+    liquid["pressure"] = {
+        **liquid["pressure"], "role": "fixed", "value": float(liquid["pressure"].get("initial", 0.0))
+    }
     try:
-        result = equilibrium.solve_equilibrium(model, _problem_from_request(liquid))
-    except Exception:
-        return None
-    if not result.success:
-        return None
-    return Anchor(temperature_c, loading, seed, tuple(map(float, result.mole_fractions)), 0.0)
+        snapshot = _solve_in_child(model, _problem_from_request(liquid), timeout_s)
+    except Exception as exc:
+        return None, "speciation_failed", f"{type(exc).__name__}: {exc}"
+    if snapshot.status != "evaluated":
+        return None, snapshot.failure_code or "speciation_failed", snapshot.failure_diagnostic
+    return liquid_anchor(snapshot, temperature_c, loading), "", ""
 
 
 def solve_with_recovery(
@@ -1034,7 +1037,8 @@ def solve_with_recovery(
     seen: set[tuple[object, ...]] = set()
     attempts: list[dict[str, object]] = []
     for kind, anchor in attempt_plan(
-        temperature_c, float(base["reaction_system"]["feed_amounts_mol"][0]), anchors
+        temperature_c, float(base["reaction_system"]["feed_amounts_mol"][0]), anchors,
+        base["pressure"]["role"] != "fixed",
     ):
         if perf_counter() >= deadline:
             attempts.append(
@@ -1048,12 +1052,16 @@ def solve_with_recovery(
             )
             break
         if kind == "speciated-liquid-start":
-            if base["pressure"]["role"] == "fixed":
-                continue
-            anchor = _speciated_liquid_anchor(
-                model, base, temperature_c, float(base["reaction_system"]["feed_amounts_mol"][0])
+            clock = perf_counter()
+            anchor, code, diagnostic = _speciated_liquid_anchor(
+                model, base, temperature_c, float(base["reaction_system"]["feed_amounts_mol"][0]),
+                max(0.01, deadline - clock),
             )
             if anchor is None:
+                attempts.append({
+                    "kind": kind, "anchor": None, "wall_s": perf_counter() - clock,
+                    "status": "non_evaluable", "failure_code": code, "failure_diagnostic": diagnostic,
+                })
                 continue
         candidate = copy.deepcopy(base)
         try:
