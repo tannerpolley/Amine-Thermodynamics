@@ -10,35 +10,52 @@ dominates the misfit: (a) the data, (b) the reaction/reference chain, or (c) the
 
 ## Outcome
 
-**Mainly (c), with a measurable data floor from (a); (b) is refuted as the dominant cause.**
+**The residual lies outside the local span of the R2/R4/R5 constants.** It therefore points to
+the non-reaction part of the model. That is either the fitted residual EOS/ionic parameters or
+the ePC-SAFT ionic formulation itself; this work does not test which. The conclusion is reached
+by eliminating (b), not by testing the EOS parameters directly. The data (a) add a floor of
+roughly 0.2–0.4 in ln, an estimate.
 
-- **The shape comes from the model.** About 79% of the residual sum of squares is one loading
-  pattern with no temperature trend. At every temperature from 40 to 120 °C, the model
-  under-predicts pCO2 below loading 0.2 (mean ln −0.21). It over-predicts pCO2 by about 2× at
-  loadings 0.3–0.5 (mean +0.75). It under-predicts again above 0.55 (mean −0.51).
-- **No change to the R2/R4/R5 constants can make that shape.** Within a nominal source-sized
-  bound of ±0.3 in ln K, the best correction only moves the RMS from 0.59 to 0.56. Even
-  unbounded shifts of about −5.5 in ln K (a factor of about 250 in K) still leave an RMS of 0.47.
+- **The error has one shape.** Most of the residual follows loading, not temperature. The model
+  under-predicts pCO2 below loading 0.2 (mean ln −0.21), over-predicts it by about 2× at
+  0.3–0.5 (mean +0.75), and under-predicts again above 0.55 (mean −0.51). Coverage limits how
+  far "every temperature" holds:
+  - The low and middle bins keep these signs at all five temperatures.
+  - The 0.2–0.3 bin exists only at 40 and 60 °C.
+  - The ≥0.55 bin is negative at 40, 60, 80 and 120 °C, but 120 °C has one point there.
+  - At 100 °C that bin averages +0.03 over n=3.
+- **Changing R2, R4 or R5 cannot reproduce the shape.** Allowing ln K shifts of up to ±0.3 cuts
+  the RMS only from 0.59 to 0.56. An unbounded linearized fit reaches 0.47. That fit is an
+  ill-conditioned extrapolation:
+  - The R2 and R5 sensitivities are correlated at −0.91.
+  - The singular values of the sensitivity matrix are 12.6, 4.5 and 0.36.
+  - The two −5.5 shifts largely cancel each other.
 - **The fit did not target these states.** The fit that produced the adopted reaction values
-  scored only 5 pCO2 rows, all Jou 1995 at 80 or 120 °C. Its coordinates were reaction
-  enthalpies that preserve ln K at the 313.15 K pivot. It therefore could not act on the
-  40 °C residuals, which are the largest.
-- **The data set a floor of about 0.3 in ln.** Hilliard's observed pCO2 sits +0.17 in ln above
-  Jou's at the same temperature and loading. The sources state a 2% relative loading
-  uncertainty. On the steep part of the curve, that alone moves ln pCO2 by 0.28–0.31.
+  scored only 5 pCO2 rows, all Jou at 80 or 120 °C. Its coordinates were reaction enthalpies at
+  a 313.15 K pivot, which leave ln K at 40 °C unchanged, and 40 °C has the largest misfit.
+- **The data set a floor.** Hilliard's observed pCO2 sits +0.17 in ln above Jou's at the same
+  temperature and loading. The sources' stated loading uncertainty adds scatter. Hilliard gives
+  ±2% relative. Jou gives ±3% for its BaCO3 method (used for many points) and ±2% for its GC
+  method.
 - **The migration does not explain the misfit.** The Engine wheel, dispersion rule and adapter
-  changes are not the cause. Today's predictions match the adoption-time replay to an RMS of
+  changes are not the cause: today's predictions match the adoption-time replay to an RMS of
   0.007 in ln.
 
 ## Identity and reproduction
 
 | item | value |
 |---|---|
-| Engine wheel | `e9fb8a47e2f98a4f45c66b001836a4de68c7306ee20a9f50a891e940a2413e62` (main `7fa8aaf4`) |
+| Engine wheel for this run | `e9fb8a47e2f98a4f45c66b001836a4de68c7306ee20a9f50a891e940a2413e62` (Engine `7fa8aaf4`) |
 | parameter record | `868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be` |
-| state packet | `e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba` |
+| state packet, `.gz` archive bytes | `e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba` |
+| state packet, decompressed content (the `packet_sha256` column in the CSVs) | `86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448` |
 | producer | `../../../scripts/diagnose_pco2_misfit.py` (its SHA-256 is written into every CSV row) |
 | inputs reused | `../reaction-temperature-fit/cold-start-sweep/cold-start-sweep.csv` (`main-cb16` rows); `../../reaction-temperature-fit/full-validation-targets.csv` (adoption-time replay, wheel `40fba7cf…`) |
+
+The result carries over to the newer pin. Open PR #99 (`work/mea-96-port`) pins wheel
+`3eb502ab…` (Engine `83ac1126`). Its 79-state `main-83ac` sweep differs from `main-cb16` by at
+most 2.3e-11 relative in `co2_partial_pressure_pa`, and `main-cb16` equals this run's fresh base
+solves to 2.8e-12 in ln.
 
 Command, run single-threaded:
 
@@ -58,9 +75,10 @@ Files:
 
 - `pco2-misfit-states.csv`: one row per state. Columns include the observed value, the fresh,
   sweep and adoption-time predictions, ln(pred/obs), d ln pCO2 / d ln K for R2/R4/R5, the
-  Hilliard-over-Jou interpolation, the pCO2 effect of the 2% loading uncertainty, and the residual
+  Hilliard-over-Jou interpolation, the pCO2 effect of a 2% loading uncertainty, and the residual
   left after each linear correction.
-- `pco2-misfit-summary.csv`: every aggregate quoted below.
+- `pco2-misfit-summary.csv`: the aggregates quoted below. The binning-robustness shares in
+  (c-iii) were computed from `pco2-misfit-states.csv` after the run and are not rows in this file.
 
 ## Evidence by hypothesis
 
@@ -88,12 +106,15 @@ The three kinds of evidence are kept separate:
 - The three families were given equal weight.
 - The fit coordinates were reaction-enthalpy shifts at the 313.15 K pivot, which keep ln K at
   40 °C unchanged (`README.md` in `../../reaction-temperature-fit/`).
-- So the loading dependence at 40–60 °C comes from the pre-existing residual EOS and ionic
-  parameters, not from any pCO2 objective.
+- So the loading dependence at 40–60 °C comes from the model outside the reaction constants, not
+  from any pCO2 objective.
 
-### (c-iii) The residual EOS/ionic model makes the wrong loading shape: **supported as dominant** (prediction)
+### (c-iii) The loading shape lies outside the reaction-constant span: **supported** (prediction)
 
-Mean ln(pred/obs) by loading bin and temperature:
+This points to the non-reaction model. Whether the fitted EOS/ionic parameters or the ePC-SAFT
+ionic formulation is responsible is untested.
+
+Mean ln(pred/obs) by loading bin and temperature (a dash means no states):
 
 | loading | 40 °C | 60 °C | 80 °C | 100 °C | 120 °C |
 |---|---:|---:|---:|---:|---:|
@@ -101,14 +122,23 @@ Mean ln(pred/obs) by loading bin and temperature:
 | 0.2–0.3 | +0.28 | +0.37 | – | – | – |
 | 0.3–0.5 | +0.78 | +0.94 | +0.68 | +0.72 | +0.54 |
 | 0.5–0.55 | +0.31 | +0.21 | +0.37 | – | +0.12 |
-| ≥ 0.55 | −0.88 | −0.46 | −0.61 | +0.03 | −0.48 |
+| ≥ 0.55 (n = 4/4/3/3/1) | −0.88 | −0.46 | −0.61 | +0.03 | −0.48 |
 
 Removing the five loading-bin means takes away 79% of the residual sum of squares. The RMS drops
 from 0.59 to 0.27. Removing temperature means takes away 12%; removing source means takes away
 13%.
 
-The pattern has the same signs in both sources and at every temperature. The largest single
-misses are:
+The loading share holds up under other binnings:
+
+| grouping | share of sum of squares removed |
+|---|---:|
+| 3 loading quantiles | 51% |
+| 5 loading quantiles | 74% |
+| 10 loading quantiles | 85% |
+| the five fixed loading bins crossed with temperature | 86% |
+| random relabelling of the five bins (2000 draws) | 12.2% mean, 22.2% at the 99th percentile |
+
+The largest single misses are:
 
 - Jou 40 °C, loading 0.642: −1.62.
 - Jou 60 °C, loading 0.389: +1.26.
@@ -130,21 +160,27 @@ beyond 323 K would give a temperature-growing error; that is not seen.
 | 0.5–0.55 | −0.92 | −0.24 | +0.96 |
 | ≥ 0.55 | −0.84 | −0.49 | +0.84 |
 
-R2 and R5 act almost uniformly across loading, so they only shift pCO2 up or down. R4
-(carbamate reversion) is the one lever whose effect changes sign with loading, but it changes
-sign only once, from + to −. The residual needs up, then down, then up. That shape lies outside
-the span of these three constants.
+R2 and R5 act almost uniformly across loading, so they only shift pCO2 up or down. That uniform
+direction already covers a constant shift of the CO2 reference. R4 (carbamate reversion) is the
+one lever whose effect changes sign with loading, but it changes sign only once, from + to −. The
+residual needs up, then down, then up. That shape lies outside the local span of these three
+constants.
 
-**Linear corrections (prediction, 77 states):**
+**Linearized corrections (prediction, 77 states):**
 
 | correction | ln K shifts | RMS after |
 |---|---|---:|
-| ±0.3 ln K on R2, R4, R5 (nominal source-sized bound) | −0.19, −0.13, −0.30 | 0.558 |
+| ±0.3 ln K on R2, R4, R5 (nominal bound; source uncertainties not transcribed) | −0.19, −0.13, −0.30 | 0.558 |
 | unbounded constant shifts on R2, R4, R5 | −5.56, −0.01, −5.44 | 0.467 |
 | unbounded constant plus 1/T term, 6 coordinates | intercepts −12.1, +0.3, −11.3 | 0.363 |
 
-The unbounded shifts are far outside the linear range and any source uncertainty. They are
-reported only to show that the residual is mostly orthogonal to the reaction constants.
+The unbounded rows are linearized, ill-conditioned extrapolations:
+
+- The R2 and R5 sensitivities are correlated at −0.91.
+- The singular values are 12.6, 4.5 and 0.36.
+- The R2 and R5 shifts largely cancel each other.
+
+They show direction only. They are not candidate constants.
 
 **Basis and units.** Checked, and consistent:
 
@@ -152,8 +188,8 @@ reported only to show that the residual is mostly orthogonal to the reaction con
 - Loading is total CO2 per mol MEA in both sources and in the packet feed.
 - Every state is 30 wt% MEA, which is 7 m in Hilliard.
 - The vapor holds only molecular CO2. The target is y_CO2·P, the same quantity both sources
-  report (Jou 1995 p. 142: CO2 partial pressure from the GC N2/CO2 ratio after subtracting the
-  Raoult solvent pressure).
+  report (Jou 1995 printed p. 142: CO2 partial pressure from the GC N2/CO2 ratio after
+  subtracting the Raoult solvent pressure).
 
 The CO2 physical-solubility path (the CO2–water EOS pair) was not perturbed; see Limits.
 
@@ -172,27 +208,34 @@ mean is lower overall because it includes the under-predicted high-loading rows 
 Hilliard 2008 (§2.4.3, Fig. 2.4-5, printed p. 37) reports its 7 m MEA data as consistent with Jou
 1995 at 40 and 60 °C.
 
-**Scatter floor.** Two estimates agree:
+**Stated loading uncertainty.**
 
-- The stated loading uncertainty is 2% relative. Hilliard 2008 §2.3.4, printed pp. 28–29, gives
-  vapor ±2% expanded and loading ±2% standard. Jou 1995 p. 141 gives ±3% for BaCO3 and ±2% for
-  GC. Propagated through the observed local slope d ln p/dα, that is 0.04 in ln below loading
-  0.3 and 0.28–0.31 above it (RMS 0.31 over all states).
+- Hilliard 2008 §2.3.4, printed pp. 28–29, gives vapor ±2% expanded and loading ±2% standard.
+- Jou 1995, printed p. 142, gives ±3% for the BaCO3 precipitation-titration method, which was
+  used for many points, and ±2% for the gas-chromatograph method. Those figures come from an
+  internal-consistency test at loading below 0.3 near room temperature.
+
+**Scatter floor: roughly 0.2–0.4 in ln, an estimate.** The two estimates are crude:
+
+- The CSV column propagates a uniform 2% loading uncertainty through `np.gradient` of the
+  observed ln pCO2. On closely spaced, noisy loadings that slope is unstable, reaching 1.195 in
+  ln at `vle_obs_0136`, Hilliard 40 °C, loading 0.464. The column RMS (0.31) is therefore
+  indicative only. The column also uses 2% for Jou's BaCO3 points, which carry 3%.
 - Differences in the residual between adjacent loadings within a (source, T) group give a
   scatter of at most 0.30 in ln. This is an upper bound, because model curvature is included.
+- Some observed curves are non-monotone, for example Jou 100 °C at loadings 0.571/0.589
+  (509/376 kPa) and Hilliard 40 °C at 0.382–0.389.
 
-Both match the 0.27 left after removing the loading-bin means. Some observed curves are
-non-monotone, for example Jou 100 °C at loadings 0.571/0.589 (509/376 kPa) and Hilliard 40 °C
-at 0.382–0.389.
-
-**Benchmark.** Hilliard's own fitted eNRTL model gets pCO2 AARD of 30.0% on the Hilliard data
-and 13.6% on Jou (Hilliard 2008 Table 13.4-6, printed p. 447). The present model gets 67% and
-57%. The data therefore allow a fit about 2–4× better than the adopted record.
+**Benchmark (indicative).** Hilliard's own fitted eNRTL model reached 30.0% pCO2 AARD on the
+Hilliard data and 13.6% on Jou (Hilliard 2008 Table 13.4-6, printed p. 447). That points to a
+floor near 0.3 in ln on the Hilliard data. The present model gets 67% and 57%, so the data
+appear to allow a fit about 2–4× better. This comparison is indicative, because Hilliard's
+coverage of states differs from these 79.
 
 **Specific outliers.** No single state drives the result. The largest misses belong to the
 systematic high- and mid-loading groups.
 
-## Physical meaning
+## Physical meaning (hypothesis)
 
 pCO2 in loaded MEA is set by how the CO2 is shared between carbamate, bicarbonate and molecular
 CO2, weighted by activities. The observed misfit shape has three parts:
@@ -201,13 +244,10 @@ CO2, weighted by activities. The observed misfit shape has three parts:
 - Too much in the carbamate plateau.
 - Too little rise past loading 0.5, where bicarbonate and physical CO2 take over.
 
-That points to how the model's non-ideality varies with composition (ionic strength and the
-MEAH+/MEACOO−/HCO3− interactions) rather than to a single wrong equilibrium constant. A wrong
-constant scales pCO2 almost uniformly, or monotonically in loading for R4.
-
-The model is too flat in the plateau and too shallow at high loading. Because of that, the
-enthalpy-only reaction fit could improve pressure RMSE only on average. Its record already notes
-that the shifts "compensate other temperature-dependent model deficiencies".
+That shape is consistent with how the model's non-ideality varies with composition (ionic
+strength and the MEAH+/MEACOO−/HCO3− interactions). It is less consistent with a single wrong
+equilibrium constant, which scales pCO2 almost uniformly, or monotonically in loading for R4.
+This mechanism is a hypothesis; no activity-coefficient decomposition was computed.
 
 ## Limits
 
@@ -215,17 +255,19 @@ that the shifts "compensate other temperature-dependent model deficiencies".
   linear. The unbounded solutions extrapolate far past validity and only show direction.
 - The ±0.3 ln K bound is nominal. Source uncertainties for R2, R4 and R5 were not transcribed.
 - R1 and R3 were not perturbed. R1 is water autoprotolysis and R3 is bicarbonate/carbonate. At
-  these states the adoption screen found them near-null (column norms 1.6e-5 and 0.0033 log10
-  per kJ/mol).
+  the pH of loaded MEA, hydroxide, hydronium and carbonate are minor species, so constant R1/R3
+  shifts are expected to move pCO2 little. That expectation is not a computed result.
 - CO2 physical solubility (the CO2–water EOS pair and the neutral reference) and the residual
   ionic parameters were not perturbed. This diagnosis shows the residual lies outside the
-  reaction span. It does not show that those parameters can close it.
+  reaction span. It does not show whether the EOS parameters or the ionic formulation can close
+  it.
 - Jou's rows are N2-carrier measurements mapped onto a neutral-only bubble at a different total
   pressure (migration record, "Reactive VLE"). The Poynting-type effect is estimated below 0.01
   in ln at 200 kPa. This is an estimate, not a solve.
-- All 79 rows are labelled calibration. The Jou group w=0.3/T=80 °C is a grouped-manifest
-  validation reservation (a lineage conflict recorded in the migration record). Nothing here is
-  independent validation.
+- All 79 rows are labelled calibration. The Jou 30 wt% / 80 °C group
+  (`vle|Jou1995|w=0.3|T=80`) is `reserved_validation` in
+  `data/reference/MEA/manifests/grouped_split_manifest.csv`. The migration record's row inventory
+  records this as a lineage conflict. Nothing here is independent validation.
 
 ## Next step that would resolve what remains
 
@@ -242,5 +284,7 @@ Then check whether an up–down–up loading shape lies in their span.
   to `cse:design`, with speciation held as a constraint and Xu 2011 kept as the only held-out
   pressure block.
 - **If it does not,** the ePC-SAFT ionic formulation (Born/permittivity or ion-pair treatment) is
-  the limitation. Either way, about 0.3 in ln RMS is the data floor. No fit should be asked to go
-  below it on these two sources.
+  the limitation.
+
+A target set well below the estimated 0.2–0.4 in ln data floor on these two sources would fit
+measurement scatter rather than chemistry.
