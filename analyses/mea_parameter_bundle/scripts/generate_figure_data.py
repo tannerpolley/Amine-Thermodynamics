@@ -187,7 +187,9 @@ def main() -> None:
     )
     parameter_sha256 = sha256(PARAMETERS)
     with PARAMETER_HISTORY.open(encoding="utf-8", newline="") as handle:
-        incumbent = list(csv.DictReader(handle))[-1]["candidate_sha256"]
+        last = list(csv.DictReader(handle))[-1]
+    # A rejected candidate row keeps the previous incumbent in incumbent_sha256.
+    incumbent = last["incumbent_sha256" if last["decision"] == "not_adopted" else "candidate_sha256"]
     assert parameter_sha256 == incumbent, (
         "parameter document is not the current incumbent in parameter-record-history.csv"
     )
