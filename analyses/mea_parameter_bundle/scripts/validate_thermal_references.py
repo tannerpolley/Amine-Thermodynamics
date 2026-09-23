@@ -1,7 +1,7 @@
 """Validate the anchored species thermal references for non-isothermal use.
 
-The validation starts from the anchored reference, which the pinned Engine
-cannot construct (see ``evaluate_direct_absorption_heat``).  The checks that
+The validation starts from the anchored reference, which has not been rebuilt
+on the pinned Engine (see ``evaluate_direct_absorption_heat``).  The checks that
 produced the retained validation results are in Git history.
 """
 

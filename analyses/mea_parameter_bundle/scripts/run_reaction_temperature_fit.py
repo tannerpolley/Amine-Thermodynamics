@@ -1,9 +1,9 @@
-"""Bounded R1--R5 reaction-enthalpy fit (retired until Engine #84 and #61).
+"""Bounded R1--R5 reaction-enthalpy fit (retired until its heat route is rebuilt and Engine #61).
 
 Every fit mode -- screen, candidate, parity, benchmark, full replay, partial
 summary and adoption -- depends on heat evaluations or on candidate and heat
-records that only the thermal stages write, and those stages need the reaction
-reference temperature derivative the pinned Engine does not expose (see
+records that only the thermal stages write, and those stages have not been
+rebuilt on the pinned Engine's reference temperature actions (see
 ``evaluate_direct_absorption_heat``).  The sensitivity check needs reaction
 coefficient equilibrium actions (Engine #61).  Only ``--self-check`` remains:
 it verifies the reaction-enthalpy shift algebra, cohort roles and the recovery
@@ -222,7 +222,7 @@ def main() -> None:
         )
     else:
         # The candidate, adoption and full-replay modes all depend on heat and
-        # candidate records that only the #84-blocked stages write.
+        # candidate records that only the unported thermal stages write.
         raise RuntimeError(THERMAL_REFERENCE_UNAVAILABLE)
 
 
