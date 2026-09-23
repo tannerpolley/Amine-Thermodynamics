@@ -1138,7 +1138,7 @@ kinds, and the retained grid campaign superseded it. The thermal chain stops on 
 reference temperature derivative (Engine #84): `evaluate_direct_absorption_heat.py` and
 `validate_thermal_references.py` raise `THERMAL_REFERENCE_UNAVAILABLE` on entry. The
 reaction-temperature fit is retired as one unit: every mode of
-`run_reaction_temperature_fit.py` except `--self-check` raises it on entry, because the
+`run_reaction_temperature_fit.py` except `--self-check` and `--sensitivity-check` raises it on entry, because the
 screen, candidate, parity and benchmark consume the thermal reference and the full replay,
 partial summary and adoption require `candidate-receipt.json` and the heat summary, which
 only those blocked stages write for the current parameter file. `--sensitivity-check` stops
@@ -1162,7 +1162,8 @@ generator gives the same 38/39 result on this wheel (`kiepe-313.20-13` infeasibl
 Engine main `443a9da492fd5ac7724525945d108c6a2a854d51` (wheel
 `b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58`, 2026-09-23) is the current pin.
 It adds first-order reference temperature actions on the R1--R5 referenced reactions (Engine #84,
-qualified on the adopted model in `results/reference-temperature/`) and record-anchored total
+qualified on the adopted model in `results/reference-temperature/` on candidate wheel
+`59ac20de...`, not re-run on this pin) and record-anchored total
 enthalpy on referenced reactive states (Engine #138). Its 79-request cold sweep (`main-443a`)
 evaluates 79/79 in 141.6 s total (median 0.58 s per state) at host load average 4--9; pressure and
 CO2 partial pressure equal the `main-83ac` rows exactly. The heat, thermal-reference and

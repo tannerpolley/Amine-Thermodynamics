@@ -1,4 +1,5 @@
-"""Bounded R1--R5 reaction-enthalpy fit (retired until its heat route is rebuilt and Engine #61).
+"""Bounded R1--R5 reaction-enthalpy fit (retired until the heat calculation is rebuilt on the pinned Engine;
+the sensitivity check waits on Engine #61).
 
 Every fit mode -- screen, candidate, parity, benchmark, full replay, partial
 summary and adoption -- depends on heat evaluations or on candidate and heat
