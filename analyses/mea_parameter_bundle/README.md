@@ -227,8 +227,12 @@ Use the repository's pinned uv environment. From this analysis directory:
 uv run python scripts/refresh_results.py
 ```
 
-This is the normal update command. It runs figure data, calorimetry, thermal
-checks, figure rendering, Quarto, and handoff packaging sequentially. It uses
+This is the normal update command. It runs figure data, figure rendering and
+the overview figures sequentially, then exits nonzero naming the stages it did
+not run: direct heat, thermal checks, the strict Quarto render and handoff
+packaging need the reaction-reference temperature derivative that the pinned
+Engine lacks (ePC-SAFT #84). Until then render with
+`bash render.sh notebook.qmd --working-copy`. It uses
 one logical CPU, single-threaded BLAS/OpenMP, lower scheduling priority, a
 2 GiB per-process solver address-space limit and a 2 GiB native V8 heap cap
 for Quarto (neither is an aggregate RAM quota), and a

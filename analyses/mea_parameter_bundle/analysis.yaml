@@ -155,6 +155,7 @@ commands:
     - uv run python scripts/run_reaction_temperature_fit.py [--parity|--benchmark|--candidate|--full|--sensitivity-check|--adopt]
     - uv run python scripts/validate_thermal_references.py --equilibrium
     - uv run python scripts/render_figures.py
+    - uv run python scripts/render_regression_overview.py
     - uv run python scripts/build_absorption_handoff.py
   render:
     - bash render.sh notebook.qmd
