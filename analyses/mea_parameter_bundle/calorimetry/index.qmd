@@ -10,9 +10,12 @@ Heat values are direct paired-state total-enthalpy comparisons on the retained
 thermal reference. They do not by themselves validate an absorber model. They
 were calculated on the superseded Engine `8438ce5f` (wheel `40fba7cf`) with
 parameter file `568f7a5f…`, whose coefficients equal the adopted record's. The
-greenfield Engine cannot yet reproduce them: the heat and thermal-reference
-scripts stop because the Engine lacks the reaction-reference temperature
-derivative ([ePC-SAFT #84](https://github.com/tannerpolley/ePC-SAFT/issues/84)).
+pinned Engine provides reference temperature actions
+([ePC-SAFT #84](https://github.com/tannerpolley/ePC-SAFT/issues/84)) and
+record-anchored total enthalpy
+([ePC-SAFT #138](https://github.com/tannerpolley/ePC-SAFT/issues/138)), but
+the MEA heat calculation has not been rebuilt on them
+([MEA #96](https://github.com/tannerpolley/MEA-Thermodynamics/issues/96)).
 :::
 
 # Question
