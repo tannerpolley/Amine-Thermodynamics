@@ -31,12 +31,10 @@ from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
 ANALYSIS = Path(__file__).resolve().parents[1]
 INPUT = ANALYSIS / "data/input"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
-ENGINE_WHEEL = Path(
-    "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/"
-    "build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
-)
-ENGINE_WHEEL_SHA256 = "98b9a4fb01e399955bd7a80de7afecc050b2278fe8cf8a31825962adab60dc85"
-ENGINE_COMMIT = "c24261a79843e842a9abb06487d32eec95f9c688"
+# Identity of the non-editable wheel that must be installed; its build path is not
+# retained because Engine rebuilds overwrite it.
+ENGINE_WHEEL_SHA256 = "66c5c1a7e9e091239d9a0a52b3c6a322e86a57c4d0e02c12cdb775db9c4d5b13"
+ENGINE_COMMIT = "d1b4f50c5033ae2563f785d0fdb5bd1960b71ec3"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
@@ -186,11 +184,8 @@ def installed_wheel() -> Path:
 
 
 def verify_wheel() -> None:
-    if (
-        sha256(ENGINE_WHEEL) != ENGINE_WHEEL_SHA256
-        or sha256(installed_wheel()) != ENGINE_WHEEL_SHA256
-    ):
-        raise RuntimeError("installed and retained Engine wheels must match")
+    if sha256(installed_wheel()) != ENGINE_WHEEL_SHA256:
+        raise RuntimeError("installed Engine wheel does not match the pinned SHA-256")
 
 
 class ReferenceBasisUnavailable(RuntimeError):
