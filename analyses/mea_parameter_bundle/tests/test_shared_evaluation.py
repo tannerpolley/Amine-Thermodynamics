@@ -115,8 +115,8 @@ def test_failed_state_cache_policy(tmp_path, monkeypatch, failure_code, reusable
         ),
     )
 
-    first = shared.evaluate_state(_Model(), _request(), {}, "first", [])
-    cached = shared.evaluate_state(_Model(), _request(), {}, "second", [])
+    first = shared.evaluate_state(None, _request(), {}, "first", [])
+    cached = shared.evaluate_state(None, _request(), {}, "second", [])
     assert first["status"] == "non_evaluable"
     assert first["failure_code"] == failure_code
     assert cached["cache_hit"] is reusable
