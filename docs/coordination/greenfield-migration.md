@@ -1079,4 +1079,12 @@ fixed-pressure reference work with bit-identical results (VLE medians 13.46->8.4
 from a cold packet start ends locally infeasible (residual 0.698 after 53 iterations),
 while a start from the old Engine's liquid solution converges (residual 2.3e-13) to
 pCO2 84.87 Pa (old Engine 84.93 Pa; observed 99.2 Pa): an initialization failure (#90),
-not a missing equilibrium.
+not a missing equilibrium. Engine PR #109 (main `832380ad`, wheel `6cb2c2f0...`) moves the
+pinned-vapor pressure seed by one fugacity step; the nine-case replay then evaluates 9/9
+(`fitted-exclusion-6cb2`, 31.2 s, VLE 0206 cold at the warm-anchor state). Over all 79
+solved-pressure requests from cold (`cold-start-sweep/cold-start-sweep.csv`, producer
+`scripts/run_cold_start_sweep.py`), 69 -> 76 evaluate and total time falls 556 -> 380 s;
+0128/0145/0227 regress and 0129-0131/0208 slow down because the packet liquid guesses
+carry unspeciated molecular CO2 (x_CO2 8.9e-5 to 1.4e-3 against ~1e-6 speciated), so the
+seed is the saturation pressure of a wrong liquid. Speciated packet liquid guesses are the
+remaining application-side repair.

@@ -35,8 +35,8 @@ ENGINE_WHEEL = Path(
     "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/"
     "build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
 )
-ENGINE_WHEEL_SHA256 = "4368d0f1fe4a06deb816c978e6a2880134744cd1c28da39edf87591fde43bd33"
-ENGINE_COMMIT = "f2d1e01f4e904ba43b604035511f45f87fcab8b6"
+ENGINE_WHEEL_SHA256 = "6cb2c2f0a513ebccc5b3e3fdc6fd16220b1d59db9959feb2290f20d9f1894041"
+ENGINE_COMMIT = "832380ad5e254762dbe5d9dfc44e0659e4b65167"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
