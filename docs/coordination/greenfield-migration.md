@@ -1158,3 +1158,13 @@ admission fix) is the current pin. Its 79-request cold sweep (`main-83ac`) evalu
 retained `main-cb16` rows is 7.3e-13 in `pressure_pa` and 2.3e-11 in `co2_partial_pressure_pa`.
 The wall time is not comparable with earlier rows recorded at lower load. The Kiepe CO2-water
 generator gives the same 38/39 result on this wheel (`kiepe-313.20-13` infeasible, residual 0.250).
+
+Engine main `443a9da492fd5ac7724525945d108c6a2a854d51` (wheel
+`b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58`, 2026-09-23) is the current pin.
+It adds first-order reference temperature actions on the R1--R5 referenced reactions (Engine #84,
+qualified on the adopted model in `results/reference-temperature/`) and record-anchored total
+enthalpy on referenced reactive states (Engine #138). Its 79-request cold sweep (`main-443a`)
+evaluates 79/79 in 141.6 s total (median 0.58 s per state) at host load average 4--9; pressure and
+CO2 partial pressure equal the `main-83ac` rows exactly. The heat, thermal-reference and
+reaction-temperature-fit scripts still stop: the Engine now supplies the reference temperature
+slope and total enthalpy, but the MEA heat calculation has not been rebuilt on those callables.
