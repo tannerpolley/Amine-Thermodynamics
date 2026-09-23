@@ -715,41 +715,83 @@ R2 carries the adopted constant enthalpy shift of −8.2000 kJ mol⁻¹ in $\Del
 
 # Pressure
 
-The overview figures below are regenerated from retained row-level result tables.
-Pressure and speciation use the all-five-reaction candidate replay and therefore
-are not exact replays of the selected JSON, which saved only R2/R4/R5. Heat uses
-the hash-matched selected JSON. Rendering reads these records and never runs
-the Engine.
+The pressure and speciation figures and tables below are calculated from the exact adopted parameter record (`results/selected-current-best-parameters.json`, SHA-256 `868a5018…fcb7be`) on the greenfield Engine main `83ac1126` (wheel `3eb502ab…1252`, evaluator `shared-evaluation-v5`). The regeneration used a 180 s per-state budget; with 60 s under shared host load, `vle_obs_0040` timed out and Böttinger 2008 state 042 stopped at the equilibrium residual floor, and both evaluate with 180 s. Heat is not regenerated (see [Heat release](#heat-release)). Rendering reads these retained tables and never runs the Engine.
 
-**The adoption study evaluated all 161 observations; the adopted shifts removed most of the high-temperature bias in that comparison.** For 30 mass% MEA at 40–120 °C, the replayed candidate has log₁₀ RMSE **0.2318**—an RMS multiplicative factor of **1.71**—against 0.3317 (factor 2.15) for the previous record on the same rows. Paired on identical evaluated rows: calibration 0.3344 → 0.2366 (143 rows); the Xu 2011 holdout, never in the objective, 0.3096 → 0.1901 (18 rows). At 120 °C the RMSE is 0.165. Certified neighboring-loading and cross-temperature starts recover every state; recovery establishes numerical coverage, not physical accuracy.
+**The adopted record reproduces all 161 pressure observations with log₁₀ RMSE 0.2318 (RMS factor 1.71), the same value as the superseded adoption replay; the greenfield Engine does not change the fit.** The 161 rows at 30 mass% MEA and 40–120 °C come from Aronu 2011, Hilliard 2008, Idris 2014, Jou 1995, Mamun 2005 and the Xu 2011 holdout. The table reports both scales; RMS ln(pred/obs) = 2.303 × log₁₀ RMSE, and AARD is the mean of |pred/obs − 1|. Each source row pairs the superseded adoption replay (Engine `8438ce5f`, all five reaction shifts, `evaluated` and `pivot_reuse` rows of [full-validation-targets.csv](results/reaction-temperature-fit/full-validation-targets.csv)) with the greenfield calculation of the adopted record. Paired row by row, the two calculations differ by median |Δ ln pCO₂| 0.0012 and at most 0.009 (`vle_obs_0233`). Those differences combine the Engine change with the omitted R1/R3 shifts.
 
-![Pressure observations and candidate-replay calculations at 40 to 120 degrees Celsius. Open circles are observations; dashed lines connect retained calculated states. This candidate includes all five reaction shifts and is not the exact selected JSON.](figures/regression_overview/output/pressure.svg){#fig-pressure fig-alt="CO2 partial pressure versus loading at 40 to 120 degrees Celsius, comparing observations with dashed model calculations from the all-five-reaction candidate replay."}
+::: {.parameter-table .numeric-table}
+| Source | n | Mean ln(pred/obs) superseded → greenfield | RMS ln superseded → greenfield | log₁₀ RMSE superseded → greenfield | AARD % superseded → greenfield |
+|:--|--:|--:|--:|--:|--:|
+| Aronu 2011 | 36 | −0.004 → −0.005 | 0.506 → 0.506 | 0.2197 → 0.2196 | 41.5 → 41.4 |
+| Hilliard 2008 | 30 | +0.365 → +0.364 | 0.585 → 0.584 | 0.2541 → 0.2537 | 69.1 → 69.0 |
+| Idris 2014 | 10 | +0.608 → +0.607 | 0.660 → 0.659 | 0.2867 → 0.2862 | 89.3 → 89.1 |
+| Jou 1995 | 48 | +0.049 → +0.050 | 0.602 → 0.601 | 0.2613 → 0.2612 | 56.9 → 56.9 |
+| Mamun 2005 | 19 | −0.029 → −0.027 | 0.254 → 0.254 | 0.1102 → 0.1103 | 20.5 → 20.6 |
+| Xu 2011 (holdout) | 18 | +0.316 → +0.318 | 0.438 → 0.440 | 0.1901 → 0.1910 | 48.4 → 48.7 |
+| **All 161** | 161 | +0.152 → +0.152 | 0.534 → 0.534 | **0.2318 → 0.2318** | 52.5 → 52.5 |
+:::
 
-Pressure constrains molecular-CO₂ chemical potential coupled to the reaction network. It cannot independently identify reaction constants, Born diameters, dielectric mixing, and association parameters. Xu 2011 is excluded from the new fitting objective, but its earlier use in bundle selection means it is not untouched validation of the whole model.
+By temperature (greenfield), RMS ln is 0.621 at 40 °C (59 rows), 0.553 at 60 °C (24), 0.556 at 80 °C (21), 0.448 at 100 °C (18) and 0.382 at 120 °C (39). The previous notebook's 0.2318 was already this log₁₀ value; an RMS ln near 0.6 quoted for Hilliard and Jou alone is the same misfit on a different scale and a smaller subset, not a deterioration.
 
-[Adoption-study full replay](results/reaction-temperature-fit/full-validation-targets.csv) · [Paired comparison](results/reaction-temperature-fit/adoption-receipt.json) · earlier figure-generation results (refresh incomplete): [residuals](results/current-best-fit-residuals.csv), [statistics](results/current-best-fit-statistics.csv), [numerical failures](results/figure-calculation-failures.csv), [generation receipt](results/figure-calculation-receipt.json)
+![All 161 pressure observations and the adopted record's Engine calculations at 40–120 °C. Markers are observations by source; the dashed line in each panel connects calculated states at the observed loadings, without interpolation.](figures/regression_overview/output/pressure.svg){#fig-pressure fig-alt="CO2 partial pressure versus loading in five temperature panels, observations marked by source and dashed lines through the adopted record's calculated states."}
+
+![Parity of calculated against observed CO₂ partial pressure for all 161 states, with the 1:1 line and factor-2 bounds, colored by source.](figures/regression_overview/output/pressure-parity.svg){#fig-pressure-parity fig-alt="Log-log parity plot of calculated versus observed CO2 partial pressure with 1:1 and factor-of-two lines, points colored by source."}
+
+**The residual is organized by loading rather than by source.** Every source's mean ln(pred/obs) is negative below loading 0.2 (−0.17 to −0.53) and positive between 0.3 and 0.5 (+0.17 for Mamun 2005 to +0.76 for Hilliard 2008). In that loading band 74 of 82 rows are over-predicted, with mean +0.49 and maximum +1.26. Above 0.55, the 13 Jou 1995 rows average −0.49. The source means in the table therefore partly reflect each source's loading coverage; Idris 2014 has 9 of its 10 rows at 0.3–0.5. This shape is a model–data discrepancy in the adopted record, and the paired comparison shows it is not a solver effect.
+
+![ln(calculated/observed pCO₂) against loading and temperature, by source; dotted lines mark a factor of 2.](figures/regression_overview/output/pressure-residuals.svg){#fig-pressure-residuals fig-alt="Two scatter panels of log pressure ratio versus loading and versus temperature, colored by source, with factor-of-two reference lines."}
+
+Pressure constrains molecular-CO₂ chemical potential coupled to the reaction network. It cannot independently identify reaction constants, Born diameters, dielectric mixing, and association parameters. Xu 2011 is excluded from the reaction-temperature objective, but its earlier use in bundle selection means it is not untouched validation of the whole model.
+
+**Engine comparison.** *Placeholder for the parent integration: the greenfield-versus-superseded Engine timing and prediction comparison is produced separately under `results/runs/engine-comparison/`; no values are reported here yet.*
+
+**Calibration misfit diagnosis.** *Placeholder for the parent integration: the diagnosis of the loading-organized pCO₂ residual is produced separately under `results/runs/pco2-calibration-misfit/`; no values are reported here yet.*
+
+[Residuals](results/current-best-fit-residuals.csv) · [ln statistics with the paired superseded rows](results/current-best-fit-ln-statistics.csv) · [log₁₀ statistics by temperature, source and species](results/current-best-fit-statistics.csv) · [numerical failures (none)](results/figure-calculation-failures.csv) · [Engine identity, coverage and hashes](results/figure-calculation-receipt.json) · [superseded adoption replay](results/reaction-temperature-fit/full-validation-targets.csv)
 
 # Speciation
 
-**For the replayed candidate, free and protonated MEA are better described than carbamate and bicarbonate, and the enthalpy shifts barely move speciation.** The scored observation set evaluates **129/131 positive targets** (previously 125), with log₁₀ RMSE **0.3630** (0.3702 → 0.3670 paired on the 125 shared rows). Recomputed from the positive evaluated and pivot-reuse speciation rows in the [retained full-target CSV](results/reaction-temperature-fit/full-validation-targets.csv), species scores are 0.0569 for MEA (19 rows), 0.1141 for MEAH⁺ (19), 0.0624 for MEA + MEAH⁺ (24), 0.4877 for MEACOO⁻ (43), and 0.5150 for HCO₃⁻ (24). These are diagnostic comparisons, not independent validation of each ionic parameter.
+**Free and protonated MEA and carbamate are within RMS ln 0.26 of the scored observations; bicarbonate is under-predicted, with RMS ln 1.19.** All 131 scored speciation targets from Böttinger 2008 and Matin 2012 evaluate (44/44 states), and a 46-point loading grid evaluates at each of 20, 40, 60 and 80 °C (184/184 states).
 
-![Speciation observations and candidate-replay calculations at 20 to 80 degrees Celsius. Open circles are observations; dashed lines connect retained calculated states. The candidate uses all five reaction shifts and is not the exact selected JSON.](figures/regression_overview/output/speciation.svg){#fig-speciation fig-alt="Principal species mole fractions versus carbon dioxide loading at 20 to 80 degrees Celsius, comparing observations with dashed model calculations from the all-five-reaction candidate replay."}
+::: {.parameter-table .numeric-table}
+| Target | n | Mean ln(pred/obs) | RMS ln | log₁₀ RMSE | AARD % |
+|:--|--:|--:|--:|--:|--:|
+| MEA | 19 | −0.037 | 0.131 | 0.0570 | 9.6 |
+| MEAH⁺ | 19 | +0.251 | 0.262 | 0.1138 | 28.9 |
+| MEA + MEAH⁺ | 25 | +0.037 | 0.093 | 0.0406 | 7.2 |
+| MEACOO⁻ | 44 | −0.158 | 0.207 | 0.0900 | 15.8 |
+| HCO₃⁻ | 24 | −0.723 | 1.185 | 0.5147 | 61.8 |
+| **All 131** | 131 | −0.148 | 0.535 | 0.2322 | 23.6 |
+:::
 
-This display includes a broader set of reported observation operators than the scored targets. Reported zeros remain in the source data but cannot appear on logarithmic axes. Carbonate, hydronium, and hydroxide remain in the equilibrium calculation even though omitted from this principal-species view. Preserve the successful amine description while testing carbamate–bicarbonate coupling; do not reopen every ion parameter merely because the aggregate score is high.
+The previous notebook reported speciation log₁₀ RMSE 0.3630 over 129 targets and 0.4877 for carbamate. That replay evaluated Böttinger 2008 state 048 through `pivot_reuse` and returned a carbamate mole fraction of 3.53, which is impossible; the adopted record gives 0.0377 against the observed 0.0492. State 047 did not evaluate in that replay and evaluates here. On the other 127 paired targets the two calculations differ by median |Δ ln| 0.0007. The lower carbamate and overall scores therefore come from removing one unphysical value, not from a better fit.
 
-Additional temperature views: [40 °C](figures/speciation/output/speciation-diagnostic-replay-40C.svg), [60 °C](figures/speciation/output/speciation-diagnostic-replay-60C.svg), [80 °C](figures/speciation/output/speciation-diagnostic-replay-80C.svg). The display grids are regenerated by the figure script when needed.
+![Principal species and the MEA + MEAH⁺ aggregate against loading at 20–80 °C and 30 mass% MEA. Circles are all positive retained observations; dashed lines connect 46 calculated states per temperature.](figures/regression_overview/output/speciation.svg){#fig-speciation fig-alt="Five panels of species mole fraction versus loading, observations as circles and dashed lines through the adopted record's calculated grid at 20, 40, 60 and 80 degrees Celsius."}
+
+This display includes a broader set of reported observations than the scored targets. Reported zeros remain in the source data but cannot appear on logarithmic axes. Carbonate, hydronium and hydroxide remain in the equilibrium calculation although this view omits them. Below loading 0.3 at 20 °C, Matin 2012 reports bicarbonate near 0.002 while Jakobsen 2005 reports 0.0001–0.0002, a factor of 10–20. The calculated values lie between them. Because Matin 2012 supplies 19 of the 24 scored bicarbonate targets, much of the bicarbonate residual reflects this disagreement between sources. Above loading 0.4 at 20 °C, calculated MEA + MEAH⁺ lies above the observations and carbamate below them.
+
+Additional temperature views: [40 °C](figures/speciation/output/speciation-diagnostic-replay-40C.svg), [60 °C](figures/speciation/output/speciation-diagnostic-replay-60C.svg), [80 °C](figures/speciation/output/speciation-diagnostic-replay-80C.svg).
 
 # Heat release
 
-**The replayed candidate halves the absorption-heat error at 40/80 °C and improves the previously reserved 120 °C comparison, which still under-predicts.** All **113/113 intervals** evaluate. Paired on identical rows against the previous record: 66 Kim–Svendsen 40/80 °C calibration intervals RMSE **20.01 → 11.84 kJ mol⁻¹ CO₂** (bias −17.0 → −2.3); the 20 Kim–Svendsen 120 °C holdout intervals **39.30 → 31.15** (bias −28.8 → −18.8); the 27 Kim 2014 model-selection rows **16.84 → 10.71**. Only six 40/80 °C intervals entered the fit. The separate retained [selected-JSON heat replay](results/calorimetry/current-selected-direct-enthalpy-summary.json), whose parameter hash matches the current document, gives RMSE 11.8497, 31.1500, and 10.7128 kJ mol⁻¹ CO₂ for those three cohorts respectively; it predates the unfinished shared-driver refresh.
+**Heat was calculated on the superseded Engine `8438ce5f` (wheel `40fba7cf`); the greenfield Engine cannot yet reproduce it.** The direct paired-state heat calculation and the thermal-reference checks need the temperature derivative of the source-to-EOS reaction reference transfer, which the pinned Engine does not provide ([ePC-SAFT #84](https://github.com/tannerpolley/ePC-SAFT/issues/84)). `evaluate_direct_absorption_heat.py` and `validate_thermal_references.py` stop explicitly at that point; nothing substitutes for them. The retained values used parameter file `568f7a5f…524d`, whose coefficients equal the adopted record's.
 
-![Heat observations and hash-matched selected-bundle calculations at 40, 80 and 120 degrees Celsius. Open circles are calorimetry observations; dashed lines connect retained finite-loading interval calculations.](figures/regression_overview/output/heat.svg){#fig-heat fig-alt="Heat released per mole of absorbed carbon dioxide versus loading at 40, 80 and 120 degrees Celsius, comparing observations with dashed model calculations from the selected bundle."}
+On that superseded calculation all 113 intervals evaluate, with RMSE 11.8497 kJ mol⁻¹ CO₂ for the 66 Kim–Svendsen 40/80 °C calibration intervals, 31.1500 for the 20 Kim–Svendsen 120 °C holdout intervals and 10.7128 for the 27 Kim 2014 comparison rows. Against the previous record, the reaction-temperature study reduced these paired errors from 20.01, 39.30 and 16.84 kJ mol⁻¹ CO₂. Only six 40/80 °C intervals entered the fit.
 
-Heat release is the negative of (liquid enthalpy change minus incoming ideal-gas CO₂ enthalpy), divided by absorbed CO₂. The reconstruction assumes zero finite vapor inventory and an initial loading of 0.003. Source roles are 66 Kim–Svendsen 40/80 °C calibration rows, 20 at 120 °C held out, and 27 Kim 2014 comparison rows.
+![Heat observations and superseded-Engine calculations for the adopted coefficients at 40, 80 and 120 °C. Open circles are calorimetry observations; dashed lines connect calculated finite-loading intervals.](figures/regression_overview/output/heat.svg){#fig-heat fig-alt="Heat released per mole of absorbed carbon dioxide versus loading at 40, 80 and 120 degrees Celsius, observations as circles and dashed lines through superseded-Engine calculations."}
 
-**Species references are now continuous and physically anchored.** At every temperature in 293.15–393.15 K the nine reference enthalpies solve the five typed reaction constraints (source correlation plus Engine source-reference transfer), three neutral thermal anchors, and one charge gauge; each is carried on the Engine's polynomial form. Reaction-reference consistency holds to **1.7 × 10⁻⁴ J mol⁻¹** across the domain, inside the Engine's 2 × 10⁻³ J mol⁻¹ admissibility tolerance. Anchors: CO₂ ideal-gas Shomate cp (NIST, Chase 1998); H₂O and MEA pure-liquid cp correlations (Hilliard 2008, as retained by MEA-Absorption-Column) net of the Engine's own residual cp so nothing is counted twice; formation enthalpies pin the constants (CODATA CO₂(g), H₂O(l); NIST MEA(l)); hydronium shares the water reference (zero-enthalpy proton). The retained anchored-reference calculation gives fixed-composition cp for 30 mass% MEA at 40 °C of 3.83 kJ kg⁻¹ K⁻¹ unloaded and 3.21 at loading 0.4. Water vaporization enthalpy from the EOS residual is within 1.3 % of steam tables at 40–120 °C. The Engine's residual cp under-predicts liquid-water cp by about 11 J mol⁻¹ K⁻¹, which is why the water and MEA anchors are liquid-based; the ideal-gas-anchored alternative is retained as a diagnostic. Above 393.15 K the source-reference transfer leaves the EOS domain at the 1 bar reference pressure, so the references are undefined there.
+Heat release is the negative of (liquid enthalpy change minus incoming ideal-gas CO₂ enthalpy), divided by absorbed CO₂. The reconstruction assumes zero finite vapor inventory and an initial loading of 0.003.
 
-[Adopted heat results](results/calorimetry/current-selected-direct-enthalpy-summary.json) · [Interval values](results/calorimetry/current-selected-direct-enthalpy-comparison.csv) · [Paired comparison and adoption rules](results/reaction-temperature-fit/adoption-receipt.json) · [Thermal references](results/calorimetry/current-selected-reference-thermochemistry.json) · [Earlier thermal checks (retired three-knot rows invalid; refresh pending) and missing evidence](results/calorimetry/thermal-reference-validation.json)
+**The thermal references were also built on the superseded Engine.** At 293.15–393.15 K the nine reference enthalpies solved the five reaction constraints, three neutral thermal anchors and one charge gauge; reaction-reference consistency held to 1.7 × 10⁻⁴ J mol⁻¹, and water vaporization enthalpy from the EOS residual was within 1.3 % of steam tables at 40–120 °C. Fixed-composition cp for 30 mass% MEA at 40 °C was 3.83 kJ kg⁻¹ K⁻¹ unloaded and 3.21 at loading 0.4. These numbers are not regenerated on the greenfield Engine for the same Engine #84 reason.
+
+[Superseded-Engine heat summary](results/calorimetry/current-selected-direct-enthalpy-summary.json) · [Interval values](results/calorimetry/current-selected-direct-enthalpy-comparison.csv) · [Paired comparison and adoption rules](results/reaction-temperature-fit/adoption-receipt.json) · [Thermal references](results/calorimetry/current-selected-reference-thermochemistry.json) · [Thermal checks](results/calorimetry/thermal-reference-validation.json)
+
+# Claim limits
+
+- **Calibration residuals, not prediction.** Except Xu 2011, every pressure row and every scored speciation target belonged to the data used to select or fit this record. RMS ln(pred/obs) of 0.25–0.66 by source (0.534 over all 161 rows; log₁₀ 0.2318, factor 1.71) measures calibration misfit. Xu 2011 (RMS ln 0.440) was outside the reaction-temperature objective but influenced earlier bundle selection.
+- **Reaction source ranges.** The selected R4 (Tong 2012 / Aroua 1999) and R5 (Bates and Pinching 1951) correlations have source ranges ending at 323.15 K (R4 293.15–323.15 K; R5 273.15–323.15 K; [migration record](../../docs/coordination/greenfield-migration.md)). Every 60–120 °C pressure row and the 60 and 80 °C speciation rows use R4 and R5 above that range, and the adopted temperature shifts carry the extrapolation. The reaction table's R4 domain column (293.15–393.15 K) does not match this source range; the owner should reconcile it.
+- **Heat.** The heat and thermal-reference results come from the superseded Engine and cannot be reproduced on the greenfield Engine until Engine #84 provides the reaction-reference temperature derivative.
+- **No predictive qualification.** No confidence intervals, independent identification of individual coefficients, or validation on unused data are established. The record is an exploratory incumbent for 30 mass% MEA at 20–120 °C.
 
 ## Parameter change history {#parameter-change-history}
 
@@ -778,7 +820,7 @@ Still unresolved is whether the carbamate/bicarbonate split constrains reaction 
 
 # Supporting evidence
 
-These links preserve the deeper analysis without reproducing it here. Figures and source data remain separate repository files for other agents; only the three displayed figures are embedded in this portable HTML.
+These links preserve the deeper analysis without reproducing it here. Figures and source data remain separate repository files; only the displayed figures are embedded in this portable HTML.
 
 ::: {.parameter-table .summary-table}
 | Question | Retained evidence |

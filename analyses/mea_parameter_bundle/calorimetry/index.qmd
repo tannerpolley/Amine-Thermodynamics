@@ -7,7 +7,12 @@ execute:
 
 ::: {.callout-warning}
 Heat values are direct paired-state total-enthalpy comparisons on the retained
-thermal reference. They do not by themselves validate an absorber model.
+thermal reference. They do not by themselves validate an absorber model. They
+were calculated on the superseded Engine `8438ce5f` (wheel `40fba7cf`) with
+parameter file `568f7a5f…`, whose coefficients equal the adopted record's. The
+greenfield Engine cannot yet reproduce them: the heat and thermal-reference
+scripts stop because the Engine lacks the reaction-reference temperature
+derivative ([ePC-SAFT #84](https://github.com/tannerpolley/ePC-SAFT/issues/84)).
 :::
 
 # Question
@@ -41,9 +46,8 @@ residual enthalpy and an explicit zero-vapor/ideal-CO₂-feed reconstruction.
 
 The retained reaction-temperature candidate reduced the corresponding paired
 errors from 20.01, 39.30 and 16.84 kJ mol⁻¹ CO₂ to 11.84, 31.15 and 10.71.
-The selected-JSON heat replay is hash-matched to the current parameter
-document; the shared-driver pressure/speciation refresh was not completed at
-the same checkpoint.
+The pressure and speciation results were regenerated for the adopted record
+on the greenfield Engine; the heat results were not, for the reason above.
 
 # Conclusion and limits
 
