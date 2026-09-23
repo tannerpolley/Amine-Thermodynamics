@@ -11,6 +11,7 @@ from pathlib import Path
 from result_freshness import hashes, require_current_results, require_hashes
 from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
 from shared_evaluation import (
+    MODEL_RUNTIME_DEFAULTS,
     R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS as R123_OFFSETS,
     expand_state_packet,
 )
@@ -168,8 +169,8 @@ Verified model choices:
 - reaction coefficients come from the recorded selection (see
   chemistry/reaction-system.json and
   validation/reaction-temperature-fit/adoption-receipt.json);
-- every parameter value is supplied by parameters/parameters.json, not by
-  hard-coded assertions in the loader.
+- `parameters/parameters.json` preserves the adopted record and `bundle.json`
+  supplies its declared shell-Born runtime defaults.
 
 The reaction order, stoichiometry, correlations, units, standard state, and
 R1--R3 source-to-common-molality corrections are in
@@ -207,16 +208,10 @@ python3.13 -m venv .venv
 .venv/bin/python verify_bundle.py
 ```
 
-Then load the parameter mapping with:
-
-```python
-from pathlib import Path
-import epcsaft
-
-root = Path("mea-reactive-epcsaft-parameter-bundle")
-parameters = epcsaft.Parameters.from_json(root / "parameters/parameters.json")
-model = epcsaft.Mixture(parameters)
-```
+`verify_bundle.py` applies the `model_runtime_defaults` recorded in
+`bundle.json` through `Parameters.from_mapping` before checking the Engine
+load. Use the same mapping step when loading the preserved adopted parameter
+document in another program.
 
 Construct new column states through `epcsaft.equilibrium` using the species
 order and reaction definition in chemistry/reaction-system.json. The retained
@@ -259,10 +254,16 @@ for item in inventory["files"]:
 
 import epcsaft
 
-parameters = epcsaft.Parameters.from_json(root / "parameters/parameters.json")
+mapping = json.loads(
+    (root / "parameters/parameters.json").read_text(encoding="utf-8")
+)
+for family in mapping.get("model_families", ()):
+    if family.get("kind") == "electrolyte" and family.get("choice") == "born":
+        for key, value in inventory["model_runtime_defaults"].items():
+            family.setdefault(key, value)
+parameters = epcsaft.Parameters.from_mapping(mapping)
 assert hashlib.sha256((root / "parameters/parameters.json").read_bytes()).hexdigest() == inventory["parameter_document_sha256"]
 print("bundle hashes and ePC-SAFT parameter load: ok")
-print(f"parameter fingerprint: {parameters.fingerprint}")
 '''
 
 
@@ -420,6 +421,7 @@ def main() -> None:
         "schema_version": 1,
         "bundle_id": "mea-reactive-epcsaft-parameter-bundle",
         "model": "nine-species reactive aqueous MEA ePC-SAFT",
+        "model_runtime_defaults": MODEL_RUNTIME_DEFAULTS,
         "parameter_document_sha256": parameter_hash,
         "engine_wheel_sha256": EXPECTED_ENGINE_SHA256,
         "state_packet_sha256": EXPECTED_STATE_PACKET_SHA256,

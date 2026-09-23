@@ -26,6 +26,7 @@ from shared_evaluation import (
     cached_anchors,
     corrected_request,
     evaluate_state,
+    load_parameters,
     load_state_packet,
     sha256,
     verify_wheel,
@@ -205,7 +206,7 @@ def main() -> None:
         overall_timeout_s=args.overall_timeout_s,
         deadline_monotonic=perf_counter() + args.overall_timeout_s,
     )
-    parameters = epcsaft.Parameters.from_json(PARAMETERS)
+    parameters = load_parameters()
     model = epcsaft.Mixture(parameters)
     reaction_values = {
         spec.identity: float(spec.value.magnitude)
