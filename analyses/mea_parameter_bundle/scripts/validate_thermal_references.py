@@ -39,6 +39,7 @@ from shared_evaluation import (  # noqa: E402
     SOURCE_CONTRACT,
     STATE_PACKET,
     corrected_request,
+    load_parameters,
 )
 from run_reaction_temperature_fit import (  # noqa: E402
     Anchor,
@@ -290,7 +291,7 @@ def main() -> None:
         Path(__file__).with_name("evaluate_direct_absorption_heat.py"),
         Path(__file__).with_name("run_reaction_temperature_fit.py"),
     )
-    model = epcsaft.Mixture(epcsaft.Parameters.from_json(PARAMETERS))
+    model = epcsaft.Mixture(load_parameters())
     templates = pressure_templates()
     reactions = baseline_reactions()
     anchored, payload = build_thermochemistry(model, templates, reactions)
