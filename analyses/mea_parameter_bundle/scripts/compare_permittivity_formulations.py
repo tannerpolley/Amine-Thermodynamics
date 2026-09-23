@@ -272,10 +272,8 @@ def main(parameter_path: Path) -> None:
             if family == "pressure":
                 anchors.append(liquid)
             state = model.state(
-                T=temperature_k * epcsaft.unit_registry.kelvin,
-                rho=(1.0 / liquid.molar_volume_m3_per_mol)
-                * epcsaft.unit_registry.mole
-                / epcsaft.unit_registry.meter**3,
+                T=temperature_k,
+                rho=1.0 / liquid.molar_volume_m3_per_mol,
                 x=liquid.mole_fractions,
             )
             state_rows.append(

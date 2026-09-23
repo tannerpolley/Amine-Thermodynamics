@@ -182,7 +182,7 @@ state into another temperature.
 
 `thermal/reference-thermochemistry.json` is the species reference enthalpy
 and heat-capacity declaration in exact Engine component order, on the
-Engine's own polynomial form (`epcsaft.ReferenceThermochemistry`). It is the
+polynomial form of the Engine commit recorded in the file. It is the
 unique solution of the five typed reaction constraints, three neutral
 thermal anchors (CO2 ideal-gas Shomate; H2O and MEA pure-liquid cp
 correlations net of the Engine's residual cp at 1 atm), and one charge gauge

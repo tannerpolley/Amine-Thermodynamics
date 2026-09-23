@@ -10,17 +10,7 @@ import statistics
 import time
 
 import epcsaft
-from epcsaft.equilibrium import (
-    AllComponents,
-    DeclaredTopology,
-    FixedTCoexistence,
-    IncipientBoundary,
-    PhaseEquilibriumError,
-    PhaseEquilibriumProblem,
-    PhaseHint,
-    PhaseSpecification,
-    phase_equilibrium,
-)
+from epcsaft import equilibrium
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
@@ -28,7 +18,10 @@ SOURCE = ANALYSIS / "source/kiepe_2002_table_1.csv"
 RESULTS = ANALYSIS / "results"
 COMPONENTS = ("carbon-dioxide", "water")
 T_REFERENCE_K = 298.15
-U = epcsaft.unit_registry
+# Each isotherm's warm-start chain begins from the most concentrated dilute
+# bubble point that converges cold; a 1e-6 seed alone does not carry the
+# 313.2 K chain to the first source row.
+SEED_CO2_MOLE_FRACTIONS = (1.0e-4, 3.0e-5, 1.0e-5, 1.0e-6)
 
 
 def value(magnitude: float, unit: str) -> dict[str, object]:
@@ -103,7 +96,7 @@ def edge(component_a: str, site_a: str, component_b: str, site_b: str) -> dict[s
     }
 
 
-def parameters() -> epcsaft.Parameters:
+def parameters(k_ij: float) -> epcsaft.Parameters:
     family_provenance = provenance("pabsch-2020", "Tables 2 and 6")
     mapping = {
         "schema": "epcsaft.parameters",
@@ -141,7 +134,7 @@ def parameters() -> epcsaft.Parameters:
                     {
                         "identity": "pair/carbon-dioxide/water/k_ij",
                         "family": "k_ij",
-                        "value": value(0.0, "dimensionless"),
+                        "value": value(k_ij, "dimensionless"),
                         "provenance": provenance("pabsch-2020", "Table 6"),
                     }
                 ],
@@ -159,7 +152,6 @@ def parameters() -> epcsaft.Parameters:
                 ("model/association", "association", "general-site"),
                 ("model/electrolyte", "electrolyte", "none"),
                 ("model/relative_permittivity", "permittivity", "none"),
-                ("model/polar", "polar", "none"),
             )
         ],
         "model_coefficients": [],
@@ -227,21 +219,19 @@ def source_rows() -> list[dict[str, str]]:
         return [row for row in csv.DictReader(stream) if row["included"] == "true"]
 
 
-def problem(row: dict[str, str], hints: tuple[PhaseHint, ...]) -> PhaseEquilibriumProblem:
-    x_co2 = float(row["liquid_co2_mole_fraction"])
-    return PhaseEquilibriumProblem(
-        FixedTCoexistence(
-            float(row["temperature_k"]) * U.kelvin,
-            DeclaredTopology(
-                (
-                    PhaseSpecification("liquid", AllComponents()),
-                    PhaseSpecification("vapor", AllComponents()),
-                )
-            ),
-            0,
-            (x_co2, 1.0 - x_co2),
-        ),
-        hints,
+def problem(temperature: float, x_co2: float) -> equilibrium.Problem:
+    return equilibrium.bubble_point(
+        liquid=equilibrium.Phase("liquid", kind="liquid"),
+        T=temperature,
+        feed=equilibrium.MoleFractions({"carbon-dioxide": x_co2, "water": 1.0 - x_co2}),
+    )
+
+
+def residual_inf(result: equilibrium.EquilibriumResult, kind: str) -> float:
+    return max(
+        abs(value)
+        for row, value in zip(result.rows, result.residuals, strict=True)
+        if row.kind.name == kind
     )
 
 
@@ -260,37 +250,32 @@ def main() -> None:
     args = parser.parse_args()
     results = args.results_directory
     started = time.perf_counter()
-    document = parameters()
-    mixture = epcsaft.Mixture(document)
     predictions: list[dict[str, object]] = []
     failures: list[dict[str, object]] = []
-    hints: tuple[PhaseHint, ...] = ()
     previous_temperature = None
     for row in source_rows():
         temperature = float(row["temperature_k"])
-        if temperature != previous_temperature:
-            hints = ()
-            previous_temperature = temperature
         kij = 0.0122 + args.kij_offset + 3.016e-4 * (temperature - T_REFERENCE_K)
-        active = epcsaft.ActiveParameterSet(
-            document,
-            ("pair/carbon-dioxide/water/k_ij",),
-            values=(kij,),
+        mixture = epcsaft.Mixture(parameters(kij))
+        if temperature != previous_temperature:
+            previous_temperature = temperature
+            start = None
+            for seed in SEED_CO2_MOLE_FRACTIONS:
+                trial = equilibrium.solve_equilibrium(mixture, problem(temperature, seed))
+                if trial.success:
+                    start = trial
+                    break
+        result = equilibrium.solve_equilibrium(
+            mixture,
+            problem(temperature, float(row["liquid_co2_mole_fraction"])),
+            start,
         )
-        try:
-            result = phase_equilibrium(
-                mixture,
-                problem(row, hints),
-                active_parameters=active,
-            )
-        except PhaseEquilibriumError as error:
-            failures.append({"row_id": row["row_id"], "reason": str(error)})
-            hints = ()
+        if not result.success:
+            failures.append({"row_id": row["row_id"], "reason": result.message})
             continue
-        if not isinstance(result.extent, IncipientBoundary):
-            raise TypeError("expected an incipient coexistence boundary")
+        start = result
         observed_kpa = float(row["observed_pressure_kpa"])
-        model_kpa = result.extent.pressure_pa / 1000.0
+        model_kpa = result.pressure[0] / 1000.0
         residual = math.log(model_kpa / observed_kpa)
         predictions.append(
             {
@@ -302,16 +287,12 @@ def main() -> None:
                 "log_pressure_residual": residual,
                 "multiplicative_error": math.exp(abs(residual)),
                 "k_ij": kij,
-                "liquid_density_mol_m3": result.phases[0].molar_density_mol_m3,
-                "vapor_density_mol_m3": result.phases[1].molar_density_mol_m3,
-                "vapor_co2_mole_fraction": result.phases[1].mole_fractions[0],
-                "pressure_residual_inf": result.diagnostics.pressure_residual_inf,
-                "chemical_potential_residual_inf": result.diagnostics.chemical_potential_residual_inf,
+                "liquid_density_mol_m3": result.molar_densities[0],
+                "vapor_density_mol_m3": result.molar_densities[1],
+                "vapor_co2_mole_fraction": result.mole_fractions[len(COMPONENTS)],
+                "pressure_residual_inf": residual_inf(result, "Pressure"),
+                "chemical_potential_residual_inf": residual_inf(result, "Chemical"),
             }
-        )
-        hints = tuple(
-            PhaseHint(index, phase.mole_fractions, phase.molar_density_mol_m3)
-            for index, phase in enumerate(result.phases)
         )
 
     residuals = [float(row["log_pressure_residual"]) for row in predictions]

@@ -472,9 +472,9 @@ R1–R5 construction uses the public reference-path representation delivered by
 
 The focused checks belong in
 `analyses/mea_parameter_bundle/tests/test_shared_evaluation.py`. Mechanical
-metadata readers in `generate_figure_data.py` and
-`run_best_in_slot_campaign.py` may call the shared request decoder when those
-scripts are brought forward; they are not a second adapter owner.
+metadata readers in `generate_figure_data.py` may call the shared request decoder;
+they are not a second adapter owner. `run_best_in_slot_campaign.py` was deleted in the
+issue #96 port (below).
 `evaluate_direct_absorption_heat.py` and `validate_thermal_references.py`
 remain blocked on the #84 reference-basis decision. The direct calls in
 `run_reaction_temperature_fit.py` remain a separate optional reaction-fit
@@ -1118,3 +1118,54 @@ mapping fingerprint to the state cache so candidate models cannot reuse selected
 states. The frozen foundation `data/input/parameters.json` declares no ionic-dispersion rule
 and the Born study's `AUTO` variants declare no Born constants; both now fail explicitly
 rather than receive an invented default.
+
+Issue #96 port on Engine main `7fa8aaf4` (wheel `e9fb8a47...3e62`, 2026-09-23): the figure,
+permittivity and Kiepe CO2-water scripts now call only current Engine callables; retained
+results were not regenerated. `generate_figure_data.py` reads temperature, loading and the
+source continuation fingerprint from the packet request and takes reaction values from
+`parameter_mapping()`; packet state `vle_obs_0186` reproduces the `main-cb16` sweep to
+1.3e-12 in pCO2. Its incumbent check now reads the last `candidate_sha256` of
+`results/parameter-record-history.csv`, which already records `868a5018...` (2026-09-22,
+coefficients unchanged); the earlier check read only the historical permittivity comparison and
+adoption record and so rejected the explicit-exclusion file. The Kiepe generator uses
+`bubble_point` with a per-isotherm warm-start chain seeded at the first cold-converging
+dilute composition; 38/39 rows reproduce the retained pressures to 4.3e-9 relative, and
+`kiepe-313.20-13` (retained 22.43 MPa, dense CO2-rich branch) fails without a hand seed.
+Born-study variants B and C use permittivity rules the Engine no longer admits.
+`run_best_in_slot_campaign.py` is deleted: its optimizer coordinates (reaction coefficients,
+ion solvation and Born diameters) and pCO2 observations are not `regression` coordinates or
+kinds, and the retained grid campaign superseded it. The thermal chain stops on the missing
+reference temperature derivative (Engine #84): `evaluate_direct_absorption_heat.py` and
+`validate_thermal_references.py` raise `THERMAL_REFERENCE_UNAVAILABLE` on entry. The
+reaction-temperature fit is retired as one unit: every mode of
+`run_reaction_temperature_fit.py` except `--self-check` and `--sensitivity-check` raises it on entry, because the
+screen, candidate, parity and benchmark consume the thermal reference and the full replay,
+partial summary and adoption require `candidate-receipt.json` and the heat summary, which
+only those blocked stages write for the current parameter file. `--sensitivity-check` stops
+on missing reaction-coefficient actions (Engine #61). `--self-check` remains; it checks the
+reaction-enthalpy shift algebra, cohort roles and recovery attempt plan without an Engine
+solve. The code behind these stops (anchored reference construction, heat evaluation,
+thermal validation and every other fit mode) was deleted rather than kept unreachable; the
+retained results name their producers, which Git history keeps for the #84 and #61 ports. `shared_evaluation` no
+longer accepts a thermochemistry or active-parameter argument, and its records drop the
+always-null `thermochemistry` field; as after any evaluator edit, the evaluator source hash
+in the cache key sends new evaluations to new state records.
+
+Engine main `83ac1126d8824dd2f1465c194be73c19ebc0cdb5` (wheel
+`3eb502abf74c4bb9f48fcafbbe2f271e7bba7a70152ed2d998f10c4606741252`, 2026-09-23, PR #133 neutral-subset
+admission fix) is the current pin. Its 79-request cold sweep (`main-83ac`) evaluates 79/79 in
+139.7 s total at host load average 15--18 on 12 cores; the maximum relative change against the
+retained `main-cb16` rows is 7.3e-13 in `pressure_pa` and 2.3e-11 in `co2_partial_pressure_pa`.
+The wall time is not comparable with earlier rows recorded at lower load. The Kiepe CO2-water
+generator gives the same 38/39 result on this wheel (`kiepe-313.20-13` infeasible, residual 0.250).
+
+Engine main `443a9da492fd5ac7724525945d108c6a2a854d51` (wheel
+`b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58`, 2026-09-23) is the current pin.
+It adds first-order reference temperature actions on the R1--R5 referenced reactions (Engine #84,
+qualified on the adopted model in `results/reference-temperature/` on candidate wheel
+`59ac20de...`, not re-run on this pin) and record-anchored total
+enthalpy on referenced reactive states (Engine #138). Its 79-request cold sweep (`main-443a`)
+evaluates 79/79 in 141.6 s total (median 0.58 s per state) at host load average 4--9; pressure and
+CO2 partial pressure equal the `main-83ac` rows exactly. The heat, thermal-reference and
+reaction-temperature-fit scripts still stop: the Engine now supplies the reference temperature
+slope and total enthalpy, but the MEA heat calculation has not been rebuilt on those callables.

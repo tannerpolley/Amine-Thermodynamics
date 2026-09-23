@@ -89,39 +89,9 @@ def test_failed_comparison_retains_failures_without_selecting_candidate(
     assert not (comparison.RESULTS / "selected-candidate-parameters.json").exists()
 
 
-def test_baseline_requires_current_selection(tmp_path, monkeypatch):
-    import pytest
-    import run_reaction_temperature_fit as fit
-
-    selected = tmp_path / "parameters.json"
-    selected.write_text("selected input")
-    receipts = [tmp_path / "figure.json", tmp_path / "heat.json"]
-    monkeypatch.setattr(fit, "PARAMETERS", selected)
-    monkeypatch.setattr(fit, "FIGURE_DATA", receipts[0])
-    monkeypatch.setattr(fit, "HEAT", receipts[1])
-    checked = []
-    monkeypatch.setattr(fit, "require_results", checked.append)
-    for path in receipts:
-        path.write_text(json.dumps({"parameter_document_sha256": fit.sha256(selected)}))
-    fit.require_current_baseline()
-    assert checked == receipts
-    receipts[1].write_text(json.dumps({"parameter_document_sha256": "old selection"}))
-    with pytest.raises(ValueError, match="another selection"):
-        fit.require_current_baseline()
-
-
-def test_empty_heat_and_selected_handoff_metadata(tmp_path):
-    import evaluate_direct_absorption_heat as heat
+def test_selected_handoff_metadata():
     import build_absorption_handoff as handoff
 
-    output = tmp_path / "curve.csv"
-    output.write_text("old predictions")
-    heat.write_rows(output, [])
-    assert output.read_text() == ""
-    assert (
-        heat.residual_metrics([{"status": "non_evaluable"}])["rmse_kj_per_mol_CO2"]
-        is None
-    )
     selected = json.loads(handoff.PARAMETERS.read_text())
     selected["reaction_correlations"][0]["coefficients"][0]["value"]["magnitude"] += 1.0
     definition = json.loads(

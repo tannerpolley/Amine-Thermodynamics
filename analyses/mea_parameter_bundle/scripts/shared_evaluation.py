@@ -33,8 +33,8 @@ INPUT = ANALYSIS / "data/input"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 # Identity of the non-editable wheel that must be installed; its build path is not
 # retained because Engine rebuilds overwrite it.
-ENGINE_WHEEL_SHA256 = "3a69fd263ba073ea600fa7e45aa866337b11c2e4556329d337bb5e025a0eda9f"
-ENGINE_COMMIT = "cb163066e683f278ab40fb5cf7069e3602119f96"
+ENGINE_WHEEL_SHA256 = "b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58"
+ENGINE_COMMIT = "443a9da492fd5ac7724525945d108c6a2a854d51"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
@@ -57,7 +57,6 @@ COMPONENT_IDS = (
     "carbamate-anion", "bicarbonate-anion", "carbonate-anion", "hydronium-cation", "hydroxide-anion",
 )
 R123_SOURCE_TO_COMMON_MOLALITY_OFFSETS = (8.0330699846, 4.0165349923, 4.0165349923)
-NEUTRAL_VAPOR_IDS = COMPONENT_IDS[:3]
 # Shell-modified Born constants of the adopted configuration
 # (data/reference/MEA/manifests/reactive_vle_model_configurations.json).
 MODEL_RUNTIME_DEFAULTS = {"c_shell": 1.0, "c_dielectric": 1.0}
@@ -606,9 +605,7 @@ def _selected_reactions() -> dict[str, float]:
     return reaction_values(parameter_mapping())
 
 
-def provenance(
-    thermochemistry: object | None = None, reactions: dict[str, float] | None = None
-) -> dict[str, object]:
+def provenance(reactions: dict[str, float] | None = None) -> dict[str, object]:
     values = _selected_reactions() if reactions is None else reactions
     selected = _reaction_identity(_selected_reactions())
     effective = _reaction_identity(values)
@@ -622,9 +619,6 @@ def provenance(
         "parameter_runtime_defaults": MODEL_RUNTIME_DEFAULTS,
         "source_contract_sha256": sha256(SOURCE_CONTRACT),
         "evaluator_source_sha256": sha256(Path(__file__)),
-        "thermochemistry": None
-        if thermochemistry is None
-        else thermochemistry.scientific_fingerprint,
     }
 
 
@@ -936,19 +930,9 @@ def _solve_in_child(
     model: object,
     problem: object,
     timeout_s: float,
-    active_parameters: object | None = None,
     request: dict[str, object] | None = None,
 ) -> SolveSnapshot:
     """Run one Engine call in a forked child so timeout can kill native code."""
-    if active_parameters is not None:
-        return SolveSnapshot(
-            status="unavailable",
-            failure_code="reaction_action_unavailable",
-            failure_diagnostic=(
-                "the current Engine exposes EOS active parameters only; "
-                "reaction-correlation actions are unavailable"
-            ),
-        )
     if not hasattr(os, "fork"):
         raise RuntimeError("hard solver timeout requires POSIX fork support")
     read_fd, write_fd = os.pipe()
@@ -1050,7 +1034,6 @@ def solve_with_recovery(
     reactions: dict[str, float],
     identity: str,
     anchors: list[Anchor],
-    thermochemistry: object | None = None,
     budget_s: float = math.inf,
     limits: EvaluationLimits | None = None,
 ) -> tuple[object | None, list[dict[str, object]]]:
@@ -1206,7 +1189,6 @@ def evaluate_state(
     reactions: dict[str, float],
     identity: str,
     anchors: list[Anchor],
-    thermochemistry: object | None = None,
     budget_s: float = math.inf,
     limits: EvaluationLimits | None = None,
     model_fingerprint: str | None = None,
@@ -1217,7 +1199,7 @@ def evaluate_state(
     selected record (see ``parameter_fingerprint``); without it, cached states of a
     different model would be reused.
     """
-    provenance_data = provenance(thermochemistry, reactions)
+    provenance_data = provenance(reactions)
     model_fingerprint = model_fingerprint or f"sha256:{sha256(PARAMETERS)}"
     corrected = corrected_request(request, reactions)
     provenance_data["parameter_role"] = (
@@ -1270,7 +1252,6 @@ def evaluate_state(
         reactions,
         identity,
         anchors,
-        thermochemistry,
         budget_s,
         limits,
     )
