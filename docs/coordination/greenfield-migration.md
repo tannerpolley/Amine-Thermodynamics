@@ -1091,3 +1091,12 @@ seed is the saturation pressure of a wrong liquid. The adapter's recovery plan n
 liquid alone is speciated at the packet pressure seed and replaces the packet liquid guess.
 It recovers 0128, 0145 and 0227 at the baseline states (P and pCO2 within 1e-11 relative),
 so all 79 requests evaluate from cold without anchors; earlier attempts are unchanged.
+
+Engine main `c24261a7` (wheel `98b9a4fb...`, 2026-09-23) removes density-closure and
+associating pressure-slope work (Engine PRs #111, #113, #114, #116, #118, #119) with
+predictions unchanged to <=3e-11. The same 79-request cold sweep (label `main-c242`)
+evaluates 79/79 in 121 s total (median 0.48 s per state), against 380 s for `cand-f7cf`.
+Against the packet's observed true-species vapor pCO2 (calibration rows, derivable from the
+sweep and the state packet), the adopted model gives mean ln(pred/obs) +0.34 / RMS 0.58 for
+Hilliard2008 (31 states) and +0.05 / RMS 0.60 for Jou1995 (48 states): a model/reference
+discrepancy recorded on Engine #61, not a solver effect.
