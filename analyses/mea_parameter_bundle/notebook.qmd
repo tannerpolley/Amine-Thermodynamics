@@ -713,11 +713,25 @@ R2 carries the adopted constant enthalpy shift of −8.2000 kJ mol⁻¹ in $\Del
 
 [Component source audit](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/ePC-SAFT/full-component-parameter-source-audit.md) · [reaction source contract](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/data/reference/MEA/manifests/chemical_reaction_source_contract.json) · [reaction-temperature study](reaction-temperature-fit/index.qmd)
 
+# Fit statistics {#fit-statistics}
+
+Every figure and table below computes these from the retained residual rows (calculated against observed value, same state), through one function in `scripts/render_regression_overview.py` that also writes [`results/current-best-fit-ln-statistics.csv`](results/current-best-fit-ln-statistics.csv):
+
+- **n**: number of rows with positive observed and calculated values.
+- **bias (mean ln)**: mean of ln(pred/obs); positive means over-prediction on average.
+- **RMS ln**: root mean square of ln(pred/obs).
+- **log₁₀ RMSE** = RMS ln / ln 10 (RMS ln = 2.303 × log₁₀ RMSE).
+- **RMS factor** = exp(RMS ln), the typical multiplicative error.
+- **AARD %** = 100 · mean |pred/obs − 1|. AARD is asymmetric: over-prediction by a factor of 2 contributes 100 %, under-prediction by a factor of 2 contributes 50 %.
+- **mean dev** (heat only) = mean(calculated − observed) in kJ mol⁻¹ CO₂.
+
+*[Slot for the parent: which of these statistics the predecessor MEA papers report, after the literature check.]*
+
 # Pressure
 
 The pressure and speciation figures and tables below are calculated from the exact adopted parameter record (`results/selected-current-best-parameters.json`, SHA-256 `868a5018…fcb7be`) on the greenfield Engine main `443a9da4` (wheel `b66c7b96…2a58`, evaluator `shared-evaluation-v5`). Against the earlier calculation on Engine `83ac1126` (wheel `3eb502ab`), every pressure, scored speciation and grid value differs by at most 2.1 × 10⁻¹¹ in ln. The regeneration used a 180 s per-state budget (`state_timeout_s` in the [generation record](results/figure-calculation-receipt.json)); with 60 s under shared host load, `vle_obs_0040` timed out and Böttinger 2008 state 042 stopped at the equilibrium residual floor, and both evaluate with 180 s. Heat is not regenerated (see [Heat release](#heat-release)). Rendering reads these retained tables and never runs the Engine.
 
-**The adopted record reproduces all 161 pressure observations with log₁₀ RMSE 0.2318 (RMS factor 1.71), the same value as the superseded adoption replay; the greenfield Engine does not change the fit.** The 161 rows at 30 mass% MEA and 40–120 °C come from Aronu 2011, Hilliard 2008, Idris 2014, Jou 1995, Mamun 2005 and the Xu 2011 holdout. The table reports both scales; RMS ln(pred/obs) = 2.303 × log₁₀ RMSE, and AARD is the mean of |pred/obs − 1|. Each source row pairs the superseded adoption replay (Engine `8438ce5f`, all five reaction shifts, `evaluated` and `pivot_reuse` rows of [full-validation-targets.csv](results/reaction-temperature-fit/full-validation-targets.csv)) with the greenfield calculation of the adopted record. Paired row by row, the two calculations differ by median |Δ ln pCO₂| 0.0012 and at most 0.009 (`vle_obs_0233`). Those differences combine the Engine change with the omitted R1/R3 shifts.
+**The adopted record reproduces all 161 pressure observations with log₁₀ RMSE 0.2318 (RMS factor 1.71), the same value as the superseded adoption replay; the greenfield Engine does not change the fit.** The 161 rows at 30 mass% MEA and 40–120 °C come from Aronu 2011, Hilliard 2008, Idris 2014, Jou 1995, Mamun 2005 and the Xu 2011 holdout. The table reports both scales, defined under [Fit statistics](#fit-statistics). Each source row pairs the superseded adoption replay (Engine `8438ce5f`, all five reaction shifts, `evaluated` and `pivot_reuse` rows of [full-validation-targets.csv](results/reaction-temperature-fit/full-validation-targets.csv)) with the greenfield calculation of the adopted record. Paired row by row, the two calculations differ by median |Δ ln pCO₂| 0.0012 and at most 0.009 (`vle_obs_0233`). Those differences combine the Engine change with the omitted R1/R3 shifts.
 
 ::: {.parameter-table .numeric-table}
 | Source | n | Mean ln(pred/obs) superseded → greenfield | RMS ln superseded → greenfield | log₁₀ RMSE superseded → greenfield | AARD % superseded → greenfield |

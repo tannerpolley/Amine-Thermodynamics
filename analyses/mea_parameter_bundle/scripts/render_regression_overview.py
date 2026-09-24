@@ -76,7 +76,51 @@ def ln_statistics(
         "rms_factor": math.exp(rms_ln),
         "aard_percent": 100.0
         * statistics.fmean(abs(math.exp(e) - 1.0) for e in errors),
+        "mean_difference_native_unit": statistics.fmean(
+            float(r["predicted"]) - float(r["observed"]) for r in valid
+        ),
     }
+
+
+def ln_label(rows):
+    """n, AARD, bias and RMS ln of retained residual rows, for figure text."""
+    stat = ln_statistics("", "", "", rows)
+    return (
+        f"n = {stat['evaluated_positive']} · AARD {stat['aard_percent']:.1f} % · "
+        f"bias (mean ln) {stat['mean_ln_pred_over_obs']:+.2f} · RMS ln {stat['rms_ln_pred_over_obs']:.2f}"
+    )
+
+
+def species_label(rows):
+    stat = ln_statistics("", "", "", rows)
+    return (
+        f"n = {stat['evaluated_positive']}, AARD {stat['aard_percent']:.0f} %, "
+        f"RMS ln {stat['rms_ln_pred_over_obs']:.2f}"
+    )
+
+
+def heat_label(rows):
+    stat = ln_statistics(
+        "",
+        "",
+        "",
+        [
+            {
+                "observed": r["observed_heat_release_kj_per_mol_CO2"],
+                "predicted": r["predicted_heat_release_kj_per_mol_CO2"],
+            }
+            for r in rows
+        ],
+    )
+    return (
+        f"n = {stat['evaluated_positive']}, AARD {stat['aard_percent']:.1f} %, "
+        f"mean dev {stat['mean_difference_native_unit']:+.1f}"
+    )
+
+
+def short_label(rows):
+    stat = ln_statistics("", "", "", rows)
+    return f"n = {stat['evaluated_positive']}, AARD {stat['aard_percent']:.0f} %"
 
 
 def save(fig, name):
@@ -100,7 +144,7 @@ def source_colors(pressure):
 
 def render_isotherms(pressure, colors, title):
     temperatures = sorted({round(float(r["temperature_C"])) for r in pressure})
-    fig, axes = plt.subplots(2, 3, figsize=(12, 7.6), squeeze=False)
+    fig, axes = plt.subplots(2, 3, figsize=(13, 8.6), squeeze=False)
     for ax in axes.flat[len(temperatures) :]:
         ax.set_visible(False)
     for ax, temperature in zip(axes.flat, temperatures):
@@ -114,7 +158,7 @@ def render_isotherms(pressure, colors, title):
                     marker=MARKERS[source],
                     color=color,
                     s=26,
-                    label=source,
+                    label=f"{source} ({short_label(sub)})",
                     facecolors="none" if MARKERS[source] in "oDh^" else color,
                 )
         model = sorted(
@@ -129,7 +173,8 @@ def render_isotherms(pressure, colors, title):
             label=f"calculated ({len(model)}/{len(group)} states)",
         )
         ax.set_yscale("log")
-        ax.set_title(f"{temperature} °C")
+        n_label, rest = ln_label(group).split(" · ", 1)
+        ax.set_title(f"T = {temperature} °C · {n_label}\n{rest}", fontsize=9)
         ax.set_xlabel("CO₂ loading (mol/mol MEA)")
         ax.grid(alpha=0.18)
         ax.legend(fontsize=7, frameon=False)
@@ -171,7 +216,7 @@ def render_parity(pressure, colors, title):
             marker=MARKERS[source],
             color=color,
             s=24,
-            label=f"{source} ({len(sub)})",
+            label=f"{source} ({short_label(sub)})",
             facecolors="none" if MARKERS[source] in "oDh^" else color,
         )
     ax.set_xscale("log")
@@ -182,6 +227,19 @@ def render_parity(pressure, colors, title):
     ax.set_xlabel("Observed CO₂ partial pressure (kPa)")
     ax.set_ylabel("Calculated CO₂ partial pressure (kPa)")
     ax.set_title(title, fontsize=11)
+    stat = ln_statistics("", "", "", pressure)
+    ax.text(
+        0.97,
+        0.03,
+        f"n = {stat['evaluated_positive']}\nAARD {stat['aard_percent']:.1f} %\n"
+        f"bias (mean ln) {stat['mean_ln_pred_over_obs']:+.3f}\n"
+        f"RMS ln {stat['rms_ln_pred_over_obs']:.3f}\nlog₁₀ RMSE {stat['rmse_log10']:.4f}",
+        transform=ax.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=8,
+        bbox={"facecolor": "white", "edgecolor": "0.6", "boxstyle": "round"},
+    )
     ax.grid(alpha=0.18)
     ax.legend(fontsize=7, frameon=False, loc="upper left")
     fig.tight_layout()
@@ -209,6 +267,16 @@ def render_residuals(pressure, colors, title):
         ax.axhline(0.0, color="black", linewidth=1.0)
         for bound in (math.log(2.0), -math.log(2.0)):
             ax.axhline(bound, color="grey", linewidth=0.9, linestyle=":")
+        stat = ln_statistics("", "", "", valid)
+        ax.text(
+            0.02,
+            0.03,
+            f"all rows: n = {stat['evaluated_positive']} · bias (mean ln) "
+            f"{stat['mean_ln_pred_over_obs']:+.2f} · RMS ln {stat['rms_ln_pred_over_obs']:.2f}",
+            transform=ax.transAxes,
+            fontsize=8,
+            bbox={"facecolor": "white", "edgecolor": "0.6", "boxstyle": "round"},
+        )
         ax.set_xlabel(label)
         ax.grid(alpha=0.18)
     axes[0].set_ylabel("ln(calculated / observed pCO₂)")
@@ -227,7 +295,7 @@ def render_residuals(pressure, colors, title):
 
 def render_speciation(speciation, grid, display, title):
     temperatures = (20, 40, 60, 80)
-    fig, axes = plt.subplots(2, 3, figsize=(12, 7.6), squeeze=False)
+    fig, axes = plt.subplots(2, 3, figsize=(13, 8.6), squeeze=False)
     axes.flat[-1].set_visible(False)
     by_grid = {}
     for row in grid:
@@ -247,7 +315,6 @@ def render_speciation(speciation, grid, display, title):
                 facecolors="none",
                 edgecolors=color,
                 s=26,
-                label=f"{temperature} °C observed",
             )
             line = []
             for values in by_grid.values():
@@ -260,13 +327,20 @@ def render_speciation(speciation, grid, display, title):
                         )
                     )
             line.sort()
+            scored = [
+                r
+                for r in speciation
+                if r["target"] == species
+                and round(float(r["temperature_C"])) == temperature
+            ]
             ax.plot(
                 [x for x, _ in line],
                 [y for _, y in line],
                 color=color,
                 linewidth=1.1,
                 linestyle="--",
-                label=f"{temperature} °C calculated",
+                label=f"{temperature} °C: "
+                + (species_label(scored) if scored else "not scored"),
             )
         stat = ln_statistics(
             "speciation",
@@ -275,22 +349,22 @@ def render_speciation(speciation, grid, display, title):
             [r for r in speciation if r["target"] == species],
         )
         ax.set_title(
-            f"{species}  (scored n={stat['evaluated_positive']}, "
-            f"RMS ln {stat['rms_ln_pred_over_obs']:.2f})",
-            fontsize=10,
+            f"{species} · scored n = {stat['evaluated_positive']} · "
+            f"AARD {stat['aard_percent']:.1f} % · RMS ln {stat['rms_ln_pred_over_obs']:.2f}",
+            fontsize=8.5,
         )
         ax.set_yscale("log")
         ax.set_xlabel("CO₂ loading (mol/mol MEA)")
         ax.grid(alpha=0.18)
+        ax.legend(fontsize=6.5, frameon=False, loc="best")
     axes[0, 0].set_ylabel("Species / aggregate mole fraction")
     axes[1, 0].set_ylabel("Species / aggregate mole fraction")
-    axes[0, 0].legend(fontsize=7, frameon=False, ncol=2)
     fig.suptitle(title, fontsize=13)
     fig.text(
         0.5,
         0.012,
-        "30 mass% MEA. Circles are all positive retained observations; dashed lines connect 46 adopted-record "
-        "Engine states per temperature. Panel statistics use the scored packet targets.",
+        "30 mass% MEA. Circles are all positive retained observations, colored by temperature; dashed lines connect 46 "
+        "adopted-record Engine states per temperature. Statistics use the scored packet targets only.",
         ha="center",
         fontsize=8,
     )
@@ -299,7 +373,7 @@ def render_speciation(speciation, grid, display, title):
 
 
 def render_heat(heat, title):
-    fig, axes = plt.subplots(1, 3, figsize=(12, 4.2), squeeze=False)
+    fig, axes = plt.subplots(1, 3, figsize=(14, 5.6), squeeze=False)
     for ax, temperature in zip(axes.flat, ("40", "80", "120")):
         group = sorted(
             [r for r in heat if r["temperature_C"] == temperature],
@@ -307,19 +381,12 @@ def render_heat(heat, title):
         )
         for color, source in zip(COLORS, sorted({r["source"] for r in group})):
             sub = [r for r in group if r["source"] == source]
-            errors = [
-                float(r["predicted_heat_release_kj_per_mol_CO2"])
-                - float(r["observed_heat_release_kj_per_mol_CO2"])
-                for r in sub
-            ]
-            rmse = math.sqrt(statistics.fmean(e * e for e in errors))
             ax.scatter(
                 [float(r["loading_mol_CO2_per_mol_MEA"]) for r in sub],
                 [float(r["observed_heat_release_kj_per_mol_CO2"]) for r in sub],
                 facecolors="none",
                 edgecolors=color,
                 s=26,
-                label=f"{source} observed",
             )
             ax.plot(
                 [float(r["loading_mol_CO2_per_mol_MEA"]) for r in sub],
@@ -327,23 +394,29 @@ def render_heat(heat, title):
                 color=color,
                 linewidth=1.1,
                 linestyle="--",
-                label=f"{source} calculated (RMSE {rmse:.1f})",
+                label=f"{source} calculated ({heat_label(sub)})",
             )
-        ax.set_title(f"{temperature} °C")
+        ax.set_title(f"T = {temperature} °C · {heat_label(group)}", fontsize=9)
         ax.set_xlabel("CO₂ loading (mol/mol MEA)")
         ax.grid(alpha=0.18)
-        ax.legend(fontsize=7, frameon=False)
+        ax.legend(
+            fontsize=7,
+            frameon=False,
+            loc="upper center",
+            bbox_to_anchor=(0.5, -0.2),
+        )
     axes[0, 0].set_ylabel("Heat released (kJ/mol CO₂)")
     fig.suptitle(title, fontsize=12)
     fig.text(
         0.5,
         0.012,
         "Calculated on the superseded Engine 8438ce5f (wheel 40fba7cf); the MEA heat calculation is not yet "
-        "rebuilt on the pinned Engine (MEA #96). Dashed lines connect calculated intervals; RMSE in kJ/mol CO₂.",
+        "rebuilt on the pinned Engine (MEA #96). Circles are observed intervals and dashed lines connect calculated\n"
+        "intervals, one color per source. Statistics compare them: mean dev = mean(calculated − observed) in kJ/mol CO₂.",
         ha="center",
         fontsize=8,
     )
-    fig.tight_layout(rect=(0, 0.05, 1, 0.93))
+    fig.subplots_adjust(left=0.06, right=0.98, top=0.86, bottom=0.34, wspace=0.25)
     save(fig, "heat")
 
 
