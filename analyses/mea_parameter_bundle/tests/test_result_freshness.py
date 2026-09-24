@@ -36,27 +36,27 @@ def test_publication_rejects_changed_inputs_outputs_and_unverified_results(
     monkeypatch.setattr(freshness, "REPO", tmp_path)
     source = tmp_path / "parameters.json"
     output = tmp_path / "predictions.csv"
-    receipt = tmp_path / "generation.json"
+    record = tmp_path / "generation.json"
     source.write_text('{"value": 1}')
     output.write_text("prediction\n2\n")
     inputs = freshness.hashes((source,))
-    freshness.stamp_results(receipt, [output], inputs=inputs)
-    freshness.require_results(receipt)
+    freshness.stamp_results(record, [output], inputs=inputs)
+    freshness.require_results(record)
     output.write_text("prediction\n3\n")
     with pytest.raises(ValueError, match="Stale"):
-        freshness.require_results(receipt)
+        freshness.require_results(record)
     output.write_text("prediction\n2\n")
     source.write_text('{"value": 2}')
     with pytest.raises(ValueError, match="Stale"):
-        freshness.require_results(receipt)
+        freshness.require_results(record)
     with pytest.raises(ValueError, match="Stale"):
-        freshness.stamp_results(receipt, [output], inputs=inputs)
-    receipt.write_text("{}")
+        freshness.stamp_results(record, [output], inputs=inputs)
+    record.write_text("{}")
     with pytest.raises(ValueError, match="Unverified"):
-        freshness.require_results(receipt)
+        freshness.require_results(record)
 
 
-def test_handoff_checks_captured_bytes_not_only_live_receipts(monkeypatch):
+def test_handoff_checks_captured_bytes_not_only_live_records(monkeypatch):
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1] / "scripts"))
     monkeypatch.setitem(sys.modules, "result_freshness", freshness)
     spec = importlib.util.spec_from_file_location(

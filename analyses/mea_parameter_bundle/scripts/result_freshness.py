@@ -16,11 +16,11 @@ PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 # The pinned wheel lives outside the repository; its SHA-256 (enforced against the
 # installed wheel by shared_evaluation.verify_wheel) is the Engine identity.
 ENGINE_KEY = "engine_wheel_sha256"
-FIGURE_DATA = ANALYSIS / "results/figure-calculation-receipt.json"
-FIGURES = ANALYSIS / "results/figure-render-receipt.json"
+FIGURE_DATA = ANALYSIS / "results/figure-calculation-record.json"
+FIGURES = ANALYSIS / "results/figure-render-record.json"
 HEAT = ANALYSIS / "results/calorimetry/current-selected-direct-enthalpy-summary.json"
 THERMAL = ANALYSIS / "results/calorimetry/thermal-reference-validation.json"
-NOTEBOOK = ANALYSIS / "results/notebook-render-receipt.json"
+NOTEBOOK = ANALYSIS / "results/notebook-render-record.json"
 
 
 def hashes(paths: list[Path] | tuple[Path, ...]) -> dict[str, str]:
@@ -66,7 +66,7 @@ def require_hashes(expected: dict[str, str]) -> None:
 
 
 def stamp_results(
-    receipt_path: Path,
+    record_path: Path,
     output_paths: list[Path],
     sources: tuple[Path, ...] = (),
     *,
@@ -75,32 +75,32 @@ def stamp_results(
     """Call only after successful generation; pass start-of-run inputs for long jobs."""
     expected = source_hashes(*sources) if inputs is None else inputs
     require_hashes(expected)
-    payload = json.loads(receipt_path.read_text()) if receipt_path.exists() else {}
+    payload = json.loads(record_path.read_text()) if record_path.exists() else {}
     payload["publication"] = {"inputs": expected, "outputs": hashes(output_paths)}
-    pending = receipt_path.with_suffix(receipt_path.suffix + ".tmp")
+    pending = record_path.with_suffix(record_path.suffix + ".tmp")
     pending.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    pending.replace(receipt_path)
+    pending.replace(record_path)
 
 
-def require_results(receipt_path: Path) -> None:
-    if not receipt_path.is_file():
-        raise ValueError(f"Missing generation evidence: {receipt_path}")
-    publication = json.loads(receipt_path.read_text()).get("publication")
+def require_results(record_path: Path) -> None:
+    if not record_path.is_file():
+        raise ValueError(f"Missing generation evidence: {record_path}")
+    publication = json.loads(record_path.read_text()).get("publication")
     if (
         not publication
         or not publication.get("inputs")
         or not publication.get("outputs")
     ):
         raise ValueError(
-            f"Unverified generation: {receipt_path}; regenerate its owning stage"
+            f"Unverified generation: {record_path}; regenerate its owning stage"
         )
     require_hashes(publication["inputs"])
     require_hashes(publication["outputs"])
 
 
 def require_current_results(*, notebook: bool = False) -> None:
-    for receipt in (FIGURE_DATA, FIGURES, HEAT, THERMAL):
-        require_results(receipt)
+    for record in (FIGURE_DATA, FIGURES, HEAT, THERMAL):
+        require_results(record)
     if notebook:
         require_results(NOTEBOOK)
 

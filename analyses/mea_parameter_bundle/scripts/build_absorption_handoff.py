@@ -173,7 +173,7 @@ Verified model choices:
 - solvent-only MEA--water mass-fraction relative-permittivity mixing;
 - reaction coefficients come from the recorded selection (see
   chemistry/reaction-system.json and
-  validation/reaction-temperature-fit/adoption-receipt.json);
+  validation/reaction-temperature-fit/adoption-record.json);
 - `parameters/parameters.json` preserves the adopted record and `bundle.json`
   supplies its declared shell-Born runtime defaults.
 
@@ -192,7 +192,7 @@ unique solution of the five typed reaction constraints, three neutral
 thermal anchors (CO2 ideal-gas Shomate; H2O and MEA pure-liquid cp
 correlations net of the Engine's residual cp at 1 atm), and one charge gauge
 over the declared reference domain. Consult the included thermal validation
-receipt for the measured reaction-reference consistency and evaluated states;
+record for the measured reaction-reference consistency and evaluated states;
 a reference declaration alone does not establish successful equilibrium.
 Do not use it above 393.15 K: the source-reference transfer leaves the EOS
 domain there at the 1 bar reference pressure.
@@ -228,7 +228,7 @@ initial conditions.
 
 Current pressure/speciation results and coverage are in validation/fit-statistics.csv
 and validation/non-evaluable-states.csv. Their generation identities are in
-validation/figure-calculation-receipt.json. Calorimetry results are in
+validation/figure-calculation-record.json. Calorimetry results are in
 validation/calorimetry-summary.json. Older model-selection comparisons live
 under history/ and must not be presented as predictions of the selected vector.
 
@@ -305,14 +305,14 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
         "documentation/research-notebook.html": source(
             rendered_page(ANALYSIS / "notebook.qmd")
         ),
-        "validation/figure-calculation-receipt.json": source(
-            ANALYSIS / "results/figure-calculation-receipt.json"
+        "validation/figure-calculation-record.json": source(
+            ANALYSIS / "results/figure-calculation-record.json"
         ),
-        "validation/figure-render-receipt.json": source(
-            ANALYSIS / "results/figure-render-receipt.json"
+        "validation/figure-render-record.json": source(
+            ANALYSIS / "results/figure-render-record.json"
         ),
-        "validation/notebook-render-receipt.json": source(
-            ANALYSIS / "results/notebook-render-receipt.json"
+        "validation/notebook-render-record.json": source(
+            ANALYSIS / "results/notebook-render-record.json"
         ),
         "validation/calorimetry-summary.json": source(
             ANALYSIS
@@ -334,13 +334,13 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
                 ANALYSIS / "results/reaction-temperature-fit" / name
             )
             for name in (
-                "screen-receipt.json",
-                "candidate-receipt.json",
-                "full-validation-receipt.json",
+                "screen-record.json",
+                "candidate-record.json",
+                "full-validation-record.json",
                 "full-validation-targets.csv",
-                "adoption-receipt.json",
-                "sensitivity-check-receipt.json",
-                "parity-receipt.json",
+                "adoption-record.json",
+                "sensitivity-check-record.json",
+                "parity-record.json",
             )
         },
     }
@@ -412,7 +412,7 @@ def main() -> None:
     parameter_hash = sha256(source(PARAMETERS))
     adoption = json.loads(
         (
-            ANALYSIS / "results/reaction-temperature-fit/adoption-receipt.json"
+            ANALYSIS / "results/reaction-temperature-fit/adoption-record.json"
         ).read_text()
     )
     if parameter_hash != adoption.get("adopted_parameter_sha256"):

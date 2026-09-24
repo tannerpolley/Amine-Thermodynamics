@@ -535,7 +535,7 @@ def main():
         json.dumps(
             {
                 "inputs": {str(p.relative_to(ROOT)): digest(p) for p in inputs},
-                "pressure_speciation_identity": "adopted parameter record on the pinned Engine; figure-calculation receipt",
+                "pressure_speciation_identity": "adopted parameter record on the pinned Engine; figure-calculation record",
                 "heat_identity": "parameter record 568f7a5f (same coefficients) on superseded Engine 8438ce5f, wheel 40fba7cf",
                 "model_executed": False,
                 "series": "open markers observations; dashed segments connect discrete calculations; no interpolation",
