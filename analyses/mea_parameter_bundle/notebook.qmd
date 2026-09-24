@@ -711,11 +711,11 @@ $$
 
 R2 carries the adopted constant enthalpy shift of −8.2000 kJ mol⁻¹ in $\Delta$; its intercept and inverse-temperature coefficient are therefore coupled at the 313.15 K pivot.
 
-[Component source audit](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/ePC-SAFT/full-component-parameter-source-audit.md) · [reaction source contract](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/data/reference/MEA/manifests/chemical_reaction_source_contract.json) · [reaction-temperature study](reaction-temperature-fit/index.qmd)
+[Component source audit](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/ePC-SAFT/full-component-parameter-source-audit.md) · [reaction source record](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/data/reference/MEA/manifests/chemical_reaction_source_contract.json) · [reaction-temperature study](reaction-temperature-fit/index.qmd)
 
 # Fit statistics {#fit-statistics}
 
-Every figure and table below computes these from the retained residual rows (calculated against observed value, same state), through one function in `scripts/render_regression_overview.py` that also writes [`results/current-best-fit-ln-statistics.csv`](results/current-best-fit-ln-statistics.csv):
+The figure labels and [`results/current-best-fit-ln-statistics.csv`](results/current-best-fit-ln-statistics.csv) compute these from the retained residual rows (calculated against observed value, same state) through one function in `scripts/render_regression_overview.py`; the log₁₀ statistics file and the heat deviations come from their generation scripts and agree with it:
 
 - **n**: number of rows with positive observed and calculated values.
 - **bias (mean ln)**: mean of ln(pred/obs); positive means over-prediction on average.
@@ -733,14 +733,14 @@ Loading-direction statistics are not comparable with pressure AARD: Hilliard 200
 | Source | This record (points) | Zhang 2011 eNRTL | Baygi 2015 PC-SAFT | Najafloo 2018 SAFT-HR | Hilliard 2008 eNRTL | Aronu 2011 e-UNIQUAC |
 |:--|--:|--:|--:|--:|--:|--:|
 | Jou 1995 | 56.9 (48) | 33.5 (124, cal.) | 43.2 (100, pred.) | 49.5 (100) | 13.6 (70, cal.) | — |
-| Hilliard 2008 | 69.0 (30) | 35.5 (55, cal.) | 35.0 (42) | 42.6 (42) | 30.0 (55, cal.) | — |
-| Mamun 2005 | 20.6 (19) | 13.5 (19, cal.) | 21.0 | 40.0 | 27.1 | — |
-| Xu 2011 | 48.7 (18) | 28.0 (63, cal.) | 46.9 (52) | 15.4 | — | — |
-| Aronu 2011 | 41.4 (36) | — | — | — | — | 24.3 (cal.) |
+| Hilliard 2008 | 69.0 (30) | 35.5 (55, cal.) | 35.0 (42, pred.) | 42.6 (42) | 30.0 (55, cal.) | — |
+| Mamun 2005 | 20.6 (19) | 13.5 (19, cal.) | 21.0 (19, pred.) | 40.0 | 27.1 (19, cal.) | — |
+| Xu 2011 | 48.7 (18) | 28.0 (63, cal.) | 46.9 (52, pred.) | 15.4 | — | — |
+| Aronu 2011 | 41.4 (36) | — | — | — | — | 24.3 (15–60 mass%, cal.) |
 | Idris 2014 | 89.1 (10) | — | — | — | — | — |
 :::
 
-pCO₂ AARD % in the pressure direction. This record's values are calibration residuals on the rows used here; Xu 2011 was outside the reaction-temperature objective but influenced earlier bundle selection. Published values carry their point counts and, where the survey recorded it, their role (cal. = calibration, pred. = prediction); a blank role was not recorded, and — means no value was found. No other-model value was found for the Idris 2014 rows, which come from Table 2 of Idris, Jens and Eimer 2014 [<a href="#ref-20">20</a>], the paper that also reports the Raman speciation measurements; the repository records its full text as not verified.
+pCO₂ AARD % in the pressure direction. This record's values are calibration residuals on the rows used here; Xu 2011 was outside the reaction-temperature objective but influenced earlier bundle selection. Published values carry their point counts and, where the survey recorded it, their role (cal. = calibration, pred. = prediction); a blank role was not recorded, and — means no value was found. No other-model value was found for the Idris 2014 rows, which come from Table 2 of Idris, Jens and Eimer 2014 [<a href="#ref-20">20</a>], the paper that also reports the Raman speciation measurements; all 10 rows match its Table 2 (30 mass% column; loading 0.242–0.460, pCO₂ 0.021–0.813 kPa). Table 2 also gives a per-row uncertainty, which is not yet transcribed for 9 of the 10 rows.
 
 # Pressure
 
@@ -859,7 +859,7 @@ These links preserve the deeper analysis without reproducing it here. Figures an
 | Question | Retained evidence |
 |:--|:--|
 | Which parameter vector and Engine? | [Selected parameters](results/selected-current-best-parameters.json), [analysis inventory and wheel identity](analysis.yaml) |
-| What changed in the adopted record, and why? | [Adoption receipt](results/reaction-temperature-fit/adoption-receipt.json), [record history](results/parameter-record-history.csv), [holdout ledger](results/holdout-evaluations.csv), [full replay targets](results/reaction-temperature-fit/full-validation-targets.csv), [screen](results/reaction-temperature-fit/screen-receipt.json), [candidate scores](results/reaction-temperature-fit/candidate-receipt.json), [derivative checks](results/reaction-temperature-fit/sensitivity-check-receipt.json), [study notes](results/reaction-temperature-fit/README.md) |
+| What changed in the adopted record, and why? | [Adoption record](results/reaction-temperature-fit/adoption-receipt.json), [record history](results/parameter-record-history.csv), [holdout ledger](results/holdout-evaluations.csv), [full replay targets](results/reaction-temperature-fit/full-validation-targets.csv), [screen](results/reaction-temperature-fit/screen-receipt.json), [candidate scores](results/reaction-temperature-fit/candidate-receipt.json), [derivative checks](results/reaction-temperature-fit/sensitivity-check-receipt.json), [study notes](results/reaction-temperature-fit/README.md) |
 | Can the absorber use it non-isothermally? | [Thermal references](results/calorimetry/current-selected-reference-thermochemistry.json), [thermal validation](results/calorimetry/thermal-reference-validation.csv); build the handoff locally with `scripts/build_absorption_handoff.py` |
 | What did the historical Born/permittivity study show? | [Common-row comparisons](results/born-permittivity-study/full-common-row-statistics.csv), [reaction-synchronized comparison](results/born-permittivity-study/current-fast-common-comparison.csv), [joint sensitivity figure](figures/born_permittivity/output/selected-bundle-joint-sensitivity.svg) |
 | What did earlier parameter studies show? | [Parameter-start comparison](results/parameter-start-comparison.csv), [bounded sensitivity](results/parameter-sensitivity-screen.csv), [R4–CO₂ campaign](results/best-in-slot-campaign/final-full-validation-summary.csv) |
@@ -890,5 +890,5 @@ Detailed source prose from the former LaTeX notebook remains in Git history; all
 <li id="ref-17">U. E. Aronu, S. Gondal, E. T. Hessen, T. Haug-Warberg, A. Hartono, K. A. Hoff, and H. F. Svendsen, “Solubility of CO₂ in 15, 30, 45 and 60 mass% MEA from 40 to 120 °C and model representation using the extended UNIQUAC framework,” <em>Chemical Engineering Science</em> (2011). <a href="https://doi.org/10.1016/j.ces.2011.08.042">doi:10.1016/j.ces.2011.08.042</a>.</li>
 <li id="ref-18">P. Akula, A. Lee, J. Eslick, D. Bhattacharyya, and D. C. Miller, “A modified electrolyte non-random two-liquid model with analytical expression for excess enthalpy: Application to the MEA-H₂O-CO₂ system,” <em>AIChE Journal</em> (2023). <a href="https://doi.org/10.1002/aic.17935">doi:10.1002/aic.17935</a>.</li>
 <li id="ref-19">N. Mac Dowell, F. Llovell, C. S. Adjiman, G. Jackson, and A. Galindo, “Modeling the fluid phase behavior of carbon dioxide in aqueous solutions of monoethanolamine using transferable parameters with the SAFT-VR approach,” <em>Industrial &amp; Engineering Chemistry Research</em> (2010). <a href="https://doi.org/10.1021/ie901014t">doi:10.1021/ie901014t</a>.</li>
-<li id="ref-20">Z. Idris, K. J. Jens, and D. A. Eimer, “Speciation of MEA–CO₂ adducts at equilibrium. Measurement and modeling,” <em>Energy Procedia</em> (2014). <a href="https://doi.org/10.1016/j.egypro.2014.11.152">doi:10.1016/j.egypro.2014.11.152</a>.</li>
+<li id="ref-20">Z. Idris, K. J. Jens, and D. A. Eimer, “Speciation of MEA-CO₂ adducts at equilibrium using Raman spectroscopy,” <em>Energy Procedia</em> (2014). <a href="https://doi.org/10.1016/j.egypro.2014.11.152">doi:10.1016/j.egypro.2014.11.152</a>.</li>
 </ol>
