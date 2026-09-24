@@ -2,7 +2,7 @@
 
 This document preserves the literature rationale and historical model choices.
 The [scientific plan](../scientific/PREDICTIVE_MEA_PROGRAM.md) owns the current
-estimation strategy; the [established-work map](../scientific/CONTEXT.md) connects it to
+estimation strategy; the established-work map `docs/scientific/CONTEXT.md` connects it to
 completed studies and real gaps. Historical choices below are not instructions
 to reset the current exploratory incumbent.
 
@@ -189,7 +189,7 @@ The estimation sequence is already developed in the
 [ionic identification strategy](meah-meacoo-volumetric-evidence.md) specifying
 analog data, active coordinates, objectives, uncertainty and staged fitting.
 Completed and blocked calculations are mapped in
-[`CONTEXT.md`](../scientific/CONTEXT.md). Consult those records before proposing
+`docs/scientific/CONTEXT.md`. Consult those records before proposing
 another strategy review or treating an old implementation limit as current.
 
 ## 9. Published-work gaps and what the retained evidence adds (23 September 2026)
