@@ -385,7 +385,7 @@ def run(
     ]
     write_csv(RESULTS / f"{phase}-evaluations.csv", result_rows)
     write_csv(RESULTS / f"{phase}-summary.csv", summaries)
-    receipt = {
+    record = {
         "phase": phase,
         "full_pressure_catalog": full,
         "pressure_state_count": len(pressure_catalog(full)),
@@ -400,10 +400,10 @@ def run(
         "engine_wheel_sha256": ENGINE_WHEEL_SHA256,
         "method": "Direct coupled Engine reactive equilibrium solve at every sampled state.",
     }
-    (RESULTS / f"{phase}-receipt.json").write_text(
-        json.dumps(receipt, indent=2) + "\n", encoding="utf-8"
+    (RESULTS / f"{phase}-record.json").write_text(
+        json.dumps(record, indent=2) + "\n", encoding="utf-8"
     )
-    print(json.dumps(receipt, indent=2))
+    print(json.dumps(record, indent=2))
 
 
 def main() -> None:

@@ -5,7 +5,7 @@ exact, hashed inputs for this diagnostic replay. The generator verifies all
 three before calculation.
 
 The active parameter-bundle handoff uses the pinned wheel under `engine/`;
-historical comparison receipts retain their original Engine commit and hash.
+historical comparison records retain their original Engine commit and hash.
 
 The parameter mapping is unchanged; only JSON whitespace and key order were
 compacted to satisfy the repository size limit. Its

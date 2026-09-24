@@ -16,9 +16,9 @@ SOURCE = (
     / "data/reference/MEA/observations/calorimetry/MEA_heat_of_absorption_observations.csv"
 )
 OUTPUT = ANALYSIS / "data/input/calorimetry-observation-partition.csv"
-RECEIPT = (
+RECORD = (
     ANALYSIS
-    / "results/calorimetry/calorimetry-observation-partition-receipt.json"
+    / "results/calorimetry/calorimetry-observation-partition-record.json"
 )
 ASSUMED_START_LOADING = 0.003
 
@@ -109,7 +109,7 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(enriched)
 
-    receipt = {
+    record = {
         "schema_version": 1,
         "canonical_source": str(SOURCE.relative_to(REPO)),
         "canonical_source_sha256": sha256(SOURCE),
@@ -129,7 +129,7 @@ def main() -> None:
         "engine_requirement": "paired-state total reactive-liquid enthalpy owner with compatible incoming ideal-gas CO2 enthalpy and typed endpoint failures",
         "engine_requirement_state": "not present at inspected ePC-SAFT-project commit 9eccbfd9d4c3cd308a37906a0342908e4efed87e",
     }
-    RECEIPT.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    RECORD.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

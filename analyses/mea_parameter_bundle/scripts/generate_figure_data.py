@@ -724,7 +724,7 @@ def main() -> None:
         errors = [float(row["rmse_log10_error"]) for row in statistics_rows
                   if row["family"] == family and row["group_type"] == "temperature_C" and row["rmse_log10_error"] != ""]
         temperature_balanced_log10_rmse[family] = math.sqrt(statistics.fmean(value * value for value in errors)) if errors else None
-    receipt = {
+    record = {
         "schema_version": 1,
         "evaluator_version": EVALUATOR_VERSION,
         "status": "exploratory_incumbent",
@@ -785,11 +785,11 @@ def main() -> None:
         "fit_statistics_table": "results/current-best-fit-statistics.csv",
         "temperature_balanced_log10_rmse": temperature_balanced_log10_rmse,
     }
-    (ANALYSIS / "results/figure-calculation-receipt.json").write_text(
-        json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    (ANALYSIS / "results/figure-calculation-record.json").write_text(
+        json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     stamp_results(
-        ANALYSIS / "results/figure-calculation-receipt.json",
+        ANALYSIS / "results/figure-calculation-record.json",
         [
             SPECIATION_OUTPUT / "speciation-model.csv",
             SPECIATION_OUTPUT / "speciation-observations.csv",
