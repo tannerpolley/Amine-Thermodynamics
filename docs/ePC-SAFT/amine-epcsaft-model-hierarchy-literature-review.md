@@ -231,7 +231,7 @@ the exploratory incumbent named above.
 
 | Topic | What published work does (locator) | What is missing | Retained evidence here (path) | Strength |
 |---|---|---|---|---|
-| Explicit-ion reactive ePC-SAFT for MEA | Explicit-ion ePC-SAFT exists for MDEA, a tertiary amine that forms no carbamate: Uyan 2015 (§3, Eqs. 12–15), Wangler 2018, Cleeton 2020, Bülow 2021a (Eqs. 1–5); the only amine ion is MDEAH+. MEA SAFT models use ideal chemistry plus a neutral EOS (Baygi 2015 §3.3; Najafloo 2018 §3.3; Nasrifar 2010 §6 lumps ions into "effective water") or association sites instead of ions (Mac Dowell 2010 §II.B; Rodriguez 2012; Perdomo 2023 Eqs. 4–14; Wang 2018 PR-CPA association scheme Fig. 1). Carbamate ions as EOS species with electrolyte terms exist outside SAFT-for-MEA: electrolyte SAFT-HR with MSA and Born terms for the AEEA carbamates in MDEA + AEEA (Najafloo, Zoghi & Feyzi 2015, Eqs. 19–21, A1, A21–A26, Table 8); a cubic + association EOS with a Debye–Hückel term for MEAH+, MEACOO- and HCO3- (Téllez-Arredondo & Medeiros 2013, Eqs. 10–14, Tables 5–6); a Helmholtz multiparameter EOS whose reaction part is an e-NRTL excess Gibbs energy with Pitzer–Debye–Hückel and Born terms for MEA (Neumann 2021, Eqs. 15–17, Table 3). Search record: §9.6. | No explicit-ion SAFT-family treatment of the MEA ions MEAH+/MEACOO-. | Nine-species, five-reaction pre-refit record; 161 pressure rows and 131 speciation targets, all evaluated (notebook §Pressure, §Speciation) | Calibration residual |
+| Explicit-ion reactive ePC-SAFT for MEA | Explicit-ion ePC-SAFT exists for MDEA, a tertiary amine that forms no carbamate: Uyan 2015 (§3, Eqs. 12–15), Wangler 2018, Cleeton 2020, Bülow 2021a (Eqs. 1–5); the only amine ion is MDEAH+. MEA SAFT models use ideal chemistry plus a neutral EOS (Baygi 2015 §3.3; Najafloo 2018 §3.3; Nasrifar 2010 §6 lumps ions into "effective water") or association sites instead of ions (Mac Dowell 2010 §II.B; Rodriguez 2012; Perdomo 2023 Eqs. 4–14; Wang 2018 PR-CPA association scheme Fig. 1). Carbamate ions as EOS species with electrolyte terms exist outside SAFT-for-MEA: electrolyte SAFT-HR with MSA and Born terms for the AEEA carbamates in MDEA + AEEA (Najafloo, Zoghi & Feyzi 2015, Eqs. 19–21, A1, A21–A26, Table 8); a cubic + association EOS with a Debye–Hückel term for MEAH+, MEACOO- and HCO3- (Téllez-Arredondo & Medeiros 2013, Eqs. 10–14, Tables 5–6); a Helmholtz multiparameter EOS whose reaction part is an e-NRTL excess Gibbs energy with Pitzer–Debye–Hückel and Born terms for MEA (Neumann 2021, Eqs. 15–17, Table 3). Search record: §9.6. | No SAFT-family equation of state with MEA ions as species with electrolyte terms, in the searches of §9.6 (Scopus and Web of Science pending). | Nine-species, five-reaction pre-refit record; 161 pressure rows and 131 speciation targets, all evaluated (notebook §Pressure, §Speciation) | Calibration residual |
 | Pressure, speciation and heat from one model | Activity-coefficient models fitted jointly to pCO2, NMR, heat of absorption and heat capacity: Hilliard 2008 (data inventory Table 13.4-2, p. 440; 35 parameters Table 13.4-3, p. 441), Zhang 2011 (Table 9); Akula 2023a fits pCO2 and heat of absorption only (Table 3, p. 8) and compares speciation and heat capacity (Figs. 7–8). **Cleeton 2020 already does all three with one explicit-ion ePC-SAFT, for MDEA:** pCO2 (Figs. 7–9), speciation including carbonate against Jakobsen 2005 (§3.3.2, Fig. 6), and differential heat from the EOS fugacity temperature derivative plus reaction terms (Eq. 15, Fig. 10; 19.73 % against Arcis and Mathonat). Wang 2018 does all three with pseudo-chemical PR-CPA for MEA (Fig. 16; Figs. 18–19). | The same three quantities from one explicit-ion EOS for a carbamate-forming amine. | Pressure and speciation tables in the notebook; single-state heat `analyses/mea_parameter_bundle/results/reference-calorics/heat.csv` | Calibration residual (pressure, speciation); prediction (heat, 2 states) |
 | Exact derivatives and sensitivities | Finite differences: Hilliard 2008 heat between T and T+1 K (Eq. 13-36, p. 429); Uyan 2015 iterates activities without derivatives (§3). Automatic differentiation of fugacities in reactive non-electrolyte PC-SAFT: Ascani 2023 (Eqs. 16–17). No amine paper read reports solved-state sensitivities. | Solved-state derivatives of a reactive electrolyte EOS equilibrium, checked against finite differences. | Temperature and pressure solved-state derivatives, relative error ≤ 1.21×10⁻⁷; kij refused and reaction-coefficient derivatives unavailable on the pinned wheel (`analyses/mea_parameter_bundle/results/runs/engine-comparison/README.md`, Derivatives); 46/46 reference-temperature actions within 10⁻⁵ of finite differences (`analyses/mea_parameter_bundle/results/reference-temperature/summary.json`) | Numerical verification |
 | Modified Born (solvation shell + dielectric saturation) for amine ions | Figiel 2025 (Eqs. 5–11, Table 3): inorganic ions in water, methanol and ethanol, 298.15 K only; the authors state the diameter was not tested at other temperatures. Bülow 2021a uses the original Born term with MDEAH+ (Eq. 20). In its Results discussion of the sulfolane blends, Bülow 2021a says the deviation at loading near and above 1 "needs a careful investigation", "might be reasoned in the induced association of CO2", and that "an extended version of the model … that includes an altered Born contribution" including ionic species might be applied. Rueben 2024: permittivity for inorganic ions only. | No application to amine or carbamate ions, or to a reactive CO2–amine system, in the papers read. Temperature transfer of the solvation-shell parameters is untested anywhere. | The pre-refit record uses SSM+DS with MEAH+/MEACOO- Born diameters from a historical speciation fit (notebook species table); historical Born/permittivity comparison `analyses/mea_parameter_bundle/results/born-permittivity-study/` | Calibration residual; no independent electrostatic evidence |
@@ -322,7 +322,7 @@ measured temperature and loading. "Pred." means no ternary data were fitted;
 once MEA #107 adopts a record; candidate A (26.9 % over the same 161 rows,
 PR #106) has no per-source row here because its record is not adopted.
 
-| Dataset | Pre-refit record (n) | Baygi 2015 PC-SAFT, pred.‡ | Najafloo 2018 SAFT-HR | Zhang 2011 eNRTL, cal. | Hilliard 2008 eNRTL, cal.* | Aronu 2011 e-UNIQUAC, cal. | Akula 2023a eNRTL, cal. |
+| Dataset | Pre-refit record (n) | Baygi 2015 PC-SAFT, pred.‡ | Najafloo 2018 SAFT-HR, pred.‡ | Zhang 2011 eNRTL, cal. | Hilliard 2008 eNRTL, cal.* | Aronu 2011 e-UNIQUAC, cal. | Akula 2023a eNRTL, cal. |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Jou 1995 | 56.9 (48) | 43.2 | 49.5 | 33.5 (124) | 13.6 (70) | — | 40.5 over all its 30 mass % data |
 | Hilliard 2008 | 69.0 (30) | 35.0§ | 42.6§ | 35.5 (55) | 30.0 (55) | — | (same) |
@@ -341,13 +341,17 @@ Baygi's overall 36.42 % covers 691 rows at x_MEA 0.02–0.16 and 273–443 K
 (Table 5), mostly other concentrations. It is not a like-for-like comparison
 with the 161-row value.
 
-\* Hilliard's fit reconciles pCO2 and loading together (maximum likelihood
-with errors in all variables; method in Chapter VI and Appendix L, data in
-Table 13.4-2). Its pCO2 AARD is therefore not strictly the same residual
-direction. Zhang 2011 uses the Aspen fitting tool without stating its error model.
+\* Hilliard's parameters are fitted by maximum likelihood with errors in all
+variables (Chapter VI, Appendix L; data in Table 13.4-2). The Table 13.4-6
+errors come from a separate Aspen Plus flash test of the fitted model
+(§13.4.1, pp. 446–447) whose specification is not stated. That table gives
+separate pCO2 and loading errors, which suggests pCO2 at the measured
+loading; this is inference. Zhang 2011 uses the Aspen fitting tool without
+stating its error model.
 ‡ Baygi's "prediction" is weaker than the label suggests: it chose the Tong
 2012 and Bates–Pinching constants for R4/R5 because they gave the best
-ideal-chemistry agreement (text before Table 5).
+ideal-chemistry agreement (text before Table 5). Najafloo 2018 reuses the
+Tong 2012 constant for K3 (Table 3), so the caveat applies to it too.
 § The Baygi and Najafloo Hilliard rows span x_MEA 0.06–0.16 (3.5–11 m). The
 pre-refit record uses the 7 m (30 mass %) rows only.
 
@@ -372,21 +376,23 @@ as printed; "not reported" means the paper gives no number for that quantity.
 | Model (paper) | Datasets, points | Deviation reported | Conditions | Fitted or predicted | Value, % | Locator | Like-for-like with ours |
 |---|---|---|---|---|---|---|---|
 | Baygi 2015, PC-SAFT, ideal ions | Jou 1995 (100), Hilliard 2008 (42), Mamun 2005 (19), Xu 2011 (52); 14 other sources | Mean \|Δp/p\| on pCO2; speciation solved at the measured composition (§3.3) | Jou 273–423 K, loading 0.002–1.324; Hilliard x_MEA 0.06–0.16, 313–333 K; Mamun 393 K, 0.155–0.418; Xu 373–443 K, 0.303–0.52 | Predicted: no ternary data fitted, but K(R4, R5) chosen for fit (‡ above) | Jou 43.16; Hilliard 34.97; Mamun 21.03; Xu 46.88; all 691 rows 36.42 | Table 5, footnote b | Mamun: yes (same source, all at 120 °C and 30 mass %, n = 19 in both). Jou, Xu: partly (wider temperature range). Hilliard: partly (other concentrations) |
-| Najafloo 2018, SAFT-HR, ideal ions | Same rows as Baygi | Mean \|Δp/p\| on pCO2 (§3.3, text before Table 5) | As Baygi (Table 4) | Predicted: all kij zero, K from literature, MEA parameters from pure-component data (§3.1–3.3) | Jou 49.52; Hilliard 42.59; Mamun 39.96; Xu 15.44; all 691 rows 34.71 | Table 5 | As Baygi |
-| Zhang 2011, e-NRTL | Hilliard 2008 (55), Jou 1995 (124), Mamun 2005 (19), Xu 2011 (63) | Mean \|ΔY/Y\|; Y is CO2 pressure for Jou and Mamun, and not stated for the Hilliard and Xu TPxy rows | Hilliard 313–333 K, x_MEA 0.06–0.16, 0.11–0.59; Jou 273–423 K, 0.002–1.33; Mamun 393 K, 0.16–0.42; Xu 373–443 K, 0.30–0.52 | Fitted with the Aspen fitting tool, jointly with heat, heat capacity and NMR speciation | Hilliard 35.5; Jou 33.5; Mamun 13.5; Xu 28.0 | Table 9 | Mamun: yes, as a calibration residual. Others: partly (wider ranges; Hilliard and Xu quantity unstated) |
-| Hilliard 2008, e-NRTL | Jou 1995 (70), own data (55), Mamun 2005 (19), Lee 1976 (93), Lawson and Garst 1976 (16), Goldman and Leibush 1959 (38) | pCO2 AARD after maximum-likelihood reconciliation of pressure and loading together; loading AARD also reported | Jou 25–120 °C; own data 40–120 °C as listed in Table 13.4-2; Mamun 120 °C | Fitted (with heat of absorption, heat capacity, NMR) | Jou 13.55; own data 30.01; Mamun 27.06; Lee 21.67; Lawson and Garst 67.99; Goldman and Leibush 13.93 | Tables 13.4-2 (p. 440), 13.4-6 (p. 447) | Partly: reconciled residual, not pCO2 at the measured loading (* above) |
-| Aronu 2011, extended UNIQUAC | Own data, 15, 30, 45 and 60 mass % | pCO2 AARD (Eq. 21) pooled over all concentrations; total pressure separately | pCO2 40–80 °C; total pressure 60–120 °C; loading range not extracted | Fitted to own data | pCO2 24.3; total pressure 11.7; all own data 16.2. 30 mass % alone not reported | Abstract; Eq. 21; §5 (p. 6400) | Partly: pooled across concentrations |
+| Najafloo 2018, SAFT-HR, ideal ions | Same rows as Baygi | Mean \|Δp/p\| on pCO2 (§3.3, text before Table 5) | As Baygi (Table 4) | Predicted, with the ‡ caveat: MEA–H2O and CO2–MEA kij zero, CO2–H2O kij from Najafloo et al. 2016 (§3.2); K from literature, K3 from Tong 2012 as in Baygi (Table 3); MEA parameters from pure-component data (§3.1) | Jou 49.52; Hilliard 42.59; Mamun 39.96; Xu 15.44; all 691 rows 34.71 | Table 5 | As Baygi |
+| Zhang 2011, e-NRTL | Hilliard 2008 (55), Jou 1995 (124), Mamun 2005 (19), Xu 2011 (63) | Mean \|ΔY/Y\| on CO2 partial pressure for all four sources (§3.3, p. 72) | Hilliard 313–333 K, x_MEA 0.06–0.16, 0.11–0.59; Jou 273–423 K, 0.002–1.33; Mamun 393 K, 0.16–0.42; Xu 373–443 K, 0.30–0.52 | Fitted with the Aspen fitting tool, jointly with heat, heat capacity and NMR speciation | Hilliard 35.5; Jou 33.5; Mamun 13.5; Xu 28.0 | Table 9 | Mamun: yes, as a calibration residual. Others: partly (wider ranges) |
+| Hilliard 2008, e-NRTL | Jou 1995 (70), own data (55), Mamun 2005 (19), Lee 1976 (93), Lawson and Garst 1976 (16), Goldman and Leibush 1959 (38) | pCO2 AARD from an Aspen Plus flash test of the fitted model, specification not stated; loading AARD reported separately (§13.4.1) | Jou 25–120 °C; own data 40–120 °C as listed in Table 13.4-2; Mamun 120 °C | Fitted (with heat of absorption, heat capacity, NMR) | Jou 13.55; own data 30.01; Mamun 27.06; Lee 21.67; Lawson and Garst 67.99; Goldman and Leibush 13.93 | Tables 13.4-2 (p. 440), 13.4-6 (p. 447); §13.4.1 | Partly: flash specification not stated; probably pCO2 at the measured loading (inference, * above). Mamun: probably yes (inference) |
+| Aronu 2011, extended UNIQUAC | Own data, 15, 30, 45 and 60 mass % | pCO2 AARD (Eq. 21) pooled over all concentrations; total pressure separately | pCO2 40–80 °C; total pressure 60–120 °C; loading range not extracted | Fitted to own data | pCO2 24.3; total pressure 11.7; all own data 16.2. 30 mass % alone not reported | Abstract; Eq. 21; §4.2 (p. 6400) | Partly: pooled across concentrations |
 | Akula 2023a, e-NRTL | Aronu 2011 (138), Hilliard 2008 (55), Jou 1995 (38), Xu 2011 (25), Kim 2014 (7) | Mean absolute percentage error on pCO2 (Eq. 36); objective in ln pCO2 at measured T and loading (Eq. 34) | 30 mass % subset, loading 0.003–0.5, 40–120 °C | Fitted (with heat of absorption) | 40.5, pooled over the 30 mass % subset; per source not reported | Table 3; Eqs. 34, 36; Fig. 4 | Partly: same residual and concentration, pooled across sources, loading ≤ 0.5 |
 | Akula 2021, rate-based process model | Thermodynamics taken from Morgan et al. (Table 1) | Not reported | — | — | Not reported | Table 1 | No |
-| Téllez-Arredondo 2013, eCTS (cubic + association + Debye–Hückel, EOS ions) | Lawson and Garst 1976, Mamun 2005, Jou 1995; 107 points | %AAD in "p"; the objective combines acid-gas partial pressure and total pressure (Eq. 28), and which one Table 8 reports is not stated | 298–393 K (Table 2; §4.3.3 gives 298–366.68 K), 15.2–30 mass %; loading range not stated | Fitted (MEACOO- d1 and cross-parameters; Table 5) | 12.5, pooled | Tables 2, 8 | No: pooled, pressure definition unstated |
+| Téllez-Arredondo 2013, eCTS (cubic + association + Debye–Hückel, EOS ions) | Lawson and Garst 1976, Mamun 2005, Jou 1995; 107 points | %AAD in the partial pressure of the acid gas (§4.3.3, p. 53); the fitting objective also includes total pressure (Eq. 28) | 298–393 K (Table 2; §4.3.3 gives 298–366.68 K), 15.2–30 mass %; loading range not stated | Fitted (MEACOO- d1 and cross-parameters; Table 5) | 12.5, pooled | Tables 2, 8; §4.3.3 | Partly: pooled over 15.2–30 mass % and three sources |
 | Wang 2018, PR-CPA, association instead of ions | Jou 1995, 30 mass % | Relative deviation of total pressure (Eq. 8) | 298–393 K; loading range not stated | Fitted (kij(T), cross-association; Table 4) | 12 | Table 4, Fig. 5 | No: total pressure |
-| Neumann 2021, Helmholtz model + e-NRTL | Aronu 2011, Jou 1995, Lee 1976, Shen and Li 1992 at 30 mass % (plotted) | Not reported for pressure (density AARD only) | 298–393 K, 15–60 mass % for the plotted VLE (§4.2) | K3–K5 fitted to VLE (§3, Table 6); e-NRTL parameters from Putta 2016 unchanged; low-loading Jou rows below the MEA vapor pressure not fitted (§4.2) | Not reported | Fig. 5 | No |
+| Neumann 2021, Helmholtz model + e-NRTL | Aronu 2011, Jou 1995, Lee 1976, Shen and Li 1992 at 30 mass % (plotted) | Not reported for pressure (density AARD only) | 30 mass % in Fig. 5 (caption); the selected datasets span 298–393 K and 15–60 mass % (§4.2) | K3–K5 fitted to VLE (§3, Table 6); e-NRTL parameters from Putta 2016 unchanged; low-loading Jou rows below the MEA vapor pressure not fitted (§4.2) | Not reported | Fig. 5 | No |
 | Lloret 2017, soft-SAFT, association instead of ions | Jou 1995 at 30 mass % (Fig. 10a); Lee 1976 at 2.5 N (Fig. 11) | Not reported | 313–373 K (Fig. 10a); 298–373 K (Fig. 11) | CO2 reactive-site energy and volume fitted to the Jou data; 2.5 N predicted | Not reported | §4.7; Figs. 10a, 11 | No |
 
 The same limitation applies to Chremos 2016 (Fig. 11) and Noroozi 2020
 (Fig. 5): pressure comparisons for 30 mass % MEA in figures only, with no
-numerical deviation. The only like-for-like published comparisons are the
-three Mamun 2005 values (Baygi 21.03, Najafloo 39.96, Zhang 13.5, n = 19).
+numerical deviation. The like-for-like published comparisons are the three
+Mamun 2005 values (Baygi 21.03, Najafloo 39.96, Zhang 13.5, n = 19), and
+probably a fourth, Hilliard 27.06 (n = 19, fitted); that one is inference,
+because Hilliard's flash specification is not stated.
 Akula 2023a is the closest pooled comparison: same residual and
 concentration, fitted, and loading limited to 0.5. The pre-refit record's
 Mamun value is 20.6 % (n = 19).
@@ -421,7 +427,9 @@ Mamun value is 20.6 % (n = 19).
   MEACOO- and HCO3- are EOS species with fitted parameters (Tables 5–6).
   CO3²- is omitted because the second acid dissociation is neglected (§3).
   The MEA–CO2 ionic parameters are fitted to ternary VLE, with pressure
-  %AAD 12.5 (§4.3.3, Table 8). Neither reports speciation or heat for MEA.
+  %AAD 12.5 (§4.3.3, Table 8). Téllez reports neither speciation nor heat.
+  Neumann reports MEA speciation only in a figure (Fig. 7, Jakobsen 2005,
+  313.15 K, 30 mass %, no metric) and no heat.
   The claim must say "SAFT-family", not "equation of state" or
   "Helmholtz-energy model".
 - **Electrolyte SAFT with carbamate ions, for AEEA (read in full).**
@@ -474,7 +482,9 @@ their own owners.
   is HCO3- + CO3²-.
 - **Hilliard residual direction.** Notebook §Fit statistics groups Hilliard
   2008 with the papers that report pressure at the measured loading. Its
-  Table 13.4-6 values are reconciled maximum-likelihood residuals (see §9.3).
+  Table 13.4-6 values come from an Aspen Plus flash test whose
+  specification is not stated (§13.4.1), so that grouping is probable but
+  unconfirmed (see §9.3).
 - **Idris 2014.** The notebook calls it "the paper that also reports the Raman
   speciation measurements." It reports Raman calibrations and spectra, and
   states that quantitative speciation is future work (p. 1430). Only its
