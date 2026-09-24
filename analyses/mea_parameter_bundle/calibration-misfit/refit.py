@@ -7,7 +7,7 @@ Calibration: every packet state except 80 degC. Validation: the 80 degC isotherm
 (Jou 1995 pressure, reserved_validation in the grouped split manifest, plus Bottinger 2008).
 Residuals: pCO2 ln(pred/obs)/0.3 (the #101 data floor); species (pred-obs)/(0.1 obs + 0.001).
 The NMR "HCO3-" observation is compared with model HCO3- + CO3^2- (fast-exchange carbon pool).
-Writes /tmp/cm/refit-NAME.jsonl (every evaluation) and the result JSON beside this script.
+Writes results/runs/calibration-misfit/refit-NAME.jsonl (every evaluation) and the result JSON beside this script.
 Diagnostic only: never writes the selected parameter record.
 """
 import json
@@ -59,8 +59,8 @@ def main(argv):
     base_vals = probe.shared.parameter_values(probe.with_values(probe.shared.parameter_mapping(),
                                                                 {i: 0.0 for i in ids if i.endswith(probe.SLOPE)}))
     x0 = np.array([start.get(i, base_vals[i]) for i in ids])
-    log = Path(f'/tmp/cm/refit-{name}.jsonl')
-    log.parent.mkdir(exist_ok=True)
+    log = probe.SCRATCH / f'refit-{name}.jsonl'
+    log.parent.mkdir(parents=True, exist_ok=True)
     base = {r['identity']: r for r in probe.evaluate()}
     keys = [(r['identity'], k) for r in base.values() if not is_validation(r) and residuals(r) for k in residuals(r)]
     order = [(i, k[1]) for i, k in keys]

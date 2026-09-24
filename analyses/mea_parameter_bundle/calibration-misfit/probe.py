@@ -3,7 +3,7 @@
 Usage: probe.py OUT.jsonl [identity-substring ...] [identity=value ...]
 Writes one JSON line per state: identity, status, predictions, liquid composition.
 Perturbed solves warm-start from the adopted solution of the same state.
-Run single-threaded; the solve cache lives in /tmp.
+Run single-threaded; the solve cache and logs live in results/runs/calibration-misfit (ignored).
 """
 import copy
 import csv
@@ -19,7 +19,8 @@ import shared_evaluation as shared  # noqa: E402
 import epcsaft  # noqa: E402
 
 shared.verify_wheel()  # the pinned Engine wheel must be installed
-shared.RUNS = Path('/tmp/mea-calibration-misfit-cache')
+SCRATCH = W / 'analyses/mea_parameter_bundle/results/runs/calibration-misfit'
+shared.RUNS = SCRATCH / 'cache'
 OBSERVATIONS = shared.load_state_packet()['observations']
 
 
