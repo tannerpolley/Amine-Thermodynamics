@@ -421,7 +421,7 @@ required by this slice.
 | liquid speciation | fixed `T` K and `P` Pa; finite feed amounts mol; nine-component molar masses; reaction/balance rows | true liquid mole fractions dimensionless; linear aggregates from stored coefficient vectors | value rows for current packet; no unrecorded finite-difference substitute for a missing native action. Aggregate mapping and source basis stay application-owned. |
 | continuation/density | finite phase amounts mol, molar volume m3/mol, balance totals, continuation identity, model/reaction fingerprints | phase pressure Pa, molar density mol/m3, molar volume m3/mol, packing fraction, composition, phase amounts, chemical-potential-over-RT and evidence/status | continuation state and property actions seed bounded recovery and cache identity. Nonpositive, inconsistent or failed density is a failed attempt. Global search remains unestablished if not run. |
 | paired heat | fixed endpoint `T/P`, finite composition and amounts, reference/formation enthalpy payload, paired loading endpoints | phase `TotalEnthalpy` (J/mol), phase amount (mol), extensive endpoint `H` (J), paired heat J/mol CO2 | current `solved_state_actions` value/status for the phase observable plus the #61 adapter's amount multiplication and finite pairing. No reaction/reference active-parameter derivative is currently available; do not finite-difference silently. |
-| reaction-coordinate fit | candidate reaction coefficient identities and order; application-transformed values; T/P/feed coordinates | fixed-candidate output rows; any future reaction-coefficient Jacobian columns | retained fit receipts use old reaction actions. Current `SolvedStateActionDirection.active_parameters` covers EOS model actives only; #61 owns a conditional reaction-fit design and adoption decision. |
+| reaction-coordinate fit | candidate reaction coefficient identities and order; application-transformed values; T/P/feed coordinates | fixed-candidate output rows; any future reaction-coefficient Jacobian columns | retained fit records use old reaction actions. Current `SolvedStateActionDirection.active_parameters` covers EOS model actives only; #61 owns a conditional reaction-fit design and adoption decision. |
 
 The retained old-wheel application evidence consumes values, recovery evidence,
 density and reaction-fit output Jacobians. The current adapter maps the
@@ -458,7 +458,7 @@ implementation uses `corrected_request`, `_problem_from_request`,
 `_snapshot_from_result`, `_solve_in_child` and `solve_with_recovery` as one
 private request-to-Problem mapping and one result/action-to-snapshot mapping.
 Keep packet expansion, cache identity, provenance, forked timeout handling,
-bounded recovery and failure receipts in this file. The mapping must use only
+bounded recovery and failure records in this file. The mapping must use only
 the public current interfaces imported from `epcsaft.equilibrium`:
 `Problem`, `Phase`, `Free`, `Pinned`, `Amounts`, `Reaction`,
 `ReactionLogPolynomial`, `SolvedStateObservable`, `SolvedStateObservableKind`,
@@ -791,7 +791,7 @@ for this input handoff.
 Selection, calibration and validation lineages must stay separate. The current
 packet is calibration only. The Xu 2011 pressure rows and Kim/Svendsen 120 C
 heat rows were accessed during reaction selection and are therefore no longer
-untouched independent validation, even though their retained holdout receipts
+untouched independent validation, even though their retained holdout records
 are useful limitations. Source-reserved rows and non-30-wt% composition rows
 remain candidates for a later, explicitly designed validation split.
 
@@ -1047,7 +1047,7 @@ The bounded replay consumed Engine runtime `892c6687480259a6de6bbc8fa1721a35d06c
 and noneditable wheel `dc1d18d02fa560a5b518f4fb20be7e2254e8aa79dd62b3f6dfddf2107005d2b2`.
 The new `current-main-adopted-comparison` result directory beside the earlier
 `final-current-wheel` result record retains nine requests, eight successful states,
-one cold 360 K failure and eight packet-target comparisons. Earlier c878 receipts
+one cold 360 K failure and eight packet-target comparisons. Earlier c878 records
 are unchanged. Packet calibration labels, selection exposure, source-range
 extrapolation and the Böttinger 058 role conflict limit interpretation; this is
 not independent predictive validation.
@@ -1140,7 +1140,7 @@ reference temperature derivative (Engine #84): `evaluate_direct_absorption_heat.
 reaction-temperature fit is retired as one unit: every mode of
 `run_reaction_temperature_fit.py` except `--self-check` and `--sensitivity-check` raises it on entry, because the
 screen, candidate, parity and benchmark consume the thermal reference and the full replay,
-partial summary and adoption require `candidate-record.json` and the heat summary, which
+partial summary and adoption require the candidate comparison JSON and the heat summary, which
 only those blocked stages write for the current parameter file. `--sensitivity-check` stops
 on missing reaction-coefficient actions (Engine #61). `--self-check` remains; it checks the
 reaction-enthalpy shift algebra, cohort roles and recovery attempt plan without an Engine

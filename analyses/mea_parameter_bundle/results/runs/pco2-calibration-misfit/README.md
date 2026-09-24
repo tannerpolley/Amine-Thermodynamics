@@ -98,7 +98,7 @@ The three kinds of evidence are kept separate:
 - They match the adoption-time full replay (old adapter, wheel `40fba7cf…`) with mean ln −0.0030
   and RMS 0.0070 over 78 states. `vle_obs_0149` is absent from that replay.
 - The ~0.3% offset is consistent with the R1/R3 shifts that the replay scored but the selected
-  document omits (see `interpretation_correction` in `adoption-record.json`). It is negligible
+  document omits (see `interpretation_correction` in the adoption comparison JSON of `results/reaction-temperature-fit/`). It is negligible
   next to the misfit.
 - The misfit therefore already existed at adoption. The adoption record agrees: its 143-row
   calibration pressure cohort had log10 RMSE 0.2366, which is ln RMSE 0.545.

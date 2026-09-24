@@ -157,7 +157,7 @@ bounded direct-Engine campaign subsequently selected the displayed R4 and
 carbon-dioxide dispersion-energy values. The current fixed-parameter
 Born--permittivity study retains solvent-only mass-fraction dielectric mixing.
 The subsequent reaction-temperature selection is recorded in
-`results/reaction-temperature-fit/adoption-record.json`; read the current
+the adoption comparison listed in `results/reaction-temperature-fit/README.md`; read the current
 R2/R4/R5 coefficients from `results/selected-current-best-parameters.json`,
 not from the earlier study's fitted values.
 The active mapping omits redundant formulation switches: positive unique ion
