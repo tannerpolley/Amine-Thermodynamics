@@ -90,7 +90,7 @@ def bounded_main(main) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--wall-seconds", type=float, default=900)
+    parser.add_argument("--wall-seconds", type=float, default=3600)
     parser.add_argument(
         "--memory-mib",
         type=int,
@@ -113,7 +113,13 @@ def main() -> None:
             parser.error("another bundle refresh is already running")
         started = time.monotonic()
         commands = [
-            [sys.executable, "scripts/generate_figure_data.py"],
+            # The retained 161 pressure states need 180 s per state under shared load.
+            [
+                sys.executable,
+                "scripts/generate_figure_data.py",
+                "--state-timeout-s",
+                "180",
+            ],
             [sys.executable, "scripts/render_figures.py"],
             [sys.executable, "scripts/render_regression_overview.py"],
         ]

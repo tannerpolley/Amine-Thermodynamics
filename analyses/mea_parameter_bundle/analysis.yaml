@@ -161,7 +161,8 @@ commands:
     - bash render.sh notebook.qmd
 runtime:
   class: pinned_engine_replay
-  refresh_wall_seconds: 900
+  refresh_wall_seconds: 3600
+  refresh_state_timeout_seconds: 180
   refresh_logical_cpus: 1
   refresh_solver_address_space_mib: 2048
   refresh_quarto_v8_heap_mib: 2048

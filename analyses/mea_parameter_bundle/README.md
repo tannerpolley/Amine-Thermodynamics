@@ -237,7 +237,8 @@ reference temperature actions and record-anchored calorics (ePC-SAFT #84,
 one logical CPU, single-threaded BLAS/OpenMP, lower scheduling priority, a
 2 GiB per-process solver address-space limit and a 2 GiB native V8 heap cap
 for Quarto (neither is an aggregate RAM quota), and a
-15-minute hard wall deadline for the entire refresh. `--wall-seconds` and
+one-hour hard wall deadline for the entire refresh, with a 180 s budget per
+equilibrium state. `--wall-seconds` and
 `--memory-mib` explicitly override those limits; they are never increased
 automatically. A timeout stops the owned process group and preserves completed
 state caches. Cache reuse also requires an unchanged evaluator source hash;

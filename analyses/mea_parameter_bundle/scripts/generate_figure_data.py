@@ -747,6 +747,8 @@ def main() -> None:
         "source_continuation_parameter_fingerprints": sorted(
             source_continuation_fingerprints
         ),
+        "state_timeout_s": args.state_timeout_s,
+        "overall_timeout_s": args.overall_timeout_s,
         "warm_start_policy": (
             "source continuation values are projected to mass-balanced finite "
             "starts; pressure observations then reuse certified states across "
