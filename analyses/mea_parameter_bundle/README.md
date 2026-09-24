@@ -227,12 +227,18 @@ Use the repository's pinned uv environment. From this analysis directory:
 uv run python scripts/refresh_results.py
 ```
 
-This is the normal update command. It runs figure data, calorimetry, thermal
-checks, figure rendering, Quarto, and handoff packaging sequentially. It uses
+This is the normal update command. It runs figure data, figure rendering and
+the overview figures sequentially, then exits nonzero naming the stages it did
+not run: direct heat, thermal checks, the strict Quarto render and handoff
+packaging wait for the MEA heat calculation to be rebuilt on the Engine
+reference temperature actions and record-anchored calorics (ePC-SAFT #84,
+#138; MEA #96). Until then render with
+`bash render.sh notebook.qmd --working-copy`. It uses
 one logical CPU, single-threaded BLAS/OpenMP, lower scheduling priority, a
 2 GiB per-process solver address-space limit and a 2 GiB native V8 heap cap
 for Quarto (neither is an aggregate RAM quota), and a
-15-minute hard wall deadline for the entire refresh. `--wall-seconds` and
+one-hour hard wall deadline for the entire refresh, with a 180 s budget per
+equilibrium state. `--wall-seconds` and
 `--memory-mib` explicitly override those limits; they are never increased
 automatically. A timeout stops the owned process group and preserves completed
 state caches. Cache reuse also requires an unchanged evaluator source hash;

@@ -11,7 +11,9 @@ from pathlib import Path
 ANALYSIS = Path(__file__).resolve().parents[1]
 REPO = ANALYSIS.parents[1]
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
-ENGINE = ANALYSIS / "data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
+# The pinned wheel lives outside the repository; its SHA-256 (enforced against the
+# installed wheel by shared_evaluation.verify_wheel) is the Engine identity.
+ENGINE_KEY = "engine_wheel_sha256"
 FIGURE_DATA = ANALYSIS / "results/figure-calculation-receipt.json"
 FIGURES = ANALYSIS / "results/figure-render-receipt.json"
 HEAT = ANALYSIS / "results/calorimetry/current-selected-direct-enthalpy-summary.json"
@@ -34,12 +36,24 @@ def hashes(paths: list[Path] | tuple[Path, ...]) -> dict[str, str]:
     return result
 
 
+def pinned_engine_wheel_sha256() -> str:
+    from shared_evaluation import ENGINE_WHEEL_SHA256
+
+    return ENGINE_WHEEL_SHA256
+
+
 def source_hashes(*sources: Path) -> dict[str, str]:
-    return hashes((PARAMETERS, ENGINE, *sources))
+    return {ENGINE_KEY: pinned_engine_wheel_sha256(), **hashes((PARAMETERS, *sources))}
 
 
 def require_hashes(expected: dict[str, str]) -> None:
     for name, digest in expected.items():
+        if name == ENGINE_KEY:
+            if digest != pinned_engine_wheel_sha256():
+                raise ValueError(
+                    f"Stale Engine: generated with wheel {digest}; regenerate its owning stage"
+                )
+            continue
         path = REPO / name
         if not path.is_file() and path.suffix == ".json":
             path = path.with_suffix(".json.gz")

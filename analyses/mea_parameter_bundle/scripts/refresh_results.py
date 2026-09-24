@@ -90,7 +90,7 @@ def bounded_main(main) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--wall-seconds", type=float, default=900)
+    parser.add_argument("--wall-seconds", type=float, default=3600)
     parser.add_argument(
         "--memory-mib",
         type=int,
@@ -113,12 +113,24 @@ def main() -> None:
             parser.error("another bundle refresh is already running")
         started = time.monotonic()
         commands = [
-            [sys.executable, "scripts/generate_figure_data.py"],
-            [sys.executable, "scripts/evaluate_direct_absorption_heat.py"],
-            [sys.executable, "scripts/validate_thermal_references.py", "--equilibrium"],
+            # The retained 161 pressure states need 180 s per state under shared load.
+            [
+                sys.executable,
+                "scripts/generate_figure_data.py",
+                "--state-timeout-s",
+                "180",
+            ],
             [sys.executable, "scripts/render_figures.py"],
-            ["bash", "render.sh", "notebook.qmd"],
-            [sys.executable, "scripts/build_absorption_handoff.py"],
+            [sys.executable, "scripts/render_regression_overview.py"],
+        ]
+        # The heat and thermal scripts are stubs until the MEA heat calculation is
+        # rebuilt on the Engine calorics (MEA #96); the strict render and handoff
+        # require their outputs.
+        blocked = [
+            "scripts/evaluate_direct_absorption_heat.py",
+            "scripts/validate_thermal_references.py --equilibrium",
+            "render.sh notebook.qmd",
+            "scripts/build_absorption_handoff.py",
         ]
         try:
             for command in commands:
@@ -147,9 +159,15 @@ def main() -> None:
             )
             raise SystemExit(1) from exc
         print(
-            "Selected data, figures, notebook, and handoff refreshed and hash-checked",
-            flush=True,
+            "Blocked, not run: "
+            + "; ".join(blocked)
+            + ". The MEA heat calculation has not been rebuilt on the Engine reference "
+            "temperature actions and record-anchored calorics (ePC-SAFT #84, #138; "
+            "MEA #96). Figure data and figures were refreshed; render with "
+            "`bash render.sh notebook.qmd --working-copy`.",
+            file=sys.stderr,
         )
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
