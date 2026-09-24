@@ -64,7 +64,7 @@ decide: the 353.15 K / 0.195 g/g block has HCO₃⁻ shifted down one row
 (source 0.0, 0.0092, 0.0156 at loading 0.324, 0.472, 0.576; retained 0.0092,
 0.0156, 0), the oxazolidone column (17 nonzero states) is not retained, and
 the reported mass fractions 0.195, 0.203 and 0.31 g/g are stored as 0.2 or 0.3
-in 34 states. The shifted cells are unscored 0.2 g/g rows; six scored
+in 27 states. The shifted cells are unscored 0.2 g/g rows; five scored
 353.15 K states use 0.3 instead of the reported 0.31 g/g.
 
 ### Idris 2014 CO₂ solubility (`dataset:idris-2014-mea-co2-pco2-table2`)
@@ -106,7 +106,7 @@ temperature-dependent model deficiencies.
 | R4 (Tong/Aroua) | Both PDFs in Zotero | Aroua's original coefficients not yet compared with Tong's converted K5 |
 | R5 (Bates–Pinching) | NIST PDF, outside Zotero | No Zotero record; Böttinger Table 5 is the in-library cross-check |
 | Notebook reaction table | — | cites Nasrifar 2010 (ref. 4) for R4/R5, while the source record selects Tong/Aroua and Bates–Pinching; R4 domain column shows 293.15–393.15 K against the 293–323 K source range (already noted in the notebook) |
-| Holdouts | `holdout-evaluations.csv` | Xu 2011 and Kim 2014 were each scored once during selection; they are not untouched validation data |
+| Holdouts | `holdout-evaluations.csv` | Xu 2011 pressure (18 rows) and Kim–Svendsen 2007 heat at 120 °C (20 rows) were each scored once during selection; they are not untouched validation data. Kim et al. 2014 is a model-selection comparison, not a holdout |
 | Companion corpus recovery | local, unversioned | No backup or recovery policy selected |
 
 ## Next decisions
@@ -115,7 +115,7 @@ These are for the data and parameter owners; none was acted on here.
 
 1. Correct the three Böttinger HCO₃⁻ cells and decide whether to retain the
    reported mass fractions and oxazolidone column (the 0.31 g/g change affects
-   six scored states).
+   five scored states).
 2. Transcribe the remaining nine Idris uncertainties and confirm the pressure
    unit from the article.
 3. Correct the notebook's R4/R5 citation to the selected sources.
