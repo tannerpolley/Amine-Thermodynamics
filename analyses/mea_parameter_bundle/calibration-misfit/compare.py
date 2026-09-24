@@ -80,6 +80,15 @@ def main(argv):
                                'status': r['status']})
         coverage = {'canonical evaluated': sum(r['status'] == 'evaluated' for r in canonical.values()),
                     'canonical total': len(canonical)}
+        for scope, recs in (('packet states', packet), ('six-source pCO2 states', canonical)):
+            checks = [r['check'] for r in recs.values()]
+            ok = [c for c in checks if not c['failure_code']]
+            rows.append({'variant': variant, 'scope': scope, 'quantity': 'solver check', 'n': len(checks),
+                         'evaluated': len(ok), 'tolerance_not_met': sum(c['tolerance_met'] is not True for c in ok),
+                         'balance_errors': sum(bool(c['balance_errors']) for c in ok),
+                         'max_abs_stationarity': max(c['max_abs_stationarity'] for c in ok),
+                         'failures': ' '.join(f"{i}:{r['check']['failure_code']}" for i, r in recs.items()
+                                              if r['check']['failure_code'])})
         for scope, v in groups.items():
             rows.append({'variant': variant, 'scope': scope, 'quantity': 'ln(pred/obs)', **stats(v)})
         for source, t, a, obs in carbonate_refs():
@@ -95,6 +104,7 @@ def main(argv):
                           'parameter_sha256': probe.shared.sha256(probe.shared.PARAMETERS),
                           'script_sha256': probe.shared.sha256(Path(__file__))})
     fields = ['variant', 'scope', 'quantity', 'n', 'mean_ln', 'rms_ln', 'aard_percent', 'observed', 'predicted',
+              'evaluated', 'tolerance_not_met', 'balance_errors', 'max_abs_stationarity', 'failures',
               'parameter_overrides', 'canonical evaluated', 'canonical total', 'engine_wheel_sha256',
               'parameter_sha256', 'script_sha256']
     with (HERE / 'variant-scores.csv').open('w', newline='') as h:
@@ -109,6 +119,9 @@ def main(argv):
     for r in rows:
         if r['quantity'] == 'ln(pred/obs)':
             print(f"{r['variant']:10s} {r['scope']:40s} n={r['n']:3d} rms {r['rms_ln']:.3f} mean {r['mean_ln']:+.3f} AARD {r['aard_percent']:.0f}%")
+        elif r['quantity'] == 'solver check':
+            print(f"{r['variant']:10s} {r['scope']:40s} solved {r['evaluated']}/{r['n']} tol-unmet {r['tolerance_not_met']}"
+                  f" balance {r['balance_errors']} max|stat| {r['max_abs_stationarity']:.1e} {r['failures']}")
         else:
             print(f"{r['variant']:10s} {r['scope']:40s} CO3 obs {r['observed']:.3f} model {r['predicted']:.3f}")
 

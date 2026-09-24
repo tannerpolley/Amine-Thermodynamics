@@ -88,7 +88,7 @@ The adopted model is the one the notebook reports (Mamun 0.25, Xu 0.44, Aronu 0.
 Jou 0.60, Idris 0.64–0.66). The adopted model fails 1 canonical row (Idris `vle_obs_0166`) and 3 speciation
 states that the candidate solves. `probe.py` builds the canonical rows with the same nearest-template
 rule as `generate_figure_data.py`, but it cold-starts the adopted solves and warm-starts the
-candidate solves from them. The figure pipeline instead uses cached cross-state anchors, so its
+candidate solves from them. The figure-data generation (`generate_figure_data.py`) instead uses cached cross-state anchors, so its
 failure set can differ.
 
 ### Carbonate fraction of dissolved carbon (Jakobsen 2005 NMR, 30 wt%)
@@ -151,7 +151,7 @@ This follows the ion–water k_ij convention of Held-type ePC-SAFT (see Literatu
   in all. The three adopted-model failures (Böttinger 042 and 046, Matin 016) are not in the
   objective.
 - Validation: the whole 80 °C isotherm (11 Jou pCO2 rows, `reserved_validation` in the grouped split
-  manifest, plus 5 Böttinger states). Aronu, Idris, Mamun and Xu enter no objective.
+  file, plus 5 Böttinger states). Aronu, Idris, Mamun and Xu enter no objective.
 
 **Objective:**
 
@@ -189,6 +189,77 @@ They are not valid at the bounds and understate the correlated uncertainty.
 `candidate-refit-a-parameters.json` (SHA-256 `4f31b348…7734`) holds these five values; R4's
 `b_k` keeps its source provenance. Loaded directly (`python candidate.py --check`), it reproduces
 the refit predictions to 2e-11 in ln pCO2 and 2e-13 in mole fraction.
+
+### Refit C: R4 held at its source value (`refit.py`, `refit-C.json`)
+
+Owner decision of 2026-09-23 (#96, #107): refit with the R4 intercept at its Tong 2012 / Aroua 1999
+value, and adopt only if the fit holds. Adoption rule: the 161-row pCO2 AARD must be at most 35 %,
+keeping at least 70 % of refit A's 52 → 27 % gain, and Mamun 2005 at 120 °C must not degrade
+against the adopted record's RMS ln of 0.254.
+
+**Coordinates and bounds:**
+
+- The four refit-A k_ij, each within ±0.3, started from refit A's values.
+- A 1/T slope on MEAH⁺–water k_ij, within ±300 K, with T_ref 313.15 K. Its form is the one the record
+  already uses for CO2–MEA.
+- R4 fixed at `a` = 2.151 (source).
+
+The partition, objective and HCO₃⁻ + CO₃²⁻ mapping are the same as refit A's. The mapping is the
+#109 decision (Matin 2012, Eqs. 18–19b).
+
+**Solver and stopping:**
+
+- Part 1 stopped after iteration 1 because the process was killed. Calibration pCO2 RMS ln went from
+  0.523 to 0.445.
+- Part 2 restarted from part 1's iteration-1 point.
+- The run stopped at iteration 2 under the 2 % pCO2-RMS rule: 0.445 → 0.444. The objective cost fell
+  2.3 % (126.9 → 124.0) in that step, so the optimizer had not reached an optimum.
+
+| coordinate | adopted | refit A | refit C | SE (C) | at bound (C) |
+|---|---:|---:|---:|---:|:--:|
+| carbamate–water k_ij | 0 | −0.0037 | +0.0748 | 0.019 | |
+| MEAH⁺–water k_ij | 0 | −0.2118 | −0.2329 | 0.018 | |
+| MEAH⁺–water 1/T slope (K) | 0 | 0 | −155.6 | 66 | |
+| HCO₃⁻–water k_ij | 0 | +0.3000 | +0.2957 | 0.020 | near (+0.3) |
+| MEAH⁺–MEACOO⁻ k_ij | −0.0020 | −0.3000 | −0.3000 | 0.048 | **yes (−0.3)** |
+| R4 intercept `a` | 1.5050 | 1.0050 | 2.151 (fixed) | | |
+
+The standard errors come from the final forward-difference Jacobian over the 180 objective
+residuals. They are not valid at the active MEAH⁺–MEACOO⁻ bound. The column-normalized singular values
+are 1.48, 1.06, 0.89, 0.72 and 0.62. The largest correlation is +0.48, between carbamate–water and
+the slope. Holding R4 removed refit A's −0.97 R4 correlation, but the cation–anion bound is still
+active.
+
+**pCO2 by source** (ln(pred/obs); the 80 °C Jou rows are held out; Aronu, Idris, Mamun and Xu enter no
+objective):
+
+| source | n | adopted AARD / bias / RMS | refit A | refit C |
+|---|---:|---|---|---|
+| all six (161) | 161 | 52 % / +0.147 / 0.532 (n = 160) | 27 % / −0.025 / 0.329 | **37 %** / +0.097 / 0.400 |
+| Hilliard 2008 (fitted) | 30 | 69 % / +0.364 / 0.584 | 24 % / +0.130 / 0.262 | 50 % / +0.350 / 0.445 |
+| Jou 1995 (fitted except 80 °C) | 48 | 57 % / +0.050 / 0.601 | 30 % / +0.125 / 0.326 | 40 % / +0.098 / 0.428 |
+| Aronu 2011 (not fitted) | 36 | 41 % / −0.005 / 0.506 | 22 % / −0.245 / 0.349 | 27 % / −0.057 / 0.368 |
+| Idris 2014 (not fitted) | 10 | 85 % / +0.584 / 0.640 (n = 9) | 21 % / +0.107 / 0.226 | 59 % / +0.442 / 0.493 |
+| Xu 2011 (not fitted) | 18 | 49 % / +0.318 / 0.440 | 35 % / +0.021 / 0.379 | 32 % / +0.124 / 0.340 |
+| Mamun 2005, 120 °C (not fitted) | 19 | 21 % / −0.027 / **0.254** | 29 % / −0.347 / 0.380 | 19 % / −0.218 / **0.299** |
+| 80 °C held-out isotherm (Jou) | 11 | 47 % / −0.137 / 0.525 | 17 % / +0.014 / 0.208 | 30 % / −0.052 / 0.341 |
+
+**Speciation** (AARD / RMS ln): calibration 36 % / 0.398 (adopted, n = 112), 12 % / 0.265 (A, n = 120),
+14 % / 0.301 (C, n = 120); 80 °C holdout 11 % / 0.147, 11 % / 0.133, 9 % / 0.103. Carbonate share of
+dissolved carbon against Jakobsen 2005 NMR at 20 and 40 °C, loading 0.11–0.40: adopted 5–13× the
+measured share, refit A 1.3–3.0×, refit C 1.2–2.8×. One point is excluded from these ratios: 40 °C,
+loading 0.21, measured 0.119, which is out of line with its neighbours. Wong 2015 (about 5 % at 30 °C)
+is quoted, not scored, because no 30 °C model states exist.
+
+**Solver status:** refit C solves 123/123 packet states and 161/161 pCO2 states. On every row the
+requested tolerance is met, material and charge balances close within 1e-7, and the maximum
+stationarity residual is 6.8e-13. The adopted record fails 3 packet states and 1 pCO2 state
+(`variant-scores.csv`, column `failures`).
+
+**Outcome: refit C fails both adoption conditions.** Its 161-row AARD is 37 % (limit 35 %), and
+Mamun's RMS ln rises from 0.254 to 0.299. Refit C is not adopted. It is a calibration result;
+Aronu, Idris, Mamun and Xu are predictions of other 30 wt% sources, and the 80 °C isotherm is an
+interpolation test.
 
 ## Literature comparison
 
@@ -259,7 +330,8 @@ python candidate.py                         # candidate-refit-a-parameters.json
 python candidate.py --check                 # file vs probe overrides, four states
 python probe.py /tmp/cm/base-b66.jsonl; python probe.py /tmp/cm/canon-base.jsonl --canonical
 python probe.py /tmp/cm/best.jsonl <id=value ...>; python probe.py /tmp/cm/canon-best.jsonl --canonical <id=value ...>
-python compare.py adopted=/tmp/cm/base-b66.jsonl,/tmp/cm/canon-base.jsonl candidate-A=/tmp/cm/best.jsonl,/tmp/cm/canon-best.jsonl
+python refit.py C '<four k_ij>@-0.3@0.3@<start>' 'pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope@-300@300@<start>'
+python compare.py adopted=ADOPTED.jsonl,CANON-ADOPTED.jsonl candidate-A=A.jsonl,CANON-A.jsonl candidate-C=C.jsonl,CANON-C.jsonl
 ```
 
 Retained files:
