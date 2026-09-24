@@ -2,7 +2,7 @@
 
 This document preserves the literature rationale and historical model choices.
 The [scientific plan](../scientific/PREDICTIVE_MEA_PROGRAM.md) owns the current
-estimation strategy; the [context map](../scientific/CONTEXT.md) connects it to
+estimation strategy; the [established-work map](../scientific/CONTEXT.md) connects it to
 completed studies and real gaps. Historical choices below are not instructions
 to reset the current exploratory incumbent.
 
@@ -189,7 +189,7 @@ The estimation sequence is already developed in the
 [ionic identification strategy](meah-meacoo-volumetric-evidence.md) specifying
 analog data, active coordinates, objectives, uncertainty and staged fitting.
 Completed and blocked calculations are mapped in
-[CONTEXT.md](../scientific/CONTEXT.md). Consult those records before proposing
+[`CONTEXT.md`](../scientific/CONTEXT.md). Consult those records before proposing
 another strategy review or treating an old implementation limit as current.
 
 ## 9. Published-work gaps and what the retained evidence adds (23 September 2026)
@@ -246,7 +246,7 @@ one paper; claims 3–5 support it or stand as short communications.
    supply, placing it in the ionic non-ideality.** Under-prediction below
    loading 0.2, about 2× over-prediction at 0.3–0.5, under-prediction above
    0.55, at every temperature with coverage. Evidence and limits:
-   `results/runs/pco2-calibration-misfit/README.md`. Published context:
+   `results/runs/pco2-calibration-misfit/README.md`. Published comparison:
    Bülow 2021a attributes the MDEA high-loading error to overpredicted
    ion–solvent interactions; Smith et al. 2026 argue the ill-posedness in
    general. This result adds a quantitative MEA instance. Stronger with: the
@@ -297,9 +297,9 @@ Baygi Table 5; Najafloo Table 5; Zhang Table 9; Hilliard Table 13.4-6
 (p. 447); Aronu abstract and Eq. 21; Akula 2023a Fig. 4. Published row counts
 and domains differ from these rows.
 
-\* Hilliard's regression reconciles pCO2 and loading together (maximum
+\* Hilliard's maximum-likelihood fit reconciles pCO2 and loading together (maximum
 likelihood with errors in all variables, p. 440), so its pCO2 AARD is not
-strictly the same residual direction. Zhang 2011 uses the Aspen regression
+strictly the same residual direction. Zhang 2011 uses the Aspen fitting
 tool without stating its error model.
 † Not re-verified in this reading.
 
@@ -307,7 +307,7 @@ Excluded because the residual direction differs: Mac Dowell 2010 (absolute
 deviation in x_CO2 at measured T and P, AAD 0.010), Schick 2023 and Pabsch 2020
 (x_CO2 at given pressure), and Wang 2018 (total pressure, 12 %, Table 4).
 
-MDEA context only: Uyan 2015 34.4 % (corrected by Wangler 2018 Table 11,
+MDEA values, for comparison only: Uyan 2015 34.4 % (corrected by Wangler 2018 Table 11,
 footnote b, from the published 22.9 %), Wangler 2018 19.7 %, Cleeton 2020
 20–70 % by dataset, Bülow 2021a 32.7 % at 30 mass %.
 
