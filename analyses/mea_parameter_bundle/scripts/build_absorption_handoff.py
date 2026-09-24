@@ -8,7 +8,12 @@ import json
 import zipfile
 from pathlib import Path
 
-from result_freshness import hashes, require_current_results, require_hashes
+from result_freshness import (
+    hashes,
+    rendered_page,
+    require_current_results,
+    require_hashes,
+)
 from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
 from shared_evaluation import (
     MODEL_RUNTIME_DEFAULTS,
@@ -297,7 +302,9 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
         "figures/pressure.pdf": source(
             ANALYSIS / "figures/pressure/output/pressure-diagnostic-replay.pdf"
         ),
-        "documentation/research-notebook.html": source(ANALYSIS / "notebook.html"),
+        "documentation/research-notebook.html": source(
+            rendered_page(ANALYSIS / "notebook.qmd")
+        ),
         "validation/figure-calculation-receipt.json": source(
             ANALYSIS / "results/figure-calculation-receipt.json"
         ),

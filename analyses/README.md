@@ -2,19 +2,32 @@
 
 This directory contains source-controlled scientific analysis, validation, and figure workflows. Runtime package code belongs under `src/MEA`; reusable literature and parameter inputs belong under `data/reference`; analysis-specific generated snapshots stay with the analysis that owns them.
 
-## Hosted analysis site
+## Root Quarto Manuscript
 
-The repository-level Quarto site is the only hosted analysis surface. Its
-configuration and index are [`_quarto.yml`](_quarto.yml) and
-[`index.qmd`](index.qmd); build [`_site/`](_site/) with:
+`analyses/` is one root Quarto Manuscript managed by the CSE `manuscript.py`.
+[`index.qmd`](index.qmd) is the article; `_quarto.yml` holds the shared HTML
+presentation; `_cse-manuscript.json` holds the ordered publication list (the
+article, four reference and decision pages, the MEA parameter bundle overview
+and its nine study pages). From the repository root:
 
 ```bash
-bash analyses/render.sh
+python3 analyses/manuscript.py validate analyses
+(cd analyses && bash render.sh)
+python3 analyses/manuscript.py refresh analyses analyses/mea_parameter_bundle/notebook.qmd
+python3 analyses/manuscript.py preview analyses --port <free port>
 ```
 
-The site-level format and explicit workflow sidebar are inherited by every
-rendered report. Individual analysis directories keep their
-source records and retained results; they do not publish separate sites.
+`render.sh` validates the manuscript and always passes `--no-execute`; the
+article is `analyses/_site/index.html` and each registered page renders to
+`<page>-preview.html` beside it under `_site/`. Register a new report with
+`python3 analyses/manuscript.py include analyses <report.qmd> --title <title>`;
+an unregistered `.qmd` is not rendered. `refresh` and `preview` use the
+presentation profile (`_quarto-presentation.yml`), which only prepares
+presentation views and never solves the model. The strict bundle
+certification is `result_freshness.py --certify` (see the bundle README).
+`python3 analyses/manuscript.py service analyses/` installs the CSE always-on
+preview unit; it is not installed here (see the bundle README for the
+interpreter requirement and the existing port-8770 preview service).
 
 ```text
 analyses/
@@ -49,7 +62,7 @@ calculations, figures, fit statistics, cross-analysis interpretation, and next
 experiments. `enrtl_six_species_ideal_comparison/` retains the complete matched
 six-/nine-species calculation packet, source notebook, UQ tables, and figures;
 its packet-specific results are summarized, rather than duplicated, in the live
-parameter notebook. The notebook is rendered through the root Quarto site and
+parameter notebook. The notebook is rendered through the root Quarto Manuscript and
 is not a certified numerical publication; the strict result-freshness check
 currently refuses the retained generation.
 

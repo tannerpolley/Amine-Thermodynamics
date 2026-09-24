@@ -1,73 +1,27 @@
-project:
-  type: website
-  output-dir: _site
-  render:
-    - index.qmd
-    - ideal_reaction_equilibrium/index.qmd
-    - historical_fixed_parameter_epcsaft_evaluation/index.qmd
-    - reactive_epcsaft_parameter_evidence/index.qmd
-    - enrtl_six_species_ideal_comparison/notebook.qmd
-    - mea_parameter_bundle/notebook.qmd
-    - mea_parameter_bundle/neutral-mea-water/index.qmd
-    - mea_parameter_bundle/ionic-speciation-fit/index.qmd
-    - mea_parameter_bundle/co2-r4-calibration/index.qmd
-    - mea_parameter_bundle/reaction-temperature-fit/index.qmd
-    - mea_parameter_bundle/born-permittivity/index.qmd
-    - mea_parameter_bundle/calorimetry/index.qmd
-    - mea_parameter_bundle/coupling-and-identification/index.qmd
-    - mea_parameter_bundle/association-topology/index.qmd
-    - mea_parameter_bundle/historical-designs/index.qmd
-
-website:
-  title: "MEA thermodynamics analyses"
-  page-navigation: false
-  search: true
-  reader-mode: true
-  sidebar:
-    style: docked
-    alignment: left
-    collapse-level: 3
-    contents:
-      - text: "Analysis home"
-        href: index.qmd
-      - section: "MEA parameter bundle"
-        href: mea_parameter_bundle/notebook.qmd
-        contents:
-          - section: "Active formulation"
-            contents:
-              - mea_parameter_bundle/neutral-mea-water/index.qmd
-              - mea_parameter_bundle/co2-r4-calibration/index.qmd
-              - mea_parameter_bundle/born-permittivity/index.qmd
-              - mea_parameter_bundle/association-topology/index.qmd
-          - section: "Coupled assessment"
-            contents:
-              - mea_parameter_bundle/reaction-temperature-fit/index.qmd
-              - mea_parameter_bundle/calorimetry/index.qmd
-              - mea_parameter_bundle/coupling-and-identification/index.qmd
-          - section: "Historical context"
-            contents:
-              - mea_parameter_bundle/ionic-speciation-fit/index.qmd
-              - mea_parameter_bundle/historical-designs/index.qmd
-      - section: "Reference and comparison"
-        contents:
-          - ideal_reaction_equilibrium/index.qmd
-          - enrtl_six_species_ideal_comparison/notebook.qmd
-      - section: "Historical and decision evidence"
-        contents:
-          - historical_fixed_parameter_epcsaft_evaluation/index.qmd
-          - reactive_epcsaft_parameter_evidence/index.qmd
-
-# All analysis pages inherit one site-level HTML presentation and never execute
-# model code during a documentation build.
-execute:
-  enabled: false
-
-format:
-  html:
-    theme: cosmo
-    fontsize: 16px
-    toc: false
-    embed-resources: true
-    self-contained-math: true
-    html-math-method: mathjax
-    css: site.css
+{
+  "project": {
+    "type": "manuscript",
+    "output-dir": "_site"
+  },
+  "metadata-files": [
+    "_cse-manuscript.json"
+  ],
+  "manuscript": {
+    "article": "index.qmd"
+  },
+  "format": {
+    "html": {
+      "embed-resources": true,
+      "theme": "cosmo",
+      "fontsize": "16px",
+      "toc": false,
+      "self-contained-math": true,
+      "html-math-method": "mathjax",
+      "css": "site.css"
+    }
+  },
+  "execute": {
+    "enabled": false
+  },
+  "keep-md": true
+}
