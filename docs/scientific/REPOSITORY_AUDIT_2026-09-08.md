@@ -38,7 +38,7 @@ row against its primary paper or rerun historical thermodynamics.
 | `six_species_solubility_reference` | Six-species pressure/speciation reference | Legacy neutral calculation is a distinct baseline |
 | `neutral_pcsaft_pressure_reference` | Neutral pressure/parity reference | Not coupled reactive parameter evidence |
 | `ideal_reaction_equilibrium` | Ideal chemistry baseline and manuscript comparison | Does not qualify electrolyte parameters |
-| `speciation_evidence_harmonization` | Observation bases and direct/aggregate/comparison-only roles | Harmonization is not parameter estimation |
+| `speciation_evidence_harmonization` | Observation bases and direct/aggregate/ambiguous roles | Harmonization is not parameter estimation |
 | `historical_fixed_parameter_epcsaft_evaluation` | Exact historical fixed-parameter comparisons | Cannot be relabeled as selected-vector predictions |
 | `reactive_epcsaft_parameter_evidence` | Issue #70 negative decision, neutral/source and electrostatic history | Retain failures and original input identities |
 | `enrtl_six_species_ideal_comparison` | Matched species reduction and packet-specific sensitivity | Its perturbation ranges are not uncertainty for the incumbent |
