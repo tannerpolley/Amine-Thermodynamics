@@ -53,7 +53,8 @@ def main(argv):
         hi.append(float(b))
         if x:
             start[ident] = float(x[0])
-    base_vals = probe.shared.parameter_values(probe.shared.parameter_mapping())
+    base_vals = probe.shared.parameter_values(probe.with_values(probe.shared.parameter_mapping(),
+                                                                {i: 0.0 for i in ids if i.endswith(probe.SLOPE)}))
     x0 = np.array([start.get(i, base_vals[i]) for i in ids])
     log = Path(f'/tmp/cm/refit-{name}.jsonl')
     log.parent.mkdir(exist_ok=True)
@@ -80,7 +81,8 @@ def main(argv):
         table = scaled(evaluate_all(x))
         return np.array([table.get(k, fallback[k])[1] for k in order])
 
-    steps = np.array([0.01 if 'k_ij' in i else 0.05 if i.startswith('reaction:') else 0.02 * abs(v)
+    steps = np.array([10.0 if i.endswith(probe.SLOPE) else 0.01 if 'k_ij' in i
+                      else 0.05 if i.startswith('reaction:') else 0.02 * abs(v)
                       for i, v in zip(ids, x0)])
     memo = {}
 
