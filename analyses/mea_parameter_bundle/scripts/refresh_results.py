@@ -129,7 +129,7 @@ def main() -> None:
         blocked = [
             "scripts/evaluate_direct_absorption_heat.py",
             "scripts/validate_thermal_references.py --equilibrium",
-            "render.sh notebook.qmd",
+            "scripts/result_freshness.py --certify",
             "scripts/build_absorption_handoff.py",
         ]
         try:
@@ -163,8 +163,8 @@ def main() -> None:
             + "; ".join(blocked)
             + ". The MEA heat calculation has not been rebuilt on the Engine reference "
             "temperature actions and record-anchored calorics (ePC-SAFT #84, #138; "
-            "MEA #96). Figure data and figures were refreshed; render with "
-            "`bash render.sh notebook.qmd --working-copy`.",
+            "MEA #96). Figure data and figures were refreshed; render the uncertified "
+            "view with `bash render.sh` from `analyses/`.",
             file=sys.stderr,
         )
         raise SystemExit(1)

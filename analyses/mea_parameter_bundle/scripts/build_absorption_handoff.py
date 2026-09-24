@@ -8,7 +8,12 @@ import json
 import zipfile
 from pathlib import Path
 
-from result_freshness import hashes, require_current_results, require_hashes
+from result_freshness import (
+    hashes,
+    rendered_page,
+    require_current_results,
+    require_hashes,
+)
 from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
 from shared_evaluation import (
     MODEL_RUNTIME_DEFAULTS,
@@ -187,7 +192,7 @@ unique solution of the five typed reaction constraints, three neutral
 thermal anchors (CO2 ideal-gas Shomate; H2O and MEA pure-liquid cp
 correlations net of the Engine's residual cp at 1 atm), and one charge gauge
 over the declared reference domain. Consult the included thermal validation
-receipt for the measured reaction-reference consistency and evaluated states;
+record for the measured reaction-reference consistency and evaluated states;
 a reference declaration alone does not establish successful equilibrium.
 Do not use it above 393.15 K: the source-reference transfer leaves the EOS
 domain there at the 1 bar reference pressure.
@@ -223,7 +228,7 @@ initial conditions.
 
 Current pressure/speciation results and coverage are in validation/fit-statistics.csv
 and validation/non-evaluable-states.csv. Their generation identities are in
-validation/figure-calculation-receipt.json. Calorimetry results are in
+validation/figure-calculation-record.json. Calorimetry results are in
 validation/calorimetry-summary.json. Older model-selection comparisons live
 under history/ and must not be presented as predictions of the selected vector.
 
@@ -297,15 +302,17 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
         "figures/pressure.pdf": source(
             ANALYSIS / "figures/pressure/output/pressure-diagnostic-replay.pdf"
         ),
-        "documentation/research-notebook.html": source(ANALYSIS / "notebook.html"),
-        "validation/figure-calculation-receipt.json": source(
-            ANALYSIS / "results/figure-calculation-receipt.json"
+        "documentation/research-notebook.html": source(
+            rendered_page(ANALYSIS / "notebook.qmd")
         ),
-        "validation/figure-render-receipt.json": source(
-            ANALYSIS / "results/figure-render-receipt.json"
+        "validation/figure-calculation-record.json": source(
+            ANALYSIS / "results/figure-calculation-record.json"
         ),
-        "validation/notebook-render-receipt.json": source(
-            ANALYSIS / "results/notebook-render-receipt.json"
+        "validation/figure-render-record.json": source(
+            ANALYSIS / "results/figure-render-record.json"
+        ),
+        "validation/notebook-render-record.json": source(
+            ANALYSIS / "results/notebook-render-record.json"
         ),
         "validation/calorimetry-summary.json": source(
             ANALYSIS
@@ -327,13 +334,13 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
                 ANALYSIS / "results/reaction-temperature-fit" / name
             )
             for name in (
-                "screen-receipt.json",
+                "screen-record.json",
                 "candidate-receipt.json",
-                "full-validation-receipt.json",
+                "full-validation-record.json",
                 "full-validation-targets.csv",
                 "adoption-receipt.json",
-                "sensitivity-check-receipt.json",
-                "parity-receipt.json",
+                "sensitivity-check-record.json",
+                "parity-record.json",
             )
         },
     }

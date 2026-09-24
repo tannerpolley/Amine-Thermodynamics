@@ -1,8 +1,6 @@
 ---
 title: "MEA parameter bundle"
 subtitle: "Selected parameters first · synchronized overview of retained regression evidence"
-execute:
-  enabled: false
 ---
 
 ::: {.callout-note}
@@ -15,9 +13,9 @@ This is a working view of retained evidence, not an independently validated proc
 
 Working nine-species bundle: the exploratory incumbent adopted on 3 September 2026 after the reaction-temperature fit (constant R2/R4/R5 enthalpy shifts, ln K unchanged at 313.15 K). It has not yet been independently validated for predictive process-column use. Lengths: Å; energy parameters: K; temperature: K. [Exact values and provenance](results/selected-current-best-parameters.json) supersede displayed rounding.
 
-[Green: supported for the stated use]{.evidence-1} · [Blue: working value—review the evidence for green]{.evidence-2} · [Yellow: needs targeted testing or regression]{.evidence-3}. Green includes checked formulation rules and supported derived estimates; it does not imply every value was independently fitted. Blue includes fitted, fixed, and derived values whose support for the stated use remains under review. Yellow marks a follow-up, not an unknown number or an automatic instruction to refit. Move blue to green when its source, derivation, or relevant comparison supports the intended use; fixed mathematical definitions need checking, not regression. **The two yellow entries are the R2/R4 intercepts flagged by the formation/partition study; its later diagnostic disposition is linked below.** Other retained choices stay blue unless a specific comparison gives us a reason to reopen them.
+[Green: supported for the stated use]{.evidence-1} · [Blue: working value—review the evidence for green]{.evidence-2} · [Yellow: needs targeted testing or refitting]{.evidence-3}. Green includes checked formulation rules and supported derived estimates; it does not imply every value was independently fitted. Blue includes fitted, fixed, and derived values whose support for the stated use remains under review. Yellow marks a follow-up, not an unknown number or an automatic instruction to refit. Move blue to green when its source, derivation, or relevant comparison supports the intended use; fixed mathematical definitions need checking, not refitting. **The two yellow entries are the R2/R4 intercepts flagged by the formation/partition study; its later diagnostic disposition is linked below.** Other retained choices stay blue unless a specific comparison gives us a reason to reopen them.
 
-[★](#parameter-change-history){.fit-star aria-label="Parameter change history"} marks a current value changed by our regression or data-calibrated selection; hover for the method and click for its record. Stars describe history, independently of the evidence color. Literature fits, fixed rules, derivations, and unretained trials are not starred.
+[★](#parameter-change-history){.fit-star aria-label="Parameter change history"} marks a current value changed by our parameter fitting or data-calibrated selection; hover for the method and click for its record. Stars describe history, independently of the evidence color. Literature fits, fixed rules, derivations, and unretained trials are not starred.
 
 ## Species parameters
 
@@ -643,7 +641,7 @@ OH⁻
 </table>
 :::
 
-The engine input schema accepts a Debye–Hückel diameter record for ionic formulations, but this bundle does not treat it as an independent regression parameter: the retained ion values are fixed by the convention $d_{DH}=0.88\sigma$. It is therefore omitted from this manuscript-facing parameter table while remaining in the machine-readable records. The explicit Born diameter $d_B$ remains because it is the retained Born/solvation input.
+The Engine input fields accept a Debye–Hückel diameter record for ionic formulations, but this bundle does not treat it as an independently fitted parameter: the retained ion values are fixed by the convention $d_{DH}=0.88\sigma$. It is therefore omitted from this manuscript-facing parameter table while remaining in the machine-readable records. The explicit Born diameter $d_B$ remains because it is the retained Born/solvation input.
 
 <span id="note-a">**a**</span> CO₂ uses the selected induced 2B scheme with no self-association.
 
@@ -744,7 +742,7 @@ pCO₂ AARD % in the pressure direction. This record's values are calibration re
 
 # Pressure
 
-The pressure and speciation figures and tables below are calculated from the exact adopted parameter record (`results/selected-current-best-parameters.json`, SHA-256 `868a5018…fcb7be`) on the greenfield Engine main `443a9da4` (wheel `b66c7b96…2a58`, evaluator `shared-evaluation-v5`). Against the earlier calculation on Engine `83ac1126` (wheel `3eb502ab`), every pressure, scored speciation and grid value differs by at most 2.1 × 10⁻¹¹ in ln. The regeneration used a 180 s per-state budget (`state_timeout_s` in the [generation record](results/figure-calculation-receipt.json)); with 60 s under shared host load, `vle_obs_0040` timed out and Böttinger 2008 state 042 stopped at the equilibrium residual floor, and both evaluate with 180 s. Heat is not regenerated (see [Heat release](#heat-release)). Rendering reads these retained tables and never runs the Engine.
+The pressure and speciation figures and tables below are calculated from the exact adopted parameter record (`results/selected-current-best-parameters.json`, SHA-256 `868a5018…fcb7be`) on the greenfield Engine main `443a9da4` (wheel `b66c7b96…2a58`, evaluator `shared-evaluation-v5`). Against the earlier calculation on Engine `83ac1126` (wheel `3eb502ab`), every pressure, scored speciation and grid value differs by at most 2.1 × 10⁻¹¹ in ln. The regeneration used a 180 s per-state budget (`state_timeout_s` in the [generation record](results/figure-calculation-record.json)); with 60 s under shared host load, `vle_obs_0040` timed out and Böttinger 2008 state 042 stopped at the equilibrium residual floor, and both evaluate with 180 s. Heat is not regenerated (see [Heat release](#heat-release)). Rendering reads these retained tables and never runs the Engine.
 
 **The adopted record reproduces all 161 pressure observations with log₁₀ RMSE 0.2318 (RMS factor 1.71), the same value as the superseded adoption replay; the greenfield Engine does not change the fit.** The 161 rows at 30 mass% MEA and 40–120 °C come from Aronu 2011, Hilliard 2008, Idris 2014, Jou 1995, Mamun 2005 and the Xu 2011 holdout. The table reports both scales, defined under [Fit statistics](#fit-statistics). Each source row pairs the superseded adoption replay (Engine `8438ce5f`, all five reaction shifts, `evaluated` and `pivot_reuse` rows of [full-validation-targets.csv](results/reaction-temperature-fit/full-validation-targets.csv)) with the greenfield calculation of the adopted record. Paired row by row, the two calculations differ by median |Δ ln pCO₂| 0.0012 and at most 0.009 (`vle_obs_0233`). Those differences combine the Engine change with the omitted R1/R3 shifts.
 
@@ -776,7 +774,7 @@ Pressure constrains molecular-CO₂ chemical potential coupled to the reaction n
 
 **Calibration misfit diagnosis.** A bounded diagnosis of the 79 Hilliard 2008 and Jou 1995 states ([README](results/runs/pco2-calibration-misfit/README.md)) ran on Engine `7fa8aaf4` (wheel `e9fb8a47`, recorded in its CSVs); its README reports that the values reproduce on Engine `83ac1126` (wheel `3eb502ab`) to about 10⁻¹¹, and the current pin matches `3eb502ab` to 2.1 × 10⁻¹¹ in ln. It places the residual in the non-reaction part of the model by elimination. It does not test the fitted EOS/ionic parameters or the ePC-SAFT ionic formulation directly. Removing five loading-bin means takes away about 79% of the residual sum of squares, against 12% for temperature and 13% for source. Plausible R2/R4/R5 shifts (±0.3 in ln K) remove only about 11%, lowering RMS ln from 0.59 to 0.56. The data add a floor of roughly 0.2–0.4 in ln, which is an estimate. The fit that produced the adopted reaction values scored only 5 pCO₂ rows (Jou 1995 at 80 and 120 °C).
 
-[Residuals](results/current-best-fit-residuals.csv) · [ln statistics with the paired superseded rows](results/current-best-fit-ln-statistics.csv) · [log₁₀ statistics by temperature, source and species](results/current-best-fit-statistics.csv) · [numerical failures (none)](results/figure-calculation-failures.csv) · [Engine identity, coverage and hashes](results/figure-calculation-receipt.json) · [superseded adoption replay](results/reaction-temperature-fit/full-validation-targets.csv)
+[Residuals](results/current-best-fit-residuals.csv) · [ln statistics with the paired superseded rows](results/current-best-fit-ln-statistics.csv) · [log₁₀ statistics by temperature, source and species](results/current-best-fit-statistics.csv) · [numerical failures (none)](results/figure-calculation-failures.csv) · [Engine identity, coverage and hashes](results/figure-calculation-record.json) · [superseded adoption replay](results/reaction-temperature-fit/full-validation-targets.csv)
 
 # Speciation
 
@@ -817,7 +815,7 @@ Heat release is the negative of (liquid enthalpy change minus incoming ideal-gas
 
 **The thermal references were also built on the superseded Engine.** At 293.15–393.15 K the nine reference enthalpies solved the five reaction constraints, three neutral thermal anchors and one charge gauge; reaction-reference consistency held to 1.7 × 10⁻⁴ J mol⁻¹, and water vaporization enthalpy from the EOS residual was within 1.3 % of steam tables at 40–120 °C. Fixed-composition cp for 30 mass% MEA at 40 °C was 3.83 kJ kg⁻¹ K⁻¹ unloaded and 3.21 at loading 0.4. They are not regenerated on the pinned Engine until the MEA heat calculation is rebuilt (MEA #96).
 
-[Superseded-Engine heat summary](results/calorimetry/current-selected-direct-enthalpy-summary.json) · [Interval values](results/calorimetry/current-selected-direct-enthalpy-comparison.csv) · [Paired comparison and adoption rules](results/reaction-temperature-fit/adoption-receipt.json) · [Thermal references](results/calorimetry/current-selected-reference-thermochemistry.json) · [Thermal checks](results/calorimetry/thermal-reference-validation.json)
+[Superseded-Engine heat summary](results/calorimetry/current-selected-direct-enthalpy-summary.json) · [Interval values](results/calorimetry/current-selected-direct-enthalpy-comparison.csv) · [Paired comparison and adoption rules](results/reaction-temperature-fit/README.md) · [Thermal references](results/calorimetry/current-selected-reference-thermochemistry.json) · [Thermal checks](results/calorimetry/thermal-reference-validation.json)
 
 # Claim limits
 
@@ -828,8 +826,8 @@ Heat release is the negative of (liquid enthalpy change minus incoming ideal-gas
 
 ## Parameter change history {#parameter-change-history}
 
-This overview keeps the selected parameter tables and main regression figures
-together. The sidebar leaves preserve the question, data, method, numerical
+This overview keeps the selected parameter tables and main fit-comparison figures
+together. The study pages listed in the analysis index preserve the question, data, method, numerical
 result, and conclusion for each distinct study; this anchor remains the target
 for the change markers in the tables above.
 
@@ -846,7 +844,7 @@ What remains uncertain: the 120 °C heat bias (−18.8 kJ mol⁻¹) and the size
 
 The [six-species study](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/analyses/enrtl_six_species_ideal_comparison/notebook.qmd) derives two net reactions: carbamate formation, R2 − R4 − R5, and bicarbonate formation, R2 − R5. Their log equilibrium constants differ by −ln K₄. Both reactions share MEA, CO₂, and MEAH⁺, so their amounts must satisfy the same carbon, amine, and charge balances. Activity coefficients also depend on the shared mixture composition: changing one species changes the equilibrium conditions for the others. This is chemical coupling, not an extra fitted interaction term.
 
-The [recent sensitivity fit](results/reaction-temperature-fit/screen-receipt.json) instead retains all five reactions and two SVD parameter directions, dominated by R2/R5 and R4. It reduces fitting freedom, not the reaction network. The numerical count of two does not make those directions the two net reactions.
+The [recent sensitivity fit](results/reaction-temperature-fit/screen-record.json) instead retains all five reactions and two SVD parameter directions, dominated by R2/R5 and R4. It reduces fitting freedom, not the reaction network. The numerical count of two does not make those directions the two net reactions.
 
 Still unresolved is whether the carbamate/bicarbonate split constrains reaction constants separately from ionic Born/dispersion and dielectric effects. The retained fit changes reaction-temperature dependence, holds the EOS parameters fixed, and barely improves paired speciation RMSE (0.3702 → 0.3670). Earlier ion perturbations are not a joint identifiability study of the current selection. The F/S and ionic-screen reports linked above address separate bounded directions and retain negative results; they do not establish joint identifiability. This checkout does not contain their newer corrected result set. The [scientific roadmap](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/scientific/PREDICTIVE_MEA_PROGRAM.md) places reconciliation and numerical failure diagnosis before further joint fitting.
 :::
@@ -859,7 +857,7 @@ These links preserve the deeper analysis without reproducing it here. Figures an
 | Question | Retained evidence |
 |:--|:--|
 | Which parameter vector and Engine? | [Selected parameters](results/selected-current-best-parameters.json), [analysis inventory and wheel identity](analysis.yaml) |
-| What changed in the adopted record, and why? | [Adoption record](results/reaction-temperature-fit/adoption-receipt.json), [record history](results/parameter-record-history.csv), [holdout ledger](results/holdout-evaluations.csv), [full replay targets](results/reaction-temperature-fit/full-validation-targets.csv), [screen](results/reaction-temperature-fit/screen-receipt.json), [candidate scores](results/reaction-temperature-fit/candidate-receipt.json), [derivative checks](results/reaction-temperature-fit/sensitivity-check-receipt.json), [study notes](results/reaction-temperature-fit/README.md) |
+| What changed in the adopted record, and why? | [Adoption record](results/reaction-temperature-fit/README.md), [record history](results/parameter-record-history.csv), [holdout ledger](results/holdout-evaluations.csv), [full replay targets](results/reaction-temperature-fit/full-validation-targets.csv), [screen](results/reaction-temperature-fit/screen-record.json), [candidate scores](results/reaction-temperature-fit/README.md), [derivative checks](results/reaction-temperature-fit/sensitivity-check-record.json), [study notes](results/reaction-temperature-fit/README.md) |
 | Can the absorber use it non-isothermally? | [Thermal references](results/calorimetry/current-selected-reference-thermochemistry.json), [thermal validation](results/calorimetry/thermal-reference-validation.csv); build the handoff locally with `scripts/build_absorption_handoff.py` |
 | What did the historical Born/permittivity study show? | [Common-row comparisons](results/born-permittivity-study/full-common-row-statistics.csv), [reaction-synchronized comparison](results/born-permittivity-study/current-fast-common-comparison.csv), [joint sensitivity figure](figures/born_permittivity/output/selected-bundle-joint-sensitivity.svg) |
 | What did earlier parameter studies show? | [Parameter-start comparison](results/parameter-start-comparison.csv), [bounded sensitivity](results/parameter-sensitivity-screen.csv), [R4–CO₂ campaign](results/best-in-slot-campaign/final-full-validation-summary.csv) |
