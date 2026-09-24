@@ -493,9 +493,10 @@ treatment of a carbamate-forming amine, or an EOS heat of absorption for MEA:
 | Wang 2017 thesis (tel-01865166) | Full text (open) | PR-CPA + Deshmukh–Mather for MEA speciation and heat; no EOS ions |
 | Noroozi & Smith 2020, IECR (doi 10.1021/acs.iecr.0c03738) | Abstract | Simulated K + ideal solution; no effect |
 
-The second screening helper's detailed reads of the electrolyte-CPA and
-pseudo-chemical SAFT papers are pending; entries marked "Abstract" or "Title
-only" may be updated.
+Entries marked "Abstract", "Title only" or "Not obtained" were screened
+without the full text. The planned full-text pass on the electrolyte-CPA and
+non-ionic SAFT papers was stopped before it reported, so those entries remain
+at that screening level.
 
 **Zotero.** No items were added. The Zotero workflow does not allow automated
 publisher downloads, and adding an item requires the owner to save it through
