@@ -23,9 +23,10 @@ shared.RUNS = Path('/tmp/mea-calibration-misfit-cache')
 OBSERVATIONS = shared.load_state_packet()['observations']
 
 
-def _canonical_pressure_observations():
-    """The 161 active 30 wt% pCO2 rows (six sources), built as generate_figure_data.py builds them:
-    the nearest-loading packet pressure request at the same temperature with the CO2 feed replaced."""
+def pressure_observations(select):
+    """pCO2 states for the canonical VLE rows accepted by ``select``, built as generate_figure_data.py
+    builds them: the nearest-loading packet pressure request at the same temperature with the CO2 feed
+    replaced. Water is rescaled to the row's MEA mass fraction (the packet requests are all 30 wt%)."""
     templates = {}
     for o in OBSERVATIONS:
         if o['request']['pressure']['role'] == 'solved':
@@ -34,12 +35,15 @@ def _canonical_pressure_observations():
     out = []
     with shared.CANONICAL_VLE.open(newline='', encoding='utf-8') as h:
         for row in csv.DictReader(h):
-            if row['active_view_member'] != 'yes':
+            if not select(row):
                 continue
-            t, loading = round(float(row['temperature_canonical_C'])), float(row['CO2_loading'])
+            t = round(float(row['temperature_canonical_C'] or row['temperature_reported_C']))
+            loading = float(row['CO2_loading'])
             request = copy.deepcopy(min(templates[t], key=lambda c: abs(c[0] - loading))[1])
             system = request['reaction_system']
+            w = float(row['MEA_weight_fraction'])
             system['feed_amounts_mol'][0] = loading
+            system['feed_amounts_mol'][2] *= (1 - w) / w / (0.7 / 0.3)  # the template is the 30 wt% solvent
             system['conserved_totals'] = [math.fsum(c * a for c, a in zip(b, system['feed_amounts_mol'], strict=True))
                                           for b in system['balance_matrix']]
             out.append({'identity': 'canonical:' + row['observation_id'], 'request': request, 'targets': [{
@@ -49,7 +53,7 @@ def _canonical_pressure_observations():
     return out
 
 
-CANONICAL = _canonical_pressure_observations()
+CANONICAL = pressure_observations(lambda row: row['active_view_member'] == 'yes')
 _BASE = {}
 
 
@@ -79,10 +83,19 @@ def with_values(mapping, values):
     return shared.with_parameter_values(mapping, values)
 
 
-def evaluate(sets=None, filters=(), canonical=False):
+def check(r):
+    """Solver, balance and stationarity (reaction affinity and phase equality) status of one evaluator record."""
+    evidence = dict(r.get('evidence') or [])
+    return {'failure_code': r.get('failure_code', ''), 'solver_status': r.get('solver_status'),
+            'tolerance_met': evidence.get('requested_tolerance_met'),
+            'balance_errors': evidence.get('validation_errors', []),  # material/charge balance > 1e-7
+            'max_abs_stationarity': (evidence.get('compiled_point_evaluation') or {}).get('raw_stationarity_max_abs')}
+
+
+def evaluate(sets=None, filters=(), canonical=False, states=None):
     """Yield one record per state matching ``filters`` at the adopted record plus ``sets``.
 
-    States are the packet observations, or with ``canonical`` the 161 six-source pCO2 rows."""
+    States are ``states``, else the packet observations, or with ``canonical`` the 161 six-source pCO2 rows."""
     sets = dict(sets or {})
     reactions = shared._selected_reactions()
     reactions.update({k: v for k, v in sets.items() if k.startswith('reaction:')})
@@ -90,7 +103,7 @@ def evaluate(sets=None, filters=(), canonical=False):
     mapping = with_values(shared.parameter_mapping(), eos) if eos else shared.parameter_mapping()
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping)) if eos else _base_model()
     fp = shared.parameter_fingerprint(mapping)
-    for o in (CANONICAL if canonical else OBSERVATIONS):
+    for o in states or (CANONICAL if canonical else OBSERVATIONS):
         ident = o['identity']
         if filters and not any(f in ident for f in filters):
             continue
@@ -101,7 +114,7 @@ def evaluate(sets=None, filters=(), canonical=False):
             anchors = [a for a in [shared.anchor_from(b)] if a]
         r = shared.evaluate_state(model, o['request'], reactions, ident, anchors, budget_s=90, model_fingerprint=fp)
         liq = next((p for p in r.get('phases') or [] if p.get('role') == 'liquid'), None)
-        yield {'identity': ident, 'status': r['status'], 'predictions': r['predictions'],
+        yield {'identity': ident, 'status': r['status'], 'predictions': r['predictions'], 'check': check(r),
                'liquid': liq, 'wall_s': time.perf_counter() - t0, 'sets': sets,
                'wheel': shared.ENGINE_WHEEL_SHA256, 'T': o['request']['temperature']['value'],
                'feed': o['request']['reaction_system']['feed_amounts_mol'],

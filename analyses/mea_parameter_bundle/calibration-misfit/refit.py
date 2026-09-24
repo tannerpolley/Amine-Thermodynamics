@@ -102,7 +102,21 @@ def main(argv):
             cols.append((fun_memo(xk) - f0) / h)
         return np.array(cols).T
 
-    fit = least_squares(fun_memo, x0, jac=jac, bounds=(lo, hi), x_scale=steps, max_nfev=10, verbose=2)
+    pressure_rows = np.array([k[0] == 'p' for _, k in keys])
+    history = []
+
+    def pressure_rms(f):
+        return float(np.sqrt(np.mean(np.square(f[pressure_rows] * SIGMA_LN_P))))
+
+    def stop_rule(intermediate_result):  # the lane's rule: stop below a 2 % drop in calibration pCO2 RMS per iteration
+        history.append(pressure_rms(intermediate_result.fun))
+        print('iteration', len(history), 'x', list(intermediate_result.x), 'pCO2 RMS ln', history[-1], flush=True)
+        previous = history[-2] if len(history) > 1 else pressure_rms(fun_memo(x0))
+        if previous - history[-1] < 0.02 * previous:
+            raise StopIteration
+
+    fit = least_squares(fun_memo, x0, jac=jac, bounds=(lo, hi), x_scale=steps, max_nfev=60, verbose=2,
+                        callback=stop_rule)
     J = fit.jac
     dof = max(len(order) - len(ids), 1)
     s2 = 2 * fit.cost / dof
@@ -128,7 +142,8 @@ def main(argv):
         'bounds': [lo, hi], 'standard_error': list(map(float, np.sqrt(np.clip(np.diag(cov), 0, None)))),
         'correlation': (cov / np.outer(np.sqrt(np.diag(cov)), np.sqrt(np.diag(cov)))).tolist() if np.all(np.diag(cov) > 0) else None,
         'jacobian_singular_values_column_normalized': list(map(float, sv)),
-        'status': int(fit.status), 'nfev': int(fit.nfev), 'cost': float(fit.cost), 'n_residuals': len(order),
+        'status': int(fit.status), 'message': fit.message, 'pco2_rms_per_iteration': history,
+        'nfev': int(fit.nfev), 'cost': float(fit.cost), 'n_residuals': len(order),
         'before': {'calibration': stats(base, False), 'validation': stats(base, True)},
         'after': {'calibration': stats(final, False), 'validation': stats(final, True)},
         'wheel_sha256': probe.shared.ENGINE_WHEEL_SHA256,
