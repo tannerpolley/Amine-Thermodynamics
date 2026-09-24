@@ -257,9 +257,75 @@ stationarity residual is 6.8e-13. The adopted record fails 3 packet states and 1
 (`variant-scores.csv`, column `failures`).
 
 **Outcome: refit C fails both adoption conditions.** Its 161-row AARD is 37 % (limit 35 %), and
-Mamun's RMS ln rises from 0.254 to 0.299. Refit C is not adopted. It is a calibration result;
+Mamun's RMS ln rises from 0.254 to 0.299. This first-stop point is not adopted. It is a calibration result;
 Aronu, Idris, Mamun and Xu are predictions of other 30 wt% sources, and the 80 °C isotherm is an
 interpolation test.
+
+### Refit C run on to the iteration cap: adopted by owner decision (`refit-C-converged.json`)
+
+This run started from the refit-C first-stop point. Bounds, residual weights and the calibration set
+are unchanged. It used `least_squares` default tolerances, capped at 6 iterations
+(`refit.py --iterations=6`).
+
+- **Stop:** the 6-iteration cap (status −2), with 8 function evaluations. No `least_squares` tolerance
+  was met, and the 2 % rule was not applied.
+- **Stall:** calibration pCO2 RMS ln per iteration was 0.4432, 0.4457, 0.4466, 0.44676, 0.446763 and
+  0.446763. The last three changes are 1.6e-4, 5e-6 and 2e-7. The objective cost fell from 124.0 to 121.4
+  because speciation improved while pCO2 rose slightly. The iterate stopped moving with two
+  coordinates at bounds.
+
+| coordinate | first stop | this run | SE | at bound |
+|---|---:|---:|---:|:--:|
+| carbamate–water k_ij | +0.0748 | +0.1069 | 0.026 | |
+| MEAH⁺–water k_ij | −0.2329 | −0.2414 | 0.034 | |
+| MEAH⁺–water 1/T slope (K) | −155.6 | −140.5 | 12.9 | |
+| HCO₃⁻–water k_ij | +0.2957 | **+0.3000** | 0.108 | **yes (+0.3)** |
+| MEAH⁺–MEACOO⁻ k_ij | −0.3000 | **−0.3000** | 0.048 | **yes (−0.3)** |
+
+- **Identification:** the column-normalized singular values are 1.41, 1.16, 0.95, 0.82 and **0.31**. The
+  first-stop point's smallest was 0.62.
+- **Correlations:** the largest is −0.86, between MEAH⁺–water and HCO₃⁻–water. HCO₃⁻–water correlates
+  +0.76 with carbamate–water. The standard errors are not valid at the two active bounds.
+
+| pCO2, ln(pred/obs) | n | pre-refit AARD / bias / RMS | this run |
+|---|---:|---|---|
+| all six sources | 161 | 52 % / +0.147 / 0.532 (n = 160) | **38 %** / +0.079 / 0.410 |
+| Hilliard 2008 (fitted) | 30 | 69 % / +0.364 / 0.584 | 50 % / +0.326 / 0.448 |
+| Jou 1995 (fitted except 80 °C) | 48 | 57 % / +0.050 / 0.601 | 42 % / +0.084 / 0.433 |
+| Aronu 2011 (not fitted) | 36 | 41 % / −0.005 / 0.506 | 27 % / −0.085 / 0.388 |
+| Idris 2014 (not fitted) | 10 | 85 % / +0.584 / 0.640 (n = 9) | 57 % / +0.428 / 0.480 |
+| Xu 2011 (not fitted) | 18 | 49 % / +0.318 / 0.440 | 33 % / +0.132 / 0.349 |
+| Mamun 2005, 120 °C (not fitted) | 19 | 21 % / −0.027 / **0.254** | 21 % / −0.244 / **0.332** |
+| 80 °C held-out isotherm (Jou) | 11 | 47 % / −0.137 / 0.525 | 32 % / −0.078 / 0.356 |
+| Akula 2023a-comparable set | 106 | 58 % / +0.237 / 0.535 | 39 % / +0.139 / 0.410 |
+
+- **Speciation (AARD / RMS ln):** calibration 36 % / 0.398 (pre-refit, n = 112) and 14 % / 0.341
+  (n = 120); 80 °C holdout 11 % / 0.147 and 9 % / 0.103.
+- **Carbonate share against Jakobsen 2005:** 0.9–2.5× the measured share (pre-refit 5–13×), excluding
+  the out-of-line 40 °C, loading 0.21 point.
+- **Solver status:** 123/123 packet and 161/161 pCO2 states solve. On every row the tolerance is met,
+  balances close within 1e-7, and the maximum stationarity residual is 5.7e-13.
+
+**Akula 2023a-comparable set:** 30 wt% rows from Aronu, Hilliard, Jou and Xu at loading ≤ 0.5 and
+40–120 °C. The number is the mean absolute relative pCO2 error at measured loading. Akula 2023a
+reports 40.5 % for its eNRTL model fitted to its own 30 mass % data. That paper is not on the local
+reading shelf, so the definition and value are taken from
+`docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md` (Akula Fig. 4) and have not been
+re-read. Akula's rows are not these rows, and Hilliard and Jou are calibration rows here.
+
+**Adoption (owner decision 2026-09-24, #107):** this run is the exploratory incumbent even though it
+misses the pre-set rule.
+
+- The 161-row AARD is 38 %, above the 35 % limit.
+- Mamun's RMS ln rose from 0.254 to 0.332 (AARD 21 % in both).
+- MEAH⁺–MEACOO⁻ sits at −0.3 and HCO₃⁻–water at +0.3.
+
+The claim is improvement over the prior record on 30 wt% pCO2, speciation and carbonate. It is not a
+pass of the pre-set rule. The record is written by `candidate.py refit-C-converged.json OUT`.
+
+The notebook's statistics (`generate_figure_data.py`) still score Matin's HCO₃⁻ against model HCO₃⁻
+alone, because the #109 change to the target membership file is pending. The refit objective pools
+HCO₃⁻ + CO₃²⁻, so its speciation numbers differ from the notebook's.
 
 ## Literature comparison
 
