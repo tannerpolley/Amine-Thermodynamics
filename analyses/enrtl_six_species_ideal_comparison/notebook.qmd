@@ -69,13 +69,13 @@ initial MEA, and the feed is 30 wt% MEA in water.
 ### Ideal-liquid lane
 
 The nine-species ideal coefficients come from the local, source-controlled
-[reaction constant manifest](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/data/reference/MEA/manifests/reaction_constant_manifest.csv).
+[reaction constant source table](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/data/reference/MEA/manifests/reaction_constant_manifest.csv).
 They are the Edwards/Baygi water-carbonate family, the Tong/Baygi carbamate
 hydrolysis entry, and the Bates/Pinching/Baygi protonated-amine dissociation
-entry. The manifest, rather than a fitting-routine output, is the authority
+entry. This source table, rather than a fitting-routine output, is the authority
 for this lane.
 
-The manifest correlation is
+The source-table correlation is
 
 $$
 \ln K(T) = A + B/T + C\ln(T) + DT.
@@ -115,7 +115,7 @@ fitting-routine coefficients.
 ### ePC-SAFT liquid lane
 
 For the ePC-SAFT lane, the reaction constants come from the Engine-side MEA
-source contract used by the candidate input. R1-R3 use the same source forms
+reaction-constant sources used by the candidate input. R1-R3 use the same source forms
 as above. R4 uses
 
 $$
@@ -130,7 +130,7 @@ $$
 
 The ePC-SAFT six-species reaction constants are the same two exact rows of
 the projection matrix applied to these Engine source constants. This keeps
-the reaction source separate from the ideal manifest; the ideal R4/R5 rows
+the reaction source separate from the ideal source table; the ideal R4/R5 rows
 are not mixed into the ePC-SAFT calculation.
 
 The liquid EOS parameters are not reaction coefficients. They come from the
@@ -143,7 +143,7 @@ dielectric, molecular-weight, and interaction inputs used by both the nine-
 and six-species EOS evaluations. This hash identifies the retained comparison;
 it is not the active parameter document.
 
-## Experiment contract
+## Experiment design
 
 ### Ideal canonical-state lane
 
@@ -308,7 +308,7 @@ candidate-3 parameter document and the explicit Engine wheel recorded in
 `sha256:05cca73463b9b44dcb3a77dfd239b767ec63aafce7d18b85b2a66b80773847a5`;
 the locked production hash is different, so these are diagnostic results.
 
-### Parameter universe and sampling contract
+### Parameter universe and sampling plan
 
 The retained
 [parameter inventory](results/uq_parameter_inventory.csv) contains 143
@@ -427,7 +427,7 @@ single score.
 - The ePC-SAFT packet is provisional and diagnostic, not an adopted parameter
   set.
 - The disposable SciPy bridge is a temporary equilibrium method, not a
-  production Engine API or a replacement for Engine declaration validation.
+  production Engine callable or a replacement for Engine declaration validation.
 - The ePC-SAFT results are fixed-$T,P$ liquid compositions. They do not claim
   VLE pressure, bubble-point agreement, global equilibrium, or phase
   stability.
@@ -467,10 +467,10 @@ uv run python analyses/enrtl_six_species_ideal_comparison/scripts/render_uq_figu
 The ePC-SAFT bridge was intentionally disposable. Its retained authority is
 the output packet under `results/epcsaft_scipy_*.csv` and the accompanying
 [lane status](results/epcsaft_scipy_lane_status.csv), diagnostics, reaction
-values, packet manifest, and summary. This notebook does not rerun that
+values, packet hash inventory, and summary. This notebook does not rerun that
 bridge.
 
 The source and result hashes are retained in
 [source_manifest.csv](results/source_manifest.csv),
 [epcsaft_scipy_packet_manifest.csv](results/epcsaft_scipy_packet_manifest.csv),
-and [the figure source manifest](figures/output/source_manifest.csv).
+and [the figure source-hash table](figures/output/source_manifest.csv).
