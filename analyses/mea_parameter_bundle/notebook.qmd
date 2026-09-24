@@ -15,9 +15,9 @@ This is a working view of retained evidence, not an independently validated proc
 
 Working nine-species bundle: the exploratory incumbent adopted on 3 September 2026 after the reaction-temperature fit (constant R2/R4/R5 enthalpy shifts, ln K unchanged at 313.15 K). It has not yet been independently validated for predictive process-column use. Lengths: Å; energy parameters: K; temperature: K. [Exact values and provenance](results/selected-current-best-parameters.json) supersede displayed rounding.
 
-[Green: supported for the stated use]{.evidence-1} · [Blue: working value—review the evidence for green]{.evidence-2} · [Yellow: needs targeted testing or regression]{.evidence-3}. Green includes checked formulation rules and supported derived estimates; it does not imply every value was independently fitted. Blue includes fitted, fixed, and derived values whose support for the stated use remains under review. Yellow marks a follow-up, not an unknown number or an automatic instruction to refit. Move blue to green when its source, derivation, or relevant comparison supports the intended use; fixed mathematical definitions need checking, not regression. **The two yellow entries are the R2/R4 intercepts flagged by the formation/partition study; its later diagnostic disposition is linked below.** Other retained choices stay blue unless a specific comparison gives us a reason to reopen them.
+[Green: supported for the stated use]{.evidence-1} · [Blue: working value—review the evidence for green]{.evidence-2} · [Yellow: needs targeted testing or refitting]{.evidence-3}. Green includes checked formulation rules and supported derived estimates; it does not imply every value was independently fitted. Blue includes fitted, fixed, and derived values whose support for the stated use remains under review. Yellow marks a follow-up, not an unknown number or an automatic instruction to refit. Move blue to green when its source, derivation, or relevant comparison supports the intended use; fixed mathematical definitions need checking, not refitting. **The two yellow entries are the R2/R4 intercepts flagged by the formation/partition study; its later diagnostic disposition is linked below.** Other retained choices stay blue unless a specific comparison gives us a reason to reopen them.
 
-[★](#parameter-change-history){.fit-star aria-label="Parameter change history"} marks a current value changed by our regression or data-calibrated selection; hover for the method and click for its record. Stars describe history, independently of the evidence color. Literature fits, fixed rules, derivations, and unretained trials are not starred.
+[★](#parameter-change-history){.fit-star aria-label="Parameter change history"} marks a current value changed by our parameter fitting or data-calibrated selection; hover for the method and click for its record. Stars describe history, independently of the evidence color. Literature fits, fixed rules, derivations, and unretained trials are not starred.
 
 ## Species parameters
 
@@ -643,7 +643,7 @@ OH⁻
 </table>
 :::
 
-The engine input schema accepts a Debye–Hückel diameter record for ionic formulations, but this bundle does not treat it as an independent regression parameter: the retained ion values are fixed by the convention $d_{DH}=0.88\sigma$. It is therefore omitted from this manuscript-facing parameter table while remaining in the machine-readable records. The explicit Born diameter $d_B$ remains because it is the retained Born/solvation input.
+The Engine input fields accept a Debye–Hückel diameter record for ionic formulations, but this bundle does not treat it as an independently fitted parameter: the retained ion values are fixed by the convention $d_{DH}=0.88\sigma$. It is therefore omitted from this manuscript-facing parameter table while remaining in the machine-readable records. The explicit Born diameter $d_B$ remains because it is the retained Born/solvation input.
 
 <span id="note-a">**a**</span> CO₂ uses the selected induced 2B scheme with no self-association.
 
@@ -828,7 +828,7 @@ Heat release is the negative of (liquid enthalpy change minus incoming ideal-gas
 
 ## Parameter change history {#parameter-change-history}
 
-This overview keeps the selected parameter tables and main regression figures
+This overview keeps the selected parameter tables and main fit-comparison figures
 together. The sidebar leaves preserve the question, data, method, numerical
 result, and conclusion for each distinct study; this anchor remains the target
 for the change markers in the tables above.
