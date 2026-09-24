@@ -56,7 +56,7 @@ parent/child tree is recorded in [`analysis.yaml`](analysis.yaml): neutral
 MEA–water,
 ionic/speciation, CO₂–R4, reaction-temperature, Born/permittivity, calorimetry,
 coupling and identification, association topology, and historical designs. The
-historical page preserves the July designs as discarded-strategy context, with
+historical page preserves the July designs as retained background on discarded strategies, with
 exact Git retrievals, rather than presenting them as the current plan.
 
 ## Claude experiment checkpoint — 3 September 2026
@@ -167,7 +167,8 @@ The retained compact state packet contains deduplicated requests and raw Austgen
 labeled with the common aqueous-molality standard state. The replay applies the
 audited source-to-common shifts before constructing each Engine problem. The
 uncorrected packet remains immutable input evidence; the correction and its
-numerical consequences are documented in the notebook and calculation receipt.
+numerical consequences are documented in the notebook and the calculation record
+`results/figure-calculation-receipt.json`.
 
 The calorimetry preparation step reads the canonical MEA observation table and
 materializes only the declared paired-state campaign rows. It retains 66
@@ -265,7 +266,7 @@ Render a newly generated comparison with
 `render_figures.py --permittivity-comparison results/historical/permittivity-comparison`;
 it is not part of the current refresh.
 
-The generation receipt under `results/` anchors the selected pressure replay,
+The generation record `results/figure-calculation-receipt.json` anchors the selected pressure replay,
 current failure table, and fit tables. The pressure
 replay preserves certified continuation states across nearby loadings and,
 when needed, neighboring temperatures while retaining the original independent
@@ -283,7 +284,7 @@ parameter mapping when the figures are refreshed.
 Pressure lines are shape-preserving render-time interpolations of the selected
 bundle's reactive Engine evaluations at the active-v1 observation coordinates. The pressure view includes
 Aronu, Hilliard, Idris, Jou, Mamun, and Xu. Current coverage and failed states
-are recorded in the generation receipt; the earlier vector evaluated all 161 states.
+are recorded in `results/figure-calculation-receipt.json`; the earlier vector evaluated all 161 states.
 Complete target-level
 residuals and grouped overall, temperature, source, species, and
 temperature--source statistics are retained in
@@ -292,7 +293,8 @@ temperature--source statistics are retained in
 `parameter-start-comparison.csv` and `parameter-sensitivity-screen.csv` retain
 the bounded diagnosis used by the notebook to select the current parameter
 start and reject unsupported parameter substitutions.
-`quick-endpoint-perturbation-screen.csv` and its receipt retain the earlier
+`quick-endpoint-perturbation-screen.csv` and
+`quick-endpoint-perturbation-receipt.json` retain the earlier
 representative-state full bubble-point endpoint diagnostic and the single
 SciPy reaction-root consistency check. The complete superseding sensitivity,
 full-validation summary and selected row-level results are retained under
@@ -343,8 +345,8 @@ validation files still contain invalid retired three-knot comparison rows.
 The default render and handoff packaging continue to require a successful
 numerical refresh. Display colors mark supported values (green), working values
 whose evidence should be reviewed for green (blue, including fixed/derived
-choices), and values needing targeted testing or regression (yellow). Test
-first; regress only if observations can constrain the parameter. Color changes
+choices), and values needing targeted testing or refitting (yellow). Test
+first; refit only if observations can constrain the parameter. Color changes
 do not change parameter values or their recorded scientific qualifications.
 The current yellow targets are only the R2/R4 intercepts in the F/S experiment;
 retained transfer values remain blue unless a specific test justifies reopening
