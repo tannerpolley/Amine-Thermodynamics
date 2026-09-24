@@ -7,9 +7,11 @@ import gzip
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 ANALYSIS = Path(__file__).resolve().parents[1]
 REPO = ANALYSIS.parents[1]
+MANUSCRIPT = ANALYSIS.parent
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 # The pinned wheel lives outside the repository; its SHA-256 (enforced against the
 # installed wheel by shared_evaluation.verify_wheel) is the Engine identity.
@@ -103,38 +105,47 @@ def require_current_results(*, notebook: bool = False) -> None:
         require_results(NOTEBOOK)
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--stamp-notebook", action="store_true")
-    parser.add_argument("--fingerprint", action="store_true")
-    parser.add_argument("--expected-fingerprint")
-    args = parser.parse_args()
-    require_current_results()
-    pages = sorted(
-        path for path in ANALYSIS.rglob("*.qmd") if "_site" not in path.parts
-    )
-    inputs = source_hashes(
-        *pages,
-        ANALYSIS / "_quarto.yml",
+def bundle_pages() -> list[Path]:
+    return sorted(ANALYSIS.rglob("*.qmd"))
+
+
+def rendered_page(page: Path) -> Path:
+    """Native Quarto Manuscript view of a registered notebook page."""
+    relative = page.relative_to(MANUSCRIPT).with_name(f"{page.stem}-preview.html")
+    return MANUSCRIPT / "_site" / relative
+
+
+def render_inputs() -> dict[str, str]:
+    return source_hashes(
+        *bundle_pages(),
+        MANUSCRIPT / "_quarto.yml",
+        MANUSCRIPT / "_cse-manuscript.json",
         FIGURE_DATA,
         FIGURES,
         HEAT,
         THERMAL,
     )
-    fingerprint = hashlib.sha256(
-        json.dumps(inputs, sort_keys=True).encode()
-    ).hexdigest()
-    if args.fingerprint:
-        print(fingerprint)
-        raise SystemExit(0)
-    if args.stamp_notebook:
-        if args.expected_fingerprint != fingerprint:
-            raise ValueError(
-                "Notebook inputs changed during rendering; refusing certification"
-            )
-        stamp_results(
-            NOTEBOOK,
-            [page.with_suffix(".html") for page in pages],
-            inputs=inputs,
-        )
+
+
+def certify() -> None:
+    """Render through the root CSE wrapper and stamp only unchanged inputs."""
+    require_current_results()
+    inputs = render_inputs()
+    subprocess.run(["bash", "render.sh"], cwd=MANUSCRIPT, check=True)
+    if render_inputs() != inputs:
+        raise ValueError("Notebook inputs changed during rendering; refusing certification")
+    stamp_results(NOTEBOOK, [rendered_page(page) for page in bundle_pages()], inputs=inputs)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--certify",
+        action="store_true",
+        help="render the root manuscript and stamp the bundle HTML",
+    )
+    if parser.parse_args().certify:
+        certify()
+    else:
+        require_current_results()
     print("Current result hashes verified; no model execution")

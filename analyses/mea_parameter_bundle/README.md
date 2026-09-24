@@ -1,63 +1,65 @@
 # MEA Parameter Bundle Notebook
 
 This directory is the canonical, update-in-place research notebook for the
-single nine-species MEA ePC-SAFT parameter bundle. The rendered view is a small
-Quarto site: [`notebook.qmd`](notebook.qmd) is the parent overview with the
-selected parameter tables and the main pressure, speciation and heat figures;
-each child analysis folder contains one `index.qmd` report and its
-`analysis.yaml` identity. Keep the overview and child reports synchronized with
-the retained evidence. Link to detailed records rather than creating
+single nine-species MEA ePC-SAFT parameter bundle. The rendered view is part
+of the root Quarto Manuscript at `analyses/`: [`notebook.qmd`](notebook.qmd) is
+the parent overview with the selected parameter tables and the main pressure,
+speciation and heat figures; each child analysis folder contains one
+`index.qmd` report. Keep the overview and child reports synchronized with the
+retained evidence. Link to detailed records rather than creating
 candidate-specific notebook copies or parallel status notes.
 
 ## Presentation map
 
-The repository-level site at `analyses/` is the hosted entry point. Render it
-with `bash ../render.sh` from this directory or `bash analyses/render.sh` from
-the repository root; open `analyses/_site/index.html` (or the root preview at
-<http://127.0.0.1:8770/>). The bundle pages below remain the source-owned
-children of that site.
+`analyses/manuscript.py` registers the overview and the nine child reports in
+`analyses/_cse-manuscript.json`; the analysis index lists them by group
+(formulation, coupled assessment, historical background), and each rendered page
+links back to that index. The parent/child tree is also recorded in
+[`analysis.yaml`](analysis.yaml). The historical page preserves the July
+designs as retained background on discarded strategies, with exact Git
+retrievals, rather than presenting them as the current plan.
 
-For the bundle's strict freshness gate and local snapshots, render the complete
-overview plus study pages with:
-
-```bash
-bash render.sh notebook.qmd
-```
-
-For an automatically refreshing local view of the complete site while editing,
-start the repository-level Quarto preview instead:
+From `analyses/`, validate and render the uncertified working view with:
 
 ```bash
-bash ../preview.sh
+python3 manuscript.py validate .
+bash render.sh
 ```
 
-Open <http://127.0.0.1:8770/>. The preview watches the QMD, CSS, and included
-files, rebuilds changed pages, and never executes the scientific model. It stays
-available until stopped; systemd restarts it if the process fails. The
-checked-in systemd unit at
-`systemd/mea-parameter-bundle-preview.service` provides the same preview as a
-user service; install it with:
+The overview is `analyses/_site/mea_parameter_bundle/notebook-preview.html`;
+each child report is `index-preview.html` in its folder under `_site/`. The CSE
+wrapper always passes `--no-execute`; Quarto reads retained tables, figures and
+records but never runs the thermodynamic model. Evidence links to retained
+CSV/JSON files resolve only in the repository checkout, not in `_site/`.
+
+The strict numerical publication gate wraps the same render. From this
+directory:
 
 ```bash
-install -D systemd/mea-parameter-bundle-preview.service \
-  "$HOME/.config/systemd/user/mea-parameter-bundle-preview.service"
-systemctl --user daemon-reload
-systemctl --user enable --now mea-parameter-bundle-preview.service
+uv run python scripts/result_freshness.py --certify
 ```
 
-The copied `notebook.html` remains the offline fallback. It is a rendered
-snapshot and does not update until `render.sh` is run.
+It checks the figure, heat and thermal generation records, hashes the bundle
+pages, `analyses/_quarto.yml` and `analyses/_cse-manuscript.json`, runs
+`analyses/render.sh`, refuses if any of those inputs changed during the
+render, and then stamps the rendered bundle HTML in
+`results/notebook-render-receipt.json`. `build_absorption_handoff.py` packages
+that stamped overview.
 
-The render wrappers always pass `--no-execute`; Quarto reads retained tables,
-figures and receipts but never runs the thermodynamic model. The hosted root
-site uses an explicit native Quarto sidebar, so its links, groups, and order
-are deliberate and stable rather than inferred from filesystem names. The
-parent/child tree is recorded in [`analysis.yaml`](analysis.yaml): neutral
-MEA–water,
-ionic/speciation, CO₂–R4, reaction-temperature, Born/permittivity, calorimetry,
-coupling and identification, association topology, and historical designs. The
-historical page preserves the July designs as retained background on discarded strategies, with
-exact Git retrievals, rather than presenting them as the current plan.
+For an automatically refreshing local view while editing, from `analyses/`:
+
+```bash
+python3 manuscript.py preview . --port <free port>
+```
+
+The owner's installed `mea-parameter-bundle-preview.service`
+(`systemd/mea-parameter-bundle-preview.service`, port 8770) runs
+`analyses/preview.sh`, which starts the same manuscript preview.
+`python3 analyses/manuscript.py service analyses/` would install the CSE
+always-on preview unit instead; it is not installed, and it requires an
+interpreter that imports `jupyter_core`, `nbformat`, `nbclient`, `ipykernel`,
+`jupyter_client`, `jupyter_cache` and `yaml`, which the project environment
+does not provide.
 
 ## Claude experiment checkpoint — 3 September 2026
 
@@ -230,11 +232,11 @@ uv run python scripts/refresh_results.py
 
 This is the normal update command. It runs figure data, figure rendering and
 the overview figures sequentially, then exits nonzero naming the stages it did
-not run: direct heat, thermal checks, the strict Quarto render and handoff
+not run: direct heat, thermal checks, the certified Quarto render and handoff
 packaging wait for the MEA heat calculation to be rebuilt on the Engine
 reference temperature actions and record-anchored calorics (ePC-SAFT #84,
-#138; MEA #96). Until then render with
-`bash render.sh notebook.qmd --working-copy`. It uses
+#138; MEA #96). Until then render the uncertified view with
+`bash render.sh` from `analyses/`. It uses
 one logical CPU, single-threaded BLAS/OpenMP, lower scheduling priority, a
 2 GiB per-process solver address-space limit and a 2 GiB native V8 heap cap
 for Quarto (neither is an aggregate RAM quota), and a
@@ -307,19 +309,9 @@ means exclusion from both SSM $f_{mix}$ and the salt-free neutral-permittivity
 pool while CO2 remains a reacting EOS component. The selected live mapping
 remains `results/selected-current-best-parameters.json`.
 
-Render from this directory with:
-
-```bash
-bash render.sh notebook.qmd
-```
-
-The overview and child reports render under the root site's `_site/` directory.
-The site copies displayed figures and assets into that output; evidence links
-still require the repository. The overview is the user-facing entry point and
-the sidebar links to every child report.
-The wrapper checks result freshness and always passes `--no-execute`, so
-rendering cannot rerun the model. A successful build hashes the source and HTML;
-manual prose remains investigator-reviewed, not inferred from a timestamp.
+Rendering and certification are described in the presentation map above.
+A successful certification hashes the source and HTML; manual prose remains
+investigator-reviewed, not inferred from a timestamp.
 The former LaTeX/PDF notebook is retired; historical prose and selected
 evidence remain in Git, while rerunnable detail tables and plot sidecars stay
 out of the mergeable tree.
@@ -337,12 +329,12 @@ not copied into parallel status files.
 The latest shared-driver refresh stopped at pressure state 87/161 after 900
 seconds. The retained figures, HTML, and thermal checks are not a current
 synchronized publication. The corrected `notebook.qmd` can still be rendered
-for day-to-day discussion with `bash render.sh notebook.qmd --working-copy`.
+for day-to-day discussion with `bash render.sh` from `analyses/`.
 That render includes a visible warning, uses the retained figures as labeled,
 and does not stamp numerical publication or authorize packaging. It replaces
 the previously stale HTML without rerunning the model. The old thermal
 validation files still contain invalid retired three-knot comparison rows.
-The default render and handoff packaging continue to require a successful
+Certification and handoff packaging continue to require a successful
 numerical refresh. Display colors mark supported values (green), working values
 whose evidence should be reviewed for green (blue, including fixed/derived
 choices), and values needing targeted testing or refitting (yellow). Test
@@ -351,7 +343,7 @@ do not change parameter values or their recorded scientific qualifications.
 The current yellow targets are only the R2/R4 intercepts in the F/S experiment;
 retained transfer values remain blue unless a specific test justifies reopening
 them. The working-note callout is part of the Quarto source, preserving the
-normal page margins and table-of-contents sidebar in both render modes.
+normal page margins in both the working and certified renders.
 
 Build the deterministic absorption-agent handoff locally when needed with:
 

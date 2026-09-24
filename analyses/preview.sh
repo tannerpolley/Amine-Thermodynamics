@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Entry point of the installed mea-parameter-bundle-preview.service; the CSE
+# manuscript preview owns the serving behavior.
 cd "$(dirname "$0")"
-exec quarto preview \
-  --port "${MEA_ANALYSES_PORT:-8770}" \
+exec python3 manuscript.py preview . \
   --host "${MEA_ANALYSES_HOST:-127.0.0.1}" \
-  --no-browser \
-  --no-navigate \
-  --timeout "${MEA_ANALYSES_TIMEOUT:-0}" \
-  --render html \
-  --no-clean
+  --port "${MEA_ANALYSES_PORT:-8770}"

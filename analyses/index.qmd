@@ -1,48 +1,60 @@
 ---
 title: "MEA thermodynamics analyses"
-subtitle: "One hosted Quarto site for the repository's retained analysis records"
+subtitle: "Root Quarto Manuscript for the repository's retained analysis records"
 order: 1
 ---
 
-This is the repository-level analysis index. The site is rendered from
-[`_quarto.yml`](_quarto.yml), which is the single source for shared HTML
-defaults, publication membership, and the left workflow sidebar. Each analysis
-keeps its scientific metadata in its own `analysis.yaml`.
+This article is the repository-level analysis index. `manuscript.py` manages
+the root Quarto Manuscript: `_quarto.yml` holds the shared HTML presentation,
+and `_cse-manuscript.json` holds the ordered list of published pages. Each
+analysis keeps its scientific metadata in its own `analysis.yaml`.
 
 The [MEA parameter bundle](mea_parameter_bundle/notebook.qmd) is the main
-parameter-development result. Its overview is the clickable parent page;
-formulation, coupled-assessment, and historical-context reports are grouped
-under it in the sidebar. The other published pages are reference and decision
-evidence that support selecting and assessing the bundle.
+parameter-development result. Its overview is the parent page for the
+formulation, coupled-assessment, and historical-background reports listed below.
+The other published pages are reference and decision evidence that support
+selecting and assessing the bundle.
+
+## Published pages
+
+| Group | Pages |
+|:--|:--|
+| MEA parameter bundle | [Overview](mea_parameter_bundle/notebook.qmd) |
+| Active formulation | [Neutral MEA–water fit](mea_parameter_bundle/neutral-mea-water/index.qmd) · [CO₂ dispersion and R4 calibration](mea_parameter_bundle/co2-r4-calibration/index.qmd) · [Born and permittivity study](mea_parameter_bundle/born-permittivity/index.qmd) · [Association topology analysis](mea_parameter_bundle/association-topology/index.qmd) |
+| Coupled assessment | [Reaction-temperature fit](mea_parameter_bundle/reaction-temperature-fit/index.qmd) · [Calorimetry and thermal assessment](mea_parameter_bundle/calorimetry/index.qmd) · [Coupling and parameter identification](mea_parameter_bundle/coupling-and-identification/index.qmd) |
+| Historical background | [Historical ionic/speciation fit](mea_parameter_bundle/ionic-speciation-fit/index.qmd) · [Historical designs and discarded strategies](mea_parameter_bundle/historical-designs/index.qmd) |
+| Reference and comparison | [Ideal reaction-equilibrium reference](ideal_reaction_equilibrium/index.qmd) · [Matched six- and nine-species comparison](enrtl_six_species_ideal_comparison/notebook.qmd) |
+| Historical and decision evidence | [Historical fixed-parameter ePC-SAFT evaluation](historical_fixed_parameter_epcsaft_evaluation/index.qmd) · [Reactive ePC-SAFT parameter evidence](reactive_epcsaft_parameter_evidence/index.qmd) |
 
 ## Folder roles for parameter development
 
 The physical folders stay with the result or source owner that created them.
-The navigation groups them by the role each record plays in reaching an
+The table below groups them by the role each record plays in reaching an
 accepted parameter suite:
 
-| Navigation group | Folders and purpose |
+| Role | Folders and purpose |
 |:--|:--|
-| Parameter bundle | `mea_parameter_bundle/` — current candidate display, formulation studies, coupled assessment, and historical bundle context. This is the only active parameter-development parent. |
+| Parameter bundle | `mea_parameter_bundle/` — current candidate display, formulation studies, coupled assessment, and historical bundle background. This is the only active parameter-development parent. |
 | Reference and comparison | `six_species_solubility_reference/`, `neutral_pcsaft_pressure_reference/`, `ideal_reaction_equilibrium/`, and `paper_validation/2015_baygi/` — source-aligned baselines and parity checks used to define or assess candidates. |
 | Historical and decision evidence | `historical_fixed_parameter_epcsaft_evaluation/`, `reactive_epcsaft_parameter_evidence/`, and `enrtl_six_species_ideal_comparison/` — completed configurations, packet-specific comparisons, and supported-negative gates. |
-| Source and contract records | `film_chemistry_work_package_a/` and `speciation_evidence_harmonization/` — qualified inputs and harmonization work that feed later studies but are not parameter authorities. |
-| Retired exploration | `toybox/ionic_parameter_fit_playground/` — rejection receipt only; retain for traceability and exclude from promotion. |
+| Source and input-qualification records | `film_chemistry_work_package_a/` and `speciation_evidence_harmonization/` — qualified inputs and harmonization work that feed later studies but are not parameter authorities. |
+| Retired exploration | `toybox/ionic_parameter_fit_playground/` — retained rejection record only; retain for traceability and exclude from promotion. |
 
-The remaining records are source-contract, reference, or audit analyses without
+The remaining records are source-qualification, reference, or audit analyses without
 a hosted report. Their `README.md` and `analysis.yaml` files remain the source
 records. Six-species, neutral-pressure, Baygi, speciation-harmonization, film,
 and toybox records stay source-only; their values are linked from the pages that
 use them rather than copied into new reports.
 
-## Site contract
+## Publication rules
 
-- Build and host `analyses/_site/` as the single publication target.
+- Render `analyses/_site/` with `bash render.sh` from `analyses/`; it validates
+  the manuscript and always passes `--no-execute`.
+- Register a new report with `python3 manuscript.py include . <report.qmd>
+  --title <title>`; an unregistered `.qmd` is not rendered.
 - Keep evidence, scripts, and results in the analysis directory that owns them.
 - Use page front matter only for content-specific metadata; shared presentation
   belongs in `_quarto.yml`.
-- Keep `site.css` limited to the parameter-table and evidence-color rules; the
-  cross-page sidebar is native Quarto navigation and the in-page TOC is
-  disabled.
+- Keep `site.css` limited to the parameter-table and evidence-color rules.
 - Keep execution disabled for documentation builds. Numerical refreshes remain
-  separate analysis commands with their own receipts and claim boundaries.
+  separate analysis commands with their own retained records and claim limits.
