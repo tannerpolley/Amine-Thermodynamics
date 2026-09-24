@@ -155,4 +155,4 @@ python3.13 analyses/mea_parameter_bundle/scripts/compare_engines.py --scenario a
 python3.13 analyses/mea_parameter_bundle/scripts/compare_engines.py --finalize-only
 ```
 
-Use wheel 3eb502ab for the original comparison and b66 for the five-state addendum. The addendum records values and derivative checks without timing rows.
+Use wheel 3eb502ab for the original comparison and b66 for the five-state addendum. The addendum records values and derivative checks without timing rows. A fresh comparison refuses to overwrite this folder: run it from a checkout without `results/runs/engine-comparison/`; valid cold runs are taken from the data (cold-sweep runs without `setup_failure` rows), and G rows record the git blob of the `shared_evaluation.py` actually imported.
