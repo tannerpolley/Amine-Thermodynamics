@@ -18,6 +18,9 @@ import probe
 from refit import is_validation, residuals
 
 HERE = Path(__file__).parent
+# Akula 2023a pools its 30 mass % pCO2 data from these sources, loading 0.003-0.5, 40-120 degC (40.5 %,
+# mean absolute relative error at measured loading; docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md).
+AKULA_SOURCES = {'Aronu2011', 'Hilliard2008', 'Jou1995', 'Xu2011'}
 DATA = probe.W / 'data/reference/MEA/observations/liquid_speciation'
 
 
@@ -65,6 +68,8 @@ def main(argv):
             ln = math.log(r['predictions']['co2-partial-pressure'] / t['observed'])
             groups.setdefault(f"source={t['source_identity']}", []).append(ln)
             groups.setdefault('all six sources', []).append(ln)
+            if t['source_identity'] in AKULA_SOURCES and r['feed'][0] <= 0.5 and 40 <= r['T'] - 273.15 <= 120:
+                groups.setdefault('Akula 2023a-comparable: Aronu, Hilliard, Jou, Xu; loading <= 0.5', []).append(ln)
         for r in packet.values():
             part = 'validation (80 degC)' if is_validation(r) else 'calibration'
             for kind, _, _, ln in residuals(r) or []:

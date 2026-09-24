@@ -1,6 +1,8 @@
 """Diagnostic nonlinear refit of a named parameter subset against pCO2 and liquid speciation.
 
-Usage: refit.py NAME identity@lower@upper[@start] ...  (start defaults to the adopted value)
+Usage: refit.py [--iterations=N] NAME identity@lower@upper[@start] ...  (start defaults to the adopted value)
+Stopping: below a 2 % drop in calibration pCO2 RMS per iteration, or with --iterations only the
+least_squares default tolerances, capped at N iterations.
 Calibration: every packet state except 80 degC. Validation: the 80 degC isotherm
 (Jou 1995 pressure, reserved_validation in the grouped split manifest, plus Bottinger 2008).
 Residuals: pCO2 ln(pred/obs)/0.3 (the #101 data floor); species (pred-obs)/(0.1 obs + 0.001).
@@ -44,6 +46,7 @@ def is_validation(rec):
 
 
 def main(argv):
+    cap = int(argv.pop(0).split('=')[1]) if argv[0].startswith('--iterations=') else None
     name, specs = argv[0], argv[1:]
     ids, lo, hi, start = [], [], [], {}
     for s in specs:
@@ -111,11 +114,15 @@ def main(argv):
     def stop_rule(intermediate_result):  # the lane's rule: stop below a 2 % drop in calibration pCO2 RMS per iteration
         history.append(pressure_rms(intermediate_result.fun))
         print('iteration', len(history), 'x', list(intermediate_result.x), 'pCO2 RMS ln', history[-1], flush=True)
+        if cap is not None:
+            if len(history) >= cap:
+                raise StopIteration
+            return
         previous = history[-2] if len(history) > 1 else pressure_rms(fun_memo(x0))
         if previous - history[-1] < 0.02 * previous:
             raise StopIteration
 
-    fit = least_squares(fun_memo, x0, jac=jac, bounds=(lo, hi), x_scale=steps, max_nfev=60, verbose=2,
+    fit = least_squares(fun_memo, x0, jac=jac, bounds=(lo, hi), x_scale=steps, max_nfev=None if cap else 60, verbose=2,
                         callback=stop_rule)
     J = fit.jac
     dof = max(len(order) - len(ids), 1)
