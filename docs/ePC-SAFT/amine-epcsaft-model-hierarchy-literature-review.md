@@ -204,7 +204,7 @@ for Fluid Phase Equilibria built on the R4-fixed refit of candidate A
 ([MEA #107](https://github.com/tannerpolley/MEA-Thermodynamics/issues/107);
 candidate A reaches pCO2 AARD 26.9 % on the 161 rows, draft
 [PR #106](https://github.com/tannerpolley/MEA-Thermodynamics/pull/106)), with
-composition-transfer validation on the 95 reserved non-30 mass % pressure rows
+composition-transfer validation on the 95 reserved pressure rows, 94 of them at other MEA concentrations
 ([MEA #108](https://github.com/tannerpolley/MEA-Thermodynamics/issues/108);
 row-access audit running). Every "pre-refit record" number below comes from
 the exploratory incumbent `selected-current-best-parameters.json`
@@ -232,7 +232,7 @@ the exploratory incumbent named above.
 | Topic | What published work does (locator) | What is missing | Retained evidence here (path) | Strength |
 |---|---|---|---|---|
 | Explicit-ion reactive ePC-SAFT for MEA | Explicit-ion ePC-SAFT exists for MDEA, a tertiary amine that forms no carbamate: Uyan 2015 (§3, Eqs. 12–15), Wangler 2018, Cleeton 2020, Bülow 2021a (Eqs. 1–5); the only amine ion is MDEAH+. MEA SAFT models use ideal chemistry plus a neutral EOS (Baygi 2015 §3.3; Najafloo 2018 §3.3; Nasrifar 2010 §6 lumps ions into "effective water") or association sites instead of ions (Mac Dowell 2010 §II.B; Rodriguez 2012; Perdomo 2023 Eqs. 4–14; Wang 2018 PR-CPA association scheme Fig. 1). Search results for other explicit-ion EOS work: §9.6. | No explicit-ion ePC-SAFT treatment of the carbamate-forming MEAH+/MEACOO- pair. | Nine-species, five-reaction pre-refit record; 161 pressure rows and 131 speciation targets, all evaluated (notebook §Pressure, §Speciation) | Calibration residual |
-| Pressure, speciation and heat from one model | Activity-coefficient models fitted jointly to pCO2, NMR, heat of absorption and heat capacity: Hilliard 2008 (data inventory Table 13.4-2, p. 440; 35 parameters Table 13.4-3, p. 441), Zhang 2011 (Table 9), Akula 2023a (Eq. 34, Table 3). **Cleeton 2020 already does all three with one explicit-ion ePC-SAFT, for MDEA:** pCO2 (Figs. 7–9), speciation including carbonate against Jakobsen 2005 (§3.3.2, Fig. 6), and differential heat from the EOS fugacity temperature derivative plus reaction terms (Eq. 15, Fig. 10; 19.73 % against Arcis and Mathonat). Wang 2018 does all three with pseudo-chemical PR-CPA for MEA (Fig. 16; Figs. 18–19). | The same three quantities from one explicit-ion EOS for a carbamate-forming amine. | Pressure and speciation tables in the notebook; single-state heat `analyses/mea_parameter_bundle/results/reference-calorics/heat.csv` | Calibration residual (pressure, speciation); prediction (heat, 2 states) |
+| Pressure, speciation and heat from one model | Activity-coefficient models fitted jointly to pCO2, NMR, heat of absorption and heat capacity: Hilliard 2008 (data inventory Table 13.4-2, p. 440; 35 parameters Table 13.4-3, p. 441), Zhang 2011 (Table 9); Akula 2023a fits pCO2 and heat of absorption only (Table 3, p. 8) and compares speciation and heat capacity (Figs. 7–8). **Cleeton 2020 already does all three with one explicit-ion ePC-SAFT, for MDEA:** pCO2 (Figs. 7–9), speciation including carbonate against Jakobsen 2005 (§3.3.2, Fig. 6), and differential heat from the EOS fugacity temperature derivative plus reaction terms (Eq. 15, Fig. 10; 19.73 % against Arcis and Mathonat). Wang 2018 does all three with pseudo-chemical PR-CPA for MEA (Fig. 16; Figs. 18–19). | The same three quantities from one explicit-ion EOS for a carbamate-forming amine. | Pressure and speciation tables in the notebook; single-state heat `analyses/mea_parameter_bundle/results/reference-calorics/heat.csv` | Calibration residual (pressure, speciation); prediction (heat, 2 states) |
 | Exact derivatives and sensitivities | Finite differences: Hilliard 2008 heat between T and T+1 K (Eq. 13-36, p. 429); Uyan 2015 iterates activities without derivatives (§3). Automatic differentiation of fugacities in reactive non-electrolyte PC-SAFT: Ascani 2023 (Eqs. 16–17). No amine paper read reports solved-state sensitivities. | Solved-state derivatives of a reactive electrolyte EOS equilibrium, checked against finite differences. | Temperature and pressure solved-state derivatives, relative error ≤ 1.21×10⁻⁷; kij refused and reaction-coefficient derivatives unavailable on the pinned wheel (`analyses/mea_parameter_bundle/results/runs/engine-comparison/README.md`, Derivatives); 46/46 reference-temperature actions within 10⁻⁵ of finite differences (`analyses/mea_parameter_bundle/results/reference-temperature/summary.json`) | Numerical verification |
 | Modified Born (solvation shell + dielectric saturation) for amine ions | Figiel 2025 (Eqs. 5–11, Table 3): inorganic ions in water, methanol and ethanol, 298.15 K only; the authors state the diameter was not tested at other temperatures. Bülow 2021a uses the original Born term with MDEAH+ (Eq. 20). In its Results discussion of the sulfolane blends, Bülow 2021a says the deviation at loading near and above 1 "needs a careful investigation", "might be reasoned in the induced association of CO2", and that "an extended version of the model … that includes an altered Born contribution" including ionic species might be applied. Rueben 2024: permittivity for inorganic ions only. | No application to amine or carbamate ions, or to a reactive CO2–amine system, in the papers read. Temperature transfer of the solvation-shell parameters is untested anywhere. | The pre-refit record uses SSM+DS with MEAH+/MEACOO- Born diameters from a historical speciation fit (notebook species table); historical Born/permittivity comparison `analyses/mea_parameter_bundle/results/born-permittivity-study/` | Calibration residual; no independent electrostatic evidence |
 | Reference-state and K(T) conventions | Conventions conflict: Austgen 1991 mole-fraction, unsymmetric (pp. 545–546; Table V, p. 547); Cleeton 2020 symmetric for water and MDEA (Eq. 8); Bülow 2021a infinite dilution in water for MDEA and calls the alternative "often misused" (Eqs. 12–13); Böttinger 2008 molality (§4). Cleeton applies an MDEAH+ constant valid at 298–333 K up to 413 K (Table 1). | An explicit conversion of mixed-source constants to one basis with a verified temperature derivative. | Common aqueous-molality conversion (`docs/ePC-SAFT/mea-reaction-and-sentinel-primary-source-audit.md`); reaction-by-reaction slope attribution `analyses/mea_parameter_bundle/results/reference-temperature/attribution.csv`, `slopes.csv` | Numerical verification |
@@ -251,7 +251,8 @@ search in §9.6.
 
 1. **Explicit-ion reactive ePC-SAFT for a carbamate-forming amine, validated
    across MEA concentration (contingent on #107 and #108).** Defensible
-   wording: no published SAFT-family equation of state places MEAH+,
+   wording: in the searches of §9.6 (Scopus and Web of Science still
+   pending), no published SAFT-family equation of state places MEAH+,
    MEACOO-, HCO3- and CO3²- in the equation of state with electrolyte
    (Debye–Hückel and Born) terms and solves the reaction equilibria with
    fugacities from that equation of state. Nasrifar 2010, Baygi 2015 and
@@ -261,11 +262,12 @@ search in §9.6.
    closest precedent. Evidence now: the pre-refit record evaluates every
    pressure and speciation row, and candidate A reaches 26.9 % on the 161
    rows (PR #106). What establishes it: #107 adoption with its promotion
-   gates, then #108 on the 95 reserved non-30 mass % rows. That would be the
+   gates, then #108 on the 95 reserved rows, 94 of them at other MEA concentrations. That would be the
    first physical validation here, limited to transfer across concentration.
    Stronger with: the per-source table of §9.3 recomputed on the adopted
    record, and the reads listed in §9.6 that are still missing
-   (Neumann 2021 and the Rozmus thesis).
+   for this claim (the Rozmus thesis and Najafloo 2015; Neumann 2021 is not
+   SAFT-family and cannot change it).
 2. **Hypothesis tested by #107: the loading-shaped pCO2 misfit lies outside
    the reaction-constant span.** For the pre-refit record, loading-bin means
    remove 79 % of the residual sum of squares, and ±0.3 ln K on R2/R4/R5
@@ -330,7 +332,7 @@ Baygi Table 5; Najafloo Table 5; Zhang Table 9; Hilliard Table 13.4-6
 0.003–0.5, 40–120 °C). Published row counts and domains differ from these rows.
 
 Scope: every pre-refit row is 30 mass % MEA (x_MEA ≈ 0.11) at 40–120 °C.
-Baygi's overall 36.42 % covers 691 rows at x_MEA 0.02–0.16 and 298–443 K
+Baygi's overall 36.42 % covers 691 rows at x_MEA 0.02–0.16 and 273–443 K
 (Table 5), mostly other concentrations. It is not a like-for-like comparison
 with the 161-row value.
 
@@ -377,8 +379,8 @@ Table 11, footnote b, from the published 22.9 %), Wangler 2018 19.7 %, Cleeton
 - **Electrolyte SAFT for another carbamate-forming amine.** Najafloo, Zoghi
   and Feyzi 2015 (J. Chem. Thermodyn. 82:143) use an electrolyte SAFT-HR for
   CO2 in MDEA + AEEA; AEEA forms carbamate. Only the search summary was read.
-  If its AEEA carbamate ion is an EOS species, the MEA claim still holds, but
-  "only MDEA" must be dropped.
+  If its AEEA carbamate ion is an EOS species, claim 1 still holds for MEA,
+  but its heading "for a carbamate-forming amine" must narrow to "for MEA".
 - **IFP electrolyte PPC-SAFT line.** The Rozmus 2012 thesis plans GC-PPC-SAFT
   with ions and reactions for primary and secondary amines. Its abstract
   reports strong electrolytes and CO2-free amine solutions only. Rozmus et al.
@@ -409,8 +411,10 @@ their own owners.
 - **Matin 2012 bicarbonate targets.** The 19 Matin HCO3- targets (loading
   0.106–0.531) are scored against model HCO3- alone
   (`data/reference/MEA/manifests/speciation_target_membership.csv`, empty
-  `linear_coefficients`). Matin assumes carbonate is zero and folds it into
-  bicarbonate above loading 0.25 (Eqs. 18–19b). The equivalent model quantity
+  `linear_coefficients`). Matin sets carbonate to zero at every loading and
+  counts it with bicarbonate (Eqs. 18–19b). Its text justifies this for most
+  loadings and "particularly" above 0.25, and separately below 0.3, where both
+  ions are small (Discussion). The equivalent model quantity
   is HCO3- + CO3²-.
 - **Hilliard residual direction.** Notebook §Fit statistics groups Hilliard
   2008 with the papers that report pressure at the measured loading. Its
