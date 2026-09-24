@@ -56,6 +56,7 @@ def main(argv):
     base_vals = probe.shared.parameter_values(probe.shared.parameter_mapping())
     x0 = np.array([start.get(i, base_vals[i]) for i in ids])
     log = Path(f'/tmp/cm/refit-{name}.jsonl')
+    log.parent.mkdir(exist_ok=True)
     base = {r['identity']: r for r in probe.evaluate()}
     keys = [(r['identity'], k) for r in base.values() if not is_validation(r) and residuals(r) for k in residuals(r)]
     order = [(i, k[1]) for i, k in keys]

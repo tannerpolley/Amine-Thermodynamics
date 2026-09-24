@@ -91,7 +91,7 @@ def main(argv):
         for r in rows:
             if r['variant'] == variant:
                 r.update({'parameter_overrides': json.dumps(sets, sort_keys=True), **coverage,
-                          'engine_wheel_sha256': probe.shared.ENGINE_WHEEL_SHA256,
+                          'engine_wheel_sha256': ','.join(sorted({r['wheel'] for r in [*packet.values(), *canonical.values()]})),
                           'parameter_sha256': probe.shared.sha256(probe.shared.PARAMETERS),
                           'script_sha256': probe.shared.sha256(Path(__file__))})
     fields = ['variant', 'scope', 'quantity', 'n', 'mean_ln', 'rms_ln', 'aard_percent', 'observed', 'predicted',

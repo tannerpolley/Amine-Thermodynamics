@@ -11,35 +11,47 @@ The refit result is a candidate file only.
 
 ## Outcome
 
-1. **Cause: the adopted ionic parameters were never fitted to pCO2 or to speciation on the current
+1. **Leading explanation: the adopted ionic parameters were never fitted to pCO2 or to speciation on the current
    formulation.** Every ion–water k_ij is zero:
    - The MEAH⁺/MEACOO⁻ size, energy and Born values come from a historical speciation-only fit on the
      retired 1.5.2 runtime (22 rows; `../ionic-speciation-fit/index.qmd`).
    - The HCO₃⁻/CO₃²⁻ values are transferred diagnostics.
    - The adoption fit scored only 5 pCO2 rows and moved only reaction enthalpies (#101).
-2. **The pCO2 misfit and a speciation misfit have one cause.** At loading 0.3–0.5 the adopted model
-   shifts carbon out of carbamate into bicarbonate and carbonate:
-   - Carbamate is under-predicted by 25–35% (Böttinger 2008, Matin 2012).
-   - The model puts 11–24% of dissolved carbon in CO₃²⁻ at 20 °C. Jakobsen 2005 NMR gives 1–3%
-     (table below).
-   - Through the bicarbonate equilibria, the excess HCO₃⁻ raises a(CO2) ∝ a(MEAH⁺)·a(HCO₃⁻)/a(MEA).
-     That is the pCO2 over-prediction at 0.3–0.5.
-3. **The ionic coordinates can express the loading shape; CO2-side parameters cannot.** Of the 24
-   coordinates tested:
+2. **The pCO2 misfit and a speciation misfit are consistent with one shared cause: the unfitted
+   ionic non-ideality.** At loading 0.3–0.5 the adopted model shifts carbon out of carbamate into
+   bicarbonate and carbonate:
+   - Carbamate is under-predicted by about 17% (Böttinger 2008) and 21% (Matin 2012) on average,
+     and by up to 35%.
+   - The model puts 5–24% of dissolved carbon in CO₃²⁻ at 20–40 °C. Jakobsen 2005 NMR gives 1–3%,
+     a 5–13× excess (table below). Jakobsen is not in any objective, so it is the out-of-objective
+     check.
+   - The equilibrium identity a(CO2) ∝ a(MEAH⁺)·a(HCO₃⁻)/a(MEA) links the two misfits. An excess of
+     HCO₃⁻ at 0.3–0.5 is consistent with the pCO2 over-prediction there. That identity is not proof
+     of causation, and activity coefficients were not decomposed. The mechanism also does not
+     explain the pCO2 under-prediction below loading 0.2, where the carbonate excess is
+     proportionally largest.
+3. **The ionic, MEA–water and R4 coordinates can express the loading shape; the CO2-side parameters
+   cannot.** Of the 24 coordinates tested:
    - The CO2–water k_ij and the CO2 dispersion energy shift pCO2 uniformly and leave speciation
      unchanged.
    - The CO2–MEA k_ij has no pCO2 effect, because a(CO2) is pinned by the reactions.
-   - The carbamate–water, bicarbonate–water and MEAH⁺–MEACOO⁻ k_ij have loading-dependent,
-     sign-changing effects. So does the MEA–water k_ij, which is the strongest shape lever.
+   - These have loading-dependent effects:
+     - the carbamate–water, bicarbonate–water and MEAH⁺–MEACOO⁻ k_ij;
+     - the MEAH⁺–water k_ij (U-shaped);
+     - the R4 intercept (changes sign; the refit leans on it);
+     - the neutral MEA–water k_ij, the strongest shape lever.
 4. **Refit A** fits five ionic/reaction coordinates to pCO2 and speciation jointly, with the 80 °C
    isotherm held out:
    - pCO2 RMS ln over all six sources falls from 0.532 to 0.329 (AARD 52% → 27%).
-   - The held-out 80 °C isotherm falls from 0.525 to 0.208.
+   - The held-out 80 °C isotherm falls from 0.525 to 0.208. That is an **interpolation** test,
+     because 80 °C lies between the calibrated 60 and 100 °C isotherms.
    - Five of six sources improve, including three never fitted (Idris, Aronu, Xu). **Mamun 2005
-     (120 °C, not fitted) worsens** from 0.254 to 0.380.
+     (120 °C, not fitted) worsens** from 0.254 to 0.380. Mamun is the only high-temperature
+     extrapolation evidence.
 5. **Warning: the reaction chemistry is compensating.** Three of five coordinates sit on their
    bounds:
-   - The R4 intercept is at its lower bound (ln K4 lowered by 0.50, carbamate made more stable).
+   - The R4 intercept is at its lower bound (ln K4 lowered by 0.50, a factor of 1.65 in K4,
+     carbamate made more stable). That bound is wider than #101's nominal ±0.3.
    - HCO₃⁻–water k_ij is at +0.30.
    - MEAH⁺–MEACOO⁻ k_ij is at −0.30.
 
@@ -69,9 +81,15 @@ RMS of ln(pred/obs); AARD in parentheses. "Canonical" rows are the 161 active 30
 | packet calibration speciation (both solved) | 112 | 0.398 | 0.272 |
 | packet validation speciation, 80 °C (Böttinger) | 11 | 0.147 | 0.133 |
 
+Speciation scores here compare the NMR "HCO₃⁻" with model HCO₃⁻ + CO₃²⁻ (see Refit A), not the
+packet's HCO₃⁻-only mapping, so they are not comparable with the notebook's speciation statistics.
+
 The adopted model is the one the notebook reports (Mamun 0.25, Xu 0.44, Aronu 0.51, Hilliard 0.585,
-Jou 0.60, Idris 0.64–0.66). The adopted model fails 1 canonical row and 3 speciation states that the
-candidate solves.
+Jou 0.60, Idris 0.64–0.66). The adopted model fails 1 canonical row (Idris `vle_obs_0166`) and 3 speciation
+states that the candidate solves. `probe.py` builds the canonical rows with the same nearest-template
+rule as `generate_figure_data.py`, but it cold-starts the adopted solves and warm-starts the
+candidate solves from them. The figure pipeline instead uses cached cross-state anchors, so its
+failure set can differ.
 
 ### Carbonate fraction of dissolved carbon (Jakobsen 2005 NMR, 30 wt%)
 
@@ -128,8 +146,10 @@ This follows the ion–water k_ij convention of Held-type ePC-SAFT (see Literatu
 
 **Partition:**
 
-- Calibration: every packet state except 80 °C, that is 68 pCO2 rows (Hilliard; Jou at
-  40/60/100/120 °C) and 120 speciation rows (Böttinger, Matin).
+- Calibration: every packet state except 80 °C that the adopted model solves: 68 pCO2 rows
+  (Hilliard; Jou at 40/60/100/120 °C) and 112 speciation rows (Böttinger, Matin), 180 residuals
+  in all. The three adopted-model failures (Böttinger 042 and 046, Matin 016) are not in the
+  objective.
 - Validation: the whole 80 °C isotherm (11 Jou pCO2 rows, `reserved_validation` in the grouped split
   manifest, plus 5 Böttinger states). Aronu, Idris, Mamun and Xu enter no objective.
 
@@ -145,10 +165,15 @@ This follows the ion–water k_ij convention of Held-type ePC-SAFT (see Literatu
 
 - Trust-region least squares, with forward differences at the sweep steps.
 - A state that fails at a trial point keeps its adopted residual.
-- Stopped at convergence under the owner's rule (below 2% relative drop per iteration:
-  0.317 → 0.312 → 0.311).
-- Part 1 (four iterations) ran on wheel `762dd326`, part 2 on `b66c7b96`. On the 120 packet states
-  the two wheels give identical results (fresh solves: |Δln pCO2| = 0, |Δx| = 0).
+- Stopped under the owner's rule at iterate 13: below 2% relative drop in calibration pCO2 RMS
+  per iteration (0.317 → 0.312 → 0.311). This is not an optimizer optimum; three coordinates are
+  at bounds.
+- Part 1 (four iterations, `max_nfev` 10) ran on wheel `762dd326` and was stopped at an evaluation
+  boundary for the rebase. Part 2 restarted on `b66c7b96` from part 1's best point:
+  `@0.0007023682593133643`, `@-0.2096295233737498`, `@0.2988551751685706`,
+  `@-0.29557764994923635`, `@1.016844054303057`, in coordinate order.
+- On the 120 packet states the two wheels give identical results (fresh solves: |Δln pCO2| = 0,
+  |Δx| = 0).
 
 | coordinate | adopted | candidate A | SE | at bound |
 |---|---:|---:|---:|:--:|
@@ -158,10 +183,12 @@ This follows the ion–water k_ij convention of Held-type ePC-SAFT (see Literatu
 | MEAH⁺–MEACOO⁻ k_ij | −0.0020 | −0.3000 | 0.150 | yes |
 | R4 intercept `a` (ln K4) | 1.5050 | 1.0050 | 0.326 | yes (−0.5) |
 
-The standard errors come from the linearized Jacobian at iterate 7 with residual variance 0.86.
+The standard errors come from the linearized Jacobian at iterate 7, over the 180 objective
+residuals, with residual variance 0.86.
 They are not valid at the bounds and understate the correlated uncertainty.
-`candidate-refit-a-parameters.json` (SHA-256 `9f1ab31f…b559`) holds these five values. Loaded
-directly, it reproduces the refit predictions to 2e-11 in ln pCO2.
+`candidate-refit-a-parameters.json` (SHA-256 `4f31b348…7734`) holds these five values; R4's
+`b_k` keeps its source provenance. Loaded directly (`python candidate.py --check`), it reproduces
+the refit predictions to 2e-11 in ln pCO2 and 2e-13 in mole fraction.
 
 ## Literature comparison
 
@@ -205,8 +232,9 @@ the pCO2 residual to temperature. Two things remain untested:
 
 ## Limits
 
-- The candidate is a calibration result. Its 80 °C holdout and the four unfitted sources are
-  campaign-blocked evidence. None of it is independent of the 30 wt% solvent or the 40–120 °C range.
+- The candidate is a calibration result. The 80 °C holdout is an interpolation test, and the
+  four unfitted sources are other laboratories on the same 30 wt%, 40–120 °C domain. None of it
+  tests other solvent concentrations.
 - Three coordinates are at bounds. The R4 shift of −0.5 ln K is outside what has been checked
   against the Tong/Aroua source, whose uncertainty is not transcribed. Mamun and Aronu move to a
   negative mean bias.
@@ -226,8 +254,9 @@ python sensitivity.py                      # 24-coordinate sweep -> sensitivity-
 python refit.py A 'pair/carbamate-anion/water/k_ij@-0.3@0.3' 'pair/protonated-monoethanolamine/water/k_ij@-0.3@0.3' \
   'pair/bicarbonate-anion/water/k_ij@-0.3@0.3' 'pair/carbamate-anion/protonated-monoethanolamine/k_ij@-0.3@0.3' \
   'reaction:R4:correlation:a@1.005@2.005'  # log: /tmp/cm/refit-A.jsonl
-python identifiability.py /tmp/cm/refit-A.jsonl 7 <the five identities>
+python identifiability.py /tmp/cm/refit-A.jsonl /tmp/cm/base-b66.jsonl 7 <the five identities>
 python candidate.py                         # candidate-refit-a-parameters.json
+python candidate.py --check                 # file vs probe overrides, four states
 python probe.py /tmp/cm/base-b66.jsonl; python probe.py /tmp/cm/canon-base.jsonl --canonical
 python probe.py /tmp/cm/best.jsonl <id=value ...>; python probe.py /tmp/cm/canon-best.jsonl --canonical <id=value ...>
 python compare.py adopted=/tmp/cm/base-b66.jsonl,/tmp/cm/canon-base.jsonl candidate-A=/tmp/cm/best.jsonl,/tmp/cm/canon-best.jsonl
