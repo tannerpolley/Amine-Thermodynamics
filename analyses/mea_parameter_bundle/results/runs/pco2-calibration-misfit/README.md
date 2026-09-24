@@ -98,14 +98,14 @@ The three kinds of evidence are kept separate:
 - They match the adoption-time full replay (old adapter, wheel `40fba7cf…`) with mean ln −0.0030
   and RMS 0.0070 over 78 states. `vle_obs_0149` is absent from that replay.
 - The ~0.3% offset is consistent with the R1/R3 shifts that the replay scored but the selected
-  document omits (see `interpretation_correction` in `adoption-receipt.json`). It is negligible
+  document omits (see `interpretation_correction` in `adoption-record.json`). It is negligible
   next to the misfit.
 - The misfit therefore already existed at adoption. The adoption record agrees: its 143-row
   calibration pressure cohort had log10 RMSE 0.2366, which is ln RMSE 0.545.
 
 ### (c-ii) The fit did not target these rows: **supported** (retained record)
 
-- `screen-receipt.json` scored 33 common targets: 5 pressure rows, 22 speciation rows and 6 heat
+- `screen-record.json` scored 33 common targets: 5 pressure rows, 22 speciation rows and 6 heat
   rows. The 5 pressure rows are Jou `vle_obs_0206/0211/0227/0228/0232`, at 80 and 120 °C.
 - The three families were given equal weight.
 - The fit coordinates were reaction-enthalpy shifts at the 313.15 K pivot, which keep ln K at

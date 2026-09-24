@@ -19,7 +19,7 @@ The bounded HTML check passed 16 stars including the legend, all four fit
 anchors, star links, Quarto layout wrappers, and selected-file identity.
 
 **Verified:** strict `result_freshness.py --fingerprint` refuses
-`results/figure-calculation-receipt.json` as unverified generation. HTML layout
+`results/figure-calculation-record.json` as unverified generation. HTML layout
 and parameter-table identity therefore do not certify numerical publication.
 
 ## Coverage and ownership

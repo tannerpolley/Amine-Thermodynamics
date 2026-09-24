@@ -2,7 +2,7 @@
 
 2026-09-03. The original screening record below used the earlier selected
 bundle. The subsequent exploratory adoption is recorded in
-`adoption-receipt.json`; the active values are in
+`adoption-record.json`; the active values are in
 `../selected-current-best-parameters.json`. Historical baseline results below
 are not a replay of that later selection. The full candidate replay included
 R1/R3 shifts omitted from the selected JSON; see `interpretation_correction`
@@ -82,7 +82,7 @@ processes were stopped at closeout.
 The self-check verifies selected reaction origins, pivot preservation, and
 constant reaction-enthalpy shifts at 20/40/80/120 C. The retained
 `full-validation-targets.csv` provides row-level replay evidence; screen and
-candidate receipts retain their bounded shifts, weights, coverage, and
+candidate records retain their bounded shifts, weights, coverage, and
 incomplete-holdout status. Full-validation aggregate metrics are computed only
 on evaluated rows and must not be compared against a different cohort.
 
@@ -96,11 +96,11 @@ verifies the installed wheel in every mode, caps BLAS/OpenMP threads, and
 records per-attempt wall time. Xu 2011 pressure rows are an independent
 holdout and Kim et al. 2014 rows are excluded from fitting.
 
-`parity-receipt.json` / `parity-targets.csv`: 17/17 states reproduce the
+`parity-record.json` / `parity-targets.csv`: 17/17 states reproduce the
 retained baseline to a maximum relative difference of 1.5e-10, including three
 120 C pressure states recovered through cross-temperature anchors.
 Detailed scenario caches and invalid trial runs are intentionally not retained
-in the mergeable tree; the receipts and selected target tables above are the
+in the mergeable tree; the records and selected target tables above are the
 reviewable evidence, and rerunning the driver recreates the omitted detail.
 
 
@@ -123,13 +123,13 @@ exact check of the unbounded two-direction solution:
 | unbounded (adopted) | -8.20 | -4.81 | +8.42 | 0.6559 |
 
 R1 and R3 shifts are below 0.3 kJ/mol and are carried only through the
-retained directions. `sensitivity-check-receipt.json` shows native Engine
+retained directions. `sensitivity-check-record.json` shows native Engine
 R4/R5 sensitivities agree with the finite-difference columns to at most 0.2 %
 over 45 pressure/speciation rows.
 
 Full replay under the same recovery policy as the retained baseline
-(`full-validation-receipt.json`, `full-validation-targets.csv`), paired on
-identical evaluated rows (`adoption-receipt.json`):
+(`full-validation-record.json`, `full-validation-targets.csv`), paired on
+identical evaluated rows (`adoption-record.json`):
 
 | Cohort | n | Incumbent RMSE | Candidate RMSE |
 |---|---:|---:|---:|

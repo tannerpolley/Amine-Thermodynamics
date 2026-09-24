@@ -1140,7 +1140,7 @@ reference temperature derivative (Engine #84): `evaluate_direct_absorption_heat.
 reaction-temperature fit is retired as one unit: every mode of
 `run_reaction_temperature_fit.py` except `--self-check` and `--sensitivity-check` raises it on entry, because the
 screen, candidate, parity and benchmark consume the thermal reference and the full replay,
-partial summary and adoption require `candidate-receipt.json` and the heat summary, which
+partial summary and adoption require `candidate-record.json` and the heat summary, which
 only those blocked stages write for the current parameter file. `--sensitivity-check` stops
 on missing reaction-coefficient actions (Engine #61). `--self-check` remains; it checks the
 reaction-enthalpy shift algebra, cohort roles and recovery attempt plan without an Engine

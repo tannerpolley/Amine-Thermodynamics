@@ -43,7 +43,7 @@ It checks the figure, heat and thermal generation records, hashes the bundle
 pages, `analyses/_quarto.yml` and `analyses/_cse-manuscript.json`, runs
 `analyses/render.sh`, refuses if any of those inputs changed during the
 render, and then stamps the rendered bundle HTML in
-`results/notebook-render-receipt.json`. `build_absorption_handoff.py` packages
+`results/notebook-render-record.json`. `build_absorption_handoff.py` packages
 that stamped overview.
 
 For an automatically refreshing local view while editing, from `analyses/`:
@@ -157,7 +157,7 @@ bounded direct-Engine campaign subsequently selected the displayed R4 and
 carbon-dioxide dispersion-energy values. The current fixed-parameter
 Born--permittivity study retains solvent-only mass-fraction dielectric mixing.
 The subsequent reaction-temperature selection is recorded in
-`results/reaction-temperature-fit/adoption-receipt.json`; read the current
+`results/reaction-temperature-fit/adoption-record.json`; read the current
 R2/R4/R5 coefficients from `results/selected-current-best-parameters.json`,
 not from the earlier study's fitted values.
 The active mapping omits redundant formulation switches: positive unique ion
@@ -170,7 +170,7 @@ labeled with the common aqueous-molality standard state. The replay applies the
 audited source-to-common shifts before constructing each Engine problem. The
 uncorrected packet remains immutable input evidence; the correction and its
 numerical consequences are documented in the notebook and the calculation record
-`results/figure-calculation-receipt.json`.
+`results/figure-calculation-record.json`.
 
 The calorimetry preparation step reads the canonical MEA observation table and
 materializes only the declared paired-state campaign rows. It retains 66
@@ -268,7 +268,7 @@ Render a newly generated comparison with
 `render_figures.py --permittivity-comparison results/historical/permittivity-comparison`;
 it is not part of the current refresh.
 
-The generation record `results/figure-calculation-receipt.json` anchors the selected pressure replay,
+The generation record `results/figure-calculation-record.json` anchors the selected pressure replay,
 current failure table, and fit tables. The pressure
 replay preserves certified continuation states across nearby loadings and,
 when needed, neighboring temperatures while retaining the original independent
@@ -286,7 +286,7 @@ parameter mapping when the figures are refreshed.
 Pressure lines are shape-preserving render-time interpolations of the selected
 bundle's reactive Engine evaluations at the active-v1 observation coordinates. The pressure view includes
 Aronu, Hilliard, Idris, Jou, Mamun, and Xu. Current coverage and failed states
-are recorded in `results/figure-calculation-receipt.json`; the earlier vector evaluated all 161 states.
+are recorded in `results/figure-calculation-record.json`; the earlier vector evaluated all 161 states.
 Complete target-level
 residuals and grouped overall, temperature, source, species, and
 temperature--source statistics are retained in
@@ -296,7 +296,7 @@ temperature--source statistics are retained in
 the bounded diagnosis used by the notebook to select the current parameter
 start and reject unsupported parameter substitutions.
 `quick-endpoint-perturbation-screen.csv` and
-`quick-endpoint-perturbation-receipt.json` retain the earlier
+`quick-endpoint-perturbation-record.json` retain the earlier
 representative-state full bubble-point endpoint diagnostic and the single
 SciPy reaction-root consistency check. The complete superseding sensitivity,
 full-validation summary and selected row-level results are retained under
@@ -320,7 +320,7 @@ out of the mergeable tree.
 
 `../enrtl_six_species_ideal_comparison/` retains the complete six-/nine-species
 comparison, including its Quarto source, self-contained HTML and PDF notebooks,
-calculation scripts, exact packet receipts, row-level tables, UQ checkpoints,
+calculation scripts, exact packet provenance records, row-level tables, UQ checkpoints,
 and figure bundles. This notebook summarizes the conclusions that affect the
 active bundle and records which results can be used in the manuscript. The
 companion notebook remains the detailed calculation record so its results are

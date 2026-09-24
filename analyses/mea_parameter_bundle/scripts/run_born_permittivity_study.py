@@ -764,7 +764,7 @@ def run(
     _write_csv(RESULTS / f"{prefix}-states.csv", all_states)
     _write_csv(RESULTS / f"{prefix}-targets.csv", all_targets)
     _write_csv(RESULTS / f"{prefix}-summary.csv", summaries)
-    receipt = {
+    record = {
         "phase": phase,
         "variants": variants,
         "workers": min(workers, len(tasks)),
@@ -782,10 +782,10 @@ def run(
         "states_per_variant": len(sparse_catalog() if phase == "sparse" else catalog()),
     }
     RESULTS.mkdir(parents=True, exist_ok=True)
-    (RESULTS / f"{prefix}-receipt.json").write_text(
-        json.dumps(receipt, indent=2) + "\n", encoding="utf-8"
+    (RESULTS / f"{prefix}-record.json").write_text(
+        json.dumps(record, indent=2) + "\n", encoding="utf-8"
     )
-    print(json.dumps(receipt, indent=2))
+    print(json.dumps(record, indent=2))
 
 
 def main() -> None:
