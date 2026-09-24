@@ -1,0 +1,155 @@
+---
+title: "MEA evidence map"
+subtitle: "Papers, retained data, parameter records and results as one traced web (issue #89)"
+order: 2
+---
+
+This page connects the sources behind MEA–H₂O–CO₂ observations and reaction
+constants to the files this repository retains and to the results that used
+them. It is navigation, not a new result: the repository still has **no
+accepted MEA parameter set**, and every residual below is a calibration
+residual of the exploratory incumbent
+(`selected-current-best-parameters.json`, SHA-256 `868a5018…fcb7be`).
+Checked 2026-09-23 against commit
+[`0ace34c`](https://github.com/tannerpolley/MEA-Thermodynamics/tree/0ace34cc978b8d73efefdf0fe1d6cb37f163ef21);
+file links below are pinned to it. Values were read from the files and Zotero
+PDFs; nothing was refitted or promoted.
+
+## Where each kind of evidence lives
+
+| Evidence | Owner | Entry point |
+|:--|:--|:--|
+| Paper identity, PDFs, supplements | Zotero (parent and attachment keys) | `literature/index.csv` in the ignored local shelf; `zotero-companion zotero-children <KEY> --json` |
+| Reusable paper, dataset, parameter and relation records | Zotero Companion corpus, project view `mea-thermodynamics` | the project-view query under [Using the map](#using-the-map) |
+| Model-hierarchy and estimation literature synthesis | This repository | [amine literature synthesis](https://github.com/tannerpolley/MEA-Thermodynamics/blob/main/docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md) (being revised separately; read the current `main` copy) |
+| Reaction constants, standard states, directions | This repository | [primary-source audit](https://github.com/tannerpolley/MEA-Thermodynamics/blob/0ace34cc978b8d73efefdf0fe1d6cb37f163ef21/docs/ePC-SAFT/mea-reaction-and-sentinel-primary-source-audit.md); [`chemical_reaction_source_contract.json`](https://github.com/tannerpolley/MEA-Thermodynamics/blob/0ace34cc978b8d73efefdf0fe1d6cb37f163ef21/data/reference/MEA/manifests/chemical_reaction_source_contract.json) |
+| Component parameters and MEAH⁺/MEACOO⁻ volumetric evidence | This repository | [component audit](https://github.com/tannerpolley/MEA-Thermodynamics/blob/0ace34cc978b8d73efefdf0fe1d6cb37f163ef21/docs/ePC-SAFT/full-component-parameter-source-audit.md); [volumetric evidence](https://github.com/tannerpolley/MEA-Thermodynamics/blob/0ace34cc978b8d73efefdf0fe1d6cb37f163ef21/docs/ePC-SAFT/meah-meacoo-volumetric-evidence.md) |
+| Observations, scoring roles, exclusions, file hashes | This repository | [`data/reference/MEA/README.md`](https://github.com/tannerpolley/MEA-Thermodynamics/blob/0ace34cc978b8d73efefdf0fe1d6cb37f163ef21/data/reference/MEA/README.md); hashes in `manifests/data_library_inventory.csv` |
+| Results and parameter decisions | This repository | [working notebook](mea_parameter_bundle/notebook.qmd); `results/parameter-record-history.csv`; `results/holdout-evaluations.csv`; [Issue 70 decision](https://github.com/tannerpolley/MEA-Thermodynamics/blob/0ace34cc978b8d73efefdf0fe1d6cb37f163ef21/analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json) |
+
+The corpus records point to repository files by path, commit and SHA-256; the
+repository points to corpus records by ID. Neither side copies the other's
+values or decides adoption for it.
+
+## Traced chains
+
+Each chain runs from the printed source to the scored result. Read it upward
+to find the evidence behind a residual.
+
+### Jou 1995 CO₂ partial pressure (`dataset:jou-1995-mea-co2-pco2-table2`)
+
+| Step | Value | Where |
+|:--|:--|:--|
+| Source | Jou, Mather, Otto 1995, *Can. J. Chem. Eng.* 73; Zotero `XIY346VI`, PDF `VF5GM23T` (SHA-256 `3fe40a0b…5267`); no Markdown companion | Table 2, printed pp. 142–143 |
+| Source-faithful row | 40 °C block, P = 200 kPa, pCO₂ = 0.00147 kPa, GC loading 0.0888 mol/mol, P_R = 6.6 kPa (Raoult vapor pressure of the solution) | Table 2, p. 142 (checked against the PDF text) |
+| Unit and basis | kPa and mol CO₂/mol MEA kept unchanged; only the GC loading column is retained (BaCO₃ column dropped); `pco2_metrology_manifest.csv` converts total pressure to `state_pressure_pa` = 200000 Pa | Jou's Results section: pCO₂ = (P − P_R) × gas-analysis CO₂ fraction |
+| Retained files | `Jou_1995_VLE.csv` row 15 (`ed376aec…a213a`) → `Canonical_VLE_Observations.csv` `vle_obs_0186` (`9e7d9ba5…2cb73`) | `data/reference/MEA/observations/vapor_liquid_equilibrium/` |
+| Project use | 74 rows retained; 48 at 40–120 °C are `active_v1` calibration rows; 26 at 0, 25 and 150 °C are `qa_pending_domain_review` | `Canonical_VLE_Observations.csv` columns `lifecycle_status`, `disposition_reason` |
+| Result | n = 48, pCO₂ AARD 56.87 %, mean ln(pred/obs) +0.050, RMS ln 0.601 | notebook per-source pressure table; recomputed from `mea_parameter_bundle/results/current-best-fit-residuals.csv` |
+
+### Böttinger 2008 NMR speciation (`dataset:bottinger-2008-mea-nmr-speciation-table3`)
+
+| Step | Value | Where |
+|:--|:--|:--|
+| Source | Böttinger, Maiwald, Hasse 2008, *Fluid Phase Equilib.* 263; Zotero `E322TKPZ`, PDF `TJCRKTFQ` (`dd0c6986…f0f4`), Markdown `2VVGB8Z2` (`b9643df4…d074d`) | Table 3, printed p. 137 |
+| Source-faithful values | True mole fractions of MEA + MEAH⁺ (reported only as a sum), MEACOO⁻, 2-oxazolidone, HCO₃⁻, CO₂ for 68 states at 293–353 K | Table 3; the Markdown companion omits Table 3, so the check used the PDF |
+| Unit and basis | Mole fraction kept as reported; `Canonical_Combined_ChEq.csv` adds mol/kg on a 1 kg unloaded MEA–water feed basis | column `conversion_basis` |
+| Retained files | `Bottinger_2007_ChEq.csv` (`6c4c1e14…03f5`) → `Canonical_Combined_ChEq.csv` (`8c07df9e…85809e`) → `speciation_target_membership.csv` (`a89a3f03…190`) | `data/reference/MEA/` |
+| Project use | 55 scored targets from the 0.3 g/g states: 25 MEA + MEAH⁺ (aggregate), 25 MEACOO⁻, 5 HCO₃⁻; 0.2 g/g states are `transferability_candidate` | `speciation_target_membership.csv` |
+| Result | MEA + MEAH⁺ RMS ln 0.093; MEACOO⁻ RMS ln 0.194 (mean −0.137); HCO₃⁻ RMS ln 0.578 (mean +0.546) | `current-best-fit-residuals.csv` |
+
+Transcription check against Table 3, cell by cell: all retained aggregate,
+carbamate and CO₂ values match. Three defects remain for the data owner to
+decide: the 353.15 K / 0.195 g/g block has HCO₃⁻ shifted down one row
+(source 0.0, 0.0092, 0.0156 at loading 0.324, 0.472, 0.576; retained 0.0092,
+0.0156, 0), the oxazolidone column (17 nonzero states) is not retained, and
+the reported mass fractions 0.195, 0.203 and 0.31 g/g are stored as 0.2 or 0.3
+in 27 states. The shifted cells are unscored 0.2 g/g rows; five scored
+353.15 K states use 0.3 instead of the reported 0.31 g/g.
+
+### Idris 2014 CO₂ solubility (`dataset:idris-2014-mea-co2-pco2-table2`)
+
+Zotero `RQM5QU6W`, PDF `5W37W7C7` (`3fc1f124…1290`), Table 2, printed
+p. 1427, 30 wt% column. All ten loading/pCO₂ pairs in `Idris_2014_VLE.csv`
+(`1e7bce1e…de0cf`) match the PDF. Table 2 prints an uncertainty for every row;
+only row 10 is transcribed, so 9 of 10 uncertainty cells stay blank. The PDF
+text layer prints no pressure unit beside Table 2; kPa is the repository's
+reading. Result: n = 10, AARD 89.09 %, mean ln +0.607.
+
+### R4 and R5 reaction constants (`parameter:mea-r4-r5-reaction-constants`)
+
+| Step | R4: MEACOO⁻ + H₂O ⇌ MEA + HCO₃⁻ | R5: MEAH⁺ + H₂O ⇌ MEA + H₃O⁺ |
+|:--|:--|:--|
+| Source | Tong 2012 Table 5 K5 (p. 44), Zotero `5FB2UHQZ`/`2SVMJQ58` (`78af3d67…d61c`); converted from Aroua 1999 (`L8GDWZEW`/`93Y7NVMH`) | Bates and Pinching 1951 Eq. 7, p. 349; not in Zotero; NIST PDF `aff8621e…0db1` inspected by the reaction audit |
+| Source form and values | ln K = 2.151 − 1545.3/T, 293–323 K | −log₁₀ K = 2677.91/T + 0.3869 + 0.0004277 T, 273–323 K |
+| Basis | aqueous molality, infinite dilution in water; no conversion needed | same; Böttinger 2008 Table 5 (IV) lists −0.8909, −6166.11, −9.8482 × 10⁻⁴ in ln form, which is −ln 10 × the Bates coefficients |
+| Check value | ln K(298.15 K) = −3.031961596511823 | ln K(298.15 K) = −21.86574617291778 |
+| Retained record | `chemical_reaction_source_contract.json` (`39db0d7e…fb55`), `selected_source` and `anchor_ln_k` | same |
+| Project path | best-in-slot campaign `local-p0.15-db-350` → (3.3516, −1895.3); reaction-temperature fit −4.81 kJ/mol at the 313.15 K pivot → (1.5050, −1317.049) | Born/permittivity variant `r5am80` → a = 2597.91; fit +8.42 kJ/mol at 313.15 K → (3037.640, −1.0173, 0.0004277) |
+| Result and decision | adopted as exploratory incumbent on 2026-09-03 (`parameter-record-history.csv`); applied at 40–120 °C, beyond the 323 K source range | same |
+
+The two anchors reproduce the recorded `anchor_ln_k` exactly. Applying the
+exact shifts in `reaction-temperature-fit/adoption-receipt.json`
+(R4 −4.807847, R5 +8.418523 kJ/mol) to the prior record `00049473…da25e`
+reproduces every incumbent R4/R5 coefficient to 10⁻⁸. The fit README states the
+R2 and R5 shifts exceed typical source uncertainty and compensate other
+temperature-dependent model deficiencies.
+
+## Coverage and gaps
+
+| Item | Available | Gap |
+|:--|:--|:--|
+| Jou 1995 | PDF; one row verified | No Markdown companion; retained file has no per-row locator; numeric uncertainty not transcribed |
+| Hilliard 2008 (dissertation, `DNQUPRMT`) | PDF; 30 active rows | No Markdown companion; locator in `pco2_metrology_manifest.csv` is "Sections 2.3.4–2.3.5 and VLE appendices", not a table and row; not re-read here |
+| Idris 2014 | PDF; all rows verified | 9/10 uncertainties untranscribed; pressure unit not printed in the table text |
+| Böttinger 2008 | PDF and Markdown | Markdown lacks Table 3; three shifted HCO₃⁻ cells; oxazolidone and reported mass fractions not retained; file name says 2007 (online date) |
+| R4 (Tong/Aroua) | Both PDFs in Zotero | Aroua's original coefficients not yet compared with Tong's converted K5 |
+| R5 (Bates–Pinching) | NIST PDF, outside Zotero | No Zotero record; Böttinger Table 5 is the in-library cross-check |
+| Notebook reaction table | — | cites Nasrifar 2010 (ref. 4) for R4/R5, while the source record selects Tong/Aroua and Bates–Pinching; R4 domain column shows 293.15–393.15 K against the 293–323 K source range (already noted in the notebook) |
+| Holdouts | `holdout-evaluations.csv` | Xu 2011 pressure (18 rows) and Kim–Svendsen 2007 heat at 120 °C (20 rows) were each scored once during selection; they are not untouched validation data. Kim et al. 2014 is a model-selection comparison, not a holdout |
+| Companion corpus recovery | local, unversioned | No backup or recovery policy selected |
+
+## Next decisions
+
+These are for the data and parameter owners; none was acted on here.
+
+1. Correct the three Böttinger HCO₃⁻ cells and decide whether to retain the
+   reported mass fractions and oxazolidone column (the 0.31 g/g change affects
+   five scored states).
+2. Transcribe the remaining nine Idris uncertainties and confirm the pressure
+   unit from the article.
+3. Correct the notebook's R4/R5 citation to the selected sources.
+4. Compare Aroua 1999 with Tong's K5 before R4 is used outside 293–323 K.
+5. Choose a recovery policy for the Companion corpus.
+
+## Using the map
+
+Commands are the installed `zotero-companion` (alias `cse-zotero`); all are
+read-only unless `--apply` is given.
+
+```bash
+# Query: project view, typed records, and a two-way trace
+zotero-companion wiki-context mea-thermodynamics --query "Jou pCO2" --json
+zotero-companion wiki-record-search "MEA speciation" --json
+zotero-companion wiki-lineage validation:mea-bundle-2026-09-source-residuals --direction both --json
+
+# Check a retained number against the retained rows
+zotero-companion data-query analyses/mea_parameter_bundle/results/current-best-fit-residuals.csv \
+  --sql "SELECT source, target, count(*) n, 100*avg(abs(predicted/observed-1)) aard FROM records GROUP BY ALL" --json
+
+# Incorporate a source: read existing text first, never convert by default
+zotero-companion zotero-children <KEY> --json
+zotero-companion wiki-evidence <KEY> --query "<terms>" --json
+zotero-companion wiki-record-template dataset_reference --zotero-key <KEY> --json
+
+# Health: record structure, project view, review queue
+zotero-companion wiki-lint --json
+zotero-companion wiki-manifest-lint --json
+zotero-companion wiki-health --record parameter:mea-r4-r5-reaction-constants --json
+```
+
+A template only prints a draft. Write the record under the corpus
+`wiki/records/`, run `wiki-lint`, then `wiki-index --apply`. `wiki-evidence`
+reports `hash_matches` for Markdown companions; PDFs are checked by SHA-256
+against the values above. Offline analyses read the Git-tracked files in
+`data/reference/MEA/` at a stated commit; corpus updates do not change them.
