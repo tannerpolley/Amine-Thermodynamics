@@ -297,7 +297,7 @@ Baygi Table 5; Najafloo Table 5; Zhang Table 9; Hilliard Table 13.4-6
 (p. 447); Aronu abstract and Eq. 21; Akula 2023a Fig. 4. Published row counts
 and domains differ from these rows.
 
-\* Hilliard's maximum-likelihood fit reconciles pCO2 and loading together (maximum
+\* Hilliard's fit reconciles pCO2 and loading together (maximum
 likelihood with errors in all variables, p. 440), so its pCO2 AARD is not
 strictly the same residual direction. Zhang 2011 uses the Aspen fitting
 tool without stating its error model.
