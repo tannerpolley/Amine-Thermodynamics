@@ -66,9 +66,10 @@ most 0.22% over 45 checked rows.
 
 Greenfield pressure values use the same 143/18 split and differ from the
 candidate replay by at most 0.009 in ln pCO₂ per row. The speciation cohort is
-not re-paired here: the candidate replay returned an impossible carbamate mole
-fraction of 3.53 for Böttinger 2008 state 048 through `pivot_reuse`, which
-inflated both speciation values. The greenfield adopted record scores all 131
+not re-paired here: the candidate replay reused a pivot solution for
+Böttinger 2008 state 048 (`pivot_reuse`) and landed on a different solution
+branch (carbamate 3.53 × 10⁻⁵ against 0.0492 observed). That one wrong-solution
+state inflated both speciation values. The greenfield adopted record scores all 131
 speciation targets at log₁₀ RMSE 0.2322 (overview table).
 
 # Conclusion and limits
