@@ -192,7 +192,7 @@ Completed and blocked calculations are mapped in
 `docs/scientific/CONTEXT.md`. Consult those records before proposing
 another strategy review or treating an old implementation limit as current.
 
-## 9. Published-work gaps and what the retained evidence adds (23 September 2026; revised 24 September 2026)
+## 9. Published-work gaps and what the retained evidence adds (23 September 2026; revised 24 September 2026, twice)
 
 Question: where does published MEA–CO2–H2O and reactive-amine modeling stop,
 and which retained results in this repository extend it? This section judges
@@ -231,7 +231,7 @@ the exploratory incumbent named above.
 
 | Topic | What published work does (locator) | What is missing | Retained evidence here (path) | Strength |
 |---|---|---|---|---|
-| Explicit-ion reactive ePC-SAFT for MEA | Explicit-ion ePC-SAFT exists for MDEA, a tertiary amine that forms no carbamate: Uyan 2015 (§3, Eqs. 12–15), Wangler 2018, Cleeton 2020, Bülow 2021a (Eqs. 1–5); the only amine ion is MDEAH+. MEA SAFT models use ideal chemistry plus a neutral EOS (Baygi 2015 §3.3; Najafloo 2018 §3.3; Nasrifar 2010 §6 lumps ions into "effective water") or association sites instead of ions (Mac Dowell 2010 §II.B; Rodriguez 2012; Perdomo 2023 Eqs. 4–14; Wang 2018 PR-CPA association scheme Fig. 1). Search results for other explicit-ion EOS work: §9.6. | No explicit-ion ePC-SAFT treatment of the carbamate-forming MEAH+/MEACOO- pair. | Nine-species, five-reaction pre-refit record; 161 pressure rows and 131 speciation targets, all evaluated (notebook §Pressure, §Speciation) | Calibration residual |
+| Explicit-ion reactive ePC-SAFT for MEA | Explicit-ion ePC-SAFT exists for MDEA, a tertiary amine that forms no carbamate: Uyan 2015 (§3, Eqs. 12–15), Wangler 2018, Cleeton 2020, Bülow 2021a (Eqs. 1–5); the only amine ion is MDEAH+. MEA SAFT models use ideal chemistry plus a neutral EOS (Baygi 2015 §3.3; Najafloo 2018 §3.3; Nasrifar 2010 §6 lumps ions into "effective water") or association sites instead of ions (Mac Dowell 2010 §II.B; Rodriguez 2012; Perdomo 2023 Eqs. 4–14; Wang 2018 PR-CPA association scheme Fig. 1). Carbamate ions as EOS species with electrolyte terms exist outside SAFT-for-MEA: electrolyte SAFT-HR with MSA and Born terms for the AEEA carbamates in MDEA + AEEA (Najafloo, Zoghi & Feyzi 2015, Eqs. 19–21, A1, A21–A26, Table 8); a cubic + association EOS with a Debye–Hückel term for MEAH+, MEACOO- and HCO3- (Téllez-Arredondo & Medeiros 2013, Eqs. 10–14, Tables 5–6); a Helmholtz multiparameter EOS whose reaction part is an e-NRTL excess Gibbs energy with Pitzer–Debye–Hückel and Born terms for MEA (Neumann 2021, Eqs. 15–17, Table 3). Search record: §9.6. | No explicit-ion SAFT-family treatment of the MEA ions MEAH+/MEACOO-. | Nine-species, five-reaction pre-refit record; 161 pressure rows and 131 speciation targets, all evaluated (notebook §Pressure, §Speciation) | Calibration residual |
 | Pressure, speciation and heat from one model | Activity-coefficient models fitted jointly to pCO2, NMR, heat of absorption and heat capacity: Hilliard 2008 (data inventory Table 13.4-2, p. 440; 35 parameters Table 13.4-3, p. 441), Zhang 2011 (Table 9); Akula 2023a fits pCO2 and heat of absorption only (Table 3, p. 8) and compares speciation and heat capacity (Figs. 7–8). **Cleeton 2020 already does all three with one explicit-ion ePC-SAFT, for MDEA:** pCO2 (Figs. 7–9), speciation including carbonate against Jakobsen 2005 (§3.3.2, Fig. 6), and differential heat from the EOS fugacity temperature derivative plus reaction terms (Eq. 15, Fig. 10; 19.73 % against Arcis and Mathonat). Wang 2018 does all three with pseudo-chemical PR-CPA for MEA (Fig. 16; Figs. 18–19). | The same three quantities from one explicit-ion EOS for a carbamate-forming amine. | Pressure and speciation tables in the notebook; single-state heat `analyses/mea_parameter_bundle/results/reference-calorics/heat.csv` | Calibration residual (pressure, speciation); prediction (heat, 2 states) |
 | Exact derivatives and sensitivities | Finite differences: Hilliard 2008 heat between T and T+1 K (Eq. 13-36, p. 429); Uyan 2015 iterates activities without derivatives (§3). Automatic differentiation of fugacities in reactive non-electrolyte PC-SAFT: Ascani 2023 (Eqs. 16–17). No amine paper read reports solved-state sensitivities. | Solved-state derivatives of a reactive electrolyte EOS equilibrium, checked against finite differences. | Temperature and pressure solved-state derivatives, relative error ≤ 1.21×10⁻⁷; kij refused and reaction-coefficient derivatives unavailable on the pinned wheel (`analyses/mea_parameter_bundle/results/runs/engine-comparison/README.md`, Derivatives); 46/46 reference-temperature actions within 10⁻⁵ of finite differences (`analyses/mea_parameter_bundle/results/reference-temperature/summary.json`) | Numerical verification |
 | Modified Born (solvation shell + dielectric saturation) for amine ions | Figiel 2025 (Eqs. 5–11, Table 3): inorganic ions in water, methanol and ethanol, 298.15 K only; the authors state the diameter was not tested at other temperatures. Bülow 2021a uses the original Born term with MDEAH+ (Eq. 20). In its Results discussion of the sulfolane blends, Bülow 2021a says the deviation at loading near and above 1 "needs a careful investigation", "might be reasoned in the induced association of CO2", and that "an extended version of the model … that includes an altered Born contribution" including ionic species might be applied. Rueben 2024: permittivity for inorganic ions only. | No application to amine or carbamate ions, or to a reactive CO2–amine system, in the papers read. Temperature transfer of the solvation-shell parameters is untested anywhere. | The pre-refit record uses SSM+DS with MEAH+/MEACOO- Born diameters from a historical speciation fit (notebook species table); historical Born/permittivity comparison `analyses/mea_parameter_bundle/results/born-permittivity-study/` | Calibration residual; no independent electrostatic evidence |
@@ -249,25 +249,30 @@ candidate A already reaches 26.9 %, and the pre-refit record's 52.5 % is
 superseded once MEA #107 adopts a record. The novelty wording follows the
 search in §9.6.
 
-1. **Explicit-ion reactive ePC-SAFT for a carbamate-forming amine, validated
-   across MEA concentration (contingent on #107 and #108).** Defensible
-   wording: in the searches of §9.6 (Scopus and Web of Science still
-   pending), no published SAFT-family equation of state places MEAH+,
-   MEACOO-, HCO3- and CO3²- in the equation of state with electrolyte
-   (Debye–Hückel and Born) terms and solves the reaction equilibria with
-   fugacities from that equation of state. Nasrifar 2010, Baygi 2015 and
-   Najafloo 2018 carry the same ions and reactions, but as ideal species
-   outside the SAFT term (§9.4). The only published explicit-ion ePC-SAFT
-   treatments are for MDEA, which forms no carbamate; Cleeton 2020 is the
-   closest precedent. Evidence now: the pre-refit record evaluates every
-   pressure and speciation row, and candidate A reaches 26.9 % on the 161
-   rows (PR #106). What establishes it: #107 adoption with its promotion
-   gates, then #108 on the 95 reserved rows, 94 of them at other MEA concentrations. That would be the
-   first physical validation here, limited to transfer across concentration.
-   Stronger with: the per-source table of §9.3 recomputed on the adopted
-   record, and the reads listed in §9.6 that are still missing
-   for this claim (the Rozmus thesis and Najafloo 2015; Neumann 2021 is not
-   SAFT-family and cannot change it).
+1. **Explicit-ion reactive ePC-SAFT for MEA, validated across MEA
+   concentration (contingent on #107 and #108).** Defensible wording: in the
+   searches of §9.6 (Scopus and Web of Science still pending), no published
+   SAFT-family equation of state places MEAH+, MEACOO-, HCO3- and CO3²- in
+   the equation of state with electrolyte terms and solves the MEA reaction
+   equilibria with fugacities from that equation of state. The claim needs
+   all three qualifiers (SAFT-family, MEA, ions inside the equation of state
+   with electrolyte terms), because each has been done without the others
+   (§9.4). Nasrifar 2010, Baygi 2015 and Najafloo 2018 carry the MEA ions
+   and reactions, but as ideal species outside the SAFT term. Najafloo,
+   Zoghi and Feyzi 2015 put carbamate ions in a SAFT equation of state with
+   MSA and Born terms, but for AEEA in MDEA + AEEA. Téllez-Arredondo and
+   Medeiros 2013 put the MEA ions in a cubic + association equation of
+   state with a Debye–Hückel term. Neumann 2021 puts them in a Helmholtz
+   multiparameter model through an e-NRTL excess Gibbs term. Explicit-ion
+   ePC-SAFT itself (Debye–Hückel, or MSA and Born) has been applied only to
+   MDEA; Cleeton 2020 is the closest precedent. Evidence now: the pre-refit
+   record evaluates every pressure and speciation row, and candidate A
+   reaches 26.9 % on the 161 rows (PR #106). What establishes it: #107
+   adoption with its promotion gates, then #108 on the 95 reserved rows, 94
+   of them at other MEA concentrations. That would be the first physical
+   validation here, limited to transfer across concentration. Stronger with:
+   the per-source table of §9.3 recomputed on the adopted record, and the
+   Rozmus 2012 thesis chapters (§9.6).
 2. **Hypothesis tested by #107: the loading-shaped pCO2 misfit lies outside
    the reaction-constant span.** For the pre-refit record, loading-bin means
    remove 79 % of the residual sum of squares, and ±0.3 ln K on R2/R4/R5
@@ -354,6 +359,38 @@ MDEA values, for comparison only: Uyan 2015 34.4 % (corrected by Wangler 2018
 Table 11, footnote b, from the published 22.9 %), Wangler 2018 19.7 %, Cleeton
 2020 20–70 % by dataset, Bülow 2021a 32.7 % at 30 mass %.
 
+#### Published MEA–CO2–H2O models and their 30 mass % pressure deviations
+
+For the manuscript comparison. This repository scores pCO2 AARD at the
+measured temperature and loading, per source, on Jou 1995, Hilliard 2008,
+Aronu 2011, Mamun 2005, Xu 2011 and Idris 2014, 30 mass % MEA only, 40–120 °C
+(table above). A published value is **like-for-like** only if it is a relative
+pCO2 deviation at the measured loading, restricted to 30 mass %, on the same
+source over the same temperatures. "Partly" names the difference. Values are
+as printed; "not reported" means the paper gives no number for that quantity.
+
+| Model (paper) | Datasets, points | Deviation reported | Conditions | Fitted or predicted | Value, % | Locator | Like-for-like with ours |
+|---|---|---|---|---|---|---|---|
+| Baygi 2015, PC-SAFT, ideal ions | Jou 1995 (100), Hilliard 2008 (42), Mamun 2005 (19), Xu 2011 (52); 14 other sources | Mean \|Δp/p\| on pCO2; speciation solved at the measured composition (§3.3) | Jou 273–423 K, loading 0.002–1.324; Hilliard x_MEA 0.06–0.16, 313–333 K; Mamun 393 K, 0.155–0.418; Xu 373–443 K, 0.303–0.52 | Predicted: no ternary data fitted, but K(R4, R5) chosen for fit (‡ above) | Jou 43.16; Hilliard 34.97; Mamun 21.03; Xu 46.88; all 691 rows 36.42 | Table 5, footnote b | Mamun: yes (same source, all at 120 °C and 30 mass %, n = 19 in both). Jou, Xu: partly (wider temperature range). Hilliard: partly (other concentrations) |
+| Najafloo 2018, SAFT-HR, ideal ions | Same rows as Baygi | Mean \|Δp/p\| on pCO2 (§3.3, text before Table 5) | As Baygi (Table 4) | Predicted: all kij zero, K from literature, MEA parameters from pure-component data (§3.1–3.3) | Jou 49.52; Hilliard 42.59; Mamun 39.96; Xu 15.44; all 691 rows 34.71 | Table 5 | As Baygi |
+| Zhang 2011, e-NRTL | Hilliard 2008 (55), Jou 1995 (124), Mamun 2005 (19), Xu 2011 (63) | Mean \|ΔY/Y\|; Y is CO2 pressure for Jou and Mamun, and not stated for the Hilliard and Xu TPxy rows | Hilliard 313–333 K, x_MEA 0.06–0.16, 0.11–0.59; Jou 273–423 K, 0.002–1.33; Mamun 393 K, 0.16–0.42; Xu 373–443 K, 0.30–0.52 | Fitted with the Aspen fitting tool, jointly with heat, heat capacity and NMR speciation | Hilliard 35.5; Jou 33.5; Mamun 13.5; Xu 28.0 | Table 9 | Mamun: yes, as a calibration residual. Others: partly (wider ranges; Hilliard and Xu quantity unstated) |
+| Hilliard 2008, e-NRTL | Jou 1995 (70), own data (55), Mamun 2005 (19), Lee 1976 (93), Lawson and Garst 1976 (16), Goldman and Leibush 1959 (38) | pCO2 AARD after maximum-likelihood reconciliation of pressure and loading together; loading AARD also reported | Jou 25–120 °C; own data 40–120 °C as listed in Table 13.4-2; Mamun 120 °C | Fitted (with heat of absorption, heat capacity, NMR) | Jou 13.55; own data 30.01; Mamun 27.06; Lee 21.67; Lawson and Garst 67.99; Goldman and Leibush 13.93 | Tables 13.4-2 (p. 440), 13.4-6 (p. 447) | Partly: reconciled residual, not pCO2 at the measured loading (* above) |
+| Aronu 2011, extended UNIQUAC | Own data, 15, 30, 45 and 60 mass % | pCO2 AARD (Eq. 21) pooled over all concentrations; total pressure separately | pCO2 40–80 °C; total pressure 60–120 °C; loading range not extracted | Fitted to own data | pCO2 24.3; total pressure 11.7; all own data 16.2. 30 mass % alone not reported | Abstract; Eq. 21; §5 (p. 6400) | Partly: pooled across concentrations |
+| Akula 2023a, e-NRTL | Aronu 2011 (138), Hilliard 2008 (55), Jou 1995 (38), Xu 2011 (25), Kim 2014 (7) | Mean absolute percentage error on pCO2 (Eq. 36); objective in ln pCO2 at measured T and loading (Eq. 34) | 30 mass % subset, loading 0.003–0.5, 40–120 °C | Fitted (with heat of absorption) | 40.5, pooled over the 30 mass % subset; per source not reported | Table 3; Eqs. 34, 36; Fig. 4 | Partly: same residual and concentration, pooled across sources, loading ≤ 0.5 |
+| Akula 2021, rate-based process model | Thermodynamics taken from Morgan et al. (Table 1) | Not reported | — | — | Not reported | Table 1 | No |
+| Téllez-Arredondo 2013, eCTS (cubic + association + Debye–Hückel, EOS ions) | Lawson and Garst 1976, Mamun 2005, Jou 1995; 107 points | %AAD in "p"; the objective combines acid-gas partial pressure and total pressure (Eq. 28), and which one Table 8 reports is not stated | 298–393 K (Table 2; §4.3.3 gives 298–366.68 K), 15.2–30 mass %; loading range not stated | Fitted (MEACOO- d1 and cross-parameters; Table 5) | 12.5, pooled | Tables 2, 8 | No: pooled, pressure definition unstated |
+| Wang 2018, PR-CPA, association instead of ions | Jou 1995, 30 mass % | Relative deviation of total pressure (Eq. 8) | 298–393 K; loading range not stated | Fitted (kij(T), cross-association; Table 4) | 12 | Table 4, Fig. 5 | No: total pressure |
+| Neumann 2021, Helmholtz model + e-NRTL | Aronu 2011, Jou 1995, Lee 1976, Shen and Li 1992 at 30 mass % (plotted) | Not reported for pressure (density AARD only) | 298–393 K, 15–60 mass % for the plotted VLE (§4.2) | K3–K5 fitted to VLE (§3, Table 6); e-NRTL parameters from Putta 2016 unchanged; low-loading Jou rows below the MEA vapor pressure not fitted (§4.2) | Not reported | Fig. 5 | No |
+| Lloret 2017, soft-SAFT, association instead of ions | Jou 1995 at 30 mass % (Fig. 10a); Lee 1976 at 2.5 N (Fig. 11) | Not reported | 313–373 K (Fig. 10a); 298–373 K (Fig. 11) | CO2 reactive-site energy and volume fitted to the Jou data; 2.5 N predicted | Not reported | §4.7; Figs. 10a, 11 | No |
+
+The same limitation applies to Chremos 2016 (Fig. 11) and Noroozi 2020
+(Fig. 5): pressure comparisons for 30 mass % MEA in figures only, with no
+numerical deviation. The only like-for-like published comparisons are the
+three Mamun 2005 values (Baygi 21.03, Najafloo 39.96, Zhang 13.5, n = 19).
+Akula 2023a is the closest pooled comparison: same residual and
+concentration, fitted, and loading limited to 0.5. The pre-refit record's
+Mamun value is 20.6 % (n = 19).
+
 ### 9.4 Threats to novelty
 
 - **Closest precedent: Cleeton 2020 (MDEA).** One explicit-ion ePC-SAFT gives
@@ -367,34 +404,53 @@ Table 11, footnote b, from the published 22.9 %), Wangler 2018 19.7 %, Cleeton
   (§3.3) carry MEAH+, MEACOO-, HCO3- and CO3²- outside the SAFT term.
   "Explicit ions" alone is therefore not new; ions as EOS species with
   electrolyte terms is the defensible wording.
-- **Non-SAFT equations of state with ions for MEA.** Neumann, Poplsteinova
-  Jakobsen, Thol and Span 2021 (Chem. Eng. Sci., doi 10.1016/j.ces.2021.117261)
-  combine a Helmholtz-energy multiparameter EOS with an excess-Gibbs-energy
-  model for reactive mixtures. The EOS-CG-2021 paper (Int. J. Thermophys.
-  44:178, 2023, Sect. 5) states that H2O+MEA+CO2 is validated against VLE,
-  density and speciation data. Téllez-Arredondo and Medeiros 2013 (FPE
-  344:45) use SRK + two-state association + Debye–Hückel for ionic species in
-  aqueous MEA, DEA and MDEA. Neither paper has been read in full. The claim
-  must say "SAFT-family", not "equation of state" or "Helmholtz-energy model".
-- **Electrolyte SAFT for another carbamate-forming amine.** Najafloo, Zoghi
-  and Feyzi 2015 (J. Chem. Thermodyn. 82:143) use an electrolyte SAFT-HR for
-  CO2 in MDEA + AEEA; AEEA forms carbamate. Only the search summary was read.
-  If its AEEA carbamate ion is an EOS species, claim 1 still holds for MEA,
-  but its heading "for a carbamate-forming amine" must narrow to "for MEA".
+- **Non-SAFT equations of state with ions for MEA (both read in full).**
+  Neumann, Poplsteinova Jakobsen, Thol and Span (Chem. Eng. Sci. 252,
+  117261; online 2021) add an "effect of reaction" term to a Helmholtz
+  multiparameter mixture model (Eqs. 2, 8, 15). That term is the Putta 2016
+  e-NRTL excess Gibbs energy, used with unchanged parameters, including its
+  Pitzer–Debye–Hückel and Born terms (Eqs. 16–17, §4.2). MEAH+, MEACOO-,
+  HCO3-, CO3²-, H3O+ and OH- are species of the combined model (Table 3).
+  Their pure-fluid residual Helmholtz energy is set to zero and their
+  ideal-gas part comes from the Joback method (§2). K3–K5 are fitted to VLE
+  data (Table 6, §3). The ternary pressure comparison is figures only
+  (Fig. 5), the speciation comparison with Jakobsen 2005 is a figure
+  without a metric (Fig. 7), and no heat of absorption is reported.
+  Téllez-Arredondo and Medeiros 2013 (FPE 344:45) use SRK + two-state
+  association + a Debye–Hückel primitive-model term (Eqs. 1, 10–14). MEAH+,
+  MEACOO- and HCO3- are EOS species with fitted parameters (Tables 5–6).
+  CO3²- is omitted because the second acid dissociation is neglected (§3).
+  The MEA–CO2 ionic parameters are fitted to ternary VLE, with pressure
+  %AAD 12.5 (§4.3.3, Table 8). Neither reports speciation or heat for MEA.
+  The claim must say "SAFT-family", not "equation of state" or
+  "Helmholtz-energy model".
+- **Electrolyte SAFT with carbamate ions, for AEEA (read in full).**
+  Najafloo, Zoghi and Feyzi 2015 (J. Chem. Thermodyn. 82:143) use
+  electrolyte SAFT-HR, SAFT-HR plus MSA and Born terms (Appendix A,
+  Eqs. A1, A21–A26), for CO2 in MDEA + AEEA. Ion fugacity coefficients
+  from the equation of state enter the equilibrium constants (Eqs. 19–21).
+  The two AEEA carbamate ions have SAFT parameters fitted to the authors'
+  own total pressures (Eq. 29, Table 8); the other ions copy the parameters
+  of their parent molecules, and every kij is zero (§4.2). Total-pressure
+  AAD is 7.74 % (Tables 10–13). A SAFT equation of state with carbamate
+  ions and electrolyte terms therefore exists, and claim 1's heading is
+  narrowed from "a carbamate-forming amine" to MEA.
 - **IFP electrolyte PPC-SAFT line.** The Rozmus 2012 thesis plans GC-PPC-SAFT
   with ions and reactions for primary and secondary amines. Its abstract
-  reports strong electrolytes and CO2-free amine solutions only. Rozmus et al.
-  2013 (IECR, read in full) covers alkali halides and calls amine–CO2 "the
-  final aim". The thesis chapters are unread.
+  (theses.fr snapshot, Zotero 3GBTNFUA) reports strong electrolytes with MSA
+  and Born terms and CO2-free amine solutions only. Rozmus et al. 2013 (IECR,
+  read in full) covers alkali halides and calls amine–CO2 "the final aim".
+  The thesis chapters are unread; Zotero holds the record without full text.
 - **Pressure, speciation and heat from one model is not new.** It is done
   with activity-coefficient models (Hilliard 2008, Zhang 2011, Akula 2023a),
   with pseudo-chemical SAFT (Perdomo 2023, heat for MAPA, Fig. 7; Rodriguez
   2012, MEA speciation), with PR-CPA for MEA (Wang 2018), and with PR-CPA plus
   Deshmukh–Mather for MEA (Wang 2017 thesis, Figs. 5-17, 5-20, 5-21).
 - **Heat and derivatives.** EOS heats of absorption for MEA exist without
-  ions (Wang 2018; soft-SAFT and SAFT-VR SW papers screened in §9.6). Exact
-  derivatives are standard in Helmholtz-energy software (EOS-CG-2021,
-  Sect. 2.2). Neither is a headline claim.
+  ions: Wang 2018, and Lloret 2017, whose soft-SAFT heat comes from the
+  Clausius–Clapeyron slope of pCO2 (Eq. 26, Fig. 10b, against Kim 2014,
+  no metric). Exact derivatives are standard in Helmholtz-energy software
+  (EOS-CG-2021, Sect. 2.2). Neither is a headline claim.
 - **Identifiability.** Smith, Rutherford and Leal 2026 argue the general
   point, and activity-coefficient papers already report non-identified
   parameters (Austgen, Hilliard, Zhang, Akula). Claim 2 is new only as the
@@ -481,46 +537,38 @@ treatment of a carbamate-forming amine, or an EOS heat of absorption for MEA:
 | Paper | Read | Outcome |
 |---|---|---|
 | Nasrifar 2010; Baygi 2015; Najafloo 2018 | Full text | Ions and reactions present, but ideal and outside the SAFT term; narrows claim 1 (§9.4) |
-| Neumann et al. 2021, Chem. Eng. Sci. (doi 10.1016/j.ces.2021.117261) | Not obtained (paywalled); described through the open EOS-CG-2021 paper | Non-SAFT Helmholtz EOS + excess-Gibbs model for reactive MEA; narrows claim 1 to SAFT-family |
-| Téllez-Arredondo & Medeiros 2013, FPE (doi 10.1016/j.fluid.2013.01.005) | Search summary only | Cubic + association + Debye–Hückel for MEA ions; outside SAFT wording |
-| Najafloo, Zoghi & Feyzi 2015, J. Chem. Thermodyn. (doi 10.1016/j.jct.2014.11.006) | Search summary only | Electrolyte SAFT-HR, MDEA + AEEA; may affect "only MDEA" |
-| Rozmus 2012 thesis (2012PA066320) | Abstract only; theses.fr lists it as not accessible | Planned ions + reactions for amines; reported work stops before CO2 |
+| Neumann et al. 2021, Chem. Eng. Sci. 252 (doi 10.1016/j.ces.2021.117261) | Full text (Zotero PDF) | Helmholtz multiparameter model + e-NRTL reaction term (Pitzer–Debye–Hückel and Born); MEA ions are model species (Table 3, Eqs. 15–17); pressure and speciation in figures only (Figs. 5, 7); no heat. Not SAFT-family; narrows claim 1 to SAFT-family |
+| Téllez-Arredondo & Medeiros 2013, FPE (doi 10.1016/j.fluid.2013.01.005) | Full text (Zotero PDF) | SRK + two-state association + Debye–Hückel; MEAH+, MEACOO-, HCO3- are EOS species, CO3²- omitted (§3, Tables 5–6); MEA–CO2 fitted, %AAD p 12.5 (Table 8). Cubic, outside SAFT wording |
+| Najafloo, Zoghi & Feyzi 2015, J. Chem. Thermodyn. (doi 10.1016/j.jct.2014.11.006) | Full text (Zotero PDF) | Electrolyte SAFT-HR (MSA + Born) with AEEA carbamate ions as EOS species, MDEA + AEEA (Eqs. 19–21, Appendix A, Table 8). Narrows claim 1 from "carbamate-forming amine" to MEA |
+| Rozmus 2012 thesis (2012PA066320) | Abstract only (Zotero record 3GBTNFUA, theses.fr snapshot; no full text) | GC-PPC-SAFT; MSA and Born for strong electrolytes; aqueous primary amines without CO2 in the reported work. Chapters unread |
 | Rozmus et al. 2013, IECR (doi 10.1021/ie303527j) | Full text (Zotero) | Alkali halides only; no effect |
 | Rozmus et al. 2011, FPE (doi 10.1016/j.fluid.2010.12.009) | Metadata only | Amine + alkane/alcohol, no CO2; no effect expected |
-| Chremos et al. 2016, FPE (doi 10.1016/j.fluid.2015.07.052) | Abstract | SAFT-γ SW with physical association for reactions, no ions; no effect |
-| Brand et al. 2016, Faraday Discuss. (doi 10.1039/c6fd00041j) | Abstract | SAFT-VR SW absorber model for MEA, reactions via physical association; no ions |
-| Pereira, Llovell & Vega 2018 and Pereira & Vega 2018, Appl. Energy | Abstracts | soft-SAFT with implicit reactions; no ions |
-| Lloret, Vega & Llovell 2017, J. CO2 Util. (doi 10.1016/j.jcou.2017.08.018) | Not obtained | soft-SAFT MEA model; heat of absorption reported per web summary; no ions expected |
-| Raeispour Shirazi & Lotfollahi 2019/2020, FPE | Abstract (2020) | ePC_SAFT-MB (PC-SAFT + MSA + Born), MDEA only; no effect on MEA claim |
+| Chremos et al. 2016, FPE (doi 10.1016/j.fluid.2015.07.052) | Full text (Zotero PDF, §3.6) | SAFT-γ SW group contribution; reactions by association; ions only as neutral tight ion pairs (§3.6). MEA–CO2 parameters fitted to one Jou 1995 isotherm (353 K, 30 mass %, loading ≤ 0.7); 313 and 393 K predicted (Fig. 11); carbamate and bicarbonate from bonding fractions (Fig. 12). No numerical pCO2 deviation. No effect |
+| Brand et al. 2016, Faraday Discuss. (doi 10.1039/c6fd00041j) | Full text (Zotero PDF, model and results sections) | SAFT-VR SW inside a rate-based MEA absorber; reactions by physical association, products not treated explicitly (abstract, §2.1); thermodynamic parameters from Mac Dowell et al. (§2.1). No ions; no effect |
+| Pereira, Llovell & Vega 2018, Appl. Energy (doi 10.1016/j.apenergy.2018.04.021) | Full text (Zotero PDF) | soft-SAFT + free-volume + density-gradient theory for aqueous MEA, DEA, MDEA, AMP and piperazine without CO2 (abstract, §3); MEA parameters from Lloret 2017. No CO2, reactions or ions; no effect |
+| Pereira & Vega 2018, Appl. Energy (doi 10.1016/j.apenergy.2018.09.189) | Abstract | soft-SAFT with implicit reactions; no ions |
+| Lloret, Vega & Llovell 2017, J. CO2 Util. (doi 10.1016/j.jcou.2017.08.018) | Full text (Zotero PDF) | soft-SAFT, no ions: CO2 has two reactive association sites fitted to Jou 1995 at 30 mass % (§4.7, Fig. 10a); heat from the Clausius–Clapeyron slope of pCO2 (Eq. 26, Fig. 10b); 2.5 N predicted (Fig. 11). No numerical pCO2 deviation. No effect on claim 1 |
+| Raeispour Shirazi & Lotfollahi 2019 and 2020, FPE (doi 10.1016/j.fluid.2019.112289; 10.1016/j.fluid.2020.112801) | Full text (Zotero PDFs; methods and results) | ePC_SAFT-MB (PC-SAFT + MSA + Born) with MDEAH+ and HS- or HCO3- as EOS species. 2019: H2S in MDEA, total-pressure AAD 18.6 % on 277 points after fitting ion BIPs; 2020: CO2 in MDEA, 15.3 % on 162 points (abstracts). MDEA only; no effect on the MEA claim |
 | Mehdizade et al. 2024, J. Mol. Liq. (doi 10.1016/j.molliq.2024.124441) | Title only | Electrolyte SRK-CPA, H2S in MDEA/MEA/DEA; no CO2 per title |
 | Plakia, Pappa & Voutsas 2018, FPE (doi 10.1016/j.fluid.2018.09.013) | Abstract | UMR-PRU cubic EoS/GE with extended UNIQUAC ions, MEA + CO2; outside SAFT wording |
 | Wang 2017 thesis (tel-01865166) | Full text (open) | PR-CPA + Deshmukh–Mather for MEA speciation and heat; no EOS ions |
-| Noroozi & Smith 2020, IECR (doi 10.1021/acs.iecr.0c03738) | Abstract | Simulated K + ideal solution; no effect |
+| Noroozi & Smith 2020, IECR (doi 10.1021/acs.iecr.0c03738) | Full text (Zotero PDF) | Equilibrium constants from quantum chemistry and molecular-dynamics solvation free energies, ideal (Henry's-law) solution, no EOS (abstract, §2). MEA speciation (Fig. 3) and 30 mass % pCO2 (Fig. 5) in figures only. No effect |
 
-Entries marked "Abstract", "Title only" or "Not obtained" were screened
-without the full text. The planned full-text pass on the electrolyte-CPA and
-non-ionic SAFT papers was stopped before it reported, so those entries remain
-at that screening level.
+Entries marked "Abstract", "Title only" or "Metadata only" were screened
+without the full text. The full-text reads of 24 September 2026 used Zotero
+PDFs saved by the owner (collection MEA-Absorption-Paper), read as text
+extractions; none has a Markdown companion.
 
-**Zotero.** No items were added. The Zotero workflow does not allow automated
-publisher downloads, and adding an item requires the owner to save it through
-the browser Connector. Papers to save, in priority order:
-
-1. Neumann et al. 2021 — doi 10.1016/j.ces.2021.117261 (decides whether any
-   Helmholtz model already gives MEA heat with EOS ions)
-2. Najafloo, Zoghi & Feyzi 2015 — doi 10.1016/j.jct.2014.11.006
-3. Téllez-Arredondo & Medeiros 2013 — doi 10.1016/j.fluid.2013.01.005
-4. Lloret, Vega & Llovell 2017 — doi 10.1016/j.jcou.2017.08.018
-5. Rozmus 2012 thesis, Université Paris 6, 2012PA066320 (library or
-   interlibrary loan)
-6. Raeispour Shirazi & Lotfollahi 2019 (doi 10.1016/j.fluid.2019.112289) and
-   2020 (doi 10.1016/j.fluid.2020.112801)
-7. Pereira, Llovell & Vega 2018 (doi 10.1016/j.apenergy.2018.04.021);
-   Pereira & Vega 2018 (doi 10.1016/j.apenergy.2018.09.189)
+**Zotero.** The owner saved Neumann 2021, Najafloo 2015, Téllez-Arredondo
+2013, Lloret 2017, Raeispour Shirazi 2019 and 2020, Pereira, Llovell and Vega
+2018, Chremos 2016, Brand 2016 and Noroozi 2020 with PDFs, and the Rozmus
+2012 thesis as a record without full text. No agent wrote to Zotero.
 
 **Still required before submission:** the Scopus and Web of Science query
-and "cited by" lists in the owner's browser session, and full reads of
-items 1–5.
+and "cited by" lists in the owner's browser session; the Rozmus 2012 thesis
+chapters (Université Paris 6, 2012PA066320; library or interlibrary loan);
+and Pereira & Vega 2018 (doi 10.1016/j.apenergy.2018.09.189), still at
+abstract level.
 
 ### 9.7 What was read and what was not
 
@@ -535,8 +583,11 @@ Austgen 1991, Liu 1999, Gabrielsen 2005, Hilliard 2008 (Chapter 13, Appendix F,
 supplement), Akula 2023a; Böttinger 2008 (Table 3 from the PDF, which the
 Markdown copy lacks), Jakobsen 2005, Wong 2015, Wong 2016 (RSC Adv. and
 J. Nat. Gas Sci. Eng.), Matin 2012, Idris 2014, du Preez 2019, Yamada 2012;
-Kim and Svendsen 2007, Kim et al. 2014. Papers screened during the
-pre-submission search are listed with their read status in §9.6.
+Kim and Svendsen 2007, Kim et al. 2014; Neumann 2021, Téllez-Arredondo 2013,
+Najafloo 2015 and Lloret 2017 (24 September 2026, Zotero PDFs). Methods and
+results only: Raeispour Shirazi 2019 and 2020, Pereira 2018, Chremos 2016,
+Brand 2016, Noroozi 2020. Papers screened during the pre-submission search
+are listed with their read status in §9.6.
 
 Not read or read only in part:
 
