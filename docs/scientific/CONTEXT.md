@@ -16,7 +16,7 @@ and independent-comparison gates pass.
 
 Reconciled against this checkout on 8 September 2026. This is the starting map
 for research and estimation work; absence of an accepted parameter set does
-not mean the method, data search or regression strategy is unstudied.
+not mean the method, data search or fitting strategy is unstudied.
 
 | Question | Work already retained | Read before proposing more work |
 |---|---|---|
@@ -65,7 +65,7 @@ The remaining questions are narrower than “develop an estimation strategy”:
 ### Historical retrieval and known documentation defects
 
 The source-lineage review was expanded in commit `48ad7fa` (25 August 2026).
-Commit `897bb6e` (10 May 2026) retains the earlier ion-regression plan and
+Commit `897bb6e` (10 May 2026) retains the earlier ion-parameter fitting plan and
 preliminary fit; use it as history, not the latest result. That plan was removed
 from the working tree in `5165fe1`; its absence is a documentation-history
 change, not a scientific gap. The volumetric
@@ -106,7 +106,7 @@ or evidence. Update the existing owning record when that answer changes.
 ## Calculation ownership
 
 The installed Engine wheel owns generic equations, equilibrium compilation,
-exact derivatives, and regression mechanics. New generic ePC-SAFT methods are
+exact derivatives, and parameter-fitting mechanics. New generic ePC-SAFT methods are
 first built and debugged in `ePC-SAFT-project/analysis/` or `validation/`.
 
 MEA-Thermodynamics may call those public Engine methods directly to reproduce
@@ -116,10 +116,10 @@ input and packet identity, and hashes. This upstream-first rule does not ban
 direct Engine calculations here.
 
 This repository owns MEA chemistry hypotheses, source translations, data
-roles, model selection, the regression question, validation design, parameter
+roles, model selection, the fitting question, validation design, parameter
 adoption, scientific figures, and the manuscript. It does not copy generic
 Engine equations, restore retired APIs, or maintain local generic runtime or
-regression wrappers.
+fitting wrappers.
 
 ## Source and evidence authority
 
@@ -134,7 +134,7 @@ The qualified Kiepe CO2--water induced-association evidence is also retained.
 Engine Issue #80 owns the current method and parameter campaign. Until that
 campaign succeeds and MEA accepts an immutable packet, this repository has no
 active MEA parameter set. Once such inputs exist, MEA may reproduce the pinned
-calculation directly through the installed Engine API.
+calculation directly through the installed Engine public callables.
 
 The [8 September 2026 audit](REPOSITORY_AUDIT_2026-09-08.md) records a checkout
 boundary: this branch still uses shared evaluator v3, while MEA Issues #85/#86
