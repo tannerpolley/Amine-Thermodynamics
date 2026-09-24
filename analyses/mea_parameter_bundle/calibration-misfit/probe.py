@@ -59,6 +59,26 @@ def _base_model():
     return _BASE['model']
 
 
+SLOPE = '/k_ij/reciprocal_temperature_slope'
+
+
+def with_values(mapping, values):
+    """``shared.with_parameter_values`` that first adds any missing k_ij 1/T slope node (value 0, T_ref
+    313.15 K), in the form the record already uses for the CO2-MEA pair."""
+    mapping = copy.deepcopy(mapping)
+    have = set(shared.parameter_values(mapping))
+    for ident in values:
+        if ident.endswith(SLOPE) and ident not in have:
+            _, a, b, _, _ = ident.split('/')
+            pair = next(p for p in mapping['pairs'] if {p['component_id_a'], p['component_id_b']} == {a, b})
+            node = copy.deepcopy(next(c for p in mapping['pairs'] for c in p['coefficients']
+                                      if c['family'] == 'k_ij_reciprocal_temperature_slope'))
+            node.update({'identity': ident, 'value': {'magnitude': 0.0, 'unit': 'kelvin'}})
+            node['provenance'] = {**node['provenance'], 'locator': 'calibration-misfit refit C: added 1/T slope'}
+            pair['coefficients'].append(node)
+    return shared.with_parameter_values(mapping, values)
+
+
 def evaluate(sets=None, filters=(), canonical=False):
     """Yield one record per state matching ``filters`` at the adopted record plus ``sets``.
 
@@ -67,7 +87,7 @@ def evaluate(sets=None, filters=(), canonical=False):
     reactions = shared._selected_reactions()
     reactions.update({k: v for k, v in sets.items() if k.startswith('reaction:')})
     eos = {k: v for k, v in sets.items() if not k.startswith('reaction:')}
-    mapping = shared.with_parameter_values(shared.parameter_mapping(), eos) if eos else shared.parameter_mapping()
+    mapping = with_values(shared.parameter_mapping(), eos) if eos else shared.parameter_mapping()
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping)) if eos else _base_model()
     fp = shared.parameter_fingerprint(mapping)
     for o in (CANONICAL if canonical else OBSERVATIONS):
