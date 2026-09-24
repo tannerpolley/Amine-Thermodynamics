@@ -34,6 +34,12 @@ from MEA.common.plot_style import (  # noqa: E402
     write_mpl_sidecar,
 )
 from MEA.common.analysis_io import file_sha256, repo_relative_path  # noqa: E402
+from render_regression_overview import (  # noqa: E402
+    FIT,
+    ln_label,
+    short_label,
+    species_label,
+)
 
 DISPLAY_SPECIES = ("CO2", "MEA", "MEAH+", "MEACOO-", "HCO3-")
 MARKERS = {
@@ -132,6 +138,17 @@ def save(
 
 def render_speciation(temperature_c: int) -> None:
     output = ANALYSIS / "figures/speciation/output"
+    scored = [
+        row
+        for row in rows(FIT)
+        if row["family"] == "speciation"
+        and round(float(row["temperature_C"])) == temperature_c
+    ]
+
+    def scored_label(species: str) -> str:
+        selected = [row for row in scored if row["target"] == species]
+        return species_label(selected) if selected else "not scored"
+
     model = [
         row
         for row in rows(output / "speciation-model-grid.csv")
@@ -147,7 +164,7 @@ def render_speciation(temperature_c: int) -> None:
     fig, (ax, trace_ax) = plt.subplots(
         2,
         1,
-        figsize=(9.2, 7.0),
+        figsize=(10.5, 7.6),
         sharex=True,
         gridspec_kw={"height_ratios": (4.2, 1.15), "hspace": 0.05},
     )
@@ -298,7 +315,7 @@ def render_speciation(temperature_c: int) -> None:
             color=TRUE_SPECIES_COLORS[s],
             linewidth=1.6,
             linestyle="--",
-            label=TRUE_SPECIES_LABELS[s],
+            label=f"{TRUE_SPECIES_LABELS[s]}: {scored_label(s)}",
         )
         for s in DISPLAY_SPECIES
     ]
@@ -309,7 +326,7 @@ def render_speciation(temperature_c: int) -> None:
             color=TRUE_SPECIES_COLORS["MEA + MEAH+"],
             linewidth=1.6,
             linestyle="--",
-            label=r"$MEA + MEAH^+$ aggregate",
+            label=rf"$MEA + MEAH^+$ aggregate: {scored_label('MEA + MEAH+')}",
         )
     )
     source_handles = [
@@ -327,10 +344,11 @@ def render_speciation(temperature_c: int) -> None:
     fig.legend(
         handles=species_handles + source_handles,
         loc="lower center",
-        ncol=5,
+        ncol=3,
+        fontsize=8,
         bbox_to_anchor=(0.5, 0.0),
     )
-    fig.subplots_adjust(left=0.12, right=0.98, top=0.93, bottom=0.19)
+    fig.subplots_adjust(left=0.12, right=0.98, top=0.93, bottom=0.24)
     suffix = "" if temperature_c == 20 else f"-{temperature_c}C"
     line_data = output / f"speciation-model-lines{suffix}.csv"
     write_rows(
@@ -358,11 +376,12 @@ def render_speciation(temperature_c: int) -> None:
 
 def render_pressure() -> None:
     output = ANALYSIS / "figures/pressure/output"
+    residuals = [row for row in rows(FIT) if row["family"] == "pressure"]
     model = rows(output / "pressure-model.csv")
     observed = rows(output / "pressure-observations.csv")
     line_rows: list[dict[str, object]] = []
     apply_plot_theme()
-    fig, ax = plt.subplots(figsize=(9.4, 6.3))
+    fig, ax = plt.subplots(figsize=(10.5, 8.4))
     for temperature in (40, 60, 80, 100, 120):
         color = JOU_TEMPERATURE_COLORS[temperature]
         selected = sorted(
@@ -381,7 +400,14 @@ def render_pressure() -> None:
                 color=color,
                 linewidth=1.8,
                 linestyle="--",
-                label=f"{temperature} °C model",
+                label=f"{temperature} °C model: "
+                + ln_label(
+                    [
+                        row
+                        for row in residuals
+                        if round(float(row["temperature_C"])) == temperature
+                    ]
+                ),
             )
             line_rows.extend(
                 {
@@ -442,7 +468,7 @@ def render_pressure() -> None:
             color="black",
             marker=MARKERS[source],
             linestyle="none",
-            label=SOURCE_LABELS[source],
+            label=f"{SOURCE_LABELS[source]} ({short_label([row for row in residuals if row['source'] == source])})",
         )
         for source in displayed_sources
     ]
@@ -450,7 +476,10 @@ def render_pressure() -> None:
     ax.legend(
         handles + source_handles,
         labels + [h.get_label() for h in source_handles],
-        ncol=3,
+        ncol=2,
+        fontsize=7.5,
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.12),
     )
     ax.set_title("30 wt% MEA $CO_2$ pressure: reactive ePC-SAFT parameter set")
     fig.tight_layout()
@@ -620,6 +649,8 @@ if __name__ == "__main__":
         FIGURE_DATA,
         ROOT / "src/MEA/common/plot_style.py",
         ROOT / "src/MEA/common/analysis_io.py",
+        Path(__file__).with_name("render_regression_overview.py"),
+        FIT,
     )
     for temperature in (20, 40, 60, 80):
         render_speciation(temperature)

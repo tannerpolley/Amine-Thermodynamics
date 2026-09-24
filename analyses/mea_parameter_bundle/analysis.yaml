@@ -62,7 +62,7 @@ inputs:
   - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv
     kind: canonical_vle_observations
   - path: analyses/mea_parameter_bundle/data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl
-    kind: immutable_engine_wheel
+    kind: superseded_engine_wheel_40fba7cf_heat_and_engine_comparison_only
   - uri: https://github.com/tannerpolley/ePC-SAFT/issues/80
     kind: upstream_campaign
   - uri: https://github.com/tannerpolley/ePC-SAFT/issues/119
@@ -155,12 +155,14 @@ commands:
     - uv run python scripts/run_reaction_temperature_fit.py [--parity|--benchmark|--candidate|--full|--sensitivity-check|--adopt]
     - uv run python scripts/validate_thermal_references.py --equilibrium
     - uv run python scripts/render_figures.py
+    - uv run python scripts/render_regression_overview.py
     - uv run python scripts/build_absorption_handoff.py
   render:
     - bash render.sh notebook.qmd
 runtime:
   class: pinned_engine_replay
-  refresh_wall_seconds: 900
+  refresh_wall_seconds: 3600
+  refresh_state_timeout_seconds: 180
   refresh_logical_cpus: 1
   refresh_solver_address_space_mib: 2048
   refresh_quarto_v8_heap_mib: 2048
