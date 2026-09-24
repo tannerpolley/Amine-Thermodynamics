@@ -2,7 +2,7 @@
 
 2026-09-03. The original screening record below used the earlier selected
 bundle. The subsequent exploratory adoption is recorded in
-`adoption-record.json`; the active values are in
+the adoption comparison JSON in this folder (its original filename is cited by the pinned parameter record); the active values are in
 `../selected-current-best-parameters.json`. Historical baseline results below
 are not a replay of that later selection. The full candidate replay included
 R1/R3 shifts omitted from the selected JSON; see `interpretation_correction`
@@ -129,7 +129,7 @@ over 45 pressure/speciation rows.
 
 Full replay under the same recovery policy as the retained baseline
 (`full-validation-record.json`, `full-validation-targets.csv`), paired on
-identical evaluated rows (`adoption-record.json`):
+identical evaluated rows (the adoption comparison JSON):
 
 | Cohort | n | Incumbent RMSE | Candidate RMSE |
 |---|---:|---:|---:|

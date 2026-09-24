@@ -173,7 +173,7 @@ Verified model choices:
 - solvent-only MEA--water mass-fraction relative-permittivity mixing;
 - reaction coefficients come from the recorded selection (see
   chemistry/reaction-system.json and
-  validation/reaction-temperature-fit/adoption-record.json);
+  validation/reaction-temperature-fit/adoption-receipt.json);
 - `parameters/parameters.json` preserves the adopted record and `bundle.json`
   supplies its declared shell-Born runtime defaults.
 
@@ -335,10 +335,10 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
             )
             for name in (
                 "screen-record.json",
-                "candidate-record.json",
+                "candidate-receipt.json",
                 "full-validation-record.json",
                 "full-validation-targets.csv",
-                "adoption-record.json",
+                "adoption-receipt.json",
                 "sensitivity-check-record.json",
                 "parity-record.json",
             )
@@ -412,7 +412,7 @@ def main() -> None:
     parameter_hash = sha256(source(PARAMETERS))
     adoption = json.loads(
         (
-            ANALYSIS / "results/reaction-temperature-fit/adoption-record.json"
+            ANALYSIS / "results/reaction-temperature-fit/adoption-receipt.json"
         ).read_text()
     )
     if parameter_hash != adoption.get("adopted_parameter_sha256"):

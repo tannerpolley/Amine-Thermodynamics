@@ -46,7 +46,7 @@ analyses/
   film_chemistry_work_package_a/
 ```
 
-`toybox/` retains compact rejection receipts from retired exploratory
+`toybox/` retains compact rejection records from retired exploratory
 calculations. These results are excluded from parameter promotion, manuscript
 inputs, and predictive-model claims.
 
