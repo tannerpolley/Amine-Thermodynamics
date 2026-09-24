@@ -28,7 +28,7 @@ def main(argv):
     states = probe.pressure_observations(lambda row: row['observation_id'] in ids)
     assert len(states) == len(ids) == 70
     s = probe.shared
-    s.RUNS = Path('/tmp/mea-composition-transfer-cache')
+    s.RUNS = HERE.parent / 'results/runs/composition-transfer'
     fraction = {r['observation_id']: r['MEA_weight_fraction'] for r in csv.DictReader(s.CANONICAL_VLE.open())}
     out, scores = [], []
     for spec in argv:
