@@ -24,13 +24,14 @@ RESOLVE_RTOL = 1e-6
 # g/mol in shared.COMPONENT_IDS order; reactions conserve mass, so feed mass is the solution mass.
 MOLAR_MASS = (44.0095, 61.0831, 18.01528, 62.0910, 104.0852, 61.0168, 60.0089, 19.0232, 17.0073)
 # Observed loaded-solution cp, kJ/(kg K): Hilliard 2008 App. G.2 p. 937 (7 mol MEA/kg water, loading
-# 0.358; uncertainty not transcribed) and Weiland 1997 Table 3 p. 1004 (30 wt%, loadings 0.3/0.4
+# 0.358; accuracy +/-2.0 %, reproducibility 1.0 %, Sections 4.6-4.7 pp. 78-80) and Weiland 1997 Table 3 p. 1004 (30 wt%, loadings 0.3/0.4
 # averaged to 0.35; +/-1 % repeatability).
 MEASURED = ((298.15, "Weiland 1997 Table 3 (0.3/0.4 mean)", (3.457 + 3.418) / 2, 0.01),
-            (318.15, "Hilliard 2008 App. G.2 (loading 0.358)", 3.3675, None),
-            (353.15, "Hilliard 2008 App. G.2 (loading 0.358)", 3.4707, None))
+            (318.15, "Hilliard 2008 App. G.2 (loading 0.358)", 3.3675, 0.02),
+            (353.15, "Hilliard 2008 App. G.2 (loading 0.358)", 3.4707, 0.02))
 # Liquid water cp at 0.101325 MPa, kJ/(kg K), IAPWS-95 (Wagner and Pruss 2002) via the NIST WebBook:
-# attributes the solution-cp gap to the residual EOS of water.
+# the residual-EOS water deficit is the same order as the solution-cp gap; it does not explain the
+# opposite temperature trend, which comes from the reaction-shift term (equilibrium minus frozen cp).
 WATER_CP = {298.15: 4.1813, 318.15: 4.1804, 353.15: 4.1965}
 
 
@@ -96,7 +97,10 @@ def main() -> None:
         "claim_limit": "Equilibrium cp is numerically qualified against re-solves; the measured comparison is "
                        "empirical on one adopted model. Neutral ideal-gas cp inputs (water NIST Shomate "
                        "extrapolated below 500 K; MEA Zhang-Que-Chen 2011 Table 3, Aspen, uncertainty "
-                       "unreported) enter cp directly. Hilliard loading 0.358 vs model 0.35.",
+                       "unreported) enter cp directly. Hilliard loading 0.358 vs model 0.35. The pure-water residual cp "
+                       "deficit (12-15 % below IAPWS-95) is the same order as the gap; the model's falling "
+                       "equilibrium cp against rising measurements comes from the reaction-shift term, which "
+                       "depends on K(T) and the reference calorics and is unresolved.",
     }
     (OUTPUT / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print(json.dumps(summary, indent=2))
