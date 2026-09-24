@@ -725,7 +725,22 @@ Every figure and table below computes these from the retained residual rows (cal
 - **AARD %** = 100 · mean |pred/obs − 1|. AARD is asymmetric: over-prediction by a factor of 2 contributes 100 %, under-prediction by a factor of 2 contributes 50 %.
 - **mean dev** (heat only) = mean(calculated − observed) in kJ mol⁻¹ CO₂.
 
-*[Slot for the parent: which of these statistics the predecessor MEA papers report, after the literature check.]*
+The predecessor MEA and reactive ePC-SAFT papers report the mean absolute relative deviation of CO₂ partial (or total) pressure calculated at the measured loading, printed as AAD %, ARD, AARD, |ΔY/Y| or MAPE, per data set: Baygi 2015 Table 5 [<a href="#ref-11">11</a>], Najafloo 2018 Table 5 [<a href="#ref-3">3</a>], Uyan 2015 Eq. 25 [<a href="#ref-12">12</a>], Wangler 2018 Eq. 32 [<a href="#ref-13">13</a>], Bülow 2021a Eq. 28 [<a href="#ref-14">14</a>], Zhang 2011 Table 9 [<a href="#ref-15">15</a>], Hilliard 2008 Eq. 7-9 and Table 13.4-6 [<a href="#ref-16">16</a>], Aronu 2011 Eq. 21 [<a href="#ref-17">17</a>] and Akula 2023a Eq. 36 [<a href="#ref-18">18</a>]. None reports a log-space RMSE or a signed bias; Akula 2023a fits Σ(ln p_exp − ln p_cal)² but reports MAPE. The per-source pressure table and the figure legends therefore lead with AARD % on pCO₂, the same residual direction (pressure at measured temperature and loading), and keep bias and RMS ln / log₁₀ RMSE as symmetric complements.
+
+Loading-direction statistics are not comparable with pressure AARD: Hilliard 2008 Table 13.4-6 gives 13.55 % on pCO₂ but 0.52 % on loading for Jou 1995 [<a href="#ref-16">16</a>], and Mac Dowell 2010 reports absolute deviations in x_CO₂ [<a href="#ref-19">19</a>]. Published values also cover different row subsets, and most (Zhang 2011, Hilliard 2008, Aronu 2011, Akula 2023a) are calibration values.
+
+::: {.parameter-table .numeric-table}
+| Source | This record (points) | Zhang 2011 eNRTL | Baygi 2015 PC-SAFT | Najafloo 2018 SAFT-HR | Hilliard 2008 eNRTL | Aronu 2011 e-UNIQUAC |
+|:--|--:|--:|--:|--:|--:|--:|
+| Jou 1995 | 56.9 (48) | 33.5 (124, cal.) | 43.2 (100, pred.) | 49.5 (100) | 13.6 (70, cal.) | — |
+| Hilliard 2008 | 69.0 (30) | 35.5 (55, cal.) | 35.0 (42) | 42.6 (42) | 30.0 (55, cal.) | — |
+| Mamun 2005 | 20.6 (19) | 13.5 (19, cal.) | 21.0 | 40.0 | 27.1 | — |
+| Xu 2011 | 48.7 (18) | 28.0 (63, cal.) | 46.9 (52) | 15.4 | — | — |
+| Aronu 2011 | 41.4 (36) | — | — | — | — | 24.3 (cal.) |
+| Idris 2014 | 89.1 (10) | — | — | — | — | — |
+:::
+
+pCO₂ AARD % in the pressure direction. This record's values are calibration residuals on the rows used here; Xu 2011 was outside the reaction-temperature objective but influenced earlier bundle selection. Published values carry their point counts and, where the survey recorded it, their role (cal. = calibration, pred. = prediction); a blank role was not recorded, and — means no value was found. No other-model value was found for the Idris 2014 rows, which come from Table 2 of Idris, Jens and Eimer 2014 [<a href="#ref-20">20</a>], the paper that also reports the Raman speciation measurements; the repository records its full text as not verified.
 
 # Pressure
 
@@ -734,15 +749,15 @@ The pressure and speciation figures and tables below are calculated from the exa
 **The adopted record reproduces all 161 pressure observations with log₁₀ RMSE 0.2318 (RMS factor 1.71), the same value as the superseded adoption replay; the greenfield Engine does not change the fit.** The 161 rows at 30 mass% MEA and 40–120 °C come from Aronu 2011, Hilliard 2008, Idris 2014, Jou 1995, Mamun 2005 and the Xu 2011 holdout. The table reports both scales, defined under [Fit statistics](#fit-statistics). Each source row pairs the superseded adoption replay (Engine `8438ce5f`, all five reaction shifts, `evaluated` and `pivot_reuse` rows of [full-validation-targets.csv](results/reaction-temperature-fit/full-validation-targets.csv)) with the greenfield calculation of the adopted record. Paired row by row, the two calculations differ by median |Δ ln pCO₂| 0.0012 and at most 0.009 (`vle_obs_0233`). Those differences combine the Engine change with the omitted R1/R3 shifts.
 
 ::: {.parameter-table .numeric-table}
-| Source | n | Mean ln(pred/obs) superseded → greenfield | RMS ln superseded → greenfield | log₁₀ RMSE superseded → greenfield | AARD % superseded → greenfield |
+| Source | n | AARD % superseded → greenfield | Mean ln(pred/obs) superseded → greenfield | RMS ln superseded → greenfield | log₁₀ RMSE superseded → greenfield |
 |:--|--:|--:|--:|--:|--:|
-| Aronu 2011 | 36 | −0.004 → −0.005 | 0.506 → 0.506 | 0.2197 → 0.2196 | 41.5 → 41.4 |
-| Hilliard 2008 | 30 | +0.365 → +0.364 | 0.585 → 0.584 | 0.2541 → 0.2537 | 69.1 → 69.0 |
-| Idris 2014 | 10 | +0.608 → +0.607 | 0.660 → 0.659 | 0.2867 → 0.2862 | 89.3 → 89.1 |
-| Jou 1995 | 48 | +0.049 → +0.050 | 0.602 → 0.601 | 0.2613 → 0.2612 | 56.9 → 56.9 |
-| Mamun 2005 | 19 | −0.029 → −0.027 | 0.254 → 0.254 | 0.1102 → 0.1103 | 20.5 → 20.6 |
-| Xu 2011 (holdout) | 18 | +0.316 → +0.318 | 0.438 → 0.440 | 0.1901 → 0.1910 | 48.4 → 48.7 |
-| **All 161** | 161 | +0.152 → +0.152 | 0.534 → 0.534 | **0.2318 → 0.2318** | 52.5 → 52.5 |
+| Aronu 2011 | 36 | 41.5 → 41.4 | −0.004 → −0.005 | 0.506 → 0.506 | 0.2197 → 0.2196 |
+| Hilliard 2008 | 30 | 69.1 → 69.0 | +0.365 → +0.364 | 0.585 → 0.584 | 0.2541 → 0.2537 |
+| Idris 2014 | 10 | 89.3 → 89.1 | +0.608 → +0.607 | 0.660 → 0.659 | 0.2867 → 0.2862 |
+| Jou 1995 | 48 | 56.9 → 56.9 | +0.049 → +0.050 | 0.602 → 0.601 | 0.2613 → 0.2612 |
+| Mamun 2005 | 19 | 20.5 → 20.6 | −0.029 → −0.027 | 0.254 → 0.254 | 0.1102 → 0.1103 |
+| Xu 2011 (holdout) | 18 | 48.4 → 48.7 | +0.316 → +0.318 | 0.438 → 0.440 | 0.1901 → 0.1910 |
+| **All 161** | 161 | 52.5 → 52.5 | +0.152 → +0.152 | 0.534 → 0.534 | **0.2318 → 0.2318** |
 :::
 
 By temperature (greenfield), RMS ln is 0.621 at 40 °C (59 rows), 0.553 at 60 °C (24), 0.556 at 80 °C (21), 0.448 at 100 °C (18) and 0.382 at 120 °C (39). The previous notebook's 0.2318 was already this log₁₀ value; an RMS ln near 0.6 quoted for Hilliard and Jou alone is the same misfit on a different scale and a smaller subset, not a deterioration.
@@ -867,4 +882,13 @@ Detailed source prose from the former LaTeX notebook remains in Git history; all
 <li id="ref-9">C. Held, T. Reschke, S. Mohammad, A. Luza, and G. Sadowski, “ePC-SAFT revised,” <em>Chemical Engineering Research and Design</em> (2014). <a href="https://doi.org/10.1016/j.cherd.2014.05.017">doi:10.1016/j.cherd.2014.05.017</a>.</li>
 <li id="ref-10">P. Figiel, G. Yu, and C. Held, “Predicting thermodynamic properties of ions in single solvents and in mixed solvents using a modified Born term within the ePC-SAFT framework,” <em>Industrial &amp; Engineering Chemistry Research</em> (2025). <a href="https://doi.org/10.1021/acs.iecr.5c00475">doi:10.1021/acs.iecr.5c00475</a>.</li>
 <li id="ref-11">S. Baygi and M. Pahlavanzadeh, “Application of the PC-SAFT equation of state for modeling CO₂ solubility in aqueous monoethanolamine solutions,” <em>Chemical Engineering Research and Design</em> (2015). <a href="https://doi.org/10.1016/j.cherd.2014.07.017">doi:10.1016/j.cherd.2014.07.017</a>.</li>
+<li id="ref-12">M. Uyan, G. Sieder, T. Ingram, and C. Held, “Predicting CO₂ solubility in aqueous N-methyldiethanolamine solutions with ePC-SAFT,” <em>Fluid Phase Equilibria</em> (2015). <a href="https://doi.org/10.1016/j.fluid.2015.02.026">doi:10.1016/j.fluid.2015.02.026</a>.</li>
+<li id="ref-13">A. Wangler, G. Sieder, T. Ingram, M. Heilig, and C. Held, “Prediction of CO₂ and H₂S solubility and enthalpy of absorption in reacting N-methyldiethanolamine/water systems with ePC-SAFT,” <em>Fluid Phase Equilibria</em> (2018). <a href="https://doi.org/10.1016/j.fluid.2017.12.033">doi:10.1016/j.fluid.2017.12.033</a>.</li>
+<li id="ref-14">M. Bülow, N. G. Ince, S. Hirohama, G. Sadowski, and C. Held, “Predicting vapor–liquid equilibria for sour-gas absorption in aqueous mixtures of chemical and physical solvents or ionic liquids with ePC-SAFT,” <em>Industrial &amp; Engineering Chemistry Research</em> (2021). <a href="https://doi.org/10.1021/acs.iecr.1c00176">doi:10.1021/acs.iecr.1c00176</a>.</li>
+<li id="ref-15">Y. Zhang, H. Que, and C.-C. Chen, “Thermodynamic modeling for CO₂ absorption in aqueous MEA solution with electrolyte NRTL model,” <em>Fluid Phase Equilibria</em> (2011). <a href="https://doi.org/10.1016/j.fluid.2011.08.025">doi:10.1016/j.fluid.2011.08.025</a>.</li>
+<li id="ref-16">M. D. Hilliard, “A predictive thermodynamic model for an aqueous blend of potassium carbonate, piperazine, and monoethanolamine for carbon dioxide capture from flue gas,” doctoral dissertation, The University of Texas at Austin (2008).</li>
+<li id="ref-17">U. E. Aronu, S. Gondal, E. T. Hessen, T. Haug-Warberg, A. Hartono, K. A. Hoff, and H. F. Svendsen, “Solubility of CO₂ in 15, 30, 45 and 60 mass% MEA from 40 to 120 °C and model representation using the extended UNIQUAC framework,” <em>Chemical Engineering Science</em> (2011). <a href="https://doi.org/10.1016/j.ces.2011.08.042">doi:10.1016/j.ces.2011.08.042</a>.</li>
+<li id="ref-18">P. Akula, A. Lee, J. Eslick, D. Bhattacharyya, and D. C. Miller, “A modified electrolyte non-random two-liquid model with analytical expression for excess enthalpy: Application to the MEA-H₂O-CO₂ system,” <em>AIChE Journal</em> (2023). <a href="https://doi.org/10.1002/aic.17935">doi:10.1002/aic.17935</a>.</li>
+<li id="ref-19">N. Mac Dowell, F. Llovell, C. S. Adjiman, G. Jackson, and A. Galindo, “Modeling the fluid phase behavior of carbon dioxide in aqueous solutions of monoethanolamine using transferable parameters with the SAFT-VR approach,” <em>Industrial &amp; Engineering Chemistry Research</em> (2010). <a href="https://doi.org/10.1021/ie901014t">doi:10.1021/ie901014t</a>.</li>
+<li id="ref-20">Z. Idris, K. J. Jens, and D. A. Eimer, “Speciation of MEA–CO₂ adducts at equilibrium. Measurement and modeling,” <em>Energy Procedia</em> (2014). <a href="https://doi.org/10.1016/j.egypro.2014.11.152">doi:10.1016/j.egypro.2014.11.152</a>.</li>
 </ol>
