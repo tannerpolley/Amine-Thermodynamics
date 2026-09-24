@@ -33,7 +33,6 @@ GREENFIELD_3EB_SHA256 = "3eb502abf74c4bb9f48fcafbbe2f271e7bba7a70152ed2d998f10c4
 GREENFIELD_3EB_COMMIT = "83ac1126d8824dd2f1465c194be73c19ebc0cdb5"
 GREENFIELD_B66_SHA256 = "b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58"
 GREENFIELD_B66_COMMIT = "443a9da492fd5ac7724525945d108c6a2a854d51"
-GREENFIELD_EVALUATOR_BLOB = "ac6298f85a33f0a4d09dd71f17a3a343195392b2"
 ENGINE = {
     "S": {
         "name": "SUPERSEDED",
@@ -51,7 +50,7 @@ ENGINE = {
         "wheel_sha256": GREENFIELD_3EB_SHA256,
         "parameter": PARAMETERS_G,
         "parameter_sha256": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
-        "evaluator_blob": GREENFIELD_EVALUATOR_BLOB,
+        "evaluator_blob": None,
     },
 }
 
@@ -63,14 +62,14 @@ def configure_greenfield(wheel: Path, scenario: str) -> None:
             raise ValueError(f"addendum requires b66 wheel {GREENFIELD_B66_SHA256}; got {digest}")
         ENGINE["G"].update(
             wheel=wheel, commit=GREENFIELD_B66_COMMIT, wheel_sha256=GREENFIELD_B66_SHA256,
-            evaluator_blob=GREENFIELD_EVALUATOR_BLOB,
+            evaluator_blob=evaluator_blob(),
         )
     else:
         if digest != GREENFIELD_3EB_SHA256:
             raise ValueError(f"standard greenfield runs require wheel {GREENFIELD_3EB_SHA256}; got {digest}")
         ENGINE["G"].update(
             wheel=wheel, commit=GREENFIELD_3EB_COMMIT, wheel_sha256=GREENFIELD_3EB_SHA256,
-            evaluator_blob=GREENFIELD_EVALUATOR_BLOB,
+            evaluator_blob=evaluator_blob(),
         )
 PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 PACKET_FILE_SHA256 = "e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba"
@@ -93,6 +92,22 @@ REPRESENTATIVE_STATES = (
     "Bottinger2008_state_050", "Bottinger2008_state_058",
     "vle_obs_0130", "vle_obs_0206", "vle_obs_0232",
 )
+
+
+def evaluator_blob() -> str:
+    """Git blob hash of the shared_evaluation.py this checkout imports for G."""
+    return subprocess.run(["git", "hash-object", str(SCRIPTS / "shared_evaluation.py")],
+                          check=True, capture_output=True, text=True).stdout.strip()
+
+
+def valid_cold_runs(rows: list[dict[str, str]]) -> tuple[int, ...]:
+    """Cold-sweep run indices whose workers started (setup_failure runs excluded)."""
+    cold = {int(r["run_index"]) for r in rows if r["scenario"] == "cold_sweep"}
+    failed = {int(r["run_index"]) for r in rows if r["scenario"] == "cold_sweep" and r["status"] == "setup_failure"}
+    return tuple(sorted(cold - failed))
+
+
+VALID_RUNS: tuple[int, ...] = ()
 
 
 def utc_now() -> str:
@@ -809,6 +824,8 @@ def add_raw_row(path: Path, row: dict[str, object]) -> None:
 
 
 def derive_engine_differences(path: Path) -> list[dict[str, object]]:
+    global VALID_RUNS
+    VALID_RUNS = valid_cold_runs(read_rows(path))
     raw = read_rows(path)
     predictions = defaultdict(lambda: {"S": [], "G": []})
     statuses = defaultdict(dict)
@@ -820,7 +837,7 @@ def derive_engine_differences(path: Path) -> list[dict[str, object]]:
         if engine not in ("S", "G") or row["scenario"] != "cold_sweep":
             continue
         run_index = int(row["run_index"])
-        if run_index not in (4, 5, 6):
+        if run_index not in VALID_RUNS:
             continue
         blobs[engine].add(row["evaluator_blob_sha"])
         if row["host_load"]:
@@ -900,6 +917,8 @@ def summary_row(engine: str, scenario: str, group: str, metric: str, values: lis
 
 
 def build_summary(path: Path) -> list[dict[str, object]]:
+    global VALID_RUNS
+    VALID_RUNS = valid_cold_runs(read_rows(path))
     raw = read_rows(path)
     result = []
 
@@ -918,7 +937,7 @@ def build_summary(path: Path) -> list[dict[str, object]]:
 
     accuracy = defaultdict(lambda: defaultdict(list))
     for row in raw:
-        if row["scenario"] != "cold_sweep" or int(row["run_index"]) not in (4, 5, 6):
+        if row["scenario"] != "cold_sweep" or int(row["run_index"]) not in VALID_RUNS:
             continue
         if row["metric"] not in ("ln_prediction_over_observation", "absolute_relative_error_pct"):
             continue
@@ -954,7 +973,7 @@ def build_summary(path: Path) -> list[dict[str, object]]:
                     engine, scenario, source, metric, [value],
                     "ln ratio" if "ratio" in metric else "%",
                     detail=(
-                        "per-state medians across valid cold runs 4–6"
+                        f"per-state medians across valid cold runs {VALID_RUNS[0]}–{VALID_RUNS[-1]}"
                         if selected_states is None else
                         f"per-state medians restricted to {len(selected_states)} states evaluated by both Engines"
                     ),
@@ -1033,7 +1052,7 @@ def build_summary(path: Path) -> list[dict[str, object]]:
     cold_walls = {}
     cold_totals = {}
     for row in raw:
-        if row["scenario"] != "cold_sweep" or int(row["run_index"]) not in (4, 5, 6):
+        if row["scenario"] != "cold_sweep" or int(row["run_index"]) not in VALID_RUNS:
             continue
         run = int(row["run_index"])
         if row["metric"] == "state_status":
@@ -1051,7 +1070,7 @@ def build_summary(path: Path) -> list[dict[str, object]]:
     cold_start_counts = defaultdict(list)
     recovered_counts = defaultdict(list)
     for engine in ("S", "G"):
-        for run in (4, 5, 6):
+        for run in VALID_RUNS:
             final_statuses = cold_status[(engine, run)]
             first_success = 0
             recovered = 0
@@ -1078,10 +1097,10 @@ def build_summary(path: Path) -> list[dict[str, object]]:
     shared_s_states = set(cold_status[("S", 4)]) & set(cold_status[("S", 5)]) & set(cold_status[("S", 6)])
     shared_s_states = {
         state for state in shared_s_states
-        if all(cold_status[("S", run)].get(state) == "evaluated" for run in (4, 5, 6))
+        if all(cold_status[("S", run)].get(state) == "evaluated" for run in VALID_RUNS)
     }
     total_ratios, shared_ratios = [], []
-    for run in (4, 5, 6):
+    for run in VALID_RUNS:
         s_total, g_total = cold_totals.get(("S", run)), cold_totals.get(("G", run))
         if s_total and g_total:
             total_ratio = s_total / g_total
@@ -1228,6 +1247,8 @@ def derivative_failure_note(raw: list[dict[str, str]]) -> str:
 
 
 def write_readme(path: Path, raw_path: Path, summary: list[dict[str, object]]) -> None:
+    global VALID_RUNS
+    VALID_RUNS = valid_cold_runs(read_rows(raw_path))
     raw = read_rows(raw_path)
 
     def pick(engine, scenario, group, metric):
@@ -1276,9 +1297,9 @@ def write_readme(path: Path, raw_path: Path, summary: list[dict[str, object]]) -
               if row["engine_label"] == "S" and row["scenario"] == "cold_sweep"
               and int(row["run_index"]) == run and row["metric"] == "state_status"
               and row["status"] == "evaluated"}
-        for run in (4, 5, 6)
+        for run in VALID_RUNS
     }
-    shared_s = set.intersection(*(s_states[run] for run in (4, 5, 6))) if s_states else set()
+    shared_s = set.intersection(*(s_states[run] for run in VALID_RUNS)) if s_states else set()
     cold_rows = {(row["engine_label"], int(row["run_index"]), row["state_id"], row["metric"]): row
                  for row in raw if row["scenario"] == "cold_sweep"}
     recovered = set()
@@ -1286,14 +1307,14 @@ def write_readme(path: Path, raw_path: Path, summary: list[dict[str, object]]) -
     persistent_s_failures = defaultdict(list)
     for state_id in sorted({row["state_id"] for row in raw
                             if row["engine_label"] == "S" and row["scenario"] == "cold_sweep"
-                            and int(row["run_index"]) in (4, 5, 6) and row["metric"] == "state_status"}):
-        statuses = [cold_rows.get(("S", run, state_id, "state_status")) for run in (4, 5, 6)]
+                            and int(row["run_index"]) in VALID_RUNS and row["metric"] == "state_status"}):
+        statuses = [cold_rows.get(("S", run, state_id, "state_status")) for run in VALID_RUNS]
         if all(row and row["status"] != "evaluated" for row in statuses):
             diagnostic = statuses[0]["diagnostic"]
             persistent_s_failures[diagnostic].append(state_id)
     for row in raw:
         if (row["engine_label"] == "G" and row["scenario"] == "cold_sweep"
-                and int(row["run_index"]) in (4, 5, 6) and row["metric"] == "attempt_trace"):
+                and int(row["run_index"]) in VALID_RUNS and row["metric"] == "attempt_trace"):
             try:
                 attempts = json.loads(row["value"])
             except (TypeError, ValueError):
@@ -1311,7 +1332,7 @@ def write_readme(path: Path, raw_path: Path, summary: list[dict[str, object]]) -
 
     def attempt_count_text(metric):
         counts = [(run, attempt_counts[run][metric], attempt_counts[run]["states"])
-                  for run in (4, 5, 6) if run in attempt_counts]
+                  for run in VALID_RUNS if run in attempt_counts]
         if not counts:
             return "no retained attempt traces"
         if len(counts) == 3 and len({(count, states) for _, count, states in counts}) == 1:
@@ -1321,7 +1342,7 @@ def write_readme(path: Path, raw_path: Path, summary: list[dict[str, object]]) -
 
     def recovered_count_text():
         counts = [(run, attempt_counts[run]["recovered"], attempt_counts[run]["states"])
-                  for run in (4, 5, 6) if run in attempt_counts]
+                  for run in VALID_RUNS if run in attempt_counts]
         if not counts:
             return "no retained attempt traces"
         if len(counts) == 3 and len({count for _, count, _ in counts}) == 1:
@@ -1347,7 +1368,7 @@ def write_readme(path: Path, raw_path: Path, summary: list[dict[str, object]]) -
             g_line = line
 
     pair_lines = []
-    for run in (4, 5, 6):
+    for run in VALID_RUNS:
         s_total = raw_pick("S", "cold_sweep", "total_wall_s", run=run, state="79-state-cold-sweep")
         g_total = raw_pick("G", "cold_sweep", "total_wall_s", run=run, state="79-state-cold-sweep")
         total_ratio = pick("S_vs_G", "engine_pair", f"run-{run}", "s_to_g_total_wall_ratio")
@@ -1514,13 +1535,13 @@ def write_readme(path: Path, raw_path: Path, summary: list[dict[str, object]]) -
     s_bubble_sums = [
         sum(float(cold_rows[("S", run, state, "state_wall_s")]["value"])
             for state in bubble_states if ("S", run, state, "state_wall_s") in cold_rows)
-        for run in (4, 5, 6)
+        for run in VALID_RUNS
     ]
     setup_failures_count = setup_failures
     g_recovery_attempts = pick("G", "cold_sweep", "79-state-cold-sweep", "recovery_attempts_total")
     minimum_shared_ratio = min(
         float(pick("S_vs_G", "engine_pair", f"run-{run}", "s_to_g_shared_states_wall_ratio")["summary_value"])
-        for run in (4, 5, 6)
+        for run in VALID_RUNS
     )
     extra_hilliard_states = int(pick("G", "accuracy_pco2", "Hilliard2008", "aard_pct")["n"]) - int(
         pick("S", "accuracy_pco2", "Hilliard2008", "aard_pct")["n"]
@@ -1650,7 +1671,7 @@ def write_readme(path: Path, raw_path: Path, summary: list[dict[str, object]]) -
         'python3.13 analyses/mea_parameter_bundle/scripts/compare_engines.py --finalize-only',
         fence,
         "",
-        "Use wheel 3eb502ab for the original comparison and b66 for the five-state addendum. The addendum records values and derivative checks without timing rows.",
+        "Use wheel 3eb502ab for the original comparison and b66 for the five-state addendum. The addendum records values and derivative checks without timing rows. A fresh comparison refuses to overwrite this folder: run it from a checkout without `results/runs/engine-comparison/`; valid cold runs are taken from the data (cold-sweep runs without `setup_failure` rows), and G rows record the git blob of the `shared_evaluation.py` actually imported.",
     ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
