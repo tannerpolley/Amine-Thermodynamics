@@ -78,7 +78,7 @@ def main():
     for n, (ident, step) in enumerate(COORDINATES, 1):
         v = perturbed_value(ident, step, values[ident])
         columns.append((ident, v - values[ident], solved(SCRATCH / f'sens_{n}.jsonl', {ident: v})))
-    prov = {'engine_wheel_sha256': probe.shared.ENGINE_WHEEL_SHA256,
+    prov = {'engine_wheel_sha256': ','.join(sorted({r['wheel'] for r in base.values()})),  # wheel that solved the inputs
             'parameter_sha256': probe.shared.sha256(probe.shared.PARAMETERS),
             'packet_sha256': probe.shared.sha256(probe.shared.STATE_PACKET),
             'script_sha256': probe.shared.sha256(Path(__file__))}

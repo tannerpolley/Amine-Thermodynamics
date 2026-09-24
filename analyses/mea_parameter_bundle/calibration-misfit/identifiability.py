@@ -1,6 +1,7 @@
 """Identifiability of a refit from its logged forward-difference Jacobian.
 
-Usage: identifiability.py LOG.jsonl LINE NAMES...
+Usage: identifiability.py LOG.jsonl BASE.jsonl LINE NAMES...
+BASE.jsonl is the adopted packet solve; its calibration residuals define the objective rows, as in refit.py.
 LINE is the 1-based log line of the base point; the next len(NAMES) lines are its one-coordinate
 steps (refit.py's Jacobian order). Scaled calibration residuals as in refit.py. Writes
 refit-A-identifiability.csv: estimate, standard error, correlations, singular values.
@@ -19,10 +20,11 @@ def table(states):
             for _, t, sc, _ in residuals(r) or []}
 
 
-def main(log, line, names):
+def main(log, base, line, names):
     lines = [json.loads(text) for text in open(log)][line - 1:line + len(names)]
     tabs = [table(d['states']) for d in lines]
-    keys = sorted(set.intersection(*(set(t) for t in tabs)))
+    objective = set(table(map(json.loads, open(base))))
+    keys = sorted(objective.intersection(*(set(t) for t in tabs)))
     x = [np.array(d['x']) for d in lines]
     f0 = np.array([tabs[0][k] for k in keys])
     J = np.array([(np.array([tabs[i + 1][k] for k in keys]) - f0) / (x[i + 1][i] - x[0][i])
@@ -36,11 +38,11 @@ def main(log, line, names):
     with out.open('w', newline='') as h:
         w = csv.writer(h)
         w.writerow(['parameter', 'estimate', 'standard_error', *[f'corr[{n}]' for n in names],
-                    'normalized_singular_value', 'n_residuals', 'residual_variance', 'log_line'])
+                    'sorted_singular_value_of_normalized_jacobian', 'n_residuals', 'residual_variance', 'log_line'])
         for i, n in enumerate(names):
             w.writerow([n, x[0][i], se[i], *corr[i], sv[i], len(keys), s2, line])
     print(open(out).read())
 
 
 if __name__ == '__main__':
-    main(sys.argv[1], int(sys.argv[2]), sys.argv[3:])
+    main(sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4:])
