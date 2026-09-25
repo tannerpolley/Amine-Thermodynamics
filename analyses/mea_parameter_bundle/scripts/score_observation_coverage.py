@@ -4,7 +4,7 @@ The calibration statistics (``generate_figure_data``) score positive packet targ
 This stage covers what they leave out, on the adopted model:
 - every active 30 mass % Böttinger 2008, Jakobsen 2005 and Matin 2012 row in its reported
   true-species liquid mole-fraction basis, including states outside the calibration packet
-  (Böttinger and Jakobsen 20/40 C), marked by ``in_packet``;
+  (Böttinger above loading 0.5 at 20-80 C, all Jakobsen), marked by ``in_packet``;
 - reported zeros (nondetections) as censored rows: the model value is compared with two
   thresholds frozen before scoring, the half-unit of the fourth decimal the tables report
   (5e-5) and the smallest positive value the same source reports for that species
