@@ -35,7 +35,7 @@ The current application evaluator and its retained input identities are:
 | Engine wheel | `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl` | `c87846663349640ab115cb09f9b880caea71be973dfe685dc9bd0f8bf7b11072` | final non-editable wheel pinned by this adapter |
 | Engine runtime source | — | `3f5d9ac87a70aebbefbbecef47fcb8ba39f56e6c` | final runtime source; build fingerprint `78937d2876bd90feaebbd7c28ae5ad6a7d1c6323fda9d3dab3440338e84dc202` |
 | reaction source record | `data/reference/MEA/manifests/chemical_reaction_source_contract.json` | `39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55` | source standard state, reaction rows and conversion metadata |
-| thermal reference | `analyses/mea_parameter_bundle/results/calorimetry/current-selected-reference-thermochemistry.json` | `a24a6b3c8b506fc659fc1bbd8a470b55919ba93da23eea27ffdf882645706185` | current exploratory reaction-consistent thermal reference |
+| thermal reference | `analyses/mea_parameter_bundle/results/calorimetry/current-selected-reference-thermochemistry.json` | `bfd628459fd253a120469d055eefc71459fe608fe29554f66d123683412efc99` | neutral ideal-gas records consumed by the Engine's record-anchored calorics (ions reaction-completed by the Engine); unadopted |
 | calorimetry partition | `analyses/mea_parameter_bundle/data/input/calorimetry-observation-partition.csv` | `175e55ff7e238ee19957da9b028e0d957bd99b35aa5ec4145926a055542725d3` | calibration, holdout and source-lineage partition |
 | density observations | `data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv` | `9047efb0281bff93d1769b12a3df50420d0b01ddd44ffd5041749ec0fb1fe622` | supporting density source rows |
 
@@ -174,19 +174,17 @@ actions. #84 still owns the exact source-to-EOS reference conversion; the
 adapter must carry the adopted coefficient records to that conversion without
 silently changing their basis.
 
-The thermal reference payload is
-`mea-anchored-reaction-consistent-reference-thermochemistry-v2`: 293.15--393.15
-K, reference temperature 353.15 K, 2.5 K grid, degree-8 Engine-form
-polynomials, anchor pressure 101325 Pa, and a hydronium gauge equal to the
-water reference enthalpy (zero-enthalpy proton). Its retained maximum
-van't Hoff residual is `0.00012996 J/mol` against a `0.001 J/mol` identity
-tolerance. CO2 has a physical ideal-gas Cp/formation-enthalpy anchor from the
-NIST Shomate/CODATA record. Hilliard and Weiland provide physical solution-Cp
-observations on their stated mass bases. The current selected record labelled
-`liquid_correlation_minus_eos_residual` is an **effective model-input record**:
-it makes the modeled pure-liquid Cp match a retained solution correlation by
-subtracting the Engine residual contribution. It is not a physical ideal-gas
-Cp and it is not a freely selectable enthalpy or entropy gauge.
+The thermal reference is the Engine's record-anchored calorics (ePC-SAFT #84/#138,
+EqID `reference_species_calorics`). The payload
+`mea-neutral-ideal-gas-thermochemistry-v1` declares only the neutral ideal-gas
+records: CO2 and H2O NIST Shomate (Chase 1998, CODATA formation enthalpies; water
+extrapolated below 500 K) and MEA Zhang, Que and Chen 2011 Table 3. The Engine completes
+the ion enthalpies and heat capacities from the R1--R5 reaction enthalpies on its density
+basis; the ionic charge gauge cancels in electroneutral phases. These records are
+unadopted inputs. Finite-dose and differential absorption heats at fixed temperature do not
+depend on them; liquid heat capacity does, and pure liquid water cp is 12--15 % below
+IAPWS-95 because it inherits the EOS residual cp. The former liquid-anchored
+`...-v2` polynomial reference is in Git history.
 
 Zhang, Que and Chen (2011), DOI
 [10.1016/j.fluid.2011.08.025](https://doi.org/10.1016/j.fluid.2011.08.025),
@@ -1134,19 +1132,12 @@ dilute composition; 38/39 rows reproduce the retained pressures to 4.3e-9 relati
 Born-study variants B and C use permittivity rules the Engine no longer admits.
 `run_best_in_slot_campaign.py` is deleted: its optimizer coordinates (reaction coefficients,
 ion solvation and Born diameters) and pCO2 observations are not `regression` coordinates or
-kinds, and the retained grid campaign superseded it. The thermal chain stops on the missing
-reference temperature derivative (Engine #84): `evaluate_direct_absorption_heat.py` and
-`validate_thermal_references.py` raise `THERMAL_REFERENCE_UNAVAILABLE` on entry. The
-reaction-temperature fit is retired as one unit: every mode of
-`run_reaction_temperature_fit.py` except `--self-check` and `--sensitivity-check` raises it on entry, because the
-screen, candidate, parity and benchmark consume the thermal reference and the full replay,
-partial summary and adoption require the candidate comparison JSON and the heat summary, which
-only those blocked stages write for the current parameter file. `--sensitivity-check` stops
-on missing reaction-coefficient actions (Engine #61). `--self-check` remains; it checks the
-reaction-enthalpy shift algebra, cohort roles and recovery attempt plan without an Engine
-solve. The code behind these stops (anchored reference construction, heat evaluation,
-thermal validation and every other fit mode) was deleted rather than kept unreachable; the
-retained results name their producers, which Git history keeps for the #84 and #61 ports. `shared_evaluation` no
+kinds, and the retained grid campaign superseded it. The thermal stages run on the pinned Engine's record-anchored calorics
+(ePC-SAFT #61): `evaluate_direct_absorption_heat.py` scores the 113 calorimetry intervals,
+`validate_thermal_references.py` checks the reference chain and pure-water properties, and
+`run_reaction_temperature_fit.py` runs the R1--R5 reaction-enthalpy screen and candidate
+replay (reported, not adopted). There is no sensitivity-check mode: the Engine has no
+reaction-coefficient actions. `shared_evaluation` no
 longer accepts a thermochemistry or active-parameter argument, and its records drop the
 always-null `thermochemistry` field; as after any evaluator edit, the evaluator source hash
 in the cache key sends new evaluations to new state records.
