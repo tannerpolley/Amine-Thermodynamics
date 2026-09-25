@@ -1,86 +1,97 @@
 {
-  "schema": "mea.selected-bundle-direct-total-enthalpy-calorimetry.v1",
-  "status": "fixed_bundle_zero_vapor_ideal_co2_feed_reconstruction",
-  "engine_source_commit": "8438ce5f94a547189c91c4ec180a7782d60879d6",
-  "engine_wheel_sha256": "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805",
-  "parameter_document_sha256": "568f7a5f6379acebacea584d707d5a3222db1022a85a4092b52553248e48524d",
-  "thermochemistry_fingerprint": "sha256:6919acbc3f1125b89363dd6997fcfd936036854768cd4c47d845d0133c8b0648",
+  "schema": "mea.selected-bundle-direct-total-enthalpy-calorimetry.v2",
+  "method": "Finite-dose heat of CO2 absorption from the Engine's record-anchored total enthalpy.",
+  "engine_wheel_sha256": "b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58",
+  "parameter_document_sha256": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
+  "observations_sha256": "175e55ff7e238ee19957da9b028e0d957bd99b35aa5ec4145926a055542725d3",
   "assumptions": [
-    "calorimeter finite vapor inventory is zero",
-    "incoming CO2 has the same ideal/reference enthalpy gauge and zero residual enthalpy",
-    "reported heat is compared to the finite loading interval declared by each retained observation"
+    "zero calorimeter vapor inventory",
+    "ideal-gas CO2 feed at the calorimeter temperature",
+    "each observation is scored on its declared finite loading interval"
   ],
-  "attempted_endpoint_states": 113,
-  "evaluated_endpoint_states": 113,
-  "failed_endpoint_states": 0,
-  "total_solver_attempts": 174,
-  "failed_solver_attempts_before_recovery": 61,
-  "attempted_observations": 113,
-  "evaluated_observations": 113,
-  "rmse_kj_per_mol_CO2": 16.768201296296972,
-  "mean_bias_kj_per_mol_CO2": -5.057600873420567,
-  "median_absolute_error_kj_per_mol_CO2": 8.94459882726445,
+  "endpoint_states": {
+    "attempted": 113,
+    "evaluated": 111
+  },
+  "solver_attempts": {
+    "total": 128,
+    "failed_before_recovery": 17
+  },
+  "attempted": 113,
+  "evaluated": 109,
+  "failed": 4,
+  "rmse_kj_per_mol_CO2": 16.281953119552032,
+  "mean_bias_kj_per_mol_CO2": -2.3213566111975488,
+  "median_absolute_error_kj_per_mol_CO2": 8.556834573525663,
   "by_temperature_C": {
     "40": {
       "attempted": 48,
-      "evaluated": 48,
-      "rmse_kj_per_mol_CO2": 11.552175981257893,
-      "mean_bias_kj_per_mol_CO2": 2.4329090274868856,
-      "median_absolute_error_kj_per_mol_CO2": 6.133371953777839
+      "evaluated": 44,
+      "failed": 4,
+      "rmse_kj_per_mol_CO2": 12.853777271652593,
+      "mean_bias_kj_per_mol_CO2": 5.645012315395203,
+      "median_absolute_error_kj_per_mol_CO2": 4.094917476475487
     },
     "80": {
       "attempted": 38,
       "evaluated": 38,
-      "rmse_kj_per_mol_CO2": 11.375279644918564,
-      "mean_bias_kj_per_mol_CO2": -6.169099358808694,
-      "median_absolute_error_kj_per_mol_CO2": 8.293232290406387
+      "failed": 0,
+      "rmse_kj_per_mol_CO2": 10.012887157631114,
+      "mean_bias_kj_per_mol_CO2": -3.364991243866765,
+      "median_absolute_error_kj_per_mol_CO2": 6.14510589338559
     },
     "120": {
       "attempted": 27,
       "evaluated": 27,
-      "rmse_kj_per_mol_CO2": 27.52082207084427,
-      "mean_bias_kj_per_mol_CO2": -16.809731717820895,
-      "median_absolute_error_kj_per_mol_CO2": 18.540465578925037
+      "failed": 0,
+      "rmse_kj_per_mol_CO2": 25.688054002570382,
+      "mean_bias_kj_per_mol_CO2": -13.834768341888322,
+      "median_absolute_error_kj_per_mol_CO2": 15.820086935024406
     }
   },
   "by_campaign_partition": {
     "calibration": {
       "attempted": 66,
-      "evaluated": 66,
-      "rmse_kj_per_mol_CO2": 11.849673593936144,
-      "mean_bias_kj_per_mol_CO2": -2.3465852932653775,
-      "median_absolute_error_kj_per_mol_CO2": 7.667565602112809
+      "evaluated": 63,
+      "failed": 3,
+      "rmse_kj_per_mol_CO2": 11.765221901882871,
+      "mean_bias_kj_per_mol_CO2": 0.42608288287714896,
+      "median_absolute_error_kj_per_mol_CO2": 6.512641016969596
     },
     "model_selection_comparison": {
       "attempted": 27,
-      "evaluated": 27,
-      "rmse_kj_per_mol_CO2": 10.71278378093174,
-      "mean_bias_kj_per_mol_CO2": -1.5243629931972782,
-      "median_absolute_error_kj_per_mol_CO2": 6.165457832570027
+      "evaluated": 26,
+      "failed": 1,
+      "rmse_kj_per_mol_CO2": 10.796810150349568,
+      "mean_bias_kj_per_mol_CO2": 1.3731059784879645,
+      "median_absolute_error_kj_per_mol_CO2": 3.6877882092935366
     },
     "temperature_holdout": {
       "attempted": 20,
       "evaluated": 20,
-      "rmse_kj_per_mol_CO2": 31.150044637864358,
-      "mean_bias_kj_per_mol_CO2": -18.77382342623413,
-      "median_absolute_error_kj_per_mol_CO2": 21.097119590678297
+      "failed": 0,
+      "rmse_kj_per_mol_CO2": 29.27864473211692,
+      "mean_bias_kj_per_mol_CO2": -15.778592384124014,
+      "median_absolute_error_kj_per_mol_CO2": 18.21694796674223
     }
   },
-  "by_source": {
-    "Kim and Svendsen 2007": {
-      "attempted": 86,
-      "evaluated": 86,
-      "rmse_kj_per_mol_CO2": 18.259715496613655,
-      "mean_bias_kj_per_mol_CO2": -6.166873231165088,
-      "median_absolute_error_kj_per_mol_CO2": 11.245163594551897
+  "claim_limit": "Calorimetry intervals at 40/80 C are calibration-labelled and six entered the reaction-temperature fit; 120 C Kim-Svendsen rows are a temperature holdout; Kim 2014 rows are model-selection comparison. Numerical qualification of the Engine calorics is separate (ePC-SAFT #61 analysis).",
+  "publication": {
+    "inputs": {
+      "engine_wheel_sha256": "b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58",
+      "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
+      "analyses/mea_parameter_bundle/data/input/calorimetry-observation-partition.csv": "175e55ff7e238ee19957da9b028e0d957bd99b35aa5ec4145926a055542725d3",
+      "analyses/mea_parameter_bundle/data/input/state-packet.json": "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448",
+      "analyses/mea_parameter_bundle/scripts/evaluate_direct_absorption_heat.py": "1ef2d8f4a45c4e70415c3387cc3d6682100cdd22fb297d57d1646ca27c94cb1e",
+      "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "2ec34105677f6b41227c1b9ad8f866c85f1ab86fb260f5f954c4bb7a9d6a847a",
+      "analyses/mea_parameter_bundle/scripts/verify_reference_calorics.py": "d4d5740d9df68aff1fc82e2fd4693b6aa2272d22ff1384b786dc557c6760fa40"
     },
-    "Kim et al. 2014": {
-      "attempted": 27,
-      "evaluated": 27,
-      "rmse_kj_per_mol_CO2": 10.71278378093174,
-      "mean_bias_kj_per_mol_CO2": -1.5243629931972782,
-      "median_absolute_error_kj_per_mol_CO2": 6.165457832570027
+    "outputs": {
+      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-states.csv": "ec97613b935962cd245f19810fc1c11c8781869706d8af7fb838e50ac2b44ea8",
+      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-attempts.csv": "751dfde8b8570511ff481d0230f5ba18ae86ef413e8bf7c7304a153f2a0058d6",
+      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-comparison.csv": "52d207be06ed80aa606c7e996cad2dbed788f591765e69a1a3afcaa5f50048b8",
+      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-reference-thermochemistry.json": "bfd628459fd253a120469d055eefc71459fe608fe29554f66d123683412efc99",
+      "analyses/mea_parameter_bundle/figures/calorimetry/output/current-selected-direct-enthalpy.svg": "dd473eefe2f43ee373654719b5f10cabced640113535e0878c4eda7430e2b357"
     }
-  },
-  "observations_sha256": "175e55ff7e238ee19957da9b028e0d957bd99b35aa5ec4145926a055542725d3"
+  }
 }
