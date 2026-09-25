@@ -3,17 +3,13 @@ title: "Calorimetry and thermal assessment"
 subtitle: "Paired absorption-heat data, fit membership and the remaining high-temperature bias"
 ---
 
-::: {.callout-warning}
-Heat values are direct paired-state total-enthalpy comparisons on the retained
-thermal reference. They do not by themselves validate an absorber model. They
-were calculated on the superseded Engine `8438ce5f` (wheel `40fba7cf`) with
-parameter file `568f7a5f…`, whose coefficients equal the adopted record's. The
-pinned Engine provides reference temperature actions
-([ePC-SAFT #84](https://github.com/tannerpolley/ePC-SAFT/issues/84)) and
-record-anchored total enthalpy
-([ePC-SAFT #138](https://github.com/tannerpolley/ePC-SAFT/issues/138)), but
-the MEA heat calculation has not been rebuilt on them
-([MEA #96](https://github.com/tannerpolley/MEA-Thermodynamics/issues/96)).
+::: {.callout-note}
+Heat values are finite-dose total-enthalpy differences on the pinned Engine
+(wheel `b66c7b96`): the Engine's record-anchored total enthalpy
+([ePC-SAFT #84](https://github.com/tannerpolley/ePC-SAFT/issues/84),
+[#138](https://github.com/tannerpolley/ePC-SAFT/issues/138)) with MEA's neutral
+ideal-gas records and ions completed from the R1–R5 reaction enthalpies. They do
+not by themselves validate an absorber model.
 :::
 
 # Question
@@ -32,33 +28,45 @@ holdout intervals and 27 Kim et al. 2014 model-selection comparison rows.
 
 Only six 40/80 °C intervals entered the reaction-temperature objective. The
 120 °C block remained outside that fit, and Kim 2014 was comparison evidence.
-The selected-JSON replay uses one reaction-consistent conserved gauge, Engine
-residual enthalpy and an explicit zero-vapor/ideal-CO₂-feed reconstruction.
+Each interval is scored as the heat released per mole of CO₂ absorbed,
+−[H_L(α₂) − H_L(α₁) − (α₂ − α₁) h_CO₂^ig(T)]/(α₂ − α₁), for 1 mol MEA, with
+zero calorimeter vapor inventory and an ideal-gas CO₂ feed. The neutral
+records cancel between the endpoints, so the result depends only on the EOS,
+the reactions and their reference chain.
 
 # Numerical result
 
 ::: {.parameter-table .numeric-table}
-| Cohort | Intervals | RMSE (kJ mol⁻¹ CO₂) | Bias (kJ mol⁻¹ CO₂) |
+| Cohort | Intervals scored | RMSE (kJ mol⁻¹ CO₂) | Bias (kJ mol⁻¹ CO₂) |
 |:--|--:|--:|--:|
-| Kim–Svendsen 40/80 °C calibration | 66 | 11.8497 | −2.3 |
-| Kim–Svendsen 120 °C holdout | 20 | 31.1500 | −18.8 |
-| Kim 2014 comparison | 27 | 10.7128 | — |
+| Kim–Svendsen 40/80 °C calibration | 63 / 66 | 11.77 | +0.4 |
+| Kim–Svendsen 120 °C holdout | 20 / 20 | 29.28 | −15.8 |
+| Kim 2014 comparison | 26 / 27 | 10.80 | +1.4 |
 :::
 
-The retained reaction-temperature candidate reduced the corresponding paired
-errors from 20.01, 39.30 and 16.84 kJ mol⁻¹ CO₂ to 11.84, 31.15 and 10.71.
-The pressure and speciation results were regenerated for the adopted record
-on the greenfield Engine; the heat results were not, for the reason above.
+Four 40 °C intervals start at loading 0.003 or 0.037, where the pinned Engine's
+bubble solve ends infeasible from every start, including a 0.041 anchor. The
+current Engine (wheel `ad12b19f`, after ePC-SAFT #154/#157) solves both states
+cold in three iterations; they are reported as failed here, not dropped.
+
+On the same intervals the rebuilt values are 2.5–3.3 kJ mol⁻¹ above the
+superseded-Engine anchored-reference values (RMSE 12.09, 31.15 and 10.87
+before). The rebuilt enthalpy chain is closed: at 40, 80 and 120 °C and
+loadings 0.1–0.5 its CO₂ feed action matches centered re-solves of the
+enthalpy to ≤ 3.1 × 10⁻⁹ and equals RT²·∂ln a_CO₂/∂T + RT to ≤ 2.6 × 10⁻¹³
+([thermal checks](../results/calorimetry/thermal-reference-validation.csv)).
+The source of the superseded offset was not re-derived.
 
 # Conclusion and limits
 
-The reaction-temperature adjustment improves 40/80 °C heat agreement and the
-120 °C comparison, but the 120 °C under-prediction remains material. Loaded
-solution heat capacities and MEA ideal-gas heat capacity are not retained, so
-solution heat-capacity behavior is predicted rather than independently
-validated. The heat study identifies a remaining thermal discrepancy; it does
+The 40/80 °C calibration intervals are unbiased on average (+0.4 kJ mol⁻¹)
+with an 11.8 kJ mol⁻¹ scatter, while the 120 °C holdout is under-predicted by
+15.8 kJ mol⁻¹ on average. Loaded-solution heat capacity is compared with Hilliard 2008 and Weiland 1997
+in `verify_solution_heat_capacity`; pure liquid water cp from the ideal-gas
+record and the EOS residual is 12–15 % below IAPWS-95, and pure MEA liquid cp
+has no verified retained reference. The heat study identifies a remaining thermal discrepancy; it does
 not justify refitting every EOS or reaction parameter.
 
 # Records
 
-[Observation partition record](../results/calorimetry/calorimetry-observation-partition-record.json) · [Selected-JSON heat summary](../results/calorimetry/current-selected-direct-enthalpy-summary.json) · [Interval comparison](../results/calorimetry/current-selected-direct-enthalpy-comparison.csv) · [Thermal reference](../results/calorimetry/current-selected-reference-thermochemistry.json) · [Thermal checks](../results/calorimetry/thermal-reference-validation.json)
+[Observation partition record](../results/calorimetry/calorimetry-observation-partition-record.json) · [Heat summary](../results/calorimetry/current-selected-direct-enthalpy-summary.json) · [Interval comparison](../results/calorimetry/current-selected-direct-enthalpy-comparison.csv) · [Neutral thermal records](../results/calorimetry/current-selected-reference-thermochemistry.json) · [Thermal checks](../results/calorimetry/thermal-reference-validation.json)
