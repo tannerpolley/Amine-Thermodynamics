@@ -185,12 +185,19 @@ state into another temperature.
 
 ## Thermal references for non-isothermal use
 
-`thermal/reference-thermochemistry.json` declares the neutral ideal-gas
+`thermal/reference-thermochemistry.json` declares the physical ideal-gas
 records for CO2, H2O, N2, O2 and MEA, with provenance, ranges, units and bases.
-The Engine consumes the neutral records and completes ion enthalpies and heat
-capacities from R1--R5 reaction enthalpies (ePC-SAFT #84/#138). Solution heat
-capacity remains 8--14% low in the retained comparisons (#103); these physical
-gas records do not correct that model limit. Consult the included thermal
+The Engine consumes the CO2, H2O and MEA records and completes ion enthalpies
+and heat capacities from R1--R5 reaction enthalpies (ePC-SAFT #84/#138). N2
+and O2 are absorber gas-phase records only; they are not Engine components.
+
+Model limit (#103): the model's equilibrium heat capacity of the loaded
+solution is 8--14 % below measurement. That range comes from three states at
+298.15, 318.15 and 353.15 K, 101325 Pa, loading 0.35 mol CO2/mol MEA and MEA
+mass fraction 0.28, against Weiland 1997 Table 3 and Hilliard 2008 App. G.2,
+computed on candidate Engine wheel 0d80cc49 (MEA-Thermodynamics
+`analyses/mea_parameter_bundle/results/solution-heat-capacity/heat_capacity.csv`).
+The physical gas records do not correct it. Consult the included thermal
 validation record for reference-chain consistency and evaluated states; a
 reference declaration alone does not establish successful equilibrium.
 Do not use it above 393.15 K: the source-reference transfer leaves the EOS
@@ -198,8 +205,8 @@ domain there at the 1 bar reference pressure.
 
 Species references are shared across phases; vaporization enthalpy is the
 EOS residual difference.
-`thermal/thermal-reference-validation.*` retain the consistency, pure-liquid
-cp, water vaporization, and solution cp checks and the missing evidence list.
+`thermal/thermal-reference-validation.*` retain the reference-chain
+consistency, pure liquid water cp and water vaporization checks.
 
 ## Install and verify
 
