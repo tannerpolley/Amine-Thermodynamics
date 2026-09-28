@@ -185,14 +185,12 @@ state into another temperature.
 
 ## Thermal references for non-isothermal use
 
-`thermal/reference-thermochemistry.json` is the species reference enthalpy
-and heat-capacity declaration in exact Engine component order, on the
-polynomial form of the Engine commit recorded in the file. It is the
-unique solution of the five typed reaction constraints, three neutral
-thermal anchors (CO2 ideal-gas Shomate; H2O and MEA pure-liquid cp
-correlations net of the Engine's residual cp at 1 atm), and one charge gauge
-over the declared reference domain. Consult the included thermal validation
-record for the measured reaction-reference consistency and evaluated states;
+`thermal/reference-thermochemistry.json` declares the neutral ideal-gas
+records (CO2 and H2O NIST Shomate, MEA Zhang-Que-Chen 2011) that the Engine's
+record-anchored calorics consume; the Engine completes the ion enthalpies and
+heat capacities from the R1--R5 reaction enthalpies (ePC-SAFT #84/#138), so
+liquid cp inherits the EOS residual cp. Consult the included thermal validation
+record for the reference-chain consistency and evaluated states;
 a reference declaration alone does not establish successful equilibrium.
 Do not use it above 393.15 K: the source-reference transfer leaves the EOS
 domain there at the 1 bar reference pressure.
@@ -393,7 +391,7 @@ DOWNSTREAM_GAS_CP = (
                     "note": "extrapolated below 500 K; reproduces the JANAF 298.15 K value 33.59 J/mol/K",
                 },
             },
-            "note": "In the Engine bundle the water and MEA references are liquid-anchored (see thermal/reference-thermochemistry.json); use these ideal-gas values only for N2/O2 and for gas-phase sensible heat of non-EOS components.",
+            "note": "The Engine bundle declares CO2, H2O and MEA by ideal-gas records (see thermal/reference-thermochemistry.json); use these ideal-gas values only for N2/O2 and for gas-phase sensible heat of non-EOS components.",
         },
         indent=2,
     )

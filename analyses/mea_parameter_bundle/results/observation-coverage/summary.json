@@ -1,0 +1,159 @@
+{
+  "engine_wheel_sha256": "b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58",
+  "parameter_sha256": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
+  "canonical_speciation_sha256": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
+  "pressure_residuals_sha256": "2894fd5c644b992d558e24ffc19495d411e42a90cca164ad54d824f22f174411",
+  "speciation": {
+    "all_positive": {
+      "attempted": 274,
+      "scored": 274,
+      "failed": 0,
+      "aard_percent": 74.26392025488123,
+      "mean_ln": 0.19421692297625223,
+      "rms_ln": 0.6634403343568611
+    },
+    "by_source_and_packet": {
+      "Bottinger2008 | packet": {
+        "attempted": 55,
+        "scored": 55,
+        "failed": 0,
+        "aard_percent": 16.889038252729264,
+        "mean_ln": 0.0041961715122800555,
+        "rms_ln": 0.2268558244412667
+      },
+      "Bottinger2008 | outside packet": {
+        "attempted": 44,
+        "scored": 44,
+        "failed": 0,
+        "aard_percent": 26.891934201758833,
+        "mean_ln": -0.057916732879750084,
+        "rms_ln": 0.40606238303897796
+      },
+      "Jakobsen2005 | outside packet": {
+        "attempted": 99,
+        "scored": 99,
+        "failed": 0,
+        "aard_percent": 152.4707110670557,
+        "mean_ln": 0.4282574231894711,
+        "rms_ln": 0.9897619061458073
+      },
+      "Matin2012 | packet": {
+        "attempted": 76,
+        "scored": 76,
+        "failed": 0,
+        "aard_percent": 41.33646770291373,
+        "mean_ln": 0.17283551070090897,
+        "rms_ln": 0.4219815355157313
+      }
+    },
+    "by_species": {
+      "CO2": {
+        "attempted": 6,
+        "scored": 6,
+        "failed": 0,
+        "aard_percent": 63.57489146390215,
+        "mean_ln": 0.013952637340701249,
+        "rms_ln": 0.6449024915077715
+      },
+      "CO3^2-": {
+        "attempted": 16,
+        "scored": 16,
+        "failed": 0,
+        "aard_percent": 581.9414773221122,
+        "mean_ln": 1.6830684192581966,
+        "rms_ln": 1.8693519998757022
+      },
+      "HCO3-": {
+        "attempted": 53,
+        "scored": 53,
+        "failed": 0,
+        "aard_percent": 107.0859649918186,
+        "mean_ln": 0.5755895241557474,
+        "rms_ln": 0.7733236255826649
+      },
+      "MEA": {
+        "attempted": 35,
+        "scored": 35,
+        "failed": 0,
+        "aard_percent": 41.09194269788116,
+        "mean_ln": 0.04602907992433081,
+        "rms_ln": 0.46779910353210524
+      },
+      "MEA + MEAH+": {
+        "attempted": 55,
+        "scored": 55,
+        "failed": 0,
+        "aard_percent": 12.339183476519773,
+        "mean_ln": 0.09092330961898228,
+        "rms_ln": 0.14171728362753516
+      },
+      "MEACOO-": {
+        "attempted": 74,
+        "scored": 74,
+        "failed": 0,
+        "aard_percent": 22.30985372786854,
+        "mean_ln": -0.2842767180502182,
+        "rms_ln": 0.4966775309113884
+      },
+      "MEAH+": {
+        "attempted": 35,
+        "scored": 35,
+        "failed": 0,
+        "aard_percent": 34.64122165249036,
+        "mean_ln": 0.28917311121096284,
+        "rms_ln": 0.3153472046300738
+      }
+    },
+    "nondetections": {
+      "Bottinger2008 | CO2": {
+        "attempted": 37,
+        "failed": 0,
+        "below_reporting_half_unit": 25,
+        "below_source_smallest_positive": 37,
+        "median_model_mole_fraction": 1.1551964982725728e-05,
+        "max_model_mole_fraction": 0.0027869747577723676
+      },
+      "Bottinger2008 | HCO3-": {
+        "attempted": 20,
+        "failed": 0,
+        "below_reporting_half_unit": 0,
+        "below_source_smallest_positive": 18,
+        "median_model_mole_fraction": 0.0010660798149463963,
+        "max_model_mole_fraction": 0.008103103264731074
+      },
+      "Jakobsen2005 | HCO3-": {
+        "attempted": 1,
+        "failed": 0,
+        "below_reporting_half_unit": 0,
+        "below_source_smallest_positive": 0,
+        "median_model_mole_fraction": 0.00017042110891155138,
+        "max_model_mole_fraction": 0.00017042110891155138
+      }
+    }
+  },
+  "pressure": {
+    "calibration": {
+      "attempted": 143,
+      "scored": 143,
+      "failed_or_nonpositive": 0,
+      "observed_zero": 0,
+      "aard_percent": 52.964100778323555,
+      "mean_ln": 0.13052072010867496,
+      "rms_ln": 0.5443928706885326
+    },
+    "holdout (Xu 2011)": {
+      "attempted": 18,
+      "scored": 18,
+      "failed_or_nonpositive": 0,
+      "observed_zero": 0,
+      "aard_percent": 48.743816729384584,
+      "mean_ln": 0.31848764071141505,
+      "rms_ln": 0.439824162668588
+    }
+  },
+  "thresholds": {
+    "reporting_half_unit": 5e-05,
+    "source_smallest_positive": "smallest positive mole fraction the same source reports for the species"
+  },
+  "claim_limit": "Calibration and outside-packet rows share one adopted model; outside-packet rows were not fitted but the sources were previously accessed. Nondetection thresholds are data-derived bounds: B\u00f6ttinger 2008 states no detection limit (carbonate 'practically not present')."
+}

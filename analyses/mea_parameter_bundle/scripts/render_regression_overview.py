@@ -13,7 +13,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from result_freshness import FIGURE_DATA, require_results
-from shared_evaluation import ENGINE_COMMIT
+from shared_evaluation import ENGINE_COMMIT, ENGINE_WHEEL_SHA256
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "figures/regression_overview/output"
@@ -27,9 +27,6 @@ HEAT_SUMMARY = (
 )
 PARAM = ROOT / "results/selected-current-best-parameters.json"
 LN_STATISTICS = ROOT / "results/current-best-fit-ln-statistics.csv"
-SUPERSEDED_HEAT_WHEEL = (
-    "40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805"
-)
 COLORS = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9"]
 SOURCES = ["Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011"]
 MARKERS = dict(zip(SOURCES, ["*", "o", "D", "x", "h", "^"], strict=True))
@@ -388,9 +385,10 @@ def render_heat(heat, title):
                 edgecolors=color,
                 s=26,
             )
+            calculated = [r for r in sub if r["status"] == "evaluated"]
             ax.plot(
-                [float(r["loading_mol_CO2_per_mol_MEA"]) for r in sub],
-                [float(r["predicted_heat_release_kj_per_mol_CO2"]) for r in sub],
+                [float(r["loading_mol_CO2_per_mol_MEA"]) for r in calculated],
+                [float(r["predicted_heat_release_kj_per_mol_CO2"]) for r in calculated],
                 color=color,
                 linewidth=1.1,
                 linestyle="--",
@@ -410,8 +408,8 @@ def render_heat(heat, title):
     fig.text(
         0.5,
         0.012,
-        "Calculated on the superseded Engine 8438ce5f (wheel 40fba7cf); the MEA heat calculation is not yet "
-        "rebuilt on the pinned Engine (MEA #96). Circles are observed intervals and dashed lines connect calculated\n"
+        "Finite-dose total-enthalpy differences on the pinned Engine's record-anchored calorics; intervals whose "
+        "endpoint failed are observed only. Circles are observed intervals and dashed lines connect calculated\n"
         "intervals, one color per source. Statistics compare them: mean dev = mean(calculated − observed) in kJ/mol CO₂.",
         ha="center",
         fontsize=8,
@@ -511,14 +509,10 @@ def main():
     )
 
     summary = json.loads(HEAT_SUMMARY.read_text())
-    assert summary["engine_wheel_sha256"] == SUPERSEDED_HEAT_WHEEL, (
-        "heat identity changed; relabel figure"
-    )
+    assert summary["engine_wheel_sha256"] == ENGINE_WHEEL_SHA256, "heat is from another Engine; regenerate it"
     heat = read(HEAT)
-    assert len(heat) == 113 and all(r["status"] == "evaluated" for r in heat)
-    render_heat(
-        heat, "Superseded-Engine heat: 120 °C absorption heat remains under-predicted"
-    )
+    assert len(heat) == 113
+    render_heat(heat, "Absorption heat: 120 °C holdout remains under-predicted")
 
     inputs = [
         FIT,
@@ -536,7 +530,7 @@ def main():
             {
                 "inputs": {str(p.relative_to(ROOT)): digest(p) for p in inputs},
                 "pressure_speciation_identity": "adopted parameter record on the pinned Engine; figure-calculation record",
-                "heat_identity": "parameter record 568f7a5f (same coefficients) on superseded Engine 8438ce5f, wheel 40fba7cf",
+                "heat_identity": "adopted parameter record on the pinned Engine; current-selected-direct-enthalpy-summary.json",
                 "model_executed": False,
                 "series": "open markers observations; dashed segments connect discrete calculations; no interpolation",
                 "outputs": {
