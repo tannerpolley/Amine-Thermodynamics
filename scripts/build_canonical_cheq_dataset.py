@@ -13,6 +13,9 @@ OUTPUT_PATH = CHEQ_DIR / "Canonical_Combined_ChEq.csv"
 SCHEMA_PATH = CHEQ_DIR / "Canonical_Combined_ChEq_schema.csv"
 ACTIVE_VIEW_PATH = CHEQ_DIR / "Combined_ChEq.csv"
 MEMBERSHIP_PATH = REPO_ROOT / "data" / "reference" / "MEA" / "manifests" / "speciation_target_membership.csv"
+# What each source's reported species measures in model species, applied to every row of that
+# source and species (MEA #109).
+COEFFICIENT_RULES_PATH = MEMBERSHIP_PATH.with_name("speciation_linear_coefficient_rules.csv")
 
 MW_MEA_G_PER_MOL = 61.084
 MW_CO2_G_PER_MOL = 44.01
@@ -390,6 +393,10 @@ def _active_roles(dataset: pd.DataFrame) -> dict[tuple[str, int], dict[str, str]
 
 def build_membership(dataset: pd.DataFrame) -> pd.DataFrame:
     active_roles = _active_roles(dataset)
+    coefficient_rules = {
+        (rule["source_key"], rule["species"]): rule["linear_coefficients"]
+        for rule in pd.read_csv(COEFFICIENT_RULES_PATH, dtype=str).to_dict("records")
+    }
     rows: list[dict[str, object]] = []
     legacy = dataset[dataset["source_key"] != "Wong2015"]
     for (source_key, source_row), group in legacy.groupby(
@@ -475,7 +482,7 @@ def build_membership(dataset: pd.DataFrame) -> pd.DataFrame:
                     "linear_coefficients": (
                         '{"MEA":1.0,"MEAH+":1.0}'
                         if role.startswith("aggregate_direct")
-                        else ""
+                        else coefficient_rules.get((str(source_key), species), "")
                     ),
                     "covariance_status": (
                         "source_covariance_not_reported"
@@ -487,6 +494,10 @@ def build_membership(dataset: pd.DataFrame) -> pd.DataFrame:
                     "censor_bound_source_locator": "",
                 }
             )
+
+    unmatched = set(coefficient_rules) - {(str(row["source_key"]), row["species"]) for row in rows}
+    if unmatched:
+        raise ValueError(f"Linear-coefficient rules match no membership row: {sorted(unmatched)}")
 
     wong = dataset[dataset["source_key"] == "Wong2015"]
     for row in wong.to_dict("records"):

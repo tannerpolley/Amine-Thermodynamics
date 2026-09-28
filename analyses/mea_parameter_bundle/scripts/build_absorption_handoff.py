@@ -185,21 +185,28 @@ state into another temperature.
 
 ## Thermal references for non-isothermal use
 
-`thermal/reference-thermochemistry.json` declares the neutral ideal-gas
-records (CO2 and H2O NIST Shomate, MEA Zhang-Que-Chen 2011) that the Engine's
-record-anchored calorics consume; the Engine completes the ion enthalpies and
-heat capacities from the R1--R5 reaction enthalpies (ePC-SAFT #84/#138), so
-liquid cp inherits the EOS residual cp. Consult the included thermal validation
-record for the reference-chain consistency and evaluated states;
-a reference declaration alone does not establish successful equilibrium.
+`thermal/reference-thermochemistry.json` declares the physical ideal-gas
+records for CO2, H2O, N2, O2 and MEA, with provenance, ranges, units and bases.
+The Engine consumes the CO2, H2O and MEA records and completes ion enthalpies
+and heat capacities from R1--R5 reaction enthalpies (ePC-SAFT #84/#138). N2
+and O2 are absorber gas-phase records only; they are not Engine components.
+
+Model limit (#103): the model's equilibrium heat capacity of the loaded
+solution is 8--14 % below measurement. That range comes from three states at
+298.15, 318.15 and 353.15 K, 101325 Pa, loading 0.35 mol CO2/mol MEA and MEA
+mass fraction 0.28, against Weiland 1997 Table 3 and Hilliard 2008 App. G.2,
+computed on candidate Engine wheel 0d80cc49 (MEA-Thermodynamics
+`analyses/mea_parameter_bundle/results/solution-heat-capacity/heat_capacity.csv`).
+The physical gas records do not correct it. Consult the included thermal
+validation record for reference-chain consistency and evaluated states; a
+reference declaration alone does not establish successful equilibrium.
 Do not use it above 393.15 K: the source-reference transfer leaves the EOS
 domain there at the 1 bar reference pressure.
 
 Species references are shared across phases; vaporization enthalpy is the
-EOS residual difference. `thermal/downstream-only-ideal-gas-cp.json` supplies
-N2/O2 (and gas-basis CO2/H2O) ideal-gas cp for non-EOS gas components.
-`thermal/thermal-reference-validation.*` retain the consistency, pure-liquid
-cp, water vaporization, and solution cp checks and the missing evidence list.
+EOS residual difference.
+`thermal/thermal-reference-validation.*` retain the reference-chain
+consistency, pure liquid water cp and water vaporization checks.
 
 ## Install and verify
 
@@ -317,8 +324,7 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
             / "results/calorimetry/current-selected-direct-enthalpy-summary.json"
         ),
         "thermal/reference-thermochemistry.json": source(
-            ANALYSIS
-            / "results/calorimetry/current-selected-reference-thermochemistry.json"
+            REPO / "data/reference/MEA/thermal/physical-ideal-gas-calorics.json"
         ),
         "thermal/thermal-reference-validation.json": source(
             ANALYSIS / "results/calorimetry/thermal-reference-validation.json"
@@ -326,7 +332,6 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
         "thermal/thermal-reference-validation.csv": source(
             ANALYSIS / "results/calorimetry/thermal-reference-validation.csv"
         ),
-        "thermal/downstream-only-ideal-gas-cp.json": DOWNSTREAM_GAS_CP.encode(),
         **{
             f"validation/reaction-temperature-fit/{name}": source(
                 ANALYSIS / "results/reaction-temperature-fit" / name
@@ -346,57 +351,6 @@ def payloads() -> tuple[dict[str, bytes], dict[str, str]]:
         files["parameters/parameters.json"], files["validation/state-packet.json.gz"]
     )
     return files, captured
-
-
-# Not Engine components; supplied for the absorber gas phase on the same
-# ideal-gas cp basis as the CO2 anchor. Shomate coefficients from the NIST
-# WebBook (Chase 1998), cp in J/mol/K with t = T/1000.
-DOWNSTREAM_GAS_CP = (
-    json.dumps(
-        {
-            "basis": "ideal gas; Shomate cp = A + B t + C t^2 + D t^3 + E / t^2, t = T[K]/1000, J/mol/K",
-            "source": "NIST WebBook, Chase 1998",
-            "components": {
-                "nitrogen": {
-                    "range_k": [100, 500],
-                    "A": 28.98641,
-                    "B": 1.853978,
-                    "C": -9.647459,
-                    "D": 16.63537,
-                    "E": 0.000117,
-                },
-                "oxygen": {
-                    "range_k": [100, 700],
-                    "A": 31.32234,
-                    "B": -20.23531,
-                    "C": 57.86644,
-                    "D": -36.50624,
-                    "E": -0.007374,
-                },
-                "carbon-dioxide": {
-                    "range_k": [298, 1200],
-                    "A": 24.99735,
-                    "B": 55.18696,
-                    "C": -33.69137,
-                    "D": 7.948387,
-                    "E": -0.136638,
-                },
-                "water": {
-                    "range_k": [500, 1700],
-                    "A": 30.09200,
-                    "B": 6.832514,
-                    "C": 6.793435,
-                    "D": -2.534480,
-                    "E": 0.082139,
-                    "note": "extrapolated below 500 K; reproduces the JANAF 298.15 K value 33.59 J/mol/K",
-                },
-            },
-            "note": "The Engine bundle declares CO2, H2O and MEA by ideal-gas records (see thermal/reference-thermochemistry.json); use these ideal-gas values only for N2/O2 and for gas-phase sensible heat of non-EOS components.",
-        },
-        indent=2,
-    )
-    + "\n"
-)
 
 
 def add(zf: zipfile.ZipFile, name: str, data: bytes) -> None:

@@ -52,8 +52,10 @@ CANONICAL_VLE = (
 CANONICAL_SPECIATION_SHA256 = (
     "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e"
 )
+# Re-pinned 2026-09-28 for the issue #110 Idris uncertainty transcription; the
+# loading, pressure and membership columns read here did not change.
 CANONICAL_VLE_SHA256 = (
-    "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73"
+    "a4f9e3c0176894cad78c5960198c13707d36a167e48abf3d5e7a2106a55d5af1"
 )
 SPECIATION_GRID_TEMPERATURES_C = (20, 40, 60, 80)
 SPECIATION_GRID_POINTS = 46

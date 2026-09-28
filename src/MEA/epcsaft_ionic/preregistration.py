@@ -12,8 +12,10 @@ GATE0_PREREGISTRATION_PATH = (
     / "reactive_epcsaft_parameter_evidence"
     / "ionic_volumetric_fit_preregistration.json"
 )
+# Re-pinned after the MEA #110 source hashes and the MEA #109 membership hash; no frozen state,
+# coordinate, residual or split membership changed.
 EXPECTED_GATE0_CANONICAL_SHA256 = (
-    "ee38cd533ac4647fb20cb05e06694306c2c0fd8aabedcfd09655e9592c76f454"
+    "146c0cd68f738555391f3ea7a2ab17c6b1e8af6c2c5ae500dc81a510990e950e"
 )
 GATE0_REPO_ROOT = Path(__file__).resolve().parents[3]
 EXPECTED_TRACER_SOURCES = {
@@ -23,7 +25,7 @@ EXPECTED_TRACER_SOURCES = {
             "Canonical_VLE_Observations.csv"
         ),
         "canonical_sha256": (
-            "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73"
+            "a4f9e3c0176894cad78c5960198c13707d36a167e48abf3d5e7a2106a55d5af1"
         ),
         "raw_path": (
             "data/reference/MEA/observations/vapor_liquid_equilibrium/"
@@ -34,7 +36,7 @@ EXPECTED_TRACER_SOURCES = {
         ),
         "manifest_path": "data/reference/MEA/manifests/pco2_metrology_manifest.csv",
         "manifest_sha256": (
-            "0d14803873a60534ec5d7df382cfbd0ae03e4aaeba68bb5d54be7e4def8397cc"
+            "8db8f74f739d13b87e34d12d4df1d5d566e51deb0fd5eea8f547436d030a2f8c"
         ),
     },
     "speciation": {
@@ -55,8 +57,10 @@ EXPECTED_TRACER_SOURCES = {
         "manifest_path": (
             "data/reference/MEA/manifests/speciation_target_membership.csv"
         ),
+        # MEA #109 (was a89a3f03...): HCO3- + CO3^2- linear coefficients on the Matin 2012 and
+        # Böttinger 2008 HCO3- rows only; the guarded state_049 MEACOO- row is unchanged.
         "manifest_sha256": (
-            "a89a3f0373a86813482158f180939cf57f74be038cd59f244dfadcb689923190"
+            "fc4109dd131e34118c14eac974be6fe2b76ed0cad0f38d044dc14e00a308f5ea"
         ),
     },
 }
@@ -296,7 +300,7 @@ def validate_gate0_preregistration(payload: Mapping[str, Any]) -> dict[str, Any]
     if actual != expected:
         raise PreregistrationError("Gate 0 active coordinate order or scaling drifted")
     if payload.get("state_partition", {}).get("grouped_split_sha256") != (
-        "af205ad5968667cf25dc9205d780738035769664a94cc9a421cd3c67148ff804"
+        "ede4568bdc8162df2556073430636e1ca6cda93b3aa1b85d005c564bde344fc6"
     ):
         raise PreregistrationError("Gate 0 grouped split identity drifted")
     if payload.get("execution_admission", {}).get("admitted") is not False:
