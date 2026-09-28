@@ -35,7 +35,7 @@ The current application evaluator and its retained input identities are:
 | Engine wheel | `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/build/environment-wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl` | `c87846663349640ab115cb09f9b880caea71be973dfe685dc9bd0f8bf7b11072` | final non-editable wheel pinned by this adapter |
 | Engine runtime source | — | `3f5d9ac87a70aebbefbbecef47fcb8ba39f56e6c` | final runtime source; build fingerprint `78937d2876bd90feaebbd7c28ae5ad6a7d1c6323fda9d3dab3440338e84dc202` |
 | reaction source record | `data/reference/MEA/manifests/chemical_reaction_source_contract.json` | `39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55` | source standard state, reaction rows and conversion metadata |
-| thermal reference | `analyses/mea_parameter_bundle/results/calorimetry/current-selected-reference-thermochemistry.json` | `bfd628459fd253a120469d055eefc71459fe608fe29554f66d123683412efc99` | neutral ideal-gas records consumed by the Engine's record-anchored calorics (ions reaction-completed by the Engine); unadopted |
+| thermal reference | `data/reference/MEA/thermal/physical-ideal-gas-calorics.json` | `c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a` | physical ideal-gas records: CO2, H2O and MEA consumed by the Engine's record-anchored calorics (ions reaction-completed by the Engine); N2 and O2 for the absorber gas phase only; unadopted |
 | calorimetry partition | `analyses/mea_parameter_bundle/data/input/calorimetry-observation-partition.csv` | `175e55ff7e238ee19957da9b028e0d957bd99b35aa5ec4145926a055542725d3` | calibration, holdout and source-lineage partition |
 | density observations | `data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv` | `9047efb0281bff93d1769b12a3df50420d0b01ddd44ffd5041749ec0fb1fe622` | supporting density source rows |
 
@@ -175,9 +175,9 @@ adapter must carry the adopted coefficient records to that conversion without
 silently changing their basis.
 
 The thermal reference is the Engine's record-anchored calorics (ePC-SAFT #84/#138,
-EqID `reference_species_calorics`). The payload
-`mea-neutral-ideal-gas-thermochemistry-v1` declares only the neutral ideal-gas
-records: CO2 and H2O NIST Shomate (Chase 1998, CODATA formation enthalpies; water
+EqID `reference_species_calorics`). The data file
+`data/reference/MEA/thermal/physical-ideal-gas-calorics.json` holds absorber-only N2 and O2 records and the neutral ideal-gas
+records the Engine consumes: CO2 and H2O NIST Shomate (Chase 1998, CODATA formation enthalpies; water
 extrapolated below 500 K) and MEA Zhang, Que and Chen 2011 Table 3. The Engine completes
 the ion enthalpies and heat capacities from the R1--R5 reaction enthalpies on its density
 basis; the ionic charge gauge cancels in electroneutral phases. These records are

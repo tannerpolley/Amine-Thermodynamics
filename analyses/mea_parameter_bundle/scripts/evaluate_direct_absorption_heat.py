@@ -51,7 +51,6 @@ ANALYSIS = Path(__file__).resolve().parents[1]
 OBSERVATIONS = ANALYSIS / "data/input/calorimetry-observation-partition.csv"
 RESULTS = ANALYSIS / "results/calorimetry"
 FIGURES = ANALYSIS / "figures/calorimetry/output"
-THERMAL_RECORD = RESULTS / "current-selected-reference-thermochemistry.json"
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -68,28 +67,10 @@ def write_rows(path: Path, rows: list[dict[str, object]]) -> None:
 
 
 def thermal_model() -> tuple[epcsaft.Mixture, str]:
-    """Adopted parameters with MEA's neutral ideal-gas records; its cache identity includes both."""
-    fingerprint = parameter_fingerprint({"parameters": parameter_mapping(), "thermal": thermal_record()})
+    """Adopted parameters with MEA's physical ideal-gas records; its cache identity includes both."""
+    fingerprint = parameter_fingerprint({"parameters": parameter_mapping(),
+                                         "thermal_sha256": sha256(vrc.PHYSICAL_CALORICS)})
     return epcsaft.Mixture(load_parameters(), thermochemistry=vrc.record()), fingerprint
-
-
-def thermal_record() -> dict[str, object]:
-    return {
-        "schema": "mea-neutral-ideal-gas-thermochemistry-v1",
-        "method": "Engine record-anchored calorics (EqID reference_species_calorics): neutral species carry "
-                  "the ideal-gas records below; ions are completed from the R1-R5 reaction enthalpies "
-                  "RT^2 (ln K_rho)' on the Engine's density basis; the ionic charge gauge cancels in "
-                  "electroneutral phases",
-        "reference_pressure_pa": vrc.P0,
-        "carbon-dioxide": {"shomate": vrc.CO2_SHOMATE, "formation_enthalpy_j_per_mol": -393510.0,
-                           "source": "NIST WebBook Shomate (Chase 1998), 298-1200 K; CODATA formation enthalpy"},
-        "water": {"shomate": vrc.WATER_SHOMATE, "formation_enthalpy_j_per_mol": -241826.0,
-                  "source": "NIST WebBook Shomate (Chase 1998), fitted 500-1700 K, used from 273.15 K"},
-        "monoethanolamine": {"cp_polynomial_j_per_mol_k": vrc.MEA_CP,
-                             "source": "Zhang, Que and Chen 2011 Table 3 (Aspen), 283-1000 K; "
-                                       "anchor h = s = 0 at 313.15 K (moiety convention)"},
-        "adoption": "unadopted neutral inputs; absorption heat at fixed T does not depend on them",
-    }
 
 
 def heat_request(templates: dict, temperature_c: int, loading: float) -> dict[str, object]:
@@ -106,7 +87,7 @@ def heat_request(templates: dict, temperature_c: int, loading: float) -> dict[st
 
 def interval_heat(h_prior: float, h_current: float, prior: float, current: float, temperature_k: float) -> float:
     """Heat released per mol CO2, kJ/mol, for an ideal-gas CO2 dose from prior to current loading."""
-    gas = vrc.shomate_enthalpy(temperature_k, vrc.CO2_SHOMATE, -393510.0)
+    gas = vrc.co2_gas_enthalpy(temperature_k)
     return -((h_current - h_prior) - (current - prior) * gas) / (current - prior) / 1000.0
 
 
@@ -198,7 +179,7 @@ def main() -> None:
     args = parser.parse_args()
     verify_wheel()
     inputs = source_hashes(OBSERVATIONS, STATE_PACKET, Path(__file__), Path(__file__).with_name("shared_evaluation.py"),
-                           Path(__file__).with_name("verify_reference_calorics.py"))
+                           Path(__file__).with_name("verify_reference_calorics.py"), vrc.PHYSICAL_CALORICS)
     limits = EvaluationLimits(args.state_timeout_s, args.overall_timeout_s, perf_counter() + args.overall_timeout_s)
     model, fingerprint = thermal_model()
     observations = [r for r in read_rows(OBSERVATIONS) if r["regression_eligible"] == "true"]
@@ -209,6 +190,7 @@ def main() -> None:
         "engine_wheel_sha256": ENGINE_WHEEL_SHA256,
         "parameter_document_sha256": sha256(PARAMETERS),
         "observations_sha256": sha256(OBSERVATIONS),
+        "physical_calorics_sha256": sha256(vrc.PHYSICAL_CALORICS),
         "assumptions": ["zero calorimeter vapor inventory", "ideal-gas CO2 feed at the calorimeter temperature",
                         "each observation is scored on its declared finite loading interval"],
         "endpoint_states": {"attempted": len(states), "evaluated": sum(s["status"] == "evaluated" for s in states)},
@@ -225,12 +207,11 @@ def main() -> None:
     write_rows(RESULTS / "current-selected-direct-enthalpy-states.csv", states)
     write_rows(RESULTS / "current-selected-direct-enthalpy-attempts.csv", attempts)
     write_rows(RESULTS / "current-selected-direct-enthalpy-comparison.csv", comparison)
-    THERMAL_RECORD.write_text(json.dumps(thermal_record(), indent=2) + "\n", encoding="utf-8")
     (RESULTS / "current-selected-direct-enthalpy-summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     render(comparison)
     stamp_results(RESULTS / "current-selected-direct-enthalpy-summary.json",
                   [RESULTS / f"current-selected-direct-enthalpy-{n}.csv" for n in ("states", "attempts", "comparison")]
-                  + [THERMAL_RECORD, FIGURES / "current-selected-direct-enthalpy.svg"], inputs=inputs)
+                  + [FIGURES / "current-selected-direct-enthalpy.svg"], inputs=inputs)
     print(json.dumps({k: v for k, v in summary.items() if k not in ("assumptions",)}, indent=2))
 
 
