@@ -11,7 +11,9 @@ This stage covers what they leave out, on the adopted model:
   among its active 30 mass % rows;
 - the pressure rows of ``current-best-fit-residuals.csv`` by role (Xu 2011 is the holdout),
   counting failed or non-positive predictions instead of dropping them.
-Matin 2012 "HCO3-" is scored against HCO3- + CO3^2- (MEA #109 decision, Matin Eqs. 18-19b).
+Each row is scored on the model basis its membership row's ``linear_coefficients`` give
+(``speciation_target_membership.csv``, keyed by the row's record id); a blank cell means the
+reported species alone.
 """
 
 from __future__ import annotations
@@ -104,15 +106,8 @@ def speciation_rows(limits: EvaluationLimits) -> list[dict[str, object]]:
     model, reactions = epcsaft.Mixture(load_parameters()), reaction_values(parameter_mapping())
     canonical = [r for r in read(CANONICAL_SPECIATION) if r["source_key"] in SOURCES
                  and r["target_membership"] == "active_v1" and float(r["mea_mass_fraction"]) == 0.3]
-    # The mapping is a property of how a source measured a species, so it applies to every
-    # row of that source and species, not only the fitted targets that carry it.
-    mappings: dict[tuple[str, str], set[str]] = {}
-    for r in read(MEMBERSHIP):
-        if r["linear_coefficients"]:
-            mappings.setdefault((r["source_key"], r["species"]), set()).add(r["linear_coefficients"])
-    if any(len(v) > 1 for v in mappings.values()):
-        raise ValueError(f"conflicting linear coefficients within a source and species: {mappings}")
-    membership = {key: value.pop() for key, value in mappings.items()}
+    coefficients_by_record = {r["measurement_identity"]: r["linear_coefficients"] for r in read(MEMBERSHIP)
+                              if r["measurement_identity"]}
     floor = {}
     for r in canonical:
         if r["measurement_role"] == "direct_positive":
@@ -132,7 +127,7 @@ def speciation_rows(limits: EvaluationLimits) -> list[dict[str, object]]:
         key = state_key(r["source_key"], float(r["temperature_C"]), float(r["co2_loading_mol_per_mol_mea"]))
         liquid, in_packet, failure = solved[key]
         species = r["species"]
-        raw_coefficients = membership.get((r["source_key"], species))
+        raw_coefficients = coefficients_by_record[r["record_id"]]
         coefficients = json.loads(raw_coefficients) if raw_coefficients else {species: 1.0}
         components = [(component, coefficient) for label, coefficient in coefficients.items()
                       for component in MODEL_SPECIES[label]]
@@ -197,7 +192,8 @@ def main() -> None:
     zeros = [r for r in rows if r["measurement_role"] == "direct_zero"]
     summary = {
         "engine_wheel_sha256": ENGINE_WHEEL_SHA256, "parameter_sha256": sha256(PARAMETERS),
-        "canonical_speciation_sha256": sha256(CANONICAL_SPECIATION), "pressure_residuals_sha256": sha256(PRESSURE),
+        "canonical_speciation_sha256": sha256(CANONICAL_SPECIATION), "membership_sha256": sha256(MEMBERSHIP),
+        "pressure_residuals_sha256": sha256(PRESSURE),
         "speciation": {
             "all_positive": ln_stats(scored),
             "by_source_and_packet": {f"{s} | {'packet' if p else 'outside packet'}": ln_stats(
