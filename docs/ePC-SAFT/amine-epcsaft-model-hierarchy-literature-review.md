@@ -476,10 +476,11 @@ Mamun value is 20.6 % (n = 19).
 These are recorded here, not fixed, because the notebook and data belong to
 their own owners.
 
-- **Matin 2012 bicarbonate targets.** The 19 Matin HCO3- targets (loading
-  0.106–0.531) are scored against model HCO3- alone
+- **Matin 2012 bicarbonate targets (data mapping set by MEA #109; the calibration packet still scores bicarbonate alone).** The 19 Matin HCO3-
+  targets (loading 0.106–0.531) were scored against model HCO3- alone
   (`data/reference/MEA/manifests/speciation_target_membership.csv`, empty
-  `linear_coefficients`). Matin sets carbonate to zero at every loading and
+  `linear_coefficients`). That file now gives HCO3- + CO3²- for every Matin
+  and Böttinger 2008 HCO3- row. Matin sets carbonate to zero at every loading and
   counts it with bicarbonate (Eqs. 18–19b). Its text justifies this for most
   loadings and "particularly" above 0.25, and separately below 0.3, where both
   ions are small (Discussion). The equivalent model quantity

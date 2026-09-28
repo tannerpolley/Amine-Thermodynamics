@@ -54,9 +54,9 @@ to find the evidence behind a residual.
 | Source | Böttinger, Maiwald, Hasse 2008, *Fluid Phase Equilib.* 263; Zotero `E322TKPZ`, PDF `TJCRKTFQ` (`dd0c6986…f0f4`), Markdown `2VVGB8Z2` (`b9643df4…d074d`) | Table 3, printed p. 137 |
 | Source-faithful values | True mole fractions of MEA + MEAH⁺ (reported only as a sum), MEACOO⁻, 2-oxazolidone, HCO₃⁻, CO₂ for 68 states at 293–353 K | Table 3; the Markdown companion omits Table 3, so the check used the PDF |
 | Unit and basis | Mole fraction kept as reported; `Canonical_Combined_ChEq.csv` adds mol/kg on a 1 kg unloaded MEA–water feed basis | column `conversion_basis` |
-| Retained files | `Bottinger_2007_ChEq.csv` (`6c4c1e14…03f5`) → `Canonical_Combined_ChEq.csv` (`8c07df9e…85809e`) → `speciation_target_membership.csv` (`a89a3f03…190`) | `data/reference/MEA/` |
+| Retained files | `Bottinger_2007_ChEq.csv` (`6c4c1e14…03f5`) → `Canonical_Combined_ChEq.csv` (`8c07df9e…85809e`) → `speciation_target_membership.csv` (`fc4109dd…08f5ea`) | `data/reference/MEA/` |
 | Project use | 55 scored targets from the 0.3 g/g states: 25 MEA + MEAH⁺ (aggregate), 25 MEACOO⁻, 5 HCO₃⁻; 0.2 g/g states are `transferability_candidate` | `speciation_target_membership.csv` |
-| Result | MEA + MEAH⁺ RMS ln 0.093; MEACOO⁻ RMS ln 0.194 (mean −0.137); HCO₃⁻ RMS ln 0.578 (mean +0.546) | `current-best-fit-residuals.csv` |
+| Result | MEA + MEAH⁺ RMS ln 0.093; MEACOO⁻ RMS ln 0.194 (mean −0.137); HCO₃⁻ RMS ln 0.578 (mean +0.546) on bicarbonate alone; on the HCO₃⁻ + CO₃²⁻ basis (MEA #109) the same 5 rows give 0.922 (mean +0.861) | `current-best-fit-residuals.csv` (bicarbonate alone); `observation-coverage/speciation-rows.csv` (HCO₃⁻ + CO₃²⁻) |
 
 Transcription check against Table 3, cell by cell: all retained aggregate,
 carbamate and CO₂ values match. Three defects remain for the data owner to
