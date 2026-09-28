@@ -36,7 +36,7 @@ WATER_CP = {298.15: 4.1813, 318.15: 4.1804, 353.15: 4.1965}
 
 
 def water_ideal_cp(temperature: float) -> float:
-    a, b, c, d, e = vrc.WATER_SHOMATE[:5]
+    a, b, c, d, e = vrc.CALORICS["components"]["water"]["coefficients"][:5]
     t = temperature / 1000.0
     return a + b * t + c * t * t + d * t**3 + e / (t * t)
 
