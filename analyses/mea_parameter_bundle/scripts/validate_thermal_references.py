@@ -25,7 +25,8 @@ from evaluate_direct_absorption_heat import RESULTS, heat_request, thermal_model
 from refresh_results import bounded_main
 from result_freshness import source_hashes, stamp_results
 from run_direct_parameter_campaign import load_packet, pressure_templates
-from shared_evaluation import ENGINE_WHEEL_SHA256, STATE_PACKET, corrected_request, reaction_values, parameter_mapping, verify_wheel
+from shared_evaluation import (ENGINE_WHEEL_SHA256, STATE_PACKET, corrected_request, parameter_mapping, reaction_values,
+                               sha256, verify_wheel)
 
 TEMPERATURES_C = (40, 80, 120)
 LOADINGS = (0.1, 0.3, 0.5)
@@ -71,7 +72,7 @@ def water_rows(model) -> list[dict[str, object]]:
 def main() -> None:
     verify_wheel()
     inputs = source_hashes(STATE_PACKET, Path(__file__), Path(__file__).with_name("verify_reference_calorics.py"),
-                           Path(__file__).with_name("evaluate_direct_absorption_heat.py"))
+                           Path(__file__).with_name("evaluate_direct_absorption_heat.py"), vrc.PHYSICAL_CALORICS)
     model, _ = thermal_model()
     rows = consistency_rows(model) + water_rows(model)
     with OUTPUT.open("w", newline="", encoding="utf-8") as stream:
@@ -81,6 +82,7 @@ def main() -> None:
     chain = [r for r in rows if r["check"] == "reference_chain_consistency"]
     summary = {
         "engine_wheel_sha256": ENGINE_WHEEL_SHA256,
+        "physical_calorics_sha256": sha256(vrc.PHYSICAL_CALORICS),
         "criteria": {"gibbs_helmholtz_rel": vrc.IDENTITY_RTOL, "feed_resolve_rel": vrc.RESOLVE_RTOL},
         "reference_chain_passed": sum(r["identity_rel"] <= vrc.IDENTITY_RTOL and r["resolve_rel"] <= vrc.RESOLVE_RTOL
                                       for r in chain),
