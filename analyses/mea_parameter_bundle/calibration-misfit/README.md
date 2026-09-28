@@ -261,7 +261,7 @@ Mamun's RMS ln rises from 0.254 to 0.299. This first-stop point is not adopted. 
 Aronu, Idris, Mamun and Xu are predictions of other 30 wt% sources, and the 80 °C isotherm is an
 interpolation test.
 
-### Refit C run on to the iteration cap: adopted by owner decision (`refit-C-converged.json`)
+### Refit C run on to the iteration cap (`refit-C-converged.json`)
 
 This run started from the refit-C first-stop point. Bounds, residual weights and the calibration set
 are unchanged. It used `least_squares` default tolerances, capped at 6 iterations
@@ -313,15 +313,17 @@ reading shelf, so the definition and value are taken from
 `docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md` (Akula Fig. 4) and have not been
 re-read. Akula's rows are not these rows, and Hilliard and Jou are calibration rows here.
 
-**Adoption (owner decision 2026-09-24, #107):** this run is the exploratory incumbent even though it
-misses the pre-set rule.
+**Adoption (owner decisions, #107):** on 2026-09-24 the owner chose this run as the exploratory
+incumbent even though it misses the pre-set rule:
 
 - The 161-row AARD is 38 %, above the 35 % limit.
 - Mamun's RMS ln rose from 0.254 to 0.332 (AARD 21 % in both).
 - MEAH⁺–MEACOO⁻ sits at −0.3 and HCO₃⁻–water at +0.3.
 
-The claim is improvement over the prior record on 30 wt% pCO2, speciation and carbonate. It is not a
-pass of the pre-set rule. The record is written by `candidate.py refit-C-converged.json OUT`.
+On 2026-09-28 the owner replaced that with: the paper is written on refit C, refit on the current
+Engine, not adopted on this pin. `results/selected-current-best-parameters.json` stays `868a5018…`.
+The refit-C record (`4c1bff04…`) is written by `candidate.py refit-C-converged.json OUT`; the #108
+composition-transfer prediction used it (`../composition-transfer/README.md`).
 
 The notebook's statistics (`generate_figure_data.py`) still score Matin's HCO₃⁻ against model HCO₃⁻
 alone, because the #109 change to the target membership file is pending. The refit objective pools
