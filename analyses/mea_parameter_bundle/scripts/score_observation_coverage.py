@@ -46,12 +46,12 @@ from shared_evaluation import (
 ANALYSIS = Path(__file__).resolve().parents[1]
 OUTPUT = ANALYSIS / "results/observation-coverage"
 PRESSURE = ANALYSIS / "results/current-best-fit-residuals.csv"
+MEMBERSHIP = ANALYSIS.parents[1] / "data/reference/MEA/manifests/speciation_target_membership.csv"
 SOURCES = ("Bottinger2008", "Jakobsen2005", "Matin2012")
 REPORTING_HALF_UNIT = 5e-5
 HOLDOUT_PRESSURE_SOURCES = ("Xu2011",)
 MODEL_SPECIES = {label: (component,) for component, label in SPECIES_LABELS.items()}
 MODEL_SPECIES["MEA + MEAH+"] = ("monoethanolamine", "protonated-monoethanolamine")
-BASIS = {("Matin2012", "HCO3-"): ("bicarbonate-anion", "carbonate-anion")}
 CARBON_SEEDS = [COMPONENT_IDS.index(c) for c in ("carbamate-anion", "bicarbonate-anion", "carbonate-anion")]
 
 
@@ -104,6 +104,8 @@ def speciation_rows(limits: EvaluationLimits) -> list[dict[str, object]]:
     model, reactions = epcsaft.Mixture(load_parameters()), reaction_values(parameter_mapping())
     canonical = [r for r in read(CANONICAL_SPECIATION) if r["source_key"] in SOURCES
                  and r["target_membership"] == "active_v1" and float(r["mea_mass_fraction"]) == 0.3]
+    membership = {(r["measurement_identity"], r["species"]): r["linear_coefficients"]
+                  for r in read(MEMBERSHIP) if r["measurement_identity"]}
     floor = {}
     for r in canonical:
         if r["measurement_role"] == "direct_positive":
@@ -123,15 +125,18 @@ def speciation_rows(limits: EvaluationLimits) -> list[dict[str, object]]:
         key = state_key(r["source_key"], float(r["temperature_C"]), float(r["co2_loading_mol_per_mol_mea"]))
         liquid, in_packet, failure = solved[key]
         species = r["species"]
-        components = BASIS.get((r["source_key"], species), MODEL_SPECIES[species])
-        predicted = None if liquid is None else math.fsum(liquid[c] for c in components)
+        raw_coefficients = membership[(r["record_id"], species)]
+        coefficients = json.loads(raw_coefficients) if raw_coefficients else {species: 1.0}
+        components = [(component, coefficient) for label, coefficient in coefficients.items()
+                      for component in MODEL_SPECIES[label]]
+        predicted = None if liquid is None else math.fsum(liquid[c] * coefficient for c, coefficient in components)
         observed = float(r["value_mole_fraction"])
         zero = r["measurement_role"] == "direct_zero"
         limit = floor.get((r["source_key"], species))
         rows.append({
             "record_id": r["record_id"], "source": r["source_key"], "temperature_C": r["temperature_C"],
             "loading_mol_CO2_per_mol_MEA": r["co2_loading_mol_per_mol_mea"], "species": species,
-            "model_basis": "+".join(components), "measurement_role": r["measurement_role"], "in_packet": in_packet,
+            "model_basis": "+".join(c for c, _ in components), "measurement_role": r["measurement_role"], "in_packet": in_packet,
             "observed_mole_fraction": observed, "predicted_mole_fraction": "" if predicted is None else predicted,
             "status": "failed" if predicted is None else ("nondetection" if zero else "scored"),
             "failure_code": failure if predicted is None else "",
