@@ -36,12 +36,9 @@ from epcsaft import (
 
 OUTPUT = Path(__file__).resolve().parents[1] / "results" / "reference-calorics"
 CALORIMETRY = Path(__file__).resolve().parents[3] / "data/reference/MEA/observations/calorimetry/MEA_heat_of_absorption_observations.csv"
+PHYSICAL_CALORICS = Path(__file__).resolve().parents[3] / "data/reference/MEA/thermal/physical-ideal-gas-calorics.json"
+CALORICS = json.loads(PHYSICAL_CALORICS.read_text())
 CO2, WATER = vt.CO2, vt.WATER
-P0 = 1.0e5
-# NIST WebBook (Chase 1998) gas Shomate A..H with CODATA formation enthalpies.
-CO2_SHOMATE = (24.99735, 55.18696, -33.69137, 7.948387, -0.136638, -403.6075, 228.2431, -393.5224)
-WATER_SHOMATE = (30.09200, 6.832514, 6.793435, -2.534480, 0.082139, -250.8810, 223.3967, -241.8264)
-MEA_CP = (13.207, 0.28158, -0.0001513, 3.1287e-8)  # Zhang, Que, Chen 2011 Table 3 (Aspen), 283-1000 K
 IDENTITY_RTOL, RESOLVE_RTOL, CLOSURE_RTOL = 1e-6, 1e-6, 1e-5
 FEED_STEP = 1e-4  # mol CO2, relative to ~1 mol MEA
 
@@ -51,16 +48,27 @@ def shomate_enthalpy(temperature: float, c: tuple[float, ...], formation: float)
     return formation + 1000.0 * (c[0] * t + c[1] * t**2 / 2 + c[2] * t**3 / 3 + c[3] * t**4 / 4 - c[4] / t + c[5] - c[7])
 
 
+def co2_gas_enthalpy(temperature: float) -> float:
+    co2 = CALORICS["components"]["carbon-dioxide"]
+    return shomate_enthalpy(temperature, co2["coefficients"], co2["formation_enthalpy_j_per_mol"])
+
+
 def record() -> ThermochemistryRecord:
-    centre = 313.15  # re-centre the Table 3 cubic; the anchor h = s = 0 is a moiety convention
-    mea = [sum(a * comb(j, k) * centre ** (j - k) for j, a in enumerate(MEA_CP) if j >= k) for k in range(4)]
+    references, p0 = CALORICS["components"], CALORICS["reference_pressure_pa"]
+    centre = references["monoethanolamine"]["enthalpy_entropy_anchor_k"]
+    cp = references["monoethanolamine"]["coefficients"]
+    mea = [sum(a * comb(j, k) * centre ** (j - k) for j, a in enumerate(cp) if j >= k) for k in range(4)]
     intervals: list[list[IdealInterval]] = [[] for _ in shared.COMPONENT_IDS]
-    intervals[CO2] = [IdealInterval(298.0, 1200.0, True, True, IdealCorrelation(IdealShomate(CO2_SHOMATE, -393510.0), P0))]
-    # Chase 1998 fits water 500-1700 K; extrapolated below 500 K (33.59 J/mol/K at 298.15 K, JANAF).
-    intervals[WATER] = [IdealInterval(273.15, 1700.0, True, True, IdealCorrelation(IdealShomate(WATER_SHOMATE, -241826.0), P0))]
+    for component, index in (("carbon-dioxide", CO2), ("water", WATER)):
+        source = references[component]
+        intervals[index] = [IdealInterval(*source["range_k"], True, True, IdealCorrelation(
+            IdealShomate(tuple(source["coefficients"]), source["formation_enthalpy_j_per_mol"]),
+            p0))]
+    source = references["monoethanolamine"]
     intervals[shared.COMPONENT_IDS.index("monoethanolamine")] = [IdealInterval(
-        283.0, 1000.0, True, True, IdealCorrelation(IdealPolynomial(mea, centre, 0.0, 0.0), P0))]
-    return ThermochemistryRecord(P0, intervals)
+        *source["range_k"], True, True, IdealCorrelation(
+            IdealPolynomial(mea, centre, 0.0, 0.0), p0))]
+    return ThermochemistryRecord(p0, intervals)
 
 
 def observable(kind: str, phase: int, component: int = 0, prop: object | None = None) -> object:
@@ -108,8 +116,7 @@ def liquid_heat(model: object, base: dict, temperature: float, pressure: float, 
     partial = n * dh + h * dn
     resolve = (extensive_enthalpy(model, problem, FEED_STEP, warm)
                - extensive_enthalpy(model, problem, -FEED_STEP, warm)) / (2 * FEED_STEP)
-    gas = shomate_enthalpy(temperature, CO2_SHOMATE, -393510.0)
-    heat = gas - partial
+    heat = co2_gas_enthalpy(temperature) - partial
     gibbs_helmholtz = R * temperature**2 * t_ln_a + R * temperature
     apparent = sum(result.mole_fractions[shared.COMPONENT_IDS.index(c)] for c in (
         "carbon-dioxide", "carbamate-anion", "bicarbonate-anion", "carbonate-anion"))
@@ -172,6 +179,7 @@ def main() -> None:
         "engine_wheel_sha256": vt.wheel_sha256(), "csv_sha256": hashes,
         "producer_sha256": shared.sha256(Path(__file__)), "parameter_sha256": shared.sha256(shared.PARAMETERS),
         "calorimetry_input_sha256": shared.sha256(CALORIMETRY),
+        "physical_calorics_sha256": shared.sha256(PHYSICAL_CALORICS),
         "criteria": {"gibbs_helmholtz_rel": IDENTITY_RTOL, "feed_resolve_rel": RESOLVE_RTOL, "bubble_closure_rel": CLOSURE_RTOL},
         "heat_rows_passed": passed, "heat_rows_total": len(rows),
         "closure_passed": all(c["closure_rel"] <= CLOSURE_RTOL for c in closure),
