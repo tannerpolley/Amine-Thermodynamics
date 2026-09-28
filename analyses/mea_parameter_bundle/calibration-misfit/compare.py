@@ -1,8 +1,10 @@
 """Score model variants on all six pCO2 sources, the refit partition, speciation and carbonate.
 
-Usage: compare.py VARIANT=PACKET.jsonl,CANONICAL.jsonl ...   (probe.py outputs)
-Writes variant-scores.csv (one row per variant, scope, quantity) and variant-states.csv
-(one row per variant, state, target: observed and predicted).
+Usage: compare.py [--out=STEM] VARIANT=PACKET.jsonl,CANONICAL.jsonl ...   (probe.py outputs)
+Writes STEM-scores.csv (one row per variant, scope, quantity) and STEM-states.csv
+(one row per variant, state, target: observed and predicted); STEM defaults to "variant".
+Each variant carries its wheel and base record SHA-256 (probe outputs before record_sha256 was
+recorded used the pre-refit record 868a5018).
 Carbonate reference: Jakobsen 2005 30 wt% NMR (CO3^2- carbon fraction, inferred from the
 fast-exchange HCO3-/CO3^2- shift); model values are interpolated in loading on the packet
 states at the same temperature.
@@ -15,9 +17,32 @@ from pathlib import Path
 import numpy as np
 
 import probe
-from refit import is_validation, residuals
 
 HERE = Path(__file__).parent
+SIGMA_LN_P = 0.3  # the #101 pCO2 data floor
+# Refit rows: every packet state except 80 degC, less the three the pre-refit record failed on the old pin.
+EXCLUDED = {'Bottinger2008_state_042', 'Bottinger2008_state_046', 'Matin2012_state_016'}
+
+
+def residuals(rec):
+    """(kind, target identity, scaled residual, ln residual) for one evaluated state, scaled as refit.py weights it."""
+    if rec['status'] != 'evaluated':
+        return None
+    out = []
+    for t in rec['targets']:
+        if t['prediction_identity'] == 'co2-partial-pressure':
+            ln = math.log(rec['predictions']['co2-partial-pressure'] / t['observed'])
+            out.append(('p', t['identity'], ln / SIGMA_LN_P, ln))
+            continue
+        x = rec['liquid']['mole_fractions']
+        pred = x[5] + x[6] if t['identity'].endswith('::HCO3-') else rec['predictions'][t['prediction_identity']]
+        ln = math.log(pred / t['observed']) if t['observed'] > 0 and pred > 0 else float('nan')
+        out.append(('s', t['identity'], (pred - t['observed']) / (0.1 * t['observed'] + 0.001), ln))
+    return out
+
+
+def is_validation(rec):
+    return round(rec['T'] - 273.15) == 80
 # Akula 2023a pools its 30 mass % pCO2 data from these sources, loading 0.003-0.5, 40-120 degC (40.5 %,
 # mean absolute relative error at measured loading; docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md).
 AKULA_SOURCES = {'Aronu2011', 'Hilliard2008', 'Jou1995', 'Xu2011'}
@@ -53,7 +78,12 @@ def stats(values):
             'aard_percent': 100 * np.mean(np.abs(np.expm1(v)))}
 
 
+PRE_REFIT_SHA256 = '868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be'
+
+
 def main(argv):
+    stem = next((a.split('=', 1)[1] for a in argv if a.startswith('--out=')), 'variant')
+    argv = [a for a in argv if not a.startswith('--out=')]
     rows, states = [], []
     for spec in argv:
         variant, paths = spec.split('=')
@@ -70,7 +100,10 @@ def main(argv):
             groups.setdefault('all six sources', []).append(ln)
             if t['source_identity'] in AKULA_SOURCES and r['feed'][0] <= 0.5 and 40 <= r['T'] - 273.15 <= 120:
                 groups.setdefault('Akula 2023a-comparable: Aronu, Hilliard, Jou, Xu; loading <= 0.5', []).append(ln)
+        objective = []
         for r in packet.values():
+            if not is_validation(r) and r['identity'] not in EXCLUDED:
+                objective += [sc for _, _, sc, _ in residuals(r) or []]
             part = 'validation (80 degC)' if is_validation(r) else 'calibration'
             for kind, _, _, ln in residuals(r) or []:
                 if np.isfinite(ln):
@@ -94,6 +127,8 @@ def main(argv):
                          'max_abs_stationarity': max(c['max_abs_stationarity'] for c in ok),
                          'failures': ' '.join(f"{i}:{r['check']['failure_code']}" for i, r in recs.items()
                                               if r['check']['failure_code'])})
+        rows.append({'variant': variant, 'scope': 'refit rows (180)', 'quantity': 'cost 0.5 sum scaled^2',
+                     'n': len(objective), 'predicted': 0.5 * sum(x * x for x in objective)})
         for scope, v in groups.items():
             rows.append({'variant': variant, 'scope': scope, 'quantity': 'ln(pred/obs)', **stats(v)})
         for source, t, a, obs in carbonate_refs():
@@ -106,27 +141,30 @@ def main(argv):
             if r['variant'] == variant:
                 r.update({'parameter_overrides': json.dumps(sets, sort_keys=True), **coverage,
                           'engine_wheel_sha256': ','.join(sorted({r['wheel'] for r in [*packet.values(), *canonical.values()]})),
-                          'parameter_sha256': probe.shared.sha256(probe.shared.PARAMETERS),
+                          'parameter_sha256': ','.join(sorted({x.get('record_sha256', PRE_REFIT_SHA256)
+                                                               for x in [*packet.values(), *canonical.values()]})),
                           'script_sha256': probe.shared.sha256(Path(__file__))})
     fields = ['variant', 'scope', 'quantity', 'n', 'mean_ln', 'rms_ln', 'aard_percent', 'observed', 'predicted',
               'evaluated', 'tolerance_not_met', 'balance_errors', 'max_abs_stationarity', 'failures',
               'parameter_overrides', 'canonical evaluated', 'canonical total', 'engine_wheel_sha256',
               'parameter_sha256', 'script_sha256']
-    with (HERE / 'variant-scores.csv').open('w', newline='') as h:
+    with (HERE / f'{stem}-scores.csv').open('w', newline='') as h:
         w = csv.DictWriter(h, fieldnames=fields)
         w.writeheader()
         w.writerows(rows)
-    prov = {k: rows[0][k] for k in ('engine_wheel_sha256', 'parameter_sha256', 'script_sha256')}
-    with (HERE / 'variant-states.csv').open('w', newline='') as h:
-        w = csv.DictWriter(h, fieldnames=[*states[0], *prov])
+    prov = {r['variant']: {k: r[k] for k in ('engine_wheel_sha256', 'parameter_sha256', 'script_sha256')} for r in rows}
+    with (HERE / f'{stem}-states.csv').open('w', newline='') as h:
+        w = csv.DictWriter(h, fieldnames=[*states[0], *prov[states[0]['variant']]])
         w.writeheader()
-        w.writerows({**r, **prov} for r in states)
+        w.writerows({**r, **prov[r['variant']]} for r in states)
     for r in rows:
         if r['quantity'] == 'ln(pred/obs)':
             print(f"{r['variant']:10s} {r['scope']:40s} n={r['n']:3d} rms {r['rms_ln']:.3f} mean {r['mean_ln']:+.3f} AARD {r['aard_percent']:.0f}%")
         elif r['quantity'] == 'solver check':
             print(f"{r['variant']:10s} {r['scope']:40s} solved {r['evaluated']}/{r['n']} tol-unmet {r['tolerance_not_met']}"
                   f" balance {r['balance_errors']} max|stat| {r['max_abs_stationarity']:.1e} {r['failures']}")
+        elif r['quantity'].startswith('cost'):
+            print(f"{r['variant']:10s} {r['scope']:40s} n={r['n']} cost {r['predicted']:.5f}")
         else:
             print(f"{r['variant']:10s} {r['scope']:40s} CO3 obs {r['observed']:.3f} model {r['predicted']:.3f}")
 

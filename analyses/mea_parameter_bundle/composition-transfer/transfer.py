@@ -1,11 +1,11 @@
 """Predict the frozen #108 composition-transfer rows (Aronu 2011, 15 and 45 wt% MEA) once per record.
 
-Usage: transfer.py LABEL=PARAMETERS.json ...
+Usage: transfer.py [--out=STEM] LABEL=PARAMETERS.json ...   (STEM defaults to "transfer", the one-time run)
 Rows: aronu-2011-untouched-vle-rows.txt, checked against the #108 audit hash before any solve.
 Each state is the 30 wt% packet pCO2 request at the same temperature and nearest loading, with the
 CO2 feed set to the row loading and water rescaled to the row's MEA mass fraction (probe.py).
-Writes transfer-states.csv (every row, failures kept) and transfer-scores.csv (per record and
-mass fraction: n solved/total, AARD, bias, RMS of ln(pred/obs)).
+Writes STEM-states.csv (every row, failures kept) and STEM-scores.csv (per record and
+mass fraction: n solved/total, AARD, bias, RMS of ln(pred/obs)); never overwrites either.
 """
 import csv
 import hashlib
@@ -22,6 +22,11 @@ ROWS_SHA256 = 'eaaaa6f9f138d1ada838b166f9e5866ea110ddf2141862cc304dfd4fa433cea1'
 
 
 def main(argv):
+    stem = next((a.split('=', 1)[1] for a in argv if a.startswith('--out=')), 'transfer')
+    argv = [a for a in argv if not a.startswith('--out=')]
+    names = (f'{stem}-states.csv', f'{stem}-scores.csv')
+    if any((HERE / name).exists() for name in names):
+        raise SystemExit(f'{names} exist: a retained prediction is never overwritten')
     if hashlib.sha256(ROWS.read_bytes()).hexdigest() != ROWS_SHA256:
         raise SystemExit('frozen partition changed')
     ids = set(ROWS.read_text().split())
@@ -60,7 +65,7 @@ def main(argv):
                            'parameter_sha256': digest})
     prov = {'engine_wheel_sha256': s.ENGINE_WHEEL_SHA256, 'rows_sha256': ROWS_SHA256,
             'script_sha256': s.sha256(Path(__file__)), 'probe_sha256': s.sha256(Path(probe.__file__))}
-    for name, rows in (('transfer-states.csv', out), ('transfer-scores.csv', scores)):
+    for name, rows in zip(names, (out, scores)):
         with (HERE / name).open('w', newline='') as h:
             w = csv.DictWriter(h, fieldnames=[*rows[0], *prov])
             w.writeheader()

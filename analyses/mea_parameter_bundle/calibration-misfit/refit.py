@@ -1,165 +1,147 @@
-"""Diagnostic nonlinear refit of a named parameter subset against pCO2 and liquid speciation.
+"""Refit C through epcsaft.regression.fit: Ceres Levenberg-Marquardt with exact implicit derivatives, multistart.
 
-Usage: refit.py [--iterations=N] NAME identity@lower@upper[@start] ...  (start defaults to the adopted value)
-Stopping: below a 2 % drop in calibration pCO2 RMS per iteration, or with --iterations only the
-least_squares default tolerances, capped at N iterations.
-Calibration: every packet state except 80 degC. Validation: the 80 degC isotherm
-(Jou 1995 pressure, reserved_validation in the grouped split manifest, plus Bottinger 2008).
-Residuals: pCO2 ln(pred/obs)/0.3 (the #101 data floor); species (pred-obs)/(0.1 obs + 0.001).
-The NMR "HCO3-" observation is compared with model HCO3- + CO3^2- (fast-exchange carbon pool).
-Writes results/runs/calibration-misfit/refit-NAME.jsonl (every evaluation) and the result JSON beside this script.
+Usage: refit.py [START ...]   (default: every start in STARTS; results merge into refit-C-multistart.json)
+Coordinates, bounds and scales are refit C's (refit-C-converged.json): four ion k_ij within +-0.3 and the
+MEAH+-water k_ij 1/T slope within +-300 K (T_ref 313.15 K); R4 stays at its source value.
+Rows (compare.residuals scores the same rows from probe records): every packet state except 80 degC and the three
+the pre-refit record failed on the old pin (compare.EXCLUDED), 180 rows. pCO2: ln(pred/obs), weight 1/0.3^2.
+Species: (pred - obs)/(0.1 obs + 0.001), weight 1; the NMR "HCO3-" target is model HCO3- + CO3^2-.
+Each state is declared from the base record's solve (MEA liquid anchor), as Engine
+analyses/2026-mea-reactive-fit-timing/scripts/run.py declares it. Base record: probe.RECORD.
 Diagnostic only: never writes the selected parameter record.
 """
 import json
-import math
 import sys
 from pathlib import Path
+from time import perf_counter
+
 import numpy as np
-from scipy.optimize import least_squares
 
 import probe
+from compare import EXCLUDED, SIGMA_LN_P, is_validation
 
-SIGMA_LN_P = 0.3
+s, epcsaft = probe.shared, probe.epcsaft
+from epcsaft import regression  # noqa: E402
+
+HERE = Path(__file__).parent
+OUT = HERE / 'refit-C-multistart.json'
+REFIT_C = json.loads((HERE / 'refit-C-converged.json').read_text())  # old pin: coordinates, bounds, fitted values
+IDS, (LOWER, UPPER) = REFIT_C['parameters'], REFIT_C['bounds']
+SCALES = [10.0 if i.endswith(probe.SLOPE) else 0.01 for i in IDS]  # refit C's sweep steps (scipy x_scale)
+HCO3_POOL = ('bicarbonate-anion', 'carbonate-anion')
+REACTIONS = s._selected_reactions()
 
 
-def residuals(rec):
-    """(kind, target identity, scaled residual, ln residual) for one evaluated state."""
-    if rec['status'] != 'evaluated':
-        return None
+def _seeded(seed):
+    return list(np.random.default_rng(seed).uniform(LOWER, UPPER))
+
+
+STARTS = {
+    'pre-refit': [s.parameter_values(probe.with_values(s.parameter_mapping(probe.RECORD), {IDS[4]: 0.0}))[i] for i in IDS],
+    'old-refit-C': REFIT_C['fitted'],
+    'zero': [0.0] * len(IDS),
+    'seed-1': _seeded(1),
+    'seed-2': _seeded(2),
+}
+
+
+def parameters(values):
+    return epcsaft.Parameters.from_mapping(probe.with_values(s.parameter_mapping(probe.RECORD), dict(zip(IDS, values))))
+
+
+def states():
+    """(identity, packet observation, declared problem) for every calibration state."""
     out = []
-    for t in rec['targets']:
-        if t['prediction_identity'] == 'co2-partial-pressure':
-            ln = math.log(rec['predictions']['co2-partial-pressure'] / t['observed'])
-            out.append(('p', t['identity'], ln / SIGMA_LN_P, ln))
+    for o in probe.OBSERVATIONS:
+        if is_validation({'T': o['request']['temperature']['value']}) or o['identity'] in EXCLUDED:
             continue
-        x = rec['liquid']['mole_fractions']
-        pred = rec['predictions'][t['prediction_identity']]
-        if t['identity'].endswith('::HCO3-'):
-            pred = x[5] + x[6]
-        ln = math.log(pred / t['observed']) if t['observed'] > 0 and pred > 0 else float('nan')
-        out.append(('s', t['identity'], (pred - t['observed']) / (0.1 * t['observed'] + 0.001), ln))
+        base = probe.base_record(o)
+        anchor = s.anchor_from(base) if base['status'] == 'evaluated' else None
+        out.append((o['identity'], o, s._problem_from_request(s.corrected_request(o['request'], REACTIONS), anchor)))
     return out
 
 
-def is_validation(rec):
-    return round(rec['T'] - 273.15) == 80
+def observations(params, o, prob):
+    """(target identity, observation, weight) for one packet state, as compare.residuals scores it."""
+    outputs = {x['identity']: x for x in o['request']['outputs']}
+    rows = []
+    for t in o['targets']:
+        output = outputs[t['prediction_identity']]
+        support = prob.phases[[p.name for p in prob.phases].index(output['phase_identity'])].support or s.COMPONENT_IDS
+        assert all(c in (0.0, 1.0) for c in output['coefficients']), output
+        species = HCO3_POOL if t['identity'].endswith('::HCO3-') else tuple(
+            name for name, c in zip(support, output['coefficients'], strict=True) if c)
+        if t['prediction_identity'] == 'co2-partial-pressure':
+            item = regression.observation(params, 'partial_pressure', prob, observed=t['observed'], form='log_ratio',
+                                          mass_basis=False, phase=output['phase_identity'], species=species)
+            rows.append((t['identity'], item, 1.0 / SIGMA_LN_P**2))
+        else:
+            item = regression.observation(params, 'mole_fraction', prob, observed=t['observed'], form='difference',
+                                          scale=0.1 * t['observed'] + 0.001, mass_basis=False,
+                                          phase=output['phase_identity'], species=species)
+            rows.append((t['identity'], item, 1.0))
+    return rows
 
 
-def main(argv):
-    cap = int(argv.pop(0).split('=')[1]) if argv[0].startswith('--iterations=') else None
-    name, specs = argv[0], argv[1:]
-    ids, lo, hi, start = [], [], [], {}
-    for s in specs:
-        ident, a, b, *x = s.split('@')
-        ids.append(ident)
-        lo.append(float(a))
-        hi.append(float(b))
-        if x:
-            start[ident] = float(x[0])
-    base_vals = probe.shared.parameter_values(probe.with_values(probe.shared.parameter_mapping(),
-                                                                {i: 0.0 for i in ids if i.endswith(probe.SLOPE)}))
-    x0 = np.array([start.get(i, base_vals[i]) for i in ids])
-    log = probe.SCRATCH / f'refit-{name}.jsonl'
-    log.parent.mkdir(parents=True, exist_ok=True)
-    base = {r['identity']: r for r in probe.evaluate()}
-    keys = [(r['identity'], k) for r in base.values() if not is_validation(r) and residuals(r) for k in residuals(r)]
-    order = [(i, k[1]) for i, k in keys]
+def identifiability(result, n_rows):
+    """Column-normalized singular values and, for the coordinates off their bounds, the covariance conditional on
+    the active-bound coordinates held fixed (the Engine withholds the full covariance at an active bound)."""
+    J = np.array(result.optimizer_jacobian).reshape(n_rows, len(IDS)) / np.array(SCALES)  # weighted, physical units
+    free = [k for k in range(len(IDS)) if k not in set(result.covariance.active_bounds)]
+    r = np.array(result.weighted_residuals)
+    s2 = float(r @ r / (n_rows - len(free)))
+    cov = s2 * np.linalg.inv(J[:, free].T @ J[:, free])
+    se = np.sqrt(np.diag(cov))
+    return {'column_normalized_singular_values': list(np.linalg.svd(J / np.linalg.norm(J, axis=0), compute_uv=False)),
+            'free_coordinates': [IDS[k] for k in free], 'residual_variance': s2,
+            'conditional_standard_error': dict(zip((IDS[k] for k in free), se)),
+            'conditional_correlation': (cov / np.outer(se, se)).tolist()}
 
-    def evaluate_all(x):
-        recs = {r['identity']: r for r in probe.evaluate(dict(zip(ids, map(float, x))))}
-        with log.open('a') as h:
-            h.write(json.dumps({'x': list(map(float, x)), 'states': list(recs.values())}) + '\n')
-        return recs
 
-    def scaled(recs):
-        table = {}
-        for i, r in recs.items():
-            for kind, tid, sc, ln in residuals(r) or []:
-                table[(i, tid)] = (kind, sc, ln)
-        return table
-
-    fallback = scaled(base)
-
-    def fun(x):  # a state that fails at a trial point keeps its adopted-model residual (zero derivative)
-        table = scaled(evaluate_all(x))
-        return np.array([table.get(k, fallback[k])[1] for k in order])
-
-    steps = np.array([10.0 if i.endswith(probe.SLOPE) else 0.01 if 'k_ij' in i
-                      else 0.05 if i.startswith('reaction:') else 0.02 * abs(v)
-                      for i, v in zip(ids, x0)])
-    memo = {}
-
-    def fun_memo(x):
-        key = tuple(map(float, x))
-        if key not in memo:
-            memo[key] = fun(x)
-        return memo[key]
-
-    def jac(x):  # forward differences at the sweep steps; stepping inward at an upper bound
-        f0 = fun_memo(x)
-        cols = []
-        for k, h in enumerate(steps):
-            h = -h if x[k] + h > hi[k] else h
-            xk = np.array(x, float)
-            xk[k] += h
-            cols.append((fun_memo(xk) - f0) / h)
-        return np.array(cols).T
-
-    pressure_rows = np.array([k[0] == 'p' for _, k in keys])
-    history = []
-
-    def pressure_rms(f):
-        return float(np.sqrt(np.mean(np.square(f[pressure_rows] * SIGMA_LN_P))))
-
-    def stop_rule(intermediate_result):  # the lane's rule: stop below a 2 % drop in calibration pCO2 RMS per iteration
-        history.append(pressure_rms(intermediate_result.fun))
-        print('iteration', len(history), 'x', list(intermediate_result.x), 'pCO2 RMS ln', history[-1], flush=True)
-        if cap is not None:
-            if len(history) >= cap:
-                raise StopIteration
-            return
-        previous = history[-2] if len(history) > 1 else pressure_rms(fun_memo(x0))
-        if previous - history[-1] < 0.02 * previous:
-            raise StopIteration
-
-    fit = least_squares(fun_memo, x0, jac=jac, bounds=(lo, hi), x_scale=steps, max_nfev=None if cap else 60, verbose=2,
-                        callback=stop_rule)
-    J = fit.jac
-    dof = max(len(order) - len(ids), 1)
-    s2 = 2 * fit.cost / dof
-    cov = np.linalg.pinv(J.T @ J) * s2
-    sv = np.linalg.svd(J / np.maximum(np.linalg.norm(J, axis=0), 1e-300), compute_uv=False)
-
-    def stats(recs, validation):
-        v = {'p': [], 's': []}
-        for r in recs.values():
-            if is_validation(r) != validation:
-                continue
-            for kind, tid, sc, ln in residuals(r) or []:
-                if np.isfinite(ln):
-                    v[kind].append(ln)
-        def summary(a):
-            return {'n': len(a), 'rms_ln': float(np.sqrt(np.mean(np.square(a)))) if a else None,
-                    'mean_ln': float(np.mean(a)) if a else None}
-        return {'pco2': summary(v['p']), 'speciation': summary(v['s'])}
-
-    final = {r['identity']: r for r in probe.evaluate(dict(zip(ids, map(float, fit.x))))}
-    result = {
-        'name': name, 'parameters': ids, 'start': list(map(float, x0)), 'fitted': list(map(float, fit.x)),
-        'bounds': [lo, hi], 'standard_error': list(map(float, np.sqrt(np.clip(np.diag(cov), 0, None)))),
-        'correlation': (cov / np.outer(np.sqrt(np.diag(cov)), np.sqrt(np.diag(cov)))).tolist() if np.all(np.diag(cov) > 0) else None,
-        'jacobian_singular_values_column_normalized': list(map(float, sv)),
-        'status': int(fit.status), 'message': fit.message, 'pco2_rms_per_iteration': history,
-        'nfev': int(fit.nfev), 'cost': float(fit.cost), 'n_residuals': len(order),
-        'before': {'calibration': stats(base, False), 'validation': stats(base, True)},
-        'after': {'calibration': stats(final, False), 'validation': stats(final, True)},
-        'wheel_sha256': probe.shared.ENGINE_WHEEL_SHA256,
-        'parameter_record_sha256': probe.shared.sha256(probe.shared.PARAMETERS),
-        'state_packet_sha256': probe.shared.sha256(probe.shared.STATE_PACKET),
-        'script_sha256': probe.shared.sha256(Path(__file__)),
-    }
-    Path(__file__).with_name(f'refit-{name}.json').write_text(json.dumps(result, indent=1))
-    print(json.dumps({k: result[k] for k in ('fitted', 'standard_error', 'before', 'after')}, indent=1))
+def main(names):
+    clock = perf_counter()
+    calibration = states()
+    setup_s = perf_counter() - clock
+    record = json.loads(OUT.read_text()) if OUT.exists() else {}
+    for name in names or STARTS:
+        start = STARTS[name]
+        params = parameters(start)
+        rows = [row for _, o, prob in calibration for row in observations(params, o, prob)]
+        assert len(rows) == 180, len(rows)
+        coordinates = [regression.coordinate(params, 'k_ij_reciprocal_temperature_slope' if i.endswith(probe.SLOPE) else 'k_ij',
+                                             tuple(i.split('/')[1:3]), origin=x0, scale=h, bounds=(lo, hi))
+                       for i, x0, h, lo, hi in zip(IDS, start, SCALES, LOWER, UPPER)]
+        controls = regression.FitControls()
+        controls.maximum_iterations = 100
+        controls.maximum_elapsed_time_seconds = 7200.0
+        clock = perf_counter()
+        result = regression.fit(params, coordinates, [item for _, item, _ in rows], weights=[w for _, _, w in rows],
+                                controls=controls)
+        fit_s = perf_counter() - clock
+        c = result.covariance
+        record[name] = {
+            'start': start, 'fitted': list(result.physical), 'status': result.status, 'message': result.message,
+            'usable': result.usable, 'initial_cost': result.initial_cost, 'final_cost': result.final_cost,
+            'iterations': result.iterations, 'iteration_seconds': list(result.iteration_seconds),
+            'iteration_costs': list(result.iteration_costs), 'residual_evaluations': result.residual_evaluations,
+            'jacobian_evaluations': result.jacobian_evaluations, 'trial_failures': result.trial_failures,
+            'failures': [{'trial': f.trial, 'observation': rows[f.observation][0], 'status': f.status.name,
+                          'message': f.message, 'jacobian': f.jacobian} for f in result.failures],
+            'active_bounds': [IDS[k] for k in c.active_bounds],
+            'engine_covariance': {'status': c.status, 'assumption': c.assumption, 'rank': c.rank,
+                                  'singular_values': list(c.singular_values), 'variance_factor': c.variance_factor,
+                                  'physical': list(c.physical)},
+            **identifiability(result, len(rows)),
+            'rows': [{'target': t, 'weight': w, 'prediction': y, 'weighted_residual': r} for (t, _, w), y, r
+                     in zip(rows, result.predictions, result.weighted_residuals)],
+            'fit_s': fit_s, 'setup_s': setup_s}
+        record['provenance'] = {'parameters': IDS, 'bounds': [LOWER, UPPER], 'scales': SCALES, 'n_rows': len(rows),
+                                'excluded_states': sorted(EXCLUDED), 'wheel_sha256': s.ENGINE_WHEEL_SHA256,
+                                'engine_commit': s.ENGINE_COMMIT, 'base_record_sha256': s.sha256(probe.RECORD),
+                                'state_packet_sha256': s.sha256(s.STATE_PACKET), 'script_sha256': s.sha256(Path(__file__))}
+        OUT.write_text(json.dumps(record, indent=1) + '\n')
+        print(name, result.status, result.message, result.initial_cost, result.final_cost, result.iterations,
+              list(result.physical), [IDS[k] for k in c.active_bounds], round(fit_s), flush=True)
 
 
 if __name__ == '__main__':
