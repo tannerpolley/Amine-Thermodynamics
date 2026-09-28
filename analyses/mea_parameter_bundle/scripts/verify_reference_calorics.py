@@ -48,7 +48,8 @@ def shomate_enthalpy(temperature: float, c: tuple[float, ...], formation: float)
 
 
 def record() -> ThermochemistryRecord:
-    references = json.loads(PHYSICAL_CALORICS.read_text())["components"]
+    data = json.loads(PHYSICAL_CALORICS.read_text())
+    references, p0 = data["components"], data["reference_pressure_pa"]
     centre = references["monoethanolamine"]["enthalpy_entropy_anchor_k"]
     cp = references["monoethanolamine"]["coefficients"]
     mea = [sum(a * comb(j, k) * centre ** (j - k) for j, a in enumerate(cp) if j >= k) for k in range(4)]
@@ -57,12 +58,12 @@ def record() -> ThermochemistryRecord:
         source = references[component]
         intervals[index] = [IdealInterval(*source["range_k"], True, True, IdealCorrelation(
             IdealShomate(tuple(source["coefficients"]), source["formation_enthalpy_j_per_mol"]),
-            references["reference_pressure_pa"]))]
+            p0))]
     source = references["monoethanolamine"]
     intervals[shared.COMPONENT_IDS.index("monoethanolamine")] = [IdealInterval(
         *source["range_k"], True, True, IdealCorrelation(
-            IdealPolynomial(mea, centre, 0.0, 0.0), references["reference_pressure_pa"]))]
-    return ThermochemistryRecord(references["reference_pressure_pa"], intervals)
+            IdealPolynomial(mea, centre, 0.0, 0.0), p0))]
+    return ThermochemistryRecord(p0, intervals)
 
 
 def observable(kind: str, phase: int, component: int = 0, prop: object | None = None) -> object:
