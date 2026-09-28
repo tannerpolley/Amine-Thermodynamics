@@ -37,6 +37,7 @@ from epcsaft import (
 OUTPUT = Path(__file__).resolve().parents[1] / "results" / "reference-calorics"
 CALORIMETRY = Path(__file__).resolve().parents[3] / "data/reference/MEA/observations/calorimetry/MEA_heat_of_absorption_observations.csv"
 PHYSICAL_CALORICS = Path(__file__).resolve().parents[3] / "data/reference/MEA/thermal/physical-ideal-gas-calorics.json"
+CALORICS = json.loads(PHYSICAL_CALORICS.read_text())
 CO2, WATER = vt.CO2, vt.WATER
 IDENTITY_RTOL, RESOLVE_RTOL, CLOSURE_RTOL = 1e-6, 1e-6, 1e-5
 FEED_STEP = 1e-4  # mol CO2, relative to ~1 mol MEA
@@ -47,9 +48,13 @@ def shomate_enthalpy(temperature: float, c: tuple[float, ...], formation: float)
     return formation + 1000.0 * (c[0] * t + c[1] * t**2 / 2 + c[2] * t**3 / 3 + c[3] * t**4 / 4 - c[4] / t + c[5] - c[7])
 
 
+def co2_gas_enthalpy(temperature: float) -> float:
+    co2 = CALORICS["components"]["carbon-dioxide"]
+    return shomate_enthalpy(temperature, co2["coefficients"], co2["formation_enthalpy_j_per_mol"])
+
+
 def record() -> ThermochemistryRecord:
-    data = json.loads(PHYSICAL_CALORICS.read_text())
-    references, p0 = data["components"], data["reference_pressure_pa"]
+    references, p0 = CALORICS["components"], CALORICS["reference_pressure_pa"]
     centre = references["monoethanolamine"]["enthalpy_entropy_anchor_k"]
     cp = references["monoethanolamine"]["coefficients"]
     mea = [sum(a * comb(j, k) * centre ** (j - k) for j, a in enumerate(cp) if j >= k) for k in range(4)]
@@ -111,9 +116,7 @@ def liquid_heat(model: object, base: dict, temperature: float, pressure: float, 
     partial = n * dh + h * dn
     resolve = (extensive_enthalpy(model, problem, FEED_STEP, warm)
                - extensive_enthalpy(model, problem, -FEED_STEP, warm)) / (2 * FEED_STEP)
-    co2 = json.loads(PHYSICAL_CALORICS.read_text())["components"]["carbon-dioxide"]
-    gas = shomate_enthalpy(temperature, tuple(co2["coefficients"]), co2["formation_enthalpy_j_per_mol"])
-    heat = gas - partial
+    heat = co2_gas_enthalpy(temperature) - partial
     gibbs_helmholtz = R * temperature**2 * t_ln_a + R * temperature
     apparent = sum(result.mole_fractions[shared.COMPONENT_IDS.index(c)] for c in (
         "carbon-dioxide", "carbamate-anion", "bicarbonate-anion", "carbonate-anion"))
@@ -176,6 +179,7 @@ def main() -> None:
         "engine_wheel_sha256": vt.wheel_sha256(), "csv_sha256": hashes,
         "producer_sha256": shared.sha256(Path(__file__)), "parameter_sha256": shared.sha256(shared.PARAMETERS),
         "calorimetry_input_sha256": shared.sha256(CALORIMETRY),
+        "physical_calorics_sha256": shared.sha256(PHYSICAL_CALORICS),
         "criteria": {"gibbs_helmholtz_rel": IDENTITY_RTOL, "feed_resolve_rel": RESOLVE_RTOL, "bubble_closure_rel": CLOSURE_RTOL},
         "heat_rows_passed": passed, "heat_rows_total": len(rows),
         "closure_passed": all(c["closure_rel"] <= CLOSURE_RTOL for c in closure),
