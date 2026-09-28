@@ -49,19 +49,41 @@ By temperature (refit C; AARD / mean ln / n):
 Each state is the 30 wt% packet pCO2 request at the same temperature and nearest loading. The CO2
 feed is set to the row loading and water is rescaled to the row's MEA mass fraction.
 
+## Second look: refit C on Engine `1303c119` (2026-09-28)
+
+`second-look-states.csv`, `second-look-scores.csv`. The rows are the same 70. This is **not** an
+untouched test: the one-time results above were seen before this refit was run.
+
+- **Record:** refit C through the Engine fitter with packet v5 association terms,
+  `../calibration-misfit/refit-C-engine-parameters.json` (`039ddaba…`), not adopted.
+- **Engine:** wheel `f66d972c…`, Engine `1303c119`.
+
+| MEA wt% | solved | AARD | mean ln | RMS ln |
+|---|---:|---:|---:|---:|
+| 15 | 33/33 | 87.8 % | +0.536 | 0.656 |
+| 45 | 37/37 | 23.3 % | −0.182 | 0.350 |
+
+- **By temperature:** 15 wt% gives 77 / 81 / 126 % at 40 / 60 / 80 °C (mean ln +0.39 / +0.56 / +0.82).
+  45 wt% gives 26 / 23 / 20 %.
+- **Solver:** `vle_obs_0072`, which failed in the one-time run, now solves. Every row meets the
+  tolerance, and the maximum stationarity residual is 1.7e-13.
+- **Conclusion:** the result matches the one-time run to 0.1 percentage point. The 15 wt% transfer
+  still fails.
+
 ## Claim limit
 
 This is composition transfer at fixed chemistry. Temperatures (40–80 °C) lie inside the calibrated
 range, and no species or reactions are new. It is not temperature validation or new-species
 validation. The source is one laboratory, Aronu 2011.
 
-This run is the one-time look at these rows. Any later model scored on them is a second look, not an
+The 2026-09-24 run is the one-time look at these rows. Any later model scored on them is a second look, not an
 untouched test.
 
 ## Reproduce
 
 ```sh
-OMP_NUM_THREADS=1 python transfer.py adopted-refit-C=REFIT_C.json pre-refit=PRE_REFIT.json
+OMP_NUM_THREADS=1 python transfer.py adopted-refit-C=REFIT_C.json pre-refit=PRE_REFIT.json   # one-time run
+OMP_NUM_THREADS=1 python transfer.py --out=second-look new-refit-C=../calibration-misfit/refit-C-engine-parameters.json
 ```
 
 Solver caches go to `../results/runs/composition-transfer/` (ignored). The run log is
