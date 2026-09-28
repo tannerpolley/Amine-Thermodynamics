@@ -1,6 +1,7 @@
 """Score model variants on all six pCO2 sources, the refit partition, speciation and carbonate.
 
-Usage: compare.py [--out=STEM] VARIANT=PACKET.jsonl,CANONICAL.jsonl ...   (probe.py outputs)
+Usage: compare.py [--out=STEM] [--pairs=A:B,...] VARIANT=PACKET.jsonl,CANONICAL.jsonl ...   (probe.py outputs)
+--pairs adds, for each named pair of variants, max |d ln pCO2| and max |d x| over the states both solve.
 Writes STEM-scores.csv (one row per variant, scope, quantity) and STEM-states.csv
 (one row per variant, state, target: observed and predicted); STEM defaults to "variant".
 Each variant carries its wheel and base record SHA-256 (probe outputs before record_sha256 was
@@ -24,6 +25,26 @@ SIGMA_LN_P = 0.3  # the #101 pCO2 data floor
 EXCLUDED = {'Bottinger2008_state_042', 'Bottinger2008_state_046', 'Matin2012_state_016'}
 
 
+# #109: the NMR "HCO3-" target is the fast-exchange carbon pool (Matin 2012 Eqs. 18-19b). The calibration state
+# packet (86f60041) still maps it to HCO3- alone, so the pool is applied here, the one place both scoring and
+# refit.py read it; data/reference/MEA/manifests/speciation_linear_coefficient_rules.csv holds the canonical rule.
+HCO3_POOL = ('bicarbonate-anion', 'carbonate-anion')
+
+
+def pooled_species(target_identity):
+    """Species summed for a target whose packet mapping the pool replaces, else None."""
+    return HCO3_POOL if target_identity.endswith('::HCO3-') else None
+
+
+def predicted(rec, t):
+    """Prediction of one target of an evaluated state, with the HCO3- pool applied."""
+    pool = pooled_species(t['identity'])
+    if pool:
+        x = rec['liquid']['mole_fractions']
+        return sum(x[probe.shared.COMPONENT_IDS.index(c)] for c in pool)
+    return rec['predictions'][t['prediction_identity']]
+
+
 def residuals(rec):
     """(kind, target identity, scaled residual, ln residual) for one evaluated state, scaled as refit.py weights it."""
     if rec['status'] != 'evaluated':
@@ -34,8 +55,7 @@ def residuals(rec):
             ln = math.log(rec['predictions']['co2-partial-pressure'] / t['observed'])
             out.append(('p', t['identity'], ln / SIGMA_LN_P, ln))
             continue
-        x = rec['liquid']['mole_fractions']
-        pred = x[5] + x[6] if t['identity'].endswith('::HCO3-') else rec['predictions'][t['prediction_identity']]
+        pred = predicted(rec, t)
         ln = math.log(pred / t['observed']) if t['observed'] > 0 and pred > 0 else float('nan')
         out.append(('s', t['identity'], (pred - t['observed']) / (0.1 * t['observed'] + 0.001), ln))
     return out
@@ -83,12 +103,13 @@ PRE_REFIT_SHA256 = '868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfc
 
 def main(argv):
     stem = next((a.split('=', 1)[1] for a in argv if a.startswith('--out=')), 'variant')
-    argv = [a for a in argv if not a.startswith('--out=')]
-    rows, states = [], []
+    pairs = [p.split(':') for a in argv if a.startswith('--pairs=') for p in a.split('=', 1)[1].split(',')]
+    argv = [a for a in argv if not a.startswith(('--out=', '--pairs='))]
+    rows, states, loaded = [], [], {}
     for spec in argv:
         variant, paths = spec.split('=')
         packet_path, canonical_path = paths.split(',')
-        packet, canonical = load(packet_path), load(canonical_path)
+        packet, canonical = loaded[variant] = load(packet_path), load(canonical_path)
         sets = next(iter(packet.values()))['sets']
         groups = {}
         for r in canonical.values():
@@ -109,9 +130,8 @@ def main(argv):
                 if np.isfinite(ln):
                     groups.setdefault(f"packet {part} {'pCO2' if kind == 'p' else 'speciation'}", []).append(ln)
         for r in [*packet.values(), *canonical.values()]:
-            x = r['liquid']['mole_fractions'] if r['status'] == 'evaluated' else None
             for t in r['targets']:
-                pred = ((x[5] + x[6]) if t['identity'].endswith('::HCO3-') else r['predictions'][t['prediction_identity']]) if x else ''
+                pred = predicted(r, t) if r['status'] == 'evaluated' else ''
                 states.append({'variant': variant, 'identity': r['identity'], 'target': t['identity'],
                                'source': t['source_identity'], 'temperature_c': round(r['T'] - 273.15, 2),
                                'loading': r['feed'][0] / r['feed'][1], 'observed': t['observed'], 'predicted': pred,
@@ -144,6 +164,17 @@ def main(argv):
                           'parameter_sha256': ','.join(sorted({x.get('record_sha256', PRE_REFIT_SHA256)
                                                                for x in [*packet.values(), *canonical.values()]})),
                           'script_sha256': probe.shared.sha256(Path(__file__))})
+    for a, b in pairs:
+        for scope, k in (('packet states', 0), ('six-source pCO2 states', 1)):
+            A, B = loaded[a][k], loaded[b][k]
+            both = [i for i in A if A[i]['status'] == B[i]['status'] == 'evaluated']
+            dp = [abs(math.log(A[i]['predictions']['co2-partial-pressure'] / B[i]['predictions']['co2-partial-pressure']))
+                  for i in both if 'co2-partial-pressure' in A[i]['predictions']]
+            dx = [max(abs(u - v) for u, v in zip(A[i]['liquid']['mole_fractions'], B[i]['liquid']['mole_fractions']))
+                  for i in both]
+            for quantity, v in (('max |d ln pCO2| vs ' + b, dp), ('max |d x| vs ' + b, dx)):
+                rows.append({'variant': a, 'scope': scope, 'quantity': quantity, 'n': len(v), 'predicted': max(v),
+                             'mean_ln': float(np.mean(v)) if 'pCO2' in quantity else ''})
     fields = ['variant', 'scope', 'quantity', 'n', 'mean_ln', 'rms_ln', 'aard_percent', 'observed', 'predicted',
               'evaluated', 'tolerance_not_met', 'balance_errors', 'max_abs_stationarity', 'failures',
               'parameter_overrides', 'canonical evaluated', 'canonical total', 'engine_wheel_sha256',
@@ -152,7 +183,8 @@ def main(argv):
         w = csv.DictWriter(h, fieldnames=fields)
         w.writeheader()
         w.writerows(rows)
-    prov = {r['variant']: {k: r[k] for k in ('engine_wheel_sha256', 'parameter_sha256', 'script_sha256')} for r in rows}
+    prov = {r['variant']: {k: r[k] for k in ('engine_wheel_sha256', 'parameter_sha256', 'script_sha256')}
+            for r in rows if 'engine_wheel_sha256' in r}
     with (HERE / f'{stem}-states.csv').open('w', newline='') as h:
         w = csv.DictWriter(h, fieldnames=[*states[0], *prov[states[0]['variant']]])
         w.writeheader()
@@ -163,6 +195,8 @@ def main(argv):
         elif r['quantity'] == 'solver check':
             print(f"{r['variant']:10s} {r['scope']:40s} solved {r['evaluated']}/{r['n']} tol-unmet {r['tolerance_not_met']}"
                   f" balance {r['balance_errors']} max|stat| {r['max_abs_stationarity']:.1e} {r['failures']}")
+        elif r['quantity'].startswith('max |d'):
+            print(f"{r['variant']:10s} {r['scope']:40s} {r['quantity']} n={r['n']} max {r['predicted']:.2e}")
         elif r['quantity'].startswith('cost'):
             print(f"{r['variant']:10s} {r['scope']:40s} n={r['n']} cost {r['predicted']:.5f}")
         else:

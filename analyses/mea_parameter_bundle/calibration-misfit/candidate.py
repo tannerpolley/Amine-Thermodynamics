@@ -9,8 +9,9 @@ Usage: candidate.py --packet-v5 PARAMETERS.json  the pre-refit record (868a5018)
                                            usable start) on probe.RECORD; missing
                                            k_ij 1/T slope nodes are added as probe.with_values adds them
        candidate.py --check RECORD.json PROBE.jsonl  re-solves four states from the record file (cold) and compares
-                                           with probe.py's override solves of the same values
+                                           with probe.py's override solves of the same values -> record-replay-check.csv
 """
+import csv
 import json
 import math
 import sys
@@ -35,15 +36,19 @@ def write(name, values, source, document_id, purpose, citation, use_basis, out, 
     for node in probe.shared._identified(mapping):
         if node['identity'] in values and 'provenance' in node:
             node['provenance'] = {**node['provenance'], **source}
+    r4 = {k: v for k, v in values.items() if k.startswith('reaction:R4:')}
     for record in mapping['reaction_correlations']:
-        if record['reaction_id'] == 'R4' and 'reaction:R4:correlation:a' in values:  # b_k keeps its source
-            record['source'] = {**record['source'], 'locator': record['source']['locator']
-                                + f"; coefficient a replaced by calibration-misfit refit {name} (" + source['locator'] + ')'}
+        if record['reaction_id'] == 'R4' and r4:
+            note = ('a and b_k set to the source correlation (Tong 2012 via Aroua 1999, chemical_reaction_source_contract.json)'
+                    if r4 == probe.SOURCE_R4 else f'{sorted(r4)} replaced by calibration-misfit refit {name}')
+            record['source'] = {**record['source'], 'locator': record['source']['locator'] + f'; {note} (' + source['locator'] + ')'}
     mapping['document_id'] = document_id
     mapping['purpose'] = purpose
     mapping['sources'].append({'citation': citation, 'source_id': source['source_id'], 'use_basis': use_basis})
     out.write_text(json.dumps(mapping, sort_keys=True, separators=(',', ':')) + '\n')
     probe.epcsaft.Parameters.from_mapping(probe.shared.parameter_mapping(out))  # must parse as an Engine record
+    written = probe.shared.reaction_values(probe.shared.parameter_mapping(out))
+    assert all(written[k] == v for k, v in r4.items()), 'written R4 differs from the requested values'
     print(out, probe.shared.sha256(out))
 
 
@@ -91,13 +96,16 @@ def main(argv):
     if 'provenance' in result:  # refit.py multistart: the lowest-cost usable start
         best = min((v for k, v in result.items() if k != 'provenance' and v['usable']), key=lambda v: v['final_cost'])
         result = {'name': 'C', 'parameters': result['provenance']['parameters'], 'fitted': best['fitted'],
-                  'wheel_sha256': result['provenance']['wheel_sha256']}
-    name = result['name']
-    write(name, dict(zip(result['parameters'], result['fitted'])),
+                  'wheel_sha256': result['provenance']['wheel_sha256'],
+                  'reaction_overrides': result['provenance'].get('reaction_overrides', {})}
+    name, r4 = result['name'], result.get('reaction_overrides', {})
+    assert r4 in ({}, probe.SOURCE_R4), r4
+    write(name, {**dict(zip(result['parameters'], result['fitted'])), **r4},
           {'source_id': f'mea-calibration-misfit-refit-{name.lower()}',
            'locator': f'analyses/mea_parameter_bundle/calibration-misfit/{Path(argv[0]).name}'},
           'mea-co2-h2o-nine-species-calibration-misfit-refit-c',
-          f'candidate, not adopted: calibration-misfit refit {name}, R4 at its source value (MEA #107)',
+          f'candidate, not adopted: calibration-misfit refit {name}, R4 '
+          + ('at its source correlation (MEA #107)' if r4 else "the incumbent's fitted value"),
           f'MEA-Thermodynamics calibration-misfit refit {name} on {result["wheel_sha256"][:8]}',
           'ion-water, MEAH+-water 1/T slope and cation-anion k_ij; not adopted', out)
 
@@ -108,6 +116,7 @@ def check(path, probe_out):
     best = {r['identity']: r for r in map(json.loads, open(probe_out))}
     model = probe.epcsaft.Mixture(s.load_parameters(path))
     reactions = s.reaction_values(s.parameter_mapping(path))  # explicit path: the defaults bind PARAMETERS
+    rows = []
     for o in probe.OBSERVATIONS:
         if o['identity'] in ('vle_obs_0135', 'vle_obs_0193', 'vle_obs_0206', 'Matin2012_state_010'):
             r = s.evaluate_state(model, o['request'], reactions, o['identity'], [], budget_s=90,
@@ -117,7 +126,16 @@ def check(path, probe_out):
             dp = (math.log(r['predictions']['co2-partial-pressure'] / b['predictions']['co2-partial-pressure'])
                   if 'co2-partial-pressure' in b['predictions'] else 0.0)
             dx = max(abs(u - v) for u, v in zip(x, b['liquid']['mole_fractions']))
+            rows.append({'record': path.name, 'record_sha256': s.sha256(path), 'probe_output': probe_out.name,
+                         'identity': o['identity'], 'status': r['status'], 'abs_dln_pco2': abs(dp), 'max_abs_dx': dx,
+                         'engine_wheel_sha256': s.ENGINE_WHEEL_SHA256})
             print(o['identity'], r['status'], f'|dln pCO2| {abs(dp):.1e}', f'max |dx| {dx:.1e}')
+    out = Path(__file__).with_name('record-replay-check.csv')
+    kept = [x for x in (list(csv.DictReader(out.open())) if out.exists() else []) if x['record'] != path.name]
+    with out.open('w', newline='') as h:
+        w = csv.DictWriter(h, list(rows[0]), lineterminator='\n')
+        w.writeheader()
+        w.writerows(kept + rows)
 
 
 if __name__ == '__main__':

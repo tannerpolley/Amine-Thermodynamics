@@ -36,9 +36,12 @@ By temperature (refit C; AARD / mean ln / n):
 
 ## What was evaluated
 
-- **Refit C:** parameter SHA-256 `4c1bff04…9e5159`, written by
-  `../calibration-misfit/candidate.py refit-C-converged.json`. The CSV label `adopted-refit-C` is the
-  command-line label of the run. Refit C was the candidate for adoption at the time; it has not been
+- **Refit C with the incumbent's fitted R4** ("refit C" in the tables above): parameter SHA-256
+  `4c1bff04…9e5159`, written by `../calibration-misfit/candidate.py refit-C-converged.json`. The CSV label
+  `adopted-refit-C` is the command-line label of the run. **Correction (2026-09-28):** the record carries the
+  incumbent's fitted R4 (`a` = 1.505015, `b_k` = −1317.049 K), not the Tong 2012 / Aroua 1999 source R4
+  (`a` = 2.151, `b_k` = −1545.3 K) that refit C was defined to hold. The result stands as a prediction of this
+  record. Any source-R4 score on these rows is a second look. Refit C was the candidate for adoption at the time; it has not been
   adopted (owner decision 2026-09-28: refit on the current Engine first).
 - **Pre-refit:** the exploratory incumbent, `868a5018…fcb7be`.
 - **Engine:** wheel `b66c7b96…` (SHA-256 `b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58`),
@@ -49,13 +52,13 @@ By temperature (refit C; AARD / mean ln / n):
 Each state is the 30 wt% packet pCO2 request at the same temperature and nearest loading. The CO2
 feed is set to the row loading and water is rescaled to the row's MEA mass fraction.
 
-## Second look: refit C on Engine `1303c119` (2026-09-28)
+## Second look: refit C with the incumbent's fitted R4 on Engine `1303c119` (2026-09-28)
 
-`second-look-states.csv`, `second-look-scores.csv`. The rows are the same 70. This is **not** an
+`second-look-incumbent-R4-states.csv`, `second-look-incumbent-R4-scores.csv` (CSV label `new-refit-C`). The rows are the same 70. This is **not** an
 untouched test: the one-time results above were seen before this refit was run.
 
-- **Record:** refit C through the Engine fitter with packet v5 association terms,
-  `../calibration-misfit/refit-C-engine-parameters.json` (`039ddaba…`), not adopted.
+- **Record:** refit C with the incumbent's fitted R4, through the Engine fitter with packet v5 association
+  terms, `../calibration-misfit/refit-C-incumbent-R4-parameters.json` (`039ddaba…`), not adopted.
 - **Engine:** wheel `f66d972c…`, Engine `1303c119`.
 
 | MEA wt% | solved | AARD | mean ln | RMS ln |
@@ -83,7 +86,7 @@ untouched test.
 
 ```sh
 OMP_NUM_THREADS=1 python transfer.py adopted-refit-C=REFIT_C.json pre-refit=PRE_REFIT.json   # one-time run
-OMP_NUM_THREADS=1 python transfer.py --out=second-look new-refit-C=../calibration-misfit/refit-C-engine-parameters.json
+OMP_NUM_THREADS=1 python transfer.py --out=second-look new-refit-C=../calibration-misfit/refit-C-engine-parameters.json  # renamed *-incumbent-R4-*
 ```
 
 Solver caches go to `../results/runs/composition-transfer/` (ignored). The run log is

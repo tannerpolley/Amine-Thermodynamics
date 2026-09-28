@@ -1,6 +1,7 @@
 """Solve packet states at the base record RECORD, optionally with named parameter overrides.
 
-Usage: probe.py OUT.jsonl [--record=PATH] [--canonical] [identity-substring ...] [identity=value ...]
+Usage: probe.py OUT.jsonl [--record=PATH] [--source-r4] [--canonical] [identity-substring ...] [identity=value ...]
+--source-r4 adds SOURCE_R4 (Tong 2012 via Aroua 1999) to the overrides; without it R4 is the record's.
 RECORD defaults to the pre-refit record on the Engine packet v5 association topology (candidate.py --packet-v5).
 Writes one JSON line per state: identity, status, predictions, liquid composition, base record SHA-256.
 Perturbed solves warm-start from the base-record solution of the same state.
@@ -24,6 +25,17 @@ SCRATCH = W / 'analyses/mea_parameter_bundle/results/runs/calibration-misfit'
 shared.RUNS = SCRATCH / 'cache'
 OBSERVATIONS = shared.load_state_packet()['observations']
 RECORD = Path(__file__).with_name('pre-refit-packet-v5-parameters.json')
+# R4 source correlation (both coefficients). The selected record's R4 is a fitted incumbent value.
+SOURCE_R4 = {f'reaction:R4:correlation:{k}': v for k, v in shared.EXPECTED_REACTION_CORRELATIONS['R4'].items() if k != 'kind'}
+_CONTRACT = json.loads((W / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json').read_text())
+assert SOURCE_R4 == {f'reaction:R4:correlation:{k}': v for r in _CONTRACT['reactions'] if r['reaction_id'] == 'R4'
+                     for k, v in r['correlation'].items() if k != 'kind'}, 'R4 source contract mismatch'
+
+
+def reactions(sets=None):
+    """The one source of reaction values for a solve: RECORD's R1-R5 with any `reaction:` overrides in sets."""
+    return {**shared.reaction_values(shared.parameter_mapping(RECORD)),
+            **{k: v for k, v in (sets or {}).items() if k.startswith('reaction:')}}
 
 
 def pressure_observations(select):
@@ -71,7 +83,7 @@ def _base_model():
 
 def base_record(o):
     """The evaluator record of one state at RECORD; its liquid anchor warm-starts perturbed solves and declares fit states."""
-    return shared.evaluate_state(_base_model(), o['request'], shared._selected_reactions(), o['identity'], [], budget_s=90,
+    return shared.evaluate_state(_base_model(), o['request'], reactions(), o['identity'], [], budget_s=90,
                                  model_fingerprint=_BASE['fingerprint'])
 
 
@@ -109,8 +121,7 @@ def evaluate(sets=None, filters=(), canonical=False, states=None):
 
     States are ``states``, else the packet observations, or with ``canonical`` the 161 six-source pCO2 rows."""
     sets = dict(sets or {})
-    reactions = shared._selected_reactions()
-    reactions.update({k: v for k, v in sets.items() if k.startswith('reaction:')})
+    values = reactions(sets)
     eos = {k: v for k, v in sets.items() if not k.startswith('reaction:')}
     mapping = with_values(shared.parameter_mapping(RECORD), eos) if eos else shared.parameter_mapping(RECORD)
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping)) if eos else _base_model()
@@ -124,7 +135,7 @@ def evaluate(sets=None, filters=(), canonical=False, states=None):
         anchors = []
         if sets:
             anchors = [a for a in [shared.anchor_from(base_record(o))] if a]
-        r = shared.evaluate_state(model, o['request'], reactions, ident, anchors, budget_s=90, model_fingerprint=fp)
+        r = shared.evaluate_state(model, o['request'], values, ident, anchors, budget_s=90, model_fingerprint=fp)
         liq = next((p for p in r.get('phases') or [] if p.get('role') == 'liquid'), None)
         yield {'identity': ident, 'status': r['status'], 'predictions': r['predictions'], 'check': check(r),
                'liquid': liq, 'wall_s': time.perf_counter() - t0, 'sets': sets,
@@ -141,7 +152,9 @@ def main(argv):
     RECORD = Path(next((a.split('=', 1)[1] for a in rest if a.startswith('--record=')), RECORD))
     rest = [a for a in rest if not a.startswith('--record=')]
     sets = {k: float(v) for k, v in (a.split('=') for a in rest if '=' in a)}
-    filters = [a for a in rest if '=' not in a and a != '--canonical']
+    if '--source-r4' in rest:
+        sets.update(SOURCE_R4)
+    filters = [a for a in rest if '=' not in a and a not in ('--canonical', '--source-r4')]
     with out.open('a') as h:
         for rec in evaluate(sets, filters, canonical='--canonical' in rest):
             h.write(json.dumps(rec) + '\n')

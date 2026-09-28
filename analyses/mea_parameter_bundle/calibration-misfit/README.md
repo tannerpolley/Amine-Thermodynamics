@@ -14,7 +14,8 @@ sections before it are old-pin (`b66c7b96`) results.
 ## Outcome
 
 1. **Leading explanation: the adopted ionic parameters were never fitted to pCO2 or to speciation on the current
-   formulation.** Every ion–water k_ij is zero:
+   formulation.** The three ion–water k_ij that the refits fit (MEAH⁺, MEACOO⁻ and HCO₃⁻ with water) are
+   zero. The trace ions carry transferred values: CO₃²⁻–water −0.25, H₃O⁺–water +0.25 and OH⁻–water −0.25.
    - The MEAH⁺/MEACOO⁻ size, energy and Born values come from a historical speciation-only fit on the
      retired 1.5.2 runtime (22 rows; `../ionic-speciation-fit/index.qmd`).
    - The HCO₃⁻/CO₃²⁻ values are transferred diagnostics.
@@ -192,10 +193,17 @@ They are not valid at the bounds and understate the correlated uncertainty.
 `b_k` keeps its source provenance. Loaded directly (`python candidate.py --check`), it reproduces
 the refit predictions to 2e-11 in ln pCO2 and 2e-13 in mole fraction.
 
-### Refit C: R4 held at its source value (`refit.py`, `refit-C.json`)
+### Refit C with the incumbent's fitted R4 (`refit.py` at `e522dc4`, `refit-C.json`)
+
+**Correction (2026-09-28, independent review of PR #106):** this run and every later refit C up to
+`be1036b` did **not** hold R4 at its source correlation. `refit.py` passed the incumbent record's fitted R4
+(`a` = 1.505015, `b_k` = −1317.049 K) to every problem, and `candidate.py` wrote the same R4 into the
+records. The source is `a` = 2.151, `b_k` = −1545.3 K (Tong 2012 via Aroua 1999,
+`data/reference/MEA/manifests/chemical_reaction_source_contract.json`). The results below are retained as
+"refit C with the incumbent's fitted R4". Refit C with the source R4 is in its own section below.
 
 Owner decision of 2026-09-23 (#96, #107): refit with the R4 intercept at its Tong 2012 / Aroua 1999
-value, and adopt only if the fit holds. Adoption rule: the 161-row pCO2 AARD must be at most 35 %,
+value, and adopt only if the fit holds (the run below did not do this; see the correction). Adoption rule: the 161-row pCO2 AARD must be at most 35 %,
 keeping at least 70 % of refit A's 52 → 27 % gain, and Mamun 2005 at 120 °C must not degrade
 against the adopted record's RMS ln of 0.254.
 
@@ -204,7 +212,7 @@ against the adopted record's RMS ln of 0.254.
 - The four refit-A k_ij, each within ±0.3, started from refit A's values.
 - A 1/T slope on MEAH⁺–water k_ij, within ±300 K, with T_ref 313.15 K. Its form is the one the record
   already uses for CO2–MEA.
-- R4 fixed at `a` = 2.151 (source).
+- Intended: R4 fixed at `a` = 2.151 (source). Run: R4 at the incumbent's `a` = 1.505015, `b_k` = −1317.049 K.
 
 The partition, objective and HCO₃⁻ + CO₃²⁻ mapping are the same as refit A's. The mapping is the
 #109 decision (Matin 2012, Eqs. 18–19b).
@@ -224,7 +232,7 @@ The partition, objective and HCO₃⁻ + CO₃²⁻ mapping are the same as refi
 | MEAH⁺–water 1/T slope (K) | 0 | 0 | −155.6 | 66 | |
 | HCO₃⁻–water k_ij | 0 | +0.3000 | +0.2957 | 0.020 | near (+0.3) |
 | MEAH⁺–MEACOO⁻ k_ij | −0.0020 | −0.3000 | −0.3000 | 0.048 | **yes (−0.3)** |
-| R4 intercept `a` | 1.5050 | 1.0050 | 2.151 (fixed) | | |
+| R4 intercept `a` | 1.5050 | 1.0050 | 1.5050 (incumbent, fixed) | | |
 
 The standard errors come from the final forward-difference Jacobian over the 180 objective
 residuals. They are not valid at the active MEAH⁺–MEACOO⁻ bound. The column-normalized singular values
@@ -263,7 +271,7 @@ Mamun's RMS ln rises from 0.254 to 0.299. This first-stop point is not adopted. 
 Aronu, Idris, Mamun and Xu are predictions of other 30 wt% sources, and the 80 °C isotherm is an
 interpolation test.
 
-### Refit C run on to the iteration cap (`refit-C-converged.json`)
+### Refit C with the incumbent's fitted R4, run on to the iteration cap (`refit-C-converged.json`)
 
 This run started from the refit-C first-stop point. Bounds, residual weights and the calibration set
 are unchanged. It used `least_squares` default tolerances, capped at 6 iterations
@@ -327,11 +335,20 @@ Engine, not adopted on this pin. `results/selected-current-best-parameters.json`
 The refit-C record (`4c1bff04…`) is written by `candidate.py refit-C-converged.json OUT`; the #108
 composition-transfer prediction used it (`../composition-transfer/README.md`).
 
-The notebook's statistics (`generate_figure_data.py`) still score Matin's HCO₃⁻ against model HCO₃⁻
-alone, because the #109 change to the target membership file is pending. The refit objective pools
-HCO₃⁻ + CO₃²⁻, so its speciation numbers differ from the notebook's.
+The canonical rule is merged (#109, main `0be3ad4`): `data/reference/MEA/manifests/speciation_linear_coefficient_rules.csv`
+maps the Matin 2012 and Böttinger 2008 HCO₃⁻ targets to HCO₃⁻ + CO₃²⁻, applied to the membership file by
+`scripts/build_canonical_cheq_dataset.py`. The calibration state packet (`86f60041`) predates it and still maps
+them to HCO₃⁻ alone, so `compare.pooled_species` applies the pool for this analysis. The notebook statistics
+(`generate_figure_data.py`) have not been regenerated from the new membership.
 
-### Refit C on Engine `1303c119` with packet v5 association terms (2026-09-28)
+### Refit C with the incumbent's fitted R4 on Engine `1303c119`, packet v5 terms (2026-09-28)
+
+Relabelled by the correction above: every fit, score and record in this section used the incumbent's
+fitted R4, not the source R4. The files are `refit-C-incumbent-R4-multistart.json`,
+`refit-C-incumbent-R4-iterations.csv` and `refit-C-incumbent-R4-parameters.json` (`039ddaba…`), whose
+`purpose` field wrongly says "R4 at its source value". Its variants are `incumbent-R4-C-*` in
+`refit-C-scores.csv`. That record's per-row residuals and Jacobian were not retained, so its conditional
+standard errors, correlations and singular values below cannot be rebuilt from retained files.
 
 Owner decision 2026-09-28 (#107): refit C on the current Engine before any adoption. The paper is
 written on refit C, and a later model replaces it only by rules fixed in advance.
@@ -352,7 +369,7 @@ written on refit C, and a later model replaces it only by rules fixed in advance
   value that changes. `probe.py`'s base record `RECORD` is this file, so every score and fit below
   uses packet v5 terms. The selected record is unchanged.
 
-**Baseline shift** (pre-refit record; `probe.py` outputs; `refit-C-engine-scores.csv`):
+**Baseline shift** (pre-refit record; `probe.py` outputs; the maxima are the `max |d …| vs …` rows of `refit-C-scores.csv`):
 
 | change | max \|Δln pCO2\| | max \|Δx\| | solved (packet / pCO2) |
 |---|---:|---:|---|
@@ -374,19 +391,19 @@ path; the old `refit.py` and `identifiability.py` are in Git history (`e522dc4`)
 - Coordinates, bounds, scales, rows and weights are refit C's:
   - four k_ij within ±0.3;
   - the MEAH⁺–water 1/T slope within ±300 K (T_ref 313.15 K);
-  - R4 fixed at its source value;
+  - R4 intended at its source value, run at the incumbent's fitted value;
   - 180 rows: every packet state except 80 °C and `compare.EXCLUDED`, the three states the pre-refit
     record failed on the old pin.
 - Every state is declared from the pre-refit solve's liquid anchor.
 - Limits: 100 iterations, 7200 s; tolerances are the Engine's `FIT_*` defaults.
 
-**Multistart** (`refit-C-multistart.json`; every start converged with "function tolerance reached"
+**Multistart** (`refit-C-incumbent-R4-multistart.json`, `refit-C-incumbent-R4-iterations.csv`; every start converged with "function tolerance reached"
 and no trial failures):
 
 | start | start point (4 k_ij; slope, K) | initial cost | final cost | iterations | fit time |
 |---|---|---:|---:|---:|---:|
 | pre-refit | 0, 0, 0, −0.0020; 0 | 471.283 | 121.4524670 | 57 | 3067 s |
-| old refit C | 0.1069, −0.2414, 0.3, −0.3; −140.47 | 121.453 | 121.4524671 | 4 | 234 s |
+| C, incumbent R4, old pin | 0.1069, −0.2414, 0.3, −0.3; −140.47 | 121.453 | 121.4524671 | 4 | 234 s |
 | all zero | 0, 0, 0, 0; 0 | 472.759 | 121.4524670 | 57 | 2974 s |
 | seed 1 | 0.0071, 0.2703, −0.2135, 0.2692; −112.90 | 2124.746 | 121.4524670 | 56 | 3138 s |
 | seed 2 | −0.1430, −0.1209, 0.1885, −0.2449; 60.06 | 540.012 | 121.4524670 | 58 | 3284 s |
@@ -400,7 +417,7 @@ and no trial failures):
   1e-12 function tolerance before the bound set changes. It is an efficiency observation; the
   result is unaffected.
 
-| coordinate | pre-refit | old refit C (`b66c7b96`, v3) | new refit C (`f66d972c`, v5) | conditional SE | at bound |
+| coordinate | pre-refit | C, incumbent R4 (`b66c7b96`, v3) | C, incumbent R4 (`f66d972c`, v5) | conditional SE | at bound |
 |---|---:|---:|---:|---:|:--:|
 | carbamate–water k_ij | 0 | +0.10691 | +0.10725 | 0.018 | |
 | MEAH⁺–water k_ij | 0 | −0.24144 | −0.24143 | 0.018 | |
@@ -410,9 +427,9 @@ and no trial failures):
 
 **Identifiability at the best point:**
 
-- **Engine covariance:** withheld as `active_bound`. HCO₃⁻–water and MEAH⁺–MEACOO⁻ are active from
-  all five starts. Seed 1 started MEAH⁺–MEACOO⁻ at +0.27, so the objective drives both coordinates
-  through the box from either side; the unbounded optimum lies outside it.
+- **Engine covariance:** withheld as `active_bound`. HCO₃⁻–water and MEAH⁺–MEACOO⁻ end on their bounds
+  from all five starts, including seed 1, which started MEAH⁺–MEACOO⁻ at +0.27. This shows only the
+  bounded result; where an unbounded optimum lies is not established.
 - **Singular values:** the Engine reports rank 5; its scaled optimizer-space singular values are
   0.927, 0.643, 0.252, 0.181 and 0.092, with variance factor 1.388. The column-normalized singular
   values of the weighted Jacobian are 1.53, 1.18, 0.89, 0.64 and 0.28. Old C's were 1.41, 1.16,
@@ -427,13 +444,13 @@ and no trial failures):
 
 - `compare.py` scores the new point from `probe.py` records at cost 121.45247, equal to the Engine fit.
   It scores old C on the new pin at 121.45329, the Engine's initial cost from that start.
-- `refit-C-engine-parameters.json` (`039ddaba…`, written by `candidate.py`, not adopted) reproduces
-  the probe-override solves to 8e-14 in ln pCO2 and 3e-16 in mole fraction (`candidate.py --check`).
+- `refit-C-incumbent-R4-parameters.json` (`039ddaba…`, written by `candidate.py`, not adopted) reproduces
+  the probe-override solves to 8e-14 in ln pCO2 and 3e-16 in mole fraction (`record-replay-check.csv`).
 
-**Scores** (`refit-C-engine-scores.csv`, `refit-C-engine-states.csv`). pCO2 is AARD / mean ln / RMS ln.
+**Scores** (`refit-C-scores.csv`, `refit-C-states.csv`). pCO2 is AARD / mean ln / RMS ln.
 Aronu, Idris, Mamun and Xu enter no objective, and the 80 °C isotherm is held out.
 
-| scope | n | pre-refit, new pin (v5) | old C (`b66c7b96`, v3) | new C (`f66d972c`, v5) |
+| scope | n | pre-refit, new pin (v5) | C, incumbent R4 (`b66c7b96`, v3) | C, incumbent R4 (`f66d972c`, v5) |
 |---|---:|---|---|---|
 | all six sources | 161 | 52.5 % / +0.153 / 0.534 | 37.6 % / +0.079 / 0.410 | **37.7 %** / +0.080 / 0.410 |
 | Hilliard 2008 (fitted) | 30 | 69.1 % / +0.365 / 0.585 | 49.7 % / +0.326 / 0.448 | 49.8 % / +0.326 / 0.448 |
@@ -455,7 +472,7 @@ Aronu, Idris, Mamun and Xu enter no objective, and the 80 °C isotherm is held o
 - **Carbonate:** the ratio of model to measured carbonate share of dissolved carbon. The 40 °C,
   loading 0.21 point (0.12× for both refits) is excluded as out of line. Wong 2015 (about 5 % at
   30 °C) is quoted, not scored, because there are no 30 °C states.
-- **#108 rows:** `../composition-transfer/second-look-scores.csv`. They are not an untouched test
+- **#108 rows:** `../composition-transfer/second-look-incumbent-R4-scores.csv`. They are not an untouched test
   (see `../composition-transfer/README.md`).
 - **Solver status:** every variant on the new pin solves 123/123 packet and 161/161 pCO2 states. The
   tolerance is met, balances close within 1e-7, and the maximum stationarity residual is 1.1e-12
@@ -468,15 +485,15 @@ Aronu, Idris, Mamun and Xu enter no objective, and the 80 °C isotherm is held o
 - Baygi 2015 PC-SAFT with ideal ions: 21.03 % (Table 5). It is a prediction, but K(R4, R5) were
   chosen for fit.
 - Najafloo 2018 SAFT-HR: 39.96 % (Table 5).
-- New refit C (not fitted to Mamun): 21.3 %, with a −0.244 mean ln bias (pCO2 about 22 % low on
+- Refit C with the incumbent's R4 (not fitted to Mamun): 21.3 %, with a −0.244 mean ln bias (pCO2 about 22 % low on
   average).
 - Akula 2023a eNRTL, fitted, pooled over its 30 mass % subset at loading ≤ 0.5 (Fig. 4): 40.5 %.
-  Against the comparable 106 rows here, new refit C gives 39.3 %. Akula's rows are not these rows,
+  Against the comparable 106 rows here, that refit gives 39.3 %. Akula's rows are not these rows,
   and Hilliard and Jou are calibration rows here.
 
 **Outcome:**
 
-- Refit C through the Engine fitter, with packet v5 terms on the new pin, reproduces the old refit C
+- Refit C with the incumbent's R4, through the Engine fitter with packet v5 terms on the new pin, reproduces the old-pin run
   to within 3.4e-4 in any k_ij and 0.8 K in the slope. Every score moves by 0.1 percentage point or
   less.
 - The #107 pre-set rule is still missed: the 161-row AARD is 37.7 % against a 35 % limit, and
@@ -534,8 +551,8 @@ the pCO2 residual to temperature. Two things remain untested:
   negative mean bias.
 - The ion k_ij have no temperature dependence.
 - Carbonate is still over-predicted.
-- The HCO₃⁻+CO₃²⁻ observation mapping is a proposal. The Böttinger label is unresolved (Wong 2015 vs
-  Aronu 2011).
+- The HCO₃⁻ + CO₃²⁻ mapping for Matin and Böttinger is the merged canonical rule (#109). The
+  calibration packet used here predates it; see the note above.
 - One refit design was run. B and further ablations were stopped by owner instruction.
 
 ## Reproduce
