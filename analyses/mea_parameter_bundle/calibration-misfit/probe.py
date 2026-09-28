@@ -1,8 +1,9 @@
-"""Solve packet states at the adopted record, optionally with named parameter overrides.
+"""Solve packet states at the base record RECORD, optionally with named parameter overrides.
 
-Usage: probe.py OUT.jsonl [identity-substring ...] [identity=value ...]
-Writes one JSON line per state: identity, status, predictions, liquid composition.
-Perturbed solves warm-start from the adopted solution of the same state.
+Usage: probe.py OUT.jsonl [--record=PATH] [--canonical] [identity-substring ...] [identity=value ...]
+RECORD defaults to the pre-refit record on the Engine packet v5 association topology (candidate.py --packet-v5).
+Writes one JSON line per state: identity, status, predictions, liquid composition, base record SHA-256.
+Perturbed solves warm-start from the base-record solution of the same state.
 Run single-threaded; the solve cache and logs live in results/runs/calibration-misfit (ignored).
 """
 import copy
@@ -22,6 +23,7 @@ shared.verify_wheel()  # the pinned Engine wheel must be installed
 SCRATCH = W / 'analyses/mea_parameter_bundle/results/runs/calibration-misfit'
 shared.RUNS = SCRATCH / 'cache'
 OBSERVATIONS = shared.load_state_packet()['observations']
+RECORD = Path(__file__).with_name('pre-refit-packet-v5-parameters.json')
 
 
 def pressure_observations(select):
@@ -59,9 +61,18 @@ _BASE = {}
 
 
 def _base_model():
+    """The RECORD model and its cache fingerprint (the evaluator's default key is the selected record)."""
     if 'model' not in _BASE:
-        _BASE['model'] = epcsaft.Mixture(shared.load_parameters())
+        mapping = shared.parameter_mapping(RECORD)
+        _BASE.update(model=epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping)),
+                     fingerprint=shared.parameter_fingerprint(mapping))
     return _BASE['model']
+
+
+def base_record(o):
+    """The evaluator record of one state at RECORD; its liquid anchor warm-starts perturbed solves and declares fit states."""
+    return shared.evaluate_state(_base_model(), o['request'], shared._selected_reactions(), o['identity'], [], budget_s=90,
+                                 model_fingerprint=_BASE['fingerprint'])
 
 
 SLOPE = '/k_ij/reciprocal_temperature_slope'
@@ -94,16 +105,17 @@ def check(r):
 
 
 def evaluate(sets=None, filters=(), canonical=False, states=None):
-    """Yield one record per state matching ``filters`` at the adopted record plus ``sets``.
+    """Yield one record per state matching ``filters`` at RECORD plus ``sets``.
 
     States are ``states``, else the packet observations, or with ``canonical`` the 161 six-source pCO2 rows."""
     sets = dict(sets or {})
     reactions = shared._selected_reactions()
     reactions.update({k: v for k, v in sets.items() if k.startswith('reaction:')})
     eos = {k: v for k, v in sets.items() if not k.startswith('reaction:')}
-    mapping = with_values(shared.parameter_mapping(), eos) if eos else shared.parameter_mapping()
+    mapping = with_values(shared.parameter_mapping(RECORD), eos) if eos else shared.parameter_mapping(RECORD)
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping)) if eos else _base_model()
     fp = shared.parameter_fingerprint(mapping)
+    _base_model()
     for o in states or (CANONICAL if canonical else OBSERVATIONS):
         ident = o['identity']
         if filters and not any(f in ident for f in filters):
@@ -111,20 +123,23 @@ def evaluate(sets=None, filters=(), canonical=False, states=None):
         t0 = time.perf_counter()
         anchors = []
         if sets:
-            b = shared.evaluate_state(_base_model(), o['request'], shared._selected_reactions(), ident, [], budget_s=90)
-            anchors = [a for a in [shared.anchor_from(b)] if a]
+            anchors = [a for a in [shared.anchor_from(base_record(o))] if a]
         r = shared.evaluate_state(model, o['request'], reactions, ident, anchors, budget_s=90, model_fingerprint=fp)
         liq = next((p for p in r.get('phases') or [] if p.get('role') == 'liquid'), None)
         yield {'identity': ident, 'status': r['status'], 'predictions': r['predictions'], 'check': check(r),
                'liquid': liq, 'wall_s': time.perf_counter() - t0, 'sets': sets,
-               'wheel': shared.ENGINE_WHEEL_SHA256, 'T': o['request']['temperature']['value'],
+               'wheel': shared.ENGINE_WHEEL_SHA256, 'record_sha256': shared.sha256(RECORD),
+               'T': o['request']['temperature']['value'],
                'feed': o['request']['reaction_system']['feed_amounts_mol'],
                'targets': [{k: t[k] for k in ('identity', 'observed', 'basis', 'source_identity',
                                               'prediction_identity', 'scale') if k in t} for t in o['targets']]}
 
 
 def main(argv):
+    global RECORD
     out, rest = Path(argv[0]), argv[1:]
+    RECORD = Path(next((a.split('=', 1)[1] for a in rest if a.startswith('--record=')), RECORD))
+    rest = [a for a in rest if not a.startswith('--record=')]
     sets = {k: float(v) for k, v in (a.split('=') for a in rest if '=' in a)}
     filters = [a for a in rest if '=' not in a and a != '--canonical']
     with out.open('a') as h:
