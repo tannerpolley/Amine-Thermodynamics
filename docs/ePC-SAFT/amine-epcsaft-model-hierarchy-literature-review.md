@@ -476,7 +476,7 @@ Mamun value is 20.6 % (n = 19).
 These are recorded here, not fixed, because the notebook and data belong to
 their own owners.
 
-- **Matin 2012 bicarbonate targets (fixed by MEA #109).** The 19 Matin HCO3-
+- **Matin 2012 bicarbonate targets (data mapping set by MEA #109; the calibration packet still scores bicarbonate alone).** The 19 Matin HCO3-
   targets (loading 0.106–0.531) were scored against model HCO3- alone
   (`data/reference/MEA/manifests/speciation_target_membership.csv`, empty
   `linear_coefficients`). That file now gives HCO3- + CO3²- for every Matin
