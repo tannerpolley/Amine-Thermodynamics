@@ -1,4 +1,32 @@
-# Reaction-temperature study — recentered candidate adopted as exploratory incumbent
+# Reaction-temperature study
+
+## Current screen on the pinned Engine (ePC-SAFT #61, 2026-09-25)
+
+`../../scripts/run_reaction_temperature_fit.py` (screen, then `--candidate`) ran on wheel
+`b66c7b96…` with the adopted record `868a5018…` and the rebuilt heat stage (Engine
+record-anchored calorics). The sparse cohort is 6 pressure, 29 speciation and 6
+Kim–Svendsen 2007 heat targets; all 41 evaluate in all 11 scenarios (adopted values and
+±2.5 kJ/mol per reaction). Objective: squared residuals (log10 ratio; heat in kJ/mol),
+equal family weight, each family scaled by its adopted-record RMS (pressure 0.184,
+speciation 0.110, heat 5.93 kJ/mol), so the adopted record scores 1.
+
+| Quantity | Value |
+|---|---|
+| Singular values of the weighted Jacobian (per kJ/mol) | 0.184, 0.056, 0.011, 1.5e-5, 2.6e-7 |
+| Directions kept (≥ 0.1 of the largest) | 2 |
+| Proposed extra shifts R1–R5 (kJ/mol) | 0.0006, +1.005, +0.104, +3.448, −1.109 |
+| Objective: adopted / predicted / exact replay | 1.000 / 0.956 / 0.955 |
+| Family RMS at the proposal: pressure, speciation, heat | 0.190, 0.110, 5.30 kJ/mol |
+
+The adopted shifts are within 4.5 % of the local optimum on this cohort: the proposal
+trades pCO2 agreement for heat agreement. Only two combinations of the five reaction
+enthalpies are identified. The proposal is reported, not adopted (MEA #107 owns
+adoption). Records: `screen-record.json`, `screen-targets.csv`, `candidate-receipt.json`,
+`candidate-targets.csv`. Scenario differences are application-side re-solves; the Engine
+has no reaction-coefficient actions.
+
+## Historical study (superseded Engine)
+
 
 2026-09-03. The original screening record below used the earlier selected
 bundle. The subsequent exploratory adoption is recorded in
@@ -10,7 +38,7 @@ in the adoption record. Its scores must not be attributed to the exact selected
 vector. Future adoption must persist every scored shift or constrain omitted
 shifts to zero before replay.
 
-## Corrected scientific origin
+### Corrected scientific origin
 
 The retained Engine wheel is
 `40fba7cfb9c8414152f3e49636c49ae2e3f7099e30040d54d464ccb38355f805`;
@@ -21,7 +49,7 @@ from that selected parameter file, not from the state packet. The corrected
 sparse baseline reproduces the retained selected-bundle heat predictions to
 `1.1641532182693481e-9 kJ/mol CO2` maximum absolute difference.
 
-## Design and sparse result
+### Design and sparse result
 
 At the 313.15 K pivot, every ln K is preserved. For R1–R4,
 `delta A = delta h/(R T_p)` and `delta B = -delta h/R`; for R5,
@@ -50,7 +78,7 @@ The exact sparse weighted norm was `0.78042113`, versus `0.77852951` predicted
 and `1.0` at baseline. No recenter was used. Sparse heat RMSE was
 `12.21363818 kJ/mol CO2` over six intervals.
 
-## Full-domain replay and stopping decision
+### Full-domain replay and stopping decision
 
 The corrected candidate was replayed once over the full pressure/speciation
 catalog and 40/80 C heat. The 120 C heat sequence was stopped after the pressure
@@ -70,7 +98,7 @@ solver-coverage limitation, not proof of physical inadmissibility. The candidate
 is **not accepted**, and the requested complete 120 C heat holdout remains
 unresolved. No second candidate, additional recenter, or promotion was attempted.
 
-## Reproduction and retained evidence
+### Reproduction and retained evidence
 
 Use the repository's pinned environment and cap BLAS/OpenMP threads to one.
 The driver is `../../scripts/run_reaction_temperature_fit.py` and supports
@@ -86,7 +114,7 @@ candidate records retain their bounded shifts, weights, coverage, and
 incomplete-holdout status. Full-validation aggregate metrics are computed only
 on evaluated rows and must not be compared against a different cohort.
 
-## Stage 0--2 driver repair, parity, and benchmark (2026-09-03, later)
+### Stage 0--2 driver repair, parity, and benchmark (2026-09-03, later)
 
 The driver now uses one shared recovery policy (the retained baseline replay's
 ordering: same-temperature anchor, cold packet start, cross-temperature
@@ -104,7 +132,7 @@ in the mergeable tree; the records and selected target tables above are the
 reviewable evidence, and rerunning the driver recreates the omitted detail.
 
 
-## Revised screen, recenter, full replay, and adoption (2026-09-03, evening)
+### Revised screen, recenter, full replay, and adoption (2026-09-03, evening)
 
 Cohort changes: the three 120 C screen pressure rows are Jou 1995 states
 (vle_obs_0227, 0228, 0232) and evaluate in every scenario under the shared
