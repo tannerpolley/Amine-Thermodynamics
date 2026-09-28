@@ -104,8 +104,15 @@ def speciation_rows(limits: EvaluationLimits) -> list[dict[str, object]]:
     model, reactions = epcsaft.Mixture(load_parameters()), reaction_values(parameter_mapping())
     canonical = [r for r in read(CANONICAL_SPECIATION) if r["source_key"] in SOURCES
                  and r["target_membership"] == "active_v1" and float(r["mea_mass_fraction"]) == 0.3]
-    membership = {(r["measurement_identity"], r["species"]): r["linear_coefficients"]
-                  for r in read(MEMBERSHIP) if r["measurement_identity"]}
+    # The mapping is a property of how a source measured a species, so it applies to every
+    # row of that source and species, not only the fitted targets that carry it.
+    mappings: dict[tuple[str, str], set[str]] = {}
+    for r in read(MEMBERSHIP):
+        if r["linear_coefficients"]:
+            mappings.setdefault((r["source_key"], r["species"]), set()).add(r["linear_coefficients"])
+    if any(len(v) > 1 for v in mappings.values()):
+        raise ValueError(f"conflicting linear coefficients within a source and species: {mappings}")
+    membership = {key: value.pop() for key, value in mappings.items()}
     floor = {}
     for r in canonical:
         if r["measurement_role"] == "direct_positive":
@@ -125,7 +132,7 @@ def speciation_rows(limits: EvaluationLimits) -> list[dict[str, object]]:
         key = state_key(r["source_key"], float(r["temperature_C"]), float(r["co2_loading_mol_per_mol_mea"]))
         liquid, in_packet, failure = solved[key]
         species = r["species"]
-        raw_coefficients = membership[(r["record_id"], species)]
+        raw_coefficients = membership.get((r["source_key"], species))
         coefficients = json.loads(raw_coefficients) if raw_coefficients else {species: 1.0}
         components = [(component, coefficient) for label, coefficient in coefficients.items()
                       for component in MODEL_SPECIES[label]]
