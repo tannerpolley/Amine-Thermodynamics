@@ -12,8 +12,9 @@ GATE0_PREREGISTRATION_PATH = (
     / "reactive_epcsaft_parameter_evidence"
     / "ionic_volumetric_fit_preregistration.json"
 )
+# Re-pinned for the MEA #109 membership hash below; no other preregistration field changed.
 EXPECTED_GATE0_CANONICAL_SHA256 = (
-    "ee38cd533ac4647fb20cb05e06694306c2c0fd8aabedcfd09655e9592c76f454"
+    "8214e8222c3c9663ce4306c0739789ab0f2f21858cfe3565f8654401e3453c31"
 )
 GATE0_REPO_ROOT = Path(__file__).resolve().parents[3]
 EXPECTED_TRACER_SOURCES = {
@@ -55,8 +56,10 @@ EXPECTED_TRACER_SOURCES = {
         "manifest_path": (
             "data/reference/MEA/manifests/speciation_target_membership.csv"
         ),
+        # MEA #109 (was a89a3f03...): HCO3- + CO3^2- linear coefficients on the Matin 2012 and
+        # Böttinger 2008 HCO3- rows only; the guarded state_049 MEACOO- row is unchanged.
         "manifest_sha256": (
-            "a89a3f0373a86813482158f180939cf57f74be038cd59f244dfadcb689923190"
+            "fc4109dd131e34118c14eac974be6fe2b76ed0cad0f38d044dc14e00a308f5ea"
         ),
     },
 }
