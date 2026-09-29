@@ -1,0 +1,114 @@
+# Composition transfer on the 70 untouched Aronu 2011 rows (#108)
+
+This folder holds one prediction run, finished 2026-09-24 16:12. It predicts pCO2 for the Aronu 2011
+rows at 15 and 45 wt% MEA. No fit or model selection used these rows. The partition was frozen in
+`d7d187e` (`aronu-2011-untouched-vle-rows.txt`, SHA-256 `eaaaa6f9…cea1`, the #108 audit hash). The
+row IDs in `transfer-states.csv` equal that partition for both records.
+
+## Result: 15 wt% transfer fails
+
+ln(pred/obs), one row per measured point, failures kept:
+
+| MEA wt% | record | solved | AARD | mean ln | RMS ln |
+|---|---|---:|---:|---:|---:|
+| 15 | refit C | 33/33 | 87.8 % | +0.535 | 0.656 |
+| 15 | pre-refit | 33/33 | 90.6 % | +0.541 | 0.675 |
+| 45 | refit C | 36/37 | 23.3 % | −0.180 | 0.351 |
+| 45 | pre-refit | 32/37 | 32.7 % | −0.268 | 0.512 |
+
+By temperature (refit C; AARD / mean ln / n):
+
+| MEA wt% | 40 °C | 60 °C | 80 °C |
+|---|---|---|---|
+| 15 | 77 % / +0.39 / 14 | 81 % / +0.56 / 13 | 126 % / +0.82 / 6 |
+| 45 | 26 % / −0.14 / 14 | 23 % / −0.25 / 11 | 20 % / −0.16 / 11 |
+
+- **15 wt%:** both records over-predict pCO2 by a factor of about 1.7 on average (exp 0.535). The bias
+  grows with temperature. Refit C barely changes it.
+- **45 wt%:** refit C under-predicts by about 16 % on average. Its AARD is 23 %, against 27 % for
+  refit C on the 36 Aronu rows at 30 wt%, which no fit used (`../calibration-misfit/README.md`).
+- **Failures:** each failure is an Ipopt `LOCAL_INFEASIBILITY` return unless marked otherwise.
+  - Refit C: `vle_obs_0072` (45 wt%, 40 °C, loading 0.195).
+  - Pre-refit: `0075` and `0077` (40 °C); `0086` and `0090` (60 °C); `0088` (60 °C), which hit the
+    90 s budget.
+- **Solved rows:** every solved row meets the requested tolerance with no balance error. The maximum
+  stationarity residual is 2.3e-13.
+
+## What was evaluated
+
+- **Refit C with the incumbent's fitted R4** ("refit C" in the tables above): parameter SHA-256
+  `4c1bff04…9e5159`, written by `../calibration-misfit/candidate.py refit-C-converged.json`. The CSV label
+  `adopted-refit-C` is the command-line label of the run. **Correction (2026-09-28):** the record carries the
+  incumbent's fitted R4 (`a` = 1.505015, `b_k` = −1317.049 K), not the Tong 2012 / Aroua 1999 source R4
+  (`a` = 2.151, `b_k` = −1545.3 K) that refit C was defined to hold. The result stands as a prediction of this
+  record. Any source-R4 score on these rows is a second look. Refit C was the candidate for adoption at the time; it has not been
+  adopted (owner decision 2026-09-28: refit on the current Engine first).
+- **Pre-refit:** the exploratory incumbent, `868a5018…fcb7be`.
+- **Engine:** wheel `b66c7b96…` (SHA-256 `b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58`),
+  Engine `443a9da4`, parameter packet v3. This is the old pin, not the current Engine.
+- **Scripts:** `transfer.py` `dab504a8…`, `../calibration-misfit/probe.py` `33bbd805…`. Each CSV row
+  carries all hashes.
+
+Each state is the 30 wt% packet pCO2 request at the same temperature and nearest loading. The CO2
+feed is set to the row loading and water is rescaled to the row's MEA mass fraction.
+
+## Second look: refit C with the incumbent's fitted R4 on Engine `1303c119` (2026-09-28)
+
+`second-look-incumbent-R4-states.csv`, `second-look-incumbent-R4-scores.csv` (CSV label `new-refit-C`). The rows are the same 70. This is **not** an
+untouched test: the one-time results above were seen before this refit was run.
+
+- **Record:** refit C with the incumbent's fitted R4, through the Engine fitter with packet v5 association
+  terms, `../calibration-misfit/refit-C-incumbent-R4-parameters.json` (`039ddaba…`), not adopted.
+- **Engine:** wheel `f66d972c…`, Engine `1303c119`.
+
+| MEA wt% | solved | AARD | mean ln | RMS ln |
+|---|---:|---:|---:|---:|
+| 15 | 33/33 | 87.8 % | +0.536 | 0.656 |
+| 45 | 37/37 | 23.3 % | −0.182 | 0.350 |
+
+- **By temperature:** 15 wt% gives 77 / 81 / 126 % at 40 / 60 / 80 °C (mean ln +0.39 / +0.56 / +0.82).
+  45 wt% gives 26 / 23 / 20 %.
+- **Solver:** `vle_obs_0072`, which failed in the one-time run, now solves. Every row meets the
+  tolerance, and the maximum stationarity residual is 1.7e-13.
+- **Conclusion:** the result matches the one-time run to 0.1 percentage point. The 15 wt% transfer
+  still fails.
+
+## Second look: refit C with the source R4 (2026-09-28)
+
+`second-look-source-R4-states.csv`, `second-look-source-R4-scores.csv`. The rows are the same 70. This
+is **not** an untouched test.
+
+- **Record:** refit C as defined, with R4 at its Tong 2012 / Aroua 1999 source correlation
+  (`a` = 2.151, `b_k` = −1545.3 K): `../calibration-misfit/refit-C-parameters.json` (`8b6f30ea…`), not
+  adopted.
+- **Engine:** wheel `f66d972c…`, Engine `1303c119`, packet v5 association terms.
+
+| MEA wt% | solved | AARD | mean ln | RMS ln |
+|---|---:|---:|---:|---:|
+| 15 | 33/33 | 83.5 % | +0.513 | 0.634 |
+| 45 | 37/37 | 22.2 % | −0.184 | 0.349 |
+
+- **By temperature:** 15 wt% gives 70 / 78 / 127 % at 40 / 60 / 80 °C (mean ln +0.35 / +0.55 / +0.82).
+  45 wt% gives 25 / 23 / 18 %.
+- **Conclusion:** with the source R4 the 15 wt% transfer still fails. pCO2 is 1.67× too high on
+  average (exp 0.513), and the bias grows with temperature.
+
+## Claim limit
+
+This is composition transfer at fixed chemistry. Temperatures (40–80 °C) lie inside the calibrated
+range, and no species or reactions are new. It is not temperature validation or new-species
+validation. The source is one laboratory, Aronu 2011.
+
+The 2026-09-24 run is the one-time look at these rows. Any later model scored on them is a second look, not an
+untouched test.
+
+## Reproduce
+
+```sh
+OMP_NUM_THREADS=1 python transfer.py adopted-refit-C=REFIT_C.json pre-refit=PRE_REFIT.json   # one-time run
+OMP_NUM_THREADS=1 python transfer.py --out=second-look-incumbent-R4 new-refit-C=../calibration-misfit/refit-C-incumbent-R4-parameters.json
+OMP_NUM_THREADS=1 python transfer.py --out=second-look-source-R4 source-R4-refit-C=../calibration-misfit/refit-C-parameters.json
+```
+
+Solver caches go to `../results/runs/composition-transfer/` (ignored). The run log is
+`transfer.log` there.
