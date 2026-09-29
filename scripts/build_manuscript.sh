@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-latex_dir="$repo_root/docs/latex"
+latex_dir="$repo_root/docs/scientific/latex"
 SOURCE_DATE_EPOCH="$(git -C "$repo_root" log -1 --format=%ct)"
 export SOURCE_DATE_EPOCH
 export FORCE_SOURCE_DATE=1

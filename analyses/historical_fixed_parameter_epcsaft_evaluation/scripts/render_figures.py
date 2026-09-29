@@ -38,7 +38,7 @@ CONTROLLED_COMPARISON_INPUT = (
 CONTROLLED_COMPARISON_FIGURE_OUT = (
     ANALYSIS_DIR / "figures" / "controlled_comparison" / "output"
 )
-LATEX_FIGURES_DIR = REPO_ROOT / "docs" / "latex" / "figures"
+LATEX_FIGURES_DIR = REPO_ROOT / "docs" / "scientific" / "latex" / "figures"
 STALE_SCAFFOLD_PATTERNS = (
     "historical_activity_evaluation_speciation_scaffold_curve.csv",
     "historical_activity_evaluation_speciation_scaffold_*C.png",

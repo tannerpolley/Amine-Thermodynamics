@@ -5,8 +5,8 @@ usage() {
     cat <<'EOF'
 Usage: sync_to_overleaf_mirror.sh [--dry-run] [--mirror-root PATH]
 
-Synchronize docs/latex into a separate, flat Overleaf Git checkout. The mirror
-is made an exact projection of docs/latex except for scripts/ and builds/.
+Synchronize docs/scientific/latex into a separate, flat Overleaf Git checkout. The mirror
+is made an exact projection of docs/scientific/latex except for scripts/ and builds/.
 Set MEA_OVERLEAF_MIRROR or pass --mirror-root to select the mirror checkout.
 EOF
 }
