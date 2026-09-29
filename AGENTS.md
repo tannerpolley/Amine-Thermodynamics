@@ -45,7 +45,7 @@ CSE execution mode: direct.
 
 ## Startup Reads
 
-- For scientific work, use the installed CSE skills and read `docs/scientific/README.md` and `docs/scientific/CONTEXT.md` before choosing research, diagnosis or implementation. The context map identifies established estimation research, completed studies and unresolved questions.
+- For scientific work, use the installed CSE skills and read `docs/scientific/README.md` and `docs/scientific/CONTEXT.md` before choosing research, diagnosis or implementation. The scientific context map identifies established estimation research, completed studies and unresolved questions.
 - Before proposing a search, conversion, fit or repeated study, follow the relevant map entry to its existing source synthesis and retained results. Use Git history for retired records; distinguish an unreadable reference from absent research. Report the precise remaining gap and what new evidence the proposed work would add.
 
 - Read `docs/.codex-journal/user_preferences.md` when it exists.
@@ -73,8 +73,8 @@ CSE execution mode: direct.
 - Prefer uv-managed workflows. Use `.venv/bin/python` only for interpreter-specific debugging or repo-local troubleshooting.
 - Normal and final work uses one immutable Engine wheel and SHA-256 hash. Local co-development may use an explicitly supplied candidate wheel; never import an Engine source checkout.
 - Build and debug new generic ePC-SAFT methods first in `ePC-SAFT-project/analysis/` or `validation/`. MEA may then run direct Engine calculations to reproduce that pinned method against MEA-owned inputs; direct Engine use here is allowed and does not move generic method ownership.
-- Keep MEA chemistry hypotheses, source data, model selection, regression, validation, parameter adoption, figures, and the thermodynamics manuscript in this repository.
-- Keep Engine equations, generic equilibrium compilation, exact derivatives, and generic regression mechanics in ePC-SAFT-project. Do not create nested repositories, submodules, or sibling-source runtime imports.
+- Keep MEA chemistry hypotheses, source data, model selection, parameter fitting, validation, parameter adoption, figures, and the thermodynamics manuscript in this repository.
+- Keep Engine equations, generic equilibrium compilation, exact derivatives, and generic parameter fitting mechanics in ePC-SAFT-project. Do not create nested repositories, submodules, or sibling-source runtime imports.
 - Reusable scientific packets are materialized from Data by exact commit, packet path/version, fingerprint, and file hashes. Do not discover sibling repositories at runtime.
 - Keep Engine interactions behind the approved runtime and diagnostic modules. Unsupported scientific capabilities must fail explicitly; do not restore old APIs or local equation copies.
 
