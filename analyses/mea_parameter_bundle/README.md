@@ -2,7 +2,7 @@
 
 This directory is the canonical, update-in-place research notebook for the
 single nine-species MEA ePC-SAFT parameter bundle. The rendered view is part
-of the root Quarto Manuscript at `analyses/`: [`notebook.qmd`](notebook.qmd) is
+of the root Quarto analysis website at `analyses/`: [`notebook.qmd`](notebook.qmd) is
 the parent overview with the selected parameter tables and the main pressure,
 speciation and heat figures; each child analysis folder contains one
 `index.qmd` report. Keep the overview and child reports synchronized with the
@@ -11,10 +11,10 @@ candidate-specific notebook copies or parallel status notes.
 
 ## Presentation map
 
-`analyses/manuscript.py` registers the overview and the nine child reports in
-`analyses/_cse-manuscript.json`; the analysis index lists them by group
-(formulation, coupled assessment, historical background), and each rendered page
-links back to that index. The parent/child tree is also recorded in
+`analyses/manuscript.py` registers the overview and nine child reports in
+`analyses/_cse-manuscript.json`; the analysis index and sidebar preserve their
+groups (formulation, coupled assessment, historical background), and the
+sidebar links each page back to Home. The parent/child tree is also recorded in
 [`analysis.yaml`](analysis.yaml). The historical page preserves the July
 designs as retained background on discarded strategies, with exact Git
 retrievals, rather than presenting them as the current plan.
@@ -26,10 +26,10 @@ python3 manuscript.py validate .
 bash render.sh
 ```
 
-The overview is `analyses/_site/mea_parameter_bundle/notebook-preview.html`;
-each child report is `index-preview.html` in its folder under `_site/`. The CSE
-wrapper always passes `--no-execute`; Quarto reads retained tables, figures and
-records but never runs the thermodynamic model. Evidence links to retained
+The overview is `analyses/_site/mea_parameter_bundle/notebook.html`; each child
+report is `index.html` in its folder under `_site/`. The CSE wrapper renders
+HTML by default and always passes `--no-execute`; Quarto reads retained tables,
+figures and records but never runs the thermodynamic model. Evidence links to retained
 CSV/JSON files resolve only in the repository checkout, not in `_site/`.
 
 The strict numerical publication gate wraps the same render. From this
