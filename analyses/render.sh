@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ -f manuscript.py || -f _cse-manuscript.json ]]; then
-  python3 ./manuscript.py validate .
+  python3 ./manuscript.py sync .
 fi
 
 runtime_root="$(mktemp -d "${TMPDIR:-/tmp}/cse-quarto.XXXXXX")"
@@ -22,5 +22,13 @@ for directory in "$TEXMFVAR" "$QUARTO_CACHE_DIR" "$DENO_DIR" "$XDG_CACHE_HOME"; 
   }
 done
 
+# Select HTML unless the caller selects another format; page metadata may also declare PDF.
+target_args=(--to html)
+for argument in "$@"; do
+  case "$argument" in
+    --to|--to=*|-t|-t=*) target_args=(); break ;;
+  esac
+done
+
 # Rendering must neither install TeX packages nor execute document code.
-quarto render "$@" -M latex-auto-install:false --no-execute
+quarto render "$@" "${target_args[@]}" -M latex-auto-install:false --no-execute

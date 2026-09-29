@@ -51,6 +51,37 @@ terminology rules; do not invent a preference during Setup.
 
 Name the source hierarchy and exact location of project-approved equations, parameters, data, reference cases, and tolerances.
 
+## Source/data adoption
+
+source/data adoption: zotero
+
+## Local Snakemake workflow adoption
+
+The investigator deferred local Snakemake adoption for these populated analyses on 2026-09-29.
+
+| Analysis | Decision |
+|---|---|
+| `analyses/enrtl_six_species_ideal_comparison/` | deferred |
+| `analyses/film_chemistry_work_package_a/` | deferred |
+| `analyses/historical_fixed_parameter_epcsaft_evaluation/` | deferred |
+| `analyses/ideal_reaction_equilibrium/` | deferred |
+| `analyses/mea_parameter_bundle/` | deferred |
+| `analyses/mea_parameter_bundle/association-topology/` | deferred |
+| `analyses/mea_parameter_bundle/born-permittivity/` | deferred |
+| `analyses/mea_parameter_bundle/calorimetry/` | deferred |
+| `analyses/mea_parameter_bundle/co2-r4-calibration/` | deferred |
+| `analyses/mea_parameter_bundle/coupling-and-identification/` | deferred |
+| `analyses/mea_parameter_bundle/historical-designs/` | deferred |
+| `analyses/mea_parameter_bundle/ionic-speciation-fit/` | deferred |
+| `analyses/mea_parameter_bundle/neutral-mea-water/` | deferred |
+| `analyses/mea_parameter_bundle/reaction-temperature-fit/` | deferred |
+| `analyses/neutral_pcsaft_pressure_reference/` | deferred |
+| `analyses/paper_validation/2015_baygi/` | deferred |
+| `analyses/reactive_epcsaft_parameter_evidence/` | deferred |
+| `analyses/reactive_epcsaft_parameter_evidence/pressure_first/` | deferred |
+| `analyses/six_species_solubility_reference/` | deferred |
+| `analyses/speciation_evidence_harmonization/` | deferred |
+
 ## Claim boundaries
 
 State supported uses, excluded phenomena, validity limits, and unresolved scientific questions.
