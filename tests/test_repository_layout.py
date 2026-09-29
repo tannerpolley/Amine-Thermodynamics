@@ -36,10 +36,10 @@ def test_tracked_file_size_boundaries(tmp_path):
 
 def test_cse_layout_keeps_cas_and_retires_central_notebook():
     assert not (ROOT / "docs/scientific/notebook").exists()
-    main = (ROOT / "docs/latex/main.tex").read_text()
+    main = (ROOT / "docs/scientific/latex/main.tex").read_text()
     assert r"\documentclass[a4paper,fleqn]{cas-sc}" in main
     assert r"\graphicspath{{figures/generated/}}" in main
-    assert (ROOT / "docs/latex/figures/generated").is_dir()
+    assert (ROOT / "docs/scientific/latex/figures/generated").is_dir()
     assert (
         ROOT
         / "analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/scripts/generate.py"

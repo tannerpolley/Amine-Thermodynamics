@@ -8,7 +8,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-LATEX_DIR = ROOT / "docs" / "latex"
+LATEX_DIR = ROOT / "docs" / "scientific" / "latex"
 BUILD_DIR = LATEX_DIR / "builds"
 PDF_PATH = BUILD_DIR / "main.pdf"
 LOG_PATH = BUILD_DIR / "main.log"
@@ -26,7 +26,7 @@ UNDEFINED_PATTERNS = (
 
 def manuscript_inputs() -> list[Path]:
     completed = subprocess.run(
-        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "docs/latex"],
+        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "docs/scientific/latex"],
         cwd=ROOT,
         check=True,
         capture_output=True,
@@ -70,7 +70,7 @@ def validate_build(paths: list[Path]) -> dict[str, object]:
 
     newest_input = max(path.stat().st_mtime_ns for path in paths)
     if PDF_PATH.stat().st_mtime_ns < newest_input:
-        raise RuntimeError("docs/latex/builds/main.pdf is older than a manuscript input.")
+        raise RuntimeError("docs/scientific/latex/builds/main.pdf is older than a manuscript input.")
 
     logs = LOG_PATH.read_text(encoding="utf-8", errors="replace")
     if BLG_PATH.exists():
