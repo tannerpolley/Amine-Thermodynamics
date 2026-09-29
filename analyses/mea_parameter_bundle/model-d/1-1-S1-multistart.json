@@ -1,0 +1,607 @@
+{
+ "C_src": {
+  "start": [
+   0.08856574707663775,
+   -0.23435339828916843,
+   0.3,
+   -0.3,
+   -168.228432055721
+  ],
+  "fitted": [
+   0.041441083250741646,
+   -0.26272894185779366,
+   0.2479571774520709,
+   -0.7152685509622538,
+   -196.3962970691141
+  ],
+  "status": "converged",
+  "message": "Function tolerance reached. |cost_change|/cost: 3.020747e-13 <= 1.000000e-12",
+  "usable": true,
+  "initial_cost": 112.70495613787143,
+  "final_cost": 55.018167319034,
+  "iterations": 7,
+  "residual_evaluations": 7,
+  "jacobian_evaluations": 7,
+  "trial_failures": 0,
+  "failures": [],
+  "active_bounds": [],
+  "engine_covariance": {
+   "status": "available",
+   "assumption": "unit-variance weighted residuals, independent errors and a regular local linearization at an interior point; multiply by variance_factor for an unknown common variance; no claim under bounds, rank deficiency or model discrepancy",
+   "rank": 5,
+   "singular_values": [
+    0.9213805526327606,
+    0.5832297037745189,
+    0.2740258249309983,
+    0.17527065830119287,
+    0.09469835881961891
+   ],
+   "variance_factor": 0.6287790550746742
+  },
+  "column_normalized_singular_values": [
+   1.5409159328665336,
+   1.1357600771839405,
+   0.9185565807768912,
+   0.6333793425360342,
+   0.30118358400364054
+  ],
+  "cost_gradient": {
+   "pair/carbamate-anion/water/k_ij": 0.00011759076295625448,
+   "pair/protonated-monoethanolamine/water/k_ij": -5.426671031916186e-05,
+   "pair/bicarbonate-anion/water/k_ij": 1.6604735523229053e-05,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 2.2140598511910525e-05,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -2.8995261049796772e-08
+  },
+  "active_bound_outward_descent": {},
+  "free_coordinates": [
+   "pair/carbamate-anion/water/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij",
+   "pair/bicarbonate-anion/water/k_ij",
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope"
+  ],
+  "residual_variance": 0.6287790550746745,
+  "conditional_standard_error": {
+   "pair/carbamate-anion/water/k_ij": 0.020486222395497862,
+   "pair/protonated-monoethanolamine/water/k_ij": 0.023075043717508775,
+   "pair/bicarbonate-anion/water/k_ij": 0.07669469145744001,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.029042010973495656,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 49.76926947399068
+  },
+  "conditional_correlation": [
+   [
+    0.9999999999999999,
+    -0.6880181442122508,
+    0.7711331826627155,
+    0.20997473664209673,
+    0.5499408118143478
+   ],
+   [
+    -0.6880181442122509,
+    1.0,
+    -0.8126336100619371,
+    0.010667509079603127,
+    -0.10360483194862272
+   ],
+   [
+    0.7711331826627156,
+    -0.8126336100619371,
+    1.0000000000000002,
+    0.13286043268985143,
+    0.37114169919571927
+   ],
+   [
+    0.2099747366420967,
+    0.01066750907960316,
+    0.13286043268985134,
+    1.0,
+    0.07770883580841538
+   ],
+   [
+    0.5499408118143477,
+    -0.10360483194862227,
+    0.3711416991957189,
+    0.0777088358084155,
+    1.0000000000000002
+   ]
+  ],
+  "fit_s": 455.19647270899986,
+  "setup_s": 36.29526735299987,
+  "admissible": true,
+  "k_at_temperatures_k": {
+   "temperatures_k": [
+    293.15,
+    353.15,
+    393.15
+   ],
+   "pair/protonated-monoethanolamine/water/k_ij": [
+    -0.3055168422656866,
+    -0.19169242477115178,
+    -0.13511075028130842
+   ]
+  },
+  "admissibility_domain_k": [
+   293.15,
+   393.15
+  ]
+ },
+ "provenance": {
+  "parameters": [
+   "pair/carbamate-anion/water/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij",
+   "pair/bicarbonate-anion/water/k_ij",
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope"
+  ],
+  "bounds": [
+   [
+    -0.5,
+    -0.5,
+    -0.5,
+    -1.0,
+    -1000.0
+   ],
+   [
+    0.5,
+    0.5,
+    0.5,
+    1.0,
+    1000.0
+   ]
+  ],
+  "scales": [
+   0.01,
+   0.01,
+   0.01,
+   0.01,
+   10.0
+  ],
+  "n_rows": 180,
+  "born": {
+   "c_shell": 1.0,
+   "c_dielectric": 1.0
+  },
+  "reaction_overrides": {
+   "reaction:R4:correlation:a": 2.151,
+   "reaction:R4:correlation:b_k": -1545.3
+  },
+  "excluded_states": [
+   "Bottinger2008_state_042",
+   "Bottinger2008_state_046",
+   "Matin2012_state_016"
+  ],
+  "wheel_sha256": "f66d972c032ce709ada69e8d8177e195c7e416800757663b7420c22bda5f6328",
+  "engine_commit": "1303c119e4a21ba31e46596fe62ee3fdfe4cc253",
+  "base_record_sha256": "562b5976c7f6d44b782498480fce54bad1e3142d9541438f6d7a42a876a3df87",
+  "state_packet_sha256": "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448",
+  "script_sha256": "8ce1fa9c59e1dfee2a75da2e6e3595bf7107835a59b8327202767647ebcb62b9"
+ },
+ "pre-refit": {
+  "start": [
+   0.0,
+   0.0,
+   0.0,
+   -0.00201813457644,
+   0.0
+  ],
+  "fitted": [
+   0.041440772710345616,
+   -0.262728569038263,
+   0.2479559896773835,
+   -0.7152686893773178,
+   -196.39639477229142
+  ],
+  "status": "converged",
+  "message": "Function tolerance reached. |cost_change|/cost: 4.598922e-13 <= 1.000000e-12",
+  "usable": true,
+  "initial_cost": 399.2114053687935,
+  "final_cost": 55.01816731904296,
+  "iterations": 10,
+  "residual_evaluations": 10,
+  "jacobian_evaluations": 10,
+  "trial_failures": 0,
+  "failures": [],
+  "active_bounds": [],
+  "engine_covariance": {
+   "status": "available",
+   "assumption": "unit-variance weighted residuals, independent errors and a regular local linearization at an interior point; multiply by variance_factor for an unknown common variance; no claim under bounds, rank deficiency or model discrepancy",
+   "rank": 5,
+   "singular_values": [
+    0.921380548494292,
+    0.5832300090682984,
+    0.27402583979475326,
+    0.17527070062935057,
+    0.09469847354632963
+   ],
+   "variance_factor": 0.6287790550747767
+  },
+  "column_normalized_singular_values": [
+   1.5409157561633176,
+   1.1357601667473745,
+   0.9185565772485164,
+   0.6333793830830885,
+   0.3011840758014667
+  ],
+  "cost_gradient": {
+   "pair/carbamate-anion/water/k_ij": -0.0001519064347892396,
+   "pair/protonated-monoethanolamine/water/k_ij": 7.580609021573537e-05,
+   "pair/bicarbonate-anion/water/k_ij": -1.5992018395305507e-05,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -2.3066733208398915e-05,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 3.7989784784989156e-08
+  },
+  "active_bound_outward_descent": {},
+  "free_coordinates": [
+   "pair/carbamate-anion/water/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij",
+   "pair/bicarbonate-anion/water/k_ij",
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope"
+  ],
+  "residual_variance": 0.6287790550747767,
+  "conditional_standard_error": {
+   "pair/carbamate-anion/water/k_ij": 0.020486194688157752,
+   "pair/protonated-monoethanolamine/water/k_ij": 0.023074999016339602,
+   "pair/bicarbonate-anion/water/k_ij": 0.07669459198570766,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.02904200996385742,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 49.7692720213015
+  },
+  "conditional_correlation": [
+   [
+    1.0000000000000002,
+    -0.6880171472401577,
+    0.7711325681531019,
+    0.20997496229157686,
+    0.5499412975430414
+   ],
+   [
+    -0.6880171472401582,
+    1.0,
+    -0.8126330372856806,
+    0.010667607746207142,
+    -0.10360466024430419
+   ],
+   [
+    0.771132568153102,
+    -0.8126330372856806,
+    0.9999999999999999,
+    0.13286055311649106,
+    0.37114191594119894
+   ],
+   [
+    0.20997496229157672,
+    0.010667607746207241,
+    0.13286055311649095,
+    1.0,
+    0.07770886139037493
+   ],
+   [
+    0.549941297543041,
+    -0.10360466024430369,
+    0.37114191594119844,
+    0.07770886139037504,
+    1.0
+   ]
+  ],
+  "fit_s": 652.9984395789998,
+  "setup_s": 36.29526735299987,
+  "admissible": true,
+  "k_at_temperatures_k": {
+   "temperatures_k": [
+    293.15,
+    353.15,
+    393.15
+   ],
+   "pair/protonated-monoethanolamine/water/k_ij": [
+    -0.30551649073226916,
+    -0.19169201661239366,
+    -0.135110313974314
+   ]
+  },
+  "admissibility_domain_k": [
+   293.15,
+   393.15
+  ]
+ },
+ "incumbent-R4-C": {
+  "start": [
+   0.10725041093591134,
+   -0.241429735948538,
+   0.3,
+   -0.3,
+   -141.25360087122007
+  ],
+  "fitted": [
+   0.04144099962017708,
+   -0.26272884332458185,
+   0.24795685367389392,
+   -0.7152685916992625,
+   -196.39632988995425
+  ],
+  "status": "converged",
+  "message": "Function tolerance reached. |cost_change|/cost: 2.088306e-13 <= 1.000000e-12",
+  "usable": true,
+  "initial_cost": 113.47065726478885,
+  "final_cost": 55.01816731902435,
+  "iterations": 8,
+  "residual_evaluations": 8,
+  "jacobian_evaluations": 8,
+  "trial_failures": 0,
+  "failures": [],
+  "active_bounds": [],
+  "engine_covariance": {
+   "status": "available",
+   "assumption": "unit-variance weighted residuals, independent errors and a regular local linearization at an interior point; multiply by variance_factor for an unknown common variance; no claim under bounds, rank deficiency or model discrepancy",
+   "rank": 5,
+   "singular_values": [
+    0.9213805514690009,
+    0.5832297834372617,
+    0.27402582917219404,
+    0.1752706693696469,
+    0.09469838931088358
+   ],
+   "variance_factor": 0.628779055074564
+  },
+  "column_normalized_singular_values": [
+   1.540915886343157,
+   1.135760100089603,
+   0.9185565802410908,
+   0.633379353147505,
+   0.3011837149680892
+  ],
+  "cost_gradient": {
+   "pair/carbamate-anion/water/k_ij": 5.004428417620943e-05,
+   "pair/protonated-monoethanolamine/water/k_ij": -2.47385381113574e-05,
+   "pair/bicarbonate-anion/water/k_ij": 5.49297376783997e-06,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 7.826886569528568e-06,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -1.249345426743674e-08
+  },
+  "active_bound_outward_descent": {},
+  "free_coordinates": [
+   "pair/carbamate-anion/water/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij",
+   "pair/bicarbonate-anion/water/k_ij",
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope"
+  ],
+  "residual_variance": 0.628779055074564,
+  "conditional_standard_error": {
+   "pair/carbamate-anion/water/k_ij": 0.0204862150384695,
+   "pair/protonated-monoethanolamine/water/k_ij": 0.02307503185844507,
+   "pair/bicarbonate-anion/water/k_ij": 0.07669466502186406,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.029042010670085324,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 49.769270190843365
+  },
+  "conditional_correlation": [
+   [
+    1.0,
+    -0.6880178794877256,
+    0.7711330191392415,
+    0.20997479484221834,
+    0.5499409402234158
+   ],
+   [
+    -0.6880178794877256,
+    1.0,
+    -0.8126334571632498,
+    0.01066753676377013,
+    -0.1036047851704151
+   ],
+   [
+    0.7711330191392415,
+    -0.8126334571632499,
+    1.0000000000000002,
+    0.13286046368942167,
+    0.37114175635638375
+   ],
+   [
+    0.2099747948422184,
+    0.010667536763770028,
+    0.13286046368942173,
+    1.0000000000000002,
+    0.07770884253691887
+   ],
+   [
+    0.5499409402234161,
+    -0.10360478517041542,
+    0.37114175635638397,
+    0.07770884253691888,
+    1.0
+   ]
+  ],
+  "fit_s": 524.7436907860001,
+  "setup_s": 36.29526735299987,
+  "admissible": true,
+  "k_at_temperatures_k": {
+   "temperatures_k": [
+    293.15,
+    353.15,
+    393.15
+   ],
+   "pair/protonated-monoethanolamine/water/k_ij": [
+    -0.30551675088299063,
+    -0.19169231436664602,
+    -0.1351106304211351
+   ]
+  },
+  "admissibility_domain_k": [
+   293.15,
+   393.15
+  ]
+ },
+ "seed-1": {
+  "start": [
+   0.011821624700256717,
+   0.4504636963259353,
+   -0.35584038728036627,
+   0.8972988942744877,
+   -376.3370959790291
+  ],
+  "fitted": [],
+  "status": "initial_evaluation_failed",
+  "message": "MAXITER_EXCEEDED: budget_exhausted: residual 2.3658489955380468 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 1.173332897000215e-10, amplification 7.3694613507998584e-05",
+  "usable": false,
+  "initial_cost": 0.0,
+  "final_cost": 0.0,
+  "iterations": 0,
+  "residual_evaluations": 0,
+  "jacobian_evaluations": 1,
+  "trial_failures": 1,
+  "failures": [
+   {
+    "trial": 1,
+    "observation": "Bottinger2008_state_049::MEA + MEAH+",
+    "status": "CentralSolveUnavailable",
+    "message": "MAXITER_EXCEEDED: budget_exhausted: residual 2.3658489955380468 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 1.173332897000215e-10, amplification 7.3694613507998584e-05",
+    "jacobian": true
+   }
+  ],
+  "active_bounds": [],
+  "engine_covariance": {
+   "status": "not_evaluated",
+   "assumption": "",
+   "rank": 0,
+   "singular_values": [],
+   "variance_factor": null
+  },
+  "fit_s": 44.3957820429996,
+  "setup_s": 1.17549648899967,
+  "admissible": true,
+  "k_at_temperatures_k": {
+   "temperatures_k": [
+    293.15,
+    353.15,
+    393.15
+   ]
+  },
+  "admissibility_domain_k": [
+   293.15,
+   393.15
+  ]
+ },
+ "seed-2": {
+  "start": [
+   -0.2383878657506836,
+   -0.2015088565858767,
+   0.3142257405942803,
+   -0.8161681157298062,
+   200.20105193130803
+  ],
+  "fitted": [
+   0.04144075457601465,
+   -0.2627285471050957,
+   0.24795592065403665,
+   -0.7152686971602799,
+   -196.39639991401248
+  ],
+  "status": "converged",
+  "message": "Function tolerance reached. |cost_change|/cost: 4.632500e-13 <= 1.000000e-12",
+  "usable": true,
+  "initial_cost": 495.73058237661706,
+  "final_cost": 55.01816731904358,
+  "iterations": 10,
+  "residual_evaluations": 10,
+  "jacobian_evaluations": 10,
+  "trial_failures": 0,
+  "failures": [],
+  "active_bounds": [],
+  "engine_covariance": {
+   "status": "available",
+   "assumption": "unit-variance weighted residuals, independent errors and a regular local linearization at an interior point; multiply by variance_factor for an unknown common variance; no claim under bounds, rank deficiency or model discrepancy",
+   "rank": 5,
+   "singular_values": [
+    0.9213805482568885,
+    0.583230027117585,
+    0.27402584064208957,
+    0.17527070312980692,
+    0.09469848028102722
+   ],
+   "variance_factor": 0.6287790550747837
+  },
+  "column_normalized_singular_values": [
+   1.5409157457523788,
+   1.135760172082724,
+   0.9185565770065667,
+   0.6333793854775732,
+   0.3011841046487033
+  ],
+  "cost_gradient": {
+   "pair/carbamate-anion/water/k_ij": -0.00016807969464061046,
+   "pair/protonated-monoethanolamine/water/k_ij": 8.387846328261617e-05,
+   "pair/bicarbonate-anion/water/k_ij": -1.7693432863730152e-05,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -2.5521283343987733e-05,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 4.203460882211234e-08
+  },
+  "active_bound_outward_descent": {},
+  "free_coordinates": [
+   "pair/carbamate-anion/water/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij",
+   "pair/bicarbonate-anion/water/k_ij",
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope"
+  ],
+  "residual_variance": 0.6287790550747837,
+  "conditional_standard_error": {
+   "pair/carbamate-anion/water/k_ij": 0.02048619306108795,
+   "pair/protonated-monoethanolamine/water/k_ij": 0.02307499639044346,
+   "pair/bicarbonate-anion/water/k_ij": 0.07669458614639728,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.029042009907628424,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 49.769272167381665
+  },
+  "conditional_correlation": [
+   [
+    1.0,
+    -0.6880170886946244,
+    0.7711325320976957,
+    0.20997497569113194,
+    0.5499413261156387
+   ],
+   [
+    -0.6880170886946246,
+    1.0,
+    -0.8126330037205354,
+    0.010667613411571658,
+    -0.10360465026398225
+   ],
+   [
+    0.771132532097696,
+    -0.8126330037205352,
+    0.9999999999999999,
+    0.13286056027298848,
+    0.3711419287031216
+   ],
+   [
+    0.20997497569113194,
+    0.010667613411571714,
+    0.13286056027298845,
+    1.0,
+    0.07770886289819783
+   ],
+   [
+    0.5499413261156385,
+    -0.10360465026398193,
+    0.3711419287031214,
+    0.07770886289819783,
+    1.0
+   ]
+  ],
+  "fit_s": 662.8084948149999,
+  "setup_s": 1.17549648899967,
+  "admissible": true,
+  "k_at_temperatures_k": {
+   "temperatures_k": [
+    293.15,
+    353.15,
+    393.15
+   ],
+   "pair/protonated-monoethanolamine/water/k_ij": [
+    -0.3055164699193035,
+    -0.19169199281946642,
+    -0.1351102887000595
+   ]
+  },
+  "admissibility_domain_k": [
+   293.15,
+   393.15
+  ]
+ }
+}

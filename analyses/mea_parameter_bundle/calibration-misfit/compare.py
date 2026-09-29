@@ -63,6 +63,14 @@ def residuals(rec):
 
 def is_validation(rec):
     return round(rec['T'] - 273.15) == 80
+
+
+def in_objective(rec, target, pco2_max_c=None):
+    """Whether a packet target is a refit row: every packet state except 80 degC and EXCLUDED. With pco2_max_c
+    (MEA #121 decision 23: 80), pCO2 targets above that temperature are dropped as well; speciation is unchanged."""
+    return (not is_validation(rec) and rec['identity'] not in EXCLUDED
+            and not (pco2_max_c is not None and target['prediction_identity'] == 'co2-partial-pressure'
+                     and rec['T'] - 273.15 > pco2_max_c + 0.5))
 # Akula 2023a pools its 30 mass % pCO2 data from these sources, loading 0.003-0.5, 40-120 degC (40.5 %,
 # mean absolute relative error at measured loading; docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md).
 AKULA_SOURCES = {'Aronu2011', 'Hilliard2008', 'Jou1995', 'Xu2011'}
@@ -119,12 +127,19 @@ def main(argv):
             ln = math.log(r['predictions']['co2-partial-pressure'] / t['observed'])
             groups.setdefault(f"source={t['source_identity']}", []).append(ln)
             groups.setdefault('all six sources', []).append(ln)
+            tc = round(r['T'] - 273.15)
+            groups.setdefault(f'T={tc}C', []).append(ln)
+            band = '40-80 degC (decision 23 rule)' if 40 <= tc <= 80 else '100-120 degC (out of range, not gated)'
+            groups.setdefault(band, []).append(ln)
+            groups.setdefault(f"{band} source={t['source_identity']}", []).append(ln)
             if t['source_identity'] in AKULA_SOURCES and r['feed'][0] <= 0.5 and 40 <= r['T'] - 273.15 <= 120:
                 groups.setdefault('Akula 2023a-comparable: Aronu, Hilliard, Jou, Xu; loading <= 0.5', []).append(ln)
-        objective = []
+        for label, cap in (('refit rows (180)', None), ('refit rows, decision 23 (160)', 80)):
+            v = [sc for r in packet.values() for t, (_, _, sc, _) in zip(r['targets'], residuals(r) or [])
+                 if in_objective(r, t, cap)]
+            rows.append({'variant': variant, 'scope': label, 'quantity': 'cost 0.5 sum scaled^2',
+                         'n': len(v), 'predicted': 0.5 * sum(x * x for x in v)})
         for r in packet.values():
-            if not is_validation(r) and r['identity'] not in EXCLUDED:
-                objective += [sc for _, _, sc, _ in residuals(r) or []]
             part = 'validation (80 degC)' if is_validation(r) else 'calibration'
             for kind, _, _, ln in residuals(r) or []:
                 if np.isfinite(ln):
@@ -147,8 +162,6 @@ def main(argv):
                          'max_abs_stationarity': max(c['max_abs_stationarity'] for c in ok),
                          'failures': ' '.join(f"{i}:{r['check']['failure_code']}" for i, r in recs.items()
                                               if r['check']['failure_code'])})
-        rows.append({'variant': variant, 'scope': 'refit rows (180)', 'quantity': 'cost 0.5 sum scaled^2',
-                     'n': len(objective), 'predicted': 0.5 * sum(x * x for x in objective)})
         for scope, v in groups.items():
             rows.append({'variant': variant, 'scope': scope, 'quantity': 'ln(pred/obs)', **stats(v)})
         for source, t, a, obs in carbonate_refs():
