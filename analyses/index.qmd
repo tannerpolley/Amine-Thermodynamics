@@ -1,13 +1,13 @@
 ---
 title: "MEA thermodynamics analyses"
-subtitle: "Root Quarto Manuscript for the repository's retained analysis records"
+subtitle: "Root Quarto website for the repository's retained analysis records"
 order: 1
 ---
 
-This article is the repository-level analysis index. `manuscript.py` manages
-the root Quarto Manuscript: `_quarto.yml` holds the shared HTML presentation,
-and `_cse-manuscript.json` holds the ordered list of published pages. Each
-analysis keeps its scientific metadata in its own `analysis.yaml`.
+This article is the home page of the root Quarto analysis website.
+`manuscript.py` manages the website: `_quarto.yml` holds its shared HTML
+presentation, and `_cse-manuscript.json` owns the published pages and sidebar.
+Each analysis keeps its scientific metadata in its own `analysis.yaml`.
 
 The [MEA parameter bundle](mea_parameter_bundle/notebook.qmd) is the main
 parameter-development result. Its overview is the parent page for the
@@ -49,13 +49,14 @@ use them rather than copied into new reports.
 
 ## Publication rules
 
-- Render `analyses/_site/` with `bash render.sh` from `analyses/`; it validates
-  the manuscript and always passes `--no-execute`.
-- Register a new report with `python3 manuscript.py include . <report.qmd>
-  --title <title>`; an unregistered `.qmd` is not rendered.
+- Render `analyses/_site/` with `bash render.sh` from `analyses/`; it syncs the
+  sidebar and always passes `--no-execute`.
+- Register a report with `python3 manuscript.py include . <report.qmd>
+  --title <title> [--group <group>]`; an unregistered `.qmd` is not rendered.
 - Keep evidence, scripts, and results in the analysis directory that owns them.
-- Use page front matter only for content-specific metadata; shared presentation
-  belongs in `_quarto.yml`.
-- Keep `site.css` limited to the parameter-table and evidence-color rules.
+- Keep page front matter for content-specific metadata, shared presentation in
+  `_quarto.yml`, and published-page and sidebar membership in
+  `_cse-manuscript.json`.
+- Keep `site.css` for shared publication layout and project-specific styling.
 - Keep execution disabled for documentation builds. Numerical refreshes remain
   separate analysis commands with their own retained records and claim limits.
