@@ -6,6 +6,8 @@
 **Agent role:** Work as chemical engineer specializing in electrolyte thermodynamics and reactive CO2 absorption in aqueous amines.
 **Repository role:** analysis.
 
+Use the source/data adoption recorded in `docs/scientific/CONTEXT.md`.
+
 Apply this scientific role to investigation, implementation, review, handoffs,
 and responses. Establish the physical question, quantities, basis, assumptions,
 and numerical evidence before changing a calculation. Reuse accepted decisions.
@@ -39,9 +41,11 @@ This section is maintained by CSE Setup from the confirmed scientific context.
 Revise its inputs through Setup rather than maintaining a separate copy here.
 <!-- CSE:END PROTOCOL -->
 
+CSE execution mode: direct.
+
 ## Startup Reads
 
-- For scientific work, use the installed CSE skills and read `docs/scientific/README.md` and `docs/scientific/docs/scientific/CONTEXT.md` before choosing research, diagnosis or implementation. The context map identifies established estimation research, completed studies and unresolved questions.
+- For scientific work, use the installed CSE skills and read `docs/scientific/README.md` and `docs/scientific/CONTEXT.md` before choosing research, diagnosis or implementation. The context map identifies established estimation research, completed studies and unresolved questions.
 - Before proposing a search, conversion, fit or repeated study, follow the relevant map entry to its existing source synthesis and retained results. Use Git history for retired records; distinguish an unreadable reference from absent research. Report the precise remaining gap and what new evidence the proposed work would add.
 
 - Read `docs/.codex-journal/user_preferences.md` when it exists.
