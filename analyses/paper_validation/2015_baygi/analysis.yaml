@@ -1,23 +1,42 @@
 id: 2015_baygi
-title: Baygi 2015 Neutral-Parity Reproduction
+title: Baygi 2015 Reproduction and pCO2 Comparison
 status: validation
-summary: Reproduces the Baygi and Pahlavanzadeh parameter tables and compares neutral ePC-SAFT against the legacy PC-SAFT pressure calculation.
+summary: Reproduces the Baygi and Pahlavanzadeh parameter tables and neutral ePC-SAFT parity, and compares the Baygi ideal Smith-Missen plus PC-SAFT model with our refit C_src on the 161 canonical 30 wt % pCO2 rows, with digitized published model curves.
 owner: project
 inputs:
   - path: analyses/paper_validation/2015_baygi/data/input_baygi_2015.md
     kind: literature_transcription
   - path: analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_curves.csv
     kind: canonical_pressure_results
+  - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv
+    kind: canonical_observations
+  - path: analyses/mea_parameter_bundle/calibration-misfit/refit-C-states.csv
+    kind: retained_model_predictions
+  - path: analyses/mea_parameter_bundle/composition-transfer/second-look-source-R4-states.csv
+    kind: retained_model_predictions
+  - path: analyses/paper_validation/2015_baygi/data/digitized/source
+    kind: figure_image_from_zotero_pdf
 outputs:
   - path: analyses/paper_validation/2015_baygi/data/processed
-    kind: reproduced_parameter_tables
+    kind: reproduced_parameter_tables_and_comparison_tables
+  - path: analyses/paper_validation/2015_baygi/data/digitized
+    kind: digitized_model_curves_with_provenance_and_qa
   - path: analyses/paper_validation/2015_baygi/results/neutral_parity
     kind: plotted_validation_bundle
+  - path: analyses/paper_validation/2015_baygi/results/pco2_comparison
+    kind: plotted_comparison_bundle
 commands:
   render:
     - uv run python analyses/paper_validation/2015_baygi/scripts/render_figures.py
+    - uv run python analyses/paper_validation/2015_baygi/scripts/render_pco2_comparison.py
+  digitize:
+    - uv run python analyses/paper_validation/2015_baygi/scripts/digitize_curves.py
+  compute:
+    - uv run python analyses/paper_validation/2015_baygi/scripts/compute_pco2_comparison.py
+    - uv run python analyses/paper_validation/2015_baygi/scripts/check_pure_mea_saturation.py
+    - uv run python analyses/paper_validation/2015_baygi/scripts/evaluate_c_src_grid.py  # needs the pinned Engine wheel f66d972c
 runtime:
-  class: quick
-  expected_seconds: 5
+  class: minutes
+  expected_seconds: 300
 manuscript_consumers: []
-results_policy: Track the reproduced Baygi tables and the exact plotted-data CSV, sidecar, PNG, SVG, and PDF parity bundle; do not duplicate these outputs elsewhere.
+results_policy: Track the reproduced Baygi tables, the comparison tables, the digitized curves with their calibration and QA overlays, and the exact plotted-data CSV, sidecar, PNG, SVG, and PDF bundles; do not duplicate these outputs elsewhere.
