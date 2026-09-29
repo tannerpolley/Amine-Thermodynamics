@@ -110,8 +110,8 @@ def bundle_pages() -> list[Path]:
 
 
 def rendered_page(page: Path) -> Path:
-    """Native Quarto Manuscript view of a registered notebook page."""
-    relative = page.relative_to(MANUSCRIPT).with_name(f"{page.stem}-preview.html")
+    """Native Quarto website output path for a registered notebook page."""
+    relative = page.relative_to(MANUSCRIPT).with_suffix(".html")
     return MANUSCRIPT / "_site" / relative
 
 

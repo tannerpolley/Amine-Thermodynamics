@@ -1,27 +1,32 @@
 {
   "project": {
-    "type": "manuscript",
+    "type": "website",
     "output-dir": "_site"
   },
   "metadata-files": [
     "_cse-manuscript.json"
   ],
-  "manuscript": {
-    "article": "index.qmd"
+  "website": {
+    "title": "Analyses",
+    "search": true,
+    "reader-mode": true,
+    "page-navigation": false
   },
   "format": {
     "html": {
       "embed-resources": true,
+      "page-layout": "full",
       "theme": "cosmo",
+      "css": "site.css",
       "fontsize": "16px",
       "toc": false,
-      "self-contained-math": true,
+      "notebook-links": false,
       "html-math-method": "mathjax",
-      "css": "site.css"
+      "self-contained-math": true,
+      "format-links": false
     }
   },
   "execute": {
     "enabled": false
-  },
-  "keep-md": true
+  }
 }
