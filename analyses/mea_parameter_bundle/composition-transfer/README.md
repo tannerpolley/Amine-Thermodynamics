@@ -73,6 +73,26 @@ untouched test: the one-time results above were seen before this refit was run.
 - **Conclusion:** the result matches the one-time run to 0.1 percentage point. The 15 wt% transfer
   still fails.
 
+## Second look: refit C with the source R4 (2026-09-28)
+
+`second-look-source-R4-states.csv`, `second-look-source-R4-scores.csv`. The rows are the same 70. This
+is **not** an untouched test.
+
+- **Record:** refit C as defined, with R4 at its Tong 2012 / Aroua 1999 source correlation
+  (`a` = 2.151, `b_k` = −1545.3 K): `../calibration-misfit/refit-C-parameters.json` (`8b6f30ea…`), not
+  adopted.
+- **Engine:** wheel `f66d972c…`, Engine `1303c119`, packet v5 association terms.
+
+| MEA wt% | solved | AARD | mean ln | RMS ln |
+|---|---:|---:|---:|---:|
+| 15 | 33/33 | 83.5 % | +0.513 | 0.634 |
+| 45 | 37/37 | 22.2 % | −0.184 | 0.349 |
+
+- **By temperature:** 15 wt% gives 70 / 78 / 127 % at 40 / 60 / 80 °C (mean ln +0.35 / +0.55 / +0.82).
+  45 wt% gives 25 / 23 / 18 %.
+- **Conclusion:** with the source R4 the 15 wt% transfer still fails. pCO2 is 1.67× too high on
+  average (exp 0.513), and the bias grows with temperature.
+
 ## Claim limit
 
 This is composition transfer at fixed chemistry. Temperatures (40–80 °C) lie inside the calibrated
@@ -87,6 +107,7 @@ untouched test.
 ```sh
 OMP_NUM_THREADS=1 python transfer.py adopted-refit-C=REFIT_C.json pre-refit=PRE_REFIT.json   # one-time run
 OMP_NUM_THREADS=1 python transfer.py --out=second-look new-refit-C=../calibration-misfit/refit-C-engine-parameters.json  # renamed *-incumbent-R4-*
+OMP_NUM_THREADS=1 python transfer.py --out=second-look-source-R4 source-R4-refit-C=../calibration-misfit/refit-C-parameters.json
 ```
 
 Solver caches go to `../results/runs/composition-transfer/` (ignored). The run log is
