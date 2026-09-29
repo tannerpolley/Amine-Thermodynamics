@@ -1,6 +1,6 @@
 # Start scientific work here
 
-Read `CONTEXT.md` in this directory first. Its established-work table connects the
+Read `docs/scientific/CONTEXT.md` in this directory first. Its established-work table connects the
 estimation strategy, source audits, measurement inventories and completed
 studies to their existing records, followed by the unresolved questions.
 Use the installed CSE skill appropriate to that question.

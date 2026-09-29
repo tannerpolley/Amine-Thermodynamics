@@ -31,7 +31,7 @@ ANALYSIS_DIR = Path(__file__).resolve().parents[1]
 OUT_DIR = ANALYSIS_DIR / "results"
 PRESSURE_FIGURE_OUT = ANALYSIS_DIR / "figures" / "pressure" / "output"
 SPECIATION_FIGURE_OUT = ANALYSIS_DIR / "figures" / "speciation" / "output"
-LATEX_FIGURES_DIR = REPO_ROOT / "docs" / "latex" / "figures"
+LATEX_FIGURES_DIR = REPO_ROOT / "docs" / "scientific" / "latex" / "figures"
 PRESSURE_MODEL_LABELS = {
     "legacy_pcsaft_smith_missen": ("Legacy PC-SAFT Smith-Missen", LEGACY_PCSAFT_LINESTYLE, REFERENCE_LINEWIDTH),
     "neutral_pcsaft_pressure_reference": ("Neutral ePC-SAFT parity", EPCSAFT_NEUTRAL_LINESTYLE, MODEL_LINEWIDTH),

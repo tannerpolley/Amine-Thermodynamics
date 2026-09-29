@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LATEX = ROOT / "docs/latex"
+LATEX = ROOT / "docs/scientific/latex"
 
 
 def test_manuscript_numbers_match_computed_comparison() -> None:
