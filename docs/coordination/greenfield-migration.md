@@ -1160,3 +1160,17 @@ evaluates 79/79 in 141.6 s total (median 0.58 s per state) at host load average 
 CO2 partial pressure equal the `main-83ac` rows exactly. The heat, thermal-reference and
 reaction-temperature-fit scripts still stop: the Engine now supplies the reference temperature
 slope and total enthalpy, but the MEA heat calculation has not been rebuilt on those callables.
+
+Engine main `1303c119e4a21ba31e46596fe62ee3fdfe4cc253` (wheel
+`f66d972c032ce709ada69e8d8177e195c7e416800757663b7420c22bda5f6328`, 2026-09-28, built by the Engine's
+`tools/ensure-engine-wheel.sh` from a `git archive` of that commit; cache entry `3d34bc60…`) is the
+current pin. It adds Ceres fitting with exact derivatives, including the k_ij 1/T slope family and the
+`partial_pressure` observation (Engine #153), the Wolbach–Sandler association rule (#164) and the
+speciated cold start. Identity check with the pre-refit record `868a5018…` (packet v3 association
+terms) on both wheels, in `analyses/mea_parameter_bundle/calibration-misfit/` (`probe.py`):
+on the 79 packet and 160 six-source pCO2 states that both wheels solve, max |Δln pCO2| is 2.8e-11 and
+max |Δx| is 1.9e-13. The old pin's four failures (Böttinger 042 and 046, Matin 016,
+`vle_obs_0166`) all solve on this wheel. The Engine packet v5 association terms (#164, #166) are not
+in the selected record; they reach the calibration-misfit analysis through
+`calibration-misfit/pre-refit-packet-v5-parameters.json` (see that README). The heat,
+thermal-reference and figure outputs retained on `b66c7b96` have not been re-run on this pin.
