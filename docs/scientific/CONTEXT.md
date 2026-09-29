@@ -51,6 +51,16 @@ terminology rules; do not invent a preference during Setup.
 
 Name the source hierarchy and exact location of project-approved equations, parameters, data, reference cases, and tolerances.
 
+## Source/data adoption
+
+source/data adoption: zotero
+
+Confirmed on 2026-09-29 for [issue #130](https://github.com/tannerpolley/MEA-Thermodynamics/issues/130):
+Zotero Companion owns paper briefs and the project reading list. The ignored
+`literature/` folder retains full-paper reading copies and their source hashes.
+Project scientific syntheses, datasets and analysis results remain with their
+existing repository owners.
+
 ## Claim boundaries
 
 State supported uses, excluded phenomena, validity limits, and unresolved scientific questions.

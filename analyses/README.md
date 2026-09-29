@@ -2,6 +2,33 @@
 
 This directory contains source-controlled scientific analysis, validation, and figure workflows. Runtime package code belongs under `src/MEA`; reusable literature and parameter inputs belong under `data/reference`; analysis-specific generated snapshots stay with the analysis that owns them.
 
+## Snakemake adoption
+
+The owner chose Snakemake for all 11 populated analyses on 2026-09-29 in
+[issue #131](https://github.com/tannerpolley/MEA-Thermodynamics/issues/131).
+This records adoption; Snakemake workflows have not yet been installed here.
+
+| Analysis | Owner decision |
+|---|---|
+| `enrtl_historical_evidence` | Adopt |
+| `enrtl_six_species_ideal_comparison` | Adopt |
+| `film_chemistry_work_package_a` | Adopt |
+| `historical_fixed_parameter_epcsaft_evaluation` | Adopt |
+| `ideal_reaction_equilibrium` | Adopt |
+| `mea_parameter_bundle` | Adopt |
+| `neutral_pcsaft_pressure_reference` | Adopt |
+| `paper_validation` | Adopt |
+| `reactive_epcsaft_parameter_evidence` | Adopt |
+| `six_species_solubility_reference` | Adopt |
+| `speciation_evidence_harmonization` | Adopt |
+
+Implement each workflow around its existing scientific scope and retained
+inputs. Historical records remain historical, and deferred calculations remain
+deferred. Follow the installed CSE Snakemake reference: `calculate` runs only
+the authorized study; `present` reads verified retained results and rebuilds
+presentation without running a model. Adoption does not authorize a numerical
+campaign, parameter promotion, or use of an unqualified Engine wheel.
+
 ## Root Quarto Manuscript
 
 `analyses/` is one root Quarto Manuscript managed by the CSE `manuscript.py`.
