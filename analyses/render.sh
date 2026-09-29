@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+project_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$project_directory/_cse-manuscript.json" ]]; then
+  cd "$project_directory"
+fi
+
 if [[ -f manuscript.py || -f _cse-manuscript.json ]]; then
   python3 ./manuscript.py sync .
 fi
