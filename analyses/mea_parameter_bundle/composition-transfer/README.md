@@ -106,7 +106,7 @@ untouched test.
 
 ```sh
 OMP_NUM_THREADS=1 python transfer.py adopted-refit-C=REFIT_C.json pre-refit=PRE_REFIT.json   # one-time run
-OMP_NUM_THREADS=1 python transfer.py --out=second-look new-refit-C=../calibration-misfit/refit-C-engine-parameters.json  # renamed *-incumbent-R4-*
+OMP_NUM_THREADS=1 python transfer.py --out=second-look-incumbent-R4 new-refit-C=../calibration-misfit/refit-C-incumbent-R4-parameters.json
 OMP_NUM_THREADS=1 python transfer.py --out=second-look-source-R4 source-R4-refit-C=../calibration-misfit/refit-C-parameters.json
 ```
 

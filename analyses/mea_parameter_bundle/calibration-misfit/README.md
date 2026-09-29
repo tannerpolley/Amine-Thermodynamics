@@ -62,7 +62,7 @@ in "Refit C with the incumbent's fitted R4").
    The R4 intercept correlates at −0.97 with the MEAH⁺–MEACOO⁻ k_ij and +0.97 with the carbamate–water
    k_ij. The smallest normalized singular value is 0.09. The data cannot separate the carbamate
    reaction constant from the carbamate ion interactions: the fit uses R4 as a free knob to absorb
-   what the ionic model lacks. The candidate improves the fit. It does not identify the physics.
+   what the ionic model lacks. Candidate A improves the fit. It does not identify the physics.
 
 ## Evidence
 
@@ -90,7 +90,7 @@ packet's HCO₃⁻-only mapping, so they are not comparable with the notebook's 
 
 The adopted model is the one the notebook reports (Mamun 0.25, Xu 0.44, Aronu 0.51, Hilliard 0.585,
 Jou 0.60, Idris 0.64–0.66). The adopted model fails 1 canonical row (Idris `vle_obs_0166`) and 3 speciation
-states that the candidate solves. `probe.py` builds the canonical rows with the same nearest-template
+states that candidate A solves. `probe.py` builds the canonical rows with the same nearest-template
 rule as `generate_figure_data.py`, but it cold-starts the adopted solves and warm-starts the
 candidate solves from them. The figure-data generation (`generate_figure_data.py`) instead uses cached cross-state anchors, so its
 failure set can differ.
@@ -106,7 +106,7 @@ failure set can differ.
 | 40 °C, 0.29 | 0.014 | 0.083 | 0.024 |
 | 40 °C, 0.40 | 0.019 | 0.105 | 0.034 |
 
-The candidate cuts carbonate 3–5×, but it stays 1.3–3× above Jakobsen. The NMR split is inferred
+Candidate A cuts carbonate 3–5×, but it stays 1.3–3× above Jakobsen. The NMR split is inferred
 from the fast-exchange HCO₃⁻/CO₃²⁻ shift. Matin et al. put that inferred split's error at
 10–12% mean and up to 34% (2012, p. 6616). One Jakobsen row (40 °C, 0.21, 0.119) is an outlier.
 Wong 2015 Raman (30 °C) gives about 5% carbonate at loading 0.13 and 0.43 (Fig. 8, digitized). No
@@ -616,7 +616,11 @@ from those transcriptions.
 - PC-SAFT MEA models with ideal chemistry (γ = 1) predict Jou/Hilliard at 43/35% AAD (Fakouri Baygi
   2015, Table 5) and 50/43% (Najafloo 2018, Table 5). Hilliard's eNRTL fit reaches 30% on Hilliard
   and 14% on Jou (Hilliard 2008, Table 13.4-6). The adopted model (69%/57%) is worse than
-  ideal-chemistry PC-SAFT on the same two sources. The candidate (24%/30%) is in the eNRTL range.
+  ideal-chemistry PC-SAFT on the same two sources. Historical refit A (24%/30%, R4 fitted) was in the
+  eNRTL range. The current refit C (R4 at its source) gives 44.6%/40.0% on Hilliard/Jou: better
+  than ideal-chemistry PC-SAFT on Jou and worse on Hilliard. Baygi's and Najafloo's Hilliard rows
+  span other concentrations and Jou a wider temperature range, so these comparisons are only partly
+  like-for-like.
 - Data: Hilliard reports its 40/60 °C data as consistent with Jou (§2.4.3). Dugas & Rochelle 2009 find
   higher pressures above loading about 0.45 (Fig. 4). Jayarathna 2013 finds a non-directional 40 °C
   source offset. There is no established Jou bias. #101's floor of 0.2–0.4 in ln stands.
@@ -637,21 +641,40 @@ imperfect. It does not directly set pCO2 at fixed temperature, and #101 attribut
 the pCO2 residual to temperature. Two things remain untested:
 
 - whether part of the loading shape belongs to the neutral model rather than the ionic parameters;
-- whether Mamun's 120 °C degradation reflects the missing temperature dependence of the ion k_ij.
+- whether the remaining Mamun 120 °C bias (current refit C: mean ln −0.204, RMS ln 0.293 against the
+  pre-refit 0.254) reflects missing temperature dependence. Refit C gives only MEAH⁺–water a 1/T slope;
+  the other ion k_ij have none.
 
 ## Limits
 
-- The candidate is a calibration result. The 80 °C holdout is an interpolation test, and the
-  four unfitted sources are other laboratories on the same 30 wt%, 40–120 °C domain. None of it
-  tests other solvent concentrations.
-- Three coordinates are at bounds. The R4 shift of −0.5 ln K is outside what has been checked
-  against the Tong/Aroua source, whose uncertainty is not transcribed. Mamun and Aronu move to a
-  negative mean bias.
-- The ion k_ij have no temperature dependence.
-- Carbonate is still over-predicted.
-- The HCO₃⁻ + CO₃²⁻ mapping for Matin and Böttinger is the merged canonical rule (#109). The
-  calibration packet used here predates it; see the note above.
-- One refit design was run. B and further ablations were stopped by owner instruction.
+Current refit C (R4 at its source correlation, Engine `1303c119`, packet v5 terms):
+
+- **Scope of the evidence:** it is a calibration result. The 80 °C holdout is an interpolation test,
+  and the four unfitted sources are other laboratories on the same 30 wt%, 40–120 °C domain.
+- **Other concentrations:** these rest on the 70 Aronu 2011 rows at 15 and 45 wt%. They were
+  predicted once with refit C carrying the incumbent's fitted R4 (#108), then scored again as second
+  looks, which are not untouched tests. With the source R4, the 15 wt% transfer fails (AARD 83.5 %,
+  pCO2 about 1.67× too high) and 45 wt% gives 22.2 %. That is transfer at fixed chemistry and 40–80 °C
+  only.
+- **Bounds:** HCO₃⁻–water (+0.3) and MEAH⁺–MEACOO⁻ (−0.3) end on their bounds from every start, with
+  the cost decreasing outward at both. The covariance is withheld, and the standard errors are
+  conditional on those two coordinates held fixed.
+- **R4:** held at the Tong 2012 / Aroua 1999 correlation. Its uncertainty is not transcribed, so R4
+  uncertainty does not enter the fit.
+- **Temperature dependence:** only MEAH⁺–water has a 1/T slope. Mamun 2005 at 120 °C keeps a negative
+  mean bias (−0.204 in ln), and its RMS ln (0.293) fails the #107 rule.
+- **Carbonate:** still over-predicted, at 1.05–2.37× the Jakobsen 2005 share.
+- **HCO₃⁻ mapping:** the HCO₃⁻ + CO₃²⁻ mapping for Matin and Böttinger is the merged canonical rule
+  (#109). The calibration packet used here predates it; see the note above.
+- **Designs run:** refit A (R4 intercept fitted) and refit C. Every refit C before `ec569bb` held the
+  incumbent's fitted R4. Refit B and further ablations were stopped by owner instruction.
+
+Historical refit A conclusions, which do not describe the current refit C:
+
+- three coordinates at bounds, including an R4 intercept shift of −0.5 ln K outside what has been
+  checked against the Tong/Aroua source;
+- Mamun and Aronu moving to a negative mean bias;
+- no temperature dependence in any ion k_ij.
 
 ## Reproduce
 
@@ -665,7 +688,7 @@ python probe.py RUNS/f66-v5.jsonl; python probe.py RUNS/canon-f66-v5.jsonl --can
 python probe.py RUNS/f66-v3.jsonl --record=../results/selected-current-best-parameters.json  # packet v3 terms
 python refit.py                     # source-R4 refit C, three starts -> refit-C-multistart.json, -iterations.csv, -jacobian.csv
 python probe.py RUNS/srcR4C-f66-v5.jsonl --source-r4 <id=value ...>; python probe.py RUNS/canon-srcR4C-f66-v5.jsonl --canonical --source-r4 <id=value ...>
-python candidate.py refit-C-multistart.json refit-C-parameters.json            # lowest-cost start, source R4; not adopted
+python candidate.py refit-C-multistart.json refit-C-parameters.json            # lowest-cost start, source R4, on its recorded base; not adopted
 python candidate.py --check refit-C-parameters.json RUNS/srcR4C-f66-v5.jsonl   # -> record-replay-check.csv
 python compare.py --out=refit-C --pairs=pre-refit-f66-v3:pre-refit-b66-v3,pre-refit-f66-v5:pre-refit-f66-v3 VARIANT=PACKET,CANONICAL ...
 cd ../composition-transfer && python transfer.py --out=second-look-source-R4 source-R4-refit-C=../calibration-misfit/refit-C-parameters.json

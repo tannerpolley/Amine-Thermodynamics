@@ -1,5 +1,9 @@
 """Write parameter records for the calibration-misfit refits. None of them is the selected record.
 
+Every record starts from the base record its refit ran on: the SHA-256 recorded in the refit result
+(`parameter_record_sha256`, or `provenance.base_record_sha256` for a multistart; refit A: 868a5018), verified
+on disk by base_path. A base that is no longer on disk is refused, never replaced by the current one.
+
 Usage: candidate.py --packet-v5 PARAMETERS.json  the pre-refit record (868a5018) with the association
                                            topology of Engine packet mea-co2-h2o-nine-species-estimation/5
                                            (PARAMETERS.json is that packet's parameters file, hash-checked)
@@ -30,8 +34,17 @@ SOURCE = {'source_id': 'mea-calibration-misfit-refit-a-2026-09-23',
           'locator': 'analyses/mea_parameter_bundle/calibration-misfit/README.md#refit-a'}
 
 
-def write(name, values, source, document_id, purpose, citation, use_basis, out, base=probe.RECORD):
-    raw = json.loads(base.read_text(encoding='utf-8'))  # without runtime defaults
+def base_path(sha):
+    """The base record a refit ran on, found by its recorded SHA-256 and verified; a base that is no longer on disk
+    (e.g. after adoption changes the selected record) is refused, never replaced by the current one."""
+    path = {PRE_REFIT_SHA256: probe.shared.PARAMETERS, PRE_REFIT_V5_SHA256: probe.RECORD}.get(sha)
+    if path is None or probe.shared.sha256(path) != sha:
+        raise SystemExit(f'base record {sha[:8]} is not on disk; restore it from Git history before writing')
+    return path
+
+
+def write(name, values, source, document_id, purpose, citation, use_basis, out, base_sha256):
+    raw = json.loads(base_path(base_sha256).read_text(encoding='utf-8'))  # without runtime defaults
     mapping = probe.with_values(raw, values)
     for node in probe.shared._identified(mapping):
         if node['identity'] in values and 'provenance' in node:
@@ -40,7 +53,8 @@ def write(name, values, source, document_id, purpose, citation, use_basis, out, 
     for record in mapping['reaction_correlations']:
         if record['reaction_id'] == 'R4' and r4:
             note = ('a and b_k set to the source correlation (Tong 2012 via Aroua 1999, chemical_reaction_source_contract.json)'
-                    if r4 == probe.SOURCE_R4 else f'{sorted(r4)} replaced by calibration-misfit refit {name}')
+                    if r4 == probe.SOURCE_R4 else 'coefficient ' + ', '.join(k.split(':')[-1] for k in r4)
+                    + f' replaced by calibration-misfit refit {name}')
             record['source'] = {**record['source'], 'locator': record['source']['locator'] + f'; {note} (' + source['locator'] + ')'}
     mapping['document_id'] = document_id
     mapping['purpose'] = purpose
@@ -59,6 +73,7 @@ PACKET_V5 = {'packet_id': 'mea-co2-h2o-nine-species-estimation', 'packet_version
              'parameters_sha256': '1ba95275f9e23264250e891aee3d6284d801f73205dad255101e6561b29aee5f',
              'engine_commit': '1303c119e4a21ba31e46596fe62ee3fdfe4cc253'}
 PRE_REFIT_SHA256 = '868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be'
+PRE_REFIT_V5_SHA256 = '562b5976c7f6d44b782498480fce54bad1e3142d9541438f6d7a42a876a3df87'  # probe.RECORD
 
 
 def packet_v5(packet_parameters):
@@ -91,12 +106,13 @@ def main(argv):
                      'candidate, not adopted: diagnostic refit A of the pCO2 calibration misfit',
                      'MEA-Thermodynamics calibration-misfit refit A (2026-09-23)',
                      'candidate ion-water, cation-anion and R4 values; not adopted',
-                     Path(__file__).with_name('candidate-refit-a-parameters.json'))
+                     Path(__file__).with_name('candidate-refit-a-parameters.json'), PRE_REFIT_SHA256)  # refit A's base
     result, out = json.loads(Path(argv[0]).read_text()), Path(argv[1])
     if 'provenance' in result:  # refit.py multistart: the lowest-cost usable start
         best = min((v for k, v in result.items() if k != 'provenance' and v['usable']), key=lambda v: v['final_cost'])
         result = {'name': 'C', 'parameters': result['provenance']['parameters'], 'fitted': best['fitted'],
                   'wheel_sha256': result['provenance']['wheel_sha256'],
+                  'parameter_record_sha256': result['provenance']['base_record_sha256'],
                   'reaction_overrides': result['provenance'].get('reaction_overrides', {})}
     name, r4 = result['name'], result.get('reaction_overrides', {})
     assert r4 in ({}, probe.SOURCE_R4), r4
@@ -107,7 +123,7 @@ def main(argv):
           f'candidate, not adopted: calibration-misfit refit {name}, R4 '
           + ('at its source correlation (MEA #107)' if r4 else "the incumbent's fitted value"),
           f'MEA-Thermodynamics calibration-misfit refit {name} on {result["wheel_sha256"][:8]}',
-          'ion-water, MEAH+-water 1/T slope and cation-anion k_ij; not adopted', out)
+          'ion-water, MEAH+-water 1/T slope and cation-anion k_ij; not adopted', out, result['parameter_record_sha256'])
 
 
 def check(path, probe_out):
