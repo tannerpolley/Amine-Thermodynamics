@@ -1,6 +1,6 @@
 # GREPE and MEA document authority index
 
-Start with [the established-work and gap map](CONTEXT.md). This index locates
+Start with [the established-work and gap map](docs/scientific/CONTEXT.md). This index locates
 record owners; it does not replace the evidence summarized there.
 
 General Reactive Equilibrium and Phase Equilibrium (GREPE) is the Engine
@@ -31,7 +31,7 @@ but cannot silently reactivate or supersede current decisions.
 | Path | Classification | Use |
 |---|---|---|
 | `governance/GOVERNANCE.md` | Authoritative doctrine | Ownership, equilibrium/regression calculation admission, numerical evidence, and repository boundaries |
-| `governance/CONTEXT.md` | Authoritative project definition | Current four-repository ownership, regression formulations, and bibliography authority |
+| `governance/docs/scientific/CONTEXT.md` | Authoritative project definition | Current four-repository ownership, regression formulations, and bibliography authority |
 | `engine/docs/equilibrium/plans/2026-08-14-general-reactive-equilibrium-phase-equilibrium.md` | Authoritative application-independent design | GREPE request/compiler/result definitions, current reduced-space formulation, and planned full-space formulation |
 | `engine/docs/equilibrium/reactive-bubble-observations.md` | Current admitted-calculation note | Fixed-topology reactive bubble/VLE observations and local-branch semantics |
 | `engine/docs/regression/science/literature-reproduction-contract.md` | Retained application-independent evidence guidance | Source reproduction classes, exact rows, and replay requirements |
@@ -51,7 +51,7 @@ accepted homogeneous-reactive and reactive-bubble calculation history.
 
 | Path | Classification | Use |
 |---|---|---|
-| `docs/scientific/CONTEXT.md` | Authoritative scientific definition | Question, ownership, vocabulary, authority, and claim boundary; authority comes from repository guidance and issue #70 |
+| `docs/scientific/docs/scientific/CONTEXT.md` | Authoritative scientific definition | Question, ownership, vocabulary, authority, and claim boundary; authority comes from repository guidance and issue #70 |
 | `docs/scientific/PREDICTIVE_MEA_PROGRAM.md` | Authoritative scientific plan | Neutral qualification, electrostatic selection, regression, validation, and manuscript sequence; GitHub issues own execution |
 | This index | Authoritative navigation | Document classification only; it owns no scientific decision or work queue |
 | `analyses/mea_parameter_bundle/notebook.qmd` | Active exploratory working notebook | Selected table and retained comparisons; no accepted bundle, numerical publication incomplete |
@@ -88,7 +88,7 @@ boundary and inspect exact retained work before integrating or recalculating.
 | `docs/coordination/epcsaft_reactive_vle_upstream_handoff.md` | Historical transfer record | Earlier upstream request; not current Engine callable status |
 | `docs/reviewer_quick_revision_report.md` | Current branch review record | Reviewer-driven manuscript changes, independent of predictive-thermo adoption |
 | `docs/revision_report.md` | Revision evidence | Existing manuscript revision record |
-| `docs/latex/**` | Current manuscript source | Fixed-chemistry/ePC-SAFT fugacity comparison until a parameter set meets independent column-comparison criteria |
+| `docs/scientific/latex/**` | Current manuscript source | Fixed-chemistry/ePC-SAFT fugacity comparison until a parameter set meets independent column-comparison criteria |
 
 Issue #3 owns the current electrolyte-path validation. Issue #12 owns creation
 of an authoritative scientific definition and current predictive
@@ -100,7 +100,7 @@ must remain valid if that predictive lane produces a supported negative result.
 
 | Path | Classification | Use |
 |---|---|---|
-| `docs/scientific/CONTEXT.md` | Authoritative application definition | Configured HBTA/TOPO reactive-LLE question, ownership, evidence, and claims |
+| `docs/scientific/docs/scientific/CONTEXT.md` | Authoritative application definition | Configured HBTA/TOPO reactive-LLE question, ownership, evidence, and claims |
 | `docs/scientific/formulation.tex` | Authoritative formulation | Phase-specific reactive-LLE equations and conventions |
 | `docs/scientific/methods.tex` | Authoritative methods | Parameter fitting, starts, numerical acceptance, surrogate generation, and domain |
 | `docs/scientific/evidence.tex` | Authoritative evidence plan/record | Verification, validation, and uncertainty |

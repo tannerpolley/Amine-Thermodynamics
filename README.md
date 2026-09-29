@@ -47,7 +47,7 @@ Old file-path commands such as `uv run python MEA/run_plot_exports.py` are inten
 - `analyses/mea_parameter_bundle/`: exploratory incumbent, parameter-first working HTML notebook, and retained comparisons; numerical publication remains incomplete.
 - `analyses/enrtl_six_species_ideal_comparison/`: packet-specific species reduction and sensitivity comparisons.
 - `analyses/film_chemistry_work_package_a/`: bounded film-input source and consistency checks; no accepted thermodynamic packet.
-- `docs/latex/`: writable manuscript source mirrored from the separate Overleaf Git checkout.
+- `docs/scientific/latex/`: writable manuscript source mirrored from the separate Overleaf Git checkout.
 - `scripts/`: root doctor, validation, and plot orchestration entrypoints.
 
 Removed diagnostic workflows remain recoverable from Git history and archival tags; they are not part of active `main` validation.
@@ -79,7 +79,7 @@ format, and raw fit requests/results must remain in ignored `results/runs/`.
 
 ## Manuscript
 
-The article draft source lives under `docs/latex/`. It is a normal folder in this repo, not a submodule. Set `MEA_OVERLEAF_MIRROR` to the absolute path of the independent Overleaf-connected mirror checkout.
+The article draft source lives under `docs/scientific/latex/`. It is a normal folder in this repo, not a submodule. Set `MEA_OVERLEAF_MIRROR` to the absolute path of the independent Overleaf-connected mirror checkout.
 
 Build and hash-verify the local manuscript with:
 
@@ -88,12 +88,12 @@ bash scripts/build_manuscript.sh
 uv run python scripts/check_manuscript_freshness.py
 ```
 
-The build is written only to `docs/latex/builds/`. The tracked `manuscript_references.bib`, `project_sources.bib`, and `official_sources.bib` files make citations reproducible in a clean clone; a full personal-library `references.bib` export remains ignored.
+The build is written only to `docs/scientific/latex/builds/`. The tracked `manuscript_references.bib`, `project_sources.bib`, and `official_sources.bib` files make citations reproducible in a clean clone; a full personal-library `references.bib` export remains ignored.
 
 Sync the local manuscript source back to the Overleaf mirror with:
 
 ```bash
-bash docs/latex/scripts/sync_to_overleaf_mirror.sh
+bash docs/scientific/latex/scripts/sync_to_overleaf_mirror.sh
 ```
 
 ## Model Boundaries
