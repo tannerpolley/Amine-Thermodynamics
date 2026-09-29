@@ -51,6 +51,45 @@ terminology rules; do not invent a preference during Setup.
 
 Name the source hierarchy and exact location of project-approved equations, parameters, data, reference cases, and tolerances.
 
+## Source/data adoption
+
+source/data adoption: zotero
+
+Confirmed on 2026-09-29 for [issue #130](https://github.com/tannerpolley/MEA-Thermodynamics/issues/130):
+Zotero Companion owns paper briefs and the project reading list. The ignored
+`literature/` folder retains full-paper reading copies and their source hashes.
+Project scientific syntheses, datasets and analysis results remain with their
+existing repository owners.
+
+## Local Snakemake workflow adoption
+
+The owner chose Snakemake for all 11 populated top-level analyses on 2026-09-29 in
+[issue #131](https://github.com/tannerpolley/MEA-Thermodynamics/issues/131).
+This records adoption; Snakemake workflows have not yet been installed here.
+
+| Analysis | Owner decision |
+|---|---|
+| `analyses/enrtl_historical_evidence/` | Adopt |
+| `analyses/enrtl_six_species_ideal_comparison/` | Adopt |
+| `analyses/film_chemistry_work_package_a/` | Adopt |
+| `analyses/historical_fixed_parameter_epcsaft_evaluation/` | Adopt |
+| `analyses/ideal_reaction_equilibrium/` | Adopt |
+| `analyses/mea_parameter_bundle/` | Adopt |
+| `analyses/neutral_pcsaft_pressure_reference/` | Adopt |
+| `analyses/paper_validation/` | Adopt |
+| `analyses/reactive_epcsaft_parameter_evidence/` | Adopt |
+| `analyses/six_species_solubility_reference/` | Adopt |
+| `analyses/speciation_evidence_harmonization/` | Adopt |
+
+Implement each workflow around its existing scientific scope and retained
+inputs. Historical records remain historical, and deferred calculations remain
+deferred. Follow the installed CSE Snakemake reference: `calculate` runs only
+the authorized study; `present` reads verified retained results and rebuilds
+presentation without running a model. Adoption does not authorize a numerical
+campaign, parameter promotion, or use of an unqualified Engine wheel.
+
+The top-level choices apply to their nested analyses and report pages. They replace the earlier blanket deferral.
+
 ## Claim boundaries
 
 State supported uses, excluded phenomena, validity limits, and unresolved scientific questions.
@@ -81,7 +120,7 @@ A source-verified measurement with explicit identity, units, composition basis, 
 
 ## Candidate observation
 
-A source-traceable measurement whose identity and campaign block are known but which still lacks one or more execution requirements, such as a residual scale, pressure contract, model-domain admission, or immutable Data-packet binding. Candidate observations may be partitioned for planning but may not be scored or fitted.
+A source-traceable measurement whose identity and campaign block are known but which still lacks one or more execution requirements, such as a residual scale, declared pressure basis and units, model-domain admission, or immutable Data-packet binding. Candidate observations may be partitioned for planning but may not be scored or fitted.
 
 ## Campaign block
 
@@ -101,7 +140,7 @@ One declarative combination of neutral polar physics, association topology, diel
 
 ## Promoted parameter set
 
-The single parameter set accepted for scientific use after numerical, identifiability, campaign-blocked assessment, domain, provenance, and immutable-artifact gates pass. Alternative fits remain comparison evidence.
+The single parameter set accepted for scientific use after numerical, identifiability, campaign-blocked assessment, domain, provenance, and immutable-file identity checks pass. Alternative fits remain comparison evidence.
 
 ## Application curation
 
