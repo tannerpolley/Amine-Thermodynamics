@@ -55,32 +55,40 @@ Name the source hierarchy and exact location of project-approved equations, para
 
 source/data adoption: zotero
 
+Confirmed on 2026-09-29 for [issue #130](https://github.com/tannerpolley/MEA-Thermodynamics/issues/130):
+Zotero Companion owns paper briefs and the project reading list. The ignored
+`literature/` folder retains full-paper reading copies and their source hashes.
+Project scientific syntheses, datasets and analysis results remain with their
+existing repository owners.
+
 ## Local Snakemake workflow adoption
 
-The investigator deferred local Snakemake adoption for these populated analyses on 2026-09-29.
+The owner chose Snakemake for all 11 populated top-level analyses on 2026-09-29 in
+[issue #131](https://github.com/tannerpolley/MEA-Thermodynamics/issues/131).
+This records adoption; Snakemake workflows have not yet been installed here.
 
-| Analysis | Decision |
+| Analysis | Owner decision |
 |---|---|
-| `analyses/enrtl_six_species_ideal_comparison/` | deferred |
-| `analyses/film_chemistry_work_package_a/` | deferred |
-| `analyses/historical_fixed_parameter_epcsaft_evaluation/` | deferred |
-| `analyses/ideal_reaction_equilibrium/` | deferred |
-| `analyses/mea_parameter_bundle/` | deferred |
-| `analyses/mea_parameter_bundle/association-topology/` | deferred |
-| `analyses/mea_parameter_bundle/born-permittivity/` | deferred |
-| `analyses/mea_parameter_bundle/calorimetry/` | deferred |
-| `analyses/mea_parameter_bundle/co2-r4-calibration/` | deferred |
-| `analyses/mea_parameter_bundle/coupling-and-identification/` | deferred |
-| `analyses/mea_parameter_bundle/historical-designs/` | deferred |
-| `analyses/mea_parameter_bundle/ionic-speciation-fit/` | deferred |
-| `analyses/mea_parameter_bundle/neutral-mea-water/` | deferred |
-| `analyses/mea_parameter_bundle/reaction-temperature-fit/` | deferred |
-| `analyses/neutral_pcsaft_pressure_reference/` | deferred |
-| `analyses/paper_validation/2015_baygi/` | deferred |
-| `analyses/reactive_epcsaft_parameter_evidence/` | deferred |
-| `analyses/reactive_epcsaft_parameter_evidence/pressure_first/` | deferred |
-| `analyses/six_species_solubility_reference/` | deferred |
-| `analyses/speciation_evidence_harmonization/` | deferred |
+| `analyses/enrtl_historical_evidence/` | Adopt |
+| `analyses/enrtl_six_species_ideal_comparison/` | Adopt |
+| `analyses/film_chemistry_work_package_a/` | Adopt |
+| `analyses/historical_fixed_parameter_epcsaft_evaluation/` | Adopt |
+| `analyses/ideal_reaction_equilibrium/` | Adopt |
+| `analyses/mea_parameter_bundle/` | Adopt |
+| `analyses/neutral_pcsaft_pressure_reference/` | Adopt |
+| `analyses/paper_validation/` | Adopt |
+| `analyses/reactive_epcsaft_parameter_evidence/` | Adopt |
+| `analyses/six_species_solubility_reference/` | Adopt |
+| `analyses/speciation_evidence_harmonization/` | Adopt |
+
+Implement each workflow around its existing scientific scope and retained
+inputs. Historical records remain historical, and deferred calculations remain
+deferred. Follow the installed CSE Snakemake reference: `calculate` runs only
+the authorized study; `present` reads verified retained results and rebuilds
+presentation without running a model. Adoption does not authorize a numerical
+campaign, parameter promotion, or use of an unqualified Engine wheel.
+
+The top-level choices apply to their nested analyses and report pages. They replace the earlier blanket deferral.
 
 ## Claim boundaries
 
