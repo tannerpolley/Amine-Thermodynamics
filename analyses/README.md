@@ -2,6 +2,13 @@
 
 This directory contains source-controlled scientific analysis, validation, and figure workflows. Runtime package code belongs under `src/MEA`; reusable literature and parameter inputs belong under `data/reference`; analysis-specific generated snapshots stay with the analysis that owns them.
 
+## Snakemake adoption
+
+The confirmed decisions for all 11 top-level analyses and their nested work
+are recorded in [scientific context](../docs/scientific/CONTEXT.md#local-snakemake-workflow-adoption).
+Workflow implementation remains with the MEA owning agent; no Snakemake
+workflows have been installed by this setup migration.
+
 ## Root Quarto analysis website
 
 `analyses/` is one root Quarto analysis website managed by the CSE
