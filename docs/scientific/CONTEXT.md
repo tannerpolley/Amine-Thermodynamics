@@ -120,7 +120,7 @@ A source-verified measurement with explicit identity, units, composition basis, 
 
 ## Candidate observation
 
-A source-traceable measurement whose identity and campaign block are known but which still lacks one or more execution requirements, such as a residual scale, pressure contract, model-domain admission, or immutable Data-packet binding. Candidate observations may be partitioned for planning but may not be scored or fitted.
+A source-traceable measurement whose identity and campaign block are known but which still lacks one or more execution requirements, such as a residual scale, declared pressure basis and units, model-domain admission, or immutable Data-packet binding. Candidate observations may be partitioned for planning but may not be scored or fitted.
 
 ## Campaign block
 
@@ -140,7 +140,7 @@ One declarative combination of neutral polar physics, association topology, diel
 
 ## Promoted parameter set
 
-The single parameter set accepted for scientific use after numerical, identifiability, campaign-blocked assessment, domain, provenance, and immutable-artifact gates pass. Alternative fits remain comparison evidence.
+The single parameter set accepted for scientific use after numerical, identifiability, campaign-blocked assessment, domain, provenance, and immutable-file identity checks pass. Alternative fits remain comparison evidence.
 
 ## Application curation
 
