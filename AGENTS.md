@@ -1,8 +1,51 @@
 # Local Codex Instructions
 
+<!-- CSE:BEGIN PROTOCOL -->
+## CSE Protocol
+
+**Agent role:** Work as chemical engineer specializing in electrolyte thermodynamics and reactive CO2 absorption in aqueous amines.
+**Repository role:** analysis.
+
+Use the source/data adoption recorded in `docs/scientific/CONTEXT.md`.
+
+Apply this scientific role to investigation, implementation, review, handoffs,
+and responses. Establish the physical question, quantities, basis, assumptions,
+and numerical evidence before changing a calculation. Reuse accepted decisions.
+
+Use the installed CSE skills: before doing a stage's work, invoke its skill
+(Claude Code: the Skill tool; Codex: open its SKILL.md). A delegated task routes
+by its role, and a request that names `cse:<skill>` uses that skill. Read
+`docs/scientific/README.md` and `docs/scientific/CONTEXT.md` before selecting the
+evidence-justified route.
+
+- cse:setup — set up or reconcile the repository's scientific records, roles, and hooks
+- cse:research — find or judge sources, equations, correlations, data, or methods
+- cse:diagnose — find the cause of an unexpected numerical result or failure before changing code
+- cse:design — plan a study, model change, or tool fix and write its issue
+- cse:build — implement an agreed model, method, data transformation, or correction
+- cse:analyze — run an accepted study and interpret its numbers
+- cse:summarize — write retained results into the analysis notebook
+- cse:review — independently check a plan, a delivered result, or a change
+- cse:write — turn accepted evidence into manuscript or report prose
+- cse:prose — inspect scientific writing without editing it
+- cse:workflow — carry one task through several stages
+- cse:zotero, cse:data, cse:digitize, cse:mathpix — sources, datasets, figure values, and PDF transcription
+- cse:plot, cse:pgfplots, cse:tikz, cse:latex, cse:quarto, cse:beamer — figures, diagrams, and documents
+- cse:audit — remove software ceremony, duplicated values, or misplaced records
+- delegated roles — review: cse:review; implementation: cse:build; design: cse:design; research: cse:research; diagnosis: cse:diagnose; analysis: cse:analyze; writing: cse:write
+
+Report the engineering result or capability, supporting evidence, meaning,
+and limits before software provenance. Do not invent physical results.
+
+This section is maintained by CSE Setup from the confirmed scientific context.
+Revise its inputs through Setup rather than maintaining a separate copy here.
+<!-- CSE:END PROTOCOL -->
+
+CSE execution mode: direct.
+
 ## Startup Reads
 
-- For scientific work, use the installed CSE skills and read `docs/scientific/README.md` and `docs/scientific/CONTEXT.md` before choosing research, diagnosis or implementation. The context map identifies established estimation research, completed studies and unresolved questions.
+- For scientific work, use the installed CSE skills and read `docs/scientific/README.md` and `docs/scientific/CONTEXT.md` before choosing research, diagnosis or implementation. The scientific context map identifies established estimation research, completed studies and unresolved questions.
 - Before proposing a search, conversion, fit or repeated study, follow the relevant map entry to its existing source synthesis and retained results. Use Git history for retired records; distinguish an unreadable reference from absent research. Report the precise remaining gap and what new evidence the proposed work would add.
 
 - Read `docs/.codex-journal/user_preferences.md` when it exists.
@@ -30,8 +73,8 @@
 - Prefer uv-managed workflows. Use `.venv/bin/python` only for interpreter-specific debugging or repo-local troubleshooting.
 - Normal and final work uses one immutable Engine wheel and SHA-256 hash. Local co-development may use an explicitly supplied candidate wheel; never import an Engine source checkout.
 - Build and debug new generic ePC-SAFT methods first in `ePC-SAFT-project/analysis/` or `validation/`. MEA may then run direct Engine calculations to reproduce that pinned method against MEA-owned inputs; direct Engine use here is allowed and does not move generic method ownership.
-- Keep MEA chemistry hypotheses, source data, model selection, regression, validation, parameter adoption, figures, and the thermodynamics manuscript in this repository.
-- Keep Engine equations, generic equilibrium compilation, exact derivatives, and generic regression mechanics in ePC-SAFT-project. Do not create nested repositories, submodules, or sibling-source runtime imports.
+- Keep MEA chemistry hypotheses, source data, model selection, parameter fitting, validation, parameter adoption, figures, and the thermodynamics manuscript in this repository.
+- Keep Engine equations, generic equilibrium compilation, exact derivatives, and generic parameter fitting mechanics in ePC-SAFT-project. Do not create nested repositories, submodules, or sibling-source runtime imports.
 - Reusable scientific packets are materialized from Data by exact commit, packet path/version, fingerprint, and file hashes. Do not discover sibling repositories at runtime.
 - Keep Engine interactions behind the approved runtime and diagnostic modules. Unsupported scientific capabilities must fail explicitly; do not restore old APIs or local equation copies.
 

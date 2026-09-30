@@ -45,7 +45,7 @@ row against its primary paper or rerun historical thermodynamics.
 | `mea_parameter_bundle` | Exploratory parameter mapping, working notebook, retained comparisons | No accepted bundle; publication freshness incomplete |
 | `film_chemistry_work_package_a` | Source-qualified reaction/transport input checks for film work | No thermodynamic adoption; Work Package B remains blocked |
 | `toybox/ionic_parameter_fit_playground` | Retired rejection evidence | Excluded from promotion and manuscript predictions |
-| `docs/latex` | Current fixed-parameter manuscript | New exploratory results have not been promoted for manuscript use |
+| `docs/scientific/latex` | Current fixed-parameter manuscript | New exploratory results have not been promoted for manuscript use |
 
 ## Findings established before documentation corrections
 
@@ -56,7 +56,7 @@ row against its primary paper or rerun historical thermodynamics.
    `cfe8e2a0d5af8d35227a49246dc1590de64ab55bf033e3416b6f80e1ff8f410e`,
    a different wheel from the notebook. `scripts/validate_engine_environment.py`
    reads that historical lock. Do not change either identity to make them agree.
-2. **Verified — missing notebook authority.** `CONTEXT.md` says no research
+2. **Verified — missing notebook authority.** `docs/scientific/CONTEXT.md` says no research
    notebook is active, while `analyses/README.md` and the existing notebook
    define an active working view. The correction must distinguish working
    interpretation from an accepted parameter set.
@@ -108,7 +108,7 @@ row against its primary paper or rerun historical thermodynamics.
 
 ## Manuscript alignment
 
-Independent read-only review found that `docs/latex/main.tex`,
+Independent read-only review found that `docs/scientific/latex/main.tex`,
 `sections/data_methods.tex`, `sections/conclusion.tex` and the parameter tables
 already identify a retired fixed-parameter evaluation. Preserve their original
 Engine/version and parameter identities. No new notebook numbers were promoted
