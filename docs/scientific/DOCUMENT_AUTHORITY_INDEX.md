@@ -47,7 +47,7 @@ MEA-intensive boundary, #50 typed null-residual failure, and #51 optional
 simultaneous sparse multi-experiment backend. Closed issues #30 and #31 are
 accepted homogeneous-reactive and reactive-bubble calculation history.
 
-## MEA-Thermodynamics
+## Amine-Thermodynamics
 
 | Path | Classification | Use |
 |---|---|---|

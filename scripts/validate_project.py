@@ -185,7 +185,7 @@ def verify_tracked_file_size() -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate the MEA-Thermodynamics project layout and analysis artifacts.")
+    parser = argparse.ArgumentParser(description="Validate the Amine-Thermodynamics project layout and analysis artifacts.")
     parser.add_argument("mode", choices=["quick", "confidence"], help="quick runs structural/tests checks; confidence also regenerates curated plots")
     args = parser.parse_args()
 
