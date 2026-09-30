@@ -1,0 +1,26 @@
+{
+  "form": "00",
+  "jobs": [
+    {
+      "kind": "packet",
+      "command": "/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-00-packet-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path\nimport sys\nsys.path.insert(0, '\\''analyses/mea_parameter_bundle/calibration-misfit'\\'')\nimport probe\nprobe.shared.RUNS = Path('\\''analyses/mea_parameter_bundle/results/runs/assessment-p5a-00/packet-cache'\\'')\nprobe.main(['\\''analyses/mea_parameter_bundle/results/runs/assessment-p5a-00/assessment-p5a-00-packet.jsonl'\\'', '\\''--record=analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json'\\''])' > analyses/mea_parameter_bundle/model-d/assessment-p5a-00-packet-log.txt 2>&1"
+    },
+    {
+      "kind": "canonical",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-00-canonical-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path\nimport sys\nsys.path.insert(0, '\\''analyses/mea_parameter_bundle/calibration-misfit'\\'')\nimport probe\nprobe.shared.RUNS = Path('\\''analyses/mea_parameter_bundle/results/runs/assessment-p5a-00/canonical-cache'\\'')\nprobe.main(['\\''analyses/mea_parameter_bundle/results/runs/assessment-p5a-00/assessment-p5a-00-canonical.jsonl'\\'', '\\''--record=analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json'\\'', '\\''--canonical'\\''])' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-00-canonical-log.txt"
+    },
+    {
+      "kind": "transfer",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-00-transfer-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path\nimport sys\nsys.path.insert(0, '\\''analyses/mea_parameter_bundle/composition-transfer'\\'')\nimport transfer\ntransfer.HERE = Path('\\''/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/downstream/.worktrees/MEA-Thermodynamics-121-model-d/analyses/mea_parameter_bundle/results/runs/assessment-p5a-00/transfer'\\'')\ntransfer.HERE.mkdir()\ntransfer.main(['\\''--out=assessment-p5a-00-transfer'\\'', '\\''D-p5a-00-eval-28181e72=analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json'\\''])' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-00-transfer-log.txt"
+    },
+    {
+      "kind": "nahco3",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-00-nahco3-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path\nimport sys\nsys.path.insert(0, '\\''analyses/mea_parameter_bundle/model-d'\\'')\nimport nahco3\nnahco3.b.HERE = Path('\\''analyses/mea_parameter_bundle/results/runs/assessment-p5a-00/nahco3'\\'')\nnahco3.b.HERE.mkdir()\nnahco3.main(['\\''D-p5a-00-eval-28181e72=analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json'\\''])' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-00-nahco3-log.txt"
+    },
+    {
+      "kind": "scoring",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-00-scoring-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python analyses/mea_parameter_bundle/calibration-misfit/compare.py --out='/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/downstream/.worktrees/MEA-Thermodynamics-121-model-d/analyses/mea_parameter_bundle/results/runs/assessment-p5a-00/assessment-p5a-00-comparison' 'D-p5a-00-eval-28181e72=/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/downstream/.worktrees/MEA-Thermodynamics-121-model-d/analyses/mea_parameter_bundle/results/runs/assessment-p5a-00/assessment-p5a-00-packet.jsonl,/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/downstream/.worktrees/MEA-Thermodynamics-121-model-d/analyses/mea_parameter_bundle/results/runs/assessment-p5a-00/assessment-p5a-00-canonical.jsonl' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-00-scoring-log.txt"
+    }
+  ],
+  "changes_from_retained_jobs": "Candidate paths, labels, output paths and cache directories only; same existing script entry points, evaluator, rows and numerical settings."
+}
