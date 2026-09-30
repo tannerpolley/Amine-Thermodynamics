@@ -1,0 +1,29 @@
+{
+  "meaning": "maximum_iterations caps optimizer updates; FitResult.iterations counts the initial point plus updates",
+  "pinned_sources": {
+    "engine/native/regression/fit.cpp": {
+      "commit": "8c670d3aa9673459867154fa5c344c97526a7818",
+      "sha256": "9afb53f235995491f45c11891fd3ffa123fd96dd224d403b44e4d633b5005bfe",
+      "locators": [
+        [
+          519,
+          "remaining -= static_cast<int>(summary.iterations.size()) - 1;"
+        ],
+        [
+          524,
+          "result.iterations = result.iteration_costs.size();"
+        ]
+      ]
+    },
+    "engine/native/regression/fit.hpp": {
+      "commit": "8c670d3aa9673459867154fa5c344c97526a7818",
+      "sha256": "a5fe19219d43e1750ff735da15e3734f1539a20a403dc971b03e30fd9d81a15c",
+      "locators": [
+        [
+          78,
+          "std::vector<double> iteration_seconds, iteration_costs;  // per Ceres iteration, 0 = the start"
+        ]
+      ]
+    }
+  }
+}

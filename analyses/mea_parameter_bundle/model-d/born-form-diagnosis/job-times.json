@@ -1,0 +1,152 @@
+[
+  {
+    "job": "baselines",
+    "wall_s": 215.5494026990018,
+    "status": "failed",
+    "script_sha256": "a501419bba74e7dcc7aec9b9b29f853be71c08f3da9610bbed7e4628f8c49e41",
+    "argv": [
+      "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+      "baselines"
+    ],
+    "charged_s": 220.0,
+    "outer_timeout_s": 220,
+    "exit_code": 124
+  },
+  {
+    "job": "baselines",
+    "wall_s": 104.86499971800004,
+    "status": "complete",
+    "script_sha256": "cbb42aea2187aa33c60a81ef5814002832d9bd260a28a82f11268ed397320648",
+    "argv": [
+      "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+      "baselines"
+    ]
+  },
+  {
+    "job": "p1",
+    "wall_s": 1.4448385180003243,
+    "status": "failed",
+    "script_sha256": "1efee3df2510e028b00ec2889a504df27a5e9627dbbd76f8ee3d25a63c9b1388"
+  },
+  {
+    "job": "p1",
+    "wall_s": 3.4524342759978026,
+    "status": "complete",
+    "script_sha256": "b521b36a873d71dc5ab1f72198358ae7d211263e1f3d61f4dfc108368e7c89f4"
+  },
+  {
+    "job": "p1b",
+    "wall_s": 114.86877466100123,
+    "status": "complete",
+    "script_sha256": "cbb42aea2187aa33c60a81ef5814002832d9bd260a28a82f11268ed397320648",
+    "argv": [
+      "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+      "p1b"
+    ]
+  },
+  {
+    "job": "branch-check",
+    "wall_s": 44.8594019810007,
+    "status": "complete",
+    "script_sha256": "effbb53208d6161cfab87b9545c8e64309ad5e505ddeec8f1e18eb79a0aae4b1",
+    "argv": [
+      "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+      "branch-check"
+    ]
+  },
+  {
+    "job": "p2",
+    "wall_s": 1278.5736668089994,
+    "status": "complete",
+    "script_sha256": "7c626c5240be738746718d6babb8a96e00b108dba69997cc03d8d72da6d4566f"
+  },
+  {
+    "job": "p3-shell-only",
+    "wall_s": 8.888011075003305,
+    "status": "failed",
+    "script_sha256": "11c52db403c2e9bafb68a447b004010b33017217be060bee5c656fac2ea94c1b"
+  },
+  {
+    "job": "p3-best-group",
+    "wall_s": 150.74777332899976,
+    "status": "complete",
+    "script_sha256": "11c52db403c2e9bafb68a447b004010b33017217be060bee5c656fac2ea94c1b"
+  },
+  {
+    "job": "p4",
+    "wall_s": 828.5093512400017,
+    "status": "complete",
+    "budget_s": 900.0,
+    "script_sha256": "3fe35bc96965225942cb6eeb74794ae91f599036a38112552e49fb85a40bd068"
+  },
+  {
+    "job": "p5a-11",
+    "wall_s": 223.3179868219995,
+    "status": "complete",
+    "budget_family_s": 1200.0,
+    "script_sha256": "55e7746199b0e114a54e21b17f02c1fdd39d0779b9c2a7013709ce49c9df2f8e"
+  },
+  {
+    "job": "p5a-00",
+    "wall_s": 187.1418605229992,
+    "status": "complete",
+    "budget_family_s": 1200.0,
+    "script_sha256": "55e7746199b0e114a54e21b17f02c1fdd39d0779b9c2a7013709ce49c9df2f8e"
+  },
+  {
+    "job": "p5b-11",
+    "wall_s": 218.45274019299904,
+    "status": "complete",
+    "budget_family_s": 1200.0,
+    "script_sha256": "55e7746199b0e114a54e21b17f02c1fdd39d0779b9c2a7013709ce49c9df2f8e"
+  },
+  {
+    "job": "p5b-00",
+    "wall_s": 217.20533542400153,
+    "status": "complete",
+    "budget_family_s": 1200.0,
+    "script_sha256": "55e7746199b0e114a54e21b17f02c1fdd39d0779b9c2a7013709ce49c9df2f8e"
+  },
+  {
+    "job": "render-association",
+    "wall_s": 5.939834585999051,
+    "status": "complete"
+  },
+  {
+    "job": "summarize-results-first",
+    "wall_s": null,
+    "charged_s": 30.0,
+    "status": "failed",
+    "outer_timeout_s": 30,
+    "exit_code": 1,
+    "script_sha256": "a204fab6a29d8a681e1fbd9200024d8c8f8a22545f42983189cd12eace69314e",
+    "reason": "shared objective log contains separately owned scan cases whose JSONs were moved into scans; reporting only, no Engine evaluation",
+    "timing_basis": "conservatively charge the entire cap; exact Python wall time unavailable"
+  },
+  {
+    "job": "render-association",
+    "wall_s": 1.7459289020007418,
+    "status": "complete"
+  },
+  {
+    "job": "summarize-results-second",
+    "wall_s": null,
+    "charged_s": 30.0,
+    "status": "failed",
+    "outer_timeout_s": 30,
+    "exit_code": 1,
+    "script_sha256": "bf470b73fdc139c67ed5e534ab9e7d7cd25f85b15576073d6da77d21f9a59289",
+    "reason": "verification compared compressed-file bytes with the evaluator\u2019s decompressed-source SHA-256; raw gzip equals HEAD and decompressed bytes match the original input hash",
+    "timing_basis": "conservatively charge the entire cap; exact Python wall time unavailable"
+  },
+  {
+    "job": "render-association",
+    "wall_s": 1.7907457089968375,
+    "status": "complete"
+  },
+  {
+    "job": "summarize-results",
+    "wall_s": 0.33063369099545525,
+    "status": "complete"
+  }
+]
