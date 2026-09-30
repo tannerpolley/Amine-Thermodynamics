@@ -1,0 +1,18 @@
+from pathlib import Path
+import subprocess
+
+ANALYSIS = Path(workflow.basedir)
+ROOT = ANALYSIS.parents[1]
+VERIFY = ["sha256sum", "--check", "--strict", str(ANALYSIS / "retained-results.sha256")]
+
+
+rule present:
+    input: str(ANALYSIS / "retained-results.sha256")
+    run:
+        subprocess.run(VERIFY, cwd=ROOT, check=True)
+        output = ANALYSIS / "results/validation-report.md"
+        pending = output.with_suffix(".md.tmp")
+        report = (ANALYSIS / "results/validation_report.json").read_text()
+        pending.write_text("```json\n" + report.rstrip() + "\n```\n")
+        subprocess.run(VERIFY, cwd=ROOT, check=True)
+        pending.replace(output)

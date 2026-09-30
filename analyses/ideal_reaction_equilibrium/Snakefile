@@ -1,0 +1,15 @@
+from pathlib import Path
+import subprocess
+
+ANALYSIS = Path(workflow.basedir)
+ROOT = ANALYSIS.parents[1]
+UV = str(Path.home() / ".local/bin/uv")
+VERIFY = ["sha256sum", "--check", "--strict", str(ANALYSIS / "retained-results.sha256")]
+
+
+rule present:
+    input: str(ANALYSIS / "retained-results.sha256")
+    run:
+        subprocess.run(VERIFY, cwd=ROOT, check=True)
+        subprocess.run([UV, "run", "--no-sync", "python", str(ANALYSIS / "scripts/render_figures.py")], cwd=ROOT, check=True)
+        subprocess.run(VERIFY, cwd=ROOT, check=True)

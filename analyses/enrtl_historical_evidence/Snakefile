@@ -1,0 +1,31 @@
+import json
+from pathlib import Path
+import subprocess
+
+ANALYSIS = Path(workflow.basedir)
+ROOT = ANALYSIS.parents[1]
+UV = str(Path.home() / ".local/bin/uv")
+VERIFY = ["sha256sum", "--check", "--strict", str(ANALYSIS / "retained-results.sha256")]
+HASH_CHECK = """import json
+from pathlib import Path
+from MEA.common.data_access import verify_source_hashes
+analysis = Path("analyses/enrtl_historical_evidence")
+record = json.loads((analysis / "conversion_receipt.json").read_text())
+verify_source_hashes({str(analysis / record["output"]): record["output_sha256"]}, repo_root=Path.cwd())
+"""
+
+
+rule present:
+    input: str(ANALYSIS / "retained-results.sha256")
+    run:
+        subprocess.run(VERIFY, cwd=ROOT, check=True)
+        subprocess.run([UV, "run", "--no-sync", "python", "-c", HASH_CHECK], cwd=ROOT, check=True)
+        data = json.loads((ANALYSIS / "results/historical_evidence.json").read_text())
+        view = dict((key, data[key]) for key in ("identity", "status", "claim_boundary"))
+        view["evidence_roles"] = dict((name, values["role"]) for name, values in data["evidence"].items())
+        output = ANALYSIS / "results/historical-evidence.md"
+        pending = output.with_suffix(".md.tmp")
+        pending.write_text("```json\n" + json.dumps(view, indent=2) + "\n```\n")
+        subprocess.run(VERIFY, cwd=ROOT, check=True)
+        subprocess.run([UV, "run", "--no-sync", "python", "-c", HASH_CHECK], cwd=ROOT, check=True)
+        pending.replace(output)
