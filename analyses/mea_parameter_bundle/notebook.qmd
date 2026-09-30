@@ -1,6 +1,6 @@
 ---
 title: "MEA parameter bundle"
-subtitle: "Selected parameters first · synchronized overview of retained regression evidence"
+subtitle: "Model D assessment · historical selected parameters and retained fitting evidence"
 ---
 
 ::: {.callout-note}
@@ -8,6 +8,104 @@ subtitle: "Selected parameters first · synchronized overview of retained regres
 
 This is a working view of retained evidence, not an independently validated process-model parameter set. Result generations and limitations are identified in each analysis section; rendering never reruns the model.
 :::
+
+# Model D: current bounded assessment {#model-d-decision23}
+
+**Both Born forms meet the accepted 104-row pressure rule and numerical-completeness checks.** The average absolute relative deviation (AARD) at 40–80 °C is **21.04 % for SSM+DS** and **20.50 % for Original Born**, against the owner’s 35 % limit. This comparison does not select a parameter record. Large errors on the 15 and 45 mass% MEA second-look rows, active bounds in Original Born, and the limits below prevent interpreting the pass as physical validation or qualification for absorber or stripper calculations.
+
+This section reports [MEA #121 decisions 20–23](https://github.com/tannerpolley/MEA-Thermodynamics/issues/121#issuecomment-5896373779) and the [accepted recovery](https://github.com/tannerpolley/MEA-Thermodynamics/issues/121#issuecomment-5901117598). The selected-parameter tables and older pressure, speciation, and heat figures later in this notebook describe the historical September incumbent. They are not the two Model D candidates assessed here.
+
+## Model, data, and fitting controls
+
+The two S1 forms use the same five adjustable coordinates: carbamate–water, MEAH⁺–water, and HCO₃⁻–water interaction coefficients, the MEAH⁺–MEACOO⁻ interaction coefficient, and the reciprocal-temperature slope of MEAH⁺–water. The first three coefficients have bounds ±0.5, the cation–anion coefficient ±1, and the slope ±1000 K. At $T_\mathrm{ref}=313.15$ K,
+
+$$
+k_{\mathrm{MEAH^+,water}}(T)=k_{\mathrm{MEAH^+,water}}(T_\mathrm{ref})
++b(1/T-1/T_\mathrm{ref}).
+$$
+
+R4 stays at its source correlation, $\ln K_4=2.151-1545.3/T$; R1–R3, R5, the remaining interaction coefficients, and species parameters stay at the recorded base values. SSM+DS uses effective Born coefficients $c_\mathrm{shell}=c_\mathrm{dielectric}=1$; Original Born uses explicit zeros. The SSM base document omits the two keys and the retained loader supplies (1, 1); the Original Born document supplies (0, 0). [Bases, candidates, and complete wheel identities](model-d/decision23-candidate-identities.json) identify this distinction.
+
+Decision 23 fits **160 targets at 84 states**: 48 pressure targets (32 at 40 °C, 16 at 60 °C) and 112 liquid mole-fraction targets (84 at 20 °C, 16 at 40 °C, 12 at 60 °C). The weighted objective is half the sum of squared residuals, using $\ln(p_\mathrm{calc}/p_\mathrm{obs})/0.3$ for pressure and $(x_\mathrm{calc}-x_\mathrm{obs})/(0.1x_\mathrm{obs}+0.001)$ for species. Bicarbonate observations use the retained HCO₃⁻ + CO₃²⁻ pool. Böttinger 042/046 and Matin 016 remain excluded. The 80 °C isotherm stays outside the objective.
+
+The accepted method is the existing Engine Ceres Levenberg–Marquardt fit with exact implicit derivatives, coordinate scales 0.01 and 10 K, 100 iterations and 7200 s per start. The function tolerance remains $10^{-12}$. Six prescribed starts per form include the old-rule optimum, C_src, pre-refit, incumbent-R4-C, and random seeds 1 and 2. The current admissibility check uses 293.15–353.15 K; this is narrower than decision 20’s historical 293.15–393.15 K check. Values at 393.15 K are retained for reporting and do not extend qualification.
+
+Decision 23 removed 100–120 °C pressure targets from the objective and replaced the earlier all-temperature pressure and Mamun requirements with AARD ≤35 % on the 104 canonical 40–80 °C rows, retaining numerical completeness. The change followed the old-rule comparison: both forms passed the old pooled-pressure rule but failed its Mamun requirement. The owner narrowed the intended temperature domain; the retained 100–120 °C rows now report extrapolation. The [old-rule results](model-d/README.md#old-rule-all-temperatures-mamun-gate-s1-results) retain that chronology. No S2 fit is needed under the accepted S1 pass rule.
+
+## Fitting results and uncertainty
+
+| Quantity | SSM+DS (1, 1) | Original Born (0, 0) |
+|:--|--:|--:|
+| Weighted objective, 160 targets | 47.625767 | 40.201537 |
+| Usable converged starts | 5 of 6 | 6 of 6 |
+| Carbamate–water $k_{ij}$ | +0.078856 | −0.066551 |
+| MEAH⁺–water $k_{ij}$ at 313.15 K | −0.298840 | +0.146688 |
+| HCO₃⁻–water $k_{ij}$ | +0.393826 | **+0.500000 (upper bound)** |
+| MEAH⁺–MEACOO⁻ $k_{ij}$ | −0.705057 | **−1.000000 (lower bound)** |
+| MEAH⁺–water slope $b$, K | +107.644 | +88.447 |
+| Jacobian rank | 5 | 5 |
+| Full Engine covariance | Available at an interior point | Withheld: two active bounds |
+
+SSM+DS seed 1 failed its initial equilibrium evaluation at Böttinger 049 (200 iterations, residual 2.36585); it contributes no fitting trajectory. The five completed SSM+DS starts agree in objective near 47.625767. Original Born’s three pre-reboot starts remain on wheel f66d972c; only its missing incumbent-R4-C, seed-1, and seed-2 starts ran on 28181e72. These converged in 15, 7, and 8 iterations, respectively, with no trial failures, to costs differing by less than $10^{-11}$. Their fitting wall times were 282.64, 158.11, and 169.96 s. No silent retry or completed-start rerun occurred.
+
+The displayed SSM+DS candidate is the lowest-cost usable retained f66d972c result; Original Born is the lowest-cost usable 28181e72 result (seed 2). This construction chooses one representative optimum for assessment within each form; it is not adoption of either form. The full [SSM+DS fitting record](model-d/1-1-S1-40-80C-multistart.json), historical [Original Born record](model-d/0-0-S1-40-80C-multistart.json), and [three recovered Original Born starts](model-d/0-0-S1-40-80C-28181e72-multistart.json) retain every start and its diagnostics.
+
+The SSM+DS local standard errors are 0.0259, 0.0291, 0.0985, and 0.0306 for the four interaction coefficients and 130.7 K for the slope. Original Born’s standard errors conditional on fixing both active-bound coordinates are 0.0122 for carbamate–water, 0.0111 for MEAH⁺–water, and 85.1 K for the slope. These local linear estimates assume independent weighted errors and omit model discrepancy. They do not establish independent physical identification of the coefficients; conditional errors do not replace the withheld full covariance. The slope errors are large relative to both fitted slopes.
+
+![Retained objective trajectories for the six prescribed starts of each Born form. Lines connect recorded fitting iterations, not thermodynamic observation coordinates. Curve labels preserve the fitting wheel: f66d972c for all SSM+DS and three historical Original Born starts, 28181e72 for the three recovered Original Born starts. SSM+DS seed 1 failed its initial evaluation and has no trajectory. These starts are not a matched timing experiment.](model-d/figures/fit-cost-versus-iteration.svg){#fig-model-d-fit-cost fig-alt="Weighted objective on a logarithmic scale versus recorded fitting iteration, with separate panels for the two Born forms and labels identifying each start and fitting wheel."}
+
+## Pressure and species comparisons
+
+Pressure and species AARD below are unweighted relative deviations within the stated target group. They are separate from the weighted fitting objective.
+
+| Retained comparison | Targets | SSM+DS AARD, % | Original Born AARD, % |
+|:--|--:|--:|--:|
+| **Accepted pressure rule, 40–80 °C** | **104** | **21.04** | **20.50** |
+| Pressure actually fitted, 40/60 °C | 48 | 14.38 | 17.34 |
+| Species actually fitted, 20/40/60 °C | 112 | 14.08 | 10.23 |
+| Pressure at 80 °C, outside objective | 11 | 22.99 | 20.69 |
+| Species at 80 °C, outside objective | 11 | 11.40 | 7.35 |
+| Pressure at 100–120 °C, out of range | 57 | 33.24 | 31.25 |
+| Predefined 30 mass% pressure subset, 40–120 °C | 106 | 27.86 | 25.80 |
+
+![SSM+DS pressure parity at the 104 retained 40–80 °C observations, evaluated on wheel 28181e72 from the f66d972c fit. Source-specific points show calculated versus observed pressure in kPa on logarithmic axes. The solid line is equality; dotted factor-two lines are visual guides, not acceptance limits.](model-d/figures/1-1-eval-28181e72/pressure-parity.svg){#fig-model-d-ssm-parity fig-alt="Calculated versus observed carbon dioxide partial pressure for 104 observations, separated by literature source, for Model D SSM plus dielectric scaling."}
+
+![Original Born pressure parity at the same 104 retained 40–80 °C observations, fitted and evaluated on wheel 28181e72. Points and visual guides have the same meaning as the SSM+DS panel. Both forms pass the owner’s pooled 35 percent AARD rule; source-specific disagreements remain visible.](model-d/figures/0-0-eval-28181e72/pressure-parity.svg){#fig-model-d-original-parity fig-alt="Calculated versus observed carbon dioxide partial pressure for the same 104 observations, separated by literature source, for Model D Original Born."}
+
+The 104-row rule contains 36 Aronu, 30 Hilliard, 28 Jou, and 10 Idris rows. Their respective AARDs are 28.73, 10.92, 22.08, and 20.76 % for SSM+DS, and 24.44, 13.40, 23.53, and 19.08 % for Original Born. Mean $\ln(p_\mathrm{calc}/p_\mathrm{obs})$ over those 104 rows is −0.113 and −0.064; RMS ln is 0.326 and 0.283. The pass therefore retains a source-dependent pressure misfit and a pooled downward bias.
+
+All 123 packet states and all 161 canonical pressure states evaluate for each form. There are zero reported tolerance failures or balance errors under the existing checks. Maximum absolute stationarity is $4.55\times10^{-13}$ (SSM+DS packet), $2.27\times10^{-13}$ (Original Born packet), $1.56\times10^{-13}$ (SSM+DS canonical), and $1.28\times10^{-13}$ (Original Born canonical). This establishes numerical completeness for these retained evaluations, not physical validity.
+
+The raw scoring table keeps historical generic groups: its 68 packet pressure targets include the 20 high-temperature targets removed from the present objective, and its 120 non-80 °C species targets include eight excluded targets. The fitted groups in this section are the actual **48 pressure + 112 species** targets. [Scores](model-d/decision23-eval-28181e72-scores.csv), [target values](model-d/decision23-eval-28181e72-states.csv), and the [assessment summary](model-d/assessment-28181e72-summary.json) retain the groups and observation identities.
+
+## Transfer, carbonate, and salt checks
+
+| Second-look comparison from #108 | Pressure rows | SSM+DS AARD, % | Original Born AARD, % |
+|:--|--:|--:|--:|
+| 15 mass% MEA | 33 | 83.34 | 77.07 |
+| 45 mass% MEA | 37 | 64.88 | 64.52 |
+
+All 70 transfer states evaluate for each form, with no reported balance or tolerance failures and maximum absolute stationarity $1.71\times10^{-13}$. The high pressure errors show poor concentration transfer despite successful equilibrium solves. These rows were examined earlier in #106; the present [#108 scores](composition-transfer/second-look-model-d-decision23-eval-28181e72-scores.csv) and [values](composition-transfer/second-look-model-d-decision23-eval-28181e72-states.csv) are a second look, not untouched validation data.
+
+The carbonate comparison retains all ten raw Jakobsen rows at 20/40 °C. The historical nine-point summary alone excludes the 40 °C, loading 0.21 point; it gives model/observed carbonate-share ratios of 0.83–2.37 for SSM+DS and 1.38–5.00 for Original Born. Original Born’s better pooled-species score does not imply better carbonate partitioning. Jakobsen’s NMR methods use a common fast-exchange bicarbonate/carbonate signal and a separate calibrated ratio to recover carbonate ([Jakobsen 2005](#ref-7), NMR calibration and liquid-phase composition sections); this partition is not a separately resolved carbonate peak. All ten raw comparisons remain in the [assessment summary](model-d/assessment-28181e72-summary.json).
+
+The indicative NaHCO₃ comparison evaluates all 60 retained Pitzer table values per form at 278.15–318.15 K and 0.001–1 mol kg⁻¹. Stoichiometric osmotic-coefficient ARD is 4.43 % for SSM+DS and 0.508 % for Original Born; maximum absolute relative errors are 17.74 % and 2.845 %. Na⁺ stays at Figiel’s unrefitted values (σ = 2.8232 Å, $u/k=230$ K, Born diameter 3.445 Å; Na⁺–water $k=-0.3$); Na⁺–HCO₃⁻ stays at −0.514 from Held. Only each candidate’s fitted HCO₃⁻–water coefficient is transferred. Figiel’s Na⁺–water value was fitted at 298.15 K ([Figiel 2025](#ref-10), Tables 3 and 5; [Held 2014](#ref-9), Table 3). The reference values are evaluated Peiper–Pitzer correlations, not direct NaHCO₃ osmometry ([Peiper and Pitzer 1982](#ref-21), Table 6, journal pp. 631–636). [Salt values and scores](model-d/nahco3-decision23-eval-28181e72/nahco3-scores.csv) are indicative only: no sodium refit, new salt gate, or revival of the earlier N1/N2 fitting route is implied.
+
+## Published pressure comparison and claim limits
+
+Akula et al. report 40.5 % unweighted pressure MAPE for 30 mass% MEA, loading 0.003–0.5 and 40–120 °C ([Akula 2023a](#ref-18), p. 10 §4.2, Eq. 36). Its measured-pressure denominator matches the AARD calculation here, but the paper does not give the scored row count, row list, or calculated pressures. Its Table 3 (p. 8) lists pressure-calibration sources Aronu, Hilliard, Jou, Xu, and Kim; Figure 4 (p. 12) instead displays Aronu, Hilliard, Jou, Mamun, and Kim. The present 106-row subset contains Aronu 34, Hilliard 26, Jou 31, and Xu 15, and omits Kim and Mamun. Thus the values 27.86/25.80 % cannot establish superior performance on the same observations. The subset also includes this study’s out-of-range 100–120 °C calculations.
+
+Akula jointly fits pressure and heat in Eq. 34 (weights 1 and 0.2), while its speciation comparisons are outside that fit (p. 11 and Figure 7, p. 14). Model D instead fits 112 species targets as well as 48 pressure targets. The differing data use prevents calling these species comparisons equivalent prediction tests. The source read for this comparison is Zotero RVYVQKSF/IIYKTEG7, PDF SHA-256 `08f429473719f766ea5d8fb370de310d7e81da94039bf23ce779d92a131d68d3`; its absent ignored reading copy did not make the primary paper unavailable.
+
+Both forms pass the owner’s present screening rule, but no record is adopted and no absorber/stripper physical validation is established. The held-out 80 °C comparisons are outside the fit but were inspected in earlier studies; the 100–120 °C comparisons are extrapolations. This recovery does not establish new caloric performance, confidence intervals, matched-run speedup, or the cause of the historical 60-iteration plateaus. The current notebook section has not yet received the required fresh independent delivered review.
+
+## Recovery and wheel provenance
+
+Every current assessment uses Engine commit `8c670d3aa9673459867154fa5c344c97526a7818`, wheel SHA-256 `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2`. The SSM+DS fit remains identified by its historical wheel SHA-256 `f66d972c032ce709ada69e8d8177e195c7e416800757663b7420c22bda5f6328` (commit `1303c119e4a21ba31e46596fe62ee3fdfe4cc253`). The three recovered Original Born starts and its displayed candidate use 28181e72; its three earlier completed starts retain f66d972c.
+
+The [frozen-point qualification](model-d/qualification-28181e72.json) reproduces objective 40.20153733056146 at the unmoved explicit-(0, 0) point. The 160 predictions, residuals, weighted residuals and both 800-entry Jacobians match the Engine reference bit for bit. The reused relative $10^{-8}$ application-comparison criterion comes from the earlier PR188 reference check; it is not the Engine scientific solver tolerance. The objective difference is zero.
+
+The assessment retained 37 input hashes unchanged, including the old fitting files, immutable probes and candidates. Historical results keep their generating wheel identities. The recovered fitting job took 611.78 s wall / 610.47 s CPU; the four serial assessment jobs took 72.06/71.77, 120.73/120.43, 53.96/53.87 and 0.94/0.92 s wall/CPU (packet, canonical, transfer, salt). These are observed job durations, not a comparative benchmark.
 
 # Selected parameters
 
@@ -893,4 +991,5 @@ Detailed source prose from the former LaTeX notebook remains in Git history; all
 <li id="ref-18">P. Akula, A. Lee, J. Eslick, D. Bhattacharyya, and D. C. Miller, “A modified electrolyte non-random two-liquid model with analytical expression for excess enthalpy: Application to the MEA-H₂O-CO₂ system,” <em>AIChE Journal</em> (2023). <a href="https://doi.org/10.1002/aic.17935">doi:10.1002/aic.17935</a>.</li>
 <li id="ref-19">N. Mac Dowell, F. Llovell, C. S. Adjiman, G. Jackson, and A. Galindo, “Modeling the fluid phase behavior of carbon dioxide in aqueous solutions of monoethanolamine using transferable parameters with the SAFT-VR approach,” <em>Industrial &amp; Engineering Chemistry Research</em> (2010). <a href="https://doi.org/10.1021/ie901014t">doi:10.1021/ie901014t</a>.</li>
 <li id="ref-20">Z. Idris, K. J. Jens, and D. A. Eimer, “Speciation of MEA-CO₂ adducts at equilibrium using Raman spectroscopy,” <em>Energy Procedia</em> (2014). <a href="https://doi.org/10.1016/j.egypro.2014.11.152">doi:10.1016/j.egypro.2014.11.152</a>.</li>
+<li id="ref-21">J. C. Peiper and K. S. Pitzer, “Thermodynamics of aqueous carbonate solutions including mixtures of sodium carbonate, bicarbonate, and chloride,” <em>Journal of Chemical Thermodynamics</em> (1982). <a href="https://doi.org/10.1016/0021-9614(82)90078-7">doi:10.1016/0021-9614(82)90078-7</a>.</li>
 </ol>
