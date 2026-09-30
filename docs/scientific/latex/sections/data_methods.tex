@@ -15,7 +15,7 @@ Fast proton exchange makes only the sum \ce{MEA + MEAH+} observable, and the aut
 Matin et al.\ derived species from acid titration for total alkalinity, strong-base titration and total inorganic carbon \cite{matinFacileMethodDetermination2012}.
 Their method reports \MEA, \MEAH and \MEACOO separately and assigns carbonate to bicarbonate, so their bicarbonate value is also compared with the \ce{HCO3- + CO3^2-} pool \cite[Eqs.~18--19b]{matinFacileMethodDetermination2012}.
 Matin et al.\ label their measurements \SI{21}{\degreeCelsius}, and we represent them at \SI{20}{\degreeCelsius}.
-The Jakobsen et al.\ NMR data report bicarbonate and carbonate separately \cite{Jakobsen2005}; they enter only the carbonate comparison of the Results.
+Jakobsen et al.\ report bicarbonate and carbonate separately \cite{Jakobsen2005}; their observations enter the additional species comparisons in \cref{fig:speciation} and the carbonate-share comparison in the Results, but not the present fit.
 Every species target is a true-species liquid mole fraction.
 
 % P:methods-03
@@ -96,7 +96,8 @@ No covariance is reported because the \HCOthree--water coefficient lies on its b
 
 \subsection{Numerical verification and metrics}
 % P:methods-09
-All calculations use one installed \texttt{epcsaft} wheel, SHA-256 \texttt{28181e72\ldots 97402f2}, whose full hash is given in the data availability statement.
+The present 142-target fits, reported current-record assessments and Born-form re-evaluations use the \texttt{epcsaft} wheel with SHA-256 \texttt{28181e72\ldots 97402f2}, whose full hash is given in the data availability statement.
+Historical fitting records retain their original wheel identities; in particular, the earlier 160-target SSM+DS multistart fit used wheel \texttt{f66d972c\ldots}.
 A state is accepted when the solver meets its requested tolerance, the material balances close within \(10^{-7}\max(1,|n|)\)~\si{\mole} for each conserved total \(n\), and the charge balance closes within \(10^{-7}\)~mol of elementary charge.
 All 123 estimation states and all 161 canonical pressure states pass, with largest absolute stationarity residuals of \(4.0\times10^{-13}\) and \(1.7\times10^{-13}\).
 Re-evaluation of the selected record reproduces the fitted cost within \(4.2\times10^{-12}\).
@@ -108,5 +109,5 @@ Agreement is reported as
     \mathrm{AARD}=\frac{100\,\%}{n}\sum_{j=1}^{n}\left|\frac{y_j^{\mathrm{calc}}}{y_j^{\mathrm{obs}}}-1\right|,
     \label{eq:aard}
 \end{equation}
-with the mean and root mean square of \(\ln(y^{\mathrm{calc}}/y^{\mathrm{obs}})\) as bias and scatter.
+with the mean and root mean square of \(\ln(y^{\mathrm{calc}}/y^{\mathrm{obs}})\) reported as signed logarithmic bias and overall logarithmic error, respectively.
 Each value is computed from the retained calculations and rounded for display.

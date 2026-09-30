@@ -26,15 +26,15 @@ The work makes two contributions:
    reactive, carbamate-forming amine, and compares it with the original Born term using
    identical fitted coordinates and data. The ranking of the two forms depends on whether one
    set of bicarbonate observations is fitted.
-2. It traces that dependence to the bicarbonate difference between titration and NMR that
-   Matin et al. reported in their data, and states its consequence for model selection.
+2. It shows how changing the fitting role of Matin's bicarbonate observations reverses the
+   Born-form ranking and discusses their reported disagreement with NMR.
 
 The manuscript reports the tested limits as results: pressure transfer to 15 and 45 wt% MEA,
 extrapolation to 100–120 °C, an interaction coefficient at its bound, the carbonate
 partition, earlier-record density and heat-capacity deficits, and two unavailable probe
-calculations. It claims no physical validation at new conditions. The parameter record,
-retained calculations and figure data are available in the repository cited in the Data and
-Code Availability statement, under the tag `manuscript-v1`.
+calculations. It claims no physical validation at new conditions. The parameter records,
+retained calculations and figure data will be made public before submission in the repository
+cited in the Data and Code Availability statement, under the tag `manuscript-v1`.
 
 Sincerely,
 

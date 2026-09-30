@@ -80,7 +80,7 @@ The pressure figure (`pressure.pdf`) was rendered before the correction by a sep
 
 | Manuscript figure | Copied file | SHA-256 | Provenance |
 | --- | --- | --- | --- |
-| Pressure against loading (`fig:pressure`) | `figures/generated/pressure.pdf` | `29bec55d4eb02400a32bdee3ef04c2d4a68b1076bcabab29f70f4848af81d45f` | B`figures/regression_overview/output/provenance.json` |
+| Pressure against loading (`fig:pressure`) | `figures/generated/pressure.pdf` | `29bec55d5eb02400a32bdee3ef04c2d4a68b1076bcabab29f70f4848af81d45f` | B`figures/regression_overview/output/provenance.json` |
 | Speciation (`fig:speciation`) | `figures/generated/speciation.pdf` | `ed501b51165a043d782c6e1cb2e8438fa7f2a291a2370bc234229bc0e3db50a6` | same |
 | Historical cost decomposition (`fig:born-cost-groups`) | `figures/generated/born-cost-by-group-and-species.png` | `2a3bd7afe4fb72a928a3d00027c2bd46b4ee16087e990832038ed67da579451e` | B`model-d/born-form-diagnosis/born-comparison-figure-sources.json` |
 | Ranking by target set (`fig:born-ranking`) | `figures/generated/born-p5-ranking-reversal.png` | `2a633b632365893665266b02a129ce7b9c1345348e26d419769476aa4d6bb1e9` | same (`p5conv-costs.csv` hash `472765ae…`) |
