@@ -57,7 +57,9 @@ def pressure_observations(select):
             request = copy.deepcopy(min(templates[t], key=lambda c: abs(c[0] - loading))[1])
             system = request['reaction_system']
             w = float(row['MEA_weight_fraction'])
-            system['feed_amounts_mol'][0] = loading
+            carbon, mea = system['conserved_totals']
+            # The carbon balance includes two carbons per MEA and carbon in the ionic seed.
+            system['feed_amounts_mol'][0] += loading * mea - (carbon - 2 * mea)
             system['feed_amounts_mol'][2] *= (1 - w) / w / (0.7 / 0.3)  # the template is the 30 wt% solvent
             system['conserved_totals'] = [math.fsum(c * a for c, a in zip(b, system['feed_amounts_mol'], strict=True))
                                           for b in system['balance_matrix']]
