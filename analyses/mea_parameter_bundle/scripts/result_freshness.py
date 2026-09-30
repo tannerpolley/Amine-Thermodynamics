@@ -106,7 +106,8 @@ def require_current_results(*, notebook: bool = False) -> None:
 
 
 def bundle_pages() -> list[Path]:
-    return sorted(ANALYSIS.rglob("*.qmd"))
+    registered = json.loads((MANUSCRIPT / "_cse-manuscript.json").read_text())["project"]["render"]
+    return sorted(MANUSCRIPT / name for name in registered if (MANUSCRIPT / name).is_relative_to(ANALYSIS))
 
 
 def rendered_page(page: Path) -> Path:

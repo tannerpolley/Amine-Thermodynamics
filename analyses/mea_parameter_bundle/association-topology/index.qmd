@@ -8,6 +8,8 @@ species parameter table. It is an analysis of topology and transfer rules, not
 an independently fitted pair-parameter packet. The selected component values
 remain in the [overview table](../notebook.qmd#species-parameters).
 
+The selected record is `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241`. Its packet-v5 topology uses MEA self-association volume 0.036287 and the explicit Wolbach–Sandler MEA–water rule.
+
 ## Starting point
 
 The neutral components were represented with one donor and one acceptor site
@@ -35,10 +37,10 @@ not present in the topology.
 ::: {.parameter-table .association-table}
 | Pair | $\epsilon^{AB}/k$ (K) | $\kappa^{AB}$ | Role | Evidence |
 |:--|--:|--:|:--|:--|
-| MEA–MEA | [2586.3000]{.evidence-1} | [0.0375]{.evidence-1} | Self-association | Literature 2B lineage [1, 2] |
+| MEA–MEA | [2586.3000]{.evidence-1} | [0.036287]{.evidence-1} | Self-association | Literature 2B lineage [1, 2] |
 | H₂O–H₂O | [2425.7000]{.evidence-1} | [0.0451]{.evidence-1} | Self-association | ePC-SAFT aqueous-electrolyte lineage [1, 3] |
 | CO₂–H₂O | [1212.8500]{.evidence-1} | [0.0451]{.evidence-1} | Induced cross-association | ePC-SAFT advanced formulation [1] |
-| MEA–H₂O | [2506.0000]{.evidence-1} | [0.0411]{.evidence-1} | Combining-rule value | Derived from retained neutral parameters |
+| MEA–H₂O | Geometric energy rule | Wolbach–Sandler volume rule | Combining-rule value | Packet-v5 MEA 2B inputs; includes the segment-size factor |
 | CO₂–CO₂ | — | — | Disabled | No CO₂ self-association in the selected topology |
 :::
 
@@ -54,7 +56,7 @@ parameter regression.
 ## Conclusion
 
 Keep the 2B and induced-association topology as a declared formulation choice
-while the current bundle remains exploratory. Do not place the pair table in
+for the limited-domain working record. Do not place the pair table in
 the main input table or treat its derived cross values as independently
 regressed parameters. Reopen the topology only with a scheme-specific pure
 component comparison and a coupled pressure/speciation assessment.

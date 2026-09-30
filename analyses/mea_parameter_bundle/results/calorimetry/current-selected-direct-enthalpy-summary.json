@@ -1,8 +1,8 @@
 {
   "schema": "mea.selected-bundle-direct-total-enthalpy-calorimetry.v2",
   "method": "Finite-dose heat of CO2 absorption from the Engine's record-anchored total enthalpy.",
-  "engine_wheel_sha256": "b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58",
-  "parameter_document_sha256": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
+  "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+  "parameter_document_sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
   "observations_sha256": "175e55ff7e238ee19957da9b028e0d957bd99b35aa5ec4145926a055542725d3",
   "physical_calorics_sha256": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a",
   "assumptions": [
@@ -12,87 +12,87 @@
   ],
   "endpoint_states": {
     "attempted": 113,
-    "evaluated": 111
+    "evaluated": 113
   },
   "solver_attempts": {
-    "total": 128,
-    "failed_before_recovery": 17
+    "total": 113,
+    "failed_before_recovery": 0
   },
   "attempted": 113,
-  "evaluated": 109,
-  "failed": 4,
-  "rmse_kj_per_mol_CO2": 16.281953119536944,
-  "mean_bias_kj_per_mol_CO2": -2.3213566111924546,
-  "median_absolute_error_kj_per_mol_CO2": 8.556834573460478,
+  "evaluated": 113,
+  "failed": 0,
+  "rmse_kj_per_mol_CO2": 14.452969774261721,
+  "mean_bias_kj_per_mol_CO2": -4.51835568782386,
+  "median_absolute_error_kj_per_mol_CO2": 7.0254233654671765,
   "by_temperature_C": {
     "40": {
       "attempted": 48,
-      "evaluated": 44,
-      "failed": 4,
-      "rmse_kj_per_mol_CO2": 12.853777271628651,
-      "mean_bias_kj_per_mol_CO2": 5.64501231539876,
-      "median_absolute_error_kj_per_mol_CO2": 4.09491747649821
+      "evaluated": 48,
+      "failed": 0,
+      "rmse_kj_per_mol_CO2": 7.776099883767976,
+      "mean_bias_kj_per_mol_CO2": -0.732125243321898,
+      "median_absolute_error_kj_per_mol_CO2": 6.593092412148902
     },
     "80": {
       "attempted": 38,
       "evaluated": 38,
       "failed": 0,
-      "rmse_kj_per_mol_CO2": 10.012887157624322,
-      "mean_bias_kj_per_mol_CO2": -3.3649912438609375,
-      "median_absolute_error_kj_per_mol_CO2": 6.145105893408285
+      "rmse_kj_per_mol_CO2": 7.917457939353979,
+      "mean_bias_kj_per_mol_CO2": -4.678582645491311,
+      "median_absolute_error_kj_per_mol_CO2": 6.719181356296481
     },
     "120": {
       "attempted": 27,
       "evaluated": 27,
       "failed": 0,
-      "rmse_kj_per_mol_CO2": 25.68805400255502,
-      "mean_bias_kj_per_mol_CO2": -13.834768341881754,
-      "median_absolute_error_kj_per_mol_CO2": 15.820086935075182
+      "rmse_kj_per_mol_CO2": 26.048286748730103,
+      "mean_bias_kj_per_mol_CO2": -11.023927426517604,
+      "median_absolute_error_kj_per_mol_CO2": 13.34199159059402
     }
   },
   "by_campaign_partition": {
     "calibration": {
       "attempted": 66,
-      "evaluated": 63,
-      "failed": 3,
-      "rmse_kj_per_mol_CO2": 11.765221901862391,
-      "mean_bias_kj_per_mol_CO2": 0.42608288288268353,
-      "median_absolute_error_kj_per_mol_CO2": 6.5126410169812345
+      "evaluated": 66,
+      "failed": 0,
+      "rmse_kj_per_mol_CO2": 8.027439812987508,
+      "mean_bias_kj_per_mol_CO2": -3.6174203324688383,
+      "median_absolute_error_kj_per_mol_CO2": 6.626540035696248
     },
     "model_selection_comparison": {
       "attempted": 27,
-      "evaluated": 26,
-      "failed": 1,
-      "rmse_kj_per_mol_CO2": 10.796810150341763,
-      "mean_bias_kj_per_mol_CO2": 1.3731059784928061,
-      "median_absolute_error_kj_per_mol_CO2": 3.6877882078761743
+      "evaluated": 27,
+      "failed": 0,
+      "rmse_kj_per_mol_CO2": 6.670189568250755,
+      "mean_bias_kj_per_mol_CO2": -0.25219974831167913,
+      "median_absolute_error_kj_per_mol_CO2": 5.589108598221074
     },
     "temperature_holdout": {
       "attempted": 20,
       "evaluated": 20,
       "failed": 0,
-      "rmse_kj_per_mol_CO2": 29.278644732100847,
-      "mean_bias_kj_per_mol_CO2": -15.778592384119978,
-      "median_absolute_error_kj_per_mol_CO2": 18.216947966751423
+      "rmse_kj_per_mol_CO2": 30.124813005211184,
+      "mean_bias_kj_per_mol_CO2": -13.250752878836874,
+      "median_absolute_error_kj_per_mol_CO2": 18.0689139620642
     }
   },
   "claim_limit": "Calorimetry intervals at 40/80 C are calibration-labelled and six entered the reaction-temperature fit; 120 C Kim-Svendsen rows are a temperature holdout; Kim 2014 rows are model-selection comparison. Numerical qualification of the Engine calorics is separate (ePC-SAFT #61 analysis).",
   "publication": {
     "inputs": {
-      "engine_wheel_sha256": "b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58",
-      "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
+      "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+      "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
       "analyses/mea_parameter_bundle/data/input/calorimetry-observation-partition.csv": "175e55ff7e238ee19957da9b028e0d957bd99b35aa5ec4145926a055542725d3",
       "analyses/mea_parameter_bundle/data/input/state-packet.json": "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448",
       "analyses/mea_parameter_bundle/scripts/evaluate_direct_absorption_heat.py": "7f4eb2943495a58bd4bdaba95b260a791b9f7cd7263454f67491242a5f782e77",
-      "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "2ec34105677f6b41227c1b9ad8f866c85f1ab86fb260f5f954c4bb7a9d6a847a",
+      "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "930311c2599768a77a2ea756f27f85aaeadaefc9329cae83516fac0bfe79d786",
       "analyses/mea_parameter_bundle/scripts/verify_reference_calorics.py": "1c52937132ce452f638b334039ec48ee88996d91eea073397311828e39603715",
       "data/reference/MEA/thermal/physical-ideal-gas-calorics.json": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a"
     },
     "outputs": {
-      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-states.csv": "620e3b7b789093af0072c8e9cbe7a0c7c89159f90af7ff26cc6566d7fb1cb17a",
-      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-attempts.csv": "329b4a2544a8fe74cc789d5a71d246afcb6762a0606995bce79f37c43e78be25",
-      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-comparison.csv": "e94708902a62ce43eb2b0d697d113dccc27ee04ae651924f400c1a444b6f09a1",
-      "analyses/mea_parameter_bundle/figures/calorimetry/output/current-selected-direct-enthalpy.svg": "1a9d4ed428e2b953d2c9fb07f39e692c6c30a9b4ce78a398d2482dac0420d904"
+      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-states.csv": "eea18d4356771046b8a216494b481141d38fe14c43827c76574173d6955f62b8",
+      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-attempts.csv": "6d3c3ae0743c3e431cec1590c25f1ea5ecaf7827631a8ac26f39c3f0123b67fb",
+      "analyses/mea_parameter_bundle/results/calorimetry/current-selected-direct-enthalpy-comparison.csv": "b30cf9454c1859558d8cb8cbf2d119b2f864fea60ed0867c5132d9a9d0ef55b0",
+      "analyses/mea_parameter_bundle/figures/calorimetry/output/current-selected-direct-enthalpy.svg": "c3956ba829b25ef79db8f7aa5af69c6ba6630726f18db82b08530b7f7d15517d"
     }
   }
 }

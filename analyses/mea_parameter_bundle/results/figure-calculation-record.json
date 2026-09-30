@@ -6,8 +6,8 @@
   "display_speciation_observations": 332,
   "display_speciation_source_sha256": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
   "engine_distribution_version": "0.2.0.dev0",
-  "engine_source_commit": "443a9da492fd5ac7724525945d108c6a2a854d51",
-  "engine_wheel_sha256": "b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58",
+  "engine_source_commit": "8c670d3aa9673459867154fa5c344c97526a7818",
+  "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
   "evaluated_pressure_states": 161,
   "evaluated_speciation_grid_states": 184,
   "evaluated_speciation_states": 44,
@@ -17,9 +17,9 @@
   "fit_residual_table": "results/current-best-fit-residuals.csv",
   "fit_statistics_table": "results/current-best-fit-statistics.csv",
   "overall_timeout_s": 3600.0,
-  "parameter_document_sha256": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
-  "parameter_fingerprint": "sha256:64e99946ac798a6f8c35b3d5d456617e9f3613200b6ab31ae77d50bfe236e760",
-  "pressure_observation_source_sha256": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
+  "parameter_document_sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+  "parameter_fingerprint": "sha256:cb9ec7dec79d41dd65baf460d4f83d8fd51a661698c73038399bfbffe3928ab0",
+  "pressure_observation_source_sha256": "a4f9e3c0176894cad78c5960198c13707d36a167e48abf3d5e7a2106a55d5af1",
   "pressure_states": 161,
   "pressure_template_states": 79,
   "reaction_standard_state_correction": {
@@ -69,34 +69,35 @@
   "state_packet_observations": 123,
   "state_packet_sha256": "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448",
   "state_timeout_s": 180.0,
-  "status": "exploratory_incumbent",
+  "status": "limited_domain_working_record",
   "temperature_balanced_log10_rmse": {
-    "pressure": 0.22540773020059374,
-    "speciation": 0.15890706039740557
+    "pressure": 0.1411612367236375,
+    "speciation": 0.13176065154738567
   },
   "warm_start_policy": "source continuation values are projected to mass-balanced finite starts; pressure observations then reuse certified states across nearby loadings, fall back to the independent source start, and use neighboring-temperature certified states when the local branch is otherwise missed",
   "publication": {
     "inputs": {
-      "engine_wheel_sha256": "b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58",
-      "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
+      "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+      "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
       "analyses/mea_parameter_bundle/data/input/state-packet.json": "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448",
       "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
-      "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "9e7d9ba5fead8bfa83a311dad341e3e2e8df1806d5249642a23562e99a72cb73",
-      "analyses/mea_parameter_bundle/results/parameter-record-history.csv": "ed495bf886106a94d6e232b38b9a3c08fc0feb99a3f74af6ec04ea71928c22af",
-      "analyses/mea_parameter_bundle/scripts/generate_figure_data.py": "e96414d1eaa209c8f132126acff6257e90fe3ae3df34029bade41a1055b17006",
-      "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "2ec34105677f6b41227c1b9ad8f866c85f1ab86fb260f5f954c4bb7a9d6a847a",
-      "src/MEA/common/mea_source_contracts.py": "242973e500e33530a1d0315475fa4a6f974e57c6f7354706081c07bf94820ef5"
+      "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "a4f9e3c0176894cad78c5960198c13707d36a167e48abf3d5e7a2106a55d5af1",
+      "analyses/mea_parameter_bundle/results/parameter-record-history.csv": "6cd6def75a216c45cf8fbc2263e4ad936f1194fda44f07b9d727c6b44dae2609",
+      "analyses/mea_parameter_bundle/scripts/generate_figure_data.py": "7443d0b7444b7538f7d9e9d9e8ede9d11436ebc93d8bfc74b1810ed137fca560",
+      "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "930311c2599768a77a2ea756f27f85aaeadaefc9329cae83516fac0bfe79d786",
+      "src/MEA/common/mea_source_contracts.py": "242973e500e33530a1d0315475fa4a6f974e57c6f7354706081c07bf94820ef5",
+      "analyses/mea_parameter_bundle/calibration-misfit/compare.py": "277c7d5b5a1ac93ecb81ea4fcfa6e3f99c08f700b9df190ce68b3275a790201f"
     },
     "outputs": {
-      "analyses/mea_parameter_bundle/figures/speciation/output/speciation-model.csv": "510e18feb45a549487b95047fb5ee0900408fc653bc6b6be15e5fcc73190ea26",
-      "analyses/mea_parameter_bundle/figures/speciation/output/speciation-observations.csv": "accdbb3dd988f5740c70e685e007ebac56365b5c6a8454cc238d190cbad91e7f",
-      "analyses/mea_parameter_bundle/figures/speciation/output/speciation-model-grid.csv": "3ba28c144f563b1dbbefc4f725f48cdd47fcb70682cccff0ebd6c6fc26307a65",
-      "analyses/mea_parameter_bundle/figures/speciation/output/speciation-display-observations.csv": "20a76e5d3b14735a9588d507fef9d5ed5c3e1b599db7c18902df9ae850b8aa6b",
-      "analyses/mea_parameter_bundle/figures/pressure/output/pressure-model.csv": "de880fd9a746daf834805fb936996aa14ade03b349ac25a3f406c7ac8976d9c9",
+      "analyses/mea_parameter_bundle/figures/speciation/output/speciation-model.csv": "913d1f1ec4b7efa606ac725c04c0fa56738e4b6e185553e09d9cfafd029002e4",
+      "analyses/mea_parameter_bundle/figures/speciation/output/speciation-observations.csv": "23b60bcbd9e2cb56f6d9f738d34d3100e55310376b0da17ad2ea436a8a4eea87",
+      "analyses/mea_parameter_bundle/figures/speciation/output/speciation-model-grid.csv": "11d2fc821145a8f7eea7aad10d4d60f86d72b7467fe0d4eeba6d64968e46aca6",
+      "analyses/mea_parameter_bundle/figures/speciation/output/speciation-display-observations.csv": "3515384de850ff8f0bf232598cf11c529b0633ec12817da52968b7f3f082d47a",
+      "analyses/mea_parameter_bundle/figures/pressure/output/pressure-model.csv": "31af5120b33da08a59f5cf60399dc4664a8c35c32a32a09b75604d9a685ec40d",
       "analyses/mea_parameter_bundle/figures/pressure/output/pressure-observations.csv": "05226adf41cb2f87e3e0a4df2ad2fc94ccdd7d35de880bfe1cf18b32cedb9f29",
       "analyses/mea_parameter_bundle/results/figure-calculation-failures.csv": "50fadf6d985447226213352e387fec6100bb2325884b86c31bf9520ff42c2401",
-      "analyses/mea_parameter_bundle/results/current-best-fit-residuals.csv": "2894fd5c644b992d558e24ffc19495d411e42a90cca164ad54d824f22f174411",
-      "analyses/mea_parameter_bundle/results/current-best-fit-statistics.csv": "b9bfc8fbcfef697debb62bb06a9953377b5737f8b5daf9f064cba50507935599"
+      "analyses/mea_parameter_bundle/results/current-best-fit-residuals.csv": "87c3b4786788d9380e2ee268f0e161568502310c7b03595827bf16f52dc84c4c",
+      "analyses/mea_parameter_bundle/results/current-best-fit-statistics.csv": "c2289c86b43be8a46681466add14c598cca13b156c5381bf8d632220449852bb"
     }
   }
 }
