@@ -29,11 +29,12 @@ EXCLUDED = {'Bottinger2008_state_042', 'Bottinger2008_state_046', 'Matin2012_sta
 # packet (86f60041) still maps it to HCO3- alone, so the pool is applied here, the one place both scoring and
 # refit.py read it; data/reference/MEA/manifests/speciation_linear_coefficient_rules.csv holds the canonical rule.
 HCO3_POOL = ('bicarbonate-anion', 'carbonate-anion')
+HCO3_POOL_LABEL = 'HCO3- + CO3^2-'
 
 
 def pooled_species(target_identity):
     """Species summed for a target whose packet mapping the pool replaces, else None."""
-    return HCO3_POOL if target_identity.endswith('::HCO3-') else None
+    return HCO3_POOL if target_identity.startswith(('Matin', 'Bottinger')) and target_identity.endswith('::HCO3-') else None
 
 
 def predicted(rec, t):
@@ -71,6 +72,13 @@ def in_objective(rec, target, pco2_max_c=None):
     return (not is_validation(rec) and rec['identity'] not in EXCLUDED
             and not (pco2_max_c is not None and target['prediction_identity'] == 'co2-partial-pressure'
                      and rec['T'] - 273.15 > pco2_max_c + 0.5))
+
+
+def in_working_objective(rec, target):
+    """Decisions 21/24: 142 targets; Matin bicarbonate pool remains report-only."""
+    return in_objective(rec, target, 80) and not (target['identity'].startswith('Matin') and pooled_species(target['identity']))
+
+
 # Akula 2023a pools its 30 mass % pCO2 data from these sources, loading 0.003-0.5, 40-120 degC (40.5 %,
 # mean absolute relative error at measured loading; docs/ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md).
 AKULA_SOURCES = {'Aronu2011', 'Hilliard2008', 'Jou1995', 'Xu2011'}

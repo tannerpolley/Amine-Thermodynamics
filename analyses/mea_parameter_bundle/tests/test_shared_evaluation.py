@@ -5,6 +5,7 @@ import json
 import math
 import os
 import sys
+import subprocess
 import time
 from copy import deepcopy
 from pathlib import Path
@@ -144,16 +145,20 @@ def test_native_solver_timeout_terminates_owned_child(monkeypatch):
 def test_pinned_engine_state_and_cached_replay(tmp_path, monkeypatch):
     shared.verify_wheel()
     monkeypatch.setattr(shared, "RUNS", tmp_path)
-    parameters = shared.load_parameters()
+    incumbent = tmp_path / "incumbent-868a5018.json"
+    incumbent.write_bytes(subprocess.check_output(["git", "show", "33508be:analyses/mea_parameter_bundle/results/selected-current-best-parameters.json"], cwd=Path(__file__).parents[3]))
+    assert shared.sha256(incumbent) == "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be"
+    parameters = shared.load_parameters(incumbent)
+    fingerprint = shared.parameter_fingerprint(shared.parameter_mapping(incumbent))
     model = shared.epcsaft.Mixture(parameters)
     request = next(
         observation["request"]
         for observation in shared.load_state_packet()["observations"]
         if observation["identity"] == "Bottinger2008_state_050"
     )
-    reactions = shared._selected_reactions()
+    reactions = shared.reaction_values(shared.parameter_mapping(incumbent))
     result = shared.evaluate_state(
-        model, request, reactions, "Bottinger2008_state_050", [], budget_s=60
+        model, request, reactions, "Bottinger2008_state_050", [], budget_s=60, model_fingerprint=fingerprint
     )
     assert result["status"] == "evaluated", result["attempts"]
     assert result["failure_code"] == ""
@@ -185,7 +190,7 @@ def test_pinned_engine_state_and_cached_replay(tmp_path, monkeypatch):
     assert all(item["status"] == "Available" for item in diagnostics)
     assert max(item["observed_terminal_change"] for item in diagnostics) <= 5.0e-5
     replay = shared.evaluate_state(
-        model, request, reactions, "Bottinger2008_state_050-replay", [], budget_s=15
+        model, request, reactions, "Bottinger2008_state_050-replay", [], budget_s=15, model_fingerprint=fingerprint
     )
     assert replay["cache_hit"] is True
     assert replay["predictions"] == result["predictions"]
