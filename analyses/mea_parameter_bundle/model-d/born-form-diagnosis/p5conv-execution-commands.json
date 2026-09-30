@@ -1,0 +1,14 @@
+{
+  "commands": [
+    "timeout 2400 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py a 11",
+    "timeout 2400 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py a 00",
+    "timeout 2400 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py b 11",
+    "timeout 2400 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py b 00",
+    "timeout 2400 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p4refit-fit.py 11",
+    "timeout 2400 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p4refit-fit.py 00"
+  ],
+  "maximum_concurrent_jobs": 2,
+  "shared_lock": false,
+  "nice": false,
+  "priority": "P5a pair, P5b pair, then P4 pair"
+}

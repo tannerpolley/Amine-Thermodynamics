@@ -9,9 +9,11 @@ Usage: candidate.py --packet-v5 PARAMETERS.json  the pre-refit record (868a5018)
                                            (PARAMETERS.json is that packet's parameters file, hash-checked)
                                            -> pre-refit-packet-v5-parameters.json (probe.RECORD)
        candidate.py                        refit A -> candidate-refit-a-parameters.json (not adopted)
-       candidate.py refit-X.json OUT.json  the fitted values of a refit result (a multistart file: its lowest-cost
-                                           usable start) on probe.RECORD; missing
-                                           k_ij 1/T slope nodes are added as probe.with_values adds them
+       candidate.py --born-0-0             probe.RECORD with the original Born term set explicitly (c_shell =
+                                           c_dielectric = 0; MEA #121 decision 21) -> ../model-d/BORN_00
+       candidate.py refit-X.json OUT.json [NAME]  the fitted values of a refit result (a multistart file: its
+                                           lowest-cost usable start, named NAME, default C) on its recorded base;
+                                           missing k_ij 1/T slope nodes are added as probe.with_values adds them
        candidate.py --check RECORD.json PROBE.jsonl  re-solves four states from the record file (cold) and compares
                                            with probe.py's override solves of the same values -> record-replay-check.csv
 """
@@ -37,7 +39,7 @@ SOURCE = {'source_id': 'mea-calibration-misfit-refit-a-2026-09-23',
 def base_path(sha):
     """The base record a refit ran on, found by its recorded SHA-256 and verified; a base that is no longer on disk
     (e.g. after adoption changes the selected record) is refused, never replaced by the current one."""
-    path = {PRE_REFIT_SHA256: probe.shared.PARAMETERS, PRE_REFIT_V5_SHA256: probe.RECORD}.get(sha)
+    path = {PRE_REFIT_SHA256: probe.shared.PARAMETERS, PRE_REFIT_V5_SHA256: probe.RECORD, BORN_00_SHA256: BORN_00}.get(sha)
     if path is None or probe.shared.sha256(path) != sha:
         raise SystemExit(f'base record {sha[:8]} is not on disk; restore it from Git history before writing')
     return path
@@ -74,6 +76,25 @@ PACKET_V5 = {'packet_id': 'mea-co2-h2o-nine-species-estimation', 'packet_version
              'engine_commit': '1303c119e4a21ba31e46596fe62ee3fdfe4cc253'}
 PRE_REFIT_SHA256 = '868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be'
 PRE_REFIT_V5_SHA256 = '562b5976c7f6d44b782498480fce54bad1e3142d9541438f6d7a42a876a3df87'  # probe.RECORD
+BORN_00 = probe.W / 'analyses/mea_parameter_bundle/model-d/born-0-0-packet-v5-parameters.json'
+BORN_00_SHA256 = 'f5831262710bf30133910d7a237f8ef9487a4c5cb1ed167c167ad56b0792d46a'
+
+
+def born_0_0():
+    """The packet v5 pre-refit record with c_shell = c_dielectric = 0 written explicitly; the record omits both and
+    shared_evaluation.parameter_mapping fills (1, 1). Nothing else changes."""
+    s = probe.shared
+    if s.sha256(probe.RECORD) != PRE_REFIT_V5_SHA256:
+        raise SystemExit('probe.RECORD changed')
+    raw = json.loads(probe.RECORD.read_text(encoding='utf-8'))
+    family = next(f for f in raw['model_families'] if f['kind'] == 'electrolyte')
+    assert family['choice'] == 'born' and not {'c_shell', 'c_dielectric'} & set(family), family
+    family.update(c_shell=0.0, c_dielectric=0.0)
+    raw['purpose'] = (f'pre-refit packet v5 record {PRE_REFIT_V5_SHA256[:8]} with the original Born term '
+                      '(c_shell = c_dielectric = 0; MEA #121 decision 21); not adopted')
+    BORN_00.write_text(json.dumps(raw, sort_keys=True, separators=(',', ':')) + '\n')
+    probe.epcsaft.Parameters.from_mapping(s.parameter_mapping(BORN_00))  # must parse as an Engine record
+    print(BORN_00, s.sha256(BORN_00))
 
 
 def packet_v5(packet_parameters):
@@ -101,6 +122,8 @@ def packet_v5(packet_parameters):
 def main(argv):
     if argv[:1] == ['--packet-v5']:
         return packet_v5(Path(argv[1]))
+    if argv[:1] == ['--born-0-0']:
+        return born_0_0()
     if not argv:
         return write('A', REFIT_A, SOURCE, 'mea-co2-h2o-nine-species-calibration-misfit-candidate-a',
                      'candidate, not adopted: diagnostic refit A of the pCO2 calibration misfit',
@@ -110,7 +133,7 @@ def main(argv):
     result, out = json.loads(Path(argv[0]).read_text()), Path(argv[1])
     if 'provenance' in result:  # refit.py multistart: the lowest-cost usable start
         best = min((v for k, v in result.items() if k != 'provenance' and v['usable']), key=lambda v: v['final_cost'])
-        result = {'name': 'C', 'parameters': result['provenance']['parameters'], 'fitted': best['fitted'],
+        result = {'name': argv[2] if len(argv) > 2 else 'C', 'parameters': result['provenance']['parameters'], 'fitted': best['fitted'],
                   'wheel_sha256': result['provenance']['wheel_sha256'],
                   'parameter_record_sha256': result['provenance']['base_record_sha256'],
                   'reaction_overrides': result['provenance'].get('reaction_overrides', {})}
@@ -118,8 +141,8 @@ def main(argv):
     assert r4 in ({}, probe.SOURCE_R4), r4
     write(name, {**dict(zip(result['parameters'], result['fitted'])), **r4},
           {'source_id': f'mea-calibration-misfit-refit-{name.lower()}',
-           'locator': f'analyses/mea_parameter_bundle/calibration-misfit/{Path(argv[0]).name}'},
-          'mea-co2-h2o-nine-species-calibration-misfit-refit-c',
+           'locator': str(Path(argv[0]).resolve().relative_to(probe.W))},
+          f'mea-co2-h2o-nine-species-calibration-misfit-refit-{name.lower()}',
           f'candidate, not adopted: calibration-misfit refit {name}, R4 '
           + ('at its source correlation (MEA #107)' if r4 else "the incumbent's fitted value"),
           f'MEA-Thermodynamics calibration-misfit refit {name} on {result["wheel_sha256"][:8]}',

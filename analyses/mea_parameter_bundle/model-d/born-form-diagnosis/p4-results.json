@@ -1,0 +1,266 @@
+[
+  {
+    "form": "11",
+    "available": true,
+    "predictions": {
+      "reaction-alone": {
+        "estimates": [
+          {
+            "predicted_cost": 44.71302559397397,
+            "predicted_reduction": 2.9127414854123685,
+            "q": [
+              -0.04742005992626854,
+              9.999999999999732,
+              -0.05767406163863441,
+              5.556691714940819
+            ],
+            "k": [
+              0.07885623664231066,
+              -0.2988395072478097,
+              0.3938262533605895,
+              -0.7050568597416327,
+              107.64439884862216
+            ],
+            "five_k_only_local_cost": 47.62576707938223,
+            "predicted_reduction_vs_five_k_only": 2.9127414854082616,
+            "reaction_gradient_quality": "finite differences",
+            "k_gradient_quality": "exact Engine derivatives",
+            "covariance": "not estimated"
+          },
+          {
+            "predicted_cost": 44.713026332521665,
+            "predicted_reduction": 2.912740746864671,
+            "q": [
+              -0.047420063854234834,
+              9.999999999999732,
+              -0.057674079071288076,
+              5.556692164402069
+            ],
+            "k": [
+              0.07885623664231066,
+              -0.2988395072478097,
+              0.3938262533605895,
+              -0.7050568597416327,
+              107.64439884862216
+            ],
+            "five_k_only_local_cost": 47.62576707938223,
+            "predicted_reduction_vs_five_k_only": 2.912740746860564,
+            "reaction_gradient_quality": "finite differences",
+            "k_gradient_quality": "exact Engine derivatives",
+            "covariance": "not estimated"
+          }
+        ],
+        "classification_agreement": true,
+        "thresholds": "descriptive original-gap screens only; P4 is exploratory"
+      },
+      "joint-five-k": {
+        "estimates": [
+          {
+            "predicted_cost": 43.86294639324248,
+            "predicted_reduction": 3.7628206861438542,
+            "q": [
+              0.15770919694799268,
+              9.999999999999998,
+              0.006286644906702085,
+              6.43538851392485
+            ],
+            "k": [
+              0.07182207497858716,
+              -0.3326453175552742,
+              0.5,
+              -0.6191652390089263,
+              266.85802418243316
+            ],
+            "five_k_only_local_cost": 47.62576707938223,
+            "predicted_reduction_vs_five_k_only": 3.7628206861397473,
+            "reaction_gradient_quality": "finite differences",
+            "k_gradient_quality": "exact Engine derivatives",
+            "covariance": "not estimated"
+          },
+          {
+            "predicted_cost": 43.86294658485423,
+            "predicted_reduction": 3.7628204945321073,
+            "q": [
+              0.15770921928837794,
+              9.999999999999998,
+              0.006286633654896118,
+              6.435392455277961
+            ],
+            "k": [
+              0.07182207765200968,
+              -0.3326453182356413,
+              0.5,
+              -0.6191652323498545,
+              266.858209186706
+            ],
+            "five_k_only_local_cost": 47.62576707938223,
+            "predicted_reduction_vs_five_k_only": 3.7628204945280004,
+            "reaction_gradient_quality": "finite differences",
+            "k_gradient_quality": "exact Engine derivatives",
+            "covariance": "not estimated"
+          }
+        ],
+        "classification_agreement": true,
+        "thresholds": "descriptive original-gap screens only; P4 is exploratory"
+      }
+    },
+    "actual_cost": 43.70548052953331,
+    "actual_reduction": 3.9202865498530244,
+    "actual_three_group_cost": {
+      "pressure_cost": 9.31127008371566,
+      "bottinger_cost": 5.270143550924233,
+      "matin_cost": 29.124066894893417
+    },
+    "directions": {
+      "carbamate_delta_lnK": 0.15770921928837794,
+      "carbamate_delta_H_kJ_mol": 9.999999999999998,
+      "bicarbonate_delta_lnK": 0.006286633654896118,
+      "bicarbonate_delta_H_kJ_mol": 6.435392455277961
+    },
+    "recorded_comparison": {
+      "basis": "recorded source-correlation combination, before EOS standard-state conversion; local enthalpy from -R d ln K/d(1/T) at 313.15 K",
+      "carbamate_lnK_recorded": 8.580299300932705,
+      "bicarbonate_lnK_recorded": 5.796603468264653,
+      "carbamate_H_recorded_kJ_mol": -73.63012540059489,
+      "bicarbonate_H_recorded_kJ_mol": -60.781786316762684,
+      "carbamate_lnK_result": 8.738008520221083,
+      "bicarbonate_lnK_result": 5.802890101919549,
+      "carbamate_H_result_kJ_mol": -63.63012540059489,
+      "bicarbonate_H_result_kJ_mol": -54.34639386148472
+    },
+    "warm_refit": "not completed; budget reserved for two-step columns and actual predicted-step costs",
+    "evidence": "exploratory bounded local prediction and actual numerical evaluation, no adoption"
+  },
+  {
+    "form": "00",
+    "available": true,
+    "predictions": {
+      "reaction-alone": {
+        "estimates": [
+          {
+            "predicted_cost": 37.31254910469386,
+            "predicted_reduction": 2.8889882258644306,
+            "q": [
+              0.02752593589198182,
+              8.519152153243894,
+              0.004518937712600923,
+              4.042869995845494
+            ],
+            "k": [
+              -0.06655084777438225,
+              0.14668802126152747,
+              0.5,
+              -1.0,
+              88.44663761722153
+            ],
+            "five_k_only_local_cost": 40.20153733055815,
+            "predicted_reduction_vs_five_k_only": 2.8889882258642956,
+            "reaction_gradient_quality": "finite differences",
+            "k_gradient_quality": "exact Engine derivatives",
+            "covariance": "not estimated"
+          },
+          {
+            "predicted_cost": 37.31254889411221,
+            "predicted_reduction": 2.888988436446077,
+            "q": [
+              0.027525935426846306,
+              8.51915197334859,
+              0.004518933334004216,
+              4.042870631582105
+            ],
+            "k": [
+              -0.06655084777438225,
+              0.14668802126152747,
+              0.5,
+              -1.0,
+              88.44663761722153
+            ],
+            "five_k_only_local_cost": 40.20153733055815,
+            "predicted_reduction_vs_five_k_only": 2.888988436445942,
+            "reaction_gradient_quality": "finite differences",
+            "k_gradient_quality": "exact Engine derivatives",
+            "covariance": "not estimated"
+          }
+        ],
+        "classification_agreement": true,
+        "thresholds": "descriptive original-gap screens only; P4 is exploratory"
+      },
+      "joint-five-k": {
+        "estimates": [
+          {
+            "predicted_cost": 32.6613262289627,
+            "predicted_reduction": 7.540211101595588,
+            "q": [
+              0.6187181316408156,
+              9.999999999999998,
+              0.844405640708598,
+              1.902927129438755
+            ],
+            "k": [
+              -0.048393730757895013,
+              -0.03935101355599804,
+              0.40305242562791876,
+              -0.7405952477370961,
+              219.31256806239065
+            ],
+            "five_k_only_local_cost": 40.20153733055815,
+            "predicted_reduction_vs_five_k_only": 7.540211101595453,
+            "reaction_gradient_quality": "finite differences",
+            "k_gradient_quality": "exact Engine derivatives",
+            "covariance": "not estimated"
+          },
+          {
+            "predicted_cost": 32.66132558852294,
+            "predicted_reduction": 7.540211742035346,
+            "q": [
+              0.6187181769577845,
+              9.999999999999998,
+              0.8444056863739356,
+              1.9029284928138908
+            ],
+            "k": [
+              -0.04839372906002813,
+              -0.03935102546123659,
+              0.40305242311098094,
+              -0.7405952241577844,
+              219.3125878901044
+            ],
+            "five_k_only_local_cost": 40.20153733055815,
+            "predicted_reduction_vs_five_k_only": 7.540211742035211,
+            "reaction_gradient_quality": "finite differences",
+            "k_gradient_quality": "exact Engine derivatives",
+            "covariance": "not estimated"
+          }
+        ],
+        "classification_agreement": true,
+        "thresholds": "descriptive original-gap screens only; P4 is exploratory"
+      }
+    },
+    "actual_cost": 32.550632956001905,
+    "actual_reduction": 7.650904374556383,
+    "actual_three_group_cost": {
+      "pressure_cost": 8.503508388306146,
+      "bottinger_cost": 6.179979371347656,
+      "matin_cost": 17.867145196348105
+    },
+    "directions": {
+      "carbamate_delta_lnK": 0.6187181769577845,
+      "carbamate_delta_H_kJ_mol": 9.999999999999998,
+      "bicarbonate_delta_lnK": 0.8444056863739356,
+      "bicarbonate_delta_H_kJ_mol": 1.9029284928138908
+    },
+    "recorded_comparison": {
+      "basis": "recorded source-correlation combination, before EOS standard-state conversion; local enthalpy from -R d ln K/d(1/T) at 313.15 K",
+      "carbamate_lnK_recorded": 8.580299300932705,
+      "bicarbonate_lnK_recorded": 5.796603468264653,
+      "carbamate_H_recorded_kJ_mol": -73.63012540059489,
+      "bicarbonate_H_recorded_kJ_mol": -60.781786316762684,
+      "carbamate_lnK_result": 9.19901747789049,
+      "bicarbonate_lnK_result": 6.6410091546385885,
+      "carbamate_H_result_kJ_mol": -63.63012540059489,
+      "bicarbonate_H_result_kJ_mol": -58.87885782394879
+    },
+    "warm_refit": "not completed; budget reserved for two-step columns and actual predicted-step costs",
+    "evidence": "exploratory bounded local prediction and actual numerical evaluation, no adoption"
+  }
+]
