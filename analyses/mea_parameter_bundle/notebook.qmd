@@ -1046,7 +1046,7 @@ The shifts convert the source basis to aqueous molality at infinite dilution in 
 <thead><tr><th>Reaction</th><th>$A$</th><th>$B$</th><th>$C$</th><th>$D$</th><th>$\Delta$</th><th>Source domain (K)</th><th>Ref.</th></tr></thead>
 <tbody>
 <tr><th scope="row">R1 · water autoprotolysis</th><td><span class="evidence-1">132.8990</span></td><td><span class="evidence-1">−13445.9000</span></td><td><span class="evidence-1">−22.4773</span></td><td><span class="evidence-2">0.0000</span></td><td><span class="evidence-1">8.0331</span></td><td>273.15–498.15</td><td class="source-reference"><a href="#ref-11">11</a></td></tr>
-<tr><th scope="row">R2 · CO₂ hydration (adopted)</th><td><a class="fit-star" href="#parameter-change-history" title="R2 intercept changed by the reaction-temperature fit">★</a><span class="evidence-3">232.3314</span></td><td><a class="fit-star" href="#parameter-change-history" title="R2 temperature coefficient changed by the reaction-temperature fit">★</a><span class="evidence-2">−11105.6400</span></td><td><span class="evidence-1">−36.7816</span></td><td><span class="evidence-2">0.0000</span></td><td><span class="evidence-3">−8.2000</span></td><td>293.15–393.15</td><td class="source-reference"><a href="#ref-11">11</a></td></tr>
+<tr><th scope="row">R2 · CO₂ hydration (adopted)</th><td><a class="fit-star" href="#parameter-change-history" title="R2 intercept changed by the reaction-temperature fit">★</a><span class="evidence-3">232.3314</span></td><td><a class="fit-star" href="#parameter-change-history" title="R2 temperature coefficient changed by the reaction-temperature fit">★</a><span class="evidence-2">−11105.6400</span></td><td><span class="evidence-1">−36.7816</span></td><td><span class="evidence-2">0.0000</span></td><td>—</td><td>293.15–393.15</td><td class="source-reference"><a href="#ref-11">11</a></td></tr>
 <tr><th scope="row">R3 · bicarbonate dissociation</th><td><span class="evidence-1">216.0490</span></td><td><span class="evidence-1">−12431.7000</span></td><td><span class="evidence-1">−35.4819</span></td><td><span class="evidence-2">0.0000</span></td><td><span class="evidence-1">4.0165</span></td><td>273.15–498.15</td><td class="source-reference"><a href="#ref-11">11</a></td></tr>
 <tr><th scope="row">R4 · carbamate hydrolysis</th><td><a class="fit-star" href="#parameter-change-history" title="R4 restored to source correlation">★</a><span class="evidence-1">2.151</span></td><td><a class="fit-star" href="#parameter-change-history" title="R4 temperature coefficient restored to source correlation">★</a><span class="evidence-2">−1545.3</span></td><td>—</td><td>—</td><td>—</td><td>293.15–323.15</td><td class="source-reference"><a href="#ref-4">4</a></td></tr>
 <tr><th scope="row">R5 · MEAH⁺ dissociation</th><td><a class="fit-star" href="#parameter-change-history" title="R5 inverse-temperature coefficient changed by the reaction-temperature fit">★</a><span class="evidence-2">3037.6400</span></td><td><a class="fit-star" href="#parameter-change-history" title="R5 constant coefficient changed by the reaction-temperature fit">★</a><span class="evidence-2">−1.0173</span></td><td><a class="fit-star" href="#parameter-change-history" title="R5 temperature coefficient changed by the reaction-temperature fit">★</a><span class="evidence-2">0.0004</span></td><td>—</td><td>—</td><td>273.15–323.15</td><td class="source-reference"><a href="#ref-4">4</a></td></tr>
@@ -1054,10 +1054,16 @@ The shifts convert the source basis to aqueous molality at infinite dilution in 
 </table>
 :::
 
-**R1–R3 · common correlation**
+**R1 and R3 · common correlation**
 
 $$
 \ln K_{\mathrm{common}}(T)=A+\frac{B}{T}+C\ln T+DT+\Delta
+$$
+
+**R2 · CO₂ hydration (recorded correlation, no separate $\Delta$)**
+
+$$
+\ln K_2(T)=A_2+\frac{B_2}{T}+C_2\ln T+D_2T
 $$
 
 **R4 · carbamate hydrolysis**
@@ -1072,7 +1078,7 @@ $$
 \ln K_5(T)=-\ln(10)\left(\frac{A_5}{T}+B_5+C_5T\right)
 $$
 
-R2 carries the adopted constant enthalpy shift of −8.2000 kJ mol⁻¹ in $\Delta$; its intercept and inverse-temperature coefficient are therefore coupled at the 313.15 K pivot.
+R2's recorded $A_2$ and $B_2$ already contain both the conversion to aqueous molality (+4.0165 in ln K) and the adopted constant enthalpy shift of −8.2000 kJ mol⁻¹, applied so that ln K is unchanged at the 313.15 K pivot; R2 therefore has no separate $\Delta$ term. At 313.15 K the recorded correlation gives $\ln K_2=-14.5050$.
 
 [Component source audit](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/ePC-SAFT/full-component-parameter-source-audit.md) · [reaction source record](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/data/reference/MEA/manifests/chemical_reaction_source_contract.json) · [reaction-temperature study](reaction-temperature-fit/index.qmd)
 
