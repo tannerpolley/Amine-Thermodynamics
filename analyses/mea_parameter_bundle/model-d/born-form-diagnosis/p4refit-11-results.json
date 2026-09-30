@@ -1,0 +1,127 @@
+{
+  "name": "p4refit-11",
+  "form": "11",
+  "cost": 43.66531765864605,
+  "three_group_cost": {
+    "pressure_cost": 9.526311807968272,
+    "bottinger_cost": 5.325559482246899,
+    "matin_cost": 28.81344636843088
+  },
+  "species_costs_and_signed_residuals": [
+    {
+      "source": "Matin",
+      "species": "HCO3-",
+      "n": 18,
+      "cost": 9.29151769274346,
+      "mean_signed_weighted_residual": -0.7182095059312819
+    },
+    {
+      "source": "Matin",
+      "species": "MEA",
+      "n": 18,
+      "cost": 7.677276599102936,
+      "mean_signed_weighted_residual": -0.7656320637204728
+    },
+    {
+      "source": "Matin",
+      "species": "MEAH+",
+      "n": 18,
+      "cost": 10.755292142387304,
+      "mean_signed_weighted_residual": 0.9369419507739161
+    },
+    {
+      "source": "Matin",
+      "species": "MEACOO-",
+      "n": 18,
+      "cost": 1.0893599341971687,
+      "mean_signed_weighted_residual": 0.1982875883550472
+    },
+    {
+      "source": "Matin",
+      "species": "MEA + MEAH+",
+      "n": 0,
+      "cost": null,
+      "mean_signed_weighted_residual": null
+    },
+    {
+      "source": "Bottinger",
+      "species": "HCO3-",
+      "n": 4,
+      "cost": 1.98633541649633,
+      "mean_signed_weighted_residual": 0.3649390137974789
+    },
+    {
+      "source": "Bottinger",
+      "species": "MEA",
+      "n": 0,
+      "cost": null,
+      "mean_signed_weighted_residual": null
+    },
+    {
+      "source": "Bottinger",
+      "species": "MEAH+",
+      "n": 0,
+      "cost": null,
+      "mean_signed_weighted_residual": null
+    },
+    {
+      "source": "Bottinger",
+      "species": "MEACOO-",
+      "n": 18,
+      "cost": 2.5834789734439063,
+      "mean_signed_weighted_residual": -0.3254745544215847
+    },
+    {
+      "source": "Bottinger",
+      "species": "MEA + MEAH+",
+      "n": 18,
+      "cost": 0.7557450923066621,
+      "mean_signed_weighted_residual": 0.034160126353192835
+    }
+  ],
+  "k_coordinates": {
+    "pair/carbamate-anion/water/k_ij": 0.0781111369489981,
+    "pair/protonated-monoethanolamine/water/k_ij": -0.3511161711062099,
+    "pair/bicarbonate-anion/water/k_ij": 0.49999999999999967,
+    "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.5962906418839202,
+    "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 242.32846572837673
+  },
+  "directions": {
+    "carbamate_delta_lnK": 0.19556014759632886,
+    "carbamate_delta_H_kJ_mol": 9.999999999999998,
+    "bicarbonate_delta_lnK": 0.08076170836593856,
+    "bicarbonate_delta_H_kJ_mol": 4.911380450132152
+  },
+  "recorded_comparison": {
+    "basis": "recorded source-correlation combination, before EOS standard-state conversion; local enthalpy from -R d ln K/d(1/T) at 313.15 K",
+    "carbamate_lnK_recorded": 8.580299300932705,
+    "bicarbonate_lnK_recorded": 5.796603468264653,
+    "carbamate_H_recorded_kJ_mol": -73.63012540059489,
+    "bicarbonate_H_recorded_kJ_mol": -60.781786316762684,
+    "carbamate_lnK_result": 8.775859448529033,
+    "bicarbonate_lnK_result": 5.877365176630591,
+    "carbamate_H_result_kJ_mol": -63.63012540059489,
+    "bicarbonate_H_result_kJ_mol": -55.870405866630534
+  },
+  "active_k_bounds": [
+    "pair/bicarbonate-anion/water/k_ij"
+  ],
+  "active_reaction_bounds": [
+    "carbamate_delta_H_kJ_mol"
+  ],
+  "stopping_reason": "time limit before completing the next Jacobian",
+  "counts": {
+    "function_calls": 5,
+    "complete_jacobians": 4,
+    "accepted_updates": 3
+  },
+  "wall_s": 1965.6022245040003,
+  "reaction_gradient_quality": "two-step finite differences, pointwise agreement checked; no exact reaction derivatives",
+  "interaction_gradient_quality": "exact Engine derivatives",
+  "covariance": "not estimated",
+  "evidence": "local bounded numerical fit; no physical validation or adoption",
+  "initial_cost": 43.70548052953331,
+  "optimizer": {
+    "message": "2700 s total execution budget exhausted"
+  }
+}

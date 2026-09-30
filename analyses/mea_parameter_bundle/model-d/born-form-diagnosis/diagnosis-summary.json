@@ -1,0 +1,1926 @@
+{
+  "cost_convention": "C = 0.5 sum weighted residual squared; dimensionless cost units",
+  "states_per_complete_objective": 84,
+  "targets": 160,
+  "charged_execution_s": 1997.5070432549946,
+  "p4_execution_s": 828.5093512400017,
+  "p5_execution_s": 846.1179229619993,
+  "hypotheses": {
+    "a": "Inconclusive: main-ion diameter confirmation converged in six iterations, recovering 3.6748899829 cost units, below 3.71. Secondary group unavailable because H3O column disagrees after retry.",
+    "b": "Inconclusive: shell/MEA group predicts 3.0728051566 cost units; no confirming refit under the accepted best-group selection.",
+    "c": "Unavailable for the finite configuration comparison: (1,0) initial solve failed without a complete objective. Local saturation-strength reduction is zero; (0,1) = (0,0) equality is verified.",
+    "d": "Inconclusive: P1 shows no uniform attenuation, and unavailable/unconfirmed groups preclude the proposed elimination argument."
+  },
+  "confirmations": [
+    {
+      "group": "main-diameters",
+      "achieved_cost": 43.95087709645577,
+      "achieved_reduction": 3.6748899829305657,
+      "classification": "inconclusive",
+      "converged": true,
+      "iterations": 6,
+      "status": "converged",
+      "interpretation": "achieved numerical reduction at fixed Born inputs; an optimum only if convergence is shown",
+      "inputs": {
+        "component/carbon-dioxide/dispersion_energy_over_k": 173.44025,
+        "component/carbon-dioxide/segment_count": 2.0729,
+        "component/carbon-dioxide/segment_diameter": 2.7852,
+        "component/carbon-dioxide/solvation_factor": 1.0,
+        "component/monoethanolamine/dispersion_energy_over_k": 277.174,
+        "component/monoethanolamine/relative_permittivity": 32.0,
+        "component/monoethanolamine/segment_count": 3.0353,
+        "component/monoethanolamine/segment_diameter": 3.0435,
+        "component/monoethanolamine/solvation_factor": 1.0,
+        "component/water/dispersion_energy_over_k": 353.95,
+        "component/water/segment_count": 1.2047,
+        "component/water/solvation_factor": 1.5,
+        "component/protonated-monoethanolamine/born_diameter": 5.0,
+        "component/protonated-monoethanolamine/debye_huckel_diameter": 3.0668752979568,
+        "component/protonated-monoethanolamine/dispersion_energy_over_k": 232.687201645,
+        "component/protonated-monoethanolamine/packing_diameter": 3.0668752979568,
+        "component/protonated-monoethanolamine/segment_count": 1.0,
+        "component/protonated-monoethanolamine/segment_diameter": 3.48508556586,
+        "component/protonated-monoethanolamine/solvation_factor": 1.0,
+        "component/carbamate-anion/born_diameter": 2.04107030822,
+        "component/carbamate-anion/debye_huckel_diameter": 3.1111830263448,
+        "component/carbamate-anion/dispersion_energy_over_k": 453.265244384,
+        "component/carbamate-anion/packing_diameter": 3.1111830263448,
+        "component/carbamate-anion/segment_count": 1.0,
+        "component/carbamate-anion/segment_diameter": 3.53543525721,
+        "component/carbamate-anion/solvation_factor": 1.0,
+        "component/bicarbonate-anion/born_diameter": 3.3022218494917626,
+        "component/bicarbonate-anion/debye_huckel_diameter": 2.5780480000000003,
+        "component/bicarbonate-anion/dispersion_energy_over_k": 70.0,
+        "component/bicarbonate-anion/packing_diameter": 2.5780480000000003,
+        "component/bicarbonate-anion/segment_count": 1.0,
+        "component/bicarbonate-anion/segment_diameter": 2.9296,
+        "component/bicarbonate-anion/solvation_factor": 1.0,
+        "component/carbonate-anion/born_diameter": 3.0,
+        "component/carbonate-anion/debye_huckel_diameter": 2.149136,
+        "component/carbonate-anion/dispersion_energy_over_k": 249.26,
+        "component/carbonate-anion/packing_diameter": 2.149136,
+        "component/carbonate-anion/segment_count": 1.0,
+        "component/carbonate-anion/segment_diameter": 2.4422,
+        "component/carbonate-anion/solvation_factor": 1.0,
+        "component/hydronium-cation/born_diameter": 1.218,
+        "component/hydronium-cation/debye_huckel_diameter": 3.049552,
+        "component/hydronium-cation/dispersion_energy_over_k": 500.0,
+        "component/hydronium-cation/packing_diameter": 3.049552,
+        "component/hydronium-cation/segment_count": 1.0,
+        "component/hydronium-cation/segment_diameter": 3.4654,
+        "component/hydronium-cation/solvation_factor": 1.0,
+        "component/hydroxide-anion/born_diameter": 3.08107689400404,
+        "component/hydroxide-anion/debye_huckel_diameter": 1.775576,
+        "component/hydroxide-anion/dispersion_energy_over_k": 650.0,
+        "component/hydroxide-anion/packing_diameter": 1.775576,
+        "component/hydroxide-anion/segment_count": 1.0,
+        "component/hydroxide-anion/segment_diameter": 2.0177,
+        "component/hydroxide-anion/solvation_factor": 1.0,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7927,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/amplitude": 10.11,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/exponent_coefficient": -0.01775,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-1/amplitude": -1.417,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-1/exponent_coefficient": -0.01146,
+        "component/water/relative_permittivity/constant-plus-polynomial-in-temperature/constant": 78.41043478578715,
+        "component/water/relative_permittivity/constant-plus-polynomial-in-temperature/term-0/coefficient": -0.36133766233691506,
+        "component/water/relative_permittivity/constant-plus-polynomial-in-temperature/term-1/coefficient": 0.00076555618295,
+        "model/relative_permittivity/ionic_region_relative_permittivity": 8.0,
+        "pair/bicarbonate-anion/hydronium-cation/k_ij": 0.0,
+        "pair/carbamate-anion/hydronium-cation/k_ij": 0.0,
+        "pair/bicarbonate-anion/carbon-dioxide/k_ij": 0.0,
+        "pair/carbamate-anion/carbon-dioxide/k_ij": 0.0,
+        "pair/carbon-dioxide/carbonate-anion/k_ij": 0.0,
+        "pair/carbon-dioxide/hydronium-cation/k_ij": 0.0,
+        "pair/carbon-dioxide/hydroxide-anion/k_ij": 0.0,
+        "pair/carbon-dioxide/monoethanolamine/k_ij": 0.0,
+        "pair/carbon-dioxide/monoethanolamine/k_ij/reciprocal_temperature_slope": 0.0,
+        "pair/carbon-dioxide/protonated-monoethanolamine/k_ij": 0.0,
+        "pair/carbon-dioxide/water/k_ij": 0.013262879176919628,
+        "pair/carbonate-anion/hydronium-cation/k_ij": 0.0,
+        "pair/hydronium-cation/hydroxide-anion/k_ij": 0.0,
+        "pair/bicarbonate-anion/monoethanolamine/k_ij": 0.0,
+        "pair/carbamate-anion/monoethanolamine/k_ij": 0.0,
+        "pair/carbonate-anion/monoethanolamine/k_ij": 0.0,
+        "pair/hydronium-cation/monoethanolamine/k_ij": 0.0,
+        "pair/hydroxide-anion/monoethanolamine/k_ij": 0.0,
+        "pair/monoethanolamine/protonated-monoethanolamine/k_ij": 0.0,
+        "pair/monoethanolamine/water/k_ij": -0.07352749874985018,
+        "pair/bicarbonate-anion/protonated-monoethanolamine/k_ij": 0.0,
+        "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.5758666632283957,
+        "pair/carbonate-anion/protonated-monoethanolamine/k_ij": 0.0,
+        "pair/hydroxide-anion/protonated-monoethanolamine/k_ij": 0.0,
+        "pair/bicarbonate-anion/water/k_ij": 0.5,
+        "pair/carbamate-anion/water/k_ij": 0.035069923389641995,
+        "pair/carbonate-anion/water/k_ij": -0.25,
+        "pair/hydronium-cation/water/k_ij": 0.25,
+        "pair/hydroxide-anion/water/k_ij": -0.25,
+        "pair/protonated-monoethanolamine/water/k_ij": -0.25326452947195666,
+        "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 119.96460313616205,
+        "reaction:R2:correlation:a": 232.33141533884407,
+        "reaction:R2:correlation:b_k": -11105.640030520277,
+        "reaction:R2:correlation:c": -36.7816,
+        "reaction:R2:correlation:d_per_k": 0.0,
+        "reaction:R4:correlation:a": 2.151,
+        "reaction:R4:correlation:b_k": -1545.3,
+        "reaction:R5:correlation:a_k": 3037.6399534696106,
+        "reaction:R5:correlation:b": -1.0173150837285996,
+        "reaction:R5:correlation:c_per_k": 0.0004277,
+        "association/monoethanolamine/a/monoethanolamine/b/energy_over_k": 2586.3,
+        "association/monoethanolamine/a/monoethanolamine/b/volume": 0.036287,
+        "association/water/a/water/b/energy_over_k": 2425.7,
+        "association/water/a/water/b/volume": 0.04509,
+        "association/carbon-dioxide/a/water/b/energy_over_k": 1212.85,
+        "association/carbon-dioxide/a/water/b/volume": 0.04509,
+        "association/carbon-dioxide/b/water/a/energy_over_k": 1212.85,
+        "association/carbon-dioxide/b/water/a/volume": 0.04509,
+        "model/electrolyte/c_shell": 1.0,
+        "model/electrolyte/c_dielectric": 1.0
+      },
+      "native_history_entries_including_initial": 6,
+      "optimizer_updates": 5
+    }
+  ],
+  "unavailable_p3_cases": [
+    {
+      "case": "p3-joint-group-unavailable.json",
+      "classification": "unavailable",
+      "reason": "P2 joint group includes H3O Born-diameter column, which failed the entrywise two-step agreement after the single allowed retry. No complete admissible joint predicted-step evaluation exists.",
+      "refit_run": false,
+      "physical_disposition": "none"
+    },
+    {
+      "case": "p3-shell-only-job-failure.json",
+      "exception": "RuntimeError",
+      "message": "p3-shell-only: no complete final objective"
+    }
+  ],
+  "screening": [
+    {
+      "group": "single-q0",
+      "form": "11",
+      "available": true,
+      "classification": "inconclusive",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        0
+      ],
+      "predictions": [
+        {
+          "local_cost": 44.13776647939186,
+          "delta_k": [
+            -0.02797043780724806,
+            0.04925020044146148,
+            0.10617374663940751,
+            -0.13463179842365022,
+            -16.466937534562327
+          ],
+          "delta_q": [
+            1.4667707285399996
+          ],
+          "k_at_predicted_step": [
+            0.0508857988350626,
+            -0.24958930680634825,
+            0.499999999999997,
+            -0.8396886581652829,
+            91.17746131405983
+          ],
+          "q_at_predicted_step": {
+            "component/protonated-monoethanolamine/born_diameter": 5.0
+          },
+          "lsq_optimality": 4.983613883705929e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 3.4880005999903716,
+          "classification": "inconclusive"
+        },
+        {
+          "local_cost": 44.137766664115084,
+          "delta_k": [
+            -0.02797043727284501,
+            0.04925019956484132,
+            0.10617374663940751,
+            -0.13463179676401918,
+            -16.466937047594993
+          ],
+          "delta_q": [
+            1.4667707285399996
+          ],
+          "k_at_predicted_step": [
+            0.05088579936946565,
+            -0.2495893076829684,
+            0.499999999999997,
+            -0.8396886565056518,
+            91.17746180102716
+          ],
+          "q_at_predicted_step": {
+            "component/protonated-monoethanolamine/born_diameter": 5.0
+          },
+          "lsq_optimality": 3.4313407037184164e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 3.4880004152671447,
+          "classification": "inconclusive"
+        }
+      ]
+    },
+    {
+      "group": "single-q1",
+      "form": "11",
+      "available": true,
+      "classification": "not supported locally",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        1
+      ],
+      "predictions": [
+        {
+          "local_cost": 47.20050299774052,
+          "delta_k": [
+            -0.015038116476287723,
+            0.008098642507161346,
+            -0.02628474154035202,
+            0.12943491776935231,
+            -1.2436582755456993
+          ],
+          "delta_q": [
+            -1.49999999999995
+          ],
+          "k_at_predicted_step": [
+            0.06381812016602294,
+            -0.29074086474064836,
+            0.3675415118202375,
+            -0.5756219419722803,
+            106.40074057307646
+          ],
+          "q_at_predicted_step": {
+            "component/carbamate-anion/born_diameter": 2.04107030822005
+          },
+          "lsq_optimality": 1.7029370059891687e-13,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.42526408164170704,
+          "classification": "not supported locally"
+        },
+        {
+          "local_cost": 47.200502900802775,
+          "delta_k": [
+            -0.015038116030798751,
+            0.008098642190233665,
+            -0.026284738941021523,
+            0.12943491650279165,
+            -1.2436551350587755
+          ],
+          "delta_q": [
+            -1.49999999999995
+          ],
+          "k_at_predicted_step": [
+            0.0638181206115119,
+            -0.29074086505757607,
+            0.367541514419568,
+            -0.575621943238841,
+            106.40074371356339
+          ],
+          "q_at_predicted_step": {
+            "component/carbamate-anion/born_diameter": 2.04107030822005
+          },
+          "lsq_optimality": 1.703231089492178e-13,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.42526417857945376,
+          "classification": "not supported locally"
+        }
+      ]
+    },
+    {
+      "group": "single-q2",
+      "form": "11",
+      "available": true,
+      "classification": "not supported locally",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        2
+      ],
+      "predictions": [
+        {
+          "local_cost": 46.638911765074454,
+          "delta_k": [
+            -0.015493762506906627,
+            0.016341983686731006,
+            0.10617374663941047,
+            -0.0033771279984480635,
+            -72.73644678229105
+          ],
+          "delta_q": [
+            0.8166291974257729
+          ],
+          "k_at_predicted_step": [
+            0.06336247413540404,
+            -0.2824975235610787,
+            0.5,
+            -0.7084339877400807,
+            34.907952066331106
+          ],
+          "q_at_predicted_step": {
+            "component/bicarbonate-anion/born_diameter": 3.816629197425773
+          },
+          "lsq_optimality": 1.806993276128925e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.9868553143077747,
+          "classification": "not supported locally"
+        },
+        {
+          "local_cost": 46.63891178568981,
+          "delta_k": [
+            -0.015493762232946785,
+            0.01634198342803,
+            0.10617374663941047,
+            -0.003377128213801632,
+            -72.73644766766968
+          ],
+          "delta_q": [
+            0.8166292054038351
+          ],
+          "k_at_predicted_step": [
+            0.06336247440936388,
+            -0.2824975238197797,
+            0.5,
+            -0.7084339879554343,
+            34.90795118095248
+          ],
+          "q_at_predicted_step": {
+            "component/bicarbonate-anion/born_diameter": 3.816629205403835
+          },
+          "lsq_optimality": 1.6679937939012314e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.9868552936924218,
+          "classification": "not supported locally"
+        }
+      ]
+    },
+    {
+      "group": "single-q3",
+      "form": "11",
+      "available": true,
+      "classification": "confirmation required",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        3
+      ],
+      "predictions": [
+        {
+          "local_cost": 42.77869964819371,
+          "delta_k": [
+            -0.0745665395281459,
+            0.10454264274757177,
+            -0.25556175064539205,
+            -0.01097355466460877,
+            7.096482599533503
+          ],
+          "delta_q": [
+            1.4999999999999474
+          ],
+          "k_at_predicted_step": [
+            0.004289697114164756,
+            -0.19429686450023795,
+            0.13826450271519747,
+            -0.7160304144062415,
+            114.74088144815566
+          ],
+          "q_at_predicted_step": {
+            "component/carbonate-anion/born_diameter": 4.499999999999948
+          },
+          "lsq_optimality": 1.2610134217477948e-13,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 4.8470674311885205,
+          "classification": "confirmation required"
+        },
+        {
+          "local_cost": 42.77869968670844,
+          "delta_k": [
+            -0.07456653726155682,
+            0.10454263942505261,
+            -0.25556174379789476,
+            -0.010973554287470306,
+            7.096481381536121
+          ],
+          "delta_q": [
+            1.4999999999999474
+          ],
+          "k_at_predicted_step": [
+            0.004289699380753839,
+            -0.19429686782275712,
+            0.13826450956269476,
+            -0.716030414029103,
+            114.74088023015828
+          ],
+          "q_at_predicted_step": {
+            "component/carbonate-anion/born_diameter": 4.499999999999948
+          },
+          "lsq_optimality": 1.2610134356607208e-13,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 4.847067392673786,
+          "classification": "confirmation required"
+        }
+      ]
+    },
+    {
+      "group": "single-q4",
+      "form": "11",
+      "available": true,
+      "classification": "not supported locally",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        4
+      ],
+      "predictions": [
+        {
+          "local_cost": 47.624285965614206,
+          "delta_k": [
+            -2.7462145557526117e-06,
+            3.713399295260342e-06,
+            -1.3478909142606438e-05,
+            3.088423099442981e-06,
+            -0.004055570527953385
+          ],
+          "delta_q": [
+            1.4999999999999998
+          ],
+          "k_at_predicted_step": [
+            0.07885349042775491,
+            -0.29883579384851444,
+            0.3938127744514469,
+            -0.7050537713185332,
+            107.6403432780942
+          ],
+          "q_at_predicted_step": {
+            "component/hydroxide-anion/born_diameter": 4.58107689400404
+          },
+          "lsq_optimality": 1.5710929002158953e-12,
+          "lsq_message": "The relative change of the cost function is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.0014811137680226238,
+          "classification": "not supported locally"
+        },
+        {
+          "local_cost": 47.62428595497767,
+          "delta_k": [
+            -2.746182064023328e-06,
+            3.7133855657820066e-06,
+            -1.347877523624445e-05,
+            3.0884232164198788e-06,
+            -0.004055468398703148
+          ],
+          "delta_q": [
+            1.4999999999999998
+          ],
+          "k_at_predicted_step": [
+            0.07885349046024663,
+            -0.29883579386224396,
+            0.3938127745853533,
+            -0.7050537713184163,
+            107.64034338022346
+          ],
+          "q_at_predicted_step": {
+            "component/hydroxide-anion/born_diameter": 4.58107689400404
+          },
+          "lsq_optimality": 1.5682163455718197e-12,
+          "lsq_message": "The relative change of the cost function is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.0014811244045560557,
+          "classification": "not supported locally"
+        }
+      ]
+    },
+    {
+      "group": "single-q5",
+      "form": "11",
+      "available": false,
+      "classification": "unavailable",
+      "reason": "one or more complete columns unavailable"
+    },
+    {
+      "group": "single-q6",
+      "form": "11",
+      "available": true,
+      "classification": "inconclusive",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        6
+      ],
+      "predictions": [
+        {
+          "local_cost": 44.55296191329149,
+          "delta_k": [
+            -0.05182685529324186,
+            0.12187103611301993,
+            -0.06036050720016,
+            -0.05299609406783995,
+            11.672646778572698
+          ],
+          "delta_q": [
+            -0.49999999999999994
+          ],
+          "k_at_predicted_step": [
+            0.0270293813490688,
+            -0.1769684711347898,
+            0.3334657461604295,
+            -0.7580529538094727,
+            119.31704562719486
+          ],
+          "q_at_predicted_step": {
+            "model/electrolyte/c_shell": 0.5
+          },
+          "lsq_optimality": 1.717611163689998e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 3.0728051660907383,
+          "classification": "inconclusive"
+        },
+        {
+          "local_cost": 44.55296192276968,
+          "delta_k": [
+            -0.05182685174436141,
+            0.12187103421749558,
+            -0.06036049657137814,
+            -0.0529960945875825,
+            11.672655299931625
+          ],
+          "delta_q": [
+            -0.49999999999999994
+          ],
+          "k_at_predicted_step": [
+            0.027029384897949246,
+            -0.17696847303031416,
+            0.33346575678921136,
+            -0.7580529543292152,
+            119.31705414855378
+          ],
+          "q_at_predicted_step": {
+            "model/electrolyte/c_shell": 0.5
+          },
+          "lsq_optimality": 2.9667829199779915e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 3.072805156612546,
+          "classification": "inconclusive"
+        }
+      ]
+    },
+    {
+      "group": "single-q7",
+      "form": "11",
+      "available": true,
+      "classification": "not supported locally",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        7
+      ],
+      "predictions": [
+        {
+          "local_cost": 47.625767079382236,
+          "delta_k": [
+            -8.083101344178488e-08,
+            9.146154832539336e-08,
+            -3.3000679265453607e-07,
+            -3.468129386531919e-08,
+            -0.00019321326224014257
+          ],
+          "delta_q": [
+            7.681089330330416e-27
+          ],
+          "k_at_predicted_step": [
+            0.07885615581129722,
+            -0.2988394157862614,
+            0.39382592335379685,
+            -0.7050568944229265,
+            107.64420563535992
+          ],
+          "q_at_predicted_step": {
+            "component/monoethanolamine/solvation_factor": 1.0
+          },
+          "lsq_optimality": 1.986633403740196e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": -7.105427357601002e-15,
+          "classification": "not supported locally"
+        },
+        {
+          "local_cost": 47.625767079382236,
+          "delta_k": [
+            -8.083101345005448e-08,
+            9.146154833384218e-08,
+            -3.300067926839014e-07,
+            -3.468129386097211e-08,
+            -0.00019321326228682507
+          ],
+          "delta_q": [
+            7.680941418910687e-27
+          ],
+          "k_at_predicted_step": [
+            0.07885615581129721,
+            -0.2988394157862614,
+            0.39382592335379685,
+            -0.7050568944229265,
+            107.64420563535987
+          ],
+          "q_at_predicted_step": {
+            "component/monoethanolamine/solvation_factor": 1.0
+          },
+          "lsq_optimality": 9.254295822639014e-15,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": -7.105427357601002e-15,
+          "classification": "not supported locally"
+        }
+      ]
+    },
+    {
+      "group": "single-q8",
+      "form": "11",
+      "available": true,
+      "classification": "not supported locally",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        8
+      ],
+      "predictions": [
+        {
+          "local_cost": 47.62576707938223,
+          "delta_k": [
+            -8.083101342742027e-08,
+            9.14615483116012e-08,
+            -3.3000679257474853e-07,
+            -3.468129385095578e-08,
+            -0.00019321326219646159
+          ],
+          "delta_q": [
+            -2.385298282867223e-22
+          ],
+          "k_at_predicted_step": [
+            0.07885615581129723,
+            -0.2988394157862614,
+            0.39382592335379696,
+            -0.7050568944229265,
+            107.64420563535997
+          ],
+          "q_at_predicted_step": {
+            "model/electrolyte/c_dielectric": 1.0
+          },
+          "lsq_optimality": 1.0282550914043349e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.0,
+          "classification": "not supported locally"
+        },
+        {
+          "local_cost": 47.62576707938223,
+          "delta_k": [
+            -8.083101347279926e-08,
+            9.146154834013519e-08,
+            -3.3000679274109436e-07,
+            -3.468129385592448e-08,
+            -0.00019321326237744117
+          ],
+          "delta_q": [
+            -2.3853305946099007e-22
+          ],
+          "k_at_predicted_step": [
+            0.0788561558112972,
+            -0.2988394157862614,
+            0.3938259233537968,
+            -0.7050568944229265,
+            107.64420563535978
+          ],
+          "q_at_predicted_step": {
+            "model/electrolyte/c_dielectric": 1.0
+          },
+          "lsq_optimality": 5.392290667294818e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.0,
+          "classification": "not supported locally"
+        }
+      ]
+    },
+    {
+      "group": "main-diameters",
+      "form": "11",
+      "available": true,
+      "classification": "confirmation required",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        0,
+        1,
+        2
+      ],
+      "predictions": [
+        {
+          "local_cost": 43.55354609964395,
+          "delta_k": [
+            -0.05159040158866152,
+            0.06681030399352918,
+            0.10617374663941047,
+            -0.00663984455632074,
+            -55.506565957007155
+          ],
+          "delta_q": [
+            1.4667707285399996,
+            -1.4999999999999998,
+            0.30222185197375906
+          ],
+          "k_at_predicted_step": [
+            0.027265835053649136,
+            -0.23202920325428056,
+            0.5,
+            -0.7116967042979534,
+            52.137832891615005
+          ],
+          "q_at_predicted_step": {
+            "component/protonated-monoethanolamine/born_diameter": 5.0,
+            "component/carbamate-anion/born_diameter": 2.04107030822,
+            "component/bicarbonate-anion/born_diameter": 3.302221851973759
+          },
+          "lsq_optimality": 1.8204831145780402e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 4.072220979738276,
+          "classification": "confirmation required"
+        },
+        {
+          "local_cost": 43.55354620921744,
+          "delta_k": [
+            -0.05159040081863975,
+            0.06681030309216329,
+            0.10617374663941047,
+            -0.006639844248583527,
+            -55.506563755817865
+          ],
+          "delta_q": [
+            1.4667707285399996,
+            -1.4999999999999998,
+            0.3022218494917628
+          ],
+          "k_at_predicted_step": [
+            0.02726583582367091,
+            -0.23202920415564643,
+            0.5,
+            -0.7116967039902162,
+            52.137835092804295
+          ],
+          "q_at_predicted_step": {
+            "component/protonated-monoethanolamine/born_diameter": 5.0,
+            "component/carbamate-anion/born_diameter": 2.04107030822,
+            "component/bicarbonate-anion/born_diameter": 3.3022218494917626
+          },
+          "lsq_optimality": 8.429510462827206e-15,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 4.0722208701647915,
+          "classification": "confirmation required"
+        }
+      ]
+    },
+    {
+      "group": "secondary-diameters",
+      "form": "11",
+      "available": false,
+      "classification": "unavailable",
+      "reason": "one or more complete columns unavailable"
+    },
+    {
+      "group": "shell-and-MEA",
+      "form": "11",
+      "available": true,
+      "classification": "inconclusive",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        6,
+        7
+      ],
+      "predictions": [
+        {
+          "local_cost": 44.55296191329149,
+          "delta_k": [
+            -0.05182685529324186,
+            0.12187103611301993,
+            -0.06036050720016,
+            -0.05299609406783995,
+            11.672646778572643
+          ],
+          "delta_q": [
+            -0.49999999999999994,
+            4.730144444944405e-20
+          ],
+          "k_at_predicted_step": [
+            0.0270293813490688,
+            -0.1769684711347898,
+            0.3334657461604295,
+            -0.7580529538094727,
+            119.3170456271948
+          ],
+          "q_at_predicted_step": {
+            "model/electrolyte/c_shell": 0.5,
+            "component/monoethanolamine/solvation_factor": 1.0
+          },
+          "lsq_optimality": 2.3421970413954522e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 3.0728051660907383,
+          "classification": "inconclusive"
+        },
+        {
+          "local_cost": 44.55296192276968,
+          "delta_k": [
+            -0.0518268517443614,
+            0.12187103421749557,
+            -0.060360496571378104,
+            -0.05299609458758249,
+            11.672655299931696
+          ],
+          "delta_q": [
+            -0.49999999999999994,
+            4.730295017665284e-20
+          ],
+          "k_at_predicted_step": [
+            0.02702938489794926,
+            -0.17696847303031416,
+            0.3334657567892114,
+            -0.7580529543292152,
+            119.31705414855385
+          ],
+          "q_at_predicted_step": {
+            "model/electrolyte/c_shell": 0.5,
+            "component/monoethanolamine/solvation_factor": 1.0
+          },
+          "lsq_optimality": 2.5248047540078347e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 3.072805156612546,
+          "classification": "inconclusive"
+        }
+      ]
+    },
+    {
+      "group": "saturation",
+      "form": "11",
+      "available": true,
+      "classification": "not supported locally",
+      "classification_agreement": true,
+      "five_k_only_cost": 47.62576707938223,
+      "candidate_indices": [
+        8
+      ],
+      "predictions": [
+        {
+          "local_cost": 47.62576707938223,
+          "delta_k": [
+            -8.083101342742027e-08,
+            9.14615483116012e-08,
+            -3.3000679257474853e-07,
+            -3.468129385095578e-08,
+            -0.00019321326219646159
+          ],
+          "delta_q": [
+            -2.385298282867223e-22
+          ],
+          "k_at_predicted_step": [
+            0.07885615581129723,
+            -0.2988394157862614,
+            0.39382592335379696,
+            -0.7050568944229265,
+            107.64420563535997
+          ],
+          "q_at_predicted_step": {
+            "model/electrolyte/c_dielectric": 1.0
+          },
+          "lsq_optimality": 1.0282550914043349e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.0,
+          "classification": "not supported locally"
+        },
+        {
+          "local_cost": 47.62576707938223,
+          "delta_k": [
+            -8.083101347279926e-08,
+            9.146154834013519e-08,
+            -3.3000679274109436e-07,
+            -3.468129385592448e-08,
+            -0.00019321326237744117
+          ],
+          "delta_q": [
+            -2.3853305946099007e-22
+          ],
+          "k_at_predicted_step": [
+            0.0788561558112972,
+            -0.2988394157862614,
+            0.3938259233537968,
+            -0.7050568944229265,
+            107.64420563535978
+          ],
+          "q_at_predicted_step": {
+            "model/electrolyte/c_dielectric": 1.0
+          },
+          "lsq_optimality": 5.392290667294818e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.0,
+          "classification": "not supported locally"
+        }
+      ]
+    },
+    {
+      "group": "joint",
+      "form": "11",
+      "available": false,
+      "classification": "unavailable",
+      "reason": "one or more complete columns unavailable"
+    },
+    {
+      "group": "single-q0",
+      "form": "00",
+      "available": true,
+      "classification": "not supported locally",
+      "classification_agreement": true,
+      "five_k_only_cost": 40.20153733055815,
+      "candidate_indices": [
+        0
+      ],
+      "predictions": [
+        {
+          "local_cost": 38.73512168590474,
+          "delta_k": [
+            0.008724239898786746,
+            0.007632083993177255,
+            -1.1729375584504919e-26,
+            1.3305091418539242e-32,
+            62.21530216244883
+          ],
+          "delta_q": [
+            -1.448255366168223
+          ],
+          "k_at_predicted_step": [
+            -0.0578266078755955,
+            0.15432010525470471,
+            0.5,
+            -1.0,
+            150.66193977967035
+          ],
+          "q_at_predicted_step": {
+            "component/protonated-monoethanolamine/born_diameter": 2.0849739052917773
+          },
+          "lsq_optimality": 8.675182965353116e-15,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 1.4664156446534165,
+          "classification": "not supported locally"
+        },
+        {
+          "local_cost": 38.73512165107326,
+          "delta_k": [
+            0.008724240247417915,
+            0.007632084363840602,
+            -1.0889288348044532e-15,
+            1.3301705994808874e-32,
+            62.215302917462516
+          ],
+          "delta_q": [
+            -1.4482554179467901
+          ],
+          "k_at_predicted_step": [
+            -0.057826607526964335,
+            0.15432010562536808,
+            0.4999999999999989,
+            -1.0,
+            150.66194053468405
+          ],
+          "q_at_predicted_step": {
+            "component/protonated-monoethanolamine/born_diameter": 2.08497385351321
+          },
+          "lsq_optimality": 2.902399839869551e-10,
+          "lsq_message": "The relative change of the cost function is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 1.4664156794848964,
+          "classification": "not supported locally"
+        }
+      ]
+    },
+    {
+      "group": "single-q1",
+      "form": "00",
+      "available": true,
+      "classification": "inconclusive",
+      "classification_agreement": true,
+      "five_k_only_cost": 40.20153733055815,
+      "candidate_indices": [
+        1
+      ],
+      "predictions": [
+        {
+          "local_cost": 38.30448388663169,
+          "delta_k": [
+            0.015104307196027773,
+            -0.0017544047954294074,
+            -4.984114103079728e-30,
+            9.647821882305805e-23,
+            20.300586505263272
+          ],
+          "delta_q": [
+            -1.4999999999999998
+          ],
+          "k_at_predicted_step": [
+            -0.051446540578354474,
+            0.14493361646609806,
+            0.5,
+            -1.0,
+            108.7472241224848
+          ],
+          "q_at_predicted_step": {
+            "component/carbamate-anion/born_diameter": 2.04107030822
+          },
+          "lsq_optimality": 1.2456810826923295e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 1.8970534439264668,
+          "classification": "inconclusive"
+        },
+        {
+          "local_cost": 38.30448391255356,
+          "delta_k": [
+            0.015104306910247771,
+            -0.0017544046574621815,
+            -4.984691882063044e-30,
+            9.647781492627458e-23,
+            20.300587462678486
+          ],
+          "delta_q": [
+            -1.4999999999999998
+          ],
+          "k_at_predicted_step": [
+            -0.05144654086413448,
+            0.14493361660406529,
+            0.5,
+            -1.0,
+            108.7472250799
+          ],
+          "q_at_predicted_step": {
+            "component/carbamate-anion/born_diameter": 2.04107030822
+          },
+          "lsq_optimality": 8.366305552212672e-15,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 1.897053418004596,
+          "classification": "inconclusive"
+        }
+      ]
+    },
+    {
+      "group": "single-q2",
+      "form": "00",
+      "available": true,
+      "classification": "not supported locally",
+      "classification_agreement": true,
+      "five_k_only_cost": 40.20153733055815,
+      "candidate_indices": [
+        2
+      ],
+      "predictions": [
+        {
+          "local_cost": 39.97855412699382,
+          "delta_k": [
+            0.002707933143189582,
+            -0.004938467233404493,
+            -3.013933692938647e-15,
+            4.811764179263445e-24,
+            -12.896772510188136
+          ],
+          "delta_q": [
+            1.4999999999999956
+          ],
+          "k_at_predicted_step": [
+            -0.06384291463119267,
+            0.14174955402812298,
+            0.499999999999997,
+            -1.0,
+            75.54986510703338
+          ],
+          "q_at_predicted_step": {
+            "component/bicarbonate-anion/born_diameter": 4.499999999999996
+          },
+          "lsq_optimality": 3.5220006760993226e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.22298320356433265,
+          "classification": "not supported locally"
+        },
+        {
+          "local_cost": 39.978554154448716,
+          "delta_k": [
+            0.002707932690313362,
+            -0.004938466524466083,
+            -3.0139007943113246e-15,
+            4.811639095506161e-24,
+            -12.896769551401984
+          ],
+          "delta_q": [
+            1.4999999999999956
+          ],
+          "k_at_predicted_step": [
+            -0.06384291508406889,
+            0.14174955473706138,
+            0.499999999999997,
+            -1.0,
+            75.54986806581954
+          ],
+          "q_at_predicted_step": {
+            "component/bicarbonate-anion/born_diameter": 4.499999999999996
+          },
+          "lsq_optimality": 3.5219621944132434e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 0.2229831761094374,
+          "classification": "not supported locally"
+        }
+      ]
+    },
+    {
+      "group": "main-diameters",
+      "form": "00",
+      "available": true,
+      "classification": "inconclusive",
+      "classification_agreement": true,
+      "five_k_only_cost": 40.20153733055815,
+      "candidate_indices": [
+        0,
+        1,
+        2
+      ],
+      "predictions": [
+        {
+          "local_cost": 37.75323925702882,
+          "delta_k": [
+            0.020590514848377133,
+            -0.0042623833138006415,
+            -7.052062578119327e-21,
+            7.154951370959024e-23,
+            27.216622853864568
+          ],
+          "delta_q": [
+            -0.4612051615991388,
+            -1.4999999999999998,
+            1.4999999999999998
+          ],
+          "k_at_predicted_step": [
+            -0.04596033292600511,
+            0.14242563794772684,
+            0.5,
+            -1.0,
+            115.66326047108609
+          ],
+          "q_at_predicted_step": {
+            "component/protonated-monoethanolamine/born_diameter": 3.0720241098608616,
+            "component/carbamate-anion/born_diameter": 2.04107030822,
+            "component/bicarbonate-anion/born_diameter": 4.5
+          },
+          "lsq_optimality": 1.4609132263391946e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 2.4482980735293367,
+          "classification": "inconclusive"
+        },
+        {
+          "local_cost": 37.75323933329235,
+          "delta_k": [
+            0.02059051426361266,
+            -0.004262382311332113,
+            -7.051767834441588e-21,
+            7.154488151835479e-23,
+            27.216627316511982
+          ],
+          "delta_q": [
+            -0.4612051852115916,
+            -1.4999999999999998,
+            1.4999999999999998
+          ],
+          "k_at_predicted_step": [
+            -0.045960333510769585,
+            0.14242563895019536,
+            0.5,
+            -1.0,
+            115.6632649337335
+          ],
+          "q_at_predicted_step": {
+            "component/protonated-monoethanolamine/born_diameter": 3.0720240862484087,
+            "component/carbamate-anion/born_diameter": 2.04107030822,
+            "component/bicarbonate-anion/born_diameter": 4.5
+          },
+          "lsq_optimality": 1.4517656404688756e-14,
+          "lsq_message": "The first-order optimality measure is less than `tol`.",
+          "predicted_reduction_vs_five_k_only": 2.4482979972658043,
+          "classification": "inconclusive"
+        }
+      ]
+    }
+  ],
+  "unanswered": [
+    "No joint attribution when an included whole column is unavailable.",
+    "No physical validation or intrinsic-form ranking.",
+    "No parameter adoption; delivered independent review belongs to parent thread."
+  ],
+  "evidence": "local numerical verification and descriptive model decomposition; no physical validation",
+  "p4": [
+    {
+      "form": "11",
+      "available": true,
+      "predictions": {
+        "reaction-alone": {
+          "estimates": [
+            {
+              "predicted_cost": 44.71302559397397,
+              "predicted_reduction": 2.9127414854123685,
+              "q": [
+                -0.04742005992626854,
+                9.999999999999732,
+                -0.05767406163863441,
+                5.556691714940819
+              ],
+              "k": [
+                0.07885623664231066,
+                -0.2988395072478097,
+                0.3938262533605895,
+                -0.7050568597416327,
+                107.64439884862216
+              ],
+              "five_k_only_local_cost": 47.62576707938223,
+              "predicted_reduction_vs_five_k_only": 2.9127414854082616,
+              "reaction_gradient_quality": "finite differences",
+              "k_gradient_quality": "exact Engine derivatives",
+              "covariance": "not estimated"
+            },
+            {
+              "predicted_cost": 44.713026332521665,
+              "predicted_reduction": 2.912740746864671,
+              "q": [
+                -0.047420063854234834,
+                9.999999999999732,
+                -0.057674079071288076,
+                5.556692164402069
+              ],
+              "k": [
+                0.07885623664231066,
+                -0.2988395072478097,
+                0.3938262533605895,
+                -0.7050568597416327,
+                107.64439884862216
+              ],
+              "five_k_only_local_cost": 47.62576707938223,
+              "predicted_reduction_vs_five_k_only": 2.912740746860564,
+              "reaction_gradient_quality": "finite differences",
+              "k_gradient_quality": "exact Engine derivatives",
+              "covariance": "not estimated"
+            }
+          ],
+          "classification_agreement": true,
+          "thresholds": "descriptive original-gap screens only; P4 is exploratory"
+        },
+        "joint-five-k": {
+          "estimates": [
+            {
+              "predicted_cost": 43.86294639324248,
+              "predicted_reduction": 3.7628206861438542,
+              "q": [
+                0.15770919694799268,
+                9.999999999999998,
+                0.006286644906702085,
+                6.43538851392485
+              ],
+              "k": [
+                0.07182207497858716,
+                -0.3326453175552742,
+                0.5,
+                -0.6191652390089263,
+                266.85802418243316
+              ],
+              "five_k_only_local_cost": 47.62576707938223,
+              "predicted_reduction_vs_five_k_only": 3.7628206861397473,
+              "reaction_gradient_quality": "finite differences",
+              "k_gradient_quality": "exact Engine derivatives",
+              "covariance": "not estimated"
+            },
+            {
+              "predicted_cost": 43.86294658485423,
+              "predicted_reduction": 3.7628204945321073,
+              "q": [
+                0.15770921928837794,
+                9.999999999999998,
+                0.006286633654896118,
+                6.435392455277961
+              ],
+              "k": [
+                0.07182207765200968,
+                -0.3326453182356413,
+                0.5,
+                -0.6191652323498545,
+                266.858209186706
+              ],
+              "five_k_only_local_cost": 47.62576707938223,
+              "predicted_reduction_vs_five_k_only": 3.7628204945280004,
+              "reaction_gradient_quality": "finite differences",
+              "k_gradient_quality": "exact Engine derivatives",
+              "covariance": "not estimated"
+            }
+          ],
+          "classification_agreement": true,
+          "thresholds": "descriptive original-gap screens only; P4 is exploratory"
+        }
+      },
+      "actual_cost": 43.70548052953331,
+      "actual_reduction": 3.9202865498530244,
+      "actual_three_group_cost": {
+        "pressure_cost": 9.31127008371566,
+        "bottinger_cost": 5.270143550924233,
+        "matin_cost": 29.124066894893417
+      },
+      "directions": {
+        "carbamate_delta_lnK": 0.15770921928837794,
+        "carbamate_delta_H_kJ_mol": 9.999999999999998,
+        "bicarbonate_delta_lnK": 0.006286633654896118,
+        "bicarbonate_delta_H_kJ_mol": 6.435392455277961
+      },
+      "recorded_comparison": {
+        "basis": "recorded source-correlation combination, before EOS standard-state conversion; local enthalpy from -R d ln K/d(1/T) at 313.15 K",
+        "carbamate_lnK_recorded": 8.580299300932705,
+        "bicarbonate_lnK_recorded": 5.796603468264653,
+        "carbamate_H_recorded_kJ_mol": -73.63012540059489,
+        "bicarbonate_H_recorded_kJ_mol": -60.781786316762684,
+        "carbamate_lnK_result": 8.738008520221083,
+        "bicarbonate_lnK_result": 5.802890101919549,
+        "carbamate_H_result_kJ_mol": -63.63012540059489,
+        "bicarbonate_H_result_kJ_mol": -54.34639386148472
+      },
+      "warm_refit": "not completed; budget reserved for two-step columns and actual predicted-step costs",
+      "evidence": "exploratory bounded local prediction and actual numerical evaluation, no adoption"
+    },
+    {
+      "form": "00",
+      "available": true,
+      "predictions": {
+        "reaction-alone": {
+          "estimates": [
+            {
+              "predicted_cost": 37.31254910469386,
+              "predicted_reduction": 2.8889882258644306,
+              "q": [
+                0.02752593589198182,
+                8.519152153243894,
+                0.004518937712600923,
+                4.042869995845494
+              ],
+              "k": [
+                -0.06655084777438225,
+                0.14668802126152747,
+                0.5,
+                -1.0,
+                88.44663761722153
+              ],
+              "five_k_only_local_cost": 40.20153733055815,
+              "predicted_reduction_vs_five_k_only": 2.8889882258642956,
+              "reaction_gradient_quality": "finite differences",
+              "k_gradient_quality": "exact Engine derivatives",
+              "covariance": "not estimated"
+            },
+            {
+              "predicted_cost": 37.31254889411221,
+              "predicted_reduction": 2.888988436446077,
+              "q": [
+                0.027525935426846306,
+                8.51915197334859,
+                0.004518933334004216,
+                4.042870631582105
+              ],
+              "k": [
+                -0.06655084777438225,
+                0.14668802126152747,
+                0.5,
+                -1.0,
+                88.44663761722153
+              ],
+              "five_k_only_local_cost": 40.20153733055815,
+              "predicted_reduction_vs_five_k_only": 2.888988436445942,
+              "reaction_gradient_quality": "finite differences",
+              "k_gradient_quality": "exact Engine derivatives",
+              "covariance": "not estimated"
+            }
+          ],
+          "classification_agreement": true,
+          "thresholds": "descriptive original-gap screens only; P4 is exploratory"
+        },
+        "joint-five-k": {
+          "estimates": [
+            {
+              "predicted_cost": 32.6613262289627,
+              "predicted_reduction": 7.540211101595588,
+              "q": [
+                0.6187181316408156,
+                9.999999999999998,
+                0.844405640708598,
+                1.902927129438755
+              ],
+              "k": [
+                -0.048393730757895013,
+                -0.03935101355599804,
+                0.40305242562791876,
+                -0.7405952477370961,
+                219.31256806239065
+              ],
+              "five_k_only_local_cost": 40.20153733055815,
+              "predicted_reduction_vs_five_k_only": 7.540211101595453,
+              "reaction_gradient_quality": "finite differences",
+              "k_gradient_quality": "exact Engine derivatives",
+              "covariance": "not estimated"
+            },
+            {
+              "predicted_cost": 32.66132558852294,
+              "predicted_reduction": 7.540211742035346,
+              "q": [
+                0.6187181769577845,
+                9.999999999999998,
+                0.8444056863739356,
+                1.9029284928138908
+              ],
+              "k": [
+                -0.04839372906002813,
+                -0.03935102546123659,
+                0.40305242311098094,
+                -0.7405952241577844,
+                219.3125878901044
+              ],
+              "five_k_only_local_cost": 40.20153733055815,
+              "predicted_reduction_vs_five_k_only": 7.540211742035211,
+              "reaction_gradient_quality": "finite differences",
+              "k_gradient_quality": "exact Engine derivatives",
+              "covariance": "not estimated"
+            }
+          ],
+          "classification_agreement": true,
+          "thresholds": "descriptive original-gap screens only; P4 is exploratory"
+        }
+      },
+      "actual_cost": 32.550632956001905,
+      "actual_reduction": 7.650904374556383,
+      "actual_three_group_cost": {
+        "pressure_cost": 8.503508388306146,
+        "bottinger_cost": 6.179979371347656,
+        "matin_cost": 17.867145196348105
+      },
+      "directions": {
+        "carbamate_delta_lnK": 0.6187181769577845,
+        "carbamate_delta_H_kJ_mol": 9.999999999999998,
+        "bicarbonate_delta_lnK": 0.8444056863739356,
+        "bicarbonate_delta_H_kJ_mol": 1.9029284928138908
+      },
+      "recorded_comparison": {
+        "basis": "recorded source-correlation combination, before EOS standard-state conversion; local enthalpy from -R d ln K/d(1/T) at 313.15 K",
+        "carbamate_lnK_recorded": 8.580299300932705,
+        "bicarbonate_lnK_recorded": 5.796603468264653,
+        "carbamate_H_recorded_kJ_mol": -73.63012540059489,
+        "bicarbonate_H_recorded_kJ_mol": -60.781786316762684,
+        "carbamate_lnK_result": 9.19901747789049,
+        "bicarbonate_lnK_result": 6.6410091546385885,
+        "carbamate_H_result_kJ_mol": -63.63012540059489,
+        "bicarbonate_H_result_kJ_mol": -58.87885782394879
+      },
+      "warm_refit": "not completed; budget reserved for two-step columns and actual predicted-step costs",
+      "evidence": "exploratory bounded local prediction and actual numerical evaluation, no adoption"
+    }
+  ],
+  "p5": {
+    "fits": [
+      {
+        "form": "00",
+        "case": "a",
+        "fitted_targets": 142,
+        "achieved_fitted_cost": 34.5840320611367,
+        "fitted_three_group_cost": {
+          "pressure_cost": 11.436855954247331,
+          "bottinger_cost": 5.735329635371384,
+          "matin_cost": 17.411846471517993
+        },
+        "fitted_species_costs_and_signed_residuals": [
+          {
+            "source": "Matin",
+            "species": "HCO3-",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEA",
+            "n": 18,
+            "cost": 8.264205664224216,
+            "mean_signed_weighted_residual": -0.7764229868933665
+          },
+          {
+            "source": "Matin",
+            "species": "MEAH+",
+            "n": 18,
+            "cost": 8.22961720127046,
+            "mean_signed_weighted_residual": 0.8691713865927515
+          },
+          {
+            "source": "Matin",
+            "species": "MEACOO-",
+            "n": 18,
+            "cost": 0.9180236060233197,
+            "mean_signed_weighted_residual": 0.24172706916374243
+          },
+          {
+            "source": "Matin",
+            "species": "MEA + MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "HCO3-",
+            "n": 4,
+            "cost": 2.4676855291665034,
+            "mean_signed_weighted_residual": 0.9865213634907186
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEA",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEACOO-",
+            "n": 18,
+            "cost": 2.7851410720408385,
+            "mean_signed_weighted_residual": -0.43999679218157334
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEA + MEAH+",
+            "n": 18,
+            "cost": 0.48250303416404156,
+            "mean_signed_weighted_residual": 0.07790112238375739
+          }
+        ],
+        "k_coordinates": {
+          "pair/carbamate-anion/water/k_ij": -0.05009622525689636,
+          "pair/protonated-monoethanolamine/water/k_ij": 0.11717335470882706,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -119.03707287298563
+        },
+        "active_bounds": [
+          "pair/bicarbonate-anion/water/k_ij",
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij"
+        ],
+        "iterations": 7,
+        "converged": true,
+        "stopping_condition": "converged",
+        "full_rescore_available": true,
+        "evidence": "sensitivity of achieved fits; not a replacement fit definition or adoption",
+        "full_cost": 43.62396270570897,
+        "full_three_group_cost": {
+          "pressure_cost": 11.436855954248276,
+          "bottinger_cost": 5.7353296353712215,
+          "matin_cost": 26.45177711608947
+        },
+        "native_history_entries_including_initial": 7,
+        "optimizer_updates": 6
+      },
+      {
+        "form": "11",
+        "case": "a",
+        "fitted_targets": 142,
+        "achieved_fitted_cost": 32.99189726127253,
+        "fitted_three_group_cost": {
+          "pressure_cost": 8.143458770301327,
+          "bottinger_cost": 3.10081948346977,
+          "matin_cost": 21.74761900750143
+        },
+        "fitted_species_costs_and_signed_residuals": [
+          {
+            "source": "Matin",
+            "species": "HCO3-",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEA",
+            "n": 18,
+            "cost": 11.759828910315997,
+            "mean_signed_weighted_residual": -0.915795630622156
+          },
+          {
+            "source": "Matin",
+            "species": "MEAH+",
+            "n": 18,
+            "cost": 7.804352190800095,
+            "mean_signed_weighted_residual": 0.7863577545256389
+          },
+          {
+            "source": "Matin",
+            "species": "MEACOO-",
+            "n": 18,
+            "cost": 2.1834379063853375,
+            "mean_signed_weighted_residual": 0.44308086199747776
+          },
+          {
+            "source": "Matin",
+            "species": "MEA + MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "HCO3-",
+            "n": 4,
+            "cost": 1.0303330905344121,
+            "mean_signed_weighted_residual": 0.3791790807645506
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEA",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEACOO-",
+            "n": 18,
+            "cost": 1.6385477255620964,
+            "mean_signed_weighted_residual": -0.24743647952608747
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEA + MEAH+",
+            "n": 18,
+            "cost": 0.4319386673732612,
+            "mean_signed_weighted_residual": -0.013267292626393657
+          }
+        ],
+        "k_coordinates": {
+          "pair/carbamate-anion/water/k_ij": 0.12982509934009012,
+          "pair/protonated-monoethanolamine/water/k_ij": -0.37931096535037995,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.7167717783408788,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -148.53446291005767
+        },
+        "active_bounds": [
+          "pair/bicarbonate-anion/water/k_ij"
+        ],
+        "iterations": 11,
+        "converged": false,
+        "stopping_condition": "limit_reached",
+        "full_rescore_available": true,
+        "evidence": "sensitivity of achieved fits; not a replacement fit definition or adoption",
+        "full_cost": 53.76949192216955,
+        "full_three_group_cost": {
+          "pressure_cost": 8.143458770301347,
+          "bottinger_cost": 3.10081948346976,
+          "matin_cost": 42.52521366839844
+        },
+        "native_history_entries_including_initial": 11,
+        "optimizer_updates": 10
+      },
+      {
+        "form": "00",
+        "case": "b",
+        "fitted_targets": 88,
+        "achieved_fitted_cost": 16.850036901580406,
+        "fitted_three_group_cost": {
+          "pressure_cost": 11.603555297029759,
+          "bottinger_cost": 5.246481604550644,
+          "matin_cost": 0.0
+        },
+        "fitted_species_costs_and_signed_residuals": [
+          {
+            "source": "Matin",
+            "species": "HCO3-",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEA",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEACOO-",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEA + MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "HCO3-",
+            "n": 4,
+            "cost": 2.259273548008161,
+            "mean_signed_weighted_residual": 0.9689882518032075
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEA",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEACOO-",
+            "n": 18,
+            "cost": 2.5588137979147754,
+            "mean_signed_weighted_residual": -0.41986289673010696
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEA + MEAH+",
+            "n": 18,
+            "cost": 0.4283942586277077,
+            "mean_signed_weighted_residual": 0.0660938875860923
+          }
+        ],
+        "k_coordinates": {
+          "pair/carbamate-anion/water/k_ij": -0.050179499674083486,
+          "pair/protonated-monoethanolamine/water/k_ij": 0.10349829657261933,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -248.6427660627329
+        },
+        "active_bounds": [
+          "pair/bicarbonate-anion/water/k_ij",
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij"
+        ],
+        "iterations": 11,
+        "converged": false,
+        "stopping_condition": "limit_reached",
+        "full_rescore_available": true,
+        "evidence": "sensitivity of achieved fits; not a replacement fit definition or adoption",
+        "full_cost": 46.9854278700196,
+        "full_three_group_cost": {
+          "pressure_cost": 11.603555297027912,
+          "bottinger_cost": 5.246481604550522,
+          "matin_cost": 30.135390968441165
+        },
+        "native_history_entries_including_initial": 11,
+        "optimizer_updates": 10
+      },
+      {
+        "form": "11",
+        "case": "b",
+        "fitted_targets": 88,
+        "achieved_fitted_cost": 10.4717715683901,
+        "fitted_three_group_cost": {
+          "pressure_cost": 7.946708340094616,
+          "bottinger_cost": 2.5250632282954832,
+          "matin_cost": 0.0
+        },
+        "fitted_species_costs_and_signed_residuals": [
+          {
+            "source": "Matin",
+            "species": "HCO3-",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEA",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEACOO-",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Matin",
+            "species": "MEA + MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "HCO3-",
+            "n": 4,
+            "cost": 0.6656566643791832,
+            "mean_signed_weighted_residual": 0.26370476125263703
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEA",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEAH+",
+            "n": 0,
+            "cost": null,
+            "mean_signed_weighted_residual": null
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEACOO-",
+            "n": 18,
+            "cost": 1.4671933600737412,
+            "mean_signed_weighted_residual": -0.22007136714133413
+          },
+          {
+            "source": "Bottinger",
+            "species": "MEA + MEAH+",
+            "n": 18,
+            "cost": 0.3922132038425588,
+            "mean_signed_weighted_residual": -0.03207159472205296
+          }
+        ],
+        "k_coordinates": {
+          "pair/carbamate-anion/water/k_ij": 0.12811862815752031,
+          "pair/protonated-monoethanolamine/water/k_ij": -0.40263476769004436,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.7483481565007558,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -329.95077990743937
+        },
+        "active_bounds": [
+          "pair/bicarbonate-anion/water/k_ij"
+        ],
+        "iterations": 11,
+        "converged": false,
+        "stopping_condition": "limit_reached",
+        "full_rescore_available": true,
+        "evidence": "sensitivity of achieved fits; not a replacement fit definition or adoption",
+        "full_cost": 59.08177277859806,
+        "full_three_group_cost": {
+          "pressure_cost": 7.946708340095356,
+          "bottinger_cost": 2.525063228296459,
+          "matin_cost": 48.61000121020624
+        },
+        "native_history_entries_including_initial": 11,
+        "optimizer_updates": 10
+      }
+    ],
+    "rankings": [
+      {
+        "case": "a",
+        "ranking_available": true,
+        "lower_achieved_fitted_cost_form": "11",
+        "difference_11_minus_00": -1.5921347998641764
+      },
+      {
+        "case": "b",
+        "ranking_available": true,
+        "lower_achieved_fitted_cost_form": "11",
+        "difference_11_minus_00": -6.378265333190306
+      }
+    ]
+  }
+}

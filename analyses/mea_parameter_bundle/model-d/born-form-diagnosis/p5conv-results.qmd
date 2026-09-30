@@ -1,0 +1,84 @@
+---
+title: "Converged Matin-role sensitivity and reaction warm refits"
+format: html
+execute:
+  enabled: false
+---
+
+The owner-authorized continuation uses the immutable Engine wheel `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2`. Form 11 is SSM+DS; form 00 is Original Born. All costs are dimensionless, with convention C = ½ sum of squared weighted residuals. This is evidence from local numerical fitting and numerical verification, with no physical validation or parameter adoption.
+
+P5a removes the 18 Matin bicarbonate-pool targets (142 retained); P5b removes all 72 Matin targets (88 retained). Fits warm-start from their corresponding capped results, retaining the five interaction-coordinate bounds, weights, source reactions, Born inputs and accepted initial guesses. Native gradients are exact for these interaction coordinates. The slope coordinate has units K; four reference interaction coordinates are dimensionless. Each job has a 2400 s timeout and one numerical-library thread; at most two run concurrently, with no shared lock.
+
+## P5 convergence and full-set re-scores
+
+| run | n | fitted_cost | full_cost | pressure_cost | bottinger_cost | matin_cost | updates | stop | wall_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| p5conv-a-11 | 142 | 32.991897 | 53.769479 | 8.1434531 | 3.1008206 | 42.525205 | 1 | converged | 107.23925 |
+| p5conv-a-00 | 142 | 34.584032 | 43.623963 | 11.436856 | 5.7353296 | 26.451777 | 0 | converged | 86.346256 |
+| p5conv-b-11 | 88 | 10.471772 | 59.081535 | 7.9466885 | 2.525083 | 48.609763 | 1 | converged | 98.147096 |
+| p5conv-b-00 | 88 | 16.850037 | 46.985428 | 11.603555 | 5.2464816 | 30.135391 | 0 | converged | 82.224605 |
+
+| run | carbamate_water | MEAH_water | bicarbonate_water | carbamate_MEAH | MEAH_water_slope_K | active_bounds |
+| --- | --- | --- | --- | --- | --- | --- |
+| p5conv-a-11 | 0.12982492 | -0.37931089 | 0.5 | -0.71677203 | -148.53464 | pair/bicarbonate-anion/water/k_ij |
+| p5conv-a-00 | -0.050096225 | 0.11717335 | 0.5 | -1 | -119.03707 | pair/bicarbonate-anion/water/k_ij; pair/carbamate-anion/protonated-monoethanolamine/k_ij |
+| p5conv-b-11 | 0.12811811 | -0.40263369 | 0.5 | -0.74834751 | -329.94591 | pair/bicarbonate-anion/water/k_ij |
+| p5conv-b-00 | -0.0501795 | 0.1034983 | 0.5 | -1 | -248.64277 | pair/bicarbonate-anion/water/k_ij; pair/carbamate-anion/protonated-monoethanolamine/k_ij |
+
+Each entry below is dimensionless species cost (mean signed weighted residual), on the full 160-target re-score.
+
+| source | species | p5conv-a-11 | p5conv-a-00 | p5conv-b-11 | p5conv-b-00 |
+| --- | --- | --- | --- | --- | --- |
+| Matin | HCO3- | 20.777582 (-1.417573) | 9.039931 (-0.879882) | 25.239202 (-1.587801) | 11.987602 (-1.044216) |
+| Matin | MEA | 11.759832 (-0.915796) | 8.264206 (-0.776423) | 13.541914 (-0.966307) | 9.290983 (-0.814641) |
+| Matin | MEAH+ | 7.804355 (+0.786358) | 8.229617 (+0.869171) | 7.184028 (+0.752743) | 7.647997 (+0.831103) |
+| Matin | MEACOO- | 2.183437 (+0.443081) | 0.918024 (+0.241727) | 2.644618 (+0.502033) | 1.208808 (+0.300320) |
+| Bottinger | HCO3- | 1.030334 (+0.379179) | 2.467686 (+0.986521) | 0.665669 (+0.263711) | 2.259274 (+0.968988) |
+| Bottinger | MEACOO- | 1.638548 (-0.247437) | 2.785141 (-0.439997) | 1.467200 (-0.220073) | 2.558814 (-0.419863) |
+| Bottinger | MEA + MEAH+ | 0.431939 (-0.013267) | 0.482503 (+0.077901) | 0.392214 (-0.032071) | 0.428394 (+0.066094) |
+
+The SSM+DS reduced-set ranking remains lower for both objectives after the native convergence criterion is met. Full re-scores still rank Original Born lower. Removing Matin changes the objective; it does not validate either form or resolve the official role of Matin. The full-set source/species costs and signed means are retained in [p5conv-species-costs-and-signed-means.csv](p5conv-species-costs-and-signed-means.csv). Signed residuals follow model minus observation, divided by the retained target scale. Böttinger directly measures the MEA + MEAH+ sum; it has no separate MEA or MEAH+ targets in this fit. Empty groups have null means and costs, rather than zero observations.
+
+## P4 exploratory reaction warm refits
+
+The four added coordinates are δ_carbamate, ΔH_carbamate, δ_bicarbonate, and ΔH_bicarbonate. δ is a dimensionless natural-log equilibrium-constant shift at 313.15 K; ΔH is in kJ/mol. ΔlnK(T) = δ − (1000 ΔH/R)(1/T − 1/313.15). Changes are mapped to recorded R2 = bicarbonate and R4 = bicarbonate − carbamate; R1, R3 and R5 remain fixed, and all nine species remain present. δ is bounded to ±1 and ΔH to ±10 kJ/mol.
+
+The MEA-side bounded trust-region least-squares calculation uses exact Engine interaction columns and two-step finite-difference reaction columns. Relative steps are 1e-4 and 1e-5, with h = ρ max(|coordinate|, 1 unit). Near a bound it uses a feasible second-order one-sided difference. Every entry must agree within 1e-3 max(|J_coarse|, |J_fine|) + 1e-8; one retry uses 1e-3 and 1e-4. No entry is removed or zeroed. No covariance is estimated. Each refit is capped at 20 accepted updates and 2400 s; unfinished gradients or stopped fits establish no physical significance.
+
+| run | cost | pressure_cost | bottinger_cost | matin_cost | carbamate_delta_lnK | carbamate_delta_H_kJ_mol | bicarbonate_delta_lnK | bicarbonate_delta_H_kJ_mol | complete_J | callback_updates | stop | wall_s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| p4refit-11 | 43.665318 | 9.5263118 | 5.3255595 | 28.813446 | 0.19556015 | 10 | 0.080761708 | 4.9113805 | 4 | 3 | time limit before completing the next Jacobian | 1965.608 |
+| p4refit-00 | 32.289167 | 8.7360585 | 6.1251824 | 17.427927 | 0.36979351 | 10 | 0.7200194 | -0.87191917 | 4 | 3 | time limit before completing the next Jacobian | 1889.3164 |
+
+| run | carbamate_water | MEAH_water | bicarbonate_water | carbamate_MEAH | MEAH_water_slope_K | active_k_bounds | active_reaction_bounds |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| p4refit-11 | 0.078111137 | -0.35111617 | 0.5 | -0.59629064 | 242.32847 | pair/bicarbonate-anion/water/k_ij | carbamate_delta_H_kJ_mol |
+| p4refit-00 | -0.0024106584 | -0.058131653 | 0.49999989 | -0.85476884 | 154.72637 |  | carbamate_delta_H_kJ_mol |
+
+Each entry below is dimensionless species cost (mean signed weighted residual), on the full 160-target returned point.
+
+| source | species | p4refit-11 | p4refit-00 |
+| --- | --- | --- | --- |
+| Matin | HCO3- | 9.291518 (-0.718210) | 4.613292 (-0.500029) |
+| Matin | MEA | 7.677277 (-0.765632) | 4.105585 (-0.554062) |
+| Matin | MEAH+ | 10.755292 (+0.936942) | 8.172801 (+0.854641) |
+| Matin | MEACOO- | 1.089360 (+0.198288) | 0.536248 (+0.109900) |
+| Bottinger | HCO3- | 1.986335 (+0.364939) | 2.209161 (+0.581858) |
+| Bottinger | MEACOO- | 2.583479 (-0.325475) | 3.206583 (-0.421217) |
+| Bottinger | MEA + MEAH+ | 0.755745 (+0.034160) | 0.709438 (+0.072693) |
+
+Costs at returned points are complete 160-target numerical evaluations; finite-difference perturbations are also retained with their complete source/species splits. Source-correlation shifts and local enthalpy combinations are before EOS standard-state conversion, not measured equilibrium constants or absorption heats. See [p4refit-all-complete-evaluation-costs.csv](p4refit-all-complete-evaluation-costs.csv), [p4refit-all-complete-evaluation-species.csv](runs/tables/p4refit-all-complete-evaluation-species.csv), and [p4refit-finite-difference-agreement.csv](p4refit-finite-difference-agreement.csv).
+
+The final P4 species costs and signed means are retained separately in [p4refit-final-species-costs-and-signed-means.csv](p4refit-final-species-costs-and-signed-means.csv). The nine singular values of every completed scaled augmented Jacobian are in [p4refit-augmented-jacobian-singular-values.csv](p4refit-augmented-jacobian-singular-values.csv); interaction scales are 0.01 for reference coefficients and 10 K for the reciprocal-temperature slope, with reaction scales 1 natural-log unit and 1 kJ/mol. These singular values describe the local numerical sensitivity, not a covariance or physical identifiability result.
+
+P4 uses function, step and gradient tolerances of 1e-8. Its internal deadline is 2380 s from process start, inside the external 2400 s timeout. Before another Jacobian, it reserves its previous measured Jacobian duration plus 70 s. Both runs stopped at this guard. Each accepted four cost-reducing steps, of which three reached the callback after the new Jacobian completed; four complete Jacobians include the starting-point Jacobian. The last accepted point has a complete objective but no new Jacobian and is not declared converged. This count is traced in [p4refit-iteration-interpretation.json](p4refit-iteration-interpretation.json). The inherited helper's exception text names the earlier 2700 s stage budget, but that earlier deadline is overridden for these jobs.
+
+Both returned points place the carbamate enthalpy shift at +10 kJ/mol. SSM+DS also places bicarbonate–water k at +0.5. Original Born's bicarbonate–water k is 1.083e-7 below +0.5, close to the bound but outside the 1e-8 active-bound reporting tolerance. All 32 completed reaction columns passed with all 160 entries; one bicarbonate enthalpy column for SSM+DS required the permitted retry. P4 improves the evaluated warm-start cost by 0.040162871 for SSM+DS and 0.261465597 for Original Born. The unfinished fits do not establish a converged reaction-adjusted ranking.
+
+## Numerical checks and limits
+
+Full-score reduced-set costs must reproduce the native fitted-set costs within 1e-8. Every explicit state evaluation checks requested solve tolerance, raw stationarity ≤1e-10, finite residuals, phase support and topology against the retained baseline. The two previously failed solves are unchanged and remain with the Engine lead. Native stopping criteria establish numerical termination of a local bounded fit; they do not establish a unique global optimum or physical validation. Reaction-gradient quality is finite difference next to exact EOS directions. Active bounds and finite CPU limits constrain interpretation. No adopted fit definition or retained source parameter record is changed.
+
+## Provenance
+
+Owner direction: [MEA #121 continuation](https://github.com/tannerpolley/MEA-Thermodynamics/issues/121#issuecomment-5905866107). Per-job input hashes, native histories, state records, finite-difference columns and exact Jacobians are under `runs/`. Compact JSON/CSV and diagnostic parameter records are beside this notebook. [p5conv-job-times.json](p5conv-job-times.json) records elapsed seconds and execution rules. The existing diagnosis notebook remains unchanged; this separate notebook has not received an independent delivered-result review or promotion. [p5conv-output-hashes.json](p5conv-output-hashes.json) records raw-byte SHA-256 hashes. Input lineage uses the retained helper convention, which hashes decompressed content for gzip packets.

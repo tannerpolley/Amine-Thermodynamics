@@ -1,0 +1,142 @@
+[
+  {
+    "job": "baselines",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 220 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py baselines",
+    "script_sha256": "a501419bba74e7dcc7aec9b9b29f853be71c08f3da9610bbed7e4628f8c49e41",
+    "wall_s": 215.5494026990018,
+    "completion": "failed"
+  },
+  {
+    "job": "baselines",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 220 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py baselines",
+    "script_sha256": "cbb42aea2187aa33c60a81ef5814002832d9bd260a28a82f11268ed397320648",
+    "wall_s": 104.86499971800004,
+    "completion": "complete"
+  },
+  {
+    "job": "p1",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 120 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p1.py",
+    "script_sha256": "1efee3df2510e028b00ec2889a504df27a5e9627dbbd76f8ee3d25a63c9b1388",
+    "wall_s": 1.4448385180003243,
+    "completion": "failed"
+  },
+  {
+    "job": "p1",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 120 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p1.py",
+    "script_sha256": "b521b36a873d71dc5ab1f72198358ae7d211263e1f3d61f4dfc108368e7c89f4",
+    "wall_s": 3.4524342759978026,
+    "completion": "complete"
+  },
+  {
+    "job": "p1b",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 200 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py p1b",
+    "script_sha256": "cbb42aea2187aa33c60a81ef5814002832d9bd260a28a82f11268ed397320648",
+    "wall_s": 114.86877466100123,
+    "completion": "complete"
+  },
+  {
+    "job": "branch-check",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 180 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py branch-check",
+    "script_sha256": "effbb53208d6161cfab87b9545c8e64309ad5e505ddeec8f1e18eb79a0aae4b1",
+    "wall_s": 44.8594019810007,
+    "completion": "complete"
+  },
+  {
+    "job": "p2",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 1450 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p2.py",
+    "script_sha256": "7c626c5240be738746718d6babb8a96e00b108dba69997cc03d8d72da6d4566f",
+    "wall_s": 1278.5736668089994,
+    "completion": "complete"
+  },
+  {
+    "job": "p3-shell-only",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 300 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p3.py shell-only",
+    "script_sha256": "11c52db403c2e9bafb68a447b004010b33017217be060bee5c656fac2ea94c1b",
+    "wall_s": 8.888011075003305,
+    "completion": "failed"
+  },
+  {
+    "job": "p3-best-group",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 300 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p3.py best-group",
+    "script_sha256": "11c52db403c2e9bafb68a447b004010b33017217be060bee5c656fac2ea94c1b",
+    "wall_s": 150.74777332899976,
+    "completion": "complete"
+  },
+  {
+    "job": "p4",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 900 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p4.py",
+    "script_sha256": "3fe35bc96965225942cb6eeb74794ae91f599036a38112552e49fb85a40bd068",
+    "wall_s": 828.5093512400017,
+    "completion": "complete"
+  },
+  {
+    "job": "p5a-11",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 300 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5.py a 11",
+    "script_sha256": "55e7746199b0e114a54e21b17f02c1fdd39d0779b9c2a7013709ce49c9df2f8e",
+    "wall_s": 223.3179868219995,
+    "completion": "complete"
+  },
+  {
+    "job": "p5a-00",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 300 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5.py a 00",
+    "script_sha256": "55e7746199b0e114a54e21b17f02c1fdd39d0779b9c2a7013709ce49c9df2f8e",
+    "wall_s": 187.1418605229992,
+    "completion": "complete"
+  },
+  {
+    "job": "p5b-11",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 300 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5.py b 11",
+    "script_sha256": "55e7746199b0e114a54e21b17f02c1fdd39d0779b9c2a7013709ce49c9df2f8e",
+    "wall_s": 218.45274019299904,
+    "completion": "complete"
+  },
+  {
+    "job": "p5b-00",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 300 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5.py b 00",
+    "script_sha256": "55e7746199b0e114a54e21b17f02c1fdd39d0779b9c2a7013709ce49c9df2f8e",
+    "wall_s": 217.20533542400153,
+    "completion": "complete"
+  },
+  {
+    "job": "render-association",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 30 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/render_association.py",
+    "script_sha256": null,
+    "wall_s": 5.939834585999051,
+    "completion": "complete"
+  },
+  {
+    "job": "summarize-results-first",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 30 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/summarize_results.py",
+    "script_sha256": "a204fab6a29d8a681e1fbd9200024d8c8f8a22545f42983189cd12eace69314e",
+    "wall_s": null,
+    "completion": "failed"
+  },
+  {
+    "job": "render-association",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 30 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/render_association.py",
+    "script_sha256": null,
+    "wall_s": 1.7459289020007418,
+    "completion": "complete"
+  },
+  {
+    "job": "summarize-results-second",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 30 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/summarize_results.py",
+    "script_sha256": "bf470b73fdc139c67ed5e534ab9e7d7cd25f85b15576073d6da77d21f9a59289",
+    "wall_s": null,
+    "completion": "failed"
+  },
+  {
+    "job": "render-association",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 30 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/render_association.py",
+    "script_sha256": null,
+    "wall_s": 1.7907457089968375,
+    "completion": "complete"
+  },
+  {
+    "job": "summarize-results",
+    "command": "flock /tmp/t3-heavy-check.lock timeout 30 nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python -B analyses/mea_parameter_bundle/model-d/born-form-diagnosis/summarize_results.py",
+    "script_sha256": null,
+    "wall_s": 0.3170979759961483,
+    "completion": "complete"
+  }
+]
