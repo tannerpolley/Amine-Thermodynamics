@@ -1,0 +1,552 @@
+{
+  "basis": "CO2 loading is (total elemental carbon - 2 * total MEA) / total MEA. AARD is 100 * mean(abs(calculated / observed - 1)).",
+  "evidence_kind": "Numerical verification and existing-data assessment; not physical validation.",
+  "base_commit": "e80ef4ed10f7af2d13a70776d0883f491aa652a6",
+  "wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+  "root_cause": {
+    "file": "analyses/mea_parameter_bundle/calibration-misfit/probe.py",
+    "old_line": 60,
+    "cause": "Nominal CO2 loading assigned to neutral CO2 without subtracting ionic CO2 carbon.",
+    "canonical_count": 161,
+    "transfer_count": 70,
+    "actual_ionic_co2_seed_mol": 0.0001,
+    "seed_dependence": "Offset equals (carbamate + bicarbonate + carbonate starting amounts) / total MEA; all current templates have the same seed.",
+    "old_offset_range": [
+      9.999999999973919e-05,
+      0.00010000000000015552
+    ],
+    "new_max_abs_loading_error": 4.163336342344337e-16
+  },
+  "check": {
+    "file": "analyses/mea_parameter_bundle/tests/test_carbon_loading.py",
+    "case": "vle_obs_0203",
+    "absolute_tolerance_mol": 1e-12,
+    "rationale": "Floating-point summation and subtraction of two O(1) conserved totals.",
+    "old_failed": true,
+    "fixed_passed": true
+  },
+  "direct_callers": [
+    "probe.CANONICAL -> probe.evaluate -> probe.main --canonical",
+    "composition-transfer/transfer.py:33",
+    "model-d/born-form-diagnosis/p1.py:33",
+    "model-d/born-form-diagnosis/p1-executed.py:33"
+  ],
+  "scope_findings": [
+    "scripts/generate_figure_data.py:356 has a separate nominal-neutral pressure request builder; existing figures are not regenerated here.",
+    "scripts/run_direct_parameter_campaign.py:136 has a separate nominal-neutral pressure request builder; historical campaigns are not rerun here."
+  ],
+  "output_loading_note": "Existing compare/transfer CSV loading columns contain the neutral CO2 starting amount; assessment-p5a-loadfix-carbon-loading.csv and assessment-p5a-loadfix-jou-80C.csv provide measured and conserved loading.",
+  "independent_review": "Not performed by this implementation sub-agent; returned to the parent task.",
+  "records": {
+    "11": {
+      "record_sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+      "old_metrics": {
+        "pressure_gate": {
+          "variant": "D-p5a-11-eval-28181e72",
+          "scope": "40-80 degC (decision 23 rule)",
+          "quantity": "ln(pred/obs)",
+          "n": 104,
+          "mean_ln": -0.1481802722545426,
+          "rms_ln": 0.31948524065266426,
+          "aard_percent": 20.574954591061097,
+          "observed": "",
+          "predicted": "",
+          "evaluated": "",
+          "tolerance_not_met": "",
+          "balance_errors": "",
+          "max_abs_stationarity": "",
+          "failures": "",
+          "parameter_overrides": "{}",
+          "canonical evaluated": 161,
+          "canonical total": 161,
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "parameter_sha256": "42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952",
+          "script_sha256": "29f3847d4486b5353d002e62c09f7737cc30c88f1205eac20175fd3155ae4376"
+        },
+        "canonical_80C_pressure": {
+          "variant": "D-p5a-11-eval-28181e72",
+          "scope": "T=80C",
+          "quantity": "ln(pred/obs)",
+          "n": 21,
+          "mean_ln": -0.19576196815209013,
+          "rms_ln": 0.29693746176275204,
+          "aard_percent": 20.282207842428917,
+          "observed": "",
+          "predicted": "",
+          "evaluated": "",
+          "tolerance_not_met": "",
+          "balance_errors": "",
+          "max_abs_stationarity": "",
+          "failures": "",
+          "parameter_overrides": "{}",
+          "canonical evaluated": 161,
+          "canonical total": 161,
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "parameter_sha256": "42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952",
+          "script_sha256": "29f3847d4486b5353d002e62c09f7737cc30c88f1205eac20175fd3155ae4376"
+        },
+        "jou_80C_canonical": {
+          "n": 11.0,
+          "mean_ln": -0.014168509279471437,
+          "rms_ln": 0.11791956675799929,
+          "aard_percent": 9.421004915342138
+        },
+        "all_161_canonical": {
+          "variant": "D-p5a-11-eval-28181e72",
+          "scope": "all six sources",
+          "quantity": "ln(pred/obs)",
+          "n": "161",
+          "mean_ln": "-0.14353898268984974",
+          "rms_ln": "0.33137456249745334",
+          "aard_percent": "22.713540151461327",
+          "observed": "",
+          "predicted": "",
+          "evaluated": "",
+          "tolerance_not_met": "",
+          "balance_errors": "",
+          "max_abs_stationarity": "",
+          "failures": "",
+          "parameter_overrides": "{}",
+          "canonical evaluated": "161",
+          "canonical total": "161",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "parameter_sha256": "42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952",
+          "script_sha256": "29f3847d4486b5353d002e62c09f7737cc30c88f1205eac20175fd3155ae4376"
+        }
+      },
+      "new_metrics": {
+        "pressure_gate": {
+          "n": 104.0,
+          "mean_ln": -0.1503536805590202,
+          "rms_ln": 0.3206890920633292,
+          "aard_percent": 20.581177173525735
+        },
+        "canonical_80C_pressure": {
+          "n": 21.0,
+          "mean_ln": -0.19864680483635877,
+          "rms_ln": 0.2990366067827715,
+          "aard_percent": 20.27025699294711
+        },
+        "jou_80C_canonical": {
+          "n": 11.0,
+          "mean_ln": -0.01712146770076059,
+          "rms_ln": 0.11743513572713135,
+          "aard_percent": 9.239805989854668
+        },
+        "all_161_canonical": {
+          "n": 161.0,
+          "mean_ln": -0.1459915786078302,
+          "rms_ln": 0.33174934475279166,
+          "aard_percent": 22.654097080462225
+        }
+      },
+      "old_transfer": [
+        {
+          "record": "D-p5a-11-eval-28181e72",
+          "mea_mass_fraction": "0.15",
+          "n_solved": 33,
+          "n_rows": 33,
+          "aard_percent": 76.21181069858534,
+          "bias_mean_ln": 0.45442179411841926,
+          "rms_ln": 0.605280085356827,
+          "parameter_sha256": "42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "rows_sha256": "eaaaa6f9f138d1ada838b166f9e5866ea110ddf2141862cc304dfd4fa433cea1",
+          "script_sha256": "a30b10eaf96f0a8d5a3758727f7a1029df1f4e9be861a841941d8a86aa3bb612",
+          "probe_sha256": "d3ab435a784a78f83b4de2c3a09f0a0c0d01a3aff5d921de48245eb292333d65"
+        },
+        {
+          "record": "D-p5a-11-eval-28181e72",
+          "mea_mass_fraction": "0.45",
+          "n_solved": 37,
+          "n_rows": 37,
+          "aard_percent": 46.2354204437103,
+          "bias_mean_ln": -0.5170897362146709,
+          "rms_ln": 0.822682283236493,
+          "parameter_sha256": "42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "rows_sha256": "eaaaa6f9f138d1ada838b166f9e5866ea110ddf2141862cc304dfd4fa433cea1",
+          "script_sha256": "a30b10eaf96f0a8d5a3758727f7a1029df1f4e9be861a841941d8a86aa3bb612",
+          "probe_sha256": "d3ab435a784a78f83b4de2c3a09f0a0c0d01a3aff5d921de48245eb292333d65"
+        }
+      ],
+      "new_transfer": [
+        {
+          "record": "D-p5a-11-loadfix",
+          "mea_mass_fraction": "0.15",
+          "n_solved": "33",
+          "n_rows": "33",
+          "aard_percent": "75.94638542005015",
+          "bias_mean_ln": "0.4525779086666389",
+          "rms_ln": "0.6040080634970235",
+          "parameter_sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "rows_sha256": "eaaaa6f9f138d1ada838b166f9e5866ea110ddf2141862cc304dfd4fa433cea1",
+          "script_sha256": "a30b10eaf96f0a8d5a3758727f7a1029df1f4e9be861a841941d8a86aa3bb612",
+          "probe_sha256": "30a9f4d7867c227a3d36147186f873c711471eacaafdb3dc287185071f330544"
+        },
+        {
+          "record": "D-p5a-11-loadfix",
+          "mea_mass_fraction": "0.45",
+          "n_solved": "37",
+          "n_rows": "37",
+          "aard_percent": "46.14981720891385",
+          "bias_mean_ln": "-0.5194668514656497",
+          "rms_ln": "0.8238103128555825",
+          "parameter_sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "rows_sha256": "eaaaa6f9f138d1ada838b166f9e5866ea110ddf2141862cc304dfd4fa433cea1",
+          "script_sha256": "a30b10eaf96f0a8d5a3758727f7a1029df1f4e9be861a841941d8a86aa3bb612",
+          "probe_sha256": "30a9f4d7867c227a3d36147186f873c711471eacaafdb3dc287185071f330544"
+        }
+      ],
+      "old_checks": {
+        "canonical_checks": {
+          "rows": 161,
+          "evaluated": 161,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 1.7053025658242404e-13
+        },
+        "packet_checks": {
+          "rows": 123,
+          "evaluated": 123,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 3.979039320256561e-13
+        },
+        "composition_checks": {
+          "rows": 70,
+          "evaluated": 70,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 1.7053025658242404e-13
+        }
+      },
+      "new_checks": {
+        "canonical_checks": {
+          "rows": 161,
+          "evaluated": 161,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 1.7053025658242404e-13
+        },
+        "packet_checks": {
+          "rows": 123,
+          "evaluated": 123,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 3.979039320256561e-13
+        },
+        "composition_checks": {
+          "rows": 70,
+          "evaluated": 70,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 1.2789769243681803e-13
+        }
+      },
+      "pressure_gate_met": true,
+      "packet_scores_unchanged": {
+        "numeric_fields_checked": 55,
+        "maximum_absolute_difference": 0.0
+      },
+      "matched_packet_canonical": {
+        "n": 78,
+        "max_relative_pressure_difference": 1.9317880628477724e-13,
+        "relative_tolerance": 1e-08,
+        "agrees": true
+      },
+      "packet_80C_pressure_aard_percent": 9.239805989856633,
+      "record_path": "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json"
+    },
+    "00": {
+      "record_sha256": "ebb5f8f9df2aa4ff9bbaec72899dae33fba2233823bb7e389bef92b3d2981900",
+      "old_metrics": {
+        "pressure_gate": {
+          "variant": "D-p5a-00-eval-28181e72",
+          "scope": "40-80 degC (decision 23 rule)",
+          "quantity": "ln(pred/obs)",
+          "n": 104,
+          "mean_ln": -0.09098037125709979,
+          "rms_ln": 0.2879200619070662,
+          "aard_percent": 20.77638913081134,
+          "observed": "",
+          "predicted": "",
+          "evaluated": "",
+          "tolerance_not_met": "",
+          "balance_errors": "",
+          "max_abs_stationarity": "",
+          "failures": "",
+          "parameter_overrides": "{}",
+          "canonical evaluated": 161,
+          "canonical total": 161,
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "parameter_sha256": "ebb5f8f9df2aa4ff9bbaec72899dae33fba2233823bb7e389bef92b3d2981900",
+          "script_sha256": "29f3847d4486b5353d002e62c09f7737cc30c88f1205eac20175fd3155ae4376"
+        },
+        "canonical_80C_pressure": {
+          "variant": "D-p5a-00-eval-28181e72",
+          "scope": "T=80C",
+          "quantity": "ln(pred/obs)",
+          "n": 21,
+          "mean_ln": -0.19746856239821495,
+          "rms_ln": 0.302312511465149,
+          "aard_percent": 20.83094282437791,
+          "observed": "",
+          "predicted": "",
+          "evaluated": "",
+          "tolerance_not_met": "",
+          "balance_errors": "",
+          "max_abs_stationarity": "",
+          "failures": "",
+          "parameter_overrides": "{}",
+          "canonical evaluated": 161,
+          "canonical total": 161,
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "parameter_sha256": "ebb5f8f9df2aa4ff9bbaec72899dae33fba2233823bb7e389bef92b3d2981900",
+          "script_sha256": "29f3847d4486b5353d002e62c09f7737cc30c88f1205eac20175fd3155ae4376"
+        },
+        "jou_80C_canonical": {
+          "n": 11.0,
+          "mean_ln": -0.027140868899482237,
+          "rms_ln": 0.15775603310471462,
+          "aard_percent": 11.208117297560873
+        },
+        "all_161_canonical": {
+          "variant": "D-p5a-00-eval-28181e72",
+          "scope": "all six sources",
+          "quantity": "ln(pred/obs)",
+          "n": "161",
+          "mean_ln": "-0.10183407699736982",
+          "rms_ln": "0.30871935249732047",
+          "aard_percent": "22.853097000908058",
+          "observed": "",
+          "predicted": "",
+          "evaluated": "",
+          "tolerance_not_met": "",
+          "balance_errors": "",
+          "max_abs_stationarity": "",
+          "failures": "",
+          "parameter_overrides": "{}",
+          "canonical evaluated": "161",
+          "canonical total": "161",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "parameter_sha256": "ebb5f8f9df2aa4ff9bbaec72899dae33fba2233823bb7e389bef92b3d2981900",
+          "script_sha256": "29f3847d4486b5353d002e62c09f7737cc30c88f1205eac20175fd3155ae4376"
+        }
+      },
+      "new_metrics": {
+        "pressure_gate": {
+          "n": 104.0,
+          "mean_ln": -0.09316438186326764,
+          "rms_ln": 0.28881074709890386,
+          "aard_percent": 20.778396628159804
+        },
+        "canonical_80C_pressure": {
+          "n": 21.0,
+          "mean_ln": -0.20035219129398202,
+          "rms_ln": 0.3045237593056669,
+          "aard_percent": 20.91449195522668
+        },
+        "jou_80C_canonical": {
+          "n": 11.0,
+          "mean_ln": -0.030070834770762278,
+          "rms_ln": 0.15773395189821796,
+          "aard_percent": 11.20881443964433
+        },
+        "all_161_canonical": {
+          "n": 161.0,
+          "mean_ln": -0.10427566075301091,
+          "rms_ln": 0.30885771892871516,
+          "aard_percent": 22.7960810396236
+        }
+      },
+      "old_transfer": [
+        {
+          "record": "D-p5a-00-eval-28181e72",
+          "mea_mass_fraction": "0.15",
+          "n_solved": 33,
+          "n_rows": 33,
+          "aard_percent": 71.76916909736609,
+          "bias_mean_ln": 0.4424973113823656,
+          "rms_ln": 0.5760091170860161,
+          "parameter_sha256": "ebb5f8f9df2aa4ff9bbaec72899dae33fba2233823bb7e389bef92b3d2981900",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "rows_sha256": "eaaaa6f9f138d1ada838b166f9e5866ea110ddf2141862cc304dfd4fa433cea1",
+          "script_sha256": "a30b10eaf96f0a8d5a3758727f7a1029df1f4e9be861a841941d8a86aa3bb612",
+          "probe_sha256": "d3ab435a784a78f83b4de2c3a09f0a0c0d01a3aff5d921de48245eb292333d65"
+        },
+        {
+          "record": "D-p5a-00-eval-28181e72",
+          "mea_mass_fraction": "0.45",
+          "n_solved": 37,
+          "n_rows": 37,
+          "aard_percent": 47.12476565729732,
+          "bias_mean_ln": -0.36719804796848426,
+          "rms_ln": 0.7251259857464599,
+          "parameter_sha256": "ebb5f8f9df2aa4ff9bbaec72899dae33fba2233823bb7e389bef92b3d2981900",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "rows_sha256": "eaaaa6f9f138d1ada838b166f9e5866ea110ddf2141862cc304dfd4fa433cea1",
+          "script_sha256": "a30b10eaf96f0a8d5a3758727f7a1029df1f4e9be861a841941d8a86aa3bb612",
+          "probe_sha256": "d3ab435a784a78f83b4de2c3a09f0a0c0d01a3aff5d921de48245eb292333d65"
+        }
+      ],
+      "new_transfer": [
+        {
+          "record": "D-p5a-00-loadfix",
+          "mea_mass_fraction": "0.15",
+          "n_solved": "33",
+          "n_rows": "33",
+          "aard_percent": "71.49561737466182",
+          "bias_mean_ln": "0.44063094352878096",
+          "rms_ln": "0.574694092813037",
+          "parameter_sha256": "ebb5f8f9df2aa4ff9bbaec72899dae33fba2233823bb7e389bef92b3d2981900",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "rows_sha256": "eaaaa6f9f138d1ada838b166f9e5866ea110ddf2141862cc304dfd4fa433cea1",
+          "script_sha256": "a30b10eaf96f0a8d5a3758727f7a1029df1f4e9be861a841941d8a86aa3bb612",
+          "probe_sha256": "30a9f4d7867c227a3d36147186f873c711471eacaafdb3dc287185071f330544"
+        },
+        {
+          "record": "D-p5a-00-loadfix",
+          "mea_mass_fraction": "0.45",
+          "n_solved": "37",
+          "n_rows": "37",
+          "aard_percent": "46.99102065966591",
+          "bias_mean_ln": "-0.36958258265783317",
+          "rms_ln": "0.7258915829931001",
+          "parameter_sha256": "ebb5f8f9df2aa4ff9bbaec72899dae33fba2233823bb7e389bef92b3d2981900",
+          "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+          "rows_sha256": "eaaaa6f9f138d1ada838b166f9e5866ea110ddf2141862cc304dfd4fa433cea1",
+          "script_sha256": "a30b10eaf96f0a8d5a3758727f7a1029df1f4e9be861a841941d8a86aa3bb612",
+          "probe_sha256": "30a9f4d7867c227a3d36147186f873c711471eacaafdb3dc287185071f330544"
+        }
+      ],
+      "old_checks": {
+        "canonical_checks": {
+          "rows": 161,
+          "evaluated": 161,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 1.7053025658242404e-13
+        },
+        "packet_checks": {
+          "rows": 123,
+          "evaluated": 123,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 3.410605131648481e-13
+        },
+        "composition_checks": {
+          "rows": 70,
+          "evaluated": 70,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 1.4210854715202004e-13
+        }
+      },
+      "new_checks": {
+        "canonical_checks": {
+          "rows": 161,
+          "evaluated": 161,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 1.1368683772161603e-13
+        },
+        "packet_checks": {
+          "rows": 123,
+          "evaluated": 123,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 3.410605131648481e-13
+        },
+        "composition_checks": {
+          "rows": 70,
+          "evaluated": 70,
+          "failures": [],
+          "tolerance_not_met": 0,
+          "balance_errors": 0,
+          "max_abs_stationarity": 1.1368683772161603e-13
+        }
+      },
+      "pressure_gate_met": true,
+      "packet_scores_unchanged": {
+        "numeric_fields_checked": 55,
+        "maximum_absolute_difference": 0.0
+      },
+      "matched_packet_canonical": {
+        "n": 78,
+        "max_relative_pressure_difference": 2.5490720645393594e-13,
+        "relative_tolerance": 1e-08,
+        "agrees": true
+      },
+      "packet_80C_pressure_aard_percent": 11.208814439644033,
+      "record_path": "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json"
+    }
+  },
+  "file_sha256": {
+    "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-loading-offset/analyses/mea_parameter_bundle/calibration-misfit/probe.py": "30a9f4d7867c227a3d36147186f873c711471eacaafdb3dc287185071f330544",
+    "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-loading-offset/analyses/mea_parameter_bundle/calibration-misfit/compare.py": "277c7d5b5a1ac93ecb81ea4fcfa6e3f99c08f700b9df190ce68b3275a790201f",
+    "analyses/mea_parameter_bundle/composition-transfer/transfer.py": "a30b10eaf96f0a8d5a3758727f7a1029df1f4e9be861a841941d8a86aa3bb612",
+    "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-loading-offset/analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+    "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-loading-offset/analyses/mea_parameter_bundle/data/input/state-packet.json.gz": "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448",
+    "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-loading-offset/data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "a4f9e3c0176894cad78c5960198c13707d36a167e48abf3d5e7a2106a55d5af1",
+    "analyses/mea_parameter_bundle/tests/test_carbon_loading.py": "626a9c46eae601395218317a19c9b5362e722262cfd23d099de109157c34e0b6",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-canonical-log.txt": "96bdc67dc63a6e201307b66152fcc2ebf86b4c94f60ece39ca8062466c869e07",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-canonical-time.txt": "2772bf878afbd0a4c62164bd08a92d0f0b1ca8f7c45f62f8bb789ac16620e9de",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-canonical.jsonl": "f1f873ac19716ffa00f078da365ca0f6f58ba5fcea0a61b376385d8b101f7cbb",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-comparison-scores.csv": "70c609d9c31e956b8085d5e1f0d9e2ff594f8962e2ab90a031d98fee781b0092",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-comparison-states.csv": "6e0775610b644907029d0f232e4f81a3217cdd4fe7a05b609c0a370ebcaf4b4d",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-old-jou.jsonl": "8f0000fc78093deb4e7584f882bda66b0be4393ef4e281042fd69d47366667e6",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-packet-log.txt": "740feaaf101ce7e5745cb279729affbe4da882362fdacf253332fba51b91d5fb",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-packet-time.txt": "def0222ef575321ab8af7e3d2b2dc70c1181de46c5280bffa47454307fe3b5cd",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-packet.jsonl": "da99d25ee2973f872683dfc1997027d314d0268980fdabc860e2416c79133929",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-scoring-log.txt": "ba7d050a1d68b523d88563e9ef93313f62c28aefd31398ce466700917d597d2c",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-scoring-time.txt": "f37d10844cc93aae2ef8efa54b52c12aec3da222f0c667e89243ad4ef71089fb",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-transfer-log.txt": "c578855a63defbac910dacd7965f36d8691ef710caa58703b0d8eae74131e886",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-transfer-scores.csv": "801ce1656d0efab6d7214a98dcce780f1c17d1ec84024af0c0ca4cc6a15dd26b",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-transfer-states.csv": "22f2900052f48cd6d801b1b2e139e490dc69bfc408de4b6780489b1b136c2c3c",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-transfer-time.txt": "9b72841a19e620452233d27e5106b4e21459d8d0a2637db7cb1d1cc18733838f",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-canonical-log.txt": "79670fa380b66836081727729df7846610060cc8bee0009c3045d5f4ab2b3a4b",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-canonical-time.txt": "7b72162369adbcbc205707decb746c8e9a00c7ac79d13a52961627e02e817f0e",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-canonical.jsonl": "675cc1794366feeecf7b325464e0c9815407bc9e6ca642a5a0753b929bd5bbaf",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-comparison-scores.csv": "6b4f0537a915c05ee68d2ce07a733fe01be8b33cfe8d67220ebcf65a7c7a6596",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-comparison-states.csv": "5bd4b79a3b3247a3af717cfca8c82241b29b3c310c0cbfa909b1be6a482b4722",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-old-jou.jsonl": "ede575aa0232020b004736a163fe49863308412c2b75ab45ca1cd3d67fbca665",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-packet-log.txt": "6d1017d685833deb63867496f12fdf9c89209b55b28f7bd3220a89a87cbb80de",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-packet-time.txt": "7d3dfa9a0117ade117ec08ecfcd83f1b3619a4f07dca6e9dc0859a6f03ca4b5e",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-packet.jsonl": "511593d95409a5da3359e915ba162cc8f2115b92cdae2649ceb1cbd60815034e",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-scoring-log.txt": "2b4dceb4f8e03c91c37720af3ebacd9bce7dbc0078c408ce3ea109257e702acf",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-scoring-time.txt": "6fb09720d184b47cdbde6588b4f1f663a2d652e2a775d45d4f9a028174d9c939",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-transfer-log.txt": "ac4b3df66a1e049ca9a3f435de4230a4b61c0b01b864da96dceeeca24555eb63",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-transfer-scores.csv": "4a02f93066348cac54c46a969d7274dcde0143bdf249f086dd1ae74c50236102",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-transfer-states.csv": "b3d2d449b6834e9eb480158281f5986118339c037c7abd72232ce8d23660b4da",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-transfer-time.txt": "a9867642ca5d76cef24266a2de5c96ec378481342a998940878a92ae33f00059",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-loadfix-carbon-loading.csv": "3df460fc46753eea506703093c804b4726635dd89315cba1efb1789aef79d219",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-loadfix-commands.json": "bb5202ec6468b4915fa31ec0e8c4958bb0ea4b151e1320b2a08da7b1c2ccd2c2",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-loadfix-comparison.csv": "bfb8d1ede7e147c4ba9df43eeb52a40e08fa87c7356630894fae24b8f2262581",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-loadfix-jou-80C.csv": "ffabd264ebd3dc9b211fce5ca5d54b8153b85dfc27fdb6c67f040ca7e5548598",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-11-summary.json": "9a54c9dfaf1fb7b6388d68b86ab1b3e2eb62cae7b9526d4410ac8f8635b43abb",
+    "analyses/mea_parameter_bundle/model-d/assessment-p5a-00-summary.json": "6c90423b4ee755efe6d441fe24bb845cde8ee5be0350f70a9c8e4d8a610d2252",
+    "analyses/mea_parameter_bundle/notebook.qmd": "05a05738a174f3b096cc5df801e66ecf93f64de7530dc88325072660cfa37baf",
+    "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json": "ebb5f8f9df2aa4ff9bbaec72899dae33fba2233823bb7e389bef92b3d2981900"
+  },
+  "adopted_candidate_numerical_identity": {
+    "candidate_sha256": "42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952",
+    "parameter_values_equal": true,
+    "reaction_values_equal": true,
+    "model_families_equal": true
+  },
+  "hash_basis": "state-packet.json.gz is hashed after gzip decompression, following shared_evaluation.sha256; other listed files are hashed as retained bytes."
+}
