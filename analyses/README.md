@@ -6,8 +6,48 @@ This directory contains source-controlled scientific analysis, validation, and f
 
 The confirmed decisions for all 11 top-level analyses and their nested work
 are recorded in [scientific context](../docs/scientific/CONTEXT.md#local-snakemake-workflow-adoption).
-Workflow implementation remains with the MEA owning agent; no Snakemake
-workflows have been installed by this setup migration.
+Ten analysis-local presentation workflows are installed by
+[issue #133](https://github.com/tannerpolley/MEA-Thermodynamics/issues/133).
+The `mea_parameter_bundle/` workflow remains held until its scientific results
+are reconciled; all eleven adoption decisions remain in force.
+
+From an installed analysis directory, run:
+
+```bash
+PATH="$HOME/.cache/cse-quarto-demo/.venv/bin:$PATH" snakemake --cores 1 --dry-run present
+PATH="$HOME/.cache/cse-quarto-demo/.venv/bin:$PATH" snakemake --cores 1 present
+```
+
+The dedicated presentation interpreter supplies Snakemake 9.27.0. Reproduce
+that approved dependency with `uv pip install --python
+~/.cache/cse-quarto-demo/.venv/bin/python 'snakemake==9.27.0'`. Renderers use
+`~/.local/bin/uv run --no-sync` in the project environment, preserving its installed Engine
+and dependency lock. Each workflow plans one `present` job, verifies retained
+inputs before rendering, and checks them again afterward. It has no numerical
+calculation entry. Root preparation and the existing preview use these same
+local workflows. The installed uv executable is addressed directly because the
+preview service's PATH contains the presentation interpreter and system tools.
+
+Each `retained-results.sha256` selects the existing input set from base commit
+`2a01cdc4b4d5a62eea2fa2e1556c40128c548a9d`; existing producing identities and
+source records remain authoritative. The matched species comparison also
+checks its existing source and output hash inventories before its renderers
+rewrite them. Historical eNRTL and film create small Markdown includes from
+their retained JSON. Missing or modified inputs stop presentation; recover the
+identified retained version rather than rewriting hashes or running a retired
+generator. This file checking establishes presentation integrity, not a new
+calculation or physical validation.
+
+[Issue #90](https://github.com/tannerpolley/MEA-Thermodynamics/issues/90) still
+owns the required source-data calculation, coherent result delivery, notebook
+refresh and preview experiments. Presentation installation does not complete
+its calculation, unchanged-run or dependency-rebuild requirements.
+
+From the repository root, check refusal and preservation in a disposable copy:
+
+```bash
+PATH="$HOME/.cache/cse-quarto-demo/.venv/bin:$PATH" python3 tests/check_presentation_retained_inputs.py
+```
 
 ## Root Quarto analysis website
 

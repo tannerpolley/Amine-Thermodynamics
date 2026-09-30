@@ -12,7 +12,6 @@ if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 from MEA.common.config import JOU_TEMPERATURES_C
-from MEA.common.analysis_io import repo_relative_path, write_json_file
 from MEA.common.plot_style import (
     EPCSAFT_NEUTRAL_LINESTYLE,
     JOU_DATA_MARKER,
@@ -71,14 +70,6 @@ def main() -> int:
         description=description,
         data_path=curves_path,
     )
-    summary_json = {
-        "status": "historical_render_only",
-        "metrics": repo_relative_path(metrics_path),
-        "summary": repo_relative_path(summary_path),
-        "curves": repo_relative_path(curves_path),
-        "plot": repo_relative_path(png),
-    }
-    write_json_file(OUT_DIR / "epcsaft_neutral_jou_parity_summary.json", summary_json)
     print(f"Neutral ePC-SAFT pressure plot: {png}")
     return 0
 
