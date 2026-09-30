@@ -1,0 +1,34 @@
+	Command being timed: "uv run --no-sync python -c from pathlib import Path
+import sys
+print('NaHCO3: primary lock acquired; indicative frozen 60-row comparison per Born form', flush=True)
+sys.path.insert(0, str(Path('analyses/mea_parameter_bundle/model-d').resolve()))
+import nahco3
+nahco3.b.HERE = Path('analyses/mea_parameter_bundle/model-d/nahco3-decision23-eval-28181e72')
+nahco3.b.HERE.mkdir()
+nahco3.main([
+    'D-1-1-fit-f66d972c-eval-28181e72=analyses/mea_parameter_bundle/model-d/1-1-S1-40-80C-fit-f66d972c-parameters.json',
+    'D-0-0-fit-28181e72-eval-28181e72=analyses/mea_parameter_bundle/model-d/0-0-S1-40-80C-fit-28181e72-parameters.json',
+])
+"
+	User time (seconds): 0.88
+	System time (seconds): 0.04
+	Percent of CPU this job got: 98%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.94
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 55460
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 11211
+	Voluntary context switches: 67
+	Involuntary context switches: 34
+	Swaps: 0
+	File system inputs: 40
+	File system outputs: 136
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
