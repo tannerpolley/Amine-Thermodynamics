@@ -8,12 +8,12 @@ The modeled species are CO₂, MEA, H₂O, MEAH⁺, MEACOO⁻, HCO₃⁻, CO₃�
 
 ## Directory map
 
-| Path | Contents | Regression status |
+| Path | Contents | Parameter regression status |
 |---|---|---|
 | `observations/vapor_liquid_equilibrium/` | Source tables, the 327-row canonical VLE ledger, and the 161-row active view | Governed by the admission and split manifests |
 | `observations/liquid_speciation/` | Source-resolved and canonical liquid-speciation evidence | Governed by measurement role and target membership |
-| `observations/density_viscosity/` | Direct aqueous-MEA density and viscosity evidence | Qualification evidence; target use is manifest-governed |
-| `observations/dielectric/` | Dielectric schema and documented evidence gap | No loaded-solution static dataset is admitted |
+| `observations/density_viscosity/` | Direct aqueous-MEA density and viscosity evidence | Qualification evidence; target use is governed by the admission files |
+| `observations/dielectric/` | Dielectric fields and documented evidence gap | No loaded-solution static dataset is admitted |
 | `observations/ionic_activity/` | Direct target-ion activity evidence gap | No MEAH⁺/MEACOO⁻ activity dataset is admitted |
 | `observations/ph/` | Equilibrium pH evidence gap | No source-complete loaded-MEA pH matrix is admitted |
 | `observations/ionic_analog_volumetrics/` | Ethanolammonium carboxylate density and derived excess-volume evidence | Analog evidence only; not direct MEAH⁺/MEACOO⁻ measurement |
@@ -26,7 +26,7 @@ The modeled species are CO₂, MEA, H₂O, MEAH⁺, MEACOO⁻, HCO₃⁻, CO₃�
 
 The 2026-09-30 discovery pass is retained in `manifests/source_status_manifest.csv`;
 queries and source-reading routes are recorded in `manifests/source_search_log.csv`.
-The source manifest owns publication identity, concentration and measurement basis,
+`manifests/source_status_manifest.csv` owns publication identity, concentration and measurement basis,
 temperature coverage, observation counts, access, extraction status and source caveats.
 The file inventory continues to own file hashes and row counts.
 
@@ -55,7 +55,7 @@ items were left unchanged. The proposed tag is `mea-30wt-data-2026-09`.
 
 Location in `observations/` does not by itself make a row a regression target. Measurement eligibility remains governed by `pco2_metrology_manifest.csv`, `speciation_target_membership.csv`, `vle_row_disposition.csv`, and the related source/provenance contracts.
 
-`grouped_split_manifest.csv` preserves the immutable 147-training/220-reserved Gate-0 history. It is not the selection policy for the new predictive reactive-VLE campaign. The current mixed reactive-observation planning contract is `reactive_vle_cross_validation.csv`. The pressure-first analysis freezes all 121 pCO₂ candidates into a diagnostic-only packet with whole-campaign training, model-selection, reserved, and domain-challenge roles. Its provisional log scales are transparent diagnostic weights, not source uncertainties, and do not admit rows or parameters for promotion. The 198 speciation candidates remain blocked on their same-state pressure and residual contracts. Neutral pure, binary, volumetric, dielectric, and activity families retain their own admission gates and require stage-specific partitions when their source packages close. Cross-validation results and all-data calibration residuals must be reported separately.
+`grouped_split_manifest.csv` preserves the immutable 147-training/220-reserved Gate-0 history. It is not the selection policy for the new predictive reactive-VLE campaign. The current mixed reactive-observation planning file is `reactive_vle_cross_validation.csv`. The pressure-first analysis freezes all 121 pCO₂ candidates into a diagnostic-only packet with whole-campaign training, model-selection, reserved, and domain-challenge roles. Its provisional log scales are transparent diagnostic weights, not source uncertainties, and do not admit rows or parameters for promotion. The 198 speciation candidates remain blocked on their same-state pressure and residual requirements. Neutral pure, binary, volumetric, dielectric, and activity families retain their own admission gates and require stage-specific partitions when their source packages close. Cross-validation results and all-data calibration residuals must be reported separately.
 
 `reactive_vle_model_configurations.json` defines the factorized polar, association, and electrostatic comparisons. `reactive_vle_parameter_stages.json` defines the fit order and fail-closed upstream gates. These are planning and data contracts, not evidence that reactive fitting is currently executable.
 
