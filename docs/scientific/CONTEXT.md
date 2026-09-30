@@ -1,3 +1,157 @@
+# Scientific context
+
+repository role: analysis
+
+## Agent role
+
+agent role: chemical engineer specializing in electrolyte thermodynamics and reactive CO2 absorption in aqueous amines
+
+## Question and intended use
+
+State the scientific question, intended decision or use, and the domain in which conclusions may apply.
+
+## Owners
+
+Name the accountable owners for the scientific question, source data, model,
+analysis, and writing.
+
+## Glossary
+
+Every project term has a meaning and a source. Mark a missing source as
+`sourceless` for later review; do not invent a source during Setup.
+
+| Term | Meaning | Source | Scope |
+|---|---|---|---|
+
+## Avoid
+
+Use one row per confirmed repository-specific preference. Scopes are
+repository-relative POSIX globs; separate multiple scopes or exceptions with
+semicolons. Keep personal preferences in `~/.config/cse/config.toml`.
+
+| Avoid | Prefer | Meaning | Scope | Exceptions | Evidence |
+|---|---|---|---|---|---|
+
+Leave the table without data rows when the repository has no confirmed scoped
+terminology rules; do not invent a preference during Setup.
+
+## Scientific map
+
+- Formulation: `docs/scientific/formulation.md` when enabled
+- Methods: `docs/scientific/methods.md` when enabled
+- Verification, validation, and uncertainty: `docs/scientific/evidence.md` when enabled
+- Scientific decisions: `docs/scientific/decisions/` when enabled
+- Analyses and notebooks: root `analyses/<short-id>/`
+- Manuscript sources: `docs/scientific/latex/` when writing is enabled
+- Bibliography: `docs/scientific/latex/references.bib` when writing is enabled
+- Zotero Companion: record the configured capability and project collection,
+  or state that no Companion authority is configured
+
+## Source authority
+
+Name the source hierarchy and exact location of project-approved equations, parameters, data, reference cases, and tolerances.
+
+## Source/data adoption
+
+source/data adoption: zotero
+
+Confirmed on 2026-09-29 for [issue #130](https://github.com/tannerpolley/MEA-Thermodynamics/issues/130):
+Zotero Companion owns paper briefs and the project reading list. The ignored
+`literature/` folder retains full-paper reading copies and their source hashes.
+Project scientific syntheses, datasets and analysis results remain with their
+existing repository owners.
+
+## Local Snakemake workflow adoption
+
+The owner chose Snakemake for all 11 populated top-level analyses on 2026-09-29 in
+[issue #131](https://github.com/tannerpolley/MEA-Thermodynamics/issues/131).
+This records adoption; Snakemake workflows have not yet been installed here.
+
+| Analysis | Owner decision |
+|---|---|
+| `analyses/enrtl_historical_evidence/` | Adopt |
+| `analyses/enrtl_six_species_ideal_comparison/` | Adopt |
+| `analyses/film_chemistry_work_package_a/` | Adopt |
+| `analyses/historical_fixed_parameter_epcsaft_evaluation/` | Adopt |
+| `analyses/ideal_reaction_equilibrium/` | Adopt |
+| `analyses/mea_parameter_bundle/` | Adopt |
+| `analyses/neutral_pcsaft_pressure_reference/` | Adopt |
+| `analyses/paper_validation/` | Adopt |
+| `analyses/reactive_epcsaft_parameter_evidence/` | Adopt |
+| `analyses/six_species_solubility_reference/` | Adopt |
+| `analyses/speciation_evidence_harmonization/` | Adopt |
+
+Implement each workflow around its existing scientific scope and retained
+inputs. Historical records remain historical, and deferred calculations remain
+deferred. Follow the installed CSE Snakemake reference: `calculate` runs only
+the authorized study; `present` reads verified retained results and rebuilds
+presentation without running a model. Adoption does not authorize a numerical
+campaign, parameter promotion, or use of an unqualified Engine wheel.
+
+The top-level choices apply to their nested analyses and report pages. They replace the earlier blanket deferral.
+
+## Claim boundaries
+
+State supported uses, excluded phenomena, validity limits, and unresolved scientific questions.
+
+## Retained source records
+
+### `docs/scientific/CONTEXT.md`
+
+# MEA thermodynamics domain language
+
+This glossary fixes the terms used when planning and evaluating the MEA–H₂O–CO₂ model. Detailed equations, data contracts, implementation plans, and project status belong in their owner documents rather than here.
+
+## Predictive reactive VLE
+
+A coupled equilibrium calculation in which liquid reaction/speciation and liquid–vapor phase equilibrium are solved together. Neutral CO₂, H₂O, and MEA may enter the vapor phase; charged species remain liquid-only. A predictive claim requires evaluation on campaign-blocked data not used to select the model or parameters.
+
+## Homogeneous reactive tracer
+
+A fixed-temperature, fixed-pressure, single-liquid-phase equilibrium calculation used to verify reaction, activity, source-reference, derivative, and numerical contracts. It is an intermediate diagnostic and is not reactive VLE evidence.
+
+## Reactive bubble state
+
+A coupled reacting-liquid and vapor equilibrium state at prescribed temperature and liquid feed or composition, with bubble pressure and equilibrium vapor composition among the solved outputs.
+
+## Admissible observation
+
+A source-verified measurement with explicit identity, units, composition basis, uncertainty or declared residual scale, provenance, and leakage group. Quarantined, model-derived, unresolved-basis, duplicate-derived, and unbounded censored values are not admissible regression observations.
+
+## Candidate observation
+
+A source-traceable measurement whose identity and campaign block are known but which still lacks one or more execution requirements, such as a residual scale, declared pressure basis and units, model-domain admission, or immutable Data-packet binding. Candidate observations may be partitioned for planning but may not be scored or fitted.
+
+## Campaign block
+
+The smallest group of observations that must remain together during model assessment because the rows share a source, apparatus, prepared stock, calibration, temperature series, or derived quantities.
+
+## Campaign-blocked cross-validation
+
+Model and parameter selection performed by holding out complete campaign blocks. It estimates transfer across experiments without pretending that correlated rows are independent.
+
+## All-data refit
+
+The final parameter estimation performed after the model form is frozen, using every admissible in-domain observation. Its residuals describe calibration quality, not independent prediction.
+
+## Model configuration
+
+One declarative combination of neutral polar physics, association topology, dielectric formulation, and Born correction. Each configuration has an immutable identity so comparisons do not depend on informal labels such as M0–M5.
+
+## Promoted parameter set
+
+The single parameter set accepted for scientific use after numerical, identifiability, campaign-blocked assessment, domain, provenance, and immutable-file identity checks pass. Alternative fits remain comparison evidence.
+
+## Application curation
+
+MEA-owned decisions about species, reactions, source rows, measurement roles, units and bases, campaign blocks, residual policies, fit stages, and scientific acceptance.
+
+## Materialized Data packet
+
+The immutable, hash-addressed snapshot of MEA-curated inputs consumed by the unified ePC-SAFT Engine. Runtime code never discovers or imports a sibling repository to obtain it.
+
+### `docs/scientific/docs/scientific/CONTEXT.md`
+
 # MEA scientific context
 
 - Status: authoritative repository definition under ePC-SAFT Governance D-038
@@ -83,9 +237,9 @@ or evidence. Update the existing owning record when that answer changes.
 
 ## Scientific map
 
-- **Formulation:** `docs/latex/sections/epc_saft_equation_of_state.tex` and
+- **Formulation:** `docs/scientific/latex/sections/epc_saft_equation_of_state.tex` and
   `docs/ePC-SAFT/` describe the selected equations and their literature basis.
-- **Methods:** `docs/latex/sections/data_methods.tex`, analysis scripts, and the
+- **Methods:** `docs/scientific/latex/sections/data_methods.tex`, analysis scripts, and the
   installed `epcsaft` public APIs own executable methods.
 - **Verification and decisions:** analysis receipts, exact result tables, and
   GitHub issues own numerical evidence and gate outcomes.
@@ -98,9 +252,9 @@ or evidence. Update the existing owning record when that answer changes.
   publication. `analyses/enrtl_six_species_ideal_comparison/notebook.qmd`
   retains a separate packet-specific comparison. Neither notebook establishes
   an accepted parameter set or replaces its identified inputs and results.
-- **Manuscript:** the CAS journal source is `docs/latex/main.tex`.
-- **Bibliography:** tracked CAS inputs are `docs/latex/manuscript_references.bib`,
-  `docs/latex/project_sources.bib`, and `docs/latex/official_sources.bib`;
+- **Manuscript:** the CAS journal source is `docs/scientific/latex/main.tex`.
+- **Bibliography:** tracked CAS inputs are `docs/scientific/latex/manuscript_references.bib`,
+  `docs/scientific/latex/project_sources.bib`, and `docs/scientific/latex/official_sources.bib`;
   Better BibTeX remains the upstream citation export.
 
 ## Calculation ownership

@@ -1,6 +1,53 @@
 ---
 title: "MEA parameter bundle"
 subtitle: "Model D assessment · historical selected parameters and retained fitting evidence"
+resources:
+  - analysis.yaml
+  - figures/born_permittivity/output/selected-bundle-joint-sensitivity.svg
+  - figures/speciation/output/speciation-diagnostic-replay-40C.svg
+  - figures/speciation/output/speciation-diagnostic-replay-60C.svg
+  - figures/speciation/output/speciation-diagnostic-replay-80C.svg
+  - results/best-in-slot-campaign/final-full-validation-summary.csv
+  - results/born-permittivity-study/current-fast-common-comparison.csv
+  - results/born-permittivity-study/full-common-row-statistics.csv
+  - results/calorimetry/current-selected-direct-enthalpy-comparison.csv
+  - results/calorimetry/current-selected-direct-enthalpy-summary.json
+  - results/calorimetry/thermal-reference-validation.csv
+  - results/calorimetry/thermal-reference-validation.json
+  - results/current-best-fit-ln-statistics.csv
+  - results/current-best-fit-residuals.csv
+  - results/current-best-fit-statistics.csv
+  - results/figure-calculation-failures.csv
+  - results/figure-calculation-record.json
+  - results/holdout-evaluations.csv
+  - results/observation-coverage/speciation-rows.csv
+  - results/observation-coverage/summary.json
+  - results/parameter-record-history.csv
+  - results/parameter-sensitivity-screen.csv
+  - results/parameter-start-comparison.csv
+  - results/reaction-temperature-fit/README.md
+  - results/reaction-temperature-fit/full-validation-targets.csv
+  - results/reaction-temperature-fit/screen-record.json
+  - results/reaction-temperature-fit/sensitivity-check-record.json
+  - results/reference-calorics/calorimetry.csv
+  - results/reference-calorics/closure.csv
+  - results/reference-calorics/heat.csv
+  - results/reference-calorics/summary.json
+  - results/runs/engine-comparison/README.md
+  - results/runs/pco2-calibration-misfit/README.md
+  - results/selected-current-best-parameters.json
+  - model-d/assessment-28181e72-summary.json
+  - model-d/assessment-p5a-00-summary.json
+  - model-d/assessment-p5a-11-summary.json
+  - model-d/assessment-p5a-summary.json
+  - model-d/born-form-diagnosis/p1-matin-bottinger-born-activities.csv
+  - model-d/born-form-diagnosis/p1-rank-correlations.csv
+  - model-d/born-form-diagnosis/p2-screening.csv
+  - model-d/born-form-diagnosis/p2-step-agreement.csv
+  - model-d/born-form-diagnosis/p3-best-group-confirmation.json
+  - model-d/born-form-diagnosis/p5conv-costs.csv
+  - model-d/born-form-diagnosis/p5conv-k-coordinates.csv
+  - model-d/born-form-diagnosis/p5conv-species-costs-and-signed-means.csv
 ---
 
 ::: {.callout-note}
@@ -1129,12 +1176,12 @@ Heat release is the negative of (liquid enthalpy change minus incoming ideal-gas
 
 **The enthalpy chain behind these values is closed.** At 40, 80 and 120 °C and loadings 0.1–0.5, the CO₂ feed action of the liquid enthalpy matches centered re-solves to ≤ 3.1 × 10⁻⁹ and equals RT²·∂ln a_CO₂/∂T + RT to ≤ 2.6 × 10⁻¹³. Water vaporization enthalpy from the EOS residual is within 1.3 % of IAPWS-95 at 40–120 °C, and pure liquid water cp from the ideal-gas record and the EOS residual is 12–15 % low ([thermal checks](results/calorimetry/thermal-reference-validation.csv)).
 
-[Heat summary](results/calorimetry/current-selected-direct-enthalpy-summary.json) · [Interval values](results/calorimetry/current-selected-direct-enthalpy-comparison.csv) · [Paired comparison and adoption rules](results/reaction-temperature-fit/README.md) · [Physical ideal-gas records](../../data/reference/MEA/thermal/physical-ideal-gas-calorics.json) · [Thermal checks](results/calorimetry/thermal-reference-validation.json)
+[Heat summary](results/calorimetry/current-selected-direct-enthalpy-summary.json) · [Interval values](results/calorimetry/current-selected-direct-enthalpy-comparison.csv) · [Paired comparison and adoption rules](results/reaction-temperature-fit/README.md) · [Physical ideal-gas records](https://github.com/tannerpolley/MEA-Thermodynamics/blob/65ad618a994eb5a49434b58ff6bf15c431fbe905/data/reference/MEA/thermal/physical-ideal-gas-calorics.json) · [Thermal checks](results/calorimetry/thermal-reference-validation.json)
 
 # Claim limits
 
 - **Calibration residuals, not prediction.** Except Xu 2011, every pressure row and every scored speciation target belonged to the data used to select or fit this record. RMS ln(pred/obs) of 0.25–0.66 by source (0.534 over all 161 rows; log₁₀ 0.2318, factor 1.71) measures calibration misfit. Xu 2011 (RMS ln 0.440) was outside the reaction-temperature objective but influenced earlier bundle selection.
-- **Reaction source ranges.** The selected R4 (Tong 2012 / Aroua 1999) and R5 (Bates and Pinching 1951) correlations have source ranges ending at 323.15 K (R4 293.15–323.15 K; R5 273.15–323.15 K; [migration record](../../docs/coordination/greenfield-migration.md)). Every 60–120 °C pressure row and the 60 and 80 °C speciation rows use R4 and R5 above that range, and the adopted temperature shifts carry the extrapolation. The reaction table's R4 domain column (293.15–393.15 K) does not match this source range; the owner should reconcile it.
+- **Reaction source ranges.** The selected R4 (Tong 2012 / Aroua 1999) and R5 (Bates and Pinching 1951) correlations have source ranges ending at 323.15 K (R4 293.15–323.15 K; R5 273.15–323.15 K; [migration record](https://github.com/tannerpolley/MEA-Thermodynamics/blob/65ad618a994eb5a49434b58ff6bf15c431fbe905/docs/coordination/greenfield-migration.md)). Every 60–120 °C pressure row and the 60 and 80 °C speciation rows use R4 and R5 above that range, and the adopted temperature shifts carry the extrapolation. The reaction table's R4 domain column (293.15–393.15 K) does not match this source range; the owner should reconcile it.
 - **Heat.** The heat values are compared with calibration-labelled calorimetry except the 120 °C holdout, which the model under-predicts by 15.8 kJ mol⁻¹ on average. Four 40 °C intervals are unevaluated on the pinned Engine.
 - **No predictive qualification.** No confidence intervals, independent identification of individual coefficients, or validation on unused data are established. The record is an exploratory incumbent for 30 mass% MEA at 20–120 °C.
 
@@ -1172,7 +1219,7 @@ These links preserve the deeper analysis without reproducing it here. Figures an
 |:--|:--|
 | Which parameter vector and Engine? | [Selected parameters](results/selected-current-best-parameters.json), [analysis inventory and wheel identity](analysis.yaml) |
 | What changed in the adopted record, and why? | [Adoption record](results/reaction-temperature-fit/README.md), [record history](results/parameter-record-history.csv), [holdout ledger](results/holdout-evaluations.csv), [full replay targets](results/reaction-temperature-fit/full-validation-targets.csv), [screen](results/reaction-temperature-fit/screen-record.json), [candidate scores](results/reaction-temperature-fit/README.md), [derivative checks](results/reaction-temperature-fit/sensitivity-check-record.json), [study notes](results/reaction-temperature-fit/README.md) |
-| Can the absorber use it non-isothermally? | [Physical ideal-gas records](../../data/reference/MEA/thermal/physical-ideal-gas-calorics.json), [thermal validation](results/calorimetry/thermal-reference-validation.csv); build the handoff locally with `scripts/build_absorption_handoff.py` |
+| Can the absorber use it non-isothermally? | [Physical ideal-gas records](https://github.com/tannerpolley/MEA-Thermodynamics/blob/65ad618a994eb5a49434b58ff6bf15c431fbe905/data/reference/MEA/thermal/physical-ideal-gas-calorics.json), [thermal validation](results/calorimetry/thermal-reference-validation.csv); build the handoff locally with `scripts/build_absorption_handoff.py` |
 | What did the historical Born/permittivity study show? | [Common-row comparisons](results/born-permittivity-study/full-common-row-statistics.csv), [reaction-synchronized comparison](results/born-permittivity-study/current-fast-common-comparison.csv), [joint sensitivity figure](figures/born_permittivity/output/selected-bundle-joint-sensitivity.svg) |
 | What did earlier parameter studies show? | [Parameter-start comparison](results/parameter-start-comparison.csv), [bounded sensitivity](results/parameter-sensitivity-screen.csv), [R4–CO₂ campaign](results/best-in-slot-campaign/final-full-validation-summary.csv) |
 | What about fewer species? | [Matched six-/nine-species notebook](https://github.com/tannerpolley/MEA-Thermodynamics/blob/codex/born-permittivity-formulation-study/analyses/enrtl_six_species_ideal_comparison/notebook.qmd) |

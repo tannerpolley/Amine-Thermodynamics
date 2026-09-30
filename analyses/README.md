@@ -2,13 +2,61 @@
 
 This directory contains source-controlled scientific analysis, validation, and figure workflows. Runtime package code belongs under `src/MEA`; reusable literature and parameter inputs belong under `data/reference`; analysis-specific generated snapshots stay with the analysis that owns them.
 
-## Root Quarto Manuscript
+## Snakemake adoption
 
-`analyses/` is one root Quarto Manuscript managed by the CSE `manuscript.py`.
-[`index.qmd`](index.qmd) is the article; `_quarto.yml` holds the shared HTML
-presentation; `_cse-manuscript.json` holds the ordered publication list (the
-article, four reference and decision pages, the MEA parameter bundle overview
-and its nine study pages). From the repository root:
+The confirmed decisions for all 11 top-level analyses and their nested work
+are recorded in [scientific context](../docs/scientific/CONTEXT.md#local-snakemake-workflow-adoption).
+Ten analysis-local presentation workflows are installed by
+[issue #133](https://github.com/tannerpolley/MEA-Thermodynamics/issues/133).
+The `mea_parameter_bundle/` workflow remains held until its scientific results
+are reconciled; all eleven adoption decisions remain in force.
+
+From an installed analysis directory, run:
+
+```bash
+PATH="$HOME/.cache/cse-quarto-demo/.venv/bin:$PATH" snakemake --cores 1 --dry-run present
+PATH="$HOME/.cache/cse-quarto-demo/.venv/bin:$PATH" snakemake --cores 1 present
+```
+
+The dedicated presentation interpreter supplies Snakemake 9.27.0. Reproduce
+that approved dependency with `uv pip install --python
+~/.cache/cse-quarto-demo/.venv/bin/python 'snakemake==9.27.0'`. Renderers use
+`~/.local/bin/uv run --no-sync` in the project environment, preserving its installed Engine
+and dependency lock. Each workflow plans one `present` job, verifies retained
+inputs before rendering, and checks them again afterward. It has no numerical
+calculation entry. Root preparation and the existing preview use these same
+local workflows. The installed uv executable is addressed directly because the
+preview service's PATH contains the presentation interpreter and system tools.
+
+Each `retained-results.sha256` selects the existing input set from base commit
+`2a01cdc4b4d5a62eea2fa2e1556c40128c548a9d`; existing producing identities and
+source records remain authoritative. The matched species comparison also
+checks its existing source and output hash inventories before its renderers
+rewrite them. Historical eNRTL and film create small Markdown includes from
+their retained JSON. Missing or modified inputs stop presentation; recover the
+identified retained version rather than rewriting hashes or running a retired
+generator. This file checking establishes presentation integrity, not a new
+calculation or physical validation.
+
+[Issue #90](https://github.com/tannerpolley/MEA-Thermodynamics/issues/90) still
+owns the required source-data calculation, coherent result delivery, notebook
+refresh and preview experiments. Presentation installation does not complete
+its calculation, unchanged-run or dependency-rebuild requirements.
+
+From the repository root, check refusal and preservation in a disposable copy:
+
+```bash
+PATH="$HOME/.cache/cse-quarto-demo/.venv/bin:$PATH" python3 tests/check_presentation_retained_inputs.py
+```
+
+## Root Quarto analysis website
+
+`analyses/` is one root Quarto analysis website managed by the CSE
+`manuscript.py`. [`index.qmd`](index.qmd) is its home page; `_quarto.yml` holds
+the shared HTML presentation; `_cse-manuscript.json` owns the 15 published
+reports and their sidebar groups. These include the MEA parameter bundle
+overview and nine study pages, four reference and decision pages, and the MEA
+evidence map. From the repository root:
 
 ```bash
 python3 analyses/manuscript.py validate analyses
@@ -17,13 +65,14 @@ python3 analyses/manuscript.py refresh analyses analyses/mea_parameter_bundle/no
 python3 analyses/manuscript.py preview analyses --port <free port>
 ```
 
-`render.sh` validates the manuscript and always passes `--no-execute`; the
-article is `analyses/_site/index.html` and each registered page renders to
-`<page>-preview.html` beside it under `_site/`. Register a new report with
-`python3 analyses/manuscript.py include analyses <report.qmd> --title <title>`;
-an unregistered `.qmd` is not rendered. `refresh` and `preview` use the
-presentation profile (`_quarto-presentation.yml`), which only prepares
-presentation views and never solves the model. The strict bundle
+`render.sh` syncs the sidebar, validates the site and passes `--no-execute`;
+HTML is the default. The home page is `analyses/_site/index.html`; a registered
+`case/result.qmd` renders to `analyses/_site/case/result.html`. Register a new
+report with `python3 analyses/manuscript.py include analyses <report.qmd>
+--title <title> [--group <group>]`; an unregistered `.qmd` is not rendered.
+`refresh` and `preview` use the presentation profile
+(`_quarto-presentation.yml`), which only prepares presentation views and never
+solves the model. The strict bundle
 certification is `result_freshness.py --certify` (see the bundle README).
 `python3 analyses/manuscript.py service analyses/` installs the CSE always-on
 preview unit; it is not installed here (see the bundle README for the
@@ -62,7 +111,7 @@ calculations, figures, fit statistics, cross-analysis interpretation, and next
 experiments. `enrtl_six_species_ideal_comparison/` retains the complete matched
 six-/nine-species calculation packet, source notebook, UQ tables, and figures;
 its packet-specific results are summarized, rather than duplicated, in the live
-parameter notebook. The notebook is rendered through the root Quarto Manuscript and
+parameter notebook. The notebook is rendered through the root Quarto website and
 is not a certified numerical publication; the strict result-freshness check
 currently refuses the retained generation.
 
