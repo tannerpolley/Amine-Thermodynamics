@@ -2,20 +2,22 @@
     \centering
     \scriptsize\rmfamily
     \setlength{\tabcolsep}{3pt}
-    \renewcommand{\arraystretch}{1.12}
-    \caption{Liquid-phase reaction network and equilibrium-constant coefficients used for the activity-coupled speciation solve.  The constants use \(\ln K_r(T)=A_r+B_r/T+C_r\ln T+D_rT\), with \(T\) in kelvin and \(a_i=\gamma_i x_i\) on a mole-fraction activity basis.  Coefficients are taken from the acid-gas/ethanolamine reaction basis used in PC-SAFT calculations~\cite{Nasrifar2010}.}
+    \renewcommand{\arraystretch}{1.2}
+    \caption{Liquid reactions and the recorded equilibrium-constant coefficients of the selected parameter record, with \(T\) in kelvin.
+    R1--R3 use \(\ln K_r=A_r+B_r/T+C_r\ln T+D_rT\) on the source mole-fraction basis, and \(\Delta_r\) is the offset of \cref{eq:molality-conversion} to the aqueous-molality basis.
+    R2 is recorded directly on the molality basis: its \(A_2\) and \(B_2\) contain the +4.0165 conversion and the inherited \SI{-8.2019}{\kilo\joule\per\mole} enthalpy shift, so it has no separate \(\Delta_2\).
+    R4 uses \(\ln K_4=A_4+B_4/T\), and R5 uses \(\ln K_5=-\ln10\,(A_5/T+B_5+C_5T)\), both on the aqueous-molality basis.
+    The last column gives the temperature range of the source correlation.}
     \label{tab:reaction-equilibrium-constants}
-    \begin{adjustbox}{max width=\textwidth}
-    \begin{tabularx}{\textwidth}{@{}c>{\raggedright\arraybackslash}Xcccccc@{}}
+    \begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}p{3.7cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{4.5cm}c@{}}
         \toprule
-        ID & Liquid reaction & Source constant & \(A_r\) & \(B_r\) & \(C_r\) & \(D_r\) & Source range (K) \\
+        ID & Reaction & Source and treatment & Recorded coefficients & Source range (K) \\
         \midrule
-        R1 & \(2\HtwoO \rightleftharpoons \HthreeO+\Hydroxide\) & \(k_1^x\) & 132.899 & -13445.9 & -22.4773 & 0 & 273--498 \\
-        R2 & \(\COtwo+2\HtwoO \rightleftharpoons \HCOthree+\HthreeO\) & \(k_2^x\) & 231.456 & -12092.1 & -36.7816 & 0 & 273--498 \\
-        R3 & \(\HCOthree+\HtwoO \rightleftharpoons \COthree+\HthreeO\) & \(k_3^x\) & 216.049 & -12431.7 & -35.4819 & 0 & 273--498 \\
-        R4 & \(\MEACOO+\HtwoO \rightleftharpoons \MEA+\HCOthree\) & \(k_9^x\) & 2.8898 & -3635.09 & 0 & 0 & 298--393 \\
-        R5 & \(\MEAH+\HtwoO \rightleftharpoons \MEA+\HthreeO\) & \(k_7^x\) & 2.1211 & -8189.38 & 0 & -0.007484 & 273--323 \\
+        R1 & \(2\HtwoO \rightleftharpoons \HthreeO+\Hydroxide\) & Austgen \cite[Table~V]{Austgen1991}; unchanged & \(A=132.899\), \(B=-13445.9\), \(C=-22.4773\), \(D=0\); \(\Delta=8.0331\) & 273.15--498.15 \\
+        R2 & \(\COtwo+2\HtwoO \rightleftharpoons \HCOthree+\HthreeO\) & Austgen \cite[Table~V]{Austgen1991}, \(A=231.465\), \(B=-12092.1\); molality conversion and inherited enthalpy shift included & \(A=232.3314\), \(B=-11105.6400\), \(C=-36.7816\), \(D=0\) & 273.15--498.15 \\
+        R3 & \(\HCOthree+\HtwoO \rightleftharpoons \COthree+\HthreeO\) & Austgen \cite[Table~V]{Austgen1991}; unchanged & \(A=216.049\), \(B=-12431.7\), \(C=-35.4819\), \(D=0\); \(\Delta=4.0165\) & 273.15--498.15 \\
+        R4 & \(\MEACOO+\HtwoO \rightleftharpoons \MEA+\HCOthree\) & Tong et al.\ \cite[Table~5]{Tong2012}, from Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}; unchanged & \(A=2.151\), \(B=-1545.3\) & 293.15--323.15 \\
+        R5 & \(\MEAH+\HtwoO \rightleftharpoons \MEA+\HthreeO\) & Bates--Pinching form \cite[Table~5]{Bottinger2008}, \(A=2677.91\), \(B=0.3869\), \(C=4.277\times10^{-4}\); two inherited changes & \(A=3037.6400\), \(B=-1.0173\), \(C=4.277\times10^{-4}\) & 273.15--323.15 \\
         \bottomrule
     \end{tabularx}
-    \end{adjustbox}
 \end{table*}

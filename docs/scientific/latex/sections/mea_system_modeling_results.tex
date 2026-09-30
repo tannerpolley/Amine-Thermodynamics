@@ -1,127 +1,155 @@
 \section{Results and Discussion}\label{sec:mea-system-modeling-results}
-On the 31 pressure records solved by both models, the fixed SSM+DS activity calculation is less accurate than the ideal-activity baseline.  It improves 4 records and worsens 27, with median absolute \(\log_{10}\) pressure residuals of 0.495 and 0.160, respectively.  The activity calculation converges across all 161 pressure records and 74 NMR states, but its closest speciation agreement occurs for the amine family; bicarbonate, carbonate, hydronium, and hydroxide remain weakly represented or weakly observed.
+% P:results-01
+The results separate four observation roles: the 142 fitted targets, comparisons outside the fit that were inspected in earlier model development, report-only species observations, and extrapolated or transferred conditions.
+Each number below names its group and count, and \cref{tab:residual-summary} collects them for both Born forms.
+All values are numerical evaluations of fixed parameter records against existing measurements; none is a physical validation at new conditions.
 
-\subsection{Ideal CO2 solubility baseline}
-The ideal Smith--Missen-style baseline solves the five-reaction, nine-species problem with activities equal to mole fractions.  It checks the reaction and balance conventions before introducing ePC-SAFT activity coefficients.  Median absolute \(\log_{10}(\mathrm{model}/\mathrm{data})\) residuals for positive measured values are 0.055 for \MEA, 0.044 for \MEAH, 0.029 for \MEACOO, 0.227 for \HCOthree, and 0.0087 for the \ce{MEA + MEAH+} aggregate.  Molecular \COtwo and \COthree appear in the solved profiles but do not contribute to these major-species metrics.
+\input{tables/residual_summary}
 
-For the 31 Jou et al.\ measurements used in the controlled comparison, the pressure baseline has a median absolute \(\log_{10}\) residual of 0.160, a signed median of \(-0.024\), and an RMSE of 0.297.  Residuals are larger at 40 and \SI{60}{\degreeCelsius} than at 80, 100, and \SI{120}{\degreeCelsius}.  These results establish the ideal reaction and balance baseline for the activity-model comparison.
+\subsection{Calibrated model}\label{sec:results-calibration}
+% P:results-02
+The selected SSM+DS record fits 48 \COtwo partial-pressure targets at 40 and \SI{60}{\degreeCelsius} with an AARD of 13.53\,\%.
+It fits 94 liquid species targets at 20, 40 and \SI{60}{\degreeCelsius} with an AARD of 8.28\,\%.
+The species targets are 40 targets from the NMR study of B\"ottinger et al.\ and 54 \MEA, \MEAH and \MEACOO targets from the titration study of Matin et al.~\cite{Bottinger2008,matinFacileMethodDetermination2012}.
+The mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of the fitted pressure targets is 0.011, so the calibration carries no material pooled pressure bias.
 
-\begin{center}
-    \begin{minipage}{\linewidth}
+\subsection{The Born-form ranking depends on the observations fitted}\label{sec:results-born}
+% P:results-04
+SSM+DS and Original Born were fitted with the same five interaction coordinates, bounds, weights, reaction constants and ion inputs.
+On the historical 160-target objective, which also contained Matin's 18 bicarbonate-pool targets, Original Born has the lower cost: 40.20 against 47.63 for SSM+DS (\cref{fig:born-cost-groups}).
+The 7.42 cost difference is concentrated in the Matin species, which cost 11.34 more for SSM+DS.
+The pressure and B\"ottinger targets favor SSM+DS by 1.78 and 2.14, and the Matin bicarbonate pool alone contributes 6.02 of the net difference.
+
+\begin{figure}[pos=!htb]
     \centering
-    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/generated/mea_ideal_pressure_vs_loading.pdf}
-    \captionsetup{hypcap=false}
-    \captionof{figure}{Ideal-equilibrium \COtwo-solubility pressure baseline for 30 wt\% \MEA.  Predicted pressure increases with loading at every temperature, with larger deviations at 40 and \SI{60}{\degreeCelsius} than at 80, 100, and \SI{120}{\degreeCelsius}.}
-    \label{fig:ideal-pressure}
-    \end{minipage}
-\end{center}
+    \includegraphics[width=\linewidth]{born-cost-by-group-and-species.png}
+    \caption{Historical 160-target cost decomposition for the two Born forms, each at its own converged optimum of the earlier objective that fitted Matin's 18 \ce{HCO3- + CO3^2-} pool targets.
+    These are historical residuals, not residuals of the selected 142-target record.
+    Left: full objective and its pressure (48 targets), B\"ottinger species (40) and Matin species (72) groups.
+    Right: species groups; Matin's bicarbonate pool contributes 6.02 of the 7.42 net cost difference.
+    Costs are the dimensionless weighted least-squares cost \(C=\tfrac12\sum r_j^2\); the legend pairs give \((c_{\mathrm{shell}},c_{\mathrm{dielectric}})\).}
+    \label{fig:born-cost-groups}
+\end{figure}
 
-\begin{center}
-    \begin{minipage}{\linewidth}
+% P:results-05
+With the 18 Matin bicarbonate-pool targets report-only, the converged 142-target fits favor SSM+DS: 32.991897 against 34.584032 for Original Born (\cref{fig:born-ranking}).
+This is a 4.6\,\% advantage relative to Original Born.
+A sensitivity fit without any Matin targets, with 88 targets, gives 10.47 against 16.85.
+When the two 142-target fits are scored on all 160 historical targets, Original Born is again lower, 43.62 against 53.77.
+The ranking therefore follows the role assigned to the Matin bicarbonate observations, not an intrinsic property of either Born form.
+The advantage is a narrow difference in a local weighted least-squares cost, and no statistical test supports it.
+
+\begin{figure}[pos=!htb]
     \centering
-    \begin{minipage}{0.47\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/generated/mea_ideal_speciation_20C.pdf}
-        \par\smallskip
-        \small (a) \SI{20}{\degreeCelsius}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.47\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{figures/generated/mea_ideal_speciation_40C.pdf}
-        \par\smallskip
-        \small (b) \SI{40}{\degreeCelsius}
-    \end{minipage}
-    \captionsetup{hypcap=false}
-    \captionof{figure}{Ideal-equilibrium true-species baseline for 30 wt\% \MEA.  Smooth curves show the five-reaction, nine-species equilibrium calculation; markers show literature values after declared composition-basis conversion.  Positive measured amine and bicarbonate values enter the residual comparison, while other species document the solved equilibrium state.}
-    \label{fig:ideal-speciation}
-    \end{minipage}
-\end{center}
+    \includegraphics[width=\linewidth]{born-p5-ranking-reversal.png}
+    \caption{Born-form ranking by fitted target set.
+    Left: converged costs of each fitted set; the historical 160-target objective includes Matin's 18 bicarbonate-pool targets, the current 142-target objective makes those targets report-only, and the 88-target set, which omits all Matin targets, is a sensitivity case only.
+    Right: the 142- and 88-target fits, labeled P5a and P5b, re-scored on all 160 historical targets.
+    Compare forms within one target set; cost magnitudes across sets use different numbers of observations.}
+    \label{fig:born-ranking}
+\end{figure}
 
-\subsection{Historical activity-based CO2 solubility calculation}
-The historical fixed-parameter activity calculation uses the nine-species basis and parameter hierarchy in \cref{sec:data-methods}.  As loading changes, it updates ionic composition, bulk permittivity, and modified-Born solvation within the activity coefficients.  The resulting liquid composition enters the \COtwo fugacity calculation, so one fixed thermodynamic state determines both pressure and speciation. The evaluated values are retired diagnostic inputs, not an active MEA parameter set.
+% P:results-06
+The two forms differ less on unweighted comparisons (\cref{tab:residual-summary}).
+SSM+DS gives the lower fitted-pressure AARD, 13.53 against 17.31\,\%, whereas Original Born gives a slightly lower fitted-species AARD, 8.23 against 8.28\,\%.
+On the 104 canonical pressure rows at 40--\SI{80}{\degreeCelsius}, the two forms give 20.58 and 20.78\,\%.
+The comparison applies the SSM+DS construction of Figiel et al.~\cite{Figiel2025,Figiel2026Correction} to a reactive, carbamate-forming amine at 20--\SI{80}{\degreeCelsius}.
+Figiel et al.\ adjusted Born diameters to Gibbs energies of ion solvation at infinite dilution and ion interaction parameters to mean ionic activity coefficients of salts in water, methanol and ethanol at \SI{298.15}{\kelvin}~\cite[Model Parameters, pp.~9411--9412]{Figiel2025}.
 
-\subsection{Chemical speciation}
-For positive measured species and aggregate values, median absolute \(\log_{10}(\mathrm{model}/\mathrm{data})\) residuals are 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, 0.461 for \HCOthree, 0.599 for \COthree, and 0.066 for \ce{MEA + MEAH+}.  At the 15 states where the source reports zero \HCOthree, the largest modeled mole fraction is 0.00128.  These values are upper-bound checks because the sources give no detection limits.
+\subsection{Titration bicarbonate reads high against NMR}\label{sec:results-matin}
+% P:results-07
+Matin et al.\ determined speciation in 30 wt\% \MEA from acid titration for total alkalinity, strong-base titration for bicarbonate and a total inorganic carbon measurement, at an ambient temperature labeled \SI{21}{\degreeCelsius} in their figures~\cite[Experimental Section and Method Description, pp.~6614--6616]{matinFacileMethodDetermination2012}.
+Their bicarbonate follows from the base titration through Eqs.~(18)--(19b), with the carbonate amount incorporated into the bicarbonate estimate.
+The authors report bicarbonate above the NMR values of Jakobsen et al., particularly at loadings of 0.3--0.45 (Fig.~2, p.~6616), and an order-of-magnitude difference from the NMR bicarbonate in their comparisons, whereas their free amine, protonated amine and carbamate agree more closely (Fig.~3 and discussion, p.~6617)~\cite{matinFacileMethodDetermination2012,Jakobsen2005}.
+B\"ottinger et al.\ measured bicarbonate by \ce{^{13}C} NMR and could observe only the sum of \MEA and \MEAH because of fast proton exchange~\cite{Bottinger2008}.
+The fit therefore compares Matin and B\"ottinger bicarbonate with the modeled \ce{HCO3- + CO3^2-} pool, and the Matin measurements enter at \SI{20}{\degreeCelsius}.
 
-We excluded digitized Wong Raman values from the residual metrics because overlap-sensitive peak extraction and the composition-conversion denominator remain unresolved.  For the smooth activity curves, 642 of 644 requested states met the numerical acceptance criteria; the figures show those 642 states.
+% P:results-08
+Because the source authors identify the disagreement with NMR as specific to bicarbonate, the 18 Matin pool targets were made report-only while the 54 Matin amine and carbamate targets remained fitted.
+With the pool outside the objective, the selected record lies below those 18 observations with a signed relative mean of \(-58.84\,\%\) and an AARD of 59.81\,\%; Original Born gives \(-34.30\,\%\) and 35.12\,\%.
+The form favored after this source-based role change is therefore the one that departs further from the titration bicarbonate.
+The residual signs do not establish that titration is biased in general, that the NMR values are exact, or that either Born form represents bicarbonate correctly.
 
-\begin{center}
-    \begin{minipage}{\linewidth}
+\subsection{Prediction at 80 \texorpdfstring{\si{\degreeCelsius}}{°C}, outside the current fit}\label{sec:results-80c}
+% P:results-09
+The \SI{80}{\degreeCelsius} isotherm is excluded from the current five-coordinate, 142-target fit.
+For the 11 Jou 1995 targets at \SI{80}{\degreeCelsius} (packet targets \texttt{vle\_obs\_0203}--\texttt{vle\_obs\_0213})~\cite{Jou1995}, the selected record gives a pressure AARD of 9.24\,\%, a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.017\) and a root-mean-square \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of 0.117 (\cref{fig:pressure}).
+The canonical calculation gives the same 9.24\,\% on these 11 targets.
+All 21 canonical pressure rows at \SI{80}{\degreeCelsius}, which add 10 measurements of Aronu et al.~\cite{Aronu2011}, give 20.27\,\% with a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.199\), so the added rows are under-predicted.
+For the 11 packet species targets at \SI{80}{\degreeCelsius}, the AARD is 11.15\,\% for SSM+DS and 7.36\,\% for Original Born (\cref{fig:speciation}).
+
+\begin{figure}[pos=!htb]
     \centering
-    \begin{minipage}{0.47\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/generated/mea_activity_speciation_20C.pdf}
-        \par\smallskip
-        \small (a) \SI{20}{\degreeCelsius}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.47\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/generated/mea_activity_speciation_40C.pdf}
-        \par\smallskip
-        \small (b) \SI{40}{\degreeCelsius}
-    \end{minipage}
-    \par\medskip
-    \begin{minipage}{0.47\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/generated/mea_activity_speciation_60C.pdf}
-        \par\smallskip
-        \small (c) \SI{60}{\degreeCelsius}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.47\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=0.27\textheight,keepaspectratio]{figures/generated/mea_activity_speciation_80C.pdf}
-        \par\smallskip
-        \small (d) \SI{80}{\degreeCelsius}
-    \end{minipage}
-    \captionsetup{hypcap=false}
-    \captionof{figure}{Activity-coupled ePC-SAFT speciation comparison for 30 wt\% \MEA.  Curves show the 642 accepted activity-coupled states, and markers show positive measured species or aggregate values.  Source-reported zero \HCOthree values enter upper-bound checks; balance-derived values are excluded from independent residuals.}
-    \label{fig:activity-speciation}
-    \end{minipage}
-\end{center}
+    \includegraphics[width=\linewidth]{pressure.pdf}
+    \caption{\COtwo partial pressure against loading for 30 wt\% \MEA with the selected SSM+DS record, for all 161 canonical observations.
+    The 40 and \SI{60}{\degreeCelsius} panels contain the fitted temperatures; the \SI{80}{\degreeCelsius} panel is a test outside the present (142-target, five-coordinate) fit, not data unseen during model development, and its 11 Jou 1995 targets (\texttt{vle\_obs\_0203}--\texttt{vle\_obs\_0213}) give the 9.24\,\% AARD reported in the text; its 10 Aronu 2011 points are not part of that group.
+    The 100 and \SI{120}{\degreeCelsius} panels are extrapolations outside the working domain.
+    Markers are observations; dashed segments connect calculations at the observed loadings.
+    The calculations and panel statistics in this figure were rendered before a correction that removed a \(1\times10^{-4}\)~mol \COtwo/mol \MEA excess from the canonical input loadings; the text and \cref{tab:residual-summary} use the corrected values.}
+    \label{fig:pressure}
+\end{figure}
 
-\subsection{CO2 solubility pressure response}
-The controlled pressure comparison uses the same 31 Jou et al.\ measurements for both models.  The ideal baseline gives median absolute, signed median, and RMSE \(\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})\) residuals of 0.160, \(-0.024\), and 0.297, respectively; the activity model gives 0.495, 0.226, and 0.565.  The activity model improves 4 paired records and worsens 27.  The fixed activity parameter set therefore reduces pressure accuracy on this subset.  This result diagnoses the transferred parameter set, not the general ePC-SAFT formulation.
+% P:results-10
+The \SI{80}{\degreeCelsius} comparisons are tests outside the present (142-target, five-coordinate) fit, not data unseen during model development.
+Two fixed inputs used \SI{80}{\degreeCelsius} data (\cref{sec:data-methods}).
+The inherited R2 and R5 reaction shifts were estimated in September 2026 on a set that included \texttt{vle\_obs\_0206} and \texttt{vle\_obs\_0211}, two of the 11 Jou 1995 targets.
+The fixed \COtwo dispersion energy of \SI{173.440}{\kelvin} was chosen on 2 September 2026 against a set that included 21 pressure rows and 11 species targets at \SI{80}{\degreeCelsius}.
+Prediction here therefore means calculation outside the current fit, as defined in \cref{sec:introduction}.
 
-\begin{center}
-    \begin{minipage}{\linewidth}
+\begin{figure}[pos=!htb]
     \centering
-    \includegraphics[width=0.96\linewidth,height=0.42\textheight,keepaspectratio]{figures/generated/mea_controlled_pressure_comparison.pdf}
-    \captionsetup{hypcap=false}
-    \captionof{figure}{Controlled pressure evaluation using the same 31 Jou et al.\ measurements.  Panel (a) compares observed pressure with the ideal Smith--Missen baseline and fixed activity-based ePC-SAFT calculation.  Panel (b) compares their absolute \(\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})\) residuals; points below the one-to-one line favor the activity calculation.  The activity treatment reduces the absolute residual for 4 records and increases it for 27 records.}
-    \label{fig:controlled-pressure-comparison}
-    \end{minipage}
-\end{center}
+    \includegraphics[width=\linewidth]{speciation.pdf}
+    \caption{Liquid species, the \ce{MEA + MEAH+} sum and the \ce{HCO3- + CO3^2-} observation pool against loading for 30 wt\% \MEA with the selected SSM+DS record, at 20--\SI{80}{\degreeCelsius}.
+    Circles are Matin 2012 titration and B\"ottinger 2008 NMR observations, compared with the modeled pool; squares are Jakobsen 2005 NMR bicarbonate, compared with modeled \HCOthree alone (dotted curves).
+    The 131 displayed targets are the 94 fitted species targets, Matin's 18 report-only pool targets, the 11 targets at \SI{80}{\degreeCelsius} and 8 targets excluded from the fit.
+    The panel statistics therefore describe the displayed targets, not the 94-target fitted-species AARD of 8.28\,\%.
+    Matin's measurements, labeled \SI{21}{\degreeCelsius} in the source, are plotted at \SI{20}{\degreeCelsius}.}
+    \label{fig:speciation}
+\end{figure}
 
-Across all 161 VLE records from six sources, the activity calculation gives median absolute, signed median, and RMSE pressure residuals of 0.493, \(-0.288\), and 0.645, respectively.  Because the ideal baseline was evaluated only on the 31-record Jou et al.\ subset, its metrics cannot be compared with this full-set summary.  The assembled pressure records contain no uncertainty values, so we report unweighted metrics.  Full-set pressure errors are largest between 40 and \SI{80}{\degreeCelsius} and decrease at \SI{120}{\degreeCelsius}.  The pressure residuals test gas--liquid equilibrium, while the NMR residuals test the liquid composition supporting that pressure.
+\subsection{Pooled pressure assessment}\label{sec:results-pooled}
+% P:results-11
+On the 104 canonical pressure rows at 40--\SI{80}{\degreeCelsius}, the selected record gives an AARD of 20.58\,\%, below the 35\,\% limit adopted for the working domain.
+This group combines rows that coincide with fitted targets and rows inspected in earlier work, so it measures pooled agreement, not predictive accuracy.
+The source-specific AARDs are 32.99\,\% for Aronu et al.\ (36 rows), 10.87\,\% for Hilliard (30 rows), 15.06\,\% for Jou et al.\ (28 rows) and 20.47\,\% for Idris et al.\ (10 rows)~\cite{Aronu2011,Hilliard2008,Jou1995,idrisSpeciationMEACO2Adducts2014}.
+The mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(-0.398\) for the Aronu rows and \(-0.150\) for all 104 rows.
+The pooled value therefore contains a source-dependent misfit, dominated by under-prediction of the Aronu measurements.
 
-\begin{center}
-    \begin{minipage}{\linewidth}
-    \centering
-    \includegraphics[width=0.84\linewidth,height=0.40\textheight,keepaspectratio]{figures/generated/mea_activity_pressure_vs_loading.pdf}
-    \captionsetup{hypcap=false}
-    \captionof{figure}{Activity-coupled ePC-SAFT \COtwo-solubility pressure evaluation for 30 wt\% \MEA.  Connected curves show converged ePC-SAFT pressure rows at the assembled VLE loadings, and markers show the corresponding literature pressure records.  The figure is a fixed-parameter solubility residual comparison.}
-    \label{fig:activity-pressure}
-    \end{minipage}
-\end{center}
+\subsection{Tested limits}\label{sec:results-limits}
+% P:results-12
+Concentration transfer fails at the tested conditions.
+With chemistry and parameters fixed, the selected record gives a pressure AARD of 75.95\,\% on 33 rows at 15 wt\% \MEA and 46.15\,\% on 37 rows at 45 wt\%, with all 70 states solved.
+The mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(+0.453\) at 15 wt\% and \(-0.519\) at 45 wt\%, so the error changes sign with amine concentration.
+These rows were examined in earlier work, so the scores are a second look, and the successful solves do not establish useful transfer.
 
-\subsection{Sensitivity and identifiability}
-The carbonate-family parameters are less identifiable than the amine-family parameters.  The NMR data include 53 positive \HCOthree and 16 positive \COthree observations, compared with 74 direct \MEACOO observations and 74 direct \ce{MEA + MEAH+} aggregate observations.  The historical calculation used \(d_{\HCOthree}^{\mathrm{Born}}=3.0\) and \(d_{\COthree}^{\mathrm{Born}}=3.0\).  A carbonate-only sensitivity scan lowered the carbonate residual near \(d_{\HCOthree}^{\mathrm{Born}}=6.80\) and \(d_{\COthree}^{\mathrm{Born}}=3.00\).  Neither pair is active: the alternative is identified only by the carbonate observations used in the scan and lacks an independent pressure/speciation test.  \HthreeO and \Hydroxide are determined mainly by electroneutrality and water autoionization; the available NMR data provide no independent observations for either ion.
+% P:results-13
+At 100--\SI{120}{\degreeCelsius}, the 57 canonical rows give an AARD of 26.44\,\%: 20.39\,\% for Jou et al.\ (20 rows), 32.02\,\% for Ma'mun et al.\ (19 rows) and 27.26\,\% for Xu and Rochelle (18 rows)~\cite{Jou1995,Mamun2005,Xu2011}.
+These temperatures lie outside the working domain and above the \SI{323.15}{\kelvin} upper limit of the R4 and R5 source correlations, so the values report extrapolation.
 
-\begin{center}
-    \begin{minipage}{\linewidth}
-    \centering
-    \includegraphics[width=0.64\linewidth,height=0.36\textheight,keepaspectratio]{figures/generated/trace_carbonate_born_parity.pdf}
-    \captionsetup{hypcap=false}
-    \captionof{figure}{Carbonate-only Born-diameter sensitivity for \HCOthree and \COthree.  The reported calculation uses the 3.0/3.0 pair; the sensitivity scan shows that bicarbonate residuals vary strongly with the bicarbonate Born diameter.}
-    \label{fig:trace-carbonate-born-regression}
-    \end{minipage}
-\end{center}
+% P:results-14
+The carbonate share of dissolved carbon was compared with the NMR values of Jakobsen et al.\ at 20 and \SI{40}{\degreeCelsius}~\cite{Jakobsen2005}.
+Over nine points, the ratio of calculated to observed share ranges from 0.42 to 1.33 for SSM+DS and from 1.21 to 3.19 for Original Born.
+The nine-point summary excludes the \SI{40}{\degreeCelsius}, loading 0.21 point, whose observed share of 0.119 compares with 0.010--0.019 at the other four \SI{40}{\degreeCelsius} loadings; all ten comparisons are retained in the supporting data.
 
-\subsection{Comparison with literature models}
-\Cref{tab:literature-model-comparison} distinguishes apparent-chemistry PC-SAFT treatments, explicit-ion ePC-SAFT amine models, and advanced-Born electrolyte models for gas solubility.  The present calculation applies explicit-ion activity coupling and SSM+DS modified-Born solvation to carbamate-forming \MEA.  Following prior ePC-SAFT amine-solubility studies, we separate parameter provenance from VLE evaluation and add measured \MEA speciation residuals to the pressure comparison~\cite{Uyan2015,Wangler2018}.
+% P:results-15
+The \HCOthree--water interaction coefficient lies at its upper bound of \(+0.5\) with an outward cost gradient of \(-12.47\), so the cost would decrease further if the bound were relaxed.
+The column-normalized singular values of the five-column weighted Jacobian are 1.550, 1.134, 0.899, 0.698 and 0.125.
+All five columns are numerically nonzero, but the smallest singular value is one-twelfth of the largest, and a local Jacobian does not establish practical or global identification.
+No unconstrained covariance or confidence band is reported at the bound.
 
-\subsection{Model limitations and transferability}
-The parameter values predate this analysis and lack a reproducible estimation history, so the source-stratified residuals measure fixed-set transfer rather than held-out prediction.  A local finite-difference screen is most sensitive to \(k_{\MEA,\HtwoO}\), \(k_{\COtwo,\MEA}\), and \(d_{\COthree}^{\mathrm{Born}}\); \(d_{\HthreeO}^{\mathrm{Born}}\) has little effect on the reported metrics.  Future regression should jointly fit pressure, measured speciation, and reaction-equilibrium constraints, with parameter bounds and independent validation data declared before fitting.
+% P:results-16
+Density and heat capacity were not assessed for the selected record.
+For an earlier parameter record, loaded-solution densities were 12.5--16.8\,\% above the measurements of Amundsen et al.\ at 50 and \SI{70}{\degreeCelsius} and loadings of 0.3 and 0.4~\cite{Amundsen2009}, and liquid heat capacities were 9.8--14.6\,\% below the values of Hilliard at 45 and \SI{80}{\degreeCelsius}~\cite{Hilliard2008}.
+These are deficits of the earlier record, not measured errors of the selected record.
+Density and heat-capacity qualification of the selected record therefore remains unestablished, and no absorber or stripper use is supported.
+
+% P:results-17
+Two Born probe calculations remain unavailable, both at \SI{313.15}{\kelvin}: the shell-only form, \((c_{\mathrm{shell}},c_{\mathrm{dielectric}})=(1,0)\), at \texttt{vle\_obs\_0119}, and an ion-region permittivity \(\varepsilon_{\mathrm{ion}}=2\) at \texttt{vle\_obs\_0193}.
+Continuation, bounded Newton probes and alternate starts found no solution that meets the convergence criteria for either state.
+Their cause is undetermined: neither case demonstrates that no physical solution exists or that the solver fails at an existing solution.
+Neither case enters the Born-form ranking.
+
+\subsection{Comparison with published models}\label{sec:results-literature}
+% P:results-18
+Unlike the electrolyte NRTL model of Akula et al., which left NMR speciation outside its fit~\cite{Akula2023a}, the present model fits speciation together with pressure, so its species residuals at fitted temperatures are calibration results (\cref{tab:literature-model-comparison}).
+Published pressure deviations for 30 wt\% \MEA cover different row sets and temperature ranges, so no accuracy ranking against those models is claimed.

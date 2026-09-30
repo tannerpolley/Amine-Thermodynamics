@@ -1,9 +1,13 @@
 schema_version: 1
-scientific_lane: historical_fixed_parameter_evaluation
+scientific_lane: scoped_predictive_nine_species_epcsaft
 scientific_claim: >
-  Historical evaluation of a retired fixed SSM+DS modified-Born ePC-SAFT
-  parameter set against MEA-H2O-CO2 pressure and speciation evidence; no values
-  constitute an active MEA parameter set.
+  Nine-species SSM+DS ePC-SAFT record 9055458d for 30 wt% aqueous MEA, fitted
+  to 142 ternary pressure and speciation targets at 20-60 degC; outside the
+  current fit, the 11 Jou 1995 targets at 80 degC (vle_obs_0203-0213) give
+  pressure AARD 9.24 % and all 21 canonical rows 20.27 % (tests outside the
+  present fit, not data unseen during model development); Born-form ranking depends on the role of Matin 2012 titration
+  bicarbonate. Transfer, 100-120 degC, bound, carbonate, density/Cp and probe
+  limits are reported; no physical validation.
 author:
   name: Tanner W. Polley
   orcid: 0009-0008-5957-4152
@@ -31,14 +35,32 @@ declarations:
     final manuscript.
   authority_status: author_approved_2026-07-27
 target_venue: Fluid Phase Equilibria
+title: >
+  A nine-species ePC-SAFT model for CO2 solubility in 30 wt% aqueous
+  monoethanolamine: Born-form comparison and prediction at 80 degC
+keywords:
+  - CO2 solubility
+  - ePC-SAFT
+  - modified Born term
+  - monoethanolamine
+  - chemical speciation
+  - reactive vapor-liquid equilibrium
+repository: https://github.com/tannerpolley/Amine-Thermodynamics
 repository_license: MIT
-release_tag: v1.0.0
-release_url: https://github.com/tannerpolley/MEA-Thermodynamics/releases/tag/v1.0.0
-release_commit: 92a032a7de3233575233a75fb86bba0cf98b43c7
-release_published_at: 2026-07-27T22:09:55Z
-archive_provider: github_release
+repository_visibility_at_submission: public, set by the owner before submission
+release_tag: manuscript-v1
+release_commit: null
+parameter_record_sha256: 9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241
+engine_wheel_sha256: 28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2
+pdf_sha256: null
+source_zip_sha256: null
 archive_doi: null
-archive_doi_status: intentionally_not_minted_by_author_choice
-irreversible_publication_authorized: true
-authorization_date: 2026-07-27
-remaining_human_gate: []
+submission_aids:
+  cover_letter: submission/cover_letter.md
+  highlights: submission/highlights.txt
+excluded_from_upload:
+  - docs/submission/fluid_phase_equilibria/submission_metadata.yml
+remaining_human_gate:
+  - owner confirms the generative-AI declaration describes this preparation
+  - owner makes the repository public
+  - owner completes the Editorial Manager fields and submits

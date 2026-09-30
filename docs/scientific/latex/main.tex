@@ -18,7 +18,9 @@
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \usepackage{xcolor}
 \usepackage{siunitx}
+\usepackage{xurl}
 \graphicspath{{figures/generated/}}
+\newcommand{\pending}[1]{\textcolor{red}{[#1]}}
 
 \newcommand{\Ha}{\text{Ha}}
 \newcommand{\COtwo}{\ce{CO2}\xspace}
@@ -48,10 +50,10 @@
 \def\floatpagepagefraction{1}
 \def\textpagefraction{.001}
 
-\shorttitle{SSM+DS ePC-SAFT Evaluation for Aqueous MEA}
+\shorttitle{Nine-species ePC-SAFT for CO2 in 30 wt\% MEA}
 \shortauthors{Polley}
 
-\title[mode = title]{\texorpdfstring{Evaluation of SSM+DS Modified-Born ePC-SAFT for \ce{CO2} Solubility and Speciation in Aqueous Monoethanolamine}{Evaluation of SSM+DS Modified-Born ePC-SAFT for CO2 Solubility and Speciation in Aqueous Monoethanolamine}}
+\title[mode = title]{\texorpdfstring{A nine-species ePC-SAFT model for \ce{CO2} solubility in 30 wt\% aqueous monoethanolamine: Born-form comparison and prediction at \SI{80}{\degreeCelsius}}{A nine-species ePC-SAFT model for CO2 solubility in 30 wt\% aqueous monoethanolamine: Born-form comparison and prediction at 80 °C}}
 
 \author[1]{Tanner W. Polley}[orcid=0009-0008-5957-4152]
 \cormark[1]
@@ -68,20 +70,32 @@
 \cortext[cor1]{Corresponding author.}
 
 \begin{abstract}
-Reactive \COtwo absorption couples the equilibrium gas pressure to the aqueous electrolyte composition.  We evaluated a now-retired fixed solvation-shell-modeling plus dielectric-saturation (SSM+DS) modified-Born electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) parameter set for \COtwo solubility and speciation in 30 wt\% aqueous monoethanolamine (\MEA).  A five-reaction liquid model resolved \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO, and \Hydroxide.  The evidence comprised 161 vapor--liquid-equilibrium pressure records and 74 nuclear magnetic resonance speciation states over 20--\SI{120}{\degreeCelsius} and \COtwo loadings of 0.003--0.990.  An ideal-activity calculation established the reaction and material-balance baseline; an activity calculation added ePC-SAFT activities and fugacities, concentration-dependent permittivity, and SSM+DS Born terms.  On 31 Jou et al.\ measurements common to both calculations, the median absolute \(\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})\) residual was 0.160 for the ideal baseline and 0.495 for the activity model, which improved only 4 of 31 records.  The activity calculation converged for all 161 pressure records and all 74 speciation states.  Median absolute residuals for positive measured species values were 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, and 0.461 for \HCOthree.  The historical set described amine-family speciation more closely than pressure or carbonate speciation.  Its limited \MEAH/\MEACOO parameter provenance and carbonate-solvation sensitivity do not support transfer as a predictive parameterization and define the evidence needed for a future joint regression. No values evaluated here constitute an active MEA parameter set.
+% P:abstract-01
+The equilibrium \COtwo partial pressure over aqueous monoethanolamine (\MEA) depends on liquid speciation as well as phase equilibrium.
+We present a nine-species electrolyte PC-SAFT (ePC-SAFT) model of \COtwo solubility in 30 wt\% \MEA with explicit carbamate chemistry, five reactions and a modified Born term.
+Five interaction coordinates were fitted to 48 \COtwo partial pressures at 40 and \SI{60}{\degreeCelsius} and 94 NMR and titration species measurements at 20--\SI{60}{\degreeCelsius}, giving average absolute relative deviations (AARD) of 13.53\,\% and 8.28\,\%.
+Prediction here means calculation outside the current fit.
+For the 11 Jou 1995 targets at \SI{80}{\degreeCelsius}, the pressure AARD is 9.24\,\%; all 21 canonical rows at \SI{80}{\degreeCelsius} give 20.27\,\%.
+These are tests outside the present (142-target, five-coordinate) fit, not data unseen during model development.
+The solvation-shell and dielectric-saturation (SSM+DS) Born term of Figiel et al.\ and the Original Born term were fitted with identical coordinates and data.
+Their ranking depends on the role of 18 bicarbonate observations from Matin et al., whose titration values the source authors report as higher than NMR values.
+With those observations fitted, Original Born has the lower weighted cost, 40.20 against 47.63 on 160 targets; with them report-only, SSM+DS is lower, 32.99 against 34.58 on 142 targets.
+Pressure transfer to 15 and 45 wt\% \MEA gives AARDs of 75.95\,\% and 46.15\,\%, and extrapolation to 100--\SI{120}{\degreeCelsius} gives 26.44\,\%.
+The bicarbonate--water coefficient lies at its bound, and density and heat capacity remain unqualified.
+The results are numerical verification and assessment on existing measurements, not physical validation.
 \end{abstract}
 
 \begin{keywords}
-\COtwo solubility\sep{}ePC-SAFT\sep{}SSM+DS modified Born\sep{}monoethanolamine\sep{}reactive vapor--liquid equilibrium\sep{}electrolyte speciation
+\COtwo solubility\sep{}ePC-SAFT\sep{}modified Born term\sep{}monoethanolamine\sep{}chemical speciation\sep{}reactive vapor--liquid equilibrium
 \end{keywords}
 
 \maketitle
 
 \hypersetup{
-    pdftitle={Evaluation of SSM+DS Modified-Born ePC-SAFT for CO2 Solubility and Speciation in Aqueous Monoethanolamine},
+    pdftitle={A nine-species ePC-SAFT model for CO2 solubility in 30 wt\% aqueous monoethanolamine: Born-form comparison and prediction at 80 °C},
     pdfauthor={Tanner W. Polley},
-    pdfsubject={Historical fixed-parameter thermodynamic evaluation of reactive aqueous MEA-CO2-H2O},
-    pdfkeywords={carbon dioxide, monoethanolamine, ePC-SAFT, modified Born, speciation, vapor-liquid equilibrium}
+    pdfsubject={Nine-species ePC-SAFT model of CO2 solubility and speciation in 30 wt\% aqueous MEA},
+    pdfkeywords={carbon dioxide, monoethanolamine, ePC-SAFT, modified Born term, speciation, vapor-liquid equilibrium}
 }
 
 \input{sections/introduction}
@@ -93,7 +107,7 @@ Reactive \COtwo absorption couples the equilibrium gas pressure to the aqueous e
 
 \clearpage
 \bibliographystyle{styles/model1-num-names}
-\bibliography{manuscript_references,project_sources,official_sources}
+\bibliography{references}
 
 \clearpage
 \input{sections/nomenclature}

@@ -1,6 +1,20 @@
 \section{Conclusions}\label{sec:conclusion}
-We evaluated a now-retired fixed SSM+DS modified-Born ePC-SAFT parameter set against 161 VLE pressure records and 74 NMR states for 30 wt\% aqueous \MEA.  The nine-species calculation converged at every experimental state.  For positive measured values, median absolute \(\log_{10}(\mathrm{model}/\mathrm{data})\) residuals were 0.074 for \MEA, 0.033 for \MEAH, 0.040 for \MEACOO, 0.461 for \HCOthree, 0.599 for \COthree, and 0.066 for the \ce{MEA + MEAH+} aggregate.  The historical set therefore describes the measured amine-family composition more closely than the carbonate family.
+% P:conclusion-01
+A nine-species ePC-SAFT model with explicit \MEAH and \MEACOO chemistry and an SSM+DS Born term was fitted to 48 \COtwo pressures at 40 and \SI{60}{\degreeCelsius} and 94 species measurements at 20--\SI{60}{\degreeCelsius} in 30 wt\% aqueous \MEA.
+The fitted pressure and species AARDs are 13.53 and 8.28\,\%.
+At \SI{80}{\degreeCelsius}, outside the current fit, the model reproduces the 11 Jou 1995 targets with an AARD of 9.24\,\% and all 21 canonical rows with 20.27\,\%.
+These are tests outside the present (142-target, five-coordinate) fit, not data unseen during model development: inherited reaction shifts used two of the 11 targets, and the fixed \COtwo dispersion energy was chosen against a set that included \SI{80}{\degreeCelsius} data.
 
-The controlled pressure comparison does not support transfer of the historical set as a predictive pressure parameterization.  On the same 31 Jou et al.\ measurements, the median absolute \(\log_{10}(P_{\mathrm{model}}/P_{\mathrm{data}})\) residual was 0.160 for the ideal-activity baseline and 0.495 for the activity calculation.  The activity treatment improved 4 records and worsened 27.  Across all 161 pressure records, its median absolute residual was 0.493.
+% P:conclusion-02
+The comparison of Born forms depends on the observations fitted.
+With Matin's titration bicarbonate included, Original Born has the lower cost, 40.20 against 47.63.
+With those 18 observations report-only, SSM+DS is lower, 32.99 against 34.58, a 4.6\,\% advantage relative to Original Born.
+Those authors report bicarbonate above NMR values, and the selected model departs further from that bicarbonate, with a signed relative mean of \(-58.84\,\%\).
+In this system the Born-form selection depends on the measurement method of the fitted bicarbonate, which must therefore be reported with the fit.
 
-The evidence locates three limitations.  First, the historical \MEAH and \MEACOO parameters lack a reproducible estimation history.  Second, the NMR studies directly measure \MEACOO at all 74 states but resolve \MEA and \MEAH separately at only 35 states each; the \ce{MEA + MEAH+} aggregate covers all states.  Third, carbonate-only sensitivity and the absence of independent \HthreeO and \Hydroxide observations leave the electrostatic terms weakly identified.  A predictive model requires a preregistered joint regression of pressure, measured speciation, and reaction-equilibrium constraints, followed by independent validation.  These results characterize the retired calculation but do not establish predictive accuracy or an active MEA parameter set.
+% P:conclusion-03
+Pressure transfer to 15 and 45 wt\% \MEA gives AARDs of 75.95 and 46.15\,\%, and extrapolation to 100--\SI{120}{\degreeCelsius} gives 26.44\,\%.
+The \HCOthree--water coefficient lies at its bound, the calculated carbonate share ranges from 0.42 to 1.33 times the NMR values, and density and heat capacity remain unqualified.
+Two Born probe calculations remain unavailable, with undetermined cause.
+All evidence is numerical verification and assessment on existing measurements; no physical validation at new conditions is claimed.
+The working domain of the record is \COtwo pressure and speciation in 30 wt\% \MEA at 40--\SI{80}{\degreeCelsius}; the evidence does not support other concentrations, higher temperatures or absorber and stripper design.
