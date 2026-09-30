@@ -28,7 +28,7 @@ criteria may support predictive manuscript claims or column-side transfer.
 
 Direct analysis and validation whose calculation is performed by ePC-SAFT is
 first built and debugged in `ePC-SAFT-project/analysis/` or `validation/`.
-MEA-Thermodynamics may then reproduce the pinned method directly with an
+Amine-Thermodynamics may then reproduce the pinned method directly with an
 accepted immutable packet and MEA-owned inputs. Engine Issue #80 owns the
 current upstream bundle campaign; MEA Issues #83–#86 describe separate local
 diagnostic work. Neither campaign has established an active MEA parameter set.
@@ -217,7 +217,7 @@ promotion evidence.
 
 ## 8. Manuscript gates
 
-### MEA-Thermodynamics
+### Amine-Thermodynamics
 
 The current manuscript supports fixed-parameter comparisons and the negative
 predictive decision. Issue #68's later scope comment narrows its earlier

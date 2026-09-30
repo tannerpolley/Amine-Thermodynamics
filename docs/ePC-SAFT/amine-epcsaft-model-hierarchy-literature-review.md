@@ -201,11 +201,11 @@ claim limits in the [working notebook](../../analyses/mea_parameter_bundle/noteb
 
 Manuscript direction (owner decision, 24 September 2026): a predictive paper
 for Fluid Phase Equilibria built on the R4-fixed refit of candidate A
-([MEA #107](https://github.com/tannerpolley/MEA-Thermodynamics/issues/107);
+([MEA #107](https://github.com/tannerpolley/Amine-Thermodynamics/issues/107);
 candidate A reaches pCO2 AARD 26.9 % on the 161 rows, draft
-[PR #106](https://github.com/tannerpolley/MEA-Thermodynamics/pull/106)), with
+[PR #106](https://github.com/tannerpolley/Amine-Thermodynamics/pull/106)), with
 composition-transfer validation on the 95 reserved pressure rows, 94 of them at other MEA concentrations
-([MEA #108](https://github.com/tannerpolley/MEA-Thermodynamics/issues/108);
+([MEA #108](https://github.com/tannerpolley/Amine-Thermodynamics/issues/108);
 row-access audit running). Every "pre-refit record" number below comes from
 the exploratory incumbent `selected-current-best-parameters.json`
 (SHA-256 `868a5018…fcb7be`). Those numbers are superseded once #107 adopts a

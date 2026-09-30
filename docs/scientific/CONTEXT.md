@@ -263,7 +263,7 @@ The installed Engine wheel owns generic equations, equilibrium compilation,
 exact derivatives, and parameter-fitting mechanics. New generic ePC-SAFT methods are
 first built and debugged in `ePC-SAFT-project/analysis/` or `validation/`.
 
-MEA-Thermodynamics may call those public Engine methods directly to reproduce
+Amine-Thermodynamics may call those public Engine methods directly to reproduce
 an accepted calculation, evaluate MEA observations, and generate retained
 tables or figures. Such work records the Engine wheel and method identity,
 input and packet identity, and hashes. This upstream-first rule does not ban
