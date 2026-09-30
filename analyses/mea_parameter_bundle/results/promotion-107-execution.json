@@ -1,0 +1,80 @@
+{
+  "base": "33508bedceb7d4a7f66d0d80ffa94c1bd73f0e04",
+  "branch": "work/107-promote-ssmds",
+  "issue_design": "https://github.com/tannerpolley/MEA-Thermodynamics/issues/107#issuecomment-5913854251",
+  "amendment": "https://github.com/tannerpolley/MEA-Thermodynamics/issues/107#issuecomment-5914099413",
+  "parameter_sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+  "engine_wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+  "engine_wheel_path": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/build/fit-audit-20260929/candidate-28181e72/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+  "execution": {
+    "serial": true,
+    "threads": {
+      "OMP_NUM_THREADS": 1,
+      "OPENBLAS_NUM_THREADS": 1,
+      "MKL_NUM_THREADS": 1,
+      "NUMEXPR_NUM_THREADS": 1
+    },
+    "nice": 10,
+    "solver_RLIMIT_AS_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "bounded_run": "MEA_BOUNDED_RUN=1 with external timeout",
+    "uv": "uv sync --frozen --group dev; uv pip install --python .venv/bin/python --reinstall explicit wheel; executions uv run --no-sync",
+    "timeouts_s": {
+      "installation": 300,
+      "identity": 300,
+      "jacobian": 1800,
+      "assessment_each": 1800,
+      "figure": 3600,
+      "coverage": 1800,
+      "heat": 1800,
+      "thermal": 1800,
+      "render_each": 600,
+      "certification": 600
+    },
+    "per_state_figure_heat_timeout_s": 180,
+    "render_Deno_heap_options": "--max-old-space-size=2048,--max-heap-size=2048",
+    "shared_lock": false
+  },
+  "assessment_commands_owner": "model-d/assessment-p5a-11-commands.json",
+  "assessment_replacements": {
+    "record": "results/selected-current-best-parameters.json",
+    "output_and_cache": "results/runs/promotion-107",
+    "worktree": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-greenfield/downstream/.worktrees/MEA-Thermodynamics-107-promote",
+    "transfer_output": "results/promotion-107-promotion-*.csv",
+    "salt_output": "results/promotion-107-nahco3-*.csv"
+  },
+  "regeneration_order": [
+    "scripts/generate_figure_data.py --state-timeout-s 180 --overall-timeout-s 3600",
+    "scripts/score_observation_coverage.py",
+    "scripts/evaluate_direct_absorption_heat.py --state-timeout-s 180 --overall-timeout-s 1800",
+    "scripts/validate_thermal_references.py",
+    "scripts/render_regression_overview.py",
+    "scripts/render_figures.py",
+    "scripts/result_freshness.py --certify"
+  ],
+  "checks": {
+    "objective": "C=0.5 sum scaled residual^2; exact 142/160 target identities in promotion-107-verification.json",
+    "pool": "24 figure pool predictions compared with retained assessment values; maximum relative difference 3.3151259515307174e-13",
+    "jacobian": "verify_promoted_record.py; native initial optimizer Jacobian divided by existing coordinate scales, as refit.py owns; no parameter update",
+    "focused_tests": "pytest -q tests/test_shared_evaluation.py -k \"pinned_engine_state_and_cached_replay or source_normalizer\"; pytest -q tests/test_result_freshness.py -k \"certification or publication\"",
+    "render": "result_freshness.py --certify after managed sidebar synchronization"
+  },
+  "code_sources_sha256": {
+    "scripts/validate_thermal_references.py": "742960159feaa410d900f4412b73018c6e65ba8ed470bc2b96b6d8a0a902c468",
+    "scripts/result_freshness.py": "99d2f5f00a82922f765a68a450d949d4c1b173a3609b69a749a89db0f241ce30",
+    "scripts/generate_figure_data.py": "7443d0b7444b7538f7d9e9d9e8ede9d11436ebc93d8bfc74b1810ed137fca560",
+    "scripts/score_observation_coverage.py": "9cced4ec527b672e546ad897ad0de2b7ddcd4b508826221ab6ab2717b72ea350",
+    "scripts/render_figures.py": "f6827974b11c2e3b5af29e01e14cbd1fb4578377655b5e1d6438c771ab3b4d3f",
+    "scripts/verify_promoted_record.py": "4b279e434bf3682305dc62649197d4fc9530d062ea104cf8d2096bef5cd55ea0",
+    "scripts/render_regression_overview.py": "e2e31eb6e138f7585a1774a473fb906dcbb1e7e660f4592d6e7d1088bb7f96ee",
+    "scripts/evaluate_direct_absorption_heat.py": "7f4eb2943495a58bd4bdaba95b260a791b9f7cd7263454f67491242a5f782e77"
+  },
+  "association_ancestry": {
+    "packet_fingerprint": "76315ac4e4961782d089c3c4504fb49667e120b9e31d46fe2a8e99837b8e0a45",
+    "packet_parameters_sha256": "1ba95275f9e23264250e891aee3d6284d801f73205dad255101e6561b29aee5f",
+    "pre_refit_v5_sha256": "562b5976c7f6d44b782498480fce54bad1e3142d9541438f6d7a42a876a3df87"
+  },
+  "limits": "Numerical verification, not physical validation; working domain 30 wt% MEA, 40\u201380 \u00b0C; bundle Snakemake held; two unavailable probe solves unresolved; delivered promotion review remains with lead."
+}

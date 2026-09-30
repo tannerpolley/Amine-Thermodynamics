@@ -36,11 +36,15 @@ from MEA.common.plot_style import (  # noqa: E402
 from MEA.common.analysis_io import file_sha256, repo_relative_path  # noqa: E402
 from render_regression_overview import (  # noqa: E402
     FIT,
+    HCO3_POOL_LABEL,
+    model_parts,
     ln_label,
     short_label,
     species_label,
 )
 
+TRUE_SPECIES_COLORS = {**TRUE_SPECIES_COLORS, HCO3_POOL_LABEL: TRUE_SPECIES_COLORS["HCO3-"]}
+TRUE_SPECIES_LABELS = {**TRUE_SPECIES_LABELS, HCO3_POOL_LABEL: "HCO₃⁻ + CO₃²⁻ pool (Matin report-only)"}
 DISPLAY_SPECIES = ("CO2", "MEA", "MEAH+", "MEACOO-", "HCO3-")
 MARKERS = {
     "Bottinger2008": "o",
@@ -172,21 +176,14 @@ def render_speciation(temperature_c: int) -> None:
     model_by_grid: dict[str, dict[str, str]] = {}
     for row in model:
         model_by_grid.setdefault(row["grid_id"], {})[row["species"]] = row
-    for species in (*DISPLAY_SPECIES, "MEA + MEAH+"):
+    for species in (*DISPLAY_SPECIES, "MEA + MEAH+", HCO3_POOL_LABEL):
         selected: list[tuple[float, float]] = []
         for values in model_by_grid.values():
-            if species == "MEA + MEAH+":
-                if "MEA" not in values or "MEAH+" not in values:
-                    continue
-                x = float(values["MEA"]["loading_mol_CO2_per_mol_MEA"])
-                y = float(values["MEA"]["model_mole_fraction"]) + float(
-                    values["MEAH+"]["model_mole_fraction"]
-                )
-            elif species in values:
-                x = float(values[species]["loading_mol_CO2_per_mol_MEA"])
-                y = float(values[species]["model_mole_fraction"])
-            else:
+            parts = model_parts(species)
+            if any(p not in values for p in parts):
                 continue
+            x = float(values[parts[0]]["loading_mol_CO2_per_mol_MEA"])
+            y = sum(float(values[p]["model_mole_fraction"]) for p in parts)
             selected.append((x, y))
         selected.sort()
         if selected:
@@ -196,7 +193,7 @@ def render_speciation(temperature_c: int) -> None:
                     [point[1] for point in selected],
                     color=TRUE_SPECIES_COLORS[species],
                     linewidth=1.6,
-                    linestyle="--",
+                    linestyle="-." if species == HCO3_POOL_LABEL else "--",
                     zorder=2,
                 )
             line_rows.extend(
@@ -214,7 +211,7 @@ def render_speciation(temperature_c: int) -> None:
         if any(row["source"] == source for row in observed)
     )
     for source in sources:
-        for species in (*DISPLAY_SPECIES, "MEA + MEAH+"):
+        for species in (*DISPLAY_SPECIES, "MEA + MEAH+", HCO3_POOL_LABEL):
             selected = [
                 row
                 for row in observed
@@ -254,12 +251,12 @@ def render_speciation(temperature_c: int) -> None:
         max(
             float(row["observed_mole_fraction"])
             for row in observed
-            if row["species"] in (*DISPLAY_SPECIES, "MEA + MEAH+")
+            if row["species"] in (*DISPLAY_SPECIES, "MEA + MEAH+", HCO3_POOL_LABEL)
         ),
     )
     upper_limit = 1.03 * displayed_maximum
     trace_ax.set_xlabel(r"$CO_2$ loading, mol $CO_2$/mol MEA")
-    fig.supylabel("True-species mole fraction", x=0.015)
+    fig.supylabel("Species / observation-pool mole fraction", x=0.015)
     ax.set_title(f"Speciation at {temperature_c} °C and 30 wt% MEA")
     for current_ax in axes:
         current_ax.set_yscale("log")
@@ -314,10 +311,10 @@ def render_speciation(temperature_c: int) -> None:
             [0],
             color=TRUE_SPECIES_COLORS[s],
             linewidth=1.6,
-            linestyle="--",
+            linestyle="-." if s == HCO3_POOL_LABEL else "--",
             label=f"{TRUE_SPECIES_LABELS[s]}: {scored_label(s)}",
         )
-        for s in DISPLAY_SPECIES
+        for s in (*DISPLAY_SPECIES, HCO3_POOL_LABEL)
     ]
     species_handles.append(
         Line2D(
@@ -366,7 +363,7 @@ def render_speciation(temperature_c: int) -> None:
         output,
         f"speciation-diagnostic-replay{suffix}",
         f"{temperature_c} C MEA liquid-equilibrium replay with full retained observations",
-        f"Broken log scale starts 30% below the lowest positive HCO3- model or observation value ({hco3_minimum:.6g}) and ends 3% above the displayed maximum ({upper_limit:.6g}). Dashed lines connect {len(model_by_grid)} direct pinned-Engine evaluations of the five principal species plus the MEA plus MEAH+ observation operator through loading 1.0. Markers show every positive retained {temperature_c} C, 30 wt% value for those series; exact reported zeros remain in the source snapshot but are omitted from the visual. Trace ions remain in the calculation and source snapshot but are omitted from the visual.",
+        f"Broken log scale starts 30% below the lowest positive HCO3- model or observation value ({hco3_minimum:.6g}) and ends 3% above the displayed maximum ({upper_limit:.6g}). Dashed lines connect {len(model_by_grid)} direct pinned-Engine evaluations of the physical species, MEA plus MEAH+ aggregate and HCO3- plus CO3^2- pool; Matin/Böttinger compare with the pool, Jakobsen with HCO3- alone; Matin pool is report-only through loading 1.0. Markers show every positive retained {temperature_c} C, 30 wt% value for those series; exact reported zeros remain in the source snapshot but are omitted from the visual. Trace ions remain in the calculation and source snapshot but are omitted from the visual.",
         line_data,
         output / "speciation-display-observations.csv",
         output / "speciation-model-grid.csv",

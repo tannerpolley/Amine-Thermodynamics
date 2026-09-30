@@ -156,7 +156,7 @@ The immutable, hash-addressed snapshot of MEA-curated inputs consumed by the uni
 
 - Status: authoritative repository definition under ePC-SAFT Governance D-038
 - Scope: aqueous monoethanolamine (MEA)--water--carbon dioxide thermodynamics
-- Current parameter status: no active (accepted) MEA parameter set; the exploratory incumbent used for comparisons and fixed-chemistry diagnostics is `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json` (sha256 `868a5018...fcb7be`; explicit `exclude-same-sign-ion-pairs` since 2026-09-22), tracked in `analyses/mea_parameter_bundle/results/parameter-record-history.csv`
+- Current parameter status (2026-09-30, #107): SSM+DS model D `p5conv-a-11` is the limited-domain working record for 30 wt% MEA at 40–80 °C, under decisions 21/24 and the 142-target objective. `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json` SHA-256 `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241`, Engine wheel `28181e72`; history in `analyses/mea_parameter_bundle/results/parameter-record-history.csv`. This is numerical verification and calibration/assessment evidence, not physical validation, concentration transfer or 100–120 °C qualification. The HCO₃⁻–water upper bound and two unavailable probe solves remain disclosed; bundle Snakemake remains held under #133.
 
 ## Question and intended use
 

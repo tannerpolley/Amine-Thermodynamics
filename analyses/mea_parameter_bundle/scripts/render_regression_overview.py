@@ -5,6 +5,7 @@ import hashlib
 import json
 import math
 import statistics
+import sys
 from pathlib import Path
 
 import matplotlib
@@ -16,6 +17,9 @@ from result_freshness import FIGURE_DATA, require_results
 from shared_evaluation import ENGINE_COMMIT, ENGINE_WHEEL_SHA256
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "calibration-misfit"))
+from compare import HCO3_POOL_LABEL  # noqa: E402
+
 OUT = ROOT / "figures/regression_overview/output"
 FIT = ROOT / "results/current-best-fit-residuals.csv"
 SUPERSEDED = ROOT / "results/reaction-temperature-fit/full-validation-targets.csv"
@@ -30,7 +34,7 @@ LN_STATISTICS = ROOT / "results/current-best-fit-ln-statistics.csv"
 COLORS = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9"]
 SOURCES = ["Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011"]
 MARKERS = dict(zip(SOURCES, ["*", "o", "D", "x", "h", "^"], strict=True))
-SPECIES = ["MEA", "MEAH+", "MEA + MEAH+", "MEACOO-", "HCO3-"]
+SPECIES = ["MEA", "MEAH+", "MEA + MEAH+", "MEACOO-", HCO3_POOL_LABEL]
 
 
 def digest(path):
@@ -290,6 +294,10 @@ def render_residuals(pressure, colors, title):
     save(fig, "pressure-residuals")
 
 
+def model_parts(species):
+    return ("MEA", "MEAH+") if species == "MEA + MEAH+" else ("HCO3-", "CO3^2-") if species == HCO3_POOL_LABEL else (species,)
+
+
 def render_speciation(speciation, grid, display, title):
     temperatures = (20, 40, 60, 80)
     fig, axes = plt.subplots(2, 3, figsize=(13, 8.6), squeeze=False)
@@ -315,7 +323,7 @@ def render_speciation(speciation, grid, display, title):
             )
             line = []
             for values in by_grid.values():
-                parts = ("MEA", "MEAH+") if species == "MEA + MEAH+" else (species,)
+                parts = model_parts(species)
                 if round(float(values[parts[0]]["temperature_C"])) == temperature:
                     line.append(
                         (
@@ -323,6 +331,11 @@ def render_speciation(speciation, grid, display, title):
                             sum(float(values[p]["model_mole_fraction"]) for p in parts),
                         )
                     )
+            if species == HCO3_POOL_LABEL:
+                physical = sorted((float(v["HCO3-"]["loading_mol_CO2_per_mol_MEA"]), float(v["HCO3-"]["model_mole_fraction"])) for v in by_grid.values() if round(float(v["HCO3-"]["temperature_C"])) == temperature)
+                ax.plot([x for x, _ in physical], [y for _, y in physical], color=color, linewidth=0.8, linestyle=":", label=f"{temperature} °C HCO₃⁻ alone")
+                separate = [r for r in display if r["species"] == "HCO3-" and round(float(r["temperature_C"])) == temperature and float(r["observed_mole_fraction"]) > 0]
+                ax.scatter([float(r["loading_mol_CO2_per_mol_MEA"]) for r in separate], [float(r["observed_mole_fraction"]) for r in separate], edgecolors=color, facecolors="none", marker="s", s=20)
             line.sort()
             scored = [
                 r
@@ -360,8 +373,8 @@ def render_speciation(speciation, grid, display, title):
     fig.text(
         0.5,
         0.012,
-        "30 mass% MEA. Circles are all positive retained observations, colored by temperature; dashed lines connect 46 "
-        "adopted-record Engine states per temperature. Statistics use the scored packet targets only.",
+        "30 wt% MEA; 46 direct states per temperature. Dashed: HCO₃⁻ + CO₃²⁻ pool; dotted: HCO₃⁻ alone.\n"
+        "Circles: Matin/Böttinger pools; squares: Jakobsen bicarbonate. Display statistics include report-only Matin pools.",
         ha="center",
         fontsize=8,
     )
@@ -481,7 +494,7 @@ def main():
     render_isotherms(
         pressure,
         colors,
-        f"Adopted record spans five decades of pCO₂ but overshoots near loading 0.3–0.5 "
+        f"Working-record pressure comparison "
         f"(RMS ln {overall['rms_ln_pred_over_obs']:.2f}, {overall['evaluated_positive']}/{overall['attempted']} states)",
     )
     render_parity(
@@ -493,7 +506,7 @@ def main():
     render_residuals(
         pressure,
         colors,
-        "Residuals follow loading across sources: low below 0.2 and above 0.55, high near 0.3–0.5",
+        "Working-record pressure residuals by source and loading",
     )
     species_rms = {
         r["group"]: r["rms_ln_pred_over_obs"]
@@ -504,8 +517,7 @@ def main():
         speciation,
         read(GRID),
         read(DISPLAY),
-        f"Adopted record: amine and carbamate within RMS ln {max(species_rms[s] for s in SPECIES[:4]):.2f}; "
-        f"bicarbonate misses low-loading data (RMS ln {species_rms['HCO3-']:.2f})",
+        f"Working-record species and observation-pool comparison; pool RMS ln {species_rms[HCO3_POOL_LABEL]:.2f}",
     )
 
     summary = json.loads(HEAT_SUMMARY.read_text())
