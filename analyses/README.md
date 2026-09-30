@@ -7,7 +7,7 @@ This directory contains source-controlled scientific analysis, validation, and f
 The confirmed decisions for all 11 top-level analyses and their nested work
 are recorded in [scientific context](../docs/scientific/CONTEXT.md#local-snakemake-workflow-adoption).
 Ten analysis-local presentation workflows are installed by
-[issue #133](https://github.com/tannerpolley/MEA-Thermodynamics/issues/133).
+[issue #133](https://github.com/tannerpolley/Amine-Thermodynamics/issues/133).
 The `mea_parameter_bundle/` workflow remains held until its scientific results
 are reconciled; all eleven adoption decisions remain in force.
 
@@ -38,7 +38,7 @@ identified retained version rather than rewriting hashes or running a retired
 generator. This file checking establishes presentation integrity, not a new
 calculation or physical validation.
 
-[Issue #90](https://github.com/tannerpolley/MEA-Thermodynamics/issues/90) still
+[Issue #90](https://github.com/tannerpolley/Amine-Thermodynamics/issues/90) still
 owns the required source-data calculation, coherent result delivery, notebook
 refresh and preview experiments. Presentation installation does not complete
 its calculation, unchanged-run or dependency-rebuild requirements.

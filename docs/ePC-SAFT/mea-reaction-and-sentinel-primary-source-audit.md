@@ -23,7 +23,7 @@ Evidence rules:
 | Nasrifar & Tafazzol (2010), *Ind. Eng. Chem. Res.* 49, 7620--7628 | Zotero storage key `3G4FGGY4` (PDF) | `29165d43cf374760cc17a730d92e15ed77a9e969af1f3355a1ca39a275f7110f` | Table 1 and reactions, printed p. 7621 |
 | Nasrifar Markdown rendering | Zotero storage key `FVFWT3P9` (Markdown) | `7a8b1f03a9445615c0aa991ad0d3fd85f8085b8bee23d4f45214c1685b270976` | Same printed locators as PDF |
 
-The identical Nasrifar Markdown rendering is also retained at `MEA-Thermodynamics/docs/papers/md/Nasrifar and Tafazzol - 2010 - Vapor-liquid equilibria of acid gas-aqueous ethanolamine solutions us.md` (same SHA-256).
+The identical Nasrifar Markdown rendering is also retained at `Amine-Thermodynamics/docs/papers/md/Nasrifar and Tafazzol - 2010 - Vapor-liquid equilibria of acid gas-aqueous ethanolamine solutions us.md` (same SHA-256).
 
 ## Austgen 1991: reaction directions, standard states, and Table V
 
@@ -75,7 +75,7 @@ The five entries relevant to the nine-species MEA system are:
 | R5 | `MEAH+ + H2O <-> MEA + H3O+` | 2.1211 | -8189.38 | 0 | -0.007484 | 273--323 K |
 | R4 | `MEACOO- + H2O <-> MEA + HCO3-` | 2.8898 | -3635.09 | 0 | 0 | 298--393 K |
 
-`verified discrepancy`: Austgen's original 1991 Table V prints R2's A coefficient as **231.465** (printed p. 547), whereas Nasrifar's later primary Table 1 prints **231.456** (printed p. 7621). The difference is 0.009 in A (a roughly 0.9% multiplicative change in K) and is numerically small but scientifically material for source identity. The current MEA-Thermodynamics source-verification manifest adopts the later Nasrifar value as `231.456`; it should be recorded as a later transcription/value choice, not asserted as a proven correction to the 1991 table unless an erratum or original typesetting record is found.
+`verified discrepancy`: Austgen's original 1991 Table V prints R2's A coefficient as **231.465** (printed p. 547), whereas Nasrifar's later primary Table 1 prints **231.456** (printed p. 7621). The difference is 0.009 in A (a roughly 0.9% multiplicative change in K) and is numerically small but scientifically material for source identity. The current Amine-Thermodynamics source-verification manifest adopts the later Nasrifar value as `231.456`; it should be recorded as a later transcription/value choice, not asserted as a proven correction to the 1991 table unless an erratum or original typesetting record is found.
 
 `verified provenance`: Nasrifar explicitly cites Austgen et al. (1991) as the source family for this table. The later paper is therefore a primary reproduction/selection, not an independent reaction-constant measurement.
 
@@ -155,7 +155,7 @@ These are molality-reference fitted constants and are not the Austgen/Nasrifar m
 
 `verified onset`: In the MEA results discussion (printed p. 141), Böttinger reports that at approximately `0.5 mol_CO2/mol_MEA`, free molecular amine has fallen nearly to zero and carbamate concentration begins to decline at higher loading; above approximately `0.5 mol_CO2/mol_MEA`, **2-oxazolidone is present in quantifiable amounts**. At loadings above approximately `0.7`, molecular CO2 is also present. The paper studied MEA at 0.2 and 0.3 g/g initial amine, 293--353 K, and pressures 5--25 bar (abstract and experimental section).
 
-This is an onset/eligibility boundary, not proof that every Böttinger point above 0.5 has a separately measured oxazolidone concentration in the current MEA-Thermodynamics CSV. The species tables report an `x_OXA` column, but any reuse must preserve the source's molar-fraction basis and the measured-vs-inferred row status.
+This is an onset/eligibility boundary, not proof that every Böttinger point above 0.5 has a separately measured oxazolidone concentration in the current Amine-Thermodynamics CSV. The species tables report an `x_OXA` column, but any reuse must preserve the source's molar-fraction basis and the measured-vs-inferred row status.
 
 ## Wong 2015: pressure/temperature loading sentinel
 
