@@ -306,7 +306,7 @@ def render_speciation(speciation, grid, display, title):
     for row in grid:
         by_grid.setdefault(row["grid_id"], {})[row["species"]] = row
     for ax, species in zip(axes.flat, SPECIES):
-        for color, temperature in zip(COLORS, temperatures):
+        for color, temperature, marker in zip(COLORS, temperatures, ("o", "^", "D", "v")):
             points = [
                 r
                 for r in display
@@ -317,8 +317,9 @@ def render_speciation(speciation, grid, display, title):
             ax.scatter(
                 [float(r["loading_mol_CO2_per_mol_MEA"]) for r in points],
                 [float(r["observed_mole_fraction"]) for r in points],
-                facecolors="none",
+                facecolors=[color if r["source"] == "Jakobsen2005" else "none" for r in points],
                 edgecolors=color,
+                marker=marker,
                 s=26,
             )
             line = []
@@ -333,9 +334,9 @@ def render_speciation(speciation, grid, display, title):
                     )
             if species == HCO3_POOL_LABEL:
                 physical = sorted((float(v["HCO3-"]["loading_mol_CO2_per_mol_MEA"]), float(v["HCO3-"]["model_mole_fraction"])) for v in by_grid.values() if round(float(v["HCO3-"]["temperature_C"])) == temperature)
-                ax.plot([x for x, _ in physical], [y for _, y in physical], color=color, linewidth=0.8, linestyle=":", label=f"{temperature} °C HCO₃⁻ alone")
+                ax.plot([x for x, _ in physical], [y for _, y in physical], color=color, linewidth=0.8, linestyle=":", marker=marker, markevery=6, markersize=3.2, markerfacecolor="none", label=f"{temperature} °C HCO₃⁻ alone")
                 separate = [r for r in display if r["species"] == "HCO3-" and round(float(r["temperature_C"])) == temperature and float(r["observed_mole_fraction"]) > 0]
-                ax.scatter([float(r["loading_mol_CO2_per_mol_MEA"]) for r in separate], [float(r["observed_mole_fraction"]) for r in separate], edgecolors=color, facecolors="none", marker="s", s=20)
+                ax.scatter([float(r["loading_mol_CO2_per_mol_MEA"]) for r in separate], [float(r["observed_mole_fraction"]) for r in separate], edgecolors=color, facecolors=[color if r["source"] == "Jakobsen2005" else "none" for r in separate], marker=marker, s=20)
             line.sort()
             scored = [
                 r
@@ -349,6 +350,10 @@ def render_speciation(speciation, grid, display, title):
                 color=color,
                 linewidth=1.1,
                 linestyle="--",
+                marker=marker,
+                markevery=6,
+                markersize=3.2,
+                markerfacecolor="none",
                 label=f"{temperature} °C: "
                 + (species_label(scored) if scored else "not scored"),
             )
@@ -374,7 +379,7 @@ def render_speciation(speciation, grid, display, title):
         0.5,
         0.012,
         "30 wt% MEA; 46 direct states per temperature. Dashed: HCO₃⁻ + CO₃²⁻ pool; dotted: HCO₃⁻ alone.\n"
-        "Circles: Matin/Böttinger pools; squares: Jakobsen bicarbonate. Display statistics include report-only Matin pools.",
+        "Shapes: ○ 20, △ 40, ◇ 60, ▽ 80 °C. Open: Matin/Böttinger; filled: Jakobsen. Statistics include report-only Matin pools.",
         ha="center",
         fontsize=8,
     )
@@ -544,7 +549,7 @@ def main():
                 "pressure_speciation_identity": "adopted parameter record on the pinned Engine; figure-calculation record",
                 "heat_identity": "adopted parameter record on the pinned Engine; current-selected-direct-enthalpy-summary.json",
                 "model_executed": False,
-                "series": "open markers observations; dashed segments connect discrete calculations; no interpolation",
+                "series": "Speciation: temperature shapes o/^/D/v for 20/40/60/80 °C on observations and selected retained curve points; open Matin/Böttinger, filled Jakobsen; dashed modeled HCO3- + CO3^2- pool, dotted HCO3- alone. Other figures: open observation markers; dashed segments connect discrete calculations; no interpolation.",
                 "outputs": {
                     p.name: digest(p)
                     for p in sorted(OUT.iterdir())

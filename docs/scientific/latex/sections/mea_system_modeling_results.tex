@@ -54,7 +54,8 @@ The two forms differ less on unweighted comparisons (\cref{tab:residual-summary}
 SSM+DS gives the lower fitted-pressure AARD, 13.53 against 17.31\,\%, whereas Original Born gives a slightly lower fitted-species AARD, 8.23 against 8.28\,\%.
 On the 104 canonical pressure rows at 40--\SI{80}{\degreeCelsius}, the two forms give 20.58 and 20.78\,\%.
 The comparison applies the SSM+DS construction of Figiel et al.~\cite{Figiel2025,Figiel2026Correction} to a reactive, carbamate-forming amine at 20--\SI{80}{\degreeCelsius}.
-Figiel et al.\ adjusted Born diameters to Gibbs energies of ion solvation at infinite dilution and ion interaction parameters to mean ionic activity coefficients of salts in water, methanol and ethanol at \SI{298.15}{\kelvin}~\cite[Model Parameters, pp.~9411--9412]{Figiel2025}.
+Figiel et al.\ fitted Born diameters to infinite-dilution solvation Gibbs energies in water, solvent factors to NaBr activity coefficients, and aqueous ion interaction parameters to salt activity or osmotic data.
+Ion--methanol and ion--ethanol interaction parameters were fitted to infinite-dilution solvation Gibbs energies~\cite[Model Parameters, pp.~9411--9412]{Figiel2025}.
 
 \subsection{Titration bicarbonate reads high against NMR}\label{sec:results-matin}
 % P:results-07
@@ -100,10 +101,14 @@ Prediction here therefore means calculation outside the current fit, as defined 
     \centering
     \includegraphics[width=\linewidth]{speciation.pdf}
     \caption{Liquid species, the \ce{MEA + MEAH+} sum and the \ce{HCO3- + CO3^2-} observation pool against loading for 30 wt\% \MEA with the selected SSM+DS record, at 20--\SI{80}{\degreeCelsius}.
-    Circles are Matin 2012 titration and B\"ottinger 2008 NMR observations, compared with the modeled pool; squares are Jakobsen 2005 NMR bicarbonate, compared with modeled \HCOthree alone (dotted curves).
-    The 131 displayed targets are the 94 fitted species targets, Matin's 18 report-only pool targets, the 11 targets at \SI{80}{\degreeCelsius} and 8 targets excluded from the fit.
-    The panel statistics therefore describe the displayed targets, not the 94-target fitted-species AARD of 8.28\,\%.
-    Matin's measurements, labeled \SI{21}{\degreeCelsius} in the source, are plotted at \SI{20}{\degreeCelsius}.}
+    The plotted observations comprise 76 Matin 2012 titration values, 97 B\"ottinger 2008 NMR values and 79 Jakobsen 2005 NMR values.
+    The model is compared with each reported species or sum; Matin and B\"ottinger bicarbonate values use the modeled \ce{HCO3- + CO3^2-} pool, whereas Jakobsen bicarbonate values use modeled \HCOthree alone.
+    The panel statistics score 131 packet targets: 94 fitted species targets, 18 report-only Matin pool targets, 11 targets at \SI{80}{\degreeCelsius} and eight excluded targets.
+    The additional 121 plotted observations do not enter those statistics.
+    Matin's measurements, labeled \SI{21}{\degreeCelsius} in the source, are plotted at \SI{20}{\degreeCelsius}.
+    Marker shape identifies temperature: circles, \SI{20}{\degreeCelsius}; upward triangles, \SI{40}{\degreeCelsius}; diamonds, \SI{60}{\degreeCelsius}; downward triangles, \SI{80}{\degreeCelsius}.
+    Open observation markers denote Matin or B\"ottinger values; filled observation markers denote Jakobsen values.
+    Dashed curves denote the bicarbonate/carbonate pool and dotted curves denote \HCOthree alone.}
     \label{fig:speciation}
 \end{figure}
 
@@ -139,7 +144,8 @@ No unconstrained covariance or confidence band is reported at the bound.
 
 % P:results-16
 Density and heat capacity were not assessed for the selected record.
-For an earlier parameter record, loaded-solution densities were 12.5--16.8\,\% above the measurements of Amundsen et al.\ at 50 and \SI{70}{\degreeCelsius} and loadings of 0.3 and 0.4~\cite{Amundsen2009}, and liquid heat capacities were 9.8--14.6\,\% below the values of Hilliard at 45 and \SI{80}{\degreeCelsius}~\cite{Hilliard2008}.
+For the earlier record \texttt{868a5018} on \texttt{epcsaft} wheel \texttt{48a639e7\ldots}, loaded-solution densities were 12.5--16.8\,\% above the measurements of Amundsen et al.\ at 50 and \SI{70}{\degreeCelsius} and loadings 0.3 and 0.4~\cite{Amundsen2009}.
+Heat-capacity deviations against Hilliard were \(-9.8\,\%\) for unloaded solution at \SI{45}{\degreeCelsius}, \(-10.2\,\%\) at loading 0.358 and \SI{45}{\degreeCelsius}, and \(-14.6\,\%\) at loading 0.358 and \SI{80}{\degreeCelsius}~\cite{Hilliard2008}.
 These are deficits of the earlier record, not measured errors of the selected record.
 Density and heat-capacity qualification of the selected record therefore remains unestablished, and no absorber or stripper use is supported.
 
@@ -151,5 +157,5 @@ Neither case enters the Born-form ranking.
 
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:results-18
-Unlike the electrolyte NRTL model of Akula et al., which left NMR speciation outside its fit~\cite{Akula2023a}, the present model fits speciation together with pressure, so its species residuals at fitted temperatures are calibration results (\cref{tab:literature-model-comparison}).
+Unlike the electrolyte NRTL model of Akula et al., which left NMR speciation outside its fit~\cite{Akula2023a}, the present model fits speciation together with pressure, so the residuals of its 94 fitted species targets are calibration results (\cref{tab:literature-model-comparison}).
 Published pressure deviations for 30 wt\% \MEA cover different row sets and temperature ranges, so no accuracy ranking against those models is claimed.
