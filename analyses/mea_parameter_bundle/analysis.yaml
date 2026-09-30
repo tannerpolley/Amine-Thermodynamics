@@ -1,7 +1,10 @@
 id: mea_parameter_bundle
 title: Nine-Species MEA ePC-SAFT Parameter Bundle
 status: active
-summary: Live update-in-place research record of the active bundle, retained results, interpretation, limitations, and next experiments.
+summary: Limited-domain SSM+DS model D p5conv-a-11 working record, 142 targets, 30 wt% MEA at 40–80 °C; numerical verification, not physical validation.
+working_record_sha256: 9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241
+working_engine_wheel_sha256: 28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2
+bundle_snakemake: held_under_issue_133
 owner: MEA-Thermodynamics
 children:
   - id: neutral-mea-water
@@ -164,7 +167,7 @@ runtime:
   refresh_logical_cpus: 1
   refresh_solver_address_space_mib: 2048
   refresh_quarto_v8_heap_mib: 2048
-parameter_status: exploratory_incumbent
+parameter_status: limited_domain_working_record
 parameter_record: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json
 parameter_record_history: analyses/mea_parameter_bundle/results/parameter-record-history.csv
 holdout_ledger: analyses/mea_parameter_bundle/results/holdout-evaluations.csv

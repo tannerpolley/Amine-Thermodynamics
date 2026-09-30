@@ -7,6 +7,7 @@ import importlib.metadata
 import json
 import math
 import statistics
+import sys
 from time import perf_counter
 from pathlib import Path
 
@@ -40,6 +41,9 @@ ANALYSIS = Path(__file__).resolve().parents[1]
 INPUT = ANALYSIS / "data/input"
 SPECIATION_OUTPUT = ANALYSIS / "figures/speciation/output"
 PRESSURE_OUTPUT = ANALYSIS / "figures/pressure/output"
+sys.path.insert(0, str(ANALYSIS / "calibration-misfit"))
+from compare import HCO3_POOL_LABEL, pooled_species  # noqa: E402
+
 PARAMETER_HISTORY = ANALYSIS / "results/parameter-record-history.csv"
 CANONICAL_SPECIATION = (
     ANALYSIS.parents[1]
@@ -186,6 +190,7 @@ def main() -> None:
         Path(__file__),
         Path(__file__).with_name("shared_evaluation.py"),
         SOURCE_CONTRACT,
+        ANALYSIS / "calibration-misfit/compare.py",
     )
     parameter_sha256 = sha256(PARAMETERS)
     with PARAMETER_HISTORY.open(encoding="utf-8", newline="") as handle:
@@ -267,7 +272,7 @@ def main() -> None:
                         "source": source,
                         "temperature_C": temperature_c,
                         "loading_mol_CO2_per_mol_MEA": loading,
-                        "species": str(target["identity"]).split("::")[-1],
+                        "species": HCO3_POOL_LABEL if pooled_species(target["identity"]) else str(target["identity"]).split("::")[-1],
                         "observed_mole_fraction": float(target["observed"]),
                     }
                 )
@@ -537,7 +542,7 @@ def main() -> None:
             "temperature_C": row["temperature_C"],
             "mea_mass_fraction": row["mea_mass_fraction"],
             "loading_mol_CO2_per_mol_MEA": row["co2_loading_mol_per_mol_mea"],
-            "species": row["species"],
+            "species": HCO3_POOL_LABEL if pooled_species(f"{row['source_key']}::{row['species']}") else row["species"],
             "observed_mole_fraction": row["value_mole_fraction"],
             "measurement_role": row["measurement_role"],
             "lifecycle_status": row["lifecycle_status"],
@@ -665,6 +670,9 @@ def main() -> None:
             mea = species_predictions.get((row["observation_id"], "MEA"))
             meah = species_predictions.get((row["observation_id"], "MEAH+"))
             predicted = mea + meah if mea is not None and meah is not None else ""
+        elif row["species"] == HCO3_POOL_LABEL:
+            parts = [species_predictions.get((row["observation_id"], SPECIES_LABELS[c])) for c in pooled_species(f"{row['source']}::HCO3-")]
+            predicted = sum(parts) if all(p is not None for p in parts) else ""
         else:
             predicted = species_predictions.get(key, "")
         residual_rows.append(
@@ -729,7 +737,7 @@ def main() -> None:
     record = {
         "schema_version": 1,
         "evaluator_version": EVALUATOR_VERSION,
-        "status": "exploratory_incumbent",
+        "status": "limited_domain_working_record",
         "engine_source_commit": ENGINE_COMMIT,
         "engine_wheel_sha256": ENGINE_WHEEL_SHA256,
         "engine_distribution_version": importlib.metadata.version("epcsaft"),

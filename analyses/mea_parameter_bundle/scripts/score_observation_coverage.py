@@ -170,8 +170,8 @@ def nondetection_stats(rows: list[dict[str, object]]) -> dict[str, object]:
 
 def pressure_summary() -> dict[str, object]:
     rows = [r for r in read(PRESSURE) if r["family"] == "pressure"]
-    groups = {"calibration": [r for r in rows if r["source"] not in HOLDOUT_PRESSURE_SOURCES],
-              "holdout (Xu 2011)": [r for r in rows if r["source"] in HOLDOUT_PRESSURE_SOURCES]}
+    groups = {"historical calibration-source rows (broad assessment)": [r for r in rows if r["source"] not in HOLDOUT_PRESSURE_SOURCES],
+              "previously accessed Xu 2011 comparison (outside working range)": [r for r in rows if r["source"] in HOLDOUT_PRESSURE_SOURCES]}
     out = {}
     for name, members in groups.items():
         usable = [r for r in members if r["predicted"] and float(r["predicted"]) > 0 and float(r["observed"]) > 0]
