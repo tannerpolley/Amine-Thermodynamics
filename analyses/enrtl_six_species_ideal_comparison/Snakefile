@@ -1,0 +1,27 @@
+from pathlib import Path
+import subprocess
+
+ANALYSIS = Path(workflow.basedir)
+ROOT = ANALYSIS.parents[1]
+UV = str(Path.home() / ".local/bin/uv")
+VERIFY = ["sha256sum", "--check", "--strict", str(ANALYSIS / "retained-results.sha256")]
+HASH_CHECK = """import csv
+from pathlib import Path
+from MEA.common.data_access import verify_source_hashes
+for name in ("results/source_manifest.csv", "figures/output/source_manifest.csv", "figures/output/uq_source_manifest.csv"):
+    path = Path("analyses/enrtl_six_species_ideal_comparison") / name
+    with path.open() as stream:
+        expected = dict((row["artifact"], row["sha256"]) for row in csv.DictReader(stream))
+    verify_source_hashes(expected, repo_root=Path.cwd())
+"""
+
+
+rule present:
+    input: str(ANALYSIS / "retained-results.sha256")
+    run:
+        subprocess.run(VERIFY, cwd=ROOT, check=True)
+        subprocess.run([UV, "run", "--no-sync", "python", "-c", HASH_CHECK], cwd=ROOT, check=True)
+        for name in ("render_figures.py", "render_uq_figures.py"):
+            subprocess.run([UV, "run", "--no-sync", "python", str(ANALYSIS / "scripts" / name)], cwd=ROOT, check=True)
+        subprocess.run(VERIFY, cwd=ROOT, check=True)
+        subprocess.run([UV, "run", "--no-sync", "python", "-c", HASH_CHECK], cwd=ROOT, check=True)
