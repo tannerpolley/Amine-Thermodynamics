@@ -1,0 +1,47 @@
+{
+  "base_commit": "e80ef4ed10f7af2d13a70776d0883f491aa652a6",
+  "jobs": [
+    {
+      "form": "11",
+      "kind": "canonical",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-canonical-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path; import sys; sys.path.insert(0, '\"'\"'analyses/mea_parameter_bundle/calibration-misfit'\"'\"'); import probe; probe.shared.RUNS=Path('\"'\"'analyses/mea_parameter_bundle/results/runs/assessment-p5a-11-loadfix/canonical-cache'\"'\"'); probe.main(['\"'\"'analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-canonical.jsonl'\"'\"', '\"'\"'--record=analyses/mea_parameter_bundle/results/selected-current-best-parameters.json'\"'\"', '\"'\"'--canonical'\"'\"'])' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-canonical-log.txt"
+    },
+    {
+      "form": "11",
+      "kind": "packet",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-packet-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path; import sys; sys.path.insert(0, '\"'\"'analyses/mea_parameter_bundle/calibration-misfit'\"'\"'); import probe; probe.shared.RUNS=Path('\"'\"'analyses/mea_parameter_bundle/results/runs/assessment-p5a-11-loadfix/packet-cache'\"'\"'); probe.main(['\"'\"'analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-packet.jsonl'\"'\"', '\"'\"'--record=analyses/mea_parameter_bundle/results/selected-current-best-parameters.json'\"'\"'])' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-packet-log.txt"
+    },
+    {
+      "form": "11",
+      "kind": "transfer",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-transfer-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path; import sys; sys.path.insert(0, '\"'\"'analyses/mea_parameter_bundle/composition-transfer'\"'\"'); import transfer; transfer.HERE=Path('\"'\"'/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-loading-offset/analyses/mea_parameter_bundle/model-d'\"'\"'); transfer.main(['\"'\"'--out=assessment-p5a-11-loadfix-transfer'\"'\"', '\"'\"'D-p5a-11-loadfix=analyses/mea_parameter_bundle/results/selected-current-best-parameters.json'\"'\"'])' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-transfer-log.txt"
+    },
+    {
+      "form": "00",
+      "kind": "canonical",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-canonical-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path; import sys; sys.path.insert(0, '\"'\"'analyses/mea_parameter_bundle/calibration-misfit'\"'\"'); import probe; probe.shared.RUNS=Path('\"'\"'analyses/mea_parameter_bundle/results/runs/assessment-p5a-00-loadfix/canonical-cache'\"'\"'); probe.main(['\"'\"'analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-canonical.jsonl'\"'\"', '\"'\"'--record=analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json'\"'\"', '\"'\"'--canonical'\"'\"'])' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-canonical-log.txt"
+    },
+    {
+      "form": "00",
+      "kind": "packet",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-packet-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path; import sys; sys.path.insert(0, '\"'\"'analyses/mea_parameter_bundle/calibration-misfit'\"'\"'); import probe; probe.shared.RUNS=Path('\"'\"'analyses/mea_parameter_bundle/results/runs/assessment-p5a-00-loadfix/packet-cache'\"'\"'); probe.main(['\"'\"'analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-packet.jsonl'\"'\"', '\"'\"'--record=analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json'\"'\"'])' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-packet-log.txt"
+    },
+    {
+      "form": "00",
+      "kind": "transfer",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-transfer-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python -c 'from pathlib import Path; import sys; sys.path.insert(0, '\"'\"'analyses/mea_parameter_bundle/composition-transfer'\"'\"'); import transfer; transfer.HERE=Path('\"'\"'/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-loading-offset/analyses/mea_parameter_bundle/model-d'\"'\"'); transfer.main(['\"'\"'--out=assessment-p5a-00-loadfix-transfer'\"'\"', '\"'\"'D-p5a-00-loadfix=analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json'\"'\"'])' 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-transfer-log.txt"
+    },
+    {
+      "form": "11",
+      "kind": "scoring",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-scoring-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python analyses/mea_parameter_bundle/calibration-misfit/compare.py --out=/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-loading-offset/analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-comparison D-p5a-11-loadfix=analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-packet.jsonl,analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-canonical.jsonl 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-11-loadfix-scoring-log.txt"
+    },
+    {
+      "form": "00",
+      "kind": "scoring",
+      "command": "set -o pipefail\n/usr/bin/time -v -o analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-scoring-time.txt env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 1800 uv run --no-sync python analyses/mea_parameter_bundle/calibration-misfit/compare.py --out=/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-loading-offset/analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-comparison D-p5a-00-loadfix=analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-packet.jsonl,analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-canonical.jsonl 2>&1 | tee analyses/mea_parameter_bundle/model-d/assessment-p5a-00-loadfix-scoring-log.txt"
+    }
+  ],
+  "limits": "At most two simultaneous jobs; one thread each; timeout 1800 s per job.",
+  "changes_from_retained_jobs": "Corrected conserved loading; adopted 9055458d file for SSM+DS; new loadfix outputs and cache paths. Existing probe/transfer entry points and numerical settings."
+}
