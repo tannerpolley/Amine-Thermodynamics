@@ -1,6 +1,6 @@
 # Issue Tracker
 
-GitHub Issues in `tannerpolley/MEA-Thermodynamics` are authoritative for
+GitHub Issues in `tannerpolley/Amine-Thermodynamics` are authoritative for
 current work. Read existing issues, dependencies, pull requests, and repository
 evidence before publishing or changing tracker state.
 
@@ -34,7 +34,7 @@ claims, pull requests, CI, and verification evidence.
 
 ## Repository ownership
 
-MEA-Thermodynamics owns application chemistry, datasets, target construction,
+Amine-Thermodynamics owns application chemistry, datasets, target construction,
 parameter-evidence records, validation artifacts, and manuscript claims. The
 Provider owns EOS evaluation, typed parameter and applicability schemas, and
 derivatives. Equilibrium owns reaction/balance constraints, Ipopt execution,
