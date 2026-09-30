@@ -1,0 +1,197 @@
+---
+title: "Common concentration calibration of model D: issue 137"
+format:
+  html:
+    embed-resources: true
+execute:
+  enabled: false
+---
+
+Both approved common-parameter calibrations miss the issue 137 improvement targets. One additional constant MEA–water interaction lowers the joint cost and improves the 45 wt% pressure comparison, but 15 wt% remains above the error and bias limits. The original 30 wt% pressure gate fails, and the six-coordinate fit exceeds the species-cost allowance. These are completed numerical experiments with converged, agreeing starts.
+
+This notebook has not been independently reviewed or promoted for manuscript use. It supplies calibration evidence for manuscript v2, subject to parent delivered review and owner adoption approval. It establishes no physical validation.
+
+## Question, basis and method
+
+[Issue 137](https://github.com/tannerpolley/Amine-Thermodynamics/issues/137) and its [owner decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/137#issuecomment-5918434068) authorize both experiments. The starting record SHA-256 is `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241`. The noneditable Engine wheel SHA-256 is `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2`. All 18 installed RECORD hashes and module origin were verified before fitting and afterward.
+
+The original objective has 48 pressure targets (32 at 40 °C, 16 at 60 °C) and 94 species targets (66 at 20 °C, 16 at 40 °C, 12 at 60 °C), at 84 states. The 18 Matin bicarbonate/carbonate-pool targets remain report-only. Aronu adds 27 pressure rows at 15 wt% and 26 at 45 wt%, at 40/60 °C. The expanded objective has 195 targets at 137 states. Six 15 wt% and eleven 45 wt% Aronu rows at 80 °C stay out of fitting. All 70 Aronu rows were previously accessed; the 80 °C groups are out-of-fit assessment.
+
+Loading α is mol CO₂/mol total fed MEA. MEA wt% is the unloaded-solvent mass fraction, excluding added CO₂. The corrected canonical builder maps source pressure in kPa to Pa and conserves measured loading including ionic seed carbon. Source observations, locators, temperature, concentration, loading, grouping, roles and hashes are in `admitted-observations.csv`. Numeric pressure uncertainty is not transcribed and source covariance is unreported. All residual scales are diagnostic scales.
+
+Define L = ln(p_model/p_observed), AARD = 100 mean|exp(L) − 1|, and RMS ln = sqrt(mean L²). The objective is Φ = ½ Σ_pressure(L/0.3)² + ½ Σ_species[(x_model − x_observed)/(0.1 x_observed + 0.001)]². Every added pressure row receives the same 0.3 scale. Pooling, exclusions, nine species, five reactions, declared phases, association, SSM+DS, permittivity and fixed coefficients retain the adopted values. Reaction identities are explicitly taken from that document.
+
+The model-D law is k_ij(T) = k_ij + b_ij(1/T − 1/T_ref), T_ref = 313.15 K, with u_ij = (1 − k_ij(T)) sqrt(u_i u_j). Ion–water reference k bounds are [−0.5,+0.5], MEAH⁺–MEACOO⁻ bounds [−1,+1], and MEAH⁺–water slope bounds [−1000,+1000] K. Experiment 2 additionally frees constant MEA–water k in [−0.17352749875,+0.02647250125]. Scales are 0.01 for k and 10 K for b. Effective interactions remain below 1 over 293.15–353.15 K.
+
+The Engine owns exact EOS-parameter/implicit equilibrium derivatives and optimization. The driver reuses `probe.py`, `refit.py`, `shared_evaluation.py`, and `model-d/fit.py`. The original 160-target rescore uses `born_form_diagnosis.evaluate` and its split-cost function. The historical `fitted` wrapper enforces 160 targets/five coordinates; this driver supplies the approved 195-target/five-or-six-coordinate observations directly to the same Engine fitting function.
+
+## Weighted costs
+
+All costs are dimensionless. Baseline 142-target replay is 32.991897261221126, within 4.23 × 10⁻¹² of the issue reference. Corrected-builder baseline metrics match the corrected records at base `d8c4cd1`. Displayed experiments use the lower-native-cost start after required agreement; this display choice adopts no record.
+
+| Component | Targets | Baseline | Experiment 1 | Experiment 2 |
+| --- | --- | --- | --- | --- |
+| Original pressure | 48 | 8.143453131 | 33.496294024 | 27.433857534 |
+| Böttinger species | 40 | 3.100820644 | 4.076978214 | 6.272156019 |
+| Matin species | 54 | 21.747623487 | 18.305512249 | 23.871131463 |
+| Species subtotal | 94 | 24.848444131 | 22.382490463 | 30.143287482 |
+| Original objective | 142 | 32.991897261 | 55.878784487 | 57.577145016 |
+| Added Aronu pressure | 53 | 170.560789229 | 75.926068631 | 44.501936837 |
+| Joint objective | 195 | 203.552686490 | 131.804853118 | 102.079081854 |
+
+## Approved targets
+
+![Pressure errors at sampled concentrations. The 15/45 wt% cohorts combine calibration at 40/60 °C and previously accessed out-of-fit assessment at 80 °C; 30 wt% has 104 rows at 40–80 °C. Cohorts have different temperature/loading distributions. Points represent cohort statistics, with no continuous concentration curve. Limits are the issue’s engineering targets.](pressure-error-comparison.svg)
+
+| Quantity | Rows | Unit / bound | Baseline | Experiment 1 | Experiment 2 |
+| --- | --- | --- | --- | --- | --- |
+| 15 wt% all-row AARD | 33 | % ≤35 | 75.946385 | 80.468283 | 55.937049 |
+| 15 wt% all-row mean L | 33 | 1; absolute ≤0.20 | 0.452578 | 0.502409 | 0.354278 |
+| 45 wt% all-row AARD | 37 | % ≤35 | 46.149817 | 25.485369 | 20.168609 |
+| 45 wt% all-row mean L | 37 | 1; absolute ≤0.20 | -0.519467 | -0.276507 | -0.157424 |
+| 30 wt% pressure gate | 104 | % ≤25.57 | 20.581177 | 28.629701 | 26.664544 |
+| 15 wt% Aronu 80 °C RMS ln | 6 | 1; ≤0.765899 | 0.764355 | 0.794636 | 0.644698 |
+| 45 wt% Aronu 80 °C RMS ln | 11 | 1; ≤0.519137 | 0.517285 | 0.300905 | 0.271269 |
+| Original species cost | 94 | 1; ≤27.333288544 | 24.848444131 | 22.382490463 | 30.143287482 |
+
+Experiment 1 fails 15 wt% AARD, both concentration bias limits, the 30 wt% gate and 15 wt% 80 °C RMS ln. Species cost and 45 wt% AARD/RMS ln pass. This complete miss activates Experiment 2. Experiment 2 passes 45 wt% AARD/bias and both Aronu 80 °C RMS ln limits, while failing 15 wt% AARD/bias, the 30 wt% gate and species cost. Its species cost is 21.3086% above baseline, exceeding the 10% allowance.
+
+## Calibration and out-of-fit assessment
+
+| MEA wt% | Role / temperature | Rows | Record | AARD (%) | Mean L (1) | RMS ln (1) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 15 | Calibration; 40/60 °C | 27 | Baseline | 67.4013 | 0.384765 | 0.562199 |
+| 15 | Calibration; 40/60 °C | 27 | Experiment 1 | 71.3896 | 0.437673 | 0.570423 |
+| 15 | Calibration; 40/60 °C | 27 | Experiment 2 | 48.2554 | 0.289861 | 0.442305 |
+| 15 | Out-of-fit; 80 °C | 6 | Baseline | 114.3991 | 0.757736 | 0.764355 |
+| 15 | Out-of-fit; 80 °C | 6 | Experiment 1 | 121.3221 | 0.793722 | 0.794636 |
+| 15 | Out-of-fit; 80 °C | 6 | Experiment 2 | 90.5047 | 0.644155 | 0.644698 |
+| 45 | Calibration; 40/60 °C | 26 | Baseline | 45.9610 | -0.731951 | 0.923354 |
+| 45 | Calibration; 40/60 °C | 26 | Experiment 1 | 26.9298 | -0.337535 | 0.433296 |
+| 45 | Calibration; 40/60 °C | 26 | Experiment 2 | 20.1750 | -0.201853 | 0.323933 |
+| 45 | Out-of-fit; 80 °C | 11 | Baseline | 46.5962 | -0.017230 | 0.517285 |
+| 45 | Out-of-fit; 80 °C | 11 | Experiment 1 | 22.0712 | -0.132261 | 0.300905 |
+| 45 | Out-of-fit; 80 °C | 11 | Experiment 2 | 20.1534 | -0.052409 | 0.271269 |
+
+Fitted 15/45 wt% results are multi-concentration calibration. The 17 previously accessed Aronu 80 °C rows are out-of-fit assessment.
+
+## Isotherms and loading bins
+
+| MEA wt% | Temperature (°C) | Rows | Record | AARD (%) | Mean L (1) | RMS ln (1) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 15 | 40 | 14 | Baseline | 57.0656 | 0.236045 | 0.521547 |
+| 15 | 40 | 14 | Experiment 1 | 64.9614 | 0.334414 | 0.542424 |
+| 15 | 40 | 14 | Experiment 2 | 43.8725 | 0.189558 | 0.424754 |
+| 15 | 60 | 13 | Baseline | 78.5321 | 0.544925 | 0.602919 |
+| 15 | 60 | 13 | Experiment 1 | 78.3124 | 0.548876 | 0.599114 |
+| 15 | 60 | 13 | Experiment 2 | 52.9753 | 0.397880 | 0.460458 |
+| 15 | 80 | 6 | Baseline | 114.3991 | 0.757736 | 0.764355 |
+| 15 | 80 | 6 | Experiment 1 | 121.3221 | 0.793722 | 0.794636 |
+| 15 | 80 | 6 | Experiment 2 | 90.5047 | 0.644155 | 0.644698 |
+| 45 | 40 | 15 | Baseline | 49.3702 | -0.797274 | 0.952967 |
+| 45 | 40 | 15 | Experiment 1 | 25.3752 | -0.322425 | 0.441715 |
+| 45 | 40 | 15 | Experiment 2 | 18.7647 | -0.184946 | 0.339398 |
+| 45 | 60 | 11 | Baseline | 41.3120 | -0.642875 | 0.881370 |
+| 45 | 60 | 11 | Experiment 1 | 29.0498 | -0.358139 | 0.421544 |
+| 45 | 60 | 11 | Experiment 2 | 22.0983 | -0.224907 | 0.301568 |
+| 45 | 80 | 11 | Baseline | 46.5962 | -0.017230 | 0.517285 |
+| 45 | 80 | 11 | Experiment 1 | 22.0712 | -0.132261 | 0.300905 |
+| 45 | 80 | 11 | Experiment 2 | 20.1534 | -0.052409 | 0.271269 |
+
+| MEA wt% | Loading bin (mol/mol) | Rows | Record | AARD (%) | Mean L (1) | RMS ln (1) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 15 | α <0.3 | 21 | Baseline | 97.3365 | 0.649678 | 0.694979 |
+| 15 | α <0.3 | 21 | Experiment 1 | 95.7574 | 0.643983 | 0.686966 |
+| 15 | α <0.3 | 21 | Experiment 2 | 64.9189 | 0.472146 | 0.530000 |
+| 15 | 0.3 ≤α <0.5 | 9 | Baseline | 38.8467 | 0.301364 | 0.365835 |
+| 15 | 0.3 ≤α <0.5 | 9 | Experiment 1 | 61.5052 | 0.461549 | 0.498317 |
+| 15 | 0.3 ≤α <0.5 | 9 | Experiment 2 | 42.4271 | 0.335160 | 0.385902 |
+| 15 | α ≥0.5 | 3 | Baseline | 37.5146 | -0.473481 | 0.480211 |
+| 15 | α ≥0.5 | 3 | Experiment 1 | 30.3339 | -0.366021 | 0.378043 |
+| 15 | α ≥0.5 | 3 | Experiment 2 | 33.5939 | -0.413445 | 0.422981 |
+| 45 | α <0.3 | 22 | Baseline | 32.4081 | -0.089053 | 0.382906 |
+| 45 | α <0.3 | 22 | Experiment 1 | 21.5095 | -0.178935 | 0.286749 |
+| 45 | α <0.3 | 22 | Experiment 2 | 18.1049 | -0.076277 | 0.229149 |
+| 45 | 0.3 ≤α <0.5 | 15 | Baseline | 66.3044 | -1.150740 | 1.207890 |
+| 45 | 0.3 ≤α <0.5 | 15 | Experiment 1 | 31.3166 | -0.419613 | 0.520795 |
+| 45 | 0.3 ≤α <0.5 | 15 | Experiment 2 | 23.1954 | -0.276439 | 0.398539 |
+
+Bins use measured source loading. `vle_obs_0077` has α = 0.300; conserved floating-point loading 0.2999999999999998 previously put it below 0.3. Corrected 45 wt% counts are 22/15. `loading-bin-correction.json` preserves the case, source commit, old/new driver hashes and identical fit-function hash. No solve or fitted cost changed.
+
+## Original-domain and 80 °C assessment
+
+| Cohort | Rows | Baseline AARD (%) | E1 AARD (%) | E2 AARD (%) | Baseline RMS ln (1) | E1 RMS ln (1) | E2 RMS ln (1) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Fitted original pressure | 48 | 13.5266 | 35.4725 | 29.3434 | 0.174751 | 0.354417 | 0.320744 |
+| Fitted original species | 94 | 8.2849 | 8.1399 | 9.1112 | 0.144605 | 0.124174 | 0.149786 |
+| Jou 30 wt% pressure at 80 °C | 11 | 9.2398 | 22.5186 | 25.9227 | 0.117435 | 0.253147 | 0.306184 |
+| Packet species at 80 °C | 11 | 11.1542 | 10.3004 | 10.0691 | 0.138964 | 0.120761 | 0.119518 |
+| All canonical 30 wt% pressure at 80 °C | 21 | 20.2703 | 25.5052 | 31.7917 | 0.299037 | 0.371586 | 0.465406 |
+
+The original Jou/species 80 °C comparisons remain report-only. They do not acquire an adoption gate. Higher-temperature 100–120 °C cases remain out-of-domain reporting.
+
+## Starts, bounds and derivatives
+
+| Start | Initial cost (1) | Final cost (1) | Fit time (s) | Native history rows | Optimizer updates | Failed trials | Termination |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| experiment-1-adopted | 203.552686490 | 131.804853118 | 574.170 | 13 | 12 | 0 | converged |
+| experiment-1-decision-23 | 219.488495777 | 131.804853118 | 620.748 | 14 | 13 | 0 | converged |
+| experiment-2-0 | 131.804853118 | 102.079081854 | 921.978 | 22 | 21 | 0 | converged |
+| experiment-2-1 | 266.535742473 | 102.079081854 | 1210.672 | 29 | 28 | 0 | converged |
+
+Limits are 40 native iterations, 2250 s fitter time and the task’s tighter 1800 s process cap. All starts run serially with OMP/BLAS/MKL threads set to 1 and stop on function tolerance 10⁻¹². E1 starts use adopted and retained decision-23 coordinates with all fixed values from the adopted record. E2 starts use the lower-cost E1 optimum at baseline neutral k, then the other E1 optimum at baseline +0.02.
+
+| Experiment | Relative cost difference (1; ≤10⁻⁶) | Max interaction difference (1; ≤10⁻⁵) | Slope difference (K; ≤0.1) | Agreement |
+| --- | --- | --- | --- | --- |
+| 1 | 2.63074422e-14 | 2.65760819e-09 | 2.38837711e-06 | Passed |
+| 2 | 4.62191046e-13 | 2.10583496e-07 | 2.5829929e-05 | Passed |
+
+| Coordinate | Unit | Baseline | Experiment 1 | Experiment 2 |
+| --- | --- | --- | --- | --- |
+| MEACOO⁻–water k | 1 | 0.129824922 | 0.180462884 | -0.129832815 |
+| MEAH⁺–water k at 313.15 K | 1 | -0.379310893 | -0.395041287 | -0.500000000 |
+| HCO₃⁻–water k | 1 | 0.500000000 | 0.500000000 | 0.403814939 |
+| MEAH⁺–MEACOO⁻ k | 1 | -0.716772028 | -0.462333140 | 0.084880419 |
+| MEAH⁺–water reciprocal-temperature slope | K | -148.534644430 | -193.349111906 | -235.352202432 |
+| MEA–water constant k | 1 | -0.073527499 | -0.073527499 | -0.145784880 |
+
+E1 retains the HCO₃⁻–water upper bound +0.5. E2 reaches the MEAH⁺–water lower bound −0.5; its neutral coordinate is interior. Bounds were not widened. All fixed coefficients, model families and reaction dictionaries match the adopted record.
+
+| Experiment | Weighted optimizer-J singular values (1) | Column-normalized J singular values (1) | Native covariance | Rank | Variance factor (1) |
+| --- | --- | --- | --- | --- | --- |
+| Experiment 1 | 1.336868, 0.550511, 0.358036, 0.087553, 0.032275 | 1.662694, 1.072155, 0.839726, 0.612937, 0.071413 | active_bound | 5 | 1.387420 |
+| Experiment 2 | 7.844721, 0.643011, 0.519478, 0.098451, 0.075783, 0.060351 | 1.876647, 1.108762, 0.904612, 0.634078, 0.152560, 0.072048 | active_bound | 6 | 1.080202 |
+
+Optimizer-J singular values use the declared 0.01 / 10 K coordinate scales. Weighted physical-coordinate Jacobians and their unit-dependent singular values are retained in native output; physical columns use dimensionless k and K slope coordinates. Column normalization is dimensionless. Native covariance remains unavailable due to active bounds. Diagnostic scales and independent-error/unit-variance assumptions do not establish measured parameter uncertainty.
+
+| Other coordinate | Pearson correlation of weighted physical-J column with neutral column (1) |
+| --- | --- |
+| MEACOO⁻–water k | -0.840147 |
+| MEAH⁺–water k | -0.777685 |
+| HCO₃⁻–water k | 0.073070 |
+| MEAH⁺–MEACOO⁻ k | 0.615646 |
+| MEAH⁺–water slope | 0.440853 |
+
+## Numerical checks, meaning and limits
+
+| Record | Solved states /354 | In / out of domain | Max material error (mol) | Max charge (mol elementary charge) | Max raw stationarity | Failed states |
+| --- | --- | --- | --- | --- | --- | --- |
+| baseline | 354 | 277/77 | 3.74811e-13 | 1.77036e-13 | 3.97904e-13 | 0 |
+| experiment-1-adopted | 354 | 277/77 | 3.41949e-13 | 5.03052e-14 | 3.69482e-13 | 0 |
+| experiment-1-decision-23 | 354 | 277/77 | 6.43929e-14 | 2.518e-14 | 5.11591e-13 | 0 |
+| experiment-2-0 | 354 | 277/77 | 3.27294e-13 | 1.174e-13 | 4.12115e-13 | 0 |
+| experiment-2-1 | 354 | 277/77 | 3.05089e-13 | 1.17334e-13 | 4.54747e-13 | 0 |
+
+Each record evaluates 123 packet, 161 canonical 30 wt% and 70 Aronu states. Material errors are absolute differences in the declared conserved carbon/MEA totals; charge residuals are moles of elementary charge. Requested tolerances are met. Material and charge residuals are below 10⁻⁷ mol, and raw stationarity is below 10⁻¹⁰. Independent full-state costs agree with native costs within 4.6 × 10⁻¹². All 77 higher-temperature states per record solve numerically; this does not qualify 100–120 °C use.
+
+The five-coordinate fit improves 45 wt% while worsening 15 wt% and the original-domain pressure gate. Freeing one constant neutral interaction improves both concentration pressure comparisons relative to baseline, but leaves positive pressure bias at 15 wt% and fails original-domain pressure/species protection. The two approved bounded calibrations are insufficient under this objective, partition, fixed chemistry, bounds and starts. This does not establish global model incapability or identify dielectric, Born or reaction correlations as the cause.
+
+Source uncertainty/covariance remain unresolved. Aronu rows share one laboratory and access history. No untouched concentration validation set is established. The fixed R4 source interval is 293.15–323.15 K, retaining a source extrapolation limit at 60/80 °C. Neutral binary qualification remains an adoption prerequisite; reactive recalibration does not supply it. No density, heat-capacity, absorber-process, species-extension or global phase-stability qualification follows.
+
+## Retained evidence and provenance
+
+`experiment.py` is the only new executable file: 250 gross added lines from `d8c4cd1531b150fda915abc258a872a98272aad2`, under the [parent-approved budget](https://github.com/tannerpolley/Amine-Thermodynamics/issues/137#issuecomment-5919357679). Existing scientific owners are unchanged. Original driver SHA-256 `76da793edfe7c2f8097e673e9639890f8cc0272244f3649278faa2c7d5c6b917` is retained at commit `8f24394d6090ca39da248312f3754c5dfaecc9c8`; E1 and first E2 fit used it. Corrected driver SHA-256 `e579ca87513a4bd6b592fe0c8d72a7b12483ed068585856f8b5eca47d784d570` changes measured-loading reporting only; the fit function is byte-identical. `input-hashes.json` is the pre-fit snapshot; `loading-bin-correction.json` records this transition.
+
+`admitted-observations.csv` retains historical lifecycle/access labels beside explicit issue-137 roles. `materialized-inputs.json` contains exact requests. Packet content hashes follow the existing owner’s decompressed-JSON convention; `verification.json` also retains the compressed-file hash. The adopted record remains unchanged.
+
+Every candidate has an evaluated-row CSV with observations, predictions, signed residuals, temperature, source loading, concentration, units and numerical evidence. `cost-comparison.csv`, `metric-comparison.csv`, `numerical-checks.csv`, start agreement and verdict files retain the comparisons. Bulk evaluations, native fitting/Jacobian output, caches, logs and figure preview are in ignored `../runs/137-transfer/`. `output-hashes.json` lists final hashes. The parent will integrate this new notebook into the existing bundle notebook and perform independent delivered review.

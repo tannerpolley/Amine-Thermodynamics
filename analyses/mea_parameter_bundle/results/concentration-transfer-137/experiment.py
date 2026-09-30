@@ -127,8 +127,8 @@ def assess(label, record):
                     failed.append({'family': family, 'identity': result['identity'], 'temperature_c': tc, 'check': result['check']})
                 system = observation['request']['reaction_system']
                 carbon, mea = system['conserved_totals']
-                loading = (carbon - 2 * mea) / mea
                 identity = result['identity'].removeprefix('canonical:')
+                loading = float(CANONICAL[identity]['CO2_loading']) if family != 'packet' else (carbon - 2 * mea) / mea
                 fraction = float(CANONICAL[identity]['MEA_weight_fraction']) if family != 'packet' else 0.3
                 for target, residual in zip(result['targets'], compare.residuals(result) or [None] * len(result['targets']), strict=True):
                     pressure = target['prediction_identity'] == 'co2-partial-pressure'
