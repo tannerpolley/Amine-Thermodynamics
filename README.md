@@ -1,6 +1,6 @@
-# MEA Thermodynamics
+# Amine Thermodynamics
 
-MEA-CO2-H2O thermodynamics workflows organized around importable package code in `src/MEA`, reusable reference data in `data/reference`, and durable analysis workspaces in `analyses/<category>/<analysis_id>`.
+Amine thermodynamics workflows for the existing MEA-CO2-H2O studies and the planned MDEA refit (#126), organized around importable package code in `src/MEA`, reusable reference data in `data/reference`, and durable analysis workspaces in `analyses/<category>/<analysis_id>`.
 
 ## Canonical Commands
 
