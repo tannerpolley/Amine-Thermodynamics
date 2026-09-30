@@ -11,7 +11,9 @@ The modeled species are CO₂, MEA, H₂O, MEAH⁺, MEACOO⁻, HCO₃⁻, CO₃�
 | Path | Contents | Parameter regression status |
 |---|---|---|
 | `observations/vapor_liquid_equilibrium/` | Source tables, the 327-row canonical VLE ledger, and the 161-row active view | Governed by the admission and split manifests |
+| `observations/reaction_constants/` | Reported dilute-MEA dissociation and carbamate constants, retaining finite-ionic-strength and infinite-dilution roles | Source extraction only; no target admission |
 | `observations/liquid_speciation/` | Source-resolved and canonical liquid-speciation evidence | Governed by measurement role and target membership |
+| `observations/calorimetry/` | Reported absorption and protonation heats with their sign and dose definitions | Existing admission files govern target use; new source tables alone admit no rows |
 | `observations/density_viscosity/` | Direct aqueous-MEA density and viscosity evidence | Qualification evidence; target use is governed by the admission files |
 | `observations/dielectric/` | Dielectric fields and documented evidence gap | No loaded-solution static dataset is admitted |
 | `observations/ionic_activity/` | Direct target-ion activity evidence gap | No MEAH⁺/MEACOO⁻ activity dataset is admitted |
@@ -45,8 +47,10 @@ they must not be summed across reused experiments or repeated literature columns
 Mixed solvents, reference salts and degradation studies retain their composition
 caveats. PDF attachment keys and SHA-256 hashes identify inspected local companions.
 
-This pass inventories sources without extracting observation tables or changing
-target membership. It does not establish exhaustive worldwide coverage. New Zotero
+The discovery pass inventoried sources without extracting observation tables or changing
+target membership. Subsequent authorized table extractions are recorded by publication in
+`manifests/source_status_manifest.csv`; the source tables alone do not change admission.
+The discovery pass does not establish exhaustive worldwide coverage. New Zotero
 items remain pending because the configured Companion has no item-add or PDF
 acquisition operation; duplicate checks used 546 live top-level items. Existing
 items were left unchanged. The proposed tag is `mea-30wt-data-2026-09`.
