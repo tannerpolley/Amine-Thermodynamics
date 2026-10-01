@@ -28,10 +28,7 @@ certify this version.
 
 ## Owner-only steps
 
-- Confirm that the generative-AI declaration describes how this version was prepared. AI agents
-  drafted the manuscript prose and made the bibliography corrections, which is more than the
-  approved July wording ("editorial review, language polishing, and computational consistency
-  checks") describes.
+- Generative-AI declaration confirmed by the author on 2026-10-01 (names OpenAI Codex and Claude).
 - Make `tannerpolley/Amine-Thermodynamics` public before submitting. The data-availability
   statement cites it and the `manuscript-v1` tag.
 - Check the current Fluid Phase Equilibria Guide for Authors for required fields (graphical
