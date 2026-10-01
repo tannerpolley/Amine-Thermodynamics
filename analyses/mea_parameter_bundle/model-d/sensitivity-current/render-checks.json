@@ -1,0 +1,13 @@
+{
+  "notebook_source_sha256": "92e765c9853a7d1cd27d8cfcda32f01152f9fd10f014676731c9f7447a771257",
+  "notebook_html": "analyses/_site/mea_parameter_bundle/notebook.html",
+  "notebook_html_sha256": "b05943cb4b557c97554a6b5dd6800ace52cec66558f1387e1b3041b438e3b166",
+  "index_html": "analyses/_site/index.html",
+  "commands": [
+    "python3 analyses/manuscript.py refresh analyses analyses/mea_parameter_bundle/notebook.qmd (presentation preparation unavailable: snakemake missing)",
+    "quarto render mea_parameter_bundle/notebook.qmd --to html --no-execute (cwd analyses)",
+    "quarto render index.qmd --to html --no-execute (cwd analyses)"
+  ],
+  "profile": "ordinary project HTML; execution disabled",
+  "limitation": "Snakemake presentation preparation unavailable in supplied environment; ordinary HTML and index rendered from retained source without adding a dependency or running calculations."
+}
