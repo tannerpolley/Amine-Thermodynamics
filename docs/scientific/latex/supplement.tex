@@ -33,24 +33,24 @@
 
 % P:supplement-00
 \Cref{sec:s-diameter} summarizes a calculation that supports the main text but does not carry a main-text claim.
-Values labeled historical belong to the earlier 160-target objective and its optima, not to the selected 142-target record.
+Values in that section belong to the 160-target objective, which also fitted the 18 Matin bicarbonate-pool targets, and to its optima, not to the 142-target fits.
 
-\section{Born-diameter refit at the historical 160-target objective}\label{sec:s-diameter}
+\section{Born-diameter refit on the 160-target objective}\label{sec:s-diameter}
 % P:supplement-01
-Uniform scaling of all Born diameters at fixed interactions changed the historical SSM+DS cost more than the Original Born cost, which raised the question of whether the inherited diameters explain the SSM+DS penalty on the 160-target objective.
-The Born diameters of \ce{MEAH+}, \ce{MEACOO-} and \ce{HCO3-} were changed from 3.533, 3.541 and \SI{3.000}{\angstrom} to 5.000, 2.041 and \SI{3.302}{\angstrom}, within a search envelope of 2--\SI{5}{\angstrom} chosen from the 2.784--\SI{4.985}{\angstrom} Born diameters reported for other non-proton ions \cite[Tables~2--3]{Figiel2025}, not from measured diameters of the \ce{MEA}-derived ions, and the five interaction coordinates were then refitted.
-That refit converged after five optimizer updates and lowered the historical SSM+DS cost from 47.625767 to 43.950877, a reduction of 3.674890.
+Uniform scaling of all Born diameters at fixed interactions changed the 160-target SSM+DS cost more than the Original Born cost, which raised the question of whether the fixed diameters explain the SSM+DS penalty on the 160-target objective.
+The Born diameters of \ce{MEAH+}, \ce{MEACOO-} and \ce{HCO3-} were changed from 3.533, 3.541 and \SI{3.000}{\angstrom} to 5.000, 2.041 and \SI{3.302}{\angstrom}, within a search envelope of 2--\SI{5}{\angstrom} chosen from the 2.784--\SI{4.985}{\angstrom} Born diameters reported for other non-proton ions \cite[Tables~2--3]{Figiel2025}, not from measured diameters of the \ce{MEA}-derived ions, and the five binary interaction parameters were then refitted.
+That refit converged after five optimizer updates and lowered the 160-target SSM+DS cost from 47.625767 to 43.950877, a reduction of 3.674890.
 The test set in advance was a reduction of at least 3.71, half the 7.42 cost gap to Original Born, so the result is inconclusive: the diameters affect the cost, but this change does not account for the gap.
 Table~\ref{tab:s-diameter-refit} lists the diameters and group costs.
-The refitted coordinates are \(k_{\ce{MEACOO-},\ce{H2O}}=0.0351\), \(k_{\ce{MEAH+},\ce{H2O}}=-0.2533\) at \SI{313.15}{\kelvin}, \(k_{\ce{HCO3-},\ce{H2O}}=+0.5\) at its upper bound, \(k_{\ce{MEAH+},\ce{MEACOO-}}=-0.5759\) and \(b=\SI{119.96}{\kelvin}\).
+The refitted parameters are \(k_{\ce{MEACOO-},\ce{H2O}}=0.0351\), \(k_{\ce{MEAH+},\ce{H2O}}=-0.2533\) at \SI{313.15}{\kelvin}, \(k_{\ce{HCO3-},\ce{H2O}}=+0.5\) at its upper bound, \(k_{\ce{MEAH+},\ce{MEACOO-}}=-0.5759\) and \(b=\SI{119.96}{\kelvin}\).
 
 \begin{table}[htb]
     \centering
-    \caption{Born diameters and 160-target group costs at the historical SSM+DS optimum and after the diameter change and five-coordinate refit.}
+    \caption{Born diameters and 160-target group costs at the 160-target SSM+DS optimum and after the diameter change and five-parameter refit.}
     \label{tab:s-diameter-refit}
     \begin{tabular}{@{}lrr@{}}
         \toprule
-        Quantity & Historical optimum & After refit \\
+        Quantity & 160-target optimum & After refit \\
         \midrule
         \(d^{\mathrm{Born}}_{\ce{MEAH+}}\) (\si{\angstrom}) & 3.533 & 5.000 \\
         \(d^{\mathrm{Born}}_{\ce{MEACOO-}}\) (\si{\angstrom}) & 3.541 & 2.041 \\
