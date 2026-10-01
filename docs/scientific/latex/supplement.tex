@@ -1,5 +1,13 @@
 \documentclass[a4paper,11pt]{article}
 \usepackage[margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{stix}
+\usepackage[scaled=0.95]{inconsolata}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,labelsep=colon,justification=justified}
+\captionsetup[table]{position=top,labelsep=newline,justification=raggedright,singlelinecheck=false}
+\AddToHook{env/table/begin}{\small}
+\setlength{\tabcolsep}{4pt}
 \usepackage[numbers]{natbib}
 \usepackage[version=4]{mhchem}
 \usepackage{siunitx}

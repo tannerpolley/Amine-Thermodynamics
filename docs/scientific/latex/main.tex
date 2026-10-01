@@ -21,6 +21,22 @@
 \usepackage{xurl}
 \graphicspath{{figures/generated/}}
 
+% Typography. cas-sc sets floats, captions, header and footer in \sffamily
+% (bitmap EC sans here) and its Inconsolata check fails, leaving bitmap EC
+% typewriter. Set all of them in the STIX body serif, use Type 1 Inconsolata,
+% and route the class's caption makers through the caption package.
+\renewcommand{\sfdefault}{\rmdefault}
+\usepackage[scaled=0.95]{inconsolata}
+\captionsetup{font=small,labelfont=bf,labelsep=colon,justification=justified}
+\captionsetup[table]{position=top,labelsep=newline,justification=raggedright,singlelinecheck=false}
+\setlength{\tabcolsep}{4pt}
+\makeatletter
+\ExplSyntaxOn
+\cs_set_eq:NN \__make_fig_caption:nn \caption@makecaption
+\cs_set_eq:NN \__make_tbl_caption:nn \caption@makecaption
+\ExplSyntaxOff
+\makeatother
+
 \newcommand{\Ha}{\text{Ha}}
 \newcommand{\COtwo}{\ce{CO2}\xspace}
 \newcommand{\HtwoO}{\ce{H2O}\xspace}
