@@ -3,8 +3,13 @@
   "phase": "A: source admission and freeze only",
   "branch": "work/147-heat-temperature",
   "implementation_base_commit": "76ea465fe1ede72257a809d04fc986489c5267f3",
-  "issue_budget_base_commit": "b58e4d7ff4dc4aff0ef072df85b1c2c8019f9d90",
-  "captured_issue_body_sha256": "35da04eaff725970def2ad3e082518816b703cd3b48f448edf50d75155aa5c90",
+  "issue_budget_base_commit": "76ea465fe1ede72257a809d04fc986489c5267f3",
+  "issue_budget_base_amendment": {
+    "date": "2026-10-01",
+    "previous_base_commit": "b58e4d7ff4dc4aff0ef072df85b1c2c8019f9d90",
+    "authority": "orchestrator decision recorded in issue 147 section 10; unrelated work merged to main after the design base is excluded"
+  },
+  "captured_issue_body_sha256": "dba4257e1f192e9b1cd828f6bcc8b0db55654f66ba1d220ab9167fd561b9f81e",
   "readiness_comment": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-5938591434",
   "input_file_sha256": {
     "data/reference/MEA/observations/calorimetry/Vinjarapu_2024_calorimetry_30wt.csv": "61b6aaab4f5ae791a7064bc25efdba1b1fd81f0cce5d5975a280e950ea15522c",
@@ -56,7 +61,7 @@
     }
   ],
   "written_file_sha256": {
-    "analyses/mea_parameter_bundle/results/temperature-heat-147/README.md": "1a98274e26bcbec8e4ebc2c19c312208f1b7cca0977a64a3561588c8f62ae642",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/README.md": "55a6cdb3b473df4727347c13a9968adf0450886d8d7d2ffe9d55055381a04a5a",
     "analyses/mea_parameter_bundle/results/temperature-heat-147/arcis-extraction-check.json": "8b565dac77f32577610dc8e94269bc4c224081e25d86162d0464367f7d4fbcb1",
     "analyses/mea_parameter_bundle/results/temperature-heat-147/arcis-image-recheck.csv": "f8a20f827e33efbad0e5cd8aca3c53d81f642c2e68d5a6d1cc8b25ca31aa7b92",
     "analyses/mea_parameter_bundle/results/temperature-heat-147/heat-source-admission.json": "d51a7210be2b93b3a8ae55b19a33001e5f5eeb875070a071ca0127cf88ea4a78",
@@ -107,6 +112,16 @@
   },
   "code_surface": {
     "source-laws.py_gross_added_executable_lines": 120,
+    "phase_A_own_gross_added_executable_lines": 120,
+    "excluded_inherited_unrelated_executable_lines": {
+      "total": 262,
+      "by_path": {
+        "analyses/mea_parameter_bundle/results/concentration-transfer-137/experiment.py": 250,
+        ".codex/environments/setup.sh": 5,
+        "analyses/mea_parameter_bundle/scripts/compare_engines.py": 6,
+        "analyses/mea_parameter_bundle/scripts/render_regression_overview.py": 1
+      }
+    },
     "removed_executable_lines": 0,
     "executable_tests_or_fixtures_added": 0,
     "issue_ceiling_gross_added_lines": 450,
