@@ -2,28 +2,31 @@
 \noindent\begin{minipage}{\linewidth}
     \centering
     \captionsetup{hypcap=false,justification=raggedright,singlelinecheck=false,labelfont=bf,labelsep=newline}
-    \captionof{table}{Primary symbols used in this manuscript.}
+    \captionof{table}{Symbols used in this manuscript.}
     \label{tab:nomenclature}
+    \small
     \begin{tabularx}{\linewidth}{lX}
         \toprule
         Symbol & Definition \\
         \midrule
-        \(\alpha\) & \COtwo loading on \MEA (mol \COtwo per mol apparent \MEA) \\
-        \(T\) & Temperature \\
-        \(P\) & Total pressure \\
-        \(P_{\mathrm{CO_2}}\) & \COtwo equilibrium partial pressure \\
-        \(y_i, x_i\) & Gas- and liquid-phase molar composition of species \(i\) \\
-        \(z_i^{\mathrm{app}}\) & Apparent liquid-state mole fraction of apparent species \(i\) \\
-        \(x_i^{\mathrm{true}}\) & True-species liquid mole fraction of species \(i\) after speciation solve \\
-        \(\gamma_i\) & Species activity coefficient from ePC-SAFT \\
-        \(\phi_i\) & Fugacity coefficient from ePC-SAFT \\
-        \(k_{ij}\) & Binary dispersion interaction parameter between species \(i\) and \(j\) \\
-        \(\kappa\) & Inverse Debye length in the electrolyte contribution \\
-        \(\kappa^{A_iB_j}_{ij}\) & Association-volume parameter for sites \(A_i\) and \(B_j\) \\
-        \(\sigma_i,\epsilon_i\) & PC-SAFT segment diameter and energy parameters for species \(i\) \\
-        \(\lambda^{\mathrm{Born}}\) & Species-specific Born correction parameter \\
-        \(\mathbf{R}\) & Charge/atom-balance constraints in speciation solves \\
-        \text{RMSE} & Root-mean-square error (defined on the transformed residual scale indicated in text) \\
+        \(\alpha\) & \COtwo loading (mol \COtwo per mol total amine) \\
+        \(T\), \(T_{\mathrm{ref}}\) & Temperature; reference temperature of \cref{eq:kij-temperature}, \SI{313.15}{\kelvin} \\
+        \(P\), \(p_{\COtwo}\) & Bubble pressure; \COtwo partial pressure, \(y_{\COtwo}P\) \\
+        \(x_i\), \(y_i\) & Liquid and vapor mole fraction of true species \(i\) \\
+        \(z_i\), \(M_i\) & Charge number and molar mass of species \(i\) \\
+        \(a^{\mathrm{res}}\) & Reduced residual Helmholtz energy and its contributions (hc, disp, assoc, DH, Born) \\
+        \(m_i\), \(\sigma_i\), \(u_i/k_{\mathrm{B}}\) & Segment number, segment diameter and dispersion energy \\
+        \(k_{ij}\), \(b\) & Binary dispersion interaction parameter; its reciprocal-temperature slope (K) \\
+        \(\kappa^{AB}\), \(\epsilon^{AB}/k_{\mathrm{B}}\) & Association volume and association energy \\
+        \(d_i^{\mathrm{Born}}\), \(D_i\) & Born diameter; outer diameter of the first solvation shell \\
+        \(f_k\), \(f_{\mathrm{mix}}\) & Solvation factor of component \(k\); its mole-fraction average \\
+        \(c_{\mathrm{shell}}\), \(c_{\mathrm{dielectric}}\) & Born-form coefficients: (1,1) for SSM+DS, (0,0) for Original Born \\
+        \(\varepsilon_{\mathrm{bulk}}\), \(\varepsilon_{\mathrm{ion}}\), \(\varepsilon_s\) & Relative permittivity of the solution, of the region next to an ion, and of solvent \(s\) \\
+        \(\nu_{ri}\), \(K_r\), \(a_i\) & Stoichiometric coefficient, equilibrium constant of reaction \(r\), activity of species \(i\) \\
+        \(A_r\), \(B_r\), \(C_r\), \(D_r\), \(\Delta_r\) & Coefficients of \(\ln K_r(T)\); offset to the aqueous-molality basis \\
+        \(m^{\circ}\) & Standard molality, \SI{1}{\mole\per\kilo\gram} \\
+        \(r_{P,j}\), \(r_{x,j}\), \(C\) & Weighted pressure and species residuals; fitting cost \(\tfrac12\sum_jr_j^2\) \\
+        AARD & Average absolute relative deviation, \cref{eq:aard} \\
         \bottomrule
     \end{tabularx}
 \end{minipage}\par

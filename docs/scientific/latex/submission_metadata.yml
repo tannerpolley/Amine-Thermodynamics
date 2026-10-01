@@ -1,9 +1,16 @@
 schema_version: 1
-scientific_lane: historical_fixed_parameter_evaluation
+scientific_lane: nine_species_epcsaft_born_term_and_speciation_comparison
 scientific_claim: >
-  Historical evaluation of a retired fixed SSM+DS modified-Born ePC-SAFT
-  parameter set against MEA-H2O-CO2 pressure and speciation evidence; no values
-  constitute an active MEA parameter set.
+  Nine-species ePC-SAFT record 9055458d (Debye-Hueckel and SSM+DS Born terms,
+  explicit carbamate chemistry) for 30 wt% aqueous MEA, fitted simultaneously
+  to 48 CO2 pressures (40/60 degC, AARD 13.53 %) and 94 species targets
+  (20-60 degC, AARD 8.28 %). Outside the fit: 20.27 % on 21 canonical rows at
+  80 degC; 24.51 % and 25.45 % on 11 and 12 previously unused Wagner 2013 rows
+  near 353 and 392 K. Removing the Born term raises the cost from 32.99 to
+  98.79; the MEAH+-MEACOO- and MEAH+-water interactions dominate the tested ablations. The
+  Born-form ranking changes when Matin 2012 titration bicarbonate enters the
+  fit. Data at or below 60 degC do not set the temperature response.
+  Scope: CO2 pressure and speciation in 30 wt% MEA at 40-80 degC.
 author:
   name: Tanner W. Polley
   orcid: 0009-0008-5957-4152
@@ -25,20 +32,40 @@ declarations:
     relationships that could have appeared to influence the work reported in
     this paper.
   generative_ai: >
-    During preparation of this manuscript, AI-assisted tools were used for
-    editorial review, language polishing, and computational consistency checks.
+    During preparation of this manuscript, OpenAI Codex and Claude (Anthropic)
+    were used to draft and revise manuscript text, check computational
+    consistency, and assist with bibliography checking and correction.
     The author reviewed and edited the content and takes responsibility for the
     final manuscript.
-  authority_status: author_approved_2026-07-27
+  authority_status: author_approved_2026-10-01
 target_venue: Fluid Phase Equilibria
+title: >
+  Electrolyte PC-SAFT with carbamate chemistry for CO2 in aqueous
+  monoethanolamine: the role of the Born term and of speciation data
+keywords:
+  - CO2 solubility
+  - ePC-SAFT
+  - modified Born term
+  - monoethanolamine
+  - chemical speciation
+  - reactive vapor-liquid equilibrium
+repository: https://github.com/tannerpolley/Amine-Thermodynamics
 repository_license: MIT
-release_tag: v1.0.0
-release_url: https://github.com/tannerpolley/MEA-Thermodynamics/releases/tag/v1.0.0
-release_commit: 92a032a7de3233575233a75fb86bba0cf98b43c7
-release_published_at: 2026-07-27T22:09:55Z
-archive_provider: github_release
+repository_visibility_at_submission: public, set by the owner before submission
+release_tag: manuscript-v1
+release_commit: "tag manuscript-v1"
+parameter_record_sha256: 9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241
+engine_wheel_sha256: 28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2
+pdf_sha256: null
+source_zip_sha256: null
 archive_doi: null
-archive_doi_status: intentionally_not_minted_by_author_choice
-irreversible_publication_authorized: true
-authorization_date: 2026-07-27
-remaining_human_gate: []
+submission_aids:
+  cover_letter: submission/cover_letter.md
+  highlights: submission/highlights.txt
+excluded_from_upload:
+  - docs/submission/fluid_phase_equilibria/submission_metadata.yml
+remaining_human_gate:
+  - owner makes the repository public
+  - owner publishes the draft GitHub release
+  - owner posts the preprint to ChemRxiv and completes its attestations
+  - owner completes the Editorial Manager fields and submits

@@ -1,19 +1,22 @@
-\begin{table*}
+\begin{table*}[pos=!tb,width=\textwidth]
     \centering
     \scriptsize
-    \caption{Positioning of the present \MEA \COtwo-solubility study relative to representative SAFT-family and electrolyte-model studies.}
+    \caption{Fitted and outside-fit quantities in published models closest to the present model and in this work.
+    ``Outside fit'' refers to quantities excluded from the parameter-estimation step described in each row.
+    For the present work, it refers only to the five-coordinate, 142-target fit; inherited reaction shifts and the fixed \COtwo dispersion energy were selected using data that included \SI{80}{\degreeCelsius}.}
     \label{tab:literature-model-comparison}
-    \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+    \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
         \toprule
-        Study & System and model & Species and activity treatment & Data and fitted quantities & Validation reported \\
+        Study & System and model & Quantities used for fitting & Quantities outside the fit \\
         \midrule
-        Nasrifar and Tafazzol\cite{Nasrifar2010} & \MEA--\HtwoO and acid-gas PC-SAFT mixtures & Apparent neutral mixture basis without explicit Born treatment & Pure-component and VLE/property data; molecular parameters and binary interactions & Pure and mixture thermodynamic-property checks \\
-        Baygi and Pahlavanzadeh\cite{Baygi2015} & \MEA--\HtwoO--\COtwo PC-SAFT with external chemistry & Six-species reconstructed liquid without ionic ePC-SAFT activity coupling or SSM+DS Born terms & \COtwo pressure data with reconstructed speciation; neutral PC-SAFT molecular and binary terms & Pressure curves and reconstructed speciation \\
-        Uyan et al.\cite{Uyan2015} & MDEA--\HtwoO--\COtwo ePC-SAFT & Explicit ionic true-species chemistry with electrolyte activity terms; no \MEA carbamate ion pair & Solubility data and independent parameter sources; selected ion and binary parameters & Predictive ternary acid-gas solubility checks \\
-        Wangler et al.\cite{Wangler2018} & MDEA amine ePC-SAFT systems & Explicit ionic true species with fitted electrolyte binary interactions; no \MEACOO pathway & Osmotic, solubility, and related data; selected binary and pure-ion quantities & Acid-gas solubility and related validation data \\
-        Buelow et al.\cite{Bulow2020,Bulow2021} & Electrolyte and mixed-solvent advanced ePC-SAFT & Concentration-dependent permittivity with advanced Born corrections & Electrolyte solution and salt-solubility data; dielectric/Born framework terms & Electrolyte and salt-solubility validation \\
-        Figiel et al.\cite{Figiel2025} & Electrolyte and organic-solvent modified-Born ePC-SAFT & Explicit ionic true species with SSM+DS modified Born treatment & Electrolyte activity and solubility data; Born, dielectric, and solvent-shell conventions & Activity, solubility, and consistency checks \\
-        Present study & \MEA--\HtwoO--\COtwo SSM+DS modified-Born ePC-SAFT & Nine-species explicit ionic basis with \MEAH/\MEACOO carbamate chemistry, SSM+DS Born terms, and concentration-dependent permittivity & 161 \COtwo-solubility pressure rows and 74 NMR-derived speciation states; fixed ion inputs from release \texttt{v1.0.0} & Pressure/speciation residuals and carbonate-only Born sensitivity for a fixed parameter set \\
+        B\"ottinger et al.~\cite{Bottinger2008} & \MEA--\HtwoO--\COtwo; extended Pitzer excess Gibbs energy with chemical equilibria & \MEA carbamate-formation and oxazolidone-formation constants fitted to NMR; \MEA protonation constant and \MEA interaction parameters retained from the literature (\S\S5--6) & Vapor--liquid equilibrium (\S6) \\
+        Baygi and Pahlavanzadeh~\cite{Baygi2015} & \MEA--\HtwoO--\COtwo; PC-SAFT with separate chemical-equilibrium calculation & \MEA pure-component parameters; binary interaction parameters from binary vapor--liquid equilibrium & Ternary \COtwo solubility \\
+        Najafloo and Zarei~\cite{Najafloo2018} & \MEA--\HtwoO--\COtwo; SAFT-HR & Pure-\MEA vapor pressure and liquid density (\S3.1); literature \COtwo--\HtwoO interaction and zero \COtwo--\MEA and \MEA--\HtwoO interactions (\S3.2) & Ternary solubility comparisons (\S3.3); the conclusion describes the data use more broadly than the parameter-estimation methods \\
+        Akula et al.~\cite{Akula2023a} & \MEA--\HtwoO--\COtwo; electrolyte NRTL & \COtwo partial pressure and heat of absorption, jointly (Eq.~34) & NMR speciation and liquid heat capacity (\S4.2) \\
+        Uyan et al.~\cite{Uyan2015} & MDEA--\HtwoO--\COtwo; ePC-SAFT with explicit ions & Literature pure-component and ion parameters; binary parameters from binary subsystems & Ternary \COtwo solubility \\
+        Wangler et al.~\cite{Wangler2018} & MDEA--\HtwoO--\COtwo/\ce{H2S}; ePC-SAFT with explicit ions & Binary parameters including osmotic coefficients of water--MDEA--HCl & \COtwo and \ce{H2S} solubility; enthalpy of absorption \\
+        Figiel et al.~\cite{Figiel2025} & Salts in water, methanol and ethanol; ePC-SAFT with SSM+DS Born term & Born diameters to infinite-dilution solvation Gibbs energies in water; solvent factors to NaBr activity coefficients; aqueous ion interactions to salt activity or osmotic data; ion--methanol and ion--ethanol interactions to infinite-dilution solvation Gibbs energies; \SI{298.15}{\kelvin} & Transfer Gibbs energies and activity coefficients in mixed solvents \\
+        This work & 30 wt\% \MEA--\HtwoO--\COtwo; nine-species ePC-SAFT, SSM+DS or Original Born & Five interaction coordinates to 48 \COtwo pressures at 40/\SI{60}{\degreeCelsius} and 94 species at 20/40/\SI{60}{\degreeCelsius} & \COtwo pressure and species at \SI{80}{\degreeCelsius}; 15 and 45 wt\% \MEA; 100--\SI{120}{\degreeCelsius} \\
         \bottomrule
     \end{tabularx}
 \end{table*}

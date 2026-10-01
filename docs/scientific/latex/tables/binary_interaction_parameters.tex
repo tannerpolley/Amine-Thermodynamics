@@ -1,22 +1,27 @@
-\begin{table}[t]
+\begin{table*}[t]
     \centering
-    \caption{Historical binary dispersion interaction parameters used in the retired fixed activity-based ePC-SAFT evaluation. These values are not active parameter authority. Unlisted binary pairs were held at \(k_{ij}=0\).}
+    \caption{Binary dispersion interaction parameters.
+    Both Born forms fit the same five coordinates within the same bounds, each starting from its own optimum of the earlier 160-target objective; the Start column gives the SSM+DS starting values, and the Original Born column gives that form's converged 142-target values.
+    The \MEAH--water coefficient is the value at \(T_{\mathrm{ref}}=\SI{313.15}{\kelvin}\) in \cref{eq:kij-temperature}, and \(b\) is its reciprocal-temperature slope.
+    Pairs of ions with the same charge sign have no dispersion interaction, and every pair not listed has \(k_{ij}=0\).}
     \label{tab:binary-interaction-parameters}
     \small\rmfamily
-    \setlength{\tabcolsep}{5pt}
-    \renewcommand{\arraystretch}{1.08}
-    \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.26\linewidth}c>{\raggedright\arraybackslash}X}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.1}
+    \begin{tabularx}{\textwidth}{@{}llrrrr>{\raggedright\arraybackslash}X@{}}
         \toprule
-        Pair & \(k_{ij}\) & Treatment and evidence role \\
+        Pair & Role & Bounds & Start & SSM+DS & Original Born & Source or note \\
         \midrule
-        \COtwo--\MEA & 0.0000 & Held fixed in the activity-based evaluation. \\
-        \MEA--\HtwoO & -0.0520 & Inherited neutral molecular interaction term for the aqueous amine solvent basis~\cite{Baygi2015,Nasrifar2010}. \\
-        \MEAH--\MEACOO & -0.002018 & Fixed input from release \texttt{v1.0.0}; estimation history unavailable. \\
-        \MEAH--\HCOthree & 0.0000 & Held fixed in the activity-based evaluation. \\
-        \HtwoO--\HthreeO & 0.2500 & Literature water-ion transfer term for the proton carrier~\cite{Held2014,Uyan2015}. \\
-        \HtwoO--\Hydroxide & -0.2500 & Literature water-ion transfer term for hydroxide~\cite{Held2014,Uyan2015}. \\
-        \HtwoO--\HCOthree & 0.0000 & Literature water-ion transfer term for bicarbonate~\cite{Held2014,Uyan2015}. \\
-        \HtwoO--\COthree & -0.2500 & Literature water-ion transfer term for carbonate~\cite{Held2014,Uyan2015}. \\
+        \MEACOO--\HtwoO & Fitted & \(\pm0.5\) & 0.0788562 & 0.1298249224 & \(-0.0500962\) & This work \\
+        \MEAH--\HtwoO & Fitted & \(\pm0.5\) & \(-0.2988395\) & \(-0.3793108929\) & 0.1171734 & This work; value at \(T_{\mathrm{ref}}\) \\
+        \MEAH--\HtwoO, \(b\) (K) & Fitted & \(\pm1000\) & 107.644 & \(-148.5346444\) & \(-119.037\) & This work \\
+        \HCOthree--\HtwoO & Fitted & \(\pm0.5\) & 0.3938263 & 0.5 (upper bound) & 0.5 (upper bound) & This work \\
+        \MEAH--\MEACOO & Fitted & \(\pm1\) & \(-0.7050569\) & \(-0.7167720275\) & \(-1\) (lower bound) & This work \\
+        \MEA--\HtwoO & Fixed & -- & -- & \(-0.0735275\) & \(-0.0735275\) & Earlier project fit to binary VLE \cite{caiBinaryIsobaricVaporLiquid1996} \\
+        \COtwo--\HtwoO & Fixed & -- & -- & 0.0132629 & 0.0132629 & Inherited value \\
+        \HthreeO--\HtwoO & Fixed & -- & -- & 0.25 & 0.25 & \cite[Table~2]{Held2014} \\
+        \Hydroxide--\HtwoO & Fixed & -- & -- & \(-0.25\) & \(-0.25\) & \cite[Table~2]{Held2014} \\
+        \COthree--\HtwoO & Fixed & -- & -- & \(-0.25\) & \(-0.25\) & \cite[Table~2]{Held2014} \\
         \bottomrule
     \end{tabularx}
-\end{table}
+\end{table*}
