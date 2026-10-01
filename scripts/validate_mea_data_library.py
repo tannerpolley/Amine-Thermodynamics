@@ -5,6 +5,7 @@ import csv
 import hashlib
 import io
 import json
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -44,6 +45,16 @@ EXPECTED_ROWS = {
     "observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_excess_molar_volume.csv": 44,
 }
 TEXT_SUFFIXES = {".csv", ".json", ".md", ".py", ".tex", ".txt", ".yaml", ".yml"}
+LONG_TEXT_WORDS = {
+    "diisopropanolamine",
+    "dimethylethanolamines",
+    "hydroxyethylammonium",
+    "methyldiethanolamine",
+    "monoethanolammonium",
+    "monoethyleneglycol",
+    "multiconcentration",
+    "piperidinemethanol",
+}
 STALE_PATHS = (
     "data/reference/MEA/VLE",
     "data/reference/MEA/ChEq",
@@ -319,6 +330,17 @@ def cross_validation_bytes() -> bytes:
 
 def validate() -> list[str]:
     errors: list[str] = []
+    for path in sorted(LIBRARY.rglob("*.csv")):
+        for line, row in enumerate(_read_dicts(path), start=2):
+            for column, value in row.items():
+                for token in re.findall(
+                    r"(?<![A-Za-z0-9_])[a-z]{18,}(?![A-Za-z0-9_])", value or ""
+                ):
+                    if token not in LONG_TEXT_WORDS:
+                        errors.append(
+                            f"Possible missing spaces in {path.relative_to(LIBRARY)}:"
+                            f"{line} column {column}: {token!r}"
+                        )
     for relative in REQUIRED_DIRECTORIES:
         if not (LIBRARY / relative).is_dir():
             errors.append(f"Missing required evidence-library directory: {relative}")
