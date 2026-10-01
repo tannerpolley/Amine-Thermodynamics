@@ -55,5 +55,5 @@ Not verified. ChemRxiv's help pages were inaccessible. Expected route: after jou
 ## Owner checklist
 1. Make the repository public (https://github.com/tannerpolley/Amine-Thermodynamics).
 2. Confirm the tag `manuscript-v1` exists (metadata still has `release_commit: null`).
-3. Upload to ChemRxiv: main PDF, supplement, fields above; paste the final R2_TEST sentence first.
+3. Upload to ChemRxiv: main PDF, supplement and the fields above (the abstract above is final).
 4. After acceptance, update the preprint with the DOI link.
