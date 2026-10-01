@@ -473,7 +473,7 @@ def fit(structure, start):
                     }
                     node.pop("source_sha256", None)
             final["purpose"] = (
-                "Issue 140 low-temperature source-constant comparison; not adopted or physically validated."
+                "Issue 140 low-temperature fixed-chemistry comparison; not adopted or physically validated."
             )
             final["document_id"] = "mea-temperature-reanchor-140-" + name
             assert s.reaction_values(final) == reactions
