@@ -53,20 +53,20 @@ most 0.22% over 45 checked rows.
 ::: {.parameter-table .numeric-table}
 | Cohort | Paired targets | Baseline RMSE → candidate RMSE |
 |:--|--:|--:|
-| Pressure calibration, log₁₀ ratio | 143 | 0.3344 → 0.2366 (greenfield, adopted record: 0.2364) |
-| Xu 2011 pressure comparison | 18 | 0.3096 → 0.1901 (greenfield, adopted record: 0.1910) |
+| Pressure calibration, log₁₀ ratio | 143 | 0.3344 → 0.2366 (record `868a5018` on Engine `83ac1126`: 0.2364) |
+| Xu 2011 pressure comparison | 18 | 0.3096 → 0.1901 (record `868a5018` on Engine `83ac1126`: 0.1910) |
 | Speciation, log₁₀ ratio | 125 | 0.3702 → 0.3670 (see note) |
 | Kim–Svendsen 40/80 °C heat | 66 | 20.01 → 11.84 kJ mol⁻¹ CO₂ |
 | Kim–Svendsen 120 °C heat | 20 | 39.30 → 31.15 kJ mol⁻¹ CO₂ |
 | Kim 2014 heat comparison | 27 | 16.84 → 10.71 kJ mol⁻¹ CO₂ |
 :::
 
-Greenfield pressure values use the same 143/18 split and differ from the
+The Engine `83ac1126` pressure values use the same 143/18 split and differ from the
 candidate replay by at most 0.009 in ln pCO₂ per row. The speciation cohort is
 not re-paired here: the candidate replay reused a pivot solution for
 Böttinger 2008 state 048 (`pivot_reuse`) and landed on a different solution
 branch (carbamate 3.53 × 10⁻⁵ against 0.0492 observed). That one wrong-solution
-state inflated both speciation values. The greenfield adopted record scores all 131
+state inflated both speciation values. On Engine `83ac1126`, record `868a5018` scores all 131
 speciation targets at log₁₀ RMSE 0.2322 (overview table).
 
 # Conclusion and limits

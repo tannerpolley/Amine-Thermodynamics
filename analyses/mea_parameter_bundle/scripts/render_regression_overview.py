@@ -61,7 +61,7 @@ def positive(rows):
 
 
 def ln_statistics(
-    family, group_type, group, rows, engine=f"greenfield {ENGINE_COMMIT[:8]}"
+    family, group_type, group, rows, engine=f"Engine {ENGINE_COMMIT[:8]}"
 ):
     valid = positive(rows)
     errors = [ln_ratio(r) for r in valid]
