@@ -1,0 +1,120 @@
+{
+  "label": "diagnostic: source measurement uncertainty unavailable",
+  "chemical_consistency": "UNRESOLVED",
+  "base_commit": "cc508d1",
+  "freeze_commit": "cffd5ba",
+  "freeze_sha256": "117067dba2f4fc47fa40c4e9585f1d4f345c28398dcf457ef5a1d9d549457ec2",
+  "records": [
+    {
+      "structure": "slope-fixed",
+      "start": 1,
+      "cost": 32.84413761745968,
+      "fitted_coordinates": 5,
+      "role": "primary",
+      "record": "primary-parameters.json",
+      "sha256": "0917146b4e4844a841a7cfff0cb2e44500b542d31ff5c6079674d025636cc287"
+    },
+    {
+      "structure": "slope-free",
+      "start": 1,
+      "cost": 32.060519829305015,
+      "fitted_coordinates": 6,
+      "role": "secondary",
+      "record": "secondary-parameters.json",
+      "sha256": "08c8768e3b052b4d33857a06d27ce5a429ed488132ea455e959706b68ee53633"
+    }
+  ],
+  "fits_attempted": 8,
+  "fits_complete": 8,
+  "new_assessment_state_solves": 578,
+  "reused_adopted_pressure_states": 23,
+  "reused_adopted_heat_states": 113,
+  "assessment_max_abs_stationarity": 2.2737367544323206e-13,
+  "assessment_tolerance_met": true,
+  "assessment_balance_errors": 0,
+  "all_pressure_species_stages_complete": true,
+  "all_heat_records_complete": true,
+  "no_loss_pressure_condition": false,
+  "baseline_model_evaluations_performed": 0,
+  "conditions": "142 low-T targets; four structures/two starts; fixed R2 and independent diagnostic R4/R5; same diagnostic scales; conditional on historical SSM+DS and high-T binary interactions; previously assessed Wagner cohorts; heat outside objective",
+  "presentation_input_copies": [
+    {
+      "path": "never-accessed-vle-admission.csv",
+      "source": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-140-reanchor/analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv",
+      "sha256": "ceee9107ca784936126b9f32e08af8cb1e9a7088a87b4667796d9abac94f5bcc",
+      "meaning": "immutable byte-identical input or baseline snapshot"
+    },
+    {
+      "path": "assessment-row-ids.json",
+      "source": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-140-reanchor/analyses/mea_parameter_bundle/results/temperature-reanchor-140/assessment-row-ids.json",
+      "sha256": "0f3e9669719d8fd26d07a38e8c3aaf798bce4fd0c608b566d9204bd8757a721e",
+      "meaning": "immutable byte-identical input or baseline snapshot"
+    },
+    {
+      "path": "assessment-stage-6.json",
+      "source": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-140-reanchor/analyses/mea_parameter_bundle/results/temperature-reanchor-140/assessment-stage-6.json",
+      "sha256": "9c7b8c9a9b422a8413394d71c0c970901de1ecc29e319ac1d40d121cbddba56d",
+      "meaning": "immutable byte-identical input or baseline snapshot"
+    },
+    {
+      "path": "training-targets.csv",
+      "source": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-140-reanchor/analyses/mea_parameter_bundle/results/temperature-reanchor-140/training-targets.csv",
+      "sha256": "8a9426d253b23a5dce5db9e5fa71493136a843f40d919f694021815d5b8ea36b",
+      "meaning": "immutable byte-identical input or baseline snapshot"
+    },
+    {
+      "path": "preregistration.md",
+      "source": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-140-reanchor/analyses/mea_parameter_bundle/results/temperature-reanchor-140/stage-2-preregistration.md",
+      "sha256": "a635f2dec3e785c17a9efa58e4e5aff12091fffb43a366a250401897f8aafa5d",
+      "meaning": "immutable byte-identical input or baseline snapshot"
+    },
+    {
+      "path": "assessment-stage-6-rows.csv",
+      "source": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-140-reanchor/analyses/mea_parameter_bundle/results/temperature-reanchor-140/assessment-stage-6-rows.csv",
+      "sha256": "84ad63fa1ffb904dc154e2bb6a67e908687b27ee561865543cb949e4b8703964",
+      "meaning": "immutable byte-identical input or baseline snapshot"
+    }
+  ],
+  "execution_code_commit": "cffd5ba",
+  "source_calculation_producer_commit": "499397a",
+  "post_freeze_change": "Source-input presentation links normalized to byte-identical copies; coefficient equations, fit/selection/assessment mathematics and all frozen input/parameter hashes unchanged.",
+  "final_code_hashes": {
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/reaction-constants.py": "ecc64b7d84aec509a8adc9a8e0f69d50655f5e29dd454d92fa923ee2abd9566a",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/low-temperature-fit.py": "2a00a5dd77b1971a427d3a881240ccfec2437de63ec47b266a4b51ca54d58db4",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/present.py": "a651defc759be291f4f7449eb221737c7505b4cc671062ca4dd8a71e421e7795",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/assessment.py": "1f9d173e418333b32f5c4351e1b1621572a49f2a052205974921801e34ea4db9"
+  },
+  "change_accounting_categories": {
+    "documents": {
+      "additions": 715,
+      "binary_files": 0,
+      "files": 4,
+      "removals": 1
+    },
+    "executable": {
+      "additions": 201,
+      "binary_files": 0,
+      "files": 4,
+      "removals": 6
+    },
+    "generated": {
+      "additions": 0,
+      "binary_files": 0,
+      "files": 0,
+      "removals": 0
+    },
+    "other": {
+      "additions": 78516,
+      "binary_files": 0,
+      "files": 78,
+      "removals": 0
+    },
+    "tests": {
+      "additions": 0,
+      "binary_files": 0,
+      "files": 0,
+      "removals": 0
+    }
+  },
+  "change_accounting_note": "The tool classifies retained CSV/JSON/SVG scientific outputs and immutable input copies as other; executable additions are 201, below the reviewed 300-line ceiling. No tests or numerical methods were duplicated."
+}

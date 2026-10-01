@@ -139,8 +139,8 @@ def source_constants():
         checks.append({"reaction": rid, "temperature_K": t, "native_ln_K": value, "difference_ln_K": difference})
     fit.save(OUT / "native-reaction-inputs.json", native)
     for filename in ("training-targets.csv", "assessment-row-ids.json", "never-accessed-vle-admission.csv"):
-        (OUT / filename).symlink_to(Path("..") / filename)
-    (OUT / "preregistration.md").symlink_to(Path("..") / "stage-2-preregistration.md")
+        (OUT / filename).write_bytes((BASE / filename).read_bytes())
+    (OUT / "preregistration.md").write_bytes((BASE / "stage-2-preregistration.md").read_bytes())
     hashes = json.loads((BASE / "input-hashes.json").read_text())
     hashes["hashes"][str(fit.SOURCE.relative_to(pa.probe.W))] = s.sha256(fit.SOURCE)
     fit.save(OUT / "input-hashes.json", hashes)
