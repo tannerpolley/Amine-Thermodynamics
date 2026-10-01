@@ -26,7 +26,7 @@ def run(args, seconds):
         try: subprocess.run(['bash','-c',f'while kill -0 {occupied[0]} 2>/dev/null; do sleep 60; done'],check=True,timeout=max(1,DEADLINE-time.time()-30))
         except subprocess.TimeoutExpired: raise SystemExit('10:00 deadline while waiting for CPU; no calculation launched')
     if time.time()+seconds+30>DEADLINE: raise SystemExit(f'10:00 deadline: stopping before {args}')
-    subprocess.run(['timeout',str(seconds),'uv','run','--no-sync','python',str(BASE/'r2-temperature.py'),*args],env=env,check=True)
+    subprocess.run(['flock','-w',str(max(0,int(DEADLINE-time.time()-seconds-30))),'/tmp/t3-heavy-check.lock','timeout',str(seconds),'uv','run','--no-sync','python',str(BASE/'r2-temperature.py'),*args],env=env,check=True)
 
 assert json.loads((BASE/'stage-3/source-admission.json').read_text())['passed'], 'retained source law must pass amended admission; never refit it'
 for structure in ('constant-fixed','slope-fixed','slope-free'):
