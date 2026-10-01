@@ -1,4 +1,5 @@
 import csv
+import os
 import json
 import sys
 from pathlib import Path
@@ -10,10 +11,11 @@ import born_form_diagnosis
 born_form_diagnosis.DEADLINE = float("inf")
 
 PARAMETER = "model/relative_permittivity/ionic_region_relative_permittivity"
-POINTS = (2.0, 4.0, 8.0, 16.0, 32.0)
-BASE = born_form_diagnosis.MAPPINGS["11"]
+POINTS = (float(os.environ['SCAN_VALUE']),)
+FORM = os.environ["SCAN_FORM"]
+BASE = born_form_diagnosis.MAPPINGS[FORM]
 BASE_VALUES = born_form_diagnosis.values(BASE)
-RESULTS = Path(__file__).resolve().parent / "scan_B_results.csv"
+RESULTS = born_form_diagnosis.HERE / "scan_B_results.csv"
 FIELDS = ("param", "value", "pressure_cost", "bottinger_cost", "matin_cost", "cost", "status")
 
 if BASE_VALUES[PARAMETER] != 8.0:
@@ -39,7 +41,7 @@ with RESULTS.open("x", newline="") as output:
                 raise RuntimeError("mapping changed parameters other than epsilon_ion")
 
             name = f"scan-B-eps_ion-{value:.1f}"
-            result = born_form_diagnosis.evaluate(name, mapping, "11")
+            result = born_form_diagnosis.evaluate(name, mapping, FORM)
             if result.get("complete") is not True:
                 raise RuntimeError("evaluate() did not return a complete result")
             row.update({key: result[key] for key in FIELDS[2:-1]})
@@ -51,18 +53,3 @@ with RESULTS.open("x", newline="") as output:
         output.flush()
         rows.append(row)
         print(json.dumps(row), flush=True)
-
-baseline = next(row for row in rows if row["value"] == 8.0)
-if baseline["status"] != "evaluated":
-    raise RuntimeError(f"baseline evaluation failed: {baseline['status']}")
-
-expected = {"pressure_cost": 10.065, "bottinger_cost": 5.481,
-            "matin_cost": 32.080, "cost": 47.6258}
-for key, target in expected.items():
-    if abs(float(baseline[key]) - target) > 0.005:
-        raise RuntimeError(f"baseline {key}={baseline[key]}, expected approximately {target}")
-
-baseline_cost = float(baseline["cost"])
-if not any(row["status"] == "evaluated" and row["value"] != 8.0
-           and float(row["cost"]) != baseline_cost for row in rows):
-    raise RuntimeError("no non-baseline point changed total cost from epsilon_ion=8.0")
