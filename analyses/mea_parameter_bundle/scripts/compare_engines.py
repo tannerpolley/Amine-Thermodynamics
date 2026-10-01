@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Cold, paired MEA comparison of the superseded and greenfield Engine wheels."""
+"""Reproduce the retained comparison of historical Engine wheels.
+
+The historical `greenfield` label and CLI options bind the exact wheels and
+output records for this comparison; this script does not identify the current
+Engine.
+"""
 
 from __future__ import annotations
 
