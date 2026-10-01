@@ -47,7 +47,7 @@ def main(case, form):
     setup(name)
     startpath=d.FILES[form]
     start=d.values(d.s.parameter_mapping(startpath))
-    mapping=d.changed(d.MAPPINGS['11'], {i: start[i] for i in d.IDS})
+    mapping=d.changed(d.s.parameter_mapping(Path(os.environ.get('SENSITIVITY_MAPPING',d.FILES['11']))), {i: start[i] for i in d.IDS})
     if case == 'off':
         family = next(f for f in mapping['model_families'] if f['kind'] == 'electrolyte')
         family['choice'] = 'fully-dissociated-debye-huckel'
@@ -56,9 +56,9 @@ def main(case, form):
         for c in mapping['components']:
             c['coefficients'] = [x for x in c['coefficients'] if x['family'] not in ('solvation_factor', 'born_diameter')]
         mapping['model_coefficients'] = [x for x in mapping['model_coefficients'] if x['family'] != 'ionic_region_relative_permittivity']
-    else:
+    elif case != 'refit':
         mapping=d.changed(mapping, {d.IDS[int(case)]: 0.})
-    free=[i for i in d.IDS if case == 'off' or i != d.IDS[int(case)]]
+    free=[i for i in d.IDS if case in ('off','refit') or i != d.IDS[int(case)]]
     assert d.design.admissible(d.IDS, [d.values(mapping)[i] for i in d.IDS], '40-80')
     d.save(name+'-start-hash.json',{'path':str(startpath),'sha256':d.s.sha256(startpath),'script_sha256':d.s.sha256(Path(__file__))})
     params,groups,rows=d.rows_for(mapping,'11')
