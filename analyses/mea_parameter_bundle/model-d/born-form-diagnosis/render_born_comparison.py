@@ -87,8 +87,8 @@ def ranking():
         resc=[float(next(r['cost'] for r in rescored if r['series']==form and r['x_value']==label)) for label in labels]
         axes[1].bar(np.arange(2)+offset,resc,width=.34,color=COLORS[form],edgecolor='black',linewidth=.7,
                     hatch=HATCHES[form])
-    axes[0].set_xticks(np.arange(3),['Historical\n160 targets','P5a\n142 targets','P5b\n88 targets'])
-    axes[1].set_xticks(np.arange(2),['P5a point','P5b point'])
+    axes[0].set_xticks(np.arange(3),['160-target fit\n(Matin pool fitted)','142-target fit','88-target fit'])
+    axes[1].set_xticks(np.arange(2),['142-target fit','88-target fit'])
     for ax in axes:ax.grid(axis='y',alpha=.2);ax.set_axisbelow(True);ax.tick_params(axis='x',labelsize=8)
     add_panels(axes)
     fig.legend(handles=form_legend(),loc='upper center',bbox_to_anchor=(.55,.995),ncol=2,frameon=False)

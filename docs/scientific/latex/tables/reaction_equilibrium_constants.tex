@@ -1,21 +1,21 @@
 \begin{table*}[t]
     \centering
     \footnotesize
-    \caption{Liquid reactions and the recorded equilibrium-constant coefficients of the selected parameter record, with \(T\) in kelvin.
+    \caption{Liquid reactions and the equilibrium-constant coefficients of the fitted parameter set, with \(T\) in kelvin.
     R1--R3 use \(\ln K_r=A_r+B_r/T+C_r\ln T+D_rT\) on the source mole-fraction basis, and \(\Delta_r\) is the offset of \cref{eq:molality-conversion} to the aqueous-molality basis.
-    R2 is recorded directly on the molality basis: its \(A_2\) and \(B_2\) contain the +4.0165 conversion and the inherited \SI{-8.2019}{\kilo\joule\per\mole} enthalpy shift, so it has no separate \(\Delta_2\).
+    R2 is given directly on the molality basis: its \(A_2\) and \(B_2\) contain the +4.0165 conversion and the fixed \SI{-8.2019}{\kilo\joule\per\mole} enthalpy shift, so it has no separate \(\Delta_2\).
     R4 uses \(\ln K_4=A_4+B_4/T\), and R5 uses \(\ln K_5=-\ln10\,(A_5/T+B_5+C_5T)\), both on the aqueous-molality basis.
     The last column gives the temperature range of the source correlation.}
     \label{tab:reaction-equilibrium-constants}
     \begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}p{3.7cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{4.5cm}c@{}}
         \toprule
-        ID & Reaction & Source and treatment & Recorded coefficients & Source range (K) \\
+        ID & Reaction & Source and treatment & Coefficients used & Source range (K) \\
         \midrule
         R1 & \(2\HtwoO \rightleftharpoons \HthreeO+\Hydroxide\) & Austgen \cite[Table~V]{Austgen1991}; unchanged & \(A=132.899\), \(B=-13445.9\), \(C=-22.4773\), \(D=0\); \(\Delta=8.0331\) & 273.15--498.15 \\
-        R2 & \(\COtwo+2\HtwoO \rightleftharpoons \HCOthree+\HthreeO\) & Austgen \cite[Table~V]{Austgen1991}, \(A=231.465\), \(B=-12092.1\); molality conversion and inherited enthalpy shift included & \(A=232.3314\), \(B=-11105.6400\), \(C=-36.7816\), \(D=0\) & 273.15--498.15 \\
+        R2 & \(\COtwo+2\HtwoO \rightleftharpoons \HCOthree+\HthreeO\) & Austgen \cite[Table~V]{Austgen1991}, \(A=231.465\), \(B=-12092.1\); molality conversion and fixed enthalpy shift included & \(A=232.3314\), \(B=-11105.6400\), \(C=-36.7816\), \(D=0\) & 273.15--498.15 \\
         R3 & \(\HCOthree+\HtwoO \rightleftharpoons \COthree+\HthreeO\) & Austgen \cite[Table~V]{Austgen1991}; unchanged & \(A=216.049\), \(B=-12431.7\), \(C=-35.4819\), \(D=0\); \(\Delta=4.0165\) & 273.15--498.15 \\
         R4 & \(\MEACOO+\HtwoO \rightleftharpoons \MEA+\HCOthree\) & Tong et al.\ \cite[Table~5]{Tong2012}, from Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}; unchanged & \(A=2.151\), \(B=-1545.3\) & 293.15--323.15 \\
-        R5 & \(\MEAH+\HtwoO \rightleftharpoons \MEA+\HthreeO\) & Bates--Pinching form \cite[Table~5]{Bottinger2008}, \(A=2677.91\), \(B=0.3869\), \(C=4.277\times10^{-4}\); two inherited changes & \(A=3037.6400\), \(B=-1.0173\), \(C=4.277\times10^{-4}\) & 273.15--323.15 \\
+        R5 & \(\MEAH+\HtwoO \rightleftharpoons \MEA+\HthreeO\) & Bates--Pinching form \cite[Table~5]{Bottinger2008}, \(A=2677.91\), \(B=0.3869\), \(C=4.277\times10^{-4}\); two fixed changes (\cref{sec:data-methods}) & \(A=3037.6400\), \(B=-1.0173\), \(C=4.277\times10^{-4}\) & 273.15--323.15 \\
         \bottomrule
     \end{tabularx}
 \end{table*}

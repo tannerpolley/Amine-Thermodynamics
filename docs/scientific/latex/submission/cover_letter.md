@@ -23,7 +23,7 @@ and measured liquid speciation for loaded MEA. The work extends published Born-f
 comparisons to reactive aqueous MEA and shows that, for the datasets and fitting protocol
 examined, the solvation-shell and dielectric-saturation Born term of Figiel et al. and the
 original Born term calibrate comparably after refitting, with costs of 31.7–34.6 at three sets
-of inherited Born inputs, and which has the lower cost changes both when titration bicarbonate
+of fixed Born inputs, and which has the lower cost changes both when titration bicarbonate
 data enter the fit and with those inputs. Including a Born term matters far more than its form:
 removing it triples the fitted cost, to 98.79, and two interactions of protonated MEA, with
 carbamate and with water, dominate the tested ablations. For this model, the results support
@@ -33,7 +33,7 @@ Independent temperature-sensitive data could constrain the high-temperature resp
 
 The manuscript states its scope in one place: the model is a phase- and speciation-equilibrium
 description of 30 wt% MEA at 40–80 °C, and density, heat capacity and transfer to other amine
-concentrations are reported as limitations. The parameter records,
+concentrations are reported as limitations. The parameter files,
 retained calculations and figure data will be made public before submission in the repository
 cited in the Data and Code Availability statement, under the tag `manuscript-v1`.
 

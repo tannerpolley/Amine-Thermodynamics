@@ -5,7 +5,7 @@
 All solutions are 30 wt\% \MEA on a \COtwo-free basis unless stated otherwise.
 For the Wagner comparisons, each row is evaluated at its reported temperature and \COtwo-free \MEA mass fraction: 29.93--30.52 wt\% near \SI{353}{\kelvin} and 30.28--30.95 wt\% near \SI{392}{\kelvin}.
 Supplementary Section~S2 places the observations below within an inventory of published measurements near 30 wt\% \MEA.
-The canonical pressure set contains 161 measured \COtwo partial pressures at 40--\SI{120}{\degreeCelsius} from six studies \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
+The pressure assessment set contains 161 measured \COtwo partial pressures at 40--\SI{120}{\degreeCelsius} from six studies \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
 Each row keeps its source table and row, the reported temperature, the loading and the pressure in kilopascal.
 Six Xu et al.\ rows measured at 100.5--\SI{101.1}{\degreeCelsius} and 120.4--\SI{121.8}{\degreeCelsius} carry the authors' nominal temperatures of 100 and \SI{120}{\degreeCelsius}.
 Idris et al.\ report a combined standard uncertainty for each pressure \cite[Table~2]{idrisSpeciationMEACO2Adducts2014}, and the other five studies give no row-level uncertainty that we retained.
@@ -23,15 +23,15 @@ Every species target is a true-species liquid mole fraction.
 % P:methods-03
 \Cref{tab:mea-data-inventory} summarizes the fitted target sets and comparison groups; these groups overlap and their counts are not additive.
 The fitted and 80\,\si{\degreeCelsius} targets belong to an estimation set of 123 states: 79 pressure states from Hilliard and Jou et al.\ and 44 species states from B\"ottinger and Matin et al.
-Three species states that earlier calculations could not solve are kept out of the objective, although the selected record solves them.
-Two kinds of inherited values described below were estimated partly on 80\,\si{\degreeCelsius} data.
+Three species states are excluded from the objective because an earlier build of the equilibrium software did not solve them; the build used here solves them.
+Two kinds of fixed values described below were estimated partly on 80\,\si{\degreeCelsius} data.
 The 80\,\si{\degreeCelsius} targets therefore test conditions outside the present fit, not data unseen during model development.
 
 \begin{table*}[t]
     \centering
     \caption{Observation roles.
     The pool is the \ce{HCO3- + CO3^2-} mole fraction.
-    Fitted and 80\,\si{\degreeCelsius} targets belong to the 123-state estimation set; assessment and transfer rows are canonical pressure rows.}
+    Fitted and 80\,\si{\degreeCelsius} targets belong to the 123-state estimation set; assessment and transfer rows are evaluated with the pressure assessment calculation.}
     \label{tab:mea-data-inventory}
     \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{3.3cm}r>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{4.6cm}@{}}
         \toprule
@@ -39,11 +39,11 @@ The 80\,\si{\degreeCelsius} targets therefore test conditions outside the presen
         \midrule
         Fitted pressure & 48 & Hilliard 31, Jou et al.\ 17; 32 at 40 and 16 at \SI{60}{\degreeCelsius} & \(p_{\COtwo}\) \\
         Fitted species & 94 & B\"ottinger et al.\ 40 at 20, 40 and \SI{60}{\degreeCelsius}; Matin et al.\ 54 at \SI{20}{\degreeCelsius} & B\"ottinger: \ce{MEA + MEAH+} 18, \MEACOO 18, pool 4; Matin: \MEA, \MEAH and \MEACOO, 18 each \\
-        Report-only species & 18 & Matin et al., \SI{20}{\degreeCelsius} & Pool \\
+        Species compared, not fitted & 18 & Matin et al., \SI{20}{\degreeCelsius} & Pool \\
         Out-of-fit, \SI{80}{\degreeCelsius} & 11 + 11 & Jou et al.\ pressure; B\"ottinger et al.\ species & \(p_{\COtwo}\); \ce{MEA + MEAH+} 5, \MEACOO 5, pool 1 \\
-        Pressure assessment & 104 & Canonical rows at 40--\SI{80}{\degreeCelsius}: Aronu 36, Hilliard 30, Jou 28, Idris 10 & \(p_{\COtwo}\) \\
+        Pressure assessment & 104 & Assessment-set rows at 40--\SI{80}{\degreeCelsius}: Aronu 36, Hilliard 30, Jou 28, Idris 10 & \(p_{\COtwo}\) \\
         Previously unused pressure & 11 + 12 & Wagner et al.\ near 353 and \SI{392}{\kelvin}, not used before the final assessment \cite{wagnerSolubilityCarbonDioxide2013} & \(p_{\COtwo}\) \\
-        Out-of-range pressure & 57 & Canonical rows at 100--\SI{120}{\degreeCelsius}: Jou, Mamun and Xu et al. & \(p_{\COtwo}\) \\
+        Out-of-range pressure & 57 & Assessment-set rows at 100--\SI{120}{\degreeCelsius}: Jou, Mamun and Xu et al. & \(p_{\COtwo}\) \\
         Concentration transfer & 70 & Aronu et al.\ at 15 wt\% (33) and 45 wt\% (37), 40--\SI{80}{\degreeCelsius} & \(p_{\COtwo}\) \\
         Carbonate comparison & 10 & Jakobsen et al.\ & Carbonate fraction of dissolved carbon \\
         \bottomrule
@@ -52,18 +52,17 @@ The 80\,\si{\degreeCelsius} targets therefore test conditions outside the presen
 
 \subsection{Parameters}
 % P:methods-04
-\Cref{tab:full-ionic-ssm-ds-parameters,tab:binary-interaction-parameters,tab:reaction-equilibrium-constants} list every parameter of the selected record, identified by its SHA-256 hash \texttt{9055458d\ldots cb241}.
-Only the five interaction coordinates of \cref{tab:binary-interaction-parameters} are fitted here.
+\Cref{tab:full-ionic-ssm-ds-parameters,tab:binary-interaction-parameters,tab:reaction-equilibrium-constants} list every parameter of the fitted SSM+DS parameter set, called the fitted parameter set below.
+Only the five binary interaction parameters of \cref{tab:binary-interaction-parameters} are fitted here.
 The molecular and \HthreeO, \Hydroxide, \HCOthree and \COthree parameters come from the cited sources, with the exceptions marked in the tables.
-Several fixed values are inherited from earlier fits of this project and are not independently estimated molecular properties.
-These are the \COtwo dispersion energy, selected in a September 2026 comparison against 161 pressure rows and 131 species targets that included the 80\,\si{\degreeCelsius} isotherm; the \MEAH and \MEACOO parameters, from an earlier speciation fit; the \MEA--water interaction, fitted to binary VLE \cite{caiBinaryIsobaricVaporLiquid1996}; and the R2 and R5 changes below.
+Several fixed values are fitted or data-selected values, not independently estimated molecular properties.
+These are the \COtwo dispersion energy, selected by comparison against 161 pressure measurements and 131 species observations that included the 80\,\si{\degreeCelsius} isotherm; the \MEAH and \MEACOO parameters, from a fit to speciation data; the \MEA--water interaction, fitted to binary VLE \cite{caiBinaryIsobaricVaporLiquid1996}; and the R2 and R5 changes below.
 
 % P:methods-05
-The recorded R2 and R5 coefficients carry inherited constant shifts of the reaction enthalpy, \SI{-8.2019}{\kilo\joule\per\mole} for R2 and \SI{8.4185}{\kilo\joule\per\mole} for R5, applied so that \(\ln K\) is unchanged at \SI{313.15}{\kelvin}.
-They were estimated in September 2026 against pressure, species and heat-of-absorption targets that included the 80\,\si{\degreeCelsius} isotherm, among them two of the 11 Jou et al.\ targets at \SI{80}{\degreeCelsius}.
-The retained estimation record is in \nolinkurl{analyses/mea_parameter_bundle/results/reaction-temperature-fit/} at repository commit \texttt{c369705}.
-Before that shift, a Born-permittivity comparison had changed \(A_5\) from the Bates--Pinching value of \SI{2677.91}{\kelvin} to \SI{2597.91}{\kelvin}.
-The same estimation shifted R4, but the selected record returns R4 to its source correlation.
+The R2 and R5 coefficients carry fixed constant shifts of the reaction enthalpy, \SI{-8.2019}{\kilo\joule\per\mole} for R2 and \SI{8.4185}{\kilo\joule\per\mole} for R5, applied so that \(\ln K\) is unchanged at \SI{313.15}{\kelvin}.
+They were estimated against pressure, species and heat-of-absorption targets that included the 80\,\si{\degreeCelsius} isotherm, among them two of the 11 Jou et al.\ measurements at \SI{80}{\degreeCelsius}, at loadings 0.118 and 0.578.
+The R5 shift was applied to an \(A_5\) of \SI{2597.91}{\kelvin}, which a Born-permittivity comparison had set in place of the Bates--Pinching value of \SI{2677.91}{\kelvin}.
+The same estimation also shifted R4, but the fitted parameter set uses the R4 source correlation.
 
 \input{tables/full_ionic_ssm_ds_parameters}
 \input{tables/binary_interaction_parameters}
@@ -78,18 +77,17 @@ The fit minimizes \(C=\tfrac12\sum_jr_j^2\) over the 142 fitted targets, with
     \label{eq:fit-residuals}
 \end{equation}
 These scales are the declared fitting weights, not measured standard deviations, and every target has unit weight within its family.
-The bounds are \(\pm0.5\) for the three ion--water coefficients, \(\pm1\) for \MEAH--\MEACOO and \(\pm\SI{1000}{\kelvin}\) for \(b\), with coordinate scales of 0.01 and \SI{10}{\kelvin}.
-The same coordinates, bounds, weights, reactions and ion inputs define the SSM+DS and Original Born fits.
+The bounds are \(\pm0.5\) for the three ion--water coefficients, \(\pm1\) for \MEAH--\MEACOO and \(\pm\SI{1000}{\kelvin}\) for \(b\), with parameter scales of 0.01 and \SI{10}{\kelvin}.
+The same binary interaction parameters, bounds, weights, reactions and ion inputs define the SSM+DS and Original Born fits.
 
 % P:methods-07
-Two protocol choices were made after earlier fits had been inspected.
-Earlier refits met a pooled pressure limit but not a separate limit on the Mamun et al.\ rows at \SI{120}{\degreeCelsius}; the 100--\SI{120}{\degreeCelsius} pressure targets were then removed from the objective, and the working criterion became an AARD of at most 35\,\% on the 104 assessment rows.
-An earlier 160-target objective also fitted the 18 Matin pool targets.
-After those fits showed that these targets decided the Born-form ranking, they were made report-only, on the basis of the authors' own comparison with NMR data \cite{matinFacileMethodDetermination2012}.
+Two choices of the objective were made with knowledge of the fits that preceded them.
+The 100--\SI{120}{\degreeCelsius} pressure targets are excluded from the objective, because fits that included them met a pooled pressure limit but not a separate limit on the Mamun et al.\ rows at \SI{120}{\degreeCelsius}; the working criterion is an AARD of at most 35\,\% on the 104 assessment rows.
+The 18 Matin pool targets are compared but not fitted, on the basis of the authors' own comparison with NMR data \cite{matinFacileMethodDetermination2012}; a 160-target objective that also fitted them showed that these targets decided the Born-form ranking.
 
 % P:methods-08
-Each fit is a bounded Levenberg--Marquardt least-squares problem with exact implicit derivatives of the equilibrium states with respect to the fitted coordinates.
-The earlier 160-target SSM+DS fit used six prescribed starts; five converged, and one failed its initial equilibrium evaluation.
+Each fit is a bounded Levenberg--Marquardt least-squares problem with exact implicit derivatives of the equilibrium states with respect to the fitted parameters.
+The 160-target SSM+DS fit used six prescribed starts; five converged, and one failed its initial equilibrium evaluation.
 The 142-target fit started from the best of those optima, reached a ten-update cap, and converged after one further update at a relative cost change of \(2.6\times10^{-13}\), below the \(10^{-12}\) tolerance, with no failed trial state.
 This is a local optimum, not evidence of a global one.
 Local identification uses the column-normalized singular values of the weighted Jacobian at the solution.
@@ -97,11 +95,10 @@ No covariance is reported because the \HCOthree--water coefficient lies on its b
 
 \subsection{Numerical verification and metrics}
 % P:methods-09
-The present 142-target fits, reported current-record assessments and Born-form re-evaluations use the \texttt{epcsaft} wheel with SHA-256 \texttt{28181e72\ldots 97402f2}, whose full hash is given in the data availability statement.
-Historical fitting records retain their original wheel identities; in particular, the earlier 160-target SSM+DS multistart fit used wheel \texttt{f66d972c\ldots}.
+The software builds used for each calculation are identified in the Data and Code Availability statement.
 A state is accepted when the solver meets its requested tolerance, the material balances close within \(10^{-7}\max(1,|n|)\)~\si{\mole} for each conserved total \(n\), and the charge balance closes within \(10^{-7}\)~mol of elementary charge.
-All 123 estimation states and all 161 canonical pressure states pass, with largest absolute stationarity residuals of \(4.0\times10^{-13}\) and \(1.7\times10^{-13}\).
-Re-evaluation of the selected record reproduces the fitted cost within \(4.2\times10^{-12}\).
+All 123 estimation states and all 161 assessment-set pressure states pass, with largest absolute stationarity residuals of \(4.0\times10^{-13}\) and \(1.7\times10^{-13}\).
+Re-evaluation of the fitted parameter set reproduces the fitted cost within \(4.2\times10^{-12}\).
 These checks verify the numerical solutions, not the physical model.
 
 % P:methods-10
