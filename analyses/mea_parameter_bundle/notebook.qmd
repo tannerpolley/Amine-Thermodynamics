@@ -67,7 +67,7 @@ The official fit uses **142 targets: 48 pressure + 94 species (40 Böttinger + 5
 
 # Source-constant temperature control {#temperature-reanchor-140}
 
-**The adopted 142-target cost is reproduced, and the restored source reaction laws pass the basis/temperature-coordinate check. No fit or new 80 °C model assessment has been run.** The [preregistration](results/temperature-reanchor-140/preregistration.md) freezes the owner-directed [issue 140](https://github.com/tannerpolley/Amine-Thermodynamics/issues/140) control before independent readiness review. Its inputs preserve 48 pressure targets at 40/60 °C and 94 species targets at 20–60 °C, the existing diagnostic scales and the Matin measured-21 °C/packet-20 °C convention.
+**The source-constant control preserves low-temperature family costs but fails the 80 °C no-loss pressure condition: primary AARD 29.333590% versus 20.270257%. Both frozen records also underpredict the never-accessed Wagner pressures.** The [preregistration](results/temperature-reanchor-140/preregistration.md) froze the owner-directed [issue 140](https://github.com/tannerpolley/Amine-Thermodynamics/issues/140) control before readiness review and fitting. Its inputs preserve 48 pressure targets at 40/60 °C and 94 species targets at 20–60 °C, the existing diagnostic scales and the Matin measured-21 °C/packet-20 °C convention.
 
 The fresh replay on Engine wheel `28181e72` with selected record `9055458d…` gives **32.991897261221126**, differing from the required reference by **−7.11×10⁻¹⁵** (absolute tolerance 10⁻⁸). Pressure/species costs are **8.14345313051485/24.848444130706277**. All 84 states met the requested tolerance, with no reported balance errors and maximum stationarity residual **3.98×10⁻¹³**. [Exact target predictions and residuals](results/temperature-reanchor-140/replay-targets.csv) and [replay diagnostics](results/temperature-reanchor-140/replay.json) retain the numerical evidence. This verifies replay of the chosen calculation; it does not provide new physical validation.
 
@@ -87,9 +87,132 @@ The following dimensionless ln K values are all on the common aqueous-molality i
 
 The [training targets](results/temperature-reanchor-140/training-targets.csv) and [assessment identities](results/temperature-reanchor-140/assessment-row-ids.json) are frozen before fitting. The four structures cross constant k versus the existing one-slope k(T) with source-fixed versus one fitted constant CO₂ energy; two source/default starts each allow at most eight fits. The 1% low-temperature cost rule yields at most one finalist per energy branch. The primary is the numerically complete finalist with the fewest fitted coordinates, with ties favoring fixed source energy. If the other energy branch also has a complete finalist, both records are exported and frozen before 80 °C access; the other record is a prespecified secondary comparison. Model selection remains unresolved until the deferred temperature folds. Neither record, role nor weights can change on the basis of 80 °C scores.
 
-The subsequent single assessment stage will score the primary and optional frozen secondary on the same **21 canonical 80 °C pressure rows**, the identical **19-row comparison**, and **all 11 admitted 80 °C species targets**. The **57 rows at 100–120 °C**, **33/37 rows at 15/45 wt%**, and finite-dose heat comparisons remain outside selection and the fitting objective. The fixed CO₂–water k=0.013262879176919628 comes from all 39 Kiepe binary rows at 313.20/353.11/373.26/393.17 K (Engine `1ed0d0bc`, physical-co2-water `result.json:182`); fixed MEA–water k=−0.07352749874985018 comes from a 25-row Cai binary fit over 362.81–431.85 K (Engine `186e816`, neutral-mea-water `results/neutral-mea-water.json:4157`). Both are known high-temperature binary-subsystem fits retained by the owner; fixed model/association/dielectric choices previously had high-temperature access, whereas the May pure-ion numerical fit used only 20/40/60 °C rows. Any resulting temperature extrapolation is conditional on these disclosed historical fixed choices. There is no new untouched physical validation, concentration-transfer or stripper-use claim.
+The completed single assessment stage scored the primary and frozen secondary on the same **21 canonical 80 °C pressure rows**, the identical **19-row comparison**, and **all 11 admitted 80 °C species targets**. The **57 rows at 100–120 °C**, **33/37 rows at 15/45 wt%**, and finite-dose heat comparisons remain outside selection and the fitting objective. The fixed CO₂–water k=0.013262879176919628 comes from all 39 Kiepe binary rows at 313.20/353.11/373.26/393.17 K (Engine `1ed0d0bc`, physical-co2-water `result.json:182`); fixed MEA–water k=−0.07352749874985018 comes from a 25-row Cai binary fit over 362.81–431.85 K (Engine `186e816`, neutral-mea-water `results/neutral-mea-water.json:4157`). Both are known high-temperature binary-subsystem fits retained by the owner; fixed model/association/dielectric choices previously had high-temperature access, whereas the May pure-ion numerical fit used only 20/40/60 °C rows. Any resulting temperature extrapolation is conditional on these disclosed historical fixed choices. There is no new untouched physical validation, concentration-transfer or stripper-use claim.
 
-This preparation and its notebook evidence have not been independently reviewed or promoted for manuscript use. Phase B is held for independent readiness review and the parent's explicit follow-up; no parameter adoption or manuscript change is made here.
+The independent readiness review supported the conversions, Wagner admission and frozen selection/numerical rules, while identifying high-temperature binary-subsystem ancestry. The owner kept both binaries and authorized this conditional run after correction commit `7a7f2d4`. No parameter adoption or manuscript change is made here.
+
+## Low-temperature estimation and frozen records
+
+The primary is **slope-k with source-fixed CO₂ energy**, start 1; the secondary is **slope-k with one fitted constant CO₂ energy**, start 1. Both exported records were reloaded, rescored on all 142 targets, hashed and committed in `522fe6cd…` **before** any ≥80 °C model evaluation. The [freeze receipt](results/temperature-reanchor-140/freeze.json) retains the two-start comparisons, 1% shortlist and record roles. The primary remains fixed despite the secondary’s smaller training cost and 80 °C AARD. Model selection remains unresolved until the deferred temperature folds.
+
+| Role | Byte SHA-256 |
+|---|---|
+| Primary | `7e38de2e62bbcf5a022e9773adf19e37c36db3a3e73bc44684a30d4756efad26` |
+| Secondary | `4cf35f01019a210ca610fc912da284c844bfa618fe54322c2880c902eff22e24` |
+
+Eight prescribed attempts were made. Six fits converged and passed fresh export/reload rescoring. Both constant-k/fixed-energy attempts completed all 84 start-state solves and entered native fitting, but their processes were lost when the execution session was interrupted; neither returned a native fit result. They remain **incomplete and unranked**. No extra fit or continuation replaced them. Consequently, the constant-versus-slope comparison within the fixed-energy branch is unavailable; retaining its eligible slope form does not establish that a slope is necessary. In the free-energy branch, constant-k cost 35.86550350 exceeds 1.01×32.43704367, so the slope form is retained.
+
+| Structure | Start 1 cost | Start 2 cost | Numerical disposition |
+|---|---:|---:|---|
+| constant-fixed | Unavailable | Unavailable | Interrupted; no ranking |
+| slope-fixed | 33.01269413 | 33.01269413 | Both converged/rescored; start agreement met |
+| constant-free | 35.86550350 | 35.86550350 | Both converged/rescored; start agreement met |
+| slope-free | 32.43704367 | 32.43704367 | Both converged/rescored; start agreement met |
+
+| Family | Adopted replay cost | Primary cost / change | Secondary cost / change | ≤10% increase |
+|---|---:|---:|---:|---|
+| Pressure | 8.14345313 | 8.33045823 / +2.2964% | 8.26384952 / +1.4784% | Met by both |
+| Species | 24.84844413 | 24.68223590 / -0.6689% | 24.17319415 / -2.7175% | Met by both |
+
+These are costs on unchanged diagnostic scales, not AARD or measured uncertainty. Source/temperature costs and signed residuals remain in the selected starts’ [primary rescore](results/temperature-reanchor-140/slope-fixed-start-1-rescore-targets.csv) and [secondary rescore](results/temperature-reanchor-140/slope-free-start-1-rescore-targets.csv). The 18 Matin bicarbonate/carbonate-pool observations per record remain [report-only](results/temperature-reanchor-140/matin-report-only.csv), outside the 142-target costs.
+
+| Parameter | Primary | Secondary | Bounds / status |
+|---|---:|---:|---|
+| MEACOO⁻–water k | 0.1597657139 | 0.1596845017 | [−0.5,+0.5]; interior |
+| MEAH⁺–water k | -0.4901025764 | -0.5 | [−0.5,+0.5]; primary interior, secondary lower bound |
+| HCO₃⁻–water k | 0.5 | 0.5 | [−0.5,+0.5]; both upper bound |
+| MEAH⁺–MEACOO⁻ k | -0.4754639296 | -0.4173302354 | [−1,+1]; interior |
+| MEAH⁺–water b / K | 379.369094 | 447.38931 | [−1000,+1000] K; interior |
+| CO₂ ε/kB / K | 169.21 | 171.3493441 | Primary source-fixed; secondary [160.7495,177.6705] K, interior |
+
+The fitted energy is mixture calibration with m/σ fixed, not a qualified pure-CO₂ property or ε(T). All required fitted predictions/residuals/Jacobians are finite. Two-start cost and coordinate differences satisfy the frozen tolerances. Maximum absolute Pearson correlation between weighted Jacobian columns is **0.6350 primary / 0.7810 secondary**, below the 0.95 trigger. However, active bounds prevent an unrestricted identification or covariance claim.
+
+| Jacobian diagnostic | Primary singular values | Secondary singular values |
+|---|---|---|
+| Weighted physical coordinates | 73.5345, 46.2052, 25.2304, 5.03372, 0.00579155 | 73.4883, 46.3398, 25.1308, 5.04807, 0.019186, 0.0058243 |
+| Weighted scaled coordinates (0.01, 10 K, 1 K) | 0.736211, 0.462318, 0.252347, 0.0641312, 0.0453711 | 1.25509, 0.559614, 0.347649, 0.0695484, 0.052258, 0.00543984 |
+| Column normalized | 1.53014, 1.13939, 0.906146, 0.716628, 0.160647 | 1.78997, 1.14037, 0.972526, 0.723101, 0.163338, 0.0137536 |
+
+The secondary’s smaller normalized singular value is a local weak-direction diagnostic, not an uncertainty interval. Bounds are engineering search limits; source uncertainty and profiles remain pending. Native function/gradient/parameter tolerances stayed at zero defaults, with 40 iterations, 2250 s native time and 2400 s external time limits. The six returned fits used 9–24 native history entries and 213–485 s of native fitting. The original executed script is retained in `8e46c46`; its later formatting preserves the parsed program.
+
+## Prespecified 80 °C assessment
+
+**The primary fails the no-loss condition:** 21-row AARD **29.333590% >20.270257%**, a deterioration of **9.063333 percentage points**. Its AARD is below the separate 35% pressure tolerance on this 21-row set; that does not establish the historical 104-row adoption gate or physical validation. Secondary 21-row AARD is 28.089819%; it also fails no-loss and does not replace the primary.
+
+Each cell below is **AARD % / RMS ln / mean ln**, with ln(pcalc/pobs) dimensionless. Negative mean ln indicates pressure underprediction. The 19-row set excludes the same two frozen Jou anchors; it is a comparison, not a new primary denominator.
+
+| Set / source | n | Primary | Secondary | Adopted baseline |
+|---|---:|---|---|---|
+| Canonical 21 pooled | 21 | 29.333590 / 0.501171 / -0.374843 | 28.089819 / 0.478699 / -0.341393 | Historical AARD 20.270257% (21) / 21.834481% (19) |
+| Canonical 21 Aronu | 10 | 46.373968 / 0.684482 / -0.647402 | 44.081663 / 0.652813 / -0.608566 | — |
+| Canonical 21 Jou | 11 | 13.842336 / 0.231490 / -0.127063 | 13.551779 / 0.223722 / -0.098509 | — |
+| Canonical 19 pooled | 19 | 31.484943 / 0.526003 / -0.404485 | 30.390909 / 0.502702 / -0.370498 | Historical AARD 20.270257% (21) / 21.834481% (19) |
+| Canonical 19 Aronu2011 | 10 | 46.373968 / 0.684482 / -0.647402 | 44.081663 / 0.652813 / -0.608566 | — |
+| Canonical 19 Jou1995 | 9 | 14.941581 / 0.252046 / -0.134577 | 15.178960 / 0.244911 / -0.105978 | — |
+| Never-accessed Wagner near 353 K (source = pooled) | 11 | 52.301450 / 0.757668 / -0.747815 | 51.704254 / 0.744768 / -0.735097 | 24.511124 / 0.290457 / -0.283234 |
+
+![Discrete frozen predictions at the pressure observation coordinates. Canonical rows use 353.15 K; Wagner rows use each reported temperature and converted 29.93–30.52 wt% unloaded-solvent MEA. Wagner bars show the paper’s estimated pressure uncertainty, the larger of 2% or 0.4 kPa; they are not parameter uncertainty or confidence intervals. No continuous curve is inferred from these points.](results/temperature-reanchor-140/pressure-80C.svg)
+
+All 11 Wagner near-80 °C pressures are underpredicted by both control records. The adopted-record Wagner baseline was computed **only after** the low-temperature freeze and the prescribed canonical/species/Wagner/outside/concentration order. These errors cannot change record roles, parameters or weights.
+
+All **11 Böttinger 80 °C species targets** were assessed: five MEA+MEAH⁺ sums, five MEACOO⁻ and one HCO₃⁻+CO₃²⁻ pool. Per-source and pooled values coincide because only Böttinger contributes.
+
+| Species metric (11 targets) | Primary | Secondary |
+|---|---:|---:|
+| AARD / % | 13.606035 | 13.709211 |
+| RMS ln | 0.20492646 | 0.20858062 |
+| Mean ln | -0.037584487 | -0.03876477 |
+| Mean absolute error / (mol/mol true species) | 0.0051971702 | 0.0052134018 |
+| RMS absolute error / (mol/mol true species) | 0.0069437505 | 0.0069615524 |
+| Mean signed error / (mol/mol true species) | -0.0021680434 | -0.0021714497 |
+| Cost on unchanged scales | 6.1738326 | 6.2407561 |
+
+These are diagnostic comparison metrics, not a new species acceptance threshold. The [row table](results/temperature-reanchor-140/assessment-stage-2-rows.csv) preserves each measured sum and residual, including the bicarbonate/carbonate pool. No missing species or nondetection target was invented.
+
+## Outside-fit pressure comparisons
+
+Each cell again gives **AARD % / RMS ln / mean ln**. Canonical 100–120 °C and 15/45 wt% rows were historically accessed and remain separate from the never-accessed Wagner subsets. These sets have no newly invented pass criterion and did not enter selection.
+
+| Set / source | n | Primary | Secondary | Adopted Wagner baseline |
+|---|---:|---|---|---|
+| Canonical 100–120 °C pooled | 57 | 52.054136 / 0.917806 / -0.764718 | 51.615106 / 0.888695 / -0.722428 | — |
+| Canonical 100–120 °C Jou | 20 | 32.921495 / 0.493364 / -0.269814 | 34.232974 / 0.489003 / -0.219392 | — |
+| Canonical 100–120 °C Xu | 18 | 56.278369 / 0.990723 / -0.905458 | 55.294848 / 0.968984 / -0.882337 | — |
+| Canonical 100–120 °C Mamun | 19 | 68.191853 / 1.158020 / -1.152336 | 66.426014 / 1.108204 / -1.100447 | — |
+| Never-accessed Wagner near 392 K (source = pooled) | 12 | 60.144821 / 0.926600 / -0.923139 | 57.230218 / 0.861255 / -0.854855 | 25.450581 / 0.354493 / -0.308482 |
+| Aronu 15 wt% (source = pooled) | 33 | 31.088901 / 0.363379 / +0.061211 | 28.745501 / 0.362915 / +0.007270 | — |
+| Aronu 45 wt% (source = pooled) | 37 | 58.950187 / 0.720632 / -0.157569 | 63.899975 / 0.713082 / -0.068238 | — |
+
+Historical corrected-loading adopted AARDs are 26.436267% for the 57 canonical high-temperature rows and 75.946385% / 46.149817% for 15/45 wt%. The primary improves the 15 wt% comparison while worsening 45 wt% and high-temperature pressure comparisons. This does not qualify concentration transfer or stripper use. All source/temperature/loading groups are retained in [phase-b-scores.csv](results/temperature-reanchor-140/phase-b-scores.csv) and the six assessment-stage row tables. R4/R5 source laws are extrapolations beyond their published intervals; the 100–120 °C calculations remain outside the candidate-use interval.
+
+## Finite-dose heat outside the objective
+
+The existing two-endpoint liquid total-enthalpy method was used with neutral ideal-gas calorics and ions completed afresh from the restored reaction laws. Heat is positive release in **kJ/mol absorbed CO₂**, on a 1 mol MEA solvent basis, with zero vapor inventory and ideal-gas CO₂ feed at T. The conserved-loading correction also applies to heat endpoints. The adopted comparison was recomputed on the same corrected endpoints; old heat values are not silently substituted. No heat target entered fitting.
+
+| Source / T | Intervals | Primary RMSE / bias | Secondary RMSE / bias | Adopted RMSE / bias |
+|---|---:|---|---|---|
+| Kim and Svendsen 2007, 40 °C | 37 | 12.524830 / -4.923140 | 12.653020 / -3.078019 | 7.518220 / -1.315742 |
+| Kim and Svendsen 2007, 80 °C | 29 | 16.169097 / -13.575131 | 15.512033 / -12.500957 | 8.628133 / -6.540810 |
+| Kim and Svendsen 2007, 120 °C | 20 | 35.029490 / -20.828242 | 34.331699 / -20.083046 | 30.127431 / -13.244753 |
+| Kim et al. 2014, 40 °C | 11 | 11.869549 / -3.068456 | 12.229288 / -1.313224 | 8.595246 / +1.252897 |
+| Kim et al. 2014, 80 °C | 9 | 8.263657 / -6.248766 | 7.593305 / -5.189210 | 4.959489 / +1.351821 |
+| Kim et al. 2014, 120 °C | 7 | 12.089450 / -11.692471 | 11.420586 / -11.041793 | 4.915096 / -4.652974 |
+| All 40/80/120 °C intervals | 113 | 19.074776 / -10.303000 | 18.708780 / -8.995719 | 14.453664 / -4.512244 |
+| First-dose-excluded sensitivity | 104 | 17.156472 / -9.251441 | 16.904486 / -8.020491 | 11.901756 / -3.064958 |
+
+The control’s heat errors are larger than the matched adopted-record errors overall. First-dose/source-typo and assumed-start notes remain in the [interval table](results/temperature-reanchor-140/heat-comparison.csv); source/run/temperature metrics are in [heat-scores.csv](results/temperature-reanchor-140/heat-scores.csv). The 104-row sensitivity excludes nine assumed-start first doses without another model solve; it remains an outside-objective comparison. Source correlation, vapor-inventory assumptions and an admitted uncertainty objective remain unresolved. **No normalized caloric adequacy pass or individual reaction-enthalpy identification is claimed.**
+
+## Numerical evidence and supported claim
+
+All **714 assessment state solves** (pressure/species and heat endpoints) met requested Engine tolerance, with no material/charge balance errors at the 10⁻⁷ condition and maximum absolute stationarity **2.27374e-13**, below 10⁻¹⁰. Every planned pressure/species row and every heat interval is available; no completed-state-only denominator was used. Fresh low-temperature rescoring also passed the balance/stationarity conditions for all six converged fits. Effective k(T)<1 holds for every pair at 293.15/333.15 K and, after freeze, at 353.15/393.15 K. Each model job used one thread, at most two host slots, a 2 GiB address-space cap and the prescribed timeouts. These are numerical verification and empirical comparison, **not physical validation**.
+
+The engineering result is a supported failure of the no-loss pressure condition for this source-constant control, despite low-temperature family preservation. It does not identify which restored source law, fitted interaction or fixed historical model choice caused the discrepancy. The incomplete constant-k/fixed-energy attempts limit structural comparison; bounds, source extrapolation, diagnostic weights and deferred folds/profiles limit identification and use. The current adopted record `9055458d…` remains unchanged.
+
+The owner’s bounded statement describes how these predictions were produced; it does not assert that their accuracy passed:
+
+> Prediction of loaded 30 wt% MEA at 80 °C from loaded-solution parameters estimated only from ≤60 °C loaded-solution data, conditional on binary CO₂–water (Kiepe, 313–393 K) and MEA–water (Cai, 363–432 K) interactions fitted to binary-subsystem data that include higher temperatures; historical SSM+DS, dielectric and association choices are fixed conditions.
+
+The result does not support improved 80 °C accuracy, concentration/stripper qualification or a newly untouched model-validation claim. The calculation and notebook await independent delivered review and investigator promotion; no parameter adoption, manuscript change, push or PR was made.
 
 # Model D: historical 160-target assessment {#model-d-decision23}
 

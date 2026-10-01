@@ -1,0 +1,72 @@
+{
+  "freeze_commit": "522fe6cd992d9e7246dca193aa95f86f7a50dc3d",
+  "freeze_sha256": "92d1dac53a42f1e69312f875e726c723596f879b65a858a013664ba6345f823b",
+  "records": [
+    {
+      "structure": "slope-fixed",
+      "start": 1,
+      "cost": 33.012694129920845,
+      "fitted_coordinates": 5,
+      "role": "primary",
+      "record": "primary-parameters.json",
+      "sha256": "7e38de2e62bbcf5a022e9773adf19e37c36db3a3e73bc44684a30d4756efad26"
+    },
+    {
+      "structure": "slope-free",
+      "start": 1,
+      "cost": 32.437043668225314,
+      "fitted_coordinates": 6,
+      "role": "secondary",
+      "record": "secondary-parameters.json",
+      "sha256": "4cf35f01019a210ca610fc912da284c844bfa618fe54322c2880c902eff22e24"
+    }
+  ],
+  "fits_attempted": 8,
+  "fits_complete": 6,
+  "fits_interrupted": 2,
+  "assessment_state_solves": 714,
+  "assessment_max_abs_stationarity": 2.2737367544323206e-13,
+  "assessment_tolerance_met": true,
+  "assessment_balance_errors": 0,
+  "conditions": {
+    "primary/pressure_preservation": {
+      "cost": 8.330458234245977,
+      "replay_cost": 8.14345313051485,
+      "change_percent": 2.2963858296229267,
+      "met": true
+    },
+    "secondary/pressure_preservation": {
+      "cost": 8.263849516195672,
+      "replay_cost": 8.14345313051485,
+      "change_percent": 1.4784438953750145,
+      "met": true
+    },
+    "primary/species_preservation": {
+      "cost": 24.682235895678648,
+      "replay_cost": 24.848444130706277,
+      "change_percent": -0.6688878955694366,
+      "met": true
+    },
+    "secondary/species_preservation": {
+      "cost": 24.17319415203012,
+      "replay_cost": 24.848444130706277,
+      "change_percent": -2.7174738793473208,
+      "met": true
+    },
+    "primary/80C_no_loss": {
+      "aard_percent": 29.333589612912355,
+      "limit_percent": 20.270257,
+      "met": false
+    },
+    "secondary/80C_no_loss": {
+      "aard_percent": 28.089818903431077,
+      "limit_percent": 20.270257,
+      "met": false
+    },
+    "primary/80C_35percent_on_21_rows": {
+      "met": true,
+      "qualification": "This is not an assessment of the historical 104-row gate."
+    }
+  },
+  "bounded_claim": "Prediction of loaded 30 wt% MEA at 80 \u00b0C from loaded-solution parameters estimated only from \u226460 \u00b0C loaded-solution data, conditional on binary CO\u2082\u2013water (Kiepe, 313\u2013393 K) and MEA\u2013water (Cai, 363\u2013432 K) interactions fitted to binary-subsystem data that include higher temperatures; historical SSM+DS, dielectric and association choices are fixed conditions."
+}
