@@ -110,9 +110,65 @@ def replay():
     assert passed, 'OLD replay failed; stop without resetting the benchmark'
 
 
+def campaign():
+    from epcsaft import equilibrium as eq
+    import verify_reference_calorics as thermal
+    mapping = s.parameter_mapping(OLD / 'restored-source-parameters.json')
+    params = probe.epcsaft.Parameters.from_mapping(mapping)
+    records = json.loads((OLD / 'stage-3/native-reaction-inputs.json').read_text())
+    laws = json.loads((HERE / 'source-laws.json').read_text())
+    for index, key in ((1, 'R2_reused'), (3, 'R4'), (4, 'R5')):
+        law, correlation = laws[key], records[index]['engine_correlation']
+        correlation.update(a=law['a_native'], b=law['B_K'], c=law['C'], d=law['D_per_K'])
+    request = pa.training()[0]['request']
+    request['reaction_system']['engine_reactions'] = records
+    reactions = [eq.Reaction(dict(zip(s.COMPONENT_IDS, r['stoichiometry'], strict=True)), name=r['reaction_id'],
+                 correlation=s._reaction_correlation(r, r['reaction_id']),
+                 reference=s._reaction_reference(r, r['reaction_id'])) for r in records]
+    return mapping, params, records, request, reactions, thermal
+
+
+def mapping_check():
+    from epcsaft import equilibrium as eq, regression as reg
+    mapping, params, records, request, reactions, thermal = campaign()
+    laws = json.loads((HERE / 'source-laws.json').read_text())
+    assert all(laws[k]['passed'] for k in ('R2_reused', 'R4', 'R5'))
+    pa.save(HERE / 'campaign-reactions.json', records)
+    rows = []
+    model = probe.epcsaft.Mixture(params)
+    for index, key in ((1, 'R2_reused'), (3, 'R4'), (4, 'R5')):
+        law, native = laws[key], records[index]['engine_correlation']
+        A = law['A_stored'] if index == 1 else law['A']
+        assert abs(native['a'] - (A + law['C'] * math.log(313.15))) < 5e-13
+        for T in (293.15, 313.15, 333.15, 353.15):
+            request['temperature']['value'] = T
+            problem = s._problem_from_request(request)
+            item = reg.Observation()
+            item.kind, item.reaction = reg.ObservationKind.LogEquilibriumConstant, records[index]['reaction_id']
+            item.problem, item.form, item.scale = problem._native(params), reg.ResidualForm.Difference, 1.0
+            prediction = reg.predict(model, item)
+            document = A + law['B_K'] / T + law['C'] * math.log(T) + law['D_per_K'] * T
+            derivative = s.epcsaft.GAS_CONSTANT_J_PER_MOL_K * (-law['B_K'] + law['C'] * T + law['D_per_K'] * T*T)
+            native_derivative = s.epcsaft.GAS_CONSTANT_J_PER_MOL_K * (-native['b'] + native['c'] * T + native['d'] * T*T)
+            rows.append({'reaction': item.reaction, 'T_K': T, 'status': prediction.status.name,
+                         'document_lnK': document, 'native_lnK': prediction.value,
+                         'delta_lnK': prediction.value - document, 'document_RT2_derivative_J_mol': derivative,
+                         'native_polynomial_RT2_derivative_J_mol': native_derivative,
+                         'reference_pressure_pa': problem.reactions[index].reference.reference_pressure_pa,
+                         'module_origin': probe.epcsaft.__file__})
+            pa.table(HERE / 'native-law-mapping.csv', rows)
+            assert prediction.status.name == 'Available' and abs(prediction.value - document) < 5e-13
+            assert derivative == native_derivative
+    pa.save(HERE / 'native-law-mapping.json', {'passed': True, 'rows': len(rows),
+        'max_abs_delta_lnK': max(abs(r['delta_lnK']) for r in rows),
+        'RT2_derivative_check': 'stored versus native polynomial coefficients; Engine thermochemistry.cpp:221-229 inspected',
+        'source_representation_checks': 'phase-A frozen admission grid and continuation errors retained unchanged',
+        'producer_sha256': s.sha256(Path(__file__)), 'module_origin': probe.epcsaft.__file__})
+
+
 if __name__ == '__main__':
     try:
-        {'freeze': freeze, 'R1': replay}[sys.argv[1]]()
+        {'freeze': freeze, 'R1': replay, 'Q1-mapping': mapping_check}[sys.argv[1]]()
     except Exception as exc:
         pa.save(HERE / 'qualification-failure.json', {'job': sys.argv[1], 'exception': type(exc).__name__,
             'message': str(exc), 'module_origin': probe.epcsaft.__file__, 'producer_sha256': s.sha256(Path(__file__))})
