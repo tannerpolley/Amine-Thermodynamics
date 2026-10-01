@@ -3,6 +3,23 @@ title: "MEA parameter bundle"
 subtitle: "Limited-domain SSM+DS model D working record · 142 fitted targets"
 resources:
   - analysis.yaml
+  - results/temperature-reanchor-140/stage-2-inputs.json
+  - results/temperature-reanchor-140/stage-2-preregistration.md
+  - results/temperature-reanchor-140/stage-2/assessment-stage-2-rows.csv
+  - results/temperature-reanchor-140/stage-2/comparison-scores.csv
+  - results/temperature-reanchor-140/stage-2/finite-I-loading-scatter.csv
+  - results/temperature-reanchor-140/stage-2/freeze.json
+  - results/temperature-reanchor-140/stage-2/heat-comparison.csv
+  - results/temperature-reanchor-140/stage-2/heat-scores.csv
+  - results/temperature-reanchor-140/stage-2/matin-report-only.csv
+  - results/temperature-reanchor-140/stage-2/native-coefficient-checks.csv
+  - results/temperature-reanchor-140/stage-2/pressure-80C.svg
+  - results/temperature-reanchor-140/stage-2/protonation-enthalpy-comparison.csv
+  - results/temperature-reanchor-140/stage-2/slope-fixed-start-1-fit.json
+  - results/temperature-reanchor-140/stage-2/slope-free-start-1-fit.json
+  - results/temperature-reanchor-140/stage-2/source-fit.json
+  - results/temperature-reanchor-140/stage-2/source-residuals.csv
+  - results/temperature-reanchor-140/stage-2/stage-2-summary.json
   - figures/born_permittivity/output/selected-bundle-joint-sensitivity.svg
   - figures/speciation/output/speciation-diagnostic-replay-40C.svg
   - figures/speciation/output/speciation-diagnostic-replay-60C.svg
@@ -81,6 +98,8 @@ Both source fits use **ln K=A+B/T**, T in kelvin, with no C ln T or D T term. R4
 |---|---:|---:|---:|---:|---:|---:|
 | R4 hydrolysis | 2.282869879 | −1585.057202 | 0.0321833 | 0.0445803 | +13.1789 | 1.65385 |
 | R5 dissociation | −1.443016604 | −6080.400894 | 0.0150079 | 0.0199123 | +50.5553 | 0.67618 |
+
+The maximum R5 residual, **0.0199123 ln K**, is **0.4324 times** Kim's reported pH scale, 0.02 ln(10)=0.0460517 ln K, and **3.9825 times** the 0.005 ln K rounding half-step. These are descriptive comparisons with reported scales, whose coverage and covariance are unknown; they do not establish agreement within measurement uncertainty. Chemical consistency remains **UNRESOLVED**.
 
 For coefficient order (A,B), the residual-based covariance matrices are
 
