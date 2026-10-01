@@ -117,7 +117,7 @@ def selection():
     frozen.update(selection='independent-R2 1% constant/slope rule; fixed roles; incomplete structures not ranked',
         wheel_sha256=s.ENGINE_WHEEL_SHA256, source_fit_sha256=s.sha256(OUT/'source-fit.json'),
         readiness_review='Ready at 129f19e; thread mea140-stage3-rereview-1',
-        hashes={str(p.relative_to(pa.probe.W)):s.sha256(p) for p in [Path(__file__),Path(fit.__file__),Path(assessment.__file__),Path(s.__file__),BASE/'stage-3-preregistration.md',OUT/'input-hashes.json',*OUT.glob('*jacobian.csv'),*OUT.glob('*fit.json'),*OUT.glob('*parameters.json'),OUT/'representation-errors.csv',OUT/'native-coefficient-checks.csv']})
+        hashes={str(p.relative_to(pa.probe.W)):s.sha256(p) for p in [Path(__file__),BASE/'r2-temperature-run.py',Path(fit.__file__),Path(assessment.__file__),Path(s.__file__),BASE/'stage-3-preregistration.md',OUT/'input-hashes.json',*OUT.glob('*jacobian.csv'),*OUT.glob('*fit.json'),*OUT.glob('*parameters.json'),*OUT.glob('*reaction-inputs.json'),OUT/'representation-errors.csv',OUT/'native-coefficient-checks.csv']})
     fit.save(path,frozen)
 
 
