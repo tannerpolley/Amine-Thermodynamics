@@ -1,4 +1,5 @@
 import csv
+import os
 import sys
 import time
 from pathlib import Path
@@ -11,16 +12,16 @@ born_form_diagnosis.DEADLINE = float('inf')
 
 def main():
     started = time.perf_counter()
-    output = SCANS / 'scan_C_results.csv'
+    output = born_form_diagnosis.HERE / 'scan_C_results.csv'
     fields = ('form', 'scale', 'pressure_cost', 'bottinger_cost', 'matin_cost', 'cost', 'status')
-    scales = (0.8, 0.9, 1.0, 1.1, 1.2)
+    scales = (float(os.environ['SCAN_VALUE']),)
     diameter_ids = [f'component/{ion}/born_diameter' for ion in born_form_diagnosis.ION_IDS[:3]]
 
     with output.open('w', newline='') as stream:
         writer = csv.DictWriter(stream, fieldnames=fields)
         writer.writeheader()
         stream.flush()
-        for form in ('11', '00'):
+        for form in (os.environ['SCAN_FORM'],):
             base = born_form_diagnosis.MAPPINGS[form]
             diameters = born_form_diagnosis.values(base)
             for scale in scales:
