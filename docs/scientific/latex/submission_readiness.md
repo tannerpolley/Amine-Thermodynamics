@@ -33,16 +33,17 @@ certify this version.
 ## Owner-only steps
 
 - Generative-AI declaration confirmed by the author on 2026-10-01 (names OpenAI Codex and Claude).
-- Approve the corrected manuscript (final review of 2026-10-01) and, separately, the R2 test
-  result that fills `[[R2_TEST]]`.
+- Approve the corrected manuscript (final review of 2026-10-01) and, separately, confirm the R2
+  test result (issue 140 Stage 3) now in the abstract, Results and Conclusions, promoted under
+  the overnight delegation.
 - Authorize the merges that put every cited result in the public release, or give immutable
   public links to their owning repositories:
   - the promoted `temperature-reanchor-140`, `sensitivity-current` and
     `density-current-record-123` result directories, absent from this branch;
   - the 165-entry source inventory input from commit `a349f1a` that generates Table S4; this
     branch holds an older 17-row file;
-- Provide a public download location for the `epcsaft` wheel `28181e72…` named in the manuscript, or
-  state its access restriction; the only wheel tracked on this branch is `40fba7cf…`.
+- Provide a public download location for the `epcsaft` wheel `28181e72…` and the R2-refit wheel
+  `9e6a76cf…` named in the manuscript, or state their access restriction; the only wheel tracked on this branch is `40fba7cf…`.
 - Create the annotated `manuscript-v1` tag at the release commit, record `release_commit` in
   `submission_metadata.yml`, and make `tannerpolley/Amine-Thermodynamics` public when the
   preprint is posted. The data-availability statement promises the materials at that tag at
