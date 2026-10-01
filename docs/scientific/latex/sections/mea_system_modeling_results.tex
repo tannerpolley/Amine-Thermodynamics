@@ -191,7 +191,6 @@ All 21 canonical pressure rows at \SI{80}{\degreeCelsius}, which add 10 measurem
 Without \texttt{vle\_obs\_0206} and \texttt{vle\_obs\_0211}, which set the inherited reaction shifts, the remaining 19 rows give 21.83\,\%.
 For the 11 packet species targets at \SI{80}{\degreeCelsius}, the AARD is 11.15\,\% for SSM+DS and 7.36\,\% for Original Born (\cref{fig:speciation}).
 
-% FLAG (issue #68): pressure.pdf was rendered before the loading correction of #138; a separate task regenerates it. Do not edit here.
 \begin{figure}[pos=!htb]
     \centering
     \includegraphics[width=\linewidth]{pressure.pdf}
@@ -199,7 +198,7 @@ For the 11 packet species targets at \SI{80}{\degreeCelsius}, the AARD is 11.15\
     The 40 and \SI{60}{\degreeCelsius} panels contain the fitted temperatures; the \SI{80}{\degreeCelsius} panel is a test outside the present (142-target, five-coordinate) fit, not data unseen during model development, and its 11 Jou 1995 targets (\texttt{vle\_obs\_0203}--\texttt{vle\_obs\_0213}) give the 9.24\,\% AARD reported in the text; its 10 Aronu 2011 points are not part of that group.
     The 100 and \SI{120}{\degreeCelsius} panels are extrapolations outside the working domain.
     Markers are observations; dashed segments connect calculations at the observed loadings.
-    The calculations and panel statistics in this figure were rendered before a correction that removed a \(1\times10^{-4}\)~mol \COtwo/mol \MEA excess from the canonical input loadings; the text and \cref{tab:residual-summary} use the corrected values.}
+    The calculations and panel statistics use corrected canonical input loadings, with the \(1\times10^{-4}\)~mol \COtwo/mol \MEA excess removed, consistent with the values reported in the text and \cref{tab:residual-summary}.}
     \label{fig:pressure}
 \end{figure}
 
