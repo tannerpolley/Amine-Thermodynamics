@@ -26,6 +26,10 @@ certify this version.
 - [ ] The annotated `manuscript-v1` tag is created at the reviewed commit, after the loading-fix
       merge.
 
+## Resolved evidence links
+
+- Historical heat-capacity rows are public at an immutable link: https://github.com/tannerpolley/MEA-Absorption-Column/blob/ccedbd2cecf82c843908a406387c180cd31e7f93/analyses/physical_acceptance_149/results/physical-checks.csv (rows 6–8; repository public, commit on main).
+
 ## Owner-only steps
 
 - Generative-AI declaration confirmed by the author on 2026-10-01 (names OpenAI Codex and Claude).
@@ -37,8 +41,6 @@ certify this version.
     `density-current-record-123` result directories, absent from this branch;
   - the 165-entry source inventory input from commit `a349f1a` that generates Table S4; this
     branch holds an older 17-row file;
-  - the historical heat-capacity rows: `MEA-Absorption-Column` commit `ccedbd2`,
-    `analyses/physical_acceptance_149/results/physical-checks.csv`, rows 6–8.
 - Provide a public download location for the `epcsaft` wheel `28181e72…` named in the manuscript, or
   state its access restriction; the only wheel tracked on this branch is `40fba7cf…`.
 - Create the annotated `manuscript-v1` tag at the release commit, record `release_commit` in
