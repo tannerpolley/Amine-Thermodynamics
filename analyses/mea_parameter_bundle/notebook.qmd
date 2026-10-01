@@ -2,6 +2,19 @@
 title: "MEA parameter bundle"
 subtitle: "Limited-domain SSM+DS model D working record · 142 fitted targets"
 resources:
+  - model-d/sensitivity-current/ranking-refit/preregistration.md
+  - model-d/sensitivity-current/ranking-refit/fitted-costs.csv
+  - model-d/sensitivity-current/ranking-refit/target-predictions.csv
+  - model-d/sensitivity-current/ranking-refit/state-checks.csv
+  - model-d/sensitivity-current/ranking-refit/aard-by-source-species.csv
+  - model-d/sensitivity-current/ranking-refit/native-fit-summaries.json
+  - model-d/sensitivity-current/ranking-refit/start-agreement.json
+  - model-d/sensitivity-current/ranking-refit/numerical-summary.json
+  - model-d/sensitivity-current/ranking-refit/ranking.json
+  - model-d/sensitivity-current/ranking-refit/inputs.json
+  - model-d/sensitivity-current/ranking-refit/execution-commands.json
+  - model-d/sensitivity-current/ranking-refit/execution-results.json
+  - model-d/sensitivity-current/ranking-refit/raw-output-hashes.json
   - model-d/sensitivity-current/inputs.json
   - model-d/sensitivity-current/frozen-targets.json
   - model-d/sensitivity-current/born-input-sensitivity-values.csv
@@ -561,6 +574,50 @@ The campaign attempts **12 refits and 48 objective evaluation/replay sets**; 47 
 This evidence comprises fixed-input model evaluations, local re-calibration and numerical verification. It does not establish independent physical validation, global optimality, unique physical ion parameters, statistical significance, uncertainty intervals, concentration transfer, thermal/property or absorber qualification, or removal of inherited high-temperature parameter-selection history. Measurement uncertainty, residual-scale choices, fixed-input uncertainty and model discrepancy remain distinct from the measured replay and start differences. Two deterministic starts establish agreement for those starts only.
 
 The retained owners are [frozen inputs, requests and source identities](model-d/sensitivity-current/inputs.json), [ordered targets and measured values](model-d/sensitivity-current/frozen-targets.json), [scan values](model-d/sensitivity-current/born-input-sensitivity-values.csv), [scan target predictions](model-d/sensitivity-current/scan-targets.csv), [final-fit target predictions](model-d/sensitivity-current/fit-replay-targets.csv), [source/species AARD](model-d/sensitivity-current/fit-aard-by-source-species.csv), [native fitting histories](model-d/sensitivity-current/native-fit-summaries.json), [final replay checks](model-d/sensitivity-current/final-replay-checks.json), [start agreement](model-d/sensitivity-current/start-agreement.json), [numerical summary](model-d/sensitivity-current/numerical-summary.json), [Born-off comparisons](model-d/sensitivity-current/born-off-comparison.csv), and [exact numerical commands](model-d/sensitivity-current/execution-commands.json). Bulk state/native outputs remain in the ignored `model-d/sensitivity-current/runs/` directory. All tables and figures above read retained outputs; rendering never reruns the model.
+
+## Born-form ranking after refitting interactions {#ranking-refit}
+
+**The Born-form ranking is input-dependent after both forms refit all five interactions.** SSM+DS has the lower baseline cost, 32.991897 versus 34.584032. At three-ion Born diameters ×0.8, Original Born has the lower converged cost, 31.722527 versus 31.985822. At εMEA = 24, Original Born again has the lower cost, 32.084417 versus 32.896882. The same form does not win at baseline and both altered inputs, so the preregistered “robust ranking” condition is not met.
+
+The [preregistration posted before fitting](https://github.com/tannerpolley/Amine-Thermodynamics/issues/141#issuecomment-5927291060) was committed locally as `0e7fa72e07a67a5e614ec3bfa094497106641744`. Four cases combine two Born forms with the two fixed input sets; each refits the five interactions from its own accepted coordinates and the matched other-form coordinates. Exactly eight fits were attempted. Two fresh baseline replays and eight final-map replays retain the same 142 targets over 84 states: 48 pressure, 40 Böttinger and 54 Matin. The 18 Matin bicarbonate/carbonate-pool targets remain report-only.
+
+Only MEAH⁺, MEACOO⁻ and HCO₃⁻ Born diameters change in the diameter cases. H₃O⁺, OH⁻ and CO₃²⁻ Born diameters, every packing and Debye–Hückel diameter, and εMEA = 32 stay fixed. The εMEA = 24 cases keep all diameters fixed. Both retain f_water = 1.5, f_MEA = 1, εion = 8, the nine-species/five-reaction chemistry, inherited reaction correlations including source R4, association topology, solvent-only permittivity mixing, neutral interactions and the pinned Engine wheel `28181e72`. Original Born has c_shell = c_dielectric = 0; SSM+DS has both 1. Born remains enabled. The existing fitter's `11`/`00` argument selects starting coordinates only; the supplied input mapping specifies the physical form. Existing shared fit anchors and actual-form final replay anchors remain unchanged.
+
+The objective and residuals are those defined above: C = ½Σr², with pressure log residual scale 0.3 and species scale 0.1x_observed + 0.001. These fixed scales are engineering choices. Pressure is CO₂ partial pressure in Pa, species use retained true-species or pooled mole fractions, loading is mol fed CO₂/mol fed MEA, and 30 wt% is the unloaded solvent basis. Pressure fitting remains at 40/60 °C; species retain their packet temperatures and the inherited Matin 21 °C measurement versus 20 °C packet convention. The three ion–water k bounds remain [−0.5,0.5], the MEAH⁺–MEACOO⁻ bound [−1,1], and the MEAH⁺–water reciprocal-temperature slope bound [−1000,1000] K. No Born input is fitted.
+
+The following table reads the [retained fitted costs](model-d/sensitivity-current/ranking-refit/fitted-costs.csv). Total/family costs are dimensionless final-replay values; native fitted costs agree within 10⁻⁸. “Own” and “other” describe coordinate starts, with physical form fixed in each pair. AARD means average absolute relative deviation; pressure/species denominators are 48/94 positive observations throughout. H denotes HCO₃⁻–water k = +0.5; C denotes MEAH⁺–MEACOO⁻ k = −1. Baselines replay the retained converged fits and have no new paired-start check. A table preserves these six scalar input/form comparisons and their exact lower-cost decision; a plot adds no further tested response.
+
+| Input | Form | Start | Total C | Pressure C | Böttinger C | Matin C | Pressure / species AARD, % | Bounds | Start agreement |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| Baseline | SSM+DS | baseline | 32.991897 | 8.143453 | 3.100821 | 21.747623 | 13.527 / 8.285 | H | — |
+| Baseline | Original Born | baseline | 34.584032 | 11.436856 | 5.735330 | 17.411846 | 17.312 / 8.234 | H,C | — |
+| Diameters ×0.8 | Original Born | own | 31.722527 | 8.753441 | 4.229531 | 18.739555 | 14.798 / 8.057 | H,C | Pass |
+| Diameters ×0.8 | Original Born | other | 31.722527 | 8.753439 | 4.229535 | 18.739553 | 14.798 / 8.057 | H,C | Pass |
+| εMEA = 24 | Original Born | own | 32.084417 | 9.522669 | 4.715344 | 17.846404 | 15.684 / 8.017 | H,C | Pass |
+| εMEA = 24 | Original Born | other | 32.084417 | 9.522670 | 4.715342 | 17.846404 | 15.684 / 8.017 | H,C | Pass |
+| Diameters ×0.8 | SSM+DS | own | 31.985822 | 8.563613 | 2.495691 | 20.926518 | 13.597 / 7.975 | H | Pass |
+| Diameters ×0.8 | SSM+DS | other | 31.985822 | 8.563621 | 2.495693 | 20.926508 | 13.597 / 7.975 | H | Pass |
+| εMEA = 24 | SSM+DS | own | 32.896882 | 8.252959 | 3.020215 | 21.623708 | 13.740 / 8.251 | H | Pass |
+| εMEA = 24 | SSM+DS | other | 32.896882 | 8.252965 | 3.020216 | 21.623701 | 13.740 / 8.251 | H | Pass |
+
+Original Born's total advantage at both altered inputs comes from its lower Matin cost; SSM+DS retains lower pressure and Böttinger costs. Allowing interaction compensation therefore preserves the reversal seen against the baseline in the fixed-interaction scans, while showing that it also holds against SSM+DS refitted at the same altered inputs. This is conditional calibration under the declared observation roles and scales, rather than an intrinsic ranking of Born theories.
+
+Across the three tested input sets, the minimum fitted cost is **31.7225274151 for Original Born** and **31.9858215136 for SSM+DS**, both at the three-ion diameter multiplier 0.8. These are minima among the tested cases, with local bounded fits; neither is an optimization over all Born inputs or evidence of global optimality.
+
+All four pairs meet cost agreement ≤10⁻⁶ relative, each k agreement ≤10⁻⁵ and b agreement ≤0.1 K. The [start differences](model-d/sensitivity-current/ranking-refit/start-agreement.json) are:
+
+| Input | Form | Relative cost difference | Maximum k difference | b difference, K |
+| --- | --- | ---: | ---: | ---: |
+| Diameters ×0.8 | Original Born | 1.871e-13 | 7.622e-08 | 0.000205 |
+| Diameters ×0.8 | SSM+DS | 6.661e-13 | 1.871e-07 | 0.000973 |
+| εMEA = 24 | Original Born | 8.615e-14 | 4.062e-08 | 0.000097 |
+| εMEA = 24 | SSM+DS | 7.905e-13 | 2.426e-07 | 0.000637 |
+
+All eight native fits converge without trial failures, caps or timeouts. All 840 replayed states meet balance and stationarity limits and retain baseline phase support/topology. Maximum absolute material balance is 1.063e-12 mol; maximum charge balance is 2.477e-13 mol charge; maximum stationarity is 1.521e-12, below 10⁻¹⁰. Maximum native/replay cost difference is 6.374e-12, below 10⁻⁸. All final coordinates meet their retained bounds and k(T) < 1 at 293.15/353.15 K; chemistry and undeclared inputs are unchanged. Native fitting records 70 residual and 66 Jacobian evaluations. Summed single-thread fit wall time is 1541.76 s; the longest fit is 267.48 s, below its 2250 s native/2400 s external limits. Execution used one available host slot while another fit occupied the second, with OMP/OpenBLAS/MKL set to one thread for every study job.
+
+The retained [target predictions and source identities](model-d/sensitivity-current/ranking-refit/target-predictions.csv), [state checks](model-d/sensitivity-current/ranking-refit/state-checks.csv), [source/species AARD](model-d/sensitivity-current/ranking-refit/aard-by-source-species.csv), [native histories and final-mapping filenames](model-d/sensitivity-current/ranking-refit/native-fit-summaries.json), [numerical summary](model-d/sensitivity-current/ranking-refit/numerical-summary.json), [ranking and minima](model-d/sensitivity-current/ranking-refit/ranking.json), [input identities](model-d/sensitivity-current/ranking-refit/inputs.json), and [commands](model-d/sensitivity-current/ranking-refit/execution-commands.json) support this section. Bulk outputs remain in the ignored `ranking-refit/runs/` directory. Tables are assembled from retained values; rendering never runs the model.
+
+This is re-calibration and numerical verification on the frozen objective. It does not establish independent physical validation, unique physical Born or interaction parameters, statistical significance or uncertainty intervals, concentration/temperature transfer, or absorber qualification. Active bounds, inherited chemistry and parameter-selection history remain limitations. Two starts demonstrate agreement for those starts only. The source basis and reading limits are inherited from the preceding sensitivity section; the relevant Böttinger, Matin and Figiel reading-copy hashes were checked against current Zotero files. Manuscript use requires investigator promotion of this new notebook section after independent delivered review.
 
 # Selected parameters
 

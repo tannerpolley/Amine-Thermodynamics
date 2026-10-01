@@ -1,0 +1,187 @@
+{
+  "common_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "memory_kib": 2097152,
+  "host_concurrency": 2,
+  "jobs": [
+    {
+      "name": "diameters-0.8-00-start-00",
+      "case": "diameters-0.8",
+      "form": "00",
+      "start": "00",
+      "start_role": "own",
+      "output": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/diameters-0.8-00-start-00",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/diameters-0.8-00-start-00",
+        "SENSITIVITY_MAPPING": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/diameters-0.8-00-input-parameters.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "refit",
+        "00"
+      ],
+      "timeout_s": 2400
+    },
+    {
+      "name": "diameters-0.8-00-start-11",
+      "case": "diameters-0.8",
+      "form": "00",
+      "start": "11",
+      "start_role": "other",
+      "output": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/diameters-0.8-00-start-11",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/diameters-0.8-00-start-11",
+        "SENSITIVITY_MAPPING": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/diameters-0.8-00-input-parameters.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "refit",
+        "11"
+      ],
+      "timeout_s": 2400
+    },
+    {
+      "name": "eps-mea-24-00-start-00",
+      "case": "eps-mea-24",
+      "form": "00",
+      "start": "00",
+      "start_role": "own",
+      "output": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/eps-mea-24-00-start-00",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/eps-mea-24-00-start-00",
+        "SENSITIVITY_MAPPING": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/eps-mea-24-00-input-parameters.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "refit",
+        "00"
+      ],
+      "timeout_s": 2400
+    },
+    {
+      "name": "eps-mea-24-00-start-11",
+      "case": "eps-mea-24",
+      "form": "00",
+      "start": "11",
+      "start_role": "other",
+      "output": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/eps-mea-24-00-start-11",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/eps-mea-24-00-start-11",
+        "SENSITIVITY_MAPPING": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/eps-mea-24-00-input-parameters.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "refit",
+        "11"
+      ],
+      "timeout_s": 2400
+    },
+    {
+      "name": "diameters-0.8-11-start-11",
+      "case": "diameters-0.8",
+      "form": "11",
+      "start": "11",
+      "start_role": "own",
+      "output": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/diameters-0.8-11-start-11",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/diameters-0.8-11-start-11",
+        "SENSITIVITY_MAPPING": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/diameters-0.8-11-input-parameters.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "refit",
+        "11"
+      ],
+      "timeout_s": 2400
+    },
+    {
+      "name": "diameters-0.8-11-start-00",
+      "case": "diameters-0.8",
+      "form": "11",
+      "start": "00",
+      "start_role": "other",
+      "output": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/diameters-0.8-11-start-00",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/diameters-0.8-11-start-00",
+        "SENSITIVITY_MAPPING": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/diameters-0.8-11-input-parameters.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "refit",
+        "00"
+      ],
+      "timeout_s": 2400
+    },
+    {
+      "name": "eps-mea-24-11-start-11",
+      "case": "eps-mea-24",
+      "form": "11",
+      "start": "11",
+      "start_role": "own",
+      "output": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/eps-mea-24-11-start-11",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/eps-mea-24-11-start-11",
+        "SENSITIVITY_MAPPING": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/eps-mea-24-11-input-parameters.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "refit",
+        "11"
+      ],
+      "timeout_s": 2400
+    },
+    {
+      "name": "eps-mea-24-11-start-00",
+      "case": "eps-mea-24",
+      "form": "11",
+      "start": "00",
+      "start_role": "other",
+      "output": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/eps-mea-24-11-start-00",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/runs/eps-mea-24-11-start-00",
+        "SENSITIVITY_MAPPING": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/eps-mea-24-11-input-parameters.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "refit",
+        "00"
+      ],
+      "timeout_s": 2400
+    }
+  ]
+}
