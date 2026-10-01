@@ -133,7 +133,11 @@ def attribution(summaries, mappings):
             x, P = np.array(liq['mole_fractions']), liq['pressure_pa']
             anchor = on.state(T, rho=liq['molar_density_mol_m3'], x=x)
             q0 = activities(off, T, off.state(T, P=P, x=x, phase='liquid', anchor=anchor), x)[2]
-            offsets = [activities(m, T, m.state(T, P=P, x=x, phase='liquid', anchor=anchor), x)[2]-q0 for m in models]
+            offsets = []
+            for coordinate, m in zip(d.IDS, models, strict=True):
+                d.s.write_json(HERE/'runs/c2-attempt.json', dict(state=identity, T_K=T, P_Pa=P, x=x.tolist(), anchor_rho_mol_m3=anchor.molar_density, coordinate=coordinate, new_value=changes[coordinate]))
+                offsets.append(activities(m, T, m.state(T, P=P, x=x, phase='liquid', anchor=anchor), x)[2]-q0)
+            d.s.write_json(HERE/'runs/c2-attempt.json', dict(state=identity, T_K=T, P_Pa=P, x=x.tolist(), anchor_rho_mol_m3=anchor.molar_density, coordinate='all-five', new_values=changes))
             together = activities(joint, T, joint.state(T, P=P, x=x, phase='liquid', anchor=anchor), x)[2]-q0
             zero = [v for v, key in zip(offsets, d.IDS, strict=True) if key==d.design.HCO3_W or (key.endswith(d.design.probe.SLOPE) and T==313.15)]
             check('C2-zero', zero, 0., dict(state=identity, T_K=T))
@@ -318,7 +322,16 @@ def calculate(arguments):
             check('N6',values-expected,1e-6,dict(record=name))
     for T, values in closures.items():
         check('N5',np.ptp(values,axis=0),1e-6,dict(T_K=T))
-    comparisons = attribution(summaries, mappings)
+    d.s.write_json(HERE/'checks.json', checks)
+    try:
+        comparisons = attribution(summaries, mappings)
+    except Exception as error:
+        checks.setdefault('failure', dict(stage='attribution', exception=type(error).__name__, message=str(error)))
+        d.s.write_json(HERE/'checks.json', checks)
+        with (HERE/'runs/partial-activity-values.jsonl').open('w') as output:
+            for row in rows:
+                output.write(json.dumps(row)+'\n')
+        raise
     checks['falsifiers'] = falsifiers(populations, comparisons, mappings)
     checks['coverage'] = dict(solved_states=sum(len(v) for v in closures.values()), pressure_states=len(summaries), long_rows=len(rows), compared_pairs=len(comparisons))
     d.s.write_json(HERE/'checks.json', checks)
