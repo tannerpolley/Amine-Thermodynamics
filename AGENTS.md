@@ -68,13 +68,18 @@ CSE execution mode: direct.
 ## ePC-SAFT Cross-Repo Integration
 
 - This is an official downstream application under ePC-SAFT Governance D-038.
-- Engine governance lives at `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT-project/governance`; the generic runtime lives in that repository's `engine/` directory.
+- The Engine repository is `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT`.
+- Engine owner paths are relative to that repository:
+  - Owner map: `docs/scientific/README.md` and `docs/scientific/CONTEXT.md`; accepted decisions: `docs/scientific/adr/`.
+  - Budgets: `ARCHITECTURE.yaml`, explained in `docs/scientific/code-budgets.md`; equations: `engine/docs/equations.md`; algorithms: `engine/docs/science/algorithms.md`.
+  - Plans: GitHub issues in `tannerpolley/ePC-SAFT`.
+  - Code: `engine/native/<layer>/` and `engine/src/epcsaft/`; tests: `engine/tests/`; evidence: `analyses/`.
 - The Unified Engine is one `epcsaft` wheel with `epcsaft`, `epcsaft.equilibrium`, and `epcsaft.regression`. Do not install split packages or use compatibility imports.
 - Prefer uv-managed workflows. Use `.venv/bin/python` only for interpreter-specific debugging or repo-local troubleshooting.
 - Normal and final work uses one immutable Engine wheel and SHA-256 hash. Local co-development may use an explicitly supplied candidate wheel; never import an Engine source checkout.
-- Build and debug new generic ePC-SAFT methods first in `ePC-SAFT-project/analysis/` or `validation/`. MEA may then run direct Engine calculations to reproduce that pinned method against MEA-owned inputs; direct Engine use here is allowed and does not move generic method ownership.
+- MEA does not build generic methods in the Engine repository. Request them through an Engine issue and adopt them through a pinned wheel. MEA may run direct Engine calculations to reproduce that pinned method against MEA-owned inputs; direct Engine use here is allowed and does not move generic method ownership.
 - Keep MEA chemistry hypotheses, source data, model selection, parameter fitting, validation, parameter adoption, figures, and the thermodynamics manuscript in this repository.
-- Keep Engine equations, generic equilibrium compilation, exact derivatives, and generic parameter fitting mechanics in ePC-SAFT-project. Do not create nested repositories, submodules, or sibling-source runtime imports.
+- Keep Engine equations, generic equilibrium compilation, exact derivatives, and generic parameter fitting mechanics in the Engine repository. Do not create nested repositories, submodules, or sibling-source runtime imports.
 - Reusable scientific packets are materialized from Data by exact commit, packet path/version, fingerprint, and file hashes. Do not discover sibling repositories at runtime.
 - Keep Engine interactions behind the approved runtime and diagnostic modules. Unsupported scientific capabilities must fail explicitly; do not restore old APIs or local equation copies.
 
