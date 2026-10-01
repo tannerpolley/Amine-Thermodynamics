@@ -116,5 +116,27 @@
       "removals": 0
     }
   },
-  "change_accounting_note": "The tool classifies retained CSV/JSON/SVG scientific outputs and immutable input copies as other; executable additions are 201, below the reviewed 300-line ceiling. No tests or numerical methods were duplicated."
+  "change_accounting_note": "The tool classifies retained CSV/JSON/SVG scientific outputs and immutable input copies as other; executable additions are 201, below the reviewed 300-line ceiling. No tests or numerical methods were duplicated.",
+  "readiness_review": {
+    "verdict": "Ready",
+    "reviewed_commit": "2814df5996389c85fec2494fcbab259c228287c4",
+    "recorded_before_fits_commit": "8589e76",
+    "conditions": "parent diagnostic uncertainty decision; fixed freeze/selection/single-evaluation rules"
+  },
+  "delivered_review": {
+    "verdict": "Supported",
+    "reviewed_commit": "887e078",
+    "base_commit": "cc508d1",
+    "reviewer": "independent GPT-6 Astra, cse:review",
+    "correction_rounds": 1,
+    "initial_commit": "7600e93",
+    "initial_verdict": "Not supported as complete package; numerical evidence supported",
+    "corrected_findings": [
+      "16 rendered evidence links missing retained resources",
+      "missing preregistered Kim residual-vs-pH/rounding comparison"
+    ],
+    "final_findings": [],
+    "permitted_use": "diagnostic numerical estimation and conditional comparison; chemical consistency UNRESOLVED; no physical validation or uncertainty-qualified agreement",
+    "stage_complete": true
+  }
 }
