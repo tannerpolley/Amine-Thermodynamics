@@ -1,0 +1,1692 @@
+{
+  "common_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "memory_kib": 2097152,
+  "host_concurrency": 2,
+  "individual_state_timeout_s": 180,
+  "jobs": [
+    {
+      "stage": "baseline",
+      "name": "baseline-11",
+      "form": "11",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "baseline-11",
+        "11",
+        "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "baseline",
+      "name": "baseline-00",
+      "form": "00",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "baseline-00",
+        "00",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-water-1-11",
+      "form": "11",
+      "panel": "A",
+      "axis": "water",
+      "value": 1,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-water-1-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "1",
+        "SCAN_AXIS": "water"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-water-1.25-11",
+      "form": "11",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.25,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-water-1.25-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "1.25",
+        "SCAN_AXIS": "water"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-water-1.75-11",
+      "form": "11",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.75,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-water-1.75-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "1.75",
+        "SCAN_AXIS": "water"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-water-2-11",
+      "form": "11",
+      "panel": "A",
+      "axis": "water",
+      "value": 2,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-water-2-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "2",
+        "SCAN_AXIS": "water"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-monoethanolamine-1.25-11",
+      "form": "11",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.25,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-monoethanolamine-1.25-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "1.25",
+        "SCAN_AXIS": "monoethanolamine"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-monoethanolamine-1.5-11",
+      "form": "11",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.5,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-monoethanolamine-1.5-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "1.5",
+        "SCAN_AXIS": "monoethanolamine"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-monoethanolamine-1.75-11",
+      "form": "11",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.75,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-monoethanolamine-1.75-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "1.75",
+        "SCAN_AXIS": "monoethanolamine"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-B-eps_ion-2-11",
+      "form": "11",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 2,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-B-eps_ion-2-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "2",
+        "SCAN_AXIS": "eps_ion"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_B_eps_ion.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-B-eps_ion-4-11",
+      "form": "11",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 4,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-B-eps_ion-4-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "4",
+        "SCAN_AXIS": "eps_ion"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_B_eps_ion.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-B-eps_ion-16-11",
+      "form": "11",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 16,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-B-eps_ion-16-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "16",
+        "SCAN_AXIS": "eps_ion"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_B_eps_ion.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-B-eps_ion-32-11",
+      "form": "11",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 32,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-B-eps_ion-32-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "32",
+        "SCAN_AXIS": "eps_ion"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_B_eps_ion.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-C-diameter_scale-0.8-11",
+      "form": "11",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 0.8,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-C-diameter_scale-0.8-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "0.8",
+        "SCAN_AXIS": "diameter_scale"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_C_diameter_scale.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-C-diameter_scale-0.9-11",
+      "form": "11",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 0.9,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-C-diameter_scale-0.9-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "0.9",
+        "SCAN_AXIS": "diameter_scale"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_C_diameter_scale.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-C-diameter_scale-1.1-11",
+      "form": "11",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1.1,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-C-diameter_scale-1.1-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "1.1",
+        "SCAN_AXIS": "diameter_scale"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_C_diameter_scale.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-C-diameter_scale-1.2-11",
+      "form": "11",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1.2,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-C-diameter_scale-1.2-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "1.2",
+        "SCAN_AXIS": "diameter_scale"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_C_diameter_scale.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-D-eps_MEA-24-11",
+      "form": "11",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 24,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-D-eps_MEA-24-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "24",
+        "SCAN_AXIS": "eps_MEA"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_D_eps_mea.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-D-eps_MEA-40-11",
+      "form": "11",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 40,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-D-eps_MEA-40-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json",
+        "SCAN_FORM": "11",
+        "SCAN_VALUE": "40",
+        "SCAN_AXIS": "eps_MEA"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_D_eps_mea.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-water-1-00",
+      "form": "00",
+      "panel": "A",
+      "axis": "water",
+      "value": 1,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-water-1-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "1",
+        "SCAN_AXIS": "water"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-water-1.25-00",
+      "form": "00",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.25,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-water-1.25-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "1.25",
+        "SCAN_AXIS": "water"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-water-1.75-00",
+      "form": "00",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.75,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-water-1.75-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "1.75",
+        "SCAN_AXIS": "water"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-water-2-00",
+      "form": "00",
+      "panel": "A",
+      "axis": "water",
+      "value": 2,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-water-2-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "2",
+        "SCAN_AXIS": "water"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-monoethanolamine-1.25-00",
+      "form": "00",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.25,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-monoethanolamine-1.25-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "1.25",
+        "SCAN_AXIS": "monoethanolamine"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-monoethanolamine-1.5-00",
+      "form": "00",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.5,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-monoethanolamine-1.5-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "1.5",
+        "SCAN_AXIS": "monoethanolamine"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-A-monoethanolamine-1.75-00",
+      "form": "00",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.75,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-A-monoethanolamine-1.75-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "1.75",
+        "SCAN_AXIS": "monoethanolamine"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_A_solvation.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-B-eps_ion-2-00",
+      "form": "00",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 2,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-B-eps_ion-2-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "2",
+        "SCAN_AXIS": "eps_ion"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_B_eps_ion.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-B-eps_ion-4-00",
+      "form": "00",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 4,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-B-eps_ion-4-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "4",
+        "SCAN_AXIS": "eps_ion"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_B_eps_ion.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-B-eps_ion-16-00",
+      "form": "00",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 16,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-B-eps_ion-16-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "16",
+        "SCAN_AXIS": "eps_ion"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_B_eps_ion.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-B-eps_ion-32-00",
+      "form": "00",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 32,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-B-eps_ion-32-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "32",
+        "SCAN_AXIS": "eps_ion"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_B_eps_ion.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-C-diameter_scale-0.8-00",
+      "form": "00",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 0.8,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-C-diameter_scale-0.8-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "0.8",
+        "SCAN_AXIS": "diameter_scale"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_C_diameter_scale.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-C-diameter_scale-0.9-00",
+      "form": "00",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 0.9,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-C-diameter_scale-0.9-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "0.9",
+        "SCAN_AXIS": "diameter_scale"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_C_diameter_scale.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-C-diameter_scale-1.1-00",
+      "form": "00",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1.1,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-C-diameter_scale-1.1-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "1.1",
+        "SCAN_AXIS": "diameter_scale"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_C_diameter_scale.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-C-diameter_scale-1.2-00",
+      "form": "00",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1.2,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-C-diameter_scale-1.2-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "1.2",
+        "SCAN_AXIS": "diameter_scale"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_C_diameter_scale.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-D-eps_MEA-24-00",
+      "form": "00",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 24,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-D-eps_MEA-24-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "24",
+        "SCAN_AXIS": "eps_MEA"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_D_eps_mea.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "scan",
+      "name": "scan-D-eps_MEA-40-00",
+      "form": "00",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 40,
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/scan-D-eps_MEA-40-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-00/baseline-00.json",
+        "SCAN_FORM": "00",
+        "SCAN_VALUE": "40",
+        "SCAN_AXIS": "eps_MEA"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/scans/scan_D_eps_mea.py"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-0-11",
+      "form": "11",
+      "case": "0",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "0",
+        "11"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-0-00",
+      "form": "00",
+      "case": "0",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "0",
+        "00"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-1-11",
+      "form": "11",
+      "case": "1",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "1",
+        "11"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-1-00",
+      "form": "00",
+      "case": "1",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "1",
+        "00"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-2-11",
+      "form": "11",
+      "case": "2",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "2",
+        "11"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-2-00",
+      "form": "00",
+      "case": "2",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "2",
+        "00"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-3-11",
+      "form": "11",
+      "case": "3",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "3",
+        "11"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-3-00",
+      "form": "00",
+      "case": "3",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "3",
+        "00"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-4-11",
+      "form": "11",
+      "case": "4",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "4",
+        "11"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-4-00",
+      "form": "00",
+      "case": "4",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "4",
+        "00"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-off-11",
+      "form": "11",
+      "case": "off",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "off",
+        "11"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "fit",
+      "name": "ablation-off-00",
+      "form": "00",
+      "case": "off",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py",
+        "off",
+        "00"
+      ],
+      "timeout": 2400
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-0-11",
+      "form": "11",
+      "start": "11",
+      "case": "0",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-0-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-0-11",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-0-11-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-0-00",
+      "form": "11",
+      "start": "00",
+      "case": "0",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-0-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-0-00",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-0-00-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-1-11",
+      "form": "11",
+      "start": "11",
+      "case": "1",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-1-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-1-11",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-1-11-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-1-00",
+      "form": "11",
+      "start": "00",
+      "case": "1",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-1-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-1-00",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-1-00-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-2-11",
+      "form": "11",
+      "start": "11",
+      "case": "2",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-2-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-2-11",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-2-11-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-2-00",
+      "form": "11",
+      "start": "00",
+      "case": "2",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-2-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-2-00",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-2-00-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-3-11",
+      "form": "11",
+      "start": "11",
+      "case": "3",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-3-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-3-11",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-3-11-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-3-00",
+      "form": "11",
+      "start": "00",
+      "case": "3",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-3-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-3-00",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-3-00-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-4-11",
+      "form": "11",
+      "start": "11",
+      "case": "4",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-4-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-4-11",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-4-11-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-4-00",
+      "form": "11",
+      "start": "00",
+      "case": "4",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-4-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-4-00",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-4-00-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-off-11",
+      "form": "11",
+      "start": "11",
+      "case": "off",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-off-11",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-off-11",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-off-11-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    },
+    {
+      "stage": "final-replay",
+      "name": "replay-ablation-off-00",
+      "form": "11",
+      "start": "00",
+      "case": "off",
+      "env": {
+        "SENSITIVITY_OUTPUT": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/replay-ablation-off-00",
+        "SENSITIVITY_BASELINE": "analyses/mea_parameter_bundle/model-d/sensitivity-current/runs/baseline-11/baseline-11.json"
+      },
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py",
+        "evaluate",
+        "replay-ablation-off-00",
+        "11",
+        "analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-off-00-diagnostic-parameters.json"
+      ],
+      "timeout": 600
+    }
+  ],
+  "scan_table_rows": [
+    {
+      "form": "11",
+      "panel": "A",
+      "axis": "water",
+      "value": 1,
+      "baseline": 1.5,
+      "evaluation": "scan-A-water-1-11"
+    },
+    {
+      "form": "11",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.25,
+      "baseline": 1.5,
+      "evaluation": "scan-A-water-1.25-11"
+    },
+    {
+      "form": "11",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.5,
+      "baseline": 1.5,
+      "evaluation": "baseline-11"
+    },
+    {
+      "form": "11",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.75,
+      "baseline": 1.5,
+      "evaluation": "scan-A-water-1.75-11"
+    },
+    {
+      "form": "11",
+      "panel": "A",
+      "axis": "water",
+      "value": 2,
+      "baseline": 1.5,
+      "evaluation": "scan-A-water-2-11"
+    },
+    {
+      "form": "11",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1,
+      "baseline": 1,
+      "evaluation": "baseline-11"
+    },
+    {
+      "form": "11",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.25,
+      "baseline": 1,
+      "evaluation": "scan-A-monoethanolamine-1.25-11"
+    },
+    {
+      "form": "11",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.5,
+      "baseline": 1,
+      "evaluation": "scan-A-monoethanolamine-1.5-11"
+    },
+    {
+      "form": "11",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.75,
+      "baseline": 1,
+      "evaluation": "scan-A-monoethanolamine-1.75-11"
+    },
+    {
+      "form": "11",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 2,
+      "baseline": 8,
+      "evaluation": "scan-B-eps_ion-2-11"
+    },
+    {
+      "form": "11",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 4,
+      "baseline": 8,
+      "evaluation": "scan-B-eps_ion-4-11"
+    },
+    {
+      "form": "11",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 8,
+      "baseline": 8,
+      "evaluation": "baseline-11"
+    },
+    {
+      "form": "11",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 16,
+      "baseline": 8,
+      "evaluation": "scan-B-eps_ion-16-11"
+    },
+    {
+      "form": "11",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 32,
+      "baseline": 8,
+      "evaluation": "scan-B-eps_ion-32-11"
+    },
+    {
+      "form": "11",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 0.8,
+      "baseline": 1,
+      "evaluation": "scan-C-diameter_scale-0.8-11"
+    },
+    {
+      "form": "11",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 0.9,
+      "baseline": 1,
+      "evaluation": "scan-C-diameter_scale-0.9-11"
+    },
+    {
+      "form": "11",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1,
+      "baseline": 1,
+      "evaluation": "baseline-11"
+    },
+    {
+      "form": "11",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1.1,
+      "baseline": 1,
+      "evaluation": "scan-C-diameter_scale-1.1-11"
+    },
+    {
+      "form": "11",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1.2,
+      "baseline": 1,
+      "evaluation": "scan-C-diameter_scale-1.2-11"
+    },
+    {
+      "form": "11",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 24,
+      "baseline": 32,
+      "evaluation": "scan-D-eps_MEA-24-11"
+    },
+    {
+      "form": "11",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 32,
+      "baseline": 32,
+      "evaluation": "baseline-11"
+    },
+    {
+      "form": "11",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 40,
+      "baseline": 32,
+      "evaluation": "scan-D-eps_MEA-40-11"
+    },
+    {
+      "form": "00",
+      "panel": "A",
+      "axis": "water",
+      "value": 1,
+      "baseline": 1.5,
+      "evaluation": "scan-A-water-1-00"
+    },
+    {
+      "form": "00",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.25,
+      "baseline": 1.5,
+      "evaluation": "scan-A-water-1.25-00"
+    },
+    {
+      "form": "00",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.5,
+      "baseline": 1.5,
+      "evaluation": "baseline-00"
+    },
+    {
+      "form": "00",
+      "panel": "A",
+      "axis": "water",
+      "value": 1.75,
+      "baseline": 1.5,
+      "evaluation": "scan-A-water-1.75-00"
+    },
+    {
+      "form": "00",
+      "panel": "A",
+      "axis": "water",
+      "value": 2,
+      "baseline": 1.5,
+      "evaluation": "scan-A-water-2-00"
+    },
+    {
+      "form": "00",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1,
+      "baseline": 1,
+      "evaluation": "baseline-00"
+    },
+    {
+      "form": "00",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.25,
+      "baseline": 1,
+      "evaluation": "scan-A-monoethanolamine-1.25-00"
+    },
+    {
+      "form": "00",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.5,
+      "baseline": 1,
+      "evaluation": "scan-A-monoethanolamine-1.5-00"
+    },
+    {
+      "form": "00",
+      "panel": "A",
+      "axis": "monoethanolamine",
+      "value": 1.75,
+      "baseline": 1,
+      "evaluation": "scan-A-monoethanolamine-1.75-00"
+    },
+    {
+      "form": "00",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 2,
+      "baseline": 8,
+      "evaluation": "scan-B-eps_ion-2-00"
+    },
+    {
+      "form": "00",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 4,
+      "baseline": 8,
+      "evaluation": "scan-B-eps_ion-4-00"
+    },
+    {
+      "form": "00",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 8,
+      "baseline": 8,
+      "evaluation": "baseline-00"
+    },
+    {
+      "form": "00",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 16,
+      "baseline": 8,
+      "evaluation": "scan-B-eps_ion-16-00"
+    },
+    {
+      "form": "00",
+      "panel": "B",
+      "axis": "eps_ion",
+      "value": 32,
+      "baseline": 8,
+      "evaluation": "scan-B-eps_ion-32-00"
+    },
+    {
+      "form": "00",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 0.8,
+      "baseline": 1,
+      "evaluation": "scan-C-diameter_scale-0.8-00"
+    },
+    {
+      "form": "00",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 0.9,
+      "baseline": 1,
+      "evaluation": "scan-C-diameter_scale-0.9-00"
+    },
+    {
+      "form": "00",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1,
+      "baseline": 1,
+      "evaluation": "baseline-00"
+    },
+    {
+      "form": "00",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1.1,
+      "baseline": 1,
+      "evaluation": "scan-C-diameter_scale-1.1-00"
+    },
+    {
+      "form": "00",
+      "panel": "C",
+      "axis": "diameter_scale",
+      "value": 1.2,
+      "baseline": 1,
+      "evaluation": "scan-C-diameter_scale-1.2-00"
+    },
+    {
+      "form": "00",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 24,
+      "baseline": 32,
+      "evaluation": "scan-D-eps_MEA-24-00"
+    },
+    {
+      "form": "00",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 32,
+      "baseline": 32,
+      "evaluation": "baseline-00"
+    },
+    {
+      "form": "00",
+      "panel": "D",
+      "axis": "eps_MEA",
+      "value": 40,
+      "baseline": 32,
+      "evaluation": "scan-D-eps_MEA-40-00"
+    }
+  ]
+}
