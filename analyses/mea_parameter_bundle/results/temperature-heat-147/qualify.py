@@ -166,9 +166,45 @@ def mapping_check():
         'producer_sha256': s.sha256(Path(__file__)), 'module_origin': probe.epcsaft.__file__})
 
 
+def heat_case(alpha):
+    from epcsaft import equilibrium as eq, regression as reg
+    mapping, params, records, request, reactions, thermal = campaign()
+    masses = {c['component_id']: c['fixed']['molar_mass']['value']['magnitude'] for c in mapping['components']}
+    solvent = {'monoethanolamine': 1.0, 'water': masses['monoethanolamine'] * .7 / (.3 * masses['water'])}
+    endpoints = [eq.Problem(T=313.15, P=1734000.0,
+        feed=eq.Amounts({**solvent, 'carbon-dioxide': a}),
+        phases=[eq.Phase('L', kind='liquid', support=s.COMPONENT_IDS)], reactions=reactions,
+        neutral_reference=s._neutral_reference(request)) for a in (0.0, alpha)]
+    model = probe.epcsaft.Mixture(params, thermochemistry=thermal.record())
+    initial, final = endpoints
+    item = reg.addition_enthalpy(params, initial, final, {'carbon-dioxide': 1.0}, alpha,
+                                313.15, 1734000.0, phase='vapor', observed=-80000.0, form='difference', scale=3000.0)
+    path = HERE / f'calorimetry-{alpha:g}.json'
+    output = {'alpha_initial': 0.0, 'alpha_final': alpha, 'source_temperature_K': 313.15,
+        'source_pressure_Pa': 1734000.0, 'initial_feed_mol': dict(initial.feed.values),
+        'final_feed_mol': dict(final.feed.values), 'feed': {'carbon-dioxide': 1.0}, 'feed_phase_hint': 'vapor',
+        'physical_parameter_source': str((OLD / 'restored-source-parameters.json').relative_to(ROOT)),
+        'physical_parameter_source_sha256': s.sha256(OLD / 'restored-source-parameters.json'),
+        'chemistry_owner': 'campaign-reactions.json; parameter-document reaction metadata is not consumed',
+        'physical_calorics_sha256': s.sha256(thermal.PHYSICAL_CALORICS),
+        'module_origin': probe.epcsaft.__file__, 'producer_sha256': s.sha256(Path(__file__))}
+    pa.save(path, output)
+    clock = time.perf_counter()
+    prediction = reg.predict(model, item)
+    output.update(prediction={k: s._jsonable(getattr(prediction, k)) for k in
+        ('value', 'unit', 'status', 'message', 'residual', 'requested_tolerance_met', 'branch', 'stable_root_count')},
+        prediction_elapsed_s=time.perf_counter() - clock,
+        prediction_convergence=None if prediction.convergence is None else {k: s._jsonable(getattr(prediction.convergence, k))
+            for k in ('residual', 'floor', 'amplification', 'contraction', 'iterations', 'evaluations', 'stop')})
+    pa.save(path, output)
+    assert prediction.status.name == 'Available', prediction.message
+    assert prediction.value < 0, 'exothermic sign check failed'
+
+
 if __name__ == '__main__':
     try:
-        {'freeze': freeze, 'R1': replay, 'Q1-mapping': mapping_check}[sys.argv[1]]()
+        {'freeze': freeze, 'R1': replay, 'Q1-mapping': mapping_check,
+         'Q1-heat': lambda: heat_case(float(sys.argv[2]))}[sys.argv[1]]()
     except Exception as exc:
         pa.save(HERE / 'qualification-failure.json', {'job': sys.argv[1], 'exception': type(exc).__name__,
             'message': str(exc), 'module_origin': probe.epcsaft.__file__, 'producer_sha256': s.sha256(Path(__file__))})

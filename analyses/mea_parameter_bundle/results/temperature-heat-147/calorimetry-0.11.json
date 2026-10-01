@@ -1,0 +1,46 @@
+{
+  "alpha_initial": 0.0,
+  "alpha_final": 0.11,
+  "source_temperature_K": 313.15,
+  "source_pressure_Pa": 1734000.0,
+  "initial_feed_mol": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.0
+  },
+  "final_feed_mol": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.11
+  },
+  "feed": {
+    "carbon-dioxide": 1.0
+  },
+  "feed_phase_hint": "vapor",
+  "physical_parameter_source": "analyses/mea_parameter_bundle/results/temperature-reanchor-140/restored-source-parameters.json",
+  "physical_parameter_source_sha256": "7e9e3f02723700f8b6577681173249c0e7bd2c8c2a098f38a4e0a7e4611852d5",
+  "chemistry_owner": "campaign-reactions.json; parameter-document reaction metadata is not consumed",
+  "physical_calorics_sha256": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a",
+  "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "producer_sha256": "0a231d6479947f38bd63c8b5a6ba354ce23f96ad617a962ab0dd212102ac225a",
+  "prediction": {
+    "value": null,
+    "unit": "",
+    "status": "CentralSolveUnavailable",
+    "message": "initial:central_solve_unavailable: SUCCESS: stalled: residual 1.1966663563277393e-07 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 28 iterations, contraction absent, floor 1.7641264140878111e-10, amplification 0",
+    "residual": null,
+    "requested_tolerance_met": false,
+    "branch": null,
+    "stable_root_count": null
+  },
+  "prediction_elapsed_s": 0.18332733399984136,
+  "prediction_convergence": {
+    "residual": 1.1966663563277393e-07,
+    "floor": 1.764126414087811e-10,
+    "amplification": 0.0,
+    "contraction": null,
+    "iterations": 28,
+    "evaluations": 43,
+    "stop": "stalled"
+  }
+}
