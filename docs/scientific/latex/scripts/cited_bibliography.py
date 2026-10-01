@@ -2,7 +2,7 @@
 
 Usage: python scripts/cited_bibliography.py [EXPORT] > references.bib
 EXPORT defaults to ~/Zotero/exports/references.bib. Entries are copied verbatim,
-except that local attachment ``file`` fields are dropped.
+except that local attachment ``file`` fields are dropped and handle eprints become ``url`` fields.
 """
 import re
 import sys
@@ -16,4 +16,7 @@ missing = sorted(cited - entries.keys())
 if missing:
     sys.exit(f'cited keys absent from {export}: {", ".join(missing)}')
 for key in sorted(cited, key=str.lower):
-    sys.stdout.write(re.sub(r'^  file = \{.*\},?\n', '', entries[key], flags=re.M) + '\n')
+    entry = re.sub(r'^  file = \{.*\},?\n', '', entries[key], flags=re.M)
+    # The Elsevier style prints every eprint as arXiv; restore handle URLs that the export turned into eprints.
+    entry = re.sub(r'^  eprint = \{(.*)\},\n  eprinttype = \{hdl\},\n', r'  url = {http://hdl.handle.net/\1},\n', entry, flags=re.M)
+    sys.stdout.write(entry + '\n')

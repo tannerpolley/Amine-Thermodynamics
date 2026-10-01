@@ -110,7 +110,7 @@ Across the three input sets the two forms calibrate comparably, with costs of 31
 Original Born gains its advantage at the altered inputs in the Matin species, whereas SSM+DS keeps the lower pressure and B\"ottinger costs at every input set.
 Including a Born contribution matters far more than which form is used: the refit without it costs 98.79, whereas the form-to-form differences at matched inputs are 0.26--1.59.
 This input dependence complements the dependence on the fitted observations in \cref{sec:results-born}: the lower-cost form changes both with the role of the titration bicarbonate data and with the inherited Born inputs.
-On pressure and speciation data alone, the two formulations are therefore not distinguishable; a choice between them requires independent evidence, such as solvation Gibbs energies or activity coefficients, together with a statement of which speciation data were fitted.
+For the datasets and input sets examined here, the pressure and speciation fits give no consistent preference between the two Born formulations; independent solvation or activity data could help choose between them.
 
 \input{tables/born_formulation_refits}
 
@@ -136,7 +136,7 @@ Refits with one interaction coordinate fixed at zero measure what that coordinat
 Each refit started from two points, the selected SSM+DS coordinates and the coordinates of the Original Born record, and used the convergence test of \cref{sec:data-methods}; all refits converged, and the two starts agreed in cost within a relative \(7\times10^{-13}\).
 Fixing the \MEACOO--water, \MEAH--water, \HCOthree--water and \MEAH--\MEACOO coefficients at zero raises the cost by 9.85, 75.87, 11.93 and 134.32, and removing the slope \(b\) of \cref{eq:kij-temperature} raises it by 0.38.
 The corresponding fitted-pressure AARDs are 14.89, 26.45, 16.64, 85.05 and 14.29\,\% and the fitted-species AARDs 9.43, 15.86, 9.52, 10.61 and 8.25\,\%, against 13.53 and 8.28\,\% for the selected record.
-The \MEAH--\MEACOO and \MEAH--water coefficients therefore carry most of the fit.
+The \MEAH--\MEACOO and \MEAH--water coefficients therefore dominate the tested ablations.
 Without the \MEAH--\MEACOO coefficient the Matin species cost falls by 7.54 while the pressure cost rises by 119.68, so an improvement in one target group does not stand in for the total.
 The slope contributes little on these data, which constrain temperature only through pressures at 40 and \SI{60}{\degreeCelsius} and species at 20--\SI{60}{\degreeCelsius}.
 The \HCOthree--water coefficient stays at its upper bound of \(+0.5\) in the \MEAH--\MEACOO and slope refits; its own refit tests whether that coefficient is needed at all, a separate question from whether its bound is active.
@@ -232,7 +232,7 @@ On the 21 canonical rows at \SI{80}{\degreeCelsius} it gives 29.33\,\% against 2
 Its mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(-0.375\) on the canonical \SI{80}{\degreeCelsius} rows and \(-0.748\) on the Wagner rows, so its calculated pressures are too low.
 Data at or below \SI{60}{\degreeCelsius} therefore do not determine the temperature response of this model, and independent temperature information is required to fix it.
 In a diagnostic refit otherwise identical to this one, with R2 at its source correlation and R4 and R5 given independent temperature dependences fitted to the dilute-solution \MEA carbamate constants of Aroua et al.~\cite[Table~3]{arouaEquilibriumConstantCarbamate1999} and \MEA dissociation constants of Kim et al.~\cite[Table~7]{kimThermodynamicsProtonationAmines2011} at or below \SI{333}{\kelvin}, the refit to the same targets reaches a cost of 32.84 but gives 28.58\,\% on the 21 canonical rows at \SI{80}{\degreeCelsius} and 51.61\,\% on the same 11 Wagner rows.
-The missing temperature information is therefore not carried by dilute-solution temperature laws for R4 and R5; because the source measurement uncertainties were unavailable, the agreement of these fitted constants with the literature values is not assessed.
+The tested dilute-solution temperature laws for R4 and R5 did not recover the selected record's higher-temperature pressure agreement; because source measurement uncertainties were unavailable, agreement with the literature constants was not assessed.
 For modelers, the temperature response of this model must come from data that carry it directly, such as heat of absorption or equilibrium measurements above \SI{60}{\degreeCelsius}.
 
 % P:results-31
@@ -268,7 +268,7 @@ The pooled value therefore contains a source-dependent misfit, dominated by unde
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:results-18
 Like the electrolyte NRTL model of Zhang et al., which was fitted to \COtwo solubility, heat of absorption, heat capacity and NMR speciation~\cite{Zhang2011}, and unlike that of Akula et al., which left NMR speciation outside its fit~\cite{Akula2023a}, the present model fits speciation together with pressure, so the residuals of its 94 fitted species targets are calibration results (\cref{tab:literature-model-comparison}).
-Unlike the ePC-SAFT models of MDEA~\cite{Uyan2015,Wangler2018,Bulow2021a}, it fits ion interactions to the loaded ternary mixture, including the \MEAH--\MEACOO interaction, which exists only in loaded solution and carries most of the fit.
+Unlike the ePC-SAFT models of MDEA~\cite{Uyan2015,Wangler2018,Bulow2021a}, it fits ion interactions to the loaded ternary mixture, including the \MEAH--\MEACOO interaction, which exists only in loaded solution and dominates the tested ablations.
 Published pressure deviations for 30 wt\% \MEA cover different row sets and temperature ranges, so no accuracy ranking against those models is claimed.
 
 \subsection{Scope and limitations}\label{sec:results-limits}
@@ -282,5 +282,5 @@ Over nine Jakobsen NMR points at 20 and \SI{40}{\degreeCelsius}, the calculated 
 Liquid density and heat capacity are not qualified.
 For the selected SSM+DS record \texttt{9055458d} on \texttt{epcsaft} wheel \texttt{28181e72\ldots}, homogeneous-liquid densities at an assumed ambient pressure of \SI{101325}{\pascal} exceed Amundsen et al.'s measurements by 13.17 and 17.80\,\% at \SI{50}{\degreeCelsius} and by 12.99 and 17.39\,\% at \SI{70}{\degreeCelsius}, for loadings 0.3 and 0.4~mol \COtwo/mol \MEA on a \COtwo-free 30 wt\% \MEA solvent basis~\cite[Table~3, p.~3097]{Amundsen2009}, whose stated loaded-density uncertainty is \(\pm\SI{0.002}{\gram\per\cubic\centi\metre}\) (approximately \(\pm0.2\,\%\))~\cite[Discussion, pp.~3099--3100]{Amundsen2009}.
 The near-unloaded control at \SI{50}{\degreeCelsius} and loading 0.000101 gives \SI{0.993873}{\gram\per\cubic\centi\metre}, 0.423\,\% below the unloaded value of \SI{0.9981}{\gram\per\cubic\centi\metre}~\cite[Table~1, p.~3097]{Amundsen2009}, so the deviation appears in loaded solution.
-For the earlier record \texttt{868a5018} on wheel \texttt{48a639e7\ldots}, heat-capacity deviations against Hilliard were \(-9.8\,\%\) for unloaded solution at \SI{45}{\degreeCelsius}, \(-10.2\,\%\) at loading 0.358 and \SI{45}{\degreeCelsius}, and \(-14.6\,\%\) at loading 0.358 and \SI{80}{\degreeCelsius}~\cite{Hilliard2008}.
+For the earlier record \texttt{868a5018} on wheel \texttt{48a639e7\ldots}, heat-capacity deviations against Hilliard were \(-9.8\,\%\) for a near-unloaded proxy at loading \(10^{-5}\) and \SI{45}{\degreeCelsius}, \(-10.2\,\%\) at loading 0.358 and \SI{45}{\degreeCelsius}, and \(-14.6\,\%\) at loading 0.358 and \SI{80}{\degreeCelsius}~\cite{Hilliard2008}.
 The record is therefore a phase- and speciation-equilibrium model; absorber and stripper calculations would require density and heat-capacity qualification first.

@@ -6,19 +6,19 @@ Outside the fit, it gives 20.27\,\% on the 21 canonical pressure rows at \SI{80}
 This extends the ePC-SAFT treatment of reactive MDEA to a carbamate-forming primary amine.
 
 % P:conclusion-02
-The Born term is essential in this system.
-Refitting without it raises the cost from 32.99 to 98.79 and the fitted-pressure AARD to 53.90\,\%, and the five interaction coordinates cannot recover the loss within their bounds.
-Two interactions of protonated \MEA carry the fit: fixing the \MEAH--\MEACOO or the \MEAH--water coefficient at zero raises the cost by 134.32 or 75.87, whereas the \MEAH--water temperature slope adds only 0.38 on 20--\SI{60}{\degreeCelsius} data.
+Born-term removal substantially worsens the bounded refits examined here.
+Refitting without the term raises the cost from 32.99 to 98.79 and the fitted-pressure AARD to 53.90\,\%, and the five interaction coordinates cannot recover the loss within their bounds.
+Two interactions of protonated \MEA dominate the tested ablations: fixing the \MEAH--\MEACOO or the \MEAH--water coefficient at zero raises the cost by 134.32 or 75.87, whereas the \MEAH--water temperature slope adds only 0.38 on 20--\SI{60}{\degreeCelsius} data.
 Including a Born contribution matters far more than which form is used.
 Refitted at three sets of inherited Born inputs, the SSM+DS and original Born formulations calibrate comparably, with costs of 31.72--34.58, fitted-pressure AARDs of 13.53--17.31\,\% and fitted-species AARDs of 7.98--8.28\,\%, and their differences at matched inputs, 0.26--1.59, are small against the rise to 98.79 without the term.
 Which form has the lower cost depends both on the fitted observations and on the inherited Born inputs.
 SSM+DS is lower without the titration bicarbonate data, 32.99 against 34.58, and the original Born term with them, 40.20 against 47.63; without those data, the original Born term is also lower with the three ion Born diameters multiplied by 0.8 or with \(\varepsilon_{\MEA}=24\).
 
 % P:conclusion-03
-These results give three practical rules for electrolyte equation-of-state models of reactive amines.
+These results suggest three practical lessons for fitting this model.
 First, a comparison of electrolyte terms must state which speciation data are fitted: without the Born term, the model moves toward the titration bicarbonate values, with an AARD of 20.12\,\% on those observations against 59.81\,\% for the selected record, while losing pressure accuracy.
-Because pressure and speciation data alone do not distinguish the two Born formulations, the choice between them should rest on independent evidence, such as solvation or activity data.
-Second, the ion--ion interaction between protonated amine and carbamate, which exists only in loaded solution, must be fitted to ternary data; it carries most of the fit.
+For the datasets and input sets examined here, the pressure and speciation fits give no consistent preference between the two Born formulations; independent solvation or activity data could help choose between them.
+Second, the \MEAH--\MEACOO interaction should be retained when fitting this model to loaded-\MEA data: fixing it at zero produces the largest cost increase among the tested ablations.
 Third, data at or below \SI{60}{\degreeCelsius} do not set the high-temperature response: refits to these data with source or dilute-solution temperature laws for the amine reactions give 28.58--29.33\,\% at \SI{80}{\degreeCelsius}, against 20.27\,\% for the selected record; the temperature response must come from independent temperature data, such as heat of absorption or equilibrium measurements above \SI{60}{\degreeCelsius}.
 
 % P:conclusion-04
