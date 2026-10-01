@@ -1,5 +1,5 @@
 {
-  "hash_basis": "SHA-256 of retained file bytes; excludes this catalog itself and transient cache files.",
+  "hash_basis": "SHA-256 of retained file bytes; excludes this catalog itself and transient cache files. An entry with retained false is not stored in Git; its rebuild command, run at its commit, reproduces the listed bytes.",
   "files": {
     "analyses/mea_parameter_bundle/results/concentration-transfer-137/verdict.json": {
       "sha256_file_bytes": "b930775fa04706c13c5783abf783a8bc6b062471edb1f047cb78a5325f306f41",
@@ -22,8 +22,8 @@
       "git_ignored": false
     },
     "analyses/mea_parameter_bundle/results/concentration-transfer-137/change-accounting.json": {
-      "sha256_file_bytes": "9afd70312e266a88e300c7b29a1d7b15f37aec14b2b97db5d5e4ec7046422925",
-      "bytes": 10247,
+      "sha256_file_bytes": "69c518237317d41261118d63f0e03bbb0b564065703116ae7fba8fb7609fff25",
+      "bytes": 10456,
       "git_ignored": false
     },
     "analyses/mea_parameter_bundle/results/concentration-transfer-137/experiment-1-adopted-evaluated-rows.csv": {
@@ -37,13 +37,13 @@
       "git_ignored": false
     },
     "analyses/mea_parameter_bundle/results/concentration-transfer-137/notebook.qmd": {
-      "sha256_file_bytes": "985ccacbad2e75c69762280c73980faa3b85a0140aa4d4ec8e594587347edd51",
-      "bytes": 18644,
+      "sha256_file_bytes": "10829de9c45110e67283c6705bb7ce2dc43130d0bc13a4888a78cd8535dc8dd0",
+      "bytes": 18761,
       "git_ignored": false
     },
     "analyses/mea_parameter_bundle/results/concentration-transfer-137/notebook.html": {
-      "sha256_file_bytes": "0cd9d719e72b1295b5372c484f151b57a0ef0b69c625f5a14b876b206cd7941a",
-      "bytes": 1281916,
+      "sha256_file_bytes": "9bf975f6b8e81ca28039fa3618e164f56ac21c21d229dec91e1c801cb80bbcac",
+      "bytes": 1282044,
       "git_ignored": false
     },
     "analyses/mea_parameter_bundle/results/concentration-transfer-137/verification.json": {
@@ -87,7 +87,7 @@
       "git_ignored": false
     },
     "analyses/mea_parameter_bundle/results/concentration-transfer-137/render-verification.json": {
-      "sha256_file_bytes": "b0c0a8e6ad369862b8026e26da69077b6f7c7f85efb49156e23872edeca2395c",
+      "sha256_file_bytes": "3987ee6c4099bc06c28a25a20b791b9e7e6c3102dc8da47b120a9be47af1c54e",
       "bytes": 713,
       "git_ignored": false
     },
@@ -159,7 +159,13 @@
     "analyses/mea_parameter_bundle/results/concentration-transfer-137/materialized-inputs.json": {
       "sha256_file_bytes": "2dd6adce5bd8440951a95e2049e2d650740aef52798797b0dabff866686953e9",
       "bytes": 5888905,
-      "git_ignored": false
+      "git_ignored": false,
+      "retained": false,
+      "rebuild": {
+        "commit": "1e293fdd811df0cc073bed22a7b201ee93b403a4",
+        "command": "cd analyses/mea_parameter_bundle/results/concentration-transfer-137 && OMP_NUM_THREADS=1 SENSITIVITY_OUTPUT=/tmp/issue-137-rebuild ../../../../.venv/bin/python -c \"import json, pathlib, experiment as e; pathlib.Path('/tmp/materialized-inputs.json').write_text(json.dumps(e.s._jsonable({'calibration_ids': e.CAL_IDS, 'assessment_ids': e.OUT_IDS, 'transfer_observations': e.TRANSFER, 'packet_observations': e.probe.OBSERVATIONS, 'canonical_observations': e.probe.CANONICAL}), indent=2, allow_nan=False) + '\\n')\" && sha256sum /tmp/materialized-inputs.json",
+        "basis": "Run from the repository root with the repository .venv; importing experiment.py checks the Engine wheel and builds its module-level inputs, which the command serializes exactly as prepare() saved them. It does not run prepare, assess or fit and changes no tracked file."
+      }
     },
     "analyses/mea_parameter_bundle/results/concentration-transfer-137/experiment-1-adopted-assessment.json": {
       "sha256_file_bytes": "c8983bba72b7ed7ca3f04e94e0d31daed596e555dc975b49218a926f4c2ebc96",
@@ -402,13 +408,13 @@
       "git_ignored": true
     },
     "analyses/mea_parameter_bundle/results/runs/137-transfer/render/notebook.qmd": {
-      "sha256_file_bytes": "985ccacbad2e75c69762280c73980faa3b85a0140aa4d4ec8e594587347edd51",
-      "bytes": 18644,
+      "sha256_file_bytes": "10829de9c45110e67283c6705bb7ce2dc43130d0bc13a4888a78cd8535dc8dd0",
+      "bytes": 18761,
       "git_ignored": true
     },
     "analyses/mea_parameter_bundle/results/runs/137-transfer/render/notebook.html": {
-      "sha256_file_bytes": "0cd9d719e72b1295b5372c484f151b57a0ef0b69c625f5a14b876b206cd7941a",
-      "bytes": 1281916,
+      "sha256_file_bytes": "9bf975f6b8e81ca28039fa3618e164f56ac21c21d229dec91e1c801cb80bbcac",
+      "bytes": 1282044,
       "git_ignored": true
     }
   }
