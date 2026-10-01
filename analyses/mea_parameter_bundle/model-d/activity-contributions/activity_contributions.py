@@ -4,9 +4,12 @@ import json
 import os
 import sys
 from pathlib import Path
+from multiprocessing import get_context
 import numpy as np
 
-HERE = Path(__file__).resolve().parent
+HERE = Path(os.environ.get('ACTIVITY_OUTPUT', Path(__file__).resolve().parent))
+CONFIG = Path(os.environ.get('ACTIVITY_INPUTS', HERE/'inputs.json'))
+MODEL_MAPPINGS = {}
 TERMS = ['hc', 'disp', 'assoc', 'DH', 'Born', 'V', 'total']
 FIELDS = ['hard_chain', 'dispersion', 'association', 'debye_huckel', 'born']
 
@@ -17,10 +20,10 @@ def render():
     a = pd.read_csv(HERE / 'state-activity-contributions.csv')
     p = pd.read_csv(HERE / 'born-off-pressure-decomposition.csv')
     rows = []
-    for T, group in p[(p.parent == 'adopted') & (p.comparison == 'off-refit')].groupby('T_K'):
+    for T, group in p[(p.parent == 'adopted') & (p.comparison == 'off-refit')].groupby('nominal_T_K'):
         for third, indices in enumerate(np.array_split(group.sort_values(['loading', 'state']).index.to_numpy(), 3), 1):
             part = group.loc[indices]
-            row = dict(T_K=T, third=third, loading_low=part.loading.min(), loading_high=part.loading.max())
+            row = dict(status=part.status.iloc[0], nominal_T_K=T, third=third, loading_low=part.loading.min(), loading_high=part.loading.max())
             for record in ('adopted', 'original'):
                 q = a[(a.record == record) & a.state.isin(part.state) & (a.quantity == 'Q')]
                 for term in ('Born', 'Born-transfer', 'Born-ion', 'Born-permittivity', 'Born-shell'):
@@ -39,7 +42,7 @@ def render():
     series = [('dlnp', 'Refit total'), ('dQ_Born', 'Born removal'), ('dQ_disp', 'Dispersion'),
               ('other_activity', 'Other activity'), ('dS', 'Speciation'), ('dH', 'Vapor/reference H'),
               ('no_refit_dlnp', 'Without refit')]
-    for ax, (T, group) in zip(axes, plotted.groupby('T_K'), strict=True):
+    for ax, (T, group) in zip(axes, plotted.groupby('nominal_T_K'), strict=True):
         ax.axhspan(-.3, .3, color='grey', alpha=.15)
         for (column, label), marker, color in zip(series, 'oxs^vD+', ['#222222','#0072B2','#D55E00','#009E73','#CC79A7','#E69F00','#566573'], strict=True):
             ax.scatter(group.loading, group[column], s=19, marker=marker, color=color, label=label)
@@ -47,7 +50,7 @@ def render():
     axes[0].set_ylabel('Change in ln CO₂ partial pressure (dimensionless)')
     axes[1].legend(fontsize=8, loc='best')
     activity_larger = np.mean(plotted.dQ**2) > np.mean(plotted.dS**2)
-    fig.suptitle('Born-off activity-sum shifts exceed speciation shifts' if activity_larger else 'Speciation shifts match or exceed activity-sum shifts')
+    fig.suptitle(('Born-off activity-sum shifts exceed speciation shifts' if activity_larger else 'Speciation shifts match or exceed activity-sum shifts')+'\n'+plotted.status.iloc[0], fontsize=10)
     for suffix in ('svg', 'pdf'):
         fig.savefig(HERE / ('born-off-pressure-decomposition.' + suffix))
 
@@ -66,11 +69,21 @@ def check(name, values, tolerance, context):
 
 
 def mixture(mapping):
-    return d.epcsaft.Mixture(d.epcsaft.Parameters.from_mapping(mapping))
+    model = d.epcsaft.Mixture(d.epcsaft.Parameters.from_mapping(mapping))
+    MODEL_MAPPINGS[id(model)] = mapping
+    return model
 
 
 def scalar(state):
     return np.array([getattr(state, field) for field in FIELDS])
+
+
+def sample(mapping, T, rho, x, i, delta):
+    amounts = x.copy()
+    amounts[i] += delta
+    shifted = mixture(mapping).state(T, rho=rho*(1+delta), x=amounts/(1+delta))
+    parts = scalar(shifted)
+    return (1+delta)*parts, parts.sum()-shifted.residual_helmholtz
 
 
 def difference(model, T, state, x, context, h=1e-5, reference=False, off=None):
@@ -78,15 +91,11 @@ def difference(model, T, state, x, context, h=1e-5, reference=False, off=None):
     base = scalar(state)
     check('N2', base.sum() - state.residual_helmholtz, 1e-12, context)
     mu = np.empty((5, 9))
+    samples = pool.starmap(sample, [(MODEL_MAPPINGS[id(model)], T, rho, x, i, delta) for i in range(9) for delta in (h, 2*h)])
     for i in range(9):
-        samples = []
-        for delta in (h, 2*h):
-            amounts = x.copy()
-            amounts[i] += delta
-            shifted = model.state(T, rho=rho*(1+delta), x=amounts/(1+delta))
-            check('N2', scalar(shifted).sum() - shifted.residual_helmholtz, 1e-12, context)
-            samples.append((1+delta)*scalar(shifted))
-        mu[:, i] = (-3*base + 4*samples[0] - samples[1])/(2*h)
+        first, second = samples[2*i:2*i+2]
+        check('N2', [first[1], second[1]], 1e-12, context)
+        mu[:, i] = (-3*base + 4*first[0] - second[0])/(2*h)
     smooth = mu[[0, 1, 2, 4]].sum(axis=0) if reference else mu.sum(axis=0)
     check('N3', smooth - state.residual_chemical_potential_over_rt, 1e-5, context)
     check('N4', mu[4] - born(model, off or mixture(p1.without_born(current_mapping)), T, state, x), 1e-5, context)
@@ -121,26 +130,26 @@ def attribution(summaries, mappings):
     checks['C2_coordinates'] = coordinates
     if 'adopted' in mappings and 'off-refit' in mappings:
         mapping = p1.without_born(mappings['adopted'])
-        on, off = mixture(mappings['adopted']), mixture(mapping)
+        off = mixture(mapping)
         changes = {identity:d.s.parameter_values(mappings['off-refit'])[identity] for identity in d.IDS}
         models = [mixture(d.s.with_parameter_values(mapping, {identity:changes[identity]})) for identity in d.IDS]
         joint = mixture(d.s.with_parameter_values(mapping, changes))
-        records = list(map(json.loads, (HERE/'runs/adopted-states.jsonl').open()))
+        records = list(map(json.loads, Path(inputs['states']['adopted']).open()))
         for rec in records:
             if ('adopted', rec['identity']) not in summaries:
                 continue
             T, liq, identity = rec['T'], rec['liquid'], rec['identity']
             x, P = np.array(liq['mole_fractions']), liq['pressure_pa']
-            anchor = on.state(T, rho=liq['molar_density_mol_m3'], x=x)
-            q0 = activities(off, T, off.state(T, P=P, x=x, phase='liquid', anchor=anchor), x)[2]
+            q0 = activities(off, T, off.state(T, P=P, x=x, phase='liquid'), x)[2]
             offsets = []
             for coordinate, m in zip(d.IDS, models, strict=True):
-                d.s.write_json(HERE/'runs/c2-attempt.json', dict(state=identity, T_K=T, P_Pa=P, x=x.tolist(), anchor_rho_mol_m3=anchor.molar_density, coordinate=coordinate, new_value=changes[coordinate]))
-                offsets.append(activities(m, T, m.state(T, P=P, x=x, phase='liquid', anchor=anchor), x)[2]-q0)
-            d.s.write_json(HERE/'runs/c2-attempt.json', dict(state=identity, T_K=T, P_Pa=P, x=x.tolist(), anchor_rho_mol_m3=anchor.molar_density, coordinate='all-five', new_values=changes))
-            together = activities(joint, T, joint.state(T, P=P, x=x, phase='liquid', anchor=anchor), x)[2]-q0
-            zero = [v for v, key in zip(offsets, d.IDS, strict=True) if key==d.design.HCO3_W or (key.endswith(d.design.probe.SLOPE) and T==313.15)]
-            check('C2-zero', zero, 0., dict(state=identity, T_K=T))
+                d.s.write_json(HERE/'runs/c2-attempt.json', dict(state=identity, T_K=T, P_Pa=P, x=x.tolist(), route='unanchored-liquid', coordinate=coordinate, new_value=changes[coordinate]))
+                offsets.append(activities(m, T, m.state(T, P=P, x=x, phase='liquid'), x)[2]-q0)
+            d.s.write_json(HERE/'runs/c2-attempt.json', dict(state=identity, T_K=T, P_Pa=P, x=x.tolist(), route='unanchored-liquid', coordinate='all-five', new_values=changes))
+            together = activities(joint, T, joint.state(T, P=P, x=x, phase='liquid'), x)[2]-q0
+            zero = [v for v, key in zip(offsets, d.IDS, strict=True) if changes[key]==d.s.parameter_values(mapping)[key] or (key.endswith(d.design.probe.SLOPE) and T==inputs['c2_reference_temperature_K'])]
+            if zero:
+                check('C2-zero', zero, 0., dict(state=identity, T_K=T))
             c2[identity] = {**dict(zip(coordinates, offsets, strict=True)), 'C2_Born_removal':q0-summaries[('adopted',identity)]['Q'], 'C2_all_coordinates':together, 'C2_remainder':together-sum(offsets)}
     fields = [*coordinates, 'C2_Born_removal', 'C2_all_coordinates', 'C2_remainder']
     checks['missing_comparison_states'] = []
@@ -157,7 +166,7 @@ def attribution(summaries, mappings):
             delta = {f'd{key}':other[key]-baseline[key] for key in ('lnp','S','Q','H')}
             phi = (delta['dQ']+baseline['Born'])/baseline['Born'] if baseline['Born']!=0 else None
             phi = float(phi) if phi is not None and np.isfinite(phi) else None
-            row = {**{key:baseline[key] for key in ('state','source','T_K','loading')}, 'parent':parent, 'comparison':comparison, **delta, 'phi':phi, 'phi_undefined':phi is None}
+            row = {**{key:baseline[key] for key in ('status','state','source','T_K','nominal_T_K','loading')}, 'parent':parent, 'comparison':comparison, **delta, 'phi':phi, 'phi_undefined':phi is None}
             row.update({f'dQ_{term}':other[term]-baseline[term] for term in TERMS[:-1]})
             row.update({key:c2.get(identity,{}).get(key) if parent=='adopted' else None for key in fields})
             row['term_allocation_error'] = delta['dQ']-sum(row['dQ_'+term] for term in TERMS[:-1])
@@ -169,13 +178,13 @@ def attribution(summaries, mappings):
 
 
 def falsifiers(populations, comparisons, mappings):
-    expected = {T:{o['identity'] for o in d.OBS if o['request']['temperature']['value']==T and any(t['prediction_identity']=='co2-partial-pressure' for t in o['targets'])} for T in (313.15,333.15)}
+    expected = {T:{o['identity'] for o in observations.values() if inputs['cohorts'].get(o['identity'])==T and any(t['prediction_identity']=='co2-partial-pressure' for t in o['targets'])} for T in (313.15,333.15)}
     results = {'H1':{}, 'H2':{}, 'C':{}}
     for name, population in populations.items():
         if not any(f['choice']=='born' for f in mappings[name]['model_families']):
             continue
         for T in (313.15,333.15):
-            group = sorted([r for r in population if r['T_K']==T], key=lambda r:(r['loading'],r['state']))
+            group = sorted([r for r in population if r['nominal_T_K']==T], key=lambda r:(r['loading'],r['state']))
             missing = sorted(expected[T]-{r['state'] for r in group})
             complete = not missing and len(group)==len(expected[T])
             if T==313.15:
@@ -198,44 +207,49 @@ def falsifiers(populations, comparisons, mappings):
     missing = sorted(set.union(*expected.values())-{r['state'] for r in group})
     undefined = sum(r['phi'] is None or not np.isfinite(r['phi']) for r in group)
     rms_S, rms_Q = [float(np.sqrt(np.mean([r[key]**2 for r in group]))) if group else np.nan for key in ('dS','dQ')]
-    complete = not missing and len(group)==48 and not undefined and np.isfinite([rms_S,rms_Q]).all()
+    complete = not missing and len(group)==sum(map(len, expected.values())) and not undefined and np.isfinite([rms_S,rms_Q]).all()
     results['C'] = dict(outcome='not evaluable' if not complete else 'rejected' if rms_S>=rms_Q else 'not rejected', n=len(group), missing_states=missing, undefined_phi=undefined, RMS_delta_S=rms_S if np.isfinite(rms_S) else None, RMS_delta_Q=rms_Q if np.isfinite(rms_Q) else None, pressure_cost_change=sum(r['pressure_cost_change'] for r in group), loading_thirds=[])
     for parent in ('adopted','original'):
         for T in (313.15,333.15):
-            population = sorted([r for r in comparisons if r['parent']==parent and r['comparison']=='off-refit' and r['T_K']==T], key=lambda r:(r['loading'],r['state']))
+            population = sorted([r for r in comparisons if r['parent']==parent and r['comparison']=='off-refit' and r['nominal_T_K']==T], key=lambda r:(r['loading'],r['state']))
             for third, indices in enumerate(np.array_split(np.arange(len(population)),3),1):
                 part = [population[j] for j in indices]
                 invalid = sum(r['phi'] is None or not np.isfinite(r['phi']) for r in part)
                 results['C']['loading_thirds'].append(dict(parent=parent, T_K=T, third=third, n=len(part), undefined_phi=invalid, mean_phi=float(np.mean([r['phi'] for r in part])) if part and not invalid else None))
     if complete:
-        evaluations = json.loads((HERE/'evaluations.json').read_text())
+        evaluations = {name:json.loads(Path(inputs['evaluation_paths'][name]).read_text()) for name in ('adopted','off-refit')}
         difference_cost = evaluations['off-refit']['pressure_cost']-evaluations['adopted']['pressure_cost']
         check('pressure-cost-reproduction', results['C']['pressure_cost_change']-difference_cost, 1e-8, dict(parent='adopted'))
     return results
 
 
 def calculate(arguments):
-    global current_mapping
+    global current_mapping, inputs
     assert len(arguments) % 2 == 0, 'calculate takes NAME RECORD pairs; states are runs/NAME-states.jsonl'
-    inputs = json.loads((HERE / 'inputs.json').read_text())
+    inputs = json.loads(CONFIG.read_text())
     mappings = {name: d.s.parameter_mapping(Path(path)) for name, path in zip(arguments[::2], arguments[1::2], strict=True)}
     inputs['sha256'][str(Path(__file__))] = d.s.sha256(Path(__file__))
     d.s.verify_wheel()
+    assert all(d.s.sha256(Path(p))==digest for p, digest in inputs['sha256'].items()), 'input provenance changed'
+    assert {name:str(Path(path).resolve()) for name,path in zip(arguments[::2],arguments[1::2],strict=True)}==inputs['records']
     for name, path in zip(arguments[::2], arguments[1::2], strict=True):
-        for source in (Path(path).resolve(), HERE/'runs'/(name+'-states.jsonl')):
+        for source in (Path(path).resolve(), Path(inputs['states'][name])):
             digest = d.s.sha256(source)
             assert digest == inputs['sha256'].get(str(source), digest), 'retained input changed'
             inputs['sha256'][str(source)] = digest
     d.s.write_json(HERE/'inputs.json', inputs)
+    for name, expected in inputs['N1_expected_costs'].items():
+        check('N1', json.loads(Path(inputs['evaluation_paths'][name]).read_text())['cost']-expected, 1e-8, dict(record=name))
     rows, summaries, closures, populations = [], {}, {}, {}
     for name, mapping in mappings.items():
         current_mapping = mapping
         model, off = mixture(mapping), mixture(p1.without_born(mapping))
-        records = list(map(json.loads, (HERE / 'runs' / (name+'-states.jsonl')).open()))
+        records = list(map(json.loads, Path(inputs['states'][name]).open()))
+        assert {r['identity'] for r in records}==set(observations), 'state mask differs'
         pressure_records = [r for r in records if 'co2-partial-pressure' in r['predictions']]
         sentinels = []
         for T in (313.15, 333.15):
-            group = sorted([r for r in pressure_records if r['T']==T], key=lambda r: (r['feed'][0]/r['feed'][1], r['identity']))
+            group = sorted([r for r in pressure_records if inputs['cohorts'].get(r['identity'])==T], key=lambda r: (r['feed'][0]/r['feed'][1], r['identity']))
             if group:
                 sentinels.extend([group[0]['identity'], group[-1]['identity']])
             if T == 313.15 and group:
@@ -290,7 +304,7 @@ def calculate(arguments):
                 gammas = np.concatenate([gammas, np.tile(vector,(5,1))[:,None,:]],axis=1)
             all_terms = TERMS+list(split)
             loading = rec['feed'][0]/rec['feed'][1]
-            info = dict(record=name, sha256=d.s.sha256(Path(arguments[arguments.index(name)+1])), state=identity, source=rec['targets'][0]['source_identity'], T_K=T, loading=loading)
+            info = dict(status=inputs['status'], nominal_T_K=inputs['cohorts'].get(identity), record=name, sha256=d.s.sha256(Path(arguments[arguments.index(name)+1])), state=identity, source=rec['targets'][0]['source_identity'], T_K=T, loading=loading)
             if '-no-refit' in name and rec not in pressure_records:
                 continue
             for r in range(5):
@@ -316,8 +330,7 @@ def calculate(arguments):
             pure_ref = model.state(313.15,P=101325.,x=pure,phase='liquid')
             salt_state = model.state(313.15,P=101325.,x=saltfree,phase='liquid')
             values = (born(model,off,313.15,salt_state,saltfree)-born(model,off,313.15,pure_ref,pure))[[3,4,7]]
-            shell = next(f for f in mapping['model_families'] if f['kind']=='electrolyte').get('c_shell', 1.)
-            expected = [-.145297,-.144975,-.421485] if shell==1. else [.419167,.418239,1.215939]
+            expected = inputs['N6_by_record_sha256'][info['sha256']]
             checks.setdefault('N6_values',{})[name] = values.tolist()
             check('N6',values-expected,1e-6,dict(record=name))
     for T, values in closures.items():
@@ -350,13 +363,18 @@ if __name__ == '__main__':
         render()
     else:
         os.environ['SENSITIVITY_OUTPUT'] = str(HERE/'runs')
-        sys.path.insert(0,str(HERE.parent/'born-form-diagnosis'))
+        sys.path.insert(0,str(Path(__file__).resolve().parent.parent/'born-form-diagnosis'))
         import p1
         d = p1.d
-        checks = {'N1':json.loads((HERE/'checks.json').read_text())['N1']}
-        observations = {o['identity']:o for o in d.OBS}
-        matrix = np.array(d.OBS[0]['request']['reaction_system']['reaction_matrix'])
+        inputs = json.loads(CONFIG.read_text())
+        checks = {'status':inputs['status']}
+        observations = {o['identity']:o for o in d.s.load_state_packet(Path(inputs['packet']))['observations'] if o['identity'] in inputs['state_ids']}
+        assert len(observations)==inputs['state_count'] and {t['identity'] for o in observations.values() for t in o['targets'] if d.compare.in_working_objective({'T':o['request']['temperature']['value'], 'identity':o['identity']},t)}==set(inputs['target_ids'])
+        assert len(inputs['target_ids'])==inputs['target_count'] and (inputs['state_count'],inputs['target_count']) in ((84,142),(83,141))
+        assert set(inputs['cohorts'])=={o['identity'] for o in observations.values() if any(t['prediction_identity']=='co2-partial-pressure' for t in o['targets'])}
+        matrix = np.array(next(iter(observations.values()))['request']['reaction_system']['reaction_matrix'])
         pure = np.array([float(c=='water') for c in d.s.COMPONENT_IDS])
         pressures = list(d.s.REACTION_REFERENCE_PRESSURES.values())
         source_contract = json.loads((d.ROOT/'data/reference/MEA/manifests/chemical_reaction_source_contract.json').read_text())
-        calculate(sys.argv[2:])
+        with get_context('fork').Pool(len(os.sched_getaffinity(0))) as pool:
+            calculate(sys.argv[2:])
