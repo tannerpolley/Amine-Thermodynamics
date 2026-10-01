@@ -71,8 +71,14 @@ alone is invalid: its activity coefficients and water activity remain needed.
 **S2-E2 — R4.** Aroua reaction (i) is
 MEA + HCO3− ⇌ MEACOO− + H2O. Its Eq. 1 is
 Kc_dim=[MEACOO−]/([HCO3−][MEA]) in L/mol; Eq. 2 applies solute activity
-coefficients; the water factor is omitted. Table 3 is the I→0 extrapolation,
-where water activity tends to one. Thus its dimensionless concentration
+coefficients; the water factor is omitted. Table 3 is the I→0 extrapolation
+interpreted by the authors as an infinite-dilution thermodynamic constant.
+Water activity tending to one is part of that admitted source/model
+interpretation; I→0 alone does not remove neutral MEA. Aroua held nominal
+MEA concentration near 0.100 M, set neutral gamma to one through Eq. 13
+(z=0), and used water activity from NaClO4 solution literature. Those are
+source approximations, not independent verification of neutral-solute
+activity. Under that interpretation, its dimensionless concentration
 formation constant is Kf_c=c° K1_dim. Δν_s=−1 and
 
     Kf_m = q Kf_c
@@ -159,7 +165,8 @@ bounded diagnostic use despite the issue's source-uncertainty stop rule.
 
 The parent also requests an empirical check using the 48 finite-I rows where
 they support it. Report the three-alpha spread of Kc within each of 16
-T/added-salt groups, and compare it with each reported zero-I Table 3 value.
+T/added-salt groups as finite-I loading scatter. It is not scatter or
+uncertainty of the four Table 3 zero-I constants; total I varies with loading.
 Total ionic strength is not tabulated, the species columns are method-derived,
 and some printed headers/entries are inconsistent. Do not substitute added
 salt for total I or claim a reproduced zero-I extrapolation from insufficient
