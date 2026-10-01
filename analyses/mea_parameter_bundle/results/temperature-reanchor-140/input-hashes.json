@@ -30,7 +30,14 @@
     "analyses/mea_parameter_bundle/results/runs/temperature-reanchor-140/training-inputs.json": "c90e41d37ce36c31837342617b53fb7d6ff6f723f55c5475f5d518add77769d5",
     "analyses/mea_parameter_bundle/results/temperature-reanchor-140/fixed-parameter-ancestry.csv": "d379393c49234cbcc42173e37eba5ebdaff61ed3aa7f66cfa884cc283ed9fca3",
     "analyses/mea_parameter_bundle/results/temperature-reanchor-140/preregistration.md": "663df8524f802d26b66bff08fad2d3d37be5f5e529f9eb6d6afdaf9f41d742db",
-    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv": "ceee9107ca784936126b9f32e08af8cb1e9a7088a87b4667796d9abac94f5bcc"
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv": "ceee9107ca784936126b9f32e08af8cb1e9a7088a87b4667796d9abac94f5bcc",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/low-temperature-fit.py": "8bed1cb573ae496a6a76381840fcd783189a2f12f67ce0ced3199bd481edf087",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/assessment.py": "cd6d49843581c4c1b352123b41381f0cbc895039910619ed97e7bcdb78e66336",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/present.py": "ed9d8c7154346ed397687d670a52cb10e4e69a48fe18132f4f2ca0d867606715",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/native-reaction-inputs.json": "1227b3c60fd0d737bfb56f21a7d9875a9bebe52e92803aebf2cd1b148d91a7fc",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/freeze.json": "92d1dac53a42f1e69312f875e726c723596f879b65a858a013664ba6345f823b",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/primary-parameters.json": "7e38de2e62bbcf5a022e9773adf19e37c36db3a3e73bc44684a30d4756efad26",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/secondary-parameters.json": "4cf35f01019a210ca610fc912da284c844bfa618fe54322c2880c902eff22e24"
   },
   "preregistration_amendment_sources": [
     {
@@ -54,5 +61,20 @@
       "sha256": "5e3d6479c13c9a0165b6eab54e128e1359e31b58001a98e45cbb6db09e8a734e"
     }
   ],
-  "preregistration_amendment_scope": "Secondary never-accessed 80 C and >=100 C subset admission only; all scores deferred until Phase B freeze."
+  "preregistration_amendment_scope": "Secondary never-accessed 80 C and >=100 C subset admission only; all scores deferred until Phase B freeze.",
+  "phase_b": {
+    "correction_commit": "7a7f2d4e2ae89cc054ab505da0844335ac8d616c",
+    "executed_fit_code_commit": "8e46c46",
+    "fits_attempted": 8,
+    "fits_interrupted": 2,
+    "fits_converged_and_rescored": 6,
+    "high_temperature_model_access_at_freeze": false,
+    "maximum_concurrent_single_thread_jobs": 2,
+    "fit_timeout_s": 2400,
+    "assessment_timeout_s": 1800,
+    "state_timeout_s": 180,
+    "native_maximum_iterations": 40,
+    "native_maximum_elapsed_time_s": 2250,
+    "memory_limit_kib": 2097152
+  }
 }
