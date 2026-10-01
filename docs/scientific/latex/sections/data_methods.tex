@@ -7,7 +7,7 @@ For the Wagner comparisons, each row is evaluated at its reported temperature an
 Supplementary Section~S2 places the observations below within an inventory of published measurements near 30 wt\% \MEA.
 The pressure comparisons use 161 measured \COtwo partial pressures at 40--\SI{120}{\degreeCelsius} from six studies \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
 Each row keeps its source table and row, the reported temperature, the loading and the pressure in kilopascal.
-Six Xu et al.\ rows measured at 100.5--\SI{101.1}{\degreeCelsius} and 120.4--\SI{121.8}{\degreeCelsius} carry the authors' nominal temperatures of 100 and \SI{120}{\degreeCelsius}.
+Six Xu et al.\ rows, tabulated at measured temperatures of 100.5--\SI{101.1}{\degreeCelsius} and 120.4--\SI{121.8}{\degreeCelsius}, are grouped with and calculated at the 100 and \SI{120}{\degreeCelsius} isotherms in this work, following the comparison temperatures of the source's Fig.~3 \cite[Table~1, Fig.~3]{Xu2011}.
 Idris et al.\ report a combined standard uncertainty for each pressure \cite[Table~2]{idrisSpeciationMEACO2Adducts2014}, and the other five studies give no row-level uncertainty that we retained.
 
 % P:methods-02
@@ -57,6 +57,8 @@ Only the five binary interaction parameters of \cref{tab:binary-interaction-para
 The molecular and \HthreeO, \Hydroxide, \HCOthree and \COthree parameters come from the cited sources, with the exceptions marked in the tables.
 The following quantities were estimated from data while the model was developed and are held fixed here; they are fitted or data-selected values, not independently estimated molecular properties.
 The segment diameters, dispersion energies and Born diameters of \MEAH and \MEACOO were fitted to liquid speciation alone: NMR values of B\"ottinger et al.\ and Jakobsen et al.\ and titration values of Matin et al.\ at 20--\SI{60}{\degreeCelsius}~\cite{Bottinger2008,Jakobsen2005,matinFacileMethodDetermination2012}.
+The \HCOthree and \COthree Born diameters were kept at \SI{3.0}{\angstrom}: a fit of both diameters to the bicarbonate and carbonate observations of Jakobsen et al.\ and Matin et al.\ at 20 and \SI{40}{\degreeCelsius} stayed at that starting value, and starts at other values ended at different diameters without converging~\cite{Jakobsen2005,matinFacileMethodDetermination2012}.
+Their selection history is only partly retained, and they are neither independently determined ion properties nor uniquely identified fitted diameters.
 The \COtwo dispersion energy was selected by comparison against 161 pressure measurements and 131 species observations that included the 80\,\si{\degreeCelsius} isotherm.
 The R5 coefficient \(A_5\) and the R2 and R5 reaction enthalpies were changed as described below, using data that included the 80\,\si{\degreeCelsius} isotherm.
 The \MEA--water and \COtwo--water interactions were fitted to binary VLE at 363--\SI{432}{\kelvin} and 313--\SI{393}{\kelvin} \cite{caiBinaryIsobaricVaporLiquid1996,kiepeExperimentalDeterminationPrediction2002}.
@@ -101,7 +103,7 @@ No covariance is reported because the \HCOthree--water coefficient lies on its b
 \subsection{Numerical verification and metrics}
 % P:methods-09
 The software builds used for each calculation are identified in the Data and Code Availability statement.
-In every equilibrium calculation compared with pressure or species observations, the total carbon of the feed, including the small ion amounts that start the solution, equals the measured loading.
+In every equilibrium calculation compared with pressure or species observations, the \COtwo-equivalent carbon of the feed equals the reported loading, \(\alpha=(n_{\mathrm{C}}-2n_{\mathrm{am}})/n_{\mathrm{am}}\), where \(n_{\mathrm{C}}\) is the total carbon of the feed, including the small ion amounts that start the solution, and \(n_{\mathrm{am}}\) is the total amine, each \MEA unit carrying two carbons.
 A state is accepted when the solver meets its requested tolerance, the material balances close within \(10^{-7}\max(1,|n|)\)~\si{\mole} for each conserved total \(n\), and the charge balance closes within \(10^{-7}\)~mol of elementary charge.
 All 123 estimation states and all 161 measured-pressure states pass, with largest absolute stationarity residuals of \(4.0\times10^{-13}\) and \(1.7\times10^{-13}\).
 Re-evaluation of the fitted parameter set reproduces the fitted cost within \(4.2\times10^{-12}\).
