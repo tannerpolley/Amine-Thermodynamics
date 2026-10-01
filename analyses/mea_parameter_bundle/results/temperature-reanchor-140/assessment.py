@@ -20,6 +20,7 @@ HERE = Path(__file__).resolve().parent
 BUNDLE = HERE.parents[1]
 RAW = BUNDLE / "results/runs/temperature-reanchor-140"
 STRUCTURES = ("constant-fixed", "slope-fixed", "constant-free", "slope-free")
+FIXED_ROLES = False
 
 
 def save(path, value):
@@ -72,6 +73,8 @@ def select():
             for identity, x, y in zip(
                 a["coordinates"], a["physical"], b["physical"], strict=True
             ):
+                if identity.startswith("reaction:"):
+                    continue
                 tolerance = (
                     0.1
                     if identity.endswith("reciprocal_temperature_slope")
@@ -84,6 +87,11 @@ def select():
                     "tolerance": tolerance,
                     "met": abs(x - y) <= tolerance,
                 }
+            if any(i.startswith("reaction:") for i in a["coordinates"]):
+                j = a["coordinates"].index("reaction:R2:correlation:a")
+                da, db = a["physical"][j]-b["physical"][j], a["physical"][j+1]-b["physical"][j+1]
+                for key, delta, limit in (("R2_delta_L0",abs(da+db/313.15),1e-4),("R2_delta_H_kj_mol",abs(db)*.00831446261815324,.01)):
+                    differences[key] = {"difference":delta,"tolerance":limit,"met":delta<=limit}
         else:
             agreement = False
         agreement = agreement and all(v["met"] for v in differences.values())
@@ -150,7 +158,7 @@ def select():
     )
     records = []
     for i, r in enumerate(finalists):
-        role = "primary" if i == 0 else "secondary"
+        role = ("secondary" if r["structure"].endswith("free") else "primary") if FIXED_ROLES else ("primary" if i == 0 else "secondary")
         origin = HERE / f"{r['structure']}-start-{r['start']}-parameters.json"
         fit_result = json.loads(
             (HERE / f"{r['structure']}-start-{r['start']}-fit.json").read_text()
