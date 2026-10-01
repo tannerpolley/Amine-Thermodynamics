@@ -1,0 +1,48 @@
+{
+  "delta_L0": 0.145106209910161,
+  "delta_H_kj_mol": -5.904806649676686,
+  "transformed_conditional_covariance_L0_H": [
+    [
+      0.003846854240402653,
+      -0.042584559589501296
+    ],
+    [
+      -0.042584559589501296,
+      19.018981419660353
+    ]
+  ],
+  "conditional_standard_errors": [
+    0.0620230137965147,
+    4.361075718175546
+  ],
+  "covariance_units": [
+    [
+      "1",
+      "kJ/mol"
+    ],
+    [
+      "kJ/mol",
+      "(kJ/mol)^2"
+    ]
+  ],
+  "held_fixed_active_coordinates": [
+    "pair/protonated-monoethanolamine/water/k_ij",
+    "pair/bicarbonate-anion/water/k_ij"
+  ],
+  "conditional_ln_K_standard_errors": {
+    "293.15": 0.13833684274461974,
+    "313.15": 0.0620230137965147,
+    "333.15": 0.10951763910381938,
+    "353.15": 0.1900909869091741,
+    "393.15": 0.33668415566418497
+  },
+  "R2_slope_column_correlations": [
+    -0.3993049730242791,
+    -0.3742928674619137
+  ],
+  "R2_a_b_column_correlation": 0.9993779424506132,
+  "registered_identification_falsifier_triggered": false,
+  "driver_R2_identified": false,
+  "explanation": "Both R2 coordinates are interior, the scaled/normalized Jacobian is full rank, starts agree and R2/slope correlations are below 0.95. The driver conservatively withholds its R2_identified flag and unconditional transformed covariance whenever any coordinate is at a bound. Here two interaction bounds are active. The transformed covariance shown is postprocessing of the frozen conditional covariance with those interactions held fixed; diagnostic weighting is not measurement uncertainty and no physical enthalpy identification is claimed.",
+  "fit_record_sha256": "9464cd3e20b2dc7f2d9ca15113643eeae438736a1fed86565f665c4b51847d1e"
+}

@@ -1,4 +1,5 @@
 import csv
+import os
 import sys
 import time
 from pathlib import Path
@@ -11,9 +12,10 @@ born_form_diagnosis.DEADLINE = float('inf')
 
 def main():
     started = time.perf_counter()
-    output = SCANS / 'scan_A_results.csv'
+    output = born_form_diagnosis.HERE / 'scan_A_results.csv'
     fields = ('param', 'value', 'pressure_cost', 'bottinger_cost', 'matin_cost', 'cost', 'status')
-    base = born_form_diagnosis.MAPPINGS['11']
+    form = os.environ['SCAN_FORM']
+    base = born_form_diagnosis.MAPPINGS[form]
     values = born_form_diagnosis.values(base)
     parameters = {
         'component/water/solvation_factor': ('water', (1.0, 1.25, 1.5, 1.75, 2.0), 1.5),
@@ -32,7 +34,7 @@ def main():
             raise SystemExit(f'scan stopped: changed() did not accept {identity}; returned {probe!r}')
         print(f'parameter_id[{label}]={identity}', flush=True)
 
-    scans = [(identity, parameters[identity][0], parameters[identity][1]) for identity in parameters]
+    scans = [(identity, label, (float(os.environ['SCAN_VALUE']),)) for identity, (label, _, _) in parameters.items() if label == os.environ['SCAN_AXIS']]
     results = {}
     with output.open('w', newline='') as stream:
         writer = csv.DictWriter(stream, fieldnames=fields)
@@ -49,7 +51,7 @@ def main():
                     row = {'param': identity, 'value': value_text}
                     try:
                         mapping = born_form_diagnosis.changed(base, {identity: value})
-                        result = born_form_diagnosis.evaluate(name, mapping, '11')
+                        result = born_form_diagnosis.evaluate(name, mapping, form)
                         row.update({key: result[key] for key in fields[2:6]})
                         row['status'] = 'complete'
                     except Exception as error:
@@ -60,20 +62,6 @@ def main():
                 writer.writerow(row)
                 stream.flush()
 
-    baseline = results[(1.5, 1.0)]
-    expected = {'cost': 47.6258, 'pressure_cost': 10.065, 'bottinger_cost': 5.481, 'matin_cost': 32.080}
-    if baseline['status'] != 'complete':
-        print(f'baseline_sanity=UNAVAILABLE ({baseline["status"]})', flush=True)
-    else:
-        mismatches = {
-            key: (baseline[key], target)
-            for key, target in expected.items()
-            if abs(float(baseline[key]) - target) > 0.001
-        }
-        if mismatches:
-            print(f'baseline_sanity=MISMATCH {mismatches}', flush=True)
-        else:
-            print(f'baseline_sanity=match { {key: baseline[key] for key in expected} }', flush=True)
     print(f'wall_time_s={time.perf_counter() - started:.3f}', flush=True)
 
 
