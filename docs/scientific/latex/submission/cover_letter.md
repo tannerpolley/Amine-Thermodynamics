@@ -26,11 +26,10 @@ original Born term calibrate comparably after refitting, with costs of 31.7–34
 of inherited Born inputs, and which has the lower cost changes both when titration bicarbonate
 data enter the fit and with those inputs. Including a Born term matters far more than its form:
 removing it triples the fitted cost, to 98.79, and two interactions of protonated MEA, with
-carbamate and with water, carry the fit. The results give practical guidance for modelers:
-electrolyte-term comparisons must state which speciation data are fitted; pressure and
-speciation data alone do not distinguish the two Born forms, so the choice between them should
-rest on independent solvation or activity data; and data at or below 60 °C do not set the
-high-temperature response, which must come from independent temperature data.
+carbamate and with water, dominate the tested ablations. For this model, the results support
+reporting the fitted speciation data explicitly. The Born-form ranking changes across the tested
+datasets and inputs, so independent solvation or activity data could guide that choice.
+Independent temperature-sensitive data could constrain the high-temperature response.
 
 The manuscript states its scope in one place: the model is a phase- and speciation-equilibrium
 description of 30 wt% MEA at 40–80 °C, and density, heat capacity and transfer to other amine

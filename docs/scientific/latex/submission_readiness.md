@@ -29,8 +29,26 @@ certify this version.
 ## Owner-only steps
 
 - Generative-AI declaration confirmed by the author on 2026-10-01 (names OpenAI Codex and Claude).
-- Make `tannerpolley/Amine-Thermodynamics` public before submitting. The data-availability
-  statement cites it and the `manuscript-v1` tag.
+- Approve the corrected manuscript (final review of 2026-10-01) and, separately, the R2 test
+  result that fills `[[R2_TEST]]`.
+- Authorize the merges that put every cited result in the public release, or give immutable
+  public links to their owning repositories:
+  - the promoted `temperature-reanchor-140`, `sensitivity-current` and
+    `density-current-record-123` result directories, absent from this branch;
+  - the 165-entry source inventory input from commit `a349f1a` that generates Table S4; this
+    branch holds an older 17-row file;
+  - the historical heat-capacity rows: `MEA-Absorption-Column` commit `ccedbd2`,
+    `analyses/physical_acceptance_149/results/physical-checks.csv`, rows 6–8.
+- Provide a public download location for the `epcsaft` wheel `28181e72…` named in the manuscript, or
+  state its access restriction; the only wheel tracked on this branch is `40fba7cf…`.
+- Create the annotated `manuscript-v1` tag at the release commit, record `release_commit` in
+  `submission_metadata.yml`, and make `tannerpolley/Amine-Thermodynamics` public when the
+  preprint is posted. The data-availability statement promises the materials at that tag at
+  posting.
+- Post to ChemRxiv and complete its attestations.
+- For Fluid Phase Equilibria, report any AI contribution to research methods or figure
+  generation in Methods with tool and version details, as Elsevier requests; state only actual
+  use.
 - Check the current Fluid Phase Equilibria Guide for Authors for required fields (graphical
   abstract, suggested reviewers, file types). The design inspection received HTTP 403, so these
   requirements were not verified.
