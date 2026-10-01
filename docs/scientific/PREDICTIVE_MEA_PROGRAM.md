@@ -26,12 +26,13 @@ model selection and replay it through one immutable installed Engine wheel.
 Only a candidate that meets preregistered numerical and independent-comparison
 criteria may support predictive manuscript claims or column-side transfer.
 
-Direct analysis and validation whose calculation is performed by ePC-SAFT is
-first built and debugged in `ePC-SAFT-project/analysis/` or `validation/`.
-Amine-Thermodynamics may then reproduce the pinned method directly with an
-accepted immutable packet and MEA-owned inputs. Engine Issue #80 owns the
-current upstream bundle campaign; MEA Issues #83–#86 describe separate local
-diagnostic work. Neither campaign has established an active MEA parameter set.
+The Engine source repository is
+`/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT`. MEA requests generic
+calculation methods through Engine issues, then may reproduce an accepted
+pinned method with an immutable packet and MEA-owned inputs. Engine Issue #80
+owns the current upstream bundle campaign; MEA Issues #83–#86 describe separate
+local diagnostic work. Neither campaign has established an active MEA
+parameter set.
 
 The endpoint is not the lowest available sum of squared residuals. It is a
 retained model-form decision and parameter record with an explicit domain,
