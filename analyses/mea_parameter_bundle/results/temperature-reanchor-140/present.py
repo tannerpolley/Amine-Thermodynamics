@@ -6,7 +6,8 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+matplotlib.rcParams["svg.hashsalt"] = "temperature-reanchor-140"
+import matplotlib.pyplot as plt  # noqa: E402 — select the noninteractive backend first
 
 HERE = Path(__file__).resolve().parent
 rows = [
@@ -66,4 +67,8 @@ for ax, group, title in zip(
     ax.grid(alpha=0.2)
     ax.legend(fontsize=8)
 fig.savefig(HERE / "pressure-80C.svg", metadata={"Date": None})
+fig.savefig(
+    HERE.parents[1] / "results/runs/temperature-reanchor-140/pressure-80C-preview.png",
+    dpi=140,
+)
 plt.close(fig)
