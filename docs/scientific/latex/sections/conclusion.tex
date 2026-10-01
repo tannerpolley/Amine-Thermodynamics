@@ -2,13 +2,13 @@
 % P:conclusion-01
 Electrolyte PC-SAFT with Debye--H\"uckel and Born contributions and explicit carbamate chemistry describes \COtwo partial pressure and liquid speciation in 30 wt\% aqueous \MEA with one set of liquid-phase parameters.
 Fitted simultaneously to 48 \COtwo pressures at 40 and \SI{60}{\degreeCelsius} and 94 species measurements at 20--\SI{60}{\degreeCelsius}, the nine-species model reaches AARDs of 13.53 and 8.28\,\%.
-Outside the fit, it gives 20.27\,\% on the 21 assessment rows at \SI{80}{\degreeCelsius}, and 24.51 and 25.45\,\% on 11 and 12 Wagner rows near 353 and \SI{392}{\kelvin} that were used at no earlier stage.
+Outside the fit, it gives 20.27\,\% on the 21 measured pressures at \SI{80}{\degreeCelsius}, and 24.51 and 25.45\,\% on 11 and 12 Wagner rows near 353 and \SI{392}{\kelvin} that were used at no earlier stage.
 This extends the ePC-SAFT treatment of reactive MDEA to a carbamate-forming primary amine.
 
 % P:conclusion-02
-Born-term removal substantially worsens the bounded refits examined here.
-Refitting without the term raises the cost from 32.99 to 98.79 and the fitted-pressure AARD to 53.90\,\%, and the five binary interaction parameters cannot recover the loss within their bounds.
-Two interactions of protonated \MEA dominate the tested ablations: fixing the \MEAH--\MEACOO or the \MEAH--water coefficient at zero raises the cost by 134.32 or 75.87, whereas the \MEAH--water temperature slope adds only 0.38 on 20--\SI{60}{\degreeCelsius} data.
+Within the fitting bounds, the model requires a Born contribution.
+Refitted without it, the fitted-pressure AARD rises from 13.53 to 53.90\,\% and the cost from 32.99 to 98.79, and the five binary interaction parameters cannot recover the loss within their bounds.
+Two interactions of protonated \MEA dominate the tested ablations: fixing the \MEAH--\MEACOO or the \MEAH--water coefficient at zero raises the fitted-pressure AARD to 85.05 or 26.45\,\%, whereas removing the \MEAH--water temperature slope gives 14.29\,\% on 20--\SI{60}{\degreeCelsius} data.
 Including a Born contribution matters far more than which form is used.
 Refitted at three sets of fixed Born inputs, the SSM+DS and original Born formulations calibrate comparably, with costs of 31.72--34.58, fitted-pressure AARDs of 13.53--17.31\,\% and fitted-species AARDs of 7.98--8.28\,\%, and their differences at matched inputs, 0.26--1.59, are small against the rise to 98.79 without the term.
 Which form has the lower cost depends both on the fitted observations and on the fixed Born inputs.
@@ -23,5 +23,5 @@ Third, data at or below \SI{60}{\degreeCelsius} do not set the high-temperature 
 
 % P:conclusion-04
 The fitted parameter set applies to \COtwo partial pressure and speciation in 30 wt\% \MEA at 40--\SI{80}{\degreeCelsius}.
-Transfer to 15 and 45 wt\% \MEA, liquid density and heat capacity remain outside its supported scope (\cref{sec:results-limits}), and the \HCOthree--water coefficient lies at its bound.
+It is calibrated for 30 wt\% \MEA and gives AARDs of 75.95 and 46.15\,\% when applied unchanged at 15 and 45 wt\% \MEA (\cref{sec:results-limits}); liquid density and heat capacity are not yet qualified, and the \HCOthree--water coefficient lies at its bound.
 Qualifying density and heat capacity, and adding heat-of-absorption data to the fit, are the next steps toward absorber and stripper calculations.
