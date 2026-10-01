@@ -11,11 +11,16 @@ the deferred folds. This document is the immutable local preregistration
 snapshot. Base: `cc508d1`, branch `work/140-temperature-reanchor`.
 
 **No source or loaded-solution fit has run for Stage 2.** An independent
-readiness review precedes both kinds of fit. The source evidence leaves the
-admission decisions below unresolved; the proposed diagnostic estimation does
-not override the issue's instruction to stop on unresolved activity convention
-or source uncertainty. A Ready review and resolution of required admission
-decisions precede execution. A complete numerical miss remains evidence; an
+readiness review precedes execution. The parent explicitly decided to proceed
+with source-only diagnostic fits and conditional loaded-solution refits using
+residual-based covariance, within the owner's independent-constants-next
+authorization. This is a parent decision deviating from issue 140's
+stop-on-source-uncertainty-gap rule. The stage is labelled **diagnostic:
+source measurement uncertainty unavailable**. Chemical consistency under
+issue 140 is **UNRESOLVED**, never passed; no agreement of K(T) or reaction
+enthalpy within literature uncertainty is claimed. All selection, freeze and
+single-evaluation rules remain unchanged. A Ready review precedes loaded
+refits. A complete numerical miss remains evidence; an
 unavailable quantity or unfinished solve does not establish model failure.
 
 Done means source coefficients, covariance with its statistical assumptions,
@@ -110,15 +115,14 @@ If a literal infinite-dilution mole-fraction constant were supplied instead,
 Δν_s=+1 gives K5_m=K5_x/(M_water m°), adding 4.016534992299479 to ln K.
 Those are different source interpretations, not interchangeable fits.
 
-Kim §2.2 defines pKa as measured pH at half equivalence using calibrated
-buffers; §3.1 assumes the 0.01 mol/kg constants equal infinite dilution from
-an MDEA comparison, without a MEA-specific extrapolation. Its general Eq. 4
-and notation define gamma_i x_i with x_i a mole fraction, but do not supply
-the numerical pH-to-reference transformation for Table 7. Table 7 comparison
-with Bates and Böttinger's explicitly molal Table 5 supports the operational
-molal interpretation; that is an inference, not an explicit Kim declaration.
-Readiness must establish that inference or return the admission choice to the
-owner. No fitted pressure may be used to choose the interpretation.
+Kim §2.2 defines pKa as measured pH at half equivalence using NBS-traceable
+buffers. The [IUPAC pH definition](https://goldbook.iupac.org/terms/view/P04524)
+is −log10[m_H gamma_H^m/m°], m°=1 mol/kg. Together these support direct
+operational molal mapping rather than a literal mole-fraction correction
+from Kim's general Eq. 4 notation. Kim §3.1 assumes the 0.01 mol/kg
+constants equal infinite dilution from an MDEA comparison, without a
+MEA-specific extrapolation. This is the source's approximation, not newly
+verified MEA activity behavior. No fitted pressure chooses the interpretation.
 
 ## Source-only coefficient estimation and uncertainty
 
@@ -149,10 +153,19 @@ correlation. Propagated fitted enthalpy variance is R² Var(B).
 Eq. 14 gives coefficient standard errors 0.272 and 85 K, without their
 covariance. Table 2's maximum-deviation concentration uncertainties and summed
 relative Kc errors cannot be reassigned to Table 3 as independent standard
-deviations. The proposed residual-only covariance is a diagnostic statistical
-estimate, not measured uncertainty. The issue explicitly stops on a source
-uncertainty gap: owner acceptance of this bounded diagnostic use is required
-if that gap remains after review.
+deviations. The residual-only covariance is a diagnostic statistical estimate,
+not measured uncertainty. The parent decision above explicitly permits this
+bounded diagnostic use despite the issue's source-uncertainty stop rule.
+
+The parent also requests an empirical check using the 48 finite-I rows where
+they support it. Report the three-alpha spread of Kc within each of 16
+T/added-salt groups, and compare it with each reported zero-I Table 3 value.
+Total ionic strength is not tabulated, the species columns are method-derived,
+and some printed headers/entries are inconsistent. Do not substitute added
+salt for total I or claim a reproduced zero-I extrapolation from insufficient
+information. If actual total I cannot be established from these records,
+report that limitation and retain the finite-I scatter as a separate check;
+it supplies no missing Table 3 measurement covariance.
 
 Kim reports ±0.02 pH, ±0.1 K and ±2.5% heat uncertainty, without a coverage
 factor or covariance. Keep 0.02 ln(10) as a stated ln K uncertainty scale,
@@ -202,11 +215,13 @@ Folds are skipped by owner decision; simplicity selects the comparison record
 and does not establish optimal model selection. Export, reload, low-T rescore,
 hash and **locally commit** the freeze before any ≥80 °C calculation.
 
-Run the same six ordered assessment groups once for frozen records: canonical
-80 °C pressure (21 primary /19 diagnostic rows), all admitted 80 °C species,
-finite-dose heat outside the objective, canonical 100–120 °C pressure (57),
-15/45 wt% transfer, and never-accessed Wagner near-353 K (11) /near-392 K (12).
-Reuse already retained adopted-record comparisons, not new adopted solves.
+Run the existing ordered candidate assessments once: 1 canonical 80 °C
+pressure (21 primary /19 diagnostic rows), 2 all admitted 80 °C species,
+3 never-accessed Wagner near-353 K (11), 4 canonical 100–120 °C pressure (57)
+and Wagner near-392 K (12), 5 the 15/45 wt% transfer sets. Assess finite-dose
+heat outside the objective separately, within the existing six-assessment-job
+cap. The old sixth group's adopted-Wagner baseline is already computed;
+reuse it, along with adopted heat/other comparisons, without new adopted solves.
 Retain AARD, RMS ln and mean ln, source/temperature groups, numerical residuals,
 balance evidence, row predictions and failures; no available-row-only metric
 when required rows fail. Heat retains per-isotherm RMSE and bias, run/source
@@ -228,12 +243,13 @@ silently. No generic method, additional dependency or test suite is proposed.
 
 1. Unresolved source-basis mapping, unavailable uncertainty required for the
    chosen claim, or rank-deficient source estimation blocks admission.
-2. Source fit disagreement with selected Kim ln K beyond its declared pH
-   scale plus rounding, or implied R5 dissociation heat inconsistent with
-   selected positive Kim magnitudes ±2.5%, falsifies chemical consistency
-   at that stated scale. Unknown correlation/coverage prevents a probabilistic
-   validation claim. Aroua residuals/covariance are reported; no invented
-   measurement-normalized pass is supplied for Table 3.
+2. Report source residuals relative to Kim's stated pH scale/rounding and
+   fitted R5 enthalpy differences from selected Kim heat magnitudes ±2.5%.
+   These are descriptive comparisons. The chemical-consistency condition
+   remains **UNRESOLVED** under the parent decision: unknown source covariance,
+   systematic uncertainty and coverage prevent an uncertainty-based pass.
+   Aroua residuals/covariance are reported; no invented measurement-normalized
+   pass is supplied for Table 3.
 3. If fixed independent chemistry cannot preserve the loaded-solution family
    costs within the existing 10% diagnostic allowance, report the conflict
    rather than changing K to match loaded-solution observations.
