@@ -406,7 +406,7 @@ def check():
     print("Analytic metric and simplicity/incomplete-branch selection checks passed.")
 
 
-def heat_comparison(pa, freeze, deadline):
+def heat_comparison(pa, freeze, deadline, adopted_baseline=None):
     """Prespecified outside-objective two-endpoint comparison; never an estimation target."""
     import evaluate_direct_absorption_heat as heat
 
@@ -448,9 +448,9 @@ def heat_comparison(pa, freeze, deadline):
         return request
 
     heat.heat_request = heat_request
-    records = freeze["records"] + [
+    records = freeze["records"] + ([] if adopted_baseline is not None else [
         {"role": "adopted", "record": str(pa.ADOPTED), "sha256": digest(pa.ADOPTED)}
-    ]
+    ])
     comparisons, diagnostics, summaries = [], [], {}
     for record in records:
         path = HERE / record["record"]
@@ -587,6 +587,15 @@ def heat_comparison(pa, freeze, deadline):
     s._engine_reaction_records = original_builder
     heat.evaluate_state = original_evaluate
     heat.heat_request = original_request
+    if adopted_baseline is not None:
+        baseline = json.loads((adopted_baseline / "heat-comparison.json").read_text())
+        assert baseline["thermal_records_sha256"] == s.sha256(heat.vrc.PHYSICAL_CALORICS)
+        summaries["adopted"] = baseline["metrics"]["adopted"]
+        diagnostics.extend(c for c in baseline["checks"] if c["record_role"] == "adopted")
+        comparisons.extend(
+            r for r in csv.DictReader((adopted_baseline / "heat-comparison.csv").open())
+            if r["record_role"] == "adopted"
+        )
     table(HERE / "heat-comparison.csv", comparisons)
     save(
         HERE / "heat-comparison.json",
@@ -596,6 +605,8 @@ def heat_comparison(pa, freeze, deadline):
             "thermal_records_sha256": s.sha256(heat.vrc.PHYSICAL_CALORICS),
             "freeze_sha256": digest(HERE / "freeze.json"),
             "conditions": "Existing two-endpoint method, positive release kJ/mol CO2; zero vapor inventory; ideal-gas CO2 feed; comparison only, no uncertainty-based caloric pass.",
+            "adopted_baseline_sha256": digest(adopted_baseline / "heat-comparison.json")
+            if adopted_baseline is not None else None,
         },
     )
 
