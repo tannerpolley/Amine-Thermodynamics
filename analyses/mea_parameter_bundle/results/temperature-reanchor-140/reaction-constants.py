@@ -1,6 +1,5 @@
 """Issue 140 diagnostic source constants and reuse of its frozen loaded-fit method."""
 
-import csv
 import importlib.util
 import json
 import math
@@ -172,6 +171,7 @@ if __name__ == "__main__":
     elif args == ["select"]:
         assessment.select()
     elif args[0] == "stage":
+        assert int(args[1]) in range(1, 6), "adopted baseline is reused, not recalculated"
         assessment.stage(int(args[1]))
     elif args == ["heat"]:
         freeze = json.loads((OUT / "freeze.json").read_text())

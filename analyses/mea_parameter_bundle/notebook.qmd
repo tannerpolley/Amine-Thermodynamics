@@ -65,6 +65,38 @@ Selected byte SHA-256: `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade
 The official fit uses **142 targets: 48 pressure + 94 species (40 Böttinger + 54 Matin)**. Matin's 18 HCO₃⁻ + CO₃²⁻ pool targets are report-only; its 21 °C measurement/packet 20 °C convention is retained. The full historical 160-target re-score is reported separately. This is numerical verification and bounded calibration/assessment evidence, not independent physical validation. Rendering reads retained results and never reruns the model. The [canonical loading correction](#canonical-loading-correction) supersedes the earlier canonical and concentration-transfer scores for the two 142-target records. Its new evidence awaits independent delivered review and manuscript-use confirmation.
 :::
 
+# Independent chemical temperature estimates {#reaction-constants-140}
+
+**The four-temperature source-only fits imply R4 hydrolysis enthalpy +13.179 kJ/mol and R5 dissociation enthalpy +50.555 kJ/mol. The R5 estimate corresponds to protonation enthalpy −50.555 kJ/mol, compared with Kim's measured heat-release magnitudes 49.0, 49.1 and 48.9 kJ/mol at 298.15, 313.15 and 333.15 K.** This stage is **diagnostic: source measurement uncertainty unavailable**. Chemical consistency under issue 140 remains **UNRESOLVED**; the comparison does not establish agreement within literature uncertainty.
+
+The [Stage 2 preregistration](results/temperature-reanchor-140/stage-2-preregistration.md) was committed before fitting. The parent explicitly allowed residual-based covariance despite issue 140's source-uncertainty stop, while retaining its low-temperature selection, committed freeze and single-evaluation rules. Independent GPT-6 Astra readiness review returned **Ready** for this bounded diagnostic use at `2814df5`. The [input snapshot](results/temperature-reanchor-140/stage-2-inputs.json) retains exact rows from extraction commit `1e92af1` and matching live Zotero PDF hashes; no loaded-solution observation entered these chemical fits.
+
+Aroua 1999 reaction (i) and Eqs. 1–2, p. 888, describe MEA + HCO₃⁻ ⇌ MEACOO⁻ + H₂O, exactly the reverse of R4. With 1 mol/L concentration and 1 mol/kg molality standards, the admitted infinite-dilution interpretation gives **K₄ᵐ=1/(ρw m° K₁,dim)**, where K₁,dim is in L/mol and ρw is in kg/L. No R2/R3/R5 combination is required. Water activity remains in the finite-solution R4 quotient; its unit limiting value belongs to the source's assumed infinite-dilution interpretation and is not guaranteed merely by zero ionic strength at finite neutral MEA concentration. The conversion reuses the Wagner–Pruss saturated-liquid water density correlation as a declared reference-density approximation, not an exact ambient-pressure conversion.
+
+Kim 2011 §2.2, pp. 1755–1756, reports NBS-calibrated pH at half equivalence. The [IUPAC molal pH definition](https://goldbook.iupac.org/terms/view/P04524) supports **ln K₅ᵐ=ln Ka,Kim**, without a mole-fraction offset or a factor of 55.51. The hydrated proton represents H₃O⁺−H₂O in the model reference; water activity remains in the finite-solution quotient. Kim §3.1, p. 1757, assumes dilute 0.01 mol/kg MEA constants equal infinite dilution based on an MDEA comparison, without independently verifying that approximation for MEA.
+
+Both source fits use **ln K=A+B/T**, T in kelvin, with no C ln T or D T term. R4 uses Table 3 at 298/308/318/328 K, after density conversion; R5 uses only Kim Table 7 This work Exp at 298.15/313.15/323.15/333.15 K. Each centered linear least-squares fit has rank two and two residual degrees of freedom. The [coefficients and covariance](results/temperature-reanchor-140/stage-2/source-fit.json) and [source residuals](results/temperature-reanchor-140/stage-2/source-residuals.csv) retain all numerical values.
+
+| Reaction | A | B / K | RMS ln K residual | Maximum absolute ln K residual | ΔH° / (kJ/mol) | Residual-based standard error of ΔH° / (kJ/mol) |
+|---|---:|---:|---:|---:|---:|---:|
+| R4 hydrolysis | 2.282869879 | −1585.057202 | 0.0321833 | 0.0445803 | +13.1789 | 1.65385 |
+| R5 dissociation | −1.443016604 | −6080.400894 | 0.0150079 | 0.0199123 | +50.5553 | 0.67618 |
+
+For coefficient order (A,B), the residual-based covariance matrices are
+
+\[
+\operatorname{Cov}_4=\begin{pmatrix}0.40541430&-126.57075\\-126.57075&39566.05474\end{pmatrix},\qquad
+\operatorname{Cov}_5=\begin{pmatrix}0.06619252&-20.90547\\-20.90547&6613.79015\end{pmatrix}.
+\]
+
+Their diagonal units are dimensionless² and K²; off-diagonal entries have units K. The (A,B) coefficient correlations are −0.99936 and −0.99915; the centered (ln K(313.15 K),B) covariance is retained separately to avoid interpreting coordinate correlation as missing source-fit rank. Covariance assumes independent equal-variance residuals and uses their fitted variance; it does not estimate unreported systematic error or campaign correlation. The fitted reaction enthalpy is −RB. These few scalar coefficients and exact covariance values are shown in tables and equations because a plot would not further resolve their statistical meaning.
+
+The fitted R5 heat-release magnitude exceeds the three low-temperature measurements by **1.5553, 1.4553 and 1.6553 kJ/mol**, respectively. Kim reports ±2.5% experimental heat uncertainty, giving stated scales 1.2250, 1.2275 and 1.2225 kJ/mol, without a coverage factor or measurement covariance. The [enthalpy comparison](results/temperature-reanchor-140/stage-2/protonation-enthalpy-comparison.csv) keeps those source scales separate from the residual-based fitted standard error. No uncertainty-qualified chemical pass is claimed. Kim's finite-concentration calorimetry is assumed infinite dilution in its §3.1; it measures protonation, not R4 hydrolysis.
+
+The [finite-ionic-strength check](results/temperature-reanchor-140/stage-2/finite-I-loading-scatter.csv) reports all 16 temperature/added-salt groups of Aroua Table 2. Across each group's three loadings, Kc ranges span **0.85–3.55 L/mol**. Those loadings are not replicate measurements, and their total ionic strengths differ. Reliable total ionic strengths are not tabulated; the method-derived species table has inconsistent printed fields. The rows therefore do not support reproducing scatter of the four zero-I constants. This finite-I loading spread supplies no missing Table 3 measurement covariance.
+
+The [native coefficient checks](results/temperature-reanchor-140/stage-2/native-coefficient-checks.csv) verify the source-to-native coefficient algebra at all eight source temperatures within the existing 5×10⁻¹³ ln K tolerance. R5 maps to the existing pKa-polynomial input using a=−B/ln(10), b=−A/ln(10), c=0. R2 stays at its source correlation and R1/R3 remain unchanged. Source correlation and coefficient algebra are numerical estimation and verification; neither establishes physical validation. Loaded-solution assessment and independent delivered review are pending at this point.
+
 # Source-constant temperature control {#temperature-reanchor-140}
 
 **The source-constant control preserves low-temperature family costs but fails the 80 °C no-loss pressure condition: primary AARD 29.333590% versus 20.270257%. Both frozen records also underpredict the never-accessed Wagner pressures.** The [preregistration](results/temperature-reanchor-140/preregistration.md) froze the owner-directed [issue 140](https://github.com/tannerpolley/Amine-Thermodynamics/issues/140) control before readiness review and fitting. Its inputs preserve 48 pressure targets at 40/60 °C and 94 species targets at 20–60 °C, the existing diagnostic scales and the Matin measured-21 °C/packet-20 °C convention.
