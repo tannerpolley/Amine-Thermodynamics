@@ -1,0 +1,178 @@
+{
+  "preregistration_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/141#issuecomment-5927291060",
+  "preregistration_commit": "0e7fa72e07a67a5e614ec3bfa094497106641744",
+  "inherited_inputs": "../inputs.json",
+  "inherited_inputs_sha256": "7820e8f05a8d83841d6e1fae85a86fc27ad8b60c15e1e84bb2966c8cca45f131",
+  "frozen_targets": "../frozen-targets.json",
+  "frozen_targets_sha256": "63809cb6f8d7fe5cca2665f33801997d32cf0b65364d6e6d6bc367ecf9597193",
+  "wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2",
+  "script_hashes": {
+    "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-141-sensitivity/analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py": "c5a217bea95765e03de8949cd0ad7fcfecfcc304ab5a3a643c8337fd3b32a10d",
+    "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-141-sensitivity/analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-fit.py": "b185c99104ae2e8b2e7cd9391705cdcb298a1c03cfc4f247667320244791bd21"
+  },
+  "cases": [
+    {
+      "input": "diameters-0.8",
+      "model_form": "Original Born",
+      "form": "00",
+      "mapping": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/diameters-0.8-00-input-parameters.json",
+      "mapping_sha256": "4ad026a1e61ccbe03ff07e81059f4abad1b676de97db6f8f5ea3b4bbd98e2b47",
+      "changes": {
+        "component/protonated-monoethanolamine/born_diameter": 2.8265834171680004,
+        "component/carbamate-anion/born_diameter": 2.832856246576,
+        "component/bicarbonate-anion/born_diameter": 2.4000000000000004
+      },
+      "starts": {
+        "00": {
+          "pair/carbamate-anion/water/k_ij": -0.05009622525689636,
+          "pair/protonated-monoethanolamine/water/k_ij": 0.11717335470882706,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -119.03707287298563
+        },
+        "11": {
+          "pair/carbamate-anion/water/k_ij": 0.12982492242111807,
+          "pair/protonated-monoethanolamine/water/k_ij": -0.37931089293768305,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.7167720275459181,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -148.5346444297559
+        }
+      }
+    },
+    {
+      "input": "eps-mea-24",
+      "model_form": "Original Born",
+      "form": "00",
+      "mapping": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/eps-mea-24-00-input-parameters.json",
+      "mapping_sha256": "be146813c666a3287d179eefcca72e392c9031d6f2333a8b06df4bc7bb11d122",
+      "changes": {
+        "component/monoethanolamine/relative_permittivity": 24.0
+      },
+      "starts": {
+        "00": {
+          "pair/carbamate-anion/water/k_ij": -0.05009622525689636,
+          "pair/protonated-monoethanolamine/water/k_ij": 0.11717335470882706,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -119.03707287298563
+        },
+        "11": {
+          "pair/carbamate-anion/water/k_ij": 0.12982492242111807,
+          "pair/protonated-monoethanolamine/water/k_ij": -0.37931089293768305,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.7167720275459181,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -148.5346444297559
+        }
+      }
+    },
+    {
+      "input": "diameters-0.8",
+      "model_form": "SSM+DS",
+      "form": "11",
+      "mapping": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/diameters-0.8-11-input-parameters.json",
+      "mapping_sha256": "4740d09f9978db3a3028c2492990335e92e7e895a442ef23d1b0fe53486ab342",
+      "changes": {
+        "component/protonated-monoethanolamine/born_diameter": 2.8265834171680004,
+        "component/carbamate-anion/born_diameter": 2.832856246576,
+        "component/bicarbonate-anion/born_diameter": 2.4000000000000004
+      },
+      "starts": {
+        "00": {
+          "pair/carbamate-anion/water/k_ij": -0.05009622525689636,
+          "pair/protonated-monoethanolamine/water/k_ij": 0.11717335470882706,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -119.03707287298563
+        },
+        "11": {
+          "pair/carbamate-anion/water/k_ij": 0.12982492242111807,
+          "pair/protonated-monoethanolamine/water/k_ij": -0.37931089293768305,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.7167720275459181,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -148.5346444297559
+        }
+      }
+    },
+    {
+      "input": "eps-mea-24",
+      "model_form": "SSM+DS",
+      "form": "11",
+      "mapping": "analyses/mea_parameter_bundle/model-d/sensitivity-current/ranking-refit/eps-mea-24-11-input-parameters.json",
+      "mapping_sha256": "1ebc8c87504b3beea161bd6f093d303a1efc01962b837b82adbb9101e3cba609",
+      "changes": {
+        "component/monoethanolamine/relative_permittivity": 24.0
+      },
+      "starts": {
+        "00": {
+          "pair/carbamate-anion/water/k_ij": -0.05009622525689636,
+          "pair/protonated-monoethanolamine/water/k_ij": 0.11717335470882706,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -119.03707287298563
+        },
+        "11": {
+          "pair/carbamate-anion/water/k_ij": 0.12982492242111807,
+          "pair/protonated-monoethanolamine/water/k_ij": -0.37931089293768305,
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.7167720275459181,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -148.5346444297559
+        }
+      }
+    }
+  ],
+  "fit_anchor_form": "11",
+  "native_form_argument": "start record only; actual model_form comes from SENSITIVITY_MAPPING",
+  "followup_executable_added_lines": 3,
+  "conservative_total_added_lines": 77,
+  "allowed_total_added_lines": 80,
+  "design_review": {
+    "task": "/root/ranking_readiness_sol",
+    "model": "GPT-6.1 Sol",
+    "effort": "high",
+    "verdict": "Ready",
+    "required_corrections": []
+  },
+  "current_source_checks": [
+    {
+      "citation_key": "Bottinger2008",
+      "local_file": "Bottinger2008--2VVGB8Z2.md",
+      "zotero_parent_key": "E322TKPZ",
+      "zotero_attachment_key": "2VVGB8Z2",
+      "document_role": "paper",
+      "reading_copy_sha256": "b9643df4c5606e79136dff0ddff9db5adbcd4481a2ebb2f06dc15b19cb3f074d",
+      "current_source_sha256": "b9643df4c5606e79136dff0ddff9db5adbcd4481a2ebb2f06dc15b19cb3f074d",
+      "source_path": "/home/tnnrpolley21/Zotero/storage/2VVGB8Z2/B\u00f6ttinger et al. - 2008 - Online NMR spectroscopic study of species distribution in MEA-H2O-CO2 and DEA-H2O-CO2.mmd"
+    },
+    {
+      "citation_key": "Figiel2025",
+      "local_file": "Figiel2025--2M74BKJG.md",
+      "zotero_parent_key": "YEENX35P",
+      "zotero_attachment_key": "2M74BKJG",
+      "document_role": "paper",
+      "reading_copy_sha256": "ce80533925a91bc59d8d0d8056113c40611ca26c2edf04aced76986d50bd4bae",
+      "current_source_sha256": "ce80533925a91bc59d8d0d8056113c40611ca26c2edf04aced76986d50bd4bae",
+      "source_path": "/home/tnnrpolley21/Zotero/storage/2M74BKJG/Figiel, Yu, Held - 2025 - Predicting Thermodynamic Properties of Ions in Single Solvents and in Mixe.md"
+    },
+    {
+      "citation_key": "Figiel2025",
+      "local_file": "Figiel2025--D5NILP7Y.md",
+      "zotero_parent_key": "YEENX35P",
+      "zotero_attachment_key": "D5NILP7Y",
+      "document_role": "supplement",
+      "reading_copy_sha256": "85bd39f727158d5a9d6eea6828c1673f73850e783a655b09660cc9b66d84321a",
+      "current_source_sha256": "85bd39f727158d5a9d6eea6828c1673f73850e783a655b09660cc9b66d84321a",
+      "source_path": "/home/tnnrpolley21/Zotero/storage/D5NILP7Y/Supporting information Predicting thermodynamic properties of ions in single solvents and in mixed solvents using a modified Born term within the ePC-SAFT framework.mmd"
+    },
+    {
+      "citation_key": "matinFacileMethodDetermination2012",
+      "local_file": "matinFacileMethodDetermination2012--6UD2LJ7G.md",
+      "zotero_parent_key": "X5FACKMR",
+      "zotero_attachment_key": "6UD2LJ7G",
+      "document_role": "main paper",
+      "reading_copy_sha256": "3c4e0c1b0f2eca3a9603c6556002c0a3c9b1d7d2af63913b02d6e6925be355ce",
+      "current_source_sha256": "6d0837e1da55f0c06949c1e001961b452eeef744d2520db605b27455e16d9fbb",
+      "source_path": "/home/tnnrpolley21/Zotero/storage/6UD2LJ7G/Matin et al. - 2012 - Facile Method for Determination of Amine Speciation in CO2 Capture Solutions.pdf"
+    }
+  ],
+  "code_accounting_note": "Three runtime binding replacements relative to 83ab62b; conservatively 77 cumulative added executable lines including the prior 74. Final fixed-base diff accounting remains 74 because these replace previously added lines. One .gitignore output exclusion is non-executable configuration."
+}

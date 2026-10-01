@@ -6,6 +6,7 @@ import csv
 import hashlib
 import json
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -28,8 +29,8 @@ IDS = list(design.S1)
 LOWER, UPPER = (np.array(x) for x in zip(*design.S1.values()))
 SCALES = np.array([10.0 if i.endswith(design.probe.SLOPE) else 0.01 for i in IDS])
 FILES = {
-    '11': MODEL / '1-1-S1-40-80C-fit-f66d972c-parameters.json',
-    '00': MODEL / '0-0-S1-40-80C-fit-28181e72-parameters.json',
+    '11': BUNDLE / 'results/selected-current-best-parameters.json',
+    '00': HERE / 'p5conv-a-00-diagnostic-parameters.json',
 }
 PACKETS = {
     '11': MODEL / '1-1-S1-40-80C-fit-f66d972c-eval-28181e72-packet.jsonl',
@@ -37,6 +38,8 @@ PACKETS = {
 }
 MAPPINGS = {form: s.parameter_mapping(path) for form, path in FILES.items()}
 RETAINED = {form: {r['identity']: r for r in map(json.loads, path.open())} for form, path in PACKETS.items()}
+HERE = Path(os.environ['SENSITIVITY_OUTPUT'])
+HERE.mkdir(parents=True, exist_ok=True)
 OBS = [o for o in design.probe.OBSERVATIONS if any(compare.in_objective(
     {'T': o['request']['temperature']['value'], 'identity': o['identity']}, t, 80) for t in o['targets'])]
 assert len(OBS) == 84
@@ -50,7 +53,7 @@ GROUPS = {'main-diameters': [0, 1, 2], 'secondary-diameters': [3, 4, 5],
           'shell-and-MEA': [6, 7], 'saturation': [8], 'joint': [0, 1, 2, 6, 7]}
 LEDGER = HERE / 'job-times.json'
 OLD_JOBS = json.loads(LEDGER.read_text()) if LEDGER.exists() else []
-DEADLINE = STARTED + 2700.0 - sum(j.get('charged_s', j['wall_s']) for j in OLD_JOBS)
+DEADLINE = STARTED + 590.0
 ANCHORS = {}
 
 
@@ -72,7 +75,7 @@ def enough(seconds=0.):
 def values(mapping):
     return {**s.parameter_values(mapping), **{
         f'model/electrolyte/{k}': f[k] for f in mapping['model_families']
-        if f['kind'] == 'electrolyte' for k in ('c_shell', 'c_dielectric')}}
+        if f['kind'] == 'electrolyte' for k in ('c_shell', 'c_dielectric') if k in f}}
 
 
 def changed(mapping, changes):
@@ -94,21 +97,8 @@ def declared(mapping, form):
     reactions = s.reaction_values(mapping)
     assert {k: v for k, v in reactions.items() if k.startswith('reaction:R4:')} == design.probe.SOURCE_R4
     if form not in ANCHORS:
-        prefit = design.RECORDS['1-1' if form == '11' else '0-0']
-        fp = s.parameter_fingerprint(s.parameter_mapping(prefit))
-        rh = s._reaction_identity(s.reaction_values(s.parameter_mapping(prefit)))
-        candidates = {}
-        hashes = {}
-        for path in (BUNDLE / 'results/runs/calibration-misfit/cache/states').glob('*.json'):
-            rec = json.loads(path.read_text())
-            if (rec.get('model_parameters_fingerprint') != fp or rec.get('status') != 'evaluated'
-                    or rec.get('effective_reaction_values_sha256') != rh): continue
-            identity = rec['identity']
-            if identity in candidates and candidates[identity].get('engine_wheel_sha256') == s.ENGINE_WHEEL_SHA256: continue
-            candidates[identity] = rec; hashes[identity] = (str(path), s.sha256(path))
-        assert all(o['identity'] in candidates for o in OBS), 'accepted fit anchor missing'
-        ANCHORS[form] = candidates
-        save('accepted-fit-anchor-hashes-' + form + '.json', dict(hashes[o['identity']] for o in OBS))
+        ANCHORS[form] = RETAINED[form]
+        save('accepted-fit-anchor-hashes-' + form + '.json', {str(PACKETS[form]): s.sha256(PACKETS[form])})
     return [(o, s._problem_from_request(s.corrected_request(o['request'], reactions),
                                       s.anchor_from(ANCHORS[form][o['identity']]))) for o in OBS]
 
@@ -117,7 +107,9 @@ def rows_for(mapping, form):
     params = epcsaft.Parameters.from_mapping(mapping)
     groups = declared(mapping, form)
     rows = [row for o, problem in groups for row in design.refit.observations(params, o, problem, 80)]
-    assert len(rows) == 160
+    keep = {t['identity'] for o in OBS for t in o['targets'] if compare.in_working_objective(design.refit._rec(o), t)}
+    rows = [row for row in rows if row[0] in keep]
+    assert len(rows) == 142
     return params, groups, rows
 
 
@@ -127,7 +119,7 @@ def split_cost(targets, residuals):
     for name, r in zip(targets, residuals, strict=True):
         key = 'pressure_cost' if name.endswith('-pco2') else 'bottinger_cost' if name.startswith('Bottinger') else 'matin_cost'
         out[key] += .5 * float(r) ** 2; counts[key] += 1
-    assert list(counts.values()) == [48, 40, 72], counts
+    assert list(counts.values()) == [48, 40, 54], counts
     return {**out, 'cost': sum(out.values())}
 
 
@@ -138,7 +130,7 @@ def publish_evaluation(name, mapping, form, targets, residuals, duration, diagno
     save(name + '.json', result)
     path = HERE / 'objective-evaluations.csv'
     compact = {k: result[k] for k in ('name', 'form', 'complete', 'cost', 'pressure_cost', 'bottinger_cost', 'matin_cost', 'wall_s')}
-    compact.update({k: result['inputs'][k] for k in QIDS})
+    compact.update({k: result['inputs'][k] for k in QIDS if k in result['inputs']})
     with path.open('a', newline='') as h:
         w = csv.DictWriter(h, list(compact))
         if path.stat().st_size == 0: w.writeheader()
@@ -157,8 +149,8 @@ def state_evaluate(name, mapping, form='11'):
         for o, problem in groups:
             enough(1.)
             request = s.corrected_request(o['request'], s.reaction_values(mapping))
-            solved = equilibrium.solve_equilibrium(model, problem)
-            snapshot = s._snapshot_from_payload(s._snapshot_from_result(model, problem, request, solved))
+            save(name + '-attempt.json', {'state': o['identity'], 'request': request})
+            snapshot = s._solve_in_child(model, problem, 180., request)
             payload = s._jsonable(snapshot.__dict__)
             liq = next((p for p in snapshot.phases if p['role'] == 'liquid'), None)
             rec = {'identity': o['identity'], 'T': request['temperature']['value'],
@@ -176,9 +168,9 @@ def state_evaluate(name, mapping, form='11'):
             if rec['check']['max_abs_stationarity'] is None or rec['check']['max_abs_stationarity'] > 1e-10:
                 raise RuntimeError(f'{name}: stationarity unavailable/outside accepted tolerance')
             for t, (_, identity, rr, _) in zip(o['targets'], compare.residuals(rec), strict=True):
-                if compare.in_objective(rec, t, 80): targets.append(identity); residuals.append(rr)
-    assert len(residuals) == 160 and np.isfinite(residuals).all()
-    baseline_path = HERE / f'branch-baseline-{form}.json'
+                if compare.in_working_objective(rec, t): targets.append(identity); residuals.append(rr)
+    assert len(residuals) == 142 and np.isfinite(residuals).all()
+    baseline_path = Path(os.environ.get('SENSITIVITY_BASELINE', HERE / f'branch-baseline-{form}.json'))
     if baseline_path.exists() and not name.startswith('branch-baseline'):
         expected = json.loads(baseline_path.read_text())['branches']
         for identity, actual in branches.items():
@@ -277,7 +269,10 @@ if __name__ == '__main__':
     mode = sys.argv[1]
     status = 'complete'
     try:
-        if mode == 'baselines': baselines()
+        if mode == 'evaluate':
+            name, form, record = sys.argv[2:]
+            evaluate(name, s.parameter_mapping(Path(record)), form)
+        elif mode == 'baselines': baselines()
         elif mode == 'branch-check':
             for form in ('11','00'):
                 actual = state_evaluate('branch-baseline-'+form,MAPPINGS[form],form)

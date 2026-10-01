@@ -1,0 +1,51 @@
+{
+  "verdict": "input-dependent",
+  "rankings": [
+    {
+      "input": "baseline",
+      "original_born_cost": 34.58403206113704,
+      "ssm_ds_cost": 32.991897261221126,
+      "winner": "SSM+DS",
+      "ssm_minus_original_cost": -1.592134799915911,
+      "selected_fit": {
+        "00": "baseline-00",
+        "11": "baseline-11"
+      }
+    },
+    {
+      "input": "diameters-0.8",
+      "original_born_cost": 31.722527415136156,
+      "ssm_ds_cost": 31.985821513571388,
+      "winner": "Original Born",
+      "ssm_minus_original_cost": 0.26329409843523166,
+      "selected_fit": {
+        "00": "diameters-0.8-00-start-00",
+        "11": "diameters-0.8-11-start-11"
+      }
+    },
+    {
+      "input": "eps-mea-24",
+      "original_born_cost": 32.08441683312459,
+      "ssm_ds_cost": 32.896881811082096,
+      "winner": "Original Born",
+      "ssm_minus_original_cost": 0.8124649779575037,
+      "selected_fit": {
+        "00": "eps-mea-24-00-start-00",
+        "11": "eps-mea-24-11-start-11"
+      }
+    }
+  ],
+  "minimum_fitted_cost": {
+    "Original Born": {
+      "cost": 31.722527415136156,
+      "input": "diameters-0.8",
+      "fit": "diameters-0.8-00-start-00"
+    },
+    "SSM+DS": {
+      "cost": 31.985821513571388,
+      "input": "diameters-0.8",
+      "fit": "diameters-0.8-11-start-11"
+    }
+  },
+  "evidence": "bounded local calibration and numerical verification; not independent physical validation"
+}
