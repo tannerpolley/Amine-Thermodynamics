@@ -22,7 +22,8 @@
     "memory_limit_bytes": 2147483648,
     "busy_before": [],
     "wall_s": 26.182460287999675,
-    "exit_code": 0
+    "exit_code": 0,
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
   },
   {
     "argv": [
@@ -47,7 +48,8 @@
     "memory_limit_bytes": 2147483648,
     "busy_before": [],
     "wall_s": 23.85817754799973,
-    "exit_code": 0
+    "exit_code": 0,
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
   },
   {
     "argv": [
@@ -72,7 +74,8 @@
     "memory_limit_bytes": 2147483648,
     "busy_before": [],
     "wall_s": 22.56512190300009,
-    "exit_code": 0
+    "exit_code": 0,
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
   },
   {
     "argv": [
@@ -97,7 +100,8 @@
     "memory_limit_bytes": 2147483648,
     "busy_before": [],
     "wall_s": 24.90582453099978,
-    "exit_code": 0
+    "exit_code": 0,
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
   },
   {
     "argv": [
@@ -122,7 +126,8 @@
     "memory_limit_bytes": 2147483648,
     "busy_before": [],
     "wall_s": 23.391501146000337,
-    "exit_code": 0
+    "exit_code": 0,
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
   },
   {
     "argv": [
@@ -155,7 +160,8 @@
     ],
     "wall_s": 49.57857800400052,
     "exit_code": 1,
-    "scope": "checks-first candidate; C1/C2 and falsifiers pending within code budget"
+    "scope": "checks-first candidate; C1/C2 and falsifiers pending within code budget",
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
   },
   {
     "argv": [
@@ -189,7 +195,8 @@
     "wall_s": 47.91677955199975,
     "cpu_s": 47.811658,
     "exit_code": 1,
-    "scope": "completed decomposition under owner-approved 380-line ceiling"
+    "scope": "completed decomposition under owner-approved 380-line ceiling",
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
   },
   {
     "argv": [
@@ -211,7 +218,8 @@
     "wall_s": 0.9449542789998304,
     "cpu_s": 0.9339790000000001,
     "exit_code": 1,
-    "scope": "narrow diagnosis of first C2 pressure state; same anchor and tolerance, no alternate start, no grid"
+    "scope": "narrow diagnosis of first C2 pressure state; same anchor and tolerance, no alternate start, no grid",
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
   },
   {
     "argv": [
@@ -235,7 +243,8 @@
     "wall_s": 0.9897519129999637,
     "cpu_s": 0.9746940000000001,
     "exit_code": 1,
-    "scope": "diagnostic harness matrix binding corrected; same first C2 state, anchor and tolerance"
+    "scope": "diagnostic harness matrix binding corrected; same first C2 state, anchor and tolerance",
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
   },
   {
     "argv": [
@@ -259,6 +268,88 @@
     "wall_s": 4.368822821999856,
     "cpu_s": 4.350499,
     "exit_code": 0,
-    "scope": "identify first failing C2 state in retained order; no alternate start, tolerance change, new grid or fit"
+    "scope": "identify first failing C2 state in retained order; no alternate start, tolerance change, new grid or fit",
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values"
+  },
+  {
+    "argv": [
+      "/usr/bin/time",
+      "-f",
+      "{\"wall_s\":%e,\"user_s\":%U,\"system_s\":%S,\"maxrss_KiB\":%M,\"exit\":%x}",
+      "-o",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism/analyses/mea_parameter_bundle/model-d/activity-contributions/runs/pipeline-final-calculate-time.json",
+      "timeout",
+      "--kill-after=5",
+      "1800",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-141-sensitivity/.venv/bin/python",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism/analyses/mea_parameter_bundle/model-d/activity-contributions/activity_contributions.py",
+      "calculate",
+      "adopted",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism/analyses/mea_parameter_bundle/results/selected-current-best-parameters.json",
+      "adopted-no-refit",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism/analyses/mea_parameter_bundle/model-d/activity-contributions/adopted-no-refit-parameters.json",
+      "off-refit",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism/analyses/mea_parameter_bundle/model-d/sensitivity-current/ablation-off-11-diagnostic-parameters.json",
+      "original",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism/analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-00-diagnostic-parameters.json",
+      "original-no-refit",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism/analyses/mea_parameter_bundle/model-d/activity-contributions/original-no-refit-parameters.json"
+    ],
+    "cwd": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism",
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "source_sha256": "65cf924ddefd7e7fed35f7ae29f1ff77653a1f651b5c74a1ff593e66b3212b70",
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values",
+    "wall_s": 64.57,
+    "user_s": 128.03,
+    "system_s": 10.34,
+    "maxrss_KiB": 656460,
+    "exit": 0,
+    "memory_limit_bytes": 2147483648,
+    "pool_size": 12,
+    "load_monitor": "runs/pipeline-load.json",
+    "load_max": 4.65771484375
+  },
+  {
+    "argv": [
+      "/usr/bin/time",
+      "-f",
+      "{\"wall_s\":%e,\"user_s\":%U,\"system_s\":%S,\"maxrss_KiB\":%M,\"exit\":%x}",
+      "-o",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism/analyses/mea_parameter_bundle/model-d/activity-contributions/runs/pipeline-render-time.json",
+      "timeout",
+      "--kill-after=5",
+      "300",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-141-sensitivity/.venv/bin/python",
+      "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism/analyses/mea_parameter_bundle/model-d/activity-contributions/activity_contributions.py",
+      "render"
+    ],
+    "cwd": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-151-born-mechanism",
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values",
+    "wall_s": 3.36,
+    "user_s": 2.82,
+    "system_s": 0.32,
+    "maxrss_KiB": 207396,
+    "exit": 0,
+    "memory_limit_bytes": 2147483648
+  },
+  {
+    "status": "Pipeline verification on pre-#152 data; method development, not manuscript values",
+    "stage": "initial-success-before-review-fixes",
+    "source_sha256": "835f8e7cca76fb33701b6e257b8537a75df88ad18c998f2a6f68eb5a15fae2e5",
+    "note": "source changed only in cost-path/import/mask assertions before final rerun; command as final except old source and no load monitor",
+    "wall_s": 71.79,
+    "user_s": 134.84,
+    "system_s": 11.39,
+    "maxrss_KiB": 656200,
+    "exit": 0
   }
 ]
