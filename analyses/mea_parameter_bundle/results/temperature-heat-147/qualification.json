@@ -1,0 +1,131 @@
+{
+  "phase": "B: wheel and ordered numerical qualification; stopped at first numerical failure",
+  "phase_A_supported_commit": "845e98a63a617cd6525d3c4047cf9c191124ddc3",
+  "phase_B_authorization": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-5939694947",
+  "wheel_identity": "wheel-identity.json",
+  "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "check_1_OLD_replay": {
+    "passed": true,
+    "costs": {
+      "pressure": 8.14345313051485,
+      "species": 24.848444130706277,
+      "total": 32.991897261221126
+    },
+    "reference_costs": {
+      "pressure": 8.14345313051485,
+      "species": 24.848444130706277,
+      "total": 32.991897261221126
+    },
+    "cost_differences": {
+      "pressure": 0.0,
+      "species": 0.0,
+      "total": 0.0
+    },
+    "states": 84,
+    "targets": 142,
+    "maximum_prediction_tolerance_fraction": 0.0,
+    "maximum_stationarity": 3.979039320256561e-13,
+    "wall_s": 4.663484370999868,
+    "summed_worker_s": 43.13895819800928,
+    "pool_size": 12,
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "producer_sha256": "091840ed2d0a96b0b09c634f992cf0d615358a189c447efefd82437fcfaa5f7e"
+  },
+  "check_2_native_mapping": {
+    "passed": true,
+    "rows": 12,
+    "max_abs_delta_lnK": 7.815970093361102e-14,
+    "RT2_derivative_check": "stored versus native polynomial coefficients; Engine thermochemistry.cpp:221-229 inspected",
+    "source_representation_checks": "phase-A frozen admission grid and continuation errors retained unchanged",
+    "producer_sha256": "bf0f7e7cdedcd1102b8e17458914f0e2a8d6be2897a338cca989e5419ff501f7",
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv/lib/python3.13/site-packages/epcsaft/__init__.py"
+  },
+  "check_3_zero_to_0_11": {
+    "value": null,
+    "unit": "",
+    "status": "CentralSolveUnavailable",
+    "message": "initial:central_solve_unavailable: SUCCESS: stalled: residual 1.1966663563277393e-07 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 28 iterations, contraction absent, floor 1.7641264140878111e-10, amplification 0",
+    "residual": null,
+    "requested_tolerance_met": false,
+    "branch": null,
+    "stable_root_count": null
+  },
+  "check_3_zero_to_0_45": "not run: initial endpoint failed for zero-to-0.11",
+  "check_4_independent_enthalpies_anchor_conditioning": "not run: no admitted initial endpoint or heat value",
+  "check_5_heat_Jacobian_h_and_2h": "not run: Q2 not started",
+  "check_6_training": {
+    "passed": true,
+    "maximum_material_residual_mol": 2.0605739337042905e-13,
+    "maximum_charge_residual_mol": 3.7951851945411784e-14,
+    "maximum_stationarity": 3.979039320256561e-13,
+    "all_requested_tolerances_met": true
+  },
+  "check_6_calorimetric_initial_endpoint": {
+    "passed": false,
+    "requested_tolerance_met": false,
+    "residual": 1.1966663563277393e-07,
+    "material_charge_stationarity_diagnostics": "unavailable: Engine rejected and cleared the initial state"
+  },
+  "section_6_1_phase_boundary_and_feed_root": "not reached: native initial endpoint solve failed before calorics/feed or any declared-phase admission",
+  "remaining_numerical_work": "blocked; no retry, regularization, tolerance change, fit, high-temperature loaded solve or #152 target used",
+  "code_surface": {
+    "implementation_base": "76ea465fe1ede72257a809d04fc986489c5267f3",
+    "phase_A_gross_added_executable_lines": 120,
+    "phase_B_gross_added_executable_lines": 211,
+    "issue_gross_added_executable_lines": 331,
+    "remaining_to_450": 119
+  },
+  "compute": {
+    "CPU_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "R1_pool_size": 12,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "R1_wall_s": 4.663484370999868,
+    "R1_summed_worker_s": 43.13895819800928,
+    "Q1_heat_native_prediction_s": 0.18332733399984136,
+    "Q1_mapping_timing": "not separately instrumented; twelve direct ln K values only, no equilibrium solve",
+    "Q2_executed": false,
+    "external_caps_s": {
+      "Engine_setup": 1800,
+      "R1": 1800,
+      "Q1_mapping": 1770,
+      "Q1_heat_observation": 180
+    }
+  },
+  "generic_F1_F8_evidence": {
+    "source_commit": "717a2990e443423e051fc0569f25209d04007543",
+    "summary": {
+      "base": "3f5ee19f",
+      "wheel_sha256": "62c2f9078579f300c5e1dc5ae0814223b021a3b5e0a921d331cb6b63a58fbaf5",
+      "logs": [
+        "/tmp/issue210-reference-final.log",
+        "/tmp/issue210-addition-final.log",
+        "/tmp/issue210-python-final.log"
+      ],
+      "rows": 148,
+      "failed": [],
+      "evidence": "Numerical verification on manufactured Engine cases; no physical validation or parameter adoption"
+    },
+    "sha256": {
+      "analyses/2026-addition-enthalpy-fitting/results/regularity.csv": "3824246e1235b8e87f4872583c5f15594e8b7e2c7dd415d6b56491f321e752c8",
+      "analyses/2026-addition-enthalpy-fitting/results/comparisons.csv": "2d28164dc5ec2126c650d7458ff257335b73f2b74403a093f8e0b720602a49a9",
+      "analyses/2026-addition-enthalpy-fitting/results/summary.json": "7520c94a4f557a07306423cd012b2f77c5e362ddce6ba6db957b03b8b65f7b3b",
+      "analyses/2026-addition-enthalpy-fitting/results/provenance.json": "356ba204babc3e19b873105b9827145ad4dcf18182cf8df812c1fd9fbaa094ae"
+    },
+    "use": "cited unmodified; manufactured evidence, not MEA qualification; no generic test rerun"
+  }
+}
