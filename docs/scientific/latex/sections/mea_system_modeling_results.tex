@@ -71,14 +71,79 @@ With the pool outside the objective, the selected record lies below those 18 obs
 The form favored after this source-based role change is therefore the one that departs further from the titration bicarbonate.
 The residual signs do not establish that titration is biased in general, that the NMR values are exact, or that either Born form represents bicarbonate correctly.
 
-\subsection{Prediction at 80 \texorpdfstring{\si{\degreeCelsius}}{°C}, outside the current fit}\label{sec:results-80c}
+\subsection{Sensitivity of the fitted response to Born inputs and interaction coordinates}\label{sec:results-sensitivity}
+% P:results-19
+The Born-form comparison above contrasts two fitted optima; the calculations below ask how the cost responds when a Born input or an interaction coordinate changes.
+All use the 142-target objective and the selected SSM+DS record: fixed-interaction scans of one Born input at a time, refits with one interaction coordinate fixed at zero, refits without the Born term and local Jacobian diagnostics.
+A fixed-interaction scan measures the response of the cost to one input with every other parameter held at the record; it does not optimize that input.
+
+% P:results-20
+\pending{FIG_SENS_SCANS} shows the scans of the selected record.
+Lowering the water solvation factor from 1.5 to 1, which removes the solvation shell, raises the cost from 32.99 to \pending{SCAN_FW1_C}, of which the 48 pressure targets contribute \pending{SCAN_FW1_CP}; factors of 1.25, 1.75 and 2 give \pending{SCAN_FW_OTHER_C}.
+Raising the \MEA solvation factor from 1 to 1.25, 1.5 and 1.75 gives \pending{SCAN_FMEA_C}.
+The ion-region permittivity \(\varepsilon_{\mathrm{ion}}=4\), 16 and 32, in place of 8, gives \pending{SCAN_EPSION_C}.
+Uniform scaling of all Born diameters by 0.8, 0.9, 1.1 and 1.2 gives \pending{SCAN_DBORN_C} for SSM+DS and \pending{SCAN_DBORN_ORIG_C} for Original Born at its own 142-target optimum.
+Setting \(\varepsilon_{\MEA}\) to 24 and 40, in place of 32, gives \pending{SCAN_EPSMEA_C} for SSM+DS and \pending{SCAN_EPSMEA_ORIG_C} for Original Born.
+
+% P:results-21
+The same scans at the historical 160-target optima set the expected scale; they belong to the earlier objective, not to the selected record.
+At the historical SSM+DS optimum, \(f_{\HtwoO}=1\) raised the cost from 47.63 to 454.51 and the pressure-group cost from 10.065 to 386.263, while the B\"ottinger species cost fell from 5.480 to 4.865.
+Among the scanned values, the water factor of 1.5 of Figiel et al.\ and the \MEA factor of 1 gave the lowest historical costs.
+The historical costs at \(\varepsilon_{\mathrm{ion}}=4\) and 32 were 1647.30 and 359.64.
+Uniform Born-diameter multipliers of 0.8 and 1.2 gave 84.28 and 59.98 for SSM+DS but 39.11 and 43.51 for Original Born.
+\(\varepsilon_{\MEA}=24\) and 40 moved the two forms in opposite directions: 48.80 and 47.03 for SSM+DS, 39.08 and 43.42 for Original Born.
+A historical refit of the five interactions after changing three ion Born diameters lowered the SSM+DS cost from 47.63 to 43.95.
+This reduction of 3.67 falls short of 3.71, half the cost gap to Original Born, which was set in advance as the test of whether the diameters explain that gap (Supplementary Section~S1).
+
+% P:results-17
+Two Born probe calculations remain unavailable, both at \SI{313.15}{\kelvin}: the shell-only form, \((c_{\mathrm{shell}},c_{\mathrm{dielectric}})=(1,0)\), at \texttt{vle\_obs\_0119}, and an ion-region permittivity \(\varepsilon_{\mathrm{ion}}=2\) at \texttt{vle\_obs\_0193}.
+Continuation, bounded Newton probes and alternate starts found no solution that meets the convergence criteria for either state.
+Their cause is undetermined: neither case demonstrates that no physical solution exists or that the solver fails at an existing solution.
+Neither case enters the Born-form ranking.
+
+% P:results-22
+Refits with one interaction coordinate fixed at zero measure what that coordinate contributes once the other four can adjust (\pending{TAB_ABLATION}).
+Each refit started from \pending{ABL_NSTARTS} starts and used the convergence test of \cref{sec:data-methods}.
+Fixing the \MEACOO--water, \MEAH--water, \HCOthree--water and \MEAH--\MEACOO coefficients at zero raises the cost by \pending{ABL_MEACOO_dC}, \pending{ABL_MEAH_dC}, \pending{ABL_HCO3_dC} and \pending{ABL_PAIR_dC}, and removing the slope \(b\) of \cref{eq:kij-temperature} raises it by \pending{ABL_B_dC}.
+The corresponding fitted-pressure AARDs are \pending{ABL_P_AARD}\,\% and the fitted-species AARDs \pending{ABL_X_AARD}\,\%, against 13.53 and 8.28\,\% for the selected record.
+The \HCOthree--water refit tests whether that coefficient is needed at all, a separate question from whether its bound is active.
+
+% P:results-23
+Refits without the Born term, which leave the Debye--H\"uckel term as the only electrostatic contribution, measure how much of the fitted response the Born term carries.
+At the selected interactions, removing the Born term raises the 142-target cost from 32.99 to \pending{BORNOFF_FIXED_C142}.
+Refitting the five coordinates lowers it to \pending{BORNOFF_C142}, with fitted pressure and species AARDs of \pending{BORNOFF_P_AARD} and \pending{BORNOFF_X_AARD}\,\%.
+The difference between these two costs is the part of the Born contribution that the interaction coordinates absorb.
+On the 160-target objective, the refit without the Born term gives \pending{BORNOFF_C160}, against 47.63 for SSM+DS and 40.20 for Original Born.
+On the 18 report-only Matin pool targets, the 142-target refit without the Born term gives an AARD of \pending{BORNOFF_MATIN_AARD}\,\%, against 59.81\,\% for SSM+DS and 35.12\,\% for Original Born.
+
+% P:results-24
+Two properties of \cref{eq:born-ssm-ds,eq:born-shell-diameter} limit how separately the Born inputs can be interpreted.
+At \(c_{\mathrm{shell}}=0\), the shell diameter \(D_i\) equals \(d_i^{\mathrm{Born}}\), so the dielectric-saturation term vanishes and \((c_{\mathrm{shell}},c_{\mathrm{dielectric}})=(0,1)\) is identical to Original Born, \((0,0)\).
+The retained evaluation at the historical 160-target Original Born optimum confirms this equality: both selector pairs give a cost of 40.201537, with a largest weighted-residual difference of zero.
+Because every component except water has \(f_k=1\), \(D_i\) depends on \(c_{\mathrm{shell}}\) and \(f_{\HtwoO}\) only through the product \(c_{\mathrm{shell}}(f_{\HtwoO}-1)\), so the two cannot be estimated separately from this dependence.
+
+% P:results-25
+A local Jacobian analysis at the historical 160-target SSM+DS optimum shows that the interaction coordinates can reproduce most of the residual change caused by a Born input.
+The fraction of each Born-input column of the weighted Jacobian that lies in the span of the five interaction columns is 0.9928 for the \MEAH Born diameter, 0.9997 for \MEACOO, 0.9969 for \HCOthree, and 0.9939 for each of \(c_{\mathrm{shell}}\) and \(c_{\mathrm{dielectric}}\).
+This compensation is local to that historical optimum.
+A joint attribution that includes the \HthreeO Born diameter is unavailable, because its finite-difference column agreed on only 157 of 160 entries.
+Large fixed-interaction cost changes therefore do not show that the data identify the Born inputs, and the fitted interaction values carry part of the Born contribution.
+
+% P:results-15
+At the selected record, the \HCOthree--water interaction coefficient lies at its upper bound of \(+0.5\) with an outward cost gradient of \(-12.47\), so the cost would decrease further if the bound were relaxed.
+The column-normalized singular values of the five-column weighted Jacobian are 1.550, 1.134, 0.899, 0.698 and 0.125.
+All five columns are numerically nonzero, but the smallest singular value is one-twelfth of the largest, and a local Jacobian does not establish practical or global identification.
+No unconstrained covariance or confidence band is reported at the bound.
+
+\subsection{Temperature and concentration outside the present fit}\label{sec:results-80c}
 % P:results-09
 The \SI{80}{\degreeCelsius} isotherm is excluded from the current five-coordinate, 142-target fit.
 For the 11 Jou 1995 targets at \SI{80}{\degreeCelsius} (packet targets \texttt{vle\_obs\_0203}--\texttt{vle\_obs\_0213})~\cite{Jou1995}, the selected record gives a pressure AARD of 9.24\,\%, a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.017\) and a root-mean-square \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of 0.117 (\cref{fig:pressure}).
 The canonical calculation gives the same 9.24\,\% on these 11 targets.
-All 21 canonical pressure rows at \SI{80}{\degreeCelsius}, which add 10 measurements of Aronu et al.~\cite{Aronu2011}, give 20.27\,\% with a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.199\), so the added rows are under-predicted.
+All 21 canonical pressure rows at \SI{80}{\degreeCelsius}, which add 10 measurements of Aronu et al.~\cite{Aronu2011}, give 20.27\,\% with a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.199\), so the model underestimates the added rows.
 For the 11 packet species targets at \SI{80}{\degreeCelsius}, the AARD is 11.15\,\% for SSM+DS and 7.36\,\% for Original Born (\cref{fig:speciation}).
 
+% FLAG (issue #68): pressure.pdf was rendered before the loading correction of #138; a separate task regenerates it. Do not edit here.
 \begin{figure}[pos=!htb]
     \centering
     \includegraphics[width=\linewidth]{pressure.pdf}
@@ -95,7 +160,7 @@ The \SI{80}{\degreeCelsius} comparisons are tests outside the present (142-targe
 Two fixed inputs used \SI{80}{\degreeCelsius} data (\cref{sec:data-methods}).
 The inherited R2 and R5 reaction shifts were estimated in September 2026 on a set that included \texttt{vle\_obs\_0206} and \texttt{vle\_obs\_0211}, two of the 11 Jou 1995 targets.
 The fixed \COtwo dispersion energy of \SI{173.440}{\kelvin} was chosen on 2 September 2026 against a set that included 21 pressure rows and 11 species targets at \SI{80}{\degreeCelsius}.
-Prediction here therefore means calculation outside the current fit, as defined in \cref{sec:introduction}.
+The \SI{80}{\degreeCelsius} values are therefore tests outside the fit in the sense of \cref{sec:introduction}, not predictions.
 
 \begin{figure}[pos=!htb]
     \centering
@@ -112,48 +177,40 @@ Prediction here therefore means calculation outside the current fit, as defined 
     \label{fig:speciation}
 \end{figure}
 
-\subsection{Pooled pressure assessment}\label{sec:results-pooled}
-% P:results-11
-On the 104 canonical pressure rows at 40--\SI{80}{\degreeCelsius}, the selected record gives an AARD of 20.58\,\%, below the 35\,\% limit adopted for the working domain.
-This group combines rows that coincide with fitted targets and rows inspected in earlier work, so it measures pooled agreement, not predictive accuracy.
-The source-specific AARDs are 32.99\,\% for Aronu et al.\ (36 rows), 10.87\,\% for Hilliard (30 rows), 15.06\,\% for Jou et al.\ (28 rows) and 20.47\,\% for Idris et al.\ (10 rows)~\cite{Aronu2011,Hilliard2008,Jou1995,idrisSpeciationMEACO2Adducts2014}.
-The mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(-0.398\) for the Aronu rows and \(-0.150\) for all 104 rows.
-The pooled value therefore contains a source-dependent misfit, dominated by under-prediction of the Aronu measurements.
+% P:results-13
+At 100--\SI{120}{\degreeCelsius}, the 57 canonical rows give an AARD of 26.44\,\%: 20.39\,\% for Jou et al.\ (20 rows), 32.02\,\% for Ma'mun et al.\ (19 rows) and 27.26\,\% for Xu and Rochelle (18 rows)~\cite{Jou1995,Mamun2005,Xu2011}.
+These temperatures lie outside the working domain and above the \SI{323.15}{\kelvin} upper limit of the R4 and R5 source correlations, so the values report extrapolation.
 
-\subsection{Tested limits}\label{sec:results-limits}
 % P:results-12
 Concentration transfer fails at the tested conditions.
 With chemistry and parameters fixed, the selected record gives a pressure AARD of 75.95\,\% on 33 rows at 15 wt\% \MEA and 46.15\,\% on 37 rows at 45 wt\%, with all 70 states solved.
 The mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(+0.453\) at 15 wt\% and \(-0.519\) at 45 wt\%, so the error changes sign with amine concentration.
 These rows were examined in earlier work, so the scores are a second look, and the successful solves do not establish useful transfer.
 
-% P:results-13
-At 100--\SI{120}{\degreeCelsius}, the 57 canonical rows give an AARD of 26.44\,\%: 20.39\,\% for Jou et al.\ (20 rows), 32.02\,\% for Ma'mun et al.\ (19 rows) and 27.26\,\% for Xu and Rochelle (18 rows)~\cite{Jou1995,Mamun2005,Xu2011}.
-These temperatures lie outside the working domain and above the \SI{323.15}{\kelvin} upper limit of the R4 and R5 source correlations, so the values report extrapolation.
+\subsection{Pooled pressure assessment}\label{sec:results-pooled}
+% P:results-11
+On the 104 canonical pressure rows at 40--\SI{80}{\degreeCelsius}, the selected record gives an AARD of 20.58\,\%, below the 35\,\% limit adopted for the working domain.
+This group combines rows that coincide with fitted targets and rows inspected in earlier work, so it measures pooled agreement, not accuracy outside the fit.
+The source-specific AARDs are 32.99\,\% for Aronu et al.\ (36 rows), 10.87\,\% for Hilliard (30 rows), 15.06\,\% for Jou et al.\ (28 rows) and 20.47\,\% for Idris et al.\ (10 rows)~\cite{Aronu2011,Hilliard2008,Jou1995,idrisSpeciationMEACO2Adducts2014}.
+The mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(-0.398\) for the Aronu rows and \(-0.150\) for all 104 rows.
+The pooled value therefore contains a source-dependent misfit, dominated by underestimation of the Aronu measurements.
 
+\subsection{Limits of the selected record}\label{sec:results-limits}
 % P:results-14
 The carbonate share of dissolved carbon was compared with the NMR values of Jakobsen et al.\ at 20 and \SI{40}{\degreeCelsius}~\cite{Jakobsen2005}.
 Over nine points, the ratio of calculated to observed share ranges from 0.42 to 1.33 for SSM+DS and from 1.21 to 3.19 for Original Born.
 The nine-point summary excludes the \SI{40}{\degreeCelsius}, loading 0.21 point, whose observed share of 0.119 compares with 0.010--0.019 at the other four \SI{40}{\degreeCelsius} loadings; all ten comparisons are retained in the supporting data.
 
-% P:results-15
-The \HCOthree--water interaction coefficient lies at its upper bound of \(+0.5\) with an outward cost gradient of \(-12.47\), so the cost would decrease further if the bound were relaxed.
-The column-normalized singular values of the five-column weighted Jacobian are 1.550, 1.134, 0.899, 0.698 and 0.125.
-All five columns are numerically nonzero, but the smallest singular value is one-twelfth of the largest, and a local Jacobian does not establish practical or global identification.
-No unconstrained covariance or confidence band is reported at the bound.
+% P:results-26
+The \HCOthree--water coefficient lies at its bound (\cref{sec:results-sensitivity}), so its value is set by the bound rather than estimated from the data.
 
+% FLAG (issue #68): this paragraph cites earlier record 868a5018; current-record density probes (#123) await delivered review. A separate task revises it. Do not edit here.
 % P:results-16
 Density and heat capacity were not assessed for the selected record.
 For the earlier record \texttt{868a5018} on \texttt{epcsaft} wheel \texttt{48a639e7\ldots}, loaded-solution densities were 12.5--16.8\,\% above the measurements of Amundsen et al.\ at 50 and \SI{70}{\degreeCelsius} and loadings 0.3 and 0.4~\cite{Amundsen2009}.
 Heat-capacity deviations against Hilliard were \(-9.8\,\%\) for unloaded solution at \SI{45}{\degreeCelsius}, \(-10.2\,\%\) at loading 0.358 and \SI{45}{\degreeCelsius}, and \(-14.6\,\%\) at loading 0.358 and \SI{80}{\degreeCelsius}~\cite{Hilliard2008}.
 These are deficits of the earlier record, not measured errors of the selected record.
 Density and heat-capacity qualification of the selected record therefore remains unestablished, and no absorber or stripper use is supported.
-
-% P:results-17
-Two Born probe calculations remain unavailable, both at \SI{313.15}{\kelvin}: the shell-only form, \((c_{\mathrm{shell}},c_{\mathrm{dielectric}})=(1,0)\), at \texttt{vle\_obs\_0119}, and an ion-region permittivity \(\varepsilon_{\mathrm{ion}}=2\) at \texttt{vle\_obs\_0193}.
-Continuation, bounded Newton probes and alternate starts found no solution that meets the convergence criteria for either state.
-Their cause is undetermined: neither case demonstrates that no physical solution exists or that the solver fails at an existing solution.
-Neither case enters the Born-form ranking.
 
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:results-18
