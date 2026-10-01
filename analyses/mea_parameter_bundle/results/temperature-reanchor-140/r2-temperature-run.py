@@ -11,10 +11,12 @@ os.chdir(ROOT)
 env = dict(os.environ, OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1',
     UV_PROJECT_ENVIRONMENT=str(BASE.parents[1]/'results/runs/temperature-reanchor-140/stage-3-wheel-replay/.venv'))
 def run(args, seconds):
+    assert not re.match(r'(?:\S*/)?python[0-9.]*\s', 'bash -c .venv/bin/python stage1_fit.py')
+    assert re.match(r'(?:\S*/)?python[0-9.]*\s', '.venv/bin/python stage1_fit.py')
     while True:
         report=subprocess.check_output(['ps','-eo','pid,ppid,args'],text=True)
         workers={int(pid):(int(parent),command) for line in report.splitlines()[1:] for pid,parent,command in [line.strip().split(None,2)]
-            if re.search(r'(^|/)python[0-9.]*\s',command) and any(s in command for s in ('fit','assessment','evaluate_direct_absorption_heat','r2-temperature.py'))}
+            if re.match(r'(?:\S*/)?python[0-9.]*\s',command) and any(s in command for s in ('fit','assessment','evaluate_direct_absorption_heat','r2-temperature.py'))}
         occupied=[pid for pid in workers if not any(parent==pid for parent,_ in workers.values())]
         print('CPU gate',args,'workers',[(p,workers[p][1]) for p in occupied],flush=True)
         if len(occupied)<2: break
