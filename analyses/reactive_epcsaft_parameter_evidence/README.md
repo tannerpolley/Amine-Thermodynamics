@@ -4,10 +4,11 @@ This directory retains the Issue #70 supported-negative decision, source and
 readiness receipts, and bounded diagnostic evidence. There is no active MEA
 parameter set.
 
-New generic ePC-SAFT methods are built and debugged first in
-`ePC-SAFT-project/analysis/` or `validation/`. This repository may then run the
-pinned public Engine method directly against MEA-owned inputs and an accepted
-immutable parameter packet. Engine Issue #80 owns the current campaign.
+Generic ePC-SAFT methods are owned by
+`/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT`. MEA requests them through
+Engine issues, then may run a pinned public Engine method directly against
+MEA-owned inputs and an accepted immutable parameter packet. Engine Issue #80
+owns the current campaign.
 
 The retained Born/permittivity comparison method is
 `compare_independent_evidence.py`. It is not a current entry point and will
