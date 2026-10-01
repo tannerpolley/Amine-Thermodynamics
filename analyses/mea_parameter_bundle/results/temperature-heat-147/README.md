@@ -116,10 +116,21 @@ there is no second 55.51 factor or local ionic caloric equation.
 
 ## Reproduction and freeze identity
 
-`source-laws.py` is the only retained executable addition: **120 gross lines**,
-including comments/blanks, within the phase-A source/unit allocation and the
-issue's total 450-line ceiling. It reuses NumPy, not a new optimizer or runtime
-dependency. No executable tests/fixtures were added. The source-only S1 job
+The **450 gross added executable-line ceiling** is counted from implementation
+base `76ea465fe1ede72257a809d04fc986489c5267f3`, amended **2026-10-01** in
+issue #147 §10 from design base `b58e4d7ff4dc4aff0ef072df85b1c2c8019f9d90`.
+Phase A's own additions are **120 lines**, including comments/blanks, all in
+`source-laws.py`; **330 lines remain** for subsequent #147 phases. The following
+**262 inherited unrelated additions are excluded** from the #147 ceiling:
+
+- `analyses/mea_parameter_bundle/results/concentration-transfer-137/experiment.py`: 250.
+- `.codex/environments/setup.sh`: 5.
+- `analyses/mea_parameter_bundle/scripts/compare_engines.py`: 6.
+- `analyses/mea_parameter_bundle/scripts/render_regression_overview.py`: 1.
+
+The 120 own lines meet the phase-A source/unit allocation. The script reuses
+NumPy, not a new optimizer or runtime dependency. No executable tests/fixtures
+were added. The source-only S1 job
 ran once under a 60 s external cap with single-threaded BLAS; numerical work
 elapsed 0.01449 s. No second source-law solve was run. After execution,
 extraneous temperatures above 393.15 K from a broad Wagner temperature
