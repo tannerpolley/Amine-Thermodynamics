@@ -60,13 +60,17 @@ The coefficient-level table owns exact values and archived pointers. No #123, #1
 | Inherited R2/R5 corrections | Yes: sparse historical pressure/species/heat screen included 80 °C | Reset complete published laws, fixed; no chemical coordinate fitted tonight |
 | R1/R3 and restored R4/R5 coefficients | External source laws; source intervals are disclosed. Historical R4/source/model choice had high-T access | Keep published laws and source conventions; no independent-constant estimation tonight |
 | MEAH⁺/MEACOO⁻ σ, ε/kB, Born d | No 80 °C row in the May numerical fit: Git `897bb6e`, 8 states/22 residuals at 20/40/60 °C | Keep provisional historical pure-ion values; derived packing/Debye–Hückel diameters remain 0.88σ |
-| MEA–water k=−0.07352749874985018 | Cai binary inputs 361.75–443.38 K contain no exact 353.15 K row; exact current-value refit ancestry is unresolved | Keep as disclosed historical ancestry; do not substitute retired −0.052 or unpromoted −0.0585655905 |
-| CO₂–water k=0.013262879176919628 | Exact selection ancestry unknown. A distinct Kiepe check used 353.11 K but does not explain this constant | Keep as disclosed historical ancestry; do not substitute source k=0 or Pabsch k(T) |
+| MEA–water k=−0.07352749874985018 | Yes: high-temperature binary-subsystem fit, 25 Cai rows over 362.81–431.85 K; Engine `186e81617b632ccf9189131033fef46719109476`, `validation/campaigns/2026-mea-parameter-estimation/analysis/neutral-mea-water/results/neutral-mea-water.json:4157` | Keep as disclosed historical ancestry; do not substitute retired −0.052 or unpromoted −0.0585655905 |
+| CO₂–water k=0.013262879176919628 | Yes: high-temperature binary-subsystem fit, all 39 Kiepe rows at 313.20/353.11/373.26/393.17 K; Engine `1ed0d0bc1af5915b910997f3b4ddff0ba97c1e1e`, `validation/campaigns/2026-mea-parameter-estimation/analysis/physical-co2-water/result.json:182`, `README.md:44`, `run.py:437–452` | Keep as disclosed historical ancestry; do not substitute source k=0 or Pabsch k(T) |
 | CO₂–MEA zero intercept/slope; secondary-ion Born sizes | Exact bounded-screen/diagnostic 80 °C selection ancestry remains incomplete | Keep as disclosed historical choices; no claim their selection was clean |
 | Pure neutral laws, transferred ions, water-ion k values, explicit zero defaults, association topology/volumes | External-source estimation spans not all re-audited; fixed historical topology/model choices had high-T access | Keep source/transfer/default values as disclosed ancestry; numerical values and pointers in the full table |
 | SSM+DS c_shell=c_dielectric=1, solvent-only dielectric mixing, ionic εr=8, same-sign dispersion exclusion | Yes: historical fixed model/form selection after high-T access | Keep exactly fixed under the owner's scope; no newly untouched model-selection claim |
 
 The exact-source/selection gaps above do not authorize replacing other fixed physics. They must be visible in readiness review. The restored control cannot erase historical access or establish concentration/stripper qualification.
+
+The owner keeps both binary interactions for tonight after the independent readiness review. The bounded claim is:
+
+Prediction of loaded 30 wt% MEA at 80 °C from loaded-solution parameters estimated only from ≤60 °C loaded-solution data, conditional on binary CO₂–water (Kiepe, 313–393 K) and MEA–water (Cai, 363–432 K) interactions fitted to binary-subsystem data that include higher temperatures; historical SSM+DS, dielectric and association choices are fixed conditions.
 
 ## Four structures, two starts each, bounded native estimation
 
