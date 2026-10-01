@@ -12,6 +12,7 @@ from time import perf_counter
 from pathlib import Path
 
 import epcsaft
+import shared_evaluation
 from shared_evaluation import (
     ENGINE_COMMIT,
     ENGINE_WHEEL_SHA256,
@@ -42,7 +43,10 @@ INPUT = ANALYSIS / "data/input"
 SPECIATION_OUTPUT = ANALYSIS / "figures/speciation/output"
 PRESSURE_OUTPUT = ANALYSIS / "figures/pressure/output"
 sys.path.insert(0, str(ANALYSIS / "calibration-misfit"))
+figure_runs = shared_evaluation.RUNS
 from compare import HCO3_POOL_LABEL, pooled_species  # noqa: E402
+from probe import pressure_observations  # noqa: E402
+shared_evaluation.RUNS = figure_runs
 
 PARAMETER_HISTORY = ANALYSIS / "results/parameter-record-history.csv"
 CANONICAL_SPECIATION = (
@@ -191,6 +195,7 @@ def main() -> None:
         Path(__file__).with_name("shared_evaluation.py"),
         SOURCE_CONTRACT,
         ANALYSIS / "calibration-misfit/compare.py",
+        ANALYSIS / "calibration-misfit/probe.py",
     )
     parameter_sha256 = sha256(PARAMETERS)
     with PARAMETER_HISTORY.open(encoding="utf-8", newline="") as handle:
@@ -220,7 +225,6 @@ def main() -> None:
     failures: list[dict[str, object]] = []
     source_continuation_fingerprints: set[str] = set()
     speciation_templates: dict[int, list[tuple[float, dict[str, object]]]] = {}
-    pressure_templates: dict[int, list[tuple[float, dict[str, object]]]] = {}
     speciation_anchors: dict[int, list[object]] = {}
 
     for index, observation in enumerate(fit["observations"], start=1):
@@ -234,10 +238,6 @@ def main() -> None:
             and round(temperature_c) in SPECIATION_GRID_TEMPERATURES_C
         ):
             speciation_templates.setdefault(round(temperature_c), []).append(
-                (loading, observation["request"])
-            )
-        elif family == "pressure":
-            pressure_templates.setdefault(round(temperature_c), []).append(
                 (loading, observation["request"])
             )
         continuation = (request.get("continuation") or {}).get("state")
@@ -328,6 +328,10 @@ def main() -> None:
         canonical_vle_rows = [
             row for row in csv.DictReader(stream) if row["active_view_member"] == "yes"
         ]
+    pressure_requests = {
+        observation["identity"].removeprefix("canonical:"): observation["request"]
+        for observation in pressure_observations(lambda row: row["active_view_member"] == "yes")
+    }
     pressure_anchors = cached_anchors(
         {round(float(row["temperature_canonical_C"])) for row in canonical_vle_rows}
     )
@@ -345,28 +349,10 @@ def main() -> None:
     ):
         temperature_c = round(float(row["temperature_canonical_C"]))
         loading = float(row["CO2_loading"])
-        if temperature_c not in pressure_templates:
-            raise ValueError(f"missing {temperature_c} C pressure template")
-        _, template = min(
-            pressure_templates[temperature_c],
-            key=lambda candidate: abs(candidate[0] - loading),
-        )
-        request = copy.deepcopy(template)
-        reaction_system = request["reaction_system"]
-        reaction_system["feed_amounts_mol"][0] = loading
-        reaction_system["conserved_totals"] = [
-            math.fsum(
-                coefficient * amount
-                for coefficient, amount in zip(
-                    balance, reaction_system["feed_amounts_mol"], strict=True
-                )
-            )
-            for balance in reaction_system["balance_matrix"]
-        ]
         identity = row["observation_id"]
         record = evaluate_state(
             model,
-            request,
+            pressure_requests[identity],
             reactions,
             identity,
             pressure_anchors,
@@ -770,7 +756,10 @@ def main() -> None:
             speciation_packet_count + len(canonical_vle_rows) + grid_attempt
         ),
         "state_packet_observations": len(fit["observations"]),
-        "pressure_template_states": sum(map(len, pressure_templates.values())),
+        "pressure_template_states": sum(
+            observation["request"]["pressure"]["role"] == "solved"
+            for observation in fit["observations"]
+        ),
         "attempted_speciation_packet_states": speciation_packet_count,
         "attempted_canonical_pressure_states": len(canonical_vle_rows),
         "attempted_speciation_grid_states": grid_attempt,

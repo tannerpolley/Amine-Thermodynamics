@@ -16,7 +16,7 @@
   "failure_table": "results/figure-calculation-failures.csv",
   "fit_residual_table": "results/current-best-fit-residuals.csv",
   "fit_statistics_table": "results/current-best-fit-statistics.csv",
-  "overall_timeout_s": 3600.0,
+  "overall_timeout_s": 1800.0,
   "parameter_document_sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
   "parameter_fingerprint": "sha256:cb9ec7dec79d41dd65baf460d4f83d8fd51a661698c73038399bfbffe3928ab0",
   "pressure_observation_source_sha256": "a4f9e3c0176894cad78c5960198c13707d36a167e48abf3d5e7a2106a55d5af1",
@@ -71,7 +71,7 @@
   "state_timeout_s": 180.0,
   "status": "limited_domain_working_record",
   "temperature_balanced_log10_rmse": {
-    "pressure": 0.1411612367236375,
+    "pressure": 0.14135180471996697,
     "speciation": 0.13176065154738567
   },
   "warm_start_policy": "source continuation values are projected to mass-balanced finite starts; pressure observations then reuse certified states across nearby loadings, fall back to the independent source start, and use neighboring-temperature certified states when the local branch is otherwise missed",
@@ -83,21 +83,22 @@
       "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
       "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "a4f9e3c0176894cad78c5960198c13707d36a167e48abf3d5e7a2106a55d5af1",
       "analyses/mea_parameter_bundle/results/parameter-record-history.csv": "6cd6def75a216c45cf8fbc2263e4ad936f1194fda44f07b9d727c6b44dae2609",
-      "analyses/mea_parameter_bundle/scripts/generate_figure_data.py": "7443d0b7444b7538f7d9e9d9e8ede9d11436ebc93d8bfc74b1810ed137fca560",
+      "analyses/mea_parameter_bundle/scripts/generate_figure_data.py": "a69cf8ecdab6c0895ccaff80006cef80b5b3e5d1b884f43f36400ee5e8a55b8c",
       "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "930311c2599768a77a2ea756f27f85aaeadaefc9329cae83516fac0bfe79d786",
       "src/MEA/common/mea_source_contracts.py": "242973e500e33530a1d0315475fa4a6f974e57c6f7354706081c07bf94820ef5",
-      "analyses/mea_parameter_bundle/calibration-misfit/compare.py": "277c7d5b5a1ac93ecb81ea4fcfa6e3f99c08f700b9df190ce68b3275a790201f"
+      "analyses/mea_parameter_bundle/calibration-misfit/compare.py": "277c7d5b5a1ac93ecb81ea4fcfa6e3f99c08f700b9df190ce68b3275a790201f",
+      "analyses/mea_parameter_bundle/calibration-misfit/probe.py": "30a9f4d7867c227a3d36147186f873c711471eacaafdb3dc287185071f330544"
     },
     "outputs": {
       "analyses/mea_parameter_bundle/figures/speciation/output/speciation-model.csv": "913d1f1ec4b7efa606ac725c04c0fa56738e4b6e185553e09d9cfafd029002e4",
       "analyses/mea_parameter_bundle/figures/speciation/output/speciation-observations.csv": "23b60bcbd9e2cb56f6d9f738d34d3100e55310376b0da17ad2ea436a8a4eea87",
       "analyses/mea_parameter_bundle/figures/speciation/output/speciation-model-grid.csv": "11d2fc821145a8f7eea7aad10d4d60f86d72b7467fe0d4eeba6d64968e46aca6",
       "analyses/mea_parameter_bundle/figures/speciation/output/speciation-display-observations.csv": "3515384de850ff8f0bf232598cf11c529b0633ec12817da52968b7f3f082d47a",
-      "analyses/mea_parameter_bundle/figures/pressure/output/pressure-model.csv": "31af5120b33da08a59f5cf60399dc4664a8c35c32a32a09b75604d9a685ec40d",
+      "analyses/mea_parameter_bundle/figures/pressure/output/pressure-model.csv": "2f6e83e64315e16f0d9203653302d7bcb52c37a74cb9bf483a7a6277bd5a031f",
       "analyses/mea_parameter_bundle/figures/pressure/output/pressure-observations.csv": "05226adf41cb2f87e3e0a4df2ad2fc94ccdd7d35de880bfe1cf18b32cedb9f29",
       "analyses/mea_parameter_bundle/results/figure-calculation-failures.csv": "50fadf6d985447226213352e387fec6100bb2325884b86c31bf9520ff42c2401",
-      "analyses/mea_parameter_bundle/results/current-best-fit-residuals.csv": "87c3b4786788d9380e2ee268f0e161568502310c7b03595827bf16f52dc84c4c",
-      "analyses/mea_parameter_bundle/results/current-best-fit-statistics.csv": "c2289c86b43be8a46681466add14c598cca13b156c5381bf8d632220449852bb"
+      "analyses/mea_parameter_bundle/results/current-best-fit-residuals.csv": "1ea868c8cfbf562750d504c84a9d2d42d94605811722c32cf827780668ff5a50",
+      "analyses/mea_parameter_bundle/results/current-best-fit-statistics.csv": "ef54eec003fc79c5942bb51f7bb18c1218436ab066ba8312c0efbcbc3876d175"
     }
   }
 }
