@@ -2,6 +2,27 @@
 title: "MEA parameter bundle"
 subtitle: "Limited-domain SSM+DS model D working record · 142 fitted targets"
 resources:
+  - results/temperature-reanchor-140/stage-3-preregistration.md
+  - results/temperature-reanchor-140/stage-3/freeze.json
+  - results/temperature-reanchor-140/stage-3/stage-3-summary.json
+  - results/temperature-reanchor-140/stage-3/source-fit.json
+  - results/temperature-reanchor-140/stage-3/source-admission.json
+  - results/temperature-reanchor-140/stage-3/primary-parameters.json
+  - results/temperature-reanchor-140/stage-3/secondary-parameters.json
+  - results/temperature-reanchor-140/stage-3/secondary-conditional-R2-diagnostics.json
+  - results/temperature-reanchor-140/stage-3/pressure-80C.svg
+  - results/temperature-reanchor-140/stage-3/heat-comparison.csv
+  - results/temperature-reanchor-140/stage-3/heat-comparison.json
+  - results/temperature-reanchor-140/stage-3/assessment-stage-1.json
+  - results/temperature-reanchor-140/stage-3/assessment-stage-1-rows.csv
+  - results/temperature-reanchor-140/stage-3/assessment-stage-2.json
+  - results/temperature-reanchor-140/stage-3/assessment-stage-2-rows.csv
+  - results/temperature-reanchor-140/stage-3/assessment-stage-3.json
+  - results/temperature-reanchor-140/stage-3/assessment-stage-3-rows.csv
+  - results/temperature-reanchor-140/stage-3/assessment-stage-4.json
+  - results/temperature-reanchor-140/stage-3/assessment-stage-4-rows.csv
+  - results/temperature-reanchor-140/stage-3/assessment-stage-5.json
+  - results/temperature-reanchor-140/stage-3/assessment-stage-5-rows.csv
   - analysis.yaml
   - results/temperature-reanchor-140/stage-2-inputs.json
   - results/temperature-reanchor-140/stage-2-preregistration.md
@@ -71,6 +92,12 @@ resources:
   - model-d/born-form-diagnosis/p5conv-k-coordinates.csv
   - model-d/born-form-diagnosis/p5conv-species-costs-and-signed-means.csv
 ---
+
+::: {.callout-note}
+## Latest issue 140 result: Stage 3
+
+**Both complete R2 tests miss the adopted 80 °C pressure benchmark while preserving the ≤60 °C pressure and species cost limits.** The independent Plummer–Busenberg R2 primary gives 27.61% canonical 21-row AARD; the free-R2 secondary gives 23.02%, against ≤20.270257%. The [Stage 3 results](#stage-3-loaded-results) record the committed freeze, all six converged starts, single assessments and conditional enthalpy diagnostics. These are bounded prediction comparisons with retained measurements, not physical validation or parameter adoption. Independent delivered review is pending.
+:::
 
 ::: {.callout-note}
 ## Working notebook
@@ -380,13 +407,71 @@ The centered coefficients are L0=−14.499153219021714 (dimensionless), B=−229
 
 The [preregistration](results/temperature-reanchor-140/stage-3-preregistration.md) expressly stops on either failed representation limit and forbids changing the grid, weights, number of terms or source fit. Therefore **one source fit, zero loaded fits, zero new loaded equilibrium states, zero frozen loaded records and zero new ≥80 °C loaded evaluations** were performed in this campaign. Earlier wheel replay states remain a separate qualification result. The secondary budget was not reassigned. Canonical 21/19, Wagner 11/12, 100–120 °C 57, transfer 33/37, species and heat 113 metrics are unavailable for Stage 3. Neither the loaded primary pass condition nor its physical falsifier nor secondary enthalpy identification can be decided.
 
-The supported statement is limited to the registered approximation: this equal-weight four-term representation of PB on the eleven 0–100 °C samples cannot enter the loaded fitting campaign under the selected engineering tolerances. It does not prove that no four-term representation can work, falsify independently constrained R2 temperature correction, or assess 80 °C loaded-MEA pressure performance. Source uncertainties, the disclosed hydration continuation and the Edwards convention remain separate limitations. The two scalar maximum-error checks decide this admission gate; the table gives their limits and temperatures, and no loaded comparison exists to plot. Any source representation change returns to Design and requires an amended preregistration before more fitting. The [Stage 3 summary](results/temperature-reanchor-140/stage-3/stage-3-summary.json) records the stop and unavailable decisions. HTML refresh remains unavailable because `snakemake` is absent; the notebook source and retained numerical evidence are available for the authorized independent delivered review. The independent delivered review (GPT-6.1 Sol high, `/root/stage3_delivered_review`, reviewed `f41e17d`) returned **Supported**, with no required corrections, for the source-compression result and registered stop. It independently checked the source PDF, coefficients, derivatives, rank, normal-equation residual ≤2.09×10⁻¹⁴, error maxima and absence of loaded products. The [review record](results/temperature-reanchor-140/stage-3/delivered-review.json) retains its scope. The copied `input-hashes.json` retains historical base/wheel metadata and four stale historical file entries; it is not a complete current-run inventory. The source-only result instead has current provenance in `source-fit.json` and its committed producer/preregistration/source verification records. Refresh the inherited inventory in any newly authorized loaded study. No investigator promotion or manuscript result is claimed.
+The supported statement is limited to the registered approximation: this equal-weight four-term representation of PB on the eleven 0–100 °C samples cannot enter the loaded fitting campaign under the selected engineering tolerances. It does not prove that no four-term representation can work, falsify independently constrained R2 temperature correction, or assess 80 °C loaded-MEA pressure performance. Source uncertainties, the disclosed hydration continuation and the Edwards convention remain separate limitations. The two scalar maximum-error checks decide this admission gate; the table gives their limits and temperatures, and no loaded comparison exists to plot. Any source representation change returns to Design and requires an amended preregistration before more fitting. The [Stage 3 summary](results/temperature-reanchor-140/stage-3/stage-3-summary.json) records the stop and unavailable decisions. HTML refresh remains unavailable because `snakemake` is absent; the notebook source and retained numerical evidence are available for the authorized independent delivered review. The independent delivered review (GPT-6.1 Sol high, `/root/stage3_delivered_review`, reviewed `f41e17d`) returned **Supported**, with no required corrections, for the source-compression result and registered stop. It independently checked the source PDF, coefficients, derivatives, rank, normal-equation residual ≤2.09×10⁻¹⁴, error maxima and absence of loaded products. The [review record](results/temperature-reanchor-140/stage-3/source-delivered-review.json) retains its scope. The copied `input-hashes.json` retains historical base/wheel metadata and four stale historical file entries; it is not a complete current-run inventory. The source-only result instead has current provenance in `source-fit.json` and its committed producer/preregistration/source verification records. Refresh the inherited inventory in any newly authorized loaded study. No investigator promotion or manuscript result is claimed.
 
 ## Parent amendment reopens Stage 3 before any loaded output
 
 The parent, acting under the owner's overnight delegation, increased only the source-representation admission limits to |Δln K|≤0.002 and |ΔH|≤0.15 kJ/mol on 293.15–353.15 K. The retained representation error is 3.2386% of the approximately 0.0415 ln K PB–Austgen difference at 353.15 K and 11.8076% of the 0.90739 kJ/mol enthalpy difference there. These are engineering scale comparisons, not uncertainty normalization. The source fit, coefficients and original failed-admission evidence are unchanged. Margins to the new limits are **0.000655976982 in ln K** and **0.042859303579 kJ/mol**. The [active admission record](results/temperature-reanchor-140/stage-3/source-admission.json) binds the unchanged source-fit SHA-256 and the [amended preregistration](results/temperature-reanchor-140/stage-3-preregistration.md).
 
 This parent decision follows source-only error inspection, before any Stage 3 loaded-MEA output. The earlier stop and independent review remain historical evidence of the original limits; the amendment supersedes that stop. There is one source fit and all six loaded-fit slots remain unused at amendment time. All data, starts, bounds, fit counts, numerical tolerances, 1% selection, freeze/single-assessment and physical pass/falsifier rules remain. A quick GPT-6.1 Sol high amendment check precedes loaded fits. The deadline is **2026-10-01T10:00:00-06:00**, America/Denver; incomplete estimation cannot produce a partial scored freeze. Current implementation count is **349 added Python lines** against the approved 350-line ceiling. Each job also acquires the Engine’s existing heavy-job lock, with acquisition bounded to leave its full budget before the deadline; this prevents a race when the Engine replaces its two-worker pool between the process check and launch. No new optimizer or equation method is introduced. The accepted Edwards pool assumption and hydration continuation remain disclosed conditions.
+
+## Stage 3 loaded results
+
+**Independently fixing the Plummer–Busenberg R2 temperature law does not recover adopted 80 °C pressure performance in this bounded SSM+DS test.** The selected primary gives canonical 21-row AARD 27.61232%, exceeding the unchanged 20.270257% limit by 7.34206 percentage points. Freeing Austgen R2 a/b using only low-temperature loaded observations reduces AARD to 23.01804%, but still exceeds that limit by 2.74779 points. Both preserve each low-temperature family cost limit. The complete primary triggers the registered numerical falsifier; both tested R2 treatments miss the pressure benchmark. This concerns these laws, finite search bounds, fixed CO2 energy and current calibration/model design, and does not exclude other chemistry or activity descriptions.
+
+The admitted loaded data remained 84 states and 142 targets: 48 pressure at 40/60 °C and 94 species over packet temperatures 20–60 °C. No loaded ≥80 °C output entered source fitting, estimation or selection. High-temperature pure-water pK1 information was expressly admitted as independent chemistry input. Diagnostic objective scales remain 0.3 for ln pressure and 0.1xobs+0.001 for species mole fraction; they are not measurement uncertainties. The source-only stop and its review above are historical; the parent amendment admitted the unchanged coefficients before loaded output.
+
+### Estimation, selection and freeze
+
+One source representation and six loaded fits exhaust the seven-fit menu. Every loaded start converged with finite 142-row residuals/Jacobians and passed export/reload/rescore at all 84 states. Both starts agree for each structure. Native fit wall times total 1387.65 s (23.13 single-thread minutes including setup); rescoring and assessment are separate. Jobs used the registered CPU controls, thread caps and timeouts. The campaign finished before the 10:00 Denver deadline.
+
+| Structure | Start 1 total cost | Start 2 total cost | Two-start agreement | Selection |
+|---|---:|---:|---|---|
+| Independent R2, constant interactions | 34.82126857134 | 34.82126857133 | Met | Eligible, not selected |
+| Independent R2, interaction slope | 32.67776862044 | 32.67776862044 | Met | Primary |
+| Austgen R2 a/b free, interaction slope | 31.66551071016 | 31.66551071016 | Met | Secondary |
+
+The constant-to-slope cost ratio is 1.06559505, exceeding 1.01; the registered 1% rule selects the independent-R2 slope form. The secondary retains its assigned role. The deterministic near-tie rule chooses start 1. All rescore CSV costs equal their JSON sums; maximum stationarity across six starts is 1.50635×10⁻¹², below 1e−10, with no material/charge balance violation.
+
+The [freeze](results/temperature-reanchor-140/stage-3/freeze.json) was committed at `0a6a4af` before any new ≥80 °C assessment, with timestamp 2026-10-01T11:09:32Z. All **35** listed file hashes match retained bytes. Freeze SHA-256 is `a509348ee1f925f75b977c254a2cb7f2fb8e0c6695cdf0ed539f7496cc69ae2f`; primary parameters `9fbdb68e6fb745e9b060a0b7f8989c159c99fb7a714a630cc8b46cf8e38d5467`; secondary `1a34cdd3bdbcbb1056c1f9b17858274e73048c0290752d0f40c1b06b749631f4`. The 9e6a76cf wheel and 349-line executable addition count remain unchanged. No refit, role change or repeated high-temperature assessment follows the scores.
+
+### Pass conditions and single assessments
+
+| Preregistered quantity | Primary | Secondary | Limit | Decision |
+|---|---:|---:|---:|---|
+| Canonical 80 °C, 21 rows, AARD / % | 27.612322 | 23.018042 | ≤20.270257 | Both miss |
+| Low-T pressure cost | 8.047955 | 7.625752 | ≤8.957798 | Both pass |
+| Low-T species cost | 24.629813 | 24.039759 | ≤27.333289 | Both pass |
+
+Against adopted replay costs, primary pressure/species change by −1.17270%/−0.87986%, and secondary by −6.35727%/−3.25447%. Every cohort below is complete. RMS ln and mean ln use ln(predicted/measured pressure); negative mean ln denotes underprediction. Wagner, transfer and outside-temperature scores are descriptive, with no additional pass condition.
+
+| Pressure cohort | Rows | Primary AARD / % | Primary RMS ln | Primary mean ln | Secondary AARD / % | Secondary RMS ln | Secondary mean ln |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Canonical 80 °C | 21 | 27.612322 | 0.469605 | −0.347426 | 23.018042 | 0.385974 | −0.263884 |
+| Canonical 80 °C, two historical anchors excluded | 19 | 29.710500 | 0.492943 | −0.375550 | 24.989915 | 0.405441 | −0.288913 |
+| Wagner 352.81–352.86 K | 11 | 50.047489 | 0.709395 | −0.700475 | 42.780948 | 0.570116 | −0.562583 |
+| Canonical 100–120 °C, outside temperature domain | 57 | 49.947791 | 0.863850 | −0.714018 | 40.264836 | 0.635438 | −0.463625 |
+| Wagner 391.94–392.03 K, outside temperature domain | 12 | 58.168866 | 0.876007 | −0.873627 | 45.333366 | 0.606007 | −0.604701 |
+| 15 wt% transfer | 33 | 32.964730 | 0.371713 | +0.095670 | 31.337858 | 0.379535 | +0.070185 |
+| 45 wt% transfer | 37 | 58.154877 | 0.723471 | −0.179787 | 57.148306 | 0.670137 | −0.091367 |
+
+At canonical 80 °C the primary Jou/Aronu groups give AARD 12.24175%/44.51996% and mean ln −0.10808/−0.61070; secondary gives 8.44389%/39.04961% and −0.03977/−0.51040. The source imbalance remains. The retained adopted Wagner AARD is 24.51112%, lower than either new result. These Wagner rows have previously been assessed and are not untouched validation observations.
+
+![Frozen Stage 3 pressure predictions at retained measurement loadings. Primary uses independent R2; secondary fits Austgen R2 a/b at low temperature. Predictions remain points, with no continuous loading sweep. Adopted Wagner points are copied from the retained earlier assessment without new solves. Wagner bars show the existing source estimate max(2% of pressure, 0.4 kPa); canonical points have no quantified uncertainty bars.](results/temperature-reanchor-140/stage-3/pressure-80C.svg)
+
+The 80 °C species comparison contains 11 targets at five states per record. Primary/secondary AARD is 13.34068%/12.85880%, absolute mole-fraction RMS error 0.00689751/0.00681369, and diagnostic cost 6.005970/5.710532. All 352 pressure/species assessment state checks pass solver tolerance and balance checks; maximum stationarity is 2.13163×10⁻¹³. Exact rows and source/temperature subdivisions remain in the five assessment JSON/CSV pairs.
+
+All 113 heat intervals per finalist are complete under the existing two-endpoint method, zero vapor inventory and ideal-gas CO2 feed. Positive heat denotes release; bias is predicted minus observed release. Primary RMSE/bias is **18.97791/−10.18194 kJ/mol CO2**; secondary **16.66550/−6.40600 kJ/mol CO2**. Retained adopted values are 14.45366/−4.51224 kJ/mol CO2, so neither candidate improves pooled heat error. Excluding nine first-dose observations gives primary/secondary RMSE 16.92491/14.65712 kJ/mol CO2 at 104 intervals. No heat parameter was fitted or uncertainty-based heat pass imposed. Heat checks report no balance violation and stationarity ≤2.27374×10⁻¹³. Adopted heat rows/checks are copied from the retained baseline, not recalculated.
+
+### Secondary enthalpy interpretation and limits
+
+The secondary fits δL0=+0.14510621 and δH=−5.90480665 kJ/mol relative to source Austgen at 313.15 K. Starts differ by 1.82202×10⁻⁸ in δL0 and 1.01278×10⁻⁶ kJ/mol in δH. Both R2 coordinates are interior, seven-column scaled/normalized Jacobians have full numerical rank, and R2 a/b versus interaction-slope column correlations are −0.39930/−0.37429, below 0.95. These explicit registered identification-falsifier tests are not triggered. R2 a/b columns themselves correlate at +0.999378; normalized smallest singular value is 0.00891855 versus maximum 2.04042.
+
+Two interaction intercepts are at bounds: MEAH+–water −0.5 and HCO3−–water +0.5. The driver conservatively withholds `R2_identified` and unconditional transformed R2 covariance whenever any coordinate is at a bound, a stricter condition than the registered R2-bound test. It does not mean an R2 bound was reached. The [conditional R2 diagnostics](results/temperature-reanchor-140/stage-3/secondary-conditional-R2-diagnostics.json) transform the frozen conditional covariance with these interaction coordinates held fixed. In order (δL0, δH in kJ/mol), the matrix is [[0.00384685, −0.04258456], [−0.04258456, 19.01898142]], yielding local standard errors 0.0620230 and 4.36108 kJ/mol. These residual-based diagnostic scales are not measurement confidence intervals and exclude active-bound, model and source uncertainty. The shift is conditional mixture calibration, without a claim of independently identified physical R2 enthalpy.
+
+The supported claim is bounded prediction failure under the admitted conventions. Edwards' combined CO2+H2CO3 convention remains assumed because full text is unavailable. The hydration envelope relies on constant-enthalpy continuation beyond Wang's measured 42.8 °C and is not an empirical whole-interval bound. Source uncertainty, compression, source pressure, active bounds and model discrepancy remain distinct. The 100–120 °C scores use a frozen continuation outside the candidate temperature domain; historical high-temperature binary interactions/model choices remain. R4/R5 chemical consistency is unresolved, concentration/stripper use is not qualified, and no parameter or manuscript result is adopted.
+
+The [current summary](results/temperature-reanchor-140/stage-3/stage-3-summary.json) supersedes its source-only stop version retained in Git. Exact predictions, costs, Jacobians, conditional covariance, failed-trial counts and hashes are retained. The existing presentation owner rendered the pressure SVG from retained values, and it was visually inspected. Notebook HTML refresh remains unavailable because `snakemake` is absent from PATH. Independent GPT-6.1 Sol high delivered review is pending; no investigator promotion is claimed.
 
 # Model D: historical 160-target assessment {#model-d-decision23}
 

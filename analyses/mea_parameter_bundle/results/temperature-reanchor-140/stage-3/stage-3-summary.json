@@ -1,40 +1,408 @@
 {
-  "outcome": "registered source representation fails both approximation limits; loaded experiment not executed",
+  "outcome": "Both numerically complete frozen routes miss canonical 80 C pressure benchmark; bounded primary falsifier triggered",
+  "amendment_commit": "fd85fd9437bbefb9558f98ddc0021f88bb6aa130",
+  "freeze_commit": "0a6a4afdf9757233e48402370ae088f4ff4f180f",
+  "freeze_sha256": "a509348ee1f925f75b977c254a2cb7f2fb8e0c6695cdf0ed539f7496cc69ae2f",
+  "frozen_records": [
+    {
+      "cost": 32.677768620439494,
+      "fitted_coordinates": 5,
+      "record": "primary-parameters.json",
+      "role": "primary",
+      "sha256": "9fbdb68e6fb745e9b060a0b7f8989c159c99fb7a714a630cc8b46cf8e38d5467",
+      "start": 1,
+      "structure": "slope-fixed"
+    },
+    {
+      "cost": 31.665510710156102,
+      "fitted_coordinates": 7,
+      "record": "secondary-parameters.json",
+      "role": "secondary",
+      "sha256": "1a34cdd3bdbcbb1056c1f9b17858274e73048c0290752d0f40c1b06b749631f4",
+      "start": 1,
+      "structure": "slope-free"
+    }
+  ],
   "source_fits_performed": 1,
-  "loaded_fits_performed": 0,
-  "new_loaded_equilibrium_evaluations": 0,
-  "high_temperature_loaded_evaluations": 0,
-  "frozen_records": [],
+  "loaded_fits_performed": 6,
+  "all_loaded_starts_complete": true,
+  "all_two_start_agreements": true,
+  "constant_to_slope_cost_ratio": 1.0655950525812838,
+  "selection": "Constant independent-R2 cost exceeds 1.01 times slope cost; slope selected as primary. Free-R2 role stays secondary.",
   "source_fit_sha256": "6fd269cd48ab3027b59af2d4b3f4b5048dadc80662a30777661f61c6bdb0dadd",
-  "representation_verification_sha256": "606552c34a640e3cb1b74beb03bd4fde10edc7510bb490101027e64aaf5dc885",
-  "preregistration_sha256": "9686b72a5656298a40d7814c29c3406713546e7285164137c3b52ee87c5059e5",
-  "implementation_commit": "17f3f3e",
+  "preregistration_sha256": "a18a8b2f2f9559b61c61e8065274b56b3168fbcbdbf98ef3c0de5ba4e3dfac77",
   "wheel_sha256": "9e6a76cf59d4e2fef3347d895bf3a966ecced01f13dc6e0caec74c3c3d618dc4",
-  "maximum_ln_k_error": 0.0013440230183832114,
-  "ln_k_limit": 0.001,
-  "ln_k_error_temperature_k": 353.15,
-  "ln_k_limit_met": false,
-  "maximum_enthalpy_error_kj_mol": 0.10714069642131463,
-  "enthalpy_limit_kj_mol": 0.1,
-  "enthalpy_error_temperature_k": 340.15,
-  "enthalpy_limit_met": false,
-  "native_coefficient_maximum_error_ln_k": 4.796163466380676e-14,
-  "representation_rank": 4,
-  "loaded_primary_pass": "not evaluated",
-  "loaded_primary_falsifier": "not evaluated",
-  "R2_enthalpy_identification": "not evaluated",
-  "cpu_gate": "source launched only after process scan returned no occupied numerical worker; no subsequent calculation launched",
-  "supported_claim": "The registered equal-weight four-term representation of the Plummer\u2013Busenberg law on eleven 0\u2013100 C samples exceeds the stated ln K and enthalpy approximation limits on 293.15\u2013353.15 K. It cannot enter the loaded fitting campaign under this preregistration. This does not falsify R2 temperature correction or assess loaded-MEA 80 C performance.",
-  "source_conditions": "Combined CO2+H2CO3 pool assumed for Edwards and verified for PB; molal K; 101325 Pa source reference; no hydration correction; no alternative grid, weights, term, source or fit attempted",
-  "python_added_lines": 344,
-  "python_removed_lines": 10,
-  "python_net_lines": 334,
-  "approved_added_line_ceiling": 350,
-  "delivered_review": {
-    "verdict": "Supported",
-    "reviewed_commit": "f41e17dff8c8370e3d00898073821451b854e58b",
-    "record": "delivered-review.json",
-    "model": "GPT-6.1 Sol high"
+  "limits": {
+    "canonical_80C_aard_percent": 20.270257,
+    "pressure_cost": 8.95779844356634,
+    "species_cost": 27.33328854377691
   },
-  "inherited_input_inventory": "input-hashes.json is historical, not a complete current-run inventory; source-fit.json identifies the current source-only provenance"
+  "low_temperature_family_costs": {
+    "primary": {
+      "pressure": 8.047955184701529,
+      "species": 24.629813435735787,
+      "pressure_change_percent": -1.1726959593526098,
+      "species_change_percent": -0.8798566776272221
+    },
+    "secondary": {
+      "pressure": 7.62575193481541,
+      "species": 24.03975877534423,
+      "pressure_change_percent": -6.357268684454365,
+      "species_change_percent": -3.254470787419328
+    }
+  },
+  "criteria": {
+    "primary": {
+      "canonical_pressure_pass": false,
+      "low_T_pressure_pass": true,
+      "low_T_species_pass": true,
+      "overall_pass": false
+    },
+    "secondary": {
+      "canonical_pressure_pass": false,
+      "low_T_pressure_pass": true,
+      "low_T_species_pass": true,
+      "overall_pass": false
+    }
+  },
+  "primary_falsifier_triggered": true,
+  "metrics": {
+    "1": {
+      "primary/canonical-80C-21": {
+        "pooled": {
+          "rows": 21,
+          "available": 21,
+          "complete": true,
+          "aard_percent": 27.61232162008982,
+          "rms_ln": 0.4696051474418532,
+          "mean_ln": -0.34742579367417126,
+          "mean_relative_error_percent": -25.890933879381414
+        },
+        "canonical-80C-19": {
+          "rows": 19,
+          "available": 19,
+          "complete": true,
+          "aard_percent": 29.710500310472334,
+          "rms_ln": 0.4929433752620847,
+          "mean_ln": -0.37555005846844036,
+          "mean_relative_error_percent": -27.807913860215677
+        }
+      },
+      "secondary/canonical-80C-21": {
+        "pooled": {
+          "rows": 21,
+          "available": 21,
+          "complete": true,
+          "aard_percent": 23.018042094907166,
+          "rms_ln": 0.38597447700562876,
+          "mean_ln": -0.2638839483398285,
+          "mean_relative_error_percent": -20.20169036457431
+        },
+        "canonical-80C-19": {
+          "rows": 19,
+          "available": 19,
+          "complete": true,
+          "aard_percent": 24.98991536418916,
+          "rms_ln": 0.4054414024841308,
+          "mean_ln": -0.28891294610789037,
+          "mean_relative_error_percent": -22.066830492676367
+        }
+      }
+    },
+    "2": {
+      "primary/species-80C": {
+        "pooled": {
+          "rows": 11,
+          "available": 11,
+          "complete": true,
+          "aard_percent": 13.340678487139968,
+          "rms_ln": 0.1961841032665133,
+          "mean_ln": -0.034823534534936584,
+          "mean_relative_error_percent": -1.7298213313345043,
+          "mean_absolute_error": 0.005153880796367736,
+          "rms_absolute_error": 0.00689751261768329,
+          "mean_absolute_signed_error": -0.002159711042866584,
+          "cost": 6.005970317512033
+        }
+      },
+      "secondary/species-80C": {
+        "pooled": {
+          "rows": 11,
+          "available": 11,
+          "complete": true,
+          "aard_percent": 12.858803285838803,
+          "rms_ln": 0.1808177656182676,
+          "mean_ln": -0.029725939054312457,
+          "mean_relative_error_percent": -1.454514648654542,
+          "mean_absolute_error": 0.005077875056900281,
+          "rms_absolute_error": 0.00681369333230779,
+          "mean_absolute_signed_error": -0.002143904900449881,
+          "cost": 5.710531572537062
+        }
+      }
+    },
+    "3": {
+      "secondary/never-accessed-80C": {
+        "pooled": {
+          "rows": 11,
+          "available": 11,
+          "complete": true,
+          "aard_percent": 42.78094827329479,
+          "rms_ln": 0.5701157894026567,
+          "mean_ln": -0.5625829149581719,
+          "mean_relative_error_percent": -42.78094827329479
+        }
+      },
+      "primary/never-accessed-80C": {
+        "pooled": {
+          "rows": 11,
+          "available": 11,
+          "complete": true,
+          "aard_percent": 50.04748852769763,
+          "rms_ln": 0.7093954662830235,
+          "mean_ln": -0.7004749802088592,
+          "mean_relative_error_percent": -50.04748852769763
+        }
+      }
+    },
+    "4": {
+      "secondary/canonical-100-120C": {
+        "pooled": {
+          "rows": 57,
+          "available": 57,
+          "complete": true,
+          "aard_percent": 40.26483635332215,
+          "rms_ln": 0.6354382708480748,
+          "mean_ln": -0.4636251974661294,
+          "mean_relative_error_percent": -30.44295620750101
+        }
+      },
+      "secondary/never-accessed-100-120C": {
+        "pooled": {
+          "rows": 12,
+          "available": 12,
+          "complete": true,
+          "aard_percent": 45.333365892562234,
+          "rms_ln": 0.6060067505785571,
+          "mean_ln": -0.6047008664447155,
+          "mean_relative_error_percent": -45.333365892562234
+        }
+      },
+      "primary/canonical-100-120C": {
+        "pooled": {
+          "rows": 57,
+          "available": 57,
+          "complete": true,
+          "aard_percent": 49.94779139390856,
+          "rms_ln": 0.8638496472333488,
+          "mean_ln": -0.714018477378929,
+          "mean_relative_error_percent": -44.30105040757886
+        }
+      },
+      "primary/never-accessed-100-120C": {
+        "pooled": {
+          "rows": 12,
+          "available": 12,
+          "complete": true,
+          "aard_percent": 58.16886581219705,
+          "rms_ln": 0.8760073236799955,
+          "mean_ln": -0.8736265193845741,
+          "mean_relative_error_percent": -58.16886581219705
+        }
+      }
+    },
+    "5": {
+      "primary/transfer-45wt": {
+        "pooled": {
+          "rows": 37,
+          "available": 37,
+          "complete": true,
+          "aard_percent": 58.154876871640816,
+          "rms_ln": 0.7234712182776836,
+          "mean_ln": -0.17978682543695018,
+          "mean_relative_error_percent": 7.009912189898144
+        }
+      },
+      "primary/transfer-15wt": {
+        "pooled": {
+          "rows": 33,
+          "available": 33,
+          "complete": true,
+          "aard_percent": 32.96472953898303,
+          "rms_ln": 0.3717128589270952,
+          "mean_ln": 0.09567023164199331,
+          "mean_relative_error_percent": 17.15886576267612
+        }
+      },
+      "secondary/transfer-45wt": {
+        "pooled": {
+          "rows": 37,
+          "available": 37,
+          "complete": true,
+          "aard_percent": 57.14830551661581,
+          "rms_ln": 0.670137084776296,
+          "mean_ln": -0.09136662424092513,
+          "mean_relative_error_percent": 14.156830626705347
+        }
+      },
+      "secondary/transfer-15wt": {
+        "pooled": {
+          "rows": 33,
+          "available": 33,
+          "complete": true,
+          "aard_percent": 31.337858069938363,
+          "rms_ln": 0.37953494030490376,
+          "mean_ln": 0.07018477095824792,
+          "mean_relative_error_percent": 14.481798515612569
+        }
+      }
+    }
+  },
+  "heat_metrics": {
+    "primary": {
+      "pooled": {
+        "rows": 113,
+        "available": 113,
+        "complete": true,
+        "rmse_kj_per_mol_CO2": 18.977907066276007,
+        "mean_bias_kj_per_mol_CO2": -10.181935710423248
+      },
+      "first-dose-excluded-sensitivity": {
+        "rows": 104,
+        "available": 104,
+        "complete": true,
+        "rmse_kj_per_mol_CO2": 16.92490505137292,
+        "mean_bias_kj_per_mol_CO2": -9.092299430861944
+      }
+    },
+    "secondary": {
+      "pooled": {
+        "rows": 113,
+        "available": 113,
+        "complete": true,
+        "rmse_kj_per_mol_CO2": 16.665504258504477,
+        "mean_bias_kj_per_mol_CO2": -6.4060002500968745
+      },
+      "first-dose-excluded-sensitivity": {
+        "rows": 104,
+        "available": 104,
+        "complete": true,
+        "rmse_kj_per_mol_CO2": 14.65712309774376,
+        "mean_bias_kj_per_mol_CO2": -5.278765913677349
+      }
+    },
+    "adopted": {
+      "pooled": {
+        "rows": 113,
+        "available": 113,
+        "complete": true,
+        "rmse_kj_per_mol_CO2": 14.453663679864091,
+        "mean_bias_kj_per_mol_CO2": -4.512244115192895
+      },
+      "first-dose-excluded-sensitivity": {
+        "rows": 104,
+        "available": 104,
+        "complete": true,
+        "rmse_kj_per_mol_CO2": 11.901755669552045,
+        "mean_bias_kj_per_mol_CO2": -3.0649576998920742
+      }
+    }
+  },
+  "numerical_checks": {
+    "1": {
+      "states": 42,
+      "failures": 0,
+      "maximum_stationarity": 1.7053025658242404e-13
+    },
+    "2": {
+      "states": 10,
+      "failures": 0,
+      "maximum_stationarity": 2.1316282072803006e-13
+    },
+    "3": {
+      "states": 22,
+      "failures": 0,
+      "maximum_stationarity": 1.1368683772161603e-13
+    },
+    "4": {
+      "states": 138,
+      "failures": 0,
+      "maximum_stationarity": 1.1368683772161603e-13
+    },
+    "5": {
+      "states": 140,
+      "failures": 0,
+      "maximum_stationarity": 1.7053025658242404e-13
+    },
+    "heat": {
+      "checks_including_retained_adopted": 339,
+      "failures": 0,
+      "maximum_stationarity": 2.2737367544323206e-13
+    }
+  },
+  "fit_wall_seconds_total": 1387.649141334001,
+  "secondary_R2_diagnostics": {
+    "delta_L0": 0.145106209910161,
+    "delta_H_kj_mol": -5.904806649676686,
+    "transformed_conditional_covariance_L0_H": [
+      [
+        0.003846854240402653,
+        -0.042584559589501296
+      ],
+      [
+        -0.042584559589501296,
+        19.018981419660353
+      ]
+    ],
+    "conditional_standard_errors": [
+      0.0620230137965147,
+      4.361075718175546
+    ],
+    "covariance_units": [
+      [
+        "1",
+        "kJ/mol"
+      ],
+      [
+        "kJ/mol",
+        "(kJ/mol)^2"
+      ]
+    ],
+    "held_fixed_active_coordinates": [
+      "pair/protonated-monoethanolamine/water/k_ij",
+      "pair/bicarbonate-anion/water/k_ij"
+    ],
+    "conditional_ln_K_standard_errors": {
+      "293.15": 0.13833684274461974,
+      "313.15": 0.0620230137965147,
+      "333.15": 0.10951763910381938,
+      "353.15": 0.1900909869091741,
+      "393.15": 0.33668415566418497
+    },
+    "R2_slope_column_correlations": [
+      -0.3993049730242791,
+      -0.3742928674619137
+    ],
+    "R2_a_b_column_correlation": 0.9993779424506132,
+    "registered_identification_falsifier_triggered": false,
+    "driver_R2_identified": false,
+    "explanation": "Both R2 coordinates are interior, the scaled/normalized Jacobian is full rank, starts agree and R2/slope correlations are below 0.95. The driver conservatively withholds its R2_identified flag and unconditional transformed covariance whenever any coordinate is at a bound. Here two interaction bounds are active. The transformed covariance shown is postprocessing of the frozen conditional covariance with those interactions held fixed; diagnostic weighting is not measurement uncertainty and no physical enthalpy identification is claimed.",
+    "fit_record_sha256": "9464cd3e20b2dc7f2d9ca15113643eeae438736a1fed86565f665c4b51847d1e"
+  },
+  "evidence_type": "Numerically verified bounded prediction assessment against retained measurements; no physical validation or parameter adoption",
+  "supported_claim": "With the disclosed CO2+H2CO3 convention and independently sourced Plummer\u2013Busenberg R2(T), the complete low-temperature-calibrated SSM+DS primary preserves both low-temperature cost limits but does not recover adopted 80 C pressure performance. The tested free-R2 a/b route improves pressure extrapolation but also misses the same benchmark. These two bounded R2 treatments do not suffice in the fixed model and calibration design; they do not rule out other chemistry/activity laws or establish an independently identified physical R2 enthalpy.",
+  "limitations": [
+    "Edwards 1978 combined-pool convention is assumed; full text unavailable",
+    "Hydration bound is a constant-enthalpy continuation beyond measured 42.8 C, not an empirical bound over the whole interval",
+    "Pure-water source-law compression admitted by parent amendment after source-only inspection",
+    "Diagnostic weights are not measurement uncertainties; two active secondary interaction bounds condition covariance",
+    "High-temperature binary interactions and historical model choices remain; no untouched model-selection validation",
+    "100\u2013120 C scores use frozen chemistry outside candidate/source pressure-temperature domain",
+    "R4/R5 chemical consistency remains unresolved; no concentration or stripper qualification",
+    "HTML refresh unavailable because snakemake is absent; notebook and SVG retained"
+  ],
+  "python_added_lines": 349,
+  "python_removed_lines": 10,
+  "approved_added_line_ceiling": 350,
+  "delivered_review": "pending"
 }
