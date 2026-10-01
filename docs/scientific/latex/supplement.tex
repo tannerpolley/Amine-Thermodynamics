@@ -6,7 +6,11 @@
 \usepackage{xcolor}
 \usepackage{xurl}
 \usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{array}
 \usepackage{hyperref}
+\usepackage{cleveref}
 \setlength{\emergencystretch}{3em}
 \renewcommand{\thesection}{S\arabic{section}}
 \renewcommand{\thetable}{S\arabic{table}}
@@ -20,7 +24,7 @@
 \maketitle
 
 % P:supplement-00
-The section below summarizes a calculation that supports the main text but does not carry a main-text claim.
+\Cref{sec:s-diameter} summarizes a calculation that supports the main text but does not carry a main-text claim.
 Values labeled historical belong to the earlier 160-target objective and its optima, not to the selected 142-target record.
 
 \section{Born-diameter refit at the historical 160-target objective}\label{sec:s-diameter}
@@ -50,6 +54,18 @@ The refitted coordinates are \(k_{\ce{MEACOO-},\ce{H2O}}=0.0351\), \(k_{\ce{MEAH
         \bottomrule
     \end{tabular}
 \end{table}
+
+\section{Experimental data inventory for near-30 wt\% aqueous MEA}\label{sec:s-data-inventory}
+% P:supplement-02
+To place the observations of the main text among published measurements, we inventoried experimental studies of \ce{CO2} in aqueous \ce{MEA} near 30 wt\%: vapor--liquid equilibrium, liquid speciation, density, heat of absorption, heat capacity, pH and reaction constants.
+The search is not exhaustive.
+The inventory holds 165 entries, of which 88 were identified from bibliographic metadata alone; their coverage is unverified, and they are not tabulated.
+\Cref{tab:s4-data-inventory} lists the 34 publications whose near-30 wt\% coverage was confirmed from a primary passage, table or database record, with the concentration basis, conditions and observation counts each source reports.
+Several entries reuse the same experimental campaign and are not independent measurements.
+Extracting values from a source does not admit them to the fit; the fitted and assessment roles of the main text are those of its observation-role table.
+Reaction-constant sources measured in dilute solution are listed separately.
+
+\input{tables/supplement_data_inventory}
 
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references}
