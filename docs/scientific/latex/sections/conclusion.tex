@@ -2,20 +2,26 @@
 % P:conclusion-01
 A nine-species ePC-SAFT model with explicit \MEAH and \MEACOO chemistry and an SSM+DS Born term was fitted to 48 \COtwo pressures at 40 and \SI{60}{\degreeCelsius} and 94 species measurements at 20--\SI{60}{\degreeCelsius} in 30 wt\% aqueous \MEA.
 The fitted pressure and species AARDs are 13.53 and 8.28\,\%.
-At \SI{80}{\degreeCelsius}, outside the current fit, the model reproduces the 11 Jou 1995 targets with an AARD of 9.24\,\% and all 21 canonical rows with 20.27\,\%.
-These are tests outside the present (142-target, five-coordinate) fit, not data unseen during model development: inherited reaction shifts used two of the 11 targets, and the fixed \COtwo dispersion energy was chosen against a set that included \SI{80}{\degreeCelsius} data.
+At \SI{80}{\degreeCelsius}, outside the current fit, the model reproduces the 11 Jou 1995 targets with an AARD of 9.24\,\%, all 21 canonical rows with 20.27\,\% and the 19 rows not used for inherited reaction shifts with 21.83\,\%.
+These comparisons are tests outside the fit, not predictions: inherited reaction shifts used two of the 11 targets, and the fixed \COtwo dispersion energy was chosen against a set that included \SI{80}{\degreeCelsius} data.
+On Wagner rows not used at any earlier stage, the record gives 24.51\,\% on 11 rows near \SI{353}{\kelvin} and 25.45\,\% on 12 rows near \SI{392}{\kelvin}.
+A refit with source reaction constants to the same targets at or below \SI{60}{\degreeCelsius} keeps the low-temperature cost, 33.01 against 32.99, but gives 29.33\,\% on the 21 canonical rows and 52.30\,\% on the 11 Wagner rows at \SI{80}{\degreeCelsius}, with calculated pressures too low.
+Data at or below \SI{60}{\degreeCelsius} therefore do not determine the temperature response, and independent temperature information is required.
 
 % P:conclusion-02
 The comparison of Born forms depends on the observations fitted.
 On the historical 160-target objective, Original Born has the lower cost, 40.20 against 47.63.
 On the current 142-target objective, which excludes the 18 Matin bicarbonate-pool targets, SSM+DS has the lower cost, 32.99 against 34.58, a 4.6\,\% advantage relative to Original Born.
 Matin et al.\ report bicarbonate above NMR values, and the selected model departs further from that bicarbonate, with a signed relative mean of \(-58.84\,\%\).
-Within this comparison, the Born-form ranking reverses when Matin's bicarbonate-pool observations are excluded from the objective, so their measurement method and fitting role must be reported.
+Within this comparison, the Born-form ranking reverses when Matin's bicarbonate-pool observations are excluded from the objective.
+It also depends on inherited Born inputs: with interactions fixed, Original Born reaches 32.18, below the 32.99 of SSM+DS, when the \MEAH, \MEACOO and \HCOthree Born diameters are scaled by 0.8 or \(\varepsilon_{\MEA}\) is set to 24.
+The ranking is therefore not a property of either Born form on these data, and the speciation measurement method, its fitting role and the inherited Born inputs must be reported with any such comparison.
 
 % P:conclusion-04
-With the interactions of the selected record fixed, scans of the solvation factors, ion-region permittivity and Born diameters raise the 142-target cost from 32.99 to as much as \pending{SCAN_MAX_C142}.
-A refit without the Born term reaches \pending{BORNOFF_C142}, and refits with one interaction coordinate fixed at zero raise the cost by \pending{ABL_dC_RANGE}.
-At the historical 160-target SSM+DS optimum, more than 99\,\% of each tested Born-input column of the weighted Jacobian lay in the span of the interaction columns, so locally the fitted interactions carry part of the Born contribution and these data do not identify the Born inputs separately.
+The Born term itself is needed: a refit without it reaches a cost of 98.79, with a fitted-pressure AARD of 53.90\,\%, and two interaction coordinates move to their bounds.
+Refits with one interaction coordinate fixed at zero raise the cost by 134.32 for \MEAH--\MEACOO, 75.87 for \MEAH--water, 11.93 for \HCOthree--water and 9.85 for \MEACOO--water, so the two \MEAH interactions carry most of the fit; removing the temperature slope adds only 0.38 on these 20--\SI{60}{\degreeCelsius} data.
+At the historical 160-target SSM+DS optimum, more than 99\,\% of each tested Born-input column of the weighted Jacobian lay in the span of the interaction columns, so the interactions compensate locally for small Born-input changes; they do not compensate for removal of the Born term.
+These cost changes are local and conditional on the chemistry, bounds and fixed inputs, not statistical significance tests.
 
 % P:conclusion-03
 Pressure transfer gives AARDs of 75.95\,\% on 33 Aronu rows at 15 wt\% \MEA and 46.15\,\% on 37 Aronu rows at 45 wt\%; the 57 canonical pressure rows at 100--\SI{120}{\degreeCelsius} give 26.44\,\%.
