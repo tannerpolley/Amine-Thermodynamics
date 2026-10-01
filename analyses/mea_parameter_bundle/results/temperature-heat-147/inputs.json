@@ -1,0 +1,124 @@
+{
+  "issue": "tannerpolley/Amine-Thermodynamics#147",
+  "phase": "A: source admission and freeze only",
+  "branch": "work/147-heat-temperature",
+  "implementation_base_commit": "76ea465fe1ede72257a809d04fc986489c5267f3",
+  "issue_budget_base_commit": "b58e4d7ff4dc4aff0ef072df85b1c2c8019f9d90",
+  "captured_issue_body_sha256": "35da04eaff725970def2ad3e082518816b703cd3b48f448edf50d75155aa5c90",
+  "readiness_comment": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-5938591434",
+  "input_file_sha256": {
+    "data/reference/MEA/observations/calorimetry/Vinjarapu_2024_calorimetry_30wt.csv": "61b6aaab4f5ae791a7064bc25efdba1b1fd81f0cce5d5975a280e950ea15522c",
+    "data/reference/MEA/observations/calorimetry/Kim_2011_MEA_protonation_enthalpy.csv": "0a4860b1000df320b83fb351ff90c9d05b4a72d89b51e5234c7c720d6c112772",
+    "data/reference/MEA/observations/reaction_constants/Kim_2011_MEA_dissociation_constants.csv": "849762286b59485708eb4b6cf9da7e986835c6aa254eebef018779e49b12091b",
+    "data/reference/MEA/observations/reaction_constants/Aroua_1999_MEA_carbamate_constants.csv": "725665e7a9cb19dbfa18cd849e482f7ab78835737fc90af92c3e774752736056",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Wagner_2013_VLE.csv": "91d0e4a4d3d3b55abb1983b700fa8d0057fcc609d2846472ce8e6476cff8a239",
+    "analyses/mea_parameter_bundle/scripts/verify_temperature_reference.py": "ece087635f7a1b525564cff2657192507fdab4ed87dd2b6723b1a1a07ea3f855",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/stage-3/source-fit.json": "6fd269cd48ab3027b59af2d4b3f4b5048dadc80662a30777661f61c6bdb0dadd",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/stage-3/source-admission.json": "2a64eebde3857ecb5342cf388d3edd36697c643cea41e932bdde9ce35c3de537",
+    "data/reference/MEA/manifests/chemical_reaction_source_contract.json": "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55",
+    "data/reference/MEA/thermal/physical-ideal-gas-calorics.json": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a"
+  },
+  "source_PDFs": [
+    {
+      "parent_key": "LJKBNXS9",
+      "pdf_attachment_key": "UAIPQMND",
+      "bytes": 1659759,
+      "sha256": "626f73c93d534ab52b2b5f5a9a489118662014519733be5d7e09b1e52ef08c83",
+      "access": "existing local attachment resolved read-only through cse-zotero zotero-attachment-path"
+    },
+    {
+      "parent_key": "MSICA5ZB",
+      "pdf_attachment_key": "CE8AP5BM",
+      "bytes": 1411277,
+      "sha256": "fcb05a98b686aa981b4253868fc6b9e5d110bfd61cf3fec419e58356ad776186",
+      "access": "existing local attachment resolved read-only through cse-zotero zotero-attachment-path"
+    },
+    {
+      "parent_key": "89KKLDUF",
+      "pdf_attachment_key": "7R3LYF7R",
+      "bytes": 1206137,
+      "sha256": "8e2fe3d0f4c1294ad74d1ea10b987dbb11c2d89a739386dd0f09198f6a1efbce",
+      "access": "existing local attachment resolved read-only through cse-zotero zotero-attachment-path"
+    },
+    {
+      "parent_key": "L8GDWZEW",
+      "pdf_attachment_key": "93Y7NVMH",
+      "bytes": 83287,
+      "sha256": "8ff86fb4dc598900c7540bb8ce0b08abd3b2b17121fb027048949bd0fa51eb6a",
+      "access": "existing local attachment resolved read-only through cse-zotero zotero-attachment-path"
+    },
+    {
+      "parent_key": "RWKJERFY",
+      "pdf_attachment_key": "NJSUXCZL",
+      "bytes": 3612759,
+      "sha256": "ad957d246e8daf35e9173a57c723f1e5940dde7bf700bea790df9e530c5a51d6",
+      "access": "existing local attachment resolved read-only through cse-zotero zotero-attachment-path"
+    }
+  ],
+  "written_file_sha256": {
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/README.md": "1a98274e26bcbec8e4ebc2c19c312208f1b7cca0977a64a3561588c8f62ae642",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/arcis-extraction-check.json": "8b565dac77f32577610dc8e94269bc4c224081e25d86162d0464367f7d4fbcb1",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/arcis-image-recheck.csv": "f8a20f827e33efbad0e5cd8aca3c53d81f642c2e68d5a6d1cc8b25ca31aa7b92",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/heat-source-admission.json": "d51a7210be2b93b3a8ae55b19a33001e5f5eeb875070a071ca0127cf88ea4a78",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/r5-residuals.csv": "740c742e61c94d14766cfcdb1426e6941f017f6c4ceb6f3e554a3df3624df709",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/representation-errors.csv": "b092f45e4f0dda756f8dede3964e0dc61f3d9b9da2b384ca02419a40d9abbf48",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/source-law-admission.json": "5855b7f3a42e5232e42cc255ebca904315b1bd0c941cb5a814f0737ee8a0d312",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/source-laws.json": "db2bb4f31e82c4c91a55b48541c9ad4cf32a76d375b811944884b073ff74bcad",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/source-laws.py": "f4586fb86df4d9f62a72844d83e83d0bbe013e908a434075f639813aad3daec5",
+    "data/reference/MEA/observations/calorimetry/Arcis_2011_calorimetry_30wt.csv": "647de13e35309dec8bd63f53c8dd950ed7d7d91c6bb760ecd3873fc8bc763a6f"
+  },
+  "shared_inventory_rows": {
+    "data/reference/MEA/manifests/source_status_manifest.csv": {
+      "captured_file_sha256": "c8f10fd4b532cb1d6f2d2972f7b9f2c540dd8ce24a03632515fb66b2c59fda58",
+      "row_key": {
+        "source_key": "Arcis2011"
+      },
+      "row_sha256": "3bdbf5f6815ae74a6a5a231c5b63450e6cdafeb13d89f0c73895d2509a46e066",
+      "row_hash_serialization": "UTF-8 JSON; sorted keys; separators comma/colon; no newline",
+      "hash_use": "row hash binds this phase; whole-file hash documents snapshot but does not block unrelated #152 row changes"
+    },
+    "data/reference/MEA/manifests/data_library_inventory.csv": {
+      "captured_file_sha256": "c461ebc786e405c845b8fe3bee616c5c916d9bf988c5f0f1af1806dc76d1c6a4",
+      "row_key": {
+        "path": "observations/calorimetry/Arcis_2011_calorimetry_30wt.csv"
+      },
+      "row_sha256": "d97563a6c0b16c70085537988bd245be2f371dcd6199f18bc9a8b1f154c26d16",
+      "row_hash_serialization": "UTF-8 JSON; sorted keys; separators comma/colon; no newline",
+      "hash_use": "row hash binds this phase; whole-file hash documents snapshot but does not block unrelated #152 row changes"
+    }
+  },
+  "calibration_observations": 8,
+  "required_Arcis_observations": 14,
+  "Arcis_retained_rows": 178,
+  "Arcis_report_only_rows": 164,
+  "source_law_admission": "source-law-admission.json",
+  "heat_source_admission": "heat-source-admission.json",
+  "source_law_results": "source-laws.json",
+  "Engine_wheel": "not built or installed in phase A; preparation and qualification pending",
+  "pressure_species_targets": "not hashed as execution inputs or edited here; #152 owns corrected 141-target input freeze",
+  "execution_limits": {
+    "S1_jobs_executed": 1,
+    "external_cap_s": 60,
+    "numerical_elapsed_s": 0.014488594999420457,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "pool": "none needed for source-only arithmetic"
+  },
+  "code_surface": {
+    "source-laws.py_gross_added_executable_lines": 120,
+    "removed_executable_lines": 0,
+    "executable_tests_or_fixtures_added": 0,
+    "issue_ceiling_gross_added_lines": 450,
+    "remaining_lines_before_other_147_phases": 330,
+    "responsibility": "one bounded source-only R4/R5 NumPy linear solve and frozen R2 representation comparison; no Engine dependency or generic runtime changes"
+  },
+  "limits": [
+    "source admission, not MEA physical validation or qualification",
+    "independent delivered source review pending",
+    "R2/R4 representations admitted only 293.15-353.15 K; unchanged report-only continuation to 393.15 K",
+    "R5 source-data representation, not published Table 5 law; covariance unavailable",
+    "phase checks pending; never replace actual source T/P or alpha=0",
+    "no #152 pressure/species/training files changed"
+  ]
+}

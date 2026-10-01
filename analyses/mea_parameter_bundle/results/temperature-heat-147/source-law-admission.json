@@ -1,0 +1,146 @@
+{
+  "common_conventions": {
+    "activity_reference": "CommonMolalityInfiniteDilution; solute m/1 mol kg-water^-1; water Raoult activity",
+    "hydrated_proton": "aH+=aH3O+/aw; muH+=muH3O+-muH2O",
+    "native_law": "lnK=a+b/T+c*ln(T/Tref)+d*T; a=A+C*ln(Tref)",
+    "stored_law": "lnK=A+B/T+C*ln(T/1 K)+D*T",
+    "centered_law": "lnK=L0+B*(1/T-1/Tref)+C*ln(T/Tref)+D*(T-Tref)",
+    "tied_enthalpy": "DeltaH=R*(-B+C*T+D*T^2); J/mol",
+    "reference_mapping": "Engine owns EOS reference conversion; retain water factors; no extra 55.51 or pure-amine reference correction"
+  },
+  "R2": {
+    "source": "Plummer-Busenberg 1982 Eq.13/Table 3 p.1015 PDF p.5",
+    "parent": "RWKJERFY",
+    "pdf": "NJSUXCZL",
+    "source_fit_path": "analyses/mea_parameter_bundle/results/temperature-reanchor-140/stage-3/source-fit.json",
+    "source_fit_sha256": "6fd269cd48ab3027b59af2d4b3f4b5048dadc80662a30777661f61c6bdb0dadd",
+    "admission_path": "analyses/mea_parameter_bundle/results/temperature-reanchor-140/stage-3/source-admission.json",
+    "admission_sha256": "2a64eebde3857ecb5342cf388d3edd36697c643cea41e932bdde9ce35c3de537",
+    "numerical_representation_reused_unchanged": true,
+    "new_source_fit_count": 0,
+    "reference_pressure_Pa": 101325,
+    "source_published_correlation_range_K": [
+      273.15,
+      523.15
+    ],
+    "representation_admission_interval_K": [
+      293.15,
+      353.15
+    ],
+    "report_only_continuation_K": [
+      353.15,
+      393.15
+    ],
+    "CO2_pool": "combined un-ionized CO2+H2CO3; #140 combined-pool to Engine mapping retained; Edwards pool assumed, not verified",
+    "maximum_errors": {
+      "max_lnK_error": 0.0013440230184649238,
+      "max_heat_error_kJ_mol": 0.10714069642131471
+    },
+    "passed": true
+  },
+  "R4": {
+    "source": "Aroua1999 reaction (i), Eqs.1-2/14; Table 3; pp.887-890",
+    "parent": "L8GDWZEW",
+    "pdf": "93Y7NVMH",
+    "formation_law": "log10 Kf,c=-0.934+671/T, Kf,c in L/mol",
+    "admitted_hydrolysis_law": "lnK4,m=-ln(10)*(-0.934+671/T)-ln(q(T)); q=rho_water_kg_L*(1 mol/kg)/(1 mol/L)",
+    "density_owner": "analyses/mea_parameter_bundle/scripts/verify_temperature_reference.py:water_reference (Wagner-Pruss saturation-density approximation to ambient source)",
+    "density_derivative": "complex-step derivative at 1e-20 K through existing source-density function; includes -R*T^2*dlnq/dT",
+    "fit_method": "one equal-weight OLS of published converted law at 298+5j K, j=0..6; centered 313.15 K; scaled columns; NumPy lstsq; not independent experimental observations",
+    "source_measurement_interval_K": [
+      298,
+      328
+    ],
+    "representation_admission_interval_K": [
+      293.15,
+      353.15
+    ],
+    "report_only_continuation_K": [
+      353.15,
+      393.15
+    ],
+    "reference_pressure_Pa": 100000,
+    "reference_pressure_meaning": "inherited ambient source-reference declaration, not a measured pressure in Aroua tables",
+    "limit_lnK": 0.002,
+    "limit_heat_kJ_mol": 0.15,
+    "check_grid": "293.15+1j K, j=0..60, plus seven fit knots and all declared diagnostics",
+    "passed": true,
+    "limitations": "0.100+/-0.005 M MEA; neutral ideality and NaClO4 water activity approximations; zero-I covariance absent; representation agreement above 328 K does not extend measured domain"
+  },
+  "R5": {
+    "source": "Kim2011 Table 7 This work Exp (7); Table 12 MEA Exp (6), pp.1758/1761 PDF pp.5/8",
+    "parent": "89KKLDUF",
+    "pdf": "7R3LYF7R",
+    "option": "(a) owner-selected joint source-only representation; not printed Table 5 coefficients or a verified published correction",
+    "B_K": 0,
+    "joint_row_count": 13,
+    "method": "one centered scaled linear least-squares solve, Tref=313.15 K; residual scales ln(10)*0.02 and 0.025*Exp heat J/mol; row weights 1; no family normalization",
+    "reaction": "MEAH+ + H2O <=> MEA + H3O+; dissociation heat positive (reverse of negative protonation heat)",
+    "constant_measurement_interval_K": [
+      298.15,
+      363.15
+    ],
+    "heat_measurement_interval_K": [
+      298.15,
+      393.15
+    ],
+    "admitted_execution_interval_K": [
+      293.15,
+      393.15
+    ],
+    "constant_continuations_K": [
+      [
+        293.15,
+        298.15
+      ],
+      [
+        363.15,
+        393.15
+      ]
+    ],
+    "reference_pressure_Pa": 100000,
+    "reference_pressure_meaning": "inherited dilute-law reference declaration; not asserted source cell pressure",
+    "rule": "family scaled RMS <=2 and every absolute scaled residual <=2; factor 2 engineering allowance, not source coverage",
+    "family_scaled_residuals": {
+      "lnK": {
+        "RMS": 1.0327114256129832,
+        "maximum_absolute": 1.7925718321949375
+      },
+      "dissociation_heat": {
+        "RMS": 0.7739072902013623,
+        "maximum_absolute": 1.4412548780837895
+      }
+    },
+    "check_value_differences": {
+      "L0": -1.538325022920617e-12,
+      "C": -9.229950137523701e-12,
+      "D_per_K": -1.3739009929736312e-15,
+      "A": 4.1040948417503387e-11,
+      "a_native": -8.615330671091215e-13
+    },
+    "passed": true,
+    "limitations": "rounded tables; missing covariance; source dilute-state assumption 0.01 mol/kg constants and 0.1 mol/kg heats, based on MDEA; no confidence band or mixture shift"
+  },
+  "retained_R1_R3": {
+    "source_owner": "data/reference/MEA/manifests/chemical_reaction_source_contract.json",
+    "law_and_conversion_unchanged": true,
+    "reported_correlation_range_K": [
+      273.15,
+      498.15
+    ],
+    "Edwards1978_full_text_lineage": "incomplete; no new primary-source verification claimed"
+  },
+  "execution": {
+    "environment": {
+      "python": "3.13.14",
+      "numpy": "2.5.1"
+    },
+    "elapsed_s": 0.014488594999420457,
+    "producer_sha256": "6cabd97d58f3bf09d762cf752340f010edca12c34069ee7799138f987a93a93c"
+  },
+  "post_execution_curation": "Only diagnostic-temperature rows above 393.15 K removed from broad Wagner source-temperature enumeration; no coefficients, source grid, solve, weights or tolerances changed. Timing/environment logging moved from reproduction script to this record. Exactly one S1 execution; no numerical rerun.",
+  "source_review": "implementation checks recorded; independent delivered source review pending",
+  "errors_csv": "representation-errors.csv",
+  "coefficients_json": "source-laws.json",
+  "residual_csv": "r5-residuals.csv"
+}
