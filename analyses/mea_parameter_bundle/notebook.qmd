@@ -2,6 +2,8 @@
 title: "MEA parameter bundle"
 subtitle: "Limited-domain SSM+DS model D working record · 142 fitted targets"
 resources:
+  - results/temperature-reanchor-140/stage-3/delivered-review.json
+  - results/temperature-reanchor-140/stage-3/source-delivered-review.json
   - results/temperature-reanchor-140/stage-3-preregistration.md
   - results/temperature-reanchor-140/stage-3/freeze.json
   - results/temperature-reanchor-140/stage-3/stage-3-summary.json
@@ -96,7 +98,7 @@ resources:
 ::: {.callout-note}
 ## Latest issue 140 result: Stage 3
 
-**Both complete R2 tests miss the adopted 80 °C pressure benchmark while preserving the ≤60 °C pressure and species cost limits.** The independent Plummer–Busenberg R2 primary gives 27.61% canonical 21-row AARD; the free-R2 secondary gives 23.02%, against ≤20.270257%. The [Stage 3 results](#stage-3-loaded-results) record the committed freeze, all six converged starts, single assessments and conditional enthalpy diagnostics. These are bounded prediction comparisons with retained measurements, not physical validation or parameter adoption. Independent delivered review is pending.
+**Both complete R2 tests miss the adopted 80 °C pressure benchmark while preserving the ≤60 °C pressure and species cost limits.** The independent Plummer–Busenberg R2 primary gives 27.61% canonical 21-row AARD; the free-R2 secondary gives 23.02%, against ≤20.270257%. The [Stage 3 results](#stage-3-loaded-results) record the committed freeze, all six converged starts, single assessments and conditional enthalpy diagnostics. These are bounded prediction comparisons with retained measurements, not physical validation or parameter adoption. Independent GPT-6.1 Sol high delivered review returned **Supported at `0e5703e`**, with no required corrections.
 :::
 
 ::: {.callout-note}
@@ -471,7 +473,7 @@ Two interaction intercepts are at bounds: MEAH+–water −0.5 and HCO3−–wat
 
 The supported claim is bounded prediction failure under the admitted conventions. Edwards' combined CO2+H2CO3 convention remains assumed because full text is unavailable. The hydration envelope relies on constant-enthalpy continuation beyond Wang's measured 42.8 °C and is not an empirical whole-interval bound. Source uncertainty, compression, source pressure, active bounds and model discrepancy remain distinct. The 100–120 °C scores use a frozen continuation outside the candidate temperature domain; historical high-temperature binary interactions/model choices remain. R4/R5 chemical consistency is unresolved, concentration/stripper use is not qualified, and no parameter or manuscript result is adopted.
 
-The [current summary](results/temperature-reanchor-140/stage-3/stage-3-summary.json) supersedes its source-only stop version retained in Git. Exact predictions, costs, Jacobians, conditional covariance, failed-trial counts and hashes are retained. The existing presentation owner rendered the pressure SVG from retained values, and it was visually inspected. Notebook HTML refresh remains unavailable because `snakemake` is absent from PATH. Independent GPT-6.1 Sol high delivered review is pending; no investigator promotion is claimed.
+The [current summary](results/temperature-reanchor-140/stage-3/stage-3-summary.json) supersedes its source-only stop version retained in Git. Exact predictions, costs, Jacobians, conditional covariance, failed-trial counts and hashes are retained. The existing presentation owner rendered the pressure SVG from retained values, and it was visually inspected. Notebook HTML refresh remains unavailable because `snakemake` is absent from PATH. The [independent GPT-6.1 Sol high delivered review](results/temperature-reanchor-140/stage-3/delivered-review.json), task `/root/stage3_loaded_delivered_review`, returned **Supported at `0e5703e`**, with no required corrections. It reproduced metrics, cohort identities, baseline reuse and conditional covariance, verified all 35 freeze hashes and installed wheel entries, and confirmed complete estimation and freeze-before-assessment. The authorized Stage 3 numerical study and delivered review are complete. No investigator promotion is claimed.
 
 # Model D: historical 160-target assessment {#model-d-decision23}
 
