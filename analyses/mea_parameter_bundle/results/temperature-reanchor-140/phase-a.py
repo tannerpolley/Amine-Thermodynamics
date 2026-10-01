@@ -43,7 +43,7 @@ def table(path, rows):
         writer.writerows(rows)
 
 
-def verify():
+def verify(environment_root=None):
     s.verify_wheel()
     distribution = importlib.metadata.distribution('epcsaft')
     count = 0
@@ -55,7 +55,7 @@ def verify():
             assert len(data) == int(size), name
             count += 1
     origin = Path(probe.epcsaft.__file__).resolve()
-    assert origin.is_relative_to((probe.W / '.venv').resolve()), origin
+    assert origin.is_relative_to((environment_root or probe.W / '.venv').resolve()), origin
     assert s.sha256(ADOPTED) == '9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241'
     return {'wheel_sha256': s.ENGINE_WHEEL_SHA256, 'installed_record_hashes': count,
             'module_origin': str(origin), 'direct_url': json.loads(distribution.read_text('direct_url.json'))}
