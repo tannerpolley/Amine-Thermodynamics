@@ -224,7 +224,7 @@ hash and **locally commit** the freeze before any ≥80 °C calculation.
 
 Run the existing ordered candidate assessments once: 1 canonical 80 °C
 pressure (21 primary /19 diagnostic rows), 2 all admitted 80 °C species,
-3 never-accessed Wagner near-353 K (11), 4 canonical 100–120 °C pressure (57)
+3 previously assessed Wagner near-353 K (11), 4 canonical 100–120 °C pressure (57)
 and Wagner near-392 K (12), 5 the 15/45 wt% transfer sets. Assess finite-dose
 heat outside the objective separately, within the existing six-assessment-job
 cap. The old sixth group's adopted-Wagner baseline is already computed;
@@ -278,3 +278,21 @@ interpretation, Aroua's inferred activity model, missing source covariance,
 active loaded-fit bounds and two-start local estimation limit the claims.
 No individual loaded-solution reaction-enthalpy identification, calorimetric
 constraint, concentration/stripper qualification or parameter adoption follows.
+
+## Independent readiness review, before fitting
+
+GPT-6 Astra xhigh, read-only task `/root/stage_2_readiness`: **Ready** for
+the diagnostic design at `2814df5996389c85fec2494fcbab259c228287c4`, relative
+to `cc508d1`. The reviewer checked the source PDFs, exact CSV/PDF hashes,
+selected row values, conversion algebra, enthalpy signs, requested A+B/T form,
+parent uncertainty exception and density approximation. The reviewer accepted
+the eight-fit cap and 300-line executable addition ceiling, with no blocking
+findings. All source and loaded-solution fits were still unstarted. Source
+measurement uncertainty remains unavailable and chemical consistency remains
+UNRESOLVED; no uncertainty-qualified chemical agreement is authorized.
+
+The empirical-row snapshot added in `2c2b47d` retains the same 48 Table 2
+values from the same hashed source, separately from the four fitted Table 3
+values. Stage 2 uses the historically never-accessed Phase B Wagner cohort,
+which is now a previously assessed cohort; retained identifiers describe its
+Phase B history and do not imply newly untouched validation.
