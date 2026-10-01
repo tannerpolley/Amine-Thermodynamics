@@ -68,5 +68,20 @@
       "qualification": "This is not an assessment of the historical 104-row gate."
     }
   },
-  "bounded_claim": "Prediction of loaded 30 wt% MEA at 80 \u00b0C from loaded-solution parameters estimated only from \u226460 \u00b0C loaded-solution data, conditional on binary CO\u2082\u2013water (Kiepe, 313\u2013393 K) and MEA\u2013water (Cai, 363\u2013432 K) interactions fitted to binary-subsystem data that include higher temperatures; historical SSM+DS, dielectric and association choices are fixed conditions."
+  "bounded_claim": "Prediction of loaded 30 wt% MEA at 80 \u00b0C from loaded-solution parameters estimated only from \u226460 \u00b0C loaded-solution data, conditional on binary CO\u2082\u2013water (Kiepe, 313\u2013393 K) and MEA\u2013water (Cai, 363\u2013432 K) interactions fitted to binary-subsystem data that include higher temperatures; historical SSM+DS, dielectric and association choices are fixed conditions.",
+  "independent_delivered_review": {
+    "outcome": "Supported",
+    "reviewed_commit": "78f4efe0ebddf920e3962a74d651c09e9da03f01",
+    "merge_base": "d730dc80bbe3b11385c43c2d8e7f3c90b60f52ab",
+    "provider": "pi",
+    "model": "openai-codex/gpt-6.1-sol",
+    "reasoning_effort": "high",
+    "task_id": "node:delegated-task:command%3Amcp%3A5bddf1d4-299d-43c0-a7e9-0a93f37b1e43%3Adelegate-task%3A42b6f62d-8f8f-4d7d-9389-7857a3aa75f2",
+    "scope": "Bounded numerical verification and prediction comparison; not physical validation, adoption or manuscript promotion.",
+    "independent_checks": "All 176 pressure/species summary groups, heat summaries and finite-dose heats from retained endpoints; all 714 raw assessment states and material/charge balances; freeze, ordering and all 90 file hashes; installed 18-file RECORD and immutable Engine wheel; complete notebook, refreshed HTML and pressure SVG.",
+    "required_corrections": [],
+    "optional_hardening": "assessment.py names the signed mean mean_absolute_signed_error; notebook already correctly labels Mean signed error. No change made to this optional field-name suggestion.",
+    "limitations": "Incomplete constant-fixed attempts prevent its structural comparison; active bounds, the secondary weak Jacobian direction, source-law extrapolation and deferred folds/profiles prevent unrestricted identification; no normalized caloric adequacy; Bates PDF identity remains explicitly unrefreshed. Misfit does not establish a solver defect.",
+    "next_stage": "STOP pending investigator promotion/deferred-fold decision."
+  }
 }
