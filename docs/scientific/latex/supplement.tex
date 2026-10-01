@@ -4,6 +4,8 @@
 \usepackage{stix}
 \usepackage[scaled=0.95]{inconsolata}
 \usepackage{caption}
+\usepackage{graphicx}
+\graphicspath{{figures/generated/}}
 \captionsetup{font=small,labelfont=bf,labelsep=colon,justification=justified}
 \captionsetup[table]{position=top,labelsep=newline,justification=raggedright,singlelinecheck=false}
 \AddToHook{env/table/begin}{\small}
@@ -33,34 +35,146 @@
 \begin{document}
 \maketitle
 
+\section{Born-form calculations}\label{sec:s-born}
 % P:supplement-00
-\Cref{sec:s-diameter} summarizes a calculation that supports the main text but does not carry a main-text claim.
-Values in that section belong to the 160-target objective, which also fitted the 18 Matin bicarbonate-pool targets, and to its optima, not to the 142-target fits.
+This section gives the calculations behind the main-text comparison of the SSM+DS and original Born terms.
+Costs are the weighted least-squares cost \(C=\tfrac12\sum r_j^2\) of the main text.
+Two sensitivity fits are named as in the main text: the fit including the titration bicarbonate data adds Matin's 18 \ce{HCO3- + CO3^2-} pool targets to the 142 fitted targets, 160 targets in all, and the fit without the titration data omits all 72 Matin targets, leaving 88.
 
-\section{Born-diameter refit on the 160-target objective}\label{sec:s-diameter}
+\subsection{Cost by target group and fitted target set}\label{sec:s-costs}
+% P:supplement-03
+In the fit including the titration bicarbonate data, original Born has the lower cost, 40.20 against 47.63 for SSM+DS (\cref{fig:born-cost-groups}).
+The 7.42 cost difference is concentrated in the Matin species, which cost 11.34 more for SSM+DS.
+The pressure and B\"ottinger targets favor SSM+DS by 1.78 and 2.14, and the Matin bicarbonate pool alone contributes 6.02 of the net difference.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{born-cost-by-group-and-species.pdf}
+    \caption{Cost decomposition for the two Born forms, each at its own converged optimum of the fit including the titration bicarbonate data, which fitted Matin's 18 \ce{HCO3- + CO3^2-} pool targets (160 targets).
+    These are residuals of that fit, not of the fitted parameter set of the main text.
+    Left: full objective and its pressure (48 targets), B\"ottinger species (40) and Matin species (72) groups.
+    Right: species groups; Matin's bicarbonate pool contributes 6.02 of the 7.42 net cost difference.
+    The legend pairs give \((c_{\mathrm{shell}},c_{\mathrm{dielectric}})\).}
+    \label{fig:born-cost-groups}
+\end{figure}
+
+% P:supplement-04
+With the pool compared but not fitted, the two forms' fits to the 142 targets favor SSM+DS, 32.99 against 34.58, and the fit without the titration data favors it more strongly, 10.47 against 16.85 (\cref{fig:born-ranking}).
+Evaluated with the 18 pool targets included, the two fitted parameter sets of the main text again favor original Born, 43.62 against 53.77 (\cref{tab:s-costs}).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{born-p5-ranking-reversal.pdf}
+    \caption{Born-form ranking by fitted target set.
+    Left: converged costs of each fit: the fit including the titration bicarbonate data (160 targets); the main-text fit (142 targets), which compares Matin's 18 bicarbonate-pool targets without fitting them; and the fit without the titration data (88 targets), which omits all Matin targets and is a sensitivity case only.
+    Right: the 142-target and 88-target fits evaluated on all 160 targets.
+    Compare forms within one target set; cost magnitudes across sets use different numbers of observations.}
+    \label{fig:born-ranking}
+\end{figure}
+
+\begin{table}[htb]
+    \centering
+    \caption{Weighted costs of the two Born forms on the 160 targets that include Matin's 18 bicarbonate-pool targets.}
+    \label{tab:s-costs}
+    \begin{tabular}{@{}llrrr@{}}
+        \toprule
+        Parameter set & Role & \(n\) & SSM+DS & original Born \\
+        \midrule
+        Fit including the titration bicarbonate data & fitted & 160 & 47.63 & 40.20 \\
+        Fitted parameter sets of the main text & evaluated & 160 & 53.77 & 43.62 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Fixed-interaction scans of the Born inputs}\label{sec:s-scans}
+% P:results-19
+The main-text Born-form comparison contrasts two fitted optima; the calculations below ask how the cost responds when a Born input changes.
+Fixed-interaction scans of one Born input at a time use the 142 fitted targets, the fitted SSM+DS parameter set and the original Born parameter set at its own optimum; the local Jacobian diagnostics of \cref{sec:s-identity} belong to the SSM+DS optimum of the fit including the titration bicarbonate data.
+A fixed-interaction scan measures the response of the cost to one input with every other parameter held at its fitted value; it does not optimize that input.
+All costs in this section are local and conditional on the chemistry, bounds, weights and fixed inputs of the two parameter sets, and none is a statistical significance test.
+
+% P:results-20
+\Cref{fig:born-input-sensitivity} shows the scans of both forms.
+Lowering the water solvation factor from 1.5 to 1, which removes the solvation shell, raises the SSM+DS cost from 32.99 to 424.16, of which the 48 pressure targets contribute 392.92; factors of 1.25, 1.75 and 2 give 69.07, 42.57 and 52.42.
+Raising the \ce{MEA} solvation factor from 1 to 1.25, 1.5 and 1.75 gives 41.11, 65.92 and 107.16.
+The ion-region permittivity \(\varepsilon_{\mathrm{ion}}=4\), 16 and 32, in place of 8, gives 911.67, 171.91 and 335.97; the calculation at \(\varepsilon_{\mathrm{ion}}=2\) is unavailable (\cref{sec:s-unavailable}).
+The original Born form contains none of these three inputs, so its cost stays at 34.58 on these scans.
+Scaling the Born diameters of \ce{MEAH+}, \ce{MEACOO-} and \ce{HCO3-} together by 0.8, 0.9, 1.1 and 1.2, with the other Born diameters and all packing and Debye--H\"uckel diameters fixed, gives 63.69, 38.50, 38.03 and 48.70 for SSM+DS and 32.18, 32.96, 36.56 and 38.66 for original Born.
+Setting \(\varepsilon_{\ce{MEA}}\) to 24 and 40, in place of 32, gives 33.12 and 33.35 for SSM+DS and 32.18 and 38.71 for original Born.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{born-input-sensitivity.pdf}
+    \caption{Change of the cost of the 142 fitted targets when one Born input is changed with all five binary interaction parameters fixed, for SSM+DS and original Born, each relative to its own fitted parameter set (32.99 and 34.58).
+    (A)~water and \ce{MEA} solvation factors; (B)~ion-region permittivity \(\varepsilon_{\mathrm{ion}}\); (C)~common multiplier on the Born diameters of \ce{MEAH+}, \ce{MEACOO-} and \ce{HCO3-} only, with the \ce{H3O+}, \ce{OH-} and \ce{CO3^2-} Born diameters and every packing and Debye--H\"uckel diameter fixed; (D)~\ce{MEA} relative permittivity.
+    The SSM+DS calculation at \(\varepsilon_{\mathrm{ion}}=2\) is unavailable: one equilibrium state did not converge, so no full cost exists for that point; this is a missing calculation, not evidence that no physical solution exists.
+    The original Born form does not contain the solvation factors or \(\varepsilon_{\mathrm{ion}}\), so its points in (A) and (B) are unchanged.
+    Points are discrete evaluations and are not interpolated; the vertical axes of (A) and (B) are logarithmic beyond \(|\Delta C|=1\) for legibility.}
+    \label{fig:born-input-sensitivity}
+\end{figure}
+
+% P:results-27
+At 0.8 times the three ion diameters, or at \(\varepsilon_{\ce{MEA}}=24\), original Born without any refit reaches a cost of 32.18, below the 32.99 of the fitted SSM+DS parameter set.
+The three ion Born diameters are fixed model inputs, not measured properties of these ions (main-text table of component parameters), and \(\varepsilon_{\ce{MEA}}\) is held at one value for all temperatures.
+With the interactions fixed, the ranking of the two Born forms on the 142 fitted targets therefore also responds to the fixed Born inputs within the scanned ranges.
+These are fixed-interaction evaluations, not optimized inputs, and they identify neither a better parameter set nor a physical diameter or permittivity.
+
+% P:results-21
+The same scans at the optima of the fit including the titration bicarbonate data set the expected scale; they belong to that fit, not to the fitted parameter set of the main text.
+At its SSM+DS optimum, \(f_{\ce{H2O}}=1\) raised the cost from 47.63 to 454.51 and the pressure-group cost from 10.07 to 386.26, while the B\"ottinger species cost fell from 5.48 to 4.86.
+Among the scanned values, the water factor of 1.5 of Figiel et al.\ and the \ce{MEA} factor of 1 gave the lowest costs of that fit.
+Its costs at \(\varepsilon_{\mathrm{ion}}=4\) and 32 were 1647.30 and 359.64.
+Uniform Born-diameter multipliers of 0.8 and 1.2 gave 84.28 and 59.98 for SSM+DS but 39.11 and 43.51 for original Born.
+\(\varepsilon_{\ce{MEA}}=24\) and 40 moved the two forms in opposite directions: 48.80 and 47.03 for SSM+DS, 39.08 and 43.42 for original Born.
+\Cref{sec:s-diameter} tests whether the fixed Born diameters explain the SSM+DS penalty of that fit.
+
+\subsection{Unavailable calculations}\label{sec:s-unavailable}
+% P:results-17
+Two Born calculations remain unavailable, both at \SI{313.15}{\kelvin}: the shell-only form, \((c_{\mathrm{shell}},c_{\mathrm{dielectric}})=(1,0)\), at Hilliard's measurement at loading 0.153, and an ion-region permittivity \(\varepsilon_{\mathrm{ion}}=2\) at the Jou et al.\ measurement at loading 0.642.
+Continuation, additional bounded Newton solver attempts and alternate starts found no solution that meets the convergence criteria for either state.
+Their cause is undetermined: neither case demonstrates that no physical solution exists or that the solver fails at an existing solution.
+The fixed-interaction scan of the fitted parameter set at \(\varepsilon_{\mathrm{ion}}=2\) stops at the same state, with an equilibrium residual of \(2.1\times10^{-4}\) after 61 iterations, so that scan point has no full cost.
+Neither case enters the Born-form ranking.
+
+\subsection{Coefficient identity and local compensation}\label{sec:s-identity}
+% P:results-24
+Two properties of the main-text SSM+DS Born term and its shell diameter \(D_i\) limit how separately the Born inputs can be interpreted.
+At \(c_{\mathrm{shell}}=0\), the shell diameter \(D_i\) equals \(d_i^{\mathrm{Born}}\), so the dielectric-saturation term vanishes and \((c_{\mathrm{shell}},c_{\mathrm{dielectric}})=(0,1)\) is identical to original Born, \((0,0)\).
+An evaluation at the original Born optimum of the fit including the titration bicarbonate data confirms this equality: the two coefficient settings \((c_{\mathrm{shell}},c_{\mathrm{dielectric}})=(0,1)\) and \((0,0)\) both give a cost of 40.20, with a largest weighted-residual difference of zero.
+Because every component except water has \(f_k=1\), \(D_i\) depends on \(c_{\mathrm{shell}}\) and \(f_{\ce{H2O}}\) only through the product \(c_{\mathrm{shell}}(f_{\ce{H2O}}-1)\), so the two cannot be estimated separately from this dependence.
+
+% P:results-25
+A local Jacobian analysis at the SSM+DS optimum of the fit including the titration bicarbonate data shows that, for small changes, the binary interaction parameters can reproduce most of the residual change caused by each of the five Born inputs listed below.
+The fraction of each Born-input column of the weighted Jacobian that lies in the span of the five interaction columns is 0.9928 for the \ce{MEAH+} Born diameter, 0.9997 for \ce{MEACOO-}, 0.9969 for \ce{HCO3-}, and 0.9939 for each of \(c_{\mathrm{shell}}\) and \(c_{\mathrm{dielectric}}\).
+This compensation is local to that optimum and to small input changes.
+A joint attribution that includes the \ce{H3O+} Born diameter is unavailable, because its finite-difference column agreed on only 157 of 160 entries.
+Large fixed-interaction cost changes therefore do not by themselves show that the data identify the Born inputs.
+The compensation does not extend to removal of the Born term, which the main-text refits leave at a fitted-pressure AARD of 53.90\,\% and a cost of 98.79.
+
+\subsection{Born-diameter refit}\label{sec:s-diameter}
 % P:supplement-01
-Uniform scaling of all Born diameters at fixed interactions changed the 160-target SSM+DS cost more than the Original Born cost, which raised the question of whether the fixed diameters explain the SSM+DS penalty on the 160-target objective.
+In the fit including the titration bicarbonate data, uniform scaling of the Born diameters at fixed interactions changed the SSM+DS cost more than the original Born cost (\cref{sec:s-scans}), which raises the question of whether the fixed diameters explain the SSM+DS penalty in that fit.
 The Born diameters of \ce{MEAH+}, \ce{MEACOO-} and \ce{HCO3-} were changed from 3.533, 3.541 and \SI{3.000}{\angstrom} to 5.000, 2.041 and \SI{3.302}{\angstrom}, within a search envelope of 2--\SI{5}{\angstrom} chosen from the 2.784--\SI{4.985}{\angstrom} Born diameters reported for other non-proton ions \cite[Tables~2--3]{Figiel2025}, not from measured diameters of the \ce{MEA}-derived ions, and the five binary interaction parameters were then refitted.
-That refit converged after five optimizer updates and lowered the 160-target SSM+DS cost from 47.625767 to 43.950877, a reduction of 3.674890.
-The test set in advance was a reduction of at least 3.71, half the 7.42 cost gap to Original Born, so the result is inconclusive: the diameters affect the cost, but this change does not account for the gap.
+That refit converged after five optimizer updates and lowered the SSM+DS cost of that fit from 47.63 to 43.95, a reduction of 3.67.
+The test set in advance was a reduction of at least 3.71, half the 7.42 cost gap to original Born, so the result is inconclusive: the diameters affect the cost, but this change does not account for the gap.
 Table~\ref{tab:s-diameter-refit} lists the diameters and group costs.
 The refitted parameters are \(k_{\ce{MEACOO-},\ce{H2O}}=0.0351\), \(k_{\ce{MEAH+},\ce{H2O}}=-0.2533\) at \SI{313.15}{\kelvin}, \(k_{\ce{HCO3-},\ce{H2O}}=+0.5\) at its upper bound, \(k_{\ce{MEAH+},\ce{MEACOO-}}=-0.5759\) and \(b=\SI{119.96}{\kelvin}\).
 
 \begin{table}[htb]
     \centering
-    \caption{Born diameters and 160-target group costs at the 160-target SSM+DS optimum and after the diameter change and five-parameter refit.}
+    \caption{Born diameters and group costs of the fit including the titration bicarbonate data, at its SSM+DS optimum and after the diameter change and five-parameter refit.}
     \label{tab:s-diameter-refit}
     \begin{tabular}{@{}lrr@{}}
         \toprule
-        Quantity & 160-target optimum & After refit \\
+        Quantity & Optimum & After refit \\
         \midrule
         \(d^{\mathrm{Born}}_{\ce{MEAH+}}\) (\si{\angstrom}) & 3.533 & 5.000 \\
         \(d^{\mathrm{Born}}_{\ce{MEACOO-}}\) (\si{\angstrom}) & 3.541 & 2.041 \\
         \(d^{\mathrm{Born}}_{\ce{HCO3-}}\) (\si{\angstrom}) & 3.000 & 3.302 \\
-        Pressure cost (48 targets) & 10.065 & 10.080 \\
-        B\"ottinger cost (40 targets) & 5.480 & 5.800 \\
-        Matin cost (72 targets) & 32.080 & 28.071 \\
-        Total cost (160 targets) & 47.626 & 43.951 \\
+        Pressure cost (48 targets) & 10.07 & 10.08 \\
+        B\"ottinger cost (40 targets) & 5.48 & 5.80 \\
+        Matin cost (72 targets) & 32.08 & 28.07 \\
+        Total cost (160 targets) & 47.63 & 43.95 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -72,7 +186,7 @@ The search is not exhaustive.
 The inventory holds 165 entries, of which 88 were identified from bibliographic metadata alone; their coverage is unverified, and they are not tabulated.
 \Cref{tab:s4-data-inventory} lists the 34 publications whose near-30 wt\% coverage was confirmed from a primary passage, table or database record, with the concentration basis, conditions and observation counts each source reports.
 Several entries reuse the same experimental campaign and are not independent measurements.
-Extracting values from a source does not admit them to the fit; the fitted and assessment roles of the main text are those of its observation-role table.
+Extracting values from a source does not admit them to the fit; the fitted and compared roles of the main text are those of its observation-role table.
 Dilute-solution reaction-constant measurements are outside the scope of \Cref{tab:s4-data-inventory}.
 
 \input{tables/supplement_data_inventory}

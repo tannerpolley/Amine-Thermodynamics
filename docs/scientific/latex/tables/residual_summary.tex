@@ -1,18 +1,13 @@
 \begin{table}[pos=!htb]
     \centering
-    \caption{Cost and deviation summary for the two Born forms, each fitted to the 142-target objective unless stated otherwise.
+    \caption{Deviation and cost summary for the two Born forms, each fitted to the 142 fitted targets.
     AARD is \(100\,n^{-1}\sum|y_{\mathrm{calc}}/y_{\mathrm{obs}}-1|\) over the stated group; the cost is the weighted least-squares cost \(C=\tfrac12\sum r_j^2\).
-    Rows marked outside fit are tests outside the present (142-target, five-parameter) fit, not data unseen during model development; assessment and transfer rows use input loadings corrected for a \(1\times10^{-4}\)~mol \COtwo/mol \MEA excess.
+    Rows marked outside fit are tests outside the present five-parameter fit, not data unseen during model development.
     The carbonate-share row covers nine Jakobsen points at 20 and \SI{40}{\degreeCelsius}, excluding the \SI{40}{\degreeCelsius} point at loading 0.21.}
     \label{tab:residual-summary}
     \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{3.1cm}r r r@{}}
         \toprule
-        Group & Role & \(n\) & SSM+DS & Original Born \\
-        \midrule
-        \multicolumn{5}{@{}l}{\emph{Weighted cost}} \\
-        142-target objective & fitted & 142 & 32.991897 & 34.584032 \\
-        160-target objective, 160-target fits & fitted & 160 & 47.625767 & 40.201537 \\
-        160-target objective, 142-target fits & evaluated & 160 & 53.769479 & 43.623963 \\
+        Group & Role & \(n\) & SSM+DS & original Born \\
         \midrule
         \multicolumn{5}{@{}l}{\emph{AARD, \%}} \\
         Pressure, 40/\SI{60}{\degreeCelsius} & fitted & 48 & 13.53 & 17.31 \\
@@ -20,14 +15,17 @@
         Matin \ce{HCO3- + CO3^2-} pool & not fitted & 18 & 59.81 & 35.12 \\
         Jou 1995 pressure, \SI{80}{\degreeCelsius} & outside fit & 11 & 9.24 & 11.21 \\
         Species, \SI{80}{\degreeCelsius} & outside fit & 11 & 11.15 & 7.36 \\
-        Assessment pressure, \SI{80}{\degreeCelsius} & outside fit & 21 & 20.27 & 20.91 \\
-        Assessment pressure, 40--\SI{80}{\degreeCelsius} & pooled & 104 & 20.58 & 20.78 \\
-        Assessment pressure, 100--\SI{120}{\degreeCelsius} & extrapolation & 57 & 26.44 & 26.48 \\
+        Measured pressure, \SI{80}{\degreeCelsius} & outside fit & 21 & 20.27 & 20.91 \\
+        Measured pressure, 40--\SI{80}{\degreeCelsius} & pooled & 104 & 20.58 & 20.78 \\
+        Measured pressure, 100--\SI{120}{\degreeCelsius} & extrapolation & 57 & 26.44 & 26.48 \\
         Pressure, 15 wt\% \MEA & transfer & 33 & 75.95 & 71.50 \\
         Pressure, 45 wt\% \MEA & transfer & 37 & 46.15 & 46.99 \\
         \midrule
         \multicolumn{5}{@{}l}{\emph{Calculated/observed ratio}} \\
         Jakobsen carbonate share, 20/\SI{40}{\degreeCelsius} & outside fit & 9 & 0.42--1.33 & 1.21--3.19 \\
+        \midrule
+        \multicolumn{5}{@{}l}{\emph{Weighted cost}} \\
+        Fitted targets & fitted & 142 & 32.99 & 34.58 \\
         \bottomrule
     \end{tabularx}
 \end{table}
