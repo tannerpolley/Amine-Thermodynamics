@@ -31,6 +31,11 @@ queries and source-reading routes are recorded in `manifests/source_search_log.c
 `manifests/source_status_manifest.csv` owns publication identity, concentration and measurement basis,
 temperature coverage, observation counts, access, extraction status and source caveats.
 The file inventory continues to own file hashes and row counts.
+`repo_extraction_status` owns the publication extraction fact. The legacy `status`
+column duplicates that fact for the nine reconciled retained-extraction entries;
+read `repo_extraction_status` for extraction coverage, including partial and diagnostic roles.
+The remaining legacy `status` values also describe source workflow and are not a
+second extraction authority.
 
 The search includes 25–35 wt% aqueous MEA and reported 7 mol/kg water, 5 mol/L
 or 5-normal solutions. These concentration bases remain distinct. A molarity or
