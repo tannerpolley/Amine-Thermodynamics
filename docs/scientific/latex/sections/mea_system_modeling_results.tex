@@ -236,7 +236,14 @@ The tested dilute-solution temperature laws for R4 and R5 did not recover the se
 For modelers, the temperature response of this model must come from data that carry it directly, such as heat of absorption or equilibrium measurements above \SI{60}{\degreeCelsius}.
 
 % P:results-31
-\textbf{[[R2\_TEST]]}
+Two further refits tested R2, the reaction of dissolved \COtwo with water to bicarbonate, keeping the dilute-solution R4 and R5 laws and the published \COtwo dispersion energy of the preceding diagnostic refit; both were fitted to the same 142 targets and frozen before any calculation at or above \SI{80}{\degreeCelsius}.
+In the first, R2 follows the pure-water first ionization constant of carbonic acid of Plummer and Busenberg~\cite{plummerSolubilitiesCalciteAragonite1982a}, \(\log_{10}K_1=-6.338\) at \SI{80}{\degreeCelsius}, consistent with \(-6.33\pm0.03\) of Stef\'ansson et al.~\cite[Table~2]{stefanssonCarbonicAcidIonization2013}.
+This constant refers to the combined \ce{CO2(aq) + H2CO3} pool, and the Austgen correlation, taken from Edwards et al.~\cite{edwardsVaporliquidEquilibriaMulticomponent1978}, is assumed to use the same convention; the error limits for the four-term representation of the Plummer--Busenberg law were widened to 0.002 in \(\ln K\) and \SI{0.15}{\kilo\joule\per\mole} before any loaded-solution fit.
+This record preserves the fit at or below \SI{60}{\degreeCelsius}, with a cost of 32.68 against 32.99, but gives 27.61\,\% on the 21 canonical rows at \SI{80}{\degreeCelsius} and 50.05\,\% on the 11 Wagner rows near \SI{353}{\kelvin}.
+In the second, \(\ln K_2\) at \SI{313.15}{\kelvin} and the R2 reaction enthalpy are fitted with the five interaction coordinates, starting from the Austgen correlation.
+The fitted enthalpy shift, \SI{-5.90}{\kilo\joule\per\mole}, has the same sign as the inherited \SI{-8.20}{\kilo\joule\per\mole}, which was estimated with \SI{80}{\degreeCelsius} data (\cref{sec:data-methods}); with a cost of 31.67, this record gives 23.02\,\% and 42.78\,\% on the same rows, against 20.27\,\% and 24.51\,\% for the selected record.
+Because two interaction coordinates lie at their bounds, the shift is conditional on them and is a calibration value, not an identified hydration enthalpy or a validated temperature law.
+The data at or below \SI{60}{\degreeCelsius} thus move the R2 enthalpy in the direction the \SI{80}{\degreeCelsius} data required and recover part of the \SI{80}{\degreeCelsius} agreement, whereas the pure-water constant changes it little; equilibrium or heat-of-absorption data above \SI{60}{\degreeCelsius} are needed to set the temperature response.
 
 \begin{figure}[pos=!htb]
     \centering
