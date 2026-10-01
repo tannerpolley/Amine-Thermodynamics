@@ -1,6 +1,7 @@
 """Render the frozen 80 °C comparisons from retained rows; never solve a model."""
 
 import csv
+import sys
 from pathlib import Path
 
 import matplotlib
@@ -9,7 +10,7 @@ matplotlib.use("Agg")
 matplotlib.rcParams["svg.hashsalt"] = "temperature-reanchor-140"
 import matplotlib.pyplot as plt  # noqa: E402 — select the noninteractive backend first
 
-HERE = Path(__file__).resolve().parent
+HERE = Path(sys.argv[1]) if len(sys.argv) == 2 else Path(__file__).resolve().parent
 rows = [
     r
     for stage in (1, 3, 6)
@@ -68,7 +69,8 @@ for ax, group, title in zip(
     ax.legend(fontsize=8)
 fig.savefig(HERE / "pressure-80C.svg", metadata={"Date": None})
 fig.savefig(
-    HERE.parents[1] / "results/runs/temperature-reanchor-140/pressure-80C-preview.png",
+    Path(__file__).resolve().parent.parents[1]
+    / f"results/runs/temperature-reanchor-140/{HERE.name}-pressure-80C-preview.png",
     dpi=140,
 )
 plt.close(fig)
