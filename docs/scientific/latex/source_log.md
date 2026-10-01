@@ -34,16 +34,18 @@ was then refreshed with `cse-zotero bibliography-export --apply`.
 | `Baygi2015`, `Najafloo2018` | PC-SAFT and SAFT-HR for loaded MEA, with separate chemical equilibrium. |
 | `Gross2001`, `Gross2002`, `Cameretti2005`, `Bulow2020`, `Rueben2024`, `Schick2023` | Lineage of the equation of state and of the permittivity/Born terms. |
 | `Jou1995`, `Hilliard2008`, `Aronu2011`, `idrisSpeciationMEACO2Adducts2014`, `Mamun2005`, `Xu2011` | Pressure observations. Hilliard2008 is also the source of the Cp values in the earlier-record deficit. |
-| `Amundsen2009` | Loaded-solution densities in the earlier-record deficit. |
+| `Amundsen2009` | Selected-record density limitation; Amundsen Table 3 and unloaded control in Table 1. |
 
 Writer A's methods, equation-of-state and table files may add keys; `scripts/cited_bibliography.py`
 fails if any cited key is absent from the export.
 
 ## Numerical evidence
 
-The investigator promoted notebook commit `e80ef4e` for manuscript-v1 use. The promoted use
-covers scoped pressure prediction and the Born/source-method comparison, subject to the limits
-C7–C11 in the #68 design. Paths below are relative to the repository root, under
+The manuscript uses owner-promoted evidence at `e80ef4e` for the base record and Born/source-method
+comparison, `cc508d1` for the temperature finding, `83ab62b` for interaction and Born-input
+sensitivity, and `5dd82bc7` for the selected-record density limitation. The claims concern
+calibration, numerical verification and tests outside the present fit; no physical validation is
+claimed. Paths below are relative to the repository root, under
 `analyses/mea_parameter_bundle/` (**B**).
 
 | Manuscript value | Retained file |
@@ -55,7 +57,8 @@ C7–C11 in the #68 design. Paths below are relative to the repository root, und
 | Canonical pressure after the loading correction: 104 rows 20.581177/20.778397 %; 21 rows at 80 °C 20.270257/20.914492 %; the 11 Jou targets 9.239806/11.208814 %; 57 rows at 100–120 °C 26.436267/26.477470 %; per-source values; transfer 75.946385/46.149817 % and 71.495617/46.991021 %; mean ln values | B`model-d/assessment-p5a-loadfix-summary.json`; B`model-d/assessment-p5a-loadfix-comparison.csv`; B`model-d/assessment-p5a-11-loadfix-comparison-scores.csv`; B`model-d/assessment-p5a-00-loadfix-comparison-scores.csv`; B`model-d/assessment-p5a-11-loadfix-transfer-scores.csv` |
 | Singular values 1.55013, 1.13411, 0.89865, 0.69831, 0.12531; HCO₃⁻–water gradient −12.4674 | B`results/promotion-107-identification.json` |
 | Unavailable probes `vle_obs_0119` (1,0) and `vle_obs_0193` (ε_ion = 2) | B`model-d/born-form-diagnosis/engine-handoff/`; notebook “Unavailable solves and limits” |
-| Earlier-record density (+12.5 to +16.8 %) and Cp (−9.8 to −14.6 %) | Issues #123 and #124, record `868a5018`, wheel `48a639e7…` |
+| Selected-record density: +13.17/+17.80 % at 50 °C and +12.99/+17.39 % at 70 °C (loadings 0.3/0.4); unloaded control −0.423 % | B`results/density-current-record-123/density.csv` at `5dd82bc7` (issue #123) |
+| Historical earlier-record Cp (−9.8 to −14.6 %) | Issue #124, record `868a5018`, wheel `48a639e7…` |
 | Inherited R2/R5 reaction shifts estimated partly on 80 °C data (`vle_obs_0206`, `vle_obs_0211`) | Ancestry commit `c369705`; B`results/reaction-temperature-fit/README.md` |
 
 ### Canonical loading correction
@@ -84,11 +87,18 @@ owns replacement of the caption's pre-correction disclosure.
 | Manuscript figure | Copied file | SHA-256 | Provenance |
 | --- | --- | --- | --- |
 | Pressure against loading (`fig:pressure`) | `figures/generated/pressure.pdf` | `98ef591000a8d77a96eaad6291cfe5a5bab19394c3064762c8608dc8ee741522` | B`figures/regression_overview/output/provenance.json` |
-| Speciation (`fig:speciation`) | `figures/generated/speciation.pdf` | `ed501b51165a043d782c6e1cb2e8438fa7f2a291a2370bc234229bc0e3db50a6` | same |
+| Speciation (`fig:speciation`) | `figures/generated/speciation.pdf` | `20d325c76cb08efa3690c9621ecee303f9e3e01df5e18bcae04ddc50f13e8b52` | same |
 | Historical cost decomposition (`fig:born-cost-groups`) | `figures/generated/born-cost-by-group-and-species.png` | `2a3bd7afe4fb72a928a3d00027c2bd46b4ee16087e990832038ed67da579451e` | B`model-d/born-form-diagnosis/born-comparison-figure-sources.json` |
 | Ranking by target set (`fig:born-ranking`) | `figures/generated/born-p5-ranking-reversal.png` | `2a633b632365893665266b02a129ce7b9c1345348e26d419769476aa4d6bb1e9` | same (`p5conv-costs.csv` hash `472765ae…`) |
+| Born-input sensitivity (`fig:born-input-sensitivity`) | `figures/generated/born-input-sensitivity.png` | `1cd3d038f909f8776b38b349512f5a3c6e75946bc04da3d8f6aa8546f46c82c5` | B`model-d/sensitivity-current/figure-inputs.json` at `83ab62b` |
 
 ## Supplement data inventory generation (2026-09-30)
+
+The notes in this section are historical build records. The current inventory input is
+`source_status_manifest.csv` at main-checkout commit `a349f1a` on
+`work/mea-30wt-data-inventory`; on 2026-10-01 regenerating from it reproduced
+`tables/supplement_data_inventory.tex` byte for byte. Final publication checks are the
+builds reported with the `manuscript-v1` tag, not the preview checks below.
 
 The 34-entry selection and eight columns follow part B of the independent source
 inventory review (thread `mea68-supplement-review-1`, timeline position 56).

@@ -171,7 +171,7 @@ The retained evaluation at the historical 160-target Original Born optimum confi
 Because every component except water has \(f_k=1\), \(D_i\) depends on \(c_{\mathrm{shell}}\) and \(f_{\HtwoO}\) only through the product \(c_{\mathrm{shell}}(f_{\HtwoO}-1)\), so the two cannot be estimated separately from this dependence.
 
 % P:results-25
-A local Jacobian analysis at the historical 160-target SSM+DS optimum shows that, for small changes, the interaction coordinates can reproduce most of the residual change caused by a Born input.
+A local Jacobian analysis at the historical 160-target SSM+DS optimum shows that, for small changes, the interaction coordinates can reproduce most of the residual change caused by each of the five Born inputs listed below.
 The fraction of each Born-input column of the weighted Jacobian that lies in the span of the five interaction columns is 0.9928 for the \MEAH Born diameter, 0.9997 for \MEACOO, 0.9969 for \HCOthree, and 0.9939 for each of \(c_{\mathrm{shell}}\) and \(c_{\mathrm{dielectric}}\).
 This compensation is local to that historical optimum and to small input changes.
 A joint attribution that includes the \HthreeO Born diameter is unavailable, because its finite-difference column agreed on only 157 of 160 entries.
@@ -212,7 +212,7 @@ The fixed \COtwo dispersion energy of \SI{173.440}{\kelvin} was chosen on 2 Sept
 The \SI{80}{\degreeCelsius} values are therefore tests outside the fit in the sense of \cref{sec:introduction}, not predictions.
 
 % P:results-28
-The selected record was also scored on 23 \COtwo partial pressures of Wagner et al.\ in 30 wt\% \MEA that no earlier fit, selection or assessment of this work had used~\cite{wagnerSolubilityCarbonDioxide2013}.
+The selected record was also scored on 23 \COtwo partial pressures of Wagner et al.\ near 30 wt\% \MEA that no earlier fit, selection or assessment of this work had used~\cite{wagnerSolubilityCarbonDioxide2013}.
 It gives an AARD of 24.51\,\% with a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.283\) on 11 rows near \SI{353}{\kelvin}, and 25.45\,\% with \(-0.308\) on 12 rows near \SI{392}{\kelvin}.
 Because the inputs above carry \SI{80}{\degreeCelsius} information, these scores also test the record outside its fit; they are not predictions.
 
@@ -225,6 +225,7 @@ It preserves the fit at or below \SI{60}{\degreeCelsius}, with a cost of 33.01 a
 On the 21 canonical rows at \SI{80}{\degreeCelsius} it gives 29.33\,\% against 20.27\,\%, on the 11 Wagner rows near \SI{353}{\kelvin} 52.30\,\% against 24.51\,\%, and on the 57 canonical rows at 100--\SI{120}{\degreeCelsius} 52.05\,\% against 26.44\,\%.
 Its mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(-0.375\) on the canonical \SI{80}{\degreeCelsius} rows and \(-0.748\) on the Wagner rows, so its calculated pressures are too low.
 Data at or below \SI{60}{\degreeCelsius} therefore do not determine the temperature response of this model, and independent temperature information is required to fix it.
+In a diagnostic refit otherwise identical to this one, with R2 at its source correlation and R4 and R5 given independent temperature dependences fitted to the dilute-solution \MEA carbamate constants of Aroua et al.~\cite[Table~3]{arouaEquilibriumConstantCarbamate1999} and \MEA dissociation constants of Kim et al.~\cite[Table~7]{kimThermodynamicsProtonationAmines2011} at or below \SI{333}{\kelvin}, the refit to the same targets reaches a cost of 32.84 but gives 28.58\,\% on the 21 canonical rows at \SI{80}{\degreeCelsius} and 51.61\,\% on the same 11 Wagner rows, so the missing temperature information is not carried by R4 and R5; because the source measurement uncertainties were unavailable, the agreement of these fitted constants with the literature values is not assessed.
 
 \begin{figure}[pos=!htb]
     \centering
