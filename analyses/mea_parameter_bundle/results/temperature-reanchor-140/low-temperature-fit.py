@@ -36,6 +36,8 @@ IDS = [
 SLOPE = IDS[1] + "/reciprocal_temperature_slope"
 EPSILON = "component/carbon-dioxide/dispersion_energy_over_k"
 STRUCTURES = ("constant-fixed", "slope-fixed", "constant-free", "slope-free")
+FREE_REACTIONS = False
+NATIVE_INPUTS = None
 
 
 def save(path, value):
@@ -131,21 +133,27 @@ def source_context():
     """Every evaluator correction emits these verified laws, including repeated internal corrections."""
     mapping = s.parameter_mapping(SOURCE)
     reactions = s.reaction_values(mapping)
-    native = json.loads((HERE / "native-reaction-inputs.json").read_text())
+    native = json.loads((NATIVE_INPUTS or HERE / "native-reaction-inputs.json").read_text())
     original = s._engine_reaction_records
     for record in native:
         record["engine_correlation"]["temperature_min"] = 293.15
         record["engine_correlation"]["temperature_max"] = 353.15
 
     def records(request, values):
-        assert values == reactions, "changed fixed source reactions"
+        assert FREE_REACTIONS or values == reactions, "changed fixed source reactions"
         assert request["temperature"]["value"] <= 333.15, (
             "high-temperature input refused"
         )
         assert [r["stoichiometry"] for r in native] == request["reaction_system"][
             "reaction_matrix"
         ]
-        return copy.deepcopy(native)
+        result = copy.deepcopy(native)
+        if FREE_REACTIONS:
+            assert all(values[k] == v for k, v in reactions.items() if k not in ("reaction:R2:correlation:a", "reaction:R2:correlation:b_k"))
+            c = result[1]["engine_correlation"]
+            c["a"] = values["reaction:R2:correlation:a"] + c["c"] * math.log(c["reference_temperature"])
+            c["b"] = values["reaction:R2:correlation:b_k"]
+        return result
 
     s._engine_reaction_records = records
     probe.RECORD = SOURCE
@@ -224,6 +232,7 @@ def fit(structure, start):
     s.RUNS = cache / "anchor-cache"
     ids, bounds, scales, values = design(structure, start)
     mapping = s.with_parameter_values(mapping, dict(zip(ids, values, strict=True)))
+    reactions = s.reaction_values(mapping)
     params = probe.epcsaft.Parameters.from_mapping(mapping)
     model = probe.epcsaft.Mixture(params)
     fingerprint = s.parameter_fingerprint(mapping)
@@ -250,7 +259,7 @@ def fit(structure, start):
             "training_sha256": s.sha256(TRAINING),
             "source_sha256": s.sha256(SOURCE),
             "native_reaction_inputs_sha256": s.sha256(
-                HERE / "native-reaction-inputs.json"
+                NATIVE_INPUTS or HERE / "native-reaction-inputs.json"
             ),
             "wheel_sha256": s.ENGINE_WHEEL_SHA256,
             "producer_sha256": s.sha256(Path(__file__)),
@@ -308,6 +317,11 @@ def fit(structure, start):
         for identity, value, scale, bound in zip(
             ids, values, scales, bounds, strict=True
         ):
+            if identity.startswith("reaction:"):
+                offset = reactions["reaction:R2:correlation:c"] * math.log(s.REACTION_REFERENCE_TEMPERATURE_K) if identity.endswith(":a") else 0.0
+                coordinates.append(regression.reaction_coordinate("R2", "a" if identity.endswith(":a") else "b",
+                    origin=value+offset, scale=scale, bounds=(bound[0]+offset, bound[1]+offset)))
+                continue
             family = (
                 "dispersion_energy_over_k"
                 if identity == EPSILON
@@ -389,6 +403,11 @@ def fit(structure, start):
             "physical_jacobian": list(result.physical_jacobian),
         }
         save(cache / "native-fit.json", raw)
+        physical = list(result.physical)
+        if FREE_REACTIONS and len(physical) == len(ids):
+            physical[ids.index("reaction:R2:correlation:a")] -= reactions["reaction:R2:correlation:c"] * math.log(s.REACTION_REFERENCE_TEMPERATURE_K)
+            output["native_physical"] = list(result.physical)
+            output["physical"] = physical
         finite = all(
             len(v) == 142 and np.isfinite(v).all()
             for v in (result.predictions, result.weighted_residuals)
@@ -463,7 +482,7 @@ def fit(structure, start):
         )
         if len(result.physical) == len(ids) and np.isfinite(result.physical).all():
             final = s.with_parameter_values(
-                mapping, dict(zip(ids, result.physical, strict=True))
+                mapping, dict(zip(ids, physical, strict=True))
             )
             for node in s._identified(final):
                 if node["identity"] in ids:
@@ -476,7 +495,7 @@ def fit(structure, start):
                 "Issue 140 low-temperature fixed-chemistry comparison; not adopted or physically validated."
             )
             final["document_id"] = "mea-temperature-reanchor-140-" + name
-            assert s.reaction_values(final) == reactions
+            assert FREE_REACTIONS or s.reaction_values(final) == reactions
             output["k_at_domain_ends"] = k_ends(final)
             output["native_complete"] = (
                 output["native_complete"] and output["k_at_domain_ends"]["admissible"]
@@ -523,7 +542,8 @@ def rescore(structure, start):
     path = HERE / f"{name}-parameters.json"
     assert s.sha256(path) == output["parameter_sha256"]
     mapping = json.loads(path.read_text())
-    assert s.reaction_values(mapping) == reactions
+    assert FREE_REACTIONS or s.reaction_values(mapping) == reactions
+    reactions = s.reaction_values(mapping)
     model = probe.epcsaft.Mixture(probe.epcsaft.Parameters.from_mapping(mapping))
     fingerprint = s.parameter_fingerprint(mapping)
     s.RUNS = RAW / name / "rescore-cache"
