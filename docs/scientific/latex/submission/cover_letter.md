@@ -21,12 +21,16 @@ and Born contributions to aqueous MEA–CO2 with explicit carbamate chemistry, a
 simultaneous estimation of liquid-phase ePC-SAFT parameters against both CO2 partial pressures
 and measured liquid speciation for loaded MEA. The work extends published Born-formulation
 comparisons to reactive aqueous MEA and shows that, for the datasets and fitting protocol
-examined, the ranking of the solvation-shell and dielectric-saturation Born term of Figiel et
-al. and the original Born term changes when titration bicarbonate data enter the fit. Removing
-the Born term triples the fitted cost, and two interactions of protonated MEA, with carbamate
-and with water, carry the fit. The results give practical guidance for modelers: electrolyte-term
-comparisons must state which speciation data are fitted, and data at or below 60 °C do not set
-the high-temperature response, which must come from independent temperature data.
+examined, the solvation-shell and dielectric-saturation Born term of Figiel et al. and the
+original Born term calibrate comparably after refitting, with costs of 31.7–34.6 at three sets
+of inherited Born inputs, and which has the lower cost changes both when titration bicarbonate
+data enter the fit and with those inputs. Including a Born term matters far more than its form:
+removing it triples the fitted cost, to 98.79, and two interactions of protonated MEA, with
+carbamate and with water, carry the fit. The results give practical guidance for modelers:
+electrolyte-term comparisons must state which speciation data are fitted; pressure and
+speciation data alone do not distinguish the two Born forms, so the choice between them should
+rest on independent solvation or activity data; and data at or below 60 °C do not set the
+high-temperature response, which must come from independent temperature data.
 
 The manuscript states its scope in one place: the model is a phase- and speciation-equilibrium
 description of 30 wt% MEA at 40–80 °C, and density, heat capacity and transfer to other amine

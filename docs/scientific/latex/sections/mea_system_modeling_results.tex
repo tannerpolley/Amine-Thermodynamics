@@ -103,7 +103,16 @@ With the interactions fixed, the ranking of the two Born forms on the 142-target
 These are fixed-interaction evaluations, not optimized inputs, and they identify neither a better record nor a physical diameter or permittivity.
 
 % P:results-30
-\textbf{[[BORN\_RANKING\_REFIT]]}
+Refitting all five interaction coordinates at these inputs confirms the input dependence (\cref{tab:born-formulation-refits}).
+Each altered-input fit was started from the coordinates of both forms; all converged, and the two starts agreed in cost within a relative \(8\times10^{-13}\).
+SSM+DS has the lower cost at the baseline inputs, 32.99 against 34.58, whereas Original Born is lower with the three ion Born diameters multiplied by 0.8, 31.72 against 31.99, and with \(\varepsilon_{\MEA}=24\), 32.08 against 32.90.
+Across the three input sets the two forms calibrate comparably, with costs of 31.72--34.58, fitted-pressure AARDs of 13.53--17.31\,\% and fitted-species AARDs of 7.98--8.28\,\%.
+Original Born gains its advantage at the altered inputs in the Matin species, whereas SSM+DS keeps the lower pressure and B\"ottinger costs at every input set.
+Including a Born contribution matters far more than which form is used: the refit without it costs 98.79, whereas the form-to-form differences at matched inputs are 0.26--1.59.
+This input dependence complements the dependence on the fitted observations in \cref{sec:results-born}: the lower-cost form changes both with the role of the titration bicarbonate data and with the inherited Born inputs.
+On pressure and speciation data alone, the two formulations are therefore not distinguishable; a choice between them requires independent evidence, such as solvation Gibbs energies or activity coefficients, together with a statement of which speciation data were fitted.
+
+\input{tables/born_formulation_refits}
 
 % P:results-21
 The same scans at the historical 160-target optima set the expected scale; they belong to the earlier objective, not to the selected record.
