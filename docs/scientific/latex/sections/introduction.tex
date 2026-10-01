@@ -27,16 +27,17 @@ Figiel et al.\ modified the Born term to account for the solvation-shell volume 
 Carbamate-forming \MEA differs from these test systems because the ion population and the solvent composition change together with \COtwo loading through reaction equilibrium.
 
 % P:introduction-05
-This work presents a nine-species ePC-SAFT model of \COtwo solubility and speciation in 30 wt\% \MEA, fitted to pressure at 40 and \SI{60}{\degreeCelsius} and speciation at 20--\SI{60}{\degreeCelsius}, and tested at \SI{80}{\degreeCelsius} outside the present fit.
+This work fits a nine-species ePC-SAFT model with explicit carbamate chemistry to \COtwo partial pressure in 30 wt\% \MEA at 40 and \SI{60}{\degreeCelsius} and to speciation at 20--\SI{60}{\degreeCelsius}.
 Its parameters are fitted to ternary \MEA--\COtwo--\HtwoO pressure and speciation data.
-Prediction here means calculation outside the current fit; it does not mean prediction of the ternary system from pure-component and binary information alone, as in the MDEA studies above.
+In the MDEA studies above, prediction means calculation of a mixture with no parameter adjusted to that mixture~\cite{Uyan2015,Wangler2018}.
+That meaning does not apply here, so calculations at conditions outside the present fit are reported as tests outside the fit; above \SI{60}{\degreeCelsius} and at other amine concentrations, they are extrapolations.
 \Cref{tab:literature-model-comparison} summarizes the quantities fitted and left outside the fit in this and the closest published studies.
 
 \input{tables/literature_model_comparison}
 
 % P:introduction-06
-The work makes two contributions.
-First, it compares the SSM+DS and Original Born terms in \MEA with identical fitted coordinates and data, and shows that their ranking depends on the role assigned to one set of bicarbonate observations.
-Second, it relates that sensitivity to Matin et al.'s reported disagreement between titration and NMR bicarbonate, without establishing which method is more accurate.
-The Results also report the tested limits: concentration transfer to 15 and 45 wt\% \MEA, extrapolation to 100--\SI{120}{\degreeCelsius}, an interaction coefficient at its bound, the carbonate partition, density and heat capacity, and two unavailable probe calculations.
+The work makes three contributions.
+First, it compares the SSM+DS and Original Born terms in \MEA with identical fitted coordinates and data, and shows that their ranking depends on the role assigned to the bicarbonate observations of Matin et al., which those authors report as higher than NMR values; it does not establish which measurement method is more accurate.
+Second, it measures how the fitted response depends on fixed Born inputs and on each interaction coordinate, through fixed-interaction scans, refits with one coordinate removed at a time and a refit without the Born term, and it shows where Born inputs and interaction coefficients compensate for one another.
+Third, it tests the record outside the present fit, at 80 and 100--\SI{120}{\degreeCelsius} and at 15 and 45 wt\% \MEA, and states its limits: an interaction coefficient at its bound, the carbonate partition, density and heat capacity.
 No physical validation of the model at new conditions is claimed.

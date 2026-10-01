@@ -1,0 +1,61 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage[numbers]{natbib}
+\usepackage[version=4]{mhchem}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage{xurl}
+\usepackage{hyperref}
+\newcommand{\pending}[1]{\textcolor{red}{[[\texttt{\detokenize{#1}}]]}}
+\setlength{\emergencystretch}{3em}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\title{Supplementary Material for ``Electrolyte PC-SAFT with carbamate chemistry for \ce{CO2} in aqueous monoethanolamine: the role of the Born term and of speciation data''}
+\author{Tanner W. Polley}
+\date{}
+
+\begin{document}
+\maketitle
+
+% P:supplement-00
+Each section below summarizes a calculation or data record that supports the main text but does not carry a main-text claim.
+Values labeled historical belong to the earlier 160-target objective and its optima, not to the selected 142-target record.
+
+\section{Born-diameter refit at the historical 160-target objective}\label{sec:s-diameter}
+% P:supplement-01
+Uniform scaling of all Born diameters at fixed interactions changed the historical SSM+DS cost more than the Original Born cost, which raised the question of whether the inherited diameters explain the SSM+DS penalty on the 160-target objective.
+A selected change of the \pending{S1_IONS} Born diameters to \pending{S1_DIAMETERS}, bounded by an envelope of analog-ion values rather than by measured diameters of the \ce{MEA}-derived ions, was followed by a refit of the five interaction coordinates.
+That refit converged after five optimizer updates and lowered the historical SSM+DS cost from 47.625767 to 43.950877, a reduction of 3.674890.
+The test set in advance was a reduction of at least 3.71, half the 7.42 cost gap to Original Born, so the result is inconclusive: the diameters affect the cost, but this change does not account for the gap.
+\pending{TAB_S1_DIAMETER_REFIT} lists the diameters, fitted coordinates and group costs.
+
+\section{Reaction-enthalpy screen}\label{sec:s-reaction-enthalpy}
+% P:supplement-02
+The screen asks how many independent changes of the reaction temperature dependence the pressure, speciation and heat-of-absorption data can distinguish.
+On the earlier parameter record \texttt{868a5018}, each of R1--R5 was perturbed by \(\pm\)\pending{S2_DH_STEP}~\si{\kilo\joule\per\mole} in reaction enthalpy, with \(\ln K\) held at its value at \SI{313.15}{\kelvin}, and \pending{S2_NTARGETS} targets were evaluated in each of \pending{S2_NSCENARIOS} scenarios.
+The singular values of the resulting sensitivity matrix are \pending{S2_SINGULAR_VALUES}, so \pending{S2_NDIRECTIONS} directions are distinguishable above \pending{S2_SV_CUTOFF}.
+An exact replay of the local proposal changes the heat-of-absorption root-mean-square deviation from \pending{S2_HEAT_RMS_BASE} to \pending{S2_HEAT_RMS_PROP}~\si{\kilo\joule\per\mole} and the pressure root-mean-square \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) from \pending{S2_P_RMS_BASE} to \pending{S2_P_RMS_PROP}.
+The proposal is a local linear step, not a converged nonlinear five-reaction fit, and it was not adopted.
+
+\section{Six-species and nine-species chemistry}\label{sec:s-six-nine}
+% P:supplement-03
+The nine-species model carries five reactions; a six-species reduction with two net reactions omits \pending{S3_OMITTED_SPECIES}.
+With ideal activities, the two chemistries were solved at \pending{S3_IDEAL_NCOORDS} matched temperature and loading coordinates, and the largest redistribution or omitted inventory is \pending{S3_IDEAL_MAX_OMITTED}~mol per mol of initial \ce{MEA}, chiefly carbonate.
+With an earlier ePC-SAFT record at \SI{100}{\kilo\pascal} and 293.15, 313.15 and \SI{323.15}{\kelvin}, the omitted inventory is \pending{S3_EPCSAFT_OMITTED}~mol per mol \ce{MEA}.
+These comparisons measure speciation only; no matched reactive-pressure comparison of the two chemistries with the selected record is reported, so they do not establish pressure equivalence.
+\pending{FIG_S3_SIX_NINE} shows the species differences.
+
+\section{Experimental source inventory}\label{sec:s-data-inventory}
+% P:supplement-04
+\pending{TAB_S4_SOURCE_INVENTORY} lists the experimental sources for aqueous \ce{MEA} near 30 wt\% identified for this work, with measured quantity, basis, conditions, reported uncertainty and role.
+Of \pending{S4_NSOURCES} inventoried entries, \pending{S4_NINVENTORY_ONLY} are recorded but not extracted.
+The extracted sources beyond those of the main text include \ce{CO2} partial pressures \pending{CITE_S4_VLE}, carbamate and protonation constants and protonation enthalpies at dilute conditions \cite{arouaEquilibriumConstantCarbamate1999}\pending{CITE_S4_PROTONATION}, and heats of absorption \pending{CITE_S4_HEAT}.
+The dilute reaction measurements are not 30 wt\% speciation observations, and archived heat measurements that repeat experiments already used are counted once.
+None of these sources enters the present fit or the assessments of the main text.
+
+\bibliographystyle{styles/model1-num-names}
+\bibliography{references}
+
+\end{document}
