@@ -23,6 +23,17 @@ Read the exact [Issue 70 decision](results/issue_70/predictive_mea_parameter_dec
 and [readiness summary](results/readiness/regression_readiness_summary.json).
 They remain the authority for the negative result.
 
+On 2026-10-01, issue #120 corrected the coverage-table source hash in the
+readiness summary. Commit `96d33a9` changed only three `owner` cells from
+“Phase 3” to “reactive ePC-SAFT parameter evidence”; the other columns and
+all seven rows are unchanged. The old pin matches the pre-rename bytes.
+The summary already contains the renamed owners, so only its source pin and
+the retained-summary checksum were updated; data admission is unchanged.
+The loader check still stops on separate stale source pins for
+`reactive_vle_cross_validation.csv` and `speciation_target_membership.csv`.
+Their scientific target changes require separate assessment; this correction
+does not resolve issue #120 or bypass source verification.
+
 ## Retained diagnostic branches
 
 The parent record owns the decision and shared result records. Its distinct evidence
