@@ -4953,16 +4953,258 @@
     }
   ],
   "coverage_limits": {
-    "N7": "168 Born-on states; no separate Born-off invariance assertion",
-    "N8": "absolute identity only; pair differences not implemented",
-    "H1_H2_C": "not computed; no hypothesis disposition",
-    "C2": "not implemented; coordinate-zero checks pending"
+    "N7": "Born-on maximum is retained from original run; resumed Born-off assertions passed but maximum not checkpointed",
+    "N8": "absolute identity only; differences not reached",
+    "H1_H2_C": "not executed; no disposition",
+    "C2": "20 complete, state 21 failed on MEAH+-water k, 27 pressure states unattempted; no full-population conclusion"
   },
   "stopping_point": {
-    "reason": "foreseeable code-budget overrun; partial candidate ended at explicit unfinished C1/C2 boundary",
+    "reason": "reproduced Engine fixed-pressure density-root failure during C2",
     "numerical_assertion_failed": false,
     "no_tables_written": true,
-    "approved_ceiling": 250,
-    "candidate_lines": 230
-  }
+    "approved_ceiling": 380,
+    "candidate_lines": 349
+  },
+  "retained_maxima_source": {
+    "commit": "5eee2b3703acd17595de302506dbb071fdfcb5cb",
+    "script_sha256": "d746ec22a7b5e2d82139c31c158bf6692f625b9ef35257d1ec7ff9ba26b28380",
+    "note": "N2\u2013N9 maxima and N9 arrays are from the original checks-first run; resumed in-memory maxima were lost at the Engine exception"
+  },
+  "latest_execution": {
+    "script_sha256": "3f13cbdd2d2c37e669f9aebe7971503efc4f42f664396573ac18497b83ef670e",
+    "executable_lines": 349,
+    "assertions_reached_and_passed": [
+      "N2",
+      "N3",
+      "N4",
+      "N5",
+      "N5a",
+      "N6",
+      "N7",
+      "N7-off",
+      "N8-absolute",
+      "N9"
+    ],
+    "maxima_checkpointed": false,
+    "C2_complete_states": 20,
+    "C2_failed_state_number": 21,
+    "C2_unattempted_pressure_states": 27,
+    "failure_file": "c2-density-failure.json"
+  },
+  "failure": {
+    "P_Pa": 8011.150874919407,
+    "T_K": 313.15,
+    "Z_at_anchor": 0.3001328900258302,
+    "coordinate": "pair/protonated-monoethanolamine/water/k_ij",
+    "exception": "ConvergenceError",
+    "mapping_fingerprint": "sha256:124345c672023a8928d7f86a9ec56e2981692f879d5bd4b894fa607e246433c9",
+    "message": "left_domain: residual 0.0084948354266894399 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 2 iterations, contraction absent, floor 3.5805781949253065e-15, amplification 1861.6987413317174",
+    "new_value": 0.06968817739786343,
+    "old_value": -0.37931089293768305,
+    "pressure_at_anchor_Pa": 41871040.519260176,
+    "state": "vle_obs_0139"
+  },
+  "C2_diagnostic_zero_values": [
+    {
+      "state": "vle_obs_0119",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0119",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0120",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0120",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0121",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0121",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0122",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0122",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0123",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0123",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0124",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0124",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0125",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0125",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0126",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0126",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0127",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0127",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0128",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0128",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0129",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0129",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0130",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0130",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0131",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0131",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0132",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0132",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0133",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0133",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0134",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0134",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0135",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0135",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0136",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0136",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0137",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0137",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0138",
+      "coordinate": "pair/bicarbonate-anion/water/k_ij",
+      "value": 0.0
+    },
+    {
+      "state": "vle_obs_0138",
+      "coordinate": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "value": 0.0
+    }
+  ],
+  "C2_diagnostic_zero_max_abs_error": 0.0
 }
