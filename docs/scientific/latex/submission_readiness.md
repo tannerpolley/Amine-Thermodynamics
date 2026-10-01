@@ -8,8 +8,8 @@ certify this version.
 ## Checks at the final build
 
 - [x] Writer A's methods, equation-of-state, nomenclature and parameter tables are integrated
-      (build of 2026-09-30, PDF SHA-256 `8664a9bd…ecd5a193e`). The pressure caption and Table 6
-      describe the canonical loading correction themselves; the methods do not mention it.
+      (build of 2026-09-30, PDF SHA-256 `8664a9bd…ecd5a193e`). Since the 2026-10-01 restructure,
+      the methods state once that each calculated feed carries the measured loading; the captions carry no loading note.
 - [x] `references.bib` (31 entries) is regenerated with `python scripts/cited_bibliography.py > references.bib`
       and the command exits with no missing key.
 - [x] `latexmk` build into `builds/` completes with no undefined citation or reference, no
