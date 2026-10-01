@@ -87,3 +87,110 @@ owns replacement of the caption's pre-correction disclosure.
 | Speciation (`fig:speciation`) | `figures/generated/speciation.pdf` | `ed501b51165a043d782c6e1cb2e8438fa7f2a291a2370bc234229bc0e3db50a6` | same |
 | Historical cost decomposition (`fig:born-cost-groups`) | `figures/generated/born-cost-by-group-and-species.png` | `2a3bd7afe4fb72a928a3d00027c2bd46b4ee16087e990832038ed67da579451e` | B`model-d/born-form-diagnosis/born-comparison-figure-sources.json` |
 | Ranking by target set (`fig:born-ranking`) | `figures/generated/born-p5-ranking-reversal.png` | `2a633b632365893665266b02a129ce7b9c1345348e26d419769476aa4d6bb1e9` | same (`p5conv-costs.csv` hash `472765ae…`) |
+
+## Supplement data inventory generation (2026-09-30)
+
+The 34-entry selection and eight columns follow part B of the independent source
+inventory review (thread `mea68-supplement-review-1`, timeline position 56).
+The corrected manifest is from main-checkout commit
+`fdb30b62865b8decf878bc266039353aef9ce718`, on
+`work/mea-30wt-data-inventory`. Barzagli's journal locator was checked on Zotero
+PDF `VZPDXBT5`, p. 1; the nine legacy extraction labels were reconciled without
+changing observation admission. `uv run python scripts/validate_mea_data_library.py`
+passed. This table transcribes retained source inventory evidence; it adds no
+measurement extraction, model calculation, or physical validation.
+
+Regenerate from `docs/scientific/latex/`:
+
+```bash
+python scripts/supplement_data_inventory.py /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/data/reference/MEA/manifests/source_status_manifest.csv /home/tnnrpolley21/Zotero/exports/references.bib
+```
+
+The generator reads all coverage, method, basis, count, extraction and caveat fields
+from that CSV. It removes extraction/checking workflow receipts from the caveat
+cell while retaining source limitations. Long compact source tokens receive
+line-break opportunities; no numeric values are rewritten. Reference labels
+`Won16c` and `Sob16b` expand to Wong 2016 and Sobrino 2016; their names are
+recorded in the retained Wong source file and source-search log, respectively.
+Citation keys are matched by DOI against the central Zotero export. Hilliard's
+dissertation has no DOI and is matched by title to its supplied export key.
+Missing export keys: Park2002, Dugas2009, Arcis2011, Han2012, Concepcion2023,
+Karunarathne2020, Sob16b. These rows retain reference labels and DOIs with an
+explicit unavailable-key marker. The bibliography export was not edited.
+
+`tables/supplement_data_inventory.tex` contains exactly 34 entries and three
+salt-containing markers, with label `tab:s4-data-inventory`. The caption retains
+all review disclosures. The table requires `longtable`, `pdflscape`, `array`,
+`booktabs`, `xurl` and the manuscript citation package. No other TeX source was
+edited by this task; inclusion and preamble assembly remain with the manuscript
+writer.
+
+A temporary A4 wrapper with 25 mm margins, LuaLaTeX and natbib compiled using
+`timeout 120 env OMP_NUM_THREADS=2 latexmk -norc -lualatex -interaction=nonstopmode -halt-on-error`.
+It produced 11 landscape table pages and two bibliography pages, with no
+overfull boxes, undefined citations, or missing glyphs. All 11 table pages were
+visually inspected; rows and repeated headers fit without clipping.
+The CSE `latex_visual_qa.py --profile article --contact-sheet` check completed
+text, vector and raster checks. Its 590 warnings are exclusively
+`text_near_page_edge`: the detector uses portrait page coordinates for the
+rotated landscape content. Inspection of the rendered pages confirms the table
+fits the landscape margins. Disposition: keep; scientific logic: exact
+transcription of retained inventory fields, subject to their stated caveats.
+Preview evidence is retained in `builds/supplement_data_inventory_preview.pdf`,
+`builds/supplement_data_inventory_preview.log` and
+`builds/supplement_data_inventory_preview_qa.json`.
+
+Generation input/output SHA-256:
+
+- Corrected source manifest: `aa6d9ad4d3b4f6ea2c664c7c57870c6522745cbdbba2969bdaa52a001cf2cfc2`
+- Zotero bibliography export: `fdcd9eb08a586485b9deec626613828c29ab1fb68d61d125b4034fd6faf661f9`
+- Generator: `647f88486c6dde655cfbf399501ba01e41102e10c2c44b10b229b277b57b2c99`
+- Generated table: `7ea50628d71233a882085f3878b68494be46c05ad4415d0760ce0ee147e7fea1`
+- Preview PDF: `ce574771466d4129e62815168e78c17c953ff87cf77fd193804b729e7e5db7ff`
+
+### Supplement table formatting correction (2026-09-30)
+
+The generator now preserves source wording and whitespace, including underscores;
+it does not insert arbitrary breaks inside words. URLs and reference DOIs use
+`\url` with the existing `xurl` package. Break opportunities in long identifiers
+and file tokens occur only at `/`, `_`, `.` or `-`; list punctuation permits a
+line break between items without inserting or removing a space. The explicit
+7 pt table font, column widths and 2 pt cell padding accommodate the manifest's
+unspaced prose strings without rewriting them.
+
+Rebuilt the actual supplement using the owner's updated preamble:
+
+```bash
+python scripts/supplement_data_inventory.py /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/data/reference/MEA/manifests/source_status_manifest.csv
+timeout 600 env OMP_NUM_THREADS=2 latexmk -pdf -interaction=nonstopmode supplement.tex
+```
+
+The final `builds/supplement.log` has zero overfull boxes and zero undefined
+citations or references. Five generated cells were compared with the manifest
+after decoding LaTeX markup: Arcis quantity/method, Arcis observation count basis,
+Weiland1998 composition, Amundsen2009 composition, and Jayarathna2013 locator.
+All five retain exact wording; the comparison is retained in
+`builds/supplement_data_inventory_wording_check.json`. The original Arcis
+strings `vibratingtubebinarydensity` and `across15/30 mass%` are already compact
+in the manifest; no spaces were invented to repair them.
+
+The seven unavailable-key markers remain unchanged. No bibliography, supplement
+preamble or other manuscript text was edited by this correction. No commit was
+made. This is a rendering and source-wording check, not new extraction, fitting
+admission, or physical validation. The actual supplement replaces the earlier
+standalone preview as the rendering evidence.
+
+Corrected artifact SHA-256:
+
+- Generator: `2f515a3b73a50822d5baecf7b2f966b2e906017db47c883d33a316d3c7126059`
+- Table: `fb5ea5b154875727dbd77b2958507cc8487484a49baea05f5174021eff2a06b3`
+- Actual supplement PDF: `fb886ae299873f80512e6e74f84dc18ef4dc7784b047ebb88782ccb54593d2d8`
+
+The affected rendered pages (5, 10, 11 and 12) were inspected: URLs and
+source strings fit their cells. The full-document automated visual report is
+retained in `builds/supplement_inventory_qa/report.json`. It flags one
+`text_overlap` on page 1 in the existing Born-diameter annotation, outside the
+generated inventory table; that source was left unchanged. Landscape page-edge
+warnings arise from the detector's portrait coordinates. No table overlap error
+was reported. This is not a claim that the whole supplement passed automated
+visual acceptance.
