@@ -35,15 +35,16 @@ The work makes three contributions:
    average absolute relative deviation of 9.24 %, all 21 canonical rows 20.27 %, and the 19
    rows not used for the inherited reaction shifts 21.83 %; inherited reaction shifts and the
    fixed CO2 dispersion energy were chosen against sets that included 80 °C data, as the
-   manuscript states. On Wagner et al. rows not used at any earlier stage, the record gives
-   24.51 % near 353 K and 25.45 % near 392 K. A refit with source reaction constants to data
-   at or below 60 °C keeps the low-temperature fit but gives 29.33 % and 52.30 % on the 80 °C
-   rows, so these data do not determine the temperature response.
+   manuscript states. On previously unused Wagner et al. rows, the selected record gives
+   AARDs of 24.51 % on 11 rows near 353 K and 25.45 % on 12 rows near 392 K. A refit with
+   source reaction constants to data at or below 60 °C preserves the low-temperature fit but
+   gives 29.33 % on the 21 canonical rows at 80 °C and 52.30 % on the 11 Wagner rows near
+   353 K, so these data do not determine the temperature response.
 
 The manuscript reports the tested limits as results: pressure transfer to 15 and 45 wt% MEA,
 extrapolation to 100–120 °C, an interaction coefficient at its bound, the carbonate
-partition, earlier-record density and heat-capacity deficits, and two unavailable probe
-calculations. It claims no physical validation at new conditions. The parameter records,
+partition, selected-record density deviations and earlier-record heat-capacity deficits,
+and two unavailable probe calculations. It claims no physical validation at new conditions. The parameter records,
 retained calculations and figure data will be made public before submission in the repository
 cited in the Data and Code Availability statement, under the tag `manuscript-v1`.
 
