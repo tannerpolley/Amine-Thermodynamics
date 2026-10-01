@@ -1,8 +1,7 @@
 \section{Results and Discussion}\label{sec:mea-system-modeling-results}
 % P:results-01
-The results separate four observation roles: the 142 fitted targets, comparisons outside the fit that were inspected in earlier model development, report-only species observations, and extrapolated or transferred conditions.
+The results are grouped by observation role: the 142 fitted targets, comparisons outside the fit, report-only species observations, and conditions outside the working domain.
 Each number below names its group and count, and \cref{tab:residual-summary} collects them for both Born forms.
-All values are numerical evaluations of fixed parameter records against existing measurements; none is a physical validation at new conditions.
 
 \input{tables/residual_summary}
 
@@ -32,12 +31,11 @@ The pressure and B\"ottinger targets favor SSM+DS by 1.78 and 2.14, and the Mati
 \end{figure}
 
 % P:results-05
-With the 18 Matin bicarbonate-pool targets report-only, the converged 142-target fits favor SSM+DS: 32.991897 against 34.584032 for Original Born (\cref{fig:born-ranking}).
-This is a 4.6\,\% advantage relative to Original Born.
-A sensitivity fit without any Matin targets, with 88 targets, gives 10.47 against 16.85.
+With the 18 Matin bicarbonate-pool targets report-only, the converged 142-target fits favor SSM+DS: 32.991897 against 34.584032 for Original Born (\cref{fig:born-ranking}), a 4.6\,\% lower weighted least-squares cost.
+A sensitivity fit without any Matin targets, with 88 targets, favors SSM+DS more strongly, 10.47 against 16.85.
 When the two 142-target fits are scored on all 160 historical targets, Original Born is again lower, 43.62 against 53.77.
-The ranking therefore follows the role assigned to the Matin bicarbonate observations, and \cref{sec:results-sensitivity} shows that it also follows inherited Born inputs; it is not an intrinsic property of either Born form.
-The advantage is a narrow difference in a local weighted least-squares cost, and no statistical test supports it.
+The ranking therefore changes with the role assigned to the Matin bicarbonate observations, and \cref{sec:results-sensitivity} examines its dependence on inherited Born inputs.
+The 4.6\,\% difference is a local cost comparison, not a statistical test.
 
 \begin{figure}[pos=!htb]
     \centering
@@ -69,7 +67,7 @@ The fit therefore compares Matin and B\"ottinger bicarbonate with the modeled \c
 Because the source authors identify the disagreement with NMR as specific to bicarbonate, the 18 Matin pool targets were made report-only while the 54 Matin amine and carbamate targets remained fitted.
 With the pool outside the objective, the selected record lies below those 18 observations with a signed relative mean of \(-58.84\,\%\) and an AARD of 59.81\,\%; Original Born gives \(-34.30\,\%\) and 35.12\,\%.
 The form favored after this source-based role change is therefore the one that departs further from the titration bicarbonate.
-The residual signs do not establish that titration is biased in general, that the NMR values are exact, or that either Born form represents bicarbonate correctly.
+The residual signs do not establish which measurement is correct.
 
 \subsection{Sensitivity of the fitted response to Born inputs and interaction coordinates}\label{sec:results-sensitivity}
 % P:results-19
@@ -101,8 +99,11 @@ Setting \(\varepsilon_{\MEA}\) to 24 and 40, in place of 32, gives 33.12 and 33.
 % P:results-27
 At 0.8 times the three ion diameters, or at \(\varepsilon_{\MEA}=24\), Original Born without any refit reaches a cost of 32.18, below the 32.99 of the selected SSM+DS record.
 The three ion Born diameters are inherited project values, not measured properties of these ions (\cref{tab:full-ionic-ssm-ds-parameters}), and \(\varepsilon_{\MEA}\) is held at one value for all temperatures.
-Within the scanned ranges, the ranking of the two Born forms on the 142-target objective therefore depends on the inherited Born inputs as well as on the role of the Matin bicarbonate observations.
+With the interactions fixed, the ranking of the two Born forms on the 142-target objective therefore also responds to the inherited Born inputs within the scanned ranges.
 These are fixed-interaction evaluations, not optimized inputs, and they identify neither a better record nor a physical diameter or permittivity.
+
+% P:results-30
+\textbf{[[BORN\_RANKING\_REFIT]]}
 
 % P:results-21
 The same scans at the historical 160-target optima set the expected scale; they belong to the earlier objective, not to the selected record.
@@ -161,8 +162,9 @@ With all five coordinates refitted from the same two starts, the cost is 98.79, 
 The \HCOthree--water coefficient reaches its upper bound of \(+0.5\) and the \MEAH--\MEACOO coefficient its lower bound of \(-1\).
 The pressure targets carry most of the increase, 54.87 of 65.80, whereas the Matin species cost falls by 4.20.
 Re-scored on all 160 historical targets, this refit has a cost of 102.14 and an AARD of 20.12\,\% on the 18 report-only Matin \ce{HCO3- + CO3^2-} pool observations at \SI{20}{\degreeCelsius}, against 59.81\,\% for the selected record.
-Removing the Born term therefore moves the calculated pool toward the titration bicarbonate while worsening the pressures, so the role of the Matin bicarbonate observations and the electrostatic description interact; this local comparison at bound-limited optima is not a validation of either description.
-Within their bounds, the five interaction coordinates therefore do not compensate for removal of the Born term.
+Removing the Born term therefore moves the calculated pool toward the titration bicarbonate while losing pressure accuracy, so the choice of electrostatic terms and the role of the titration bicarbonate data are coupled.
+Within their bounds, the five interaction coordinates do not compensate for removal of the Born term, which roughly triples the cost.
+A comparison of electrolyte terms in this system is therefore interpretable only together with a statement of which speciation data are fitted.
 
 % P:results-24
 Two properties of \cref{eq:born-ssm-ds,eq:born-shell-diameter} limit how separately the Born inputs can be interpreted.
@@ -186,7 +188,7 @@ No unconstrained covariance or confidence band is reported at the bound.
 
 \subsection{Temperature and concentration outside the present fit}\label{sec:results-80c}
 % P:results-09
-The \SI{80}{\degreeCelsius} isotherm is excluded from the current five-coordinate, 142-target fit, but its data informed two fixed inputs (below), so these comparisons test the selected record outside its fit and are not predictions.
+The \SI{80}{\degreeCelsius} isotherm is outside the five-coordinate, 142-target fit.
 For the 11 Jou 1995 targets at \SI{80}{\degreeCelsius} (packet targets \texttt{vle\_obs\_0203}--\texttt{vle\_obs\_0213})~\cite{Jou1995}, the selected record gives a pressure AARD of 9.24\,\%, a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.017\) and a root-mean-square \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of 0.117 (\cref{fig:pressure}).
 The canonical calculation gives the same 9.24\,\% on these 11 targets.
 All 21 canonical pressure rows at \SI{80}{\degreeCelsius}, which add 10 measurements of Aronu et al.~\cite{Aronu2011}, give 20.27\,\% with a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.199\), so the model underestimates the added rows.
@@ -197,7 +199,7 @@ For the 11 packet species targets at \SI{80}{\degreeCelsius}, the AARD is 11.15\
     \centering
     \includegraphics[width=\linewidth]{pressure.pdf}
     \caption{\COtwo partial pressure against loading for 30 wt\% \MEA with the selected SSM+DS record, for all 161 canonical observations.
-    The 40 and \SI{60}{\degreeCelsius} panels contain the fitted temperatures; the \SI{80}{\degreeCelsius} panel is a test outside the present (142-target, five-coordinate) fit, not data unseen during model development, and its 11 Jou 1995 targets (\texttt{vle\_obs\_0203}--\texttt{vle\_obs\_0213}) give the 9.24\,\% AARD reported in the text; its 10 Aronu 2011 points are not part of that group.
+    The 40 and \SI{60}{\degreeCelsius} panels contain the fitted temperatures; the \SI{80}{\degreeCelsius} panel lies outside the present fit (\cref{sec:results-80c}), and its 11 Jou 1995 targets (\texttt{vle\_obs\_0203}--\texttt{vle\_obs\_0213}) give the 9.24\,\% AARD reported in the text; its 10 Aronu 2011 points are not part of that group.
     The 100 and \SI{120}{\degreeCelsius} panels are extrapolations outside the working domain.
     Markers are observations; dashed segments connect calculations at the observed loadings.
     The calculations and panel statistics use corrected canonical input loadings, with the \(1\times10^{-4}\)~mol \COtwo/mol \MEA excess removed, consistent with the values reported in the text and \cref{tab:residual-summary}.}
@@ -205,16 +207,11 @@ For the 11 packet species targets at \SI{80}{\degreeCelsius}, the AARD is 11.15\
 \end{figure}
 
 % P:results-10
-The \SI{80}{\degreeCelsius} comparisons are tests outside the present (142-target, five-coordinate) fit, not data unseen during model development.
-Two fixed inputs used \SI{80}{\degreeCelsius} data (\cref{sec:data-methods}).
-The inherited R2 and R5 reaction shifts were estimated in September 2026 on a set that included \texttt{vle\_obs\_0206} and \texttt{vle\_obs\_0211}, two of the 11 Jou 1995 targets.
-The fixed \COtwo dispersion energy of \SI{173.440}{\kelvin} was chosen on 2 September 2026 against a set that included 21 pressure rows and 11 species targets at \SI{80}{\degreeCelsius}.
-The \SI{80}{\degreeCelsius} values are therefore tests outside the fit in the sense of \cref{sec:introduction}, not predictions.
+The model's history includes \SI{80}{\degreeCelsius} data through two fixed inputs (\cref{sec:data-methods}): the inherited R2 and R5 reaction shifts were estimated on a set that included \texttt{vle\_obs\_0206} and \texttt{vle\_obs\_0211}, two of the 11 Jou 1995 targets, and the fixed \COtwo dispersion energy of \SI{173.440}{\kelvin} was chosen against a set that included 21 pressure rows and 11 species targets at \SI{80}{\degreeCelsius}.
 
 % P:results-28
-The selected record was also scored on 23 \COtwo partial pressures of Wagner et al.\ near 30 wt\% \MEA that no earlier fit, selection or assessment of this work had used~\cite{wagnerSolubilityCarbonDioxide2013}.
-It gives an AARD of 24.51\,\% with a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.283\) on 11 rows near \SI{353}{\kelvin}, and 25.45\,\% with \(-0.308\) on 12 rows near \SI{392}{\kelvin}.
-Because the inputs above carry \SI{80}{\degreeCelsius} information, these scores also test the record outside its fit; they are not predictions.
+The 23 \COtwo partial pressures of Wagner et al.\ near 30 wt\% \MEA were used at no earlier stage of this work, by any fit, selection or assessment~\cite{wagnerSolubilityCarbonDioxide2013}.
+The selected record gives an AARD of 24.51\,\% with a mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(-0.283\) on 11 rows near \SI{353}{\kelvin}, and 25.45\,\% with \(-0.308\) on 12 rows near \SI{392}{\kelvin}.
 
 % P:results-29
 A separate fit tested whether the data at or below \SI{60}{\degreeCelsius} determine the temperature response of the model.
@@ -225,7 +222,12 @@ It preserves the fit at or below \SI{60}{\degreeCelsius}, with a cost of 33.01 a
 On the 21 canonical rows at \SI{80}{\degreeCelsius} it gives 29.33\,\% against 20.27\,\%, on the 11 Wagner rows near \SI{353}{\kelvin} 52.30\,\% against 24.51\,\%, and on the 57 canonical rows at 100--\SI{120}{\degreeCelsius} 52.05\,\% against 26.44\,\%.
 Its mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(-0.375\) on the canonical \SI{80}{\degreeCelsius} rows and \(-0.748\) on the Wagner rows, so its calculated pressures are too low.
 Data at or below \SI{60}{\degreeCelsius} therefore do not determine the temperature response of this model, and independent temperature information is required to fix it.
-In a diagnostic refit otherwise identical to this one, with R2 at its source correlation and R4 and R5 given independent temperature dependences fitted to the dilute-solution \MEA carbamate constants of Aroua et al.~\cite[Table~3]{arouaEquilibriumConstantCarbamate1999} and \MEA dissociation constants of Kim et al.~\cite[Table~7]{kimThermodynamicsProtonationAmines2011} at or below \SI{333}{\kelvin}, the refit to the same targets reaches a cost of 32.84 but gives 28.58\,\% on the 21 canonical rows at \SI{80}{\degreeCelsius} and 51.61\,\% on the same 11 Wagner rows, so the missing temperature information is not carried by R4 and R5; because the source measurement uncertainties were unavailable, the agreement of these fitted constants with the literature values is not assessed.
+In a diagnostic refit otherwise identical to this one, with R2 at its source correlation and R4 and R5 given independent temperature dependences fitted to the dilute-solution \MEA carbamate constants of Aroua et al.~\cite[Table~3]{arouaEquilibriumConstantCarbamate1999} and \MEA dissociation constants of Kim et al.~\cite[Table~7]{kimThermodynamicsProtonationAmines2011} at or below \SI{333}{\kelvin}, the refit to the same targets reaches a cost of 32.84 but gives 28.58\,\% on the 21 canonical rows at \SI{80}{\degreeCelsius} and 51.61\,\% on the same 11 Wagner rows.
+The missing temperature information is therefore not carried by dilute-solution temperature laws for R4 and R5; because the source measurement uncertainties were unavailable, the agreement of these fitted constants with the literature values is not assessed.
+For modelers, the temperature response of this model must come from data that carry it directly, such as heat of absorption or equilibrium measurements above \SI{60}{\degreeCelsius}.
+
+% P:results-31
+\textbf{[[R2\_TEST]]}
 
 \begin{figure}[pos=!htb]
     \centering
@@ -244,13 +246,7 @@ In a diagnostic refit otherwise identical to this one, with R2 at its source cor
 
 % P:results-13
 At 100--\SI{120}{\degreeCelsius}, the 57 canonical rows give an AARD of 26.44\,\%: 20.39\,\% for Jou et al.\ (20 rows), 32.02\,\% for Ma'mun et al.\ (19 rows) and 27.26\,\% for Xu and Rochelle (18 rows)~\cite{Jou1995,Mamun2005,Xu2011}.
-These temperatures lie outside the working domain and above the \SI{323.15}{\kelvin} upper limit of the R4 and R5 source correlations, so the values report extrapolation.
-
-% P:results-12
-Concentration transfer fails at the tested conditions.
-With chemistry and parameters fixed, the selected record gives a pressure AARD of 75.95\,\% on 33 rows at 15 wt\% \MEA and 46.15\,\% on 37 rows at 45 wt\%, with all 70 states solved.
-The mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(+0.453\) at 15 wt\% and \(-0.519\) at 45 wt\%, so the error changes sign with amine concentration.
-These rows were examined in earlier work, so the scores are a second look, and the successful solves do not establish useful transfer.
+These temperatures lie outside the working domain and above the \SI{323.15}{\kelvin} upper limit of the R4 and R5 source correlations, so these values are extrapolations.
 
 \subsection{Pooled pressure assessment}\label{sec:results-pooled}
 % P:results-11
@@ -260,26 +256,22 @@ The source-specific AARDs are 32.99\,\% for Aronu et al.\ (36 rows), 10.87\,\% f
 The mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) is \(-0.398\) for the Aronu rows and \(-0.150\) for all 104 rows.
 The pooled value therefore contains a source-dependent misfit, dominated by underestimation of the Aronu measurements.
 
-\subsection{Limits of the selected record}\label{sec:results-limits}
-% P:results-14
-The carbonate share of dissolved carbon was compared with the NMR values of Jakobsen et al.\ at 20 and \SI{40}{\degreeCelsius}~\cite{Jakobsen2005}.
-Over nine points, the ratio of calculated to observed share ranges from 0.42 to 1.33 for SSM+DS and from 1.21 to 3.19 for Original Born.
-The nine-point summary excludes the \SI{40}{\degreeCelsius}, loading 0.21 point, whose observed share of 0.119 compares with 0.010--0.019 at the other four \SI{40}{\degreeCelsius} loadings; all ten comparisons are retained in the supporting data.
-
-% P:results-26
-The \HCOthree--water coefficient lies at its bound (\cref{sec:results-sensitivity}), so its value is set by the bound rather than estimated from the data.
-
-% P:results-16
-For the selected SSM+DS model-D record \texttt{9055458d} on \texttt{epcsaft} wheel \texttt{28181e72\ldots}, homogeneous-liquid densities at an assumed ambient pressure of \SI{101325}{\pascal} exceed Amundsen et al.'s measurements by 13.17 and 17.80\,\% at \SI{50}{\degreeCelsius} and by 12.99 and 17.39\,\% at \SI{70}{\degreeCelsius}, for loadings 0.3 and 0.4~mol \COtwo/mol \MEA, respectively, on a \COtwo-free 30 wt\% \MEA solvent basis~\cite[Table~3, p.~3097]{Amundsen2009}.
-The source does not report a numerical measurement pressure.
-The near-unloaded control at \SI{50}{\degreeCelsius} and loading 0.000101 gives \SI{0.993873}{\gram\per\cubic\centi\metre}, 0.423\,\% below the unloaded Table~1 value of \SI{0.9981}{\gram\per\cubic\centi\metre}~\cite[Table~1, p.~3097]{Amundsen2009}.
-Amundsen et al.\ state a combined loaded-density uncertainty of \(\pm\SI{0.002}{\gram\per\cubic\centi\metre}\) (approximately \(\pm0.2\,\%\)), with higher uncertainty at the highest temperatures and loadings; the unloaded uncertainty is approximately \(\pm0.05\,\%\)~\cite[Discussion, pp.~3099--3100]{Amundsen2009}.
-These comparisons establish a density limitation at the tested conditions; they do not identify its cause or qualify densities over the full domain.
-Heat-capacity deviations against Hilliard were \(-9.8\,\%\) for unloaded solution at \SI{45}{\degreeCelsius}, \(-10.2\,\%\) at loading 0.358 and \SI{45}{\degreeCelsius}, and \(-14.6\,\%\) at loading 0.358 and \SI{80}{\degreeCelsius}~\cite{Hilliard2008}.
-These heat-capacity deficits concern the earlier record \texttt{868a5018} on wheel \texttt{48a639e7\ldots}, not measured errors of the selected record.
-Density and heat-capacity qualification of the selected record remains unestablished, and no absorber or stripper use is supported.
-
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:results-18
-Unlike the electrolyte NRTL model of Akula et al., which left NMR speciation outside its fit~\cite{Akula2023a}, the present model fits speciation together with pressure, so the residuals of its 94 fitted species targets are calibration results (\cref{tab:literature-model-comparison}).
+Like the electrolyte NRTL model of Zhang et al., which was fitted to \COtwo solubility, heat of absorption, heat capacity and NMR speciation~\cite{Zhang2011}, and unlike that of Akula et al., which left NMR speciation outside its fit~\cite{Akula2023a}, the present model fits speciation together with pressure, so the residuals of its 94 fitted species targets are calibration results (\cref{tab:literature-model-comparison}).
+Unlike the ePC-SAFT models of MDEA~\cite{Uyan2015,Wangler2018,Bulow2021a}, it fits ion interactions to the loaded ternary mixture, including the \MEAH--\MEACOO interaction, which exists only in loaded solution and carries most of the fit.
 Published pressure deviations for 30 wt\% \MEA cover different row sets and temperature ranges, so no accuracy ranking against those models is claimed.
+
+\subsection{Scope and limitations}\label{sec:results-limits}
+% P:results-14
+The working domain of the selected record is \COtwo partial pressure and liquid speciation in 30 wt\% \MEA at 40--\SI{80}{\degreeCelsius}.
+Pressure transfer to other amine concentrations is not supported: with chemistry and parameters fixed, the record gives AARDs of 75.95\,\% on 33 rows at 15 wt\% \MEA and 46.15\,\% on 37 rows at 45 wt\%, with mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of \(+0.453\) and \(-0.519\), so the error changes sign with amine concentration.
+The \HCOthree--water coefficient lies at its bound (\cref{sec:results-sensitivity}), so its value is set by the bound rather than estimated from the data.
+Over nine Jakobsen NMR points at 20 and \SI{40}{\degreeCelsius}, the calculated carbonate share of dissolved carbon is 0.42--1.33 times the observed share for SSM+DS and 1.21--3.19 times for Original Born~\cite{Jakobsen2005}; the excluded \SI{40}{\degreeCelsius}, loading 0.21 point has an observed share of 0.119, against 0.010--0.019 at the other four \SI{40}{\degreeCelsius} loadings, and all ten comparisons are retained in the supporting data.
+
+% P:results-16
+Liquid density and heat capacity are not qualified.
+For the selected SSM+DS record \texttt{9055458d} on \texttt{epcsaft} wheel \texttt{28181e72\ldots}, homogeneous-liquid densities at an assumed ambient pressure of \SI{101325}{\pascal} exceed Amundsen et al.'s measurements by 13.17 and 17.80\,\% at \SI{50}{\degreeCelsius} and by 12.99 and 17.39\,\% at \SI{70}{\degreeCelsius}, for loadings 0.3 and 0.4~mol \COtwo/mol \MEA on a \COtwo-free 30 wt\% \MEA solvent basis~\cite[Table~3, p.~3097]{Amundsen2009}, whose stated loaded-density uncertainty is \(\pm\SI{0.002}{\gram\per\cubic\centi\metre}\) (approximately \(\pm0.2\,\%\))~\cite[Discussion, pp.~3099--3100]{Amundsen2009}.
+The near-unloaded control at \SI{50}{\degreeCelsius} and loading 0.000101 gives \SI{0.993873}{\gram\per\cubic\centi\metre}, 0.423\,\% below the unloaded value of \SI{0.9981}{\gram\per\cubic\centi\metre}~\cite[Table~1, p.~3097]{Amundsen2009}, so the deviation appears in loaded solution.
+For the earlier record \texttt{868a5018} on wheel \texttt{48a639e7\ldots}, heat-capacity deviations against Hilliard were \(-9.8\,\%\) for unloaded solution at \SI{45}{\degreeCelsius}, \(-10.2\,\%\) at loading 0.358 and \SI{45}{\degreeCelsius}, and \(-14.6\,\%\) at loading 0.358 and \SI{80}{\degreeCelsius}~\cite{Hilliard2008}.
+The record is therefore a phase- and speciation-equilibrium model; absorber and stripper calculations would require density and heat-capacity qualification first.

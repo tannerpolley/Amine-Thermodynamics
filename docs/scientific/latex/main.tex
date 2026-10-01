@@ -70,13 +70,15 @@
 
 \begin{abstract}
 % P:abstract-01
-The equilibrium \COtwo partial pressure over loaded aqueous monoethanolamine (\MEA) depends on liquid speciation, and titration and NMR measurements disagree on bicarbonate.
-Electrolyte PC-SAFT (ePC-SAFT) with explicit ions has been applied to aqueous methyldiethanolamine, which forms no carbamate, and recent Born-term modifications were parameterized on salt solutions.
-We fit five interaction coordinates of a nine-species ePC-SAFT model with explicit carbamate chemistry to 48 \COtwo partial pressures (40 and \SI{60}{\degreeCelsius}) and 94 species targets (20--\SI{60}{\degreeCelsius}) in 30 wt\% \MEA, with average absolute relative deviations (AARD) of 13.53\,\% and 8.28\,\%.
-The ranking of the solvation-shell and dielectric-saturation (SSM+DS) and Original Born terms depends on the role of 18 titration bicarbonate observations and on inherited Born inputs: with interactions fixed, Original Born reaches a cost of 32.18 against 32.99 for SSM+DS at 0.8 times three ion Born diameters or an \MEA permittivity of 24.
-The Born term itself matters: refitting without it raises the cost to 98.79, and fixing the \MEAH--\MEACOO or \MEAH--water interaction at zero raises it by 134.3 or 75.9.
-Outside the present fit, the pressure AARD is 20.27\,\% for 21 rows at \SI{80}{\degreeCelsius}, whose data informed fixed inputs, and 24.51\,\% for 11 previously unused rows near \SI{353}{\kelvin}; refitting with source reaction constants to data at or below \SI{60}{\degreeCelsius} gives 29.33 and 52.30\,\%, so independent temperature information is required.
-The bicarbonate--water coefficient lies at its bound, density and heat capacity are not qualified, and no physical validation is claimed.
+Electrolyte PC-SAFT (ePC-SAFT) with explicit ions and activity-based reaction equilibria describes \COtwo absorption in aqueous methyldiethanolamine, which forms no carbamate.
+This work extends that approach to monoethanolamine (\MEA), whose carbamate chemistry changes the ion population with \COtwo loading.
+A nine-species ePC-SAFT model with Debye--H\"uckel and Born contributions and explicit carbamate, bicarbonate and carbonate chemistry was fitted simultaneously to 48 \COtwo partial pressures at 40 and \SI{60}{\degreeCelsius} and 94 liquid species measurements at 20--\SI{60}{\degreeCelsius} in 30 wt\% \MEA, with average absolute relative deviations (AARD) of 13.53\,\% and 8.28\,\%.
+Outside the fit, the model gives 20.27\,\% on 21 pressures at \SI{80}{\degreeCelsius}, and 24.51\,\% and 25.45\,\% on 11 and 12 previously unused pressures near 353 and \SI{392}{\kelvin}.
+The Born term is essential: refitting without it triples the weighted least-squares cost, from 32.99 to 98.79, and raises the pressure AARD to 53.9\,\%.
+Two interactions of protonated \MEA, with carbamate and with water, carry the fit.
+With titration bicarbonate data outside the fit, the solvation-shell and dielectric-saturation (SSM+DS) Born term has a lower cost than the original Born term, 32.99 against 34.58; with them inside, the order reverses; \textbf{[[BORN\_RANKING\_REFIT]]}.
+Data at or below \SI{60}{\degreeCelsius}, even with independent temperature laws for the amine reactions, do not determine the response at \SI{80}{\degreeCelsius}; \textbf{[[R2\_TEST]]}.
+Electrolyte-term comparisons for reactive amines should therefore state which speciation data are fitted, and the temperature response should be set by independent heat-of-absorption or high-temperature equilibrium data.
 \end{abstract}
 
 \begin{keywords}

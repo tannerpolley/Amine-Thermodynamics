@@ -15,31 +15,33 @@ When such observations enter a parameter fit, the choice of which measurements t
 % P:introduction-03
 Excess-Gibbs-energy models with chemical equilibria represent this system with fitted interaction parameters.
 B\"ottinger et al.\ refitted the \MEA carbamate-formation constant to NMR speciation while retaining the Bates--Pinching protonation constant and published \MEA interaction parameters~\cite{Bottinger2008}.
-Akula et al.\ fitted an electrolyte NRTL model jointly to \COtwo pressure and heat of absorption, leaving NMR speciation and heat capacity outside the fit~\cite{Akula2023a}.
+Zhang et al.\ fitted an electrolyte NRTL liquid model, with PC-SAFT vapor fugacities, to \COtwo solubility, heat of absorption, heat capacity and NMR speciation together~\cite{Zhang2011}, and Akula et al.\ fitted an electrolyte NRTL model jointly to \COtwo pressure and heat of absorption, leaving NMR speciation and heat capacity outside the fit~\cite{Akula2023a}.
 Equations of state based on statistical associating fluid theory describe association and chain formation within one Helmholtz energy~\cite{Gross2001,Gross2002}.
-PC-SAFT and SAFT-HR have been applied to loaded \MEA with a separate chemical-equilibrium calculation and neutral-species fugacities~\cite{Baygi2015,Najafloo2018}.
+For loaded \MEA, SAFT-VR models represented the reactions implicitly as association between \MEA and \COtwo sites~\cite{MacDowell2010,Rodriguez2012}, and PC-SAFT and SAFT-HR models combined neutral-species fugacities with ideal reaction equilibria~\cite{Baygi2015,Najafloo2018}.
+None of these equation-of-state models carries explicit ion activities.
 
 % P:introduction-04
 Electrolyte PC-SAFT (ePC-SAFT) adds a Debye--H\"uckel contribution for charged species~\cite{Cameretti2005}, and Held et al.\ estimated ion parameters from densities and osmotic coefficients of aqueous salt solutions, with dispersion between ions of the same sign excluded~\cite{Held2014}.
-Uyan et al.\ and Wangler et al.\ applied ePC-SAFT with explicit ions and activity-coupled reaction equilibria to aqueous MDEA, and predicted acid-gas solubility from parameters obtained from pure components and binary subsystems~\cite{Uyan2015,Wangler2018}.
-Later work added concentration-dependent permittivity to the Born and Debye--H\"uckel terms~\cite{Bulow2020,Rueben2024} and predicted \COtwo solubility in aqueous and organic salt solutions~\cite{Schick2023}.
+With explicit ions and activity-based reaction equilibria, ePC-SAFT described acid-gas solubility in aqueous methyldiethanolamine (MDEA) from parameters obtained from pure components and binary subsystems~\cite{Uyan2015,Wangler2018}, and was extended to competitive \ce{H2S}--\COtwo absorption~\cite{Cleeton2020}.
+B\"ulow et al.\ added the Born term for the solvation Gibbs energy of ions to MDEA blends with sulfolane or an ionic liquid, which reduced the number of binary interaction parameters~\cite{Bulow2021a}.
+Related work added concentration-dependent permittivity to the Born and Debye--H\"uckel terms~\cite{Bulow2020,Rueben2024} and predicted \COtwo solubility in aqueous and organic salt solutions~\cite{Schick2023}.
 Figiel et al.\ modified the Born term to account for the solvation-shell volume and dielectric saturation near an ion (SSM+DS), with parameters estimated from ion solvation and salt activity data in water and alcohols at \SI{298.15}{\kelvin}~\cite{Figiel2025}; a later correction restored a missing bracket and the ion-region permittivity in its Eq.~(7)~\cite{Figiel2026Correction}.
-Carbamate-forming \MEA differs from these test systems because the ion population and the solvent composition change together with \COtwo loading through reaction equilibrium.
+MDEA is a tertiary amine and forms no carbamate.
+The natural next step in this line is the primary amine \MEA, in which carbamate formation makes the ion population and the solvent composition change together with \COtwo loading.
 
 % P:introduction-05
-This work fits a nine-species ePC-SAFT model with explicit carbamate chemistry to \COtwo partial pressure in 30 wt\% \MEA at 40 and \SI{60}{\degreeCelsius} and to speciation at 20--\SI{60}{\degreeCelsius}.
-Its parameters are fitted to ternary \MEA--\COtwo--\HtwoO pressure and speciation data.
-In the MDEA studies above, prediction means calculation of a mixture with no parameter adjusted to that mixture~\cite{Uyan2015,Wangler2018}.
-That meaning does not apply here, so calculations at conditions outside the present fit are reported as tests outside the fit; above \SI{60}{\degreeCelsius} and at other amine concentrations, they are extrapolations.
+This work fits a nine-species ePC-SAFT model with Debye--H\"uckel and Born contributions and explicit carbamate chemistry to \COtwo partial pressure in 30 wt\% \MEA at 40 and \SI{60}{\degreeCelsius} and to liquid speciation at 20--\SI{60}{\degreeCelsius}.
+Because its interaction parameters are fitted to the ternary mixture, calculations at other conditions are reported as tests outside the fit rather than as predictions in the sense of the MDEA studies~\cite{Uyan2015,Wangler2018}.
 \Cref{tab:literature-model-comparison} summarizes the quantities fitted and left outside the fit in this and the closest published studies.
 
 \input{tables/literature_model_comparison}
 
 % P:introduction-06
-The work makes three contributions.
-First, it compares the SSM+DS and Original Born terms in \MEA with identical fitted coordinates and data, and shows that their ranking depends on the role assigned to the bicarbonate observations of Matin et al., which those authors report as higher than NMR values, and on inherited Born inputs; it does not establish which measurement method or Born form is more accurate.
-Second, it measures how the fitted response depends on fixed Born inputs and on each interaction coordinate, through fixed-interaction scans, refits with one coordinate fixed at zero and a refit without the Born term.
-These show that the Born term itself is needed, that the \MEAH--\MEACOO and \MEAH--water interactions carry most of the fit, and that the interactions compensate locally for small changes in five specified Born inputs at the historical optimum but not for removal of the Born term.
-Third, it tests the record outside the present fit, at 80 and 100--\SI{120}{\degreeCelsius}, including measurements not used at any earlier stage, and at 15 and 45 wt\% \MEA; a refit restricted to data at or below \SI{60}{\degreeCelsius} shows that these data do not determine the temperature response.
-It also states the limits of the record: an interaction coefficient at its bound, the carbonate partition, density and heat capacity.
-No physical validation of the model at new conditions is claimed.
+The work makes four contributions.
+\begin{enumerate}
+    \item To our knowledge, this is the first application of electrolyte PC-SAFT with both Debye--H\"uckel and Born contributions to aqueous \MEA--\COtwo with explicit carbamate chemistry.
+    \item To our knowledge, it is also the first simultaneous estimation of liquid-phase electrolyte PC-SAFT parameters against both \COtwo partial pressures and measured liquid speciation for loaded \MEA; Zhang et al.\ fitted both observables with an electrolyte NRTL liquid model~\cite{Zhang2011}.
+    \item We extend published Born-formulation comparisons to reactive aqueous \MEA, where the ionic species and their amounts change with loading.
+    \item For the datasets and fitting protocol examined, the relative ranking of the Born formulations changes when the titration bicarbonate data enter the fit.
+\end{enumerate}
+The work also identifies which parameters carry the fit and which data set the temperature response, and turns these results into guidance for fitting electrolyte models of reactive amines.
