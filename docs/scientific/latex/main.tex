@@ -59,6 +59,21 @@
 \newcommand{\liq}{\ell}
 \newcommand{\vap}{v}
 
+% Footer: this is a preprint, not yet submitted to a journal.
+\ExplSyntaxOn
+\cs_set:Npn \__first_footerline:
+{
+  \group_begin:
+  \small
+  \ifnum\theblind>0\relax
+  \else
+	\__short_authors: :~
+  \fi
+  { \rmfamily \itshape Preprint,~not~peer~reviewed }
+  \group_end:
+}
+\ExplSyntaxOff
+
 \begin{document}
 
 \let\WriteBookmarks\relax
