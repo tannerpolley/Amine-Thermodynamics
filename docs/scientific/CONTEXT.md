@@ -260,14 +260,24 @@ or evidence. Update the existing owning record when that answer changes.
 ## Calculation ownership
 
 The installed Engine wheel owns generic equations, equilibrium compilation,
-exact derivatives, and parameter-fitting mechanics. New generic ePC-SAFT methods are
-first built and debugged in `ePC-SAFT-project/analysis/` or `validation/`.
+exact derivatives, and parameter-fitting mechanics. Its source repository is
+`/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT`. Its owner map is at
+`/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/docs/scientific/README.md`
+and `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/docs/scientific/CONTEXT.md`;
+accepted decisions are in `docs/scientific/adr/`, budgets in
+`ARCHITECTURE.yaml` and `docs/scientific/code-budgets.md`, equations in
+`engine/docs/equations.md`, algorithms in `engine/docs/science/algorithms.md`,
+plans in Engine GitHub issues, code in `engine/native/<layer>/` and
+`engine/src/epcsaft/`, tests in `engine/tests/`, and evidence in `analyses/`.
 
 Amine-Thermodynamics may call those public Engine methods directly to reproduce
 an accepted calculation, evaluate MEA observations, and generate retained
 tables or figures. Such work records the Engine wheel and method identity,
 input and packet identity, and hashes. This upstream-first rule does not ban
 direct Engine calculations here.
+
+MEA does not build generic methods in the Engine repository. It requests them
+through an Engine issue and adopts them through a pinned wheel.
 
 This repository owns MEA chemistry hypotheses, source translations, data
 roles, model selection, the fitting question, validation design, parameter
