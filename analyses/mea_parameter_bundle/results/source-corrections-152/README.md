@@ -81,7 +81,10 @@ selected for a better fit.
   retained outside-domain counts; no full-Xu AARD fabricated.
 - Aronu transfer15wt%33 rows:75.94764009221944% AARD;45wt%37 rows:
   45.90148912022073%. Corrected Aronu loading row99 remains source-faithful.
-- Böttinger80°C w=0.31, six states/11 targets:11.848031576410587% AARD.
+- Böttinger80°C w=0.31, five evaluated states (`state_063`–`state_067`)/11 targets:
+  11.848031576410587% AARD. The source reports six 80°C states; the retained
+  assessment population omits `state_068` (loading 0.51), whose membership record
+  notes quantifiable 2-oxazolidone above about 0.5 mol CO2/mol MEA.
 - Matin bicarbonate pool18 report targets:59.81349181429435% AARD, unchanged
   unverified legacy20°C/feed/observations; state016 display-only.
 - `jakobsen-comparisons.csv`:ten comparisons/nine summary rows; nine ratios
