@@ -143,6 +143,18 @@ def evaluate(sets=None, filters=(), canonical=False, states=None):
                                               'prediction_identity', 'scale') if k in t} for t in o['targets']]}
 
 
+def reaction_domain_status(state):
+    record = shared.parameter_mapping(RECORD)
+    domain_ids = {reaction['candidate_domain_id'] for reaction in record['reaction_correlations']}
+    domains = [domain for domain in record['domains'] if domain['domain_id'] in domain_ids]
+    temperature = state['request']['temperature']['value']
+    if all(domain['temperature_min']['magnitude'] <= temperature <= domain['temperature_max']['magnitude'] for domain in domains):
+        return None
+    if state['identity'] not in {'canonical:vle_obs_0286', 'canonical:vle_obs_0287', 'canonical:vle_obs_0288'}:
+        raise RuntimeError(f'protected comparison/target outside declared reaction domain: {state["identity"]}')
+    return 'ParameterError: reference_unavailable: reaction R2 temperature outside reaction correlation'
+
+
 def _fixed_state_job(state, cache_root):
     shared.RUNS = Path(cache_root) / f'worker-{os.getpid()}'
     return next(evaluate(states=[state]))

@@ -116,3 +116,25 @@ def test_public_views_refuse_execution_and_stale_hash():
     for role in ("active_training", "reserved_validation"):
         assert len(data.load_regression_vle_view(role=role, executable_only=False)) > 0
         assert len(data.load_regression_speciation_view(role=role, executable_only=False)) > 0
+
+
+def test_declared_domain_pre_dispatch_and_protected_rows(monkeypatch):
+    sys.path.insert(0, str(BUNDLE / "calibration-misfit"))
+    import probe
+    probe.RECORD = BUNDLE / "results/selected-current-best-parameters.json"
+    def forbidden_solve(*args, **kwargs):
+        raise AssertionError("domain classification must not invoke a solve")
+    monkeypatch.setattr(probe, "base_record", forbidden_solve)
+    excluded = [state for state in probe.CANONICAL if probe.reaction_domain_status(state)]
+    assert [state["identity"] for state in excluded] == [f"canonical:vle_obs_{i}" for i in ("0286", "0287", "0288")]
+    assert [round(state["request"]["temperature"]["value"] - 273.15, 10) for state in excluded] == [120.4, 121.0, 121.8]
+    assert all("reaction R2 temperature outside reaction correlation" in probe.reaction_domain_status(state) for state in excluded)
+    for identity in ("vle_obs_0119", "benchmark:vle_obs_0286", "transfer:canonical:vle_obs_0286", "Jakobsen2005_row9"):
+        protected = copy.deepcopy(excluded[0])
+        protected["identity"] = identity
+        with pytest.raises(RuntimeError, match="protected comparison/target"):
+            probe.reaction_domain_status(protected)
+    inside = copy.deepcopy(excluded[0])
+    inside["request"]["temperature"]["value"] = 393.15
+    assert probe.reaction_domain_status(inside) is None
+    assert shared.sha256(probe.RECORD) == "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241"
