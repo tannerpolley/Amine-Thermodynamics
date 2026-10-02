@@ -146,7 +146,7 @@ def born_off_figure():
     mechanism = read("born-off-mechanism.csv")
     f1 = {r["identity"]: float(r["ln_pred_over_obs"]) for r in read("pressure.csv")
           if r["problem"] == "F1" and r["kind"] == "packet"}
-    fig, axes = plt.subplots(2, 2, figsize=(FULL_WIDTH, 4.8), layout="constrained", sharex=True)
+    fig, axes = plt.subplots(2, 2, figsize=(FULL_WIDTH, 5.2), layout="constrained", sharex=True)
     for col, t in enumerate((313.15, 333.15)):
         part = sorted((r for r in mechanism if float(r["nominal_T_K"]) == t), key=lambda r: float(r["loading"]))
         x = [float(r["loading"]) for r in part]
@@ -172,8 +172,8 @@ def born_off_figure():
             ax.grid(alpha=0.18)
     axes[0, 0].set_ylabel(r"$\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})$")
     axes[1, 0].set_ylabel("Change (ln units)")
-    axes[0, 1].legend(frameon=False, loc="upper left")
-    axes[1, 1].legend(frameon=False, loc="lower left")
+    handles = axes[0, 0].get_legend_handles_labels()[0] + axes[1, 0].get_legend_handles_labels()[0]
+    fig.legend(handles=handles, loc="outside lower center", ncol=3, frameon=False)
     save(fig, "born-off-mechanism")
 
 
@@ -194,7 +194,7 @@ def pool_figure():
     left.set_xlabel(LOADING)
     left.set_ylabel(r"HCO$_3^-$ + CO$_3^{2-}$ mole fraction")
     left.set_title(r"(a) Titration bicarbonate pool, 20 °C", loc="left")
-    left.legend(frameon=False, fontsize=7, loc="upper left")
+    left.legend(fontsize=7, loc="upper left", facecolor="white", edgecolor="none", framealpha=1)
     point = {r["problem"]: (float(r["base141_cost"]), float(r["pool18_cost"])) for r in costs}
     for a, b in (("F1", "F4"), ("F2", "F5")):
         right.annotate("", xy=point[b], xytext=point[a],
