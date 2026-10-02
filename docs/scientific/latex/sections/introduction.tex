@@ -1,6 +1,6 @@
 \section{Introduction}\label{sec:introduction}
 % P:introduction-01
-Monoethanolamine (\MEA) in water is the reference solvent for \COtwo absorption, and its vapor--liquid equilibrium has been measured extensively~\cite{Jou1995,Mamun2005,Hilliard2008,Aronu2011,Xu2011}.
+Monoethanolamine (\MEA) in water is the reference solvent for \COtwo absorption, and its vapor--liquid equilibrium (VLE) has been measured extensively~\cite{Jou1995,Mamun2005,Hilliard2008,Aronu2011,Xu2011}.
 Absorbed \COtwo reacts with water and amine to form protonated amine, carbamate, bicarbonate and carbonate.
 The equilibrium \COtwo partial pressure at a given loading therefore depends on both the phase equilibrium and the liquid speciation.
 A model can reproduce the pressure with an implausible distribution of \MEA, \MEAH, \MEACOO, \HCOthree and \COthree, so speciation measurements provide a separate test of the same thermodynamic state.
@@ -15,9 +15,9 @@ When such observations enter a parameter fit, the choice of which measurements t
 % P:introduction-03
 Excess-Gibbs-energy models with chemical equilibria represent this system with fitted interaction parameters.
 B\"ottinger et al.\ refitted the \MEA carbamate-formation constant to NMR speciation while retaining the Bates--Pinching protonation constant and published \MEA interaction parameters~\cite{Bottinger2008}.
-Zhang et al.\ fitted an electrolyte NRTL liquid model, with PC-SAFT vapor fugacities, to \COtwo solubility, heat of absorption, heat capacity and NMR speciation together~\cite{Zhang2011}, and Akula et al.\ fitted an electrolyte NRTL model jointly to \COtwo pressure and heat of absorption, leaving NMR speciation and heat capacity outside the fit~\cite{Akula2023a}.
-Equations of state based on statistical associating fluid theory describe association and chain formation within one Helmholtz energy~\cite{Gross2001,Gross2002}.
-For loaded \MEA, SAFT-VR models represented the reactions implicitly as association between \MEA and \COtwo sites~\cite{MacDowell2010,Rodriguez2012}, Wang et al.\ used pseudo-chemical association in a Peng--Robinson cubic-plus-association equation of state and predicted the liquid speciation~\cite{wangImprovementPRCPAEquation2018}, and PC-SAFT and SAFT-HR models combined neutral-species fugacities with ideal reaction equilibria~\cite{Nasrifar2010,Baygi2015,Najafloo2018}.
+Zhang et al.\ fitted an electrolyte non-random two-liquid (NRTL) liquid model, with vapor fugacities from the perturbed-chain statistical associating fluid theory (PC-SAFT), to \COtwo solubility, heat of absorption, heat capacity and NMR speciation together~\cite{Zhang2011}, and Akula et al.\ fitted an electrolyte NRTL model jointly to \COtwo pressure and heat of absorption, leaving NMR speciation and heat capacity outside the fit~\cite{Akula2023a}.
+Equations of state based on statistical associating fluid theory (SAFT) describe association and chain formation within one Helmholtz energy~\cite{Gross2001,Gross2002}.
+For loaded \MEA, SAFT models with variable-range potentials (SAFT-VR) represented the reactions implicitly as association between \MEA and \COtwo sites~\cite{MacDowell2010,Rodriguez2012}, Wang et al.\ used pseudo-chemical association in a Peng--Robinson cubic-plus-association equation of state and predicted the liquid speciation~\cite{wangImprovementPRCPAEquation2018}, and PC-SAFT and Huang--Radosz SAFT (SAFT-HR) models combined neutral-species fugacities with ideal reaction equilibria~\cite{Nasrifar2010,Baygi2015,Najafloo2018}.
 Nasrifar and Tafazzol solved the reaction equilibria of aqueous \MEA, diethanolamine and methyldiethanolamine (MDEA) as an ideal liquid, lumped the ions with water and predicted \COtwo and \ce{H2S} solubility from PC-SAFT pure-component parameters and amine--water interaction parameters from binary vapor--liquid equilibria, without parameters fitted to the loaded solutions~\cite[Sects.~3 and 6, Table~3]{Nasrifar2010}.
 None of these equation-of-state models carries explicit ion activities.
 
@@ -49,6 +49,6 @@ The work makes four contributions.
     \item To our knowledge, this is the first application of electrolyte PC-SAFT with Debye--H\"uckel and Born contributions to aqueous \MEA--\COtwo with ions and carbamate chemistry treated explicitly.
     \item To our knowledge, it is also the first simultaneous estimation of liquid-phase electrolyte PC-SAFT parameters against both \COtwo partial pressures and measured liquid speciation for loaded \MEA; Zhang et al.\ fitted both observables with an electrolyte NRTL liquid model~\cite{Zhang2011}.
     \item We extend published Born-formulation comparisons to reactive aqueous \MEA, where the ionic species and their amounts change with loading, and decompose the pressure change caused by removing the Born term into activity and speciation contributions.
-    \item Within the declared fitting bounds, the tested refits without a Born contribution do not recover agreement with pressure and speciation together, and the SSM+DS and original Born formulations calibrate comparably on these data; which has the lower cost depends on whether the titration bicarbonate data are fitted.
+    \item Within the declared fitting bounds, the tested refit without a Born contribution does not recover agreement with pressure and speciation together, and the SSM+DS and original Born formulations calibrate comparably on these data; which has the lower cost depends on whether the titration bicarbonate data are fitted.
 \end{enumerate}
 The work also reports conditional parameter uncertainties, compares the calibrated reaction temperature dependence with a refit using literature temperature laws, and turns these results into practical lessons for fitting this model.

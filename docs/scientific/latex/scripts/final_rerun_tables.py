@@ -71,7 +71,7 @@ groups = [("Fitted pressure, 40 and \\SI{60}{\\degreeCelsius}", "fitted", "fit p
           ("B\\\"ottinger et al.\\ species, \\SI{80}{\\degreeCelsius}", "outside fit", "Bottinger 80C species"),
           ("Wagner et al.\\ pressure near \\SI{353}{\\kelvin}", "outside fit", "Wagner near 353.15K"),
           ("Wagner et al.\\ pressure near \\SI{392}{\\kelvin}", "outside fit", "Wagner near 392.15K"),
-          ("Measured pressure, 100--\\SI{120}{\\degreeCelsius}", "extrapolation", "100-120C"),
+          ("Measured pressure, 100--\\SI{120}{\\degreeCelsius}", "outside fit", "100-120C"),
           ("Measured pressure, 40--\\SI{80}{\\degreeCelsius}", "pooled", "pooled 40-80C"),
           ("Pressure, 15 wt\\% \\MEA", "transfer", "transfer 15wt%"),
           ("Pressure, 45 wt\\% \\MEA", "transfer", "transfer 45wt%")]
@@ -84,7 +84,7 @@ write("residual_summary.tex", r"""\begin{table}[pos=!htb]
     \centering
     \caption{Deviations and costs of the selected SSM+DS fit (F1), the original Born fit (F2) and the source-law fit (F6), each fitted to the same 141 targets.
     AARD is \(100\,n^{-1}\sum|y_{\mathrm{calc}}/y_{\mathrm{obs}}-1|\) over the stated group, and the cost is \(C=\tfrac12\sum r_j^2\).
-    Outside-fit rows are outside the five-parameter fit; the \SI{80}{\degreeCelsius} and higher-temperature data also informed the fixed reaction shifts of F1 and F2 (\cref{sec:data-methods}).
+    Outside-fit rows are outside the five-parameter fit; except for the Wagner et al.\ rows, the data at 80--\SI{120}{\degreeCelsius} also informed fixed values of F1 and F2 (\cref{sec:parameters}).
     The 100--\SI{120}{\degreeCelsius} group omits three Xu and Rochelle rows above \SI{393.15}{\kelvin}, the upper limit of the declared reaction-correlation domain.
     The carbonate-share row covers nine Jakobsen et al.\ points at 20 and \SI{40}{\degreeCelsius}; the density row covers four loaded 30 wt\% solutions at 50 and \SI{70}{\degreeCelsius}.}
     \label{tab:residual-summary}
@@ -285,7 +285,7 @@ write("supplement_carbonate_density.tex", r"""\begin{table}[htb]
     \centering
     \caption{Carbonate share of dissolved carbon, \(x_{\COthree}/(x_{\HCOthree}+x_{\COthree}+x_{\MEACOO}+x_{\COtwo})\) as reported by Jakobsen et al., and the calculated/observed ratio for each fit.
     Loadings are the printed \emph{maxload} values; the source dilution and loading definitions are unresolved.
-    The point at \SI{40}{\degreeCelsius} and loading 0.21 is excluded from the summary range of the main text.}
+    The point at \SI{40}{\degreeCelsius} and loading 0.21 is excluded from the summary range of the main text because its observed share is out of line with the other four \SI{40}{\degreeCelsius} points.}
     \label{tab:s-carbonate}
     \begin{tabular}{@{}rrrrrrc@{}}
         \toprule
@@ -317,7 +317,7 @@ third_rows = [f"        {num(r['T_K'] - 273.15, 0)} & {r['third']} & {r['n']} & 
               for r in checks["C"]["loading_thirds"] if r["parent"] == "adopted"]
 write("supplement_decomposition.tex", r"""\begin{table}[htb]
     \centering
-    \caption{Mean offset fraction \(\phi\) of the Born-off refit F3 relative to F1, by loading third of the fitted pressure states (third 1 is the lowest loading).
+    \caption{Mean offset fraction \(\phi\) of F3, the refit without the Born term, relative to F1, by loading third of the fitted pressure states (third 1 is the lowest loading).
     \(\phi=1\) means the non-Born activity changes of the refit fully offset the removed Born contribution to \(Q\); \(\phi=0\) means no offset.}
     \label{tab:s-phi}
     \begin{tabular}{@{}rrrr@{}}
