@@ -14,26 +14,31 @@
 \usepackage{booktabs}
 \usepackage{adjustbox}
 \usepackage{xspace}
-\renewcommand\cellalign{tl}
+\renewcommand\cellalign{rb}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \usepackage{xcolor}
 \usepackage{siunitx}
 \usepackage{xurl}
 \graphicspath{{figures/generated/}}
 
+% Typography. cas-sc sets floats, captions, header and footer in \sffamily
+% (bitmap EC sans here) and its Inconsolata check fails, leaving bitmap EC
+% typewriter. Set all of them in the STIX body serif, use Type 1 Inconsolata,
+% and route the class's caption makers through the caption package.
+\renewcommand{\sfdefault}{\rmdefault}
+\usepackage[scaled=0.95]{inconsolata}
+\captionsetup{font=small,labelfont=bf,labelsep=colon,justification=justified}
+\captionsetup[table]{position=top,labelsep=newline,justification=raggedright,singlelinecheck=false}
+\setlength{\tabcolsep}{4pt}
+\makeatletter
+\ExplSyntaxOn
+\cs_set_eq:NN \__make_fig_caption:nn \caption@makecaption
+\cs_set_eq:NN \__make_tbl_caption:nn \caption@makecaption
+\ExplSyntaxOff
+\makeatother
+
 \newcommand{\Ha}{\text{Ha}}
-\newcommand{\COtwo}{\ce{CO2}\xspace}
-\newcommand{\HtwoO}{\ce{H2O}\xspace}
-\newcommand{\MEA}{\ce{MEA}\xspace}
-\newcommand{\MEAH}{\ce{MEAH+}\xspace}
-\newcommand{\MEACOO}{\ce{MEACOO-}\xspace}
-\newcommand{\HCOthree}{\ce{HCO3-}\xspace}
-\newcommand{\COthree}{\ce{CO3^2-}\xspace}
-\newcommand{\HthreeO}{\ce{H3O+}\xspace}
-\newcommand{\Hydroxide}{\ce{OH-}\xspace}
-\newcommand{\Ntwo}{\ce{N2}\xspace}
-\newcommand{\Otwo}{\ce{O2}\xspace}
-\newcommand{\NtwoO}{\ce{N2O}\xspace}
+\input{chemistry_macros}
 
 \newcommand{\A}{\text{A}}
 \newcommand{\B}{\text{B}}
@@ -42,6 +47,21 @@
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\liq}{\ell}
 \newcommand{\vap}{v}
+
+% Footer: this is a preprint, not yet submitted to a journal.
+\ExplSyntaxOn
+\cs_set:Npn \__first_footerline:
+{
+  \group_begin:
+  \small
+  \ifnum\theblind>0\relax
+  \else
+	\__short_authors: :~
+  \fi
+  { \rmfamily \itshape Preprint,~not~peer~reviewed }
+  \group_end:
+}
+\ExplSyntaxOff
 
 \begin{document}
 
@@ -70,15 +90,15 @@
 
 \begin{abstract}
 % P:abstract-01
-Electrolyte PC-SAFT (ePC-SAFT) with explicit ions and activity-based reaction equilibria describes \COtwo absorption in aqueous methyldiethanolamine, which forms no carbamate.
+Electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) with explicit ions and activity-based reaction equilibria describes \COtwo absorption in aqueous methyldiethanolamine, which forms no carbamate.
 This work extends that approach to monoethanolamine (\MEA), whose carbamate chemistry changes the ion population with \COtwo loading.
-A nine-species ePC-SAFT model with Debye--H\"uckel and Born contributions and explicit carbamate, bicarbonate and carbonate chemistry was fitted simultaneously to 48 \COtwo partial pressures at 40 and \SI{60}{\degreeCelsius} and 94 liquid species measurements at 20--\SI{60}{\degreeCelsius} in 30 wt\% \MEA, with average absolute relative deviations (AARD) of 13.53\,\% and 8.28\,\%.
-Outside the fit, the model gives 20.27\,\% on 21 pressures at \SI{80}{\degreeCelsius}, and 24.51\,\% and 25.45\,\% on 11 and 12 previously unused pressures near 353 and \SI{392}{\kelvin}.
-Within this model and its fitting bounds, removing the Born term triples the refitted cost, from 32.99 to 98.79, and raises the pressure AARD to 53.9\,\%.
-The protonated \MEA--carbamate and protonated \MEA--water interactions dominate the tested ablations.
-Across the three tested Born-input sets, solvation-shell and dielectric-saturation (SSM+DS) and original Born terms give costs of 31.7--34.6 after refitting; their ranking changes with the inputs and the titration bicarbonate data role.
-Refits to \(\le\)\SI{60}{\degreeCelsius} data with literature amine and \COtwo-hydration temperature laws give 27.61--29.33\,\% at \SI{80}{\degreeCelsius}; fitting the hydration enthalpy gives 23.02\,\%.
-Electrolyte-term comparisons for this model should state which speciation data are fitted; independent solvation or activity data could guide Born-form choice, and heat-of-absorption or high-temperature equilibrium data could constrain the temperature response.
+A nine-species ePC-SAFT model with Debye--H\"uckel and Born contributions was fitted through five binary interaction parameters to 47 \COtwo partial pressures at 40 and \SI{60}{\degreeCelsius} and 94 liquid species measurements at 20--\SI{60}{\degreeCelsius} in 30 wt\% \MEA, with average absolute relative deviations (AARD) of 14.0\,\% and 8.3\,\%.
+On pressures near 80 and \SI{119}{\degreeCelsius} (353 and \SI{392}{\kelvin}) that entered no fitting or selection step it gives 22.5\,\% and 22.3\,\%; the other data at 80--\SI{120}{\degreeCelsius} informed fixed reaction-enthalpy shifts and are not independent temperature tests.
+Refitted without the Born term, the model gives a fitted-pressure AARD of 53.6\,\%.
+A decomposition of the calculated pressure shows that the Born term lowers the activity sum that sets the \COtwo pressure increasingly with loading and that the refitted interactions do not offset its removal at high loading, where a compensating speciation change cancels most of the activity-sum change, so the error is largest at intermediate loading.
+The solvation-shell and dielectric-saturation (SSM+DS) and original Born terms calibrate comparably; which has the lower cost depends on whether titration bicarbonate data are fitted.
+A refit with literature reaction temperature laws and the published \COtwo dispersion energy fits the data at or below \SI{60}{\degreeCelsius} equally well but gives 51.0\,\% at 100--\SI{120}{\degreeCelsius}, so these data do not determine the temperature response of this model.
+Electrolyte-term comparisons for this model should state which speciation data are fitted, and heat-of-absorption or high-temperature equilibrium data are needed to constrain its temperature response.
 \end{abstract}
 
 \begin{keywords}

@@ -4,6 +4,7 @@ import csv
 import hashlib
 import json
 import math
+import shutil
 import statistics
 import sys
 from pathlib import Path
@@ -13,6 +14,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from manuscript_style import FULL_WIDTH, apply_style
 from result_freshness import FIGURE_DATA, require_results
 from shared_evaluation import ENGINE_COMMIT, ENGINE_WHEEL_SHA256
 
@@ -144,11 +146,12 @@ def source_colors(pressure):
 
 
 def render_isotherms(pressure, colors, title):
+    apply_style()
     temperatures = sorted({round(float(r["temperature_C"])) for r in pressure})
-    fig, axes = plt.subplots(2, 3, figsize=(13, 8.6), squeeze=False)
+    fig, axes = plt.subplots(2, 3, figsize=(FULL_WIDTH, 5.4), squeeze=False)
     for ax in axes.flat[len(temperatures) :]:
         ax.set_visible(False)
-    for ax, temperature in zip(axes.flat, temperatures):
+    for panel, (ax, temperature) in enumerate(zip(axes.flat, temperatures)):
         group = [r for r in pressure if round(float(r["temperature_C"])) == temperature]
         for source, color in colors.items():
             sub = [r for r in group if r["source"] == source]
@@ -158,8 +161,9 @@ def render_isotherms(pressure, colors, title):
                     [float(r["observed"]) for r in sub],
                     marker=MARKERS[source],
                     color=color,
-                    s=26,
-                    label=f"{source} ({short_label(sub)})",
+                    s=16,
+                    linewidths=0.7,
+                    label=source,
                     facecolors="none" if MARKERS[source] in "oDh^" else color,
                 )
         model = sorted(
@@ -169,28 +173,27 @@ def render_isotherms(pressure, colors, title):
             [float(r["loading_mol_CO2_per_mol_MEA"]) for r in model],
             [float(r["predicted"]) for r in model],
             color="black",
-            linewidth=1.1,
+            linewidth=1.0,
             linestyle="--",
             label=f"calculated ({len(model)}/{len(group)} states)",
         )
         ax.set_yscale("log")
-        n_label, rest = ln_label(group).split(" · ", 1)
-        ax.set_title(f"T = {temperature} °C · {n_label}\n{rest}", fontsize=9)
-        ax.set_xlabel("CO₂ loading (mol/mol MEA)")
+        ax.set_title(f"({chr(97 + panel)}) {temperature} °C", loc="left")
+        stat = ln_statistics("", "", "", group)
+        ax.text(0.03, 0.97, f"n = {stat['evaluated_positive']}; AARD {stat['aard_percent']:.1f}%\nRMS ln {stat['rms_ln_pred_over_obs']:.2f}", transform=ax.transAxes, va="top", fontsize=8)
+        ax.set_xlabel(r"$\mathrm{CO}_2$ loading (mol/mol MEA)")
         ax.grid(alpha=0.18)
-        ax.legend(fontsize=7, frameon=False)
-    axes[0, 0].set_ylabel("CO₂ partial pressure (kPa)")
-    axes[1, 0].set_ylabel("CO₂ partial pressure (kPa)")
-    fig.suptitle(title, fontsize=13)
-    fig.text(
-        0.5,
-        0.012,
-        "30 mass% MEA, active-v1 observations. Markers are observations; the dashed line connects "
-        "adopted-record Engine states at the observed loadings (no interpolation).",
-        ha="center",
-        fontsize=8,
-    )
-    fig.tight_layout(rect=(0, 0.035, 1, 0.95))
+
+    axes[0, 0].set_ylabel(r"$\mathrm{CO}_2$ partial pressure (kPa)")
+    axes[1, 0].set_ylabel(r"$\mathrm{CO}_2$ partial pressure (kPa)")
+    from matplotlib.lines import Line2D
+    legend_ax = axes.flat[-1]
+    legend_ax.set_visible(True)
+    legend_ax.set_axis_off()
+    handles = [Line2D([], [], color=color, marker=MARKERS[source], markerfacecolor="none" if MARKERS[source] in "oDh^" else color, linestyle="none", label=source) for source, color in colors.items()]
+    handles.append(Line2D([], [], color="black", linestyle="--", label="Calculated"))
+    legend_ax.legend(handles=handles, frameon=False, loc="center")
+    fig.tight_layout(pad=0.7, h_pad=1.4, w_pad=0.9)
     save(fig, "pressure")
 
 
@@ -299,13 +302,14 @@ def model_parts(species):
 
 
 def render_speciation(speciation, grid, display, title):
+    apply_style()
     temperatures = (20, 40, 60, 80)
-    fig, axes = plt.subplots(2, 3, figsize=(13, 8.6), squeeze=False)
-    axes.flat[-1].set_visible(False)
+    fig, axes = plt.subplots(2, 3, figsize=(FULL_WIDTH, 6.4), squeeze=False)
+    axes.flat[-1].set_axis_off()
     by_grid = {}
     for row in grid:
         by_grid.setdefault(row["grid_id"], {})[row["species"]] = row
-    for ax, species in zip(axes.flat, SPECIES):
+    for panel, (ax, species) in enumerate(zip(axes.flat, SPECIES)):
         for color, temperature, marker in zip(COLORS, temperatures, ("o", "^", "D", "v")):
             points = [
                 r
@@ -320,7 +324,8 @@ def render_speciation(speciation, grid, display, title):
                 facecolors=[color if r["source"] == "Jakobsen2005" else "none" for r in points],
                 edgecolors=color,
                 marker=marker,
-                s=26,
+                s=16,
+                linewidths=0.7,
             )
             line = []
             for values in by_grid.values():
@@ -334,9 +339,9 @@ def render_speciation(speciation, grid, display, title):
                     )
             if species == HCO3_POOL_LABEL:
                 physical = sorted((float(v["HCO3-"]["loading_mol_CO2_per_mol_MEA"]), float(v["HCO3-"]["model_mole_fraction"])) for v in by_grid.values() if round(float(v["HCO3-"]["temperature_C"])) == temperature)
-                ax.plot([x for x, _ in physical], [y for _, y in physical], color=color, linewidth=0.8, linestyle=":", marker=marker, markevery=6, markersize=3.2, markerfacecolor="none", label=f"{temperature} °C HCO₃⁻ alone")
+                ax.plot([x for x, _ in physical], [y for _, y in physical], color=color, linewidth=1.0, linestyle=":", marker=marker, markevery=6, markersize=4, markerfacecolor="none", label=f"{temperature} °C HCO₃⁻ alone")
                 separate = [r for r in display if r["species"] == "HCO3-" and round(float(r["temperature_C"])) == temperature and float(r["observed_mole_fraction"]) > 0]
-                ax.scatter([float(r["loading_mol_CO2_per_mol_MEA"]) for r in separate], [float(r["observed_mole_fraction"]) for r in separate], edgecolors=color, facecolors=[color if r["source"] == "Jakobsen2005" else "none" for r in separate], marker=marker, s=20)
+                ax.scatter([float(r["loading_mol_CO2_per_mol_MEA"]) for r in separate], [float(r["observed_mole_fraction"]) for r in separate], edgecolors=color, facecolors=[color if r["source"] == "Jakobsen2005" else "none" for r in separate], marker=marker, s=16, linewidths=0.7)
             line.sort()
             scored = [
                 r
@@ -348,11 +353,11 @@ def render_speciation(speciation, grid, display, title):
                 [x for x, _ in line],
                 [y for _, y in line],
                 color=color,
-                linewidth=1.1,
+                linewidth=1.0,
                 linestyle="--",
                 marker=marker,
                 markevery=6,
-                markersize=3.2,
+                markersize=4,
                 markerfacecolor="none",
                 label=f"{temperature} °C: "
                 + (species_label(scored) if scored else "not scored"),
@@ -363,27 +368,20 @@ def render_speciation(speciation, grid, display, title):
             species,
             [r for r in speciation if r["target"] == species],
         )
-        ax.set_title(
-            f"{species} · scored n = {stat['evaluated_positive']} · "
-            f"AARD {stat['aard_percent']:.1f} % · RMS ln {stat['rms_ln_pred_over_obs']:.2f}",
-            fontsize=8.5,
-        )
+        labels = {"MEA": "MEA", "MEAH+": r"$\mathrm{MEAH}^{+}$", "MEA + MEAH+": r"$\mathrm{MEA}+\mathrm{MEAH}^{+}$", "MEACOO-": r"$\mathrm{MEACOO}^{-}$", HCO3_POOL_LABEL: r"$\mathrm{HCO}_3^{-}+\mathrm{CO}_3^{2-}$"}
+        ax.set_title(f"({chr(97 + panel)}) {labels[species]}", loc="left", pad=31)
+        ax.text(0.0, 1.02, f"n = {stat['evaluated_positive']}; AARD {stat['aard_percent']:.1f}%\nRMS ln {stat['rms_ln_pred_over_obs']:.2f}", transform=ax.transAxes, va="bottom", fontsize=8)
         ax.set_yscale("log")
-        ax.set_xlabel("CO₂ loading (mol/mol MEA)")
+        ax.set_xlabel(r"$\mathrm{CO}_2$ loading (mol/mol MEA)")
         ax.grid(alpha=0.18)
-        ax.legend(fontsize=6.5, frameon=False, loc="best")
+
     axes[0, 0].set_ylabel("Species / aggregate mole fraction")
     axes[1, 0].set_ylabel("Species / aggregate mole fraction")
-    fig.suptitle(title, fontsize=13)
-    fig.text(
-        0.5,
-        0.012,
-        "30 wt% MEA; 46 direct states per temperature. Dashed: HCO₃⁻ + CO₃²⁻ pool; dotted: HCO₃⁻ alone.\n"
-        "Shapes: ○ 20, △ 40, ◇ 60, ▽ 80 °C. Open: Matin/Böttinger; filled: Jakobsen. Statistics include report-only Matin pools.",
-        ha="center",
-        fontsize=8,
-    )
-    fig.tight_layout(rect=(0, 0.035, 1, 0.95))
+    from matplotlib.lines import Line2D
+    handles = [Line2D([], [], color=color, marker=marker, markerfacecolor="none", linestyle="--", label=f"{temperature} °C") for color, temperature, marker in zip(COLORS, temperatures, ("o", "^", "D", "v"))]
+    handles += [Line2D([], [], color="black", linestyle=":", label=r"$\mathrm{HCO}_3^{-}$ alone"), Line2D([], [], color="black", marker="o", markerfacecolor="none", linestyle="none", label="Matin / Böttinger"), Line2D([], [], color="black", marker="o", linestyle="none", label="Jakobsen")]
+    axes.flat[-1].legend(handles=handles, frameon=False, loc="center", title="Temperature / source")
+    fig.tight_layout(pad=0.7, h_pad=1.4, w_pad=0.9)
     save(fig, "speciation")
 
 
@@ -436,12 +434,42 @@ def render_heat(heat, title):
     save(fig, "heat")
 
 
+def render_manuscript():
+    """Restyle only the retained pressure/speciation figures and their provenance."""
+    provenance_path = OUT / "provenance.json"
+    provenance = json.loads(provenance_path.read_text())
+    sources = (FIT, GRID, DISPLAY)
+    for path in sources:
+        assert digest(path) == provenance["inputs"][str(path.relative_to(ROOT))], path
+    fit = read(FIT)
+    pressure = [r for r in fit if r["family"] == "pressure"]
+    speciation = [r for r in fit if r["family"] == "speciation"]
+    render_isotherms(pressure, source_colors(pressure), "")
+    render_speciation(speciation, read(GRID), read(DISPLAY), "")
+    destination = ROOT.parents[1] / "docs/scientific/latex/figures/generated"
+    for name in ("pressure", "speciation"):
+        for ext in ("pdf", "svg", "png"):
+            path = OUT / f"{name}.{ext}"
+            provenance["outputs"][path.name] = digest(path)
+        shutil.copy2(OUT / f"{name}.pdf", destination / f"{name}.pdf")
+    for path in (Path(__file__), Path(__file__).with_name("manuscript_style.py")):
+        provenance["inputs"][str(path.relative_to(ROOT))] = digest(path)
+    provenance["manuscript_rendering"] = {
+        "text_width_mm": 164.6, "font": "STIXGeneral",
+        "tick_pt": 8, "label_pt": 9, "legend_pt": 8,
+        "model_executed": False, "retained_input_hashes_unchanged": True,
+    }
+    provenance_path.write_text(json.dumps(provenance, indent=2) + "\n")
+
+
 def main():
+    if sys.argv[1:] == ["--manuscript"]:
+        render_manuscript()
+        return
     require_results(FIGURE_DATA)
     OUT.mkdir(parents=True, exist_ok=True)
-    plt.rcParams.update(
-        {"font.family": "DejaVu Sans", "svg.hashsalt": "mea-regression-overview"}
-    )
+    apply_style()
+    plt.rcParams["svg.hashsalt"] = "mea-regression-overview"
     fit = read(FIT)
     pressure = [r for r in fit if r["family"] == "pressure"]
     speciation = [r for r in fit if r["family"] == "speciation"]

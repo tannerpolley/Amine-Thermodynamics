@@ -61,7 +61,7 @@ The Born term follows the solvation-shell and dielectric-saturation (SSM+DS) for
     \label{eq:born-shell-diameter}
 \end{equation}
 Here \(\mathcal{I}\) is the set of ions, \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell and \(\varepsilon_{\mathrm{ion}}=8\) is the permittivity assigned to the region between the ion surface and that shell.
-The selected model uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\), which reproduces the corrected Eq.~7; the Original Born comparison uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=0\), which recovers the Original Born expression \cite[Eq.~5]{Figiel2025}.
+The selected model uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\), which reproduces the corrected Eq.~7; the original Born comparison uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=0\), which recovers the original Born expression \cite[Eq.~5]{Figiel2025}.
 The water solvation factor is \(f_{\HtwoO}=1.5\) \cite[Table~2]{Figiel2025}, and every other component, including \MEA, \COtwo and all ions, has \(f_k=1\).
 Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents; here it runs over all nine components, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\).
 The shell diameter therefore changes with loading through the water mole fraction, and the Born term contributes to the water activity.
@@ -78,7 +78,7 @@ The bulk permittivity in the Debye--H\"uckel and Born terms is the mass-weighted
 \end{equation}
 which is the salt-free weight-fraction rule of Uyan et al.\ and Figiel et al.\ \cite[Eq.~5]{Uyan2015}\cite[Eq.~12]{Figiel2025}.
 The ion-fraction suppression of Figiel et al.\ \cite[Eq.~11]{Figiel2025} is not applied.
-The \MEA permittivity is constant at \(\varepsilon_{\MEA}=32\), and the water permittivity is
+The \MEA permittivity is held constant at \(\varepsilon_{\MEA}=32\), an assumed value (\cref{sec:parameters}), and the water permittivity is the software's approximation of the Archer--Wang permittivity,
 \begin{equation}
     \varepsilon_{\HtwoO}(T)=78.4104-0.361338\,\theta+7.65556\times10^{-4}\,\theta^{2},
     \qquad \theta=T/\mathrm{K}-298.15 .
@@ -87,7 +87,8 @@ The \MEA permittivity is constant at \(\varepsilon_{\MEA}=32\), and the water pe
 
 \subsection{Reactions and phase equilibrium}
 % P:theory-06
-The apparent feed is \SI{1}{\mole} of \MEA, the water amount that gives 30 wt\% \MEA on a \COtwo-free basis, and \(\alpha\)~\si{\mole} of \COtwo, where \(\alpha\) is the loading in mol \COtwo per mol total amine.
+The apparent feed is \SI{1}{\mole} of \MEA, the water amount given by the source composition, and \(\alpha\)~\si{\mole} of \COtwo, where \(\alpha\) is the loading in mol \COtwo per mol total amine.
+The water amount follows from the reported \MEA molality where the source gives one and otherwise from the reported \COtwo-free \MEA mass fraction.
 The liquid conserves the carbon, hydrogen, nitrogen and oxygen amounts of this feed.
 For these nine species the four element balances imply electroneutrality and leave the five independent reactions of \cref{tab:reaction-equilibrium-constants}.
 The equilibrium state satisfies equal chemical potentials of \COtwo, \MEA and \HtwoO in the two phases and, for each reaction \(r\),
@@ -114,8 +115,8 @@ R1--R3 use the correlations of Austgen \cite[Table~V]{Austgen1991},
 on the mole-fraction basis, which corresponds to the molality-basis offsets \(\Delta_r\) in \cref{tab:reaction-equilibrium-constants}.
 R4 is the carbamate-hydrolysis constant of Tong et al.\ \cite[Table~5]{Tong2012}, converted from Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}, \(\ln K_4=2.151-\SI{1545.3}{\kelvin}/T\) on the aqueous-molality basis.
 R5 has the Bates--Pinching form \(\ln K_5=-\ln 10\,(A_5/T+B_5+C_5T)\) on the aqueous-molality basis \cite[Table~5]{Bottinger2008}.
-The recorded R2 correlation has no separate offset, because its \(A_2\) and \(B_2\) already contain the +4.0165 molality conversion and an inherited constant reaction-enthalpy shift of \SI{-8.2019}{\kilo\joule\per\mole}, applied so that \(\ln K_2(\SI{313.15}{\kelvin})=-14.5050\) is unchanged.
-The recorded R5 coefficients contain two inherited changes, which \cref{sec:data-methods} describes with the R2 shift.
-The R4 and R5 source correlations end at \SI{323.15}{\kelvin}, so their use at 333.15 and \SI{353.15}{\kelvin} is an extrapolation of the source constants.
+The R2 correlation used here has no separate offset, because its \(A_2\) and \(B_2\) already contain the +4.0165 molality conversion and a fixed constant reaction-enthalpy shift of \SI{-8.2019}{\kilo\joule\per\mole}, applied so that \(\ln K_2(\SI{313.15}{\kelvin})=-14.5050\) is unchanged.
+The R5 coefficients used here contain two fixed changes, which \cref{sec:data-methods} describes with the R2 shift.
+All five correlations are used over a declared domain of 293.15--\SI{393.15}{\kelvin}; the R4 and R5 source correlations end at \SI{323.15}{\kelvin}, so they are used beyond their source range at higher temperatures.
 
 \input{tables/reaction_equilibrium_constants}
