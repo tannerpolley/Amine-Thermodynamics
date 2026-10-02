@@ -135,7 +135,8 @@ def evaluate(sets=None, filters=(), canonical=False, states=None):
         r = shared.evaluate_state(model, o['request'], values, ident, anchors, budget_s=90, model_fingerprint=fp)
         liq = next((p for p in r.get('phases') or [] if p.get('role') == 'liquid'), None)
         yield {'identity': ident, 'status': r['status'], 'predictions': r['predictions'], 'check': check(r),
-               'liquid': liq, 'wall_s': time.perf_counter() - t0, 'sets': sets,
+               'liquid': liq, 'phases': r.get('phases', []), 'evidence': r.get('evidence', []),
+               'wall_s': time.perf_counter() - t0, 'sets': sets,
                'wheel': shared.ENGINE_WHEEL_SHA256, 'record_sha256': shared.sha256(RECORD),
                'T': o['request']['temperature']['value'],
                'feed': o['request']['reaction_system']['feed_amounts_mol'],
@@ -207,7 +208,7 @@ def main(argv):
     RECORD = Path(next((a.split('=', 1)[1] for a in rest if a.startswith('--record=')), RECORD))
     packet = next((a.split('=', 1)[1] for a in rest if a.startswith('--packet=')), None)
     if packet:
-        OBSERVATIONS = shared.load_state_packet(Path(packet))
+        OBSERVATIONS = shared.load_state_packet(Path(packet))['observations']
     rest = [a for a in rest if not a.startswith(('--record=', '--packet='))]
     sets = {k: float(v) for k, v in (a.split('=') for a in rest if '=' in a)}
     if '--source-r4' in rest:
