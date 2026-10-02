@@ -87,7 +87,8 @@ The \MEA permittivity is constant at \(\varepsilon_{\MEA}=32\), and the water pe
 
 \subsection{Reactions and phase equilibrium}
 % P:theory-06
-The apparent feed is \SI{1}{\mole} of \MEA, the water amount that gives 30 wt\% \MEA on a \COtwo-free basis, and \(\alpha\)~\si{\mole} of \COtwo, where \(\alpha\) is the loading in mol \COtwo per mol total amine.
+The apparent feed is \SI{1}{\mole} of \MEA, the water amount given by the source composition, and \(\alpha\)~\si{\mole} of \COtwo, where \(\alpha\) is the loading in mol \COtwo per mol total amine.
+The water amount follows from the reported \MEA molality where the source gives one and otherwise from the reported \COtwo-free \MEA mass fraction.
 The liquid conserves the carbon, hydrogen, nitrogen and oxygen amounts of this feed.
 For these nine species the four element balances imply electroneutrality and leave the five independent reactions of \cref{tab:reaction-equilibrium-constants}.
 The equilibrium state satisfies equal chemical potentials of \COtwo, \MEA and \HtwoO in the two phases and, for each reaction \(r\),
@@ -114,8 +115,8 @@ R1--R3 use the correlations of Austgen \cite[Table~V]{Austgen1991},
 on the mole-fraction basis, which corresponds to the molality-basis offsets \(\Delta_r\) in \cref{tab:reaction-equilibrium-constants}.
 R4 is the carbamate-hydrolysis constant of Tong et al.\ \cite[Table~5]{Tong2012}, converted from Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}, \(\ln K_4=2.151-\SI{1545.3}{\kelvin}/T\) on the aqueous-molality basis.
 R5 has the Bates--Pinching form \(\ln K_5=-\ln 10\,(A_5/T+B_5+C_5T)\) on the aqueous-molality basis \cite[Table~5]{Bottinger2008}.
-The R2 correlation used here has no separate offset, because its \(A_2\) and \(B_2\) already contain the +4.0165 molality conversion and a fixed constant reaction-enthalpy shift of \SI{-8.2019}{\kilo\joule\per\mole}, applied so that \(\ln K_2(\SI{313.15}{\kelvin})=-14.5050\) is unchanged.
+The R2 correlation used here has no separate offset, because its \(A_2\) and \(B_2\) already contain the +4.0165 molality conversion and a fixed constant reaction-enthalpy shift of \SI{-8.2019}{\kilo\joule\per\mole}, applied so that \(\ln K_2(\SI{313.15}{\kelvin})=-14.5050\) is unchanged; this shift is a calibration value.
 The R5 coefficients used here contain two fixed changes, which \cref{sec:data-methods} describes with the R2 shift.
-The R4 and R5 source correlations end at \SI{323.15}{\kelvin}, so their use at 333.15 and \SI{353.15}{\kelvin} is an extrapolation of the source constants.
+All five correlations are used over a declared domain of 293.15--\SI{393.15}{\kelvin}; the R4 and R5 source correlations end at \SI{323.15}{\kelvin}, so their use at higher temperatures extrapolates the source constants.
 
 \input{tables/reaction_equilibrium_constants}

@@ -1,15 +1,11 @@
 \section*{Data and Code Availability}
 % P:availability-01
-The processed observations, parameter files, calculation results and figure data will be public at \url{https://github.com/tannerpolley/Amine-Thermodynamics} under the tag \texttt{manuscript-v1} when this manuscript is posted.
-The fitted SSM+DS parameter set is in \nolinkurl{analyses/mea_parameter_bundle/results/selected-current-best-parameters.json}, SHA-256 \nolinkurl{9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241}.
-The fits to the 142 fitted targets, the comparisons of the fitted parameter set with measurements and the Born-form re-evaluations used the \texttt{epcsaft} software build (Python wheel) with SHA-256 \nolinkurl{28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2}.
-The two R2 refits used software build SHA-256 \nolinkurl{9e6a76cf59d4e2fef3347d895bf3a966ecced01f13dc6e0caec74c3c3d618dc4}; their results are in \nolinkurl{analyses/mea_parameter_bundle/results/temperature-reanchor-140/stage-3/}.
-The SSM+DS multistart fit including the titration bicarbonate data used software build SHA-256 \nolinkurl{f66d972c032ce709ada69e8d8177e195c7e416800757663b7420c22bda5f6328}.
-The estimation of the R2 and R5 enthalpy shifts is retained in \nolinkurl{analyses/mea_parameter_bundle/results/reaction-temperature-fit/} at repository commit \texttt{c369705}.
-The heat-capacity comparison used an earlier parameter set, SHA-256 \nolinkurl{868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be}, with the software build whose SHA-256 begins \texttt{48a639e7}.
-The Born-form costs are in \nolinkurl{analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-costs.csv}.
-The target-level comparisons of both forms are in \nolinkurl{analyses/mea_parameter_bundle/model-d/assessment-p5a-11-summary.json} and \nolinkurl{assessment-p5a-00-summary.json} in the same directory.
-The values for the 161 measured pressures, the concentration transfer and the 100--\SI{120}{\degreeCelsius} comparisons are in \nolinkurl{analyses/mea_parameter_bundle/model-d/assessment-p5a-loadfix-summary.json} and the per-form \nolinkurl{assessment-p5a-11-loadfix-comparison-scores.csv} and \nolinkurl{assessment-p5a-00-loadfix-comparison-scores.csv}.
+The processed observations, parameter files, calculation results and figure data are available at \url{https://github.com/tannerpolley/Amine-Thermodynamics} on the branch \texttt{work/final-rerun} (pull request 155).
+The selected SSM+DS parameter set, F1, is in \nolinkurl{analyses/mea_parameter_bundle/results/selected-current-best-parameters.json}, SHA-256 \nolinkurl{ae92bac5d2ef7ab690e692f6b1686e18cf06f24ac6b53a6aab4fafeb3046f1aa}.
+The six fits, the comparisons outside the fit, the conditional standard errors, the pressure decomposition and the figure data are in \nolinkurl{analyses/mea_parameter_bundle/results/final-rerun/}, and the source-data corrections are in \nolinkurl{analyses/mea_parameter_bundle/results/source-corrections-152/}.
+All fits and evaluations used the \texttt{epcsaft} software build (Python wheel) with SHA-256 \nolinkurl{28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2}.
+The estimation of the fixed R2 and R5 shifts is retained in \nolinkurl{analyses/mea_parameter_bundle/results/reaction-temperature-fit/}.
+The figures are drawn from the retained figure data by \nolinkurl{analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py}, and the result tables by \nolinkurl{docs/scientific/latex/scripts/final_rerun_tables.py}.
 The MIT License covers the repository software and original documentation; third-party experimental data retain their original terms and provenance.
 
 \section*{Funding}
