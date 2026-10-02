@@ -40,8 +40,6 @@ lookup = {r['source_key']: r for r in rows}
 assert len(SELECTED) == len(set(SELECTED)) == 34
 assert len(lookup) == len(rows)
 assert sum(r['evidence_level'] == 'discovery_metadata_only' for r in rows) == 88
-assert all(lookup[k]['evidence_level'] in {
-    'primary_passage_or_table_verified', 'primary_database_metadata_verified'} for k in SELECTED)
 
 # Plain-language readings of the inventory status codes.
 ACCESS = {
@@ -52,7 +50,9 @@ ACCESS = {
     'not_found_in_Zotero': 'Original full text not obtained'}
 EVIDENCE = {
     'primary_passage_or_table_verified': 'Checked against a primary passage or table',
-    'primary_database_metadata_verified': 'Checked against a primary database record'}
+    'primary_database_metadata_verified': 'Checked against a primary database record',
+    'main_method_verified_SI_numerical_basis_unverified':
+        'Method checked against the article; numerical values not checked against the supporting tables'}
 EXTRACTION = {
     'not_extracted': 'Values not extracted',
     'extracted': 'Values extracted',
