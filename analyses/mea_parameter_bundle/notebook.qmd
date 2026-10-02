@@ -2010,6 +2010,14 @@ Run each index 0–4 serially from the #123 checkout with `OMP_NUM_THREADS=1 OPE
 
 This is numerical reproduction of the reviewed model predictions and a comparison with existing measurements, not physical validation or qualification beyond these five states. The control is closer but exceeds the stated unloaded uncertainty. No cause is claimed. The complete 26-probe and sensitivity claims are not retained or promoted here. The investigator promoted this five-state density limitation for the manuscript on condition that these rows be retained first (instruction of 1 October 2026); that authority applies to this retained comparison and its stated limits, not the rest of the notebook.
 
+## New-water binary refit: incomplete CO₂–water calculation (#160)
+
+With the adopted water values, the 25-row Cai MEA–water fit converged at $k_{ij}=-0.0803172262$ in 3.17 s. Temperature AARD changed from 0.4253 % with the old water to 0.3669 % after refitting; vapor-water composition AARD changed from 2.6473 % to 2.6422 %. The joint temperature/composition cost was 92.5417. These are calibration comparisons, not independent validation.
+
+The 39-row Kiepe CO₂–water fit failed its initial evaluation at 313.2 K and liquid CO₂ mole fraction 0.01639 (`kiepe-313.20-10`). With converged old-water anchors, the native solve returned `CentralSolveUnavailable`, with residual 0.19138 against the unchanged $10^{-10}$ row limit. The fit stopped in 0.256 s without an optimizer step. Its native zero cost is not a valid objective. Old-water pressure AARD was 24.1634 %; no after-refit AARD exists. This failure does not establish that no constant $k_{ij}$ can fit the observations.
+
+[Binary values](results/density-cp-160/stage1-binary-values.csv), [CO₂–water baseline](results/density-cp-160/stage1-co2-water-baseline.csv), and [the numerical stopping point](results/density-cp-160/numerical-stop.json) retain the results on wheel `28181e72`. A figure would not clarify this incomplete fit, so the scalar comparisons are reported directly. Stages 2–4, the F1′ candidate, and the Hilliard heat-capacity checks remain unavailable. The selected parameters are unchanged. This section has not been independently reviewed or promoted for manuscript use.
+
 # Supporting evidence
 
 These links preserve the deeper analysis without reproducing it here. Figures and source data remain separate repository files; only the displayed figures are embedded in this portable HTML.
