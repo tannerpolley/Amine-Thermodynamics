@@ -9,6 +9,7 @@ import copy
 import csv
 import json
 import math
+import os
 import sys
 import time
 from pathlib import Path
@@ -38,6 +39,7 @@ EPSILON = "component/carbon-dioxide/dispersion_energy_over_k"
 STRUCTURES = ("constant-fixed", "slope-fixed", "constant-free", "slope-free")
 FREE_REACTIONS = False
 NATIVE_INPUTS = None
+N_STATES, N_TARGETS = (83, 141) if os.environ.get('FINAL_RERUN') else (84, 142)
 
 
 def save(path, value):
@@ -86,7 +88,9 @@ def design(structure, start):
 
 
 def verify_inputs():
-    hashes = json.loads((HERE / "input-hashes.json").read_text())["hashes"]
+    input_owner = SOURCE.parent
+    hash_owner = TRAINING.parent if os.environ.get('FINAL_RERUN') else input_owner
+    hashes = json.loads((hash_owner / "input-hashes.json").read_text())["hashes"]
     for path in (
         TRAINING,
         SOURCE,
@@ -98,9 +102,10 @@ def verify_inputs():
         assert s.sha256(path) == hashes[str(path.relative_to(probe.W))], path
     observations = json.loads(TRAINING.read_text())
     assert (
-        len(observations) == 84 and sum(len(o["targets"]) for o in observations) == 142
+        len(observations) == N_STATES and sum(len(o["targets"]) for o in observations) == N_TARGETS
     )
-    expected = list(csv.DictReader((HERE / "training-targets.csv").open()))
+    expected_path = BUNDLE / 'results/source-corrections-152/accepted-wave/strict141-targets.csv' if os.environ.get('FINAL_RERUN') else input_owner / 'training-targets.csv'
+    expected = list(csv.DictReader(expected_path.open()))
     assert {(r["identity"], r["target"]) for r in expected} == {
         (o["identity"], t["identity"]) for o in observations for t in o["targets"]
     }
@@ -312,7 +317,7 @@ def fit(structure, start):
             for observation, problem in calibration
             for r in refit.observations(params, observation, problem, 60)
         ]
-        assert len(rows) == 142 and len(calibration) == 84
+        assert len(rows) == N_TARGETS and len(calibration) == N_STATES
         coordinates = []
         for identity, value, scale, bound in zip(
             ids, values, scales, bounds, strict=True
@@ -409,7 +414,7 @@ def fit(structure, start):
             output["native_physical"] = list(result.physical)
             output["physical"] = physical
         finite = all(
-            len(v) == 142 and np.isfinite(v).all()
+            len(v) == N_TARGETS and np.isfinite(v).all()
             for v in (result.predictions, result.weighted_residuals)
         )
         finite = (
@@ -419,7 +424,7 @@ def fit(structure, start):
             and math.isfinite(result.final_cost)
         )
         jacobian_ok = (
-            len(result.optimizer_jacobian) == 142 * len(ids)
+            len(result.optimizer_jacobian) == N_TARGETS * len(ids)
             and np.isfinite(result.optimizer_jacobian).all()
         )
         output["native_complete"] = (
@@ -427,12 +432,12 @@ def fit(structure, start):
             and result.usable
             and finite
             and jacobian_ok
-            and len(result.statuses) == 142
+            and len(result.statuses) == N_TARGETS
             and all(x.name == "Available" for x in result.statuses)
         )
         if jacobian_ok:
             jacobian = np.array(result.optimizer_jacobian).reshape(
-                142, len(ids)
+                N_TARGETS, len(ids)
             ) / np.array(scales)
             norms = np.linalg.norm(jacobian, axis=0)
             output["weighted_physical_jacobian_singular_values"] = np.linalg.svd(
@@ -644,8 +649,8 @@ def rescore(structure, start):
                     "rescore", name, observation["identity"], rec["status"], flush=True
                 )
         complete = (
-            len(checks) == 84
-            and len(rows) == 142
+            len(checks) == N_STATES
+            and len(rows) == N_TARGETS
             and all(c["complete"] for c in checks)
             and all(
                 r["scaled_residual"] is not None and math.isfinite(r["scaled_residual"])
