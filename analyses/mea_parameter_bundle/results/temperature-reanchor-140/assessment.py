@@ -267,23 +267,10 @@ def wagner(pa, subset):
                 ),
             )["request"]
         )
-        system = request["reaction_system"]
-        carbon, mea = system["conserved_totals"]
-        system["feed_amounts_mol"][0] += loading * mea - (carbon - 2 * mea)
-        system["feed_amounts_mol"][2] *= (1 - w) / w / (0.7 / 0.3)
-        system["conserved_totals"] = [
-            math.fsum(c * n for c, n in zip(b, system["feed_amounts_mol"], strict=True))
-            for b in system["balance_matrix"]
-        ]
-        assert (
-            abs(
-                (system["conserved_totals"][0] - 2 * system["conserved_totals"][1])
-                / system["conserved_totals"][1]
-                - loading
-            )
-            < 1e-12
-        )
-        request["temperature"]["value"] = T
+        request = pa.s.source_feed_request(request, {
+            'source_key': 'Wagner2013', 'CO2_loading': loading,
+            'MEA_weight_fraction': w, 'temperature_reported_C': T - 273.15,
+        })
         identity = f"Wagner2013:csv-row-{row['csv_data_row_number']}"
         out.append(
             {
@@ -303,6 +290,15 @@ def wagner(pa, subset):
             }
         )
     return out
+
+
+def engine_records(native, maximum_temperature=393.15):
+    """The existing scoring domain, also used with exact F6 native source inputs."""
+    result = copy.deepcopy(native)
+    for record in result:
+        record['engine_correlation']['temperature_min'] = 293.15
+        record['engine_correlation']['temperature_max'] = maximum_temperature
+    return result
 
 
 def metrics(rows):
@@ -720,17 +716,11 @@ def stage(number):
         model = probe.epcsaft.Mixture(probe.epcsaft.Parameters.from_mapping(mapping))
         fingerprint = s.parameter_fingerprint(mapping)
 
-        def engine_records(request, values):
+        def scoring_records(request, values):
             native = native_builder(request, values)
-            if record["role"] != "adopted":
-                for r in native:
-                    r["engine_correlation"]["temperature_min"] = 293.15
-                    r["engine_correlation"]["temperature_max"] = (
-                        393.15 if number in (4, 5, 6) else 353.15
-                    )
-            return native
+            return engine_records(native, 393.15 if number in (4, 5, 6) else 353.15) if record['role'] != 'adopted' else native
 
-        s._engine_reaction_records = engine_records
+        s._engine_reaction_records = scoring_records
         s.RUNS = RAW / f"assessment-{record['role']}-stage-{number}-cache"
         limits = s.EvaluationLimits(180, 1780, deadline)
         for group, observations in groups:
