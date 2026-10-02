@@ -50,7 +50,8 @@ Each fit was started from two prescribed parameter vectors, and both starts conv
 % P:supplement-02
 F4 is the only fit with no parameter at a bound: including the pool moves the \HCOthree--water coefficient of SSM+DS from its bound of \(+0.5\) to 0.4006 (\cref{tab:s-coordinates}).
 In F2, F3 and F5 the \MEAH--\MEACOO coefficient also lies on its lower bound of \(-1\).
-At F1 the outward cost gradient of the bounded \HCOthree--water coefficient is \(-12.63\); at F2 the outward gradients are \(-20.35\) for \HCOthree--water and 48.13 for \MEAH--\MEACOO, so relaxing either bound would lower the cost of that fit.
+At F1 the cost gradient \(\partial C/\partial k\) of the \HCOthree--water coefficient at its upper bound is \(-12.63\), so raising the coefficient beyond the bound would lower the cost.
+At F2 the cost gradients are \(-20.35\) for \HCOthree--water at its upper bound and \(+48.13\) for \MEAH--\MEACOO at its lower bound, so moving either coefficient beyond its bound would lower the cost of that fit.
 \Cref{tab:s-source-aard} divides the fitted-target deviations by source and observable.
 
 \input{tables/supplement_source_aard}
@@ -66,7 +67,7 @@ The slope has a standard error comparable with its value in both fits, so the da
 \section{Comparisons outside the fit}\label{sec:s-outside}
 % P:supplement-04
 \Cref{tab:s-outside} lists every comparison outside the fit for F1, F2 and F6, with the AARD and the mean \(\ln(y_{\mathrm{calc}}/y_{\mathrm{obs}})\) of each group and source.
-The \SI{80}{\degreeCelsius} and higher-temperature data also informed the fixed reaction shifts and \COtwo dispersion energy of F1 and F2, so these comparisons are not independent temperature predictions; the Wagner et al.\ rows entered no fit or parameter selection.
+Except for the Wagner et al.\ rows, which entered no fitting or selection step, the pressure and species data at 80--\SI{120}{\degreeCelsius} informed fixed values of F1 and F2 (main text, Section~3.2), so these comparisons are not independent temperature predictions.
 F1 and F6 both use their reaction correlations over the declared domain 293.15--\SI{393.15}{\kelvin}, beyond the ranges of the source correlations.
 
 \input{tables/supplement_outside_fit}
@@ -78,9 +79,9 @@ The loaded densities of \cref{tab:s-density} are homogeneous-liquid calculations
 
 \input{tables/supplement_carbonate_density}
 
-\section{Born-off pressure decomposition}\label{sec:s-decomposition}
+\section{Pressure decomposition of the fit without the Born term}\label{sec:s-decomposition}
 % P:supplement-06
-The decomposition of the main text evaluates F1 and the Born-off refit F3 at the 47 fitted pressure states and the 36 fitted species states.
+The decomposition of the main text evaluates F1 and the refit without the Born term, F3, at the 47 fitted pressure states and the 36 fitted species states.
 For each solved liquid state and each Helmholtz contribution (hard chain, dispersion, association, Debye--H\"uckel and Born), the term chemical potentials are obtained by finite differences of the term Helmholtz energies at fixed temperature and volume, and the Born part also from the exact difference between the model with and without the Born term.
 Activity coefficients refer to the standard state of each source constant: solutes at infinite dilution in pure water and water as the pure liquid, at the reference pressure of each reaction.
 The overall reaction R2 \(-\) R4 \(-\) R5 is evaluated as that combination of the three reaction sums, so the reaction-specific reference pressures are kept.
@@ -96,7 +97,7 @@ The calculation passed all of its numerical checks.
 The replayed costs of F1 and F3 agree with the fitted costs within \(1.1\times10^{-12}\), and the term Helmholtz energies sum to the total within \(2.0\times10^{-14}\).
 The finite-difference term chemical potentials sum to the analytic total within \(2.4\times10^{-6}\), and their Born part matches the exact Born difference within \(3.1\times10^{-9}\).
 The absolute reaction closure is within \(4.7\times10^{-7}\), the Born activity coefficients of three ions at infinite dilution in \COtwo-free 30 wt\% \MEA--water at \SI{313.15}{\kelvin} match values calculated by hand from the Born equations of the main text within \(4.6\times10^{-7}\), and the Born part of every activity coefficient vanishes within \(3.4\times10^{-13}\) when both substitutions above are applied.
-The pressure identity of the main text closes within \(2.4\times10^{-7}\) at every state and within \(1.2\times10^{-8}\) for every F3 \(-\) F1 difference, and at five sentinel states halving the finite-difference step changes the term chemical potentials by at most \(1.8\times10^{-6}\).
+The pressure identity of the main text closes within \(2.4\times10^{-7}\) at every state and within \(1.2\times10^{-8}\) for every F3 \(-\) F1 difference, and at five selected pressure states, the lowest- and highest-loading states at each temperature and one intermediate state at \SI{40}{\degreeCelsius}, halving the finite-difference step changes the term chemical potentials by at most \(1.8\times10^{-6}\).
 
 % P:supplement-09
 Three tests were stated before the calculation, with thresholds set against the pressure residual scale of 0.3 in \(\ln p\); they are engineering choices, not statistical tests.
@@ -112,25 +113,24 @@ The values are 0.819 and 1.094, so C is not rejected; this establishes only the 
 
 \section{Source-data corrections}\label{sec:s-corrections}
 % P:supplement-10
-Before the fits, the source data were checked against the original tables, and the following corrections were made; none was chosen to improve a fit.
-Hilliard's 55 pressure rows carry the measured \MEA molality and temperature of each solution in place of the nominal composition and series temperature \cite[App.~D.4]{Hilliard2008}, and a 30 wt\% measurement missing from the pooled comparison set was added, giving 31 Hilliard rows.
-Xu and Rochelle's 63 rows carry the source molality, and six rows that had been calculated at the 100 and \SI{120}{\degreeCelsius} series temperatures are calculated at their measured 100.5--101.1 and 120.4--\SI{121.8}{\degreeCelsius} \cite[Table~1]{Xu2011}; the three rows above \SI{393.15}{\kelvin} are not evaluated.
-B\"ottinger et al.'s compositions follow the unloaded mass fractions printed in their Table~3 rather than the nominal values, three bicarbonate values of the 20 wt\% series at \SI{80}{\degreeCelsius} are assigned to their printed loadings, and the printed 2-oxazolidone values are retained in the data set but not represented by the model \cite[Table~3]{Bottinger2008}.
-One Aronu et al.\ loading at 45 wt\% and \SI{80}{\degreeCelsius} follows the source table and its corrigendum, 0.025 in place of 0.045 \cite[Table~5]{Aronu2011}.
+The source data follow the original tables, checked before the fits; no value was chosen to improve a fit.
+Hilliard's 55 pressure rows carry the measured \MEA molality and temperature of each solution rather than the nominal composition and series temperature \cite[App.~D.4]{Hilliard2008}, and the pooled comparison set contains all 31 Hilliard measurements in 30 wt\% solution.
+Xu and Rochelle's 63 rows carry the source molality and are calculated at their measured temperatures, including 100.5--101.1 and 120.4--\SI{121.8}{\degreeCelsius} for six rows grouped with the 100 and \SI{120}{\degreeCelsius} series \cite[Table~1]{Xu2011}; the three rows above \SI{393.15}{\kelvin} are not evaluated.
+B\"ottinger et al.'s compositions are the unloaded mass fractions printed in their Table~3 rather than the nominal values, each bicarbonate value of the 20 wt\% series at \SI{80}{\degreeCelsius} is assigned to its printed loading, and the printed 2-oxazolidone values are kept in the data set but not represented by the model \cite[Table~3]{Bottinger2008}.
+The Aronu et al.\ loading at 45 wt\% and \SI{80}{\degreeCelsius} with \SI{0.0060}{\kilo\pascal} is 0.025, as in the source table and its corrigendum \cite[Table~5]{Aronu2011}.
 Jakobsen et al.'s two printed loadings are both kept \cite[Tables~A1--A2]{Jakobsen2005}.
-The Matin et al.\ method description was corrected against the article, but the numerical values could not be checked because the supporting tables were not available \cite{matinFacileMethodDetermination2012}.
-For Amundsen et al., the measurement pressure is recorded as unreported, and the stated loaded-solution uncertainty is recorded as excluding the highest temperatures and loadings \cite{Amundsen2009}.
-After these corrections the fitted set has 83 states and 141 targets: 47 pressures and 94 species.
+The Matin et al.\ method description follows the article, but the numerical values are not checked against the source because its supporting tables are not available \cite{matinFacileMethodDetermination2012}.
+For Amundsen et al., the measurement pressure is unreported, and the stated loaded-solution uncertainty excludes the highest temperatures and loadings \cite{Amundsen2009}.
+The fitted set has 83 states and 141 targets: 47 pressures and 94 species.
 
 \section{Experimental data inventory for near-30 wt\% aqueous MEA}\label{sec:s-data-inventory}
 % P:supplement-11
 To place the observations of the main text among published measurements, we inventoried experimental studies of \ce{CO2} in aqueous \ce{MEA} near 30 wt\%: vapor--liquid equilibrium, liquid speciation, density, heat of absorption, heat capacity, pH and reaction constants.
 The search is not exhaustive.
-The inventory holds 165 entries, of which 88 were identified from bibliographic metadata alone; their coverage is unverified, and they are not tabulated.
-\Cref{tab:s4-data-inventory} lists the 34 publications whose near-30 wt\% coverage was confirmed from a primary passage, table or database record, with the concentration basis, conditions and observation counts each source reports.
+The inventory holds 165 entries: 88 known only from bibliographic metadata, 36 assessed only from publisher or secondary descriptions or older records, and 41 checked against a primary passage, table or database record.
+\Cref{tab:s4-data-inventory} lists the 34 of these 41 whose near-30 wt\% scope is confirmed, with the concentration basis, conditions and observation counts each source reports; of the other seven, four report dilute-solution reaction constants and three lie outside 25--35 wt\% \MEA.
 Several entries reuse the same experimental campaign and are not independent measurements.
-Extracting values from a source does not admit them to the fit; the fitted and compared roles of the main text are those of its observation-role table.
-Dilute-solution reaction-constant measurements are outside the scope of \Cref{tab:s4-data-inventory}.
+Listing a source here does not make its values fitted targets; the fitted and compared roles are those of the observation-role table of the main text.
 
 \input{tables/supplement_data_inventory}
 
