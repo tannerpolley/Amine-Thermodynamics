@@ -62,7 +62,7 @@ The other values are fixed, and some of them were estimated from data before the
 The segment diameters, dispersion energies and Born diameters of \MEAH and \MEACOO were fitted to liquid speciation alone: NMR values of B\"ottinger et al.\ and Jakobsen et al.\ and titration values of Matin et al.\ at 20--\SI{60}{\degreeCelsius}~\cite{Bottinger2008,Jakobsen2005,matinFacileMethodDetermination2012}.
 The \MEA--water and \COtwo--water interactions were fitted to binary VLE data at 363--\SI{432}{\kelvin} and 313--\SI{393}{\kelvin} \cite{caiBinaryIsobaricVaporLiquid1996,kiepeExperimentalDeterminationPrediction2002}.
 The \HCOthree and \COthree Born diameters are fixed at \SI{3.0}{\angstrom}; they were examined against bicarbonate and carbonate data during model development but are neither independently determined ion properties nor uniquely identified fitted values.
-The \MEA permittivity of 32 is an assumed fixed value for which no source is retained, and the water permittivity polynomial of \cref{eq:water-permittivity} is the software's approximation of the Archer--Wang water permittivity, referenced to \SI{298.15}{\kelvin}.
+The \MEA permittivity of 32 is an assumed fixed value for which no source is retained, and the water permittivity polynomial of \cref{eq:water-permittivity} is the software's approximation of the Archer--Wang water permittivity~\cite{archerDielectricConstantWater1990}, referenced to \SI{298.15}{\kelvin}.
 
 % P:methods-05
 Four fixed values were estimated with data beyond the fitted temperatures: the R2 and R5 enthalpy shifts, a change of the R5 coefficient \(A_5\) and the \COtwo dispersion energy.
@@ -97,7 +97,7 @@ The 15 and 45 wt\% pressures and the loaded densities also entered none of them,
         Fixed without a source value & \HCOthree and \COthree Born diameters & \SI{3.0}{\angstrom} & Examined against bicarbonate and carbonate data; not uniquely identified \\
         & \MEA relative permittivity & 32 & Assumed; no source retained \\
         \midrule
-        Literature & Pure-component parameters of \COtwo (\(m\), \(\sigma\)), \MEA and water; segment parameters of \HthreeO, \Hydroxide, \HCOthree and \COthree; their water interactions; \(f_{\HtwoO}\), \(\varepsilon_{\mathrm{ion}}\), \HthreeO and \Hydroxide Born diameters; water permittivity (software approximation of Archer--Wang); R1, R3 and R4 correlations and the R2 and R5 source correlations & \Cref{tab:full-ionic-ssm-ds-parameters,tab:binary-interaction-parameters,tab:reaction-equilibrium-constants} & Cited in those tables \\
+        Literature & Pure-component parameters of \COtwo (\(m\), \(\sigma\)), \MEA and water; segment parameters of \HthreeO, \Hydroxide, \HCOthree and \COthree; their water interactions; \(f_{\HtwoO}\), \(\varepsilon_{\mathrm{ion}}\), \HthreeO and \Hydroxide Born diameters; water permittivity (software approximation of Archer--Wang~\cite{archerDielectricConstantWater1990}); R1, R3 and R4 correlations and the R2 and R5 source correlations & \Cref{tab:full-ionic-ssm-ds-parameters,tab:binary-interaction-parameters,tab:reaction-equilibrium-constants} & Cited in those tables \\
         \bottomrule
     \end{tabularx}
 \end{table*}
