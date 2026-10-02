@@ -58,7 +58,7 @@ def worker(problem, start):
             else:
                 p5 = module('p5', OWNER / 'p5conv-fit.py')
                 d = p5.d
-                primary = BUNDLE / 'results/selected-current-best-parameters.json'
+                primary = OUT / 'v1-start-parameters.json'
                 original = OWNER / 'p5conv-a-00-diagnostic-parameters.json'
                 off = BUNDLE / 'model-d/sensitivity-current/ablation-off-11-diagnostic-parameters.json'
                 paths = {'F1': (primary, original), 'F2': (original, primary),

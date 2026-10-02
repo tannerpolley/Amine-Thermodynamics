@@ -39,6 +39,8 @@ def selected():
     result = {}
     summary = json.loads((OUT / 'fit-summary.json').read_text())
     for row in summary:
+        if row['problem']=='F6':
+            continue
         name = row['problem'] + '-' + row['lower_complete_start']
         raw = OUT / name / 'runs' / name / (name + '-fit.json')
         result[row['problem']] = dict(record=str(OUT / name / (name + '-diagnostic-parameters.json')), raw=str(raw))
@@ -116,7 +118,7 @@ def score_rows(problem, records):
         for target, (kind, identity, residual, ln) in zip(rec['targets'], compare.residuals(rec), strict=True):
             predicted = compare.predicted(rec, target)
             rows.append(dict(problem=problem, kind=rec['kind'], identity=rec['identity'], target=identity,
-                source=target['source_identity'], quantity='pressure' if kind=='p' else 'species',
+                source=target['source_identity'], quantity='pressure' if kind=='p' else 'species', basis=target['basis'],
                 species=identity.split('::')[-1] if kind=='s' else 'pCO2', temperature_K=rec['T'],
                 loading=rec['feed'][0]/rec['feed'][1], observed=target['observed'], predicted=predicted,
                 scaled_residual=residual, ln_pred_over_obs=ln if math.isfinite(ln) else None,
@@ -159,6 +161,7 @@ def summarize(records, density, choices, excluded):
             ids = json.loads((ASSESSMENT.parent/'assessment-row-ids.json').read_text())
             groups.update({'canonical 80C 21':[r for r in canonical if r['identity'].removeprefix('canonical:') in ids['primary_80c_pressure']],
                 'Jou 80C':[r for r in rows if r['kind']=='packet' and r['quantity']=='pressure' and r['source']=='Jou1995' and round(r['temperature_K']-273.15)==80],
+                'Bottinger 80C species':[r for r in rows if r['kind']=='packet' and r['quantity']=='species' and r['source']=='Bottinger2008' and round(r['temperature_K']-273.15)==80],
                 '100-120C':[r for r in canonical if round(r['temperature_K']-273.15)>=100],
                 'pooled 40-80C':[r for r in canonical if 40<=round(r['temperature_K']-273.15)<=80],
                 'Matin pool report-only':[r for r in rows if r['kind']=='packet' and r['target'].startswith('Matin') and compare.pooled_species(r['target']) and compare.in_objective({'T':r['temperature_K'],'identity':r['identity']}, {'prediction_identity':'species'}, 80)]})
@@ -171,9 +174,12 @@ def summarize(records, density, choices, excluded):
                 wanted={o['identity'] for o in probe.pressure_observations(lambda r: abs(float(r['MEA_weight_fraction'])-w)<1e-10)}
                 groups[f'transfer {int(100*w)}wt%']=[r for r in rows if r['kind']=='transfer' and r['identity'].removeprefix('transfer:') in wanted]
             packet = {r['identity']:r for r in subset if r['kind']=='packet'}
+            carbonate_roles = {(float(r['temperature_C']),float(r['maxload_mol_per_mol_mea'])):r for r in csv.DictReader((CORRECTED/'accepted-wave/jakobsen-comparisons.csv').open())}
             for source,T,a,observed in compare.carbonate_refs():
                 predicted = compare.model_carbonate(packet,T,a)
-                carbonate.append(dict(problem=problem,source=source,temperature_C=T,loading=a,observed_carbonate_share=observed,predicted_carbonate_share=predicted,ratio=predicted/observed if predicted is not None and observed>0 else None))
+                role = carbonate_roles[(T,a)]
+                carbonate.append(dict(problem=problem,source=source,temperature_C=T,loading=a,observed_carbonate_share=observed,predicted_carbonate_share=predicted,ratio=predicted/observed if predicted is not None and observed>0 else None,
+                    summary_included=role['summary_included'],loading_convention=role['loading_convention'],model_loading_alignment=role['model_loading_alignment']))
         for label, rr in groups.items():
             if not rr:
                 continue
@@ -181,10 +187,119 @@ def summarize(records, density, choices, excluded):
             values=compare.stats([r['ln_pred_over_obs'] for r in positive]) if positive else {}
             if problem=='F6' and len(positive)==len(rr):
                 values=assessment.metrics([{**r,'quantity':r['quantity'],'ln_pred_over_obs':r['ln_pred_over_obs'], 'relative_error':r['predicted']/r['observed']-1,'numerically_complete':True} for r in rr])
-            scores.append(dict(problem=problem,group=label,rows=len(rr),positive_n=len(positive),cost=math.fsum(r['cost'] for r in rr),**values))
+            scores.append({**dict(problem=problem,group=label,rows=len(rr),positive_n=len(positive),cost=math.fsum(r['cost'] for r in rr)), **values})
     table(EVAL/'targets.csv',all_rows);table(EVAL/'scores.csv',scores);table(EVAL/'density.csv',density);table(EVAL/'jakobsen-carbonate-share.csv',carbonate)
     s.write_json(EVAL/'replay-checks.json',replays);s.write_json(EVAL/'not-evaluated.json',excluded)
     return replays
+
+
+def present():
+    """Tables and four figure data sets from retained results only; no state solves."""
+    import refit
+    choices=selected()
+    replay=json.loads((EVAL/'replay-checks.json').read_text())
+    summary=json.loads((OUT/'fit-summary.json').read_text())
+    summary=[r for r in summary if r['problem']!='F6']
+    for row in summary:
+        row['replay']=replay[row['problem']]
+        row['per_state_checks']='stationarity, element and charge balance passed; declared domain checked before evaluation'
+    targets={t['identity']:t for o in s.load_state_packet(CORRECTED/'state-packet.json.gz')['observations'] for t in o['targets']}
+    f6_starts=[]
+    native_rows=[]
+    for letter,i in zip('AB',(1,2)):
+        raw=json.loads((OUT/f'F6-{letter}/runs'/f'slope-fixed-start-{i}/native-fit.json').read_text())
+        data=[dict(problem='F6',start=letter,target=identity,source=targets[identity]['source_identity'],
+              observed=targets[identity]['observed'],predicted=pred,quantity='pressure' if identity.endswith('-pco2') else 'species',
+              species=identity.split('::')[-1] if '::' in identity else 'pCO2',scaled_residual=res,cost=.5*res**2)
+              for identity,pred,res in zip(raw['targets'],raw['predictions'],raw['weighted_residuals'],strict=True)]
+        native_rows.extend(data)
+        aard={kind:compare.stats([math.log(r['predicted']/r['observed']) for r in data if r['quantity']==kind and r['observed']>0 and r['predicted']>0])['aard_percent'] for kind in ('pressure','species')}
+        f6_starts.append(dict(start=letter,status=raw['status'],cost=raw['final_cost'],pressure_cost=math.fsum(r['cost'] for r in data if r['quantity']=='pressure'),
+            species_cost=math.fsum(r['cost'] for r in data if r['quantity']=='species'),aard_percent=aard,
+            coordinates=dict(zip(raw['coordinates'],raw['physical'],strict=True)),active_bounds=raw['active_bounds'],targets=len(data),
+            observation_statuses_available=all(v=='Available' for v in raw['observation_statuses'])))
+    gap=abs(f6_starts[0]['cost']-f6_starts[1]['cost'])/max(r['cost'] for r in f6_starts)
+    summary.append(dict(problem='F6',starts=f6_starts,lower_complete_start=min(f6_starts,key=lambda r:r['cost'])['start'],
+        relative_cost_difference=gap,start_agreement=gap<=1e-6,replay=replay['F6'],per_state_checks=summary[0]['per_state_checks']))
+    s.write_json(OUT/'fit-summary.json',summary)
+    table(OUT/'f6-fit-targets.csv',native_rows)
+    source_stats=[]
+    for letter in 'AB':
+        rr=[r for r in native_rows if r['start']==letter]
+        for source,species in sorted({(r['source'],r['species']) for r in rr}):
+            part=[r for r in rr if (r['source'],r['species'])==(source,species)]
+            positive=[r for r in part if r['observed']>0 and r['predicted']>0]
+            source_stats.append(dict(problem='F6',start=letter,source=source,species=species,rows=len(part),positive_n=len(positive),
+                cost=math.fsum(r['cost'] for r in part),**compare.stats([math.log(r['predicted']/r['observed']) for r in positive])))
+    table(OUT/'f6-aard-by-source-species.csv',source_stats)
+    evaluated=list(csv.DictReader((EVAL/'targets.csv').open()))
+    errors=json.loads((OUT/'conditional-uncertainty.json').read_text())
+    uncertainty_checks={}
+    for problem in ('F1','F2'):
+        raw=json.loads(Path(choices[problem]['raw']).read_text());ids=raw['coordinates']
+        rr={r['target']:float(r['scaled_residual']) for r in evaluated if r['problem']==problem and r['kind']=='packet'}
+        residual=np.array([rr[t] for t in raw['targets']]);scales=np.array([10. if i.endswith(refit.probe.SLOPE) else .01 for i in ids])
+        J=np.array(raw['optimizer_jacobian']).reshape(141,5)/scales
+        active=[ids.index(i) for i in raw['active_bounds']]
+        proxy=SimpleNamespace(covariance=SimpleNamespace(active_bounds=active),physical=raw['physical'])
+        value=refit.identifiability(proxy,J,residual,ids,[-.5,-.5,-.5,-1.,-1000.],[.5,.5,.5,1.,1000.])
+        previous=errors[problem]
+        delta=max(abs(value['conditional_standard_error'][k]/v-1) for k,v in previous['conditional_standard_error'].items())
+        corr=float(np.max(np.abs(np.array(value['conditional_correlation'])-previous['conditional_correlation'])))
+        uncertainty_checks[problem]=dict(max_relative_standard_error_difference=delta,max_abs_correlation_difference=corr,
+            replay_passed=replay[problem]['passed'],retained_standard_error_table_sha256=s.sha256(OUT/'conditional-standard-errors.csv'),
+            retained_correlation_table_sha256=s.sha256(OUT/'conditional-correlations.csv'))
+    s.write_json(OUT/'uncertainty-replay-checks.json',uncertainty_checks)
+    figures=OUT/'figure-data';figures.mkdir(exist_ok=True)
+    for row in evaluated:
+        row['unit']='Pa' if row['quantity']=='pressure' else 'mol/mol true liquid species'
+        row['operator_label']=compare.HCO3_POOL_LABEL if compare.pooled_species(row['target']) else row['species']
+    table(figures/'pressure.csv',[r for r in evaluated if r['problem'] in ('F1','F2','F6') and r['quantity']=='pressure'])
+    table(figures/'speciation.csv',[r for r in evaluated if r['problem'] in ('F1','F2') and r['quantity']=='species'])
+    mechanism=list(csv.DictReader((OUT/'activity-contributions/born-off-pressure-decomposition.csv').open()))
+    table(figures/'born-off-mechanism.csv',mechanism)
+    activity=list(csv.DictReader((OUT/'activity-contributions/state-activity-contributions.csv').open()))
+    table(figures/'born-activity-sums.csv',[r for r in activity if r['quantity']=='Q' or (r['quantity']=='reaction sum' and r['reaction']=='OV')])
+    pools=[r for r in evaluated if r['problem'] in ('F1','F2','F4','F5') and r['kind']=='packet']
+    masks={problem:set(json.loads(Path(chosen['raw']).read_text())['targets']) for problem,chosen in choices.items()}
+    for r in pools:
+        r['fitted_target']=r['target'] in masks[r['problem']]
+    table(figures/'pool-effect.csv',pools)
+    pool_summary=[]
+    for problem in ('F1','F2','F4','F5'):
+        rr=[r for r in pools if r['problem']==problem and r['target'] in masks['F4']]
+        added=[r for r in rr if r['target'] not in masks['F1']]
+        pool_summary.append(dict(problem=problem,base141_cost=math.fsum(float(r['cost']) for r in rr if r['target'] in masks['F1']),
+            pool18_cost=math.fsum(float(r['cost']) for r in added),pool18_aard_percent=compare.stats([float(r['ln_pred_over_obs']) for r in added])['aard_percent'],
+            pool_role='fitted' if problem in ('F4','F5') else 'report-only'))
+    table(figures/'pool-effect-costs.csv',pool_summary)
+    s.write_json(figures/'input-hashes.json',{str(p.relative_to(OUT)):s.sha256(p) for p in figures.glob('*.csv')})
+
+
+def render():
+    """Notebook mechanism figure from the retained 47-row decomposition."""
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    rows=pd.read_csv(OUT/'figure-data/born-off-mechanism.csv')
+    figures=OUT/'figures';figures.mkdir(exist_ok=True)
+    fig,axes=plt.subplots(1,2,figsize=(10,3.6),sharey=True,layout='constrained')
+    series=[('dlnp','Total ln pressure','o','#222222'),('dQ','Activity sum Q','x','#0072B2'),
+            ('dS','Speciation S','^','#D55E00'),('dH','Vapor/reference H','+','#009E73')]
+    for ax,(T,group) in zip(axes,rows.groupby('nominal_T_K'),strict=True):
+        ax.axhspan(-.3,.3,color='#777777',alpha=.12)
+        ax.axhline(0,color='#777777',linewidth=.6)
+        for column,label,marker,color in series:
+            ax.scatter(group.loading,group[column],label=label,marker=marker,color=color,s=27)
+        ax.set(xlabel='Loading (mol CO₂ / mol MEA)',title=f'Nominal {T-273.15:.0f} °C series, n={len(group)}')
+    axes[0].set_ylabel('F3 − F1 change (dimensionless)')
+    axes[1].legend(fontsize=8,loc='best')
+    fig.suptitle('Born-off refit: activity-sum shifts exceed speciation shifts',fontsize=11)
+    fig.savefig(figures/'born-off-mechanism.png',dpi=200)
+    plt.close(fig)
+    s.write_json(figures/'render-inputs.json',dict(data_sha256=s.sha256(OUT/'figure-data/born-off-mechanism.csv'),
+        image_sha256=s.sha256(figures/'born-off-mechanism.png'),points=47,
+        grey_band='±0.3 natural-log units: declared pressure residual scale, not an acceptance interval',
+        semantics='Discrete computed states, no interpolation or physical-necessity claim'))
 
 
 def main():
@@ -221,4 +336,18 @@ def main():
 
 
 if __name__=='__main__':
-    main()
+    if sys.argv[1:] == ['summarize']:
+        choices=selected()
+        retained=[json.loads(p.read_text()) for p in sorted((EVAL/'states').rglob('*.json'))]
+        density=[{**json.loads(p.read_text()),'problem':p.name.split('-')[0],
+                  'uncertainty_status':'general source estimate only; loaded-row uncertainty scope unbound'} for p in sorted(EVAL.glob('F*-density-*.json'))]
+        _,groups=observations()
+        excluded=[dict(problem=problem,kind='canonical',identity=o['identity'],temperature_K=o['request']['temperature']['value'],reason='not evaluated: outside declared reaction domain')
+                  for problem in ('F1','F2','F6') for o in groups['canonical'] if not 293.15<=o['request']['temperature']['value']<=393.15]
+        summarize(retained,density,choices,excluded)
+    elif sys.argv[1:] == ['present']:
+        present()
+    elif sys.argv[1:] == ['render']:
+        render()
+    else:
+        main()
