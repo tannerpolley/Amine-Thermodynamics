@@ -33,6 +33,7 @@ was then refreshed with `cse-zotero bibliography-export --apply`.
 | `Uyan2015`, `Wangler2018` | MDEA ePC-SAFT with explicit ions. Prediction from pure-component and binary parameters, one sense of "predictive" that this work does not use. |
 | `Baygi2015`, `Najafloo2018` | PC-SAFT and SAFT-HR for loaded MEA, with separate chemical equilibrium. |
 | `Gross2001`, `Gross2002`, `Cameretti2005`, `Bulow2020`, `Rueben2024`, `Schick2023` | Lineage of the equation of state and of the permittivity/Born terms. |
+| `archerDielectricConstantWater1990` | Water relative permittivity. The manuscript uses the Engine's polynomial approximation (eq. `eq:water-permittivity`), not the full Archer–Wang equation, so no equation or table locator is cited. Zotero item `BWBDFZ6J` (PDF `VII3CVVA`); title, authors, year and DOI 10.1063/1.555853 checked against the item. |
 | `Jou1995`, `Hilliard2008`, `Aronu2011`, `idrisSpeciationMEACO2Adducts2014`, `Mamun2005`, `Xu2011` | Pressure observations. Hilliard App. D.4 and Xu Table 1 supply the measured molality and temperature used in calculation. |
 | `Amundsen2009` | Loaded-density limitation; Table 3, p. 3097; uncertainty scope pp. 3099–3100. |
 
@@ -63,7 +64,7 @@ claimed.
 | Fixed R2/R5 shifts (−8.2019, +8.4185 kJ/mol): 33 estimation targets (Jou `vle_obs_0206`, `0211` at 80 °C; `0227`, `0228`, `0232` at 120 °C; 22 species; 6 Kim–Svendsen 2007 heats); adoption replay with Xu 2011 held out | F1 record reaction coefficients; `analyses/mea_parameter_bundle/results/reaction-temperature-fit/README.md` (“Revised screen, recenter, full replay, and adoption”), `adoption-receipt.json`, `full-validation-targets.csv` |
 | R5 \(A_5\) lowered by 80 K | Fixed-parameter variant `r5am80` in `analyses/mea_parameter_bundle/scripts/run_born_permittivity_study.py`; `analyses/mea_parameter_bundle/results/born-permittivity-study/current-fast-common-comparison.csv`; `analyses/evidence-map.qmd` (R4/R5 row) |
 | CO2 dispersion energy 173.44 K selected against 30 wt% pressures at 40–120 °C and species at 20–80 °C | `analyses/mea_parameter_bundle/results/best-in-slot-campaign/final-full-validation-evaluations.csv` (scenario `local-p0.15-db-350-eps+0.025`) |
-| ε_MEA = 32 has no retained source (retired `any_solvent.csv`, column `dielc`); water permittivity is the Engine's Archer–Wang approximation | F1 record provenance of `component/monoethanolamine/relative_permittivity` and of the water permittivity correlation |
+| ε_MEA = 32 has no retained source (retired `any_solvent.csv`, column `dielc`); water permittivity is the Engine's approximation of the Archer–Wang permittivity (`archerDielectricConstantWater1990`) | F1 record provenance of `component/monoethanolamine/relative_permittivity` and of the water permittivity correlation |
 | Reason the two Böttinger 40 °C states and Matin state 016 are not fitted | `analyses/mea_parameter_bundle/calibration-misfit/compare.py` (`EXCLUDED`, commit `e274898`); `data/reference/MEA/manifests/speciation_target_membership.csv` (Matin state 016) |
 | Jakobsen 40 °C, loading 0.21 point excluded as out of line | `analyses/mea_parameter_bundle/calibration-misfit/README.md` (carbonate share) |
 
