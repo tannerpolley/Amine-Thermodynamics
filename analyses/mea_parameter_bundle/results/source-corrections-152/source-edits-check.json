@@ -1,0 +1,85 @@
+{
+  "stage": "source transcription and stable-ID preparation only; derived regeneration and numerical checks pending",
+  "source_file_checks": [
+    {
+      "file": "data/reference/MEA/observations/liquid_speciation/Bottinger_2007_ChEq.csv",
+      "rows_old": 68,
+      "rows_new": 68,
+      "old_sha256": "6c4c1e14c2a417bcbd2ff54c5f3978cb1560e7c831a9f931178d021d71b003f5",
+      "new_sha256": "583a3f7a26f4ea8cdae97cf7c2606bdbefafbb18cac085dbedd9cc2234aa3c71",
+      "original_column_lexeme_preservation": "PASS",
+      "BOM_and_line_endings": "PASS"
+    },
+    {
+      "file": "data/reference/MEA/observations/liquid_speciation/Combined_ChEq.csv",
+      "rows_old": 74,
+      "rows_new": 74,
+      "old_sha256": "cff2fbd5678f8575302e11ee3d5cb0f206717dd607607bf4f086091703d9ee2b",
+      "new_sha256": "a17142ea8176cdec94559b99d9be65b3df2eef49a6eedf113347788b9e2bcbeb",
+      "original_column_lexeme_preservation": "PASS",
+      "BOM_and_line_endings": "PASS"
+    },
+    {
+      "file": "data/reference/MEA/observations/liquid_speciation/Jakobsen_2005_ChEq.csv",
+      "rows_old": 24,
+      "rows_new": 24,
+      "old_sha256": "e6e3ba26c34b6db7e886d33d9af20bd2dd374bfd0fdfc22d38ebb71a14e5bb07",
+      "new_sha256": "f3479866b0693a5e122e3f35e8b91fdb524ac358986e05b269a6b872e4cae3c3",
+      "original_column_lexeme_preservation": "PASS",
+      "BOM_and_line_endings": "PASS"
+    },
+    {
+      "file": "data/reference/MEA/observations/vapor_liquid_equilibrium/Aronu_2011_VLE.csv",
+      "rows_old": 106,
+      "rows_new": 106,
+      "old_sha256": "d70c79407d3b6e96b480f4d8cd2af4c12c55c2baab906d71b4540750659d241d",
+      "new_sha256": "820a167e73071d15b0c48c90bb6a50545016457e9717d7a2f18ae6bad74ed052",
+      "original_column_lexeme_preservation": "PASS",
+      "BOM_and_line_endings": "PASS"
+    },
+    {
+      "file": "data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE_inclusion.csv",
+      "rows_old": 161,
+      "rows_new": 162,
+      "old_sha256": "a3361fc7b61b80ca11901cd1f145415f0f3aac0d910152423af5b297e906bf65",
+      "new_sha256": "b79fa4e73e51fd60669107ef6368214e351cefa464bde0f306956bb5872beb8a",
+      "original_column_lexeme_preservation": "PASS",
+      "BOM_and_line_endings": "PASS"
+    },
+    {
+      "file": "data/reference/MEA/observations/vapor_liquid_equilibrium/Hilliard_2008_VLE.csv",
+      "rows_old": 55,
+      "rows_new": 55,
+      "old_sha256": "4039394233367cbe491f6f97c3e5adcd5f6975fc696a3fde00cd4ca5af44da6c",
+      "new_sha256": "e77393ebba8c8ec63c71fd88d1f1f467ded983da3a73e17b24d1f8c902acee7f",
+      "original_column_lexeme_preservation": "PASS",
+      "BOM_and_line_endings": "PASS"
+    },
+    {
+      "file": "data/reference/MEA/observations/vapor_liquid_equilibrium/Xu_2011_VLE.csv",
+      "rows_old": 63,
+      "rows_new": 63,
+      "old_sha256": "3118395550de0e3bcf18562670ac443d26f3cc87dac0a85a4438914bb5e55574",
+      "new_sha256": "3658849147c544f06fe6c09fd3eceda3e9961b99911f3b9f20d2e906f20d018b",
+      "original_column_lexeme_preservation": "PASS",
+      "BOM_and_line_endings": "PASS"
+    }
+  ],
+  "protected_147_manifests": "byte-identical",
+  "immutable_preregistration_and_guard": "byte-identical",
+  "manuscript": "byte-identical",
+  "primary_original_cell_changes": {
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Hilliard_2008_VLE.csv::temperature": 55,
+    "data/reference/MEA/observations/liquid_speciation/Bottinger_2007_ChEq.csv::MEA_weight_fraction": 27,
+    "data/reference/MEA/observations/liquid_speciation/Bottinger_2007_ChEq.csv::HCO3^-": 3,
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Aronu_2011_VLE.csv::CO2_loading": 1,
+    "data/reference/MEA/observations/liquid_speciation/Combined_ChEq.csv::MEA_weight_fraction": 6
+  },
+  "pdf_identity_checks": "six issue-pinned PDFs match; Aronu corrigendum re-read",
+  "models_run": 0,
+  "git_whitespace_check": {
+    "default_check": "flags preserved original CRLF as trailing whitespace; no source-value failure",
+    "CRLF_aware_check": "PASS: git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol diff --check",
+    "configuration_changed": false
+  }
+}

@@ -1,7 +1,24 @@
 ---
 title: "MEA parameter bundle"
-subtitle: "Limited-domain SSM+DS model D working record · 142 fitted targets"
+subtitle: "Corrected141 SSM+DS F1 working record · final evidence rerun"
 resources:
+  - results/final-rerun/README.md
+  - results/final-rerun/selected-record.json
+  - results/final-rerun/fit-summary.json
+  - results/final-rerun/conditional-standard-errors.csv
+  - results/final-rerun/conditional-correlations.csv
+  - results/final-rerun/uncertainty-replay-checks.json
+  - results/final-rerun/evaluation/scores.csv
+  - results/final-rerun/evaluation/density.csv
+  - results/final-rerun/evaluation/jakobsen-carbonate-share.csv
+  - results/final-rerun/evaluation/replay-checks.json
+  - results/final-rerun/evaluation/not-evaluated.json
+  - results/final-rerun/activity-contributions/checks.json
+  - results/final-rerun/figure-data/pressure.csv
+  - results/final-rerun/figure-data/speciation.csv
+  - results/final-rerun/figure-data/born-off-mechanism.csv
+  - results/final-rerun/figure-data/pool-effect.csv
+  - results/final-rerun/figure-data/pool-effect-costs.csv
   - results/temperature-reanchor-140/stage-3/delivered-review.json
   - results/temperature-reanchor-140/stage-3/source-delivered-review.json
   - results/temperature-reanchor-140/stage-3-preregistration.md
@@ -125,14 +142,96 @@ resources:
   - model-d/born-form-diagnosis/p5conv-species-costs-and-signed-means.csv
 ---
 
+# Final corrected-data rerun (#154) {#final-rerun-154}
+
+**SSM+DS F1 is the selected calibrated record on the corrected 141-target base.** Its pressure/species costs are **8.438702 / 24.595073**, with fitted AARDs **13.9776% / 8.2582%**. The Born-off refit F3 raises those costs to **61.612150 / 35.026459** within the same five-coordinate bounds. This is bounded calibration and numerical verification, not physical necessity of the Born term or physical validation of the effective ion values.
+
+This section supersedes the pre-correction fitted numbers in the retained studies below, including their former “working record” tables and density comparison. Those earlier studies do not describe the new selected record. This section and its render await independent delivered review and have not been promoted for manuscript use; the manuscript refresh is separate.
+
+## Fixed basis and six fitted problems
+
+The corrected packet and exact `strict141-targets.csv` identities from #152 supply **83 states: 47 pressure targets and 94 species targets**. F4/F5 add the **18 existing Matin HCO₃⁻ + CO₃²⁻ pool identities**, giving 159 targets and 112 species targets at the same states. Matin inputs remain source-unverified legacy observations at packet 20 °C; state 016 is display-only, excluded from both fit and 18-pool summaries. Böttinger aggregate operators are transported by the corrected packet, not counted again as independent species.
+
+The pressure residual is $\ln(p_\mathrm{model}/p_\mathrm{obs})/0.3$; the species residual is $(x_\mathrm{model}-x_\mathrm{obs})/(0.1x_\mathrm{obs}+0.001)$. Costs are half the squared-residual sum. F1–F5 retain the `9055458d` chemistry, pure/ion/Born inputs and CO₂ $\epsilon/k=173.44$ K. The R2/R5 enthalpy shifts and R5 coefficient are calibration values tuned using data that included 80 °C. F6 instead fixes CO₂ $\epsilon/k=169.21$ K and the exact #140 source R2/R4/R5 inputs, with its reaction-`slope-fixed` structure and starts 1/2 (the MEAH⁺–water 1/T slope remains free).
+
+Exactly **12 optimizer runs** converged. F1–F5 were retained without refitting; the two planned F6 runs used the existing #140 `feed_start` initialization. No Born-input, parameter-removal, fixed-interaction or heat refits were added. All two-start relative cost differences are below $7.3\times10^{-13}$, satisfying the $10^{-6}$ rule. Lower complete costs are reported; original Born remains the matched alternative, not a post-hoc replacement for primary SSM+DS.
+
+| Problem | Form / pool | Lower start | Pressure cost | Species cost | Total cost | Pressure AARD / % | Species AARD / % |
+|:--|:--|:--:|--:|--:|--:|--:|--:|
+| F1 | SSM+DS / report-only | B | 8.438702 | 24.595073 | 33.033774 | 13.9776 | 8.2582 |
+| F2 | Original Born / report-only | A | 11.241012 | 22.900686 | 34.141698 | 17.3650 | 8.1600 |
+| F3 | Born-off | B | 61.612150 | 35.026459 | 96.638609 | 53.5980 | 10.7871 |
+| F4 | SSM+DS / fitted | B | 10.309525 | 37.317323 | 47.626848 | 14.7928 | 14.0969 |
+| F5 | Original Born / fitted | A | 11.621034 | 28.077576 | 39.698610 | 17.4610 | 10.1706 |
+| F6 | Source-law SSM+DS | A | 8.478968 | 24.579969 | 33.058937 | 14.8403 | 8.3001 |
+
+For coordinate order carbamate–water, MEAH⁺–water, bicarbonate–water, carbamate–MEAH⁺, and MEAH⁺–water reciprocal-temperature slope:
+
+| Problem | $k_{CW}$ | $k_{HW}$ | $k_{BW}$ | $k_{CH}$ | $b_{HW}$ / K | Active bounds |
+|:--|--:|--:|--:|--:|--:|:--|
+| F1 | 0.134081 | −0.379554 | 0.500000 | −0.707286 | −112.567751 | $k_{BW}=+0.5$ |
+| F2 | −0.047026 | 0.115578 | 0.500000 | −1.000000 | −86.322113 | $k_{BW}=+0.5$, $k_{CH}=-1$ |
+| F3 | −0.070157 | 0.068068 | 0.500000 | −1.000000 | −298.356700 | $k_{BW}=+0.5$, $k_{CH}=-1$ |
+| F4 | 0.085214 | −0.302098 | 0.400591 | −0.695732 | 141.894726 | None |
+| F5 | −0.063241 | 0.144603 | 0.500000 | −1.000000 | 118.723555 | $k_{BW}=+0.5$, $k_{CH}=-1$ |
+| F6 | 0.162235 | −0.490031 | 0.500000 | −0.469689 | 400.103045 | $k_{BW}=+0.5$ |
+
+Here $k_{HW}(T)=k_{HW}(313.15\,\mathrm K)+b_{HW}\left(\frac1T-\frac1{313.15\,\mathrm K}\right)$; interaction coefficients are dimensionless. [Both starts and full precision](results/final-rerun/fit-summary.json) are retained. The selected [F1 record](results/selected-current-best-parameters.json) has SHA-256 `ae92bac5d2ef7ab690e692f6b1686e18cf06f24ac6b53a6aab4fafeb3046f1aa`. Only its description/document identity differ from the replayed optimizer export; [model-input equality and both hashes](results/final-rerun/selected-record.json) are recorded.
+
+## Conditional standard errors and replay
+
+F1/F2 interior Jacobians have rank 4/4 and 3/3. The retained covariance uses $s^2(J_I^\mathsf{T}J_I)^{-1}$, physical-unit columns from optimizer scales 0.01 and 10 K, and $s^2=2\,\mathrm{cost}/(141-p)$ with each actual active-bound set. Variance factors are 0.4822448795 and 0.4948072134. At-bound coordinates have no symmetric interval.
+
+| Problem | SE $k_{CW}$ | SE $k_{HW}$ | SE $k_{BW}$ | SE $k_{CH}$ | SE $b_{HW}$ / K |
+|:--|--:|--:|:--|:--|--:|
+| F1 | 0.013816 | 0.016560 | At bound | 0.027236 | 119.705816 |
+| F2 | 0.013493 | 0.014596 | At bound | At bound | 108.636909 |
+
+**F1's computed slope is −112.6 K with conditional SE 119.7 K.** This rerun does not change or remove that coordinate; any model change is a later owner decision. Unique F1 correlations (CW–HW, CW–CH, CW–slope, HW–CH, HW–slope, CH–slope) are −0.3785, 0.1431, 0.0849, 0.2495, 0.4592 and 0.0518. F2 correlations (CW–HW, CW–slope, HW–slope) are −0.4042, 0.1130 and 0.4183. [Full error](results/final-rerun/conditional-standard-errors.csv) and [correlation](results/final-rerun/conditional-correlations.csv) tables are unchanged from the initial result. Independent residuals are assumed despite shared-titration dependence; these errors are conditional and indicative only.
+
+Every selected optimum reproduces its native cost within relative $9.44\times10^{-13}$, well inside $10^{-8}$. [Replay](results/final-rerun/evaluation/replay-checks.json) checks stationarity, element and charge balance and declared domain. The [uncertainty replay check](results/final-rerun/uncertainty-replay-checks.json) changes standard errors by at most $1.40\times10^{-14}$ relative and correlations by $2.22\times10^{-16}$; it does not refit parameters or recalculate the Jacobian.
+
+## Outside-fit behaviour and limits
+
+| Comparison (evaluated rows) | F1 AARD / % | F2 AARD / % | F6 AARD / % |
+|:--|--:|--:|--:|
+| Canonical 80 °C (21) | 19.5827 | 20.0082 | 28.9142 |
+| Jou 80 °C (11) | 9.5654 | 10.9784 | 13.7722 |
+| Böttinger 80 °C species (11 at five states) | 12.0532 | 8.0789 | 14.4863 |
+| Wagner near 353 K (11) | 22.5007 | 18.4235 | 51.5973 |
+| Wagner near 392 K (12) | 22.2691 | 21.2714 | 59.1891 |
+| 100–120 °C, in-domain (54) | 27.2447 | 27.1264 | 51.0467 |
+| Pooled 40–80 °C (105) | 20.3468 | 20.5376 | 22.8099 |
+| 15 wt% transfer (33) | 76.7072 | 72.1936 | 31.1175 |
+| 45 wt% transfer (37) | 46.2905 | 47.3590 | 55.1820 |
+| Matin pool, report-only (18) | 59.5875 | 34.9859 | 53.4054 |
+
+[Source-resolved scores](results/final-rerun/evaluation/scores.csv) retain every denominator. Both F1 and F6 use the declared **293.15–393.15 K** reaction-correlation domain as candidate extrapolation beyond source ranges; the R4 source range ends at 323.15 K. Xu rows 22–24 are [not evaluated](results/final-rerun/evaluation/not-evaluated.json) for all three scored records, not included in an invented full-Xu AARD. **F6 versus F1 assesses extrapolated model behaviour and the combined change of reaction laws, CO₂ $\epsilon/k$ and refitted interactions—not the reaction-law effect alone.**
+
+The 80 °C and higher-temperature comparisons also informed the inherited reaction shifts and are not independent temperature predictions. Wagner is the only comparison set not used in those earlier calibration stages; retained #140 outside-fit assessments already exist, so no newly untouched-data claim is made here. The [Jakobsen carbonate-share comparisons](results/final-rerun/evaluation/jakobsen-carbonate-share.csv) retain ten rows and the existing nine-row summary mask: F1 ratios span 0.4121–1.3351, F2 1.1894–3.2114 and F6 0.3816–1.7811. Printed `maxload`, unresolved dilution/loading definitions and the existing $10^{-4}$ seeded-loading interpolation alignment remain disclosed; the excluded summary row remains visible.
+
+Loaded density remains a substantial limit, not a fitted property. On the existing CO₂-free 30 wt% basis at 50/70 °C, loadings 0.3/0.4 and assumed 101325 Pa (source pressure unreported), [F1 density deviations](results/final-rerun/evaluation/density.csv) are **+13.1640%, +17.7988%, +13.0030%, +17.4082%**. F2 spans +12.4490–17.0888%; F6 +13.3386–18.0724%. Source loaded-row uncertainty scope remains unbound; these are raw comparisons, not uncertainty-weighted density qualification.
+
+## Born-off mechanism and pool effect
+
+The unchanged #151 decomposition binds final F1 as `adopted` and F3 as `off-refit`, with the corrected 83-state/141-target mask, source-series cohorts, replay costs and SHA-256s. **N1–N9 all pass**. Across 47 pressure states, RMS $\Delta Q=1.094324$ exceeds RMS $\Delta S=0.819324$; the decomposed pressure-cost increase **53.1734487074** reproduces F3 minus F1. H1 is rejected (at nominal 40 °C, median overall Born reaction sum −0.905849; permittivity contribution at the median-loading state −0.287018). H2 is supported under the unchanged local rules: Spearman correlations −0.997067/−0.996429 and high-third ion contributions −1.759165/−1.749710 at nominal 40/60 °C. The activity-compensation criterion C is not rejected; high-third mean $\phi=(\Delta Q+Q_{\mathrm{Born,F1}})/Q_{\mathrm{Born,F1}}$ is 0.082522/−0.008930. Here $Q$ is the activity sum, $S$ the speciation sum and $H$ the vapor/reference correction, with $\Delta\ln p=\Delta Q+\Delta S+\Delta H$. These are outcomes of the tested decomposition and refits, not universal physical criteria.
+
+![The tested Born-off refit changes the activity sum more than speciation in aggregate. Each marker is a computed state; no interpolation is implied. Grey shading is ±0.3 natural-log units, the declared pressure residual scale, not an acceptance interval. Nominal source-series labels do not replace the measured temperatures used in calculation.](results/final-rerun/figures/born-off-mechanism.png){#fig-final-born-off-mechanism}
+
+Adding the legacy pool exposes a fit trade-off. On the common 141-target mask, F4/F5 costs rise to **37.642015 / 35.905010**, compared with F1/F2 **33.033774 / 34.141698**. Pool AARDs fall from **59.5875% / 34.9859%** to **42.5709% / 19.5581%**. The [pool-effect costs](results/final-rerun/figure-data/pool-effect-costs.csv) separate the 141-target base from the 18 added targets; totals with different target counts are not used to reselect Born form.
+
+Four main-text data sets are retained without changing the manuscript: [pressure](results/final-rerun/figure-data/pressure.csv), [speciation](results/final-rerun/figure-data/speciation.csv), [Born-off plus mechanism](results/final-rerun/figure-data/born-off-mechanism.csv), and [pool effect](results/final-rerun/figure-data/pool-effect.csv). They contain discrete retained evaluations, not newly inferred continuous curves. The [decomposition checks](results/final-rerun/activity-contributions/checks.json) retain all errors and hypothesis outcomes.
+
+The supported use remains a **calibrated model for 30 wt% MEA, pressure fitted at 40–60 °C and species at 20–60 °C**. Effective ion parameters, active bounds, conditional errors, reused high-temperature calibration information, legacy Matin inputs, concentration-transfer errors and loaded-density bias constrain interpretation. No heat fit, absorber qualification, unique physical identification or physical Born necessity is established. The wheel is unchanged: `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2`.
+
 ::: {.callout-note}
-## Latest issue 140 result: Stage 3
+## Retained pre-correction issue 140 result: Stage 3
 
 **Both complete R2 tests miss the adopted 80 °C pressure benchmark while preserving the ≤60 °C pressure and species cost limits.** The independent Plummer–Busenberg R2 primary gives 27.61% canonical 21-row AARD; the free-R2 secondary gives 23.02%, against ≤20.270257%. The [Stage 3 results](#stage-3-loaded-results) record the committed freeze, all six converged starts, single assessments and conditional enthalpy diagnostics. These are bounded prediction comparisons with retained measurements, not physical validation or parameter adoption. Independent GPT-6.1 Sol high delivered review returned **Supported at `0e5703e`**, with no required corrections.
 :::
 
 ::: {.callout-note}
-## Working notebook
+## Retained v1 working record (superseded by #154)
 
 The working record is SSM+DS model D `p5conv-a-11` for **30 wt% MEA, 40–80 °C**, under [decisions 21/24](https://github.com/tannerpolley/Amine-Thermodynamics/issues/121#issuecomment-5906843564). Its candidate assessment/comparison [Supported review](https://github.com/tannerpolley/Amine-Thermodynamics/issues/121#issuecomment-5907883147) met decision 21's gate. This promotion and regenerated notebook await their separate delivered review and have not been promoted for manuscript use.
 
@@ -1031,9 +1130,9 @@ The retained [target predictions and source identities](model-d/sensitivity-curr
 
 This is re-calibration and numerical verification on the frozen objective. It does not establish independent physical validation, unique physical Born or interaction parameters, statistical significance or uncertainty intervals, concentration/temperature transfer, or absorber qualification. Active bounds, inherited chemistry and parameter-selection history remain limitations. Two starts demonstrate agreement for those starts only. The source basis and reading limits are inherited from the preceding sensitivity section; the relevant Böttinger, Matin and Figiel reading-copy hashes were checked against current Zotero files. Manuscript use requires investigator promotion of this new notebook section after independent delivered review.
 
-# Selected parameters
+# Retained v1 parameters (superseded by #154) {#selected-parameters}
 
-Working nine-species bundle: SSM+DS model D `p5conv-a-11`, promoted on 30 September 2026 under decisions 21/24 for 30 wt% MEA at 40–80 °C. R4 is at its source coefficients; inherited R1–R3/R5 corrections retain their ancestry. Independent physical validation and process-column use are not established. Lengths: Å; energy parameters: K; temperature: K. [Exact values and provenance](results/selected-current-best-parameters.json) supersede displayed rounding.
+Working nine-species bundle: SSM+DS model D `p5conv-a-11`, promoted on 30 September 2026 under decisions 21/24 for 30 wt% MEA at 40–80 °C. R4 is at its source coefficients; inherited R1–R3/R5 corrections retain their ancestry. Independent physical validation and process-column use are not established. Lengths: Å; energy parameters: K; temperature: K. [Exact v1 values and provenance](results/final-rerun/v1-start-parameters.json) supersede displayed rounding; these are not the new F1 fitted interactions.
 
 [Green: supported for the stated use]{.evidence-1} · [Blue: working value—review the evidence for green]{.evidence-2} · [Yellow: needs targeted testing or refitting]{.evidence-3}. Green includes checked formulation rules and supported derived estimates; it does not imply every value was independently fitted. Blue includes fitted, fixed, and derived values whose support for the stated use remains under review. Yellow marks a follow-up, not an unknown number or an automatic instruction to refit. Move blue to green when its source, derivation, or relevant comparison supports the intended use; fixed mathematical definitions need checking, not refitting. **The two yellow entries are the R2/R4 intercepts flagged by the formation/partition study; its later diagnostic disposition is linked below.** Other retained choices stay blue unless a specific comparison gives us a reason to reopen them.
 
@@ -1891,7 +1990,7 @@ The following timing and residual diagnoses concern `868a5018` and their recorde
 
 **Calibration misfit diagnosis.** A bounded diagnosis of the 79 Hilliard 2008 and Jou 1995 states ([README](results/runs/pco2-calibration-misfit/README.md)) ran on Engine `7fa8aaf4` (wheel `e9fb8a47`, recorded in its CSVs); its README reports that the values reproduce on Engine `83ac1126` (wheel `3eb502ab`) to about 10⁻¹¹, and the then-active pin matches `3eb502ab` to 2.1 × 10⁻¹¹ in ln. It places the residual in the non-reaction part of the model by elimination. It does not test the fitted EOS/ionic parameters or the ePC-SAFT ionic formulation directly. Removing five loading-bin means takes away about 79% of the residual sum of squares, against 12% for temperature and 13% for source. Plausible R2/R4/R5 shifts (±0.3 in ln K) remove only about 11%, lowering RMS ln from 0.59 to 0.56. The data add a floor of roughly 0.2–0.4 in ln, which is an estimate. The fit that produced the adopted reaction values scored only 5 pCO₂ rows (Jou 1995 at 80 and 120 °C).
 
-# Current-record density limitation (#123) {#density-current-record-123}
+# Retained v1 density limitation (#123) {#density-current-record-123}
 
 The current SSM+DS model-D record overestimates four loaded liquid densities by **12.99–17.80 %** on a **CO₂-free 30 wt% MEA solvent basis**, at 50 and 70 °C and total absorbed CO₂ loadings of 0.3 and 0.4 mol/mol analytical MEA. These are homogeneous reactive liquid predictions at **101325 Pa assumed ambient pressure**; Amundsen does not report a numerical measurement pressure. The near-unloaded control at loading 0.000101 is **0.423 % below** the unloaded measurement.
 

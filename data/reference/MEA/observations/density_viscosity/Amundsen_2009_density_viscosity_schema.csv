@@ -8,9 +8,9 @@ co2_loading_mol_per_mol_mea,no,mol CO2/mol MEA,CO2 loading for loaded mixtures; 
 pressure_kPa,no,kPa,Pressure if reported.
 value,yes,reported unit,Measured property value.
 value_unit,yes,g/cm^3|mPa*s,Unit reported by the source table.
-uncertainty_value,yes,reported uncertainty,Combined absolute or relative uncertainty attached to the property family.
+uncertainty_value,no,reported uncertainty,Row estimate unavailable where loaded scope is unbound; general estimate retained separately.
 uncertainty_unit,yes,g/cm^3|percent,Unit for uncertainty_value.
-uncertainty_type,yes,combined_absolute|combined_relative,Source uncertainty classification.
+uncertainty_type,yes,combined_absolute|combined_relative|unbound_source_scope,Source uncertainty classification.
 temperature_uncertainty_K,yes,K,Estimated temperature uncertainty reported by the source.
 mea_mass_fraction_relative_uncertainty_percent,yes,percent,Estimated relative uncertainty of MEA mass fraction.
 co2_loading_relative_uncertainty_percent,no,percent,Estimated relative loading uncertainty; blank for unloaded rows.
@@ -20,3 +20,9 @@ source_table_or_figure,yes,Table 1 through Table 8,Source table identifier in re
 source_line_start,yes,line number,First source line covering the table.
 source_line_end,yes,line number,Last source line covering the table.
 notes,no,text,Short basis and use restriction.
+system,yes,text,Source-qualified metadata; loaded row weights unbound; pressure unreported.
+uncertainty_status,yes,text,Source-qualified metadata; loaded row weights unbound; pressure unreported.
+uncertainty_scope,yes,text,Source-qualified metadata; loaded row weights unbound; pressure unreported.
+source_general_uncertainty_value,yes,text,Source-qualified metadata; loaded row weights unbound; pressure unreported.
+source_general_uncertainty_unit,yes,property-dependent source unit,Source-qualified metadata; loaded row weights unbound; pressure unreported.
+source_locator,yes,text,Source-qualified metadata; loaded row weights unbound; pressure unreported.

@@ -36,13 +36,25 @@ PACKETS = {
     '11': MODEL / '1-1-S1-40-80C-fit-f66d972c-eval-28181e72-packet.jsonl',
     '00': MODEL / '0-0-S1-40-80C-fit-28181e72-eval-28181e72-packet.jsonl',
 }
+FINAL = BUNDLE / 'results/source-corrections-152'
+if os.environ.get('FINAL_RERUN'):
+    PACKETS = dict.fromkeys(FILES, FINAL / 'accepted-wave/packet.jsonl')
 MAPPINGS = {form: s.parameter_mapping(path) for form, path in FILES.items()}
 RETAINED = {form: {r['identity']: r for r in map(json.loads, path.open())} for form, path in PACKETS.items()}
 HERE = Path(os.environ['SENSITIVITY_OUTPUT'])
 HERE.mkdir(parents=True, exist_ok=True)
 OBS = [o for o in design.probe.OBSERVATIONS if any(compare.in_objective(
     {'T': o['request']['temperature']['value'], 'identity': o['identity']}, t, 80) for t in o['targets'])]
-assert len(OBS) == 84
+if os.environ.get('FINAL_RERUN'):
+    selected = {(r['identity'], r['target']) for r in csv.DictReader((FINAL / 'accepted-wave/strict141-targets.csv').open())}
+    packet = s.load_state_packet(FINAL / 'state-packet.json.gz')['observations']
+    if os.environ.get('FINAL_POOL') == '1':
+        selected.update((o['identity'], t['identity']) for o in packet for t in o['targets']
+                        if t['identity'].startswith('Matin') and compare.pooled_species(t['identity'])
+                        and compare.in_objective(design.refit._rec(o), t, 80))
+    OBS = [{**o, 'targets': [t for t in o['targets'] if (o['identity'], t['identity']) in selected]}
+           for o in packet if any((o['identity'], t['identity']) in selected for t in o['targets'])]
+assert len(OBS) == (83 if os.environ.get('FINAL_RERUN') else 84)
 ION_IDS = ('protonated-monoethanolamine', 'carbamate-anion', 'bicarbonate-anion',
            'carbonate-anion', 'hydroxide-anion', 'hydronium-cation')
 QIDS = [f'component/{i}/born_diameter' for i in ION_IDS] + [
@@ -107,9 +119,10 @@ def rows_for(mapping, form):
     params = epcsaft.Parameters.from_mapping(mapping)
     groups = declared(mapping, form)
     rows = [row for o, problem in groups for row in design.refit.observations(params, o, problem, 80)]
-    keep = {t['identity'] for o in OBS for t in o['targets'] if compare.in_working_objective(design.refit._rec(o), t)}
+    keep = {t['identity'] for o in OBS for t in o['targets']
+            if os.environ.get('FINAL_RERUN') or compare.in_working_objective(design.refit._rec(o), t)}
     rows = [row for row in rows if row[0] in keep]
-    assert len(rows) == 142
+    assert len(rows) == (159 if os.environ.get('FINAL_POOL') == '1' else 141) if os.environ.get('FINAL_RERUN') else len(rows) == 142
     return params, groups, rows
 
 

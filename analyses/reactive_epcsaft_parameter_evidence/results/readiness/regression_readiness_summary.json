@@ -1,21 +1,31 @@
 {
   "admitted_target_families": [],
+  "baseline_dir": "analyses/mea_parameter_bundle/results/source-corrections-152/baseline",
   "blocking_conditions": {
-    "application_admission": "The frozen cross-validation packet contains 319 candidate rows and zero executable rows because required residual scales, immutable packet identity, and speciation state-pressure contracts are absent."
+    "application_admission": "Candidate views only; execution not admitted; immutable qualification/scales and source-pressure/uncertainty contracts incomplete. Calorimetry admission/path repair remains147-owned."
   },
+  "candidate_counts": {
+    "pco2": 85,
+    "speciation": 210
+  },
+  "capability_metadata_status": "retained/unrequalified; no Engine import or capability probe",
   "capability_receipt_hash": "5bcdd1897d3fe62af2ca3a63a02da399391bd3e51b809d61c4aa9584ab6921f5",
   "claim_boundary": "This receipt freezes data admission and grouped splits only. It is not a completed fit, parameter promotion, independent-validation result, or submission claim.",
   "executable_observation_counts": {
-    "speciation": {},
-    "vle_pressure": {}
+    "speciation": 0,
+    "vle_pressure": 0
   },
   "failed_row_policy": "Every attempted reserved row remains in validation accounting; solver failure is a failed prediction and may not be omitted or replaced.",
   "leakage_findings": [],
   "lifecycle_counts": {
-    "active_v1": 161,
+    "active_v1": 162,
     "canonical_eligible": 74,
     "validation_reserved": 37,
-    "validation_reserved_candidate": 95
+    "validation_reserved_candidate": 94
+  },
+  "output_hashes": {
+    "data/reference/MEA/manifests/grouped_split_manifest.csv": "c877df847db6b63ac9d8bae094ed1cf90e756fa6ff6b59961a505444bec25114",
+    "data/reference/MEA/manifests/reactive_vle_cross_validation.csv": "716e9a1400ea0d76f83f94a156360dd4f09e19c47f4f9db4ab4df09614418788"
   },
   "package_version": "0.2.0.dev0",
   "parameter_coverage": [
@@ -94,18 +104,39 @@
   },
   "schema_version": 1,
   "source_hashes": {
+    "analyses/mea_parameter_bundle/results/source-corrections-152/baseline/grouped_split_manifest.csv": "ede4568bdc8162df2556073430636e1ca6cda93b3aa1b85d005c564bde344fc6",
+    "analyses/mea_parameter_bundle/results/source-corrections-152/baseline/ionic_volumetric_fit_preregistration.json": "05efdb25c7852a1755bda8ceebafcd2cf3ad7740b998b48aeabc14a7c77ecc63",
+    "analyses/mea_parameter_bundle/results/source-corrections-152/baseline/ionic_volumetric_observation_contract.csv": "e5e751fb5100c2cb65a5ce0d544b3d52e3b8e17af2390ebaf081922cd63a2ef1",
+    "analyses/mea_parameter_bundle/results/source-corrections-152/baseline/reactive_vle_cross_validation.csv": "29730ae0ab69caaf4b398f7c059e07407e729ae4c10ec246d2d39ad02060a6ff",
+    "analyses/mea_parameter_bundle/results/source-corrections-152/baseline/source_status_manifest.csv": "7cc23658a0d9390426ceba4fc60dab0d8e3b68374f41e4c877d38135d64e3030",
+    "analyses/mea_parameter_bundle/results/source-corrections-152/baseline/target_admission_manifest.csv": "580fe1147cd7b99099897f4b9c1cd85b95b048c9e731456dac2d8958deae03e9",
+    "analyses/mea_parameter_bundle/results/source-corrections-152/baseline/volumetric_grouped_split_manifest.csv": "156681e9cefc554314124b99daa9ffe9a45aa1ab02c167fa080d12405501dacd",
+    "analyses/mea_parameter_bundle/results/source-corrections-152/current-volumetric-admission.json": "43784867e40b894da508b1635bf37e18a9cc1791e715ba37b04c876977fff233",
     "data/reference/MEA/manifests/chemical_reaction_source_contract.json": "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55",
+    "data/reference/MEA/manifests/grouped_split_manifest.csv": "c877df847db6b63ac9d8bae094ed1cf90e756fa6ff6b59961a505444bec25114",
     "data/reference/MEA/manifests/homogeneous_speciation_sentinel_contract.json": "f2ac84cef7a792151f7b3d68ec45c05440720960d94b1c910ddba01dd93b71f6",
     "data/reference/MEA/manifests/observation_contract.csv": "dad553bcc76bb4f77ad4de17f313353d85fe3f5c1aa2090d403e1da3451b66fb",
     "data/reference/MEA/manifests/parameter_observable_coverage.csv": "82cb959d10c26e9a3ef2443dfc0d9bb4d1b452c0990c546f9e698fb8fe598a95",
-    "data/reference/MEA/manifests/pco2_metrology_manifest.csv": "8db8f74f739d13b87e34d12d4df1d5d566e51deb0fd5eea8f547436d030a2f8c",
-    "data/reference/MEA/manifests/reactive_vle_cross_validation.csv": "12258108a3a6301e80ce9cc920c3f48bbb30369fdef6180f0f15863e94a3f61e",
-    "data/reference/MEA/manifests/speciation_target_membership.csv": "a89a3f0373a86813482158f180939cf57f74be038cd59f244dfadcb689923190",
-    "data/reference/MEA/manifests/vle_row_disposition.csv": "a09fe2b5cf76ba0f098791078234ad6c841f639919af2f288482bd646882bec0",
-    "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv": "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e",
-    "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "a4f9e3c0176894cad78c5960198c13707d36a167e48abf3d5e7a2106a55d5af1"
+    "data/reference/MEA/manifests/pco2_metrology_manifest.csv": "5fc1686cac29de59979c2a5ddf3046fed4d32a89e771b6cb37991d7a021a442f",
+    "data/reference/MEA/manifests/reactive_vle_cross_validation.csv": "716e9a1400ea0d76f83f94a156360dd4f09e19c47f4f9db4ab4df09614418788",
+    "data/reference/MEA/manifests/speciation_linear_coefficient_rules.csv": "46c9c5ec3795b924fa2d67fbfdd501ec186d33510ea5cc91962f3a2138abc7e7",
+    "data/reference/MEA/manifests/speciation_target_membership.csv": "216600eb7bf1bb4ff7a5796ebfd11c5b5b9d4a9b9cd458e0c88fcedf029d8cf5",
+    "data/reference/MEA/manifests/target_admission_manifest.csv": "580fe1147cd7b99099897f4b9c1cd85b95b048c9e731456dac2d8958deae03e9",
+    "data/reference/MEA/manifests/vle_row_disposition.csv": "c5599391f0282bddce976eb72224ceab3814a2e8db67b0c4d914c28ad47b2afc",
+    "data/reference/MEA/observations/liquid_speciation/Bottinger_2007_ChEq.csv": "583a3f7a26f4ea8cdae97cf7c2606bdbefafbb18cac085dbedd9cc2234aa3c71",
+    "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv": "38326453cfe11b30f2e83e2c33e9342037a8f2bbbec0d95938384806e935383b",
+    "data/reference/MEA/observations/liquid_speciation/Jakobsen_2005_ChEq.csv": "f3479866b0693a5e122e3f35e8b91fdb524ac358986e05b269a6b872e4cae3c3",
+    "data/reference/MEA/observations/liquid_speciation/Matin_2012_ChEq.csv": "8625f8dd06c26f9230fedbc50c97f907cc555f986521a270c873634f9ea5776f",
+    "data/reference/MEA/observations/liquid_speciation/Wong_2015_Raman_speciation.csv": "6ad84fd1d055b8e2e8295d5f336f1a7b3908c8c2354046463d6910cbc93d7c43",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Aronu_2011_VLE.csv": "820a167e73071d15b0c48c90bb6a50545016457e9717d7a2f18ae6bad74ed052",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "d5cd6ea0d5d75f9994f5ed354463776a09b8f3cd081eb72ddef98dd4a356c53a",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Hilliard_2008_VLE.csv": "e77393ebba8c8ec63c71fd88d1f1f467ded983da3a73e17b24d1f8c902acee7f",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Idris_2014_VLE.csv": "0302f5dde5cf5ffe1d9d8e7bbbe0c23d6fe736268bf610ae901cbec5b27db052",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Jou_1995_VLE.csv": "ed376aec2bda38348ed5387197215b744e15719f1f6041e998913991ca1a213a",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Mamun_2005_VLE.csv": "568519446e88d1cd5637a076162e42b20d7c28792cefbde87eeda958e1df3847",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Xu_2011_VLE.csv": "3658849147c544f06fe6c09fd3eceda3e9961b99911f3b9f20d2e906f20d018b"
   },
-  "split_hash": "ede4568bdc8162df2556073430636e1ca6cda93b3aa1b85d005c564bde344fc6",
+  "split_hash": "c877df847db6b63ac9d8bae094ed1cf90e756fa6ff6b59961a505444bec25114",
   "target_admission": [
     {
       "admission_reason": "Engine support is installed, but every selected pressure row remains candidate-only pending its application data contract.",
@@ -226,5 +257,5 @@
     "ionic_activity",
     "calorimetry"
   ],
-  "upstream_execution_admitted": true
+  "upstream_execution_admitted": false
 }

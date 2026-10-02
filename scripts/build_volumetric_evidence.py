@@ -5,6 +5,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
+import json
+from collections import Counter
 from io import StringIO
 from pathlib import Path
 
@@ -41,6 +44,8 @@ CONTRACT_FIELDS = [
     "target_eligible",
     "group_id",
 ]
+
+CONTRACT_FIELDS += ["system", "uncertainty_status", "uncertainty_scope", "admission_reason", "measurement_identity", "linear_coefficients"]
 
 SPLIT_FIELDS = [
     "observation_id",
@@ -113,7 +118,9 @@ def build_contract() -> list[dict[str, str]]:
                 "mea_mass_fraction": row["mea_mass_fraction"],
                 "co2_loading_mol_per_mol_mea": row["co2_loading_mol_per_mol_mea"],
                 "composition_value": row["mea_mass_fraction"],
-                "composition_basis": "MEA mass fraction in unloaded solution",
+                "composition_basis": "pure MEA endpoint" if row["system"] == "pure_mea" else "MEA mass fraction in unloaded solution",
+                **{field: row[field] for field in ("system", "uncertainty_status", "uncertainty_scope")},
+                "admission_reason": "Measurement pressure unreported; loaded uncertainty scope unbound.",
                 "value_reported": row["value"],
                 "reported_unit": row["value_unit"],
                 "uncertainty_value": row["uncertainty_value"],
@@ -121,9 +128,9 @@ def build_contract() -> list[dict[str, str]]:
                 "uncertainty_type": row["uncertainty_type"],
                 "measurement_role": row["measurement_role"],
                 "source_lifecycle_status": row["lifecycle_status"],
-                "contract_lifecycle_status": "canonical_eligible",
-                "objective_role": "direct_measurement",
-                "target_eligible": "yes",
+                "contract_lifecycle_status": "diagnostic_only",
+                "objective_role": "contextual",
+                "target_eligible": "no",
                 "group_id": group_id,
             }
         )
@@ -158,20 +165,20 @@ def build_contract() -> list[dict[str, str]]:
                 "uncertainty_type": row["uncertainty_type"],
                 "measurement_role": row["measurement_role"],
                 "source_lifecycle_status": row["lifecycle_status"],
-                "contract_lifecycle_status": (
-                    "diagnostic_only" if shared_water_endpoint else row["lifecycle_status"]
-                ),
-                "objective_role": (
-                    "contextual" if shared_water_endpoint else "analog_measurement"
-                ),
-                "target_eligible": "no" if shared_water_endpoint else "yes",
+                "contract_lifecycle_status": "diagnostic_only",
+                "objective_role": "contextual",
+                "target_eligible": "no",
+                "admission_reason": "source binding unverified",
+                "uncertainty_scope": "Legacy estimates retained; exact PDF/salt-to-row binding unverified.",
                 "group_id": group_id,
             }
         )
 
     canonical = {row["record_id"]: row for row in read_rows(CANONICAL)}
     for row in read_rows(SPECIATION):
-        source = canonical.get(row["membership_id"], {})
+        source = canonical.get(row["measurement_identity"], {})
+        if row["target_eligible"] == "yes" and not source:
+            raise ValueError(f"Missing measured speciation identity: {row['membership_id']}")
         lifecycle = row["lifecycle_status"]
         rows.append(
             {
@@ -201,17 +208,23 @@ def build_contract() -> list[dict[str, str]]:
                     row["source_key"],
                 ),
                 "target_eligible": row["target_eligible"],
+                **{field: row[field] for field in ("measurement_identity", "linear_coefficients")},
+                "admission_reason": row["eligibility_reason"],
                 "group_id": (
                     f"{row['source_key']}|w={row['mea_mass_fraction']}|"
                     f"T={row['temperature_C']}"
                 ),
             }
         )
+    for row in rows:
+        for field in CONTRACT_FIELDS:
+            row.setdefault(field, "")
     return rows
 
 
-def build_split(contract: list[dict[str, str]]) -> list[dict[str, str]]:
+def build_split(contract: list[dict[str, str]], baseline_dir: Path) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
+    baseline = {row["observation_id"]: row for row in read_rows(baseline_dir / SPLIT.name)}
     source_paths = {
         "ethanolammonium_carboxylate_density": ANALOG.relative_to(ROOT).as_posix(),
         "unloaded_mea_density": AMUNDSEN.relative_to(ROOT).as_posix(),
@@ -251,6 +264,14 @@ def build_split(contract: list[dict[str, str]]) -> list[dict[str, str]]:
                 "reason": reason,
             }
         )
+    if set(baseline) != {row["observation_id"] for row in rows}:
+        raise ValueError("Volumetric split IDs changed")
+    for row in rows:
+        previous = baseline[row["observation_id"]]
+        row.update({field: previous[field] for field in ("group_id", "split", "role")})
+        row["reason"] = "Frozen partition provenance only; current execution blocked."
+        if row["data_family"] == "ethanolammonium_carboxylate_density":
+            row.update(role="context_only", reason="source binding unverified")
     return rows
 
 
@@ -265,12 +286,35 @@ def csv_text(rows: list[dict[str, str]], fields: list[str]) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--baseline-dir", type=Path, required=True)
+    parser.add_argument("--admission-receipt", type=Path, required=True)
     args = parser.parse_args()
+    preflight = json.loads((args.baseline_dir.parent / "preflight.json").read_text())
+    for name, expected in preflight["baseline_file_hashes"].items():
+        if hashlib.sha256((args.baseline_dir / name).read_bytes()).hexdigest() != expected:
+            raise ValueError(f"Frozen baseline hash drift: {name}")
     contract = build_contract()
-    outputs = {
-        CONTRACT: csv_text(contract, CONTRACT_FIELDS),
-        SPLIT: csv_text(build_split(contract), SPLIT_FIELDS),
+    split = build_split(contract, args.baseline_dir)
+    outputs = {CONTRACT: csv_text(contract, CONTRACT_FIELDS), SPLIT: csv_text(split, SPLIT_FIELDS)}
+    frozen = [ROOT / "analyses/reactive_epcsaft_parameter_evidence/ionic_volumetric_fit_preregistration.json", ROOT / "src/MEA/epcsaft_ionic/preregistration.py"]
+    if any(hashlib.sha256(path.read_bytes()).hexdigest() != preflight["protected_file_hashes"][path.relative_to(ROOT).as_posix()] for path in frozen):
+        raise ValueError("Immutable preregistration/guard drift")
+    analogs = [row for row in contract if row["data_family"] == "ethanolammonium_carboxylate_density"]
+    if len(analogs) != 128 or any(row["target_eligible"] != "no" or row["objective_role"] != "contextual" for row in analogs):
+        raise ValueError("All128 analogs must remain context-only")
+    baseline = read_rows(args.baseline_dir / SPLIT.name)
+    receipt = {
+        "base_commit": preflight["base_commit"], "baseline_dir": args.baseline_dir.relative_to(ROOT) .as_posix() if args.baseline_dir.is_absolute() else args.baseline_dir.as_posix(),
+        "baseline_assignment_sha256": preflight["baseline_file_hashes"][SPLIT.name],
+        "source_hashes": {path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in (AMUNDSEN, ANALOG, SPECIATION, CANONICAL, *frozen)},
+        "output_hashes": {path.relative_to(ROOT).as_posix(): hashlib.sha256(text.encode()).hexdigest() for path, text in outputs.items()},
+        "family_counts": dict(Counter(row["data_family"] for row in contract)), "role_counts": dict(Counter(row["role"] for row in split)),
+        "role_diffs": [{"observation_id": row["observation_id"], "old": previous["role"], "new": row["role"]} for row, previous in zip(split, baseline, strict=True) if row["role"] != previous["role"]],
+        "analog_context_only_count": len(analogs), "execution_admitted": False,
+        "frozen_preregistration_disposition": "superseded for current-data execution; retained as immutable provenance",
+        "blockers": ["source binding unverified", "Amundsen pressure unreported; loaded uncertainty scope unbound", "application qualification absent"],
     }
+    outputs[args.admission_receipt] = json.dumps(receipt, indent=2, sort_keys=True) + "\n"
     stale = []
     for path, content in outputs.items():
         if args.check:
