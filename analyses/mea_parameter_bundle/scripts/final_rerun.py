@@ -35,7 +35,7 @@ def worker(problem, start):
     clock = time.perf_counter()
     name = f'{problem}-{start}'
     directory = OUT / name
-    directory.mkdir()
+    directory.mkdir(exist_ok=problem == 'F6')
     signal.signal(signal.SIGALRM, timeout)
     signal.alarm(2400)
     os.environ['SENSITIVITY_OUTPUT'] = str(directory)
@@ -51,7 +51,7 @@ def worker(problem, start):
                 low.NATIVE_INPUTS = low.HERE / 'native-reaction-inputs.json'
                 low.HERE = directory
                 low.RAW = directory / 'runs'
-                low.TRAINING = OUT / 'training-inputs.json'
+                low.TRAINING = OUT / 'f6-input/training-inputs.json'
                 low.fit('slope-fixed', '1' if start == 'A' else '2')
                 fit = json.loads(next(directory.glob('*-fit.json')).read_text())
                 complete = fit['native_complete']
@@ -83,6 +83,7 @@ def worker(problem, start):
 
 def main():
     s.verify_wheel()
+    f6_only = sys.argv[1:] == ['f6']
     OUT.mkdir(parents=True, exist_ok=True)
     corrected = BUNDLE / 'results/source-corrections-152'
     selected = {(r['identity'], r['target']) for r in csv.DictReader(
@@ -90,24 +91,28 @@ def main():
     observations = s.load_state_packet(corrected / 'state-packet.json.gz')['observations']
     training = [{**o, 'targets': [t for t in o['targets'] if (o['identity'], t['identity']) in selected]}
                 for o in observations if any((o['identity'], t['identity']) in selected for t in o['targets'])]
-    s.write_json(OUT / 'training-inputs.json', training)
-    paths = [OUT / 'training-inputs.json', BUNDLE / 'results/temperature-reanchor-140/restored-source-parameters.json',
+    if f6_only:
+        assessment = module('assessment', BUNDLE / 'results/temperature-reanchor-140/assessment.py')
+        training = [{**o, 'request': assessment.feed_start(o['request'], s)} for o in training]
+    input_root = OUT / 'f6-input' if f6_only else OUT
+    s.write_json(input_root / 'training-inputs.json', training)
+    paths = [input_root / 'training-inputs.json', BUNDLE / 'results/temperature-reanchor-140/restored-source-parameters.json',
              *[BUNDLE / 'calibration-misfit' / f'{name}.py' for name in ('refit', 'probe', 'compare')],
              Path(s.__file__)]
-    s.write_json(OUT / 'input-hashes.json', {'hashes': {str(p.relative_to(BUNDLE.parents[1])): s.sha256(p) for p in paths}})
+    s.write_json(input_root / 'input-hashes.json', {'hashes': {str(p.relative_to(BUNDLE.parents[1])): s.sha256(p) for p in paths}})
     clock = time.perf_counter()
     workers = len(os.sched_getaffinity(0))
     with concurrent.futures.ProcessPoolExecutor(max_workers=workers,
             mp_context=multiprocessing.get_context('spawn')) as pool:
-        futures = [pool.submit(worker, f'F{i}', start) for i in range(1, 7) for start in ('A', 'B')]
+        futures = [pool.submit(worker, f'F{i}', start) for i in ([6] if f6_only else range(1, 7)) for start in ('A', 'B')]
         runs = []
         for future in concurrent.futures.as_completed(futures):
             result = future.result()
             runs.append(result)
             print(json.dumps(result), flush=True)
-    s.write_json(OUT / 'execution.json', dict(runs=runs, workers=workers,
+    s.write_json(OUT / ('f6-execution.json' if f6_only else 'execution.json'), dict(runs=runs, workers=workers,
         threads=1, wall_s=time.perf_counter()-clock, wheel_sha256=s.ENGINE_WHEEL_SHA256,
-        installed_module=s.epcsaft.__file__, training_sha256=s.sha256(OUT / 'training-inputs.json')))
+        installed_module=s.epcsaft.__file__, training_sha256=s.sha256(input_root / 'training-inputs.json')))
 
 
 if __name__ == '__main__':
