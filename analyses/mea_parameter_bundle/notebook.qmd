@@ -2010,13 +2010,22 @@ Run each index 0–4 serially from the #123 checkout with `OMP_NUM_THREADS=1 OPE
 
 This is numerical reproduction of the reviewed model predictions and a comparison with existing measurements, not physical validation or qualification beyond these five states. The control is closer but exceeds the stated unloaded uncertainty. No cause is claimed. The complete 26-probe and sensitivity claims are not retained or promoted here. The investigator promoted this five-state density limitation for the manuscript on condition that these rows be retained first (instruction of 1 October 2026); that authority applies to this retained comparison and its stated limits, not the rest of the notebook.
 
-## New-water binary refit: incomplete CO₂–water calculation (#160)
+## New water and shared ion volume: density acceptance fails (#160)
 
-With the adopted water values, the 25-row Cai MEA–water fit converged at $k_{ij}=-0.0803172262$ in 3.17 s. Temperature AARD changed from 0.4253 % with the old water to 0.3669 % after refitting; vapor-water composition AARD changed from 2.6473 % to 2.6422 %. The joint temperature/composition cost was 92.5417. These are calibration comparisons, not independent validation.
+The new-water six-coordinate fit preserves the pressure/species cost but misses the 1.6 % density limit at two fitted states. F1′ has cost **35.6755** on the 141 strict targets, against F1's **33.0338** and the **36.3372** preservation limit. Fitted-pressure AARD changes from **13.9776 % to 18.2967 %**; species AARD changes from **8.2582 % to 8.3625 %**. The shared MEAH⁺/MEACOO⁻ segment count is **2.753185**; their diameters remain fixed. HCO₃⁻–water remains at its $k_{ij}=+0.5$ bound.
 
-The 39-row Kiepe CO₂–water fit failed its initial evaluation at 313.2 K and liquid CO₂ mole fraction 0.01639 (`kiepe-313.20-10`). With converged old-water anchors, the native solve returned `CentralSolveUnavailable`, with residual 0.19138 against the unchanged $10^{-10}$ row limit. The fit stopped in 0.256 s without an optimizer step. Its native zero cost is not a valid objective. Old-water pressure AARD was 24.1634 %; no after-refit AARD exists. This failure does not establish that no constant $k_{ij}$ can fit the observations.
+| Fitted state, 30 wt% MEA on CO₂-free basis | Density / kg m⁻³ | Deviation / % |
+|:--|--:|--:|
+| 50 °C, loading 0.3 | 1075.7655 | +1.6792 |
+| 50 °C, loading 0.4 | 1101.6187 | +1.7192 |
+| 70 °C, loading 0.3 | 1062.2216 | +1.5120 |
+| 70 °C, loading 0.4 | 1087.3822 | +1.4444 |
 
-[Binary values](results/density-cp-160/stage1-binary-values.csv), [CO₂–water baseline](results/density-cp-160/stage1-co2-water-baseline.csv), and [the numerical stopping point](results/density-cp-160/numerical-stop.json) retain the results on wheel `28181e72`. A figure would not clarify this incomplete fit, so the scalar comparisons are reported directly. Stages 2–4, the F1′ candidate, and the Hilliard heat-capacity checks remain unavailable. The selected parameters are unchanged. This section has not been independently reviewed or promoted for manuscript use.
+The two starts converge to relative agreement **1.08 × 10⁻¹³** in the complete 145-target cost (37.6261), taking **289.58 and 627.48 s**, both below the 900 s watchdog. Neither required water-parameter continuation. The scalar acceptance comparison is reported as a table; no outside-fit relationship is inferred.
+
+The Cai binary fit gives temperature AARD **0.4253 → 0.3669 %** and vapor-water AARD **2.6473 → 2.6422 %**. CO₂–water pressure AARD is **24.1634 → 30.3735 %**; parameter continuation used 35 initially solvable Kiepe rows, followed by all 39 rows and one intermediate composition point that was never a target. Pure-water Cp at 298.15, 318.15 and 353.15 K differs from IAPWS-95 by **+0.0618, +0.4954 and +0.5615 %**, satisfying its 3 % limit. Unloaded 30 wt% MEA density deviations over 25–80 °C are **−0.1317 to −0.0448 %**. At 45 °C, equilibrium $dH/dT$ is **3.8681 kJ/(kg·K)** against Hilliard's **3.7195**, or **+3.9951 %**; frozen-composition Cp is **3.8679**. The unloaded check uses the absorber's loading-$10^{-5}$ proxy, with 30 wt% MEA on the CO₂-free basis; pressure is assumed 101325 Pa.
+
+[The retained results](results/density-cp-160/run-summary.json), [fit targets](results/density-cp-160/stage3-targets.csv), and [candidate parameters](results/density-cp-160/F1-prime-candidate-parameters.json) belong to wheel `28181e72`. This is calibration plus reference comparison, not independent physical validation. Failed density acceptance stopped Stage 4: outside-fit scores, uncertainty, decomposition and loaded Hilliard Cp remain unevaluated. The candidate is not promoted and the selected parameters are unchanged. This section has not been independently reviewed or promoted for manuscript use.
 
 # Supporting evidence
 
