@@ -1,0 +1,37 @@
+{
+  "F1_sha256": "ae92bac5d2ef7ab690e692f6b1686e18cf06f24ac6b53a6aab4fafeb3046f1aa",
+  "binding_failure": {
+    "accepted_density_state": "Amundsen 70 C, loading 0.3 or 0.4",
+    "exception": "AssertionError",
+    "function": "source_context.records",
+    "line": 149,
+    "message": "high-temperature input refused",
+    "owner": "analyses/mea_parameter_bundle/results/temperature-reanchor-140/low-temperature-fit.py",
+    "temperature_K": 343.15
+  },
+  "candidate_record": "not produced; no fit launched",
+  "installed_module": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-160-density-cp/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "issue": 160,
+  "base_commit": "43f207406af04bda9a11473c7a963ea04d8529d2",
+  "branch": "work/160-density-heat-capacity",
+  "fit_wall_seconds": 0,
+  "total_wall_time": "approximately 5 minutes including issue reads, input verification and the refusal probe; no fit launched", 
+  "notebook": "not written; no useful numerical result generated",
+  "probe_command": "PYTHONPATH=src FINAL_RERUN=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 .venv/bin/python; load low-temperature-fit.py, source_context(), call corrected_request with T=343.15 K and unchanged source reactions",
+  "required_owner_decision": "Authorize a fitting-domain change for F6 or name a fitting owner that accepts the four density targets with the exact source laws. No gate, reaction law, target, weight, or owner was changed.",
+  "scientific_conflict": "Issue 154 binds F6 estimation to the low-temperature slope-fixed owner and requires all training inputs <=333.15 K. Issue 160 adds density fit targets at 343.15 K to every problem, including F6. The owner explicitly refuses those temperatures before emitting source reaction records. Scoring at that temperature is supported separately, but is not the named fitting route.",
+  "selected_record_changed": false,
+  "sigma_form_check": "identical constant-plus-sum-of-exponentials, including both exponential terms and original constant",
+  "stage5": "excluded by user",
+  "stages": {
+    "1": "not launched; stopped during required pre-launch binding",
+    "2": "not launched; stopped during required pre-launch binding",
+    "3": "not launched; stopped during required pre-launch binding",
+    "4": "not launched; stopped during required pre-launch binding"
+  },
+  "status": "stopped: named F6 fitting owner cannot accept the required 70 C density inputs",
+  "water_fit_source_commit": "b1417a74",
+  "water_fit_summary_sha256": "32698f0cbd67d0e43f1e0b617a7cea45a56ead39d4b6db3fb698f4df1325a85b",
+  "wheel_content_files_verified": 14,
+  "wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2"
+}
