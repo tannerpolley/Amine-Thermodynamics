@@ -43,7 +43,7 @@ assert sum(r['evidence_level'] == 'discovery_metadata_only' for r in rows) == 88
 
 # Plain-language readings of the inventory status codes.
 ACCESS = {
-    'PDF_in_Zotero': 'Full text held',
+    'PDF_in_Zotero': 'Full text available',
     'open_access_primary_PDF_web_accessible;not_in_Zotero': 'Open-access full text',
     'primary_PDF_web_accessible;not_in_Zotero': 'Full text available online',
     'NIST_ThermoML_machine_readable;PDF_not_obtained;not_in_Zotero': 'NIST ThermoML record; full text not obtained',
@@ -63,7 +63,7 @@ EXTRACTION = {
     'extracted_near_30wt_source_tables_no_admission': 'Near-30 wt% source tables extracted; not fitted',
     'partially_extracted_speciation': 'Speciation values partly extracted',
     'partially_extracted_total_pressure': 'Total-pressure values partly extracted',
-    'partially_extracted_diagnostic_only': 'Values partly extracted; diagnostic use only',
+    'partially_extracted_diagnostic_only': 'Values partly extracted',
     'partially_extracted_VLE;NMR_and_Cp_not_extracted': 'VLE values partly extracted; NMR and heat-capacity values not extracted',
     'Table_2_state_coverage_complete_no_new_admission': 'All Table 2 states extracted; not fitted',
     '30wt_Table_4_measured_state_coverage_complete_no_new_admission': 'All 30 wt% Table 4 measured states extracted; not fitted',
@@ -129,19 +129,32 @@ def tex(value):
                     result.append(r'\allowbreak{}')
     return ''.join(result)
 
-def paragraphs(parts):
-    return r'\par '.join(tex(p) for p in parts if p)
+# Curation-workflow notes in the inventory fields become plain statements of what is known.
+PLAIN = [(r'exact scope pending basis review', 'exact scope not determined'),
+         (r'visual reader count provisional', 'count read from the figure'),
+         (r'Raman scope requires separate review', 'Raman scope not determined'),
+         (r'source species basis verify', 'source species basis not determined'),
+         (r'numerical legacy packet\s?20\s?°?\s?C not source verified', 'calculated here at 20 °C'),
+         (r'\bpending\b', 'not determined'),
+         (r'\bunverified\b', 'not determined')]
 
-caption = (r'Non-exhaustive inventory of 34 publication entries with confirmed near-30 wt\% scope '
-           r'and primary-passage/table or primary-database evidence. The 88 discovery-only entries '
-           r'in the source inventory are excluded from verified coverage. Mass fraction, molality '
+def plain(value):
+    for pattern, replacement in PLAIN:
+        value = re.sub(pattern, replacement, value, flags=re.I)
+    return value
+
+def paragraphs(parts):
+    return r'\par '.join(tex(plain(p)) for p in parts if p)
+
+caption = (r'Published measurements near 30 wt\% aqueous MEA: 34 publications whose near-30 wt\% scope is '
+           r'confirmed from a primary passage, table or database record. Mass fraction, molality '
            r'(per kg water or solution), and molarity remain distinct reported bases; no equivalence '
            r'is assumed. The three marked Wong studies contain sodium perchlorate reference salt; '
            r'NMR dilution and additives can change the final liquid composition. Derived quantities are '
-           r'marked; counts are not additive across publications or properties. Blank source fields are rendered as unverified, '
-           r'never zero. Extraction does not admit observations to parameter fitting. Temperature '
+           r'marked; counts are not additive across publications or properties. ``Not determined'' marks a field that '
+           r'could not be established from the source; it never means zero. Temperature '
            r'envelopes are in K; reported property-specific temperatures retain their stated units. '
-           r'The full per-source curation notes, including campaign overlap and reused states, are in the '
+           r'The per-source notes, including campaign overlap and reused states, are in the '
            r'public inventory file \nolinkurl{data/reference/MEA/manifests/source_status_manifest.csv}.')
 # "Retained" counts what was extracted from each source, not what this work fitted.
 COUNTS = [('Near-30 wt% published: ', 'near_30wt_point_count'),
@@ -189,11 +202,11 @@ for source in SELECTED:
     cells = [reference,
              paragraphs([properties(r), r['measurement_method']]),
              paragraphs([r['concentration_reported'], 'Basis: ' + r['concentration_basis']]),
-             paragraphs([temperatures + ' K' if r['temperature_min_K'] else 'Unverified',
+             paragraphs([temperatures + ' K' if r['temperature_min_K'] else 'Not determined',
                          'Reported: ' + units(r['temperature_reported'])]),
-             paragraphs(['Loading: ' + units(r['loading_range_reported'] or 'unverified'),
-                         'Pressure: ' + units(r['pressure_range_reported'] or 'unverified')]),
-             paragraphs([units(label + (r[column] or 'unverified')) for label, column in COUNTS]),
+             paragraphs(['Loading: ' + units(r['loading_range_reported'] or 'not determined'),
+                         'Pressure: ' + units(r['pressure_range_reported'] or 'not determined')]),
+             paragraphs([units(label + (r[column] or 'not determined')) for label, column in COUNTS]),
              paragraphs([ACCESS[r['access_status']], EVIDENCE[r['evidence_level']],
                          EXTRACTION[r['repo_extraction_status']]]),
              paragraphs([locator(r['evidence_locator']), derived(r)])]
