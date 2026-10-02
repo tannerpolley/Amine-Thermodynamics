@@ -8,6 +8,10 @@ Perturbed solves warm-start from the base-record solution of the same state.
 Run single-threaded; the solve cache and logs live in results/runs/calibration-misfit (ignored).
 """
 import copy
+import concurrent.futures as futures
+import multiprocessing
+import os
+import signal
 import csv
 import json
 import math
@@ -39,9 +43,7 @@ def reactions(sets=None):
 
 
 def pressure_observations(select):
-    """pCO2 states for the canonical VLE rows accepted by ``select``, built as generate_figure_data.py
-    builds them: the nearest-loading packet pressure request at the same temperature with the CO2 feed
-    replaced. Water is rescaled to the row's MEA mass fraction (the packet requests are all 30 wt%)."""
+    """Measured source T/feed via the shared analytical converter; nominal series initialize only."""
     templates = {}
     for o in OBSERVATIONS:
         if o['request']['pressure']['role'] == 'solved':
@@ -52,17 +54,10 @@ def pressure_observations(select):
         for row in csv.DictReader(h):
             if not select(row):
                 continue
-            t = round(float(row['temperature_canonical_C'] or row['temperature_reported_C']))
+            t = round(float(row['temperature_series_C'] or row['temperature_reported_C']))
             loading = float(row['CO2_loading'])
-            request = copy.deepcopy(min(templates[t], key=lambda c: abs(c[0] - loading))[1])
-            system = request['reaction_system']
-            w = float(row['MEA_weight_fraction'])
-            carbon, mea = system['conserved_totals']
-            # The carbon balance includes two carbons per MEA and carbon in the ionic seed.
-            system['feed_amounts_mol'][0] += loading * mea - (carbon - 2 * mea)
-            system['feed_amounts_mol'][2] *= (1 - w) / w / (0.7 / 0.3)  # the template is the 30 wt% solvent
-            system['conserved_totals'] = [math.fsum(c * a for c, a in zip(b, system['feed_amounts_mol'], strict=True))
-                                          for b in system['balance_matrix']]
+            template = min(templates[t], key=lambda c: abs(c[0] - loading))[1]
+            request = shared.source_feed_request(template, row)
             out.append({'identity': 'canonical:' + row['observation_id'], 'request': request, 'targets': [{
                 'identity': row['observation_id'] + '-pco2', 'observed': float(row['CO2_pressure']) * 1000.0,
                 'basis': 'true-species-vapor-partial-pressure', 'source_identity': row['source_key'],
@@ -148,11 +143,60 @@ def evaluate(sets=None, filters=(), canonical=False, states=None):
                                               'prediction_identity', 'scale') if k in t} for t in o['targets']]}
 
 
+def _fixed_state_job(state, cache_root):
+    shared.RUNS = Path(cache_root) / f'worker-{os.getpid()}'
+    return next(evaluate(states=[state]))
+
+
+def pooled_evaluate(states, cache_root, worker_seconds, deadline):
+    """One affinity-sized fixed-record pool; bounded dispatch, progress and cleanup."""
+    workers = len(os.sched_getaffinity(0))
+    todo = sorted(states, key=lambda state: state['identity'])
+    pending, records = {}, []
+    spent, progress = {}, time.monotonic()
+    Path(cache_root).mkdir(parents=True, exist_ok=True)
+    executor = futures.ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context('fork'), initializer=os.setsid)
+    try:
+        while todo or pending:
+            if time.monotonic() >= deadline or time.monotonic() - progress >= 300:
+                raise TimeoutError(f'campaign/progress deadline; pending={[o["identity"] for o in todo]}')
+            while todo and len(pending) < workers and os.getloadavg()[0] <= workers:
+                state = todo.pop(0)
+                pending[executor.submit(_fixed_state_job, state, str(cache_root))] = state.get('budget_group', 'old')
+            done, _ = futures.wait(pending, timeout=1, return_when=futures.FIRST_COMPLETED)
+            for future in done:
+                record = future.result()
+                group = pending.pop(future)
+                records.append(record)
+                with (Path(cache_root).parent / 'progress.jsonl').open('a') as handle:
+                    handle.write(json.dumps(record) + '\n')
+                spent[group] = spent.get(group, 0.0) + record['wall_s']
+                progress = time.monotonic()
+                check = record['check']
+                if record['status'] != 'evaluated' or not check['tolerance_met'] or check['balance_errors'] or check['max_abs_stationarity'] > 1e-10:
+                    raise RuntimeError(f'failed state: {record["identity"]}: {check}')
+                if spent[group] > worker_seconds[group]:
+                    raise TimeoutError(f'{group} worker-seconds cap exceeded: {spent}')
+        executor.shutdown(wait=True)
+    except BaseException:
+        for process in executor._processes.values():
+            try:
+                os.killpg(process.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                process.terminate()
+        executor.shutdown(wait=True, cancel_futures=True)
+        raise
+    return sorted(records, key=lambda record: record['identity'])
+
+
 def main(argv):
-    global RECORD
+    global RECORD, OBSERVATIONS
     out, rest = Path(argv[0]), argv[1:]
     RECORD = Path(next((a.split('=', 1)[1] for a in rest if a.startswith('--record=')), RECORD))
-    rest = [a for a in rest if not a.startswith('--record=')]
+    packet = next((a.split('=', 1)[1] for a in rest if a.startswith('--packet=')), None)
+    if packet:
+        OBSERVATIONS = shared.load_state_packet(Path(packet))
+    rest = [a for a in rest if not a.startswith(('--record=', '--packet='))]
     sets = {k: float(v) for k, v in (a.split('=') for a in rest if '=' in a)}
     if '--source-r4' in rest:
         sets.update(SOURCE_R4)
