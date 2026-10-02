@@ -1,16 +1,17 @@
 schema_version: 1
 scientific_lane: nine_species_epcsaft_born_term_and_speciation_comparison
 scientific_claim: >
-  Nine-species ePC-SAFT record 9055458d (Debye-Hueckel and SSM+DS Born terms,
-  explicit carbamate chemistry) for 30 wt% aqueous MEA, fitted simultaneously
-  to 48 CO2 pressures (40/60 degC, AARD 13.53 %) and 94 species targets
-  (20-60 degC, AARD 8.28 %). Outside the fit: 20.27 % on 21 canonical rows at
-  80 degC; 24.51 % and 25.45 % on 11 and 12 previously unused Wagner 2013 rows
-  near 353 and 392 K. Removing the Born term raises the cost from 32.99 to
-  98.79; the MEAH+-MEACOO- and MEAH+-water interactions dominate the tested ablations. The
-  Born-form ranking changes when Matin 2012 titration bicarbonate enters the
-  fit. Data at or below 60 degC do not set the temperature response.
-  Scope: CO2 pressure and speciation in 30 wt% MEA at 40-80 degC.
+  Nine-species ePC-SAFT parameter set F1 ae92bac5 (Debye-Hueckel and SSM+DS
+  Born terms, explicit carbamate chemistry) for 30 wt% aqueous MEA, fitted
+  through five binary interaction parameters to 47 CO2 pressures (40/60 degC,
+  AARD 13.98 %) and 94 species targets (20-60 degC, AARD 8.26 %) on the
+  corrected 141-target base. Outside the fit: 19.58 % on 21 rows at 80 degC;
+  22.50 % and 22.27 % on 11 and 12 Wagner 2013 rows near 353 and 392 K, which
+  entered no fit; 80 degC data informed fixed reaction shifts, so these are
+  not independent temperature predictions. Bounded refits without the Born
+  term give 53.60 % fitted-pressure AARD. The Born-form ranking reverses when
+  Matin 2012 titration bicarbonate enters the fit. A source-law refit fits
+  the data at or below 60 degC equally well but gives 28.91 % at 80 degC.
 author:
   name: Tanner W. Polley
   orcid: 0009-0008-5957-4152
@@ -53,8 +54,9 @@ repository: https://github.com/tannerpolley/Amine-Thermodynamics
 repository_license: MIT
 repository_visibility_at_submission: public, set by the owner before submission
 release_tag: manuscript-v1
-release_commit: "tag manuscript-v1"
-parameter_record_sha256: 9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241
+release_commit: null
+data_branch: work/final-rerun (pull request 155)
+parameter_record_sha256: ae92bac5d2ef7ab690e692f6b1686e18cf06f24ac6b53a6aab4fafeb3046f1aa
 engine_wheel_sha256: 28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2
 pdf_sha256: null
 source_zip_sha256: null
