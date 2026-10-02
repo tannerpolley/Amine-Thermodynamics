@@ -9,6 +9,7 @@ silently grow a second solver implementation.
 from __future__ import annotations
 
 import copy
+import csv
 import gzip
 import hashlib
 import importlib.metadata
@@ -124,6 +125,9 @@ def expand_state_packet(document: object) -> dict[str, object]:
             if not isinstance(table, list) or ref < 0 or ref >= len(table):
                 raise ValueError(f"out-of-range {field} reference")
             request[field] = copy.deepcopy(table[ref])
+        if document["metadata"].get("source_corrections") == 152 and any(target["source_identity"] in {"Hilliard2008", "Xu2011"} for target in row["targets"]):
+            if (request.get("feed") or {}).get("generation") != "source-corrections-152" or "analytical_feed_contract" not in request["reaction_system"]:
+                raise ValueError("Corrected Hilliard/Xu packet lacks the required source-feed contract")
         expanded.append({
             "family": row["family"], "identity": row["identity"],
             "multiplier": row["multiplier"], "request": request,
@@ -244,6 +248,91 @@ def with_parameter_values(
 def parameter_fingerprint(mapping: dict[str, object]) -> str:
     text = json.dumps(mapping, sort_keys=True, separators=(",", ":"))
     return f"sha256:{hashlib.sha256(text.encode()).hexdigest()}"
+
+
+def source_feed_request(template: dict, source: dict) -> dict:
+    """Measured source coordinates on the immutable OLD analytical-feed mass/seed basis."""
+    request = copy.deepcopy(template)
+    system = request["reaction_system"]
+    frozen = load_state_packet()["observations"][0]["request"]["reaction_system"]
+    if system["species_ids"] != list(COMPONENT_IDS) or any(system[key] != frozen[key] for key in ("molar_masses_kg_per_mol", "reaction_matrix", "balance_matrix")):
+        raise ValueError("Frozen analytical-feed basis/order/matrix mismatch")
+    masses = dict(zip(COMPONENT_IDS, system["molar_masses_kg_per_mol"], strict=True))
+    loading = float(source["CO2_loading"])
+    temperature_c = float(source["temperature_reported_C"])
+    molality = float(source["source_molality_mol_per_kg_water"]) if source["source_key"] in {"Hilliard2008", "Xu2011"} else None
+    if molality is not None:
+        if float(source["temperature_measured_C"]) != temperature_c:
+            raise ValueError("Nominal-only or inconsistent measured temperature")
+        water = 1.0 / (molality * masses["water"])
+        basis = "source_molality"
+    else:
+        fraction = float(source["MEA_weight_fraction"])
+        if not 0 < fraction < 1:
+            raise ValueError("Invalid verified source mass fraction")
+        water = (1 - fraction) * masses["monoethanolamine"] / (fraction * masses["water"])
+        basis = "source_mass_fraction"
+    if not all(math.isfinite(value) for value in (loading, temperature_c, water)) or loading < 0 or water <= 0:
+        raise ValueError("Invalid source analytical amounts/temperature")
+    analytical = [loading, 1.0, water, 0., 0., 0., 0., 0., 0.]
+    extents = [1e-5, 1e-4, 1e-5, -1e-5, -1e-5]
+    increment = [math.fsum(row[i] * extent for row, extent in zip(system["reaction_matrix"], extents, strict=True)) for i in range(9)]
+    system["feed_amounts_mol"] = [amount + change for amount, change in zip(analytical, increment, strict=True)]
+    system["conserved_totals"] = [math.fsum(c * amount for c, amount in zip(row, system["feed_amounts_mol"], strict=True)) for row in system["balance_matrix"]]
+    system["analytical_feed_contract"] = {
+        "basis": basis, "source_coordinates": copy.deepcopy(source),
+        "neutral_analytical_amounts_mol": analytical, "seed_extents_mol": extents,
+        "molar_masses_kg_per_mol": list(system["molar_masses_kg_per_mol"]),
+        "temperature_measured_C": temperature_c,
+    }
+    request["temperature"]["value"] = temperature_c + 273.15
+    request["feed"] = {"generation": "source-corrections-152", "source": "reaction_system.analytical_feed_contract"}
+    return request
+
+
+def source_corrected_packet() -> dict:
+    """Regenerate the same compact observation IDs; no solve or target admission."""
+    document = json.loads(source_bytes(STATE_PACKET))
+    expanded = expand_state_packet(document)["observations"]
+    vle = {row["observation_id"]: row for row in csv.DictReader(CANONICAL_VLE.open())}
+    measured = {row["record_id"]: row for row in csv.DictReader(CANONICAL_SPECIATION.open())}
+    membership_path = CANONICAL_SPECIATION.parents[2] / "manifests/speciation_target_membership.csv"
+    membership = {row["membership_id"]: row for row in csv.DictReader(membership_path.open())}
+    aliases = ("CO2", "MEA", "water", "MEAH+", "MEACOO-", "HCO3-", "CO3^2-", "H3O+", "OH-")
+    for observation in expanded:
+        request = observation["request"]
+        identity = observation["identity"]
+        if identity in vle:
+            source = vle[identity]
+            observation["request"] = source_feed_request(request, source)
+            observation["targets"][0].update(observed=float(source["CO2_pressure"]) * 1000, source_hash="sha256:" + sha256(CANONICAL_VLE))
+        else:
+            row = membership[observation["targets"][0]["identity"].replace("::", "|")]
+            if row["source_key"] == "Bottinger2008":
+                observation["request"] = source_feed_request(request, {"source_key": row["source_key"], "source_row": row["source_row_index"], "CO2_loading": row["co2_loading_mol_per_mol_mea"], "temperature_reported_C": row["temperature_C"], "MEA_weight_fraction": row["mea_mass_fraction"]})
+            for target in observation["targets"]:
+                row = membership[target["identity"].replace("::", "|")]
+                source = measured[row["measurement_identity"]]
+                if row["source_key"] == "Bottinger2008":
+                    target.update(observed=float(source["value_mole_fraction"]), source_hash="sha256:" + sha256(CANONICAL_SPECIATION))
+                if target["identity"].endswith("::HCO3-"):
+                    coefficients = json.loads(row["linear_coefficients"])
+                    target["basis"] = "true-species-liquid-mole-fraction-linear-aggregate"
+                    for output in observation["request"]["outputs"]:
+                        if output["identity"] == target["prediction_identity"]:
+                            output.update(coefficients=[coefficients.get(name, 0.) for name in aliases], basis=target["basis"])
+    document["request_tables"] = {field: [] for field in STATE_PACKET_REQUEST_FIELDS}
+    for observation in expanded:
+        refs = {}
+        for field, value in observation["request"].items():
+            table = document["request_tables"][field]
+            if value not in table:
+                table.append(value)
+            refs[field] = table.index(value)
+        observation["request"] = refs
+    document["observations"] = expanded
+    document["metadata"].update(source_corrections=152, legacy_Matin="source-unverified; unchanged packet20C/values", old_packet_content_sha256=STATE_PACKET_SHA256)
+    return document
 
 
 def corrected_request(
@@ -528,6 +617,17 @@ def _problem_from_request(request: dict[str, object], anchor: Anchor | None = No
     feed_values = tuple(float(value) for value in system["feed_amounts_mol"])
     if len(feed_values) != len(COMPONENT_IDS) or not all(math.isfinite(v) and v > 0 for v in feed_values):
         raise ValueError("MEA feed amounts must be finite and strictly positive")
+    if (request.get("feed") or {}).get("generation") == "source-corrections-152" or "analytical_feed_contract" in system:
+        contract = system["analytical_feed_contract"]
+        expected = source_feed_request(request, contract["source_coordinates"])
+        if system != expected["reaction_system"] or request["temperature"]["value"] != expected["temperature"]["value"]:
+            raise ValueError("Final source-feed/temperature contract mismatch before native construction")
+        if contract["basis"] == "source_molality":
+            increment = [math.fsum(row[i] * extent for row, extent in zip(system["reaction_matrix"], contract["seed_extents_mol"], strict=True)) for i in range(9)]
+            neutral = [value - change for value, change in zip(feed_values, increment, strict=True)]
+            recovered = neutral[1] / (system["molar_masses_kg_per_mol"][2] * neutral[2])
+            if abs(recovered / float(contract["source_coordinates"]["source_molality_mol_per_kg_water"]) - 1) > 1e-12:
+                raise ValueError("Native analytical-feed molality reversal failed")
     feed = equilibrium.Amounts(dict(zip(COMPONENT_IDS, feed_values, strict=True)))
     continuation = request.get("continuation") or {}
     state = continuation.get("state") or {}

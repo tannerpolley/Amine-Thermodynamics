@@ -95,10 +95,10 @@ SCHEMA_ROWS = [
     ("co2_loading_mol_per_mol_mea", "yes", "mol/mol", "CO2 loading as mol CO2 per mol MEA."),
     ("species", "yes", "species label", "Canonical species label."),
     ("source_species", "yes", "text", "Species label or source column before canonical normalization."),
-    ("measurement_role", "yes", "direct_positive|direct_zero|aggregate_direct_positive|aggregate_direct_zero|ambiguous", "How the value should be treated as measured or unresolved evidence."),
+    ("measurement_role", "yes", "direct_positive|direct_zero|aggregate_direct_positive|aggregate_direct_zero|ambiguous|model_derived|source_context_only", "How the value should be treated as measured or unresolved evidence."),
     ("conversion_eligible", "yes", "true|false", "Whether the reported basis has enough verified denominator information for normalized conversion."),
     ("lifecycle_status", "yes", "canonical_eligible|validation_reserved|diagnostic_only|qa_pending", "Row-level evidence lifecycle state."),
-    ("target_membership", "yes", "active_v1|transferability_candidate|diagnostic_only_basis_unverified", "Current target or holdout membership without implying upstream admission."),
+    ("target_membership", "yes", "active_v1|transferability_candidate|diagnostic_only_basis_unverified|source_context_only", "Current target or holdout membership without implying upstream admission."),
     ("reported_value", "yes", "source basis", "Numeric value exactly on the source-file basis."),
     ("reported_basis", "yes", "mole_fraction|mol_per_kg_source_basis", "Basis of reported_value."),
     ("reported_unit", "yes", "unit text", "Reported unit label."),
@@ -186,6 +186,7 @@ def _legacy_rows(source: LegacySource) -> list[dict[str, object]]:
     for row_number, row in enumerate(df.to_dict("records"), start=1):
         series = pd.Series(row)
         mea_mass_fraction = _finite_or_blank(row["MEA_weight_fraction"])
+        nominal_fraction = float(row.get("MEA_weight_fraction_nominal", mea_mass_fraction))
         loading = _finite_or_blank(row["CO2_loading"])
         temperature_C = _finite_or_blank(row["temperature"])
         context = _feed_context(mea_mass_fraction, loading)
@@ -212,16 +213,16 @@ def _legacy_rows(source: LegacySource) -> list[dict[str, object]]:
                     "co2_loading_mol_per_mol_mea": loading,
                     "species": species,
                     "source_species": column,
-                    "measurement_role": _measurement_role(species, value, "reported"),
+                    "measurement_role": "model_derived" if source.source_key == "Jakobsen2005" and species == "MEA + MEAH+" else _measurement_role(species, value, "reported"),
                     "conversion_eligible": "true",
                     "lifecycle_status": (
                         "canonical_eligible"
-                        if abs(mea_mass_fraction - 0.3) < 1.0e-12
+                        if abs(nominal_fraction - 0.3) < 1.0e-12
                         else "validation_reserved"
                     ),
                     "target_membership": (
                         "active_v1"
-                        if abs(mea_mass_fraction - 0.3) < 1.0e-12
+                        if abs(nominal_fraction - 0.3) < 1.0e-12
                         else "transferability_candidate"
                     ),
                     "reported_value": value,
@@ -236,10 +237,10 @@ def _legacy_rows(source: LegacySource) -> list[dict[str, object]]:
                     **context,
                     "conversion_total_moles_per_kg_unloaded_solution": total_moles,
                     "conversion_basis": "reported_mole_fraction_scaled_by_MEA_moiety_balance_per_kg_unloaded_solution",
-                    "source_table_or_figure": "",
+                    "source_table_or_figure": row.get("source_locator", ""),
                     "source_line_start": "",
                     "source_line_end": "",
-                    "notes": "Legacy ChEq value treated as true-species liquid mole fraction; mol/kg columns use a 1 kg unloaded MEA-water feed basis.",
+                    "notes": "Source-unverified legacy inputs at packet20C; Matin SI unresolved." if source.source_key == "Matin2012" else "Nominal campaign retained; Jakobsen maxload is a disclosed unresolved-source convention; MEA+MEAH+ is a derived sum." if source.source_key == "Jakobsen2005" else "Reported mole fraction; original MEA-moiety conversion retained without adding 2-OXA to the balance.",
                 }
             )
     return rows
@@ -306,6 +307,21 @@ def build_dataset() -> pd.DataFrame:
     for source in LEGACY_SOURCES:
         rows.extend(_legacy_rows(source))
     rows.extend(_wong_rows())
+    bottinger = pd.read_csv(CHEQ_DIR / LEGACY_SOURCES[0].filename, dtype=str)
+    context = {row["source_row_index"]: row for row in rows if row["source_key"] == "Bottinger2008"}
+    for index, source in enumerate(bottinger.to_dict("records"), 1):
+        row = dict(context[index])
+        row.update(
+            species="2-OXA", source_species="2-OXA",
+            reported_value=float(source["2-OXA"]), value_mole_fraction=float(source["2-OXA"]),
+            measurement_role="source_context_only", conversion_eligible="false",
+            lifecycle_status="diagnostic_only", target_membership="source_context_only",
+            conversion_basis="source_context_no_normalization",
+            notes="Reported 2-oxazolidone; no model component/reaction/residual or renormalization.",
+        )
+        for field in ("value_mol_per_kg_unloaded_solution", "value_mol_per_kg_initial_water", "value_mol_per_kg_loaded_solution", "conversion_total_moles_per_kg_unloaded_solution"):
+            row[field] = _blank()
+        rows.append(row)
     for index, row in enumerate(rows):
         row["record_id"] = f"cheq_canon_{index:05d}"
     return pd.DataFrame(rows, columns=CANONICAL_COLUMNS)
@@ -363,7 +379,7 @@ def _roles_from_active_row(row: dict[str, object]) -> dict[str, str]:
     for species, column in columns.items():
         value = _finite_or_blank(row.get(column, ""))
         if np.isfinite(value):
-            roles[species] = _measurement_role(species, value, "reported")
+            roles[species] = "model_derived" if row["source_key"] == "Jakobsen2005" and species == "MEA + MEAH+" else _measurement_role(species, value, "reported")
     return roles
 
 
@@ -371,23 +387,24 @@ def _active_roles(dataset: pd.DataFrame) -> dict[tuple[str, int], dict[str, str]
     active = pd.read_csv(ACTIVE_VIEW_PATH)
     roles: dict[tuple[str, int], dict[str, str]] = {}
     legacy = dataset[dataset["source_key"] != "Wong2015"]
-    for row in active.to_dict("records"):
+    active_rows = active.to_dict("records")
+    for row in active_rows:
         source_key = ACTIVE_SOURCE_KEYS[str(row["source"])]
         candidates = legacy[
             (legacy["source_key"] == source_key)
-            & np.isclose(legacy["mea_mass_fraction"].astype(float), float(row["MEA_weight_fraction"]))
-            & np.isclose(legacy["temperature_C"].astype(float), float(row["temperature"]))
-            & np.isclose(
-                legacy["co2_loading_mol_per_mol_mea"].astype(float),
-                float(row["CO2_loading"]),
-            )
+            & (legacy["source_row_index"] == int(row["source_row_index"]))
         ]
         source_rows = candidates["source_row_index"].unique()
         if len(source_rows) != 1:
             raise ValueError(f"Active speciation state does not map uniquely to its source row: {row}")
+        if row["source_key"] != source_key:
+            raise ValueError(f"Active source identity mismatch: {row}")
+        first = candidates.iloc[0]
+        row.update(MEA_weight_fraction=first["mea_mass_fraction"], temperature=first["temperature_C"], CO2_loading=first["co2_loading_mol_per_mol_mea"])
         roles[(source_key, int(source_rows[0]))] = _roles_from_active_row(row)
     if len(roles) != 74:
         raise ValueError(f"Active-v1 speciation membership must contain 74 states; found {len(roles)}")
+    pd.DataFrame(active_rows).to_csv(ACTIVE_VIEW_PATH, index=False, float_format="%.12g")
     return roles
 
 
@@ -427,14 +444,18 @@ def build_membership(dataset: pd.DataFrame) -> pd.DataFrame:
                 and bool(source_measurements.get("MEA + MEAH+"))
             )
             redundant_constituent = species in {"MEA", "MEAH+"} and independent_aggregate
+            legacy_excluded = state_id == "Matin2012_state_016"
             target_eligible = (
-                is_active
+                not legacy_excluded
+                and is_active
                 and positive_measurement
                 and bool(measurement_identity)
                 and not redundant_constituent
                 and not oxazolidone_excluded
             )
-            if role in {"direct_zero", "aggregate_direct_zero", "below_detection"}:
+            if legacy_excluded:
+                reason = "Source-unverified legacy state016 retained as evaluated/display context; excluded from fit and pooled summaries."
+            elif role in {"direct_zero", "aggregate_direct_zero", "below_detection"}:
                 reason = (
                     "Reported zero has no source-backed detection or censor bound and is "
                     "retained as context only."
@@ -529,6 +550,18 @@ def build_membership(dataset: pd.DataFrame) -> pd.DataFrame:
                 "censor_bound_source_locator": "",
             }
         )
+    by_state = {row["state_id"]: row for row in rows}
+    for source in dataset[dataset["species"] == "2-OXA"].to_dict("records"):
+        state_id = f"Bottinger2008_state_{int(source['source_row_index']):03d}"
+        row = dict(by_state[state_id])
+        row.update(
+            membership_id=f"{state_id}|2-OXA", species="2-OXA",
+            measurement_role="source_context_only", conversion_eligible="false",
+            lifecycle_status="diagnostic_only", target_membership="source_context_only",
+            target_eligible="no", eligibility_reason="Source-context byproduct; no model component or residual.",
+            measurement_identity=source["record_id"], linear_coefficients="", covariance_status="not_applicable",
+        )
+        rows.append(row)
     return pd.DataFrame(rows)
 
 

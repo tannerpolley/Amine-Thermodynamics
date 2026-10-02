@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import argparse
+import csv
 from decimal import Decimal
 from pathlib import Path
 import re
@@ -27,6 +29,7 @@ AMUNDSEN_OUTPUT = (
     / "data"
     / "reference"
     / "MEA"
+    / "observations"
     / "density_viscosity"
     / "Amundsen_2009_density_viscosity.csv"
 )
@@ -56,6 +59,10 @@ AMUNDSEN_FIELDS = (
     "source_line_start",
     "source_line_end",
     "notes",
+)
+AMUNDSEN_FIELDS += (
+    "system", "uncertainty_status", "uncertainty_scope",
+    "source_general_uncertainty_value", "source_general_uncertainty_unit", "source_locator",
 )
 WONG_FIELDS = (
     "record_id",
@@ -92,8 +99,8 @@ def _latex_values(line: str) -> list[str]:
     return [value.strip() for value in body.split("&")]
 
 
-def _amundsen_rows() -> list[dict[str, str | int]]:
-    lines = _source_lines(AMUNDSEN_SOURCE)
+def _amundsen_rows(source_file: Path) -> list[dict[str, str | int]]:
+    lines = _source_lines(source_file)
     tables = (
         ("Table 1", "density", None, (0.20, 0.30, 0.40, 0.50, 0.70, 0.90, 1.00), (), 43, 47, 38, 49),
         ("Table 2", "density", 0.20, (), (0.1, 0.2, 0.3, 0.4, 0.5), 59, 63, 54, 65),
@@ -149,9 +156,15 @@ def _amundsen_rows() -> list[dict[str, str | int]]:
                         "pressure_kPa": "",
                         "value": value,
                         "value_unit": value_unit,
-                        "uncertainty_value": uncertainty_value,
+                        "uncertainty_value": "" if loaded else uncertainty_value,
                         "uncertainty_unit": uncertainty_unit,
-                        "uncertainty_type": "combined_relative" if uncertainty_unit == "percent" else "combined_absolute",
+                        "uncertainty_type": "unbound_source_scope" if loaded else "combined_relative" if uncertainty_unit == "percent" else "combined_absolute",
+                        "system": "pure_mea" if not loaded and float(mea_fraction) == 1 else "ternary" if loaded else "binary",
+                        "uncertainty_status": "loaded_scope_unbound" if loaded else "unloaded_source_estimate",
+                        "uncertainty_scope": "Loaded general estimates exclude highest T/loadings; exact per-row boundary unresolved (pp.3099-3100)." if loaded else "Unloaded source estimate; not a loaded-row weight.",
+                        "source_general_uncertainty_value": uncertainty_value,
+                        "source_general_uncertainty_unit": uncertainty_unit,
+                        "source_locator": f"3QJR6RHH/NGQVTDX7 {table}; pressure unreported; uncertainty pp.3099-3100",
                         "temperature_uncertainty_K": "0.03",
                         "mea_mass_fraction_relative_uncertainty_percent": "0.5",
                         "co2_loading_relative_uncertainty_percent": "2" if loaded else "",
@@ -163,7 +176,7 @@ def _amundsen_rows() -> list[dict[str, str | int]]:
                         "notes": (
                             "CO2-loaded ternary measurement; MEA mass fraction is on the unloaded-solution basis."
                             if loaded
-                            else "Unloaded binary MEA-water measurement."
+                            else "Pure MEA endpoint; pressure unreported." if float(mea_fraction) == 1 else "Unloaded binary MEA-water; pressure unreported."
                         ),
                     }
                 )
@@ -222,12 +235,28 @@ def _wong_rows() -> list[dict[str, str | int]]:
 
 
 def main() -> int:
-    amundsen = _amundsen_rows()
-    wong = _wong_rows()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--amundsen-only", action="store_true", required=True)
+    parser.add_argument("--source-file", type=Path, required=True)
+    args = parser.parse_args()
+    amundsen = _amundsen_rows(args.source_file)
     write_csv_rows(AMUNDSEN_OUTPUT, amundsen, fieldnames=AMUNDSEN_FIELDS)
-    write_csv_rows(WONG_OUTPUT, wong, fieldnames=WONG_FIELDS)
+    schema_path = AMUNDSEN_OUTPUT.with_name("Amundsen_2009_density_viscosity_schema.csv")
+    with schema_path.open(newline="", encoding="utf-8") as stream:
+        schema = list(csv.DictReader(stream))
+    original = [row for row in schema if row["column"] not in AMUNDSEN_FIELDS[21:]]
+    for row in original:
+        if row["column"] == "uncertainty_value":
+            row.update(required="no", description="Row estimate unavailable where loaded scope is unbound; general estimate retained separately.")
+        if row["column"] == "uncertainty_type":
+            row["unit_or_domain"] = "combined_absolute|combined_relative|unbound_source_scope"
+    for field in AMUNDSEN_FIELDS[21:]:
+        original.append({
+            "column": field, "required": "yes", "unit_or_domain": "property-dependent source unit" if field.endswith("unit") else "text",
+            "description": "Source-qualified metadata; loaded row weights unbound; pressure unreported.",
+        })
+    write_csv_rows(schema_path, original, fieldnames=list(schema[0]))
     print(f"Wrote {len(amundsen)} Amundsen observations to {AMUNDSEN_OUTPUT}")
-    print(f"Wrote {len(wong)} Wong loading rows to {WONG_OUTPUT}")
     return 0
 
 
