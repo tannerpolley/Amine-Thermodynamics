@@ -1,15 +1,30 @@
 \documentclass[a4paper,11pt]{article}
 \usepackage[margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{stix}
+\usepackage[scaled=0.95]{inconsolata}
+\usepackage{caption}
+\usepackage{graphicx}
+\graphicspath{{figures/generated/}}
+\captionsetup{font=small,labelfont=bf,labelsep=colon,justification=justified}
+\captionsetup[table]{position=top,labelsep=newline,justification=raggedright,singlelinecheck=false}
+\AddToHook{env/table/begin}{\small}
+\setlength{\tabcolsep}{4pt}
 \usepackage[numbers]{natbib}
 \usepackage[version=4]{mhchem}
 \usepackage{siunitx}
-\usepackage{xcolor}
+\usepackage[svgnames]{xcolor}
 \usepackage{xurl}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{pdflscape}
 \usepackage{array}
-\usepackage{hyperref}
+\usepackage{makecell}
+\usepackage{xspace}
+\input{chemistry_macros}
+\usepackage[colorlinks]{hyperref}
+\colorlet{hscolor}{DarkSlateGrey}
+\hypersetup{allcolors=hscolor}
 \usepackage{cleveref}
 \setlength{\emergencystretch}{3em}
 \renewcommand{\thesection}{S\arabic{section}}
@@ -23,47 +38,99 @@
 \begin{document}
 \maketitle
 
-% P:supplement-00
-\Cref{sec:s-diameter} summarizes a calculation that supports the main text but does not carry a main-text claim.
-Values labeled historical belong to the earlier 160-target objective and its optima, not to the selected 142-target record.
-
-\section{Born-diameter refit at the historical 160-target objective}\label{sec:s-diameter}
+\section{Fits and conditional uncertainty}\label{sec:s-fits}
 % P:supplement-01
-Uniform scaling of all Born diameters at fixed interactions changed the historical SSM+DS cost more than the Original Born cost, which raised the question of whether the inherited diameters explain the SSM+DS penalty on the 160-target objective.
-The Born diameters of \ce{MEAH+}, \ce{MEACOO-} and \ce{HCO3-} were changed from 3.533, 3.541 and \SI{3.000}{\angstrom} to 5.000, 2.041 and \SI{3.302}{\angstrom}, within a search envelope of 2--\SI{5}{\angstrom} chosen from the 2.784--\SI{4.985}{\angstrom} Born diameters reported for other non-proton ions \cite[Tables~2--3]{Figiel2025}, not from measured diameters of the \ce{MEA}-derived ions, and the five interaction coordinates were then refitted.
-That refit converged after five optimizer updates and lowered the historical SSM+DS cost from 47.625767 to 43.950877, a reduction of 3.674890.
-The test set in advance was a reduction of at least 3.71, half the 7.42 cost gap to Original Born, so the result is inconclusive: the diameters affect the cost, but this change does not account for the gap.
-Table~\ref{tab:s-diameter-refit} lists the diameters and group costs.
-The refitted coordinates are \(k_{\ce{MEACOO-},\ce{H2O}}=0.0351\), \(k_{\ce{MEAH+},\ce{H2O}}=-0.2533\) at \SI{313.15}{\kelvin}, \(k_{\ce{HCO3-},\ce{H2O}}=+0.5\) at its upper bound, \(k_{\ce{MEAH+},\ce{MEACOO-}}=-0.5759\) and \(b=\SI{119.96}{\kelvin}\).
+This section gives the details of the six fits of the main text.
+All six use the cost \(C=\tfrac12\sum r_j^2\) and the residual scales of the main text, the same five binary interaction parameters and the same bounds.
+F1 (selected) and F2 fit the SSM+DS and original Born forms to the 141 base targets, F3 removes the Born term, F4 and F5 add Matin's 18 \ce{HCO3- + CO3^2-} pool targets to F1 and F2, and F6 uses the R2 and R5 source correlations and the published \COtwo dispersion energy of \SI{169.21}{\kelvin}.
+Each fit was started from two prescribed parameter vectors, and both starts converged to the same cost within the relative difference given in \cref{tab:s-fits}.
 
-\begin{table}[htb]
-    \centering
-    \caption{Born diameters and 160-target group costs at the historical SSM+DS optimum and after the diameter change and five-coordinate refit.}
-    \label{tab:s-diameter-refit}
-    \begin{tabular}{@{}lrr@{}}
-        \toprule
-        Quantity & Historical optimum & After refit \\
-        \midrule
-        \(d^{\mathrm{Born}}_{\ce{MEAH+}}\) (\si{\angstrom}) & 3.533 & 5.000 \\
-        \(d^{\mathrm{Born}}_{\ce{MEACOO-}}\) (\si{\angstrom}) & 3.541 & 2.041 \\
-        \(d^{\mathrm{Born}}_{\ce{HCO3-}}\) (\si{\angstrom}) & 3.000 & 3.302 \\
-        Pressure cost (48 targets) & 10.065 & 10.080 \\
-        B\"ottinger cost (40 targets) & 5.480 & 5.800 \\
-        Matin cost (72 targets) & 32.080 & 28.071 \\
-        Total cost (160 targets) & 47.626 & 43.951 \\
-        \bottomrule
-    \end{tabular}
-\end{table}
+\input{tables/supplement_fits}
+
+% P:supplement-02
+F4 is the only fit with no parameter at a bound: including the pool moves the \HCOthree--water coefficient of SSM+DS from its bound of \(+0.5\) to 0.4006 (\cref{tab:s-coordinates}).
+In F2, F3 and F5 the \MEAH--\MEACOO coefficient also lies on its lower bound of \(-1\).
+At F1 the cost gradient \(\partial C/\partial k\) of the \HCOthree--water coefficient at its upper bound is \(-12.63\), so raising the coefficient beyond the bound would lower the cost.
+At F2 the cost gradients are \(-20.35\) for \HCOthree--water at its upper bound and \(+48.13\) for \MEAH--\MEACOO at its lower bound, so moving either coefficient beyond its bound would lower the cost of that fit.
+\Cref{tab:s-source-aard} divides the fitted-target deviations by source and observable.
+
+\input{tables/supplement_source_aard}
+
+% P:supplement-03
+\Cref{tab:s-correlations} gives the conditional standard errors and correlations of the interior parameters of F1 and F2.
+F1 has four interior parameters and F2 three; the interior Jacobian has full rank in both.
+The largest correlation in either fit links the \MEAH--water coefficient with its reciprocal-temperature slope, 0.459 in F1 and 0.418 in F2.
+The slope has a standard error comparable with its value in both fits, so the data do not determine it.
+
+\input{tables/supplement_correlations}
+
+\section{Comparisons outside the fit}\label{sec:s-outside}
+% P:supplement-04
+\Cref{tab:s-outside} lists every comparison outside the fit for F1, F2 and F6, with the AARD and the mean \(\ln(y_{\mathrm{calc}}/y_{\mathrm{obs}})\) of each group and source.
+Except for the Wagner et al.\ rows, which entered no fitting or selection step, the pressure and species data at 80--\SI{120}{\degreeCelsius} informed fixed values of F1 and F2 (main text, Section~3.2), so these comparisons are not independent temperature predictions.
+F1 and F6 both use their reaction correlations over the declared domain 293.15--\SI{393.15}{\kelvin}, beyond the ranges of the source correlations.
+
+\input{tables/supplement_outside_fit}
+
+% P:supplement-05
+The calculated carbonate share at each Jakobsen et al.\ loading is interpolated linearly in loading between the calculated speciation states at the same temperature (\cref{tab:s-carbonate}).
+Jakobsen et al.\ print a maximum loading and an NMR loading for each sample; the comparison uses the printed maximum loading, and the source dilution and loading definitions remain unresolved.
+The loaded densities of \cref{tab:s-density} are homogeneous-liquid calculations on the same 30 wt\% \COtwo-free solvent basis as the measurements; density is not fitted.
+
+\input{tables/supplement_carbonate_density}
+
+\section{Pressure decomposition of the fit without the Born term}\label{sec:s-decomposition}
+% P:supplement-06
+The decomposition of the main text evaluates F1 and the refit without the Born term, F3, at the 47 fitted pressure states and the 36 fitted species states.
+For each solved liquid state and each Helmholtz contribution (hard chain, dispersion, association, Debye--H\"uckel and Born), the term chemical potentials are obtained by finite differences of the term Helmholtz energies at fixed temperature and volume, and the Born part also from the exact difference between the model with and without the Born term.
+Activity coefficients refer to the standard state of each source constant: solutes at infinite dilution in pure water and water as the pure liquid, at the reference pressure of each reaction.
+The overall reaction R2 \(-\) R4 \(-\) R5 is evaluated as that combination of the three reaction sums, so the reaction-specific reference pressures are kept.
+
+% P:supplement-07
+The Born contribution is split in two ways, each a stated convention.
+Its transfer part is the Born contribution at the ion-free composition of the same state, with the neutral mole fractions renormalized, and its ion-concentration part is the remainder.
+Its permittivity and shell parts are averaged over the order of two substitutions: setting \(\varepsilon_{\MEA}\) equal to the water permittivity, so that \(\varepsilon_{\mathrm{bulk}}\) does not depend on composition, and setting every solvation factor to 1.5, so that \(f_{\mathrm{mix}}\) does not depend on composition.
+With both substitutions the Born part of every activity coefficient vanishes, so the two parts sum to the Born contribution.
+
+% P:supplement-08
+The calculation passed all of its numerical checks.
+The replayed costs of F1 and F3 agree with the fitted costs within \(1.1\times10^{-12}\), and the term Helmholtz energies sum to the total within \(2.0\times10^{-14}\).
+The finite-difference term chemical potentials sum to the analytic total within \(2.4\times10^{-6}\), and their Born part matches the exact Born difference within \(3.1\times10^{-9}\).
+The absolute reaction closure is within \(4.7\times10^{-7}\), the Born activity coefficients of three ions at infinite dilution in \COtwo-free 30 wt\% \MEA--water at \SI{313.15}{\kelvin} match values calculated by hand from the Born equations of the main text within \(4.6\times10^{-7}\), and the Born part of every activity coefficient vanishes within \(3.4\times10^{-13}\) when both substitutions above are applied.
+The pressure identity of the main text closes within \(2.4\times10^{-7}\) at every state and within \(1.2\times10^{-8}\) for every F3 \(-\) F1 difference, and at five selected pressure states, the lowest- and highest-loading states at each temperature and one intermediate state at \SI{40}{\degreeCelsius}, halving the finite-difference step changes the term chemical potentials by at most \(1.8\times10^{-6}\).
+
+% P:supplement-09
+Three tests were stated before the calculation, with thresholds set against the pressure residual scale of 0.3 in \(\ln p\); they are engineering choices, not statistical tests.
+H1 states that the Born term gives a positive shift, dominated by the lower permittivity of \MEA--water, of the activity-coefficient sum of the overall reaction; it is rejected if the median Born part over the 32 fitted states at \SI{40}{\degreeCelsius} is below \(+0.10\), or if at the median-loading state the permittivity part has the opposite sign or less than half the magnitude.
+For F1 the median is \(-0.906\), and at the median-loading state the permittivity part is \(-0.287\) of a total of \(-0.879\), so H1 is rejected.
+H2 states that the ion-concentration part of the Born contribution to \(Q\) is negative and falls with loading; it is supported if the Spearman correlation with loading is at most \(-0.8\) and the mean over the highest-loading third is at most \(-0.30\).
+For F1 these are \(-0.997\) and \(-1.759\) at \SI{40}{\degreeCelsius} (32 states) and \(-0.996\) and \(-1.750\) at \SI{60}{\degreeCelsius} (15 states), so H2 is supported at both temperatures.
+C states that the refit changes the activity sum more than the speciation; it is rejected if the root-mean-square \(\Delta S\) over the 47 pressure states is at least that of \(\Delta Q\).
+The values are 0.819 and 1.094, so C is not rejected; this establishes only the inequality and does not assign the cost increase to one contribution, because the contributions can reinforce or cancel.
+\Cref{tab:s-phi} gives the offset fraction \(\phi=(\Delta Q+Q^{\mathrm{Born}}_{\mathrm{F1}})/Q^{\mathrm{Born}}_{\mathrm{F1}}\) by loading third.
+
+\input{tables/supplement_decomposition}
+
+\section{Source-data corrections}\label{sec:s-corrections}
+% P:supplement-10
+The source data follow the original tables, checked before the fits; no value was chosen to improve a fit.
+Hilliard's 55 pressure rows carry the measured \MEA molality and temperature of each solution rather than the nominal composition and series temperature \cite[App.~D.4]{Hilliard2008}, and the pooled comparison set contains all 31 Hilliard measurements in 30 wt\% solution.
+Xu and Rochelle's 63 rows carry the source molality and are calculated at their measured temperatures, including 100.5--101.1 and 120.4--\SI{121.8}{\degreeCelsius} for six rows grouped with the 100 and \SI{120}{\degreeCelsius} series \cite[Table~1]{Xu2011}; the three rows above \SI{393.15}{\kelvin} are not evaluated.
+B\"ottinger et al.'s compositions are the unloaded mass fractions printed in their Table~3 rather than the nominal values, each bicarbonate value of the 20 wt\% series at \SI{80}{\degreeCelsius} is assigned to its printed loading, and the printed 2-oxazolidone values are kept in the data set but not represented by the model \cite[Table~3]{Bottinger2008}.
+The Aronu et al.\ loading at 45 wt\% and \SI{80}{\degreeCelsius} with \SI{0.0060}{\kilo\pascal} is 0.025, as in the source table and its corrigendum \cite[Table~5]{Aronu2011}.
+Jakobsen et al.'s two printed loadings are both kept \cite[Tables~A1--A2]{Jakobsen2005}.
+The Matin et al.\ method description follows the article, but the numerical values are not checked against the source because its supporting tables are not available \cite{matinFacileMethodDetermination2012}.
+For Amundsen et al., the measurement pressure is unreported, and the stated loaded-solution uncertainty excludes the highest temperatures and loadings \cite{Amundsen2009}.
+The fitted set has 83 states and 141 targets: 47 pressures and 94 species.
 
 \section{Experimental data inventory for near-30 wt\% aqueous MEA}\label{sec:s-data-inventory}
-% P:supplement-02
+% P:supplement-11
 To place the observations of the main text among published measurements, we inventoried experimental studies of \ce{CO2} in aqueous \ce{MEA} near 30 wt\%: vapor--liquid equilibrium, liquid speciation, density, heat of absorption, heat capacity, pH and reaction constants.
 The search is not exhaustive.
-The inventory holds 165 entries, of which 88 were identified from bibliographic metadata alone; their coverage is unverified, and they are not tabulated.
-\Cref{tab:s4-data-inventory} lists the 34 publications whose near-30 wt\% coverage was confirmed from a primary passage, table or database record, with the concentration basis, conditions and observation counts each source reports.
+The inventory holds 165 entries: 88 known only from bibliographic metadata, 36 assessed only from publisher or secondary descriptions or older records, and 41 checked against a primary passage, table or database record.
+\Cref{tab:s4-data-inventory} lists the 34 of these 41 whose near-30 wt\% scope is confirmed, with the concentration basis, conditions and observation counts each source reports; of the other seven, four report dilute-solution reaction constants and three lie outside 25--35 wt\% \MEA.
 Several entries reuse the same experimental campaign and are not independent measurements.
-Extracting values from a source does not admit them to the fit; the fitted and assessment roles of the main text are those of its observation-role table.
-Dilute-solution reaction-constant measurements are outside the scope of \Cref{tab:s4-data-inventory}.
+Listing a source here does not make its values fitted targets; the fitted and compared roles are those of the observation-role table of the main text.
 
 \input{tables/supplement_data_inventory}
 

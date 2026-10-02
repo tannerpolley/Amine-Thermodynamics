@@ -1,76 +1,100 @@
-"""Render the Born-form comparison from retained CSVs; no model imports or solves."""
+"""Render the retained Born-form comparisons; no model imports or solves."""
+import argparse
 import csv
 import hashlib
 import json
 import os
+import sys
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 FIGURES=HERE/'figures';FIGURES.mkdir(exist_ok=True)
+ROOT=HERE.parents[3]
+GENERATED=ROOT/'docs/scientific/latex/figures/generated'
+GENERATED.mkdir(parents=True,exist_ok=True)
 os.environ.setdefault('MPLCONFIGDIR',str(HERE/'runs/matplotlib-cache'))
+sys.path.insert(0,str(ROOT/'analyses/mea_parameter_bundle/scripts'))
+from manuscript_style import FULL_WIDTH, apply_style
+
 import matplotlib
 matplotlib.use('Agg')
+apply_style()
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Patch
 
 COLORS={'11':'#0072B2','00':'#D55E00'}
+HATCHES={'11':'///','00':'xxx'}
 LABELS={'11':'SSM+DS (1,1)','00':'Original Born (0,0)'}
-plt.rcParams.update({'font.size':11,'axes.spines.top':False,'axes.spines.right':False,'svg.fonttype':'none'})
 plotted=[]
 def rows(relative):return list(csv.DictReader((HERE/relative).open()))
 def retain(figure,panel,series,x,cost,source,**extra):
     plotted.append(dict(figure=figure,panel=panel,series=series,x_value=x,cost=cost,source_file=source,
         source_sha256=hashlib.sha256((HERE/source).read_bytes()).hexdigest(),**extra))
 def save(fig,name):
-    fig.savefig(FIGURES/(name+'.svg'),bbox_inches='tight')
-    fig.savefig(FIGURES/(name+'.png'),dpi=160,bbox_inches='tight');plt.close(fig)
+    fig.savefig(FIGURES/(name+'.svg'))
+    fig.savefig(FIGURES/(name+'.png'),dpi=160)
+    if name in {'born-cost-by-group-and-species','born-p5-ranking-reversal'}:
+        fig.savefig(GENERATED/(name+'.pdf'))
+    plt.close(fig)
+
+def add_panels(axes):
+    for letter,ax in zip(('(a)','(b)'),axes):
+        ax.text(0,1.035,letter,transform=ax.transAxes,ha='left',va='bottom',fontweight='bold')
+
+def form_legend():
+    return [Patch(facecolor=COLORS[key],edgecolor='black',linewidth=.7,hatch=HATCHES[key],label=LABELS[key]) for key in ('11','00')]
 
 def costs():
-    source='key-objective-evaluations.csv'
-    baseline={r['name'][-2:]:r for r in rows(source) if r['name'] in ('baseline-11','baseline-00')}
-    sp_source='runs/tables/objective-species-costs-and-signed-residuals.csv'
-    sp=[r for r in rows(sp_source) if r['evaluation'] in ('baseline-11','baseline-00') and int(r['n'])>0]
-    groups=[('cost','Full objective'),('pressure_cost','Pressure (48)'),('bottinger_cost','Böttinger (40)'),('matin_cost','Matin (72)')]
-    identities=[('Matin','HCO3-'),('Matin','MEA'),('Matin','MEAH+'),('Matin','MEACOO-'),
-                ('Bottinger','HCO3-'),('Bottinger','MEACOO-'),('Bottinger','MEA + MEAH+')]
-    names=['Matin: HCO₃⁻ pool','Matin: MEA','Matin: MEAH⁺','Matin: MEACOO⁻',
-           'Böttinger: HCO₃⁻ pool','Böttinger: MEACOO⁻','Böttinger: MEA + MEAH⁺']
-    fig,axes=plt.subplots(1,2,figsize=(13,5),gridspec_kw={'width_ratios':[1,1.5]})
+    snapshot=rows('born-comparison-plotted-values.csv')
+    group_rows=[r for r in snapshot if r['figure']=='cost-by-group-and-species' and r['panel']=='group']
+    species_rows=[r for r in snapshot if r['figure']=='cost-by-group-and-species' and r['panel']=='species']
+    plotted.extend(group_rows+species_rows)
+    groups=['Full objective','Pressure (48)','Böttinger (40)','Matin (72)']
+    identities=['Matin HCO3-','Matin MEA','Matin MEAH+','Matin MEACOO-',
+                'Bottinger HCO3-','Bottinger MEACOO-','Bottinger MEA + MEAH+']
+    fig,axes=plt.subplots(1,2,figsize=(FULL_WIDTH,3.9),gridspec_kw={'width_ratios':[.85,2.15]})
     for form,offset in [('11',-.18),('00',.18)]:
-        vv=[float(baseline[form][key]) for key,_ in groups]
-        axes[0].barh(np.arange(4)+offset,vv,height=.34,color=COLORS[form],label=LABELS[form])
-        for (key,label),value in zip(groups,vv):retain('cost-by-group-and-species','group',form,label,value,source)
-        values=[]
-        for source_name,species in identities:
-            rec=next(r for r in sp if r['evaluation']=='baseline-'+form and r['source']==source_name and r['species']==species)
-            value=float(rec['cost']);values.append(value)
-            retain('cost-by-group-and-species','species',form,source_name+' '+species,value,sp_source,
-                   mean_signed_weighted_residual=float(rec['mean_signed_weighted_residual']),n=int(rec['n']))
-        axes[1].barh(np.arange(7)+offset,values,height=.34,color=COLORS[form])
-    for ax in axes:ax.invert_yaxis();ax.set_xlabel('Dimensionless cost, ½∑r²');ax.grid(axis='x',alpha=.2);ax.set_axisbelow(True)
-    axes[0].set_yticks(np.arange(4),[g[1] for g in groups]);axes[0].legend(loc='lower right',fontsize=10)
-    axes[1].set_yticks(np.arange(7),names)
-    axes[0].set_title('Original Born has the lower full cost')
-    axes[1].set_title('Matin bicarbonate contributes 6.02 of the 7.42 gap')
-    fig.tight_layout(w_pad=3);save(fig,'born-cost-by-group-and-species')
+        vv=[float(next(r['cost'] for r in group_rows if r['series']==form and r['x_value']==label)) for label in groups]
+        axes[0].barh(np.arange(4)+offset,vv,height=.34,color=COLORS[form],edgecolor='black',linewidth=.7,
+                     hatch=HATCHES[form],label=LABELS[form])
+        values=[float(next(r['cost'] for r in species_rows if r['series']==form and r['x_value']==label)) for label in identities]
+        axes[1].barh(np.arange(7)+offset,values,height=.34,color=COLORS[form],edgecolor='black',linewidth=.7,
+                     hatch=HATCHES[form])
+    for ax in axes:ax.invert_yaxis();ax.grid(axis='x',alpha=.2);ax.set_axisbelow(True);ax.tick_params(axis='y',labelsize=8)
+    axes[0].set_yticks(np.arange(4),['Full\nobjective','Pressure\n(48)','Böttinger\n(40)','Matin\n(72)'])
+    axes[1].set_yticks(np.arange(7),[r'Matin: $\mathrm{HCO_3^-}$ pool','Matin: MEA',r'Matin: $\mathrm{MEAH^+}$',
+                                    r'Matin: $\mathrm{MEACOO^-}$',r'Böttinger: $\mathrm{HCO_3^-}$ pool',
+                                    r'Böttinger: $\mathrm{MEACOO^-}$',r'Böttinger: MEA + $\mathrm{MEAH^+}$'])
+    add_panels(axes)
+    fig.legend(handles=form_legend(),loc='upper center',bbox_to_anchor=(.57,.995),ncol=2,frameon=False)
+    fig.supxlabel(r'Dimensionless cost, $C=\frac{1}{2}\sum r^2$',y=.025)
+    fig.tight_layout(rect=(0, .03, 1, .91), w_pad=1.5)
+    save(fig,'born-cost-by-group-and-species')
 
 def ranking():
-    source='p5conv-costs.csv';rr=rows(source)
-    base={r['name'][-2:]:float(r['cost']) for r in rows('key-objective-evaluations.csv') if r['name'] in ('baseline-11','baseline-00')}
-    fig,axes=plt.subplots(1,2,figsize=(12,4.8))
+    snapshot=rows('born-comparison-plotted-values.csv')
+    fitted=[r for r in snapshot if r['figure']=='p5-ranking-reversal' and r['panel']=='fitted set']
+    rescored=[r for r in snapshot if r['figure']=='p5-ranking-reversal' and r['panel']=='full re-score']
+    plotted.extend(fitted+rescored)
+    fig,axes=plt.subplots(1,2,figsize=(FULL_WIDTH,3.45))
     for form,offset in [('11',-.18),('00',.18)]:
-        values=[base[form]]+[float(next(r for r in rr if r['run']==f'p5conv-{case}-{form}')['fitted_cost']) for case in ('a','b')]
-        axes[0].bar(np.arange(3)+offset,values,width=.34,color=COLORS[form],label=LABELS[form])
-        for label,n,value in zip(('Historical full','Without Matin bicarbonate','Without all Matin'),(160,142,88),values):
-            retain('p5-ranking-reversal','fitted set',form,label,value,'key-objective-evaluations.csv' if n==160 else source,n=n)
-        resc=[float(next(r for r in rr if r['run']==f'p5conv-{case}-{form}')['full_cost']) for case in ('a','b')]
-        axes[1].bar(np.arange(2)+offset,resc,width=.34,color=COLORS[form])
-        for label,value in zip(('P5a point','P5b point'),resc):retain('p5-ranking-reversal','full re-score',form,label,value,source,n=160)
-    axes[0].set_xticks(np.arange(3),['Historical full\n160 targets','P5a: no Matin HCO₃⁻\n142 targets','P5b: no Matin\n88 targets'])
-    axes[1].set_xticks(np.arange(2),['P5a point','P5b point'])
-    for ax in axes:ax.set_ylabel('Dimensionless cost, ½∑r²');ax.grid(axis='y',alpha=.2);ax.set_axisbelow(True)
-    axes[0].set_title('Reduced fitted sets favor SSM+DS');axes[1].set_title('Full 160-target re-scores favor Original Born')
-    axes[0].legend(fontsize=10);fig.tight_layout(w_pad=2);save(fig,'born-p5-ranking-reversal')
+        set_names=('Historical full','Without Matin bicarbonate','Without all Matin')
+        values=[float(next(r['cost'] for r in fitted if r['series']==form and r['x_value']==label)) for label in set_names]
+        axes[0].bar(np.arange(3)+offset,values,width=.34,color=COLORS[form],edgecolor='black',linewidth=.7,
+                    hatch=HATCHES[form],label=LABELS[form])
+        labels=('P5a point','P5b point')
+        resc=[float(next(r['cost'] for r in rescored if r['series']==form and r['x_value']==label)) for label in labels]
+        axes[1].bar(np.arange(2)+offset,resc,width=.34,color=COLORS[form],edgecolor='black',linewidth=.7,
+                    hatch=HATCHES[form])
+    axes[0].set_xticks(np.arange(3),['160-target fit\n(Matin pool fitted)','142-target fit','88-target fit'])
+    axes[1].set_xticks(np.arange(2),['142-target fit','88-target fit'])
+    for ax in axes:ax.grid(axis='y',alpha=.2);ax.set_axisbelow(True);ax.tick_params(axis='x',labelsize=8)
+    add_panels(axes)
+    fig.legend(handles=form_legend(),loc='upper center',bbox_to_anchor=(.55,.995),ncol=2,frameon=False)
+    fig.supylabel(r'Dimensionless cost, $C=\frac{1}{2}\sum r^2$',x=.015)
+    fig.subplots_adjust(left=.13,right=.99,bottom=.23,top=.85,wspace=.36)
+    save(fig,'born-p5-ranking-reversal')
 
 def scans():
     fig,axes=plt.subplots(2,2,figsize=(12,8));axes=axes.ravel()
@@ -101,10 +125,51 @@ def scans():
         ax.set_title(title,fontsize=11);ax.set_ylabel('Dimensionless cost, ½∑r²');ax.grid(alpha=.2)
     fig.tight_layout(h_pad=3,w_pad=2);save(fig,'born-fixed-k-scans')
 
+def verify_plotted_values(figure_names):
+    retained=list(csv.DictReader((HERE/'born-comparison-plotted-values.csv').open()))
+    expected=[r for r in retained if r['figure'] in figure_names]
+    actual=[r for r in plotted if r['figure'] in figure_names]
+    if len(expected)!=len(actual):raise ValueError(f'plotted row count changed: {len(expected)} != {len(actual)}')
+    def key(row):return (row['figure'],row['panel'],row['series'],row['x_value'],row['cost'],row['source_file'])
+    old={key(row):row for row in expected}
+    new={key({k:str(v) for k,v in row.items()}):{k:str(v) for k,v in row.items()} for row in actual}
+    if old.keys()!=new.keys():raise ValueError('plotted series or coordinates changed')
+    for k,record in new.items():
+        if any(old[k].get(field,'')!=value for field,value in record.items()):
+            raise ValueError(f'plotted value changed for {k}')
+
+def write_manuscript_provenance():
+    source_hashes=json.loads((HERE/'born-comparison-figure-sources.json').read_text())
+    source_names={r['source_file'] for r in plotted if r['figure'] in {'cost-by-group-and-species','p5-ranking-reversal'}}
+    output_names=('born-cost-by-group-and-species','born-p5-ranking-reversal')
+    outputs={str((GENERATED/f'{name}.pdf').relative_to(ROOT)):hashlib.sha256((GENERATED/f'{name}.pdf').read_bytes()).hexdigest()
+             for name in output_names}
+    local={f'figures/{name}.{ext}':hashlib.sha256((FIGURES/f'{name}.{ext}').read_bytes()).hexdigest()
+           for name in output_names for ext in ('svg','png')}
+    style=ROOT/'analyses/mea_parameter_bundle/scripts/manuscript_style.py'
+    provenance={'rendering_only':True,'renderer':str(Path(__file__).resolve().relative_to(ROOT)),
+        'renderer_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        'style':str(style.relative_to(ROOT)),'style_sha256':hashlib.sha256(style.read_bytes()).hexdigest(),
+        'source_ancestry_sha256':{name:source_hashes[name] for name in sorted(source_names)},
+        'render_input_file':str((HERE/'born-comparison-plotted-values.csv').relative_to(ROOT)),
+        'render_input_sha256':hashlib.sha256((HERE/'born-comparison-plotted-values.csv').read_bytes()).hexdigest(),
+        'plotted_values_sha256':hashlib.sha256((HERE/'born-comparison-plotted-values.csv').read_bytes()).hexdigest(),
+        'manuscript_pdf_sha256':outputs,'analysis_figure_sha256':local,
+        'manuscript_width_mm':164.6,'panels':['(a)','(b)'],'color_and_grayscale_encoding':'form colors plus distinct hatch patterns'}
+    (HERE/'born-manuscript-render-provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+
 if __name__=='__main__':
-    costs();ranking();scans()
-    fields=sorted(set().union(*(r.keys() for r in plotted)))
-    with (HERE/'born-comparison-plotted-values.csv').open('w',newline='') as handle:
-        writer=csv.DictWriter(handle,fields);writer.writeheader();writer.writerows(plotted)
-    (HERE/'born-comparison-figure-sources.json').write_text(json.dumps({r['source_file']:r['source_sha256'] for r in plotted},indent=2)+'\n')
-    print('Rendered three figures from retained CSVs;',len(plotted),'plotted rows retained.')
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--figures',nargs='+',choices=('costs','ranking','scans'),default=('costs','ranking'))
+    selected=set(parser.parse_args().figures)
+    if 'costs' in selected:costs()
+    if 'ranking' in selected:ranking()
+    if 'scans' in selected:scans()
+    selected_data={'cost-by-group-and-species' if 'costs' in selected else None,
+                   'p5-ranking-reversal' if 'ranking' in selected else None,
+                   'fixed-k-scans' if 'scans' in selected else None} - {None}
+    verify_plotted_values(selected_data)
+    if selected=={'costs','ranking'}:
+        write_manuscript_provenance()
+    else:
+        print('Rendered requested Born figures from retained values; snapshot unchanged.')
