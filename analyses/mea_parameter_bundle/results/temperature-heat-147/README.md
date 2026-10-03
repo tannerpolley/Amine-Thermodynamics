@@ -4,7 +4,9 @@ This record fixes source rows, signs, uncertainty meanings, reaction laws and
 continuations before any MEA calculation. It does not qualify an Engine wheel,
 solve equilibrium, fit mixture parameters, or change the adopted parameter set.
 The owner-approved issue sections 3/3.1/4.2/5.2/5.3/6 govern these choices.
-Independent delivered source review remains required before qualification.
+Independent delivered source review returned **Supported** (commit `845e98a`;
+[review comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-5939694947)); this
+closes Phase A only.
 
 ## Calorimetry
 
@@ -152,7 +154,8 @@ Their numerical tables/equations were checked against rendered primary pages.
 The worktree has no literature shelf; relevant sources were read as existing
 Zotero PDFs. No conversion, source acquisition, library write or Mathpix use.
 
-Remaining work belongs to the parent: independent delivered source review,
-#152 corrected-input integration, immutable-wheel preparation and qualification.
+Remaining work belongs to the parent: #152 corrected-input integration,
+immutable-wheel preparation and qualification. Phase B remains blocked on
+ePC-SAFT #231.
 No training-target, pressure/species, qualification or adopted-record file was
 modified by this phase.
