@@ -239,7 +239,7 @@
           "qualification": "candidate_extrapolation",
           "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
           "value": {
-            "magnitude": 353.95,
+            "magnitude": 415.47578,
             "unit": "kelvin"
           }
         },
@@ -255,7 +255,7 @@
           "qualification": "candidate_extrapolation",
           "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
           "value": {
-            "magnitude": 1.2047,
+            "magnitude": 1.3340338,
             "unit": "dimensionless"
           }
         },
@@ -1223,7 +1223,7 @@
       "constant": {
         "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant",
         "value": {
-          "magnitude": 2.7927,
+          "magnitude": 2.7176052,
           "unit": "angstrom"
         }
       },
@@ -1326,7 +1326,7 @@
       ]
     }
   ],
-  "document_id": "mea-ssm-ds-issue154-f1-corrected141-working-record",
+  "document_id": "mea-issue160-f1-double-prime-unpromoted-candidate",
   "document_version": 2,
   "domains": [
     {
@@ -1406,6 +1406,30 @@
       }
     }
   ],
+  "empirical_density_correction": {
+    "Pc_over_RT_at_1bar": {
+      "298.15": 0.0015939887140510951,
+      "318.15": 0.001493785117379645,
+      "323.15": 0.0014706722422848026,
+      "343.15": 0.0013849562439001426,
+      "353.15": 0.0013457390205134758
+    },
+    "applied_to_chemical_potentials": false,
+    "applied_to_enthalpy_or_heat_capacity": false,
+    "c_cm3_mol": 39.51429527803833,
+    "component_ids": [
+      "protonated-monoethanolamine",
+      "carbamate-anion"
+    ],
+    "equilibrium_solves_during_c_fit": 0,
+    "equilibrium_unchanged": true,
+    "fitting_targets": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-160-density-cp/analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/corrected-target-densities.csv",
+    "formula": "rho_corr = M_mix / (v_EOS + 1e-6*c_cm3_mol*(x_MEAH+ + x_MEACOO-))",
+    "kind": "density-only-volume-translation",
+    "log_ratio_sum_of_squares": 1.4509011826776184e-05,
+    "optimizer_message": "`gtol` termination condition is satisfied.",
+    "pressure_Pa": 100000.0
+  },
   "model_coefficients": [
     {
       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
@@ -1714,7 +1738,7 @@
           "qualification": "candidate_extrapolation",
           "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
           "value": {
-            "magnitude": 0.013262879176919628,
+            "magnitude": -0.02424240226792941,
             "unit": "dimensionless"
           }
         }
@@ -1912,7 +1936,7 @@
           "qualification": "candidate_extrapolation",
           "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
           "value": {
-            "magnitude": -0.07352749874985018,
+            "magnitude": -0.08031722618968729,
             "unit": "dimensionless"
           }
         }
@@ -1956,7 +1980,7 @@
           "qualification": "candidate_extrapolation",
           "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
           "value": {
-            "magnitude": -0.7072858902151943,
+            "magnitude": -0.9674984297781464,
             "unit": "dimensionless"
           }
         }
@@ -2044,7 +2068,7 @@
           "qualification": "candidate_extrapolation",
           "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
           "value": {
-            "magnitude": 0.13408074131722733,
+            "magnitude": 0.2230769983733113,
             "unit": "dimensionless"
           }
         }
@@ -2132,7 +2156,7 @@
           "qualification": "candidate_extrapolation",
           "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
           "value": {
-            "magnitude": -0.3795540800656849,
+            "magnitude": -0.3194004575874091,
             "unit": "dimensionless"
           }
         },
@@ -2152,7 +2176,7 @@
           },
           "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
           "value": {
-            "magnitude": -112.56775058400221,
+            "magnitude": -1.0308441902699457,
             "unit": "kelvin"
           }
         }
@@ -2161,7 +2185,7 @@
       "component_id_b": "water"
     }
   ],
-  "purpose": "Issue 154 F1 calibrated working record: corrected141, SSM+DS; effective ion parameters, not physical validation.",
+  "purpose": "Calibrated D1 chemistry with empirical density-only volume translation; not promoted; no absorber validation.",
   "reaction_correlations": [
     {
       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
@@ -2455,7 +2479,7 @@
         "energy_over_k": {
           "identity": "association/water/a/water/b/energy_over_k",
           "value": {
-            "magnitude": 2425.7,
+            "magnitude": 1725.6848,
             "unit": "kelvin"
           }
         },
@@ -2479,7 +2503,7 @@
         "volume": {
           "identity": "association/water/a/water/b/volume",
           "value": {
-            "magnitude": 0.04509,
+            "magnitude": 0.0461035,
             "unit": "dimensionless"
           }
         }
@@ -2497,7 +2521,7 @@
         "energy_over_k": {
           "identity": "association/carbon-dioxide/a/water/b/energy_over_k",
           "value": {
-            "magnitude": 1212.85,
+            "magnitude": 862.8424,
             "unit": "kelvin"
           }
         },
@@ -2516,7 +2540,7 @@
         "volume": {
           "identity": "association/carbon-dioxide/a/water/b/volume",
           "value": {
-            "magnitude": 0.04509,
+            "magnitude": 0.0461035,
             "unit": "dimensionless"
           }
         }
@@ -2534,7 +2558,7 @@
         "energy_over_k": {
           "identity": "association/carbon-dioxide/b/water/a/energy_over_k",
           "value": {
-            "magnitude": 1212.85,
+            "magnitude": 862.8424,
             "unit": "kelvin"
           }
         },
@@ -2553,7 +2577,7 @@
         "volume": {
           "identity": "association/carbon-dioxide/b/water/a/volume",
           "value": {
-            "magnitude": 0.04509,
+            "magnitude": 0.0461035,
             "unit": "dimensionless"
           }
         }

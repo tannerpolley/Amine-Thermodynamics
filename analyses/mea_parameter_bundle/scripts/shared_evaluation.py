@@ -34,8 +34,8 @@ INPUT = ANALYSIS / "data/input"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 # Identity of the non-editable wheel that must be installed; its build path is not
 # retained because Engine rebuilds overwrite it.
-ENGINE_WHEEL_SHA256 = "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2"
-ENGINE_COMMIT = "8c670d3aa9673459867154fa5c344c97526a7818"
+ENGINE_WHEEL_SHA256 = "48a639e78d00ef88a2f7e66ed1e3d89831ca0ad5267322330d44f48c34926060"
+ENGINE_COMMIT = "464a9897615e513e5cc404ce5b49f46a72466d3d"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
