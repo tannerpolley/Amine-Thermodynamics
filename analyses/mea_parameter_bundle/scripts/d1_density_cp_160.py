@@ -332,7 +332,8 @@ def campaign():
         state['starts']['F1-B'] = pool.submit(launch_fit, 'F1', 'B').result()
         main = select('F1')
         state['main'] = main
-        assert min(main['cost_A'], main['cost_B']) <= 36.34, 'main cost acceptance failed'
+        preservation_limit = 1.10 * load(ORIGINAL / 'acceptance.json')['F1_cost141']
+        assert min(main['cost_A'], main['cost_B']) <= preservation_limit, 'main cost acceptance failed'
         if not main['starts_agree']:
             print('Starts differ; #154 rule reports both and uses lower complete cost.', flush=True)
         mapping = s.parameter_mapping(Path(main['parameters']))
@@ -358,7 +359,7 @@ def campaign():
         candidate['document_id'] = 'mea-issue160-f1-double-prime-unpromoted-candidate'
         candidate['purpose'] = 'Calibrated D1 chemistry with empirical density-only volume translation; not promoted; no absorber validation.'
         candidate['empirical_density_correction'] = dict(volume, kind='density-only-volume-translation',
-            component_ids=list(m.IONS), formula='rho_corr = M_mix / (v_EOS + c_m3_mol*(x_MEAH+ + x_MEACOO-))',
+            component_ids=list(m.IONS), formula='rho_corr = M_mix / (v_EOS + 1e-6*c_cm3_mol*(x_MEAH+ + x_MEACOO-))',
             fitting_targets=str(OUT/'corrected-target-densities.csv'), applied_to_chemical_potentials=False,
             applied_to_enthalpy_or_heat_capacity=False, equilibrium_unchanged=True)
         s.write_json(OUT/'F1-double-prime-candidate-parameters.json', candidate)
