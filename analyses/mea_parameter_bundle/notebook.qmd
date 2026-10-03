@@ -136,6 +136,13 @@ resources:
 
 The working record is SSM+DS model D `p5conv-a-11` for **30 wt% MEA, 40–80 °C**, under [decisions 21/24](https://github.com/tannerpolley/Amine-Thermodynamics/issues/121#issuecomment-5906843564). Its candidate assessment/comparison [Supported review](https://github.com/tannerpolley/Amine-Thermodynamics/issues/121#issuecomment-5907883147) met decision 21's gate. This promotion and regenerated notebook await their separate delivered review and have not been promoted for manuscript use.
 
+The independent delivered review of #147 Phase A source admission returned
+**Supported** (commit `845e98a`; [review comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-5939694947)). The
+checksum-covered `results/temperature-heat-147/README.md` retains its pre-review wording that
+independent source review remains required and lists it as remaining work; both annotations
+predate the review and are preserved so `SHA256SUMS` remains valid. Phase B remains blocked
+on ePC-SAFT #231. No fit or native exact-zero result exists for #147.
+
 Selected byte SHA-256: `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241`; candidate byte SHA-256: `42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952`. The producing and replay wheel is `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2` (MEA merge `8c670d3a`, Engine build identifier `1a905ff8`; these commits are distinct).
 
 The official fit uses **142 targets: 48 pressure + 94 species (40 Böttinger + 54 Matin)**. Matin's 18 HCO₃⁻ + CO₃²⁻ pool targets are report-only; its 21 °C measurement/packet 20 °C convention is retained. The full historical 160-target re-score is reported separately. This is numerical verification and bounded calibration/assessment evidence, not independent physical validation. Rendering reads retained results and never reruns the model. The [canonical loading correction](#canonical-loading-correction) supersedes the earlier canonical and concentration-transfer scores for the two 142-target records. Its new evidence awaits independent delivered review and manuscript-use confirmation.
