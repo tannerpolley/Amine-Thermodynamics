@@ -1,0 +1,190 @@
+{
+  "evidence_type": "numerical verification only",
+  "state": "incomplete: stopped at first driver failure in check 3",
+  "first_numerical_failure": null,
+  "stopping_reason": "Stop-at-first-failure rule; no alternative feed query, retry or later check was run.",
+  "wheel_identity": "wheel-identity.json",
+  "wheel_sha256": "b83c42502235e8915cd07b0eabf24398c7f54a884d41ca914273ddd0f1703667",
+  "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "check_1_old_replay": {
+    "passed": true,
+    "costs": {
+      "pressure": 8.143453130514477,
+      "species": 24.848444130706277,
+      "total": 32.99189726122075
+    },
+    "reference_costs": {
+      "pressure": 8.14345313051485,
+      "species": 24.848444130706277,
+      "total": 32.991897261221126
+    },
+    "cost_differences": {
+      "pressure": -3.730349362740526e-13,
+      "species": 0.0,
+      "total": -3.765876499528531e-13
+    },
+    "states": 84,
+    "targets": 142,
+    "maximum_prediction_tolerance_fraction": 1.7684921378575326e-05,
+    "maximum_stationarity": 3.979039320256561e-13,
+    "wall_s": 5.9011351030003425,
+    "summed_worker_s": 53.58881045800172,
+    "pool_size": 12,
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "producer_sha256": "a532aca03ab20c0ac5ab2112c89b3edf38fbd3918bad248a21751cf7c49d59f9"
+  },
+  "check_2_native_mapping": {
+    "passed": true,
+    "rows": 12,
+    "max_abs_delta_lnK": 7.815970093361102e-14,
+    "RT2_derivative_check": "stored versus native polynomial coefficients; Engine thermochemistry.cpp:221-229 inspected",
+    "source_representation_checks": "phase-A frozen admission grid and continuation errors retained unchanged",
+    "producer_sha256": "a532aca03ab20c0ac5ab2112c89b3edf38fbd3918bad248a21751cf7c49d59f9",
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py"
+  },
+  "check_2_reference_pressures_Pa": {
+    "R2": 101325,
+    "R4": 100000,
+    "R5": 100000
+  },
+  "check_2_maximum_polynomial_RT2_derivative_difference_J_mol": 0.0,
+  "check_3_zero_to_0_11": {
+    "passed": false,
+    "native_prediction": {
+      "value": -68169.42621173232,
+      "unit": "J/mol",
+      "status": "Available",
+      "message": "SUCCESS: converged: residual 5.045085355955182e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 12 iterations, contraction absent, floor 1.7641264411153503e-10, amplification 0",
+      "residual": 3.9435245960892256,
+      "requested_tolerance_met": true,
+      "branch": null,
+      "stable_root_count": null
+    },
+    "native_prediction_elapsed_s": 0.33411707899995235,
+    "initial_total_H_J": -2313691.8924407274,
+    "final_total_H_J": -2364483.718759536,
+    "exact_zero_initial_carbon": true,
+    "maximum_feed_balance_error_mol": 0.0,
+    "independent_feed_query": "failed before native evaluation: unexposed enum",
+    "phase_boundary_admission": "unrun"
+  },
+  "check_3_zero_to_0_45": "unrun: earlier feed-query failure",
+  "check_4_independent_enthalpies_anchor_conditioning": "unrun",
+  "check_5_heat_Jacobian_h_and_2h": "unrun",
+  "check_6_training": {
+    "passed": true,
+    "states": 84,
+    "maximum_material_error_mol": 2.0605739337042905e-13,
+    "maximum_charge_error_mol": 3.7951851945411784e-14,
+    "maximum_stationarity": 3.979039320256561e-13,
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "method": "Conservation sums from retained phase amounts/compositions and unchanged packet balance matrix, conserved totals and charges; no new Engine calculation."
+  },
+  "check_6_calorimetric_endpoints": {
+    "formal_check_6": "unrun; following data were returned in check 3 before the failure",
+    "states_returned": 2,
+    "maximum_packet_material_error_mol": 1.951563910473908e-16,
+    "maximum_charge_error_mol": 4.96507676858133e-16,
+    "maximum_raw_row": 1.2789769243681803e-13,
+    "all_requested_tolerances_met": true
+  },
+  "section_6_1_phase_boundary_and_feed_root": "unrun: no independent feed-root or bubble calculation",
+  "heat_J_mol_CO2": {
+    "0_to_0_11": -68169.42621173232,
+    "0_to_0_45": null
+  },
+  "conditioning": null,
+  "Jacobian_fine_and_coarse_error_ratios": null,
+  "compute": {
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "CPU_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "replay_pool_size": 12,
+    "R1_wall_s": 5.9011351030003425,
+    "R1_summed_worker_s": 53.58881045800172,
+    "R1_external_wall_including_queue_s": 205.12,
+    "R1_process_user_s": 38.23,
+    "R1_process_system_s": 2.11,
+    "Q1_mapping_external_wall_including_queue_s": 49.79,
+    "Q1_mapping_process_user_s": 0.31,
+    "Q1_mapping_process_system_s": 0.11,
+    "Q1_mapping_native_call_elapsed": "not separately instrumented; 12 direct ln K calls, no equilibrium solve",
+    "prior_numerical_time_approx_s": 60,
+    "new_conservative_budget_charge_s": 105.57407782100111,
+    "cumulative_conservative_budget_charge_approx_s": 165.5740778210011,
+    "total_ceiling_s": 50400,
+    "numerical_jobs_executed": [
+      "R1",
+      "Q1-mapping",
+      "Q1 remaining: check 3 stopped at feed-query construction"
+    ],
+    "caps_s": {
+      "R1_external_including_kill_grace": 1800,
+      "R1_state_budget": 175,
+      "Q1_external_including_kill_grace": 1770
+    },
+    "remaining_invocation_wall_including_queue_s": 162.93,
+    "remaining_process_user_s": 2.14,
+    "remaining_process_system_s": 0.34,
+    "remaining_summed_subprocess_wall_s": 2.1952673629994024,
+    "remaining_native_heat_s": 0.33411707899995235,
+    "remaining_call_count": 4,
+    "remaining_successful_call_count": 3
+  },
+  "code_surface": {
+    "base": "76ea465fe1ede72257a809d04fc986489c5267f3",
+    "phase_baseline_commit": "df8ab59",
+    "phase_baseline_used": 356,
+    "remaining_qualification_gross_additions": 110,
+    "remaining_qualification_removals": 1,
+    "removal_credit": 0,
+    "issue_used": 466,
+    "issue_remaining": 0,
+    "ceiling": 466,
+    "no_tests_added": true
+  },
+  "commits": {
+    "wheel_identity": "ff50239",
+    "driver": "effa030",
+    "remaining_driver": "e7ff4b4"
+  },
+  "independent_delivered_review": "not performed; parent owns review",
+  "limits": [
+    "Numerical verification only; no physical validation or parameter adoption.",
+    "Native 0-to-0.11 heat and independent endpoint enthalpies returned; complete calorimetric qualification did not pass.",
+    "Independent feed, 0-to-0.45, assembly/anchor/conditioning, heat Jacobian and phase-boundary checks remain unrun.",
+    "The failure is in the qualification driver, not a demonstrated Engine numerical or physical failure.",
+    "No changed tolerance, seed, epsilon, guess, chemistry, fit, loaded solve above 333.15 K, notebook or manuscript change.",
+    "Earlier wheel qualification, zero-carbon diagnosis and completed checks 1-2 remain unchanged."
+  ],
+  "first_execution_failure": {
+    "stage": "3",
+    "alpha_final": 0.11,
+    "failed_job": "feed",
+    "category": "driver call to an unavailable Python enum; no independent feed calculation occurred",
+    "exception": "AttributeError",
+    "message": "type object 'epcsaft._core.ObservationKind' has no attribute 'FeedEnthalpy'",
+    "child_traceback": "Traceback (most recent call last):\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 97, in <module>\n    native(job, alpha, sys.argv[3:], record)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 61, in native\n    item.kind = reg.ObservationKind.FeedEnthalpy\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'epcsaft._core.ObservationKind' has no attribute 'FeedEnthalpy'\n",
+    "parent_exception": "AssertionError",
+    "parent_message": "{'job': 'feed', 'alpha': 0.11, 'extra': (), 'elapsed_s': 0.35410562499964726, 'exit_code': 1, 'output': 'Traceback (most recent call last):\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 97, in <module>\\n    native(job, alpha, sys.argv[3:], record)\\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 61, in native\\n    item.kind = reg.ObservationKind.FeedEnthalpy\\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAttributeError: type object \\'epcsaft._core.ObservationKind\\' has no attribute \\'FeedEnthalpy\\'\\n'}",
+    "wheel_sha256": "b83c42502235e8915cd07b0eabf24398c7f54a884d41ca914273ddd0f1703667",
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "producer_sha256": "e6298f03e107dfe9a177ae6a4dc24fb006c4ad82cf9b9910aef494a1187d4c10",
+    "diagnosis": "Engine source observations.hpp:19 defines internal FeedEnthalpy; regression_bindings.cpp:18-34 does not expose it, consistent with the pinned wheel AttributeError. This does not establish missing EOS feed capability or a physical-model failure.",
+    "no_further_numerical_calls": true
+  }
+}

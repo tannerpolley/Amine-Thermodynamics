@@ -1,0 +1,21 @@
+{
+  "stage": "6.1",
+  "failed_job": "bubble",
+  "alpha_final": 0.11,
+  "endpoint": 0,
+  "alpha_endpoint": 0.0,
+  "exception": "ParameterError",
+  "message": "zero_inventory_incipient_support: component 0 in phase V needs the discarded conserved potential in chemical stationarity",
+  "child_traceback": "Traceback (most recent call last):\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 104, in <module>\n    native(job, alpha, sys.argv[3:], record)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 46, in native\n    result = eq.solve_equilibrium(model, problem)\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/equilibrium/problem.py\", line 436, in solve_equilibrium\n    return _core.solve_equilibrium(model._model, native, start)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nepcsaft._core.ParameterError: zero_inventory_incipient_support: component 0 in phase V needs the discarded conserved potential in chemical stationarity\n",
+  "parent_exception": "AssertionError",
+  "parent_message": "{'job': 'bubble', 'alpha': 0.11, 'extra': (0,), 'elapsed_s': 0.3873037400007888, 'exit_code': 1, 'output': 'Traceback (most recent call last):\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 104, in <module>\\n    native(job, alpha, sys.argv[3:], record)\\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 46, in native\\n    result = eq.solve_equilibrium(model, problem)\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/equilibrium/problem.py\", line 436, in solve_equilibrium\\n    return _core.solve_equilibrium(model._model, native, start)\\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nepcsaft._core.ParameterError: zero_inventory_incipient_support: component 0 in phase V needs the discarded conserved potential in chemical stationarity\\n'}",
+  "exit_code": 1,
+  "elapsed_s": 0.3873037400007888,
+  "wheel_sha256": "b83c42502235e8915cd07b0eabf24398c7f54a884d41ca914273ddd0f1703667",
+  "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "producer_sha256": "60a5b7946c71d61f6753db178a0fb865211585aa80ec24613611b28d056fea9c",
+  "driver_commit": "713f29d",
+  "meaning": "Exact-zero-carbon incipient vapor boundary is unavailable for the prescribed neutral support. This blocks phase qualification; it does not establish physical-model failure.",
+  "no_further_numerical_calls": true,
+  "infrastructure_failure": false
+}
