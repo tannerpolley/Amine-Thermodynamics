@@ -1,0 +1,47 @@
+{
+  "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "wheel_sha256": "b83c42502235e8915cd07b0eabf24398c7f54a884d41ca914273ddd0f1703667",
+  "producer_sha256": "e6298f03e107dfe9a177ae6a4dc24fb006c4ad82cf9b9910aef494a1187d4c10",
+  "calls": [
+    {
+      "job": "Q1-heat",
+      "alpha": 0.11,
+      "extra": [],
+      "elapsed_s": 0.7019019910003408,
+      "exit_code": 0,
+      "output": "\n******************************************************************************\nThis program contains Ipopt, a library for large-scale nonlinear optimization.\n Ipopt is released as open source code under the Eclipse Public License (EPL).\n         For more information visit http://projects.coin-or.org/Ipopt\n******************************************************************************\n\n"
+    },
+    {
+      "job": "state",
+      "alpha": 0.11,
+      "extra": [
+        0
+      ],
+      "elapsed_s": 0.548934817999907,
+      "exit_code": 0,
+      "output": "\n******************************************************************************\nThis program contains Ipopt, a library for large-scale nonlinear optimization.\n Ipopt is released as open source code under the Eclipse Public License (EPL).\n         For more information visit http://projects.coin-or.org/Ipopt\n******************************************************************************\n\n"
+    },
+    {
+      "job": "state",
+      "alpha": 0.11,
+      "extra": [
+        1
+      ],
+      "elapsed_s": 0.5903249289995074,
+      "exit_code": 0,
+      "output": "\n******************************************************************************\nThis program contains Ipopt, a library for large-scale nonlinear optimization.\n Ipopt is released as open source code under the Eclipse Public License (EPL).\n         For more information visit http://projects.coin-or.org/Ipopt\n******************************************************************************\n\n"
+    },
+    {
+      "job": "feed",
+      "alpha": 0.11,
+      "extra": [],
+      "elapsed_s": 0.35410562499964726,
+      "exit_code": 1,
+      "output": "Traceback (most recent call last):\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 97, in <module>\n    native(job, alpha, sys.argv[3:], record)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 61, in native\n    item.kind = reg.ObservationKind.FeedEnthalpy\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'epcsaft._core.ObservationKind' has no attribute 'FeedEnthalpy'\n"
+    }
+  ],
+  "checks": {},
+  "stage": "3",
+  "exception": "AssertionError",
+  "message": "{'job': 'feed', 'alpha': 0.11, 'extra': (), 'elapsed_s': 0.35410562499964726, 'exit_code': 1, 'output': 'Traceback (most recent call last):\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 97, in <module>\\n    native(job, alpha, sys.argv[3:], record)\\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 61, in native\\n    item.kind = reg.ObservationKind.FeedEnthalpy\\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAttributeError: type object \\'epcsaft._core.ObservationKind\\' has no attribute \\'FeedEnthalpy\\'\\n'}"
+}
