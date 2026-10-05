@@ -1,0 +1,134 @@
+{
+  "evidence_type": "numerical verification only",
+  "state": "incomplete: parent code-budget decision pending",
+  "first_numerical_failure": null,
+  "stopping_reason": "Parent code-budget decision required: retained driver lacks section 6.1 and checks 4-5; estimated 80-110 further readable lines exceeds the about-60-new-line stop threshold and may exceed the 94 lines remaining. No extension or further numerical check is authorized pending that decision.",
+  "wheel_identity": "wheel-identity.json",
+  "wheel_sha256": "b83c42502235e8915cd07b0eabf24398c7f54a884d41ca914273ddd0f1703667",
+  "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "check_1_old_replay": {
+    "passed": true,
+    "costs": {
+      "pressure": 8.143453130514477,
+      "species": 24.848444130706277,
+      "total": 32.99189726122075
+    },
+    "reference_costs": {
+      "pressure": 8.14345313051485,
+      "species": 24.848444130706277,
+      "total": 32.991897261221126
+    },
+    "cost_differences": {
+      "pressure": -3.730349362740526e-13,
+      "species": 0.0,
+      "total": -3.765876499528531e-13
+    },
+    "states": 84,
+    "targets": 142,
+    "maximum_prediction_tolerance_fraction": 1.7684921378575326e-05,
+    "maximum_stationarity": 3.979039320256561e-13,
+    "wall_s": 5.9011351030003425,
+    "summed_worker_s": 53.58881045800172,
+    "pool_size": 12,
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "producer_sha256": "a532aca03ab20c0ac5ab2112c89b3edf38fbd3918bad248a21751cf7c49d59f9"
+  },
+  "check_2_native_mapping": {
+    "passed": true,
+    "rows": 12,
+    "max_abs_delta_lnK": 7.815970093361102e-14,
+    "RT2_derivative_check": "stored versus native polynomial coefficients; Engine thermochemistry.cpp:221-229 inspected",
+    "source_representation_checks": "phase-A frozen admission grid and continuation errors retained unchanged",
+    "producer_sha256": "a532aca03ab20c0ac5ab2112c89b3edf38fbd3918bad248a21751cf7c49d59f9",
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py"
+  },
+  "check_2_reference_pressures_Pa": {
+    "R2": 101325,
+    "R4": 100000,
+    "R5": 100000
+  },
+  "check_2_maximum_polynomial_RT2_derivative_difference_J_mol": 0.0,
+  "check_3_zero_to_0_11": "unrun: full section 6.1 admission not implemented",
+  "check_3_zero_to_0_45": "unrun: follows zero-to-0.11 admission",
+  "check_4_independent_enthalpies_anchor_conditioning": "unrun",
+  "check_5_heat_Jacobian_h_and_2h": "unrun",
+  "check_6_training": {
+    "passed": true,
+    "states": 84,
+    "maximum_material_error_mol": 2.0605739337042905e-13,
+    "maximum_charge_error_mol": 3.7951851945411784e-14,
+    "maximum_stationarity": 3.979039320256561e-13,
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "method": "Conservation sums from retained phase amounts/compositions and unchanged packet balance matrix, conserved totals and charges; no new Engine calculation."
+  },
+  "check_6_calorimetric_endpoints": "unrun",
+  "section_6_1_phase_boundary_and_feed_root": "unrun",
+  "heat_J_mol_CO2": {
+    "0_to_0_11": null,
+    "0_to_0_45": null
+  },
+  "conditioning": null,
+  "Jacobian_fine_and_coarse_error_ratios": null,
+  "compute": {
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "CPU_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "replay_pool_size": 12,
+    "R1_wall_s": 5.9011351030003425,
+    "R1_summed_worker_s": 53.58881045800172,
+    "R1_external_wall_including_queue_s": 205.12,
+    "R1_process_user_s": 38.23,
+    "R1_process_system_s": 2.11,
+    "Q1_mapping_external_wall_including_queue_s": 49.79,
+    "Q1_mapping_process_user_s": 0.31,
+    "Q1_mapping_process_system_s": 0.11,
+    "Q1_mapping_native_call_elapsed": "not separately instrumented; 12 direct ln K calls, no equilibrium solve",
+    "prior_numerical_time_approx_s": 60,
+    "new_conservative_budget_charge_s": 103.37881045800171,
+    "cumulative_conservative_budget_charge_approx_s": 163.3788104580017,
+    "total_ceiling_s": 50400,
+    "numerical_jobs_executed": [
+      "R1",
+      "Q1-mapping"
+    ],
+    "caps_s": {
+      "R1_external_including_kill_grace": 1800,
+      "R1_state_budget": 175,
+      "Q1_external_including_kill_grace": 1770
+    }
+  },
+  "code_surface": {
+    "base": "76ea465fe1ede72257a809d04fc986489c5267f3",
+    "prior_executable_additions": 331,
+    "new_executable_additions": 25,
+    "issue_used": 356,
+    "issue_remaining": 94,
+    "ceiling": 450,
+    "no_tests_added": true
+  },
+  "commits": {
+    "wheel_identity": "ff50239",
+    "driver": "effa030"
+  },
+  "independent_delivered_review": "not performed; parent owns review",
+  "limits": [
+    "No numerical failure has occurred in the two completed checks.",
+    "No new heat, anchor, conditioning, feed-root, phase-boundary or heat-Jacobian result exists.",
+    "No physical validation, parameter fit, parameter adoption, loaded solve above 333.15 K, notebook or manuscript change.",
+    "The prior wheel qualification and zero-carbon diagnosis remain unchanged."
+  ]
+}
