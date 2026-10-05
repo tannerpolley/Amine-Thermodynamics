@@ -1,0 +1,252 @@
+{
+  "candidate_sha256": "f02864af990911e7283b52667879230a0d93176f68440994f598be340c4d2102",
+  "continuation": "CO2-water: 35 initially available rows, then all 39, one intermediate composition point. Stage 3 required no water continuation; both initial evaluations succeeded.",
+  "heat_capacity_loaded": "not evaluated: Stage 4 not run",
+  "resumed_at_utc": "2026-10-02T21:21:25+00:00",
+  "resumed_from": "8c4c6b3",
+  "resumed_wall_s": 1421.673388,
+  "retained_at_utc": "2026-10-02T21:45:06.673388+00:00",
+  "selected_parameters_sha256": "ae92bac5d2ef7ab690e692f6b1686e18cf06f24ac6b53a6aab4fafeb3046f1aa",
+  "stage1": {
+    "CO2-water": {
+      "after_refit_AARD_percent": 30.373520769134146,
+      "final_cost": 2.4407552392270113,
+      "final_rows": 39,
+      "full_fit_wall_s": 27.716576403001454,
+      "k_ij_after": -0.02424240226792941,
+      "k_ij_before": 0.013262879176919628,
+      "old_water_AARD_percent": 24.16339904393649,
+      "solver_path_points": 1,
+      "status": "converged",
+      "subset_fit_wall_s": 5.492457207999905,
+      "subset_rows": 35,
+      "usable": true
+    },
+    "MEA-water": {
+      "final_cost": 92.54166458991172,
+      "k_ij_after": -0.08031722618968729,
+      "k_ij_before": -0.07352749874985018,
+      "temperature_K": {
+        "after_refit_AARD_percent": 0.366859459907066,
+        "new_water_before_refit_AARD_percent": 0.3916276396624485,
+        "old_water_AARD_percent": 0.4252886413928021
+      },
+      "vapor_water": {
+        "after_refit_AARD_percent": 2.642197781143027,
+        "new_water_before_refit_AARD_percent": 2.5447134305885974,
+        "old_water_AARD_percent": 2.647262750265586
+      },
+      "wall_s": 3.1722553249992416
+    }
+  },
+  "stage2": {
+    "unloaded_density": [
+      {
+        "T_K": 298.15,
+        "deviation_percent": -0.13170875666740356,
+        "model_kg_m3": 1009.2689513051191,
+        "observed_kg_m3": 1010.5999999999999
+      },
+      {
+        "T_K": 313.15,
+        "deviation_percent": -0.08613353741596663,
+        "model_kg_m3": 1002.5357360855683,
+        "observed_kg_m3": 1003.4000000000001
+      },
+      {
+        "T_K": 323.15,
+        "deviation_percent": -0.08313736904100866,
+        "model_kg_m3": 997.2702059196017,
+        "observed_kg_m3": 998.1
+      },
+      {
+        "T_K": 343.15,
+        "deviation_percent": -0.044750361162049224,
+        "model_kg_m3": 985.3588509396644,
+        "observed_kg_m3": 985.8
+      },
+      {
+        "T_K": 353.15,
+        "deviation_percent": -0.054197767494090776,
+        "model_kg_m3": 978.8691870651629,
+        "observed_kg_m3": 979.4000000000001
+      }
+    ],
+    "unloaded_heat_capacity": {
+      "T_K": 318.15,
+      "deviation_percent": 3.995121785636546,
+      "equilibrium_cp_kJ_kg_K": 3.868098554816751,
+      "frozen_cp_kJ_kg_K": 3.86794517465708,
+      "loading": 0.0,
+      "model_loading": 1e-05,
+      "observed_kJ_kg_K": 3.7195
+    },
+    "water": [
+      {
+        "P_Pa": 101325,
+        "T_K": 298.15,
+        "cp_deviation_percent": 0.0618264699141724,
+        "cp_kJ_kg_K": 4.18131499077116,
+        "density_deviation_percent": -0.04265174282173101,
+        "model_cp_kJ_kg_K": 4.183900150225946,
+        "model_rho_kg_m3": 996.6223785665027,
+        "rho_kg_m3": 997.0476367603438
+      },
+      {
+        "P_Pa": 101325,
+        "T_K": 318.15,
+        "cp_deviation_percent": 0.49542268170381654,
+        "cp_kJ_kg_K": 4.180141940156336,
+        "density_deviation_percent": -0.09114504069953622,
+        "model_cp_kJ_kg_K": 4.200851311455284,
+        "model_rho_kg_m3": 989.3103679148902,
+        "rho_kg_m3": 990.2128978636601
+      },
+      {
+        "P_Pa": 101325,
+        "T_K": 353.15,
+        "cp_deviation_percent": 0.5615039879570238,
+        "cp_kJ_kg_K": 4.196753264497112,
+        "density_deviation_percent": -0.19094828012397036,
+        "model_cp_kJ_kg_K": 4.22031820144198,
+        "model_rho_kg_m3": 969.9347810449894,
+        "rho_kg_m3": 971.7903980965647
+      }
+    ],
+    "water_cp_passed": true
+  },
+  "stage3": {
+    "F1_aard_percent": {
+      "pressure": 13.977583010175842,
+      "species": 8.258162617784622
+    },
+    "F1_cost141": 33.03377424355485,
+    "agreement_relative": 1.082070647533295e-13,
+    "density_passed": false,
+    "passed": false,
+    "preservation_limit": 36.33715166791034,
+    "preservation_passed": true,
+    "selected": "B",
+    "start_agreement": true,
+    "starts": [
+      {
+        "aard_percent": {
+          "pressure": 18.29665707279017,
+          "species": 8.362531423276389
+        },
+        "active_bounds": [
+          "pair/bicarbonate-anion/water/k_ij"
+        ],
+        "coordinates": {
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.8947657341350832,
+          "pair/carbamate-anion/water/k_ij": 0.12454722464432844,
+          "pair/protonated-monoethanolamine/water/k_ij": -0.10910545408353911,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -13.372287126202352,
+          "shared-ion-segment-count": 2.753184610390506
+        },
+        "cost141": 35.67550652973283,
+        "cost145": 37.62610033999742,
+        "density": [
+          {
+            "T_K": 323.15,
+            "deviation_percent": 1.6791597331998531,
+            "loading": 0.3,
+            "model_kg_m3": 1075.7655099772544,
+            "observed_kg_m3": 1058.0
+          },
+          {
+            "T_K": 323.15,
+            "deviation_percent": 1.7191822843449556,
+            "loading": 0.4,
+            "model_kg_m3": 1101.6187441394559,
+            "observed_kg_m3": 1083.0
+          },
+          {
+            "T_K": 343.15,
+            "deviation_percent": 1.5120008692319775,
+            "loading": 0.3,
+            "model_kg_m3": 1062.2215770956434,
+            "observed_kg_m3": 1046.4
+          },
+          {
+            "T_K": 343.15,
+            "deviation_percent": 1.4443726374808064,
+            "loading": 0.4,
+            "model_kg_m3": 1087.3822303011568,
+            "observed_kg_m3": 1071.9
+          }
+        ],
+        "fit_wall_s": 277.9028591080005,
+        "ion_m": 2.753184610390506,
+        "process_wall_s": 289.584028958001,
+        "start": "A",
+        "tied_ion_segment_counts": {
+          "carbamate-anion": 2.753184610390506,
+          "protonated-monoethanolamine": 2.753184610390506
+        }
+      },
+      {
+        "aard_percent": {
+          "pressure": 18.296660350098726,
+          "species": 8.362531457786401
+        },
+        "active_bounds": [
+          "pair/bicarbonate-anion/water/k_ij"
+        ],
+        "coordinates": {
+          "pair/bicarbonate-anion/water/k_ij": 0.5,
+          "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.894765719964205,
+          "pair/carbamate-anion/water/k_ij": 0.12454722652360956,
+          "pair/protonated-monoethanolamine/water/k_ij": -0.10910544886272844,
+          "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -13.372287656207405,
+          "shared-ion-segment-count": 2.753184890729224
+        },
+        "cost141": 35.67551107300588,
+        "cost145": 37.62610033999335,
+        "density": [
+          {
+            "T_K": 323.15,
+            "deviation_percent": 1.679158108931822,
+            "loading": 0.3,
+            "model_kg_m3": 1075.7654927924987,
+            "observed_kg_m3": 1058.0
+          },
+          {
+            "T_K": 323.15,
+            "deviation_percent": 1.719180144948318,
+            "loading": 0.4,
+            "model_kg_m3": 1101.6187209697903,
+            "observed_kg_m3": 1083.0
+          },
+          {
+            "T_K": 343.15,
+            "deviation_percent": 1.5119992530365778,
+            "loading": 0.3,
+            "model_kg_m3": 1062.2215601837747,
+            "observed_kg_m3": 1046.4
+          },
+          {
+            "T_K": 343.15,
+            "deviation_percent": 1.4443705178839306,
+            "loading": 0.4,
+            "model_kg_m3": 1087.382207581198,
+            "observed_kg_m3": 1071.9
+          }
+        ],
+        "fit_wall_s": 615.8385269899991,
+        "ion_m": 2.753184890729224,
+        "process_wall_s": 627.4836665540006,
+        "start": "B",
+        "tied_ion_segment_counts": {
+          "carbamate-anion": 2.753184890729224,
+          "protonated-monoethanolamine": 2.753184890729224
+        }
+      }
+    ]
+  },
+  "stage4": "not run: failed density acceptance",
+  "stage5": "excluded",
+  "total_wall_basis": "UTC elapsed since first inspection in this resumption; includes input binding and Stage 3 fits, excludes previous attempts",
+  "wheel_sha256": "28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2"
+}

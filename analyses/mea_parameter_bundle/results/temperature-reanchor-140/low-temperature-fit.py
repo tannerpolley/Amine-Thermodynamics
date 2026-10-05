@@ -146,7 +146,10 @@ def source_context():
 
     def records(request, values):
         assert FREE_REACTIONS or values == reactions, "changed fixed source reactions"
-        assert request["temperature"]["value"] <= 333.15, (
+        density_only = bool(request.get("outputs")) and all(
+            output.get("selector") == "phase.density" for output in request["outputs"]
+        )
+        assert request["temperature"]["value"] <= (343.15 if density_only else 333.15), (
             "high-temperature input refused"
         )
         assert [r["stoichiometry"] for r in native] == request["reaction_system"][
