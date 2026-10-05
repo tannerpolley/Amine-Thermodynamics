@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 ANALYSIS = Path(__file__).resolve().parents[1]
 RESULTS = ANALYSIS / "results"
 FIGURES = ANALYSIS / "figures"
+# Same reproducible-output settings as MEA.common.plot_style.save_figure_bundle.
+plt.rcParams["svg.hashsalt"] = "MEA-Thermodynamics"
+REPRODUCIBLE = {"svg": {"Date": None}, "pdf": {"CreationDate": None, "ModDate": None}}
 
 
 def rows() -> list[dict[str, str]]:
@@ -36,7 +39,7 @@ def main() -> None:
     fig.suptitle("CO$_2$–water coexistence with fixed induced association", fontsize=16)
     FIGURES.mkdir(parents=True, exist_ok=True)
     for suffix in ("png", "svg", "pdf"):
-        fig.savefig(FIGURES / f"co2_water_induced_association.{suffix}", dpi=220)
+        fig.savefig(FIGURES / f"co2_water_induced_association.{suffix}", dpi=220, metadata=REPRODUCIBLE.get(suffix))
     plt.close(fig)
 
 
