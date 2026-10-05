@@ -1,0 +1,16 @@
+{
+  "stage": "3",
+  "alpha_final": 0.11,
+  "failed_job": "feed",
+  "category": "driver call to an unavailable Python enum; no independent feed calculation occurred",
+  "exception": "AttributeError",
+  "message": "type object 'epcsaft._core.ObservationKind' has no attribute 'FeedEnthalpy'",
+  "child_traceback": "Traceback (most recent call last):\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 97, in <module>\n    native(job, alpha, sys.argv[3:], record)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 61, in native\n    item.kind = reg.ObservationKind.FeedEnthalpy\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: type object 'epcsaft._core.ObservationKind' has no attribute 'FeedEnthalpy'\n",
+  "parent_exception": "AssertionError",
+  "parent_message": "{'job': 'feed', 'alpha': 0.11, 'extra': (), 'elapsed_s': 0.35410562499964726, 'exit_code': 1, 'output': 'Traceback (most recent call last):\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 97, in <module>\\n    native(job, alpha, sys.argv[3:], record)\\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 61, in native\\n    item.kind = reg.ObservationKind.FeedEnthalpy\\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAttributeError: type object \\'epcsaft._core.ObservationKind\\' has no attribute \\'FeedEnthalpy\\'\\n'}",
+  "wheel_sha256": "b83c42502235e8915cd07b0eabf24398c7f54a884d41ca914273ddd0f1703667",
+  "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-9c31cb9a/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "producer_sha256": "e6298f03e107dfe9a177ae6a4dc24fb006c4ad82cf9b9910aef494a1187d4c10",
+  "diagnosis": "Engine source observations.hpp:19 defines internal FeedEnthalpy; regression_bindings.cpp:18-34 does not expose it, consistent with the pinned wheel AttributeError. This does not establish missing EOS feed capability or a physical-model failure.",
+  "no_further_numerical_calls": true
+}
