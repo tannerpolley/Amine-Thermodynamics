@@ -128,11 +128,12 @@ compute is **about 201.11 s of 50400 s**, leaving about 50198.89 s.
 CSE accounting uses base `76ea465fe1ede72257a809d04fc986489c5267f3`.
 The feed replacement adds **10 gross executable lines** and removes three,
 retiring the unsupported enum/prediction path while preserving root admission.
-Owner accounting is **466 + 10 = 476 of 481**, five lines remaining; removals
-receive no credit. The base-to-final-tree report measures **472 surviving
-executable additions** (120 source-law, 211 original-driver, 141 successor-driver
-lines). The four-line difference is the earlier one-line removal plus this
-three-line replacement. Documents and retained JSON/CSV/log/checksum changes are
+Gross additions from `git log --numstat 76ea465..83e558b` are **478 of 481**
+(120 source-law, 213 original-driver, 145 successor-driver), three lines
+remaining; removals receive no credit. Independent delivered review found the
+earlier ledger figure of 476 understated by two: the original driver's gross
+additions are 213, not 211. The base-to-final-tree report measures **472
+surviving executable additions**; the difference is the six removed lines. Documents and retained JSON/CSV/log/checksum changes are
 reported separately in `change-accounting.json`. No test or dependency was added.
 The protected pre-existing untracked diagnosis is explicitly excluded from the
 task's changed surface and remains untracked.
