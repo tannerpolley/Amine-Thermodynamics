@@ -1,0 +1,101 @@
+{
+  "adopted_cp_value_limit_passed": 42,
+  "adopted_cp_value_limit_total": 42,
+  "commands": {
+    "diagnosis": "Two authorized one-thread, timeout 60 probes: one identical unloaded native solve; one 343 K enthalpy step ladder. The ladder was repeated only after diagnostic JSON serialization failed; the initial partial write is preserved.",
+    "native_batch": "timeout 300 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 /home/tnnrpolley21/Workspaces/Engineering/MEA-Absorption-Column/.venv/bin/python analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/evaluate.py models",
+    "reference": "timeout 300 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 /home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/.venv/bin/python analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/evaluate.py reference",
+    "tighter_diagnostic": "timeout 60 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 /home/tnnrpolley21/Workspaces/Engineering/MEA-Absorption-Column/.venv/bin/python analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/diagnose_unloaded.py",
+    "working_directory": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-160-density-cp"
+  },
+  "completeness": {
+    "additional_unloaded_solution_Cp_available": 0,
+    "additional_unloaded_solution_Cp_requested": 1,
+    "prior_loaded_solution_diagnosis_available": 1,
+    "saturation_evaluated_states": 78,
+    "saturation_requested_states": 78,
+    "tighter_control_unloaded_diagnostic_Cp_available": 0,
+    "tighter_control_unloaded_diagnostic_requested": 1,
+    "water_evaluated_rows": 84,
+    "water_requested_rows": 84
+  },
+  "enthalpy_FD_relative_limit_passed": 84,
+  "extra_existing_owner_half_error_rule_passed": 83,
+  "final_assessment": "Adopted water Cp value and vapor-pressure requirements pass on both sampled grids; mean saturated-density errors worsen, so original joint property requirements are not satisfied. Additional unloaded80C Cp remains unavailable. No EOS-impossibility or physical-validation conclusion.",
+  "max_fine_FD_relative_error": 2.541033716774166e-09,
+  "max_saturation_unscaled_residual": 1.6653345369377348e-14,
+  "minimum_pressure_density_derivative": 60812.17440209809,
+  "numerical_check_total": 84,
+  "published_step_halving_improvement_passed": 84,
+  "question": "Fixed original #124 versus adopted #160 candidate; no fitting or model change.",
+  "refinement_diagnosis": "At 343.15 K, the .2\u2192.1 K Cp error contracts by a factor of .252; .05/.025 K errors plateau at 2.08/2.49e-8 J/(mol K). Pressure closure changes sign and is about 4e-5 Pa. Final stored-enthalpy rounding alone is too small; exact closure and upstream value-error contributions remain unresolved.",
+  "refinement_rule_owner": "verify_solution_heat_capacity.py:93\u201395 supplies fine-error<=coarse-error/2; published #124 criterion only requires step-halving improvement. Extra check preserved unchanged; it is not a new published acceptance condition.",
+  "result_sha256": {
+    "diagnose_unloaded.py": "b0c13eba13262e712000db8f7bba3ac575a93d912736013232dd3c7cc854a2d7",
+    "evaluate.py": "f1f3ce2a95c052e0b93b3624d1500633b7dbb3fe9160c9303ca27d70d812ab0c",
+    "execution.log": "6c19a3fa7be096262c4d4124ee0e223e77f7e4b716636572bfdfad4a142b4b2b",
+    "iapws95-reference.csv": "68d107edd7c67cecef5f3454475249e216e63d9a19eb9d29166741333f4e2a24",
+    "inputs.json": "e4cd74e03c24fb6cfcf7459494fe54f5f8a3df8dd983548d8fcef6e61448f82e",
+    "loaded-80C-decomposition.json": "4e2aae8751858ee1a1dbb2476ad019db5dbd03266d228a7ceeb6b001be41f1c8",
+    "model-provenance.json": "9a91d6fb120be95275351691a68eea067dea5e3f2daf48a464aad3cecaa81148",
+    "original-record.json": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+    "plot.py": "f7777afcba9dd8fc2a372b5ad95ac588a4ed3958bee70f6e7c3cd11d9345d4f8",
+    "reference-provenance.json": "6a5e91b40f3f75681efdf482671ad1cce0cd0fd1cd3ef0a250a9572954ba431f",
+    "solution-request-0.0.json": "bc8a03e13efab9a9675a63121c12538dbb9f42a18dbe4ddc7fe6742b6ab6da61",
+    "unloaded-80C-native-diagnosis.json": "6cf8667f4ca784bd002b5d328dc45a5bec33e88af43c4233fa74ded52f0eeda3",
+    "unloaded-80C-row-diagnosis.json": "4a103653090484943ea8e7c6dbefb7d7b5bd689d491cd3176bcfa85df4f085a2",
+    "unloaded-80C-tighter-control.json": "560ea34e3c6bcba67b6e19f7d208f9d8a4cdb085ce276e90ea80ba089a7f5140",
+    "water-343K-enthalpy-ladder.json": "3f855c43e8780ae9c4dd0819549f1d47dc91d8b10b98b8a12df7c4fa8684346c",
+    "water-343K-enthalpy-ladder.serialization-failure.txt": "7d99070a44b28b9b995fe4e83bc94cdc4e66810064c4d37450310c9094a455b2",
+    "water-deviations.svg": "bf76b89e23a17bc4fb7aeb96415cc3e20b9e791e8928f6d0e4fc7e6c834c1ed1",
+    "water-metrics.csv": "e70de9f5371b426b253611a05a47624e12a67bb448ac2591df3a6e66a6cf6a6d",
+    "water.csv": "ac74a5103ed589031aa7087b360a5126b24d6eef947787abb43844fd96357eb0"
+  },
+  "unloaded_diagnosis": {
+    "Cp_evaluated": false,
+    "classified_residual": -5.056211127918387e-17,
+    "failing_component": "carbonate-anion",
+    "failing_equation": "chemical_potential_stationarity",
+    "loading_induced_model_Cp_difference": null,
+    "meaning": "Native amount-weighted convergence does not satisfy the existing raw stationarity gate. This is a numerical non-result, not evidence of physical-model failure.",
+    "next_existing_owner_probe": "The authorized tighter Problem.row_tolerance=1e-12 attempt is retained and still fails raw 1e-9. Further correction belongs to Engine native evaluation/refinement and its raw/classified completion evidence; no improvement is assumed and no additional solve is authorized here.",
+    "observed_loading_induced_Cp_difference_kJ_kg_K": -0.3859,
+    "raw_gate": 1e-09,
+    "raw_residual": -7.374467259069206e-09,
+    "tighter_control_attempt": {
+      "Cp_evaluated": false,
+      "iterations": 18,
+      "maximum_classified_residual": 7.545909682380633e-12,
+      "maximum_raw_residual": 7.373955668299459e-09,
+      "native_row_tolerance": 1e-12,
+      "path": "unloaded-80C-tighter-control.json",
+      "reported_evaluation_floor": 1.5379984769810711e-10,
+      "requested_tolerance_met": false,
+      "termination": "converged_to_floor: residual 7.5459096823806328e-12 against EQUILIBRIUM_REQUESTED_ROW_RESIDUAL 9.9999999999999998e-13 after 18 iterations, contraction absent, floor 1.5379984769810711e-10, amplification 0; requested row tolerance 0.000000 not met by an available floor-limited state",
+      "unchanged_raw_gate": 1e-09,
+      "wall_s": 0.06504104099440156
+    }
+  },
+  "water_nonworsening": {
+    "primary": {
+      "psat": {
+        "maximum_absolute_relative_error": true,
+        "mean_absolute_relative_error": true
+      },
+      "saturated_liquid_rho": {
+        "maximum_absolute_relative_error": true,
+        "mean_absolute_relative_error": false
+      }
+    },
+    "staggered": {
+      "psat": {
+        "maximum_absolute_relative_error": true,
+        "mean_absolute_relative_error": true
+      },
+      "saturated_liquid_rho": {
+        "maximum_absolute_relative_error": true,
+        "mean_absolute_relative_error": false
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "calculation_owner": "MEA-Absorption-Column",
+  "source_repository": "tannerpolley/MEA-Absorption-Column",
+  "source_commit": "bb70f6f7af62cdcdd029447cba34e44173a2750b",
+  "source_branch": "work/160-amine-density-cp",
+  "purpose": "Exact materialized Stage 5 comparison handoff for Amine-Thermodynamics #160; the absorber repository owns the full solve.",
+  "retained_files": [
+    {
+      "source_path": "analyses/physical_acceptance_149/results/amine_160_candidate_column/summary.json",
+      "retained_file": "summary.json",
+      "sha256": "18bf8d9a15a9e3d3ce2d5a580b3c33d31fc8fa13ab52d29d5efdbe917b65f050"
+    },
+    {
+      "source_path": "analyses/physical_acceptance_149/results/amine_160_candidate_column/physical-checks.csv",
+      "retained_file": "physical-checks.csv",
+      "sha256": "3129154d10df689c6fc8dac00ca529fd6886511b1fbc7e25843f0c88aad2a2f0"
+    },
+    {
+      "source_path": "analyses/bvp_solution_methods/figures/amine_160_candidate/output/temperature-comparison.csv",
+      "retained_file": "temperature-comparison.csv",
+      "sha256": "e3431ece4c7211b4a98a36dc47f8207abdb9e85e56d65bbee1cfcd993b04263b"
+    },
+    {
+      "source_path": "analyses/bvp_solution_methods/figures/amine_160_candidate/output/temperature-comparison.svg",
+      "retained_file": "temperature-comparison.svg",
+      "sha256": "8a54871b69c58859f0edf6a942666af888a3c9d8d835bcea4d8add75321c68a0"
+    },
+    {
+      "source_path": "analyses/bvp_solution_methods/figures/amine_160_candidate/output/temperature-comparison-provenance.json",
+      "retained_file": "temperature-comparison-provenance.json",
+      "sha256": "2987629b8fcbce9134e74d8a3205bb348f4ca94e285a9cd774f4f161de381da8"
+    }
+  ],
+  "source_attempt": {
+    "path": "analyses/bvp_solution_methods/results/amine_160_candidate/upwind_cos_n65_parameter_transfer/attempt.json",
+    "sha256": "ecbe8b276f2a782fce51a22f1540ae9be7dde2626a87e72bb1dc7492898a4e1c",
+    "attempt_id": "20261003T025113-def8060e09c1"
+  },
+  "source_resolved_config": {
+    "path": "analyses/bvp_solution_methods/results/amine_160_candidate/upwind_cos_n65_parameter_transfer/resolved_config.json",
+    "file_sha256": "c729944dfce2d8bc0f1f1fd9840e2a15488027299e2fa82630eb90c7dd58e807",
+    "canonical_config_sha256": "b74398e65000dc4d044507fadb3ced36de9978c90201dbc355f249e92ce65706"
+  },
+  "candidate_parameter_sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b",
+  "engine_wheel_sha256": "48a639e78d00ef88a2f7e66ed1e3d89831ca0ad5267322330d44f48c34926060",
+  "execution": {
+    "runtime_s": 5520.754646136,
+    "started_at_utc": "2026-10-03T02:51:13Z",
+    "status": "completed"
+  },
+  "numerical_acceptance": "accepted",
+  "scaled_residual_inf": 5.6616652239209375e-08,
+  "scaled_bound_violation_inf": 0.0,
+  "solver_iterations": 5,
+  "native_grid_nodes": 65,
+  "physical_certificate": {
+    "accepted": true,
+    "criteria": {
+      "boundary": 1e-07,
+      "charge": 1e-07,
+      "energy": 1e-07,
+      "interface": 1e-07,
+      "material": 1e-07
+    },
+    "scope": "Native-grid material/energy invariants, bulk/film-quadrature charge, interface, boundary, original bounds, and CO2 capture direction; between-node accuracy still requires refinement",
+    "reason": "physical criteria accepted"
+  },
+  "evidence_type": "Fixed-grid numerical verification and conditional comparison; no mesh-independent error estimate or physical validation.",
+  "claim_limits": [
+    "exploratory numerical attempt only; no solution-verification, validation, or scientific-promotion claim",
+    "species mobilities are case-estimated and use the declared harmonic-mean closure",
+    "native vapor caloric reference remains provisional for thermal interpretation",
+    "physical certification is limited to the native grid and configured film quadrature",
+    "the case-declared 3C policy does not establish continuous-profile or peak behavior"
+  ],
+  "solution_Cp_policy": "Two C5 comparisons miss 3%; solution Cp is reported, not a #160 acceptance requirement. No parameter or manuscript promotion.",
+  "quantity_label_note": {
+    "source_label": "reaction-shift contribution equilibrium minus frozen Cp kJ/(kg K)",
+    "meaning": "Equilibrium Cp minus frozen-composition Cp is the temperature-driven equilibrium reaction/speciation response. The retained values do not isolate the contribution of fitted R2/R5 parameter shifts.",
+    "preservation": "Original source CSV labels and all values are retained byte-identically from the declared absorber commit."
+  }
+}
