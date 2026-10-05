@@ -58,10 +58,17 @@ def native(job, alpha, extra, output):
             output['H_J'] = h*n
         return
     if job == 'feed':
-        item.kind = reg.ObservationKind.FeedEnthalpy
-        state = model.state(313.15, P=1734000., x=item.composition, phase='vapor')
-        output['feed_root'] = {k: s._jsonable(getattr(state, k)) for k in ('molar_density', 'pressure_density_derivative', 'stable_root_count', 'density_branch', 'residual_enthalpy')}
+        feed_params = probe.epcsaft.Parameters.from_mapping(mapping, components=['carbon-dioxide'])
+        feed_record = thermal.record()
+        feed_thermal = probe.epcsaft.ThermochemistryRecord(feed_record.standard_pressure,
+            [feed_record.component_intervals[s.COMPONENT_IDS.index('carbon-dioxide')]])
+        feed_model = probe.epcsaft.Pure(feed_params, thermochemistry=feed_thermal)
+        state = feed_model.state(313.15, P=1734000., phase='vapor')
+        output['feed_root'] = {k: s._jsonable(getattr(state, k)) for k in ('molar_density', 'pressure_density_derivative', 'stable_root_count', 'density_branch', 'residual_enthalpy', 'ideal_enthalpy', 'total_enthalpy', 'thermochemistry_status')}
         assert state.stable_root_count == 1 and all(math.isfinite(x) and x > 0 for x in (state.pressure_density_derivative, state.molar_density))
+        assert state.total_enthalpy is not None and math.isfinite(state.total_enthalpy)
+        output['prediction'] = {'value': state.total_enthalpy, 'status': 'Available', 'message': ''}
+        return
     if job == 'shift':
         thermal.CALORICS['components']['carbon-dioxide']['formation_enthalpy_j_per_mol'] += 10000.
         model = probe.epcsaft.Mixture(params, thermochemistry=thermal.record())
