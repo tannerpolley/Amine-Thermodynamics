@@ -280,15 +280,16 @@
   },
   "code_surface": {
     "base": "76ea465fe1ede72257a809d04fc986489c5267f3",
-    "prior_charged_gross_additions": 466,
+    "prior_charged_gross_additions": 468,
     "feed_fix_gross_additions": 10,
     "feed_fix_removals": 3,
     "removal_credit": 0,
-    "charged_used": 476,
+    "charged_used": 478,
     "ceiling": 481,
-    "remaining": 5
+    "remaining": 3,
+    "correction": "Independent delivered review 2026-10-05: git numstat gives 120 + 213 + 145 = 478 gross additions; the earlier prior figure 466 counted the original driver as 211."
   },
-  "independent_delivered_review": "not performed; parent owns review",
+  "independent_delivered_review": "2026-10-05 GPT-6.1 Sol high: checks 1, 2, 4, 5, 6 and the section 6.1 feed root Supported; check 3 Not supported as complete because the section 6.1 bubble boundary at alpha 0 is unavailable (Engine #231 stated limit); accounting corrected to 478",
   "limits": [
     "Fixed frozen physical parameters and chemistry, exact-zero initial carbon, 313.15 K and 1734000 Pa only.",
     "Negative finite-addition heats indicate exothermic increments under the declared one-liquid calculations; local liquid-vapor phase admission is incomplete.",
