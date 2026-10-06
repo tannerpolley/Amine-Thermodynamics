@@ -1,0 +1,318 @@
+{
+  "evidence_type": "numerical verification",
+  "complete_qualification": false,
+  "wheel_sha256": "e8ad39e0c5d7da471a6d3ace6ff62d60518c57bc1c96fe5198d8bf18747ba8b5",
+  "source_commit": "c106702048e87d0c583a3a5516cb5746e7a6ac07",
+  "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-c1067020/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "producer_sha256": "c5b535bb00898d23b38b6f39bf30030093d815be290735565d5c1b7a3e556fa5",
+  "driver_commit": "ebb24a619afbdce0b0d81bb40bf0ca04ec01b6f4",
+  "basis": {
+    "T_K": 313.15,
+    "P_Pa": 1734000.0,
+    "MEA_feed_mol": 1.0,
+    "water_feed_mol": 7.911062165006594,
+    "initial_carbon_mol": 0.0,
+    "unloaded_MEA_mass_fraction": 0.3,
+    "feed": "pure carbon dioxide",
+    "feed_branch_hint": "vapor",
+    "endpoint_phase": "one reacting liquid"
+  },
+  "check_1_historical_replay": {
+    "passed": true,
+    "costs": {
+      "pressure": 8.143453130517166,
+      "species": 24.84844413070364,
+      "total": 32.99189726122081
+    },
+    "reference_costs": {
+      "pressure": 8.14345313051485,
+      "species": 24.848444130706277,
+      "total": 32.991897261221126
+    },
+    "cost_differences": {
+      "pressure": 2.3163693185779266e-12,
+      "species": -2.6361135496699717e-12,
+      "total": -3.197442310920451e-13
+    },
+    "states": 84,
+    "targets": 142,
+    "maximum_prediction_tolerance_fraction": 0.00012402064066160403,
+    "maximum_stationarity": 5.968558980384842e-13,
+    "wall_s": 7.54201071999978,
+    "summed_worker_s": 71.94193797600019,
+    "pool_size": 12,
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-c1067020/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "producer_sha256": "c5b535bb00898d23b38b6f39bf30030093d815be290735565d5c1b7a3e556fa5",
+    "rerun": true,
+    "prior_wheel_cost_differences": {
+      "pressure": 2.6894042548519792e-12,
+      "species": -2.6361135496699717e-12,
+      "total": 5.684341886080802e-14
+    }
+  },
+  "check_2_law_mapping": {
+    "passed": true,
+    "rows": 12,
+    "max_abs_delta_lnK": 7.815970093361102e-14,
+    "RT2_derivative_check": "stored versus native polynomial coefficients; Engine thermochemistry.cpp:221-229 inspected",
+    "source_representation_checks": "phase-A frozen admission grid and continuation errors retained unchanged",
+    "producer_sha256": "c5b535bb00898d23b38b6f39bf30030093d815be290735565d5c1b7a3e556fa5",
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-c1067020/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "rerun": true,
+    "prior_wheel_max_abs_delta_lnK_difference": 0.0
+  },
+  "check_3_native_values_feed_and_fixed_pressure_endpoints": {
+    "passed": true,
+    "complete_check_3": false,
+    "phase_boundary_admission": "unrun after first failure at check 5"
+  },
+  "check_4_independent_assembly_anchor_shift_conditioning": {
+    "passed": true
+  },
+  "check_5_exact_Jacobian_h_and_2h": {
+    "passed": false,
+    "result_available": false,
+    "stopping_point": "First exact-action coordinate declaration, alpha_final 0.11",
+    "fine_and_coarse_ratios": null,
+    "finite_difference_calls": 0
+  },
+  "check_6_training": {
+    "passed": true,
+    "states": 84,
+    "maximum_material_error_mol": 6.066258606551855e-13,
+    "maximum_charge_error_mol": 2.0431756812929434e-13,
+    "maximum_stationarity": 5.968558980384842e-13,
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-c1067020/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "method": "Conservation sums from retained phase amounts/compositions and unchanged packet balance matrix, conserved totals and charges; no new Engine calculation."
+  },
+  "check_6_calorimetric_endpoints": {
+    "returned_states": 4,
+    "distinct_states": 3,
+    "maximum_material_error_mol": 9.959481156451844e-16,
+    "maximum_charge_error_mol": 7.770991991234328e-16,
+    "maximum_raw_row": 2.8421709430404007e-13,
+    "maximum_raw_residual": 2.8421709430404007e-13,
+    "maximum_classified_residual": 7.567628033932771e-14,
+    "all_requested_tolerances_met": true,
+    "formal_check_6_reached": false
+  },
+  "section_6_1": {
+    "complete": false,
+    "feed_root_admission": "pass at both observations during check 3",
+    "bubble_boundaries": [
+      {
+        "alpha": 0.0,
+        "pressure_Pa": null,
+        "separation_factor": null,
+        "outcome": "unrun after first failure at check 5"
+      },
+      {
+        "alpha": 0.11,
+        "pressure_Pa": null,
+        "separation_factor": null,
+        "outcome": "unrun after first failure at check 5"
+      },
+      {
+        "alpha": 0.45,
+        "pressure_Pa": null,
+        "separation_factor": null,
+        "outcome": "unrun after first failure at check 5"
+      }
+    ],
+    "Engine_handoff_pressure_Pa": 6289.083617367117,
+    "Engine_handoff_is_qualification": false
+  },
+  "observations": {
+    "0.11": {
+      "native_heat_J_mol_CO2": -68169.42621173232,
+      "initial_H_J": -2313691.8924407274,
+      "final_H_J": -2364483.718759536,
+      "independent_feed_H_J_mol": -393574.4494137983,
+      "feed_root": {
+        "molar_density": 723.5928742984386,
+        "pressure_density_derivative": 2196.5242889643346,
+        "stable_root_count": 1,
+        "density_branch": "Unspecified",
+        "residual_enthalpy": -623.740071356366,
+        "ideal_enthalpy": -392950.7093424419,
+        "total_enthalpy": -393574.4494137983,
+        "thermochemistry_status": "Available"
+      },
+      "independent_assembly_J_mol_CO2": -68169.42621173232,
+      "assembly_difference_J_mol_CO2": 0.0,
+      "allowance_J_mol_CO2": 0.0425980386189414,
+      "shifted_heat_J_mol_CO2": -68169.42621173232,
+      "anchor_shift_change_J_mol_CO2": 0.0,
+      "conditioning": 623.8701358675985,
+      "Jacobian": null,
+      "maximum_fine_error_ratio": null,
+      "maximum_coarse_error_ratio": null,
+      "prior_wheel_differences": {
+        "native_heat_J_mol_CO2": 0.0,
+        "initial_H_J": 0.0,
+        "final_H_J": 0.0,
+        "independent_feed_H_J_mol": 0.0,
+        "independent_assembly_J_mol_CO2": 0.0,
+        "assembly_difference_J_mol_CO2": 0.0,
+        "allowance_J_mol_CO2": 0.0,
+        "shifted_heat_J_mol_CO2": -4.249159246683121e-09,
+        "anchor_shift_change_J_mol_CO2": -4.249159246683121e-09,
+        "conditioning": 0.0
+      }
+    },
+    "0.45": {
+      "native_heat_J_mol_CO2": -68286.33285346051,
+      "initial_H_J": -2313691.8924407274,
+      "final_H_J": -2521529.244460994,
+      "independent_feed_H_J_mol": -393574.4494137983,
+      "feed_root": {
+        "molar_density": 723.5928742984386,
+        "pressure_density_derivative": 2196.5242889643346,
+        "stable_root_count": 1,
+        "density_branch": "Unspecified",
+        "residual_enthalpy": -623.740071356366,
+        "ideal_enthalpy": -392950.7093424419,
+        "total_enthalpy": -393574.4494137983,
+        "thermochemistry_status": "Available"
+      },
+      "independent_assembly_J_mol_CO2": -68286.33285346051,
+      "assembly_difference_J_mol_CO2": 0.0,
+      "allowance_J_mol_CO2": 0.010814222192635062,
+      "shifted_heat_J_mol_CO2": -68286.33285345847,
+      "anchor_shift_change_J_mol_CO2": 2.0372681319713593e-09,
+      "conditioning": 157.35119182398864,
+      "Jacobian": null,
+      "maximum_fine_error_ratio": null,
+      "maximum_coarse_error_ratio": null,
+      "prior_wheel_differences": {
+        "native_heat_J_mol_CO2": 0.0,
+        "initial_H_J": 0.0,
+        "final_H_J": 0.0,
+        "independent_feed_H_J_mol": 0.0,
+        "independent_assembly_J_mol_CO2": 0.0,
+        "assembly_difference_J_mol_CO2": 0.0,
+        "allowance_J_mol_CO2": 0.0,
+        "shifted_heat_J_mol_CO2": 9.89530235528946e-10,
+        "anchor_shift_change_J_mol_CO2": 9.89530235528946e-10,
+        "conditioning": 0.0
+      }
+    }
+  },
+  "first_execution_failure": {
+    "stage": "5",
+    "failed_job": "gradient",
+    "alpha_final": 0.11,
+    "exception": "TypeError",
+    "message": "coordinate() takes 2 positional arguments but 3 positional arguments (and 2 keyword-only arguments) were given",
+    "child_traceback": "Traceback (most recent call last):\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 105, in <module>\n    native(job, alpha, sys.argv[3:], record)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 82, in native\n    chart.coordinates = [reg.coordinate(params, 'k_ij_reciprocal_temperature_slope' if identity == pa.SLOPE else 'k_ij', tuple(identity.split('/')[1:3]), origin=0., scale=1.) for identity in pa.IDS+[pa.SLOPE]]\n                         ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: coordinate() takes 2 positional arguments but 3 positional arguments (and 2 keyword-only arguments) were given\n",
+    "parent_exception": "AssertionError",
+    "parent_message": "{'job': 'gradient', 'alpha': 0.11, 'extra': (), 'elapsed_s': 0.36355639300018083, 'exit_code': 1, 'output': 'Traceback (most recent call last):\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 105, in <module>\\n    native(job, alpha, sys.argv[3:], record)\\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py\", line 82, in native\\n    chart.coordinates = [reg.coordinate(params, \\'k_ij_reciprocal_temperature_slope\\' if identity == pa.SLOPE else \\'k_ij\\', tuple(identity.split(\\'/\\')[1:3]), origin=0., scale=1.) for identity in pa.IDS+[pa.SLOPE]]\\n                         ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nTypeError: coordinate() takes 2 positional arguments but 3 positional arguments (and 2 keyword-only arguments) were given\\n'}",
+    "parent_traceback_log": "remaining-qualification.log.gz",
+    "exit_code": 1,
+    "elapsed_s": 0.36355639300018083,
+    "wheel_sha256": "e8ad39e0c5d7da471a6d3ace6ff62d60518c57bc1c96fe5198d8bf18747ba8b5",
+    "module_origin": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/downstream/.worktrees/Amine-Thermodynamics-147-heat-temperature/analyses/mea_parameter_bundle/results/runs/temperature-heat-147/.venv-c1067020/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "producer_sha256": "c5b535bb00898d23b38b6f39bf30030093d815be290735565d5c1b7a3e556fa5",
+    "driver_commit": "ebb24a619afbdce0b0d81bb40bf0ca04ec01b6f4",
+    "meaning": "The Python coordinate declaration rejected the third positional argument before exact differentiation. No Jacobian was returned; this is an execution failure, not numerical nonconvergence or physical-model failure.",
+    "no_further_numerical_calls": true,
+    "infrastructure_failure": false
+  },
+  "compute": {
+    "thread_environment": {
+      "OMP_NUM_THREADS": 1,
+      "OPENBLAS_NUM_THREADS": 1,
+      "MKL_NUM_THREADS": 1
+    },
+    "pool_size": 12,
+    "CPU_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "jobs": {
+      "build": {
+        "wall_s": 11.82,
+        "user_s": 5.63,
+        "system_s": 3.5,
+        "max_rss_KB": 122488.0,
+        "exit_code": 0.0
+      },
+      "replay": {
+        "wall_s": 8.05,
+        "user_s": 40.01,
+        "system_s": 1.74,
+        "max_rss_KB": 75036.0,
+        "exit_code": 0.0
+      },
+      "mapping": {
+        "wall_s": 0.37,
+        "user_s": 0.27,
+        "system_s": 0.07,
+        "max_rss_KB": 70896.0,
+        "exit_code": 0.0
+      },
+      "remaining": {
+        "wall_s": 6.59,
+        "user_s": 5.61,
+        "system_s": 0.72,
+        "max_rss_KB": 70856.0,
+        "exit_code": 1.0
+      }
+    },
+    "agent_heavy_memory_caps": {
+      "build": "6G",
+      "replay": "3G",
+      "mapping": "1G",
+      "remaining": "1G"
+    },
+    "agent_heavy_wait_cap_s": 180,
+    "single_call_timeout_s": 175,
+    "kill_grace_s": 5,
+    "serial_child_calls": 11,
+    "successful_serial_child_calls": 10,
+    "serial_summed_child_wall_s": 6.22890521500176,
+    "Q1_child_wall_s": 5.865348822001579,
+    "Q2_child_wall_s": 0.36355639300018083,
+    "pooled_summed_worker_s": 71.94193797600019,
+    "new_conservative_numerical_charge_s": 78.9019379760002,
+    "prior_charge_approx_s": 201.11,
+    "cumulative_conservative_charge_approx_s": 280.01193797600024,
+    "remaining_ceiling_s": 50119.988062024,
+    "ceiling_s": 50400,
+    "infrastructure_failures": [],
+    "charge_basis": "Summed pooled worker wall time plus enclosing mapping/remaining wall times; build preparation is separate from numerical time. Parent/child time is not double counted. Existing driver Q1 reserves 49.79 s from its 1770 s cap, conservatively exceeding this mapping time."
+  },
+  "code_surface": {
+    "base": "76ea465fe1ede72257a809d04fc986489c5267f3",
+    "prior_charged_gross_additions": 478,
+    "wrapper_gross_additions": 6,
+    "wrapper_removals": 5,
+    "removal_credit": 0,
+    "charged_used": 484,
+    "ceiling": 491,
+    "remaining": 7,
+    "surviving_executable_additions_expected": 473
+  },
+  "independent_delivered_review": "Not performed by this worker; parent owns review.",
+  "limits": [
+    "Frozen physical parameters, chemistry, starts and source records; heat basis 30 wt% unloaded solvent, 313.15 K and 1734000 Pa, initial carbon exactly zero.",
+    "Negative finite-addition heat is an exothermic increment under the declared one-liquid model; local liquid-vapor admission remains unrun.",
+    "Assembly and anchor invariance are numerical verification, not calorimetric physical validation, parameter adoption, or absorber/stripper qualification.",
+    "No fit, loaded solve above 333.15 K, #152/#160 input substitution, epsilon, retry, notebook/manuscript edit or remote publication."
+  ],
+  "unrun": [
+    "All five exact heat directions and h/2h comparisons at both loadings",
+    "Formal check 6 after check 5; available training/fixed-pressure diagnostics retained separately",
+    "Bubble endpoints alpha 0, 0.11 and 0.45, including pressures/separation factors"
+  ]
+}
