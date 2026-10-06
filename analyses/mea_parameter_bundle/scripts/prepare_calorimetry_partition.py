@@ -79,7 +79,7 @@ def main() -> None:
                         "assumed_start_loading" if index == 0 else "preceding_observation_endpoint"
                     ),
                     "first_row_source_typo_sensitivity": (
-                        "exclude_and_replay" if row["record_id"] == "kim2007_t40_r1_0.041" else ""
+                        "integral_only_differential_usable" if row["record_id"] == "kim2007_t40_r1_0.041" else ""
                     ),
                 }
             )
@@ -123,7 +123,7 @@ def main() -> None:
             "co2_loading_mol_per_mol_mea": ASSUMED_START_LOADING,
             "required_sensitivity": "perturb before parameter adoption",
         },
-        "source_typo_sensitivity_record_id": "kim2007_t40_r1_0.041",
+        "integral_cell_suspicion_record_id": "kim2007_t40_r1_0.041",
         "heat_sign": "reported positive heat-release magnitude",
         "heat_unit": "kJ/mol CO2",
         "engine_requirement": "paired-state total reactive-liquid enthalpy owner with compatible incoming ideal-gas CO2 enthalpy and typed endpoint failures",

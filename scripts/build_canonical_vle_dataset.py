@@ -48,8 +48,13 @@ OUTPUT_FIELDS = (
     "CO2_pressure",
     "paper",
 )
-EXPECTED_ROW_COUNT = 161
+EXPECTED_ROW_COUNT = 162
 EXPECTED_OBSERVATION_COUNT = 327
+SOURCE_COORDINATES = (
+    "source_molality_mol_per_kg_water", "temperature_measured_C",
+    "MEA_weight_fraction_nominal", "temperature_series_C", "temperature_series_origin",
+)
+OUTPUT_FIELDS += SOURCE_COORDINATES
 OBSERVATION_FIELDS = (
     "observation_id",
     "source_key",
@@ -77,6 +82,7 @@ OBSERVATION_FIELDS = (
     "disposition_reason",
     "notes",
 )
+OBSERVATION_FIELDS += SOURCE_COORDINATES
 DISPOSITION_FIELDS = (
     "source_key",
     "source_file",
@@ -117,34 +123,37 @@ def _pco2_metrology(row: dict[str, str | int]) -> dict[str, str | int]:
         "Xu2011": "Xu et al. (2011), Eq. (1) and equilibrium table",
     }[source]
     origin = {
-        "Aronu2011": "direct_partial_pressure" if temperature <= 80.0 else "model_derived",
+        "Aronu2011": "calibration_derived_partial_pressure" if temperature <= 80.0 else "model_derived",
         "Hilliard2008": "calibration_derived_partial_pressure",
-        "Idris2014": "unresolved",
+        "Idris2014": "calibration_derived_partial_pressure",
         "Jou1995": "calibration_derived_partial_pressure",
-        "Mamun2005": "direct_partial_pressure",
+        "Mamun2005": "calibration_derived_partial_pressure",
         "Xu2011": "total_pressure_derived",
     }[source]
     primitive = {
-        "Aronu2011": "equilibrium_gas_CO2_partial_pressure",
-        "Hilliard2008": "calibrated_gas_composition_and_total_pressure",
-        "Idris2014": "unresolved_primary_metrology",
+        "Aronu2011": "cooled_NDIR_gas_fraction",
+        "Hilliard2008": "calibrated_vapor_concentrations",
+        "Idris2014": "GC_at_least_six_gas_samples_per_loading",
         "Jou1995": "total_pressure_and_calibrated_gas_composition",
-        "Mamun2005": "equilibrium_gas_CO2_partial_pressure",
+        "Mamun2005": "NDIR_gas_fraction_in_N2_cell",
         "Xu2011": "measured_total_pressure",
     }[source]
     correction = {
         "Aronu2011": (
-            "none"
-            if origin == "direct_partial_pressure"
+            "source Eq.3 solvent correction already applied; atmospheric circulation; no numeric pressure inferred"
+            if temperature <= 80.0
             else "extended_UNIQUAC value reported by the source; excluded"
         ),
-        "Hilliard2008": "CO2 concentration from calibrated FTIR/IR response combined with measured total pressure",
-        "Idris2014": "primary pressure-metrology description not source-complete in the local record",
+        "Hilliard2008": "source pCO2 retained; tabulated sum pCO2+pMEA+pH2O excludes N2; not cell pressure; vapor concentration expanded +/-2%, loading standard +/-2%; not independent pressure uncertainty",
+        "Idris2014": "source GC origin verified (section2.2 p.1425); detailed state pressure unresolved",
         "Jou1995": "gas analysis and solvent-vapor correction reported by the source",
-        "Mamun2005": "none",
+        "Mamun2005": "source Eq.3 p.632 Wilson solvent correction already applied; pCO2 expanded +/-2%, loading standard +/-2%, temperature +/-0.5 C",
         "Xu2011": "source Eq. (1): measured total pressure corrected for N2 and calculated solvent vapor pressures",
     }[source]
-    if total_pressure:
+    if source == "Mamun2005":
+        state_pressure_pa = "700000"
+        pressure_specification = "source_N2_cell_total_pressure"
+    elif total_pressure and source != "Hilliard2008":
         state_pressure_pa = f"{float(total_pressure) * 1000.0:.12g}"
         pressure_specification = "row_reported_total_pressure"
     else:
@@ -228,10 +237,17 @@ def _validate_measurement(row: dict[str, str], *, context: str) -> None:
 
 
 def _load_sources() -> dict[str, list[dict[str, str]]]:
-    return {
+    sources = {
         source_key: _read_rows(VLE_DIR / source_file)
         for source_key, source_file in SOURCE_FILES.items()
     }
+    for key in ("Hilliard2008", "Xu2011"):
+        for row in sources[key]:
+            if not all(row[field] for field in SOURCE_COORDINATES + ("MEA_weight_fraction_calculation",)):
+                raise ValueError(f"Missing measured source coordinates: {key}")
+            if float(row["source_molality_mol_per_kg_water"]) <= 0 or row["temperature_measured_C"] != row["temperature"]:
+                raise ValueError(f"Invalid source molality/temperature: {key}")
+    return sources
 
 
 def build_dataset(
@@ -323,7 +339,8 @@ def build_dataset(
                 "source_key": source_key,
                 "source_file": source_file,
                 "source_row": source_row,
-                "MEA_weight_fraction": source["MEA_weight_fraction"],
+                "MEA_weight_fraction": source["MEA_weight_fraction_calculation"] if source_key in {"Hilliard2008", "Xu2011"} else source["MEA_weight_fraction"],
+                **{field: source.get(field, "") for field in SOURCE_COORDINATES},
                 "temperature": temperature,
                 "CO2_loading": source["CO2_loading"],
                 "CO2_pressure": source["CO2_pressure"],
@@ -369,7 +386,7 @@ def _write_full_registry(
             active = active_lookup.get((source_key, source_row))
             active_member = "yes" if active is not None else "no"
             active_row_id = str(active["row_id"]) if active is not None else ""
-            canonical_temperature = str(active["temperature"]) if active is not None else ""
+            canonical_temperature = str(active["temperature"]) if active is not None else source["temperature"] if source_key in {"Hilliard2008", "Xu2011"} else ""
             temperature_normalized = (
                 "yes"
                 if active is not None and canonical_temperature != source["temperature"]
@@ -392,7 +409,8 @@ def _write_full_registry(
                 raise RuntimeError(f"Unaccounted non-active VLE row: {context}")
 
             replicate_group = (
-                f"{source_key}|w={source['MEA_weight_fraction']}|T={source['temperature']}"
+                f"{source_key}|w={source.get('MEA_weight_fraction_nominal', source['MEA_weight_fraction'])}"
+                f"|T={source.get('temperature_series_C', source['temperature'])}"
             )
             normalization_group = (
                 f"{source_key}|nominal_T={canonical_temperature}"
@@ -405,9 +423,10 @@ def _write_full_registry(
                     "source_key": source_key,
                     "source_file": source_file,
                     "source_row": source_row,
-                    "source_table_or_figure": source.get("source_table_or_figure", ""),
+                    "source_table_or_figure": source.get("source_locator", source.get("source_table_or_figure", "")),
                     "doi": source.get("doi", ""),
-                    "MEA_weight_fraction": source["MEA_weight_fraction"],
+                    "MEA_weight_fraction": source["MEA_weight_fraction_calculation"] if source_key in {"Hilliard2008", "Xu2011"} else source["MEA_weight_fraction"],
+                    **{field: source.get(field, "") for field in SOURCE_COORDINATES},
                     "temperature_reported_C": source["temperature"],
                     "temperature_canonical_C": canonical_temperature,
                     "temperature_normalized": temperature_normalized,

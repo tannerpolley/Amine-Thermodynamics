@@ -1,0 +1,40 @@
+{
+  "claim_limit": "Fixed-record errors only; trace rejection is a numerical non-result. No model-limit finding, parameter change, acceptance change, authoritativeC5 substitution, or physical validation.",
+  "corrected_state_packet_path": "analyses/mea_parameter_bundle/data/input/state-packet.json.gz",
+  "density_translation_applied": false,
+  "engine_wheel_sha256": "48a639e78d00ef88a2f7e66ed1e3d89831ca0ad5267322330d44f48c34926060",
+  "hilliard_locator": "Appendix G.2, printed p.937 (PDF p.994), 80C values 3.8566(alpha0) and 3.4707(alpha.358), kJ/kg/K; procedure \u00a7\u00a74.6\u20134.8, pp.74\u201383; accuracy \u00b12%, reproducibility 1%.",
+  "hilliard_pdf_sha256": "728f506faaca36a0f5b3ec4162c1aa6f8ffc49af98871bb2da2fe573fc39df61",
+  "installed_module": "/home/tnnrpolley21/Workspaces/Engineering/MEA-Absorption-Column/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "interpreter": "/home/tnnrpolley21/Workspaces/Engineering/MEA-Absorption-Column/.venv/bin/python",
+  "native_batch_wall_s": 1.25080872,
+  "parameter_files": {
+    "adopted": {
+      "path": "../D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b"
+    },
+    "original": {
+      "path": "original-record.json",
+      "sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241"
+    }
+  },
+  "physical_ideal_calorics_sha256": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a",
+  "producer_sha256": "f1f3ce2a95c052e0b93b3624d1500633b7dbb3fe9160c9303ca27d70d812ab0c",
+  "producers": {
+    "analyses/mea_parameter_bundle/scripts/density_cp_160.py": "975fbcc606f0fa32c9c98edcdbf5578d4c16ceb1caee71b6e5028459a1157f47",
+    "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "71953a76516914c4ca8e90925d1f2f04f5daba398ce269bdeba9a29ba9bba641",
+    "analyses/mea_parameter_bundle/scripts/verify_reference_calorics.py": "1c52937132ce452f638b334039ec48ee88996d91eea073397311828e39603715",
+    "analyses/mea_parameter_bundle/scripts/verify_temperature_reference.py": "ece087635f7a1b525564cff2657192507fdab4ed87dd2b6723b1a1a07ea3f855"
+  },
+  "solution_evaluated_rows": 0,
+  "solution_requested_rows": 2,
+  "solution_unloaded_failure": "RuntimeError from unchanged verify_temperature_reference.solve: solve failed at T=353.15: converged: residual 7.5711468385089983e-12 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after14iterations, contraction absent, floor1.5379984769810678e-10, amplification0. Raw unscaled residuals were not returned by that wrapper.",
+  "source_feed_owner_sha256": "242973e500e33530a1d0315475fa4a6f974e57c6f7354706081c07bf94820ef5",
+  "state_packet_sha256": "e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba",
+  "stopping_point": "Nominal-unloaded80C solve check, after84water rows and before solutionCp actions.",
+  "water_evaluated_rows": 84,
+  "water_ideal_calorics": "Existing fixed NIST Shomate, extrapolated below500K.",
+  "water_requested_rows": 84,
+  "water_saturation_evaluated_states": 78,
+  "water_saturation_requested_states": 78
+}
