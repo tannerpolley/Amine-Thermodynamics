@@ -1,0 +1,69 @@
+{
+  "fits_executed": 0,
+  "equilibrium_solves_executed": 0,
+  "checks": {
+    "syntax_and_independent_git_numstat": {
+      "low-temperature-fit.py": {
+        "added": 272,
+        "removed": 11,
+        "by_part": {
+          "imports/bindings/dispatch/spacing": 52,
+          "verify_inputs": 13,
+          "check_state": 1,
+          "heat_rows": 5,
+          "heat_problem": 10,
+          "heat_observation": 9,
+          "heat_value": 54,
+          "bounded_heat": 21,
+          "fit": 28,
+          "rescore": 21,
+          "check147": 58
+        }
+      },
+      "assessment.py": {
+        "added": 248,
+        "removed": 15,
+        "by_part": {
+          "imports/bindings/dispatch/spacing": 23,
+          "source_file": 5,
+          "select": 23,
+          "calculation": 6,
+          "wagner": 1,
+          "identification": 27,
+          "independent_heat": 74,
+          "heat_metrics": 7,
+          "limits147": 59,
+          "heat_comparison": 1,
+          "stage": 22
+        }
+      }
+    },
+    "branch_membership": {
+      "draft_heat_choices": [
+        "constant-no-heat",
+        "slope-no-heat",
+        "constant-heat",
+        "slope-heat"
+      ],
+      "reduced_heat_choices": [
+        "constant-heat",
+        "slope-heat"
+      ]
+    },
+    "endpoint_shape": "Original raises KeyError(request); corrected request wrapper passes on retained state.",
+    "five_pinned_input_hashes": true,
+    "compute_arithmetic": true,
+    "git_apply_check_against_b10339d": true
+  },
+  "files_sha256": {
+    "low-temperature-fit.py": "b646317bc8ebb0abc9b0903cb721485b3e3c032e4e8a37c92b87fabed0581dcb",
+    "assessment.py": "1cdb50edffa989acba4834dace12855ee4881637f0b3ae31b3281a8d788e2502",
+    "reduced-owner-reuse.diff": "9664176c9cc9de8c09a3259a1daba21ef96142f413d8edbf9763248ff98e3905",
+    "line-counts.json": "85a96bc3bd720b76d4a4fada200772adcbab897dd3b4e396edc89e0500448a01"
+  },
+  "repository_after_review": {
+    "head": "b10339d8ec0335831f335aebd93d130fa81c510f",
+    "status": "?? analyses/mea_parameter_bundle/results/temperature-heat-147/zero-carbon-diagnosis/",
+    "unchanged_from_start": true
+  }
+}

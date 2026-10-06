@@ -1,0 +1,176 @@
+{
+  "base_head": "b10339d8ec0335831f335aebd93d130fa81c510f",
+  "historical_base": "76ea465fe1ede72257a809d04fc986489c5267f3",
+  "parts": {
+    "low-temperature-fit.py": 272,
+    "assessment.py": 248
+  },
+  "gross_remaining": 520,
+  "historical_used": 566,
+  "ceiling": 1086,
+  "saving_vs_554": 34,
+  "ledger": [
+    {
+      "change": "Use immutable corrected-input hashes; keep target-count/order checks in the recovery check and native fit",
+      "kind": "cut",
+      "before": {
+        "low-temperature-fit.py": 283,
+        "assessment.py": 271
+      },
+      "after": {
+        "low-temperature-fit.py": 275,
+        "assessment.py": 271
+      },
+      "saving": 8
+    },
+    {
+      "change": "Use the existing parameter fingerprint in already isolated fresh caches; bind calorics in fit provenance",
+      "kind": "cut",
+      "before": {
+        "low-temperature-fit.py": 275,
+        "assessment.py": 271
+      },
+      "after": {
+        "low-temperature-fit.py": 267,
+        "assessment.py": 271
+      },
+      "saving": 8
+    },
+    {
+      "change": "Write fitted-coordinate provenance once in the existing export loop",
+      "kind": "cut",
+      "before": {
+        "low-temperature-fit.py": 267,
+        "assessment.py": 271
+      },
+      "after": {
+        "low-temperature-fit.py": 265,
+        "assessment.py": 271
+      },
+      "saving": 2
+    },
+    {
+      "change": "Keep one heat-rescore result and completeness check; use qualified exact-zero support with the unchanged declaration",
+      "kind": "cut",
+      "before": {
+        "low-temperature-fit.py": 265,
+        "assessment.py": 271
+      },
+      "after": {
+        "low-temperature-fit.py": 257,
+        "assessment.py": 271
+      },
+      "saving": 8
+    },
+    {
+      "change": "One frozen-input hash table and verification loop, including both calorimetry sources",
+      "kind": "cut",
+      "before": {
+        "low-temperature-fit.py": 257,
+        "assessment.py": 271
+      },
+      "after": {
+        "low-temperature-fit.py": 257,
+        "assessment.py": 264
+      },
+      "saving": 7
+    },
+    {
+      "change": "Remove unreachable Xu filtering and historical-heat guard after the explicit issue-147 stage-4 stop",
+      "kind": "cut",
+      "before": {
+        "low-temperature-fit.py": 257,
+        "assessment.py": 264
+      },
+      "after": {
+        "low-temperature-fit.py": 257,
+        "assessment.py": 261
+      },
+      "saving": 3
+    },
+    {
+      "change": "Reuse the frozen Arcis source-admission separation evidence; retain parameter-dependent bubble checks",
+      "kind": "cut",
+      "before": {
+        "low-temperature-fit.py": 257,
+        "assessment.py": 261
+      },
+      "after": {
+        "low-temperature-fit.py": 257,
+        "assessment.py": 256
+      },
+      "saving": 5
+    },
+    {
+      "change": "Consume fit-owner norms, normalized singular values and uncentered correlations; retain native full-column slope projection",
+      "kind": "cut",
+      "before": {
+        "low-temperature-fit.py": 257,
+        "assessment.py": 256
+      },
+      "after": {
+        "low-temperature-fit.py": 260,
+        "assessment.py": 244
+      },
+      "saving": 9
+    },
+    {
+      "change": "Required draft corrections: branch isolation, endpoint record shape, bounded child, failure preservation, parameter hash",
+      "kind": "correction",
+      "before": {
+        "low-temperature-fit.py": 260,
+        "assessment.py": 244
+      },
+      "after": {
+        "low-temperature-fit.py": 262,
+        "assessment.py": 246
+      },
+      "saving": -4
+    },
+    {
+      "change": "Retain full 149-row residual/Jacobian timings and messages in the recovery check",
+      "kind": "correction",
+      "before": {
+        "low-temperature-fit.py": 262,
+        "assessment.py": 246
+      },
+      "after": {
+        "low-temperature-fit.py": 267,
+        "assessment.py": 246
+      },
+      "saving": -5
+    },
+    {
+      "change": "Bind accepted Arcis bytes and native Jacobian evidence; retain worker exceptions",
+      "kind": "correction",
+      "before": {
+        "low-temperature-fit.py": 267,
+        "assessment.py": 246
+      },
+      "after": {
+        "low-temperature-fit.py": 271,
+        "assessment.py": 247
+      },
+      "saving": -5
+    },
+    {
+      "change": "Apply the issue-147 absolute material-error limit also in assessment",
+      "kind": "correction",
+      "before": {
+        "low-temperature-fit.py": 271,
+        "assessment.py": 247
+      },
+      "after": {
+        "low-temperature-fit.py": 272,
+        "assessment.py": 248
+      },
+      "saving": -2
+    }
+  ],
+  "syntax_only_not_executed": true,
+  "retirement": {
+    "file": "analyses/mea_parameter_bundle/results/temperature-heat-147/fit/timing.py",
+    "added": 0,
+    "removed": 80
+  }
+}
