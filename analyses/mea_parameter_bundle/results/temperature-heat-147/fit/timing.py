@@ -10,7 +10,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 BUNDLE = HERE.parents[2]
-sys.path[:0] = [str(BUNDLE / 'scripts'), str(BUNDLE / 'calibration-misfit')]
+sys.path[:0] = [str(BUNDLE.parents[1] / 'src'), str(BUNDLE / 'scripts'), str(BUNDLE / 'calibration-misfit')]
 import shared_evaluation as s
 s.ENGINE_WHEEL_SHA256 = 'e8ad39e0c5d7da471a6d3ace6ff62d60518c57bc1c96fe5198d8bf18747ba8b5'
 s.ENGINE_COMMIT = 'c106702048e87d0c583a3a5516cb5746e7a6ac07'

@@ -1,0 +1,153 @@
+{
+  "first_failure": "Heat branch contains 141 rows, not 149: role selector calibration matches zero rows, frozen role is heat_calibration. Eight heat values/gradients omitted. Process exit 0 does not establish completeness.",
+  "classification": "driver data-role selection defect; required-denominator incompleteness; no physical-model conclusion",
+  "process_exit_code": 0,
+  "branch_timings": {
+    "heat": {
+      "actual_rows": 141,
+      "required_rows": 149,
+      "residual_s": 51.01764002301388,
+      "jacobian_s": 63.69765803200244,
+      "mean_row_residual_s": 0.36182723420577223,
+      "mean_row_jacobian_s": 0.4517564399432797,
+      "family_cost_at_zero_start": {
+        "pressure": 114.72140872341997,
+        "species": 247.32198707625443
+      }
+    },
+    "no-heat": {
+      "actual_rows": 141,
+      "required_rows": 141,
+      "residual_s": 46.712028837004254,
+      "jacobian_s": 61.243467182011955,
+      "mean_row_residual_s": 0.33129098465960466,
+      "mean_row_jacobian_s": 0.43435083107809896,
+      "family_cost_at_zero_start": {
+        "pressure": 114.72140872341997,
+        "species": 247.32198707625443
+      }
+    }
+  },
+  "presolved_states": 83,
+  "presolve_recorded_state_s": 40.452183259993035,
+  "maximum_stationarity": 4.547473508864641e-13,
+  "wall_s_driver": 495.18383146799897,
+  "wall_s_external": 504.3,
+  "user_cpu_s_including_children": 415.5,
+  "system_cpu_s_including_children": 5.91,
+  "maximum_RSS_KiB": 80756,
+  "CPU_affinity_available": 12,
+  "prior_compute_s_approximate": 325.29,
+  "cumulative_compute_s_conservative": 829.59,
+  "remaining_s_conservative": 49570.41,
+  "forecast": {
+    "iteration_cap": 40,
+    "residual_evaluations_assumed": 40,
+    "jacobian_evaluations_assumed": 41,
+    "basis": "Design native maximum_iterations=40; one full residual per iteration and one Jacobian initially plus one per iteration. Same measured five-column cost conservatively used for constant form. This is a planning extrapolation, not a convergence or runtime bound.",
+    "no_heat_per_fit_40_iteration_s": 4379.46330794266,
+    "mislabeled_heat_pressure_species_only_per_fit_s": 4652.309580232655,
+    "eight_fit_partial_s": 36127.09155270126,
+    "rescore_partial_s": 714.5361415200168,
+    "assessment_reserved_s": 10800,
+    "partial_total_s": 47641.62769422128,
+    "missing_heat_residual_coefficient": 168,
+    "missing_heat_jacobian_coefficient": 164,
+    "missing_heat_definition": "R_H and J_H are sums for the omitted eight Vinjarapu rows; no endpoint caching assumed. Complete expression: partial_total + 168 R_H + 164 J_H, plus replacement timing and remaining setup/phase checks.",
+    "margin_before_missing_terms_s": 1928.7823057787245,
+    "qualified_complete_prediction_s": null,
+    "per_fit_external_cap_s": 2400,
+    "native_elapsed_cap_s": 2250,
+    "per_fit_cap_warning": "The assumed 40-iteration no-heat projection already exceeds 2400 s. Completing under unchanged caps requires earlier convergence; this has not been demonstrated. No caps or iteration counts are amended here."
+  },
+  "eight_fits": [
+    {
+      "branch": "no-heat",
+      "form": "constant",
+      "start": 1,
+      "status": "not_started",
+      "family_costs": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "no-heat",
+      "form": "constant",
+      "start": 2,
+      "status": "not_started",
+      "family_costs": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "no-heat",
+      "form": "slope",
+      "start": 1,
+      "status": "not_started",
+      "family_costs": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "no-heat",
+      "form": "slope",
+      "start": 2,
+      "status": "not_started",
+      "family_costs": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "heat",
+      "form": "constant",
+      "start": 1,
+      "status": "not_started",
+      "family_costs": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "heat",
+      "form": "constant",
+      "start": 2,
+      "status": "not_started",
+      "family_costs": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "heat",
+      "form": "slope",
+      "start": 1,
+      "status": "not_started",
+      "family_costs": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "heat",
+      "form": "slope",
+      "start": 2,
+      "status": "not_started",
+      "family_costs": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    }
+  ],
+  "selection": null,
+  "freeze_commit": null,
+  "assessment": null,
+  "Vinjarapu_residuals": null,
+  "evidence_type": "Numerical verification for presolved states and complete no-heat prediction/gradient availability; declared-scale comparison at prescribed zero start. No new fitted calibration or selected-branch conditional comparison. Not physical validation.",
+  "no_adoption": true,
+  "no_notebook_change": true,
+  "no_fit_code_implemented": true
+}
