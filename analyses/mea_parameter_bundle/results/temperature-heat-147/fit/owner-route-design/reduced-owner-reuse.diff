@@ -1,0 +1,895 @@
+--- a/analyses/mea_parameter_bundle/results/temperature-reanchor-140/low-temperature-fit.py
++++ b/analyses/mea_parameter_bundle/results/temperature-reanchor-140/low-temperature-fit.py
+@@ -6,6 +6,7 @@
+ """
+ 
+ import copy
++import subprocess
+ import csv
+ import json
+ import math
+@@ -19,6 +20,14 @@
+ HERE = Path(__file__).resolve().parent
+ BUNDLE = HERE.parents[1]
+ sys.path.insert(0, str(BUNDLE / "calibration-misfit"))
++ISSUE147 = "--issue147" in sys.argv
++if ISSUE147:
++    sys.argv.remove("--issue147")
++    sys.path[:0] = [str(BUNDLE / "scripts"), str(BUNDLE.parents[1] / "src")]
++    import shared_evaluation
++
++    shared_evaluation.ENGINE_WHEEL_SHA256 = "e8ad39e0c5d7da471a6d3ace6ff62d60518c57bc1c96fe5198d8bf18747ba8b5"
++    shared_evaluation.ENGINE_COMMIT = "c106702048e87d0c583a3a5516cb5746e7a6ac07"
+ import probe  # noqa: E402
+ import compare  # noqa: E402
+ import refit  # noqa: E402
+@@ -40,6 +49,26 @@
+ FREE_REACTIONS = False
+ NATIVE_INPUTS = None
+ N_STATES, N_TARGETS = (83, 141) if os.environ.get('FINAL_RERUN') else (84, 142)
++
++
++THERMOCHEMISTRY = None
++HEAT = False
++if ISSUE147:
++    import verify_reference_calorics as thermal
++    from epcsaft import equilibrium
++
++    OLD = HERE
++    CAMPAIGN = HERE.with_name("temperature-heat-147")
++    HERE = CAMPAIGN / "fit"
++    RAW = BUNDLE / "results/runs/temperature-heat-147/fit"
++    TRAINING = BUNDLE / "results/final-rerun/training-inputs.json"
++    NATIVE_INPUTS = CAMPAIGN / "campaign-reactions.json"
++    STRUCTURES = ("constant-no-heat", "slope-no-heat", "constant-heat", "slope-heat")
++    HEAT = bool(sys.argv[1:]) and sys.argv[1] in ("constant-heat", "slope-heat")
++    if sys.argv[1:2] == ["rescore"] and len(sys.argv) > 2:
++        HEAT = sys.argv[2] in ("constant-heat", "slope-heat")
++    N_STATES, N_TARGETS = 83, 149 if HEAT else 141
++    THERMOCHEMISTRY = thermal.record()
+ 
+ 
+ def save(path, value):
+@@ -88,6 +117,19 @@
+ 
+ 
+ def verify_inputs():
++    if ISSUE147:
++        hashes = {
++            BUNDLE / "results/source-corrections-152/accepted-wave/strict141-targets.csv": "b2c63743258e949d33eed367d5cdd733968a36ed960ef52fb6fe919d51953e4a",
++            probe.W / "data/reference/MEA/observations/calorimetry/Arcis_2011_calorimetry_30wt.csv": "647de13e35309dec8bd63f53c8dd950ed7d7d91c6bb760ecd3873fc8bc763a6f",
++            TRAINING: "a063148a1c3c68765adbfca81e17d32cd327c68b035e19c84ebeb007f76bb369",
++            SOURCE: "7e9e3f02723700f8b6577681173249c0e7bd2c8c2a098f38a4e0a7e4611852d5",
++            NATIVE_INPUTS: "c1cb5c74b2d71ce56e9c0a5d86116f972adbb2d635a0e9ed944152f25bd5fc43",
++            thermal.PHYSICAL_CALORICS: "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a",
++            CAMPAIGN / "heat-source-admission.json": "d51a7210be2b93b3a8ae55b19a33001e5f5eeb875070a071ca0127cf88ea4a78",
++        }
++        for path, expected in hashes.items():
++            assert s.sha256(path) == expected, path
++        return json.loads(TRAINING.read_text())
+     input_owner = SOURCE.parent
+     hash_owner = TRAINING.parent if os.environ.get('FINAL_RERUN') else input_owner
+     hashes = json.loads((hash_owner / "input-hashes.json").read_text())["hashes"]
+@@ -209,7 +251,7 @@
+         )
+         balances = (
+             all(
+-                abs(v) <= 1e-7 * max(1.0, abs(target))
++                abs(v) <= 1e-7 * (1.0 if ISSUE147 else max(1.0, abs(target)))
+                 for v, target in zip(material, system["conserved_totals"], strict=True)
+             )
+             and abs(charge) <= 1e-7
+@@ -229,6 +271,115 @@
+     return check
+ 
+ 
++def heat_rows():
++    rows = json.loads((CAMPAIGN / "heat-source-admission.json").read_text())["Vinjarapu2024"]["rows"]
++    rows = [r for r in rows if r["role_147"] == "heat_calibration"]
++    assert len(rows) == 8
++    return rows
++
++
++def heat_problem(row, template, alpha):
++    masses = {c["component_id"]: c["fixed"]["molar_mass"]["value"]["magnitude"]
++              for c in s.parameter_mapping(SOURCE)["components"]}
++    water = masses["monoethanolamine"] * 0.7 / (0.3 * masses["water"])
++    return equilibrium.Problem(
++        T=row["temperature_K"], P=row["system_pressure_Pa"],
++        feed=equilibrium.Amounts({"monoethanolamine": 1.0, "water": water, "carbon-dioxide": alpha}),
++        phases=[equilibrium.Phase("L", kind="liquid", support=s.COMPONENT_IDS)],
++        reactions=template.reactions, neutral_reference=template.neutral_reference,
++    )
++
++
++def heat_observation(params, row, template):
++    initial = heat_problem(row, template, 0.0)
++    final = heat_problem(row, template, row["alpha_final"])
++    return regression.addition_enthalpy(
++        params, initial, final, {"carbon-dioxide": 1.0}, row["alpha_final"],
++        row["temperature_K"], row["system_pressure_Pa"], phase="vapor",
++        observed=row["observed_addition_enthalpy_J_per_mol_CO2"],
++        form="difference", scale=row["uH_J_per_mol_CO2"],
++    )
++
++
++def heat_value(mapping, row, directory):
++    params = probe.epcsaft.Parameters.from_mapping(mapping)
++    model = probe.epcsaft.Mixture(params, thermochemistry=THERMOCHEMISTRY)
++    request = s.corrected_request(verify_inputs()[0]["request"], s.reaction_values(mapping))
++    template = s._problem_from_request(request)
++    diagnostics = []
++    for alpha in (0.0, row["alpha_final"]):
++        problem = heat_problem(row, template, alpha)
++        system = copy.deepcopy(request["reaction_system"])
++        feed = [problem.feed.values.get(i, 0.0) for i in s.COMPONENT_IDS]
++        system["feed_amounts_mol"] = feed
++        system["conserved_totals"] = [math.fsum(c * n for c, n in zip(a, feed, strict=True))
++                                      for a in system["balance_matrix"]]
++        endpoint = {"reaction_system": system}
++        boundary = equilibrium.Problem(
++            T=row["temperature_K"], P=equilibrium.Free(), feed=problem.feed,
++            phases=[problem.phases[0], equilibrium.Phase("V", kind="vapor",
++                    support=s.COMPONENT_IDS[:3], amount=equilibrium.Pinned(0))],
++            reactions=problem.reactions, neutral_reference=problem.neutral_reference,
++        )
++        for kind, declaration in (("fixed-pressure", problem), ("bubble", boundary)):
++            solved = equilibrium.solve_equilibrium(model, declaration)
++            state = s._snapshot_from_result(model, declaration, endpoint, solved)
++            check = check_state(state, {"request": endpoint})
++            diagnostics.append({"alpha": alpha, "kind": kind, "state": state, "check": check})
++            save(directory / "endpoint-checks.json", diagnostics)
++            assert check["complete"], diagnostics[-1]
++            if kind == "bubble":
++                assert row["system_pressure_Pa"] > state["phases"][0]["pressure_pa"] * (1 + 1e-7)
++    feed_params = probe.epcsaft.Parameters.from_mapping(mapping, components=["carbon-dioxide"])
++    feed_calorics = probe.epcsaft.ThermochemistryRecord(
++        THERMOCHEMISTRY.standard_pressure,
++        [THERMOCHEMISTRY.component_intervals[s.COMPONENT_IDS.index("carbon-dioxide")]],
++    )
++    feed = probe.epcsaft.Pure(feed_params, thermochemistry=feed_calorics).state(
++        row["temperature_K"], P=row["system_pressure_Pa"], phase="vapor",
++    )
++    feed_values = {k: s._jsonable(getattr(feed, k)) for k in
++                   ("stable_root_count", "molar_density", "pressure_density_derivative", "total_enthalpy")}
++    save(directory / "feed.json", feed_values)
++    assert feed.stable_root_count == 1 and feed.molar_density > 0
++    assert feed.pressure_density_derivative > 0 and math.isfinite(feed.total_enthalpy)
++    prediction = regression.predict(model, heat_observation(params, row, template))
++    return {
++        "row": row,
++        "checks": diagnostics,
++        "feed": feed_values,
++        **{
++            k: s._jsonable(getattr(prediction, k)) for k in (
++                "value", "residual", "status", "message", "requested_tolerance_met",
++                "convergence", "branch", "stable_root_count",
++            )
++        },
++    }
++
++
++def bounded_heat(mapping, row, deadline, directory):
++    directory.mkdir(parents=True, exist_ok=False)
++    save(directory / "inputs.json", {"mapping": mapping, "row": row})
++    cap = min(175.0, deadline - time.perf_counter())
++    result = {}
++    try:
++        with (directory / "worker.log").open("w") as log:
++            subprocess.run([sys.executable, __file__, "--issue147", "heat-value", str(directory)],
++                           timeout=max(0.0, cap), check=True, stdout=log, stderr=subprocess.STDOUT)
++        result = json.loads((directory / "result.json").read_text())
++        assert result["status"] == "Available", result
++        assert result["requested_tolerance_met"] is not False, result
++        assert math.isfinite(result["value"]) and math.isfinite(result["residual"])
++        return result
++    except Exception as exc:
++        result = {**result, "row": row, "status": "unavailable", "value": None, "residual": None,
++                  "message": f"{type(exc).__name__}: {exc}", "worker_log": str(directory / "worker.log"),
++                  "endpoint_checks": json.loads((directory / "endpoint-checks.json").read_text())
++                  if (directory / "endpoint-checks.json").exists() else []}
++        save(directory / "failure.json", result)
++        return result
++
++
+ def fit(structure, start):
+     observations = verify_inputs()
+     mapping, reactions, original = source_context()
+@@ -242,7 +393,7 @@
+     mapping = s.with_parameter_values(mapping, dict(zip(ids, values, strict=True)))
+     reactions = s.reaction_values(mapping)
+     params = probe.epcsaft.Parameters.from_mapping(mapping)
+-    model = probe.epcsaft.Mixture(params)
++    model = probe.epcsaft.Mixture(params, thermochemistry=THERMOCHEMISTRY)
+     fingerprint = s.parameter_fingerprint(mapping)
+     controls = regression.FitControls()
+     controls.maximum_iterations = 40
+@@ -278,6 +429,8 @@
+             "thermochemistry": "native reaction-source derivatives; no inherited reaction calorics",
+         },
+     }
++    if ISSUE147:
++        output["provenance"]["physical_calorics_sha256"] = s.sha256(thermal.PHYSICAL_CALORICS)
+     save(summary_path, output)
+     clock = time.perf_counter()
+     try:
+@@ -320,6 +473,17 @@
+             for observation, problem in calibration
+             for r in refit.observations(params, observation, problem, 60)
+         ]
++        if ISSUE147:
++            assert len(rows) == 141
++            heat = heat_rows()
++            for row in heat:
++                result = bounded_heat(mapping, row, clock + 2395, cache / row["record_id"])
++                assert result["status"] == "Available", result
++            if HEAT:
++                rows.extend(
++                    (r["record_id"], heat_observation(params, r, calibration[0][1]), 1.0)
++                    for r in heat
++                )
+         assert len(rows) == N_TARGETS and len(calibration) == N_STATES
+         coordinates = []
+         for identity, value, scale, bound in zip(
+@@ -344,6 +508,8 @@
+             )
+             coordinates.append(
+                 regression.coordinate(
++                    params, [(family, target, 1.0)], origin=value, scale=scale, bounds=bound
++                ) if ISSUE147 else regression.coordinate(
+                     params, family, target, origin=value, scale=scale, bounds=bound
+                 )
+             )
+@@ -357,6 +523,7 @@
+             [r[1] for r in rows],
+             weights=[r[2] for r in rows],
+             controls=controls,
++            **({"thermochemistry": THERMOCHEMISTRY} if ISSUE147 else {}),
+         )
+         output.update(
+             {
+@@ -386,7 +553,7 @@
+             failures=[
+                 {
+                     "trial": f.trial,
+-                    "observation": rows[f.observation][0],
++                    "observation": rows[f.observation][0] if f.observation < len(rows) else "whole_trial",
+                     "status": f.status.name,
+                     "message": f.message,
+                     "jacobian": f.jacobian,
+@@ -411,6 +578,7 @@
+             "physical_jacobian": list(result.physical_jacobian),
+         }
+         save(cache / "native-fit.json", raw)
++        output["native_fit_sha256"] = s.sha256(cache / "native-fit.json")
+         physical = list(result.physical)
+         if FREE_REACTIONS and len(physical) == len(ids):
+             physical[ids.index("reaction:R2:correlation:a")] -= reactions["reaction:R2:correlation:c"] * math.log(s.REACTION_REFERENCE_TEMPERATURE_K)
+@@ -455,8 +623,9 @@
+                 if np.all(norms > 0)
+                 else None
+             )
+-            output["jacobian_column_correlations"] = np.corrcoef(
+-                jacobian, rowvar=False
++            output["jacobian_column_correlations"] = (
++                (jacobian / norms).T @ (jacobian / norms)
++                if ISSUE147 else np.corrcoef(jacobian, rowvar=False)
+             ).tolist()
+             table(
+                 HERE / f"{name}-jacobian.csv",
+@@ -495,14 +664,18 @@
+             for node in s._identified(final):
+                 if node["identity"] in ids:
+                     node["provenance"] = {
+-                        "source_id": "issue-140-low-temperature-loaded-solution-fit",
+-                        "locator": f"{name}-fit.json; 142 targets at <=333.15 K",
++                        "source_id": "issue-147-low-temperature-heat-fit" if ISSUE147 else "issue-140-low-temperature-loaded-solution-fit",
++                        "locator": f"{name}-fit.json; {N_TARGETS} declared observations at <=333.15 K",
+                     }
+                     node.pop("source_sha256", None)
+             final["purpose"] = (
+                 "Issue 140 low-temperature fixed-chemistry comparison; not adopted or physically validated."
+             )
+             final["document_id"] = "mea-temperature-reanchor-140-" + name
++            if ISSUE147:
++                final["purpose"] = "Issue 147 physical fit; frozen campaign-reactions.json supplies chemistry; not adopted."
++                final["document_id"] = "mea-temperature-heat-147-" + name
++                final["campaign_reactions_sha256"] = s.sha256(NATIVE_INPUTS)
+             assert FREE_REACTIONS or s.reaction_values(final) == reactions
+             output["k_at_domain_ends"] = k_ends(final)
+             output["native_complete"] = (
+@@ -552,7 +725,7 @@
+     mapping = json.loads(path.read_text())
+     assert FREE_REACTIONS or s.reaction_values(mapping) == reactions
+     reactions = s.reaction_values(mapping)
+-    model = probe.epcsaft.Mixture(probe.epcsaft.Parameters.from_mapping(mapping))
++    model = probe.epcsaft.Mixture(probe.epcsaft.Parameters.from_mapping(mapping), thermochemistry=THERMOCHEMISTRY)
+     fingerprint = s.parameter_fingerprint(mapping)
+     s.RUNS = RAW / name / "rescore-cache"
+     assert not s.RUNS.exists(), "rescore must start with a fresh cache"
+@@ -563,7 +736,7 @@
+         )
+     }
+     rows, checks, groups = [], [], {}
+-    deadline = time.perf_counter() + 1790
++    deadline = time.perf_counter() + (1640 if ISSUE147 else 1790)
+     try:
+         with (RAW / name / "rescore-states.jsonl").open("w") as handle:
+             for observation in observations:
+@@ -651,6 +824,22 @@
+                 print(
+                     "rescore", name, observation["identity"], rec["status"], flush=True
+                 )
++        if ISSUE147:
++            scored_heat = []
++            for row in heat_rows():
++                result = bounded_heat(mapping, row, deadline, RAW / name / "heat-rescore" / row["record_id"])
++                scored_heat.append(result)
++            output["heat_rescore"] = scored_heat
++            if HEAT:
++                for result in scored_heat:
++                    residual = result["residual"]
++                    rows.append({
++                        "target": result["row"]["record_id"],
++                        "quantity": "heat",
++                        "scaled_residual": residual,
++                        "cost": None if residual is None else 0.5 * residual ** 2,
++                    })
++                groups["heat"] = rows[-8:]
+         complete = (
+             len(checks) == N_STATES
+             and len(rows) == N_TARGETS
+@@ -660,6 +849,8 @@
+                 for r in rows
+             )
+         )
++        if ISSUE147:
++            complete = complete and all(r["status"] == "Available" for r in scored_heat)
+         cost = math.fsum(r["cost"] for r in rows) if complete else None
+         output["rescore"] = {
+             "cost": cost,
+@@ -682,7 +873,7 @@
+                 k: math.fsum(r["cost"] for r in groups[k])
+                 if all(r["cost"] is not None for r in groups[k])
+                 else None
+-                for k in ("pressure", "species")
++                for k in (("pressure", "species", "heat") if HEAT else ("pressure", "species"))
+             },
+             "source_temperature_costs": {
+                 k: math.fsum(r["cost"] for r in v)
+@@ -718,9 +909,79 @@
+     )
+ 
+ 
++def check147():
++    observations = verify_inputs()
++    mapping, reactions, original = source_context()
++    reference = json.loads((HERE / "timing.json").read_text())
++    ids, bounds, scales, values = design("slope-no-heat", "1")
++    params = probe.epcsaft.Parameters.from_mapping(
++        s.with_parameter_values(mapping, dict(zip(ids, values, strict=True)))
++    )
++    chart = regression.CoordinateSet()
++    chart.coordinates = [regression.coordinate(
++        params, [("k_ij_reciprocal_temperature_slope" if i == SLOPE else "k_ij",
++                  tuple(i.split("/")[1:3]), 1.0)], origin=value, scale=scale, bounds=bound,
++    ) for i, value, scale, bound in zip(ids, values, scales, bounds, strict=True)]
++    model = probe.epcsaft.Mixture(params, thermochemistry=THERMOCHEMISTRY)
++    active = probe.epcsaft.Mixture(params, thermochemistry=THERMOCHEMISTRY,
++                                 active_parameters=chart.active())
++    states = {r["identity"]: r["state"] for r in reference["checks"]}
++    rows = []
++    for observation in observations:
++        assert check_state(states[observation["identity"]], observation)["complete"]
++        problem = s._problem_from_request(s.corrected_request(observation["request"], reactions),
++                                         s.anchor_from(states[observation["identity"]]))
++        rows.extend(refit.observations(params, observation, problem, 60))
++    compared = []
++    try:
++        retained = reference["branches"]["no-heat"]
++        assert [r[0] for r in rows] == [r["target"] for r in retained]
++        heat = [
++            (r["record_id"], heat_observation(params, r, problem), 1.0)
++            for r in heat_rows()
++        ]
++        assert len(rows) == 141 and len(rows + heat) == 149
++        for index, (identity, item, weight) in enumerate(rows + heat):
++            clock = time.perf_counter()
++            prediction = regression.predict(model, item)
++            residual_s = time.perf_counter() - clock
++            clock = time.perf_counter()
++            gradient = regression.differentiate(active, item)
++            residual = None if prediction.residual is None else math.sqrt(weight) * prediction.residual
++            compared.append({
++                "target": identity, "residual": residual, "gradient": list(gradient.value),
++                "residual_s": residual_s, "jacobian_s": time.perf_counter() - clock,
++                "prediction_status": prediction.status.name, "prediction_message": prediction.message,
++                "gradient_status": gradient.status.name, "gradient_message": gradient.message,
++            })
++            save(HERE / "owner-check.json", compared)
++            assert prediction.status.name == gradient.status.name == "Available"
++            assert math.isfinite(residual) and len(gradient.value) == 5
++            assert all(math.isfinite(v) for v in gradient.value)
++            if index < len(rows):
++                assert residual == retained[index]["weighted_residual"]
++                assert list(gradient.value) == retained[index]["gradient"]
++        save(HERE / "owner-check-complete.json", {
++            "base_rows": len(rows), "heat_ids": [r[0] for r in heat],
++            "heat_branch_rows": len(rows + heat), "exact": True,
++        })
++    finally:
++        s._engine_reaction_records = original
++
++
+ if __name__ == "__main__":
+     args = sys.argv[1:]
+-    if args[:1] == ["rescore"] and len(args) == 3:
++    if ISSUE147 and args == ["check147"]:
++        check147()
++    elif ISSUE147 and args[:1] == ["heat-value"]:
++        directory = Path(args[1])
++        inputs = json.loads((directory / "inputs.json").read_text())
++        _, _, original = source_context()
++        try:
++            save(directory / "result.json", heat_value(inputs["mapping"], inputs["row"], directory))
++        finally:
++            s._engine_reaction_records = original
++    elif args[:1] == ["rescore"] and len(args) == 3:
+         assert args[1] in STRUCTURES and args[2] in ("1", "2")
+         rescore(*args[1:])
+     elif len(args) == 2:
+--- a/analyses/mea_parameter_bundle/results/temperature-reanchor-140/assessment.py
++++ b/analyses/mea_parameter_bundle/results/temperature-reanchor-140/assessment.py
+@@ -21,6 +21,26 @@
+ RAW = BUNDLE / "results/runs/temperature-reanchor-140"
+ STRUCTURES = ("constant-fixed", "slope-fixed", "constant-free", "slope-free")
+ FIXED_ROLES = False
++ISSUE147 = "--issue147" in sys.argv
++OWNER = HERE
++if ISSUE147:
++    spec = importlib.util.spec_from_file_location("low_temperature_fit", OWNER / "low-temperature-fit.py")
++    fit = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(fit)
++    HERE, RAW, STRUCTURES = fit.HERE, fit.RAW, fit.STRUCTURES
++    SOURCE_FILES = {
++        "preregistration": fit.CAMPAIGN / "inputs.json",
++        "training_targets": BUNDLE / "results/source-corrections-152/accepted-wave/strict141-targets.csv",
++        "assessment_row_ids": OWNER / "assessment-row-ids.json",
++        "never_accessed_admission": OWNER / "never-accessed-vle-admission.csv",
++    }
++
++
++def source_file(name):
++    return SOURCE_FILES[name] if ISSUE147 else HERE / {
++        "preregistration": "preregistration.md", "training_targets": "training-targets.csv",
++        "assessment_row_ids": "assessment-row-ids.json", "never_accessed_admission": "never-accessed-vle-admission.csv",
++    }[name]
+ 
+ 
+ def save(path, value):
+@@ -132,8 +152,10 @@
+                 for i, x in enumerate(starts)
+             ],
+         }
+-    for energy in ("fixed", "free"):
+-        choices = [s for s in STRUCTURES if s.endswith(energy) and forms[s]["eligible"]]
++    if ISSUE147:
++        assert all(r["eligible"] for r in forms.values()), "Incomplete form or disagreeing starts stop selection"
++    for energy in (("no-heat", "heat") if ISSUE147 else ("fixed", "free")):
++        choices = [s for s in STRUCTURES if s.split("-", 1)[1] == energy and forms[s]["eligible"]]
+         if not choices:
+             continue
+         minimum = min(forms[s]["cost"] for s in choices)
+@@ -159,6 +181,8 @@
+     records = []
+     for i, r in enumerate(finalists):
+         role = ("secondary" if r["structure"].endswith("free") else "primary") if FIXED_ROLES else ("primary" if i == 0 else "secondary")
++        if ISSUE147:
++            role = "control" if r["structure"].endswith("-no-heat") else "primary"
+         origin = HERE / f"{r['structure']}-start-{r['start']}-parameters.json"
+         fit_result = json.loads(
+             (HERE / f"{r['structure']}-start-{r['start']}-fit.json").read_text()
+@@ -185,20 +209,39 @@
+         "forms": forms,
+         "records": records,
+         "selection": "fewest fitted coordinates; ties fixed source energy; unresolved until temperature folds",
+-        "preregistration_sha256": digest(HERE / "preregistration.md"),
+-        "training_targets_sha256": digest(HERE / "training-targets.csv"),
+-        "assessment_row_ids_sha256": digest(HERE / "assessment-row-ids.json"),
++        "preregistration_sha256": digest(source_file("preregistration")),
++        "training_targets_sha256": digest(source_file("training_targets")),
++        "assessment_row_ids_sha256": digest(source_file("assessment_row_ids")),
+         "never_accessed_admission_sha256": digest(
+-            HERE / "never-accessed-vle-admission.csv"
++            source_file("never_accessed_admission")
+         ),
+         "high_temperature_model_access_before_freeze": False,
+         "selection_code_sha256": digest(Path(__file__)),
+     }
++    if ISSUE147:
++        freeze["selection"] = "constant within 1 percent, independently by branch; heat primary"
++        freeze["identification"] = {r["role"]: identification(r) for r in records}
++        freeze["input_hashes"] = {
++            str(p.relative_to(fit.probe.W)): digest(p) for p in
++            (fit.TRAINING, fit.SOURCE, fit.NATIVE_INPUTS, fit.thermal.PHYSICAL_CALORICS,
++             fit.CAMPAIGN / "heat-source-admission.json", Path(fit.__file__), Path(fit.s.__file__),
++             fit.probe.W / "data/reference/MEA/observations/calorimetry/Arcis_2011_calorimetry_30wt.csv",
++             fit.probe.W / "data/reference/MEA/observations/calorimetry/Mathonat_1998_low_loading_heat.csv")
++        }
++        freeze["wheel_sha256"] = fit.s.ENGINE_WHEEL_SHA256
++        freeze["report_only"] = {"vle_obs_0148": "above fitting temperature limit",
++                               "Xu_0286_0288": "not evaluated; outside frozen continuation domain"}
+     save(HERE / "freeze.json", freeze)
+     print(json.dumps(freeze), flush=True)
+ 
+ 
+ def calculation():
++    if ISSUE147:
++        fit.verify_inputs()
++        fit.source_context()
++        packet = fit.s.source_corrected_packet()
++        fit.probe.OBSERVATIONS = fit.s.expand_state_packet(packet)["observations"]
++        return fit
+     spec = importlib.util.spec_from_file_location("phase_a", HERE / "phase-a.py")
+     module = importlib.util.module_from_spec(spec)
+     spec.loader.exec_module(module)
+@@ -239,7 +282,7 @@
+ def wagner(pa, subset):
+     rows = [
+         r
+-        for r in csv.DictReader((HERE / "never-accessed-vle-admission.csv").open())
++        for r in csv.DictReader((source_file("never_accessed_admission")).open())
+         if r["admitted"] == "yes" and r["subset"] == subset
+     ]
+     out = []
+@@ -410,6 +453,181 @@
+     print("Analytic metric and simplicity/incomplete-branch selection checks passed.")
+ 
+ 
++def identification(record):
++    import numpy as np
++
++    name = f"{record['structure']}-start-{record['start']}"
++    summary = json.loads((HERE / f"{name}-fit.json").read_text())
++    ids = summary["coordinates"]
++    singular = summary["column_normalized_singular_values"]
++    correlation = np.array(summary["jacobian_column_correlations"], dtype=float)
++    rank_pass = singular is not None and singular[-1] / singular[0] >= 1e-8
++    correlation_pass = np.isfinite(correlation).all() and np.max(np.abs(correlation - np.eye(len(ids)))) < 0.95
++    out = {"rank_pass": bool(rank_pass), "correlation_pass": bool(correlation_pass)}
++    if fit.SLOPE in ids and singular is not None:
++        assert digest(RAW / name / "native-fit.json") == summary["native_fit_sha256"]
++        native = json.loads((RAW / name / "native-fit.json").read_text())
++        matrix = np.array(native["optimizer_jacobian"]).reshape(-1, len(ids))
++        column = ids.index(fit.SLOPE)
++        intercepts = matrix[:, [ids.index(i) for i in fit.IDS]]
++        u, values, _ = np.linalg.svd(intercepts, full_matrices=False)
++        q = u[:, values >= values[0] * 1e-8]
++        slope = matrix[:, column]
++        eta = np.linalg.norm(slope - q @ (q.T @ slope)) / np.linalg.norm(slope)
++        lo, hi = summary["bounds"][column]
++        out.update(eta=float(eta), slope_interior=lo < summary["physical"][column] < hi,
++                   intercept_rank=int(q.shape[1]))
++        out["slope_pass"] = out["slope_interior"] and eta > 0.3122499 and q.shape[1] == 4
++    out["pass"] = bool(rank_pass and correlation_pass and out.get("slope_pass", True))
++    return out
++
++
++def independent_heat(freeze, deadline):
++    arcis = list(csv.DictReader((fit.probe.W / "data/reference/MEA/observations/calorimetry/Arcis_2011_calorimetry_30wt.csv").open()))
++    arcis = [r for r in arcis if r["role_147"] == "required_independent_heat_comparison"]
++    assert len(arcis) == 14
++    mathonat = list(csv.DictReader((fit.probe.W / "data/reference/MEA/observations/calorimetry/Mathonat_1998_low_loading_heat.csv").open()))
++    result = {}
++    for record in freeze["records"]:
++        role = record["role"]
++        assert digest(HERE / record["record"]) == record["sha256"]
++        mapping = fit.s.parameter_mapping(HERE / record["record"])
++        groups, values, checks = {}, [], []
++        for index, source in enumerate(arcis):
++            row = {
++                k: float(source[k]) for k in (
++                    "temperature_K", "system_pressure_Pa", "alpha_final",
++                    "observed_addition_enthalpy_J_per_mol_CO2",
++                )
++            }
++            row["uH_J_per_mol_CO2"] = float(source["heat_residual_scale_J_per_mol_CO2"])
++            value = fit.bounded_heat(mapping, row, deadline, RAW / f"heat-{role}" / f"Arcis-{index}")
++            value["source_record_id"] = source["record_id"]
++            checks.append(value)
++            groups.setdefault(str(row["system_pressure_Pa"]), []).append(value["residual"])
++            values.append(value["residual"])
++            save(HERE / "assessment-independent-heat-progress.json", checks)
++        assert sorted(map(len, groups.values())) == [6, 8]
++        assert sum(float(r["temperature_K"]) <= 353.15 for r in mathonat) == 2
++        for source in mathonat:
++            temperature = float(source["temperature_K"])
++            if temperature > 353.15:
++                continue
++            pressure_values, refinements = [], []
++            for pressure in (2e6, 5e6, 10e6):
++                increments = []
++                for epsilon in (1e-3, 5e-4, 2.5e-4):
++                    row = {
++                        "temperature_K": temperature,
++                        "system_pressure_Pa": pressure,
++                        "alpha_final": epsilon,
++                           "observed_addition_enthalpy_J_per_mol_CO2": -1000 * float(source["minus_DeltaHabs_kJ_per_mol_CO2_reported"]),
++                           "uH_J_per_mol_CO2": 1000 * float(source["sigma_kJ_per_mol_CO2_reported"])}
++                    value = fit.bounded_heat(mapping, row, deadline, RAW / f"heat-{role}" / f"Mathonat-{temperature}-{pressure}-{epsilon}")
++                    checks.append(value)
++                    increments.append(value["value"])
++                save(HERE / "assessment-independent-heat-progress.json", checks)
++                refined = all(v is not None for v in increments) and abs(increments[-1] - increments[-2]) <= 100
++                refinements.append({
++                    "pressure_Pa": pressure,
++                    "values_J_mol": increments,
++                    "refined": refined,
++                })
++                pressure_values.append(increments[-1] if refined else None)
++            mean = math.fsum(pressure_values) / 3 if all(v is not None for v in pressure_values) else None
++            residual = None if mean is None else (mean - row["observed_addition_enthalpy_J_per_mol_CO2"]) / row["uH_J_per_mol_CO2"]
++            values.append(residual)
++            groups[str(temperature)] = [residual]
++            checks.append({
++                "source_record_id": source["record_id"],
++                "mean_J_mol": mean,
++                "pressure_values_J_mol": pressure_values,
++                "refinements": refinements,
++                "pressure_spread_J_mol": max(pressure_values) - min(pressure_values)
++                if mean is not None else None,
++            })
++        assert len(values) == 16 and len(groups) == 4
++        summaries = {key: heat_metrics(rows) for key, rows in groups.items()}
++        result[role] = {"groups": summaries, "aggregate": heat_metrics(values), "checks": checks}
++        save(HERE / "assessment-independent-heat.json", result)
++    result["improvement_pass"] = (
++        result["primary"]["aggregate"]["complete"]
++        and result["control"]["aggregate"]["complete"]
++        and result["primary"]["aggregate"]["rms"] <= result["control"]["aggregate"]["rms"]
++    )
++    save(HERE / "assessment-independent-heat.json", result)
++
++
++def heat_metrics(values):
++    complete = bool(values) and all(v is not None and math.isfinite(v) for v in values)
++    out = {"rows": len(values), "complete": complete}
++    if complete:
++        out.update(rms=math.sqrt(math.fsum(v * v for v in values) / len(values)), mean=math.fsum(values) / len(values))
++    out["pass"] = complete and out["rms"] <= 2 and abs(out["mean"]) <= 2
++    return out
++
++
++def limits147(freeze):
++    independent = json.loads((HERE / "assessment-independent-heat.json").read_text())
++    pressure = json.loads((HERE / "assessment-stage-1.json").read_text())
++    result = {}
++    for record in freeze["records"]:
++        role = record["role"]
++        name = f"{record['structure']}-start-{record['start']}"
++        trained = json.loads((HERE / f"{name}-fit.json").read_text())
++        heat = trained["heat_rescore"]
++        assert len(heat) == 8
++        values = [r["residual"] for r in heat]
++        levels = {
++            alpha: [r["residual"] for r in heat if r["row"]["alpha_final"] == alpha]
++            for alpha in (0.11, 0.22, 0.33, 0.45)
++        }
++        vinjarapu = heat_metrics(values)
++        vinjarapu["levels"] = {alpha: heat_metrics(v) for alpha, v in levels.items()}
++        vinjarapu["pass"] = vinjarapu["pass"] and all(
++            g["complete"] and abs(g["mean"]) <= 2
++            for g in vinjarapu["levels"].values()
++        )
++        if vinjarapu["complete"]:
++            errors = [(r["value"] - r["row"]["observed_addition_enthalpy_J_per_mol_CO2"]) / 1000 for r in heat]
++            vinjarapu.update(rmse_kJ_mol=math.sqrt(math.fsum(v * v for v in errors) / 8), bias_kJ_mol=math.fsum(errors) / 8)
++        p80 = pressure["metrics"][f"{role}/canonical-80C-21"]["pooled"]
++        costs = trained["rescore"]["family_costs"]
++        result[role] = {
++            "pressure_cost": costs["pressure"],
++            "species_cost": costs["species"],
++            "pressure_preserved": costs["pressure"] is not None and costs["pressure"] <= 9.077053756257484,
++            "species_preserved": costs["species"] is not None and costs["species"] <= 27.33328854377677,
++            "Vinjarapu": vinjarapu,
++            "independent_heat": independent[role],
++            "pressure80": p80,
++            "pressure80_pass": p80["rows"] == 21 and p80["complete"] and p80["aard_percent"] <= 20.270257,
++            "identification": freeze["identification"][role],
++        }
++    complete = all(json.loads((HERE / f"assessment-stage-{i}.json").read_text())["all_required_states_complete"] for i in (1, 2, 3))
++    interaction_pass = all(
++        json.loads((HERE / f"assessment-stage-{i}.json").read_text())["interaction_checks"]["primary"]["admissible_at_353_15_k"]
++        for i in (1, 2, 3)
++    )
++    primary = result["primary"]
++    result["all_limits_pass"] = bool(
++        complete
++        and interaction_pass
++        and primary["pressure_preserved"]
++        and primary["species_preserved"]
++        and primary["Vinjarapu"]["pass"]
++        and all(g["pass"] for g in independent["primary"]["groups"].values())
++        and independent["improvement_pass"]
++        and primary["pressure80_pass"]
++        and primary["identification"]["pass"]
++    )
++    result["primary_minus_control_pressure"] = {
++        k: primary["pressure80"][k] - result["control"]["pressure80"][k]
++        for k in ("aard_percent", "rms_ln", "mean_ln")
++    } if complete else None
++    save(HERE / "assessment-limits.json", result)
++
++
+ def heat_comparison(pa, freeze, deadline, adopted_baseline=None):
+     """Prespecified outside-objective two-endpoint comparison; never an estimation target."""
+     import evaluate_direct_absorption_heat as heat
+@@ -420,7 +638,7 @@
+         for r in heat.read_rows(heat.OBSERVATIONS)
+         if r["regression_eligible"] == "true"
+     ]
+-    identities = json.loads((HERE / "assessment-row-ids.json").read_text())[
++    identities = json.loads((source_file("assessment_row_ids")).read_text())[
+         "outside_objective_heat"
+     ]
+     assert {r["record_id"] for r in observations} == {
+@@ -616,16 +834,18 @@
+ 
+ 
+ def stage(number):
++    if ISSUE147 and number > 4:
++        raise ValueError("Only the frozen in-domain assessment is bound for issue 147")
+     freeze = json.loads((HERE / "freeze.json").read_text())
+     assert freeze["records"], (
+         "No complete finalist; high-temperature assessment is not authorized."
+     )
+-    assert digest(HERE / "preregistration.md") == freeze["preregistration_sha256"]
++    assert digest(source_file("preregistration")) == freeze["preregistration_sha256"]
+     assert (
+-        digest(HERE / "assessment-row-ids.json") == freeze["assessment_row_ids_sha256"]
++        digest(source_file("assessment_row_ids")) == freeze["assessment_row_ids_sha256"]
+     )
+     assert (
+-        digest(HERE / "never-accessed-vle-admission.csv")
++        digest(source_file("never_accessed_admission"))
+         == freeze["never_accessed_admission_sha256"]
+     )
+     for i in range(1, number):
+@@ -635,13 +855,18 @@
+     assert not (HERE / f"assessment-stage-{number}.json").exists(), (
+         "Assess once; no automatic repeat."
+     )
++    if ISSUE147:
++        assert all(
++            digest(fit.probe.W / p) == value
++            for p, value in freeze["input_hashes"].items()
++        )
+     pa = calculation()
+     s, probe, compare = pa.s, pa.probe, pa.compare
+-    ids = json.loads((HERE / "assessment-row-ids.json").read_text())
++    ids = json.loads((source_file("assessment_row_ids")).read_text())
+     canonical = {r["observation_id"]: r for r in csv.DictReader(s.CANONICAL_VLE.open())}
+     subsets = {
+         r["subset"]
+-        for r in csv.DictReader((HERE / "never-accessed-vle-admission.csv").open())
++        for r in csv.DictReader((source_file("never_accessed_admission")).open())
+         if r["admitted"] == "yes"
+     }
+     near = next(x for x in subsets if "80" in x)
+@@ -651,6 +876,11 @@
+         wanted = set(ids[key])
+         return probe.pressure_observations(lambda r: r["observation_id"] in wanted)
+ 
++    if ISSUE147 and number == 4:
++        independent_heat(freeze, time.perf_counter() + 1780)
++        limits147(freeze)
++        save(HERE / "assessment-stage-4.json", {"completed": True, "freeze_sha256": digest(HERE / "freeze.json")})
++        return
+     if number == 1:
+         groups = [("canonical-80C-21", canonical_set("primary_80c_pressure"))]
+     elif number == 2:
+@@ -689,6 +919,9 @@
+         ]
+     )
+     native_builder = s._engine_reaction_records
++    if ISSUE147:
++        frozen_native = json.loads(fit.NATIVE_INPUTS.read_text())
++        native_builder = lambda request, values: copy.deepcopy(frozen_native)
+     deadline = time.perf_counter() + 1780
+     rows, checks, summary, interaction_checks = [], [], {}, {}
+     for record in records:
+@@ -749,9 +982,9 @@
+                     "a"
+                 ) as f:
+                     f.write(json.dumps(result) + "\n")
+-                check = probe.check(result)
++                check = fit.check_state(result, {"request": request}) if ISSUE147 else probe.check(result)
+                 ok = (
+-                    result["status"] == "evaluated"
++                    result["status"] == "evaluated" and (not ISSUE147 or check["complete"])
+                     and check["tolerance_met"]
+                     and not check["balance_errors"]
+                     and check["max_abs_stationarity"] is not None
+--- a/analyses/mea_parameter_bundle/results/temperature-heat-147/fit/timing.py
++++ /dev/null
+@@ -1,80 +0,0 @@
+-"""Issue 147 corrected campaign presolve and complete residual/Jacobian timing; no fit."""
+-import importlib.util
+-import json
+-import math
+-import os
+-import resource
+-import sys
+-import time
+-from pathlib import Path
+-
+-HERE = Path(__file__).resolve().parent
+-BUNDLE = HERE.parents[2]
+-sys.path[:0] = [str(BUNDLE.parents[1] / 'src'), str(BUNDLE / 'scripts'), str(BUNDLE / 'calibration-misfit')]
+-import shared_evaluation as s
+-s.ENGINE_WHEEL_SHA256 = 'e8ad39e0c5d7da471a6d3ace6ff62d60518c57bc1c96fe5198d8bf18747ba8b5'
+-s.ENGINE_COMMIT = 'c106702048e87d0c583a3a5516cb5746e7a6ac07'
+-s.verify_wheel()
+-import epcsaft
+-from epcsaft import equilibrium as eq, regression as reg
+-import verify_reference_calorics as thermal
+-spec = importlib.util.spec_from_file_location('low_temperature_fit', HERE.parent.with_name('temperature-reanchor-140') / 'low-temperature-fit.py')
+-f = importlib.util.module_from_spec(spec)
+-spec.loader.exec_module(f)
+-f.NATIVE_INPUTS = HERE.parent / 'campaign-reactions.json'
+-mapping, reactions, original = f.source_context()
+-params = epcsaft.Parameters.from_mapping(s.with_parameter_values(mapping, dict.fromkeys(f.IDS + [f.SLOPE], 0.0)))
+-model = epcsaft.Mixture(params, thermochemistry=thermal.record())
+-chart = reg.CoordinateSet()
+-chart.coordinates = [reg.coordinate(params, [('k_ij_reciprocal_temperature_slope' if i == f.SLOPE else 'k_ij', tuple(i.split('/')[1:3]), 1.0)], origin=0.0, scale=h, bounds=b) for i, b, h, _ in zip(*f.design('slope-fixed', '1'), strict=True)]
+-active_model = epcsaft.Mixture(params, thermochemistry=thermal.record(), active_parameters=chart.active())
+-training = BUNDLE / 'results/final-rerun/training-inputs.json'
+-assert s.sha256(training) == 'a063148a1c3c68765adbfca81e17d32cd327c68b035e19c84ebeb007f76bb369'
+-observations = json.loads(training.read_text())
+-rows = []
+-record = {'wheel_sha256': s.ENGINE_WHEEL_SHA256, 'module_origin': epcsaft.__file__, 'checks': [], 'branches': {}, 'pool_size_available': len(os.sched_getaffinity(0))}
+-clock = time.perf_counter()
+-try:
+-    for variable in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
+-        assert os.environ[variable] == '1'
+-    for o in observations:
+-        assert o['request']['temperature']['value'] <= 333.15
+-        s.RUNS = BUNDLE / 'results/runs/temperature-heat-147/timing' / o['identity']
+-        rec = s.evaluate_state(model, o['request'], reactions, o['identity'], [], budget_s=175, limits=s.EvaluationLimits(175, 175), model_fingerprint=s.parameter_fingerprint(mapping))
+-        check = f.check_state(rec, o)
+-        record['checks'].append({'identity': o['identity'], 'state': rec, 'check': check})
+-        f.save(HERE / 'timing.json', record)
+-        assert check['complete'], (o['identity'], check)
+-        problem = s._problem_from_request(s.corrected_request(o['request'], reactions), s.anchor_from(rec))
+-        rows.extend(f.refit.observations(params, o, problem, 60))
+-        print('presolve', o['identity'], flush=True)
+-    assert len(observations) == 83 and len(rows) == 141
+-    heat = [r for r in json.loads((HERE.parent / 'heat-source-admission.json').read_text())['Vinjarapu2024']['rows'] if r['role_147'] == 'calibration']
+-    solvent = {'monoethanolamine': 1.0, 'water': 7.911062165006594}
+-    template = s._problem_from_request(s.corrected_request(observations[0]['request'], reactions))
+-    heat_rows = []
+-    for r in heat:
+-        endpoints = [eq.Problem(T=313.15, P=1734000.0, feed=eq.Amounts({**solvent, 'carbon-dioxide': a}), phases=[eq.Phase('L', kind='liquid', support=s.COMPONENT_IDS)], reactions=template.reactions, neutral_reference=template.neutral_reference) for a in (0.0, r['alpha_final'])]
+-        heat_rows.append((r['record_id'], reg.addition_enthalpy(params, *endpoints, {'carbon-dioxide': 1.0}, r['alpha_final'], 313.15, 1734000.0, phase='vapor', observed=r['observed_addition_enthalpy_J_per_mol_CO2'], form='difference', scale=r['uH_J_per_mol_CO2']), 1.0))
+-    for branch, items in (('no-heat', rows), ('heat', rows + heat_rows)):
+-        values = []
+-        for identity, item, weight in items:
+-            t = time.perf_counter()
+-            p = reg.predict(model, item)
+-            residual_s = time.perf_counter() - t
+-            record['current_prediction'] = {'target': identity, **{k: s._jsonable(getattr(p, k)) for k in ('value', 'status', 'message', 'residual', 'requested_tolerance_met', 'convergence', 'branch', 'stable_root_count')}}
+-            f.save(HERE / 'timing.json', record)
+-            assert p.status.name == 'Available' and p.requested_tolerance_met is not False, (identity, p.message)
+-            t = time.perf_counter()
+-            g = reg.differentiate(active_model, item)
+-            values.append({'target': identity, 'prediction': p.value, 'weighted_residual': math.sqrt(weight)*p.residual, 'gradient': list(g.value), 'status': g.status.name, 'message': g.message, 'residual_s': residual_s, 'jacobian_s': time.perf_counter()-t})
+-            record['branches'][branch] = values
+-            f.save(HERE / 'timing.json', record)
+-            assert g.status.name == 'Available' and len(g.value) == 5 and all(math.isfinite(v) for v in g.value), (identity, g.message)
+-            print('timing', branch, identity, flush=True)
+-except Exception as error:
+-    record['failure'] = {'exception': type(error).__name__, 'message': str(error)}
+-    raise
+-finally:
+-    record.update(wall_s=time.perf_counter()-clock, maximum_RSS_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+-    f.save(HERE / 'timing.json', record)
