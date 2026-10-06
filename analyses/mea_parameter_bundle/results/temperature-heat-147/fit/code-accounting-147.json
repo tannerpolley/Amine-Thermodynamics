@@ -1,51 +1,83 @@
 {
   "base": "76ea465fe1ede72257a809d04fc986489c5267f3",
-  "merge_base": "76ea465fe1ede72257a809d04fc986489c5267f3",
-  "whole_tree_executable": {
-    "additions": 4908,
-    "binary_files": 0,
-    "files": 39,
-    "removals": 699
+  "history_gross_from_git_log_numstat": 565,
+  "history_removals_no_credit": 12,
+  "new_import_fix_gross_additions": 1,
+  "new_import_fix_removals_no_credit": 1,
+  "current_gross": 566,
+  "ceiling": 691,
+  "fit_used": 81,
+  "fit_limit": 100,
+  "assessment_used": 0,
+  "assessment_limit": 100,
+  "scope_surviving_executable": [
+    {
+      "additions": 80,
+      "binary": false,
+      "category": "executable",
+      "path": "analyses/mea_parameter_bundle/results/temperature-heat-147/fit/timing.py",
+      "removals": 0,
+      "untracked": false
+    },
+    {
+      "additions": 142,
+      "binary": false,
+      "category": "executable",
+      "path": "analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py",
+      "removals": 0,
+      "untracked": false
+    },
+    {
+      "additions": 211,
+      "binary": false,
+      "category": "executable",
+      "path": "analyses/mea_parameter_bundle/results/temperature-heat-147/qualify.py",
+      "removals": 0,
+      "untracked": false
+    },
+    {
+      "additions": 120,
+      "binary": false,
+      "category": "executable",
+      "path": "analyses/mea_parameter_bundle/results/temperature-heat-147/source-laws.py",
+      "removals": 0,
+      "untracked": false
+    }
+  ],
+  "scope_surviving_additions": 553,
+  "scope_historical_removals_including_repair": 13,
+  "archived_timing_producer": "byte-identical historical source; git diff --find-copies-harder --numstat reports 0 additions / 0 removals for its copy; preserved historical evidence, not a new runtime owner",
+  "full_tree_categories": {
+    "documents": {
+      "additions": 3585,
+      "binary_files": 0,
+      "files": 62,
+      "removals": 2639
+    },
+    "executable": {
+      "additions": 4988,
+      "binary_files": 0,
+      "files": 40,
+      "removals": 699
+    },
+    "generated": {
+      "additions": 0,
+      "binary_files": 7,
+      "files": 7,
+      "removals": 0
+    },
+    "other": {
+      "additions": 2215663,
+      "binary_files": 57,
+      "files": 3608,
+      "removals": 4851
+    },
+    "tests": {
+      "additions": 140,
+      "binary_files": 0,
+      "files": 1,
+      "removals": 0
+    }
   },
-  "issue_147_surviving_executable": {
-    "additions": 553,
-    "removals": 0,
-    "files": [
-      {
-        "additions": 80,
-        "binary": false,
-        "category": "executable",
-        "path": "analyses/mea_parameter_bundle/results/temperature-heat-147/fit/timing.py",
-        "removals": 0,
-        "untracked": true
-      },
-      {
-        "additions": 142,
-        "binary": false,
-        "category": "executable",
-        "path": "analyses/mea_parameter_bundle/results/temperature-heat-147/qualification-9c31cb9a/qualify.py",
-        "removals": 0,
-        "untracked": false
-      },
-      {
-        "additions": 211,
-        "binary": false,
-        "category": "executable",
-        "path": "analyses/mea_parameter_bundle/results/temperature-heat-147/qualify.py",
-        "removals": 0,
-        "untracked": false
-      },
-      {
-        "additions": 120,
-        "binary": false,
-        "category": "executable",
-        "path": "analyses/mea_parameter_bundle/results/temperature-heat-147/source-laws.py",
-        "removals": 0,
-        "untracked": false
-      }
-    ]
-  },
-  "historical_gross_147_additions": 565,
-  "historical_removals_without_credit": 12,
-  "note": "Full-tree accounting includes unrelated changes merged from main; issue scope is the three historical drivers and the new timing driver."
+  "full_tree_note": "CSE full-tree report includes unrelated main integration, preexisting untracked records and the 80-line archived producer copy. None is charged as a new #147 implementation. Surviving original owner additions 553 plus 13 historical removals without credit equals gross 566. No proposed code fragments executed or installed."
 }
