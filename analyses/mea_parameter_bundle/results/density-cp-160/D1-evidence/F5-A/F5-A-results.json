@@ -1,0 +1,99 @@
+{
+  "name": "F5-A",
+  "form": "00",
+  "case": "refit",
+  "fitted_targets": 159,
+  "fitted_cost": 63.88978074951008,
+  "fitted_species_costs_and_signed_residuals": [
+    {
+      "source": "Matin",
+      "species": "HCO3-",
+      "n": 18,
+      "cost": 5.585634747671109,
+      "mean_signed_weighted_residual": -0.49210676763856614
+    },
+    {
+      "source": "Matin",
+      "species": "MEA",
+      "n": 18,
+      "cost": 3.468919980930891,
+      "mean_signed_weighted_residual": -0.46764094728552014
+    },
+    {
+      "source": "Matin",
+      "species": "MEAH+",
+      "n": 18,
+      "cost": 7.979353966923738,
+      "mean_signed_weighted_residual": 0.8525204273614396
+    },
+    {
+      "source": "Matin",
+      "species": "MEACOO-",
+      "n": 18,
+      "cost": 0.6596315836801643,
+      "mean_signed_weighted_residual": 0.11050988152310542
+    },
+    {
+      "source": "Matin",
+      "species": "MEA + MEAH+",
+      "n": 0,
+      "cost": null,
+      "mean_signed_weighted_residual": null
+    },
+    {
+      "source": "Bottinger",
+      "species": "HCO3-",
+      "n": 4,
+      "cost": 8.552205681871209,
+      "mean_signed_weighted_residual": 1.9034288305874432
+    },
+    {
+      "source": "Bottinger",
+      "species": "MEA",
+      "n": 0,
+      "cost": null,
+      "mean_signed_weighted_residual": null
+    },
+    {
+      "source": "Bottinger",
+      "species": "MEAH+",
+      "n": 0,
+      "cost": null,
+      "mean_signed_weighted_residual": null
+    },
+    {
+      "source": "Bottinger",
+      "species": "MEACOO-",
+      "n": 18,
+      "cost": 3.6377387430700057,
+      "mean_signed_weighted_residual": -0.5415982861642488
+    },
+    {
+      "source": "Bottinger",
+      "species": "MEA + MEAH+",
+      "n": 18,
+      "cost": 0.8387416377869451,
+      "mean_signed_weighted_residual": 0.15676601021066947
+    }
+  ],
+  "k_coordinates": {
+    "pair/carbamate-anion/water/k_ij": 0.07587756125132436,
+    "pair/protonated-monoethanolamine/water/k_ij": 0.1704457731163423,
+    "pair/bicarbonate-anion/water/k_ij": 0.5,
+    "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+    "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 160.93384164917217
+  },
+  "active_bounds": [
+    "pair/bicarbonate-anion/water/k_ij",
+    "pair/carbamate-anion/protonated-monoethanolamine/k_ij"
+  ],
+  "optimizer_updates": 6,
+  "native_history_rows": 7,
+  "stopping_reason": "converged",
+  "message": "Function tolerance reached. |cost_change|/cost: 1.039849e-13 <= 1.000000e-12",
+  "converged": true,
+  "trial_failures": 0,
+  "full_rescore_available": false,
+  "gradient_quality": "exact Engine EOS-parameter derivatives",
+  "evidence": "local bounded numerical sensitivity fit; not physical validation"
+}

@@ -1,0 +1,87 @@
+{
+  "question": "Does the frozen #160 water change satisfy the original #124 Cp and density/vapor-pressure nonworsening requirements, and where is the remaining80C solution difference?",
+  "primary_T_K": [
+    298.15,
+    303.15,
+    308.15,
+    313.15,
+    318.15,
+    323.15,
+    328.15,
+    333.15,
+    338.15,
+    343.15,
+    348.15,
+    353.15,
+    358.15,
+    363.15,
+    368.15,
+    373.15,
+    378.15,
+    383.15,
+    388.15,
+    393.15
+  ],
+  "staggered_T_K": [
+    300.65,
+    305.65,
+    310.65,
+    315.65,
+    320.65,
+    325.65,
+    330.65,
+    335.65,
+    340.65,
+    345.65,
+    350.65,
+    355.65,
+    360.65,
+    365.65,
+    370.65,
+    375.65,
+    380.65,
+    385.65,
+    390.65
+  ],
+  "water_liquid_P_Pa": 300000.0,
+  "atmospheric_controls_T_K": [
+    298.15,
+    318.15,
+    353.15
+  ],
+  "atmospheric_control_P_Pa": 101325.0,
+  "solution_T_K": 353.15,
+  "solution_P_Pa": 101325.0,
+  "solution_MEA_mol_kg_water": 7.0,
+  "solution_nominal_loading": [
+    0.0,
+    0.358
+  ],
+  "solution_model_loading": [
+    1e-05,
+    0.358
+  ],
+  "water_cp_max_relative_error": 0.03,
+  "mean_and_max_saturated_density_and_Psat_nonworsening_slack_absolute_relative": 1e-06,
+  "native_Cp_vs_centered_dH_dT_relative_tolerance": 1e-06,
+  "enthalpy_difference_steps_K": [
+    0.1,
+    0.05
+  ],
+  "step_halving_requirement": "fine error at most half coarse error",
+  "minimum_pressure_density_derivative": 0.0,
+  "saturation_and_solution_max_unscaled_residual": 1e-09,
+  "fixed_records": {
+    "original": {
+      "path": "original-record.json",
+      "sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+      "source_commit": "e80ef4e"
+    },
+    "adopted": {
+      "path": "../D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b"
+    }
+  },
+  "changes_allowed": "None; no fit, parameter change, equation change, reaction-law adjustment or density translation.",
+  "C5_boundary": "The additional Amine producers do not overwrite or reconcile authoritative absorber C5 values."
+}

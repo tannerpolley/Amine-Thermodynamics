@@ -43,7 +43,7 @@ def active(k):
     return [identity for identity,x,lo,hi in zip(d.IDS,k,d.LOWER,d.UPPER) if abs(x-lo)<1e-8 or abs(x-hi)<1e-8]
 
 def main(case, form):
-    name=f'ablation-{case}-{form}'
+    name=os.environ.get('FINAL_NAME', f'ablation-{case}-{form}')
     setup(name)
     startpath=d.FILES[form]
     start=d.values(d.s.parameter_mapping(startpath))
@@ -62,7 +62,7 @@ def main(case, form):
     assert d.design.admissible(d.IDS, [d.values(mapping)[i] for i in d.IDS], '40-80')
     d.save(name+'-start-hash.json',{'path':str(startpath),'sha256':d.s.sha256(startpath),'script_sha256':d.s.sha256(Path(__file__))})
     params,groups,rows=d.rows_for(mapping,'11')
-    assert len(rows)==142
+    assert len(rows)==(159 if os.environ.get('FINAL_POOL') == '1' else 141) if os.environ.get('FINAL_RERUN') else len(rows)==142
     v=d.values(mapping)
     coords=[d.regression.coordinate(params,'k_ij_reciprocal_temperature_slope' if identity.endswith(d.design.probe.SLOPE) else 'k_ij',
         tuple(identity.split('/')[1:3]),origin=v[identity],scale=scale,bounds=(lo,hi))
@@ -70,9 +70,10 @@ def main(case, form):
     controls=d.regression.FitControls();controls.maximum_iterations=40
     controls.maximum_elapsed_time_seconds=2250.
     fit=d.regression.fit(params,coords,[r[1] for r in rows],weights=[r[2] for r in rows],controls=controls)
-    raw={key:d.s._jsonable(getattr(fit,key)) for key in ('status','message','physical','weighted_residuals','optimizer_jacobian',
+    raw={key:d.s._jsonable(getattr(fit,key)) for key in ('status','message','physical','predictions','weighted_residuals','optimizer_jacobian',
         'physical_jacobian','iterations','residual_evaluations','jacobian_evaluations','trial_failures','iteration_costs','iteration_seconds','initial_cost','final_cost')}
-    raw.update(targets=[r[0] for r in rows], coordinates=free, start={i: v[i] for i in d.IDS})
+    raw.update(targets=[r[0] for r in rows], coordinates=free, start={i: v[i] for i in d.IDS},
+               active_bounds=[free[i] for i in fit.covariance.active_bounds])
     raw['observation_statuses']=[x.name for x in fit.statuses]
     raw['failures']=[dict(trial=f.trial,observation=raw['targets'][f.observation],status=f.status.name,message=f.message,jacobian=f.jacobian) for f in fit.failures]
     d.save(name+'-fit.json',raw)

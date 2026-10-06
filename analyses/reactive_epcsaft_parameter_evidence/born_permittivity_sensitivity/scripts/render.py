@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 ANALYSIS = Path(__file__).resolve().parents[1]
 RESULTS = ANALYSIS / "results"
 FIGURES = ANALYSIS / "figures"
+# Same reproducible-output settings as MEA.common.plot_style.save_figure_bundle.
+plt.rcParams["svg.hashsalt"] = "MEA-Thermodynamics"
+REPRODUCIBLE = {"svg": {"Date": None}, "pdf": {"CreationDate": None, "ModDate": None}}
 COLORS = {
     "original_born_no_induced": "#CC79A7",
     "original_born_solvent_only": "#E69F00",
@@ -221,7 +224,7 @@ def main() -> None:
     )
     FIGURES.mkdir(parents=True, exist_ok=True)
     for suffix in ("png", "svg", "pdf"):
-        fig.savefig(FIGURES / f"born_permittivity_sensitivity.{suffix}", dpi=220)
+        fig.savefig(FIGURES / f"born_permittivity_sensitivity.{suffix}", dpi=220, metadata=REPRODUCIBLE.get(suffix))
     plt.close(fig)
     fields = tuple(dict.fromkeys(key for row in plotted for key in row))
     with (RESULTS / "plotted_values.csv").open(

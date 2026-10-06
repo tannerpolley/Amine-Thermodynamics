@@ -5,14 +5,22 @@ ANALYSIS = Path(workflow.basedir)
 ROOT = ANALYSIS.parents[1]
 UV = str(Path.home() / ".local/bin/uv")
 VERIFY = ["sha256sum", "--check", "--strict", str(ANALYSIS / "retained-results.sha256")]
-HASH_CHECK = """import csv
+# Retained results were produced at 910f630, before the #152 source corrections; a source
+# that changed since then must match its version at that commit.
+HASH_CHECK = """import csv, hashlib, subprocess
 from pathlib import Path
-from MEA.common.data_access import verify_source_hashes
+PRODUCED_AT = "910f6308475661e3bf014d83557c74edcc63b1c9"
 for name in ("results/source_manifest.csv", "figures/output/source_manifest.csv", "figures/output/uq_source_manifest.csv"):
     path = Path("analyses/enrtl_six_species_ideal_comparison") / name
     with path.open() as stream:
-        expected = dict((row["artifact"], row["sha256"]) for row in csv.DictReader(stream))
-    verify_source_hashes(expected, repo_root=Path.cwd())
+        for row in csv.DictReader(stream):
+            source = row["artifact"]
+            if hashlib.sha256(Path(source).read_bytes()).hexdigest() == row["sha256"]:
+                continue
+            used = subprocess.run(["git", "show", f"{PRODUCED_AT}:{source}"], capture_output=True, check=True).stdout
+            if hashlib.sha256(used).hexdigest() != row["sha256"]:
+                raise SystemExit(f"source hash drift for {source}: matches neither current nor {PRODUCED_AT[:7]} version")
+            print(f"historical input {source}: retained results use its {PRODUCED_AT[:7]} version")
 """
 
 

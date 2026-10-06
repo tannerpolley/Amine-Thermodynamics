@@ -1,0 +1,106 @@
+{
+  "design_comments": [
+    5902438283,
+    5902470668,
+    5902535041,
+    5902558744
+  ],
+  "candidate_ids": [
+    "component/protonated-monoethanolamine/born_diameter",
+    "component/carbamate-anion/born_diameter",
+    "component/bicarbonate-anion/born_diameter",
+    "component/carbonate-anion/born_diameter",
+    "component/hydroxide-anion/born_diameter",
+    "component/hydronium-cation/born_diameter",
+    "model/electrolyte/c_shell",
+    "component/monoethanolamine/solvation_factor",
+    "model/electrolyte/c_dielectric"
+  ],
+  "candidate_bounds": [
+    [
+      2.0,
+      5.0
+    ],
+    [
+      2.0,
+      5.0
+    ],
+    [
+      2.0,
+      5.0
+    ],
+    [
+      2.0,
+      5.0
+    ],
+    [
+      2.0,
+      5.0
+    ],
+    [
+      1.0,
+      2.0
+    ],
+    [
+      0.0,
+      1.0
+    ],
+    [
+      1.0,
+      2.0
+    ],
+    [
+      0.0,
+      1.0
+    ]
+  ],
+  "step_limits": [
+    1.5,
+    1.5,
+    1.5,
+    1.5,
+    1.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5
+  ],
+  "bounds_source": "Figiel 2025 Model Parameters, Tables 2-3, p. 9411; engineering analog envelopes accepted in v2.2",
+  "f_water": 1.5,
+  "epsilon_ion": 8.0,
+  "k_ids": [
+    "pair/carbamate-anion/water/k_ij",
+    "pair/protonated-monoethanolamine/water/k_ij",
+    "pair/bicarbonate-anion/water/k_ij",
+    "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+    "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope"
+  ],
+  "k_bounds": [
+    [
+      -0.5,
+      -0.5,
+      -0.5,
+      -1.0,
+      -1000.0
+    ],
+    [
+      0.5,
+      0.5,
+      0.5,
+      1.0,
+      1000.0
+    ]
+  ],
+  "finite_difference_relative_steps": [
+    0.0001,
+    1e-05
+  ],
+  "retry_relative_steps": [
+    0.001,
+    0.0001
+  ],
+  "agreement_relative": 0.001,
+  "agreement_absolute": 1e-08,
+  "half_gap": 3.71,
+  "quarter_gap": 1.86
+}

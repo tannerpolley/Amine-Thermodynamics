@@ -4,11 +4,13 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+import argparse
 import csv
 import hashlib
 import json
 from pathlib import Path
 
+from MEA.common.data_access import verify_source_hashes
 from MEA.epcsaft_ionic.preregistration import (
     PreregistrationError,
     validate_gate0_preregistration,
@@ -39,7 +41,7 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def validate() -> list[str]:
+def validate(*, current: bool = False) -> list[str]:
     errors: list[str] = []
     density = rows(DENSITY)
     required_density = {
@@ -130,7 +132,7 @@ def validate() -> list[str]:
         "unloaded_mea_density": 35,
         "reactive_mea_density": 68,
         "ethanolammonium_carboxylate_density": 128,
-        "speciation": 1070,
+        "speciation": len(rows(SPECIATION)) if current else 1070,
     }
     if family_counts != expected_families:
         errors.append(f"unexpected contract family counts: {dict(family_counts)}")
@@ -192,7 +194,7 @@ def validate() -> list[str]:
     if len(split) != 231:
         errors.append(f"volumetric split row count is {len(split)}, expected 231")
     split_counts = Counter(row["split"] for row in split)
-    if split_counts != {"training": 153, "validation": 78}:
+    if not current and split_counts != {"training": 153, "validation": 78}:
         errors.append(f"unexpected volumetric split counts: {dict(split_counts)}")
     group_splits: dict[str, set[str]] = defaultdict(set)
     for row in split:
@@ -222,10 +224,11 @@ def validate() -> list[str]:
         errors.append(f"unexpected preregistered active parameter map: {active}")
 
     preregistration = json.loads(PREREGISTRATION.read_text(encoding="utf-8"))
-    try:
-        validate_gate0_preregistration(preregistration)
-    except PreregistrationError as exc:
-        errors.append(f"canonical Gate 0 preregistration failed: {exc}")
+    if not current:
+        try:
+            validate_gate0_preregistration(preregistration)
+        except PreregistrationError as exc:
+            errors.append(f"canonical Gate 0 preregistration failed: {exc}")
     if (
         preregistration["status"] != "GATE_0_FROZEN_EXECUTION_BLOCKED"
         or preregistration["execution_admission"]["admitted"] is not False
@@ -295,17 +298,41 @@ def validate() -> list[str]:
     return errors
 
 
+def validate_current_admission(path: Path) -> list[str]:
+    receipt = json.loads(path.read_text())
+    errors = validate(current=True)
+    verify_source_hashes({**receipt["source_hashes"], **receipt["output_hashes"]}, repo_root=ROOT)
+    baseline_dir = ROOT / receipt["baseline_dir"]
+    preflight = json.loads((baseline_dir.parent / "preflight.json").read_text())
+    for name in (PREREGISTRATION.relative_to(ROOT).as_posix(), "src/MEA/epcsaft_ionic/preregistration.py"):
+        if sha256(ROOT / name) != preflight["protected_file_hashes"][name]:
+            errors.append(f"Immutable pin identity drift: {name}")
+    before = {row["observation_id"]: row for row in rows(baseline_dir / SPLIT.name)}
+    if sha256(baseline_dir / SPLIT.name) != receipt["baseline_assignment_sha256"]:
+        errors.append("Frozen volumetric assignment baseline drift")
+    for row in rows(SPLIT):
+        if any(row[field] != before[row["observation_id"]][field] for field in ("group_id", "split")):
+            errors.append(f"Volumetric assignment drift: {row['observation_id']}")
+        if row["data_family"] == "ethanolammonium_carboxylate_density" and row["role"] != "context_only":
+            errors.append("Analog split role is not context_only")
+    analogs = [row for row in rows(CONTRACT) if row["data_family"] == "ethanolammonium_carboxylate_density"]
+    if len(analogs) != 128 or any(row["target_eligible"] != "no" or row["admission_reason"] != "source binding unverified" for row in analogs):
+        errors.append("All128 analog non-admission contract failed")
+    if receipt["execution_admitted"] is not False:
+        errors.append("Current volumetric receipt admits execution")
+    return errors
+
+
 def main() -> int:
-    errors = validate()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--current-admission", type=Path)
+    args = parser.parse_args()
+    errors = validate_current_admission(args.current_admission) if args.current_admission else validate()
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
-    print(
-        "Volumetric evidence valid: 128 analog densities, 44 derived diagnostics, "
-        "103 Amundsen densities, 1070 speciation memberships, "
-        "and frozen 153/78 volumetric split."
-    )
+    print("Volumetric source/value/unit/identity checks passed; current receipt is admission-only." if args.current_admission else "Frozen volumetric preregistration checked.")
     return 0
 
 

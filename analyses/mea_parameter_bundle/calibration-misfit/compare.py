@@ -40,7 +40,7 @@ def pooled_species(target_identity):
 def predicted(rec, t):
     """Prediction of one target of an evaluated state, with the HCO3- pool applied."""
     pool = pooled_species(t['identity'])
-    if pool:
+    if pool and t['basis'] != 'true-species-liquid-mole-fraction-linear-aggregate':
         x = rec['liquid']['mole_fractions']
         return sum(x[probe.shared.COMPONENT_IDS.index(c)] for c in pool)
     return rec['predictions'][t['prediction_identity']]

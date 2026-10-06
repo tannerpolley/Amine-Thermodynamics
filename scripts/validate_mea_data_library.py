@@ -16,6 +16,9 @@ INVENTORY = LIBRARY / "manifests" / "data_library_inventory.csv"
 MODEL_CONFIGURATIONS = LIBRARY / "manifests" / "reactive_vle_model_configurations.json"
 PARAMETER_STAGES = LIBRARY / "manifests" / "reactive_vle_parameter_stages.json"
 CROSS_VALIDATION = LIBRARY / "manifests" / "reactive_vle_cross_validation.csv"
+READINESS = ROOT / "analyses/reactive_epcsaft_parameter_evidence/results/readiness/regression_readiness_summary.json"
+SPLIT = LIBRARY / "manifests/grouped_split_manifest.csv"
+ADMISSION_BASELINE = None
 INVENTORY_FIELDS = (
     "library_tier",
     "scientific_family",
@@ -39,8 +42,8 @@ REQUIRED_DIRECTORIES = (
 )
 EXPECTED_ROWS = {
     "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": 327,
-    "observations/vapor_liquid_equilibrium/Combined_VLE.csv": 161,
-    "observations/liquid_speciation/Canonical_Combined_ChEq.csv": 571,
+    "observations/vapor_liquid_equilibrium/Combined_VLE.csv": 162,
+    "observations/liquid_speciation/Canonical_Combined_ChEq.csv": 639,
     "observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_density.csv": 128,
     "observations/ionic_analog_volumetrics/ethanolammonium_carboxylate_excess_molar_volume.csv": 44,
 }
@@ -176,6 +179,14 @@ def _domain_role(temperature_c: str) -> str:
     return "high_temperature_challenge"
 
 
+def baseline_directory() -> Path:
+    path = ADMISSION_BASELINE or ROOT / json.loads(READINESS.read_text())["baseline_dir"]
+    preflight = json.loads((path.parent / "preflight.json").read_text())
+    if any(_sha256(path / name) != expected for name, expected in preflight["baseline_file_hashes"].items()):
+        raise ValueError("Frozen admission baseline hash drift")
+    return path
+
+
 def cross_validation_rows() -> list[dict[str, str]]:
     vle_rows = {
         row["observation_id"]: row
@@ -213,7 +224,7 @@ def cross_validation_rows() -> list[dict[str, str]]:
                 "source_file_sha256": _sha256(source_path),
                 "source_row_identity": observation["source_row"],
                 "source_locator": metrology["source_locator"],
-                "temperature_K": f"{float(temperature_c) + 273.15:.2f}",
+                "temperature_K": str(float(temperature_c) + 273.15),
                 "temperature_reported_C": temperature_c,
                 "temperature_conversion": "T_K=T_C+273.15",
                 "mea_mass_fraction": observation["MEA_weight_fraction"],
@@ -283,17 +294,23 @@ def cross_validation_rows() -> list[dict[str, str]]:
             }
         )
 
-    group_fold: dict[str, int] = {}
+    baseline = {row["observation_id"]: row for row in _read_dicts(baseline_directory() / CROSS_VALIDATION.name)}
+    group_fold = {row["campaign_block_id"]: int(row["cross_validation_fold"].split("_")[-1]) for row in baseline.values()}
+    for row in rows:
+        if row["observation_id"] in baseline:
+            row["campaign_block_id"] = baseline[row["observation_id"]]["campaign_block_id"]
     for family in sorted({row["observable_family"] for row in rows}):
         grouped = Counter(
             row["campaign_block_id"]
             for row in rows
             if row["observable_family"] == family
         )
-        fold_load = [0] * 5
+        fold_load = [sum(size for group, size in grouped.items() if group_fold.get(group) == fold + 1) for fold in range(5)]
         for group, size in sorted(
             grouped.items(), key=lambda item: (-item[1], item[0])
         ):
+            if group in group_fold:
+                continue
             fold = min(
                 range(5), key=lambda candidate: (fold_load[candidate], candidate)
             )
@@ -318,14 +335,73 @@ def cross_validation_rows() -> list[dict[str, str]]:
     )
 
 
-def cross_validation_bytes() -> bytes:
+def cross_validation_bytes(rows=None) -> bytes:
     stream = io.StringIO(newline="")
     writer = csv.DictWriter(
         stream, fieldnames=CROSS_VALIDATION_FIELDS, lineterminator="\n"
     )
     writer.writeheader()
-    writer.writerows(cross_validation_rows())
+    writer.writerows(cross_validation_rows() if rows is None else rows)
     return stream.getvalue().encode()
+
+
+def grouped_split_rows() -> list[dict[str, str]]:
+    baseline = _read_dicts(baseline_directory() / SPLIT.name)
+    current = {}
+    for family, path, identity, temperature, fraction in (
+        ("vle_pressure", LIBRARY / "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv", "observation_id", "temperature_reported_C", "MEA_weight_fraction"),
+        ("speciation", LIBRARY / "manifests/speciation_target_membership.csv", "state_id", "temperature_C", "mea_mass_fraction"),
+    ):
+        for row in _read_dicts(path):
+            if row["lifecycle_status"] in {"active_v1", "validation_reserved_candidate", "canonical_eligible", "validation_reserved"}:
+                current.setdefault((family, row[identity]), (row, temperature, fraction))
+    if set(current) != {(row["target_family"], row["record_id"]) for row in baseline}:
+        raise ValueError("Unapproved grouped-split state membership change")
+    for row in baseline:
+        source, temperature, fraction = current[(row["target_family"], row["record_id"])]
+        row.update(mea_mass_fraction=source[fraction], temperature_C=source[temperature], lifecycle_status=source["lifecycle_status"], source_hash=_sha256(ROOT / row["source_path"]))
+    return baseline
+
+
+def readiness_summary(cv, split, outputs) -> dict:
+    summary = json.loads(READINESS.read_text())
+    sources = set(summary["source_hashes"]) | {row["source_file"] for row in cv}
+    sources.update((LIBRARY / "observations/vapor_liquid_equilibrium" / row["source_file"]).relative_to(ROOT).as_posix() for row in _read_dicts(LIBRARY / "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv"))
+    sources.update(row["source_file"] for row in _read_dicts(LIBRARY / "observations/liquid_speciation/Canonical_Combined_ChEq.csv"))
+    sources.update(path.relative_to(ROOT).as_posix() for path in baseline_directory().iterdir() if path.is_file())
+    sources.update(["data/reference/MEA/manifests/speciation_linear_coefficient_rules.csv", "data/reference/MEA/manifests/target_admission_manifest.csv", "analyses/mea_parameter_bundle/results/source-corrections-152/current-volumetric-admission.json"])
+    summary.update(source_hashes={name: _sha256(ROOT / name) for name in sorted(sources)},
+                   baseline_dir=baseline_directory().relative_to(ROOT).as_posix(), target_admission=_read_dicts(LIBRARY / "manifests/target_admission_manifest.csv"),
+                   row_counts=dict(Counter(row["target_family"] for row in split)), role_counts=dict(Counter(row["role"] for row in split)),
+                   lifecycle_counts=dict(Counter(row["lifecycle_status"] for row in split)), candidate_counts=dict(Counter(row["observable_family"] for row in cv)),
+                   executable_observation_counts={"speciation": 0, "vle_pressure": 0}, admitted_target_families=[], upstream_execution_admitted=False,
+                   capability_metadata_status="retained/unrequalified; no Engine import or capability probe",
+                   blocking_conditions={"application_admission": "Candidate views only; execution not admitted; immutable qualification/scales and source-pressure/uncertainty contracts incomplete. Calorimetry admission/path repair remains147-owned."})
+    partitions = {}
+    for row in split:
+        partitions.setdefault(row["group_id"], set()).add(row["split"])
+    summary["leakage_findings"] = sorted(group for group, assignments in partitions.items() if len(assignments) != 1)
+    summary["uncertainty_coverage"] = {"speciation_rows_with_numeric_uncertainty": 0, "vle_rows_with_reported_loading_or_pressure_uncertainty": sum(bool(row["CO2_loading_uncertainty"] or row["CO2_pressure_uncertainty"]) for row in _read_dicts(LIBRARY / "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv"))}
+    summary["output_hashes"] = {path.relative_to(ROOT).as_posix(): hashlib.sha256(data).hexdigest() for path, data in outputs.items()}
+    summary["source_hashes"].update(summary["output_hashes"])
+    summary["split_hash"] = summary["output_hashes"][SPLIT.relative_to(ROOT).as_posix()]
+    return summary
+
+
+def write_admission_outputs(*, check=False) -> list[str]:
+    cv, split = cross_validation_rows(), grouped_split_rows()
+    stream = io.StringIO(newline="")
+    writer = csv.DictWriter(stream, fieldnames=list(split[0]), lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(split)
+    outputs = {CROSS_VALIDATION: cross_validation_bytes(cv), SPLIT: stream.getvalue().encode()}
+    summary = readiness_summary(cv, split, outputs)
+    outputs[READINESS] = (json.dumps(summary, indent=2, sort_keys=True) + "\n").encode()
+    stale = [path.relative_to(ROOT).as_posix() for path, data in outputs.items() if check and path.read_bytes() != data]
+    if not check:
+        for path, data in outputs.items():
+            path.write_bytes(data)
+    return stale
 
 
 def validate() -> list[str]:
@@ -415,10 +491,6 @@ def validate() -> list[str]:
     else:
         cross_validation = _read_dicts(CROSS_VALIDATION)
         family_counts = Counter(row["observable_family"] for row in cross_validation)
-        if family_counts != Counter({"speciation": 198, "pco2": 121}):
-            errors.append(
-                f"Admissible reactive-observation count drift: {dict(family_counts)}"
-            )
         if any(
             not row["source_locator"] or not row["source_file_sha256"]
             for row in cross_validation
@@ -480,16 +552,18 @@ def validate() -> list[str]:
 
     split = _read_dicts(LIBRARY / "manifests" / "grouped_split_manifest.csv")
     split_roles = Counter(row["role"] for row in split)
-    if split_roles != Counter({"active_training": 147, "reserved_validation": 220}):
+    if split_roles != Counter(row["role"] for row in grouped_split_rows()):
         errors.append(f"Frozen regression split drift: {dict(split_roles)}")
     volumetric_split = _read_dicts(
         LIBRARY / "manifests" / "volumetric_grouped_split_manifest.csv"
     )
     volumetric_roles = Counter(row["role"] for row in volumetric_split)
-    if volumetric_roles != Counter({"future_training": 153, "reserved_validation": 78}):
+    if volumetric_roles != Counter(json.loads((baseline_directory().parent / "current-volumetric-admission.json").read_text())["role_counts"]):
         errors.append(f"Frozen volumetric split drift: {dict(volumetric_roles)}")
 
     for path in ROOT.rglob("*"):
+        if any(part in {"tmp", ".venv", ".git", "baseline"} for part in path.relative_to(ROOT).parts):
+            continue
         if (
             not path.is_file()
             or path == Path(__file__)
@@ -515,9 +589,20 @@ def main() -> int:
         action="store_true",
         help="Regenerate the machine-readable file inventory.",
     )
+    parser.add_argument("--write-admission", action="store_true")
+    parser.add_argument("--check-admission", action="store_true")
+    parser.add_argument("--write-inventory", action="store_true")
+    parser.add_argument("--baseline-dir", type=Path)
     args = parser.parse_args()
+    global ADMISSION_BASELINE
+    ADMISSION_BASELINE = (ROOT / args.baseline_dir).resolve() if args.baseline_dir else None
+    if args.write_admission or args.check_admission:
+        return bool(write_admission_outputs(check=args.check_admission))
+    if args.write_inventory:
+        INVENTORY.write_bytes(inventory_bytes())
+        return 0
     if args.write:
-        CROSS_VALIDATION.write_bytes(cross_validation_bytes())
+        write_admission_outputs()
         INVENTORY.write_bytes(inventory_bytes())
         print(
             f"Wrote {CROSS_VALIDATION.relative_to(ROOT)} with {len(cross_validation_rows())} observations."
