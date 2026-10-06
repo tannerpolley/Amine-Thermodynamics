@@ -1,0 +1,147 @@
+{
+  "first_failure": "ModuleNotFoundError: No module named MEA while importing shared_evaluation; repository src omitted from driver sys.path",
+  "exit_code": 1,
+  "classification": "driver import prerequisite; no numerical call reached",
+  "numerical_jobs_completed": 0,
+  "numerical_compute_s": 0.0,
+  "charged_startup_elapsed_s": 0.17,
+  "prior_compute_s_approximate": 325.12,
+  "conservative_cumulative_compute_s_approximate": 325.29,
+  "remaining_ceiling_s_approximate": 50074.71,
+  "time_prediction_s": null,
+  "branch_timings_s": null,
+  "peak_RSS_KiB": 34856,
+  "user_CPU_s": 0.11,
+  "system_CPU_s": 0.03,
+  "machine_threads": {
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1
+  },
+  "limits": {
+    "memory_max": "2G",
+    "external_timeout_s": 1800,
+    "slot_wait_s": 180
+  },
+  "eight_fits": [
+    {
+      "branch": "no-heat",
+      "form": "constant",
+      "start": 1,
+      "status": "not_started",
+      "cost_by_family": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "no-heat",
+      "form": "constant",
+      "start": 2,
+      "status": "not_started",
+      "cost_by_family": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "no-heat",
+      "form": "slope",
+      "start": 1,
+      "status": "not_started",
+      "cost_by_family": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "no-heat",
+      "form": "slope",
+      "start": 2,
+      "status": "not_started",
+      "cost_by_family": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "heat",
+      "form": "constant",
+      "start": 1,
+      "status": "not_started",
+      "cost_by_family": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "heat",
+      "form": "constant",
+      "start": 2,
+      "status": "not_started",
+      "cost_by_family": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "heat",
+      "form": "slope",
+      "start": 1,
+      "status": "not_started",
+      "cost_by_family": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    },
+    {
+      "branch": "heat",
+      "form": "slope",
+      "start": 2,
+      "status": "not_started",
+      "cost_by_family": null,
+      "parameters": null,
+      "active_bounds": null,
+      "start_agreement": null
+    }
+  ],
+  "selection": null,
+  "primary_record": null,
+  "freeze_commit": null,
+  "assessment": "not_run",
+  "identification": "not_run",
+  "Vinjarapu_residuals": "not_run",
+  "gross_executable_lines": {
+    "base": "76ea465fe1ede72257a809d04fc986489c5267f3",
+    "previous": 485,
+    "this_driver": 80,
+    "total": 565,
+    "ceiling": 691,
+    "remaining_total": 126,
+    "fit_integration_selection_allocation": 100,
+    "charged_to_this_allocation": 80,
+    "remaining_allocation": 20,
+    "assessment_allocation": 100,
+    "assessment_used": 0,
+    "removed_credit": 0
+  },
+  "existing_tracked_records_verified_byte_identical": 242,
+  "input_hashes": {
+    "analyses/mea_parameter_bundle/results/source-corrections-152/accepted-wave/strict141-targets.csv": "b2c63743258e949d33eed367d5cdd733968a36ed960ef52fb6fe919d51953e4a",
+    "analyses/mea_parameter_bundle/results/final-rerun/training-inputs.json": "a063148a1c3c68765adbfca81e17d32cd327c68b035e19c84ebeb007f76bb369",
+    "analyses/mea_parameter_bundle/results/temperature-reanchor-140/restored-source-parameters.json": "7e9e3f02723700f8b6577681173249c0e7bd2c8c2a098f38a4e0a7e4611852d5",
+    "analyses/mea_parameter_bundle/results/temperature-heat-147/campaign-reactions.json": "c1cb5c74b2d71ce56e9c0a5d86116f972adbb2d635a0e9ed944152f25bd5fc43",
+    "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b",
+    "data/reference/MEA/thermal/physical-ideal-gas-calorics.json": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Wagner_2013_VLE.csv": "8e6a2efa193a2b676d0cbf793316434bbba7453c209baac6cdc9520dc8eb7944"
+  },
+  "issue_body_sha256": "e1ce9eb82633a80a42910933c42663a789baac2e3ead863abc40f3789b463ae9",
+  "issue_comments_read": 22,
+  "authority": "issue 147 corrected-input amendment 6026191670 and Ready 6026371945",
+  "evidence_type": "execution evidence only; no new calibration, conditional comparison or numerical verification values",
+  "unevaluated": [
+    "all 8 fits",
+    "all section 9 assessments",
+    "Xu vle_obs_0286 through vle_obs_0288; pending domain decision"
+  ]
+}
