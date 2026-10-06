@@ -2,15 +2,16 @@
 import os
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parent
+TAG = os.environ.get('EPCSAFT_147_WHEEL_TAG', '9c31cb9a')
+OUT = Path(__file__).resolve().parent.with_name(f'qualification-{TAG}')
 original = OUT.parent / 'qualify.py'
 source = original.read_text()
 replacements = {
     'HERE = Path(__file__).resolve().parent': 'HERE = Path(__file__).resolve().parent.parent',
-    'ePC-SAFT-build-717a2990': 'ePC-SAFT-build-9c31cb9a',
-    '717a2990e443423e051fc0569f25209d04007543': '9c31cb9a89b6fb42fd386ca44de2331601b4751c',
+    'ePC-SAFT-build-717a2990': f'ePC-SAFT-build-{TAG}',
+    '717a2990e443423e051fc0569f25209d04007543': os.environ.get('EPCSAFT_147_ENGINE_COMMIT', '9c31cb9a89b6fb42fd386ca44de2331601b4751c'),
     '9e6a76cf59d4e2fef3347d895bf3a966ecced01f13dc6e0caec74c3c3d618dc4': os.environ['EPCSAFT_147_WHEEL_SHA256'],
-    "RAW = BUNDLE / 'results/runs/temperature-heat-147'": "RAW = BUNDLE / 'results/runs/temperature-heat-147/qualification-9c31cb9a'",
+    "RAW = BUNDLE / 'results/runs/temperature-heat-147'": f"RAW = BUNDLE / 'results/runs/temperature-heat-147/qualification-{TAG}'",
     'pa.save(HERE /': 'pa.save(OUT /',
     'pa.table(HERE /': 'pa.table(OUT /',
     "'build_jobs': len(os.sched_getaffinity(0))": "'build_jobs': 1",
@@ -19,7 +20,7 @@ replacements = {
     "path = HERE / f'calorimetry-": "path = OUT / f'calorimetry-",
     "    path = OUT / f'calorimetry-": (
         "    if sys.argv[1] != 'Q1-heat':\n        return model, params, initial, final, item, mapping, thermal, request['reaction_system']\n    path = OUT / f'calorimetry-"),
-    "if __name__ == '__main__':": "pa.save(OUT / 'installed-record-check.json', pa.verify(RAW.parent / '.venv-9c31cb9a'))\nif __name__ == '__main__' and sys.argv[1] in ('freeze', 'R1', 'Q1-mapping', 'Q1-heat'):",
+    "if __name__ == '__main__':": f"pa.save(OUT / 'installed-record-check.json', pa.verify(RAW.parent / '.venv-{TAG}'))\nif __name__ == '__main__' and sys.argv[1] in ('freeze', 'R1', 'Q1-mapping', 'Q1-heat'):",
 }
 for old, new in replacements.items():
     assert old in source, old
