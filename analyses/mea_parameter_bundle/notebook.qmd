@@ -268,7 +268,7 @@ The model retains estimated mobilities, an assumed **318.15 K** liquid inlet, a 
 # Open work
 
 - [#124](https://github.com/tannerpolley/Amine-Thermodynamics/issues/124) remains open: unloaded 80 °C Cp was unavailable on the active wheel; [Engine #261](https://github.com/tannerpolley/ePC-SAFT/issues/261) fixed the upstream issue, and [#161](https://github.com/tannerpolley/Amine-Thermodynamics/issues/161) tracks the rerun.
-- [#147](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147) remains open: the heat-of-absorption follow-up. [Engine #269](https://github.com/tannerpolley/ePC-SAFT/issues/269) merged (`c1067020`), so the Engine now solves its zero-carbon bubble endpoint. #147 must still pin that wheel and repeat its own §8 qualification before any fit.
+- [#147](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147) remains open: the heat-of-absorption follow-up. [Engine #269](https://github.com/tannerpolley/ePC-SAFT/issues/269) merged (`c1067020`), so the Engine now solves its zero-carbon bubble endpoint. #147's §8 qualification on that wheel (SHA-256 `e8ad39e0…`) is complete and independently Supported ([record](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-6025992100)): the model gives −68.17 and −68.29 kJ/mol CO₂ for 0→0.11 and 0→0.45 at 313.15 K and 1.734 MPa, against measured −79 to −85 kJ/mol. These are numerical verification results; the authorized heat-of-absorption fit has not yet run.
 
 # Record history
 
