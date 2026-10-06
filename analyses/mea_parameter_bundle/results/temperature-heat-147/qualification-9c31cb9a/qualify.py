@@ -79,7 +79,7 @@ def native(job, alpha, extra, output):
         model = probe.epcsaft.Mixture(params, thermochemistry=thermal.record())
     if job == 'gradient':
         chart = reg.CoordinateSet()
-        chart.coordinates = [reg.coordinate(params, 'k_ij_reciprocal_temperature_slope' if identity == pa.SLOPE else 'k_ij', tuple(identity.split('/')[1:3]), origin=0., scale=1.) for identity in pa.IDS+[pa.SLOPE]]
+        chart.coordinates = [reg.coordinate(params, [('k_ij_reciprocal_temperature_slope' if identity == pa.SLOPE else 'k_ij', tuple(identity.split('/')[1:3]), 1.0)], origin=0., scale=1.) for identity in pa.IDS+[pa.SLOPE]]
         model = probe.epcsaft.Mixture(params, thermochemistry=thermal.record(), active_parameters=chart.active())
     prediction = reg.differentiate(model, item) if job == 'gradient' else reg.predict(model, item)
     output['prediction'] = {k: s._jsonable(getattr(prediction, k)) for k in ('value', 'status', 'message')}
