@@ -272,26 +272,6 @@ The model retains estimated mobilities, an assumed **318.15 K** liquid inlet, a 
 
 # Record history
 
-## Historical #147 source-admission and earlier-wheel record
-
-The following branch record predates the completed `c1067020` qualification described above; its earlier adopted-record identity and incomplete-qualification wording are retained as history.
-
-The independent delivered review of #147 Phase A source admission returned
-**Supported** (commit `845e98a`; [review comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-5939694947)). The
-checksum-covered `results/temperature-heat-147/README.md` retains its pre-review wording that
-independent source review remains required and lists it as remaining work; both annotations
-predate the review and are preserved so `SHA256SUMS` remains valid. Phase B §8 was repeated
-on wheel `b83c4250…` (Engine `9c31cb9a`, after ePC-SAFT #231 and #261 merged), as recorded in
-`results/temperature-heat-147/qualification-9c31cb9a/`. Independent delivered review found
-checks 1, 2, 4, 5 and 6 and the pure-CO₂ feed root Supported. The native exact-zero-carbon heats
-at 313.15 K and 1.734 MPa are −68169.42621173232 J/mol CO₂ (0→0.11) and
-−68286.33285346051 J/mol CO₂ (0→0.45). These are numerical verification, not calorimetric
-validation. Phase B is incomplete: the Engine refuses the required §6.1 bubble boundary at the
-α = 0 endpoint (`zero_inventory_incipient_support`, the stated limit of #231). No #147 fit exists.
-
-Selected byte SHA-256: `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241`; candidate byte SHA-256: `42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952`. The producing and replay wheel is `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2` (MEA merge `8c670d3a`, Engine build identifier `1a905ff8`; these commits are distinct).
-
-
 Past records and comparisons are in [parameter-record-history.csv](results/parameter-record-history.csv) and Git history. This notebook replaces the previous view with current retained work; rendering it never runs the thermodynamic model.
 
 # References
