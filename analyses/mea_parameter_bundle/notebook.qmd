@@ -249,7 +249,7 @@ Two rows miss 3%. Solution Cp remains report-only for #160; full #149 property a
 
 # Absorber comparison
 
-The [Stage 5 handoff](results/density-cp-160/stage5-absorber/handoff.json) retains one **65-node, nine-film-point 3C case** on the active wheel; the quadrature count is in its bound [resolved configuration](https://github.com/tannerpolley/MEA-Absorption-Column/blob/bb70f6f7af62cdcdd029447cba34e44173a2750b/analyses/bvp_solution_methods/results/amine_160_candidate/upwind_cos_n65_parameter_transfer/resolved_config.json). The absorber repository owns the solve. The retained model/observation comparisons are:
+The [Stage 5 handoff](results/density-cp-160/stage5-absorber/handoff.json) retains one **65-node, nine-film-point 3C case** on the active wheel; the quadrature count is in its bound resolved configuration, `analyses/bvp_solution_methods/results/amine_160_candidate/upwind_cos_n65_parameter_transfer/resolved_config.json` at absorber commit `bb70f6f7` (local branch `work/160-amine-density-cp`, not yet published to GitHub), file SHA-256 `c729944d…` as recorded in the handoff. The absorber repository owns the solve. The retained model/observation comparisons are:
 
 ::: {.parameter-table .summary-table}
 | Quantity | Current record | Reference or limit |
@@ -268,7 +268,7 @@ The model retains estimated mobilities, an assumed **318.15 K** liquid inlet, a 
 # Open work
 
 - [#124](https://github.com/tannerpolley/Amine-Thermodynamics/issues/124) remains open: unloaded 80 °C Cp was unavailable on the active wheel; [Engine #261](https://github.com/tannerpolley/ePC-SAFT/issues/261) fixed the upstream issue, and [#161](https://github.com/tannerpolley/Amine-Thermodynamics/issues/161) tracks the rerun.
-- [#147](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147) remains open: the heat-of-absorption follow-up waits on [Engine #269](https://github.com/tannerpolley/ePC-SAFT/issues/269).
+- [#147](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147) remains open: the heat-of-absorption follow-up. [Engine #269](https://github.com/tannerpolley/ePC-SAFT/issues/269) merged (`c1067020`), so the Engine now solves its zero-carbon bubble endpoint. #147 must still pin that wheel and repeat its own §8 qualification before any fit.
 
 # Record history
 
