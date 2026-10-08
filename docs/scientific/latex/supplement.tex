@@ -119,7 +119,8 @@ Xu and Rochelle's 63 rows carry the source molality and are calculated at their 
 B\"ottinger et al.'s compositions are the unloaded mass fractions printed in their Table~3 rather than the nominal values, each bicarbonate value of the 20 wt\% series at \SI{80}{\degreeCelsius} is assigned to its printed loading, and the printed 2-oxazolidone values are kept in the data set but not represented by the model \cite[Table~3]{Bottinger2008}.
 The Aronu et al.\ loading at 45 wt\% and \SI{80}{\degreeCelsius} with \SI{0.0060}{\kilo\pascal} is 0.025, as in the source table and its corrigendum \cite[Table~5]{Aronu2011}.
 Jakobsen et al.'s two printed loadings are both kept \cite[Tables~A1--A2]{Jakobsen2005}.
-The Matin et al.\ method description follows the article, but the numerical values are not checked against the source because its supporting tables are not available \cite{matinFacileMethodDetermination2012}.
+All 95 numerical values in the 19-row Matin transcription were checked against Table~S.1 of the supporting information \cite[Table~S.1, Supplementary Material]{matinFacileMethodDetermination2012}.
+The source figures label the measurements at \SI{21}{\degreeCelsius}; that temperature is treated as equivalent to \SI{20}{\degreeCelsius} in these calculations.
 For Amundsen et al., the measurement pressure is unreported, and the stated loaded-solution uncertainty excludes the highest temperatures and loadings \cite{Amundsen2009}.
 The fitted set has 83 states and 141 targets: 47 pressures and 94 species.
 
@@ -129,10 +130,38 @@ To place the observations of the main text among published measurements, we inve
 The search is not exhaustive.
 The inventory holds 165 entries: 88 known only from bibliographic metadata, 36 assessed only from publisher or secondary descriptions or older records, and 41 checked against a primary passage, table or database record.
 \Cref{tab:s4-data-inventory} lists the 34 of these 41 whose near-30 wt\% scope is confirmed, with the concentration basis, conditions and observation counts each source reports; of the other seven, four report dilute-solution reaction constants and three lie outside 25--35 wt\% \MEA.
-Several entries reuse the same experimental campaign and are not independent measurements.
-Listing a source here does not make its values fitted targets; the fitted and compared roles are those of the observation-role table of the main text.
+Entries can share measurements; the main text's observation-role table identifies which observations are fitted or compared.
 
 \input{tables/supplement_data_inventory}
+
+\section{Earlier calibration and numerical verification}\label{sec:s-calibration}
+% P:supplement-12
+Four fixed values were estimated with data beyond the fitted temperatures: the R2 and R5 enthalpy shifts, a change of the R5 coefficient \(A_5\) and the \COtwo dispersion energy.
+The R2 and R5 correlations carry fixed constant shifts of the reaction enthalpy, \SI{-8.2019}{\kilo\joule\per\mole} for R2 and \SI{8.4185}{\kilo\joule\per\mole} for R5, applied so that \(\ln K\) is unchanged at \SI{313.15}{\kelvin}.
+These shifts were estimated against 33 targets: five \COtwo pressures of Jou et al., two at \SI{80}{\degreeCelsius} (loadings 0.118 and 0.578) and three at \SI{120}{\degreeCelsius}, 22 species and six heat-of-absorption intervals of Kim and Svendsen~\cite{Jou1995,Kim2007}.
+They were adopted after a replay against the 30 wt\% pressures at 40--\SI{120}{\degreeCelsius}, the species and the heats of absorption, in which no group deteriorated and the Xu and Rochelle pressures, held out from the estimation, improved; the same estimation shifted R4, which here uses its source correlation instead.
+The R5 shift was applied to an \(A_5\) of \SI{2597.91}{\kelvin}, \SI{80}{\kelvin} below the Bates--Pinching value of \SI{2677.91}{\kelvin}, which lowers \(\mathrm{p}K_5=-\log_{10}K_5\) by \((\SI{80}{\kelvin})/T\) at every temperature, so \MEAH dissociates more readily.
+This lower \(A_5\) was chosen, without fitting, among fixed-parameter variants of the Born and permittivity treatment by comparison with a subset of the 30 wt\% pressures at 40--\SI{120}{\degreeCelsius} and with species at 20--\SI{80}{\degreeCelsius}.
+The \COtwo dispersion energy, \SI{173.44}{\kelvin} in place of the published \SI{169.21}{\kelvin}~\cite{Gross2001}, was selected by comparison with all 30 wt\% pressures at 40--\SI{120}{\degreeCelsius} and species at 20--\SI{80}{\degreeCelsius}.
+These are calibration values, not physical reaction enthalpies or molecular properties.
+The pressure and species comparisons at 80--\SI{120}{\degreeCelsius} are therefore not independent of them; among the pressure comparisons at \SI{80}{\degreeCelsius} and above, only the Wagner et al.\ rows entered none of these steps.
+The 15 and 45 wt\% pressures and the loaded densities also entered none of them, whereas the Jakobsen et al.\ data entered the fit of the \MEAH and \MEACOO parameters.
+
+% P:supplement-13
+The following checks concern the six fits of Supplementary Section~S1.
+Each was started from two prescribed parameter vectors; all twelve runs converged, and the two starts of each fit agree in cost within a relative \(7.2\times10^{-13}\).
+Re-evaluation of the six fitted parameter sets reproduces each fitted cost within a relative \(9.4\times10^{-13}\), with largest absolute material-balance, charge-balance and stationarity residuals of \(1.2\times10^{-12}\)~mol, \(2.0\times10^{-13}\)~mol and \(1.3\times10^{-12}\).
+These residuals establish numerical verification, not physical validation.
+
+\section{Calculation files and software identity}\label{sec:s-files}
+% P:supplement-14
+The processed observations, parameter files, calculation results and figure data are identified in the repository \url{https://github.com/tannerpolley/Amine-Thermodynamics}, commit \nolinkurl{79256a09ba0f3c4a3afdceabd4d1595c927a6d08}.
+The selected SSM+DS parameter set, F1, is in \nolinkurl{analyses/mea_parameter_bundle/results/selected-current-best-parameters.json}, SHA-256 \nolinkurl{ae92bac5d2ef7ab690e692f6b1686e18cf06f24ac6b53a6aab4fafeb3046f1aa}.
+The six fits, the comparisons outside the fit, the conditional standard errors, the pressure decomposition and the figure data are in \nolinkurl{analyses/mea_parameter_bundle/results/final-rerun/}, and the source-data corrections are in \nolinkurl{analyses/mea_parameter_bundle/results/source-corrections-152/}.
+All fits and evaluations used the \texttt{epcsaft} software build (Python wheel) with SHA-256 \nolinkurl{28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2}.
+The estimation of the fixed R2 and R5 shifts is retained in \nolinkurl{analyses/mea_parameter_bundle/results/reaction-temperature-fit/}.
+The figures and result tables of this manuscript are drawn from those files by \nolinkurl{analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py} and \nolinkurl{docs/scientific/latex/scripts/final_rerun_tables.py} in the manuscript sources of the same repository.
+The MIT License covers the repository software and original documentation; third-party experimental data retain their original terms and provenance.
 
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references}
