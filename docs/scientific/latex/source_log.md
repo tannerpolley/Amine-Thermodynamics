@@ -40,66 +40,41 @@ was then refreshed with `cse-zotero bibliography-export --apply`.
 Writer A's methods, equation-of-state and table files may add keys; `scripts/cited_bibliography.py`
 fails if any cited key is absent from the export.
 
-## Numerical evidence
+## Numerical evidence (2026-10-08 numbers pass)
 
-Every result number in the manuscript and supplement comes from the corrected141 final rerun
-(#154), which the owner promoted for manuscript use at `79256a0` on 2026-10-02 (#68), and from the
-#152 source corrections. Paths below are relative to `analyses/mea_parameter_bundle/results/final-rerun/` (**R**). The claims concern
-calibration, numerical verification and comparisons outside the fit; no physical validation is
-claimed.
+The investigator authorized manuscript use of notebook commit `398c1d3` in this implementation task, subject to #170's reviewed claim limits: calibration for fitted pressure, species, heat and four density states; conditional predictions outside the fit with prior access disclosed; numerical verification rather than physical validation.
 
-| Manuscript value | Retained file |
+The manuscript consumes the adopted heat-augmented record `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`. Engine commit `026b30311b959f1a5db4feef4c15e243f7044a5f`, immutable wheel `94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a`. The fitting-stage provenance snapshot is `7ad8156`; public deposit/tag remains pending. Numerical files were merged from evidence branch `398c1d3` without conflicts and remain unchanged.
+
+Paths below are relative to `analyses/mea_parameter_bundle/results/heat-final-170/`.
+
+| Manuscript quantity | Retained file |
 | --- | --- |
-| F1 record SHA-256 `ae92bac5…f1aa`; wheel `28181e72…a97402f2` | R`selected-record.json`; R`README.md` |
-| Costs, fitted AARDs, coordinates, active bounds and start agreement of F1–F6 | R`fit-summary.json` |
-| Fitted-target AARD by source and observable | R`fit-aard-by-source-species.csv`; R`f6-aard-by-source-species.csv` |
-| Conditional standard errors, correlations, outward bound gradients | R`conditional-standard-errors.csv`; R`conditional-correlations.csv`; R`conditional-uncertainty.json` |
-| Outside-fit AARD and mean ln by group and source (80 °C, Wagner, 100–120 °C, pooled, transfer, Matin pool) | R`evaluation/scores.csv`; R`evaluation/not-evaluated.json` |
-| Jakobsen carbonate share; loaded density | R`evaluation/jakobsen-carbonate-share.csv`; R`evaluation/density.csv` |
-| Replay residuals and the 1,374 evaluated states | R`evaluation/replay-checks.json`; R`evaluation/execution.json` |
-| Pressure decomposition, H1/H2/C statistics, offset fractions and checks N1–N9 | R`activity-contributions/checks.json`; R`activity-contributions/born-off-pressure-decomposition.csv` |
-| Pool-effect costs (141 base and 18 pool targets) | R`figure-data/pool-effect-costs.csv` |
-| Corrected data: 83 states, 141 targets (47 pressure, 94 species); Xu rows 22–24 not evaluated | `analyses/mea_parameter_bundle/results/source-corrections-152/README.md`; issue #152 |
-| Wagner composition and temperature ranges | `analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv` |
-| Fixed R2/R5 shifts (−8.2019, +8.4185 kJ/mol): 33 estimation targets (Jou `vle_obs_0206`, `0211` at 80 °C; `0227`, `0228`, `0232` at 120 °C; 22 species; 6 Kim–Svendsen 2007 heats); adoption replay with Xu 2011 held out | F1 record reaction coefficients; `analyses/mea_parameter_bundle/results/reaction-temperature-fit/README.md` (“Revised screen, recenter, full replay, and adoption”), `adoption-receipt.json`, `full-validation-targets.csv` |
-| R5 \(A_5\) lowered by 80 K | Fixed-parameter variant `r5am80` in `analyses/mea_parameter_bundle/scripts/run_born_permittivity_study.py`; `analyses/mea_parameter_bundle/results/born-permittivity-study/current-fast-common-comparison.csv`; `analyses/evidence-map.qmd` (R4/R5 row) |
-| CO2 dispersion energy 173.44 K selected against 30 wt% pressures at 40–120 °C and species at 20–80 °C | `analyses/mea_parameter_bundle/results/best-in-slot-campaign/final-full-validation-evaluations.csv` (scenario `local-p0.15-db-350-eps+0.025`) |
-| ε_MEA = 32 has no retained source (retired `any_solvent.csv`, column `dielc`); water permittivity is the Engine's approximation of the Archer–Wang permittivity (`archerDielectricConstantWater1990`) | F1 record provenance of `component/monoethanolamine/relative_permittivity` and of the water permittivity correlation |
-| Reason the two Böttinger 40 °C states and Matin state 016 are not fitted | `analyses/mea_parameter_bundle/calibration-misfit/compare.py` (`EXCLUDED`, commit `e274898`); `data/reference/MEA/manifests/speciation_target_membership.csv` (Matin state 016) |
-| Jakobsen 40 °C, loading 0.21 point excluded as out of line | `analyses/mea_parameter_bundle/calibration-misfit/README.md` (carbonate share) |
+| All 128 old/new entries and paragraph locators | `awaiting-rerun-numbers.csv`; disposition in `docs/scientific/latex/builds/numbers-pass-170.csv` |
+| Six heat fits: 149 base or 167 pool targets, costs, AARDs and coordinates | `fit-comparison.csv`; `fit-summary.json`; each selected native-fit file |
+| Source/observable AARDs | `evaluation/targets.csv`, restricted to each native-fit target-ID set |
+| Conditional errors, correlations and bound gradients | `conditional-uncertainty.json`; `conditional-standard-errors.csv` |
+| Outside-fit AARDs and mean log ratios | `evaluation/scores.csv` |
+| Carbonate comparison | `evaluation/jakobsen-carbonate-share.csv` |
+| Four density-translation calibration states at 0.100 MPa | `corrected-densities.csv`, restricted to 30 wt%, 50/70 °C, loading 0.3/0.4 |
+| Uncorrected density comparisons at 101325 Pa, explicitly separate | `evaluation/density.csv` |
+| Vinjarapu fitted and Arcis predicted heats; matched no-heat comparison | `heat-comparison.csv`; `figure-data/heat.csv` |
+| Separately named Hilliard/Jou packet and canonical pressure cohorts | `high-temperature-comparison.csv` |
+| Heat-capacity spot checks | `heat-capacity-comparison.csv` |
+| 1,374 current and 375 no-heat equilibrium states, replay/balance residuals | `evaluation/replay-checks.json`; `evaluation/execution.json` |
 
-The result tables (`tables/residual_summary.tex`, `tables/binary_interaction_parameters.tex`
-and `tables/supplement_*.tex` except the data inventory) are generated from these files by
-`python scripts/final_rerun_tables.py`; their values are not edited by hand.
+The 83 pressure/species states and 141 targets remain the #152 corrected basis. Eight Vinjarapu observations bring each base fit to 149; 18 Matin pool values bring F4/F5 to 167. Historical source corrections and fixed reaction shifts retain their existing cited records and are not re-estimated here.
 
-## Figures
+The unavailable ion-free ionic reference prevents the decomposition. Its numerical checks, hypotheses, offsets, activity/speciation interpretations, figure and table are removed. The supported Born claim is the tested refit comparison, 13.81% against 80.25% fitted-pressure AARD. The Matin pool does not reverse the Born ordering. The slope's 107.96 ± 22.93 K uncertainty is conditional, and the heat/high-temperature-pressure change is a trade-off of the parameterization, without a uniquely diagnosed chemistry cause.
 
-All four figures are drawn by `analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py`
-from R`figure-data/`, whose CSV hashes the script checks against R`figure-data/input-hashes.json`.
-Model values are discrete evaluations at the measured states and are drawn as markers.
+## Heat sources read for this pass
 
-| Manuscript figure | File | SHA-256 | Data |
-| --- | --- | --- | --- |
-| Pressure against loading (`fig:pressure`) | `figures/generated/pressure.pdf` | `ef99f2d42c5f9274b6274f2fa4fcd055a754f633334b31e3f5a9f2b8ecbea705` | R`figure-data/pressure.csv` |
-| Speciation (`fig:speciation`) | `figures/generated/speciation.pdf` | `eec5ec497c8755a9862fb907e99e5fef8b430a7cb667d56004e2e0394571b29b` | R`figure-data/speciation.csv`, R`figure-data/pool-effect.csv` (fitted flags) |
-| Born-off decomposition (`fig:born-off`) | `figures/generated/born-off-mechanism.pdf` | `ff430c99fb3c88eb66594e9aaa0a0304cc020baf787b2af4e294081db1393a6e` | R`figure-data/born-off-mechanism.csv`, R`figure-data/pressure.csv` |
-| Titration pool effect (`fig:pool-effect`) | `figures/generated/pool-effect.pdf` | `b64377cebb5dfd5bb18383f10712b11596b1a972a6b300ffe3e2258f89a26f57` | R`figure-data/pool-effect.csv`, R`figure-data/pool-effect-costs.csv` |
+The worktree lacks its ignored literature shelf. The existing Zotero PDFs were read directly without changing Zotero or refreshing the bibliography: Vinjarapu (2024), attachment `CE8AP5BM`, Sections 1.1.1, 2.2 and 3.1, Table 4; Arcis (2011), attachment `UAIPQMND`, Section 2.4 and Table 5. These support the integral-heat definition, conditions and observation roles. Prior literature positioning is retained from the approved restructuring; no new literature ranking or molecular mechanism is asserted.
 
-## Supplement data inventory
+## Presentation and build
 
-`tables/supplement_data_inventory.tex` (34 entries, label `tab:s4-data-inventory`) is generated
-from the #152-corrected source-status inventory `data/reference/MEA/manifests/source_status_manifest.csv`; its values are not edited by hand. Regenerate from
-`docs/scientific/latex/`:
+`scripts/render_manuscript_figures.py` reads the current retained tables and writes pressure, speciation, pool-effect and heat-of-absorption figures under `figures/generated/`. Model values are discrete markers at measured states; pressures are in kPa, species in mole fraction, and heat in kJ/mol CO2. Rendering evaluates no model. `scripts/final_rerun_tables.py` writes result tables from the same current evidence.
 
-```bash
-python scripts/supplement_data_inventory.py ../../../data/reference/MEA/manifests/source_status_manifest.csv ~/Zotero/exports/references.bib
-```
+The manuscript build remains `scripts/build_manuscript.sh`; the supplement uses `latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex` from the LaTeX directory. Both run through `agent-heavy --max 3G --timeout 10m`. Final build counts, warnings and visual checks are recorded in `builds/numbers-pass-170.md`.
 
-The corrected inventory records the Matin 2012 method as checked against the article and its
-numerical values as unchecked against the unavailable supporting tables; the generator maps that
-evidence level, and curation notes such as pending or unverified fields, to plain statements. Seven reference labels have no export key and keep an explicit
-unavailable-key marker.
-
-- Source-status inventory CSV: `455ed105c408a444e793307856be29eaa5c208ca4251734b9dcecddf95de0bd1`
-- Generator: `0880b78373b9e8ffd3b02b8cf9b86403c7ceec50cd42f2ebe94fdf3d2a9adfc7`
-- Generated table: `c32ba940160eda83e4c764df7d5a078e518ab81191e6aeac6a10c6fd32feea42`
+The data statement remains pending a public deposit or immutable manuscript tag. Independent manuscript evidence/prose review and owner publication remain open.

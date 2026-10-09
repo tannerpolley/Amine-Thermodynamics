@@ -1,5 +1,7 @@
 # Issue 154: corrected-data final evidence
 
+> **Historical record.** This is the #154 evidence. Its F1 record (`ae92bac5…`) was superseded by #160 and then by the heat-augmented record (`66ff7715…`, #170); see `../parameter-record-history.csv`. Statements below describe the state at #154 adoption.
+
 **F1 (SSM+DS) is the selected calibrated record.** On the corrected 141-target base,
 its pressure/species costs are 8.438701621598156 / 24.595072621944944. F3's
 Born-off refit increases pressure cost by 53.17344870743889 within the same
@@ -61,7 +63,7 @@ against the retained Jacobians changes SEs by at most 1.40e-14 relative and
 correlations by 2.22e-16 (`uncertainty-replay-checks.json`); no Jacobian was
 refitted or newly evaluated.
 
-`F1-parameters.json` and `../selected-current-best-parameters.json` have SHA-256
+`F1-parameters.json` and, at the #154 adoption commit, `../selected-current-best-parameters.json` had SHA-256
 `ae92bac5d2ef7ab690e692f6b1686e18cf06f24ac6b53a6aab4fafeb3046f1aa`.
 All model inputs equal the replayed F1-B optimizer export; only description and
 document identity changed. `selected-record.json` records that equality and

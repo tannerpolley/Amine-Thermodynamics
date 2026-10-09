@@ -1,0 +1,87 @@
+{
+  "relative_start_cost_difference": 1.375572177054801e-12,
+  "max_intercept_start_difference": 1.2396029713812595e-07,
+  "slope_start_difference_K": 5.810789232896241e-06,
+  "starts_agree": true,
+  "calibration_targets": {
+    "pressure": 47,
+    "species": 94,
+    "heat": 8
+  },
+  "cost_definition": "0.5 sum of squared weighted residuals",
+  "evidence": {
+    "fitted_data": "calibration",
+    "Arcis": "prediction",
+    "benchmark80": "prediction; previously accessed",
+    "physical_validation": false
+  },
+  "baseline": {
+    "pressure_species_cost": 30.089761188866785,
+    "heat_cost": 7.146631706689346,
+    "total149_cost": 37.23639289555613,
+    "pressure_species_cost_change_vs_160": 0.0,
+    "pressure_species_cost_change_percent": 0.0,
+    "Arcis": {
+      "n": 14,
+      "RMSE_kJ_mol": 11.631834642247986,
+      "mean_residual_kJ_mol": 10.97549795991594,
+      "max_abs_residual_kJ_mol": 17.603086407772906,
+      "510000": {
+        "n": 8,
+        "RMSE_kJ_mol": 14.143005515119832,
+        "mean_residual_kJ_mol": 14.035331161473943
+      },
+      "1030000": {
+        "n": 6,
+        "RMSE_kJ_mol": 6.9999671430029435,
+        "mean_residual_kJ_mol": 6.895720357838601
+      }
+    }
+  },
+  "A": {
+    "pressure_species_cost": 30.330865910907587,
+    "heat_cost": 1.7258177853889853,
+    "total149_cost": 32.056683696296574,
+    "pressure_species_cost_change_vs_160": 0.24110472204080224,
+    "pressure_species_cost_change_percent": 0.8012849305364833,
+    "Arcis": {
+      "n": 14,
+      "RMSE_kJ_mol": 8.36442064230067,
+      "mean_residual_kJ_mol": 7.500121327472199,
+      "max_abs_residual_kJ_mol": 13.401324985556188,
+      "510000": {
+        "n": 8,
+        "RMSE_kJ_mol": 10.579502282657703,
+        "mean_residual_kJ_mol": 10.48413797481361
+      },
+      "1030000": {
+        "n": 6,
+        "RMSE_kJ_mol": 3.7434945605401375,
+        "mean_residual_kJ_mol": 3.5214324643503154
+      }
+    }
+  },
+  "B": {
+    "pressure_species_cost": 30.330865613994135,
+    "heat_cost": 1.7258180822583238,
+    "total149_cost": 32.056683696252456,
+    "pressure_species_cost_change_vs_160": 0.2411044251273502,
+    "pressure_species_cost_change_percent": 0.8012839437773867,
+    "Arcis": {
+      "n": 14,
+      "RMSE_kJ_mol": 8.364420402844567,
+      "mean_residual_kJ_mol": 7.500121082171836,
+      "max_abs_residual_kJ_mol": 13.401324445038044,
+      "510000": {
+        "n": 8,
+        "RMSE_kJ_mol": 10.579501999385988,
+        "mean_residual_kJ_mol": 10.484137702819645
+      },
+      "1030000": {
+        "n": 6,
+        "RMSE_kJ_mol": 3.7434943795251354,
+        "mean_residual_kJ_mol": 3.5214322546414234
+      }
+    }
+  }
+}

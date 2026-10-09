@@ -17,7 +17,14 @@ Excess-Gibbs-energy models with chemical equilibria represent this system with f
 B\"ottinger et al.\ refitted the \MEA carbamate-formation constant to NMR speciation while retaining the Bates--Pinching protonation constant and published \MEA interaction parameters~\cite{Bottinger2008}.
 Zhang et al.\ fitted an electrolyte non-random two-liquid (NRTL) liquid model, with vapor fugacities from the perturbed-chain statistical associating fluid theory (PC-SAFT), to \COtwo solubility, heat of absorption, heat capacity and NMR speciation together~\cite{Zhang2011}, and Akula et al.\ fitted an electrolyte NRTL model jointly to \COtwo pressure and heat of absorption, leaving NMR speciation and heat capacity outside the fit~\cite{Akula2023a}.
 Equations of state based on statistical associating fluid theory (SAFT) describe association and chain formation within one Helmholtz energy~\cite{Gross2001,Gross2002}.
-For loaded \MEA, SAFT models with variable-range potentials (SAFT-VR) represented the reactions implicitly as association between \MEA and \COtwo sites~\cite{MacDowell2010,Rodriguez2012}, Wang et al.\ used pseudo-chemical association in a Peng--Robinson cubic-plus-association equation of state and predicted the liquid speciation~\cite{wangImprovementPRCPAEquation2018}, and PC-SAFT and Huang--Radosz SAFT (SAFT-HR) models combined neutral-species fugacities with ideal reaction equilibria~\cite{Nasrifar2010,Baygi2015,Najafloo2018}.
+Binary \MEA--water and \MEA--hydrocarbon mixtures have also been described with simplified PC-SAFT and cubic-plus-association equations of state~\cite[Introduction and Conclusion]{avlundApplicationAssociationModels2011}.
+For loaded \MEA, SAFT models with variable-range potentials (SAFT-VR) represented the reactions implicitly as association between \MEA and \COtwo sites~\cite{MacDowell2010,Rodriguez2012}, and Wang et al.\ used pseudo-chemical association in a Peng--Robinson cubic-plus-association equation of state and predicted the liquid speciation~\cite{wangImprovementPRCPAEquation2018}.
+Chremos et al.\ used the SAFT-$\gamma$ square-well group-contribution approach to fit \COtwo solubility and predict carbamate and bicarbonate from the fractions of bonded association sites~\cite[Sect.~3.6]{chremosModellingPhaseChemical2016}.
+Perdomo et al.\ extended this association-based treatment with SAFT-$\gamma$ Mie group parameters, fitting phase-equilibrium data and predicting the species concentrations without fitting speciation data~\cite[Sects.~2.2--2.3 and 4.3.3]{perdomoPredictiveGroupcontributionFramework2023}.
+These species predictions represent associated, electrically neutral ion pairs; they do not require separate ionic activity coefficients.
+Lloret et al.\ fitted reactive \COtwo association sites in soft-SAFT to ternary equilibrium data and tested their transfer to another \MEA concentration~\cite[Sect.~4.7]{lloretConsistentTransferableThermodynamic2017}.
+PC-SAFT and Huang--Radosz SAFT (SAFT-HR) models instead combined neutral-species fugacities with ideal reaction equilibria~\cite{Nasrifar2010,Baygi2015,Najafloo2018}.
+Najafloo and Zarei set reaction activities equal to mole fractions and compared ternary solubility after selecting pure-\MEA parameters and binary interactions~\cite[Sects.~2 and 3.1--3.3]{Najafloo2018}.
 Nasrifar and Tafazzol solved the reaction equilibria of aqueous \MEA, diethanolamine and methyldiethanolamine (MDEA) as an ideal liquid, lumped the ions with water and predicted \COtwo and \ce{H2S} solubility from PC-SAFT pure-component parameters and amine--water interaction parameters from binary vapor--liquid equilibria, without parameters fitted to the loaded solutions~\cite[Sects.~3 and 6, Table~3]{Nasrifar2010}.
 None of these equation-of-state models carries explicit ion activities.
 
@@ -37,7 +44,8 @@ MDEA is a tertiary amine and forms no carbamate.
 The natural next step in this line is the primary amine \MEA, in which carbamate formation makes the ion population and the solvent composition change together with \COtwo loading.
 
 % P:introduction-05
-This work fits a nine-species ePC-SAFT model with Debye--H\"uckel and Born contributions and explicit carbamate chemistry to \COtwo partial pressure in 30 wt\% \MEA at 40 and \SI{60}{\degreeCelsius} and to liquid speciation at 20--\SI{60}{\degreeCelsius}.
+This work fits a nine-species ePC-SAFT model with Debye--H\"uckel and Born contributions and explicit carbamate chemistry to \COtwo partial pressure in 30 wt\% \MEA at 40 and \SI{60}{\degreeCelsius} to liquid speciation at 20--\SI{60}{\degreeCelsius} and to integral heat at \SI{40}{\degreeCelsius}.
+It uses separate ionic activities and jointly fits pressure and measured species, whereas the association-based group-contribution studies infer species populations from phase-equilibrium fits~\cite{chremosModellingPhaseChemical2016,perdomoPredictiveGroupcontributionFramework2023}.
 Because its interaction parameters are fitted to the ternary mixture, calculations at other conditions are reported as tests outside the fit rather than as predictions in the sense of the MDEA studies~\cite{Uyan2015,Wangler2018}.
 \Cref{tab:literature-model-comparison} summarizes the quantities fitted and left outside the fit in this and the closest published studies.
 
@@ -48,7 +56,7 @@ The work makes four contributions.
 \begin{enumerate}
     \item To our knowledge, this is the first application of electrolyte PC-SAFT with Debye--H\"uckel and Born contributions to aqueous \MEA--\COtwo with ions and carbamate chemistry treated explicitly.
     \item To our knowledge, it is also the first simultaneous estimation of liquid-phase electrolyte PC-SAFT parameters against both \COtwo partial pressures and measured liquid speciation for loaded \MEA; Zhang et al.\ fitted both observables with an electrolyte NRTL liquid model~\cite{Zhang2011}.
-    \item We extend published Born-formulation comparisons to reactive aqueous \MEA, where the ionic species and their amounts change with loading, and decompose the pressure change caused by removing the Born term into activity and speciation contributions.
-    \item Within the declared fitting bounds, the tested refit without a Born contribution does not recover agreement with pressure and speciation together, and the SSM+DS and original Born formulations calibrate comparably on these data; which has the lower cost depends on whether the titration bicarbonate data are fitted.
+    \item We extend published Born-formulation comparisons to reactive aqueous \MEA, where the ionic species and their amounts change with loading, and compare the refitted models with and without the Born term.
+    \item Within the tested model, bounds, objective and two starts, removing the Born term worsens fitted-pressure agreement; SSM+DS has the lower cost both with and without the titration bicarbonate pool.
 \end{enumerate}
 The work also reports conditional parameter uncertainties, compares the calibrated reaction temperature dependence with a refit using literature temperature laws, and turns these results into practical lessons for fitting this model.
