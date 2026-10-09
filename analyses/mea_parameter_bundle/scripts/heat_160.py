@@ -13,7 +13,8 @@ for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
     os.environ[key] = '1'
 BUNDLE = Path(__file__).resolve().parents[1]
 OUT = BUNDLE / 'results/heat-160'
-os.environ.update(SENSITIVITY_OUTPUT=str(OUT), FINAL_POOL='0')
+os.environ.setdefault('SENSITIVITY_OUTPUT', str(OUT))
+os.environ.setdefault('FINAL_POOL', '0')
 import d1_density_cp_160 as d1
 s = d1.s
 PIN = json.loads((OUT / 'engine.json').read_text())
@@ -23,8 +24,8 @@ import verify_reference_calorics as thermal
 import numpy as np
 
 reg, epcsaft, eq = d1.regression, d1.m.epcsaft, d1.m.eq
-SELECTED = BUNDLE / 'results/selected-current-best-parameters.json'
-BASE = s.parameter_mapping(SELECTED)
+BASELINE = d1.ORIGINAL / 'D1-evidence/F1-double-prime-candidate-parameters.json'
+BASE = s.parameter_mapping(BASELINE)
 IDS, SCALES = d1.IDS, d1.SCALES
 ADMISSION = json.loads((OUT / 'inputs/heat-source-admission.json').read_text())
 VINJARAPU = [r for r in ADMISSION['Vinjarapu2024']['rows'] if r['role_147'] == 'heat_calibration']

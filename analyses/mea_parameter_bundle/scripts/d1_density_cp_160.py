@@ -13,6 +13,7 @@ import signal
 import subprocess
 import sys
 import time
+from types import SimpleNamespace
 
 import numpy as np
 from scipy.optimize import least_squares
@@ -24,7 +25,10 @@ from density_cp_160 import s, regression
 ROOT = m.ROOT
 BUNDLE = m.BUNDLE
 ORIGINAL = m.OUT
-OUT = ORIGINAL / 'D1-evidence'
+OUT = BUNDLE / 'results/heat-final-170' if os.environ.get('FINAL_HEAT_160') else ORIGINAL / 'D1-evidence'
+if os.environ.get('FINAL_HEAT_160'):
+    pin = json.loads((BUNDLE / 'results/heat-160/engine.json').read_text())
+    s.ENGINE_WHEEL_SHA256, s.ENGINE_COMMIT = pin['wheel_sha256'], pin['commit']
 IDS = json.loads((ORIGINAL / 'F1-A/native-fit.json').read_text())['coordinates'][:5]
 SCALES = [.01, .01, .01, .01, 10.]
 
@@ -62,6 +66,7 @@ def fit_worker(problem, letter):
     os.environ['FINAL_RERUN'] = '1'
     os.environ['SENSITIVITY_CASE'] = f'{problem}-{letter}'
     os.environ['FINAL_POOL'] = str(int(problem in ('F4', 'F5')))
+    s.verify_wheel()
     p5 = m.module('p5d1', BUNDLE / 'model-d/born-form-diagnosis/p5conv-fit.py')
     d = p5.d
     mapping = base()
@@ -99,6 +104,18 @@ def fit_worker(problem, letter):
     raw_path = directory / 'runs' / f'{problem}-{letter}' / f'{problem}-{letter}-fit.json'
     raw = load(raw_path)
     raw['observed'] = [r[1].observed for r in d.rows_for(mapping,'11')[2]]
+    if os.environ.get('FINAL_HEAT_160'):
+        import heat_160 as heat
+        raw['observed'] += [r['observed_addition_enthalpy_J_per_mol_CO2'] for r in heat.VINJARAPU]
+        raw['conditional_uncertainty'] = d.design.refit.identifiability(
+            SimpleNamespace(physical=raw['physical'], covariance=SimpleNamespace(
+                active_bounds=[IDS.index(i) for i in raw['active_bounds']])),
+            np.array(raw['optimizer_jacobian']).reshape(len(raw['targets']), 5)/np.array(SCALES),
+            np.array(raw['weighted_residuals']), IDS, d.LOWER, d.UPPER)
+        raw['scales'] = SCALES
+        if problem == 'F1':
+            raw['relative_heat160_cost_difference'] = abs(raw['final_cost']/load(heat.OUT/'A-summary.json')['cost']-1)
+            assert raw['relative_heat160_cost_difference'] <= 1e-8, 'F1 heat equivalence failed'
     assert raw['coordinates'] == IDS and complete(raw), f'{problem}-{letter}: incomplete fit'
     assert all(s.parameter_values(s.parameter_mapping(directory / f'{problem}-{letter}-diagnostic-parameters.json'))[f'component/{ion}/segment_count'] == 1. for ion in m.IONS)
     s.write_json(directory / 'native-fit.json', raw)
@@ -143,7 +160,7 @@ def select(problem):
     aa, bb = (load(OUT / f'{problem}-{letter}/native-fit.json') for letter in ('A', 'B'))
     assert complete(aa) and complete(bb)
     relative = abs(aa['final_cost']-bb['final_cost']) / max(abs(aa['final_cost']), abs(bb['final_cost']), 1e-300)
-    letter = 'A' if aa['final_cost'] <= bb['final_cost'] else 'B'
+    letter = 'A' if (problem == 'F1' and os.environ.get('FINAL_HEAT_160')) or aa['final_cost'] <= bb['final_cost'] else 'B'
     return dict(problem=problem, start=letter, relative_start_cost_difference=relative,
                 starts_agree=relative <= 1e-6, cost_A=aa['final_cost'], cost_B=bb['final_cost'],
                 parameters=str(OUT / f'{problem}-{letter}/parameters.json'),
