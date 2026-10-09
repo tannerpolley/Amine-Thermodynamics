@@ -16,8 +16,8 @@ workspace_root="$(dirname "$(dirname "$git_common_dir")")"
 engine_wheel="${EPCSAFT_ENGINE_WHEEL:-}"
 expected_engine_sha256="${EPCSAFT_ENGINE_SHA256:-}"
 if [[ -z "$engine_wheel" ]]; then
-    engine_wheel="$workspace_root/ePC-SAFT/build/fit-audit-20260929/candidate-28181e72/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
-    expected_engine_sha256="${expected_engine_sha256:-28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2}"
+    engine_wheel="$workspace_root/ePC-SAFT/build/wheels/main-026b3031/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
+    expected_engine_sha256="${expected_engine_sha256:-94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a}"
 fi
 engine_wheel="$(realpath "$engine_wheel")"
 if [[ -n "$expected_engine_sha256" ]]; then
