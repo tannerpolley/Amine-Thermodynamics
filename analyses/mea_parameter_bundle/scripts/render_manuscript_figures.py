@@ -10,6 +10,7 @@ import csv
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 
 import matplotlib
@@ -21,8 +22,8 @@ from matplotlib.lines import Line2D
 from manuscript_style import FULL_WIDTH, apply_style
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "results/final-rerun/figure-data"
-OUT = ROOT.parents[1] / "docs/scientific/latex/figures/generated"
+DATA = ROOT / ("results/heat-final-170/figure-data" if os.environ.get('FINAL_HEAT_160') else "results/final-rerun/figure-data")
+OUT = DATA.parent / 'figures' if os.environ.get('FINAL_HEAT_160') else ROOT.parents[1] / "docs/scientific/latex/figures/generated"
 COLORS = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#555555"]
 SOURCES = ["Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011", "Wagner2013"]
 SOURCE_STYLE = dict(zip(SOURCES, zip(COLORS, ["s", "o", "D", "^", "v", "<", "h"]), strict=True))
@@ -48,7 +49,10 @@ def check_inputs():
 
 
 def save(fig, name):
+    OUT.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT / f"{name}.pdf", metadata={"CreationDate": None, "ModDate": None})
+    if os.environ.get('FINAL_HEAT_160'):
+        fig.savefig(OUT / f"{name}.png", dpi=200)
     plt.close(fig)
 
 
@@ -195,7 +199,7 @@ def pool_figure():
     left.set_ylabel(r"HCO$_3^-$ + CO$_3^{2-}$ mole fraction")
     left.set_title(r"(a) Titration bicarbonate pool, 20 °C", loc="left")
     left.legend(fontsize=7, loc="upper left", facecolor="white", edgecolor="none", framealpha=1)
-    point = {r["problem"]: (float(r["base141_cost"]), float(r["pool18_cost"])) for r in costs}
+    point = {r["problem"]: (float(r.get("base149_cost", r["base141_cost"])), float(r["pool18_cost"])) for r in costs}
     for a, b in (("F1", "F4"), ("F2", "F5")):
         right.annotate("", xy=point[b], xytext=point[a],
                        arrowprops=dict(arrowstyle="->", color=styles[a][0], linewidth=0.7))
@@ -203,11 +207,36 @@ def pool_figure():
         color, marker = styles[problem]
         right.scatter([x], [y], marker="o" if marker == "." else "x", color=color, s=20, linewidths=0.9)
         right.annotate(problem, (x, y), textcoords="offset points", xytext=(5, 3), fontsize=8)
-    right.set_xlabel("Cost of the 141 base targets")
+    right.set_xlabel("Cost of the 149 base targets" if os.environ.get('FINAL_HEAT_160') else "Cost of the 141 base targets")
     right.set_ylabel("Cost of the 18 pool targets")
     right.set_title("(b) Base-target and pool costs", loc="left")
     right.grid(alpha=0.18)
     save(fig, "pool-effect")
+
+
+def heat_figure():
+    rows = read('heat.csv')
+    panels = [('Vinjarapu2024', 1734000., 'Vinjarapu, 313.15 K (fitted)'),
+              ('Arcis2011', 510000., 'Arcis, 322.5 K (predicted)'),
+              ('Arcis2011', 1030000., 'Arcis, 322.5 K (predicted)')]
+    fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH, 2.9), layout='constrained', sharey=True)
+    for ax, (source, pressure, title) in zip(axes, panels, strict=True):
+        group = [r for r in rows if r['source']==source and float(r['pressure_Pa'])==pressure]
+        measured = [r for r in group if r['record']=='heat F1']
+        ax.errorbar([float(r['loading']) for r in measured],
+                    [float(r['observed_J_mol'])/1000 for r in measured],
+                    yerr=[float(r['scale_J_mol'])/1000 for r in measured],
+                    fmt='o', mfc='none', color='black', ms=4, lw=.7, label='Measured')
+        for record, marker, color in [('heat F1', 'x', '#0072B2'), ('no-heat F1', '+', '#D55E00')]:
+            part = [r for r in group if r['record']==record]
+            ax.scatter([float(r['loading']) for r in part],
+                       [float(r['predicted_J_mol'])/1000 for r in part],
+                       marker=marker, color=color, s=24, label=record)
+        ax.set(xlabel=LOADING, title=title+'\n'+f'{pressure/1000:g} kPa')
+        ax.grid(alpha=.18)
+    axes[0].set_ylabel(r'$\Delta h$ (kJ/mol CO$_2$)')
+    axes[-1].legend(frameon=False, fontsize=7)
+    save(fig, 'heat-of-absorption')
 
 
 if __name__ == "__main__":
@@ -217,5 +246,7 @@ if __name__ == "__main__":
     speciation_figure()
     born_off_figure()
     pool_figure()
+    if os.environ.get('FINAL_HEAT_160'):
+        heat_figure()
     print(json.dumps({p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                       for p in sorted(OUT.glob("*.pdf"))}, indent=1))

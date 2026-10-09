@@ -38,6 +38,11 @@ def table(path, rows):
 def selected():
     result = {}
     summary = json.loads((OUT / 'fit-summary.json').read_text())
+    if os.environ.get('FINAL_HEAT_160'):
+        choices = {r['problem']: dict(record=r['parameters'], raw=r['fit']) for r in summary}
+        control = BUNDLE / 'results/density-cp-160/D1-evidence'
+        choices['F1-no-heat'] = dict(record=str(control/'F1-double-prime-candidate-parameters.json'), raw=str(control/'F1-A/native-fit.json'))
+        return choices
     for row in summary:
         if row['problem']=='F6':
             continue
@@ -130,6 +135,7 @@ def summarize(records, density, choices, excluded):
     all_rows, scores, replays, carbonate = [], [], {}, []
     original = json.loads((OUT / 'fit-summary.json').read_text())
     for problem, chosen in choices.items():
+        binding(problem, chosen['record'])
         raw = json.loads(Path(chosen['raw']).read_text())
         subset = [r for r in records if r['problem']==problem]
         rows = score_rows(problem, subset)
@@ -137,6 +143,19 @@ def summarize(records, density, choices, excluded):
         mask = set(raw['targets'])
         fitted = [r for r in rows if r['kind']=='packet' and r['target'] in mask]
         cost = math.fsum(r['cost'] for r in fitted)
+        if os.environ.get('FINAL_HEAT_160') and problem != 'F1-no-heat':
+            import heat_160 as heat
+            mapping = s.parameter_mapping(Path(chosen['record']))
+            values = heat.predict(mapping, heat.heat_items(mapping, probe.epcsaft.Parameters.from_mapping(mapping), heat.VINJARAPU))
+            heats = [dict(problem=problem, kind='heat', identity=r['record_id'], target=r['record_id'],
+                source='Vinjarapu2024', quantity='heat', basis='J/mol CO2', species='',
+                temperature_K=r['temperature_K'], loading=r['alpha_final'], observed=r['observed_addition_enthalpy_J_per_mol_CO2'],
+                predicted=y, scaled_residual=(y-r['observed_addition_enthalpy_J_per_mol_CO2'])/r['uH_J_per_mol_CO2'],
+                ln_pred_over_obs=None, cost=.5*((y-r['observed_addition_enthalpy_J_per_mol_CO2'])/r['uH_J_per_mol_CO2'])**2,
+                record_sha256=s.sha256(Path(chosen['record']))) for r,y in zip(heat.VINJARAPU,values,strict=True)]
+            all_rows.extend(heats)
+            fitted += heats
+            cost = math.fsum(r['cost'] for r in fitted)
         check_rows = [r for r in subset if r['kind']=='packet' and any(t['identity'] in mask for t in r['targets'])]
         replay = dict(cost=cost, native_cost=raw['final_cost'], relative_error=abs(cost-raw['final_cost'])/abs(raw['final_cost']),
             states=len(check_rows), targets=len(fitted), pressure_cost=math.fsum(r['cost'] for r in fitted if r['quantity']=='pressure'),
@@ -156,7 +175,9 @@ def summarize(records, density, choices, excluded):
             raise RuntimeError(f'replay mismatch: {problem}: {replay}')
         groups = {'fit pressure':[r for r in fitted if r['quantity']=='pressure'],
                   'fit species':[r for r in fitted if r['quantity']=='species']}
-        if problem in ('F1','F2','F6'):
+        if os.environ.get('FINAL_HEAT_160') and problem != 'F1-no-heat':
+            groups['fit heat'] = heats
+        if problem in ('F1','F2','F6','F1-no-heat'):
             canonical = [r for r in rows if r['kind']=='canonical']
             ids = json.loads((ASSESSMENT.parent/'assessment-row-ids.json').read_text())
             groups.update({'canonical 80C 21':[r for r in canonical if r['identity'].removeprefix('canonical:') in ids['primary_80c_pressure']],
@@ -199,18 +220,23 @@ def present():
     choices=selected()
     replay=json.loads((EVAL/'replay-checks.json').read_text())
     summary=json.loads((OUT/'fit-summary.json').read_text())
+    f6_choice = next(r for r in summary if r['problem']=='F6')
     summary=[r for r in summary if r['problem']!='F6']
     for row in summary:
         row['replay']=replay[row['problem']]
         row['per_state_checks']='stationarity, element and charge balance passed; declared domain checked before evaluation'
     targets={t['identity']:t for o in s.load_state_packet(CORRECTED/'state-packet.json.gz')['observations'] for t in o['targets']}
+    packet_target_ids = set(targets)
+    if os.environ.get('FINAL_HEAT_160'):
+        import heat_160 as heat
+        targets.update({r['record_id']: dict(source_identity='Vinjarapu2024', observed=r['observed_addition_enthalpy_J_per_mol_CO2']) for r in heat.VINJARAPU})
     f6_starts=[]
     native_rows=[]
     for letter,i in zip('AB',(1,2)):
-        raw=json.loads((OUT/f'F6-{letter}/runs'/f'slope-fixed-start-{i}/native-fit.json').read_text())
+        raw=json.loads((OUT/f'F6-{letter}/native-fit.json' if os.environ.get('FINAL_HEAT_160') else OUT/f'F6-{letter}/runs'/f'slope-fixed-start-{i}/native-fit.json').read_text())
         data=[dict(problem='F6',start=letter,target=identity,source=targets[identity]['source_identity'],
-              observed=targets[identity]['observed'],predicted=pred,quantity='pressure' if identity.endswith('-pco2') else 'species',
-              species=identity.split('::')[-1] if '::' in identity else 'pCO2',scaled_residual=res,cost=.5*res**2)
+              observed=targets[identity]['observed'],predicted=pred,quantity='heat' if identity not in packet_target_ids else 'pressure' if identity.endswith('-pco2') else 'species',
+              species='' if identity not in packet_target_ids else identity.split('::')[-1] if '::' in identity else 'pCO2',scaled_residual=res,cost=.5*res**2)
               for identity,pred,res in zip(raw['targets'],raw['predictions'],raw['weighted_residuals'],strict=True)]
         native_rows.extend(data)
         aard={kind:compare.stats([math.log(r['predicted']/r['observed']) for r in data if r['quantity']==kind and r['observed']>0 and r['predicted']>0])['aard_percent'] for kind in ('pressure','species')}
@@ -219,7 +245,7 @@ def present():
             coordinates=dict(zip(raw['coordinates'],raw['physical'],strict=True)),active_bounds=raw['active_bounds'],targets=len(data),
             observation_statuses_available=all(v=='Available' for v in raw['observation_statuses'])))
     gap=abs(f6_starts[0]['cost']-f6_starts[1]['cost'])/max(r['cost'] for r in f6_starts)
-    summary.append(dict(problem='F6',starts=f6_starts,lower_complete_start=min(f6_starts,key=lambda r:r['cost'])['start'],
+    summary.append(dict(f6_choice,starts=f6_starts,lower_complete_start=min(f6_starts,key=lambda r:r['cost'])['start'],
         relative_cost_difference=gap,start_agreement=gap<=1e-6,replay=replay['F6'],per_state_checks=summary[0]['per_state_checks']))
     s.write_json(OUT/'fit-summary.json',summary)
     table(OUT/'f6-fit-targets.csv',native_rows)
@@ -230,17 +256,17 @@ def present():
             part=[r for r in rr if (r['source'],r['species'])==(source,species)]
             positive=[r for r in part if r['observed']>0 and r['predicted']>0]
             source_stats.append(dict(problem='F6',start=letter,source=source,species=species,rows=len(part),positive_n=len(positive),
-                cost=math.fsum(r['cost'] for r in part),**compare.stats([math.log(r['predicted']/r['observed']) for r in positive])))
+                cost=math.fsum(r['cost'] for r in part),**(compare.stats([math.log(r['predicted']/r['observed']) for r in positive]) if positive else {})))
     table(OUT/'f6-aard-by-source-species.csv',source_stats)
     evaluated=list(csv.DictReader((EVAL/'targets.csv').open()))
     errors=json.loads((OUT/'conditional-uncertainty.json').read_text())
     uncertainty_checks={}
     for problem in ('F1','F2'):
         raw=json.loads(Path(choices[problem]['raw']).read_text());ids=raw['coordinates']
-        rr={r['target']:float(r['scaled_residual']) for r in evaluated if r['problem']==problem and r['kind']=='packet'}
+        rr={r['target']:float(r['scaled_residual']) for r in evaluated if r['problem']==problem and r['kind'] in ('packet','heat')}
         residual=np.array([rr[t] for t in raw['targets']]);scales=np.array([10. if i.endswith(refit.probe.SLOPE) else .01 for i in ids])
-        J=np.array(raw['optimizer_jacobian']).reshape(141,5)/scales
-        active=[ids.index(i) for i in raw['active_bounds']]
+        J=np.array(raw['optimizer_jacobian']).reshape(len(raw['targets']),5)/scales
+        active=[ids.index(i) if isinstance(i,str) else i for i in raw['active_bounds']]
         proxy=SimpleNamespace(covariance=SimpleNamespace(active_bounds=active),physical=raw['physical'])
         value=refit.identifiability(proxy,J,residual,ids,[-.5,-.5,-.5,-1.,-1000.],[.5,.5,.5,1.,1000.])
         previous=errors[problem]
@@ -252,7 +278,7 @@ def present():
     s.write_json(OUT/'uncertainty-replay-checks.json',uncertainty_checks)
     figures=OUT/'figure-data';figures.mkdir(exist_ok=True)
     for row in evaluated:
-        row['unit']='Pa' if row['quantity']=='pressure' else 'mol/mol true liquid species'
+        row['unit']='Pa' if row['quantity']=='pressure' else 'J/mol CO2' if row['quantity']=='heat' else 'mol/mol true liquid species'
         row['operator_label']=compare.HCO3_POOL_LABEL if compare.pooled_species(row['target']) else row['species']
     table(figures/'pressure.csv',[r for r in evaluated if r['problem'] in ('F1','F2','F6') and r['quantity']=='pressure'])
     table(figures/'speciation.csv',[r for r in evaluated if r['problem'] in ('F1','F2') and r['quantity']=='species'])
@@ -272,6 +298,9 @@ def present():
         pool_summary.append(dict(problem=problem,base141_cost=math.fsum(float(r['cost']) for r in rr if r['target'] in masks['F1']),
             pool18_cost=math.fsum(float(r['cost']) for r in added),pool18_aard_percent=compare.stats([float(r['ln_pred_over_obs']) for r in added])['aard_percent'],
             pool_role='fitted' if problem in ('F4','F5') else 'report-only'))
+        if os.environ.get('FINAL_HEAT_160'):
+            heat_cost = math.fsum(float(r['cost']) for r in evaluated if r['problem']==problem and r['quantity']=='heat')
+            pool_summary[-1].update(heat8_cost=heat_cost, base149_cost=pool_summary[-1]['base141_cost']+heat_cost)
     table(figures/'pool-effect-costs.csv',pool_summary)
     s.write_json(figures/'input-hashes.json',{str(p.relative_to(OUT)):s.sha256(p) for p in figures.glob('*.csv')})
 
@@ -310,7 +339,7 @@ def main():
     for problem,chosen in choices.items():
         binding(problem,chosen['record'])
         raw=json.loads(Path(chosen['raw']).read_text());mask=set(raw['targets'])
-        use=groups if problem in ('F1','F2','F6') else {'packet':[{**o,'targets':[t for t in o['targets'] if t['identity'] in mask]} for o in packet if any(t['identity'] in mask for t in o['targets'])]}
+        use=groups if problem in ('F1','F2','F6','F1-no-heat') else {'packet':[{**o,'targets':[t for t in o['targets'] if t['identity'] in mask]} for o in packet if any(t['identity'] in mask for t in o['targets'])]}
         for kind, oo in use.items():
             for o in oo:
                 T=o['request']['temperature']['value']
@@ -320,7 +349,7 @@ def main():
                     continue
                 tasks.append((problem,chosen['record'],kind,o))
     records=[];density=[]
-    workers=len(os.sched_getaffinity(0))
+    workers=min(2,len(os.sched_getaffinity(0)))
     with concurrent.futures.ProcessPoolExecutor(max_workers=workers,mp_context=multiprocessing.get_context('spawn')) as pool:
         pending={pool.submit(job,*task):task[:3] for task in tasks}
         pending.update({pool.submit(density_job,problem,choices[problem]['record'],idx):('density',problem,idx) for problem in ('F1','F2','F6') for idx in range(4)})
