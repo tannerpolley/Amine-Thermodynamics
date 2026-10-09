@@ -99,7 +99,7 @@ The stored temperature dependence is $k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b(1/T-1
 | :-- | :-- | :-- | :-- |
 | MEACOO⁻–water $k_{ij}$ | <span class="evidence-2" title="">0.2239502973575809</span>[★](#fitted-coordinates){.fit-star} | 0.011759 | Free |
 | MEAH⁺–water $k_{ij}$ | <span class="evidence-2" title="">-0.312453113461325</span>[★](#fitted-coordinates){.fit-star} | 0.012776 | Free |
-| HCO₃⁻–water $k_{ij}$ | <span class="evidence-2" title="">0.5</span>[★](#fitted-coordinates){.fit-star} | — | Free |
+| HCO₃⁻–water $k_{ij}$ | <span class="evidence-2" title="">0.5</span>[★](#fitted-coordinates){.fit-star} | — | On upper bound |
 | MEACOO⁻–MEAH⁺ $k_{ij}$ | <span class="evidence-2" title="">-0.9682867488255271</span>[★](#fitted-coordinates){.fit-star} | 0.026692 | Free |
 | MEAH⁺–water $b$ (K) | <span class="evidence-2" title="">107.96395673675056</span>[★](#fitted-coordinates){.fit-star} | 22.93 | Free |
 :::
@@ -210,7 +210,7 @@ The adopted record retains a density-only translation, $\rho_{\mathrm{corr}}=M_{
 | 343.15 | 0.3 | 1046.4000 | 1049.0123 | 0.2496 |
 | 343.15 | 0.4 | 1071.9000 | 1070.3970 | -0.1402 |
 
-The source locator is Amundsen (2009), Table 2, stored per row in the CSV. Source pressure is unreported; 0.100 MPa is the modeling assumption. The recorded uncertainty scope excludes the highest temperatures/loadings and leaves its exact per-row boundary unresolved. Outside these four calibration states, the retained density rows do not establish concentration-transfer qualification.
+The source locator is Amundsen (2009), Table 3, stored per row in the CSV. Source pressure is unreported; 0.100 MPa is the modeling assumption. The recorded uncertainty scope excludes the highest temperatures/loadings and leaves its exact per-row boundary unresolved. Outside these four calibration states, the retained density rows do not establish concentration-transfer qualification.
 
 ## Heat capacity
 
@@ -230,7 +230,7 @@ No absorber solve using the adopted heat-augmented record is retained in `result
 
 # Open work
 
-[#170: FPE submission](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170) owns the remaining manuscript numbers pass, investigator promotion, independent review, public-data delivery and preprint/submission steps. This notebook supplies retained evidence, not manuscript promotion or submission authority.
+[#170: FPE submission](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170) owns the remaining public-data delivery, preprint update and journal submission; the manuscript numbers pass and its independent review are complete. This notebook supplies retained evidence, not manuscript promotion or submission authority.
 
 The pressure-decomposition diagnostic is **unavailable on this Engine (`IonicInsertion`)**: the [retained failure](results/heat-final-170/activity-contributions/diagnostic-failure.txt) records an unavailable ion-free ionic reference. It is dropped from the paper; no previous decomposition values are carried forward.
 
