@@ -12,12 +12,12 @@ Removed: Born activity-sum decrease, activity/speciation cancellation, intermedi
 
 | File | Pages | SHA-256 |
 | --- | ---: | --- |
-| `main.pdf` | 20 | `f62e50b64a97ccd124a456defb69932885834d9b9ba4ab2de9c0a25bd0e1d2bb` |
-| `supplement.pdf` | 16 | `3de08958fbcb594d8070503012dac7d8f52893669c4ec2a3ab880109f134856a` |
+| `main.pdf` | 20 | `a490d6ef84dcf919ace2d12cb98a1b1ae3e592e69fd7f4fb315e1b908d9c739d` |
+| `supplement.pdf` | 16 | `0889617c87302824b6cd5d24c2895047f8fb536f2a4517e7ea8ca60e61987bbd` |
 
-Main input SHA-256 from the freshness check: `9cbf8d3e2ee64c06f204594f14bb80d19489a8e03a7b11613c22b4d5e42c28cd`.
+Main input SHA-256 from the freshness check: `a7e28db7153e4c3d885cdf2247a91680044deb43624e863f596f16c0c5b8e83a`.
 
-Abstract: **223 whitespace-delimited words in the synchronized submission text; 224 after extracting the rendered PDF and joining line-break hyphenation**. Both are below 250. TeXcount on the isolated TeX abstract reports 211 because its default rules omit some macro content. Highlight lengths: **80, 70, 79, 77, 77** characters, including spaces; all are at most 85.
+Abstract: **225 whitespace-delimited words in the synchronized submission text; 224 after extracting the rendered PDF and joining line-break hyphenation**. Both are below 250. TeXcount on the isolated TeX abstract reports 211 because its default rules omit some macro content. Highlight lengths: **80, 70, 79, 77, 77** characters, including spaces; all are at most 85.
 
 Both builds ran through `agent-heavy --max 3G --timeout 10m`: `scripts/build_manuscript.sh` for the main file and `latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex` from the LaTeX directory. Final logs contain no undefined citation/reference, duplicate label, overfull box or LaTeX error. The manuscript freshness check passes. The initial supplement alignment error was corrected in the table generator; the redundant start-difference column was removed to fit the six-fit table, with its maximum retained in Section S5. Float barriers keep the Methods tables and the translated-density table within their section boundaries.
 
