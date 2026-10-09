@@ -15,19 +15,18 @@ import matplotlib.pyplot as plt
 from manuscript_style import apply_style
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "figures/regression_overview/output"
-DATA = ROOT / "results/density-cp-160/D1-evidence"
+DATA = ROOT / "results/heat-final-170"
 PRESSURE = DATA / "pressure-figure-data.csv"
 SPECIES_DATA = DATA / "species-figure-data.csv"
 POOL = DATA / "pool-figure-data.csv"
-WATER = ROOT / "results/density-cp-160/cp-124-assessment/water.csv"
 NATIVE_FIT = DATA / "F1-A/native-fit.json"
-PHYSICAL = DATA / "F1-A/parameters.json"
+PHYSICAL = ROOT / "results/heat-160/A-parameters.json"
 PARAM = ROOT / "results/selected-current-best-parameters.json"
-QUALIFICATION = ROOT / "results/density-cp-160/common-wheel-48a639e7/qualification.json"
+QUALIFICATION = DATA / "evaluation/execution.json"
 # Separate legacy diagnostic renderer reads this file; this notebook does not.
 FIT = ROOT / "results/current-best-fit-residuals.csv"
 HCO3_POOL_LABEL = "HCO3- + CO3^2-"
-ENGINE_COMMIT = "D1 fit, wheel 28181e72"
+ENGINE_COMMIT = "heat F1, Engine 026b3031"
 COLORS = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9"]
 SOURCES = ["Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011"]
 MARKERS = dict(zip(SOURCES, ["*", "o", "D", "^", "h", "v"], strict=True))
@@ -131,7 +130,7 @@ def render_isotherms(pressure, colors, title):
                        facecolors='none', edgecolors=color, s=26, label=source)
         ax.scatter([float(r['loading_mol_CO2_per_mol_MEA']) for r in group],
                    [float(r['predicted']) / 1000 for r in group], marker='+', color='black', s=24)
-        domain = 'calibration' if temperature <= 60 else 'comparison' if temperature == 80 else 'extrapolation'
+        domain = 'calibration / comparison' if temperature <= 60 else 'prediction'
         ax.set(title=f'{temperature} °C · {domain}', xlabel='CO₂ loading (mol/mol MEA)',
                ylabel='CO₂ partial pressure (kPa)', yscale='log')
         ax.text(.02, .98, short_label(group), transform=ax.transAxes, va='top', fontsize=8)
@@ -141,7 +140,7 @@ def render_isotherms(pressure, colors, title):
     legend.set_axis_off()
     handles = [Line2D([], [], linestyle='none', marker=MARKERS[s], markerfacecolor='none',
                       markeredgecolor=c, label=s) for s, c in colors.items()]
-    handles += [Line2D([], [], linestyle='none', marker='+', color='black', label='F1″ at observed loading')]
+    handles += [Line2D([], [], linestyle='none', marker='+', color='black', label='heat F1 at observed loading')]
     legend.legend(handles=handles, loc='center', frameon=False, title='Observed (open) / calculated (+)')
     save(fig, 'pressure')
 
@@ -214,7 +213,7 @@ def render_speciation(rows):
                for s, c in species_colors.items()]
     handles += [Line2D([], [], linestyle='none', marker=m, color='black',
                        markerfacecolor='none', label=l) for m, l in
-                [('o', 'Observation, fitted'), ('s', 'Observation, not fitted'), ('+', 'F1″ at observed loading')]]
+                [('o', 'Observation, fitted'), ('s', 'Observation, not fitted'), ('+', 'heat F1 at observed loading')]]
     axes.flat[-1].legend(handles=handles, loc='center', frameon=False)
     save(fig, 'speciation')
 
@@ -225,7 +224,7 @@ def render_pool(rows):
     ax.scatter([float(r['loading']) for r in rows], [float(r['observed']) for r in rows],
                marker='s', facecolors='none', edgecolors='#009E73', label='Matin observations')
     ax.scatter([float(r['loading']) for r in rows], [float(r['predicted']) for r in rows],
-               marker='+', color='black', label='F1″ pool comparison')
+               marker='+', color='black', label='heat F1 pool comparison')
     ax.set(xlabel='CO₂ loading (mol/mol MEA)', ylabel='HCO₃⁻ + CO₃²⁻ mole fraction',
            title='Matin pool · report-only · 20 °C')
     ax.legend(frameon=False)
@@ -239,39 +238,16 @@ def render_pool(rows):
     save(fig, 'matin-pool')
 
 
-def render_water():
-    rows = [r for r in read(WATER) if r['record'] == 'adopted' and r['grid'] != 'atmospheric-controls']
-    fig, axes = plt.subplots(1, 3, figsize=(11, 4), layout='constrained')
-    for ax, quantity, label in zip(axes, ('cp', 'saturated_liquid_rho', 'psat'),
-                                    ('Liquid Cp error (%)', 'Saturated density error (%)', 'Saturation pressure error (%)')):
-        for grid, marker, color in [('primary', 'o', COLORS[0]), ('staggered', 's', COLORS[1])]:
-            sub = [r for r in rows if r['grid'] == grid]
-            ax.scatter([float(r['T_K']) for r in sub], [100 * float(r[quantity + '_error_relative']) for r in sub],
-                       marker=marker, facecolors='none', edgecolors=color, s=24, label=grid)
-        ax.axhline(0, color='black', lw=.8)
-        ax.set(xlabel='Temperature (K)', ylabel=label)
-        ax.grid(alpha=.18)
-    for limit in (-3, 3):
-        axes[0].axhline(limit, color='grey', linestyle='--', lw=.8)
-    axes[0].legend(frameon=False)
-    axes[0].set_title('Cp at 0.300 MPa; ±3% limit')
-    axes[1].set_title('Saturated liquid density')
-    axes[2].set_title('Saturation pressure')
-    save(fig, 'water-deviations')
-
-
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     apply_style()
     plt.rcParams.update({'font.family': 'sans-serif', 'font.sans-serif': ['DejaVu Sans']})
     plt.rcParams['svg.hashsalt'] = 'mea-regression-overview'
     qualification = json.loads(QUALIFICATION.read_text())
-    assert digest(PARAM) == qualification['inputs']['candidate_record_sha256']
-    assert digest(PHYSICAL) == qualification['inputs']['physical_record_sha256']
-    selected, physical = (json.loads(path.read_text()) for path in (PARAM, PHYSICAL))
-    assert all(value == physical[key] for key, value in selected.items()
-               if key not in {'document_id', 'purpose', 'empirical_density_correction'})
+    assert digest(PARAM) == digest(PHYSICAL)
     fitted = set(json.loads(NATIVE_FIT.read_text())['targets'])
+    fit_comparison = next(r for r in read(DATA / 'fit-comparison.csv')
+                          if r['problem'] == 'F1' and r['objective'] == 'with heat')
     pressure, species, pool = ([r for r in read(path) if r['problem'] == 'F1']
                                for path in (PRESSURE, SPECIES_DATA, POOL))
     for row in pressure + species:
@@ -279,7 +255,8 @@ def main():
                    loading_mol_CO2_per_mol_MEA=row['loading'], fitted=row['target'] in fitted)
     assert {r['record_sha256'] for r in pressure + species + pool} == {digest(PHYSICAL)}
     assert [sum(r['fitted'] for r in rows) for rows in (pressure, species)] == [47, 94]
-    assert {r['target'] for r in pressure + species if r['fitted']} == fitted
+    assert {r['target'] for r in pressure + species if r['fitted']} < fitted
+    assert len(fitted) == 149
     assert len(positive(pressure + species)) == len(pressure + species)
     pool = [r for r in pool if r['source'] == 'Matin2012' and r['species'] == 'HCO3-']
     assert not any(r['target'] in fitted for r in pool)
@@ -290,7 +267,7 @@ def main():
             sub = [r for r in rows if r['fitted']]
             statistics_rows.append(ln_statistics(family, 'fitted', 'all', sub))
             assert math.isclose(statistics_rows[-1]['aard_percent'],
-                                qualification['cost_by_quantity'][family]['common_wheel_percent'], rel_tol=1e-10)
+                                float(fit_comparison[family + '_AARD_percent']), rel_tol=1e-10)
         statistics_rows += [ln_statistics(family, 'displayed source', s, [r for r in rows if r['source'] == s])
                             for s in sorted({r['source'] for r in rows})]
     with (OUT / 'statistics.csv').open('w', newline='') as stream:
@@ -306,25 +283,24 @@ def main():
     species_colors = {'Bottinger2008': COLORS[0], 'Matin2012': COLORS[2]}
     MARKERS.update(Bottinger2008='o', Matin2012='s')
     render_isotherms(pressure, pressure_colors, '')
-    render_parity(pressure, pressure_colors, 'F1″ pressure · all 79 retained display rows')
-    render_residuals(pressure, pressure_colors, 'F1″ pressure · all displayed rows by source')
+    render_parity(pressure, pressure_colors, 'heat F1 pressure · all 79 retained display rows')
+    render_residuals(pressure, pressure_colors, 'heat F1 pressure · all displayed rows by source')
     strict_species = [r for r in species if not (r['source'] == 'Matin2012' and r['species'] == 'HCO3-')]
-    render_parity(strict_species, species_colors, 'F1″ species · Matin pool shown separately',
+    render_parity(strict_species, species_colors, 'heat F1 species · Matin pool shown separately',
                   'species-parity', 'mole fraction / aggregate', 1)
-    render_residuals(strict_species, species_colors, 'F1″ species · Matin pool shown separately',
+    render_residuals(strict_species, species_colors, 'heat F1 species · Matin pool shown separately',
                      'species-residuals', species=True)
     render_speciation(species)
     render_pool(pool)
-    render_water()
-    inputs = [PRESSURE, SPECIES_DATA, POOL, WATER, DATA / 'run-summary.json', PARAM, PHYSICAL, NATIVE_FIT, QUALIFICATION,
+    inputs = [PRESSURE, SPECIES_DATA, POOL, DATA / 'fit-comparison.csv', PARAM, PHYSICAL, NATIVE_FIT, QUALIFICATION,
               Path(__file__), Path(__file__).with_name('manuscript_style.py')]
     (OUT / 'provenance.json').write_text(json.dumps({
         'inputs': {str(p.relative_to(ROOT)): digest(p) for p in inputs},
-        'fit_figure_wheel_sha256': json.loads((DATA / 'run-summary.json').read_text())['wheel_sha256'],
-        'current_wheel_qualification': qualification['engine'], 'model_executed': False,
+        'fit_figure_wheel_sha256': qualification['wheel_sha256'],
+        'engine_commit': '026b30311b959f1a5db4feef4c15e243f7044a5f', 'model_executed': False,
         'series': 'Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from F1 fitting.',
         'outputs': {p.name: digest(p) for p in sorted(OUT.iterdir())
-                    if p.suffix in ('.csv', '.svg', '.pdf') and not p.name.startswith('heat')}
+                    if p.suffix in ('.csv', '.svg', '.pdf') and not p.name.startswith(('heat', 'water-deviations'))}
     }, indent=2) + '\n')
     for row in statistics_rows:
         print(f"{row['family']} · {row['group_type']} · {row['group']}: "
