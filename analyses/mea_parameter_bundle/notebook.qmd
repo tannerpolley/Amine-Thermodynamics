@@ -1,55 +1,37 @@
 ---
 title: "MEA parameter bundle"
-subtitle: "Current F1″ record · pressure, speciation, density, heat capacity and absorber comparison"
+subtitle: "Current heat-augmented F1 record · pressure, speciation, calorimetry and property status"
 resources:
   - results/selected-current-best-parameters.json
-  - results/parameter-record-history.csv
-  - results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json
-  - results/density-cp-160/D1-evidence/F1-A/parameters.json
-  - results/density-cp-160/D1-evidence/F1-A/native-fit.json
-  - results/density-cp-160/D1-evidence/run-summary.json
-  - results/density-cp-160/D1-evidence/fit-summary.json
-  - results/density-cp-160/D1-evidence/conditional-uncertainty.json
-  - results/density-cp-160/D1-evidence/pressure-figure-data.csv
-  - results/density-cp-160/D1-evidence/species-figure-data.csv
-  - results/density-cp-160/D1-evidence/pool-figure-data.csv
-  - results/density-cp-160/D1-evidence/volume-correction.json
-  - results/density-cp-160/D1-evidence/corrected-target-densities.csv
-  - results/density-cp-160/D1-evidence/corrected-outside-densities.csv
-  - results/density-cp-160/common-wheel-48a639e7/qualification.json
-  - results/density-cp-160/common-wheel-48a639e7/targets.jsonl
-  - results/density-cp-160/cp-124-assessment/summary.json
-  - results/density-cp-160/cp-124-assessment/inputs.json
-  - results/density-cp-160/cp-124-assessment/water.csv
-  - results/density-cp-160/cp-124-assessment/water-metrics.csv
-  - results/density-cp-160/cp-124-assessment/iapws95-reference.csv
-  - results/density-cp-160/cp-124-assessment/model-provenance.json
-  - results/density-cp-160/cp-124-assessment/reference-provenance.json
-  - results/density-cp-160/stage5-absorber/handoff.json
-  - results/density-cp-160/stage5-absorber/summary.json
-  - results/density-cp-160/stage5-absorber/physical-checks.csv
-  - results/density-cp-160/stage5-absorber/temperature-comparison.csv
-  - results/density-cp-160/stage5-absorber/temperature-comparison-provenance.json
-  - figures/regression_overview/output/statistics.csv
+  - results/heat-160/A-parameters.json
+  - results/heat-final-170/conditional-uncertainty.json
+  - results/heat-final-170/fit-comparison.csv
+  - results/heat-final-170/high-temperature-comparison.csv
+  - results/heat-final-170/heat-comparison.csv
+  - results/heat-final-170/heat-capacity-comparison.csv
+  - results/heat-final-170/corrected-densities.csv
+  - results/heat-final-170/figure-data/heat.csv
+  - results/heat-final-170/figure-data/input-hashes.json
   - figures/regression_overview/output/provenance.json
+  - figures/regression_overview/output/statistics.csv
   - figures/regression_overview/output/parameter-table-inputs.json
 ---
 
-# Current working record {#working-record-160}
+# Current working record {#working-record}
 
-**The current record is the investigator-adopted #160 SSM+DS F1″ bundle, selected on 2026-10-03 for 30 wt% MEA on a CO₂-free basis at 40–80 °C.** Pressure calibration covers 40/60 °C and species calibration covers 20–60 °C. The 80 °C comparison is weaker; 100–120 °C is extrapolation. Concentration transfer is not qualified.
+**The current record is the investigator-adopted heat-augmented SSM+DS F1 start A, for 30 wt% MEA on a CO₂-free basis at 40–80 °C.** The [#170 owner decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6071318908) adds eight Vinjarapu integral heats to each F1–F6 fit; the [#147 design amendment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-6070624850) fixes the same five interaction coordinates and inherited calibrated chemistry. Water, ion sizes and the density-only empirical volume translation remain fixed.
 
-This notebook presents **calibration, numerical verification and conditional comparison**, without physical validation. The fitted comparisons reuse calibration data. The absorber comparison uses one fixed grid and disclosed assumptions. **Investigator promotion for manuscript writing remains pending**; this presentation revision awaits the parent's independent review.
+Pressure calibration covers 40/60 °C, species calibration covers 20–60 °C, and heat calibration uses 40 °C. Evidence is **calibration for the fitted data; prediction for Arcis, 80–120 °C and concentration transfer; no physical validation**. The high-temperature data have historical access and selection ancestry; they are not untouched tests. Concentration transfer and absorber/stripper use are not qualified. **Investigator promotion for manuscript writing remains pending**. This notebook revision awaits independent review.
 
-The [selected JSON](results/selected-current-best-parameters.json) is byte-identical to the [retained F1″ candidate](results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json), SHA-256 `756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b`. The active immutable Engine wheel is SHA-256 `48a639e78d00ef88a2f7e66ed1e3d89831ca0ad5267322330d44f48c34926060`, from Engine commit `464a9897615e513e5cc404ce5b49f46a72466d3d`.
+The [selected record](results/selected-current-best-parameters.json) is byte-identical to [heat-160/A-parameters.json](results/heat-160/A-parameters.json), SHA-256 `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`. The immutable Engine wheel is SHA-256 `94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a`, from merged Engine commit `026b30311b959f1a5db4feef4c15e243f7044a5f`; [evaluation execution](results/heat-final-170/evaluation/execution.json) records its use.
 
-The [common-wheel qualification](results/density-cp-160/common-wheel-48a639e7/qualification.json) evaluates **141 targets at 83 states**, with cost **30.089761188864866**: pressure AARD **13.256546%** for **47 targets**, species AARD **7.937281%** for **94 targets**. Its relative cost difference from the retained fit is **9.8589 × 10⁻¹⁴**, below the **10⁻⁸** numerical equivalence tolerance. This checks one fixed objective; it establishes neither cold-start convergence nor root uniqueness.
+The current [fit-comparison rows](results/heat-final-170/fit-comparison.csv) give a 149-target objective cost of **32.056684**: 47 pressures, 94 species targets and eight integral heats. The matched pressure/species subtotal is **30.330866**, against **30.089761** without heat. Fitted pressure AARD is **13.814751%** and species AARD is **7.891434%**. AARD is the average absolute relative deviation; the declared residual scales and conditional errors do not constitute measured uncertainty for all targets.
 
 # Current parameters {#selected-parameters}
 
-The tables below are generated from the selected JSON, including its new water inputs, original ion segment counts, binary interactions and reaction overrides. Exact serialized values and source locators govern over display rounding. [Input hashes](figures/regression_overview/output/parameter-table-inputs.json) identify the files read by the presentation generator.
+These tables read the selected JSON and [conditional-uncertainty.json](results/heat-final-170/conditional-uncertainty.json), F1 entry. Exact serialized values govern display rounding. [Input hashes](figures/regression_overview/output/parameter-table-inputs.json) identify the presentation inputs.
 
-[Green: a fixed charge or formulation definition]{.evidence-1} · [Blue: a current numerical input with its recorded qualifications]{.evidence-2}. Green does not certify fitted properties. [★](#fitted-coordinates){.fit-star} identifies the five coordinates fitted in the #160 pressure/species problem. Chemistry, water, neutral binaries and Born inputs were fixed during that fit.
+[Green: a fixed charge or formulation definition]{.evidence-1} · [Blue: a current numerical input with recorded qualifications]{.evidence-2}. [★](#fitted-coordinates){.fit-star} marks the five fitted coordinates. Green does not certify fitted properties.
 
 <!-- CURRENT-PARAMETERS:BEGIN -->
 
@@ -92,8 +74,8 @@ Symmetric $k_{ij}$, upper triangle. A blue zero is a serialized fixed input, not
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | CO₂ | — | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=MEA:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=H2O:status=explicit-diagnostic">-0.0242424022679</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=MEAH+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=MEACOO-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=OH-:status=explicit-diagnostic">0</span> |
 | MEA |  | — | <span class="evidence-2" title="grouped pressure-level one-SE selection and complete 25-row refit">-0.0803172261897</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=MEAH+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=MEACOO-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=OH-:status=explicit-diagnostic">0</span> |
-| H₂O |  |  | — | <span class="evidence-2" title="Current F1 fit: F1-A/native-fit.json">-0.3194004575874091</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="Current F1 fit: F1-A/native-fit.json">0.2230769983733113</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="Current F1 fit: F1-A/native-fit.json">0.5</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=CO3^2-:status=explicit-diagnostic">-0.25</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=H3O+:status=explicit-diagnostic">0.25</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=OH-:status=explicit-diagnostic">-0.25</span> |
-| MEAH⁺ |  |  |  | — | <span class="evidence-2" title="Current F1 fit: F1-A/native-fit.json">-0.9674984297781464</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=OH-:status=explicit-diagnostic">0</span> |
+| H₂O |  |  | — | <span class="evidence-2" title="Current F1 fit: F1-A/native-fit.json">-0.312453113461325</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="Current F1 fit: F1-A/native-fit.json">0.2239502973575809</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="Current F1 fit: F1-A/native-fit.json">0.5</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=CO3^2-:status=explicit-diagnostic">-0.25</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=H3O+:status=explicit-diagnostic">0.25</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=OH-:status=explicit-diagnostic">-0.25</span> |
+| MEAH⁺ |  |  |  | — | <span class="evidence-2" title="Current F1 fit: F1-A/native-fit.json">-0.9682867488255271</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=OH-:status=explicit-diagnostic">0</span> |
 | MEACOO⁻ |  |  |  |  | — | <span class="evidence-1" title="">excluded</span> | <span class="evidence-1" title="">excluded</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEACOO-:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> |
 | HCO₃⁻ |  |  |  |  |  | — | <span class="evidence-1" title="">excluded</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=HCO3-:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> |
 | CO₃²⁻ |  |  |  |  |  |  | — | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO3^2-:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> |
@@ -107,7 +89,7 @@ The stored temperature dependence is $k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b(1/T-1
 | Pair | $b$ (K) | $T_{\mathrm{ref}}$ (K) |
 | :-- | :-- | :-- |
 | CO₂–MEA | <span class="evidence-2" title="">0</span> | 313.15 |
-| MEAH⁺–H₂O | <span class="evidence-2" title="">-1.0308441902699457</span>[★](#fitted-coordinates){.fit-star} | 313.15 |
+| MEAH⁺–H₂O | <span class="evidence-2" title="">107.96395673675056</span>[★](#fitted-coordinates){.fit-star} | 313.15 |
 :::
 
 ## Five fitted coordinates {#fitted-coordinates}
@@ -115,14 +97,14 @@ The stored temperature dependence is $k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b(1/T-1
 ::: {.parameter-table .summary-table}
 | Coordinate | Current value | Conditional standard error | Bound |
 | :-- | :-- | :-- | :-- |
-| MEACOO⁻–water $k_{ij}$ | <span class="evidence-2" title="">0.2230769983733113</span>[★](#fitted-coordinates){.fit-star} | 0.011809 | Free |
-| MEAH⁺–water $k_{ij}$ | <span class="evidence-2" title="">-0.3194004575874091</span>[★](#fitted-coordinates){.fit-star} | 0.0144 | Free |
-| HCO₃⁻–water $k_{ij}$ | <span class="evidence-2" title="">0.5</span>[★](#fitted-coordinates){.fit-star} | — | Upper bound; SE excluded |
-| MEACOO⁻–MEAH⁺ $k_{ij}$ | <span class="evidence-2" title="">-0.9674984297781464</span>[★](#fitted-coordinates){.fit-star} | 0.026717 | Free |
-| MEAH⁺–water $b$ (K) | <span class="evidence-2" title="">-1.0308441902699457</span>[★](#fitted-coordinates){.fit-star} | 103.39 | Free |
+| MEACOO⁻–water $k_{ij}$ | <span class="evidence-2" title="">0.2239502973575809</span>[★](#fitted-coordinates){.fit-star} | 0.011759 | Free |
+| MEAH⁺–water $k_{ij}$ | <span class="evidence-2" title="">-0.312453113461325</span>[★](#fitted-coordinates){.fit-star} | 0.012776 | Free |
+| HCO₃⁻–water $k_{ij}$ | <span class="evidence-2" title="">0.5</span>[★](#fitted-coordinates){.fit-star} | — | Free |
+| MEACOO⁻–MEAH⁺ $k_{ij}$ | <span class="evidence-2" title="">-0.9682867488255271</span>[★](#fitted-coordinates){.fit-star} | 0.026692 | Free |
+| MEAH⁺–water $b$ (K) | <span class="evidence-2" title="">107.96395673675056</span>[★](#fitted-coordinates){.fit-star} | 22.93 | Free |
 :::
 
-The errors condition on fixed chemistry, water, neutral binaries, Born inputs and residual weights. The HCO₃⁻–water coordinate is on its upper bound. The MEAH⁺–water slope is not distinguishable from zero on this conditional scale: its standard error is much larger than its magnitude. No uncertainty band or concentration-transfer claim follows.
+The errors condition on fixed chemistry, water, neutral binaries, Born inputs and residual weights. The HCO₃⁻–water coordinate is on its upper bound. The MEAH⁺–water slope is $b = 107.96 \pm 22.93$ K (conditional standard error). These errors do not establish unique ion properties. No uncertainty band or concentration-transfer claim follows.
 
 ## Reactions
 
@@ -142,144 +124,114 @@ For R1–R3, $\ln K=A+B/T+C\ln T+DT+\Delta$; R2 already includes the conversion 
 
 <!-- CURRENT-PARAMETERS:END -->
 
-# Pressure and species fit evidence {#fit-statistics}
+# Pressure and speciation
 
-The pressure residual is $\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})/0.3$; the species residual is $(x_{\mathrm{calc}}-x_{\mathrm{obs}})/(0.1x_{\mathrm{obs}}+0.001)$. Cost is half the sum of squared scaled residuals. The [native F1 fit](results/density-cp-160/D1-evidence/F1-A/native-fit.json) identifies the fitted targets. Its [two-start summary](results/density-cp-160/D1-evidence/fit-summary.json) gives relative cost agreement **3.3036 × 10⁻¹³**; this agreement does not prove a global optimum.
+The figures read only the F1 rows in the retained [pressure](results/heat-final-170/pressure-figure-data.csv), [species](results/heat-final-170/species-figure-data.csv) and [pool](results/heat-final-170/pool-figure-data.csv) tables. Each row identifies the selected record by hash. **Model values are markers at measured states**; no continuous curve is inferred. Pressure CSV values are Pa, converted to kPa on the pressure axes. [Figure provenance](figures/regression_overview/output/provenance.json) records the input hashes and confirms that rendering executes no model.
 
-The figures read F1 rows from the retained [pressure](results/density-cp-160/D1-evidence/pressure-figure-data.csv), [species](results/density-cp-160/D1-evidence/species-figure-data.csv) and [pool](results/density-cp-160/D1-evidence/pool-figure-data.csv) files. Those rows were produced on wheel `28181e72`; the common-wheel replay above verifies the same fitted objective on active wheel `48a639e7`. They describe the current F1″ physical inputs, with the density-only translation excluded from equilibrium. The figures read retained values without running the Engine.
+![Current heat F1 pressure against loading. Open markers are observations; + markers are calculated at measured states. The 40/60 °C panels contain calibration and comparison rows; 80–120 °C are predictions.](figures/regression_overview/output/pressure.svg){#fig-pressure}
 
-**Pressure values in these retained files are Pa.** Pressure axes divide those values by 1000 to show kPa. Loading is mol total CO₂ per mol analytical MEA; species and aggregate values are dimensionless liquid mole fractions. Model values are markers at observed loadings. No retained continuous calculation is used and no model curve is drawn.
+![Pressure parity for the current heat F1. Equality is a reference line; every model/observation pair is a point.](figures/regression_overview/output/pressure-parity.svg){#fig-pressure-parity}
 
-Average absolute relative deviation (AARD) is $100\,\mathrm{mean}|q_{\mathrm{calc}}/q_{\mathrm{obs}}-1|$. Display statistics are computed only from the named retained rows, with no new model evaluations.
+![Current heat F1 pressure residuals by loading and temperature. The ordinate is ln(calculated/observed pressure).](figures/regression_overview/output/pressure-residuals.svg){#fig-pressure-residuals}
 
-::: {.parameter-table .summary-table}
-| Rows | Pressure n | Pressure AARD (%) | Species n | Species AARD (%) |
-|:--|--:|--:|--:|--:|
-| Fitted targets, active-wheel replay | 47 | 13.256546 | 94 | 7.937281 |
-| All retained F1 display rows, including outside-fit comparisons and Matin pool | 79 | 14.786419 | 131 | 16.186308 |
-:::
+![Current heat F1 species and aggregate mole fractions. Open circles identify fitted observations; squares identify observations outside fitting. Model values are + markers. The Matin HCO₃⁻ label denotes HCO₃⁻ + CO₃²⁻, excluded from F1 fitting.](figures/regression_overview/output/speciation.svg){#fig-speciation}
 
-The fitted statistics come from `qualification.json`; the display statistics and source counts come from [statistics.csv](figures/regression_overview/output/statistics.csv). The display set includes **19 Matin pool rows**, all excluded from F1 fitting; state 016 is display-only even in the separate 18-pool assessment. Its 19-row AARD is **61.400391%**. These rows must not enlarge the 94-target fitted species score. [Matin (2012)](#ref-6) and [Böttinger (2008)](#ref-8) retain different observation operators; the packet's `HCO3-` label is a **HCO₃⁻ + CO₃²⁻ pool**, not a bicarbonate-only measurement. Böttinger `MEA + MEAH+` is also an aggregate. Matin inputs retain the source-unverified legacy qualification and packet temperature 20 °C.
+# Heat of absorption
 
-## Pressure
+The [retained heat rows](results/heat-final-170/figure-data/heat.csv) and [input hashes](results/heat-final-170/figure-data/input-hashes.json) support the integral finite-addition heat comparison. Vinjarapu uses eight fitted points at 313.15 K and 1.734 MPa, from zero carbon; Arcis uses 14 predicted points at 322.5 K, separated by pressure. Negative heat denotes exothermic absorption. The no-heat F1 control is evaluated on the same Engine wheel.
 
-![F1″ pressure at five nominal temperatures. Open markers are retained Hilliard and Jou observations; plus markers are model values at the same observed loadings. Pressure is shown in kPa after conversion from retained Pa. The 80 °C panel is a weaker comparison; 100–120 °C is extrapolation. Panel statistics describe all displayed rows.](figures/regression_overview/output/pressure.svg){#fig-pressure}
+![Integral heat of absorption: current heat F1 against the matched no-heat #160 F1, with Vinjarapu fitted and Arcis predicted.](results/heat-final-170/figures/heat-of-absorption.png){#fig-heat}
 
-The observations are retained under [Hilliard (2008)](#ref-16) and [Jou (1995)](#ref-jou). Temperature panels group the recorded state temperatures by their nominal series; the numerical values are unchanged.
+RMSE is root-mean-square error; bias is calculated minus observed. Values below are from [heat-comparison.csv](results/heat-final-170/heat-comparison.csv), in kJ/mol CO₂.
 
-![Pressure parity for all 79 retained F1 rows. Both axes use kPa and a logarithmic scale. Each point compares one observed state with its retained model result. The equality line is a visual guide. This display includes extrapolation rows and is separate from the 47-target calibration statistic.](figures/regression_overview/output/pressure-parity.svg){#fig-pressure-parity}
+| Record | Source / role | Pressure (MPa) | n | RMSE (kJ/mol) | Bias (kJ/mol) |
+| --- | --- | --- | --- | --- | --- |
+| heat F1 | Vinjarapu2024 · fitted | All | 8 | 2.1266 | 0.5998 |
+| heat F1 | Arcis2011 · predicted | All | 14 | 8.3644 | 7.5001 |
+| heat F1 | Arcis2011 · predicted | 0.5100 | 8 | 10.5795 | 10.4841 |
+| heat F1 | Arcis2011 · predicted | 1.0300 | 6 | 3.7435 | 3.5214 |
+| no-heat F1 | Vinjarapu2024 · predicted control | All | 8 | 4.5741 | 4.2684 |
+| no-heat F1 | Arcis2011 · predicted | All | 14 | 11.6318 | 10.9755 |
+| no-heat F1 | Arcis2011 · predicted | 0.5100 | 8 | 14.1430 | 14.0353 |
+| no-heat F1 | Arcis2011 · predicted | 1.0300 | 6 | 7.0000 | 6.8957 |
 
-![Pressure logarithmic residuals for all displayed rows, separated by source and plotted against loading and temperature. Zero denotes equality. These are displayed-row residuals, not a new calibration or independent validation.](figures/regression_overview/output/pressure-residuals.svg){#fig-pressure-residuals}
+The current fit gives −81.7538 to −81.5072 kJ/mol CO₂ for Vinjarapu. Its heat RMSE improves from 4.5741 to 2.1266 kJ/mol; Arcis RMSE improves from 11.6318 to 8.3644 kJ/mol. The positive Arcis bias means the model remains less exothermic than those observations. Heat calibration does not identify unique ion properties or establish physical validation.
 
-## Species parity and residuals
+# F1–F6 fit comparison
 
-![Species and aggregate parity for the 112 retained F1 rows outside the Matin pool. Both axes are dimensionless mole fractions on logarithmic scales. The 19 report-only Matin pool rows appear separately below. Equality is a visual guide.](figures/regression_overview/output/species-parity.svg){#fig-species-parity}
+All heat-augmented problems use the same eight Vinjarapu heats. The table reports both matched no-heat controls and current heat fits from [fit-comparison.csv](results/heat-final-170/fit-comparison.csv). F1 is SSM+DS; F2/F3 change the Born treatment, F4/F5 add the Matin pool to F1/F2, and F6 changes source chemistry. Costs for different target sets are not directly comparable. HCO₃⁻–water is on its upper bound in F1; bound membership for every problem remains in the CSV.
 
-![Scaled species residuals by source against loading and temperature for the same 112 rows. The denominator is 0.1 times observed mole fraction plus 0.001. The Matin pool is excluded here and shown in its own residual panel.](figures/regression_overview/output/species-residuals.svg){#fig-species-residuals}
+| Problem | Objective | Targets | Cost | Pressure AARD (%) | Species n | Species AARD (%) | Heat cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| F1 | no heat | 141 | 30.0898 | 13.2565 | 94 | 7.9373 | 0.0000 |
+| F2 | no heat | 141 | 57.2430 | 36.0792 | 94 | 8.4560 | 0.0000 |
+| F3 | no heat | 141 | 154.6342 | 79.5732 | 94 | 11.6456 | 0.0000 |
+| F4 | no heat | 159 | 46.0544 | 13.8667 | 112 | 14.0734 | 0.0000 |
+| F5 | no heat | 159 | 63.8898 | 34.4715 | 112 | 11.9681 | 0.0000 |
+| F6 | no heat | 141 | 30.1794 | 14.3321 | 94 | 7.9699 | 0.0000 |
+| F1 | with heat | 149 | 32.0567 | 13.8148 | 94 | 7.8914 | 1.7258 |
+| F2 | with heat | 149 | 60.0081 | 36.0678 | 94 | 8.4435 | 2.6588 |
+| F3 | with heat | 149 | 160.5551 | 80.2452 | 94 | 11.9813 | 4.2801 |
+| F4 | with heat | 167 | 47.6143 | 13.3442 | 112 | 14.0830 | 1.4504 |
+| F5 | with heat | 167 | 66.6018 | 34.3375 | 112 | 12.1191 | 2.6371 |
+| F6 | with heat | 149 | 40.9018 | 14.7318 | 94 | 7.9899 | 10.3466 |
 
-## Speciation
+# Matched high-temperature trade-off
 
-![Species and aggregate values against observed loading for Matin at packet 20 °C and Böttinger at 20/40/60/80 °C. Open circles denote observations used in F1 fitting; open squares denote rows outside that fit; plus markers denote model values at those loadings. Colors identify species or aggregates. HCO₃⁻ + CO₃²⁻ is a pool, and MEA + MEAH⁺ is a separate observation aggregate. The model points are not connected.](figures/regression_overview/output/speciation.svg){#fig-speciation}
+The two F1 records below are evaluated on identical rows and Engine wheel, grouped by cohort and nominal temperature in [high-temperature-comparison.csv](results/heat-final-170/high-temperature-comparison.csv). “All” is the retained cohort aggregate, not an extra temperature. These are pressure predictions outside fitted temperatures; the aggregate also contains low-temperature comparisons.
 
-![Separate report-only Matin HCO₃⁻ + CO₃²⁻ pool: observed and model mole fractions against loading, and scaled residuals for all 19 displayed rows. None enters the 94-target fitted species cost. State 016 remains display-only in the retained pool assessment.](figures/regression_overview/output/matin-pool.svg){#fig-matin-pool}
+| Cohort | Nominal temperature (°C) | n | No-heat F1 AARD (%) | Heat F1 AARD (%) |
+| --- | --- | --- | --- | --- |
+| Hilliard/Jou packet pressures | 40 | 32 | 13.4784 | 13.7841 |
+| Hilliard/Jou packet pressures | 60 | 16 | 13.4512 | 14.7990 |
+| Hilliard/Jou packet pressures | 80 | 11 | 9.0194 | 15.2212 |
+| Hilliard/Jou packet pressures | 100 | 10 | 18.1241 | 29.6587 |
+| Hilliard/Jou packet pressures | 120 | 10 | 24.1146 | 41.5535 |
+| Hilliard/Jou packet pressures | All | 79 | 14.7864 | 19.7143 |
+| canonical pressures | 40 | 59 | 21.6294 | 21.8668 |
+| canonical pressures | 60 | 25 | 16.0157 | 16.3166 |
+| canonical pressures | 80 | 21 | 19.4112 | 19.6061 |
+| canonical pressures | 100 | 18 | 24.0083 | 30.8034 |
+| canonical pressures | 120 | 36 | 29.3719 | 30.8510 |
+| canonical pressures | All | 159 | 22.4761 | 23.7414 |
 
-# Density
+**A single linear-in-$1/T$ interaction slope cannot satisfy both the 40 °C heats and the 100–120 °C pressures in this retained comparison.** Heat fitting improves calorimetry while the high-temperature pressure deviations increase in both cohorts. This conclusion applies to the fixed chemistry, five fitted coordinates, residual scales and retained observations; it does not establish a general impossibility for another model. The working 40–80 °C interval is not qualification of high-temperature extrapolation or concentration transfer.
 
-The selected record uses a **density-only empirical volume translation**:
+# Density, heat capacity and absorber status
 
-$$
-\rho_{\mathrm{corr}}=\frac{M_{\mathrm{mix}}}{v_{\mathrm{EOS}}+10^{-6}c(x_{\mathrm{MEAH^+}}+x_{\mathrm{MEACOO^-}})},\qquad c=39.51429527803833\ \mathrm{cm^3/mol}.
-$$
+## Density
 
-The [retained volume correction](results/density-cp-160/D1-evidence/volume-correction.json) uses native composition and equation-of-state molar volume. It does not alter native molar-density fields, chemical potentials, equilibrium, enthalpy or heat capacity. Engine parameter loading does not apply it automatically; the retained absorber producer applies it explicitly.
+The adopted record retains a density-only translation, $\rho_{\mathrm{corr}}=M_{\mathrm{mix}}/[v_{\mathrm{EOS}}+10^{-6}c(x_{\mathrm{MEAH^+}}+x_{\mathrm{MEACOO^-}})]$, with $c=39.5142952780$ cm³/mol. It is not applied to chemical potentials, enthalpy or heat capacity and is not applied automatically by Engine. Current [corrected-densities.csv](results/heat-final-170/corrected-densities.csv) gives the following four translation-calibration states at 0.100 MPa, 30 wt% MEA on a CO₂-free basis. This is calibration of density correction, not independent prediction.
 
-The [four fitted density states](results/density-cp-160/D1-evidence/corrected-target-densities.csv), from [Amundsen (2009), Table 3](#ref-amundsen), give the following values. Pressure was unreported in the source; the retained correction calculation uses 100000 Pa. The source uncertainty boundary for the loaded rows remains unresolved.
+| Temperature (K) | Loading (mol/mol MEA) | Observed (kg/m³) | Corrected (kg/m³) | Deviation (%) |
+| --- | --- | --- | --- | --- |
+| 323.15 | 0.3 | 1058.0000 | 1060.1526 | 0.2035 |
+| 323.15 | 0.4 | 1083.0000 | 1081.3468 | -0.1526 |
+| 343.15 | 0.3 | 1046.4000 | 1049.0123 | 0.2496 |
+| 343.15 | 0.4 | 1071.9000 | 1070.3970 | -0.1402 |
 
-::: {.parameter-table .summary-table}
-| Temperature (K) | Loading (mol/mol MEA) | Corrected density (kg/m³) | Observed density (kg/m³) | Deviation (%) |
-|--:|--:|--:|--:|--:|
-| 323.15 | 0.3 | 1060.1296 | 1058.0 | +0.201281 |
-| 323.15 | 0.4 | 1081.3164 | 1083.0 | −0.155458 |
-| 343.15 | 0.3 | 1048.7823 | 1046.4 | +0.227670 |
-| 343.15 | 0.4 | 1070.0845 | 1071.9 | −0.169376 |
-:::
+The source locator is Amundsen (2009), Table 2, stored per row in the CSV. Source pressure is unreported; 0.100 MPa is the modeling assumption. The recorded uncertainty scope excludes the highest temperatures/loadings and leaves its exact per-row boundary unresolved. Outside these four calibration states, the retained density rows do not establish concentration-transfer qualification.
 
-All four meet the **1.6%** comparison limit. On the active wheel, the [absorber physical-check rows](results/density-cp-160/stage5-absorber/physical-checks.csv) give corresponding errors **+0.2018, −0.1550, +0.2282 and −0.1689%**, hence all **≤0.229%**. These remain fitted density comparisons; the two producers are kept distinct.
+## Heat capacity
 
-![Current-record corrected density deviations for the four fitted states and 64 other Amundsen loaded-density rows. Markers identify retained rows and distinguish correction targets from outside-fit comparisons; colors identify solvent mass fraction. The 1.6% limit belongs to the four targets. The additional concentrations do not establish qualified concentration transfer.](results/density-cp-160/D1-evidence/figures/loaded-density-correction.svg){#fig-density}
+Current equilibrium solution Cp spot checks are retained in [heat-capacity-comparison.csv](results/heat-final-170/heat-capacity-comparison.csv), using the heat F1 rows only. The Hilliard (2008) Appendix G.2 observations use 7 mol MEA/kg water; the model uses 30 wt% MEA on a CO₂-free basis, assumes 101325 Pa and represents nominal unloaded MEA by loading $10^{-5}$.
 
-The [64 outside-fit density rows](results/density-cp-160/D1-evidence/corrected-outside-densities.csv) have AARD **0.2706%**, with deviations **−0.5712 to +0.6834%** ([retained summary](results/density-cp-160/D1-evidence/run-summary.json)). These are conditional comparisons without independent validation or bound source uncertainty.
-
-# Heat capacity
-
-The current water inputs meet the sampled **3%** Cp value limit. The [#124 assessment](results/density-cp-160/cp-124-assessment/summary.json) retains an unmet joint requirement because mean saturated-density errors worsened; no requirement was waived by working-record adoption. Only the current record's values are shown below.
-
-::: {.parameter-table .summary-table}
-| Grid | Quantity | States | Mean absolute error (%) | Maximum absolute error (%) |
-|:--|:--|--:|--:|--:|
-| Primary | Liquid Cp | 20 | 0.412549 | 0.604524 |
-| Primary | Saturated liquid density | 20 | 0.132313 | 0.194363 |
-| Primary | Saturation pressure | 20 | 0.295906 | 0.436665 |
-| Staggered | Liquid Cp | 19 | 0.432562 | 0.604049 |
-| Staggered | Saturated liquid density | 19 | 0.136279 | 0.194760 |
-| Staggered | Saturation pressure | 19 | 0.299973 | 0.437434 |
-:::
-
-The [retained metrics](results/density-cp-160/cp-124-assessment/water-metrics.csv) use IAPWS-95 [reference rows](results/density-cp-160/cp-124-assessment/iapws95-reference.csv). The primary grid spans **298.15–393.15 K**, the staggered grid **300.65–390.65 K**, both at **5 K** spacing. Liquid Cp is evaluated at **0.300 MPa**; density and vapor pressure use saturation states. Water caloric inputs remain fixed in the [assessment](results/density-cp-160/cp-124-assessment/inputs.json). No physical or parameter uncertainty was propagated.
-
-![Current-record water-property deviations relative to IAPWS-95. Markers distinguish primary and staggered retained grids. Liquid Cp uses 0.300 MPa; density and pressure use saturation states. Dashed Cp guides show the existing ±3% limit. The figure uses retained points without interpolation.](figures/regression_overview/output/water-deviations.svg){#fig-water}
-
-The retained assessment reports **42/42** current water Cp values inside 3%. The current subset of `water.csv` supplies **42/42** liquid rows and **39/39** saturation states. Its maximum relative Cp/enthalpy-difference disagreement is **2.541 × 10⁻⁹** and its maximum unscaled saturation residual is **1.599 × 10⁻¹⁴**. The additional half-error step rule is met by **41/42** current rows; the published step-halving improvement rule is met by all **42/42**. These numerical checks do not imply physical validation.
-
-## Solution Cp
-
-The current-wheel [absorber C5 rows](results/density-cp-160/stage5-absorber/physical-checks.csv) compare equilibrium $dH/dT$ at fixed pressure and analytical feed against [Hilliard (2008), Appendix G.2, printed p. 937](#ref-16), at **7 mol MEA/kg water and assumed 101325 Pa**. Nominal unloaded MEA uses the disclosed loading-$10^{-5}$ proxy.
-
-::: {.parameter-table .summary-table}
 | Temperature (K) | Nominal loading (mol/mol MEA) | Cp (kJ/(kg·K)) | Observed Cp (kJ/(kg·K)) | Deviation (%) |
-|--:|--:|--:|--:|--:|
-| 318.15 | 0 | 3.868664 | 3.7195 | +4.0103 |
-| 318.15 | 0.358 | 3.383767 | 3.3675 | +0.4831 |
-| 353.15 | 0.358 | 3.314773 | 3.4707 | −4.4927 |
-:::
+| --- | --- | --- | --- | --- |
+| 318.15 | 0.0 | 3.8680 | 3.7195 | 3.9938 |
+| 318.15 | 0.358 | 3.4173 | 3.3675 | 1.4787 |
+| 353.15 | 0.358 | 3.3414 | 3.4707 | -3.7256 |
 
-Two rows miss 3%. Solution Cp remains report-only for #160; full #149 property acceptance is not established. Equilibrium-minus-frozen Cp represents the temperature-driven reaction/speciation response, not an isolated effect of fitted reaction-law shifts.
+Two spot checks exceed the existing 3% comparison limit. Solution Cp remains report-only; full property acceptance is not established. No current unloaded 80 °C Cp value or current-wheel pure-water grid assessment is retained in the heat-final set, so neither is shown as a current result.
 
-**Unloaded 80 °C Cp is unavailable on wheel `48a639e7`: 0/1 requested values.** The [retained assessment](results/density-cp-160/cp-124-assessment/summary.json) rejects the trace-carbonate stationarity row under the unchanged raw-residual gate, so no model loading-induced Cp difference is available. The upstream correction and current rerun are tracked below; no value from an unmerged branch is shown.
+## Absorber
 
-# Absorber comparison
-
-The [Stage 5 handoff](results/density-cp-160/stage5-absorber/handoff.json) retains one **65-node, nine-film-point 3C case** on the active wheel; the quadrature count is in its bound resolved configuration, `analyses/bvp_solution_methods/results/amine_160_candidate/upwind_cos_n65_parameter_transfer/resolved_config.json` at absorber commit `bb70f6f7` (local branch `work/160-amine-density-cp`, not yet published to GitHub), file SHA-256 `c729944d…` as recorded in the handoff. The absorber repository owns the solve. The retained model/observation comparisons are:
-
-::: {.parameter-table .summary-table}
-| Quantity | Current record | Reference or limit |
-|:--|--:|:--|
-| CO₂ capture | 90.6093% | 89.5%; within 5 percentage points |
-| Five temperature taps, root-mean-square error | 3.4415 K | ≤6 K |
-| Native-grid maximum liquid temperature | 348.3281 K at 5.2229 m | Peak tap 348.05 K at 4.8 m; within 5 K |
-:::
-
-The [retained handoff](results/density-cp-160/stage5-absorber/handoff.json) gives maximum scaled residual **5.6617 × 10⁻⁸**, below **10⁻⁷**, with zero scaled bound violation. Its numerical checks and native-grid physical-certificate checks pass. These checks do not establish a physical-validation claim.
-
-![Current-record liquid temperature at the 65 native grid nodes and five reported 3C temperature taps. Each model value is a retained point. Height is measured from the gas inlet. The source leaves tap phase ambiguous and supplies no retained uncertainty intervals; no phase-specific validation or continuous accuracy claim follows.](results/density-cp-160/stage5-absorber/temperature-comparison.svg){#fig-absorber}
-
-The model retains estimated mobilities, an assumed **318.15 K** liquid inlet, a provisional vapor caloric reference and the producer's `reported_total_wet` gas basis with `legacy_ratio` composition. No mesh independence, between-node accuracy, root uniqueness, propagated source/parameter uncertainty or global physical validation is established. The accepted comparisons apply to this one fixed-grid case.
+No absorber solve using the adopted heat-augmented record is retained in `results/heat-final-170/`. The previous record's capture and temperature comparisons do not qualify the current record and are excluded from this live view. Absorber/stripper use remains unqualified; no current capture or temperature result is asserted.
 
 # Open work
 
-- [#124](https://github.com/tannerpolley/Amine-Thermodynamics/issues/124) remains open: unloaded 80 °C Cp was unavailable on the active wheel; [Engine #261](https://github.com/tannerpolley/ePC-SAFT/issues/261) fixed the upstream issue, and [#161](https://github.com/tannerpolley/Amine-Thermodynamics/issues/161) tracks the rerun.
-- [#147](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147) remains open: the heat-of-absorption follow-up. [Engine #269](https://github.com/tannerpolley/ePC-SAFT/issues/269) merged (`c1067020`), so the Engine now solves its zero-carbon bubble endpoint. #147's §8 qualification on that wheel (SHA-256 `e8ad39e0…`) is complete and independently Supported ([record](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-6025992100)): the model gives −68.17 and −68.29 kJ/mol CO₂ for 0→0.11 and 0→0.45 at 313.15 K and 1.734 MPa, against measured −79 to −85 kJ/mol. These are numerical verification results; the authorized heat-of-absorption fit has not yet run.
+[#170: FPE submission](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170) owns the remaining manuscript numbers pass, investigator promotion, independent review, public-data delivery and preprint/submission steps. This notebook supplies retained evidence, not manuscript promotion or submission authority.
 
-# Record history
+The pressure-decomposition diagnostic is **unavailable on this Engine (`IonicInsertion`)**: the [retained failure](results/heat-final-170/activity-contributions/diagnostic-failure.txt) records an unavailable ion-free ionic reference. It is dropped from the paper; no previous decomposition values are carried forward.
 
-Past records and comparisons are in [parameter-record-history.csv](results/parameter-record-history.csv) and Git history. This notebook replaces the previous view with current retained work; rendering it never runs the thermodynamic model.
-
-# References
-
-<ol class="references">
-<li id="ref-6">M. Matin et al., “Facile Method for Determination of Amine Speciation in CO₂ Capture Solutions,” <em>Industrial &amp; Engineering Chemistry Research</em> (2012). <a href="https://doi.org/10.1021/ie300230k">doi:10.1021/ie300230k</a>.</li>
-<li id="ref-8">W. Böttinger, M. Maiwald, and H. Hasse, “Online NMR spectroscopic study of species distribution in MEA–H₂O–CO₂ and DEA–H₂O–CO₂,” <em>Fluid Phase Equilibria</em> (2008). <a href="https://doi.org/10.1016/j.fluid.2007.09.017">doi:10.1016/j.fluid.2007.09.017</a>.</li>
-<li id="ref-16">M. D. Hilliard, “A predictive thermodynamic model for an aqueous blend of potassium carbonate, piperazine, and monoethanolamine for carbon dioxide capture from flue gas,” doctoral dissertation, The University of Texas at Austin (2008).</li>
-<li id="ref-jou">F.-Y. Jou, A. E. Mather, and F. D. Otto, “The Solubility of CO₂ in a 30 Mass Percent Monoethanolamine Solution,” <em>The Canadian Journal of Chemical Engineering</em> 73 (1995), 140–147. <a href="https://doi.org/10.1002/cjce.5450730116">doi:10.1002/cjce.5450730116</a>.</li>
-<li id="ref-amundsen">T. G. Amundsen, L. E. Øi, and D. A. Eimer, “Density and Viscosity of Monoethanolamine + Water + Carbon Dioxide from (25 to 80) °C,” <em>Journal of Chemical &amp; Engineering Data</em> 54 (2009), 3096–3100. <a href="https://doi.org/10.1021/je900188m">doi:10.1021/je900188m</a>.</li>
-</ol>
+Past records are owned by [parameter-record-history.csv](results/parameter-record-history.csv) and Git. Rendering this live notebook never runs the thermodynamic model.
