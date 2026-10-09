@@ -297,11 +297,12 @@ def decomposition(choices):
     born_reference_path = BUNDLE/'model-d/activity-contributions/inputs.json'
     born_reference = load(born_reference_path)['N6_by_record_sha256']
     inputs = {k:reference[k] for k in ('c2_reference_temperature_K','cohorts','state_count','state_ids','target_count','target_ids')}
-    inputs.update(status='Issue 160 D1 model: new water, refit binaries, original ion sizes, corrected141',
+    inputs.update(status='Issue 170 heat comparison: 149 base targets' if os.environ.get('FINAL_HEAT_160') else 'Issue 160 D1 model: new water, refit binaries, original ion sizes, corrected141',
                   packet=str(BUNDLE/'results/source-corrections-152/state-packet.json.gz'), sha256={},
                   N1_expected_costs={k:load(choices[p]['fit'])['final_cost'] for k,p in (('adopted','F1'),('off-refit','F3'))},
                   N6_by_record_sha256={}, records={}, states={}, evaluation_paths={})
-    records = [json.loads(line) for line in (OUT/'evaluation/states.jsonl').open()]
+    records = ([load(p) for p in sorted((OUT/'evaluation/states').rglob('*.json'))]
+               if os.environ.get('FINAL_HEAT_160') else [json.loads(line) for line in (OUT/'evaluation/states.jsonl').open()])
     arguments = []
     for name, problem in (('adopted','F1'),('original','F2'),('off-refit','F3')):
         path = Path(choices[problem]['parameters'])
