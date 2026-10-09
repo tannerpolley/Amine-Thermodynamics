@@ -7,7 +7,7 @@ The manuscript reports the investigator-adopted heat-augmented F1 record `66ff77
 - [x] Decomposition and dependent claims removed; Born-off, pool ordering and conditional uncertainty claims corrected.
 - [x] Heat calibration, heat figure and matched high-temperature comparison added; both cohorts separately named.
 - [x] Submission abstract and highlights synchronized; data statement remains pending.
-- [ ] Final main/supplement build and visual inspection recorded in `builds/numbers-pass-170.md`.
+- [x] Final main/supplement build and visual inspection recorded in `builds/numbers-pass-170.md`.
 - [ ] Independent manuscript evidence review and final prose inspection after the numbers pass.
 - [ ] Public deposit or immutable manuscript tag, source archive and final submission identities.
 - [ ] Owner preprint update and journal submission, including portal attestations.

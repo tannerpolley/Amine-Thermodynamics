@@ -110,7 +110,7 @@ def species_panel(ax, rows, problems):
         for r in part:
             if r["problem"] != "F1":
                 continue
-            fitted = r.get("fitted_target", "True") == "True"
+            fitted = r["fitted_target"] == "True"
             x, obs, calc = float(r["loading"]), float(r["observed"]), float(r["predicted"])
             ax.plot([x, x], [obs, calc], color=color, linewidth=0.5, alpha=0.6)
             ax.scatter([x], [obs], marker="o" if fitted else "s", facecolors="none", edgecolors=color,

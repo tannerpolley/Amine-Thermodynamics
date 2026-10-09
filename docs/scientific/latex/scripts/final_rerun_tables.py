@@ -133,7 +133,7 @@ write("binary_interaction_parameters.tex", r"""\begin{table*}[t]
     SEs condition on each fit's active bounds, use the declared residual scales and treat residuals as independent, although the titration species of one sample are not; they are indicative only.
     A coordinate at a bound has no symmetric interval.
     Pairs of ions with the same charge sign have no dispersion interaction, and every pair not listed has \(k_{ij}=0\).
-    Full-precision values are in the parameter file named in the Data and Code Availability statement.}
+    Full-precision values are in the parameter file listed in Supplementary Section~S6.}
     \label{tab:binary-interaction-parameters}
     \begin{tabularx}{\textwidth}{@{}lllrrrr>{\raggedright\arraybackslash}X@{}}
         \toprule
@@ -155,8 +155,8 @@ form = {"F1": "SSM+DS", "F2": "original Born", "F3": "none", "F4": "SSM+DS", "F5
 role = {"F1": "compared", "F2": "compared", "F3": "compared", "F4": "fitted", "F5": "fitted", "F6": "compared"}
 cost_rows = [f"        {p} & {form[p]} & {role[p]} & {summary[p]['replay']['targets']} & {num(summary[p]['replay']['pressure_cost'])} & "
              f"{num(summary[p]['replay']['species_cost'])} & {num(summary[p]['replay']['heat_cost'])} & {num(summary[p]['replay']['cost'])} & "
-             f"{num(chosen[p]['aard_percent']['pressure'])} & {num(chosen[p]['aard_percent']['species'])} & {num(chosen[p]['aard_percent']['heat'])} & "
-             f"\\num{{{summary[p]['relative_cost_difference']:.1e}}} \\\\" for p in FITS]
+             f"{num(chosen[p]['aard_percent']['pressure'])} & {num(chosen[p]['aard_percent']['species'])} & {num(chosen[p]['aard_percent']['heat'])}"
+             r" \\" for p in FITS]
 coord_rows = [f"        {p} & " + " & ".join(coordinate(p, k) for k in (CW, HW, SLOPE, BW, CH)) + r" \\" for p in FITS]
 write("supplement_fits.tex", r"""\begin{table}[htb]
     \centering
@@ -165,11 +165,11 @@ write("supplement_fits.tex", r"""\begin{table}[htb]
     F6 uses the source reaction laws and \(u_{\COtwo}/k_{\mathrm{B}}=\SI{169.21}{\kelvin}\).
     The species AARD of F4 and F5 includes the pool targets.
     Every fit includes the same eight Vinjarapu heats; \(C_h\) is their cost and heat AARD is based on the signed enthalpy.
-    The last column is the relative cost difference between the two starts.}
+    The largest relative start-cost difference is reported in Supplementary Section~S5.}
     \label{tab:s-fits}
-    \begin{tabular}{@{}lllrrrrrrrrr@{}}
+    \begin{tabular}{@{}lllrrrrrrrr@{}}
         \toprule
-        Fit & Born term & Pool & \(n\) & \(C_p\) & \(C_x\) & \(C_h\) & \(C\) & \makecell{AARD\\\(p\), \%} & \makecell{AARD\\\(x\), \%} & \makecell{AARD\\\(h\), \%} & \makecell{Start\\difference} \\
+        Fit & Born term & Pool & \(n\) & \(C_p\) & \(C_x\) & \(C_h\) & \(C\) & \makecell{AARD\\\(p\), \%} & \makecell{AARD\\\(x\), \%} & \makecell{AARD\\\(h\), \%} \\
         \midrule
 """ + "\n".join(cost_rows) + r"""
         \bottomrule
@@ -324,6 +324,7 @@ write("supplement_carbonate_density.tex", r"""\begin{table}[htb]
     \begin{tabular}{@{}rrrrrrrrr@{}}
         \toprule
         \(T\) (\si{\degreeCelsius}) & \(\alpha\) & Measured & \multicolumn{2}{c}{F1} & \multicolumn{2}{c}{F2} & \multicolumn{2}{c}{F6} \\
+        & & & Density & Dev. (\%) & Density & Dev. (\%) & Density & Dev. (\%) \\
         \midrule
 """ + "\n".join(density_rows) + r"""
         \bottomrule
@@ -333,7 +334,7 @@ write("supplement_carbonate_density.tex", r"""\begin{table}[htb]
 
 translated_rows = [f"        {num(float(r['temperature_K']) - 273.15, 0)} & {num(r['loading'], 1)} & "
                    f"{num(float(r['observed_kg_m3']) / 1000, 4)} & {num(float(r['corrected_density_kg_m3']) / 1000, 4)} & "
-                   f"{num(r['corrected_deviation_percent'])} \\" for r in corrected_density]
+                   f"{num(r['corrected_deviation_percent'])}" + r" \\" for r in corrected_density]
 with (TABLES / "supplement_carbonate_density.tex").open("a") as stream:
     stream.write(r"""
 \begin{table}[htb]

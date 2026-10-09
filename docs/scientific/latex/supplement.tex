@@ -17,6 +17,7 @@
 \usepackage{xurl}
 \usepackage{booktabs}
 \usepackage{longtable}
+\usepackage{placeins}
 \usepackage{pdflscape}
 \usepackage{array}
 \usepackage{makecell}
@@ -43,7 +44,7 @@
 This section gives the details of the six fits of the main text.
 All six use the cost \(C=\tfrac12\sum r_j^2\) and the residual scales of the main text, the same five binary interaction parameters and the same bounds, with the eight Vinjarapu integral heats fitted in every problem.
 F1 (selected) and F2 fit the SSM+DS and original Born forms to the 149 base targets, F3 removes the Born term, F4 and F5 add Matin's 18 \ce{HCO3- + CO3^2-} pool targets to F1 and F2, and F6 uses the R2 and R5 source correlations and the published \COtwo dispersion energy of \SI{169.21}{\kelvin}.
-Each fit was started from two prescribed parameter vectors, and both starts converged to the same cost within the relative difference given in \cref{tab:s-fits}.
+Each fit was started from two prescribed parameter vectors, and both starts converged to the same cost within the maximum relative difference reported in Supplementary Section~S5.
 
 \input{tables/supplement_fits}
 
@@ -94,6 +95,7 @@ The source figures label the measurements at \SI{21}{\degreeCelsius}; that tempe
 For Amundsen et al., the measurement pressure is unreported, and the stated loaded-solution uncertainty excludes the highest temperatures and loadings \cite{Amundsen2009}.
 The fitted pressure/species set has 83 states and 141 targets: 47 pressures and 94 species; eight finite-addition heat observations bring the base objective to 149 targets.
 
+\FloatBarrier
 \section{Experimental data inventory for near-30 wt\% aqueous MEA}\label{sec:s-data-inventory}
 % P:supplement-11
 To place the observations of the main text among published measurements, we inventoried experimental studies of \ce{CO2} in aqueous \ce{MEA} near 30 wt\%: vapor--liquid equilibrium, liquid speciation, density, heat of absorption, heat capacity, pH and reaction constants.
@@ -101,6 +103,7 @@ The search is not exhaustive.
 The inventory holds 165 entries: 88 known only from bibliographic metadata, 36 assessed only from publisher or secondary descriptions or older records, and 41 checked against a primary passage, table or database record.
 \Cref{tab:s4-data-inventory} lists the 34 of these 41 whose near-30 wt\% scope is confirmed, with the concentration basis, conditions and observation counts each source reports; of the other seven, four report dilute-solution reaction constants and three lie outside 25--35 wt\% \MEA.
 Entries can share measurements; the main text's observation-role table identifies which observations are fitted or compared.
+The inventory predates the calorimetric fit; its extraction notes are historical, and the main text states the current use of the eight Vinjarapu heats and fourteen Arcis comparisons.
 
 \input{tables/supplement_data_inventory}
 
