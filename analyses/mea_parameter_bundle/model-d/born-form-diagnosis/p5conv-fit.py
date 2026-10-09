@@ -63,13 +63,18 @@ def main(case, form):
     d.save(name+'-start-hash.json',{'path':str(startpath),'sha256':d.s.sha256(startpath),'script_sha256':d.s.sha256(Path(__file__))})
     params,groups,rows=d.rows_for(mapping,'11')
     assert len(rows)==(159 if os.environ.get('FINAL_POOL') == '1' else 141) if os.environ.get('FINAL_RERUN') else len(rows)==142
+    thermochemistry = {}
+    if os.environ.get('FINAL_HEAT_160'):
+        import heat_160 as heat
+        rows += [(r['record_id'], item, 1.) for r, item in zip(heat.VINJARAPU,
+            heat.heat_items(mapping, params, heat.VINJARAPU), strict=True)]
+        thermochemistry = dict(thermochemistry=heat.thermal.record())
     v=d.values(mapping)
-    coords=[d.regression.coordinate(params,'k_ij_reciprocal_temperature_slope' if identity.endswith(d.design.probe.SLOPE) else 'k_ij',
-        tuple(identity.split('/')[1:3]),origin=v[identity],scale=scale,bounds=(lo,hi))
+    coords=[d.regression.coordinate(params,[('k_ij_reciprocal_temperature_slope' if identity.endswith(d.design.probe.SLOPE) else 'k_ij',
+        tuple(identity.split('/')[1:3]),1.)],origin=v[identity],scale=scale,bounds=(lo,hi))
         for identity,scale,lo,hi in zip(d.IDS,d.SCALES,d.LOWER,d.UPPER) if identity in free]
-    controls=d.regression.FitControls();controls.maximum_iterations=40
-    controls.maximum_elapsed_time_seconds=2250.
-    fit=d.regression.fit(params,coords,[r[1] for r in rows],weights=[r[2] for r in rows],controls=controls)
+    controls=d.regression.FitControls(maximum_iterations=40,maximum_elapsed_time_seconds=2250.)
+    fit=d.regression.fit(params,coords,[r[1] for r in rows],weights=[r[2] for r in rows],controls=controls,**thermochemistry)
     raw={key:d.s._jsonable(getattr(fit,key)) for key in ('status','message','physical','predictions','weighted_residuals','optimizer_jacobian',
         'physical_jacobian','iterations','residual_evaluations','jacobian_evaluations','trial_failures','iteration_costs','iteration_seconds','initial_cost','final_cost')}
     raw.update(targets=[r[0] for r in rows], coordinates=free, start={i: v[i] for i in d.IDS},
