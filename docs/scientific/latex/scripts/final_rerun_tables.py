@@ -92,7 +92,6 @@ lines = [f"        {label} & {role} & {scores[('F1', key)]['n'] or scores[('F1',
          + " & ".join(aard(p, key) for p in ("F1", "F2", "F6")) + r" \\" for label, role, key in groups]
 ratio = {p: [float(r["ratio"]) for r in jakobsen if r["problem"] == p and r["summary_included"] == "True"]
          for p in ("F1", "F2", "F6")}
-deviation = {p: [float(r["deviation_percent"]) for r in density if r["problem"] == p] for p in ("F1", "F2", "F6")}
 write("residual_summary.tex", r"""\begin{table}[pos=!htb]
     \centering
     \caption{Deviations and costs of the selected SSM+DS fit (F1), the original Born fit (F2) and the source-law fit (F6), each fitted to the same 149 targets.
@@ -165,6 +164,7 @@ write("supplement_fits.tex", r"""\begin{table}[htb]
     F1--F3 and F6 fit the 149 base targets; F4 and F5 add Matin's 18 \ce{HCO3- + CO3^2-} pool targets (167 targets).
     F6 uses the source reaction laws and \(u_{\COtwo}/k_{\mathrm{B}}=\SI{169.21}{\kelvin}\).
     The species AARD of F4 and F5 includes the pool targets.
+    Every fit includes the same eight Vinjarapu heats; \(C_h\) is their cost and heat AARD is based on the signed enthalpy.
     The last column is the relative cost difference between the two starts.}
     \label{tab:s-fits}
     \begin{tabular}{@{}lllrrrrrrrrr@{}}
@@ -331,4 +331,23 @@ write("supplement_carbonate_density.tex", r"""\begin{table}[htb]
 \end{table}
 """)
 
+translated_rows = [f"        {num(float(r['temperature_K']) - 273.15, 0)} & {num(r['loading'], 1)} & "
+                   f"{num(float(r['observed_kg_m3']) / 1000, 4)} & {num(float(r['corrected_density_kg_m3']) / 1000, 4)} & "
+                   f"{num(r['corrected_deviation_percent'])} \\" for r in corrected_density]
+with (TABLES / "supplement_carbonate_density.tex").open("a") as stream:
+    stream.write(r"""
+\begin{table}[htb]
+    \centering
+    \caption{Translated F1 densities at the four calibration states of the density-only correction, at an assumed \SI{100000}{\pascal}.
+    Densities in \si{\gram\per\cubic\centi\metre}; these deviations are calibration results, not independent predictions.}
+    \label{tab:s-translated-density}
+    \begin{tabular}{@{}rrrrr@{}}
+        \toprule
+        \(T\) (\si{\degreeCelsius}) & \(\alpha\) & Measured & Translated F1 & Deviation (\%) \\
+        \midrule
+""" + "\n".join(translated_rows) + r"""
+        \bottomrule
+    \end{tabular}
+\end{table}
+""")
 print("wrote current manuscript result tables")
