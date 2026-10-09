@@ -14,7 +14,7 @@ for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
     os.environ[key] = '1'
 os.environ['FINAL_RERUN'] = '1'
 BUNDLE = Path(__file__).resolve().parents[1]
-OUT = BUNDLE / 'results/final-rerun'
+OUT = BUNDLE / ('results/heat-final-170' if os.environ.get('FINAL_HEAT_160') else 'results/final-rerun')
 OWNER = BUNDLE / 'model-d/born-form-diagnosis'
 sys.path[:0] = [str(OWNER), str(BUNDLE / 'scripts'), str(BUNDLE.parents[1] / 'src')]
 import shared_evaluation as s

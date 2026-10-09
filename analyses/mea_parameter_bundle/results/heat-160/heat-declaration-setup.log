@@ -1,0 +1,22 @@
+EQUIVALENCE 30.089761188866785 {'pressure': {'n': 47, 'cost': 7.789863500244635, 'AARD_percent': 13.256546301512213}, 'species': {'n': 94, 'cost': 22.29989768862215, 'AARD_percent': 7.937280955818779}}
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/analyses/mea_parameter_bundle/scripts/heat_160.py", line 206, in <module>
+    baseline()
+    ~~~~~~~~^^
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/analyses/mea_parameter_bundle/scripts/heat_160.py", line 136, in baseline
+    heats = heat_rows(VINJARAPU, predict(BASE, heat_items(BASE, params, VINJARAPU)))
+                                               ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/analyses/mea_parameter_bundle/scripts/heat_160.py", line 58, in heat_items
+    items.append(reg.addition_enthalpy(params, initial, final, {'carbon-dioxide': 1.}, alpha,
+                 ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        T, P, phase='vapor', observed=row['observed_addition_enthalpy_J_per_mol_CO2'],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        form='difference', scale=row['uH_J_per_mol_CO2']))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/build/heat-160/venv/lib/python3.13/site-packages/epcsaft/regression.py", line 174, in addition_enthalpy
+    result.problem, result.final_problem = initial._native(parameters), final._native(parameters)
+                                           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/build/heat-160/venv/lib/python3.13/site-packages/epcsaft/equilibrium/problem.py", line 282, in _native
+    reaction_item.name = reaction.name
+                         ^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'name'

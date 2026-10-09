@@ -7,8 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PARAM = ROOT / 'results/selected-current-best-parameters.json'
-DATA = ROOT / 'results/density-cp-160/D1-evidence'
-QUALIFICATION = ROOT / 'results/density-cp-160/common-wheel-48a639e7/qualification.json'
+DATA = ROOT / 'results/heat-final-170'
+PHYSICAL = ROOT / 'results/heat-160/A-parameters.json'
 CHEMISTRY = ROOT.parents[1] / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json'
 OUT = ROOT / 'figures/regression_overview/output'
 
@@ -36,7 +36,7 @@ def main():
     p = json.loads(PARAM.read_text())
     fit = json.loads((DATA / 'F1-A/native-fit.json').read_text())
     fitted = set(fit['coordinates'])
-    assert hashlib.sha256(PARAM.read_bytes()).hexdigest() == json.loads(QUALIFICATION.read_text())['inputs']['candidate_record_sha256']
+    assert hashlib.sha256(PARAM.read_bytes()).hexdigest() == hashlib.sha256(PHYSICAL.read_bytes()).hexdigest()
     components = p['components']
     labels = {'CO2': 'CO₂', 'H2O': 'H₂O', 'MEAH+': 'MEAH⁺', 'MEACOO-': 'MEACOO⁻',
               'HCO3-': 'HCO₃⁻', 'CO3^2-': 'CO₃²⁻', 'H3O+': 'H₃O⁺', 'OH-': 'OH⁻', 'MEA': 'MEA'}
@@ -98,7 +98,7 @@ def main():
               for r in p['pairs'] for c in r['coefficients'] if c['family'] == 'k_ij_reciprocal_temperature_slope']
     text += '\nThe stored temperature dependence is $k_{ij}(T)=k_{ij}(T_{\\mathrm{ref}})+b(1/T-1/T_{\\mathrm{ref}})$. The slope $b$ has units K.\n'
     text += table(['Pair', '$b$ (K)', '$T_{\\mathrm{ref}}$ (K)'], slopes, 'summary-table')
-    uncertainty = next(r for r in json.loads((DATA / 'conditional-uncertainty.json').read_text()) if r['problem'] == 'F1')['uncertainty']
+    uncertainty = json.loads((DATA / 'conditional-uncertainty.json').read_text())['F1']
     coordinates = {c['identity']: c for r in p['pairs'] for c in r['coefficients']}
     coordinate_labels = ['MEACOO⁻–water $k_{ij}$', 'MEAH⁺–water $k_{ij}$', 'HCO₃⁻–water $k_{ij}$',
               'MEACOO⁻–MEAH⁺ $k_{ij}$', 'MEAH⁺–water $b$ (K)']
@@ -109,7 +109,7 @@ def main():
         rows.append([label, cell(magnitude(coordinates[identity]), fitted=True), '—' if se is None else f'{se:.5g}', bound])
     text += '\n## Five fitted coordinates {#fitted-coordinates}\n'
     text += table(['Coordinate', 'Current value', 'Conditional standard error', 'Bound'], rows, 'summary-table')
-    text += '\nThe errors condition on fixed chemistry, water, neutral binaries, Born inputs and residual weights. The HCO₃⁻–water coordinate is on its upper bound. The MEAH⁺–water slope is not distinguishable from zero on this conditional scale: its standard error is much larger than its magnitude. No uncertainty band or concentration-transfer claim follows.\n'
+    text += '\nThe errors condition on fixed chemistry, water, neutral binaries, Born inputs and residual weights. The HCO₃⁻–water coordinate is on its upper bound. The MEAH⁺–water slope is $b = 107.96 \\pm 22.93$ K (conditional standard error). These errors do not establish unique ion properties. No uncertainty band or concentration-transfer claim follows.\n'
     chemistry = json.loads(CHEMISTRY.read_text())
     overrides = {r['reaction_id']: r for r in p['reaction_correlations']}
     offsets = chemistry['common_source_standard_state']['source_to_common_ln_k_offsets']
@@ -142,7 +142,7 @@ def main():
     prefix, rest = source.split(begin, 1)
     _, suffix = rest.split(end, 1)
     notebook.write_text(prefix + begin + '\n\n' + text + '\n' + end + suffix)
-    inputs = [PARAM, QUALIFICATION, CHEMISTRY, DATA / 'conditional-uncertainty.json', DATA / 'F1-A/native-fit.json', Path(__file__)]
+    inputs = [PARAM, PHYSICAL, CHEMISTRY, DATA / 'conditional-uncertainty.json', DATA / 'F1-A/native-fit.json', Path(__file__)]
     (OUT / 'parameter-table-inputs.json').write_text(json.dumps(
         {str(f.relative_to(ROOT.parents[1])): hashlib.sha256(f.read_bytes()).hexdigest() for f in inputs}, indent=2) + '\n')
 
