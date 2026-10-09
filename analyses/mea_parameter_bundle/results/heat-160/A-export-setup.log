@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/analyses/mea_parameter_bundle/scripts/heat_160.py", line 213, in <module>
+    fit(sys.argv[2])
+    ~~~^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/analyses/mea_parameter_bundle/scripts/heat_160.py", line 166, in fit
+    raw.update({k: s._jsonable(getattr(fitted, k)) for k in ('termination', 'residual_evaluations',
+                               ~~~~~~~^^^^^^^^^^^
+AttributeError: 'epcsaft._core.FitResult' object has no attribute 'termination'

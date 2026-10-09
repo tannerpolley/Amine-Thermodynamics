@@ -1,7 +1,7 @@
 \section{Thermodynamic model}\label{sec:theory}
 % P:theory-01
 The liquid contains nine true species: \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO and \Hydroxide.
-Each equilibrium state is a reactive bubble state of one liquid and one incipient vapor at the measured temperature and apparent composition.
+Each pressure or species calculation uses a reactive bubble state of one liquid and one incipient vapor at the measured temperature and apparent composition.
 Only the neutral species \COtwo, \MEA and \HtwoO enter the vapor, and the calculated \COtwo partial pressure is \(p_{\COtwo}=y_{\COtwo}P\).
 The same ePC-SAFT equation of state describes both phases.
 
@@ -35,7 +35,7 @@ Ion hard-chain and Debye--H\"uckel diameters are \(d_i=0.88\,\sigma_i\) \cite[Eq
 
 % P:theory-03
 Water and \MEA carry two association sites (2B), and \COtwo carries two induced-association sites that bond only with water \cite{Kleiner2007,Pabsch2020,Schick2023}.
-The \COtwo--water cross-association energy is \SI{1212.85}{\kelvin}, half the water self-association energy, with the water association volume \cite[Table~1, Sect.~2.4.2]{Schick2023}.
+The \COtwo--water cross-association energy is \SI{862.84}{\kelvin}, half the water self-association energy, with the water association volume \cite[Table~1, Sect.~2.4.2]{Schick2023}.
 \MEA--water cross-association follows the Wolbach--Sandler rule used by Fakouri Baygi and Pahlavanzadeh \cite[Eq.~6]{Baygi2015}.
 The association strength carries \(\sigma_{ij}^3\), so their \MEA association volume, reported for a \(d_{ij}^3\) strength \cite[Table~2]{Baygi2015}, was converted from 0.037470 to 0.036287, the constant value that best reproduces the vapor pressure and saturated-liquid density of their model at 293.15--\SI{393.15}{\kelvin}.
 
@@ -60,7 +60,7 @@ The Born term follows the solvation-shell and dielectric-saturation (SSM+DS) for
     f_{\mathrm{mix}}=\frac{\sum_kx_kf_k}{\sum_kx_k}.
     \label{eq:born-shell-diameter}
 \end{equation}
-Here \(\mathcal{I}\) is the set of ions, \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell and \(\varepsilon_{\mathrm{ion}}=8\) is the permittivity assigned to the region between the ion surface and that shell.
+Here \(\mathcal{I}\) is the set of ions, \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell and \(\varepsilon_{\mathrm{ion}}=8\) is the fixed permittivity assigned to the region between the ion surface and that shell.
 The selected model uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\), which reproduces the corrected Eq.~7; the original Born comparison uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=0\), which recovers the original Born expression \cite[Eq.~5]{Figiel2025}.
 The water solvation factor is \(f_{\HtwoO}=1.5\) \cite[Table~2]{Figiel2025}, and every other component, including \MEA, \COtwo and all ions, has \(f_k=1\).
 Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents; here it runs over all nine components, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\).
@@ -68,7 +68,7 @@ The shell diameter therefore changes with loading through the water mole fractio
 
 \subsection{Relative permittivity}
 % P:theory-05
-The bulk permittivity in the Debye--H\"uckel and Born terms is the mass-weighted permittivity of the neutral solvents,
+The solvent-composition-dependent bulk permittivity in the Debye--H\"uckel and Born terms is the mass-weighted permittivity of the neutral solvents,
 \begin{equation}
     \varepsilon_{\mathrm{bulk}}
     =
@@ -78,6 +78,7 @@ The bulk permittivity in the Debye--H\"uckel and Born terms is the mass-weighted
 \end{equation}
 which is the salt-free weight-fraction rule of Uyan et al.\ and Figiel et al.\ \cite[Eq.~5]{Uyan2015}\cite[Eq.~12]{Figiel2025}.
 The ion-fraction suppression of Figiel et al.\ \cite[Eq.~11]{Figiel2025} is not applied.
+The bulk value can nevertheless change with loading because reaction changes the relative amounts of free \MEA and water; the ion-region value remains fixed.
 The \MEA permittivity is held constant at \(\varepsilon_{\MEA}=32\), an assumed value (\cref{sec:parameters}), and the water permittivity is the software's approximation of the Archer--Wang permittivity~\cite{archerDielectricConstantWater1990},
 \begin{equation}
     \varepsilon_{\HtwoO}(T)=78.4104-0.361338\,\theta+7.65556\times10^{-4}\,\theta^{2},

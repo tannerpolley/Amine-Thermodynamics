@@ -1,22 +1,23 @@
 \section{Conclusions}\label{sec:conclusion}
 % P:conclusion-01
 Electrolyte PC-SAFT with Debye--H\"uckel and Born contributions and explicit carbamate chemistry describes \COtwo partial pressure and liquid speciation in 30 wt\% aqueous \MEA with one set of liquid-phase parameters.
-Fitted through five binary interaction parameters to 47 \COtwo pressures at 40 and \SI{60}{\degreeCelsius} and 94 species measurements at 20--\SI{60}{\degreeCelsius}, the nine-species model reaches AARDs of 14.0 and 8.3\,\%.
-On Wagner et al.\ pressures near 80 and \SI{119}{\degreeCelsius} (353 and \SI{392}{\kelvin}), which entered no fitting or selection step, it gives 22.5 and 22.3\,\%; the other data at 80--\SI{120}{\degreeCelsius} informed fixed reaction shifts and are not independent temperature tests.
+Fitted through five binary interaction parameters to 47 \COtwo pressures at 40 and \SI{60}{\degreeCelsius}, 94 species measurements at 20--\SI{60}{\degreeCelsius} and eight integral heats at \SI{40}{\degreeCelsius}, the nine-species model reaches AARDs of 13.81 and 7.89\,\%.
+On Wagner et al.\ pressures near 80 and \SI{119}{\degreeCelsius} (353 and \SI{392}{\kelvin}), which entered no fitting or selection step, it gives 23.11 and 16.23\,\%; the other data at 80--\SI{120}{\degreeCelsius} informed fixed reaction shifts and are not independent temperature tests.
 This extends the ePC-SAFT treatment of reactive MDEA to a carbamate-forming primary amine.
 
 % P:conclusion-02
-Within the declared bounds, the tested refit without a Born term does not recover agreement: the fitted-pressure AARD rises from 14.0 to 53.6\,\%.
-A decomposition of the calculated pressure shows why within this model: the ion-concentration part of the Born contribution lowers the activity sum that sets the \COtwo pressure increasingly with loading, the refitted interactions offset its removal at low loading but not at high loading, and at high loading a compensating speciation change cancels most of the activity-sum change, so the pressure error of the refit is largest at intermediate loading.
-The SSM+DS and original Born formulations calibrate comparably, and which has the lower cost depends on the fitted observations: SSM+DS without the titration bicarbonate pool and original Born with it.
+Within the tested model, bounds, objective and two starts, refitting without the Born term raises fitted-pressure AARD from 13.81 to 80.25\,\%.
+This establishes neither physical necessity nor a mechanism.
+SSM+DS has the lower total cost both without and with the titration bicarbonate pool; fitting the pool does not reverse the ordering.
 
 % P:conclusion-03
-These results suggest three practical lessons for fitting this model.
-First, a comparison of electrolyte terms must state which speciation data are fitted, because fitting the titration bicarbonate pool alone changes which Born form has the lower cost; independent solvation or activity data could guide the choice of form.
-Second, some parameters are not determined by these data: the \MEAH--water slope, \SI{-112.6}{\kelvin}, has a conditional standard error of \SI{119.7}{\kelvin}, and the \HCOthree--water coefficient lies on its bound.
-Third, data at or below \SI{60}{\degreeCelsius} do not determine the temperature response: a refit with literature reaction temperature laws and the published \COtwo dispersion energy matches the fit at or below \SI{60}{\degreeCelsius} but gives 51.0\,\% at 100--\SI{120}{\degreeCelsius}, so heat-of-absorption or equilibrium data above \SI{60}{\degreeCelsius} are needed to fix it.
+Heat measurements give the \MEAH--water reciprocal-temperature slope \(b=\SI{107.96}{\kelvin}\) with conditional standard error \SI{22.93}{\kelvin}, while the \HCOthree--water coefficient remains on its bound.
+The uncertainty conditions on fixed inputs, active bounds and declared residual scales.
+The source-law refit has a similar pressure/species subtotal but poorer heat agreement and a canonical 100--\SI{120}{\degreeCelsius} pressure AARD of 54.98\,\%.
+Heat fitting reduces Vinjarapu RMSE from 4.57 to \SI{2.13}{\kilo\joule\per\mole} and Arcis RMSE from 11.63 to 8.36, while the Hilliard/Jou packet pressure AARD rises from 18.12 to 29.66\,\% at \SI{100}{\degreeCelsius} and from 24.11 to 41.55\,\% at \SI{120}{\degreeCelsius}; the separate canonical 100--\SI{120}{\degreeCelsius} cohort changes from 27.58 to 30.84\,\%.
+These comparisons constrain this parameterization without uniquely locating its limitation in reaction chemistry.
 
 % P:conclusion-04
-The selected parameter set applies to \COtwo partial pressure and speciation in 30 wt\% \MEA.
-Applied unchanged at 15 and 45 wt\% \MEA it gives AARDs of 76.7 and 46.3\,\% (\cref{sec:results-80c}), and it overestimates loaded-solution density by 13.0--17.8\,\%.
-Qualifying density and caloric properties, and adding heat-of-absorption data to the fit, are the next steps toward absorber and stripper calculations.
+Applied unchanged at 15 and 45 wt\% \MEA, the selected parameter set gives pressure AARDs of 105.54 and 56.32\,\%.
+A separate density-only translation gives deviations of \(-0.15\) to \(+0.25\)\,\% over its four calibration states; these are calibration results rather than independent density predictions.
+Density transfer, solution heat capacity and wider calorimetric agreement remain limitations before absorber or stripper use.

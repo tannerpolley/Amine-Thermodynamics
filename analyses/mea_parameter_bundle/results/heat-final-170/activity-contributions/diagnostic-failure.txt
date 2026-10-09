@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/analyses/mea_parameter_bundle/model-d/activity-contributions/activity_contributions.py", line 380, in <module>
+    calculate(sys.argv[2:])
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/analyses/mea_parameter_bundle/model-d/activity-contributions/activity_contributions.py", line 268, in calculate
+    gamma, analytic_G, Q, refs = activities(model, T, state, x)
+                                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-heat-augmented-160-fit-on-engine-026b30-7549f78f/analyses/mea_parameter_bundle/model-d/activity-contributions/activity_contributions.py", line 122, in activities
+    gamma = np.array([np.asarray(state.log_fugacity_coefficient) - ref.log_fugacity_coefficient + np.log(state.pressure/ref.pressure) for ref in refs])
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for -: 'float' and 'NoneType'
