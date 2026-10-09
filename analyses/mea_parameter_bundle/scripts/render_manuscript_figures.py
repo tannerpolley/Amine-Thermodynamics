@@ -1,16 +1,13 @@
-"""Render the four manuscript figures from the retained final-rerun figure data.
+"""Render manuscript figures from retained heat-final-170 observations and results.
 
-Reads only `results/final-rerun/figure-data/*.csv` (hash-checked against its
-`input-hashes.json`); never evaluates the equation of state. Model values are
-discrete evaluations at the observed states, so they are drawn as markers.
-Usage: python render_manuscript_figures.py  (writes docs/scientific/latex/figures/generated/*.pdf)
+No equation-of-state evaluation. Model values are markers at measured states.
+Usage: python render_manuscript_figures.py
 """
 
 import csv
 import hashlib
 import json
 import math
-import os
 from pathlib import Path
 
 import matplotlib
@@ -22,8 +19,9 @@ from matplotlib.lines import Line2D
 from manuscript_style import FULL_WIDTH, apply_style
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / ("results/heat-final-170/figure-data" if os.environ.get('FINAL_HEAT_160') else "results/final-rerun/figure-data")
-OUT = DATA.parent / 'figures' if os.environ.get('FINAL_HEAT_160') else ROOT.parents[1] / "docs/scientific/latex/figures/generated"
+RUN = ROOT / "results/heat-final-170"
+DATA = RUN / "figure-data"
+OUT = ROOT.parents[1] / "docs/scientific/latex/figures/generated"
 COLORS = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#555555"]
 SOURCES = ["Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011", "Wagner2013"]
 SOURCE_STYLE = dict(zip(SOURCES, zip(COLORS, ["s", "o", "D", "^", "v", "<", "h"]), strict=True))
@@ -37,8 +35,16 @@ LOADING = r"CO$_2$ loading (mol CO$_2$/mol MEA)"
 
 
 def read(name):
-    with (DATA / name).open(newline="") as stream:
-        return list(csv.DictReader(stream))
+    paths = {"pressure.csv": RUN / "evaluation/targets.csv", "speciation.csv": RUN / "species-figure-data.csv",
+             "pool-effect.csv": RUN / "pool-figure-data.csv", "pool-effect-costs.csv": RUN / "fit-comparison.csv",
+             "heat.csv": DATA / "heat.csv"}
+    with paths[name].open(newline="") as stream:
+        rows = list(csv.DictReader(stream))
+    if name in ("speciation.csv", "pool-effect.csv"):
+        fitted = set(json.loads((RUN / "F1-A/native-fit.json").read_text())["targets"])
+        for row in rows:
+            row["fitted_target"] = str(row["target"] in fitted)
+    return rows
 
 
 def check_inputs():
@@ -51,8 +57,7 @@ def check_inputs():
 def save(fig, name):
     OUT.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT / f"{name}.pdf", metadata={"CreationDate": None, "ModDate": None})
-    if os.environ.get('FINAL_HEAT_160'):
-        fig.savefig(OUT / f"{name}.png", dpi=200)
+    fig.savefig(OUT / f"{name}.png", dpi=200)
     plt.close(fig)
 
 
@@ -164,15 +169,22 @@ def pool_figure():
     left.set_ylabel(r"HCO$_3^-$ + CO$_3^{2-}$ mole fraction")
     left.set_title(r"(a) Titration bicarbonate pool, 20 °C", loc="left")
     left.legend(fontsize=7, loc="upper left", facecolor="white", edgecolor="none", framealpha=1)
-    point = {r["problem"]: (float(r.get("base149_cost", r["base141_cost"])), float(r["pool18_cost"])) for r in costs}
+    pool_cost = {p: math.fsum(float(r["cost"]) for r in rows if r["problem"] == p
+                             and r["identity"] != "Matin2012_state_016") for p in styles}
+    assert all(sum(r["problem"] == p and r["identity"] != "Matin2012_state_016" for r in rows) == 18
+               for p in styles)
+    point = {r["problem"]: (float(r["cost"]) - (pool_cost[r["problem"]] if r["problem"] in ("F4", "F5") else 0),
+                            pool_cost[r["problem"]]) for r in costs
+             if r["objective"] == "with heat" and r["problem"] in styles}
     for a, b in (("F1", "F4"), ("F2", "F5")):
         right.annotate("", xy=point[b], xytext=point[a],
                        arrowprops=dict(arrowstyle="->", color=styles[a][0], linewidth=0.7))
     for problem, (x, y) in point.items():
         color, marker = styles[problem]
         right.scatter([x], [y], marker="o" if marker == "." else "x", color=color, s=20, linewidths=0.9)
-        right.annotate(problem, (x, y), textcoords="offset points", xytext=(5, 3), fontsize=8)
-    right.set_xlabel("Cost of the 149 base targets" if os.environ.get('FINAL_HEAT_160') else "Cost of the 141 base targets")
+        right.annotate(problem, (x, y), textcoords="offset points", xytext=(-5, 3) if problem in ("F2", "F5") else (5, 3),
+                       ha="right" if problem in ("F2", "F5") else "left", fontsize=8)
+    right.set_xlabel("Cost of the 149 base targets")
     right.set_ylabel("Cost of the 18 pool targets")
     right.set_title("(b) Base-target and pool costs", loc="left")
     right.grid(alpha=0.18)
@@ -210,7 +222,6 @@ if __name__ == "__main__":
     pressure_figure()
     speciation_figure()
     pool_figure()
-    if os.environ.get('FINAL_HEAT_160'):
-        heat_figure()
+    heat_figure()
     print(json.dumps({p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                       for p in sorted(OUT.glob("*.pdf"))}, indent=1))

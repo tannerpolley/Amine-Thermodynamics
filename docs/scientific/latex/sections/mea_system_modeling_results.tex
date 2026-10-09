@@ -39,6 +39,54 @@ The reciprocal-temperature slope is \(b=\SI{107.96}{\kelvin}\) with conditional 
 Its precision is conditional on the active bounds, fixed inputs, declared residual scales and residuals treated as independent; it does not identify a unique molecular mechanism.
 The \MEAH--\MEACOO coefficient is only 1.19 conditional standard errors above its lower bound, which further limits a symmetric local uncertainty interpretation.
 
+\subsection{Heat of absorption and matched pressure comparison}\label{sec:results-heat}
+% P:results-heat-01
+Adding the eight Vinjarapu heats reduces their root-mean-square error (RMSE) from 4.57 to \SI{2.13}{\kilo\joule\per\mole} relative to the matched no-heat fit (\cref{fig:heat}).
+The fitted heats range from \(-81.75\) to \(-81.51\)~\si{\kilo\joule\per\mole} \COtwo, against measured values of \(-85\) to \(-79\), with heat AARD 2.30\,\%.
+The 141-target pressure/species subtotal rises from 30.090 to 30.331 (0.80\,\%); pressure cost rises 7.58\,\%, B\"ottinger species cost from 2.974 to 3.213 and Matin cost falls from 19.326 to 18.737.
+Fitted-pressure AARD changes from 13.26 to 13.81\,\% and species AARD from 7.94 to 7.89\,\%.
+
+\begin{figure}[pos=!htb]
+    \centering
+    \includegraphics[width=\linewidth]{heat-of-absorption.pdf}
+    \caption{Heat fitting improves agreement with Vinjarapu and reduces, but does not remove, the Arcis discrepancy.
+    Integral heat of absorption per mole of added \COtwo from zero loading in 30 wt\% \MEA: Vinjarapu at \SI{313.15}{\kelvin} and \SI{1.734}{\mega\pascal} (eight fitted rows), and Arcis at \SI{322.5}{\kelvin} and 0.51 or \SI{1.03}{\mega\pascal} (fourteen predicted rows).
+    Open circles are measurements; crosses are heat-fitted F1 and plus signs the matched no-heat fit, evaluated at measured states without interpolation.
+    Error bars show the retained source heat intervals, used as declared scales, rather than established independent one-standard-deviation errors.}
+    \label{fig:heat}
+\end{figure}
+
+% P:results-heat-02
+Arcis RMSE falls from 11.63 to \SI{8.36}{\kilo\joule\per\mole} overall: from 14.14 to 10.58 at \SI{0.51}{\mega\pascal} and from 7.00 to 3.74 at \SI{1.03}{\mega\pascal}.
+The positive mean calculated-minus-observed difference, \SI{7.50}{\kilo\joule\per\mole}, means the model remains less exothermic than Arcis.
+The calorimeters differ in temperature and pressure, and this transfer discrepancy does not establish that either measurement set is wrong.
+
+% P:results-heat-03
+The calorimetric gain comes with a higher pressure AARD at 100--\SI{120}{\degreeCelsius} (\cref{tab:heat-pressure-tradeoff}).
+The Hilliard/Jou packet and canonical cohorts have different row sets and are kept separate; their higher-temperature rows were outside this fit but had been accessed during earlier model development.
+The canonical 80\,\si{\degreeCelsius} pressure AARD changes only from 19.41 to 19.61\,\%, while the B\"ottinger 80\,\si{\degreeCelsius} species AARD rises from 12.65 to 13.14\,\%.
+Two Hilliard/Jou packet rows overestimate pressure by 103.6\,\% at \SI{100}{\degreeCelsius}, loading 0.5889, and by 132.8\,\% at \SI{120}{\degreeCelsius}, loading 0.00323; both are converged predictions.
+This is a trade-off of the tested parameterization with fixed chemistry, five coordinates, bounds and residual scales; it does not uniquely locate the limitation in reaction chemistry.
+
+\begin{table}[pos=!htb]
+    \centering
+    \caption{Matched F1 pressure AARD (\%) with and without the eight heat targets, on identical rows and the same software build.
+    The Hilliard/Jou packet includes an unfitted 60.106\,\si{\degreeCelsius} row in its full 79-row total.
+    The canonical cohort is the six-study pressure set; its combined 100--\SI{120}{\degreeCelsius} AARD changes from 27.58 to 30.84\,\%.}
+    \label{tab:heat-pressure-tradeoff}
+    \begin{tabular}{@{}lrrrr@{}}
+        \toprule
+        Cohort & Nominal \(T\) (\si{\degreeCelsius}) & \(n\) & No heat & Heat fitted \\
+        \midrule
+        Hilliard/Jou packet & 100 & 10 & 18.12 & 29.66 \\
+        Hilliard/Jou packet & 120 & 10 & 24.11 & 41.55 \\
+        Hilliard/Jou packet, all & 40--120 & 79 & 14.79 & 19.71 \\
+        Canonical & 100 & 18 & 24.01 & 30.80 \\
+        Canonical & 120 & 36 & 29.37 & 30.85 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
 \subsection{Born term}\label{sec:results-born-off}
 % P:results-04
 Within the tested model, bounds, objective and two starts, refitting all five parameters without the Born term (F3) raises the fitted-pressure AARD from 13.81 to 80.25\,\% (Supplementary Table~S1).
@@ -112,7 +160,7 @@ Published pressure deviations for 30 wt\% \MEA cover different row sets and temp
 
 \subsection{Scope and limitations}\label{sec:results-limits}
 % P:results-16
-F1 describes \COtwo partial pressure in 30 wt\% \MEA, fitted at 40 and \SI{60}{\degreeCelsius}, and liquid speciation, fitted at 20--\SI{60}{\degreeCelsius}; its comparisons at 80--\SI{120}{\degreeCelsius} rest partly on fixed values estimated with data at those temperatures.
+F1 describes \COtwo partial pressure in 30 wt\% \MEA, fitted at 40 and \SI{60}{\degreeCelsius}, and liquid speciation, fitted at 20--\SI{60}{\degreeCelsius}, and integral heat, fitted at \SI{40}{\degreeCelsius}; its comparisons at 80--\SI{120}{\degreeCelsius} rest partly on fixed values estimated with data at those temperatures.
 Its ion parameters are effective values: the \MEAH and \MEACOO parameters were fitted to speciation data, the \HCOthree--water coefficient lies on its bound, and the \MEAH--water slope has only conditional precision.
 The conditional standard errors treat residuals as independent and exclude the uncertainty of the fixed inputs.
 The Matin numerical values were checked against Table~S.1, while the calculations treat the reported \SI{21}{\degreeCelsius} as equivalent to \SI{20}{\degreeCelsius}.
@@ -122,4 +170,5 @@ The physical equation-of-state fit contains no density targets; a separate densi
 For those four calibration states, at an assumed pressure of \SI{100000}{\pascal}, the translated density deviations range from \(-0.15\) to \(+0.25\)\,\%.
 The translation is \(v_{\mathrm{corr}}=v_{\mathrm{EOS}}+c(x_{\MEAH}+x_{\MEACOO})\), with \(c=\SI{39.5143}{\cubic\centi\metre\per\mole}\); it changes only the reported density, not equilibrium or calorics.
 The source does not report the measurement pressure, and its general uncertainty estimate of \(\pm\SI{0.002}{\gram\per\cubic\centi\metre}\) for loaded solutions excludes the highest temperatures and loadings~\cite[pp.~3099--3100]{Amundsen2009}.
-These four calibrated deviations do not establish density transfer, and the model remains unqualified for absorber and stripper calculations.
+Three solution heat-capacity spot checks were also evaluated; the loaded \SI{45}{\degreeCelsius} deviation changes from \(+0.44\) to \(+1.48\)\,\% and the loaded \SI{80}{\degreeCelsius} deviation from \(-4.53\) to \(-3.73\)\,\% relative to the no-heat fit, without establishing caloric qualification.
+These four calibrated density deviations do not establish density transfer, and the model remains unqualified for absorber and stripper calculations.
