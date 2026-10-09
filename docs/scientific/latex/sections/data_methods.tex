@@ -3,7 +3,7 @@
 \subsection{Observations}
 % P:methods-01
 All solutions are 30 wt\% \MEA on a \COtwo-free basis unless stated otherwise.
-Supplementary Section~S5 places the observations below within an inventory of published measurements near 30 wt\% \MEA, and Supplementary Section~S4 lists the corrections made to the source data before fitting.
+Supplementary Section~S4 places the observations below within an inventory of published measurements near 30 wt\% \MEA, and Supplementary Section~S3 lists the corrections made to the source data before fitting.
 The pressure comparisons use 162 measured \COtwo partial pressures at 40--\SI{120}{\degreeCelsius} from six studies \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
 Each row keeps its source table and row, the measured temperature, the loading and the pressure.
 Hilliard and Xu and Rochelle report the amine concentration as molality, and their rows are calculated at the reported molality and measured temperature rather than at a nominal composition and series temperature \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
@@ -72,7 +72,7 @@ The \MEA permittivity of 32 is an assumed fixed value for which no source is ret
 
 % P:methods-05
 The fixed R2 and R5 reaction-enthalpy shifts, the R5 coefficient \(A_5\) and the \COtwo dispersion energy were also calibrated before the final five-parameter fit.
-Their calibration used pressures at 40--\SI{120}{\degreeCelsius}, species at 20--\SI{80}{\degreeCelsius} and heat-of-absorption data, as detailed in Supplementary Section~S6.
+Their calibration used pressures at 40--\SI{120}{\degreeCelsius}, species at 20--\SI{80}{\degreeCelsius} and heat-of-absorption data, as detailed in Supplementary Section~S5.
 These are calibration values, not independently determined physical reaction enthalpies or molecular properties.
 Pressure and species comparisons at 80--\SI{120}{\degreeCelsius} are therefore not independent of model development; among the pressure comparisons at \SI{80}{\degreeCelsius} and above, only the Wagner et al.\ rows entered none of these steps.
 The 15 and 45 wt\% pressures and the loaded densities also entered none of them, whereas the Jakobsen et al.\ data entered the fit of the \MEAH and \MEACOO parameters.
@@ -131,7 +131,7 @@ F2 is reported as the matched alternative.
 
 % P:methods-08
 Each fit is a bounded Levenberg--Marquardt least-squares problem with exact implicit derivatives of the equilibrium states with respect to the fitted parameters.
-Each was started from two prescribed parameter vectors; all twelve runs converged to matching costs (Supplementary Section~S6).
+Each was started from two prescribed parameter vectors; all twelve runs converged to matching costs (Supplementary Section~S5).
 The lower-cost start is reported; this is a local optimum, not evidence of a global one.
 For F1 and F2, the covariance of the interior parameters is \(s^2(J_I^{\mathsf{T}}J_I)^{-1}\), where \(J_I\) holds the columns of the weighted residual Jacobian for the parameters not at a bound, in physical units, and \(s^2=2C/(n-p)\) with \(n=141\) and \(p\) interior parameters.
 These standard errors are conditional on the active bounds and the declared residual scales, and they treat residuals as independent, although species derived from one titration are not; they are indicative only.
@@ -140,7 +140,7 @@ A parameter at a bound has no symmetric interval.
 \subsection{Numerical verification and metrics}
 % P:methods-09
 In every equilibrium calculation, the conserved \COtwo-equivalent carbon of the feed equals the reported loading, \(\alpha=(n_{\mathrm{C}}-2n_{\mathrm{am}})/n_{\mathrm{am}}\), where \(n_{\mathrm{C}}\) is the total carbon of the feed, including the small ion amounts that start the solution, and \(n_{\mathrm{am}}\) is the total amine, each \MEA unit carrying two carbons.
-Re-evaluation reproduces the fitted costs and satisfies material balance, electroneutrality and stationarity; Supplementary Section~S6 gives the exact numerical residuals.
+Re-evaluation reproduces the fitted costs and satisfies material balance, electroneutrality and stationarity; Supplementary Section~S5 gives the exact numerical residuals.
 All 1,749 retained evaluation states, including fitted-state replays and comparisons outside the fit, meet the numerical checks.
 These checks verify the numerical solutions, not the physical model.
 

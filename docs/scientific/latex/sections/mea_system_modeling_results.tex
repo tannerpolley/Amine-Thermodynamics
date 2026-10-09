@@ -34,56 +34,22 @@ The mean \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of the fitted pressures is 
 
 % P:results-03
 At F1 the \HCOthree--water coefficient lies on its upper bound of \(+0.5\), where the cost gradient \(\partial C/\partial k\) is \(-10.81\), so the cost would decrease further if the bound were relaxed; its value is set by the bound rather than estimated from the data.
-The conditional standard errors of the three interior interaction coefficients are 0.012--0.027 (\cref{tab:binary-interaction-parameters}), and the largest correlation, 0.46, links \(k_{\MEAH,\HtwoO}\) with its slope \(b\).
-The slope itself is \(b=\SI{107.96}{\kelvin}\) with a conditional standard error of \SI{22.93}{\kelvin}, so these data, which constrain temperature only through pressures at 40 and \SI{60}{\degreeCelsius} and species at 20--\SI{60}{\degreeCelsius}, do not determine it.
-The slope is kept in the five-parameter model and reported with this uncertainty.
-These standard errors rest on the declared residual scales and on residuals treated as independent (\cref{sec:data-methods}), and they are indicative only.
+The conditional standard errors of the three interior interaction coefficients are 0.012--0.027 (\cref{tab:binary-interaction-parameters}), and the largest absolute correlation, 0.482, links \(k_{\MEACOO,\HtwoO}\) with \(k_{\MEAH,\HtwoO}\).
+The reciprocal-temperature slope is \(b=\SI{107.96}{\kelvin}\) with conditional standard error \SI{22.93}{\kelvin}.
+Its precision is conditional on the active bounds, fixed inputs, declared residual scales and residuals treated as independent; it does not identify a unique molecular mechanism.
+The \MEAH--\MEACOO coefficient is only 1.19 conditional standard errors above its lower bound, which further limits a symmetric local uncertainty interpretation.
 
 \subsection{Born term}\label{sec:results-born-off}
 % P:results-04
-Refitting all five parameters without the Born term (F3), within the same bounds and from two starts, raises the fitted-pressure AARD from 13.81 to 80.25\,\% (\cref{tab:residual-summary}; Supplementary Table~S1).
+Within the tested model, bounds, objective and two starts, refitting all five parameters without the Born term (F3) raises the fitted-pressure AARD from 13.81 to 80.25\,\% (Supplementary Table~S1).
 The pressure targets carry most of the cost increase, and both the \HCOthree--water and the \MEAH--\MEACOO coefficients reach their bounds.
-This refit, within the declared bounds, does not recover the agreement of the model with a Born term; the result concerns these parameters and bounds and does not show that a Born contribution is physically necessary.
-
-% P:results-05
-A decomposition of the calculated pressure locates where the refit loses agreement.
-Combining \COtwo phase equilibrium with the overall carbamate reaction R2 \(-\) R4 \(-\) R5, \(\ce{CO2 + 2 MEA <=> MEAH+ + MEACOO-}\), gives at every calculated state
-\begin{equation}
-    \ln p_{\COtwo}=S+Q-\ln K_{x,\mathrm{OV}}+H,
-    \qquad
-    S=\ln\frac{x_{\MEAH}\,x_{\MEACOO}}{x_{\MEA}^{2}},
-    \label{eq:pressure-decomposition}
-\end{equation}
-where \(S\) is the speciation sum, \(Q=\sum_i\nu_{\mathrm{OV},i}\ln\gamma_i^{*}+\ln\gamma_{\COtwo}^{*}\) is the activity sum of the overall reaction, in which the \COtwo activity coefficient cancels, \(K_{x,\mathrm{OV}}\) is the mole-fraction equilibrium constant of the overall reaction, and \(H\) collects the vapor fugacity coefficient and reference fugacity of \COtwo.
-At fixed speciation, liquid nonideality changes the \COtwo pressure only through \(Q\), and each Helmholtz contribution adds its own part to \(Q\).
-For F3 relative to F1, \cref{eq:pressure-decomposition} splits the change of \(\ln p_{\COtwo}\) at each fitted pressure state into \(\Delta Q\), \(\Delta S\) and \(\Delta H\); the split reproduces the pressure-cost increase of F3 and satisfies the closure checks at every state (Supplementary Section~S3).
-
-\begin{figure}[pos=!htb]
-    \centering
-    \includegraphics[width=\linewidth]{born-off-mechanism.pdf}
-    \caption{Without the Born term, the refitted model F3 overestimates the fitted pressures at intermediate loadings, where \(\Delta Q\), the change of the activity sum, rises with loading faster than \(\Delta S\), the change of the speciation sum, falls; at the highest loadings the two nearly cancel.
-    (a, b) \(\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})\) of the 47 fitted pressures for F1 and F3 in the nominal 40 and \SI{60}{\degreeCelsius} series; the shaded band is \(\pm0.3\), the declared pressure residual scale, not an acceptance interval.
-    (c, d) Change from F1 to F3 of \(\ln p_{\COtwo}\) and of its contributions in \cref{eq:pressure-decomposition} at the same states.
-    Points are calculated states at their measured temperatures and are not interpolated.}
-    \label{fig:born-off}
-\end{figure}
-
-% P:results-06
-Three tests stated before the calculation locate the Born contribution of F1 (Supplementary Section~S3).
-The first hypothesis was that the Born term raises the activity-coefficient sum \(\sum_i\nu_{\mathrm{OV},i}\ln\gamma_i^{*}\) of the overall reaction, mainly through the lower permittivity of \MEA--water than of water.
-In F1 the Born part of this sum is instead negative, with a median of \(-0.91\) over the 32 fitted states at \SI{40}{\degreeCelsius}, and at the median-loading state its permittivity part is less than half of it, so this hypothesis is rejected.
-The second hypothesis was that the ion-concentration part of the Born contribution to \(Q\), defined as the Born contribution minus its value at the ion-free composition of the same state, falls with loading.
-It does: its Spearman correlation with loading is \(-0.997\) at \SI{40}{\degreeCelsius}, so this hypothesis is supported at both temperatures.
-The third hypothesis was that the refit changes the activity sum more than the speciation; over the 47 fitted pressure states the root-mean-square change of \(Q\), 1.09, exceeds that of \(S\), 0.82, so it is not rejected.
-\(\Delta Q\) rises with loading to about 2.3, but at the highest loadings a nearly equal and opposite \(\Delta S\) cancels most of it, so the net change of \(\ln p_{\COtwo}\), and with it the pressure error of F3, is largest at intermediate loadings (\cref{fig:born-off}).
-The non-Born activity changes of the refit offset the removed Born contribution fully or more in the lowest-loading third of the states but hardly at all in the highest-loading third, where the mean offset fraction is 0.08 at \SI{40}{\degreeCelsius} (Supplementary Table~S8).
-Within this model, the Born term therefore supplies a loading-dependent lowering of the activity sum that the five refitted interactions reproduce at low loading but not at high loading.
-These are attributions within the calibrated model at its fitted states, under stated conventions for splitting the Born term; they are not measurements of single-ion activity coefficients.
+This comparison does not establish physical necessity of the Born term or identify the mechanism of the pressure change.
 
 \subsection{Born form and fitted observation set}\label{sec:results-born}
 % P:results-07
-The SSM+DS (F1) and original Born (F2) forms were fitted with the same parameters, bounds, weights, reaction constants and ion inputs, and they calibrate the data comparably.
-With Matin's 18 pool targets not fitted, SSM+DS has the lower cost, 32.057 against 60.008, and the lower fitted-pressure AARD, whereas original Born has a slightly lower fitted-species AARD (\cref{tab:residual-summary}).
+The SSM+DS (F1) and original Born (F2) forms were fitted with the same parameters, bounds, weights, reaction constants, ion inputs and eight heat targets.
+Without fitting Matin's pool, SSM+DS has the lower cost, 32.057 against 60.008, and lower fitted-pressure AARD, 13.81 against 36.07\,\%; its fitted-species AARD is also lower, 7.89 against 8.44\,\% (\cref{tab:residual-summary}).
+The two forms therefore do not calibrate pressure comparably under this objective.
 In F2 the \MEAH--\MEACOO coefficient also lies on its lower bound of \(-1\).
 
 % P:results-08
@@ -94,18 +60,17 @@ F1 lies below them, with a mean \(\ln(x_{\mathrm{calc}}/x_{\mathrm{obs}})\) of \
 \begin{figure}[pos=!htb]
     \centering
     \includegraphics[width=\linewidth]{pool-effect.pdf}
-    \caption{Fitting Matin's titration bicarbonate pool changes which Born form has the lower cost.
+    \caption{Fitting Matin's titration bicarbonate pool improves its agreement while SSM+DS retains the lower total cost.
     (a) \ce{HCO3- + CO3^2-} mole fraction at \SI{20}{\degreeCelsius}: Matin et al.\ measurements and the values calculated by F1 and F2, which do not fit the pool, and by F4 and F5, which fit it; the Matin state at loading 0.455 is outside both target sets.
-    (b) Cost of the 141 base targets against the cost of the 18 pool targets; arrows join each Born form's fit without and with the pool.}
+    (b) Cost of the 149 base targets against the cost of the 18 pool targets; arrows join each Born form's fit without and with the pool.}
     \label{fig:pool-effect}
 \end{figure}
 
 % P:results-09
-Adding the 18 pool targets to the objective changes which form has the lower cost (\cref{fig:pool-effect}): original Born then has the lower cost, 66.602 against 47.614 for SSM+DS.
-Fitting the pool lowers its AARD for both forms and raises the cost of the 141 base targets for both, less for original Born than for SSM+DS (\cref{fig:pool-effect}b; Supplementary Table~S3).
-Original Born therefore moves toward the titration bicarbonate at a smaller cost to the other targets.
-For these data, the pressure and speciation fits give no preference between the two Born formulations that is independent of the fitted observations, and independent solvation or activity data could help choose between them.
-The residual signs do not establish which bicarbonate measurement is correct.
+Adding the 18 pool targets preserves the Born-form cost ordering (\cref{fig:pool-effect}): SSM+DS F4 has cost 47.614, below 66.602 for original Born F5.
+Fitting the pool lowers its AARD for both forms and raises the cost of the 149 base targets for both (\cref{fig:pool-effect}b; Supplementary Table~S3).
+F5 represents the titration pool more closely, with AARD 29.51 against 42.13\,\% for F4, while F4 retains a lower fitted-pressure AARD, 13.34 against 34.34\,\%.
+These comparisons describe the tested observation sets, bounds and objective; the residual signs do not establish which bicarbonate measurement is correct.
 
 \subsection{Temperature and concentration outside the fit}\label{sec:results-80c}
 % P:results-10
@@ -113,7 +78,7 @@ Except for the Wagner et al.\ rows, the comparisons at 80--\SI{120}{\degreeCelsi
 On the 21 measured pressures at \SI{80}{\degreeCelsius}, F1 gives an AARD of 19.6\,\% and underestimates the pressures on average (\cref{tab:residual-summary}; Supplementary Table~S5).
 The Wagner et al.\ pressures, which entered no fitting or selection step, give 23.11\,\% near \SI{80}{\degreeCelsius} (\SI{353}{\kelvin}) and 16.23\,\% near \SI{119}{\degreeCelsius} (\SI{392}{\kelvin}), and F1 again lies below them on average.
 At 100--\SI{120}{\degreeCelsius}, beyond the fitted temperatures, the 54 evaluated pressures give 30.84\,\%.
-The 11 B\"ottinger species at \SI{80}{\degreeCelsius}, measured in a 31 wt\% solution, are represented more closely by F2 than by F1, and F2 gives values comparable to those of F1 in each of these pressure groups (\cref{tab:residual-summary}).
+The 11 B\"ottinger species at \SI{80}{\degreeCelsius}, measured in a 31 wt\% solution, are represented more closely by F2 than by F1, while the pressure comparisons vary by group: F2 is closer near \SI{353}{\kelvin}, F1 near \SI{392}{\kelvin} (\cref{tab:residual-summary}).
 
 % P:results-11
 On the 105 measured pressures at 40--\SI{80}{\degreeCelsius}, F1 gives an AARD of 20.09\,\%.
@@ -127,16 +92,16 @@ One of the ten points, at \SI{40}{\degreeCelsius} and loading 0.21, is excluded 
 
 \subsection{Source reaction laws}\label{sec:results-source-laws}
 % P:results-13
-F6 uses a different temperature description with the same 141 targets: R2 and R5 follow their source correlations, the \COtwo dispersion energy is the published \SI{169.21}{\kelvin}, and the five interaction parameters are refitted.
-It fits the data at or below \SI{60}{\degreeCelsius} as well as F1, with a cost of 40.902 against 32.057, but represents higher temperatures worse (\cref{fig:pressure}; \cref{tab:residual-summary}).
-On the 54 evaluated pressures at 100--\SI{120}{\degreeCelsius} it gives 54.98\,\% against 30.84\,\% for F1, and its calculated pressures are too low.
+F6 uses the same 149 targets with a different temperature description: R2 and R5 follow their source correlations, the \COtwo dispersion energy is the published \SI{169.21}{\kelvin}, and the five interaction parameters are refitted.
+Its pressure/species subtotal, 30.555, is close to F1's 30.331, but its heat cost is 10.347 against 1.726, making the total cost 40.902 against 32.057.
+On the 54 canonical pressures at 100--\SI{120}{\degreeCelsius} it gives 54.98\,\% against 30.84\,\% for F1, and its calculated pressures are too low.
 At 15 wt\% \MEA, F6 gives 46.58\,\% against 105.54\,\% for F1, but at 45 wt\% it is farther from the measurements than F1 (\cref{tab:residual-summary}), so neither fit carries over consistently between amine concentrations.
 
 % P:results-14
 F6 changes the reaction laws, the \COtwo dispersion energy and the refitted interactions together, so the difference from F1 does not isolate the effect of the reaction laws.
 Both fits use their reaction correlations over the same declared domain, 293.15--\SI{393.15}{\kelvin}, which extends beyond the source ranges; the R4 source correlation, for example, ends at \SI{323.15}{\kelvin}.
 The comparison therefore assesses model behavior beyond the fitted temperatures.
-Data at or below \SI{60}{\degreeCelsius} do not distinguish between the two temperature descriptions, and the better higher-temperature agreement of F1 comes with fixed values estimated from data at 80--\SI{120}{\degreeCelsius} (\cref{sec:parameters}).
+The pressure/species subtotal at or below \SI{60}{\degreeCelsius} alone gives little distinction between the two temperature descriptions, and the better higher-temperature agreement of F1 comes with fixed values estimated from data at 80--\SI{120}{\degreeCelsius} (\cref{sec:parameters}).
 For modelers, the temperature response of this model must come from data that carry it directly, such as heat of absorption or equilibrium measurements above \SI{60}{\degreeCelsius}.
 
 \subsection{Comparison with published models}\label{sec:results-literature}
@@ -148,13 +113,13 @@ Published pressure deviations for 30 wt\% \MEA cover different row sets and temp
 \subsection{Scope and limitations}\label{sec:results-limits}
 % P:results-16
 F1 describes \COtwo partial pressure in 30 wt\% \MEA, fitted at 40 and \SI{60}{\degreeCelsius}, and liquid speciation, fitted at 20--\SI{60}{\degreeCelsius}; its comparisons at 80--\SI{120}{\degreeCelsius} rest partly on fixed values estimated with data at those temperatures.
-Its ion parameters are effective values: the \MEAH and \MEACOO parameters were fitted to speciation data, the \HCOthree--water coefficient lies on its bound, and the \MEAH--water slope is not determined.
+Its ion parameters are effective values: the \MEAH and \MEACOO parameters were fitted to speciation data, the \HCOthree--water coefficient lies on its bound, and the \MEAH--water slope has only conditional precision.
 The conditional standard errors treat residuals as independent and exclude the uncertainty of the fixed inputs.
 The Matin numerical values were checked against Table~S.1, while the calculations treat the reported \SI{21}{\degreeCelsius} as equivalent to \SI{20}{\degreeCelsius}.
 
 % P:results-17
-Liquid density is not fitted.
-At an assumed pressure of \SI{101325}{\pascal}, which the source does not report, F1 overestimates the four loaded densities of Amundsen et al.\ at 50 and \SI{70}{\degreeCelsius} and loadings 0.3 and 0.4~mol \COtwo/mol \MEA, on a \COtwo-free 30 wt\% \MEA solvent basis, by 13.0--17.8\,\%~\cite[Table~3, p.~3097]{Amundsen2009}.
-The source gives a general uncertainty estimate of \(\pm\SI{0.002}{\gram\per\cubic\centi\metre}\) for loaded solutions but excludes the highest temperatures and loadings from it~\cite[pp.~3099--3100]{Amundsen2009}, so these deviations are not weighted by uncertainty.
-Heat capacity and heat of absorption were not evaluated for F1.
-The parameter set is therefore a phase- and speciation-equilibrium model; absorber and stripper calculations would require density and caloric qualification first.
+The physical equation-of-state fit contains no density targets; a separate density-only volume translation uses four Amundsen et al.\ calibration states at 50 and \SI{70}{\degreeCelsius} and loadings 0.3 and 0.4~mol \COtwo/mol \MEA, on a \COtwo-free 30 wt\% solvent basis~\cite[Table~3, p.~3097]{Amundsen2009}.
+For those four calibration states, at an assumed pressure of \SI{100000}{\pascal}, the translated density deviations range from \(-0.15\) to \(+0.25\)\,\%.
+The translation is \(v_{\mathrm{corr}}=v_{\mathrm{EOS}}+c(x_{\MEAH}+x_{\MEACOO})\), with \(c=\SI{39.5143}{\cubic\centi\metre\per\mole}\); it changes only the reported density, not equilibrium or calorics.
+The source does not report the measurement pressure, and its general uncertainty estimate of \(\pm\SI{0.002}{\gram\per\cubic\centi\metre}\) for loaded solutions excludes the highest temperatures and loadings~\cite[pp.~3099--3100]{Amundsen2009}.
+These four calibrated deviations do not establish density transfer, and the model remains unqualified for absorber and stripper calculations.

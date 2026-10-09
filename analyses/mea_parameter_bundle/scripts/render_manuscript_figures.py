@@ -146,41 +146,6 @@ def speciation_figure():
     save(fig, "speciation")
 
 
-def born_off_figure():
-    mechanism = read("born-off-mechanism.csv")
-    f1 = {r["identity"]: float(r["ln_pred_over_obs"]) for r in read("pressure.csv")
-          if r["problem"] == "F1" and r["kind"] == "packet"}
-    fig, axes = plt.subplots(2, 2, figsize=(FULL_WIDTH, 5.2), layout="constrained", sharex=True)
-    for col, t in enumerate((313.15, 333.15)):
-        part = sorted((r for r in mechanism if float(r["nominal_T_K"]) == t), key=lambda r: float(r["loading"]))
-        x = [float(r["loading"]) for r in part]
-        top, bottom = axes[0, col], axes[1, col]
-        top.axhspan(-0.3, 0.3, color="#777777", alpha=0.12, linewidth=0)
-        top.axhline(0, color="#777777", linewidth=0.6)
-        top.scatter(x, [f1[r["state"]] for r in part], marker="o", color="black", s=12, label="F1, Born term")
-        # F3 ln ratio = F1 ln ratio + Delta ln p at the same state (identity of the retained decomposition).
-        top.scatter(x, [f1[r["state"]] + float(r["dlnp"]) for r in part], marker="s", facecolors="none",
-                    edgecolors="#D55E00", s=14, linewidths=0.7, label="F3, Born term removed and refitted")
-        top.set_title(f"({'ab'[col]}) Fitted pressures, {t - 273.15:.0f} °C", loc="left")
-        bottom.axhline(0, color="#777777", linewidth=0.6)
-        for column, label, marker, color in (("dQ", r"$\Delta Q$, activity sum", "^", "#0072B2"),
-                                             ("dS", r"$\Delta S$, speciation sum", "v", "#D55E00"),
-                                             ("dlnp", r"$\Delta\ln p_{\mathrm{CO_2}}$", "o", "black"),
-                                             ("dH", r"$\Delta H$, vapor and reference", "+", "#009E73")):
-            bottom.scatter(x, [float(r[column]) for r in part], marker=marker, s=12, linewidths=0.7,
-                           label=label, **({"color": color} if marker == "+" else
-                                           {"facecolors": "none", "edgecolors": color}))
-        bottom.set_title(f"({'cd'[col]}) F3 $-$ F1 decomposition, {t - 273.15:.0f} °C", loc="left")
-        bottom.set_xlabel(LOADING)
-        for ax in (top, bottom):
-            ax.grid(alpha=0.18)
-    axes[0, 0].set_ylabel(r"$\ln(p_{\mathrm{calc}}/p_{\mathrm{obs}})$")
-    axes[1, 0].set_ylabel("Change (ln units)")
-    handles = axes[0, 0].get_legend_handles_labels()[0] + axes[1, 0].get_legend_handles_labels()[0]
-    fig.legend(handles=handles, loc="outside lower center", ncol=3, frameon=False)
-    save(fig, "born-off-mechanism")
-
-
 def pool_figure():
     rows = [r for r in read("pool-effect.csv") if r["source"] == "Matin2012" and r["species"] == "HCO3-"]
     costs = read("pool-effect-costs.csv")
@@ -244,7 +209,6 @@ if __name__ == "__main__":
     apply_style()
     pressure_figure()
     speciation_figure()
-    born_off_figure()
     pool_figure()
     if os.environ.get('FINAL_HEAT_160'):
         heat_figure()
