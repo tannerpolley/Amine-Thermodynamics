@@ -11,42 +11,24 @@ candidate-specific notebook copies or parallel status notes.
 
 ## Current limited-domain working record
 
-On 2026-10-03 the investigator adopted the reviewed #160 F1″ candidate with
-its stated limits. [Selected parameters](results/selected-current-best-parameters.json)
-are byte-identical to the retained candidate, SHA-256
-`756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b`;
-the active Engine wheel is `48a639e78d00ef88a2f7e66ed1e3d89831ca0ad5267322330d44f48c34926060`.
-The [current notebook statement](notebook.qmd#working-record-160) owns the
-conditions, retained comparisons and limits. [History](results/parameter-record-history.csv)
-records the actual replaced #154 SHA `ae92bac5` and explains the earlier
-metadata omission without assigning a prior adoption date.
+On 2026-10-08 the investigator adopted the reviewed heat-augmented F1 fit
+(#147/#170): the #160 141 pressure/species targets plus the 8 Vinjarapu heats
+of absorption, with the unchanged density-only volume translation.
+[Selected parameters](results/selected-current-best-parameters.json) are
+byte-identical to [heat-160/A-parameters.json](results/heat-160/A-parameters.json),
+SHA-256 `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`.
+The Engine wheel is built from ePC-SAFT `026b3031`, SHA-256
+`94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a`, kept at
+`ePC-SAFT/build/wheels/main-026b3031/`. The [notebook](notebook.qmd) owns the
+conditions, retained comparisons and limits, including the 100–120 °C pressure
+trade-off. [History](results/parameter-record-history.csv) lists every
+replaced record.
 
-This working use is limited to 30 wt% MEA on a CO₂-free basis at 40–80 °C;
-pressure calibration is at 40/60 °C, species calibration at 20–60 °C, and the
-80 °C comparison is weaker. The empirical volume translation applies to
-reported density only. Engine parameter loading does not apply it
-automatically; native molar density, equilibrium and calorics retain their
-original meanings. The candidate's frozen metadata and the absorber handoff
-retain their pre-adoption wording. Solution Cp misses remain reported; #124
-keeps its original unmet joint requirements. Investigator promotion for the
-raw-LaTeX manuscript remains pending.
-
-For the focused adoption checks, use the private ignored environment from the
-repository root. The existing `.venv` symlink and its #154 environment remain
-untouched. The wheel cache directory name differs from the wheel's actual
-SHA-256; verify the file itself against the identity above.
-
-```bash
-adoption_wheel=/home/tnnrpolley21/.cache/epcsaft/wheels/8d9d3fcc30f47f36905a90d3f95754e41c4e1712ce160267c2de26e85b16d969/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl
-sha256sum "$adoption_wheel"
-timeout 120 uv venv tmp/adoption-160-venv --python 3.13
-timeout 120 uv pip install --python tmp/adoption-160-venv/bin/python "$adoption_wheel" pytest numpy pandas scipy pyyaml
-timeout 120 uv pip install --python tmp/adoption-160-venv/bin/python --no-deps -e .
-timeout 120 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
-  uv run --no-project --python tmp/adoption-160-venv/bin/python python -m pytest -q \
-  tests/test_source_corrections_152.py::test_declared_domain_pre_dispatch_and_protected_rows \
-  analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_pinned_engine_state_and_cached_replay
-```
+This working use is limited to 30 wt% MEA on a CO₂-free basis at 40–80 °C.
+The empirical volume translation applies to reported density only; native
+molar density, equilibrium and calorics keep their original meanings.
+Solution Cp misses remain reported; #124 keeps its original unmet joint
+requirements.
 
 ## Presentation map
 
@@ -73,7 +55,7 @@ CSV/JSON files resolve only in the repository checkout, not in `_site/`.
 
 The following strict-certification and archive commands belong to the older
 figure/heat/thermal generation records. They require their owners to regenerate
-and certify current results before they can package the adopted #160 notebook;
+and certify current results before they can package the adopted notebook;
 changing the selected record does not update those historical outputs. This
 adoption renders the notebook and home page without model execution and
 produces no certification stamp or new absorber archive.
