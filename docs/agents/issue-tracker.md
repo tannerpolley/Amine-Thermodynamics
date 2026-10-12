@@ -28,6 +28,13 @@ available. One mergeable implementation unit should be one leaf. GitHub
 becomes authoritative immediately after publication; do not create a second
 local lifecycle ledger.
 
+Every issue belongs to a milestone. Create issues with `--milestone`, choosing
+from 03 - Ionic Regression, 04 - Manuscript Submission, Extension - Other
+Amines and Tooling - Project Infrastructure (add a milestone only for a new
+workstream). `.github/workflows/issue-milestone.yml` assigns a title-keyword
+fallback when an issue is opened, reopened or demilestoned without one;
+correct a wrong fallback by hand.
+
 Preserve existing labels. Do not infer lifecycle state from legacy
 `status:*` labels: derive readiness from the issue contract, dependencies,
 claims, pull requests, CI, and verification evidence.
