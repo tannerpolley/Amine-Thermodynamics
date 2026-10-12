@@ -1,0 +1,69 @@
+# Schreckenberg measured-route refit, issue 172
+
+Execution follows the [accepted design](https://github.com/tannerpolley/Amine-Thermodynamics/issues/172#issuecomment-6131080825) and [amendment 2](https://github.com/tannerpolley/Amine-Thermodynamics/issues/172#issuecomment-6131424985). Amendment 1 is withdrawn. This directory owns the numerical evidence; the parent task owns notebook Summarize and independent delivered Review. No parameter adoption is authorized by these results.
+
+Both retained F1 branches pass all five owner ceilings and the gas-root falsifier, but neither passes the declared 73-point phase-family gate. Smaller-dV has 0 two-phase stable passes, 0 single-liquid stable passes, 59 unresolved and 14 failed points; larger-dV has 0, 0, 60 and 13 respectively. Native descending liquid-support splits establish the failed classifications; unresolved trial evidence prevents the other passes under amendment 2. No branch is eligible for acceptance or adoption. These are completed bounded numerical checks, not a claim of experimental liquid-liquid equilibrium.
+
+## Source admission and coefficient reduction
+
+All 14 unloaded MEA–water observations at 298.15 K were transcribed from Agieienko & Buchner (2024), ESI p2 Tables S1/S2. Each row retains the source SHA-256 and table/row locators in `inputs/agieienko-buchner-2024.csv` and the canonical dielectric observation CSV. The ESI water endpoint cites Eiberweiser et al. (2015), ESI reference 2. The 80.48 wt% row uses S1 density composition c1=13.47 mol/L and S2 dielectric composition c1=13.50 mol/L as reported; rows are joined by sample composition. The ESI is third-party and remains ignored outside this commit. Admission identities and the visual table verification are in `inputs/source-admission.json`.
+
+The fit uses native unloaded EOS densities, with reported measured densities retained for comparison. The dielectric scale is 0.01 times epsilon, from S2 footnote a; it is not an independent Gaussian error model. Native density reduction gives q=[0.825385924618, −0.457686088708], rank 2, singular values [102.074181275, 16.525876652], and discriminant 3.243639912. Both coefficient branches are admissible:
+
+| Branch | d_V L/mol | d_T K |
+|---|---:|---:|
+| smaller-dV | 0.246061063738 | 2439.616606178 |
+| larger-dV | 0.732073980317 | 1017.929100533 |
+
+Both have d_V>0 and d_T>393.15 K. Dielectric RMSE is 0.282026 and maximum absolute residual 0.498913. Algebra/native replay differs by at most 2.84e-14. `dielectric/reduction.json` retains the two roots, residuals, conditional covariance and coherent ±1% sensitivity. Yang et al. §2.1 equations 1a/2a/2b and Table 6 supply the water/temperature conventions; the MEA coefficients derive from the admitted ESI. Temperature dependence and the near-zero CO2 choice remain model assumptions rather than independently measured loaded-MEA coefficients.
+
+## Same-wheel replay and fitting
+
+The unchanged current record replays to cost 32.056684909, pressure AARD 13.814747343%, species AARD 7.891434571%, Vinjarapu heat RMSE 2.126572297 kJ/mol and Arcis RMSE 8.364420938 kJ/mol. Cross-wheel relative cost difference is 3.782e-8 and maximum weighted residual difference 1.7625e-6, within the declared numerical tolerances. The unchanged index-63 classifier control is unresolved, with an indeterminate trial and failed trial optimizer; see `classifier-check.json`.
+
+All 24 original attempts retain the original starts and requested limits of 40 iterations and 2250 s, with 32 Engine workers and OMP/OpenBLAS/MKL threads one. `execution-original-19.json` preserves the first 19 records; `execution.json` appends the five resumed attempts. The interrupted larger-dV/F4-B log and original start/targets are preserved separately. Twenty fits converged; four used the full 40-iteration budget. All 24 endpoint replays have identical ordered targets/observations and available predictions, relative cost difference ≤3.82e-13 and maximum weighted residual difference ≤1.788e-11. F4/F5 retain their 167-row cost and separately replay the common 149 rows. Arcis's 14 heat observations remain outside every objective.
+
+For each branch/problem, the table selects the lower-cost complete converged start. Budget-limited endpoints are retained as `endpoint-parameters.json` and are ineligible for selection. F3 fits five interaction coordinates with Born removed; other fits use seven coordinates. Native wall time excludes process startup; `comparison.csv` also gives command wall time. Exact A/B costs, coordinate dispersions and termination evidence are in `comparison.json` and `fit-attempts.csv`.
+
+| Branch | Fit/start | Cost | Common149 cost | Pressure AARD % | Species AARD % | Vinjarapu RMSE kJ/mol | Arcis RMSE kJ/mol | Born diameters MEAH / carbamate Å | Iterations | Native wall s |
+|---|---|---:|---:|---:|---:|---:|---:|---|---:|---:|
+| smaller-dV | F1-A | 31.123727 | 31.123727 | 13.898024 | 7.850682 | 1.972619 | 8.217657 | 2.894133 / 2.000000 | 34 | 464.766 |
+| smaller-dV | F2-A | 142.260070 | 142.260070 | 72.820694 | 11.296506 | 2.994918 | 8.572726 | 5.000000 / 5.000000 | 12 | 135.096 |
+| smaller-dV | F3-A | 83.506805 | 83.506805 | 47.451795 | 9.367195 | 2.839061 | 8.470190 | Not applicable | 16 | 127.213 |
+| smaller-dV | F4-A | 42.294899 | 36.161324 | 13.970414 | 8.420352 | 1.922542 | 8.014043 | 3.763703 / 2.000000 | 10 | 141.432 |
+| smaller-dV | F5-B | 146.278155 | 142.306083 | 73.445628 | 11.172378 | 3.039578 | 8.734581 | 5.000000 / 5.000000 | 18 | 168.871 |
+| smaller-dV | F6-B | 38.987370 | 38.987370 | 14.574809 | 7.834359 | 4.745475 | 9.768236 | 2.000000 / 2.000000 | 20 | 160.263 |
+| larger-dV | F1-A | 31.101299 | 31.101299 | 13.853838 | 7.845874 | 2.016679 | 8.189743 | 2.931721 / 2.000000 | 33 | 220.659 |
+| larger-dV | F2-A | 141.599621 | 141.599621 | 72.535840 | 11.270416 | 3.026757 | 8.560909 | 5.000000 / 5.000000 | 12 | 149.949 |
+| larger-dV | F3-A | 83.910827 | 83.910827 | 47.643822 | 9.386298 | 2.829099 | 8.486110 | Not applicable | 16 | 114.213 |
+| larger-dV | F4-B | 42.284538 | 36.171003 | 13.911271 | 8.422403 | 1.961774 | 7.991754 | 3.811122 / 2.000000 | 10 | 105.958 |
+| larger-dV | F5-B | 145.604300 | 141.644498 | 73.149193 | 11.149856 | 3.070331 | 8.721132 | 5.000000 / 5.000000 | 18 | 148.711 |
+| larger-dV | F6-B | 39.263372 | 39.263372 | 14.579463 | 7.828214 | 4.821643 | 9.749406 | 2.000000 / 2.000000 | 38 | 196.895 |
+
+All eight problems with two complete starts agree in relative cost within 1e-6. The other four problems each have one limited endpoint: smaller F1-B/F6-A and larger F1-B/F6-A. Their endpoint relative-cost differences are respectively 2.595e-13, 7.760e-4, 2.671e-4 and 1.275e-3; these are endpoint comparisons, not two-converged-start agreement. The larger F1-B native message “Number of iterations: 5” describes the final active-bound Ceres round. The native total is 40 iterations and 41 history entries. Frozen Engine `engine/native/regression/fit.cpp:895–951` shares the budget across rounds and retains the last round's message. Smaller F1-B analogously reports a last round of 3. `termination-diagnosis.json` records the controls, available serialized fields, histories and source locator. No return code is used as a physical-model diagnosis.
+
+## Gas-root falsifier and low-density limits
+
+Both retained F1 models remove the stable gas-density ionic root at the declared 318.15 K, 3699.0803800848512 Pa, loading 0.25557798094241313 case. Vapor/liquid density selectors coincide on one stable native root: 58308.520802 and 58300.762875 mol/m3 for the smaller/larger branch. Native EOS pressure and the newly solved physical states are retained in each `falsifier.json`, `falsifier-solve.json` and `falsifier-contributions.csv`. The old packing witness has Gibbs/RT higher than the new physical state by 3085.615 and 3069.293; it is not a converged gas state, and this comparison does not establish global stability.
+
+The fixed-composition 1e-6–100 mol/m3 scans retain extensive contributions divided by RT at the retained amount 86.704475477 mol: hard-chain, dispersion, association, Debye–Hückel, bulk Born and shell Born contributions. At 1e-6 mol/m3, epsilon is 1.000000001035 and bulk Born/RT is approximately −3.394e-6 / −3.377e-6. Shell Born/RT remains finite, approximately −901.531 / −895.853, with the fixed ionic-region permittivity. This is the disclosed model limit rather than an additional rejection gate. F3 retains Debye–Hückel without Born and does not remove the gas root.
+
+## Identification and loaded dielectric comparison
+
+Both F1 weighted optimizer Jacobians have full rank 7 at the 1e-14 s_max cutoff and free-coordinate rank 4 conditional on held bounds. Optimizer condition numbers are 84.532 / 92.584 and column-normalized conditions 58.758 / 63.545. Three coordinates lie at bounds: bicarbonate–water k_ij=+0.5, carbamate–MEAH k_ij=−1, and carbamate Born diameter=2 Å. MEAH Born diameter correlates with MEAH–water interaction at +0.87652 / +0.87522. Its local scale sensitivity is approximately 0.642 / 0.654 Å conditional on those held bounds; bound-coordinate uncertainty is unavailable. These diameters are effective fitted coordinates, not independently determined ionic sizes or confidence intervals. `identification.json` retains both Jacobians, full/free singular values, active bounds, gradients, correlations and conditional free covariance for all 24 endpoints; `identification.csv` summarizes the retained 12 fits. The physical Jacobian is d(predicted observable)/d(physical coordinate), while the optimizer Jacobian differentiates the weighted residual with scaled coordinates.
+
+All 28 Hajj Table 1 rows have available reacting-liquid predictions at 30 wt% CO2-free MEA, loadings 0.22/0.33/0.44/0.55 and 293.15–353.15 K, with stated pressure assumption 101325 Pa. Dielectric RMSE is 17.36673 / 17.40758 for smaller/larger F1. Every row and native density is retained in `hajj.csv`/`hajj.json`. All 28 predictions are below the reported static values, with mean residuals −15.83879 / −15.89694 and maximum absolute residuals 29.17438 / 29.19127; `hajj-summary.json` retains the loading-wise statistics. Hajj §3.3.1 warns that the static-limit extrapolation is uncertain, especially cold/high-loading samples. This comparison adds no fit weight, coefficient tuning or objective. Arcis and Hajj are out-of-objective comparisons, not untouched validation after their prior use.
+
+## Execution limits and corrections
+
+`failures-and-deviations.json` retains every known interruption and implementation correction. Host cancellation of original F4-B and the later family-only shell produced no native termination diagnosis. Superseded family outputs under `first-implementation` and `model-instance-error` names remain for audit, and must not supply final counts. Initial family code replayed successful cold coordinates and then incorrectly used a replacement Mixture for stability. Engine rejected a result bound to another model. The final point worker keeps its originating Mixture alive, exactly reproduces the retained valid cold solve, and applies the unchanged original nearest-start/bubble sequence. `model-binding-probe.json` demonstrates rejection by a replacement model and completion through the original model. This corrects result ownership without altering physics, support, starts, tolerances or native work limits.
+
+The owner's memory steer is applied only to family parallelism. A full single-point run peaks at 116644 KiB. Before each variant `free -m` and MemAvailable are recorded; workers=min(32,floor(0.6 MemAvailable/peak RSS)). Numeric threads remain one and the shell starts with nice -n10. `family-execution.json` records each pool, timing and completed counts; `family-points/` saves each completed original point immediately. The original running campaign was reniced to10 (36 processes; `priority-change.json`). Five resumed fits had outer and inner nice -n10, so actual child niceness was 19; the unchanged fit controls are recorded. No fit budget, start, tolerance, model or adoption rule was changed.
+
+## Provenance and handoff
+
+The wheel is the frozen merged-main `epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl`, Engine commit `81d1e38a3f04f60834719f758f35a079974ccd57`, engine tree `8a65aa43a0c9bc0b9f04e5cdec99e872b8acdfc5`, SHA-256 `3fd8140211aac1fb1e82807f066cdf507be733b36c6c27bf41377e7bb939aa86`. Later Engine main advancement did not replace the explicitly frozen wheel. Installed wheel bytes and private ignored environment import paths were verified. No Engine source was imported. `inputs/` and the final SHA-256 inventory identify sources, retained inputs, drivers and outputs. The selected current record SHA-256 remains `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`.
+
+LINE_ACCOUNTING_PENDING
+
+Agieienko residuals are dielectric calibration at 298.15 K; reactive/heat residuals are calibration/model comparison on already used observations. Same-wheel replay, root and phase checks are bounded numerical verification. Temperature extrapolation and loaded dielectric response remain conditional predictions. The 30 wt% working-use boundary, source chemistry, CO2 assumption, finite shell and conditional identification limits remain. No global phase-stability, unique ion-property, concentration-transfer, absorber/stripper or broad physical-validation conclusion follows. `stability-diagnosis.json` identifies the exact frozen native guards behind control refusals: the old SST permittivity lacks the required low-density ionic-trial limit, and corrected positive support can be refused. These are unresolved numerical/capability evidence, not observed phase failure. No guard or support is weakened. The selected record, notebook and manuscript are unchanged; results are ready for parent Summarize followed by fresh independent delivered Review when final checks are complete.

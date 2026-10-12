@@ -14,7 +14,7 @@ from reduce_dielectric import OUT, ROOT, SHA, declaration, write
 
 for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
     os.environ[key] = '1'
-problem = sys.argv[3] if sys.argv[1:2] == ['fit'] else 'F1'
+problem = sys.argv[3] if sys.argv[1:2] == ['fit'] else Path(sys.argv[2]).parent.name[:2] if sys.argv[1:2] == ['evaluate'] else 'F1'
 os.environ.update(FINAL_RERUN='1', FINAL_POOL=str(int(problem in ('F4','F5'))),
     SENSITIVITY_OUTPUT=str(OUT/'scratch'))
 sys.path[:0] = [str(ROOT/'analyses/mea_parameter_bundle/scripts'),

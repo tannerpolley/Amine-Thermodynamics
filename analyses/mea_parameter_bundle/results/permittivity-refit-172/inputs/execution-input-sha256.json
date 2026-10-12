@@ -30,5 +30,11 @@
     "analyses/mea_parameter_bundle/results/permittivity-screen-172/diagnose_family.py": "acb0160d80eaf3cd75824ad24dfb719ead474fa876c720a81965d24789e43eff",
     "analyses/mea_parameter_bundle/results/permittivity-screen-172/permittivity_probe.py": "9ee7585e8a8668fd9f575b073deeff3202e6ef99e4cbb8c8ac3e4cb3c7a52751",
     "analyses/mea_parameter_bundle/results/permittivity-screen-172/recover_family.py": "bc00f421fdfc8b2ff21c291a916d0124957f32641a042f571089f888b323707e"
-  }
+  },
+  "driver_commit": "6149ea3",
+  "baseline_family_notes": "First implementation made an extra replay of successful cold states because native results were not transported. Final family driver keeps each same-temperature native cold result in its worker and applies the exact original recovery sequence. Earlier baseline family numbers are retained under *-first-implementation names and are superseded by final family.json.",
+  "resume_notes": "Five missing original attempts resumed; first19 accounting unchanged. Original F4-B host interruption has separate log/input hashes and no native stopping record.",
+  "candidate_metadata_notes": "Executed start snapshots remain byte-identical. Final candidate/limited-endpoint dielectric provenance is corrected before replay; all physical parameter and reaction values are asserted unchanged.",
+  "post_replay_notes": "F4/F5 replay activates its original pooled objective; complete converged fits alone participate in selection. Limited usable endpoints receive separate endpoint-parameters.json and replay but are ineligible.",
+  "final_family_model_identity": "One native Mixture per point worker retained from its exactly repeated cold solve through recovery, own-bubble diagnosis and stability. Retained valid cold payloads supply unchanged same-temperature nearest-start coordinates. Prior model-instance stability refusals are superseded; exact model-binding probe retained."
 }

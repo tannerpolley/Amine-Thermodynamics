@@ -1,0 +1,24 @@
+{
+  "commands": [
+    [
+      "nice",
+      "-n",
+      "10",
+      "python3",
+      "scripts/validate_mea_data_library.py",
+      "--write-inventory"
+    ],
+    [
+      "nice",
+      "-n",
+      "10",
+      "python3",
+      "scripts/validate_mea_data_library.py"
+    ]
+  ],
+  "result": "MEA evidence-library validation passed",
+  "checked_rows": "14 admitted dielectric rows; retained objective/start identities all24; native history dimensions and requested budgets; all24 endpoint replays",
+  "script_parsing": "All new scientific Python drivers parsed with ast.parse",
+  "checked_UTC": "2026-10-12T21:43:16.683151+00:00",
+  "final_static_checks": "All24 native histories, widths5/7, row counts149/167, replay tolerances and unchanged original19 execution records passed. All final driver files parse."
+}

@@ -58,6 +58,22 @@ def declaration(record, pair):
     return result
 
 
+def measured_provenance(record):
+    result = copy.deepcopy(record)
+    source = 'permittivity-refit-172'
+    result['sources'] = [r for r in result['sources'] if r['source_id'] not in ('permittivity-screen-172',source)]
+    result['sources'].append(dict(source_id=source,citation='Issue172 accepted design/amendment2; Yang2024 Table6; AgieienkoBuchner2024 ESI S1/S2',
+        use_basis='Two-branch dielectric calibration and reactive comparison; not adopted'))
+    locators = {'water':'Yang2024 Table6 fixed water dV=0.3777 L/mol dT=1403 K',
+        'monoethanolamine':'dielectric/reduction.json; admitted ESI p2 Tables S1/S2 SHA256 e928ae3242dc38612f0fbf44e7e1e42c296ca49e3638ac4ef2f08a6c50f0f5c2',
+        'carbon-dioxide':'Issue172 Design section2; assumed near-zero-volume CO2 coefficients; not measured'}
+    for component in result['components']:
+        for coefficient in component['coefficients']:
+            if coefficient['family'] in ('dielectric_volume','dielectric_temperature'):
+                coefficient['provenance'].update(source_id=source,locator=locators[component['component_id']])
+    return result
+
+
 def main():
     assert hashlib.sha256(WHEEL.read_bytes()).hexdigest() == SHA
     assert hashlib.sha256(CURRENT.read_bytes()).hexdigest() == '66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778'
