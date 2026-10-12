@@ -1,0 +1,34 @@
+name: Issue milestone
+
+# Every issue belongs to a milestone. Agents pass --milestone at creation; this
+# assigns a fallback from title keywords when an issue is opened, reopened or
+# demilestoned without one.
+on:
+  issues:
+    types: [opened, reopened, demilestoned]
+
+permissions:
+  issues: write
+
+jobs:
+  milestone:
+    if: github.event.issue.milestone == null
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign fallback milestone
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          TITLE: ${{ github.event.issue.title }}
+        run: |
+          shopt -s nocasematch
+          manuscript='\b(manuscript|paper|submission|chemrxiv|preprint|journal|release|publication|reproducibility)\b'
+          amines='\b(mdea|dea|amp|piperazine|other amines?)\b'
+          tooling='\b(tooling|repin|workflow|ci|preview|infrastructure|zotero|snakemake|rename|agents\.md|container(ized)?|apis?)\b'
+          if [[ $TITLE =~ $manuscript ]]; then milestone='04 - Manuscript Submission'
+          elif [[ $TITLE =~ $amines ]]; then milestone='Extension - Other Amines'
+          elif [[ $TITLE =~ $tooling ]]; then milestone='Tooling - Project Infrastructure'
+          else milestone='03 - Ionic Regression'
+          fi
+          gh issue edit "$NUMBER" --repo "$REPO" --milestone "$milestone"
