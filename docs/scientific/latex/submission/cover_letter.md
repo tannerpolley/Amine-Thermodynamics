@@ -8,7 +8,7 @@ The manuscript extends the explicit-ion electrolyte PC-SAFT treatment of reactiv
 
 Within the tested model, bounds, objective and two starts, refitting without the Born term raises fitted-pressure AARD from 13.81 % to 80.25 %. This does not establish physical necessity or a mechanism. The SSM+DS form has the lower cost with and without titration bicarbonate pool targets. A matched no-heat comparison shows that fitting heat improves Vinjarapu RMSE from 4.57 to 2.13 kJ/mol CO2 while Hilliard/Jou packet pressure AARD rises from 18.12 % to 29.66 % at 100 °C and from 24.11 % to 41.55 % at 120 °C. The separately named canonical cohort is also reported. This is a trade-off of the tested parameterization, without a uniquely diagnosed chemistry cause.
 
-The manuscript reports conditional parameter errors, the independent Arcis heat discrepancy, concentration-transfer limitations and four density-translation calibration states. The public data statement remains pending a deposit or immutable manuscript tag.
+The manuscript reports conditional parameter errors, the independent Arcis heat discrepancy, concentration-transfer limitations and four density-translation calibration states. The data, parameter files and calculation scripts are archived on Zenodo (https://doi.org/10.5281/zenodo.23323107).
 
 Sincerely,
 

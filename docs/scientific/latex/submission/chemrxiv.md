@@ -31,7 +31,7 @@ Recommend **CC BY 4.0** (the owner's earlier choice). ChemRxiv offers CC BY 4.0,
 ## Statements (exact text from sections/data_code_availability.tex)
 
 **Data availability**
-Data availability statement pending the public deposit or immutable manuscript tag. The Supplementary Material lists the calculation files and software identities used by this draft.
+The processed observations, parameter files, calculation scripts, results and figure data supporting this article are archived on Zenodo, https://doi.org/10.5281/zenodo.23323107, as release manuscript-fpe-v1 of https://github.com/tannerpolley/Amine-Thermodynamics (MIT licence). The ePC-SAFT software used for all calculations is attached to that GitHub release as a binary wheel with its SHA-256 hash; its source code is not public. The Supplementary Material lists the calculation files and software identities.
 
 **Funding**
 This research received no specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
@@ -54,5 +54,5 @@ Not verified. ChemRxiv's help pages were inaccessible. Expected route: after jou
 
 ## Owner checklist
 1. Upload to ChemRxiv: main PDF, supplement and the fields above.
-2. Publish the data deposit or immutable manuscript tag, then complete the pending data-availability statement.
+2. Data deposit: done, Zenodo DOI 10.5281/zenodo.23323107 (release manuscript-fpe-v1, 2026-10-12).
 3. After acceptance, update the preprint with the DOI link.
