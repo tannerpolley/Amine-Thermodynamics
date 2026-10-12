@@ -1,0 +1,23 @@
+{
+  "engine_commit": "81d1e38a3f04f60834719f758f35a079974ccd57",
+  "source_path": "engine/native/equilibrium/phase_stability.cpp",
+  "source_sha256": "522f6669c05e8689f2c11df207a6c30bb7a4b5cff1f5bcfc44151227aa4703e2",
+  "checks": [
+    {
+      "message": "permittivity model has no low-density limit; declare phases",
+      "locator": "phase_stability.cpp:144-147",
+      "cause": "Declared ionic trial support requires DensityTemperature or DipolarPerturbation permittivity. The retained current SST model fails this native capability requirement; affected baseline points are unresolved, not an observed unstable phase."
+    },
+    {
+      "message": "stability correction destroys positive support",
+      "locator": "phase_stability.cpp:192-199",
+      "cause": "The native algebraic material-balance correction requires every corrected supported inventory to remain strictly positive. This guard refused the control calculation. Exact rejected correction inventories are not returned, so their magnitude is unverified. The point remains unresolved without weakening support or balance requirements."
+    },
+    {
+      "message": "no_resolved_descent with optimizer_success=False",
+      "locator": "phase_stability.cpp:522-528; issue172 amendment2",
+      "cause": "The native report can retain no_resolved_descent and completed=True even when a trial optimizer has not converged. Amendment2 independently requires every optimizer to succeed. A no-descent label alone does not qualify the point."
+    }
+  ],
+  "scope": "Read-only diagnosis through the exact frozen Engine source and retained calls. No Engine edit, extra start, tolerance change or budget expansion."
+}

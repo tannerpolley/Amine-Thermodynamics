@@ -1,0 +1,2523 @@
+[
+  {
+    "branch": "smaller-dV",
+    "problem": "F1",
+    "selected_start": "A",
+    "complete_starts": 1,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 8.903550e-15 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 31.123726998618142,
+        "iterations": 34,
+        "wall_s": 464.76588277500014,
+        "trial_failures": 0,
+        "physical": [
+          0.15392520995256428,
+          -0.2491333991357337,
+          0.5,
+          -1.0,
+          47.998081126429625,
+          2.894133339552694,
+          2.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          6
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "limit_reached",
+        "message": "Maximum number of iterations reached. Number of iterations: 3.",
+        "usable": true,
+        "final_cost": 31.123726998610067,
+        "iterations": 40,
+        "wall_s": 242.0901107259997,
+        "trial_failures": 0,
+        "physical": [
+          0.15392519453645098,
+          -0.24913338088384013,
+          0.5,
+          -1.0,
+          47.998088119237295,
+          2.8941334094526345,
+          2.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          6
+        ],
+        "eligible": false
+      }
+    ],
+    "all_starts_relative_cost_difference": 2.59458585800861e-13,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 1.541611330257986e-08,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.8251893579845913e-08,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 6.992807669803369e-06,
+      "component/protonated-monoethanolamine/born_diameter": 6.989994050243808e-08,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": null,
+    "coordinate_dispersion": null,
+    "iterations": 34,
+    "wall_s": 464.76588277500014,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.15392520995256428,
+      "pair/protonated-monoethanolamine/water/k_ij": -0.2491333991357337,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 47.998081126429625,
+      "component/protonated-monoethanolamine/born_diameter": 2.894133339552694,
+      "component/carbamate-anion/born_diameter": 2.0
+    },
+    "complete_starts_agree_1e_6": null,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/smaller-dV/F1-A/parameters.json",
+    "replay": {
+      "relative_cost": 8.815170815523743e-14,
+      "max_abs_weighted_residual": 4.581376944479132e-12
+    },
+    "cost": 31.1237269986154,
+    "common149_cost": 31.1237269986154,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 8.37789621321589,
+        "AARD_percent": 13.898024499673987
+      },
+      "species": {
+        "n": 94,
+        "cost": 21.31611327488488,
+        "AARD_percent": 7.850681776225985
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 1.9726190688833651,
+    "Arcis_RMSE_kJ_mol": 8.21765716062576,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 105965.36259242616,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 58308.520801918734,
+          "EOS_pressure_Pa": 3699.08037842154,
+          "bulk_epsilon": 61.3565563740527,
+          "hard_chain_over_RT": 417.49151232207265,
+          "dispersion_over_RT": -936.351817380996,
+          "association_over_RT": -189.8202552557833,
+          "DH_over_RT": -26.206123930056286,
+          "Born_bulk_over_RT": -3225.4703129277523,
+          "Born_shell_over_RT": -901.5313832879439,
+          "residual_A_over_RT": -4861.888380460458
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 105965.36259242616,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 58308.520801918734,
+          "EOS_pressure_Pa": 3699.08037842154,
+          "bulk_epsilon": 61.3565563740527,
+          "hard_chain_over_RT": 417.49151232207265,
+          "dispersion_over_RT": -936.351817380996,
+          "association_over_RT": -189.8202552557833,
+          "DH_over_RT": -26.206123930056286,
+          "Born_bulk_over_RT": -3225.4703129277523,
+          "Born_shell_over_RT": -901.5313832879439,
+          "residual_A_over_RT": -4861.888380460458
+        }
+      ],
+      "old_witness_G_over_RT": -16053.71295802546,
+      "old_witness_rows": [
+        -110.9398399669445,
+        -108.12994331384179,
+        -233.94594152444708,
+        41.7195084068004,
+        -74.78768243736145,
+        -257.4141959829981,
+        157.30858491591317,
+        103.65099853653747,
+        -127.82188072715172,
+        -0.9078828950610153,
+        -136.04771064436426,
+        -118.84813297660325,
+        -267.56179698127613,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -19139.327763759957,
+      "witness_delta_G_over_RT": 3085.6148057344963,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.002643070363702224,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.9532064621752703e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.394079716021349e-06,
+          "Born_shell_over_RT": -901.5313832879435,
+          "residual_A_over_RT": -901.6740307885734
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1079549.4218775332,
+          "bulk_epsilon": 1.1035124121551487,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.9512200902525685,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946820663054,
+          "Born_bulk_over_RT": -307.5705713237416,
+          "Born_shell_over_RT": -901.5313832879435,
+          "residual_A_over_RT": -2001.4460776547635
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "Hajj": {
+      "available": 28,
+      "n": 28,
+      "RMSE_epsilon": 17.366732045951697,
+      "warning": "Hajj section 3.3.1: static-limit extrapolation uncertain, particularly cold/high loading; comparison only"
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 70,
+      "failed": 3
+    },
+    "gates": {
+      "cost": true,
+      "pressure": true,
+      "species": true,
+      "Vinjarapu": true,
+      "Arcis": true,
+      "gas_root": true,
+      "family": false
+    }
+  },
+  {
+    "branch": "smaller-dV",
+    "problem": "F2",
+    "selected_start": "A",
+    "complete_starts": 2,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 4.223497e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 142.26006971377402,
+        "iterations": 12,
+        "wall_s": 135.0964953870007,
+        "trial_failures": 0,
+        "physical": [
+          0.03034182702923016,
+          0.2835978512254938,
+          0.5,
+          -1.0,
+          42.21747358236102,
+          5.0,
+          5.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 4.559139e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 142.2600697137772,
+        "iterations": 19,
+        "wall_s": 179.63714710400018,
+        "trial_failures": 0,
+        "physical": [
+          0.030341848099107047,
+          0.2835978366579516,
+          0.5,
+          -1.0,
+          42.21746869616608,
+          5.0,
+          5.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 2.2376141545620008e-14,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 2.106987688488271e-08,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.4567542228061114e-08,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 4.8861949437650765e-06,
+      "component/protonated-monoethanolamine/born_diameter": 0.0,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": 2.2376141545620008e-14,
+    "coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 2.106987688488271e-08,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.4567542228061114e-08,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 4.8861949437650765e-06,
+      "component/protonated-monoethanolamine/born_diameter": 0.0,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "iterations": 12,
+    "wall_s": 135.0964953870007,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.03034182702923016,
+      "pair/protonated-monoethanolamine/water/k_ij": 0.2835978512254938,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 42.21747358236102,
+      "component/protonated-monoethanolamine/born_diameter": 5.0,
+      "component/carbamate-anion/born_diameter": 5.0
+    },
+    "complete_starts_agree_1e_6": true,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/smaller-dV/F2-A/parameters.json",
+    "replay": {
+      "relative_cost": 5.1514348342607263e-14,
+      "max_abs_weighted_residual": 9.540285228482048e-13
+    },
+    "cost": 142.26006971376668,
+    "common149_cost": 142.26006971376668,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 96.79716916066468,
+        "AARD_percent": 72.82069355005464
+      },
+      "species": {
+        "n": 94,
+        "cost": 41.805131843507034,
+        "AARD_percent": 11.296506078571161
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 2.9949181388816166,
+    "Arcis_RMSE_kJ_mol": 8.572725678204073,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 91968.1781464453,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57199.06082249107,
+          "EOS_pressure_Pa": 3699.080381135325,
+          "bulk_epsilon": 60.20812758745112,
+          "hard_chain_over_RT": 399.96770899985734,
+          "dispersion_over_RT": -841.3209990792064,
+          "association_over_RT": -186.2299973218392,
+          "DH_over_RT": -26.704348030028342,
+          "Born_bulk_over_RT": -3506.3624670435997,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -4160.650102474817
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 91968.1781464453,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57199.06082249107,
+          "EOS_pressure_Pa": 3699.080381135325,
+          "bulk_epsilon": 60.20812758745112,
+          "hard_chain_over_RT": 399.96770899985734,
+          "dispersion_over_RT": -841.3209990792064,
+          "association_over_RT": -186.2299973218392,
+          "DH_over_RT": -26.704348030028342,
+          "Born_bulk_over_RT": -3506.3624670435997,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -4160.650102474817
+        }
+      ],
+      "old_witness_G_over_RT": -16521.20049190183,
+      "old_witness_rows": [
+        -96.12140881554078,
+        -49.834007506481385,
+        -249.90945355813727,
+        67.31491931156253,
+        -70.39669856595012,
+        -210.1872388065001,
+        272.05803138026823,
+        202.06650908740556,
+        -104.48822427032357,
+        -0.9125349592695364,
+        -113.47866575924358,
+        -52.79221949561962,
+        -285.4122791306541,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -19810.7355974167,
+      "witness_delta_G_over_RT": 3289.5351055148712,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.0026430703547079843,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.759850020796e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.690821728456481e-06,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -0.1426477954384139
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1153305.7133322812,
+          "bulk_epsilon": 1.1035124121551487,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.7581334150771986,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946820663054,
+          "Born_bulk_over_RT": -334.4612509591095,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -1126.6122873270126
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 73,
+      "failed": 0
+    }
+  },
+  {
+    "branch": "smaller-dV",
+    "problem": "F3",
+    "selected_start": "A",
+    "complete_starts": 2,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 1.706865e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 83.50680530506017,
+        "iterations": 16,
+        "wall_s": 127.21333524700094,
+        "trial_failures": 0,
+        "physical": [
+          0.11120818380690065,
+          0.019265225347441607,
+          0.5,
+          -1.0,
+          113.08383407698204
+        ],
+        "active_bounds": [
+          2,
+          3
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 4.458611e-14 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 83.5068053050696,
+        "iterations": 16,
+        "wall_s": 123.10715446100039,
+        "trial_failures": 0,
+        "physical": [
+          0.11120818622903278,
+          0.01926522347651377,
+          0.5,
+          -1.0,
+          113.08383350259679
+        ],
+        "active_bounds": [
+          2,
+          3
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 1.1299686889496275e-13,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 2.42213213375031e-09,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.870927836267189e-09,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 5.743852540263106e-07
+    },
+    "starts_relative_cost_difference": 1.1299686889496275e-13,
+    "coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 2.42213213375031e-09,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.870927836267189e-09,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 5.743852540263106e-07
+    },
+    "iterations": 16,
+    "wall_s": 127.21333524700094,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.11120818380690065,
+      "pair/protonated-monoethanolamine/water/k_ij": 0.019265225347441607,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 113.08383407698204
+    },
+    "complete_starts_agree_1e_6": true,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/smaller-dV/F3-A/parameters.json",
+    "replay": {
+      "relative_cost": 4.063416270128073e-14,
+      "max_abs_weighted_residual": 5.715428130770306e-13
+    },
+    "cost": 83.50680530506357,
+    "common149_cost": 83.50680530506357,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 51.43264154245339,
+        "AARD_percent": 47.45179511398953
+      },
+      "species": {
+        "n": 94,
+        "cost": 28.762161638047118,
+        "AARD_percent": 9.367194871519795
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 2.839061292247399,
+    "Arcis_RMSE_kJ_mol": 8.470190141107132,
+    "falsifier": {
+      "gas_root_absent": false,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 2,
+          "density_branch": "Vapor",
+          "pressure_density_derivative": 5223.06186663744,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 179.31156114756257,
+          "EOS_pressure_Pa": 3699.08038019983,
+          "bulk_epsilon": 1.1856097222168964,
+          "hard_chain_over_RT": 0.538228136973386,
+          "dispersion_over_RT": -3.3132713632902493,
+          "association_over_RT": -1.2440536099725552,
+          "DH_over_RT": -862.896082821776,
+          "Born_bulk_over_RT": 0.0,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -866.9151796580653
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 2,
+          "density_branch": "Liquid",
+          "pressure_density_derivative": 85848.58764911363,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 56730.88671473248,
+          "EOS_pressure_Pa": 3699.080377593932,
+          "bulk_epsilon": 59.723509275424355,
+          "hard_chain_over_RT": 392.80218423900004,
+          "dispersion_over_RT": -874.5068949667628,
+          "association_over_RT": -184.72782130160934,
+          "DH_over_RT": -26.920320021338323,
+          "Born_bulk_over_RT": 0.0,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -693.3528520507105
+        }
+      ],
+      "old_witness_G_over_RT": -809.8880511958906,
+      "old_witness_rows": [
+        -11.158945908338126,
+        -9.889925208113109,
+        -8.509017858239769,
+        -18.08485958601315,
+        -24.526640627778455,
+        -29.646810493512696,
+        -37.924328022500355,
+        -7.838864863851468,
+        -4.3740026401877055,
+        -0.8543073173161868,
+        -28.516203422978688,
+        -12.964590830496014,
+        -44.08429066773807,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": null,
+      "witness_delta_G_over_RT": null,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.002643070467282555,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.8510507222887212e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": 0.0,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -0.14264410552869247
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -228899.60183625916,
+          "bulk_epsilon": 1.1035124121551487,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.8492208750262202,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946820663054,
+          "Born_bulk_over_RT": 0.0,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -792.242123827852
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 31,
+      "failed": 42
+    }
+  },
+  {
+    "branch": "smaller-dV",
+    "problem": "F4",
+    "selected_start": "A",
+    "complete_starts": 2,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 4.838321e-14 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 42.29489891587989,
+        "iterations": 10,
+        "wall_s": 141.43153557300138,
+        "trial_failures": 0,
+        "physical": [
+          0.07560090074975163,
+          -0.13188088428730702,
+          0.33378725162225564,
+          -1.0,
+          60.82149338805608,
+          3.7637031818197344,
+          2.0
+        ],
+        "active_bounds": [
+          3,
+          6
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 7.391880e-15 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 42.294898915884446,
+        "iterations": 10,
+        "wall_s": 116.81604781100032,
+        "trial_failures": 0,
+        "physical": [
+          0.07560085850223672,
+          -0.13188081298276555,
+          0.33378715132077336,
+          -1.0,
+          60.821503450251996,
+          3.76370417105123,
+          2.0
+        ],
+        "active_bounds": [
+          3,
+          6
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 1.076862471117458e-13,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 4.224751491699319e-08,
+      "pair/protonated-monoethanolamine/water/k_ij": 7.130454146575538e-08,
+      "pair/bicarbonate-anion/water/k_ij": 1.0030148228645785e-07,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 1.0062195912041716e-05,
+      "component/protonated-monoethanolamine/born_diameter": 9.892314953852122e-07,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": 1.076862471117458e-13,
+    "coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 4.224751491699319e-08,
+      "pair/protonated-monoethanolamine/water/k_ij": 7.130454146575538e-08,
+      "pair/bicarbonate-anion/water/k_ij": 1.0030148228645785e-07,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 1.0062195912041716e-05,
+      "component/protonated-monoethanolamine/born_diameter": 9.892314953852122e-07,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "iterations": 10,
+    "wall_s": 141.43153557300138,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.07560090074975163,
+      "pair/protonated-monoethanolamine/water/k_ij": -0.13188088428730702,
+      "pair/bicarbonate-anion/water/k_ij": 0.33378725162225564,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 60.82149338805608,
+      "component/protonated-monoethanolamine/born_diameter": 3.7637031818197344,
+      "component/carbamate-anion/born_diameter": 2.0
+    },
+    "complete_starts_agree_1e_6": true,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/smaller-dV/F4-A/parameters.json",
+    "replay": {
+      "relative_cost": 5.6288307348495437e-14,
+      "max_abs_weighted_residual": 3.485327044333575e-12
+    },
+    "cost": 42.29489891587751,
+    "common149_cost": 36.161323898408014,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 9.109890349055545,
+        "AARD_percent": 13.9704143791904
+      },
+      "species": {
+        "n": 94,
+        "cost": 25.659413779804822,
+        "AARD_percent": 8.420352050965889
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 1.922542214851557,
+    "Arcis_RMSE_kJ_mol": 8.014042681063117,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 101639.89675587082,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57987.85589586711,
+          "EOS_pressure_Pa": 3699.080384003083,
+          "bulk_epsilon": 61.024628394863626,
+          "hard_chain_over_RT": 412.34631522961183,
+          "dispersion_over_RT": -914.2186258247503,
+          "association_over_RT": -188.77808516605046,
+          "DH_over_RT": -26.34820420796069,
+          "Born_bulk_over_RT": -2938.9497334806747,
+          "Born_shell_over_RT": -799.2077655221252,
+          "residual_A_over_RT": -4455.156098971949
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 101639.89675587082,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57987.85589586711,
+          "EOS_pressure_Pa": 3699.080384003083,
+          "bulk_epsilon": 61.024628394863626,
+          "hard_chain_over_RT": 412.34631522961183,
+          "dispersion_over_RT": -914.2186258247503,
+          "association_over_RT": -188.77808516605046,
+          "DH_over_RT": -26.34820420796069,
+          "Born_bulk_over_RT": -2938.9497334806747,
+          "Born_shell_over_RT": -799.2077655221252,
+          "residual_A_over_RT": -4455.156098971949
+        }
+      ],
+      "old_witness_G_over_RT": -15972.354228288705,
+      "old_witness_rows": [
+        -111.09543945360666,
+        -95.89799039740626,
+        -230.38694075338896,
+        29.017124264546794,
+        -66.26961396313872,
+        -259.44620024248036,
+        147.61613402128853,
+        112.60069088639739,
+        -131.7568672821597,
+        -0.9031222458452415,
+        -135.3628355314465,
+        -105.78520934744685,
+        -264.2139696578289,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -18752.351798610278,
+      "witness_delta_G_over_RT": 2779.997570321573,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.002643070372906193,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.9068799171067114e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.092860180173609e-06,
+          "Born_shell_over_RT": -799.2077655221256,
+          "residual_A_over_RT": -799.3504127210729
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1003942.2046935997,
+          "bulk_epsilon": 1.1035124121551487,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.9049678130326908,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946820663054,
+          "Born_bulk_over_RT": -280.27413974694747,
+          "Born_shell_over_RT": -799.2077655221258,
+          "residual_A_over_RT": -1871.7797760349317
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 70,
+      "failed": 3
+    }
+  },
+  {
+    "branch": "smaller-dV",
+    "problem": "F5",
+    "selected_start": "B",
+    "complete_starts": 2,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 7.911858e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 146.27815510472462,
+        "iterations": 9,
+        "wall_s": 111.47420075199989,
+        "trial_failures": 0,
+        "physical": [
+          0.030713552695617624,
+          0.279830586678627,
+          0.5,
+          -1.0,
+          37.87113027058574,
+          5.0,
+          5.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 9.151486e-14 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 146.2781551046265,
+        "iterations": 18,
+        "wall_s": 168.87093728199943,
+        "trial_failures": 0,
+        "physical": [
+          0.03071374177385315,
+          0.27983046381943866,
+          0.5,
+          -1.0,
+          37.871125038634815,
+          5.0,
+          5.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 6.707203880409463e-13,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 1.8907823552682945e-07,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.22859188322888e-07,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 5.231950922279793e-06,
+      "component/protonated-monoethanolamine/born_diameter": 0.0,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": 6.707203880409463e-13,
+    "coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 1.8907823552682945e-07,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.22859188322888e-07,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 5.231950922279793e-06,
+      "component/protonated-monoethanolamine/born_diameter": 0.0,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "iterations": 18,
+    "wall_s": 168.87093728199943,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.03071374177385315,
+      "pair/protonated-monoethanolamine/water/k_ij": 0.27983046381943866,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 37.871125038634815,
+      "component/protonated-monoethanolamine/born_diameter": 5.0,
+      "component/carbamate-anion/born_diameter": 5.0
+    },
+    "complete_starts_agree_1e_6": true,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/smaller-dV/F5-B/parameters.json",
+    "replay": {
+      "relative_cost": 4.929390229335695e-14,
+      "max_abs_weighted_residual": 1.7497114868092467e-12
+    },
+    "cost": 146.27815510463373,
+    "common149_cost": 142.30608254484704,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 97.63870015081095,
+        "AARD_percent": 73.44562830886294
+      },
+      "species": {
+        "n": 94,
+        "cost": 40.93565350015139,
+        "AARD_percent": 11.172378483277866
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 3.0395779402165193,
+    "Arcis_RMSE_kJ_mol": 8.73458148859532,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 92070.17948716624,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57207.86385841305,
+          "EOS_pressure_Pa": 3699.080382020673,
+          "bulk_epsilon": 60.21723982227686,
+          "hard_chain_over_RT": 400.103718703584,
+          "dispersion_over_RT": -841.9603142397043,
+          "association_over_RT": -186.25831447622096,
+          "DH_over_RT": -26.700320313332334,
+          "Born_bulk_over_RT": -3506.371428519477,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -4161.18665884515
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 92070.17948716624,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57207.86385841305,
+          "EOS_pressure_Pa": 3699.080382020673,
+          "bulk_epsilon": 60.21723982227686,
+          "hard_chain_over_RT": 400.103718703584,
+          "dispersion_over_RT": -841.9603142397043,
+          "association_over_RT": -186.25831447622096,
+          "DH_over_RT": -26.700320313332334,
+          "Born_bulk_over_RT": -3506.371428519477,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -4161.18665884515
+        }
+      ],
+      "old_witness_G_over_RT": -16521.220689989033,
+      "old_witness_rows": [
+        -96.12187307106365,
+        -49.85186077784344,
+        -249.9155103996532,
+        67.3504766031217,
+        -70.41440384517813,
+        -210.1833558182977,
+        272.07231824534983,
+        202.05004858726667,
+        -104.48387701670481,
+        -0.9125351379862137,
+        -113.47913002466116,
+        -52.81007278871334,
+        -285.418335750615,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -19811.26743407343,
+      "witness_delta_G_over_RT": 3290.046744084397,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.0026430703547076395,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.760979377759527e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.690821728456481e-06,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -0.1426477954497075
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1153309.1515115432,
+          "bulk_epsilon": 1.1035124121551487,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.7592615667923175,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946820663054,
+          "Born_bulk_over_RT": -334.4612509591095,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -1126.6134154787278
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 73,
+      "failed": 0
+    }
+  },
+  {
+    "branch": "smaller-dV",
+    "problem": "F6",
+    "selected_start": "B",
+    "complete_starts": 1,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "limit_reached",
+        "message": "iteration limit reached",
+        "usable": true,
+        "final_cost": 39.01764646357208,
+        "iterations": 40,
+        "wall_s": 238.48061360800057,
+        "trial_failures": 0,
+        "physical": [
+          0.2048077793844744,
+          -0.3950249072807603,
+          0.5,
+          -0.7142464914789853,
+          529.0604557305884,
+          2.0,
+          2.0
+        ],
+        "active_bounds": [
+          2,
+          5,
+          6
+        ],
+        "eligible": false
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 8.454553e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 38.98736980326721,
+        "iterations": 20,
+        "wall_s": 160.26335077600015,
+        "trial_failures": 0,
+        "physical": [
+          0.20723654119365492,
+          -0.398683440313398,
+          0.5,
+          -0.7106439379296677,
+          528.1830733977072,
+          2.0,
+          2.0
+        ],
+        "active_bounds": [
+          2,
+          5,
+          6
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 0.0007759735158074713,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 0.0024287618091805296,
+      "pair/protonated-monoethanolamine/water/k_ij": 0.0036585330326376897,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0036025535493175997,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 0.8773823328812114,
+      "component/protonated-monoethanolamine/born_diameter": 0.0,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": null,
+    "coordinate_dispersion": null,
+    "iterations": 20,
+    "wall_s": 160.26335077600015,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.20723654119365492,
+      "pair/protonated-monoethanolamine/water/k_ij": -0.398683440313398,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.7106439379296677,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 528.1830733977072,
+      "component/protonated-monoethanolamine/born_diameter": 2.0,
+      "component/carbamate-anion/born_diameter": 2.0
+    },
+    "complete_starts_agree_1e_6": null,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/smaller-dV/F6-B/parameters.json",
+    "replay": {
+      "relative_cost": 3.83026943495679e-14,
+      "max_abs_weighted_residual": 5.608624675801366e-12
+    },
+    "cost": 38.987369803265715,
+    "common149_cost": 38.987369803265715,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 8.055778898124933,
+        "AARD_percent": 14.574809111572769
+      },
+      "species": {
+        "n": 94,
+        "cost": 21.355500130616402,
+        "AARD_percent": 7.83435893882968
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 4.745475463718242,
+    "Arcis_RMSE_kJ_mol": 9.768236350646042,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 112785.75048943471,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 58788.969870132205,
+          "EOS_pressure_Pa": 3699.0803781328395,
+          "bulk_epsilon": 61.85388079373741,
+          "hard_chain_over_RT": 425.32639014423773,
+          "dispersion_over_RT": -969.7374956828853,
+          "association_over_RT": -191.3887163132546,
+          "DH_over_RT": -25.99609119765928,
+          "Born_bulk_over_RT": -3779.881391889547,
+          "Born_shell_over_RT": -1099.528595961956,
+          "residual_A_over_RT": -5641.2059009010645
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 112785.75048943471,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 58788.969870132205,
+          "EOS_pressure_Pa": 3699.0803781328395,
+          "bulk_epsilon": 61.85388079373741,
+          "hard_chain_over_RT": 425.32639014423773,
+          "dispersion_over_RT": -969.7374956828853,
+          "association_over_RT": -191.3887163132546,
+          "DH_over_RT": -25.99609119765928,
+          "Born_bulk_over_RT": -3779.881391889547,
+          "Born_shell_over_RT": -1099.528595961956,
+          "residual_A_over_RT": -5641.2059009010645
+        }
+      ],
+      "old_witness_G_over_RT": -16221.83068534369,
+      "old_witness_rows": [
+        -111.66350482786828,
+        -131.85784233869637,
+        -240.7402742962137,
+        65.05586232446299,
+        -89.96842008937867,
+        -252.25218072713432,
+        174.55636220483143,
+        86.80584961681481,
+        -120.49550557953407,
+        -0.9170922153412042,
+        -138.39771067778673,
+        -144.18396823266494,
+        -273.94751024478234,
+        -36744541.64066674,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -19880.1472870442,
+      "witness_delta_G_over_RT": 3658.3166017005115,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.0026430703458974344,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.995860775308496e-09,
+          "dispersion_over_RT": -2.0265260125014387e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.976942497879864e-06,
+          "Born_shell_over_RT": -1099.5285959619555,
+          "residual_A_over_RT": -1099.6712440461815
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1225800.4414084493,
+          "bulk_epsilon": 1.1035124121551487,
+          "hard_chain_over_RT": 0.29990801973041953,
+          "dispersion_over_RT": -2.024413159926045,
+          "association_over_RT": -0.698128906264783,
+          "DH_over_RT": -789.9946820663054,
+          "Born_bulk_over_RT": -360.3894364709977,
+          "Born_shell_over_RT": -1099.5285959619557,
+          "residual_A_over_RT": -2252.3353485457187
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 73,
+      "failed": 0
+    }
+  },
+  {
+    "branch": "larger-dV",
+    "problem": "F1",
+    "selected_start": "A",
+    "complete_starts": 1,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 1.626641e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 31.101298571429727,
+        "iterations": 33,
+        "wall_s": 220.65939880100086,
+        "trial_failures": 0,
+        "physical": [
+          0.15397950012086284,
+          -0.2477072201656517,
+          0.5,
+          -1.0,
+          42.62497789620387,
+          2.931720958434088,
+          2.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          6
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "limit_reached",
+        "message": "Maximum number of iterations reached. Number of iterations: 5.",
+        "usable": true,
+        "final_cost": 31.10960757917603,
+        "iterations": 40,
+        "wall_s": 225.77039597000112,
+        "trial_failures": 0,
+        "physical": [
+          0.15384737085158112,
+          -0.24691408642351825,
+          0.5,
+          -1.0,
+          42.897199675812814,
+          2.9055932748805042,
+          2.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          6
+        ],
+        "eligible": false
+      }
+    ],
+    "all_starts_relative_cost_difference": 0.000267088156774558,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 0.00013212926928171664,
+      "pair/protonated-monoethanolamine/water/k_ij": 0.0007931337421334395,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 0.272221779608941,
+      "component/protonated-monoethanolamine/born_diameter": 0.026127683553583747,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": null,
+    "coordinate_dispersion": null,
+    "iterations": 33,
+    "wall_s": 220.65939880100086,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.15397950012086284,
+      "pair/protonated-monoethanolamine/water/k_ij": -0.2477072201656517,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 42.62497789620387,
+      "component/protonated-monoethanolamine/born_diameter": 2.931720958434088,
+      "component/carbamate-anion/born_diameter": 2.0
+    },
+    "complete_starts_agree_1e_6": null,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/larger-dV/F1-A/parameters.json",
+    "replay": {
+      "relative_cost": 6.794564910705958e-14,
+      "max_abs_weighted_residual": 1.7883250436057097e-11
+    },
+    "cost": 31.101298571431837,
+    "common149_cost": 31.101298571431837,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 8.307491023229053,
+        "AARD_percent": 13.853838496280785
+      },
+      "species": {
+        "n": 94,
+        "cost": 21.284612181300485,
+        "AARD_percent": 7.845874466449644
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 2.016679410038664,
+    "Arcis_RMSE_kJ_mol": 8.189743112109081,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 105858.86783486647,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 58300.762875406865,
+          "EOS_pressure_Pa": 3699.080382232387,
+          "bulk_epsilon": 61.34852489351683,
+          "hard_chain_over_RT": 417.3662465569445,
+          "dispersion_over_RT": -935.9850375275229,
+          "association_over_RT": -189.7949980186602,
+          "DH_over_RT": -26.20954376757927,
+          "Born_bulk_over_RT": -3209.578350989637,
+          "Born_shell_over_RT": -895.8532057628828,
+          "residual_A_over_RT": -4840.054889509337
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 105858.86783486647,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 58300.762875406865,
+          "EOS_pressure_Pa": 3699.080382232387,
+          "bulk_epsilon": 61.34852489351683,
+          "hard_chain_over_RT": 417.3662465569445,
+          "dispersion_over_RT": -935.9850375275229,
+          "association_over_RT": -189.7949980186602,
+          "DH_over_RT": -26.20954376757927,
+          "Born_bulk_over_RT": -3209.578350989637,
+          "Born_shell_over_RT": -895.8532057628828,
+          "residual_A_over_RT": -4840.054889509337
+        }
+      ],
+      "old_witness_G_over_RT": -16049.130272757408,
+      "old_witness_rows": [
+        -110.91628034743697,
+        -107.45109101630456,
+        -233.75943455649858,
+        41.08117507152314,
+        -74.38015538540644,
+        -257.5539619039207,
+        156.8307045721078,
+        104.11726190631131,
+        -128.03184622860542,
+        -0.9076190120916061,
+        -135.97751106392087,
+        -118.12463097418967,
+        -267.3870081534807,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -19118.42363855134,
+      "witness_delta_G_over_RT": 3069.293365793932,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.0026430703642124024,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.9525154567145095e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.377364337539775e-06,
+          "Born_shell_over_RT": -895.8532057628838,
+          "residual_A_over_RT": -895.9958532467916
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1075359.510378452,
+          "bulk_epsilon": 1.1035124103306952,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.9505302264637725,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946837985999,
+          "Born_bulk_over_RT": -306.0558234300168,
+          "Born_shell_over_RT": -895.8532057628837,
+          "residual_A_over_RT": -1994.2524641044847
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "Hajj": {
+      "available": 28,
+      "n": 28,
+      "RMSE_epsilon": 17.407580894200567,
+      "warning": "Hajj section 3.3.1: static-limit extrapolation uncertain, particularly cold/high loading; comparison only"
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 70,
+      "failed": 3
+    },
+    "gates": {
+      "cost": true,
+      "pressure": true,
+      "species": true,
+      "Vinjarapu": true,
+      "Arcis": true,
+      "gas_root": true,
+      "family": false
+    }
+  },
+  {
+    "branch": "larger-dV",
+    "problem": "F2",
+    "selected_start": "A",
+    "complete_starts": 2,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 1.798441e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 141.59962124795072,
+        "iterations": 12,
+        "wall_s": 149.948548639999,
+        "trial_failures": 0,
+        "physical": [
+          0.03035461970675643,
+          0.283588978463175,
+          0.5,
+          -1.0,
+          38.89772641790465,
+          5.0,
+          5.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 3.506558e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 141.5996212479724,
+        "iterations": 19,
+        "wall_s": 200.32635714199932,
+        "trial_failures": 0,
+        "physical": [
+          0.03035463922793051,
+          0.28358896495436825,
+          0.5,
+          -1.0,
+          38.89772190645961,
+          5.0,
+          5.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 1.5314846257548715e-13,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 1.9521174079994985e-08,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.350880673989252e-08,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 4.511445041543993e-06,
+      "component/protonated-monoethanolamine/born_diameter": 0.0,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": 1.5314846257548715e-13,
+    "coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 1.9521174079994985e-08,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.350880673989252e-08,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 4.511445041543993e-06,
+      "component/protonated-monoethanolamine/born_diameter": 0.0,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "iterations": 12,
+    "wall_s": 149.948548639999,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.03035461970675643,
+      "pair/protonated-monoethanolamine/water/k_ij": 0.283588978463175,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 38.89772641790465,
+      "component/protonated-monoethanolamine/born_diameter": 5.0,
+      "component/carbamate-anion/born_diameter": 5.0
+    },
+    "complete_starts_agree_1e_6": true,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/larger-dV/F2-A/parameters.json",
+    "replay": {
+      "relative_cost": 7.416289804496046e-14,
+      "max_abs_weighted_residual": 1.4164225348167747e-12
+    },
+    "cost": 141.59962124796124,
+    "common149_cost": 141.59962124796124,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 96.25088697781604,
+        "AARD_percent": 72.53584031409402
+      },
+      "species": {
+        "n": 94,
+        "cost": 41.607320536564465,
+        "AARD_percent": 11.270415666051182
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 3.026757194405432,
+    "Arcis_RMSE_kJ_mol": 8.560908678368493,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 91963.6447081882,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57198.66930812231,
+          "EOS_pressure_Pa": 3699.080383560409,
+          "bulk_epsilon": 60.207721277921046,
+          "hard_chain_over_RT": 399.96166108253675,
+          "dispersion_over_RT": -841.2925875274861,
+          "association_over_RT": -186.22873798055508,
+          "DH_over_RT": -26.704527743435158,
+          "Born_bulk_over_RT": -3506.362067393155,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -4160.626259562095
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 91963.6447081882,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57198.66930812231,
+          "EOS_pressure_Pa": 3699.080383560409,
+          "bulk_epsilon": 60.207721277921046,
+          "hard_chain_over_RT": 399.96166108253675,
+          "dispersion_over_RT": -841.2925875274861,
+          "association_over_RT": -186.22873798055508,
+          "DH_over_RT": -26.704527743435158,
+          "Born_bulk_over_RT": -3506.362067393155,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -4160.626259562095
+        }
+      ],
+      "old_witness_G_over_RT": -16521.203681153387,
+      "old_witness_rows": [
+        -96.12126763424834,
+        -49.83138823809801,
+        -249.9092688356951,
+        67.31349601921639,
+        -70.39628566249692,
+        -210.18731486147382,
+        272.0575533178461,
+        202.06709583011485,
+        -104.48844157318408,
+        -0.9125349504069997,
+        -113.47852451147848,
+        -52.791209020190294,
+        -285.412094418045,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -19810.661478426995,
+      "witness_delta_G_over_RT": 3289.457797273608,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.0026430703547080017,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.75979988006507e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.690821728456481e-06,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -0.1426477954379125
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1153305.5531087578,
+          "bulk_epsilon": 1.1035124103306952,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.758083327725009,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946837985999,
+          "Born_bulk_over_RT": -334.46124561704704,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -1126.6122336298924
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 73,
+      "failed": 0
+    }
+  },
+  {
+    "branch": "larger-dV",
+    "problem": "F3",
+    "selected_start": "A",
+    "complete_starts": 2,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 3.749556e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 83.91082688484931,
+        "iterations": 16,
+        "wall_s": 114.2130989239995,
+        "trial_failures": 0,
+        "physical": [
+          0.11097276446205609,
+          0.019316670661774393,
+          0.5,
+          -1.0,
+          115.40837689873695
+        ],
+        "active_bounds": [
+          2,
+          3
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 2.968822e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 83.91082688485389,
+        "iterations": 16,
+        "wall_s": 108.35235757299961,
+        "trial_failures": 0,
+        "physical": [
+          0.11097276743612149,
+          0.01931666836577961,
+          0.5,
+          -1.0,
+          115.40837619419635
+        ],
+        "active_bounds": [
+          2,
+          3
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 5.4532834297703784e-14,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 2.974065396732506e-09,
+      "pair/protonated-monoethanolamine/water/k_ij": 2.295994783185762e-09,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 7.045405965300233e-07
+    },
+    "starts_relative_cost_difference": 5.4532834297703784e-14,
+    "coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 2.974065396732506e-09,
+      "pair/protonated-monoethanolamine/water/k_ij": 2.295994783185762e-09,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 7.045405965300233e-07
+    },
+    "iterations": 16,
+    "wall_s": 114.2130989239995,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.11097276446205609,
+      "pair/protonated-monoethanolamine/water/k_ij": 0.019316670661774393,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 115.40837689873695
+    },
+    "complete_starts_agree_1e_6": true,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/larger-dV/F3-A/parameters.json",
+    "replay": {
+      "relative_cost": 3.3861802251067274e-14,
+      "max_abs_weighted_residual": 1.4164225348167747e-12
+    },
+    "cost": 83.91082688484647,
+    "common149_cost": 83.91082688484647,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 51.75070094138889,
+        "AARD_percent": 47.64382169089164
+      },
+      "species": {
+        "n": 94,
+        "cost": 28.87487748712068,
+        "AARD_percent": 9.386297992269158
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 2.8290986552636865,
+    "Arcis_RMSE_kJ_mol": 8.486109836872007,
+    "falsifier": {
+      "gas_root_absent": false,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 2,
+          "density_branch": "Vapor",
+          "pressure_density_derivative": 5223.061618261208,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 179.31160830557928,
+          "EOS_pressure_Pa": 3699.0803802026867,
+          "bulk_epsilon": 1.1856097677598405,
+          "hard_chain_over_RT": 0.5382282787973801,
+          "dispersion_over_RT": -3.313314574639197,
+          "association_over_RT": -1.2440539325882278,
+          "DH_over_RT": -862.8961074874383,
+          "Born_bulk_over_RT": 0.0,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -866.9152477158683
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 2,
+          "density_branch": "Liquid",
+          "pressure_density_derivative": 85850.49972016066,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 56731.05359341263,
+          "EOS_pressure_Pa": 3699.0803809236113,
+          "bulk_epsilon": 59.723680980539946,
+          "hard_chain_over_RT": 392.80471481276044,
+          "dispersion_over_RT": -874.5188637276489,
+          "association_over_RT": -184.72835541861468,
+          "DH_over_RT": -26.920242973864994,
+          "Born_bulk_over_RT": 0.0,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -693.3627473073681
+        }
+      ],
+      "old_witness_G_over_RT": -809.8547856864282,
+      "old_witness_rows": [
+        -11.159947351192198,
+        -9.892153919661979,
+        -8.508435291290883,
+        -18.085490332173357,
+        -24.523891658500595,
+        -29.647532690792264,
+        -37.925353541814125,
+        -7.837978971627901,
+        -4.373723389974564,
+        -0.8543073211579435,
+        -28.517204870478253,
+        -12.96670928039515,
+        -44.083708096138324,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": null,
+      "witness_delta_G_over_RT": null,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.0026430704672825477,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.8510743948993096e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": 0.0,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -0.1426441055289292
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -228899.67952136893,
+          "bulk_epsilon": 1.1035124103306952,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.8492445145730783,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946837985999,
+          "Born_bulk_over_RT": 0.0,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -792.2421491996935
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 30,
+      "failed": 43
+    }
+  },
+  {
+    "branch": "larger-dV",
+    "problem": "F4",
+    "selected_start": "B",
+    "complete_starts": 2,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 9.800001e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 42.28453780797943,
+        "iterations": 10,
+        "wall_s": 173.1873772070012,
+        "trial_failures": 0,
+        "physical": [
+          0.07506818391144669,
+          -0.12993824268973453,
+          0.33104894102416005,
+          -1.0,
+          55.96337719324298,
+          3.8111250531786256,
+          2.0
+        ],
+        "active_bounds": [
+          3,
+          6
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 1.621571e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 42.284537807938776,
+        "iterations": 10,
+        "wall_s": 105.95833813200005,
+        "trial_failures": 0,
+        "physical": [
+          0.07506829876935578,
+          -0.12993843817725853,
+          0.331049185369232,
+          -1.0,
+          55.96334064652801,
+          3.8111220452168872,
+          2.0
+        ],
+        "active_bounds": [
+          3,
+          6
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 9.61515897958345e-13,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 1.1485790908649651e-07,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.954875240017806e-07,
+      "pair/bicarbonate-anion/water/k_ij": 2.443450719535889e-07,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 3.654671496633455e-05,
+      "component/protonated-monoethanolamine/born_diameter": 3.007961738354936e-06,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": 9.61515897958345e-13,
+    "coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 1.1485790908649651e-07,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.954875240017806e-07,
+      "pair/bicarbonate-anion/water/k_ij": 2.443450719535889e-07,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 3.654671496633455e-05,
+      "component/protonated-monoethanolamine/born_diameter": 3.007961738354936e-06,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "iterations": 10,
+    "wall_s": 105.95833813200005,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.07506829876935578,
+      "pair/protonated-monoethanolamine/water/k_ij": -0.12993843817725853,
+      "pair/bicarbonate-anion/water/k_ij": 0.331049185369232,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 55.96334064652801,
+      "component/protonated-monoethanolamine/born_diameter": 3.8111220452168872,
+      "component/carbamate-anion/born_diameter": 2.0
+    },
+    "complete_starts_agree_1e_6": true,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/larger-dV/F4-B/parameters.json",
+    "replay": {
+      "relative_cost": 3.885780586188048e-14,
+      "max_abs_weighted_residual": 5.253936175009244e-12
+    },
+    "cost": 42.28453780794042,
+    "common149_cost": 36.171003149611686,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 9.040081387986122,
+        "AARD_percent": 13.911271176171446
+      },
+      "species": {
+        "n": 94,
+        "cost": 25.66962976907854,
+        "AARD_percent": 8.422403180227333
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 1.9617741079924944,
+    "Arcis_RMSE_kJ_mol": 7.991753622195538,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 101533.67640596862,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57979.821979469736,
+          "EOS_pressure_Pa": 3699.0803786525007,
+          "bulk_epsilon": 61.01631123639538,
+          "hard_chain_over_RT": 412.218258570449,
+          "dispersion_over_RT": -913.7774301736259,
+          "association_over_RT": -188.75202208100725,
+          "DH_over_RT": -26.351784207703062,
+          "Born_bulk_over_RT": -2927.0901116494465,
+          "Born_shell_over_RT": -794.9704750469207,
+          "residual_A_over_RT": -4438.723564588254
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 101533.67640596862,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57979.821979469736,
+          "EOS_pressure_Pa": 3699.0803786525007,
+          "bulk_epsilon": 61.01631123639538,
+          "hard_chain_over_RT": 412.218258570449,
+          "dispersion_over_RT": -913.7774301736259,
+          "association_over_RT": -188.75202208100725,
+          "DH_over_RT": -26.351784207703062,
+          "Born_bulk_over_RT": -2927.0901116494465,
+          "Born_shell_over_RT": -794.9704750469207,
+          "residual_A_over_RT": -4438.723564588254
+        }
+      ],
+      "old_witness_G_over_RT": -15969.051984761867,
+      "old_witness_rows": [
+        -111.08471308929445,
+        -95.3883301072037,
+        -230.2473224477819,
+        28.529762327195435,
+        -65.95732901872418,
+        -259.5396757553254,
+        147.24737886062493,
+        112.95193759576881,
+        -131.9159758545538,
+        -0.9029252729456927,
+        -135.31730449165173,
+        -105.24246247592559,
+        -264.08309597720347,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -18736.67801931402,
+      "witness_delta_G_over_RT": 2767.6260345521514,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.0026430703732870098,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.906033108437309e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.080386474707931e-06,
+          "Born_shell_over_RT": -794.97047504692,
+          "residual_A_over_RT": -795.113122233385
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1000814.5116877848,
+          "bulk_epsilon": 1.1035124103306952,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.9041223150299762,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946837985999,
+          "Born_bulk_over_RT": -279.14377152634313,
+          "Born_shell_over_RT": -794.97047504692,
+          "residual_A_over_RT": -1866.4112735734136
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 70,
+      "failed": 3
+    }
+  },
+  {
+    "branch": "larger-dV",
+    "problem": "F5",
+    "selected_start": "B",
+    "complete_starts": 2,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 6.023819e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 145.60429994180754,
+        "iterations": 9,
+        "wall_s": 92.61031588200001,
+        "trial_failures": 0,
+        "physical": [
+          0.030678220974285825,
+          0.2798757934546904,
+          0.5,
+          -1.0,
+          34.6038200728956,
+          5.0,
+          5.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "eligible": true
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 2.092526e-13 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 145.60429994171324,
+        "iterations": 18,
+        "wall_s": 148.71081747800008,
+        "trial_failures": 0,
+        "physical": [
+          0.030678401619883833,
+          0.27987567597080254,
+          0.5,
+          -1.0,
+          34.60381526477967,
+          5.0,
+          5.0
+        ],
+        "active_bounds": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 6.476679049160628e-13,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 1.8064559800801128e-07,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.174838878403861e-07,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 4.808115932064538e-06,
+      "component/protonated-monoethanolamine/born_diameter": 0.0,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": 6.476679049160628e-13,
+    "coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 1.8064559800801128e-07,
+      "pair/protonated-monoethanolamine/water/k_ij": 1.174838878403861e-07,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 4.808115932064538e-06,
+      "component/protonated-monoethanolamine/born_diameter": 0.0,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "iterations": 18,
+    "wall_s": 148.71081747800008,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.030678401619883833,
+      "pair/protonated-monoethanolamine/water/k_ij": 0.27987567597080254,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -1.0,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 34.60381526477967,
+      "component/protonated-monoethanolamine/born_diameter": 5.0,
+      "component/carbamate-anion/born_diameter": 5.0
+    },
+    "complete_starts_agree_1e_6": true,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/larger-dV/F5-B/parameters.json",
+    "replay": {
+      "relative_cost": 6.661338147750939e-15,
+      "max_abs_weighted_residual": 4.229727679216921e-12
+    },
+    "cost": 145.6042999417142,
+    "common149_cost": 141.64449840341848,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 97.07024727380451,
+        "AARD_percent": 73.14919349149714
+      },
+      "species": {
+        "n": 94,
+        "cost": 40.76034328554214,
+        "AARD_percent": 11.149856064303714
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 3.0703309689409863,
+    "Arcis_RMSE_kJ_mol": 8.721131906515193,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 92064.1684134457,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57207.34539853277,
+          "EOS_pressure_Pa": 3699.0803810198445,
+          "bulk_epsilon": 60.21670210822739,
+          "hard_chain_over_RT": 400.09570701593833,
+          "dispersion_over_RT": -841.9226340638357,
+          "association_over_RT": -186.25664664702265,
+          "DH_over_RT": -26.700558047063648,
+          "Born_bulk_over_RT": -3506.370899777032,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -4161.155031519015
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 92064.1684134457,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 57207.34539853277,
+          "EOS_pressure_Pa": 3699.0803810198445,
+          "bulk_epsilon": 60.21670210822739,
+          "hard_chain_over_RT": 400.09570701593833,
+          "dispersion_over_RT": -841.9226340638357,
+          "association_over_RT": -186.25664664702265,
+          "DH_over_RT": -26.700558047063648,
+          "Born_bulk_over_RT": -3506.370899777032,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -4161.155031519015
+        }
+      ],
+      "old_witness_G_over_RT": -16521.21762899088,
+      "old_witness_rows": [
+        -96.12190097427593,
+        -49.84929904216527,
+        -249.91511475762616,
+        67.34830903304072,
+        -70.41318914948198,
+        -210.18362884558005,
+        272.0714044062753,
+        202.05108505071848,
+        -104.48412220751035,
+        -0.912535126515748,
+        -113.47915786125962,
+        -52.809119845679206,
+        -285.4179401216543,
+        -36744541.64122745,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -19811.17779320501,
+      "witness_delta_G_over_RT": 3289.9601642141315,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.0026430703547076616,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.99586077546436e-09,
+          "dispersion_over_RT": -1.760912756842034e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.690821728456481e-06,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -0.14264779544904127
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1153308.9411180117,
+          "bulk_epsilon": 1.1035124103306952,
+          "hard_chain_over_RT": 0.2999080197443223,
+          "dispersion_over_RT": -1.7591950171295896,
+          "association_over_RT": -0.6981289062648297,
+          "DH_over_RT": -789.9946837985999,
+          "Born_bulk_over_RT": -334.46124561704704,
+          "Born_shell_over_RT": 0.0,
+          "residual_A_over_RT": -1126.613345319297
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 73,
+      "failed": 0
+    }
+  },
+  {
+    "branch": "larger-dV",
+    "problem": "F6",
+    "selected_start": "B",
+    "complete_starts": 1,
+    "attempts": [
+      {
+        "start": "A",
+        "status": "limit_reached",
+        "message": "iteration limit reached",
+        "usable": true,
+        "final_cost": 39.31349698193821,
+        "iterations": 40,
+        "wall_s": 181.114416066,
+        "trial_failures": 0,
+        "physical": [
+          0.20425330372885914,
+          -0.39223514933841835,
+          0.5,
+          -0.7144887133619904,
+          522.5145940076014,
+          2.023170299877701,
+          2.0
+        ],
+        "active_bounds": [
+          2,
+          6
+        ],
+        "eligible": false
+      },
+      {
+        "start": "B",
+        "status": "converged",
+        "message": "Function tolerance reached. |cost_change|/cost: 5.302372e-14 <= 1.000000e-12",
+        "usable": true,
+        "final_cost": 39.26337237090712,
+        "iterations": 38,
+        "wall_s": 196.89479149700003,
+        "trial_failures": 0,
+        "physical": [
+          0.208378579890035,
+          -0.3988564032432277,
+          0.5,
+          -0.7073088447036147,
+          520.8428367012075,
+          2.0,
+          2.0
+        ],
+        "active_bounds": [
+          2,
+          5,
+          6
+        ],
+        "eligible": true
+      }
+    ],
+    "all_starts_relative_cost_difference": 0.0012749975168608399,
+    "all_starts_coordinate_dispersion": {
+      "pair/carbamate-anion/water/k_ij": 0.0041252761611758615,
+      "pair/protonated-monoethanolamine/water/k_ij": 0.006621253904809332,
+      "pair/bicarbonate-anion/water/k_ij": 0.0,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.007179868658375721,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 1.6717573063939426,
+      "component/protonated-monoethanolamine/born_diameter": 0.023170299877700806,
+      "component/carbamate-anion/born_diameter": 0.0
+    },
+    "starts_relative_cost_difference": null,
+    "coordinate_dispersion": null,
+    "iterations": 38,
+    "wall_s": 196.89479149700003,
+    "fitted_coordinates": {
+      "pair/carbamate-anion/water/k_ij": 0.208378579890035,
+      "pair/protonated-monoethanolamine/water/k_ij": -0.3988564032432277,
+      "pair/bicarbonate-anion/water/k_ij": 0.5,
+      "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.7073088447036147,
+      "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 520.8428367012075,
+      "component/protonated-monoethanolamine/born_diameter": 2.0,
+      "component/carbamate-anion/born_diameter": 2.0
+    },
+    "complete_starts_agree_1e_6": null,
+    "parameters": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3code-172-execute-schreckenberg-measured-rou-d2c453db/analyses/mea_parameter_bundle/results/permittivity-refit-172/larger-dV/F6-B/parameters.json",
+    "replay": {
+      "relative_cost": 8.348877145181177e-14,
+      "max_abs_weighted_residual": 1.028599427854715e-11
+    },
+    "cost": 39.263372370910396,
+    "common149_cost": 39.263372370910396,
+    "scores": {
+      "pressure": {
+        "n": 47,
+        "cost": 8.076148443717658,
+        "AARD_percent": 14.579463466754184
+      },
+      "species": {
+        "n": 94,
+        "cost": 21.29483947641918,
+        "AARD_percent": 7.828213664482665
+      }
+    },
+    "Vinjarapu_RMSE_kJ_mol": 4.821643149157417,
+    "Arcis_RMSE_kJ_mol": 9.749405955745779,
+    "falsifier": {
+      "gas_root_absent": true,
+      "roots": [
+        {
+          "selector": "vapor",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 112780.43752522086,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 58788.61110484704,
+          "EOS_pressure_Pa": 3699.080383040748,
+          "bulk_epsilon": 61.85350835456598,
+          "hard_chain_over_RT": 425.32048243739405,
+          "dispersion_over_RT": -969.7022671868516,
+          "association_over_RT": -191.38754193362197,
+          "DH_over_RT": -25.99624731754151,
+          "Born_bulk_over_RT": -3779.8810178815343,
+          "Born_shell_over_RT": -1099.5285959619548,
+          "residual_A_over_RT": -5641.17518784411
+        },
+        {
+          "selector": "liquid",
+          "stable_root_count": 1,
+          "density_branch": "Unspecified",
+          "pressure_density_derivative": 112780.43752522086,
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 58788.61110484704,
+          "EOS_pressure_Pa": 3699.080383040748,
+          "bulk_epsilon": 61.85350835456598,
+          "hard_chain_over_RT": 425.32048243739405,
+          "dispersion_over_RT": -969.7022671868516,
+          "association_over_RT": -191.38754193362197,
+          "DH_over_RT": -25.99624731754151,
+          "Born_bulk_over_RT": -3779.8810178815343,
+          "Born_shell_over_RT": -1099.5285959619548,
+          "residual_A_over_RT": -5641.17518784411
+        }
+      ],
+      "old_witness_G_over_RT": -16221.990202336608,
+      "old_witness_rows": [
+        -111.65873711434914,
+        -131.84655624110107,
+        -240.74325096916513,
+        65.060016264872,
+        -89.98211668535627,
+        -252.24860700267936,
+        174.56171856596208,
+        86.80109030848635,
+        -120.496699639974,
+        -0.9170922008257225,
+        -138.3929428929806,
+        -144.17442419420271,
+        -273.95048693446745,
+        -36744541.64066674,
+        0.0,
+        -9.958154675510698e-18,
+        0.0,
+        1.1212252809249554e-10,
+        0.0,
+        0.0
+      ],
+      "new_physical_G_over_RT": -19880.023033174857,
+      "witness_delta_G_over_RT": 3658.0328308382486,
+      "interpretation": "One native stable density root for retained gas composition; selectors coincide. Old packing witness is not a converged state. No global stability claim.",
+      "finite_shell_limit": "Fixed ionic-region permittivity leaves finite Born shell as bulk permittivity tends to one",
+      "low_density_endpoints": [
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 1e-06,
+          "EOS_pressure_Pa": 0.002643070345897463,
+          "bulk_epsilon": 1.0000000010351242,
+          "hard_chain_over_RT": 2.995860775308496e-09,
+          "dispersion_over_RT": -2.026440649105549e-08,
+          "association_over_RT": -7.037529420534608e-09,
+          "DH_over_RT": -0.14264408297651662,
+          "Born_bulk_over_RT": -3.976942497879864e-06,
+          "Born_shell_over_RT": -1099.5285959619555,
+          "residual_A_over_RT": -1099.6712440461806
+        },
+        {
+          "amount_mol": 86.70447547705399,
+          "molar_density_mol_m3": 100.0,
+          "EOS_pressure_Pa": -1225800.1733062037,
+          "bulk_epsilon": 1.1035124103306952,
+          "hard_chain_over_RT": 0.29990801973041953,
+          "dispersion_over_RT": -2.0243279495270623,
+          "association_over_RT": -0.698128906264783,
+          "DH_over_RT": -789.9946837985999,
+          "Born_bulk_over_RT": -360.38943071480656,
+          "Born_shell_over_RT": -1099.5285959619555,
+          "residual_A_over_RT": -2252.335259311423
+        }
+      ],
+      "low_density_interpretation": "Native fixed-composition scan; epsilon tends to one and bulk Born tends to zero. Shell finiteness is disclosed, not an extra gate."
+    },
+    "family": {
+      "two-phase": 0,
+      "single-liquid": 0,
+      "unresolved": 73,
+      "failed": 0
+    }
+  }
+]

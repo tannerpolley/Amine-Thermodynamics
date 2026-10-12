@@ -1,6 +1,10 @@
 """Issue 172 original attempt sequence and amendment 2 stability classification."""
 import concurrent.futures as cf
 import copy
+import hashlib
+import resource
+import subprocess
+import time
 import json
 import math
 import multiprocessing
@@ -12,7 +16,9 @@ sys.path.insert(0,str(c.OUT.parent/'permittivity-screen-172'))
 import permittivity_probe as screen
 
 MAPPING = None
+MODEL = None
 COLD = []
+NATIVE = {}
 
 
 def payload(r):
@@ -20,7 +26,8 @@ def payload(r):
         residual=r.convergence.residual,amounts=list(r.amounts),mole_fractions=list(r.mole_fractions),
         densities=list(r.molar_densities),packing=list(r.packing_fractions),coordinates=list(r.coordinates),
         objective=r.objective,iterations=r.iterations,reduced_hessian_minimum=r.reduced_hessian_minimum,
-        residuals=list(r.residuals),constraint_multipliers=list(r.constraint_multipliers))
+        residuals=list(r.residuals),classified_residuals=list(r.classified_residuals),constraint_multipliers=list(r.constraint_multipliers),pressure_Pa=list(r.pressure),
+        solver_status=r.solver_status,rows=[dict(kind=row.kind.name,phase=row.phase,index=row.index,eqid=row.eqid) for row in r.rows])
 
 
 def problem(index,liquid=False):
@@ -36,7 +43,8 @@ def problem(index,liquid=False):
 
 def cold(index):
     try:
-        r = c.h.eq.solve_equilibrium(screen.mixture(MAPPING),problem(index))
+        r = c.h.eq.solve_equilibrium(MODEL,problem(index))
+        NATIVE[index] = r
         return dict(index=index,**payload(r))
     except Exception as error:
         return dict(index=index,success=False,message=f'{type(error).__name__}: {error}')
@@ -61,15 +69,13 @@ def stable(model,p,r):
 
 def finish(index):
     loading,T,P = screen.POINTS[index]
-    model,p = screen.mixture(MAPPING),problem(index)
+    model,p = MODEL,problem(index)
     row = dict(index=index,loading=loading,temperature_K=T,pressure_Pa=P,attempts=[COLD[index]])
     final,final_problem,kind = None,p,'two-phase'
     if COLD[index]['success']:
-        batch = c.h.eq.solve_equilibrium_starts(model,p,[c.h.eq.EquilibriumStart(coordinates=COLD[index]['coordinates'])],
-            c.h.eq.EquilibriumWorkLimits(attempts=1,attempt_iterations=400,iterations=400))
-        if batch.selected is not None: final = batch.results[batch.selected]
+        final = NATIVE[index]
     else:
-        nearest = sorted((r for r in COLD if r['success'] and screen.POINTS[r['index']][1]==T),
+        nearest = sorted((r for r in COLD if r is not None and r['success'] and screen.POINTS[r['index']][1]==T),
             key=lambda r:abs(screen.POINTS[r['index']][0]-loading)+abs(math.log(screen.POINTS[r['index']][2]/P)))[:2]
         row['nearest_seed_indices'] = [r['index'] for r in nearest]
         if nearest:
@@ -104,6 +110,9 @@ def finish(index):
     row['classification'] = 'failed'
     if final is not None and final.success and final.requested_tolerance_met and all(a>=0 for a in final.amounts):
         row['final'] = payload(final)
+        row['phase_support'] = [c.s.COMPONENT_IDS] + ([c.s.COMPONENT_IDS[:3]] if kind=='two-phase' else [])
+        row['final_EOS_pressure_closure_Pa'] = [model.state(T,rho=rho,x=list(final.mole_fractions[offset:offset+width])+[0.]*(9-width)).pressure-P
+            for rho,offset,width in zip(final.molar_densities,(0,9),(9,3))]
         try:
             evidence = stable(model,final_problem,final)
             row['stability'] = evidence
@@ -118,25 +127,59 @@ def finish(index):
     return row
 
 
-def family(mapping,directory):
-    global MAPPING,COLD
-    MAPPING = mapping
-    with cf.ProcessPoolExecutor(c.WORKERS,mp_context=multiprocessing.get_context('fork')) as pool:
-        COLD = list(pool.map(cold,range(73)))
-    c.write(directory/'family-cold.json',COLD)
-    with cf.ProcessPoolExecutor(c.WORKERS,mp_context=multiprocessing.get_context('fork')) as pool:
-        rows = list(pool.map(finish,range(73)))
-    c.write(directory/'family.json',rows)
-    counts = {kind:sum(r['classification']==kind for r in rows) for kind in ('two-phase','single-liquid','unresolved','failed')}
-    assert sum(counts.values())==73
-    c.write(directory/'family-counts.json',counts)
-    c.table(directory/'family.csv',[{k:v for k,v in r.items() if k not in ('attempts','final','stability','liquid','bubble')} for r in rows])
-    print('FAMILY',directory,counts,flush=True)
+def point(index):
+    global MODEL,NATIVE
+    MODEL,NATIVE = screen.mixture(MAPPING),{}
+    current = cold(index)
+    assert current == COLD[index], ('Cold replay changed',index)
+    return finish(index)
+
+
+def families(records):
+    peak = json.loads((c.OUT/'family-memory-probe.json').read_text())['peak_RSS_KiB']
+    accounting = []
+    for mapping,directory in records:
+        global MAPPING,COLD
+        MAPPING = mapping
+        COLD = json.loads((directory/'family-cold-model-instance-error.json').read_text())
+        assert [r['index'] for r in COLD] == list(range(73))
+        checkpoint = directory/'family-points'; checkpoint.mkdir(exist_ok=True)
+        identity = hashlib.sha256(json.dumps(dict(mapping=mapping,wheel=c.SHA,points=screen.POINTS,driver=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),sort_keys=True).encode()).hexdigest()
+        if (checkpoint/'identity.json').exists(): assert json.loads((checkpoint/'identity.json').read_text()) == identity
+        else: c.write(checkpoint/'identity.json',identity)
+        free = subprocess.check_output(['free','-m'],text=True)
+        available = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:')))
+        workers = min(32,math.floor(.6*available/peak)); assert workers >= 1, 'Insufficient memory for one worker'
+        record = dict(directory=str(directory),MemAvailable_KiB=available,peak_RSS_KiB=peak,workers=workers,free_m=free,started_unix=time.time(),numeric_threads=1,command=['nice','-n','10','uv','run','--no-project','--python','tmp/permittivity-refit-172-venv/bin/python',str(Path(__file__)),'retained'],cold_basis='Prior cold solves remain valid: only stability model instance was wrong; every repeated cold result is required to match exactly')
+        accounting.append(record); c.write(c.OUT/'family-execution.json',accounting)
+        pending = [i for i in range(73) if not (checkpoint/f'{i}.json').exists()]
+        print('POOL',directory,workers,'pending',len(pending),flush=True)
+        with cf.ProcessPoolExecutor(workers,mp_context=multiprocessing.get_context('fork')) as pool:
+            futures = [pool.submit(point,i) for i in pending]
+            for future in cf.as_completed(futures):
+                row = future.result(); c.write(checkpoint/f"{row['index']}.json",row)
+                print('POINT',directory,row['index'],row['classification'],flush=True)
+        rows = [json.loads((checkpoint/f'{i}.json').read_text()) for i in range(73)]
+        c.write(directory/'family-cold.json',COLD); c.write(directory/'family.json',rows)
+        counts = {kind:sum(r['classification']==kind for r in rows) for kind in ('two-phase','single-liquid','unresolved','failed')}
+        assert len(rows)==sum(counts.values())==73
+        c.write(directory/'family-counts.json',counts)
+        c.table(directory/'family.csv',[{k:v for k,v in r.items() if k not in ('attempts','final','stability','liquid','bubble')} for r in rows])
+        record.update(ended_unix=time.time(),wall_s=time.time()-record['started_unix'],counts=counts)
+        c.write(c.OUT/'family-execution.json',accounting)
+        print('FAMILY',directory,counts,flush=True)
 
 
 if __name__=='__main__':
-    if sys.argv[1]=='classifier':
+    if sys.argv[1]=='memory-probe':
+        MAPPING = json.loads((c.OUT/'smaller-dV/F1-A/parameters.json').read_text())
+        COLD = json.loads((c.OUT/'smaller-dV/F1-A/family-cold-model-instance-error.json').read_text())
+        row = point(0)
+        c.write(c.OUT/'family-memory-probe.json',dict(peak_RSS_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,index=0,result=row,method='One full point; exact retained cold replay; original model retained for stability'))
+        print('PEAK RSS KiB',resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,flush=True)
+    elif sys.argv[1]=='classifier':
         MAPPING = screen.VARIANTS['MEA-1403-CO2-near-zero']
+        MODEL = screen.mixture(MAPPING)
         COLD = [dict(r,success=r['accepted']) for r in screen.read(c.OUT/'inputs/screen-family.json')
             if r['basis']=='current' and r['variant']=='MEA-1403-CO2-near-zero']
         row = finish(63)
@@ -145,5 +188,9 @@ if __name__=='__main__':
         assert any(t['evidence']=='indeterminate' for t in row['stability']['trials'])
         assert any(not t['optimizer_success'] for t in row['stability']['trials'])
         print('CLASSIFIER',row['classification'],flush=True)
-    elif sys.argv[1]=='baseline': family(c.s.parameter_mapping(),c.OUT/'baseline')
-    else: family(json.loads(Path(sys.argv[1]).read_text()),Path(sys.argv[2]))
+    elif sys.argv[1]=='baseline': families([(c.s.parameter_mapping(),c.OUT/'baseline')])
+    elif sys.argv[1]=='retained':
+        paths = [Path(r['parameters']) for r in json.loads((c.OUT/'comparison.json').read_text())]
+        paths += [c.OUT/b/'unrefitted/parameters.json' for b in ('smaller-dV','larger-dV')]
+        families([(c.s.parameter_mapping(),c.OUT/'baseline')]+[(json.loads(p.read_text()),p.parent) for p in paths])
+    else: families([(json.loads(Path(sys.argv[1]).read_text()),Path(sys.argv[2]))])
