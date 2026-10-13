@@ -1,0 +1,33 @@
+{
+  "verdict": "Supported",
+  "reviewed_commit": "11154edb92b3421a88dd90778f0c76bb48209a9b",
+  "design_base": "b8c16b2236b1e961706a1d8481b0cb9681e817ab",
+  "initial_review": {
+    "task": "/root/delivered_review_179",
+    "commit": "20f1bb93ed677ce020fe271bbab86fb62fb01da8",
+    "verdict": "Not supported",
+    "required_findings": [
+      "Use Engine residuals in replay and heat scoring.",
+      "Record numeric/non-numeric field mismatches without raising."
+    ],
+    "preservation_and_retirement_checked": true
+  },
+  "focused_review": {
+    "task": "/root/focused_review_179",
+    "model": "GPT-6.1 Sol",
+    "reasoning_effort": "high",
+    "verdict": "Supported",
+    "required_corrections_remaining": [],
+    "baseline_rows_bitwise": 163,
+    "accepted_difference_fields": 72,
+    "weighted_residual_differences": 36,
+    "cost_differences": 36,
+    "maximum_abs_weighted_residual_difference": 4.440892098500626e-16,
+    "maximum_abs_cost_difference": 6.661338147750939e-16,
+    "independent_reconstructed_unweighted_residuals_checked": 163,
+    "maximum_abs_reconstructed_unweighted_residual_difference": 1.1102230246251565e-16,
+    "no_additional_numerical_runs": true,
+    "scope": "Engine residual consumption, type mismatch recording, lead-approved baseline rounding criterion, explicit heat record hashes, restored thread initialization."
+  },
+  "limits": "Numerical reproduction and execution capability only. No new physical validation or parameter adoption. Wider retirement surface checked in initial review; focused re-review did not repeat it."
+}
