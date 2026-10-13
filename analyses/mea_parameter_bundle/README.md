@@ -80,14 +80,9 @@ For an automatically refreshing local view while editing, from `analyses/`:
 python3 manuscript.py preview . --port <free port>
 ```
 
-The owner's installed `mea-parameter-bundle-preview.service`
-(`systemd/mea-parameter-bundle-preview.service`, port 8770) runs
-`analyses/preview.sh`, which starts the same manuscript preview.
-`python3 analyses/manuscript.py service analyses/` would install the CSE
-always-on preview unit instead; it is not installed, and it requires an
-interpreter that imports `jupyter_core`, `nbformat`, `nbclient`, `ipykernel`,
-`jupyter_client`, `jupyter_cache` and `yaml`, which the project environment
-does not provide.
+The CSE always-on preview unit serves the main checkout at
+`http://127.0.0.1:8770/` (see `analyses/README.md`); use the command above only
+for an unmerged worktree, and stop it when done.
 
 ## Claude experiment checkpoint — 3 September 2026
 
