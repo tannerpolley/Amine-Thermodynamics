@@ -1,0 +1,118 @@
+{
+  "candidates": [
+    {
+      "id": "lambda-0.1-A",
+      "passed": true,
+      "gates": {
+        "complete": true,
+        "cp": true,
+        "numerical": true,
+        "primary/saturated_liquid_rho/mean_absolute_relative_error": true,
+        "primary/saturated_liquid_rho/maximum_absolute_relative_error": true,
+        "primary/psat/mean_absolute_relative_error": true,
+        "primary/psat/maximum_absolute_relative_error": true,
+        "staggered/saturated_liquid_rho/mean_absolute_relative_error": true,
+        "staggered/saturated_liquid_rho/maximum_absolute_relative_error": true,
+        "staggered/psat/mean_absolute_relative_error": true,
+        "staggered/psat/maximum_absolute_relative_error": true
+      },
+      "metrics": [
+        {
+          "grid": "primary",
+          "quantity": "cp",
+          "requested_rows": 20,
+          "evaluated_rows": 20,
+          "mean_absolute_relative_error": 0.004400325391673765,
+          "maximum_absolute_relative_error": 0.014869404238793571
+        },
+        {
+          "grid": "primary",
+          "quantity": "rho",
+          "requested_rows": 20,
+          "evaluated_rows": 20,
+          "mean_absolute_relative_error": 0.0003739791833217099,
+          "maximum_absolute_relative_error": 0.0009544955017994905
+        },
+        {
+          "grid": "primary",
+          "quantity": "saturated_liquid_rho",
+          "requested_rows": 20,
+          "evaluated_rows": 20,
+          "mean_absolute_relative_error": 0.0003629471419502206,
+          "maximum_absolute_relative_error": 0.0009846511177786788
+        },
+        {
+          "grid": "primary",
+          "quantity": "psat",
+          "requested_rows": 20,
+          "evaluated_rows": 20,
+          "mean_absolute_relative_error": 0.0007541296177243195,
+          "maximum_absolute_relative_error": 0.0017090129795482856
+        },
+        {
+          "grid": "staggered",
+          "quantity": "cp",
+          "requested_rows": 19,
+          "evaluated_rows": 19,
+          "mean_absolute_relative_error": 0.004159041116367685,
+          "maximum_absolute_relative_error": 0.01361324001989117
+        },
+        {
+          "grid": "staggered",
+          "quantity": "rho",
+          "requested_rows": 19,
+          "evaluated_rows": 19,
+          "mean_absolute_relative_error": 0.00035405670530037973,
+          "maximum_absolute_relative_error": 0.000745235428290858
+        },
+        {
+          "grid": "staggered",
+          "quantity": "saturated_liquid_rho",
+          "requested_rows": 19,
+          "evaluated_rows": 19,
+          "mean_absolute_relative_error": 0.000343298069465624,
+          "maximum_absolute_relative_error": 0.0007795724060168929
+        },
+        {
+          "grid": "staggered",
+          "quantity": "psat",
+          "requested_rows": 19,
+          "evaluated_rows": 19,
+          "mean_absolute_relative_error": 0.0007003893670657288,
+          "maximum_absolute_relative_error": 0.0014105339586455434
+        },
+        {
+          "grid": "atmospheric-controls",
+          "quantity": "cp",
+          "requested_rows": 3,
+          "evaluated_rows": 3,
+          "mean_absolute_relative_error": 0.007844100369068574,
+          "maximum_absolute_relative_error": 0.014845347996355951
+        },
+        {
+          "grid": "atmospheric-controls",
+          "quantity": "rho",
+          "requested_rows": 3,
+          "evaluated_rows": 3,
+          "mean_absolute_relative_error": 0.00037820910719850903,
+          "maximum_absolute_relative_error": 0.0005312489676030374
+        }
+      ],
+      "physical": [
+        1.252753837934407,
+        2.780432614942962,
+        432.3788130932931,
+        1756.6497964508999,
+        0.0376197279502706
+      ]
+    }
+  ],
+  "cpu_s": 21.881904999999996,
+  "wall_s": 6.245060115999877,
+  "process_accounting_cpu_s": 21.990000000000002,
+  "process_accounting_wall_s": 7.08,
+  "process_accounting_basis": "GNU time for completed study and final-tree reassessment, plus conservative 2 CPU-s / 2 wall-s charge for the failed serialization attempt. Rounded external times include startup; body timers are retained separately.",
+  "stop_reason": "First completely verified passing candidate; remaining eight fits not run.",
+  "elapsed_wall_through_final_numerical_verification_s": 116.61076235771179,
+  "elapsed_wall_basis": "File timestamps from first verified-input receipt minus a conservative 2 s startup allowance to final-tree numerical verification receipt; includes intervening diagnosis, editing and tool interaction."
+}
