@@ -3,6 +3,7 @@ import copy
 import csv
 import json
 import math
+import importlib.util
 import os
 from pathlib import Path
 import runpy
@@ -13,7 +14,15 @@ from types import SimpleNamespace
 import concurrent.futures
 import multiprocessing
 
-from final_rerun import BUNDLE, OUT, module, s
+import shared_evaluation as s
+BUNDLE = Path(__file__).resolve().parents[1]
+OUT = BUNDLE / 'results/final-rerun'
+
+def module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    result = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(result)
+    return result
 sys.path.insert(0, str(BUNDLE / 'calibration-misfit'))
 import probe
 import compare
@@ -35,10 +44,11 @@ def table(path, rows):
             w.writerows(rows)
 
 
-def selected():
+def selected(output_dir=OUT, heat_rows=None):
+    OUT = Path(output_dir)
     result = {}
     summary = json.loads((OUT / 'fit-summary.json').read_text())
-    if os.environ.get('FINAL_HEAT_160'):
+    if heat_rows is not None:
         choices = {r['problem']: dict(record=r['parameters'], raw=r['fit']) for r in summary}
         control = BUNDLE / 'results/density-cp-160/D1-evidence'
         choices['F1-no-heat'] = dict(record=str(control/'F1-double-prime-candidate-parameters.json'), raw=str(control/'F1-A/native-fit.json'))
@@ -68,7 +78,8 @@ def binding(problem, path):
         s._engine_reaction_records = lambda request, values: assessment.engine_records(native)
 
 
-def job(problem, path, kind, observation):
+def job(problem, path, kind, observation, *, output_dir=OUT):
+    EVAL = Path(output_dir) / 'evaluation'
     started = time.perf_counter()
     binding(problem, path)
     key = observation['identity'].replace(':', '_')
@@ -131,7 +142,9 @@ def score_rows(problem, records):
     return rows
 
 
-def summarize(records, density, choices, excluded):
+def summarize(records, density, choices, excluded, *, output_dir=OUT, heat_rows=None):
+    OUT = Path(output_dir)
+    EVAL = OUT / 'evaluation'
     all_rows, scores, replays, carbonate = [], [], {}, []
     original = json.loads((OUT / 'fit-summary.json').read_text())
     for problem, chosen in choices.items():
@@ -143,16 +156,17 @@ def summarize(records, density, choices, excluded):
         mask = set(raw['targets'])
         fitted = [r for r in rows if r['kind']=='packet' and r['target'] in mask]
         cost = math.fsum(r['cost'] for r in fitted)
-        if os.environ.get('FINAL_HEAT_160') and problem != 'F1-no-heat':
-            import heat_160 as heat
+        if heat_rows is not None and problem != 'F1-no-heat':
+            from fit_observations import heat_items, predict
             mapping = s.parameter_mapping(Path(chosen['record']))
-            values = heat.predict(mapping, heat.heat_items(mapping, probe.epcsaft.Parameters.from_mapping(mapping), heat.VINJARAPU))
+            from heat_evidence_170 import request
+            values = predict(mapping, heat_items(mapping, probe.epcsaft.Parameters.from_mapping(mapping), heat_rows, request(mapping, 313.15, .11)))
             heats = [dict(problem=problem, kind='heat', identity=r['record_id'], target=r['record_id'],
                 source='Vinjarapu2024', quantity='heat', basis='J/mol CO2', species='',
                 temperature_K=r['temperature_K'], loading=r['alpha_final'], observed=r['observed_addition_enthalpy_J_per_mol_CO2'],
                 predicted=y, scaled_residual=(y-r['observed_addition_enthalpy_J_per_mol_CO2'])/r['uH_J_per_mol_CO2'],
                 ln_pred_over_obs=None, cost=.5*((y-r['observed_addition_enthalpy_J_per_mol_CO2'])/r['uH_J_per_mol_CO2'])**2,
-                record_sha256=s.sha256(Path(chosen['record']))) for r,y in zip(heat.VINJARAPU,values,strict=True)]
+                record_sha256=s.sha256(Path(chosen['record']))) for r,y in zip(heat_rows,values,strict=True)]
             all_rows.extend(heats)
             fitted += heats
             cost = math.fsum(r['cost'] for r in fitted)
@@ -175,7 +189,7 @@ def summarize(records, density, choices, excluded):
             raise RuntimeError(f'replay mismatch: {problem}: {replay}')
         groups = {'fit pressure':[r for r in fitted if r['quantity']=='pressure'],
                   'fit species':[r for r in fitted if r['quantity']=='species']}
-        if os.environ.get('FINAL_HEAT_160') and problem != 'F1-no-heat':
+        if heat_rows is not None and problem != 'F1-no-heat':
             groups['fit heat'] = heats
         if problem in ('F1','F2','F6','F1-no-heat'):
             canonical = [r for r in rows if r['kind']=='canonical']
@@ -214,10 +228,12 @@ def summarize(records, density, choices, excluded):
     return replays
 
 
-def present():
+def present(*, output_dir=OUT, choices=None, heat_rows=None, campaign_dir=None):
     """Tables and four figure data sets from retained results only; no state solves."""
+    OUT = Path(output_dir)
+    EVAL = OUT / 'evaluation'
     import refit
-    choices=selected()
+    choices = selected(OUT, heat_rows) if choices is None else choices
     replay=json.loads((EVAL/'replay-checks.json').read_text())
     summary=json.loads((OUT/'fit-summary.json').read_text())
     f6_choice = next(r for r in summary if r['problem']=='F6')
@@ -227,13 +243,12 @@ def present():
         row['per_state_checks']='stationarity, element and charge balance passed; declared domain checked before evaluation'
     targets={t['identity']:t for o in s.load_state_packet(CORRECTED/'state-packet.json.gz')['observations'] for t in o['targets']}
     packet_target_ids = set(targets)
-    if os.environ.get('FINAL_HEAT_160'):
-        import heat_160 as heat
-        targets.update({r['record_id']: dict(source_identity='Vinjarapu2024', observed=r['observed_addition_enthalpy_J_per_mol_CO2']) for r in heat.VINJARAPU})
+    if heat_rows is not None:
+        targets.update({r['record_id']: dict(source_identity='Vinjarapu2024', observed=r['observed_addition_enthalpy_J_per_mol_CO2']) for r in heat_rows})
     f6_starts=[]
     native_rows=[]
     for letter,i in zip('AB',(1,2)):
-        raw=json.loads((OUT/f'F6-{letter}/native-fit.json' if os.environ.get('FINAL_HEAT_160') else OUT/f'F6-{letter}/runs'/f'slope-fixed-start-{i}/native-fit.json').read_text())
+        raw=json.loads((Path(campaign_dir)/'F6'/letter/'native-fit.json' if heat_rows is not None else OUT/f'F6-{letter}/runs'/f'slope-fixed-start-{i}/native-fit.json').read_text())
         data=[dict(problem='F6',start=letter,target=identity,source=targets[identity]['source_identity'],
               observed=targets[identity]['observed'],predicted=pred,quantity='heat' if identity not in packet_target_ids else 'pressure' if identity.endswith('-pco2') else 'species',
               species='' if identity not in packet_target_ids else identity.split('::')[-1] if '::' in identity else 'pCO2',scaled_residual=res,cost=.5*res**2)
@@ -298,7 +313,7 @@ def present():
         pool_summary.append(dict(problem=problem,base141_cost=math.fsum(float(r['cost']) for r in rr if r['target'] in masks['F1']),
             pool18_cost=math.fsum(float(r['cost']) for r in added),pool18_aard_percent=compare.stats([float(r['ln_pred_over_obs']) for r in added])['aard_percent'],
             pool_role='fitted' if problem in ('F4','F5') else 'report-only'))
-        if os.environ.get('FINAL_HEAT_160'):
+        if heat_rows is not None:
             heat_cost = math.fsum(float(r['cost']) for r in evaluated if r['problem']==problem and r['quantity']=='heat')
             pool_summary[-1].update(heat8_cost=heat_cost, base149_cost=pool_summary[-1]['base141_cost']+heat_cost)
     table(figures/'pool-effect-costs.csv',pool_summary)
