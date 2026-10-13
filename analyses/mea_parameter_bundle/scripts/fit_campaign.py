@@ -1,0 +1,252 @@
+"""Run a frozen MEA fit declaration directly through Engine (#179)."""
+import argparse
+import csv
+import hashlib
+import importlib.metadata
+import json
+import math
+import os
+from pathlib import Path
+import resource
+import struct
+import sys
+import time
+import traceback
+import zipfile
+
+COMMAND_STARTED = time.monotonic()
+for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
+    os.environ[key] = '1'
+ROOT = Path(__file__).resolve().parents[3]
+
+
+def load(path):
+    return json.loads(Path(path).read_text())
+
+
+def write(path, value):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    Path(path).write_text(json.dumps(value, indent=2, allow_nan=False)+'\n')
+
+
+def checked(path, sha):
+    path = ROOT / path
+    actual = hashlib.sha256(path.read_bytes()).hexdigest()
+    if actual != sha:
+        raise ValueError(f'input hash mismatch: {path}: {actual} != {sha}')
+    return path
+
+
+def verify(spec):
+    files = {}
+    for r in spec['inputs']:
+        checked(r['path'], r['sha256'])
+        files[r['path']] = r['sha256']
+    wheel = checked(spec['engine']['wheel_path'], spec['engine']['wheel_sha256'])
+    import epcsaft
+    package = Path(epcsaft.__file__).resolve().parent
+    if not package.is_relative_to(Path(sys.prefix).resolve()):
+        raise ValueError(f'Engine source checkout rejected: {package}')
+    with zipfile.ZipFile(wheel) as archive:
+        names = [n for n in archive.namelist() if n.startswith('epcsaft/') and not n.endswith('/')]
+        for name in names:
+            if (package.parent / name).read_bytes() != archive.read(name):
+                raise ValueError(f'installed Engine differs from wheel: {name}')
+    packages = {p: importlib.metadata.version(p) for p in ('epcsaft','numpy','scipy')}
+    for p, version in spec['engine']['packages'].items():
+        if packages[p] != version:
+            raise ValueError(f'{p} version mismatch: {packages[p]} != {version}')
+    return dict(files=files, wheel_sha256=spec['engine']['wheel_sha256'], installed_package=str(package),
+        installed_files_verified=len(names), python=sys.version, packages=packages)
+
+
+def workers(memory, cpu, allowance, requested=None):
+    if memory < 0 or cpu < 1 or allowance <= 0:
+        raise ValueError('invalid worker-sizing inputs')
+    chosen = max(1, min(cpu, math.floor(memory/allowance)))
+    if requested is not None and (requested > cpu or requested*allowance > memory):
+        raise RuntimeError(f'deferred reproduction: {requested} workers require {requested*allowance} bytes; available {memory}')
+    return requested if requested is not None else chosen
+
+
+def machine(spec, requested):
+    rows = {line.split(':')[0]: line.split(':')[1].strip() for line in Path('/proc/meminfo').read_text().splitlines()}
+    memory = int(rows['MemAvailable'].split()[0])*1024
+    cpu = os.cpu_count()
+    if cpu is None:
+        raise RuntimeError('CPU count unavailable')
+    allowance = spec['worker_memory']['allowance_bytes']
+    return dict(MemAvailable_bytes=memory, CPU_count=cpu, workers_requested=workers(memory,cpu,allowance,requested),
+        worker_allowance_bytes=allowance, worker_memory_estimate=json.dumps(spec['worker_memory']),
+        actual_workers=None, state_group_cap=None, actual_workers_reason='not returned by Engine')
+
+
+def cpu_seconds():
+    return math.fsum(r.ru_utime+r.ru_stime for r in (resource.getrusage(resource.RUSAGE_SELF),
+        resource.getrusage(resource.RUSAGE_CHILDREN)))
+
+
+def differences(expected, actual, path=''):
+    result = []
+    if isinstance(expected, dict) and isinstance(actual, dict):
+        for k in expected:
+            if k not in actual:
+                result.append(dict(field=path+'/'+k, reason='missing'))
+            else:
+                result.extend(differences(expected[k], actual[k], path+'/'+k))
+    elif isinstance(expected, list) and isinstance(actual, list):
+        if len(expected) != len(actual):
+            result.append(dict(field=path, expected_length=len(expected), actual_length=len(actual)))
+        for i,(a,b) in enumerate(zip(expected,actual)):
+            result.extend(differences(a,b,f'{path}/{i}'))
+    elif isinstance(expected, float) or isinstance(actual, float):
+        if not isinstance(actual,(int,float)) or struct.pack('!d',expected) != struct.pack('!d',actual):
+            result.append(dict(field=path,expected=expected,actual=actual,
+                expected_hex=float(expected).hex(), actual_hex=float(actual).hex() if isinstance(actual,(int,float)) else None))
+    elif expected != actual:
+        result.append(dict(field=path,expected=expected,actual=actual))
+    return result
+
+
+def resolve(spec, case, start):
+    import fit_observations as o
+    mapping = load(checked(start['parameters_path'], start['sha256']))
+    variant = case['variant']
+    if next(f['choice'] for f in mapping['model_families'] if f['kind']=='electrolyte') != variant['born']:
+        raise ValueError('Born variant mismatch')
+    if next(f for f in mapping['model_families'] if f['kind']=='permittivity') != variant['permittivity']:
+        raise ValueError('permittivity variant mismatch')
+    if o.s.reaction_values(mapping) != variant['chemistry']:
+        raise ValueError('chemistry variant mismatch')
+    params, rows = o.rows_for(spec,mapping,case['observations'])
+    values = o.s.parameter_values(mapping)
+    coordinates = [spec['coordinates'][i] for i in case['coordinates']]
+    for c in coordinates:
+        if struct.pack('!d', values[c['identity']]) != struct.pack('!d',c['origin'][start['id']]):
+            raise ValueError(f"coordinate origin mismatch: {c['identity']}")
+    return mapping, params, rows, coordinates
+
+
+def run(spec_path, output_dir, *, case_ids, operation):
+    started = COMMAND_STARTED if __name__ == '__main__' else time.monotonic()
+    if operation not in ('fit','replay') or not case_ids:
+        raise ValueError('explicit fit/replay operation and case IDs required')
+    spec_path, out = Path(spec_path), Path(output_dir)
+    out.mkdir(parents=True, exist_ok=False)
+    (out/'spec.json').write_bytes(spec_path.read_bytes())
+    spec = load(spec_path)
+    timing = []
+    try:
+        write(out/'inputs.json',verify(spec))
+        import fit_observations as o
+        if operation == 'replay':
+            declared = o.indexed(spec['replay'],'id')
+            for identity in case_ids:
+                entry = declared[identity]
+                directory = out/'replay'/identity
+                mapping = load(checked(entry['parameters_path'],entry['sha256']))
+                _, rows = o.rows_for(spec,mapping,entry['observations'])
+                clock = time.monotonic()
+                values = o.replay(mapping,rows)
+                native_wall = time.monotonic()-clock
+                write(directory/'predictions.json',values)
+                summary = o.replay_summary(values,o.load(spec['heat_rows_path']))
+                write(directory/'summary.json',summary)
+                delta = differences(load(checked(entry['reference_path'],entry['reference_sha256'])),values)
+                delta += differences(load(checked(entry['summary_path'],entry['summary_sha256'])),summary,'summary')
+                write(directory/'comparison.json',dict(bitwise_equal=not delta,differences=delta,
+                    native_wall_s=native_wall,command_wall_s=time.monotonic()-started))
+                if delta:
+                    raise RuntimeError('bitwise replay mismatch; see comparison.json')
+            return out
+        available = {c['id'] for c in spec['cases']} | {c['id']+'-'+s['id'] for c in spec['cases'] for s in c['starts']}
+        if set(case_ids)-available:
+            raise ValueError(f'unknown case IDs: {set(case_ids)-available}')
+        for case in spec['cases']:
+            for start in case['starts']:
+                name = case['id']+'-'+start['id']
+                if case['id'] not in case_ids and name not in case_ids:
+                    continue
+                directory = out/case['id']/start['id']
+                case_started = started if not timing else time.monotonic()
+                row = dict(case=case['id'],start=start['id'],native_wall_s=None,cpu_s=None)
+                timing.append(row)
+                try:
+                    mapping, params, rows, declared = resolve(spec,case,start)
+                    write(directory/'start-parameters.json',mapping)
+                    write(directory/'targets.json',[dict(target=i,observed=x.observed,scale=x.scale,weight=w,form=x.form.name) for i,x,w in rows])
+                    row.update(machine(spec,case.get('reproduction_workers')))
+                    coords = []
+                    for c in declared:
+                        parts = c['identity'].split('/')
+                        target = parts[1] if parts[0]=='component' else tuple(parts[1:3])
+                        coords.append(o.reg.coordinate(params,[(c['family'],target,1.)],origin=c['origin'][start['id']],
+                            scale=c['scale'],bounds=tuple(c['bounds'])))
+                    controls = o.reg.FitControls(**spec['controls'],workers=row['workers_requested'])
+                    before = cpu_seconds()
+                    clock = time.monotonic()
+                    fitted = o.reg.fit(params,coords,[r[1] for r in rows],weights=[r[2] for r in rows],
+                        controls=controls,thermochemistry=o.thermal.record())
+                    row.update(native_wall_s=time.monotonic()-clock,cpu_s=cpu_seconds()-before,
+                        iterations=fitted.iterations,residual_evaluations=fitted.residual_evaluations,jacobian_evaluations=fitted.jacobian_evaluations)
+                    row.update(amortized_s_per_residual_evaluation_including_Jacobian_work=row['native_wall_s']/fitted.residual_evaluations if fitted.residual_evaluations else None,
+                        amortized_reason='' if fitted.residual_evaluations else 'zero residual evaluations',
+                        F1_native_wall_le_120_s=row['native_wall_s']<=120 if case['variant']['problem']=='F1' else None,
+                        F1_excess_s=max(0.,row['native_wall_s']-120) if case['variant']['problem']=='F1' else None)
+                    ids = [c['identity'] for c in declared]
+                    fields = ('status','message','usable','initial_cost','final_cost','physical','predictions','residuals',
+                        'weighted_residuals','optimizer_jacobian','physical_jacobian','iterations','iteration_costs','iteration_seconds',
+                        'trial_failures','residual_evaluations','jacobian_evaluations')
+                    raw = {k:o.s._jsonable(getattr(fitted,k)) for k in fields}
+                    raw.update(coordinates=ids,scales=[c['scale'] for c in declared],start={c['identity']:c['origin'][start['id']] for c in declared},
+                        targets=[r[0] for r in rows],observed=[r[1].observed for r in rows],active_bounds=list(fitted.covariance.active_bounds),
+                        observation_statuses=[v.name for v in fitted.statuses],
+                        covariance={k:o.s._jsonable(getattr(fitted.covariance,k)) for k in
+                            ('status','assumption','rank','singular_values','physical','variance_factor','active_bounds')},
+                        failures=[dict(trial=f.trial,observation=f.observation,status=f.status.name,message=f.message,jacobian=f.jacobian) for f in fitted.failures])
+                    complete = (raw['status']=='converged' and raw['usable'] and len(raw['predictions'])==len(rows)
+                        and len(raw['physical'])==len(declared)
+                        and all(len(raw[k])==len(rows) for k in ('residuals','weighted_residuals','observation_statuses'))
+                        and all(len(raw[k])==len(rows)*len(declared) for k in ('optimizer_jacobian','physical_jacobian'))
+                        and all(v=='Available' for v in raw['observation_statuses'])
+                        and all(math.isfinite(v) for k in ('physical','predictions','weighted_residuals','optimizer_jacobian','physical_jacobian') for v in raw[k])
+                        and math.isfinite(raw['final_cost']))
+                    raw['selection_eligible'] = complete
+                    write(directory/'native-fit.json',raw)
+                    if complete:
+                        final = o.s.with_parameter_values(mapping,dict(zip(ids,raw['physical'],strict=True)))
+                        final['purpose'] = 'Declared campaign endpoint; no parameter adoption or physical validation.'
+                        write(directory/'parameters.json',final)
+                    else:
+                        if raw['usable']:
+                            write(directory/'usable-budget-endpoint.json',o.s.with_parameter_values(mapping,dict(zip(ids,raw['physical'],strict=True))))
+                        raise RuntimeError(f"incomplete fit: {raw['status']}: {raw['message']}")
+                    (directory/'execution.log').write_text(f"{name}: {raw['status']}; cost={raw['final_cost']}; native wall={row['native_wall_s']} s\n")
+                    print(name,row,flush=True)
+                except Exception:
+                    row['failure'] = traceback.format_exc()
+                    directory.mkdir(parents=True,exist_ok=True)
+                    (directory/'execution.log').write_text(row['failure'])
+                    raise
+                finally:
+                    row['command_wall_s'] = time.monotonic()-case_started
+    except Exception:
+        write(out/'failure.json',dict(cause=traceback.format_exc()))
+        raise
+    finally:
+        if timing:
+            with (out/'timing.csv').open('w',newline='') as stream:
+                writer = csv.DictWriter(stream,list(dict.fromkeys(k for row in timing for k in row)),lineterminator='\n')
+                writer.writeheader()
+                writer.writerows(timing)
+    return out
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(__doc__)
+    parser.add_argument('spec',type=Path)
+    parser.add_argument('output',type=Path)
+    parser.add_argument('--operation',choices=('fit','replay'),required=True)
+    parser.add_argument('--case',action='append',required=True)
+    args = parser.parse_args()
+    run(args.spec,args.output,case_ids=args.case,operation=args.operation)
