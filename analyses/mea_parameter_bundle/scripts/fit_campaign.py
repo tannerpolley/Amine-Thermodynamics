@@ -151,6 +151,88 @@ def resolve(spec, case, start):
     return mapping, params, rows, coordinates
 
 
+
+def water_study(spec, out, started):
+    import fit_observations as o
+    candidates = []
+    def elapsed():
+        return dict(cpu_s=cpu_seconds()+spec['prior_cpu_charge_s'],wall_s=time.monotonic()-started+spec['prior_wall_charge_s'])
+    baseline = list(csv.DictReader(checked(spec['metrics_path'],spec['metrics_sha256']).open()))
+    def assess(mapping, directory):
+        clock, cpu = time.monotonic(), cpu_seconds()
+        result = o.water_assessment(spec,mapping)
+        result.update(cpu_s=cpu_seconds()-cpu,wall_s=time.monotonic()-clock)
+        write(directory/'assessment.json',result)
+        return result
+    def gates(result):
+        rows, limits = result['rows'], spec['gates']
+        verdict = dict(complete=len(rows)==42 and all(r['evaluated'] for r in rows),
+            cp=all(abs(r.get('cp_error_relative',math.inf))<=limits['cp'] for r in rows),
+            numerical=all(r.get('cp_verified',False) and r.get('dP_drho',0)>0 and
+                (r['grid']=='atmospheric-controls' or (r.get('saturation_success',False) and
+                r.get('saturation_max_abs_residual',math.inf)<=limits['raw_residual'] and r.get('saturated_dP_drho',0)>0)) for r in rows))
+        for m in result['metrics']:
+            if m['quantity'] not in ('saturated_liquid_rho','psat'):
+                continue
+            b = next(b for b in baseline if b['record']=='original' and b['grid']==m['grid'] and b['quantity']==m['quantity'])
+            for stat in ('mean_absolute_relative_error','maximum_absolute_relative_error'):
+                verdict[m['grid']+'/'+m['quantity']+'/'+stat] = (m['evaluated_rows']==m['requested_rows'] and m[stat] is not None and m[stat]<=float(b[stat])+limits['slack'])
+        return verdict
+    try:
+        for record in spec['records']:
+            result = assess(load(checked(record['path'],record['sha256'])),out/'replay'/record['id'])
+            delta = [dict(grid=m['grid'],quantity=m['quantity'],statistic=k,difference=m[k]-float(b[k]))
+                for m in result['metrics'] for b in baseline if b['record']==record['id'] and b['grid']==m['grid'] and b['quantity']==m['quantity']
+                for k in ('mean_absolute_relative_error','maximum_absolute_relative_error')]
+            passed = all(r['evaluated'] for r in result['rows']) and len(delta)==len([b for b in baseline if b['record']==record['id']])*2 and all(abs(d['difference'])<=spec['gates']['slack'] for d in delta)
+            write(out/'replay'/record['id']/'comparison.json',dict(passed=passed,differences=delta))
+            if not passed:
+                raise RuntimeError('frozen water replay mismatch; fitting stopped')
+        sizing = machine(spec,None)
+        write(out/'machine.json',sizing)
+        for case in spec['cases']:
+            remaining = min(spec['budget_s']-elapsed()['wall_s'],(spec['budget_s']-elapsed()['cpu_s'])/sizing['workers_requested'])-spec['assessment_reserve_s']
+            if remaining<=0:
+                break
+            directory = out/case['id']
+            mapping = load(checked(case['parameters_path'],case['sha256']))
+            mapping = o.s.with_parameter_values(mapping,case['origins'])
+            params, _, thermal, declared = o.water_rows(spec,mapping)
+            rows, weights = [], []
+            for ref, cp, problem in declared:
+                if ref['grid']=='staggered':
+                    continue
+                if ref['grid']=='primary':
+                    for kind,q in (('phase_density','saturated_liquid_rho'),('pressure','psat')):
+                        observed = float(ref['saturated_liquid_rho_kg_m3' if q=='saturated_liquid_rho' else 'psat_Pa'])
+                        rows.append(o.reg.observation(params,kind,problem,observed=observed,form='difference',
+                            scale=spec['relative_scales'][q]*observed,**(dict(phase='L',mass_basis=True) if kind=='phase_density' else {})))
+                        weights.append(1/20)
+                rows.append(cp)
+                weights.append(case['lambda']/23)
+            assert len(rows)==63
+            coords = [o.reg.coordinate(params,[(c['family'],tuple(map(tuple,c['target'])) if isinstance(c['target'],list) else c['target'],1.)],
+                origin=case['origins'][c['identity']],scale=c['scale'],bounds=tuple(c['bounds'])) for c in spec['coordinates']]
+            write(directory/'targets.json',[dict(observed=r.observed,scale=r.scale,weight=w,kind=r.kind.name) for r,w in zip(rows,weights,strict=True)])
+            clock, cpu = time.monotonic(), cpu_seconds()
+            fitted = o.reg.fit(params,coords,rows,weights=weights,thermochemistry=thermal,
+                controls=o.reg.FitControls(**dict(spec['controls'],maximum_elapsed_time_seconds=min(60.,remaining)),workers=sizing['workers_requested']))
+            raw = {k:o.s._jsonable(getattr(fitted,k)) for k in ('status','message','usable','physical','initial_cost','final_cost','iterations','residual_evaluations','jacobian_evaluations','predictions','residuals','weighted_residuals','iteration_costs','iteration_seconds','trial_failures')}
+            raw.update(native_wall_s=time.monotonic()-clock,cpu_s=cpu_seconds()-cpu)
+            write(directory/'native-fit.json',raw)
+            endpoint = o.s.with_parameter_values(mapping,dict(zip(case['origins'],raw['physical'],strict=True)))
+            write(directory/'parameters.json',dict(endpoint,document_id='water-124-'+case['id'],purpose='Water-only feasibility endpoint; nothing adopted; dependent mixture coefficients and inherited coefficient provenance are historical.'))
+            result = assess(endpoint,directory)
+            verdict = gates(result)
+            write(directory/'gates.json',verdict)
+            candidates.append(dict(id=case['id'],passed=all(verdict.values()),gates=verdict,metrics=result['metrics'],physical=raw['physical']))
+            print(case['id'],raw['status'],raw['physical'],verdict,elapsed(),flush=True)
+            if all(verdict.values()):
+                break
+    finally:
+        write(out/'summary.json',dict(candidates=candidates,**elapsed()))
+
+
 def run(spec_path, output_dir, *, case_ids, operation):
     started = COMMAND_STARTED if __name__ == '__main__' else time.monotonic()
     if operation not in ('fit','replay') or not case_ids:
@@ -163,6 +245,9 @@ def run(spec_path, output_dir, *, case_ids, operation):
     try:
         write(out/'inputs.json',verify(spec))
         import fit_observations as o
+        if spec.get('study') == 'water-124' and operation=='fit' and case_ids==['water-124']:
+            water_study(spec,out,started)
+            return out
         if operation == 'replay':
             declared = o.indexed(spec['replay'],'id')
             for identity in case_ids:

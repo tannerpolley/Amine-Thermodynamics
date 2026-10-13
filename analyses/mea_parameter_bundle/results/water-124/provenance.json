@@ -1,0 +1,14 @@
+{
+  "implementation_base": "0e923d6fdfa29a931d0441763e62a063142bc8fc",
+  "design_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/124#issuecomment-6156164248",
+  "design_readback_sha256": "6d3bc6c905e6016e2eba0b1fefe7d10c4adb81fee2c01d02987a0b56bb0378c7",
+  "spec_sha256": "b3a2a832baf8256b133675e65c420d76ed73f250f81960b32ae0ff40ccf102f6",
+  "script_sha256": {
+    "analyses/mea_parameter_bundle/scripts/fit_campaign.py": "5d709b0144d0c0cdb144f08d98a8787b4e53d0d1d3f5b6948c25e4f20903a95c",
+    "analyses/mea_parameter_bundle/scripts/fit_observations.py": "f399af82c7146b6c767a694a52fd38fbf2d593380d1510bce7642c5958044ac8"
+  },
+  "command": "nice -n 10 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/water-124/venv/bin/python analyses/mea_parameter_bundle/scripts/fit_campaign.py analyses/mea_parameter_bundle/data/input/fit-campaigns/water-124.json analyses/mea_parameter_bundle/results/water-124 --operation fit --case water-124",
+  "outer_wall_limit_s": 598,
+  "process_cpu_limit_s": 598,
+  "prior_budget_charge_s": 2
+}
