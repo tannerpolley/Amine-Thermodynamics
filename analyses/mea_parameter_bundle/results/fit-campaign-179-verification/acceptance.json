@@ -1,0 +1,72 @@
+{
+  "issue": 179,
+  "design_base": "b8c16b2236b1e961706a1d8481b0cb9681e817ab",
+  "checks": [
+    {
+      "check": "172 baseline",
+      "bitwise": false,
+      "rows": 163,
+      "cost": 32.05668490872888,
+      "native_wall_s": 19.204013775999556,
+      "command_wall_s": 21.62724239199997,
+      "passed": true,
+      "rows_bitwise": true,
+      "accepted_rounding_fields": 72,
+      "maximum_abs_weighted_residual_difference": 4.440892098500626e-16,
+      "maximum_abs_cost_difference": 6.661338147750939e-16,
+      "residual_rounding_cause": "Retained baseline computes log(pred/obs) in Python; Engine computes log1p((pred-observed)/observed).",
+      "comparison_path": "analyses/mea_parameter_bundle/results/fit-campaign-179-baseline-amended/replay/baseline/comparison.json"
+    },
+    {
+      "check": "172 larger-dV F1-A",
+      "bitwise": true,
+      "rows": 149,
+      "cost": 31.101298571429727,
+      "iterations": 33,
+      "residual_evaluations": 34,
+      "jacobian_evaluations": 16,
+      "native_wall_s": 178.2573328540002,
+      "command_wall_s": 180.3888211880003,
+      "cpu_s": 3209.783537,
+      "workers": 32,
+      "MemAvailable_bytes": 16800206848,
+      "F1_native_wall_le_120_s": false,
+      "F1_excess_s": 58.2573328540002
+    },
+    {
+      "check": "175 F1-A",
+      "bitwise": true,
+      "rows": 149,
+      "cost": 32.05668490870866,
+      "iterations": 9,
+      "residual_evaluations": 10,
+      "jacobian_evaluations": 7,
+      "native_wall_s": 69.26096050499837,
+      "command_wall_s": 71.47934417299984,
+      "cpu_s": 742.139206,
+      "workers": 16,
+      "MemAvailable_bytes": 17455644672,
+      "F1_native_wall_le_120_s": true,
+      "F1_excess_s": 0.0
+    }
+  ],
+  "scope": "Numerical reproduction only; no new physical validation or parameter adoption.",
+  "structure": "48 starts resolved; 149/167 observations; all F3 effective mappings and five coordinates verified; mismatched input hash rejected; constrained memory defers reproduction; active assessment imports resolve.",
+  "decision": "Owner chose retained e9b1aed5 wheel for heat-170: 026b3031 FitControls lacks workers.",
+  "limits": [
+    "Existing notebooks, manuscript, selected record and result trees preserved.",
+    "No full campaign or phase family/falsifier run.",
+    "Engine actual worker count and state-group cap unavailable.",
+    "Command wall measured by runner; standard-library import and argument parsing before run were excluded in these acceptance measurements."
+  ],
+  "commands": [
+    "nice -n 10 env PYTHONPATH=src tmp/fit-179/venv-172/bin/python analyses/mea_parameter_bundle/scripts/fit_campaign.py analyses/mea_parameter_bundle/data/input/fit-campaigns/permittivity-172.json analyses/mea_parameter_bundle/results/fit-campaign-179-baseline-amended --operation replay --case baseline",
+    "nice -n 10 env PYTHONPATH=src tmp/fit-179/venv-172/bin/python analyses/mea_parameter_bundle/scripts/fit_campaign.py analyses/mea_parameter_bundle/data/input/fit-campaigns/permittivity-172.json analyses/mea_parameter_bundle/results/fit-campaign-179-permittivity --operation fit --case larger-dV/F1-A",
+    "nice -n 10 env PYTHONPATH=src tmp/fit-179/venv-175/bin/python analyses/mea_parameter_bundle/scripts/fit_campaign.py analyses/mea_parameter_bundle/data/input/fit-campaigns/parallel-175.json analyses/mea_parameter_bundle/results/fit-campaign-179-parallel --operation fit --case F1-A"
+  ],
+  "baseline_amendment": "Lead decision 2026-10-12: all 163 row IDs, availability, observations and predictions bitwise; residuals/costs at most 4 ulp or 1e-15 absolute below magnitude 1; both fit checks stay bitwise.",
+  "review_corrections": [
+    "Replay and heat costs consume Engine Prediction.residual.",
+    "Type mismatches are retained as field-level differences; focused cases cover None/string on either side."
+  ]
+}
