@@ -133,3 +133,68 @@ def replay_summary(values, heat_sources):
         rr = [r for r in values if (r['target'] in arcis_ids) == (name=='Arcis') and r['target'] in heat_ids]
         score[name+'_RMSE_kJ_mol'] = math.sqrt(math.fsum(((r['predicted']-r['observed'])/1000)**2 for r in rr)/len(rr))
     return score
+
+
+def water_rows(spec, mapping):
+    params = epcsaft.Parameters.from_mapping(mapping, components=['water'])
+    source, p0 = thermal.CALORICS['components']['water'], thermal.CALORICS['reference_pressure_pa']
+    calorics = epcsaft.ThermochemistryRecord(p0, [[epcsaft.IdealInterval(*source['range_k'], True, True,
+        epcsaft.IdealCorrelation(epcsaft.IdealShomate(tuple(source['coefficients']), source['formation_enthalpy_j_per_mol']), p0))]])
+    model, rows = epcsaft.Pure(params, thermochemistry=calorics), []
+    import csv
+    for ref in csv.DictReader((ROOT/spec['reference_path']).open()):
+        T, P = float(ref['T_K']), float(ref['P_Pa'])
+        observed = float(ref['cp_kJ_kg_K'])*1000*spec['molar_mass_kg_mol']
+        cp = reg.isobaric_heat_capacity(params,T,P,{'water':1.},phase='liquid',observed=observed,
+            form='difference',scale=spec['relative_scales']['cp']*observed)
+        problem = eq.Problem(T=T,P=eq.Free(float(ref['psat_Pa'])),feed=eq.Amounts({'water':1.}),
+            phases=[eq.Phase('L',kind='liquid',amount=eq.Free(),composition_guess=(1.,)),
+                eq.Phase('V',kind='vapor',amount=eq.Pinned(0.),composition_guess=(1.,))],row_tolerance=1e-10)
+        rows.append((ref,cp,problem))
+    return params, model, calorics, rows
+
+
+def water_assessment(spec, mapping):
+    _, model, _, declared = water_rows(spec,mapping)
+    rows = []
+    for ref, item, problem in declared:
+        row = dict(grid=ref['grid'],T_K=float(ref['T_K']),P_Pa=float(ref['P_Pa']),evaluated=False)
+        try:
+            prediction = reg.predict(model,item)
+            if prediction.status.name != 'Available':
+                raise RuntimeError(prediction.message)
+            state = model.state(row['T_K'],P=row['P_Pa'],phase='liquid')
+            row.update(cp_J_mol_K=prediction.value,rho_kg_m3=state.molar_density*spec['molar_mass_kg_mol'],cp_error_relative=prediction.value/item.observed-1,
+                rho_error_relative=state.molar_density*spec['molar_mass_kg_mol']/float(ref['rho_kg_m3'])-1,
+                density_termination=s._jsonable(state.density_convergence),dP_drho=state.pressure_density_derivative,enthalpy_ladder=[])
+            for step in spec['enthalpy_steps_K']:
+                hs = [model.state(row['T_K']+d*step,P=row['P_Pa'],phase='liquid').total_enthalpy for d in (-1,1)]
+                fd = (hs[1]-hs[0])/(2*step)
+                row['enthalpy_ladder'].append(dict(step_K=step,enthalpies_J_mol=hs,cp_J_mol_K=fd,
+                    error_relative=abs(fd/prediction.value-1),subtraction_roundoff_relative=8*max(map(math.ulp,hs))/(2*step*abs(prediction.value))))
+            coarse, fine = row['enthalpy_ladder']
+            row['cp_verified'] = (max(coarse['error_relative'],fine['error_relative'])<=spec['cp_verification_tolerance']
+                and (fine['error_relative']<coarse['error_relative'] or max(coarse['error_relative'],fine['error_relative'])<=max(coarse['subtraction_roundoff_relative'],fine['subtraction_roundoff_relative'])))
+            if ref['grid'] != 'atmospheric-controls':
+                solved = eq.solve_equilibrium(model,problem)
+                row.update(saturation_termination=solved.message,saturation_success=solved.success,
+                    saturation_max_abs_residual=max(map(abs,solved.residuals)),saturation_phase_kinds=['liquid','vapor'],
+                    saturation_molar_densities=list(solved.molar_densities),saturation_pressure_Pa=solved.pressure[0])
+                sat = model.state(row['T_K'],rho=solved.molar_densities[0])
+                row.update(saturated_dP_drho=sat.pressure_density_derivative,saturated_liquid_rho_kg_m3=solved.molar_densities[0]*spec['molar_mass_kg_mol'],
+                    saturated_liquid_rho_error_relative=solved.molar_densities[0]*spec['molar_mass_kg_mol']/float(ref['saturated_liquid_rho_kg_m3'])-1,
+                    psat_error_relative=solved.pressure[0]/float(ref['psat_Pa'])-1)
+            row['evaluated'] = all(math.isfinite(v) for k,v in row.items() if isinstance(v,(int,float)))
+        except Exception as error:
+            row['failure'] = f'{type(error).__name__}: {error}'
+        rows.append(row)
+    metrics = []
+    for grid in dict.fromkeys(r['grid'] for r in rows):
+        for q in ('cp','rho','saturated_liquid_rho','psat'):
+            selected = [r for r in rows if r['grid']==grid and (grid!='atmospheric-controls' or q in ('cp','rho'))]
+            if not selected:
+                continue
+            errors = [abs(r[q+'_error_relative']) for r in selected if r['evaluated'] and q+'_error_relative' in r]
+            metrics.append(dict(grid=grid,quantity=q,requested_rows=len(selected),evaluated_rows=len(errors),
+                mean_absolute_relative_error=math.fsum(errors)/len(errors) if errors else None,maximum_absolute_relative_error=max(errors,default=None)))
+    return dict(rows=rows,metrics=metrics)
