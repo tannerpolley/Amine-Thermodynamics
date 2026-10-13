@@ -4,11 +4,18 @@
   "checks": [
     {
       "check": "172 baseline",
-      "bitwise": true,
+      "bitwise": false,
       "rows": 163,
       "cost": 32.05668490872888,
-      "native_wall_s": 20.75942906599994,
-      "command_wall_s": 23.207022952999978
+      "native_wall_s": 19.204013775999556,
+      "command_wall_s": 21.62724239199997,
+      "passed": true,
+      "rows_bitwise": true,
+      "accepted_rounding_fields": 72,
+      "maximum_abs_weighted_residual_difference": 4.440892098500626e-16,
+      "maximum_abs_cost_difference": 6.661338147750939e-16,
+      "residual_rounding_cause": "Retained baseline computes log(pred/obs) in Python; Engine computes log1p((pred-observed)/observed).",
+      "comparison_path": "analyses/mea_parameter_bundle/results/fit-campaign-179-baseline-amended/replay/baseline/comparison.json"
     },
     {
       "check": "172 larger-dV F1-A",
@@ -53,8 +60,13 @@
     "Command wall measured by runner; standard-library import and argument parsing before run were excluded in these acceptance measurements."
   ],
   "commands": [
-    "nice -n 10 env PYTHONPATH=src tmp/fit-179/venv-172/bin/python analyses/mea_parameter_bundle/scripts/fit_campaign.py analyses/mea_parameter_bundle/data/input/fit-campaigns/permittivity-172.json analyses/mea_parameter_bundle/results/fit-campaign-179-baseline-complete --operation replay --case baseline",
+    "nice -n 10 env PYTHONPATH=src tmp/fit-179/venv-172/bin/python analyses/mea_parameter_bundle/scripts/fit_campaign.py analyses/mea_parameter_bundle/data/input/fit-campaigns/permittivity-172.json analyses/mea_parameter_bundle/results/fit-campaign-179-baseline-amended --operation replay --case baseline",
     "nice -n 10 env PYTHONPATH=src tmp/fit-179/venv-172/bin/python analyses/mea_parameter_bundle/scripts/fit_campaign.py analyses/mea_parameter_bundle/data/input/fit-campaigns/permittivity-172.json analyses/mea_parameter_bundle/results/fit-campaign-179-permittivity --operation fit --case larger-dV/F1-A",
     "nice -n 10 env PYTHONPATH=src tmp/fit-179/venv-175/bin/python analyses/mea_parameter_bundle/scripts/fit_campaign.py analyses/mea_parameter_bundle/data/input/fit-campaigns/parallel-175.json analyses/mea_parameter_bundle/results/fit-campaign-179-parallel --operation fit --case F1-A"
+  ],
+  "baseline_amendment": "Lead decision 2026-10-12: all 163 row IDs, availability, observations and predictions bitwise; residuals/costs at most 4 ulp or 1e-15 absolute below magnitude 1; both fit checks stay bitwise.",
+  "review_corrections": [
+    "Replay and heat costs consume Engine Prediction.residual.",
+    "Type mismatches are retained as field-level differences; focused cases cover None/string on either side."
   ]
 }

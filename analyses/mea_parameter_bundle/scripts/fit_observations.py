@@ -93,10 +93,10 @@ def rows_for(spec, mapping, observation_id):
 def predict(mapping, items):
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping), thermochemistry=thermal.record())
     values = [reg.predict(model, item) for item in items]
-    if any(v.status.name != 'Available' or not math.isfinite(v.value) for v in values):
-        raise RuntimeError([(v.status.name, v.message, v.value) for v in values
-            if v.status.name != 'Available' or not math.isfinite(v.value)])
-    return [v.value for v in values]
+    if any(v.status.name != 'Available' or not all(math.isfinite(x) for x in (v.value, v.residual)) for v in values):
+        raise RuntimeError([(v.status.name, v.message, v.value, v.residual) for v in values
+            if v.status.name != 'Available' or not all(math.isfinite(x) for x in (v.value, v.residual))])
+    return values
 
 
 def replay(mapping, rows):
@@ -112,9 +112,8 @@ def replay(mapping, rows):
                 convergence=None if value.convergence is None else {k:s._jsonable(getattr(value.convergence,k))
                     for k in ('residual','floor','amplification','contraction','iterations','stop')})
         if value.status.name == 'Available':
-            r = math.sqrt(weight)*(math.log(value.value/item.observed) if item.form == reg.ResidualForm.LogRatio
-                else (value.value-item.observed)/item.scale)
-            row.update(predicted=value.value, weighted_residual=r, cost=.5*r**2)
+            r = math.sqrt(weight)*value.residual
+            row.update(predicted=value.value, residual=value.residual, weighted_residual=r, cost=.5*r**2)
         result.append(row)
     return result
 

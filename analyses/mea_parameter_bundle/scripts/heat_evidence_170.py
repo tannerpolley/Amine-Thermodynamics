@@ -309,14 +309,13 @@ def main(output_dir, selected_record, no_heat_record, vinjarapu, arcis):
                         pressure_Pa=r["system_pressure_Pa"],
                         loading=r["alpha_final"],
                         observed_J_mol=r["observed_addition_enthalpy_J_per_mol_CO2"],
-                        predicted_J_mol=y,
+                        predicted_J_mol=y.value,
+                        scaled_residual=y.residual,
                         scale_J_mol=r["uH_J_per_mol_CO2"],
-                        residual_J_mol=y - r["observed_addition_enthalpy_J_per_mol_CO2"],
+                        residual_J_mol=y.value - r["observed_addition_enthalpy_J_per_mol_CO2"],
                         role="fitted" if source == "Vinjarapu2024" and label == "heat F1" else "predicted",
                         parameter_sha256=s.sha256(
-                            BUNDLE / "results/selected-current-best-parameters.json"
-                            if label == "heat F1"
-                            else ORIGINAL / "D1-evidence/F1-double-prime-candidate-parameters.json"
+                            Path(selected_record if label == "heat F1" else no_heat_record)
                         ),
                     )
                 )
@@ -344,7 +343,7 @@ def main(output_dir, selected_record, no_heat_record, vinjarapu, arcis):
                     bias_kJ_mol=math.fsum(r["residual_J_mol"] for r in part) / len(part) / 1000,
                     minimum_predicted_kJ_mol=min(r["predicted_J_mol"] for r in part) / 1000,
                     maximum_predicted_kJ_mol=max(r["predicted_J_mol"] for r in part) / 1000,
-                    heat_cost=math.fsum(0.5 * (r["residual_J_mol"] / r["scale_J_mol"]) ** 2 for r in part),
+                    heat_cost=math.fsum(0.5 * r["scaled_residual"] ** 2 for r in part),
                 )
             )
     table(output_dir / "heat-comparison.csv", heatstats)

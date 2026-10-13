@@ -2190,7 +2190,13 @@
       "reference_path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/frozen-172/baseline/replay.json",
       "reference_sha256": "c37ce772e08b5784e1e8fae820964398bb84c72e24a00dcddd260df32edf3b86",
       "summary_path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/frozen-172/baseline/summary.json",
-      "summary_sha256": "3b42299244d72b4c9549dbab408444c54b02abb7880cd200836755d29a92ba2a"
+      "summary_sha256": "3b42299244d72b4c9549dbab408444c54b02abb7880cd200836755d29a92ba2a",
+      "residual_comparison": {
+        "maximum_ulps": 4,
+        "absolute_below_one": 1e-15,
+        "cause": "Retained baseline computes log(pred/obs) in Python; Engine computes log1p((pred-observed)/observed).",
+        "authority": "Lead amendment, 2026-10-12, issue 179."
+      }
     }
   ],
   "packet_path": "analyses/mea_parameter_bundle/results/source-corrections-152/state-packet.json.gz",

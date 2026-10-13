@@ -5,6 +5,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT/'analyses/mea_parameter_bundle/scripts'), str(ROOT/'src')]
 import fit_campaign as f
 import fit_observations as o
+for a,b in ((None,1.),('unavailable',1.),(1.,None),(1.,'unavailable')):
+ mismatch=f.differences({'prediction':a},{'prediction':b})
+ assert len(mismatch)==1 and mismatch[0]['field']=='/prediction'
+policy=f.load(ROOT/'analyses/mea_parameter_bundle/data/input/fit-campaigns/permittivity-172.json')['replay'][0]['residual_comparison']
+assert not f.replay_comparison(f.differences({'predicted':1.},{'predicted':1.+2**-52}),policy)['passed']
+assert not f.replay_comparison(f.differences({'cost':1.},{'cost':1.+5*2**-52}),policy)['passed']
 new,old=map(Path,sys.argv[1:3])
 a=f.load(old/'native-fit.json');b=f.load(new/'native-fit.json')
 fields=['physical','predictions','weighted_residuals','optimizer_jacobian','physical_jacobian','initial_cost','final_cost','iteration_costs',
