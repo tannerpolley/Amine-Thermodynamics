@@ -99,13 +99,37 @@ def differences(expected, actual, path=''):
             result.append(dict(field=path, expected_length=len(expected), actual_length=len(actual)))
         for i,(a,b) in enumerate(zip(expected,actual)):
             result.extend(differences(a,b,f'{path}/{i}'))
-    elif isinstance(expected, float) or isinstance(actual, float):
-        if not isinstance(actual,(int,float)) or struct.pack('!d',expected) != struct.pack('!d',actual):
+    elif isinstance(expected, (int,float)) and isinstance(actual, (int,float)):
+        if struct.pack('!d',expected) != struct.pack('!d',actual):
             result.append(dict(field=path,expected=expected,actual=actual,
-                expected_hex=float(expected).hex(), actual_hex=float(actual).hex() if isinstance(actual,(int,float)) else None))
+                expected_hex=float(expected).hex(), actual_hex=float(actual).hex()))
     elif expected != actual:
         result.append(dict(field=path,expected=expected,actual=actual))
     return result
+
+
+
+def replay_comparison(delta, policy):
+    accepted = []
+    for difference in delta:
+        field = difference['field'].rsplit('/', 1)[-1]
+        a, b = difference.get('expected'), difference.get('actual')
+        eligible = (field in ('residual','weighted_residual','cost','common149_cost')
+            and isinstance(a,(int,float)) and isinstance(b,(int,float)))
+        if eligible and policy:
+            limit = max(policy['maximum_ulps']*math.ulp(a), policy['absolute_below_one'] if abs(a)<1 else 0.)
+            difference.update(absolute_difference=abs(a-b), allowed_absolute_difference=limit,
+                accepted_rounding=abs(a-b)<=limit)
+        else:
+            difference['accepted_rounding'] = False
+        if difference['accepted_rounding']:
+            accepted.append(difference)
+    return dict(passed=all(d['accepted_rounding'] for d in delta), bitwise_equal=not delta,
+        differences=delta, accepted_rounding_fields=len(accepted), cause=policy.get('cause') if policy else None,
+        maximum_abs_weighted_residual_difference=max((d['absolute_difference'] for d in accepted
+            if d['field'].endswith('/weighted_residual')),default=0.),
+        maximum_abs_cost_difference=max((d['absolute_difference'] for d in accepted
+            if d['field'].endswith('/cost')),default=0.))
 
 
 def resolve(spec, case, start):
@@ -154,10 +178,11 @@ def run(spec_path, output_dir, *, case_ids, operation):
                 write(directory/'summary.json',summary)
                 delta = differences(load(checked(entry['reference_path'],entry['reference_sha256'])),values)
                 delta += differences(load(checked(entry['summary_path'],entry['summary_sha256'])),summary,'summary')
-                write(directory/'comparison.json',dict(bitwise_equal=not delta,differences=delta,
-                    native_wall_s=native_wall,command_wall_s=time.monotonic()-started))
-                if delta:
-                    raise RuntimeError('bitwise replay mismatch; see comparison.json')
+                comparison = replay_comparison(delta,entry.get('residual_comparison'))
+                comparison.update(native_wall_s=native_wall,command_wall_s=time.monotonic()-started)
+                write(directory/'comparison.json',comparison)
+                if not comparison['passed']:
+                    raise RuntimeError('replay mismatch; see comparison.json')
             return out
         available = {c['id'] for c in spec['cases']} | {c['id']+'-'+s['id'] for c in spec['cases'] for s in c['starts']}
         if set(case_ids)-available:

@@ -14,6 +14,8 @@ from types import SimpleNamespace
 import concurrent.futures
 import multiprocessing
 
+for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
+    os.environ[key] = '1'
 import shared_evaluation as s
 BUNDLE = Path(__file__).resolve().parents[1]
 OUT = BUNDLE / 'results/final-rerun'
@@ -164,8 +166,8 @@ def summarize(records, density, choices, excluded, *, output_dir=OUT, heat_rows=
             heats = [dict(problem=problem, kind='heat', identity=r['record_id'], target=r['record_id'],
                 source='Vinjarapu2024', quantity='heat', basis='J/mol CO2', species='',
                 temperature_K=r['temperature_K'], loading=r['alpha_final'], observed=r['observed_addition_enthalpy_J_per_mol_CO2'],
-                predicted=y, scaled_residual=(y-r['observed_addition_enthalpy_J_per_mol_CO2'])/r['uH_J_per_mol_CO2'],
-                ln_pred_over_obs=None, cost=.5*((y-r['observed_addition_enthalpy_J_per_mol_CO2'])/r['uH_J_per_mol_CO2'])**2,
+                predicted=y.value, scaled_residual=y.residual,
+                ln_pred_over_obs=None, cost=.5*y.residual**2,
                 record_sha256=s.sha256(Path(chosen['record']))) for r,y in zip(heat_rows,values,strict=True)]
             all_rows.extend(heats)
             fitted += heats
