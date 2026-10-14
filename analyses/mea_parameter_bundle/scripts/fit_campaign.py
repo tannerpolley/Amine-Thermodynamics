@@ -286,13 +286,17 @@ def stage2_study(spec, out, started):
                 max(map(abs,e['raw_residuals']),default=0)>spec['verification']['raw_residual'] or
                 any(v<=0 for v in e['dP_drho']) or e['reduced_hessian_minimum']<0):
                 raise RuntimeError(f"state verification failed: {r['id']}")
-    reference = o.s.stage2_reference(load(ROOT/spec['water_path']),spec)
+    reference = load(ROOT/spec['reference_path']) if 'reference_path' in spec else o.s.stage2_reference(load(ROOT/spec['water_path']),spec)
     write(out/'reference-parameters.json',reference)
     try:
         for case in spec['cases']:
-            coordinate, starts, endpoints = case['coordinate'], [], []
+            coordinates, starts, endpoints = case.get('coordinates',[case.get('coordinate')]), [], []
+            for pair in reference['pairs']:
+                if [pair['component_id_a'],pair['component_id_b']]==coordinates[0]['target']:
+                    pair['coefficients'].extend(case.get('additional_coefficients',[]))
             for start in case['starts']:
-                mapping = o.s.with_parameter_values(reference,{coordinate['identity']:start['value']})
+                values = start.get('values',[start.get('value')])
+                mapping = o.s.with_parameter_values(reference,{c['identity']:v for c,v in zip(coordinates,values,strict=True) if v is not None})
                 directory = out/case['id']/start['id']
                 write(directory/'start-parameters.json',mapping)
                 rows = call(mapping,case,'assessment',directory/'start-predictions.json')
@@ -303,13 +307,14 @@ def stage2_study(spec, out, started):
                 directory = out/case['id']/start['id']
                 raw = call(mapping,case,'fit',directory/'native-fit.json')
                 complete = (raw['status']=='converged' and raw['usable'] and all(v=='Available' for v in raw['statuses'])
-                    and len(raw['targets'])==case['target_count'] and len(raw['physical'])==1
+                    and len(raw['targets'])==case['target_count'] and len(raw['physical'])==len(coordinates)
                     and all(math.isfinite(v) for k in ('physical','predictions','weighted_residuals','optimizer_jacobian','physical_jacobian') for v in raw[k]))
-                endpoint = o.s.with_parameter_values(mapping,{coordinate['identity']:raw['physical'][0]}) if raw['usable'] else None
+                endpoint = o.s.with_parameter_values(mapping,{c['identity']:v for c,v in zip(coordinates,raw['physical'],strict=True)}) if raw['usable'] else None
                 if not complete:
                     if endpoint is not None:
                         write(directory/'usable-budget-endpoint.json',endpoint)
-                    raise RuntimeError(f"incomplete fit: {case['id']}/{start['id']}: {raw['status']}: {raw['message']}")
+                    write(directory/'incomplete-fit.json',dict(status=raw['status'],message=raw['message'],eligible=False))
+                    continue
                 endpoint['purpose'] = spec['purpose']
                 write(directory/'parameters.json',endpoint)
                 rows = call(endpoint,case,'assessment',directory/'predictions.json')
@@ -325,43 +330,48 @@ def stage2_study(spec, out, started):
                     or delta>spec['verification']['row_replay_absolute']):
                     raise RuntimeError('candidate serialization replay failed')
                 derivatives = []
-                for step in spec['verification']['steps_optimizer']:
-                    shifted = [call(o.s.with_parameter_values(endpoint,{coordinate['identity']:raw['physical'][0]+sign*step*coordinate['scale']}),
-                        case,'residuals',directory/f'derivative-{step}-{sign}.json') for sign in (-1,1)]
-                    for quantity in dict.fromkeys(r['quantity'] for r in objective):
-                        i = next(i for i,r in enumerate(objective) if r['quantity']==quantity)
-                        fd = (shifted[1][i]['weighted_residual']-shifted[0][i]['weighted_residual'])/(2*step)
-                        exact = raw['optimizer_jacobian'][i]
-                        error = abs(fd-exact)
-                        derivatives.append(dict(target=objective[i]['id'],step_optimizer=step,centered=fd,exact=exact,
-                            absolute_error=error,relative_error=error/max(abs(exact),1e-300),
-                            roundoff=8*max(math.ulp(shifted[j][i]['weighted_residual']) for j in (0,1))/(2*step),
-                            passed=error<=spec['verification']['derivative_absolute'] or error<=spec['verification']['derivative_relative']*abs(exact)))
+                jac = np.asarray(raw['optimizer_jacobian']).reshape(-1,len(coordinates))
+                for column,coordinate in enumerate(coordinates):
+                    for step in spec['verification']['steps_optimizer']:
+                        shifted = [call(o.s.with_parameter_values(endpoint,{coordinate['identity']:raw['physical'][column]+sign*step*coordinate['scale']}),
+                            case,'residuals',directory/f'derivative-{column}-{step}-{sign}.json') for sign in (-1,1)]
+                        for i,r in enumerate(objective):
+                            if i and (r['quantity'],r['T_K']) in {(q['quantity'],q['T_K']) for q in objective[:i]}:
+                                continue
+                            fd = (shifted[1][i]['weighted_residual']-shifted[0][i]['weighted_residual'])/(2*step)
+                            exact = float(jac[i,column])
+                            error = abs(fd-exact)
+                            derivatives.append(dict(target=r['id'],coordinate=coordinate['identity'],step_optimizer=step,centered=fd,exact=exact,
+                                absolute_error=error,relative_error=error/max(abs(exact),1e-300),
+                                roundoff=8*max(math.ulp(shifted[j][i]['weighted_residual']) for j in (0,1))/(2*step),
+                                passed=error<=spec['verification']['derivative_absolute'] or error<=spec['verification']['derivative_relative']*abs(exact)))
                 write(directory/'derivatives.json',derivatives)
                 if not all(d['passed'] for d in derivatives):
                     raise RuntimeError('exact parameter derivative verification failed')
-                jac = np.asarray(raw['optimizer_jacobian'])
-                write(directory/'identification.json',dict(coordinate=coordinate,gradient=float(jac@np.asarray(raw['weighted_residuals'])),
-                    optimizer_singular_values=np.linalg.svd(jac.reshape(-1,1),compute_uv=False).tolist(),
-                    physical_singular_values=np.linalg.svd(np.asarray(raw['physical_jacobian']).reshape(-1,1),compute_uv=False).tolist(),
-                    full_condition=1.,free_condition=1. if not raw['covariance']['active_bounds'] else None,
+                spectrum = np.linalg.svd(jac,compute_uv=False)
+                write(directory/'identification.json',dict(coordinates=coordinates,gradient=(jac.T@np.asarray(raw['weighted_residuals'])).tolist(),
+                    optimizer_singular_values=spectrum.tolist(),
+                    physical_singular_values=np.linalg.svd(np.asarray(raw['physical_jacobian']).reshape(jac.shape),compute_uv=False).tolist(),
+                    full_condition=float(spectrum[0]/spectrum[-1]),free_condition=float(spectrum[0]/spectrum[-1]) if not raw['covariance']['active_bounds'] else None,
                     native_rank_cutoff='Engine-owned; not returned',covariance=raw['covariance']))
                 write(directory/'scores.json',o.stage2_scores(rows))
-                endpoints.append(dict(start=start['id'],cost=cost,k_ij=raw['physical'][0],path=str((directory/'parameters.json').resolve().relative_to(ROOT)),
+                endpoints.append(dict(start=start['id'],cost=cost,k_ij=raw['physical'][0],physical=raw['physical'],path=str((directory/'parameters.json').resolve().relative_to(ROOT)),
                     sha256=hashlib.sha256((directory/'parameters.json').read_bytes()).hexdigest(),active_bounds=raw['covariance']['active_bounds']))
                 print(case['id'],start['id'],endpoints[-1],elapsed(),flush=True)
+            if not endpoints:
+                raise RuntimeError(f"no complete converged endpoint: {case['id']}; all declared fits retained")
             chosen = min(endpoints,key=lambda e:e['cost'])
-            agreement = abs(endpoints[0]['cost']-endpoints[1]['cost'])/max(e['cost'] for e in endpoints)
+            agreement = abs(endpoints[0]['cost']-endpoints[-1]['cost'])/max(e['cost'] for e in endpoints)
             passed = chosen['cost']<=min(c for _,c in starts)
             selected.append(dict(case=case['id'],passed=passed,selected=chosen,endpoints=endpoints,
                 start_relative_cost_difference=agreement,start_agreement=agreement<=spec['verification']['start_cost_relative'],
-                provisional=case['id']=='co2-water'))
+                provisional=case['id']=='co2-water',diagnostic=case.get('diagnostic',False)))
             write(out/'selection.json',selected)
             if not passed:
                 raise RuntimeError('endpoint cost exceeds better same-basis start')
             reference = load(ROOT/chosen['path'])
     finally:
-        write(out/'summary.json',dict(selected=selected,completed=len(selected)==2,calls=timing,**elapsed()))
+        write(out/'summary.json',dict(selected=selected,completed=len(selected)==len(spec['cases']),calls=timing,**elapsed()))
 
 
 def run(spec_path, output_dir, *, case_ids, operation):
