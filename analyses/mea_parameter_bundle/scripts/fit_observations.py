@@ -201,7 +201,7 @@ def water_assessment(spec, mapping):
 
 
 def stage2_rows(spec, mapping, case, assessment=False):
-    declared = load(spec['stage2_rows_path'])[case['id']]
+    declared = load(spec['stage2_rows_path'])[case.get('observations_id',case['id'])]
     mapping = json.loads(json.dumps(mapping))
     for domain in mapping['domains']:
         if domain['domain_id'] in case['neutral_domain_ids']:
@@ -236,10 +236,9 @@ def stage2_native(spec, mapping, case, operation, workers=0, output_path=None):
     params, rows = stage2_rows(spec,mapping,case,assessment=operation=='assessment')
     model = epcsaft.Mixture(params,thermochemistry=thermal.record())
     if operation == 'fit':
-        c = case['coordinate']
-        coord = reg.coordinate(params,[('k_ij',tuple(c['target']),1.)],origin=s.parameter_values(mapping)[c['identity']],
-            scale=c['scale'],bounds=tuple(c['bounds']))
-        fitted = reg.fit(params,[coord],[r[1] for r in rows],weights=[r[0]['weight'] for r in rows],
+        coords = [reg.coordinate(params,[(c.get('family','k_ij'),tuple(c['target']),1.)],origin=s.parameter_values(mapping)[c['identity']],
+            scale=c['scale'],bounds=tuple(c['bounds'])) for c in case.get('coordinates',[case.get('coordinate')])]
+        fitted = reg.fit(params,coords,[r[1] for r in rows],weights=[r[0]['weight'] for r in rows],
             thermochemistry=thermal.record(),controls=reg.FitControls(**spec['controls'],workers=workers,
                 maximum_elapsed_time_seconds=case['fit_wall_s']),singular_vectors=True)
         result = {k:s._jsonable(getattr(fitted,k)) for k in ('status','message','usable','initial_cost','final_cost','physical',
