@@ -1,0 +1,85 @@
+{
+  "completed": true,
+  "declared_rows": 39,
+  "starts_qualified": true,
+  "endpoints": [
+    {
+      "start": "A",
+      "complete": true,
+      "physical": [
+        -0.046416901324128006,
+        -35.66505265248939
+      ],
+      "native_cost": 0.026481760450540074,
+      "replayed_cost": 0.026481760450526227,
+      "initial_cost": 1.2561916589702176,
+      "iterations": 4,
+      "residual_evaluations": 5,
+      "jacobian_evaluations": 6,
+      "trial_failures": 0,
+      "active_bounds": [],
+      "replay": {
+        "cost": 0.026481760450526227,
+        "relative_cost_difference": 5.228716878965834e-13,
+        "maximum_weighted_row_difference": 9.518774657379936e-14,
+        "ids_equal": true,
+        "start_cost": 1.2561916589702178
+      },
+      "derivative_checks": 16,
+      "derivatives_passed": true,
+      "maximum_derivative_relative_error": 3.836399461122357e-07,
+      "maximum_raw_equilibrium_residual": 1.0746958878371515e-13,
+      "minimum_dP_drho": 563.8376371565295,
+      "maximum_pressure_closure_Pa": 9.93022695183754e-06
+    },
+    {
+      "start": "B",
+      "complete": true,
+      "physical": [
+        -0.046416901120577676,
+        -35.66505220645838
+      ],
+      "native_cost": 0.026481760450542256,
+      "replayed_cost": 0.026481760450524285,
+      "initial_cost": 1.4385228950871876,
+      "iterations": 4,
+      "residual_evaluations": 5,
+      "jacobian_evaluations": 6,
+      "trial_failures": 0,
+      "active_bounds": [],
+      "replay": {
+        "cost": 0.026481760450524285,
+        "relative_cost_difference": 6.786457888509342e-13,
+        "maximum_weighted_row_difference": 1.172950625516478e-13,
+        "ids_equal": true,
+        "start_cost": 1.438522895087187
+      },
+      "derivative_checks": 16,
+      "derivatives_passed": true,
+      "maximum_derivative_relative_error": 3.836378269739529e-07,
+      "maximum_raw_equilibrium_residual": 1.0480505352461478e-13,
+      "minimum_dP_drho": 563.8378236851828,
+      "maximum_pressure_closure_Pa": 1.0783434845507145e-05
+    }
+  ],
+  "provisional_selected": {
+    "start": "B",
+    "cost": 0.026481760450524285,
+    "k_ij": -0.046416901120577676,
+    "physical": [
+      -0.046416901120577676,
+      -35.66505220645838
+    ],
+    "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/co2-water/slope/co2-water/B/parameters.json",
+    "sha256": "b1ec1ddc22abe5ced8d08116fc91a7b3da1361864db1b34c33dda121b642a5e2",
+    "active_bounds": []
+  },
+  "selection_basis": "Lowest cold-replayed objective among complete, converged, replayed and derivative-verified endpoints. Native A cost is smaller than native B by 2.18e-15; the replayed order reverses at rounding precision. Both meet start agreement.",
+  "start_relative_cost_difference": 7.336711230825352e-14,
+  "cpu_s": 76.92578300000001,
+  "wall_s": 37.936401221999404,
+  "budget_cpu_s": 600,
+  "budget_wall_s": 300,
+  "adopted": false,
+  "delivered_review": "Parent task; not performed by implementation sub-agent"
+}

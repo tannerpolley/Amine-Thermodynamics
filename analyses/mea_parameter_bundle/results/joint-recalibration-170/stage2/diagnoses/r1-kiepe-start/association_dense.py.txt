@@ -1,0 +1,5 @@
+exec(open('tmp/stage2-diagnose/probe.py').read().split('mode=sys.argv[1]')[0])
+m,p,rows,model=setup(-.0242)
+row,item,pp=rows[8];pp.phases[1].kind='liquid';pp.phases[1].packing_guess=.25;pp.P=eq.Free(30e6)
+s,e=solve(model,pp,'newrounded/row10/dense-phase');print(e,flush=True)
+save('association-dense-timing.json',{'cpu_s':time.process_time()-CPU,'wall_s':time.monotonic()-WALL})
