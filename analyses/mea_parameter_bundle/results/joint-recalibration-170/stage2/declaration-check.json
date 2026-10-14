@@ -1,0 +1,141 @@
+{
+  "first": {
+    "cause": "Traceback (most recent call last):\n  File \"/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494/analyses/mea_parameter_bundle/scripts/fit_campaign.py\", line 373, in run\n    stage2_study(spec,out,started)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494/analyses/mea_parameter_bundle/scripts/fit_campaign.py\", line 293, in stage2_study\n    rows = call(mapping,case,'assessment',directory/'start-predictions.json')\n  File \"/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494/analyses/mea_parameter_bundle/scripts/fit_campaign.py\", line 272, in call\n    raise RuntimeError(load(path.with_suffix('.failure.json'))['failure'])\nRuntimeError: Traceback (most recent call last):\n  File \"/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494/analyses/mea_parameter_bundle/scripts/fit_campaign.py\", line 253, in child\n    write(path,o.stage2_native(spec,mapping,case,operation,sizing['workers_requested'],path))\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494/analyses/mea_parameter_bundle/scripts/fit_observations.py\", line 236, in stage2_native\n    params, rows = stage2_rows(spec,mapping,case,assessment=operation=='assessment')\n                   ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494/analyses/mea_parameter_bundle/scripts/fit_observations.py\", line 209, in stage2_rows\n    params = epcsaft.Parameters.from_mapping(mapping)\n  File \"/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494/tmp/stage2/venv/lib/python3.13/site-packages/epcsaft/parameters.py\", line 96, in from_mapping\n    raise _core.ParameterError(f\"parameter document fields the Engine does not read: {', '.join(unread)}\")\nepcsaft._core.ParameterError: parameter document fields the Engine does not read: stage2_inputs, starting_assumptions\n\n"
+  },
+  "first_timing": {
+    "selected": [],
+    "completed": false,
+    "calls": [
+      {
+        "path": "neutral-mea-water/A/start-predictions.json",
+        "operation": "assessment",
+        "cpu_s": 0.011034000000000016,
+        "wall_s": 0.0092174649998924,
+        "wall_limit_s": 60,
+        "interrupted": false,
+        "host_load": [
+          4.501953125,
+          7.08837890625,
+          7.8818359375
+        ]
+      }
+    ],
+    "cpu_s": 0.216554,
+    "wall_s": 0.16694672900030127
+  },
+  "second": {
+    "cause": "Traceback (most recent call last):\n  File \"/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494/analyses/mea_parameter_bundle/scripts/fit_campaign.py\", line 373, in run\n    stage2_study(spec,out,started)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494/analyses/mea_parameter_bundle/scripts/fit_campaign.py\", line 343, in stage2_study\n    endpoints.append(dict(start=start['id'],cost=cost,k_ij=raw['physical'][0],path=str((directory/'parameters.json').relative_to(ROOT)),\n                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^\n  File \"/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/pathlib/_local.py\", line 385, in relative_to\n    raise ValueError(f\"{str(self)!r} is not in the subpath of {str(other)!r}\")\nValueError: 'analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json' is not in the subpath of '/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/t3-170-stage-2-build-and-run-mea-water-an-c331b494'\n"
+  },
+  "second_timing": {
+    "selected": [],
+    "completed": false,
+    "calls": [
+      {
+        "path": "neutral-mea-water/A/start-predictions.json",
+        "operation": "assessment",
+        "cpu_s": 2.8395289999999997,
+        "wall_s": 2.844057817999783,
+        "wall_limit_s": 60,
+        "interrupted": false,
+        "host_load": [
+          4.99169921875,
+          6.98681640625,
+          7.82568359375
+        ]
+      },
+      {
+        "path": "neutral-mea-water/B/start-predictions.json",
+        "operation": "assessment",
+        "cpu_s": 5.198814,
+        "wall_s": 5.255199222000101,
+        "wall_limit_s": 60,
+        "interrupted": false,
+        "host_load": [
+          7.31494140625,
+          7.435546875,
+          7.96630859375
+        ]
+      },
+      {
+        "path": "neutral-mea-water/A/native-fit.json",
+        "operation": "fit",
+        "cpu_s": 12.145777999999998,
+        "wall_s": 2.041285531000085,
+        "wall_limit_s": 60,
+        "interrupted": false,
+        "host_load": [
+          11.4541015625,
+          8.2919921875,
+          8.24072265625
+        ]
+      },
+      {
+        "path": "neutral-mea-water/A/predictions.json",
+        "operation": "assessment",
+        "cpu_s": 3.794432000000004,
+        "wall_s": 3.8163654150002913,
+        "wall_limit_s": 60,
+        "interrupted": false,
+        "host_load": [
+          11.4541015625,
+          8.2919921875,
+          8.24072265625
+        ]
+      },
+      {
+        "path": "neutral-mea-water/A/derivative-0.01--1.json",
+        "operation": "residuals",
+        "cpu_s": 2.677429,
+        "wall_s": 2.7272599780003475,
+        "wall_limit_s": 60,
+        "interrupted": false,
+        "host_load": [
+          13.419921875,
+          8.75244140625,
+          8.39013671875
+        ]
+      },
+      {
+        "path": "neutral-mea-water/A/derivative-0.01-1.json",
+        "operation": "residuals",
+        "cpu_s": 1.719967999999998,
+        "wall_s": 1.7219267529999343,
+        "wall_limit_s": 60,
+        "interrupted": false,
+        "host_load": [
+          13.419921875,
+          8.75244140625,
+          8.39013671875
+        ]
+      },
+      {
+        "path": "neutral-mea-water/A/derivative-0.005--1.json",
+        "operation": "residuals",
+        "cpu_s": 1.7276699999999998,
+        "wall_s": 1.7330208449998281,
+        "wall_limit_s": 60,
+        "interrupted": false,
+        "host_load": [
+          12.74560546875,
+          8.68994140625,
+          8.37158203125
+        ]
+      },
+      {
+        "path": "neutral-mea-water/A/derivative-0.005-1.json",
+        "operation": "residuals",
+        "cpu_s": 1.7613280000000024,
+        "wall_s": 1.7987359740000102,
+        "wall_limit_s": 60,
+        "interrupted": false,
+        "host_load": [
+          12.74560546875,
+          8.68994140625,
+          8.37158203125
+        ]
+      }
+    ],
+    "cpu_s": 32.334538,
+    "wall_s": 22.293787871000404
+  }
+}

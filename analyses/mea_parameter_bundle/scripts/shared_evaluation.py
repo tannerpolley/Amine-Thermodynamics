@@ -250,6 +250,36 @@ def parameter_fingerprint(mapping: dict[str, object]) -> str:
     return f"sha256:{hashlib.sha256(text.encode()).hexdigest()}"
 
 
+def stage2_reference(water: dict, declaration: dict) -> dict:
+    """Refresh fixed association and the explicitly provisional stage-2 seeds (#170 §2)."""
+    updated = with_parameter_values(water, declaration['starting_assumptions'])
+    updated.pop('empirical_density_correction', None)
+    values = parameter_values(updated)
+    for edge in updated['topology']['edges']:
+        if edge['endpoint_a']['component_id'] == 'carbon-dioxide':
+            edge['energy_over_k']['value']['magnitude'] = values['association/water/a/water/b/energy_over_k']/2
+            edge['volume']['value']['magnitude'] = values['association/water/a/water/b/volume']
+    updated.update(document_id='joint-recalibration-170-stage2-reference', purpose=declaration['purpose'])
+    for node in _identified(updated):
+        if node['identity'] in declaration['starting_assumptions']:
+            node['provenance'] = dict(source_id='joint-recalibration-170', locator=declaration['design_url'])
+    for reaction in updated['reaction_correlations']:
+        reaction['source'] = dict(source_id='chemical_reaction_source_contract', locator='src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923')
+    return updated
+
+
+def unloaded_density_problem(mapping: dict, template: dict, row: dict) -> object:
+    """Exact carbon-free analytical feed; retain water and MEA protonation."""
+    masses = dict(zip(COMPONENT_IDS, template['reaction_system']['molar_masses_kg_per_mol'], strict=True))
+    water = masses['monoethanolamine']*(1-row['MEA_weight_fraction'])/(row['MEA_weight_fraction']*masses['water'])
+    records = _engine_reaction_records(template, reaction_values(mapping))
+    reactions = [equilibrium.Reaction(dict(zip(COMPONENT_IDS, r['stoichiometry'], strict=True)), name=r['reaction_id'],
+        correlation=_reaction_correlation(r, r['reaction_id']), reference=_reaction_reference(r, r['reaction_id'])) for r in records]
+    return equilibrium.Problem(T=row['T_K'], P=row['P_Pa'], feed=equilibrium.Amounts({'monoethanolamine':1., 'water':water}),
+        phases=[equilibrium.Phase('L', kind='liquid', support=COMPONENT_IDS)], reactions=reactions,
+        neutral_reference=_neutral_reference(template), row_tolerance=1e-10)
+
+
 def source_feed_request(template: dict, source: dict) -> dict:
     """Measured source coordinates on the immutable OLD analytical-feed mass/seed basis."""
     request = copy.deepcopy(template)
