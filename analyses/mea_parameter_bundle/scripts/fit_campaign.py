@@ -314,7 +314,7 @@ def stage2_study(spec, out, started):
                     if endpoint is not None:
                         write(directory/'usable-budget-endpoint.json',endpoint)
                     write(directory/'incomplete-fit.json',dict(status=raw['status'],message=raw['message'],eligible=False))
-                    continue
+                    raise RuntimeError(f"fit did not converge: {case['id']} {start['id']}; no further call launched")
                 endpoint['purpose'] = spec['purpose']
                 write(directory/'parameters.json',endpoint)
                 rows = call(endpoint,case,'assessment',directory/'predictions.json')
