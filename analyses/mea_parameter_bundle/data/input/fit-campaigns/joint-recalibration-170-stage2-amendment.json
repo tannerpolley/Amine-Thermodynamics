@@ -90,7 +90,7 @@
     "parameter_tolerance": 1e-10,
     "gradient_tolerance": 1e-08
   },
-  "budget_cpu_s": 900,
+  "budget_cpu_s": 600,
   "budget_wall_s": 300,
   "nonfit_wall_s": 60,
   "worker_memory": {
@@ -112,65 +112,18 @@
   "cases": [
     {
       "id": "co2-water",
-      "coordinate": {
-        "identity": "pair/carbon-dioxide/water/k_ij",
-        "target": [
-          "carbon-dioxide",
-          "water"
-        ],
-        "scale": 0.01,
-        "bounds": [
-          -0.5,
-          0.5
-        ]
-      },
       "starts": [
         {
           "id": "A",
-          "value": -0.046912921483332176
+          "values": [
+            -0.0456,
+            0.0
+          ]
         },
         {
           "id": "B",
-          "value": -0.04891292148333218
-        }
-      ],
-      "fit_wall_s": 90,
-      "neutral_domain_ids": [
-        "mea-candidate-293-15-to-393-15-k",
-        "cai-1996-neutral-refit"
-      ],
-      "neutral_domain": {
-        "kind": "fit-range",
-        "temperature_min": {
-          "magnitude": 293.15,
-          "unit": "kelvin"
-        },
-        "temperature_max": {
-          "magnitude": 398.17,
-          "unit": "kelvin"
-        },
-        "pressure_min": {
-          "magnitude": 1.0,
-          "unit": "pascal"
-        },
-        "pressure_max": {
-          "magnitude": 100000000.0,
-          "unit": "pascal"
-        }
-      },
-      "neutral_observation_temperature_K": [
-        313.2,
-        393.17
-      ],
-      "target_count": 39
-    },
-    {
-      "id": "co2-water-slope",
-      "starts": [
-        {
-          "id": "D",
           "values": [
-            null,
+            -0.0469,
             0.0
           ]
         }
@@ -204,8 +157,6 @@
         393.17
       ],
       "target_count": 39,
-      "observations_id": "co2-water",
-      "diagnostic": true,
       "coordinates": [
         {
           "identity": "pair/carbon-dioxide/water/k_ij",
@@ -250,15 +201,15 @@
           "source_sha256": "sha256:93cd60d21df030c36a4034d804dd02fe0fdc2dfd9af364b13cd749c906a95fca",
           "provenance": {
             "source_id": "joint-recalibration-170",
-            "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158350746"
+            "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158787639"
           }
         }
       ]
     }
   ],
-  "prior_cpu_charge_s": 157.473325,
-  "prior_wall_charge_s": 137.025568,
-  "prior_charge_basis": "Round 1 aggregate including declaration qualification/checks, retained in stage2/README.md.",
-  "amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158350746",
+  "prior_cpu_charge_s": 0,
+  "prior_wall_charge_s": 0,
+  "prior_charge_basis": "Owner-authorized additional round-3 allowance; rounds 1 and 2 remain separately charged in their retained summaries.",
+  "amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158787639",
   "reference_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json"
 }
