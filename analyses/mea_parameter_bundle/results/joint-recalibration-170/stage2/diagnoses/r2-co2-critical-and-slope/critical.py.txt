@@ -1,0 +1,55 @@
+from probe import *
+from scipy.optimize import root,brentq
+import numpy as np
+import CoolProp.CoolProp as CP
+
+def critical(eps):
+ m=mapping(-.0456,eps);p=epcsaft.Parameters.from_mapping(m,components=['carbon-dioxide']);model=epcsaft.Pure(p)
+ sat=[]
+ for T in [300.,305.,309.,310.,310.2,313.2,317.]:
+  prob=model.saturation(T);prob.row_tolerance=1e-10
+  try:
+   s=eq.solve_equilibrium(model,prob)
+   sat.append(dict(T=T,success=s.success,message=s.message,pressure=list(s.pressure),rho=list(s.molar_densities),residuals=list(s.residuals)))
+  except Exception as ex:sat.append(dict(T=T,error=str(ex)))
+  save('saturation-'+str(eps)+'.json',sat)
+ def d(T,r):return model.state(T,rho=r).pressure_density_derivative
+ refined=[]
+ for h in [10.,1.,.1]:
+  def fun(q):
+   T,r=q
+   return [d(T,r)/1000, (d(T,r+h)-d(T,r-h))/(2*h)]
+  result=root(fun,[310.227*eps/169.21,10000.],tol=1e-10)
+  T,r=result.x;s=model.state(T,rho=r)
+  refined.append(dict(h=h,success=bool(result.success),T=float(T),rho=float(r),P=s.pressure,dP_drho=s.pressure_density_derivative,d2P_drho2=fun(result.x)[1],message=result.message))
+ return dict(eps=eps,saturation=sat,critical_refinement=refined)
+
+def roots(model,x,P,T=313.2):
+ grid=np.linspace(1,30000,601)
+ def state(r):return model.state(T,rho=float(r),**({'x':x} if x is not None else {}))
+ result=[];turns=[]
+ vals=[state(r) for r in grid]
+ for a,b,sa,sb in zip(grid,grid[1:],vals,vals[1:]):
+  if (sa.pressure-P)*(sb.pressure-P)<0:
+   r=brentq(lambda r:state(r).pressure-P,a,b,xtol=1e-7);s=state(r)
+   result.append(dict(rho=r,P=s.pressure,dP_drho=s.pressure_density_derivative,logphi=list(s.log_fugacity_coefficient),stable=s.pressure_density_derivative>0))
+  if sa.pressure_density_derivative*sb.pressure_density_derivative<0:
+   r=brentq(lambda r:state(r).pressure_density_derivative,a,b);s=state(r)
+   turns.append(dict(rho=r,P=s.pressure,dP_drho=s.pressure_density_derivative))
+ branches=[]
+ for phase in ['vapor','liquid',None]:
+  try:
+   s=model.state(T,P=P,phase=phase,**({'x':x} if x is not None else {}));branches.append(dict(phase=phase,rho=s.molar_density,root_count=s.stable_root_count,dP_drho=s.pressure_density_derivative))
+  except Exception as e:branches.append(dict(phase=phase,error=str(e)))
+ return dict(T=T,P=P,x=x,roots=result,turns=turns,branches=branches)
+try:
+ out=dict(pure=[critical(e) for e in [169.21,173.44025]],states=[],real=dict(version=CP.get_global_param_string('version'),Tc=CP.PropsSI('Tcrit','CO2'),Pc=CP.PropsSI('Pcrit','CO2'),rhoc=CP.PropsSI('rhomolar_critical','CO2'),densities=[]))
+ for e in [169.21,173.44025]:
+  m=mapping(-.0456,e);model=epcsaft.Pure(epcsaft.Parameters.from_mapping(m,components=['carbon-dioxide']))
+  for P in [6.64e6,9.23e6]:out['states'].append(dict(eps=e,case='pure',**roots(model,None,P)))
+  m2,p,rows=None,None,None
+  p,rows=o.stage2_rows(spec,m,case);model=epcsaft.Mixture(p,thermochemistry=o.thermal.record())
+  for P in [6.64e6,9.23e6]:out['states'].append(dict(eps=e,k=-.0456,case='co2-rich',**roots(model,{'carbon-dioxide':.983,'water':.017},P)))
+ for P in [6.64e6,9.23e6,6.6438e6,9.2319e6]:out['real']['densities'].append(dict(T=313.2,P=P,rho=CP.PropsSI('Dmolar','T',313.2,'P',P,'HEOS::CO2')))
+ save('critical.json',out);print(json.dumps(out,indent=2),flush=True)
+finally:save('critical-timing.json',dict(cpu_s=time.process_time()-CPU,wall_s=time.monotonic()-WALL))

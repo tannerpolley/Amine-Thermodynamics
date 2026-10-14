@@ -1,0 +1,15 @@
+from probe import *
+from scipy.optimize import brentq
+import numpy as np
+try:
+ f=json.loads((D/'slope-A.json').read_text());k,b=f['physical'];m=mapping(k,slope=b);p,rows=o.stage2_rows(spec,m,case);model=epcsaft.Mixture(p,thermochemistry=o.thermal.record());replay=json.loads((D/'slope-replay.json').read_text());out=[]
+ for r in replay['rows'][10:12]:
+  x=dict(zip(model.component_ids,r['x'][len(model.component_ids):]));x={a:v for a,v in x.items() if v>0}
+  def state(rho):return model.state(313.2,rho=float(rho),x=x)
+  grid=np.linspace(1000,23000,441);v=[state(d) for d in grid];turns=[]
+  for a,c,sa,sc in zip(grid,grid[1:],v,v[1:]):
+   if sa.pressure_density_derivative*sc.pressure_density_derivative<0:
+    rho=brentq(lambda rho:state(rho).pressure_density_derivative,a,c);s=state(rho);turns.append(dict(rho=rho,P=s.pressure))
+  out.append(dict(id=r['id'],x=x,P=r['pressure'][0],rho=r['rho'][1],turns=turns,minimum_sampled_dP_drho=min(s.pressure_density_derivative for s in v)))
+ save('fitted-composition-density.json',out);print(out)
+finally:save('density-composition-timing.json',dict(cpu_s=time.process_time()-CPU,wall_s=time.monotonic()-WALL))

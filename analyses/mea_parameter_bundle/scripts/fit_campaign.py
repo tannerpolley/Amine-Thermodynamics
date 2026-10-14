@@ -157,8 +157,7 @@ def water_study(spec, out, started):
     import fit_observations as o
     candidates = []
     def elapsed():
-        return dict(cpu_s=cpu_seconds()+prior.get('cpu_s',spec['prior_cpu_charge_s']),
-            wall_s=time.monotonic()-started+prior.get('wall_s',spec['prior_wall_charge_s']))
+        return dict(cpu_s=cpu_seconds()+spec['prior_cpu_charge_s'],wall_s=time.monotonic()-started+spec['prior_wall_charge_s'])
     baseline = list(csv.DictReader(checked(spec['metrics_path'],spec['metrics_sha256']).open()))
     def assess(mapping, directory):
         clock, cpu = time.monotonic(), cpu_seconds()

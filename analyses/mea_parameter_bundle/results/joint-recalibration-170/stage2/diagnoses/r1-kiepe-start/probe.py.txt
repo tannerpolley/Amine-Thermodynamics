@@ -1,0 +1,66 @@
+import os,json,time,resource,math,sys,copy
+from pathlib import Path
+for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS'):os.environ[k]='1'
+import fit_observations as o
+from epcsaft import equilibrium as eq,regression as reg
+import epcsaft
+D=Path('tmp/stage2-diagnose'); R=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2')
+spec=json.loads((R/'spec.json').read_text());case=next(c for c in spec['cases'] if c['id']=='co2-water')
+reference=json.loads((R/'reference-parameters.json').read_text())
+CPU=time.process_time(); WALL=time.monotonic(); resource.setrlimit(resource.RLIMIT_CPU,(55,56))
+log=[]
+def save(name,value): (D/name).write_text(json.dumps(value,indent=2,allow_nan=False))
+def setup(k,old=False):
+ m=o.s.with_parameter_values(reference,{case['coordinate']['identity']:k})
+ if old:
+  vals={key:(862.8424 if key.endswith('energy_over_k') else .0461035) for key in o.s.parameter_values(m) if key.startswith('association/carbon-dioxide/') and '/water/' in key}
+  m=o.s.with_parameter_values(m,vals)
+ p,rows=o.stage2_rows(spec,m,case,assessment=True)
+ return m,p,rows,epcsaft.Mixture(p,thermochemistry=o.thermal.record())
+def solve(model,problem,label,start=None):
+ t=time.monotonic();cpu=time.process_time();s=eq.solve_equilibrium(model,problem,start=start)
+ e={k:o.s._jsonable(getattr(s,k)) for k in ('success','message','solver_status','pressure','temperature','amounts','molar_densities','mole_fractions','packing_fractions','coordinates','iterations','residuals','classified_residuals','reduced_hessian_minimum','topology_event','convergence')}
+ e.update(label=label,cpu_s=time.process_time()-cpu,wall_s=time.monotonic()-t,initialization='cold' if start is None else 'previous-state')
+ if s.success:
+  e['dP_drho']=[model.state(s.temperature[0],rho=s.molar_densities[i],x=dict(zip(model.component_ids,s.phase_mole_fractions(i)))).pressure_density_derivative for i in range(2)]
+ log.append(e);save(sys.argv[1]+'-calls.json',log)
+ return s,e
+def advance(model,row,prob,prev,prev_x,depth=0):
+ s,e=solve(model,prob,row['id']+f'/continuation-level-{depth}',prev)
+ if s.success:return s,e
+ if depth>=8:return s,e
+ x=row['feed']['carbon-dioxide']; mid=(x+prev_x)/2
+ rr=dict(row,feed={'carbon-dioxide':mid,'water':1-mid},id=row['id']+f'/mid-{depth}')
+ pp=eq.Problem(T=row['T_K'],P=eq.Free(prev.pressure[0]),feed=eq.Amounts(rr['feed']),phases=prob.phases,row_tolerance=1e-10)
+ ss,ee=advance(model,rr,pp,prev,prev_x,depth+1)
+ if not ss.success:return s,e
+ return advance(model,row,prob,ss,mid,depth+1)
+def evaluate(k,name,old=False):
+ m,p,rows,model=setup(k,old); results=[];prev=None;prev_x=None;prevT=None
+ for row,item,prob in rows:
+  if row['T_K']!=prevT:prev=None
+  s,e=solve(model,prob,row['id'])
+  cold=dict(e)
+  if not s.success and prev is not None:s,e=advance(model,row,prob,prev,prev_x)
+  rr=dict(row,k_ij=k,cold_success=cold['success'],cold_message=cold['message'],equilibrium=e,status='Available' if s.success else 'Unavailable')
+  if s.success:
+   rr.update(predicted_P_MPa=s.pressure[0]/1e6,error_percent=100*(s.pressure[0]/row['observed']-1))
+   prev=s;prev_x=row['feed']['carbon-dioxide'];prevT=row['T_K']
+  results.append(rr);save(name+'.json',results)
+  print(name,row['id'],rr['status'],rr.get('predicted_P_MPa'),rr.get('error_percent'),flush=True)
+  if time.process_time()-CPU>48:print('CPU batch boundary');break
+ return results
+mode=sys.argv[1]
+try:
+ if mode=='fit8':
+  m,p,rows,model=setup(-.02424240226792941); c=case['coordinate']
+  coord=reg.coordinate(p,[('k_ij',tuple(c['target']),1.)],origin=-.02424240226792941,scale=.01,bounds=(-.5,.5))
+  controls=dict(spec['controls']);controls.update(workers=1,maximum_elapsed_time_seconds=50)
+  f=reg.fit(p,[coord],[r[1] for r in rows[:8]],weights=[1.]*8,thermochemistry=o.thermal.record(),controls=reg.FitControls(**controls),singular_vectors=True)
+  out={k:o.s._jsonable(getattr(f,k)) for k in ('status','message','usable','physical','initial_cost','final_cost','iterations','predictions','residuals','weighted_residuals','trial_failures')};save('fit8.json',out);print(out,flush=True)
+ else:
+  kval={'A':-.02424240226792941,'B':.013262879176919628,'old':-.0242,'newrounded':-.0242}.get(mode)
+  if kval is None:kval=float(sys.argv[2])
+  evaluate(kval,mode,old=mode=='old')
+finally:
+ save(mode+'-timing.json',{'cpu_s':time.process_time()-CPU,'wall_s':time.monotonic()-WALL})

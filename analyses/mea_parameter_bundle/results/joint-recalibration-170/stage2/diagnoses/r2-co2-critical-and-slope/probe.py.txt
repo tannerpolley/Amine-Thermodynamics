@@ -1,0 +1,37 @@
+import os,json,time,resource,math,sys,copy
+from pathlib import Path
+for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','NUMEXPR_NUM_THREADS'):os.environ[k]='1'
+import fit_observations as o
+from epcsaft import equilibrium as eq,regression as reg
+import epcsaft
+D=Path('tmp/stage2-diagnose-r2');R=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2')
+spec=json.loads((R/'spec.json').read_text());case=next(c for c in spec['cases'] if c['id']=='co2-water')
+reference=json.loads((R/'reference-parameters.json').read_text());CPU=time.process_time();WALL=time.monotonic()
+resource.setrlimit(resource.RLIMIT_CPU,(57,58))
+def save(n,v):(D/n).write_text(json.dumps(o.s._jsonable(v),indent=2,allow_nan=False))
+def mapping(k,eps=169.21,slope=None):
+ m=o.s.with_parameter_values(reference,{case['coordinate']['identity']:k,'component/carbon-dioxide/dispersion_energy_over_k':eps})
+ if slope is not None:
+  pair=next(v for v in m['pairs'] if {v['component_id_a'],v['component_id_b']}=={'carbon-dioxide','water'})
+  c=copy.deepcopy(pair['coefficients'][0]);c.update(family='k_ij_reciprocal_temperature_slope',identity=case['coordinate']['identity']+'/reciprocal_temperature_slope',value={'magnitude':slope,'unit':'kelvin'},reference_temperature={'magnitude':313.15,'unit':'kelvin'});pair['coefficients'].append(c)
+ return m
+
+def fit(k,eps=169.21,slope=True):
+ m=mapping(k,eps,0 if slope else None);p,rows=o.stage2_rows(spec,m,case)
+ c=case['coordinate'];coords=[reg.coordinate(p,[('k_ij',tuple(c['target']),1.)],origin=k,scale=c['scale'],bounds=tuple(c['bounds']))]
+ if slope:coords.append(reg.coordinate(p,[('k_ij_reciprocal_temperature_slope',tuple(c['target']),1.)],origin=0,scale=10,bounds=(-1000,1000)))
+ f=reg.fit(p,coords,[r[1] for r in rows],weights=[r[0]['weight'] for r in rows],thermochemistry=o.thermal.record(),controls=reg.FitControls(**spec['controls'],workers=1,maximum_elapsed_time_seconds=50),singular_vectors=True)
+ out={v:o.s._jsonable(getattr(f,v)) for v in ('status','message','usable','initial_cost','final_cost','physical','optimizer','predictions','residuals','weighted_residuals','optimizer_jacobian','physical_jacobian','iterations','iteration_costs','iteration_seconds','trial_failures','residual_evaluations','jacobian_evaluations')}
+ out.update(start_k=k,eps=eps,coordinates=['k','b'] if slope else ['k'],targets=[r[0]['id'] for r in rows],statuses=[v.name for v in f.statuses],covariance={v:o.s._jsonable(getattr(f.covariance,v)) for v in ('status','rank','singular_values','active_bounds','projected_gradient_norm')},failures=[dict(trial=v.trial,observation=v.observation,status=v.status.name,message=v.message,jacobian=v.jacobian) for v in f.failures])
+ save(sys.argv[1]+'.json',out)
+ scores=[]
+ for T in sorted(set(r[0]['T_K'] for r in rows)):
+  ix=[i for i,r in enumerate(rows) if r[0]['T_K']==T]
+  if len(f.predictions)!=len(rows):continue
+  err=[100*(f.predictions[i]/rows[i][0]['observed']-1) for i in ix]
+  scores.append(dict(T=T,n=len(ix),mean_absolute_percent=sum(map(abs,err))/len(ix),max_absolute_percent=max(map(abs,err)),signed_percent=err))
+ out['isotherms']=scores;save(sys.argv[1]+'.json',out);print(json.dumps({k:out[k] for k in ('status','message','physical','initial_cost','final_cost','iterations','trial_failures','covariance','isotherms')}),flush=True)
+ return out
+if __name__=='__main__':
+ try:fit(float(sys.argv[2]),float(sys.argv[3]) if len(sys.argv)>3 else 169.21,sys.argv[1]!='constant-old-eps')
+ finally:save(sys.argv[1]+'-timing.json',dict(cpu_s=time.process_time()-CPU,wall_s=time.monotonic()-WALL))

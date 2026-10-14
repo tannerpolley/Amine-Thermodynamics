@@ -1,0 +1,9 @@
+exec(open('tmp/stage2-diagnose/probe.py').read().split('mode=sys.argv[1]')[0])
+m,p,rows,model=setup(-.02424240226792941)
+row,item,prob=rows[8]
+for kind in ('liquid','vapor'):
+ for P in (15e6,30e6,50e6):
+  phases=[eq.Phase('L',kind='liquid',support=tuple(row['feed']),amount=eq.Free(),composition_guess=row['feed'],packing_guess=.46),eq.Phase('V',kind=kind,support=tuple(row['feed']),amount=eq.Pinned(0.),composition_guess={'carbon-dioxide':.99,'water':.01},packing_guess=.25)]
+  pp=eq.Problem(T=row['T_K'],P=eq.Free(P),feed=eq.Amounts(row['feed']),phases=phases,row_tolerance=1e-10)
+  ss,e=solve(model,pp,str(kind)+'/'+str(P));print(e,flush=True)
+save('dense-timing.json',{'cpu_s':time.process_time()-CPU,'wall_s':time.monotonic()-WALL})
