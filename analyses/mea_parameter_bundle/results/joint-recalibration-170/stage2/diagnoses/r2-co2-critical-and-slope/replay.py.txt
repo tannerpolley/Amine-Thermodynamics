@@ -1,0 +1,20 @@
+from probe import *
+from scipy.optimize import root
+import numpy as np
+try:
+ f=json.loads((D/'slope-A.json').read_text());k,b=f['physical'];m=mapping(k,slope=b);p,rows=o.stage2_rows(spec,m,case);model=epcsaft.Mixture(p,thermochemistry=o.thermal.record());out=[]
+ for i,(r,item,prob) in enumerate(rows):
+  st=eq.solve_equilibrium(model,prob)
+  row=dict(id=r['id'],T=r['T_K'],feed=r['feed'],observed=r['observed'],success=st.success,message=st.message,pressure=list(st.pressure),rho=list(st.molar_densities),x=list(st.mole_fractions),packing=list(st.packing_fractions),residuals=list(st.residuals),iterations=st.iterations)
+  if st.success:
+   row['dP_drho']=[model.state(r['T_K'],rho=st.molar_densities[j],x=dict(zip(model.component_ids,st.phase_mole_fractions(j)))).pressure_density_derivative for j in range(2)]
+   row['prediction_difference']=st.pressure[0]-f['predictions'][i]
+  out.append(row);save('slope-replay.json',dict(component_ids=model.component_ids,rows=out));print(row['id'],row['success'],row['pressure'],row['rho'],flush=True)
+ kinds=[]
+ for kind in [None,'fluid','supercritical','liquid','vapor']:
+  prob=rows[-1][2];prob.phases[1].kind=kind
+  try:compiled=eq.compile_problem(model,prob);kinds.append(dict(kind=kind,accepted=True))
+  except Exception as e:kinds.append(dict(kind=kind,accepted=False,error=str(e)))
+ save('phase-kinds.json',kinds)
+except Exception as e:save('replay-error.json',dict(error=str(e)));raise
+finally:save('replay-timing.json',dict(cpu_s=time.process_time()-CPU,wall_s=time.monotonic()-WALL))

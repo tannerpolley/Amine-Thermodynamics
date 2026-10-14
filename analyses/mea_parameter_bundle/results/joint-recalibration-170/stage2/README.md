@@ -67,6 +67,20 @@ These are checks of the returned declared roots and local equilibrium, not a glo
 
 This additional formal round used **76.925783 CPU-s / 37.936401 wall-s**, including direct pressure closure, within the authorized **600 CPU-s / 300 s wall**. Lightweight table/hash reporting adds 0.006902 CPU-s / 0.006905 wall-s. The formal-round cumulative total is 483.061126 CPU-s / 197.521657 wall-s, before that separately stated reporting and start-generation work. All calls were sequential, at `nice -n 10`, with single-threaded libraries. One native row pool requested 32 workers from 32 CPUs and 23.03 GB available memory; actual count is not returned. Each fit had at most 40 iterations / 90 s wall, every non-fit call at most 60 s. No call was interrupted. Per-call CPU, wall, host load, iteration and evaluation counts are retained.
 
+**Aggregate stage-2 accounting (delivered review r1, 2026-10-13).** Recorded durations, CPU-s / active wall-s:
+
+| Part | CPU-s | Wall-s |
+|---|---:|---:|
+| Round 1 (MEA–water, failed CO₂–water start qualification, declaration check) | 157.473325 | 137.025568 |
+| Round 2, incremental (subset-start qualification and two iteration-limited constant fits) | 248.662018 | 22.559688 |
+| Round 3 (formal slope fits, replay, derivatives, pressure closure) | 76.925783 | 37.936401 |
+| Diagnosis 1 (`diagnoses/r1-kiepe-start/`, including the eight-row start-generation fit) | 47.063097 | 47.353166 |
+| Diagnosis 2 (`diagnoses/r2-co2-critical-and-slope/`) | 73.239246 | 75.457384 |
+
+The total is about **603.38 recorded CPU-s and 320.35 recorded active wall-s**, including the small reporting charges. With the diagnoses' conservative charges (60 and 100 CPU-s) it is **643.08 CPU-s**. The allowance was 900 + 600 CPU-s and 300 + 300 s wall. Diagnosis 2 also had failed-probe and import overhead that wasn't metered, so the wall total is a lower bound. The start-generation fit is counted once, inside diagnosis 1. Both diagnoses' reports, timing files and probe scripts (scripts kept as inert `.py.txt`) are retained under `diagnoses/`.
+
+**Derivative check at the high-pressure row (review evidence).** At `kiepe-313.20-13` the constant-coordinate centered difference has relative errors 8.79×10⁻⁴ and 2.19×10⁻⁴ at optimizer steps 0.01 and 0.005. The reviewer's refinement to 0.000625 and 0.0003125 reduced them to 3.41×10⁻⁶ and 8.52×10⁻⁷. That points to truncation error in the finite difference, not a wrong analytical derivative.
+
 **Frozen stage-3 inputs.** `frozen-inputs.json` contains the paths, exact edges, hashes, source/input references and intended stage-3 scope. It points to existing endpoint files; no duplicated selected parameter document is created.
 
 - MEA–water A, $k_{ij}=-0.0843938800264992$: `neutral-mea-water/A/parameters.json`, SHA-256 `36c827bdb5e8b27997f3bc82439ef22d70f7fe8648526e0aa2ac1b6079e6d237`.

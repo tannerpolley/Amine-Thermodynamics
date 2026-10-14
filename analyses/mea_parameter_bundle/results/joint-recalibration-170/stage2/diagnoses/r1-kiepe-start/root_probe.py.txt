@@ -1,0 +1,20 @@
+exec(open('tmp/stage2-diagnose/probe.py').read().split('mode=sys.argv[1]')[0])
+from scipy.optimize import brentq
+m,p,rows,model=setup(-.02424240226792941)
+y={'carbon-dioxide':.9827693878549831,'water':.017230612145016925}
+def state(rho):return model.state(313.2,rho=rho,x=y)
+scan=[]
+for rho in range(1000,23001,1000):
+ s=state(rho);scan.append({'rho_mol_m3':rho,'P_Pa':s.pressure,'dP_drho':s.pressure_density_derivative})
+spin=[]
+for a,b in zip(scan,scan[1:]):
+ if a['dP_drho']*b['dP_drho']<0:
+  r=brentq(lambda d:state(d).pressure_density_derivative,a['rho_mol_m3'],b['rho_mol_m3']);s=state(r);spin.append({'rho_mol_m3':r,'P_Pa':s.pressure,'dP_drho':s.pressure_density_derivative})
+out={'fixed_CO2_rich_composition':y,'scan':scan,'spinodal_turns':spin}
+for mode,k,old,i in [('A',-.02424240226792941,False,8),('B',.013262879176919628,False,7),('upper',-.044912921483332176,False,11),('old',-.0242,True,8)]:
+ m,p,rows,model=setup(k,old);row,item,pp=rows[i]
+ pp.phases[1].kind='liquid';pp.phases[1].packing_guess=.25;pp.P=eq.Free(30e6)
+ s,e=solve(model,pp,mode+'/'+row['id']+'/dense-phase');print(mode,e['success'],e['pressure'],e['molar_densities'],e['message'],flush=True)
+ if mode=='A' and s.success:
+  pp.phases[1].kind='vapor';ss,ee=solve(model,pp,'A/identical-converged-start-as-vapor',s)
+save('root-scan.json',out);save('root-timing.json',{'cpu_s':time.process_time()-CPU,'wall_s':time.monotonic()-WALL})
