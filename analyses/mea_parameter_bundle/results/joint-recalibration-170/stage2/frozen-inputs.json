@@ -1,0 +1,314 @@
+{
+  "reference_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/reference-parameters.json",
+  "reference_sha256": "dd47e323bfec5c45c50a7ed82c7c128831d12f774a0d195e133f6489a0d821cb",
+  "association_edges": [
+    {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "endpoint_a": {
+        "component_id": "monoethanolamine",
+        "site_id": "a"
+      },
+      "endpoint_b": {
+        "component_id": "monoethanolamine",
+        "site_id": "b"
+      },
+      "energy_over_k": {
+        "identity": "association/monoethanolamine/a/monoethanolamine/b/energy_over_k",
+        "value": {
+          "magnitude": 2586.3,
+          "unit": "kelvin"
+        }
+      },
+      "qualification": "candidate_extrapolation",
+      "source": {
+        "kind": "explicit",
+        "provenance": [
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=association_energy_over_k:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=association_volume:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "Eq. 4 (p. 791) uses d_ij^3; Table 2 (p. 792) 2B kappa = 0.037470 under that convention. Converted to the Engine sigma_ij^3 convention as the constant kappa that best reproduces Baygi's d^3 model (Eq. 8 form, p_sat and saturated liquid density) over the packet domain 293.15-393.15 K, with m, sigma, epsilon fixed: analyses/2026-mea-association-diameter",
+            "source_id": "fakouri-baygi-pahlavanzadeh-2015"
+          }
+        ]
+      },
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+      "volume": {
+        "identity": "association/monoethanolamine/a/monoethanolamine/b/volume",
+        "value": {
+          "magnitude": 0.036287,
+          "unit": "dimensionless"
+        }
+      }
+    },
+    {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "endpoint_a": {
+        "component_id": "water",
+        "site_id": "a"
+      },
+      "endpoint_b": {
+        "component_id": "water",
+        "site_id": "b"
+      },
+      "energy_over_k": {
+        "identity": "association/water/a/water/b/energy_over_k",
+        "value": {
+          "magnitude": 1756.6497964508999,
+          "unit": "kelvin"
+        }
+      },
+      "qualification": "candidate_extrapolation",
+      "source": {
+        "kind": "explicit",
+        "provenance": [
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_energy_over_k:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_volume:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          }
+        ]
+      },
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+      "volume": {
+        "identity": "association/water/a/water/b/volume",
+        "value": {
+          "magnitude": 0.0376197279502706,
+          "unit": "dimensionless"
+        }
+      }
+    },
+    {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "endpoint_a": {
+        "component_id": "carbon-dioxide",
+        "site_id": "a"
+      },
+      "endpoint_b": {
+        "component_id": "water",
+        "site_id": "b"
+      },
+      "energy_over_k": {
+        "identity": "association/carbon-dioxide/a/water/b/energy_over_k",
+        "value": {
+          "magnitude": 878.3248982254499,
+          "unit": "kelvin"
+        }
+      },
+      "qualification": "candidate_extrapolation",
+      "source": {
+        "kind": "explicit",
+        "provenance": [
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "Schick et al. (2023), Table 1 and Section 2.4.2; Pabsch et al. (2020) CO2-water parameterization",
+            "source_id": "schick-2023-pabsch-2020-induced-association"
+          }
+        ]
+      },
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+      "volume": {
+        "identity": "association/carbon-dioxide/a/water/b/volume",
+        "value": {
+          "magnitude": 0.0376197279502706,
+          "unit": "dimensionless"
+        }
+      }
+    },
+    {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "endpoint_a": {
+        "component_id": "carbon-dioxide",
+        "site_id": "b"
+      },
+      "endpoint_b": {
+        "component_id": "water",
+        "site_id": "a"
+      },
+      "energy_over_k": {
+        "identity": "association/carbon-dioxide/b/water/a/energy_over_k",
+        "value": {
+          "magnitude": 878.3248982254499,
+          "unit": "kelvin"
+        }
+      },
+      "qualification": "candidate_extrapolation",
+      "source": {
+        "kind": "explicit",
+        "provenance": [
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "Schick et al. (2023), Table 1 and Section 2.4.2; Pabsch et al. (2020) CO2-water parameterization",
+            "source_id": "schick-2023-pabsch-2020-induced-association"
+          }
+        ]
+      },
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+      "volume": {
+        "identity": "association/carbon-dioxide/b/water/a/volume",
+        "value": {
+          "magnitude": 0.0376197279502706,
+          "unit": "dimensionless"
+        }
+      }
+    },
+    {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "endpoint_a": {
+        "component_id": "monoethanolamine",
+        "site_id": "a"
+      },
+      "endpoint_b": {
+        "component_id": "water",
+        "site_id": "b"
+      },
+      "qualification": "candidate_extrapolation",
+      "source": {
+        "inputs": {
+          "energy_over_k": [
+            "association/monoethanolamine/a/monoethanolamine/b/energy_over_k",
+            "association/water/a/water/b/energy_over_k"
+          ],
+          "volume": [
+            "association/monoethanolamine/a/monoethanolamine/b/volume",
+            "association/water/a/water/b/volume"
+          ]
+        },
+        "kind": "combining-rule",
+        "provenance": [
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_energy_over_k:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_volume:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=association_energy_over_k:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=association_volume:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "Eq. 6, Wolbach-Sandler volume rule including the size factor, used with the Table 2 MEA 2B parameters",
+            "source_id": "fakouri-baygi-pahlavanzadeh-2015"
+          }
+        ],
+        "rule_id": "wolbach-sandler"
+      },
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+    },
+    {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "endpoint_a": {
+        "component_id": "monoethanolamine",
+        "site_id": "b"
+      },
+      "endpoint_b": {
+        "component_id": "water",
+        "site_id": "a"
+      },
+      "qualification": "candidate_extrapolation",
+      "source": {
+        "inputs": {
+          "energy_over_k": [
+            "association/monoethanolamine/a/monoethanolamine/b/energy_over_k",
+            "association/water/a/water/b/energy_over_k"
+          ],
+          "volume": [
+            "association/monoethanolamine/a/monoethanolamine/b/volume",
+            "association/water/a/water/b/volume"
+          ]
+        },
+        "kind": "combining-rule",
+        "provenance": [
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_energy_over_k:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_volume:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=association_energy_over_k:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=association_volume:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "Eq. 6, Wolbach-Sandler volume rule including the size factor, used with the Table 2 MEA 2B parameters",
+            "source_id": "fakouri-baygi-pahlavanzadeh-2015"
+          }
+        ],
+        "rule_id": "wolbach-sandler"
+      },
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+    }
+  ],
+  "selected": [
+    {
+      "case": "neutral-mea-water",
+      "passed": true,
+      "selected": {
+        "start": "A",
+        "cost": 91.84540850646788,
+        "k_ij": -0.0843938800264992,
+        "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json",
+        "sha256": "36c827bdb5e8b27997f3bc82439ef22d70f7fe8648526e0aa2ac1b6079e6d237",
+        "active_bounds": []
+      },
+      "endpoints": [
+        {
+          "start": "A",
+          "cost": 91.84540850646788,
+          "k_ij": -0.0843938800264992,
+          "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json",
+          "sha256": "36c827bdb5e8b27997f3bc82439ef22d70f7fe8648526e0aa2ac1b6079e6d237",
+          "active_bounds": []
+        },
+        {
+          "start": "B",
+          "cost": 91.84540850692042,
+          "k_ij": -0.08439384952694257,
+          "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/B/parameters.json",
+          "sha256": "6107734be6f7efc79f5604adf831be460d66893e289f6702f53b0e21dc546705",
+          "active_bounds": []
+        }
+      ],
+      "start_relative_cost_difference": 4.92724324233921e-12,
+      "start_agreement": true,
+      "provisional": false
+    }
+  ],
+  "stage3_ready": false,
+  "reason": "CO2-water start qualification stopped at an unavailable row; no provisional endpoint."
+}
