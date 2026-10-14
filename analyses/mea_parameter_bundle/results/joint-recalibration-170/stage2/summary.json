@@ -1,0 +1,244 @@
+{
+  "selected": [
+    {
+      "case": "neutral-mea-water",
+      "passed": true,
+      "selected": {
+        "start": "A",
+        "cost": 91.84540850646788,
+        "k_ij": -0.0843938800264992,
+        "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json",
+        "sha256": "36c827bdb5e8b27997f3bc82439ef22d70f7fe8648526e0aa2ac1b6079e6d237",
+        "active_bounds": []
+      },
+      "endpoints": [
+        {
+          "start": "A",
+          "cost": 91.84540850646788,
+          "k_ij": -0.0843938800264992,
+          "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json",
+          "sha256": "36c827bdb5e8b27997f3bc82439ef22d70f7fe8648526e0aa2ac1b6079e6d237",
+          "active_bounds": []
+        },
+        {
+          "start": "B",
+          "cost": 91.84540850692042,
+          "k_ij": -0.08439384952694257,
+          "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/B/parameters.json",
+          "sha256": "6107734be6f7efc79f5604adf831be460d66893e289f6702f53b0e21dc546705",
+          "active_bounds": []
+        }
+      ],
+      "start_relative_cost_difference": 4.92724324233921e-12,
+      "start_agreement": true,
+      "provisional": false
+    }
+  ],
+  "completed": false,
+  "calls": [
+    {
+      "path": "neutral-mea-water/A/start-predictions.json",
+      "operation": "assessment",
+      "cpu_s": 2.8395289999999997,
+      "wall_s": 2.844057817999783,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        4.99169921875,
+        6.98681640625,
+        7.82568359375
+      ]
+    },
+    {
+      "path": "neutral-mea-water/B/start-predictions.json",
+      "operation": "assessment",
+      "cpu_s": 5.198814,
+      "wall_s": 5.255199222000101,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        7.31494140625,
+        7.435546875,
+        7.96630859375
+      ]
+    },
+    {
+      "path": "neutral-mea-water/A/native-fit.json",
+      "operation": "fit",
+      "cpu_s": 12.145777999999998,
+      "wall_s": 2.041285531000085,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        11.4541015625,
+        8.2919921875,
+        8.24072265625
+      ]
+    },
+    {
+      "path": "neutral-mea-water/A/predictions.json",
+      "operation": "assessment",
+      "cpu_s": 3.794432000000004,
+      "wall_s": 3.8163654150002913,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        11.4541015625,
+        8.2919921875,
+        8.24072265625
+      ]
+    },
+    {
+      "path": "neutral-mea-water/A/derivative-0.01--1.json",
+      "operation": "residuals",
+      "cpu_s": 2.677429,
+      "wall_s": 2.7272599780003475,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        13.419921875,
+        8.75244140625,
+        8.39013671875
+      ]
+    },
+    {
+      "path": "neutral-mea-water/A/derivative-0.01-1.json",
+      "operation": "residuals",
+      "cpu_s": 1.719967999999998,
+      "wall_s": 1.7219267529999343,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        13.419921875,
+        8.75244140625,
+        8.39013671875
+      ]
+    },
+    {
+      "path": "neutral-mea-water/A/derivative-0.005--1.json",
+      "operation": "residuals",
+      "cpu_s": 1.7276699999999998,
+      "wall_s": 1.7330208449998281,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        12.74560546875,
+        8.68994140625,
+        8.37158203125
+      ]
+    },
+    {
+      "path": "neutral-mea-water/A/derivative-0.005-1.json",
+      "operation": "residuals",
+      "cpu_s": 1.7613280000000024,
+      "wall_s": 1.7987359740000102,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        12.74560546875,
+        8.68994140625,
+        8.37158203125
+      ]
+    },
+    {
+      "path": "neutral-mea-water/B/native-fit.json",
+      "operation": "fit",
+      "cpu_s": 12.067358999999998,
+      "wall_s": 1.355786907000038,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        13.88134765625,
+        9.66552734375,
+        8.72265625
+      ]
+    },
+    {
+      "path": "neutral-mea-water/B/predictions.json",
+      "operation": "assessment",
+      "cpu_s": 3.3113360000000007,
+      "wall_s": 3.312394296000093,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        13.88134765625,
+        9.66552734375,
+        8.72265625
+      ]
+    },
+    {
+      "path": "neutral-mea-water/B/derivative-0.01--1.json",
+      "operation": "residuals",
+      "cpu_s": 1.8565629999999995,
+      "wall_s": 1.859359994999977,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        14.13134765625,
+        9.78759765625,
+        8.767578125
+      ]
+    },
+    {
+      "path": "neutral-mea-water/B/derivative-0.01-1.json",
+      "operation": "residuals",
+      "cpu_s": 1.8770219999999966,
+      "wall_s": 1.8920098730000063,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        14.13134765625,
+        9.78759765625,
+        8.767578125
+      ]
+    },
+    {
+      "path": "neutral-mea-water/B/derivative-0.005--1.json",
+      "operation": "residuals",
+      "cpu_s": 1.8561220000000027,
+      "wall_s": 1.858553844999733,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        13.72021484375,
+        9.7744140625,
+        8.76904296875
+      ]
+    },
+    {
+      "path": "neutral-mea-water/B/derivative-0.005-1.json",
+      "operation": "residuals",
+      "cpu_s": 1.907703999999999,
+      "wall_s": 1.9099689809995652,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        13.72021484375,
+        9.7744140625,
+        8.76904296875
+      ]
+    },
+    {
+      "path": "co2-water/A/start-predictions.json",
+      "operation": "assessment",
+      "cpu_s": 0.772198999999997,
+      "wall_s": 0.7730397739996988,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        13.72021484375,
+        9.7744140625,
+        8.76904296875
+      ]
+    }
+  ],
+  "cpu_s": 157.473325,
+  "wall_s": 137.0255678630008,
+  "checks_cpu_s": 0.33888399999999996,
+  "checks_wall_s": 0.30827275000024934,
+  "aggregate_cpu_s": 157.473325,
+  "aggregate_wall_s": 137.0255678630008,
+  "stage3_ready": false,
+  "calculation_and_numerical_checks_cpu_s": 56.673325,
+  "calculation_and_numerical_checks_wall_s": 35.79556786300078
+}

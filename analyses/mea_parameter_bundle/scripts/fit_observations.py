@@ -198,3 +198,117 @@ def water_assessment(spec, mapping):
             metrics.append(dict(grid=grid,quantity=q,requested_rows=len(selected),evaluated_rows=len(errors),
                 mean_absolute_relative_error=math.fsum(errors)/len(errors) if errors else None,maximum_absolute_relative_error=max(errors,default=None)))
     return dict(rows=rows,metrics=metrics)
+
+
+def stage2_rows(spec, mapping, case, assessment=False):
+    declared = load(spec['stage2_rows_path'])[case.get('observations_id',case['id'])]
+    mapping = json.loads(json.dumps(mapping))
+    for domain in mapping['domains']:
+        if domain['domain_id'] in case['neutral_domain_ids']:
+            domain.update(case['neutral_domain'])
+    params = epcsaft.Parameters.from_mapping(mapping)
+    rows, problems = [], {}
+    template = s.load_state_packet(ROOT/spec['packet_path'])['observations'][0]['request']
+    for row in declared:
+        if row['weight'] == 0 and not assessment:
+            continue
+        group = row['state_id']
+        if group not in problems:
+            if row['quantity'] == 'phase_density':
+                problem = s.unloaded_density_problem(mapping,template,row)
+            else:
+                support = tuple(row['feed'])
+                phases = [eq.Phase('L',kind='liquid',support=support,amount=eq.Free(),composition_guess=row['feed']),
+                    eq.Phase('V',kind='vapor',support=support,amount=eq.Pinned(0.),composition_guess=row['vapor_guess'])]
+                problem = eq.Problem(T=eq.Free(row['T_K']) if row['quantity'] in ('temperature','mole_fraction') else row['T_K'],
+                    P=eq.Free(row['P_Pa']) if row['quantity']=='pressure' else row['P_Pa'],
+                    feed=eq.Amounts(row['feed']),phases=phases,row_tolerance=1e-10)
+            problems[group] = problem
+        extra = dict(phase='L',mass_basis=True) if row['quantity']=='phase_density' else (
+            dict(phase='V',species=['water']) if row['quantity']=='mole_fraction' else {})
+        item = reg.observation(params,row['quantity'],problems[group],observed=row['observed'],form=row['form'],
+            **extra,**(dict(scale=row['scale']) if row['form']=='difference' else {}))
+        rows.append((row,item,problems[group]))
+    return params,rows
+
+
+def stage2_native(spec, mapping, case, operation, workers=0, output_path=None):
+    params, rows = stage2_rows(spec,mapping,case,assessment=operation=='assessment')
+    model = epcsaft.Mixture(params,thermochemistry=thermal.record())
+    if operation == 'fit':
+        coords = [reg.coordinate(params,[(c.get('family','k_ij'),tuple(c['target']),1.)],origin=s.parameter_values(mapping)[c['identity']],
+            scale=c['scale'],bounds=tuple(c['bounds'])) for c in case.get('coordinates',[case.get('coordinate')])]
+        fitted = reg.fit(params,coords,[r[1] for r in rows],weights=[r[0]['weight'] for r in rows],
+            thermochemistry=thermal.record(),controls=reg.FitControls(**spec['controls'],workers=workers,
+                maximum_elapsed_time_seconds=case['fit_wall_s']),singular_vectors=True)
+        result = {k:s._jsonable(getattr(fitted,k)) for k in ('status','message','usable','initial_cost','final_cost','physical',
+            'optimizer','predictions','residuals','weighted_residuals','optimizer_jacobian','physical_jacobian','iterations',
+            'iteration_costs','iteration_seconds','trial_failures','residual_evaluations','jacobian_evaluations')}
+        result.update(targets=[r[0]['id'] for r in rows],statuses=[v.name for v in fitted.statuses],
+            covariance={k:s._jsonable(getattr(fitted.covariance,k)) for k in ('status','assumption','rank','singular_values',
+                'physical','optimizer','variance_factor','active_bounds','projected_gradient_norm','left_vectors','right_vectors')},
+            failures=[dict(trial=f.trial,observation=f.observation,status=f.status.name,message=f.message,jacobian=f.jacobian) for f in fitted.failures])
+        return result
+    result, solved = [], {}
+    for row,item,problem in rows:
+        value = reg.predict(model,item)
+        retained = dict(row,status=value.status.name,message=value.message,requested_tolerance_met=value.requested_tolerance_met,
+            stable_root_count=value.stable_root_count)
+        if value.status.name != 'Available' or not all(math.isfinite(v) for v in (value.value,value.residual)):
+            result.append(retained)
+            if output_path is not None:
+                s.write_json(output_path,result)
+            raise RuntimeError(f"{row['id']}: {value.status.name}: {value.message}")
+        retained.update(predicted=value.value,error=value.value-item.observed,residual=value.residual,
+            weighted_residual=math.sqrt(row['weight'])*value.residual)
+        if operation != 'residuals':
+            if row['state_id'] not in solved:
+                state = eq.solve_equilibrium(model,problem)
+                point = eq.compile_problem(model,problem).evaluate(state.coordinates)
+                phases = [s._phase_payload(problem,state,i,len(model.component_ids)) for i in range(state.phase_count)]
+                evidence = dict(success=state.success,message=state.message,raw_residuals=list(point.values),
+                    classified_residuals=list(state.classified_residuals),reduced_hessian_minimum=state.reduced_hessian_minimum,
+                    temperature=list(state.temperature),pressure=list(state.pressure),phases=phases,
+                    dP_drho=[model.state(state.temperature[0],rho=state.molar_densities[i],x={k:v for k,v in zip(p['support'],p['mole_fractions'],strict=True)}).pressure_density_derivative for i,p in enumerate(phases)])
+                solved[row['state_id']] = evidence
+            retained['equilibrium'] = solved[row['state_id']]
+        result.append(retained)
+        if output_path is not None:
+            s.write_json(output_path,result)
+    return result
+
+
+def stage2_scores(rows):
+    scores = []
+    for key in dict.fromkeys((r['quantity'],r['P_Pa'] if r['quantity']!='pressure' else r['T_K']) for r in rows):
+        rr = [r for r in rows if (r['quantity'],r['P_Pa'] if r['quantity']!='pressure' else r['T_K'])==key]
+        scores.append(dict(quantity=key[0],condition=key[1],n=len(rr),cost=sum(.5*r['weighted_residual']**2 for r in rr),
+            MAE=sum(abs(r['error']) for r in rr)/len(rr),maximum_absolute_error=max(abs(r['error']) for r in rr),
+            AARD_percent=100*sum(abs(r['error']/r['observed']) for r in rr)/len(rr),
+            RMSE=math.sqrt(sum(r['error']**2 for r in rr)/len(rr))))
+    return scores
+
+
+def stage2_balances(spec, mapping, rows):
+    system = s.load_state_packet(ROOT/spec['packet_path'])['observations'][0]['request']['reaction_system']
+    source_mass = dict(zip(s.COMPONENT_IDS,system['molar_masses_kg_per_mol'],strict=True))
+    eos_mass = {c['component_id']:c['fixed']['molar_mass']['value']['magnitude'] for c in mapping['components']}
+    result = []
+    for row in rows:
+        phases = row['equilibrium']['phases']
+        feed = row.get('feed',{'monoethanolamine':1.,'water':source_mass['monoethanolamine']*.7/(.3*source_mass['water'])})
+        final = {c:math.fsum(p['amount_mol']*dict(zip(p['support'],p['mole_fractions'],strict=True)).get(c,0.) for p in phases) for c in s.COMPONENT_IDS}
+        moiety = [math.fsum(b*(final[c]-feed.get(c,0.)) for c,b in zip(s.COMPONENT_IDS,balance,strict=True)) for balance in system['balance_matrix']]
+        charge = math.fsum(q*final[c] for c,q in zip(s.COMPONENT_IDS,system['charges'],strict=True))
+        carbon = math.fsum(final[c] for c in ('carbon-dioxide','carbamate-anion','bicarbonate-anion','carbonate-anion'))
+        expected_carbon = feed.get('carbon-dioxide',0.)
+        mass_error = math.fsum(source_mass[c]*(final[c]-feed.get(c,0.)) for c in s.COMPONENT_IDS)
+        record = dict(target=row['id'],analytical_feed_mol=feed,final_amounts_mol=final,moiety_residuals_mol=moiety,
+            charge_residual_mol=charge,carbon_residual_mol=carbon-expected_carbon,source_mass_kg=math.fsum(source_mass[c]*n for c,n in feed.items()),
+            source_mass_residual_kg=mass_error,eos_mass_residual_kg=math.fsum(eos_mass[c]*(final[c]-feed.get(c,0.)) for c in s.COMPONENT_IDS))
+        if max(map(abs,moiety+[charge,carbon-expected_carbon,mass_error]))>spec['verification']['raw_residual']:
+            raise RuntimeError(record)
+        if row['quantity']=='phase_density' and carbon!=0.:
+            raise RuntimeError('exact-zero-carbon face was not retained')
+        result.append(record)
+    return result
