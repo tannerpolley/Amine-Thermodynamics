@@ -1,0 +1,122 @@
+{
+  "A": {
+    "declared_rows": 195,
+    "attempted_rows": 195,
+    "available_rows": 195,
+    "unavailable_rows": [],
+    "unattempted_rows": [],
+    "families": [
+      {
+        "quantity": "partial_pressure",
+        "declared_n": 25,
+        "evaluated_n": 25,
+        "complete": true,
+        "cost": 0.2505838849016584,
+        "AARD_percent": 58.86249443589496
+      },
+      {
+        "quantity": "mole_fraction",
+        "declared_n": 131,
+        "evaluated_n": 131,
+        "complete": true,
+        "cost": 0.04040879873694283,
+        "AARD_percent": 73.04228518758033
+      },
+      {
+        "quantity": "pressure",
+        "declared_n": 39,
+        "evaluated_n": 39,
+        "complete": true,
+        "cost": 0.0006790194987316682,
+        "AARD_percent": 2.666523563690128
+      }
+    ],
+    "cost": 0.29167170313733287
+  },
+  "B": {
+    "declared_rows": 195,
+    "attempted_rows": 168,
+    "available_rows": 167,
+    "unavailable_rows": [
+      {
+        "P_Pa": 9231900.0,
+        "T_K": 313.2,
+        "feed": {
+          "carbon-dioxide": 0.02481,
+          "water": 0.97519
+        },
+        "form": "log_ratio",
+        "id": "kiepe-313.20-13",
+        "message": "LOCAL_INFEASIBILITY: infeasible: residual 0.0050988359807841097 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 31 iterations, contraction absent, floor 2.1070540460595154e-10, amplification 0",
+        "observed": 9231900.0,
+        "quantity": "pressure",
+        "requested_tolerance_met": false,
+        "source_locator": "PDF page 2, article Table 1",
+        "stable_root_count": null,
+        "state_id": "kiepe-313.20-13",
+        "status": "CentralSolveUnavailable",
+        "vapor_guess": {
+          "carbon-dioxide": 0.99,
+          "water": 0.01
+        },
+        "weight": 0.02564102564102564
+      }
+    ],
+    "unattempted_rows": [
+      "kiepe-353.11-02",
+      "kiepe-353.11-03",
+      "kiepe-353.11-04",
+      "kiepe-353.11-05",
+      "kiepe-353.11-06",
+      "kiepe-353.11-07",
+      "kiepe-353.11-08",
+      "kiepe-353.11-09",
+      "kiepe-353.11-10",
+      "kiepe-373.26-02",
+      "kiepe-373.26-03",
+      "kiepe-373.26-04",
+      "kiepe-373.26-05",
+      "kiepe-373.26-06",
+      "kiepe-373.26-07",
+      "kiepe-373.26-08",
+      "kiepe-373.26-09",
+      "kiepe-373.26-10",
+      "kiepe-373.26-11",
+      "kiepe-373.26-12",
+      "kiepe-373.26-13",
+      "kiepe-393.17-02",
+      "kiepe-393.17-03",
+      "kiepe-393.17-04",
+      "kiepe-393.17-05",
+      "kiepe-393.17-06",
+      "kiepe-393.17-07"
+    ],
+    "families": [
+      {
+        "quantity": "partial_pressure",
+        "declared_n": 25,
+        "evaluated_n": 25,
+        "complete": true,
+        "cost": 0.19276091080813593,
+        "AARD_percent": 57.342726587441206
+      },
+      {
+        "quantity": "mole_fraction",
+        "declared_n": 131,
+        "evaluated_n": 131,
+        "complete": true,
+        "cost": 0.028961725686077765,
+        "AARD_percent": 56.910339038867534
+      },
+      {
+        "quantity": "pressure",
+        "declared_n": 39,
+        "evaluated_n": 11,
+        "complete": false,
+        "cost": null,
+        "AARD_percent": null
+      }
+    ],
+    "cost": null
+  }
+}
