@@ -10,19 +10,19 @@ The parent authorized at most 120 CPU-s / 120 wall-s, reader correction and exac
 
 The corrected reader was checked on the exact native charts at both requested points; all eleven source values agree with their source parameter records within $10^{-12}$ in their stored units. This checks the previous failing tied-output case. It does not replace the unrun full endpoint replay or centered derivative qualification.
 
-| Physical target | A start | A iteration 40 |
-|---|---:|---:|
-| `component/protonated-monoethanolamine/segment_diameter` | 3.563 | 4.49330937370393 |
-| `component/protonated-monoethanolamine/packing_diameter` | 3.13544 | 3.95411224885946 |
-| `component/protonated-monoethanolamine/debye_huckel_diameter` | 3.13544 | 3.95411224885946 |
-| `component/carbamate-anion/segment_diameter` | 3.5605 | 2 |
-| `component/carbamate-anion/packing_diameter` | 3.13324 | 1.76 |
-| `component/carbamate-anion/debye_huckel_diameter` | 3.13324 | 1.76 |
-| `component/protonated-monoethanolamine/dispersion_energy_over_k` | 228.71 | 489.253732302516 |
-| `component/carbamate-anion/dispersion_energy_over_k` | 533.11 | 50 |
-| `component/protonated-monoethanolamine/born_diameter` | 3.563 | 1 |
-| `component/carbamate-anion/born_diameter` | 3.5605 | 1 |
-| `pair/carbamate-anion/protonated-monoethanolamine/k_ij` | 0 | -0.763082703628406 |
+| Physical target | Unit | A start | A iteration 40 |
+|---|---|---:|---:|
+| `component/protonated-monoethanolamine/segment_diameter` | angstrom | 3.563 | 4.49330937370393 |
+| `component/protonated-monoethanolamine/packing_diameter` | angstrom | 3.13544 | 3.95411224885946 |
+| `component/protonated-monoethanolamine/debye_huckel_diameter` | angstrom | 3.13544 | 3.95411224885946 |
+| `component/carbamate-anion/segment_diameter` | angstrom | 3.5605 | 2 |
+| `component/carbamate-anion/packing_diameter` | angstrom | 3.13324 | 1.76 |
+| `component/carbamate-anion/debye_huckel_diameter` | angstrom | 3.13324 | 1.76 |
+| `component/protonated-monoethanolamine/dispersion_energy_over_k` | kelvin | 228.71 | 489.253732302516 |
+| `component/carbamate-anion/dispersion_energy_over_k` | kelvin | 533.11 | 50 |
+| `component/protonated-monoethanolamine/born_diameter` | angstrom | 3.563 | 1 |
+| `component/carbamate-anion/born_diameter` | angstrom | 3.5605 | 1 |
+| `pair/carbamate-anion/protonated-monoethanolamine/k_ij` | dimensionless | 0 | -0.763082703628406 |
 
 ## What the objective is fitting
 
@@ -139,3 +139,5 @@ The result is local conditional assessment and numerical verification of the cor
 ## Final code accounting
 
 The complete block now adds **46/250 gross executable lines** and removes 14, against `e1ece11`. Its conservative campaign charge is **544/900**, leaving 356 campaign lines and 204 in this block. The final classifier against `6c8d20073fd0e5fda8dd323a51f55551d12b7486` reports 369 executable additions; the retained conservative prior charge is not replaced by that smaller classification. All code remains in the two existing fit owners. Generated inputs, results, notebook and prose are separate. No new executable probe file, persistent test, generic EOS/equilibrium/fit method or dependency was added. The one previous failing reader case is checked on its retained native charts at both points.
+
+The updated notebook was rendered with the guarded `--no-execute` command and visually checked in the T3 in-app browser at 1280×800. The diagnostic table fits without horizontal overflow. The renderer reported an external Google Fonts lookup failure and displayed fallback typography; the numerical text and tables are present. The render log is retained here. No service action or system browser was used.
