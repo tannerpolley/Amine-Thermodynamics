@@ -208,6 +208,7 @@ def stage2_rows(spec, mapping, case, assessment=False):
             domain.update(case['neutral_domain'])
     params = epcsaft.Parameters.from_mapping(mapping)
     rows, problems = [], {}
+    adjacent = {}
     template = s.load_state_packet(ROOT/spec['packet_path'])['observations'][0]['request']
     for row in declared:
         if row['weight'] == 0 and not assessment:
@@ -226,6 +227,19 @@ def stage2_rows(spec, mapping, case, assessment=False):
                 problem = eq.Problem(T=eq.Free(row['T_K']) if row['quantity'] in ('temperature','mole_fraction') else row['T_K'],
                     P=eq.Free(row['P_Pa']) if row['quantity']=='pressure' else row['P_Pa'],
                     feed=eq.Amounts(row['feed']),phases=phases,row_tolerance=1e-10)
+            if case.get('kiepe_continuation') and row['id'].startswith('kiepe-'):
+                model = epcsaft.Mixture(params,thermochemistry=thermal.record())
+                previous = adjacent.get(row['T_K'])
+                if previous is not None:
+                    problem.P = eq.Free(previous.pressure[0])
+                    for i,phase in enumerate(problem.phases):
+                        payload = s._phase_payload(problem,previous,i,len(model.component_ids))
+                        phase.composition_guess = dict(zip(payload['support'],payload['mole_fractions'],strict=True))
+                        phase.packing_guess = previous.packing_fractions[i]
+                state = eq.solve_equilibrium(model,problem)
+                if not state.success:
+                    raise RuntimeError(f"{row['id']}: continuation unavailable: {state.message}; residuals={list(state.residuals)}")
+                adjacent[row['T_K']] = state
             problems[group] = problem
         extra = dict(phase=row['phase'],species=row['species']) if 'request_id' in row else dict(phase='L',mass_basis=True) if row['quantity']=='phase_density' else (
             dict(phase='V',species=['water']) if row['quantity']=='mole_fraction' else {})
