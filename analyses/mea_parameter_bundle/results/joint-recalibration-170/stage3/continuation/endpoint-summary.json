@@ -1,0 +1,70 @@
+{
+  "outcome": "Paused at a bound-limited 3a A endpoint; no precursor selected",
+  "evidence": "Conditional calibration and numerical starting-state verification; no physical validation",
+  "cost": 0.1475198494358558,
+  "start_costs": {
+    "A": 0.2916717031373328,
+    "B": 0.24847134553886543
+  },
+  "source_values": {
+    "component/carbon-dioxide/dispersion_energy_over_k": 160.0,
+    "pair/carbon-dioxide/water/k_ij": -0.07253664499178383,
+    "pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope": -45.66829700762119,
+    "reaction:R5:correlation:a_k": 2500.112408571033
+  },
+  "endpoint_sha256": "28be95687772451c848591bb7994c7ef9bf0258246a9b37a7bc0827749b2b712",
+  "engine_wheel_sha256": "a974c0e0c1d1049ffd144c003815a47f313820c5c3065aa395faa0a58e70a60d",
+  "full_rank": 4,
+  "free_rank": 3,
+  "full_condition": 134.9069188647605,
+  "free_condition": 5.115862440091624,
+  "active_bounds": [
+    "CO2 dispersion lower bound 160 K"
+  ],
+  "iterations": 26,
+  "all_195_native_endpoint_predictions_available": true,
+  "trial_failures": [
+    {
+      "trial": 2,
+      "observation": 167,
+      "status": "CentralSolveUnavailable",
+      "message": "LOCAL_INFEASIBILITY: infeasible: residual 0.00056748040854204262 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 96 iterations, contraction absent, floor 2.1299900908324498e-10, amplification 0",
+      "jacobian": false
+    },
+    {
+      "trial": 3,
+      "observation": 167,
+      "status": "CentralSolveUnavailable",
+      "message": "LOCAL_INFEASIBILITY: infeasible: residual 0.18864687430428353 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 79 iterations, contraction absent, floor 2.1108824769023538e-10, amplification 0",
+      "jacobian": false
+    },
+    {
+      "trial": 4,
+      "observation": 167,
+      "status": "CentralSolveUnavailable",
+      "message": "SUCCESS: phase V has no locally unique anchored root: vapor branch not admitted by the finite search: the sole stable root 16977.160871679462 mol/m3 lies above the negative-slope sample 11546.807416403712 mol/m3",
+      "jacobian": false
+    },
+    {
+      "trial": 5,
+      "observation": 167,
+      "status": "CentralSolveUnavailable",
+      "message": "SUCCESS: phase V has no locally unique anchored root: vapor branch not admitted by the finite search: the sole stable root 14988.706372992032 mol/m3 lies above the negative-slope sample 11457.833662646617 mol/m3",
+      "jacobian": false
+    },
+    {
+      "trial": 8,
+      "observation": 167,
+      "status": "CentralSolveUnavailable",
+      "message": "SUCCESS: phase V has no locally unique anchored root: vapor branch not admitted by the finite search: the sole stable root 12214.09364129821 mol/m3 lies above the negative-slope sample 10069.043296868384 mol/m3",
+      "jacobian": false
+    }
+  ],
+  "unrun": [
+    "A endpoint serialization replay, equilibrium closure/root qualification, critical temperature and derivatives",
+    "B fit and all B endpoint quantities",
+    "3b six-heat qualification, pivot/enthalpy checks and both fits",
+    "stage-4 frozen-inputs.json"
+  ],
+  "owner_decision_required": true
+}

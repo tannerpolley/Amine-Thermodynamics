@@ -16,6 +16,21 @@ resources:
   - figures/regression_overview/output/parameter-table-inputs.json
 ---
 
+## Joint recalibration: CO₂ dispersion reaches its lower bound
+
+The revised stage-3 calculation is paused at a conditional 3a calibration result. On the corrected water/binary inputs and fixed source chemistry, A converges in 26 iterations from cost 0.2916717031373328 to 0.1475198494358558, with all 195 native predictions available. CO₂ dispersion reaches its declared lower bound, 160 K. The other returned values are CO₂–water interaction −0.07253664499178383 at 313.15 K, reciprocal-temperature slope −45.66829700762119 K, and R5 reference coefficient 2500.112408571033 K. Full/free ranks are 4/4 and 3/3, with condition numbers 134.9069 and 5.11586. These are conditional fit diagnostics, without a physical parameter uncertainty claim.
+
+| Family | A start mean absolute relative error, % | A bound-limited endpoint, % |
+|---|---:|---:|
+| Reactive pressure | 58.862494 | 101.286954 |
+| Species | 73.042285 | 46.112169 |
+| Kiepe pressure | 2.666524 | 4.981335 |
+
+The lower log-ratio objective trades improved species error against worse mean pressure error. Identical adjacent-row initialization makes all 195 targets available at both starts; B's complete starting cost is 0.24847134553886543. At 313.20 K row 13, A starts on a CO₂-rich density of 14043.39 mol/m³ and B on 3100.30 mol/m³. This preserves the root-family question for any completed endpoint comparison. The bound-limited A endpoint is not a selected precursor. Its replay, equilibrium/root qualification, critical temperature and derivative checks, the B fit, and all stage-3b heat/pivot checks remain unrun under the explicit stop rule. A scalar table is sufficient to show this unresolved bound and error trade-off.
+
+The [stage-3 report](results/joint-recalibration-170/stage3/README.md#amended-3a-result-lower-bound-endpoint-returned-for-decision) links the full-precision returned parameters, family/isotherm tables, Jacobians, trial failures and timings. Recorded execution is 519.271879 CPU-s / 100.076116 wall-s including retained prior charges; stage 3b is unrun. This conditional calibration and starting-state numerical verification has not been independently reviewed or promoted for manuscript use. The adopted record described in the following sections is unchanged.
+
+
 # Current working record {#working-record}
 
 **The current record is the investigator-adopted heat-augmented SSM+DS F1 start A, for 30 wt% MEA on a CO₂-free basis at 40–80 °C.** The [#170 owner decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6071318908) adds eight Vinjarapu integral heats to each F1–F6 fit; the [#147 design amendment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/147#issuecomment-6070624850) fixes the same five interaction coordinates and inherited calibrated chemistry. Water, ion sizes and the density-only empirical volume translation remain fixed.

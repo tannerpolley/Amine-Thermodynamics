@@ -80,3 +80,48 @@ The classifier reports 323 total executable additions against `6c8d20073fd0e5fda
 The diagnosis adds 5.581666 CPU-s / 5.768992 wall-s. Combined recorded execution is therefore **48.625389 CPU-s / 48.152996 wall-s**, or **51.052091 wall-s** including the separately known current-replay command overhead. The remaining unmetered qualification startup/verification overhead still makes these execution totals lower bounds. No scientific allowance was exhausted.
 
 No new persistent test was added: the four retained numerical replays and complete/partial start solves check the changes exercised here. No independent delivered review has run. The root notebook, manuscript, selected-current parameter record and stage-2 results remain unchanged. The worktree contains neither the ignored literature shelf nor the journal preference files; this task used the accepted design and retained source owners and makes no new literature judgment. No GitHub write, push, merge, Engine edit, subagent, worktree or preview-service action was performed.
+
+## Orchestrator amendment, 15 October 2026, pending owner confirmation
+
+The parent authorized the design section 2 Kiepe continuation allowance for stage 3a after the retained B row-13 diagnosis. The amended calculation uses continuation for every row within each isotherm, identically at A and B. At each parameter record, the preceding converged row supplies the next row's Engine pressure `Free(guess)`, both phases' `composition_guess`, and both phases' `packing_guess`. The first row of each isotherm retains its original guesses. No intermediate composition is required unless direct adjacency fails; no intermediate point receives objective weight. There is no local solver. Parameters, target identities, phase kinds, bounds, tolerances and objective weights remain unchanged.
+
+The original cold calculations and their failure remain in their original paths. Amended results are retained under `continuation/`, with a frozen copy of the amended campaign declaration. The preceding result is recomputed at each parameter record before its guesses are transported; guesses never come from the other start or a different parameter record. This amendment is an orchestrator decision pending owner confirmation, as required by the parent task.
+
+## Amended 3a result: lower-bound endpoint, returned for decision
+
+With the amendment above, both A and B return all 195 targets. A retains cost 0.2916717031373328, matching its original cold result to floating-point roundoff; B's complete starting cost is 0.24847134553886543. B row 13 returns 5.503809502954186 MPa and CO₂-rich density 3100.2957005057706 mol/m³, matching the retained adjacent-row diagnosis. The same initialization procedure at A returns 9.000105234320171 MPa and CO₂-rich density 14043.38538551182 mol/m³. The starting root families remain different and are preserved in `continuation/kiepe-313.20-roots.csv` for all twelve rows of that isotherm.
+
+The A fit converges in 26 iterations to cost **0.1475198494358558**, with CO₂ dispersion **160 K**, CO₂–water interaction at 313.15 K **−0.07253664499178383**, slope **−45.66829700762119 K**, and R5 reference coefficient **2500.112408571033 K**. All 195 native endpoint predictions are available. The native function-tolerance termination is accompanied by an active CO₂-dispersion lower bound, so the calibration has not been settled. The explicit owner stop rule applies. No B fit or later calculation was launched, and no precursor was selected.
+
+The full optimizer Jacobian has rank **4/4**, condition **134.90691886476048**; after excluding the active dispersion column, the free matrix has rank **3/3**, condition **5.115862440091624**. `continuation/identification.json` retains both singular spectra, physical spectra, scales, gradient and weakest directions. Native covariance independently reports full rank 4 and an active bound; its interior-point uncertainty assumptions do not apply. There is no physical parameter uncertainty estimate.
+
+Mean absolute relative errors, percent:
+
+| Family | A start | B start | A bound-limited endpoint |
+|---|---:|---:|---:|
+| Reactive pressure | 58.862494 | 57.342727 | 101.286954 |
+| Species | 73.042285 | 56.910339 | 46.112169 |
+| Kiepe pressure | 2.666524 | 19.240258 | 4.981335 |
+
+Kiepe mean / maximum absolute relative errors, percent:
+
+| Isotherm, K | A start | B start | A bound-limited endpoint |
+|---|---:|---:|---:|
+| 313.20 | 1.501207 / 2.659100 | 24.692845 / 40.382700 | 5.277946 / 19.930828 |
+| 353.11 | 3.826095 / 5.577518 | 16.546102 / 21.250162 | 5.903299 / 6.303107 |
+| 373.26 | 0.972618 / 2.799777 | 16.660296 / 20.367789 | 4.781600 / 6.582074 |
+| 393.17 | 6.645612 / 11.336118 | 17.536242 / 26.986562 | 3.404637 / 5.553888 |
+
+The lower log-ratio objective coexists with worse reactive-pressure mean relative error. Its three endpoint family costs are 0.12371264771537516, 0.02195295585330804 and 0.0018542458671724372, respectively. These declared engineering weights allow that trade-off; lower cost does not imply every displayed error improves. Family and isotherm values are retained in the two CSV tables under `continuation/`.
+
+The native A row-13 endpoint pressure is 7.391905913193009 MPa. Its CO₂-rich density, endpoint root family, model CO₂ critical temperature, serialized replay, endpoint equilibrium closure and parameter-derivative checks have **not** been evaluated because the bound stop preceded those calls. There is no B endpoint, so endpoint start dispersion and the A/B endpoint root-family comparison are unavailable. The five failed trial steps, all on Kiepe row 13, remain in `native-fit.json` with their numerical causes; no failed trial received a penalty or changed denominator. At the starts, complete material, charge and source-mass checks are retained in each `start-balances.json`, along with all phase and equilibrium diagnostics in `start-predictions.json`.
+
+Stage 3b is unrun. Its six heat comparisons, family root mean squares, linked shifts, pivot/enthalpy invariants and serialized reaction-temperature replays are unavailable. `stage3/frozen-inputs.json` is not written because the required precursor is unsettled. No unavailable value is inferred from the parameter trend or an earlier fit.
+
+This is a conditional calibration result and numerical verification of starting-state availability, not a completed stage-3 calibration, prediction on independent data or physical validation. A compact table describes the active bound and family trade-off; an incomplete comparison figure would not settle the missing endpoint/root checks. Independent delivered review and investigator promotion have not occurred.
+
+The amended command records 519.271879 aggregate CPU-s and 100.076116 wall-s including the conservative prior charges 48.625389 CPU-s / 51.052091 wall-s. The new measured work is 470.646490 CPU-s / 49.024025 wall-s. It requests 32 native workers on 32 discovered CPUs with 10.67 GB available memory and single-thread BLAS/OpenMP. It runs at `nice -n 10`; actual worker count is not returned by the Engine. Stage 3b uses zero CPU/wall. Neither stage allowance is exhausted. The previously unmetered qualification startup still makes the combined campaign total a lower bound.
+
+The amended code adds 14 executable lines to the existing observation owner. Against the stage-2 head `b6aee49`, stage-3 code now adds 57 lines (31 in `fit_campaign.py`, 26 in `fit_observations.py`) and removes 14. Adding the retained 114 diagnostic-script lines gives **171 of 200** stage-3 gross executable lines, and **498 of 900** for the campaign when combined with the supplied stage-2 charge of 327. `continuation/change-accounting.json` records the final-tree classification against `6c8d20073fd0e5fda8dd323a51f55551d12b7486`; `continuation/change-accounting-stage3.json` preserves the conservative stage-specific charge. No new persistent test, local solver, EOS, parameter derivative or optimizer was added. `continuation/initialization-check.json` checks unchanged target definitions, A's original result and B row 13 against the existing diagnosis.
+
+The working notebook now records the conditional A endpoint and explicit stop. The presentation refresh attempted the existing `analyses/manuscript.py refresh` command without any service change, but could not run because `snakemake` is absent from the command environment. No HTML was refreshed and no package was installed. The notebook source and retained result tables remain available for independent review.
