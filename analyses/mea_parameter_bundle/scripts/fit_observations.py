@@ -243,6 +243,8 @@ def stage2_rows(spec, mapping, case, assessment=False):
             problems[group] = problem
         extra = dict(phase=row['phase'],species=row['species']) if 'request_id' in row else dict(phase='L',mass_basis=True) if row['quantity']=='phase_density' else (
             dict(phase='V',species=['water']) if row['quantity']=='mole_fraction' else {})
+        if row['quantity']=='amount_ratio':
+            extra.update(denominator_phase=row['phase'],denominator_species=row['denominator_species'])
         item = reg.observation(params,row['quantity'],problems[group],observed=row['observed'],form=row['form'],
             **extra,**(dict(scale=row['scale']) if row['form']=='difference' else {}))
         rows.append((row,item,problems[group]))
@@ -258,7 +260,8 @@ def stage2_native(spec, mapping, case, operation, workers=0, output_path=None):
             factor = c.get('source_to_native_factor',1.)
             kwargs = dict(origin=factor*s.parameter_values(mapping)[c['identity']],scale=abs(factor)*c['scale'],bounds=tuple(sorted(factor*b for b in c['bounds'])))
             coords.append(reg.reaction_coordinate(c['reaction'],c['coefficient'],**kwargs) if 'reaction' in c else
-                reg.coordinate(params,[(c.get('family','k_ij'),tuple(c['target']) if isinstance(c['target'],list) else c['target'],1.)],**kwargs))
+                reg.coordinate(params,[(t['family'],tuple(t['target']) if isinstance(t['target'],list) else t['target'],t.get('factor',1.))
+                    for t in c.get('targets',[dict(family=c.get('family','k_ij'),target=c.get('target'))])],**kwargs))
         fitted = reg.fit(params,coords,[r[1] for r in rows],weights=[r[0]['weight'] for r in rows],
             thermochemistry=thermal.record(),controls=reg.FitControls(**spec['controls'],workers=workers,
                 maximum_elapsed_time_seconds=case['fit_wall_s']),singular_vectors=True)

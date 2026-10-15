@@ -243,13 +243,19 @@ def stage2_study(spec, out, started):
     sizing, timing, selected = machine(spec,None), prior.get('calls',[]), []
     write(out/'machine.json',sizing)
     def elapsed():
-        return dict(cpu_s=cpu_seconds()+prior.get('cpu_s',spec['prior_cpu_charge_s']),
-            wall_s=time.monotonic()-started+prior.get('wall_s',spec['prior_wall_charge_s']))
+        cpu = cpu_seconds()+prior.get('cpu_s',spec['prior_cpu_charge_s'])
+        wall = time.monotonic()-started+prior.get('wall_s',spec['prior_wall_charge_s'])
+        return dict(cpu_s=cpu,wall_s=wall,
+            cumulative_cpu_s=spec.get('program_prior_cpu_s',0.)+cpu,
+            cumulative_wall_s=spec.get('program_prior_wall_s',0.)+wall,
+            remaining_cpu_s=spec.get('program_cpu_limit_s',144000.)-spec.get('program_prior_cpu_s',0.)-cpu,
+            remaining_wall_s=spec.get('program_wall_limit_s',21600.)-spec.get('program_prior_wall_s',0.)-wall)
     def call(mapping, case, operation, path):
         if path.exists() and not path.with_suffix('.failure.json').exists():
             return load(path)
         remaining = spec['budget_wall_s']-elapsed()['wall_s']
-        if remaining<=0 or elapsed()['cpu_s']>=spec['budget_cpu_s']:
+        remaining = min(remaining,elapsed()['remaining_wall_s'])
+        if remaining<=0 or elapsed()['cpu_s']>=spec['budget_cpu_s'] or elapsed()['remaining_cpu_s']<=0:
             raise RuntimeError('stage-2 allowance reached; no further call launched')
         limit = min(remaining,case['fit_wall_s'] if operation=='fit' else spec['nonfit_wall_s'])
         def child():
@@ -288,6 +294,13 @@ def stage2_study(spec, out, started):
     reference = load(ROOT/spec['reference_path']) if 'reference_path' in spec else o.s.stage2_reference(load(ROOT/spec['water_path']),spec)
     if spec['stage']==2:
         write(out/'reference-parameters.json',reference)
+    def parameter_record(mapping, coordinates, values):
+        updates = {}
+        for coordinate,value in zip(coordinates,values,strict=True):
+            updates[coordinate['identity']] = value
+            updates.update({tie['identity']:tie['factor']*value for tie in coordinate.get('ties',[])})
+        return o.s.with_parameter_values(mapping,updates)
+    write(out/'entry-accounting.json',elapsed())
     try:
         for case in spec['cases']:
             coordinates, starts, endpoints = case.get('coordinates',[case.get('coordinate')]), [], []
@@ -296,7 +309,7 @@ def stage2_study(spec, out, started):
                     pair['coefficients'].extend(case.get('additional_coefficients',[]))
             for start in case['starts']:
                 values = start.get('values',[start.get('value')])
-                mapping = o.s.with_parameter_values(reference,{c['identity']:v for c,v in zip(coordinates,values,strict=True) if v is not None})
+                mapping = parameter_record(reference,coordinates,values)
                 directory = out/case['id']/start['id']
                 write(directory/'start-parameters.json',mapping)
                 rows = call(mapping,case,'assessment',directory/'start-predictions.json')
@@ -309,7 +322,21 @@ def stage2_study(spec, out, started):
                 complete = (raw['status']=='converged' and raw['usable'] and all(v=='Available' for v in raw['statuses'])
                     and len(raw['targets'])==case['target_count'] and len(raw['physical'])==len(coordinates)
                     and all(math.isfinite(v) for k in ('physical','predictions','weighted_residuals','optimizer_jacobian','physical_jacobian') for v in raw[k]))
-                endpoint = o.s.with_parameter_values(mapping,{c['identity']:v/c.get('source_to_native_factor',1.) for c,v in zip(coordinates,raw['physical'],strict=True)}) if raw['usable'] else None
+                endpoint = parameter_record(mapping,coordinates,[v/c.get('source_to_native_factor',1.) for c,v in zip(coordinates,raw['physical'],strict=True)]) if raw['usable'] else None
+                if raw['usable']:
+                    jac = np.asarray(raw['optimizer_jacobian']).reshape(-1,len(coordinates))
+                    active = raw['covariance']['active_bounds']
+                    free = [j for j in range(len(coordinates)) if j not in active]
+                    spectra = [np.linalg.svd(matrix,compute_uv=False) for matrix in (jac,jac[:,free])]
+                    write(directory/'identification.json',dict(coordinates=coordinates,
+                        gradient=(jac.T@np.asarray(raw['weighted_residuals'])).tolist(),
+                        optimizer_singular_values=spectra[0].tolist(),free_optimizer_singular_values=spectra[1].tolist(),
+                        physical_singular_values=np.linalg.svd(np.asarray(raw['physical_jacobian']).reshape(jac.shape),compute_uv=False).tolist(),
+                        full_rank=int(np.count_nonzero(spectra[0]>1e-14*spectra[0][0])),
+                        free_rank=int(np.count_nonzero(spectra[1]>1e-14*spectra[1][0])) if free else 0,
+                        full_condition=float(spectra[0][0]/spectra[0][-1]) if spectra[0][-1]>0 else None,
+                        free_condition=float(spectra[1][0]/spectra[1][-1]) if free and spectra[1][-1]>0 else None,
+                        rank_relative_cutoff=1e-14,covariance=raw['covariance']))
                 if not complete:
                     if endpoint is not None:
                         write(directory/'usable-budget-endpoint.json',endpoint)
@@ -336,7 +363,7 @@ def stage2_study(spec, out, started):
                 for column,coordinate in enumerate(coordinates):
                     for step in spec['verification']['steps_optimizer']:
                         factor = coordinate.get('source_to_native_factor',1.)
-                        shifted = [call(o.s.with_parameter_values(endpoint,{coordinate['identity']:raw['physical'][column]/factor+sign*step*coordinate['scale']*math.copysign(1.,factor)}),
+                        shifted = [call(parameter_record(endpoint,[coordinate],[raw['physical'][column]/factor+sign*step*coordinate['scale']*math.copysign(1.,factor)]),
                             case,'residuals',directory/f'derivative-{column}-{step}-{sign}.json') for sign in (-1,1)]
                         for i,r in enumerate(objective):
                             if i and (r['quantity'],r['T_K']) in {(q['quantity'],q['T_K']) for q in objective[:i]}:
@@ -351,12 +378,6 @@ def stage2_study(spec, out, started):
                 write(directory/'derivatives.json',derivatives)
                 if not all(d['passed'] for d in derivatives):
                     raise RuntimeError('exact parameter derivative verification failed')
-                spectrum = np.linalg.svd(jac,compute_uv=False)
-                write(directory/'identification.json',dict(coordinates=coordinates,gradient=(jac.T@np.asarray(raw['weighted_residuals'])).tolist(),
-                    optimizer_singular_values=spectrum.tolist(),
-                    physical_singular_values=np.linalg.svd(np.asarray(raw['physical_jacobian']).reshape(jac.shape),compute_uv=False).tolist(),
-                    full_condition=float(spectrum[0]/spectrum[-1]),free_condition=float(spectrum[0]/spectrum[-1]) if not raw['covariance']['active_bounds'] else None,
-                    native_rank_cutoff='Engine-owned; not returned',covariance=raw['covariance']))
                 write(directory/'scores.json',o.stage2_scores(rows))
                 endpoints.append(dict(start=start['id'],cost=cost,k_ij=raw['physical'][0],physical=raw['physical'],path=str((directory/'parameters.json').resolve().relative_to(ROOT)),
                     sha256=hashlib.sha256((directory/'parameters.json').read_bytes()).hexdigest(),active_bounds=raw['covariance']['active_bounds']))
