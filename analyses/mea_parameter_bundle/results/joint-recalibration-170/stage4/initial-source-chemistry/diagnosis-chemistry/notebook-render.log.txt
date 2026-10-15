@@ -1,0 +1,58 @@
+synced
+pandoc 
+  to: html
+  output-file: notebook.html
+  standalone: true
+  embed-resources: true
+  title-prefix: Analyses
+  section-divs: true
+  html-math-method: mathjax
+  wrap: none
+  default-image-extension: png
+  css:
+    - ../site.css
+  toc: false
+  
+metadata
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  page-layout: full
+  theme: cosmo
+  fontsize: 16px
+  title: MEA parameter bundle
+  subtitle: Current heat-augmented F1 record · pressure, speciation, calorimetry and property status
+  resources:
+    - results/selected-current-best-parameters.json
+    - results/heat-final-170/conditional-uncertainty.json
+    - results/heat-final-170/fit-comparison.csv
+    - results/heat-final-170/high-temperature-comparison.csv
+    - results/heat-final-170/heat-comparison.csv
+    - results/heat-final-170/heat-capacity-comparison.csv
+    - results/heat-final-170/corrected-densities.csv
+    - results/heat-final-170/figure-data/heat.csv
+    - results/heat-final-170/figure-data/input-hashes.json
+    - figures/regression_overview/output/provenance.json
+    - figures/regression_overview/output/statistics.csv
+    - figures/regression_overview/output/parameter-table-inputs.json
+  latex-auto-install: false
+  
+[WARNING] Could not fetch resource https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap: HttpExceptionRequest Request {
+    host                 = "fonts.googleapis.com"
+    port                 = 443
+    secure               = True
+    requestHeaders       = [("User-Agent","pandoc/3.10")]
+    path                 = "/css2"
+    queryString          = "?family=Source+Sans+Pro:wght@300;400;700&display=swap"
+    method               = "GET"
+    proxy                = Nothing
+    rawBody              = False
+    redirectCount        = 10
+    responseTimeout      = ResponseTimeoutDefault
+    requestVersion       = HTTP/1.1
+    proxySecureMode      = ProxySecureWithConnect
+  }
+   (ConnectionFailure Network.Socket.getAddrInfo (called with preferred socket type/protocol: AddrInfo {addrFlags = [AI_ADDRCONFIG], addrFamily = AF_UNSPEC, addrSocketType = Stream, addrProtocol = 0, addrAddress = 0.0.0.0:0, addrCanonName = Nothing}, host name: "fonts.googleapis.com", service name: "443"): does not exist (Try again))
+Output created: ../_site/mea_parameter_bundle/notebook.html
+
