@@ -1,0 +1,57 @@
+import time,resource,json,math,hashlib
+from pathlib import Path
+START=time.monotonic(); CPU=time.process_time(); resource.setrlimit(resource.RLIMIT_CPU,(60,60))
+import numpy as np
+from scipy.optimize import root,brentq
+import fit_campaign as c
+import fit_observations as o
+s=o.s; eq=o.eq; epcsaft=o.epcsaft
+D=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/stage3/diagnosis-start-B');D.mkdir()
+def save(name,obj):c.write(D/(name+'.json'),obj)
+spec=c.load(D.parent/'stage3a-spec.json');mapping=c.load(D.parent/'co2-dispersion-r5-reference/B/start-parameters.json')
+save('inputs',dict(verified=c.verify(spec),start_sha256=hashlib.sha256((D.parent/'co2-dispersion-r5-reference/B/start-parameters.json').read_bytes()).hexdigest(),limits=dict(cpu_s=60,wall_s=60),source='Same B parameters, source row and tolerance; alternative phase declarations are diagnosis only.'))
+try:
+ params,rows=o.stage2_rows(spec,mapping,spec['cases'][0]); row,item,problem=next(r for r in rows if r[0]['id']=='kiepe-313.20-13');model=epcsaft.Mixture(params,thermochemistry=o.thermal.record())
+ pure=epcsaft.Pure(epcsaft.Parameters.from_mapping(mapping,components=['carbon-dioxide']))
+ critical=[]
+ for h in (1.,.1):
+  def fun(q):
+   T,r=q
+   def d(rho):return pure.state(T,rho=float(rho)).pressure_density_derivative
+   return [d(r)/1000,(d(r+h)-d(r-h))/(2*h)]
+  found=root(fun,[318.033719,10023.6355],tol=1e-10);T,r=map(float,found.x);state=pure.state(T,rho=r)
+  critical.append(dict(step_mol_m3=h,success=bool(found.success),T_K=T,rho_mol_m3=r,P_Pa=state.pressure,dP_drho=state.pressure_density_derivative,d2P_drho2=fun(found.x)[1],message=str(found.message)))
+ save('pure-critical',critical)
+ satprob=pure.saturation(313.2);satprob.row_tolerance=1e-10;sat=eq.solve_equilibrium(pure,satprob)
+ observed=pure.state(313.2,P=row['observed'],phase='liquid')
+ save('pure-saturation',dict(T_K=313.2,success=sat.success,message=sat.message,P_Pa=list(sat.pressure),rho_mol_m3=list(sat.molar_densities),raw_residuals=list(sat.residuals),observed_P_Pa=row['observed'],observed_pressure_liquid_rho_mol_m3=observed.molar_density,observed_pressure_dP_drho=observed.pressure_density_derivative))
+ calls=[]
+ def solve(label,prob,start=None):
+  clock,cpu=time.monotonic(),time.process_time()
+  try:
+   result=eq.solve_equilibrium(model,prob,**(dict(start=start) if start is not None else {}))
+   payload=dict(label=label,success=result.success,message=result.message,P_Pa=list(result.pressure),rho_mol_m3=list(result.molar_densities),raw_residuals=list(result.residuals),coordinates=list(result.coordinates))
+   if result.success:
+    point=eq.compile_problem(model,prob).evaluate(result.coordinates);phases=[s._phase_payload(prob,result,i,len(model.component_ids)) for i in range(result.phase_count)]
+    states=[model.state(result.temperature[0],rho=result.molar_densities[i],x=dict(zip(p['support'],p['mole_fractions']))) for i,p in enumerate(phases)]
+    payload.update(phases=phases,unscaled_residuals=list(point.values),reduced_hessian_minimum=result.reduced_hessian_minimum,dP_drho=[st.pressure_density_derivative for st in states],direct_pressure_Pa=[st.pressure for st in states])
+  except Exception as error: result=None;payload=dict(label=label,success=False,error=f'{type(error).__name__}: {error}')
+  payload.update(cpu_s=time.process_time()-cpu,wall_s=time.monotonic()-clock);calls.append(payload);save('coexistence-calls',calls);return result
+ cold=solve('unchanged-liquid-vapor-cold',problem)
+ phases=[eq.Phase('L',kind='liquid',support=tuple(row['feed']),amount=eq.Free(),composition_guess=row['feed'],packing_guess=.46),eq.Phase('V',kind='liquid',support=tuple(row['feed']),amount=eq.Pinned(0.),composition_guess=row['vapor_guess'],packing_guess=.25)]
+ denseproblem=eq.Problem(T=row['T_K'],P=eq.Free(row['P_Pa']),feed=eq.Amounts(row['feed']),phases=phases,row_tolerance=1e-10)
+ dense=solve('dense-CO2-phase-diagnosis-same-pressure-guess',denseproblem)
+ if dense is not None and dense.success:
+  denseproblem.phases[1].kind='vapor';solve('identical-converged-dense-state-declared-vapor',denseproblem,dense)
+  rich=calls[-2]['phases'][1];x=dict(zip(rich['support'],rich['mole_fractions']));target=dense.pressure[0]
+  def st(rho):return model.state(row['T_K'],rho=float(rho),x=x)
+  grid=np.linspace(1.,30000.,601);states=[st(r) for r in grid];turns=[];roots=[]
+  for a,b,sa,sb in zip(grid,grid[1:],states,states[1:]):
+   if sa.pressure_density_derivative*sb.pressure_density_derivative<0:
+    rho=brentq(lambda rho:st(rho).pressure_density_derivative,a,b);v=st(rho);turns.append(dict(rho_mol_m3=rho,P_Pa=v.pressure,dP_drho=v.pressure_density_derivative))
+   if (sa.pressure-target)*(sb.pressure-target)<0:
+    rho=brentq(lambda rho:st(rho).pressure-target,a,b,xtol=1e-7);v=st(rho);roots.append(dict(rho_mol_m3=rho,P_Pa=v.pressure,dP_drho=v.pressure_density_derivative))
+  save('co2-rich-isotherm',dict(T_K=row['T_K'],composition=x,coexistence_P_Pa=target,scan_min_rho_mol_m3=1,scan_max_rho_mol_m3=30000,scan_spacing_mol_m3=float(grid[1]-grid[0]),turns=turns,pressure_roots=roots,samples=[dict(rho_mol_m3=float(r),P_Pa=v.pressure,dP_drho=v.pressure_density_derivative) for r,v in zip(grid,states)]))
+ print('critical',critical,flush=True);print('coexistence',[(v['label'],v.get('P_Pa'),v.get('rho_mol_m3'),v.get('message',v.get('error'))) for v in calls],flush=True)
+finally:
+ save('timing',dict(cpu_s=time.process_time()-CPU,wall_s=time.monotonic()-START,limits_cpu_s=60,limits_wall_s=60,host_load=c.os.getloadavg()))
