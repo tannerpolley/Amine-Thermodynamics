@@ -235,6 +235,14 @@ def water_study(spec, out, started):
 
 
 
+def fitted_parameter_values(coordinates, physical):
+    targets = [(c['identity'],c.get('source_to_native_factor',1.))
+        for c in coordinates]
+    targets = [target for c,primary in zip(coordinates,targets,strict=True)
+        for target in [primary,*[(tie['identity'],1.) for tie in c.get('ties',[])]]]
+    return {identity:value/factor for (identity,factor),value in zip(targets,physical,strict=True)}
+
+
 def stage2_study(spec, out, started):
     import fit_observations as o
     import numpy as np
@@ -320,9 +328,9 @@ def stage2_study(spec, out, started):
                 directory = out/case['id']/start['id']
                 raw = call(mapping,case,'fit',directory/'native-fit.json')
                 complete = (raw['status']=='converged' and raw['usable'] and all(v=='Available' for v in raw['statuses'])
-                    and len(raw['targets'])==case['target_count'] and len(raw['physical'])==len(coordinates)
+                    and len(raw['targets'])==case['target_count'] and len(raw['physical'])==sum(1+len(c.get('ties',[])) for c in coordinates)
                     and all(math.isfinite(v) for k in ('physical','predictions','weighted_residuals','optimizer_jacobian','physical_jacobian') for v in raw[k]))
-                endpoint = parameter_record(mapping,coordinates,[v/c.get('source_to_native_factor',1.) for c,v in zip(coordinates,raw['physical'],strict=True)]) if raw['usable'] else None
+                endpoint = o.s.with_parameter_values(mapping,fitted_parameter_values(coordinates,raw['physical'])) if raw['usable'] else None
                 if raw['usable']:
                     jac = np.asarray(raw['optimizer_jacobian']).reshape(-1,len(coordinates))
                     active = raw['covariance']['active_bounds']
@@ -331,7 +339,7 @@ def stage2_study(spec, out, started):
                     write(directory/'identification.json',dict(coordinates=coordinates,
                         gradient=(jac.T@np.asarray(raw['weighted_residuals'])).tolist(),
                         optimizer_singular_values=spectra[0].tolist(),free_optimizer_singular_values=spectra[1].tolist(),
-                        physical_singular_values=np.linalg.svd(np.asarray(raw['physical_jacobian']).reshape(jac.shape),compute_uv=False).tolist(),
+                        physical_singular_values=np.linalg.svd(np.asarray(raw['physical_jacobian']).reshape(len(raw['targets']),len(raw['physical'])),compute_uv=False).tolist(),
                         full_rank=int(np.count_nonzero(spectra[0]>1e-14*spectra[0][0])),
                         free_rank=int(np.count_nonzero(spectra[1]>1e-14*spectra[1][0])) if free else 0,
                         full_condition=float(spectra[0][0]/spectra[0][-1]) if spectra[0][-1]>0 else None,
@@ -363,7 +371,7 @@ def stage2_study(spec, out, started):
                 for column,coordinate in enumerate(coordinates):
                     for step in spec['verification']['steps_optimizer']:
                         factor = coordinate.get('source_to_native_factor',1.)
-                        shifted = [call(parameter_record(endpoint,[coordinate],[raw['physical'][column]/factor+sign*step*coordinate['scale']*math.copysign(1.,factor)]),
+                        shifted = [call(parameter_record(endpoint,[coordinate],[o.s.parameter_values(endpoint)[coordinate['identity']]+sign*step*coordinate['scale']*math.copysign(1.,factor)]),
                             case,'residuals',directory/f'derivative-{column}-{step}-{sign}.json') for sign in (-1,1)]
                         for i,r in enumerate(objective):
                             if i and (r['quantity'],r['T_K']) in {(q['quantity'],q['T_K']) for q in objective[:i]}:
