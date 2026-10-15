@@ -214,7 +214,10 @@ def stage2_rows(spec, mapping, case, assessment=False):
             continue
         group = row['state_id']
         if group not in problems:
-            if row['quantity'] == 'phase_density':
+            if 'request_id' in row:
+                request = s.corrected_request(load(spec['state_requests_path'])[row['request_id']],s.reaction_values(mapping))
+                problem = s._problem_from_request(request)
+            elif row['quantity'] == 'phase_density':
                 problem = s.unloaded_density_problem(mapping,template,row)
             else:
                 support = tuple(row['feed'])
@@ -224,7 +227,7 @@ def stage2_rows(spec, mapping, case, assessment=False):
                     P=eq.Free(row['P_Pa']) if row['quantity']=='pressure' else row['P_Pa'],
                     feed=eq.Amounts(row['feed']),phases=phases,row_tolerance=1e-10)
             problems[group] = problem
-        extra = dict(phase='L',mass_basis=True) if row['quantity']=='phase_density' else (
+        extra = dict(phase=row['phase'],species=row['species']) if 'request_id' in row else dict(phase='L',mass_basis=True) if row['quantity']=='phase_density' else (
             dict(phase='V',species=['water']) if row['quantity']=='mole_fraction' else {})
         item = reg.observation(params,row['quantity'],problems[group],observed=row['observed'],form=row['form'],
             **extra,**(dict(scale=row['scale']) if row['form']=='difference' else {}))
@@ -236,8 +239,12 @@ def stage2_native(spec, mapping, case, operation, workers=0, output_path=None):
     params, rows = stage2_rows(spec,mapping,case,assessment=operation=='assessment')
     model = epcsaft.Mixture(params,thermochemistry=thermal.record())
     if operation == 'fit':
-        coords = [reg.coordinate(params,[(c.get('family','k_ij'),tuple(c['target']),1.)],origin=s.parameter_values(mapping)[c['identity']],
-            scale=c['scale'],bounds=tuple(c['bounds'])) for c in case.get('coordinates',[case.get('coordinate')])]
+        coords = []
+        for c in case.get('coordinates',[case.get('coordinate')]):
+            factor = c.get('source_to_native_factor',1.)
+            kwargs = dict(origin=factor*s.parameter_values(mapping)[c['identity']],scale=abs(factor)*c['scale'],bounds=tuple(sorted(factor*b for b in c['bounds'])))
+            coords.append(reg.reaction_coordinate(c['reaction'],c['coefficient'],**kwargs) if 'reaction' in c else
+                reg.coordinate(params,[(c.get('family','k_ij'),tuple(c['target']) if isinstance(c['target'],list) else c['target'],1.)],**kwargs))
         fitted = reg.fit(params,coords,[r[1] for r in rows],weights=[r[0]['weight'] for r in rows],
             thermochemistry=thermal.record(),controls=reg.FitControls(**spec['controls'],workers=workers,
                 maximum_elapsed_time_seconds=case['fit_wall_s']),singular_vectors=True)
@@ -301,7 +308,7 @@ def stage2_balances(spec, mapping, rows):
         moiety = [math.fsum(b*(final[c]-feed.get(c,0.)) for c,b in zip(s.COMPONENT_IDS,balance,strict=True)) for balance in system['balance_matrix']]
         charge = math.fsum(q*final[c] for c,q in zip(s.COMPONENT_IDS,system['charges'],strict=True))
         carbon = math.fsum(final[c] for c in ('carbon-dioxide','carbamate-anion','bicarbonate-anion','carbonate-anion'))
-        expected_carbon = feed.get('carbon-dioxide',0.)
+        expected_carbon = math.fsum(feed.get(c,0.) for c in ('carbon-dioxide','carbamate-anion','bicarbonate-anion','carbonate-anion'))
         mass_error = math.fsum(source_mass[c]*(final[c]-feed.get(c,0.)) for c in s.COMPONENT_IDS)
         record = dict(target=row['id'],analytical_feed_mol=feed,final_amounts_mol=final,moiety_residuals_mol=moiety,
             charge_residual_mol=charge,carbon_residual_mol=carbon-expected_carbon,source_mass_kg=math.fsum(source_mass[c]*n for c,n in feed.items()),

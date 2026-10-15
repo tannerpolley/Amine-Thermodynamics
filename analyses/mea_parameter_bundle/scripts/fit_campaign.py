@@ -286,12 +286,13 @@ def stage2_study(spec, out, started):
                 any(v<=0 for v in e['dP_drho']) or e['reduced_hessian_minimum']<0):
                 raise RuntimeError(f"state verification failed: {r['id']}")
     reference = load(ROOT/spec['reference_path']) if 'reference_path' in spec else o.s.stage2_reference(load(ROOT/spec['water_path']),spec)
-    write(out/'reference-parameters.json',reference)
+    if spec['stage']==2:
+        write(out/'reference-parameters.json',reference)
     try:
         for case in spec['cases']:
             coordinates, starts, endpoints = case.get('coordinates',[case.get('coordinate')]), [], []
             for pair in reference['pairs']:
-                if [pair['component_id_a'],pair['component_id_b']]==coordinates[0]['target']:
+                if [pair['component_id_a'],pair['component_id_b']]==coordinates[0].get('target'):
                     pair['coefficients'].extend(case.get('additional_coefficients',[]))
             for start in case['starts']:
                 values = start.get('values',[start.get('value')])
@@ -308,7 +309,7 @@ def stage2_study(spec, out, started):
                 complete = (raw['status']=='converged' and raw['usable'] and all(v=='Available' for v in raw['statuses'])
                     and len(raw['targets'])==case['target_count'] and len(raw['physical'])==len(coordinates)
                     and all(math.isfinite(v) for k in ('physical','predictions','weighted_residuals','optimizer_jacobian','physical_jacobian') for v in raw[k]))
-                endpoint = o.s.with_parameter_values(mapping,{c['identity']:v for c,v in zip(coordinates,raw['physical'],strict=True)}) if raw['usable'] else None
+                endpoint = o.s.with_parameter_values(mapping,{c['identity']:v/c.get('source_to_native_factor',1.) for c,v in zip(coordinates,raw['physical'],strict=True)}) if raw['usable'] else None
                 if not complete:
                     if endpoint is not None:
                         write(directory/'usable-budget-endpoint.json',endpoint)
@@ -316,6 +317,8 @@ def stage2_study(spec, out, started):
                     raise RuntimeError(f"fit did not converge: {case['id']} {start['id']}; no further call launched")
                 endpoint['purpose'] = spec['purpose']
                 write(directory/'parameters.json',endpoint)
+                if raw['covariance']['rank']<len(coordinates) or raw['covariance']['active_bounds']:
+                    raise RuntimeError('rank-deficient or bound-limited endpoint; no further call launched')
                 rows = call(endpoint,case,'assessment',directory/'predictions.json')
                 verify_rows(rows)
                 write(directory/'balances.json',o.stage2_balances(spec,endpoint,rows))
@@ -332,7 +335,8 @@ def stage2_study(spec, out, started):
                 jac = np.asarray(raw['optimizer_jacobian']).reshape(-1,len(coordinates))
                 for column,coordinate in enumerate(coordinates):
                     for step in spec['verification']['steps_optimizer']:
-                        shifted = [call(o.s.with_parameter_values(endpoint,{coordinate['identity']:raw['physical'][column]+sign*step*coordinate['scale']}),
+                        factor = coordinate.get('source_to_native_factor',1.)
+                        shifted = [call(o.s.with_parameter_values(endpoint,{coordinate['identity']:raw['physical'][column]/factor+sign*step*coordinate['scale']*math.copysign(1.,factor)}),
                             case,'residuals',directory/f'derivative-{column}-{step}-{sign}.json') for sign in (-1,1)]
                         for i,r in enumerate(objective):
                             if i and (r['quantity'],r['T_K']) in {(q['quantity'],q['T_K']) for q in objective[:i]}:
@@ -378,17 +382,19 @@ def run(spec_path, output_dir, *, case_ids, operation):
     if operation not in ('fit','replay') or not case_ids:
         raise ValueError('explicit fit/replay operation and case IDs required')
     spec_path, out = Path(spec_path), Path(output_dir).resolve()
-    resume_stage2 = load(spec_path).get('study')=='joint-recalibration-170' and operation=='fit' and case_ids==['stage2']
-    if out.exists() and resume_stage2 and (out/'spec.json').read_bytes()!=spec_path.read_bytes():
+    declaration = load(spec_path)
+    resume_stage2 = declaration.get('study')=='joint-recalibration-170' and operation=='fit' and case_ids==[f"stage{declaration['stage']}"]
+    frozen_spec = out/('stage'+str(declaration['stage'])+'-spec.json' if resume_stage2 and declaration['stage']!=2 else 'spec.json')
+    if frozen_spec.exists() and resume_stage2 and frozen_spec.read_bytes()!=spec_path.read_bytes():
         raise ValueError('stage-2 continuation requires the identical frozen declaration')
     out.mkdir(parents=True, exist_ok=resume_stage2)
-    (out/'spec.json').write_bytes(spec_path.read_bytes())
+    frozen_spec.write_bytes(spec_path.read_bytes())
     spec = load(spec_path)
     timing = []
     try:
         write(out/'inputs.json',verify(spec))
         import fit_observations as o
-        if spec.get('study') == 'joint-recalibration-170' and operation=='fit' and case_ids==['stage2']:
+        if spec.get('study') == 'joint-recalibration-170' and operation=='fit' and case_ids==[f"stage{spec['stage']}"]:
             stage2_study(spec,out,started)
             return out
         if spec.get('study') == 'water-124' and operation=='fit' and case_ids==['water-124']:
@@ -401,7 +407,7 @@ def run(spec_path, output_dir, *, case_ids, operation):
                 directory = out/'replay'/identity
                 mapping = load(checked(entry['parameters_path'],entry['sha256']))
                 _, rows = o.rows_for(spec,mapping,entry['observations'])
-                clock = time.monotonic()
+                clock, before = time.monotonic(), cpu_seconds()
                 values = o.replay(mapping,rows)
                 native_wall = time.monotonic()-clock
                 write(directory/'predictions.json',values)
@@ -410,7 +416,23 @@ def run(spec_path, output_dir, *, case_ids, operation):
                 delta = differences(load(checked(entry['reference_path'],entry['reference_sha256'])),values)
                 delta += differences(load(checked(entry['summary_path'],entry['summary_sha256'])),summary,'summary')
                 comparison = replay_comparison(delta,entry.get('residual_comparison'))
+                if 'verification' in entry:
+                    expected = load(ROOT/entry['reference_path'])
+                    prior_summary = load(ROOT/entry['summary_path'])
+                    same_rows = len(values)==len(expected) and all(
+                        all(a[k]==b[k] for k in ('target','observed','scale','weight','form','status'))
+                        for a,b in zip(expected,values))
+                    row_differences = [dict(target=a['target'],expected=a['weighted_residual'],actual=b['weighted_residual'],
+                        difference=b['weighted_residual']-a['weighted_residual']) for a,b in zip(expected,values)]
+                    relative = abs(summary['cost']-prior_summary['cost'])/abs(prior_summary['cost'])
+                    maximum = max(abs(r['difference']) for r in row_differences)
+                    policy = entry['verification']
+                    comparison = dict(passed=same_rows and relative<=policy['cost_replay_relative'] and
+                        maximum<=policy['row_replay_absolute'],identical_definitions=same_rows,
+                        relative_cost_difference=relative,maximum_weighted_row_difference=maximum,
+                        expected_summary=prior_summary,actual_summary=summary,rows=row_differences,limits=policy)
                 comparison.update(native_wall_s=native_wall,command_wall_s=time.monotonic()-started)
+                comparison.update(cpu_s=cpu_seconds()-before,host_load=os.getloadavg())
                 write(directory/'comparison.json',comparison)
                 if not comparison['passed']:
                     raise RuntimeError('replay mismatch; see comparison.json')
