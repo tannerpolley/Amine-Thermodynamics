@@ -19,3 +19,87 @@ A reporting assertion initially required exact binary equality and stopped after
 Derivation and paired solves used 0.441394710 recorded command wall-s. CPU was not metered because the assertion preceded the timing write; a conservative 14.124630720 CPU-s charge uses 32 CPUs times the complete command duration. This charge counts against the initial ion-pair allowance. Earlier qualification startup remains unmetered as disclosed in its historical record.
 
 Program boundary before the ion fits: 1187.728494 CPU-s / at least 432.145917 active wall-s; remaining at most 142812.271506 CPU-s / 21167.854083 wall-s. Initial ion-pair allowance after these checks is at most 2385.875369 CPU-s / 359.558605 wall-s. This is numerical verification and starting-record construction; no ion calibration result exists yet.
+
+## Initial ion fit: required stop, no I₀ selected
+
+Both A and B return all nine admitted states and 26 targets. The first A fit reaches the 40-iteration allowance without native convergence, and four coordinates reach lower bounds. Cost falls from 59.17684171980518 to 1.3609750436302284. The native result is `limit_reached`, `usable=true`, with all 26 target predictions available and zero trial failures. This is an incomplete conditional calibration result; it is not an accepted ion precursor or a physical limit of the model. No B fit or later stage ran.
+
+The native iteration counter is 40; its diagnostic message separately says “Maximum number of iterations reached. Number of iterations: 20.” Both are retained exactly in `fit/ion-speciation/A/native-fit.json`; the reason for that discrepancy is unverified.
+
+| Quantity | Start A | Returned A vector | Bounds | Active |
+|---|---:|---:|---|---|
+| MEAH⁺ segment diameter, Å | 3.563 | 4.49330937370393 | 2 to 5.8 | No |
+| Carbamate segment diameter, Å | 3.5605 | 2 | 2 to 5.8 | Lower |
+| MEAH⁺ dispersion/k, K | 228.71 | 489.253732302516 | 50 to 950 | No |
+| Carbamate dispersion/k, K | 533.11 | 50 | 50 to 1000 | Lower |
+| MEAH⁺ Born diameter, Å | 3.563 | 1 | 1 to 7 | Lower |
+| Carbamate Born diameter, Å | 3.5605 | 1 | 1 to 7 | Lower |
+| Mutual interaction | 0 | -0.763082703628406 | -2 to 2 | No |
+
+**Large interaction movement:** mutual MEAH⁺–carbamate interaction changes by −0.763082703628406 from A, exceeding the 0.03 reporting scale. This scale is the earlier interaction search half-width, not measured uncertainty. The source R5 reference remains 2677.91 K, the CO₂–water pivot interaction remains −0.046416901120577676, and its slope remains −35.66505220645838 K. Their movement is zero in this ion-only attempt. CO₂ dispersion remains 169.21 K.
+
+The weighted optimizer Jacobian is 26×7, rank 7/7, condition 16199.960584. Removing active columns 1, 3, 4 and 5 leaves rank 3/3, condition 147.29070907; the declared relative rank cutoff is $10^{-14}$. `identification.json` retains spectra, gradient, coordinate scales, covariance diagnostics and native singular vectors. Native covariance is `not_converged`, with no variance multiplier; no standard errors or movement allowances are inferred from this vector. The physical Jacobian is 26×11 because the diameter ties produce eleven parameter targets for seven coordinates.
+
+| Family | A start cost | B start cost | A unconverged cost | A start / returned mean relative error, % |
+|---|---:|---:|---:|---|
+| All 26 targets | 59.1768417198 | 42.3676729612 | 1.36097504363 | 144.16579 / 18.180933 |
+| 18 mole-fraction targets | 7.2027965343 | 5.25673578656 | 0.523204661816 | 63.006749 / 16.799706 |
+| 8 Jakobsen ratios | 51.9740451855 | 37.1109371747 | 0.837770381815 | 326.77362 / 21.288693 |
+
+The error rows are dimensionless in their declared mole-fraction or amount-ratio basis, with difference scale $0.1y^{obs}+0.001$ and weight 1/26. Their weighting is an engineering declaration, not source covariance. Mole fractions and ratios retain separate errors in `fit/family-errors.csv`. Native endpoint values were used directly; endpoint equilibrium diagnostics were not copied from a starting record.
+
+The source-corrected packet supplies Böttinger 030/042/046 and Matin 009/019/016; newly declared Böttinger 051 uses raw row 51 at 313.15 K, 30 wt% and loading 0.508, preserving 0.0647 amine aggregate and 0.0483 carbamate. Its campaign declaration explicitly overrides the earlier membership loading exclusion. Jakobsen 011/022 retain raw rows 11/22, printed `loadNMR` 0.29/0.59, corrected CO₂-free fractions 0.2714274817259226/0.11583721405835971, and species/total-amine ratios. Their model pressure is the existing single-liquid packet convention, 101325 Pa. The exact requests, analytical feeds, source rows, admission and hashes are frozen in `fit/stage4-spec.json` and its input tables.
+
+Start material, charge, carbon and source-mass checks pass, with all state predictions and raw residuals retained. The fit stops before endpoint replay, centered diameter/other-coordinate derivative checks, endpoint closure, or cost/start selection. The two byproduct-bearing Böttinger states and remaining corrected Jakobsen comparisons are unrun after the stop. Neither their absence nor the incomplete fit is treated as failed physics.
+
+### Serialization defect and retained native values
+
+The application runner assumed one `physical` result per coordinate. The Engine returns eleven parameter-target values for the seven coordinates: each size coordinate contributes segment, packing and Debye–Hückel diameters. A strict seven-to-eleven `zip` raises `ValueError` before the runner writes its normal incomplete-fit record. This is an application serialization defect; it does not change the separately retained native non-convergence or active bounds. The accepted correction boundary is the tied-coordinate result reader and physical-Jacobian dimensions. No correction or further model call has been made after the stop.
+
+`fit/ion-speciation/A/returned-parameter-targets.json` records the exact eleven-to-seven correspondence. The source-coordinate values reconstructed from retained optimizer origins/scales agree with those native target values and the 0.88 diameter ties. `usable-budget-endpoint.json` preserves that vector for diagnosis only; it is not replay-qualified or selected. No complete `parameters.json` or stage-4 frozen selection is written.
+
+### Kiepe evidence and unrun repeat test
+
+The new wheel requalifies the unchanged stage-2 CO₂–water record. The following errors and `fit/kiepe-qualified-313.20-roots.csv` come only from that requalification, with its original 39 rows. They are not results for a new stage-3 fit. The twelve 313.20 K rows retain pressure, both phase densities/packing fractions, positive pressure-density derivatives and raw equilibrium residuals. No second 3a starting root family exists in this reordered attempt. A new model CO₂ critical-temperature calculation was unnecessary and did not run.
+
+| Kiepe isotherm, K | Rows | Mean absolute relative error, % | Maximum, % |
+|---|---:|---:|---:|
+| 313.2 | 12 | 1.50120691 | 2.65909999 |
+| 353.11 | 9 | 3.8260945 | 5.57751768 |
+| 373.26 | 12 | 0.97261782 | 2.79977739 |
+| 393.17 | 6 | 6.64561194 | 11.3361183 |
+
+| Record or decision | Result |
+|---|---|
+| I₀ | Not selected: A non-convergence, four bounds, serialization defect |
+| S₁ (3a/3b on I₀) | Unrun |
+| I₁ (ion refit on S₁) | Unrun |
+| Ion-coordinate and frozen-family movement test | Unavailable without complete I₀ and I₁ |
+| S₂ | Unrun; repeat condition cannot be evaluated |
+| Final precursor, replay and conditional mismatch | Unavailable |
+
+The design requires a return to the owner before any additional start fit or stage. Neither bounds, iteration limits, observations, weights, starts nor the repeat rule were changed.
+
+### Execution and remaining allowance
+
+The initial ion-pair boundary entry is retained in `fit/entry-accounting.json`; its exit is in `fit/summary.json`. Pair charges including derived-record/density work are 50.514018720 CPU-s / 6.875057967 wall-s, leaving 2349.485981 CPU-s / 353.124942 wall-s in this pair. New fit-process charges exclude the separately recorded density work: 36.389388000 CPU-s / 6.433663257 wall-s. Qualification adds 11.251984 CPU-s / 11.278405983 s. These are execution charges, not elapsed conversational time.
+
+Program cumulative charges are 1224.117881720 CPU-s / at least 438.579579950 active wall-s. Remaining program allowance is at most 142775.882118280 CPU-s / 21161.420420050 active wall-s. Prior 1162.351879 CPU-s / 420.426116 wall-s were charged once, including the already cumulative superseded stage-3 work. Earlier unmetered startup/verification overhead and bookkeeping-only inspections remain disclosed rather than assigned zero. The unsuccessful argument-parsing command executed no scientific call; its process startup was unmetered.
+
+All model calls ran at `nice -n 10` with single-thread BLAS/OpenMP. The fit requested 32 native row workers on 32 CPUs; available memory was 15,347,884,032 bytes at the existing 256 MiB/worker estimate. Actual native worker count is not returned. A start used 0.663389 CPU-s / 0.666275 wall-s, B start 0.697842 / 0.697703, and A fit 34.715622 / 4.832730. No call was interrupted. Per-call wall limits were 60 s for assessments and 180 s for the fit. No scientific budget was exhausted.
+
+This stopped conditional calibration and numerical verification requires the parent’s stop decision and independent delivered review. It supports no unique single-ion property, independent prediction, simultaneous optimum, parameter adoption or physical validation. No Engine edit, GitHub write, push, merge, additional worktree, subagent or preview-service action occurred. The worktree has no ignored literature shelf or journal preferences; the accepted design and retained source owners were used without a new literature judgment.
+
+### Code accounting and verification
+
+This block adds **37 gross executable lines**, removes 13, and uses 37/250 of its authorized ceiling. The conservative campaign charge is **535/900**, leaving 365 lines; 213 remain in this block. `fit/change-accounting.json` classifies the final code against `6c8d20073fd0e5fda8dd323a51f55551d12b7486`: 361 gross executable additions. The smaller classifier total does not replace the retained 498-line prior campaign charge. `change-accounting-block.json` records the distinction.
+
+`fit_observations.py` adds explicit denominator species for native amount-ratio observations and transports multiple targets for each size coordinate. `fit_campaign.py` serializes diameter ties, records program/stage accounting, and retains full/free Jacobian diagnostics before an endpoint is eligible. The former late identification writer was removed. The old one-physical-value-per-coordinate assumption remains defective for tied native outputs, as disclosed above; the new fit path is incomplete and not qualified for another fit.
+
+The completed checks are Python syntax, input/wheel hashes, exact target count/identity declarations, A/B starting size ties, four unchanged-record requalifications, five paired unloaded densities, both 26-target starting solves, and their material/charge/source-mass checks. No persistent test was added. Endpoint centered derivatives, closure/replay, byproduct/expanded comparisons and independent delivered review remain unrun after the stop.
+
+### Notebook rendering
+
+The notebook source was updated from retained values through CSE Summarize. `nice -n 10 bash analyses/render.sh mea_parameter_bundle/notebook.qmd` produced `analyses/_site/mea_parameter_bundle/notebook.html` with execution disabled. The new result text and table were checked in the T3 in-app browser at 1280×800; the inspected text fits the page and reports the stop and missing stages. No system browser or preview service was opened, started, stopped or restarted.
+
+The broad `manuscript.py refresh` first lacked Snakemake on PATH; using the presentation interpreter documented in `analyses/README.md` reached a historical presentation job but that job failed with `ModuleNotFoundError: No module named MEA` in the worktree’s unpopulated default environment. The guarded notebook-only render succeeded without that unrelated presentation preparation. The home page was not refreshed. All three command logs are retained in `fit/`; rendering establishes no scientific claim and is outside numerical fit charges.

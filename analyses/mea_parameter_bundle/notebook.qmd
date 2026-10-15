@@ -16,20 +16,24 @@ resources:
   - figures/regression_overview/output/parameter-table-inputs.json
 ---
 
-## Joint recalibration: CO₂ dispersion reaches its lower bound
+## Joint recalibration: initial ion calibration stops at four bounds
 
-The revised stage-3 calculation is paused at a conditional 3a calibration result. On the corrected water/binary inputs and fixed source chemistry, A converges in 26 iterations from cost 0.2916717031373328 to 0.1475198494358558, with all 195 native predictions available. CO₂ dispersion reaches its declared lower bound, 160 K. The other returned values are CO₂–water interaction −0.07253664499178383 at 313.15 K, reciprocal-temperature slope −45.66829700762119 K, and R5 reference coefficient 2500.112408571033 K. Full/free ranks are 4/4 and 3/3, with condition numbers 134.9069 and 5.11586. These are conditional fit diagnostics, without a physical parameter uncertainty claim.
+The ions-first amendment fixes CO₂ dispersion at 169.21 K, resets bicarbonate–water interaction from +0.5 to zero, and estimates seven ion quantities on source R2/R5 chemistry and the stage-2 neutral binaries. Engine `cf26a17b` passes all four unchanged-record requalifications at the declared $10^{-8}$ limits. The five unloaded 30 wt% density predictions change by at most $1.37\times10^{-12}$ kg/m³ after the bicarbonate correction; all five numerical closure checks pass.
 
-| Family | A start mean absolute relative error, % | A bound-limited endpoint, % |
+Both initial ion starts return all nine admitted states and 26 targets. The first A fit uses its 40 iterations without native convergence. Cost falls from **59.17684172 to 1.36097504**, but carbamate segment diameter reaches **2 Å**, carbamate dispersion/k **50 K**, and both Born diameters **1 Å**, all lower bounds. Its other returned values are MEAH⁺ segment diameter 4.49330937 Å, MEAH⁺ dispersion/k 489.25373230 K, and mutual interaction −0.76308270. The mutual change exceeds the 0.03 reporting scale. Full/free ranks are **7/7 and 3/3**, with condition numbers **16199.96 and 147.29**. Native covariance is unavailable for this unconverged, bound-active vector.
+
+| Family | A start mean absolute relative error, % | A unconverged native vector, % |
 |---|---:|---:|
-| Reactive pressure | 58.862494 | 101.286954 |
-| Species | 73.042285 | 46.112169 |
-| Kiepe pressure | 2.666524 | 4.981335 |
+| 18 mole-fraction targets | 63.006749 | 16.799706 |
+| 8 Jakobsen species/total-amine ratios | 326.773624 | 21.288693 |
 
-The lower log-ratio objective trades improved species error against worse mean pressure error. Identical adjacent-row initialization makes all 195 targets available at both starts; B's complete starting cost is 0.24847134553886543. At 313.20 K row 13, A starts on a CO₂-rich density of 14043.39 mol/m³ and B on 3100.30 mol/m³. This preserves the root-family question for any completed endpoint comparison. The bound-limited A endpoint is not a selected precursor. Its replay, equilibrium/root qualification, critical temperature and derivative checks, the B fit, and all stage-3b heat/pivot checks remain unrun under the explicit stop rule. A scalar table is sufficient to show this unresolved bound and error trade-off.
+These are calibration errors under fixed inputs and declared engineering scales, not physical parameter uncertainty. All 26 native predictions are available, with no failed trials. Endpoint closure, replay and centered derivative checks have not run. The application also encounters a serialization defect: seven tied coordinates return eleven physical parameter-target values; its one-value-per-coordinate reader raises an error. The retained vector is for diagnosis only.
 
-The [stage-3 report](results/joint-recalibration-170/stage3/README.md#amended-3a-result-lower-bound-endpoint-returned-for-decision) links the full-precision returned parameters, family/isotherm tables, Jacobians, trial failures and timings. Recorded execution is 519.271879 CPU-s / 100.076116 wall-s including retained prior charges; stage 3b is unrun. This conditional calibration and starting-state numerical verification has not been independently reviewed or promoted for manuscript use. The adopted record described in the following sections is unchanged.
+**No I₀ is selected. S₁, I₁, S₂ and the movement test are unrun under the explicit stop rule.** R5 remains at source 2677.91 K, and CO₂–water interaction/slope remain at their stage-2 values. No further start fit, bound change or later stage was launched. The [stage-4 report](results/joint-recalibration-170/stage4/initial-source-chemistry/README.md) retains starts, source declarations, raw fit, error tables, singular spectra, bounds and timings; [wheel requalification](results/joint-recalibration-170/stage4/qualification-cf26a17b/README.md) retains the unchanged comparisons. Its Kiepe isotherm/root tables describe that unchanged-record requalification, not a new stage-3 endpoint.
 
+Cumulative program execution is **1224.117882 CPU-s / at least 438.579580 active wall-s**, leaving at most **142775.882118 CPU-s / 21161.420420 wall-s**. Earlier unmetered startup/verification overhead remains unknown. Added code and incomplete tied-coordinate serialization are disclosed in the stage-4 report. This conditional calibration and numerical verification has not been independently reviewed or promoted for manuscript use. It establishes no physical model limit or unique ion properties.
+
+The superseded 160 K stage-3 endpoint and its pressure/species trade-off remain in the [historical stage-3 report](results/joint-recalibration-170/stage3/README.md). It was not used as a start or precursor in this attempt. The adopted record below remains the prior record.
 
 # Current working record {#working-record}
 
