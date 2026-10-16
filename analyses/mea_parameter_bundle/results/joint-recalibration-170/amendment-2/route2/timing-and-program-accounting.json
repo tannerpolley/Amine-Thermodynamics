@@ -1,6 +1,6 @@
 {
-  "route2_cpu_s": 522.9896160000001,
-  "route2_active_wall_s": 528.5853774560092,
+  "route2_cpu_s": 555.4871890000001,
+  "route2_active_wall_s": 565.4756948459981,
   "measured_and_preparation": {
     "release_tests": [],
     "calls": [
@@ -23,8 +23,8 @@
   "render_charge_pending": false,
   "program_prior_cpu_s": 2267.53513772,
   "program_prior_wall_s": 702.764352127,
-  "cumulative_cpu_s": 2790.52475372,
-  "cumulative_wall_s": 1231.3497295830093,
+  "cumulative_cpu_s": 2823.02232672,
+  "cumulative_wall_s": 1268.2400469729982,
   "route2_cpu_limit_s": 15000,
   "route2_wall_limit_s": 2100,
   "program_cpu_limit_s": 144000,
@@ -51,8 +51,17 @@
       "purpose": "Static HTML with --no-execute; presentation refresh lacks snakemake; no service action."
     }
   ],
-  "route2_remaining_cpu_s": 14477.010384,
-  "route2_remaining_wall_s": 1571.4146225439908,
-  "program_remaining_cpu_s": 141209.47524628,
-  "program_remaining_wall_s": 20368.65027041699
+  "route2_remaining_cpu_s": 5130.529993744189,
+  "route2_remaining_wall_s": 1534.524305154002,
+  "program_remaining_cpu_s": 131862.9948560242,
+  "program_remaining_wall_s": 20331.759953027,
+  "cpu_accounting": "Incomplete for interrupted native process workers. CPU subtotals include measured/reaped CPU plus conservative overhead, but omit unmeasured worker CPU.",
+  "diagnosis_cpu_s": 32.497573,
+  "diagnosis_wall_s": 36.89031738998892,
+  "fit_aggregate_cpu_ceiling_verified": false,
+  "possible_missing_worker_cpu_upper_bound_s": 9313.982817255812,
+  "conservative_fit_cpu_upper_bound_s": 9603.614564255811,
+  "route2_conservative_cpu_upper_bound_s": 9869.470006255811,
+  "cumulative_conservative_cpu_upper_bound_s": 12137.005143975812,
+  "CPU_upper_bound_meaning": "Conservative reservation only; actual aggregate interrupted-fit CPU is unavailable. The physical CPU-count times wall bound is used because complete worker CPU was not measured, not as a substitute for a complete measurement."
 }
