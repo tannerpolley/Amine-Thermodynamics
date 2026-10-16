@@ -1,0 +1,287 @@
+{
+  "derived_from": {
+    "start": "B",
+    "cost": 0.026481760450524285,
+    "k_ij": -0.046416901120577676,
+    "physical": [
+      -0.046416901120577676,
+      -35.66505220645838
+    ],
+    "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/co2-water/slope/co2-water/B/parameters.json",
+    "sha256": "b1ec1ddc22abe5ced8d08116fc91a7b3da1361864db1b34c33dda121b642a5e2",
+    "active_bounds": []
+  },
+  "stage2_frozen_inputs_sha256": "4abf21d682f9eb2eced9e32569f95742bd88706c0446a0abce6a4e18fa8d9739",
+  "engine": {
+    "wheel_path": "tmp/amendment-2-84ca269d/wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a",
+    "packages": {
+      "epcsaft": "0.2.0.dev0",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1"
+    }
+  },
+  "coordinates": [
+    {
+      "identity": "component/protonated-monoethanolamine/segment_diameter",
+      "family": "segment_diameter",
+      "target": "protonated-monoethanolamine",
+      "bounds": [
+        2,
+        5.8
+      ],
+      "scale": 0.1,
+      "targets": [
+        {
+          "family": "segment_diameter",
+          "target": "protonated-monoethanolamine",
+          "factor": 1.0
+        },
+        {
+          "family": "packing_diameter",
+          "target": "protonated-monoethanolamine",
+          "factor": 0.88
+        },
+        {
+          "family": "debye_huckel_diameter",
+          "target": "protonated-monoethanolamine",
+          "factor": 0.88
+        }
+      ],
+      "ties": [
+        {
+          "identity": "component/protonated-monoethanolamine/packing_diameter",
+          "factor": 0.88
+        },
+        {
+          "identity": "component/protonated-monoethanolamine/debye_huckel_diameter",
+          "factor": 0.88
+        }
+      ]
+    },
+    {
+      "identity": "component/carbamate-anion/segment_diameter",
+      "family": "segment_diameter",
+      "target": "carbamate-anion",
+      "bounds": [
+        2,
+        5.8
+      ],
+      "scale": 0.1,
+      "targets": [
+        {
+          "family": "segment_diameter",
+          "target": "carbamate-anion",
+          "factor": 1.0
+        },
+        {
+          "family": "packing_diameter",
+          "target": "carbamate-anion",
+          "factor": 0.88
+        },
+        {
+          "family": "debye_huckel_diameter",
+          "target": "carbamate-anion",
+          "factor": 0.88
+        }
+      ],
+      "ties": [
+        {
+          "identity": "component/carbamate-anion/packing_diameter",
+          "factor": 0.88
+        },
+        {
+          "identity": "component/carbamate-anion/debye_huckel_diameter",
+          "factor": 0.88
+        }
+      ]
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/dispersion_energy_over_k",
+      "family": "dispersion_energy_over_k",
+      "target": "protonated-monoethanolamine",
+      "bounds": [
+        50,
+        950
+      ],
+      "scale": 10
+    },
+    {
+      "identity": "component/carbamate-anion/dispersion_energy_over_k",
+      "family": "dispersion_energy_over_k",
+      "target": "carbamate-anion",
+      "bounds": [
+        50,
+        1000
+      ],
+      "scale": 10
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/born_diameter",
+      "family": "born_diameter",
+      "target": "protonated-monoethanolamine",
+      "bounds": [
+        1,
+        7
+      ],
+      "scale": 0.1
+    },
+    {
+      "identity": "component/carbamate-anion/born_diameter",
+      "family": "born_diameter",
+      "target": "carbamate-anion",
+      "bounds": [
+        1,
+        7
+      ],
+      "scale": 0.1
+    },
+    {
+      "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+      "family": "k_ij",
+      "target": [
+        "carbamate-anion",
+        "protonated-monoethanolamine"
+      ],
+      "bounds": [
+        -2,
+        2
+      ],
+      "scale": 0.01
+    },
+    {
+      "identity": "pair/carbon-dioxide/water/k_ij",
+      "family": "k_ij",
+      "target": [
+        "carbon-dioxide",
+        "water"
+      ],
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "scale": 0.01
+    },
+    {
+      "identity": "pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope",
+      "family": "k_ij_reciprocal_temperature_slope",
+      "target": [
+        "carbon-dioxide",
+        "water"
+      ],
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "scale": 10.0
+    },
+    {
+      "identity": "reaction:R5:correlation:a_k",
+      "reaction": "R5",
+      "coefficient": "b",
+      "source_to_native_factor": -2.302585092994046,
+      "bounds": [
+        2400.0,
+        3000.0
+      ],
+      "scale": 80.0
+    }
+  ],
+  "starts": [
+    {
+      "id": "A",
+      "values": [
+        3.563,
+        3.5605,
+        228.71,
+        533.11,
+        3.563,
+        3.5605,
+        0.0,
+        -0.046416901120577676,
+        -35.66505220645838,
+        2677.91
+      ],
+      "parameters_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1/precursor/A/start-parameters.json",
+      "sha256": "f96374436ef7c61eb6bda5a0f46455a4969e902752d8fbe05e7d34a558979e38"
+    },
+    {
+      "id": "B",
+      "values": [
+        3.48508556586174,
+        3.535435257213276,
+        232.6872016451942,
+        453.26524438401077,
+        3.533229271464668,
+        3.5410703082156436,
+        -0.002018134576435147,
+        -0.046416901120577676,
+        -35.66505220645838,
+        2597.91
+      ],
+      "parameters_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1/precursor/B/start-parameters.json",
+      "sha256": "6735aa6bfb8626890c719756157e5a7299eb39ff236bad83615179903fee232d"
+    }
+  ],
+  "feed_checks": [
+    {
+      "state": "Jakobsen2005_state_011",
+      "MEA_mass_fraction": 0.27142748172592257,
+      "analytical_loading": 0.29,
+      "analytical_feed_mol": [
+        0.29,
+        1.0,
+        9.100855238251219,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pooled_target": 0.007279344858962693
+    },
+    {
+      "state": "Jakobsen2005_state_022",
+      "MEA_mass_fraction": 0.27142748172592257,
+      "analytical_loading": 0.59,
+      "analytical_feed_mol": [
+        0.59,
+        1.0,
+        9.100855238251219,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pooled_target": 0.1413427561837456
+    }
+  ],
+  "stage4_count": 24,
+  "source_markdown_sha256": "425d83393c1eaf0d838370d15323823f9f2b8a3c5b0d422c65f64484ab93be10",
+  "cost_basis": "24 standardized differences, weight 1/24",
+  "cpu_s": 1.129445,
+  "wall_s": 1.1109279639931628,
+  "cumulative_cpu_s": 1413.8716587200001,
+  "cumulative_wall_s_lower_bound": 482.5471373929927,
+  "remaining_cpu_s_upper_bound": 142586.12834128,
+  "remaining_wall_s_upper_bound": 21117.452862607006,
+  "unmetered_prior_overhead": "unknown",
+  "hashes": {
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/reference-parameters.json": "f96374436ef7c61eb6bda5a0f46455a4969e902752d8fbe05e7d34a558979e38",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/stage4-rows.json": "506d151b8654a2947f2b805599d9c691bd80ff6d3ad4f77911e9fecb67aa2635",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/stage4-requests.json": "f6fdaff18269e474cd7dea1aa05b4abe47864a12203730068ba65472d3162583",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/precursor-rows.json": "b4dee6f0f55178e50b45ab9237b1211834a34f5d45a4ae532fd42edcf914ee4e",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/precursor-requests.json": "9393e9e9d10bfc7a81d423926ba3b82218fdbd74fc166c50335a88c30bba0c0c",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/overlap.json": "a3775619c67da356ac12c08b0797374cc92d89cecd99710ee3940667c9ee8884"
+  },
+  "campaign_path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170.json",
+  "campaign_sha256": "e944b07994d2e6c7412acbbdbf06dd864e828b999b046524c726240ccee1df82",
+  "post_derivation_conservative_charge": {
+    "cpu_s": 1.0,
+    "wall_s": 1.0,
+    "basis": "Upper charge for the second input assembly, immutable-file verification and reporting command; not a native calculation."
+  }
+}
