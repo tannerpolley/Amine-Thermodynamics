@@ -32,10 +32,9 @@ from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
 ANALYSIS = Path(__file__).resolve().parents[1]
 INPUT = ANALYSIS / "data/input"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
-# Identity of the non-editable wheel that must be installed; its build path is not
-# retained because Engine rebuilds overwrite it.
-ENGINE_WHEEL_SHA256 = "94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a"
-ENGINE_COMMIT = "026b30311b959f1a5db4feef4c15e243f7044a5f"
+# Identity of the immutable published wheel pinned in pyproject.toml and uv.lock.
+ENGINE_WHEEL_SHA256 = "d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357"
+ENGINE_COMMIT = "21e761c318c2ac5b555a245365c844d38a93e4cb"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
