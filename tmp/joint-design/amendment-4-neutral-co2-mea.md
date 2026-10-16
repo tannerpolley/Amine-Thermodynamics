@@ -38,10 +38,7 @@ is comment 6211817527. This document supplies the requested next draft only.
 
 ## Sources, data and what the literature establishes
 
-Data owner: `data/reference/MEA/physical_solubility/`. Its `sources.json` owns
-source identities, inspected PDF hashes and locators. Its README owns the
-conversion equations and uncertainty distinctions; `convert_n2o_henry.py`
-reproduces the derived table. Do not create another source table in an analysis.
+Data owner: `data/reference/MEA/physical_solubility/`. Its `sources.json` owns source identities, inspected PDF hashes and locators. Its README owns the conversion equations and uncertainty distinctions; the raw and derived CSVs retain the verified values. Do not create another source table in an analysis.
 
 | Source inspected | Evidence and use | Remaining limit |
 |---|---|---|
@@ -152,11 +149,7 @@ $\epsilon=10^{-5},10^{-6},10^{-7}$ on the cold lowest and highest primary
 states and both parameter starts. Select the largest epsilon whose H differs
 from the next decade by ≤1e-4 relative; if neither adjacent pair passes, stop.
 Verify the liquid-density change against $\rho_{s,0}$ is ≤1e-4 relative.
-Compare the H reference at the solvent bubble pressure and at 101325 Pa;
-if its pressure dependence exceeds 1%, stop for a pressure-specific source
-translation, including obtaining Xu Table S3. These limits are engineering
-checks that the numerical/basis approximation is small relative to the
-proposed 5% residual scale, not published source uncertainties.
+The pressure comparison is a separate mandatory preflight check. The fixed-T, fixed-feed incipient bubble determines its own pressure; do not also pin that declaration to 101325 Pa. Before evaluating this check, record the existing Engine-owned declaration that supplies the same H=p/c quantity at the solvent bubble reference and at 101325 Pa, including the liquid composition, gas reference and any conversion from fugacity to partial pressure. A fugacity/concentration result is not silently interchangeable with p/c. If no supported declaration can be specified and verified within the preflight allowance, stop with incomplete preflight and run no fit. If the H difference exceeds 1%, stop for a pressure-specific source translation, including obtaining Xu Table S3. Keep generic thermodynamic calculations in Engine. The 1% limit is an engineering approximation check relative to the proposed 5% residual scale, not a source uncertainty.
 
 Retain raw closure ≤1e-10, liquid/vapor branch identity, positive densities,
 normalization and phase support. Check centered derivatives at optimizer
@@ -235,11 +228,7 @@ subsequent reactive comparison includes that temperature.
 
 ## Matched reacting comparison
 
-After neutral qualification and independent review, perform **larger-dV
-control and neutral-fixed variant first**, then the smaller branch only if
-the remaining ledger admits both arms. Each branch is a separate decision;
-an unrun or incomplete branch remains inconclusive. A larger-branch result
-cannot stand in for the smaller branch.
+After neutral qualification and independent review, attempt the larger-dV zero control, then its neutral-fixed variant, using sequential admission before each call. Attempt the smaller-dV branch in the same order only while the next call passes numerical and ledger admission. Each branch is a separate decision. An unrun or incomplete arm makes its branch inconclusive; a larger-branch result cannot stand in for the smaller branch.
 
 Both arms release exactly the **same 14 coordinates**, in the same order,
 with the same bounds, ties and scales: the first 14 entries of
@@ -292,6 +281,8 @@ silently discard failed rows or use time-limited vectors as fit endpoints.
 
 ## Budget, order and stops
 
+The campaign executable-addition ceiling remains 900 lines, with 861 previously charged. The proposed 56-line conversion script would bring the total to 917 and is omitted from this delivery. The source equations and verified derived CSV are retained. Any new executable work for the preflight or fits shares the remaining 39-line allowance and must be counted before execution; moving code under data or counting it as documentation does not exempt it. This amendment grants no increase in the ceiling.
+
 The handoff ledger gives about **9794.489424 active wall-s** and
 **92572.391086 CPU-s** remaining. Mandatory-check reserve is
 1950.38 wall-s / 17950.44 CPU-s. These are entry figures, not a claim that
@@ -335,16 +326,7 @@ full reactive calls and wall checks cost at most 480+5520+1950.38=7950.38 s
 before preparation, leaving 1844.109424 entry wall-s for other work. This
 does not prove CPU admission for all four calls.
 
-**Recommended budget choice for the parent:** if guaranteed larger-pair
-admission is desired, use equal 900 s native / 1020 s crash / 60 s teardown
-limits (1080 s complete) for its two reactive arms. Their worst-case CPU
-reservation is 69120; with the check reserve this is 87070.44 CPU-s. It
-fits the entry CPU remainder only if all preparation, preflight and neutral
-work charge ≤5501.951086 CPU-s. Confirm that condition from measured work
-before admitting the pair, and reserve both calls. This is a proposed runtime
-amendment, not a silent relaxation of endpoint convergence. If the parent
-retains 1380 s calls, keep sequential admission and accept a possible
-inconclusive pair. No second-branch completion promise is justified now.
+Settled runtime decision, 16 October 2026: retain 1200 s native / 1320 s crash backstop / at most 60 s teardown, for 1380 s complete per reactive call, identically in both arms. Do not use 1080 s caps. Before each reactive call, require remaining CPU to cover 44160 CPU-s plus the still-required check reserve, and remaining active wall to cover 1380 s plus the still-required wall reserve. Charge all intervening work before admission, then debit measured aggregate process-and-worker CPU after complete reaping. Retain the 12000 CPU-s post-call stop. Apply the same sequential rule on either dielectric branch; simultaneous reservation of both arms is not required. A refused or incomplete second arm leaves that branch inconclusive. The Route 2b measured CPU charges support this order but do not guarantee future runtimes. Neither program cap is increased.
 
 Other hard stops: failed source/data or readiness review; unsupported native
 observation; incomplete dilution/pressure/derivative checks; rank loss,
@@ -353,7 +335,7 @@ falsifier; missing rows; loss of fixed binary behavior; failed cold replay;
 unreaped child; or insufficient actual ledger allowance. Do not convert any
 of these to evidence of thermodynamic impossibility.
 
-## Evidence labels, delivery and open decisions
+## Evidence labels, delivery and settled dispositions
 
 - **Literature practice:** N₂O physical-solubility measurement, Xu's water-ratio
   analogy, Versteeg's water coefficients, and neutral-first estimation in the
@@ -373,13 +355,6 @@ of these to evidence of thermodynamic impossibility.
   delivered review. Do not update manuscript numbers from this draft or
   promote a calibration to global physical validation.
 
-Open decisions with recommended answers: (1) keep Hartono 2013 as a missing
-PDF gap without blocking already verified tables; (2) accept the 24–37%
-bracketing rows as conditional calibration candidates, keeping the strict
-25–35% inventory counts intact; (3) use the printed Eqs.4–5 water ratio and
-retain Eq.6 as a 0.47% alternative; (4) permit the labelled 0.85 K extension
-for the highest Hartono row while withholding 360–393 K qualification;
-(5) require successful native-observation preflight before any fit;
-(6) choose the equal 1080 s reactive caps if the measured ≤5501.951086 CPU-s
-condition holds and guaranteed larger-pair admission matters. The parent
-resolves these in the reviewed amendment; the owner was not asked to wait.
+The orchestrator supplied all six dispositions on 16 October 2026 while the owner was away.
+
+Settled dispositions supplied for this review, 16 October 2026: (1) Hartono 2013 remains a recorded missing-PDF gap and does not block the verified tables; (2) accept the 24–37% rows as conditional calibration candidates while preserving the strict 25–35% inventory counts; (3) select Versteeg Eqs.4–5 and retain Eq.6 only as an alternative; (4) allow the labelled 0.85 K extension for the 360.25 K Hartono row without qualification of 360–393 K; (5) require successful native-observation preflight before any fit; (6) retain 1380 s reactive calls with sequential worst-case admission and accept an inconclusive pair if admission fails. These decisions are settled; no owner answer is pending.
