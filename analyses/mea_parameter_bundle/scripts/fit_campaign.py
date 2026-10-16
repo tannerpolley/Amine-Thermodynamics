@@ -516,11 +516,12 @@ def stage6_study(spec, out, started):
             path = directory/'native.json'
             cpu_limit = spec['fit_cpu_s'] if fit_case else spec['nonfit_cpu_s']
             wall_limit = spec['fit_wall_s'] if fit_case else spec['nonfit_wall_s']
+            guard_wall_limit = wall_limit + (120 if fit_case else 0)
             remaining_cpu = min(spec['budget_cpu_s']-elapsed()['cpu_s'],
                 spec['program_cpu_limit_s']-elapsed()['cumulative_cpu_s'])
             remaining_wall = min(spec['budget_wall_s']-elapsed()['wall_s'],
                 spec['program_wall_limit_s']-elapsed()['cumulative_wall_s'])
-            if remaining_cpu<cpu_limit or remaining_wall<wall_limit:
+            if remaining_cpu<cpu_limit or remaining_wall<guard_wall_limit:
                 raise RuntimeError('allowance insufficient for the next bounded information call')
             def child():
                 try:
@@ -573,13 +574,13 @@ def stage6_study(spec, out, started):
             clock, cpu = time.monotonic(), cpu_seconds()
             process = multiprocessing.get_context('fork').Process(target=child)
             process.start()
-            process.join(wall_limit)
+            process.join(guard_wall_limit)
             interrupted = process.is_alive()
             if interrupted:
                 process.terminate()
                 process.join()
             calls.append(dict(start=start['id'], cpu_s=cpu_seconds()-cpu,
-                wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted))
+                wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted, host_load=os.getloadavg()))
             write(out/'timing.json', dict(calls=calls, **elapsed()))
             if interrupted or process.exitcode or (directory/'failure.json').exists():
                 if fit_case:
@@ -588,6 +589,8 @@ def stage6_study(spec, out, started):
                 raise RuntimeError(f'bounded call failed: {directory}; no subsequent fit launched')
             raw = load(path)
             if fit_case:
+                if calls[-1]['cpu_s']>cpu_limit:
+                    raise RuntimeError('aggregate fit CPU ceiling exceeded; return to owner before another fit')
                 if raw['status']!='converged' or raw['covariance']['active_bounds'] or raw['covariance']['rank']<14:
                     raise RuntimeError('nonconverged, bound-active or rank-deficient joint fit; return to owner before another fit')
                 return
