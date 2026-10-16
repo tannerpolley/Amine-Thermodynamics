@@ -16,35 +16,115 @@ resources:
   - figures/regression_overview/output/parameter-table-inputs.json
 ---
 
-## Route 2b: release tests pass; smaller fit interrupted, larger fit unrun
+## Route 2b: λ=0, start A, two dielectric branches
 
-**The smaller-$d_V$ fit returns no endpoint after a launcher failure; the larger-$d_V$ fit is unrun pending a code allowance.** All four start-A release tests pass. The [owner-authorized modification](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6208172805) frees CO₂–water pivot/slope, includes all 39 Kiepe natural-log pressure residuals at weight 1/39 and raises bicarbonate–water's upper bound to 1.0. The declaration has 16 coordinates and 205 positive-weight rows at $\lambda=0$; the $\lambda=1$ derivative check has 217. Both branches return all 217 requested rows Available. These derivative calculations establish numerical rank and conditioning at the declared starts, not physical validation or endpoint identifiability.
+**smaller-dV:** limit_reached at 53 iterations, training cost 36.7833961664, common-149 cost 23.0753630456. **larger-dV:** Fit running; no returned result.
 
-The orchestrator's **2026-10-16 decision** raises the numerical release-derivative limit only to **180 wall-s / 500 aggregate CPU-s per evaluation**, within the remaining 1079.724605 CPU-s release/reporting allowance. It changes no scientific declaration. The original 60 s interruption and its charge remain retained. Both new release calls return normally in **54.497663704 / 55.463373719 wall-s**, using **71.217846 / 72.404589 reaped CPU-s** on smaller/larger $d_V$ respectively. The weighted/scaled matrices use the original cutoff $10^{-14}s_{\max}$ and condition limit $10^4$; all start-A coordinates are interior.
+The two authorized calls use λ=0, start A, 100 iterations, 1200 s native wall and a 1320 s crash backstop, with 12000 CPU-s checked after normal reaping. Bound activity is reported. The frozen declaration has 16 coordinates and 205 positive-weight rows. CO₂–water pivot and reciprocal-temperature slope are free; all 39 Kiepe natural-log pressure residuals have weight 1/39; bicarbonate–water has upper bound 1.0. All other declarations remain unchanged. No loaded-density assessment is run.
 
-| Branch/start | $\lambda$ | Rows | Mandatory rank / condition | Augmented rank / condition | Projected dispersion rank / condition |
-|---|---:|---:|---|---|---|
-| smaller-dV-A | 0 | 205 | 14/14 / 6421.24943 | 16/16 / 9204.66513 | 2/2 / 7.13401849 |
-| smaller-dV-A | 1 | 217 | 14/14 / 3554.0437 | 16/16 / 6123.93805 | 2/2 / 10.8100018 |
-| larger-dV-A | 0 | 205 | 14/14 / 5182.36717 | 16/16 / 7682.71156 | 2/2 / 7.21482051 |
-| larger-dV-A | 1 | 217 | 14/14 / 3342.29486 | 16/16 / 5908.4496 | 2/2 / 10.3597194 |
-
-The smaller-$d_V$, $\lambda=0$, start-A fit runs with **100 iterations, 1200 s native wall, 1320 s crash backstop and 12000 aggregate CPU-s** declared, nice 10, single-thread BLAS and 32 requested workers sized against available memory. At launcher elapsed **767.885850080 s**, reading a disappearing `/proc/<pid>/stat` raises `ProcessLookupError`, which the sampler does not catch. Monitoring exits before a native return or call timing record is retained. The native owner and its 31 verified descendants remain active until captured by parent/child links and PID/start ticks and terminated. All captured processes are confirmed inactive. Those descendants also use process groups different from their owner; the existing group-only CPU scan omits their live CPU before reaping. Thus the declared aggregate control is not demonstrated for native fits. A correction requires executable changes, and this continuation permits none.
-
-| Requested fit evidence | Smaller $d_V$ | Larger $d_V$ |
+| Returned quantity | Smaller d_V | Larger d_V |
 |---|---|---|
-| Fit outcome | Interrupted after launcher failure; no native endpoint | Unrun pending code authority |
-| Convergence / iterations / projected gradient | Unavailable | Unrun |
-| Family training costs / common-149 cost | Unavailable | Unrun |
-| Kiepe errors by isotherm / four Cp errors | No fit predictions returned | Unrun |
-| Active bounds and gradients / 16 endpoint coordinates | No returned endpoint | Unrun |
-| Endpoint replay and derivative checks | Unrun: no converged endpoint | Unrun: no fit |
+| Convergence status | limit_reached | Pending |
+| Iterations | 53 | Pending |
+| Residual evaluations | 54 | Pending |
+| Jacobian evaluations | 47 | Pending |
+| Projected gradient, tolerance 1e-8 | 0.000110807132411 | Pending |
+| Initial training cost | 196.86581561 | Pending |
+| Returned training cost | 36.7833961664 | Pending |
+| Common-149 cost | 23.0753630456 | Pending |
+| Common-149 minus Route 2 partial | -1.20583106812 | Pending |
+| Trial failures | 0 | Pending |
 
-The older **24.2811941137** common-149 cost belongs to the 81-iteration Route 2 partial. Adopted **32.05668491** is historical context from different inputs and wheel. Neither supplies a Route 2b cost or ranking. [All 16 historical values and both starts](results/joint-recalibration-170/amendment-2/route2b/coordinate-comparison.csv) are retained with missing endpoints marked explicitly. Start-A release predictions do not fill missing fit errors. This result contains scalar rank/conditioning values and an execution failure; a table states the available evidence without inventing a calibration curve or uncertainty estimate.
+The earlier 81-iteration Route 2 partial has common-149 cost **24.2811941137**. Adopted **32.05668491** is historical context from different inputs and wheel. These are partial-iterate calibration statistics; an objective value is not a converged optimum or a parameter-adoption decision.
 
-The [report](results/joint-recalibration-170/amendment-2/route2b/README.md), [release matrices and spectra](results/joint-recalibration-170/amendment-2/route2b/release-180/release-tests.json), [frozen fit declaration](results/joint-recalibration-170/amendment-2/route2b/smaller-dV/lambda-0-A/stage6-spec.json), [failure trace](results/joint-recalibration-170/amendment-2/route2b/smaller-dV/lambda-0-A/failure.json) and [process identities and CPU snapshot](results/joint-recalibration-170/amendment-2/route2b/smaller-dV/process-stop.json) preserve the evidence. All 12 installed Engine files match wheel SHA-256 `98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a`, merged Engine `84ca269dfa0c7068417a1c4c326acae276d4d965`. Release evidence is committed in `ec60a2f`; the fit ran `b868f15`; failure evidence is committed in `58eb7a6`.
+### Training cost by family
 
-[Accounting](results/joint-recalibration-170/amendment-2/route2b/continuation-accounting.json) charges **143.90 CPU-s / 110.31 wall-s** for release, the full **12000 CPU-s** reservation and **856.42 wall-s** for the interrupted fit, plus **70 CPU-s / 120 active wall-s** for preparation, containment, reporting, presentation, checks and commits. Whole-command fit CPU is only **319.13 s** and excludes unreaped workers; the live descendant snapshot alone is **4667.83 CPU-s**, so neither incomplete measure is substituted for final aggregate CPU. Cumulative program charge is **36657.498914 CPU-s / at least 4594.298996 active wall-s**. Release/reporting retains **865.824605 CPU-s** and the two-fit allowance retains **12000 CPU-s**. Unknown earlier overhead remains unknown. Executable additions in this continuation are **0**; campaign code remains **852/900**. No independent delivered review, physical validation, adoption or manuscript promotion is claimed. The larger fit and any retry require a new code allowance to repair native-worker CPU accounting and failure containment; an automatic user-away answer is not authority. No $\lambda=0.1$, start B, assessment, subagent, preview-service action or remote write occurs.
+| Family | Rows | Smaller d_V | Larger d_V |
+|---|---|---|---|
+| Common-149 pressure | 47 | 6.78866387178 | Pending |
+| Common-149 species | 94 | 15.0852796903 | Pending |
+| Common-149 Vinjarapu heat | 8 | 1.20141948351 | Pending |
+| Restored species | 7 | 1.69801644599 | Pending |
+| Pooled Jakobsen ratios | 6 | 6.24600648378 | Pending |
+| Kiepe pressure | 39 | 2.29832717517 | Pending |
+| Equilibrium Cp | 4 | 3.46568301584 | Pending |
+
+Costs are one half the sum of squared weighted residuals. All 149 common targets keep their original definitions, weights and scales. Cost reconstruction from the returned arrays is retained in each reported-results.json; it is arithmetic verification, not serialization replay.
+
+### Kiepe pressure errors by isotherm
+
+| T, K | Rows | Smaller mean absolute error, % | Smaller maximum absolute error, % | Larger mean absolute error, % | Larger maximum absolute error, % |
+|---|---|---|---|---|---|
+| 313.2 | 12 | 96.3778735169 | 98.2142367181 | Pending | Pending |
+| 353.11 | 9 | 77.8852816516 | 85.051357781 | Pending | Pending |
+| 373.26 | 12 | 58.9405035288 | 69.1574437004 | Pending | Pending |
+| 393.17 | 6 | 31.3686952579 | 46.3200109654 | Pending | Pending |
+
+Errors are calculated from all 39 returned pressure predictions against their retained observations. Signed means, log-residual root-mean-square values and isotherm costs are in each Kiepe-isotherms.csv. The smaller branch underpredicts most binary pressures strongly at its returned partial iterate; its lower common-149 cost therefore does not establish simultaneous agreement with the added binary data.
+
+### Active bounds and objective gradients
+
+| Branch | Coordinate | Value | Unit | Side | Gradient per optimizer unit | Gradient per quantity unit |
+|---|---|---|---|---|---|---|
+| smaller-dV | Bicarbonate–water k | 1 | dimensionless | upper | -0.000888184514473 | -0.0888184514473 |
+| smaller-dV | Carbamate–MEAH⁺ k | -1 | dimensionless | lower | 0.0246367162102 | 2.46367162102 |
+| smaller-dV | MEAH⁺ Born diameter | 5 | angstrom | upper | -0.00224389215565 | -0.0224389215565 |
+| smaller-dV | Carbamate Born diameter | 5 | angstrom | upper | -0.00431899105143 | -0.0431899105143 |
+| smaller-dV | R5 unshifted a_k | 2400 | K | lower | -0.338734138729 | 0.00423417673411 |
+| smaller-dV | R5 enthalpy shift | 10000 | J/mol | upper | -0.000445945513378 | -1.78378205351e-07 |
+| smaller-dV | MEAH⁺ dispersion/k | 950 | K | upper | -0.0108689636201 | -0.00108689636201 |
+
+Gradients are Jᵀr for the weighted residual objective, using the returned weighted optimizer Jacobian. Quantity gradients include the reciprocal-correlation sign for R5 unshifted a_k. Bounds are search limits, not confidence intervals.
+
+### All coordinate values against the 81-iteration Route 2 partial
+
+| Coordinate | Unit | A start | Route 2 partial | Smaller d_V | Larger d_V |
+|---|---|---|---|---|---|
+| Carbamate–water k | dimensionless | 0.134080741317 | -0.202719733667 | 0.214819481849 | Pending |
+| MEAH⁺–water k | dimensionless | -0.379554080066 | -0.152249129162 | -0.208848402803 | Pending |
+| Bicarbonate–water k | dimensionless | 0.5 | 0.5 | 1 | Pending |
+| Carbamate–MEAH⁺ k | dimensionless | -0.707285890215 | -1 | -1 | Pending |
+| MEAH⁺–water slope b | K | -112.567750584 | 36.9034558902 | -337.127093362 | Pending |
+| MEAH⁺ segment diameter | angstrom | 3.563 | 5.51743301647 | 4.16295757137 | Pending |
+| Carbamate segment diameter | angstrom | 3.5605 | 5.8 | 5.38701343402 | Pending |
+| MEAH⁺ Born diameter | angstrom | 3.563 | 5 | 5 | Pending |
+| Carbamate Born diameter | angstrom | 3.5605 | 3.62897938162 | 5 | Pending |
+| R5 unshifted a_k | K | 2677.91 | 2568.56004544 | 2400 | Pending |
+| R2 enthalpy shift | J/mol | 0 | -10000 | 1667.91582297 | Pending |
+| R5 enthalpy shift | J/mol | 0 | -8392.06021931 | 10000 | Pending |
+| CO₂–water k(313.15 K) | dimensionless | -0.0464169011206 | -0.0464169011206 | -0.212524867101 | Pending |
+| CO₂–water slope b | K | -35.6650522065 | -35.6650522065 | -249.206280174 | Pending |
+| MEAH⁺ dispersion/k | K | 228.71 | 251.302802793 | 950 | Pending |
+| Carbamate dispersion/k | K | 533.11 | 168.034884166 | 677.551986745 | Pending |
+
+The fixed dielectric pairs remain smaller d_V/d_T = **0.2464540312088979 L/mol / 2436.4423007273617 K** and larger **0.7309888238084122 L/mol / 1019.0786110170793 K**. Segment-size coordinates retain the 0.88 packing/Debye–Hückel ties. R2/R5 enthalpy shifts preserve the 313.15 K pivot. R5 unshifted a_k is separate from the composed serialized reaction law, retained in each partial parameter file.
+
+### Four molality-based solution Cp errors
+
+| T, K | Loading | Observed Cp, kJ/(kg K) | Smaller Cp | Smaller signed error, % | Larger Cp | Larger signed error, % |
+|---|---|---|---|---|---|---|
+| 318.15 | 0 | 3.7195 | 3.84329140224 | 3.32817320169 | Pending | Pending |
+| 318.15 | 0.358 | 3.3675 | 3.45783007606 | 2.6824076039 | Pending | Pending |
+| 353.15 | 0 | 3.8566 | 3.83233767735 | -0.629111721565 | Pending | Pending |
+| 353.15 | 0.358 | 3.4707 | 3.3662461415 | -3.0095905294 | Pending | Pending |
+
+These four equilibrium Cp targets use 7 mol MEA/kg water and 101325 Pa; nominal unloaded states retain the declared 1e-6 CO₂ proxy. Molar-to-mass conversion uses the retained complete-feed amount and mass, and reproduces each source observation. These are fitted observations, not withheld validation.
+
+### Numerical checks and limits
+
+| Branch | Available rows | Full rank / columns | Free rank / columns | Full condition | Free condition | Native CPU-s | Complete call wall-s |
+|---|---|---|---|---|---|---|---|
+| smaller-dV | {'Available': 205} | 16/16 | 9/9 | 166973.649595 | 271.337775542 | 6795.859259 | 1279.28800544 |
+
+Every returned native call exits 0 and is reaped without interruption. The driver retains a nonconvergence traceback for limit-reached returns; this does not supersede the owner instruction to run the other authorized branch. The native time-limit message describes an internal solver span; complete call timing can exceed 1200 s while remaining below the 1320 s crash backstop.
+
+| Branch | Endpoint replay | Derivative checks | Hard stops before another call |
+|---|---|---|---|
+| smaller-dV | Unrun: fit did not converge | Unrun: fit did not converge | None reached |
+
+These two bounded end-state comparisons are reported as scalar tables rather than an inferred continuous calibration curve. No parameter uncertainty, independent physical validation, adoption, manuscript promotion or delivered independent review is claimed. No λ=0.1, start B or assessment is run. Frozen, hash-checked source inputs are reused; no new literature judgment is made, and this worktree has no local literature reading shelf.
+
+The [full report and charges](results/joint-recalibration-170/amendment-2/route2b/README.md) links retained targets, coordinates, native returns and wheel checks. Four start-A release tests remain passed and are not repeated. The launcher change has 5 gross executable additions / 28 removals, net −23; campaign charge is 857/900. The earlier interrupted fit remains reserved at 12000 CPU-s within the extended 36000 CPU-s fit allowance.
 
 ## Route 2: time limit at 81 iterations; comparison incomplete
 

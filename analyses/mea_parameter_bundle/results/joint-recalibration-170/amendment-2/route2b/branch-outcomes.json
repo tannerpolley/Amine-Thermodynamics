@@ -1,41 +1,18 @@
 {
-  "branches": [
-    {
-      "branch": "smaller-dV",
-      "release_tests_passed": true,
-      "fit": "Interrupted after launcher aggregate-CPU sampler failure",
-      "convergence": null,
-      "iterations": null,
-      "projected_gradient": null,
-      "training_cost": null,
-      "common149_cost": null,
-      "Kiepe_errors": null,
-      "active_bounds": null,
-      "coordinate_values": "No returned endpoint",
-      "Cp_errors": null,
-      "endpoint_replay": "Unrun: no converged endpoint",
-      "derivative_check": "Unrun: no converged endpoint"
-    },
-    {
-      "branch": "larger-dV",
-      "release_tests_passed": true,
-      "fit": "Unrun pending executable-code authority",
-      "convergence": null,
-      "iterations": null,
-      "projected_gradient": null,
-      "training_cost": null,
-      "common149_cost": null,
-      "Kiepe_errors": null,
-      "active_bounds": null,
-      "coordinate_values": "Unrun",
-      "Cp_errors": null,
-      "endpoint_replay": "Unrun: no fit",
-      "derivative_check": "Unrun: no fit"
-    }
-  ],
-  "comparison_reference": {
-    "route2_81_iteration_partial_common149": 24.2811941137,
-    "adopted_historical_common149": 32.05668491
+  "smaller-dV": {
+    "status": "limit_reached",
+    "converged": false,
+    "iterations": 53,
+    "residual_evaluations": 54,
+    "jacobian_evaluations": 47,
+    "projected_gradient_norm": 0.00011080713241096163,
+    "final_cost": 36.78339616636657,
+    "common149_cost": 23.075363045580513,
+    "endpoint_replay": "Unrun: fit did not converge",
+    "derivative_checks": "Unrun: fit did not converge",
+    "stop_before_next_call": []
   },
-  "evidence": "Numerical release rank/conditioning verification only; no new calibration result or physical validation."
+  "larger-dV": {
+    "status": "Fit running; no returned result"
+  }
 }
