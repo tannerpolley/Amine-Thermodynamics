@@ -2,7 +2,7 @@
 
 **No completed Route 2 comparison record is available.** The unchanged lambda=0 start A rerun returns a usable partial vector after **29 iterations**, with training cost **196.865136591 → 42.4903033067**, **29 residual / 17 Jacobian evaluations**, and no trial failures. All **166 requested predictions are Available**. The native status is `limit_reached`, with message `Maximum solver time reached. Total solver time: 1.202227e+02 >= 1.075647e+02.`. Five free coordinates are active at bounds. No B or lambda=0.1 fit, replay, derivative or assessment call follows this stop. The primary lambda=0.1 common-149 metric remains unavailable.
 
-The [partial record](lambda-0/F1/A/rerun-1/incomplete-fit.json), [native return](lambda-0/F1/A/rerun-1/native.json), [usable partial vector](lambda-0/F1/A/rerun-1/usable-budget-endpoint.json) and [iteration history](lambda-0/F1/A/rerun-1/iteration-history.csv) retain the values. The vector is incomplete calibration evidence, not a comparison endpoint, adopted parameter set or physical validation. The fit does not establish a limitation of the equation of state. Independent delivered review and any further scientific execution decision belong to the parent.
+The [partial record](lambda-0/F1/A/rerun-1/incomplete-fit.json), [native return](lambda-0/F1/A/rerun-1/native.json), [usable partial vector](lambda-0/F1/A/rerun-1/usable-budget-endpoint.json) and [iteration history](lambda-0/F1/A/rerun-1/iteration-history.csv) retain the values. The vector is incomplete calibration evidence, not a comparison endpoint, adopted parameter set or physical validation. The fit does not establish a limitation of the equation of state. The parent selected return of this partial record, with no further fits or thermodynamic calculations. Independent delivered review and any later execution decision remain with the parent.
 
 ## Launcher correction and actual return
 
@@ -16,17 +16,47 @@ The real owner returns with **exit code 0, interrupted=false**, after **334.0349
 
 The last projected gradient norm is **5.48891531689**, against the declared **1e-8** gradient tolerance. Full weighted/scaled rank is **14/14**, condition **11468.4807697**. Excluding the five native bound-active columns gives free rank **9/9**, condition **733.531580929**. The native covariance status is `not_converged`; no conditional uncertainty is asserted. Reconstructing one half the sum of squared returned weighted residuals gives **42.490303306668636**, exactly the reported final cost. This arithmetic check is not a serialization replay, derivative test or physical assessment.
 
-| Active coordinate | Physical bound | Side |
-|---|---:|---|
-| pair/bicarbonate-anion/water/k_ij | 0.5 | upper |
-| pair/carbamate-anion/protonated-monoethanolamine/k_ij | -1 | lower |
-| component/protonated-monoethanolamine/born_diameter | 5 | upper |
-| component/carbamate-anion/born_diameter | 2 | lower |
-| reaction:R2:enthalpy_shift | -10000 | lower |
+| Active coordinate | Physical bound | Unit | Side |
+|---|---:|---|---|
+| pair/bicarbonate-anion/water/k_ij | 0.5 | dimensionless | upper |
+| pair/carbamate-anion/protonated-monoethanolamine/k_ij | -1 | dimensionless | lower |
+| component/protonated-monoethanolamine/born_diameter | 5 | Å | upper |
+| component/carbamate-anion/born_diameter | 2 | Å | lower |
+| reaction:R2:enthalpy_shift | -10000 | J/mol | lower |
 
 The segment-size/packing ties and ordinary native physical quantities remain in the full serialized partial vector. R5's unshifted a_k is **2839.113225350851 K**; R2/R5 enthalpy shifts are **-10000 / -5501.50839734298 J/mol** at the **313.15 K** pivot. These are partial fit quantities, with no endpoint identification claim.
 
 The sequence stops on non-convergence and active bounds. After charging this rerun and conservative reporting overhead, less than 3000 CPU-s remains in Route 2 even before presentation, so another full per-fit CPU reservation also cannot fit. Limits, bounds, starts and weights remain unchanged. No additional fit is authorized by this record.
+
+## Starting and partial costs by family
+
+All costs are dimensionless, one half the sum of squared declared weighted residuals. The unchanged 149 target IDs and weights give common-149 cost **160.863262274 at the start** and **24.1347709294 at the partial iterate**. The latter is available from the native returned predictions/residuals; it is an incomplete-iterate diagnostic, not the primary lambda=0.1 comparison result. No new native call is used. [cost-breakdown.json](lambda-0/F1/A/rerun-1/cost-breakdown.json), [family-costs.csv](lambda-0/F1/A/rerun-1/family-costs.csv) and [target-costs.csv](lambda-0/F1/A/rerun-1/target-costs.csv) retain all values, IDs, weights, predictions and contributions.
+
+| Family | Rows | Starting cost | Partial cost |
+|---|---:|---:|---:|
+| Common-149 pressure | 47 | 24.0517111716 | 5.99868812583 |
+| Common-149 species | 94 | 22.2484621542 | 17.1481224184 |
+| Common-149 Vinjarapu heat | 8 | 114.563088949 | 0.987960385198 |
+| Restored species | 7 | 2.90846901287 | 2.48928763854 |
+| Pooled Jakobsen ratios | 6 | 29.6415203756 | 13.1919764074 |
+| Equilibrium Cp | 4 | 3.4518849279 | 2.6742683313 |
+| **Whole training objective** | **166** | **196.865136591** | **42.4903033067** |
+| **Common-149 subset** | **149** | **160.863262274** | **24.1347709294** |
+
+The largest individual starting contributions among the 166 fitted rows are below. [largest-start-targets.csv](lambda-0/F1/A/rerun-1/largest-start-targets.csv) also retains observed/starting/partial predictions and weighted residuals. The heat values in that CSV use J/mol CO2; amount ratios are dimensionless. The objective's largest family reduction is the eight Vinjarapu heats, **114.563088949 → 0.987960385198**; this remains a bound-active, unconverged calibration result.
+
+| Starting cost rank | Target | Starting cost |
+|---:|---|---:|
+| 1 | vinjarapu2024_source_table4_05 | 20.5488231857 |
+| 2 | vinjarapu2024_source_table4_07 | 17.9357211901 |
+| 3 | vinjarapu2024_source_table4_01 | 16.9433524261 |
+| 4 | vinjarapu2024_source_table4_08 | 15.9948509845 |
+| 5 | vinjarapu2024_source_table4_02 | 15.0584983785 |
+| 6 | vinjarapu2024_source_table4_03 | 14.4132888343 |
+| 7 | Jakobsen2005_state_022::HCO3- + CO3^2- | 10.8457686752 |
+| 8 | Jakobsen2005_state_011::HCO3- + CO3^2- | 10.6969014024 |
+| 9 | vinjarapu2024_source_table4_04 | 9.54425003129 |
+| 10 | Jakobsen2005_state_011::MEAH+ | 6.60546008288 |
 
 ## Native cost and time history
 
@@ -93,7 +123,7 @@ No lower-training-cost complete A/B record can be selected. The partial **42.490
 
 | Required report item | Retained evidence or unavailability |
 |---|---|
-| common-149 cost/contributions | No completed comparison records; both exact starting values retained; no primary lambda=0.1 metric |
+| common-149 cost/contributions | Start A 160.863262274 and partial A 24.1347709294, with full family/target costs; no completed comparison or primary lambda=0.1 metric |
 | pressure/species family errors | Starting values only; no fitted records |
 | Vinjarapu/Arcis heat errors | Eight starting Vinjarapu heats available per start; Arcis unrun |
 | pooled Jakobsen/restored target errors | All 13 added starting rows available; no fitted records |
@@ -133,10 +163,10 @@ Authority is [amendment 2](https://github.com/tannerpolley/Amine-Thermodynamics/
 
 | Charge | Recorded CPU plus conservative overhead, original missing workers excluded / CPU-s | Conservative CPU reservation total / CPU-s | Active wall / s |
 |---|---:|---:|---:|
-| Route 2 | 2775.451684000 | 12089.434501256 | 999.673608383 |
-| Shared program | 5042.986821720 | 14356.969638976 | at least 1702.437960510 |
+| Route 2 | 2791.217817000 | 12105.200634256 | 1014.354443399 |
+| Shared program | 5058.752954720 | 14372.735771976 | at least 1717.118795526 |
 
-Remaining Route 2 allowance is **2910.565498744 CPU-s / 1100.326391617 wall-s**; shared program remaining is **129643.030361024 CPU-s / at most 19897.562039490 wall-s**. Route 2 remains inside 15000/2100 and the shared program inside 144000/21600 CPU/wall seconds. The new charge is the measured full rerun command plus **60 CPU-s / 60 wall-s conservative preparation, probe, arithmetic/checks, report and commits**, plus separately measured presentation **43.919280000 CPU-s / 39.928467183 wall-s**, each once. Native call CPU is a subset of command CPU and is not charged twice.
+Remaining Route 2 allowance is **2894.799365744 CPU-s / 1085.645556601 wall-s**; shared program remaining is **129627.264228024 CPU-s / at most 19882.881204474 wall-s**. Route 2 remains inside 15000/2100 and the shared program inside 144000/21600 CPU/wall seconds. The new charge is the measured full rerun command plus **60 CPU-s / 60 wall-s conservative preparation, probe, arithmetic/checks, report and commits**, plus separately measured presentation **59.685413000 CPU-s / 54.609302199 wall-s**, each once. Native call CPU is a subset of command CPU and is not charged twice.
 
 The standard presentation refresh fails because `snakemake` is absent. Both guarded HTML renders succeed, with execution disabled, at `analyses/_site/mea_parameter_bundle/notebook.html` and `analyses/_site/index.html`. No preview service is touched.
  The [pre-rerun accounting](timing-before-rerun.json), [original interrupted record](lambda-0/F1/A/incomplete-fit.json) and [wall-limit diagnosis](diagnosis-wall/README.md) remain retained. Original missing worker CPU stays reserved at the conservative upper bound; the complete rerun measurement never erases it. Earlier unmetered overhead remains disclosed; program active wall remains a lower bound.
