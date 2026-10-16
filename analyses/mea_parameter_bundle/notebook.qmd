@@ -79,7 +79,7 @@ The two authorized calls use λ=0, start A, 100 iterations, 1200 s native wall a
 | Common-149 minus Route 2 partial | -1.20583106812 | -1.21123774354 |
 | Trial failures | 0 | 2 |
 
-The earlier 81-iteration Route 2 partial has common-149 cost **24.2811941137**. Adopted **32.05668491** is historical context from different inputs and wheel. The smaller values belong to a time-limited iterate. The larger fit meets its function tolerance (relative cost change 6.178608e-11 ≤ 1e-10), while its projected gradient remains above 1e-8 and its serialized endpoint fails replay. Neither branch supplies a qualified calibration endpoint or a parameter-adoption decision.
+The earlier 81-iteration Route 2 partial has common-149 cost **24.2811941137**. Adopted **32.05668491** belongs to a historical calibration using different inputs and wheel. The smaller values belong to a time-limited iterate. The larger fit meets its function tolerance (relative cost change 6.178608e-11 ≤ 1e-10), while its projected gradient remains above 1e-8 and its serialized endpoint fails replay. Neither branch supplies a qualified calibration endpoint or a parameter-adoption decision.
 
 ### Training cost by family
 
@@ -227,7 +227,7 @@ The [first-attempt accounting diagnosis](results/joint-recalibration-170/amendme
 
 ## Joint recalibration amendment 2: precursor stops at five bounds
 
-The new [amendment-2 calculation](results/joint-recalibration-170/amendment-2/route1/precursor/README.md), performed on merged Engine `84ca269d`, has **no selected joint precursor**. Start A reaches 40 iterations without convergence; both segment diameters reach 5.8 Å, both Born diameters 1 Å, and R5's unshifted $a_k$ 2400 K, all bounds. No Route 1 B or 3b fit runs after this required stop. Route 2 remains subject to its separately reported native-time/non-convergence stop. All 203 quantities are available at both starts and in the native A vector, with zero failed trials. This is an incomplete calibration attempt with retained diagnostics, not parameter adoption or an EOS impossibility result.
+The new [amendment-2 calculation](results/joint-recalibration-170/amendment-2/route1/precursor/README.md), performed on merged Engine `84ca269d`, has **no selected joint precursor**. Start A reaches 40 iterations without convergence; both segment diameters reach 5.8 Å, both Born diameters 1 Å, and R5's unshifted $a_k$ 2400 K, all bounds. Start B and the 3b fit remain unrun after this required stop. The [other amendment-2 calculation](results/joint-recalibration-170/amendment-2/route2/README.md) remains subject to its separately reported native-time/non-convergence stop. All 203 quantities are available at both starts and in the native A vector, with zero failed trials. This is an incomplete calibration attempt with retained diagnostics, not parameter adoption or an EOS impossibility result.
 
 The four [unchanged-record replays](results/joint-recalibration-170/amendment-2/qualification-84ca269d/README.md) pass both $10^{-8}$ limits: maximum relative cost difference $8.42\times10^{-13}$ and weighted-row difference $3.68\times10^{-10}$. One fresh Python 3.13.14 environment pins wheel SHA-256 `98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a`, NumPy 2.5.4 and SciPy 1.18.1. This is numerical verification of unchanged records.
 
