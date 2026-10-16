@@ -582,7 +582,10 @@ def stage6_study(spec, out, started):
                 wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted))
             write(out/'timing.json', dict(calls=calls, **elapsed()))
             if interrupted or process.exitcode or (directory/'failure.json').exists():
-                raise RuntimeError(f'information call failed: {directory}; no fit launched')
+                if fit_case:
+                    write(directory/'incomplete-fit.json', dict(case=fit_case, endpoint_available=False,
+                        reason='bounded call interrupted' if interrupted else 'child call failed', call=calls[-1]))
+                raise RuntimeError(f'bounded call failed: {directory}; no subsequent fit launched')
             raw = load(path)
             if fit_case:
                 if raw['status']!='converged' or raw['covariance']['active_bounds'] or raw['covariance']['rank']<14:
