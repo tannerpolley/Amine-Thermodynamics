@@ -1,0 +1,1492 @@
+{
+  "base_commit": "5082ba4f03850c2bdeed2f3e0e2e8c1c0718b221",
+  "evidence_type": "numerical verification; not physical validation",
+  "limits": [
+    "Only the selected heat F1 record and these 152 quantities were evaluated; the source snapshot cannot be qualified without an owner-selected ionic-dispersion declaration.",
+    "This compares numerical predictions; it adds no physical validation, parameter fit, uncertainty estimate or process-use qualification.",
+    "Historical retained predictions, figures, campaign documents and their wheel identities are unchanged."
+  ],
+  "method": {
+    "bitwise_comparison": "IEEE 754 binary64 big-endian bytes",
+    "declaration_path": "analyses/mea_parameter_bundle/results/fit-campaign-179-baseline-complete/spec.json",
+    "declaration_sha256": "8963eeff37f8af568009c307e87c89775d508d5107fcfa0f87b0d3b8e44958e7",
+    "evaluators": [
+      "analyses/mea_parameter_bundle/scripts/fit_observations.py:rows_for/replay",
+      "analyses/mea_parameter_bundle/scripts/heat_evidence_170.py:cp_check/HILLIARD"
+    ],
+    "heat_capacity_states": [
+      {
+        "T_K": 318.15,
+        "loading": 0.0,
+        "model_loading": 1e-05
+      },
+      {
+        "T_K": 318.15,
+        "loading": 0.358,
+        "model_loading": 0.358
+      },
+      {
+        "T_K": 353.15,
+        "loading": 0.358,
+        "model_loading": 0.358
+      }
+    ],
+    "observations": "base: 47 pressures, 94 species mole fractions, 8 integral heats",
+    "relative_difference": "abs(new-old)/max(abs(old),abs(new),1e-300)",
+    "runtime": "Installed wheels only; process pool over available CPUs; OMP/OPENBLAS/MKL threads each 1"
+  },
+  "new_engine": {
+    "checksum_check": "sha256sum --check --strict passed in task and main checkout directories",
+    "commit": "21e761c318c2ac5b555a245365c844d38a93e4cb",
+    "installed_files_byte_verified": 35,
+    "release_asset_digest": "sha256:d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357",
+    "release_json_verified": true,
+    "release_tag": "main-21e761c318c2ac5b555a245365c844d38a93e4cb",
+    "tag_target": "21e761c318c2ac5b555a245365c844d38a93e4cb",
+    "wheel_path": "build/engine-wheels/main-21e761c318c2ac5b555a245365c844d38a93e4cb/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+    "wheel_sha256": "d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357"
+  },
+  "old_engine": {
+    "commit": "84ca269dfa0c7068417a1c4c326acae276d4d965",
+    "installed_files_byte_verified": 12,
+    "python": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a2-part-1-requalify-84ca269d-shared/tmp/amendment-2-84ca269d/venv/bin/python",
+    "wheel_path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a2-part-1-requalify-84ca269d-shared/tmp/amendment-2-84ca269d/wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a"
+  },
+  "question": "Does the declared selected MEA record preserve existing predictions when moving from wheel 84ca269d to 21e761c3?",
+  "rows": [
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 5.201985002076884,
+      "old_prediction": 5.201985002076884,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0119-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 5.971114601811579,
+      "old_prediction": 5.971114601811579,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0120-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 6.495624993251985,
+      "old_prediction": 6.495624993251985,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0121-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 8.728282996184246,
+      "old_prediction": 8.728282996184246,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0122-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 9.152667082161326,
+      "old_prediction": 9.152667082161326,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0123-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 14.175178395485755,
+      "old_prediction": 14.175178395485755,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0124-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 16.887362316317255,
+      "old_prediction": 16.887362316317255,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0125-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 21.897928420283026,
+      "old_prediction": 21.897928420283026,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0126-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 24.358629134673922,
+      "old_prediction": 24.358629134673922,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0127-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 44.82377420053187,
+      "old_prediction": 44.82377420053187,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0128-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 60.97984161106515,
+      "old_prediction": 60.97984161106515,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0129-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 63.3261519610245,
+      "old_prediction": 63.3261519610245,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0130-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 71.37638026227755,
+      "old_prediction": 71.37638026227755,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0131-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 93.20310016831382,
+      "old_prediction": 93.20310016831382,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0132-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 108.92732745142197,
+      "old_prediction": 108.92732745142197,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0133-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 114.47603135386952,
+      "old_prediction": 114.47603135386952,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0134-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 140.92603365429608,
+      "old_prediction": 140.92603365429608,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0135-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 585.4007315697531,
+      "old_prediction": 585.4007315697531,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0136-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 634.5732007207667,
+      "old_prediction": 634.5732007207667,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0137-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 989.6837510648393,
+      "old_prediction": 989.6837510648393,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0138-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 1339.3526656290867,
+      "old_prediction": 1339.3526656290867,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0139-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 1901.7940772106278,
+      "old_prediction": 1901.7940772106278,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0140-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 3336.160356736164,
+      "old_prediction": 3336.160356736164,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0141-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 23575.83402083751,
+      "old_prediction": 23575.83402083751,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0142-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 18.738658746652607,
+      "old_prediction": 18.738658746652607,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0143-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 57.985671170293884,
+      "old_prediction": 57.985671170293884,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0144-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 198.66406130052738,
+      "old_prediction": 198.66406130052738,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0145-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 748.0520806447798,
+      "old_prediction": 748.0520806447798,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0146-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 6279.519856163526,
+      "old_prediction": 6279.519856163526,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0147-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 53815.571151707416,
+      "old_prediction": 53815.571151707416,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0149-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 1.6878793347430614,
+      "old_prediction": 1.6878793347430614,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0186-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 9.946232100350509,
+      "old_prediction": 9.946232100350509,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0187-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 79.62336930119348,
+      "old_prediction": 79.62336930119348,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0188-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 793.1426758220116,
+      "old_prediction": 793.1426758220116,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0189-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 2844.4869552308764,
+      "old_prediction": 2844.4869552308764,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0190-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 10657.228721707186,
+      "old_prediction": 10657.228721707186,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0191-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 33699.93666793637,
+      "old_prediction": 33699.93666793637,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0192-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 59033.13758152787,
+      "old_prediction": 59033.13758152787,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0193-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 5.017337109854073,
+      "old_prediction": 5.017337109854073,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0194-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 20.638374079559227,
+      "old_prediction": 20.638374079559227,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0195-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 71.08883250598808,
+      "old_prediction": 71.08883250598808,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0196-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 796.5330562440922,
+      "old_prediction": 796.5330562440922,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0197-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 2020.7345801863382,
+      "old_prediction": 2020.7345801863382,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0198-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 11130.724050225754,
+      "old_prediction": 11130.724050225754,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0199-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 49882.2405453883,
+      "old_prediction": 49882.2405453883,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0200-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 73525.24513638973,
+      "old_prediction": 73525.24513638973,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0201-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 291463.4822180179,
+      "old_prediction": 291463.4822180179,
+      "quantity": "pressure_Pa",
+      "relative_difference": 0.0,
+      "target": "vle_obs_0202-pco2"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.10392323059130744,
+      "old_prediction": 0.10392323059130744,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_030::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.00829563814624686,
+      "old_prediction": 0.00829563814624686,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_030::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.09569267554482241,
+      "old_prediction": 0.09569267554482241,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_031::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.016526192750074685,
+      "old_prediction": 0.016526192750074685,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_031::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.08652261971499635,
+      "old_prediction": 0.08652261971499635,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_032::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.025696247407464626,
+      "old_prediction": 0.025696247407464626,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_032::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.07881068277221379,
+      "old_prediction": 0.07881068277221379,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_033::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.03340818182983792,
+      "old_prediction": 0.03340818182983792,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_033::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.07117741062955221,
+      "old_prediction": 0.07117741062955221,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_034::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.0410414452213505,
+      "old_prediction": 0.0410414452213505,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_034::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.06493459849160181,
+      "old_prediction": 0.06493459849160181,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_035::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.047284168607979044,
+      "old_prediction": 0.047284168607979044,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_035::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.08974687647836822,
+      "old_prediction": 0.08974687647836822,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_043::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.0224719843770439,
+      "old_prediction": 0.0224719843770439,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_043::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.08641834651145493,
+      "old_prediction": 0.08641834651145493,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_044::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.025800510696843422,
+      "old_prediction": 0.025800510696843422,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_044::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.08175865265038604,
+      "old_prediction": 0.08175865265038604,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_045::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.03046019653891019,
+      "old_prediction": 0.03046019653891019,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_045::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.07421439111040103,
+      "old_prediction": 0.07421439111040103,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_047::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.03800442684843618,
+      "old_prediction": 0.03800442684843618,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_047::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.06536143720730925,
+      "old_prediction": 0.06536143720730925,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_048::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04685703771235049,
+      "old_prediction": 0.04685703771235049,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_048::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.06504716720326194,
+      "old_prediction": 0.06504716720326194,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_049::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04717123562925786,
+      "old_prediction": 0.04717123562925786,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_049::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.005118387003510226,
+      "old_prediction": 0.005118387003510226,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_049::HCO3-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.06428715189197544,
+      "old_prediction": 0.06428715189197544,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_050::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04793082877117114,
+      "old_prediction": 0.04793082877117114,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_050::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.006711412706875866,
+      "old_prediction": 0.006711412706875866,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_050::HCO3-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.09783837250962518,
+      "old_prediction": 0.09783837250962518,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_055::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.014380479557696696,
+      "old_prediction": 0.014380479557696696,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_055::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.0900392461608652,
+      "old_prediction": 0.0900392461608652,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_056::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.022179577642811272,
+      "old_prediction": 0.022179577642811272,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_056::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.08217956294453349,
+      "old_prediction": 0.08217956294453349,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_057::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.030039196654381383,
+      "old_prediction": 0.030039196654381383,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_057::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.06881461087551688,
+      "old_prediction": 0.06881461087551688,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_058::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04340347618782686,
+      "old_prediction": 0.04340347618782686,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_058::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.0031600629873644393,
+      "old_prediction": 0.0031600629873644393,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_058::HCO3-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.06466029668209462,
+      "old_prediction": 0.06466029668209462,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_059::MEA + MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04755405977914896,
+      "old_prediction": 0.04755405977914896,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_059::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.0072785495919749366,
+      "old_prediction": 0.0072785495919749366,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Bottinger2008_state_059::HCO3-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.08855950648837294,
+      "old_prediction": 0.08855950648837294,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_001::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.01195103407593128,
+      "old_prediction": 0.01195103407593128,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_001::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.011708328033174776,
+      "old_prediction": 0.011708328033174776,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_001::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.08365724659572615,
+      "old_prediction": 0.08365724659572615,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_002::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.014439988513306079,
+      "old_prediction": 0.014439988513306079,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_002::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.014121633354659432,
+      "old_prediction": 0.014121633354659432,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_002::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.07875855555093017,
+      "old_prediction": 0.07875855555093017,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_003::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.016934119993892285,
+      "old_prediction": 0.016934119993892285,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_003::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.01652619275007468,
+      "old_prediction": 0.01652619275007468,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_003::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.07364164191990166,
+      "old_prediction": 0.07364164191990166,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_004::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.01954844270651735,
+      "old_prediction": 0.01954844270651735,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_004::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.01902878344587853,
+      "old_prediction": 0.01902878344587853,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_004::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.06875220689946687,
+      "old_prediction": 0.06875220689946687,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_005::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.022057127810504455,
+      "old_prediction": 0.022057127810504455,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_005::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.021409533093963224,
+      "old_prediction": 0.021409533093963224,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_005::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.06364677537259494,
+      "old_prediction": 0.06364677537259494,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_006::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.024690181101719038,
+      "old_prediction": 0.024690181101719038,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_006::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.02388191097404175,
+      "old_prediction": 0.02388191097404175,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_006::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.058549093918200575,
+      "old_prediction": 0.058549093918200575,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_007::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.027336210509748705,
+      "old_prediction": 0.027336210509748705,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_007::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.026333562563924853,
+      "old_prediction": 0.026333562563924853,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_007::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.05346100867355539,
+      "old_prediction": 0.05346100867355539,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_008::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.029998154375199485,
+      "old_prediction": 0.029998154375199485,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_008::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.02875970334947056,
+      "old_prediction": 0.02875970334947056,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_008::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.048385064466904,
+      "old_prediction": 0.048385064466904,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_009::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.0326795049204025,
+      "old_prediction": 0.0326795049204025,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_009::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.031154296225078,
+      "old_prediction": 0.031154296225078,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_009::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04332488612068221,
+      "old_prediction": 0.04332488612068221,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_010::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.03538433141558155,
+      "old_prediction": 0.03538433141558155,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_010::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.033509647012083255,
+      "old_prediction": 0.033509647012083255,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_010::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.038067345686066074,
+      "old_prediction": 0.038067345686066074,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_011::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.03823676221295056,
+      "old_prediction": 0.03823676221295056,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_011::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.03591475508742277,
+      "old_prediction": 0.03591475508742277,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_011::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.03284242231282866,
+      "old_prediction": 0.03284242231282866,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_012::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.041125332182106955,
+      "old_prediction": 0.041125332182106955,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_012::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.03825110618404084,
+      "old_prediction": 0.03825110618404084,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_012::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.027666204382450484,
+      "old_prediction": 0.027666204382450484,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_013::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04405527764967028,
+      "old_prediction": 0.04405527764967028,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_013::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04049737503904805,
+      "old_prediction": 0.04049737503904805,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_013::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.02256767042761637,
+      "old_prediction": 0.02256767042761637,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_014::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04702980608150147,
+      "old_prediction": 0.04702980608150147,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_014::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04262137447085657,
+      "old_prediction": 0.04262137447085657,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_014::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.017400817739090378,
+      "old_prediction": 0.017400817739090378,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_015::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.05017244604904686,
+      "old_prediction": 0.05017244604904686,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_015::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.044645575093193855,
+      "old_prediction": 0.044645575093193855,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_015::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.008374808191819759,
+      "old_prediction": 0.008374808191819759,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_017::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.05633778544711679,
+      "old_prediction": 0.05633778544711679,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_017::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04750614903044655,
+      "old_prediction": 0.04750614903044655,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_017::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.005106171041708834,
+      "old_prediction": 0.005106171041708834,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_018::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.05929899988216055,
+      "old_prediction": 0.05929899988216055,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_018::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04781335748017785,
+      "old_prediction": 0.04781335748017785,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_018::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.003083844411390316,
+      "old_prediction": 0.003083844411390316,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_019::MEA"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.062122848260218445,
+      "old_prediction": 0.062122848260218445,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_019::MEAH+"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 0.04701121224757844,
+      "old_prediction": 0.04701121224757844,
+      "quantity": "species_mole_fraction",
+      "relative_difference": 0.0,
+      "target": "Matin2012_state_019::MEACOO-"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": -81753.79791503021,
+      "old_prediction": -81753.79791503021,
+      "quantity": "integral_heat_J_mol_CO2",
+      "relative_difference": 0.0,
+      "target": "vinjarapu2024_source_table4_01"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": -81753.79791503021,
+      "old_prediction": -81753.79791503021,
+      "quantity": "integral_heat_J_mol_CO2",
+      "relative_difference": 0.0,
+      "target": "vinjarapu2024_source_table4_02"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": -81678.67652260629,
+      "old_prediction": -81678.67652260629,
+      "quantity": "integral_heat_J_mol_CO2",
+      "relative_difference": 0.0,
+      "target": "vinjarapu2024_source_table4_03"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": -81678.67652260629,
+      "old_prediction": -81678.67652260629,
+      "quantity": "integral_heat_J_mol_CO2",
+      "relative_difference": 0.0,
+      "target": "vinjarapu2024_source_table4_04"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": -81661.18013905908,
+      "old_prediction": -81661.18013905908,
+      "quantity": "integral_heat_J_mol_CO2",
+      "relative_difference": 0.0,
+      "target": "vinjarapu2024_source_table4_05"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": -81661.18013905908,
+      "old_prediction": -81661.18013905908,
+      "quantity": "integral_heat_J_mol_CO2",
+      "relative_difference": 0.0,
+      "target": "vinjarapu2024_source_table4_06"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": -81507.18803201657,
+      "old_prediction": -81507.18803201657,
+      "quantity": "integral_heat_J_mol_CO2",
+      "relative_difference": 0.0,
+      "target": "vinjarapu2024_source_table4_07"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": -81507.18803201657,
+      "old_prediction": -81507.18803201657,
+      "quantity": "integral_heat_J_mol_CO2",
+      "relative_difference": 0.0,
+      "target": "vinjarapu2024_source_table4_08"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 3.8680475677985995,
+      "old_prediction": 3.8680475677985995,
+      "quantity": "equilibrium_cp_kJ_kg_K",
+      "relative_difference": 0.0,
+      "target": "Hilliard-Cp-318.15-0.0"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 3.417296548687273,
+      "old_prediction": 3.417296548687273,
+      "quantity": "equilibrium_cp_kJ_kg_K",
+      "relative_difference": 0.0,
+      "target": "Hilliard-Cp-318.15-0.358"
+    },
+    {
+      "absolute_difference": 0.0,
+      "bitwise_equal": true,
+      "new_prediction": 3.34139449792879,
+      "old_prediction": 3.34139449792879,
+      "quantity": "equilibrium_cp_kJ_kg_K",
+      "relative_difference": 0.0,
+      "target": "Hilliard-Cp-353.15-0.358"
+    }
+  ],
+  "selected_record": {
+    "change": "Only document_version and topology.no_cross_association; all fitted values and other fields unchanged",
+    "new_document_version": 3,
+    "new_sha256": "7b0b4bb5669c1b2061fd7ec26e5fb4c8491005bdb5ba8f9e22e4c0b0b4b84308",
+    "old_document_version": 2,
+    "old_sha256": "66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778",
+    "old_wheel_accepts_declared_mapping": true,
+    "path": "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json"
+  },
+  "source_input": {
+    "comparison": "No predicted quantities: both wheels refuse construction after existing shared evaluator defaults",
+    "construction": {
+      "new": {
+        "document": "analyses/mea_parameter_bundle/data/input/parameters.json",
+        "document_sha256": "2a03b675aebdccb854c27857e95f493a1aea1436f7d2e236630bd621d9d82f05",
+        "document_version": 2,
+        "existing_defaults": {
+          "c_dielectric": 1.0,
+          "c_shell": 1.0
+        },
+        "refusal": {
+          "message": "missing model/electrolyte/ionic_dispersion",
+          "type": "ParameterError"
+        },
+        "wheel_sha256": "d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357"
+      },
+      "old": {
+        "document": "analyses/mea_parameter_bundle/data/input/parameters.json",
+        "document_sha256": "58793d354f393944ca0f5fd1640a11645417ddfe6331b955de728f86f0e0b195",
+        "document_version": 1,
+        "existing_defaults": {
+          "c_dielectric": 1.0,
+          "c_shell": 1.0
+        },
+        "refusal": {
+          "message": "missing model/electrolyte/ionic_dispersion",
+          "type": "ParameterError"
+        },
+        "wheel_sha256": "98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a"
+      }
+    },
+    "new_document_version": 2,
+    "new_sha256": "2a03b675aebdccb854c27857e95f493a1aea1436f7d2e236630bd621d9d82f05",
+    "old_document_version": 1,
+    "old_sha256": "58793d354f393944ca0f5fd1640a11645417ddfe6331b955de728f86f0e0b195",
+    "path": "analyses/mea_parameter_bundle/data/input/parameters.json"
+  },
+  "summary": {
+    "bitwise_equal": 152,
+    "failed_quantities": 0,
+    "quantities_compared": 152,
+    "quantity_counts": {
+      "equilibrium_cp_kJ_kg_K": 3,
+      "integral_heat_J_mol_CO2": 8,
+      "pressure_Pa": 47,
+      "species_mole_fraction": 94
+    },
+    "worst_absolute_difference_by_quantity": {
+      "equilibrium_cp_kJ_kg_K": 0.0,
+      "integral_heat_J_mol_CO2": 0.0,
+      "pressure_Pa": 0.0,
+      "species_mole_fraction": 0.0
+    },
+    "worst_relative_difference": 0.0
+  }
+}

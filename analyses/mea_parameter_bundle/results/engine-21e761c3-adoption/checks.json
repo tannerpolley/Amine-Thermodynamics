@@ -1,0 +1,48 @@
+{
+  "checks": [
+    {
+      "command": "uv lock",
+      "exit_status": 0
+    },
+    {
+      "command": "uv sync --locked",
+      "exit_status": 0
+    },
+    {
+      "command": "uv run ruff check src scripts analyses tests",
+      "exit_status": 1,
+      "findings": 678,
+      "diagnostics_sha256": "ef41deb9447a487ac752abd7ded4e18c56f832cb95aec7b0a0ea9a6cf546191e"
+    },
+    {
+      "command": "uv run pytest tests",
+      "exit_status": 1,
+      "passed": 68,
+      "failed": 7,
+      "failed_tests": [
+        "tests/test_controlled_comparison_numerics.py::test_controlled_comparison_recomputes_persisted_metrics",
+        "tests/test_film_chemistry_inputs.py::test_work_package_a_inputs_fail_closed_and_conserve_balances",
+        "tests/test_film_chemistry_inputs.py::test_loaded_source_contract_identity_drift_is_rejected",
+        "tests/test_manuscript_numerical_claims.py::test_manuscript_numbers_match_computed_comparison",
+        "tests/test_reactive_vle_vertical_slice.py::test_candidate_inventory_and_retained_model_family_fail_closed",
+        "tests/test_source_corrections_152.py::test_declared_domain_pre_dispatch_and_protected_rows",
+        "tests/test_volumetric_evidence.py::test_volumetric_evidence_package_is_scientifically_consistent"
+      ],
+      "diagnostics_sha256": "944a50f6944e34e2c8d74933b4bd7675b1854dd85f0a4bac642fce6053d3c08a"
+    },
+    {
+      "command": "uv run python scripts/check_manuscript_freshness.py",
+      "exit_status": 1,
+      "diagnostic": "Missing manuscript build artifact: docs/scientific/latex/builds/main.pdf"
+    }
+  ],
+  "stopped_on_undeclared_frozen_document": false,
+  "structural_verification": {
+    "tracked_parameter_documents": 274,
+    "changed_adopted_documents": 2,
+    "other_parameter_documents_unchanged": 272,
+    "changes_only_version_and_declaration": true,
+    "frozen_heat_F1_sha256_unchanged": "66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778",
+    "relative_source_and_locked_wheel_hash_agree": true
+  }
+}
