@@ -93,7 +93,7 @@ def rows_for(spec, mapping, observation_id):
 def stage6_rows(spec, mapping):
     """Common-149 plus the declared restored, pooled, density and molality-Cp rows."""
     params, common = rows_for(spec, mapping, 'base')
-    _, added = stage2_rows(spec, mapping, spec['cases'][0], assessment=True)
+    params, added = stage2_rows(spec, mapping, spec['cases'][0], assessment=True)
     rows = [(dict(id=i, observed=item.observed, scale=item.scale, weight=w,
         form=item.form.name, quantity=item.kind.name), item) for i, item, w in common]
     rows.extend((row, item) for row, item, _ in added)
@@ -108,7 +108,7 @@ def stage6_rows(spec, mapping):
             form='difference', scale=row['scale'],
             **(dict(phase='L', mass_basis=True) if row['quantity']=='phase_density' else {}))
         rows.append((dict(row, form='difference'), item))
-    assert len(rows)==178 and len({r['id'] for r, _ in rows})==178
+    assert len(rows)==165+len(added) and len({r['id'] for r, _ in rows})==len(rows)
     return params, rows
 
 

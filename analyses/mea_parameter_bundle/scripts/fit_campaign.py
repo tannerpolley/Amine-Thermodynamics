@@ -9,6 +9,7 @@ import multiprocessing
 import os
 from pathlib import Path
 import resource
+import signal
 import struct
 import sys
 import time
@@ -85,6 +86,18 @@ def machine(spec, requested):
 def cpu_seconds():
     return math.fsum(r.ru_utime+r.ru_stime for r in (resource.getrusage(resource.RUSAGE_SELF),
         resource.getrusage(resource.RUSAGE_CHILDREN)))
+
+
+def pool_cpu_seconds(group):
+    ticks = 0
+    for path in Path('/proc').glob('[0-9]*/stat'):
+        try:
+            fields = path.read_text().rsplit(')', 1)[1].split()
+            if int(fields[2]) == group:
+                ticks += sum(int(v) for v in fields[11:15])
+        except FileNotFoundError:
+            pass
+    return ticks/os.sysconf('SC_CLK_TCK')
 
 
 def differences(expected, actual, path=''):
@@ -490,7 +503,7 @@ def stage6_study(spec, out, started):
     """Amendment 2 information checks or one explicitly declared joint fit."""
     import fit_observations as o
     import numpy as np
-    sizing = machine(spec, None)
+    sizing = machine(spec, spec.get('workers'))
     write(out/'machine.json', sizing)
     reports, calls = [], []
     fit_case = spec.get('fit_case')
@@ -498,7 +511,7 @@ def stage6_study(spec, out, started):
         release = load(checked(spec['release_tests_path'], spec['release_tests_sha256']))
         assert len(release)==4 and all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in release)
     def elapsed():
-        cpu = cpu_seconds()+spec['prior_cpu_charge_s']
+        cpu = cpu_seconds()+spec['prior_cpu_charge_s']+sum(c['cpu_s']-c['reaped_cpu_s'] for c in calls)
         wall = time.monotonic()-started+spec['prior_wall_charge_s']
         return dict(cpu_s=cpu, wall_s=wall, cumulative_cpu_s=spec['program_prior_cpu_s']+cpu,
             cumulative_wall_s=spec['program_prior_wall_s']+wall)
@@ -524,6 +537,7 @@ def stage6_study(spec, out, started):
             if remaining_cpu<cpu_limit or remaining_wall<guard_wall_limit:
                 raise RuntimeError('allowance insufficient for the next bounded information call')
             def child():
+                os.setsid()
                 try:
                     resource.setrlimit(resource.RLIMIT_CPU, (cpu_limit, cpu_limit+1))
                     params, rows = o.stage6_rows(spec, mapping)
@@ -574,12 +588,19 @@ def stage6_study(spec, out, started):
             clock, cpu = time.monotonic(), cpu_seconds()
             process = multiprocessing.get_context('fork').Process(target=child)
             process.start()
-            process.join(guard_wall_limit)
+            sampled_cpu = 0.
+            while process.is_alive() and time.monotonic()-clock < guard_wall_limit:
+                sampled_cpu = max(sampled_cpu, pool_cpu_seconds(process.pid))
+                if sampled_cpu >= cpu_limit-os.cpu_count():
+                    os.killpg(process.pid, signal.SIGKILL)
+                    break
+                process.join(.05)
             interrupted = process.is_alive()
             if interrupted:
-                process.terminate()
+                os.killpg(process.pid, signal.SIGKILL)
                 process.join()
-            calls.append(dict(start=start['id'], cpu_s=cpu_seconds()-cpu,
+            calls.append(dict(start=start['id'], cpu_s=cpu_limit if interrupted else cpu_seconds()-cpu,
+                reaped_cpu_s=cpu_seconds()-cpu, sampled_pool_cpu_s=sampled_cpu,
                 wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted, host_load=os.getloadavg()))
             write(out/'timing.json', dict(calls=calls, **elapsed()))
             if interrupted or process.exitcode or (directory/'failure.json').exists():
@@ -591,31 +612,32 @@ def stage6_study(spec, out, started):
             if fit_case:
                 if calls[-1]['cpu_s']>cpu_limit:
                     raise RuntimeError('aggregate fit CPU ceiling exceeded; return to owner before another fit')
-                if raw['status']!='converged' or raw['covariance']['rank']<14:
+                if raw['status']!='converged' or raw['covariance']['rank']<len(spec['information_coordinates']):
                     raise RuntimeError('nonconverged or rank-deficient joint fit; return to owner before another fit')
                 return
-            if raw['statuses']!=['Available']*178 or not all(math.isfinite(x) for key in
+            if raw['statuses']!=['Available']*len(raw['rows']) or not all(math.isfinite(x) for key in
                 ('predictions','residuals','residual_optimizer_gradient') for x in raw[key]):
                 raise RuntimeError(f'unavailable or nonfinite information row: {directory}; no fit launched')
             coordinates = spec['information_coordinates']
             values = o.s.parameter_values(mapping)
+            mandatory_count = len(coordinates)-2
             active = [i for i,c in enumerate(coordinates) if values.get(c['identity'],0.) in c['bounds']]
             for density_weight in spec['information_density_weights']:
                 weights = np.array([density_weight/12 if r['quantity']=='phase_density' else r['weight'] for r in raw['rows']])
                 keep = weights>0
-                J = np.array(raw['residual_optimizer_gradient']).reshape(178,14)[keep]*np.sqrt(weights[keep,None])
-                free = [j for j in range(12) if j not in active]
+                J = np.array(raw['residual_optimizer_gradient']).reshape(len(raw['rows']),len(coordinates))[keep]*np.sqrt(weights[keep,None])
+                free = [j for j in range(mandatory_count) if j not in active]
                 mandatory = spectrum(J[:,free])
                 u, sv, _ = np.linalg.svd(J[:,free], full_matrices=False)
                 u = u[:,sv>sv[0]*1e-14]
-                projected = spectrum(J[:,12:] - u@(u.T@J[:,12:]))
-                augmented = spectrum(J[:,free+list(range(12,14))])
+                projected = spectrum(J[:,mandatory_count:] - u@(u.T@J[:,mandatory_count:]))
+                augmented = spectrum(J[:,free+list(range(mandatory_count,len(coordinates)))])
                 passed = mandatory['rank']==len(free) and mandatory['condition'] is not None and mandatory['condition']<=1e4
-                release = (passed and not any(j in active for j in (12,13)) and augmented['rank']==len(free)+2
+                release = (passed and not any(j in active for j in range(mandatory_count,len(coordinates))) and augmented['rank']==len(free)+2
                     and augmented['condition'] is not None and augmented['condition']<=1e4
                     and projected['rank']==2 and projected['condition'] is not None and projected['condition']<=1e4)
                 record = dict(start=start['id'], density_weight=density_weight, row_count=int(sum(keep)),
-                    full=spectrum(J[:,:12]), mandatory_free=mandatory, augmented_free=augmented,
+                    full=spectrum(J[:,:mandatory_count]), mandatory_free=mandatory, augmented_free=augmented,
                     projected_dispersions=projected, active_columns=active, free_columns=free,
                     mandatory_passed=passed, dispersion_release_passed=release)
                 reports.append(record)
@@ -623,7 +645,7 @@ def stage6_study(spec, out, started):
                     weighted_optimizer_jacobian=J.tolist(), weighted_residuals=(np.array(raw['residuals'])[keep]*np.sqrt(weights[keep])).tolist()))
                 write(out/'release-tests.json', reports)
                 print(record, flush=True)
-            if not all(r['mandatory_passed'] for r in reports):
+            if not all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in reports):
                 raise RuntimeError('mandatory chemistry/ion block fails conditioning; return to owner before another start or fit')
     finally:
         write(out/'summary.json', dict(release_tests=reports, calls=calls, fit_calls=int(bool(fit_case)), **elapsed()))
