@@ -1,6 +1,5 @@
 """Run a frozen MEA fit declaration directly through Engine (#179)."""
 import argparse
-import contextlib
 import csv
 import hashlib
 import importlib.metadata
@@ -10,7 +9,6 @@ import multiprocessing
 import os
 from pathlib import Path
 import resource
-import signal
 import struct
 import sys
 import time
@@ -87,18 +85,6 @@ def machine(spec, requested):
 def cpu_seconds():
     return math.fsum(r.ru_utime+r.ru_stime for r in (resource.getrusage(resource.RUSAGE_SELF),
         resource.getrusage(resource.RUSAGE_CHILDREN)))
-
-
-def pool_cpu_seconds(group):
-    ticks = 0
-    for path in Path('/proc').glob('[0-9]*/stat'):
-        try:
-            fields = path.read_text().rsplit(')', 1)[1].split()
-            if int(fields[2]) == group:
-                ticks += sum(int(v) for v in fields[11:15])
-        except FileNotFoundError:
-            pass
-    return ticks/os.sysconf('SC_CLK_TCK')
 
 
 def differences(expected, actual, path=''):
@@ -512,7 +498,7 @@ def stage6_study(spec, out, started):
         release = load(checked(spec['release_tests_path'], spec['release_tests_sha256']))
         assert len(release)==4 and all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in release)
     def elapsed():
-        cpu = cpu_seconds()+spec['prior_cpu_charge_s']+sum(c['cpu_s']-c['reaped_cpu_s'] for c in calls)
+        cpu = cpu_seconds()+spec['prior_cpu_charge_s']
         wall = time.monotonic()-started+spec['prior_wall_charge_s']
         return dict(cpu_s=cpu, wall_s=wall, cumulative_cpu_s=spec['program_prior_cpu_s']+cpu,
             cumulative_wall_s=spec['program_prior_wall_s']+wall)
@@ -538,9 +524,7 @@ def stage6_study(spec, out, started):
             if remaining_cpu<cpu_limit or remaining_wall<guard_wall_limit:
                 raise RuntimeError('allowance insufficient for the next bounded information call')
             def child():
-                os.setsid()
                 try:
-                    resource.setrlimit(resource.RLIMIT_CPU, (cpu_limit, cpu_limit+1))
                     params, rows = o.stage6_rows(spec, mapping)
                     coordinates, values = [], o.s.parameter_values(mapping)
                     for c in spec['information_coordinates']:
@@ -589,19 +573,12 @@ def stage6_study(spec, out, started):
             clock, cpu = time.monotonic(), cpu_seconds()
             process = multiprocessing.get_context('fork').Process(target=child)
             process.start()
-            sampled_cpu = 0.
-            while process.is_alive() and time.monotonic()-clock < guard_wall_limit:
-                sampled_cpu = max(sampled_cpu, pool_cpu_seconds(process.pid)+cpu_seconds()-cpu)
-                if sampled_cpu >= cpu_limit-os.cpu_count():
-                    break
-                process.join(.05)
-            interrupted = process.is_alive() or sampled_cpu >= cpu_limit-os.cpu_count()
+            process.join(guard_wall_limit)
+            interrupted = process.is_alive()
             if interrupted:
-                with contextlib.suppress(ProcessLookupError):
-                    os.killpg(process.pid, signal.SIGKILL)
+                process.terminate()
                 process.join()
-            calls.append(dict(start=start['id'], cpu_s=cpu_limit if interrupted else cpu_seconds()-cpu,
-                reaped_cpu_s=cpu_seconds()-cpu, sampled_aggregate_cpu_s=sampled_cpu,
+            calls.append(dict(start=start['id'], cpu_s=cpu_seconds()-cpu,
                 wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted, host_load=os.getloadavg()))
             write(out/'timing.json', dict(calls=calls, **elapsed()))
             if interrupted or process.exitcode or (directory/'failure.json').exists():
