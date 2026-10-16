@@ -12,7 +12,7 @@ at the same load.
 
 The four Hilliard (2008) `equilibrium_isobaric_heat_capacity` rows set the
 fit's critical path. Their exact parameter derivatives make each 32-worker
-fit iteration about 5–7 times slower than the same objective without them.
+fit iteration 4.3–7.8 times slower (5.7 times on the means) than the same objective without them.
 
 | Measurement | Value |
 |---|---|
@@ -51,8 +51,8 @@ cost by at most ftol relative), with the fits' ftol 1e-10 as the baseline:
 | Route 2b larger-dV (converged) | 56 / 26 | 22 | 164 s (14 %) | 574 of 1,196 s, cost +1.66 % |
 | Route 2b smaller-dV (time limit) | 45 / 8 | 19 | 180 s (15 %) | 560 of 1,214 s, cost +0.88 % |
 
-The small steps sit on plateaus 0.9–2.9 % above the final cost that last
-400–600 s and end in real drops. A looser tolerance would stop on the
+The small steps sit on plateaus 0.9–2.9 % above the final cost; the longest stretches with under
+0.1 % total cost drop last 338–543 s, and they end in real drops. A looser tolerance would stop on the
 plateau, not at the minimum. The plateau cause (bound-limited steps or
 ill-conditioning) is not tested: the retained histories hold costs and times
 only, not per-iteration parameters or trust-region radii. In the larger-dV fit
