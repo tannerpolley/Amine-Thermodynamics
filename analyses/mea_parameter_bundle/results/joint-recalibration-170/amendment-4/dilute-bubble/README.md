@@ -47,9 +47,9 @@ Direct calls used the task's pinned interpreter through
 from the requested worktree, with `nice -n 10`, `PYTHONPATH=src` and
 single-thread BLAS/OpenMP. No Engine checkout was imported. Every numerical
 problem used `Problem`, `Amounts`, explicit neutral `Phase` support,
-`Free` pressure, `Pinned(0)` vapor, no reactions and row tolerance 1e-10;
-`regression.observation(..., 'partial_pressure', phase='V',
-species=['carbon-dioxide'], form='log_ratio')` supplied the observation.
+`Free` pressure, `Pinned(0)` vapor, no reactions and row tolerance 1e-10.
+Using the imported Engine module alias `reg`,
+`reg.observation(..., 'partial_pressure', phase='V', species=['carbon-dioxide'], form='log_ratio')` supplied the observation.
 `solve_equilibrium` and `compile_problem(...).evaluate(...)` supplied
 independent retained state/closure inspection of the declaration.
 
