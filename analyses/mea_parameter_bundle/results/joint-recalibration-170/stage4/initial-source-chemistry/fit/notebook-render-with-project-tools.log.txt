@@ -1,0 +1,65 @@
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-15 16:41:52
+  Workflow ID: d6ca8b42-739f-4a92-b298-daa1be3da1eb
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 15 16:41:52 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/enrtl_historical_evidence/conversion_receipt.json: OK
+Using CPython 3.13.14
+Creating virtual environment at: .venv
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    from MEA.common.data_access import verify_source_hashes
+ModuleNotFoundError: No module named 'MEA'
+RuleException:
+CalledProcessError in file "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence/Snakefile", line 22:
+Command '['/home/tnnrpolley21/.local/bin/uv', 'run', '--no-sync', 'python', '-c', 'import json\nfrom pathlib import Path\nfrom MEA.common.data_access import verify_source_hashes\nanalysis = Path("analyses/enrtl_historical_evidence")\nrecord = json.loads((analysis / "conversion_receipt.json").read_text())\nverify_source_hashes({str(analysis / record["output"]): record["output_sha256"]}, repo_root=Path.cwd())\n']' returned non-zero exit status 1.
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence/Snakefile", line 22, in __rule_present
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/subprocess.py", line 577, in run
+Exiting because a job execution failed. Look above for error messages
+WorkflowError:
+At least one job did not complete successfully.
+[Thu Oct 15 16:41:54 2026]
+Error in rule present:
+    message: None
+    jobid: 0
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence/retained-results.sha256
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error messages
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence/.snakemake/log/2026-10-15T164152.754965.snakemake.log
+Elapsed time: 0:00:01.629326
+WorkflowError:
+At least one job did not complete successfully.
+presentation failed in /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/analyses/enrtl_historical_evidence; retained view is stale

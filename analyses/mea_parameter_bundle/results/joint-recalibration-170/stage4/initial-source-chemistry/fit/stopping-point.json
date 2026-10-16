@@ -1,0 +1,110 @@
+{
+  "stops": [
+    "native non-convergence",
+    "four active lower bounds",
+    "application serialization assumed one physical value per coordinate"
+  ],
+  "status": "limit_reached",
+  "message": "Maximum number of iterations reached. Number of iterations: 20.",
+  "iterations": 40,
+  "initial_cost": 59.17684171980518,
+  "final_cost": 1.3609750436302284,
+  "coordinates": [
+    {
+      "identity": "component/protonated-monoethanolamine/segment_diameter",
+      "start": 3.563,
+      "returned": 4.493309373703934,
+      "bounds": [
+        2,
+        5.8
+      ],
+      "active": false,
+      "scale": 0.1
+    },
+    {
+      "identity": "component/carbamate-anion/segment_diameter",
+      "start": 3.5605,
+      "returned": 2.0,
+      "bounds": [
+        2,
+        5.8
+      ],
+      "active": true,
+      "scale": 0.1
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/dispersion_energy_over_k",
+      "start": 228.71,
+      "returned": 489.25373230251626,
+      "bounds": [
+        50,
+        950
+      ],
+      "active": false,
+      "scale": 10
+    },
+    {
+      "identity": "component/carbamate-anion/dispersion_energy_over_k",
+      "start": 533.11,
+      "returned": 50.0,
+      "bounds": [
+        50,
+        1000
+      ],
+      "active": true,
+      "scale": 10
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/born_diameter",
+      "start": 3.563,
+      "returned": 1.0,
+      "bounds": [
+        1,
+        7
+      ],
+      "active": true,
+      "scale": 0.1
+    },
+    {
+      "identity": "component/carbamate-anion/born_diameter",
+      "start": 3.5605,
+      "returned": 1.0,
+      "bounds": [
+        1,
+        7
+      ],
+      "active": true,
+      "scale": 0.1
+    },
+    {
+      "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+      "start": 0.0,
+      "returned": -0.763082703628406,
+      "bounds": [
+        -2,
+        2
+      ],
+      "active": false,
+      "scale": 0.01
+    }
+  ],
+  "full_rank": 7,
+  "free_rank": 3,
+  "full_condition": 16199.960583994542,
+  "free_condition": 147.29070906956858,
+  "all_26_native_predictions_available": true,
+  "native_trial_failures": 0,
+  "I0": null,
+  "S1": null,
+  "I1": null,
+  "S2": null,
+  "selected_precursor": null,
+  "movement_test": "Not evaluated: no complete interior I0",
+  "endpoint_checks": "Unrun after required stop",
+  "cpu_s": 50.51401872,
+  "wall_s": 6.8750579670048095,
+  "cumulative_cpu_s": 1224.11788172,
+  "cumulative_wall_s_lower_bound": 438.5795799500058,
+  "remaining_cpu_s_upper_bound": 142775.88211828002,
+  "remaining_wall_s_upper_bound": 21161.420420049995
+}

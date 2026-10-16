@@ -1,10 +1,10 @@
 {
   "study": "joint-recalibration-170",
-  "stage": 2,
+  "stage": 4,
   "implementation_base": "6c8d20073fd0e5fda8dd323a51f55551d12b7486",
   "design_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
   "controls_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000919",
-  "purpose": "Stage 2 comparison only; source chemistry and provisional ion seeds; trace ions and assumed Born diameters retain their prior qualification. No adoption.",
+  "purpose": "Initial ion-speciation calibration conditional on source chemistry, corrected stage-2 binaries and zero bicarbonate-water interaction; no adoption.",
   "inputs": [
     {
       "path": "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/parameters.json",
@@ -37,11 +37,67 @@
     {
       "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-rows.json",
       "sha256": "e50fc34ff22deeb8c65d8e4a77934b5f9fd2952c9338c1b99e1c473db8a4c72a"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json",
+      "sha256": "36c827bdb5e8b27997f3bc82439ef22d70f7fe8648526e0aa2ac1b6079e6d237"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/co2-water/slope/co2-water/B/parameters.json",
+      "sha256": "b1ec1ddc22abe5ced8d08116fc91a7b3da1361864db1b34c33dda121b642a5e2"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage3-rows.json",
+      "sha256": "2ce00fa3101cf348e0b1dbc5d22d2447824782a8b80d45dbe98162a315337a60"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage3-requests.json",
+      "sha256": "e67abfa192b7fa91754340ad98bfd7ef58b75d90ab543edbd2b559c1f454801b"
+    },
+    {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
+      "sha256": "d5cd6ea0d5d75f9994f5ed354463776a09b8f3cd081eb72ddef98dd4a356c53a"
+    },
+    {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-stage-3-qualify-engine-0bec2bdf/data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv",
+      "sha256": "38326453cfe11b30f2e83e2c33e9342037a8f2bbbec0d95938384806e935383b"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/frozen-inputs.json",
+      "sha256": "4abf21d682f9eb2eced9e32569f95742bd88706c0446a0abce6a4e18fa8d9739"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/reference-parameters.json",
+      "sha256": "d1e7fa321640ed752b926c3c42da237005a139335641365e21b9e6da635701e8"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-rows.json",
+      "sha256": "57efc1c0f8aac14259a7dd255e1b51a88bd34f5c215d94bfb01af1e8bcbc3216"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-requests.json",
+      "sha256": "93f1edac419ddd4804db4108d036b0bb4d7573118c7305c59c0740c6ee324601"
+    },
+    {
+      "path": "data/reference/MEA/observations/liquid_speciation/Bottinger_2007_ChEq.csv",
+      "sha256": "583a3f7a26f4ea8cdae97cf7c2606bdbefafbb18cac085dbedd9cc2234aa3c71"
+    },
+    {
+      "path": "data/reference/MEA/observations/liquid_speciation/Matin_2012_ChEq.csv",
+      "sha256": "8625f8dd06c26f9230fedbc50c97f907cc555f986521a270c873634f9ea5776f"
+    },
+    {
+      "path": "data/reference/MEA/observations/liquid_speciation/Jakobsen_2005_ChEq.csv",
+      "sha256": "f3479866b0693a5e122e3f35e8b91fdb524ac358986e05b269a6b872e4cae3c3"
+    },
+    {
+      "path": "data/reference/MEA/manifests/speciation_target_membership.csv",
+      "sha256": "216600eb7bf1bb4ff7a5796ebfd11c5b5b9d4a9b9cd458e0c88fcedf029d8cf5"
     }
   ],
   "engine": {
-    "wheel_path": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-36485a88/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
-    "wheel_sha256": "da5a2b65668ab5647e51b917a659614bdcb4afbe7e5c3149aee2294b86a4c1bd",
+    "wheel_path": "tmp/ions-first-cf26a17b/wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "32ce708a671c24dbb0112f53bc4a18021eaa1bd10a1f04e96b9ce8d3145da52f",
     "packages": {
       "epcsaft": "0.2.0.dev0",
       "numpy": "2.5.4",
@@ -50,7 +106,7 @@
   },
   "water_path": "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/parameters.json",
   "packet_path": "analyses/mea_parameter_bundle/data/input/state-packet.json.gz",
-  "stage2_rows_path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-rows.json",
+  "stage2_rows_path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-rows.json",
   "starting_assumptions": {
     "component/carbon-dioxide/dispersion_energy_over_k": 169.21,
     "reaction:R2:correlation:a": 235.4815349923,
@@ -86,8 +142,8 @@
     "parameter_tolerance": 1e-10,
     "gradient_tolerance": 1e-08
   },
-  "budget_cpu_s": 900,
-  "budget_wall_s": 300,
+  "budget_cpu_s": 2400,
+  "budget_wall_s": 360,
   "nonfit_wall_s": 60,
   "worker_memory": {
     "allowance_bytes": 268435456,
@@ -103,119 +159,180 @@
       0.01,
       0.005
     ],
-    "raw_residual": 1e-09
+    "raw_residual": 1e-10
   },
   "cases": [
     {
-      "id": "neutral-mea-water",
-      "coordinate": {
-        "identity": "pair/monoethanolamine/water/k_ij",
-        "target": [
-          "monoethanolamine",
-          "water"
-        ],
-        "scale": 0.01,
-        "bounds": [
-          -0.5,
-          0.5
-        ]
-      },
+      "id": "ion-speciation",
+      "target_count": 26,
+      "fit_wall_s": 180,
+      "neutral_domain_ids": [],
+      "neutral_domain": {},
+      "coordinates": [
+        {
+          "identity": "component/protonated-monoethanolamine/segment_diameter",
+          "family": "segment_diameter",
+          "target": "protonated-monoethanolamine",
+          "bounds": [
+            2,
+            5.8
+          ],
+          "scale": 0.1,
+          "targets": [
+            {
+              "family": "segment_diameter",
+              "target": "protonated-monoethanolamine",
+              "factor": 1.0
+            },
+            {
+              "family": "packing_diameter",
+              "target": "protonated-monoethanolamine",
+              "factor": 0.88
+            },
+            {
+              "family": "debye_huckel_diameter",
+              "target": "protonated-monoethanolamine",
+              "factor": 0.88
+            }
+          ],
+          "ties": [
+            {
+              "identity": "component/protonated-monoethanolamine/packing_diameter",
+              "factor": 0.88
+            },
+            {
+              "identity": "component/protonated-monoethanolamine/debye_huckel_diameter",
+              "factor": 0.88
+            }
+          ]
+        },
+        {
+          "identity": "component/carbamate-anion/segment_diameter",
+          "family": "segment_diameter",
+          "target": "carbamate-anion",
+          "bounds": [
+            2,
+            5.8
+          ],
+          "scale": 0.1,
+          "targets": [
+            {
+              "family": "segment_diameter",
+              "target": "carbamate-anion",
+              "factor": 1.0
+            },
+            {
+              "family": "packing_diameter",
+              "target": "carbamate-anion",
+              "factor": 0.88
+            },
+            {
+              "family": "debye_huckel_diameter",
+              "target": "carbamate-anion",
+              "factor": 0.88
+            }
+          ],
+          "ties": [
+            {
+              "identity": "component/carbamate-anion/packing_diameter",
+              "factor": 0.88
+            },
+            {
+              "identity": "component/carbamate-anion/debye_huckel_diameter",
+              "factor": 0.88
+            }
+          ]
+        },
+        {
+          "identity": "component/protonated-monoethanolamine/dispersion_energy_over_k",
+          "family": "dispersion_energy_over_k",
+          "target": "protonated-monoethanolamine",
+          "bounds": [
+            50,
+            950
+          ],
+          "scale": 10
+        },
+        {
+          "identity": "component/carbamate-anion/dispersion_energy_over_k",
+          "family": "dispersion_energy_over_k",
+          "target": "carbamate-anion",
+          "bounds": [
+            50,
+            1000
+          ],
+          "scale": 10
+        },
+        {
+          "identity": "component/protonated-monoethanolamine/born_diameter",
+          "family": "born_diameter",
+          "target": "protonated-monoethanolamine",
+          "bounds": [
+            1,
+            7
+          ],
+          "scale": 0.1
+        },
+        {
+          "identity": "component/carbamate-anion/born_diameter",
+          "family": "born_diameter",
+          "target": "carbamate-anion",
+          "bounds": [
+            1,
+            7
+          ],
+          "scale": 0.1
+        },
+        {
+          "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+          "family": "k_ij",
+          "target": [
+            "carbamate-anion",
+            "protonated-monoethanolamine"
+          ],
+          "bounds": [
+            -2,
+            2
+          ],
+          "scale": 0.01
+        }
+      ],
       "starts": [
         {
           "id": "A",
-          "value": -0.08031722618968729
+          "values": [
+            3.563,
+            3.5605,
+            228.71,
+            533.11,
+            3.563,
+            3.5605,
+            0.0
+          ]
         },
         {
           "id": "B",
-          "value": -0.052
+          "values": [
+            3.48508556586174,
+            3.535435257213276,
+            232.6872016451942,
+            453.26524438401077,
+            3.533229271464668,
+            3.5410703082156436,
+            -0.002018134576435147
+          ]
         }
-      ],
-      "fit_wall_s": 60,
-      "neutral_domain_ids": [
-        "mea-candidate-293-15-to-393-15-k",
-        "cai-1996-neutral-refit"
-      ],
-      "neutral_domain": {
-        "kind": "fit-range",
-        "temperature_min": {
-          "magnitude": 293.15,
-          "unit": "kelvin"
-        },
-        "temperature_max": {
-          "magnitude": 436.85,
-          "unit": "kelvin"
-        },
-        "pressure_min": {
-          "magnitude": 1.0,
-          "unit": "pascal"
-        },
-        "pressure_max": {
-          "magnitude": 100000000.0,
-          "unit": "pascal"
-        }
-      },
-      "neutral_observation_temperature_K": [
-        362.81,
-        431.85
-      ],
-      "target_count": 53
-    },
-    {
-      "id": "co2-water",
-      "coordinate": {
-        "identity": "pair/carbon-dioxide/water/k_ij",
-        "target": [
-          "carbon-dioxide",
-          "water"
-        ],
-        "scale": 0.01,
-        "bounds": [
-          -0.5,
-          0.5
-        ]
-      },
-      "starts": [
-        {
-          "id": "A",
-          "value": -0.02424240226792941
-        },
-        {
-          "id": "B",
-          "value": 0.013262879176919628
-        }
-      ],
-      "fit_wall_s": 90,
-      "neutral_domain_ids": [
-        "mea-candidate-293-15-to-393-15-k",
-        "cai-1996-neutral-refit"
-      ],
-      "neutral_domain": {
-        "kind": "fit-range",
-        "temperature_min": {
-          "magnitude": 293.15,
-          "unit": "kelvin"
-        },
-        "temperature_max": {
-          "magnitude": 398.17,
-          "unit": "kelvin"
-        },
-        "pressure_min": {
-          "magnitude": 1.0,
-          "unit": "pascal"
-        },
-        "pressure_max": {
-          "magnitude": 100000000.0,
-          "unit": "pascal"
-        }
-      },
-      "neutral_observation_temperature_K": [
-        313.2,
-        393.17
-      ],
-      "target_count": 39
+      ]
     }
   ],
-  "prior_cpu_charge_s": 0.216554,
-  "prior_wall_charge_s": 0.16694672900030127,
-  "prior_charge_basis": "Initial declaration rejected by Engine before calculation: two unsupported top-level provenance fields. Removed; failure retained in declaration-check.json."
+  "prior_cpu_charge_s": 14.12463072,
+  "prior_wall_charge_s": 0.44139471,
+  "prior_charge_basis": "Initial-record derivation and paired density replays; conservative CPU bound retained in derived-starts.json",
+  "amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6203595442",
+  "reference_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/reference-parameters.json",
+  "state_requests_path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-requests.json",
+  "program_prior_cpu_s": 1173.603863,
+  "program_prior_wall_s": 431.704521983001,
+  "program_cpu_limit_s": 144000,
+  "program_wall_limit_s": 21600
 }

@@ -1,0 +1,88 @@
+{
+  "base_commit": "a05117ac5221dd08685f69f2b62b8d5f7455ec44",
+  "code_sha256": "f77c80aac898f2b8d7b546be273794f1c01de63290ac488e05960e5e9bd11308",
+  "interleaved_check": {
+    "declaration_order": [
+      "reaction:R5:correlation:a_k",
+      "pair/carbon-dioxide/water/k_ij"
+    ],
+    "native_physical": [
+      -0.07253664499178383,
+      -5756.7215627851
+    ],
+    "source_values": {
+      "pair/carbon-dioxide/water/k_ij": -0.07253664499178383,
+      "reaction:R5:correlation:a_k": 2500.112408571033
+    },
+    "maximum_absolute_source_value_difference": 0.0,
+    "absolute_tolerance": 1e-12,
+    "declaration_unchanged": true,
+    "pre_correction_misassignment_demonstrated": true
+  },
+  "retained_vector_checks": [
+    {
+      "point": "stage3-A-endpoint",
+      "physical_targets": 4,
+      "maximum_absolute_source_value_difference": 0.0,
+      "record": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage3/continuation/co2-dispersion-r5-reference/A/parameters.json",
+      "native": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage3/continuation/co2-dispersion-r5-reference/A/native-fit.json"
+    },
+    {
+      "point": "stage4-A-start",
+      "physical_targets": 11,
+      "maximum_absolute_source_value_difference": 0.0,
+      "record": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/fit/ion-speciation/A/start-parameters.json",
+      "native": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/diagnosis-chemistry/A-start-exact.json"
+    },
+    {
+      "point": "stage4-A-iteration-40",
+      "physical_targets": 11,
+      "maximum_absolute_source_value_difference": 0.0,
+      "record": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/fit/ion-speciation/A/usable-budget-endpoint.json",
+      "native": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/fit/ion-speciation/A/native-fit.json"
+    }
+  ],
+  "retained_files_unchanged": {
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage3/continuation/co2-dispersion-r5-reference/A/native-fit.json": "be5609417df8d57bfdb4aa77dced3c36f0c28deadc35b3364821e6b52e51c4dd",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage3/continuation/co2-dispersion-r5-reference/A/parameters.json": "28be95687772451c848591bb7994c7ef9bf0258246a9b37a7bc0827749b2b712",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage3/continuation/stage3a-spec.json": "d0531affb14ba6cfd3b80d59b167814571072680061164a561d2fb4e6b117009",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/diagnosis-chemistry/A-start-exact.json": "4739d181bda1de309a0c9472d72a4486ea810b65871661aa26310dd2ade5015c",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/fit/ion-speciation/A/native-fit.json": "f311393834af142a4f0508e3d428df06c5f01ade3d3e36efb0cbd95f64d04d2e",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/fit/ion-speciation/A/start-parameters.json": "d1e7fa321640ed752b926c3c42da237005a139335641365e21b9e6da635701e8",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/fit/ion-speciation/A/usable-budget-endpoint.json": "437d4b2da9156b87677a5c319bce2683e1f35cc85c7cd4327fcdade029d98e5a",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/fit/stage4-spec.json": "927b32775e4328d1ee12d400347e992c02d61a650d574949a77190389698e588"
+  },
+  "adopted_notebook_sections_unchanged": true,
+  "adopted_parameters_sha256": "66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778",
+  "affected_hash_inventories_verified": true,
+  "fit_campaign_import": "passed",
+  "fits_launched": 0,
+  "model_evaluations": 0,
+  "check_wall_s": 0.026838179997866973,
+  "ruff_changed_script": {
+    "command": [
+      "ruff",
+      "check",
+      "analyses/mea_parameter_bundle/scripts/fit_campaign.py"
+    ],
+    "exit_code": 0,
+    "output": "All checks passed!"
+  },
+  "ruff_unchanged_fit_observations": {
+    "preexisting_findings_unchanged": true,
+    "codes": [
+      "E402",
+      "E402",
+      "E402",
+      "E402"
+    ]
+  },
+  "notebook_render": {
+    "command": "nice -n 10 bash analyses/render.sh mea_parameter_bundle/notebook.qmd",
+    "exit_code": 0,
+    "output": "analyses/_site/mea_parameter_bundle/notebook.html",
+    "execution_disabled": true,
+    "corrected_text_present": true,
+    "preview_service_touched": false
+  }
+}
