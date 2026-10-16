@@ -244,6 +244,85 @@ def fitted_parameter_values(coordinates, physical):
     return {identity:value/factor for (identity,factor),value in zip(targets,physical,strict=True)}
 
 
+def stage5_study(spec, out, started):
+    """Yang Eqs. 1a/2a/2b reduction on Agieienko ESI Tables S1/S2."""
+    import fit_observations as o
+    import numpy as np
+    reference = load(ROOT/spec['reference_path'])
+    template = load(ROOT/spec['dielectric_template_path'])
+    rows = list(csv.DictReader((ROOT/spec['dielectric_rows_path']).open()))
+    assert len(rows) == 14
+    model = o.epcsaft.Mixture(o.epcsaft.Parameters.from_mapping(reference))
+    masses = {c['component_id']:c['fixed']['molar_mass']['value']['magnitude'] for c in reference['components']}
+    compositions, density, fractions = [], [], []
+    for row in rows:
+        w = float(row['MEA_wt_percent'])/100
+        amounts = {'monoethanolamine':w/masses['monoethanolamine'], 'water':(1-w)/masses['water']}
+        x = {k:v/sum(amounts.values()) for k,v in amounts.items()}
+        state = model.state(298.15,P=101325.,x=x,phase='liquid')
+        assert state.pressure_density_derivative > 0
+        compositions.append(x)
+        density.append(state.molar_density/1000)
+        fractions.append(x['monoethanolamine'])
+        row.update(native_density_mol_L=density[-1],native_density_kg_m3=state.molar_density*sum(x[k]*masses[k] for k in x),
+            native_pressure_Pa=state.pressure,dP_drho=state.pressure_density_derivative,
+            measured_density_kg_m3=1000*float(row['density_g_cm3']))
+    A, C, T = .3777, 1403., 298.15
+    K, x, rho = C/T-1, np.array(fractions), np.array(density)
+    observed = np.array([float(r['epsilon_s']) for r in rows])
+    scale = .01*observed
+    H = np.column_stack((rho*x,rho*x*x))/scale[:,None]
+    q, _, rank, singular = np.linalg.lstsq(H,(observed-1-rho*A*K)/scale,rcond=None)
+    def roots(coefficients):
+        discriminant = coefficients[0]**2-4*K*A*coefficients[1]
+        assert discriminant > 0, 'distinct real dielectric roots required'
+        u = (coefficients[0]+np.array([-1,1])*np.sqrt(discriminant))/(2*K)
+        pairs = [(float(A+b),float(C+T*(coefficients[0]-K*b)/A)) for b in u]
+        assert all(v>0 and t>393.15 for v,t in pairs), 'inadmissible dielectric root'
+        return float(discriminant), pairs
+    delta, pairs = roots(q)
+    assert rank == 2
+    covariance = np.linalg.inv(H.T@H)
+    predicted = 1+rho*(A*K+q[0]*x+q[1]*x*x)
+    result = dict(q=q.tolist(),rank=int(rank),singular_values=singular.tolist(),condition=float(singular[0]/singular[-1]),
+        discriminant=delta,scale_covariance=covariance.tolist(),cost=float(.5*np.sum(((predicted-observed)/scale)**2)),branches=[],sensitivity=[])
+    for factor in (.99,1.01):
+        shifted = np.linalg.lstsq(H,(factor*observed-1-rho*A*K)/scale,rcond=None)[0]
+        disc, values = roots(shifted)
+        result['sensitivity'].append(dict(coherent_permittivity_factor=factor,q=shifted.tolist(),discriminant=disc,pairs=values))
+    for label,(volume,temperature) in zip(('smaller-dV','larger-dV'),pairs,strict=True):
+        mapping = json.loads(json.dumps(reference))
+        next(f for f in mapping['model_families'] if f['kind']=='permittivity')['choice'] = 'solvent-density-temperature'
+        mapping['correlations'] = [r for r in mapping['correlations'] if r['family']!='relative_permittivity']
+        for component,source in zip(mapping['components'],template['components'],strict=True):
+            assert component['component_id'] == source['component_id']
+            component['coefficients'] = [r for r in component['coefficients'] if r['family']!='relative_permittivity']
+            component['coefficients'].extend(json.loads(json.dumps(r)) for r in source['coefficients'] if r['family'] in ('dielectric_volume','dielectric_temperature'))
+        mapping = o.s.with_parameter_values(mapping,{'component/monoethanolamine/dielectric_volume':volume,'component/monoethanolamine/dielectric_temperature':temperature})
+        mapping['sources'].append(dict(source_id='joint-recalibration-170-stage5',citation='Yang2024 Eqs.1a/2a/2b Table6; AgieienkoBuchner2024 ESI S1/S2',use_basis=spec['purpose']))
+        for node in o.s._identified(mapping):
+            if node.get('family') in ('dielectric_volume','dielectric_temperature'):
+                node['provenance'].update(source_id='joint-recalibration-170-stage5',locator=spec['dielectric_rows_path']+'; fixed Yang water and assumed CO2 pair; MEA pair from reduction.json')
+        mapping.update(document_id='joint-recalibration-170-stage5-'+label,purpose=spec['purpose'])
+        native = o.epcsaft.Mixture(o.epcsaft.Parameters.from_mapping(mapping))
+        replay = np.array([native.state(T,rho=density[i]*1000,x=composition).bulk_relative_permittivity for i,composition in enumerate(compositions)])
+        error = float(np.max(np.abs(replay-predicted)))
+        u, v = volume-A, temperature-C
+        transform = np.linalg.inv(np.array([[K,A/T],[v/T,u/T]]))
+        path = out/('parameters.json' if label=='smaller-dV' else 'larger-dV-parameters.json')
+        write(path,mapping)
+        result['branches'].append(dict(branch=label,dielectric_volume_L_mol=volume,dielectric_temperature_K=temperature,
+            max_abs_native_replay_epsilon=error,scale_covariance_dV_dT=(transform@covariance@transform.T).tolist(),path=str(path.relative_to(ROOT)),sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
+        for i,row in enumerate(rows):
+            row.update(derived_MEA_mole_fraction=float(x[i]),reduced_epsilon=float(predicted[i]),residual_epsilon=float(predicted[i]-observed[i]),weighted_residual=float((predicted[i]-observed[i])/scale[i]))
+            row[label+'_epsilon'] = float(replay[i])
+        assert error <= 1e-10, 'native dielectric replay failed'
+    write(out/'rows.json',rows)
+    write(out/'reduction.json',result)
+    write(out/'timing.json',dict(cpu_s=cpu_seconds(),wall_s=time.monotonic()-started))
+    print(result,flush=True)
+
+
 def stage2_study(spec, out, started):
     import fit_observations as o
     import numpy as np
@@ -425,7 +504,7 @@ def run(spec_path, output_dir, *, case_ids, operation):
         write(out/'inputs.json',verify(spec))
         import fit_observations as o
         if spec.get('study') == 'joint-recalibration-170' and operation=='fit' and case_ids==[f"stage{spec['stage']}"]:
-            stage2_study(spec,out,started)
+            (stage5_study if spec['stage']==5 else stage2_study)(spec,out,started)
             return out
         if spec.get('study') == 'water-124' and operation=='fit' and case_ids==['water-124']:
             water_study(spec,out,started)

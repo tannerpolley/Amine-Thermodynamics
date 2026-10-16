@@ -393,14 +393,56 @@
       ]
     }
   ],
-  "prior_cpu_charge_s": 14.080128,
-  "prior_wall_charge_s": 14.206447564992704,
+  "prior_cpu_charge_s": 15.080128,
+  "prior_wall_charge_s": 15.206447564992704,
   "prior_charge_basis": "Initial-record derivation and paired density replays; conservative CPU bound retained in derived-starts.json",
   "amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6204801680",
   "reference_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/reference-parameters.json",
   "state_requests_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/precursor-requests.json",
-  "program_prior_cpu_s": 1398.79153072,
-  "program_prior_wall_s": 467.340689828,
+  "program_prior_cpu_s": 1400.01456172,
+  "program_prior_wall_s": 468.52463973199247,
   "program_cpu_limit_s": 144000,
-  "program_wall_limit_s": 21600
+  "program_wall_limit_s": 21600,
+  "shared_stage5": {
+    "reduction_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/reduction.json",
+    "reduction_sha256": "bed06086cfa121d0c69b55d9e584eaf60ca198635d2588988c7d6cef7da66717",
+    "branches": [
+      {
+        "branch": "smaller-dV",
+        "dielectric_volume_L_mol": 0.2464540312088979,
+        "dielectric_temperature_K": 2436.4423007273617,
+        "max_abs_native_replay_epsilon": 2.842170943040401e-14,
+        "scale_covariance_dV_dT": [
+          [
+            5.5615001884638315e-05,
+            -0.36591386274737514
+          ],
+          [
+            -0.36591386274737514,
+            2581.6453473103675
+          ]
+        ],
+        "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json",
+        "sha256": "0fcb0ef01b78e44ebe1e3c6e3338b46303e9821dd5efac61ad3e39d477851e71"
+      },
+      {
+        "branch": "larger-dV",
+        "dielectric_volume_L_mol": 0.7309888238084122,
+        "dielectric_temperature_K": 1019.0786110170793,
+        "max_abs_native_replay_epsilon": 2.842170943040401e-14,
+        "scale_covariance_dV_dT": [
+          [
+            0.0003017059746775267,
+            -0.3659138627473755
+          ],
+          [
+            -0.36591386274737553,
+            475.88786072133706
+          ]
+        ],
+        "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/larger-dV-parameters.json",
+        "sha256": "2ce456134fc6bc716ea28708a09f73ac2daf5bc392f61a38c2a06846097ba1d2"
+      }
+    ]
+  }
 }
