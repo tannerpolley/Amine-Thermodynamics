@@ -41,6 +41,29 @@ Engine's frozen F1 fit needs 12 Jacobian evaluations. This crawl coincides
 with the seven active bounds already reported for Route 2b; that causal link
 is not tested here.
 
+Stopping tolerance is a minor part. Replaying each retained cost history
+under Ceres's function-tolerance rule (stop when an accepted step lowers the
+cost by at most ftol relative), with the fits' ftol 1e-10 as the baseline:
+
+| Fit | Accepted / rejected | Steps under 0.01 % | Time after within 0.1 % of final | ftol 1e-4 would stop at |
+|---|---|---|---|---|
+| Route 2 converge-1 (time limit) | 62 / 19 | 26 | 0 s | 552 of 1,206 s, cost +2.92 % |
+| Route 2b larger-dV (converged) | 56 / 26 | 22 | 164 s (14 %) | 574 of 1,196 s, cost +1.66 % |
+| Route 2b smaller-dV (time limit) | 45 / 8 | 19 | 180 s (15 %) | 560 of 1,214 s, cost +0.88 % |
+
+The small steps sit on plateaus 0.9–2.9 % above the final cost that last
+400–600 s and end in real drops. A looser tolerance would stop on the
+plateau, not at the minimum. The plateau cause (bound-limited steps or
+ill-conditioning) is not tested: the retained histories hold costs and times
+only, not per-iteration parameters or trust-region radii. In the larger-dV fit
+the 56 accepted steps took 1,140 s and the 26 rejected trials 56 s.
+
+Measured compute in the program to date is about 6,790 s: the 484 s before
+Route 1 entry, 5,716 s of retained call timings in amendments 2–4 (one per call,
+command-time duplicates removed), and about 590 s for these probes. The six long
+reactive fits are 5,284 s of it. The rest of the 19,605.51 s ledger is the fixed
+conservative charges for preparation, review and reporting.
+
 ## Third factor: host contention
 
 Our own F1 timing fit (wheel `36485a88`, `results/fit-timing-36485a88*`)
