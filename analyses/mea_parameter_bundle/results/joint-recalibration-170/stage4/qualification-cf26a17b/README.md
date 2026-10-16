@@ -1,5 +1,7 @@
 # Engine cf26a17b unchanged-record requalification
 
+Historical evidence, superseded for further calibration by [#170 amendment 2](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6204801680) on 15 October 2026. No stopped endpoint here is adopted or supplies a start or calibration input for either amended sequence. Both sequences wait for the one merged-main wheel supplied for [Engine #557](https://github.com/tannerpolley/ePC-SAFT/issues/557), followed by its required qualification. Reuse is limited to the inputs and checks explicitly retained by amendment 2. Earlier design, next-step and pending-decision statements below describe the historical calculation; they do not authorize another ions-first fit or the I₀/S₁/I₁/S₂ sequence.
+
 All four records reproduce their retained costs and weighted residuals at the required relative cost and absolute residual limits of $10^{-8}$. This is numerical verification; no parameters were estimated or adopted.
 
 | Record | Relative cost difference | Maximum weighted-row difference | Result |
