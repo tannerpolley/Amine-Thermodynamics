@@ -1,0 +1,117 @@
+"""Verify retained arrays and write the bounded diagnostic report; no Engine calls."""
+import json,csv,ast,time,resource,hashlib
+from pathlib import Path
+START=time.monotonic()
+OUT=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/diagnosis-refresh-swap')
+load=lambda name:json.loads((OUT/name).read_text())
+def write(name,value):(OUT/name).write_text(json.dumps(value,indent=2,allow_nan=False)+'\n')
+s=load('summary.json');basis=load('chemistry-coordinate-basis.json');inp=load('inputs.json')
+rows=list(csv.DictReader((OUT/'target-costs.csv').open()));gr=list(csv.DictReader((OUT/'coordinate-gradients-and-steps.csv').open()))
+old=json.loads((OUT.parent/'qualification-84ca269d/current-complete/replay/baseline/predictions.json').read_text())
+old={r['target']:r for r in old}
+def pool_cost_change(state):
+    def total(variant):
+        return sum(float(r['cost']) for r in rows if r['variant']==variant and r['target'].startswith('Jakobsen2005_state_'+state+'::') and ('HCO3-' in r['target'] or 'CO3^2-' in r['target']))
+    return total('base')-total('8-old-targets')
+base=[r for r in rows if r['variant']=='base'][:149]
+maximum=max(abs(float(r['weighted_residual'])-old[r['target']]['weighted_residual']) for r in base)
+assert maximum<1e-8,maximum
+for rec in inp['files']:
+    assert hashlib.sha256(Path(rec['path']).read_bytes()).hexdigest()==rec['sha256'],rec['path']
+for name,rec in s.items():
+    assert rec['available']==(168 if name=='8-old-targets' else 166)
+    assert not rec['failures']
+    for objective,result in rec['objectives'].items():
+        assert result['rank']==14
+        assert result['linear_solve_normal_equation_residual_inf']<1e-8
+    rr=[r for r in rows if r['variant']==name]
+    assert abs(sum(float(r['cost']) for r in rr)-rec['objectives']['training']['cost'])<1e-10
+    assert abs(sum(x['cost'] for x in rec['families'].values())-rec['objectives']['training']['cost'])<1e-10
+scripts={}
+for f in sorted(OUT.glob('*.py.txt')):
+    tree=ast.parse(f.read_text());assert not any(isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='fit' for n in ast.walk(tree))
+    scripts[f.name]=dict(total_lines=len(f.read_text().splitlines()),statement_lines=len({n.lineno for n in ast.walk(tree) if isinstance(n,ast.stmt)}))
+write('verification.json',dict(adopted_common149_cost=s['base']['objectives']['common149']['cost'],
+    adopted_qualification_max_weighted_residual_difference=maximum,adopted_qualification_limit=1e-8,
+    all_166_rows_available_for_each_current_variant=True,old_comparator_rows_available=168,returned_solve_failures=0,
+    all_14_columns_full_rank=True,maximum_linear_solve_normal_equation_residual_inf=max(d['objectives']['training']['linear_solve_normal_equation_residual_inf'] for d in s.values()),
+    all_input_hashes_unchanged=True,fit_calls=0,production_executable_lines_added=0,campaign_code_count=812,campaign_code_limit=900,
+    inert_scripts=scripts,independent_delivered_review='Parent responsibility; not performed here.'))
+# GNU time rounds to hundredths; conservatively add 0.02 CPU-s / 0.01 wall-s per command.
+setup_cpu,setup_wall=14.43+.13+.02,14.59+.01
+eval_cpu,eval_wall=1487.75+6.10+.02,152.11+.01
+reduce=load('reduction-timing.json');overhead=15.
+u=resource.getrusage(resource.RUSAGE_SELF);report_cpu=u.ru_utime+u.ru_stime;report_wall=time.monotonic()-START
+charge_cpu=setup_cpu+eval_cpu+reduce['cpu_s']+overhead
+charge_wall=setup_wall+eval_wall+reduce['wall_s']+overhead
+account=dict(initial_program_cpu_s=21999.743957976,initial_program_wall_lower_bound_s=3145.449697966,
+    setup_command_charge_cpu_s=setup_cpu,setup_command_charge_wall_s=setup_wall,
+    evaluation_command_charge_cpu_s=eval_cpu,evaluation_command_charge_wall_s=eval_wall,
+    exact_post_reap_native_command_cpu_s=load('evaluation-timing.json')['cpu_s'],
+    reduction_cpu_s=reduce['cpu_s'],reduction_wall_s=reduce['wall_s'],
+    preparation_reporting_verification_commit_charge_cpu_s=overhead,preparation_reporting_verification_commit_charge_wall_s=overhead,
+    measured_report_subset_cpu_s=report_cpu,measured_report_subset_wall_s=report_wall,
+    diagnosis_charge_cpu_s=charge_cpu,diagnosis_charge_wall_s=charge_wall,
+    diagnosis_CPU_allowance_s=900,diagnosis_wall_allowance_s=300,CPU_allowance_exceeded_by_s=charge_cpu-900,
+    wall_allowance_remaining_s=300-charge_wall,cumulative_program_cpu_s=21999.743957976+charge_cpu,
+    cumulative_program_wall_lower_bound_s=3145.449697966+charge_wall,earlier_unmetered_overhead='Unknown, preserved.',
+    reason='Per-process RLIMIT_CPU did not cap aggregate pool CPU; the post-reap assertion detected the overrun after all chunks completed.',
+    all_workers_reaped=True,additional_native_evaluations_after_overrun=0,
+    accounting='CPU includes all reaped children. Conservative GNU rounding charges cover final cleanup. Report CPU is inside the 15/15 overhead, not added twice.')
+write('timing-and-program-accounting.json',account)
+labels={'base':'Adopted vector','1-water':'1 Water + association edges','2-MEA-water':'2 MEA–water interaction',
+    '3-CO2-water':'3 CO₂–water pivot + slope','4-CO2-energy':'4 CO₂ dispersion/k','5-R4':'5 R4 source law (identical)',
+    '6-dielectric':'6 Smaller-dV dielectric','7-bicarbonate-water':'7 Bicarbonate–water = 0','9-all-fixed':'9 All fixed refreshes','8-old-targets':'Old separate Jakobsen comparator'}
+order=['base','3-CO2-water','7-bicarbonate-water','6-dielectric','1-water','4-CO2-energy','2-MEA-water','5-R4','9-all-fixed','8-old-targets']
+def fmt(v):return f'{v:.6f}'
+def short(t):return t.replace('vle_obs_','P').replace('-pco2','').replace('Jakobsen2005_state_','Jakobsen ').replace('Matin2012_state_','Matin ').replace('vinjarapu2024_source_table4_','Vinjarapu Table 4 row ')
+text=['# Fixed-input swaps at the adopted MEA parameter vector','',
+'**Classification: inconclusive for attributing all five later-active bounds to one or two refreshes.** The CO₂–water interaction and bicarbonate reset cause the largest cost increases, while the dielectric change makes the largest change in the five-bound Gauss–Newton direction. Every current-definition R2 step points toward increasing its shift, away from the later lower bound. Local linear solves therefore do not establish the cause or location of the later nonlinear optimum.','',
+f'**The CPU allowance was exceeded.** Aggregate evaluation CPU after all workers were reaped is {load("evaluation-timing.json")["cpu_s"]:.6f} s. The complete conservative diagnosis charge is {charge_cpu:.6f} CPU-s / {charge_wall:.6f} active wall-s, exceeding 900 CPU-s by {charge_cpu-900:.6f} s; the 300-s active-wall allowance is met. Per-process CPU limits did not cap the pool total, and the assertion detected this only after completion. All numerical chunks had returned. No further native calculation was made; retained-array arithmetic produced this report. The run is not a budget-compliant execution.','',
+'## Basis and fixed-vector method','',
+'The owner authorized this diagnosis on 2026-10-16. Work starts at `a379f9631a264fb5659247df9ea13ba5d6cc2169` in the named existing worktree. The adopted record hash is `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`. Engine is merged `84ca269dfa0c7068417a1c4c326acae276d4d965`, wheel SHA-256 `98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a`; all installed wheel files match. This is numerical verification and conditional assessment against calibration observations, without parameter estimation or physical validation.','',
+'Only the named fixed inputs are substituted. Fitted ion, interaction and chemistry values are retained, except item 7 explicitly resets its fitted bicarbonate–water coefficient from 0.5 to zero. Water replaces its pure coefficients, self-association and refreshed CO₂–water association edges; combining-rule edges consume the changed water inputs. The dielectric substitution replaces the entire permittivity declaration and removes its superseded coefficients, preserving all other fitted values. Source hashes, exact parameter documents, target definitions, predictions and all 14 exact columns are retained beside this file.','',
+'R4 is already a = 2.151, b_k = −1545.3 K, so item 5 reuses the identical baseline. Items 1–4, 6 and 7 differ. The CO₂ dispersion changes from 173.44025 to 169.21 K; bicarbonate–water changes from 0.5 to 0. The adopted record uses solvent-only permittivity; stage 5 changes to solvent-density-temperature with smaller MEA dV = 0.2464540312088979 L/mol and dT = 2436.4423007273617 K. Exact coefficient differences are in `inputs.json`.','',
+f'The source-relative adopted coordinates are R2 shift {basis["adopted_R2_shift_J_mol"]:.9f} J/mol, R5 shift {basis["adopted_R5_shift_J_mol"]:.9f} J/mol and unshifted R5 a_k = {basis["adopted_R5_unshifted_a_K"]:.9f} K, at 313.15 K. All lie within the later Route 2 bounds. The stored effective R5 a_k = 3037.6399534696106 K includes its shift; it is not the unshifted boxed coordinate. Native columns are evaluated as increments about unchanged adopted chemistry, then expressed in the source-increasing Route 2 coordinates.','',
+'Cost is C = ½ rᵀr for declared weighted residuals. The exact native Jacobian is multiplied by square-root observation weights; coordinate scales are the unchanged Route 2 scales. Gradient is g = Jᵀr. The reported projected gradient is its infinity norm after removing outward cost-decreasing directions at active box sides. The Gauss–Newton step solves J δq = −r once by SVD least squares, cutoff 1e-14; no model reevaluation, iteration, line search, clipping or fitting follows. The source-increasing R5 column reverses native orientation.','',
+'## Costs and movement toward the later bounds','',
+'The five signed step entries below are toward bicarbonate–water upper, mutual carbamate–MEAH⁺ lower, carbamate diameter upper, MEAH⁺ Born upper and R2 shift lower, in that order. Positive means toward that later bound; negative means away. Units are dimensionless, dimensionless, Å, Å, kJ/mol. Steps are unconstrained local directions and often exceed the boxes by large factors. They are not feasible proposed parameter updates.','',
+'| Swap | Common-149 | Change | Training | Change | Projected gradient | Toward / 5 | Signed physical GN step |','|---|---:|---:|---:|---:|---:|---:|---|']
+for name in order:
+    d=s[name];tr=d['objectives']['training'];st=tr['later_bound_signed_physical_step'].copy();st[-1]/=1000
+    text.append(f'| {labels[name]} | {fmt(d["objectives"]["common149"]["cost"])} | {fmt(d["delta_common149"])} | {fmt(tr["cost"])} | {fmt(d["delta_training_current166"])} | {fmt(tr["projected_gradient_infinity_norm"])} | {tr["later_bounds_toward_count"]} | '+', '.join(f'{v:+.3f}' for v in st)+' |')
+text+=['','Changes above use the adopted vector on the current 166-row declaration. The final old-definition comparator has 168 rows and its change has the opposite orientation to the requested old → new target swap. For item 8, common-149 remains 32.056684909; old 168-row cost 73.198226007 becomes corrected pooled 166-row cost 57.513698694, a **decrease of 15.684527313**. Its projected-gradient norm changes from 5.167840900 to 6.813177071.','',
+'The adopted fit itself used 149 rows. Adding the current 17 rows raises its cost by 25.457013785: 18.328163043 pooled Jakobsen, 3.117048732 restored species and 4.011802011 Cp. That addition is distinct from pooling and correcting the previously declared eight Jakobsen targets. The 168-row comparator holds the other 160 rows and unit Jakobsen weights fixed, and preserves the old incorrect 022 feed; its full declaration is retained. It was never an adopted fit objective.','',
+'Cost-increase ranking for individual fixed swaps is **3 > 7 > 6 > 1 > 4 > 2 > 5**. Contributions are not additive: all-fixed training increases by 135.281571732, versus 189.997578303 for the sum of individual increases.','',
+'For comparing movement across unlike units, S is the sum of each signed five-bound physical step divided by that coordinate’s full box width. It is a transparent reporting projection, not a fit criterion. Relative to the unchanged current-166 baseline, ΔS ranks **dielectric +51.664547 > bicarbonate reset +16.528887 > CO₂–water +4.871931 > MEA–water +1.133224 > R4 0 > CO₂ energy −0.217121 > water −2.547325**. All-fixed ΔS = +44.227639. Corrected pooled targets versus old separate definitions give ΔS = +42.756630. The full signed vectors must accompany this scalar: R2 points away from its later lower bound for every current-definition variant.','',
+'## Training family breakdown','',
+'| Swap | Pressure 47 | Species 94 | Heat 8 | Restored 7 | Jakobsen 6 (old 8) | Cp 4 |','|---|---:|---:|---:|---:|---:|---:|']
+for name in order:
+    f=s[name]['families'];vals=[f[k]['cost'] for k in ['common-pressure','common-species','common-Vinjarapu-heat','restored-species','Jakobsen-old' if name=='8-old-targets' else 'Jakobsen-pooled','equilibrium-Cp']]
+    text.append('| '+labels[name]+' | '+' | '.join(fmt(v) for v in vals)+' |')
+text+=['','## Gradients of the five later-active coordinates','',
+'These are source-increasing scaled-coordinate derivatives of current training cost. Negative favors an increase; positive favors a decrease. Divide by 0.01, 0.01, 0.1 Å, 0.1 Å and 2500 J/mol respectively for physical-unit derivatives. All 14 gradients and steps for both objectives are in `coordinate-gradients-and-steps.csv`.','',
+'| Swap | Bicarbonate–water | Mutual ions | Carbamate size | MEAH⁺ Born | R2 shift |','|---|---:|---:|---:|---:|---:|']
+for name in order:
+    g=s[name]['objectives']['training']['gradient_scaled'];text.append('| '+labels[name]+' | '+' | '.join(f'{g[i]:+.9f}' for i in [2,3,6,7,10])+' |')
+text+=['','## Top contributing targets','',
+'The next table ranks increases in per-target cost against the adopted vector on the same current declaration; it isolates the damage attributable to each fixed swap. `P0191`, for example, means `vle_obs_0191-pco2`. `summary.json` also gives the three largest absolute costs for every variant.','',
+'| Swap | Largest three increases in target cost |','|---|---|']
+for name in ['3-CO2-water','7-bicarbonate-water','6-dielectric','1-water','4-CO2-energy','2-MEA-water','9-all-fixed']:
+    text.append('| '+labels[name]+' | '+'; '.join(f'{short(x["target"])} +{x["delta_cost"]:.6f}' for x in s[name]['top3_cost_increase'])+' |')
+text+=['| 5 R4 | Identical; every target-cost change is zero. |',
+f'| 8 Target definitions | Grouping the old two inorganic numerators: 022 pool cost decreases {-pool_cost_change("022"):.6f}; 011 pool decreases {-pool_cost_change("011"):.6f}; 022 carbamate decreases 0.923398. Definitions and the 022 feed change together in this comparison. |','',
+'The corrected target-only vector’s three largest absolute costs are Jakobsen 022 inorganic pool 8.581666012, Jakobsen 011 MEAH⁺ ratio 6.382255230 and Matin 017 MEA 2.378233687. These are also item 5’s top three absolute contributions.','',
+'## Numerical coverage, failures and limits','',
+f'Every current-definition case returns all 166 rows; the old comparator returns all 168, with all 14 exact columns and zero returned solve failures. Every weighted Jacobian has rank 14. Training condition numbers span 7387.469–20170.431. The largest normal-equation residual of a one-step solve is {max(d["objectives"]["training"]["linear_solve_normal_equation_residual_inf"] for d in s.values()):.3g}. The adopted common-149 cost reproduces 32.056684908725686, and maximum weighted residual difference from the qualified unchanged replay is {maximum:.3g}, below its retained 1e-8 limit.','',
+'Two command failures are retained. The first declaration assembly left old constant-permittivity coefficients in the new dielectric declaration; removing superseded coefficients corrected that inert assembly. The second command returned every chunk, reaped the pool, and then failed its CPU assertion. Neither is a returned thermodynamic row failure. The latter is a real allowance violation.','',
+'No measurement-uncertainty propagation or physical validation is performed. Conditioning, very large unconstrained steps, non-additive input effects and opposing R2 directions prevent inference of the constrained nonlinear optimum from this point. The original adopted fit released fewer than these 14 coordinates, so its full-14 gradient need not vanish. The absent literature shelf is recorded; no new paper-validity judgment is made. Existing declarations and retained precursor/R4 diagnoses supply the source basis. Independent delivered review and any notebook promotion remain with the parent.','',
+'## Options for the parent, without selection','',
+'- Retain the adopted CO₂–water interaction or bicarbonate–water coefficient in a new declared comparison. This removes the two largest isolated cost increases, but relinquishes the corresponding refreshed fixed value and requires an explicit consistency decision with its earlier estimation stage.','- Re-estimate the influential binary, dielectric or bicarbonate inputs jointly with reactive quantities. This may resolve compensation, but changes the free set and identification problem; it requires a new design and authority, with no fit authorized by this diagnosis.','- Revisit source and target bases before choosing fixed values: CO₂–water law, dielectric temperature dependence and the Jakobsen preparation/pooling conventions. This can distinguish incompatible input assumptions from compensation, but the present cost ranking alone does not establish that any source is wrong.','',
+'## Resources, files and delivery','',
+f'The authorized stdlib pool has 32 processes, each at nice 10 and single-thread BLAS/OpenMP. Measured per-process peak RSS is 72,433,664 bytes; free memory before the pool is 18,116,419,584 bytes; the sizing rule reserves twice measured RSS per process. No native fitting worker interface is used. Native exact evaluation remains serial inside each host process. All workers are reaped before aggregate CPU is recorded.','',
+f'The initial failed command is conservatively charged {setup_cpu:.6f} CPU-s / {setup_wall:.6f} s; the evaluation command {eval_cpu:.6f} CPU-s / {eval_wall:.6f} s; reduction {reduce["cpu_s"]:.6f} CPU-s / {reduce["wall_s"]:.6f} s; preparation/reporting/verification/commit reserve 15 CPU-s / 15 active wall-s. This reserve includes this report and is not charged twice. Total {charge_cpu:.6f} CPU-s / {charge_wall:.6f} active wall-s; cumulative program {account["cumulative_program_cpu_s"]:.6f} CPU-s / at least {account["cumulative_program_wall_lower_bound_s"]:.6f} s. Earlier unmetered overhead remains unknown.','',
+'Production executable additions: **0**; campaign remains **812/900**. Diagnostic scripts are inert `.py.txt` files, counted separately: '+', '.join(f'`{name}` {counts["total_lines"]} total lines ({counts["statement_lines"]} statement lines)' for name,counts in scripts.items())+'. They preserve the actual failed aggregate-limit approach for inspection; `evaluate.py.txt` must not be rerun under this exhausted diagnosis allowance.','',
+'`ranking.csv`, `family-costs.csv`, `target-costs.csv`, `coordinate-gradients-and-steps.csv`, parameter documents and exact matrices retain the numerical evidence. `verification.json` and `timing-and-program-accounting.json` retain checks and charges. Route 2’s README now attributes retaining the partial to the orchestrator and records the owner’s later diagnosis authorization. No fit, production-path change, notebook edit, service action, subagent, push, merge or GitHub write occurs.']
+(OUT/'README.md').write_text('\n'.join(text)+'\n')
+print(json.dumps(account,indent=2));print('weighted residual replay difference',maximum);print('inert scripts',scripts)
