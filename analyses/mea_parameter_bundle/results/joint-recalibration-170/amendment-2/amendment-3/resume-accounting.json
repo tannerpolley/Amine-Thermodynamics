@@ -1,6 +1,6 @@
 {
   "entry_commit": "4c9b5f5762e9546db6d1497ba1a9c1ecfb8fa204",
-  "recorded_utc": "2026-10-16T08:39:19.031697+00:00",
+  "recorded_utc": "2026-10-16T08:47:54.824072+00:00",
   "tracking_start_monotonic_s": 122499.061281666,
   "program_entry_cpu_s": 51278.048914,
   "program_entry_active_wall_s": 9909.718203,
@@ -32,5 +32,30 @@
   "numerical_cpu_charge_s": 49.56,
   "numerical_command_wall_s": 49.62,
   "remaining_mandatory_check_reserve_cpu_s": 17950.44,
-  "remaining_mandatory_check_reserve_wall_s": 1950.38
+  "remaining_mandatory_check_reserve_wall_s": 1950.38,
+  "tracked_active_wall_s": 515.7923732070049,
+  "finish_active_wall_reserve_s": 180,
+  "program_cpu_limit_s": 144000,
+  "program_active_wall_limit_s": 21600,
+  "fit_calls": 0,
+  "information_evaluations": 1,
+  "executable_added": 4,
+  "executable_removed": 1,
+  "campaign_executable_gross": 861,
+  "campaign_executable_ceiling": 900,
+  "stop": "Larger-dV source/seed A full/free condition 562848.8359854996 > 10000; no subsequent start or fit launched",
+  "earlier_overhead": "Earlier overhead before the recorded ledger is unknowable. Orchestrator decision admits that ledger as the accounting basis.",
+  "notes": [
+    "Initial resumed preparation is conservatively reserved at 1200 s before the monotonic tracking interval; it is not a measured interval.",
+    "Monotonic interval includes the information command, all static checks, local analysis, reporting, and commits; the command wall is not added twice.",
+    "Two import-only attempts failed before any thermodynamic child call; their measured CPU 0.19 + 0.18 s is inside the 100 CPU-s static/reporting reserve.",
+    "CPU charge is max(internal whole command 49.513093, external whole command 49.54) + 0.02 s rounding allowance = 49.56 CPU-s; child-only CPU is shown separately.",
+    "Outstanding mandatory-check reserve is not charged as executed work. No later fit is admitted after the release failure.",
+    "Historical idle time 5215.0172 s is disclosed separately and excluded from active wall."
+  ],
+  "resumed_active_wall_charge_s": 1895.7923732070049,
+  "program_active_wall_charge_s": 11805.510576207005,
+  "program_cpu_charge_s": 51427.608914,
+  "program_cpu_remaining_s": 92572.391086,
+  "program_active_wall_remaining_s": 9794.489423792995
 }
