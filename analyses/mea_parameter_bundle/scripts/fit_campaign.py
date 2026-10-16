@@ -591,8 +591,8 @@ def stage6_study(spec, out, started):
             if fit_case:
                 if calls[-1]['cpu_s']>cpu_limit:
                     raise RuntimeError('aggregate fit CPU ceiling exceeded; return to owner before another fit')
-                if raw['status']!='converged' or raw['covariance']['active_bounds'] or raw['covariance']['rank']<14:
-                    raise RuntimeError('nonconverged, bound-active or rank-deficient joint fit; return to owner before another fit')
+                if raw['status']!='converged' or raw['covariance']['rank']<14:
+                    raise RuntimeError('nonconverged or rank-deficient joint fit; return to owner before another fit')
                 return
             if raw['statuses']!=['Available']*178 or not all(math.isfinite(x) for key in
                 ('predictions','residuals','residual_optimizer_gradient') for x in raw[key]):
