@@ -1,6 +1,6 @@
-# Route 2b: release evaluation interrupted; both fits unrun
+# Route 2b: four release tests pass; fits pending
 
-Neither dielectric branch has a new fit. The first start-A derivative evaluation, on the smaller-d_V branch, reaches the inherited **60 s non-fit wall guard** before returning its Jacobian. It is killed after **60.057906468 s**, with exit code -9. All ranks and condition numbers are unavailable; no conditioning or rank conclusion follows. The required release-test stop prevents the larger-branch evaluation and both fits. This is an execution non-result, not calibration evidence or a physical limitation.
+Both dielectric branches pass the enlarged-coordinate release tests at start A, lambda 0 and 1. Mandatory rank is 14/14, augmented rank 16/16 and projected dispersion rank 2/2 in all four tests. All 217 rows return Available on each branch. Neither branch has a new fit yet. The first historical start-A derivative evaluation, on the smaller-d_V branch, reaches the inherited **60 s non-fit wall guard** before returning its Jacobian. It is killed after **60.057906468 s**, with exit code -9. All ranks and condition numbers are unavailable; no conditioning or rank conclusion follows. The required release-test stop prevents the larger-branch evaluation and both fits. This is an execution non-result, not calibration evidence or a physical limitation.
 
 | Requested endpoint | Smaller d_V | Larger d_V |
 |---|---|---|
@@ -20,6 +20,19 @@ The earlier Route 2 partial has common-149 cost **24.2811941137**, after 81 iter
 The orchestrator authorized **180 s wall / 500 aggregate CPU-s per release derivative evaluation only**, within the remaining **1079.724605 CPU-s** release/reporting allowance. This changes numerical execution limits only; all 16 coordinates, rows, bounds, scales, starts, release thresholds and scientific claims remain as declared. An evaluation that reaches the revised wall limit stops the continuation without retrying. The new [release declaration](release-180-spec.json) retains this authority and reserves 70 CPU-s / 120 active wall-s for preparation, reporting, checks and commits. The original 60 s attempt remains below as historical execution evidence.
 
 Release tests run at start A, at lambda 0 and 1, on smaller d_V followed by larger d_V. Each branch that passes is eligible for one lambda-0/start-A fit, capped at 100 iterations, 1200 native wall-s (1320 s crash backstop), and 12000 aggregate CPU-s after normal reaping. Non-convergence stops that branch with its partial record; bound activity is reported. Only a converged fit proceeds to endpoint replay and derivative checks. No lambda-0.1 fit, start B or assessments are authorized.
+
+## Completed release tests under the revised limit
+
+[Retained matrices, spectra and row values](release-180/release-tests.json) and [ranks and conditions](release-180/ranks-and-conditions.csv) establish numerical release readiness for these starts only. The cutoff is 1e-14 times the largest singular value and the condition limit is 10000; all starting coordinates are interior.
+
+| Branch/A | Lambda | Positive-weight rows | Mandatory rank/condition | Augmented rank/condition | Projected dispersion rank/condition |
+|---|---:|---:|---|---|---|
+| smaller-dV-A | 0 | 205 | 14/14; 6421.24943 | 16/16; 9204.66513 | 2/2; 7.13401849 |
+| smaller-dV-A | 1 | 217 | 14/14; 3554.0437 | 16/16; 6123.93805 | 2/2; 10.8100018 |
+| larger-dV-A | 0 | 205 | 14/14; 5182.36717 | 16/16; 7682.71156 | 2/2; 7.21482051 |
+| larger-dV-A | 1 | 217 | 14/14; 3342.29486 | 16/16; 5908.4496 | 2/2; 10.3597194 |
+
+Both calls return normally, with no interruption: smaller 54.497663704 wall-s / 71.217846 reaped CPU-s, larger 55.463373719 wall-s / 72.404589 reaped CPU-s. Whole-command measurement is 143.89 CPU-s / 110.30 wall-s. [Continuation accounting](continuation-accounting.json) conservatively charges 213.90 CPU-s / at least 230.31 active wall-s including the 70/120 reporting reserve; cumulative program charge is 24657.498914 CPU-s / at least 3737.878996 active wall-s. Release/reporting has 865.824605 CPU-s remaining; both fits retain their 24000 CPU-s allowance. These are numerical derivative/conditioning checks, not physical validation.
 
 ## Frozen declaration and engineering basis
 
@@ -57,7 +70,7 @@ The [coordinate comparison](coordinate-comparison.csv) retains all 16 original-p
 | Protonated MEA dispersion/k, K | 251.302802793 | 228.71 |
 | Carbamate dispersion/k, K | 168.034884166 | 533.11 |
 
-## Release evaluation and exact stop
+## Historical 60 s release evaluation and exact stop
 
 The installed 12 Engine files and every declared input match [the wheel/input check](wheel-and-input-check.json). Wheel SHA-256 is `98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a`, merged Engine `84ca269dfa0c7068417a1c4c326acae276d4d965`; Python 3.13.14, NumPy 2.5.4 and SciPy 1.18.1 match the pin. Declaration/cap implementation commit is `44ca579`; the interrupted calculation ran that commit. Its exact command uses the existing `tmp/amendment-2-84ca269d/venv/bin/python`, `PYTHONPATH=src`, positional declaration/output arguments, `--case stage6 --operation information`, `nice -n 10` and single-thread BLAS/OpenMP.
 
@@ -72,7 +85,7 @@ One exact derivative evaluation was intended to supply both lambda=0 and 1 weigh
 
 [summary.json](release/summary.json), [timing.json](release/timing.json) and [failure.json](release/failure.json) retain the stop. No native result file exists and the parent did not receive partial derivatives. The log does not identify whether interruption occurred during row construction/continuation or differentiation. There is no unavailable-row diagnostic, rank deficiency or evidence of a thermodynamic solve failure. No attempt was made to infer missing derivatives, reuse the old 14-column matrix, raise the guard, split the calculation or continue to fitting.
 
-## Aggregate CPU, memory and code
+## Historical charge, aggregate CPU enforcement, memory and code
 
 The launcher gives its own child a separate process group, sums Linux process CPU for that group including native workers and reaped descendants, and checks every 0.05 s. A one-full-machine-CPU-second margin precedes the hard allowance. Normal returns are charged from process-plus-reaped-worker resource usage. On forced termination, the full call allowance is conservatively reserved rather than assigning unknown unreaped-worker CPU zero. The final guard also includes launcher CPU and tolerates a process group already gone at termination; these final refinements did not rerun the stopped scientific evaluation. [The original guard check](aggregate-cpu-check.json) verifies a normally reaped four-worker pool and aggregate termination. [The final guard check](aggregate-cpu-final-check.json) verifies the pool-plus-launcher measurement and one group termination. These disposable calculations evaluate CPU control only.
 
@@ -84,10 +97,6 @@ Cumulative program charge is **24443.598914 CPU-s / at least 3507.568996 active 
 
 Executable additions against `7dadd34` are **40**, removals **17**, across `fit_campaign.py` and `fit_observations.py`: aggregate CPU enforcement and normal/forced-reap charges; declaration-sized stage-6 rank/row checks; 32-worker memory sizing; and returning the existing Kiepe-domain parameter declaration. No scientific equations or solvers are implemented locally. The task is at **40/40**; the campaign is at **852/900** conservative gross additions. JSON files retain declarations and evidence. No executable file is hidden in a text extension. Final [change accounting](change-accounting.json) records the categories.
 
-## Handoff and remaining decision
+## Presentation and review
 
-The existing [notebook](../../../../notebook.qmd) records this execution stop without presenting a calibration result. Presentation-only refresh failed because `snakemake` is absent from this worktree environment. The existing `analyses/render.sh` command renders the notebook and home page as static HTML with `--no-execute`; it runs no model and leaves the preview service untouched. [Presentation measurements](presentation-checks.json) retain the failure, static renders and overhead. No new physical result, error curve or uncertainty estimate exists; a plot would add no information. No independent delivered review or manuscript promotion is claimed. No fit, lambda=0.1, start B, fixed-record assessment, endpoint replay, scientific derivative check, parameter adoption, subagent, preview-service action, push, merge or GitHub write follows the stop.
-
-The parent must decide whether to authorize a different non-fit wall limit or another way to complete these release evaluations within the remaining 1079.724605 CPU-s. A proposed bounded continuation is **two derivative calls, each at most 180 wall-s / 500 aggregate CPU-s**, covering both lambda weights at each branch. This is a proposal, not execution authority; the 2000 CPU-s release/reporting and 144000/21600 program caps remain binding. Both fits remain dependent on all four release checks passing. No further executable addition fits the task's 40-line allowance without approval.
-
-The native question tool returned an automatic “user away / Don’t ask” choice rather than an explicit owner answer. The task reserves release-test stops and limit changes to the owner, so the proposed 180 s / 500 CPU-s calls remain unrun. The parent receives this diagnostic for that decision.
+The earlier [notebook](../../../../notebook.qmd) records the 60 s interruption; it will be refreshed with this continuation after its authorized branch runs. The previous presentation-only refresh found no `snakemake` in this environment; static rendering through `analyses/render.sh` remains available without model execution or preview-service action. This continuation has no independent delivered review or investigator promotion. No new executable lines, subagents, push, merge or GitHub writes are authorized.
