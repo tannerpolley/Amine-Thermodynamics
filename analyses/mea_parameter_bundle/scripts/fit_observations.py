@@ -107,7 +107,7 @@ def stage6_rows(spec, mapping):
         item = reg.observation(params, row['quantity'], problem, observed=row['observed'],
             form='difference', scale=row['scale'],
             **(dict(phase='L', mass_basis=True) if row['quantity']=='phase_density' else {}))
-        rows.append((row, item))
+        rows.append((dict(row, form='difference'), item))
     assert len(rows)==178 and len({r['id'] for r, _ in rows})==178
     return params, rows
 
