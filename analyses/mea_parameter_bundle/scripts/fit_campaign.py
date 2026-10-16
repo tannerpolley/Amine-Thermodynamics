@@ -577,7 +577,10 @@ def stage6_study(spec, out, started):
             interrupted = process.is_alive()
             if interrupted:
                 process.terminate()
-                process.join()
+                process.join(60)
+                if process.is_alive():
+                    process.kill()
+                    process.join()
             calls.append(dict(start=start['id'], cpu_s=cpu_seconds()-cpu,
                 wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted, host_load=os.getloadavg()))
             write(out/'timing.json', dict(calls=calls, **elapsed()))
