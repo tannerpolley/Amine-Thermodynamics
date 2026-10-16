@@ -48,7 +48,7 @@ reproduces the derived table. Do not create another source table in an analysis.
 | Hartono et al. 2014, DOI 10.1021/je401081e, §2.2 p.1809, §3.3/Table 11 p.1813; SI DOI 10.1021/je401081e.s001, Table S2 PDF p.10 | Seven own unloaded 30 mass% N₂O Henry measurements, six distinct T, 298.35–360.25 K. SI provides matching partial pressures and mole fractions. Repeat at 312.65 K remains grouped. Article `5VGPDVGB/L7SKR73P`; SI `MTGKTMAL/582BLNR4`. | Exclude the superscript-10 literature value 4.79, all loaded rows and model correlations. Printed composition uncertainty has ambiguous kg unit. |
 | Xu and Wang 2018, DOI 10.1021/acs.jced.8b00070, Eq.1 p.2708, §2.3 pp.2709–2711, §3.3/Table 8 p.2715, §4 p.2716 | Sixteen N₂O Henry measurements in the MEA-only block; x(MEA)=0.0394, 0.0870, 0.1456, 0.2197; 293.15–323.15 K. Eq.1 states the water-ratio analogy and cites Versteeg ref.18. `4TDQZ354/S5PK66RR`. | Density/viscosity reach 333.15 K; the N₂O table does not. BmimBF₄ mixtures are excluded. Water calibration differs from ref.18 by up to 7.2% (§2.3). Table S3 gas pressures were not acquired. |
 | Versteeg and van Swaaij 1988, DOI 10.1021/je00051a011, Eqs.1–2 p.29, §2.2/Eqs.4–6/Tables I–II p.30, §2.3 pp.30–31 | Water coefficients and analogy definition verified against PDF `ZKJB9G5U/RBJRWHQZ`. Their HE is c/p; use the inverse for the MEA tables' p/c. | Common measured water span is roughly 291–359.4 K. The 360.25 K Hartono row needs a 0.85 K extension. Eq.6's rounded ratio differs from Eqs.4–5; no quantified MEA analogy uncertainty is supplied. |
-| Hartono 2013, DOI 10.1016/j.egypro.2013.06.050 | Bounded acquisition created metadata parent `A8URNIZX`. | PDF missing: Elsevier API authentication failure; Connector returned “Publisher requires a human save”. Handoff is the DOI URL. No source contents or measured rows inferred. |
+| Hartono 2013, DOI 10.1016/j.egypro.2013.06.050 | Bounded acquisition created metadata parent `A8URNIZX`. | PDF missing: Elsevier Article Retrieval authentication failure; Connector returned “Publisher requires a human save”. Handoff is the DOI URL. No source contents or measured rows inferred. |
 
 **Literature practice:** the actual N₂O tables and Xu Eq.1 support an indirect
 physical-solubility estimate. They do not supply a CO₂–MEA ePC-SAFT parameter
@@ -139,8 +139,8 @@ H^{calc}_{CO_2,\epsilon}=\frac{p^{calc}_{CO_2}}{\rho_{s,0}\epsilon}.
 \tag{A4-2}
 $$
 
-Use `regression.observation(..., 'partial_pressure', ..., phase='V',
-species=['carbon-dioxide'], form='log_ratio')`. The fixed density is a
+Use `regression.observation` with kind `partial_pressure`, phase `V`,
+species `['carbon-dioxide']` and residual form `log_ratio`. The fixed density is a
 deterministic units/basis translation conditional on stage 2, not a measured
 density target. It makes the log pressure residual the desired log H residual
 in the dilute limit. Preserve H and the reference density alongside every
