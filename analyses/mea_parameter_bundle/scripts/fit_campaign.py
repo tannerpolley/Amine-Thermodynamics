@@ -590,17 +590,17 @@ def stage6_study(spec, out, started):
             process.start()
             sampled_cpu = 0.
             while process.is_alive() and time.monotonic()-clock < guard_wall_limit:
-                sampled_cpu = max(sampled_cpu, pool_cpu_seconds(process.pid))
+                sampled_cpu = max(sampled_cpu, pool_cpu_seconds(process.pid)+cpu_seconds()-cpu)
                 if sampled_cpu >= cpu_limit-os.cpu_count():
                     os.killpg(process.pid, signal.SIGKILL)
                     break
                 process.join(.05)
-            interrupted = process.is_alive()
+            interrupted = process.is_alive() or sampled_cpu >= cpu_limit-os.cpu_count()
             if interrupted:
                 os.killpg(process.pid, signal.SIGKILL)
                 process.join()
             calls.append(dict(start=start['id'], cpu_s=cpu_limit if interrupted else cpu_seconds()-cpu,
-                reaped_cpu_s=cpu_seconds()-cpu, sampled_pool_cpu_s=sampled_cpu,
+                reaped_cpu_s=cpu_seconds()-cpu, sampled_aggregate_cpu_s=sampled_cpu,
                 wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted, host_load=os.getloadavg()))
             write(out/'timing.json', dict(calls=calls, **elapsed()))
             if interrupted or process.exitcode or (directory/'failure.json').exists():
