@@ -486,13 +486,17 @@ def stage2_study(spec, out, started):
         write(out/'summary.json',dict(selected=selected,completed=len(selected)==len(spec['cases']),calls=timing,**elapsed()))
 
 
-def stage6_information(spec, out, started):
-    """Amendment 2's weighted/scaled mandatory and dispersion-release tests."""
+def stage6_study(spec, out, started):
+    """Amendment 2 information checks or one explicitly declared joint fit."""
     import fit_observations as o
     import numpy as np
     sizing = machine(spec, None)
     write(out/'machine.json', sizing)
     reports, calls = [], []
+    fit_case = spec.get('fit_case')
+    if fit_case:
+        release = load(checked(spec['release_tests_path'], spec['release_tests_sha256']))
+        assert len(release)==4 and all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in release)
     def elapsed():
         cpu = cpu_seconds()+spec['prior_cpu_charge_s']
         wall = time.monotonic()-started+spec['prior_wall_charge_s']
@@ -505,18 +509,22 @@ def stage6_information(spec, out, started):
             singular_values=sv.tolist(), weakest_direction=vh[-1].tolist())
     try:
         for start in spec['information_starts']:
+            if fit_case and start['id']!=fit_case['start']:
+                continue
             mapping = load(checked(start['parameters_path'], start['sha256']))
-            directory = out/'information'/start['id']
+            directory = out if fit_case else out/'information'/start['id']
             path = directory/'native.json'
+            cpu_limit = spec['fit_cpu_s'] if fit_case else spec['nonfit_cpu_s']
+            wall_limit = spec['fit_wall_s'] if fit_case else spec['nonfit_wall_s']
             remaining_cpu = min(spec['budget_cpu_s']-elapsed()['cpu_s'],
                 spec['program_cpu_limit_s']-elapsed()['cumulative_cpu_s'])
             remaining_wall = min(spec['budget_wall_s']-elapsed()['wall_s'],
                 spec['program_wall_limit_s']-elapsed()['cumulative_wall_s'])
-            if remaining_cpu<spec['nonfit_cpu_s'] or remaining_wall<spec['nonfit_wall_s']:
+            if remaining_cpu<cpu_limit or remaining_wall<wall_limit:
                 raise RuntimeError('allowance insufficient for the next bounded information call')
             def child():
                 try:
-                    resource.setrlimit(resource.RLIMIT_CPU, (spec['nonfit_cpu_s'], spec['nonfit_cpu_s']+1))
+                    resource.setrlimit(resource.RLIMIT_CPU, (cpu_limit, cpu_limit+1))
                     params, rows = o.stage6_rows(spec, mapping)
                     coordinates, values = [], o.s.parameter_values(mapping)
                     for c in spec['information_coordinates']:
@@ -529,6 +537,30 @@ def stage6_information(spec, out, started):
                             if 'reaction' in c else o.reg.coordinate(params, [(t['family'],
                                 tuple(t['target']) if isinstance(t['target'], list) else t['target'], t.get('factor', 1.))
                                 for t in c.get('targets', [dict(family=c.get('family'), target=c.get('target'))])], **kw))
+                    if fit_case:
+                        rows = [(dict(r, weight=fit_case['density_weight']/12) if r['quantity']=='phase_density' else r, item) for r,item in rows]
+                        rows = [(r,item) for r,item in rows if r['weight']>0]
+                        v = o.reg.fit(params, coordinates, [item for _,item in rows], weights=[r['weight'] for r,_ in rows],
+                            thermochemistry=o.thermal.record(), controls=o.reg.FitControls(**spec['controls'],
+                                workers=sizing['workers_requested'], maximum_elapsed_time_seconds=wall_limit), singular_vectors=True)
+                        raw = {k:o.s._jsonable(getattr(v,k)) for k in ('status','message','usable','initial_cost','final_cost','physical',
+                            'optimizer','predictions','residuals','weighted_residuals','optimizer_jacobian','physical_jacobian','iterations',
+                            'iteration_costs','iteration_seconds','trial_failures','residual_evaluations','jacobian_evaluations')}
+                        raw.update(rows=[r for r,_ in rows], statuses=[s.name for s in v.statuses],
+                            covariance={k:o.s._jsonable(getattr(v.covariance,k)) for k in ('status','assumption','rank','singular_values',
+                                'physical','optimizer','variance_factor','active_bounds','projected_gradient_norm','left_vectors','right_vectors')},
+                            failures=[dict(trial=f.trial,observation=f.observation,status=f.status.name,message=f.message,jacobian=f.jacobian) for f in v.failures])
+                        write(path, raw)
+                        if v.usable:
+                            ordinary = [c for c in spec['information_coordinates'] if 'reaction' not in c]
+                            updates = fitted_parameter_values(ordinary, v.physical[:len(v.chart.active)])
+                            for name,law in v.chart.reaction_laws.items():
+                                fields = dict(zip(('a_k','b','c_per_k'), o.reg.reaction_log10_reciprocal(law), strict=True)) if name=='R5' else dict(a=law.a,b_k=law.b,c=law.c,d_per_k=law.d)
+                                updates.update({f'reaction:{name}:correlation:{k}':val for k,val in fields.items()})
+                            write(directory/'usable-budget-endpoint.json', o.s.with_parameter_values(mapping, updates))
+                            write(directory/'chemistry-coordinates.json', dict(R5_unshifted_a_k=values['reaction:R5:correlation:a_k']-80*v.optimizer[9],
+                                enthalpy_shifts_J_mol={c['reaction']:c['scale']*v.optimizer[i] for i,c in enumerate(spec['information_coordinates']) if c.get('enthalpy_shift')}))
+                        return
                     v = o.reg.differentiate(params, coordinates, [item for _, item in rows],
                         optimizer=[0.]*len(coordinates), thermochemistry=o.thermal.record())
                     write(path, dict(rows=[r for r, _ in rows], predictions=list(v.predictions),
@@ -541,7 +573,7 @@ def stage6_information(spec, out, started):
             clock, cpu = time.monotonic(), cpu_seconds()
             process = multiprocessing.get_context('fork').Process(target=child)
             process.start()
-            process.join(spec['nonfit_wall_s'])
+            process.join(wall_limit)
             interrupted = process.is_alive()
             if interrupted:
                 process.terminate()
@@ -552,6 +584,10 @@ def stage6_information(spec, out, started):
             if interrupted or process.exitcode or (directory/'failure.json').exists():
                 raise RuntimeError(f'information call failed: {directory}; no fit launched')
             raw = load(path)
+            if fit_case:
+                if raw['status']!='converged' or raw['covariance']['active_bounds'] or raw['covariance']['rank']<14:
+                    raise RuntimeError('nonconverged, bound-active or rank-deficient joint fit; return to owner before another fit')
+                return
             if raw['statuses']!=['Available']*178 or not all(math.isfinite(x) for key in
                 ('predictions','residuals','residual_optimizer_gradient') for x in raw[key]):
                 raise RuntimeError(f'unavailable or nonfinite information row: {directory}; no fit launched')
@@ -584,7 +620,7 @@ def stage6_information(spec, out, started):
             if not all(r['mandatory_passed'] for r in reports):
                 raise RuntimeError('mandatory chemistry/ion block fails conditioning; return to owner before another start or fit')
     finally:
-        write(out/'summary.json', dict(release_tests=reports, calls=calls, fit_calls=0, **elapsed()))
+        write(out/'summary.json', dict(release_tests=reports, calls=calls, fit_calls=int(bool(fit_case)), **elapsed()))
 
 
 def run(spec_path, output_dir, *, case_ids, operation):
@@ -604,8 +640,8 @@ def run(spec_path, output_dir, *, case_ids, operation):
     try:
         write(out/'inputs.json',verify(spec))
         import fit_observations as o
-        if operation=='information' and spec.get('stage')==6 and case_ids==['stage6']:
-            stage6_information(spec,out,started)
+        if operation in ('information','fit') and spec.get('stage')==6 and case_ids==['stage6']:
+            stage6_study(spec,out,started)
             return out
         if spec.get('study') == 'joint-recalibration-170' and operation=='fit' and case_ids==[f"stage{spec['stage']}"]:
             (stage5_study if spec['stage']==5 else stage2_study)(spec,out,started)
