@@ -617,10 +617,13 @@
   },
   "command_cpu_s": 7615.8199,
   "command_wall_s": 1265.6977670490014,
-  "stop_before_next_call": [],
-  "endpoint_replay": "Pending for converged fit",
-  "derivative_checks": "Pending for converged fit",
-  "evidence": "Incomplete calibration statistics from a bounded fit; no parameter uncertainty, physical validation or adoption.",
+  "stop_before_next_call": [
+    "unavailable endpoint replay row",
+    "failed endpoint replay"
+  ],
+  "endpoint_replay": "Failed: CentralSolveUnavailable at Bottinger2008_state_032::MEA + MEAH+; residual 1.8575624390395507e-6 > 1e-10, 16 iterations",
+  "derivative_checks": "Unrun: hard stop after failed endpoint replay",
+  "evidence": "Native fit converged by function tolerance; serialized endpoint replay failed. No qualified endpoint, parameter uncertainty, physical validation or adoption.",
   "input_sha256": {
     "native.json": "45cd6984cabaa8ab18407fdd73a7eddf697a53f26807343d8ddd1284b37c8540",
     "stage6-spec.json": "0d27e84495e836a96e76bab8c6174fccc53c7a3eeb9a7a0a96c71863b0a076c8",
