@@ -1,0 +1,63 @@
+{
+  "entry_commit": "847396e9534e6b982d6097704ad08a2cbe1d86fb",
+  "declaration_commit": "0df9b26",
+  "recorded_utc": "2026-10-16T08:33:58.379207+00:00",
+  "program_entry_cpu_s": 51178.048914,
+  "program_entry_wall_including_idle_s_at_least": 13601.356196,
+  "program_entry_active_wall_s_at_least": 8386.338996,
+  "historical_idle_wall_s": 5215.0172,
+  "numerical_Engine_calls": 0,
+  "information_evaluations": 0,
+  "fit_calls": 0,
+  "numerical_cpu_charge_s": 0,
+  "numerical_wall_charge_s": 0,
+  "task_reporting_cpu_reservation_s": 100,
+  "program_cpu_charge_s": 51278.048914,
+  "program_cpu_limit_s": 144000,
+  "program_cpu_remaining_s": 92721.951086,
+  "program_wall_limit_s": 21600,
+  "task_wall_tracking_start_utc": "2026-10-16T08:26:35+00:00",
+  "task_tracked_wall_s": 443.379207,
+  "earlier_task_preparation_wall_reservation_s": 900,
+  "finish_wall_reservation_s": 180,
+  "task_wall_accounting_charge_s": 1523.379207,
+  "program_wall_accounting_charge_including_idle_s": 15124.735403,
+  "program_wall_accounting_remaining_s_at_most": 6475.264596999999,
+  "historical_unresolved_wall_overhead": "Unquantified; none reclaimed or silently set to zero. The accounting remainder is not a guaranteed available allowance.",
+  "current_task_preparation_reservation": "900 s is a deliberately conservative accounting reservation, not a measured or demonstrated upper bound for previously untracked work.",
+  "finish_reservation": "180 s includes the pending final static render, checks and commit; their actual measured CPU remains inside the 100 CPU-s task reservation.",
+  "presentation_commands": {
+    "notebook": {
+      "user_cpu_s": 12.48,
+      "system_cpu_s": 3.43,
+      "wall_s": 14.99
+    },
+    "index": {
+      "user_cpu_s": 11.51,
+      "system_cpu_s": 3.43,
+      "wall_s": 13.64
+    },
+    "notebook_final": {
+      "user_cpu_s": 12.52,
+      "system_cpu_s": 3.44,
+      "wall_s": 14.45
+    }
+  },
+  "mandatory_numerical_check_reserve_cpu_s": 18000,
+  "mandatory_numerical_check_reserve_wall_s": 2000,
+  "code_base": "847396e",
+  "executable_added": 0,
+  "executable_removed": 0,
+  "task_executable_maximum": 25,
+  "campaign_executable_gross": 857,
+  "campaign_executable_ceiling": 900,
+  "stop": "No finite complete-call lifecycle bound and no bound on historical unresolved wall overhead; first numerical information call not admitted.",
+  "notes": [
+    "Measured presentation CPU is included in the 100 CPU-s reservation, never added twice.",
+    "No native call ran, so no post-call native CPU measurement, numerical result or fit completion is claimed.",
+    "Static Engine identity imports perform no thermodynamic calculation.",
+    "The 66000 CPU-s / 7280 s engineering allocation is a reservation; no cap increase is inferred.",
+    "Code accounting is against 847396e and includes declaration JSON and notebook changes separately from executable code."
+  ],
+  "measured_presentation_cpu_s_included_in_reservation": 46.81
+}

@@ -14,7 +14,24 @@ resources:
   - figures/regression_overview/output/provenance.json
   - figures/regression_overview/output/statistics.csv
   - figures/regression_overview/output/parameter-table-inputs.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/README.md
+  - results/joint-recalibration-170/amendment-2/amendment-3/information-spec.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/comparison-declaration.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/inputs-check.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/admission.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/accounting.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/change-accounting.json
 ---
+
+## Amendment 3: comparison stopped before launch
+
+**Both dielectric branches remain inconclusive under the 10% non-Kiepe improvement / at-most-1% common-149 increase rule.** The [four-fit declarations and stopping-point report](results/joint-recalibration-170/amendment-2/amendment-3/README.md) retain the accepted matched comparison: fixed stage-2 CO₂–water, a 16-coordinate treatment freeing the zero-start CO₂–MEA intercept/slope, and the otherwise identical 14-coordinate control on each measured dielectric branch, with all 205 residuals unchanged.
+
+No information evaluation, derivative re-solve, fit, replay or thermodynamic assessment was launched. The [admission evidence](results/joint-recalibration-170/amendment-2/amendment-3/admission.json) identifies an unbounded `process.join()` after child termination in the existing launcher and earlier wall overhead left unknown by the retained accounting. Amendment 3 §7 / readiness correction C3 prohibits launching without a complete-call bound and accounted overhead. The nominal 1320 s first-join limit is not a bound for complete launch and reaping. The earlier idle charge remains included; no extra time is reclaimed.
+
+For each of the four fits, convergence is unrun; family, non-Kiepe and common-149 costs are unavailable; Kiepe invariance and derivatives are unrun; active bounds are uncomputed; fitted CO₂–MEA values and all four Cp errors are unavailable. The controls declare the pair fixed at zero, and treatments start at zero, without fitted endpoints. Historical Route 2b numbers below belong to its different free set and cannot decide this comparison. Static wheel/input/declaration checks pass; they provide no new thermodynamic verification, calibration result, independent prediction or physical validation.
+
+The [accounting](results/joint-recalibration-170/amendment-2/amendment-3/accounting.json) reserves 100 CPU-s for this declaration/check/reporting step, giving 51278.048914/144000 program CPU-s; numerical Engine calls add zero. Code remains 857/900 gross campaign lines, with no executable change. The existing notebook records this execution stop only; no model result or adoption is claimed. No plot is made because no new numerical comparison exists. Delivered independent review and resolution of launch/overhead bounds remain with the parent; no manuscript promotion follows.
 
 ## Route 2b: λ=0, start A, two dielectric branches
 
