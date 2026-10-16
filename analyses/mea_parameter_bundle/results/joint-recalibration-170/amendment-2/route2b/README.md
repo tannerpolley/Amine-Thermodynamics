@@ -15,6 +15,12 @@ Neither dielectric branch has a new fit. The first start-A derivative evaluation
 
 The earlier Route 2 partial has common-149 cost **24.2811941137**, after 81 iterations without convergence. The adopted record's **32.05668491** is a retained reference, with different inputs and wheel; neither number supplies a Route 2b endpoint or ranking. Prior partial parameters, bounds, gradients and Cp remain in [the original report](../route2/README.md), unchanged.
 
+## Authorized continuation: orchestrator decision, 2026-10-16
+
+The orchestrator authorized **180 s wall / 500 aggregate CPU-s per release derivative evaluation only**, within the remaining **1079.724605 CPU-s** release/reporting allowance. This changes numerical execution limits only; all 16 coordinates, rows, bounds, scales, starts, release thresholds and scientific claims remain as declared. An evaluation that reaches the revised wall limit stops the continuation without retrying. The new [release declaration](release-180-spec.json) retains this authority and reserves 70 CPU-s / 120 active wall-s for preparation, reporting, checks and commits. The original 60 s attempt remains below as historical execution evidence.
+
+Release tests run at start A, at lambda 0 and 1, on smaller d_V followed by larger d_V. Each branch that passes is eligible for one lambda-0/start-A fit, capped at 100 iterations, 1200 native wall-s (1320 s crash backstop), and 12000 aggregate CPU-s after normal reaping. Non-convergence stops that branch with its partial record; bound activity is reported. Only a converged fit proceeds to endpoint replay and derivative checks. No lambda-0.1 fit, start B or assessments are authorized.
+
 ## Frozen declaration and engineering basis
 
 The [owner decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6208172805) authorizes start A, lambda=0, on the two retained dielectric branches. The [release declaration](release-spec.json) has **16 coordinates**, with 14 mandatory columns followed by the two optional ion-dispersion columns. It retains the original A ion/chemistry start rather than the earlier partial endpoint. The [smaller](smaller-dV/start-parameters.json) and [larger](larger-dV/start-parameters.json) records differ only in the two authorized MEA dielectric coefficients.
