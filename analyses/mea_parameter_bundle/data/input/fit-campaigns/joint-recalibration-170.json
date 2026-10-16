@@ -149,6 +149,10 @@
     {
       "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2/B/start-parameters.json",
       "sha256": "b0cd251a29bcd826e895813a43f01b96ed41ce7963318e598ba9d2df554dd468"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2/release-tests.json",
+      "sha256": "1cad600ef4785b3f36fdf350f54af6f25ea3515e6497f18401b81dc54c6e5f40"
     }
   ],
   "engine": {
@@ -224,8 +228,8 @@
       "neutral_domain": {}
     }
   ],
-  "prior_cpu_charge_s": 74.72081800000001,
-  "prior_wall_charge_s": 74.68109095300315,
+  "prior_cpu_charge_s": 165.18519400000002,
+  "prior_wall_charge_s": 165.11725952300185,
   "prior_charge_basis": "Includes the failed first output assembly and the 30 s conservative preparation charge; no numerical policy changed.",
   "amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6204801680",
   "reference_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json",
@@ -1090,5 +1094,11 @@
       "feed_mass_kg": 0.21969272285714286,
       "feed_amount_mol": 9.287776437398854
     }
-  ]
+  ],
+  "fit_case": {
+    "start": "A",
+    "density_weight": 0
+  },
+  "release_tests_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2/release-tests.json",
+  "release_tests_sha256": "1cad600ef4785b3f36fdf350f54af6f25ea3515e6497f18401b81dc54c6e5f40"
 }
