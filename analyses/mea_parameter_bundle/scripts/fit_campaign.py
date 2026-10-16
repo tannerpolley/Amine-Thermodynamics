@@ -486,13 +486,114 @@ def stage2_study(spec, out, started):
         write(out/'summary.json',dict(selected=selected,completed=len(selected)==len(spec['cases']),calls=timing,**elapsed()))
 
 
+def stage6_information(spec, out, started):
+    """Amendment 2's weighted/scaled mandatory and dispersion-release tests."""
+    import fit_observations as o
+    import numpy as np
+    sizing = machine(spec, None)
+    write(out/'machine.json', sizing)
+    reports, calls = [], []
+    def elapsed():
+        cpu = cpu_seconds()+spec['prior_cpu_charge_s']
+        wall = time.monotonic()-started+spec['prior_wall_charge_s']
+        return dict(cpu_s=cpu, wall_s=wall, cumulative_cpu_s=spec['program_prior_cpu_s']+cpu,
+            cumulative_wall_s=spec['program_prior_wall_s']+wall)
+    def spectrum(matrix):
+        _, sv, vh = np.linalg.svd(matrix, full_matrices=False)
+        return dict(columns=matrix.shape[1], rank=int(sum(sv>sv[0]*1e-14)),
+            condition=float(sv[0]/sv[-1]) if sv[-1]>0 else None,
+            singular_values=sv.tolist(), weakest_direction=vh[-1].tolist())
+    try:
+        for start in spec['information_starts']:
+            mapping = load(checked(start['parameters_path'], start['sha256']))
+            directory = out/'information'/start['id']
+            path = directory/'native.json'
+            remaining_cpu = min(spec['budget_cpu_s']-elapsed()['cpu_s'],
+                spec['program_cpu_limit_s']-elapsed()['cumulative_cpu_s'])
+            remaining_wall = min(spec['budget_wall_s']-elapsed()['wall_s'],
+                spec['program_wall_limit_s']-elapsed()['cumulative_wall_s'])
+            if remaining_cpu<spec['nonfit_cpu_s'] or remaining_wall<spec['nonfit_wall_s']:
+                raise RuntimeError('allowance insufficient for the next bounded information call')
+            def child():
+                try:
+                    resource.setrlimit(resource.RLIMIT_CPU, (spec['nonfit_cpu_s'], spec['nonfit_cpu_s']+1))
+                    params, rows = o.stage6_rows(spec, mapping)
+                    coordinates, values = [], o.s.parameter_values(mapping)
+                    for c in spec['information_coordinates']:
+                        factor = c.get('source_to_native_factor', 1.)
+                        origin = 0. if c.get('enthalpy_shift') else factor*values[c['identity']]
+                        kw = dict(origin=origin, scale=abs(factor)*c['scale'],
+                            bounds=tuple(sorted(factor*b for b in c['bounds'])))
+                        coordinates.append(o.reg.reaction_enthalpy_shift(c['reaction'], pivot_temperature=313.15, **kw)
+                            if c.get('enthalpy_shift') else o.reg.reaction_coordinate(c['reaction'], c['coefficient'], **kw)
+                            if 'reaction' in c else o.reg.coordinate(params, [(t['family'],
+                                tuple(t['target']) if isinstance(t['target'], list) else t['target'], t.get('factor', 1.))
+                                for t in c.get('targets', [dict(family=c.get('family'), target=c.get('target'))])], **kw))
+                    v = o.reg.differentiate(params, coordinates, [item for _, item in rows],
+                        optimizer=[0.]*len(coordinates), thermochemistry=o.thermal.record())
+                    write(path, dict(rows=[r for r, _ in rows], predictions=list(v.predictions),
+                        statuses=[s.name for s in v.statuses], residuals=[math.log(p/r['observed'])
+                            if r['form'] in ('LogRatio','log_ratio') else (p-r['observed'])/r['scale']
+                            for p,(r,_) in zip(v.predictions,rows,strict=True)],
+                        residual_optimizer_gradient=list(v.residual_optimizer_gradient)))
+                except Exception:
+                    write(directory/'failure.json', dict(cause=traceback.format_exc()))
+            clock, cpu = time.monotonic(), cpu_seconds()
+            process = multiprocessing.get_context('fork').Process(target=child)
+            process.start()
+            process.join(spec['nonfit_wall_s'])
+            interrupted = process.is_alive()
+            if interrupted:
+                process.terminate()
+                process.join()
+            calls.append(dict(start=start['id'], cpu_s=cpu_seconds()-cpu,
+                wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted))
+            write(out/'timing.json', dict(calls=calls, **elapsed()))
+            if interrupted or process.exitcode or (directory/'failure.json').exists():
+                raise RuntimeError(f'information call failed: {directory}; no fit launched')
+            raw = load(path)
+            if raw['statuses']!=['Available']*178 or not all(math.isfinite(x) for key in
+                ('predictions','residuals','residual_optimizer_gradient') for x in raw[key]):
+                raise RuntimeError(f'unavailable or nonfinite information row: {directory}; no fit launched')
+            coordinates = spec['information_coordinates']
+            values = o.s.parameter_values(mapping)
+            active = [i for i,c in enumerate(coordinates) if values.get(c['identity'],0.) in c['bounds']]
+            for density_weight in spec['information_density_weights']:
+                weights = np.array([density_weight/12 if r['quantity']=='phase_density' else r['weight'] for r in raw['rows']])
+                keep = weights>0
+                J = np.array(raw['residual_optimizer_gradient']).reshape(178,14)[keep]*np.sqrt(weights[keep,None])
+                free = [j for j in range(12) if j not in active]
+                mandatory = spectrum(J[:,free])
+                u, sv, _ = np.linalg.svd(J[:,free], full_matrices=False)
+                u = u[:,sv>sv[0]*1e-14]
+                projected = spectrum(J[:,12:] - u@(u.T@J[:,12:]))
+                augmented = spectrum(J[:,free+list(range(12,14))])
+                passed = mandatory['rank']==len(free) and mandatory['condition'] is not None and mandatory['condition']<=1e4
+                release = (passed and not any(j in active for j in (12,13)) and augmented['rank']==len(free)+2
+                    and augmented['condition'] is not None and augmented['condition']<=1e4
+                    and projected['rank']==2 and projected['condition'] is not None and projected['condition']<=1e4)
+                record = dict(start=start['id'], density_weight=density_weight, row_count=int(sum(keep)),
+                    full=spectrum(J[:,:12]), mandatory_free=mandatory, augmented_free=augmented,
+                    projected_dispersions=projected, active_columns=active, free_columns=free,
+                    mandatory_passed=passed, dispersion_release_passed=release)
+                reports.append(record)
+                write(directory/f'lambda-{density_weight}.json', dict(record, row_ids=[r['id'] for r,k in zip(raw['rows'],keep) if k],
+                    weighted_optimizer_jacobian=J.tolist(), weighted_residuals=(np.array(raw['residuals'])[keep]*np.sqrt(weights[keep])).tolist()))
+                write(out/'release-tests.json', reports)
+                print(record, flush=True)
+            if not all(r['mandatory_passed'] for r in reports):
+                raise RuntimeError('mandatory chemistry/ion block fails conditioning; return to owner before another start or fit')
+    finally:
+        write(out/'summary.json', dict(release_tests=reports, calls=calls, fit_calls=0, **elapsed()))
+
+
 def run(spec_path, output_dir, *, case_ids, operation):
     started = COMMAND_STARTED if __name__ == '__main__' else time.monotonic()
-    if operation not in ('fit','replay') or not case_ids:
+    if operation not in ('fit','replay','information') or not case_ids:
         raise ValueError('explicit fit/replay operation and case IDs required')
     spec_path, out = Path(spec_path), Path(output_dir).resolve()
     declaration = load(spec_path)
-    resume_stage2 = declaration.get('study')=='joint-recalibration-170' and operation=='fit' and case_ids==[f"stage{declaration['stage']}"]
+    resume_stage2 = declaration.get('study')=='joint-recalibration-170' and operation in ('fit','information') and case_ids==[f"stage{declaration['stage']}"]
     frozen_spec = out/('stage'+str(declaration['stage'])+'-spec.json' if resume_stage2 and declaration['stage']!=2 else 'spec.json')
     if frozen_spec.exists() and resume_stage2 and frozen_spec.read_bytes()!=spec_path.read_bytes():
         raise ValueError('stage-2 continuation requires the identical frozen declaration')
@@ -503,6 +604,9 @@ def run(spec_path, output_dir, *, case_ids, operation):
     try:
         write(out/'inputs.json',verify(spec))
         import fit_observations as o
+        if operation=='information' and spec.get('stage')==6 and case_ids==['stage6']:
+            stage6_information(spec,out,started)
+            return out
         if spec.get('study') == 'joint-recalibration-170' and operation=='fit' and case_ids==[f"stage{spec['stage']}"]:
             (stage5_study if spec['stage']==5 else stage2_study)(spec,out,started)
             return out
@@ -633,7 +737,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument('spec',type=Path)
     parser.add_argument('output',type=Path)
-    parser.add_argument('--operation',choices=('fit','replay'),required=True)
+    parser.add_argument('--operation',choices=('fit','replay','information'),required=True)
     parser.add_argument('--case',action='append',required=True)
     args = parser.parse_args()
     run(args.spec,args.output,case_ids=args.case,operation=args.operation)
