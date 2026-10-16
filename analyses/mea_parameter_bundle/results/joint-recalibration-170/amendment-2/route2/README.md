@@ -161,9 +161,60 @@ All matrices are native residual derivatives multiplied by the declared square-r
 
 Both dispersion origins are interior. Both dispersions are therefore released together with all 12 mandatory coordinates for the same branch/problem at every fitted density weight. Full singular spectra, weakest directions, active columns, exact unweighted columns and weighted matrices are in [release-tests.json](release-tests.json) and the `information/A` and `information/B` files. The two actual derivative evaluations each include all 178 requested rows; positive-weight subsets give 166/178 rows at lambda=0/1. Every starting row is available. The lambda=1 calculation is an information check, not a fit.
 
-## Native history and reproducibility
+## Retained costs and comparison with the 29-iteration partial
 
-The [81-iteration history](lambda-0/F1/A/converge-1/iteration-history.csv) includes every native entry and rejected trial. Entry zero is the declared start; native entry durations are not total call wall time. The final five costs are 96.0731671279, 91.5948919183, 43.0208788258, 40.9876576761 and 40.5902023581. No monotone trajectory or convergence is inferred from accepted decreases. Matplotlib is absent from the pinned environment. The report uses scalar/property/availability tables and retains the exact history; a convergence plot would not turn this time-limited iterate into a comparison endpoint.
+**Owner disposition: retain the partial and keep stopped; no further fits or thermodynamic calls.** This section reads only retained records. Native cost entries include rejected trials and are not a sequence of accepted steps. Entry zero is the declared start. The current run's costs at iterations **29 / 40 / 60 / 81** are **42.4903033067 / 41.7621698211 / 41.7090881862 / 40.5902023581**. The iteration-29 cost exactly matches the prior rerun's returned cost.
+
+| Iteration | Training cost | Iteration | Training cost | Iteration | Training cost | Iteration | Training cost |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 196.865136591 | 21 | 758.01836341 | 42 | 41.7476013694 | 63 | 41.7090798372 |
+| 1 | 160.313433385 | 22 | 1792.4989814 | 43 | 41.7410459566 | 64 | 41.7090788514 |
+| 2 | 151.69221747 | 23 | 43.8538896068 | 44 | 41.7335189748 | 65 | 41.7090782874 |
+| 3 | 127.332965623 | 24 | 43.3517208783 | 45 | 41.7263665705 | 66 | 41.7090779886 |
+| 4 | 106.438857504 | 25 | 44.5389295941 | 46 | 41.7220403556 | 67 | 41.7090778346 |
+| 5 | 131.665509609 | 26 | 43.1406292151 | 47 | 41.7122072306 | 68 | 41.7090777588 |
+| 6 | 149.069478284 | 27 | 42.8720660911 | 48 | 41.7109550184 | 69 | 41.709077722 |
+| 7 | 211.633623004 | 28 | 42.700010686 | 49 | 41.7096247874 | 70 | 41.7090777041 |
+| 8 | 167.684903431 | 29 | 42.4903033067 | 50 | 41.709423465 | 71 | 41.7090776949 |
+| 9 | 48.7598904954 | 30 | 42.2968271721 | 51 | 41.7092520722 | 72 | 41.7090776897 |
+| 10 | 46.5776643357 | 31 | 42.1162690916 | 52 | 41.709216288 | 73 | 41.8306230504 |
+| 11 | 46.6188243024 | 32 | 41.9621098713 | 53 | 41.709175299 | 74 | 42.1770712977 |
+| 12 | 45.5157495778 | 33 | 41.860765362 | 54 | 41.7091575875 | 75 | 44.3178513123 |
+| 13 | 44.7233705379 | 34 | 41.8152035461 | 55 | 41.7091368368 | 76 | 41.2759297534 |
+| 14 | 44.1679011816 | 35 | 41.7979156034 | 56 | 41.7091236888 | 77 | 96.0731671279 |
+| 15 | 61.9228497447 | 36 | 41.7889412016 | 57 | 41.7091105745 | 78 | 91.5948919183 |
+| 16 | 64.4241125695 | 37 | 41.7830960888 | 58 | 41.7091014665 | 79 | 43.0208788258 |
+| 17 | 76.326136814 | 38 | 41.7768468864 | 59 | 41.7090935869 | 80 | 40.9876576761 |
+| 18 | 45.1845637083 | 39 | 41.7740245672 | 60 | 41.7090881862 | 81 | 40.5902023581 |
+| 19 | 44.0856776867 | 40 | 41.7621698211 | 61 | 41.7090841274 |  |  |
+| 20 | 146.113473871 | 41 | 41.756325639 | 62 | 41.70908153 |  |  |
+
+The [retained CSV](lambda-0/F1/A/converge-1/iteration-history.csv) owns full-precision costs and native entry durations. Those durations are not complete call wall time.
+
+**Bound history:** only endpoint sets were retained. The previous 29-iteration partial has bicarbonate–water interaction, mutual ion interaction, MEAH⁺ Born diameter, carbamate Born diameter and R2 shift active. The current 81-iteration partial has bicarbonate–water interaction, mutual ion interaction, carbamate segment diameter, MEAH⁺ Born diameter and R2 shift active. Per-iteration active sets and the number of set changes are unavailable; no change count is inferred from these two endpoints.
+
+**Last 20 iterations:** per-iteration coordinate vectors and step sizes were not retained. Which coordinates moved most and their last-20-iteration steps are unavailable; they are not reconstructed from costs or final derivatives.
+
+The endpoint comparison below uses the previous 29-iteration rerun and the current 81-iteration run. It is not a last-20-iteration trajectory. R5 a_k is the **unshifted** coordinate; R2/R5 shifts are J/mol at 313.15 K. Packing and Debye–Hückel diameters follow each displayed segment size at the declared 0.88 factor. Both records are incomplete calibration. The [comparison CSV](lambda-0/F1/A/converge-1/comparison-with-29-iteration-partial.csv) retains full precision.
+
+| Coordinate | Unit | Previous 29-iteration partial | Current 81-iteration partial |
+|---|---|---:|---:|
+| pair/carbamate-anion/water/k_ij | dimensionless | -0.182849026541 | -0.202719733667 |
+| pair/protonated-monoethanolamine/water/k_ij | dimensionless | -0.454825108004 | -0.152249129162 |
+| pair/bicarbonate-anion/water/k_ij | dimensionless | 0.5 | 0.5 |
+| pair/carbamate-anion/protonated-monoethanolamine/k_ij | dimensionless | -1 | -1 |
+| pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope | K | 61.0000697379 | 36.9034558902 |
+| component/protonated-monoethanolamine/segment_diameter | angstrom | 4.5884881959 | 5.51743301647 |
+| component/carbamate-anion/segment_diameter | angstrom | 5.42715088722 | 5.8 |
+| component/protonated-monoethanolamine/born_diameter | angstrom | 5 | 5 |
+| component/carbamate-anion/born_diameter | angstrom | 2 | 3.62897938162 |
+| reaction:R5:correlation:a_k | K | 2839.11322535 | 2568.56004544 |
+| reaction:R2:enthalpy_shift | J/mol | -10000 | -10000 |
+| reaction:R5:enthalpy_shift | J/mol | -5501.50839734 | -8392.06021931 |
+| component/protonated-monoethanolamine/dispersion_energy_over_k | K | 209.220437524 | 251.302802793 |
+| component/carbamate-anion/dispersion_energy_over_k | K | 147.251293148 | 168.034884166 |
+
+Matplotlib is absent from the pinned environment. These scalar/availability tables retain every available cost and both endpoint vectors; no trajectory is invented for missing coordinate histories.
 
 ## Charges, code and next owner decision
 
@@ -173,6 +224,6 @@ Including these conservative preparation/reporting and presentation charges, Rou
 
 The owner-policy launcher change adds two executable lines and removes two. Conservative code totals are **187/200 part 2 and 812/900 campaign**. No new persistent executable, test, optimizer or EOS is added. Final change accounting is retained in `converge-change-accounting.json` against the active design base `6c8d20073fd0e5fda8dd323a51f55551d12b7486`.
 
-The numerical run is retained in commit `dd7a1a9`. Independent delivered review and investigator promotion have not occurred. The owner must decide the non-convergence stop before any remaining fit or thermodynamic assessment. Route 1 remains stopped. No subagent, Quarto preview action, push, merge or GitHub write occurs.
+The numerical run is retained in commit `dd7a1a9`. Independent delivered review and investigator promotion have not occurred. The owner has chosen to retain this partial and keep all remaining fits and thermodynamic assessments stopped. Route 1 remains stopped. No subagent, Quarto preview action, push, merge or GitHub write occurs.
 
 The presentation-only refresh reports missing `snakemake`. Both guarded HTML renders succeed with `--no-execute`: notebook and home page. Actual presentation is **50.240062 CPU-s / 45.470171144 wall-s**, inside the charged 60/60 reservation. The [render timing](converge-presentation-timing.json) retains each command and outcome. No numerical calculation or preview-service action occurs.
