@@ -1,5 +1,7 @@
 # Carbonate diagnosis for the initial ions-first stage 4
 
+Historical evidence, superseded for further calibration by [#170 amendment 2](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6204801680) on 15 October 2026. No stopped endpoint here is adopted or supplies a start or calibration input for either amended sequence. Both sequences wait for the one merged-main wheel supplied for [Engine #557](https://github.com/tannerpolley/ePC-SAFT/issues/557), followed by its required qualification. Reuse is limited to the inputs and checks explicitly retained by amendment 2. Earlier design, next-step and pending-decision statements below describe the historical calculation; they do not authorize another ions-first fit or the I₀/S₁/I₁/S₂ sequence.
+
 **Classification: a confirmed 022 source-feed inconsistency, a source-reliability limitation for the separate 022 carbonate target, and a real mismatch between the 011 observations and the declared source-chemistry/seed-ion calculation. No single trace-interaction defect is established.** The 011 carbonate share of its common NMR peak is 75%, so the source's 10% warning does not reject that carbonate measurement. Replacing both species by their pool does not remove the 011 discrepancy. The earlier adopted model can approach both carbonate ratios with different ion/interactions/chemistry; the evidence does not establish an unavoidable model-form conflict or unique ion properties.
 
 This is `cse:diagnose` Explore work for #170. The endpoint is an evidence-backed causal distinction for the parent. No fit, production-code edit, design/target change, parameter selection, notebook promotion, push, merge, GitHub write, subagent or preview-service action occurred. Inert `.py.txt` scripts reproduce the probes explicitly; they are not imported by production. Independent review and any design amendment remain with the parent.
@@ -114,7 +116,7 @@ Evaluating that adopted parameter document on this pinned wheel gives carbonate/
 
 ## 4. Target definition and pool evaluation only
 
-Design section 4 line 155 explicitly says **“MEAH⁺, carbamate, bicarbonate and carbonate, four per state, expressed as species/total-amine ratios”**. Line 156 separately prescribes the Matin “bicarbonate/carbonate pool,” while line 173 fixes 26 targets and weight 1/26. Thus no Jakobsen pool substitution is currently authorized. The ions-first amendment's section 1 explicitly keeps all of section 4.
+Design section 4 line 155 explicitly says **“MEAH⁺, carbamate, bicarbonate and carbonate, four per state, expressed as species/total-amine ratios”**. Line 156 separately prescribes the Matin “bicarbonate/carbonate pool,” while line 173 fixes 26 targets and weight 1/26. At the time of this diagnosis, that declaration required separate Jakobsen targets. Amendment 2 subsequently requires the combined inorganic-carbon pool at both states, corrected 022 feed, 24 targets and standalone weight 1/24. The pooled costs below used the old 022 feed and remain historical comparisons; they are not baselines for the amended calculation.
 
 Evaluation only: replace each Jakobsen HCO3/CO3 pair by its sum, preserve the amine denominator, and set its difference scale to `0.1*(observed HCO3+CO3 ratio)+0.001`. This leaves 24 scalar targets. Keep 1/26 first for a paired cost comparison, and report 1/24 separately to show the effect of normalization:
 
@@ -125,7 +127,7 @@ Evaluation only: replace each Jakobsen HCO3/CO3 pair by its sum, preserve the am
 
 Starting total: **56.21902702576** at preserved 1/26, versus **59.17684171981** originally. Normalizing all 24 weights to 1/24 gives **60.90394594457**; the two pool contributions become 49.794906686 / 1.934862683, and whole-state contributions 50.922766221 / 2.178150144. The 011 pool discrepancy survives and its pooled contribution exceeds its original carbonate-only contribution. No production declaration was changed.
 
-## 5. Options for the parent, without selecting one
+## 5. Options considered before amendment 2
 
 - Reconcile the 022 feed with Table A2/#184 and design line 162 before another fit. This changes one state input, preserves 9 states/26 targets if targets stay separate, and requires corrected starting evaluations and consistent later stage-3/comparison feeds. The evaluated source correction increases the mismatch; it cannot be represented as a cost-improving correction.
 - Keep separate Jakobsen targets after that reconciliation. The declared stage 4 still needs an eligible converged interior/replay-qualified result; the iteration-40 vector remains stopped. The parent would need to resolve the 011 pool/model-input conflict and 022 carbonate reliability treatment before claiming ion identification. Extra iterations or wider bounds alone are not justified by this diagnosis.

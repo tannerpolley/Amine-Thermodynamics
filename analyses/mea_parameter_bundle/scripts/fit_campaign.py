@@ -236,6 +236,7 @@ def water_study(spec, out, started):
 
 
 def fitted_parameter_values(coordinates, physical):
+    coordinates = sorted(coordinates, key=lambda c: 'reaction' in c)
     targets = [(c['identity'],c.get('source_to_native_factor',1.))
         for c in coordinates]
     targets = [target for c,primary in zip(coordinates,targets,strict=True)
