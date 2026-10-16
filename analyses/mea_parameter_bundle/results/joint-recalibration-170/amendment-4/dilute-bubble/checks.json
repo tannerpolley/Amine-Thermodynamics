@@ -10,11 +10,11 @@
   "validation_result": "passed",
   "fits_run": 0,
   "input_and_addendum_sha256": {
-    "data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv": "a7e14002ea360ed2566e9f6b572a71bbdf1ce4f27bf385c3f766b0eb3a53b60d",
-    "data/reference/MEA/physical_solubility/unloaded_solution_density.csv": "b5a524778d4c50365d2bc2a8ff39b0e73d0ef3539b0cae39cfa7c26c871c8b44",
-    "data/reference/MEA/physical_solubility/sources.json": "4b4af1ecfcfc2840abcc173ed9732b565a884fb51d2b118afb1d7ee6485e3715",
-    "data/reference/MEA/physical_solubility/README.md": "f7c5f667f72a4faa5f55e478d4f5de4fc60b6630f0bba07a2df28aabce60f298",
-    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/joint-design/amendment-4-addendum-dilute-bubble.md": "01d1bdde2a7cc1f17612f1bc9bee51ba62b970cdace707f1aab9ea6123160320"
+    "data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv": "711813f70cad20fb571e63e90e1d740f7d8ea3099ef3f84ee475020851697422",
+    "data/reference/MEA/physical_solubility/unloaded_solution_density.csv": "58c940c39ab21f1c6c0ac34a102875deba56c3631deb9dc0174e01b4da8532d0",
+    "data/reference/MEA/physical_solubility/sources.json": "2f276f9c9af997661336407f198c54e62a80632b2e9b7981452c7bdea3215ae6",
+    "data/reference/MEA/physical_solubility/README.md": "1d708b3c7fb14d95aac12d21607f2d0632898d201f1d1b0e615427b9fdc0a287",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/joint-design/amendment-4-addendum-dilute-bubble.md": "f63a20a83a517f3302742ad8ff4f39eb09cdeb32253d345842f1c0eb8b073823"
   },
   "notebook_render": {
     "commands": [
@@ -28,5 +28,30 @@
     ],
     "result": "both rendered; notebook HTML includes retained scalar values",
     "refresh_limitation": "Initial manuscript.py refresh failed because snakemake was absent from shell PATH. Existing normal static rendering command succeeded; no presentation cells or model calculation were executed."
+  },
+  "correction_2026_10_16": {
+    "scope": "Design and data correction only; owner away; no Engine evaluations or fits",
+    "primary_basis": "Hartono SI Table S2 direct p/x times Eq.N2O-4; no density conversion",
+    "historical_results": "All preflight numerical results, target replays and earlier primary labels are unchanged; they describe the superseded Table 11 density-based two-source proposal.",
+    "identity_scope": "input_and_addendum_sha256 identifies the corrected current documents, not the original inputs used by the historical preflight.",
+    "primary_rows": 7,
+    "temperature_groups": 6,
+    "executable_lines_added": 0,
+    "gross_campaign_executable_lines": 861,
+    "gross_campaign_limit": 900,
+    "fits_run": 0,
+    "Engine_evaluations": 0,
+    "exact_replacement_blocks_verified": 8,
+    "original_derived_rows_preserved_except_role": 23,
+    "density_central_values_preserved": 24,
+    "Xu_zero_weight_rows": 16,
+    "primary_Hx_max_relative_arithmetic_error": 8.881784197001252e-16,
+    "Table11_over_SI_excess_percent": [
+      0.8536786997842549,
+      3.0912763423516676
+    ],
+    "historical_numerical_files_unchanged": true,
+    "historical_input_commit": "62a205742a58e639f3f04838ef8f0c29aad84bf9",
+    "notebook_render": "Correction prose has not been rerendered; notebook_render above records the historical preflight rendering."
   }
 }

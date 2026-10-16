@@ -36,7 +36,9 @@ from the native derivative is 32.9614–36.2440 cm³/mol at the bubble and
 Poynting estimate to 101325 Pa is 0.416577%; including the computed gas
 coefficient change at fixed bubble-vapor composition gives 0.695049%.
 This is conditional on that pressure, gas reference and volume envelope.
-It does not establish the unread Xu Table S3's measurement pressures.
+It does not establish transfer from Hartono's experimental N₂O gas reference
+or the unread Xu Table S3's measurement pressures. Hartono SI partial N₂O
+pressures do not supply its total pressure or a complete gas-fugacity mapping.
 
 `engine-identity.json` was produced by the existing `fit_campaign.verify`.
 All 12 installed Engine files match wheel SHA-256
@@ -65,3 +67,18 @@ source estimates. It is neither parameter calibration nor physical
 validation. Original start-B, parameter-derivative, dielectric-branch and
 gas-free density checks remain unrun. Source pressure/gas transfer and
 independent readiness/delivered review remain open. No fit is released.
+
+The 2026-10-16 orchestrator correction (owner away) selects Hartono SI Table
+S2 direct p/x times the unchanged analogy ratio as the primary Hx basis;
+no density conversion is needed for it. Table 11 Hc-times-density values
+remain candidate evidence and exceed the corresponding SI values by
+0.85368–3.09128%. The source volume convention remains unresolved.
+The corrected [data owner](../../../../../../data/reference/MEA/physical_solubility/README.md)
+records the decision, source uncertainty correction and active row roles.
+Only seven Hartono rows in six temperature groups are primary candidates,
+with log_ratio weight 1/[6 m_g (0.05)²]. All 16 Xu rows are conditional
+comparisons with zero fitting weight. Historical `primary` labels and target
+replays here describe the superseded two-source, Table 11 density-based
+proposal; all numerical results remain unchanged and do not qualify the SI
+targets. Source gas-reference transfer and original numerical checks still
+stop fitting. No fit or Engine evaluation ran for this correction.
