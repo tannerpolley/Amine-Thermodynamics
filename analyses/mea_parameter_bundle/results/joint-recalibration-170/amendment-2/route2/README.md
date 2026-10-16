@@ -1,3 +1,9 @@
+# Route 2 continuation: owner permits bound-constrained optima
+
+The [owner decision of 2026-10-16](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6207429019) authorizes the four comparison fits at 100 iterations, 1200 s native wall time and 12000 aggregate CPU-s per fit, with a 1320 s crash backstop. All declarations of bounds, starts, observations and releases remain fixed. The four fits share 48000 CPU-s from the selected-route reserve; 2894.799365744 CPU-s remains for assessment/reporting before continuation overhead. Program limits remain 144000 CPU-s and 21600 active wall-s. Aggregate fit CPU is measured after normal reaping. The first fit restarts from declared A, never from the partial vector.
+
+The launcher replaces only the obsolete active-bound stop; non-convergence, rank deficiency and all other declared stops remain. This adds two executable lines and removes two: part 2 **187/200**, campaign **812/900** conservative gross additions. The final continuation results will replace this notice. The prior record below remains historical until then.
+
 # Route 2: graceful partial return at the native time limit
 
 **No completed Route 2 comparison record is available.** The unchanged lambda=0 start A rerun returns a usable partial vector after **29 iterations**, with training cost **196.865136591 → 42.4903033067**, **29 residual / 17 Jacobian evaluations**, and no trial failures. All **166 requested predictions are Available**. The native status is `limit_reached`, with message `Maximum solver time reached. Total solver time: 1.202227e+02 >= 1.075647e+02.`. Five free coordinates are active at bounds. No B or lambda=0.1 fit, replay, derivative or assessment call follows this stop. The primary lambda=0.1 common-149 metric remains unavailable.
