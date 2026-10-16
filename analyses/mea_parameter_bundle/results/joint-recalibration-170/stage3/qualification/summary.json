@@ -1,0 +1,148 @@
+{
+  "engine_commit": "0bec2bdf42e31bf37e8d4679169c8174b580408f",
+  "wheel_sha256": "a974c0e0c1d1049ffd144c003815a47f313820c5c3065aa395faa0a58e70a60d",
+  "passed": true,
+  "comparisons": {
+    "water": {
+      "expected_cost": 0.3883034271799937,
+      "actual_cost": 0.3883034271803113,
+      "relative_cost_difference": 8.178637476892927e-13,
+      "maximum_weighted_row_difference": 4.763550665032312e-13,
+      "objective_rows": 63,
+      "cp_rows": 42,
+      "saturation_rows": 39,
+      "unavailable": [],
+      "cp_unverified": [],
+      "cost_tolerance": 1e-08,
+      "row_tolerance": 1e-08,
+      "passed": true
+    },
+    "neutral-mea-water": {
+      "expected_cost": 91.84540850646353,
+      "actual_cost": 91.84540850646385,
+      "relative_cost_difference": 3.55869350209972e-15,
+      "maximum_weighted_row_difference": 2.7000623958883807e-11,
+      "cost_tolerance": 1e-08,
+      "row_tolerance": 1e-08,
+      "ids_equal": true,
+      "rows": 55,
+      "passed": true
+    },
+    "co2-water": {
+      "expected_cost": 0.026481760450542256,
+      "actual_cost": 0.02648176045053506,
+      "relative_cost_difference": 2.7172034094147446e-13,
+      "maximum_weighted_row_difference": 1.5894230376289897e-13,
+      "cost_tolerance": 1e-08,
+      "row_tolerance": 1e-08,
+      "ids_equal": true,
+      "rows": 39,
+      "passed": true
+    },
+    "current": {
+      "passed": true,
+      "identical_definitions": true,
+      "relative_cost_difference": 1.3230406081688039e-12,
+      "maximum_weighted_row_difference": 3.6470337860805557e-10,
+      "expected_summary": {
+        "cost": 32.05668490872888,
+        "scores": {
+          "pressure": {
+            "n": 47,
+            "cost": 8.380385087978372,
+            "AARD_percent": 13.814747342843924
+          },
+          "species": {
+            "n": 94,
+            "cost": 21.95048204698348,
+            "AARD_percent": 7.891434570808151
+          }
+        },
+        "Vinjarapu_RMSE_kJ_mol": 2.1265722967628653,
+        "Arcis_RMSE_kJ_mol": 8.364420937935868
+      },
+      "actual_summary": {
+        "cost": 32.056684908771295,
+        "common149_cost": 32.056684908771295,
+        "scores": {
+          "pressure": {
+            "n": 47,
+            "cost": 8.380385087975224,
+            "AARD_percent": 13.814747342834215
+          },
+          "species": {
+            "n": 94,
+            "cost": 21.950482046987805,
+            "AARD_percent": 7.891434570808665
+          }
+        },
+        "Vinjarapu_RMSE_kJ_mol": 2.1265722968041008,
+        "Arcis_RMSE_kJ_mol": 8.364420937930037
+      },
+      "limits": {
+        "cost_replay_relative": 1e-08,
+        "row_replay_absolute": 1e-08
+      },
+      "native_wall_s": 11.532687122991774,
+      "command_wall_s": 14.431782626998029,
+      "cpu_s": 11.530689,
+      "host_load": [
+        9.669921875,
+        9.580078125,
+        11.7509765625
+      ]
+    }
+  },
+  "calls": [
+    {
+      "call": "water",
+      "cpu_s": 0.03869699999999998,
+      "wall_s": 0.03871424900717102,
+      "wall_limit_s": 60,
+      "host_load": [
+        7.138671875,
+        9.39453125,
+        11.9130859375
+      ]
+    },
+    {
+      "call": "neutral-mea-water",
+      "cpu_s": 0.7647489999999999,
+      "wall_s": 0.8093463010009145,
+      "wall_limit_s": 60,
+      "host_load": [
+        7.7919921875,
+        9.36328125,
+        11.8349609375
+      ]
+    },
+    {
+      "call": "co2-water",
+      "cpu_s": 0.5488149999999998,
+      "wall_s": 0.5488712350052083,
+      "wall_limit_s": 60,
+      "host_load": [
+        7.97412109375,
+        9.328125,
+        11.783203125
+      ]
+    },
+    {
+      "call": "current",
+      "cpu_s": 11.530689,
+      "wall_s": 11.532687122991774,
+      "command_wall_s": 14.431782626998029,
+      "wall_limit_s": 60,
+      "host_load": [
+        9.669921875,
+        9.580078125,
+        11.7509765625
+      ]
+    }
+  ],
+  "native_cpu_s": 12.882950000000001,
+  "native_wall_s": 12.929618908005068,
+  "budget_cpu_s": 1200,
+  "budget_wall_s": 300,
+  "timing_basis": "Native scientific calls; water/binary interpreter startup and file verification overhead were not metered. Current command wall duration is also retained."
+}

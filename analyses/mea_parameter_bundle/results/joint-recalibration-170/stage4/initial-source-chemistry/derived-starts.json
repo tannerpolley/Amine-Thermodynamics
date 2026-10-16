@@ -1,0 +1,46 @@
+{
+  "source_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/co2-water/slope/co2-water/B/parameters.json",
+  "source_sha256": "b1ec1ddc22abe5ced8d08116fc91a7b3da1361864db1b34c33dda121b642a5e2",
+  "reference_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/reference-parameters.json",
+  "reference_sha256": "d1e7fa321640ed752b926c3c42da237005a139335641365e21b9e6da635701e8",
+  "changes": [
+    {
+      "identity": "pair/bicarbonate-anion/water/k_ij",
+      "old": 0.5,
+      "new": 0.0
+    }
+  ],
+  "starts": [
+    {
+      "start": "A",
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/A/start-parameters.json",
+      "sha256": "d1e7fa321640ed752b926c3c42da237005a139335641365e21b9e6da635701e8",
+      "coordinates": {}
+    },
+    {
+      "start": "B",
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/B/start-parameters.json",
+      "sha256": "3b555c27aadab638abeed3a3763135845437e4b9c3d178a1281cb4eb60361902",
+      "coordinates": {
+        "component/protonated-monoethanolamine/born_diameter": 3.533229271464668,
+        "component/protonated-monoethanolamine/debye_huckel_diameter": 3.066875297958331,
+        "component/protonated-monoethanolamine/dispersion_energy_over_k": 232.6872016451942,
+        "component/protonated-monoethanolamine/packing_diameter": 3.066875297958331,
+        "component/protonated-monoethanolamine/segment_diameter": 3.48508556586174,
+        "component/carbamate-anion/born_diameter": 3.5410703082156436,
+        "component/carbamate-anion/debye_huckel_diameter": 3.111183026347683,
+        "component/carbamate-anion/dispersion_energy_over_k": 453.26524438401077,
+        "component/carbamate-anion/packing_diameter": 3.111183026347683,
+        "component/carbamate-anion/segment_diameter": 3.535435257213276,
+        "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.002018134576435147
+      }
+    }
+  ],
+  "cpu_s_conservative_charge": 14.12463072,
+  "wall_s": 0.44139471,
+  "timing_basis": "First command wall from exec tool; CPU unmetered, charged conservatively at all 32 CPUs times entire command wall. Bookkeeping-only follow-up not timed. The exact-equality assertion was stricter than the accepted 1e-8 replay limits; no numerical call was repeated.",
+  "cumulative_cpu_s": 1187.72849372,
+  "cumulative_wall_s_lower_bound": 432.14591669300097,
+  "remaining_cpu_s_upper_bound": 142812.27150628,
+  "remaining_wall_s_upper_bound": 21167.854083307
+}

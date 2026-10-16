@@ -1,0 +1,127 @@
+"""Evaluation only: fixed declared states and one-input perturbations; no fit."""
+import sys, json, math, csv, time, resource, signal, hashlib, zipfile
+from pathlib import Path
+started=time.perf_counter()
+resource.setrlimit(resource.RLIMIT_CPU,(240,245))
+signal.alarm(240)
+root=Path.cwd(); out=root/'analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/diagnosis-carbonate'; base=out.parent
+sys.path[:0]=[str(root/'src'),str(root/'analyses/mea_parameter_bundle/scripts')]
+import fit_observations as o
+s=o.s; eq=o.eq
+load=lambda p:json.loads(Path(p).read_text())
+def write(name,data): (out/name).write_text(json.dumps(data,indent=2,allow_nan=False)+'\n')
+def table(name,rows):
+ with (out/name).open('w') as f:
+  w=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator="\n");w.writeheader();w.writerows(rows)
+wheel=root/'tmp/ions-first-cf26a17b/wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl'
+sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+assert sha(wheel)=='32ce708a671c24dbb0112f53bc4a18021eaa1bd10a1f04e96b9ce8d3145da52f'
+installed=Path(o.epcsaft.__file__).parent
+with zipfile.ZipFile(wheel) as z:
+ checked=[n for n in z.namelist() if n.startswith('epcsaft/') and not n.endswith('/')]
+ for n in checked: assert (installed.parent/n).read_bytes()==z.read(n),n
+spec=load(base/'fit/stage4-spec.json');case=spec['cases'][0];mapping=load(base/'A/start-parameters.json');pv=s.parameter_values(mapping)
+perturbations={
+ 'A-start':{},
+ 'carbonate-water-kij-zero':{'pair/carbonate-anion/water/k_ij':0.},
+ 'hydronium-hydroxide-water-kij-zero':{'pair/hydronium-cation/water/k_ij':0.,'pair/hydroxide-anion/water/k_ij':0.},
+ 'R4-a-minus-0.2':{'reaction:R4:correlation:a':pv['reaction:R4:correlation:a']-.2},
+ 'R4-a-plus-0.2':{'reaction:R4:correlation:a':pv['reaction:R4:correlation:a']+.2},
+ 'R5-ak-minus-80K':{'reaction:R5:correlation:a_k':pv['reaction:R5:correlation:a_k']-80},
+ # All nonbaseline carbonate Born candidates in the retained trace-ion seed scan.
+ **{f'carbonate-born-{d}A':{'component/carbonate-anion/born_diameter':d} for d in (1.05,4.5,7.5)},
+ 'A-iteration-40':{},
+ '022-feed-27.1427wtpct-evaluation':{},
+ 'historical-adopted-parameters-current-declared-feeds':{},
+}
+allrows=[]; summaries=[]; states=[]; decomposition=[]; inputs={}; failures=[]
+previous=list(csv.DictReader((base/'diagnosis-chemistry/target-costs-gradients.csv').open()))
+for name,change in perturbations.items():
+ t=time.perf_counter();c0=resource.getrusage(resource.RUSAGE_SELF)
+ m=(load(base/'fit/ion-speciation/A/usable-budget-endpoint.json') if name=='A-iteration-40' else
+    load(root/'analyses/mea_parameter_bundle/results/selected-current-best-parameters.json') if name.startswith('historical-adopted') else s.with_parameter_values(mapping,change))
+ sp=json.loads(json.dumps(spec))
+ if name.startswith('022-feed'):
+  reqs=load(root/spec['state_requests_path']);q=reqs['Jakobsen2005_state_022']
+  coords=dict(q['reaction_system']['analytical_feed_contract']['source_coordinates']);coords['MEA_weight_fraction']=.2714274817259226
+  reqs['Jakobsen2005_state_022']=s.source_feed_request(q,coords)
+  write('corrected-022-requests.json',reqs);sp['state_requests_path']=str((out/'corrected-022-requests.json').relative_to(root))
+ params,rows=o.stage2_rows(sp,m,case);model=o.epcsaft.Mixture(params,thermochemistry=o.thermal.record())
+ inputs[name]=dict(changes=change,parameter_fingerprint=s.parameter_fingerprint(m))
+ vals=[]; statecache={}
+ for row,item,problem in rows:
+  v=o.reg.predict(model,item)
+  if v.status.name!='Available':
+   failures.append(dict(variant=name,target=row['id'],status=v.status.name,message=v.message));continue
+  cost=.5*row['weight']*v.residual**2
+  assert v.requested_tolerance_met is not False,(name,row['id'],v.message)
+  rr=dict(variant=name,state_id=row['state_id'],target=row['id'],status=v.status.name,requested_tolerance_met=v.requested_tolerance_met,message=v.message,quantity=row['quantity'],observed=row['observed'],predicted=v.value,scale=row['scale'],weight=row['weight'],residual=v.residual,cost=cost)
+  vals.append(rr);allrows.append(rr)
+  if name in ('A-start','A-iteration-40'):
+   old=next(p for p in previous if p['point']==name and p['target']==row['id'])
+   assert abs(v.value-float(old['predicted']))<1e-10,(name,row['id'])
+  if row['state_id'] not in statecache:
+   r=eq.solve_equilibrium(model,problem)
+   assert r.success,(name,row['state_id'],r.message)
+   assert max(map(abs,r.residuals))<1e-10
+   x=list(r.mole_fractions);den=x[1]+x[3]+x[4]
+   statecache[row['state_id']]=dict(variant=name,state_id=row['state_id'],T_K=row['T_K'],pressure_Pa=r.pressure[0],molar_density_mol_m3=r.molar_densities[0],x=x,
+      ratios_to_total_amine={str(model.component_ids[i]):x[i]/den for i in range(9)},carbonate_pool_share=x[6]/(x[5]+x[6]),max_abs_residual=max(map(abs,r.residuals)),message=r.message,
+      reference_diagnostics=[dict(reaction_index=d.reaction_index,terminal_contraction=d.terminal_contraction,status=d.status.name,observed_terminal_change=d.observed_terminal_change) for d in r.neutral_reference_diagnostics])
+   states.append(statecache[row['state_id']])
+   if name=='A-start' and 'Jakobsen' in row['state_id']:
+    st=model.state(row['T_K'],rho=r.molar_densities[0],x=x);phi=list(st.log_fugacity_coefficient);source_lnK=[];native_lnK=[]
+    for i,reaction in enumerate(problem.reactions):
+     c=reaction.correlation;k=c.a+c.b/row['T_K']+c.c*math.log(row['T_K']/c.reference_temperature)+c.d*row['T_K']
+     shift=-4.016534992299479*sum(v for k0,v in reaction.stoichiometry.items() if k0!='water') if reaction.reference.source_basis.name=='CommonMolalityInfiniteDilution' else 0.
+     source_lnK.append(k);native_lnK.append(k+shift+r.neutral_reference_diagnostics[i].terminal_contraction)
+     nu=[reaction.stoichiometry[k0] for k0 in model.component_ids]
+     if i != 1: assert abs(sum(n*(math.log(xx)+p) for n,xx,p in zip(nu,x,phi))-native_lnK[-1])<2e-9
+     else: native_lnK[-1]=None  # R2 neutral CO2 reference conversion is outside this carbonate decomposition.
+    # Native EOS fugacity coefficients are exact on the Engine basis. Infinite-dilution
+    # coefficients below use the Engine's neutral salt reference at the reaction pressure.
+    refs={};solvent=[0.]*9;solvent[2]=1.
+    for c,a,stoich in [('protonated-monoethanolamine','carbonate-anion',(2,1)),('hydronium-cation','bicarbonate-anion',(1,1)),('hydronium-cation','hydroxide-anion',(1,1))]:
+     ref=model.reference(row['T_K'],100000.,solvent_fractions=solvent,ions=(c,a),stoichiometry=stoich)
+     for key,value in zip((c,a),ref.log_fugacity): refs[key]=dict(lnphi_infinite_dilution=value,convergence_error=ref.convergence_error,molality=ref.molality)
+    # MEA and water reference from a neutral insertion (no ionic insertion needed).
+    xp=[0.]*9;xp[1]=1e-12;xp[2]=1.-1e-12
+    refst=model.state(row['T_K'],P=100000.,x=xp,phase='liquid')
+    refs['monoethanolamine']=dict(lnphi_infinite_dilution=refst.log_fugacity_coefficient[1],convergence_error=None,mole_fraction=1e-12)
+    refs['water']=dict(lnphi_infinite_dilution=refst.log_fugacity_coefficient[2],convergence_error=None,mole_fraction=1.-1e-12)
+    gamma={k:phi[model.component_ids.index(k)]-v['lnphi_infinite_dilution']+math.log(r.pressure[0]/100000.) for k,v in refs.items()}
+    lnratio=math.log(x[6]/x[5]);combinedK=native_lnK[2]-native_lnK[4]
+    at=phi[1]+phi[5]-phi[3]-phi[6];ct=math.log(x[1]/x[3])
+    assert abs(lnratio-(combinedK+at+ct))<2e-9
+    decomposition.append(dict(state_id=row['state_id'],T_K=row['T_K'],component_ids=list(model.component_ids),ln_phi=phi,
+      ln_gamma_infinite_dilution_x_scale=gamma,reference_species=refs,reference_pressure_Pa=100000.,source_lnK=source_lnK,native_lnK=native_lnK,
+      R3_lnK_native=native_lnK[2],R5_lnK_native=native_lnK[4],R3_minus_R5_lnK_native=combinedK,
+      activity_part_native=at,MEA_to_MEAH_log_ratio=ct,carbonate_to_bicarbonate_log_ratio=lnratio,
+      carbonate_to_bicarbonate_ratio=x[6]/x[5],R3_activity_part=phi[5]+phi[2]-phi[6]-phi[7],R3_composition_part=math.log(x[2]/x[7])))
+ c1=resource.getrusage(resource.RUSAGE_SELF)
+ summary=dict(variant=name,n_targets=len(vals),cost=sum(v['cost'] for v in vals),cpu_s=c1.ru_utime+c1.ru_stime-c0.ru_utime-c0.ru_stime,wall_s=time.perf_counter()-t)
+ for state_id in ('Jakobsen2005_state_011','Jakobsen2005_state_022'):
+  ss=[v for v in vals if v['state_id']==state_id];cc=next((v for v in ss if v['target'].endswith('::CO3^2-')),None)
+  short=state_id[-3:]
+  summary.update({short+'_state_cost':sum(v['cost'] for v in ss),short+'_carbonate_cost':cc['cost'] if cc else None,short+'_carbonate_ratio':cc['predicted'] if cc else None,
+       short+'_pool_share':statecache[state_id]['carbonate_pool_share']})
+ summaries.append(summary)
+ print(name,summary['cost'],summary['011_carbonate_ratio'],summary['022_carbonate_ratio'],flush=True)
+ write('states.json',states);write('summary.json',summaries);write('decomposition.json',decomposition);write('failures.json',failures)
+assert not failures, failures
+# Pool evaluation combines each Jakobsen HCO3-/CO3^2- pair, with a scale for the summed observation.
+# Preserve 1/26 for a paired comparison; also report the normalized 24-target evaluation.
+poolrows=[dict(r) for r in allrows if r['variant']=='A-start' and not ('Jakobsen' in r['state_id'] and r['target'].endswith(('::HCO3-','::CO3^2-')))]
+for sid in ('Jakobsen2005_state_011','Jakobsen2005_state_022'):
+ pair=[r for r in allrows if r['variant']=='A-start' and r['state_id']==sid and r['target'].endswith(('::HCO3-','::CO3^2-'))]
+ obs=sum(r['observed'] for r in pair);pred=sum(r['predicted'] for r in pair);scale=.1*obs+.001;resid=(pred-obs)/scale
+ poolrows.append(dict(variant='pool-evaluation',state_id=sid,target=sid+'::HCO3-+CO3^2-',status='Available',requested_tolerance_met=True,message='Sum of same-state native amount ratios',quantity='amount_ratio',observed=obs,predicted=pred,scale=scale,weight=1/26,residual=resid,cost=.5/26*resid**2))
+assert len(poolrows)==24
+write('pool-evaluation.json',dict(n_targets=24,weight_preserved=1/26,cost=sum(r['cost'] for r in poolrows),normalized_weight=1/24,normalized_cost=sum(r['cost'] for r in poolrows)*26/24,
+  states={sid:dict(pool=next(r for r in poolrows if r['target']==sid+'::HCO3-+CO3^2-'),state_cost=sum(r['cost'] for r in poolrows if r['state_id']==sid)) for sid in ('Jakobsen2005_state_011','Jakobsen2005_state_022')}))
+table('target-evaluations.csv',allrows);table('sensitivity-summary.csv',summaries);table('pool-targets.csv',poolrows)
+write('inputs.json',dict(wheel_sha256=sha(wheel),installed=str(installed),installed_wheel_files_verified=len(checked),
+    variants=inputs,files={str(p.relative_to(root)):sha(p) for p in [base/'A/start-parameters.json',base/'fit/ion-speciation/A/usable-budget-endpoint.json',base/'fit/stage4-spec.json',root/spec['stage2_rows_path'],root/spec['state_requests_path'],Path(__file__)]},
+    pressure_basis='Fixed homogeneous liquid, 101325 Pa; native reference contractions at each source reference pressure'))
+signal.alarm(0)
+u=resource.getrusage(resource.RUSAGE_SELF);write('evaluation-timing.json',dict(cpu_s=u.ru_utime+u.ru_stime,wall_s=time.perf_counter()-started,fit_calls=0,variants=len(perturbations),cpu_limit_s=240,wall_limit_s=240))

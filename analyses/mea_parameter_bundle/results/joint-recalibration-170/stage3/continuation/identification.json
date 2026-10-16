@@ -1,0 +1,117 @@
+{
+  "full": {
+    "columns": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "rank": 4,
+    "columns_count": 4,
+    "optimizer_singular_values": [
+      0.3961117533506263,
+      0.20578985588263207,
+      0.05509314342289808,
+      0.002936185606223166
+    ],
+    "physical_singular_values": [
+      674036088.6537728,
+      158736.92209777312,
+      24078.804679256144,
+      1582.5986507927826
+    ],
+    "condition": 134.9069188647605,
+    "weakest_optimizer_direction": [
+      -0.5898816312575944,
+      -0.8044789097438056,
+      -0.06942291227686026,
+      -0.005814132204955802
+    ]
+  },
+  "free": {
+    "columns": [
+      1,
+      2,
+      3
+    ],
+    "rank": 3,
+    "columns_count": 3,
+    "optimizer_singular_values": [
+      0.27119119336901293,
+      0.18430869323162596,
+      0.05300986813948733
+    ],
+    "physical_singular_values": [
+      674033801.2179362,
+      154240.65406020373,
+      1589.1282215905653
+    ],
+    "condition": 5.115862440091624,
+    "weakest_optimizer_direction": [
+      -0.2623322913133111,
+      -0.9649448262418496,
+      -0.00795306503147164
+    ]
+  },
+  "rank_cutoff": "1e-14 times largest singular value, design section 6; native covariance independently returns full rank 4",
+  "coordinates": [
+    {
+      "identity": "component/carbon-dioxide/dispersion_energy_over_k",
+      "family": "dispersion_energy_over_k",
+      "target": "carbon-dioxide",
+      "bounds": [
+        160,
+        190
+      ],
+      "scale": 5
+    },
+    {
+      "identity": "pair/carbon-dioxide/water/k_ij",
+      "target": [
+        "carbon-dioxide",
+        "water"
+      ],
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ]
+    },
+    {
+      "identity": "pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope",
+      "family": "k_ij_reciprocal_temperature_slope",
+      "target": [
+        "carbon-dioxide",
+        "water"
+      ],
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "scale": 10.0
+    },
+    {
+      "identity": "reaction:R5:correlation:a_k",
+      "reaction": "R5",
+      "coefficient": "b",
+      "source_to_native_factor": -2.302585092994046,
+      "bounds": [
+        2400,
+        3000
+      ],
+      "scale": 80
+    }
+  ],
+  "active_bounds": [
+    0
+  ],
+  "gradient": [
+    0.0001625795915203735,
+    2.9076545113787067e-07,
+    4.753021182066436e-09,
+    2.375714264806687e-08
+  ],
+  "covariance_assumption": "unit-variance weighted residuals, independent errors and a regular local linearization at an interior point; multiply by variance_factor for an unknown common variance; no claim under bounds, rank deficiency or model discrepancy",
+  "projected_gradient_norm": 2.9076545127182385e-07,
+  "conditional_covariance_available": false
+}

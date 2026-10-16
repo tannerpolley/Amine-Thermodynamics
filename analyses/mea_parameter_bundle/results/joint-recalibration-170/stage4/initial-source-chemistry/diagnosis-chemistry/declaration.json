@@ -1,0 +1,177 @@
+{
+  "authority": "Parent response to initial_stage4_stop: bounded diagnosis, at most 120 CPU-s/120 wall-s; no fit or altered bounds, starts or iteration limits.",
+  "ion_coordinates": [
+    {
+      "identity": "component/protonated-monoethanolamine/segment_diameter",
+      "family": "segment_diameter",
+      "target": "protonated-monoethanolamine",
+      "bounds": [
+        2,
+        5.8
+      ],
+      "scale": 0.1,
+      "targets": [
+        {
+          "family": "segment_diameter",
+          "target": "protonated-monoethanolamine",
+          "factor": 1.0
+        },
+        {
+          "family": "packing_diameter",
+          "target": "protonated-monoethanolamine",
+          "factor": 0.88
+        },
+        {
+          "family": "debye_huckel_diameter",
+          "target": "protonated-monoethanolamine",
+          "factor": 0.88
+        }
+      ],
+      "ties": [
+        {
+          "identity": "component/protonated-monoethanolamine/packing_diameter",
+          "factor": 0.88
+        },
+        {
+          "identity": "component/protonated-monoethanolamine/debye_huckel_diameter",
+          "factor": 0.88
+        }
+      ]
+    },
+    {
+      "identity": "component/carbamate-anion/segment_diameter",
+      "family": "segment_diameter",
+      "target": "carbamate-anion",
+      "bounds": [
+        2,
+        5.8
+      ],
+      "scale": 0.1,
+      "targets": [
+        {
+          "family": "segment_diameter",
+          "target": "carbamate-anion",
+          "factor": 1.0
+        },
+        {
+          "family": "packing_diameter",
+          "target": "carbamate-anion",
+          "factor": 0.88
+        },
+        {
+          "family": "debye_huckel_diameter",
+          "target": "carbamate-anion",
+          "factor": 0.88
+        }
+      ],
+      "ties": [
+        {
+          "identity": "component/carbamate-anion/packing_diameter",
+          "factor": 0.88
+        },
+        {
+          "identity": "component/carbamate-anion/debye_huckel_diameter",
+          "factor": 0.88
+        }
+      ]
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/dispersion_energy_over_k",
+      "family": "dispersion_energy_over_k",
+      "target": "protonated-monoethanolamine",
+      "bounds": [
+        50,
+        950
+      ],
+      "scale": 10
+    },
+    {
+      "identity": "component/carbamate-anion/dispersion_energy_over_k",
+      "family": "dispersion_energy_over_k",
+      "target": "carbamate-anion",
+      "bounds": [
+        50,
+        1000
+      ],
+      "scale": 10
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/born_diameter",
+      "family": "born_diameter",
+      "target": "protonated-monoethanolamine",
+      "bounds": [
+        1,
+        7
+      ],
+      "scale": 0.1
+    },
+    {
+      "identity": "component/carbamate-anion/born_diameter",
+      "family": "born_diameter",
+      "target": "carbamate-anion",
+      "bounds": [
+        1,
+        7
+      ],
+      "scale": 0.1
+    },
+    {
+      "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+      "family": "k_ij",
+      "target": [
+        "carbamate-anion",
+        "protonated-monoethanolamine"
+      ],
+      "bounds": [
+        -2,
+        2
+      ],
+      "scale": 0.01
+    }
+  ],
+  "diagnostic_extra_coordinates": [
+    {
+      "name": "R5 unshifted a_k",
+      "native_reaction": "R5",
+      "coefficient": "b",
+      "source_to_native": -2.302585092994046,
+      "source_scale_K": 80,
+      "bounds_K": [
+        2400,
+        3000
+      ]
+    },
+    {
+      "name": "R2 enthalpy shift",
+      "pivot_temperature_K": 313.15,
+      "source_scale_J_mol": 2500,
+      "bounds_J_mol": [
+        -10000,
+        10000
+      ]
+    }
+  ],
+  "bound_active_ion_columns": [
+    1,
+    3,
+    4,
+    5
+  ],
+  "points": [
+    {
+      "id": "A-start",
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/fit/ion-speciation/A/start-parameters.json",
+      "sha256": "d1e7fa321640ed752b926c3c42da237005a139335641365e21b9e6da635701e8"
+    },
+    {
+      "id": "A-iteration-40",
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/fit/ion-speciation/A/usable-budget-endpoint.json",
+      "sha256": "437d4b2da9156b87677a5c319bce2683e1f35cc85c7cd4327fcdade029d98e5a"
+    }
+  ],
+  "budget_cpu_s": 120,
+  "budget_wall_s": 120,
+  "nonfit_wall_limit_s": 60,
+  "prior_cumulative_cpu_s": 1224.11788172,
+  "prior_cumulative_wall_s": 438.5795799500058
+}

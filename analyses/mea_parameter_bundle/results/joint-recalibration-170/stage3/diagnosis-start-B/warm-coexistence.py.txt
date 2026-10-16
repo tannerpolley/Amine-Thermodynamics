@@ -1,0 +1,20 @@
+import time,resource
+from pathlib import Path
+START=time.monotonic();CPU=time.process_time();resource.setrlimit(resource.RLIMIT_CPU,(45,45))
+import fit_campaign as c
+import fit_observations as o
+s=o.s;eq=o.eq;D=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/stage3/diagnosis-start-B');spec=c.load(D.parent/'stage3a-spec.json');mapping=c.load(D.parent/'co2-dispersion-r5-reference/B/start-parameters.json');params,rows=o.stage2_rows(spec,mapping,spec['cases'][0]);model=o.epcsaft.Mixture(params,thermochemistry=o.thermal.record());calls=[]
+def solve(label,prob,start=None):
+ clock,cpu=time.monotonic(),time.process_time()
+ try:
+  result=eq.solve_equilibrium(model,prob,**(dict(start=start) if start is not None else {}));payload=dict(label=label,success=result.success,message=result.message,P_Pa=list(result.pressure),rho_mol_m3=list(result.molar_densities),raw_residuals=list(result.residuals))
+  if result.success:
+   point=eq.compile_problem(model,prob).evaluate(result.coordinates);phases=[s._phase_payload(prob,result,i,len(model.component_ids)) for i in range(result.phase_count)];states=[model.state(result.temperature[0],rho=result.molar_densities[i],x=dict(zip(p['support'],p['mole_fractions']))) for i,p in enumerate(phases)]
+   payload.update(phases=phases,coordinates=list(result.coordinates),unscaled_residuals=list(point.values),reduced_hessian_minimum=result.reduced_hessian_minimum,dP_drho=[v.pressure_density_derivative for v in states],direct_pressure_Pa=[v.pressure for v in states])
+ except Exception as error:result=None;payload=dict(label=label,success=False,error=f'{type(error).__name__}: {error}')
+ payload.update(cpu_s=time.process_time()-cpu,wall_s=time.monotonic()-clock);calls.append(payload);c.write(D/'warm-start-calls.json',calls);return result
+try:
+ prior=next(r for r in rows if r[0]['id']=='kiepe-313.20-12');target=next(r for r in rows if r[0]['id']=='kiepe-313.20-13')
+ state=solve('B-row-12-unchanged-vapor',prior[2]);result=solve('B-row-13-unchanged-vapor-warm-from-row-12',target[2],state) if state is not None and state.success else None
+ print([(v['label'],v.get('P_Pa'),v.get('rho_mol_m3'),v.get('message',v.get('error'))) for v in calls],flush=True)
+finally:c.write(D/'warm-timing.json',dict(cpu_s=time.process_time()-CPU,wall_s=time.monotonic()-START,limits_cpu_s=45,limits_wall_s=45,host_load=c.os.getloadavg()))

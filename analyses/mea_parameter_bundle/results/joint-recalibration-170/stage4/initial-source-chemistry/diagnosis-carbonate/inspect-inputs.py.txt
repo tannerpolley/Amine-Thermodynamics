@@ -1,0 +1,30 @@
+import sys, json, time, resource, hashlib, zipfile, csv
+from pathlib import Path
+started=time.perf_counter()
+root=Path.cwd(); out=root/'analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/diagnosis-carbonate'
+sys.path[:0]=[str(root/'src'),str(root/'analyses/mea_parameter_bundle/scripts')]
+import fit_observations as o
+s=o.s; eq=o.eq
+base=out.parent
+spec=json.loads((base/'fit/stage4-spec.json').read_text()); mapping=json.loads((base/'A/start-parameters.json').read_text()); params,rows=o.stage2_rows(spec,mapping,spec['cases'][0]);model=o.epcsaft.Mixture(params,thermochemistry=o.thermal.record())
+row,item,problem=next(t for t in rows if t[0]['state_id'].endswith('_011'))
+r=eq.solve_equilibrium(model,problem)
+state=model.state(row['T_K'],rho=r.molar_densities[0],x=r.mole_fractions)
+print('ids',model.component_ids); print('solve',r.success,max(map(abs,r.residuals)),r.message);print('x',r.mole_fractions);print('lnphi',state.log_fugacity_coefficient)
+print('refdiag',[(v.reaction_index,v.terminal_contraction,v.status.name,v.observed_terminal_change) for v in r.neutral_reference_diagnostics])
+solvent=[0.]*9;solvent[2]=1
+for c,a,st in [('protonated-monoethanolamine','carbonate-anion',(2,1)),('hydronium-cation','bicarbonate-anion',(1,1)),('hydronium-cation','hydroxide-anion',(1,1))]:
+ ref=model.reference(row['T_K'],100000.,solvent_fractions=solvent,ions=(c,a),stoichiometry=st)
+ print('ref',c,a,ref.log_fugacity,ref.molality,ref.convergence_error)
+print('reactions',[(v.name,v.stoichiometry,str(v.correlation),v.reference.source_basis.name) for v in problem.reactions])
+print('current', {k:v for k,v in s.parameter_values(mapping).items() if any(c in k for c in ['carbonate-anion','hydronium','hydroxide'])})
+variants={}
+for p in (root/'analyses/mea_parameter_bundle').rglob('*parameters.json'):
+ try:
+  m=json.loads(p.read_text());vals={k:v for k,v in s.parameter_values(m).items() if k.startswith('component/carbonate-anion/') and any(k.endswith('/'+q) for q in ['segment_count','segment_diameter','packing_diameter','debye_huckel_diameter','born_diameter','dispersion_energy_over_k'])}
+  if vals: variants.setdefault(json.dumps(vals,sort_keys=True),[]).append(str(p.relative_to(root)))
+ except (KeyError,TypeError,ValueError): pass
+print('carbonate_variants',json.dumps(variants,indent=2))
+for p in [root/'analyses/mea_parameter_bundle/results/selected-current-best-parameters.json',root/'analyses/mea_parameter_bundle/results/heat-final-170/F1-A/F1-A-diagnostic-parameters.json']:
+ vals=s.parameter_values(json.loads(p.read_text())); print('history parameters',str(p.relative_to(root)),{k:v for k,v in vals.items() if any(x in k for x in ['protonated-monoethanolamine','carbamate-anion','carbonate-anion','hydronium','hydroxide','reaction:'])})
+print('TIMING',time.perf_counter()-started,resource.getrusage(resource.RUSAGE_SELF).ru_utime+resource.getrusage(resource.RUSAGE_SELF).ru_stime)
