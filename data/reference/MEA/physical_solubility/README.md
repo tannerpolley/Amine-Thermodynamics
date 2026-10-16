@@ -3,8 +3,9 @@
 These data support the neutral CO₂–MEA design for issue #170. They contain
 23 measured N₂O Henry constants and 23 corresponding CO₂ physical Henry
 constants inferred through the N₂O analogy. The CO₂ values are indirect
-estimates, conditional on that analogy. No parameter fit, Engine calculation,
-target admission, or physical validation was performed.
+estimates, conditional on that analogy. No parameter fit, target admission,
+or physical validation was performed. The later mole-fraction extension below
+is accompanied by separately retained native calculation evidence.
 
 ## Source measurements and coverage
 
@@ -115,3 +116,80 @@ calibration residuals establish independent physical validation.
 `CO2_physical_from_N2O.csv` retains the conversion of the two source CSVs using Eqs.N2O-1–N2O-4. Temperature, pressure units, source values and the Eq.6 alternative are retained explicitly. This delivery contains no executable conversion script. Versteeg Table I at 298 K provides a printed water reference for checking the Henry direction and units. Source PDFs remain in Zotero.
 
 The derived CSV was verified against Eqs.N2O-1–N2O-4 in the [amendment-4 independent readiness review, r1, §1](/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/joint-design/amendment-4-readiness-r1.md), 16 October 2026. This delivery preserves those reviewed values.
+
+## Mole-fraction Henry basis for the dilute neutral bubble
+
+The 16 October addendum appends a mole-fraction basis to the same 23 derived
+rows. Existing fields and row identities are preserved. The transformation
+uses measured unloaded mass densities, rather than the stage-2 model density.
+It does not change the N₂O analogy or admit new fitting observations.
+
+`unloaded_solution_density.csv` contains 24 measured mass densities with
+source keys, PDF hashes, locators, pressure statements and uncertainties:
+
+- Hartono 2014 Table 3 p.1810, own unloaded 30 mass% values without reference
+  superscripts: 1010.55, 1008.31, 1003.45, 998.07, 992.23 and 985.96 kg/m³ at
+  25, 30, 40, 50, 60 and 70 °C. Section 2.2 p.1809 states atmospheric
+  pressure. Its seven Henry observations require interpolation in temperature.
+- Xu 2018 Table 4 p.2711, MEA-only block: the 16 densities at the exact
+  Table 8 temperatures and compositions. These are 993.8–1025.7 kg/m³;
+  the table states 101000 Pa. No composition or temperature interpolation
+  is used for Xu.
+- The Hartono 87.1 °C row lies above its own density table. Use Karunarathne
+  et al. 2020, DOI 10.3390/fluids5010013, Table 3 PDF p.5, own values at
+  30 mass% with no reference superscript: 979.4 and 972.3 kg/m³ at 80 and
+  90 °C. Linear interpolation gives 974.359 kg/m³ at 87.1 °C. Sections 2.2
+  and 3 describe the vibrating-tube method and uncertainty. This is a
+  measured-density source from a different campaign, with measurement
+  pressure unreported; the 4 bar statement in §2.3 concerns viscosity.
+
+The three density-table pages were visually checked against the Zotero PDFs;
+their current hashes match `sources.json`. No density correlation or
+extrapolation supplies these values. For bracketing measurements at fixed w,
+the explicit interpolation is
+
+$$
+f=(T-T_0)/(T_1-T_0),\qquad
+\rho_m(T,w)=(1-f)\rho_m(T_0,w)+f\rho_m(T_1,w). \tag{N2O-5}
+$$
+
+Here $\rho_m$ is mass density in kg/m³. The molar density of the gas-free
+solution and the limiting Henry constant on a mole-fraction basis are
+
+$$
+c_{\mathrm{total},0}=\rho_m
+\left(\frac{w}{M_{\mathrm{MEA}}}+\frac{1-w}{M_w}\right)
+\quad [\mathrm{mol/m^3}], \tag{N2O-6}
+$$
+
+$$
+H_x=H_c c_{\mathrm{total},0}\quad [\mathrm{Pa}],\qquad
+U_{H_x,\mathrm{N_2O\ only}}=
+c_{\mathrm{total},0}U_{H_c,\mathrm{N_2O\ only}}. \tag{N2O-7}
+$$
+
+These are MEA-owned basis identities: $c_{\mathrm{CO_2}}=x_{\mathrm{CO_2}}
+c_{\mathrm{total}}$ and $H_c=p/c_{\mathrm{CO_2}}$, with the gas concentration
+tending to zero. The molar masses remain those of Eq.N2O-1. The derived
+columns retain both density bracket identities and f. Across all 23 rows,
+$c_{\mathrm{total},0}=36660.2868$–50999.3137 mol/m³ and
+$H_x=120998548.9$–369615034.3 Pa. The 360.25 K Hartono row has
+$c_{\mathrm{total},0}=42645.2535$ mol/m³. These are converted source estimates,
+not new CO₂ measurements.
+
+The source density uncertainties remain separate: Hartono prints expanded
+0.02 kg/m³, k=2; Xu prints standard 1 kg/m³. Karunarathne Table 3 prints
+expanded 7.80 kg/m³, k=2, although §3 describes that combined estimate for
+loaded solutions. Carry 7.80 kg/m³ as a conservative quoted value, with that
+scope caveat; it is about 0.80% of the interpolated density. Neither linear
+interpolation error nor the difference between campaigns is quantified.
+The appended U column propagates only the original N₂O H uncertainty; it
+does not include density, composition, interpolation, water-ratio or analogy
+uncertainty. No statistical independence or combined uncertainty is asserted.
+
+The conversion does not establish the Henry measurement's reference pressure.
+Xu Table S3 remains unread. The Companion supplement request returned the
+existing main article; the exact supplement URL in its Zotero snapshot
+returned HTTP 403. The atmospheric density measurement must not be called
+the Henry measurement pressure. The addendum's pressure estimate to 101325 Pa
+is conditional on that declared reference and its stated gas reference.

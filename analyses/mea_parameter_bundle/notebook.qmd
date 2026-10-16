@@ -26,6 +26,11 @@ resources:
   - results/joint-recalibration-170/amendment-2/amendment-3/larger-dV-start-Kiepe.csv
   - results/joint-recalibration-170/amendment-2/amendment-3/larger-dV-start-family-costs.csv
   - results/joint-recalibration-170/amendment-2/amendment-3/larger-dV-start-Cp.csv
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/README.md
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/summary.json
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/results.json
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/pressure-properties.json
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/target-replay.json
 ---
 
 ## Amendment 3: information release stops both comparisons
@@ -516,6 +521,57 @@ Current equilibrium solution Cp spot checks are retained in [heat-capacity-compa
 <!-- RESULTS:heat-capacity:END -->
 
 [#124](https://github.com/tannerpolley/Amine-Thermodynamics/issues/124) fixes these misses before the joint refit, starting with the water parameters. The unloaded 80 °C value is [#161](https://github.com/tannerpolley/Amine-Thermodynamics/issues/161); no current value for it or for a pure-water grid is retained in this set.
+
+# Dilute neutral CO₂ observation for amendment 4
+
+**The fixed stage-2 model supplies a numerically verified dilute CO₂ partial
+pressure, so a mole-fraction Henry observation can be declared natively.**
+This 16 October 2026 design preflight uses Engine `84ca269d`, CO₂–MEA
+intercept and slope both zero, T=293.15–360.25 K, source gas-free MEA mass
+fractions 0.12208545–0.48838927, no reactions and neutral phase support.
+It does not change the adopted parameter set discussed above.
+
+The [retained calculation](results/joint-recalibration-170/amendment-4/dilute-bubble/summary.json)
+compares 22 distinct states at liquid CO₂ mole fractions 1e-5, 1e-6 and 1e-7.
+All 66 native partial-pressure predictions are Available with tolerance met;
+the table reports the quantities supporting that conclusion.
+
+| Quantity | Retained result |
+|---|---:|
+| Selected liquid CO₂ mole fraction | 1e-5 |
+| pCO₂ at selected dilution / Pa | 565.458365–2244.447500 |
+| Total bubble pressure / Pa | 2329.641493–57404.683320 |
+| Maximum relative change of pCO₂/x to next decade | 8.75251e-5 |
+| Maximum raw equilibrium residual | 1.57208e-13 |
+| Cold-replay pressure change / Pa | 0 |
+
+These scalar verification bounds are reported as a table; a plot would not
+clarify the declaration check.
+
+The [data owner](../../data/reference/MEA/physical_solubility/README.md),
+Eqs.N2O-5–N2O-7, converts the 23 analogy-derived Hc values using measured
+unloaded densities: Hx=Hc times gas-free total molar density. Xu Table 4
+matches all 16 Xu states exactly. Hartono Table 3 requires temperature
+interpolation; its 360.25 K row uses Karunarathne Table 3 measurements at
+353.15 and 363.15 K. The resulting Hx range is 1.20998549e8–3.69615034e8 Pa.
+Density interpolation, cross-campaign differences and analogy uncertainty
+are unquantified; propagated N₂O uncertainty does not include them.
+
+A conditional pressure estimate to 101325 Pa, using a stated 100 cm³/mol
+absolute partial-molar-volume envelope, is 0.416577% for the liquid Poynting
+term and at most 0.695049% including native gas-fugacity changes at fixed
+bubble-vapor composition. This is below the 1% engineering threshold and
+Xu's reported water-calibration discrepancy of up to 7.2%. It does not
+establish Xu's actual Henry pressures or N₂O-rich gas reference: Table S3
+remains unread. The [evidence and limits](results/joint-recalibration-170/amendment-4/dilute-bubble/README.md)
+retain this distinction. Start-B, derivative, dielectric-branch and exact
+gas-free density checks also remain unrun. No neutral or reacting fit ran.
+
+These results support the calculation declaration and basis conversion,
+with numerical solution verification. They do not supply physical validation,
+independent review, source-pressure equivalence or parameter promotion.
+This new section has not been independently reviewed or promoted for
+manuscript use.
 
 # Open work
 

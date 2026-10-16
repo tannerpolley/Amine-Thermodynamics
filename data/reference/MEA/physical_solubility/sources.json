@@ -8,7 +8,8 @@
       "pdf_sha256": "c085678a27172f0f9875d194cda6de18403753743fdf97a76b49384857bec196",
       "locator": "Section 2.2 p.1809; Section 3.3 and Table 11 p.1813",
       "read_sections": "Introduction; experimental N2O method; Section 3.3; conclusions; Table 11",
-      "state": "obtained_verified"
+      "state": "obtained_verified",
+      "density_locator": "Section 2.2 p.1809; Table 3 p.1810, own unloaded values without reference superscripts"
     },
     "Hartono2014_SI": {
       "doi": "10.1021/je401081e.s001",
@@ -29,7 +30,9 @@
       "locator": "Eq.1 p.2708; Section 2.3 pp.2709-2711; Section 3.3; Table 8 p.2715; Section 4 p.2716",
       "read_sections": "Introduction and conversion; N2O method; Section 3.3; Table 8; conclusions; ref.18",
       "state": "obtained_verified",
-      "metadata_caveat": "Article title covers density/viscosity to 333.15 K; Table 8 and conclusion have N2O values only to 323.15 K. Xu SI not acquired; not needed for Table 8 extraction."
+      "metadata_caveat": "Article title covers density/viscosity to 333.15 K; Table 8 and conclusion have N2O values only to 323.15 K. Xu SI not acquired; not needed for Table 8 extraction.",
+      "density_locator": "Section 2.2 p.2709; Table 4 p.2711, MEA-only x2 block",
+      "supplement_check": "2026-10-16: Companion acquire for .s001 returned existing main article S5PK66RR, not the supplement. Zotero children have main PDF and snapshot only. Snapshot VL2AID73 names https://pubs.acs.org/jceaax/article-supplement/918751/pdf/je8b00070_si_001/ ; read-only retrieval returned HTTP 403. Table S3 remains unread."
     },
     "Har13": {
       "doi": "10.1016/j.egypro.2013.06.050",
@@ -51,6 +54,26 @@
       "read_sections": "Introduction; Sections 2.1-2.3; conclusions; Eqs.4-6 visually checked",
       "state": "obtained_verified",
       "claim_limit": "Water measurements span roughly 291-360 K; N2O water maximum 359.4 K. No 393 K qualification; Eq.6 is a separately rounded ratio."
+    },
+    "Karunarathne2020": {
+      "doi": "10.3390/fluids5010013",
+      "zotero_parent_key": "JVANK8KM",
+      "pdf_attachment_key": "Y82ITJ68",
+      "pdf_sha256": "d7980c47030f3753ffa339c42f4bc7914908ff24e1cd12e2acd52512daf8d48d",
+      "locator": "Sections 2.2 and 3; Table 3 PDF p.5, own unloaded w1=0.3 values at 353.15 and 363.15 K (no superscript)",
+      "read_sections": "Sections 2.2 and 3; measured density discussion and Table 3; table visually checked",
+      "state": "obtained_verified",
+      "claim_limit": "Measured mass density; linear interpolation used only for Hartono 360.25 K. Table 3 gives expanded density uncertainty 7.80 kg/m3 (k=2); Section 3 describes this combined estimate for loaded solutions. No interpolation-error estimate or exact measurement pressure is supplied."
+    },
+    "Wagner2013": {
+      "doi": "10.1021/je301030z",
+      "zotero_parent_key": "TN44PTPW",
+      "pdf_attachment_key": "WYNE2K3R",
+      "pdf_sha256": "5ceca33b941346f90ff085f66b67b69973e85786dee0eefbb246a92de1215b9f",
+      "locator": "Thermodynamic Model, Vapor-Liquid Equilibrium Eq.2 pp.889-890; Table 11 p.891",
+      "read_sections": "Density results; VLE pressure correction; Henry reference and partial molar volume discussion; Table 11",
+      "state": "obtained_verified",
+      "claim_limit": "Table 11 volumes 33.4,36.3,40.8 cm3/mol at 313,353,393 K are Brelvi-OConnell estimates for CO2 in water, not measured neutral-CO2 volumes in MEA mixtures. Table 7 density correlation only spans 293-320 K and is not used."
     }
   },
   "extraction_method": "PDF text layer with visual table/equation verification; no Mathpix or figure digitization",

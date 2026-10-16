@@ -1,0 +1,32 @@
+{
+  "original_rows_preserved": 23,
+  "density_rows": 24,
+  "independent_Hx_arithmetic_max_relative_error": 2.220446049250313e-16,
+  "density_extrapolated_rows": 0,
+  "source_PDF_hashes_verified": 6,
+  "native_checked_rows": 66,
+  "liquid_amount_maximum_error": 2.220446049250313e-16,
+  "validation_command": "scripts/validate_mea_data_library.py",
+  "validation_result": "passed",
+  "fits_run": 0,
+  "input_and_addendum_sha256": {
+    "data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv": "a7e14002ea360ed2566e9f6b572a71bbdf1ce4f27bf385c3f766b0eb3a53b60d",
+    "data/reference/MEA/physical_solubility/unloaded_solution_density.csv": "b5a524778d4c50365d2bc2a8ff39b0e73d0ef3539b0cae39cfa7c26c871c8b44",
+    "data/reference/MEA/physical_solubility/sources.json": "4b4af1ecfcfc2840abcc173ed9732b565a884fb51d2b118afb1d7ee6485e3715",
+    "data/reference/MEA/physical_solubility/README.md": "f7c5f667f72a4faa5f55e478d4f5de4fc60b6630f0bba07a2df28aabce60f298",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/joint-design/amendment-4-addendum-dilute-bubble.md": "01d1bdde2a7cc1f17612f1bc9bee51ba62b970cdace707f1aab9ea6123160320"
+  },
+  "notebook_render": {
+    "commands": [
+      "nice -n 10 bash analyses/render.sh mea_parameter_bundle/notebook.qmd",
+      "nice -n 10 bash analyses/render.sh index.qmd"
+    ],
+    "execute": "disabled by --no-execute",
+    "outputs": [
+      "analyses/_site/mea_parameter_bundle/notebook.html",
+      "analyses/_site/index.html"
+    ],
+    "result": "both rendered; notebook HTML includes retained scalar values",
+    "refresh_limitation": "Initial manuscript.py refresh failed because snakemake was absent from shell PATH. Existing normal static rendering command succeeded; no presentation cells or model calculation were executed."
+  }
+}
