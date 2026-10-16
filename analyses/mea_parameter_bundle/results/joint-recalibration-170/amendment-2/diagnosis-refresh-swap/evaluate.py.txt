@@ -1,0 +1,230 @@
+"""Fixed-vector native exact evaluations only; independent row chunks in a stdlib pool."""
+import os
+for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
+    os.environ[key] = '1'
+import sys, json, math, copy, time, resource, hashlib, zipfile, signal, multiprocessing as mp, traceback
+from pathlib import Path
+START = time.monotonic()
+ROOT = Path.cwd()
+OUT = ROOT/'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/diagnosis-refresh-swap'
+BASE = OUT.parent
+sys.path[:0] = [str(ROOT/'src'), str(ROOT/'analyses/mea_parameter_bundle/scripts')]
+import numpy as np
+import fit_observations as o
+s, reg = o.s, o.reg
+load = lambda p: json.loads(Path(p).read_text())
+sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def write(name, value):
+    (OUT/name).write_text(json.dumps(s._jsonable(value), indent=2, allow_nan=False)+'\n')
+def cpu():
+    a, b = resource.getrusage(resource.RUSAGE_SELF), resource.getrusage(resource.RUSAGE_CHILDREN)
+    return a.ru_utime+a.ru_stime+b.ru_utime+b.ru_stime
+
+def assemble():
+    wheel = ROOT/'tmp/amendment-2-84ca269d/wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl'
+    adopted = ROOT/'analyses/mea_parameter_bundle/results/selected-current-best-parameters.json'
+    assert sha(wheel) == '98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a'
+    assert sha(adopted) == '66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778'
+    with zipfile.ZipFile(wheel) as z:
+        names = [n for n in z.namelist() if n.startswith('epcsaft/') and not n.endswith('/')]
+        for n in names:
+            assert (Path(o.epcsaft.__file__).parent.parent/n).read_bytes() == z.read(n), n
+    spec = load(BASE/'route2/lambda-0/F1/A/converge-1/stage6-spec.json')
+    adopted_m = load(adopted)
+    ref = load(BASE/'shared/reference-parameters.json')
+    water_path = ROOT/spec['water_path']
+    neutral_path = ROOT/'analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json'
+    co2_path = ROOT/'analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/co2-water/slope/co2-water/B/parameters.json'
+    dielectric_path = BASE/'stage5-smaller-dV/parameters.json'
+    water, neutral, co2, diel = map(load, (water_path, neutral_path, co2_path, dielectric_path))
+    pv = s.parameter_values(adopted_m)
+    patches = {}
+    patches['1-water'] = {k:v for k,v in s.parameter_values(ref).items()
+        if k.startswith(('component/water/', 'association/water/', 'association/carbon-dioxide/'))
+        and 'relative_permittivity' not in k}
+    patches['2-MEA-water'] = {'pair/monoethanolamine/water/k_ij':s.parameter_values(neutral)['pair/monoethanolamine/water/k_ij']}
+    patches['3-CO2-water'] = {k:v for k,v in s.parameter_values(co2).items() if k.startswith('pair/carbon-dioxide/water/k_ij')}
+    patches['4-CO2-energy'] = {'component/carbon-dioxide/dispersion_energy_over_k':169.21}
+    patches['5-R4'] = {'reaction:R4:correlation:a':2.151, 'reaction:R4:correlation:b_k':-1545.3}
+    patches['7-bicarbonate-water'] = {'pair/bicarbonate-anion/water/k_ij':0.}
+    def update(mapping, patch):
+        existing = s.parameter_values(mapping)
+        result = s.with_parameter_values(mapping, {k:v for k,v in patch.items() if k in existing})
+        for key in patch.keys()-existing.keys():
+            node = next(n for n in s._identified(ref) if n['identity']==key)
+            pair = next(p for p in result['pairs'] if {p['component_id_a'],p['component_id_b']}=={'carbon-dioxide','water'})
+            pair['coefficients'].append(copy.deepcopy(node))
+        return result
+    def permittivity(mapping):
+        result = copy.deepcopy(mapping)
+        result['model_families'] = [copy.deepcopy(next(f for f in diel['model_families'] if f['kind']=='permittivity'))
+            if f['kind']=='permittivity' else f for f in result['model_families']]
+        result['correlations'] = [c for c in result['correlations'] if c['family']!='relative_permittivity']
+        for component in result['components']:
+            source = next(c for c in diel['components'] if c['component_id']==component['component_id'])
+            component['coefficients'] = [c for c in component['coefficients'] if c['family']!='relative_permittivity']
+            component['coefficients'] += [copy.deepcopy(c) for c in source['coefficients'] if c['family'] in ('dielectric_volume','dielectric_temperature')]
+        return result
+    mappings = {'base':adopted_m}
+    for name, patch in patches.items():
+        mappings[name] = update(adopted_m,patch)
+    mappings['6-dielectric'] = permittivity(adopted_m)
+    together = copy.deepcopy(adopted_m)
+    for patch in patches.values():
+        together = update(together,patch)
+    mappings['9-all-fixed'] = permittivity(together)
+    changes = {name:{k:dict(old=pv.get(k), new=v) for k,v in s.parameter_values(m).items() if pv.get(k)!=v}
+        for name,m in mappings.items()}
+    for name,m in mappings.items():
+        fitted = [c['identity'] for c in spec['information_coordinates'] if not c.get('enthalpy_shift')]
+        for k in fitted:
+            if not (name in ('7-bicarbonate-water','9-all-fixed') and k=='pair/bicarbonate-anion/water/k_ij'):
+                assert s.parameter_values(m)[k]==pv[k], (name,k)
+        assert s.reaction_values(m)==s.reaction_values(adopted_m), name
+        write(name+'-parameters.json',m)
+    R, T = o.epcsaft.GAS_CONSTANT_J_PER_MOL_K, 313.15
+    H2 = -R*(pv['reaction:R2:correlation:b_k']-spec['starting_assumptions']['reaction:R2:correlation:b_k'])
+    H5 = -(pv['reaction:R5:correlation:b']-spec['starting_assumptions']['reaction:R5:correlation:b'])*math.log(10)*R*T
+    A5 = pv['reaction:R5:correlation:a_k']-H5/(R*math.log(10))
+    assert abs(pv['reaction:R2:correlation:a']-(spec['starting_assumptions']['reaction:R2:correlation:a']+H2/(R*T)))<1e-9
+    psource = [pv.get(c['identity'],0.) for c in spec['information_coordinates']]
+    psource[9:12] = [A5,H2,H5]
+    write('chemistry-coordinate-basis.json',dict(R_J_mol_K=R,pivot_K=T,adopted_R2_shift_J_mol=H2,
+        adopted_R5_shift_J_mol=H5,adopted_R5_unshifted_a_K=A5,adopted_R5_serialized_a_K=pv['reaction:R5:correlation:a_k'],
+        coordinates=spec['information_coordinates'],adopted_source_coordinate_values=psource))
+    jobs = {}
+    for name,m in mappings.items():
+        if name=='5-R4':
+            assert not changes[name]
+            continue
+        params, rows = o.stage6_rows(spec,m)
+        rows = [(r,item) for r,item in rows if r['weight']>0]
+        assert len(rows)==166
+        jobs[name] = (m,params,rows)
+    oldspec = copy.deepcopy(spec)
+    oldspec.update(stage2_rows_path='analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-rows.json',
+        state_requests_path='analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-requests.json')
+    params, oldrows = o.stage2_rows(oldspec,adopted_m,dict(id='ion-speciation',neutral_domain_ids=[],neutral_domain={}),assessment=True)
+    oldrows = [(dict(r,weight=1.),item) for r,item,_ in oldrows if r['id'].startswith('Jakobsen')]
+    assert len(oldrows)==8
+    rows = [(r,item) for r,item in jobs['base'][2] if not r['id'].startswith('Jakobsen')]+oldrows
+    assert len(rows)==168
+    jobs['8-old-targets'] = (adopted_m,params,rows)
+    write('target-definitions.json',dict(current=[r for r,_ in jobs['base'][2]],old_comparator=[r for r,_ in rows],
+        basis='Old eight separate Jakobsen targets at unit Route 2 weights replace new six pooled targets; old 022 feed preserved. Other 160 rows unchanged.'))
+    inputs = [adopted,water_path,neutral_path,co2_path,dielectric_path,
+        BASE/'shared/reference-parameters.json',BASE/'route2/lambda-0/F1/A/converge-1/stage6-spec.json',
+        Path(oldspec['stage2_rows_path']),Path(oldspec['state_requests_path'])]
+    inputs += [ROOT/e['path'] for e in spec['inputs']]
+    inputs += [ROOT/'analyses/mea_parameter_bundle/scripts'/f for f in ('fit_observations.py','shared_evaluation.py','verify_reference_calorics.py')]
+    write('inputs.json',dict(head='a379f9631a264fb5659247df9ea13ba5d6cc2169',wheel_sha256=sha(wheel),
+        installed_wheel_files_compared=len(names),files=[dict(path=str(p.relative_to(ROOT) if p.is_absolute() else p),sha256=sha(p)) for p in dict.fromkeys(inputs)],
+        changes=changes,R4_identical=True,worker_method='stdlib fork process pool, native exact evaluator serial within each worker',
+        paper_reading='No literature shelf in this worktree. Existing source declarations and retained diagnoses used; no new literature-validity judgment.'))
+    return jobs,spec,psource
+
+def coordinates(mapping,params):
+    pv = s.parameter_values(mapping)
+    result = []
+    for c in SPEC['information_coordinates']:
+        fac = c.get('source_to_native_factor',1.)
+        kw = dict(origin=0. if c.get('enthalpy_shift') else fac*pv[c['identity']],scale=abs(fac)*c['scale'])
+        if c.get('enthalpy_shift'):
+            result.append(reg.reaction_enthalpy_shift(c['reaction'],pivot_temperature=313.15,bounds=(-math.inf,math.inf),**kw))
+        elif 'reaction' in c:
+            result.append(reg.reaction_coordinate(c['reaction'],c['coefficient'],**kw))
+        else:
+            targets = c.get('targets',[dict(family=c.get('family'),target=c.get('target'))])
+            result.append(reg.coordinate(params,[(t['family'],tuple(t['target']) if isinstance(t['target'],list) else t['target'],t.get('factor',1.)) for t in targets],**kw))
+    return result
+
+def evaluate(task):
+    name, indices, sample = task
+    t0 = time.monotonic()
+    m, params, rows = JOBS[name]
+    selected = [rows[i] for i in indices]
+    try:
+        v = reg.differentiate(params,coordinates(m,params),[item for _,item in selected],optimizer=[0.]*14,thermochemistry=o.thermal.record())
+        statuses = [x.name for x in v.statuses]
+        predictions = list(v.predictions)
+        residuals = [math.log(p/r['observed']) if r['form'] in ('LogRatio','log_ratio') else (p-r['observed'])/r['scale'] for p,(r,_) in zip(predictions,selected,strict=True)]
+        jac = np.asarray(v.residual_optimizer_gradient).reshape(len(indices),14)
+        jac[:,9] *= -1
+        result = dict(variant=name,indices=indices,predictions=predictions,residuals=residuals,statuses=statuses,
+            source_increasing_scaled_residual_jacobian=jac.tolist(),maxrss_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+    except Exception:
+        result = dict(variant=name,indices=indices,failure=traceback.format_exc(),maxrss_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+    result['wall_s'] = time.monotonic()-t0
+    if sample:
+        write('base-exact.json',result)
+    return result
+
+def main():
+    global JOBS,SPEC,PSOURCE
+    JOBS,SPEC,PSOURCE = assemble()
+    # One completed native evaluation measures process memory and is reused as the baseline.
+    p = mp.get_context('fork').Process(target=evaluate,args=(('base',list(range(166)),True),))
+    p.start(); p.join(80)
+    if p.is_alive():
+        p.terminate();p.join();raise RuntimeError('baseline sample exceeded 80 s')
+    baseline = load(OUT/'base-exact.json')
+    assert 'failure' not in baseline,baseline.get('failure')
+    free = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:')))*1024
+    footprint = baseline['maxrss_KiB']*1024
+    count = min(32,max(1,free//(2*footprint)))
+    write('memory-and-workers.json',dict(free_bytes=free,measured_process_peak_RSS_bytes=footprint,
+        bytes_per_worker_reserved=2*footprint,requested_workers=32,workers=int(count),safety_factor=2,
+        niceness=os.getpriority(os.PRIO_PROCESS,0),BLAS_OpenMP_threads=1))
+    tasks = []
+    for name,(_,_,rows) in JOBS.items():
+        if name=='base':continue
+        # Strided chunks keep pressure/species/heat work distributed without changing any row.
+        tasks += [(name,list(range(k,len(rows),int(count))),False) for k in range(int(count)) if k<len(rows)]
+    parts = []
+    pool = mp.get_context('fork').Pool(int(count))
+    try:
+        iterator = pool.imap_unordered(evaluate,tasks,chunksize=1)
+        for _ in tasks:
+            remaining = 270-(time.monotonic()-START)
+            assert remaining>0,'wall allowance before result exhausted'
+            result = iterator.next(timeout=remaining)
+            parts.append(result)
+            write('chunk-results.json',parts)
+        pool.close();pool.join()
+    except BaseException:
+        pool.terminate();pool.join();raise
+    # All children are reaped before the authoritative aggregate CPU measurement.
+    measured_cpu, measured_wall = cpu(),time.monotonic()-START
+    write('evaluation-timing.json',dict(cpu_s=measured_cpu,wall_s=measured_wall,CPU_ceiling_s=900,wall_ceiling_s=300,
+        all_workers_reaped=True,fit_calls=0,worker_count=int(count)))
+    assert measured_cpu<860 and measured_wall<280,(measured_cpu,measured_wall)
+    output = {'base':baseline}
+    for name,(_,_,rows) in JOBS.items():
+        if name=='base':continue
+        pp = [p for p in parts if p['variant']==name]
+        failures = [p for p in pp if 'failure' in p]
+        if failures:
+            output[name] = dict(variant=name,failures=failures)
+            continue
+        n = len(rows)
+        rec = dict(variant=name,predictions=[None]*n,residuals=[None]*n,statuses=[None]*n,
+            source_increasing_scaled_residual_jacobian=[None]*n)
+        for p in pp:
+            for j,i in enumerate(p['indices']):
+                for key in ('predictions','residuals','statuses','source_increasing_scaled_residual_jacobian'):
+                    assert rec[key][i] is None
+                    rec[key][i] = p[key][j]
+        assert all(x is not None for x in rec['predictions'])
+        output[name] = rec
+    output['5-R4'] = dict(baseline,variant='5-R4',reused_identical_baseline=True)
+    for name,rec in output.items():write(name+'-exact.json',rec)
+    write('completed.json',dict(variants=list(output),fit_calls=0,CPU_s=cpu(),wall_s=time.monotonic()-START))
+    print(json.dumps(load(OUT/'evaluation-timing.json')),flush=True)
+
+if __name__=='__main__':
+    resource.setrlimit(resource.RLIMIT_CPU,(860,861))
+    signal.alarm(280)
+    try:main()
+    except BaseException:
+        write('command-failure.json',dict(error=traceback.format_exc(),cpu_s=cpu(),wall_s=time.monotonic()-START))
+        raise

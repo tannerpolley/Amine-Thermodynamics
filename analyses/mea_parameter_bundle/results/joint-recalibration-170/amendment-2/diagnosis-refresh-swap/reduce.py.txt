@@ -1,0 +1,122 @@
+"""Retained-array costs, gradients, and one SVD linear least-squares solve per objective."""
+import os
+for key in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS'):os.environ[key]='1'
+import json,csv,math,time,resource,ast
+from pathlib import Path
+import numpy as np
+START=time.monotonic()
+OUT=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/diagnosis-refresh-swap')
+load=lambda name:json.loads((OUT/name).read_text())
+def write(name,obj):(OUT/name).write_text(json.dumps(obj,indent=2,allow_nan=False)+'\n')
+def table(name,rows):
+    with (OUT/name).open('w') as f:
+        w=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator='\n');w.writeheader();w.writerows(rows)
+basis=load('chemistry-coordinate-basis.json');cs=basis['coordinates'];sc=np.array([c['scale'] for c in cs]);p0=np.array(basis['adopted_source_coordinate_values'])
+defs=load('target-definitions.json');current=defs['current'];old=defs['old_comparator']
+active=[2,3,6,7,10];toward=np.array([1.,-1.,1.,1.,-1.])
+lo=np.array([c['bounds'][0] for c in cs]);hi=np.array([c['bounds'][1] for c in cs])
+# The evaluator stopped at its post-reap CPU assertion. Assemble the returned arrays only.
+parts=load('chunk-results.json');baseline=load('base-exact.json')
+names=['base']+list(dict.fromkeys(p['variant'] for p in parts))+['5-R4']
+for name in names:
+    if name=='base':continue
+    if name=='5-R4':
+        write(name+'-exact.json',dict(baseline,variant=name,reused_identical_baseline=True));continue
+    n=168 if name=='8-old-targets' else 166
+    result=dict(variant=name,predictions=[None]*n,residuals=[None]*n,statuses=[None]*n,source_increasing_scaled_residual_jacobian=[None]*n)
+    for part in [p for p in parts if p['variant']==name]:
+        assert 'failure' not in part,part
+        for j,i in enumerate(part['indices']):
+            for key in ('predictions','residuals','statuses','source_increasing_scaled_residual_jacobian'):
+                assert result[key][i] is None,(name,key,i)
+                result[key][i]=part[key][j]
+    assert all(x is not None for x in result['predictions'])
+    write(name+'-exact.json',result)
+write('completed.json',dict(variants=names,native_evaluations_complete=True,fit_calls=0,CPU_allowance_exceeded=True,
+    note='Numerical arrays complete; evaluator command stopped at post-reap CPU assertion. This arithmetic does not call the Engine.'))
+all_results={};target_rows=[];gradient_rows=[];family_rows=[];rank_rows=[]
+for name in load('completed.json')['variants']:
+    exact=load(name+'-exact.json');rows=old if name=='8-old-targets' else current
+    if 'failures' in exact:
+        all_results[name]=dict(failures=exact['failures']);continue
+    assert exact['statuses']==['Available']*len(rows),(name,exact['statuses'])
+    pred=np.array(exact['predictions']);r=np.array(exact['residuals']);wt=np.sqrt([z['weight'] for z in rows])
+    rw=r*wt;J=np.array(exact['source_increasing_scaled_residual_jacobian'])*wt[:,None]
+    p=p0.copy()
+    if name in ('7-bicarbonate-water','9-all-fixed'):p[2]=0.
+    assert np.all(p>=lo-1e-8) and np.all(p<=hi+1e-8),(name,p,lo,hi)
+    fam=[]
+    for i,row in enumerate(rows):
+        fam.append('common-pressure' if i<47 else 'common-species' if i<141 else 'common-Vinjarapu-heat' if i<149 else
+            'Jakobsen-old' if name=='8-old-targets' and row['id'].startswith('Jakobsen') else
+            'Jakobsen-pooled' if row['id'].startswith('Jakobsen') else
+            'equilibrium-Cp' if row['quantity']=='equilibrium_isobaric_heat_capacity' else 'restored-species')
+    objectives={}
+    for objective,ix in [('common149',np.arange(149)),('training',np.arange(len(rows)))]:
+        j,rr=J[ix],rw[ix];g=j.T@rr
+        pg=g.copy()
+        pg[((p-lo)<1e-8)&(g>0)]=0.;pg[((hi-p)<1e-8)&(g<0)]=0.
+        # A single SVD least-squares solve: no reevaluation, line search, iteration or clipping.
+        step,_,rank,sv=np.linalg.lstsq(j,-rr,rcond=1e-14)
+        normal_residual=np.max(np.abs(j.T@(j@step+rr)))
+        signed=step[active]*sc[active]*toward
+        distance=np.where(toward>0,hi[active]-p[active],p[active]-lo[active])
+        normalized=step[active]*sc[active]/(hi[active]-lo[active])*toward
+        rec=dict(cost=float(.5*rr@rr),rows=len(ix),gradient_scaled=g.tolist(),gradient_per_physical_unit=(g/sc).tolist(),
+            projected_gradient_scaled=pg.tolist(),projected_gradient_infinity_norm=float(np.max(np.abs(pg))),
+            gauss_newton_step_scaled=step.tolist(),gauss_newton_step_physical=(step*sc).tolist(),
+            later_bound_signed_physical_step=signed.tolist(),later_bound_distance=distance.tolist(),
+            later_bound_fraction_of_box_step=normalized.tolist(),later_bound_signed_box_sum=float(sum(normalized)),
+            later_bound_positive_box_sum=float(sum(np.maximum(normalized,0))),later_bounds_toward_count=int(sum(signed>0)),
+            rank=int(rank),condition=float(sv[0]/sv[-1]),singular_values=sv.tolist(),
+            linearized_cost=float(.5*np.linalg.norm(rr+j@step)**2),linear_solve_normal_equation_residual_inf=float(normal_residual))
+        objectives[objective]=rec
+        for k,c in enumerate(cs):
+            gradient_rows.append(dict(variant=name,objective=objective,coordinate=c['identity'],value=p[k],scale=sc[k],
+                gradient_scaled=g[k],gradient_physical=g[k]/sc[k],projected_gradient_scaled=pg[k],
+                GN_step_scaled=step[k],GN_step_physical=step[k]*sc[k],later_active=k in active,
+                later_bound_side=('upper' if toward[active.index(k)]>0 else 'lower') if k in active else ''))
+    costs=.5*rw**2
+    families={f:dict(rows=fam.count(f),cost=float(sum(costs[np.array(fam)==f]))) for f in dict.fromkeys(fam)}
+    for f,d in families.items():family_rows.append(dict(variant=name,family=f,**d))
+    for i,row in enumerate(rows):
+        target_rows.append(dict(variant=name,target=row['id'],family=fam[i],observed=row['observed'],predicted=pred[i],
+            scale=row['scale'],weight=row['weight'],residual=r[i],weighted_residual=rw[i],cost=costs[i],status=exact['statuses'][i]))
+    order=np.argsort(-costs)[:3]
+    all_results[name]=dict(objectives=objectives,families=families,available=len(rows),failures=[],
+        top3_cost=[dict(target=rows[i]['id'],cost=float(costs[i])) for i in order])
+base={x['target']:x for x in target_rows if x['variant']=='base'}
+for name,rec in all_results.items():
+    if 'objectives' not in rec:continue
+    these=[dict(x,delta_cost=x['cost']-base.get(x['target'],dict(cost=0))['cost']) for x in target_rows if x['variant']==name]
+    comparable=[x for x in these if x['target'] in base]
+    for x in these:
+        x['delta_comparison']='same target ID' if x['target'] in base else 'new/old target has no one-to-one cost delta'
+    rec['top3_cost_increase']=[dict(target=x['target'],delta_cost=x['delta_cost'],cost=x['cost']) for x in sorted(comparable,key=lambda x:-x['delta_cost'])[:3]]
+    rec['delta_common149']=rec['objectives']['common149']['cost']-all_results['base']['objectives']['common149']['cost']
+    rec['delta_training_current166']=rec['objectives']['training']['cost']-all_results['base']['objectives']['training']['cost']
+    st=rec['objectives']['training'];bst=all_results['base']['objectives']['training']
+    rec['delta_later_bound_signed_box_step_sum']=st['later_bound_signed_box_sum']-bst['later_bound_signed_box_sum']
+    rank_rows.append(dict(variant=name,common149=rec['objectives']['common149']['cost'],delta_common149=rec['delta_common149'],
+        training=st['cost'],delta_training=rec['delta_training_current166'],projected_gradient_inf=st['projected_gradient_infinity_norm'],
+        toward_count=st['later_bounds_toward_count'],signed_box_step_sum=st['later_bound_signed_box_sum'],
+        delta_signed_box_step_sum=rec['delta_later_bound_signed_box_step_sum'],positive_box_step_sum=st['later_bound_positive_box_sum'],
+        signed_GN_bicarbonate_water=st['later_bound_signed_physical_step'][0],signed_GN_mutual=st['later_bound_signed_physical_step'][1],
+        signed_GN_carbamate_size_A=st['later_bound_signed_physical_step'][2],signed_GN_MEAH_Born_A=st['later_bound_signed_physical_step'][3],
+        signed_GN_R2_shift_J_mol=st['later_bound_signed_physical_step'][4],rank=st['rank'],condition=st['condition'],rows=st['rows']))
+assert abs(all_results['base']['objectives']['common149']['cost']-32.05668491)<1e-7
+for p in (OUT/'evaluate.py.txt',OUT/'reduce.py.txt'):
+    tree=ast.parse(p.read_text())
+    assert not any(isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='fit' for n in ast.walk(tree))
+target_comparison = dict(old_separate_168=all_results['8-old-targets']['objectives'],
+    corrected_pooled_166=all_results['base']['objectives'],
+    cost_change_166_minus_168=all_results['base']['objectives']['training']['cost']-all_results['8-old-targets']['objectives']['training']['cost'],
+    common149_to_current166_cost_addition=all_results['base']['objectives']['training']['cost']-all_results['base']['objectives']['common149']['cost'],
+    note='The adopted fit had common149 only. The 168-row comparator adds the original eight Jakobsen definitions at Route 2 unit weights alongside the same 160 non-Jakobsen rows. It was never an adopted fit objective.')
+write('target-definition-comparison.json',target_comparison)
+write('summary.json',all_results)
+table('ranking.csv',sorted(rank_rows,key=lambda x:-x['delta_training']))
+table('target-costs.csv',target_rows);table('coordinate-gradients-and-steps.csv',gradient_rows);table('family-costs.csv',family_rows)
+u=resource.getrusage(resource.RUSAGE_SELF)
+write('reduction-timing.json',dict(cpu_s=u.ru_utime+u.ru_stime,wall_s=time.monotonic()-START,fit_calls=0))
+for row in sorted(rank_rows,key=lambda x:-x['delta_training']):print(json.dumps(row),flush=True)
