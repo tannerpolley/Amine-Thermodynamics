@@ -560,12 +560,49 @@ are unquantified; propagated N₂O uncertainty does not include them.
 A conditional pressure estimate to 101325 Pa, using a stated 100 cm³/mol
 absolute partial-molar-volume envelope, is 0.416577% for the liquid Poynting
 term and at most 0.695049% including native gas-fugacity changes at fixed
-bubble-vapor composition. This is below the 1% engineering threshold and
-Xu's reported water-calibration discrepancy of up to 7.2%. It does not
-establish Xu's actual Henry pressures or N₂O-rich gas reference: Table S3
-remains unread. The [evidence and limits](results/joint-recalibration-170/amendment-4/dilute-bubble/README.md)
+bubble-vapor composition. This is below the 1% engineering threshold for that diagnostic. It does
+not establish transfer from Hartono's N₂O gas reference: SI Table S2 provides
+partial N₂O pressures, not the total pressure or a complete gas-fugacity
+translation. Xu's actual Henry pressures and gas reference also remain
+unverified because Table S3 is unread. Xu's 7.2% water-calibration discrepancy
+is a separate source limitation, not a Hartono uncertainty allowance. The [evidence and limits](results/joint-recalibration-170/amendment-4/dilute-bubble/README.md)
 retain this distinction. Start-B, derivative, dielectric-branch and exact
 gas-free density checks also remain unrun. No neutral or reacting fit ran.
+
+The density-uncertainty correction uses Karunarathne Table 3's expanded
+±7.10 kg/m³ (k=2, 95% confidence); §3's ±7.80 kg/m³ applies separately to
+CO₂-loaded solutions. The two retained density central values and all
+historical Hc-times-density Hx values remain unchanged.
+
+Orchestrator decision, 2026-10-16 (owner away): use Hartono SI Table S2 direct
+pN₂O/xN₂O, converted by the unchanged N₂O-to-CO₂ water ratio, as the primary
+Hartono Hx basis. It already uses mole fraction and needs no density
+conversion. Table 11 Hc times measured gas-free total molar density exceeds
+the SI ratio by 0.85368–3.09128%; retain this as a source-representation
+difference, without claiming to have resolved the source volume convention.
+The [derived CSV](../../data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv)
+retains both source representations and selects the SI primary targets
+(151298904.50–358676232.10 Pa). Their uncertainty is unquantified here;
+Table 11's Hc uncertainty is not transferred to them.
+
+Only seven Hartono observations at gas-free wMEA=0.30 and 298.35–360.25 K
+are primary neutral calibration candidates, in six temperature groups.
+The two 312.65 K repeats split one group weight. For repeat group g the
+native log_ratio weight is 1/[6 m_g (0.05)²]; 0.05 is an engineering residual
+scale. All 16 Xu rows are conditional comparisons with zero fitting weight
+until Table S3 and its pressure/gas reference are verified. Preserve the
+historical preflight's numerical results and identify its earlier `primary`
+labels as the superseded 15-row, two-source proposal. The retained target
+replays used Table 11 Hc-times-density Hartono targets; they do not qualify
+the selected SI targets. The Hartono mean absolute relative error ≤10%,
+maximum ≤20%, two-start identification checks and original numerical stops
+remain. No neutral observation enters the 205-row reacting objective.
+
+Source pressure/gas-reference qualification for Hartono and the remaining
+original numerical checks still stop calibration. The representation choice
+is supplied; no owner answer is pending. No pair is selected or adopted, no
+fit ran, and executable additions remain 861/900 with zero added by these
+text/data corrections.
 
 These results support the calculation declaration and basis conversion,
 with numerical solution verification. They do not supply physical validation,

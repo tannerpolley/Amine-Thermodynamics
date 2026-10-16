@@ -22,12 +22,7 @@ additional observations. Loaded rows, 6.2 mass% rows, and Xu ionic-liquid
 mixtures are outside this extraction. Xu's N₂O table ends at 323.15 K even
 though its title and density/viscosity measurements extend to 333.15 K.
 
-An engineering choice for amendment 4 is to use Hartono's seven rows and Xu's
-eight rows at 24.42 and 36.62 mass% as calibration candidates. This deliberately
-widens the near-30% interval to 24–37%; the repository discovery interval is
-25–35%. The other eight Xu rows remain concentration-transfer comparisons.
-All roles are proposals; existing reactive target membership is unchanged.
-There are no extracted measurements above 360.25 K or at exactly 393 K.
+The 16 October Hartono-only disposition makes the seven Hartono observations at gas-free MEA mass fraction 0.30 the sole primary neutral calibration candidates, subject to source-basis and numerical qualification. All 16 Xu rows remain conditional comparisons until Table S3 and its pressure/gas reference are checked. This supersedes the earlier proposal to fit eight Xu rows at 24.42 and 36.62 mass%. No reacting target membership changes. There are no extracted measurements above 360.25 K; extension toward 393 K remains extrapolation.
 
 `sources.json` records obtained PDFs, parent and attachment keys, SHA-256
 hashes, locators, reading scope, and the missing Hartono 2013 PDF. Hartono's
@@ -177,15 +172,7 @@ $H_x=120998548.9$–369615034.3 Pa. The 360.25 K Hartono row has
 $c_{\mathrm{total},0}=42645.2535$ mol/m³. These are converted source estimates,
 not new CO₂ measurements.
 
-The source density uncertainties remain separate: Hartono prints expanded
-0.02 kg/m³, k=2; Xu prints standard 1 kg/m³. Karunarathne Table 3 prints
-expanded 7.80 kg/m³, k=2, although §3 describes that combined estimate for
-loaded solutions. Carry 7.80 kg/m³ as a conservative quoted value, with that
-scope caveat; it is about 0.80% of the interpolated density. Neither linear
-interpolation error nor the difference between campaigns is quantified.
-The appended U column propagates only the original N₂O H uncertainty; it
-does not include density, composition, interpolation, water-ratio or analogy
-uncertainty. No statistical independence or combined uncertainty is asserted.
+The source density uncertainties remain separate: Hartono reports expanded 0.02 kg/m³, k=2; Xu reports standard 1 kg/m³. Karunarathne's rendered Table 3, PDF p.5, reports expanded 7.10 kg/m³, k=2, at 95% confidence for its aqueous-MEA density table. Section 3, PDF p.3, separately reports 7.80 kg/m³ for CO₂-loaded solutions. Record 7.10 kg/m³ with the Table 3 density rows and retain the distinct loaded-solution statement in the source notes. The table value is about 0.73% of the interpolated 974.359 kg/m³; it is not a quantified uncertainty for the interpolation or the difference between campaigns. The appended Hx uncertainty column propagates only the original N₂O H uncertainty and excludes density, composition, interpolation, water-ratio and analogy uncertainty. No combined uncertainty or statistical independence is asserted.
 
 The conversion does not establish the Henry measurement's reference pressure.
 Xu Table S3 remains unread. The Companion supplement request returned the
@@ -193,3 +180,53 @@ existing main article; the exact supplement URL in its Zotero snapshot
 returned HTTP 403. The atmospheric density measurement must not be called
 the Henry measurement pressure. The addendum's pressure estimate to 101325 Pa
 is conditional on that declared reference and its stated gas reference.
+
+## Hartono source representations and selected primary basis
+
+Hartono Table 11 Hc multiplied by the measured gas-free molar density exceeds the matching SI Table S2 pN₂O/xN₂O by 0.85368–3.09128% across the seven unloaded observations. The discrepancy occurs within Hartono's own density campaign as well as at 360.25 K. The conversion arithmetic is verified, but equivalence of the two source representations is unresolved. Keep the Table 11-derived values and SI fields unchanged as candidate evidence; do not silently replace one with the other or treat them as separate observations. Before fitting, establish the source concentration/volume convention or resolve the source inconsistency and document which representation supports the intended limiting Henry target. The 5% residual scale and the pressure-only 1% check do not resolve this discrepancy. Until that source-basis check is complete, retain the existing stop on unresolved source basis.
+
+Orchestrator decision, 2026-10-16 (owner away): select Hartono SI Table S2 direct pN₂O/xN₂O as the primary Hartono Hx basis for this conditional design. It already uses mole fraction, so no density conversion is needed. Apply the unchanged N₂O-to-CO₂ water ratio of Eq.N2O-4 to that direct ratio. Retain the Table 11 Hc-derived values and SI fields unchanged as candidate evidence on the same seven observations. Report their 0.85368–3.09128% difference as a source-representation difference; the source's concentration/volume convention remains unresolved. This explicitly adjudicates the representation used for the proposed calibration without asserting equivalence of the source tables. The selected SI basis does not transfer Table 11's Hc uncertainty: its uncertainty is unquantified here, and 0.05 remains an engineering residual scale. Source pressure/gas-reference qualification and the outstanding numerical checks still block fitting.
+
+For the same Hartono observation, the selected transformation is
+
+$$
+H_{x,\mathrm{N_2O},\mathrm{SI}}=\frac{1000P_{\mathrm{N_2O},\mathrm{kPa}}}{x_{\mathrm{N_2O}}},\qquad
+H_{x,\mathrm{CO_2},\mathrm{SI}}=H_{x,\mathrm{N_2O},\mathrm{SI}}
+\frac{1.17}{3.54}\exp(240/T)\quad[\mathrm{Pa}]. \tag{N2O-8}
+$$
+
+Hartono SI Table S2 PDF p.10 supplies the pressure in kPa and the mole
+fraction (its printed column is $10^4 x_{\mathrm{N_2O}}$); the water ratio
+is Eq.N2O-4, from Xu Eq.1 and Versteeg Eqs.4–5. This is an analogy-derived,
+finite-source-pressure candidate target. Selecting this representation does
+not establish its limiting or source gas-reference equivalence.
+
+The derived CSV appends `H_N2O_SI_mole_fraction_Pa`,
+`H_CO2_SI_mole_fraction_Pa`, `Table11_over_SI_relative_excess`,
+`H_CO2_primary_mole_fraction_Pa`, `primary_Hx_basis`,
+`primary_Hx_uncertainty` and `neutral_log_ratio_weight`. The first two
+and the relative difference are populated only for Hartono. The existing
+`H_CO2_physical_mole_fraction_Pa` and `U_Hx_from_N2O_only_Pa` remain the
+Table 11 Hc-times-density representation for Hartono; neither is the selected
+primary SI target or its uncertainty. The direct-SI primary CO₂ range is
+151298904.50–358676232.10 Pa. The seven Hartono rows have six temperature
+groups; each group has total weight $1/[6(0.05)^2]$, split equally between
+the two 312.65 K repeats. All 16 Xu primary-target fields are empty and their
+fitting weights are zero; their existing density-derived values remain
+conditional comparisons. These weights describe the proposed objective,
+not admission to fitting. No new observations are created.
+
+The retained dilute-bubble preflight's numerical values, target replays and
+`primary` labels describe the earlier Table 11 density-based, two-source
+proposal. Preserve those results as historical evidence; use the corrected
+row roles and explicitly selected basis for any later qualified inputs.
+
+The retained 0.416577% liquid and 0.695049% combined pressure estimates
+change the model bubble pressure to 101325 Pa under the assumed volume
+envelope and fixed bubble-vapor composition. They do not establish transfer
+from Hartono's N₂O gas reference. Its SI pressures are partial pressures;
+total pressure and gas-fugacity transfer remain unqualified. All seven
+Hartono source mappings and the nonzero pair require the original ≤1%
+combined source-transfer check within the remaining preflight allowance.
+Otherwise the no-fit stop remains. All 16 Xu rows remain conditional
+comparisons with zero fitting weight until Table S3 is verified.
