@@ -112,11 +112,6 @@ Independent data and design review, frozen row roles and residual scales,
 and immutable input binding precede calibration. Neither extraction nor
 calibration residuals establish independent physical validation.
 
-Reproduce the derived CSV from this directory's source CSVs:
+`CO2_physical_from_N2O.csv` retains the conversion of the two source CSVs using Eqs.N2O-1–N2O-4. Temperature, pressure units, source values and the Eq.6 alternative are retained explicitly. This delivery contains no executable conversion script. Versteeg Table I at 298 K provides a printed water reference for checking the Henry direction and units. Source PDFs remain in Zotero.
 
-```bash
-uv run --no-project python data/reference/MEA/physical_solubility/convert_n2o_henry.py
-```
-
-The script's water reference comparison uses Versteeg Table I at 298 K to
-check the Henry direction and units. Source PDF files remain in Zotero.
+The derived CSV was verified against Eqs.N2O-1–N2O-4 in the [amendment-4 independent readiness review, r1, §1](/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/joint-design/amendment-4-readiness-r1.md), 16 October 2026. This delivery preserves those reviewed values.
