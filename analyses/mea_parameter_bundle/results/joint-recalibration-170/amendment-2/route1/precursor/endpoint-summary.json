@@ -1,0 +1,254 @@
+{
+  "selection_eligible": false,
+  "selected_precursor": null,
+  "stop_reasons": [
+    "iteration limit reached without convergence",
+    "five free coordinates on bounds"
+  ],
+  "status": "limit_reached",
+  "message": "iteration limit reached",
+  "initial_cost": 62.94479652338308,
+  "native_final_cost": 0.5871029140227012,
+  "parameters": [
+    {
+      "identity": "component/protonated-monoethanolamine/segment_diameter",
+      "value": 5.8,
+      "A": 3.563,
+      "B": 3.48508556586174,
+      "bounds": [
+        2,
+        5.8
+      ],
+      "scale": 0.1,
+      "active_bound": true
+    },
+    {
+      "identity": "component/carbamate-anion/segment_diameter",
+      "value": 5.8,
+      "A": 3.5605,
+      "B": 3.535435257213276,
+      "bounds": [
+        2,
+        5.8
+      ],
+      "scale": 0.1,
+      "active_bound": true
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/dispersion_energy_over_k",
+      "value": 422.78569338748804,
+      "A": 228.71,
+      "B": 232.6872016451942,
+      "bounds": [
+        50,
+        950
+      ],
+      "scale": 10,
+      "active_bound": false
+    },
+    {
+      "identity": "component/carbamate-anion/dispersion_energy_over_k",
+      "value": 359.5316977365443,
+      "A": 533.11,
+      "B": 453.26524438401077,
+      "bounds": [
+        50,
+        1000
+      ],
+      "scale": 10,
+      "active_bound": false
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/born_diameter",
+      "value": 1.0,
+      "A": 3.563,
+      "B": 3.533229271464668,
+      "bounds": [
+        1,
+        7
+      ],
+      "scale": 0.1,
+      "active_bound": true
+    },
+    {
+      "identity": "component/carbamate-anion/born_diameter",
+      "value": 1.0,
+      "A": 3.5605,
+      "B": 3.5410703082156436,
+      "bounds": [
+        1,
+        7
+      ],
+      "scale": 0.1,
+      "active_bound": true
+    },
+    {
+      "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+      "value": -0.8029170259878712,
+      "A": 0.0,
+      "B": -0.002018134576435147,
+      "bounds": [
+        -2,
+        2
+      ],
+      "scale": 0.01,
+      "active_bound": false
+    },
+    {
+      "identity": "pair/carbon-dioxide/water/k_ij",
+      "value": -0.04817359946492634,
+      "A": -0.046416901120577676,
+      "B": -0.046416901120577676,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "scale": 0.01,
+      "active_bound": false
+    },
+    {
+      "identity": "pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope",
+      "value": -40.40432117938242,
+      "A": -35.66505220645838,
+      "B": -35.66505220645838,
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "scale": 10.0,
+      "active_bound": false
+    },
+    {
+      "identity": "reaction:R5:correlation:a_k",
+      "value": 2400.0,
+      "A": 2677.91,
+      "B": 2597.91,
+      "bounds": [
+        2400.0,
+        3000.0
+      ],
+      "scale": 80.0,
+      "active_bound": true
+    }
+  ],
+  "full_rank": 10,
+  "free_rank": 5,
+  "full_condition": 1078.535315978017,
+  "free_condition": 42.52869492693948,
+  "full_singular_values": [
+    0.3503658683750459,
+    0.27360374696464884,
+    0.21261451643671872,
+    0.05799378188316941,
+    0.05022980991297917,
+    0.02529183863111937,
+    0.019393571886633085,
+    0.005447785492634634,
+    0.002202666280870749,
+    0.00032485340367119435
+  ],
+  "free_singular_values": [
+    0.2562661119012235,
+    0.2534433416195349,
+    0.09997380865557864,
+    0.05716225208738542,
+    0.006025722452604434
+  ],
+  "active_bound_columns": [
+    0,
+    1,
+    4,
+    5,
+    9
+  ],
+  "iterations": 40,
+  "residual_evaluations": 41,
+  "jacobian_evaluations": 28,
+  "trial_failures": 0,
+  "final_available_quantities": 203,
+  "initial_available_quantities_A": 203,
+  "initial_available_quantities_B": 203,
+  "projected_gradient_norm": 0.0006936157230761353,
+  "covariance_available": false,
+  "O1_R5_projection": {
+    "all_seven_ion_columns": {
+      "columns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "rank": 7,
+      "singular_values": [
+        0.30038275570139433,
+        0.15120666650697168,
+        0.028508274943182133,
+        0.020869513946182656,
+        0.009305507151331662,
+        0.005114929442565295,
+        0.0010373271525645315
+      ],
+      "projection_cosine": 0.9996859612943051,
+      "angle_degrees": 1.4359541916693925,
+      "orthogonal_norm": 0.006567124973120291,
+      "R5_column_norm": 0.26206124070965203
+    },
+    "free_ion_columns": {
+      "columns": [
+        2,
+        3,
+        6
+      ],
+      "rank": 3,
+      "singular_values": [
+        0.25595370188582767,
+        0.10502543675831821,
+        0.006026694093984271
+      ],
+      "projection_cosine": 0.9564200377755065,
+      "angle_degrees": 16.977393755304618,
+      "orthogonal_norm": 0.07652040653681105,
+      "R5_column_norm": 0.26206124070965203
+    },
+    "four_active_ion_columns": {
+      "columns": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "rank": 4,
+      "singular_values": [
+        0.1638809109354907,
+        0.10113066407610952,
+        0.02593097657504271,
+        0.010936390491097684
+      ],
+      "projection_cosine": 0.9381365301161991,
+      "angle_degrees": 20.259070537662215,
+      "orthogonal_norm": 0.09074278711962927,
+      "R5_column_norm": 0.26206124070965203
+    }
+  },
+  "R5_source_reference_change_K": -277.90999999999985,
+  "R5_reference_change_exceeds_80_K": true,
+  "delta_kp_from_stage2": -0.0017566983443486617,
+  "delta_b_from_stage2_K": -4.7392689729240445,
+  "endpoint_replay": "not run after mandatory stop",
+  "endpoint_derivatives": "not run after mandatory stop",
+  "endpoint_closure": "not run after mandatory stop",
+  "B_fit": "not run after mandatory stop",
+  "stage3b": "not run after mandatory stop",
+  "hashes": {
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1/precursor/A/native-fit.json": "b12d84879af6c55a0afc0a683fbf2fc4d29e039c4742696cf63f1233819a56a0",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1/precursor/A/usable-budget-endpoint.json": "fca380fc3935142f2c327882e67478997657a33c0948effda295d1307bf3f351",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1/precursor/A/start-parameters.json": "f96374436ef7c61eb6bda5a0f46455a4969e902752d8fbe05e7d34a558979e38",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1/precursor/B/start-parameters.json": "6735aa6bfb8626890c719756157e5a7299eb39ff236bad83615179903fee232d",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1/stage3a-amendment2-route1-spec.json": "25969f58160f62b4ac95c970114c5019559c6432ee778c0744e888ec8198cd67",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1/precursor/A/identification.json": "fbd18e97211728c30f5fd555c425f84455763cd6f090c591fc6161ecb04b1cae"
+  },
+  "maximum_delta_k_over_declared_T": 0.002789219689434558
+}
