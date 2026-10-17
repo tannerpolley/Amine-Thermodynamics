@@ -101,6 +101,9 @@ checks. Worktree diagnostic logs remain under `tmp/engine-21e761c3-adoption/`.
   source inventory, volumetric-source checks, and a stale selected-record hash.
   The last is `test_declared_domain_pre_dispatch_and_protected_rows`: it expects
   no-heat hash `756fec50…`, while the base already held heat-fit hash `66ff7715…`.
+  The same seven tests fail on `main` 5082ba4 with its Engine 026b3031 environment,
+  with the same failure lines apart from that test's current-record hash, so the
+  adoption adds no test failure (orchestrator baseline, 2026-10-17).
 - Manuscript freshness: **exit 1**, missing
   `docs/scientific/latex/builds/main.pdf`. No manuscript build or Overleaf sync ran.
 
