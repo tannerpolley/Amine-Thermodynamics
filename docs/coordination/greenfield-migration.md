@@ -23,7 +23,11 @@ treated as the current application snapshot. This worktree now carries the
 bounded adapter and focused checks described below; the main local application
 checkout remains untouched.
 
-The current application evaluator and its retained input identities are:
+The following table retains the migration-time evaluator and input identities.
+Current parameter and Engine identities belong to
+[the scientific context](../scientific/CONTEXT.md); the #191/#192
+[adoption comparison](../../analyses/mea_parameter_bundle/results/engine-21e761c3-adoption/README.md)
+records the declaration-only versions of both parameter documents.
 
 | item | current path | SHA-256 or identity | role |
 |---|---|---|---|
