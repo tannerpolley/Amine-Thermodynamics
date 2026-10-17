@@ -52,17 +52,92 @@ cost by at most ftol relative), with the fits' ftol 1e-10 as the baseline:
 | Route 2b smaller-dV (time limit) | 45 / 8 | 19 | 180 s (15 %) | 560 of 1,214 s, cost +0.88 % |
 
 The small steps sit on plateaus 0.9–2.9 % above the final cost; the longest stretches with under
-0.1 % total cost drop last 338–543 s, and they end in real drops. A looser tolerance would stop on the
-plateau, not at the minimum. The plateau cause (bound-limited steps or
-ill-conditioning) is not tested: the retained histories hold costs and times
-only, not per-iteration parameters or trust-region radii. In the larger-dV fit
+0.1 % total cost drop last 338–543 s, and they end in real drops. In the larger-dV fit
 the 56 accepted steps took 1,140 s and the 26 rejected trials 56 s.
+
+**Superseded (2026-10-17):** this replay treated a function-tolerance stop as the end of
+the fit. The Engine fit (`fit.cpp`, active-set loop) instead runs rounds: each round is a
+Ceres solve with some coordinates held at bounds, and a held coordinate whose gradient
+points back into the box is released only after a round's Ceres solve converges. A
+tolerance stop therefore ends a round, not the fit. The measured effect of the tolerance
+and the plateau cause are in "After Engine #595" below.
 
 Measured compute in the program to date is about 6,790 s: the 484 s before
 Route 1 entry, 5,716 s of retained call timings in amendments 2–4 (one per call,
 command-time duplicates removed), and about 590 s for these probes. The six long
 reactive fits are 5,284 s of it. The rest of the 19,605.51 s ledger is the fixed
 conservative charges for preparation, review and reporting.
+
+## After Engine #595 (2026-10-16/17)
+
+Wheel `main-21e761c3` (sha256 `d2f61e3a…0357`) contains Engine #595. Same
+objective and start as above, plus the #191 CO₂/MEA `no_cross_association`
+item in a probe copy (84ca269d ignores that key). Numbers are in
+[after-595.json](after-595.json); probes were `tmp/fit-time-21e761c3/`.
+
+**Same objective.** At the start, 203 of 205 rows give bitwise-equal values and
+exact derivatives on 84ca269d and 21e761c3. The two 318.15 K Hilliard Cp rows
+differ by at most 3.1e-12, scaled by each row's largest derivative. Serial
+evaluation of all rows: 48.6 → 17.1 CPU-s (host load about 4).
+
+**Iteration time, 32 workers** (same host load, 5–10, back to back):
+
+| | 84ca269d | 21e761c3 |
+|---|---|---|
+| Without the four Cp rows | 2.14–2.32 s | 2.14–2.15 s |
+| With the Cp rows | 19.2–19.5 s | 3.43–3.50 s |
+
+With the Cp rows the new iteration is 1.62 times the one without them; #595's
+per-row criterion (about 2 CPU-s) is met, its alternative 1.5× iteration
+criterion is not.
+
+**Whole fit.** The Route 2b larger-dV continuation replays identically: the
+same 82-iteration accept/reject sequence, final cost within 2.9e-13 relative,
+optimizer within 8e-9 scaled units, the same seven active bounds. Wall time
+is **246 s** against 1,266 s (CPU 3,337 s against 7,616 s), at host load 14–22.
+
+**Plateau cause.** The two crawls (iterations 46–59 and 75–82) are linear
+convergence of a round's Ceres solve: each accepted step lowers the cost by
+about 0.4× (first crawl) and 0.18× (last) of the previous step's decrease,
+down to 2.5e-10 and 3.4e-10 relative. A fit stopped at iteration 59 retraces
+the full replay bit for bit and shows the state there:
+
+- The free coordinates' gradients are 1.1e-7–2.5e-5 in magnitude.
+- Two held coordinates have gradients pointing back into the box. Carbamate
+  Born diameter (index 8): held at 2.0 Å, g = −0.024; it ends at its 5.0 Å
+  upper bound. Carbamate ε/k (index 15): held at 1,000 K, g = +0.0087; it ends
+  free near 672 K.
+- Protonated-MEA ε/k (index 14) is free at about 764 K and ends at its
+  950 K upper bound.
+
+The first crawl is therefore the round polishing the free coordinates to the
+1e-10 function tolerance while the descent that matters waits for the
+release; the release at the round boundary is inferred from the Engine's rule,
+the held gradients at iteration 59 and the endpoint, not traced (a trace forces
+one worker, `fit.cpp:486`). The last crawl is the final round converging to
+the same tolerance. A coordinate crossing from one bound to the other is the
+model-form question of amendments 3–4, not a fit-speed defect.
+
+**Tolerance, measured.** The same fit with function tolerance 1e-6 instead of
+1e-10 follows the identical path to iteration 50, ends that round nine
+iterations earlier, releases the same coordinates and continues the same descent:
+
+| | ftol 1e-10 | ftol 1e-6 |
+|---|---|---|
+| Iterations / Jacobian evaluations | 82 / 59 | 68 / 45 |
+| Wall | 246 s | 189 s |
+| Final cost | 36.785655 | 36.785669 (+3.7e-7 relative) |
+| Active bounds | 7 | the same 7 |
+| Largest optimizer change | — | 0.10 scaled units (carbamate ε/k, about 1 K) |
+
+Linearized over the nine free coordinates (residual variance 0.375), the 1e-6
+endpoint lies 0.011 conditional standard errors from the 1e-10 endpoint. The
+remaining 45 Jacobian evaluations, against F1's 12, come from 16 coordinates of
+which seven end on bounds; each new bound contact or release restarts a round
+with a fresh trust region, which is where the 25 rejected trials (about 21 s) fall.
+
+This is numerical evidence about cost and convergence, not a physical result.
+Single runs on a shared host; times scale with load.
 
 ## Third factor: host contention
 
