@@ -1,4 +1,27 @@
-# Amendment 4: incomplete native-observation preflight
+# Amendment 4 (#170)
+
+## Outcome (2026-10-18)
+
+- **B1 passes after a vapor-side target correction** (Hartono 2008 Eq. 5
+  basis; signed transfer ≤ 0.51 % for rows 1–6, 0.83 % at 360.25 K):
+  [b1-vapor-bound](b1-vapor-bound/README.md).
+- **Neutral CO₂–MEA pair:** k(313.15 K) = 0.098720, b = −50.989 K; Hartono
+  errors −1.41 to +1.32 %: [neutral-fit](neutral-fit/README.md).
+- **Matched reacting comparison: null on both d_V branches.** C166 is 0.06 %
+  higher with the neutral pair (×1.00059), against the required 10 %
+  reduction; same five active bounds in every arm; formally not decidable
+  (endpoint free-block condition 3.7e4; fixed-step derivative truncation):
+  [larger](matched-larger-dV/README.md), [smaller](matched-smaller-dV/README.md).
+- **Defect fixed:** endpoint documents carried R2's ln K constant 211.4 too
+  low (88ee4c8); this also caused the Route 2b replay stop.
+- **Compute:** ledger 10,532 of 21,600 s and 93,620 of 144,000 CPU-s
+  ([compute-ledger.json](compute-ledger.json)); campaign code 1,000 of 1,000
+  lines.
+
+The sections below record the earlier preflight stop (16 October), kept for
+the record.
+
+## Earlier record: incomplete native-observation preflight
 
 **Stopped before any fit.** The mandatory pressure comparison in amendment 4,
 correction R3, could not be specified and verified using an existing supported
