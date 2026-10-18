@@ -1,7 +1,7 @@
 {
   "study": "joint-recalibration-170",
   "stage": 6,
-  "implementation_base": "37ef69eeccdbca0289a5934f7a316cb2b3c56de5",
+  "implementation_base": "fd61ca292e81b6d2adc8893e9486deae1ac528f4",
   "design_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
   "controls_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000919",
   "purpose": "Amendment 4 matched reacting comparison, larger-dV control arm: one 14-coordinate fit from the Route 2b source/seed A record, lambda 0; CO2-MEA fixed at (0, 0 K).",
@@ -164,7 +164,7 @@
     },
     {
       "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/neutral-fit/A/native.json",
-      "sha256": "1a979af37957c026404f4d4fb9016247d626cdc6c50b2b992cf41b79da84380b"
+      "sha256": "7d89b86f3dd08655e7cbd20d17a211648bf8b0acc9a1ff51474155de101b7135"
     }
   ],
   "engine": {
@@ -267,8 +267,8 @@
   "amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6212553416",
   "reference_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json",
   "state_requests_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/stage4-requests.json",
-  "program_prior_cpu_s": 65437.61,
-  "program_prior_wall_s": 8350,
+  "program_prior_cpu_s": 65717.61,
+  "program_prior_wall_s": 8630,
   "program_cpu_limit_s": 144000,
   "program_wall_limit_s": 21600,
   "shared_stage5": {
@@ -335,7 +335,7 @@
     {
       "id": "larger-dV-variant",
       "parameters_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/matched-larger-dV/variant-start-parameters.json",
-      "sha256": "ab30e18a06118650ba36aeb280f30723a7495ea70c4d65cd53250b089fbbe5bb",
+      "sha256": "2e0c5d228d7b79da00ac8f3ea8d8c3c2601aed64a4485ae79392176c497eff6d",
       "reaction_enthalpy_shifts_J_mol": {
         "R2": 0.0,
         "R5": 0.0
@@ -1128,11 +1128,11 @@
   ],
   "workers": 32,
   "controls_amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6231190005",
-  "ledger": "amendment-4/compute-ledger.json (compute-only wall). Charged before this call: neutral fits, replays, sensitivity refits and four information calls, 300 CPU-s / 200 s.",
+  "ledger": "amendment-4/compute-ledger.json (compute-only wall); priors include every call before the control arm; refresh before the variant.",
   "fit_case": {
     "start": "larger-dV-control",
     "density_weight": 0
   },
   "release_tests_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/matched-larger-dV/information/release-tests.json",
-  "release_tests_sha256": "9e987e44eb478ac3857d9d1db42fde1538e23b968505a2bd488ae9ec212be5d9"
+  "release_tests_sha256": "0114823a74028e411f0da6ec1baaf809633bff7f5649f71e069016332ac0516d"
 }
