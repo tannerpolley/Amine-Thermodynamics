@@ -10,13 +10,17 @@
 - **Matched reacting comparison: null on both d_V branches.** C166 is 0.06 %
   higher with the neutral pair (×1.00059), against the required 10 %
   reduction; same five active bounds in every arm; formally not decidable
-  (endpoint free-block condition 3.7e4; fixed-step derivative truncation):
+  (three endpoint misses: free-block condition 3.7e4, fixed-step derivative
+  truncation, projected gradient 0.008–0.010 against 1e-8):
   [larger](matched-larger-dV/README.md), [smaller](matched-smaller-dV/README.md).
 - **Defect fixed:** endpoint documents carried R2's ln K constant 211.4 too
   low (88ee4c8); this also caused the Route 2b replay stop.
 - **Compute:** ledger 10,532 of 21,600 s and 93,620 of 144,000 CPU-s
   ([compute-ledger.json](compute-ledger.json)); campaign code 1,000 of 1,000
-  lines.
+  lines (a 17-line presentation figure script is excluded, pending owner
+  ratification).
+- **Not run at the endpoints:** the 12 zero-weight loaded-density rows and
+  the per-row heat-capacity and heat assessments the design keeps.
 
 The sections below record the earlier preflight stop (16 October), kept for
 the record.

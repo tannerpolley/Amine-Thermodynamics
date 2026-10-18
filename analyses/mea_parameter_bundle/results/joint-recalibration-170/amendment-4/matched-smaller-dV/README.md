@@ -8,7 +8,7 @@ Run 2026-10-18 on Engine wheel `main-21e761c3`, after the larger-d_V branch
 **The same null as the larger branch.** Fixing the CO₂–MEA pair at the neutral
 value (0.098720, −50.989 K) raises the non-Kiepe cost C166 by 0.06 %, against
 the required 10 % reduction (A4-5). The decision is formally **not decidable**
-for the same two endpoint flags as the larger branch.
+for the same three endpoint misses as the larger branch.
 
 | | Zero control | Neutral-fixed variant |
 |---|---|---|
@@ -24,7 +24,8 @@ for the same two endpoint flags as the larger branch.
 | Rows available, rank | 205, 14 | 205, 14 | 205, 14 |
 | Cold replay, largest weighted row difference | 6.9e-12 | 6.9e-12 | ≤ 1e-8 |
 | Kiepe rows against the fixed-binary start | 3.2e-15 | 3.2e-15 | ≤ 1e-8 |
-| Free-block condition | 37,363 | 37,362 | ≤ 1e4 |
+| Free-block condition (9 columns; all 14: 6.22e4) | 37,363 | 37,362 | ≤ 1e4 |
+| Projected gradient (Gauss–Newton decrease left: 3.5e-4, 3.6e-4) | 0.0095 | 0.0098 | ≤ 1e-8 |
 | Centered derivatives | miss at the two ion dispersion energies (≤ 6.4e-7 absolute; h² convergence) | the same | 1e-8 absolute or 1e-5 relative |
 
 The two d_V branches end within 0.12 % of each other in C166 (39.6902 vs
