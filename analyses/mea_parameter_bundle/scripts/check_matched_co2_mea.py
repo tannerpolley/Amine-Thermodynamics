@@ -21,7 +21,7 @@ for arm in ('control', 'variant'):
     entry = dict(status=native['status'], message=native['message'], iterations=native['iterations'], available=native['statuses'].count('Available'), rows=len(native['rows']), rank=native['covariance']['rank'], singular_values=native['covariance']['singular_values'], active_bounds=native['covariance']['active_bounds'], projected_gradient_norm=native['covariance']['projected_gradient_norm'], costs=costs(native))
     params, rows = o.stage6_rows(spec, endpoint := campaign.load(D/arm/'usable-budget-endpoint.json'))
     rows = [(r, i) for r, i in rows if r['quantity'] != 'phase_density' and r['weight'] > 0]  # the fit's lambda-0 rows
-    coordinates, n = campaign.stage6_coordinates(spec, params, endpoint), len(spec['information_coordinates'])
+    coordinates, n = campaign.stage6_coordinates(dict(spec, information_coordinates=[dict(c, bounds=[c['bounds'][0]-c['scale'], c['bounds'][1]+c['scale']]) for c in spec['information_coordinates']]), params, endpoint), len(spec['information_coordinates'])  # boxes widened one unit so centered steps at active bounds stay inside
     statuses, predictions, gradient = evaluate([0.]*n)
     replay = [residual(p, r) for p, (r, _) in zip(predictions, rows)] if statuses == ['Available']*len(rows) else None
     entry['cold_replay'] = dict(statuses_available=statuses.count('Available'), maximum_weighted_row_difference=max(abs(a-b) for a, b in zip(replay, native['weighted_residuals'])) if replay else None, cost_relative_difference=abs(math.fsum(.5*x*x for x in replay)/native['final_cost']-1) if replay else None)
