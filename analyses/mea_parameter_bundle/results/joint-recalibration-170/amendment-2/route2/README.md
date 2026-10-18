@@ -234,6 +234,6 @@ The presentation-only refresh reports missing `snakemake`. Both guarded HTML ren
 `rerun-1/usable-budget-endpoint.json` carry the R2 write-back defect fixed in
 88ee4c8: the R2 ln K constant `a` (20.2686) is in the Engine's c ln(T/T_ref)
 form, 211.4 below the document's c ln T convention; the corrected value is
-a − c ln 313.15 = 231.6416. The native fit results (`native.json`) are
+a − c ln 313.15 = 231.6408. The native fit results (`native.json`) are
 unaffected. See `../route2b/README.md` (correction note) and
 `../../amendment-4/matched-larger-dV/README.md`.
