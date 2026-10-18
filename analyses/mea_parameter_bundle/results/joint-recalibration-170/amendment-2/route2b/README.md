@@ -145,3 +145,17 @@ The [working notebook](../../../../notebook.qmd) presents these retained values.
 The smaller/larger whole-command charges are **6796.19 / 7615.86 CPU-s**. Endpoint replay charges **8.50 CPU-s**; preparation, checking, rendering, reporting and commits reserve **100 CPU-s**. New continuation CPU charge is **14520.55 CPU-s**. Including the earlier interrupted-call reservation, the fit allowance uses **26412.05/36000 CPU-s**, leaving **9587.95 CPU-s**. Remaining release/reporting allowance is **757.324605 CPU-s**.
 
 Program charge is **51178.048914/144000 CPU-s**. The conservative entire-continuation wall charge is **3792.04 s**, measured from entry commit 79ea7bc to the accounting check plus a **300 s finish reserve**, including native calls and reporting time. It replaces the planned 240 s overhead reserve for final accounting; fit wall is not added twice. Program wall charge including the earlier idle wait is **at least 13601.356196/21600 s**; earlier unknown overhead remains unknown. Whole-command charges reconcile launcher measurements with independent external timing and round upward. [Final accounting](completion-accounting.json) owns these values; [retained-array and fixed-input checks](completion-checks.json) preserve numerical checks without new Engine calls. The hard replay stop remains in force.
+
+## Correction (2026-10-18): the endpoint replay stop was a write-back defect
+
+The larger-d_V endpoint replay failure above came from the endpoint document,
+not from the endpoint. `fit_campaign.py` wrote R2's fitted ln K constant in the
+Engine's c ln(T/T_ref) form (T_ref = 313.15 K after the enthalpy-shift fit)
+into a document that uses c ln T, so the document's R2 constant was 211.4 too
+low. On wheel 84ca269d, the written document reproduces the recorded stall
+exactly (Böttinger state 032, residual 1.8575624e-6 after 16 iterations);
+with the constant corrected (a − c ln 313.15), all 205 rows replay and agree
+with the native predictions to 6.7e-13. The fix is commit 88ee4c8; see
+`../../amendment-4/matched-larger-dV/README.md`. The hard replay stop therefore
+did not reflect a non-reproducible endpoint. Derivative checks for this run
+remain unrun.

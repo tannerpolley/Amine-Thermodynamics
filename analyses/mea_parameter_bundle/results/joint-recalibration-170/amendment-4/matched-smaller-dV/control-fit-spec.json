@@ -1,7 +1,7 @@
 {
   "study": "joint-recalibration-170",
   "stage": 6,
-  "implementation_base": "fd61ca292e81b6d2adc8893e9486deae1ac528f4",
+  "implementation_base": "53f59fa2c82fce469097ba3acdda28dbb9c08895",
   "design_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
   "controls_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000919",
   "purpose": "Amendment 4 matched reacting comparison, smaller-dV control arm: one 14-coordinate fit from the Route 2b source/seed A record, lambda 0; CO2-MEA fixed at (0, 0 K).",
@@ -267,8 +267,8 @@
   "amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6212553416",
   "reference_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json",
   "state_requests_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/stage4-requests.json",
-  "program_prior_cpu_s": 65717.61,
-  "program_prior_wall_s": 8630,
+  "program_prior_cpu_s": 83910.61,
+  "program_prior_wall_s": 9890,
   "program_cpu_limit_s": 144000,
   "program_wall_limit_s": 21600,
   "shared_stage5": {
@@ -1128,7 +1128,7 @@
   ],
   "workers": 32,
   "controls_amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6231190005",
-  "ledger": "amendment-4/compute-ledger.json (compute-only wall); priors include every call before the control arm; refresh before the variant.",
+  "ledger": "amendment-4/compute-ledger.json (compute-only wall); variant priors add a 240 s / 3300 CPU-s allowance for the control call.",
   "fit_case": {
     "start": "smaller-dV-control",
     "density_weight": 0
