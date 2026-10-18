@@ -41,7 +41,7 @@ def _mutate(
     mutation(payload)
     input_path.write_text(json.dumps(payload), encoding="utf-8")
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
-    receipt["files"]["1/input.json"] = hashlib.sha256(
+    receipt["files"][contract.INPUT_KEY] = hashlib.sha256(
         input_path.read_bytes()
     ).hexdigest()
     receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
@@ -50,6 +50,12 @@ def _mutate(
 def test_work_package_a_inputs_fail_closed_and_conserve_balances() -> None:
     report = contract.validate_film_chemistry_inputs()
     assert report["status"] == "pass"
+    assert report["input_identity"] == "mea-film-chemistry-work-package-a-input-v3"
+    # #152: loaded Amundsen rows have no row uncertainty and stay unadmitted.
+    assert report["admitted_property_inputs"] == [
+        "liquid_density_unloaded",
+        "liquid_dynamic_viscosity_unloaded",
+    ]
     assert report["net_carbamate_balance"] == {
         "C": 0,
         "H": 0,
@@ -114,7 +120,7 @@ def test_receipt_tampering_or_hash_drift_is_rejected(
     if case == "identity":
         receipt["identity"] = "tampered"
     else:
-        receipt["files"]["1/input.json"] = "0" * 64
+        receipt["files"][contract.INPUT_KEY] = "0" * 64
     receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
     with pytest.raises(ValueError):
         contract.validate_film_chemistry_inputs()
@@ -132,6 +138,36 @@ def test_admission_classification_drift_is_rejected(
         ),
     )
     with pytest.raises(ValueError):
+        contract.validate_film_chemistry_inputs()
+
+
+@pytest.mark.parametrize("row_index", [1, 3])
+def test_restoring_pre_152_loaded_row_uncertainty_is_rejected(
+    row_index: int, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    input_path, receipt_path = _sandbox(tmp_path, monkeypatch)
+
+    def readmit(payload: dict[str, Any]) -> None:
+        row = payload["property_inputs"][row_index]
+        general = row["source_general_uncertainty"]
+        row.update(
+            applicable_uncertainty={
+                "value": general["value"],
+                "unit": general["unit"],
+                "type": "combined_relative" if row_index == 3 else "combined_absolute",
+            },
+            uncertainty_status="reported_combined",
+            admission_status="admitted_observation_source_not_interpolator",
+        )
+
+    _mutate(input_path, receipt_path, readmit)
+    # Re-accept the edited hash so the uncertainty check itself must refuse.
+    monkeypatch.setitem(
+        contract.ACCEPTED_BUNDLE_HASHES,
+        contract.INPUT_KEY,
+        hashlib.sha256(input_path.read_bytes()).hexdigest(),
+    )
+    with pytest.raises(ValueError, match="uncertainty meaning"):
         contract.validate_film_chemistry_inputs()
 
 
@@ -370,7 +406,7 @@ def test_coordinated_nested_schema_drift_is_rejected(
     schema["$defs"]["kinetic_correlation"]["required"].remove("source_locator")
     contract.SCHEMA_PATH.write_text(json.dumps(schema), encoding="utf-8")
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
-    receipt["files"]["1/schema.json"] = hashlib.sha256(
+    receipt["files"][contract.SCHEMA_KEY] = hashlib.sha256(
         contract.SCHEMA_PATH.read_bytes()
     ).hexdigest()
     receipt_path.write_text(json.dumps(receipt), encoding="utf-8")

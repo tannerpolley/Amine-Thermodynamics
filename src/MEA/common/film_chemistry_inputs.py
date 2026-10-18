@@ -12,10 +12,15 @@ from typing import Any
 from MEA.common.config import DATA_ROOT, REPO_ROOT
 
 
-BUNDLE_ROOT = DATA_ROOT / "film_chemistry_inputs" / "1"
+# Version 1 remains as the historical pre-#152 bundle; it is no longer validated.
+# Version 2 is reserved for the Work Package B film-input release.
+VERSION = 3
+BUNDLE_ROOT = DATA_ROOT / "film_chemistry_inputs" / str(VERSION)
 INPUT_PATH = BUNDLE_ROOT / "input.json"
 SCHEMA_PATH = BUNDLE_ROOT / "schema.json"
-RECEIPT_PATH = DATA_ROOT / "film_chemistry_inputs" / "1.receipt.json"
+RECEIPT_PATH = DATA_ROOT / "film_chemistry_inputs" / f"{VERSION}.receipt.json"
+INPUT_KEY = f"{VERSION}/input.json"
+SCHEMA_KEY = f"{VERSION}/schema.json"
 REACTION_CONTRACT_PATH = (
     DATA_ROOT / "manifests" / "chemical_reaction_source_contract.json"
 )
@@ -27,10 +32,15 @@ REACTION_CONTRACT_SHA256 = (
     "39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55"
 )
 ACCEPTED_BUNDLE_HASHES = {
-    "1/input.json": "f62df1eec0176fb9196d84c6523371beab576f7154c07498f16a0d977626abe5",
-    "1/schema.json": "d6cd1f51275b9c12681d9a901300dd8ab89d585e48f8de15302d8ff8b352eed9",
+    INPUT_KEY: "5ceab9845b1fc73395c0ff8c3a4f1700eb052befd418225a4fd16e3b8ab58e25",
+    SCHEMA_KEY: "6bfe487cd1c3a69cadfa1efc58fef825e9b1d570c002484733b6a2aaded1eaf8",
 }
-BASE_COMMIT = "9f7c83d80900a10fbff7007c2137d126e92d9b3d"
+BASE_COMMIT = "96e5124f085c3cafac479f2501d88c89f24b57dd"
+SUPERSEDES = (
+    "Version 3 supersedes version 1 for Work Package A after the #152 Amundsen "
+    "correction; version 2 is reserved for the Work Package B film-input release "
+    "(MEA-Absorption-Column issue36 release guard)."
+)
 SPECIES_ORDER = tuple("CO2 MEA H2O MEAH+ MEACOO- HCO3- CO3-- H3O+ OH-".split())
 REACTION_ORDER = tuple("R1 R2 R3 R4 R5".split())
 CLASSIFICATION = {
@@ -90,8 +100,9 @@ TRANSPORT_FIELDS = _fields(
     "input_id species unit source_record_id source_locator uncertainty_status admission_status reason"
 )
 PROPERTY_FIELDS = _fields(
-    "input_id source_record_id data_path data_sha256 source_locator domain instrument_uncertainty uncertainty_status admission_status reason"
+    "input_id source_record_id data_path data_sha256 source_locator loading_state domain instrument_uncertainty applicable_uncertainty uncertainty_status admission_status reason"
 )
+LOADED_PROPERTY_FIELDS = PROPERTY_FIELDS | {"source_general_uncertainty"}
 OBSERVATION_FIELDS = _fields(
     "observation_id kind unit uncertainty_status domain admission_status reason"
 )
@@ -100,12 +111,10 @@ ROW_FIELDS = {
     "D_MEA_free_effective_fick": TRANSPORT_FIELDS | {"candidate_identity", "domain"},
     "D_ions_smallest_documented_approximation": TRANSPORT_FIELDS
     | {"candidate_identity", "domain"},
-    "liquid_density_unloaded": PROPERTY_FIELDS
-    | {"loading_state", "applicable_uncertainty"},
-    "liquid_density_loaded": PROPERTY_FIELDS
-    | {"loading_state", "applicable_uncertainty"},
-    "liquid_dynamic_viscosity": PROPERTY_FIELDS
-    | {"applicable_uncertainty_by_loading_state"},
+    "liquid_density_unloaded": PROPERTY_FIELDS,
+    "liquid_density_loaded": LOADED_PROPERTY_FIELDS,
+    "liquid_dynamic_viscosity_unloaded": PROPERTY_FIELDS,
+    "liquid_dynamic_viscosity_loaded": LOADED_PROPERTY_FIELDS,
     "Putta2016_fit_corpus_summary": OBSERVATION_FIELDS
     | {"value", "source_record_id", "source_locator"},
     "Putta2016_external_AARD_table": OBSERVATION_FIELDS
@@ -133,6 +142,37 @@ CORRELATION_EXPECTED = {
     "Putta2016_k_H2O_c": ("F2", "concentration", 108820000.0, 3900.0, CONCENTRATION_UNIT, UNIT_REJECTION),
     "Putta2016_k_MEA_a": ("F1", "e-NRTL activity", 451910000000.0, 5851.7, ACTIVITY_UNIT, ACTIVITY_REJECTION),
     "Putta2016_k_H2O_a": ("F2", "e-NRTL activity", 2110500.0, 2382.4, ACTIVITY_UNIT, ACTIVITY_REJECTION),
+}
+# fmt: on
+ADMITTED_PROPERTY = "admitted_observation_source_not_interpolator"
+DENSITY_INSTRUMENT = {
+    "value": 0.00005,
+    "unit": "g cm^-3",
+    "type": "estimated_measurement_absolute",
+}
+VISCOSITY_INSTRUMENT = {
+    "value": 0.01,
+    "unit": "mPa s",
+    "type": "estimated_measurement_absolute",
+}
+LOADED_SCOPE = "CO2-loaded system except the highest temperatures and CO2 loadings; the source does not state that boundary"
+# Amundsen 2009 pp. 3099-3100: the loaded estimates exclude unnamed highest
+# temperatures/loadings, so #152 removed loaded row uncertainties. A row with no
+# applicable uncertainty keeps the general estimate separately and is not admitted.
+# Input id: loading state, instrument, applicable row uncertainty, general estimate.
+# fmt: off
+PROPERTY_EXPECTED = {
+    "liquid_density_unloaded": ("unloaded", DENSITY_INSTRUMENT, {"value": 0.0005, "unit": "g cm^-3", "type": "combined_absolute"}, None),
+    "liquid_density_loaded": ("loaded", DENSITY_INSTRUMENT, None, {"value": 0.002, "unit": "g cm^-3", "type": "general_estimate_not_row_level", "scope": LOADED_SCOPE}),
+    "liquid_dynamic_viscosity_unloaded": ("unloaded", VISCOSITY_INSTRUMENT, {"value": 1.0, "unit": "percent", "type": "combined_relative"}, None),
+    "liquid_dynamic_viscosity_loaded": ("loaded", VISCOSITY_INSTRUMENT, None, {"value": 3.0, "unit": "percent", "type": "general_estimate_not_row_level", "scope": LOADED_SCOPE}),
+}
+# CSV (property, loading state, row value, unit, type, status, general value, general unit): rows.
+PROPERTY_INVENTORY = {
+    ("density", "unloaded", "0.0005", "g/cm^3", "combined_absolute", "unloaded_source_estimate", "0.0005", "g/cm^3"): 35,
+    ("density", "loaded", "", "g/cm^3", "unbound_source_scope", "loaded_scope_unbound", "0.002", "g/cm^3"): 68,
+    ("dynamic_viscosity", "unloaded", "1", "percent", "combined_relative", "unloaded_source_estimate", "1", "percent"): 35,
+    ("dynamic_viscosity", "loaded", "", "percent", "unbound_source_scope", "loaded_scope_unbound", "3", "percent"): 75,
 }
 # fmt: on
 CONVERSION_EXPECTED = {
@@ -254,7 +294,7 @@ def _validate_schema_receipt(
         "schema",
     )
     if (
-        schema["$id"] != "mea-film-chemistry-work-package-a-v1"
+        schema["$id"] != f"mea-film-chemistry-work-package-a-v{VERSION}"
         or schema["type"] != "object"
         or schema["additionalProperties"] is not False
         or set(schema["required"]) != set(schema["properties"])
@@ -262,8 +302,8 @@ def _validate_schema_receipt(
         raise ValueError("Schema declaration drifted")
     _keys(payload, set(schema["required"]), "input")
     identity = (
-        1,
-        "mea-film-chemistry-work-package-a-input-v1",
+        VERSION,
+        f"mea-film-chemistry-work-package-a-input-v{VERSION}",
         "source_validated_deferred_inputs",
         BASE_COMMIT,
     )
@@ -275,17 +315,18 @@ def _validate_schema_receipt(
     ) != identity:
         raise ValueError("Input identity drifted")
     hashes = {
-        "1/input.json": _sha256(INPUT_PATH),
-        "1/schema.json": _sha256(SCHEMA_PATH),
+        INPUT_KEY: _sha256(INPUT_PATH),
+        SCHEMA_KEY: _sha256(SCHEMA_PATH),
     }
     if hashes != ACCEPTED_BUNDLE_HASHES:
         raise ValueError("Accepted input or schema hash drifted")
     expected = {
-        "schema_version": 1,
-        "identity": "mea-film-chemistry-work-package-a-receipt-v1",
+        "schema_version": VERSION,
+        "identity": f"mea-film-chemistry-work-package-a-receipt-v{VERSION}",
         "bundle_identity": payload["identity"],
         "base_commit": BASE_COMMIT,
         "files": hashes,
+        "supersedes": SUPERSEDES,
         "scope": "Issue #72 Work Package A only; Work Package B remains blocked by ePC-SAFT Issue #80.",
     }
     if receipt != expected:
@@ -467,47 +508,42 @@ def _validate_evidence(payload: dict[str, Any]) -> None:
         _interval(domain["temperature_k"], "transport temperature")
         _interval(domain["loading"], "transport loading")
 
-    property_ids = (
-        "liquid_density_unloaded liquid_density_loaded liquid_dynamic_viscosity".split()
+    properties = _rows(
+        payload["property_inputs"], list(PROPERTY_EXPECTED), "input_id", ROW_FIELDS
     )
-    properties = _rows(payload["property_inputs"], property_ids, "input_id", ROW_FIELDS)
-    instrument = {
-        "value": 0.00005,
-        "unit": "g cm^-3",
-        "type": "estimated_measurement_absolute",
+    domain_fields = {
+        "unloaded": _fields(
+            "temperature_k mea_mass_fraction_supported loading_mol_co2_per_mol_mea"
+        ),
+        "loaded": _fields(
+            "temperature_k mea_mass_fraction_supported loading_mol_co2_per_mol_mea_supported"
+        ),
     }
-    for row, state, value in zip(
-        properties[:2], ("unloaded", "loaded"), (0.0005, 0.002), strict=True
-    ):
-        applicable = {"value": value, "unit": "g cm^-3", "type": "combined_absolute"}
+    for row in properties:
+        state, instrument, applicable, general = PROPERTY_EXPECTED[row["input_id"]]
+        admitted = applicable is not None
         if (
             row["loading_state"] != state
             or row["instrument_uncertainty"] != instrument
             or row["applicable_uncertainty"] != applicable
+            or row.get("source_general_uncertainty") != general
         ):
-            raise ValueError("Density uncertainty meaning drifted")
-    domain_fields = {
-        "liquid_density_unloaded": _fields(
-            "temperature_k mea_mass_fraction_supported loading_mol_co2_per_mol_mea"
-        ),
-        "liquid_density_loaded": _fields(
-            "temperature_k mea_mass_fraction_supported loading_mol_co2_per_mol_mea_supported"
-        ),
-        "liquid_dynamic_viscosity": _fields(
-            "temperature_k unloaded_mea_mass_fraction_supported loaded_mea_mass_fraction_supported loading_mol_co2_per_mol_mea_supported"
-        ),
-    }
-    for row in properties:
+            raise ValueError("Property uncertainty meaning drifted")
         valid = (
             _sha256(REPO_ROOT / row["data_path"]) == row["data_sha256"]
-            and row["uncertainty_status"] == "reported_combined"
+            and row["uncertainty_status"]
+            == ("reported_combined" if admitted else "loaded_scope_unbound")
             and row["admission_status"]
-            == "admitted_observation_source_not_interpolator"
+            == (
+                ADMITTED_PROPERTY
+                if admitted
+                else "not_admitted_row_uncertainty_unbound"
+            )
         )
         if not valid:
             raise ValueError("Property provenance or admission drifted")
         _interval(
-            _keys(row["domain"], domain_fields[row["input_id"]], "property domain")[
+            _keys(row["domain"], domain_fields[state], "property domain")[
                 "temperature_k"
             ],
             "property temperature",
@@ -522,18 +558,13 @@ def _validate_evidence(payload: dict[str, Any]) -> None:
                 row["uncertainty_value"],
                 row["uncertainty_unit"],
                 row["uncertainty_type"],
+                row["uncertainty_status"],
+                row["source_general_uncertainty_value"],
+                row["source_general_uncertainty_unit"],
             )
             for row in csv.DictReader(handle)
         )
-    expected = Counter(
-        {
-            ("density", "unloaded", "0.0005", "g/cm^3", "combined_absolute"): 35,
-            ("density", "loaded", "0.002", "g/cm^3", "combined_absolute"): 68,
-            ("dynamic_viscosity", "unloaded", "1", "percent", "combined_relative"): 35,
-            ("dynamic_viscosity", "loaded", "3", "percent", "combined_relative"): 75,
-        }
-    )
-    if inventory != expected:
+    if inventory != Counter(PROPERTY_INVENTORY):
         raise ValueError("Retained property uncertainty inventory drifted")
 
     observation_ids = "Putta2016_fit_corpus_summary Putta2016_external_AARD_table transport_numeric_candidates".split()
@@ -688,8 +719,8 @@ def validate_film_chemistry_inputs() -> dict[str, Any]:
     return {
         "status": "pass",
         "input_identity": payload["identity"],
-        "input_sha256": hashes["1/input.json"],
-        "schema_sha256": hashes["1/schema.json"],
+        "input_sha256": hashes[INPUT_KEY],
+        "schema_sha256": hashes[SCHEMA_KEY],
         "checks": [
             "accepted_input_schema_hashes_structure_and_receipt",
             "common_application_domain_and_guards",
@@ -710,12 +741,15 @@ def validate_film_chemistry_inputs() -> dict[str, Any]:
         "admitted_fast_equilibrium_reactions": [],
         "admitted_numeric_transport_inputs": [],
         "admitted_property_inputs": [
-            row["input_id"] for row in payload["property_inputs"]
+            row["input_id"]
+            for row in payload["property_inputs"]
+            if row["admission_status"] == ADMITTED_PROPERTY
         ],
         "provider_activity_correction_ran": False,
         "limitations": [
             "Published kinetic coefficient units are dimensionally inconsistent with the published rate unit.",
             "Source-complete CO2, free-MEA, and ionic diffusivity coefficients are unavailable.",
+            "Amundsen2009 loaded density and viscosity rows have no row uncertainty; their general estimates exclude unnamed highest temperatures and loadings, so they are not admitted.",
             "Luo2015 and PachecoRochelle1998 remain unavailable and not adjudicated at locator level.",
             "No active MEA parameter packet exists; Work Package B remains blocked by ePC-SAFT Issue #80.",
         ],
