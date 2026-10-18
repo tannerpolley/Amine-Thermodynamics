@@ -1,0 +1,182 @@
+{
+ "issue": "tannerpolley/Amine-Thermodynamics#126 (MDEA-CO2-H2O ePC-SAFT)",
+ "transcribed": "2026-10-18",
+ "sources": [
+  {
+   "source_key": "Kuranov1996",
+   "citation": "Kuranov, G.; Rumpf, B.; Smirnova, N. A.; Maurer, G. Solubility of Single Gases Carbon Dioxide and Hydrogen Sulfide in Aqueous Solutions of N-Methyldiethanolamine in the Temperature Range 313-413 K at Pressures up to 5 MPa. Ind. Eng. Chem. Res. 1996, 35 (6), 1959-1966.",
+   "doi": "10.1021/ie950538r",
+   "zotero_parent_key": "9F6UM7M4",
+   "pdf_attachment_key": "QB5PV62N",
+   "pdf_sha256": "a86617a611e06608c8ce601ce6747f1bba9321c65b1fa657ef999d305618e1c9",
+   "pdf_page_to_printed_page": "printed page = PDF page + 1958 (PDF pages 1-8 = pp. 1959-1966)",
+   "csv": "Kuranov_1996_CO2_MDEA_total_pressure.csv",
+   "csv_sha256": "45159aae9cc2ad8019dc9de482ec36ae4e5355ef84981cc15068bd43b7a18b29",
+   "tables": [
+    {
+     "table": "Table 2",
+     "caption": "Table 2. Solubility of Carbon Dioxide in Aqueous Solutions of MDEA",
+     "pdf_page": 2,
+     "printed_page": 1960,
+     "printed_columns": [
+      "T (K)",
+      "m̄CO2 (mol/kg)",
+      "m̄MDEA (mol/kg)",
+      "10(p) (MPa)"
+     ],
+     "layout": "Two side-by-side column blocks with the same four headers, 41 rows each. Rows are numbered in reading order: left block rows 1-41 (source_row 1-41), then right block rows 1-41 (source_row 42-82). No printed series headings; source_series is derived from the printed m̄MDEA value and the nominal isotherm.",
+     "row_count": 82,
+     "row_count_by_series": {
+      "m_MDEA 1.9938, about 313 K": 11,
+      "m_MDEA 1.9493, about 333 K": 7,
+      "m_MDEA 1.9493, about 373 K": 9,
+      "m_MDEA 1.9493, about 393 K": 7,
+      "m_MDEA 1.9493, about 413 K": 7,
+      "m_MDEA 3.9707, about 313 K": 10,
+      "m_MDEA 3.9707, about 333 K": 9,
+      "m_MDEA 3.9707, about 373 K": 8,
+      "m_MDEA 3.9707, about 393 K": 8,
+      "m_MDEA 3.9707, about 413 K": 6
+     },
+     "rows_with_zero_CO2": "4 rows print m̄CO2 = 0 (source_row 28, 35, 69, 77: 393 and 413 K at both MDEA molalities); they are CO2-free total pressures of the MDEA + H2O solvent and are part of the 82.",
+     "row_count_cross_check": "Ermatchkov 2006 Table 5 (PDF p.6, printed p.6086, image-read) lists Kuranov et al. with N = 82, T 313-413 K, m̄MDEA 1.9-4.0 mol/kg, p 74-5037 kPa, which matches 10(p) = 0.740 to 50.367 and confirms the 10 x p reading. The same row prints m̄CO2 <= 4.9 mol/kg, whereas Table 2 reaches 4.5950 and Kuranov's own text says 'about 4.6' (p.1960)."
+    }
+   ],
+   "units_and_bases": {
+    "temperature": "T in K as printed; the paper does not name a temperature scale (ITS-90 or IPTS-68).",
+    "molality": "m̄ is overall (stoichiometric) molality, mol per kg of water. Locators: p.1959 right column 'throughout the paper molality is used for the number of moles per kilogram of water'; p.1965 nomenclature 'm̄i = overall molality of component i'.",
+    "pressure": "Printed header '10(p) (MPa)': the printed number equals 10 x p/MPa, so p/MPa = printed value / 10 (equivalently p in bar). Figure 1 axis on the same page is labelled '10·p / MPa'. Values are kept as printed; no conversion is stored.",
+    "mdea_molality_note": "The about-2 mol/kg series prints m̄MDEA = 1.9938 at 313 K and 1.9493 at 333-413 K; kept as printed. The paper does not explain the difference."
+   },
+   "pressure_basis": "Total pressure. Synthetic (bubble-point) method: a known mass of gas is dissolved in a known amount of solvent and the pressure is lowered until the first stable bubble appears (p.1959 right column, Experimental Section). Abstract (p.1959): 'temperatures between 313 and 413 K and total pressures up to 5 MPa'. Results (p.1960): 'The maximum total pressure is about 5 MPa.'",
+   "stated_uncertainties": {
+    "temperature": "+-0.1 K, two calibrated platinum resistance thermometers in the bath around the cell (p.1959 right column)",
+    "pressure": "maximum uncertainty about 0.1% of each transducer's maximum reading; WIKA transducers with ranges 0-0.6, 0-1.6 and 0-10 MPa, calibrated against a high-precision gauge before and after each series (p.1959 right column)",
+    "gas_mass": "+-0.008 g by weighing (p.1959 right column)",
+    "mdea_concentration": "relative uncertainty less than +-0.1% (p.1959 right column)",
+    "purity": "CO2 >= 99.995 mol %; MDEA >= 98 mass % (Merck), degassed by vacuum distillation; water deionized and vacuum distilled (p.1959 right column)",
+    "per_row": "none printed in Table 2"
+   },
+   "author_correlation_note": "Kuranov et al. correlate the CO2 total pressures with an average relative deviation of 5.6% (p.1963) and note increasing deviations with temperature.",
+   "temperature_correction_status": "Ermatchkov et al. 2006 (p.6085 right column; Appendix II p.6089 and Table 6 p.6088; Table 5 footnote a, p.6086) state a thermometer-recalibration correction only for Perez-Salado Kamps et al. 2001 (their ref 2). No correction is stated for Kuranov et al. 1996. One sentence on p.6085 says 'the (corrected) experimental results for the total pressure by Kuranov et al. and by Perez-Salado Kamps et al.' without separating the two sources; the Table 5 footnote and Appendix II apply the correction to ref 2 only. Kuranov Table 2 temperatures are transcribed as printed.",
+   "transcription_check": "Each value was read from 600 dpi crops of PDF page 2 (five overlapping horizontal strips covering both column blocks) and written to a separate image reading before the text was compared. pdftotext -layout of the same page was then parsed into the same 82 x 4 grid. All 328 values agree between the image reading and the text layer: no disagreements, so no zoomed resolution was needed. The row count was also cross-checked against Ermatchkov 2006 Table 5 (N = 82). Kept as strings at printed precision.",
+   "consistency_checks": {
+    "temperature_within_series": "313.11-313.25, 333.13-333.16, 373.14-373.17, 393.12-393.17, 413.13-413.16 K",
+    "m_CO2_order": "printed order is increasing m̄CO2 within every series",
+    "max_loading": "m̄CO2/m̄MDEA up to 1.316 (source_row 11)",
+    "non_monotone_pressure": [
+     "source_row 5 (313 K, 1.9938): 10p 7.098 after 7.192 at m̄CO2 2.0790 vs 2.0788 (near replicate, -1.3%)",
+     "source_row 9 (313 K, 1.9938): 10p 25.185 after 25.273 at m̄CO2 2.4557 vs 2.4536 (near replicate, -0.3%)",
+     "source_row 48 (313 K, 3.9707): 10p 15.858 after 16.054 at m̄CO2 4.2020 vs 4.1771 (-1.2%)",
+     "source_row 58 (333 K, 3.9707): 10p 13.566 after 14.966 at m̄CO2 3.8696 vs 3.8643 (-9.4%, the largest; a steep region where the neighbours imply a rise)"
+    ],
+    "handling": "flagged in consistency_flag; values kept as printed"
+   }
+  },
+  {
+   "source_key": "Ermatchkov2006",
+   "citation": "Ermatchkov, V.; Pérez-Salado Kamps, Á.; Maurer, G. Solubility of Carbon Dioxide in Aqueous Solutions of N-Methyldiethanolamine in the Low Gas Loading Region. Ind. Eng. Chem. Res. 2006, 45 (17), 6081-6091.",
+   "author_list_note": "Authors from the PDF byline (p.6081, image-read): Viktor Ermatchkov, Álvaro Pérez-Salado Kamps and Gerd Maurer. Dirk Speyer is not an author; the Acknowledgment (p.6088) thanks him for help with some 393 K experiments. The issue #126 task text listed Speyer as an author.",
+   "doi": "10.1021/ie0604270",
+   "zotero_parent_key": "NM9K6UKR",
+   "pdf_attachment_key": "UD6X5RGU",
+   "pdf_sha256": "54d60f67736ac44633078fc39677eee75521cd79f2eed734d5fb514d9462850a",
+   "mathpix_sidecar": "UD6X5RGU attachment directory, same basename with .mmd extension; used only as a third reading",
+   "pdf_page_to_printed_page": "printed page = PDF page + 6080 (PDF pages 1-11 = pp. 6081-6091)",
+   "csv": "Ermatchkov_2006_CO2_MDEA_partial_pressure.csv",
+   "csv_sha256": "8af5abb8051550fea8eaed126949f4493a7e5fab9dcf4cfe7af4317998dad0af",
+   "tables": [
+    {
+     "table": "Table 1",
+     "caption": "Table 1. Solubility of Carbon Dioxide in Aqueous Solutions of MDEA at 313.15 K (ΔT = ±0.1 K, Δm̄MDEA/m̄MDEA = ±0.1 %)",
+     "pdf_page": 2,
+     "printed_page": 6082,
+     "row_count": 39,
+     "row_count_by_block": {
+      "m_MDEA about 2 (1.905-2.620)": 12,
+      "m_MDEA about 4 (3.918-4.380)": 14,
+      "m_MDEA about 8 (7.331-8.345)": 13
+     }
+    },
+    {
+     "table": "Table 2",
+     "caption": "Table 2. Solubility of Carbon Dioxide in Aqueous Solutions of MDEA at 353.15 K (ΔT = ±0.1 K, Δm̄MDEA/m̄MDEA = ±0.1 %)",
+     "pdf_page": 3,
+     "printed_page": 6083,
+     "row_count": 30,
+     "row_count_by_block": {
+      "m_MDEA about 2 (1.906-1.988)": 10,
+      "m_MDEA about 4 (3.959-4.369)": 10,
+      "m_MDEA about 8 (7.699-8.441)": 10
+     }
+    },
+    {
+     "table": "Table 3",
+     "caption": "Table 3. Solubility of Carbon Dioxide in Aqueous Solutions of MDEA at 393.15 K (ΔT = ±0.1 K, Δm̄MDEA/m̄MDEA = ±0.1 %)",
+     "pdf_page": 3,
+     "printed_page": 6083,
+     "row_count": 32,
+     "row_count_by_block": {
+      "m_MDEA about 2 (2.002-2.015)": 10,
+      "m_MDEA about 4 (3.955-4.047)": 8,
+      "m_MDEA about 8 (7.983-8.099)": 14
+     }
+    }
+   ],
+   "printed_columns": [
+    "m̄MDEA, mol·kg−1",
+    "m̄CO2, mol·kg−1 (printed as value ± uncertainty)",
+    "pCO2, kPa (printed as value ± uncertainty)",
+    "ΔpCO2,repr, kPa"
+   ],
+   "row_count_total": 101,
+   "row_count_cross_check": "Table 5 (p.6086) lists 'this work' with N = 101, T 313-393 K, m̄MDEA 1.9-8.4, pCO2 0.1-69.3 kPa; matches the transcription (m̄MDEA 1.905-8.441, pCO2 0.12-69.3 kPa).",
+   "blocks_note": "The tables print no block headings. source_series groups rows into the contiguous about-2, about-4 and about-8 mol/kg blocks by printed m̄MDEA; this grouping is an inference, not printed text.",
+   "units_and_bases": {
+    "temperature": "One temperature per table, from the caption (313.15, 353.15, 393.15 K) with ΔT = ±0.1 K; the text gives T ≈ 313, 353 and 393 K. No temperature scale is named.",
+    "molality": "m̄ is the stoichiometric molality, mol per kg of water (abstract p.6081 'mol/(kg of water)'; nomenclature p.6090 'm̄i = stoichiometric molality of component i'). The m̄CO2 and m̄MDEA values include a systematic correction for gas and water transferred to the vapor in the storage tank and cells; the CO2 correction is 0.1-4.3% (p.6082-6083).",
+    "pressure": "pCO2 in kPa as printed; ± values and ΔpCO2,repr in kPa."
+   },
+   "pressure_basis": "CO2 partial pressure, not total pressure. Headspace gas chromatography: 'At equilibrium, a certain partial pressure of the sour gas is attained in the gaseous phase (the headspace) of the sample cells. That partial pressure is to be measured.' (p.6082 right column). The CO2 peak area is converted to partial pressure by calibration with pure CO2 and a high-precision pressure transducer over 7-70 kPa (p.6082 right column). Cells are pressurized with nitrogen before sampling (p.6082).",
+   "stated_uncertainties": {
+    "temperature": "about ±0.1 K overall (p.6081-6082); ΔT = ±0.1 K in each table caption",
+    "mdea_molality": "gravimetric relative uncertainty not above ±0.03%, total below ±0.1% (p.6083 left column); ±0.1% in captions",
+    "co2_molality": "about ±0.1% to ±3.9% relative, from Gauss error propagation; printed per row as m̄CO2 ± value (p.6083 left column). Transcribed range 0.08-3.95%.",
+    "co2_partial_pressure": "ΔpCO2 = ±(Δp*CO2 + 0.02 pCO2): the first term from Gauss propagation of temperature and molality uncertainties through the VLE model, the second from the calibration (p.6083, Experimental Results). Printed per row as pCO2 ± value.",
+    "calibration": "maximum systematic pressure uncertainty from about ±0.05 kPa at p ≈ 10 kPa to about ±0.15 kPa at p ≈ 70 kPa; maximum relative deviation between measured pressures and the calibration line 2% (p.6082 right column)",
+    "reproducibility": "each point repeated 3-8 times; ΔpCO2,repr is the absolute standard deviation from the average partial pressure; 'For almost all experimental data, ΔpCO2,repr is (well) below the estimated experimental uncertainty' (p.6083)",
+    "purity": "CO2 mole fraction >= 0.99995 (Messer-Griesheim); MDEA mass fraction >= 0.985 (Riedel-de Haën), degassed under vacuum; water deionized and degassed by vacuum distillation (p.6082 right column)"
+   },
+   "temperature_recalibration_statement": {
+    "locator": "p.6085 right column, 'Ternary System (CO2 + MDEA + H2O). (a) Predictions from the Previous Model'; image-read",
+    "text": "However, the platinum resistance thermometers used in the work by Pérez-Salado Kamps et al.2 were recalibrated straight after those experimental results had been published, showing that a small correction had to be applied to the temperature values. The corrected temperatures are calculated from T = Told + ΔT, where ΔT ≈ 0.6, 1.2, and 1.8 K at Told ≈ 313.15, 353.15, and 393.15 K, respectively.",
+    "scope": "Applies to ref 2, Perez-Salado Kamps et al. 2001 (mainly about-8 mol/kg MDEA data). Their corrected CO2 results are Table 6 (p.6088, referenced from Appendix II on p.6089; footnote 'Experimental results from Pérez-Salado Kamps et al.2 (after applying a small temperature correction)'), not transcribed here. Table 5 footnote a (p.6086) applies the correction to ref 2 only. Ermatchkov's own Tables 1-3 are not described as corrected, and no correction is stated for Kuranov et al. 1996."
+   },
+   "transcription_check": "Each value was read from 600 dpi crops of PDF page 2 (Table 1, six strips) and page 3 (Table 2 four strips, Table 3 five strips) and written to a separate image reading. Two further readings were parsed into the same grid: pdftotext -layout of the same pages (where this font encodes ± as '(' and = as ')') and the Mathpix .mmd sidecar. All 606 values (101 rows x 6 numbers) agree across image, pdftotext and .mmd: no disagreements, so no zoomed resolution was needed. Kept as strings at printed precision.",
+   "consistency_checks": {
+    "loading_range": "m̄CO2/m̄MDEA 0.0028-0.784, consistent with the paper's 'about 0.003 and 0.8' (p.6081)",
+    "uncertainty_rule": "every printed pCO2 uncertainty is >= 0.02 pCO2, consistent with the stated rule",
+    "non_monotone_pressure": [
+     "Table 1 source_row 5 (m̄MDEA 2.051, loading 0.340, 5.57 kPa) is below source_row 6 (m̄MDEA 2.620, loading 0.334, 6.66 kPa). The block mixes MDEA molalities, so this need not be an inconsistency."
+    ],
+    "reproducibility_above_uncertainty": "18 of 101 rows print ΔpCO2,repr > ΔpCO2: Table 1 rows 6, 8, 21, 28, 29, 32, 35, 37; Table 2 rows 4, 5, 6, 14, 17, 23, 24, 28, 29; Table 3 row 24. The paper says 'almost all' are below. Flagged per row.",
+    "below_calibration_range": "33 rows have pCO2 below 7 kPa, the lower end of the 7-70 kPa calibration (Table 1: 16, Table 2: 9, Table 3: 8). This is an inference from p.6082; the paper does not discuss extrapolating the calibration.",
+    "handling": "flagged in consistency_flag; values kept as printed"
+   }
+  },
+  {
+   "source_key": "Hsieh2007",
+   "citation": "Hsieh, C.-J.; Chen, J.-M.; Li, M.-H. Dielectric Constants of Aqueous Diisopropanolamine, Diethanolamine, N-Methyldiethanolamine, Triethanolamine, and 2-Amino-2-methyl-1-propanol Solutions. J. Chem. Eng. Data 2007, 52, 619-623.",
+   "doi": "10.1021/je600515j",
+   "zotero_parent_key": null,
+   "record": "NIST TRC ThermoML https://trc.nist.gov/ThermoML/10.1021/je600515j.xml, retrieved 2026-10-18",
+   "record_sha256": "901354ec9c34eada3ff170f489ed27f108f2b6f7fa42d9fd2533454306a96bd0",
+   "csv": "Hsieh_2007_MDEA_relative_permittivity.csv",
+   "csv_sha256": "192b6a7f5a1b1b9fc1b2e340348e7bdcc637a42241e843a62bd15d00430a956a",
+   "quantity": "relative permittivity at zero frequency of pure N-methyldiethanolamine, 303.15-328.15 K, 101.325 kPa (ThermoML constraint)",
+   "row_count": 6,
+   "role": "Uyan 2015 Eq. 5 cites Hsieh et al. for pure-MDEA permittivity; that paper and its correlation are not in Zotero, so analyses/mdea_kuranov_refit uses a least-squares line through these six values (22.358 - 0.1024571 (T/K - 298.15); max residual 0.011), extrapolated to 413 K.",
+   "transcription_check": "Parsed programmatically from the ThermoML XML with the standard-library XML parser; not checked against the paper PDF, which is not in Zotero (DOI listed for the owner)."
+  }
+ ]
+}
