@@ -1,0 +1,25 @@
+{
+ "written": {
+  "error": "ParameterError: SUCCESS: stalled: residual 1.8575624390394766e-06 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 16 iterations, contraction absent, floor 1.7483281474180083e-10, amplification 0"
+ },
+ "corrected": {
+  "available": 205,
+  "rows": 205,
+  "max_rel": 6.696865284538944e-13
+ },
+ "R2_a": {
+  "written": 24.80564860133281,
+  "corrected": 236.17781861699603
+ },
+ "wheel": {
+  "commit": "84ca269dfa0c7068417a1c4c326acae276d4d965",
+  "sha256": "98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a",
+  "venv": "tmp/amendment-2-84ca269d/venv"
+ },
+ "producer": {
+  "path": "tmp/replay-diagnosis/route2b.py (ignored scratch; campaign code ceiling reached)",
+  "sha256": "3d032e09a623129ed2c787b41d2882153f8089035e3207c3ce62387b4633153d",
+  "procedure": "Load route2b/larger-dV/continuation-fit-spec.json and lambda-0-A-continuation/usable-budget-endpoint.json; build the stage-6 rows and coordinates from that document; evaluate all 205 positive-weight rows at optimizer 0 with epcsaft.regression.differentiate; repeat with reaction:R2:correlation:a replaced by a - c ln 313.15; compare predictions with native.json."
+ },
+ "date": "2026-10-18"
+}

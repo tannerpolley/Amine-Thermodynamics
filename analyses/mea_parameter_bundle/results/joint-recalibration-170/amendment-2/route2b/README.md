@@ -150,12 +150,15 @@ Program charge is **51178.048914/144000 CPU-s**. The conservative entire-continu
 
 The larger-d_V endpoint replay failure above came from the endpoint document,
 not from the endpoint. `fit_campaign.py` wrote R2's fitted ln K constant in the
-Engine's c ln(T/T_ref) form (T_ref = 313.15 K after the enthalpy-shift fit)
-into a document that uses c ln T, so the document's R2 constant was 211.4 too
+Engine's c ln(T/T_ref) form (the parameter loader uses T_ref = 313.15 K for
+every law with c ≠ 0) into a document that uses c ln T, so the document's R2 constant was 211.4 too
 low. On wheel 84ca269d, the written document reproduces the recorded stall
 exactly (Böttinger state 032, residual 1.8575624e-6 after 16 iterations);
 with the constant corrected (a − c ln 313.15), all 205 rows replay and agree
 with the native predictions to 6.7e-13. The fix is commit 88ee4c8; see
 `../../amendment-4/matched-larger-dV/README.md`. The hard replay stop therefore
-did not reflect a non-reproducible endpoint. Derivative checks for this run
-remain unrun.
+did not reflect a non-reproducible endpoint. Evidence, with the wheel identity
+and procedure: [replay-diagnosis/endpoint-document-replay.json](replay-diagnosis/endpoint-document-replay.json).
+The smaller-d_V document `smaller-dV/lambda-0-A-continuation/usable-budget-endpoint.json`
+carries the same defect (a = 24.7500; corrected 236.1221); it was not replayed.
+Derivative checks for this run remain unrun.

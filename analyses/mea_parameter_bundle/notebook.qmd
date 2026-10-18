@@ -687,12 +687,15 @@ variant at the neutral value.
 The rule required C166 at least 10 % lower with the neutral pair; it is
 0.06 % higher on both branches, as stated before the fits. A ratio table is
 used because the result is four scalars. Cold replay (≤ 7e-12) and Kiepe
-invariance (3e-15) pass in every arm. Two endpoint flags keep the decision
-formally undecidable: the nine free columns have condition 3.7e4 (above
-1e4), with the weakest direction 97 % on the bicarbonate–water k_ij; and the
-fixed-step derivative check misses at the two ion dispersion energies by
-truncation (error ratio 4.0 per step halving). Neither can turn a 0.06 %
-increase into a 10 % reduction.
+invariance (3e-15) pass in every arm. Three endpoint misses keep the decision
+formally undecidable: the nine free columns have condition 3.7e4 (6.2e4 for
+all 14; limit 1e4), with the weakest direction mostly on the
+bicarbonate–water k_ij; the fixed-step derivative check misses at the two ion
+dispersion energies by truncation (error ratio 4.0 per step halving); and
+the projected gradient (0.008–0.010) is above 1e-8, although a Gauss–Newton
+step would lower the cost by at most 3.6e-4. None can turn a 0.06 % increase
+into a 10 % reduction. The loaded-density and per-row heat assessments were
+not run at these endpoints.
 
 **Meaning.** The five active bounds persist with or without the neutral
 pair, so the CO₂–MEA interaction is not what drives the ion parameters to
@@ -700,7 +703,8 @@ their limits. This is numerical evidence on this objective, not physical
 validation.
 
 **Endpoint documents.** A campaign defect wrote R2's fitted ln K constant in
-the Engine's c ln(T/T_ref) form into documents that use c ln T, 211.4 too low.
+the Engine's c ln(T/T_ref) form into documents that use c ln T, 211.4 too low
+(Route 2 and both Route 2b endpoint documents carry it).
 The fits were unaffected; corrected documents replay cold. The same defect
 caused the Route 2b endpoint-replay stop: with the constant corrected, the
 Route 2b larger-d_V document replays all 205 rows to 6.7e-13.

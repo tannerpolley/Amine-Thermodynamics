@@ -11,7 +11,7 @@
  "program_cpu_limit_s": 144000,
  "superseded_ledger": "final-prerequisites/accounting.json program_active_wall_charge_s plus the diagnosis charge, 19,605.51 s, mixed compute with fixed per-task charges.",
  "campaign_executable_ceiling": 1000,
- "campaign_executable_gross": 999,
+ "campaign_executable_gross": 1000,
  "charges": [
   {
    "date": "2026-10-16/17",
@@ -70,5 +70,5 @@
    "basis": "Measured: 63.3 s wall, 63.0 CPU-s."
   }
  ],
- "campaign_executable_basis": "891 + 56 (fit_neutral_co2_mea.py) + 39 (check_matched_co2_mea.py) + 12 (stage6_coordinates helper) + 1 (release assertion), non-blank non-comment added lines"
+ "campaign_executable_basis": "891 + 56 (fit_neutral_co2_mea.py) + 39 (check_matched_co2_mea.py) + 12 (stage6_coordinates helper) + 1 (release assertion) + 1 (R2 write-back fix), non-blank non-comment added lines. Not counted, pending owner ratification: amendment-4/neutral-fit/figure.py (17 lines, presentation only) and the ignored scratch diagnostics in tmp/."
 }
