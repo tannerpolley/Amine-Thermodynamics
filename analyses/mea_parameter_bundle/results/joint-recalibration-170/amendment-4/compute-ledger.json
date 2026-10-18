@@ -3,11 +3,11 @@
  "decision": "Owner: from now on the 21,600 s active-wall cap counts only measured fit and check calls; agent research, review and reporting are not charged. Each reactive fit call is limited to 600 s. Plateau diagnosis follows the first fit after Engine #595.",
  "compute_wall_cap_s": 21600,
  "reactive_call_limit_s": 600,
- "compute_wall_charged_s": 10532,
+ "compute_wall_charged_s": 10619,
  "compute_wall_basis": "Rounded up from about 6,790 s: 484 s before Route 1 entry, 5,716 s of retained call timings in amendments 2-4 (one per call), and about 590 s of fit-time probes (diagnosis-fit-time/README.md).",
- "compute_wall_remaining_s": 11068,
+ "compute_wall_remaining_s": 10981,
  "mandatory_check_reserve_s": 1950.38,
- "program_cpu_charge_s": 93619.61,
+ "program_cpu_charge_s": 93706.61,
  "program_cpu_limit_s": 144000,
  "superseded_ledger": "final-prerequisites/accounting.json program_active_wall_charge_s plus the diagnosis charge, 19,605.51 s, mixed compute with fixed per-task charges.",
  "campaign_executable_ceiling": 1000,
@@ -68,6 +68,13 @@
    "wall_s": 64,
    "cpu_s": 64,
    "basis": "Measured: 63.3 s wall, 63.0 CPU-s."
+  },
+  {
+   "date": "2026-10-18",
+   "task": "amendment-5 screen A0: probe P, check 2 and its diagnosis, check 1 and its diagnosis (stopped at check 1; no fit)",
+   "wall_s": 87,
+   "cpu_s": 87,
+   "basis": "Rounded up from measured whole-command times (amendment-5/a0/*-command-time.json): check1-diagnosis 18.94 s / 18.93 CPU-s; check1-information 19.01 s / 19.00 CPU-s; check2-diagnosis 18.50 s / 18.49 CPU-s; check2-x 9.00 s / 9.00 CPU-s; probe-p 21.09 s / 21.08 CPU-s; total 86.54 s / 86.50 CPU-s."
   }
  ],
  "campaign_executable_basis": "891 + 56 (fit_neutral_co2_mea.py) + 39 (check_matched_co2_mea.py) + 12 (stage6_coordinates helper) + 1 (release assertion) + 1 (R2 write-back fix), non-blank non-comment added lines. Not counted, pending owner ratification: amendment-4/neutral-fit/figure.py (17 lines, presentation only) and the ignored scratch diagnostics in tmp/."
