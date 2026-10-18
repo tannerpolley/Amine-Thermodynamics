@@ -166,7 +166,8 @@ def spherical_mdeah(doc):
 
 def initial_solvent_permittivity(doc, T, m_mdea):
     """Interpretation (ii) of gap (c): Uyan Eq. 5 on the initial CO2-free water/MDEA solvent, a constant per state.
-    Expressed by giving water that constant and removing MDEA's law, so it holds for one (T, m_MDEA) only."""
+    Expressed by giving water that constant and removing MDEA's law, so it holds for one (T, m_MDEA) only.
+    A local diagnostic recomputation of Uyan Eq. 5: it must not feed adopted results."""
     w = m_mdea * COMPONENTS[MDEA][0] / (1 + m_mdea * COMPONENTS[MDEA][0])
     eps = {cid: sum(c * (T - T_REF) ** p for p, c in enumerate(law)) for cid, (law, _) in PERMITTIVITY.items()}
     water = next(c for c in doc["correlations"] if c["correlation_id"] == "component/water/relative_permittivity")
@@ -207,11 +208,6 @@ def bubble_problem(T, m_mdea, m_co2, p_guess, liquid_guess=None, vapor_guess=Non
                                   composition_guess=vapor_guess)],
         T=T, P=equilibrium.Free(p_guess), feed=equilibrium.Amounts({W: n_w, MDEA: m_mdea, CO2: m_co2}),
         reactions=reactions(), neutral_reference=NEUTRAL_REFERENCE)
-
-
-def load(path=PARAMETERS, kij=None):
-    mapping = json.loads(path.read_text()) if kij is None else document(kij)
-    return epcsaft.Parameters.from_mapping(mapping)
 
 
 if __name__ == "__main__":
