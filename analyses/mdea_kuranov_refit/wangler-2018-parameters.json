@@ -1,0 +1,1598 @@
+{
+ "schema": "epcsaft.parameters",
+ "schema_version": 1,
+ "document_id": "mdea-wangler-2018-reproduction",
+ "document_version": 1,
+ "purpose": "Fixed published Wangler 2018 MDEA-CO2-H2O model (issue #126)",
+ "components": [
+  {
+   "component_id": "water",
+   "provenance": "Uyan2015 (Zotero GSLTFVDM) Table 3; Wangler2018 (Zotero ZILDPWWE) Table 4",
+   "fixed": {
+    "molar_mass": {
+     "identity": "component/water/molar_mass",
+     "value": {
+      "magnitude": 0.01801528,
+      "unit": "kilogram / mole"
+     }
+    },
+    "charge_number": {
+     "identity": "component/water/charge_number",
+     "value": {
+      "magnitude": 0,
+      "unit": "elementary-charge"
+     }
+    }
+   },
+   "coefficients": [
+    {
+     "family": "segment_count",
+     "identity": "component/water/segment_count",
+     "value": {
+      "magnitude": 1.2046,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "family": "dispersion_energy_over_k",
+     "identity": "component/water/dispersion_energy_over_k",
+     "value": {
+      "magnitude": 353.94,
+      "unit": "kelvin"
+     }
+    }
+   ]
+  },
+  {
+   "component_id": "methyldiethanolamine",
+   "provenance": "Uyan2015 (Zotero GSLTFVDM) Table 3; Wangler2018 (Zotero ZILDPWWE) Table 4",
+   "fixed": {
+    "molar_mass": {
+     "identity": "component/methyldiethanolamine/molar_mass",
+     "value": {
+      "magnitude": 0.1191622,
+      "unit": "kilogram / mole"
+     }
+    },
+    "charge_number": {
+     "identity": "component/methyldiethanolamine/charge_number",
+     "value": {
+      "magnitude": 0,
+      "unit": "elementary-charge"
+     }
+    }
+   },
+   "coefficients": [
+    {
+     "family": "segment_count",
+     "identity": "component/methyldiethanolamine/segment_count",
+     "value": {
+      "magnitude": 3.675,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "family": "dispersion_energy_over_k",
+     "identity": "component/methyldiethanolamine/dispersion_energy_over_k",
+     "value": {
+      "magnitude": 228.711,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "family": "segment_diameter",
+     "identity": "component/methyldiethanolamine/segment_diameter",
+     "value": {
+      "magnitude": 3.563,
+      "unit": "angstrom"
+     }
+    }
+   ]
+  },
+  {
+   "component_id": "carbon-dioxide",
+   "provenance": "Uyan2015 (Zotero GSLTFVDM) Table 3; Wangler2018 (Zotero ZILDPWWE) Table 4",
+   "fixed": {
+    "molar_mass": {
+     "identity": "component/carbon-dioxide/molar_mass",
+     "value": {
+      "magnitude": 0.0440095,
+      "unit": "kilogram / mole"
+     }
+    },
+    "charge_number": {
+     "identity": "component/carbon-dioxide/charge_number",
+     "value": {
+      "magnitude": 0,
+      "unit": "elementary-charge"
+     }
+    }
+   },
+   "coefficients": [
+    {
+     "family": "segment_count",
+     "identity": "component/carbon-dioxide/segment_count",
+     "value": {
+      "magnitude": 2.0729,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "family": "dispersion_energy_over_k",
+     "identity": "component/carbon-dioxide/dispersion_energy_over_k",
+     "value": {
+      "magnitude": 169.21,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "family": "segment_diameter",
+     "identity": "component/carbon-dioxide/segment_diameter",
+     "value": {
+      "magnitude": 2.7852,
+      "unit": "angstrom"
+     }
+    }
+   ]
+  },
+  {
+   "component_id": "protonated-methyldiethanolamine",
+   "provenance": "Uyan2015 (Zotero GSLTFVDM) Table 4 and footnote a; Wangler2018 (Zotero ZILDPWWE) Table 5 (MDEA values)",
+   "fixed": {
+    "molar_mass": {
+     "identity": "component/protonated-methyldiethanolamine/molar_mass",
+     "value": {
+      "magnitude": 0.12017014,
+      "unit": "kilogram / mole"
+     }
+    },
+    "charge_number": {
+     "identity": "component/protonated-methyldiethanolamine/charge_number",
+     "value": {
+      "magnitude": 1,
+      "unit": "elementary-charge"
+     }
+    }
+   },
+   "coefficients": [
+    {
+     "family": "segment_count",
+     "identity": "component/protonated-methyldiethanolamine/segment_count",
+     "value": {
+      "magnitude": 3.675,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "family": "dispersion_energy_over_k",
+     "identity": "component/protonated-methyldiethanolamine/dispersion_energy_over_k",
+     "value": {
+      "magnitude": 228.71,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "family": "segment_diameter",
+     "identity": "component/protonated-methyldiethanolamine/segment_diameter",
+     "value": {
+      "magnitude": 3.563,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "packing_diameter",
+     "identity": "component/protonated-methyldiethanolamine/packing_diameter",
+     "value": {
+      "magnitude": 3.13544,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "debye_huckel_diameter",
+     "identity": "component/protonated-methyldiethanolamine/debye_huckel_diameter",
+     "value": {
+      "magnitude": 3.563,
+      "unit": "angstrom"
+     }
+    }
+   ]
+  },
+  {
+   "component_id": "bicarbonate-anion",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 5; Held2014 (Zotero 3DIW87Q5) Table 2 strategy 2",
+   "fixed": {
+    "molar_mass": {
+     "identity": "component/bicarbonate-anion/molar_mass",
+     "value": {
+      "magnitude": 0.06101684,
+      "unit": "kilogram / mole"
+     }
+    },
+    "charge_number": {
+     "identity": "component/bicarbonate-anion/charge_number",
+     "value": {
+      "magnitude": -1,
+      "unit": "elementary-charge"
+     }
+    }
+   },
+   "coefficients": [
+    {
+     "family": "segment_count",
+     "identity": "component/bicarbonate-anion/segment_count",
+     "value": {
+      "magnitude": 1.0,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "family": "dispersion_energy_over_k",
+     "identity": "component/bicarbonate-anion/dispersion_energy_over_k",
+     "value": {
+      "magnitude": 70.0,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "family": "segment_diameter",
+     "identity": "component/bicarbonate-anion/segment_diameter",
+     "value": {
+      "magnitude": 2.9296,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "packing_diameter",
+     "identity": "component/bicarbonate-anion/packing_diameter",
+     "value": {
+      "magnitude": 2.5780480000000003,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "debye_huckel_diameter",
+     "identity": "component/bicarbonate-anion/debye_huckel_diameter",
+     "value": {
+      "magnitude": 2.9296,
+      "unit": "angstrom"
+     }
+    }
+   ]
+  },
+  {
+   "component_id": "carbonate-anion",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 5; Held2014 (Zotero 3DIW87Q5) Table 2 strategy 2",
+   "fixed": {
+    "molar_mass": {
+     "identity": "component/carbonate-anion/molar_mass",
+     "value": {
+      "magnitude": 0.0600089,
+      "unit": "kilogram / mole"
+     }
+    },
+    "charge_number": {
+     "identity": "component/carbonate-anion/charge_number",
+     "value": {
+      "magnitude": -2,
+      "unit": "elementary-charge"
+     }
+    }
+   },
+   "coefficients": [
+    {
+     "family": "segment_count",
+     "identity": "component/carbonate-anion/segment_count",
+     "value": {
+      "magnitude": 1.0,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "family": "dispersion_energy_over_k",
+     "identity": "component/carbonate-anion/dispersion_energy_over_k",
+     "value": {
+      "magnitude": 249.26,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "family": "segment_diameter",
+     "identity": "component/carbonate-anion/segment_diameter",
+     "value": {
+      "magnitude": 2.4422,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "packing_diameter",
+     "identity": "component/carbonate-anion/packing_diameter",
+     "value": {
+      "magnitude": 2.149136,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "debye_huckel_diameter",
+     "identity": "component/carbonate-anion/debye_huckel_diameter",
+     "value": {
+      "magnitude": 2.4422,
+      "unit": "angstrom"
+     }
+    }
+   ]
+  },
+  {
+   "component_id": "hydronium-cation",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 5; Held2014 (Zotero 3DIW87Q5) Table 2 strategy 2 (H3O+)",
+   "fixed": {
+    "molar_mass": {
+     "identity": "component/hydronium-cation/molar_mass",
+     "value": {
+      "magnitude": 0.00100794,
+      "unit": "kilogram / mole"
+     }
+    },
+    "charge_number": {
+     "identity": "component/hydronium-cation/charge_number",
+     "value": {
+      "magnitude": 1,
+      "unit": "elementary-charge"
+     }
+    }
+   },
+   "coefficients": [
+    {
+     "family": "segment_count",
+     "identity": "component/hydronium-cation/segment_count",
+     "value": {
+      "magnitude": 1.0,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "family": "dispersion_energy_over_k",
+     "identity": "component/hydronium-cation/dispersion_energy_over_k",
+     "value": {
+      "magnitude": 500.0,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "family": "segment_diameter",
+     "identity": "component/hydronium-cation/segment_diameter",
+     "value": {
+      "magnitude": 3.4654,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "packing_diameter",
+     "identity": "component/hydronium-cation/packing_diameter",
+     "value": {
+      "magnitude": 3.049552,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "debye_huckel_diameter",
+     "identity": "component/hydronium-cation/debye_huckel_diameter",
+     "value": {
+      "magnitude": 3.4654,
+      "unit": "angstrom"
+     }
+    }
+   ]
+  },
+  {
+   "component_id": "hydroxide-anion",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 5; Held2014 (Zotero 3DIW87Q5) Table 2 strategy 2",
+   "fixed": {
+    "molar_mass": {
+     "identity": "component/hydroxide-anion/molar_mass",
+     "value": {
+      "magnitude": 0.01700734,
+      "unit": "kilogram / mole"
+     }
+    },
+    "charge_number": {
+     "identity": "component/hydroxide-anion/charge_number",
+     "value": {
+      "magnitude": -1,
+      "unit": "elementary-charge"
+     }
+    }
+   },
+   "coefficients": [
+    {
+     "family": "segment_count",
+     "identity": "component/hydroxide-anion/segment_count",
+     "value": {
+      "magnitude": 1.0,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "family": "dispersion_energy_over_k",
+     "identity": "component/hydroxide-anion/dispersion_energy_over_k",
+     "value": {
+      "magnitude": 650.0,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "family": "segment_diameter",
+     "identity": "component/hydroxide-anion/segment_diameter",
+     "value": {
+      "magnitude": 2.0177,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "packing_diameter",
+     "identity": "component/hydroxide-anion/packing_diameter",
+     "value": {
+      "magnitude": 1.775576,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "family": "debye_huckel_diameter",
+     "identity": "component/hydroxide-anion/debye_huckel_diameter",
+     "value": {
+      "magnitude": 2.0177,
+      "unit": "angstrom"
+     }
+    }
+   ]
+  }
+ ],
+ "correlations": [
+  {
+   "component_id": "water",
+   "correlation_id": "component/water/segment_diameter",
+   "family": "segment_diameter",
+   "form": "constant-plus-sum-of-exponentials",
+   "constant": {
+    "identity": "component/water/segment_diameter/constant",
+    "value": {
+     "magnitude": 2.7927,
+     "unit": "angstrom"
+    }
+   },
+   "terms": [
+    {
+     "amplitude": {
+      "identity": "component/water/segment_diameter/term-0/amplitude",
+      "value": {
+       "magnitude": 10.11,
+       "unit": "angstrom"
+      }
+     },
+     "exponent_coefficient": {
+      "identity": "component/water/segment_diameter/term-0/exponent",
+      "value": {
+       "magnitude": -0.01775,
+       "unit": "1 / kelvin"
+      }
+     }
+    },
+    {
+     "amplitude": {
+      "identity": "component/water/segment_diameter/term-1/amplitude",
+      "value": {
+       "magnitude": -1.417,
+       "unit": "angstrom"
+      }
+     },
+     "exponent_coefficient": {
+      "identity": "component/water/segment_diameter/term-1/exponent",
+      "value": {
+       "magnitude": -0.01146,
+       "unit": "1 / kelvin"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "component_id": "water",
+   "correlation_id": "component/water/relative_permittivity",
+   "family": "relative_permittivity",
+   "provenance": "repository water law reused from analyses/mea_parameter_bundle (uyan-2015-permittivity-transfer); Uyan cites Floriano & Nascimento 2004 (Zotero NBK9T7B7), which tabulates only 273-348 K",
+   "form": "constant-plus-polynomial-in-temperature",
+   "reference_temperature": {
+    "magnitude": 298.15,
+    "unit": "kelvin"
+   },
+   "constant": {
+    "identity": "component/water/relative_permittivity/constant",
+    "value": {
+     "magnitude": 78.41043478578715,
+     "unit": "dimensionless"
+    }
+   },
+   "terms": [
+    {
+     "power": 1,
+     "coefficient": {
+      "identity": "component/water/relative_permittivity/a1",
+      "value": {
+       "magnitude": -0.36133766233691506,
+       "unit": "1 / kelvin"
+      }
+     }
+    },
+    {
+     "power": 2,
+     "coefficient": {
+      "identity": "component/water/relative_permittivity/a2",
+      "value": {
+       "magnitude": 0.00076555618295,
+       "unit": "1 / kelvin ** 2"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "component_id": "methyldiethanolamine",
+   "correlation_id": "component/methyldiethanolamine/relative_permittivity",
+   "family": "relative_permittivity",
+   "provenance": "least-squares line through Hsieh, Chen & Li 2007 pure-MDEA values 303.15-328.15 K (doi 10.1021/je600515j; NIST ThermoML; data/reference/MDEA/Hsieh_2007_MDEA_relative_permittivity.csv)",
+   "form": "constant-plus-polynomial-in-temperature",
+   "reference_temperature": {
+    "magnitude": 298.15,
+    "unit": "kelvin"
+   },
+   "constant": {
+    "identity": "component/methyldiethanolamine/relative_permittivity/constant",
+    "value": {
+     "magnitude": 22.358,
+     "unit": "dimensionless"
+    }
+   },
+   "terms": [
+    {
+     "power": 1,
+     "coefficient": {
+      "identity": "component/methyldiethanolamine/relative_permittivity/a1",
+      "value": {
+       "magnitude": -0.10245714285714318,
+       "unit": "1 / kelvin"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "pairs": [
+  {
+   "component_id_a": "water",
+   "component_id_b": "methyldiethanolamine",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/water/methyldiethanolamine/k_ij",
+     "temperature_law": {
+      "form": "polynomial-plus-reciprocal-temperature",
+      "reference_temperature": {
+       "magnitude": 298.15,
+       "unit": "kelvin"
+      },
+      "terms": [
+       {
+        "power": 0,
+        "coefficient": {
+         "identity": "pair/water/methyldiethanolamine/k_ij/a0",
+         "value": {
+          "magnitude": -0.184,
+          "unit": "dimensionless"
+         }
+        }
+       },
+       {
+        "power": 1,
+        "coefficient": {
+         "identity": "pair/water/methyldiethanolamine/k_ij/a1",
+         "value": {
+          "magnitude": -0.00121,
+          "unit": "1 / kelvin"
+         }
+        }
+       },
+       {
+        "power": 2,
+        "coefficient": {
+         "identity": "pair/water/methyldiethanolamine/k_ij/a2",
+         "value": {
+          "magnitude": 2.7e-06,
+          "unit": "1 / kelvin ** 2"
+         }
+        }
+       },
+       {
+        "power": 3,
+        "coefficient": {
+         "identity": "pair/water/methyldiethanolamine/k_ij/a3",
+         "value": {
+          "magnitude": 1.53e-07,
+          "unit": "1 / kelvin ** 3"
+         }
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "water",
+   "component_id_b": "carbon-dioxide",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/water/carbon-dioxide/k_ij",
+     "temperature_law": {
+      "form": "polynomial-plus-reciprocal-temperature",
+      "reference_temperature": {
+       "magnitude": 298.15,
+       "unit": "kelvin"
+      },
+      "terms": [
+       {
+        "power": 0,
+        "coefficient": {
+         "identity": "pair/water/carbon-dioxide/k_ij/a0",
+         "value": {
+          "magnitude": -0.0215,
+          "unit": "dimensionless"
+         }
+        }
+       },
+       {
+        "power": 1,
+        "coefficient": {
+         "identity": "pair/water/carbon-dioxide/k_ij/a1",
+         "value": {
+          "magnitude": 0.00042,
+          "unit": "1 / kelvin"
+         }
+        }
+       },
+       {
+        "power": 2,
+        "coefficient": {
+         "identity": "pair/water/carbon-dioxide/k_ij/a2",
+         "value": {
+          "magnitude": -1.7e-06,
+          "unit": "1 / kelvin ** 2"
+         }
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "water",
+   "component_id_b": "protonated-methyldiethanolamine",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/water/protonated-methyldiethanolamine/k_ij",
+     "temperature_law": {
+      "form": "polynomial-plus-reciprocal-temperature",
+      "reference_temperature": {
+       "magnitude": 298.15,
+       "unit": "kelvin"
+      },
+      "terms": [
+       {
+        "power": 0,
+        "coefficient": {
+         "identity": "pair/water/protonated-methyldiethanolamine/k_ij/a0",
+         "value": {
+          "magnitude": -0.184,
+          "unit": "dimensionless"
+         }
+        }
+       },
+       {
+        "power": 1,
+        "coefficient": {
+         "identity": "pair/water/protonated-methyldiethanolamine/k_ij/a1",
+         "value": {
+          "magnitude": -0.00121,
+          "unit": "1 / kelvin"
+         }
+        }
+       },
+       {
+        "power": 2,
+        "coefficient": {
+         "identity": "pair/water/protonated-methyldiethanolamine/k_ij/a2",
+         "value": {
+          "magnitude": 2.7e-06,
+          "unit": "1 / kelvin ** 2"
+         }
+        }
+       },
+       {
+        "power": 3,
+        "coefficient": {
+         "identity": "pair/water/protonated-methyldiethanolamine/k_ij/a3",
+         "value": {
+          "magnitude": 1.53e-07,
+          "unit": "1 / kelvin ** 3"
+         }
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "water",
+   "component_id_b": "bicarbonate-anion",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/water/bicarbonate-anion/k_ij",
+     "temperature_law": {
+      "form": "polynomial-plus-reciprocal-temperature",
+      "reference_temperature": {
+       "magnitude": 298.15,
+       "unit": "kelvin"
+      },
+      "terms": [
+       {
+        "power": 0,
+        "coefficient": {
+         "identity": "pair/water/bicarbonate-anion/k_ij/a0",
+         "value": {
+          "magnitude": -0.0765,
+          "unit": "dimensionless"
+         }
+        }
+       },
+       {
+        "power": 1,
+        "coefficient": {
+         "identity": "pair/water/bicarbonate-anion/k_ij/a1",
+         "value": {
+          "magnitude": -0.000625,
+          "unit": "1 / kelvin"
+         }
+        }
+       },
+       {
+        "power": 2,
+        "coefficient": {
+         "identity": "pair/water/bicarbonate-anion/k_ij/a2",
+         "value": {
+          "magnitude": -6.25e-05,
+          "unit": "1 / kelvin ** 2"
+         }
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "water",
+   "component_id_b": "carbonate-anion",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/water/carbonate-anion/k_ij",
+     "value": {
+      "magnitude": -0.25,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "water",
+   "component_id_b": "hydronium-cation",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/water/hydronium-cation/k_ij",
+     "value": {
+      "magnitude": 0.25,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "water",
+   "component_id_b": "hydroxide-anion",
+   "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/water/hydroxide-anion/k_ij",
+     "value": {
+      "magnitude": -0.25,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "methyldiethanolamine",
+   "component_id_b": "carbon-dioxide",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/methyldiethanolamine/carbon-dioxide/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "methyldiethanolamine",
+   "component_id_b": "protonated-methyldiethanolamine",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/methyldiethanolamine/protonated-methyldiethanolamine/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "methyldiethanolamine",
+   "component_id_b": "bicarbonate-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/methyldiethanolamine/bicarbonate-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "methyldiethanolamine",
+   "component_id_b": "carbonate-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/methyldiethanolamine/carbonate-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "methyldiethanolamine",
+   "component_id_b": "hydronium-cation",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/methyldiethanolamine/hydronium-cation/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "methyldiethanolamine",
+   "component_id_b": "hydroxide-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/methyldiethanolamine/hydroxide-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "carbon-dioxide",
+   "component_id_b": "protonated-methyldiethanolamine",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/carbon-dioxide/protonated-methyldiethanolamine/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "carbon-dioxide",
+   "component_id_b": "bicarbonate-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/carbon-dioxide/bicarbonate-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "carbon-dioxide",
+   "component_id_b": "carbonate-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/carbon-dioxide/carbonate-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "carbon-dioxide",
+   "component_id_b": "hydronium-cation",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/carbon-dioxide/hydronium-cation/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "carbon-dioxide",
+   "component_id_b": "hydroxide-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/carbon-dioxide/hydroxide-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "protonated-methyldiethanolamine",
+   "component_id_b": "bicarbonate-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/protonated-methyldiethanolamine/bicarbonate-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "protonated-methyldiethanolamine",
+   "component_id_b": "carbonate-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/protonated-methyldiethanolamine/carbonate-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "protonated-methyldiethanolamine",
+   "component_id_b": "hydroxide-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/protonated-methyldiethanolamine/hydroxide-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "bicarbonate-anion",
+   "component_id_b": "hydronium-cation",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/bicarbonate-anion/hydronium-cation/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "carbonate-anion",
+   "component_id_b": "hydronium-cation",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/carbonate-anion/hydronium-cation/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  },
+  {
+   "component_id_a": "hydronium-cation",
+   "component_id_b": "hydroxide-anion",
+   "provenance": "zero: Uyan2015 (Zotero GSLTFVDM) section 4.2 applies binary parameters only to water pairs; Wangler2018 (Zotero ZILDPWWE) Table 6",
+   "coefficients": [
+    {
+     "family": "k_ij",
+     "identity": "pair/hydronium-cation/hydroxide-anion/k_ij",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "dimensionless"
+     }
+    }
+   ]
+  }
+ ],
+ "model_families": [
+  {
+   "kind": "base",
+   "choice": "pc-saft"
+  },
+  {
+   "kind": "association",
+   "choice": "general-site"
+  },
+  {
+   "kind": "electrolyte",
+   "choice": "fully-dissociated-debye-huckel",
+   "ionic_dispersion": "exclude-same-sign-ion-pairs",
+   "provenance": "Uyan2015 (Zotero GSLTFVDM) section 2 (Debye-Hueckel, no Born; no like-ion dispersion)"
+  },
+  {
+   "kind": "permittivity",
+   "choice": "solvent-only",
+   "provenance": "Uyan2015 (Zotero GSLTFVDM) Eq. 5"
+  }
+ ],
+ "topology": {
+  "sites": [
+   {
+    "component_id": "water",
+    "site_id": "a",
+    "site_role": "donor",
+    "multiplicity": 1
+   },
+   {
+    "component_id": "water",
+    "site_id": "b",
+    "site_role": "acceptor",
+    "multiplicity": 1
+   },
+   {
+    "component_id": "methyldiethanolamine",
+    "site_id": "a",
+    "site_role": "donor",
+    "multiplicity": 2
+   },
+   {
+    "component_id": "methyldiethanolamine",
+    "site_id": "b",
+    "site_role": "acceptor",
+    "multiplicity": 2
+   },
+   {
+    "component_id": "protonated-methyldiethanolamine",
+    "site_id": "a",
+    "site_role": "donor",
+    "multiplicity": 2
+   },
+   {
+    "component_id": "protonated-methyldiethanolamine",
+    "site_id": "b",
+    "site_role": "acceptor",
+    "multiplicity": 2
+   }
+  ],
+  "edges": [
+   {
+    "endpoint_a": {
+     "component_id": "water",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "water",
+     "site_id": "b"
+    },
+    "source": {
+     "kind": "explicit",
+     "provenance": "Uyan2015 (Zotero GSLTFVDM) Table 3"
+    },
+    "energy_over_k": {
+     "identity": "association/water/energy_over_k",
+     "value": {
+      "magnitude": 2425.67,
+      "unit": "kelvin"
+     }
+    },
+    "volume": {
+     "identity": "association/water/volume",
+     "value": {
+      "magnitude": 0.04509,
+      "unit": "dimensionless"
+     }
+    }
+   },
+   {
+    "endpoint_a": {
+     "component_id": "methyldiethanolamine",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "methyldiethanolamine",
+     "site_id": "b"
+    },
+    "source": {
+     "kind": "explicit",
+     "provenance": "Uyan2015 (Zotero GSLTFVDM) Table 3"
+    },
+    "energy_over_k": {
+     "identity": "association/methyldiethanolamine/energy_over_k",
+     "value": {
+      "magnitude": 2046.624,
+      "unit": "kelvin"
+     }
+    },
+    "volume": {
+     "identity": "association/methyldiethanolamine/volume",
+     "value": {
+      "magnitude": 0.123858,
+      "unit": "dimensionless"
+     }
+    }
+   },
+   {
+    "endpoint_a": {
+     "component_id": "protonated-methyldiethanolamine",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "protonated-methyldiethanolamine",
+     "site_id": "b"
+    },
+    "source": {
+     "kind": "explicit",
+     "provenance": "Uyan2015 (Zotero GSLTFVDM) Table 4 footnote a; Wangler2018 (Zotero ZILDPWWE) section 3"
+    },
+    "energy_over_k": {
+     "identity": "association/protonated-methyldiethanolamine/energy_over_k",
+     "value": {
+      "magnitude": 0.0,
+      "unit": "kelvin"
+     }
+    },
+    "volume": {
+     "identity": "association/protonated-methyldiethanolamine/volume",
+     "value": {
+      "magnitude": 0.123858,
+      "unit": "dimensionless"
+     }
+    }
+   },
+   {
+    "endpoint_a": {
+     "component_id": "water",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "methyldiethanolamine",
+     "site_id": "b"
+    },
+    "source": {
+     "kind": "combining-rule",
+     "rule_id": "wolbach-sandler",
+     "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 7, Eq. 35",
+     "inputs": {
+      "energy_over_k": [
+       "association/water/energy_over_k",
+       "association/methyldiethanolamine/energy_over_k"
+      ],
+      "volume": [
+       "association/water/volume",
+       "association/methyldiethanolamine/volume"
+      ]
+     }
+    },
+    "volume_correction": {
+     "identity": "association/water/methyldiethanolamine/volume_correction",
+     "temperature_law": {
+      "form": "polynomial-plus-reciprocal-temperature",
+      "reference_temperature": {
+       "magnitude": 298.15,
+       "unit": "kelvin"
+      },
+      "terms": [
+       {
+        "power": 0,
+        "coefficient": {
+         "identity": "association/water/methyldiethanolamine/volume_correction/a0",
+         "value": {
+          "magnitude": 0.6,
+          "unit": "dimensionless"
+         }
+        }
+       },
+       {
+        "power": 1,
+        "coefficient": {
+         "identity": "association/water/methyldiethanolamine/volume_correction/a1",
+         "value": {
+          "magnitude": -0.00257,
+          "unit": "1 / kelvin"
+         }
+        }
+       },
+       {
+        "power": 2,
+        "coefficient": {
+         "identity": "association/water/methyldiethanolamine/volume_correction/a2",
+         "value": {
+          "magnitude": -1.7e-05,
+          "unit": "1 / kelvin ** 2"
+         }
+        }
+       }
+      ]
+     }
+    }
+   },
+   {
+    "endpoint_a": {
+     "component_id": "methyldiethanolamine",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "water",
+     "site_id": "b"
+    },
+    "source": {
+     "kind": "combining-rule",
+     "rule_id": "wolbach-sandler",
+     "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 7, Eq. 35",
+     "inputs": {
+      "energy_over_k": [
+       "association/water/energy_over_k",
+       "association/methyldiethanolamine/energy_over_k"
+      ],
+      "volume": [
+       "association/water/volume",
+       "association/methyldiethanolamine/volume"
+      ]
+     }
+    },
+    "volume_correction": {
+     "identity": "association/water/methyldiethanolamine/volume_correction",
+     "temperature_law": {
+      "form": "polynomial-plus-reciprocal-temperature",
+      "reference_temperature": {
+       "magnitude": 298.15,
+       "unit": "kelvin"
+      },
+      "terms": [
+       {
+        "power": 0,
+        "coefficient": {
+         "identity": "association/water/methyldiethanolamine/volume_correction/a0",
+         "value": {
+          "magnitude": 0.6,
+          "unit": "dimensionless"
+         }
+        }
+       },
+       {
+        "power": 1,
+        "coefficient": {
+         "identity": "association/water/methyldiethanolamine/volume_correction/a1",
+         "value": {
+          "magnitude": -0.00257,
+          "unit": "1 / kelvin"
+         }
+        }
+       },
+       {
+        "power": 2,
+        "coefficient": {
+         "identity": "association/water/methyldiethanolamine/volume_correction/a2",
+         "value": {
+          "magnitude": -1.7e-05,
+          "unit": "1 / kelvin ** 2"
+         }
+        }
+       }
+      ]
+     }
+    }
+   },
+   {
+    "endpoint_a": {
+     "component_id": "water",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "protonated-methyldiethanolamine",
+     "site_id": "b"
+    },
+    "source": {
+     "kind": "combining-rule",
+     "rule_id": "wolbach-sandler",
+     "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 7, Eq. 35",
+     "inputs": {
+      "energy_over_k": [
+       "association/water/energy_over_k",
+       "association/protonated-methyldiethanolamine/energy_over_k"
+      ],
+      "volume": [
+       "association/water/volume",
+       "association/protonated-methyldiethanolamine/volume"
+      ]
+     }
+    },
+    "volume_correction": {
+     "identity": "association/water/protonated-methyldiethanolamine/volume_correction",
+     "temperature_law": {
+      "form": "polynomial-plus-reciprocal-temperature",
+      "reference_temperature": {
+       "magnitude": 298.15,
+       "unit": "kelvin"
+      },
+      "terms": [
+       {
+        "power": 0,
+        "coefficient": {
+         "identity": "association/water/protonated-methyldiethanolamine/volume_correction/a0",
+         "value": {
+          "magnitude": 0.372,
+          "unit": "dimensionless"
+         }
+        }
+       },
+       {
+        "power": 1,
+        "coefficient": {
+         "identity": "association/water/protonated-methyldiethanolamine/volume_correction/a1",
+         "value": {
+          "magnitude": 0.00107,
+          "unit": "1 / kelvin"
+         }
+        }
+       }
+      ]
+     }
+    }
+   },
+   {
+    "endpoint_a": {
+     "component_id": "protonated-methyldiethanolamine",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "water",
+     "site_id": "b"
+    },
+    "source": {
+     "kind": "combining-rule",
+     "rule_id": "wolbach-sandler",
+     "provenance": "Wangler2018 (Zotero ZILDPWWE) Table 7, Eq. 35",
+     "inputs": {
+      "energy_over_k": [
+       "association/water/energy_over_k",
+       "association/protonated-methyldiethanolamine/energy_over_k"
+      ],
+      "volume": [
+       "association/water/volume",
+       "association/protonated-methyldiethanolamine/volume"
+      ]
+     }
+    },
+    "volume_correction": {
+     "identity": "association/water/protonated-methyldiethanolamine/volume_correction",
+     "temperature_law": {
+      "form": "polynomial-plus-reciprocal-temperature",
+      "reference_temperature": {
+       "magnitude": 298.15,
+       "unit": "kelvin"
+      },
+      "terms": [
+       {
+        "power": 0,
+        "coefficient": {
+         "identity": "association/water/protonated-methyldiethanolamine/volume_correction/a0",
+         "value": {
+          "magnitude": 0.372,
+          "unit": "dimensionless"
+         }
+        }
+       },
+       {
+        "power": 1,
+        "coefficient": {
+         "identity": "association/water/protonated-methyldiethanolamine/volume_correction/a1",
+         "value": {
+          "magnitude": 0.00107,
+          "unit": "1 / kelvin"
+         }
+        }
+       }
+      ]
+     }
+    }
+   },
+   {
+    "endpoint_a": {
+     "component_id": "methyldiethanolamine",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "protonated-methyldiethanolamine",
+     "site_id": "b"
+    },
+    "source": {
+     "kind": "combining-rule",
+     "rule_id": "wolbach-sandler",
+     "provenance": "Wangler2018 (Zotero ZILDPWWE) section 3 ('cross-associate to water or MDEA'); Uyan2015 (Zotero GSLTFVDM) Table 4 footnote a",
+     "inputs": {
+      "energy_over_k": [
+       "association/methyldiethanolamine/energy_over_k",
+       "association/protonated-methyldiethanolamine/energy_over_k"
+      ],
+      "volume": [
+       "association/methyldiethanolamine/volume",
+       "association/protonated-methyldiethanolamine/volume"
+      ]
+     }
+    }
+   },
+   {
+    "endpoint_a": {
+     "component_id": "protonated-methyldiethanolamine",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "methyldiethanolamine",
+     "site_id": "b"
+    },
+    "source": {
+     "kind": "combining-rule",
+     "rule_id": "wolbach-sandler",
+     "provenance": "Wangler2018 (Zotero ZILDPWWE) section 3 ('cross-associate to water or MDEA'); Uyan2015 (Zotero GSLTFVDM) Table 4 footnote a",
+     "inputs": {
+      "energy_over_k": [
+       "association/methyldiethanolamine/energy_over_k",
+       "association/protonated-methyldiethanolamine/energy_over_k"
+      ],
+      "volume": [
+       "association/methyldiethanolamine/volume",
+       "association/protonated-methyldiethanolamine/volume"
+      ]
+     }
+    }
+   }
+  ]
+ },
+ "reaction_correlations": [
+  {
+   "reaction_id": "R1",
+   "stoichiometry": {
+    "water": -1,
+    "hydronium-cation": 1,
+    "hydroxide-anion": 1
+   },
+   "c1_c2_c3_c4": [
+    132.899,
+    -13445.9,
+    -22.477,
+    0.0
+   ],
+   "basis": "aqueous-mole-fraction-infinite-dilution-water-v1"
+  },
+  {
+   "reaction_id": "R2",
+   "stoichiometry": {
+    "carbon-dioxide": -1,
+    "water": -1,
+    "bicarbonate-anion": 1,
+    "hydronium-cation": 1
+   },
+   "c1_c2_c3_c4": [
+    212.739,
+    -11333.8,
+    -33.844,
+    -0.0018149
+   ],
+   "basis": "aqueous-mole-fraction-infinite-dilution-water-v1"
+  },
+  {
+   "reaction_id": "R3",
+   "stoichiometry": {
+    "bicarbonate-anion": -1,
+    "carbonate-anion": 1,
+    "hydronium-cation": 1
+   },
+   "c1_c2_c3_c4": [
+    287.444,
+    -13648.7,
+    -48.88,
+    0.030232
+   ],
+   "basis": "aqueous-mole-fraction-infinite-dilution-water-v1"
+  },
+  {
+   "reaction_id": "R4",
+   "stoichiometry": {
+    "protonated-methyldiethanolamine": -1,
+    "methyldiethanolamine": 1,
+    "hydronium-cation": 1
+   },
+   "c1_c2_c3_c4": [
+    -83.491,
+    -819.7,
+    10.976,
+    0.0
+   ],
+   "basis": "aqueous-mole-fraction-infinite-dilution-water-v1"
+  }
+ ]
+}
