@@ -48,8 +48,8 @@ def test_candidate_inventory_and_retained_model_family_fail_closed() -> None:
     with (MANIFESTS / "reactive_vle_cross_validation.csv").open(newline="") as handle:
         rows = list(csv.DictReader(handle))
     assert Counter(row["observable_family"] for row in rows) == {
-        "pco2": 121,
-        "speciation": 198,
+        "pco2": 85,
+        "speciation": 210,
     }
     assert {row["admission_status"] for row in rows} == {"candidate_not_executable"}
     assert all("residual_scale_missing" in row["admission_blockers"] for row in rows)

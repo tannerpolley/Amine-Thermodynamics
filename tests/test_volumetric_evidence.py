@@ -8,7 +8,12 @@ import sys
 def test_volumetric_evidence_package_is_scientifically_consistent() -> None:
     root = Path(__file__).resolve().parents[1]
     result = subprocess.run(
-        [sys.executable, "scripts/validate_volumetric_evidence.py"],
+        [
+            sys.executable,
+            "scripts/validate_volumetric_evidence.py",
+            "--current-admission",
+            "analyses/mea_parameter_bundle/results/source-corrections-152/current-volumetric-admission.json",
+        ],
         cwd=root,
         capture_output=True,
         check=False,
