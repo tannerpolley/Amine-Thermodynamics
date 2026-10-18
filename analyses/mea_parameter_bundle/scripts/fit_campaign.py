@@ -556,7 +556,7 @@ def stage6_study(spec, out, started):
                             ordinary = [c for c in spec['information_coordinates'] if 'reaction' not in c]
                             updates = fitted_parameter_values(ordinary, v.physical[:len(v.chart.active)])
                             for name,law in v.chart.reaction_laws.items():
-                                fields = dict(zip(('a_k','b','c_per_k'), o.reg.reaction_log10_reciprocal(law), strict=True)) if name=='R5' else dict(a=law.a,b_k=law.b,c=law.c,d_per_k=law.d)
+                                fields = dict(zip(('a_k','b','c_per_k'), o.reg.reaction_log10_reciprocal(law), strict=True)) if name=='R5' else dict(a=law.a-law.c*math.log(law.reference_temperature),b_k=law.b,c=law.c,d_per_k=law.d)  # Engine law uses c ln(T/T_ref)
                                 updates.update({f'reaction:{name}:correlation:{k}':val for k,val in fields.items()})
                             write(directory/'usable-budget-endpoint.json', o.s.with_parameter_values(mapping, updates))
                             write(directory/'chemistry-coordinates.json', dict(R5_unshifted_a_k=values['reaction:R5:correlation:a_k']-80*v.optimizer[9],
