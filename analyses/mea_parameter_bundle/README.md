@@ -14,12 +14,17 @@ candidate-specific notebook copies or parallel status notes.
 On 2026-10-08 the investigator adopted the reviewed heat-augmented F1 fit
 (#147/#170): the #160 141 pressure/species targets plus the 8 Vinjarapu heats
 of absorption, with the unchanged density-only volume translation.
-[Selected parameters](results/selected-current-best-parameters.json) are
-byte-identical to [heat-160/A-parameters.json](results/heat-160/A-parameters.json),
-SHA-256 `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`.
-The Engine wheel is built from ePC-SAFT `026b3031`, SHA-256
-`94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a`, kept at
-`ePC-SAFT/build/wheels/main-026b3031/`. The [notebook](notebook.qmd) owns the
+[Selected parameters](results/selected-current-best-parameters.json)
+are now document version 3, SHA-256 `7b0b4bb5669c1b2061fd7ec26e5fb4c8491005bdb5ba8f9e22e4c0b0b4b84308`, and differ
+from the unchanged [heat-160/A-parameters.json](results/heat-160/A-parameters.json)
+only by the #191 CO2/MEA no-cross-association declaration and document version.
+The declaration keeps the existing model and makes no claim that this physical
+interaction is absent. Engine commit `21e761c318c2ac5b555a245365c844d38a93e4cb`,
+wheel SHA-256 `d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357`, is pinned
+by the relative path in `pyproject.toml` and `uv.lock`.
+The [adoption comparison](results/engine-21e761c3-adoption/README.md) retains
+152/152 bitwise-equal predictions and the existing source-input refusal.
+The [notebook](notebook.qmd) owns the
 conditions, retained comparisons and limits, including the 100–120 °C pressure
 trade-off. [History](results/parameter-record-history.csv) lists every
 replaced record.
@@ -223,9 +228,12 @@ zero-vapor/ideal-CO2-feed reconstruction. The older Gibbs--Helmholtz
 pressure-slope result remains a historical secondary diagnostic; its summary
 records the input curve hash but does not establish the current parameter identity.
 
-`data/input/parameters.json` and the compact `data/input/state-packet.json.gz` are immutable
-local snapshots from ePC-SAFT commit
-`38e91823b6d4f26c1d549f07aaef24a089d8e16d`. The final replay uses the
+`data/input/parameters.json` version 2 adds only the #191 declaration and
+document-version increment to the local source snapshot. Its SHA-256 is
+`2a03b675aebdccb854c27857e95f493a1aea1436f7d2e236630bd621d9d82f05`; both adoption wheels refuse its missing
+ionic-dispersion choice. The compact `data/input/state-packet.json.gz` remains
+unchanged. These source snapshots originated from ePC-SAFT commit
+`38e91823b6d4f26c1d549f07aaef24a089d8e16d`. The historical final replay used the
 non-editable Engine wheel at commit `3f5d9ac87a70aebbefbbecef47fcb8ba39f56e6c`,
 build fingerprint
 `78937d2876bd90feaebbd7c28ae5ad6a7d1c6323fda9d3dab3440338e84dc202`, with

@@ -24,9 +24,10 @@ upstream acceptance, this repository may reproduce the pinned method directly
 against MEA-owned inputs and an accepted immutable packet.
 
 The lockfile pins the legacy `pcsaft.flashTQ` baseline to an immutable Git
-revision and declares its Cython/NumPy build requirements. It does not install
-the notebook's `epcsaft` runtime. That analysis requires its explicitly retained
-immutable wheel; see [the parameter-bundle README](analyses/mea_parameter_bundle/README.md).
+revision and declares its Cython/NumPy build requirements. It also pins the
+notebook's `epcsaft` runtime to a hash-checked wheel under the ignored relative
+`build/engine-wheels/` directory. Download and verify the exact wheel before
+`uv sync --locked`; see the [adoption instructions](analyses/mea_parameter_bundle/results/engine-21e761c3-adoption/README.md).
 The historical Engine lock under `data/reference/MEA/manifests/` identifies a
 different calculation and must not be substituted for the notebook wheel.
 
