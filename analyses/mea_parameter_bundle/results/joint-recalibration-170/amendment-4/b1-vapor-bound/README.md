@@ -186,10 +186,12 @@ This is source bias to report with the falsifier result.
 
 **Still not quantified:** MEA vapor, and the nonzero-loading pair repeat
 (condition 5). Xu & Wang 2018's Table S3 (supporting information now in hand,
-sha256 `b14f133e…5c85071`) gives P3 = 84.8–105.9 kPa for the MEA-only rows,
+sha256 `b14f133e…16c85071`) gives P3 = 84.8–105.9 kPa for the MEA-only rows,
 but its §2.3 p.2710 defines P3 only as the "equilibrium partial pressure of
 N₂O" and defers the apparatus to Xu, Wang & Chen 2013 (doi:10.1021/je301371p,
-not in Zotero); Xu stays comparison-only.
+not in Zotero); Xu stays comparison-only. *Update 2026-10-18:* Xu 2013 is now
+read (Zotero `JFF3PK44`/`WJ8UVRHC`); the same B1 check for the 16 Xu rows is in
+`../xu-source-qualification/README.md`.
 
 Computation: `tmp/b1-2008/eq5.py`, `residual.py` and a copy of the B1 script
 (`b1_vapor.py`), ignored scratch, stdlib; hashes in `transfer.json`. They are
