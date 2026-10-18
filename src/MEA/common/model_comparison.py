@@ -47,6 +47,8 @@ def _canonical_frame(canonical_vle: pd.DataFrame) -> pd.DataFrame:
             "MEA_weight_fraction",
             "CO2_loading",
             "CO2_pressure",
+            "temperature_series_C",
+            "MEA_weight_fraction_nominal",
         },
         "canonical VLE data",
     )
@@ -57,6 +59,12 @@ def _canonical_frame(canonical_vle: pd.DataFrame) -> pd.DataFrame:
             "CO2_pressure": "observed_CO2_pressure_kPa",
         }
     ).copy()
+    # The historical evaluations ran at the reported nominal state. The #152 source
+    # corrections moved it to these columns on the rows they changed to measured values.
+    canonical["temperature_C"] = canonical["temperature_series_C"].fillna(canonical["temperature_C"])
+    canonical["MEA_weight_fraction"] = canonical["MEA_weight_fraction_nominal"].fillna(
+        canonical["MEA_weight_fraction"]
+    )
     if canonical["row_id"].duplicated().any():
         raise ValueError("canonical VLE data contain duplicate row_id values")
     if canonical.duplicated(list(CANONICAL_IDENTITY_COLUMNS)).any():
