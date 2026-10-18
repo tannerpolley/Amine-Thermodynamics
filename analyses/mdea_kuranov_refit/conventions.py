@@ -8,6 +8,7 @@ Eq. 5 recomputed per state); they must not feed adopted results.
 """
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 import math
@@ -98,6 +99,8 @@ def self_dispersion(*keep):
                 for pair in doc["pairs"]:
                     if ion in (pair["component_id_a"], pair["component_id_b"]):
                         k = pair["coefficients"][0]
+                        # only power terms are rescaled: a reciprocal-temperature slope would need its own rule
+                        assert set(k.get("temperature_law", {})) <= {"form", "reference_temperature", "terms"}, k
                         terms = (((t["power"], t["coefficient"]["value"]) for t in k["temperature_law"]["terms"])
                                  if "temperature_law" in k else [(0, k["value"])])
                         for power, v in terms:
@@ -139,6 +142,19 @@ def mdeah_volume_correction(value):
                 edge["volume_correction"] = model._law(f"association/{W}/{MDEAH}/volume_correction", (value,))
         return doc
     return apply
+
+
+def l_hb_inside_root(doc, T, m_mdea):
+    """Wangler Eq. 12 as printed (p. 17): (1 - l_hb) under the square root.  The Engine applies (1 - c) outside it
+    (Uyan Eq. 9), so every corrected edge gets the constant c' = 1 - sqrt(1 - l_hb(T)) at this T (one document per T)."""
+    for edge in doc["topology"]["edges"]:
+        law = edge.get("volume_correction")
+        if law:
+            c = (law["value"]["magnitude"] if "value" in law else
+                 sum(t["coefficient"]["value"]["magnitude"] * (T - model.T_REF) ** t["power"]
+                     for t in law["temperature_law"]["terms"]))
+            edge["volume_correction"] = model._law(law["identity"], (1 - math.sqrt(1 - c),))
+    return doc
 
 
 def non_associating_mdeah(doc, T, m_mdea):
@@ -240,6 +256,9 @@ VARIANTS = {  # name: (base, document changes, reaction-reference convention, ch
     "wangler, MDEAH+ as charged MDEA": ("wangler", CHARGED_MDEA, NONE, CHARGED),
     "wangler, MDEAH+ as charged MDEA, initial-solvent permittivity": ("wangler", CHARGED_MDEA + (initial_permittivity,), NONE,
                                                                      f"{CHARGED}; Eq. 5 on the initial solvent"),
+    "wangler, l_hb inside the root": ("wangler", (l_hb_inside_root,), NONE, f"{WG} Eq. 12 as printed (p. 17)"),
+    "wangler, MDEAH+ as charged MDEA, l_hb inside the root": ("wangler", CHARGED_MDEA + (l_hb_inside_root,), NONE,
+                                                              f"{CHARGED}; {WG} Eq. 12 as printed"),
 }
 PUBLISHED = {"uyan": {"published (Uyan Table 6)": 22.9, "re-determined (Wangler Table 11 note b)": 34.4,
                       "19 mass %": "19.82 (abstract) or 19.22 (section 4.3.2, 0.01 < alpha)", "32 mass %": 25.91},
@@ -281,6 +300,45 @@ WANGLER_6_2 = {0.02: {H: 3.80e-11, MDEAH: 9.80e-4}, 1.4: {H: 3.32e-9, MDEAH: 3.3
 # ticks as calibration (+-0.3 bar), at loadings away from the plotted markers.
 UYAN_FIG5_BAR = {413.15: {0.4: 16.29}, 393.15: {0.4: 6.80, 0.6: 15.25, 0.8: 30.68}, 373.15: {0.6: 7.46, 0.9: 26.35},
                  333.15: {1.0: 14.05, 1.2: 33.63}, 313.15: {1.1: 14.13, 1.2: 22.20, 1.3: 31.42}}
+
+
+WANGLER_LINES = score.RESULTS / "wangler-figures-11-12.csv"  # written by wangler_figures.py (digitized model lines)
+
+
+def wangler_lines_check(name):
+    """Engine pressures against Wangler's own model lines: Fig. 11 (w_MDEA 0.32, total pressure) and Fig. 12 (w_MDEA 0.48,
+    axis 'log(p_CO2)'; both the total and the CO2 partial pressure are reported).  Digitized points nearest each 0.05 of
+    alpha (within 0.01) are used; each isotherm is a warm-started loading sweep."""
+    with WANGLER_LINES.open() as handle:
+        lines = list(csv.DictReader(handle))
+    out = {}
+    for figure, w in (("Fig. 11", 0.32), ("Fig. 12", 0.48)):
+        m = w / ((1 - w) * model.COMPONENTS[MDEA][0])
+        doc_of_row = doc_function(name)
+        for T in sorted({float(r["T_K"]) for r in lines if r["figure"].startswith(figure)}):
+            series = [(float(r["alpha"]), float(r["p_bar"])) for r in lines if r["figure"].startswith(figure) and float(r["T_K"]) == T]
+            picks = {}
+            for a, p in series:
+                grid = round(a * 20) / 20
+                if abs(a - grid) <= 0.01 and abs(a - grid) < abs(picks.get(grid, (9, 0))[0] - grid):
+                    picks[grid] = (a, p)
+            r = {"T": T, "m_mdea": m, "p_exp": 1e5}
+            mix = epcsaft.Mixture(epcsaft.Parameters.from_mapping(doc_of_row(r)))
+            options, guess, points = VARIANTS[name][2](doc_of_row)(r), (None, None), []
+            for a, p_line in sorted(picks.values()):
+                for start in (guess, (None, None)):
+                    result = equilibrium.solve_equilibrium(mix, model.bubble_problem(T, m, a * m, p_line * 1e5, *start, **options))
+                    if result.success:
+                        guess = (dict(zip(model.SPECIES, result.phase_mole_fractions(0))),
+                                 dict(zip(model.NEUTRAL, result.phase_mole_fractions(1)[:3])))
+                        break
+                P = result.pressure[0] / 1e5 if result.success else None
+                points.append({"alpha": a, "p_line_bar": p_line, "P_calc_bar": P,
+                               "p_CO2_calc_bar": P * result.phase_mole_fractions(1)[2] if result.success else None})
+            ok = [q for q in points if q["P_calc_bar"]]
+            out[f"{figure} {T} K"] = {"points": points, "mean_ln_P_over_line": sum(math.log(q["P_calc_bar"] / q["p_line_bar"]) for q in ok) / len(ok),
+                                      "mean_ln_pCO2_over_line": sum(math.log(q["p_CO2_calc_bar"] / q["p_line_bar"]) for q in ok) / len(ok)}
+    return out
 
 
 def fig5_check(name):
@@ -412,6 +470,7 @@ def run(name):
            "ARD_percent_loading_at_most_1.2": ard(rows, solved, lambda r: r["m_co2"] <= 1.2 * r["m_mdea"]),
            "osmotic_MDEAH+Cl-": osmotic_check(name),
            "Uyan_Fig5_lines": fig5_check(name) if base.startswith("uyan") else None,
+           "Wangler_Fig11_Fig12_lines": wangler_lines_check(name) if base == "wangler" else None,
            "rows": {r["row"]: {"p_exp_Pa": r["p_exp"], "p_calc_Pa": solved[r["row"]]["p_calc"],
                                "message": solved[r["row"]]["message"]} for r in rows}}
     RUNS.mkdir(parents=True, exist_ok=True)
@@ -420,7 +479,9 @@ def run(name):
     print(f"{name}: ARD {out['ARD_percent_solved_rows']:.1f} % ({out['solved']}/82), by MDEA "
           f"{[round(v, 1) for v in out['ARD_percent_by_MDEA_molality'].values()]}, mean ln(p_calc/p_exp) "
           f"{out['mean_ln_ratio']:+.2f}, osmotic ARD {osm['ARD_percent']:.1f} %"
-          + (f", ln(p/Uyan Fig. 5 line) {out['Uyan_Fig5_lines']['mean_ln_ratio_to_Uyan_line']:+.2f}" if out["Uyan_Fig5_lines"] else ""),
+          + (f", ln(p/Uyan Fig. 5 line) {out['Uyan_Fig5_lines']['mean_ln_ratio_to_Uyan_line']:+.2f}" if out["Uyan_Fig5_lines"] else "")
+          + ("".join(f", {k} ln(P/line) {v['mean_ln_P_over_line']:+.2f}" for k, v in out["Wangler_Fig11_Fig12_lines"].items())
+             if out["Wangler_Fig11_Fig12_lines"] else ""),
           flush=True)
     return out
 
@@ -431,8 +492,10 @@ def collect():
     report["kvalue_checks"] = kvalue_checks()
     report["provenance"] = {"engine_wheel_sha256": score.WHEEL_SHA256,
                             "kuranov_csv_sha256": hashlib.sha256(score.KURANOV.read_bytes()).hexdigest(),
+                            "wangler_lines_csv_sha256": hashlib.sha256(WANGLER_LINES.read_bytes()).hexdigest(),
                             "scripts_sha256": {p: hashlib.sha256((model.HERE / p).read_bytes()).hexdigest()
-                                               for p in ("model.py", "score.py", "diagnose.py", "conventions.py")}}
+                                               for p in ("model.py", "score.py", "diagnose.py", "conventions.py",
+                                                         "wangler_figures.py")}}
     (score.RESULTS / "conventions.json").write_text(json.dumps(report, indent=1) + "\n")
 
 
