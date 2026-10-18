@@ -1,0 +1,259 @@
+{
+  "release_test": {
+    "suppress_1e-12 (A0 start)": {
+      "mandatory_passed": false,
+      "dispersion_release_passed": false,
+      "mandatory_condition": 220258.46643842044,
+      "all_free_condition": 224120.1713233708,
+      "projected_shift_condition": 533.2341335278657,
+      "weakest_direction": {
+        "pair/carbamate-anion/water/k_ij": 0.0684911234355515,
+        "pair/protonated-monoethanolamine/water/k_ij": -0.1526221046341769,
+        "pair/bicarbonate-anion/water/k_ij": 0.9857868542552607,
+        "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -0.0015477246660281184,
+        "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": -3.691249218922086e-06,
+        "component/protonated-monoethanolamine/segment_diameter": -0.0009704759982934719,
+        "component/carbamate-anion/segment_diameter": 0.0005773858525266601,
+        "component/protonated-monoethanolamine/born_diameter": 0.011489067443578341,
+        "component/carbamate-anion/born_diameter": -0.010201228962263309,
+        "reaction:R5:correlation:a_k": -5.2523043109112266e-05
+      },
+      "smallest_singular_values": [
+        0.013514902732889326,
+        0.0033109433399550587,
+        8.079098979674954e-05
+      ]
+    },
+    "suppress_1e-8 (literal A5-4)": {
+      "mandatory_condition": 220227.86424757986,
+      "all_free_condition": 224088.14641625996,
+      "mandatory_passed": false
+    },
+    "a4_start_for_reference": {
+      "mandatory_condition": 3448.065234502727,
+      "all_free_condition": 6390.086918955992
+    }
+  },
+  "mandatory_condition_with_one_column_dropped": {
+    "pair/carbamate-anion/water/k_ij": 5534.189980761016,
+    "pair/protonated-monoethanolamine/water/k_ij": 5862.105082263788,
+    "pair/bicarbonate-anion/water/k_ij": 5375.006875294264,
+    "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 199159.20147356472,
+    "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 220257.14266155876,
+    "component/protonated-monoethanolamine/segment_diameter": 208569.14996997017,
+    "component/carbamate-anion/segment_diameter": 174556.68190595522,
+    "component/protonated-monoethanolamine/born_diameter": 183802.84153784803,
+    "component/carbamate-anion/born_diameter": 188975.51447409767,
+    "reaction:R5:correlation:a_k": 163254.0665761999
+  },
+  "all_free_condition_without_bicarbonate_water": 16175.742385750444,
+  "weighted_column_norm_ratio_a0_over_a4_start": {
+    "pair/carbamate-anion/water/k_ij": 9.976224360901105,
+    "pair/protonated-monoethanolamine/water/k_ij": 5.368608716738249,
+    "pair/bicarbonate-anion/water/k_ij": 0.5387797090381019,
+    "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 7.823248759765517,
+    "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 4.115841188617423,
+    "component/protonated-monoethanolamine/segment_diameter": 0.4762519241662413,
+    "component/carbamate-anion/segment_diameter": 5.447951940019089,
+    "component/protonated-monoethanolamine/born_diameter": 1.534105644001311,
+    "component/carbamate-anion/born_diameter": 2.5946423919859134,
+    "reaction:R5:correlation:a_k": 0.8511292853408734,
+    "reaction:R2:enthalpy_shift": 0.9832300300356684,
+    "reaction:R5:enthalpy_shift": 0.9665726945084233
+  },
+  "start_costs": {
+    "a0": {
+      "C205": 13843.661030352083,
+      "C166": 13843.660351332584,
+      "C149": 13773.542282823164,
+      "C154": 13774.717724358045,
+      "AdditionEnthalpy": 48.1254947274004,
+      "PartialPressure": 13653.371586554726,
+      "PhaseMoleFraction": 72.0452015410386,
+      "amount_ratio": 43.62973493840844,
+      "equilibrium_isobaric_heat_capacity": 20.81713224713894,
+      "mole_fraction": 5.671201323872088,
+      "pressure": 0.0006790194987315811
+    },
+    "a4_control_start": {
+      "C205": 195.7042876302286,
+      "C166": 195.7036086107299,
+      "C149": 159.6463713717262,
+      "C154": 78.86431335254554,
+      "AdditionEnthalpy": 113.34506846611345,
+      "PartialPressure": 24.088735519336648,
+      "PhaseMoleFraction": 22.212567386276092,
+      "amount_ratio": 29.656131864212707,
+      "equilibrium_isobaric_heat_capacity": 3.4942267920709025,
+      "mole_fraction": 2.9068785827200916,
+      "pressure": 0.0006790194987315811
+    }
+  },
+  "largest_weighted_rows": [
+    {
+      "id": "vle_obs_0136-pco2",
+      "quantity": "PartialPressure",
+      "weighted_residual": -36.7439148828474,
+      "a4_start_weighted_residual": -0.4386974757835984
+    },
+    {
+      "id": "vle_obs_0132-pco2",
+      "quantity": "PartialPressure",
+      "weighted_residual": -35.35770537359784,
+      "a4_start_weighted_residual": -0.04704886761645979
+    },
+    {
+      "id": "vle_obs_0137-pco2",
+      "quantity": "PartialPressure",
+      "weighted_residual": -34.9876869736512,
+      "a4_start_weighted_residual": 0.6362174823751621
+    },
+    {
+      "id": "vle_obs_0198-pco2",
+      "quantity": "PartialPressure",
+      "weighted_residual": -34.37475978181938,
+      "a4_start_weighted_residual": -0.33754462699954546
+    },
+    {
+      "id": "vle_obs_0189-pco2",
+      "quantity": "PartialPressure",
+      "weighted_residual": -33.95586135597255,
+      "a4_start_weighted_residual": 1.1495138139989356
+    },
+    {
+      "id": "vle_obs_0138-pco2",
+      "quantity": "PartialPressure",
+      "weighted_residual": -33.59541257674425,
+      "a4_start_weighted_residual": 0.5716548068848999
+    },
+    {
+      "id": "vle_obs_0135-pco2",
+      "quantity": "PartialPressure",
+      "weighted_residual": -33.52654613669368,
+      "a4_start_weighted_residual": 1.0710170015300169
+    },
+    {
+      "id": "vle_obs_0133-pco2",
+      "quantity": "PartialPressure",
+      "weighted_residual": -33.43858954649633,
+      "a4_start_weighted_residual": 0.5093151852344299
+    }
+  ],
+  "densities_a0_start": [
+    {
+      "id": "Amundsen2009_state_060",
+      "T_K": 298.15,
+      "observed_kg_m3": 1028.0,
+      "predicted_kg_m3": 1006.2830345322857,
+      "error_kg_m3": -21.716965467714317
+    },
+    {
+      "id": "Amundsen2009_state_061",
+      "T_K": 298.15,
+      "observed_kg_m3": 1048.0,
+      "predicted_kg_m3": 1003.6103278293497,
+      "error_kg_m3": -44.38967217065033
+    },
+    {
+      "id": "Amundsen2009_state_062",
+      "T_K": 298.15,
+      "observed_kg_m3": 1070.0,
+      "predicted_kg_m3": 1001.4743900112034,
+      "error_kg_m3": -68.52560998879665
+    },
+    {
+      "id": "Amundsen2009_state_063",
+      "T_K": 298.15,
+      "observed_kg_m3": 1095.6999999999998,
+      "predicted_kg_m3": 999.8043056609283,
+      "error_kg_m3": -95.8956943390715
+    },
+    {
+      "id": "Amundsen2009_state_070",
+      "T_K": 323.15,
+      "observed_kg_m3": 1016.0,
+      "predicted_kg_m3": 993.9906845973236,
+      "error_kg_m3": -22.009315402676407
+    },
+    {
+      "id": "Amundsen2009_state_071",
+      "T_K": 323.15,
+      "observed_kg_m3": 1035.5,
+      "predicted_kg_m3": 990.9628428387797,
+      "error_kg_m3": -44.53715716122031
+    },
+    {
+      "id": "Amundsen2009_state_072",
+      "T_K": 323.15,
+      "observed_kg_m3": 1058.0,
+      "predicted_kg_m3": 988.5504458113585,
+      "error_kg_m3": -69.44955418864151
+    },
+    {
+      "id": "Amundsen2009_state_073",
+      "T_K": 323.15,
+      "observed_kg_m3": 1083.0,
+      "predicted_kg_m3": 986.6717352415601,
+      "error_kg_m3": -96.3282647584399
+    },
+    {
+      "id": "Amundsen2009_state_075",
+      "T_K": 343.15,
+      "observed_kg_m3": 1004.0,
+      "predicted_kg_m3": 981.9229791304778,
+      "error_kg_m3": -22.077020869522244
+    },
+    {
+      "id": "Amundsen2009_state_076",
+      "T_K": 343.15,
+      "observed_kg_m3": 1024.0,
+      "predicted_kg_m3": 978.6638283249783,
+      "error_kg_m3": -45.33617167502166
+    },
+    {
+      "id": "Amundsen2009_state_077",
+      "T_K": 343.15,
+      "observed_kg_m3": 1046.4,
+      "predicted_kg_m3": 976.0822625792425,
+      "error_kg_m3": -70.31773742075757
+    },
+    {
+      "id": "Amundsen2009_state_078",
+      "T_K": 343.15,
+      "observed_kg_m3": 1071.9,
+      "predicted_kg_m3": 974.0881700441075,
+      "error_kg_m3": -97.81182995589256
+    }
+  ],
+  "pair_dispersion_weights_313_15_K": {
+    "carbamate-anion/water": {
+      "k_start": 0.13408074131722733,
+      "weight_a4_start": 16596.450456053557,
+      "weight_a0_start": 61848.33226952919,
+      "ratio_a0_over_a4": 3.7266000000000004,
+      "k_keeping_a4_start_weight": 0.7676382604296752
+    },
+    "protonated-monoethanolamine/water": {
+      "k_start": -0.3795540800656849,
+      "weight_a4_start": 17339.01015316147,
+      "weight_a0_start": 44836.555019631494,
+      "ratio_a0_over_a4": 2.5858774303477943,
+      "k_keeping_a4_start_weight": 0.4665044584575928
+    },
+    "carbamate-anion/protonated-monoethanolamine": {
+      "k_start": -0.7072858902151943,
+      "weight_a4_start": 26936.895503520238,
+      "weight_a0_start": 267261.5720548798,
+      "ratio_a0_over_a4": 9.921765929557578,
+      "k_keeping_a4_start_weight": 0.8279251997742579
+    },
+    "protonated-monoethanolamine/protonated-monoethanolamine": {
+      "weight_a4_start": 0.0,
+      "weight_a0_start": 71990.57650131914
+    },
+    "carbamate-anion/carbamate-anion": {
+      "weight_a4_start": 0.0,
+      "weight_a0_start": 334176.07870604325
+    }
+  }
+}

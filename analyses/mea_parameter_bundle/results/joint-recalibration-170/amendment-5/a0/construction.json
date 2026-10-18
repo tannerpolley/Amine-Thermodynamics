@@ -1,0 +1,872 @@
+{
+  "inputs": {
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/matched-larger-dV/control-start-parameters.json": "e01e114226597f04a1d1460fa4a4d00b6bb94bc05d17a7489768f8651ae4337d",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/matched-larger-dV/control-fit-spec.json": "c138ff13e7efb76236ff0cb66d789810a41f82eb2d92cbc583c7eb9a222e6a2f"
+  },
+  "diameter_factors": {
+    "protonated-monoethanolamine": {
+      "u_K": 277.174,
+      "f_313_15": 0.9915670684375054,
+      "f_313_15_hex": "0x1.fbaeadc575989p-1",
+      "f_293_15": 0.9929643869118047,
+      "f_353_15": 0.9886080624497985,
+      "df_du_313_15_per_K": 8.078810374415994e-05,
+      "max_relative_departure_293_353": 0.0029841713000510195
+    },
+    "carbamate-anion": {
+      "u_K": 533.11,
+      "f_313_15": 0.9992736630204387,
+      "f_313_15_hex": "0x1.ffa0cc2cda93dp-1",
+      "f_293_15": 0.9994873589648691,
+      "f_353_15": 0.9987047078651793,
+      "df_du_313_15_per_K": 6.958361611635803e-06,
+      "max_relative_departure_293_353": 0.0005693687088076382
+    }
+  },
+  "check2_x": {
+    "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-5/a0/check2-x-parameters.json",
+    "sha256": "7845f162eb1ac309b53285f06557b4338b3964d76ec52a1c00b84dadff4e35df",
+    "workaround": {
+      "suppressed": [
+        "protonated-monoethanolamine",
+        "carbamate-anion",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion"
+      ],
+      "kept": [
+        "no-such-ion"
+      ],
+      "rescaled_pairs": [
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "carbamate-anion",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "carbon-dioxide"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbamate-anion",
+            "carbon-dioxide"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "carbonate-anion"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "hydroxide-anion"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "hydronium-cation",
+            "hydroxide-anion"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbamate-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "hydronium-cation",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "hydroxide-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "monoethanolamine",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "carbamate-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "hydroxide-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbamate-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "hydronium-cation",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "hydroxide-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "protonated-monoethanolamine",
+            "water"
+          ],
+          "terms": [
+            "k_ij",
+            "k_ij_reciprocal_temperature_slope"
+          ],
+          "factor": 10000.0
+        }
+      ],
+      "added_same_sign_pairs": [
+        [
+          "protonated-monoethanolamine",
+          "hydronium-cation"
+        ],
+        [
+          "carbamate-anion",
+          "bicarbonate-anion"
+        ],
+        [
+          "carbamate-anion",
+          "carbonate-anion"
+        ],
+        [
+          "carbamate-anion",
+          "hydroxide-anion"
+        ],
+        [
+          "bicarbonate-anion",
+          "carbonate-anion"
+        ],
+        [
+          "bicarbonate-anion",
+          "hydroxide-anion"
+        ],
+        [
+          "carbonate-anion",
+          "hydroxide-anion"
+        ]
+      ]
+    }
+  },
+  "a0_start_first_attempt_1e-8": {
+    "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-5/a0/start-parameters.json",
+    "sha256": "70a4cf84802a9c1a742fd02f9d4dd2634506aa4e9398b66840ac8d3b461783fe",
+    "ion_values": {
+      "protonated-monoethanolamine": {
+        "segment_count": 3.0353,
+        "segment_diameter": 3.0435,
+        "packing_diameter": 3.017834372789548,
+        "debye_huckel_diameter": 3.0435,
+        "born_diameter": 3.563,
+        "dispersion_energy_over_k": 277.174
+      },
+      "carbamate-anion": {
+        "segment_count": 3.7266,
+        "segment_diameter": 3.5605,
+        "packing_diameter": 3.5579138771842724,
+        "debye_huckel_diameter": 3.5605,
+        "born_diameter": 3.5605,
+        "dispersion_energy_over_k": 533.11
+      }
+    },
+    "workaround": {
+      "suppressed": [
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion"
+      ],
+      "kept": [
+        "protonated-monoethanolamine",
+        "carbamate-anion"
+      ],
+      "rescaled_pairs": [
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "carbamate-anion",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "carbon-dioxide"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "carbonate-anion"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "hydroxide-anion"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "hydronium-cation",
+            "hydroxide-anion"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 100000000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "hydronium-cation",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "hydroxide-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "hydroxide-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "hydronium-cation",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        },
+        {
+          "pair": [
+            "hydroxide-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 10000.0
+        }
+      ],
+      "added_same_sign_pairs": [
+        [
+          "protonated-monoethanolamine",
+          "hydronium-cation"
+        ],
+        [
+          "carbamate-anion",
+          "bicarbonate-anion"
+        ],
+        [
+          "carbamate-anion",
+          "carbonate-anion"
+        ],
+        [
+          "carbamate-anion",
+          "hydroxide-anion"
+        ],
+        [
+          "bicarbonate-anion",
+          "carbonate-anion"
+        ],
+        [
+          "bicarbonate-anion",
+          "hydroxide-anion"
+        ],
+        [
+          "carbonate-anion",
+          "hydroxide-anion"
+        ]
+      ]
+    },
+    "status": "superseded before any call: check 2 failed at factor 1e-8; document overwritten, values identical except the inorganic u and k_ij"
+  },
+  "a0_start": {
+    "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-5/a0/start-parameters.json",
+    "sha256": "01f3b7f0d22f3de84b3d27043a30aaa7fc8a331f2bb33e54961a9983fac53004",
+    "suppression_factor": 1e-12,
+    "ion_values": {
+      "protonated-monoethanolamine": {
+        "segment_count": 3.0353,
+        "segment_diameter": 3.0435,
+        "packing_diameter": 3.017834372789548,
+        "debye_huckel_diameter": 3.0435,
+        "born_diameter": 3.563,
+        "dispersion_energy_over_k": 277.174
+      },
+      "carbamate-anion": {
+        "segment_count": 3.7266,
+        "segment_diameter": 3.5605,
+        "packing_diameter": 3.5579138771842724,
+        "debye_huckel_diameter": 3.5605,
+        "born_diameter": 3.5605,
+        "dispersion_energy_over_k": 533.11
+      }
+    },
+    "workaround": {
+      "suppressed": [
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion"
+      ],
+      "kept": [
+        "protonated-monoethanolamine",
+        "carbamate-anion"
+      ],
+      "rescaled_pairs": [
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000000000.0
+        },
+        {
+          "pair": [
+            "carbamate-anion",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "carbon-dioxide"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "carbonate-anion"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "carbon-dioxide",
+            "hydroxide-anion"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "hydronium-cation"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000000000.0
+        },
+        {
+          "pair": [
+            "hydronium-cation",
+            "hydroxide-anion"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000000000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "hydronium-cation",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "hydroxide-anion",
+            "monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "hydroxide-anion",
+            "protonated-monoethanolamine"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "bicarbonate-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "carbonate-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "hydronium-cation",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        },
+        {
+          "pair": [
+            "hydroxide-anion",
+            "water"
+          ],
+          "terms": [
+            "k_ij"
+          ],
+          "factor": 1000000.0
+        }
+      ],
+      "added_same_sign_pairs": [
+        [
+          "protonated-monoethanolamine",
+          "hydronium-cation"
+        ],
+        [
+          "carbamate-anion",
+          "bicarbonate-anion"
+        ],
+        [
+          "carbamate-anion",
+          "carbonate-anion"
+        ],
+        [
+          "carbamate-anion",
+          "hydroxide-anion"
+        ],
+        [
+          "bicarbonate-anion",
+          "carbonate-anion"
+        ],
+        [
+          "bicarbonate-anion",
+          "hydroxide-anion"
+        ],
+        [
+          "carbonate-anion",
+          "hydroxide-anion"
+        ]
+      ]
+    },
+    "hco3_water": {
+      "k_start": 0.5,
+      "k_prime_start": -499999.0,
+      "coordinate": {
+        "identity": "pair/bicarbonate-anion/water/k_ij",
+        "family": "k_ij",
+        "scale": 10000.0,
+        "bounds": [
+          -1499999.0,
+          1.0
+        ],
+        "target": [
+          "bicarbonate-anion",
+          "water"
+        ],
+        "note": "A5-4 form k' = 1 - 1e+06 (1 - k); back-transform k = 1 - (1 - k')/1e+06"
+      }
+    }
+  },
+  "check2_x_corrected": {
+    "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-5/a0/check2-diagnosis/x-suppress-1e-12-parameters.json",
+    "sha256": "4340fd6d22e02764b7ea3385134579f9e821658a6ed132841d3e8236421d5482"
+  }
+}
