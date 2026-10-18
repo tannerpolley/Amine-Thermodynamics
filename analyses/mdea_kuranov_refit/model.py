@@ -176,11 +176,13 @@ def initial_solvent_permittivity(doc, T, m_mdea):
     return doc
 
 
-def reactions():
+def reactions(shift=None):
+    """`shift` (reaction -> added ln K) is a diagnostic hook for conventions.py; None is the published model."""
+    shift = shift or {}
     return [equilibrium.Reaction(
         stoichiometry, name=name,
-        correlation=equilibrium.ReactionLogPolynomial(c1 + c3 * math.log(T_REF), c2, c3, c4, T_REF, 273.15, 423.15,
-                                                      STANDARD_STATE_ID),
+        correlation=equilibrium.ReactionLogPolynomial(c1 + shift.get(name, 0.0) + c3 * math.log(T_REF), c2, c3, c4, T_REF,
+                                                      273.15, 423.15, STANDARD_STATE_ID),
         reference=equilibrium.ReactionReference(equilibrium.ReferenceSourceBasis.RawMoleFractionInfiniteDilution))
         for name, (stoichiometry, (c1, c2, c3, c4)) in REACTIONS.items()]
 
@@ -191,7 +193,8 @@ NEUTRAL_REFERENCE = equilibrium.NeutralReference(
     solute_molality_ratios={MDEA: 0.125, CO2: 0.125, MDEAH: 0.125, H: 0.125, HCO3: 0.125, OH: 0.0625, CO3: 0.03125})
 
 
-def bubble_problem(T, m_mdea, m_co2, p_guess, liquid_guess=None, vapor_guess=None):
+def bubble_problem(T, m_mdea, m_co2, p_guess, liquid_guess=None, vapor_guess=None, neutral_reference=NEUTRAL_REFERENCE,
+                   shift=None):
     """Reactive bubble point at T (K) for stoichiometric molalities (mol/kg water); P is solved."""
     n_w = 1.0 / COMPONENTS[W][0]
     if liquid_guess is None:  # ideal-speciation seed: MDEA + CO2 + H2O -> MDEAH+ + HCO3-
@@ -207,7 +210,7 @@ def bubble_problem(T, m_mdea, m_co2, p_guess, liquid_guess=None, vapor_guess=Non
                 equilibrium.Phase("V", kind="vapor", support=NEUTRAL, amount=equilibrium.Pinned(0.0),
                                   composition_guess=vapor_guess)],
         T=T, P=equilibrium.Free(p_guess), feed=equilibrium.Amounts({W: n_w, MDEA: m_mdea, CO2: m_co2}),
-        reactions=reactions(), neutral_reference=NEUTRAL_REFERENCE)
+        reactions=reactions(shift), neutral_reference=neutral_reference)
 
 
 if __name__ == "__main__":
