@@ -1,11 +1,11 @@
 """Amendment 4 neutral CO2-MEA fit (starts A/B), endpoint checks and cold replay (#170)."""
-import csv, math, sys, time
+import csv, hashlib, math, sys, time
 from pathlib import Path
 import numpy as np
 import fit_campaign as campaign
 import fit_observations as owner
 root = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170')
-out, mode, started, cpu = Path(sys.argv[1]), sys.argv[2], time.monotonic(), campaign.cpu_seconds()
+out, mode = Path(sys.argv[1]), sys.argv[2]
 rows = list(csv.DictReader(open('data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv')))
 factor = {r['id']: r['correction_factor_on_H'] for r in campaign.load(sys.argv[3])['rows']} if len(sys.argv) > 3 else {}  # B1 source-to-model target transfer
 pair = ('pair/carbon-dioxide/monoethanolamine/k_ij', 'pair/carbon-dioxide/monoethanolamine/k_ij/reciprocal_temperature_slope')
@@ -30,7 +30,7 @@ def evaluate(mapping, values, start=(0., 0.)):
     return params, coords, items, dict(predictions=list(v.predictions), statuses=[s.name for s in v.statuses], relative_H_error=error, singular_values=sv.tolist(), rank=int(sum(sv > sv[0]*1e-14)), condition=float(sv[0]/sv[-1]), hartono_mean_abs_error=float(np.mean(np.abs(error[:7]))), hartono_max_abs_error=float(np.max(np.abs(error[:7]))), xu_mean_abs_error=float(np.mean(np.abs(error[7:]))), xu_max_abs_error=float(np.max(np.abs(error[7:]))))
 if mode == 'fit':
     campaign.write(out/'inputs.json', campaign.verify(dict(inputs=[dict(path=p, sha256=h) for p, h in (('data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv', '711813f70cad20fb571e63e90e1d740f7d8ea3099ef3f84ee475020851697422'), (str(root/'stage2/co2-water/slope/co2-water/B/parameters.json'), 'b1ec1ddc22abe5ced8d08116fc91a7b3da1361864db1b34c33dda121b642a5e2'), (str(root/'amendment-2/route2b/larger-dV/start-parameters.json'), 'aee26a2dc1149854ff0840d4bd5bfac58ec423aac1cfec7b870b1ccbbbc2d202'), (str(root/'amendment-2/route2b/smaller-dV/start-parameters.json'), 'f9a9d6ea7a46e900721eefbf8eb77a94a21fadfcee89ab44e43774b6ab6a3815'))], engine=dict(wheel_path='tmp/amendment-4-21e761c3/wheel/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl', wheel_sha256='d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357', packages=dict(epcsaft='0.2.0.dev0', numpy='2.5.4', scipy='1.18.1')))))
-    campaign.write(out/'target-factors.json', factor)
+    campaign.write(out/'target-factors.json', dict(path=sys.argv[3], sha256=hashlib.sha256(open(sys.argv[3], 'rb').read()).hexdigest(), factors=factor) if factor else {})
     for label, start in (('A', (0., 0.)), ('B', (0.10, 100.))):
         params, coords, items, at_start = evaluate(neutral('larger-dV', start), start, start)
         clock = time.monotonic()
@@ -46,15 +46,11 @@ else:  # cold replay of each retained endpoint document in a fresh process
     for label in ('A', 'B'):
         mapping = campaign.load(out/f'{label}/parameters.json')
         values = [owner.s.parameter_values(mapping)[k] for k in pair]
-        retained = campaign.load(out/f'{label}/evaluation.json')['endpoint']['larger-dV']['predictions']
-        replay = evaluate(mapping, values)[3]['predictions']
-        result[label] = dict(values=values, maximum_relative_difference=max(abs(a/b-1) for a, b in zip(replay, retained)))
+        result[label] = dict(values=values, maximum_relative_difference=max(abs(a/b-1) for a, b in zip(evaluate(mapping, values)[3]['predictions'], campaign.load(out/f'{label}/evaluation.json')['endpoint']['larger-dV']['predictions'])))
     campaign.write(out/'cold-replay.json', result)
-    model = owner.epcsaft.Mixture(owner.epcsaft.Parameters.from_mapping(campaign.load(out/'A/parameters.json')))
-    n, i, sentinel = len(model.component_ids), model.component_ids.index('carbon-dioxide'), []
+    model = owner.epcsaft.Mixture(owner.epcsaft.Parameters.from_mapping(campaign.load(out/'A/parameters.json'))); n, i, sentinel = len(model.component_ids), model.component_ids.index('carbon-dioxide'), []
     for T in (298.35, 360.25):  # endpoint dilution sentinel (addendum prerequisite at the nonzero pair)
         for epsilon in (1e-5, 1e-6, 1e-7):
             d = problem(T, 0.3, epsilon); st = owner.eq.solve_equilibrium(model, d); xs = list(st.mole_fractions)
             sentinel.append(dict(T=T, epsilon=epsilon, success=st.success, requested_tolerance_met=st.requested_tolerance_met, message=st.message, pressure_Pa=list(st.pressure), molar_densities=list(st.molar_densities), mole_fractions=xs, Hx_Pa=xs[n+i]*st.pressure[0]/xs[i], raw_residual_max=max(map(abs, owner.eq.compile_problem(model, d).evaluate(st.coordinates).values)), dP_drho_Pa_m3_mol=[model.state(T, rho=r, x=xs[k*n:(k+1)*n]).pressure_density_derivative for k, r in enumerate(st.molar_densities)]))
     campaign.write(out/'endpoint-sentinel.json', sentinel)
-campaign.write(out/f'timing-{mode}.json', dict(cpu_s=campaign.cpu_seconds()-cpu, wall_s=time.monotonic()-started))

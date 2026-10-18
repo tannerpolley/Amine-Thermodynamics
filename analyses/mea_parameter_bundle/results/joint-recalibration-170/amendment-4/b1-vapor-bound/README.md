@@ -7,19 +7,17 @@ Closed 2026-10-17 on the 2008 apparatus paper; see the last section.
 
 ## Result
 
-**B1 passes on materiality, after a vapor-side correction of the targets
-(orchestrator decision 2026-10-18, owner away; reversible).** The first bound
+**B1 passes after a vapor-side correction of the targets.** The first bound
 below (0.943 %) treated the source pressure as y·P. Hartono, Juliussen &
 Svendsen 2008 (J. Chem. Eng. Data 53, 2696–2700, doi:10.1021/je800409d; Zotero
 `YV8V38QI`, PDF `D667FF2D`, sha256 `e5fa375d…b5b3e2`) defines it instead as
 P_R − P_S° (Eq. 5). On that basis the N₂O–water cross coefficient enters at
-full strength and the uncorrected transfer reaches 1.42 % (row 7, widest
+full strength and the uncorrected transfer reaches 1.38 % (row 7, widest
 envelope). The design permits a source-supported thermodynamic correction:
-each target is multiplied by f_N₂O/pN, and the transfer uncertainty left after
-it is 0.39–0.60 % for rows 1–6 and **1.023 %** for row 7. That residual moves
-the neutral pair less than the Table 11 source difference the design already
-accepts. Details are in the last section; the table below is the superseded
-y·P bound, kept for the record.
+each target is multiplied by f_N₂O/pN. With signs kept, the transfer left
+after it is at most **0.36–0.51 % for rows 1–6 and 0.83 % for row 7**, inside
+the 1 % rule. Details are in the last section; the table below is the
+superseded y·P bound, kept for the record.
 
 | Row | T/K | pN₂O/kPa | \|φ−1\| central % | env A % | env B % | + liquid, central % | env A % | env B % |
 |---|---|---|---|---|---|---|---|---|
@@ -103,39 +101,49 @@ coefficient cancels between P_R and P_S° to first order, so
 P_R − P_S° = c₁RT(1 + B11c₁): Eq. 2's pure-N₂O compressibility is the right
 form for the gas balance (misses ≤ 1.04e-5). The same identity gives the
 fugacity: ln(f₁/pN) ≈ B11c₁ + 2B12c₂, with B12 at full strength. Solved
-exactly at second-virial level per row (`transfer.json`):
+exactly at second-virial level per row (`transfer.json`; the release review
+reproduced rows 2 and 7 independently):
 
-| Row | T/K | P_b/kPa | ln(f₁/pN) | Uncorrected, central / widest | Left after correction: vapor | liquid | model | third virial | **bound** |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | 298.35 | 3.79 | −0.00388 | 0.64 / 0.77 % | 0.130 % | 0.250 % | 0.008 % | 0.001 % | **0.389 %** |
-| 2 | 312.65 | 7.57 | −0.00503 | 0.85 / 1.05 % | 0.198 % | 0.341 % | 0.013 % | 0.003 % | **0.557 %** |
-| 3 | 312.65 | 7.57 | −0.00428 | 0.71 / 0.89 % | 0.182 % | 0.279 % | 0.013 % | 0.003 % | **0.479 %** |
-| 4 | 322.25 | 11.84 | −0.00398 | 0.64 / 0.86 % | 0.216 % | 0.238 % | 0.019 % | 0.008 % | **0.483 %** |
-| 5 | 331.75 | 18.08 | −0.00459 | 0.73 / 1.01 % | 0.282 % | 0.265 % | 0.029 % | 0.017 % | **0.594 %** |
-| 6 | 341.25 | 27.10 | −0.00422 | 0.60 / 0.94 % | 0.335 % | 0.181 % | 0.042 % | 0.037 % | **0.597 %** |
-| 7 | 360.25 | 57.40 | −0.00623 | 0.85 / 1.42 % | 0.562 % | 0.222 % | 0.084 % | 0.150 % | **1.023 %** |
+| Row | T/K | P_S°/kPa | ln(f₁/pN) | Uncorrected, central / widest | Left after correction, signed | **Bound** |
+|---|---|---|---|---|---|---|
+| 1 | 298.35 | 2.81 | -0.00373 | 0.62 / 0.74 % | -0.093 to +0.355 % | **0.355 %** |
+| 2 | 312.65 | 6.31 | -0.00487 | 0.83 / 1.01 % | -0.144 to +0.509 % | **0.511 %** |
+| 3 | 312.65 | 6.31 | -0.00412 | 0.69 / 0.86 % | -0.128 to +0.431 % | **0.432 %** |
+| 4 | 322.25 | 10.37 | -0.00381 | 0.62 / 0.82 % | -0.148 to +0.422 % | **0.422 %** |
+| 5 | 331.75 | 16.42 | -0.00442 | 0.71 / 0.97 % | -0.199 to +0.513 % | **0.514 %** |
+| 6 | 341.25 | 25.24 | -0.00405 | 0.59 / 0.90 % | -0.244 to +0.488 % | **0.489 %** |
+| 7 | 360.25 | 55.16 | -0.00605 | 0.83 / 1.38 % | -0.510 to +0.829 % | **0.832 %** |
 
 - **Correction:** each primary target is multiplied by exp(ln(f₁/pN)) at
-  central coefficients and p_s = P_b (factors 0.9938–0.9961).
-- **Vapor residual:** largest change over B11 ±10 % and ±25 cm³/mol,
-  B12 × 0.5–2, B22 ±5 % and p_s ±10 %. B12 × 2 dominates at row 7.
-- **Liquid term:** 0 to 100 cm³/mol × (pN + 0.1 P_b)/RT, the experiment's
-  pressure above the model's bubble pressure (replaces the 101325 Pa value).
-- **Model term:** −ln φ_CO₂ of the model at its bubble state
-  (`dilute-bubble/pressure-properties.json`).
-- **Third virial:** the 1.5e-3 allowance above at row 7, scaled by c₂².
-- **Uncorrected:** rows 2, 5 and 7 exceed 1 % in the widest envelope, and row 7
-  is 0.85 % centrally, as the review reported.
+  central coefficients (factors 0.9940–0.9963).
+- **Solvent pressure:** P_S° is estimated by the model's CO₂-free solvent
+  pressure, the dilute-bubble pressure minus its CO₂ partial pressure, within
+  ±10 %. The first statement used the bubble pressure itself, which included
+  0.97–2.2 kPa of CO₂; the effect on the factors was about 1.6e-4.
+- **Signed range** of ln target − ln model left after the correction:
+  - vapor deviation over B11 ±10 % and ±25 cm³/mol, B12 × 0.5–2, B22 ±5 %
+    and P_S° ±10 % (B12 × 2 dominates at row 7), both signs;
+  - liquid term 0 to 100 cm³/mol × (pN + 0.1 P_S°)/RT, positive (replaces the
+    101325 Pa value);
+  - the model's ln φ_CO₂ at its bubble state, a fixed negative value
+    (`dilute-bubble/pressure-properties.json`);
+  - third-virial allowance ±1.5e-3 at row 7, scaled by c₂².
+- **Magnitude sum:** adding every term as a magnitude gives 0.37–0.57 % and
+  1.002 % at row 7; the first corrected statement (1.023 %) did that, and the
+  release review pointed out that the model term only reduces the bias.
+- **Uncorrected:** rows 2 and 7 exceed 1 % in the widest envelope.
 
-**Materiality (the basis of the decision).** Refitting the neutral pair with
-every corrected target moved by ± its full bound (`transfer.json`
-sensitivity; all plus, all minus, and the two temperature tilts) moves k(313 K)
-by at most 0.0011 and b by at most 6.8 K. Replacing the SI basis by the Table
-11 basis, a source difference the design accepts as a disclosed limitation,
-moves them by 0.0037 and −12.3 K. The conditioning standard errors at the
-declared weights are 0.0136 and 64 K. Row 7's 0.023-point excess is therefore
-smaller in effect than an accepted limitation; the decision is reversible
-before any adoption.
+**Sensitivity of the neutral pair** (`transfer.json`, refits at the released
+settings). Moving every target to either end of its signed range, or tilting
+the ends with temperature, moves k(313.15 K) by at most 0.0010 and b by at most
+4.4 K. The Table 11 basis, a source difference the design accepts as a
+disclosed limitation, moves them by 0.0037 and −12.3 K. The conditioning
+standard errors at the declared weights are 0.0136 and 64 K.
+
+**Superseded decision.** Before the signed bound, an orchestrator decision
+(2026-10-18, owner away) passed row 7's 1.023 % on this materiality
+comparison. With signs kept no override is needed; the comparison remains
+supporting evidence.
 
 **Peng–Robinson residual δ in the source concentration.** Peng–Robinson's
 implied second virial coefficient B = b − a/RT for N₂O (T_c 309.52 K,
@@ -157,10 +165,15 @@ pressure (vessel at an assumed 295.15 K; V_S = V_R/2 as printed "around half"):
 "Lowest fill" ends the transfer at the reactor pressure (slightly understated:
 the vessel must end above it); 800 kPa is the full scale of the paper's larger
 transducer. δ is a systematic error in the source's own concentration, so the
-3 % duplicate agreement does not bound it. It is carried as a disclosed,
-unbounded source limitation, like the Table 11 difference, outside the
-pressure/gas-reference transfer that B1 bounds (orchestrator decision,
-2026-10-18).
+3 % duplicate agreement does not bound it. Its sign is opposite to the applied
+correction (−0.37 to −0.60 %): at the lowest fill it offsets part of it (row 7
+almost all), and at fills above about 300–400 kPa the net source bias raises
+H. Refitting with every target raised by δ moves the neutral pair by +0.0005 /
+−1.7 K (lowest fill), +0.0027 / −4.9 K (400 kPa) and +0.0056 / −9.9 K
+(800 kPa) in k / b, comparable at most to the Table 11 limitation. δ is carried
+as a disclosed, unbounded source limitation outside the pressure/gas-reference
+transfer that B1 bounds. This reverses condition 3 as first written and is an
+orchestrator decision (2026-10-18, owner away) for the owner to ratify.
 
 **The paper's water check.** Its Table 1 N₂O-in-water constants against
 Versteeg & van Swaaij 1988 Eq. 5 (the N₂O water correlation the analogy uses):
@@ -178,5 +191,7 @@ but its §2.3 p.2710 defines P3 only as the "equilibrium partial pressure of
 N₂O" and defers the apparatus to Xu, Wang & Chen 2013 (doi:10.1021/je301371p,
 not in Zotero); Xu stays comparison-only.
 
-Computation: `tmp/b1-2008/eq5.py` and `tmp/b1-2008/residual.py` (scratch,
-stdlib; hashes in `transfer.json`; both import the B1 script above).
+Computation: `tmp/b1-2008/eq5.py`, `residual.py` and a copy of the B1 script
+(`b1_vapor.py`), ignored scratch, stdlib; hashes in `transfer.json`. They are
+not versioned because the campaign code ceiling stands at 999 of 1,000 lines;
+the equations above define every number.
