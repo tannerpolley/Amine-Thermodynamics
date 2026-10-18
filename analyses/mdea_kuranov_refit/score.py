@@ -29,9 +29,10 @@ def kuranov_rows():
                  "p_exp": float(r["ten_times_total_pressure_MPa"]) * 1e5} for r in csv.DictReader(handle)]
 
 
-def solve_rows(doc, rows):
+def solve_rows(doc, rows, problem_options=lambda r: {}):
     """Bubble pressure of every row; within an isotherm series each solve starts from the previous solution.
-    `doc` is one parameter document, or a function of the row returning that row's document."""
+    `doc` is one parameter document, or a function of the row returning that row's document;
+    `problem_options(row)` gives extra model.bubble_problem keywords (conventions.py)."""
     shared = None if callable(doc) else epcsaft.Mixture(epcsaft.Parameters.from_mapping(doc))
     out, previous = {}, {}
     for r in sorted(rows, key=lambda r: (r["series"], r["m_co2"])):
@@ -40,7 +41,7 @@ def solve_rows(doc, rows):
         result = None
         for guess in ([start] if start else []) + [None]:  # warm start, then the ideal-speciation seed
             problem = model.bubble_problem(r["T"], r["m_mdea"], r["m_co2"], r["p_exp"],
-                                           *(guess if guess else (None, None)))
+                                           *(guess if guess else (None, None)), **problem_options(r))
             result = equilibrium.solve_equilibrium(mix, problem)
             if result.success:
                 break
