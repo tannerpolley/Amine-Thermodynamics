@@ -21,6 +21,9 @@
   ratification).
 - **Not run at the endpoints:** the 12 zero-weight loaded-density rows and
   the per-row heat-capacity and heat assessments the design keeps.
+- **Xu rows meet B1 too** (Xu 2013 Eq. 4 basis; correction 0.9940–0.9949,
+  bound ≤ 0.64 %); still zero weight, role an orchestrator decision; no fit
+  run: [xu-source-qualification](xu-source-qualification/README.md).
 
 The sections below record the earlier preflight stop (16 October), kept for
 the record.

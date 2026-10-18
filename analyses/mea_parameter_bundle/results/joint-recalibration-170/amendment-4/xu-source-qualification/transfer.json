@@ -1,0 +1,967 @@
+{
+ "purpose": "B1 source-to-model transfer for the 16 Xu & Wang 2018 MEA-only N2O rows (SI Table S3 P3, x3), on the Xu, Wang & Chen 2013 Eq. 4 basis (P_N2O = total minus the measured pre-injection solvent pressure), computed exactly as b1-vapor-bound/transfer.json did for Hartono. correction_factor_on_H multiplies the CO2 Hx target; signed_range_ln is ln(target) - ln(model-equivalent) left after it; corrected_bound_pct is the B1 quantity (limit 1 %). delta_pct is the Peng-Robinson residual in the source x3 (outside B1). No fit was run.",
+ "sources": {
+  "Xu2013": {
+   "doi": "10.1021/je301371p",
+   "zotero_parent_key": "JFF3PK44",
+   "pdf_attachment_key": "WJ8UVRHC",
+   "pdf_sha256": "bb0e32700aaddec8a07b4fcbde330191af84605e6c5fbcf002df539b0aeecd50",
+   "locator": "Experimental Section, Solubility of N2O, Figure 1 and Eqs. 2-4 p.1634; Eqs. 5-7 and Table 2 p.1635"
+  },
+  "Xu2018": {
+   "doi": "10.1021/acs.jced.8b00070",
+   "zotero_parent_key": "4TDQZ354",
+   "pdf_attachment_key": "S5PK66RR",
+   "pdf_sha256": "62cd127ff7a9bc1755700466c0e54dab54737b429da00dad5da23132fb092641",
+   "locator": "Section 2.3 and Eqs. 2-8 p.2710; Table 4 p.2711; Table 8 p.2715"
+  },
+  "Xu2018_SI": {
+   "zotero_parent_key": "4TDQZ354",
+   "pdf_attachment_key": "9JKXQ7ID",
+   "pdf_sha256": "b14f133e7a18db22d8ebaa5d81845430ce6a4f77b9fcadfeb8f45fc016c85071",
+   "locator": "Table S2 PDF p.1; Table S3 PDF p.2, x2 block"
+  }
+ },
+ "producer": {
+  "scripts": "tmp/b1-2008/xu_eq5.py (adapted from eq5.py and residual.py) with tmp/b1-2008/b1_vapor.py; ignored scratch, stdlib, not versioned (campaign code ceiling 1000/1000); equations in README",
+  "xu_eq5_sha256": "67064ada5790eddfa05bc96f8198e791e6000cfda9c47763e8e0cab79f14b1d5",
+  "b1_vapor_sha256": "34ab7e9af7ac437da55f2c80f4e0fd35d16ea4d32149b674c5a493c818df6697",
+  "inputs": {
+   "data/reference/MEA/physical_solubility/Xu_2018_N2O_solubility.csv": "ffcfd25f98f263dad7135cc5d25e346e8401194c58e06cb216d0283cd84822e4",
+   "data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv": "711813f70cad20fb571e63e90e1d740f7d8ea3099ef3f84ee475020851697422",
+   "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/dilute-bubble/pressure-properties.json": "96b230a194a63674423221ca53091b6eb4ad51922be250da8b7bac03bce4bf92",
+   "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/neutral-fit-superseded/A/evaluation.json": "7e03c8dd1c371bb6b75f93de84bb815e2c3e176af6022f385c7fa15725c08934",
+   "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/neutral-fit/A/evaluation.json": "7829fa02b3b9532bb59ef29b2b5d40d4f044339bf10f4ce5da8df5963335d78e"
+  },
+  "solvent_pressure": "P_S0 = P_b - pCO2 (model CO2-free solvent pressure at k = 0, x = 1e-5), within 10 %; 0 <= p_s <= p_sat,water sweep retained",
+  "delta_assumptions": "V_reactor 5.439e-4 m3, V_tank 2.214e-3 m3, 120 g absorbent (Xu 2018 p.2710); V_solvent = 120 g / Table 4 density; tank at 295.15 K (not printed); reactor volume taken as exact except in delta_pct_if_volume_calibrated_same_fill"
+ },
+ "summary": {
+  "correction_factor_on_H": [
+   0.9939845865876531,
+   0.99490971261314
+  ],
+  "ln_f_over_pN_central": [
+   -0.006033578896842538,
+   -0.005103287033087848
+  ],
+  "uncorrected_widest_pct": [
+   0.9971653527405255,
+   1.230312517453136
+  ],
+  "rows_over_1pct_uncorrected_widest": 15,
+  "signed_range_ln": [
+   -0.0020480656798176895,
+   0.006330872495664245
+  ],
+  "corrected_bound_pct": [
+   0.47051204874910546,
+   0.635095482613246
+  ],
+  "corrected_bound_pct_B22_pm10": [
+   0.47051684222243484,
+   0.6351557233443383
+  ],
+  "n_gas_over_n_liquid": [
+   5.412239134837255,
+   9.052014380853473
+  ],
+  "delta_pct": {
+   "lowest_fill": [
+    0.38378849519875224,
+    0.777370832946506
+   ],
+   "200kPa": [
+    0.9046393914160217,
+    1.3789274797422233
+   ],
+   "400kPa": [
+    2.103690080144991,
+    3.2425028402063996
+   ],
+   "800kPa": [
+    4.50179145760293,
+    7.001836986368673
+   ]
+  },
+  "delta_pct_if_volume_calibrated_same_fill": {
+   "lowest_fill": [
+    -0.14222533528924275,
+    -0.008145446017220836
+   ],
+   "200kPa": [
+    -0.23442740802766338,
+    -0.04966580544607058
+   ],
+   "800kPa": [
+    -1.1224867438408932,
+    -0.342374266620344
+   ]
+  },
+  "fill_for_delta_1pct_kPa": [
+   159.04604070886643,
+   215.9060178990537
+  ],
+  "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": [
+   -0.005614490519892823,
+   0.0024627923730493606
+  ],
+  "released_pair_errors": {
+   "all16": {
+    "as_released": {
+     "mean_abs": 0.10084613115226604,
+     "max_abs": 0.2251412278805045
+    },
+    "corrected": {
+     "mean_abs": 0.10498028289236622,
+     "max_abs": 0.23177483892834116
+    }
+   },
+   "A4_4_eight_w0244_w0366": {
+    "as_released": {
+     "mean_abs": 0.09216981374995303,
+     "max_abs": 0.21329511595192807
+    },
+    "corrected": {
+     "mean_abs": 0.09570913212037761,
+     "max_abs": 0.22004365202301335
+    }
+   }
+  }
+ },
+ "verdict": "B1 met for all 16 rows after the vapor-side correction (bound <= 0.64 %); conditions and source limitations in README. Fit use is an orchestrator decision; no fit run.",
+ "rows": [
+  {
+   "id": "Xu18_T8_MEA_293.15_0.0394",
+   "T_K": 293.15,
+   "pN_Pa": 91600.0,
+   "x_N2O": 0.000484,
+   "solvent_pressure_model_Pa": 2239.246245250106,
+   "psat_water_Pa": 2339.214766776897,
+   "ln_f_over_pN_central": -0.005563482533528285,
+   "correction_factor_on_H": 0.9944519649748312,
+   "uncorrected_combined_pct": 1.0761782034363954,
+   "uncorrected_central_combined_pct": 0.9374463670750455,
+   "sweep_0_to_psat_ln": [
+    -0.005579427216146678,
+    -0.005206785392181577
+   ],
+   "vapor_residual_ln": 0.0013734901144991521,
+   "liquid_max_ln": 0.003767313547351503,
+   "model_term_ln": 0.00010032504781071108,
+   "third_virial_ln": 3.7433538491478604e-06,
+   "signed_range_ln": [
+    -0.0012427205961038795,
+    0.0050442219678890916
+   ],
+   "corrected_bound_pct": 0.5056965473533515,
+   "corrected_bound_pct_B22_pm10": 0.5057019398610363,
+   "solvent_volume_m3": 0.00011936735302894658,
+   "n_gas_over_n_liquid": 5.412239134837255,
+   "vessel_drop_kPa": 20.951473540051676,
+   "delta_pct": {
+    "lowest_fill": 0.3943874974012932,
+    "200kPa": 0.9046393914160217,
+    "400kPa": 2.103690080144991,
+    "800kPa": 4.50179145760293
+   },
+   "fill_for_delta_1pct_kPa": 215.9060178990537,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.008145446017220836,
+    "200kPa": -0.04966580544607058,
+    "800kPa": -0.342374266620344
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.386822858008399,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": -0.0029140631259526595,
+   "n_total_ideal_mmol": 18.90232459567316,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": 0.0024371651791328386,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.07561293811802927,
+    "target_times_correction": 0.08161376919321794
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_293.15_0.0870",
+   "T_K": 293.15,
+   "pN_Pa": 84800.0,
+   "x_N2O": 0.000465,
+   "solvent_pressure_model_Pa": 2116.0560819230195,
+   "psat_water_Pa": 2339.214766776897,
+   "ln_f_over_pN_central": -0.005155758805764105,
+   "correction_factor_on_H": 0.9948575093064784,
+   "uncorrected_combined_pct": 0.9971653527405255,
+   "uncorrected_central_combined_pct": 0.868104297405714,
+   "sweep_0_to_psat_ln": [
+    -0.005191285253649781,
+    -0.00481931620439411
+   ],
+   "vapor_residual_ln": 0.0012786852651122714,
+   "liquid_max_ln": 0.003487820573989135,
+   "model_term_ln": 7.575481039424073e-05,
+   "third_virial_ln": 3.33497821932683e-06,
+   "signed_range_ln": [
+    -0.001136443981923924,
+    0.0046940860069264925
+   ],
+   "corrected_bound_pct": 0.47051204874910546,
+   "corrected_bound_pct_B22_pm10": 0.47051684222243484,
+   "solvent_volume_m3": 0.00011860051393556039,
+   "n_gas_over_n_liquid": 5.768029281146329,
+   "vessel_drop_kPa": 19.24423959071324,
+   "delta_pct": {
+    "lowest_fill": 0.38378849519875224,
+    "200kPa": 0.9761852597195744,
+    "400kPa": 2.241766595700473,
+    "800kPa": 4.7729292676622705
+   },
+   "fill_for_delta_1pct_kPa": 203.76344682137204,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.015433399741748843,
+    "200kPa": -0.06869399552018063,
+    "800kPa": -0.4100477300308487
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.386822858008399,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": -0.0029205995427705744,
+   "n_total_ideal_mmol": 17.36206585399286,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": 0.0024627923730493606,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.015457544315251592,
+    "target_times_correction": 0.02070651808532209
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_293.15_0.1456",
+   "T_K": 293.15,
+   "pN_Pa": 93100.0,
+   "x_N2O": 0.000513,
+   "solvent_pressure_model_Pa": 1960.686348766686,
+   "psat_water_Pa": 2339.214766776897,
+   "ln_f_over_pN_central": -0.005604142492714495,
+   "correction_factor_on_H": 0.9944115314205416,
+   "uncorrected_combined_pct": 1.0825773944343586,
+   "uncorrected_central_combined_pct": 0.9476474661622047,
+   "sweep_0_to_psat_ln": [
+    -0.0056644279575647155,
+    -0.0052922769608395575
+   ],
+   "vapor_residual_ln": 0.0013357402183470117,
+   "liquid_max_ln": 0.0038277120556545223,
+   "model_term_ln": 5.531737836561313e-05,
+   "third_virial_ln": 2.870313903298886e-06,
+   "signed_range_ln": [
+    -0.001188113031994686,
+    0.005111005209539219
+   ],
+   "corrected_bound_pct": 0.5124088677058491,
+   "corrected_bound_pct_B22_pm10": 0.51241299914353,
+   "solvent_volume_m3": 0.00011777407007557169,
+   "n_gas_over_n_liquid": 6.417844720273586,
+   "vessel_drop_kPa": 20.852179185264504,
+   "delta_pct": {
+    "lowest_fill": 0.45508812225603246,
+    "200kPa": 1.0356462168071419,
+    "400kPa": 2.4227391860019556,
+    "800kPa": 5.196925124391583
+   },
+   "fill_for_delta_1pct_kPa": 194.86029882656908,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.033096049762928015,
+    "200kPa": -0.0936563662918306,
+    "800kPa": -0.5277358669888521
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.386822858008399,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": 0.0028754213460626676,
+   "n_total_ideal_mmol": 18.812741678217876,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": -0.0033787061422990705,
+   "released_pair_relative_H_error": {
+    "as_released_target": -0.0752000689460568,
+    "target_times_correction": -0.07000280886441101
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_293.15_0.2197",
+   "T_K": 293.15,
+   "pN_Pa": 101200.0,
+   "x_N2O": 0.000628,
+   "solvent_pressure_model_Pa": 1764.1831278708241,
+   "psat_water_Pa": 2339.214766776897,
+   "ln_f_over_pN_central": -0.006033578896842538,
+   "correction_factor_on_H": 0.9939845865876531,
+   "uncorrected_combined_pct": 1.1642717889266407,
+   "uncorrected_central_combined_pct": 1.0244931770988064,
+   "sweep_0_to_psat_ln": [
+    -0.006124804353788851,
+    -0.005754059158518729
+   ],
+   "vapor_residual_ln": 0.0013826548089318404,
+   "liquid_max_ln": 0.004159229260276364,
+   "model_term_ln": 3.848745401723231e-05,
+   "third_virial_ln": 2.328996401071225e-06,
+   "signed_range_ln": [
+    -0.0012375817490958556,
+    0.005505725611592044
+   ],
+   "corrected_bound_pct": 0.5520909973032673,
+   "corrected_bound_pct_B22_pm10": 0.5520943469500939,
+   "solvent_volume_m3": 0.000116993272886809,
+   "n_gas_over_n_liquid": 6.4586044912725376,
+   "vessel_drop_kPa": 22.688598584798402,
+   "delta_pct": {
+    "lowest_fill": 0.49579885854100675,
+    "200kPa": 1.0102546629852718,
+    "400kPa": 2.4049694676202527,
+    "800kPa": 5.194399076890213
+   },
+   "fill_for_delta_1pct_kPa": 198.52949679014048,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.03542684795587053,
+    "200kPa": -0.08853557033214754,
+    "800kPa": -0.5204765886677718
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.386822858008399,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": -0.0025191787584210035,
+   "n_total_ideal_mmol": 20.469550948335463,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": 0.0018959550080042131,
+   "released_pair_relative_H_error": {
+    "as_released_target": -0.07647978703353597,
+    "target_times_correction": -0.07089081115743767
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_303.15_0.0394",
+   "T_K": 303.15,
+   "pN_Pa": 96300.0,
+   "x_N2O": 0.000405,
+   "solvent_pressure_model_Pa": 4069.0739490717233,
+   "psat_water_Pa": 4246.688340548065,
+   "ln_f_over_pN_central": -0.005500307052515672,
+   "correction_factor_on_H": 0.9945147919406034,
+   "uncorrected_combined_pct": 1.1043691941034384,
+   "uncorrected_central_combined_pct": 0.9380803292148077,
+   "sweep_0_to_psat_ln": [
+    -0.0055254630400598005,
+    -0.004925084411922139
+   ],
+   "vapor_residual_ln": 0.0016460788594540622,
+   "liquid_max_ln": 0.003836769751442742,
+   "model_term_ln": 0.00013363508474574905,
+   "third_virial_ln": 1.1549962880200505e-05,
+   "signed_range_ln": [
+    -0.001416482072077121,
+    0.005360763489031256
+   ],
+   "corrected_bound_pct": 0.5375158092149945,
+   "corrected_bound_pct_B22_pm10": 0.537528660742459,
+   "solvent_volume_m3": 0.00011974852809100888,
+   "n_gas_over_n_liquid": 6.570140615664516,
+   "vessel_drop_kPa": 20.695891843606113,
+   "delta_pct": {
+    "lowest_fill": 0.49048852491422396,
+    "200kPa": 1.0479222794303573,
+    "400kPa": 2.4634936778320573,
+    "800kPa": 5.294636474635459
+   },
+   "fill_for_delta_1pct_kPa": 193.22926706707057,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.04383027975105763,
+    "200kPa": -0.10678262918198289,
+    "800kPa": -0.5863743901471601
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.728437918332702,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": 0.005238904298410896,
+   "n_total_ideal_mmol": 18.67173994597339,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": -0.005614490519892823,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.09724160755769651,
+    "target_times_correction": 0.1032934014150173
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_303.15_0.0870",
+   "T_K": 303.15,
+   "pN_Pa": 89200.0,
+   "x_N2O": 0.000401,
+   "solvent_pressure_model_Pa": 3845.4055732112156,
+   "psat_water_Pa": 4246.688340548065,
+   "ln_f_over_pN_central": -0.005103287033087848,
+   "correction_factor_on_H": 0.99490971261314,
+   "uncorrected_combined_pct": 1.0245703534655481,
+   "uncorrected_central_combined_pct": 0.8695066922144834,
+   "sweep_0_to_psat_ln": [
+    -0.005159970006856792,
+    -0.004561133394048147
+   ],
+   "vapor_residual_ln": 0.0015360895575584317,
+   "liquid_max_ln": 0.003554195503364076,
+   "model_term_ln": 0.00010341140037307701,
+   "third_virial_ln": 1.029171553447178e-05,
+   "signed_range_ln": [
+    -0.0012964656008839536,
+    0.004997165376083903
+   ],
+   "corrected_bound_pct": 0.5009672030911183,
+   "corrected_bound_pct_B22_pm10": 0.5009786242069492,
+   "solvent_volume_m3": 0.00011908306043465316,
+   "n_gas_over_n_liquid": 6.796293717060074,
+   "vessel_drop_kPa": 19.115705515986136,
+   "delta_pct": {
+    "lowest_fill": 0.4687428369613327,
+    "200kPa": 1.1061020798155348,
+    "400kPa": 2.5639627669172294,
+    "800kPa": 5.47968414112062
+   },
+   "fill_for_delta_1pct_kPa": 185.4441400671183,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.045661571990474936,
+    "200kPa": -0.11965582219919346,
+    "800kPa": -0.6274070299848455
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.728437918332702,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": 0.0008104126228256625,
+   "n_total_ideal_mmol": 17.24610299355482,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": -0.0012104316737182597,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.06172942018103966,
+    "target_times_correction": 0.06716157930793254
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_303.15_0.1456",
+   "T_K": 303.15,
+   "pN_Pa": 97400.0,
+   "x_N2O": 0.000458,
+   "solvent_pressure_model_Pa": 3563.3883280222667,
+   "psat_water_Pa": 4246.688340548065,
+   "ln_f_over_pN_central": -0.0054833568419381945,
+   "correction_factor_on_H": 0.9945316493186169,
+   "uncorrected_combined_pct": 1.0993391709230416,
+   "uncorrected_central_combined_pct": 0.9405720314526356,
+   "sweep_0_to_psat_ln": [
+    -0.0055797764630516585,
+    -0.004981483157705373
+   ],
+   "vapor_residual_ln": 0.0015716416742205105,
+   "liquid_max_ln": 0.0038784051103389447,
+   "model_term_ln": 7.7775631282804e-05,
+   "third_virial_ln": 8.85544892374972e-06,
+   "signed_range_ln": [
+    -0.001329952067646561,
+    0.0053811266022004015
+   ],
+   "corrected_bound_pct": 0.5395630868715751,
+   "corrected_bound_pct_B22_pm10": 0.5395729184813902,
+   "solvent_volume_m3": 0.00011837821840781295,
+   "n_gas_over_n_liquid": 7.262571575079907,
+   "vessel_drop_kPa": 20.735435446930406,
+   "delta_pct": {
+    "lowest_fill": 0.5361873588819794,
+    "200kPa": 1.135805587153638,
+    "400kPa": 2.6808574683204838,
+    "800kPa": 5.7709612306541755
+   },
+   "fill_for_delta_1pct_kPa": 182.4205790356922,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.0615463153794551,
+    "200kPa": -0.135598200716889,
+    "800kPa": -0.7080324564649532
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.728437918332702,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": -0.002250494150546012,
+   "n_total_ideal_mmol": 18.707416005907284,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": 0.00179653724711204,
+   "released_pair_relative_H_error": {
+    "as_released_target": -0.0036561062939586275,
+    "target_times_correction": 0.001822208864510344
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_303.15_0.2197",
+   "T_K": 303.15,
+   "pN_Pa": 105900.0,
+   "x_N2O": 0.000576,
+   "solvent_pressure_model_Pa": 3206.987042240041,
+   "psat_water_Pa": 4246.688340548065,
+   "ln_f_over_pN_central": -0.005866885837326849,
+   "correction_factor_on_H": 0.9941502907299843,
+   "uncorrected_combined_pct": 1.1746987952401033,
+   "uncorrected_central_combined_pct": 1.0132093256141061,
+   "sweep_0_to_psat_ln": [
+    -0.00601288516445706,
+    -0.005417400045675943
+   ],
+   "vapor_residual_ln": 0.001597419998722492,
+   "liquid_max_ln": 0.004214221866295997,
+   "model_term_ln": 5.584168627309537e-05,
+   "third_virial_ln": 7.186469984600155e-06,
+   "signed_range_ln": [
+    -0.0013640763400685223,
+    0.005762986648729994
+   ],
+   "corrected_bound_pct": 0.5779624602366251,
+   "corrected_bound_pct_B22_pm10": 0.5779704270723052,
+   "solvent_volume_m3": 0.00011768167107972932,
+   "n_gas_over_n_liquid": 7.114515742013157,
+   "vessel_drop_kPa": 22.638776034243723,
+   "delta_pct": {
+    "lowest_fill": 0.5709605797536874,
+    "200kPa": 1.0809059420994012,
+    "400kPa": 2.5982722605671666,
+    "800kPa": 5.6330048975027
+   },
+   "fill_for_delta_1pct_kPa": 189.33600395439123,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.06024312893116768,
+    "200kPa": -0.12084725571401034,
+    "800kPa": -0.6618385120170318
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.728437918332702,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": -0.002771793017910862,
+   "n_total_ideal_mmol": 20.424601268735668,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": 0.002201896218475552,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.024722408064569823,
+    "target_times_correction": 0.03075200763874153
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_313.15_0.0394",
+   "T_K": 313.15,
+   "pN_Pa": 100700.0,
+   "x_N2O": 0.000348,
+   "solvent_pressure_model_Pa": 7081.524298975903,
+   "psat_water_Pa": 7384.42748706953,
+   "ln_f_over_pN_central": -0.005538529772057534,
+   "correction_factor_on_H": 0.9944767796071029,
+   "uncorrected_combined_pct": 1.1527443248457558,
+   "uncorrected_central_combined_pct": 0.9477973896152792,
+   "sweep_0_to_psat_ln": [
+    -0.005576798967455145,
+    -0.004646279978452171
+   ],
+   "vapor_residual_ln": 0.0020281687891129923,
+   "liquid_max_ln": 0.003894809935653941,
+   "model_term_ln": 0.00018479841368533134,
+   "third_virial_ln": 3.2775307812298305e-05,
+   "signed_range_ln": [
+    -0.0016695198359793402,
+    0.0057709556188939
+   ],
+   "corrected_bound_pct": 0.5787639662121924,
+   "corrected_bound_pct_B22_pm10": 0.5787926155837342,
+   "solvent_volume_m3": 0.00012021638950110197,
+   "n_gas_over_n_liquid": 7.732220561580026,
+   "vessel_drop_kPa": 20.511827373389195,
+   "delta_pct": {
+    "lowest_fill": 0.6106747963085265,
+    "200kPa": 1.193641196889665,
+    "400kPa": 2.826514653154103,
+    "800kPa": 6.0922615656829775
+   },
+   "fill_for_delta_1pct_kPa": 176.2821550994328,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.08612764370779447,
+    "200kPa": -0.1658360440674318,
+    "800kPa": -0.8356194023817576
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.887527665549669,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": -0.00011828377346834174,
+   "n_total_ideal_mmol": 18.50567781407036,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": -0.00022974340144810146,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.10404337288983556,
+    "target_times_correction": 0.11017511472316133
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_313.15_0.0870",
+   "T_K": 313.15,
+   "pN_Pa": 93400.0,
+   "x_N2O": 0.000351,
+   "solvent_pressure_model_Pa": 6692.239263443689,
+   "psat_water_Pa": 7384.42748706953,
+   "ln_f_over_pN_central": -0.0051493828533395024,
+   "correction_factor_on_H": 0.9948638524908489,
+   "uncorrected_combined_pct": 1.0716938861421221,
+   "uncorrected_central_combined_pct": 0.880082614454869,
+   "sweep_0_to_psat_ln": [
+    -0.005236570476468264,
+    -0.004308728185189357
+   ],
+   "vapor_residual_ln": 0.0018975948863109967,
+   "liquid_max_ln": 0.003612941752793074,
+   "model_term_ln": 0.0001482889104897603,
+   "third_virial_ln": 2.920667116089076e-05,
+   "signed_range_ln": [
+    -0.0015317558461935376,
+    0.005391454399775201
+   ],
+   "corrected_bound_pct": 0.5406014444893525,
+   "corrected_bound_pct_B22_pm10": 0.540626900935326,
+   "solvent_volume_m3": 0.00011961722488038277,
+   "n_gas_over_n_liquid": 7.860892766522343,
+   "vessel_drop_kPa": 19.016064459633892,
+   "delta_pct": {
+    "lowest_fill": 0.5785216621450784,
+    "200kPa": 1.2429482791090736,
+    "400kPa": 2.899882674573072,
+    "800kPa": 6.213751465501068
+   },
+   "fill_for_delta_1pct_kPa": 170.6749670024154,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.08277201699115444,
+    "200kPa": -0.17396823027102482,
+    "800kPa": -0.856238350077243
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.887527665549669,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": 0.0017845081728518064,
+   "n_total_ideal_mmol": 17.156207283516796,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": -0.002131704129410883,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.0941985062269981,
+    "target_times_correction": 0.09984748514828867
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_313.15_0.1456",
+   "T_K": 313.15,
+   "pN_Pa": 101000.0,
+   "x_N2O": 0.000443,
+   "solvent_pressure_model_Pa": 6201.340767696209,
+   "psat_water_Pa": 7384.42748706953,
+   "ln_f_over_pN_central": -0.00543543517030186,
+   "correction_factor_on_H": 0.99457931007973,
+   "uncorrected_combined_pct": 1.1300548584842085,
+   "uncorrected_central_combined_pct": 0.9382125518883067,
+   "sweep_0_to_psat_ln": [
+    -0.005583746815054144,
+    -0.004660154430110762
+   ],
+   "vapor_residual_ln": 0.001898787639379786,
+   "liquid_max_ln": 0.0039029515712584767,
+   "model_term_ln": 0.00011617796198676626,
+   "third_virial_ln": 2.511476671193698e-05,
+   "signed_range_ln": [
+    -0.0015356039256895976,
+    0.005710676015363432
+   ],
+   "corrected_bound_pct": 0.5727013009261039,
+   "corrected_bound_pct_B22_pm10": 0.5727231523823262,
+   "solvent_volume_m3": 0.0001189885969261279,
+   "n_gas_over_n_liquid": 7.5266697121867745,
+   "vessel_drop_kPa": 20.69708088129496,
+   "delta_pct": {
+    "lowest_fill": 0.5994813210489714,
+    "200kPa": 1.1648565380013582,
+    "400kPa": 2.7592932045031113,
+    "800kPa": 5.948166537506615
+   },
+   "fill_for_delta_1pct_kPa": 179.32103024661885,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.07685501345114909,
+    "200kPa": -0.1503032586521158,
+    "800kPa": -0.7717060283201835
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.887527665549669,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": 0.004903226234459046,
+   "n_total_ideal_mmol": 18.67281269039435,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": -0.005320140382564009,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.15255868074116208,
+    "target_times_correction": 0.15884039519057325
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_313.15_0.2197",
+   "T_K": 313.15,
+   "pN_Pa": 100400.0,
+   "x_N2O": 0.000509,
+   "solvent_pressure_model_Pa": 5581.390798692609,
+   "psat_water_Pa": 7384.42748706953,
+   "ln_f_over_pN_central": -0.005326142262735087,
+   "correction_factor_on_H": 0.9946880164846457,
+   "uncorrected_combined_pct": 1.1064252517531958,
+   "uncorrected_central_combined_pct": 0.9246152408046493,
+   "sweep_0_to_psat_ln": [
+    -0.00555086214970523,
+    -0.004632405721100693
+   ],
+   "vapor_residual_ln": 0.0017998230329788183,
+   "liquid_max_ln": 0.003877526152990817,
+   "model_term_ln": 8.707273393586575e-05,
+   "third_virial_ln": 2.0328999491886827e-05,
+   "signed_range_ln": [
+    -0.00145334825224166,
+    0.0056106054515256566
+   ],
+   "corrected_bound_pct": 0.5626374375568677,
+   "corrected_bound_pct_B22_pm10": 0.5626550624014071,
+   "solvent_volume_m3": 0.00011838989739542225,
+   "n_gas_over_n_liquid": 7.377340389445386,
+   "vessel_drop_kPa": 20.652026964357866,
+   "delta_pct": {
+    "lowest_fill": 0.5869350424294102,
+    "200kPa": 1.1474611534002448,
+    "400kPa": 2.713974122186529,
+    "800kPa": 5.8470000597590985
+   },
+   "fill_for_delta_1pct_kPa": 181.17332491482713,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.07039913284860111,
+    "200kPa": -0.14082846506342372,
+    "800kPa": -0.7313190424232587
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.887527665549669,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": -0.002742216276000242,
+   "n_total_ideal_mmol": 18.63216525046019,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": 0.00223935707742573,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.174805245904867,
+    "target_times_correction": 0.1810791187138039
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_323.15_0.0394",
+   "T_K": 323.15,
+   "pN_Pa": 105000.0,
+   "x_N2O": 0.0003,
+   "solvent_pressure_model_Pa": 11852.610587247382,
+   "psat_water_Pa": 12351.27043402335,
+   "ln_f_over_pN_central": -0.005720078694712493,
+   "correction_factor_on_H": 0.994296249807151,
+   "uncorrected_combined_pct": 1.230312517453136,
+   "uncorrected_central_combined_pct": 0.9719086723732229,
+   "sweep_0_to_psat_ln": [
+    -0.005776616343962794,
+    -0.004381383296144351
+   ],
+   "vapor_residual_ln": 0.0025558966091496207,
+   "liquid_max_ln": 0.003952081515888867,
+   "model_term_ln": 0.0002633670575508695,
+   "third_virial_ln": 8.626142817662661e-05,
+   "signed_range_ln": [
+    -0.0020480656798176895,
+    0.006330872495664245
+   ],
+   "corrected_bound_pct": 0.635095482613246,
+   "corrected_bound_pct_B22_pm10": 0.6351557233443383,
+   "solvent_volume_m3": 0.00012074864157778225,
+   "n_gas_over_n_liquid": 9.052014380853473,
+   "vessel_drop_kPa": 20.354194266268742,
+   "delta_pct": {
+    "lowest_fill": 0.777370832946506,
+    "200kPa": 1.3628357671252633,
+    "400kPa": 3.2425028402063996,
+    "800kPa": 7.001836986368673
+   },
+   "fill_for_delta_1pct_kPa": 161.3936135476901,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.14222533528924275,
+    "200kPa": -0.23442740802766338,
+    "800kPa": -1.1224867438408932
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.906255427585947,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": 0.0043661039477118635,
+   "n_total_ideal_mmol": 18.363461938317315,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": -0.004645819815475072,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.09813300098759359,
+    "target_times_correction": 0.10443240754511773
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_323.15_0.0870",
+   "T_K": 323.15,
+   "pN_Pa": 97400.0,
+   "x_N2O": 0.000313,
+   "solvent_pressure_model_Pa": 11200.61850710076,
+   "psat_water_Pa": 12351.27043402335,
+   "ln_f_over_pN_central": -0.005323838756830574,
+   "correction_factor_on_H": 0.9946903077570038,
+   "uncorrected_combined_pct": 1.1450973630362737,
+   "uncorrected_central_combined_pct": 0.9031168342684914,
+   "sweep_0_to_psat_ln": [
+    -0.005453800805486122,
+    -0.0040636056832358755
+   ],
+   "vapor_residual_ln": 0.002395276250502721,
+   "liquid_max_ln": 0.0036667924672623615,
+   "model_term_ln": 0.00021932593506393603,
+   "third_virial_ln": 7.68624716136982e-05,
+   "signed_range_ln": [
+    -0.0018829110291135852,
+    0.005919605254314844
+   ],
+   "corrected_bound_pct": 0.5937160740920211,
+   "corrected_bound_pct_B22_pm10": 0.5937695687261657,
+   "solvent_volume_m3": 0.00012021638950110197,
+   "n_gas_over_n_liquid": 8.896061150187483,
+   "vessel_drop_kPa": 18.937656842772654,
+   "delta_pct": {
+    "lowest_fill": 0.7191200879189806,
+    "200kPa": 1.3789274797422233,
+    "400kPa": 3.229432223610834,
+    "800kPa": 6.930441711348057
+   },
+   "fill_for_delta_1pct_kPa": 159.04604070886643,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.12673438221373745,
+    "200kPa": -0.22835694927943617,
+    "800kPa": -1.083393031489135
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.906255427585947,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": 0.0011817596731331648,
+   "n_total_ideal_mmol": 17.085468286479134,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": -0.0014929953114820593,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.12126306734322934,
+    "target_times_correction": 0.12724840947896965
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_323.15_0.1456",
+   "T_K": 323.15,
+   "pN_Pa": 105100.0,
+   "x_N2O": 0.000405,
+   "solvent_pressure_model_Pa": 10378.127096458094,
+   "psat_water_Pa": 12351.27043402335,
+   "ln_f_over_pN_central": -0.005546743809141593,
+   "correction_factor_on_H": 0.9944686109715047,
+   "uncorrected_combined_pct": 1.1926655420192223,
+   "uncorrected_central_combined_pct": 0.9542299528308984,
+   "sweep_0_to_psat_ln": [
+    -0.005768360873450234,
+    -0.004385565259519852
+   ],
+   "vapor_residual_ln": 0.0023590340002991326,
+   "liquid_max_ln": 0.00395031554816901,
+   "model_term_ln": 0.00017855707888618814,
+   "third_virial_ln": 6.606057710118459e-05,
+   "signed_range_ln": [
+    -0.0018533049114801109,
+    0.006196853046683139
+   ],
+   "corrected_bound_pct": 0.6216093262923161,
+   "corrected_bound_pct_B22_pm10": 0.6216551900872558,
+   "solvent_volume_m3": 0.00011966493817311528,
+   "n_gas_over_n_liquid": 8.2890706749181,
+   "vessel_drop_kPa": 20.61278674923007,
+   "delta_pct": {
+    "lowest_fill": 0.7235243826440775,
+    "200kPa": 1.2614383943697336,
+    "400kPa": 2.9984395192810407,
+    "800kPa": 6.472441769103655
+   },
+   "fill_for_delta_1pct_kPa": 169.8977288361764,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.11326398019688111,
+    "200kPa": -0.19075200963423455,
+    "800kPa": -0.9414117323734699
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.906255427585947,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": 0.0036900023643808844,
+   "n_total_ideal_mmol": 18.596762905983958,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": -0.004079947349016511,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.21329511595192807,
+    "target_times_correction": 0.22004365202301335
+   }
+  },
+  {
+   "id": "Xu18_T8_MEA_323.15_0.2197",
+   "T_K": 323.15,
+   "pN_Pa": 104500.0,
+   "x_N2O": 0.00046,
+   "solvent_pressure_model_Pa": 9340.08241882333,
+   "psat_water_Pa": 12351.27043402335,
+   "ln_f_over_pN_central": -0.005399962381209967,
+   "correction_factor_on_H": 0.9946145912075879,
+   "uncorrected_combined_pct": 1.1605422951068034,
+   "uncorrected_central_combined_pct": 0.9367687897685606,
+   "sweep_0_to_psat_ln": [
+    -0.005736373744082108,
+    -0.004360473743916374
+   ],
+   "vapor_residual_ln": 0.002214513350891038,
+   "liquid_max_ln": 0.003924120833383596,
+   "model_term_ln": 0.00013898578552504898,
+   "third_virial_ln": 5.3458169011170174e-05,
+   "signed_range_ln": [
+    -0.0017320239230154172,
+    0.006053106567760755
+   ],
+   "corrected_bound_pct": 0.6071463637730368,
+   "corrected_bound_pct_B22_pm10": 0.6071833457907294,
+   "solvent_volume_m3": 0.00011913034845626923,
+   "n_gas_over_n_liquid": 8.219691188434014,
+   "vessel_drop_kPa": 20.539584532116766,
+   "delta_pct": {
+    "lowest_fill": 0.7151661539000977,
+    "200kPa": 1.2548656155177536,
+    "400kPa": 2.9788931879299896,
+    "800kPa": 6.4269483327544625
+   },
+   "fill_for_delta_1pct_kPa": 170.4336961199352,
+   "delta_pct_if_volume_calibrated_same_fill": {
+    "lowest_fill": -0.10883108385215556,
+    "200kPa": -0.18523939842076165,
+    "800kPa": -0.9174804906185567
+   },
+   "B11_LS_minus_PR_cm3_mol": {
+    "T": 11.906255427585947,
+    "TV": 11.472149920484014
+   },
+   "S3_Hc_over_Table8_minus_1": -0.0013092743309359722,
+   "n_total_ideal_mmol": 18.530720197037805,
+   "Table8_Hc_times_c_total_over_S3_p_over_x_minus_1": 0.0008503877217513889,
+   "released_pair_relative_H_error": {
+    "as_released_target": 0.2251412278805045,
+    "target_times_correction": 0.23177483892834116
+   }
+  }
+ ]
+}
