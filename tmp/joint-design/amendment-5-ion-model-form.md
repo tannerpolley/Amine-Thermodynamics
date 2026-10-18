@@ -1,18 +1,21 @@
 # #170 amendment 5: the ion model form for MEAH⁺ and carbamate
 
-Design draft, 18 October 2026, on MEA `main` at `96e5124` (task branch
-`worktree-agent-a450ef4cd257ea23c`). Starting stage: `cse:design`, because
-amendment 4 placed the bound activity in the ion description but left open
-which ion form to test and what result would decide it; `cse:research`
-supplied the sources in §3.
+Design draft, 18 October 2026, first written on MEA `main` at `96e5124`;
+revised the same day from `main` at `adcefdf` after an independent readiness
+review (**Ready with corrections**; all eight corrections applied). Starting
+stage:
+`cse:design`, because amendment 4 placed the bound activity in the ion
+description but left open which ion form to test and what result would decide
+it; `cse:research` supplied the sources in §3.
 
 **Nothing was fitted, built or evaluated with the Engine in this task.** The
 numbers in §2 and §5 (diameter factors, volumes, dispersion weights) are
-arithmetic on declared parameters and can be checked by hand. Every choice is a
-reversible orchestrator-side proposal made while the owner is away (§14).
-Readiness review, publication on #170 and any Engine comment belong to the
-orchestrator. Abbreviations: DH = Debye–Hückel; GN = Gauss–Newton (the
-linearized least-squares step); A4 = amendment 4.
+arithmetic on declared parameters and can be checked by hand; the reviewer's
+arithmetic quoted below was rechecked here. Every choice is a reversible
+orchestrator-side proposal made while the owner is away (§14). Publication on
+#170 and any Engine comment belong to the orchestrator. Abbreviations: DH =
+Debye–Hückel; GN = Gauss–Newton (the linearized least-squares step); A4 =
+amendment 4.
 
 ## 1. Question and intended use
 
@@ -23,7 +26,8 @@ carbamate–MEAH⁺ k_ij at −1 (`amendment-4/README.md` "Outcome";
 neutral pair is not the cause (C166 ×1.00059 on both branches). Is this bound
 activity caused by representing MEAH⁺ and carbamate as one-segment spheres
 under the inorganic-ion rules, and does a charged-molecule form remove it
-without a loss of fit?
+without a loss of fit? A0 answers the second part. It separates the chain form
+from "the sphere box was too small" only weakly (§5.4).
 
 **Intended use.** Choose the ion form for the remaining #170 stages and
 decide whether MEA needs the Engine capability already described on
@@ -33,7 +37,10 @@ model physically.
 
 **Out of scope.** New data or observation kinds; the inorganic ions'
 parameters; the dielectric model; the CO₂–MEA pair; the reaction set;
-stages 5–7.
+stages 5–7. The Xu result now on #170 (comment 6252469842: the 16 Xu rows meet
+B1, Xu stays comparison-only, the Hartono-only neutral fit is kept) does not
+touch A5. The 205-row objective has no N₂O-analogy rows, and CO₂–MEA stays
+at (0, 0).
 
 ## 2. Prior evidence
 
@@ -133,7 +140,7 @@ indexed hash and its current Zotero source file.
 | Cleeton et al. 2020, FPE, doi:10.1016/j.fluid.2019.112453 (MMI98GID) | §2.1; §3.1, Table 1 and note b | Ions are spherical and non-associating, m = 1, with a temperature-independent solvated diameter. MDEAH⁺ has m = 1, σ 3.3474 Å, u 237.19 K, "transferred from MDEA" (4C). |
 | Bülow et al. 2021a, IECR, doi:10.1021/acs.iecr.1c00176 (B74UQB9E) | Theory: text after Eq. 18; Eq. 20 and the sentence after it. Results: Table 2. Conclusions | "Charged species are assumed to be nonassociative, and dispersive cation−cation and anion−anion interactions are neglected". The Born a_i is the DH diameter, "similar to the ePC-SAFT segment diameter". Table 2: MDEAH⁺ m 1, 3.5630 Å, 228.71 K; [Ac]⁻ m 3.7266, 3.5605 Å, 533.11 K. Conclusions: high-loading gas solubility is overestimated through overpredicted ion–solvent interactions. |
 | Ji & Held 2016, FPE, doi:10.1016/j.fluid.2015.11.014 (C2KASLZ6; Companion attachment HXLPS4LT, lines 56–60, 232, 373) | §2; Table 3; [Ac]⁻ paragraph | Each IL ion is "non-spherical"; "dispersion among all IL-ions was allowed"; ε = 1; no binary parameters. The parameters are fitted to pure-IL densities. [Ac]⁻: m 3.7266, σ 3.5605 Å, u 533.1138 K. |
-| Held et al. 2014, ChERD, doi:10.1016/j.cherd.2014.05.017 (3DIW87Q5) | §2.3; §2.4: Eqs. 21–22 and the sentence after Eq. 22; the 400 K paragraph | Solvated-ion diameters are temperature-independent. **Eq. 21 (0.88σ) "differ[s]" from Eq. 22 because like-ion dispersion is zero, "resulting in a zero u_i/k_B value in Eq. (22)".** Ion u was capped at 400 K in screening, because very high values can cause spurious liquid–liquid demixing. |
+| Held et al. 2014, ChERD, doi:10.1016/j.cherd.2014.05.017 (3DIW87Q5) | §2.1 (ions are spherical); §2.3; §2.4: Eqs. 21–22 and the sentence after Eq. 22; the 400 K paragraph; Table 2, Ac⁻ row | Solvated-ion diameters are temperature-independent. Table 2, strategy 2, aqueous acetate: σ 3.9328 Å, u 150.00 K, k with water −0.23, fitted to aqueous densities and osmotic coefficients at 298.15 K. **Eq. 21 (0.88σ) "differ[s]" from Eq. 22 because like-ion dispersion is zero, "resulting in a zero u_i/k_B value in Eq. (22)".** Ion u was capped at 400 K in screening, because very high values can cause spurious liquid–liquid demixing. |
 | Held, Cameretti & Sadowski 2008, FPE, doi:10.1016/j.fluid.2008.06.010 (D6FBI6FG) | §2, Eqs. 2–3 | The DH closest-approach distance a_j "is equivalent to the ion diameter σ_j". |
 | Cameretti et al. 2005, IECR (CNAR9DGU) | §2, Eqs. 9–14; §3, the strong-electrolyte paragraph | Ions are charged hard spheres with diameter σ_j equal to a_j. Dispersion acts only water–water and water–ion. |
 | Figiel, Yu & Held 2025, IECR, doi:10.1021/acs.iecr.5c00475 (YEENX35P) | ePC-SAFT section, Eq. 4; Born-term section; Model Parameters | d_ion = 0.88σ. "In all former ePC-SAFT modeling approaches, d_Born was set to σ_i". The Born diameter "is not well-defined". It is fitted to infinite-dilution solvation Gibbs energies of inorganic ions: 1.218–4.985 Å, Table 3, as recorded in amendment 3 §2. |
@@ -152,8 +159,11 @@ indexed hash and its current Zotero source file.
    self-dispersion is therefore consistent only with Eq. 22. This does not rest
    on the MDEA numerical inference.
 3. *Carbamate has no published ePC-SAFT parameters.* The only organic-anion
-   chain parameters in the group's aqueous-amine work are the IL [Ac]⁻ values
-   (Bülow 2021a Table 2), used with their published m = 3.7266.
+   *chain* parameters in the group's work read here are the IL [Ac]⁻ values
+   (Ji & Held 2016 Table 3, reused in Bülow 2021a Table 2), used with their
+   published m = 3.7266. They are not the only acetate parameters: Held 2014
+   Table 2 (strategy 2) has an aqueous acetate sphere (m = 1, σ 3.9328 Å,
+   u 150 K, k with water −0.23).
 4. *DH distance.* The printed DH distance is σ (Held 2008, Cameretti, Uyan).
    This repository declares 0.88σ for every ion, the inorganic ions included
    (for example HCO₃⁻ 2.578048 = 0.88 × 2.9296). That convention traces only to
@@ -234,14 +244,26 @@ pair it does not exclude (≈ 528–534). A0 therefore uses:
   [−14 999, 1] and scale 100. That is the same optimizer coordinate; reports
   back-transform it. The declared inorganic u/k values change, so A0 documents
   cannot be adopted.
+
+  A5-4 must hold at every temperature, so every term of a rescaled pair's
+  k_ij law is rescaled. MEAH⁺–water carries `k_ij_reciprocal_temperature_slope`
+  (−112.568 K at the start, +35.46 K at the A4 endpoint; reference 313.15 K),
+  the only ion pair in the A4 documents with a second term. Whenever MEAH⁺
+  is suppressed (document X, check 10), set b′ = 10⁴·b together with
+  1 − k′ = 10⁴(1 − k). The #126 helper reads only `pair["coefficients"][0]`,
+  so the construction must rescale every term, or assert that none exists.
+  A0 itself is unaffected: MEAH⁺ keeps its self-dispersion, and no inorganic
+  ion pair carries a slope.
 - **Ion u fixed at the parent values (inherited, as in Uyan §4.1 and Wangler
   Table 5).** Eq. A5-2 then becomes a fixed linear tie of packing to σ at the
-  pivot 313.15 K: f₊ = 0.991567 for MEAH⁺ and f₋ = 0.999274 for carbamate.
-  **This is the one approximation.** Over the ion-bearing row temperatures,
-  293.15–353.15 K, the exact factor differs from the pivot by at most 0.30 %
-  (MEAH⁺) and 0.057 % (carbamate). The temperature derivative ∂d/∂T is dropped
-  in the 8 heat and 4 heat-capacity rows. Both effects are bounded in §8. The
-  39 Kiepe rows contain no ions.
+  pivot 313.15 K: f₊ = 0.991567 for MEAH⁺ and f₋ = 0.999274 for carbamate
+  (declared at full double precision). **This is the one approximation.**
+  Over the ion-bearing row temperatures, 293.15–353.15 K, the exact factor
+  differs from the pivot by at most 0.30 % (MEAH⁺) and 0.057 % (carbamate);
+  check 7 brackets this. The temperature derivative ∂d/∂T is dropped in the
+  8 heat and 4 heat-capacity rows; check 8 is only a scoring sensitivity for
+  it. The 39 Kiepe rows contain no ions. Carbamate's inherited u is the weak
+  point of this choice (§5.4) and an owner decision (§14).
 
 ### 5.3 Exact form (A1, adoption grade)
 
@@ -269,9 +291,35 @@ ion form changed.
 | 10–12 | R5 a_k; R2 and R5 enthalpy shifts | A4 | A4 | A4 | none |
 | fixed | MEAH⁺ u 277.174 K; carbamate u 533.11 K | — | — | — | were free (A4 endpoint 241.97 and 210.98 K) |
 
-The interior box [2, 5.8] Å is kept on purpose, so that an interior result
-cannot come from a narrower box. CO₂–MEA stays at (0, 0), matching the
-control. The neutral pair was cost-neutral in A4.
+**Tied start values.** Engine coordinate targets are proportional: each
+target is coefficient × q (`engine/native/regression/coordinates.cpp:164`).
+The start check requires each stored tied value to equal coefficient × q
+within 8 ulp (`:132–150`). The A0 start document's packing diameters must
+therefore be written as exactly the spec's tie factor × σ, using the same
+double. Any document whose diameters break the A0 ties (checks 7 and 10)
+needs a spec with matching factors or with no tied ion coordinate (§11).
+
+**The box is kept in σ only, so a positive result is nearly built in.** In
+the quantities the bound stands in for (§2), the A0 box is far larger than
+A4's (reviewer arithmetic, rechecked). At σ = 5.8 Å, m·d³ reaches 577 Å³
+(MEAH⁺) and 726 Å³ (carbamate), against 133 Å³ at the A4 bound (4.3× and
+5.5×). The opposite-ion weight m₊m₋σ±³ reaches 2,207 Å³ against 195 Å³ (11×).
+The A4 endpoint volume maps to σ ≈ 3.56 Å (MEAH⁺) and 3.29 Å (carbamate),
+well inside the box. The A4 cation–anion dispersion strength maps to
+k ≈ +0.44 at the parent σ. So an interior endpoint does not separate "chain
+form" from "the sphere box was too small". The optional equal-volume sphere
+evaluation in check 10 is cheap evidence on that question; it does not decide
+it.
+
+**Carbamate u is fixed at 533.11 K.** This is the IL acetate value, fitted
+to neat-liquid densities with dielectric constant 1 (Ji & Held 2016). It lies
+above Held 2014 §2.4's 400 K screening cap, and A4 moved it to 211 K. Keeping
+the A4 carbamate–water dispersion strength at the parent σ needs k ≈ 0.56
+(reviewer arithmetic, rechecked), outside [−0.5, 0.5]. The likely outcome is
+carbamate–water k at +0.5; §9 states in advance how that bound is read.
+
+CO₂–MEA stays at (0, 0), matching the control. The neutral pair was
+cost-neutral in A4.
 
 ## 6. Candidate B (conditional): Born diameters fixed at a declared molecular size
 
@@ -288,7 +336,8 @@ evaluated at the parent σ before any fit. This is engineering judgment. Figiel
 2025 fits Born diameters to solvation Gibbs energies, and the repository holds
 no such data for MEA ions. Bülow 2021a sets Born equal to the DH diameter, but
 for a chain ion that is the segment size (3.04/3.56 Å), not the ion's size.
-Everything else is identical to the A0 endpoint run.
+Everything else is identical to the A0 endpoint run, except that B's
+coordinate order keeps R5 a_k at index 9 (§11).
 
 ## 7. Rows, weights and the control
 
@@ -310,13 +359,16 @@ C154 = 36.7524**: 39.6902 − 0.6898 (heats) − 2.2480 (heat capacity), from
 ## 8. Numerical checks, with the amendment-4 lessons
 
 1. **Start release test (existing guard).** All 205 rows available at the A0
-   start. The mandatory free block has full rank and condition ≤ 1e4. The A4
-   start passed at 3.45e3. Failure stops before the fit.
+   start. The mandatory free block has full rank and condition ≤ 1e4. On the
+   existing guard, A0's last two columns (the R2 and R5 enthalpy shifts) take
+   the place of A4's two optional columns, so all 12 free columns must also
+   have condition ≤ 1e4 (§11). The A4 start passed at 3.45e3 (mandatory) and
+   6.39e3 (all free columns). Failure stops before the fit.
 2. **Workaround exactness.** Document X is the A4 control start with A5-4
-   applied to all six ions and k = 1 on the seven unlike same-sign pairs. It
-   must reproduce the control start's weighted residuals on all 205 rows
-   within 1e-8; #126 measured about 5e-10. Failure means a construction
-   defect: stop.
+   applied to all six ions, the MEAH⁺–water slope included (§5.2), and k = 1
+   on the seven unlike same-sign pairs. It must reproduce the control start's
+   weighted residuals on all 205 rows within 1e-8; #126 measured about 5e-10.
+   Failure means a construction defect: stop.
 3. **Endpoint completeness and replay.** Converged within 100 iterations at
    function tolerance 1e-6 (as the control). All 205 rows available; rank 12.
    Cold replay of the written endpoint document ≤ 1e-8 per weighted row and in
@@ -324,49 +376,72 @@ C154 = 36.7524**: 39.6902 − 0.6898 (heats) − 2.2480 (heat capacity), from
 4. **Stationarity replaces the 1e-8 projected-gradient limit.** *Lesson: a
    1e-6 function tolerance cannot reach a 1e-8 projected gradient.* Require
    the GN step on the free columns to predict a decrease ≤ 1e-4 × C166
-   (≈ 0.004). The control predicts ≤ 3.6e-4. Every held coordinate's gradient
-   must point outward.
-5. **Derivatives accepted by convergence order.** *Lesson: fixed-step misses
-   came from h² truncation.* Use centered differences at optimizer steps
-   0.01, 0.005 and 0.0025, against 1e-8 absolute or 1e-5 relative per row. A
-   coordinate passes if any step meets the tolerance, or if both successive
-   error ratios lie in [3.5, 4.5] and the Richardson value (4D_{h/2} − D_h)/3
-   meets it. Include the multi-target size columns. A failure that shows
-   neither is a stop.
+   (≈ 0.004, about 1/500 of the 5 % band). A4 reached 2.4–3.6e-4 absolute
+   (6–9e-6 relative). Every held coordinate's gradient must point outward.
+5. **Derivatives: A4's every-step rule, or clean order 2.** *Lesson:
+   fixed-step misses came from h² truncation.* Centered differences at
+   optimizer steps 0.01 and 0.005 (the existing checker), against 1e-8
+   absolute or 1e-5 relative per row. A column passes if both steps meet the
+   tolerance. Failing that, it passes on clean order-2 convergence: the
+   ratio of the per-column maximum absolute errors at the two steps (the
+   maxima the checker records, not per-row errors) lies in [3.5, 4.5]. The
+   multi-target size columns are included. A4's misses were on the two
+   u columns (ratio 4.0), which A0 drops. A failure that shows neither is a
+   stop.
 6. **Conditioning governs parameter claims, not the decision.** *Lesson: the
    3.7e4 endpoint condition lay along bicarbonate–water k and could not move
-   the cost.* Report the free-block condition and the weakest direction. Above
-   1e4, make no claim that an individual value is determined. The interior
-   status of σ₊, σ₋ and k counts toward the decision only if the free-block
-   condition is ≤ 1e4, or if the weakest direction loads each of them with a
-   cosine below 0.5.
+   the cost.* Report the free-block singular values and the near-null
+   subspace N: the span of the right singular vectors whose singular values
+   are below σ₁/1e4. A4's 14 endpoint columns had three such values (1.2e-3,
+   1.0e-3, 2.8e-4, against σ₁ = 17.4). Above condition 1e4, make no claim
+   that an individual value is determined. The interior status of σ₊, σ₋ and
+   k counts toward the decision only if the free-block condition is ≤ 1e4, or
+   if each of their unit vectors projects onto N with norm below 0.5.
 7. **Pivot-diameter bracket.** Evaluate the endpoint again with both ion
    packing diameters at f(293.15 K)σ and at f(353.15 K)σ. These are exact for
    rows at those temperatures. Bound |C_exact − C_pivot| by
    Σ_r max(|c_r(293.15) − c_r(313.15)|, |c_r(353.15) − c_r(313.15)|). The bound
-   must be ≤ 1 % of C166.
-8. **Caloric robustness.** The §9 verdict must be the same with C154 as with
-   C166. This brackets the dropped ∂d/∂T.
-9. **Release of u (interpretation of a negative).** At the A0 endpoint, add
-   two u columns, each a multi-target coordinate: u ×1 and packing ×σ·f′(u),
-   with f′ = 8.079e-5 K⁻¹ (MEAH⁺) and 6.958e-6 K⁻¹ (carbamate) at the pivot.
-   Report ΔC_u, the GN-predicted decrease from releasing them, ignoring their
-   bounds (an upper estimate).
+   must be ≤ 1 % of C166. These documents break the A0 ties, so they use the
+   evaluation spec (§11).
+8. **Caloric scoring sensitivity.** The §9 verdict must be the same with C154
+   as with C166. This is a scoring sensitivity, not a bracket on the dropped
+   ∂d/∂T. The fit still uses the 12 caloric rows, and the free R2 and R5
+   enthalpy shifts can absorb part of the error (reviewer's rough estimate:
+   a few kJ/mol CO₂ per heat row).
+9. **Release of u (interpretation of a negative).** A column "u ×1, packing
+   ×σ·f′(u)" cannot be declared: it would set packing ≈ 0.07 Å and fail the
+   start check (§5.4). Instead, evaluate the Jacobian at the A0 endpoint with
+   the probe-P layout (untied σ, packing, DH, segment count, Born and u per MEA
+   ion, so no slot is targeted twice). Combine the columns offline in physical
+   units: the tied size column is J_σ + f·J_packing + J_DH, and the u column is
+   J_u + σf′·J_packing, with f′ = ∂f/∂u = 8.079e-5 K⁻¹ (MEAH⁺) and
+   6.958e-6 K⁻¹ (carbamate) at the pivot. Report ΔC_u, the extra GN-predicted
+   decrease from adding the two u columns to the A0 free block, ignoring their
+   bounds. It is a local linear estimate, not a bound, and can under-predict a
+   move as large as A4's 533 → 211 K.
 10. **Attribution (interpretation; sets the scope of the Engine request).**
     Make three single evaluations at the A0 endpoint: MEA-ion DH back to
-    0.88σ; MEA-ion self-dispersion removed (A5-4 applied to them); MEA-ion
-    packing back to 0.88σ. Report ΔC166 for each.
+    0.88σ; MEA-ion self-dispersion removed (A5-4 applied to them, with
+    b′ = 10⁴·b on MEAH⁺–water); MEA-ion packing back to 0.88σ. *Optional, same
+    cost:* one equal-volume one-sphere evaluation (m = 1; packing and DH
+    diameters (m·d³)^{1/3} at the endpoint; σ = that/0.88; no self-dispersion;
+    A4 electrolyte rules). Report ΔC166 for each. All use the evaluation spec
+    (§11).
 11. **Densities (report only).** Report signed errors on the 12 loaded
     Amundsen densities at the control endpoint (probe P) and at the A0
-    endpoint. The stage-7 owner target of ≤ 2 kg/m³ is the reference, not a
-    gate.
+    endpoint (the check-9 call). The stage-7 owner target of ≤ 2 kg/m³ is the
+    reference, not a gate.
 
 ## 9. Falsifier and decision rule
 
-**Hypothesis H5.** The A4 bound activity of the two ion sizes and of
-carbamate–MEAH⁺ k comes from representing MEAH⁺ and carbamate as
-inorganic-rule spheres. The charged-molecule form (A5-1 to A5-3) removes it
-without a material loss of fit.
+**Hypothesis H5.** At the inherited parent parameters, the charged-molecule
+form (A5-1 to A5-3) removes the A4 bound activity of the two ion sizes and of
+carbamate–MEAH⁺ k without a material loss of fit. The A0 box is far larger
+than A4's in molecular volume and dispersion weight (§5.4). A positive result
+therefore shows that the bounds go away at the parents' declared volume and
+dispersion. It does not show that the chain form, rather than a larger
+sphere, is needed; the optional sphere evaluation (check 10) is the only
+evidence on that.
 
 The thresholds are engineering judgment. 5 % is the cost accepted for
 removing these bound directions and two free coordinates. It is about 40
@@ -379,10 +454,11 @@ also requires checks 6 and 8.
 
 | Outcome | Conditions at a valid A0 endpoint | Next action |
 |---|---|---|
-| **Positive** | σ₊, σ₋ and carbamate–MEAH⁺ k each at least one scale unit inside their bounds, with check 6 satisfied; no other non-Born coordinate on a bound; C166, C149 and C154 within 1.05 × control | Smaller-d_V A0. B if any Born diameter is on a bound. MEA use case posted on Engine #499. A1 after the capability; then stages 5–7 on the new form, as the owner decides |
-| **Negative** | σ₊, σ₋ or k on a bound, or C166 > 43.66; and ΔC_u < 1.98 | The ion form is not the cause, at inherited or released u. No B, no Engine request from MEA. The owner chooses between a Born-treatment design and accepting the bounds |
-| **Negative at inherited u only** | As above, but ΔC_u ≥ 1.98 | Inconclusive for the form; A1 (Engine) decides |
-| **Inconclusive** | Anything else: cost between the bands; a bound moved to another coordinate; check 6, 7 or 8 failing | Report; owner |
+| **Positive** | σ₊, σ₋ and carbamate–MEAH⁺ k each at least one scale unit inside their bounds, with check 6 satisfied; no other non-Born coordinate on a bound; C166, C149 and C154 within 1.05 × control | Smaller-d_V A0. B if any Born diameter is on a bound. The orchestrator adds #170's use case on Engine #499. A1 after the capability; then stages 5–7 on the new form, as the owner decides |
+| **Negative** | σ₊, σ₋ and k all still on a bound (the A4 pattern), and ΔC_u < 1.98 | This form, at the inherited parents, does not remove the A4 pattern at inherited u, nor at released u to linear order. No B; #170 adds no use case to #499. *Optional before declaring it:* a second A0 start. The owner chooses between a Born-treatment design and accepting the bounds |
+| **Negative at inherited u only** | As Negative, but ΔC_u ≥ 1.98 | Inconclusive for the form; A1 (Engine) decides |
+| **Mixed** | One or two of σ₊, σ₋, k interior; or all three interior but C166 > 43.66; or all three interior within the 5 % band but another non-Born coordinate on a bound. *Stated in advance:* carbamate–water k on a bound is read through check 9, as a sign of the inherited carbamate u (§5.4); ΔC_u ≥ 1.98 there points to the u choice, not the form | Report which coordinates moved, with checks 9 and 10. No B; no use case on #499 yet. Owner, starting with the carbamate parent and u (§14) when check 9 points there |
+| **Inconclusive** | Anything else: all three interior with a cost between the bands; check 6, 7 or 8 failing | Report; owner |
 
 **B's rule.** Measured against the A0 endpoint (or A1, when B follows A1).
 *Positive:* valid, no new active bound, C166 and C149 within 1.05 × A. Then
@@ -398,24 +474,39 @@ the installed bytes and every input hash first. Launch with `nice -n 10`, one
 native pool of 32 workers and single-threaded BLAS. Calls run in sequence.
 Expected times use the A4 ledger: information calls about 36 s and 36 CPU-s;
 reactive fits 202–225 s and 2,991–3,247 CPU-s; endpoint checks about 171 s
-and 3,700 CPU-s for 56 derivative evaluations.
+and 3,700 CPU-s for two arms of 56 derivative evaluations each (so about
+1,850 CPU-s per arm).
 
 | Step | Work | Expected wall / CPU | Per-call limit |
 |---|---|---|---|
-| 1 | **Probe P** at the A4 control endpoint: untied columns per MEA ion (σ only, packing, DH, segment count, Born, u) plus the other 8 coordinates; g = Jᵀr per column. Recomposed tied gradient = A4 tied column within 1e-8 relative; densities | ≈ 40 s / 40 | 180 s |
-| 2 | Check 2 (document X) and check 1 (A0 start release) | ≈ 80 s / 80 | 180 s each |
+| 1 | **Probe P** at the A4 control endpoint: untied columns per MEA ion (σ only, packing, DH, segment count, Born, u) plus the other 8 coordinates, as an information spec with `information_density_weights: []`; g = Jᵀr per column. Recomposed tied gradient = A4 tied column within 1e-8 relative; densities | ≈ 40 s / 40 | 180 s |
+| 2 | Check 2 (document X, evaluation spec) and check 1 (A0 start release) | ≈ 80 s / 80 | 180 s each |
 | 3 | **A0 fit**, larger d_V, ≤ 100 iterations | ≈ 230 s / 3,300 | 600 s native + 120 s backstop + ≤ 60 s teardown; 12,000 CPU-s post-call stop |
-| 4 | Checks 3–5 (72 derivative evaluations, 28 processes); checks 7, 9, 10 (6 information calls); decision | ≈ 450 s / 5,000 | 600 s for derivatives; 180 s each otherwise |
-| — | **Required subtotal** | **≈ 800 s / 8,400 CPU-s** | |
-| 5 | If positive: smaller-d_V A0 (fit, checks 1–8) | ≈ 560 s / 8,100 | as steps 2–4 |
-| 6 | If positive with a Born bound: B, larger d_V | ≈ 450 s / 8,000 | as steps 3–4 |
+| 4 | Checks 3 and 5 with the existing checker, A0 as its "variant" (48 derivative evaluations, plus 56 for the re-evaluated control, 28 processes); checks 7, 9, 10 and the optional sphere (≤ 7 information calls); decision | ≈ 420 s / 3,700 | checker under `timeout 600`; 180 s each otherwise |
+| — | **Required subtotal** | **≈ 770 s / 7,100 CPU-s** | |
+| 5 | If positive: smaller-d_V A0 (check 1, fit, checks 3–8) | ≈ 500 s / 6,900 | as steps 2–4 |
+| 6 | If positive with a Born bound: B, larger d_V | ≈ 490 s / 6,600 | as steps 2–4 |
+| — | Optional, before a Negative: a second A0 start (check 1, fit, checker) | ≈ 430 s / 6,800 | as steps 2–4 |
 
-**Proposed allowance:** 3,000 compute-s and 30,000 CPU-s. A fit is admitted
-only if ≥ 780 s and ≥ 12,000 CPU-s remain in both the allowance and the
+**Proposed allowance:** 3,000 compute-s and 30,000 CPU-s. The code admits a
+fit only if ≥ 720 s (600 s native + 120 s backstop; the teardown is outside
+the guard) and ≥ 12,000 CPU-s remain in both the spec's allowance and the
 program. The entry ledger is 10,532 of 21,600 compute-s and 93,620 of 144,000
 CPU-s, with the 1,950.38 s check reserve held. Even if the whole allowance is
 used, at least 6,118 s (net of the reserve) and 20,380 CPU-s remain. A1 is not
 inside this allowance (§12).
+
+**Spec details that differ from the A4 files.**
+
+- Wheel: `build/engine-wheels/main-21e761c318c2ac5b555a245365c844d38a93e4cb/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl`
+  (SHA-256 `d2f61e3a…0357`, checked). A4's `wheel_path` under
+  `tmp/amendment-4-21e761c3/` no longer exists. Paths resolve against the
+  root of the checkout that runs the campaign; a task worktree has no
+  `build/`.
+- `program_prior_cpu_s` and `program_prior_wall_s` come from the current
+  ledger, 93,619.61 CPU-s and 10,532 s (the A4 specs carry 72,638.61 and
+  9,210), and each later spec adds the calls before it.
+- The checker has no time limit of its own; run it under `timeout 600`.
 
 **Program note for the owner.** Stage 6 as designed (16 F1 fits and up to
 20 F2–F6 fits) needs about 108,000–117,000 CPU-s at the measured λ = 0 cost on
@@ -438,43 +529,43 @@ needs a decision before stage 6.
 
 None of these stops is evidence that the model cannot fit MEA.
 
-## 11. Code ceiling and ownership
+## 11. Code and ownership
 
 Campaign code stands at **1,000 of 1,000** lines, counted as non-blank,
 non-comment executable lines against base
 `6c8d20073fd0e5fda8dd323a51f55551d12b7486` (`amendment-4/compute-ledger.json`).
-Amendment 5 cannot run without a ceiling decision. The specs, start documents
-and coordinate declarations are JSON and are not counted.
+Specs, start documents and coordinate declarations are JSON and are not
+counted. **A0, B and probe P need no new campaign code.** This holds if the
+owner ratifies the exclusion of uncounted scratch that the ledger already
+lists as pending (§14, decision 2). The existing routes:
 
-| Addition, in existing owners | Lines (estimate) | Earned by |
-|---|---:|---|
-| Start-document transformation in `fit_campaign.py`: parent coefficients through the existing `shared_evaluation.with_parameter_values`; `all-ion-pairs`; k = 1 on unlike same-sign pairs; A5-4 rescale; temperature and Born overrides for checks 7 and 10 and for B | ≈ 30 | A0, X, bracket, attribution, B |
-| Release test: number of optional projected columns read from the spec (A0 has no ion-dispersion columns) | ≈ 2 | A0 start guard |
-| `check_matched_co2_mea.py`: arm paths and rule from the spec; third step and order-2 criterion; GN predicted decrease; C154; probe Jᵀr per column; bracket | ≈ 20 | checks 3–9, probe P |
-| Back-transformed HCO₃⁻–water report | ≈ 2 | A5-4 |
-| **A0 + B total** | **≈ 54 → proposed ceiling 1,060** | |
-| A1 later: flag declaration in the transformation; workaround deleted | ≈ +10 → 1,070 | A1 |
+| Need | Existing route |
+|---|---|
+| A0 start, X, B and the check-7/9/10 documents | One recorded one-off command (disclosed scratch; its text kept with the results) calling #126's `conventions.self_dispersion` (`analyses/mdea_kuranov_refit/conventions.py`) and `shared_evaluation.with_parameter_values`. The helper rescales only `pair["coefficients"][0]`. The command therefore rescales the MEAH⁺–water slope by hand for X and check 10, and asserts that no other rescaled pair has a second term |
+| A0 fit and check 1 | A 12-coordinate JSON spec on the existing stage-6 path. The release test treats the last two columns as optional; in A0 these are the R2 and R5 enthalpy shifts, so the test is strict but its `dispersion_release_passed` field is mislabelled. R5 a_k stays at zero-based index 9 (row 10 in §5.4) with scale 80, because `fit_campaign.py:562` hard-codes both. B's 10 columns are reordered for the same reason (…, R2 shift, R5 shift, R5 a_k) |
+| Probe P and check 9 (Jacobians) | Information specs with `information_density_weights: []` (the release test is skipped), with untied ion columns |
+| X and checks 7 and 10 (costs only) | The **evaluation spec**: the same, but with only the three reaction coordinates (R5 a_k, R2 and R5 shifts). Diameters, energies and k values that no longer match the ties or bounds then cannot fail the start check |
+| Checks 3 and 5 | `check_matched_co2_mea.py` unchanged, run in a directory with the A4 control as "control" and A0 as "variant". It re-evaluates the control too (≈ 1,850 CPU-s). Its `decision` and `checks_passed` fields apply A4's rules and are not read |
+| Checks 4, 6, 8 and 9, the §9 decision, the HCO₃⁻–water back-transform | Disclosed scratch post-processing of the written native results |
 
-**One owner for the workaround.** #126's `conventions.py::self_dispersion`
-already implements A5-4 for the MDEA document. Build should move it into one
-shared helper used by both analyses rather than copy it. Under the CSE rule,
-deletions do not buy back additions. **Retirement:** once the Engine flag is
-pinned (A1), delete the workaround in both analyses. **Evidence that must
-survive:** the check-2 exactness result and the A1 Engine acceptance
-reproducing the A0 documents.
+If the owner declines the exclusion, the counted route needs about 15 lines
+(reviewer estimate), not the 54 estimated in the first draft.
 
-If the owner declines A0 and waits for the Engine, the A1 path needs about
-30 lines (ceiling 1,030). The 17-line figure-script exclusion from A4 still
-awaits ratification.
+**One owner for the workaround.** A0 imports #126's `self_dispersion` rather
+than copying it. **Retirement:** once the Engine flag is pinned (A1), the
+A0 documents and the one-off command are superseded; #126 keeps its own
+helper. **Evidence that must survive:** the check-2 exactness result and the
+A1 Engine acceptance reproducing the A0 documents.
 
 ## 12. Engine dependency
 
 **A0, B and probe P need no Engine change.**
 
 **A1 needs the capability described in Engine comment 6252262739 on
-ePC-SAFT #499.** It is not yet an accepted Engine issue; the Engine
-orchestrator owns its body and build. MEA should add its use case by comment
-(the orchestrator posts it, normally after a positive A0):
+ePC-SAFT #499.** This repository already filed that use case through #126
+(MDEA). It is not yet an accepted Engine issue; the Engine orchestrator owns
+its body and build. A0 decides only whether #170 adds the MEA use case below
+by comment (the orchestrator posts it, after a positive A0):
 
 - **Declaration.** Flag MEAH⁺ and carbamate as charged molecules. The self
   pair is kept (k_ii = 0) and unlike same-sign pairs stay excluded under
@@ -499,7 +590,8 @@ admitted by the owner.
 
 - A0 screens a declared form: inherited parent segment numbers and dispersion
   energies, a packing diameter frozen at 313.15 K (values bracketed by check 7;
-  ∂d/∂T dropped and bypassed by check 8), and an exact algebraic workaround
+  ∂d/∂T dropped, with check 8 only a scoring sensitivity), and an exact
+  algebraic workaround
   that changes the declared inorganic u/k values. It runs on one start and one
   dielectric branch. It is not adoptable.
 - The parents are analogs. MEA stands in for MEAH⁺, as MDEA did for MDEAH⁺.
@@ -511,8 +603,13 @@ admitted by the owner.
   stated convention. MEAH⁺ association (Uyan, Wangler) is not represented.
   The inorganic ions keep the repository's DH = 0.88σ.
 - A positive A0 motivates the Engine request and A1. It is neither A1 nor
-  adoption. A negative A0 shows only that this form, on this objective, does
-  not remove the bounds. It does not show an equation-of-state limitation.
+  adoption. Because the A0 box is far larger than A4's in volume and
+  dispersion weight (§5.4), a positive A0 does not show that the chain form is
+  needed rather than a larger sphere; the optional equal-volume sphere is a
+  single evaluation, not a fit. A negative A0 shows only that this form, on
+  this objective, does not remove the bounds. It does not show an
+  equation-of-state limitation. A mixed result is attributed only as far as
+  checks 9 and 10 allow.
 - Phase stability under the new form is not assessed here; the stage-7 flash
   family covers it. The densities are report-only comparisons.
 
@@ -522,31 +619,45 @@ admitted by the owner.
 
 1. A is the primary candidate; B is conditional; (ii) is handled by probe P;
    (iv) is declined.
-2. A0 inherits m and u from the parents.
+2. A0 inherits m and u from the parents (carbamate's parent and u: decision 3
+   below).
 3. The MEA ions use DH = σ.
-4. Carbamate's parent is [Ac]⁻ with m = 3.7266.
-5. MEAH⁺ is non-associating.
-6. CO₂–MEA stays at (0, 0).
-7. Larger d_V runs first; smaller d_V only on a positive result.
-8. Function tolerance 1e-6. The stationarity, derivative-order and
-   conditioning rules of §8 replace the A4 fixed limits for the decision.
-9. The 5 % and 10 % bands.
-10. B fixes Born at the hard-core equivalent sphere.
-11. The 3,000 s and 30,000 CPU-s allowance.
+4. MEAH⁺ is non-associating.
+5. CO₂–MEA stays at (0, 0).
+6. Larger d_V runs first; smaller d_V only on a positive result.
+7. Function tolerance 1e-6. The stationarity, derivative and conditioning
+   rules of §8 replace the A4 fixed limits for the decision.
+8. The 5 % and 10 % bands, and the §9 reading of a carbamate–water bound.
+9. B fixes Born at the hard-core equivalent sphere.
+10. The 3,000 s and 30,000 CPU-s allowance.
+11. The zero-new-code route of §11, including the evaluation spec.
 
 **Open owner decisions.**
 
-1. **Code ceiling:** raise to 1,060 for A0 and B (1,070 with A1), or 1,030
-   for the wait-for-Engine path. Also ratify the A4 figure-script exclusion.
-2. **Engine dependency:** run A0 now with the temporary workaround
-   (recommended: about 15 compute-minutes, and it decides whether MEA needs
-   the capability at all), or wait for the #499 flag. Posting the MEA use
-   case on #499 is the orchestrator's call.
-3. **Program CPU cap before stage 6** (§10 note).
-4. **Scope:** should the inorganic ions' DH diameter follow its source
+1. **Direction after A4 (still open from the A4 result comment):** revisit the
+   ion model form, or accept the bounds and proceed. The orchestrator chose
+   "revisit the ion model form" while the owner was away; this design follows
+   that default.
+2. **Code ceiling:** ratify the exclusion of uncounted scratch already listed
+   as pending in `amendment-4/compute-ledger.json` (the 17-line figure script
+   and the ignored diagnostics in `tmp/`). A0 then needs no new campaign code
+   (§11). Otherwise about 15 counted lines and a ceiling raise.
+3. **Carbamate parent and fixed u:** the default is the IL [Ac]⁻ chain
+   (m 3.7266, σ 3.5605 Å, u 533.11 K). Its weaknesses are in §5.4. Held 2014's
+   aqueous acetate sphere is the only other published acetate set read here
+   (§3).
+4. **Engine use case:** the MDEA use case is already on #499 (comment
+   6252262739, via #126). A0 decides only whether #170 adds the MEA use case.
+   Run A0 now with the temporary workaround (recommended: about
+   13 compute-minutes), or wait for the #499 flag. Posting stays with the
+   orchestrator.
+5. **Program CPU cap before stage 6** (§10 note).
+6. **Scope:** should the inorganic ions' DH diameter follow its source
    convention (σ) rather than 0.88σ?
-5. **Carried from A4:** the neutral pair or (0, 0) for later stages, and
-   ratification of the Peng–Robinson residual as a disclosed limitation.
+7. **Carried from A4:** the neutral pair or (0, 0) for later stages;
+   ratification of the Peng–Robinson residual as a disclosed limitation; the
+   Xu role (orchestrator default: B1-qualified, comparison-only, with the
+   Hartono-only neutral fit kept).
 
 ## 15. Sources read, and what could not be established
 
@@ -560,6 +671,14 @@ document at `21e761c3` (upstream `main` ref): the sections cited in §5 and
 `equations.md` `ionic_packing_diameter` and `same_sign_ionic_dispersion`. The
 §3 papers. The amendment-3 design §2 supplied the Held 2008/2014 table ranges,
 Figiel Table 3 and the Nasrifar/Najafloo summaries; those were not reread here.
+**Read for the revision:** the readiness review; the #170 Xu comment;
+`amendment-4/compute-ledger.json`; the A4 control spec, start and endpoint
+documents, release tests and `matched-checks.json`; `fit_campaign.py`
+(the stage-6 path, the release test, the 720 s guard, line 562);
+`check_matched_co2_mea.py`; `conventions.self_dispersion`;
+`shared_evaluation.with_parameter_values`; Engine `coordinates.cpp:132–164`
+and `helmholtz.hpp` 166–185 and 466–487 at `21e761c3`; Held 2014 §2.1 and
+Table 2 (shelf copy hash equal to the Zotero file).
 
 **Not established.**
 
@@ -572,7 +691,9 @@ Figiel Table 3 and the Nasrifar/Najafloo summaries; those were not reread here.
 - The MDEAH⁺ segment number as printed by Uyan: Table 4 omits it.
 - Whether the repository's DH = 0.88σ was a deliberate choice: it traces only
   to a retired artifact locator.
-- The size of the dropped ∂d/∂T in the caloric rows, which check 8 bypasses
-  but does not measure.
+- The size of the dropped ∂d/∂T in the caloric rows; check 8 is a scoring
+  sensitivity and does not measure it.
+- Whether the Engine accepts two coordinates targeting the same slot; the
+  design avoids it (check 9 uses untied columns).
 - Phase stability of the chain-ion form.
 - The Engine timeline for #499.
