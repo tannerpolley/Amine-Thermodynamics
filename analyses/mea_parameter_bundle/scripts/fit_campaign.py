@@ -486,6 +486,17 @@ def stage2_study(spec, out, started):
         write(out/'summary.json',dict(selected=selected,completed=len(selected)==len(spec['cases']),calls=timing,**elapsed()))
 
 
+def stage6_coordinates(spec, params, mapping):
+    import fit_observations as o
+    values, coordinates = o.s.parameter_values(mapping), []
+    for c in spec['information_coordinates']:
+        f = c.get('source_to_native_factor', 1.)
+        kw = dict(origin=0. if c.get('enthalpy_shift') else f*values[c['identity']], scale=abs(f)*c['scale'], bounds=tuple(sorted(f*b for b in c['bounds'])))
+        coordinates.append(o.reg.reaction_enthalpy_shift(c['reaction'], pivot_temperature=313.15, **kw) if c.get('enthalpy_shift') else o.reg.reaction_coordinate(c['reaction'], c['coefficient'], **kw)
+            if 'reaction' in c else o.reg.coordinate(params, [(t['family'], tuple(t['target']) if isinstance(t['target'], list) else t['target'], t.get('factor', 1.)) for t in c.get('targets', [dict(family=c.get('family'), target=c.get('target'))])], **kw))
+    return coordinates
+
+
 def stage6_study(spec, out, started):
     """Amendment 2 information checks or one explicitly declared joint fit."""
     import fit_observations as o
@@ -526,17 +537,7 @@ def stage6_study(spec, out, started):
             def child():
                 try:
                     params, rows = o.stage6_rows(spec, mapping)
-                    coordinates, values = [], o.s.parameter_values(mapping)
-                    for c in spec['information_coordinates']:
-                        factor = c.get('source_to_native_factor', 1.)
-                        origin = 0. if c.get('enthalpy_shift') else factor*values[c['identity']]
-                        kw = dict(origin=origin, scale=abs(factor)*c['scale'],
-                            bounds=tuple(sorted(factor*b for b in c['bounds'])))
-                        coordinates.append(o.reg.reaction_enthalpy_shift(c['reaction'], pivot_temperature=313.15, **kw)
-                            if c.get('enthalpy_shift') else o.reg.reaction_coordinate(c['reaction'], c['coefficient'], **kw)
-                            if 'reaction' in c else o.reg.coordinate(params, [(t['family'],
-                                tuple(t['target']) if isinstance(t['target'], list) else t['target'], t.get('factor', 1.))
-                                for t in c.get('targets', [dict(family=c.get('family'), target=c.get('target'))])], **kw))
+                    coordinates, values = stage6_coordinates(spec, params, mapping), o.s.parameter_values(mapping)
                     if fit_case:
                         rows = [(dict(r, weight=fit_case['density_weight']/12) if r['quantity']=='phase_density' else r, item) for r,item in rows]
                         rows = [(r,item) for r,item in rows if r['weight']>0]
