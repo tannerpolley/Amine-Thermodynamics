@@ -1,0 +1,124 @@
+{
+  "previous_conservative_program_cpu_s": 14372.735771975811,
+  "previous_program_active_wall_lower_bound_s": 1717.1187955259884,
+  "previous_route2_conservative_cpu_s": 12105.20063425581,
+  "previous_route2_recorded_cpu_s": 2791.217817,
+  "previous_route2_active_wall_s": 1014.3544433989882,
+  "continuation_fit_command": {
+    "cpu_s": 7447.008186,
+    "wall_s": 1248.3309024400078,
+    "exitcode": 1,
+    "owner_command_PID": 1801939,
+    "wrapper_PID": 1801938,
+    "CPU_basis": "RUSAGE_SELF plus RUSAGE_CHILDREN delta after driver wait; native normal-reap evidence in timing.json"
+  },
+  "continuation_native_call": {
+    "start": "A",
+    "cpu_s": 7446.7879649999995,
+    "wall_s": 1248.1005136489985,
+    "exitcode": 0,
+    "interrupted": false,
+    "host_load": [
+      10.00732421875,
+      12.55712890625,
+      11.72705078125
+    ]
+  },
+  "preparation_reporting_conservative_cpu_s": 120.0,
+  "preparation_reporting_conservative_wall_s": 120.0,
+  "overhead_basis": "120 CPU-s/120 active wall-s reservation covers preparation, the 0.18737699999999996 CPU-s/0.20900986400374677 wall-s missing-PYTHONPATH setup attempt, arithmetic/report generation, checks and commits. Setup is included once, not added again. Presentation is metered separately.",
+  "continuation_fit_allowance_cpu_s": 48000.0,
+  "continuation_fit_cpu_s": 7447.008186,
+  "continuation_fit_remaining_cpu_s": 40552.991814,
+  "assessment_and_reporting_allowance_cpu_s": 2894.7993657441893,
+  "assessment_and_reporting_remaining_cpu_s": 2714.7993657441893,
+  "route2_cpu_limit_s": 63000.0,
+  "program_cpu_limit_s": 144000.0,
+  "program_wall_limit_s": 21600.0,
+  "route2_conservative_cpu_upper_bound_s": 19732.20882025581,
+  "route2_cpu_s": 10418.226003,
+  "route2_active_wall_s": 2442.685345838996,
+  "cumulative_conservative_cpu_upper_bound_s": 21999.74395797581,
+  "cumulative_cpu_s": 12685.76114072,
+  "cumulative_wall_s": 3145.449697965996,
+  "fit_aggregate_cpu_margin_s": 4553.2120350000005,
+  "native_call_wall_excess_s": 48.10051364899846,
+  "backstop_fired": false,
+  "aggregate_cpu_measured_after_normal_reap": true,
+  "CPU_control": "Aggregate CPU checked after native owner exit/reap. No in-flight aggregate enforcement. Prior interrupted-worker reservation is preserved, never replaced by the new measurement.",
+  "earlier_unmetered_overhead": "Retained unknown; reported active wall remains a lower bound.",
+  "program_prior_cpu_s": 2267.53513772,
+  "program_prior_wall_s": 702.764352127,
+  "possible_missing_worker_cpu_upper_bound_s": 9313.982817255812,
+  "stops": [
+    "Native time limit without convergence after 81 iterations."
+  ],
+  "non_stops": [
+    "Five active bounds permitted by owner decision.",
+    "Full rank 14/14, free rank 9/9.",
+    "Fit CPU and cumulative program allowances remain available."
+  ],
+  "reporting_render_pending": false,
+  "comparison_records": [],
+  "primary_lambda_0p1_common149_cost": null,
+  "lambda_0_control_common149_cost": null,
+  "partial_lambda_0_A_common149_cost": 24.281194113701766,
+  "adopted_record_context_common149_cost": 32.05668491,
+  "adopted_record_context": "Different Engine wheel and declaration; context only, not a ranking.",
+  "no_further_native_calls_after_stop": true,
+  "program_remaining_cpu_s": 122000.2560420242,
+  "program_remaining_wall_s": 18454.550302034004,
+  "route2_remaining_cpu_s": 43267.79117974419,
+  "presentation_conservative_cpu_s": 60.0,
+  "presentation_conservative_wall_s": 60.0,
+  "presentation_charge_basis": "60 CPU-s/60 active wall-s reserved for the presentation-only refresh attempt and two guarded static HTML renders; measured actuals retained and checked against reservation. No thermodynamic calls or service actions. Not added again when actuals are recorded.",
+  "presentation_calls": [
+    {
+      "command": [
+        "python3",
+        "analyses/manuscript.py",
+        "refresh",
+        "analyses",
+        "analyses/mea_parameter_bundle/notebook.qmd"
+      ],
+      "exitcode": 1,
+      "cpu_s": 13.808672999999999,
+      "wall_s": 11.650421013997402,
+      "purpose": "Presentation only; no-execute HTML; no thermodynamic calculation or service action."
+    },
+    {
+      "command": [
+        "bash",
+        "analyses/render.sh",
+        "mea_parameter_bundle/notebook.qmd",
+        "--to",
+        "html"
+      ],
+      "exitcode": 0,
+      "cpu_s": 18.522212999999994,
+      "wall_s": 17.23473937700328,
+      "purpose": "Presentation only; no-execute HTML; no thermodynamic calculation or service action."
+    },
+    {
+      "command": [
+        "bash",
+        "analyses/render.sh",
+        "index.qmd",
+        "--to",
+        "html"
+      ],
+      "exitcode": 0,
+      "cpu_s": 17.909175999999995,
+      "wall_s": 16.58501075299864,
+      "purpose": "Presentation only; no-execute HTML; no thermodynamic calculation or service action."
+    }
+  ],
+  "presentation_actual_cpu_s": 50.24006199999999,
+  "presentation_actual_wall_s": 45.47017114399932,
+  "presentation_conservative_margin_cpu_s": 9.759938000000012,
+  "presentation_conservative_margin_wall_s": 14.529828856000677,
+  "notebook_source": "analyses/mea_parameter_bundle/notebook.qmd",
+  "notebook_render": "analyses/_site/mea_parameter_bundle/notebook.html",
+  "presentation_limitation": "Standard refresh requires absent snakemake; two guarded HTML renders succeeded with --no-execute. No Quarto preview service action.",
+  "parent_disposition": "Owner response: retain partial and keep stopped; no further fits or thermodynamic calls. Add the retained-history/endpoint comparison section, commit and hand back. This reporting-only addition is included in the existing 120 CPU-s/120 active wall-s reporting reservation."
+}

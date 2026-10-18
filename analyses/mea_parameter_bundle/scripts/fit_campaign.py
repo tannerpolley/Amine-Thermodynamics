@@ -244,6 +244,85 @@ def fitted_parameter_values(coordinates, physical):
     return {identity:value/factor for (identity,factor),value in zip(targets,physical,strict=True)}
 
 
+def stage5_study(spec, out, started):
+    """Yang Eqs. 1a/2a/2b reduction on Agieienko ESI Tables S1/S2."""
+    import fit_observations as o
+    import numpy as np
+    reference = load(ROOT/spec['reference_path'])
+    template = load(ROOT/spec['dielectric_template_path'])
+    rows = list(csv.DictReader((ROOT/spec['dielectric_rows_path']).open()))
+    assert len(rows) == 14
+    model = o.epcsaft.Mixture(o.epcsaft.Parameters.from_mapping(reference))
+    masses = {c['component_id']:c['fixed']['molar_mass']['value']['magnitude'] for c in reference['components']}
+    compositions, density, fractions = [], [], []
+    for row in rows:
+        w = float(row['MEA_wt_percent'])/100
+        amounts = {'monoethanolamine':w/masses['monoethanolamine'], 'water':(1-w)/masses['water']}
+        x = {k:v/sum(amounts.values()) for k,v in amounts.items()}
+        state = model.state(298.15,P=101325.,x=x,phase='liquid')
+        assert state.pressure_density_derivative > 0
+        compositions.append(x)
+        density.append(state.molar_density/1000)
+        fractions.append(x['monoethanolamine'])
+        row.update(native_density_mol_L=density[-1],native_density_kg_m3=state.molar_density*sum(x[k]*masses[k] for k in x),
+            native_pressure_Pa=state.pressure,dP_drho=state.pressure_density_derivative,
+            measured_density_kg_m3=1000*float(row['density_g_cm3']))
+    A, C, T = .3777, 1403., 298.15
+    K, x, rho = C/T-1, np.array(fractions), np.array(density)
+    observed = np.array([float(r['epsilon_s']) for r in rows])
+    scale = .01*observed
+    H = np.column_stack((rho*x,rho*x*x))/scale[:,None]
+    q, _, rank, singular = np.linalg.lstsq(H,(observed-1-rho*A*K)/scale,rcond=None)
+    def roots(coefficients):
+        discriminant = coefficients[0]**2-4*K*A*coefficients[1]
+        assert discriminant > 0, 'distinct real dielectric roots required'
+        u = (coefficients[0]+np.array([-1,1])*np.sqrt(discriminant))/(2*K)
+        pairs = [(float(A+b),float(C+T*(coefficients[0]-K*b)/A)) for b in u]
+        assert all(v>0 and t>393.15 for v,t in pairs), 'inadmissible dielectric root'
+        return float(discriminant), pairs
+    delta, pairs = roots(q)
+    assert rank == 2
+    covariance = np.linalg.inv(H.T@H)
+    predicted = 1+rho*(A*K+q[0]*x+q[1]*x*x)
+    result = dict(q=q.tolist(),rank=int(rank),singular_values=singular.tolist(),condition=float(singular[0]/singular[-1]),
+        discriminant=delta,scale_covariance=covariance.tolist(),cost=float(.5*np.sum(((predicted-observed)/scale)**2)),branches=[],sensitivity=[])
+    for factor in (.99,1.01):
+        shifted = np.linalg.lstsq(H,(factor*observed-1-rho*A*K)/scale,rcond=None)[0]
+        disc, values = roots(shifted)
+        result['sensitivity'].append(dict(coherent_permittivity_factor=factor,q=shifted.tolist(),discriminant=disc,pairs=values))
+    for label,(volume,temperature) in zip(('smaller-dV','larger-dV'),pairs,strict=True):
+        mapping = json.loads(json.dumps(reference))
+        next(f for f in mapping['model_families'] if f['kind']=='permittivity')['choice'] = 'solvent-density-temperature'
+        mapping['correlations'] = [r for r in mapping['correlations'] if r['family']!='relative_permittivity']
+        for component,source in zip(mapping['components'],template['components'],strict=True):
+            assert component['component_id'] == source['component_id']
+            component['coefficients'] = [r for r in component['coefficients'] if r['family']!='relative_permittivity']
+            component['coefficients'].extend(json.loads(json.dumps(r)) for r in source['coefficients'] if r['family'] in ('dielectric_volume','dielectric_temperature'))
+        mapping = o.s.with_parameter_values(mapping,{'component/monoethanolamine/dielectric_volume':volume,'component/monoethanolamine/dielectric_temperature':temperature})
+        mapping['sources'].append(dict(source_id='joint-recalibration-170-stage5',citation='Yang2024 Eqs.1a/2a/2b Table6; AgieienkoBuchner2024 ESI S1/S2',use_basis=spec['purpose']))
+        for node in o.s._identified(mapping):
+            if node.get('family') in ('dielectric_volume','dielectric_temperature'):
+                node['provenance'].update(source_id='joint-recalibration-170-stage5',locator=spec['dielectric_rows_path']+'; fixed Yang water and assumed CO2 pair; MEA pair from reduction.json')
+        mapping.update(document_id='joint-recalibration-170-stage5-'+label,purpose=spec['purpose'])
+        native = o.epcsaft.Mixture(o.epcsaft.Parameters.from_mapping(mapping))
+        replay = np.array([native.state(T,rho=density[i]*1000,x=composition).bulk_relative_permittivity for i,composition in enumerate(compositions)])
+        error = float(np.max(np.abs(replay-predicted)))
+        u, v = volume-A, temperature-C
+        transform = np.linalg.inv(np.array([[K,A/T],[v/T,u/T]]))
+        path = out/('parameters.json' if label=='smaller-dV' else 'larger-dV-parameters.json')
+        write(path,mapping)
+        result['branches'].append(dict(branch=label,dielectric_volume_L_mol=volume,dielectric_temperature_K=temperature,
+            max_abs_native_replay_epsilon=error,scale_covariance_dV_dT=(transform@covariance@transform.T).tolist(),path=str(path.relative_to(ROOT)),sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
+        for i,row in enumerate(rows):
+            row.update(derived_MEA_mole_fraction=float(x[i]),reduced_epsilon=float(predicted[i]),residual_epsilon=float(predicted[i]-observed[i]),weighted_residual=float((predicted[i]-observed[i])/scale[i]))
+            row[label+'_epsilon'] = float(replay[i])
+        assert error <= 1e-10, 'native dielectric replay failed'
+    write(out/'rows.json',rows)
+    write(out/'reduction.json',result)
+    write(out/'timing.json',dict(cpu_s=cpu_seconds(),wall_s=time.monotonic()-started))
+    print(result,flush=True)
+
+
 def stage2_study(spec, out, started):
     import fit_observations as o
     import numpy as np
@@ -407,13 +486,160 @@ def stage2_study(spec, out, started):
         write(out/'summary.json',dict(selected=selected,completed=len(selected)==len(spec['cases']),calls=timing,**elapsed()))
 
 
+def stage6_coordinates(spec, params, mapping):
+    import fit_observations as o
+    values, coordinates = o.s.parameter_values(mapping), []
+    for c in spec['information_coordinates']:
+        f = c.get('source_to_native_factor', 1.)
+        kw = dict(origin=0. if c.get('enthalpy_shift') else f*values[c['identity']], scale=abs(f)*c['scale'], bounds=tuple(sorted(f*b for b in c['bounds'])))
+        coordinates.append(o.reg.reaction_enthalpy_shift(c['reaction'], pivot_temperature=313.15, **kw) if c.get('enthalpy_shift') else o.reg.reaction_coordinate(c['reaction'], c['coefficient'], **kw)
+            if 'reaction' in c else o.reg.coordinate(params, [(t['family'], tuple(t['target']) if isinstance(t['target'], list) else t['target'], t.get('factor', 1.)) for t in c.get('targets', [dict(family=c.get('family'), target=c.get('target'))])], **kw))
+    return coordinates
+
+
+def stage6_study(spec, out, started):
+    """Amendment 2 information checks or one explicitly declared joint fit."""
+    import fit_observations as o
+    import numpy as np
+    sizing = machine(spec, spec.get('workers'))
+    write(out/'machine.json', sizing)
+    reports, calls = [], []
+    fit_case = spec.get('fit_case')
+    if fit_case:
+        release = load(checked(spec['release_tests_path'], spec['release_tests_sha256']))
+        assert any(r['start']==fit_case['start'] for r in release) and all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in release)
+    def elapsed():
+        cpu = cpu_seconds()+spec['prior_cpu_charge_s']
+        wall = time.monotonic()-started+spec['prior_wall_charge_s']
+        return dict(cpu_s=cpu, wall_s=wall, cumulative_cpu_s=spec['program_prior_cpu_s']+cpu,
+            cumulative_wall_s=spec['program_prior_wall_s']+wall)
+    def spectrum(matrix):
+        _, sv, vh = np.linalg.svd(matrix, full_matrices=False)
+        return dict(columns=matrix.shape[1], rank=int(sum(sv>sv[0]*1e-14)),
+            condition=float(sv[0]/sv[-1]) if sv[-1]>0 else None,
+            singular_values=sv.tolist(), weakest_direction=vh[-1].tolist())
+    try:
+        for start in spec['information_starts']:
+            if fit_case and start['id']!=fit_case['start']:
+                continue
+            mapping = load(checked(start['parameters_path'], start['sha256']))
+            directory = out if fit_case else out/'information'/start['id']
+            path = directory/'native.json'
+            cpu_limit = spec['fit_cpu_s'] if fit_case else spec['nonfit_cpu_s']
+            wall_limit = spec['fit_wall_s'] if fit_case else spec['nonfit_wall_s']
+            guard_wall_limit = wall_limit + (120 if fit_case else 0)
+            remaining_cpu = min(spec['budget_cpu_s']-elapsed()['cpu_s'],
+                spec['program_cpu_limit_s']-elapsed()['cumulative_cpu_s'])
+            remaining_wall = min(spec['budget_wall_s']-elapsed()['wall_s'],
+                spec['program_wall_limit_s']-elapsed()['cumulative_wall_s'])
+            if remaining_cpu<cpu_limit or remaining_wall<guard_wall_limit:
+                raise RuntimeError('allowance insufficient for the next bounded information call')
+            def child():
+                try:
+                    params, rows = o.stage6_rows(spec, mapping)
+                    coordinates, values = stage6_coordinates(spec, params, mapping), o.s.parameter_values(mapping)
+                    if fit_case:
+                        rows = [(dict(r, weight=fit_case['density_weight']/12) if r['quantity']=='phase_density' else r, item) for r,item in rows]
+                        rows = [(r,item) for r,item in rows if r['weight']>0]
+                        v = o.reg.fit(params, coordinates, [item for _,item in rows], weights=[r['weight'] for r,_ in rows],
+                            thermochemistry=o.thermal.record(), controls=o.reg.FitControls(**spec['controls'],
+                                workers=sizing['workers_requested'], maximum_elapsed_time_seconds=wall_limit), singular_vectors=True)
+                        raw = {k:o.s._jsonable(getattr(v,k)) for k in ('status','message','usable','initial_cost','final_cost','physical',
+                            'optimizer','predictions','residuals','weighted_residuals','optimizer_jacobian','physical_jacobian','iterations',
+                            'iteration_costs','iteration_seconds','trial_failures','residual_evaluations','jacobian_evaluations')}
+                        raw.update(rows=[r for r,_ in rows], statuses=[s.name for s in v.statuses],
+                            covariance={k:o.s._jsonable(getattr(v.covariance,k)) for k in ('status','assumption','rank','singular_values',
+                                'physical','optimizer','variance_factor','active_bounds','projected_gradient_norm','left_vectors','right_vectors')},
+                            failures=[dict(trial=f.trial,observation=f.observation,status=f.status.name,message=f.message,jacobian=f.jacobian) for f in v.failures])
+                        write(path, raw)
+                        if v.usable:
+                            ordinary = [c for c in spec['information_coordinates'] if 'reaction' not in c]
+                            updates = fitted_parameter_values(ordinary, v.physical[:len(v.chart.active)])
+                            for name,law in v.chart.reaction_laws.items():
+                                fields = dict(zip(('a_k','b','c_per_k'), o.reg.reaction_log10_reciprocal(law), strict=True)) if name=='R5' else dict(a=law.a-law.c*math.log(law.reference_temperature),b_k=law.b,c=law.c,d_per_k=law.d)  # Engine law uses c ln(T/T_ref)
+                                updates.update({f'reaction:{name}:correlation:{k}':val for k,val in fields.items()})
+                            write(directory/'usable-budget-endpoint.json', o.s.with_parameter_values(mapping, updates))
+                            write(directory/'chemistry-coordinates.json', dict(R5_unshifted_a_k=values['reaction:R5:correlation:a_k']-80*v.optimizer[9],
+                                enthalpy_shifts_J_mol={c['reaction']:c['scale']*v.optimizer[i] for i,c in enumerate(spec['information_coordinates']) if c.get('enthalpy_shift')}))
+                        return
+                    v = o.reg.differentiate(params, coordinates, [item for _, item in rows],
+                        optimizer=[0.]*len(coordinates), thermochemistry=o.thermal.record())
+                    write(path, dict(rows=[r for r, _ in rows], predictions=list(v.predictions),
+                        statuses=[s.name for s in v.statuses], residuals=[math.log(p/r['observed'])
+                            if r['form'] in ('LogRatio','log_ratio') else (p-r['observed'])/r['scale']
+                            for p,(r,_) in zip(v.predictions,rows,strict=True)],
+                        residual_optimizer_gradient=list(v.residual_optimizer_gradient)))
+                except Exception:
+                    write(directory/'failure.json', dict(cause=traceback.format_exc()))
+            clock, cpu = time.monotonic(), cpu_seconds()
+            process = multiprocessing.get_context('fork').Process(target=child)
+            process.start()
+            process.join(guard_wall_limit)
+            interrupted = process.is_alive()
+            if interrupted:
+                process.terminate()
+                process.join(60)
+                if process.is_alive():
+                    process.kill()
+                    process.join()
+            calls.append(dict(start=start['id'], cpu_s=cpu_seconds()-cpu,
+                wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted, host_load=os.getloadavg()))
+            write(out/'timing.json', dict(calls=calls, **elapsed()))
+            if interrupted or process.exitcode or (directory/'failure.json').exists():
+                if fit_case:
+                    write(directory/'incomplete-fit.json', dict(case=fit_case, endpoint_available=False,
+                        reason='bounded call interrupted' if interrupted else 'child call failed', call=calls[-1]))
+                raise RuntimeError(f'bounded call failed: {directory}; no subsequent fit launched')
+            raw = load(path)
+            if fit_case:
+                if calls[-1]['cpu_s']>cpu_limit:
+                    raise RuntimeError('aggregate fit CPU ceiling exceeded; return to owner before another fit')
+                if raw['status']!='converged' or raw['covariance']['rank']<len(spec['information_coordinates']):
+                    raise RuntimeError('nonconverged or rank-deficient joint fit; return to owner before another fit')
+                return
+            if raw['statuses']!=['Available']*len(raw['rows']) or not all(math.isfinite(x) for key in
+                ('predictions','residuals','residual_optimizer_gradient') for x in raw[key]):
+                raise RuntimeError(f'unavailable or nonfinite information row: {directory}; no fit launched')
+            coordinates = spec['information_coordinates']
+            values = o.s.parameter_values(mapping)
+            mandatory_count = len(coordinates)-2
+            active = [i for i,c in enumerate(coordinates) if values.get(c['identity'],0.) in c['bounds']]
+            for density_weight in spec['information_density_weights']:
+                weights = np.array([density_weight/12 if r['quantity']=='phase_density' else r['weight'] for r in raw['rows']])
+                keep = weights>0
+                J = np.array(raw['residual_optimizer_gradient']).reshape(len(raw['rows']),len(coordinates))[keep]*np.sqrt(weights[keep,None])
+                free = [j for j in range(mandatory_count) if j not in active]
+                mandatory = spectrum(J[:,free])
+                u, sv, _ = np.linalg.svd(J[:,free], full_matrices=False)
+                u = u[:,sv>sv[0]*1e-14]
+                projected = spectrum(J[:,mandatory_count:] - u@(u.T@J[:,mandatory_count:]))
+                augmented = spectrum(J[:,free+list(range(mandatory_count,len(coordinates)))])
+                passed = mandatory['rank']==len(free) and mandatory['condition'] is not None and mandatory['condition']<=1e4
+                release = (passed and not any(j in active for j in range(mandatory_count,len(coordinates))) and augmented['rank']==len(free)+2
+                    and augmented['condition'] is not None and augmented['condition']<=1e4
+                    and projected['rank']==2 and projected['condition'] is not None and projected['condition']<=1e4)
+                record = dict(start=start['id'], density_weight=density_weight, row_count=int(sum(keep)),
+                    full=spectrum(J[:,:mandatory_count]), mandatory_free=mandatory, augmented_free=augmented,
+                    projected_dispersions=projected, active_columns=active, free_columns=free,
+                    mandatory_passed=passed, dispersion_release_passed=release)
+                reports.append(record)
+                write(directory/f'lambda-{density_weight}.json', dict(record, row_ids=[r['id'] for r,k in zip(raw['rows'],keep) if k],
+                    weighted_optimizer_jacobian=J.tolist(), weighted_residuals=(np.array(raw['residuals'])[keep]*np.sqrt(weights[keep])).tolist()))
+                write(out/'release-tests.json', reports)
+                print(record, flush=True)
+            if not all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in reports):
+                raise RuntimeError('mandatory chemistry/ion block fails conditioning; return to owner before another start or fit')
+    finally:
+        write(out/'summary.json', dict(release_tests=reports, calls=calls, fit_calls=int(bool(fit_case)), **elapsed()))
+
+
 def run(spec_path, output_dir, *, case_ids, operation):
     started = COMMAND_STARTED if __name__ == '__main__' else time.monotonic()
-    if operation not in ('fit','replay') or not case_ids:
+    if operation not in ('fit','replay','information') or not case_ids:
         raise ValueError('explicit fit/replay operation and case IDs required')
     spec_path, out = Path(spec_path), Path(output_dir).resolve()
     declaration = load(spec_path)
-    resume_stage2 = declaration.get('study')=='joint-recalibration-170' and operation=='fit' and case_ids==[f"stage{declaration['stage']}"]
+    resume_stage2 = declaration.get('study')=='joint-recalibration-170' and operation in ('fit','information') and case_ids==[f"stage{declaration['stage']}"]
     frozen_spec = out/('stage'+str(declaration['stage'])+'-spec.json' if resume_stage2 and declaration['stage']!=2 else 'spec.json')
     if frozen_spec.exists() and resume_stage2 and frozen_spec.read_bytes()!=spec_path.read_bytes():
         raise ValueError('stage-2 continuation requires the identical frozen declaration')
@@ -424,8 +650,11 @@ def run(spec_path, output_dir, *, case_ids, operation):
     try:
         write(out/'inputs.json',verify(spec))
         import fit_observations as o
+        if operation in ('information','fit') and spec.get('stage')==6 and case_ids==['stage6']:
+            stage6_study(spec,out,started)
+            return out
         if spec.get('study') == 'joint-recalibration-170' and operation=='fit' and case_ids==[f"stage{spec['stage']}"]:
-            stage2_study(spec,out,started)
+            (stage5_study if spec['stage']==5 else stage2_study)(spec,out,started)
             return out
         if spec.get('study') == 'water-124' and operation=='fit' and case_ids==['water-124']:
             water_study(spec,out,started)
@@ -554,7 +783,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument('spec',type=Path)
     parser.add_argument('output',type=Path)
-    parser.add_argument('--operation',choices=('fit','replay'),required=True)
+    parser.add_argument('--operation',choices=('fit','replay','information'),required=True)
     parser.add_argument('--case',action='append',required=True)
     args = parser.parse_args()
     run(args.spec,args.output,case_ids=args.case,operation=args.operation)

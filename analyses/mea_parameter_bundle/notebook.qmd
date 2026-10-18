@@ -2,6 +2,13 @@
 title: "MEA parameter bundle"
 subtitle: "Current heat-augmented F1 record · pressure, speciation, calorimetry and property status"
 resources:
+  - results/joint-recalibration-170/amendment-4/final-prerequisites/**
+  - results/joint-recalibration-170/amendment-4/b1-vapor-bound/**
+  - results/joint-recalibration-170/amendment-4/neutral-fit/**
+  - results/joint-recalibration-170/amendment-4/matched-larger-dV/README.md
+  - results/joint-recalibration-170/amendment-4/matched-larger-dV/matched-checks.json
+  - results/joint-recalibration-170/amendment-4/matched-smaller-dV/README.md
+  - results/joint-recalibration-170/amendment-4/matched-smaller-dV/matched-checks.json
   - results/engine-21e761c3-adoption/comparison.json
   - results/engine-21e761c3-adoption/checks.json
   - results/selected-current-best-parameters.json
@@ -17,11 +24,257 @@ resources:
   - figures/regression_overview/output/provenance.json
   - figures/regression_overview/output/statistics.csv
   - figures/regression_overview/output/parameter-table-inputs.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/README.md
+  - results/joint-recalibration-170/amendment-2/amendment-3/information-spec.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/comparison-declaration.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/inputs-check.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/admission.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/accounting.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/change-accounting.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/information-results.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/resume-accounting.json
+  - results/joint-recalibration-170/amendment-2/amendment-3/larger-dV-start-Kiepe.csv
+  - results/joint-recalibration-170/amendment-2/amendment-3/larger-dV-start-family-costs.csv
+  - results/joint-recalibration-170/amendment-2/amendment-3/larger-dV-start-Cp.csv
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/README.md
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/summary.json
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/results.json
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/pressure-properties.json
+  - results/joint-recalibration-170/amendment-4/dilute-bubble/target-replay.json
 ---
+
+## Amendment 3: information release stops both comparisons
+
+**Larger dielectric branch: inconclusive. Smaller dielectric branch: inconclusive under the 10% non-Kiepe improvement / at-most-1% common-149 increase rule.** The [retained larger source/seed A information calculation](results/joint-recalibration-170/amendment-2/amendment-3/information-results.json) fails the complete-system conditioning requirement before any fit. All four treatment/control fits remain unrun. The [full report](results/joint-recalibration-170/amendment-2/amendment-3/README.md) preserves the fixed stage-2 CO₂–water law, 16-coordinate treatment, 14-coordinate control and all 205 positive-weight observations.
+
+| Weighted, scaled information block at the larger start | Rank / columns | Condition | Release requirement |
+|---|---:|---:|---|
+| Existing nuisance directions, all free | 14 / 14 | 6390.086918958839 | Pass, ≤10000 |
+| New CO₂–MEA pair projected against all nuisance directions | 2 / 2 | 6.298512700977455 | Pass, rank 2 and ≤10000 |
+| Complete free set | 16 / 16 | 562848.8359854996 | **Fail, >10000** |
+
+All 217 information observations are Available, including twelve loaded-density requests with zero objective weight. The projected pair is distinguishable locally by rank, while the complete 16-column system fails its separate information threshold. These statements use the declared optimizer scales and 10⁻¹⁴ relative singular cutoff. No rescaling, dropped slope, fixed nuisance coordinate or changed tolerance was used. The native exception's generic wording blames the mandatory block; its own report shows that block passes and the complete-system condition fails. No other start or fit follows this hard stop.
+
+At this larger start, all 39 Kiepe rows pass [fixed-binary invariance](results/joint-recalibration-170/amendment-2/amendment-3/larger-dV-start-Kiepe.csv) against the same-wheel qualified reference: maximum $|r_{K,new}-r_{K,reference}|=1.3785847463587686\times10^{-14}$, with $r_K=\ln(P_{calc}/P_{obs})/\sqrt{39}$. Both new weighted optimizer derivatives are zero on every Kiepe row. The two limits remain 10⁻⁸ in weighted-row and weighted-derivative units, respectively; neither is in Pa. This is a start check, not endpoint replay.
+
+The source/seed A values give **C₂₀₅=195.70428763022872, C₁₆₆=195.70360861073 and C₁₄₉=159.6463713717262**, with the CO₂–MEA pair still (0, 0 K) and no active start bound. The [costs by family](results/joint-recalibration-170/amendment-2/amendment-3/larger-dV-start-family-costs.csv) retain every contribution. At 7 mol MEA/kg water and 101325 Pa, the four [seed Cp predictions](results/joint-recalibration-170/amendment-2/amendment-3/larger-dV-start-Cp.csv) are 3.8429337814983437, 3.4007092926258196, 3.8315431506913087 and 3.3338543689118705 kJ kg⁻¹ K⁻¹, with signed errors +3.3185584486716824%, +0.9861705308335411%, −0.6497134602678645% and −3.942882735129205%. Ordering is 318.15 K/loadings 0 and 0.358, then 353.15 K/loadings 0 and 0.358; nominal zero uses the declared 10⁻⁶ carbon proxy and complete-feed mass conversion. These values are seed diagnostics, not fitted endpoints.
+
+For each of the four fits, convergence/iterations, C₁₆₆ and C₁₄₉, endpoint Kiepe invariance, fitted active bounds, fitted CO₂–MEA values and fitted Cp errors are unavailable. Controls declare CO₂–MEA fixed at (0, 0 K); treatments start there. Centered derivative re-solves, serialized start/endpoint cold replay, raw closure and subsequent assessments remain unrun. A complete bound-active control would complete its comparison and remain unadopted; that exception does not remove this earlier information stop. A compact table communicates these scalar release quantities; no fitted-comparison figure has endpoints to display.
+
+The [resumed ledger](results/joint-recalibration-170/amendment-2/amendment-3/resume-accounting.json) applies all three supplied orchestrator decisions: bounded 60 s post-termination grace and own-PID kill/reap, the recorded ledger as the admission basis despite unknowable earlier overhead, and historical idle time excluded from active wall. Prior active charge is **15124.735403 − 5215.0172 = 9909.718203 s**, including the earlier preparation/reporting charges. Each prospective fit requires active charge + 1380 s + remaining check reserve ≤21600 s and CPU charge + 44160 CPU-s + remaining check reserve ≤144000 CPU-s. The larger information launch was admitted on both limits; its conditioning failure, rather than allowance exhaustion, stopped the sequence.
+
+The information child used **49.310241 CPU-s / 49.31769729300868 wall-s** and reaped normally. Whole-command CPU is conservatively charged as 49.56 CPU-s; a separate 100 CPU-s covers static checks/reporting/commits. Program CPU is **51278.048914 + 100 + 49.56 = 51427.608914 / 144000 CPU-s**. The ledger retains all active-wall arithmetic, preparation/finish reservations and the separate 5215.0172 s historical idle interval. Numerical fit count and fit charges are zero. Executable change is **4 added / 1 removed**, giving **861/900** gross campaign lines; the bounded teardown passed cooperative and SIGTERM-resistant owned-child checks. The Engine wheel and all installed files match SHA-256 `98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a`.
+
+This evidence supports a local information diagnostic and start binary numerical verification, conditional on the fixed model, inputs and declared scales. It does not support a fitted model-form decision, independent prediction, physical validation, parameter adoption or manuscript promotion. The corrected design and its source/readiness evidence are reused without a new primary-literature claim. Delivered independent review remains with the parent; this notebook update has not been independently reviewed or promoted for manuscript use.
+
+## Route 2b: λ=0, start A, two dielectric branches
+
+**smaller-dV:** limit_reached at 53 iterations, training cost 36.7833961664, common-149 cost 23.0753630456. **larger-dV:** converged at 82 iterations, training cost 36.7856554763, common-149 cost 23.0699563702.
+
+**The larger native fit converges by function tolerance, but endpoint replay fails at Böttinger state 032 (MEA + MEAH⁺): residual 1.8575624390395507e-6 against 1e-10 after 16 iterations. There are 51 Available replay rows before the 52nd attempted row is unavailable. This is the required hard stop; derivative checks remain unrun.**
+
+The two authorized calls use λ=0, start A, 100 iterations, 1200 s native wall and a 1320 s crash backstop, with 12000 CPU-s checked after normal reaping. Bound activity is reported. The frozen declaration has 16 coordinates and 205 positive-weight rows. CO₂–water pivot and reciprocal-temperature slope are free; all 39 Kiepe natural-log pressure residuals have weight 1/39; bicarbonate–water has upper bound 1.0. All other declarations remain unchanged. The binary law is $k(T)=k(313.15)+b(1/T-1/313.15)$, with T in kelvin, b in kelvin and dimensionless k. No loaded-density assessment is run.
+
+| Returned quantity | Smaller d_V | Larger d_V |
+|---|---|---|
+| Convergence status | limit_reached | converged |
+| Native stopping message | Maximum solver time reached. Total solver time: 2.167208e+02 >= 1.997555e+02. | Function tolerance reached. |cost_change|/cost: 6.178608e-11 <= 1.000000e-10 |
+| Iterations | 53 | 82 |
+| Residual evaluations | 54 | 84 |
+| Jacobian evaluations | 47 | 59 |
+| Projected gradient, tolerance 1e-8 | 0.000110807132411 | 3.62797944318e-05 |
+| Initial training cost | 196.86581561 | 195.70428763 |
+| Returned training cost | 36.7833961664 | 36.7856554763 |
+| Common-149 cost | 23.0753630456 | 23.0699563702 |
+| Common-149 minus Route 2 partial | -1.20583106812 | -1.21123774354 |
+| Trial failures | 0 | 2 |
+
+The earlier 81-iteration Route 2 partial has common-149 cost **24.2811941137**. Adopted **32.05668491** belongs to a historical calibration using different inputs and wheel. The smaller values belong to a time-limited iterate. The larger fit meets its function tolerance (relative cost change 6.178608e-11 ≤ 1e-10), while its projected gradient remains above 1e-8 and its serialized endpoint fails replay. Neither branch supplies a qualified calibration endpoint or a parameter-adoption decision.
+
+### Training cost by family
+
+| Family | Rows | Smaller d_V | Larger d_V |
+|---|---|---|---|
+| Common-149 pressure | 47 | 6.78866387178 | 6.77164572884 |
+| Common-149 species | 94 | 15.0852796903 | 15.0835580679 |
+| Common-149 Vinjarapu heat | 8 | 1.20141948351 | 1.21475257344 |
+| Restored species | 7 | 1.69801644599 | 1.70125545 |
+| Pooled Jakobsen ratios | 6 | 6.24600648378 | 6.25662635277 |
+| Kiepe pressure | 39 | 2.29832717517 | 2.28241396275 |
+| Equilibrium Cp | 4 | 3.46568301584 | 3.47540334066 |
+
+Costs are one half the sum of squared weighted residuals. All 149 common targets keep their original definitions, weights and scales. Cost reconstruction from the returned arrays is retained in each reported-results.json; it is arithmetic verification, not serialization replay.
+
+### Kiepe pressure errors by isotherm
+
+| T, K | Rows | Smaller mean absolute error, % | Smaller maximum absolute error, % | Larger mean absolute error, % | Larger maximum absolute error, % |
+|---|---|---|---|---|---|
+| 313.2 | 12 | 96.3778735169 | 98.2142367181 | 96.3639674409 | 98.2038935526 |
+| 353.11 | 9 | 77.8852816516 | 85.051357781 | 77.6243400611 | 84.8129184727 |
+| 373.26 | 12 | 58.9405035288 | 69.1574437004 | 58.3404157861 | 68.5321695552 |
+| 393.17 | 6 | 31.3686952579 | 46.3200109654 | 30.4729342186 | 45.0997687503 |
+
+Errors are calculated from all 39 returned pressure predictions against their retained observations. Signed means, log-residual root-mean-square values and isotherm costs are in each Kiepe-isotherms.csv. Both returned vectors strongly underpredict most binary pressures. Their lower common-149 costs do not establish simultaneous agreement with the added binary data.
+
+### Active bounds and objective gradients
+
+| Branch | Coordinate | Value | Unit | Side | Gradient per optimizer unit | Gradient per quantity unit |
+|---|---|---|---|---|---|---|
+| smaller-dV | Bicarbonate–water k | 1 | dimensionless | upper | -0.000888184514473 | -0.0888184514473 |
+| smaller-dV | Carbamate–MEAH⁺ k | -1 | dimensionless | lower | 0.0246367162102 | 2.46367162102 |
+| smaller-dV | MEAH⁺ Born diameter | 5 | angstrom | upper | -0.00224389215565 | -0.0224389215565 |
+| smaller-dV | Carbamate Born diameter | 5 | angstrom | upper | -0.00431899105143 | -0.0431899105143 |
+| smaller-dV | R5 unshifted a_k | 2400 | K | lower | -0.338734138729 | 0.00423417673411 |
+| smaller-dV | R5 enthalpy shift | 10000 | J/mol | upper | -0.000445945513378 | -1.78378205351e-07 |
+| smaller-dV | MEAH⁺ dispersion/k | 950 | K | upper | -0.0108689636201 | -0.00108689636201 |
+| larger-dV | Bicarbonate–water k | 1 | dimensionless | upper | -0.00087620910926 | -0.087620910926 |
+| larger-dV | Carbamate–MEAH⁺ k | -1 | dimensionless | lower | 0.0243522023616 | 2.43522023616 |
+| larger-dV | MEAH⁺ Born diameter | 5 | angstrom | upper | -0.00213502741288 | -0.0213502741288 |
+| larger-dV | Carbamate Born diameter | 5 | angstrom | upper | -0.004237252637 | -0.04237252637 |
+| larger-dV | R5 unshifted a_k | 2400 | K | lower | -0.339594617536 | 0.00424493271921 |
+| larger-dV | R5 enthalpy shift | 10000 | J/mol | upper | -0.000452543232856 | -1.81017293143e-07 |
+| larger-dV | MEAH⁺ dispersion/k | 950 | K | upper | -0.0107401774211 | -0.00107401774211 |
+
+Gradients are Jᵀr for the weighted residual objective, using the returned weighted optimizer Jacobian. Quantity gradients include the reciprocal-correlation sign for R5 unshifted a_k. Bounds are search limits, not confidence intervals.
+
+### All coordinate values against the 81-iteration Route 2 partial
+
+| Coordinate | Unit | A start | Route 2 partial | Smaller d_V | Larger d_V |
+|---|---|---|---|---|---|
+| Carbamate–water k | dimensionless | 0.134080741317 | -0.202719733667 | 0.214819481849 | 0.21402107787 |
+| MEAH⁺–water k | dimensionless | -0.379554080066 | -0.152249129162 | -0.208848402803 | -0.208419628851 |
+| Bicarbonate–water k | dimensionless | 0.5 | 0.5 | 1 | 1 |
+| Carbamate–MEAH⁺ k | dimensionless | -0.707285890215 | -1 | -1 | -1 |
+| MEAH⁺–water slope b | K | -112.567750584 | 36.9034558902 | -337.127093362 | -339.690447725 |
+| MEAH⁺ segment diameter | angstrom | 3.563 | 5.51743301647 | 4.16295757137 | 4.15813207604 |
+| Carbamate segment diameter | angstrom | 3.5605 | 5.8 | 5.38701343402 | 5.38617156391 |
+| MEAH⁺ Born diameter | angstrom | 3.563 | 5 | 5 | 5 |
+| Carbamate Born diameter | angstrom | 3.5605 | 3.62897938162 | 5 | 5 |
+| R5 unshifted a_k | K | 2677.91 | 2568.56004544 | 2400 | 2400 |
+| R2 enthalpy shift | J/mol | 0 | -10000 | 1667.91582297 | 1812.89554857 |
+| R5 enthalpy shift | J/mol | 0 | -8392.06021931 | 10000 | 10000 |
+| CO₂–water k(313.15 K) | dimensionless | -0.0464169011206 | -0.0464169011206 | -0.212524867101 | -0.2122386739 |
+| CO₂–water slope b | K | -35.6650522065 | -35.6650522065 | -249.206280174 | -250.745198532 |
+| MEAH⁺ dispersion/k | K | 228.71 | 251.302802793 | 950 | 950 |
+| Carbamate dispersion/k | K | 533.11 | 168.034884166 | 677.551986745 | 672.474282815 |
+
+The fixed dielectric pairs remain smaller d_V/d_T = **0.2464540312088979 L/mol / 2436.4423007273617 K** and larger **0.7309888238084122 L/mol / 1019.0786110170793 K**. Segment-size coordinates retain the 0.88 packing/Debye–Hückel ties. R2/R5 enthalpy shifts preserve the 313.15 K pivot. R5 unshifted a_k is separate from the composed serialized reaction law, retained in each partial parameter file.
+
+### Four molality-based solution Cp errors
+
+| T, K | Loading | Observed Cp, kJ/(kg K) | Smaller Cp | Smaller signed error, % | Larger Cp | Larger signed error, % |
+|---|---|---|---|---|---|---|
+| 318.15 | 0 | 3.7195 | 3.84329140224 | 3.32817320169 | 3.84329005259 | 3.32813691611 |
+| 318.15 | 0.358 | 3.3675 | 3.45783007606 | 2.6824076039 | 3.45792255614 | 2.68515385702 |
+| 353.15 | 0 | 3.8566 | 3.83233767735 | -0.629111721565 | 3.83232826082 | -0.629355888085 |
+| 353.15 | 0.358 | 3.4707 | 3.3662461415 | -3.0095905294 | 3.36588376063 | -3.02003167585 |
+
+These four equilibrium Cp targets use 7 mol MEA/kg water and 101325 Pa; nominal unloaded states retain the declared 1e-6 CO₂ proxy. Molar-to-mass conversion uses the retained complete-feed amount and mass, and reproduces each source observation. These are fitted observations, not withheld validation.
+
+### Numerical checks and limits
+
+| Branch | Available rows | Full rank / columns | Free rank / columns | Full condition | Free condition | Native CPU-s | Complete call wall-s |
+|---|---|---|---|---|---|---|---|
+| smaller-dV | {'Available': 205} | 16/16 | 9/9 | 166973.649595 | 271.337775542 | 6795.859259 | 1279.28800544 |
+| larger-dV | {'Available': 205} | 16/16 | 9/9 | 170622.64937 | 269.663585122 | 7615.602123 | 1265.4682337 |
+
+Both native fit calls exit 0 and are reaped without interruption. The driver retains a nonconvergence traceback for limit-reached returns; this does not supersede the owner instruction to run the other authorized branch. The native time-limit message describes an internal solver span; complete call timing can exceed 1200 s while remaining below the 1320 s crash backstop.
+
+| Branch | Endpoint replay | Derivative checks | Hard stops before another call |
+|---|---|---|---|
+| smaller-dV | Unrun: fit did not converge | Unrun: fit did not converge | None reached |
+| larger-dV | Failed: CentralSolveUnavailable at Bottinger2008_state_032::MEA + MEAH+; residual 1.8575624390395507e-6 > 1e-10, 16 iterations | Unrun: hard stop after failed endpoint replay | unavailable endpoint replay row, failed endpoint replay |
+
+The replay failure is a numerical stopping point; it does not establish failure of the thermodynamic model. No retry, changed tolerance or method is attempted under the explicit hard-stop instruction. These two bounded end-state comparisons are reported as scalar tables rather than an inferred continuous calibration curve. No parameter uncertainty, independent physical validation, adoption, manuscript promotion or delivered independent review is claimed. No λ=0.1, start B or assessment is run. Frozen, hash-checked source inputs are reused; no new literature judgment is made, and this worktree has no local literature reading shelf.
+
+The [full report and charges](results/joint-recalibration-170/amendment-2/route2b/README.md) links retained targets, coordinates, native returns and wheel checks. Four start-A release tests remain passed and are not repeated. The launcher change has 5 gross executable additions / 28 removals, net −23; campaign charge is 857/900. The earlier interrupted fit remains reserved at 12000 CPU-s within the extended 36000 CPU-s fit allowance.
+
+Final program charge is **51178.048914/144000 CPU-s**; fit charge is **26412.05/36000 CPU-s**, including the earlier 12000 CPU-s interrupted-call reservation. The [final accounting](results/joint-recalibration-170/amendment-2/route2b/completion-accounting.json) includes 8.50 CPU-s for the failed replay and 100 CPU-s for preparation/reporting. The replay failure stops derivative checks and all further scientific calls.
+
+## Route 2: time limit at 81 iterations; comparison incomplete
+
+**The primary $\lambda=0.1$ common-149 cost and the completed $\lambda=0$ control remain unavailable.** The [owner-authorized continuation](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6207429019) restarts $\lambda=0$ A from its declared source/seed document at **100 iterations, 1200 s native wall and 12000 aggregate CPU-s**. On the shared smaller-$d_V$ branch and the same 14 released coordinates, it returns after **81 iterations** at the native time limit, with whole-training cost **196.865136591 → 40.5902023581**. The returned **24.2811941137 common-149 cost is a partial-iterate diagnostic**. The adopted record's retained **32.05668491** uses a different wheel and declaration and is a historical reference only, not a ranking. There is no completed A/B comparison record at either weight.
+
+| Density weight | Start | Retained result | Completed comparison cost |
+|---:|:---:|---|---|
+| 0 | A | Time-limited partial, 81 iterations, training cost 40.5902023581 | Unavailable |
+| 0 | B | Unrun after required non-convergence stop | Unavailable |
+| 0.1 | A | Unrun after required non-convergence stop | Unavailable |
+| 0.1 | B | Unrun after required non-convergence stop | Unavailable |
+
+All **166/166 native predictions are Available**, with **82 residual / 64 Jacobian evaluations** and zero trial failures. The native owner exits normally and is reaped after **1248.100513649 wall-s / 7446.787965 CPU-s**; the command charge is **1248.330902440 wall-s / 7447.008186 CPU-s**. The existing **1320 s backstop** does not fire. Aggregate fit CPU is measured after normal reaping, below 12000 CPU-s. The native call exceeds 1200 s by 48.100513649 s. Its time-limit message reports an internal solver span; it is not the complete call timing. The driver exits 1 after retaining the required stop. An initial missing-`PYTHONPATH` import failure performs no thermodynamic calculation and is included once in preparation overhead.
+
+The native projected-gradient norm is **2.10700056805**, against $10^{-8}$. Five coordinates are active at bounds, as reported below. **Bound activity alone is permitted for these four fits; non-convergence is the present stop.** Full/free weighted, scaled ranks are **14/14 and 9/9**, with conditions **13247.5501 and 831.2497**. Covariance remains `not_converged`; no parameter uncertainty or bound-constrained optimum is asserted. All four starting release checks remain passed. Bounds, starts, source chemistry assumptions, fixed neutral inputs, residual weights and the released dispersions stay unchanged.
+
+| Active coordinate | Partial value | Side | Training-cost gradient per scaled optimizer coordinate |
+|---|---:|---|---:|
+| Bicarbonate–water interaction | 0.5 | Upper | +0.0319591960294 |
+| Carbamate–MEAH⁺ interaction | -1 | Lower | -0.0239158824269 |
+| Carbamate segment diameter | 5.8 Å | Upper | +0.448229029215 |
+| MEAH⁺ Born diameter | 5 Å | Upper | -0.0108382835599 |
+| R2 enthalpy shift | -10000 J/mol | Lower | -0.274943154841 |
+
+R2/R5 shifts at the **313.15 K pivot** are **-10000 / -8392.06021931 J/mol**. R5's unshifted $a_k$ is **2568.56004544 K**, movement **-109.349954556 K** from source; the Engine-serialized resulting $a_k$ is **2130.21235992 K**, with $b=1.78670100758$. The unshifted search box applies to the unshifted coefficient. MEAH⁺/carbamate segment sizes are **5.51743301647 / 5.8 Å**, Born diameters **5 / 3.62897938162 Å**, and dispersions/k **251.302802793 / 168.034884166 K**. The [parameter table](results/joint-recalibration-170/amendment-2/route2/lambda-0/F1/A/converge-1/parameters-and-gradients.csv) retains all 14 values, source movements, tied-size meanings, bounds and gradients.
+
+The common-149 pressure/species/Vinjarapu contributions are **6.63091194532 / 16.9797004741 / 0.670581694244**. Pressure/species mean absolute relative errors are **12.3906185005% / 7.17742618759%**; eight Vinjarapu heats have RMSE **1.48858761067 kJ/mol CO₂**. Seven restored species, six pooled Jakobsen ratios and four Cp observations contribute **2.47797629947 / 11.5193754720 / 2.31165647297**. These are incomplete calibration statistics. The [target table](results/joint-recalibration-170/amendment-2/route2/lambda-0/F1/A/converge-1/target-costs.csv) retains every returned value and error. Cost reconstruction differs from native by one ulp, $7.11\times10^{-15}$; it is retained-array arithmetic, not serialization replay.
+
+| Temperature, K | Loading | Observed Cp, kJ/(kg K) | Partial Cp, kJ/(kg K) | Signed error, % |
+|---:|---:|---:|---:|---:|
+| 318.15 | 0 | 3.7195 | 3.84277891451 | +3.3143948 |
+| 318.15 | 0.358 | 3.3675 | 3.42372348313 | +1.6695912 |
+| 353.15 | 0 | 3.8566 | 3.83152349216 | -0.6502232 |
+| 353.15 | 0.358 | 3.4707 | 3.39874916634 | -2.0730929 |
+
+The four Cp feeds use exactly **7 mol MEA/kg water**, 101325 Pa, and the declared $10^{-6}$ unloaded CO₂ proxy. The partial vector misses the **3%** target at unloaded 318.15 K. Its proxy, total-enthalpy and frozen-composition checks remain unrun. All **103 endpoint density rows** remain unrun: loaded fit/temperature groups **12/8**, unloaded fit/temperature groups **3/2**, 30 wt% loading-0.5 group **3**, loaded 20/40 wt% **45**, and unloaded non-30 wt% **30**. There is no result for the 20 loaded or five unloaded physical requirements.
+
+No replay, derivative, closure or thermodynamic assessment follows the required non-convergence stop. Fixed-record pressure/temperature/concentration groups, Wagner, corrected Jakobsen, 14 Arcis, 28 Hajj, C5, the union score and six Kim heats/frozen $s_H$ remain unrun. Gas-root falsifier attempts and 73-point flash-family attempts are both **zero**; missing evidence does not count as zero failures. The unchanged-water and neutral-binary qualifications remain separate numerical verification. The [eligibility table](results/joint-recalibration-170/amendment-2/route2/eligibility.csv) and [full section-5 report table](results/joint-recalibration-170/amendment-2/route2/report-availability.csv) identify every available quantity and gap. This partial vector is not physically eligible, independently reviewed, adopted or promoted for manuscript/absorber use. It establishes no equation-of-state limitation.
+
+The [Route 2 report](results/joint-recalibration-170/amendment-2/route2/README.md), [incomplete-fit record](results/joint-recalibration-170/amendment-2/route2/lambda-0/F1/A/converge-1/incomplete-fit.json), [native output](results/joint-recalibration-170/amendment-2/route2/lambda-0/F1/A/converge-1/native.json), [cost/time history](results/joint-recalibration-170/amendment-2/route2/lambda-0/F1/A/converge-1/iteration-history.csv) and [full/free spectra](results/joint-recalibration-170/amendment-2/route2/lambda-0/F1/A/converge-1/identification.json) retain the evidence. Native history includes rejected costs; its per-entry durations are not call wall time. Matplotlib is absent. This section uses scalar/property/availability tables and retains the exact history; plotting it would not resolve the missing convergence or comparison record.
+
+The [cumulative accounting](results/joint-recalibration-170/amendment-2/route2/timing-and-program-accounting.json), including the conservative reporting/presentation charges, is **21999.743957976 CPU-s / at least 3145.449697966 active wall-s** for the program, leaving at most **122000.256042024 CPU-s / 18454.550302034 wall-s** of 144000/21600. Route 2 totals **19732.208820256 conservative CPU-s / 2442.685345839 wall-s**. The four-fit reserve has **40552.991814000 CPU-s** remaining; assessment/reporting has **2714.799365744 CPU-s**. These allowances do not override the present stop.
+
+The [first-attempt accounting diagnosis](results/joint-recalibration-170/amendment-2/route2/diagnosis-wall/README.md) remains valid; its conservative missing-worker CPU reservation is retained. The new command is charged once, with **120 CPU-s / 120 active wall-s** conservative preparation/reporting/checks/commits and **60 CPU-s / 60 active wall-s** conservative presentation reservation, verified against measured render charges. Earlier unmetered overhead remains disclosed. The only new launcher change removes the superseded active-bound stop: **2 added / 2 removed executable lines**, yielding **187/200 part 2 and 812/900 campaign** conservative gross additions. No subagent, preview-service action or remote write occurs. The owner must decide the non-convergence stop before any further fit or thermodynamic call. Evidence is incomplete calibration and retained-array numerical verification, not physical validation.
+
+## Joint recalibration amendment 2: precursor stops at five bounds
+
+The new [amendment-2 calculation](results/joint-recalibration-170/amendment-2/route1/precursor/README.md), performed on merged Engine `84ca269d`, has **no selected joint precursor**. Start A reaches 40 iterations without convergence; both segment diameters reach 5.8 Å, both Born diameters 1 Å, and R5's unshifted $a_k$ 2400 K, all bounds. Start B and the 3b fit remain unrun after this required stop. The [other amendment-2 calculation](results/joint-recalibration-170/amendment-2/route2/README.md) remains subject to its separately reported native-time/non-convergence stop. All 203 quantities are available at both starts and in the native A vector, with zero failed trials. This is an incomplete calibration attempt with retained diagnostics, not parameter adoption or an EOS impossibility result.
+
+The four [unchanged-record replays](results/joint-recalibration-170/amendment-2/qualification-84ca269d/README.md) pass both $10^{-8}$ limits: maximum relative cost difference $8.42\times10^{-13}$ and weighted-row difference $3.68\times10^{-10}$. One fresh Python 3.13.14 environment pins wheel SHA-256 `98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a`, NumPy 2.5.4 and SciPy 1.18.1. This is numerical verification of unchanged records.
+
+The [shared inputs](results/joint-recalibration-170/amendment-2/shared/README.md) apply 27.14274817 wt% CO₂-free MEA to Jakobsen 011 and 022, loadings 0.29/0.59, and zero bicarbonate–water interaction. At each state the inorganic numerator is bicarbonate plus carbonate; the denominator is MEA plus MEAH⁺ plus carbamate. Observed pooled ratios are 0.007279344859 and 0.141342756184. Eighteen unchanged Böttinger/Matin quantities and six Jakobsen ratios supply 24 standardized differences. The 16 overlaps with the older 195-target precursor retain this difference definition exactly once, yielding 203 residuals and 115 remaining logarithmic species quantities. Source-mass/seed conservation and the retained D₂O/dioxane approximations are explicit in the frozen requests and checks; historical wrong-feed results below remain history.
+
+The [shared Schreckenberg reduction](results/joint-recalibration-170/amendment-2/stage5-smaller-dV/README.md) passes on all 14 unloaded Agieienko–Buchner compositions at 298.15 K/101325 Pa. The smaller-$d_V$ pair is **0.246454031209 L/mol, 2436.442300727 K**; the larger pair is **0.730988823808 L/mol, 1019.078611017 K**. Rank is 2, condition 6.17608348 and discriminant 3.22393997846. Both native curves reproduce the reduction within $2.85\times10^{-14}$ absolute. Permittivity RMSE is 0.30616047. Both exact full records, scale-based sensitivity and coherent ±1% perturbations are retained. This is dielectric calibration and numerical verification, conditional on fixed water/EOS and the declared neutral-unloaded approximation. The larger pair remains for later work; neither branch is adopted.
+
+Precursor A cost decreases **62.94479652 → 0.5871029140**; B's unfit starting cost is **18.3038169348**. The weighted coordinate-scaled Jacobian has full rank **10/10**, free rank **5/5**, and condition **1078.5353 full / 42.5287 free**. Full/free spectra, native gradients and unavailable covariance are retained. R5 changes **−277.91 K** from source, beyond the declared 80 K reporting magnitude; CO₂ dispersion remains fixed at 169.21 K. Returned CO₂–water $k_p=-0.0481735994649$, $b=-40.4043211794$ K; mutual ion interaction is −0.802917025988. MEAH⁺/carbamate dispersions are 422.7856934/359.5316977 K. The optional same-matrix R5 projection onto all seven ion columns has cosine **0.9996859613** (1.435954°), showing strong local overlap under this objective while full numerical rank remains ten.
+
+| Family (targets) | A start mean absolute relative error, % | B start, % | A iteration 40, % |
+|---|---:|---:|---:|
+| reacting pressures (25) | 51.276371 | 54.796634 | 89.546995 |
+| unshared species (115) | 58.074576 | 30.024264 | 15.926736 |
+| Kiepe pressures (39) | 2.666524 | 2.666524 | 3.841493 |
+| ion difference quantities (24) | 108.516535 | 58.847926 | 11.222979 |
+
+These errors and the [Kiepe isotherm errors](results/joint-recalibration-170/amendment-2/route1/precursor/kiepe-isotherm-errors.csv) describe the executed calibration objective and finite native vector. They exclude complete input/model uncertainty. Endpoint closure, serialization replay and centered derivatives remain unrun; the saved vector is explicitly `usable-budget-endpoint.json`, with no complete precursor or 3b selection. Accordingly there are no fitted 3b shifts, pivot-check values or six-heat qualification values to report. Those computations require a complete precursor and a decision on the present stop.
+
+At the numerical stop, cumulative program charge is **2095.814246720 CPU-s / at least 536.132346552 active wall-s**; remaining allowance is at most **141904.185753280 CPU-s / 21063.867653448 wall-s**, less unknown earlier overhead. [The accounting file](results/joint-recalibration-170/amendment-2/route1/precursor/timing-and-program-accounting.json) adds subsequent reporting/rendering charges. Stage 5 charges 1.223031 CPU-s / 1.183949904 wall-s once; the precursor block, including new-wheel requalification and shared preparation, charges 695.799685 CPU-s / 67.607706820 wall-s at that boundary. Budgets and rank did not trigger this stop; convergence and five active bounds did. Parent review and an owner decision remain pending. No new record is promoted for manuscript or absorber/stripper use.
+
+### Bounded diagnosis after the precursor stop
+
+The parent-authorized [two-point diagnosis](results/joint-recalibration-170/amendment-2/route1/precursor/diagnosis/README.md) leaves Route 1 stopped. It adds an exact start Jacobian and uses the retained iteration-40 matrix; all 203 start predictions agree exactly and weighted residuals agree within $1.53\times10^{-16}$. This is conditional assessment and numerical verification of an incomplete calibration. No new fit, B start, 3b or bound change runs.
+
+The additive cost by family (25 reacting pressures / 115 unshared species / 39 Kiepe / 24 stage-4 differences) is **0.10330737 / 0.02960787 / 0.00067902 / 62.81120227** at A and **0.06447827 / 0.03486145 / 0.00122766 / 0.48653552** at iteration 40. The diagnostic original 131-species log score is 0.03034724 → 0.03188384; it is not added because its 16 overlapping targets already belong to the stage-4 difference family. The ten largest targets/states and signed contributions of every target to the five bound-coordinate gradients are retained in the diagnosis.
+
+The full weighted, coordinate-scaled condition is **12290.8524 → 1078.5353**, rank ten at both points. All ten columns start free; the five final free columns have condition 42.5287. R5's projection onto seven ion columns has cosine **0.999846708 → 0.999685961** (angles 1.00324° → 1.43595°). This is strong local overlap under the declared weights, without loss of full numerical rank or proof of feasible compensation at the bounds. At iteration 40, MEAH⁺ segment and Born gradients favor movement inward; carbamate segment/Born and R5 favor outward movement. The bound directions therefore have competing local incentives.
+
+Jakobsen 011/022 inorganic-pool standardized residuals are **+48.8892/+13.1110 → +0.9837/+0.3963**; Matin 009/019/016 are **+6.3315/+11.4830/+9.7684 → −1.6192/−0.1907/−1.6941**. The historical stopped ions-first pool residuals are +0.3721/+4.9554 and −1.7390/−1.1321/−3.3588. Historical Jakobsen 022 used the wrong feed; these are conditional discrepancies at different vectors and are not evidence that pooling alone caused an improvement. The report retains predicted values, scales and common-weight comparisons.
+
+Projected gradient is **$6.93615723\times10^{-4}$** against $10^{-8}$, including the feasible inward MEAH⁺ segment direction. The last cost decrease is **$2.95256563\times10^{-6}$**, from 0.587105866588 to 0.587102914023: **cost was still falling**. No complete precursor is selected. **Shared step 2, stage 5 smaller-$d_V$, completed**; its full record remains [parameters.json](results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json).
+
+The diagnosis charges **47.785628000 CPU-s / 47.792345550 active wall-s**, within 60/60, including the conservatively charged first capture error and short reporting/check commands. Cumulative charges become **2204.045075720 CPU-s / at least 639.282933387 active wall-s**, leaving at most **141795.954924280 CPU-s / 20960.717066613 s**, less unknown earlier overhead. Code remains 80/180 added lines for part 1 and conservative 625/900 for the campaign. Added text has numerical/prose checks; the previous HTML render predates this diagnosis. The parent keeps Route 1 stopped for its design decision with the owner.
 
 ## Historical joint recalibration: initial ion calibration stopped at four bounds
 
-The historical campaign below is superseded for further calibration by [#170 amendment 2](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6204801680) on 15 October 2026. Both estimation sequences await the one merged-main wheel supplied for [Engine #557](https://github.com/tannerpolley/ePC-SAFT/issues/557) and its required qualification. Neither the superseded 160 K stage-3 vector nor the iteration-40 ion vector is a permitted start or calibration input. Earlier next-step and pending-decision statements below describe the historical calculation; reuse is limited to the inputs and checks explicitly retained by amendment 2.
+The historical campaign below is superseded for further calibration by [#170 amendment 2](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6204801680) on 15 October 2026. The new-wheel qualification and amended calculation are reported above; these earlier statements describe the historical sequence. Neither the superseded 160 K stage-3 vector nor the iteration-40 ion vector is a permitted start or calibration input. Earlier next-step and pending-decision statements below describe the historical calculation; reuse is limited to the inputs and checks explicitly retained by amendment 2.
 
 The historical ions-first amendment fixed CO₂ dispersion at 169.21 K, reset bicarbonate–water interaction from +0.5 to zero, and estimated seven ion quantities on source R2/R5 chemistry and the stage-2 neutral binaries. Engine `cf26a17b` passed all four unchanged-record requalifications at the declared $10^{-8}$ limits. The five unloaded 30 wt% density predictions change by at most $1.37\times10^{-12}$ kg/m³ after the bicarbonate correction; all five numerical closure checks pass.
 
@@ -287,6 +540,94 @@ Current equilibrium solution Cp spot checks are retained in [heat-capacity-compa
 
 [#124](https://github.com/tannerpolley/Amine-Thermodynamics/issues/124) fixes these misses before the joint refit, starting with the water parameters. For the unloaded 80 °C state, the [#161 check](results/cp-unloaded-161/README.md) on Engine 21e761c3 uses the #124 basis: 7 mol MEA/kg water, loading $10^{-5}$, 353.15 K and 101325 Pa. The state now passes the unchanged $10^{-9}$ raw-residual gate, with a worst row of $5.7\times10^{-14}$. The heat F1 record gives 3.8437 kJ/(kg·K), −0.33 % from Hilliard's 3.8566. Engine #261 reported slightly higher values on the earlier #124 record. The gap, about $1.5\times10^{-5}$ relative, comes only from its different molar masses for the feed mass. No pure-water grid for this record is retained in this set.
 
+# Dilute neutral CO₂ observation for amendment 4
+
+**The fixed stage-2 model supplies a numerically verified dilute CO₂ partial
+pressure, so a mole-fraction Henry observation can be declared natively.**
+This 16 October 2026 design preflight uses Engine `84ca269d`, CO₂–MEA
+intercept and slope both zero, T=293.15–360.25 K, source gas-free MEA mass
+fractions 0.12208545–0.48838927, no reactions and neutral phase support.
+It does not change the adopted parameter set discussed above.
+
+The [retained calculation](results/joint-recalibration-170/amendment-4/dilute-bubble/summary.json)
+compares 22 distinct states at liquid CO₂ mole fractions 1e-5, 1e-6 and 1e-7.
+All 66 native partial-pressure predictions are Available with tolerance met;
+the table reports the quantities supporting that conclusion.
+
+| Quantity | Retained result |
+|---|---:|
+| Selected liquid CO₂ mole fraction | 1e-5 |
+| pCO₂ at selected dilution / Pa | 565.458365–2244.447500 |
+| Total bubble pressure / Pa | 2329.641493–57404.683320 |
+| Maximum relative change of pCO₂/x to next decade | 8.75251e-5 |
+| Maximum raw equilibrium residual | 1.57208e-13 |
+| Cold-replay pressure change / Pa | 0 |
+
+These scalar verification bounds are reported as a table; a plot would not
+clarify the declaration check.
+
+The [data owner](../../data/reference/MEA/physical_solubility/README.md),
+Eqs.N2O-5–N2O-7, converts the 23 analogy-derived Hc values using measured
+unloaded densities: Hx=Hc times gas-free total molar density. Xu Table 4
+matches all 16 Xu states exactly. Hartono Table 3 requires temperature
+interpolation; its 360.25 K row uses Karunarathne Table 3 measurements at
+353.15 and 363.15 K. The resulting Hx range is 1.20998549e8–3.69615034e8 Pa.
+Density interpolation, cross-campaign differences and analogy uncertainty
+are unquantified; propagated N₂O uncertainty does not include them.
+
+A conditional pressure estimate to 101325 Pa, using a stated 100 cm³/mol
+absolute partial-molar-volume envelope, is 0.416577% for the liquid Poynting
+term and at most 0.695049% including native gas-fugacity changes at fixed
+bubble-vapor composition. This is below the 1% engineering threshold for that diagnostic. It does
+not establish transfer from Hartono's N₂O gas reference: SI Table S2 provides
+partial N₂O pressures, not the total pressure or a complete gas-fugacity
+translation. Xu's actual Henry pressures and gas reference also remain
+unverified because Table S3 is unread. Xu's 7.2% water-calibration discrepancy
+is a separate source limitation, not a Hartono uncertainty allowance. The [evidence and limits](results/joint-recalibration-170/amendment-4/dilute-bubble/README.md)
+retain this distinction. Start-B, derivative, dielectric-branch and exact
+gas-free density checks also remain unrun. No neutral or reacting fit ran.
+
+The density-uncertainty correction uses Karunarathne Table 3's expanded
+±7.10 kg/m³ (k=2, 95% confidence); §3's ±7.80 kg/m³ applies separately to
+CO₂-loaded solutions. The two retained density central values and all
+historical Hc-times-density Hx values remain unchanged.
+
+Orchestrator decision, 2026-10-16 (owner away): use Hartono SI Table S2 direct
+pN₂O/xN₂O, converted by the unchanged N₂O-to-CO₂ water ratio, as the primary
+Hartono Hx basis. It already uses mole fraction and needs no density
+conversion. Table 11 Hc times measured gas-free total molar density exceeds
+the SI ratio by 0.85368–3.09128%; retain this as a source-representation
+difference, without claiming to have resolved the source volume convention.
+The [derived CSV](../../data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv)
+retains both source representations and selects the SI primary targets
+(151298904.50–358676232.10 Pa). Their uncertainty is unquantified here;
+Table 11's Hc uncertainty is not transferred to them.
+
+Only seven Hartono observations at gas-free wMEA=0.30 and 298.35–360.25 K
+are primary neutral calibration candidates, in six temperature groups.
+The two 312.65 K repeats split one group weight. For repeat group g the
+native log_ratio weight is 1/[6 m_g (0.05)²]; 0.05 is an engineering residual
+scale. All 16 Xu rows are conditional comparisons with zero fitting weight
+until Table S3 and its pressure/gas reference are verified. Preserve the
+historical preflight's numerical results and identify its earlier `primary`
+labels as the superseded 15-row, two-source proposal. The retained target
+replays used Table 11 Hc-times-density Hartono targets; they do not qualify
+the selected SI targets. The Hartono mean absolute relative error ≤10%,
+maximum ≤20%, two-start identification checks and original numerical stops
+remain. No neutral observation enters the 205-row reacting objective.
+
+Source pressure/gas-reference qualification for Hartono and the remaining
+original numerical checks still stop calibration. The representation choice
+is supplied; no owner answer is pending. No pair is selected or adopted, no
+fit ran, and executable additions remain 861/900 with zero added by these
+text/data corrections.
+
+These results support the calculation declaration and basis conversion,
+with numerical solution verification. They do not supply physical validation,
+independent review, source-pressure equivalence or parameter promotion.
+This new section has not been independently reviewed or promoted for
+manuscript use.
+
 # Open work
 
 The paper ([#170](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170)) is updated only after one joint MEA refit, which takes:
@@ -300,3 +641,71 @@ The paper ([#170](https://github.com/tannerpolley/Amine-Thermodynamics/issues/17
 This notebook supplies retained evidence, not manuscript promotion or submission authority. Past records are owned by [parameter-record-history.csv](results/parameter-record-history.csv) and Git. Rendering this live notebook never runs the thermodynamic model.
 
 **Provenance of the retained heat-fit evaluation.** [Frozen heat F1 record](results/heat-160/A-parameters.json) SHA-256 `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`; Engine wheel SHA-256 `94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a` from merged Engine commit `026b30311b959f1a5db4feef4c15e243f7044a5f`; [evaluation execution](results/heat-final-170/evaluation/execution.json) records its use.
+
+
+## Amendment 4: neutral CO₂–MEA pair determined; it does not change the reacting fit
+
+**The CO₂–MEA dispersion correction is now determined independently from
+neutral physical solubility, and fixing it leaves the reacting fit
+unchanged.** Run 18 October 2026 on Engine `main-21e761c3`. Records:
+[B1 transfer](results/joint-recalibration-170/amendment-4/b1-vapor-bound/README.md),
+[neutral fit](results/joint-recalibration-170/amendment-4/neutral-fit/README.md),
+[larger-d_V pair](results/joint-recalibration-170/amendment-4/matched-larger-dV/README.md),
+[smaller-d_V pair](results/joint-recalibration-170/amendment-4/matched-smaller-dV/README.md).
+Not yet independently reviewed as a delivered result.
+
+**Source transfer (B1).** Hartono, Juliussen & Svendsen 2008 defines the N₂O
+pressure as total minus measured solvent pressure (Eq. 5). On that basis the
+N₂O vapor fugacity differs from the reported pressure by 0.37–0.60 %, and
+each target carries that correction. The transfer left after it is at most
+0.36–0.51 % (rows 1–6) and 0.83 % (360.25 K), inside the 1 % rule. The
+source's Peng–Robinson gas balance biases its H low by 0.16–3.85 %, depending
+on an unprinted fill pressure; that is a disclosed source limitation, pending
+owner ratification.
+
+**Neutral fit.** Seven Hartono 2014 rows at 30 wt % MEA, 298.35–360.25 K,
+observed as the model's dilute-bubble CO₂ partial pressure at CO₂ mole
+fraction 10⁻⁶. Both starts reach k(313.15 K) = 0.098720 and b = −50.989 K in
+k(T) = k + b(1/T − 1/313.15 K), interior, condition 5.499, cold replay exact.
+The fitted rows lie within −1.41 to +1.32 % (@fig-neutral-henry). The Xu &
+Wang 2018 rows, not fitted, lie between −7.7 and +22.5 %, rising with
+temperature and MEA content; near 30 wt % at 313 K they sit about 12 % above
+the model while Hartono's sit within 0.5 %. The fit therefore calibrates to
+one solubility campaign; transfer to other MEA contents is not shown.
+b is weakly determined (local conditioning 64 K at the declared weights).
+
+![Relative error of the model's CO₂ Henry constant at the released neutral pair. Circles are the fitted Hartono targets (30 wt %); filled markers are Xu & Wang 2018 comparison rows by MEA mass fraction. Every point is one source state; the shaded band is the falsifier's ±10 % mean-error limit.](results/joint-recalibration-170/amendment-4/neutral-fit/neutral-henry-errors.svg){#fig-neutral-henry}
+
+**Matched reacting comparison.** Both arms free the same 14 coordinates on
+the same 205 rows; the control fixes the CO₂–MEA pair at (0, 0) and the
+variant at the neutral value.
+
+| Branch | C166 control | C166 variant | Ratio | C149 ratio | Active bounds (both arms) |
+|---|---:|---:|---:|---:|---|
+| larger d_V | 39.6902 | 39.7134 | 1.00059 | 0.99999 | carbamate–MEAH⁺ k = −1; segment diameters 5.8 Å; Born diameters 5.0 Å |
+| smaller d_V | 39.7366 | 39.7601 | 1.00059 | 1.00001 | the same |
+
+The rule required C166 at least 10 % lower with the neutral pair; it is
+0.06 % higher on both branches, as stated before the fits. A ratio table is
+used because the result is four scalars. Cold replay (≤ 7e-12) and Kiepe
+invariance (3e-15) pass in every arm. Three endpoint misses keep the decision
+formally undecidable: the nine free columns have condition 3.7e4 (6.2e4 for
+all 14; limit 1e4), with the weakest direction mostly on the
+bicarbonate–water k_ij; the fixed-step derivative check misses at the two ion
+dispersion energies by truncation (error ratio 4.0 per step halving); and
+the projected gradient (0.008–0.010) is above 1e-8, although a Gauss–Newton
+step would lower the cost by at most 3.6e-4. None can turn a 0.06 % increase
+into a 10 % reduction. The loaded-density and per-row heat assessments were
+not run at these endpoints.
+
+**Meaning.** The five active bounds persist with or without the neutral
+pair, so the CO₂–MEA interaction is not what drives the ion parameters to
+their limits. This is numerical evidence on this objective, not physical
+validation.
+
+**Endpoint documents.** A campaign defect wrote R2's fitted ln K constant in
+the Engine's c ln(T/T_ref) form into documents that use c ln T, 211.4 too low
+(Route 2 and both Route 2b endpoint documents carry it).
+The fits were unaffected; corrected documents replay cold. The same defect
+caused the Route 2b endpoint-replay stop: with the constant corrected, the
+Route 2b larger-d_V document replays all 205 rows to 6.7e-13.

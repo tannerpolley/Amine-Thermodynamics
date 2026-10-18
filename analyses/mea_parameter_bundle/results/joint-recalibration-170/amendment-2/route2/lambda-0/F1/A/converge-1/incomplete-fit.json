@@ -1,0 +1,228 @@
+{
+  "complete": false,
+  "eligible": false,
+  "status": "limit_reached",
+  "message": "Maximum solver time reached. Total solver time: 4.077778e+01 >= 3.289800e+01.",
+  "usable_partial": true,
+  "limits": {
+    "iterations": 100,
+    "native_solver_wall_s": 1200,
+    "outer_crash_backstop_wall_s": 1320,
+    "aggregate_CPU_s": 12000
+  },
+  "initial_training_cost": 196.8651365907298,
+  "partial_training_cost": 40.590202358127875,
+  "recomputed_training_cost": 40.59020235812788,
+  "recomputed_cost_difference": 7.105427357601002e-15,
+  "partial_common149_cost": 24.281194113701766,
+  "iterations": 81,
+  "residual_evaluations": 82,
+  "jacobian_evaluations": 64,
+  "trial_failures": 0,
+  "requested_rows": 166,
+  "available_rows": 166,
+  "active_bounds": [
+    {
+      "index": 2,
+      "identity": "pair/bicarbonate-anion/water/k_ij",
+      "unit": "dimensionless",
+      "start": 0.5,
+      "partial": 0.5,
+      "movement": 0.0,
+      "scale": 0.01,
+      "lower": -0.5,
+      "upper": 0.5,
+      "active_bound": true,
+      "side": "upper",
+      "optimizer_gradient": 0.03195919602935501,
+      "quantity_gradient": 3.1959196029355006
+    },
+    {
+      "index": 3,
+      "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+      "unit": "dimensionless",
+      "start": -0.7072858902151943,
+      "partial": -1.0,
+      "movement": -0.2927141097848057,
+      "scale": 0.01,
+      "lower": -1.0,
+      "upper": 1.0,
+      "active_bound": true,
+      "side": "lower",
+      "optimizer_gradient": -0.023915882426892937,
+      "quantity_gradient": -2.3915882426892936
+    },
+    {
+      "index": 6,
+      "identity": "component/carbamate-anion/segment_diameter",
+      "unit": "angstrom",
+      "start": 3.5605,
+      "partial": 5.8,
+      "movement": 2.2394999999999996,
+      "scale": 0.1,
+      "lower": 2,
+      "upper": 5.8,
+      "active_bound": true,
+      "side": "upper",
+      "optimizer_gradient": 0.4482290292154511,
+      "quantity_gradient": 4.482290292154511
+    },
+    {
+      "index": 7,
+      "identity": "component/protonated-monoethanolamine/born_diameter",
+      "unit": "angstrom",
+      "start": 3.563,
+      "partial": 5.0,
+      "movement": 1.4369999999999998,
+      "scale": 0.1,
+      "lower": 2.0,
+      "upper": 5.0,
+      "active_bound": true,
+      "side": "upper",
+      "optimizer_gradient": -0.010838283559905845,
+      "quantity_gradient": -0.10838283559905844
+    },
+    {
+      "index": 10,
+      "identity": "reaction:R2:enthalpy_shift",
+      "unit": "J/mol",
+      "start": 0.0,
+      "partial": -10000.0,
+      "movement": -10000.0,
+      "scale": 2500.0,
+      "lower": -10000.0,
+      "upper": 10000.0,
+      "active_bound": true,
+      "side": "lower",
+      "optimizer_gradient": -0.2749431548407962,
+      "quantity_gradient": -0.00010997726193631847
+    }
+  ],
+  "full": {
+    "rank": 14,
+    "columns": 14,
+    "condition": 13247.550085941199,
+    "singular_values": [
+      16.631524088174377,
+      5.803345999723235,
+      3.342607061674293,
+      1.3216953760363979,
+      0.2835310285004129,
+      0.16528505691113607,
+      0.13103830797800287,
+      0.10888088303994947,
+      0.03120354283037804,
+      0.02554637315118788,
+      0.010670241674447608,
+      0.00376122509299367,
+      0.0015295833446554992,
+      0.0012554414952410241
+    ],
+    "weakest_direction": [
+      -0.14300609087055866,
+      0.12384013083593723,
+      -0.8273983037998308,
+      -0.005296004462442722,
+      0.0006775567682620765,
+      0.0070486141279972655,
+      0.0027326147289924163,
+      -0.09350713914449083,
+      0.016372300927301218,
+      0.0004185794870892462,
+      -0.3655972746917952,
+      -0.3698577619467315,
+      -0.007196870471668039,
+      0.004419406122267891
+    ]
+  },
+  "free": {
+    "rank": 9,
+    "columns": 9,
+    "condition": 831.2497424867347,
+    "singular_values": [
+      16.324554796126467,
+      5.6354674255497335,
+      2.519199106352544,
+      1.2745099249768685,
+      0.25997666025213756,
+      0.12217073861388215,
+      0.10679998553551129,
+      0.03330109601178343,
+      0.019638568244593445
+    ],
+    "weakest_direction": [
+      -0.3834453080510654,
+      0.13462518811506036,
+      0.039119242213205785,
+      -0.17651677217491712,
+      -0.8785571769200438,
+      -0.0011158293949531106,
+      0.0025529425422853246,
+      0.04703376881514318,
+      -0.16755481900167574
+    ]
+  },
+  "projected_gradient_norm": 2.1070005680531962,
+  "covariance_status": "not_converged",
+  "R5_unshifted_a_k": 2568.5600454442556,
+  "enthalpy_shifts_J_mol": {
+    "R2": -10000.0,
+    "R5": -8392.060219312736
+  },
+  "R5_stored_a_k": 2130.2123599197716,
+  "R5_stored_b": 1.7867010075825775,
+  "families": [
+    {
+      "family": "Common-149 pressure",
+      "count": "47",
+      "start_cost": "24.051711171641855",
+      "partial_cost": "6.630911945320904",
+      "mean_absolute_relative_error_percent": "12.390618500532932",
+      "RMSE_J_mol_CO2": ""
+    },
+    {
+      "family": "Common-149 species",
+      "count": "94",
+      "start_cost": "22.24846215416794",
+      "partial_cost": "16.979700474137054",
+      "mean_absolute_relative_error_percent": "7.177426187590941",
+      "RMSE_J_mol_CO2": ""
+    },
+    {
+      "family": "Common-149 Vinjarapu heat",
+      "count": "8",
+      "start_cost": "114.56308894857932",
+      "partial_cost": "0.6705816942438083",
+      "mean_absolute_relative_error_percent": "1.3480836172747286",
+      "RMSE_J_mol_CO2": "1488.587610671815"
+    },
+    {
+      "family": "Restored species",
+      "count": "7",
+      "start_cost": "2.908469012869772",
+      "partial_cost": "2.477976299472885",
+      "mean_absolute_relative_error_percent": "9.099514924396848",
+      "RMSE_J_mol_CO2": ""
+    },
+    {
+      "family": "Pooled Jakobsen ratios",
+      "count": "6",
+      "start_cost": "29.641520375574615",
+      "partial_cost": "11.519375471985237",
+      "mean_absolute_relative_error_percent": "17.238963089660434",
+      "RMSE_J_mol_CO2": ""
+    },
+    {
+      "family": "Equilibrium Cp",
+      "count": "4",
+      "start_cost": "3.451884927896323",
+      "partial_cost": "2.311656472967993",
+      "mean_absolute_relative_error_percent": "1.9268255082675796",
+      "RMSE_J_mol_CO2": ""
+    }
+  ],
+  "verification": "Retained-array arithmetic only: cost reconstructs within one ulp. No serialization replay, derivative, closure or physical assessment call after the stop.",
+  "native_sha256": "da76727557439b82fb8ab13ed18d66fa458986bbc6911fb5f80256cb311be8ec",
+  "partial_parameter_sha256": "902acbe0b082cac47fbf59a7373d991aad32fde1d70dea3c4ef2a62fc32909a4",
+  "stop": "Native time limit without convergence; all subsequent fits and assessments paused for owner decision. Bound activity is not a stop under the owner amendment."
+}

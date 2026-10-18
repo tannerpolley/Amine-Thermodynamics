@@ -1,0 +1,41 @@
+[
+  {
+    "command": [
+      "python3",
+      "analyses/manuscript.py",
+      "refresh",
+      "analyses",
+      "analyses/mea_parameter_bundle/notebook.qmd"
+    ],
+    "exitcode": 1,
+    "cpu_s": 12.158083999999999,
+    "wall_s": 10.358911097995588,
+    "purpose": "Presentation only, execution disabled; no thermodynamic calculation or preview service action."
+  },
+  {
+    "command": [
+      "bash",
+      "analyses/render.sh",
+      "mea_parameter_bundle/notebook.qmd",
+      "--to",
+      "html"
+    ],
+    "exitcode": 0,
+    "cpu_s": 16.109027,
+    "wall_s": 15.150746466999408,
+    "purpose": "Presentation only, execution disabled; no thermodynamic calculation or preview service action."
+  },
+  {
+    "command": [
+      "bash",
+      "analyses/render.sh",
+      "index.qmd",
+      "--to",
+      "html"
+    ],
+    "exitcode": 0,
+    "cpu_s": 15.652169000000004,
+    "wall_s": 14.418809618000523,
+    "purpose": "Presentation only, execution disabled; no thermodynamic calculation or preview service action."
+  }
+]
