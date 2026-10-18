@@ -12,7 +12,7 @@ is accompanied by separately retained native calculation evidence.
 | File | Rows | Temperature / K | Gas-free MEA mass fraction | Primary locator |
 |---|---:|---|---|---|
 | `Hartono_2014_N2O_solubility.csv` | 7 | 298.35–360.25 | 0.30 | Hartono 2014 Table 11 p.1813; SI Table S2 PDF p.10, Loading=0.00 |
-| `Xu_2018_N2O_solubility.csv` | 16 | 293.15–323.15 | 0.12208545, 0.24418628, 0.36619575, 0.48838927 | Xu and Wang 2018 Table 8 p.2715, x₂-only block |
+| `Xu_2018_N2O_solubility.csv` | 16 | 293.15–323.15 | 0.12208545, 0.24418628, 0.36619575, 0.48838927 | Xu and Wang 2018 Table 8 p.2715, x₂-only block; SI Table S3 PDF p.2, x₂ block |
 
 Hartono has six distinct temperatures and a repeat at 312.65 K: 22 distinct
 temperature/composition states in total. The 4.79 value with superscript 10 in
@@ -22,7 +22,7 @@ additional observations. Loaded rows, 6.2 mass% rows, and Xu ionic-liquid
 mixtures are outside this extraction. Xu's N₂O table ends at 323.15 K even
 though its title and density/viscosity measurements extend to 333.15 K.
 
-The 16 October Hartono-only disposition makes the seven Hartono observations at gas-free MEA mass fraction 0.30 the sole primary neutral calibration candidates, subject to source-basis and numerical qualification. All 16 Xu rows remain conditional comparisons until Table S3 and its pressure/gas reference are checked. This supersedes the earlier proposal to fit eight Xu rows at 24.42 and 36.62 mass%. No reacting target membership changes. There are no extracted measurements above 360.25 K; extension toward 393 K remains extrapolation.
+The 16 October Hartono-only disposition makes the seven Hartono observations at gas-free MEA mass fraction 0.30 the sole primary neutral calibration candidates, subject to source-basis and numerical qualification. All 16 Xu rows remain conditional comparisons until Table S3 and its pressure/gas reference are checked. That check was completed on 18 October (section below); the rows keep zero fitting weight until the orchestrator assigns their role. This supersedes the earlier proposal to fit eight Xu rows at 24.42 and 36.62 mass%. No reacting target membership changes. There are no extracted measurements above 360.25 K; extension toward 393 K remains extrapolation.
 
 `sources.json` records obtained PDFs, parent and attachment keys, SHA-256
 hashes, locators, reading scope, and the missing Hartono 2013 PDF. Hartono's
@@ -175,9 +175,7 @@ not new CO₂ measurements.
 The source density uncertainties remain separate: Hartono reports expanded 0.02 kg/m³, k=2; Xu reports standard 1 kg/m³. Karunarathne's rendered Table 3, PDF p.5, reports expanded 7.10 kg/m³, k=2, at 95% confidence for its aqueous-MEA density table. Section 3, PDF p.3, separately reports 7.80 kg/m³ for CO₂-loaded solutions. Record 7.10 kg/m³ with the Table 3 density rows and retain the distinct loaded-solution statement in the source notes. The table value is about 0.73% of the interpolated 974.359 kg/m³; it is not a quantified uncertainty for the interpolation or the difference between campaigns. The appended Hx uncertainty column propagates only the original N₂O H uncertainty and excludes density, composition, interpolation, water-ratio and analogy uncertainty. No combined uncertainty or statistical independence is asserted.
 
 The conversion does not establish the Henry measurement's reference pressure.
-Xu Table S3 remains unread. The Companion supplement request returned the
-existing main article; the exact supplement URL in its Zotero snapshot
-returned HTTP 403. The atmospheric density measurement must not be called
+The Xu Table S3 pressure basis is recorded in the section below. The atmospheric density measurement must not be called
 the Henry measurement pressure. The addendum's pressure estimate to 101325 Pa
 is conditional on that declared reference and its stated gas reference.
 
@@ -230,3 +228,38 @@ Hartono source mappings and the nonzero pair require the original ≤1%
 combined source-transfer check within the remaining preflight allowance.
 Otherwise the no-fit stop remains. All 16 Xu rows remain conditional
 comparisons with zero fitting weight until Table S3 is verified.
+
+## Xu SI Table S3 fields and pressure basis (18 October)
+
+The Xu supplement is Zotero attachment `9JKXQ7ID` on the article parent
+`4TDQZ354`, SHA-256
+`b14f133e7a18db22d8ebaa5d81845430ce6a4f77b9fcadfeb8f45fc016c85071`. Its
+Table S3 MEA-only block, PDF p.2, now fills `P_N2O_reported_kPa` (P3, kPa)
+and `x_N2O_reported` (x₃; the printed column is $10^6 x_3$) for the same 16
+Xu observations. The `supplement_*` fields give the key, hash and per-row
+locator. These are additional fields on existing observations, as for
+Hartono, not new observations.
+
+- **Checks:** all 16 pairs match the SI text layer and the page image.
+- **Footnote uncertainties:** u(x₂) = 0.0002, u(T) = 0.1 K, u(p3) = 0.1 kPa
+  and $u_r(x_3)$ = 0.03.
+- **Agreement with Table 8:** Table 8 H times the Table 4 gas-free molar
+  density is −0.56 to +0.25 % from S3's direct P3/x₃.
+- **P3 range:** 84.8–105.9 kPa.
+
+**Pressure basis.** Xu 2018 §2.3 p.2710 refers its apparatus to Xu, Wang &
+Chen 2013 (doi 10.1021/je301371p; Zotero `JFF3PK44`/`WJ8UVRHC`). That paper's
+Eq. 4 p.1634 obtains the N₂O pressure as the measured total reactor pressure
+minus the reactor pressure measured at the set temperature before N₂O is
+added. The equation is printed P1 − P2; physically it is P2 − P1. Both papers
+use Peng–Robinson in the tank and reactor-gas mole balances (2018 Eqs. 2–5;
+2013 Eqs. 2–3). The 2018 paper does not print the subtraction or the solvent
+pressures, so the basis reaches the 2018 rows by citation.
+
+The source-to-model transfer and its limitations are retained in
+`analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/xu-source-qualification/`.
+
+`CO2_physical_from_N2O.csv` was deliberately not regenerated: its Xu copies
+of these SI fields stay empty. Its SHA-256 is pinned by the released neutral
+fit and by `fit_neutral_co2_mea.py`. Populating Xu primary targets or weights
+there is a separate, orchestrator-owned change.
