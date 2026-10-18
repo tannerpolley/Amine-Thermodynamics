@@ -496,7 +496,7 @@ def stage6_study(spec, out, started):
     fit_case = spec.get('fit_case')
     if fit_case:
         release = load(checked(spec['release_tests_path'], spec['release_tests_sha256']))
-        assert len(release)==4 and all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in release)
+        assert any(r['start']==fit_case['start'] for r in release) and all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in release)
     def elapsed():
         cpu = cpu_seconds()+spec['prior_cpu_charge_s']
         wall = time.monotonic()-started+spec['prior_wall_charge_s']
