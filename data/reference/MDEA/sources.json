@@ -168,15 +168,43 @@
    "source_key": "Hsieh2007",
    "citation": "Hsieh, C.-J.; Chen, J.-M.; Li, M.-H. Dielectric Constants of Aqueous Diisopropanolamine, Diethanolamine, N-Methyldiethanolamine, Triethanolamine, and 2-Amino-2-methyl-1-propanol Solutions. J. Chem. Eng. Data 2007, 52, 619-623.",
    "doi": "10.1021/je600515j",
-   "zotero_parent_key": null,
-   "record": "NIST TRC ThermoML https://trc.nist.gov/ThermoML/10.1021/je600515j.xml, retrieved 2026-10-18",
-   "record_sha256": "901354ec9c34eada3ff170f489ed27f108f2b6f7fa42d9fd2533454306a96bd0",
+   "zotero_parent_key": "U3L9K37G",
+   "pdf_attachment_key": "8X653CVB",
+   "pdf_sha256": "3a5f95471866b71d4e702061ac1c150d5ae1dc88fc0c669426634507c9cd8cf9",
+   "pdf_page_to_printed_page": "printed page = PDF page + 618 (PDF pages 1-5 = pp. 619-623)",
+   "cross_check_record": "NIST TRC ThermoML https://trc.nist.gov/ThermoML/10.1021/je600515j.xml, retrieved 2026-10-18 (secondary: the six values below agree with it; it is not the source of record)",
+   "cross_check_record_sha256": "901354ec9c34eada3ff170f489ed27f108f2b6f7fa42d9fd2533454306a96bd0",
    "csv": "Hsieh_2007_MDEA_relative_permittivity.csv",
-   "csv_sha256": "192b6a7f5a1b1b9fc1b2e340348e7bdcc637a42241e843a62bd15d00430a956a",
-   "quantity": "relative permittivity at zero frequency of pure N-methyldiethanolamine, 303.15-328.15 K, 101.325 kPa (ThermoML constraint)",
+   "csv_sha256": "10729d420ba2a1a73bacb8a644eb956ad7aa9239d4983dfe50cc86b808bbbe70",
+   "tables": [
+    {
+     "table": "Table 2",
+     "caption": "Table 2. Dielectric Constant ε of Pure Alkanolamines",
+     "pdf_page": 2,
+     "printed_page": 620,
+     "printed_columns": [
+      "T/K",
+      "DIPA",
+      "MDEA",
+      "TEA",
+      "AMP"
+     ],
+     "layout": "Six rows, 303.15-328.15 K in 5 K steps; each entry is printed as ε ± standard deviation. Only the MDEA column is transcribed. Footnote a: 'Standard deviations determined from (4 to 6) replicated runs.'",
+     "row_count": 6
+    }
+   ],
+   "quantity": "static relative permittivity (the paper's 'dielectric constant') of pure N-methyldiethanolamine, 303.15-328.15 K, measured at 260-300 kHz where the paper reports no relaxation (p.620)",
+   "pressure_basis": "The paper prints no measurement pressure; the CSV pressure_kPa = 101.325 is the ThermoML record's pressure constraint, kept as a secondary value.",
+   "stated_uncertainties": {
+    "per_row": "Table 2 prints a standard deviation from 4 to 6 replicate runs: 0.07, 0.08, 0.08, 0.09, 0.07, 0.05 at 303.15-328.15 K (CSV relative_permittivity_std_dev)",
+    "overall": "uncertainty of the dielectric constant estimated to be less than ±1.0 % (p.620, Experimental Section)",
+    "purity": "MDEA purity >= 0.985 mass fraction, Acros reagent grade (p.619, Experimental Section, Chemicals)",
+    "temperature": "the paper gives no temperature uncertainty for the measurement; it quotes an isothermal stability of 0.2 K for the dielectric analyzer (p.620)"
+   },
+   "author_correlation": "Table 3 (PDF p.3, printed p.621), eq 3 (p.620): ε = a + b (T/K) + c (T/K)^2 for MDEA, 303.15-328.15 K, 6 points: a = 44.1399, b = -0.046824, 10^5 c = -8.82158 (c = -8.82158e-5); AARD 0.02 (p.620 text: 'in 100 AARD'). It reproduces the six Table 2 values to within 0.01 (computed here). Not used by analyses/mdea_kuranov_refit, which fits a line to the six values (see role).",
    "row_count": 6,
-   "role": "Uyan 2015 Eq. 5 cites Hsieh et al. for pure-MDEA permittivity; that paper and its correlation are not in Zotero, so analyses/mdea_kuranov_refit uses a least-squares line through these six values (22.358 - 0.1024571 (T/K - 298.15); max residual 0.011), extrapolated to 413 K.",
-   "transcription_check": "Parsed programmatically from the ThermoML XML with the standard-library XML parser; not checked against the paper PDF, which is not in Zotero (DOI listed for the owner)."
+   "role": "Uyan 2015 Eq. 5 cites Hsieh et al. for pure-MDEA permittivity. analyses/mdea_kuranov_refit uses a least-squares line through these six values (22.358 - 0.1024571 (T/K - 298.15); max residual 0.011), extrapolated to 413 K, rather than the paper's own Table 3 quadratic. The two agree inside 303-328 K but differ outside it: at 413.15 K the line gives 10.58 and the quadratic 9.74 (computed here, not rerun in the model).",
+   "transcription_check": "Table 2 MDEA column read from a 400 dpi crop of PDF p.2 and the full page image, and compared with pdftotext -layout of the same page: all six temperatures, permittivities and standard deviations agree with each other and with the earlier ThermoML parse; no value changed. Table 3 MDEA row read from a 300 dpi crop of PDF p.3. Checked 2026-10-18."
   }
  ]
 }
