@@ -10,7 +10,7 @@ transcription check.
 |---|---|---|---|
 | `Kuranov_1996_CO2_MDEA_total_pressure.csv` | Kuranov et al. 1996, Table 2 (PDF p.2, printed p.1960) | 82 | Fit set |
 | `Ermatchkov_2006_CO2_MDEA_partial_pressure.csv` | Ermatchkov et al. 2006, Tables 1–3 (PDF pp.2–3, printed pp.6082–6083) | 101 (39 + 30 + 32) | Held out: reported, not gated |
-| `Hsieh_2007_MDEA_relative_permittivity.csv` | Hsieh, Chen & Li 2007, pure MDEA, via the NIST ThermoML record (paper not in Zotero) | 6 | Model input: MDEA permittivity line in Uyan Eq. 5 |
+| `Hsieh_2007_MDEA_relative_permittivity.csv` | Hsieh, Chen & Li 2007, Table 2 MDEA column (PDF p.2, printed p.620), pure MDEA; NIST ThermoML record kept as a secondary cross-check | 6 | Model input: MDEA permittivity line in Uyan Eq. 5 |
 
 ## Bases and units
 
@@ -24,6 +24,10 @@ transcription check.
 - Ermatchkov pressure: **CO₂ partial pressure** in kPa from headspace gas chromatography, not
   total pressure. The printed `±` uncertainties of m̄CO₂ and pCO₂ and the reproducibility
   ΔpCO₂,repr (standard deviation over 3–8 repeats) have their own columns.
+- Hsieh: static relative permittivity of pure MDEA (the paper's "dielectric constant"), measured
+  at 260–300 kHz. `relative_permittivity_std_dev` is the printed standard deviation of 4–6
+  replicate runs. The paper prints no measurement pressure; `pressure_kPa` = 101.325 is the
+  ThermoML record's constraint, not a paper value.
 
 ## Coverage
 
@@ -40,7 +44,9 @@ transcription check.
 table). Kuranov's table has two side-by-side column blocks: `source_row` 1–41 is the left block
 and 42–82 the right block (`source_table_half`, `source_half_row`). `source_series` labels the
 MDEA molality and isotherm; Ermatchkov prints no block headings, so its about-2/4/8 block label
-is inferred from the printed m̄MDEA.
+is inferred from the printed m̄MDEA. Hsieh's CSV uses the same four locator columns
+(`source_row` 1–6 in Table 2 order) plus the Zotero parent and attachment keys; its
+`cross_check_record` columns name the ThermoML record and its hash.
 
 ## Caveats
 
