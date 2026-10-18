@@ -227,3 +227,13 @@ The owner-policy launcher change adds two executable lines and removes two. Cons
 The numerical run is retained in commit `dd7a1a9`. Independent delivered review and investigator promotion have not occurred. The orchestrator chose to retain this partial and keep all remaining fits and thermodynamic assessments stopped. The owner later authorized the bounded fixed-input and target-definition diagnosis on 2026-10-16; that authorization does not resume fitting. Route 1 remains stopped. No subagent, Quarto preview action, push, merge or GitHub write occurs.
 
 The presentation-only refresh reports missing `snakemake`. Both guarded HTML renders succeed with `--no-execute`: notebook and home page. Actual presentation is **50.240062 CPU-s / 45.470171144 wall-s**, inside the charged 60/60 reservation. The [render timing](converge-presentation-timing.json) retains each command and outcome. No numerical calculation or preview-service action occurs.
+
+## Correction (2026-10-18): R2 constant in the written endpoint documents
+
+`lambda-0/F1/A/converge-1/usable-budget-endpoint.json` and
+`rerun-1/usable-budget-endpoint.json` carry the R2 write-back defect fixed in
+88ee4c8: the R2 ln K constant `a` (20.2686) is in the Engine's c ln(T/T_ref)
+form, 211.4 below the document's c ln T convention; the corrected value is
+a − c ln 313.15 = 231.6416. The native fit results (`native.json`) are
+unaffected. See `../route2b/README.md` (correction note) and
+`../../amendment-4/matched-larger-dV/README.md`.
