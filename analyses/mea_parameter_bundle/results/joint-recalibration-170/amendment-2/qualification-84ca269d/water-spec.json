@@ -1,0 +1,282 @@
+{
+  "study": "water-124",
+  "design_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/124#issuecomment-6156164248",
+  "implementation_base": "0e923d6fdfa29a931d0441763e62a063142bc8fc",
+  "adoption": "None. Water-only endpoints retain historical dependent mixture parameters.",
+  "inputs": [
+    {
+      "path": "analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/original-record.json",
+      "sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/iapws95-reference.csv",
+      "sha256": "68d107edd7c67cecef5f3454475249e216e63d9a19eb9d29166741333f4e2a24"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/water-metrics.csv",
+      "sha256": "e70de9f5371b426b253611a05a47624e12a67bb448ac2591df3a6e66a6cf6a6d"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/reference-provenance.json",
+      "sha256": "6a5e91b40f3f75681efdf482671ad1cce0cd0fd1cd3ef0a250a9572954ba431f"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/inputs.json",
+      "sha256": "e4cd74e03c24fb6cfcf7459494fe54f5f8a3df8dd983548d8fcef6e61448f82e"
+    },
+    {
+      "path": "data/reference/MEA/thermal/physical-ideal-gas-calorics.json",
+      "sha256": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a"
+    }
+  ],
+  "engine": {
+    "wheel_path": "tmp/amendment-2-84ca269d/wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl",
+    "wheel_sha256": "98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a",
+    "packages": {
+      "epcsaft": "0.2.0.dev0",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1"
+    }
+  },
+  "records": [
+    {
+      "id": "adopted",
+      "path": "analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b"
+    },
+    {
+      "id": "original",
+      "path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/original-record.json",
+      "sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241"
+    }
+  ],
+  "reference_path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/iapws95-reference.csv",
+  "metrics_path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/water-metrics.csv",
+  "metrics_sha256": "e70de9f5371b426b253611a05a47624e12a67bb448ac2591df3a6e66a6cf6a6d",
+  "molar_mass_kg_mol": 0.01801528,
+  "relative_scales": {
+    "cp": 0.03,
+    "saturated_liquid_rho": 0.0004885386550848192,
+    "psat": 0.006187335535035449
+  },
+  "coordinates": [
+    {
+      "family": "segment_count",
+      "identity": "component/water/segment_count",
+      "target": "water",
+      "scale": 0.1,
+      "bounds": [
+        0.8,
+        2
+      ]
+    },
+    {
+      "family": "segment_diameter",
+      "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant",
+      "target": "water",
+      "scale": 0.05,
+      "bounds": [
+        2.4,
+        3.2
+      ]
+    },
+    {
+      "family": "dispersion_energy_over_k",
+      "identity": "component/water/dispersion_energy_over_k",
+      "target": "water",
+      "scale": 20,
+      "bounds": [
+        250,
+        500
+      ]
+    },
+    {
+      "family": "association_energy_over_k",
+      "identity": "association/water/a/water/b/energy_over_k",
+      "target": [
+        [
+          "water",
+          "a"
+        ],
+        [
+          "water",
+          "b"
+        ]
+      ],
+      "scale": 100,
+      "bounds": [
+        1200,
+        3000
+      ]
+    },
+    {
+      "family": "association_volume",
+      "identity": "association/water/a/water/b/volume",
+      "target": [
+        [
+          "water",
+          "a"
+        ],
+        [
+          "water",
+          "b"
+        ]
+      ],
+      "scale": 0.005,
+      "bounds": [
+        0.005,
+        0.15
+      ]
+    }
+  ],
+  "gates": {
+    "cp": 0.03,
+    "slack": 1e-06,
+    "raw_residual": 1e-09
+  },
+  "cp_verification_tolerance": 1e-06,
+  "enthalpy_steps_K": [
+    0.1,
+    0.05
+  ],
+  "budget_s": 600,
+  "assessment_reserve_s": 3,
+  "worker_memory": {
+    "allowance_bytes": 67108864,
+    "basis": "Conservative allowance for pure-water row work; observed free memory determines workers."
+  },
+  "controls": {
+    "maximum_iterations": 150,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08
+  },
+  "cases": [
+    {
+      "id": "lambda-0.1-A",
+      "lambda": 0.1,
+      "parameters_path": "analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b",
+      "origins": {
+        "component/water/segment_count": 1.3340338,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7176052,
+        "component/water/dispersion_energy_over_k": 415.47578,
+        "association/water/a/water/b/energy_over_k": 1725.6848,
+        "association/water/a/water/b/volume": 0.0461035
+      }
+    },
+    {
+      "id": "lambda-0.1-B",
+      "lambda": 0.1,
+      "parameters_path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/original-record.json",
+      "sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+      "origins": {
+        "component/water/segment_count": 1.2047,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7927,
+        "component/water/dispersion_energy_over_k": 353.95,
+        "association/water/a/water/b/energy_over_k": 2425.7,
+        "association/water/a/water/b/volume": 0.04509
+      }
+    },
+    {
+      "id": "lambda-0.1-C",
+      "lambda": 0.1,
+      "parameters_path": "analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b",
+      "origins": {
+        "component/water/segment_count": 1.2693669,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7551525999999997,
+        "component/water/dispersion_energy_over_k": 384.71289,
+        "association/water/a/water/b/energy_over_k": 2075.6924,
+        "association/water/a/water/b/volume": 0.04559675
+      }
+    },
+    {
+      "id": "lambda-1-A",
+      "lambda": 1,
+      "parameters_path": "analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b",
+      "origins": {
+        "component/water/segment_count": 1.3340338,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7176052,
+        "component/water/dispersion_energy_over_k": 415.47578,
+        "association/water/a/water/b/energy_over_k": 1725.6848,
+        "association/water/a/water/b/volume": 0.0461035
+      }
+    },
+    {
+      "id": "lambda-1-B",
+      "lambda": 1,
+      "parameters_path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/original-record.json",
+      "sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+      "origins": {
+        "component/water/segment_count": 1.2047,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7927,
+        "component/water/dispersion_energy_over_k": 353.95,
+        "association/water/a/water/b/energy_over_k": 2425.7,
+        "association/water/a/water/b/volume": 0.04509
+      }
+    },
+    {
+      "id": "lambda-1-C",
+      "lambda": 1,
+      "parameters_path": "analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b",
+      "origins": {
+        "component/water/segment_count": 1.2693669,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7551525999999997,
+        "component/water/dispersion_energy_over_k": 384.71289,
+        "association/water/a/water/b/energy_over_k": 2075.6924,
+        "association/water/a/water/b/volume": 0.04559675
+      }
+    },
+    {
+      "id": "lambda-10-A",
+      "lambda": 10,
+      "parameters_path": "analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b",
+      "origins": {
+        "component/water/segment_count": 1.3340338,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7176052,
+        "component/water/dispersion_energy_over_k": 415.47578,
+        "association/water/a/water/b/energy_over_k": 1725.6848,
+        "association/water/a/water/b/volume": 0.0461035
+      }
+    },
+    {
+      "id": "lambda-10-B",
+      "lambda": 10,
+      "parameters_path": "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/original-record.json",
+      "sha256": "9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241",
+      "origins": {
+        "component/water/segment_count": 1.2047,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7927,
+        "component/water/dispersion_energy_over_k": 353.95,
+        "association/water/a/water/b/energy_over_k": 2425.7,
+        "association/water/a/water/b/volume": 0.04509
+      }
+    },
+    {
+      "id": "lambda-10-C",
+      "lambda": 10,
+      "parameters_path": "analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json",
+      "sha256": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b",
+      "origins": {
+        "component/water/segment_count": 1.2693669,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 2.7551525999999997,
+        "component/water/dispersion_energy_over_k": 384.71289,
+        "association/water/a/water/b/energy_over_k": 2075.6924,
+        "association/water/a/water/b/volume": 0.04559675
+      }
+    }
+  ],
+  "prior_cpu_charge_s": 2,
+  "prior_wall_charge_s": 2,
+  "prior_charge_basis": "First execution serialization failure: measured study body 0.428065 CPU-s and 1.486880 wall-s; conservatively charge 2 s each including startup.",
+  "qualification_parameter_path": "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/parameters.json",
+  "qualification_parameter_sha256": "59acacc310a6dbea73b33599e9fdca3a474e4eccf12ccd139c27816cbef75a7f"
+}

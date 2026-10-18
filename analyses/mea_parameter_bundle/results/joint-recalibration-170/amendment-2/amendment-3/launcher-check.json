@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "ignores_SIGTERM": false,
+      "started_PID": 3182106,
+      "join_timeouts_requested_s": [
+        60
+      ],
+      "SIGKILL_sent": false,
+      "exitcode": -15,
+      "reaped": true
+    },
+    {
+      "ignores_SIGTERM": true,
+      "started_PID": 3182107,
+      "join_timeouts_requested_s": [
+        60,
+        null
+      ],
+      "SIGKILL_sent": true,
+      "exitcode": -9,
+      "reaped": true
+    }
+  ],
+  "meaning": "Disposable lifecycle check executes the changed AST block on real owned child PIDs; requested grace is asserted as 60 s, wait shortened only by the disposable proxy."
+}

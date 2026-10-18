@@ -1,0 +1,81 @@
+"""Disposable exact R4 columns and four finite evaluations; never calls fit."""
+import time,resource,signal,sys,json,math,csv,hashlib,zipfile,os
+from pathlib import Path
+started=time.perf_counter()
+resource.setrlimit(resource.RLIMIT_CPU,(90,91)); signal.alarm(90)
+for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS'): os.environ[k]='1'
+root=Path.cwd(); base=root/'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1'; out=base/'precursor/diagnosis-r4'
+sys.path[:0]=[str(root/'src'),str(root/'analyses/mea_parameter_bundle/scripts')]
+import numpy as np
+import fit_observations as o
+s=o.s; reg=o.reg
+load=lambda p:json.loads(Path(p).read_text())
+def write(n,d): (out/n).write_text(json.dumps(s._jsonable(d),indent=2,allow_nan=False)+'\n')
+def table(n,rows):
+ with (out/n).open('w') as f:
+  w=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator='\n');w.writeheader();w.writerows(rows)
+wheel=root/'tmp/amendment-2-84ca269d/wheel/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl'
+sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+assert sha(wheel)=='98a140a00796782b536c892695b3546547ab5986a4905ae723190aceee38d83a'
+with zipfile.ZipFile(wheel) as z:
+ names=[n for n in z.namelist() if n.startswith('epcsaft/') and not n.endswith('/')]
+ for n in names: assert (Path(o.epcsaft.__file__).parent.parent/n).read_bytes()==z.read(n),n
+spec=load(base/'stage3a-amendment2-route1-spec.json'); case=spec['cases'][0]
+# R4 diagnostic scales are reporting units only, not proposed bounds or fit settings.
+r4scales=[.2,80.]; summaries=[]; contributions=[]; comparisons=[]
+def coords_for(params,m):
+ pv=s.parameter_values(m); cs=[]
+ for c in case['coordinates']:
+  fac=c.get('source_to_native_factor',1.)
+  kw=dict(origin=fac*pv[c['identity']],scale=abs(fac)*c['scale'])
+  cs.append(reg.reaction_coordinate(c['reaction'],c['coefficient'],**kw) if 'reaction' in c else reg.coordinate(params,[(t['family'],tuple(t['target']) if isinstance(t['target'],list) else t['target'],t.get('factor',1.)) for t in c.get('targets',[dict(family=c['family'],target=c['target'])])],**kw))
+ cs += [reg.reaction_coordinate('R4',c,origin=pv['reaction:R4:correlation:'+src],scale=sc) for c,src,sc in [('a','a',r4scales[0]),('b','b_k',r4scales[1])]]
+ return cs
+def spectrum(J):
+ sv=np.linalg.svd(J,compute_uv=False);return dict(rank=int(sum(sv>sv[0]*1e-14)),columns=J.shape[1],condition=float(sv[0]/sv[-1]),singular_values=sv.tolist())
+for point,file in [('A-start','start-parameters.json'),('A-iteration-40','usable-budget-endpoint.json')]:
+ m=load(base/'precursor/A'/file); params,rows=o.stage2_rows(spec,m,case);cs=coords_for(params,m)
+ v=reg.differentiate(params,cs,[r[1] for r in rows],optimizer=[0.]*12,thermochemistry=o.thermal.record())
+ statuses=[z.name for z in v.statuses];assert statuses==['Available']*203,statuses
+ pred=np.array(v.predictions); obs=np.array([r[0]['observed'] for r in rows]);wt=np.sqrt([r[0]['weight'] for r in rows]);res=np.array([math.log(p/r[0]['observed']) if r[0]['form']=='log_ratio' else (p-r[0]['observed'])/r[0]['scale'] for p,r in zip(pred,rows)])*wt
+ J=np.array(v.residual_optimizer_gradient).reshape(203,12)*wt[:,None];J[:,9]*=-1
+ old=load(base/'precursor/diagnosis'/f'{point}-weighted-matrix.json');oldJ=np.array(old['weighted_source_increasing_scaled_jacobian']);oldr=np.array(old['weighted_residuals'])
+ assert [r[0]['id'] for r in rows]==old['row_ids']
+ deltaJ=float(np.max(np.abs(J[:,:10]-oldJ)));deltar=float(np.max(np.abs(res-oldr)))
+ assert deltaJ<1e-8,(point,deltaJ);assert deltar<1e-8,(point,deltar)
+ rec=dict(point=point,cost=float(.5*res@res),old_matrix_max_difference=deltaJ,old_residual_max_difference=deltar,columns={})
+ U,sv,_=np.linalg.svd(J[:,:7],full_matrices=False);U=U[:,sv>sv[0]*1e-14]
+ for k,label in [(10,'R4_a'),(11,'R4_b_k')]:
+  col=J[:,k];terms=res*col;indices=np.argsort(-np.abs(terms))[:5]
+  rec['columns'][label]=dict(scale=r4scales[k-10],gradient_scaled=float(res@col),gradient_per_source_unit=float(res@col/r4scales[k-10]),ion_span_cosine=float(np.linalg.norm(U.T@col)/np.linalg.norm(col)),R5_signed_cosine=float(col@J[:,9]/np.linalg.norm(col)/np.linalg.norm(J[:,9])),norm=float(np.linalg.norm(col)),top5=[dict(target=rows[i][0]['id'],contribution_scaled=float(terms[i]),contribution_per_source_unit=float(terms[i]/r4scales[k-10])) for i in indices])
+  for i,row in enumerate(rows):contributions.append(dict(point=point,coordinate=label,target=row[0]['id'],weighted_residual=float(res[i]),weighted_scaled_column=float(col[i]),gradient_contribution=float(terms[i])))
+ rec['spectra']={'10':spectrum(J[:,:10]),'10+R4_a':spectrum(J[:,:11]),'10+R4_b_k':spectrum(J[:,list(range(10))+[11]]),'10+2':spectrum(J)}
+ summaries.append(rec); write('local-influence.json',summaries)
+ write(point+'-weighted-matrix.json',dict(row_ids=old['row_ids'],coordinate_ids=old['coordinate_ids']+['reaction:R4:correlation:a','reaction:R4:correlation:b_k'],source_scales=old['source_scales']+r4scales,weighted_residuals=res.tolist(),weighted_source_increasing_scaled_jacobian=J.tolist(),predictions=pred.tolist(),statuses=statuses))
+ print(point,rec['cost'],rec['columns'],flush=True)
+table('target-gradient-contributions.csv',contributions)
+endpoint=load(base/'precursor/A/usable-budget-endpoint.json');pv=s.parameter_values(endpoint)
+changes=[]
+for da in (-.4,-.2,.2):changes.append((f'R4-a-{da:+.1f}',{'reaction:R4:correlation:a':pv['reaction:R4:correlation:a']+da}))
+interior={'reaction:R4:correlation:a':pv['reaction:R4:correlation:a']-.2}
+for i in (0,1,4,5,9):
+ c=case['coordinates'][i];val=pv[c['identity']];lo,hi=c['bounds'];assert abs(val-lo)<1e-9 or abs(val-hi)<1e-9
+ new=val+c['scale'] if abs(val-lo)<1e-9 else val-c['scale'];interior[c['identity']]=new
+ for tie in c.get('ties',[]):interior[tie['identity']]=new*tie['factor']
+changes.append(('R4-a--0.2-plus-all-five-interior',interior))
+allrows=[];evals=[]
+for name,change in changes:
+ m=s.with_parameter_values(endpoint,change);params,rows=o.stage2_rows(spec,m,case);model=o.epcsaft.Mixture(params,thermochemistry=o.thermal.record());rr=[]
+ for i,(row,item,problem) in enumerate(rows):
+  v=reg.predict(model,item);assert v.status.name=='Available',(name,row['id'],v.message);assert v.requested_tolerance_met is not False
+  family='reacting_pressures_25' if i<25 else 'unshared_species_115' if i<140 else 'Kiepe_39' if i<179 else 'stage4_24'
+  rr.append(dict(variant=name,family=family,target=row['id'],state_id=row['state_id'],T_K=row['T_K'],observed=row['observed'],predicted=v.value,scale=row.get('scale'),weight=row['weight'],residual=v.residual,weighted_residual=math.sqrt(row['weight'])*v.residual,cost=.5*row['weight']*v.residual**2,status=v.status.name,requested_tolerance_met=v.requested_tolerance_met))
+ assert len(rr)==203
+ familycost={f:sum(r['cost'] for r in rr if r['family']==f) for f in dict.fromkeys(r['family'] for r in rr)}
+ pools=[r for r in rr if r['family']=='stage4_24' and (r['target'].endswith('::HCO3-') or r['target'].endswith('::HCO3- + CO3^2-'))]
+ rec=dict(variant=name,changes=change,parameter_fingerprint=s.parameter_fingerprint(m),target_count=len(rr),total_cost=sum(r['cost'] for r in rr),family_costs=familycost,pools=pools)
+ evals.append(rec);allrows+=rr;write('finite-evaluations.json',evals);table('finite-targets.csv',allrows)
+ print(name,rec['total_cost'],familycost,flush=True)
+write('verification.json',dict(wheel_sha256=sha(wheel),installed_wheel_files_compared=len(names),fit_calls=0,point_count=2,finite_evaluation_count=4,all_targets_available=True,scales=dict(R4_a=.2,R4_b_k=80),rank_relative_cutoff=1e-14,source_increasing_orientation=True))
+u=resource.getrusage(resource.RUSAGE_SELF);ch=resource.getrusage(resource.RUSAGE_CHILDREN)
+write('probe-timing.json',dict(cpu_s=u.ru_utime+u.ru_stime+ch.ru_utime+ch.ru_stime,wall_s=time.perf_counter()-started,niceness=os.getpriority(os.PRIO_PROCESS,0),cpu_limit_s=90,wall_limit_s=90))

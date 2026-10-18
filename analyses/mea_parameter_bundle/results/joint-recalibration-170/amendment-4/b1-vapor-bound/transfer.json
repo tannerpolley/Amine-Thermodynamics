@@ -1,0 +1,279 @@
+{
+ "purpose": "B1 source-to-model transfer for the seven Hartono 2014 SI rows on the Hartono 2008 Eq. 5 basis (pN = P_R - P_S0, water fugacity fixed by the liquid). correction_factor_on_H multiplies the primary CO2 Hx target. signed_range_ln is ln(target) - ln(model-equivalent) left after the correction, signs kept; corrected_bound_pct is its largest magnitude (the B1 quantity, limit 1 %). magnitude_sum_pct adds every term as a magnitude (the first, superseded statement).",
+ "producer": {
+  "scripts": "tmp/b1-2008/eq5.py, tmp/b1-2008/b1_vapor.py, tmp/b1-2008/residual.py (ignored scratch; not versioned because the campaign code ceiling is 999/1000; equations in README)",
+  "eq5_sha256": "92f3ee3be9c90a7ba541cf8993a2db63f7e2474e47220367719b0c4e3c23ae4b",
+  "b1_vapor_sha256": "34ab7e9af7ac437da55f2c80f4e0fd35d16ea4d32149b674c5a493c818df6697",
+  "residual_sha256": "38a7f51d06925d1d769de98addbbe305db0c08822aad2410e2fe47b88a647598",
+  "inputs": {
+   "bubble": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/dilute-bubble/pressure-properties.json",
+   "bubble_sha256": "96b230a194a63674423221ca53091b6eb4ad51922be250da8b7bac03bce4bf92",
+   "co2_partial_pressure_at_bubble": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/neutral-fit-superseded/A/evaluation.json start predictions (k = 0, x = 1e-5, same state as P_b)",
+   "co2_partial_pressure_sha256": "7e03c8dd1c371bb6b75f93de84bb815e2c3e176af6022f385c7fa15725c08934"
+  },
+  "solvent_pressure": "P_S0 = P_b - pCO2 (CO2-free model solvent pressure), within 10 %"
+ },
+ "rows": [
+  {
+   "id": "Hartono2014_T11_unloaded_01",
+   "T_K": 298.34999999999997,
+   "pN_Pa": 61640,
+   "P_bubble_Pa": 2811.901433400995,
+   "psat_water_Pa": 3207.7350624016003,
+   "ln_f_over_pN_central": -0.0037315453994916023,
+   "correction_factor_on_H": 0.9962754081641743,
+   "uncorrected_combined_pct": 0.7378215815242672,
+   "uncorrected_central_combined_pct": 0.6247176326523052,
+   "sweep_0_to_psat_ln": [
+    -0.0037906445441541906,
+    -0.003312377115996696
+   ],
+   "vapor_residual_ln": 0.0011233863181116452,
+   "liquid_max_ln": 0.002496198212074815,
+   "model_term_ln": 7.74278816183504e-05,
+   "third_virial_ln": 5.639465275206746e-06,
+   "signed_range_ln": [
+    -0.0009341193094855244,
+    0.0035477961138433165
+   ],
+   "corrected_bound_pct": 0.35540969916825205,
+   "magnitude_sum_pct": 0.3709515160710497
+  },
+  {
+   "id": "Hartono2014_T11_unloaded_02",
+   "T_K": 312.65,
+   "pN_Pa": 87870,
+   "P_bubble_Pa": 6310.569530234652,
+   "psat_water_Pa": 7189.82868965959,
+   "ln_f_over_pN_central": -0.004871577687321688,
+   "correction_factor_on_H": 0.9951402692017727,
+   "uncorrected_combined_pct": 1.0120207833548278,
+   "uncorrected_central_combined_pct": 0.8310438857762392,
+   "sweep_0_to_psat_ln": [
+    -0.004983033120004521,
+    -0.004073785105189082
+   ],
+   "vapor_residual_ln": 0.0017932441362095396,
+   "liquid_max_ln": 0.003404519604575959,
+   "model_term_ln": 0.0001305080410507779,
+   "third_virial_ln": 2.601469192294778e-05,
+   "signed_range_ln": [
+    -0.0014351432667540176,
+    0.0050932703916576685
+   ],
+   "corrected_bound_pct": 0.5106263142464318,
+   "magnitude_sum_pct": 0.536864628298539
+  },
+  {
+   "id": "Hartono2014_T11_unloaded_03",
+   "T_K": 312.65,
+   "pN_Pa": 71710,
+   "P_bubble_Pa": 6310.569530234652,
+   "psat_water_Pa": 7189.82868965959,
+   "ln_f_over_pN_central": -0.004120333011587385,
+   "correction_factor_on_H": 0.995888143913894,
+   "uncorrected_combined_pct": 0.8573573737242102,
+   "uncorrected_central_combined_pct": 0.6927080605618086,
+   "sweep_0_to_psat_ln": [
+    -0.004231677445169094,
+    -0.0033233305912177694
+   ],
+   "vapor_residual_ln": 0.0016338307748389918,
+   "liquid_max_ln": 0.002782865596091624,
+   "model_term_ln": 0.0001305080410507779,
+   "third_virial_ln": 2.5908182359524833e-05,
+   "signed_range_ln": [
+    -0.0012779643794729278,
+    0.0043120965122393625
+   ],
+   "corrected_bound_pct": 0.4321406978136988,
+   "magnitude_sum_pct": 0.45835852318389936
+  },
+  {
+   "id": "Hartono2014_T11_unloaded_04",
+   "T_K": 322.25,
+   "pN_Pa": 62610,
+   "P_bubble_Pa": 10371.936442698043,
+   "psat_water_Pa": 11810.095241149764,
+   "ln_f_over_pN_central": -0.003811711638161088,
+   "correction_factor_on_H": 0.9961955437132819,
+   "uncorrected_combined_pct": 0.8188209573410488,
+   "uncorrected_central_combined_pct": 0.6206376082796394,
+   "sweep_0_to_psat_ln": [
+    -0.003975657931212798,
+    -0.0026337100963638774
+   ],
+   "vapor_residual_ln": 0.0019676722169069414,
+   "liquid_max_ln": 0.0023754842115121305,
+   "model_term_ln": 0.00019304422212218573,
+   "third_virial_ln": 6.574263355394816e-05,
+   "signed_range_ln": [
+    -0.0014762727879916065,
+    0.0042158548398508345
+   ],
+   "corrected_bound_pct": 0.42247540574078535,
+   "magnitude_sum_pct": 0.4612548487030299
+  },
+  {
+   "id": "Hartono2014_T11_unloaded_05",
+   "T_K": 331.75,
+   "pN_Pa": 71290,
+   "P_bubble_Pa": 16418.839140673084,
+   "psat_water_Pa": 18688.53138800731,
+   "ln_f_over_pN_central": -0.004417564243276389,
+   "correction_factor_on_H": 0.9955921788414644,
+   "uncorrected_combined_pct": 0.9724397111548821,
+   "uncorrected_central_combined_pct": 0.708662249390124,
+   "sweep_0_to_psat_ln": [
+    -0.004651851563034066,
+    -0.0027312296278444058
+   ],
+   "vapor_residual_ln": 0.002615789080934414,
+   "liquid_max_ln": 0.002644066145051771,
+   "model_term_ln": 0.0002859056334210497,
+   "third_virial_ln": 0.0001558673801338641,
+   "signed_range_ln": [
+    -0.0019896329876919424,
+    0.005129816972699
+   ],
+   "corrected_bound_pct": 0.5142997011209793,
+   "magnitude_sum_pct": 0.5717913457874202
+  },
+  {
+   "id": "Hartono2014_T11_unloaded_06",
+   "T_K": 341.25,
+   "pN_Pa": 48520,
+   "P_bubble_Pa": 25239.51710322975,
+   "psat_water_Pa": 28724.16630601042,
+   "ln_f_over_pN_central": -0.004046449494347279,
+   "correction_factor_on_H": 0.9959617263509752,
+   "uncorrected_combined_pct": 0.9037647666732207,
+   "uncorrected_central_combined_pct": 0.5862593641603686,
+   "sweep_0_to_psat_ln": [
+    -0.0043732581111965395,
+    -0.0016950591517964453
+   ],
+   "vapor_residual_ln": 0.0031515770240501603,
+   "liquid_max_ln": 0.0017990260169965938,
+   "model_term_ln": 0.0004186358472439947,
+   "third_virial_ln": 0.0003471455359313304,
+   "signed_range_ln": [
+    -0.002442643478084921,
+    0.0048791127297340905
+   ],
+   "corrected_bound_pct": 0.4891034982367204,
+   "magnitude_sum_pct": 0.5732754126637651
+  },
+  {
+   "id": "Hartono2014_T11_unloaded_07",
+   "T_K": 360.25,
+   "pN_Pa": 60760,
+   "P_bubble_Pa": 55160.23581918929,
+   "psat_water_Pa": 62798.99705542948,
+   "ln_f_over_pN_central": -0.006052019206666346,
+   "correction_factor_on_H": 0.993966257372915,
+   "uncorrected_combined_pct": 1.3773799432410527,
+   "uncorrected_central_combined_pct": 0.8298944362614691,
+   "sweep_0_to_psat_ln": [
+    -0.00665095561710179,
+    -0.0017751552569314714
+   ],
+   "vapor_residual_ln": 0.0054151053319134845,
+   "liquid_max_ln": 0.0022126782620989728,
+   "model_term_ln": 0.0008404203641757561,
+   "third_virial_ln": 0.0015,
+   "signed_range_ln": [
+    -0.005099341773550488,
+    0.0082873632298367
+   ],
+   "corrected_bound_pct": 0.8321798484578258,
+   "magnitude_sum_pct": 1.0018051997392474
+  }
+ ],
+ "sensitivity": {
+  "basis": "Neutral refits with fit_neutral_co2_mea.py at CO2 mole fraction 1e-6 (start A; B agrees within 1e-8). central = released targets. shift_minus_upper / shift_minus_lower move every target by -upper / -lower of its signed range; tilt_a / tilt_b use -upper above 320 K and -lower below, and the reverse. table11 uses the Table 11-derived basis (0.85-3.09 % source-representation difference). delta_* raise every target by the Peng-Robinson residual delta at the lowest, 400 kPa and 800 kPa fills.",
+  "fits": {
+   "central": {
+    "k_313": 0.09872001256320773,
+    "b_K": -50.989174300535694,
+    "dk": 0.0,
+    "db_K": 0.0,
+    "status": "converged",
+    "active_bounds": [],
+    "final_cost": 0.019592946798860533
+   },
+   "shift_minus_upper": {
+    "k_313": 0.09774512115463377,
+    "b_K": -48.92594986055325,
+    "dk": -0.000974891408573958,
+    "db_K": 2.0632244399824415,
+    "status": "converged",
+    "active_bounds": [],
+    "final_cost": 0.017002623826501407
+   },
+   "shift_minus_lower": {
+    "k_313": 0.09904314066649071,
+    "b_K": -52.711868138572946,
+    "dk": 0.00032312810328298525,
+    "db_K": -1.7226938380372516,
+    "status": "converged",
+    "active_bounds": [],
+    "final_cost": 0.0223127702186564
+   },
+   "tilt_a": {
+    "k_313": 0.09843751428494159,
+    "b_K": -46.58524433743372,
+    "dk": -0.0002824982782661384,
+    "db_K": 4.403929963101973,
+    "status": "converged",
+    "active_bounds": [],
+    "final_cost": 0.019298322779216563
+   },
+   "tilt_b": {
+    "k_313": 0.09835074378980284,
+    "b_K": -55.052588493288155,
+    "dk": -0.00036926877340488773,
+    "db_K": -4.063414192752461,
+    "status": "converged",
+    "active_bounds": [],
+    "final_cost": 0.02053564461427001
+   },
+   "table11": {
+    "k_313": 0.10240423744523602,
+    "b_K": -63.24826317411171,
+    "dk": 0.0036842248820282975,
+    "db_K": -12.259088873576019,
+    "status": "converged",
+    "active_bounds": [],
+    "final_cost": 0.017832376306694105
+   },
+   "delta_lowest_fill": {
+    "k_313": 0.09923501358548259,
+    "b_K": -52.705505577769046,
+    "dk": 0.0005150010222748636,
+    "db_K": -1.7163312772333512,
+    "status": "converged",
+    "active_bounds": [],
+    "final_cost": 0.021842386334682856
+   },
+   "delta_400kPa": {
+    "k_313": 0.10139360308643944,
+    "b_K": -55.85766372078584,
+    "dk": 0.0026735905232317114,
+    "db_K": -4.8684894202501425,
+    "status": "converged",
+    "active_bounds": [],
+    "final_cost": 0.0219206614757054
+   },
+   "delta_800kPa": {
+    "k_313": 0.10430217309702818,
+    "b_K": -60.84994532226064,
+    "dk": 0.005582160533820449,
+    "db_K": -9.860771021724943,
+    "status": "converged",
+    "active_bounds": [],
+    "final_cost": 0.024157354290292414
+   }
+  }
+ }
+}

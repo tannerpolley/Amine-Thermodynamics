@@ -90,6 +90,28 @@ def rows_for(spec, mapping, observation_id):
     return params, rows
 
 
+def stage6_rows(spec, mapping):
+    """Common-149 plus the declared restored, pooled, density and molality-Cp rows."""
+    params, common = rows_for(spec, mapping, 'base')
+    params, added = stage2_rows(spec, mapping, spec['cases'][0], assessment=True)
+    rows = [(dict(id=i, observed=item.observed, scale=item.scale, weight=w,
+        form=item.form.name, quantity=item.kind.name), item) for i, item, w in common]
+    rows.extend((row, item) for row, item, _ in added)
+    template = s.load_state_packet(ROOT/spec['packet_path'])['observations'][0]['request']
+    request = s.corrected_request(template, s.reaction_values(mapping))
+    reactions = s._problem_from_request(request).reactions
+    for row in spec['direct_rows']:
+        problem = eq.Problem(T=row['T_K'], P=row['P_Pa'], feed=eq.Amounts(row['analytical_feed']),
+            phases=[eq.Phase('L', kind='liquid', support=s.COMPONENT_IDS)], reactions=reactions,
+            neutral_reference=s._neutral_reference(request), row_tolerance=spec['verification']['raw_residual'])
+        item = reg.observation(params, row['quantity'], problem, observed=row['observed'],
+            form='difference', scale=row['scale'],
+            **(dict(phase='L', mass_basis=True) if row['quantity']=='phase_density' else {}))
+        rows.append((dict(row, form='difference'), item))
+    assert len(rows)==165+len(added) and len({r['id'] for r, _ in rows})==len(rows)
+    return params, rows
+
+
 def predict(mapping, items):
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping), thermochemistry=thermal.record())
     values = [reg.predict(model, item) for item in items]

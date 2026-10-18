@@ -1,0 +1,188 @@
+{
+  "basis": "Dimensionless costs = one half the squared retained weighted residual. Exact unchanged common-149 IDs/weights. Arithmetic on retained arrays only; no new Engine calls.",
+  "status": "Incomplete calibration; no route comparison record or primary lambda=0.1 metric.",
+  "start_training_cost": 196.86513659072983,
+  "partial_training_cost": 42.490303306668636,
+  "start_common149_cost": 160.86326227438911,
+  "partial_common149_cost": 24.13477092941483,
+  "families": [
+    {
+      "family": "Common-149 pressure",
+      "count": 47,
+      "start_cost": 24.051711171641855,
+      "partial_cost": 5.998688125828178
+    },
+    {
+      "family": "Common-149 species",
+      "count": 94,
+      "start_cost": 22.24846215416794,
+      "partial_cost": 17.14812241838872
+    },
+    {
+      "family": "Common-149 Vinjarapu heat",
+      "count": 8,
+      "start_cost": 114.56308894857932,
+      "partial_cost": 0.9879603851979359
+    },
+    {
+      "family": "Restored species",
+      "count": 7,
+      "start_cost": 2.908469012869772,
+      "partial_cost": 2.489287638535576
+    },
+    {
+      "family": "Pooled Jakobsen ratios",
+      "count": 6,
+      "start_cost": 29.641520375574615,
+      "partial_cost": 13.191976407413598
+    },
+    {
+      "family": "Equilibrium Cp",
+      "count": 4,
+      "start_cost": 3.451884927896323,
+      "partial_cost": 2.6742683313046274
+    }
+  ],
+  "largest_start_targets": [
+    {
+      "target": "vinjarapu2024_source_table4_05",
+      "family": "Common-149 Vinjarapu heat",
+      "common149": true,
+      "quantity": "AdditionEnthalpy",
+      "weight": 1.0,
+      "observed": -84000.0,
+      "start_prediction": -64767.76618946012,
+      "partial_prediction": -82244.61263256968,
+      "start_weighted_residual": 6.410744603513294,
+      "partial_weighted_residual": 0.5851291224767725,
+      "start_cost": 20.548823185737408,
+      "partial_cost": 0.17118804498521892
+    },
+    {
+      "target": "vinjarapu2024_source_table4_07",
+      "family": "Common-149 Vinjarapu heat",
+      "common149": true,
+      "quantity": "AdditionEnthalpy",
+      "weight": 1.0,
+      "observed": -84000.0,
+      "start_prediction": -66032.16814910294,
+      "partial_prediction": -82470.60710688558,
+      "start_weighted_residual": 5.989277283632352,
+      "partial_weighted_residual": 0.5097976310381395,
+      "start_cost": 17.93572119011726,
+      "partial_cost": 0.1299468123060495
+    },
+    {
+      "target": "vinjarapu2024_source_table4_01",
+      "family": "Common-149 Vinjarapu heat",
+      "common149": true,
+      "quantity": "AdditionEnthalpy",
+      "weight": 1.0,
+      "observed": -80000.0,
+      "start_prediction": -62536.313571599545,
+      "partial_prediction": -81079.1951532609,
+      "start_weighted_residual": 5.8212288094668185,
+      "partial_weighted_residual": -0.35973171775363155,
+      "start_cost": 16.943352426083237,
+      "partial_cost": 0.06470345437898922
+    },
+    {
+      "target": "vinjarapu2024_source_table4_08",
+      "family": "Common-149 Vinjarapu heat",
+      "common149": true,
+      "quantity": "AdditionEnthalpy",
+      "weight": 1.0,
+      "observed": -83000.0,
+      "start_prediction": -66032.16814910294,
+      "partial_prediction": -82470.60710688558,
+      "start_weighted_residual": 5.655943950299019,
+      "partial_weighted_residual": 0.1764642977048061,
+      "start_cost": 15.994850984462035,
+      "partial_cost": 0.015569824182225217
+    },
+    {
+      "target": "vinjarapu2024_source_table4_02",
+      "family": "Common-149 Vinjarapu heat",
+      "common149": true,
+      "quantity": "AdditionEnthalpy",
+      "weight": 1.0,
+      "observed": -79000.0,
+      "start_prediction": -62536.313571599545,
+      "partial_prediction": -81079.1951532609,
+      "start_weighted_residual": 5.487895476133485,
+      "partial_weighted_residual": -0.6930650510869648,
+      "start_cost": 15.058498378483183,
+      "partial_cost": 0.24016958251908857
+    },
+    {
+      "target": "vinjarapu2024_source_table4_03",
+      "family": "Common-149 Vinjarapu heat",
+      "common149": true,
+      "quantity": "AdditionEnthalpy",
+      "weight": 1.0,
+      "observed": -85000.0,
+      "start_prediction": -63523.84478779236,
+      "partial_prediction": -81640.28461544454,
+      "start_weighted_residual": 5.36903880305191,
+      "partial_weighted_residual": 0.8399288461388642,
+      "start_cost": 14.413288834338543,
+      "partial_cost": 0.3527402332880819
+    },
+    {
+      "target": "Jakobsen2005_state_022::HCO3- + CO3^2-",
+      "family": "Pooled Jakobsen ratios",
+      "common149": false,
+      "quantity": "amount_ratio",
+      "weight": 1.0,
+      "observed": 0.1413427561837456,
+      "start_prediction": 0.21182939561806305,
+      "partial_prediction": 0.19610468259307795,
+      "start_weighted_residual": 4.657417455034285,
+      "partial_weighted_residual": 3.6184041965540645,
+      "start_cost": 10.845768675229015,
+      "partial_cost": 6.546424464820032
+    },
+    {
+      "target": "Jakobsen2005_state_011::HCO3- + CO3^2-",
+      "family": "Pooled Jakobsen ratios",
+      "common149": false,
+      "quantity": "amount_ratio",
+      "weight": 1.0,
+      "observed": 0.007279344858962693,
+      "start_prediction": 0.015271635459983897,
+      "partial_prediction": 0.007773222440073895,
+      "start_weighted_residual": 4.625343533713693,
+      "partial_weighted_residual": 0.2858196217173306,
+      "start_cost": 10.696901402433536,
+      "partial_cost": 0.040846428079318986
+    },
+    {
+      "target": "vinjarapu2024_source_table4_04",
+      "family": "Common-149 Vinjarapu heat",
+      "common149": true,
+      "quantity": "AdditionEnthalpy",
+      "weight": 1.0,
+      "observed": -81000.0,
+      "start_prediction": -63523.84478779236,
+      "partial_prediction": -81640.28461544454,
+      "start_weighted_residual": 4.36903880305191,
+      "partial_weighted_residual": -0.16007115386113582,
+      "start_cost": 9.544250031286634,
+      "partial_cost": 0.012811387149217708
+    },
+    {
+      "target": "Jakobsen2005_state_011::MEAH+",
+      "family": "Pooled Jakobsen ratios",
+      "common149": false,
+      "quantity": "amount_ratio",
+      "weight": 1.0,
+      "observed": 0.21474067333939945,
+      "start_prediction": 0.29642678275313905,
+      "partial_prediction": 0.2906183621911744,
+      "start_weighted_residual": 3.63468295257702,
+      "partial_weighted_residual": 3.3762330478197757,
+      "start_cost": 6.605460082877002,
+      "partial_cost": 5.699474796595206
+    }
+  ]
+}

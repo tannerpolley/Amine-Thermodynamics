@@ -1,0 +1,107 @@
+{
+  "selected": [],
+  "completed": false,
+  "calls": [
+    {
+      "path": "precursor/A/start-predictions.json",
+      "operation": "assessment",
+      "cpu_s": 8.398312999999998,
+      "wall_s": 8.40067668800475,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        6.26806640625,
+        6.6162109375,
+        5.39208984375
+      ]
+    },
+    {
+      "path": "precursor/B/start-predictions.json",
+      "operation": "assessment",
+      "cpu_s": 8.473101,
+      "wall_s": 8.515351031994214,
+      "wall_limit_s": 60,
+      "interrupted": false,
+      "host_load": [
+        5.99267578125,
+        6.5458984375,
+        5.3818359375
+      ]
+    },
+    {
+      "path": "precursor/A/native-fit.json",
+      "operation": "fit",
+      "cpu_s": 663.565095,
+      "wall_s": 35.25439217100211,
+      "wall_limit_s": 300,
+      "interrupted": false,
+      "host_load": [
+        12.75732421875,
+        8.126953125,
+        5.95166015625
+      ]
+    }
+  ],
+  "cpu_s": 695.799685,
+  "wall_s": 67.60770681999158,
+  "cumulative_cpu_s": 2095.81424672,
+  "cumulative_wall_s": 536.132346551984,
+  "remaining_cpu_s": 141904.18575328,
+  "remaining_wall_s": 21063.867653448015,
+  "precursor_run_cpu_s": 680.719557,
+  "precursor_run_wall_s": 52.40125925499888,
+  "postprocessing_cpu_s": 0.10520099999999999,
+  "postprocessing_wall_s": 0.08824128498963546,
+  "reporting_charge_pending": false,
+  "unmetered_prior_overhead": "unknown; wall totals and remaining amounts retain lower/upper bounds",
+  "remaining_precursor_cpu_s": 6995.969486,
+  "remaining_precursor_wall_s": 429.24170634502025,
+  "rendering_calls": [
+    {
+      "operation": "managed presentation refresh; unavailable snakemake",
+      "cpu_user_s": 8.92,
+      "cpu_system_s": 2.9,
+      "wall_s": 10.08,
+      "exitcode": 1,
+      "charged_cpu_s": 11.84,
+      "charged_wall_s": 10.09,
+      "rounding_cpu_s": 0.02,
+      "rounding_wall_s": 0.01
+    },
+    {
+      "operation": "guarded static HTML; passed",
+      "cpu_user_s": 13.04,
+      "cpu_system_s": 3.44,
+      "wall_s": 15.17,
+      "exitcode": 0,
+      "charged_cpu_s": 16.5,
+      "charged_wall_s": 15.18,
+      "rounding_cpu_s": 0.02,
+      "rounding_wall_s": 0.01
+    }
+  ],
+  "unmetered_preparation_conservative_charge": {
+    "cpu_s": 32.0,
+    "wall_s": 30.0,
+    "basis": "Conservative charge for remaining short unmetered wheel/environment setup, source searches/hash checks, declaration/table assembly, report and verification commands; excludes all measured calls and the earlier explicit 1 s preparation/reporting charges. No CPU-count-times-wall estimate is used."
+  },
+  "post_stop_cpu_s": 108.230829,
+  "post_stop_wall_s": 103.1505868349882,
+  "precursor_block_charged_cpu_s": 804.0305139999999,
+  "precursor_block_charged_wall_s": 170.75829365497978,
+  "final_cumulative_cpu_s": 2204.04507572,
+  "final_cumulative_wall_s_lower_bound": 639.2829333869722,
+  "final_remaining_cpu_s_upper_bound": 141795.95492428,
+  "final_remaining_wall_s_upper_bound": 20960.717066613026,
+  "part1_increment_cpu_s": 805.2535449999999,
+  "part1_increment_wall_s": 171.94224355897222,
+  "pre_diagnosis_final_cumulative_cpu_s": 2156.25944772,
+  "pre_diagnosis_final_cumulative_wall_s_lower_bound": 591.4905878369736,
+  "bounded_diagnosis": {
+    "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route1/precursor/diagnosis/timing-and-program-accounting.json",
+    "cpu_s": 47.785628,
+    "wall_s": 47.79234554999857
+  },
+  "pre_diagnosis_post_stop_cpu_s": 60.445201,
+  "pre_diagnosis_post_stop_wall_s": 55.35824128498963
+}

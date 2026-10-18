@@ -1,0 +1,221 @@
+{
+  "complete": false,
+  "eligible": false,
+  "status": "limit_reached",
+  "message": "Maximum solver time reached. Total solver time: 1.202227e+02 >= 1.075647e+02.",
+  "usable_partial": true,
+  "limits": {
+    "iterations": 40,
+    "native_solver_wall_s": 300,
+    "outer_crash_backstop_wall_s": 420,
+    "aggregate_CPU_s": 3000
+  },
+  "outcome": "Native time limit reached; no subsequent fit or assessment launched.",
+  "initial_training_cost": 196.8651365907298,
+  "final_training_cost": 42.490303306668636,
+  "recomputed_training_cost": 42.490303306668636,
+  "iterations": 29,
+  "iteration_costs": [
+    196.86513659072983,
+    160.31343338468167,
+    151.6922174698517,
+    127.33296562281393,
+    106.43885750394993,
+    131.66550960929789,
+    149.0694782835443,
+    211.63362300442856,
+    167.68490343064707,
+    48.75989049538494,
+    46.577664335727654,
+    46.61882430241034,
+    45.5157495778411,
+    44.72337053793547,
+    44.16790118160856,
+    61.92284974474985,
+    64.42411256952721,
+    76.32613681400383,
+    45.184563708314755,
+    44.085677686732105,
+    146.11347387117817,
+    758.0183634099754,
+    1792.498981395384,
+    43.853889606781564,
+    43.35172087833392,
+    44.53892959409701,
+    43.14062921514078,
+    42.87206609109248,
+    42.700010685984665,
+    42.490303306668636
+  ],
+  "iteration_seconds": [
+    2.9087066650390625e-05,
+    18.19493293762207,
+    18.022783041000366,
+    17.733698844909668,
+    17.562413215637207,
+    1.9807441234588623,
+    1.7587840557098389,
+    1.7586967945098877,
+    1.8235290050506592,
+    17.6521098613739,
+    17.345985889434814,
+    1.828355073928833,
+    17.216112852096558,
+    17.224885940551758,
+    17.47348380088806,
+    1.8798439502716064,
+    1.8091309070587158,
+    1.7961859703063965,
+    1.8630459308624268,
+    17.510129928588867,
+    1.9359560012817383,
+    1.9368488788604736,
+    1.850243091583252,
+    23.655389070510864,
+    18.431669235229492,
+    1.887282133102417,
+    17.980966091156006,
+    17.588671922683716,
+    17.379419088363647,
+    17.57610511779785
+  ],
+  "history_semantics": "Native solver iteration entries, including rejected trial costs; entry zero is the start. Native per-entry durations are not total call wall time.",
+  "projected_gradient_norm": 5.488915316885635,
+  "gradient_tolerance": 1e-08,
+  "active_bounds": [
+    {
+      "index": 2,
+      "identity": "pair/bicarbonate-anion/water/k_ij",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "boundary": "upper",
+      "optimizer": 0.0,
+      "physical_bound": 0.5
+    },
+    {
+      "index": 3,
+      "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "boundary": "lower",
+      "optimizer": -29.27141097848057,
+      "physical_bound": -1.0
+    },
+    {
+      "index": 7,
+      "identity": "component/protonated-monoethanolamine/born_diameter",
+      "bounds": [
+        2.0,
+        5.0
+      ],
+      "boundary": "upper",
+      "optimizer": 14.369999999999997,
+      "physical_bound": 5.0
+    },
+    {
+      "index": 8,
+      "identity": "component/carbamate-anion/born_diameter",
+      "bounds": [
+        2.0,
+        5.0
+      ],
+      "boundary": "lower",
+      "optimizer": -15.605000000000002,
+      "physical_bound": 2.0
+    },
+    {
+      "index": 10,
+      "identity": "reaction:R2:enthalpy_shift",
+      "bounds": [
+        -10000.0,
+        10000.0
+      ],
+      "boundary": "lower",
+      "optimizer": -4.0,
+      "physical_bound": -10000.0
+    }
+  ],
+  "available_rows": 166,
+  "requested_rows": 166,
+  "trial_failures": 0,
+  "residual_evaluations": 29,
+  "jacobian_evaluations": 17,
+  "full_rank": 14,
+  "full_condition": 11468.480769679429,
+  "full_singular_values": [
+    15.005763696192025,
+    4.7916673694299,
+    3.181873820918421,
+    0.7008874856921342,
+    0.28122149853338374,
+    0.14844890801404836,
+    0.07655820182543825,
+    0.06123386874038355,
+    0.02439316260515522,
+    0.01873854933034599,
+    0.009963960941232596,
+    0.0084987881760698,
+    0.0017708193479100116,
+    0.0013084351796503445
+  ],
+  "free_rank": 9,
+  "free_columns": [
+    0,
+    1,
+    4,
+    5,
+    6,
+    9,
+    11,
+    12,
+    13
+  ],
+  "free_condition": 733.5315809292151,
+  "free_singular_values": [
+    14.999634664861048,
+    4.75119091052195,
+    2.3209355447372904,
+    0.6645747883831445,
+    0.2525171600917667,
+    0.14428173806251382,
+    0.07134190555505963,
+    0.049923984757116964,
+    0.02044851926601439
+  ],
+  "covariance_status": "not_converged",
+  "call": {
+    "start": "A",
+    "cpu_s": 2115.8111989999998,
+    "wall_s": 334.0349491130037,
+    "exitcode": 0,
+    "interrupted": false,
+    "host_load": [
+      12.75341796875,
+      11.28515625,
+      8.83154296875
+    ]
+  },
+  "command": {
+    "cpu_s": 2116.045215,
+    "wall_s": 334.2694463539956,
+    "exitcode": 1,
+    "owner_command_PID": 1581873,
+    "UTC": "2026-10-16T02:40:37.536037+00:00",
+    "host_load": [
+      12.75341796875,
+      11.28515625,
+      8.83154296875
+    ],
+    "CPU_basis": "RUSAGE_SELF plus RUSAGE_CHILDREN delta after driver wait; native owner normal-reap status is in timing.json."
+  },
+  "final_call_wall_excess_over_native_limit_s": 34.03494911300368,
+  "complete_endpoint_available": false,
+  "partial_endpoint_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2/lambda-0/F1/A/rerun-1/usable-budget-endpoint.json",
+  "verification": "Finite returned values and cost reconstruction only. No new replay, derivative, closure or physical assessment call after the stop.",
+  "native_sha256": "77c2428843c10cc3c1810e737721832aedd7ca01eab76b1d565d35270707e486",
+  "partial_endpoint_sha256": "e76ce000a29008983a16853da2b096447218358ee11646caaaf33fbef0e65140"
+}
