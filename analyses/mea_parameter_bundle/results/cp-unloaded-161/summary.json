@@ -1,0 +1,274 @@
+{
+  "question": "#161: does the #124 nominally unloaded 30 wt% MEA state pass the unchanged 1e-9 raw gate on the pinned wheel, and what is its equilibrium Cp?",
+  "conditions": {
+    "T_K": 353.15,
+    "P_Pa": 101325.0,
+    "mea_mol_per_kg_water": 7.0,
+    "unloaded_proxy_loading": 1e-05,
+    "phases": "one nine-species liquid",
+    "reactions": "R1-R5 of each record"
+  },
+  "verification": {
+    "files": {
+      "analyses/mea_parameter_bundle/results/density-cp-160/cp-124-assessment/solution-request-0.0.json": "bc8a03e13efab9a9675a63121c12538dbb9f42a18dbe4ddc7fe6742b6ab6da61",
+      "data/reference/MEA/thermal/physical-ideal-gas-calorics.json": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a",
+      "analyses/mea_parameter_bundle/results/density-cp-160/D1-evidence/F1-double-prime-candidate-parameters.json": "756fec502d3a1433d538abb073c4caeabf91902013ab7e27d5459ce70396543b",
+      "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "7b0b4bb5669c1b2061fd7ec26e5fb4c8491005bdb5ba8f9e22e4c0b0b4b84308"
+    },
+    "wheel_sha256": "d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357",
+    "installed_package": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.claude/worktrees/agent-af71dd61b4cef9814/.venv/lib/python3.13/site-packages/epcsaft",
+    "installed_files_verified": 12,
+    "python": "3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]",
+    "packages": {
+      "epcsaft": "0.2.0.dev0",
+      "numpy": "2.4.4",
+      "scipy": "1.17.1"
+    }
+  },
+  "states": [
+    {
+      "record": "124-record-756fec50",
+      "nominal_loading": 0.0,
+      "model_loading": 1e-05,
+      "request_rebuilt_equals_archived": true,
+      "gate": "verify_temperature_reference.solve: success and max|raw residual| <= 1e-9",
+      "admitted": true,
+      "raw_residual_max": 8.526512829121202e-14,
+      "raw_residual_recomputed_max": 8.526512829121202e-14,
+      "classified_residual": 5.787972776018096e-15,
+      "iterations": 13,
+      "termination": "converged: residual 5.7879727760180963e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 1.5379984769968085e-10, amplification 0",
+      "feed_mass_kg": {
+        "mea_basis": 0.20393515190385564,
+        "request_basis": 0.20393212186979376
+      },
+      "mass_ratio_mea_over_request": 1.0000148580519543,
+      "equilibrium_cp_kJ_kg_K": {
+        "mea_basis": 3.843630799187969,
+        "request_basis": 3.843687908054076
+      },
+      "frozen_cp_kJ_kg_K": {
+        "ideal": 1.784625660993375,
+        "residual": 2.0590045465577793,
+        "total": 3.843630207551154
+      },
+      "reaction_response_kJ_kg_K": 5.916368146507978e-07,
+      "liquid_composition": [
+        4.884982584796472e-13,
+        0.11192967076429454,
+        0.8879543866436205,
+        5.797472237243298e-05,
+        1.0912721455289406e-06,
+        2.1758383085052307e-08,
+        6.856350489500299e-09,
+        1.6010263588528874e-12,
+        5.684798074388e-05
+      ],
+      "resolve": [
+        {
+          "step_K": 0.1,
+          "cp_kJ_kg_K": 3.8436308506488324,
+          "relative_difference": 1.3388607333908453e-08
+        },
+        {
+          "step_K": 0.05,
+          "cp_kJ_kg_K": 3.8436308120483065,
+          "relative_difference": 3.345882682026513e-09
+        }
+      ],
+      "cp_numerically_verified": true,
+      "cp_verified_with_half_error_rule": true,
+      "comparison": {
+        "hilliard_kJ_kg_K": 3.8566,
+        "model_minus_hilliard_relative": -0.0033628586869343113,
+        "engine_kJ_kg_K": 3.8436879,
+        "mea_prior_kJ_kg_K": 3.843630799,
+        "mea_basis_minus_engine_relative": -1.4855735823715577e-05,
+        "request_basis_minus_engine_relative": 2.095403184299016e-09,
+        "mea_basis_minus_mea_prior_relative": 4.8903991967108595e-11
+      }
+    },
+    {
+      "record": "124-record-756fec50",
+      "nominal_loading": 0.358,
+      "model_loading": 0.358,
+      "request_rebuilt_equals_archived": null,
+      "gate": "verify_temperature_reference.solve: success and max|raw residual| <= 1e-9",
+      "admitted": true,
+      "raw_residual_max": 1.2789769243681803e-13,
+      "raw_residual_recomputed_max": 1.2789769243681803e-13,
+      "classified_residual": 4.941676891987188e-15,
+      "iterations": 14,
+      "termination": "converged: residual 4.941676891987188e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.6363387573993855e-10, amplification 0",
+      "feed_mass_kg": {
+        "mea_basis": 0.2196901128080636,
+        "request_basis": 0.21968668630086882
+      },
+      "mass_ratio_mea_over_request": 1.0000155972455704,
+      "equilibrium_cp_kJ_kg_K": {
+        "mea_basis": 3.314718093515828,
+        "request_basis": 3.314769793987929
+      },
+      "frozen_cp_kJ_kg_K": {
+        "ideal": 1.5976314311862514,
+        "residual": 1.695259284053782,
+        "total": 3.2928907152400333
+      },
+      "reaction_response_kJ_kg_K": 0.02182737827579473,
+      "liquid_composition": [
+        1.4120241803149796e-05,
+        0.03406367177087341,
+        0.885658513597171,
+        0.04018579560790594,
+        0.03773768807204912,
+        0.0022316940062259527,
+        0.00010789933131697448,
+        1.2528297649517683e-09,
+        6.161198249081215e-07
+      ],
+      "resolve": [
+        {
+          "step_K": 0.1,
+          "cp_kJ_kg_K": 3.3147182028060476,
+          "relative_difference": 3.2971195773612294e-08
+        },
+        {
+          "step_K": 0.05,
+          "cp_kJ_kg_K": 3.3147181208718317,
+          "relative_difference": 8.252889927007345e-09
+        }
+      ],
+      "cp_numerically_verified": true,
+      "cp_verified_with_half_error_rule": true,
+      "comparison": {
+        "hilliard_kJ_kg_K": 3.4707,
+        "model_minus_hilliard_relative": -0.04494249185587107,
+        "engine_kJ_kg_K": 3.3147698,
+        "mea_prior_kJ_kg_K": 3.3147180836891086,
+        "mea_basis_minus_engine_relative": -1.5598815993778103e-05,
+        "request_basis_minus_engine_relative": -1.8137220614278249e-09,
+        "mea_basis_minus_mea_prior_relative": 2.9645716992376947e-09
+      }
+    },
+    {
+      "record": "selected-current-7b0b4bb5",
+      "nominal_loading": 0.0,
+      "model_loading": 1e-05,
+      "request_rebuilt_equals_archived": true,
+      "gate": "verify_temperature_reference.solve: success and max|raw residual| <= 1e-9",
+      "admitted": true,
+      "raw_residual_max": 5.684341886080802e-14,
+      "raw_residual_recomputed_max": 5.684341886080802e-14,
+      "classified_residual": 1.0169259287897329e-14,
+      "iterations": 13,
+      "termination": "converged: residual 1.0169259287897329e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 1.5379960774852609e-10, amplification 0",
+      "feed_mass_kg": {
+        "mea_basis": 0.20393515190385564,
+        "request_basis": 0.20393212186979376
+      },
+      "mass_ratio_mea_over_request": 1.0000148580519543,
+      "equilibrium_cp_kJ_kg_K": {
+        "mea_basis": 3.843741897418673,
+        "request_basis": 3.843799007935483
+      },
+      "frozen_cp_kJ_kg_K": {
+        "ideal": 1.7848743917808134,
+        "residual": 2.0588536011951226,
+        "total": 3.843727992975936
+      },
+      "reaction_response_kJ_kg_K": 1.3904442736745182e-05,
+      "liquid_composition": [
+        5.273491403499428e-13,
+        0.11193414324913159,
+        0.8879588599702838,
+        5.3501510815560954e-05,
+        1.0919988609658085e-06,
+        2.1642951026762954e-08,
+        6.245028259480967e-09,
+        1.7271406076313013e-12,
+        5.237538067420317e-05
+      ],
+      "resolve": [
+        {
+          "step_K": 0.1,
+          "cp_kJ_kg_K": 3.843741948784269,
+          "relative_difference": 1.3363435247271127e-08
+        },
+        {
+          "step_K": 0.05,
+          "cp_kJ_kg_K": 3.843741910183743,
+          "relative_difference": 3.321000807687824e-09
+        }
+      ],
+      "cp_numerically_verified": true,
+      "cp_verified_with_half_error_rule": true,
+      "comparison": {
+        "hilliard_kJ_kg_K": 3.8566,
+        "model_minus_hilliard_relative": -0.0033340513875763644
+      }
+    },
+    {
+      "record": "selected-current-7b0b4bb5",
+      "nominal_loading": 0.358,
+      "model_loading": 0.358,
+      "request_rebuilt_equals_archived": null,
+      "gate": "verify_temperature_reference.solve: success and max|raw residual| <= 1e-9",
+      "admitted": true,
+      "raw_residual_max": 1.4210854715202004e-13,
+      "raw_residual_recomputed_max": 1.4210854715202004e-13,
+      "classified_residual": 6.497276977296497e-15,
+      "iterations": 14,
+      "termination": "converged: residual 6.4972769772964967e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.6386420431519243e-10, amplification 0",
+      "feed_mass_kg": {
+        "mea_basis": 0.2196901128080636,
+        "request_basis": 0.21968668630086882
+      },
+      "mass_ratio_mea_over_request": 1.0000155972455704,
+      "equilibrium_cp_kJ_kg_K": {
+        "mea_basis": 3.3426877745333687,
+        "request_basis": 3.3427399112554532
+      },
+      "frozen_cp_kJ_kg_K": {
+        "ideal": 1.7687007586153167,
+        "residual": 1.5548389498628485,
+        "total": 3.3235397084781653
+      },
+      "reaction_response_kJ_kg_K": 0.019148066055203472,
+      "liquid_composition": [
+        1.4199411944352508e-05,
+        0.033957258737721256,
+        0.8857755329830903,
+        0.04017523306659064,
+        0.03785465478035228,
+        0.0021250844075688196,
+        9.745987744299004e-05,
+        1.3057537048882674e-09,
+        5.754295355699376e-07
+      ],
+      "resolve": [
+        {
+          "step_K": 0.1,
+          "cp_kJ_kg_K": 3.3426878874817976,
+          "relative_difference": 3.37897034796697e-08
+        },
+        {
+          "step_K": 0.05,
+          "cp_kJ_kg_K": 3.3426878027390754,
+          "relative_difference": 8.438032050861466e-09
+        }
+      ],
+      "cp_numerically_verified": true,
+      "cp_verified_with_half_error_rule": true,
+      "comparison": {
+        "hilliard_kJ_kg_K": 3.4707,
+        "model_minus_hilliard_relative": -0.03688369074441211
+      }
+    }
+  ],
+  "declared_in_memory": {
+    "124-record-756fec50": "topology.no_cross_association carbon-dioxide/monoethanolamine (#191)"
+  },
+  "wall_s": 1.9193624019972049,
+  "producer_sha256": "141173dc756bfd12fc8e0d9a512c04d464e763a6728a6fc27a007dcef5dcdcd4",
+  "claim_limit": "Numerical verification of admission and the equilibrium Cp action at one temperature; Hilliard comparison is conditional prediction for these records, not physical validation. Loading 1e-5 is a numerical proxy for zero; no proxy-convergence, temperature sweep, parameter change or C5 replay is performed here."
+}

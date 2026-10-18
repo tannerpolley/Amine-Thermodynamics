@@ -10,6 +10,7 @@ resources:
   - results/heat-final-170/high-temperature-comparison.csv
   - results/heat-final-170/heat-comparison.csv
   - results/heat-final-170/heat-capacity-comparison.csv
+  - results/cp-unloaded-161/summary.json
   - results/heat-final-170/corrected-densities.csv
   - results/heat-final-170/figure-data/heat.csv
   - results/heat-final-170/figure-data/input-hashes.json
@@ -284,7 +285,7 @@ Current equilibrium solution Cp spot checks are retained in [heat-capacity-compa
 
 <!-- RESULTS:heat-capacity:END -->
 
-[#124](https://github.com/tannerpolley/Amine-Thermodynamics/issues/124) fixes these misses before the joint refit, starting with the water parameters. The unloaded 80 °C value is [#161](https://github.com/tannerpolley/Amine-Thermodynamics/issues/161); no current value for it or for a pure-water grid is retained in this set.
+[#124](https://github.com/tannerpolley/Amine-Thermodynamics/issues/124) fixes these misses before the joint refit, starting with the water parameters. For the unloaded 80 °C state, the [#161 check](results/cp-unloaded-161/README.md) on Engine 21e761c3 uses the #124 basis: 7 mol MEA/kg water, loading $10^{-5}$, 353.15 K and 101325 Pa. The state now passes the unchanged $10^{-9}$ raw-residual gate, with a worst row of $5.7\times10^{-14}$. The heat F1 record gives 3.8437 kJ/(kg·K), −0.33 % from Hilliard's 3.8566. Engine #261 reported slightly higher values on the earlier #124 record. The gap, about $1.5\times10^{-5}$ relative, comes only from its different molar masses for the feed mass. No pure-water grid for this record is retained in this set.
 
 # Open work
 
