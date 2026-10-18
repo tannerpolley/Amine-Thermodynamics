@@ -3,15 +3,16 @@
 Researched 2026-10-16; computation reproduced independently by the
 orchestrator (scratch script `/tmp/b1-virial/b1_vapor.py`, sha256
 `34ab7e9a…df6697`, stdlib only, reproducible from the equations below).
+Closed 2026-10-17 on the 2008 apparatus paper; see the last section.
 
 ## Result
 
-For the seven unloaded 30 wt % Hartono SI Table S2 rows, the N₂O vapor
-fugacity term plus the 0.416577 % liquid Poynting bound stays **at most
-0.943 %** (row 2, widest envelope), below the 1 % B1 limit. **B1 stays open**:
-the bound holds only under conditions 1–3 below, which need the Hartono,
-Juliussen & Svendsen 2008 apparatus paper (J. Chem. Eng. Data 53, 2696–2700,
-doi:10.1021/je800409d; closed access, not yet in Zotero).
+**B1 passes.** For the seven unloaded 30 wt % Hartono SI Table S2 rows, the
+N₂O vapor fugacity term plus the 0.416577 % liquid Poynting bound stays **at
+most 0.943 %** (row 2, widest envelope), below the 1 % B1 limit. Hartono,
+Juliussen & Svendsen 2008 (J. Chem. Eng. Data 53, 2696–2700,
+doi:10.1021/je800409d; Zotero `YV8V38QI`, PDF `D667FF2D`, sha256
+`e5fa375d…b5b3e2`) settles conditions 1–3 below.
 
 | Row | T/K | pN₂O/kPa | \|φ−1\| central % | env A % | env B % | + liquid, central % | env A % | env B % |
 |---|---|---|---|---|---|---|---|---|
@@ -73,3 +74,63 @@ This sign argument is the orchestrator's derivation. The Versteeg water-ratio te
    - the third virial coefficients C112 and C122 (an assumed |C122| ≤ 3|C_ww| gives at most about 1.5e-3 in ln φ, row 7);
    - MEA vapor;
    - the nonzero-loading pair repeat. Loaded rows reach pN₂O 95.15 kPa, and CO₂ enters the vapor there.
+
+## Closure on the 2008 apparatus paper (2026-10-17)
+
+Hartono 2014 §2.2 p.1809 refers its N₂O procedure to this paper (its ref. 18).
+Read: Experimental Section and Eqs. 1–6 pp.2696–2697, Table 1 p.2697.
+
+| Condition | What the 2008 paper says | Outcome |
+|---|---|---|
+| 1. pN₂O is a true N₂O partial pressure | Eq. 5: P_N₂O = P_R − P_S°, the measured total reactor pressure minus the solvent vapor pressure; "P_S° was directly measured at the desired temperature before adding N₂O" (p.2697). The solvent was degassed by vacuum to about 2 kPa at ambient temperature first (p.2696). | Met. The reported pressure is the uncorrected partial pressure, so the vapor term above applies as computed. |
+| 2. Solvent vapor pressure ≤ pure-water saturation | P_S° is the measured vapor pressure of the degassed unloaded solution. | Met for the bound: the 0 ≤ p_s ≤ p_sat,water sweep covers it. |
+| 3. No hidden ideal-gas error in x_N₂O | Eqs. 1–4: N₂O added from the gas-holding vessel's pressure drop with Peng–Robinson compressibility factors z₁, z₂; N₂O left in the reactor gas from P_N₂O(V_R − V_S)/(z RT_R), with z of N₂O from Peng–Robinson; the difference over the solvent volume gives C_N₂O. | Met: no ideal-gas law. Residual Peng–Robinson error below. |
+
+**Gas-phase balance is first-order exact.** With the water fugacity fixed by
+the liquid, the N₂O–water cross coefficient B12 cancels between P_R and P_S°
+to first order, so P_R − P_S° = c₁RT(1 + B11c₁) and Eq. 2's pure-N₂O
+compressibility at P_N₂O is the right form. Solving the virial gas with fixed
+water fugacity, the pure-N₂O form misses the true reactor N₂O amount by at
+most 1.04e-5 relative (row 7).
+
+**Residual Peng–Robinson error (source limitation, not part of the B1
+transfer).** Peng–Robinson's implied second virial coefficient B = b − a/RT
+for N₂O (T_c 309.52 K, p_c 7.245 MPa, ω 0.162) is 11.2–11.9 cm³/mol more
+negative than Lemmon & Span. That overstates both N₂O amounts, the larger
+vessel-side one most, so the source's x_N₂O is too high and its H too low by
+δ. The gas-holding vessel's fill pressure is not printed, so δ is bounded only
+by it (vessel at an assumed 295.15 K; V_S = V_R/2 as printed "around half"):
+
+| Row | T/K | n_gas/n_liquid | δ, lowest fill | δ, 400 kPa fill | δ, 800 kPa fill | Fill for δ = 1 % |
+|---|---|---|---|---|---|---|
+| 1 | 298.35 | 1.87 | 0.16 % | 0.98 % | 2.05 % | 409 kPa |
+| 2 | 312.65 | 2.40 | 0.27 % | 1.11 % | 2.39 % | 364 kPa |
+| 3 | 312.65 | 2.40 | 0.22 % | 1.14 % | 2.42 % | 355 kPa |
+| 4 | 322.25 | 2.77 | 0.23 % | 1.29 % | 2.70 % | 319 kPa |
+| 5 | 331.75 | 3.18 | 0.31 % | 1.41 % | 2.97 % | 295 kPa |
+| 6 | 341.25 | 3.56 | 0.30 % | 1.60 % | 3.30 % | 260 kPa |
+| 7 | 360.25 | 4.35 | 0.57 % | 1.85 % | 3.85 % | 230 kPa |
+
+"Lowest fill" ends the transfer at the reactor pressure; 800 kPa is the
+full scale of the paper's larger transducer. δ has the opposite sign to the
+B1 transfer terms, so it cannot raise the 0.943 % bound. It is an error in the
+source's own concentration, inside its stated 3 % repeatability, and it grows
+with temperature because more of the added N₂O stays in the gas.
+
+**The paper's water check shows a larger high-temperature bias.** Its Table 1
+N₂O-in-water constants against Versteeg & van Swaaij 1988 Eq. 4 (the water
+correlation the analogy uses): −1.8 to +5.5 % at 298–333 K, and −4.9, −7.2,
+−8.3 and −7.2 % at 342.7, 343.5, 353.3 and 353.4 K. If the same apparatus bias
+carries to the MEA rows, the 341.25 and 360.25 K targets sit about 5–8 % low.
+This is source bias to report with the falsifier result, as the design
+requires; it does not change B1.
+
+**Still not quantified (unchanged):** third virial coefficients, MEA vapor,
+and the nonzero-loading pair repeat (condition 5). Xu & Wang 2018's Table S3
+(supporting information now in hand, sha256 `b14f133e…5c85071`) gives
+P3 = 84.8–105.9 kPa for the MEA-only rows, but its §2.3 p.2710 defines P3 only
+as the "equilibrium partial pressure of N₂O" and defers the apparatus to Xu,
+Wang & Chen 2013 (doi:10.1021/je301371p, not in Zotero); Xu stays
+comparison-only.
+
+Computation: `tmp/b1-2008/residual.py` (sha256 `38a7f51d…647598`, stdlib; imports the B1 script above).
