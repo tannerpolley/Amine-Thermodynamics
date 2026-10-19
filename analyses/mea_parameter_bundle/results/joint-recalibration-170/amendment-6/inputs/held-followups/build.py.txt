@@ -53,12 +53,26 @@ def held_sizes(mapping, spec):
         for family, factor in [('debye_huckel_diameter', 1.), ('packing_diameter', .88)]})
 
 
+def rebase(spec, totals):
+    """Same physical chemistry box as start A for a start carrying inherited R2/R5 totals (parent, #170 §0b
+    "Rebase R2/R5 increments/bounds to the same total-shift box"). Enthalpy-shift increments are bounded so the total
+    shift stays in the declared interval, and the stored-R5 a_k bounds move by the inherited R5 contribution so the
+    unshifted coefficient stays in [2400, 3000] K (fit_campaign.py:620-624 convention)."""
+    dk = totals['R5']/(o.thermal.R*math.log(10.))
+    for c in spec['information_coordinates']:
+        if c.get('enthalpy_shift'):
+            c['bounds'] = [b-totals[c['reaction']] for b in c['bounds']]
+        elif c['identity'] == 'reaction:R5:correlation:a_k':
+            c['bounds'] = [b+dk for b in c['bounds']]
+    return spec
+
+
 def declarations(form, identity, mapping, totals, purpose, output=OUT):
     start_path = output/f'{form}-start.json'
     start_sha = dump(start_path, mapping)
     specs = []
     for kind in ('information', 'fit'):
-        spec = f.load(BASE/f'held-{kind}.json')
+        spec = rebase(f.load(BASE/f'held-{kind}.json'), totals)
         old = spec['information_starts'][0]['parameters_path']
         spec['information_starts'] = [dict(id=identity, parameters_path=str(start_path),
             sha256=start_sha, reaction_enthalpy_shifts_J_mol=totals)]
@@ -151,7 +165,7 @@ def x3(endpoint_path, output=OUT):
             if row['id'] in hartono_ids:
                 row['analytical_feed']['carbon-dioxide'] = float(source[row['id']]['co2_loading_from_mole_fraction_mol_per_mol_mea'])
         assert spec['direct_rows'] == expected
-        assert spec['information_coordinates'] == primary['information_coordinates']
+        assert spec['information_coordinates'] == rebase(copy.deepcopy(primary), totals)['information_coordinates']
         assert any(r['path']==frozen_path and r['sha256']==sha(frozen_path) for r in spec['inputs'])
     result = check(specs, mapping)
     # Demonstrate the exact original verification failure without any solve.
@@ -186,7 +200,8 @@ def build():
         if identity.startswith('pair/monoethanolamine/water/') or c.get('enthalpy_shift'):
             continue
         value = b_values[identity]
-        bounded = min(max(value, c['bounds'][0]), c['bounds'][1])
+        lo, hi = rebase(dict(information_coordinates=[copy.deepcopy(c)]), totals)['information_coordinates'][0]['bounds']
+        bounded = min(max(value, lo), hi)
         updates[identity] = bounded
         if bounded != value:
             clipped.append((identity, value, bounded))
@@ -203,7 +218,7 @@ def build():
     assert {i for i,_,_ in delta} == {'component/monoethanolamine/dielectric_volume', 'component/monoethanolamine/dielectric_temperature'}
     reports = []
     for form, identity, mapping, inherited, purpose in (
-        ('held-B', 'held-larger-B', b, totals, 'Held larger-dV B: frozen #172 start-coordinate values rebased on the corrected Held declaration; R5 a_k clipped to 3000 K.'),
+        ('held-B', 'held-larger-B', b, totals, 'Held larger-dV B: frozen #172 start-coordinate values rebased on the corrected Held declaration; chemistry bounds rebased to the same unshifted-a_k/total-shift box as start A.'),
         ('held-smaller-A', 'held-smaller-A', smaller, dict(R2=0., R5=0.), 'Held smaller-dV A: A4 control start with the same stage-2b neutral pair and all-six-ion Held diameter corrections.')):
         mapping['purpose'] = purpose
         specs = declarations(form, identity, mapping, inherited, purpose)
@@ -241,15 +256,12 @@ def readme(reports, clipped, dryrun):
         'The retained `amendment-2/diagnosis-refresh-swap/README.md`, “Basis and fixed-vector method”,',
         'independently records R2 = −8201.884540544 J/mol and R5 = 8418.523404172 J/mol.',
         'These inherited totals are needed by `fit_campaign.py` lines 620–625 when writing later chemistry totals.',
-        'Existing `stage6_coordinates` constructs enthalpy shifts with origin zero and bounds ±10000 J/mol',
-        'about the supplied start; inherited totals are added only in the later chemistry output. This task',
-        'preserves that implementation and the requested identical box. These declaration checks do not',
-        'establish that later total shifts remain inside a source-relative ±10000 J/mol interval.',
+        'Existing `stage6_coordinates` bounds enthalpy-shift increments about the supplied start, and the',
+        'stored R5 a_k directly. `rebase` therefore moves B\'s two increment boxes by −(inherited total) and',
+        'its a_k box by +(inherited R5)/(R ln 10) = +439.73 K, so the total shifts stay in ±10000 J/mol and',
+        'the unshifted a_k in [2400, 3000] K, the same physical box as start A (parent correction, 2026-10-19).',
         'R4 and all undeclared neutral/trace-ion quantities remain those of the corrected Held start.', '',
-        'The current constructor bounds the stored R5 coefficient directly (`stage6_coordinates`);',
-        'the stored B coefficient includes the historical shift. The requested clipping therefore applies',
-        'to effective a_k, while the disclosed inherited R5 total remains unchanged. This changes the',
-        'unshifted coefficient inferred from the clipped record; it is not an extra enthalpy shift.', '',
+        'With the rebased box no start value is clipped (B stored a_k 3037.64 K, unshifted 2597.91 K).', '',
         '| Clipped identity | Frozen B value | Start value |', '|---|---:|---:|']
     lines += [f'| `{i}` | {a!r} | {b!r} |' for i,a,b in clipped]
     for form, mapping, totals, result in reports:
@@ -262,7 +274,7 @@ def readme(reports, clipped, dryrun):
                   f'16 coordinate objects construct without solving; {result["installed_files_verified"]} installed Engine files match the wheel.',
                   f'Information/fit binding is identical: `{result["binding"]}`.',
                   'Only the declared start, its input-list hash, purpose, fit-case start ID and pending fresh-release',
-                  'path/hash differ from `inputs/joint-mea-water/held-*.json`. No bounds, rows, scales or weights change.']
+                  'path/hash and the three chemistry bounds rebased by the inherited totals (unchanged when they are zero) differ from `inputs/joint-mea-water/held-*.json`. No rows, scales or weights change.']
     lines += ['', '## Smaller-A correction boundary', '',
         'Starting from A4 smaller-dV control, copy the corrected larger-A MEA–water pair (k and the',
         'single b coefficient with its metadata), set all six Debye–Hückel diameters to σ and retain',
