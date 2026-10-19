@@ -1,0 +1,19 @@
+"""One-off disclosed scratch: CO2-free density rows (stage-2 declarations) at the step-1b endpoints via fit_observations.stage2_rows + reg.predict."""
+import json, sys, copy
+from pathlib import Path
+import fit_observations as o
+D = Path(sys.argv[1]); out = {}
+rows_all = json.load(open('analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-rows.json'))
+dens = [r for r in rows_all['neutral-mea-water'] if r['quantity'] == 'phase_density']
+Path('/tmp/density-unloaded/rows.json').write_text(json.dumps({'neutral-mea-water': dens}))
+for tag in sys.argv[2:]:
+    spec = json.load(open(D/'hartono-fit/fit-spec.json')) if tag == 'H' else json.load(open(D/f'fit-l{tag}-spec.json')) if tag != 'A4' else json.load(open('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/matched-larger-dV/control-fit-spec.json'))
+    doc = D/'hartono-fit/fit/usable-budget-endpoint.json' if tag == 'H' else D/f'fit-l{tag}/usable-budget-endpoint.json' if tag != 'A4' else Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/matched-larger-dV/control/usable-budget-endpoint.json')
+    mapping = json.load(open(doc))
+    spec2 = dict(spec, stage2_rows_path='/tmp/density-unloaded/rows.json')
+    case = dict(spec['cases'][0], observations_id='neutral-mea-water')
+    params, rows = o.stage2_rows(spec2, mapping, case, assessment=True)
+    vals = o.predict(mapping, [item for _, item, _ in rows])
+    out[tag] = [dict(id=r['id'], T_K=r['T_K'], observed=r['observed'], predicted=v.value, error=v.value - r['observed'], weight=r['weight']) for (r, _, _), v in zip(rows, vals)]
+    print(tag, [(x['id'], x['T_K'], round(x['error'], 3)) for x in out[tag]], flush=True)
+json.dump(out, open(D/'hartono-fit/unloaded-densities.json', 'w'), indent=1)

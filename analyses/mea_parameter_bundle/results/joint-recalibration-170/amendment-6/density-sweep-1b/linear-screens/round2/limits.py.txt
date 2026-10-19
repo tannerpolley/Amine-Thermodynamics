@@ -1,0 +1,30 @@
+from diagnose import *
+def solve_hard(d,s,tol,metric='c149'):
+ x0,v,pk=feasible(s,d,tol)
+ if v>1e-7:return None,{'feasible':False,'slack':v,'kkt':pk}
+ mask=d[metric];G,h=constraints(s,d,tol);x,k=qpls(s['J'][mask]*np.sqrt(d['w'][mask,None]),d['r'][mask]*np.sqrt(d['w'][mask]),G,h,x0);return x,k
+
+def minimax_cap(d,s,cap):
+ lower=0.;upper=metrics(d,d['r'])['density_max'];best=None
+ # The unchanged endpoint is feasible in the box and under the cost cap.
+ for _ in range(32):
+  mid=(lower+upper)/2;x,k=solve_hard(d,s,mid)
+  if x is not None and metrics(d,d['r']+s['J']@x)['C149']<=cap:
+   upper=mid;best=report(d,s,x,k)
+  else:lower=mid
+ return {'C149_cap':cap,'density_max_lower':lower,'density_max_upper':upper,'result':best}
+
+out={}
+for ep in ['l1','l0p1']:
+ d=data(ep);base=metrics(d,d['r']);o={};out[ep]=o
+ for name in ['tied','k-2','k-3','pack','DH','m','Born2-8','pack+m','DH+m','all','carb-m','carb-pack','pack+DH']:
+  kw=SCENARIOS[name];oo={};o[name]=oo
+  for trusted in [False,True]:
+   s=scenario(d,**kw,trust=trusted);tag='small_moves' if trusted else 'full_bounds';oo[tag]={};rr=oo[tag]
+   if trusted:
+    for lam in [1,3,10]:
+     wt=d['w'].copy();wt[d['den']]=lam/12;n=len(s['lo']);x,k=qpls(s['J']*np.sqrt(wt[:,None]),d['r']*np.sqrt(wt),np.r_[np.eye(n),-np.eye(n)],np.r_[s['hi'],-s['lo']],np.clip(np.zeros(n),s['lo'],s['hi']));rr['lambda'+str(lam)]=report(d,s,x,k)
+    x,k=solve_hard(d,s,2.,'c166');rr['hard_C166']=report(d,s,x,k) if x is not None else k
+   rr['minimax_C149_plus5pct']=minimax_cap(d,s,base['C149']*1.05)
+   a=rr['minimax_C149_plus5pct'];print(ep,name,tag,'max',round(a['density_max_upper'],7),'C149',round(a['result']['C149'],7),'C166',round(a['result']['C166'],7),'heat',round(a['result']['Vinjarapu_RMSE_kJ_mol'],7),flush=True)
+  (ROOT/'limits.json').write_text(json.dumps(out,indent=2))
