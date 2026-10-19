@@ -66,3 +66,25 @@ The final tree has 309 nonblank/noncomment added campaign lines against `f387725
 12 previously charged replaced lines are carried, yielding 321 new plus the
 historical 1,000. Both campaign ledgers now record 1,321 / 1,325. Independent
 delivered review and the broader campaign qualifications remain with the parent.
+
+## Cp route qualification (parent, 2026-10-19)
+
+The two failed attempts above exercised a probe-only call, `reg.differentiate`
+with an empty coordinate list, not the fixed campaign route. `cp-route-probe.py.txt`
+calls the fixed `heat_evidence_170.cp_check(..., row=, proxy_loading=)` itself on
+the tied start (`inputs/revision-3/tied-start.json`) for the four declared rows,
+both proxies at zero loading: six solves, all returned
+(`cp-route-results.json`; 0.89 s wall, 0.89 CPU-s, `cp-route-time.txt`).
+
+| Row | Proxy | Equilibrium Cp (kJ/(kg K)) | Observed | Deviation |
+|---|---:|---:|---:|---:|
+| 318.15 K, α = 0 | 1e-6 / 1e-7 | 3.934807 / 3.934807 | 3.7195 | +5.789 % |
+| 318.15 K, α = 0.358 | — | 3.512657 | 3.3675 | +4.311 % |
+| 353.15 K, α = 0 | 1e-6 / 1e-7 | 3.908484 / 3.908485 | 3.8566 | +1.345 % |
+| 353.15 K, α = 0.358 | — | 3.430166 | 3.4707 | −1.168 % |
+
+The proxy change moves Cp by about 2e-5 %. The unloaded values equal the joint fit's
+own Cp rows at its tied endpoint to the reported precision (+5.79, +1.35 %), as expected
+for states without ions beyond trace amounts. This is numerical qualification at the
+start, not a candidate assessment or physical validation. The signal-8 exit of
+`reg.differentiate` with no coordinates remains undiagnosed; no campaign path makes that call.
