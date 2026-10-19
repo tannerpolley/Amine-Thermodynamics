@@ -47,7 +47,9 @@ def conditional(raw):
         np.array(raw['weighted_residuals']), ids, [-.5,-.5,-.5,-1.,-1000.], [.5,.5,.5,1.,1000.])
 
 
-def select(campaign_dir, problem):
+def select(campaign_dir, problem, documents=None):
+    if documents is not None:
+        return dict(problem=problem,parameters=documents[problem]["record"],fit=documents[problem]["raw"])
     directory = Path(campaign_dir) / problem
     aa, bb = [load(directory / letter / 'native-fit.json') for letter in 'AB']
     assert all(r['selection_eligible'] for r in (aa,bb)), f'{problem}: incomplete fit'
@@ -271,13 +273,13 @@ def summarize_fits(campaign_dir, output_dir):
     print("FIT SUMMARY", [(r["problem"], r["cost_A"], r["cost_B"]) for r in choices.values()])
 
 
-def main(output_dir, selected_record, no_heat_record, vinjarapu, arcis):
+def main(output_dir, selected_record, no_heat_record, vinjarapu, arcis, documents=None):
     output_dir = Path(output_dir)
-    choices = {r["problem"]: r for r in load(output_dir / "fit-summary.json")}
+    choices = {name:select(None,name,documents) for name in documents} if documents is not None else {r["problem"]: r for r in load(output_dir / "fit-summary.json")}
     current = s.parameter_mapping(Path(selected_record))
     original = s.parameter_mapping(Path(no_heat_record))
-    assert current["empirical_density_correction"] == original["empirical_density_correction"]
-    c = current["empirical_density_correction"]["c_cm3_mol"]
+    assert documents is not None or current["empirical_density_correction"] == original["empirical_density_correction"]
+    c = 0. if documents is not None else current["empirical_density_correction"]["c_cm3_mol"]
     sources = [
         r
         for r in csv.DictReader(
@@ -392,7 +394,8 @@ def main(output_dir, selected_record, no_heat_record, vinjarapu, arcis):
         ("pool-figure-data.csv", lambda r: r["kind"] == "packet" and r["problem"] in ("F1", "F2", "F4", "F5")),
     ]:
         table(output_dir / filename, [r for r in new if mask(r)])
-    decomposition(choices, output_dir)
+    if documents is None:
+        decomposition(choices, output_dir)
     figures = output_dir / "figure-data"
     s.write_json(
         figures / "input-hashes.json", {str(p.relative_to(output_dir)): s.sha256(p) for p in figures.glob("*.csv")}
