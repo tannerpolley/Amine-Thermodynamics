@@ -1,0 +1,103 @@
+{
+  "source_commit": "5ebcb37",
+  "points_sha256": "6e1231d9506fd6dd9e965a64120ff952cebf1c4778da5d66cfb0f888e8b7f44b",
+  "original_paths": [
+    "analyses/mea_parameter_bundle/results/permittivity-screen-172/inputs/family-points.txt",
+    "analyses/mea_parameter_bundle/results/permittivity-screen-172/flash-family.json",
+    "analyses/mea_parameter_bundle/results/permittivity-screen-172/flash-family-remaining-diagnosis.json"
+  ],
+  "qualification_calls": [
+    {
+      "kind": "information phase first attempt",
+      "gnu_time": "phase-point-0-time.json",
+      "engine_information_call": true,
+      "wall_s": 5.16,
+      "user_s": 5.06,
+      "system_s": 0.07,
+      "exit_code": 1,
+      "failure": "StabilityOptions.trials requires native PhaseSpec objects, not Python Phase declarations; corrected through Problem._native."
+    },
+    {
+      "kind": "information joint first attempt",
+      "gnu_time": "joint-evaluation-time.json",
+      "engine_information_call": true,
+      "wall_s": 21.71,
+      "user_s": 21.42,
+      "system_s": 0.28,
+      "exit_code": 1,
+      "failure": "Disposable probe accessed nonexistent ObservationEvaluation.residuals after evaluation; corrected to declared residual construction from predictions."
+    },
+    {
+      "kind": "information phase corrected",
+      "gnu_time": "phase-point-0-retry-time.json",
+      "engine_information_call": true,
+      "wall_s": 5.51,
+      "user_s": 5.44,
+      "system_s": 0.07,
+      "exit_code": 0
+    },
+    {
+      "kind": "information joint corrected",
+      "gnu_time": "joint-evaluation-retry-time.json",
+      "engine_information_call": true,
+      "wall_s": 21.44,
+      "user_s": 21.15,
+      "system_s": 0.27,
+      "exit_code": 0
+    },
+    {
+      "kind": "object construction failed quantity-name check",
+      "gnu_time": "object-qualification-first-attempt-time.json",
+      "engine_information_call": false,
+      "wall_s": 7.59,
+      "user_s": 7.45,
+      "system_s": 0.1,
+      "exit_code": 1
+    },
+    {
+      "kind": "object construction failed overly broad quantity check",
+      "gnu_time": "object-qualification-second-attempt-time.json",
+      "engine_information_call": false,
+      "wall_s": 7.6,
+      "user_s": 7.5,
+      "system_s": 0.09,
+      "exit_code": 1
+    },
+    {
+      "kind": "object construction corrected",
+      "gnu_time": "object-qualification-time.json",
+      "engine_information_call": false,
+      "wall_s": 10.62,
+      "user_s": 10.49,
+      "system_s": 0.12,
+      "exit_code": 0
+    },
+    {
+      "kind": "pytest",
+      "gnu_time": "pytest-first-time.json",
+      "engine_information_call": false,
+      "wall_s": 11.24,
+      "user_s": 15.19,
+      "system_s": 0.38,
+      "exit_code": 0
+    },
+    {
+      "kind": "pytest final sources",
+      "gnu_time": "pytest-time.json",
+      "engine_information_call": false,
+      "wall_s": 10.72,
+      "user_s": 16.34,
+      "system_s": 0.31,
+      "exit_code": 0
+    }
+  ],
+  "probe_hashes": {
+    "joint-qualification-first-attempt.py.txt": "ae36d505e746b638162eb6b30578b69c5c695f10c6a3fc339eaeb701d060413c",
+    "joint-qualification.py.txt": "06d7c8abbb5482f6d457ad163b0ae179f2d0749c10b349b0c1c737d48a42b154",
+    "object-qualification-first-attempt.py.txt": "47f2b8b4342e62e06bb1d91f5e30acbf492ae0ddbe6a5586511aeb50127a72ec",
+    "phase-qualification.py.txt": "64f0b6b81a16ecc6d2eb661e7e910846a197c167ee7638308ac0995e1f38dff1",
+    "object-qualification-second-attempt.py.txt": "8f3566ee5d2cf496b32f559a41122df3d7604262c6b44591406fc6767c480321",
+    "object-qualification.py.txt": "a3c238d39e84eefbbe60c4f7e0faa72a1d2fd4eac1ba899bf5166a47c7d58e3f"
+  },
+  "issue_body_sha256_at_handoff": "180a8af370db2096eb1c74955832432528e0c09b45c82e184844272af7dd72f0"
+}

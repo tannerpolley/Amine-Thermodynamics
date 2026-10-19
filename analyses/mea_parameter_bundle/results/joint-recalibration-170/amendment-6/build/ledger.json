@@ -1,0 +1,322 @@
+{
+  "task": "#170 amendment 6 revision 3 build",
+  "implementation_base": "8d9e315a3d59d6bd647ad41ff1408ed524f52844",
+  "accounting_base": "f387725",
+  "result": "Incomplete: resumed build reached the 1,300 gross-line ceiling; no campaign release.",
+  "scientific_fits": 0,
+  "information_calls": 4,
+  "phase_solves": 6,
+  "campaign_existing_gross": 1000,
+  "campaign_new_gross": 300,
+  "campaign_cumulative_gross": 1300,
+  "campaign_ceiling": 1300,
+  "items": [
+    {
+      "item": "declared stage6 count",
+      "file": "fit_observations.py",
+      "functions": [
+        "stage6_rows"
+      ],
+      "gross_added": 2,
+      "complete": true
+    },
+    {
+      "item": "lambda/N loaded-only density weights",
+      "file": "fit_campaign.py",
+      "functions": [
+        "stage6_weights",
+        "stage6_study"
+      ],
+      "gross_added": 7,
+      "complete": true
+    },
+    {
+      "item": "R5 identity and scale mapping",
+      "file": "fit_campaign.py",
+      "functions": [
+        "stage6_study"
+      ],
+      "gross_added": 3,
+      "complete": false,
+      "remaining": "Full linked-reaction serialization and cold replay at both widths."
+    },
+    {
+      "item": "release and endpoint predicates",
+      "file": "fit_campaign.py",
+      "functions": [
+        "stage6_ties",
+        "stage6_binding",
+        "stage6_study"
+      ],
+      "gross_added": 42,
+      "complete": false,
+      "remaining": "All three reviewed defects corrected; real shifted-derivative and endpoint persistence qualification remains."
+    },
+    {
+      "item": "source preparation",
+      "file": "fit_campaign.py",
+      "functions": [
+        "density_scales"
+      ],
+      "gross_added": 10,
+      "complete": true
+    },
+    {
+      "item": "explicit-document assessments",
+      "file": "final_evidence.py; heat_evidence_170.py",
+      "functions": [
+        "selected",
+        "main",
+        "select"
+      ],
+      "gross_added": 20,
+      "complete": true,
+      "note": "Explicit document route avoids historical selection, density correction and fixed-width decomposition. Only construction binding qualified."
+    },
+    {
+      "item": "phase-family producer and dispatch",
+      "file": "final_evidence.py; fit_campaign.py",
+      "functions": [
+        "bounded_call",
+        "flash_problem",
+        "phase_payload",
+        "stability",
+        "phase_classification",
+        "recover",
+        "diagnose",
+        "bubble_recover",
+        "family_job",
+        "phase_family"
+      ],
+      "gross_added": 165,
+      "complete": true,
+      "note": "73-point producer implemented; one real point retained. Entire family, recovery and timeout routes not executed. Gas-root producer remains absent."
+    },
+    {
+      "item": "executable checks",
+      "file": "fit_campaign.py",
+      "functions": [
+        "verify"
+      ],
+      "gross_added": 17,
+      "complete": false,
+      "remaining": "Full objective/Kiepe replay gates and frozen old-index-63 classifier added. Numerical endpoint replay, no-heat and 12/14-column linked persistence remain incomplete."
+    },
+    {
+      "item": "reviewed release defects",
+      "file": "fit_campaign.py",
+      "functions": [
+        "stage6_binding",
+        "stage6_study"
+      ],
+      "gross_added": 34,
+      "complete": true,
+      "remaining": "Real shifted derivatives and unavailable-row injection are unqualified."
+    }
+  ],
+  "qualification": {
+    "compileall": "passed final sources",
+    "static_ruff": "passed: E9,F63,F7,F82",
+    "pytest": {
+      "passed": 76,
+      "subtests_passed": 17,
+      "reported_wall_s": 10.2,
+      "interpreter": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python"
+    },
+    "pinned_environment": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv",
+    "pinned_environment_pytest": "Unavailable; used the repository main-checkout environment for pytest.",
+    "construction_results": "object-qualification.json",
+    "construction_limitations": [
+      "Only object construction at both widths; linked persistence/replay not established.",
+      "Kiepe continuation disabled in memory only for non-solving object checks; real joint evaluation retained production continuation."
+    ],
+    "engine_evaluation": "joint-evaluation.json: all 262 rows Available; 52 loaded + 5 exact-zero-carbon density rows, four Cp, 39 Kiepe and the original reacting rows.",
+    "phase_evaluation": "phase-point-0.json: 9 stability trials retained, classified unresolved; diagnostic pending-neutral start only.",
+    "frozen_index_63": "unresolved via the same classifier; executed object probe and production dispatch assertion.",
+    "derivative_previous_failure": "Actual retained predicate rejects 1.1e-8 / 1.01e-8 and accepts 4e-7 / 1e-7 with exact factor-four decay. Synthetic, no Engine call.",
+    "qualification_probe_scope": "Disclosed one-off .py.txt probes; not imported by the campaign and not substitutes for missing campaign checks."
+  },
+  "calls": [
+    {
+      "kind": "non-solving construction attempt",
+      "gnu_time": "construction-failure-time.txt",
+      "reason": "evaluate_coordinates requires explicit holds argument",
+      "wall_s": 2.85,
+      "user_s": 2.77,
+      "system_s": 0.07,
+      "exit_code": 1
+    },
+    {
+      "kind": "non-solving construction and chart inspection",
+      "gnu_time": "construction-time.json",
+      "wall_s": 9.73,
+      "user_s": 8.68,
+      "system_s": 0.18,
+      "exit_code": 0
+    }
+  ],
+  "program_charge_owner": "Parent orchestrator; program time charges are not added here to A4.",
+  "forecast": {
+    "unexecuted_phase_proposal_path": "tmp/a6-build/phase-proposal.py.txt",
+    "unexecuted_phase_proposal_sha256": "b846985367bfea3bfb4ef431378157817180e2bc47d34ae2b8d2938f003d70b6",
+    "unexecuted_phase_proposal_nonblank_noncomment": 164,
+    "proposal_is_not_campaign_code": true,
+    "missing_from_proposal": [
+      "Bounded-process owner extraction/reuse and 73-point dispatch: estimated 34 further lines.",
+      "Full numerical admissibility and old-index-63 classification correction.",
+      "Root-gate reduction and final eligibility checks."
+    ],
+    "optimistic_remaining_explicit_assessment_lines": 8,
+    "optimistic_remaining_executable_check_lines": 8,
+    "total_current_plus_proposed_and_estimated": 282,
+    "over_250": 32,
+    "qualification": "282 is an incomplete, unreviewed forecast, not a claim of a complete implementation at that ceiling.",
+    "result": "The extra 50 lines did not complete the broader design: fixes and full stability serialization consumed the remaining allowance."
+  },
+  "resumed_base": "462c984",
+  "campaign_executable_ceiling": 1300,
+  "ceiling_decision": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6277601406",
+  "resumed_gross": 232,
+  "resumed_items": {
+    "fit_campaign.py": {
+      "gross_added": 48,
+      "functions": {
+        "bounded_call": 14,
+        "stage6_binding": 3,
+        "stage6_study": 31
+      }
+    },
+    "fit_observations.py": {
+      "gross_added": 0,
+      "functions": {}
+    },
+    "final_evidence.py": {
+      "gross_added": 175,
+      "functions": {
+        "selected": 3,
+        "imports/module": 4,
+        "flash_problem": 6,
+        "phase_payload": 16,
+        "stability": 16,
+        "phase_classification": 21,
+        "recover": 13,
+        "diagnose": 17,
+        "bubble_recover": 9,
+        "family_job": 21,
+        "phase_family": 28,
+        "main": 21
+      }
+    },
+    "heat_evidence_170.py": {
+      "gross_added": 9,
+      "functions": {
+        "select": 3,
+        "main": 6
+      }
+    }
+  },
+  "accounting_note": "Prior 68 charged lines retained; 232 gross nonblank/noncomment additions versus 462c984. This conservatively carries 10 replaced previously charged lines; deletions never create headroom.",
+  "remaining": [
+    "Linked R5/reaction-total persistence and cold replay at widths 12 and 14.",
+    "Permanent no-heat eight-zero-weight assertion; the row constructor already enforces table/declaration consistency.",
+    "Numerical qualification of full-objective cold replay and fixed Kiepe invariance at an actual joint-fit endpoint.",
+    "Real shifted derivative qualification, unavailable-shift failure injection and remaining phase recovery/timeout routes.",
+    "Gas-root falsifier and its reduction from the broader section 0b remain unimplemented; not silently omitted from release eligibility.",
+    "Stage-2b neutral substitution, fresh release evidence and independent delivered review belong to the parent."
+  ],
+  "resumed_calls": [
+    {
+      "kind": "information phase first attempt",
+      "gnu_time": "phase-point-0-time.json",
+      "engine_information_call": true,
+      "wall_s": 5.16,
+      "user_s": 5.06,
+      "system_s": 0.07,
+      "exit_code": 1,
+      "failure": "StabilityOptions.trials requires native PhaseSpec objects, not Python Phase declarations; corrected through Problem._native."
+    },
+    {
+      "kind": "information joint first attempt",
+      "gnu_time": "joint-evaluation-time.json",
+      "engine_information_call": true,
+      "wall_s": 21.71,
+      "user_s": 21.42,
+      "system_s": 0.28,
+      "exit_code": 1,
+      "failure": "Disposable probe accessed nonexistent ObservationEvaluation.residuals after evaluation; corrected to declared residual construction from predictions."
+    },
+    {
+      "kind": "information phase corrected",
+      "gnu_time": "phase-point-0-retry-time.json",
+      "engine_information_call": true,
+      "wall_s": 5.51,
+      "user_s": 5.44,
+      "system_s": 0.07,
+      "exit_code": 0
+    },
+    {
+      "kind": "information joint corrected",
+      "gnu_time": "joint-evaluation-retry-time.json",
+      "engine_information_call": true,
+      "wall_s": 21.44,
+      "user_s": 21.15,
+      "system_s": 0.27,
+      "exit_code": 0
+    },
+    {
+      "kind": "object construction failed quantity-name check",
+      "gnu_time": "object-qualification-first-attempt-time.json",
+      "engine_information_call": false,
+      "wall_s": 7.59,
+      "user_s": 7.45,
+      "system_s": 0.1,
+      "exit_code": 1
+    },
+    {
+      "kind": "object construction failed overly broad quantity check",
+      "gnu_time": "object-qualification-second-attempt-time.json",
+      "engine_information_call": false,
+      "wall_s": 7.6,
+      "user_s": 7.5,
+      "system_s": 0.09,
+      "exit_code": 1
+    },
+    {
+      "kind": "object construction corrected",
+      "gnu_time": "object-qualification-time.json",
+      "engine_information_call": false,
+      "wall_s": 10.62,
+      "user_s": 10.49,
+      "system_s": 0.12,
+      "exit_code": 0
+    },
+    {
+      "kind": "pytest",
+      "gnu_time": "pytest-first-time.json",
+      "engine_information_call": false,
+      "wall_s": 11.24,
+      "user_s": 15.19,
+      "system_s": 0.38,
+      "exit_code": 0
+    },
+    {
+      "kind": "pytest final sources",
+      "gnu_time": "pytest-time.json",
+      "engine_information_call": false,
+      "wall_s": 10.72,
+      "user_s": 16.34,
+      "system_s": 0.31,
+      "exit_code": 0
+    }
+  ],
+  "resumed_engine_wall_s": 53.82,
+  "resumed_engine_cpu_s": 53.76,
+  "resumed_measured_qualification_wall_s": 101.59,
+  "resumed_measured_qualification_cpu_s": 111.73,
+  "phase_information_calls": 2,
+  "distinct_phase_points": 1,
+  "previous_construction_command_wall_s": 12.58,
+  "previous_construction_command_cpu_s": 11.7,
+  "final_tree_added_lines_from_accounting_base": 290,
+  "previously_charged_replaced_lines_carried": 10
+}
