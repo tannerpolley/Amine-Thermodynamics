@@ -319,8 +319,8 @@ only**: `fit_campaign.py`, `fit_observations.py` and shared producers through wh
 including copied numerical methods, launch/guard code, imports and executable checks. The existing
 `A4/compute-ledger.json:campaign_executable_*` account is **1,000 of 1,000** (891 + 56 neutral fitter + 39
 matched check + 12 coordinate helper + 1 release assertion + 1 R2 write-back). Keep its established
-nonblank/noncomment gross-addition basis; deletions buy no additions. Planned additions below are **250
-maximum; cumulative 1,000 + 250 = 1,250**. This is an estimate to be tested in Build, not proof of feasibility;
+nonblank/noncomment gross-addition basis; deletions buy no additions. Planned additions below are **206
+(ceiling 250; cumulative at most 1,250, with 44 lines of margin)**. This is an estimate to be tested in Build, not proof of feasibility;
 stop before exceeding it, without compressed statements, weaker checks or omitted numerical evidence.
 
 Excluded, disclosed one-off scratch: `A4/neutral-fit/figure.py` (the disputed 17 presentation lines),
@@ -340,9 +340,8 @@ is counted. The 17 lines are excluded under the decision, not added again to the
 | `fit_campaign.py` source preparation / `verify` | Compute/freeze secants and s from declared source/T groups; reuse `checked`/`write` for hashes/table output. The ID/basis/scale and start-coefficient assertions are included in the check row below. | 10 |
 | `final_evidence.py:selected/main`; `heat_evidence_170.py:select/main` | Accept explicit retained documents/declared widths; bypass displaced old-record, no-heat, translation and nominal-Jakobsen paths. Existing native row/heat/Cp producers do evaluations; one-off reductions score their retained arrays. | 8 |
 | `final_evidence.py` phase functions, detailed below | Replace retired screen drivers by the candidate-only producer, including stability, attempts, classification, serialization and dispatch. | 150 |
-| `fit_campaign.py` counted-call owner and its callers | Aggregate live CPU guard, admission, unique-unit launch/cleanup, timing and stage-2/stage-6/assessment dispatch, including required imports and guard qualification. | 44 |
-| `final_evidence.py` / existing check calls | Executable persistence/replay, Kiepe, weights/scales, tie/derivative and frozen-classification assertions; reuse existing Cp verification. | 12 |
-| **Total** | **No new Engine equations, fitting algorithm, standalone screen driver or test suite.** | **250** |
+| `final_evidence.py` / existing check calls | Executable persistence/replay, Kiepe, weights/scales, tie/derivative and frozen-classification assertions. | 12 |
+| **Total** | **No new Engine equations, fitting algorithm, standalone screen driver, CPU guard or test suite.** | **206** |
 
 The earlier **122-line phase estimate is withdrawn**. At `5ebcb37`, the seven historical functions contain
 **150 nonblank/noncomment lines**: `flash_problem` 6, `family_job` 16, nearest `recover` 21, `diagnose` 20,
@@ -370,8 +369,8 @@ iterations/evaluations/messages and each attempt's outcome. Stability serializat
 `evidence`, `message`, composition, raw coordinates/residuals, basis/row transformation, quantities,
 donor, split checks/coordinates and `resolved_descent`. `_jsonable` alone turns these native objects into
 strings: it is not sufficient. Bound each point to 300 s **across all attempts**, using the common bounded
-process owner; do not mistake a future wait timeout for termination of its worker. The 44-line guard
-allowance includes that shared launch/cleanup responsibility; phase dispatch is included in the 14 above.
+process owner; do not mistake a future wait timeout for termination of its worker. Phase dispatch and the per-point bound use the existing bounded child-process owner in
+`fit_campaign.py`; they are included in the 150 above.
 
 **Executable-check locations.** The 12-line assertion allowance and existing check calls must cover:
 
@@ -383,62 +382,56 @@ allowance includes that shared launch/cleanup responsibility; phase dispatch is 
   `check_matched_co2_mea.py`; compare the fixed 39 Kiepe weighted rows at ≤1e−8 as well.
 - Release and endpoint checks: packing = 0.88σ and DH = 0.88σ or σ, all six at start and after
   write-back (two fitted, four fixed); centered derivative evidence for each changed family/tie at
-  0.01/0.005 under §4. Existing `verify_solution_heat_capacity` owns Cp proxy/enthalpy verification;
-  reductions retain its actual errors.
+  0.01/0.005 under §4. Cp proxy/enthalpy verification for the selected vector runs as a **disclosed probe script**
+  (owner scope 2026-10-19: one-off probe scripts are excluded from the ceiling): the four declared Hilliard
+  requests at exactly 7 mol MEA/kg water, the native Cp against the centered-enthalpy proxy, and nominal-zero
+  loadings 1e−6 and 1e−7 compared; its text, inputs and errors are retained. `verify_solution_heat_capacity`
+  is not reused (it binds the default record and the historical `vle_obs_0130` composition).
 - Phase classification: feed the frozen screen index-63 evidence through the **same** classifier used for
   new points; assert unresolved and the 73-count sum. A convergence flag without completed stability
-  cannot pass. The guard's nonthermodynamic qualification checks aggregate child CPU and forced cleanup.
+  cannot pass.
 
 **Compute allocation and admission.** Main **`f387725`**'s `A4/compute-ledger.json` already includes step 1b:
-**9,536 of 21,600 compute-wall s and 36,721.39 of 144,000 CPU-s remain**. Do not add step 1b again.
+**9,536 of 21,600 compute-wall s and 36,721.39 of 144,000 CPU-s remained** before the neutral-slope probe (charged 2 s / 2 CPU-s, rounded up). **Owner, 2026-10-19: the program CPU cap rises to 200,000 CPU-s** (wall cap unchanged). Remaining: **9,534 compute-wall s and 92,719.39 CPU-s**. Do not add step 1b again.
 Measured λ = 1 fits used **777 and 1,655 CPU-s** (67–136 wall-s); λ = 0.1 used **2,967**, λ = 0.01
 **3,954 CPU-s**; information calls about **20 s**. New rows/forms may cost more. Allocations are aggregate
 allowances, not predicted call costs or a guarantee that every comparison fits:
 
 | Work, including its calls/cleanup | Wall-s / CPU-s |
 |---|---:|
-| Stage 2b A/B, release/replay/derivative/equilibrium checks | 300 / 800 |
-| Two combined-density F1 forms, fresh releases and replays | 1,500 / 6,000 |
-| Selected-form B and smaller-A fits; one Hartono loading-sensitivity fit, releases/replays | 1,600 / 8,000 |
-| Selected-vector fixed assessment and bounded fallback replay | 1,000 / 2,000 |
+| Stage 2b A/B, release/replay/derivative/equilibrium checks | 300 / 2,000 |
+| Two combined-density F1 forms, fresh releases and replays | 1,500 / 12,000 |
+| Selected-form B and smaller-A fits; one Hartono loading-sensitivity fit, releases/replays | 1,600 / 15,000 |
+| Selected-vector fixed assessment, Cp probe and bounded fallback replay | 1,000 / 2,000 |
 | Selected-vector full phase family and gas-root evidence | 2,000 / 3,500 |
-| Up to ten comparison fits | 1,800 / 12,000 |
-| Other derivatives/Cp/persistence checks, reductions and contingency | 800 / 3,700 |
-| **Reserved total** | **9,000 / 36,000** |
+| Up to ten comparison fits, releases/replays | 2,600 / 45,000 |
+| Other derivatives/persistence checks, reductions and contingency | 400 / 6,000 |
+| **Reserved total** | **9,400 / 85,500** |
 
-Leave **536 wall-s / 721.39 CPU-s** unallocated. Protect **1,950.38 wall-s** within the selected-vector
+Leave **134 wall-s / 7,219.39 CPU-s** unallocated. Protect **1,950.38 wall-s** within the selected-vector
 assessment/phase/verification allocations, and their **9,200 CPU-s**, until completed evidence releases
 that reserve. Pending stage 2b and selected-form/sensitivity work also remain earmarked ahead of comparison
 fits. Allocations may transfer only within these totals and without consuming still-required checks.
 
-**Replace post-fit CPU checking with counted runtime enforcement**, within the 44 counted lines above.
-`fit_campaign.py:595` currently checks CPU only after completion: `fit_cpu_s=3000` is not a safe admission
-bound for a 600 s parallel fit. The common call owner must:
+**CPU admission without new code (orchestrator revision, 2026-10-19, replacing the counted runtime guard).**
+`fit_campaign.py:595` checks CPU only after a call returns, so admission must reserve each call's worst
+case. Retained fits ran at **11.6–14.8 CPU-s per wall-second** (A4 matched arms 14.4–14.8; step 1/1b
+11.6–14.2), a ratio set by the fitter's parallel fraction rather than host load. With the native wall limit
+fixed, the worst-case charge per call is therefore declared, not inferred from one fit:
 
-1. Before launch, subtract measured charges, other pending mandatory allocations and the applicable
-   remaining reserve from both program and step allowances; do not subtract the current call twice.
-   Apply the drop order **now**, not after overspending.
-   Admit a fit only with its full declared charge allowance (at most **4,000 CPU-s including cleanup**)
-   available; never infer a maximum from the 777/1,655-s measurements. Cap each command by its block's
-   remaining allowance as well. Stage-2b fits retain 60 s, joint fits native ≤600 s plus ≤120 s outer join;
-   information outer guard ≤180 s, ordinary non-fit native calls ≤60 s.
-2. Launch the command and all its forked workers in a **unique transient user systemd service**, with
-   `CPUAccounting=yes`, `KillMode=control-group` and the exact project working directory/environment.
-   Sample that service's cgroup-v2 **aggregate** `cpu.stat:usage_usec` at ≤0.25-s requested intervals;
-   it includes live/exited workers, unlike `RUSAGE_CHILDREN` during a running fit. The external monitor's
-   own CPU and launch/stop subprocess CPU are charged separately. No CPU quota or worker cap is imposed.
-3. Stop before the declared CPU allowance by a margin **M = n_cpu × 2 s + 10 CPU-s**, reserved *inside*
-   that allowance for sampling latency, monitor/launch overhead and cleanup. On threshold/wall expiry,
-   terminate only the captured unit/process groups, escalate to SIGKILL promptly, reap, and retain final
-   `CPUUsageNSec` plus monitor/control CPU and active wall time. Every failure/interruption/cleanup is
-   charged; interrupted results are incomplete. Bound phase-point child groups by captured IDs within
-   the same accounted service, so descendants remain counted and no other process is stopped.
-4. Qualify accounting/cleanup with a bounded two-child CPU probe before scientific calls, within the
-   verification allowance. Fail closed if cgroup accounting or descendant cleanup is unavailable, readings
-   are missing, observed sampling/cleanup latency exceeds the reserved margin, or any allowance is crossed;
-   record the actual charge and launch no further optional work. Do not claim a hard real-time scheduler
-   bound: the margin must be verified on this host, and an overrun never becomes permission to spend the
-   protected reserve. A failed guard qualification returns to Design, without a thermodynamic fallback.
+1. Joint fits: `fit_cpu_s = 9,000` (15 CPU-s/s × 600 s). Stage-2b fits: `fit_cpu_s = 1,000` (15 × 60 s,
+   rounded up). Information and other non-fit calls keep `nonfit_cpu_s = 500`.
+2. Before every launch, set the call's `budget_cpu_s` and `budget_wall_s` to the program remainder **minus the
+   still-unspent protected reserve** (the selected-vector assessment, Cp probe, phase family and verification:
+   **9,200 CPU-s and 1,950.38 wall-s** until that evidence completes), with actual charges carried from the
+   step ledger as in step 1b. The existing admission check then refuses any call whose worst case would reach
+   the reserve. Apply the drop order before launching optional work.
+3. After every call, charge its measured whole-command time (GNU `time`, including children) to the step and
+   program ledgers. If a call's measured CPU per wall-second exceeds 15, stop optional work and return to
+   Design: the declared worst case is then invalid.
+
+This uses only existing declaration fields and the established launch procedure; it adds no counted code
+and needs no cgroup qualification.
 
 Use `nice -n 10`, all discovered CPUs in one process pool, numerical-library threads one, sequential fits
 and no subagents. First complete stage 2b → two F1 forms → selected-form B/smaller-A → loading sensitivity
