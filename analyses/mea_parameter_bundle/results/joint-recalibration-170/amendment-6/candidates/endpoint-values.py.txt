@@ -1,0 +1,14 @@
+"""Disclosed scratch (#170 A6 r3): start and endpoint values by coordinate identity, read from the written documents (no solve).
+Run from the checkout root with the pinned environment:
+  PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file> analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6"""
+import json, sys
+import fit_observations as o
+A6, out = sys.argv[1], {}
+for f in ('tied', 'held'):
+    spec, n = json.load(open(f'{A6}/{f}/fit-spec.json')), json.load(open(f'{A6}/{f}/fit/native.json'))
+    start = o.s.parameter_values(json.load(open(spec['information_starts'][0]['parameters_path'])))
+    end = o.s.parameter_values(json.load(open(f'{A6}/{f}/fit/usable-budget-endpoint.json')))
+    out[f] = dict(chemistry=json.load(open(f'{A6}/{f}/fit/chemistry-coordinates.json')), coordinates=[
+        dict(identity=c['identity'], start=start.get(c['identity']), end=end.get(c['identity']), optimizer=n['optimizer'][i], bounds=c['bounds'],
+             at_bound=i in n['covariance']['active_bounds']) for i, c in enumerate(spec['information_coordinates'])])
+json.dump(out, open(f'{A6}/candidates/endpoint-values.json', 'w'), indent=1)
