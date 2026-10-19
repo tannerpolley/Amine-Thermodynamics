@@ -105,257 +105,366 @@ Source: #170 comment 6158000919, "Run F1 at λ = 0, 0.01, 0.1, 1".
 
 The 250-line request stays deferred.
 
-## §0b. Revision 3 (owner decisions 2026-10-19)
+## §0b. Revision 3 (owner decisions 2026-10-19; readiness r1 corrections)
 
-**Authority and question.** This section supersedes §§0–7 where they conflict. The
-[owner decisions](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6275729199)
-replace loaded-density acceptance, authorize combined-source and Held fits, and raise the ceiling to **1,250
-gross added executable lines**, with readiness review first. Design base: `97bffd3`. The earlier
-[assessment route](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6259645591)
-and [step-1 report](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6263679112)
-remain history. Question: can this density-fitted model support the paper within density, calibration and
-phase limits, and which comparison claims survive? Recommendations define the proposed experiment; the
-parent owns review/publication, and the owner adopts parameters. Paths: `R` =
-`analyses/mea_parameter_bundle/results/joint-recalibration-170/`, `A4` = `R/amendment-4/`, `A6` =
-`R/amendment-6/`; scripts are under `analyses/mea_parameter_bundle/scripts/`.
+**Authority and question.** This is the single authoritative revision-3 section; it incorporates the
+former §0c and supersedes §§0–7 wherever they conflict. The [owner decisions](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6275729199)
+authorize combined-source density and Held-form fits; the [accounting decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6276283139)
+sets a **1,250-line campaign-code ceiling**. The recorded owner answers additionally authorize stage 2b
+and settle #172 as **one second start B and one smaller-d_V fit for the selected form**; further
+branch/start combinations are not run. Question: can a density-fitted candidate support the paper within
+the stated calibration and phase limits, and which comparison claims survive? This remains Design: the
+parent owns independent readiness review/publication before Build; the owner adopts parameters. No
+thermodynamic call, fit, implementation, manuscript edit or GitHub write is part of this revision.
 
-**Density observations and source facts.** Fit **52 loaded rows**, without a volume translation, at an
-assumed 100000 Pa and 30 wt% CO₂-free solvent:
+Paths: `R` = `analyses/mea_parameter_bundle/results/joint-recalibration-170/`, `A4` = `R/amendment-4/`,
+`A6` = `R/amendment-6/`; scripts are in `analyses/mea_parameter_bundle/scripts/`. Campaign accounting base
+and the existing cumulative ledger stay fixed; `599497f` is this document revision's starting commit.
+Count incremental Build additions against `f387725`, carrying forward the existing 1,000-line charge;
+this comparison does not reset or recount the historical campaign.
 
-- Amundsen 2009 Table 3 p.3097: all **20** rows, α = 0.1/0.2/0.3/0.4 at 25/40/50/70/80 °C, states 060–063,
-  065–068, 070–073, 075–078, 079–082. The eight former assessment rows become calibration rows; they cease
-  to supply an independent temperature comparison.
-- Hartono, Mba & Svendsen 2014 Table 3 p.1810: **32 own, unsuperscripted cells**, the first four
-  positive-loading columns (printed α = 0.11/0.19/0.29/0.39) at 20/25/30/40/50/60/70/80 °C. Select by
-  source cell identity, using the adopted α even if its resolved value exceeds 0.4 slightly. Exclude the
-  table's reprinted literature rows to avoid duplicates.
-- Assessment only: Hartono's eight own α = 0.50 cells and eight unloaded cells; all other Amundsen rows as
-  §3. No loading-0.5 row enters a fit or density gate. The five Amundsen unloaded 30 wt% rows retain their
-  separate gate below. These are previously accessed comparisons, not untouched data.
+**Loaded observations and adopted basis.** Fit **52 loaded rows**, without translation, at assumed
+100000 Pa and nominal 30 mass % MEA in CO₂-free solvent:
 
-**Data dependency.** Consume only the independently checked, adopted
-`data/reference/MEA/observations/density_viscosity/Hartono_2014_loaded_density.csv`, binding commit/hash,
-source-cell IDs, resolved loading basis and uncertainties. Its parallel-task draft remains blocked pending
-source review; existence is insufficient. Stop dependent work until adoption resolves the basis. Never
-consume diagnostic `density-sweep-1b/hartono-check/rows.json` or its fit declarations as observations.
-Preserve printed α/x₃ beside adopted α. Source: Zotero `5VGPDVGB`/`L7SKR73P`, Table 3 p.1810; exclude cited
-cells and preserve the distinct supplement.
+- Amundsen 2009 Table 3 p.3097: all **20** rows, α = 0.1/0.2/0.3/0.4 at 25/40/50/70/80 °C,
+  states 060–063, 065–068, 070–073, 075–078, 079–082. The eight former assessment rows become calibration.
+- Hartono, Mba & Svendsen 2014 Table 3 p.1810: the **32 own, unsuperscripted** cells at printed
+  α = 0.11/0.19/0.29/0.39 and 20/25/30/40/50/60/70/80 °C. **Printed α with nominal solvent
+  W = 7.911062165 mol water/mol MEA is an adopted assumption, not a resolved composition.** Select by
+  source-cell identity; omit the table's cited literature cells. The eight own α = 0.50 cells are
+  assessment only, as are the eight own unloaded cells; six of those unloaded cells already have retained
+  observation rows. No optional Hartono unloaded rows are added to stage 2b.
 
-**Per-row scale and weight, recommended.** ρ is mass density (kg/m³); α is mol CO₂/mol analytical MEA; w is
-CO₂-free MEA mass fraction. Define
+Consume `data/reference/MEA/observations/density_viscosity/Hartono_2014_loaded_density.csv` from
+`adopt-hartono-2014-loaded-densities-into`, commit **`b998d03849d9a2f1357aec57d1a0d3949abe15fc`**, SHA-256
+**`be0daa47de963643c498af015b430ae785a3f0b0103a23f3d5f9f81102cee7b4`**. Its README, “Adopted fitting basis”,
+records the owner decision; the 32 admitted cells are `property_target_candidate`, the eight α = 0.50
+cells `validation_only`. The branch must merge to main before Build; verify identical bytes and retain
+both adoption and merge identities. This is a merge dependency, not a new composition decision. Preserve
+printed α, x₃, alternative α and source IDs. Never use `density-sweep-1b/hartono-check/rows.json` as adopted
+observations. The adoption records source PDF `5VGPDVGB`/`L7SKR73P`, Table 3 p.1810, and its separate
+supplement; this revision does not re-adjudicate that source review.
+
+**Density scales, weights and ambiguity.** Let ρ be mass density in kg/m³, α mol CO₂/mol analytical MEA,
+w the CO₂-free MEA mass fraction, and g the source-local loading slope. Freeze before fitting:
 
 $$
-u_j=\sqrt{u_{\rho,j}^{2}+(s_j u_{\alpha,j})^{2}},\quad
-s_j=(\partial\rho/\partial\alpha)_{T,w},\quad
-C_\rho=\frac{\lambda}{2N}\sum_{j=1}^{N}[(\rho_j^{calc}-\rho_j^{obs})/u_j]^2.
+s_j^2=u(\rho_j)^2+[g_j u(\alpha_j)]^2,\qquad
+g_j=(\partial\rho/\partial\alpha)_{T,w},\qquad
+C_\rho=\frac{1}{2\,52}\sum_{j=1}^{52}[(\rho_j^{calc}-\rho_j^{obs})/s_j]^2.
 $$
 
-Amundsen pp.3096–3100, Experimental Section/uncertainty discussion: use uρ = **2 kg/m³** (±0.002 g/cm³), uα
-= **0.02α**. The source's density uncertainty is already combined with composition and excludes the highest
-temperatures/loadings. Adding loading again follows the owner's operational rule, not an independent-error
-model; nominal uρ=2 at 70/80 °C remains an engineering target with the caveat reported. Hartono Table 3
-footnotes b–c: use printed uρ = **0.02 kg/m³**, absolute uα = **0.01**, on the adoption-resolved basis. It
-also prints Uρ=0.02 at coverage factor 2; preserve this ambiguity without halving uρ or claiming statistical
-coverage.
+Use **λ = 1, weight 1/52 per loaded row**, in fitting, information and replay. Each source's four
+admitted loaded cells at the same T supply adjacent one-sided secants at endpoints and secants spanning
+the two neighbors internally. For Hartono these are at the adopted **nominal** composition; their use
+is conditional on that assumption. Exclude α = 0.50 and cross-source/model slopes. Freeze source-cell
+pairs, g, both uncertainty contributions, s and input hashes in one table; reuse it for all forms.
+Source block shares are 20/52 and 32/52; other A4 weights stay fixed except the CO₂-free block specified below.
 
-Obtain s from each source's own four admitted loaded cells at the same T: centered adjacent-cell secants
-internally, one-sided adjacent secants at endpoints. Use adopted α; exclude cross-source/model slopes and
-α=0.5 cells. Freeze slope-cell IDs, s, both uncertainty terms and u in one hashed input table before
-fitting; reuse for both forms/comparisons. Set **λ=1, N=52**, weight **1/52 per density row** in fitting and
-information diagnostics, replacing λ/12. Source block shares are 20/52 and 32/52; other A4 family
-weights/scales stay fixed. No post-result λ tuning or claim of independent observations.
+Amundsen pp.3096–3100, Experimental Section/uncertainty discussion: u(ρ) = **2 kg/m³**, u(α) = **0.02α**.
+Its combined density uncertainty already includes composition and excludes the highest temperatures and
+loadings: adding loading again is the owner's operational rule, not an independent-error model; nominal
+u(ρ) = 2 at 70/80 °C remains an engineering target. Hartono Table 3 footnotes b–c: **u(ρ) = 0.02 kg/m³,
+u(α) = 0.01**. Preserve the separately printed **U(ρ) = 0.02 kg/m³**, coverage factor 2, without halving
+u or claiming statistical coverage. The resulting Hartono s is about 1.8–2.2 kg/m³.
 
-**Density gate, recommended.** All 52 loaded rows require finite available predictions and **|ρcalc−ρobs| ≤
-2u**. Report signed errors, maximum |error|/u and counts by source/T/loading. Multiplier 2 permits two
-stated error scales per row given material loading uncertainty and conflicting sources; it is an engineering
-tolerance, not a 95% interval or published MEA standard. Report the retained **8.5–9.1 kg/m³ Amundsen excess
-near α=0.4** (printed-α interpolation), refreshing on the adopted basis. Keep conflict rows visible without
-averaging targets, enlarging scales or exemptions. The **five unloaded Amundsen rows** at 25/40/50/70/80 °C
-each require **|error| ≤ 0.5 kg/m³**, exact zero analytical carbon, no multiplier/correction or new fit
-weight; use `stage2_rows`/`shared_evaluation.unloaded_density_problem`. Any miss blocks adoption.
+**H1/H2 is separate from s:** a possibly systematic effect shared across each temperature series, not
+another independent per-row variance. After selecting the final candidate, perform **one sensitivity
+refit**, same form/branch/start endpoint, replacing only the 32 fitted Hartono loadings by
+`co2_loading_from_mole_fraction_mol_per_mol_mea` at nominal 30 mass %. Keep the frozen scales, weights,
+cell IDs, coordinate box and other observations unchanged; run its own release and full replay. Retain
+parameter/cost/density changes without selecting a new primary fit or tuning weights. Report H2's
+**+0.9 to +2.3 kg/m³** composition-shift estimate from the adopted README; do not fit it, shift targets,
+or fold it into s. This one alternate-loading fit tests sensitivity, not resolution of the composition.
 
-**Retained expectations, not new results.** Read at step-1b commit `4822dd5`,
-`A6/density-sweep-1b/{README.md,summary.json,reduce.py.txt,*-spec.json}` (including nested declarations);
-delivered review is still pending. Both λ=1 fits used only 12 source-specific density targets at scale 2 and
-weight 1/12:
+**Density gates.** All 52 loaded predictions must be available/finite and satisfy **|error| ≤ 2s**;
+report signed errors, maximum |error|/s and counts by source/T/loading. The multiplier 2 is an engineering
+tolerance, not a 95% interval or a published MEA standard. Keep the retained **8.5–9.1 kg/m³ Amundsen excess
+near α = 0.4** visible on the printed-α basis. Do not average conflict rows, inflate scales or exempt them.
+All five Amundsen CO₂-free rows at 25/40/50/70/80 °C must satisfy **|error| ≤ 0.5 kg/m³**, exact zero
+analytical carbon, without a multiplier or density correction. Any miss blocks adoption.
 
-| λ=1 target source | C149 / C166 | Pressure / species AARD | Vinjarapu RMSE | All 20 Amundsen errors | Hartono 32 errors, printed α |
+**Stage 2b: fix the neutral temperature trend before joint fitting.** The retained
+`A6/neutral-slope-probe/{README.md,probe.py.txt,result.json}` predicts Δk ≈ −0.0055, b ≈ −9 K and errors
+−0.473…+0.434 kg/m³ at density weight 10, with Cai-only cost 91.33 → 92.26 (about 1%). This is a linear
+prediction at the step-1b Hartono-target endpoint, not a completed fit or evidence that the gate passes.
+
+- **Reference and starts:** freeze that endpoint from `ceb40c1`,
+  `A6/density-sweep-1b/hartono-fit/fit/usable-budget-endpoint.json`, SHA-256
+  `05ac5071c29d23c4f189edfcaa51ee118c912e2a05918477b3dd00137907f405`, as `reference_path`.
+  Hold all other parameters fixed, including water, MEA, CO₂, association, ions, chemistry and CO₂–water.
+  Reuse stage 2's MEA–water starts **A: k = −0.08031722618968729; B: k = −0.052**, each with b = 0.
+- **Two coordinates:** $k(T)=k+b(1/T-1/313.15)$, T and b in K. The constant
+  `pair/monoethanolamine/water/k_ij` has bounds [−0.5,0.5], scale 0.01. The slope
+  `pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope` has family
+  `k_ij_reciprocal_temperature_slope`, target `[monoethanolamine,water]`, bounds [−1000,1000] K, scale 10 K.
+  In the start document the MEA–water pair needs a coefficient with that exact identity/family,
+  `value={magnitude:0,unit:kelvin}` and `reference_temperature={magnitude:313.15,unit:kelvin}`; retain the
+  accepted coefficient provenance/domain fields, citing this amendment for the new MEA–water coefficient.
+  Use the existing `additional_coefficients` insertion once, not both insertion and a duplicate coefficient.
+- **55 fitted rows:** retain all 50 Cai targets (25 boiling temperatures and 25 vapor-water fractions)
+  from `stage2/spec.json`'s `neutral-mea-water`: scales 1 K and 0.01, **weight 1 each**, unchanged feeds,
+  pressures, exclusions and neutral domain to 436.85 K. Set **all five** Amundsen rows
+  `AMU-DENS-{002,009,016,023,030}` to scale **0.5 kg/m³, weight 10 each**. This replaces the three
+  weight-1/3 rows and two zero-weight rows; it does not add duplicate observations. Weight 10 is the
+  retained probe's all-five passing linear case, not a statistical uncertainty claim. Freeze this choice;
+  no weight scan. The objective is the half-sum of these 55 weighted squared residuals.
+- **Executable path and release:** a stage-2 declaration with one case, `coordinates` (two), `starts`
+  with `values=[k,0]`, `observations_id=neutral-mea-water`, `target_count=55`, and a hashed copy of its
+  amended rows is sufficient. `stage2_study` inserts the slope before creating starts;
+  `stage2_native` already iterates coordinate families; `stage2_rows` already constructs the exact-carbon-zero
+  density problem. Use 40 iterations, function/parameter tolerances 1e−10 and gradient 1e−8, native fit
+  bound 60 s, non-fit bound 60 s. Existing start assessments release both starts only when every declared
+  row is finite/available and passes the existing equilibrium checks; no stage-6 release-file imitation.
+- **Endpoint checks:** existing `stage2_study` checks both coordinates/bounds/rank, cold serialization replay
+  (IDs identical, weighted-row difference ≤1e−8, relative total-cost difference ≤1e−8), material/charge/mass
+  balances and zero carbon, raw residual ≤1e−9, positive pressure-density derivatives and nonnegative reduced
+  Hessian. Retain centered re-solves for both coordinates at optimizer steps 0.01/0.005, absolute/relative
+  errors ≤1e−8/1e−5, all shifted rows and roundoff evidence. Choose the lower replayed-cost complete
+  endpoint; report start agreement against 1e−6. Score Cai's 50 rows separately from the five densities.
+- **Falsifier:** require all five errors ≤0.5 kg/m³ and Cai-only cost no more than **1.05 times the same-wheel
+  constant-k reference's Cai-only cost** (about 91.33, not stage 2's density-inclusive 91.8454). If the
+  nonlinear fit cannot meet both, or a required numerical check fails, return the measured trade-off to
+  the owner. Do not replace fixing the gate with a limitation sentence or commission another fit.
+
+The neutral slope and two-coordinate fitting need **zero new numerical code**: this follows inspection
+of `stage2_native`, `stage2_rows`, `stage2_study` and the existing CO₂–water slope declaration. Stage 2b
+still uses the counted CPU guard below; its launch changes are counted. Substitute its selected MEA–water
+k and b into every joint start document, then freeze them in stage 6. Carry the same five CO₂-free rows,
+scale 0.5 and weight 10, through the existing `stage2_rows` added-row path under each case's row-table key.
+The joint density-weight replacement must address only the 52 **loaded row IDs**, preserving these five
+weights. Ion fitting can move the CO₂-free predictions slightly through trace MEAH⁺; recheck their gate.
+
+**Retained step-1b expectations.** Evidence is **`ceb40c1`**, merged to main as **`f387725`**, delivered
+review **Supported**; use `A6/density-sweep-1b/{README.md,summary.json,reduce.py.txt,*-spec.json}` and
+nested declarations. These source-specific λ = 1 fits used 12 densities, scale 2, weight 1/12:
+
+| λ = 1 target source | C149 / C166 | Pressure / species AARD | Vinjarapu RMSE | All 20 Amundsen errors | Hartono 32 errors, printed α |
 |---|---:|---:|---:|---:|---:|
 | Amundsen | 24.726 / 41.313 | 12.44 / 7.10% | 1.881 kJ/mol | −4.52…+2.87 kg/m³ | +0.55…+6.26 kg/m³ |
 | Hartono diagnostic | 24.678 / 41.147 | 12.40 / 7.10% | 1.855 kJ/mol | −10.12…+1.03 kg/m³ | −3.42…+2.05 kg/m³ |
 
-Both converge and replay (217 rows within 5.3e−12 for Amundsen; 201 shared rows within 2.2e−12 for Hartono);
-neither was assessed under the new objective. Both pass only **4/5 unloaded rows**: 25 °C errors are
-−0.980/−0.985 kg/m³. Born diameters remain 5 Å. Expect a loaded-density compromise and heat near 1.9 rather
-than A4's 1.515 kJ/mol; no all-row pass is predicted. In particular, the frozen neutral model may preserve
-the unloaded miss. A smaller Born-off penalty than the old 80% pressure error remains plausible, not
-necessary. The Held form's density, calibration and phase ordering is unknown.
+Replay differences are ≤5.3e−12 on 217 Amundsen-fit rows and ≤2.2e−12 on **201 shared** Hartono-fit rows;
+Hartono-fit Cp was not replayed. Neither fit was assessed under the new objective. Both pass only 4/5
+CO₂-free rows (25 °C errors −0.980/−0.985 kg/m³); the stage-2b correction is now required. Born diameters
+remain 5 Å. A loaded-density compromise and heats near 1.9 rather than A4's 1.515 kJ/mol are plausible;
+no all-row pass is predicted. A smaller Born-off penalty than the old 80% pressure error remains an
+inference, not a required outcome; Held-form density/calibration/phase ordering remains unknown.
 
-**Two matched F1 fits.** Use larger d_V, zero CO₂–MEA pair, **A4 start A**,
-`matched-larger-dV/control-start-parameters.json`, SHA-256
-`e01e114226597f04a1d1460fa4a4d00b6bb94bc05d17a7489768f8651ae4337d`. Keep §5's 14 coordinates/scales/boxes,
-chemistry pivot and frozen quantities; use step-1b's 180 iterations and tolerances (function 1e−6, parameter
-1e−10, gradient 1e−8, achieved gradient reported). Pin merged Engine `21e761c3`/§2 wheel hash. Debye–Hückel
-(DH) diameters in the **tied form** stay 0.88σ. For **Held**, set all six ions' start-document
-`debye_huckel_diameter` equal to `segment_diameter` σ; keep packing at 0.88σ and Born independent. Four
-trace-ion sizes stay fixed. For both fitted size coordinates set the DH factor to **1** in `targets` and
-serialized `ties`; packing stays 0.88. A factor-only edit leaves a wrong start offset.
+**Matched F1 fits and selection.** Initially fit larger d_V, zero CO₂–MEA, both tied and Held forms.
+Use A4 start A `matched-larger-dV/control-start-parameters.json`, SHA-256
+`e01e114226597f04a1d1460fa4a4d00b6bb94bc05d17a7489768f8651ae4337d`, with the stage-2b neutral pair
+substituted and the resulting start rehashed. Keep §5's 14 coordinates/scales/boxes, chemistry pivot and
+other frozen quantities; use 180 iterations, function 1e−6, parameter 1e−10, gradient 1e−8, achieved
+gradient reported. Pin merged Engine `21e761c3` and §2's immutable wheel hash.
 
-Source: Held 2008 §2 between Eqs.2–3; Held 2014 §2.1 and §2.4 Eq.21; Engine
-`equations.md:debye_huckel_helmholtz` requires source justification for a tie. For **each** start/objective
-run fresh information first: omit `fit_case`, one `information_starts`, `information_density_weights=[1]`.
-Hash release evidence with start/λ/row IDs/scales/ties/wheel; never reuse step-1b's 12-row release. Check
-centered size columns at 0.01/0.005 by §4's decay rule and both diameter relations at start/replayed
-endpoint. Both dispersion coordinates remain released. Replace release producer/consumer with availability,
-finite-column and tie/derivative gates; spectra, rank, dispersion projections and conditioning are reports,
-not fabricated old pass fields.
+In the tied form, all ion Debye–Hückel diameters remain 0.88σ. For Held initialize **all six** start-document
+`debye_huckel_diameter` values to σ, set the two fitted diameter target factors and serialized ties to 1,
+keep packing 0.88σ and Born independent. Four trace-ion sizes stay fixed. Held 2008 §2 between Eqs.2–3
+and Held 2014 §§2.1/2.4 Eq.21 motivate this change; no Engine equation changes. A factor-only edit leaves
+an incorrect start offset. Each start/objective gets fresh information (`fit_case` absent, one
+`information_starts`, `information_density_weights=[1]`); bind release to start/rows/scales/weights/ties/wheel.
+Release gates are available finite rows/columns, correct ties and consistent centered size derivatives at
+0.01/0.005 under §4's decay rule. Spectra, rank, dispersion projections and conditioning are reports;
+retain both dispersion coordinates, without fabricated old pass fields. Endpoint rank alone is not a stop;
+nonconvergence remains a stop. Recheck packing and DH relations at start and cold-replayed endpoint.
 
-**Selection before fitting.** Retain both converged/replayable endpoints. Prefer one meeting density and §4
-common-row/§3 heat ceilings; among equally eligible vectors choose lower combined-objective cost, preferring
-Held within 1% relative to the lower cost. Assess it first under §§3–4; assess the other completely if
-needed and affordable. If neither qualifies, choose an explicitly ineligible comparison vector by the same
-cost rule; misses block adoption. No Wagner/transfer selection. Smaller dielectric branch and F1 second
-starts remain **outstanding under #172**. Recommend this larger/A screen first; owner disposition or funded
-completion is required before adoption. Comparison A/B starts do not discharge missing F1 starts; no neutral
-refit/bound widening is included.
+Retain both complete endpoints. Prefer a candidate meeting density and §4 common-row/§3 heat ceilings;
+among equally eligible vectors choose lower combined-objective cost, preferring Held within 1% of the lower
+cost. No Wagner/transfer-based choice. If neither qualifies, an ineligible comparison vector can be chosen
+by the same cost rule but cannot be adopted. For the selected **form only**, run the owner-authorized
+larger-branch **B** and one **smaller-branch A** fit with the same objective, neutral pair and bounds.
+B uses the frozen #172 `larger-dV/F1-B` coordinate values rebased onto the corrected current declaration,
+not the CO₂–MEA variant or a comparison-family start. Smaller A uses its A4 control start with only its
+dielectric branch change and the same corrections. Freeze hashes/total reaction shifts before release.
+Select among those form's eligible endpoints by the same cost rule; report branch/start disagreement and
+all combinations not run. Then do the single Hartono loading-sensitivity refit and selected-vector checks.
 
-**Remaining declarations and producers (r1 corrections retained).** Start from A4's larger-control stage-6
-declaration: replace its 12 density `direct_rows` with the frozen 52, retain all four Cp rows, set
-`fit_case.density_weight=1`, bind fresh release, start/wheel hashes and launch-time ledger priors. There are
-**218 reacting / 257 total positive-weight rows** (166+52, plus 39 Kiepe). Information calls omit
-`fit_case`; assessment-only rows have zero weight and remain separate. Run every §3 assessment on the
-selected vector: all 103 Amundsen densities, Hartono assessment cells, four Hilliard Cp values and their
-proxy/enthalpy verification, 8 Vinjarapu/14 Arcis heats, 23 Wagner pressures, canonical and packet 100–120
-°C cohorts, 33/37 transfer pressures, 19 Matin pools and the corrected ten-row Jakobsen carbonate share.
-Preserve §3's row identities, feeds, source limitations and exclusions; Cp adequacy remains report-only. Use
-`stage6_rows`, `stage2_rows`, `heat_items`/`predict` and existing native enthalpy actions; replace old
-selected-record/nominal-Jakobsen reductions in `final_evidence`, with explicit parameter documents and
-corrected requests. Execute §4's full 73-point family, frozen input hash and attempt sequence, using
-candidate reactions/reference and #172 **amendment 2** stable-pass definition: every trial completes, no
-descent or failed/unresolved trial; two-phase/single-liquid/unresolved/failed counts sum to 73. Verify old
-index 63 is unresolved. Execute the exact §4 gas-root state, both native root requests, newly solved
-physical state and 10⁻⁶–100 mol/m³ contribution scan. Retain Gibbs comparisons and positive pressure-density
-derivatives; require no stable ionic gas root, ε→1 and bulk Born→0. Finite shell is disclosed; unresolved
-evidence never passes. These are finite-support numerical checks.
+**Rows, assessments and comparisons.** Replace the original 12 loaded `direct_rows` by the frozen 52,
+retain four Cp rows and append five CO₂-free rows through the added-row table. F1/F2/F3 have **223 reacting
+/ 262 total** positive-weight rows (166 + 5 + 52, plus 39 Kiepe). Retain scores separately for common149,
+original non-density166, five CO₂-free densities, 52 loaded densities, Kiepe and the complete actual
+objective. Information/replay uses precisely the same IDs, scales and weights; assessment-only rows remain
+separate. No cross-row-count cost ranking.
 
-On the selected density/DH form, run **F3, F2, no-heat, F4, F5 × A/B**: A = selected endpoint, B = A4 start
-A with that form's diameter initialization. Rebase R2/R5 increments and bounds to the same total-shift box
-(§5); retain their reference coordinates by identity, never column number. F3 sets the electrolyte choice to
-`fully-dissociated-debye-huckel`, removes Born-only coefficient records and the two fitted Born coordinates
-(12 remain); F2/F5 keep `born` with `c_shell=c_dielectric=0`; F1/F4 keep both at 1. All retain the same 52
-densities/scales/λ and four Cp targets. F3/F2 have 218/257 rows; F4/F5 add **19**, giving 237/276. No-heat
-keeps all declared rows but sets only eight Vinjarapu weights to zero in **both** the frozen target table
-and `observations` weights: 210/249 positive-weight rows, with 257 constructed for information/replay.
-Evaluate excluded heats afterward. Choose the lower-cost complete A/B endpoint, report disagreement; no
-forced F1-A or old no-heat substitution. Score common149, non-density166, density, Kiepe and each actual
-objective separately; no cross-row-count cost ranking. Keep §5's weaker Born hypothesis and §7's >1%
-**both-cost-and-pressure** F3 reversal stop. If cost and pressure disagree, report a mixed outcome with both
-numbers; neither becomes a general fit-quality advantage. Apply the same rule to F2 and pool comparisons on
-identical rows. A missing heat gain or high-T trade-off retires that claim. F6 remains excluded. Gate
-failures make comparisons diagnostic; they cannot authorize adoption by another label.
+Run §3's complete selected-vector assessment: all 103 Amundsen densities, Hartono assessment cells, four
+Hilliard Cp values and proxy/enthalpy checks, 8 Vinjarapu/14 Arcis heats, 23 Wagner pressures, canonical and
+packet 100–120 °C cohorts, 33/37 transfer pressures, 19 Matin pools and the corrected ten-row Jakobsen
+carbonate share. Preserve §3's feeds, row IDs, exclusions and source limitations; Cp adequacy is report-only.
+Use `stage6_rows`, `stage2_rows`, `heat_items`/`predict` and existing native enthalpy actions with explicit
+parameter documents, not old forced substitutions or candidate density translation.
 
-**Required code, estimated gross additions.** Count nonblank, noncomment added executable lines, including
-copies, launchers, checks and reductions wherever stored. Deletions do not buy additions; no executable
-scratch/notebook exception.
+Run §4's entire hashed **73-point** phase family, candidate reactions/reference, cold → two nearest
+same-T starts → liquid/bubble diagnosis → two bubble starts, retaining every attempt. Apply #172 amendment 2:
+every declared stability trial must finish without descent or failed/unresolved trial; failed, unresolved,
+passed-two-phase and passed-single-liquid counts sum to 73. Frozen **old index 63 must classify unresolved**;
+a newly completed calculation may pass. Run §4's exact gas-root state, both root requests, new physical
+solve and 10⁻⁶–100 mol/m³ contribution scan. Retain Gibbs comparisons, positive pressure-density derivatives,
+ε → 1 and bulk Born → 0; require absence of a stable ionic gas root. Finite shell is disclosed. These are
+finite-support numerical checks, not proof of global phase stability.
 
-| Existing file / function to replace or extend | Required change | Added-line estimate |
+For the selected form/branch run **F3, F2, no-heat, F4, F5 × A/B**: A = selected endpoint; B = its corrected
+branch's A4 control start. Rebase R2/R5 increments/bounds to the same total-shift box; persist by identity.
+F3 uses `fully-dissociated-debye-huckel`, removes Born-only records/two coordinates (**12 remain**);
+F2/F5 keep `born` with `c_shell=c_dielectric=0`; F1/F4 keep both at 1. F4/F5 add 19 pools: **242/281** rows.
+No-heat sets only eight Vinjarapu weights to zero in both target table and `observations` weights:
+**215/254 positive-weight rows**, **262 constructed** for information/replay; evaluate excluded heats later.
+Keep all density/Cp rows, scales and weights. Choose lower-cost complete A/B; report incomplete/single starts.
+Keep §5's weaker Born hypothesis and §7's >1% **both-cost-and-pressure** F3 reversal stop. Mixed ordering
+is reported with both numbers, never a general advantage. Missing heat gain/high-T trade-off retires those
+claims. F6 stays excluded; a diagnostic comparison does not authorize adoption.
+
+**One cumulative code account.** Under the 2026-10-19 owner decision the ceiling counts **campaign code
+only**: `fit_campaign.py`, `fit_observations.py` and shared producers through which these fits/checks run,
+including copied numerical methods, launch/guard code, imports and executable checks. The existing
+`A4/compute-ledger.json:campaign_executable_*` account is **1,000 of 1,000** (891 + 56 neutral fitter + 39
+matched check + 12 coordinate helper + 1 release assertion + 1 R2 write-back). Keep its established
+nonblank/noncomment gross-addition basis; deletions buy no additions. Planned additions below are **250
+maximum; cumulative 1,000 + 250 = 1,250**. This is an estimate to be tested in Build, not proof of feasibility;
+stop before exceeding it, without compressed statements, weaker checks or omitted numerical evidence.
+
+Excluded, disclosed one-off scratch: `A4/neutral-fit/figure.py` (the disputed 17 presentation lines),
+`A6/neutral-slope-probe/probe.py.txt`, step-1b's `reduce.py.txt`, `unloaded-eval-scratch.py.txt`,
+`hartono-fit/unloaded-eval-scratch.py.txt`, and `linear-screens/round{1,2}/*.py.txt` at `ceb40c1`;
+the previous `tmp/` diagnostic texts remain excluded. Future `A6/reduce.py.txt` reduces/plots retained
+fit/assessment arrays only. Retain their text, hashes and invocation. No fit, phase solve, runtime guard,
+or shared input/check function is concealed in these exclusions; anything imported or run by the campaign
+is counted. The 17 lines are excluded under the decision, not added again to the ledger.
+
+| Counted file / function | Responsibility and replacement | Maximum additions |
 |---|---|---:|
-| `fit_observations.py:stage6_rows` | Replace `165+len(added)` with common+added+declared-direct count; retain uniqueness and zero-weight construction. | 4 |
-| `fit_campaign.py:stage6_study` | Replace both λ/12 occurrences with λ/N for declared fit-density IDs; use identical weights for fit, information and replay. | 6 |
-| `fit_campaign.py:stage6_study` write-back | Replace R5 column-9/80 indexing with named coordinate/declared scale; preserve linked reaction laws, unshifted reference and total shifts for 12/14 columns. | 10 |
-| `fit_campaign.py:stage6_study` release and endpoint checks | Replace conditioning release predicates/consumer with the explicit numerical gates above; retain spectra, rank, covariance availability and gradient as reports. Split line-597 rank rejection from the retained nonconvergence stop. | 12 |
-| `fit_campaign.py:stage6_study` input preparation; `fit_observations.py:stage6_rows` | Compute/freeze source secants and u before calls; consume the hashed table and reject missing basis/scales. Native density equations stay in Engine. | 18 |
-| `final_evidence.py:selected/job/score_rows/summarize/main`; `heat_evidence_170.py:select/conditional/evidence/main` | Replace forced substitutions, five-column assumptions, nominal Jakobsen interpolation and candidate translation; reuse native row/heat/Cp methods and existing reductions, explicit fit documents and declared widths. | 43 |
-| `final_evidence.py:main`, needed family/root functions | Incorporate only `flash_problem/family_job/falsifier/contribution` and recovery/diagnosis methods from the four screen scripts at `5ebcb37`; add amendment-2 stability classification, all-attempt retention and bounded calls. No restored standalone drivers. | 122 |
-| `final_evidence.py:summarize` and existing check calls | Full-objective cold replay, 39-row Kiepe invariance, changed-tie/Born/density centered derivatives, Cp checks and frozen index-63 classification. No generic test suite. | 18 |
-| **New executable subtotal** | Design estimate, not a demonstrated implementation minimum. | **233** |
+| `fit_observations.py:stage6_rows` | Replace fixed `165+added` assertion by common + added + declared-direct counts; preserve uniqueness/zero-weight construction and five added CO₂-free rows. | 4 |
+| `fit_campaign.py:stage6_study` weights | Replace both λ/12 rules by λ/N **only for frozen loaded IDs**; preserve CO₂-free weight 10 and use identical information/fit/replay weights. | 6 |
+| `fit_campaign.py:stage6_study` write-back | Replace column-9/80 assumption by R5 identity/declared scale; preserve linked laws, unshifted reference and total shifts for 12/14 columns. | 6 |
+| `fit_campaign.py:stage6_study` release/consumer | Replace obsolete condition predicates with finite/tie/derivative gates; bind input identities, retain diagnostic spectra and separate nonconvergence from rank reporting. | 10 |
+| `fit_campaign.py` source preparation / `verify` | Compute/freeze secants and s from declared source/T groups; reuse `checked`/`write` for hashes/table output. The ID/basis/scale and start-coefficient assertions are included in the check row below. | 10 |
+| `final_evidence.py:selected/main`; `heat_evidence_170.py:select/main` | Accept explicit retained documents/declared widths; bypass displaced old-record, no-heat, translation and nominal-Jakobsen paths. Existing native row/heat/Cp producers do evaluations; one-off reductions score their retained arrays. | 8 |
+| `final_evidence.py` phase functions, detailed below | Replace retired screen drivers by the candidate-only producer, including stability, attempts, classification, serialization and dispatch. | 150 |
+| `fit_campaign.py` counted-call owner and its callers | Aggregate live CPU guard, admission, unique-unit launch/cleanup, timing and stage-2/stage-6/assessment dispatch, including required imports and guard qualification. | 44 |
+| `final_evidence.py` / existing check calls | Executable persistence/replay, Kiepe, weights/scales, tie/derivative and frozen-classification assertions; reuse existing Cp verification. | 12 |
+| **Total** | **No new Engine equations, fitting algorithm, standalone screen driver or test suite.** | **250** |
 
-`A4/compute-ledger.json:campaign_executable_*` records **1,000/1,000**: 891+56 neutral fitter+39 matched
-check+12 coordinate helper+1 release assertion+1 R2 write-back.
-`amendment-4/final-prerequisites/change-accounting.json` records 861→891; earlier raw-diff categories do not
-replace this cumulative nonblank/noncomment count. Conservatively charge the disputed **17 presentation
-lines**: **1000+17+233=1250**. Delete displaced selection/translation code; preserve historical results.
-Readiness checks feasibility; Build stops before 1,250 if replacements need more. Prose, declarations and
-numeric tables add no executable lines.
+The earlier **122-line phase estimate is withdrawn**. At `5ebcb37`, the seven historical functions contain
+**150 nonblank/noncomment lines**: `flash_problem` 6, `family_job` 16, nearest `recover` 21, `diagnose` 20,
+bubble `recover` 20, `contribution` 8, `falsifier` 59. They lack the required stability calls and current
+classification. The replacement's function-level allowance is:
 
-**Compute allocation, no cap increase.** Main `97bffd3` charges 10,996 wall-s and 97,578.61 CPU-s; step-1b's
-ledger adds rounded **1,068 / 9,700** (measured 1,067.49 / 9,699.09). Thus **9,536 of 21,600 compute-wall
-s** and **36,721.39 of 144,000 CPU-s** remain; do not charge step 1b twice. Measured λ=1 fits cost 67–136
-wall-s / 777–1,655 CPU-s; λ=0.1 cost 239 / 2,967 and λ=0.01 cost 279 / 3,954. Information calls cost about
-20 s each. New rows/forms may cost more; the allocations are caps on planned work, not measured forecasts or
-promises that every comparison completes.
+| Function in `final_evidence.py` | Reuse, deletion and required work | Lines |
+|---|---|---:|
+| `flash_problem` | Keep feed/support/tolerance; use candidate `_problem_from_request` reactions and `_neutral_reference`; drop old basis/Engine-case dispatch. | 6 |
+| phase-result serialization | One explicit serializer shared by cold/recovery/bubble/root paths; `_phase_payload`, `_jsonable`, `write_json` carry lists/atomic writing, not native-object stringification. | 12 |
+| `family_job` | Candidate model/problem; cold attempt and numerical evidence via serializer; no model-variant loops. | 10 |
+| nearest `recover` | Pass model/problem/retained rows in; existing `solve_equilibrium_starts` and `EquilibriumWorkLimits` own two 400-iteration starts. Reuse serializer, remove duplicate setup/payloads. | 12 |
+| `diagnose` | One liquid solve and candidate bubble solve, full evidence through serializer; remove historical file loading and duplicate model/problem setup. | 12 |
+| bubble `recover` | Reuse that bubble state and common serializer; keep both amount starts and all native batch causes/results, no redundant bubble re-solve. | 10 |
+| `contribution` | Keep every original contribution plus pressure-density derivative; reuse for solved, witness and low-density states. | 9 |
+| `falsifier` | One candidate instead of basis/variant loops; reuse problem/model/serializer/contribution. Keep both witness evaluations, their Gibbs/closure evidence, new physical state, both root requests and all seven density-scan points. | 43 |
+| stability/classification | Call `eq.stability_test(eq.compile_problem(model,problem),result,options)` on both declared trial supports; serialize report/trials and apply amendment-2 ordered failed/unresolved/two-phase/single-liquid rules. | 22 |
+| imports, `main` launch and reduction | Reuse `final_evidence` imports, pool, `table`, `s.write_json` and counted-call owner; load/hash 73 inputs, bound each point across attempts, retain timings, assert counts, reduce classifications. | 14 |
+| **Phase subtotal** | Reductions in duplicated setup/serialization fund new stability/classification; historical numerical evidence is retained. | **150** |
 
-| Remaining work | Wall-s / CPU-s allocation |
+The serializer must retain result coordinates, phase amounts/compositions/densities/packing, pressure,
+raw/classified residuals, balance/charge/pressure closure, stationarity and reduced-Hessian evidence,
+iterations/evaluations/messages and each attempt's outcome. Stability serialization explicitly retains
+`completed`, standards/plane/present-phase quantities and, for every trial, optimizer success/work,
+`evidence`, `message`, composition, raw coordinates/residuals, basis/row transformation, quantities,
+donor, split checks/coordinates and `resolved_descent`. `_jsonable` alone turns these native objects into
+strings: it is not sufficient. Bound each point to 300 s **across all attempts**, using the common bounded
+process owner; do not mistake a future wait timeout for termination of its worker. The 44-line guard
+allowance includes that shared launch/cleanup responsibility; phase dispatch is included in the 14 above.
+
+**Executable-check locations.** The 12-line assertion allowance and existing check calls must cover:
+
+- `stage6_study` persistence plus explicit-document assessment: construct one 14-coordinate case and F3's
+  12-coordinate case, check named R5 reference/linked reaction totals, serialize, and replay each width.
+- `stage6_rows`/`stage6_study`: exact ID sets, 52 weights = 1/52, five = 10, frozen s values, Cp present,
+  no-heat's eight zero weights, declared constructed/positive counts; then cold **full-objective** replay
+  against `native.json`, ≤1e−8 weighted-row/relative-cost differences. Do not use the density-dropping
+  `check_matched_co2_mea.py`; compare the fixed 39 Kiepe weighted rows at ≤1e−8 as well.
+- Release and endpoint checks: packing = 0.88σ and DH = 0.88σ or σ, all six at start and after
+  write-back (two fitted, four fixed); centered derivative evidence for each changed family/tie at
+  0.01/0.005 under §4. Existing `verify_solution_heat_capacity` owns Cp proxy/enthalpy verification;
+  reductions retain its actual errors.
+- Phase classification: feed the frozen screen index-63 evidence through the **same** classifier used for
+  new points; assert unresolved and the 73-count sum. A convergence flag without completed stability
+  cannot pass. The guard's nonthermodynamic qualification checks aggregate child CPU and forced cleanup.
+
+**Compute allocation and admission.** Main **`f387725`**'s `A4/compute-ledger.json` already includes step 1b:
+**9,536 of 21,600 compute-wall s and 36,721.39 of 144,000 CPU-s remain**. Do not add step 1b again.
+Measured λ = 1 fits used **777 and 1,655 CPU-s** (67–136 wall-s); λ = 0.1 used **2,967**, λ = 0.01
+**3,954 CPU-s**; information calls about **20 s**. New rows/forms may cost more. Allocations are aggregate
+allowances, not predicted call costs or a guarantee that every comparison fits:
+
+| Work, including its calls/cleanup | Wall-s / CPU-s |
 |---|---:|
-| Two combined-density F1 fits, tied and Held | 1,500 / 6,000 |
-| Fixed selected-vector assessment and bounded fallback replay | 1,000 / 2,000 |
-| Selected-vector gas-root and full flash family; alternate only if affordable | 2,000 / 3,500 |
-| Ten selected-form comparison fits | 2,500 / 20,000 |
-| Verification: fresh releases, endpoint replays, derivatives, Cp and classification checks, reductions and contingency | 2,000 / 4,500 |
-| **Total reserved** | **9,000 / 36,000** |
+| Stage 2b A/B, release/replay/derivative/equilibrium checks | 300 / 800 |
+| Two combined-density F1 forms, fresh releases and replays | 1,500 / 6,000 |
+| Selected-form B and smaller-A fits; one Hartono loading-sensitivity fit, releases/replays | 1,600 / 8,000 |
+| Selected-vector fixed assessment and bounded fallback replay | 1,000 / 2,000 |
+| Selected-vector full phase family and gas-root evidence | 2,000 / 3,500 |
+| Up to ten comparison fits | 1,800 / 12,000 |
+| Other derivatives/Cp/persistence checks, reductions and contingency | 800 / 3,700 |
+| **Reserved total** | **9,000 / 36,000** |
 
-Leave **536 wall-s / 721.39 CPU-s** unallocated. Protect the existing 1,950.38 wall-s mandatory-check
-reserve within the assessment/phase/verification allocations until those checks finish. Include every failed
-call and process cleanup in measured charges. Use `nice -n 10`, full discovered CPU count in one process
-pool, numerical-library threads one; sequential fits, no subagents. Keep native fit limit 600 s (+120 s
-outer join only), non-fit native calls ≤60 s and each flash point ≤300 s across attempts; retain the bounded
-180 s information-call guard. Use fit CPU allowance at most 3,000 per launch; admit only against remaining
-aggregate allowances after mandatory reserves. Unspent allocations may be reassigned within the total, with
-ledger entries; neither a timeout nor a cheaper call authorizes another fitting screen. Order: adopted
-inputs/readiness → code checks and two fresh releases → two F1 fits/replays → selection and fixed/phase
-assessment → F3 A/B → F2 A/B → no-heat A/B → F4 A/B → F5 A/B → verification/notebook/delivered review. If
-CPU runs short, drop unneeded alternate/old-record **phase families** first, then F5 B/A, then F4 B/A, then
-F2 B and no-heat B; withdraw missing comparisons' claims and label single starts. Protect both F3 starts,
-one comparison in each remaining family if affordable, and all selected-vector mandatory checks. If those
-checks cannot finish, report unresolved and withhold adoption; never omit a flash point, stability trial or
-unavailable observation to pass.
+Leave **536 wall-s / 721.39 CPU-s** unallocated. Protect **1,950.38 wall-s** within the selected-vector
+assessment/phase/verification allocations, and their **9,200 CPU-s**, until completed evidence releases
+that reserve. Pending stage 2b and selected-form/sensitivity work also remain earmarked ahead of comparison
+fits. Allocations may transfer only within these totals and without consuming still-required checks.
 
-**Falsifiers and fallback.** Density misses, failed/unresolved phase points, surviving stable ionic gas
-root, absent low-density limit, unavailable checks, replay/Kiepe/derivative inconsistency,
-calibration-ceiling miss or unfinished mandatory evidence prevent replacement. Separate physical
-disagreement from numerical failure; §7's Born-off reversal returns to the owner. Retain **66ff7715** with
-its **existing empirical density correction**, corrected Jakobsen comparison and calibration-dependency
-disclosure. Report both sources' disagreement and raw/corrected errors; it is not a new-gate pass (15/20
-translated rows already missed the old ±2 limit). Preserve §7's record/successor distinction; transfer no
-correction to new candidates.
+**Replace post-fit CPU checking with counted runtime enforcement**, within the 44 counted lines above.
+`fit_campaign.py:595` currently checks CPU only after completion: `fit_cpu_s=3000` is not a safe admission
+bound for a 600 s parallel fit. The common call owner must:
 
-**Open gates and output.** Parent must obtain Hartono basis adoption and independent readiness **Ready**
-before Build, and the #172 branch/second-start disposition before final adoption. An unloaded-gate exception
-or neutral refit needs a new owner decision; §0c records it (neutral stage-2b refit). Retain declarations/hashes, scales, rows,
-fits, phase attempts and timings under A6; after execution, update the existing notebook, obtain independent
-delivered review and investigator promotion before manuscript use. These are calibration expectations and
-numerical falsifiers, with no new prediction or physical validation. Only this document changes here; no
-fit, thermodynamic call or GitHub write.
+1. Before launch, subtract measured charges, other pending mandatory allocations and the applicable
+   remaining reserve from both program and step allowances; do not subtract the current call twice.
+   Apply the drop order **now**, not after overspending.
+   Admit a fit only with its full declared charge allowance (at most **4,000 CPU-s including cleanup**)
+   available; never infer a maximum from the 777/1,655-s measurements. Cap each command by its block's
+   remaining allowance as well. Stage-2b fits retain 60 s, joint fits native ≤600 s plus ≤120 s outer join;
+   information outer guard ≤180 s, ordinary non-fit native calls ≤60 s.
+2. Launch the command and all its forked workers in a **unique transient user systemd service**, with
+   `CPUAccounting=yes`, `KillMode=control-group` and the exact project working directory/environment.
+   Sample that service's cgroup-v2 **aggregate** `cpu.stat:usage_usec` at ≤0.25-s requested intervals;
+   it includes live/exited workers, unlike `RUSAGE_CHILDREN` during a running fit. The external monitor's
+   own CPU and launch/stop subprocess CPU are charged separately. No CPU quota or worker cap is imposed.
+3. Stop before the declared CPU allowance by a margin **M = n_cpu × 2 s + 10 CPU-s**, reserved *inside*
+   that allowance for sampling latency, monitor/launch overhead and cleanup. On threshold/wall expiry,
+   terminate only the captured unit/process groups, escalate to SIGKILL promptly, reap, and retain final
+   `CPUUsageNSec` plus monitor/control CPU and active wall time. Every failure/interruption/cleanup is
+   charged; interrupted results are incomplete. Bound phase-point child groups by captured IDs within
+   the same accounted service, so descendants remain counted and no other process is stopped.
+4. Qualify accounting/cleanup with a bounded two-child CPU probe before scientific calls, within the
+   verification allowance. Fail closed if cgroup accounting or descendant cleanup is unavailable, readings
+   are missing, observed sampling/cleanup latency exceeds the reserved margin, or any allowance is crossed;
+   record the actual charge and launch no further optional work. Do not claim a hard real-time scheduler
+   bound: the margin must be verified on this host, and an overrun never becomes permission to spend the
+   protected reserve. A failed guard qualification returns to Design, without a thermodynamic fallback.
 
-## §0c. Addendum to revision 3 (owner answers 2026-10-19)
+Use `nice -n 10`, all discovered CPUs in one process pool, numerical-library threads one, sequential fits
+and no subagents. First complete stage 2b → two F1 forms → selected-form B/smaller-A → loading sensitivity
+→ selected-vector fixed/phase checks. Then comparison order is F3 A/B → F2 A/B → no-heat A/B → F4 A/B →
+F5 A/B → remaining verification/notebook/review. Before optional launches, drop unneeded alternate/old-record
+**phase families**, then F5 B/A, F4 B/A, F2 B and no-heat B. Comparison allocations must not displace the
+selected-form fits/sensitivity or mandatory evidence. Protect both F3 starts and one start in each retained
+family if affordable; retire any missing comparison's claim and label one-start evidence. If mandatory
+work cannot finish, report unresolved and withhold adoption. Never omit a flash point/trial/observation to
+pass, or launch another fitting screen to use a surplus.
 
-Written by the orchestrator after §0b's readiness review started. It supersedes §0b where they conflict, and the next readiness round covers it.
+**Falsifiers, output and remaining gates.** Density/neutral-Cai misses, failed/unresolved phase points,
+a stable ionic gas root, missing low-density limit, unavailable checks, replay/Kiepe/derivative inconsistency,
+calibration-ceiling miss or unfinished mandatory evidence prevent replacement. Distinguish physical
+mismatch from numerical failure; the stage-2b trade-off and §7 Born-off reversal return to the owner.
+Retain fallback **66ff7715** with its **existing empirical density correction**, corrected Jakobsen
+comparison and calibration-dependency disclosure; it is not a density-gate pass (15/20 translated rows
+missed the old ±2 limit). Preserve §7's immutable-record/successor distinction; transfer no correction.
 
-**Owner answers** (AskUserQuestion, 2026-10-19):
-1. **#172 scope.** Run a **second start (B) and one smaller-d_V fit** for the *selected* candidate form only. Further branch and start combinations are reported as not run. This settles §0b's open "#172 branch/second-start disposition".
-2. **CO₂-free 25 °C density.** The owner's words: *"avoid any disclosing as a limitation if there is anything we can do other than getting new experimental data."* So the gate miss is fixed, not disclosed.
-
-**Diagnosis.**
-- **The miss is a temperature trend.** The five Amundsen CO₂-free 30 wt % rows trend from about −0.99 kg/m³ (298 K) to +0.15 (353 K) at the step-1b Hartono-targeted endpoint. In stage 2, before any ion fitting, they ran from −0.69 to +0.53. A constant MEA–water k_ij cannot change that slope.
-- **A slope fixes it in linear terms.** The scratch probe `A6/neutral-slope-probe/` evaluates the 55 stage-2 `neutral-mea-water` rows at that endpoint: 50 Cai 1996 boiling-temperature and vapor-water rows and 5 CO₂-free densities. With k(T) = k + b(1/T − 1/313.15 K), the fix is **Δk ≈ −0.0055 and b ≈ −9 K**, giving CO₂-free errors **−0.47 to +0.43 kg/m³**, all within 0.5. The Cai cost rises from 91.33 to 92.26, about 1 %.
-- **This is linear evidence only.**
-
-**Plan.** This follows the owner's 2026-10-13 staged-refit rule: each dependent calibration is redone on the corrected basis, in its own stage.
-1. **Stage 2b: MEA–water refit.**
-   - **Coordinates:** two, the MEA–water k_ij and a new reciprocal-temperature slope at 313.15 K reference. Same family and form as MEAH⁺–water and CO₂–water. Declare the slope coefficient in the start document, at b = 0.
-   - **Objective:** the stage-2 `neutral-mea-water` case unchanged, plus all five Amundsen CO₂-free density rows as fitted rows at scale 0.5 kg/m³. Stage 2 fitted three rows at weight 1/3; state the new weights. Hartono's six own unloaded cells at 20–80 °C are optional additional density rows, with u = 0.02 kg/m³ plus composition uncertainty.
-   - **Same as stage 2:** water, MEA and CO₂ pure parameters; the stage-2 starts; replay, derivative and equilibrium checks; and the existing `stage2_native` path, with no new code beyond the coordinate declaration.
-   - **Pre-stated expectation:** k shifts about −0.005 and b lands about −7 to −9 K. All five CO₂-free rows within 0.5 kg/m³; Cai cost within about 2 % of stage 2's 91.85.
-   - **Falsifier:** if the converged fit cannot place all five within 0.5 kg/m³ without raising the Cai cost by more than 5 %, return to the owner with that measured trade-off. Do not disclose it as a limitation without owner review.
-2. **Joint fits.**
-   - **Start:** the §0b tie and Held candidate fits start from the A4 start with the stage-2b MEA–water k and b substituted, as a start-document edit. MEA–water stays fixed in stage 6.
-   - **CO₂-free rows:** the five Amundsen CO₂-free density rows enter the joint objective as fitted rows, through the existing `stage2_rows` "added" path with `unloaded_density_problem`, at scale 0.5 kg/m³. Ion parameters move them slightly through trace MEAH⁺.
-   - **Gate:** each row within 0.5 kg/m³, unchanged.
-3. **Smaller-branch and start-B fits:** only for the selected form, after selection, with the same declarations.
-
-**Compute.** Stage 2b is a two-coordinate fit on 55 rows, measured stage-2 scale: seconds to a few minutes. It is charged within §0b's 9,000 s and 36,000 CPU-s, ahead of the comparison family. The two extra candidate fits (start B and smaller branch) at about 1,700–4,000 CPU-s each move ahead of F5 and F4 in the drop order.
-
-**Code.** No change beyond §0b's plan, because the slope coordinate and the added-rows path already exist. If a gap appears, it counts against the 1,250 ceiling, and the build reports it.
+The parent's remaining gates are the adopted-data merge and independent readiness **Ready**, then execution,
+complete retained results/notebook and independent delivered review, followed by owner adoption and exact
+notebook promotion before manuscript use. No #172 scope or Hartono basis question remains open. Retain
+inputs/scales/hashes, all fits/attempts/timings and accounting under A6; update the existing notebook after
+execution. This revision reports calibration expectations and numerical falsifiers, with no new physical
+validation. Its checks were static source/declaration/history inspection and retained-number arithmetic;
+no scientific calculation was run. The new line and runtime-guard estimates still require Build evidence.
 
 ## 1. Authority, question and retained evidence
 
