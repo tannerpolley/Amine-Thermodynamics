@@ -15,7 +15,7 @@ No fit was run, and this work establishes no physical validation or parameter ad
 | No-heat assertion, `fit_observations.py:113–116` | 4 | Actual no-solve `stage6_rows` construction: 262 rows, 215 reacting / 254 total positive, exactly eight Vinjarapu zeros in table and observation weights; ninth zero and table/observation mismatch rejected. |
 
 Reaction convention: at Engine commit `21e761c318c2ac5b555a245365c844d38a93e4cb`,
-`engine/native/regression/coordinates.cpp:29–44` defines the enthalpy direction
+`engine/native/regression/coordinates.cpp` (lines 29–44) defines the enthalpy direction
 as `(1/(R*T_pivot), -1/R, 0, 0)` and R5 `a_k = -b/ln(10)`.
 Thus the inherited contribution to `a_k` is positive and is removed when
 recovering the unshifted reference. The zero-increment inherited case writes
