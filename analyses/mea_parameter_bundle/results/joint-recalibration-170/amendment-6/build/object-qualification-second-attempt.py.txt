@@ -1,0 +1,56 @@
+import sys,copy,json,ast,math
+from pathlib import Path
+import numpy as np
+sys.path[:0]=['analyses/mea_parameter_bundle/scripts','src']
+import fit_campaign as f
+import fit_observations as o
+import final_evidence as e
+import heat_evidence_170 as h
+base=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6')
+results={}
+for name in ('tied','held'):
+ spec=f.load(base/f'inputs/revision-3/{name}-information-pending-stage2b.json')
+ installed=f.verify(spec)
+ mapping=f.load(spec['information_starts'][0]['parameters_path'])
+ spec['cases'][0].pop('kiepe_continuation')
+ params,rows=o.stage6_rows(spec,mapping)
+ weights=f.stage6_weights(spec,[r for r,_ in rows],1.)
+ assert len(rows)==262 and len(set(r['id'] for r,_ in rows))==262
+ assert sum(r['id'] in spec['loaded_density_ids'] for r,_ in rows)==52
+ assert all(w==1/52 for (r,_),w in zip(rows,weights,strict=True) if r['id'] in spec['loaded_density_ids'])
+ assert sum(r['weight']==10. and r['scale']==.5 for r,_ in rows)==5
+ assert sum(r['quantity']!='phase_density' for r,_ in rows)==4
+ assert f.stage6_ties(spec,mapping)
+ widths={}
+ for width in (14,12):
+  declare=copy.deepcopy(spec)
+  if width==12:
+   declare['information_coordinates']=[c for c in declare['information_coordinates'] if c.get('family')!='born_diameter']
+  coords=f.stage6_coordinates(declare,params,mapping)
+  assert len(coords)==width
+  widths[width]=dict(coordinates=len(coords),r5_column=next(i for i,c in enumerate(declare['information_coordinates']) if c['identity']=='reaction:R5:correlation:a_k'),persistence_qualified=False)
+ fingerprints={}
+ for key in ('cases','packet_path','anchors_path','heat_rows_path','stage2_rows_path','state_requests_path','verification','ion_ids','dh_factor'):
+  changed=copy.deepcopy(spec)
+  changed[key]={'changed':True}
+  fingerprints[key]=f.stage6_binding(changed,spec['information_starts'][0],1.)!=f.stage6_binding(spec,spec['information_starts'][0],1.)
+ assert all(fingerprints.values())
+ documents={'F1':dict(record=spec['information_starts'][0]['parameters_path'],raw='unused.json')}
+ assert e.selected(documents=documents)==documents and h.select(None,'F1',documents)['parameters']==documents['F1']['record']
+ results[name]=dict(constructed_rows=len(rows),positive_rows=sum(w>0 for w in weights),widths=widths,fingerprints=fingerprints,installed_wheel=installed['wheel_sha256'],kiepe_continuation_disabled_for_construction_only=True)
+old=f.load(base/'inputs/revision-3/phase/old-index-63.json')['diagnosis']
+row=dict(old,final=dict(success=old['liquid_accepted'],requested_tolerance_met=old['liquid_residual']<=1e-10))
+assert e.phase_classification(row)=='unresolved'
+# Execute the actual retained gate statements, without calling Engine.
+tree=ast.parse(Path('analyses/mea_parameter_bundle/scripts/fit_campaign.py').read_text())
+statements=[n for n in ast.walk(tree) if isinstance(n,(ast.Assign,ast.AugAssign)) and ((isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id in ('ratio','passed') for t in n.targets)) or (isinstance(n,ast.AugAssign) and isinstance(n.target,ast.Name) and n.target.id=='passed'))]
+statements=sorted([n for n in statements if 650<=n.lineno<=660],key=lambda n:n.lineno)
+checks=[]
+for coarse,fine,expected in [(1.1e-8,1.01e-8,False),(4e-7,1e-7,True)]:
+ env=dict(np=np,previous=np.array([coarse]),error=np.array([fine]),tolerance=np.array([1e-8]),samples=[dict(roundoff=[0.])])
+ exec(compile(ast.Module(body=statements,type_ignores=[]),'<retained-derivative-gate>','exec'),env)
+ assert bool(env['passed'][0])==expected
+ checks.append(dict(coarse=coarse,fine=fine,passed=bool(env['passed'][0])))
+results.update(frozen_index_63='unresolved',derivative_previous_failure=checks,no_engine_solves_in_this_probe=True)
+f.write(base/'build/object-qualification.json',results)
+print('object construction and retained classifier/gate probes passed')
