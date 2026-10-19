@@ -46,7 +46,9 @@ def table(path, rows):
             w.writerows(rows)
 
 
-def selected(output_dir=OUT, heat_rows=None):
+def selected(output_dir=OUT, heat_rows=None, documents=None):
+    if documents is not None:
+        return documents
     OUT = Path(output_dir)
     result = {}
     summary = json.loads((OUT / 'fit-summary.json').read_text())
@@ -348,7 +350,200 @@ def render():
         semantics='Discrete computed states, no interpolation or physical-necessity claim'))
 
 
-def main():
+from epcsaft import equilibrium as eq
+import epcsaft
+import fit_campaign as campaign
+import verify_reference_calorics as thermal
+
+
+def flash_problem(request, loading, T, P, phases=None):
+    return eq.Problem(T=T, P=P, feed=eq.Amounts({'monoethanolamine':9.7292821,
+        'water':76.9751925, 'carbon-dioxide':loading*9.7292821}),
+        phases=phases or [eq.Phase('L',kind='liquid',support=s.COMPONENT_IDS),
+            eq.Phase('V',kind='vapor',support=s.COMPONENT_IDS[:3])],
+        reactions=s._problem_from_request(request).reactions, neutral_reference=s._neutral_reference(request),row_tolerance=1e-10)
+
+
+def phase_payload(model, problem, result):
+    fields = ('success message solver_status requested_tolerance_met temperature pressure amounts mole_fractions '
+        'molar_densities packing_fractions coordinates residuals classified_residuals multipliers constraint_multipliers '
+        'iterations evaluations hessian_calls objective reduced_hessian_minimum jacobian_rank generic_nullity').split()
+    row = {k:s._jsonable(getattr(result,k)) for k in fields}
+    row['convergence'] = {k:s._jsonable(getattr(result.convergence,k)) for k in
+        ('residual floor amplification contraction iterations evaluations stop').split()}
+    row['closure_criterion'] = result.convergence.criterion.value if result.convergence.criterion else None
+    if model is not None and result.success:
+        point = eq.compile_problem(model,problem).evaluate(result.coordinates)
+        row.update(raw_residuals=list(point.values),raw_objective=point.objective,roundoff_floor=point.floor,
+            phases=[s._phase_payload(problem,result,i,len(model.component_ids)) for i in range(result.phase_count)],
+            row_kinds=[r.kind.name for r in result.rows])
+        row['pressure_density_derivatives'] = [model.state(result.temperature[0],rho=result.molar_densities[i],
+            x=dict(zip(model.component_ids,result.phase_mole_fractions(i),strict=True))).pressure_density_derivative for i in range(result.phase_count)]
+    return row
+
+
+def stability(model, problem, result):
+    options = eq.StabilityOptions()
+    trials = copy.copy(problem)
+    trials.phases = [eq.Phase('trial-L',kind='liquid',support=s.COMPONENT_IDS),eq.Phase('trial-V',kind='vapor',support=s.COMPONENT_IDS[:3])]
+    options.trials = trials._native(model).phases
+    report = eq.stability_test(eq.compile_problem(model,problem),result,options)
+    payload = {k:s._jsonable(getattr(report,k)) for k in
+        ('completed message candidate_coordinates standard_over_rt plane_over_rt present_phases work').split()}
+    payload['trials'] = []
+    for trial in report.trials:
+        record = {k:s._jsonable(getattr(trial,k)) for k in ('seed evidence message raw_coordinates raw_residuals '
+            'composition split_coordinates basis row_transformation quantities split_checks donor resolved_descent').split()}
+        record.update(phase=dict(name=trial.phase.name,kind=trial.phase.kind.name.lower(),support=list(trial.phase.support)),
+            optimizer=phase_payload(None,None,trial.optimizer))
+        payload['trials'].append(record)
+    return payload
+
+
+def phase_classification(row):
+    state, reports = row.get('final'), row.get('stability',[])
+    if any(t['resolved_descent'] for r in reports for t in r['trials']):
+        return 'failed'
+    if state is None or not state['success'] or not state['requested_tolerance_met']:
+        return 'failed'
+    if 'raw_residuals' in state and (max(map(abs,state['raw_residuals']),default=0.)>1e-10
+        or state['reduced_hessian_minimum']<0 or any(v<=0 for v in state['pressure_density_derivatives'])
+        or any(v<0 for v in state['amounts'])):
+        return 'failed'
+    if (len(reports)!=1 or not reports[0]['completed'] or not reports[0]['trials']
+        or {t['phase']['kind'] for t in reports[0]['trials']}!={'liquid','vapor'}
+        or any(not t['optimizer']['success'] or t['evidence'] in ('unresolved','indeterminate','negative_plane_without_positive_donor') for t in reports[0]['trials'])
+        or 'raw_residuals' not in state or row.get('bubble_pressure_Pa') is None or row.get('pressure_uncertainty_Pa') is None):
+        return 'unresolved'
+    if abs(row['pressure_Pa']-row['bubble_pressure_Pa'])<=row['pressure_uncertainty_Pa']:
+        return 'unresolved'
+    expected = 2 if row['pressure_Pa']<row['bubble_pressure_Pa'] else 1
+    if len(state['amounts'])!=expected:
+        return 'unresolved'
+    return 'passed-two-phase' if expected==2 else 'passed-single-liquid'
+
+
+def recover(model, problem, row, retained, out):
+    nearest = sorted((r for r in retained if r['temperature_K']==row['temperature_K'] and r.get('final',{}).get('success') and len(r['final']['amounts'])==2),
+        key=lambda r:abs(r['loading']-row['loading'])+abs(math.log(r['pressure_Pa']/row['pressure_Pa'])))[:2]
+    if not nearest:
+        return None
+    starts = [eq.EquilibriumStart(coordinates=r['final']['coordinates']) for r in nearest]
+    batch = eq.solve_equilibrium_starts(model,problem,starts,eq.EquilibriumWorkLimits(attempts=2,attempt_iterations=400,iterations=800))
+    row['nearest_indices'] = [r['index'] for r in nearest]
+    row['nearest_causes'] = list(batch.causes)
+    row['nearest_selected'] = batch.selected
+    row['attempts'].extend(None if r is None else phase_payload(model,problem,r) for r in batch.results)
+    s.write_json(out,row)
+    return batch.results[batch.selected] if batch.selected is not None else None
+
+
+def diagnose(model, request, row, out):
+    problem = flash_problem(request,row['loading'],row['temperature_K'],row['pressure_Pa'],[eq.Phase('L',kind='liquid',support=s.COMPONENT_IDS)])
+    liquid = eq.solve_equilibrium(model,problem)
+    row['liquid'] = phase_payload(model,problem,liquid)
+    s.write_json(out,row)
+    if not liquid.success:
+        return problem,liquid,None
+    problem.phases = [eq.Phase('L',kind='liquid',support=s.COMPONENT_IDS,composition_guess=liquid.phase_mole_fractions(0),packing_guess=liquid.packing_fractions[0]),
+        eq.Phase('V',kind='vapor',support=s.COMPONENT_IDS[:3],amount=eq.Pinned(0.))]
+    problem.P = eq.Free(row['pressure_Pa'])
+    bubble = eq.solve_equilibrium(model,problem)
+    row['bubble'] = phase_payload(model,problem,bubble)
+    if bubble.success:
+        row['bubble_pressure_Pa'] = bubble.pressure[0]
+        row['pressure_uncertainty_Pa'] = bubble.pressure[0]*max(bubble.convergence.residual,bubble.convergence.floor or 0.,bubble.convergence.criterion.value if bubble.convergence.criterion else 0.)
+    s.write_json(out,row)
+    return problem,liquid,bubble
+
+
+def bubble_recover(model, problem, bubble, row, out):
+    starts = [eq.EquilibriumStart(amounts=[bubble.amounts[0]*f,bubble.amounts[0]*(1-f)],
+        compositions=[bubble.phase_mole_fractions(0),bubble.phase_mole_fractions(1)],packing_fractions=bubble.packing_fractions) for f in (.5,.9)]
+    batch = eq.solve_equilibrium_starts(model,problem,starts,eq.EquilibriumWorkLimits(attempts=2,attempt_iterations=400,iterations=800))
+    row['bubble_causes'] = list(batch.causes)
+    row['bubble_selected'] = batch.selected
+    row['attempts'].extend(None if r is None else phase_payload(model,problem,r) for r in batch.results)
+    s.write_json(out,row)
+    return batch.results[batch.selected] if batch.selected is not None else None
+
+
+def family_job(mapping, request, row, retained, out):
+    model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping),thermochemistry=thermal.record())
+    problem = flash_problem(request,row['loading'],row['temperature_K'],row['pressure_Pa'])
+    result = eq.solve_equilibrium(model,problem)
+    row['attempts'] = [phase_payload(model,problem,result)]
+    s.write_json(out,row)
+    if not result.success:
+        result = recover(model,problem,row,retained,out)
+    bubble_problem,liquid,bubble = diagnose(model,request,row,out)
+    if bubble is not None and bubble.success:
+        if row['pressure_Pa']>bubble.pressure[0] and liquid.success:
+            problem = flash_problem(request,row['loading'],row['temperature_K'],row['pressure_Pa'],[eq.Phase('L',kind='liquid',support=s.COMPONENT_IDS)])
+            result = liquid
+        elif result is None or not result.success:
+            result = bubble_recover(model,problem,bubble,row,out)
+    if result is not None:
+        row['final'] = phase_payload(model,problem,result)
+        if result.success:
+            row['stability'] = [stability(model,problem,result)]
+    row['classification'] = phase_classification(row)
+    s.write_json(out,row)
+
+
+
+def phase_family(mapping, request, points_path, points_sha256, output_dir):
+    points = campaign.checked(points_path,points_sha256)
+    inputs = [list(map(float,line.split())) for line in points.read_text().splitlines()]
+    assert len(inputs)==73
+    old = campaign.load(points.with_name('old-index-63.json'))['diagnosis']
+    assert phase_classification(dict(old,final=dict(success=old['liquid_accepted'],requested_tolerance_met=old['liquid_residual']<=1e-10)))=='unresolved'
+    retained, output = [], Path(output_dir)
+    for index,(loading,T,P) in enumerate(inputs):
+        path = output/f'point-{index}.json'
+        row = dict(index=index,loading=loading,temperature_K=T,pressure_Pa=P,attempts=[])
+        s.write_json(path,row)
+        def child():
+            try:
+                family_job(mapping,request,row,retained,path)
+            except Exception as error:
+                saved = campaign.load(path)
+                s.write_json(path,dict(saved,failure=f'{type(error).__name__}: {error}'))
+        timing = campaign.bounded_call(child,300.)
+        row = dict(campaign.load(path),timing=timing)
+        row['classification'] = phase_classification(row)
+        s.write_json(path,row)
+        retained.append(row)
+    counts = {label:sum(r['classification']==label for r in retained) for label in
+        ('failed','unresolved','passed-two-phase','passed-single-liquid')}
+    assert sum(counts.values())==73
+    s.write_json(output/'summary.json',dict(counts=counts,eligible=counts['failed']==counts['unresolved']==0,
+        points_sha256=points_sha256,parameter_sha256=__import__('hashlib').sha256(json.dumps(mapping,sort_keys=True).encode()).hexdigest()))
+    return retained
+
+
+def main(output_dir=OUT, documents=None, declaration=None, phase_points=None):
+    if documents is not None:
+        import fit_observations as o
+        for problem,chosen in selected(output_dir,documents=documents).items():
+            mapping = s.parameter_mapping(Path(chosen['record']))
+            if phase_points is not None:
+                return phase_family(mapping,__import__('heat_evidence_170').request(mapping,313.15,.11),*phase_points,output_dir)
+            _,rows = o.stage6_rows(declaration,mapping)
+            weights = campaign.stage6_weights(declaration,[r for r,_ in rows],chosen['density_weight'])
+            values = o.replay(mapping,[(r['id'],item,w) for (r,item),w in zip(rows,weights,strict=True)])
+            s.write_json(Path(output_dir)/(problem+'-full-replay.json'),values)
+            raw = campaign.load(chosen['raw'])
+            fitted = [r for r in values if r['weight']>0]
+            assert [r['target'] for r in fitted]==[r['id'] for r in raw['rows']]
+            assert all(r['status']=='Available' for r in values) and campaign.stage6_ties(declaration,mapping)
+            assert max(abs(r['weighted_residual']-v) for r,v in zip(fitted,raw['weighted_residuals'],strict=True))<=1e-8
+            assert abs(math.fsum(r['cost'] for r in fitted)-raw['final_cost'])<=1e-8*max(abs(raw['final_cost']),1e-300)
+            reference = {r['id']:v for r,v in zip(campaign.load(chosen['kiepe_reference'])['rows'],campaign.load(chosen['kiepe_reference'])['weighted_residuals'],strict=True)}
+            assert sum(r['target'].startswith('kiepe-') for r in fitted)==39
+            assert all(abs(r['weighted_residual']-reference[r['target']])<=1e-8 for r in fitted if r['target'].startswith('kiepe-'))
+        return
+
     clock=time.perf_counter()
     EVAL.mkdir(parents=True,exist_ok=True)
     choices=selected(); packet, groups=observations()

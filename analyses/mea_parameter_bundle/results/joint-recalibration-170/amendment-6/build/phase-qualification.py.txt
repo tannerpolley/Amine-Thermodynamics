@@ -1,0 +1,14 @@
+import sys,json
+from pathlib import Path
+sys.path[:0]=['analyses/mea_parameter_bundle/scripts','src']
+import final_evidence as e
+import fit_campaign as f
+import heat_evidence_170 as h
+base=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6')
+spec=f.load(base/'inputs/revision-3/tied-information-pending-stage2b.json')
+mapping=f.load(spec['information_starts'][0]['parameters_path'])
+request=h.request(mapping,313.15,.11)
+row=dict(index=0,loading=.25557798094241313,temperature_K=318.15,pressure_Pa=5918.5286)
+path=base/'build/phase-point-0.json'
+e.family_job(mapping,request,row,[],path)
+print(json.dumps(dict(classification=row['classification'],attempts=len(row['attempts']),stability_trials=len(row.get('stability',[{'trials':[]}])[0]['trials']))))
