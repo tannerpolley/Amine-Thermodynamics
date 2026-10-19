@@ -47,3 +47,18 @@ The remaining Build work and qualification must also complete before execution.
 Stage 2b still requires the same-wheel constant-k Cai reference and the
 specified endpoint density/Cai trade-off check during execution. No such cost
 or fitted density is claimed by these declarations.
+
+## Stage-2b substitution (2026-10-19)
+
+`tied-start.json` and `held-start.json` are the two templates with only the
+MEA–water pair changed to stage 2b's selected start-A values,
+k(313.15 K) = −0.08989182870906888 and b = −8.948391950297685 K
+(`../../stage2b/step-ledger.json`). Neutral components are identical between
+the stage-2b record and both templates, so the substituted pair keeps its
+fitted meaning. `tied-information.json`, `held-information.json`,
+`tied-fit.json` and `held-fit.json` are the pending declarations with the new
+start path and hash, the pending flag removed, and program priors
+12,168 s / 107,386.61 CPU-s from the charged ledger. Each fit declaration
+points at `../../<form>/release/release-tests.json`; its hash is filled in
+after the fresh release call. The `*-pending-stage2b.json` files stay as the
+inputs of the build's qualification calls.

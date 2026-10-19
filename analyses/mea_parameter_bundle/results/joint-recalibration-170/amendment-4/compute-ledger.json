@@ -3,11 +3,11 @@
  "decision": "Owner: from now on the 21,600 s active-wall cap counts only measured fit and check calls; agent research, review and reporting are not charged. Each reactive fit call is limited to 600 s. Plateau diagnosis follows the first fit after Engine #595.",
  "compute_wall_cap_s": 21600,
  "reactive_call_limit_s": 600,
- "compute_wall_charged_s": 12066,
+ "compute_wall_charged_s": 12168,
  "compute_wall_basis": "Rounded up from about 6,790 s: 484 s before Route 1 entry, 5,716 s of retained call timings in amendments 2-4 (one per call), and about 590 s of fit-time probes (diagnosis-fit-time/README.md).",
- "compute_wall_remaining_s": 9534,
+ "compute_wall_remaining_s": 9432,
  "mandatory_check_reserve_s": 1950.38,
- "program_cpu_charge_s": 107280.61,
+ "program_cpu_charge_s": 107386.61,
  "program_cpu_limit_s": 200000,
  "superseded_ledger": "final-prerequisites/accounting.json program_active_wall_charge_s plus the diagnosis charge, 19,605.51 s, mixed compute with fixed per-task charges.",
  "campaign_executable_ceiling": 1300,
@@ -96,6 +96,13 @@
    "wall_s": 2,
    "cpu_s": 2,
    "basis": "Rounded up from measured whole-command time: 1.12 s / 1.02 CPU-s (amendment-6/neutral-slope-probe/command-time.json)."
+  },
+  {
+   "date": "2026-10-19",
+   "task": "amendment-6 revision 3: partial-build construction calls, stage 2b fit (A/B, replays, derivatives), resumed-build Engine information and object-construction calls (failed attempts included; pytest not charged)",
+   "wall_s": 102,
+   "cpu_s": 106,
+   "basis": "Rounded up from measured whole-command times: partial build 12.58 s / 11.70 CPU-s -> 13 / 12 (build/ledger.json at 462c984); stage 2b 8.24 s / 13.73 CPU-s -> 9 / 14 (stage2b/step-ledger.json); resumed build four information calls 53.82 s / 53.76 CPU-s plus three object-construction calls 25.81 s / 25.75 CPU-s -> 80 / 80 (build/qualification-provenance.json)."
   }
  ],
  "campaign_executable_basis": "891 + 56 (fit_neutral_co2_mea.py) + 39 (check_matched_co2_mea.py) + 12 (stage6_coordinates helper) + 1 (release assertion) + 1 (R2 write-back fix), non-blank non-comment added lines. Excluded under #170 owner comment 6276283139: amendment-4/neutral-fit/figure.py (17 lines, presentation only) and the ignored scratch diagnostics in tmp/. Amendment 6 revision 3 partial Build: +68 nonblank/noncomment gross additions against f387725 (fit_campaign.py 66; fit_observations.py 2). Prior 1,000 charge carried forward; deletions do not offset additions. Itemization and incomplete-build forecast: amendment-6/build/ledger.json. Resumed Build at 462c984: +232 gross nonblank/noncomment additions, carrying the prior 68 without replacement credits, cumulative 1,300. Ceiling decision #170 comment 6277601406. Build remains incomplete; itemization, charges and remaining gates in amendment-6/build/ledger.json.",

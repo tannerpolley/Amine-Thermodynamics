@@ -43,4 +43,4 @@ The k–b correlation is 0.79. On either scaling, b is distinguishable from zero
 
 **Compute.** 8.24 s wall, 13.73 CPU-s (whole command), charged to the program ledger at merge.
 
-**Next.** Substitute k and b into both joint start documents (the tie and Held forms), as §0b specifies. That is the pending step in `inputs/revision-3/*pending-stage2b.json`.
+**Next.** Done 2026-10-19: k and b are substituted into both joint start documents (`inputs/revision-3/tied-start.json`, `held-start.json`; see that README).
