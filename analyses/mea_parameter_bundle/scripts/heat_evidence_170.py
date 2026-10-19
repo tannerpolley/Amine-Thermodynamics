@@ -78,9 +78,12 @@ def request(mapping, T, loading, density=False):
             phase_identity=req['phases'][0]['identity'], unit='kilogram / meter ** 3')]
     return s.corrected_request(req, s.reaction_values(mapping))
 
-def cp_check(mapping, T, loading, observed):
+def cp_check(mapping, T, loading, observed, row=None, proxy_loading=1e-6):
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping), thermochemistry=vrc.record())
     problem = s._problem_from_request(request(mapping,T,max(loading,1e-5)))
+    if row is not None:
+        problem.feed = eq.Amounts(dict(row['analytical_feed'], **{'carbon-dioxide': max(loading,proxy_loading)}))
+        problem.P = row['P_Pa']
     result = eq.solve_equilibrium(model, problem)
     if not result.success:
         raise RuntimeError(result.message)
@@ -90,7 +93,7 @@ def cp_check(mapping, T, loading, observed):
     ((cp,_),) = vrc.first_actions(model, problem, result, [vrc.observable('PhaseProperty',0,
         prop=epcsaft.PropertyObservable.TotalIsobaricHeatCapacity)],[(0.,0.,None)])[0]
     equilibrium_cp = (n*dh+h*dn)/mass/1000
-    return dict(T_K=T, loading=loading, model_loading=max(loading,1e-5), observed_kJ_kg_K=observed, equilibrium_cp_kJ_kg_K=equilibrium_cp,
+    return dict(T_K=T, loading=loading, model_loading=max(loading,proxy_loading if row is not None else 1e-5), observed_kJ_kg_K=observed, equilibrium_cp_kJ_kg_K=equilibrium_cp,
                 deviation_percent=100*(equilibrium_cp/observed-1), frozen_cp_kJ_kg_K=cp*n/mass/1000)
 
 def density_job(mapping, source):
@@ -273,7 +276,7 @@ def summarize_fits(campaign_dir, output_dir):
     print("FIT SUMMARY", [(r["problem"], r["cost_A"], r["cost_B"]) for r in choices.values()])
 
 
-def main(output_dir, selected_record, no_heat_record, vinjarapu, arcis, documents=None):
+def main(output_dir, selected_record, no_heat_record, vinjarapu, arcis, documents=None, declaration=None):
     output_dir = Path(output_dir)
     choices = {name:select(None,name,documents) for name in documents} if documents is not None else {r["problem"]: r for r in load(output_dir / "fit-summary.json")}
     current = s.parameter_mapping(Path(selected_record))
@@ -291,9 +294,12 @@ def main(output_dir, selected_record, no_heat_record, vinjarapu, arcis, document
     s.write_json(output_dir / "density-states.json", values)
     table(output_dir / "corrected-densities.csv", corrected(values, c))
     cp = [
-        dict(record=label, **cp_check(mapping, T, a, observed))
+        dict(record=label, **cp_check(mapping, T, a, observed, row=row, proxy_loading=proxy))
         for label, mapping in [("heat F1", current), ("no-heat F1", original)]
-        for T, a, observed in HILLIARD
+        for T, a, observed, row in ([(r['T_K'],r['source_loading'],r['source_observed_kJ_kg_K'],r)
+            for r in declaration['direct_rows'] if r['quantity']=='equilibrium_isobaric_heat_capacity']
+            if documents is not None else [(T,a,observed,None) for T,a,observed in HILLIARD])
+        for proxy in ((1e-6,1e-7) if row is not None and a==0. else (1e-6,))
     ]
     table(output_dir / "heat-capacity-comparison.csv", cp)
     rows = []
