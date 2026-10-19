@@ -29,10 +29,11 @@ Hartono 2014 on the printed-α basis. The Held form also misses the CO₂-free 2
 | Coordinates at a bound | 7 of 14 | 6 of 14 | report |
 
 **Is the density gate satisfiable at α ≈ 0.4?** The two sources' 2s bands overlap at each
-temperature, but only by **+0.44 to +1.01 kg/m³** (data-only arithmetic: Amundsen α = 0.40 minus
-Hartono α = 0.39 is +10.4 to +11.0 kg/m³; 2s_A + 2s_H is 9.3 kg/m³; the fitted model rises
-2.1–2.2 kg/m³ between the two loadings). A single model passes both only by overpredicting
-Hartono 0.39 by about 3.1–3.6 kg/m³. The least-squares objective has no reason to land there.
+temperature, but only by **+0.44 to +1.01 kg/m³**. This uses the observations, their scales and
+the tied endpoint's predicted rise between the two loadings, so it is not data-only: Amundsen
+α = 0.40 minus Hartono α = 0.39 is +10.4 to +11.0 kg/m³; 2s_A + 2s_H is 9.3 kg/m³; the tied
+model rises 2.1–2.2 kg/m³ from α = 0.39 to 0.40. With that rise, a model passes both only by
+overpredicting Hartono 0.39 by about 3.1–3.6 kg/m³. The least-squares objective has no reason to land there.
 The x₃ loading basis widens the gap (+10.6 to +11.2 kg/m³, Hartono README), so the planned
 x₃ sensitivity fit cannot close it. The slopes dρ/dα differ only above α = 0.3: Amundsen
 rises 200 → 220 → 256 kg/m³ per unit α; Hartono's own sequence is 167 → 200 → 220 → **179** → 190.
