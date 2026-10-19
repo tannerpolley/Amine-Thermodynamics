@@ -617,9 +617,12 @@ def stage6_study(spec, out, started):
                             assert stage6_ties(spec,endpoint)
                             write(directory/'usable-budget-endpoint.json', endpoint)
                             r5 = next((i,c) for i,c in enumerate(spec['information_coordinates']) if c['identity']=='reaction:R5:correlation:a_k')
-                            write(directory/'chemistry-coordinates.json', dict(R5_unshifted_a_k=values[r5[1]['identity']]
+                            inherited = start['reaction_enthalpy_shifts_J_mol']
+                            chemistry = dict(R5_unshifted_a_k=values[r5[1]['identity']]-inherited['R5']/(o.thermal.R*math.log(10.))
                                 +math.copysign(r5[1]['scale'],r5[1]['source_to_native_factor'])*v.optimizer[r5[0]],
-                                enthalpy_shifts_J_mol={c['reaction']:c['scale']*v.optimizer[i] for i,c in enumerate(spec['information_coordinates']) if c.get('enthalpy_shift')}))
+                                enthalpy_shifts_J_mol={c['reaction']:inherited[c['reaction']]+c['scale']*v.optimizer[i] for i,c in enumerate(spec['information_coordinates']) if c.get('enthalpy_shift')})
+                            assert math.isclose(updates[r5[1]['identity']], chemistry['R5_unshifted_a_k']+chemistry['enthalpy_shifts_J_mol']['R5']/(o.thermal.R*math.log(10.)), rel_tol=0., abs_tol=1e-10)
+                            write(directory/'chemistry-coordinates.json', chemistry)
                         return
                     v = o.reg.differentiate(params, coordinates, [item for _, item in rows],
                         optimizer=[0.]*len(coordinates), thermochemistry=o.thermal.record())

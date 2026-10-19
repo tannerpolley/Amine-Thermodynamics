@@ -1,0 +1,111 @@
+{
+  "parameter_document": {
+    "id": "tied-larger-A",
+    "parameters_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/revision-3/tied-start.json",
+    "sha256": "aabe31750b71bc13a20188a5bc589a8a2182ba994a8005a2d1f3c48c54f4d403",
+    "reaction_enthalpy_shifts_J_mol": {
+      "R2": 0.0,
+      "R5": 0.0
+    }
+  },
+  "engine": {
+    "wheel_path": "build/engine-wheels/main-21e761c318c2ac5b555a245365c844d38a93e4cb/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+    "wheel_sha256": "d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357",
+    "packages": {
+      "epcsaft": "0.2.0.dev0",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1"
+    }
+  },
+  "four_declared_rows": [
+    {
+      "id": "Hilliard2008_Cp_318.15_0.0",
+      "quantity": "equilibrium_isobaric_heat_capacity",
+      "T_K": 318.15,
+      "P_Pa": 101325.0,
+      "observed": 84.94549521194936,
+      "scale": 1.6989099042389872,
+      "weight": 1.0,
+      "analytical_feed": {
+        "monoethanolamine": 1.0,
+        "water": 7.929776437398854,
+        "carbon-dioxide": 1e-06
+      },
+      "source_observed_kJ_kg_K": 3.7195,
+      "source_molality_mol_kg_water": 7.0,
+      "source_loading": 0.0,
+      "source_locator": "Appendix G.2 p.937/PDF994",
+      "feed_mass_kg": 0.20393718686714285,
+      "feed_amount_mol": 8.929777437398855
+    },
+    {
+      "id": "Hilliard2008_Cp_318.15_0.358",
+      "quantity": "equilibrium_isobaric_heat_capacity",
+      "T_K": 318.15,
+      "P_Pa": 101325.0,
+      "observed": 79.65472136500112,
+      "scale": 1.5930944273000225,
+      "weight": 1.0,
+      "analytical_feed": {
+        "monoethanolamine": 1.0,
+        "water": 7.929776437398854,
+        "carbon-dioxide": 0.358
+      },
+      "source_observed_kJ_kg_K": 3.3675,
+      "source_molality_mol_kg_water": 7.0,
+      "source_loading": 0.358,
+      "source_locator": "Appendix G.2 p.937/PDF994",
+      "feed_mass_kg": 0.21969272285714286,
+      "feed_amount_mol": 9.287776437398854
+    },
+    {
+      "id": "Hilliard2008_Cp_353.15_0.0",
+      "quantity": "equilibrium_isobaric_heat_capacity",
+      "T_K": 353.15,
+      "P_Pa": 101325.0,
+      "observed": 88.0765685802941,
+      "scale": 1.7615313716058818,
+      "weight": 1.0,
+      "analytical_feed": {
+        "monoethanolamine": 1.0,
+        "water": 7.929776437398854,
+        "carbon-dioxide": 1e-06
+      },
+      "source_observed_kJ_kg_K": 3.8566,
+      "source_molality_mol_kg_water": 7.0,
+      "source_loading": 0.0,
+      "source_locator": "Appendix G.2 p.937/PDF994",
+      "feed_mass_kg": 0.20393718686714285,
+      "feed_amount_mol": 8.929777437398855
+    },
+    {
+      "id": "Hilliard2008_Cp_353.15_0.358",
+      "quantity": "equilibrium_isobaric_heat_capacity",
+      "T_K": 353.15,
+      "P_Pa": 101325.0,
+      "observed": 82.09581037609783,
+      "scale": 1.6419162075219567,
+      "weight": 1.0,
+      "analytical_feed": {
+        "monoethanolamine": 1.0,
+        "water": 7.929776437398854,
+        "carbon-dioxide": 0.358
+      },
+      "source_observed_kJ_kg_K": 3.4707,
+      "source_molality_mol_kg_water": 7.0,
+      "source_loading": 0.358,
+      "source_locator": "Appendix G.2 p.937/PDF994",
+      "feed_mass_kg": 0.21969272285714286,
+      "feed_amount_mol": 9.287776437398854
+    }
+  ],
+  "proxies": [
+    1e-06,
+    1e-07
+  ],
+  "attempts": 2,
+  "returned_predictions": 0,
+  "signal": 8,
+  "qualification_complete": false,
+  "limit": "No retry: two-call limit exhausted; neither proxy sensitivity nor Cp error is available."
+}

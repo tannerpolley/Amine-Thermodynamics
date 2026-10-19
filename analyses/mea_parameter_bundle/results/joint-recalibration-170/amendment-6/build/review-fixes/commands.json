@@ -1,0 +1,134 @@
+{
+  "base": "242d788",
+  "cwd": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a6-r3-four-counted-review-fixes",
+  "commands": [
+    {
+      "argv": [
+        "python",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/persistence-probe.py.txt"
+      ],
+      "script_sha256": "06db1a4da0fe0b10e76cbd3d2bc3a7e8530c416de67bb8573b3fa54d956e5d24",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "env",
+        "OMP_NUM_THREADS=1",
+        "OPENBLAS_NUM_THREADS=1",
+        "MKL_NUM_THREADS=1",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/no-heat-time.txt",
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/no-heat-probe.py.txt"
+      ],
+      "script_sha256": "5cdce510ee3d287dd93d6cb1e3ca0e176ac80b9c2579371dbed15cb1fafb8436",
+      "exit_code": 0,
+      "timing": {
+        "whole_command_user_s": 7.15,
+        "whole_command_system_s": 0.09,
+        "wall_s": 7.26
+      }
+    },
+    {
+      "argv": [
+        "env",
+        "OMP_NUM_THREADS=1",
+        "OPENBLAS_NUM_THREADS=1",
+        "MKL_NUM_THREADS=1",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/cp-1e-06-time.txt",
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/cp-information-probe.py.txt",
+        "1e-06"
+      ],
+      "script_sha256": "1fa762dea2c998cc93792cba14d665a174cb697f3c3cc4518ca5a70b900c50e0",
+      "exit_code": 136,
+      "timing": {
+        "whole_command_user_s": 0.39,
+        "whole_command_system_s": 0.05,
+        "wall_s": 0.45
+      },
+      "signal": 8,
+      "predictions_returned": 0,
+      "log": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/cp-1e-06.log",
+      "native_operation": "reg.differentiate(params, [], four_observations, optimizer=[])",
+      "cause": "Not diagnosed; empty-coordinate native evaluation terminated by signal 8."
+    },
+    {
+      "argv": [
+        "env",
+        "OMP_NUM_THREADS=1",
+        "OPENBLAS_NUM_THREADS=1",
+        "MKL_NUM_THREADS=1",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/cp-1e-07-time.txt",
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/cp-information-probe.py.txt",
+        "1e-07"
+      ],
+      "script_sha256": "1fa762dea2c998cc93792cba14d665a174cb697f3c3cc4518ca5a70b900c50e0",
+      "exit_code": 136,
+      "timing": {
+        "whole_command_user_s": 0.38,
+        "whole_command_system_s": 0.06,
+        "wall_s": 0.45
+      },
+      "signal": 8,
+      "predictions_returned": 0,
+      "log": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/cp-1e-07.log",
+      "native_operation": "reg.differentiate(params, [], four_observations, optimizer=[])",
+      "cause": "Not diagnosed; empty-coordinate native evaluation terminated by signal 8."
+    },
+    {
+      "argv": [
+        "python",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/cp-feed-probe.py.txt"
+      ],
+      "script_sha256": "64f6fcedbc59db8c7fe6ac67e76b1562a20782187cc077a414c25460acf60be6",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/pytest-time.txt",
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests",
+        "analyses"
+      ],
+      "exit_code": 1,
+      "timing": {
+        "whole_command_user_s": 18.11,
+        "whole_command_system_s": 0.48,
+        "wall_s": 12.26
+      }
+    }
+  ],
+  "unmeasured_commands": "The two pure-Python probes have no GNU-time measurement."
+}

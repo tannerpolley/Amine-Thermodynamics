@@ -485,6 +485,7 @@ def family_job(mapping, request, row, retained, out):
             result = bubble_recover(model,problem,bubble,row,out)
     if result is not None:
         row['final'] = phase_payload(model,problem,result)
+        s.write_json(out,row)
         if result.success:
             row['stability'] = [stability(model,problem,result)]
     row['classification'] = phase_classification(row)
