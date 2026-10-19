@@ -122,9 +122,23 @@ def x3(endpoint_path, output=OUT):
     assert set(totals) == {'R2', 'R5'} and all(math.isfinite(v) for v in totals.values())
     assert math.isclose(o.s.parameter_values(mapping)['reaction:R5:correlation:a_k'],
         chemistry['R5_unshifted_a_k']+totals['R5']/(o.thermal.R*math.log(10.)), abs_tol=1e-10, rel_tol=0.)
+    # Parent decision 2026-10-19 (same rule as the owner-approved start B): the release's centered size derivatives cannot
+    # step past a bound, so a segment diameter that ends on its bound starts two largest steps inside it; Held ties re-applied.
+    primary_spec = f.load(BASE/'held-information.json')
+    step = max(primary_spec['verification']['steps_optimizer'])
+    values = o.s.parameter_values(mapping)
+    inward = {}
+    for c in primary_spec['information_coordinates']:
+        if c.get('family') == 'segment_diameter' or c['identity'].endswith('/segment_diameter'):
+            lo, hi = c['bounds']; v = values[c['identity']]; room = 2*step*c['scale']
+            if v > hi - room or v < lo + room:
+                inward[c['identity']] = (v, min(max(v, lo + room), hi - room))
+    if inward:
+        mapping = held_sizes(o.s.with_parameter_values(mapping, {k: new for k, (_, new) in inward.items()}), primary_spec)
+    print('x3 start moved inside the bounds:', inward)
     specs = declarations('held-x3', 'held-x3', mapping, totals,
         f'Hartono x3 sensitivity from endpoint {endpoint} (sha256 {sha(endpoint)}); '
-        'nominal 30 mass % solvent, frozen printed-alpha density scales retained.', output)
+        'nominal 30 mass % solvent, frozen printed-alpha density scales retained; bound-active segment diameters start two largest derivative steps inside their bounds.', output)
     with HARTONO.open() as stream:
         source = {r['record_id']: r for r in csv.DictReader(stream)}
     primary = f.load(BASE/'held-information.json')
