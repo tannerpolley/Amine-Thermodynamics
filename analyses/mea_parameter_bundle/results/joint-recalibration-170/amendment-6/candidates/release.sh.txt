@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Fresh release information calls for the two candidate forms (#170 A6 r3), run from the stage-2b worktree root.
+set -u
+A=analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6
+PY=/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python
+for form in tied held; do
+  out=$A/$form/release; mkdir -p "$out"
+  echo "$(date -Is) $form release start"
+  nice -n 10 /usr/bin/time -f '{"whole_command_user_s":%U,"whole_command_system_s":%S,"wall_s":%e}' -o "$A/$form/release-command-time.json" \
+    env PYTHONPATH=src:analyses/mea_parameter_bundle/scripts OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+    "$PY" analyses/mea_parameter_bundle/scripts/fit_campaign.py "$A/inputs/revision-3/$form-information.json" "$out" --operation information --case stage6
+  echo "$form exit=$?"; grep '^{' "$A/$form/release-command-time.json"
+  "$PY" -I -c "import json,sys;r=json.load(open(sys.argv[1]));print([(x['binding'][:12],x['released']) for x in r])" "$out/release-tests.json" || exit 1
+done
+echo RELEASE-DONE
