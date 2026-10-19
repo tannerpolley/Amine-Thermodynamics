@@ -3,6 +3,7 @@ Run from the checkout root:  python3 -I <this file> analyses/mea_parameter_bundl
 import json, math, sys
 A6, RUN = sys.argv[1], sys.argv[2]
 COMMON = ('PartialPressure', 'PhaseMoleFraction', 'AdditionEnthalpy')
+CO2_FREE_LIMIT = 1.0  # kg/m3: 2u with Amundsen's stated 0.0005 g/cm3 (owner, #170 comment 6279085063)
 CO2_FREE = ('AMU-DENS-002', 'AMU-DENS-009', 'AMU-DENS-016', 'AMU-DENS-023', 'AMU-DENS-030')
 CEILINGS = dict(C149=35.26, pressure_AARD_pct=15.81, species_AARD_pct=9.89, vinjarapu_rmse_kJ_mol=3.13, cai_cost=95.89547282691966)  # §4/§3 from #172; Cai: 1.05 x same-wheel constant-k reference (stage2b/step-ledger.json)
 summary = {}
@@ -36,9 +37,9 @@ for form in ('tied', 'held'):
         s[f'{src}_loaded'] = dict(n=len(e), min_error=min(d['error'] for d in e), max_error=max(d['error'] for d in e),
                                   max_abs_ratio=max(abs(d['ratio']) for d in e), within_2s=sum(abs(d['ratio']) <= 2 for d in e))
     s['co2_free_errors'] = {d['id']: d['error'] for d in free}
-    s['gates'] = dict(loaded_density_within_2s=sum(abs(d['ratio']) <= 2 for d in loaded), co2_free_within_0p5=sum(abs(d['error']) <= .5 for d in free),
+    s['gates'] = dict(loaded_density_within_2s=sum(abs(d['ratio']) <= 2 for d in loaded), co2_free_within_limit=sum(abs(d['error']) <= CO2_FREE_LIMIT for d in free),
                       **{k: s[k] <= v for k, v in CEILINGS.items()})
-    s['eligible_on_fit_rows'] = s['gates']['loaded_density_within_2s'] == len(loaded) and s['gates']['co2_free_within_0p5'] == 5 and all(s['gates'][k] for k in CEILINGS)
+    s['eligible_on_fit_rows'] = s['gates']['loaded_density_within_2s'] == len(loaded) and s['gates']['co2_free_within_limit'] == 5 and all(s['gates'][k] for k in CEILINGS)
     s['loaded_misses'] = [d for d in loaded if abs(d['ratio']) > 2]
     s['densities'] = dens
     summary[form] = s

@@ -32,13 +32,17 @@ the unshifted a_k in [2400, 3000] K, the same physical box as start A (parent co
 R4 and all undeclared neutral/trace-ion quantities remain those of the corrected Held start.
 
 With the rebased box no start value is clipped (B stored a_k 3037.64 K, unshifted 2597.91 K).
+One start modification (owner decision, 2026-10-19): carbamate–MEAH⁺ k_ij starts at −0.99 instead of the frozen
+−1.0 (its lower bound). At −1.0 with B's other ion values the Engine refuses 25 CO₂ partial-pressure problems
+before solving (`NOT_RUN: rank-deficient declared equations`); −1.0 × (1 − 1e-6) still refuses, −0.99 evaluates all
+307 rows. Evidence: `../../held-followups/diagnosis/`.
 
 | Clipped identity | Frozen B value | Start value |
 |---|---:|---:|
 
 ## held-B
 
-Start SHA-256: `f55f17aa85f830898562304cac714c71083f7fe7e4ea778c26e43d02c7256cb2`.
+Start SHA-256: `cb4096a62c8a73d5188cf00e129290a52dba2412e99821678f0d26c28e45baa2`.
 Inherited totals (J/mol): R2 = -8201.88454054374; R5 = 8418.523404172149.
 All differing identified parameter magnitudes against `inputs/revision-3/held-start.json`:
 
@@ -54,7 +58,7 @@ All differing identified parameter magnitudes against `inputs/revision-3/held-st
 | `component/protonated-monoethanolamine/dispersion_energy_over_k` | 228.71 | 232.687201645 |
 | `component/protonated-monoethanolamine/packing_diameter` | 3.13544 | 3.0668752979568 |
 | `component/protonated-monoethanolamine/segment_diameter` | 3.563 | 3.48508556586 |
-| `pair/carbamate-anion/protonated-monoethanolamine/k_ij` | -0.7072858902151943 | -1.0 |
+| `pair/carbamate-anion/protonated-monoethanolamine/k_ij` | -0.7072858902151943 | -0.99 |
 | `pair/carbamate-anion/water/k_ij` | 0.13408074131722733 | -0.05009622525689636 |
 | `pair/protonated-monoethanolamine/water/k_ij` | -0.3795540800656849 | 0.11717335470882706 |
 | `pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope` | -112.56775058400221 | -119.03707287298563 |
@@ -65,7 +69,7 @@ All differing identified parameter magnitudes against `inputs/revision-3/held-st
 
 Checks: both declarations pass `fit_campaign.verify`; both pass `stage6_ties`;
 16 coordinate objects construct without solving; 12 installed Engine files match the wheel.
-Information/fit binding is identical: `fb3aea7abc458df5f398fe53476f806581f5ae7a292283ceac2ea278fadab743`.
+Information/fit binding is identical: `1deef32a73ae1fb212cdb7f11cc8529293e0da7f29dd6881535fe825e1fe3234`.
 Only the declared start, its input-list hash, purpose, fit-case start ID and pending fresh-release
 path/hash and the three chemistry bounds rebased by the inherited totals (unchanged when they are zero) differ from `inputs/joint-mea-water/held-*.json`. No rows, scales or weights change.
 

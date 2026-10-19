@@ -27,6 +27,7 @@ SMALLER_A = A6.parent/'amendment-4/matched-smaller-dV/control-start-parameters.j
 HARTONO = Path('data/reference/MEA/observations/density_viscosity/Hartono_2014_loaded_density.csv')
 RECEIPT = 'analyses/mea_parameter_bundle/results/reaction-temperature-fit/candidate-receipt.json'
 RECEIPT_COMMIT = 'c369705'
+KIJ_B, START_B_KIJ = 'pair/carbamate-anion/protonated-monoethanolamine/k_ij', -0.99
 
 
 def sha(path):
@@ -209,6 +210,11 @@ def build():
     updates.update({i:v for i,v in b_values.items() if i.startswith(('reaction:R2:correlation:', 'reaction:R5:correlation:'))
                     and i != 'reaction:R5:correlation:a_k'})
     b = held_sizes(o.s.with_parameter_values(reference, updates), spec)
+    # Owner decision 2026-10-19 (#170): frozen B has carbamate-MEAH+ k_ij at its -1.0 bound, where the Engine refuses 25 CO2
+    # partial-pressure problems before solving (NOT_RUN, rank-deficient at the generic point; held-followups/diagnosis/).
+    # Start 1 % inside the bound; the optimizer may return to -1.0.
+    assert b_values[KIJ_B] == -1.0
+    b = o.s.with_parameter_values(b, {KIJ_B: START_B_KIJ})
     smaller = f.load(SMALLER_A)
     # Reuse the corrected neutral pair declaration, including the single slope.
     old_pair = next(p for p in reference['pairs'] if any(c['identity']=='pair/monoethanolamine/water/k_ij' for c in p['coefficients']))
@@ -218,7 +224,7 @@ def build():
     assert {i for i,_,_ in delta} == {'component/monoethanolamine/dielectric_volume', 'component/monoethanolamine/dielectric_temperature'}
     reports = []
     for form, identity, mapping, inherited, purpose in (
-        ('held-B', 'held-larger-B', b, totals, 'Held larger-dV B: frozen #172 start-coordinate values rebased on the corrected Held declaration; chemistry bounds rebased to the same unshifted-a_k/total-shift box as start A.'),
+        ('held-B', 'held-larger-B', b, totals, 'Held larger-dV B: frozen #172 start-coordinate values rebased on the corrected Held declaration; chemistry bounds rebased to the same unshifted-a_k/total-shift box as start A; carbamate-MEAH+ k_ij started at -0.99, 1 % inside its -1.0 bound (owner decision; Engine refuses the frozen -1.0 start).'),
         ('held-smaller-A', 'held-smaller-A', smaller, dict(R2=0., R5=0.), 'Held smaller-dV A: A4 control start with the same stage-2b neutral pair and all-six-ion Held diameter corrections.')):
         mapping['purpose'] = purpose
         specs = declarations(form, identity, mapping, inherited, purpose)
@@ -261,7 +267,11 @@ def readme(reports, clipped, dryrun):
         'its a_k box by +(inherited R5)/(R ln 10) = +439.73 K, so the total shifts stay in ±10000 J/mol and',
         'the unshifted a_k in [2400, 3000] K, the same physical box as start A (parent correction, 2026-10-19).',
         'R4 and all undeclared neutral/trace-ion quantities remain those of the corrected Held start.', '',
-        'With the rebased box no start value is clipped (B stored a_k 3037.64 K, unshifted 2597.91 K).', '',
+        'With the rebased box no start value is clipped (B stored a_k 3037.64 K, unshifted 2597.91 K).',
+        'One start modification (owner decision, 2026-10-19): carbamate–MEAH⁺ k_ij starts at −0.99 instead of the frozen',
+        '−1.0 (its lower bound). At −1.0 with B\'s other ion values the Engine refuses 25 CO₂ partial-pressure problems',
+        'before solving (`NOT_RUN: rank-deficient declared equations`); −1.0 × (1 − 1e-6) still refuses, −0.99 evaluates all',
+        '307 rows. Evidence: `../../held-followups/diagnosis/`.', '',
         '| Clipped identity | Frozen B value | Start value |', '|---|---:|---:|']
     lines += [f'| `{i}` | {a!r} | {b!r} |' for i,a,b in clipped]
     for form, mapping, totals, result in reports:
