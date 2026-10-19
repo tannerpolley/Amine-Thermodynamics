@@ -1,0 +1,138 @@
+{
+ "authority": "#170 owner decision comment 6278610430: remove the five Amundsen 2009 loading-0.4 rows from objective and gate; refit both forms with fresh releases and replays",
+ "allocation": {
+  "wall_s": 1287.04,
+  "cpu_s": 10918.49,
+  "basis": "\u00a70b allocation \"two combined-density F1 forms, fresh releases and replays\" 1,500 s / 12,000 CPU-s, less the first pair (612.96 s / 4,081.51 CPU-s, candidates/step-ledger.json), plus a transfer of 400 s / 3,000 CPU-s from \"other derivatives/persistence checks, reductions and contingency\" (400 / 6,000) so each fit meets the runner admission of 720 s / 6,000 CPU-s; \u00a70b permits transfers within the reserved totals"
+ },
+ "operator_checks": [
+  {
+   "launch": "tied release information (mandatory)",
+   "program_prior_wall_s": 12781,
+   "program_prior_cpu_s": 111468.61,
+   "allocation_used": {
+    "wall_s": 0,
+    "cpu_s": 0
+   },
+   "budget_wall_s": 1287.04,
+   "budget_cpu_s": 10918.49,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held release information (mandatory)",
+   "program_prior_wall_s": 12946,
+   "program_prior_cpu_s": 111632.59,
+   "allocation_used": {
+    "wall_s": 164.05,
+    "cpu_s": 163.98
+   },
+   "budget_wall_s": 1122.99,
+   "budget_cpu_s": 10754.51,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "tied candidate fit (mandatory)",
+   "program_prior_wall_s": 13110,
+   "program_prior_cpu_s": 111796.73,
+   "allocation_used": {
+    "wall_s": 328.24,
+    "cpu_s": 328.12
+   },
+   "budget_wall_s": 958.8,
+   "budget_cpu_s": 10590.37,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "tied endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 13274,
+   "program_prior_cpu_s": 114364.67,
+   "allocation_used": {
+    "wall_s": 492.55,
+    "cpu_s": 2896.06
+   },
+   "budget_wall_s": 794.49,
+   "budget_cpu_s": 8022.43,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held candidate fit (mandatory)",
+   "program_prior_wall_s": 13289,
+   "program_prior_cpu_s": 114379.22,
+   "allocation_used": {
+    "wall_s": 507.14,
+    "cpu_s": 2910.61
+   },
+   "budget_wall_s": 779.9,
+   "budget_cpu_s": 8007.88,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "held endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 13398,
+   "program_prior_cpu_s": 116088.53,
+   "allocation_used": {
+    "wall_s": 616.96,
+    "cpu_s": 4619.92
+   },
+   "budget_wall_s": 670.08,
+   "budget_cpu_s": 6298.57,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  }
+ ],
+ "calls": [
+  {
+   "form": "tied",
+   "call": "release",
+   "exit_code": 0,
+   "wall_s": 164.05,
+   "cpu_s": 163.98
+  },
+  {
+   "form": "held",
+   "call": "release",
+   "exit_code": 0,
+   "wall_s": 164.19,
+   "cpu_s": 164.14
+  },
+  {
+   "form": "tied",
+   "call": "fit",
+   "exit_code": 0,
+   "wall_s": 164.31,
+   "cpu_s": 2567.94
+  },
+  {
+   "form": "tied",
+   "call": "replay",
+   "exit_code": 0,
+   "wall_s": 14.59,
+   "cpu_s": 14.55
+  },
+  {
+   "form": "held",
+   "call": "fit",
+   "exit_code": 0,
+   "wall_s": 109.82,
+   "cpu_s": 1709.31
+  },
+  {
+   "form": "held",
+   "call": "replay",
+   "exit_code": 0,
+   "wall_s": 14.32,
+   "cpu_s": 14.31
+  }
+ ]
+}
