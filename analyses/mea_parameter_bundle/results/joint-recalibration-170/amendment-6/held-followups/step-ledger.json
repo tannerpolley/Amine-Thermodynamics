@@ -5,6 +5,134 @@
   "cpu_s": 15000,
   "basis": "\u00a70b allocation \"Selected-form B and smaller-A fits; one Hartono loading-sensitivity fit, releases/replays\" 1,600 s / 15,000 CPU-s"
  },
- "operator_checks": [],
- "calls": []
+ "operator_checks": [
+  {
+   "launch": "held-B release information (mandatory)",
+   "program_prior_wall_s": 14006,
+   "program_prior_cpu_s": 119026.61,
+   "allocation_used": {
+    "wall_s": 0,
+    "cpu_s": 0
+   },
+   "budget_wall_s": 1600,
+   "budget_cpu_s": 15000,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held-smaller-A release information (mandatory)",
+   "program_prior_wall_s": 14010,
+   "program_prior_cpu_s": 119029.6,
+   "allocation_used": {
+    "wall_s": 3.01,
+    "cpu_s": 2.99
+   },
+   "budget_wall_s": 1596.99,
+   "budget_cpu_s": 14997.01,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held-smaller-A release information (mandatory)",
+   "program_prior_wall_s": 14010,
+   "program_prior_cpu_s": 119029.6,
+   "allocation_used": {
+    "wall_s": 3.01,
+    "cpu_s": 2.99
+   },
+   "budget_wall_s": 1596.99,
+   "budget_cpu_s": 14997.01,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held-smaller-A candidate fit (mandatory)",
+   "program_prior_wall_s": 14191,
+   "program_prior_cpu_s": 119211.01,
+   "allocation_used": {
+    "wall_s": 184.51999999999998,
+    "cpu_s": 184.4
+   },
+   "budget_wall_s": 1415.48,
+   "budget_cpu_s": 14815.6,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "held-smaller-A candidate fit (mandatory)",
+   "program_prior_wall_s": 14401,
+   "program_prior_cpu_s": 119420.42,
+   "allocation_used": {
+    "wall_s": 394.98,
+    "cpu_s": 393.81
+   },
+   "budget_wall_s": 1205.02,
+   "budget_cpu_s": 14606.19,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "held-smaller-A endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 14579,
+   "program_prior_cpu_s": 121562.06,
+   "allocation_used": {
+    "wall_s": 572.74,
+    "cpu_s": 2535.45
+   },
+   "budget_wall_s": 1027.26,
+   "budget_cpu_s": 12464.55,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  }
+ ],
+ "calls": [
+  {
+   "form": "held-B",
+   "call": "release",
+   "exit_code": 1,
+   "wall_s": 3.01,
+   "cpu_s": 2.99
+  },
+  {
+   "form": "held-smaller-A",
+   "call": "release",
+   "exit_code": 0,
+   "wall_s": 181.51,
+   "cpu_s": 181.41
+  },
+  {
+   "form": "held-smaller-A",
+   "call": "release",
+   "exit_code": 0,
+   "wall_s": 210.46,
+   "cpu_s": 209.41
+  },
+  {
+   "form": "held-smaller-A",
+   "call": "fit",
+   "exit_code": 1,
+   "wall_s": 0.12,
+   "cpu_s": 0.1
+  },
+  {
+   "form": "held-smaller-A",
+   "call": "fit",
+   "exit_code": 0,
+   "wall_s": 177.64,
+   "cpu_s": 2141.54
+  },
+  {
+   "form": "held-smaller-A",
+   "call": "replay",
+   "exit_code": 0,
+   "wall_s": 15.55,
+   "cpu_s": 15.52
+  }
+ ]
 }

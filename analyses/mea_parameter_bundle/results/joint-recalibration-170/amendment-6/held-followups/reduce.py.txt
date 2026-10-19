@@ -1,0 +1,58 @@
+"""Disclosed scratch reduction for the amendment 6 revision 3 candidate fits (#170): every reported number from retained arrays only.
+Run from the checkout root:  python3 -I <this file> analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6 <run dir>"""
+import json, math, sys
+A6, RUN = sys.argv[1], sys.argv[2]
+COMMON = ('PartialPressure', 'PhaseMoleFraction', 'AdditionEnthalpy')
+CO2_FREE_LIMIT = 1.0  # kg/m3: 2u with Amundsen's stated 0.0005 g/cm3 (owner, #170 comment 6279085063)
+CO2_FREE = ('AMU-DENS-002', 'AMU-DENS-009', 'AMU-DENS-016', 'AMU-DENS-023', 'AMU-DENS-030')
+CEILINGS = dict(C149=35.26, pressure_AARD_pct=15.81, species_AARD_pct=9.89, vinjarapu_rmse_kJ_mol=3.13, cai_cost=95.89547282691966)  # §4/§3 from #172; Cai: 1.05 x same-wheel constant-k reference (stage2b/step-ledger.json)
+summary = {}
+for form in ('held-smaller-A',):
+    try:
+        n = json.load(open(f'{A6}/{RUN}/{form}/fit/native.json'))
+    except FileNotFoundError:
+        continue
+    spec = json.load(open(f'{A6}/{RUN}/{form}/fit-spec.json'))
+    names = [c['identity'] for c in spec['information_coordinates']]
+    rows, q, w, p = n['rows'], [r['quantity'] for r in n['rows']], n['weighted_residuals'], n['predictions']
+    part = lambda keep: math.fsum(.5*v*v for v, r in zip(w, rows) if keep(r))
+    ard = lambda kind: 100*sum(abs(x/r['observed']-1) for r, x in zip(rows, p) if r['quantity'] == kind)/q.count(kind)
+    h = [x-r['observed'] for r, x in zip(rows, p) if r['quantity'] == 'AdditionEnthalpy']
+    s = dict(status=n['status'], message=n['message'], iterations=n['iterations'], initial_cost=n['initial_cost'], final_cost=n['final_cost'],
+             projected_gradient_norm=n['covariance']['projected_gradient_norm'], active_bounds=[names[i] for i in n['covariance']['active_bounds']],
+             optimizer=dict(zip(names, n['optimizer'])),  # declared coordinate order; physical values by identity are in endpoint-values.json
+             C149=part(lambda r: r['quantity'] in COMMON), C166=part(lambda r: r['quantity'] not in ('pressure', 'phase_density') and not r['id'].startswith('cai1996')), cai_cost=part(lambda r: r['id'].startswith('cai1996')), cai_rows=sum(r['id'].startswith('cai1996') for r in rows),
+             loaded_density_cost=part(lambda r: r['quantity'] == 'phase_density' and r['id'] not in CO2_FREE),
+             co2_free_cost=part(lambda r: r['id'] in CO2_FREE), kiepe_cost=part(lambda r: r['quantity'] == 'pressure'),
+             pressure_AARD_pct=ard('PartialPressure'), species_AARD_pct=ard('PhaseMoleFraction'),
+             vinjarapu_rmse_kJ_mol=math.sqrt(sum(x*x for x in h)/len(h))/1000,
+             cp_error_pct=[100*(x/r['observed']-1) for r, x in zip(rows, p) if r['quantity'] == 'equilibrium_isobaric_heat_capacity'])
+    dens = [dict(id=r['id'], T_K=r['T_K'], observed=r['observed'], error=x-r['observed'], s=r['scale'], ratio=(x-r['observed'])/r['scale'])
+            for r, x in zip(rows, p) if r['quantity'] == 'phase_density']
+    loaded = [d for d in dens if d['id'] not in CO2_FREE]
+    free = [d for d in dens if d['id'] in CO2_FREE]
+    assert len(loaded) == len(spec['loaded_density_ids']) and len(free) == 5
+    for src in ('Amundsen', 'Hartono'):
+        e = [d for d in loaded if d['id'].startswith(src)]
+        s[f'{src}_loaded'] = dict(n=len(e), min_error=min(d['error'] for d in e), max_error=max(d['error'] for d in e),
+                                  max_abs_ratio=max(abs(d['ratio']) for d in e), within_2s=sum(abs(d['ratio']) <= 2 for d in e))
+    s['co2_free_errors'] = {d['id']: d['error'] for d in free}
+    s['gates'] = dict(loaded_density_within_2s=sum(abs(d['ratio']) <= 2 for d in loaded), co2_free_within_limit=sum(abs(d['error']) <= CO2_FREE_LIMIT for d in free),
+                      **{k: s[k] <= v for k, v in CEILINGS.items()})
+    s['eligible_on_fit_rows'] = s['gates']['loaded_density_within_2s'] == len(loaded) and s['gates']['co2_free_within_limit'] == 5 and all(s['gates'][k] for k in CEILINGS)
+    s['loaded_misses'] = [d for d in loaded if abs(d['ratio']) > 2]
+    s['densities'] = dens
+    summary[form] = s
+json.dump(summary, open(f'{A6}/{RUN}/summary.json', 'w'), indent=1)
+for form, s in summary.items():
+    print(f"{form}: {s['status']} {s['iterations']} it; cost {s['initial_cost']:.3f} -> {s['final_cost']:.4f}; pg {s['projected_gradient_norm']:.2e}")
+    print(f"   Cai {s['cai_cost']:.3f} ({s['cai_rows']} rows)")
+    print(f"   C149 {s['C149']:.3f} C166 {s['C166']:.3f} loaded-density {s['loaded_density_cost']:.3f} CO2-free {s['co2_free_cost']:.4f} Kiepe {s['kiepe_cost']:.4f}")
+    print(f"   P {s['pressure_AARD_pct']:.2f}% S {s['species_AARD_pct']:.2f}% H {s['vinjarapu_rmse_kJ_mol']:.3f} kJ/mol Cp {[round(x, 2) for x in s['cp_error_pct']]}")
+    for src in ('Amundsen', 'Hartono'):
+        g = s[f'{src}_loaded']
+        print(f"   {src:8s} n={g['n']} [{g['min_error']:+.2f}, {g['max_error']:+.2f}] kg/m3, max|e|/s {g['max_abs_ratio']:.2f}, within 2s {g['within_2s']}")
+    print('   CO2-free', {k: round(v, 3) for k, v in s['co2_free_errors'].items()})
+    print('   gates', s['gates'], 'eligible on fit rows:', s['eligible_on_fit_rows'])
+    print('   misses', [(d['id'], round(d['error'], 2), round(d['ratio'], 2)) for d in s['loaded_misses']])
+    print('   active', s['active_bounds'])

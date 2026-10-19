@@ -1,0 +1,72 @@
+"""Disclosed scratch diagnosis (#170 A6): the Engine's NOT_RUN "rank-deficient declared equations" comes from
+compile_with_basis (request_compile.cpp 1321-1327): Eigen fullPivLu().rank() of the declared-row Jacobian at the
+parameter-free generic_point(). This compiles failing and passing pCO2 problems at start B, start A and B-with-A
+single swaps, and records the generic-point Jacobian: Engine rank, emulated Eigen full-pivot pivots and threshold,
+singular values, largest entries and the null directions.
+Run from the checkout root: PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file> [ids...]"""
+import copy, json, sys, time
+import numpy as np
+import epcsaft
+from epcsaft import equilibrium as eq
+import fit_campaign as f
+import fit_observations as o
+s = o.s
+D = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/held-followups/diagnosis'
+H = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs'
+spec = f.load(f'{H}/held-followups/held-B-information.json')
+A, B = f.load(f'{H}/revision-3/held-start.json'), f.load(f'{H}/held-followups/held-B-start.json')
+packet = s.load_state_packet(o.ROOT / spec['packet_path'])['observations']
+targets = o.indexed([dict(t, state=ob) for ob in packet for t in ob['targets']], 'identity')
+anchors = o.indexed([json.loads(line) for line in (o.ROOT / spec['anchors_path']).open()], 'identity')
+ids = sys.argv[1:] or ['vle_obs_0186-pco2', 'vle_obs_0128-pco2']
+pair20 = copy.deepcopy(B); pair20['pairs'][20] = copy.deepcopy(A['pairs'][20])
+variants = {'B': B, 'A': A, 'B-with-A-pair-20': pair20}
+
+
+def eigen_pivots(J):
+    """Eigen FullPivLU: complete pivoting; rank counts |pivot| > |max pivot| * min(m,n) * eps."""
+    U = J.copy(); m, n = U.shape; piv = []
+    rows, cols = list(range(m)), list(range(n))
+    for k in range(min(m, n)):
+        sub = np.abs(U[k:, k:]); i, j = np.unravel_index(np.argmax(sub), sub.shape); i += k; j += k
+        U[[k, i]] = U[[i, k]]; U[:, [k, j]] = U[:, [j, k]]; rows[k], rows[i] = rows[i], rows[k]; cols[k], cols[j] = cols[j], cols[k]
+        p = U[k, k]; piv.append(float(p))
+        if p != 0: U[k+1:, k:] -= np.outer(U[k+1:, k] / p, U[k, k:])
+    thr = abs(piv[0]) * min(m, n) * np.finfo(float).eps
+    return piv, thr, sum(abs(p) > thr for p in piv), rows, cols
+
+
+def label(row):
+    return f'{row.kind.name}[phase {row.phase}, idx {row.index}]'
+
+
+out = {}
+for ident in ids:
+    st = targets[ident]['state']; req = st['request']
+    info = dict(state=st['identity'], T_K=req['temperature']['value'], pressure=req['pressure'],
+                phases=[(p['identity'], p['fluid_role'], p['amount_role'], p.get('support')) for p in req['phases']],
+                feed=dict(zip(s.COMPONENT_IDS, req['reaction_system']['feed_amounts_mol'])),
+                source=(req['reaction_system'].get('analytical_feed_contract') or {}).get('source_coordinates'))
+    out[ident] = dict(info=info)
+    for name, mapping in variants.items():
+        clock = time.monotonic()
+        request = s.corrected_request(req, s.reaction_values(mapping))
+        problem = s._problem_from_request(request, s.anchor_from(anchors[st['identity']]))
+        model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping), thermochemistry=o.thermal.record())
+        c = eq.compile_problem(model, problem)
+        p = c.generic_point(); rws = list(c.rows)
+        J = np.array(c.jacobian(p)).reshape(len(rws), len(p))
+        piv, thr, rank, prow, pcol = eigen_pivots(J)
+        sv = np.linalg.svd(J, compute_uv=False); _, _, vt = np.linalg.svd(J)
+        big = np.dstack(np.unravel_index(np.argsort(-np.abs(J), axis=None)[:6], J.shape))[0]
+        values = list(c.evaluate(p).values)
+        out[ident][name] = dict(
+            engine_rank=c.jacobian_rank, generic_nullity=c.generic_nullity, shape=list(J.shape), finite=bool(np.isfinite(J).all()),
+            primal_size=c.primal_size, balance_rank=c.rank, charge_rows=c.charge_row_count, removed=list(c.removed_species),
+            rows=[label(r) for r in rws], max_abs=float(np.abs(J).max()), eigen_threshold=float(thr), emulated_rank=int(rank),
+            pivots=[f'{x:.3e}' for x in piv], pivot_rows=[label(rws[i]) for i in prow[:len(piv)]], pivot_cols=pcol[:len(piv)],
+            singular=[f'{x:.3e}' for x in sv], largest=[(label(rws[i]), int(j), f'{J[i, j]:.3e}') for i, j in big],
+            null_direction_last=[(int(j), f'{v:.3f}') for j, v in enumerate(vt[-1]) if abs(v) > 1e-3],
+            row_values_finite=bool(np.all(np.isfinite(values))), wall_s=round(time.monotonic()-clock, 3))
+        print(ident, name, {k: out[ident][name][k] for k in ('engine_rank', 'generic_nullity', 'shape', 'emulated_rank', 'max_abs', 'eigen_threshold')}, flush=True)
+json.dump(out, open(f'{D}/jacobian.json', 'w'), indent=1)

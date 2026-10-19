@@ -4,7 +4,7 @@
   "implementation_base": "8d9e315a3d59d6bd647ad41ff1408ed524f52844",
   "design_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
   "controls_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000919",
-  "purpose": "Amendment 6 revision 3 held form; stage-2b MEA-water pair substituted. Five Amundsen 2009 loading-0.4 rows removed from the objective and gate (owner, #170 comment 6278610430). MEA-water k and slope fitted jointly with the 50 Cai 1996 rows (owner, #170 comment 6278891898). Held larger-dV B: frozen #172 start-coordinate values rebased on the corrected Held declaration; chemistry bounds rebased to the same unshifted-a_k/total-shift box as start A.",
+  "purpose": "Amendment 6 revision 3 held form; stage-2b MEA-water pair substituted. Five Amundsen 2009 loading-0.4 rows removed from the objective and gate (owner, #170 comment 6278610430). MEA-water k and slope fitted jointly with the 50 Cai 1996 rows (owner, #170 comment 6278891898). Held larger-dV B: frozen #172 start-coordinate values rebased on the corrected Held declaration; chemistry bounds rebased to the same unshifted-a_k/total-shift box as start A; carbamate-MEAH+ k_ij started at -0.99, 1 % inside its -1.0 bound (owner decision; Engine refuses the frozen -1.0 start).",
   "inputs": [
     {
       "path": "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/parameters.json",
@@ -184,7 +184,7 @@
     },
     {
       "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/held-followups/held-B-start.json",
-      "sha256": "f55f17aa85f830898562304cac714c71083f7fe7e4ea778c26e43d02c7256cb2"
+      "sha256": "cb4096a62c8a73d5188cf00e129290a52dba2412e99821678f0d26c28e45baa2"
     }
   ],
   "engine": {
@@ -350,7 +350,7 @@
     {
       "id": "held-larger-B",
       "parameters_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/held-followups/held-B-start.json",
-      "sha256": "f55f17aa85f830898562304cac714c71083f7fe7e4ea778c26e43d02c7256cb2",
+      "sha256": "cb4096a62c8a73d5188cf00e129290a52dba2412e99821678f0d26c28e45baa2",
       "reaction_enthalpy_shifts_J_mol": {
         "R2": -8201.88454054374,
         "R5": 8418.523404172149

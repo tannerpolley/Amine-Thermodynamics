@@ -1,0 +1,43 @@
+"""Disclosed scratch diagnosis (#170 A6), follow-up to jacobian.json: the generic-point Jacobian's only near-null
+direction is the free-pressure column (column primal_size-1). For every pCO2 row of the base declaration, at start A
+and start B, record the Engine rank, the pressure-column entries by row, Eigen's threshold and the generic-point
+pressure seed, plus each state's temperature, loading and source.
+Run from the checkout root: PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file>"""
+import json, time
+import numpy as np
+import epcsaft
+from epcsaft import equilibrium as eq
+import fit_campaign as f
+import fit_observations as o
+s = o.s
+D = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/held-followups/diagnosis'
+H = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs'
+spec = f.load(f'{H}/held-followups/held-B-information.json')
+A, B = f.load(f'{H}/revision-3/held-start.json'), f.load(f'{H}/held-followups/held-B-start.json')
+packet = s.load_state_packet(o.ROOT / spec['packet_path'])['observations']
+targets = o.indexed([dict(t, state=ob) for ob in packet for t in ob['targets']], 'identity')
+anchors = o.indexed([json.loads(line) for line in (o.ROOT / spec['anchors_path']).open()], 'identity')
+fail = {x['id'] for x in json.load(open(f'{D}/rows.json'))['failing']}
+ids = [i for i in o.indexed(spec['observations'], 'id')['base']['ordered_row_ids'] if i in targets and i.endswith('pco2')]
+models = {n: epcsaft.Mixture(epcsaft.Parameters.from_mapping(m), thermochemistry=o.thermal.record()) for n, m in (('A', A), ('B', B))}
+clock, out = time.monotonic(), []
+for ident in ids:
+    st = targets[ident]['state']; req = st['request']; anchor = s.anchor_from(anchors[st['identity']])
+    src = (req['reaction_system'].get('analytical_feed_contract') or {}).get('source_coordinates') or {}
+    row = dict(id=ident, failed_at_B=ident in fail, T_K=req['temperature']['value'], anchor_P_Pa=anchor.pressure_pa if anchor else None,
+               source=src.get('source_key'), loading=src.get('CO2_loading'), source_pCO2_kPa=src.get('CO2_pressure'))
+    for name, mapping in (('A', A), ('B', B)):
+        problem = s._problem_from_request(s.corrected_request(req, s.reaction_values(mapping)), anchor)
+        c = eq.compile_problem(models[name], problem)
+        p = c.generic_point(); rws = list(c.rows); J = np.array(c.jacobian(p)).reshape(len(rws), len(p))
+        k = c.primal_size - 1
+        col = {f'{r.kind.name}[{r.phase},{r.index}]': float(J[i, k]) for i, r in enumerate(rws) if J[i, k] != 0}
+        row[name] = dict(rank=c.jacobian_rank, nullity=c.generic_nullity, P_seed=p[k], pressure_column=col,
+                         column_norm=float(np.linalg.norm(J[:, k])), threshold=float(np.abs(J).max()*min(J.shape)*np.finfo(float).eps),
+                         sigma_min=float(np.linalg.svd(J, compute_uv=False)[-1]))
+    out.append(row)
+summary = dict(rows=len(out), B_nullity_1=sum(r['B']['nullity'] for r in out), A_nullity_1=sum(r['A']['nullity'] for r in out),
+               B_nullity_matches_rows_json=all((r['B']['nullity'] == 1) == r['failed_at_B'] for r in out),
+               wall_s=round(time.monotonic()-clock, 2))
+print(json.dumps(summary))
+json.dump(dict(summary=summary, rows=out), open(f'{D}/pressure_column.json', 'w'), indent=1)

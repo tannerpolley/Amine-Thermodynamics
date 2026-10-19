@@ -1,0 +1,41 @@
+"""Disclosed scratch diagnosis (#170 A6): which part of Held start B makes the stage-6 evaluation report rank-deficient
+declared equations. Evaluates the held-B information declaration's rows at zero optimizer for start-document variants.
+Run from the checkout root: PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file> <variant>"""
+import copy, json, sys, time
+import fit_campaign as f
+import fit_observations as o
+H = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs'
+spec = f.load(f'{H}/held-followups/held-B-information.json')
+A, B = f.load(f'{H}/revision-3/held-start.json'), f.load(f'{H}/held-followups/held-B-start.json')
+variant = sys.argv[1]
+m = copy.deepcopy(B)
+if variant == 'B-with-A-chemistry':
+    m['reaction_correlations'] = copy.deepcopy(A['reaction_correlations'])
+elif variant == 'B-with-A-ions':
+    m['components'], m['pairs'] = copy.deepcopy(A['components']), copy.deepcopy(A['pairs'])
+elif variant == 'A-with-B-start-bounds':
+    m = copy.deepcopy(A)
+elif variant == 'B-with-A-pairs':
+    m['pairs'] = copy.deepcopy(A['pairs'])
+elif variant == 'B-with-A-components':
+    m['components'] = copy.deepcopy(A['components'])
+elif variant == 'B-scaled':
+    # one parameter multiplied by (1 + relative change): argv[2] identity, argv[3] relative change
+    ident, rel = sys.argv[2], float(sys.argv[3])
+    m = o.s.with_parameter_values(m, {ident: o.s.parameter_values(m)[ident]*(1+rel)})
+    variant = f'B-scaled {ident} {rel:g}'
+elif variant.startswith('B-with-A-pair-'):
+    i = int(variant.rsplit('-', 1)[1]); m['pairs'][i] = copy.deepcopy(A['pairs'][i])
+elif variant.startswith('B-with-A-component-'):
+    i = int(variant.rsplit('-', 1)[1]); m['components'][i] = copy.deepcopy(A['components'][i])
+clock = time.monotonic()
+try:
+    params, rows = o.stage6_rows(spec, m)
+    coords = f.stage6_coordinates(spec, params, m)
+    v = o.reg.differentiate(params, coords, [i for _, i in rows], optimizer=[0.]*len(coords), thermochemistry=o.thermal.record())
+    bad = [(r['id'], s.name) for (r, _), s in zip(rows, v.statuses) if s.name != 'Available']
+    result = dict(variant=variant, ok=True, unavailable=bad[:10], n_unavailable=len(bad))
+except Exception as e:
+    result = dict(variant=variant, ok=False, error=f'{type(e).__name__}: {e}')
+result['wall_s'] = round(time.monotonic()-clock, 2)
+print(json.dumps(result))
