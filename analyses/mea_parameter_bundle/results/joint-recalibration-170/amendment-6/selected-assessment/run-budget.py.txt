@@ -1,0 +1,52 @@
+"""Launch a timed Engine call within a reserved wall/CPU allocation; account failed calls too."""
+import json,os,subprocess,sys,time
+from pathlib import Path
+import psutil
+OUT=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment').resolve()
+mode=sys.argv[1];wall_reserve=float(sys.argv[2]);cpu_reserve=float(sys.argv[3])
+ledger=OUT/'calls.json'
+calls=json.loads(ledger.read_text()) if ledger.exists() else dict(wall_limit_s=1000,cpu_limit_s=2000,calls=[])
+used_wall=sum(c.get('wall_s',c.get('wall_reserve_s',0)) for c in calls['calls'])
+used_cpu=sum(c.get('cpu_s',c.get('cpu_reserve_s',0)) for c in calls['calls'])
+assert used_wall+wall_reserve<=1000 and used_cpu+cpu_reserve<=2000,(used_wall,used_cpu,'insufficient budget for reservation')
+name=mode+'-'+str(len(calls['calls'])+1)
+timing=OUT/(name+'-time.json');log=OUT/(name+'.log')
+command=['nice','-n','10','/usr/bin/time','-f','{"whole_command_user_s":%U,"whole_command_system_s":%S,"wall_s":%e}','-o',str(timing),'/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python',str(OUT/'assess.py.txt'),mode]
+env=dict(os.environ,PYTHONPATH='src:analyses/mea_parameter_bundle/scripts',PYTHONDONTWRITEBYTECODE='1',OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1')
+entry=dict(name=name,command=command,wall_reserve_s=wall_reserve,cpu_reserve_s=cpu_reserve,status='running',environment={k:env[k] for k in ['PYTHONPATH','PYTHONDONTWRITEBYTECODE','OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS']})
+calls['calls'].append(entry);ledger.write_text(json.dumps(calls,indent=2)+'\n')
+started=time.monotonic();peak_cpu=0;seen={};stopped=None
+with log.open('w') as stream:
+ p=subprocess.Popen(command,env=env,stdout=stream,stderr=subprocess.STDOUT)
+ root=psutil.Process(p.pid)
+ while p.poll() is None:
+  procs=[root]
+  try:procs+=root.children(recursive=True)
+  except psutil.Error:pass
+  for proc in procs:
+   try:
+    cpu=proc.cpu_times();seen[(proc.pid,proc.create_time())]=cpu.user+cpu.system
+   except psutil.Error:pass
+  peak_cpu=max(peak_cpu,sum(seen.values()))
+  if time.monotonic()-started>wall_reserve-2 or peak_cpu>cpu_reserve-5:
+   stopped='reserved wall or CPU allocation reached'
+   # Only terminate the exact descendants of this captured launch, children first.
+   for proc in reversed(procs[1:]):
+    try:proc.terminate()
+    except psutil.Error:pass
+   break
+  time.sleep(.1)
+ if stopped:
+  try:p.wait(timeout=3)
+  except subprocess.TimeoutExpired:
+   for proc in reversed(procs):
+    try:proc.kill()
+    except psutil.Error:pass
+ p.wait()
+text=timing.read_text() if timing.exists() else ''
+measure=next((json.loads(x) for x in reversed(text.splitlines()) if x.startswith('{')),None)
+entry.update(exit_code=p.returncode,status='stopped' if stopped else 'finished',stop_reason=stopped,timing_file=str(timing),log=str(log),wall_s=measure['wall_s'] if measure else time.monotonic()-started,cpu_s=measure['whole_command_user_s']+measure['whole_command_system_s'] if measure else peak_cpu,measurement=measure)
+calls['total_wall_s']=sum(c['wall_s'] for c in calls['calls']);calls['total_cpu_s']=sum(c['cpu_s'] for c in calls['calls'])
+ledger.write_text(json.dumps(calls,indent=2)+'\n')
+print(json.dumps(entry,indent=2));print('totals',calls['total_wall_s'],calls['total_cpu_s'])
+sys.exit(p.returncode or (1 if stopped else 0))
