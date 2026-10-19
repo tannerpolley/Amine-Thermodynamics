@@ -11,6 +11,7 @@ resources:
   - results/joint-recalibration-170/amendment-4/matched-smaller-dV/matched-checks.json
   - results/joint-recalibration-170/amendment-6/smaller-dV-density/README.md
   - results/joint-recalibration-170/amendment-6/density-sweep/README.md
+  - results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md
   - results/engine-21e761c3-adoption/comparison.json
   - results/engine-21e761c3-adoption/checks.json
   - results/selected-current-best-parameters.json
@@ -747,4 +748,23 @@ The table compares two endpoints across nine quantities, so a table rather than 
 - **Checks:** the start release tests pass at λ = 0.01, 0.1 and 1 (augmented condition up to 4,887). The endpoint cold replay agrees on all 217 rows to 1.8e-12.
 
 **Meaning.** The loaded densities add information the λ = 0 fits lacked. A small weight moves the MEAH⁺ size off its bound, cuts the loaded-density errors 4.4–8.6× row by row (mean absolute error 5.3× smaller), and brings the free-column condition under 1e4. The common-row cost rises only 0.1 % because improved pressure and species offset a worse Vinjarapu heat. The carbamate size held at 5.8 Å is one untested possible contributor to the remaining loading trend. This is numerical evidence from one unconverged fit, not a candidate or physical validation. Whether a converged fit, or a larger λ, can meet 2 kg/m³ is untested.
+
+## Amendment 6, step 1b: weighting density, and a second density source
+
+**Weighting the loaded densities removes the gross density error at little calibration cost. The few kg/m³ that remain sit where Amundsen 2009 and Hartono 2014 disagree with each other.** Run 19 October 2026, under the owner's authorization of that date. Record: [step 1b](results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md). Not yet independently reviewed as a delivered result.
+
+| Endpoint (converged) | C149 | Pressure / species AARD, % | Vinjarapu RMSE, kJ/mol | Amundsen 20 loaded rows, kg/m³ | Hartono 32 rows, kg/m³ |
+|---|---:|---|---:|---|---|
+| λ = 0 (A4) | 24.561 | 12.76 / 7.17 | 1.52 | −108 to −24 (12 fitted rows) | — |
+| λ = 1, Amundsen targets | 24.726 | 12.44 / 7.10 | 1.88 | −4.5 to +2.9 | +0.6 to +6.3 |
+| λ = 1, Hartono targets | 24.678 | 12.40 / 7.10 | 1.86 | −10.1 to +1.0 | −3.4 to +2.1 |
+
+The table compares three endpoints across six quantities, so a table rather than a figure.
+
+- **The two sources disagree at high loading.** Amundsen lies 0.4–1.6 kg/m³ above Hartono at loadings 0.1–0.3, then 8.5–9.1 kg/m³ above at 0.4. Hartono reports ±0.02 kg/m³ in density and ±0.01 in loading.
+- **The fit follows whichever source it is given.** Fitted to Hartono, the model is within ±1 kg/m³ of Amundsen at loadings 0.1–0.2 and below Amundsen at 0.3–0.4. Fitted to Amundsen, it lies above Hartono.
+- **The CO₂-free 25 °C row stays at about −1.0 kg/m³** against a 0.5 kg/m³ limit, and heat capacity is unchanged.
+- **Linear screens of model-form changes don't credibly close ±2 kg/m³ on all Amundsen rows** at no more than a 5 % C149 increase.
+
+The Hartono rows are a diagnostic transcription, not adopted data. None of these endpoints is a candidate.
 
