@@ -321,11 +321,41 @@ correction to new candidates.
 
 **Open gates and output.** Parent must obtain Hartono basis adoption and independent readiness **Ready**
 before Build, and the #172 branch/second-start disposition before final adoption. An unloaded-gate exception
-or neutral refit needs a new owner decision; neither is assumed. Retain declarations/hashes, scales, rows,
+or neutral refit needs a new owner decision; §0c records it (neutral stage-2b refit). Retain declarations/hashes, scales, rows,
 fits, phase attempts and timings under A6; after execution, update the existing notebook, obtain independent
 delivered review and investigator promotion before manuscript use. These are calibration expectations and
 numerical falsifiers, with no new prediction or physical validation. Only this document changes here; no
 fit, thermodynamic call or GitHub write.
+
+## §0c. Addendum to revision 3 (owner answers 2026-10-19)
+
+Written by the orchestrator after §0b's readiness review started. It supersedes §0b where they conflict, and the next readiness round covers it.
+
+**Owner answers** (AskUserQuestion, 2026-10-19):
+1. **#172 scope.** Run a **second start (B) and one smaller-d_V fit** for the *selected* candidate form only. Further branch and start combinations are reported as not run. This settles §0b's open "#172 branch/second-start disposition".
+2. **CO₂-free 25 °C density.** The owner's words: *"avoid any disclosing as a limitation if there is anything we can do other than getting new experimental data."* So the gate miss is fixed, not disclosed.
+
+**Diagnosis.**
+- **The miss is a temperature trend.** The five Amundsen CO₂-free 30 wt % rows trend from about −0.99 kg/m³ (298 K) to +0.15 (353 K) at the step-1b Hartono-targeted endpoint. In stage 2, before any ion fitting, they ran from −0.69 to +0.53. A constant MEA–water k_ij cannot change that slope.
+- **A slope fixes it in linear terms.** The scratch probe `A6/neutral-slope-probe/` evaluates the 55 stage-2 `neutral-mea-water` rows at that endpoint: 50 Cai 1996 boiling-temperature and vapor-water rows and 5 CO₂-free densities. With k(T) = k + b(1/T − 1/313.15 K), the fix is **Δk ≈ −0.0055 and b ≈ −9 K**, giving CO₂-free errors **−0.47 to +0.43 kg/m³**, all within 0.5. The Cai cost rises from 91.33 to 92.26, about 1 %.
+- **This is linear evidence only.**
+
+**Plan.** This follows the owner's 2026-10-13 staged-refit rule: each dependent calibration is redone on the corrected basis, in its own stage.
+1. **Stage 2b: MEA–water refit.**
+   - **Coordinates:** two, the MEA–water k_ij and a new reciprocal-temperature slope at 313.15 K reference. Same family and form as MEAH⁺–water and CO₂–water. Declare the slope coefficient in the start document, at b = 0.
+   - **Objective:** the stage-2 `neutral-mea-water` case unchanged, plus all five Amundsen CO₂-free density rows as fitted rows at scale 0.5 kg/m³. Stage 2 fitted three rows at weight 1/3; state the new weights. Hartono's six own unloaded cells at 20–80 °C are optional additional density rows, with u = 0.02 kg/m³ plus composition uncertainty.
+   - **Same as stage 2:** water, MEA and CO₂ pure parameters; the stage-2 starts; replay, derivative and equilibrium checks; and the existing `stage2_native` path, with no new code beyond the coordinate declaration.
+   - **Pre-stated expectation:** k shifts about −0.005 and b lands about −7 to −9 K. All five CO₂-free rows within 0.5 kg/m³; Cai cost within about 2 % of stage 2's 91.85.
+   - **Falsifier:** if the converged fit cannot place all five within 0.5 kg/m³ without raising the Cai cost by more than 5 %, return to the owner with that measured trade-off. Do not disclose it as a limitation without owner review.
+2. **Joint fits.**
+   - **Start:** the §0b tie and Held candidate fits start from the A4 start with the stage-2b MEA–water k and b substituted, as a start-document edit. MEA–water stays fixed in stage 6.
+   - **CO₂-free rows:** the five Amundsen CO₂-free density rows enter the joint objective as fitted rows, through the existing `stage2_rows` "added" path with `unloaded_density_problem`, at scale 0.5 kg/m³. Ion parameters move them slightly through trace MEAH⁺.
+   - **Gate:** each row within 0.5 kg/m³, unchanged.
+3. **Smaller-branch and start-B fits:** only for the selected form, after selection, with the same declarations.
+
+**Compute.** Stage 2b is a two-coordinate fit on 55 rows, measured stage-2 scale: seconds to a few minutes. It is charged within §0b's 9,000 s and 36,000 CPU-s, ahead of the comparison family. The two extra candidate fits (start B and smaller branch) at about 1,700–4,000 CPU-s each move ahead of F5 and F4 in the drop order.
+
+**Code.** No change beyond §0b's plan, because the slope coordinate and the added-rows path already exist. If a gap appears, it counts against the 1,250 ceiling, and the build reports it.
 
 ## 1. Authority, question and retained evidence
 
