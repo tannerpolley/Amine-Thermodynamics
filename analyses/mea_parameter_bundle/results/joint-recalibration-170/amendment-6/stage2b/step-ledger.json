@@ -1,0 +1,56 @@
+{
+ "authority": "#170 amendment 6 revision 3 (design Ready at 352bda1, merged 8d9e315); partial-build review 2026-10-19: stage 2b ready to run",
+ "operator_check": {
+  "program_prior_wall_s": 12079,
+  "program_prior_cpu_s": 107292.61,
+  "program_wall_limit_s": 21600,
+  "program_cpu_limit_s": 200000,
+  "basis": "program ledger 12,066 s / 107,280.61 CPU-s + build qualification 12.58 s / 11.70 CPU-s charged as 13 / 12",
+  "remaining_wall_s": 9521,
+  "remaining_cpu_s": 92707.39,
+  "launch": "stage 2b (mandatory)",
+  "declared_budget_wall_s": 300,
+  "declared_budget_cpu_s": 13440,
+  "admitted": true
+ },
+ "falsifier": {
+  "cai_only_cost_ceiling": 95.89547282691966,
+  "cai_only_base": 91.32902173992348,
+  "density_abs_error_limit_kg_m3": 0.5,
+  "source": "partial-build review 2026-10-19 (neutral-slope probe base predictions)"
+ },
+ "calls": [
+  {
+   "call": "stage2b fit (A and B, replays, derivatives)",
+   "wall_s": 8.24,
+   "cpu_s": 13.73
+  }
+ ],
+ "result": {
+  "selected_start": "A",
+  "k_ij": -0.08989182870906888,
+  "slope_b_K": -8.948391950297685,
+  "reference_temperature_K": 313.15,
+  "parameters": "out/neutral-mea-water/A/parameters.json",
+  "parameters_sha256": "64e799e7e38a76e651fbaf9d669d6d1eba186272e59fafdd822c1d50c70a66a4",
+  "total_cost": 103.42906024625059,
+  "cai_only_cost": 92.61475358084235,
+  "co2_free_density_errors_kg_m3": {
+   "AMU-DENS-002": -0.47923503529818845,
+   "AMU-DENS-009": -0.015821423732404583,
+   "AMU-DENS-016": 0.02343582869821148,
+   "AMU-DENS-023": 0.4309407129810552,
+   "AMU-DENS-030": 0.35290177187539484
+  },
+  "derivatives_passed": "220/220 per start",
+  "replay": {
+   "relative_cost_difference": 1.5113682894831173e-14,
+   "maximum_weighted_row_difference": 1.1504297514619566e-11
+  },
+  "identification": {
+   "free_rank": 2,
+   "free_condition": 3.636952038114228
+  },
+  "falsifier_passed": true
+ }
+}
