@@ -27,17 +27,19 @@ Its endpoint is a numerical result of an unfinished fit, not a candidate.
 | Pressure AARD, 47 rows | 12.76 % | 12.36 % |
 | Species AARD, 94 rows | 7.17 % | 7.12 % |
 | Vinjarapu heat RMSE, 8 rows | 1.515 kJ/mol | 1.789 kJ/mol |
-| 12 loaded densities, kg/m³ | −24.3 to −108.2 | −2.9 to −24.4 |
+| 12 loaded-density errors, kg/m³ | −24.3 to −108.2 | −2.9 to −24.4 |
 | MEAH⁺ segment diameter | 5.8 Å (bound) | 4.467 Å (interior) |
 | Carbamate segment diameter | 5.8 Å (bound) | 5.8 Å (bound) |
 | Born diameters | 5.0 / 5.0 Å (bound) | 5.0 / 5.0 Å (bound) |
-| Active bounds | 5 | 6: bicarbonate–water k = 1, carbamate–MEAH⁺ k = −1, carbamate σ, both Born diameters, R5 reference |
-| Hilliard Cp, %: 318.15 K 0.0 / 0.358; 353.15 K 0.0 / 0.358 | +3.31 / +1.55 / −0.64 / −2.05 | +3.32 / +1.91 / −0.64 / −2.01 |
+| Active bounds | 5: carbamate–MEAH⁺ k = −1, both segment diameters, both Born diameters | 6: bicarbonate–water k = 1, carbamate–MEAH⁺ k = −1, carbamate σ, both Born diameters, R5 reference at 2,400 K |
+| Condition of the free columns (weighted Jacobian) | 37,393 | 3,768 |
+| Projected gradient | 0.00812 | 0.00513 |
+| Hilliard Cp, %: 318.15 K 0.0 / 0.358; 353.15 K 0.0 / 0.358 | +3.31 / +1.55 / −0.64 / −2.05 | +3.31 / +1.91 / −0.64 / −2.01 |
 
 Here AARD is the average absolute relative deviation, RMSE the root-mean-square
 error, and Cp the isobaric heat capacity.
 
-**Densities at λ = 0.01, kg/m³**, in row order 060–063, 070–073 and 075–078:
+**Density errors at λ = 0.01, kg/m³** (model minus measurement), in row order 060–063, 070–073 and 075–078:
 - 298 K: −2.85, −7.45, −14.06, −23.78
 - 323 K: −2.98, −7.30, −14.51, −23.29
 - 343 K: −3.02, −8.05, −15.26, −24.41
@@ -55,10 +57,10 @@ None is within the 2 kg/m³ gate.
 - Density term: 0.265.
 
 **Reading.**
-- **Density can be weighted at almost no cost to the paper's common rows.** A small weight already cuts the loaded-density errors 4–5× while leaving C149 essentially unchanged and slightly improving the pressure and species deviations.
+- **Measured trade-off at this unfinished endpoint.** The loaded-density errors fall 4.39–8.61× row by row (mean absolute error 5.30× smaller). C149 rises 0.098 %, because improving pressure and species contributions cancel a worsening heat contribution: Vinjarapu RMSE goes from 1.515 to 1.789 kJ/mol.
 - **The trade-off falls on the corrected Jakobsen ratios and the Vinjarapu heats.**
-- **Only the MEAH⁺ size moved.** Carbamate and both Born diameters stay on their bounds.
-- **The remaining density errors still grow with loading,** which points to the carbamate size held at its 5.8 Å bound.
+- **Only the MEAH⁺ size left its bound.** Carbamate and both Born diameters stay on theirs. The free-column condition falls from 37,393 to 3,768, under the 1e4 limit that the λ = 0 endpoints missed.
+- **The remaining density errors still grow with loading.** The carbamate size held at its 5.8 Å bound is one untested possible contributor; in a simultaneous 14-coordinate fit, the loading trend and the bound do not isolate a cause.
 - **These are hypotheses about an unconverged endpoint.** A converged fit, or higher λ, may move differently.
 
 ## Checks
@@ -67,9 +69,10 @@ None is within the 2 kg/m³ gate.
   - augmented condition 4,887 / 4,521 / 4,031 (mandatory 3,318 / 3,210 / 2,784);
   - projected ion dispersions 11.5 / 11.8 / 9.3.
 - **Endpoint cold replay** (`endpoint-l0p01/`): 217 rows at λ/12 weights against `fit-l0p01/native.json`, largest weighted-row difference 1.8e-12, relative cost difference 1.4e-13.
-- **Fit progress:** rank 14 of 14, projected gradient 0.0051. The final iteration lowered the cost by 6.4e-5 relative against the 1e-6 function tolerance, and the last 10 iterations by 0.20 %.
-- **λ = 0 reference values:** taken from the A4 control endpoint as evaluated by amendment-5 probe P (`amendment-5/a0/probe-p/information/a4-control-endpoint/native.json`) on the same wheel.
-- **Not run:** endpoint derivatives, and the 8 loaded plus 5 unloaded assessment densities.
+- **Fit progress:** rank 14 of 14, projected gradient 0.00513 (λ = 0 control: 0.00812). Free-column condition, from the retained weighted Jacobians: 3,767.5 (λ = 0 control: 37,393.3). The final iteration lowered the cost by 6.4e-5 relative against the 1e-6 function tolerance, and the last 10 iterations by 0.20 %.
+- **λ = 0 reference values:** taken from the A4 control endpoint as evaluated by amendment-5 probe P (`amendment-5/a0/probe-p/information/a4-control-endpoint/native.json`) on the same wheel. Its 205 objective rows replay the A4 control to 6.9e-12; its 12 zero-weight densities are evaluations at the same parameter point, not independently replayed.
+- **Reduction commands:** the post-processing text (density, cost and family reductions, replay) is retained in `../commands.json`.
+- **Not run:** independent centered-difference derivative checks at the endpoint (the analytic derivatives are retained in `native.json`), and the 8 loaded plus 5 unloaded assessment densities.
 
 ## Compute
 
