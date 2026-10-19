@@ -1,0 +1,26 @@
+exec(open('/tmp/density-diag/options.py').read().split('scenarios=')[0])
+extra={
+ 'pack_raise6p8':dict(pack=('+','-'),sigmaminus=(2,6.8)),
+ 'pack_raise8':dict(pack=('+','-'),sigmaminus=(2,8)),
+ 'm_raise6p8':dict(m=('+','-'),mlo=1,sigmaminus=(2,6.8)),
+ 'm_raise8':dict(m=('+','-'),mlo=1,sigmaminus=(2,8)),
+ 'pack_m1':dict(pack=('+','-'),m=('+','-'),mlo=1),
+ 'pack_m_raise6p8':dict(pack=('+','-'),m=('+','-'),mlo=1,sigmaminus=(2,6.8)),
+ 'pack_m_raise8':dict(pack=('+','-'),m=('+','-'),mlo=1,sigmaminus=(2,8)),
+ 'all_wide':dict(pack=('+','-'),dh=('+','-'),m=('+','-'),mlo=1,sigmaminus=(1,8),u=(1,2000),born=(.5,8)),
+ 'carb_m_pack':dict(pack=('-',),m=('-',),mlo=1),
+ 'carb_m_raise6p8':dict(m=('-',),mlo=1,sigmaminus=(2,6.8)),
+ 'carb_m_pack_raise6p8':dict(pack=('-',),m=('-',),mlo=1,sigmaminus=(2,6.8)),
+}
+opt={}
+for name,kw in extra.items():
+ B,bs,op,delta,nn=scenario(**kw);JJ=J@B;lo,hi=boxsteps(op,bs,delta);non=~den
+ out={'configuration':kw,'names':nn,'results':{}}
+ for lam in [1.,10.]:
+  wt=w.copy();wt[den]=lam/12;s,info=bounded(JJ*np.sqrt(wt)[:,None],r*np.sqrt(wt),lo,hi);out['results']['lambda'+str(lam)]={**metrics(r+JJ@s,rows,wt),'endpoint':(op+delta*s).tolist(),'step':s.tolist(),'kkt':info}
+ s,info=hard_density(JJ[non]*np.sqrt(w[non,None]),r[non]*np.sqrt(w[non]),JJ[den],r[den],lo,hi);out['results']['hard2']={**metrics(r+JJ@s,rows,w),'endpoint':(op+delta*s).tolist(),'step':s.tolist(),**info}
+ opt[name]=out
+ print(name,'lambda1',*[round(out['results']['lambda1.0'][k],4) for k in ['density_max','C149','C166','heat_rmse_kJmol']],'lambda10',*[round(out['results']['lambda10.0'][k],4) for k in ['density_max','C149','C166','heat_rmse_kJmol']],'hard2',*[round(out['results']['hard2'][k],4) for k in ['density_max','C149','C166','heat_rmse_kJmol']])
+(ROOT/'combinations.json').write_text(json.dumps(opt,indent=2))
+for name in ['pack_raise6p8','m_raise6p8','pack_m_raise6p8','all_wide','carb_m_pack']:
+ print('DETAIL',name,opt[name]['results']['hard2'])

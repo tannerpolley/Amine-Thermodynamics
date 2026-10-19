@@ -1,0 +1,4 @@
+exec(open('/tmp/density-diag/options.py').read().split('scenarios=')[0])
+for name,cfg in [('base',{}),('pack_both',dict(pack=('+','-'))),('pack_minus',dict(pack=('-',))),('m_minus',dict(m=('-',),mlo=1)),('m_both',dict(m=('+','-'),mlo=1)),('pack_m',dict(pack=('+','-'),m=('+','-'),mlo=1))]:
+ B,bs,op,delta,nn=scenario(**cfg);jw=(J@B)*np.sqrt(np.where(den,1/12,w))[:,None];active=np.any(np.isclose(op[:,None],bs,rtol=0,atol=1e-9),axis=1);mandatory=[i for i in range(len(op)) if i not in [12,13] and not active[i]];u=[12,13];U,s,v=np.linalg.svd(jw[:,mandatory],full_matrices=False);Ur=U[:,s>s[0]*1e-14];proj=jw[:,u]-Ur@(Ur.T@jw[:,u]);ps=np.linalg.svd(proj,compute_uv=False);ss=np.linalg.svd(jw[:,mandatory+u],compute_uv=False)
+ print(name,'mandatory',s[0]/s[-1],'augmented',ss[0]/ss[-1],'projected',ps[0]/ps[-1])

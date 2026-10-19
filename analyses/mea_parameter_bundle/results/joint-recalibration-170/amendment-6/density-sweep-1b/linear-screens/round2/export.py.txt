@@ -1,0 +1,29 @@
+from diagnose import *
+# Independent replay of every retained linear screen, including native box constraints.
+screens=load(ROOT/'screens.json');flatrows=[];checks=[]
+for ep,eo in screens.items():
+ d=data(ep)
+ for name,o in eo['options'].items():
+  s=scenario(d,**SCENARIOS[name]);n=len(s['lo'])
+  for mode,a in o.items():
+   if not isinstance(a,dict) or 'step_optimizer' not in a:continue
+   x=np.array(a['step_optimizer']);res=d['r']+s['J']@x;met=metrics(d,res)
+   box=max(float(np.max(s['lo']-x)),float(np.max(x-s['hi'])),0.)
+   err=max(abs(a[k]-met[k]) for k in ['C149','C166','Vinjarapu_RMSE_kJ_mol','density_max'])
+   checks.append(dict(endpoint=ep,option=name,mode=mode,metric_replay_error=err,box_violation_optimizer=box,hard_density_violation=max(0.,met['density_max']-2.) if mode.startswith('hard') else None,**a['kkt']))
+   z=dict(endpoint=ep,option=name,mode=mode,C149=a['C149'],C166=a['C166'],Vinjarapu_RMSE_kJ_mol=a['Vinjarapu_RMSE_kJ_mol'],density_max=a['density_max'],density_RMSE=a['density_RMSE'],validity=a['validity'],large_moves=json.dumps(a['large_moves']),moves=json.dumps(a['moves']),coordinates_at_linear_optimum=json.dumps(a['endpoint']))
+   for row,e in zip(np.array(d['rows'],object)[d['den']],a['density_errors']):z[row['id']+'_error_kg_m3']=e
+   flatrows.append(z)
+with open(ROOT/'screens.csv','w') as f:
+ w=csv.DictWriter(f,fieldnames=list(flatrows[0]));w.writeheader();w.writerows(flatrows)
+(ROOT/'verification.json').write_text(json.dumps(dict(n_screens=len(checks),max_metric_replay_error=max(c['metric_replay_error'] for c in checks),max_box_violation=max(c['box_violation_optimizer'] for c in checks),max_hard_density_violation=max(c['hard_density_violation'] or 0 for c in checks),max_stationarity=max(c['stationarity'] for c in checks),min_multiplier=min(c['minimum_multiplier'] for c in checks),checks=checks),indent=2))
+paths=set()
+for ep in ['l1','l0p1']:
+ paths.update([R/f'fit-{ep}-spec.json',R/f'untied-{ep}-spec.json',R/f'fit-{ep}/native.json',R/f'fit-{ep}/chemistry-coordinates.json',R/f'fit-{ep}/usable-budget-endpoint.json',R/f'untied-{ep}/information/lambda-{ep[1:]}-endpoint-untied/native.json',*list((R/f'endpoint-{ep}/information').glob('*/native.json'))])
+(ROOT/'input-hashes.json').write_text(json.dumps([dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in sorted(paths)],indent=2))
+# Print compact tables useful for the read-only diagnosis handoff.
+for ep,eo in screens.items():
+ print('\nHARD',ep)
+ for name in ['tied','k-2','k-3','pack','DH','m','m>=1','Born2-8','Born0.5-8','k-2+pack','pack+DH','pack+m','DH+m','all']:
+  o=eo['options'][name];a=o['hard_C166'];b=o['hard_C149'];print(name, '/'.join(f'{a[k]:.3f}' for k in ['C149','C166','Vinjarapu_RMSE_kJ_mol']), '/'.join(f'{b[k]:.3f}' for k in ['C149','C166','Vinjarapu_RMSE_kJ_mol']))
+print('verification',load(ROOT/'verification.json')|{'checks':'omitted'})

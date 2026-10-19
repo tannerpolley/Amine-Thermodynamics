@@ -1,0 +1,133 @@
+import json,csv,hashlib,time
+from pathlib import Path
+import numpy as np
+ROOT=Path('/tmp/density-diag-2')
+REPO=Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-step1b')
+R=REPO/'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/density-sweep-1b'
+load=lambda p:json.loads(Path(p).read_text())
+base=load(R/'fit-l1-spec.json');bc=base['information_coordinates'];pc=load(R/'untied-l1-spec.json')['information_coordinates'];bn=[c['identity'] for c in bc];pn=[c['identity'] for c in pc]
+psc=np.array([c['scale'] for c in pc]); psgn=np.array([-1 if c.get('source_to_native_factor',1)<0 else 1 for c in pc]);bsc=np.array([c['scale'] for c in bc]);bsgn=np.array([-1 if c.get('source_to_native_factor',1)<0 else 1 for c in bc]);delta=bsc*bsgn
+T=np.zeros((20,14))
+for k,c in enumerate(bc):
+ for t in c.get('targets',[c]):
+  ident=c['identity'] if 'targets' not in c else 'component/'+t['target']+'/'+t['family']
+  T[pn.index(ident),k]=t.get('factor',1)*c['scale']/pc[pn.index(ident)]['scale']
+def flat(d):
+ out={}
+ def go(v):
+  if isinstance(v,dict):
+   if 'identity' in v and isinstance(v.get('value'),dict):out[v['identity']]=v['value']['magnitude']
+   for x in v.values():go(x)
+  elif isinstance(v,list):
+   for x in v:go(x)
+ go(d);return out
+
+def data(endpoint):
+ p=R/f'untied-{endpoint}/information/lambda-{endpoint[1:]}-endpoint-untied/native.json'
+ # Lambda labels use 0p1 rather than decimal in paths.
+ d=load(p);fit=load(R/f'fit-{endpoint}/native.json');chem=load(R/f'fit-{endpoint}/chemistry-coordinates.json');vals=flat(load(R/f'fit-{endpoint}/usable-budget-endpoint.json'))
+ vals.update({bn[9]:chem['R5_unshifted_a_k'],bn[10]:chem['enthalpy_shifts_J_mol']['R2'],bn[11]:chem['enthalpy_shifts_J_mol']['R5']})
+ rows=d['rows'];res=np.array(d['residuals']);J=np.array(d['residual_optimizer_gradient']).reshape(len(rows),20);w=np.array([r['weight'] for r in rows]);q=np.array([r['quantity'] for r in rows]);den=q=='phase_density';c149=np.isin(q,['PartialPressure','PhaseMoleFraction','AdditionEnthalpy']);c166=(q!='pressure')&~den;heats=q=='AdditionEnthalpy'
+ o=np.array([vals[k] for k in bn]);po=np.array([vals[k] for k in pn])
+ tj=load(next((R/f'endpoint-{endpoint}/information').glob('*/native.json')));tjJ=np.array(tj['residual_optimizer_gradient']).reshape(len(rows),14)
+ assert [r['id'] for r in rows]==[r['id'] for r in tj['rows']]==[r['id'] for r in fit['rows']]
+ replay={'untied_to_tied_J_relative':float(np.linalg.norm(J@T-tjJ)/np.linalg.norm(tjJ)),'residual_replay_max':float(np.max(abs(res-np.array(tj['residuals'])))),'fit_weighted_J_relative':float(np.linalg.norm(tjJ*np.sqrt([r['weight'] for r in fit['rows']])[:,None]-np.array(fit['optimizer_jacobian']).reshape(len(rows),14))/np.linalg.norm(fit['optimizer_jacobian']))}
+ return dict(endpoint=endpoint,rows=rows,r=res,J=J,w=w,den=den,c149=c149,c166=c166,heats=heats,origin=o,porigin=po,replay=replay,fit=fit)
+
+def metrics(d,res):
+ w=d['w'];den=d['den'];hh=d['heats'];sc=np.array([r['scale'] for r in d['rows'] if r['quantity']=='AdditionEnthalpy']);err=res[den]*2
+ return dict(C149=float(.5*np.dot(w[d['c149']],res[d['c149']]**2)),C166=float(.5*np.dot(w[d['c166']],res[d['c166']]**2)),Vinjarapu_RMSE_kJ_mol=float(np.sqrt(np.mean((res[hh]*sc)**2))/1000),density_errors=err.tolist(),density_max=float(np.max(abs(err))),density_RMSE=float(np.sqrt(np.mean(err**2))))
+
+# Primal feasible active-set convex quadratic least squares, all subproblems solved by SVD.
+def qpls(A,b,G,h,x=None,maxiter=3000):
+ n=A.shape[1]; x=np.zeros(n) if x is None else x.copy();G=np.array(G,float);h=np.array(h,float)
+ norms=np.linalg.norm(G,axis=1);valid=norms>1e-14;G=G[valid]/norms[valid,None];h=h[valid]/norms[valid]
+ if np.max(G@x-h)>1e-7:raise ValueError(('not feasible',np.max(G@x-h)))
+ active=[]
+ for i in np.flatnonzero(abs(G@x-h)<1e-9):
+  if np.linalg.matrix_rank(G[active+[int(i)]],tol=1e-10)>len(active):active.append(int(i))
+ for it in range(maxiter):
+  C=G[active] if active else np.empty((0,n));Z=np.linalg.svd(C,full_matrices=True)[2][len(active):].T if active else np.eye(n)
+  y=np.linalg.lstsq(A@Z,-(A@x+b),rcond=1e-12)[0] if Z.shape[1] else np.empty(0);p=Z@y
+  if np.linalg.norm(p)<1e-9*(1+np.linalg.norm(x)):
+   g=A.T@(A@x+b);mu=np.linalg.lstsq(C.T,-g,rcond=1e-12)[0] if active else np.empty(0)
+   if not active or min(mu)>=-1e-8:
+    return x,dict(iterations=it,max_violation=float(max(G@x-h)),stationarity=float(np.max(abs(g+C.T@mu))) if active else float(np.max(abs(g))),minimum_multiplier=float(min(mu)) if active else 0.)
+   del active[int(np.argmin(mu))];continue
+  gp=G@p;slack=h-G@x; candidates=np.array([i for i in np.flatnonzero(gp>1e-10) if i not in active],int);alpha=1.;block=None
+  if len(candidates):
+   ratios=slack[candidates]/gp[candidates];k=np.argmin(ratios)
+   if ratios[k]<1-1e-10:alpha=max(0.,float(ratios[k]));block=int(candidates[k])
+  x+=alpha*p
+  if block is not None:
+   if np.linalg.matrix_rank(G[active+[block]],tol=1e-10)>len(active):active.append(block)
+   else:raise RuntimeError('dependent blocker')
+ raise RuntimeError(('active set iterations',np.linalg.norm(p),np.max(G@x-h)))
+
+def scenario(d,pack=(),dh=(),m=(),mlo=.5,born=None,kmin=-1.,trust=False):
+ B=T.copy();bs=np.array([c['bounds'] for c in bc],float);bs[3,0]=kmin;nn=bn.copy();op=d['origin'].copy();dc=delta.copy();new=[]
+ if born:
+  bs[7]=born;bs[8]=born
+ for ion in pack:
+  row,col=(6,5) if ion=='+' else (12,6);B[row,col]=0;new.append((row,1.,7.))
+ for ion in dh:
+  row,col=(7,5) if ion=='+' else (13,6);B[row,col]=0;new.append((row,1.,7.))
+ for ion in m:new.append((8 if ion=='+' else 14,mlo,5.))
+ for row,low,high in new:
+  v=np.zeros(20);v[row]=1;B=np.c_[B,v];bs=np.r_[bs,[[low,high]]];nn.append(pn[row]);op=np.r_[op,d['porigin'][row]];dc=np.r_[dc,psc[row]*psgn[row]]
+ if trust:
+  for j,name in enumerate(nn):
+   radius=.1 if name.endswith('/k_ij') else (.3 if 'diameter' in name else np.inf)
+   bs[j,0]=max(bs[j,0],op[j]-radius);bs[j,1]=min(bs[j,1],op[j]+radius)
+ q=(bs-op[:,None])/dc[:,None];lo=q.min(1);hi=q.max(1)
+ return dict(B=B,J=d['J']@B,bounds=bs,names=nn,origin=op,delta=dc,lo=lo,hi=hi)
+
+def constraints(s,d,tol=2.):
+ n=len(s['lo']);Jd=s['J'][d['den']];rd=d['r'][d['den']];G=np.r_[np.eye(n),-np.eye(n),Jd,-Jd];h=np.r_[s['hi'],-s['lo'],tol/2-rd,tol/2+rd];return G,h
+
+def feasible(s,d,tol=2.):
+ n=len(s['lo']);G,h=constraints(s,d,tol);x=np.clip(np.zeros(n),s['lo'],s['hi']);v=max(0.,float(np.max(abs(d['r'][d['den']]+s['J'][d['den']]@x))-tol/2))+1e-6
+ Gp=np.r_[np.c_[G,np.r_[np.zeros(2*n),-np.ones(24)]],np.array([[0.]*n+[-1.]])];hp=np.r_[h,0.];A=np.zeros((1,n+1));A[0,-1]=1.
+ sol,kkt=qpls(A,np.zeros(1),Gp,hp,np.r_[x,v]);return sol[:-1],max(0.,float(sol[-1])),kkt
+
+def report(d,s,x,kkt):
+ p=s['origin']+s['delta']*x;moves=s['delta']*x
+ flags={n:float(v) for n,v in zip(s['names'],moves) if (('diameter' in n and abs(v)>.300001) or (n.endswith('/k_ij') and abs(v)>.100001))}
+ return {**metrics(d,d['r']+s['J']@x),'step_optimizer':x.tolist(),'endpoint':dict(zip(s['names'],p.tolist())),'moves':dict(zip(s['names'],moves.tolist())),'large_moves':flags,'validity':'low: large moves' if flags else 'local screening only; nonlinear unverified','kkt':kkt}
+
+SCENARIOS={
+ 'tied':{},'k-2':dict(kmin=-2.),'k-3':dict(kmin=-3.),
+ 'pack':dict(pack=('+','-')),'DH':dict(dh=('+','-')),'m':dict(m=('+','-')),'m>=1':dict(m=('+','-'),mlo=1.),
+ 'Born2-8':dict(born=(2.,8.)),'Born0.5-8':dict(born=(.5,8.)),
+ 'k-2+pack':dict(kmin=-2.,pack=('+','-')),'k-3+pack':dict(kmin=-3.,pack=('+','-')),
+ 'pack+DH':dict(pack=('+','-'),dh=('+','-')),'pack+m':dict(pack=('+','-'),m=('+','-')),
+ 'pack+Born':dict(pack=('+','-'),born=(2.,8.)),'DH+m':dict(dh=('+','-'),m=('+','-')),
+ 'm+Born':dict(m=('+','-'),born=(2.,8.)),
+ 'k-2+DH':dict(kmin=-2.,dh=('+','-')),'k-2+m':dict(kmin=-2.,m=('+','-')),'k-2+Born':dict(kmin=-2.,born=(2.,8.)),
+ 'all':dict(kmin=-3.,pack=('+','-'),dh=('+','-'),m=('+','-'),born=(.5,8.)),
+ 'pack+m>=1':dict(pack=('+','-'),m=('+','-'),mlo=1.),
+ 'DH+m>=1':dict(dh=('+','-'),m=('+','-'),mlo=1.),
+ 'all>=1':dict(kmin=-3.,pack=('+','-'),dh=('+','-'),m=('+','-'),mlo=1.,born=(.5,8.)),
+ 'k-2+pack+Born':dict(kmin=-2.,pack=('+','-'),born=(2.,8.)),
+ 'carb-pack':dict(pack=('-',)),'MEAH-pack':dict(pack=('+',)),
+ 'carb-m':dict(m=('-',)),'MEAH-m':dict(m=('+',)),
+}
+
+def run():
+ out={}
+ for ep in ['l1','l0p1']:
+  d=data(ep);o={'base':metrics(d,d['r']),'replay':d['replay'],'options':{}};out[ep]=o;print('BASE',ep,o['base'],o['replay'],flush=True)
+  for name,kw in SCENARIOS.items():
+   s=scenario(d,**kw);J=s['J'];w=d['w'];oo={'configuration':kw,'bounds':dict(zip(s['names'],s['bounds'].tolist()))};o['options'][name]=oo
+   for lam in [float(ep[1:].replace('p','.')),1.,3.,10.]:
+    key=f'lambda{lam:g}'
+    if key in oo:continue
+    wt=w.copy();wt[d['den']]=lam/12;A=J*np.sqrt(wt[:,None]);b=d['r']*np.sqrt(wt);n=len(s['lo']);x,k=qpls(A,b,np.r_[np.eye(n),-np.eye(n)],np.r_[s['hi'],-s['lo']],np.clip(np.zeros(n),s['lo'],s['hi']));oo[key]=report(d,s,x,k);oo[key]['weighted_cost']=oo[key]['C166']+lam*np.sum(np.array(oo[key]['density_errors'])**2)/96
+   x0,v,k=feasible(s,d);oo['phase1']=dict(slack_residual=v,kkt=k)
+   for metric in ['C166','C149']:
+    if v>1e-6:oo['hard_'+metric]={'feasible':False,'min_density_max':2+2*v};continue
+    mask=d[metric.lower()];G,h=constraints(s,d);x,k=qpls(J[mask]*np.sqrt(w[mask,None]),d['r'][mask]*np.sqrt(w[mask]),G,h,x0);oo['hard_'+metric]={**report(d,s,x,k),'feasible':True}
+   print(ep,name, 'weighted3',*[round(oo['lambda3'][k],5) for k in ['density_max','C149','C166','Vinjarapu_RMSE_kJ_mol']], 'hard',*[round(oo['hard_C166'].get(k,np.nan),5) for k in ['density_max','C149','C166','Vinjarapu_RMSE_kJ_mol']],flush=True)
+  (ROOT/'screens.json').write_text(json.dumps(out,indent=2))
+ return out
+if __name__=='__main__':run()

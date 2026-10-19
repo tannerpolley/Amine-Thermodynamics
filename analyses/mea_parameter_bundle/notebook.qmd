@@ -751,20 +751,21 @@ The table compares two endpoints across nine quantities, so a table rather than 
 
 ## Amendment 6, step 1b: weighting density, and a second density source
 
-**Weighting the loaded densities removes the gross density error at little calibration cost. The few kg/m³ that remain sit where Amundsen 2009 and Hartono 2014 disagree with each other.** Run 19 October 2026, under the owner's authorization of that date. Record: [step 1b](results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md). Not yet independently reviewed as a delivered result.
+**Weighting the loaded densities cuts the loaded-density error by one to two orders of magnitude, but no endpoint passes the existing density gate.** The aggregate calibration cost changes little, while the Vinjarapu heat error rises 22–24 %. Run 19 October 2026, under the owner's authorization of that date. Record: [step 1b](results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md). Delivered review r1 (independent): not supported as first written; its corrections are applied here, and a re-review is pending.
 
-| Endpoint (converged) | C149 | Pressure / species AARD, % | Vinjarapu RMSE, kJ/mol | Amundsen 20 loaded rows, kg/m³ | Hartono 32 rows, kg/m³ |
+| Endpoint (converged) | C149 | Pressure / species AARD, % | Vinjarapu RMSE, kJ/mol | Amundsen loaded density errors, kg/m³ | Hartono 32 density errors, kg/m³ |
 |---|---:|---|---:|---|---|
 | λ = 0 (A4) | 24.561 | 12.76 / 7.17 | 1.52 | −108 to −24 (12 fitted rows) | — |
-| λ = 1, Amundsen targets | 24.726 | 12.44 / 7.10 | 1.88 | −4.5 to +2.9 | +0.6 to +6.3 |
-| λ = 1, Hartono targets | 24.678 | 12.40 / 7.10 | 1.86 | −10.1 to +1.0 | −3.4 to +2.1 |
+| λ = 0.1, Amundsen targets | 23.472 | 11.82 / 7.05 | 1.88 | −7.3 to +2.5 (9 of 20 within 2) | −0.6 to +5.1 |
+| λ = 1, Amundsen targets | 24.726 | 12.44 / 7.10 | 1.88 | −4.5 to +2.9 (7 of 20) | +0.6 to +6.3 |
+| λ = 1, Hartono targets | 24.678 | 12.40 / 7.10 | 1.86 | −10.1 to +1.0 (10 of 20) | −3.4 to +2.1 |
 
-The table compares three endpoints across six quantities, so a table rather than a figure.
+The table compares four endpoints across six quantities, so a table rather than a figure.
 
-- **The two sources disagree at high loading.** Amundsen lies 0.4–1.6 kg/m³ above Hartono at loadings 0.1–0.3, then 8.5–9.1 kg/m³ above at 0.4. Hartono reports ±0.02 kg/m³ in density and ±0.01 in loading.
-- **The fit follows whichever source it is given.** Fitted to Hartono, the model is within ±1 kg/m³ of Amundsen at loadings 0.1–0.2 and below Amundsen at 0.3–0.4. Fitted to Amundsen, it lies above Hartono.
-- **The CO₂-free 25 °C row stays at about −1.0 kg/m³** against a 0.5 kg/m³ limit, and heat capacity is unchanged.
-- **Linear screens of model-form changes don't credibly close ±2 kg/m³ on all Amundsen rows** at no more than a 5 % C149 increase.
+- **The two sources disagree at high loading.** Amundsen lies 0.4–1.6 kg/m³ above Hartono at loadings 0.1–0.3 and 8.5–9.1 kg/m³ above at 0.4. Hartono reports ±0.02 kg/m³ in density and ±0.01 in loading.
+- **These fits follow the source they are given.** Fitted to Hartono, the model is within about ±1 kg/m³ (−1.00 to +1.03) of Amundsen at loadings 0.1–0.2 and below Amundsen at 0.3–0.4. Fitted to Amundsen, it lies above Hartono.
+- **Source disagreement does not explain every remaining error.** At 50 °C and loading 0.2, the Amundsen-targeted fit misses by +2.9 kg/m³ where the sources differ by 0.7.
+- **The CO₂-free 25 °C row stays at about −1.0 kg/m³** against a 0.5 kg/m³ limit. Unloaded heat capacity is nearly unchanged; loaded heat capacity shifts (+1.55 to +2.20 % at 318 K, loading 0.358, at λ = 0.1).
+- **Linear screens of model-form changes,** retained in the record, give at best about 2.03 kg/m³ maximum Amundsen error at no more than a 5 % C149 increase. That is a linear prediction only.
 
 The Hartono rows are a diagnostic transcription, not adopted data. None of these endpoints is a candidate.
-
