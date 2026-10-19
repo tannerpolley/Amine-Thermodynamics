@@ -1,0 +1,50 @@
+"""Disclosed one-off: one native four-row Cp information evaluation per process; no fit."""
+import copy
+import json
+import sys
+from pathlib import Path
+
+sys.path[:0] = ['analyses/mea_parameter_bundle/scripts', 'src']
+import fit_campaign as f
+import fit_observations as o
+
+OUT = Path(__file__).parent
+proxy = float(sys.argv[1])
+assert proxy in (1e-6, 1e-7)
+spec = f.load(OUT.parents[1] / 'inputs/revision-3/tied-fit.json')
+installed = f.verify(spec)
+mapping = f.load(spec['information_starts'][0]['parameters_path'])
+params = o.epcsaft.Parameters.from_mapping(mapping)
+template = o.s.load_state_packet(o.ROOT / spec['packet_path'])['observations'][0]['request']
+request = o.s.corrected_request(template, o.s.reaction_values(mapping))
+direct = [copy.deepcopy(r) for r in spec['direct_rows']
+          if r['quantity'] == 'equilibrium_isobaric_heat_capacity']
+assert len(direct) == 4
+items = []
+for row in direct:
+    if row['source_loading'] == 0.:
+        row['analytical_feed']['carbon-dioxide'] = proxy
+    feed = row['analytical_feed']
+    assert abs(feed['monoethanolamine'] / (feed['water'] * .01801528) - 7.) < 1e-14
+    problem = o.eq.Problem(T=row['T_K'], P=row['P_Pa'], feed=o.eq.Amounts(feed),
+        phases=[o.eq.Phase('L', kind='liquid', support=o.s.COMPONENT_IDS)],
+        reactions=o.s._problem_from_request(request).reactions,
+        neutral_reference=o.s._neutral_reference(request), row_tolerance=spec['verification']['raw_residual'])
+    items.append(o.reg.observation(params, row['quantity'], problem,
+        observed=row['observed'], form='difference', scale=row['scale']))
+value = o.reg.differentiate(params, [], items, optimizer=[], thermochemistry=o.thermal.record())
+rows = []
+for row, prediction, status in zip(direct, value.predictions, value.statuses, strict=True):
+    feed = row['analytical_feed']
+    mass_kg = (feed['monoethanolamine'] * 61.0831 + feed['water'] * 18.01528
+               + feed['carbon-dioxide'] * 44.0095) / 1000
+    cp = prediction * sum(feed.values()) / mass_kg / 1000
+    rows.append(dict(id=row['id'], T_K=row['T_K'], source_loading=row['source_loading'],
+        analytical_feed=feed, mass_kg=mass_kg, observed_kJ_kg_K=row['source_observed_kJ_kg_K'],
+        equilibrium_cp_kJ_kg_K=cp, status=status.name,
+        relative_error=cp / row['source_observed_kJ_kg_K'] - 1))
+f.write(OUT / f'cp-{proxy:g}-results.json', dict(engine=installed,
+    parameter_sha256=spec['information_starts'][0]['sha256'], native_information_calls=1,
+    rows=rows, interpretation='Numerical qualification only; no physical validation.'))
+assert all(r['status'] == 'Available' for r in rows)
+print(json.dumps(rows, indent=2))
