@@ -1,0 +1,97 @@
+import json
+from pathlib import Path
+import numpy as np
+ROOT=Path('/tmp/density-diag')
+load=lambda n: json.loads((ROOT/(n+'.json')).read_text())
+base_spec=load('a4_spec'); pc=load('p_spec')['information_coordinates']; bc=base_spec['information_coordinates']; names=[c['identity'] for c in bc]; pn=[c['identity'] for c in pc]
+sc=np.array([c['scale'] for c in bc]); signs=np.array([-1 if c.get('source_to_native_factor',1)<0 else 1 for c in bc]); dc=sc*signs
+bounds=np.array([c['bounds'] for c in bc],float)
+def flat(d):
+ out={}
+ def go(v):
+  if isinstance(v,dict):
+   if 'identity' in v and 'value' in v and isinstance(v['value'],dict):out[v['identity']]=v['value']['magnitude']
+   for x in v.values(): go(x)
+  elif isinstance(v,list):
+   for x in v:go(x)
+ go(d); return out
+values={n:flat(load(n+'_params')) for n in ['a4','l']}
+chems={'a4':{'R5':2472.3956785580126,'h2':2719.454475528878,'h5':2950.799195553639},'l':{'R5':2400.,'h2':6171.802894306297,'h5':9104.667715139389}}
+for n,v in values.items():
+ v.update({names[9]:chems[n]['R5'],names[10]:chems[n]['h2'],names[11]:chems[n]['h5']})
+origins={n:np.array([v[x] for x in names]) for n,v in values.items()}
+def boxsteps(origin,bs=bounds,delta=dc):
+ q=(bs-origin[:,None])/delta[:,None]; return np.min(q,axis=1),np.max(q,axis=1)
+def family(row):
+ q,i=row['quantity'],row['id']
+ if q=='PartialPressure':return 'pressures'
+ if q=='PhaseMoleFraction':return 'Bottinger' if i.startswith('Bot') else 'Matin'
+ return {'AdditionEnthalpy':'heats','amount_ratio':'Jakobsen','mole_fraction':'restored','equilibrium_isobaric_heat_capacity':'Cp','pressure':'Kiepe','phase_density':'density'}[q]
+def setup(n):
+ d=load(n); rows=d['rows']; r=np.array(d['residuals']); j=np.array(d['residual_optimizer_gradient']).reshape(len(r),-1); w=np.array([x['weight'] for x in rows]); f=np.array([family(x) for x in rows]); return d,rows,r,j,w,f
+P,rows,r,J,w,fam=setup('p'); E,erows,er,eJ,ew,efam=setup('e'); den=fam=='density'; eden=efam=='density'
+# Tie map from fourteen A4 optimizer coordinates to twenty untied probe columns.
+T=np.zeros((20,14))
+for k,c in enumerate(bc):
+ for t in c.get('targets',[c]):
+  identity=c['identity'] if 'targets' not in c else 'component/'+t['target']+'/'+t['family']
+  T[pn.index(identity),k]=t.get('factor',1)*c['scale']/pc[pn.index(identity)]['scale']
+tiedJ=J@T
+common=np.array([x['quantity'] in ['PartialPressure','PhaseMoleFraction','AdditionEnthalpy'] for x in rows]); ecommon=np.array([x['quantity'] in ['PartialPressure','PhaseMoleFraction','AdditionEnthalpy'] for x in erows])
+def metrics(res,rs,weights):
+ ff=np.array([family(x) for x in rs]); rr=np.array(res); density=ff=='density'; cc=np.array([x['quantity'] in ['PartialPressure','PhaseMoleFraction','AdditionEnthalpy'] for x in rs]);
+ ans={'C149':float(.5*np.dot(weights[cc],rr[cc]**2)),'C166':float(.5*np.dot(weights[(ff!='Kiepe')&~density],rr[(ff!='Kiepe')&~density]**2)),'families':{x:float(.5*np.dot(weights[ff==x],rr[ff==x]**2)) for x in sorted(set(ff))},'density_errors':(2*rr[density]).tolist(),'density_rmse':float(np.sqrt(np.mean((2*rr[density])**2))),'density_max':float(np.max(abs(2*rr[density])))}
+ hh=ff=='heats'; ans['heat_rmse_kJmol']=float(np.sqrt(np.mean((rr[hh]*np.array([x['scale'] for x in rs if family(x)=='heats']))**2))/1000)
+ return ans
+# Linear least squares with Gx <= h by feasible active-set steps. Every objective step uses SVD, not normal equations.
+def qpls(A,b,G,h,x=None,maxiter=1500):
+ n=A.shape[1]; x=np.zeros(n) if x is None else x.copy(); G=np.array(G,float); h=np.array(h,float)
+ norms=np.linalg.norm(G,axis=1); valid=norms>1e-14; G=G[valid]/norms[valid,None];h=h[valid]/norms[valid]
+ if np.max(G@x-h)>1e-7:raise ValueError(('not feasible',np.max(G@x-h)))
+ active=[]
+ # Initially active independent constraint rows only.
+ for i in np.flatnonzero(abs(G@x-h)<1e-9):
+  if np.linalg.matrix_rank(G[active+[int(i)]],tol=1e-10)>len(active):active.append(int(i))
+ for it in range(maxiter):
+  C=G[active] if active else np.empty((0,n)); Z=np.linalg.svd(C,full_matrices=True)[2][len(active):].T if active else np.eye(n)
+  y=np.linalg.lstsq(A@Z,-(A@x+b),rcond=1e-12)[0] if Z.shape[1] else np.empty(0); p=Z@y
+  if np.linalg.norm(p)<1e-8*(1+np.linalg.norm(x)):
+   g=A.T@(A@x+b); mu=np.linalg.lstsq(C.T,-g,rcond=1e-12)[0] if active else np.empty(0)
+   if not active or min(mu)>=-1e-8:
+    return x,{'iterations':it,'max_violation':float(max(G@x-h)),'stationarity':float(np.max(abs(g+C.T@mu))) if active else float(np.max(abs(g))),'minimum_multiplier':float(min(mu)) if active else 0.}
+   del active[int(np.argmin(mu))];continue
+  gp=G@p; slack=h-G@x; candidates=np.flatnonzero(gp>1e-10); candidates=np.array([i for i in candidates if i not in active],int)
+  alpha=1.;block=None
+  if len(candidates):
+   ratios=slack[candidates]/gp[candidates]; k=np.argmin(ratios)
+   if ratios[k]<1-1e-10:alpha=max(0.,float(ratios[k]));block=int(candidates[k])
+  x+=alpha*p
+  if block is not None:
+   if np.linalg.matrix_rank(G[active+[block]],tol=1e-10)>len(active):active.append(block)
+   else:raise RuntimeError('dependent blocker')
+ raise RuntimeError(('active set iterations',np.linalg.norm(p),np.max(G@x-h)))
+def bounded(A,b,lo,hi):
+ G=np.r_[np.eye(len(lo)),-np.eye(len(lo))]; h=np.r_[hi,-lo];return qpls(A,b,G,h,np.clip(np.zeros(len(lo)),lo,hi))
+result={'method':'unweighted residual Jacobians; C=1/2 sum weight*r^2; all predictions linear residual plus J delta; SVD active set, box constraints, no EOS evaluation','bases':{'a4':metrics(r,rows,w),'l0p01':metrics(er,erows,ew)},'gradient':{},'lambda_predictions':{}}
+for family_name in list(dict.fromkeys(fam)):
+ mask=fam==family_name; g=J[mask].T@(w[mask]*r[mask]); result['gradient'][family_name]={'n':int(mask.sum()),'cost':float(.5*np.dot(w[mask],r[mask]**2)),'plus':[float(g[5]),float(.88*g[6]),float(.88*g[7]),float(g[5]+.88*g[6]+.88*g[7])],'minus':[float(g[11]),float(.88*g[12]),float(.88*g[13]),float(g[11]+.88*g[12]+.88*g[13])]}
+lo,hi=boxsteps(origins['l'])
+# Information call optimizer shifts are around endpoint, but original fit unshifted reaction bounds must be preserved.
+lf=load('l'); fitJ=np.array(lf['optimizer_jacobian']).reshape(217,14); lw=np.array([x['weight'] for x in lf['rows']]);result['replay']={'weighted_eJ_max_difference':float(np.max(abs(eJ*np.sqrt(lw)[:,None]-fitJ))),'tied_P_J_max_relative':float(np.linalg.norm(tiedJ[np.array([{z['id']:i for i,z in enumerate(rows)}[z['id']] for z in load('a4')['rows']])]*np.sqrt(np.array([z['weight'] for z in load('a4')['rows']]))[:,None]-np.array(load('a4')['optimizer_jacobian']).reshape(205,14))/np.linalg.norm(load('a4')['optimizer_jacobian']))}
+for lam in [.01,.1,1.,10.,100.]:
+ wt=ew.copy();wt[eden]=lam/12
+ step,kkt=bounded(eJ*np.sqrt(wt)[:,None],er*np.sqrt(wt),lo,hi)
+ result['lambda_predictions'][str(lam)]={**metrics(er+eJ@step,erows,wt),'step_optimizer':step.tolist(),'delta_physical':(dc*step).tolist(),'endpoint_physical':(origins['l']+dc*step).tolist(),'kkt':kkt}
+# Direct derivative attribution at lambda=.01: per angstrom of tied sigma.
+dJ=eJ[eden]*2
+result['l0p01_density_derivatives_per_A']={'sigma_plus':(dJ[:,5]/.1).tolist(),'sigma_minus':(dJ[:,6]/.1).tolist()}
+g=eJ.T@(np.where(eden,.01/12,ew)*er);result['l0p01_gradient_per_optimizer']=g.tolist()
+for col in [5,6]:
+ a=dJ[:,col]/.1; err=er[eden]*2; best=-a@err/(a@a);result.setdefault('single_sigma_correction',{})[names[col]]={'best_delta_A':float(best),'errors':(err+a*best).tolist(),'C149_cost_delta_fixed_others':float(.5*np.dot(ew[ecommon],(er[ecommon]+eJ[ecommon,col]*best/.1)**2-er[ecommon]**2))}
+(ROOT/'results.json').write_text(json.dumps(result,indent=2))
+if __name__=='__main__':
+ print('REPLAY',result['replay']);print('BASES',result['bases']);print('GRADIENTS')
+ for k,v in result['gradient'].items():print(k,v)
+ print('LAMBDA PREDICTIONS')
+ for k,v in result['lambda_predictions'].items():print(k,{x:v[x] for x in ['C149','C166','heat_rmse_kJmol','density_errors','endpoint_physical','delta_physical','kkt']})
+ print('DENSITY DERIVATIVES',result['l0p01_density_derivatives_per_A']);print('SINGLE CORRECTION',result['single_sigma_correction']);print('LAMBDA .01 GRADIENT',g)

@@ -1,0 +1,8 @@
+exec(open('/tmp/density-diag/options.py').read().split('scenarios=')[0])
+opts=load('options');opts.update(load('combinations'));out={}
+for name in ['original','pack_both','carb_raise6p8','carb_raise8','m_both_1','m_both_0p5','u_wide','born_wide_upper','pack_m1','all_wide']:
+ cfg=opts[name]['configuration'];B,bs,op,delta,nn=scenario(**cfg);JJ=J@B;lo,hi=boxsteps(op,bs,delta);G=np.r_[np.eye(len(lo)),-np.eye(len(lo)),JJ[den],-JJ[den]];h=np.r_[hi,-lo,1-r[den],1+r[den]];s0=np.array(opts[name]['results']['hard2']['step']);out[name]={}
+ for label,mask in [('C162',(fam!='Kiepe')&(fam!='density')&(fam!='Cp')),('C149',common)]:
+  s,info=qpls(JJ[mask]*np.sqrt(w[mask,None]),r[mask]*np.sqrt(w[mask]),G,h,s0);v=metrics(r+JJ@s,rows,w);out[name][label]={**v,'endpoint':(op+delta*s).tolist(),'kkt':info}
+  print(name,label,'C149/C162/C166/heat',v['C149'],v['C166']-v['families']['Cp'],v['C166'],v['heat_rmse_kJmol'])
+(ROOT/'cost-choice.json').write_text(json.dumps(out,indent=2))

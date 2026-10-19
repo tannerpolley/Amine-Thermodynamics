@@ -1,0 +1,8 @@
+exec(open('/tmp/density-diag-2/limits.py').read().split('\nout={}')[0])
+out={}
+for ep in ['l1','l0p1']:
+ d=data(ep);cap=metrics(d,d['r'])['C149']*1.05;out[ep]={}
+ for small in [False,True]:
+  s=scenario(d,**SCENARIOS['all>=1'],trust=small);a=minimax_cap(d,s,cap);out[ep]['small_moves' if small else 'full_bounds']=a
+  print(ep,small,cap,a['density_max_upper'],a['result']['C166'],a['result']['Vinjarapu_RMSE_kJ_mol'],flush=True)
+(ROOT/'segment-count-at-least-one-cap.json').write_text(json.dumps(out,indent=2))
