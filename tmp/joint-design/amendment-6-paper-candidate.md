@@ -229,7 +229,7 @@ prediction at the step-1b Hartono-target endpoint, not a completed fit or eviden
 
 The neutral slope and two-coordinate fitting need **zero new numerical code**: this follows inspection
 of `stage2_native`, `stage2_rows`, `stage2_study` and the existing CO₂–water slope declaration. Stage 2b
-uses the whole-launch admission rule below (no new code). Substitute its selected MEA–water
+uses the recorded operator budget check below (no new code). Substitute its selected MEA–water
 k and b into every joint start document, then freeze them in stage 6. Carry the same five CO₂-free rows,
 scale 0.5 and weight 10, through the existing `stage2_rows` added-row path under each case's row-table key.
 The joint density-weight replacement must address only the 52 **loaded row IDs**, preserving these five
@@ -435,15 +435,20 @@ proven per-launch bound if mandatory work cannot be pre-empted by optional work.
    wall fields, and records the arithmetic beside the launch in the step ledger:
    - **Mandatory launch:** launched while the program remainder covers it at the measured scale (≤ 4,000 CPU-s and 300 s per fit so far). If the remainder could not plausibly cover the outstanding mandatory work, stop and return to the owner (cap decision) rather than skipping evidence.
    - **Optional comparison fit:** launched only while the program remainder is at least **26,880 CPU-s**, which is 32 processors × 840 s, a conservative allowance, not a proven bound. It also needs **840 wall-s**.
-   - **Runner fields:** stage-6 `fit_cpu_s` stays at the runner's existing post-call check value (3,000), so a fit that runs past it is still charged and reported. Each declaration's `budget_*` is that launch's own declared budget, capped by the program remainder. For stage 2b, `budget_wall_s = 300` and `budget_cpu_s = 13,440`.
+   - **Runner fields:** the stage-6 runner uses `fit_cpu_s` both as an **admission threshold** and as a **post-call threshold**. It refuses a launch unless the declaration and program remainders cover `fit_cpu_s` and `fit_wall_s + 120` (`fit_cpu_s` 6,000 and 720 wall-s at `fit_wall_s = 600`; `fit_campaign.py:528–536`). Information calls need `nonfit_cpu_s` (500) and `nonfit_wall_s` (180).
+     - **Value:** set `fit_cpu_s = 6,000`, as in steps 1 and 1b. The measured fits used 777–3,954 CPU-s, so 3,000 would spuriously stop a 0.01-like fit.
+     - **If exceeded:** a fit that ends above `fit_cpu_s` keeps its outputs and charges, but the runner raises an error requiring **return to the owner before another fit** (`fit_campaign.py:595`). That stop is honoured, not bypassed.
+     - **Budget fields:** each declaration's `budget_*` is that launch's own declared budget, capped by the program remainder. For stage 2b, `budget_wall_s = 300` and `budget_cpu_s = 13,440`; its runner may refuse later internal calls, or interrupt one at the smaller of its per-call and remaining wall allowances, and such work is recorded as incomplete.
+     - **Recorded check:** the operator check includes these admission conditions.
 3. **Charge everything and report overruns.** After each launch, charge the measured whole-command time (GNU `time`, children included) to the step and program ledgers. A mandatory launch that ends above the program cap is charged, reported to the owner and does not authorize optional work. Interrupted or failed launches are charged and recorded as incomplete.
 
 This adds no counted code, no CPU guard and no claimed bound. With 92,719.39 CPU-s remaining and measured fits of 777–3,954 CPU-s, the mandatory sequence plus most or all comparison fits is expected to fit. The drop order governs any that do not.
 
 Use `nice -n 10`, all discovered CPUs in one process pool, numerical-library threads one, sequential fits
 and no subagents. First complete stage 2b → two F1 forms → selected-form B/smaller-A → loading sensitivity
-→ selected-vector fixed/phase checks. Then comparison order is F3 A/B → F2 A/B → no-heat A/B → F4 A/B →
-F5 A/B → remaining verification/notebook/review. Before optional launches, drop unneeded alternate/old-record
+→ selected-vector fixed/phase checks **and all selected-vector mandatory verification** (derivatives, persistence,
+replays and the Cp probe). Then comparison order is F3 A/B → F2 A/B → no-heat A/B → F4 A/B →
+F5 A/B → comparison-specific verification of each completed comparison → notebook → delivered review. Before optional launches, drop unneeded alternate/old-record
 **phase families**, then F5 B/A, F4 B/A, F2 B and no-heat B. Comparison allocations must not displace the
 selected-form fits/sensitivity or mandatory evidence. Protect both F3 starts and one start in each retained
 family if affordable; retire any missing comparison's claim and label one-start evidence. If mandatory
@@ -464,7 +469,7 @@ notebook promotion before manuscript use. No #172 scope or Hartono basis questio
 inputs/scales/hashes, all fits/attempts/timings and accounting under A6; update the existing notebook after
 execution. This revision reports calibration expectations and numerical falsifiers, with no new physical
 validation. Its checks were static source/declaration/history inspection and retained-number arithmetic;
-no scientific calculation was run. The new line and runtime-guard estimates still require Build evidence.
+no scientific calculation was run. The new line estimate still requires Build evidence.
 
 ## 1. Authority, question and retained evidence
 
