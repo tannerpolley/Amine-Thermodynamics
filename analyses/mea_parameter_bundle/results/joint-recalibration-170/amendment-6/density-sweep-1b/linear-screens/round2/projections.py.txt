@@ -1,0 +1,24 @@
+from diagnose import *
+out={};tab=[]
+for ep in ['l1','l0p1']:
+ d=data(ep);F=(d['J']@T)[d['den']]*2;e=d['r'][d['den']]*2
+ interior=np.all(abs(d['origin'][:,None]-np.array([c['bounds'] for c in bc]))>1e-6,axis=1)
+ Q=np.linalg.svd(F[:,interior],full_matrices=False)[0][:,:sum(interior)];P=np.eye(12)-Q@Q.T;eperp=P@e
+ other='l0p1' if ep=='l1' else 'l1';dd=data(other);step=(dd['origin']-d['origin'])/delta;pred=d['r']+d['J']@T@step
+ cross={**metrics(d,pred),'actual':metrics(dd,dd['r']),'density_prediction_discrepancy':(2*(pred-dd['r'])[d['den']]).tolist(),'density_discrepancy_max':float(np.max(abs(2*(pred-dd['r'])[d['den']]))),'density_discrepancy_RMSE':float(np.sqrt(np.mean((2*(pred-dd['r'])[d['den']])**2))),'moves':dict(zip(bn,(dd['origin']-d['origin']).tolist()))}
+ normF=F/np.linalg.norm(F,axis=0);sv=np.linalg.svd(normF,compute_uv=False)
+ o=dict(cross=cross,interior_names=[n for n,f in zip(bn,interior) if f],full_density_design_singular_values=sv.tolist(),interior_projected_error_norm=float(np.linalg.norm(eperp)),full_projected_error_norm=float(np.linalg.norm(e-F@np.linalg.lstsq(F,e,rcond=1e-12)[0])),columns=[]);out[ep]=o
+ for j,name in enumerate(pn):
+  a=d['J'][d['den'],j]*2;ap=P@a;raw=-a@e/(a@a);orth=-ap@eperp/(ap@ap) if np.linalg.norm(ap)>1e-12 else np.nan
+  item=dict(endpoint=ep,coordinate=name,derivative_per_physical_unit=(a/(psc[j]*psgn[j])).tolist(),raw_delta=float(raw*psc[j]*psgn[j]),raw_fraction_squared_residual_removed=float((a@e)**2/(a@a)/(e@e)),raw_result_density_max=float(np.max(abs(e+a*raw))),orthogonalized_delta=float(orth*psc[j]*psgn[j]),orthogonalized_pattern_norm=float(np.linalg.norm(ap)),orthogonalized_pattern_fraction=float(np.linalg.norm(ap)/np.linalg.norm(a)),orthogonalized_remaining_fraction_removed=float((ap@eperp)**2/(ap@ap)/(eperp@eperp)) if np.linalg.norm(ap)>1e-12 else 0.,projected_result_norm=float(np.linalg.norm(eperp+ap*orth)) if np.isfinite(orth) else float(np.linalg.norm(eperp)))
+  o['columns'].append(item);tab.append({k:v for k,v in item.items() if k!='derivative_per_physical_unit'})
+ # Isolate loading curvature by removing independent constant and linear trends at each T.
+ L=np.array([.1,.2,.3,.4]);Z=np.c_[np.ones(4),L];PL=np.eye(4)-Z@np.linalg.pinv(Z);C=np.kron(np.eye(3),PL)
+ o['loading_curvature']={'error_pattern':(C@e).tolist(),'norm':float(np.linalg.norm(C@e)),'column_patterns':{name:(C@(d['J'][d['den'],j]*2)/(psc[j]*psgn[j])).tolist() for j,name in enumerate(pn)}}
+ print('CROSS',ep,cross)
+ print('PROJECTION',ep,'interior',sum(interior),'perp',np.linalg.norm(eperp),'allsv',sv)
+ for j in [3,5,6,7,8,9,11,12,13,14,15]:
+  x=o['columns'][j];print(pn[j],{k:round(x[k],6) for k in ['raw_delta','raw_fraction_squared_residual_removed','orthogonalized_delta','orthogonalized_pattern_fraction','orthogonalized_remaining_fraction_removed']})
+(ROOT/'projections.json').write_text(json.dumps(out,indent=2))
+with open(ROOT/'projections.csv','w') as f:
+ w=csv.DictWriter(f,fieldnames=list(tab[0]));w.writeheader();w.writerows(tab)

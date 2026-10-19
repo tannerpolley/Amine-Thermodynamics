@@ -3,11 +3,11 @@
  "decision": "Owner: from now on the 21,600 s active-wall cap counts only measured fit and check calls; agent research, review and reporting are not charged. Each reactive fit call is limited to 600 s. Plateau diagnosis follows the first fit after Engine #595.",
  "compute_wall_cap_s": 21600,
  "reactive_call_limit_s": 600,
- "compute_wall_charged_s": 10996,
+ "compute_wall_charged_s": 12064,
  "compute_wall_basis": "Rounded up from about 6,790 s: 484 s before Route 1 entry, 5,716 s of retained call timings in amendments 2-4 (one per call), and about 590 s of fit-time probes (diagnosis-fit-time/README.md).",
- "compute_wall_remaining_s": 10604,
+ "compute_wall_remaining_s": 9536,
  "mandatory_check_reserve_s": 1950.38,
- "program_cpu_charge_s": 97578.61,
+ "program_cpu_charge_s": 107278.61,
  "program_cpu_limit_s": 144000,
  "superseded_ledger": "final-prerequisites/accounting.json program_active_wall_charge_s plus the diagnosis charge, 19,605.51 s, mixed compute with fixed per-task charges.",
  "campaign_executable_ceiling": 1000,
@@ -82,6 +82,13 @@
    "wall_s": 377,
    "cpu_s": 3872,
    "basis": "Measured whole-command times: smaller-dV-density 19.75 s / 19.67 CPU-s; smaller-dV setup failure (wheel path) 0.08 s / 0.06 CPU-s; release-l0p01 18.74 s / 18.68 CPU-s; release-l0p1 18.18 s / 18.17 CPU-s; release-l1 18.53 s / 18.52 CPU-s; fit-l0p01 282.95 s / 3778.54 CPU-s; endpoint-l0p01 18.40 s / 18.30 CPU-s; total 376.63 s / 3871.94 CPU-s. The lambda=0.01 fit stopped at the 100-iteration limit; the runner refused further fits (fit_campaign.py:598)."
+  },
+  {
+   "date": "2026-10-19",
+   "task": "amendment-6 step 1b: F1 density-weighted fits (lambda 1, 0.1, 0.01 rerun), endpoint/assessment/untied information calls, Hartono-target diagnostic fit and evaluations, CO2-free scratch evaluations (owner authorization 2026-10-19)",
+   "wall_s": 1068,
+   "cpu_s": 9700,
+   "basis": "Measured whole-command times of 26 calls in amendment-6/density-sweep-1b/step-ledger.json: 1067.49 s / 9699.09 CPU-s."
   }
  ],
  "campaign_executable_basis": "891 + 56 (fit_neutral_co2_mea.py) + 39 (check_matched_co2_mea.py) + 12 (stage6_coordinates helper) + 1 (release assertion) + 1 (R2 write-back fix), non-blank non-comment added lines. Not counted, pending owner ratification: amendment-4/neutral-fit/figure.py (17 lines, presentation only) and the ignored scratch diagnostics in tmp/."
