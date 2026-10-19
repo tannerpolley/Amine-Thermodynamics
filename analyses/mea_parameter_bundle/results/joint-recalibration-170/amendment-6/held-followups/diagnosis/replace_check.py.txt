@@ -1,0 +1,45 @@
+"""NOTE: run at 17:13-17:15 after held-B-start.json was rewritten (17:12:10, k_ij carbamate-MEAH+ = -0.99, SHA cb4096a6); "B" in its JSON is that -0.99 start, not the frozen -1.0 start (f55f17aa) used by jacobian.json and pressure_column.json.
+Disclosed scratch diagnosis (#170 A6): temperature_scan.json gives sigma_min 1.26e-12 (rank 20) for the vle_obs_0186
+problem with T replaced by 313.15 (from arange), while the packet problem at 313.15 K gives 3.61e-13 (rank 19). Compare the
+generic-point Jacobians of the packet problem and T-replaced copies at start B, entry by entry, and also T-replaced
+copies built from requests whose temperature value is changed (so the request-dependent declarations follow T).
+Run from the checkout root: PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file>"""
+import dataclasses, json, time
+import numpy as np
+import epcsaft
+from epcsaft import equilibrium as eq
+import fit_campaign as f
+import fit_observations as o
+s = o.s
+D = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/held-followups/diagnosis'
+H = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs'
+spec = f.load(f'{H}/held-followups/held-B-information.json')
+B = f.load(f'{H}/held-followups/held-B-start.json')
+packet = s.load_state_packet(o.ROOT / spec['packet_path'])['observations']
+targets = o.indexed([dict(t, state=ob) for ob in packet for t in ob['targets']], 'identity')
+anchors = o.indexed([json.loads(line) for line in (o.ROOT / spec['anchors_path']).open()], 'identity')
+st = targets['vle_obs_0186-pco2']['state']
+model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(B), thermochemistry=o.thermal.record())
+base = s._problem_from_request(s.corrected_request(st['request'], s.reaction_values(B)), s.anchor_from(anchors[st['identity']]))
+clock = time.monotonic()
+
+
+def jac(problem):
+    c = eq.compile_problem(model, problem); p = c.generic_point()
+    J = np.array(c.jacobian(p)).reshape(len(c.rows), len(p))
+    return c, p, J
+
+
+c0, p0, J0 = jac(base)
+labels = [f'{r.kind.name}[{r.phase},{r.index}]' for r in c0.rows]
+out = dict(base_T=repr(base.T), base_P=repr(base.P), base_rank=c0.jacobian_rank, base_sigma_min=float(np.linalg.svd(J0, compute_uv=False)[-1]),
+           neutral_reference=repr(base.neutral_reference)[:600], reactions=[repr(r)[:400] for r in base.reactions], cases={})
+for name, T in (('replace-same-T', base.T), ('replace-313.15', 313.15), ('replace-arange', float(np.arange(312.65, 314.16, 0.05)[10])), ('replace-313.0', 313.0)):
+    c, p, J = jac(dataclasses.replace(base, T=T))
+    d = np.abs(J - J0); i, j = np.unravel_index(np.argmax(d), d.shape)
+    changed = sorted({(labels[a], int(b)) for a, b in zip(*np.nonzero(d > 1e-15 * (1 + np.abs(J0))))})[:20]
+    out['cases'][name] = dict(T=repr(T), rank=c.jacobian_rank, sigma_min=float(np.linalg.svd(J, compute_uv=False)[-1]),
+                              same_point=bool(np.array_equal(p, p0)), max_abs_diff=float(d.max()), at=(labels[i], int(j)), changed_entries=changed)
+    print(name, {k: out['cases'][name][k] for k in ('T', 'rank', 'sigma_min', 'same_point', 'max_abs_diff', 'at')}, flush=True)
+out['wall_s'] = round(time.monotonic()-clock, 2)
+json.dump(out, open(f'{D}/replace_check.json', 'w'), indent=1)

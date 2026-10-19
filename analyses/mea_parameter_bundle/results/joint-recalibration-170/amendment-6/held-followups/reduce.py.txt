@@ -7,7 +7,7 @@ CO2_FREE_LIMIT = 1.0  # kg/m3: 2u with Amundsen's stated 0.0005 g/cm3 (owner, #1
 CO2_FREE = ('AMU-DENS-002', 'AMU-DENS-009', 'AMU-DENS-016', 'AMU-DENS-023', 'AMU-DENS-030')
 CEILINGS = dict(C149=35.26, pressure_AARD_pct=15.81, species_AARD_pct=9.89, vinjarapu_rmse_kJ_mol=3.13, cai_cost=95.89547282691966)  # §4/§3 from #172; Cai: 1.05 x same-wheel constant-k reference (stage2b/step-ledger.json)
 summary = {}
-for form in ('held-smaller-A',):
+for form in ('held-smaller-A', 'held-B'):
     try:
         n = json.load(open(f'{A6}/{RUN}/{form}/fit/native.json'))
     except FileNotFoundError:

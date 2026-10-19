@@ -1,9 +1,9 @@
 {
  "authority": "\u00a70b selected-form follow-ups for Held (#170 comment 6279085063): larger-branch start B and smaller-branch A, same objective, neutral pair and physical bounds",
  "allocation": {
-  "wall_s": 1600,
-  "cpu_s": 15000,
-  "basis": "\u00a70b allocation \"Selected-form B and smaller-A fits; one Hartono loading-sensitivity fit, releases/replays\" 1,600 s / 15,000 CPU-s"
+  "wall_s": 2300,
+  "cpu_s": 20000,
+  "basis": "\u00a70b allocation \"Selected-form B and smaller-A fits; one Hartono loading-sensitivity fit, releases/replays\" 1,600 s / 15,000 CPU-s; plus 700 s / 5,000 CPU-s moved from the optional comparison-fit allocation (then 1,900 / 40,000 remaining) on 2026-10-19 after the duplicate smaller-A release (parallel session) and the stopped B release consumed about 330 s; mandatory fits precede optional ones (\u00a70b budget control by ordering)"
  },
  "operator_checks": [
   {
@@ -89,6 +89,62 @@
    "need_wall_s": 300,
    "need_cpu_s": 500,
    "admitted": true
+  },
+  {
+   "launch": "held-B release information (mandatory)",
+   "program_prior_wall_s": 14595,
+   "program_prior_cpu_s": 121577.58,
+   "allocation_used": {
+    "wall_s": 588.29,
+    "cpu_s": 2550.97
+   },
+   "budget_wall_s": 1011.71,
+   "budget_cpu_s": 12449.03,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held-B release information (mandatory)",
+   "program_prior_wall_s": 14715,
+   "program_prior_cpu_s": 121697.58,
+   "allocation_used": {
+    "wall_s": 708.29,
+    "cpu_s": 2670.97
+   },
+   "budget_wall_s": 1591.71,
+   "budget_cpu_s": 17329.03,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held-B candidate fit (mandatory)",
+   "program_prior_wall_s": 14895,
+   "program_prior_cpu_s": 121877.15,
+   "allocation_used": {
+    "wall_s": 888.17,
+    "cpu_s": 2850.54
+   },
+   "budget_wall_s": 1411.83,
+   "budget_cpu_s": 17149.46,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "held-B endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 15278,
+   "program_prior_cpu_s": 126057.1,
+   "allocation_used": {
+    "wall_s": 1271.86,
+    "cpu_s": 7030.49
+   },
+   "budget_wall_s": 1028.14,
+   "budget_cpu_s": 12969.51,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
   }
  ],
  "calls": [
@@ -133,6 +189,36 @@
    "exit_code": 0,
    "wall_s": 15.55,
    "cpu_s": 15.52
+  },
+  {
+   "form": "held-B",
+   "call": "release (parallel session; stopped with TaskStop at ~17:14 before completing; partial output removed; no GNU time written)",
+   "exit_code": null,
+   "wall_s": 120.0,
+   "cpu_s": 120.0,
+   "estimated": true,
+   "basis": "Conservative estimate: operator check at about 17:12:20, stopped at about 17:14 (peer report); single-process information call."
+  },
+  {
+   "form": "held-B",
+   "call": "release",
+   "exit_code": 0,
+   "wall_s": 179.88,
+   "cpu_s": 179.57
+  },
+  {
+   "form": "held-B",
+   "call": "fit",
+   "exit_code": 0,
+   "wall_s": 383.69,
+   "cpu_s": 4179.95
+  },
+  {
+   "form": "held-B",
+   "call": "replay",
+   "exit_code": 0,
+   "wall_s": 15.16,
+   "cpu_s": 15.08
   }
  ]
 }
