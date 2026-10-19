@@ -108,7 +108,8 @@ def stage6_rows(spec, mapping):
             form='difference', scale=row['scale'],
             **(dict(phase='L', mass_basis=True) if row['quantity']=='phase_density' else {}))
         rows.append((dict(row, form='difference'), item))
-    assert len(rows)==165+len(added) and len({r['id'] for r, _ in rows})==len(rows)
+    assert len(rows)==len(common)+len(added)+len(spec['direct_rows'])
+    assert len({r['id'] for r, _ in rows})==len(rows)
     return params, rows
 
 
