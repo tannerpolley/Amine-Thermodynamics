@@ -1,0 +1,103 @@
+"""Disclosed one-off: execute retained Python bodies, with no Engine import or solve."""
+import ast
+import copy
+import json
+import math
+from pathlib import Path
+from types import SimpleNamespace as NS
+
+ROOT = Path.cwd()
+SCRIPTS = ROOT / 'analyses/mea_parameter_bundle/scripts'
+OUT = Path(__file__).parent
+INPUTS = OUT.parents[1] / 'inputs/revision-3'
+
+
+def execute(nodes, env, label):
+    exec(compile(ast.Module(body=nodes, type_ignores=[]), label, 'exec'), env)
+
+
+def write(path, value):
+    path.write_text(json.dumps(value, indent=2) + '\n')
+
+
+tree = ast.parse((SCRIPTS / 'fit_campaign.py').read_text())
+block = next(n.body for n in ast.walk(tree) if isinstance(n, ast.If)
+             and ast.unparse(n.test) == 'v.usable')
+offset = next(i for i, n in enumerate(block) if isinstance(n, ast.Assign)
+              and ast.unparse(n.targets[0]) == 'r5')
+statements = block[offset:]
+spec = json.loads((INPUTS / 'tied-fit.json').read_text())
+R = 8.31446261815324
+reference = 2472.3956785580126
+inherited = dict(R2=2719.454475528878, R5=2950.799195553639)
+cases = []
+for width in (14, 12):
+    coordinates = copy.deepcopy(spec['information_coordinates'])
+    if width == 12:
+        coordinates = [c for c in coordinates if c.get('family') != 'born_diameter']
+    coordinates.reverse()  # identity, rather than a fixed column, owns persistence
+    for totals in (dict(R2=0., R5=0.), inherited):
+        for shifted in (False, True):
+            optimizer = [(.125 if c.get('reaction') == 'R2' else -.25)
+                         if shifted and c.get('reaction') else 0. for c in coordinates]
+            increments = {c['reaction']: c['scale'] * optimizer[i]
+                          for i, c in enumerate(coordinates) if c.get('enthalpy_shift')}
+            r5_index, r5 = next((i, c) for i, c in enumerate(coordinates)
+                                if c['identity'] == 'reaction:R5:correlation:a_k')
+            expected_reference = reference - r5['scale'] * optimizer[r5_index]
+            expected_totals = {k: totals[k] + increments[k] for k in totals}
+            endpoint = expected_reference + expected_totals['R5'] / (R * math.log(10.))
+            env = dict(spec=dict(information_coordinates=coordinates), math=math,
+                       start=dict(reaction_enthalpy_shifts_J_mol=totals),
+                       o=NS(thermal=NS(R=R)), v=NS(optimizer=optimizer), directory=OUT,
+                       values={r5['identity']: reference + totals['R5'] / (R * math.log(10.))},
+                       updates={r5['identity']: endpoint}, write=write)
+            execute(statements, env, '<actual chemistry persistence>')
+            saved = json.loads((OUT / 'chemistry-coordinates.json').read_text())
+            assert math.isclose(saved['R5_unshifted_a_k'], expected_reference, abs_tol=1e-12)
+            assert saved['enthalpy_shifts_J_mol'] == expected_totals
+            cases.append(dict(width=width, inherited=totals, increments=increments, written=saved))
+            env['updates'][r5['identity']] += 1.
+            try:
+                execute(statements, env, '<corrupt R5 endpoint>')
+            except AssertionError:
+                pass
+            else:
+                raise AssertionError('corrupt linked R5 was accepted')
+(OUT / 'chemistry-coordinates.json').unlink()
+
+tree = ast.parse((SCRIPTS / 'final_evidence.py').read_text())
+functions = [n for n in tree.body if isinstance(n, ast.FunctionDef)
+             and n.name in ('family_job', 'phase_classification')]
+state = dict(success=True, requested_tolerance_met=True, raw_residuals=[0.],
+             reduced_hessian_minimum=1., pressure_density_derivatives=[1.], amounts=[1.])
+phase_cases = []
+for error_type in (RuntimeError, SystemExit):
+    path = OUT / 'phase-saved.json'
+    def stability(*args):
+        saved = json.loads(path.read_text())
+        assert saved['final'] == state
+        raise error_type('synthetic stability interruption')
+    env = dict(epcsaft=NS(Mixture=lambda *a, **k: None,
+                         Parameters=NS(from_mapping=lambda m: None)),
+               thermal=NS(record=lambda: None), eq=NS(solve_equilibrium=lambda *a: NS(success=True)),
+               flash_problem=lambda *a: None, phase_payload=lambda *a: copy.deepcopy(state),
+               diagnose=lambda *a: (None, None, None), stability=stability, s=NS(write_json=write))
+    execute(functions, env, '<actual family_job and classifier>')
+    row = dict(loading=.1, temperature_K=313.15, pressure_Pa=100000.)
+    try:
+        env['family_job']({}, {}, row, [], path)
+    except error_type as error:
+        saved = json.loads(path.read_text())
+        saved['failure'] = str(error)
+        write(path, saved)
+    else:
+        raise AssertionError('interruption was not injected')
+    saved = json.loads(path.read_text())
+    assert env['phase_classification'](saved) == 'unresolved'
+    phase_cases.append(dict(interruption=error_type.__name__, classification='unresolved', saved=saved))
+path.unlink()
+write(OUT / 'persistence-results.json', dict(reaction_cases=cases, phase_cases=phase_cases,
+      no_engine_import_or_solve=True, corrupted_r5_rejected_cases=len(cases)))
+print(json.dumps(dict(reaction_cases=len(cases), corrupted_r5_rejected_cases=len(cases),
+                     phase_cases=len(phase_cases), classification='unresolved')))

@@ -1,0 +1,16 @@
+"""Disclosed one-off (#170 A6 r3): exercise the fixed explicit-document Cp route, heat_evidence_170.cp_check with declared rows, on the tied start. No fit.
+Run from the checkout root: PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file>"""
+import json, sys
+from pathlib import Path
+import fit_campaign as f
+import heat_evidence_170 as h
+OUT = Path(sys.argv[0]).parent
+spec = f.load(OUT.parents[1]/'inputs/revision-3/tied-fit.json')
+installed = f.verify(spec)
+mapping = h.s.parameter_mapping(Path(spec['information_starts'][0]['parameters_path']))
+rows = [r for r in spec['direct_rows'] if r['quantity'] == 'equilibrium_isobaric_heat_capacity']
+out = [dict(id=r['id'], proxy=p, **h.cp_check(mapping, r['T_K'], r['source_loading'], r['source_observed_kJ_kg_K'], row=r, proxy_loading=p))
+       for r in rows for p in ((1e-6, 1e-7) if r['source_loading'] == 0. else (1e-6,))]
+f.write(OUT/'cp-route-results.json', dict(engine=installed, parameter_sha256=spec['information_starts'][0]['sha256'], rows=out,
+        interpretation='Numerical qualification of the explicit-document Cp route at the tied start; not a candidate assessment or physical validation.'))
+print(json.dumps(out, indent=1))
