@@ -413,40 +413,32 @@ assessment/phase/verification allocations, and their **9,200 CPU-s**, until comp
 that reserve. Pending stage 2b and selected-form/sensitivity work also remain earmarked ahead of comparison
 fits. Allocations may transfer only within these totals and without consuming still-required checks.
 
-**CPU admission without new code: whole-launch hardware bound (orchestrator revision, 2026-10-19; readiness r3 correction).**
-The runner checks CPU only after a call returns (`fit_campaign.py:595`), and the stage-2 path admits a call
-whenever any allowance remains (`fit_campaign.py:344–346`). Measured rates (11.55–14.81 CPU-s per
-wall-second) are estimates, not bounds. Admission therefore reserves the **hardware bound** of each launch:
-all `n_cpu` = 32 processors busy for the launch's whole bounded lifetime plus cleanup. No launch can exceed
-that bound.
+**Budget control by ordering (orchestrator revision after readiness r4, 2026-10-19; replaces runtime guards and launch bounds).**
+Readiness rounds 2–4 established three things:
+- the runner checks CPU only after a call;
+- its teardown joins are untimed, so no launch lifetime is a proven bound;
+- any executable preflight would be counted launch code.
 
-1. **Bound per launch** (`B = n_cpu × T_max`), from the launch's own declared wall fields:
-   - stage-6 fit call: `T_max = fit_wall_s + 120` (outer join) `+ 60` (terminate join) `+ 60` (row
-     construction and serialization outside the native timer) = 600 + 240 = **840 s → B = 26,880 CPU-s**;
-   - stage-6 information call: `T_max = nonfit_wall_s + 60 + 60` = 180 + 120 = **300 s → B = 9,600 CPU-s**;
-   - one stage-2b launch, a whole `stage2_study` run of fits, replays and derivatives: its `T_max = budget_wall_s + 60 + 60`. The
-     stage-2 runner stops launching calls once `budget_wall_s` is spent and terminates an overrunning call.
-     With `budget_wall_s = 300`, **T_max = 420 s → B = 13,440 CPU-s**;
-   - the disclosed Cp and other scratch probes, single-process: `B = 1 × (declared timeout + 60)`.
-2. **Preflight, before every launch** (stage 2 and stage 6 alike), in the disclosed launch procedure that sets each
-   declaration's budget fields and is retained as command text, as in step 1b:
+The program caps are the owner's **planning budget**. Protecting the mandatory evidence does not need a
+proven per-launch bound if mandatory work cannot be pre-empted by optional work. Hence:
 
-   `program CPU remainder − unspent protected reserve ≥ B`, and the same for wall time with `T_max`.
+1. **Order protects the reserve.** Every mandatory launch precedes every optional one:
+   - stage 2b;
+   - the two combined-density F1 forms;
+   - the selected-form start B and smaller-branch A;
+   - the Hartono loading-sensitivity fit;
+   - the selected-vector fixed assessment, Cp probe, phase family, gas-root evidence and verification;
+   - only then any comparison fit.
 
-   The protected reserve is **9,200 CPU-s and 1,950.38 wall-s** for the selected-vector assessment, Cp
-   probe, phase family and verification, until that evidence completes. When the launch *is* one of those
-   mandatory checks, its own earmarked allocation is excluded from the reserve deducted. A launch that fails
-   preflight is not run. Apply the drop order before any optional launch.
-3. **Runner fields** stay consistent: stage-6 `fit_cpu_s = 26,880` and `nonfit_cpu_s = 9,600`, so the
-   runner's own admission and post-call check agree with the bound; each declaration's `budget_*` equals
-   the preflight's admissible remainder. **After** every launch, charge the measured whole-command time (GNU
-   `time`, children included) to the step and program ledgers.
+   Nothing optional runs while mandatory evidence is outstanding.
+2. **Operator check before each launch, not code.** The orchestrator reads the program ledger and the declared call's
+   wall fields, and records the arithmetic beside the launch in the step ledger:
+   - **Mandatory launch:** launched while the program remainder covers it at the measured scale (≤ 4,000 CPU-s and 300 s per fit so far). If the remainder could not plausibly cover the outstanding mandatory work, stop and return to the owner (cap decision) rather than skipping evidence.
+   - **Optional comparison fit:** launched only while the program remainder is at least **26,880 CPU-s**, which is 32 processors × 840 s, a conservative allowance, not a proven bound. It also needs **840 wall-s**.
+   - **Runner fields:** stage-6 `fit_cpu_s` stays at the runner's existing post-call check value (3,000), so a fit that runs past it is still charged and reported. Each declaration's `budget_*` is that launch's own declared budget, capped by the program remainder. For stage 2b, `budget_wall_s = 300` and `budget_cpu_s = 13,440`.
+3. **Charge everything and report overruns.** After each launch, charge the measured whole-command time (GNU `time`, children included) to the step and program ledgers. A mandatory launch that ends above the program cap is charged, reported to the owner and does not authorize optional work. Interrupted or failed launches are charged and recorded as incomplete.
 
-**Capacity under this rule.** Of 92,719.39 CPU-s, minus the 9,200 reserve, fits keep being admitted while the remainder
-stays ≥ 26,880 + 9,200. About **56,600 CPU-s of actual charges** can therefore be spent before admission stops;
-measured fits cost 777–3,954 CPU-s. The last admitted fit can never reach the reserve. This adds no counted
-code and needs no cgroup qualification. Because hardware bounds are conservative, an unadmissible optional
-comparison is dropped under the drop order, never launched on hope.
+This adds no counted code, no CPU guard and no claimed bound. With 92,719.39 CPU-s remaining and measured fits of 777–3,954 CPU-s, the mandatory sequence plus most or all comparison fits is expected to fit. The drop order governs any that do not.
 
 Use `nice -n 10`, all discovered CPUs in one process pool, numerical-library threads one, sequential fits
 and no subagents. First complete stage 2b → two F1 forms → selected-form B/smaller-A → loading sensitivity
