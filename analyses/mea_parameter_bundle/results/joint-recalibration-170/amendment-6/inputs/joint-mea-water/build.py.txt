@@ -1,0 +1,39 @@
+"""Disclosed scratch (#170 A6 r3, owner decision comment 6278891898): fit MEA-water k and slope b jointly. From the
+without-amundsen-0p4 declarations: two MEA-water coordinates inserted before the two dispersion coordinates, the 50 Cai 1996
+rows of stage 2b appended to the F1 added rows, the F1 neutral domain extended to stage 2b's 436.85 K, nonfit bound 300 s.
+Run from the checkout root with the pinned environment:
+  PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file>"""
+import copy, hashlib, json
+from pathlib import Path
+import fit_campaign as f
+A6 = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6')
+OLD, NEW, R3 = A6/'inputs/without-amundsen-0p4', A6/'inputs/joint-mea-water', A6/'inputs/revision-3'
+def dump(path, obj):
+    text = json.dumps(obj, indent=2) + '\n'
+    path.write_text(text)
+    return hashlib.sha256(text.encode()).hexdigest()
+s2 = json.loads((R3/'stage2b-spec.json').read_text())['cases'][0]
+coords = [{k: c[k] for k in ('identity', 'family', 'target', 'scale', 'bounds')} for c in s2['coordinates']]
+cai = [r for r in json.loads((R3/'stage2b-rows.json').read_text())['neutral-mea-water'] if r['quantity'] != 'phase_density']
+assert len(cai) == 50 and all(r['weight'] == 1 for r in cai)
+added = json.loads((R3/'joint-added-rows.json').read_text())
+assert not {r['id'] for r in added['F1']} & {r['id'] for r in cai}
+added['F1'] = added['F1'] + cai
+rows_sha = dump(NEW/'joint-added-rows.json', added)
+for form in ('tied', 'held'):
+    for kind in ('information', 'fit'):
+        spec = json.loads((OLD/f'{form}-{kind}.json').read_text())
+        ic = spec['information_coordinates']
+        assert [c['family'] for c in ic[-2:]] == ['dispersion_energy_over_k'] * 2 and len(ic) == 14
+        spec['information_coordinates'] = ic[:-2] + copy.deepcopy(coords) + ic[-2:]
+        case = spec['cases'][0]
+        assert case['id'] == 'F1' and case['neutral_domain']['temperature_max']['magnitude'] == 398.17
+        case['neutral_domain']['temperature_max'] = copy.deepcopy(s2['neutral_domain']['temperature_max'])
+        spec['inputs'] = [dict(r, path=str(NEW/'joint-added-rows.json'), sha256=rows_sha) if r['path'] == str(R3/'joint-added-rows.json') else r for r in spec['inputs']]
+        assert any(r['path'] == str(NEW/'joint-added-rows.json') for r in spec['inputs'])
+        spec['stage2_rows_path'] = str(NEW/'joint-added-rows.json')
+        spec['nonfit_wall_s'] = 300
+        spec['purpose'] += ' MEA-water k and slope fitted jointly with the 50 Cai 1996 rows (owner, #170 comment 6278891898).'
+        if kind == 'fit':
+            spec['release_tests_path'] = str(A6/f'joint-mea-water/{form}/release/release-tests.json')
+        print(form, kind, len(spec['information_coordinates']), dump(NEW/f'{form}-{kind}.json', spec))

@@ -1,0 +1,1002 @@
+{
+ "tied": {
+  "status": "converged",
+  "message": "Function tolerance reached. |cost_change|/cost: 1.904673e-07 <= 1.000000e-06",
+  "iterations": 31,
+  "initial_cost": 2141.7310304014595,
+  "final_cost": 148.25051110836665,
+  "projected_gradient_norm": 0.044754109586349955,
+  "active_bounds": [
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "component/carbamate-anion/segment_diameter",
+   "component/protonated-monoethanolamine/born_diameter",
+   "component/carbamate-anion/born_diameter",
+   "reaction:R5:correlation:a_k",
+   "reaction:R5:enthalpy_shift"
+  ],
+  "optimizer": {
+   "pair/carbamate-anion/water/k_ij": -29.981791352658774,
+   "pair/protonated-monoethanolamine/water/k_ij": 38.55073072595777,
+   "pair/bicarbonate-anion/water/k_ij": 22.93588791605378,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -29.27141097848057,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 11.784842427926863,
+   "component/protonated-monoethanolamine/segment_diameter": 6.053394186732555,
+   "component/carbamate-anion/segment_diameter": 22.394999999999996,
+   "component/protonated-monoethanolamine/born_diameter": 14.369999999999997,
+   "component/carbamate-anion/born_diameter": 14.394999999999998,
+   "reaction:R5:correlation:a_k": 3.473874999999997,
+   "reaction:R2:enthalpy_shift": 0.9145393391035109,
+   "reaction:R5:enthalpy_shift": 4.0,
+   "pair/monoethanolamine/water/k_ij": 0.12102826237119349,
+   "pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope": 0.24231542525221655,
+   "component/protonated-monoethanolamine/dispersion_energy_over_k": 8.804652330440511,
+   "component/carbamate-anion/dispersion_energy_over_k": -37.378632907483386
+  },
+  "C149": 24.92000311061437,
+  "C166": 43.53217806665938,
+  "cai_cost": 91.82767888561092,
+  "cai_rows": 50,
+  "loaded_density_cost": 0.3697937982057552,
+  "co2_free_cost": 12.520181338391867,
+  "kiepe_cost": 0.0006790194987316141,
+  "pressure_AARD_pct": 12.477316983249853,
+  "species_AARD_pct": 7.143368045115551,
+  "vinjarapu_rmse_kJ_mol": 1.8723336198512195,
+  "cp_error_pct": [
+   5.110005071648294,
+   2.5059360722310853,
+   0.8095703821587197,
+   -1.6147925396073348
+  ],
+  "Amundsen_loaded": {
+   "n": 15,
+   "min_error": -4.777598281821838,
+   "max_error": 1.3697535887251888,
+   "max_abs_ratio": 1.97719821805134,
+   "within_2s": 15
+  },
+  "Hartono_loaded": {
+   "n": 32,
+   "min_error": -3.537000962849106,
+   "max_error": 2.4398366038992663,
+   "max_abs_ratio": 1.7465819580907789,
+   "within_2s": 32
+  },
+  "co2_free_errors": {
+   "AMU-DENS-002": -0.5707564925706947,
+   "AMU-DENS-009": -0.08183531396105082,
+   "AMU-DENS-016": -0.026227262715906363,
+   "AMU-DENS-023": 0.4127367483592934,
+   "AMU-DENS-030": 0.35001368793393794
+  },
+  "gates": {
+   "loaded_density_within_2s": 47,
+   "co2_free_within_0p5": 4,
+   "C149": true,
+   "pressure_AARD_pct": true,
+   "species_AARD_pct": true,
+   "vinjarapu_rmse_kJ_mol": true,
+   "cai_cost": true
+  },
+  "eligible_on_fit_rows": false,
+  "loaded_misses": [],
+  "densities": [
+   {
+    "id": "AMU-DENS-002",
+    "T_K": 298.15,
+    "observed": 1010.5999999999999,
+    "error": -0.5707564925706947,
+    "s": 0.5,
+    "ratio": -1.1415129851413894
+   },
+   {
+    "id": "AMU-DENS-009",
+    "T_K": 313.15,
+    "observed": 1003.4000000000001,
+    "error": -0.08183531396105082,
+    "s": 0.5,
+    "ratio": -0.16367062792210163
+   },
+   {
+    "id": "AMU-DENS-016",
+    "T_K": 323.15,
+    "observed": 998.1,
+    "error": -0.026227262715906363,
+    "s": 0.5,
+    "ratio": -0.052454525431812726
+   },
+   {
+    "id": "AMU-DENS-023",
+    "T_K": 343.15,
+    "observed": 985.8,
+    "error": 0.4127367483592934,
+    "s": 0.5,
+    "ratio": 0.8254734967185868
+   },
+   {
+    "id": "AMU-DENS-030",
+    "T_K": 353.15,
+    "observed": 979.4000000000001,
+    "error": 0.35001368793393794,
+    "s": 0.5,
+    "ratio": 0.7000273758678759
+   },
+   {
+    "id": "Amundsen2009_state_060",
+    "T_K": 298.15,
+    "observed": 1028.0,
+    "error": 1.3012186803209715,
+    "s": 2.039607805437114,
+    "ratio": 0.6379749463853928
+   },
+   {
+    "id": "Amundsen2009_state_061",
+    "T_K": 298.15,
+    "observed": 1048.0,
+    "error": 0.5365519052993477,
+    "s": 2.169239498073,
+    "ratio": 0.24734562770776705
+   },
+   {
+    "id": "Amundsen2009_state_062",
+    "T_K": 298.15,
+    "observed": 1070.0,
+    "error": -2.147044191014402,
+    "s": 2.396330528120026,
+    "ratio": -0.8959716390621645
+   },
+   {
+    "id": "Amundsen2009_state_065",
+    "T_K": 313.15,
+    "observed": 1020.9999999999999,
+    "error": 1.3697535887251888,
+    "s": 2.0396078054371145,
+    "ratio": 0.671576949781104
+   },
+   {
+    "id": "Amundsen2009_state_066",
+    "T_K": 313.15,
+    "observed": 1041.0,
+    "error": 0.43124349782237914,
+    "s": 2.1684658171158704,
+    "ratio": 0.19887032316513384
+   },
+   {
+    "id": "Amundsen2009_state_067",
+    "T_K": 313.15,
+    "observed": 1062.8999999999999,
+    "error": -2.2519695059040714,
+    "s": 2.3930307143870886,
+    "ratio": -0.9410533230372071
+   },
+   {
+    "id": "Amundsen2009_state_070",
+    "T_K": 323.15,
+    "observed": 1016.0,
+    "error": 0.9652767513864546,
+    "s": 2.037670238286853,
+    "ratio": 0.47371588064121684
+   },
+   {
+    "id": "Amundsen2009_state_071",
+    "T_K": 323.15,
+    "observed": 1035.5,
+    "error": 0.39461616829885315,
+    "s": 2.169239498073,
+    "ratio": 0.18191452287744275
+   },
+   {
+    "id": "Amundsen2009_state_072",
+    "T_K": 323.15,
+    "observed": 1058.0,
+    "error": -2.967663511657747,
+    "s": 2.412985702402731,
+    "ratio": -1.2298719833701026
+   },
+   {
+    "id": "Amundsen2009_state_075",
+    "T_K": 343.15,
+    "observed": 1004.0,
+    "error": 0.7579260171744409,
+    "s": 2.039607805437114,
+    "ratio": 0.37160380302232054
+   },
+   {
+    "id": "Amundsen2009_state_076",
+    "T_K": 343.15,
+    "observed": 1024.0,
+    "error": -0.6084821429757312,
+    "s": 2.1723498797385297,
+    "ratio": -0.28010319546175955
+   },
+   {
+    "id": "Amundsen2009_state_077",
+    "T_K": 343.15,
+    "observed": 1046.4,
+    "error": -4.057511555179872,
+    "s": 2.4096339971041276,
+    "ratio": -1.6838704799385076
+   },
+   {
+    "id": "Amundsen2009_state_079",
+    "T_K": 353.15,
+    "observed": 997.0,
+    "error": 1.11031453030796,
+    "s": 2.0419951028344805,
+    "ratio": 0.5437400553834529
+   },
+   {
+    "id": "Amundsen2009_state_080",
+    "T_K": 353.15,
+    "observed": 1017.6,
+    "error": -1.0183200217359172,
+    "s": 2.178645450733093,
+    "ratio": -0.4674097023879046
+   },
+   {
+    "id": "Amundsen2009_state_081",
+    "T_K": 353.15,
+    "observed": 1040.2,
+    "error": -4.777598281821838,
+    "s": 2.4163476571056584,
+    "ratio": -1.97719821805134
+   },
+   {
+    "id": "Hartono2014_density_20C_alpha0.11",
+    "T_K": 293.15,
+    "observed": 1030.99,
+    "error": 2.17027370153437,
+    "s": 1.9913504368895074,
+    "ratio": 1.0898502148744553
+   },
+   {
+    "id": "Hartono2014_density_20C_alpha0.19",
+    "T_K": 293.15,
+    "observed": 1046.92,
+    "error": 1.6666566209873963,
+    "s": 2.1062060707218793,
+    "ratio": 0.7913074813311918
+   },
+   {
+    "id": "Hartono2014_density_20C_alpha0.29",
+    "T_K": 293.15,
+    "observed": 1068.9,
+    "error": -0.9892496903053143,
+    "s": 1.9986000725507858,
+    "ratio": -0.49497130711235715
+   },
+   {
+    "id": "Hartono2014_density_20C_alpha0.39",
+    "T_K": 293.15,
+    "observed": 1086.89,
+    "error": 0.8863571693873382,
+    "s": 1.799111169438954,
+    "ratio": 0.49266392452209906
+   },
+   {
+    "id": "Hartono2014_density_25C_alpha0.11",
+    "T_K": 298.15,
+    "observed": 1028.87,
+    "error": 2.35760476512246,
+    "s": 1.9913504368895074,
+    "ratio": 1.1839225891375715
+   },
+   {
+    "id": "Hartono2014_density_25C_alpha0.19",
+    "T_K": 298.15,
+    "observed": 1044.8,
+    "error": 1.8138043363296674,
+    "s": 2.1050950097323455,
+    "ratio": 0.8616258781404291
+   },
+   {
+    "id": "Hartono2014_density_25C_alpha0.29",
+    "T_K": 298.15,
+    "observed": 1066.76,
+    "error": -0.852725176873264,
+    "s": 1.9951002481078535,
+    "ratio": -0.4274096891532071
+   },
+   {
+    "id": "Hartono2014_density_25C_alpha0.39",
+    "T_K": 298.15,
+    "observed": 1084.7,
+    "error": 1.102410363291483,
+    "s": 1.7941114792565198,
+    "ratio": 0.6144603476637484
+   },
+   {
+    "id": "Hartono2014_density_30C_alpha0.11",
+    "T_K": 303.15,
+    "observed": 1026.65,
+    "error": 2.4398366038992663,
+    "s": 1.991350436889479,
+    "ratio": 1.2252170982573665
+   },
+   {
+    "id": "Hartono2014_density_30C_alpha0.19",
+    "T_K": 303.15,
+    "observed": 1042.58,
+    "error": 1.8524984658890844,
+    "s": 2.1045394792574124,
+    "ratio": 0.8802393512440733
+   },
+   {
+    "id": "Hartono2014_density_30C_alpha0.29",
+    "T_K": 303.15,
+    "observed": 1064.53,
+    "error": -0.8379531371924713,
+    "s": 1.9931003487030012,
+    "ratio": -0.4204269683349183
+   },
+   {
+    "id": "Hartono2014_density_30C_alpha0.39",
+    "T_K": 303.15,
+    "observed": 1082.44,
+    "error": 1.1747419154110048,
+    "s": 1.7911116659773136,
+    "ratio": 0.6558730746527806
+   },
+   {
+    "id": "Hartono2014_density_40C_alpha0.11",
+    "T_K": 313.15,
+    "observed": 1021.88,
+    "error": 2.396757807452218,
+    "s": 1.9951002481078393,
+    "ratio": 1.2013219935816821
+   },
+   {
+    "id": "Hartono2014_density_40C_alpha0.19",
+    "T_K": 313.15,
+    "observed": 1037.84,
+    "error": 1.6835294321147103,
+    "s": 2.1073171317642605,
+    "ratio": 0.7988970462671879
+   },
+   {
+    "id": "Hartono2014_density_40C_alpha0.29",
+    "T_K": 313.15,
+    "observed": 1059.81,
+    "error": -1.1034431012867572,
+    "s": 1.995600222990571,
+    "ratio": -0.5529379524888792
+   },
+   {
+    "id": "Hartono2014_density_40C_alpha0.39",
+    "T_K": 313.15,
+    "observed": 1077.75,
+    "error": 0.9277419455352174,
+    "s": 1.7941114792565198,
+    "ratio": 0.5171038456984144
+   },
+   {
+    "id": "Hartono2014_density_50C_alpha0.11",
+    "T_K": 323.15,
+    "observed": 1016.6,
+    "error": 2.2576567643147882,
+    "s": 2.002599872665514,
+    "ratio": 1.127362882186638
+   },
+   {
+    "id": "Hartono2014_density_50C_alpha0.19",
+    "T_K": 323.15,
+    "observed": 1032.62,
+    "error": 1.3784295110294806,
+    "s": 2.113427968438432,
+    "ratio": 0.6522245052183981
+   },
+   {
+    "id": "Hartono2014_density_50C_alpha0.29",
+    "T_K": 323.15,
+    "observed": 1054.64,
+    "error": -1.5452652046622006,
+    "s": 1.9991000475213851,
+    "ratio": -0.7729804251558702
+   },
+   {
+    "id": "Hartono2014_density_50C_alpha0.39",
+    "T_K": 323.15,
+    "observed": 1072.6,
+    "error": 0.5034435046190993,
+    "s": 1.796111355122485,
+    "ratio": 0.2802963764931864
+   },
+   {
+    "id": "Hartono2014_density_60C_alpha0.11",
+    "T_K": 333.15,
+    "observed": 1010.9,
+    "error": 2.042278868303697,
+    "s": 2.0125993764284065,
+    "ratio": 1.0147468454094228
+   },
+   {
+    "id": "Hartono2014_density_60C_alpha0.19",
+    "T_K": 333.15,
+    "observed": 1027.0,
+    "error": 0.9683686042226327,
+    "s": 2.123427522767006,
+    "ratio": 0.4560403375391717
+   },
+   {
+    "id": "Hartono2014_density_60C_alpha0.29",
+    "T_K": 333.15,
+    "observed": 1049.12,
+    "error": -2.1514941909993013,
+    "s": 2.0055997232748064,
+    "ratio": -1.072743561953765
+   },
+   {
+    "id": "Hartono2014_density_60C_alpha0.39",
+    "T_K": 333.15,
+    "observed": 1067.11,
+    "error": -0.11025085416122238,
+    "s": 1.799111169438954,
+    "ratio": -0.06128073463942958
+   },
+   {
+    "id": "Hartono2014_density_70C_alpha0.11",
+    "T_K": 343.15,
+    "observed": 1004.8,
+    "error": 1.8178009448982948,
+    "s": 2.0263487020994235,
+    "ratio": 0.8970819992703821
+   },
+   {
+    "id": "Hartono2014_density_70C_alpha0.19",
+    "T_K": 343.15,
+    "observed": 1021.01,
+    "error": 0.5113727568880222,
+    "s": 2.135093674759966,
+    "ratio": 0.23950834707311489
+   },
+   {
+    "id": "Hartono2014_density_70C_alpha0.29",
+    "T_K": 343.15,
+    "observed": 1043.23,
+    "error": -2.8143987838502653,
+    "s": 2.0135993270757706,
+    "ratio": -1.3976955325752158
+   },
+   {
+    "id": "Hartono2014_density_70C_alpha0.39",
+    "T_K": 343.15,
+    "observed": 1061.28,
+    "error": -0.8320241864705622,
+    "s": 1.805110799923368,
+    "ratio": -0.46092693396210577
+   },
+   {
+    "id": "Hartono2014_density_80C_alpha0.11",
+    "T_K": 353.15,
+    "observed": 998.31,
+    "error": 1.6425098235124551,
+    "s": 2.0438478569844705,
+    "ratio": 0.8036360524094212
+   },
+   {
+    "id": "Hartono2014_density_80C_alpha0.19",
+    "T_K": 353.15,
+    "observed": 1014.66,
+    "error": 0.06600759119396571,
+    "s": 2.1517596158596453,
+    "ratio": 0.03067609908999763
+   },
+   {
+    "id": "Hartono2014_density_80C_alpha0.29",
+    "T_K": 353.15,
+    "observed": 1037.04,
+    "error": -3.537000962849106,
+    "s": 2.025098763023676,
+    "ratio": -1.7465819580907789
+   },
+   {
+    "id": "Hartono2014_density_80C_alpha0.39",
+    "T_K": 353.15,
+    "observed": 1055.16,
+    "error": -1.655408123637926,
+    "s": 1.8121103719144818,
+    "ratio": -0.9135249978669893
+   }
+  ]
+ },
+ "held": {
+  "status": "converged",
+  "message": "Function tolerance reached. |cost_change|/cost: 2.003100e-07 <= 1.000000e-06",
+  "iterations": 17,
+  "initial_cost": 2140.231560315668,
+  "final_cost": 148.2377314834749,
+  "projected_gradient_norm": 0.013338946140351027,
+  "active_bounds": [
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "component/carbamate-anion/segment_diameter",
+   "component/protonated-monoethanolamine/born_diameter",
+   "component/carbamate-anion/born_diameter",
+   "reaction:R5:correlation:a_k",
+   "reaction:R5:enthalpy_shift"
+  ],
+  "optimizer": {
+   "pair/carbamate-anion/water/k_ij": -32.142218125234656,
+   "pair/protonated-monoethanolamine/water/k_ij": 40.608071155783406,
+   "pair/bicarbonate-anion/water/k_ij": 15.317733144155511,
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": -29.27141097848057,
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 13.06057055793726,
+   "component/protonated-monoethanolamine/segment_diameter": 5.923606652786921,
+   "component/carbamate-anion/segment_diameter": 22.394999999999996,
+   "component/protonated-monoethanolamine/born_diameter": 14.369999999999997,
+   "component/carbamate-anion/born_diameter": 14.394999999999998,
+   "reaction:R5:correlation:a_k": 3.473874999999997,
+   "reaction:R2:enthalpy_shift": 1.3669319219038314,
+   "reaction:R5:enthalpy_shift": 4.0,
+   "pair/monoethanolamine/water/k_ij": 0.14045800170405995,
+   "pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope": 0.2679496635044985,
+   "component/protonated-monoethanolamine/dispersion_energy_over_k": 7.137667892949163,
+   "component/carbamate-anion/dispersion_energy_over_k": -37.61729705690144
+  },
+  "C149": 24.923085270775257,
+  "C166": 43.50970603326833,
+  "cai_cost": 91.8114657752269,
+  "cai_rows": 50,
+  "loaded_density_cost": 0.3684879822794483,
+  "co2_free_cost": 12.5473926732015,
+  "kiepe_cost": 0.0006790194987316009,
+  "pressure_AARD_pct": 12.473669356154447,
+  "species_AARD_pct": 7.145138025363173,
+  "vinjarapu_rmse_kJ_mol": 1.8215300546883753,
+  "cp_error_pct": [
+   5.038545494735813,
+   2.5747708490848398,
+   0.752646614841268,
+   -1.5546723042256128
+  ],
+  "Amundsen_loaded": {
+   "n": 15,
+   "min_error": -4.775704869907031,
+   "max_error": 1.3601172667579249,
+   "max_abs_ratio": 1.976414633822788,
+   "within_2s": 15
+  },
+  "Hartono_loaded": {
+   "n": 32,
+   "min_error": -3.5362554798421115,
+   "max_error": 2.433922778889837,
+   "max_abs_ratio": 1.7462138362882245,
+   "within_2s": 32
+  },
+  "co2_free_errors": {
+   "AMU-DENS-002": -0.570926228099097,
+   "AMU-DENS-009": -0.08171461915185319,
+   "AMU-DENS-016": -0.025953261224685775,
+   "AMU-DENS-023": 0.41339251073054584,
+   "AMU-DENS-030": 0.3509539243963218
+  },
+  "gates": {
+   "loaded_density_within_2s": 47,
+   "co2_free_within_0p5": 4,
+   "C149": true,
+   "pressure_AARD_pct": true,
+   "species_AARD_pct": true,
+   "vinjarapu_rmse_kJ_mol": true,
+   "cai_cost": true
+  },
+  "eligible_on_fit_rows": false,
+  "loaded_misses": [],
+  "densities": [
+   {
+    "id": "AMU-DENS-002",
+    "T_K": 298.15,
+    "observed": 1010.5999999999999,
+    "error": -0.570926228099097,
+    "s": 0.5,
+    "ratio": -1.141852456198194
+   },
+   {
+    "id": "AMU-DENS-009",
+    "T_K": 313.15,
+    "observed": 1003.4000000000001,
+    "error": -0.08171461915185319,
+    "s": 0.5,
+    "ratio": -0.16342923830370637
+   },
+   {
+    "id": "AMU-DENS-016",
+    "T_K": 323.15,
+    "observed": 998.1,
+    "error": -0.025953261224685775,
+    "s": 0.5,
+    "ratio": -0.05190652244937155
+   },
+   {
+    "id": "AMU-DENS-023",
+    "T_K": 343.15,
+    "observed": 985.8,
+    "error": 0.41339251073054584,
+    "s": 0.5,
+    "ratio": 0.8267850214610917
+   },
+   {
+    "id": "AMU-DENS-030",
+    "T_K": 353.15,
+    "observed": 979.4000000000001,
+    "error": 0.3509539243963218,
+    "s": 0.5,
+    "ratio": 0.7019078487926436
+   },
+   {
+    "id": "Amundsen2009_state_060",
+    "T_K": 298.15,
+    "observed": 1028.0,
+    "error": 1.2985579232440614,
+    "s": 2.039607805437114,
+    "ratio": 0.6366704028992298
+   },
+   {
+    "id": "Amundsen2009_state_061",
+    "T_K": 298.15,
+    "observed": 1048.0,
+    "error": 0.5293861303989615,
+    "s": 2.169239498073,
+    "ratio": 0.24404226959228384
+   },
+   {
+    "id": "Amundsen2009_state_062",
+    "T_K": 298.15,
+    "observed": 1070.0,
+    "error": -2.157915651240046,
+    "s": 2.396330528120026,
+    "ratio": -0.9005083505458567
+   },
+   {
+    "id": "Amundsen2009_state_065",
+    "T_K": 313.15,
+    "observed": 1020.9999999999999,
+    "error": 1.3601172667579249,
+    "s": 2.0396078054371145,
+    "ratio": 0.6668523542281866
+   },
+   {
+    "id": "Amundsen2009_state_066",
+    "T_K": 313.15,
+    "observed": 1041.0,
+    "error": 0.4204714289328422,
+    "s": 2.1684658171158704,
+    "ratio": 0.19390272404297465
+   },
+   {
+    "id": "Amundsen2009_state_067",
+    "T_K": 313.15,
+    "observed": 1062.8999999999999,
+    "error": -2.261912138378875,
+    "s": 2.3930307143870886,
+    "ratio": -0.9452081516463963
+   },
+   {
+    "id": "Amundsen2009_state_070",
+    "T_K": 323.15,
+    "observed": 1016.0,
+    "error": 0.9535552655783022,
+    "s": 2.037670238286853,
+    "ratio": 0.46796348479820393
+   },
+   {
+    "id": "Amundsen2009_state_071",
+    "T_K": 323.15,
+    "observed": 1035.5,
+    "error": 0.38350334551046217,
+    "s": 2.169239498073,
+    "ratio": 0.17679161100060165
+   },
+   {
+    "id": "Amundsen2009_state_072",
+    "T_K": 323.15,
+    "observed": 1058.0,
+    "error": -2.9755369731522023,
+    "s": 2.412985702402731,
+    "ratio": -1.233134937430135
+   },
+   {
+    "id": "Amundsen2009_state_075",
+    "T_K": 343.15,
+    "observed": 1004.0,
+    "error": 0.7453526490932063,
+    "s": 2.039607805437114,
+    "ratio": 0.36543920213791675
+   },
+   {
+    "id": "Amundsen2009_state_076",
+    "T_K": 343.15,
+    "observed": 1024.0,
+    "error": -0.6176189857235386,
+    "s": 2.1723498797385297,
+    "ratio": -0.2843091674522876
+   },
+   {
+    "id": "Amundsen2009_state_077",
+    "T_K": 343.15,
+    "observed": 1046.4,
+    "error": -4.059248182415104,
+    "s": 2.4096339971041276,
+    "ratio": -1.684591181604121
+   },
+   {
+    "id": "Amundsen2009_state_079",
+    "T_K": 353.15,
+    "observed": 997.0,
+    "error": 1.098201347633676,
+    "s": 2.0419951028344805,
+    "ratio": 0.5378080222177172
+   },
+   {
+    "id": "Amundsen2009_state_080",
+    "T_K": 353.15,
+    "observed": 1017.6,
+    "error": -1.0257848529275861,
+    "s": 2.178645450733093,
+    "ratio": -0.47083606586028925
+   },
+   {
+    "id": "Amundsen2009_state_081",
+    "T_K": 353.15,
+    "observed": 1040.2,
+    "error": -4.775704869907031,
+    "s": 2.4163476571056584,
+    "ratio": -1.976414633822788
+   },
+   {
+    "id": "Hartono2014_density_20C_alpha0.11",
+    "T_K": 293.15,
+    "observed": 1030.99,
+    "error": 2.1710312637271727,
+    "s": 1.9913504368895074,
+    "ratio": 1.0902306412317497
+   },
+   {
+    "id": "Hartono2014_density_20C_alpha0.19",
+    "T_K": 293.15,
+    "observed": 1046.92,
+    "error": 1.6625492774116992,
+    "s": 2.1062060707218793,
+    "ratio": 0.7893573665571473
+   },
+   {
+    "id": "Hartono2014_density_20C_alpha0.29",
+    "T_K": 293.15,
+    "observed": 1068.9,
+    "error": -0.9991603188598219,
+    "s": 1.9986000725507858,
+    "ratio": -0.49993009235940206
+   },
+   {
+    "id": "Hartono2014_density_20C_alpha0.39",
+    "T_K": 293.15,
+    "observed": 1086.89,
+    "error": 0.8720023896503335,
+    "s": 1.799111169438954,
+    "ratio": 0.4846851069921733
+   },
+   {
+    "id": "Hartono2014_density_25C_alpha0.11",
+    "T_K": 298.15,
+    "observed": 1028.87,
+    "error": 2.3546087778863694,
+    "s": 1.9913504368895074,
+    "ratio": 1.1824180888845823
+   },
+   {
+    "id": "Hartono2014_density_25C_alpha0.19",
+    "T_K": 298.15,
+    "observed": 1044.8,
+    "error": 1.8071144976429423,
+    "s": 2.1050950097323455,
+    "ratio": 0.8584479509419909
+   },
+   {
+    "id": "Hartono2014_density_25C_alpha0.29",
+    "T_K": 298.15,
+    "observed": 1066.76,
+    "error": -0.8633216051366617,
+    "s": 1.9951002481078535,
+    "ratio": -0.4327209151296698
+   },
+   {
+    "id": "Hartono2014_density_25C_alpha0.39",
+    "T_K": 298.15,
+    "observed": 1084.7,
+    "error": 1.0891956340776687,
+    "s": 1.7941114792565198,
+    "ratio": 0.6070947355673972
+   },
+   {
+    "id": "Hartono2014_density_30C_alpha0.11",
+    "T_K": 303.15,
+    "observed": 1026.65,
+    "error": 2.433922778889837,
+    "s": 1.991350436889479,
+    "ratio": 1.2222473422064593
+   },
+   {
+    "id": "Hartono2014_density_30C_alpha0.19",
+    "T_K": 303.15,
+    "observed": 1042.58,
+    "error": 1.8439179462616266,
+    "s": 2.1045394792574124,
+    "ratio": 0.876162202912085
+   },
+   {
+    "id": "Hartono2014_density_30C_alpha0.29",
+    "T_K": 303.15,
+    "observed": 1064.53,
+    "error": -0.848767623817821,
+    "s": 1.9931003487030012,
+    "ratio": -0.4258529302702454
+   },
+   {
+    "id": "Hartono2014_density_30C_alpha0.39",
+    "T_K": 303.15,
+    "observed": 1082.44,
+    "error": 1.1630134215963608,
+    "s": 1.7911116659773136,
+    "ratio": 0.6493249101595051
+   },
+   {
+    "id": "Hartono2014_density_40C_alpha0.11",
+    "T_K": 313.15,
+    "observed": 1021.88,
+    "error": 2.386968110987823,
+    "s": 1.9951002481078393,
+    "ratio": 1.1964151241280394
+   },
+   {
+    "id": "Hartono2014_density_40C_alpha0.19",
+    "T_K": 313.15,
+    "observed": 1037.84,
+    "error": 1.6728011198017612,
+    "s": 2.1073171317642605,
+    "ratio": 0.7938060648713469
+   },
+   {
+    "id": "Hartono2014_density_40C_alpha0.29",
+    "T_K": 313.15,
+    "observed": 1059.81,
+    "error": -1.1135670740293335,
+    "s": 1.995600222990571,
+    "ratio": -0.5580110992173382
+   },
+   {
+    "id": "Hartono2014_density_40C_alpha0.39",
+    "T_K": 313.15,
+    "observed": 1077.75,
+    "error": 0.9198864250927272,
+    "s": 1.7941114792565198,
+    "ratio": 0.5127253438420273
+   },
+   {
+    "id": "Hartono2014_density_50C_alpha0.11",
+    "T_K": 323.15,
+    "observed": 1016.6,
+    "error": 2.2458860107819874,
+    "s": 2.002599872665514,
+    "ratio": 1.1214851461029272
+   },
+   {
+    "id": "Hartono2014_density_50C_alpha0.19",
+    "T_K": 323.15,
+    "observed": 1032.62,
+    "error": 1.3671400488585732,
+    "s": 2.113427968438432,
+    "ratio": 0.6468827276231821
+   },
+   {
+    "id": "Hartono2014_density_50C_alpha0.29",
+    "T_K": 323.15,
+    "observed": 1054.64,
+    "error": -1.5535757110440045,
+    "s": 1.9991000475213851,
+    "ratio": -0.777137548953705
+   },
+   {
+    "id": "Hartono2014_density_50C_alpha0.39",
+    "T_K": 323.15,
+    "observed": 1072.6,
+    "error": 0.5004579712474424,
+    "s": 1.796111355122485,
+    "ratio": 0.27863415585016105
+   },
+   {
+    "id": "Hartono2014_density_60C_alpha0.11",
+    "T_K": 333.15,
+    "observed": 1010.9,
+    "error": 2.029776390245047,
+    "s": 2.0125993764284065,
+    "ratio": 1.0085347407029028
+   },
+   {
+    "id": "Hartono2014_density_60C_alpha0.19",
+    "T_K": 333.15,
+    "observed": 1027.0,
+    "error": 0.9575622101372119,
+    "s": 2.123427522767006,
+    "ratio": 0.45095120971655633
+   },
+   {
+    "id": "Hartono2014_density_60C_alpha0.29",
+    "T_K": 333.15,
+    "observed": 1049.12,
+    "error": -2.1572247058202265,
+    "s": 2.0055997232748064,
+    "ratio": -1.0756008194386077
+   },
+   {
+    "id": "Hartono2014_density_60C_alpha0.39",
+    "T_K": 333.15,
+    "observed": 1067.11,
+    "error": -0.10758487605812661,
+    "s": 1.799111169438954,
+    "ratio": -0.05979890397305273
+   },
+   {
+    "id": "Hartono2014_density_70C_alpha0.11",
+    "T_K": 343.15,
+    "observed": 1004.8,
+    "error": 1.8053604758866868,
+    "s": 2.0263487020994235,
+    "ratio": 0.8909426467499009
+   },
+   {
+    "id": "Hartono2014_density_70C_alpha0.19",
+    "T_K": 343.15,
+    "observed": 1021.01,
+    "error": 0.501703319870785,
+    "s": 2.135093674759966,
+    "ratio": 0.234979535465669
+   },
+   {
+    "id": "Hartono2014_density_70C_alpha0.29",
+    "T_K": 343.15,
+    "observed": 1043.23,
+    "error": -2.8170464026311492,
+    "s": 2.0135993270757706,
+    "ratio": -1.3990104013007278
+   },
+   {
+    "id": "Hartono2014_density_70C_alpha0.39",
+    "T_K": 343.15,
+    "observed": 1061.28,
+    "error": -0.823125783462956,
+    "s": 1.805110799923368,
+    "ratio": -0.45599737340106766
+   },
+   {
+    "id": "Hartono2014_density_80C_alpha0.11",
+    "T_K": 353.15,
+    "observed": 998.31,
+    "error": 1.630609116702999,
+    "s": 2.0438478569844705,
+    "ratio": 0.797813355397612
+   },
+   {
+    "id": "Hartono2014_density_80C_alpha0.19",
+    "T_K": 353.15,
+    "observed": 1014.66,
+    "error": 0.05785471105639317,
+    "s": 2.1517596158596453,
+    "ratio": 0.026887162780624894
+   },
+   {
+    "id": "Hartono2014_density_80C_alpha0.29",
+    "T_K": 353.15,
+    "observed": 1037.04,
+    "error": -3.5362554798421115,
+    "s": 2.025098763023676,
+    "ratio": -1.7462138362882245
+   },
+   {
+    "id": "Hartono2014_density_80C_alpha0.39",
+    "T_K": 353.15,
+    "observed": 1055.16,
+    "error": -1.6399188426253204,
+    "s": 1.8121103719144818,
+    "ratio": -0.9049773501890824
+   }
+  ]
+ }
+}
