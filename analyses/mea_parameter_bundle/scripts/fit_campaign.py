@@ -526,9 +526,27 @@ def stage6_coordinates(spec, params, mapping):
     return coordinates
 
 
+def bounded_call(action, wall_s):
+    clock, cpu = time.monotonic(), cpu_seconds()
+    process = multiprocessing.get_context('fork').Process(target=action)
+    process.start()
+    process.join(wall_s)
+    interrupted = process.is_alive()
+    if interrupted:
+        process.terminate()
+        process.join(60)
+        if process.is_alive():
+            process.kill()
+            process.join()
+    return dict(cpu_s=cpu_seconds()-cpu, wall_s=time.monotonic()-clock,
+        exitcode=process.exitcode, interrupted=interrupted, host_load=os.getloadavg())
+
+
 def stage6_binding(spec, start, density_weight):
     return hashlib.sha256(json.dumps(dict(start=start['sha256'], density_weight=density_weight,
-        **{k:spec[k] for k in ('inputs','observations','direct_rows','information_coordinates','loaded_density_ids','engine')}),
+        **{k:v for k,v in spec.items() if k.endswith('_path') and k!='release_tests_path'},
+        **{k:spec[k] for k in ('inputs','observations','direct_rows','information_coordinates','loaded_density_ids','engine',
+            'cases','verification','ion_ids','dh_factor')}),
         sort_keys=True).encode()).hexdigest()
 
 
@@ -605,25 +623,44 @@ def stage6_study(spec, out, started):
                         return
                     v = o.reg.differentiate(params, coordinates, [item for _, item in rows],
                         optimizer=[0.]*len(coordinates), thermochemistry=o.thermal.record())
-                    derivatives = []
+                    evaluations, derivatives = [], []
+                    def retain(value, identity, sign, step):
+                        evaluations.append(dict(coordinate=identity, sign=sign, step=step, rows=[r['id'] for r,_ in rows],
+                            statuses=[x.name for x in value.statuses], predictions=[p if p is None or math.isfinite(p) else str(p) for p in value.predictions]))
+                        write(directory/'derivative-evaluations.json', evaluations)
+                        for (r,_),status in zip(rows,value.statuses,strict=True):
+                            if status.name!='Available':
+                                raise RuntimeError(f"{identity} sign={sign} step={step}: {r['id']}: {status.name}")
+                    retain(v, None, 0, 0.)
                     exact = np.array(v.residual_optimizer_gradient).reshape(len(rows),len(coordinates))
                     for column,c in enumerate(spec['information_coordinates']):
                         if c.get('family')!='segment_diameter':
                             continue
                         samples = []
-                        for step in spec['verification']['steps_optimizer']:
-                            shifts = [o.reg.differentiate(params,coordinates,[item for _,item in rows],
-                                optimizer=[sign*step if i==column else 0. for i in range(len(coordinates))],thermochemistry=o.thermal.record()) for sign in (-1,1)]
-                            assert all(x.name=='Available' for shift in shifts for x in shift.statuses)
+                        for step in spec['verification']['steps_optimizer']+spec['verification'].get('smaller_steps_optimizer',[]):
+                            shifts = []
+                            for sign in (-1,1):
+                                shift = o.reg.differentiate(params,coordinates,[item for _,item in rows],
+                                    optimizer=[sign*step if i==column else 0. for i in range(len(coordinates))],thermochemistry=o.thermal.record())
+                                retain(shift, c['identity'], sign, step)
+                                shifts.append(shift)
                             residual = np.array([[math.log(p/r['observed']) if r['form'] in ('LogRatio','log_ratio') else (p-r['observed'])/r['scale']
                                 for p,(r,_) in zip(shift.predictions,rows,strict=True)] for shift in shifts])
                             fd = (residual[1]-residual[0])/(2*step)
                             samples.append(dict(step=step,shifted_predictions=[list(x.predictions) for x in shifts],centered=fd.tolist(),
                                 roundoff=[8*max(math.ulp(x) for x in pair)/(2*step) for pair in residual.T]))
-                        coarse,fine = [np.array(x['centered']) for x in samples]
-                        tolerance = np.maximum(spec['verification']['derivative_absolute'],spec['verification']['derivative_relative']*abs(exact[:,column]))
-                        passed = (abs(fine-exact[:,column])<=tolerance) | ((abs(fine-exact[:,column])<abs(coarse-exact[:,column]))
-                            & (abs((4*fine-coarse)/3-exact[:,column])<=tolerance)) | (abs(fine-exact[:,column])<=samples[-1]['roundoff'])
+                            tolerance = np.maximum(spec['verification']['derivative_absolute'],spec['verification']['derivative_relative']*abs(exact[:,column]))
+                            error = fd-exact[:,column]
+                            passed = abs(error)<=np.maximum(tolerance,samples[-1]['roundoff'])
+                            if len(samples)>1:
+                                previous = np.array(samples[-2]['centered'])-exact[:,column]
+                                ratio = np.divide(previous,error,out=np.zeros_like(error),where=error!=0)
+                                passed |= (ratio>=3.) & (ratio<=5.) & (abs((4*error-previous)/3)<=tolerance)
+                            samples[-1]['fixed_step_passed'] = (abs(error)<=tolerance).tolist()
+                            samples[-1]['passed'] = passed.tolist()
+                            write(directory/'derivatives.json', derivatives+[dict(identity=c['identity'],samples=samples)])
+                            if len(samples)>=2 and np.all(passed):
+                                break
                         derivatives.append(dict(identity=c['identity'],rows=[r['id'] for r,_ in rows],exact=exact[:,column].tolist(),samples=samples,passed=bool(np.all(passed))))
                     write(directory/'derivatives.json', derivatives)
                     write(path, dict(rows=[r for r, _ in rows], predictions=list(v.predictions),
@@ -633,21 +670,10 @@ def stage6_study(spec, out, started):
                         residual_optimizer_gradient=list(v.residual_optimizer_gradient)))
                 except Exception:
                     write(directory/'failure.json', dict(cause=traceback.format_exc()))
-            clock, cpu = time.monotonic(), cpu_seconds()
-            process = multiprocessing.get_context('fork').Process(target=child)
-            process.start()
-            process.join(guard_wall_limit)
-            interrupted = process.is_alive()
-            if interrupted:
-                process.terminate()
-                process.join(60)
-                if process.is_alive():
-                    process.kill()
-                    process.join()
-            calls.append(dict(start=start['id'], cpu_s=cpu_seconds()-cpu,
-                wall_s=time.monotonic()-clock, exitcode=process.exitcode, interrupted=interrupted, host_load=os.getloadavg()))
+            calls.append(dict(start=start['id'], **bounded_call(child,guard_wall_limit)))
+            interrupted = calls[-1]['interrupted']
             write(out/'timing.json', dict(calls=calls, **elapsed()))
-            if interrupted or process.exitcode or (directory/'failure.json').exists():
+            if interrupted or calls[-1]['exitcode'] or (directory/'failure.json').exists():
                 if fit_case:
                     write(directory/'incomplete-fit.json', dict(case=fit_case, endpoint_available=False,
                         reason='bounded call interrupted' if interrupted else 'child call failed', call=calls[-1]))
