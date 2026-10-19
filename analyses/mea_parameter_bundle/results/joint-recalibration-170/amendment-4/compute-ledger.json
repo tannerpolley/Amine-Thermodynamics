@@ -10,8 +10,8 @@
  "program_cpu_charge_s": 107280.61,
  "program_cpu_limit_s": 200000,
  "superseded_ledger": "final-prerequisites/accounting.json program_active_wall_charge_s plus the diagnosis charge, 19,605.51 s, mixed compute with fixed per-task charges.",
- "campaign_executable_ceiling": 1000,
- "campaign_executable_gross": 1000,
+ "campaign_executable_ceiling": 1250,
+ "campaign_executable_gross": 1068,
  "charges": [
   {
    "date": "2026-10-16/17",
@@ -98,6 +98,6 @@
    "basis": "Rounded up from measured whole-command time: 1.12 s / 1.02 CPU-s (amendment-6/neutral-slope-probe/command-time.json)."
   }
  ],
- "campaign_executable_basis": "891 + 56 (fit_neutral_co2_mea.py) + 39 (check_matched_co2_mea.py) + 12 (stage6_coordinates helper) + 1 (release assertion) + 1 (R2 write-back fix), non-blank non-comment added lines. Not counted, pending owner ratification: amendment-4/neutral-fit/figure.py (17 lines, presentation only) and the ignored scratch diagnostics in tmp/.",
+ "campaign_executable_basis": "891 + 56 (fit_neutral_co2_mea.py) + 39 (check_matched_co2_mea.py) + 12 (stage6_coordinates helper) + 1 (release assertion) + 1 (R2 write-back fix), non-blank non-comment added lines. Not counted, pending owner ratification: amendment-4/neutral-fit/figure.py (17 lines, presentation only) and the ignored scratch diagnostics in tmp/. Amendment 6 revision 3 partial Build: +68 nonblank/noncomment gross additions against f387725 (fit_campaign.py 66; fit_observations.py 2). Prior 1,000 charge carried forward; deletions do not offset additions. Itemization and incomplete-build forecast: amendment-6/build/ledger.json.",
  "program_cpu_limit_decision": "Owner, 2026-10-19 (#170): raise the program CPU cap from 144,000 to 200,000 CPU-s for amendment 6; the 21,600 s compute-wall cap is unchanged."
 }

@@ -43,6 +43,10 @@ def verify(spec):
     for r in spec['inputs']:
         checked(r['path'], r['sha256'])
         files[r['path']] = r['sha256']
+    if 'density_scale_path' in spec:
+        assert load(ROOT/spec['density_scale_path'])==density_scales(load(ROOT/spec['density_source_rows_path']))
+        scales = {r['id']:r['scale'] for r in load(ROOT/spec['density_scale_path'])}
+        assert {r['id']:r['scale'] for r in spec['direct_rows'] if r['id'] in scales}==scales
     wheel = checked(spec['engine']['wheel_path'], spec['engine']['wheel_sha256'])
     import epcsaft
     package = Path(epcsaft.__file__).resolve().parent
@@ -59,6 +63,31 @@ def verify(spec):
             raise ValueError(f'{p} version mismatch: {packages[p]} != {version}')
     return dict(files=files, wheel_sha256=spec['engine']['wheel_sha256'], installed_package=str(package),
         installed_files_verified=len(names), python=sys.version, packages=packages)
+
+
+def density_scales(rows):
+    frozen = []
+    for source, temperature in sorted({(r['source'], r['T_K']) for r in rows}):
+        group = sorted((r for r in rows if (r['source'], r['T_K'])==(source, temperature)), key=lambda r: r['alpha'])
+        for i, row in enumerate(group):
+            left, right = group[max(0, i-1)], group[min(len(group)-1, i+1)]
+            slope = (right['observed']-left['observed'])/(right['alpha']-left['alpha'])
+            frozen.append(dict(row, secant_ids=[left['id'], right['id']], g_kg_m3=slope,
+                loading_contribution_kg_m3=slope*row['u_alpha'], scale=math.hypot(row['u_rho'], slope*row['u_alpha'])))
+    return frozen
+
+
+def stage6_weights(spec, rows, density_weight):
+    loaded = set(spec['loaded_density_ids'])
+    assert {r['id'] for r in rows if r['id'] in loaded}==loaded
+    return [density_weight/len(loaded) if r['id'] in loaded else r['weight'] for r in rows]
+
+
+def stage6_ties(spec, mapping):
+    import fit_observations as o
+    values = o.s.parameter_values(mapping)
+    return all(math.isclose(values[f"component/{ion}/{family}"], factor*values[f"component/{ion}/segment_diameter"], rel_tol=0., abs_tol=1e-12)
+        for ion in spec['ion_ids'] for family, factor in [('packing_diameter', .88), ('debye_huckel_diameter', spec['dh_factor'])])
 
 
 def workers(memory, cpu, allowance, requested=None):
@@ -497,6 +526,12 @@ def stage6_coordinates(spec, params, mapping):
     return coordinates
 
 
+def stage6_binding(spec, start, density_weight):
+    return hashlib.sha256(json.dumps(dict(start=start['sha256'], density_weight=density_weight,
+        **{k:spec[k] for k in ('inputs','observations','direct_rows','information_coordinates','loaded_density_ids','engine')}),
+        sort_keys=True).encode()).hexdigest()
+
+
 def stage6_study(spec, out, started):
     """Amendment 2 information checks or one explicitly declared joint fit."""
     import fit_observations as o
@@ -507,7 +542,8 @@ def stage6_study(spec, out, started):
     fit_case = spec.get('fit_case')
     if fit_case:
         release = load(checked(spec['release_tests_path'], spec['release_tests_sha256']))
-        assert any(r['start']==fit_case['start'] for r in release) and all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in release)
+        start = next(s for s in spec['information_starts'] if s['id']==fit_case['start'])
+        assert any(r['binding']==stage6_binding(spec,start,fit_case['density_weight']) and r['released'] for r in release)
     def elapsed():
         cpu = cpu_seconds()+spec['prior_cpu_charge_s']
         wall = time.monotonic()-started+spec['prior_wall_charge_s']
@@ -539,7 +575,8 @@ def stage6_study(spec, out, started):
                     params, rows = o.stage6_rows(spec, mapping)
                     coordinates, values = stage6_coordinates(spec, params, mapping), o.s.parameter_values(mapping)
                     if fit_case:
-                        rows = [(dict(r, weight=fit_case['density_weight']/12) if r['quantity']=='phase_density' else r, item) for r,item in rows]
+                        weights = stage6_weights(spec, [r for r,_ in rows], fit_case['density_weight'])
+                        rows = [(dict(r, weight=w), item) for (r,item),w in zip(rows,weights,strict=True)]
                         rows = [(r,item) for r,item in rows if r['weight']>0]
                         v = o.reg.fit(params, coordinates, [item for _,item in rows], weights=[r['weight'] for r,_ in rows],
                             thermochemistry=o.thermal.record(), controls=o.reg.FitControls(**spec['controls'],
@@ -558,12 +595,37 @@ def stage6_study(spec, out, started):
                             for name,law in v.chart.reaction_laws.items():
                                 fields = dict(zip(('a_k','b','c_per_k'), o.reg.reaction_log10_reciprocal(law), strict=True)) if name=='R5' else dict(a=law.a-law.c*math.log(law.reference_temperature),b_k=law.b,c=law.c,d_per_k=law.d)  # Engine law uses c ln(T/T_ref)
                                 updates.update({f'reaction:{name}:correlation:{k}':val for k,val in fields.items()})
-                            write(directory/'usable-budget-endpoint.json', o.s.with_parameter_values(mapping, updates))
-                            write(directory/'chemistry-coordinates.json', dict(R5_unshifted_a_k=values['reaction:R5:correlation:a_k']-80*v.optimizer[9],
+                            endpoint = o.s.with_parameter_values(mapping, updates)
+                            assert stage6_ties(spec,endpoint)
+                            write(directory/'usable-budget-endpoint.json', endpoint)
+                            r5 = next((i,c) for i,c in enumerate(spec['information_coordinates']) if c['identity']=='reaction:R5:correlation:a_k')
+                            write(directory/'chemistry-coordinates.json', dict(R5_unshifted_a_k=values[r5[1]['identity']]
+                                +math.copysign(r5[1]['scale'],r5[1]['source_to_native_factor'])*v.optimizer[r5[0]],
                                 enthalpy_shifts_J_mol={c['reaction']:c['scale']*v.optimizer[i] for i,c in enumerate(spec['information_coordinates']) if c.get('enthalpy_shift')}))
                         return
                     v = o.reg.differentiate(params, coordinates, [item for _, item in rows],
                         optimizer=[0.]*len(coordinates), thermochemistry=o.thermal.record())
+                    derivatives = []
+                    exact = np.array(v.residual_optimizer_gradient).reshape(len(rows),len(coordinates))
+                    for column,c in enumerate(spec['information_coordinates']):
+                        if c.get('family')!='segment_diameter':
+                            continue
+                        samples = []
+                        for step in spec['verification']['steps_optimizer']:
+                            shifts = [o.reg.differentiate(params,coordinates,[item for _,item in rows],
+                                optimizer=[sign*step if i==column else 0. for i in range(len(coordinates))],thermochemistry=o.thermal.record()) for sign in (-1,1)]
+                            assert all(x.name=='Available' for shift in shifts for x in shift.statuses)
+                            residual = np.array([[math.log(p/r['observed']) if r['form'] in ('LogRatio','log_ratio') else (p-r['observed'])/r['scale']
+                                for p,(r,_) in zip(shift.predictions,rows,strict=True)] for shift in shifts])
+                            fd = (residual[1]-residual[0])/(2*step)
+                            samples.append(dict(step=step,shifted_predictions=[list(x.predictions) for x in shifts],centered=fd.tolist(),
+                                roundoff=[8*max(math.ulp(x) for x in pair)/(2*step) for pair in residual.T]))
+                        coarse,fine = [np.array(x['centered']) for x in samples]
+                        tolerance = np.maximum(spec['verification']['derivative_absolute'],spec['verification']['derivative_relative']*abs(exact[:,column]))
+                        passed = (abs(fine-exact[:,column])<=tolerance) | ((abs(fine-exact[:,column])<abs(coarse-exact[:,column]))
+                            & (abs((4*fine-coarse)/3-exact[:,column])<=tolerance)) | (abs(fine-exact[:,column])<=samples[-1]['roundoff'])
+                        derivatives.append(dict(identity=c['identity'],rows=[r['id'] for r,_ in rows],exact=exact[:,column].tolist(),samples=samples,passed=bool(np.all(passed))))
+                    write(directory/'derivatives.json', derivatives)
                     write(path, dict(rows=[r for r, _ in rows], predictions=list(v.predictions),
                         statuses=[s.name for s in v.statuses], residuals=[math.log(p/r['observed'])
                             if r['form'] in ('LogRatio','log_ratio') else (p-r['observed'])/r['scale']
@@ -594,8 +656,9 @@ def stage6_study(spec, out, started):
             if fit_case:
                 if calls[-1]['cpu_s']>cpu_limit:
                     raise RuntimeError('aggregate fit CPU ceiling exceeded; return to owner before another fit')
-                if raw['status']!='converged' or raw['covariance']['rank']<len(spec['information_coordinates']):
-                    raise RuntimeError('nonconverged or rank-deficient joint fit; return to owner before another fit')
+                finite = all(math.isfinite(x) for key in ('physical','predictions','weighted_residuals','optimizer_jacobian') for x in raw[key])
+                if raw['status']!='converged' or not raw['usable'] or raw['statuses']!=['Available']*len(raw['rows']) or not finite:
+                    raise RuntimeError('nonconverged, unavailable or nonfinite joint fit; return to owner before another fit')
                 return
             if raw['statuses']!=['Available']*len(raw['rows']) or not all(math.isfinite(x) for key in
                 ('predictions','residuals','residual_optimizer_gradient') for x in raw[key]):
@@ -605,7 +668,7 @@ def stage6_study(spec, out, started):
             mandatory_count = len(coordinates)-2
             active = [i for i,c in enumerate(coordinates) if values.get(c['identity'],0.) in c['bounds']]
             for density_weight in spec['information_density_weights']:
-                weights = np.array([density_weight/12 if r['quantity']=='phase_density' else r['weight'] for r in raw['rows']])
+                weights = np.array(stage6_weights(spec, raw['rows'], density_weight))
                 keep = weights>0
                 J = np.array(raw['residual_optimizer_gradient']).reshape(len(raw['rows']),len(coordinates))[keep]*np.sqrt(weights[keep,None])
                 free = [j for j in range(mandatory_count) if j not in active]
@@ -614,21 +677,18 @@ def stage6_study(spec, out, started):
                 u = u[:,sv>sv[0]*1e-14]
                 projected = spectrum(J[:,mandatory_count:] - u@(u.T@J[:,mandatory_count:]))
                 augmented = spectrum(J[:,free+list(range(mandatory_count,len(coordinates)))])
-                passed = mandatory['rank']==len(free) and mandatory['condition'] is not None and mandatory['condition']<=1e4
-                release = (passed and not any(j in active for j in range(mandatory_count,len(coordinates))) and augmented['rank']==len(free)+2
-                    and augmented['condition'] is not None and augmented['condition']<=1e4
-                    and projected['rank']==2 and projected['condition'] is not None and projected['condition']<=1e4)
+                released = stage6_ties(spec,mapping) and all(r['passed'] for r in load(directory/'derivatives.json'))
                 record = dict(start=start['id'], density_weight=density_weight, row_count=int(sum(keep)),
                     full=spectrum(J[:,:mandatory_count]), mandatory_free=mandatory, augmented_free=augmented,
                     projected_dispersions=projected, active_columns=active, free_columns=free,
-                    mandatory_passed=passed, dispersion_release_passed=release)
+                    binding=stage6_binding(spec,start,density_weight), released=released)
                 reports.append(record)
                 write(directory/f'lambda-{density_weight}.json', dict(record, row_ids=[r['id'] for r,k in zip(raw['rows'],keep) if k],
                     weighted_optimizer_jacobian=J.tolist(), weighted_residuals=(np.array(raw['residuals'])[keep]*np.sqrt(weights[keep])).tolist()))
                 write(out/'release-tests.json', reports)
                 print(record, flush=True)
-            if not all(r['mandatory_passed'] and r['dispersion_release_passed'] for r in reports):
-                raise RuntimeError('mandatory chemistry/ion block fails conditioning; return to owner before another start or fit')
+            if not all(r['released'] for r in reports):
+                raise RuntimeError('tie or centered-derivative checks failed; no fit released')
     finally:
         write(out/'summary.json', dict(release_tests=reports, calls=calls, fit_calls=int(bool(fit_case)), **elapsed()))
 
