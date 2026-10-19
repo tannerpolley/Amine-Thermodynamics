@@ -9,6 +9,8 @@ resources:
   - results/joint-recalibration-170/amendment-4/matched-larger-dV/matched-checks.json
   - results/joint-recalibration-170/amendment-4/matched-smaller-dV/README.md
   - results/joint-recalibration-170/amendment-4/matched-smaller-dV/matched-checks.json
+  - results/joint-recalibration-170/amendment-6/smaller-dV-density/README.md
+  - results/joint-recalibration-170/amendment-6/density-sweep/README.md
   - results/engine-21e761c3-adoption/comparison.json
   - results/engine-21e761c3-adoption/checks.json
   - results/selected-current-best-parameters.json
@@ -709,3 +711,38 @@ the Engine's c ln(T/T_ref) form into documents that use c ln T, 211.4 too low
 The fits were unaffected; corrected documents replay cold. The same defect
 caused the Route 2b endpoint-replay stop: with the constant corrected, the
 Route 2b larger-d_V document replays all 205 rows to 6.7e-13.
+
+## Amendment 6: loaded density, first density-weighted screen
+
+**No λ = 0 joint-refit record meets the loaded-density gate, and neither does the paper record.** Weighting density moved the MEAH⁺ size off its bound at almost no cost to the paper's common rows.
+
+Run 18 October 2026 on Engine `main-21e761c3`. Records:
+[smaller-d_V densities](results/joint-recalibration-170/amendment-6/smaller-dV-density/README.md),
+[density-weighted screen](results/joint-recalibration-170/amendment-6/density-sweep/README.md).
+Not yet independently reviewed as a delivered result.
+
+**Density at λ = 0.** The #183 gate requires each of the 20 loaded 30 wt % rows (loading up to 0.4) within 2 kg/m³. On its 12 fitted rows:
+- Both A4 controls miss by −24.3 to −108.2 kg/m³. The two dielectric branches differ by at most 0.009 kg/m³.
+- The paper record F1 without translation misses by +136 to +190 kg/m³ at its four retained states.
+- With the empirical translation, the paper record still has 15 of the 20 gate rows outside ±2 kg/m³ (−3.68 to +3.85).
+- No joint-refit fit had ever weighted density: every retained `fit_case` has `density_weight = 0`.
+
+**First screen: larger d_V, start A, λ = 0.01.** Here λ/12 is the weight of each density row, at scale 2 kg/m³. The fit stopped at the 100-iteration limit, so the runner refused the λ = 0.1 and λ = 1 fits until the owner decides. At that unconverged endpoint:
+
+| | λ = 0 (A4 control) | λ = 0.01 (iteration 100) |
+|---|---:|---:|
+| C149 | 24.561 | 24.585 |
+| Pressure / species AARD, % | 12.76 / 7.17 | 12.36 / 7.12 |
+| Vinjarapu RMSE, kJ/mol | 1.52 | 1.79 |
+| 12 loaded densities, kg/m³ | −24 to −108 | −2.9 to −24.4 |
+| MEAH⁺ / carbamate segment diameter, Å | 5.8 / 5.8 | 4.47 / 5.8 |
+
+The table compares two endpoints across seven quantities, so a table rather than a figure.
+
+- **Where the cost moved:** the non-density reacting cost rose 2.65 %, mostly from the corrected Jakobsen ratios (+0.86) and the Vinjarapu heats (+0.47). Pressures (−0.27) and the Matin species (−0.17) improved.
+- **What stayed on bounds:** the carbamate size and both Born diameters, plus three other coordinates.
+- **Shape of the remaining errors:** they grow with loading, from about −3 kg/m³ at 0.1 to about −24 kg/m³ at 0.4.
+- **Checks:** the start release tests pass at λ = 0.01, 0.1 and 1 (augmented condition up to 4,887). The endpoint cold replay agrees on all 217 rows to 1.8e-12.
+
+**Meaning.** The loaded densities carry the ion-volume information the earlier fits lacked. A small weight already moves the MEAH⁺ size and cuts the density error four- to fivefold without degrading the common calibration. This is numerical evidence from one unconverged fit, not a candidate or physical validation. Whether a converged fit, or a larger λ, can meet 2 kg/m³ is untested.
+
