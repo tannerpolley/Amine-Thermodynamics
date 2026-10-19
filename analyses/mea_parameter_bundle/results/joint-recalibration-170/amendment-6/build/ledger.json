@@ -2,14 +2,14 @@
   "task": "#170 amendment 6 revision 3 build",
   "implementation_base": "8d9e315a3d59d6bd647ad41ff1408ed524f52844",
   "accounting_base": "f387725",
-  "result": "Incomplete: resumed build reached the 1,300 gross-line ceiling; no campaign release.",
+  "result": "Four authorized review fixes implemented; Cp numerical qualification incomplete after two signal-8 attempts. Broader campaign gates remain with the parent.",
   "scientific_fits": 0,
   "information_calls": 4,
   "phase_solves": 6,
   "campaign_existing_gross": 1000,
-  "campaign_new_gross": 300,
-  "campaign_cumulative_gross": 1300,
-  "campaign_ceiling": 1300,
+  "campaign_new_gross": 321,
+  "campaign_cumulative_gross": 1321,
+  "campaign_ceiling": 1325,
   "items": [
     {
       "item": "declared stage6 count",
@@ -153,6 +153,46 @@
       "user_s": 8.68,
       "system_s": 0.18,
       "exit_code": 0
+    },
+    {
+      "kind": "four-review-fixes: no-heat construction",
+      "gnu_time": "review-fixes/no-heat-time.txt",
+      "wall_s": 7.26,
+      "user_s": 7.15,
+      "system_s": 0.09,
+      "exit_code": 0,
+      "engine_information_call": false
+    },
+    {
+      "kind": "four-review-fixes: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/cp-information-probe.py.txt",
+      "gnu_time": "review-fixes/cp-1e-06-time.txt",
+      "wall_s": 0.45,
+      "user_s": 0.39,
+      "system_s": 0.05,
+      "exit_code": 136,
+      "engine_information_call": true,
+      "signal": 8,
+      "predictions_returned": 0
+    },
+    {
+      "kind": "four-review-fixes: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/build/review-fixes/cp-information-probe.py.txt",
+      "gnu_time": "review-fixes/cp-1e-07-time.txt",
+      "wall_s": 0.45,
+      "user_s": 0.38,
+      "system_s": 0.06,
+      "exit_code": 136,
+      "engine_information_call": true,
+      "signal": 8,
+      "predictions_returned": 0
+    },
+    {
+      "kind": "four-review-fixes: pytest",
+      "gnu_time": "review-fixes/pytest-time.txt",
+      "wall_s": 12.26,
+      "user_s": 18.11,
+      "system_s": 0.48,
+      "exit_code": 1,
+      "engine_information_call": false
     }
   ],
   "program_charge_owner": "Parent orchestrator; program time charges are not added here to A4.",
@@ -317,6 +357,37 @@
   "distinct_phase_points": 1,
   "previous_construction_command_wall_s": 12.58,
   "previous_construction_command_cpu_s": 11.7,
-  "final_tree_added_lines_from_accounting_base": 290,
-  "previously_charged_replaced_lines_carried": 10
+  "final_tree_added_lines_from_accounting_base": 309,
+  "previously_charged_replaced_lines_carried": 12,
+  "review_fixes": {
+    "base": "242d788",
+    "authority": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6278338236",
+    "gross_by_item": {
+      "inherited_reaction_totals": 5,
+      "phase_final_persistence": 1,
+      "declared_cp_assessment": 11,
+      "no_heat_assertions": 4
+    },
+    "new_gross": 21,
+    "cumulative_gross": 1321,
+    "implementation_complete": true,
+    "qualification_complete": false,
+    "information_attempts": 2,
+    "information_successes": 0,
+    "pytest": {
+      "passed": 94,
+      "subtests_passed": 17,
+      "failed": 2,
+      "expected_failures": [
+        "test_campaign_routing.py::test_campaigns_use_candidate_reactions_and_retain_failures",
+        "test_shared_evaluation.py::test_pinned_engine_state_and_cached_replay"
+      ]
+    },
+    "evidence": "review-fixes/README.md",
+    "not_done": "No Cp predictions or proxy-relative differences returned. No native Cp/enthalpy numerical qualification; no retry beyond the two-call limit. No fit or scientific adoption.",
+    "measured_wall_s": 20.42,
+    "measured_cpu_s": 26.71,
+    "engine_information_wall_s": 0.9,
+    "engine_information_cpu_s": 0.88
+  }
 }

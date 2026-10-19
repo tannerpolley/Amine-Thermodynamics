@@ -1,0 +1,53 @@
+"""Disclosed one-off: execute actual Cp function and assessment expression with synthetic actions."""
+import ast
+import json
+import math
+from pathlib import Path
+from types import SimpleNamespace as NS
+
+OUT = Path(__file__).parent
+source = Path('analyses/mea_parameter_bundle/scripts/heat_evidence_170.py')
+tree = ast.parse(source.read_text())
+function = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'cp_check')
+main = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'main')
+expression = next(n for n in main.body if isinstance(n, ast.Assign)
+                  and ast.unparse(n.targets[0]) == 'cp')
+spec = json.loads((OUT.parents[1] / 'inputs/revision-3/tied-fit.json').read_text())
+masses = (44.0095, 61.0831, 18.01528)
+ids = ('carbon-dioxide', 'monoethanolamine', 'water')
+calls = []
+
+
+def solve(model, problem):
+    feed = problem.feed.values
+    molality = feed['monoethanolamine'] / (feed['water'] * masses[2] / 1000)
+    assert math.isclose(molality, 7., rel_tol=0., abs_tol=1e-14)
+    assert problem.P == 101325.
+    calls.append(dict(T_K=problem.T, analytical_feed=feed, molality=molality, P_Pa=problem.P))
+    return NS(success=True)
+
+
+env = dict(epcsaft=NS(Mixture=lambda *a, **k: None, Parameters=NS(from_mapping=lambda m: None),
+                      PropertyObservable=NS(TotalEnthalpy='H', TotalIsobaricHeatCapacity='Cp')),
+           eq=NS(Amounts=lambda feed: NS(values=feed), solve_equilibrium=solve),
+           vrc=NS(record=lambda: None, observable=lambda *a, **k: k.get('prop'),
+                  first_actions=lambda m, p, r, obs, directions:
+                  [[(1., 2.), (3., 4.)]] if len(obs) == 2 else [[(5., 0.)]]),
+           s=NS(COMPONENT_IDS=ids, _problem_from_request=lambda req:
+                NS(T=req['T'], P=101325., feed=NS(values={'water': 7.911, 'monoethanolamine': 1.}))),
+           hc=NS(MOLAR_MASS=masses), request=lambda m, T, loading: dict(T=T),
+           declaration=spec, documents={'F1': {}}, current={}, original={})
+exec(compile(ast.Module(body=[function, expression], type_ignores=[]), str(source), 'exec'), env)
+assert len(env['cp']) == len(calls) == 12  # two records, four states plus two proxy comparisons each
+for record in ('heat F1', 'no-heat F1'):
+    values = [r for r in env['cp'] if r['record'] == record]
+    assert {(r['T_K'], r['loading']) for r in values} == {
+        (318.15, 0.), (318.15, .358), (353.15, 0.), (353.15, .358)}
+    for T in (318.15, 353.15):
+        assert {r['model_loading'] for r in values if r['T_K'] == T and r['loading'] == 0.} == {1e-6, 1e-7}
+assert {r['observed_kJ_kg_K'] for r in env['cp']} == {3.7195, 3.3675, 3.8566, 3.4707}
+(OUT / 'cp-feed-results.json').write_text(json.dumps(dict(
+    actual_cp_function_and_main_expression=True, engine_calls=0, synthetic_actions=True,
+    four_states_per_record=True, both_zero_loading_proxies_per_temperature=True,
+    calls=calls), indent=2) + '\n')
+print('Cp bodies: four declared states per record, 7 mol/kg water, both unloaded proxies; synthetic only')

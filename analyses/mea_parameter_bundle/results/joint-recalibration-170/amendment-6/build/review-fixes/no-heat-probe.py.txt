@@ -1,0 +1,57 @@
+"""Disclosed one-off: no-solve construction of a no-heat declaration and bad-weight cases."""
+import copy
+import json
+import sys
+from pathlib import Path
+
+sys.path[:0] = ['analyses/mea_parameter_bundle/scripts', 'src']
+import fit_campaign as f
+import fit_observations as o
+
+OUT = Path(__file__).parent
+spec = f.load(OUT.parents[1] / 'inputs/revision-3/tied-fit.json')
+installed = f.verify(spec)
+mapping = f.load(spec['information_starts'][0]['parameters_path'])
+# Kiepe continuation solves only seed guesses. Disable it for this object-construction probe.
+spec['cases'][0].pop('kiepe_continuation')
+o.eq.solve_equilibrium = lambda *a, **k: (_ for _ in ()).throw(AssertionError('solve forbidden'))
+base = spec['observations'][0]
+original_table = o.load(base['table'])
+original_weights = dict(zip(base['ordered_row_ids'], base['weights'], strict=True))
+heat_ids = {i for i in base['ordered_row_ids'] if i.startswith('vinjarapu')}
+assert len(heat_ids) == 8
+table = [dict(r, weight=0.) if r['target'] in heat_ids else r for r in original_table]
+f.write(OUT / 'no-heat-targets.json', table)
+base['table'] = str(OUT / 'no-heat-targets.json')
+base['weights'] = [0. if i in heat_ids else w for i, w in original_weights.items()]
+f.write(OUT / 'no-heat-declaration.json', spec)
+_, rows = o.stage6_rows(spec, mapping)
+assert len(rows) == 262
+assert sum(r['weight'] > 0 for r, _ in rows) == 254
+assert sum(r['weight'] > 0 and not r['id'].startswith('kiepe-') for r, _ in rows) == 215
+assert {r['id'] for r, _ in rows if r['weight'] == 0} == heat_ids
+assert all(r['weight'] == original_weights[r['id']] for r, _ in rows
+           if r['id'] in original_weights and r['id'] not in heat_ids)
+bad = copy.deepcopy(spec)
+bad['direct_rows'][0]['weight'] = 0.
+try:
+    o.stage6_rows(bad, mapping)
+except AssertionError:
+    additional_zero_rejected = True
+else:
+    raise AssertionError('ninth zero weight accepted')
+bad = copy.deepcopy(spec)
+bad['observations'][0]['weights'][next(i for i, k in enumerate(base['ordered_row_ids'])
+                                     if k in heat_ids)] = 1.
+try:
+    o.stage6_rows(bad, mapping)
+except ValueError as error:
+    assert 'weight mismatch' in str(error)
+    table_observation_mismatch_rejected = True
+else:
+    raise AssertionError('target/observation mismatch accepted')
+f.write(OUT / 'no-heat-results.json', dict(constructed=262, positive=254, reacting_positive=215,
+        heat_zero_ids=sorted(heat_ids), additional_zero_rejected=additional_zero_rejected,
+        table_observation_mismatch_rejected=table_observation_mismatch_rejected,
+        engine=installed, engine_solves=0, kiepe_continuation_disabled_for_construction_only=True))
+print('no-heat: 262 constructed, 215 reacting / 254 total positive; ninth zero and mismatch rejected')
