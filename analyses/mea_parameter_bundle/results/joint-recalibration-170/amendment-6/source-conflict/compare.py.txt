@@ -1,0 +1,78 @@
+"""Run from the repository root with python3 -I <path>/compare.py.txt.
+
+Comparison arithmetic only: printed loadings, no temperature interpolation,
+no extrapolation, no Engine, and no fitted correlations. Output is Markdown.
+"""
+import csv
+from decimal import Decimal as D
+from hashlib import sha256
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+INPUTS = Path("data/reference/MEA/observations/density_viscosity")
+
+
+def read_csv(path, expected_hash=None):
+    if expected_hash is not None:
+        assert sha256(path.read_bytes()).hexdigest() == expected_hash, path
+    with path.open(newline="") as stream:
+        return list(csv.DictReader(stream))
+
+
+def interpolate(points, target):
+    """Exact nodes return themselves; out-of-range targets return None."""
+    points = sorted(points)
+    assert len({x for x, _ in points}) == len(points)
+    for x, y in points:
+        if x == target:
+            return y
+    for (x0, y0), (x1, y1) in zip(points, points[1:]):
+        if x0 < target < x1:
+            return y0 + (target - x0) * (y1 - y0) / (x1 - x0)
+    return None
+
+
+# Numerical checks: a known linear relation, exact node, and both range limits.
+reference = [(D("0.2"), D("1040")), (D("0.4"), D("1080"))]
+assert interpolate(reference, D("0.3")) == D("1060")
+assert interpolate(reference, D("0.4")) == D("1080")
+assert interpolate(reference, D("0.1")) is None
+assert interpolate(reference, D("0.5")) is None
+
+amundsen = read_csv(INPUTS / "Amundsen_2009_density_viscosity.csv",
+                    "7322b7dc7f0c961d09dbfb356dccde00851c0de20ba589d150d9c3834900f70c")
+hartono = read_csv(INPUTS / "Hartono_2014_loaded_density.csv",
+                   "be0daa47de963643c498af015b430ae785a3f0b0103a23f3d5f9f81102cee7b4")
+third = read_csv(HERE / "third-source-values.csv")
+assert len(third) == 24
+
+
+def adopted_points(rows, temperature):
+    return [(D(r["co2_loading_mol_per_mol_mea"]),
+             D(r["value"]) * (1000 if r["value_unit"] == "g/cm^3" else 1))
+            for r in rows if r["property"] == "density"
+            and D(r["temperature_C"]) == temperature
+            and D(r["mea_mass_fraction"]) == D("0.3")
+            and r["co2_loading_mol_per_mol_mea"]]
+
+
+def fmt(value):
+    return "unavailable" if value is None else f"{value:.6f}"
+
+
+print("| Source | t (°C) | α | Third ρ | Amundsen ρ | Hartono ρ | Third − Amundsen | Third − Hartono | Closer | Distance advantage |")
+print("|---|---:|---:|---:|---:|---:|---:|---:|---|---:|")
+for source, temperature in sorted({(r["source"], D(r["temperature_C"])) for r in third}):
+    points = [(D(r["alpha_mol_CO2_per_mol_MEA"]), D(r["density_kg_m3"]))
+              for r in third if r["source"] == source and D(r["temperature_C"]) == temperature]
+    for alpha in (D("0.3"), D("0.4")):
+        value = interpolate(points, alpha)
+        a = interpolate(adopted_points(amundsen, temperature), alpha)
+        h = interpolate(adopted_points(hartono, temperature), alpha)
+        da = None if value is None or a is None else value - a
+        dh = None if value is None or h is None else value - h
+        closer, margin = "unavailable", None
+        if da is not None and dh is not None:
+            closer = "Hartono" if abs(dh) < abs(da) else "Amundsen" if abs(da) < abs(dh) else "tie"
+            margin = abs(abs(da) - abs(dh))
+        print(f"| {source} | {temperature} | {alpha} | {fmt(value)} | {fmt(a)} | {fmt(h)} | {fmt(da)} | {fmt(dh)} | {closer} | {fmt(margin)} |")
