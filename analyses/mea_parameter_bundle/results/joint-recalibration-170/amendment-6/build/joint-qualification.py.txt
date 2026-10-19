@@ -1,0 +1,18 @@
+import sys,json,copy,math
+from pathlib import Path
+sys.path[:0]=['analyses/mea_parameter_bundle/scripts','src']
+import fit_campaign as f
+import fit_observations as o
+base=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6')
+spec=f.load(base/'inputs/revision-3/tied-information-pending-stage2b.json')
+mapping=f.load(spec['information_starts'][0]['parameters_path'])
+params,rows=o.stage6_rows(spec,mapping)
+coordinates=f.stage6_coordinates(spec,params,mapping)
+value=o.reg.differentiate(params,coordinates,[item for _,item in rows],optimizer=[0.]*len(coordinates),thermochemistry=o.thermal.record())
+weights=f.stage6_weights(spec,[r for r,_ in rows],1.)
+residuals=[math.log(p/r['observed']) if r['form'] in ('LogRatio','log_ratio') else (p-r['observed'])/r['scale'] for p,(r,_) in zip(value.predictions,rows,strict=True)]
+raw=dict(rows=[dict(r,weight=w) for (r,_),w in zip(rows,weights,strict=True)],predictions=list(value.predictions),
+ statuses=[x.name for x in value.statuses],residuals=residuals,weighted_residuals=[math.sqrt(w)*r for w,r in zip(weights,residuals,strict=True)],
+ optimizer_jacobian=list(value.residual_optimizer_gradient),reaction_laws={name:o.s._jsonable(dict(a=law.a,b=law.b,c=law.c,d=law.d,reference_temperature=law.reference_temperature)) for name,law in value.chart.reaction_laws.items()})
+f.write(base/'build/joint-evaluation.json',raw)
+print('constructed',len(rows),'coordinates',len(coordinates),'statuses',set(raw['statuses']),'laws',list(value.chart.reaction_laws))
