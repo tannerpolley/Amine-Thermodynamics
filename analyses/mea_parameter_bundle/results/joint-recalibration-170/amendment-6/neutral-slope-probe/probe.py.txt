@@ -1,0 +1,46 @@
+"""One-off disclosed scratch: sensitivity of the CO2-free densities and Cai VLE rows to the MEA-water k_ij constant and a reciprocal-temperature slope."""
+import json, sys, copy, math
+from pathlib import Path
+import numpy as np
+import fit_observations as o, shared_evaluation as s
+D = Path(sys.argv[1]); out = Path(sys.argv[2])
+spec6 = json.load(open(D/'hartono-fit/fit-spec.json'))
+spec2 = json.load(open('analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/spec.json'))
+case2 = next(c for c in spec2['cases'] if c['id'] == 'neutral-mea-water')
+base = json.load(open(D/'hartono-fit/fit/usable-budget-endpoint.json'))
+pair = next(p for p in base['pairs'] if {p['component_id_a'], p['component_id_b']} == {'monoethanolamine', 'water'})
+slope_template = next(c for p in base['pairs'] for c in p['coefficients'] if c['identity'] == 'pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope')
+slope = copy.deepcopy(slope_template); slope['identity'] = 'pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope'; slope['value']['magnitude'] = 0.0
+pair['coefficients'].append(slope)
+K, B = 'pair/monoethanolamine/water/k_ij', 'pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope'
+spec = dict(spec6, stage2_rows_path=spec2['stage2_rows_path'], state_requests_path=spec6.get('state_requests_path'))
+case = dict(spec6['cases'][0], observations_id='neutral-mea-water', neutral_domain_ids=case2['neutral_domain_ids'], neutral_domain=case2['neutral_domain'])
+def evaluate(mapping):
+    params, rows = o.stage2_rows(spec, mapping, case, assessment=True)
+    vals = o.predict(mapping, [item for _, item, _ in rows])
+    return [(r, v.value) for (r, _, _), v in zip(rows, vals)]
+k0 = s.parameter_values(base)[K]
+res = {}
+for name, vals in (('base', {}), ('dk', {K: k0 + 0.002}), ('db', {B: 10.0})):
+    m = s.with_parameter_values(base, vals) if vals else base
+    res[name] = evaluate(m); print(name, 'rows', len(res[name]), flush=True)
+rows = [r for r, _ in res['base']]
+def resid(r, v):
+    if r['quantity'] == 'phase_density': return (v - r['observed'])/0.5
+    if r['quantity'] == 'temperature': return (v - r['observed'])/1.0
+    return (v - r['observed'])/0.01
+r0 = np.array([resid(r, v) for r, v in res['base']])
+J = np.column_stack([(np.array([resid(r, v) for r, v in res[n]]) - r0)/h for n, h in (('dk', 0.002), ('db', 10.0))])
+dens = [i for i, r in enumerate(rows) if r['quantity'] == 'phase_density']
+summary = dict(base_k=k0, rows=[dict(id=r['id'], quantity=r['quantity'], T_K=r.get('T_K'), observed=r['observed'], base=v) for r, v in res['base']])
+print('base CO2-free density errors kg/m3:', [round(0.5*r0[i], 3) for i in dens])
+print('d(density error)/dk per 0.001:', [round(0.5*J[i,0]*0.001, 3) for i in dens], ' per 10 K slope:', [round(0.5*J[i,1]*10, 3) for i in dens])
+cai = [i for i in range(len(rows)) if i not in dens]
+print('base Cai cost', round(0.5*float(r0[cai]@r0[cai]), 4), 'n', len(cai))
+for wd in (1.0, 3.0, 10.0):
+    w = np.ones(len(rows)); w[dens] = wd
+    dq, *_ = np.linalg.lstsq(J*np.sqrt(w)[:, None], -r0*np.sqrt(w), rcond=None)
+    r1 = r0 + J@dq
+    print(f'density weight {wd}: dk={dq[0]:+.5f} slope b={dq[1]:+.2f} K -> CO2-free errors', [round(0.5*r1[i], 3) for i in dens], ' Cai cost', round(0.5*float(r1[cai]@r1[cai]), 4))
+    summary[f'lsq_density_weight_{wd}'] = dict(dk=dq[0], b=dq[1], density_errors=[0.5*r1[i] for i in dens], cai_cost=0.5*float(r1[cai]@r1[cai]))
+json.dump(summary, open(out, 'w'), indent=1)
