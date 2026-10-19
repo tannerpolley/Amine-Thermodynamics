@@ -319,8 +319,8 @@ dimensionless and absolute. The loading uncertainty is populated for
 loaded rows only. Unreported x₃, alternative loadings, relative
 uncertainties, coverage factors and Markdown line numbers remain blank.
 Each row retains its source table/page, temperature/loading locator,
-Zotero keys and PDF hash. The Amundsen-specific schema describes its
-own source; it is not extended to imply identical units or uncertainty
+Zotero keys and PDF hash. The Amundsen-specific column definitions describe
+their own source; they are not extended to imply identical units or uncertainty
 definitions for Han.
 
 ### Relation to Amundsen 2009 and adopted use
