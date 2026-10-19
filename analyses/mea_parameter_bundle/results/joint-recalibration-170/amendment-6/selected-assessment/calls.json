@@ -1,0 +1,267 @@
+{
+  "wall_limit_s": 1000,
+  "cpu_limit_s": 2000,
+  "calls": [
+    {
+      "name": "inventory-1",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/inventory-1-time.json",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/assess.py.txt",
+        "inventory"
+      ],
+      "wall_reserve_s": 30.0,
+      "cpu_reserve_s": 30.0,
+      "status": "finished",
+      "environment": {
+        "PYTHONPATH": "src:analyses/mea_parameter_bundle/scripts",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "stop_reason": null,
+      "timing_file": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/inventory-1-time.json",
+      "log": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/inventory-1.log",
+      "wall_s": 11.22,
+      "cpu_s": 11.190000000000001,
+      "measurement": {
+        "whole_command_user_s": 11.13,
+        "whole_command_system_s": 0.06,
+        "wall_s": 11.22
+      }
+    },
+    {
+      "name": "density-2",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density-2-time.json",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/assess.py.txt",
+        "density"
+      ],
+      "wall_reserve_s": 180.0,
+      "cpu_reserve_s": 600.0,
+      "status": "finished",
+      "environment": {
+        "PYTHONPATH": "src:analyses/mea_parameter_bundle/scripts",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "stop_reason": null,
+      "timing_file": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density-2-time.json",
+      "log": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density-2.log",
+      "wall_s": 13.87,
+      "cpu_s": 63.68,
+      "measurement": {
+        "whole_command_user_s": 61.91,
+        "whole_command_system_s": 1.77,
+        "wall_s": 13.87
+      }
+    },
+    {
+      "name": "calorics-3",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/calorics-3-time.json",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/assess.py.txt",
+        "calorics"
+      ],
+      "wall_reserve_s": 120.0,
+      "cpu_reserve_s": 400.0,
+      "status": "finished",
+      "environment": {
+        "PYTHONPATH": "src:analyses/mea_parameter_bundle/scripts",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "stop_reason": null,
+      "timing_file": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/calorics-3-time.json",
+      "log": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/calorics-3.log",
+      "wall_s": 12.67,
+      "cpu_s": 23.53,
+      "measurement": {
+        "whole_command_user_s": 22.53,
+        "whole_command_system_s": 1.0,
+        "wall_s": 12.67
+      }
+    },
+    {
+      "name": "states-4",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/states-4-time.json",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/assess.py.txt",
+        "states"
+      ],
+      "wall_reserve_s": 400.0,
+      "cpu_reserve_s": 1500.0,
+      "status": "finished",
+      "environment": {
+        "PYTHONPATH": "src:analyses/mea_parameter_bundle/scripts",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "stop_reason": null,
+      "timing_file": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/states-4-time.json",
+      "log": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/states-4.log",
+      "wall_s": 16.63,
+      "cpu_s": 131.32,
+      "measurement": {
+        "whole_command_user_s": 123.18,
+        "whole_command_system_s": 8.14,
+        "wall_s": 16.63
+      }
+    },
+    {
+      "name": "carbonate-5",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/carbonate-5-time.json",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/assess.py.txt",
+        "carbonate"
+      ],
+      "wall_reserve_s": 60.0,
+      "cpu_reserve_s": 100.0,
+      "status": "finished",
+      "environment": {
+        "PYTHONPATH": "src:analyses/mea_parameter_bundle/scripts",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "stop_reason": null,
+      "timing_file": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/carbonate-5-time.json",
+      "log": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/carbonate-5.log",
+      "wall_s": 12.35,
+      "cpu_s": 13.41,
+      "measurement": {
+        "whole_command_user_s": 13.02,
+        "whole_command_system_s": 0.39,
+        "wall_s": 12.35
+      }
+    },
+    {
+      "name": "cp-6",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/cp-6-time.json",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/assess.py.txt",
+        "cp"
+      ],
+      "wall_reserve_s": 60.0,
+      "cpu_reserve_s": 100.0,
+      "status": "finished",
+      "environment": {
+        "PYTHONPATH": "src:analyses/mea_parameter_bundle/scripts",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "stop_reason": null,
+      "timing_file": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/cp-6-time.json",
+      "log": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/cp-6.log",
+      "wall_s": 12.17,
+      "cpu_s": 15.27,
+      "measurement": {
+        "whole_command_user_s": 14.9,
+        "whole_command_system_s": 0.37,
+        "wall_s": 12.17
+      }
+    },
+    {
+      "name": "declared-density-7",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/usr/bin/time",
+        "-f",
+        "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+        "-o",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/declared-density-7-time.json",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/assess.py.txt",
+        "declared-density"
+      ],
+      "wall_reserve_s": 100.0,
+      "cpu_reserve_s": 300.0,
+      "status": "finished",
+      "environment": {
+        "PYTHONPATH": "src:analyses/mea_parameter_bundle/scripts",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "stop_reason": null,
+      "timing_file": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/declared-density-7-time.json",
+      "log": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/amendment-6-stage2b/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/declared-density-7.log",
+      "wall_s": 14.85,
+      "cpu_s": 16.34,
+      "measurement": {
+        "whole_command_user_s": 15.83,
+        "whole_command_system_s": 0.51,
+        "wall_s": 14.85
+      }
+    }
+  ],
+  "total_wall_s": 93.75999999999999,
+  "total_cpu_s": 274.74
+}

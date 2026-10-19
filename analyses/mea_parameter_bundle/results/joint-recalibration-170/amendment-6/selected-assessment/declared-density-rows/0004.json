@@ -1,0 +1,66 @@
+{
+  "input": {
+    "id": "Amundsen2009_state_066",
+    "retained_row": "density-rows/0065.json"
+  },
+  "kind": "declared-density",
+  "result": {
+    "P_Pa": 100000.0,
+    "T_K": 313.15,
+    "declaration": {
+      "P_Pa": 100000.0,
+      "T_K": 313.15,
+      "analytical_feed": {
+        "carbon-dioxide": 0.2,
+        "monoethanolamine": 1.0,
+        "water": 7.911062165006594
+      },
+      "form": "difference",
+      "id": "Amundsen2009_state_066",
+      "observed": 1041.0,
+      "quantity": "phase_density",
+      "scale": 2.1684658171158704,
+      "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+      "weight": 0.019230769230769232
+    },
+    "error_kg_m3": 0.42047142893306955,
+    "error_over_s": 0.1939027240430795,
+    "error_percent": 0.04039110748636595,
+    "id": "Amundsen2009_state_066",
+    "lifecycle_status": "property_target_candidate",
+    "loading": 0.2,
+    "mea_mass_fraction": 0.3,
+    "numerical_evidence": {
+      "requested_tolerance_met": true,
+      "route": "fit_observations.stage6_rows (includes stage2_rows), exact declared analytical feed",
+      "stable_root_count": null
+    },
+    "observed_kg_m3": 1041.0,
+    "parameter_sha256": "ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7",
+    "predicted_kg_m3": 1041.420471428933,
+    "s_kg_m3": 2.1684658171158704,
+    "source": "Amundsen2009",
+    "source_expanded_uncertainty_unit": null,
+    "source_expanded_uncertainty_value": null,
+    "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+    "source_seed_minus_declared_prediction_kg_m3": -0.0003801508114520402,
+    "source_seed_numerical_evidence": {
+      "max_abs_raw_residual": 2.2737367544323206e-13,
+      "pressure_Pa": [
+        100000.0
+      ],
+      "reduced_hessian_minimum": 3.8483027291757915e-10,
+      "requested_tolerance_met": true,
+      "route": "source_feed_request and native phase_density",
+      "stable_root_count": null,
+      "temperature_K": [
+        313.15
+      ]
+    },
+    "source_seed_prediction_kg_m3": 1041.4200912781216,
+    "source_uncertainty_scope": "Loaded general estimates exclude highest T/loadings; exact per-row boundary unresolved (pp.3099-3100).",
+    "source_uncertainty_unit": "g/cm^3",
+    "source_uncertainty_value": ""
+  },
+  "status": "Available"
+}
