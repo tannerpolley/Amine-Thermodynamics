@@ -3,11 +3,11 @@
  "decision": "Owner: from now on the 21,600 s active-wall cap counts only measured fit and check calls; agent research, review and reporting are not charged. Each reactive fit call is limited to 600 s. Plateau diagnosis follows the first fit after Engine #595.",
  "compute_wall_cap_s": 21600,
  "reactive_call_limit_s": 600,
- "compute_wall_charged_s": 14006,
+ "compute_wall_charged_s": 15565,
  "compute_wall_basis": "Rounded up from about 6,790 s: 484 s before Route 1 entry, 5,716 s of retained call timings in amendments 2-4 (one per call), and about 590 s of fit-time probes (diagnosis-fit-time/README.md).",
- "compute_wall_remaining_s": 7594,
+ "compute_wall_remaining_s": 6035,
  "mandatory_check_reserve_s": 1950.38,
- "program_cpu_charge_s": 119026.61,
+ "program_cpu_charge_s": 126343.61,
  "program_cpu_limit_s": 200000,
  "superseded_ledger": "final-prerequisites/accounting.json program_active_wall_charge_s plus the diagnosis charge, 19,605.51 s, mixed compute with fixed per-task charges.",
  "campaign_executable_ceiling": 1325,
@@ -124,6 +124,13 @@
    "wall_s": 568,
    "cpu_s": 2898,
    "basis": "Rounded up from measured whole-command times: 567.72 s / 2897.9 CPU-s over 6 calls (amendment-6/joint-mea-water/step-ledger.json)."
+  },
+  {
+   "date": "2026-10-19",
+   "task": "amendment-6 Held follow-ups: start-B and smaller-branch releases, fits and replays (including the duplicate smaller-branch release and failed fit call from the orphaned parallel session, and the stopped start-B release estimated at 120 s), and the start-B refusal diagnosis probes",
+   "wall_s": 1559,
+   "cpu_s": 7317,
+   "basis": "Rounded up from amendment-6/held-followups/uncharged-compute.json: 1558.41 s / 7316.61 CPU-s (10 follow-up calls plus 26 diagnosis probe records); non-solving declaration builds untimed."
   }
  ],
  "campaign_executable_basis": "891 + 56 (fit_neutral_co2_mea.py) + 39 (check_matched_co2_mea.py) + 12 (stage6_coordinates helper) + 1 (release assertion) + 1 (R2 write-back fix), non-blank non-comment added lines. Excluded under #170 owner comment 6276283139: amendment-4/neutral-fit/figure.py (17 lines, presentation only) and the ignored scratch diagnostics in tmp/. Amendment 6 revision 3 partial Build: +68 nonblank/noncomment gross additions against f387725 (fit_campaign.py 66; fit_observations.py 2). Prior 1,000 charge carried forward; deletions do not offset additions. Itemization and incomplete-build forecast: amendment-6/build/ledger.json. Resumed Build at 462c984: +232 gross nonblank/noncomment additions, carrying the prior 68 without replacement credits, cumulative 1,300. Ceiling decision #170 comment 6277601406. Build remains incomplete; itemization, charges and remaining gates in amendment-6/build/ledger.json. Four review fixes against 242d788: +21 gross nonblank/noncomment added campaign lines (fit_campaign.py 5; final_evidence.py 1; heat_evidence_170.py 11; fit_observations.py 4), cumulative 1,321 / 1,325. Owner authority: #170 comment 6278338236 (2026-10-19), limited to these four items. No deletion/replacement credit. Qualification and failed attempts: amendment-6/build/review-fixes/README.md. Parent charges measured program time at merge; no program-time charge added here.",
