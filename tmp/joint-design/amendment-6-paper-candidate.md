@@ -21,67 +21,89 @@ proposals for the parent and owner, not adoption decisions.
 
 ## 0. Revision 2 (18 October 2026): density first
 
-Readiness review r1 (GPT-6 Astra, extra high) returned **Revise**. This
-section supersedes §§2–3 and §6's execution order where they conflict; §§4–5
-and 7 apply only after the step below and an owner λ choice. Revisions by the
-orchestrator.
+Readiness review r1 (GPT-6 Astra, extra high) returned **Revise**; review r2
+(same reviewer, new round) returned **Revise** with corrections, all applied
+below. This section supersedes §§1–3 and §6 where they conflict, including
+§1's deferral of the density fit (#183): positive density weights are
+reinstated under the owner's 2026-10-13 #183 decision and the reviewed
+stage-6 design, reversing the orchestrator's own away-mode deferral. §§4–5
+and 7 apply only after this step and an owner λ choice.
 
-**Known density result (r1 correction 1).** Both λ = 0 controls fail the
-unchanged #183 gate (20 loaded rows ≤ 2 kg/m³) on its 12 fitted rows:
+**Known density result.** Both λ = 0 amendment-4 controls fail the unchanged
+#183 gate on its 12 fitted loaded rows (each ≤ 2 kg/m³):
 - **Larger d_V:** −24.28 to −108.16 kg/m³ (`amendment-5/a0/probe-p-analysis.json`).
 - **Smaller d_V:** −24.28 to −108.15 kg/m³ (`amendment-6/smaller-dV-density/`).
+  - The two branches differ by at most 0.0087 kg/m³.
   - Information-only call, 19.75 s wall, no new code.
-  - Cold replay of all 205 objective rows against `matched-smaller-dV/control/native.json`: 6.9e-12, with relative cost difference 1.3e-14.
-- **Paper record F1 (`66ff7715`), without translation:** **+136 to +190** kg/m³ at 323/343 K, loading 0.3/0.4 (`heat-final-170/evaluation/density.csv`).
+  - Cold replay of the 205 objective rows: 6.9e-12, relative cost difference 1.3e-14.
+- **Paper record F1 (`66ff7715`), without translation:** +136 to +190 kg/m³ at the four retained states (323/343 K, loading 0.3/0.4; `heat-final-170/evaluation/density.csv`).
+- **The fallback with its empirical translation also misses the gate:** 15 of the 20 required loaded rows lie outside ±2 kg/m³, with errors −3.68 to +3.85 kg/m³ (`heat-final-170/corrected-densities.csv`). It is a disclosed approximation, not a pass.
 
-So no λ = 0 record passes. Density cannot choose between the λ = 0 candidate
-and the fallback. The fallback passes only through the empirical translation.
+No retained record meets the density gate.
 
-**Why (diagnosis from retained records, not a new calculation).**
-- **No density in any fit:** every joint-refit fit so far has `fit_case.density_weight = 0`. That covers the amendment-2 Route 2 and 2b fits and all four amendment-4 arms.
-- **Nothing constrains ion volume:** the loaded densities were never in the objective. At λ = 0, only speciation and pressure act on the ion segment diameters, and both reach their 5.8 Å bound.
-- **Opposite signs bracket the target:** the speciation-only paper ions over-predict density, and the 5.8 Å ions under-predict it. An interior size therefore exists that matches density, as the #183 r1 fixed-size checks found on the paper-record basis, an older model (worst loaded row 2.77 kg/m³ at MEAH⁺/carbamate 4.2/5.8 Å; 5.05 kg/m³ at 5.1/5.1 Å). That is evidence on that basis, not a result for this one.
+**Why density next (from retained records).**
+- **No density in any fit:** every tracked joint-refit declaration with a `fit_case` (17) has `density_weight = 0`, so the loaded densities have never been in a fitted objective.
+- **What acts on the ion diameters at λ = 0:** pressure, species, heat and heat-capacity rows only. Both ion segment diameters end on their 5.8 Å bound.
+- **The density-sensitive coordinates:** ion segment diameter sets the hard-sphere volume; packing and Debye–Hückel diameters are tied at 0.88σ, and the Born diameters are separate (Figiel, Yu and Held, Eqs. 3–4).
+- **Limit of the evidence:** the old record and the amendment-4 endpoints differ in more than ion size, so their opposite density errors do not establish a bracket on one model. The #183 r1 fixed-size checks on the paper-record basis motivate the test; they are not proof of feasibility here.
 
-**Step 1: the density-weighted F1 sweep already in the reviewed stage-6 design.**
-Source: #170 comment 6158000919, "Run F1 at λ = 0, 0.01, 0.1, 1"; owner decision of 2026-10-13 on #183, which sets no trade-off limits in advance, reports each candidate's trade-off, and leaves the choice to the owner.
-- **Branch:** larger d_V only. The branches agree on density within 0.01 kg/m³ and on C149 within 0.15 %. The smaller branch runs only if the owner wants both.
-- **Start:** A4 larger control start `matched-larger-dV/control-start-parameters.json` (SHA-256 `e01e1142…`). Its A4 release test passed at λ = 0 (condition 3.45e3 mandatory, 6.39e3 augmented).
-- **Release test:** one information call per λ ∈ {0.01, 0.1, 1} at that start, each with `information_density_weights` [λ] and its own `release-tests.json`. The fit path requires every record in its file to pass (`fit_campaign.py:510`), so one failing λ does not block the others. A λ whose record fails is not fitted, and the failure is retained.
-- **Fits:** F1 at λ = 0.01, 0.1 and 1. Same declaration as the A4 control except `fit_case.density_weight`. Each density row has weight λ/12 and scale 2 kg/m³. Rows 166 + 12 = 178 reacting, 217 total. All amendment-4 controls apply: function tolerance 1e-6, 600 s per call, 32 workers, `nice -n 10`, single-threaded numerical libraries.
-- **Endpoint evaluation:** one information call per endpoint (about 20 s), giving the 12 fitted densities and every common row. A4 cold replay applies.
-- **Trade-off table for the owner:** for λ = 0 (A4 control), 0.01, 0.1 and 1, report:
-  - C149, C166 and C178;
-  - pressure and species deviation, and Vinjarapu RMSE, on the common 149;
+**Step 1: first screen of the density-weighted F1 sweep in the reviewed stage-6 design.**
+Source: #170 comment 6158000919, "Run F1 at λ = 0, 0.01, 0.1, 1".
+- **Scope:** larger d_V, start A only. **The smaller branch and second starts remain outstanding** under the #172 design (both branches, both starts, no branch-selection gate). Reducing that scope permanently needs an explicit owner disposition.
+- **Start:** A4 larger control start `matched-larger-dV/control-start-parameters.json` (SHA-256 `e01e1142…`).
+- **Release tests:** one information call per λ ∈ {0.01, 0.1, 1} at that start.
+  - Declaration: no `fit_case`; `information_starts` holds that start only; `information_density_weights` [λ].
+  - Each writes its own `release-tests.json`, which must hold the matching start and λ with both pass fields true. Its hash enters that λ's fit declaration.
+  - A λ whose record fails is not fitted, and the failure is retained.
+  - Reweighting the retained start Jacobian (r2) gives augmented conditions of about 4,887, 4,521 and 4,031, under 1e4.
+- **Fits:** F1 at λ = 0.01, 0.1 and 1, run in that order.
+  - Same declaration as `matched-larger-dV/control-fit-spec.json` except: `fit_case.density_weight`; the release path and hash; the wheel path, set to the retained `build/engine-wheels/main-21e761c3…/` file with an unchanged hash; and the budget and ledger fields below.
+  - Density rows: weight λ/12, scale 2 kg/m³.
+  - Rows: 178 reacting, 217 total.
+  - Controls as in amendment 4: function tolerance 1e-6, 600 s native limit, 32 workers, `nice -n 10`, single-threaded numerical libraries.
+- **Endpoint evaluation:** one information call per endpoint, with no `fit_case` and density weights [].
+  - Cold replay on all 217 fit rows at the fit's λ/12 weights, against the fit's `native.json`, within 1e-8 for rows and relative cost.
+  - `check_matched_co2_mea.py` is not reused: it drops density rows.
+- **Costs kept distinct:** C149 (common), C166 (all non-density reacting rows), C178 (reacting rows with density), C217 (with Kiepe).
+- **Trade-off table for the owner,** for λ = 0 (A4 control), 0.01, 0.1 and 1:
+  - C149, C166, C178;
+  - pressure and species average absolute relative deviation, and Vinjarapu RMSE, on the common 149;
   - the four Cp values;
   - the 12 densities;
-  - both ion segment diameters, both Born diameters, the active bounds, and the free-block condition.
-  - The 8 loaded and 5 unloaded assessment densities follow for the chosen λ only.
+  - both ion segment diameters, both Born diameters, the active bounds, the free-block condition, and the projected gradient.
+  - The 8 loaded and 5 unloaded assessment densities follow for any λ the owner considers.
 
-**Pre-stated expectations.**
-- As λ rises, both ion segment diameters leave the 5.8 Å bound toward roughly 4–5 Å.
-- Loaded-density errors fall toward a few kg/m³ by λ = 1, while C149 rises; the size of that rise is the trade-off.
-- The Born-diameter bound may persist, since density does not see the Born term.
+**Hypotheses, pre-stated; none is a necessary outcome.**
+- Density weighting may reduce the loaded-density errors and move one or both ion segment diameters off the 5.8 Å bound.
+- The location of any optimum, whether the Born diameters move (density residuals do depend on them: retained start derivatives about 0.035 and 0.050 per scaled coordinate), and the change in C149 are open.
 
-**Falsifiers.**
-- If at λ = 1 both diameters stay at 5.8 Å, or any of the 12 densities stays more than 20 kg/m³ off, then size cannot reconcile density with this form. Density is then reported with a disclosed empirical translation, and the follow-up owns the form.
-- A fit that fails to converge or replay is retained as a numerical failure, not a physical result.
+**Outcome statements.**
+- If no λ produces a converged, replayable endpoint with all 12 densities within 2 kg/m³: "the declared sweep did not produce a candidate satisfying the density requirements." That says nothing about the model form beyond this screen.
+- No empirical correction is authorized or transferred automatically.
+- A non-converged or non-replaying fit is a numerical failure, kept distinct from a converged endpoint that misses the gate.
+- Owner selection and adoption, and the full 20 loaded plus 5 unloaded checks, are unchanged.
 
 **Compute, without raising program caps.**
-- **Allowance:** 1,200 compute-wall s and 15,000 CPU-s.
-  - Three start information calls: about 20 s each.
-  - Three fits: about 250 s and 3,300 CPU-s each, possibly more with the density rows.
-  - Three endpoint information calls: about 20 s each.
-- **Ledger before:** 10,638.83 of 21,600 s, and 93,726.34 of 144,000 CPU-s. That adds the whole-command times of the 19.75 s smaller-d_V call and its 0.08 s setup failure, which stopped at the wheel-path check before any calculation.
+- **Step allowance:** 1,500 compute-wall s and 15,000 CPU-s.
+- **Per-call allowances:**
+  - Information calls: `nonfit_wall_s` 180 and `nonfit_cpu_s` 500, as before.
+  - Fits: `fit_wall_s` 600 (guard 720) and `fit_cpu_s` 6,000. The A4 fits used 3,008–3,247 CPU-s.
+- **Carrying charges:** each declaration's `budget_*` equals the step allowance minus the actual charges of earlier step-1 calls, and its `program_prior_*` equals the program total at launch.
+- **Admission:** a call the guard refuses is not run, and the sweep is reported incomplete.
+- **Forecast:** about 870 s and 10,020 CPU-s.
+- **Ledger before:** 10,638.83 of 21,600 s and 93,726.34 of 144,000 CPU-s.
+  - That includes the 0.08 s wall / 0.06 CPU-s setup failure, whose GNU time record is retained in `setup-failure-wheel-path/command-time.json`.
+  - Spending the whole allowance leaves 9,461.17 s, above the 1,950.38 s check reserve, and 35,273.66 CPU-s.
 
-**Code:** no new lines. Declarations only, and none hide executable code.
+**Code:** no new lines. Declarations only. The post-processing that reduces densities and replay is disclosed scratch, with its text retained, as in amendment 5.
 
-**After step 1:** the owner chooses λ, or none. The §3–4 assessment and the §5 comparison family then run at that λ, with the r1 corrections applied:
+**After step 1:** the owner chooses λ, chooses none, or disposes of the outstanding branch/start scope. The §3–4 assessment and the §5 comparison family then run at that λ, with the r1 corrections:
 - the weaker Born hypothesis;
 - mixed-outcome rules for cost against pressure;
 - the zero-weight no-heat route, with the stage6_rows assertion kept;
 - verification compute added to the allowance.
 
-The 250-line request is deferred until the remaining work is known (r1 correction 3).
+The 250-line request stays deferred.
 
 ## 1. Authority, question and retained evidence
 
