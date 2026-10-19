@@ -187,3 +187,26 @@ The printed-α comparison confirms +0.420909 to +1.564000 kg/m³ at
 x₃-derived alternative changes those ranges to +1.507743 to +3.814242
 and +10.647319 to +11.247044 kg/m³, respectively. The choice of loading
 representation therefore affects the comparison and remains a review gate.
+
+### Adopted fitting basis (owner decision, 2026-10-19)
+
+Independent source review (GPT-6.1 Sol, 2026-10-19) of commit `f2d6f82` found the 40-row transcription, the own-row identification and the library changes correct. It also found that the source cannot decide between the two loading readings:
+
+- **(H1) The x₃-derived loadings are the real ones.** The printed α would then be low by 0.0058–0.0127, which is 0.6–1.3 times the stated u(α) = 0.01. A common loading offset of about 0.00715–0.01126 reconciles all five columns within printing precision.
+- **(H2) The printed α is right,** and the solvent was not exactly 30 mass %. Allowing both printed quantities their rounding, one common solvent composition W′ = 7.5959–7.7126 mol water/mol MEA, i.e. **30.54–30.86 mass % MEA** on a CO₂-free basis, reproduces all five x₃ values. Without that rounding, the five columns imply different compositions, 30.6–31.6 mass %. Calling it the titrated concentration would be an inference; the paper reports no titration numbers.
+- **Density consequence:**
+  - *H1:* at the observed slopes of 179–224 kg/m³ per unit α, the loading shift is worth about 1.2–2.5 kg/m³.
+  - *H2:* compared with a true 30 mass % solution, about +0.9 to +2.3 kg/m³, using finite differences of ∂ρ/∂w between Amundsen's 30 and 40 mass % tables.
+  - Both effects far exceed the printed u(ρ) = 0.02 kg/m³.
+- **Correlation check:** the paper's density correlation (Eqs. 3–5) does not reproduce Table 3 closely enough to adjudicate (0.74 % average absolute relative deviation in a literal check, against the reported 0.13 %).
+
+**Adopted for fitting** (owner, #170):
+- **Basis:** the printed α with the nominal 30 mass % CO₂-free solvent (W = 7.911062165). This is the authors' reporting convention and an **adopted assumption**, not a uniquely resolved composition.
+- **Residual scale:** each row combines u(ρ) = 0.02 kg/m³ with u(α) = 0.01 propagated through ∂ρ/∂α, s² = u(ρ)² + (∂ρ/∂α · u(α))², about 1.8–2.2 kg/m³.
+- **Sensitivity:** the H1/H2 ambiguity is a separate, possibly systematic effect shared across each temperature series. It is assessed by rerunning the selected candidate on the x₃-derived loadings, which stay in `co2_loading_from_mole_fraction_mol_per_mol_mea`.
+
+**Row status.**
+- Loadings 0.11–0.39 (32 rows): `property_target_candidate`.
+- Loading 0.50 (8 rows): `validation_only`.
+- `co2_loading_source_supported_mol_per_mol_mea` stays empty, because no unique source-supported loading exists.
+
