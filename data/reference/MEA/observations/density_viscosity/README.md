@@ -210,3 +210,147 @@ Independent source review (GPT-6.1 Sol, 2026-10-19) of commit `f2d6f82` found th
 - Loading 0.50 (8 rows): `validation_only`.
 - `co2_loading_source_supported_mol_per_mol_mea` stays empty, because no unique source-supported loading exists.
 
+## Han 2012 (assessment-only)
+
+`Han_2012_loaded_density.csv` retains 67 measured densities at 30 mass %
+MEA on a CO₂-free basis: 50 loaded cells from Table 4 p.1098 (PDF p.4)
+and 17 unloaded cells from Table 3 p.1097 (PDF p.3). The source is
+Jingyi Han, Jing Jin, Dag A. Eimer and Morten C. Melaaen (2012),
+“Density of Water (1) + Monoethanolamine (2) + CO₂ (3) from (298.15 to
+413.15) K and Surface Tension of Water (1) + Monoethanolamine (2) from
+(303.15 to 333.15) K”, *J. Chem. Eng. Data* **57**, 1095–1103,
+DOI `10.1021/je2010038`. Zotero parent `X8GZTAGN`, PDF attachment
+`BEZB6G4U`, PDF SHA-256
+`14d8a6b065889dddd06a21c736df2dacee86201bd624b0bb5f6282a1af5f8a92`.
+The task worktree has no literature shelf; the main checkout's reading
+index has no Han entry. The identified Zotero PDF was read directly.
+
+### Transcription and checks (19 October 2026)
+
+The selected temperature interval is the model's 293.15–393.15 K domain.
+Han prints no 30 mass % density at 293.15 K. Table 4 contributes every
+cell at 298.15, 313.15, 323.15, 333.15, 343.15, 353.15, 363.15,
+373.15, 383.15 and 393.15 K, with five printed loadings at each
+temperature: α = 0.10, 0.21, 0.32, 0.44 and 0.56 mol CO₂/mol MEA.
+Each loading therefore has ten rows. Table 3 contributes one unloaded
+cell at each of those ten temperatures and at 303.15, 308.15, 318.15,
+328.15, 338.15, 348.15 and 358.15 K. Thus the first set of temperatures
+has six rows each and the latter set has one each. Values above 393.15 K,
+other MEA concentrations, excess volumes and surface tensions are outside
+this extraction.
+
+The PDF was extracted with `pdftotext -layout` and pages were rendered
+with `pdftoppm` into a new empty directory under `tmp/`. All 50 Table 4
+density cells, their temperature/loading headers and pressure column, and
+all 17 selected Table 3 density cells and headers were checked visually
+against the rendered pages. The methods on p.1096 and uncertainty table
+and prose on p.1102 were also visually checked. Every row records
+`checked_against_rendered_page=yes` and `visual_check_date=2026-10-19`.
+All 67 CSV density values also agree with the layout-text extraction;
+no selected cell was unreadable or ambiguous.
+
+The 18 Han cells in commit `128b299`,
+`analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/source-conflict/third-source-values.csv`,
+were cross-checked by temperature and printed loading. All 18 densities,
+temperatures, loadings, pressures and PDF identities match exactly;
+there are zero disagreements. That earlier comparison file is not a
+second set of measurements.
+
+### Composition, loading and pressure
+
+Table 4 footnote a p.1098 explicitly defines w₂ as the mass fraction of
+MEA in the water + MEA solution. Its title defines α = nCO₂/nMEA.
+The Experimental Section pp.1095–1096 describes degassing MEA and water,
+preparing solutions by weighing, bubbling CO₂ into unloaded solution,
+and analyzing the highly loaded solution by BaCO₃ precipitation and
+titration. The precipitate was dissolved with HCl to pH 2, then excess
+HCl was determined by NaOH titration to pH 5.27. Unloaded and highly
+loaded solutions were mixed to obtain the loading series (p.1096,
+left column). The CSV preserves the printed loadings; it does not
+reconstruct individual sample analyses or infer unrounded loadings.
+The unloaded Table 3 row prints w₂ = 0.3 and x₂ = 0.1122; it has no
+printed α. Its loading field is blank, with `system=binary` and an
+explicit unloaded note (zero CO₂).
+
+Table 4's pressure column and Table 3 footnote a report 0.1 MPa through
+363.15 K and 0.7 MPa from 373.15 K upward. The CSV converts these to
+100 and 700 kPa. The Experimental Section p.1096 identifies the
+oscillating U-tube instruments as Anton Paar DMA 4500 through 363.15 K
+and DMA HP at higher temperatures, the latter operated under pressure
+to restrain evaporation and CO₂ desorption.
+
+### Reported uncertainties and CSV conventions
+
+The “Assessment of the Experimental Uncertainties” pp.1101–1102 and
+Table 12 p.1102 report:
+
+- Combined density uncertainty of 1.3 kg/m³ for loaded solutions over
+  the whole temperature range, with expanded uncertainty 2.6 kg/m³ at
+  confidence 0.95 (p.1102, paragraph beginning “Similar to the previous
+  calculations”).
+- Combined density uncertainty of 0.34 kg/m³ below 373.15 K and
+  0.35 kg/m³ at or above 373.15 K for unloaded solutions, with expanded
+  uncertainties 0.68 and 0.70 kg/m³, respectively, at confidence 0.95
+  (p.1102, first paragraph). Table 12 places 0.70 kg/m³ beside the
+  loaded-solution label; the prose explicitly assigns it to unloaded
+  solutions at or above 373.15 K. This extraction follows that prose.
+- Temperature uncertainty 0.03 K below 373.15 K and 0.05 K at or above
+  373.15 K; MEA mass-fraction uncertainty 0.005; loading uncertainty
+  0.003 mol CO₂/mol MEA; instrument density accuracy 0.05 kg/m³ below
+  373.15 K and 0.1 kg/m³ at or above 373.15 K (Table 12).
+
+The paper's prose says the combined density uncertainty includes
+temperature, mass fraction, instrument error and, for loaded solutions,
+loading. These contributions are retained separately as source metadata;
+they are not added to the combined uncertainty again. The source states
+confidence 0.95 but does not explicitly state a coverage factor in these
+passages; the coverage-factor column is blank. No covariance, new
+residual scale or fitting weight is assigned.
+
+The file follows the Hartono CSV's column names where applicable.
+`value` and `value_unit` preserve the printed density and kg/m³ unit;
+`density_kg_m3` repeats the density in the requested normalized unit,
+and `density_g_cm3` divides by 1000. `uncertainty_value` retains the
+combined density uncertainty with `uncertainty_type=combined_absolute`;
+the expanded uncertainty and confidence have separate columns.
+`temperature_printed` and `temperature_unit_printed` retain kelvin;
+`temperature_C=temperature_K−273.15`. Mass-fraction uncertainty is
+dimensionless and absolute. The loading uncertainty is populated for
+loaded rows only. Unreported x₃, alternative loadings, relative
+uncertainties, coverage factors and Markdown line numbers remain blank.
+Each row retains its source table/page, temperature/loading locator,
+Zotero keys and PDF hash. The Amundsen-specific schema describes its
+own source; it is not extended to imply identical units or uncertainty
+definitions for Han.
+
+### Relation to Amundsen 2009 and adopted use
+
+Han and Amundsen share Dag A. Eimer and the Porsgrunn/Telemark research
+group (Han p.1095 author affiliations; Amundsen p.3096 author
+affiliations). Both describe CO₂ saturation, mixing with unloaded
+solution, BaCO₃ precipitation/titration and DMA 4500 density
+measurements (Han p.1096; Amundsen Experimental Section pp.3096–3097).
+They should not be described as independent laboratories. Amundsen's
+30 mass % Table 3 p.3097 uses α = 0.1–0.5 and 298.15–353.15 K,
+with the highest-loading high-temperature cells absent. Han's Table 4
+uses α = 0.10–0.56 and 298.15–413.15 K, and adds DMA HP measurements
+at 0.7 MPa. Their reported loading uncertainties also differ:
+Amundsen estimates 2 % (p.3096), while Han gives an absolute
+0.003 mol/mol (Table 12 p.1102). The Amundsen reading copy used here
+matches both its shelf index and current Zotero Markdown attachment
+`6ZD3H493`, SHA-256
+`4b585de0d9d73a1f7ac142882cdbafeaa37d780c36f795f40bac627b1d7ec1ce`.
+These passages do not establish the cause of the density disagreement.
+
+The owner decision of 19 October 2026 in
+[#170 comment 6278610430](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6278610430)
+adds Han as assessment-only comparison evidence and removes the five
+Amundsen loading-0.4 rows from the fitted objective and gate because
+Hartono and Han contradict them there. This records the supplied owner
+decision; it does not change Amundsen observations or implement objective
+changes. Every Han row, including unloaded rows, has
+`lifecycle_status=validation_only`: no row is a fit target or gate.
+The status is an assessment role, not a claim of physical validation.
+No Engine calculation, fit, interpolation or new density comparison was
+performed for this adoption.
+
