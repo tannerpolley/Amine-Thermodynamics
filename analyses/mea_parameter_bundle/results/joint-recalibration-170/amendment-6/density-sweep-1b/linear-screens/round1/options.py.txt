@@ -1,0 +1,52 @@
+from diagnose import *
+# Verify tied columns using identities (probe P inserts densities before the four Cp rows).
+a4=load('a4'); idx={z['id']:i for i,z in enumerate(rows)}; ix=np.array([idx[z['id']] for z in a4['rows']]); aJ=np.array(a4['optimizer_jacobian']).reshape(205,14);print('ALIGNED REPLAY',np.max(abs(tiedJ[ix]*np.sqrt(w[ix,None])-aJ)))
+# Finite endpoint secant: same unshifted R5 and accumulated enthalpy coordinates.
+move=(origins['l']-origins['a4'])/dc; sec=r+tiedJ@move; print('SECANT from A4 to actual lambda .01',metrics(sec,rows,w)); print('secant density discrepancy',2*(sec[den]-er[eden]));
+
+# Minimize non-density C205 subject to all 12 density residuals in [-1,1], plus explicit box constraints.
+def hard_density(A,b,D,d,lo,hi):
+ n=len(lo); Gbox=np.r_[np.eye(n),-np.eye(n)];hbox=np.r_[hi,-lo];Gd=np.r_[D,-D];hd=np.r_[1-d,1+d]
+ x0=np.clip(np.zeros(n),lo,hi);t=max(0.,float(np.max(abs(d+D@x0))-1))+1e-8
+ G=np.r_[np.c_[Gbox,np.zeros(2*n)],np.c_[Gd,-np.ones(len(hd))],np.array([[0.]*n+[-1.]])];h=np.r_[hbox,hd,0.]
+ phaseA=np.zeros((1,n+1));phaseA[0,-1]=1
+ feas,info=qpls(phaseA,np.zeros(1),G,h,np.r_[x0,t]);x=feas[:-1]
+ if feas[-1]>1e-6:return x,{'feasible':False,'min_max_density':float(2*(1+feas[-1])),'phase_kkt':info}
+ x,info=qpls(A,b,np.r_[Gbox,Gd],np.r_[hbox,hd],x)
+ return x,{'feasible':True,'kkt':info}
+
+def scenario(pack=(),m=(),mlo=.5,u=None,born=None,sigmaminus=None,dh=()):
+ B=T.copy(); bs=bounds.copy(); new=[];op=origins['a4'].copy();delta=dc.copy();nn=names.copy()
+ if sigmaminus:bs[6]=sigmaminus
+ if u:
+  for k in [12,13]:bs[k]=u
+ if born:
+  for k in [7,8]:bs[k]=born
+ for ion in pack:
+  pcol,bcol=(6,5) if ion=='+' else (12,6); B[pcol,bcol]=0;new.append((pcol,1.,7.))
+ for ion in dh:
+  pcol,bcol=(7,5) if ion=='+' else (13,6);B[pcol,bcol]=0;new.append((pcol,1.,7.))
+ for ion in m:new.append((8 if ion=='+' else 14,mlo,5.))
+ for pcol,low,high in new:
+  v=np.zeros(20);v[pcol]=1;B=np.c_[B,v]; bs=np.r_[bs,[[low,high]]];nn.append(pn[pcol]);op=np.r_[op,values['a4'][pn[pcol]]];delta=np.r_[delta,pc[pcol]['scale']]
+ return B,bs,op,delta,nn
+scenarios={
+ 'original':{},'pack+':{'pack':('+',)},'pack-':{'pack':('-',)},'pack_both':{'pack':('+','-')},
+ 'carb_lower_upper5':{'sigmaminus':(2.,5.)},'carb_lower_upper4':{'sigmaminus':(2.,4.)},'carb_raise6p8':{'sigmaminus':(2.,6.8)},'carb_raise8':{'sigmaminus':(2.,8.)},'carb_lower_lower1':{'sigmaminus':(1.,5.8)},
+ 'm_both_0p5':{'m':('+','-')},'m_both_1':{'m':('+','-'),'mlo':1.},'m+':{'m':('+',)},'m-':{'m':('-',)},
+ 'u_wide':{'u':(1.,2000.)},'born_wide_upper':{'born':(2.,8.)},'born_wide_both':{'born':(.5,8.)},
+ 'pack_m_both':{'pack':('+','-'),'m':('+','-')},'pack_u':{'pack':('+','-'),'u':(1.,2000.)},'pack_born':{'pack':('+','-'),'born':(2.,8.)},'m_born':{'m':('+','-'),'born':(2.,8.)},
+ 'pack_born_u':{'pack':('+','-'),'born':(2.,8.),'u':(1.,2000.)},'pack_DH':{'pack':('+','-'),'dh':('+','-')},'pack_m_born_u':{'pack':('+','-'),'m':('+','-'),'born':(2.,8.),'u':(1.,2000.)}
+}
+optres={}
+for name,kw in scenarios.items():
+ B,bs,op,delta,nn=scenario(**kw);JJ=J@B;lo,hi=boxsteps(op,bs,delta);non=~den
+ out={'bounds':bs.tolist(),'names':nn,'origin':op.tolist(),'configuration':kw,'results':{}}
+ for lam in [1.,100.]:
+  wt=w.copy();wt[den]=lam/12;s,info=bounded(JJ*np.sqrt(wt)[:,None],r*np.sqrt(wt),lo,hi);out['results']['lambda'+str(lam)]={**metrics(r+JJ@s,rows,wt),'endpoint':(op+delta*s).tolist(),'step':s.tolist(),'kkt':info}
+ s,info=hard_density(JJ[non]*np.sqrt(w[non,None]),r[non]*np.sqrt(w[non]),JJ[den],r[den],lo,hi);out['results']['hard2']={**metrics(r+JJ@s,rows,w),'endpoint':(op+delta*s).tolist(),'step':s.tolist(),**info}
+ optres[name]=out
+ print(name, 'lambda1',*[round(out['results']['lambda1.0'][k],5) for k in ['density_max','C149','C166','heat_rmse_kJmol']], 'hard2',*[round(out['results']['hard2'][k],5) for k in ['density_max','C149','C166','heat_rmse_kJmol']],out['results']['hard2'].get('feasible'))
+(ROOT/'options.json').write_text(json.dumps(optres,indent=2));
+for name in ['pack_both','m_both_0p5','m_both_1','born_wide_upper','pack_born','pack_u','pack_born_u','pack_m_born_u']:
+ print('DETAILS',name,optres[name]['results']['hard2'])

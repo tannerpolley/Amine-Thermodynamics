@@ -1,0 +1,11 @@
+exec(open('/tmp/density-diag-2/limits.py').read().split('\nout={}')[0])
+caps={'A4_plus5pct':load('/tmp/density-diag/results.json')['bases']['a4']['C149']*1.05,'lowest_new_endpoint_plus5pct':metrics(data('l0p1'),data('l0p1')['r'])['C149']*1.05}
+out={}
+for ep in ['l1','l0p1']:
+ d=data(ep);out[ep]={}
+ for name,cap in caps.items():
+  out[ep][name]={}
+  for small in [False,True]:
+   s=scenario(d,**SCENARIOS['all'],trust=small);a=minimax_cap(d,s,cap);out[ep][name]['small_moves' if small else 'full_bounds']=a
+   print(ep,name,'small' if small else 'full',cap,a['density_max_upper'],a['result']['C166'],a['result']['Vinjarapu_RMSE_kJ_mol'],flush=True)
+(ROOT/'common-cap.json').write_text(json.dumps(out,indent=2))

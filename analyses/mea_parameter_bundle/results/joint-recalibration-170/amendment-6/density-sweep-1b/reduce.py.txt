@@ -39,9 +39,26 @@ for name, c in cases.items():
         if e: s[g] = dict(n=len(e), min=min(e), max=max(e), within_2=sum(abs(x) <= 2 for x in e))
     u = unl.get(c['unloaded']); s['unloaded'] = dict(errors=[x['error'] for x in u], within_0p5=sum(abs(x['error']) <= 0.5 for x in u)) if u else None
     s['densities'] = dens; summary[name] = s
+# Amundsen minus Hartono (own rows, printed loading; linear interpolation in loading between Hartono's printed points)
+H = json.load(open(f'{D}/hartono-check/rows.json'))['printed']; HA = [0.11, 0.19, 0.29, 0.39]
+AMU = {k: v for k, v in summary['lambda 1 (Amundsen targets)']['densities'].items() if k.startswith('Amundsen')}
+UNL = {298.15: 1010.55, 313.15: 1003.45, 323.15: 998.07, 343.15: 985.96, 353.15: 979.27}  # Hartono 2014 Table 3 own unloaded column
+H50 = {298.15: 1105.88, 313.15: 1098.66, 323.15: 1093.45, 343.15: 1082.00, 353.15: 1075.85}  # own loading-0.50 column
+diff = []
+for k, v in AMU.items():
+    T = v['T_K']; pts = [(0.0, UNL[T])] + [(a, r['observed']) for a in HA for r in H if r['T_K'] == T and r['id'].endswith(f'a{a}')] + [(0.50, H50[T])]
+    pts.sort(); a = v['loading']
+    lo, hi = next((pts[i], pts[i+1]) for i in range(len(pts)-1) if pts[i][0] <= a <= pts[i+1][0])
+    diff.append(dict(id=k, T_K=T, loading=a, amundsen_minus_hartono=v['observed'] - (lo[1] + (hi[1]-lo[1])*(a-lo[0])/(hi[0]-lo[0]))))
+summary['source_disagreement'] = diff
 json.dump(summary, open(f'{D}/summary.json', 'w'), indent=1)
 for name, s in summary.items():
+    if name == "source_disagreement": continue
     print(f"{name}: {s['status']} {s['iterations']} it; C149 {s['C149']:.3f} C166 {s['C166']:.3f}; P {s['pressure_AARD_pct']:.2f}% S {s['species_AARD_pct']:.2f}% H {s['vinjarapu_rmse_kJ_mol']:.3f}")
     for g in ('amundsen_fitted', 'amundsen_assessment', 'hartono_printed', 'hartono_x3'):
         if g in s: print(f"   {g:20s} n={s[g]['n']:2d} [{s[g]['min']:+.2f}, {s[g]['max']:+.2f}] within2 {s[g]['within_2']}")
     if s['unloaded']: print('   unloaded', [round(x, 2) for x in s['unloaded']['errors']], 'within0.5', s['unloaded']['within_0p5'])
+for a in (0.1, 0.2, 0.3, 0.4):
+    d = [x['amundsen_minus_hartono'] for x in summary['source_disagreement'] if abs(x['loading']-a) < 1e-9]
+    print(f'Amundsen - Hartono at loading {a}: {min(d):+.3f} to {max(d):+.3f} kg/m3 (n={len(d)})')
+
