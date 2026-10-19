@@ -121,6 +121,13 @@ write("residual_summary.tex", r"""\begin{table}[pos=!htb]
 """)
 
 # Main text: binary interaction parameters with conditional standard errors.
+def fixed_pair(problem, pair):
+    document = json.loads((RUN / f"{problem}-{starts[problem]['start']}/parameters.json").read_text())
+    return num(next(c["value"]["magnitude"] for p in document["pairs"] for c in p["coefficients"]
+                    if c["identity"] == f"pair/{pair}/k_ij"), 4)
+
+
+MW, CO2W = "monoethanolamine/water", "carbon-dioxide/water"
 fitted_rows = []
 for key, bounds, note in ((CW, r"\(\pm0.5\)", ""), (HW, r"\(\pm0.5\)", r"; value at \(T_{\mathrm{ref}}\)"),
                           (SLOPE, r"\(\pm1000\)", ""), (BW, r"\(\pm0.5\)", ""), (CH, r"\(\pm1\)", "")):
@@ -139,9 +146,9 @@ write("binary_interaction_parameters.tex", r"""\begin{table*}[t]
         \toprule
         Parameter & Role & Bounds & F1 & SE & F2 & SE & Source or note \\
         \midrule
-""" + "\n".join(fitted_rows) + r"""
-        \(k_{\MEA,\HtwoO}\) & Fixed & -- & \(-0.0735\) & -- & \(-0.0735\) & -- & Fitted to binary VLE \cite{caiBinaryIsobaricVaporLiquid1996} \\
-        \(k_{\COtwo,\HtwoO}\) & Fixed & -- & 0.0133 & -- & 0.0133 & -- & Fitted to binary VLE \cite{kiepeExperimentalDeterminationPrediction2002} \\
+""" + "\n".join(fitted_rows) + rf"""
+        \(k_{{\MEA,\HtwoO}}\) & Fixed & -- & {fixed_pair('F1', MW)} & -- & {fixed_pair('F2', MW)} & -- & Fitted to binary VLE \cite{{caiBinaryIsobaricVaporLiquid1996}} \\
+        \(k_{{\COtwo,\HtwoO}}\) & Fixed & -- & {fixed_pair('F1', CO2W)} & -- & {fixed_pair('F2', CO2W)} & -- & Fitted to binary VLE \cite{{kiepeExperimentalDeterminationPrediction2002}} \\""" + r"""
         \(k_{\HthreeO,\HtwoO}\) & Fixed & -- & 0.25 & -- & 0.25 & -- & \cite[Table~2]{Held2014} \\
         \(k_{\Hydroxide,\HtwoO}\) & Fixed & -- & \(-0.25\) & -- & \(-0.25\) & -- & \cite[Table~2]{Held2014} \\
         \(k_{\COthree,\HtwoO}\) & Fixed & -- & \(-0.25\) & -- & \(-0.25\) & -- & \cite[Table~2]{Held2014} \\
