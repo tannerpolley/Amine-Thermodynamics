@@ -1,0 +1,375 @@
+....................................................... [ 57%]
+.....................F..............F....                                [100%]
+=================================== FAILURES ===================================
+__________ test_campaigns_use_candidate_reactions_and_retain_failures __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d6e29145fd0>
+
+    def test_campaigns_use_candidate_reactions_and_retain_failures(monkeypatch):
+        captured = []
+    
+        def evaluate(model, request, reactions, identity, anchors, **kwargs):
+            captured.append((kwargs["model_fingerprint"], reactions))
+            return {
+                "status": "non_evaluable",
+                "failure_code": "evaluation_timeout",
+                "failure_diagnostic": "test timeout",
+                "predictions": {},
+                "cache_hit": False,
+            }
+    
+>       pressure = direct.pressure_catalog(False)[:1]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+analyses/mea_parameter_bundle/tests/test_campaign_routing.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+full = False
+
+    def pressure_catalog(full: bool) -> list[dict[str, object]]:
+        packet = load_packet()
+        templates = pressure_templates(packet)
+        with CANONICAL_VLE.open(newline="", encoding="utf-8") as stream:
+            rows = [
+                row for row in csv.DictReader(stream) if row["active_view_member"] == "yes"
+            ]
+        if not full:
+            selected = []
+            by_temperature: dict[int, list[dict[str, str]]] = defaultdict(list)
+            for row in rows:
+                by_temperature[round(float(row["temperature_canonical_C"]))].append(row)
+            for temperature_c, members in sorted(by_temperature.items()):
+                ordered = sorted(members, key=lambda row: float(row["CO2_loading"]))
+                indices = {round(index * (len(ordered) - 1) / 4) for index in range(5)}
+                selected.extend(ordered[index] for index in sorted(indices))
+            rows = selected
+        catalog = []
+        for row in rows:
+            temperature_c = round(float(row["temperature_canonical_C"]))
+            loading = float(row["CO2_loading"])
+>           _, template = min(
+                templates[temperature_c], key=lambda item: abs(item[0] - loading)
+            )
+E           ValueError: min() iterable argument is empty
+
+analyses/mea_parameter_bundle/scripts/run_direct_parameter_campaign.py:131: ValueError
+__________________ test_pinned_engine_state_and_cached_replay __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-tnnrpolley21/pytest-41/test_pinned_engine_state_and_c0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d6e291a6b30>
+
+    def test_pinned_engine_state_and_cached_replay(tmp_path, monkeypatch):
+        shared.verify_wheel()
+        monkeypatch.setattr(shared, "RUNS", tmp_path)
+        incumbent = tmp_path / "incumbent-868a5018.json"
+        incumbent.write_bytes(subprocess.check_output(["git", "show", "33508be:analyses/mea_parameter_bundle/results/selected-current-best-parameters.json"], cwd=Path(__file__).parents[3]))
+        assert shared.sha256(incumbent) == "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be"
+>       parameters = shared.load_parameters(incumbent)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+analyses/mea_parameter_bundle/tests/test_shared_evaluation.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+analyses/mea_parameter_bundle/scripts/shared_evaluation.py:207: in load_parameters
+    return epcsaft.Parameters.from_mapping(parameter_mapping(path))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'epcsaft.parameters.Parameters'>
+mapping = {'components': [{'aliases': ['CO2'], 'coefficients': [{'candidate_domain_id': 'mea-candidate-293-15-to-393-15-k', 'fam...-in-temperature', ...}], 'document_id': 'mea-co2-h2o-nine-species-estimation-candidate-v1', 'document_version': 2, ...}
+
+    @classmethod
+    def from_mapping(
+        cls, mapping: Mapping[str, object], *, components: Sequence[str] | None = None
+    ) -> Parameters:
+        document = _mapping(mapping, "parameter document")
+        if document.get("schema") != "epcsaft.parameters" or document.get("schema_version") != 1:
+            raise _core.ParameterError("unsupported parameter document schema")
+        if unread := sorted(set(document) - _KEYS):
+            raise _core.ParameterError(f"parameter document fields the Engine does not read: {', '.join(unread)}")
+        raw_components = _array(document.get("components"), "components")
+        component_records: dict[str, Mapping[str, object]] = {}
+        for index, item in enumerate(raw_components):
+            record = _mapping(item, "components")
+            component_id = record.get("component_id")
+            if not isinstance(component_id, str) or not component_id:
+                raise _core.ParameterError(f"components[{index}].component_id must be a non-empty string")
+            if component_id in component_records:
+                raise _core.ParameterError(f"duplicate component_id {component_id}")
+            component_records[component_id] = record
+        available = list(component_records)
+        selected = available if components is None else list(components)
+        for index, component_id in enumerate(selected):
+            if not isinstance(component_id, str) or not component_id:
+                raise _core.ParameterError(f"component selection[{index}] must be a non-empty string")
+        if len(set(selected)) != len(selected):
+            raise _core.ParameterError("duplicate selected component")
+        if any(item not in available for item in selected):
+            missing = next(item for item in selected if item not in available)
+            raise _core.ParameterError(f"unknown component_id {missing}")
+        selected_ids = tuple(selected)
+        positions = {item: index for index, item in enumerate(selected_ids)}
+        entries: list[_core.ParameterEntry] = []
+        laws: dict[str, tuple[int, Mapping[str, object]]] = {}
+        # Document families keep their native field name unless renamed here.
+        renamed = {"segment_diameter": "sigma_constant", "ion_specific_suppression_coefficient": "ion_suppression_coefficient"}
+        coefficient_families = {"segment_count", "dispersion_energy_over_k", "packing_diameter", "debye_huckel_diameter", "born_diameter",
+                                "solvation_factor", "relative_permittivity", "dielectric_volume", "dielectric_temperature", "dipole_scaling",
+                                "polarizability_scaling", "correlation_integral_parameter", "dipole_moment", "dipole_count",
+                                "quadrupole_moment", "quadrupole_count", *renamed}
+        for component_id in selected_ids:
+            record = component_records[component_id]
+            fixed = _mapping(record.get("fixed", {}), f"component/{component_id}/fixed")
+            for family in ("molar_mass", "charge_number"):
+                if family in fixed:
+                    item = _mapping(fixed[family], f"component/{component_id}/{family}")
+                    entries.append(_entry(item.get("identity", f"component/{component_id}/{family}"), family, (positions[component_id],), item["value"], f"component/{component_id}/{family}"))
+            coefficients = _array(record.get("coefficients", ()), f"component/{component_id}/coefficients")
+            for item_value in coefficients:
+                item = _mapping(item_value, f"component/{component_id}/coefficients")
+                family_value = item.get("family")
+                if not isinstance(family_value, str) or family_value not in coefficient_families:
+                    raise _core.ParameterError(f"unknown component family {family_value} for {item.get('identity')}")
+                identity = item.get("identity")
+                if not isinstance(identity, str):
+                    raise _core.ParameterError(f"component/{component_id}/coefficients has no identity")
+                entries.append(_entry(identity, renamed.get(family_value, family_value), (positions[component_id],), item["value"], identity))
+    
+        raw_correlations = _array(document.get("correlations", ()), "correlations")
+        sigma_term = 0
+        permittivity_term = 0
+        for correlation_index, item_value in enumerate(raw_correlations):
+            item = _mapping(item_value, "correlation")
+            component_id = item.get("component_id")
+            if not isinstance(component_id, str) or not component_id:
+                raise _core.ParameterError(f"correlation[{correlation_index}].component_id must be a non-empty string")
+            if component_id not in positions:
+                continue
+            correlation_id = item.get("correlation_id")
+            family_value = item.get("family")
+            form_value = item.get("form")
+            if not isinstance(family_value, str) or not isinstance(form_value, str):
+                raise _core.ParameterError(f"unknown correlation {correlation_id}")
+            family = family_value
+            form = form_value
+            correlation_position = (positions[component_id],)
+            if family not in {"segment_diameter", "relative_permittivity"} or form not in {"constant", "constant-plus-sum-of-exponentials", "constant-plus-polynomial-in-temperature"}:
+                raise _core.ParameterError(f"unknown correlation {correlation_id}")
+            if form == "constant-plus-sum-of-exponentials" and family != "segment_diameter":
+                raise _core.ParameterError(f"unknown correlation form {correlation_id}")
+            if form == "constant-plus-polynomial-in-temperature" and family != "relative_permittivity":
+                raise _core.ParameterError(f"unknown correlation form {correlation_id}")
+            base = "sigma_constant" if family == "segment_diameter" else "relative_permittivity"
+            constant = _mapping(item.get("constant"), f"{correlation_id}.constant")
+            entries.append(_entry(constant.get("identity", correlation_id), base, correlation_position, constant["value"], cast(str, correlation_id)))
+            if form == "constant-plus-sum-of-exponentials":
+                terms = _array(item.get("terms", ()), f"{correlation_id} terms")
+                for term in terms:
+                    term_map = _mapping(term, cast(str, correlation_id))
+                    amplitude = _mapping(term_map.get("amplitude"), "sigma amplitude")
+                    exponent = _mapping(term_map.get("exponent_coefficient"), "sigma exponent")
+                    entries.append(_entry(amplitude.get("identity"), "sigma_term_amplitude", (sigma_term, positions[component_id]), amplitude["value"], cast(str, correlation_id)))
+                    entries.append(_entry(exponent.get("identity"), "sigma_term_exponent", (sigma_term, positions[component_id]), exponent["value"], cast(str, correlation_id)))
+                    sigma_term += 1
+            elif form == "constant-plus-polynomial-in-temperature":
+                reference = _mapping(item.get("reference_temperature"), "permittivity reference")
+                entries.append(_entry(f"{correlation_id}/reference_temperature", "permittivity_reference_temperature", correlation_position, reference, cast(str, correlation_id)))
+                terms = _array(item.get("terms", ()), f"{correlation_id} terms")
+                for term in terms:
+                    term_map = _mapping(term, cast(str, correlation_id))
+                    power = term_map.get("power")
+                    if not isinstance(power, int):
+                        raise _core.ParameterError(f"invalid polynomial power for {correlation_id}")
+                    coefficient = _mapping(term_map.get("coefficient"), "permittivity coefficient")
+                    entries.append(_entry(coefficient.get("identity"), "permittivity_term_coefficient", (permittivity_term, positions[component_id], power), coefficient["value"], cast(str, correlation_id)))
+                    permittivity_term += 1
+    
+        raw_pairs = _array(document.get("pairs", ()), "pairs")
+        pair_fields = {"k_ij", "l_ij", "k_ij_reciprocal_temperature_slope"}
+        for index, pair_value in enumerate(raw_pairs):
+            pair = _mapping(pair_value, "pair")
+            a = pair.get("component_id_a")
+            b = pair.get("component_id_b")
+            if not isinstance(a, str) or not a:
+                raise _core.ParameterError(f"pair[{index}].component_id_a must be a non-empty string")
+            if not isinstance(b, str) or not b:
+                raise _core.ParameterError(f"pair[{index}].component_id_b must be a non-empty string")
+            if a not in positions or b not in positions:
+                continue
+            pair_entries = _array(pair.get("coefficients", ()), f"pair/{a}/{b} coefficients")
+            for item_value in pair_entries:
+                item = _mapping(item_value, f"pair/{a}/{b}")
+                family_value = item.get("family")
+                if not isinstance(family_value, str) or family_value not in pair_fields:
+                    raise _core.ParameterError(f"unsupported pair coefficient {item.get('identity')}")
+                family = family_value
+                pair_index = (positions[a], positions[b])
+                identity = item.get("identity")
+                if not isinstance(identity, str):
+                    raise _core.ParameterError(f"pair/{a}/{b} coefficient has no identity")
+                if family != "k_ij_reciprocal_temperature_slope":
+                    _scalar(item, family, pair_index, laws, entries)
+                else:
+                    entries.append(_entry(identity, family, pair_index, item["value"], identity))
+                    if "reference_temperature" not in item:
+                        raise _core.ParameterError(f"missing reference temperature for {item.get('identity')}")
+                    reference = _mapping(item["reference_temperature"], "pair reference temperature")
+                    entries.append(_entry(f"{identity}/reference_temperature", "k_ij_reference_temperature", pair_index, reference, identity))
+    
+        families = _array(document.get("model_families", ()), "model_families")
+        for item in families:
+            kind = _mapping(item, "model_families").get("kind")
+            if kind not in ("base", "association", "electrolyte", "permittivity", "polar"):
+                raise _core.ParameterError(f"unknown model family kind {kind}")
+        electrolyte = _choice(families, "electrolyte")
+        permittivity = _choice(families, "permittivity")
+        base = _choice(families, "base")
+        association = _choice(families, "association")
+        polar = _choice(families, "polar", "none")  # optional family (ADR 0011)
+        electrolyte_record = next(_mapping(item, "electrolyte family") for item in families if _mapping(item, "electrolyte family").get("kind") == "electrolyte")
+        if electrolyte == "born":
+            for name, field in (("c_shell", "born_c_shell"), ("c_dielectric", "born_c_dielectric")):
+                if name not in electrolyte_record:
+                    raise _core.ParameterError(f"missing electrolyte/{name}")
+                entries.append(_entry(f"model/electrolyte/{name}", field, (), {"magnitude": electrolyte_record[name], "unit": "dimensionless"}, "model/electrolyte"))
+        model_coefficients = _array(document.get("model_coefficients", ()), "model_coefficients")
+        for item_value in model_coefficients:
+            item = _mapping(item_value, "model coefficient")
+            family_value = item.get("family")
+            if family_value == "ionic_region_relative_permittivity":
+                field = "ionic_region_relative_permittivity"
+            elif family_value == "ion_fraction_suppression_coefficient":
+                field = "ion_suppression_coefficient"
+            else:
+                raise _core.ParameterError(f"unknown model coefficient {item.get('identity')}")
+            entries.append(_entry(item.get("identity"), field, (), item["value"], cast(str, item.get("identity"))))
+    
+        topology = _mapping(document.get("topology", {}), "topology")
+        presets = topology.get("presets", ())
+        if isinstance(presets, Sequence) and not isinstance(presets, (str, bytes)) and presets:
+            raise _core.ParameterError("topology.presets is not supported")
+        site_ids: list[tuple[str, str]] = []
+        site_component: list[int] = []
+        site_multiplicity: list[int] = []
+        sites = _array(topology.get("sites", ()), "topology.sites")
+        for index, item_value in enumerate(sites):
+            item = _mapping(item_value, "topology site")
+            component_id = item.get("component_id")
+            site_id = item.get("site_id")
+            if not isinstance(component_id, str) or not component_id:
+                raise _core.ParameterError(f"topology site[{index}].component_id must be a non-empty string")
+            if not isinstance(site_id, str) or not site_id:
+                raise _core.ParameterError(f"topology site[{index}].site_id must be a non-empty string")
+            if component_id not in positions:
+                continue
+            site_key = (component_id, site_id)
+            if site_key in site_ids:
+                raise _core.ParameterError(f"duplicate topology site {site_key}")
+            site_ids.append(site_key)
+            site_component.append(positions[component_id])
+            site_multiplicity.append(cast(int, item.get("multiplicity")))
+        site_positions = {pair: index for index, pair in enumerate(site_ids)}
+        edges = _array(topology.get("edges", ()), "topology.edges")
+        selected_edges: list[tuple[tuple[int, int], Mapping[str, object], Mapping[str, object]]] = []
+        association_identities: dict[str, tuple[str, tuple[int, int]]] = {}
+        for index, item_value in enumerate(edges):
+            edge = _mapping(item_value, "topology edge")
+            endpoint_a = _mapping(edge.get("endpoint_a"), "topology endpoint")
+            endpoint_b = _mapping(edge.get("endpoint_b"), "topology endpoint")
+            first_component_id = endpoint_a.get("component_id")
+            first_site_id = endpoint_a.get("site_id")
+            second_component_id = endpoint_b.get("component_id")
+            second_site_id = endpoint_b.get("site_id")
+            for value, name in ((first_component_id, "endpoint_a.component_id"),
+                                (first_site_id, "endpoint_a.site_id"),
+                                (second_component_id, "endpoint_b.component_id"),
+                                (second_site_id, "endpoint_b.site_id")):
+                if not isinstance(value, str) or not value:
+                    raise _core.ParameterError(f"topology edge[{index}].{name} must be a non-empty string")
+            first = (cast(str, first_component_id), cast(str, first_site_id))
+            second = (cast(str, second_component_id), cast(str, second_site_id))
+            if first[0] not in positions or second[0] not in positions:
+                continue
+            if first not in site_positions or second not in site_positions:
+                raise _core.ParameterError(f"missing topology site {(first if first not in site_positions else second)[0]}/{(first if first not in site_positions else second)[1]}")
+            source = _mapping(edge.get("source"), "topology edge source")
+            edge_index = (site_positions[first], site_positions[second])
+            selected_edges.append((edge_index, edge, source))
+            if source.get("kind") != "explicit":
+                continue
+            if "volume_correction" in edge:
+                raise _core.ParameterError(f"unconsumed volume_correction on explicit edge {first}/{second}")
+            energy = _mapping(edge.get("energy_over_k"), "association energy")
+            volume = _mapping(edge.get("volume"), "association volume")
+            if not isinstance(energy.get("identity"), str) or not isinstance(volume.get("identity"), str):
+                raise _core.ParameterError("association edge identities must be strings")
+            for identity, family in ((cast(str, energy.get("identity")), "energy_over_k"), (cast(str, volume.get("identity")), "volume")):
+                if identity in association_identities:
+                    raise _core.ParameterError(f"duplicate association identity {identity}")
+                association_identities[identity] = (family, edge_index)
+    
+        def resolve_inputs(values: Sequence[object], family: str) -> list[tuple[int, int]]:
+            try:
+                found = [association_identities[cast(str, value)] for value in values]
+            except KeyError as error:
+                raise _core.ParameterError(f"missing association input {error.args[0]}") from error
+            if any(item[0] != family for item in found):
+                raise _core.ParameterError(f"association {family} input has wrong family")
+            return [item[1] for item in found]
+    
+        # Emit only after all explicit identities exist, including forward self-edge references.
+        for edge_index, edge, source in selected_edges:
+            kind = source.get("kind")
+            if kind == "explicit":
+                energy = _mapping(edge.get("energy_over_k"), "association energy")
+                volume = _mapping(edge.get("volume"), "association volume")
+                _scalar(energy, "association_energy_over_k", edge_index, laws, entries)
+                _scalar(volume, "association_volume", edge_index, laws, entries)
+            elif kind == "combining-rule":
+                inputs = _mapping(source.get("inputs"), "combining rule inputs")
+                energy_inputs = inputs.get("energy_over_k")
+                volume_inputs = inputs.get("volume")
+                if not isinstance(energy_inputs, Sequence) or not isinstance(volume_inputs, Sequence) or len(energy_inputs) != 2 or len(volume_inputs) != 2:
+                    raise _core.ParameterError("combining rule requires two self edges")
+                self_energy = resolve_inputs(energy_inputs, "energy_over_k")
+                self_volume = resolve_inputs(volume_inputs, "volume")
+                if self_energy != self_volume:
+                    raise _core.ParameterError(f"association inputs disagree for {source.get('rule_id')}")
+                entries.append(_entry(source.get("rule_id"), "association_combining_rule", [*edge_index, *self_energy[0], *self_energy[1]],
+                                      {"magnitude": 0.0, "unit": "dimensionless"}, "association combining rule"))
+                if "volume_correction" in edge:
+                    _scalar(_mapping(edge["volume_correction"], "volume correction"), "association_volume_correction", edge_index, laws, entries)
+            else:
+                raise _core.ParameterError(f"unknown association edge source {kind}")
+    
+        # One unordered component pair whose unlike site edges are all inactive (preserved model, not proven absence).
+        declared: set[frozenset[str]] = set()
+        for index, value in enumerate(_array(topology.get("no_cross_association", ()), "no_cross_association")):
+            item = _mapping(value, "no_cross_association")
+            a, b = str(item.get("component_id_a")), str(item.get("component_id_b"))
+            if {a, b} - set(component_records) or a == b or frozenset((a, b)) in declared or "provenance" not in item:
+                raise ParameterError(f"no_cross_association[{index}]: two known components, once, with provenance")
+            declared.add(frozenset((a, b)))
+            if a in positions and b in positions:
+                ab, zero = (positions[a], positions[b]), {"magnitude": 0.0, "unit": "dimensionless"}
+                entries.append(_entry(f"no_cross_association/{a}/{b}", "no_cross_association", ab, zero, a))
+    
+        native_document = _core.ParameterDocument()
+        native_document.component_ids = list(selected_ids)
+        native_document.site_component = site_component
+        native_document.site_multiplicity = site_multiplicity
+        native_document.base_choice = base
+        native_document.association_choice = association
+        native_document.electrolyte_choice = electrolyte
+        native_document.ionic_dispersion_choice = str(electrolyte_record.get("ionic_dispersion", ""))
+        native_document.permittivity_choice = permittivity
+        native_document.polar_choice = polar
+        native_document.entries = entries
+>       result = cls(_core.build_parameters(native_document), selected_ids, tuple(site_ids))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       epcsaft._core.ParameterError: missing cross association or no_cross_association: carbon-dioxide/monoethanolamine
+
+../../.venv/lib/python3.13/site-packages/epcsaft/parameters.py:409: ParameterError
+=========================== short test summary info ============================
+FAILED analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_campaigns_use_candidate_reactions_and_retain_failures
+FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_pinned_engine_state_and_cached_replay
+2 failed, 94 passed, 17 subtests passed in 11.74s

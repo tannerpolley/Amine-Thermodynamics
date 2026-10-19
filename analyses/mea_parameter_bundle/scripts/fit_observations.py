@@ -110,6 +110,10 @@ def stage6_rows(spec, mapping):
         rows.append((dict(row, form='difference'), item))
     assert len(rows)==len(common)+len(added)+len(spec['direct_rows'])
     assert len({r['id'] for r, _ in rows})==len(rows)
+    if any(w==0 for d in spec['observations'] for w in d['weights']):
+        heat_ids = {r['record_id'] for r in load(spec['heat_rows_path']) if r['record_id'].startswith('vinjarapu')}
+        assert len(heat_ids)==8 and {r['id'] for r,_ in rows if r['weight']==0}==heat_ids
+        assert {i for d in spec['observations'] for i,w in zip(d['ordered_row_ids'],d['weights'],strict=True) if w==0}==heat_ids
     return params, rows
 
 

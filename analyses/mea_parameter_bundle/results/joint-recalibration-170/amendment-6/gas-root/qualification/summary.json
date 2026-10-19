@@ -1,0 +1,453 @@
+{
+  "evidence_use": "Numerical qualification only, not selected-vector gate evidence and not physical validation.",
+  "date": "2026-10-19",
+  "implementation_base": "242d788ba9427196ccbe26433889709af8f1026f",
+  "historical_source_commit": "5ebcb379cdf4fda278545237ee435a0f144fe73d",
+  "parameter_document": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/revision-3/tied-start.json",
+  "parameter_sha256": "aabe31750b71bc13a20188a5bc589a8a2182ba994a8005a2d1f3c48c54f4d403",
+  "engine": {
+    "files": {},
+    "wheel_sha256": "d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357",
+    "installed_package": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/lib/python3.13/site-packages/epcsaft",
+    "installed_files_verified": 12,
+    "python": "3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]",
+    "packages": {
+      "epcsaft": "0.2.0.dev0",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1"
+    },
+    "commit": "21e761c318c2ac5b555a245365c844d38a93e4cb"
+  },
+  "source_sha256": {
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/gas-root/probe.py.txt": "9fa39ff88ddd3aa2b7567f78bc74f6aad2eceb435027ea7e3807f4528017825c",
+    "analyses/mea_parameter_bundle/scripts/fit_campaign.py": "bff2bf9f6b6330342c8fdf2672eb80f8952446bbd2a1a99a558a956a4468bc12",
+    "analyses/mea_parameter_bundle/scripts/final_evidence.py": "52420c05699881d0f44c2c8fe03e134b8a4148b3ae8a79f8e4fe4f4a943584cd",
+    "analyses/mea_parameter_bundle/scripts/heat_evidence_170.py": "4b1088afea72ae478a584d238fcc7b00a6bbbf32addf5b6dd362e2edb0682cb9",
+    "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "8f55633b9023231551dd12ec6947cf170637acd1bf134bedf5f502a7848514bb",
+    "analyses/mea_parameter_bundle/scripts/verify_reference_calorics.py": "1c52937132ce452f638b334039ec48ee88996d91eea073397311828e39603715"
+  },
+  "engine_backed_invocations": 3,
+  "failed_invocations": 0,
+  "attempts": [
+    {
+      "number": 1,
+      "result": "attempt-1/gas-root.json",
+      "probe_text": "qualification/attempt-1-probe.py.txt",
+      "probe_sha256": "19139453ec08c184511b8fe78567b7591cb602183d5065a34a8800c43e932134",
+      "classification": "pass",
+      "GNU_time": {
+        "whole_command_user_s": 4.86,
+        "whole_command_system_s": 0.08,
+        "wall_s": 4.97
+      },
+      "bounded_process_timing": {
+        "cpu_s": 4.890936,
+        "wall_s": 4.909207503000289,
+        "exitcode": 0,
+        "interrupted": false,
+        "host_load": [
+          7.3310546875,
+          12.908203125,
+          11.1259765625
+        ]
+      }
+    },
+    {
+      "number": 2,
+      "result": "attempt-2/gas-root.json",
+      "probe_text": "qualification/attempt-2-probe.py.txt",
+      "probe_sha256": "4e9bc8aeacdafc682af08b215d9ce276f470d03441372aef10d3acf9d4fde0b4",
+      "classification": "pass",
+      "GNU_time": {
+        "whole_command_user_s": 5.69,
+        "whole_command_system_s": 0.09,
+        "wall_s": 5.8
+      },
+      "bounded_process_timing": {
+        "cpu_s": 5.735543,
+        "wall_s": 5.737732805999258,
+        "exitcode": 0,
+        "interrupted": false,
+        "host_load": [
+          8.359375,
+          11.51025390625,
+          10.76806640625
+        ]
+      }
+    },
+    {
+      "number": 3,
+      "result": "attempt-3/gas-root.json",
+      "probe_text": "probe.py.txt",
+      "probe_sha256": "9fa39ff88ddd3aa2b7567f78bc74f6aad2eceb435027ea7e3807f4528017825c",
+      "classification": "pass",
+      "GNU_time": {
+        "whole_command_user_s": 4.98,
+        "whole_command_system_s": 0.08,
+        "wall_s": 5.08
+      },
+      "bounded_process_timing": {
+        "cpu_s": 5.024037999999999,
+        "wall_s": 5.030538801000148,
+        "exitcode": 0,
+        "interrupted": false,
+        "host_load": [
+          6.013671875,
+          10.27392578125,
+          10.3935546875
+        ]
+      }
+    }
+  ],
+  "final_result": "attempt-3/gas-root.json",
+  "classification": "pass",
+  "reason": "Both native requests return the same sole ionic root, denser than the newly solved liquid; no separate stable ionic gas root is present, and the physical solve and dilution checks completed.",
+  "native_root_results": [
+    {
+      "request": "vapor",
+      "composition_meaning": "Normalized retained gas witness L composition, including ions.",
+      "stable_root_count": 1,
+      "native_branch": "Unspecified",
+      "density_convergence": {
+        "residual": 1.4978327551786602e-14,
+        "floor": 3.223703243806638e-15,
+        "iterations": 1,
+        "evaluations": 13
+      },
+      "density_stop": "converged",
+      "amount_mol": 86.70447547705399,
+      "mole_fractions": [
+        1.0000102626728601e-08,
+        5.971551547650472e-07,
+        0.8037244126646969,
+        0.11221138716745518,
+        1.0000279928464172e-08,
+        0.000394111205347203,
+        0.0282847837113581,
+        6.849477824679441e-05,
+        0.05531619331735862
+      ],
+      "molar_density_mol_m3": 58010.42820851521,
+      "EOS_pressure_Pa": 3699.080377035778,
+      "pressure_difference_Pa": -3.049073256988777e-06,
+      "pressure_density_derivative_Pa_m3_mol": 109186.70384859756,
+      "bulk_epsilon": 61.04799240088471,
+      "hard_chain_over_RT": 411.00117027217175,
+      "dispersion_over_RT": -947.5919460924566,
+      "association_over_RT": -188.6264961173171,
+      "polar_over_RT": 0.0,
+      "DH_over_RT": -26.2063557033917,
+      "Born_bulk_over_RT": -2992.630824950836,
+      "Born_shell_over_RT": -818.3912644412118,
+      "residual_A_over_RT": -4562.445717033042,
+      "stable_root_in_scan_support": false,
+      "single_stable_root": true
+    },
+    {
+      "request": "liquid",
+      "composition_meaning": "Normalized retained gas witness L composition, including ions.",
+      "stable_root_count": 1,
+      "native_branch": "Unspecified",
+      "density_convergence": {
+        "residual": 1.4978327551786602e-14,
+        "floor": 3.223703243806638e-15,
+        "iterations": 1,
+        "evaluations": 10
+      },
+      "density_stop": "converged",
+      "amount_mol": 86.70447547705399,
+      "mole_fractions": [
+        1.0000102626728601e-08,
+        5.971551547650472e-07,
+        0.8037244126646969,
+        0.11221138716745518,
+        1.0000279928464172e-08,
+        0.000394111205347203,
+        0.0282847837113581,
+        6.849477824679441e-05,
+        0.05531619331735862
+      ],
+      "molar_density_mol_m3": 58010.42820851521,
+      "EOS_pressure_Pa": 3699.080377035778,
+      "pressure_difference_Pa": -3.049073256988777e-06,
+      "pressure_density_derivative_Pa_m3_mol": 109186.70384859756,
+      "bulk_epsilon": 61.04799240088471,
+      "hard_chain_over_RT": 411.00117027217175,
+      "dispersion_over_RT": -947.5919460924566,
+      "association_over_RT": -188.6264961173171,
+      "polar_over_RT": 0.0,
+      "DH_over_RT": -26.2063557033917,
+      "Born_bulk_over_RT": -2992.630824950836,
+      "Born_shell_over_RT": -818.3912644412118,
+      "residual_A_over_RT": -4562.445717033042,
+      "stable_root_in_scan_support": false,
+      "single_stable_root": true
+    }
+  ],
+  "physical": {
+    "objective": -19411.373468876118,
+    "molar_densities": [
+      29240.137146619792,
+      1.3990539161205706
+    ],
+    "packing_fractions": [
+      0.4456712165103647,
+      1.2213921321212721e-05
+    ],
+    "pressure_density_derivatives": [
+      109917.32436860043,
+      2642.7279500072123
+    ],
+    "charge_closure": {
+      "charge_per_mole_by_phase": [
+        8.169309381735443e-16,
+        0.0
+      ],
+      "total_charge_mol": 9.714428544548898e-15
+    },
+    "iterations": 24,
+    "evaluations": 28,
+    "reduced_hessian_minimum": 3.178449828837691e-07,
+    "convergence": {
+      "residual": 2.3456279945473022e-14,
+      "floor": 6.900783461861799e-11,
+      "amplification": 0.0,
+      "contraction": null,
+      "iterations": 24,
+      "evaluations": 28,
+      "stop": "converged"
+    },
+    "native_objective_re_evaluation_difference_over_RT": 0.0
+  },
+  "physical_maximum_raw_residual": 1.1368683772161603e-13,
+  "witnesses": {
+    "gas": {
+      "G_over_RT": -16550.66351234765,
+      "witness_minus_physical_G_over_RT": 2860.709956528466,
+      "max_abs_raw_residual": 36744541.64148993
+    },
+    "physical": {
+      "G_over_RT": -19383.315274330897,
+      "witness_minus_physical_G_over_RT": 28.05819454522134,
+      "max_abs_raw_residual": 370.70359641849325
+    }
+  },
+  "density_scan": [
+    {
+      "amount_mol": 86.70447547705399,
+      "mole_fractions": [
+        1.0000102626728601e-08,
+        5.971551547650472e-07,
+        0.8037244126646969,
+        0.11221138716745518,
+        1.0000279928464172e-08,
+        0.000394111205347203,
+        0.0282847837113581,
+        6.849477824679441e-05,
+        0.05531619331735862
+      ],
+      "molar_density_mol_m3": 1e-06,
+      "EOS_pressure_Pa": 0.0026430703741407457,
+      "pressure_difference_Pa": -3699.077737014477,
+      "pressure_density_derivative_Pa_m3_mol": 2641.982506563568,
+      "bulk_epsilon": 1.0000000010351242,
+      "hard_chain_over_RT": 2.968367530526593e-09,
+      "dispersion_over_RT": -2.0211869542695555e-08,
+      "association_over_RT": -6.781751869114265e-09,
+      "polar_over_RT": 0.0,
+      "DH_over_RT": -0.14264398511590579,
+      "Born_bulk_over_RT": -3.1493324274075534e-06,
+      "Born_shell_over_RT": -818.3912644412122,
+      "residual_A_over_RT": -818.5339115996859
+    },
+    {
+      "amount_mol": 86.70447547705399,
+      "mole_fractions": [
+        1.0000102626728601e-08,
+        5.971551547650472e-07,
+        0.8037244126646969,
+        0.11221138716745518,
+        1.0000279928464172e-08,
+        0.000394111205347203,
+        0.0282847837113581,
+        6.849477824679441e-05,
+        0.05531619331735862
+      ],
+      "molar_density_mol_m3": 0.001,
+      "EOS_pressure_Pa": 2.5766047148628397,
+      "pressure_difference_Pa": -3696.5037753699885,
+      "pressure_density_derivative_Pa_m3_mol": 2542.3697199780186,
+      "bulk_epsilon": 1.000001035124102,
+      "hard_chain_over_RT": 2.968367741239255e-06,
+      "dispersion_over_RT": -2.021186932606004e-05,
+      "association_over_RT": -6.7817466545384765e-06,
+      "polar_over_RT": 0.0,
+      "DH_over_RT": -4.502256363804158,
+      "Born_bulk_over_RT": -0.0031493288432046795,
+      "Born_shell_over_RT": -818.3912644412122,
+      "residual_A_over_RT": -822.8966941591077
+    },
+    {
+      "amount_mol": 86.70447547705399,
+      "mole_fractions": [
+        1.0000102626728601e-08,
+        5.971551547650472e-07,
+        0.8037244126646969,
+        0.11221138716745518,
+        1.0000279928464172e-08,
+        0.000394111205347203,
+        0.0282847837113581,
+        6.849477824679441e-05,
+        0.05531619331735862
+      ],
+      "molar_density_mol_m3": 0.01,
+      "EOS_pressure_Pa": 24.29347542826717,
+      "pressure_difference_Pa": -3674.786904656584,
+      "pressure_density_derivative_Pa_m3_mol": 2322.244048273258,
+      "bulk_epsilon": 1.0000103512410192,
+      "hard_chain_over_RT": 2.9683680270305564e-05,
+      "dispersion_over_RT": -0.00020211867374389015,
+      "association_over_RT": -6.781741945934255e-05,
+      "polar_over_RT": 0.0,
+      "DH_over_RT": -14.177328819646192,
+      "Born_bulk_over_RT": -0.03149299503779947,
+      "Born_shell_over_RT": -818.3912644412121,
+      "residual_A_over_RT": -832.6003265083091
+    },
+    {
+      "amount_mol": 86.70447547705399,
+      "mole_fractions": [
+        1.0000102626728601e-08,
+        5.971551547650472e-07,
+        0.8037244126646969,
+        0.11221138716745518,
+        1.0000279928464172e-08,
+        0.000394111205347203,
+        0.0282847837113581,
+        6.849477824679441e-05,
+        0.05531619331735862
+      ],
+      "molar_density_mol_m3": 0.1,
+      "EOS_pressure_Pa": 197.383110743424,
+      "pressure_difference_Pa": -3501.6972693414273,
+      "pressure_density_derivative_Pa_m3_mol": 1646.219131014669,
+      "bulk_epsilon": 1.0001035124101911,
+      "hard_chain_over_RT": 0.0002968370881781534,
+      "dispersion_over_RT": -0.0020211847857708604,
+      "association_over_RT": -0.0006781694793201121,
+      "polar_over_RT": 0.0,
+      "DH_over_RT": -44.239481950683704,
+      "Born_bulk_over_RT": -0.31490061416860826,
+      "Born_shell_over_RT": -818.391264441212,
+      "residual_A_over_RT": -862.9480495232413
+    },
+    {
+      "amount_mol": 86.70447547705399,
+      "mole_fractions": [
+        1.0000102626728601e-08,
+        5.971551547650472e-07,
+        0.8037244126646969,
+        0.11221138716745518,
+        1.0000279928464172e-08,
+        0.000394111205347203,
+        0.0282847837113581,
+        6.849477824679441e-05,
+        0.05531619331735862
+      ],
+      "molar_density_mol_m3": 1.4,
+      "EOS_pressure_Pa": 400.2763336647571,
+      "pressure_difference_Pa": -3298.804046420094,
+      "pressure_density_derivative_Pa_m3_mol": -797.7022362261907,
+      "bulk_epsilon": 1.0014491737426772,
+      "hard_chain_over_RT": 0.004155776974420565,
+      "dispersion_over_RT": -0.028296192338618867,
+      "association_over_RT": -0.009493419399739756,
+      "polar_over_RT": 0.0,
+      "DH_over_RT": -157.0205557442355,
+      "Born_bulk_over_RT": -4.4026846890163815,
+      "Born_shell_over_RT": -818.3912644412121,
+      "residual_A_over_RT": -979.8481387092279
+    },
+    {
+      "amount_mol": 86.70447547705399,
+      "mole_fractions": [
+        1.0000102626728601e-08,
+        5.971551547650472e-07,
+        0.8037244126646969,
+        0.11221138716745518,
+        1.0000279928464172e-08,
+        0.000394111205347203,
+        0.0282847837113581,
+        6.849477824679441e-05,
+        0.05531619331735862
+      ],
+      "molar_density_mol_m3": 10.0,
+      "EOS_pressure_Pa": -29299.808544415733,
+      "pressure_difference_Pa": -32998.888924500585,
+      "pressure_density_derivative_Pa_m3_mol": -5219.12233786497,
+      "bulk_epsilon": 1.0103512410191227,
+      "hard_chain_over_RT": 0.02968684988042324,
+      "dispersion_over_RT": -0.20209701354095008,
+      "association_over_RT": -0.06776516208184272,
+      "polar_over_RT": 0.0,
+      "DH_over_RT": -372.962255670423,
+      "Born_bulk_over_RT": -31.170665953028205,
+      "Born_shell_over_RT": -818.3912644412122,
+      "residual_A_over_RT": -1222.7643613904058
+    },
+    {
+      "amount_mol": 86.70447547705399,
+      "mole_fractions": [
+        1.0000102626728601e-08,
+        5.971551547650472e-07,
+        0.8037244126646969,
+        0.11221138716745518,
+        1.0000279928464172e-08,
+        0.000394111205347203,
+        0.0282847837113581,
+        6.849477824679441e-05,
+        0.05531619331735862
+      ],
+      "molar_density_mol_m3": 100.0,
+      "EOS_pressure_Pa": -1014992.6823449236,
+      "pressure_difference_Pa": -1018691.7627250084,
+      "pressure_density_derivative_Pa_m3_mol": -13850.145148935273,
+      "bulk_epsilon": 1.1035124101912257,
+      "hard_chain_over_RT": 0.2971543310905032,
+      "dispersion_over_RT": -2.019021769168373,
+      "association_over_RT": -0.6730164680451182,
+      "polar_over_RT": 0.0,
+      "DH_over_RT": -787.4116098097539,
+      "Born_bulk_over_RT": -285.3916343684521,
+      "Born_shell_over_RT": -818.3912644412122,
+      "residual_A_over_RT": -1893.5893925255414
+    }
+  ],
+  "dilution": {
+    "epsilon_minus_one": [
+      1.035124208570437e-09,
+      1.0351241019890267e-06,
+      1.0351241019224133e-05,
+      0.00010351241019113111,
+      0.0014491737426771678,
+      0.010351241019122659,
+      0.1035124101912257
+    ],
+    "Born_bulk_over_RT": [
+      -3.1493324274075534e-06,
+      -0.0031493288432046795,
+      -0.03149299503779947,
+      -0.31490061416860826,
+      -4.4026846890163815,
+      -31.170665953028205,
+      -285.3916343684521
+    ],
+    "approaches_vacuum_limits": true,
+    "meaning": "Finite-support trend toward epsilon=1 and bulk Born=0; no extrapolated zero-density value or additional threshold.",
+    "finite_shell_disclosed_over_RT": -818.3912644412122
+  },
+  "prescribed_items_missing": [],
+  "campaign_scripts_changed": [],
+  "summed_GNU_cpu_s": 15.780000000000001,
+  "summed_GNU_wall_s": 15.85
+}
