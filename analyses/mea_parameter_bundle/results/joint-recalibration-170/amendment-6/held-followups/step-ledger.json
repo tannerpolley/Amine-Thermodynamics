@@ -159,6 +159,48 @@
    "need_wall_s": 300,
    "need_cpu_s": 500,
    "admitted": true
+  },
+  {
+   "launch": "held-x3 release information (mandatory)",
+   "program_prior_wall_s": 16968,
+   "program_prior_cpu_s": 133504.87,
+   "allocation_used": {
+    "wall_s": 1402.74,
+    "cpu_s": 7161.26
+   },
+   "budget_wall_s": 897.26,
+   "budget_cpu_s": 12838.74,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held-x3 candidate fit (mandatory)",
+   "program_prior_wall_s": 17145,
+   "program_prior_cpu_s": 133681.48,
+   "allocation_used": {
+    "wall_s": 1579.44,
+    "cpu_s": 7337.87
+   },
+   "budget_wall_s": 720.56,
+   "budget_cpu_s": 12662.13,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "held-x3 endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 17180,
+   "program_prior_cpu_s": 134128.42,
+   "allocation_used": {
+    "wall_s": 1614.95,
+    "cpu_s": 7784.8099999999995
+   },
+   "budget_wall_s": 685.05,
+   "budget_cpu_s": 12215.19,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
   }
  ],
  "calls": [
@@ -240,6 +282,27 @@
    "exit_code": 1,
    "wall_s": 115.72,
    "cpu_s": 115.69
+  },
+  {
+   "form": "held-x3",
+   "call": "release",
+   "exit_code": 0,
+   "wall_s": 176.7,
+   "cpu_s": 176.61
+  },
+  {
+   "form": "held-x3",
+   "call": "fit",
+   "exit_code": 0,
+   "wall_s": 35.51,
+   "cpu_s": 446.94
+  },
+  {
+   "form": "held-x3",
+   "call": "replay",
+   "exit_code": 0,
+   "wall_s": 14.99,
+   "cpu_s": 14.98
   }
  ]
 }
