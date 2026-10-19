@@ -1,0 +1,47 @@
+"""Disclosed scratch reduction for amendment 6 step 1b (#170): every reported number from retained arrays only.
+Run from the checkout root:  python3 -I <this file> analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6"""
+import glob, json, math, sys
+A6 = sys.argv[1]; D = f'{A6}/density-sweep-1b'; R = A6.rsplit('/amendment-6', 1)[0]
+COMMON = ('PartialPressure', 'PhaseMoleFraction', 'AdditionEnthalpy')
+load = lambda p: json.load(open(glob.glob(p)[0]))
+def fit_stats(native, lam):
+    rows, q = native['rows'], [r['quantity'] for r in native['rows']]
+    wr = native['weighted_residuals'] if 'weighted_residuals' in native else [math.sqrt(lam/12 if r['quantity'] == 'phase_density' else r['weight'])*x for r, x in zip(rows, native['residuals'])]
+    part = lambda keep: math.fsum(.5*v*v for v, k in zip(wr, q) if keep(k))
+    ard = lambda kind: 100*sum(abs(p/r['observed']-1) for r, p in zip(rows, native['predictions']) if r['quantity'] == kind)/sum(k == kind for k in q)
+    h = [p-r['observed'] for r, p in zip(rows, native['predictions']) if r['quantity'] == 'AdditionEnthalpy']
+    return dict(C149=part(lambda k: k in COMMON), C166=part(lambda k: k not in ('pressure', 'phase_density')), density_cost=part(lambda k: k == 'phase_density'),
+        pressure_AARD_pct=ard('PartialPressure'), species_AARD_pct=ard('PhaseMoleFraction'), vinjarapu_rmse_kJ_mol=math.sqrt(sum(x*x for x in h)/len(h))/1000,
+        cp_error_pct=[100*(p/r['observed']-1) for r, p in zip(rows, native['predictions']) if r['quantity'] == 'equilibrium_isobaric_heat_capacity'])
+def densities(*natives):
+    out = {}
+    for n in natives:
+        for r, p in zip(n['rows'], n['predictions']):
+            if r['quantity'] == 'phase_density' and not r['id'].endswith('_dup'):
+                out[r['id']] = dict(T_K=r['T_K'], loading=r['analytical_feed']['carbon-dioxide'], observed=r['observed'], error=p-r['observed'])
+    return out
+cases = {
+  'lambda 0 (A4 larger-dV control)': dict(lam=0, fit=f'{R}/amendment-4/matched-larger-dV/control/native.json', ev=[f'{R}/amendment-5/a0/probe-p/information/a4-control-endpoint/native.json'], unloaded='A4'),
+  'lambda 0.01 (Amundsen targets)': dict(lam=0.01, fit=f'{D}/fit-l0p01/native.json', ev=[f'{D}/endpoint-l0p01/information/*/native.json'], unloaded='0p01'),
+  'lambda 0.1 (Amundsen targets)': dict(lam=0.1, fit=f'{D}/fit-l0p1/native.json', ev=[f'{D}/endpoint-l0p1/information/*/native.json', f'{D}/assess-l0p1/information/*/native.json']+[f'{D}/hartono-check/l0p1-c{j}/information/*/native.json' for j in range(4)], unloaded='0p1'),
+  'lambda 1 (Amundsen targets)': dict(lam=1, fit=f'{D}/fit-l1/native.json', ev=[f'{D}/endpoint-l1/information/*/native.json', f'{D}/assess-l1/information/*/native.json']+[f'{D}/hartono-check/l1-c{j}/information/*/native.json' for j in range(4)], unloaded='1'),
+  'lambda 1 (Hartono targets)': dict(lam=1, fit=f'{D}/hartono-fit/fit/native.json', ev=[f'{D}/hartono-fit/eval-c{j}/information/*/native.json' for j in range(4)], unloaded='H'),
+}
+unl = json.load(open(f'{D}/unloaded-densities.json')); unl.update(json.load(open(f'{D}/hartono-fit/unloaded-densities.json')))
+summary = {}
+for name, c in cases.items():
+    f = load(c['fit']); dens = densities(*[load(p) for p in c['ev']])
+    s = dict(status=f['status'], iterations=f['iterations'], active_bounds=f['covariance']['active_bounds'], physical=f['physical'], **fit_stats(f, c['lam']))
+    groups = dict(amundsen_fitted=lambda k, v: k.startswith('Amundsen') and v['T_K'] in (298.15, 323.15, 343.15), amundsen_assessment=lambda k, v: k.startswith('Amundsen') and v['T_K'] in (313.15, 353.15),
+                  hartono_printed=lambda k, v: k.startswith('Hartono2014_printed'), hartono_x3=lambda k, v: k.startswith('Hartono2014_x3'))
+    for g, sel in groups.items():
+        e = [v['error'] for k, v in dens.items() if sel(k, v)]
+        if e: s[g] = dict(n=len(e), min=min(e), max=max(e), within_2=sum(abs(x) <= 2 for x in e))
+    u = unl.get(c['unloaded']); s['unloaded'] = dict(errors=[x['error'] for x in u], within_0p5=sum(abs(x['error']) <= 0.5 for x in u)) if u else None
+    s['densities'] = dens; summary[name] = s
+json.dump(summary, open(f'{D}/summary.json', 'w'), indent=1)
+for name, s in summary.items():
+    print(f"{name}: {s['status']} {s['iterations']} it; C149 {s['C149']:.3f} C166 {s['C166']:.3f}; P {s['pressure_AARD_pct']:.2f}% S {s['species_AARD_pct']:.2f}% H {s['vinjarapu_rmse_kJ_mol']:.3f}")
+    for g in ('amundsen_fitted', 'amundsen_assessment', 'hartono_printed', 'hartono_x3'):
+        if g in s: print(f"   {g:20s} n={s[g]['n']:2d} [{s[g]['min']:+.2f}, {s[g]['max']:+.2f}] within2 {s[g]['within_2']}")
+    if s['unloaded']: print('   unloaded', [round(x, 2) for x in s['unloaded']['errors']], 'within0.5', s['unloaded']['within_0p5'])
