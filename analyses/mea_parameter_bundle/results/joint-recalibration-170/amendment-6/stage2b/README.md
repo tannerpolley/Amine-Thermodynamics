@@ -32,6 +32,15 @@ The 25 °C row passes with only 0.021 kg/m³ to spare. The joint fits carry thes
 - **Centered derivatives:** 220 of 220 pass per start (largest absolute error 2.1e−7).
 - **Identification:** free rank 2, condition 3.64.
 
+**Uncertainty.** k and b are fitted point estimates; the gate checks above are deterministic evaluations at them. The retained local covariance (`out/neutral-mea-water/A/identification.json`) holds only under its stated assumptions: unit-variance weighted residuals, independent errors, an interior regular linearization, and no model discrepancy. It gives conditional standard errors:
+
+| | k_ij | b |
+|---|---:|---:|
+| Unit-variance | 0.00103 | 1.90 K |
+| Scaled by the variance factor 3.90 | 0.00203 | 3.75 K |
+
+The k–b correlation is 0.79. On either scaling, b is distinguishable from zero. These are not measurement-propagated uncertainties.
+
 **Compute.** 8.24 s wall, 13.73 CPU-s (whole command), charged to the program ledger at merge.
 
 **Next.** Substitute k and b into both joint start documents (the tie and Held forms), as §0b specifies. That is the pending step in `inputs/revision-3/*pending-stage2b.json`.
