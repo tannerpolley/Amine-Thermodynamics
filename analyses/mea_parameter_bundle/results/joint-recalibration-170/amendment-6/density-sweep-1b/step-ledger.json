@@ -1,0 +1,144 @@
+{
+ "authority": "Owner, 2026-10-19: \"send any codex model and some claude models to figure this out and try to solve this discrepancy any means necessary\" - lifts the runner stop for the step-1 lambda sweep",
+ "step_wall_allowance_s": 3500,
+ "step_cpu_allowance_s": 30000,
+ "program_prior_wall_s": 10996,
+ "program_prior_cpu_s": 97578.61,
+ "order": [
+  "fit-l1",
+  "fit-l0p1",
+  "fit-l0p01"
+ ],
+ "calls": [
+  {
+   "call": "fit-l1",
+   "wall_s": 67.3,
+   "cpu_s": 777.28
+  },
+  {
+   "call": "endpoint-l1",
+   "wall_s": 20.09,
+   "cpu_s": 20.08
+  },
+  {
+   "call": "fit-l0p1",
+   "wall_s": 239.42,
+   "cpu_s": 2967.17
+  },
+  {
+   "call": "endpoint-l0p1",
+   "wall_s": 19.74,
+   "cpu_s": 19.73
+  },
+  {
+   "call": "fit-l0p01",
+   "wall_s": 279.21,
+   "cpu_s": 3953.72
+  },
+  {
+   "call": "endpoint-l0p01",
+   "wall_s": 18.41,
+   "cpu_s": 18.41
+  },
+  {
+   "call": "untied-l1",
+   "wall_s": 20.54,
+   "cpu_s": 20.54
+  },
+  {
+   "call": "untied-l0p1",
+   "wall_s": 20.42,
+   "cpu_s": 20.41
+  },
+  {
+   "call": "assess-l1",
+   "wall_s": 19.05,
+   "cpu_s": 19.04
+  },
+  {
+   "call": "assess-l0p1",
+   "wall_s": 18.8,
+   "cpu_s": 18.79
+  },
+  {
+   "call": "unloaded-scratch (4 endpoints x 5 CO2-free rows)",
+   "wall_s": 0.45,
+   "cpu_s": 0.45
+  },
+  {
+   "call": "hartono-check/l1-c0",
+   "wall_s": 15.93,
+   "cpu_s": 15.84
+  },
+  {
+   "call": "hartono-check/l1-c1",
+   "wall_s": 14.96,
+   "cpu_s": 14.91
+  },
+  {
+   "call": "hartono-check/l1-c2",
+   "wall_s": 15.76,
+   "cpu_s": 15.73
+  },
+  {
+   "call": "hartono-check/l1-c3",
+   "wall_s": 15.63,
+   "cpu_s": 15.6
+  },
+  {
+   "call": "hartono-check/l0p1-c0",
+   "wall_s": 15.98,
+   "cpu_s": 15.97
+  },
+  {
+   "call": "hartono-check/l0p1-c1",
+   "wall_s": 15.01,
+   "cpu_s": 15.0
+  },
+  {
+   "call": "hartono-check/l0p1-c2",
+   "wall_s": 15.09,
+   "cpu_s": 15.08
+  },
+  {
+   "call": "hartono-check/l0p1-c3",
+   "wall_s": 14.88,
+   "cpu_s": 14.88
+  },
+  {
+   "call": "hartono-fit/release",
+   "wall_s": 18.97,
+   "cpu_s": 18.87
+  },
+  {
+   "call": "hartono-fit/fit",
+   "wall_s": 135.57,
+   "cpu_s": 1655.39
+  },
+  {
+   "call": "hartono-fit/eval-c0",
+   "wall_s": 16.64,
+   "cpu_s": 16.63
+  },
+  {
+   "call": "hartono-fit/eval-c1",
+   "wall_s": 16.27,
+   "cpu_s": 16.25
+  },
+  {
+   "call": "hartono-fit/eval-c2",
+   "wall_s": 16.04,
+   "cpu_s": 16.02
+  },
+  {
+   "call": "hartono-fit/eval-c3",
+   "wall_s": 17.12,
+   "cpu_s": 17.11
+  },
+  {
+   "call": "hartono-fit/unloaded-scratch",
+   "wall_s": 0.21,
+   "cpu_s": 0.19
+  }
+ ]
+}

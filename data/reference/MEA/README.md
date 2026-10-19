@@ -14,7 +14,7 @@ The modeled species are CO₂, MEA, H₂O, MEAH⁺, MEACOO⁻, HCO₃⁻, CO₃�
 | `observations/reaction_constants/` | Reported dilute-MEA dissociation and carbamate constants, retaining finite-ionic-strength and infinite-dilution roles | Source extraction only; no target admission |
 | `observations/liquid_speciation/` | Source-resolved and canonical liquid-speciation evidence | Governed by measurement role and target membership |
 | `observations/calorimetry/` | Reported absorption and protonation heats with their sign and dose definitions | Existing admission files govern target use; new source tables alone admit no rows |
-| `observations/density_viscosity/` | Direct aqueous-MEA density and viscosity evidence | Qualification evidence; target use is governed by the admission files |
+| `observations/density_viscosity/` | Amundsen 2009 density/viscosity and 40 own Hartono 2014 loaded densities | Qualification evidence; Hartono loading/uncertainty review pending; target use is governed by the admission files |
 | `observations/dielectric/` | Dielectric fields and documented evidence gap | No loaded-solution static dataset is admitted |
 | `observations/ionic_activity/` | Direct target-ion activity evidence gap | No MEAH⁺/MEACOO⁻ activity dataset is admitted |
 | `observations/ph/` | Equilibrium pH evidence gap | No source-complete loaded-MEA pH matrix is admitted |
