@@ -1,0 +1,138 @@
+{
+ "authority": "#170 owner decision comment 6278891898: fit MEA-water k and slope jointly with the 50 Cai 1996 rows; Cai-only cost <= 95.90 gate",
+ "allocation": {
+  "wall_s": 1355.76,
+  "cpu_s": 11284.26,
+  "basis": "Remaining two-F1-forms allocation after the without-amundsen-0p4 pair (1287.04 - 631.28 s; 10918.49 - 4634.23 CPU-s) plus 700 s / 5,000 CPU-s moved from the optional comparison-fit allocation (2,600 / 45,000), owner decision #170 comment 6278891898"
+ },
+ "operator_checks": [
+  {
+   "launch": "tied release information (mandatory)",
+   "program_prior_wall_s": 13438,
+   "program_prior_cpu_s": 116128.61,
+   "allocation_used": {
+    "wall_s": 0,
+    "cpu_s": 0
+   },
+   "budget_wall_s": 1355.76,
+   "budget_cpu_s": 11284.26,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held release information (mandatory)",
+   "program_prior_wall_s": 13616,
+   "program_prior_cpu_s": 116305.63,
+   "allocation_used": {
+    "wall_s": 177.33,
+    "cpu_s": 177.02
+   },
+   "budget_wall_s": 1178.43,
+   "budget_cpu_s": 11107.24,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "tied candidate fit (mandatory)",
+   "program_prior_wall_s": 13793,
+   "program_prior_cpu_s": 116483.23,
+   "allocation_used": {
+    "wall_s": 354.99,
+    "cpu_s": 354.62
+   },
+   "budget_wall_s": 1000.77,
+   "budget_cpu_s": 10929.64,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "tied endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 13893,
+   "program_prior_cpu_s": 117881.93,
+   "allocation_used": {
+    "wall_s": 454.2,
+    "cpu_s": 1753.3200000000002
+   },
+   "budget_wall_s": 901.56,
+   "budget_cpu_s": 9530.94,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held candidate fit (mandatory)",
+   "program_prior_wall_s": 13908,
+   "program_prior_cpu_s": 117897.21,
+   "allocation_used": {
+    "wall_s": 469.51,
+    "cpu_s": 1768.6000000000001
+   },
+   "budget_wall_s": 886.25,
+   "budget_cpu_s": 9515.66,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "held endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 13990,
+   "program_prior_cpu_s": 119010.84,
+   "allocation_used": {
+    "wall_s": 551.86,
+    "cpu_s": 2882.23
+   },
+   "budget_wall_s": 803.9,
+   "budget_cpu_s": 8402.03,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  }
+ ],
+ "calls": [
+  {
+   "form": "tied",
+   "call": "release",
+   "exit_code": 0,
+   "wall_s": 177.33,
+   "cpu_s": 177.02
+  },
+  {
+   "form": "held",
+   "call": "release",
+   "exit_code": 0,
+   "wall_s": 177.66,
+   "cpu_s": 177.6
+  },
+  {
+   "form": "tied",
+   "call": "fit",
+   "exit_code": 0,
+   "wall_s": 99.21,
+   "cpu_s": 1398.7
+  },
+  {
+   "form": "tied",
+   "call": "replay",
+   "exit_code": 0,
+   "wall_s": 15.31,
+   "cpu_s": 15.28
+  },
+  {
+   "form": "held",
+   "call": "fit",
+   "exit_code": 0,
+   "wall_s": 82.35,
+   "cpu_s": 1113.63
+  },
+  {
+   "form": "held",
+   "call": "replay",
+   "exit_code": 0,
+   "wall_s": 15.86,
+   "cpu_s": 15.67
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+"""Disclosed scratch diagnosis (#170 A6 r3): linearized cost of holding the CO2-free 25 C density at the -0.5 kg/m3 gate edge,
+from the retained endpoint Jacobian (no Engine call). Constrained least squares on the free (inactive) optimizer coordinates.
+Run from the checkout root:  tmp/a6/venv/bin/python <this file> analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water"""
+import json, sys
+import numpy as np
+D = sys.argv[1]; out = {}
+for form in ('tied', 'held'):
+    n, spec = json.load(open(f'{D}/{form}/fit/native.json')), json.load(open(f'{D}/{form}/fit-spec.json'))
+    rows, r0 = n['rows'], np.array(n['weighted_residuals'])
+    J = np.array(n['optimizer_jacobian']).reshape(len(rows), -1)
+    free = [j for j in range(J.shape[1]) if j not in n['covariance']['active_bounds']]
+    Jf = J[:, free]
+    i25 = next(i for i, r in enumerate(rows) if r['id'] == 'AMU-DENS-002')
+    w, s = rows[i25]['weight'], rows[i25]['scale']
+    target = -np.sqrt(w) * 0.5 / s  # weighted residual at e = -0.5 kg/m3
+    delta = target - r0[i25]
+    # min ||r0 + Jf d||^2 s.t. Jf[i25] d = delta  (linearized, around the LS optimum)
+    A = Jf.T @ Jf; g = Jf.T @ r0; c = Jf[i25]
+    Ainv = np.linalg.pinv(A)
+    d0 = -Ainv @ g                                   # unconstrained Newton step (about zero at the optimum)
+    lam = (delta - c @ d0) / (c @ Ainv @ c)
+    d = d0 + lam * (Ainv @ c)
+    r1 = r0 + Jf @ d
+    cost0, cost1 = 0.5 * r0 @ r0, 0.5 * r1 @ r1
+    groups = {'cai': lambda r: r['id'].startswith('cai1996'), 'co2_free': lambda r: r['id'].startswith('AMU-DENS'),
+              'loaded_density': lambda r: r['quantity'] == 'phase_density' and not r['id'].startswith('AMU-DENS'),
+              'common149': lambda r: r['quantity'] in ('PartialPressure', 'PhaseMoleFraction', 'AdditionEnthalpy'), 'kiepe': lambda r: r['quantity'] == 'pressure',
+              'other': lambda r: not (r['id'].startswith('cai1996') or r['quantity'] in ('phase_density', 'PartialPressure', 'PhaseMoleFraction', 'AdditionEnthalpy', 'pressure'))}
+    dg = {k: float(0.5 * sum(r1[i]**2 - r0[i]**2 for i, r in enumerate(rows) if f(r))) for k, f in groups.items()}
+    co2free = {r['id']: float(r1[i] * r['scale'] / np.sqrt(r['weight'])) for i, r in enumerate(rows) if r['id'].startswith('AMU-DENS')}
+    loaded_max = max(abs(r1[i]) * np.sqrt(len(spec['loaded_density_ids'])) for i, r in enumerate(rows) if r['quantity'] == 'phase_density' and not r['id'].startswith('AMU-DENS'))
+    names = [spec['information_coordinates'][j]['identity'] for j in free]
+    out[form] = dict(cost=cost0, cost_constrained=cost1, increase=cost1 - cost0, group_changes=dg, co2_free_errors_after=co2free,
+                     loaded_max_abs_ratio_after=float(loaded_max), step={k: float(v) for k, v in zip(names, d)}, free_columns=len(free))
+    print(form, f'cost {cost0:.4f} -> {cost1:.4f} (+{cost1-cost0:.4f})', {k: round(v, 3) for k, v in dg.items()}, 'loaded max |e|/s', round(loaded_max, 2))
+    print('   CO2-free after', {k: round(v, 3) for k, v in co2free.items()})
+    print('   largest steps', sorted(((round(v, 3), k) for k, v in out[form]['step'].items()), key=lambda t: -abs(t[0]))[:4])
+json.dump(out, open(f'{D}/tradeoff.json', 'w'), indent=1)
