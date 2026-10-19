@@ -19,6 +19,70 @@ MEA; solvent mass fractions exclude CO₂. F1–F6 are the paper's existing fit
 labels, defined where used below. All recommendations below are reversible
 proposals for the parent and owner, not adoption decisions.
 
+## 0. Revision 2 (18 October 2026): density first
+
+Readiness review r1 (GPT-6 Astra, extra high) returned **Revise**. This
+section supersedes §§2–3 and §6's execution order where they conflict; §§4–5
+and 7 apply only after the step below and an owner λ choice. Revisions by the
+orchestrator.
+
+**Known density result (r1 correction 1).** Both λ = 0 controls fail the
+unchanged #183 gate (20 loaded rows ≤ 2 kg/m³) on its 12 fitted rows:
+- **Larger d_V:** −24.28 to −108.16 kg/m³ (`amendment-5/a0/probe-p-analysis.json`).
+- **Smaller d_V:** −24.28 to −108.15 kg/m³ (`amendment-6/smaller-dV-density/`).
+  - Information-only call, 19.75 s wall, no new code.
+  - Cold replay of all 205 objective rows against `matched-smaller-dV/control/native.json`: 6.9e-12, with relative cost difference 1.3e-14.
+- **Paper record F1 (`66ff7715`), without translation:** **+136 to +190** kg/m³ at 323/343 K, loading 0.3/0.4 (`heat-final-170/evaluation/density.csv`).
+
+So no λ = 0 record passes. Density cannot choose between the λ = 0 candidate
+and the fallback. The fallback passes only through the empirical translation.
+
+**Why (diagnosis from retained records, not a new calculation).**
+- **No density in any fit:** every joint-refit fit so far has `fit_case.density_weight = 0`. That covers the amendment-2 Route 2 and 2b fits and all four amendment-4 arms.
+- **Nothing constrains ion volume:** the loaded densities were never in the objective. At λ = 0, only speciation and pressure act on the ion segment diameters, and both reach their 5.8 Å bound.
+- **Opposite signs bracket the target:** the speciation-only paper ions over-predict density, and the 5.8 Å ions under-predict it. An interior size therefore exists that matches density, as the #183 r1 fixed-size checks found on the paper-record basis, an older model (worst loaded row 2.77 kg/m³ at MEAH⁺/carbamate 4.2/5.8 Å; 5.05 kg/m³ at 5.1/5.1 Å). That is evidence on that basis, not a result for this one.
+
+**Step 1: the density-weighted F1 sweep already in the reviewed stage-6 design.**
+Source: #170 comment 6158000919, "Run F1 at λ = 0, 0.01, 0.1, 1"; owner decision of 2026-10-13 on #183, which sets no trade-off limits in advance, reports each candidate's trade-off, and leaves the choice to the owner.
+- **Branch:** larger d_V only. The branches agree on density within 0.01 kg/m³ and on C149 within 0.15 %. The smaller branch runs only if the owner wants both.
+- **Start:** A4 larger control start `matched-larger-dV/control-start-parameters.json` (SHA-256 `e01e1142…`). Its A4 release test passed at λ = 0 (condition 3.45e3 mandatory, 6.39e3 augmented).
+- **Release test:** one information call per λ ∈ {0.01, 0.1, 1} at that start, each with `information_density_weights` [λ] and its own `release-tests.json`. The fit path requires every record in its file to pass (`fit_campaign.py:510`), so one failing λ does not block the others. A λ whose record fails is not fitted, and the failure is retained.
+- **Fits:** F1 at λ = 0.01, 0.1 and 1. Same declaration as the A4 control except `fit_case.density_weight`. Each density row has weight λ/12 and scale 2 kg/m³. Rows 166 + 12 = 178 reacting, 217 total. All amendment-4 controls apply: function tolerance 1e-6, 600 s per call, 32 workers, `nice -n 10`, single-threaded numerical libraries.
+- **Endpoint evaluation:** one information call per endpoint (about 20 s), giving the 12 fitted densities and every common row. A4 cold replay applies.
+- **Trade-off table for the owner:** for λ = 0 (A4 control), 0.01, 0.1 and 1, report:
+  - C149, C166 and C178;
+  - pressure and species deviation, and Vinjarapu RMSE, on the common 149;
+  - the four Cp values;
+  - the 12 densities;
+  - both ion segment diameters, both Born diameters, the active bounds, and the free-block condition.
+  - The 8 loaded and 5 unloaded assessment densities follow for the chosen λ only.
+
+**Pre-stated expectations.**
+- As λ rises, both ion segment diameters leave the 5.8 Å bound toward roughly 4–5 Å.
+- Loaded-density errors fall toward a few kg/m³ by λ = 1, while C149 rises; the size of that rise is the trade-off.
+- The Born-diameter bound may persist, since density does not see the Born term.
+
+**Falsifiers.**
+- If at λ = 1 both diameters stay at 5.8 Å, or any of the 12 densities stays more than 20 kg/m³ off, then size cannot reconcile density with this form. Density is then reported with a disclosed empirical translation, and the follow-up owns the form.
+- A fit that fails to converge or replay is retained as a numerical failure, not a physical result.
+
+**Compute, without raising program caps.**
+- **Allowance:** 1,200 compute-wall s and 15,000 CPU-s.
+  - Three start information calls: about 20 s each.
+  - Three fits: about 250 s and 3,300 CPU-s each, possibly more with the density rows.
+  - Three endpoint information calls: about 20 s each.
+- **Ledger before:** 10,638.83 of 21,600 s, and 93,726.34 of 144,000 CPU-s. That adds the whole-command times of the 19.75 s smaller-d_V call and its 0.08 s setup failure, which stopped at the wheel-path check before any calculation.
+
+**Code:** no new lines. Declarations only, and none hide executable code.
+
+**After step 1:** the owner chooses λ, or none. The §3–4 assessment and the §5 comparison family then run at that λ, with the r1 corrections applied:
+- the weaker Born hypothesis;
+- mixed-outcome rules for cost against pressure;
+- the zero-weight no-heat route, with the stage6_rows assertion kept;
+- verification compute added to the allowance.
+
+The 250-line request is deferred until the remaining work is known (r1 correction 3).
+
 ## 1. Authority, question and retained evidence
 
 **Supplied decision, 2026-10-18.** Seek a submission candidate from amendment
