@@ -62,7 +62,7 @@ if __name__ == '__main__':
         assert o['quantity'] == v['quantity']
         rows.append(dict(target=v['target'], quantity=v['quantity'], old_prediction=o['new_prediction'], new_prediction=v['predicted'],
                          absolute_difference=abs(v['predicted']-o['new_prediction']),
-                         relative_difference=abs(v['predicted']-o['new_prediction'])/abs(o['new_prediction']),
+                         relative_difference=abs(v['predicted']-o['new_prediction'])/max(abs(o['new_prediction']), abs(v['predicted']), 1e-300),
                          bitwise_equal=bits(v['predicted']) == bits(o['new_prediction'])))
     assert {r['target'] for r in rows} == set(old)
     kinds = sorted({r['quantity'] for r in rows})

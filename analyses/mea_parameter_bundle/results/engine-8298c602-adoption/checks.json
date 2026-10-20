@@ -1,16 +1,72 @@
 {
  "checks": [
-  {"command": "sha256sum --check --strict ./*.sha256 (wheel directory)", "exit_status": 0},
-  {"command": "gh api repos/tannerpolley/ePC-SAFT/releases/tags/main-8298c6029ebb8b467929badc4a223c580ec591ab (wheel asset digest)", "value": "sha256:8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3"},
-  {"command": "gh api repos/tannerpolley/ePC-SAFT/git/ref/tags/main-8298c6029ebb8b467929badc4a223c580ec591ab", "value": "8298c6029ebb8b467929badc4a223c580ec591ab"},
-  {"command": "uv lock", "exit_status": 0, "change": "epcsaft source path and wheel hash only"},
-  {"command": "uv sync --locked", "exit_status": 0, "packages": {"epcsaft": "0.2.0.dev0", "numpy": "2.4.4", "scipy": "1.17.1"}},
-  {"command": ".venv/bin/python analyses/mea_parameter_bundle/results/engine-8298c602-adoption/evaluate.py.txt", "exit_status": 0,
-   "wall_s": 3.38, "cpu_s": 17.28, "output": "comparison.json", "quantities_compared": 152, "bitwise_equal": 13, "worst_relative_difference": 2.8942038358024324e-12},
-  {"command": "source-snapshot construction (inline, recorded in source-construction.json)", "exit_status": 0, "wall_s": 0.19, "cpu_s": 2.25,
-   "refusal": "ParameterError: missing model/electrolyte/ionic_dispersion"},
-  {"command": ".venv/bin/python -m pytest tests -q -p no:cacheprovider", "exit_status": 0, "passed": 76, "failed": 0, "subtests_passed": 17, "wall_s": 11.3}
+  {
+   "command": "sha256sum --check --strict ./*.sha256 (wheel directory)",
+   "exit_status": 0
+  },
+  {
+   "command": "gh api repos/tannerpolley/ePC-SAFT/releases/tags/main-8298c6029ebb8b467929badc4a223c580ec591ab (wheel asset digest)",
+   "value": "sha256:8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3"
+  },
+  {
+   "command": "gh api repos/tannerpolley/ePC-SAFT/git/ref/tags/main-8298c6029ebb8b467929badc4a223c580ec591ab",
+   "value": "8298c6029ebb8b467929badc4a223c580ec591ab"
+  },
+  {
+   "command": "uv lock",
+   "exit_status": 0,
+   "change": "epcsaft source path and wheel hash only"
+  },
+  {
+   "command": "uv sync --locked",
+   "exit_status": 0,
+   "packages": {
+    "epcsaft": "0.2.0.dev0",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1"
+   }
+  },
+  {
+   "command": ".venv/bin/python analyses/mea_parameter_bundle/results/engine-8298c602-adoption/evaluate.py.txt (run 1, superseded output: evaluate-r1-output.txt)",
+   "exit_status": 0,
+   "wall_s": 3.38,
+   "cpu_s": 17.28,
+   "output": "evaluate-r1-output.txt",
+   "quantities_compared": 152,
+   "bitwise_equal": 13,
+   "worst_relative_difference": 2.8942038358024324e-12
+  },
+  {
+   "command": ".venv/bin/python analyses/mea_parameter_bundle/results/engine-8298c602-adoption/evaluate.py.txt (run 2: declared relative-difference definition)",
+   "exit_status": 0,
+   "wall_s": 3.45,
+   "cpu_s": 17.33,
+   "output": "comparison.json",
+   "quantities_compared": 152,
+   "bitwise_equal": 13,
+   "worst_relative_difference": 2.8942038358024324e-12,
+   "predictions_bitwise_identical_to_run_1": true
+  },
+  {
+   "command": "source-snapshot construction (inline, recorded in source-construction.json)",
+   "exit_status": 0,
+   "wall_s": 0.19,
+   "cpu_s": 2.25,
+   "refusal": "ParameterError: missing model/electrolyte/ionic_dispersion"
+  },
+  {
+   "command": ".venv/bin/python -m pytest tests -q -p no:cacheprovider",
+   "exit_status": 0,
+   "passed": 76,
+   "failed": 0,
+   "subtests_passed": 17,
+   "wall_s": 11.3
+  }
  ],
- "not_run": ["ruff", "scripts/check_manuscript_freshness.py", "main-checkout pytest baseline"],
- "compute_charge": "3.57 wall-s / 19.53 CPU-s against the A7 qualification allocation (owner, #170 comment 6297147461)"
+ "not_run": [
+  "ruff",
+  "scripts/check_manuscript_freshness.py",
+  "main-checkout pytest baseline"
+ ],
+ "compute_charge": "8 wall-s (7.02 rounded up) / 36.86 CPU-s against the A7 qualification allocation (owner, #170 comment 6297147461)"
 }
