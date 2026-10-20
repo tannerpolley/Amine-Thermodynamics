@@ -1,227 +1,154 @@
-"""Render manuscript figures from retained heat-final-170 observations and results.
-
-No equation-of-state evaluation. Model values are markers at measured states.
-Usage: python render_manuscript_figures.py
-"""
-
-import csv
-import hashlib
+"""Render issue 197 A7 manuscript figures at retained states; no Engine compute."""
 import json
-import math
-from pathlib import Path
 
 import matplotlib
-
-matplotlib.use("Agg")
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
+import a7_presentation as a
 from manuscript_style import FULL_WIDTH, apply_style
 
-ROOT = Path(__file__).resolve().parents[1]
-RUN = ROOT / "results/heat-final-170"
-DATA = RUN / "figure-data"
-OUT = ROOT.parents[1] / "docs/scientific/latex/figures/generated"
-COLORS = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#555555"]
-SOURCES = ["Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011", "Wagner2013"]
-SOURCE_STYLE = dict(zip(SOURCES, zip(COLORS, ["s", "o", "D", "^", "v", "<", "h"]), strict=True))
-LABEL = {"Aronu2011": "Aronu et al. 2011", "Hilliard2008": "Hilliard 2008", "Idris2014": "Idris et al. 2014",
-         "Jou1995": "Jou et al. 1995", "Mamun2005": "Ma'mun et al. 2005", "Xu2011": "Xu and Rochelle 2011",
-         "Wagner2013": "Wagner et al. 2013"}
-SPECIES = {"MEA": ("#0072B2", r"MEA"), "MEAH+": ("#CC79A7", r"MEAH$^+$"),
-           "MEA + MEAH+": ("#0072B2", r"MEA + MEAH$^+$"), "MEACOO-": ("#D55E00", r"MEACOO$^-$"),
-           "HCO3-": ("#009E73", r"HCO$_3^-$ + CO$_3^{2-}$")}
-LOADING = r"CO$_2$ loading (mol CO$_2$/mol MEA)"
+OUT = a.ROOT / 'docs/scientific/latex/figures/generated'
+COLORS = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#7B5D00', '#006B75', '#555555']
+LOADING = r'Loading (mol CO$_2$/mol MEA)'
+OUTPUTS = {}
 
 
-def read(name):
-    paths = {"pressure.csv": RUN / "evaluation/targets.csv", "speciation.csv": RUN / "species-figure-data.csv",
-             "pool-effect.csv": RUN / "pool-figure-data.csv", "pool-effect-costs.csv": RUN / "fit-comparison.csv",
-             "heat.csv": DATA / "heat.csv"}
-    with paths[name].open(newline="") as stream:
-        rows = list(csv.DictReader(stream))
-    if name in ("speciation.csv", "pool-effect.csv"):
-        fitted = set(json.loads((RUN / "F1-A/native-fit.json").read_text())["targets"])
-        for row in rows:
-            row["fitted_target"] = str(row["target"] in fitted)
-    return rows
-
-
-def check_inputs():
-    expected = json.loads((DATA / "input-hashes.json").read_text())
-    for name, digest in expected.items():
-        actual = hashlib.sha256((DATA.parent / name).read_bytes()).hexdigest()
-        assert actual == digest, f"{name} differs from its retained hash"
-
-
-def save(fig, name):
+def save(fig, name, caption, inputs):
     OUT.mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUT / f"{name}.pdf", metadata={"CreationDate": None, "ModDate": None})
-    fig.savefig(OUT / f"{name}.png", dpi=200)
+    fig.savefig(OUT / (name + '.pdf'), metadata={'CreationDate': None, 'ModDate': None})
+    fig.savefig(OUT / (name + '.png'), dpi=200)
+    OUTPUTS[name] = dict(files=[name + '.pdf', name + '.png'], caption=caption, inputs=inputs)
     plt.close(fig)
 
 
-def celsius(row):
-    return float(row["temperature_K"]) - 273.15
+def measured(ax, part, color, label, fitted):
+    for marker, member in [('o', True), ('s', False)]:
+        rows = [r for r in part if (r['target'] in fitted) == member]
+        ax.scatter([float(r['loading']) for r in rows], [float(r['observed']) for r in rows],
+                   marker=marker, facecolors='none', edgecolors=color, s=16, linewidths=.7,
+                   label=label if member else None)
+    ax.scatter([float(r['loading']) for r in part], [float(r['predicted']) for r in part],
+               marker='x', color=color, s=12, linewidths=.7)
 
 
-def pressure_figure():
-    rows = [r for r in read("pressure.csv") if r["kind"] in ("canonical", "wagner")]
-    panels = [40, 60, 80, 100, 120]
-
-    def panel(r):  # nominal series; Wagner near 353 and 392 K join the 80 and 120 degC panels
-        return min(panels, key=lambda t: abs(t - celsius(r)))
-
-    fig, axes = plt.subplots(2, 3, figsize=(FULL_WIDTH, 5.0), layout="constrained")
-    for ax, t in zip(axes.flat, panels):
-        group = [r for r in rows if panel(r) == t]
-        for source in SOURCES:
-            obs = [r for r in group if r["problem"] == "F1" and r["source"] == source]
-            if obs:
-                color, marker = SOURCE_STYLE[source]
-                ax.scatter([float(r["loading"]) for r in obs], [float(r["observed"]) / 1e3 for r in obs],
-                           marker=marker, facecolors="none", edgecolors=color, s=18, linewidths=0.7)
-        for problem, style in (("F1", dict(marker=".", color="black", s=14)),
-                               ("F6", dict(marker="x", color="#888888", s=10, linewidths=0.6))):
-            calc = [r for r in group if r["problem"] == problem]
-            ax.scatter([float(r["loading"]) for r in calc], [float(r["predicted"]) / 1e3 for r in calc],
-                       zorder=3, **style)
-        ax.set_yscale("log")
-        ax.set_title(f"({chr(97 + panels.index(t))}) {t} °C", loc="left")
-        ax.set_xlabel(LOADING)
-        ax.grid(alpha=0.18)
-    for ax in axes[:, 0]:
-        ax.set_ylabel(r"$p_{\mathrm{CO_2}}$ (kPa)")
-    legend = axes.flat[-1]
-    legend.set_axis_off()
-    handles = [Line2D([], [], linestyle="none", marker=SOURCE_STYLE[s][1], markerfacecolor="none",
-                      markeredgecolor=SOURCE_STYLE[s][0], label=LABEL[s]) for s in SOURCES]
-    handles += [Line2D([], [], linestyle="none", marker=".", color="black", label="F1, SSM+DS"),
-                Line2D([], [], linestyle="none", marker="x", color="#888888", label="F6, source laws")]
-    legend.legend(handles=handles, frameon=False, loc="center", title="Measured (open) and calculated")
-    save(fig, "pressure")
-
-
-def species_panel(ax, rows, problems):
-    for name, (color, _) in SPECIES.items():
-        part = [r for r in rows if r["species"] == name]
-        if not part:
-            continue
-        for r in part:
-            if r["problem"] != "F1":
-                continue
-            fitted = r["fitted_target"] == "True"
-            x, obs, calc = float(r["loading"]), float(r["observed"]), float(r["predicted"])
-            ax.plot([x, x], [obs, calc], color=color, linewidth=0.5, alpha=0.6)
-            ax.scatter([x], [obs], marker="o" if fitted else "s", facecolors="none", edgecolors=color,
-                       s=16, linewidths=0.7)
-        for problem, marker in problems:
-            calc = [r for r in part if r["problem"] == problem]
-            ax.scatter([float(r["loading"]) for r in calc], [float(r["predicted"]) for r in calc],
-                       marker=marker, color=color, s=9, linewidths=0.6, zorder=3)
-    ax.set_xlabel(LOADING)
-    ax.grid(alpha=0.18)
-
-
-def speciation_figure():
-    rows = read("speciation.csv")
-    fitted = {r["target"]: r["fitted_target"] for r in read("pool-effect.csv") if r["problem"] == "F1"}
-    for r in rows:
-        r["fitted_target"] = fitted[r["target"]]
-    fig, axes = plt.subplots(2, 3, figsize=(FULL_WIDTH, 5.0), layout="constrained", sharey=True)
-    groups = [("Matin2012", 20)] + [("Bottinger2008", t) for t in (20, 40, 60, 80)]
-    for i, (ax, (source, t)) in enumerate(zip(axes.flat, groups)):
-        part = [r for r in rows if r["source"] == source and round(celsius(r)) == t]
-        species_panel(ax, part, [("F1", ".")])
-        name = "Matin et al., titration" if source == "Matin2012" else "Böttinger et al., NMR"
-        ax.set_title(f"({chr(97 + i)}) {name}, {t} °C", loc="left")
-    for ax in axes[:, 0]:
-        ax.set_ylabel("Liquid mole fraction")
-    legend = axes.flat[-1]
-    legend.set_axis_off()
-    handles = [Line2D([], [], linestyle="none", marker="o", markerfacecolor="none", markeredgecolor=c, label=l)
-               for k, (c, l) in SPECIES.items() if k != "MEA + MEAH+"]
-    handles[0].set_label(r"MEA; MEA + MEAH$^+$ (NMR)")
-    handles += [Line2D([], [], linestyle="none", marker="o", markerfacecolor="none", markeredgecolor="black",
-                       label="Measured, fitted"),
-                Line2D([], [], linestyle="none", marker="s", markerfacecolor="none", markeredgecolor="black",
-                       label="Measured, not fitted"),
-                Line2D([], [], linestyle="none", marker=".", color="black", label="Calculated, F1")]
-    legend.legend(handles=handles, frameon=False, loc="center")
-    save(fig, "speciation")
-
-
-def pool_figure():
-    rows = [r for r in read("pool-effect.csv") if r["source"] == "Matin2012" and r["species"] == "HCO3-"]
-    costs = read("pool-effect-costs.csv")
-    fig, (left, right) = plt.subplots(1, 2, figsize=(FULL_WIDTH, 2.9), layout="constrained")
-    obs = {r["identity"]: r for r in rows if r["problem"] == "F1"}
-    left.scatter([float(r["loading"]) for r in obs.values()], [float(r["observed"]) for r in obs.values()],
-                 marker="o", facecolors="none", edgecolors="black", s=18, linewidths=0.7, label="Matin et al., measured")
-    styles = {"F1": ("#0072B2", "."), "F2": ("#D55E00", "."), "F4": ("#0072B2", "x"), "F5": ("#D55E00", "x")}
-    names = {"F1": "F1, SSM+DS, pool not fitted", "F2": "F2, original Born, pool not fitted",
-             "F4": "F4, SSM+DS, pool fitted", "F5": "F5, original Born, pool fitted"}
-    for problem, (color, marker) in styles.items():
-        calc = [r for r in rows if r["problem"] == problem]
-        left.scatter([float(r["loading"]) for r in calc], [float(r["predicted"]) for r in calc], marker=marker,
-                     color=color, s=16 if marker == "." else 12, linewidths=0.7, label=names[problem])
-    left.set_xlabel(LOADING)
-    left.set_ylabel(r"HCO$_3^-$ + CO$_3^{2-}$ mole fraction")
-    left.set_title(r"(a) Titration bicarbonate pool, 20 °C", loc="left")
-    left.legend(fontsize=7, loc="upper left", facecolor="white", edgecolor="none", framealpha=1)
-    pool_cost = {p: math.fsum(float(r["cost"]) for r in rows if r["problem"] == p
-                             and r["identity"] != "Matin2012_state_016") for p in styles}
-    assert all(sum(r["problem"] == p and r["identity"] != "Matin2012_state_016" for r in rows) == 18
-               for p in styles)
-    point = {r["problem"]: (float(r["cost"]) - (pool_cost[r["problem"]] if r["problem"] in ("F4", "F5") else 0),
-                            pool_cost[r["problem"]]) for r in costs
-             if r["objective"] == "with heat" and r["problem"] in styles}
-    for a, b in (("F1", "F4"), ("F2", "F5")):
-        right.annotate("", xy=point[b], xytext=point[a],
-                       arrowprops=dict(arrowstyle="->", color=styles[a][0], linewidth=0.7))
-    for problem, (x, y) in point.items():
-        color, marker = styles[problem]
-        right.scatter([x], [y], marker="o" if marker == "." else "x", color=color, s=20, linewidths=0.9)
-        right.annotate(problem, (x, y), textcoords="offset points", xytext=(-5, 3) if problem in ("F2", "F5") else (5, 3),
-                       ha="right" if problem in ("F2", "F5") else "left", fontsize=8)
-    right.set_xlabel("Cost of the 149 base targets")
-    right.set_ylabel("Cost of the 18 pool targets")
-    right.set_title("(b) Base-target and pool costs", loc="left")
-    right.grid(alpha=0.18)
-    save(fig, "pool-effect")
-
-
-def heat_figure():
-    rows = read('heat.csv')
-    panels = [('Vinjarapu2024', 1734000., 'Vinjarapu, 313.15 K (fitted)'),
-              ('Arcis2011', 510000., 'Arcis, 322.5 K (predicted)'),
-              ('Arcis2011', 1030000., 'Arcis, 322.5 K (predicted)')]
-    fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH, 2.9), layout='constrained', sharey=True)
-    for ax, (source, pressure, title) in zip(axes, panels, strict=True):
-        group = [r for r in rows if r['source']==source and float(r['pressure_Pa'])==pressure]
-        measured = [r for r in group if r['record']=='heat F1']
-        ax.errorbar([float(r['loading']) for r in measured],
-                    [float(r['observed_J_mol'])/1000 for r in measured],
-                    yerr=[float(r['scale_J_mol'])/1000 for r in measured],
-                    fmt='o', mfc='none', color='black', ms=4, lw=.7, label='Measured')
-        for record, marker, color in [('heat F1', 'x', '#0072B2'), ('no-heat F1', '+', '#D55E00')]:
-            part = [r for r in group if r['record']==record]
-            ax.scatter([float(r['loading']) for r in part],
-                       [float(r['predicted_J_mol'])/1000 for r in part],
-                       marker=marker, color=color, s=24, label=record)
-        ax.set(xlabel=LOADING, title=title+'\n'+f'{pressure/1000:g} kPa')
-        ax.grid(alpha=.18)
-    axes[0].set_ylabel(r'$\Delta h$ (kJ/mol CO$_2$)')
-    axes[-1].legend(frameon=False, fontsize=7)
-    save(fig, 'heat-of-absorption')
-
-
-if __name__ == "__main__":
-    check_inputs()
+def main():
+    fit, summary, document, fitted, spec, density, heat, errors, paired = a.checked()
+    a.bind(a.BUNDLE/'scripts/manuscript_style.py')
     apply_style()
-    pressure_figure()
-    speciation_figure()
-    pool_figure()
-    heat_figure()
-    print(json.dumps({p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-                      for p in sorted(OUT.glob("*.pdf"))}, indent=1))
+    fitted_ids = {r['id'] for r in fitted}
+    canonical, wagner, packet = [a.rows(a.E / n) for n in ['canonical-pressure.csv', 'wagner-pressure.csv', 'pressure-figure-data.csv']]
+    assert len(packet) == 79 and all(r['basis'] == 'true-species-vapor-partial-pressure' for r in canonical+wagner+packet)
+    packet_fit = {r['target'] for r in packet if r['target'] in fitted_ids}
+    fig, axes = plt.subplots(3, 3, figsize=(FULL_WIDTH, 7.2), layout='constrained')
+    panels = [40, 60, 80, 100, 120]
+    sources = sorted({r['source'] for r in canonical+wagner})
+    configurations = [('canonical', t) for t in panels] + [('wagner', 80), ('wagner', 120)]
+    for ax, (view, t) in zip(axes.flat, configurations):
+        part = [dict(r, observed=float(r['observed'])/1000, predicted=float(r['predicted'])/1000)
+                for r in (canonical if view=='canonical' else wagner) if min(panels, key=lambda x: abs(x-(float(r['temperature_K'])-273.15))) == t]
+        for source, color in zip(sources, COLORS):
+            measured(ax, [r for r in part if r['source'] == source], color, source, packet_fit)
+        ax.set(title=('Wagner, ' if view=='wagner' else '')+f'{t} °C (nominal)', xlabel=LOADING, yscale='log', ylabel=r'$p_{CO_2}$ (kPa)')
+        ax.grid(alpha=.15)
+    axes.flat[-1].set_axis_off()
+    handles = [Line2D([], [], marker='o', markerfacecolor='none', color=c, linestyle='none', label=s) for s,c in zip(sources,COLORS)]
+    handles += [Line2D([], [], marker=m, markerfacecolor='none', color='black', linestyle='none', label=meaning)
+                for m,meaning in [('o','Observed, fitted ID'),('s','Observed, other ID'),('x','A7 at retained state')]]
+    axes.flat[-2].set_axis_off()
+    axes.flat[-2].legend(handles=handles, loc='center', frameon=False, fontsize=7)
+    save(fig,'pressure','Canonical and Wagner pressure views only; packet view establishes fitted IDs and is not appended. Pa converted to kPa. Nominal temperatures group retained measured states; Wagner was assessed after acceptance and previously accessed. No phase claim above 333.15 K or loading 0.5.', ['canonical-pressure.csv','wagner-pressure.csv','pressure-figure-data.csv','fitted-rows.csv'])
+    species, pool = a.rows(a.E/'species-figure-data.csv'), a.rows(a.E/'pool-figure-data.csv')
+    assert len(pool)==19 and not any(r['target'] in fitted_ids for r in pool)
+    assert all(r['basis'] in {'true-species-liquid-mole-fraction','true-species-liquid-mole-fraction-linear-aggregate'} for r in species+pool)
+    fig, axes = plt.subplots(2,3,figsize=(FULL_WIDTH,5.4),layout='constrained')
+    groups = [('Matin2012',20)]+[('Bottinger2008',t) for t in [20,40,60,80]]
+    names = sorted({r['species'] for r in species})
+    for ax,(source,t) in zip(axes.flat,groups):
+        for name,color in zip(names,COLORS):
+            part=[r for r in species if r['source']==source and round(float(r['temperature_K'])-273.15)==t and r['species']==name]
+            measured(ax,part,color,name,fitted_ids)
+        ax.set(title=f'{source}, {t} °C',xlabel=LOADING,ylabel='Liquid mole fraction')
+        ax.grid(alpha=.15)
+    ax=axes.flat[-1]
+    measured(ax,pool,'#0072B2','Matin pool',set())
+    ax.set(title='Matin pool, report-only (19)',xlabel=LOADING,ylabel='HCO3− + CO3²− mole fraction')
+    handles=[Line2D([],[],marker='o',color=c,linestyle='none',label=(r'HCO$_3^-$ + CO$_3^{2-}$ pool' if n=='HCO3-' else n)) for n,c in zip(names,COLORS)]
+    fig.legend(handles=handles,fontsize=7,frameon=False,loc='outside upper center',ncol=3)
+    fig.supxlabel('Open circles: fitted ID; open squares: other; crosses: A7',fontsize=8)
+    save(fig,'speciation','Species observation operators retain aggregates: NMR MEA + MEAH+, titration species, and the separate 19-row Matin HCO3− + CO3²− pool. All values are mole fractions at retained states; pool rows are outside the objective and previously accessed.', ['species-figure-data.csv','pool-figure-data.csv','fitted-rows.csv'])
+    fig,axes=plt.subplots(1,3,figsize=(FULL_WIDTH,3.0),layout='constrained',sharey=True)
+    for ax,(source,pressure) in zip(axes,[('Vinjarapu2024',1734000),('Arcis2011',510000),('Arcis2011',1030000)]):
+        part=[r for r in heat if r['source']==source and float(r['P_Pa'])==pressure]
+        ax.errorbar([float(r['loading']) for r in part],[float(r['observed_kJ_mol']) for r in part],
+                    yerr=[float(r['scale_J_mol_CO2'])/1000 for r in part],fmt='o',mfc='none',color='#0072B2',ms=4,lw=.6)
+        ax.scatter([float(r['loading']) for r in part],[float(r['predicted_kJ_mol']) for r in part],marker='x',s=16,color='#D55E00')
+        ax.set(title=f'{source}\n{pressure/1e6:g} MPa; '+('fitted' if source=='Vinjarapu2024' else 'acceptance check'),xlabel=LOADING)
+        ax.grid(alpha=.15)
+    axes[0].set_ylabel(r'Integral heat (kJ/mol CO$_2$)')
+    fig.suptitle('Open: observed; crosses: A7; bars: retained heat scale',fontsize=9)
+    save(fig,'heat-of-absorption','Eight fitted Vinjarapu heats and fourteen Arcis acceptance-check heats, separated by retained source pressure. Bars show scale_J_mol_CO2 / 1000, not a declared confidence interval. There is no A7 no-heat series.', ['heat.csv'])
+    a6=a.rows(a.J/'amendment-6/selected-assessment/density.csv')
+    by_id={r['id']:r for r in a6}
+    loaded=[r for r in density if r['id'] in spec['loaded_density_ids']]
+    for r in loaded:
+        assert all(r[k]==by_id[r['id']][k] for k in ['T_K','P_Pa','loading','observed_kg_m3','s_kg_m3'])
+    fig,axes=plt.subplots(2,2,figsize=(FULL_WIDTH,5.5),layout='constrained')
+    for ax,source in zip(axes[0],['Amundsen2009','Hartono2014']):
+        for r in [x for x in loaded if x['source']==source]:
+            color=plt.colormaps['viridis'](float(r['loading'])/.5)
+            ax.scatter(float(r['T_K']),float(r['error_over_s']),color=color,marker='o',s=18)
+            ax.scatter(float(r['T_K']),float(by_id[r['id']]['error_over_s']),color=color,marker='x',s=18)
+        ax.axhline(2,color='grey',ls='--',lw=.6)
+        ax.axhline(-2,color='grey',ls='--',lw=.6)
+        ax.set(title=source+' fitted loaded',xlabel='Temperature (K)',ylabel='Error / retained scale s')
+    excluded=set(summary['density']['Amundsen source-conflict five']['row_ids'])
+    free=set(summary['density']['Amundsen CO2-free gate five']['row_ids'])
+    for ax,record,group in [(axes[1,0],'Fitted', [r for r in density if r['id'] in set(spec['loaded_density_ids'])|free]),
+                            (axes[1,1],'Non-fitted / excluded',[r for r in density if r['id'] not in set(spec['loaded_density_ids'])|free])]:
+        for source,color in zip(sorted({r['source'] for r in density}),COLORS):
+            for marker,is_excluded in [('o',False),('x',True)]:
+                part=[r for r in group if r['source']==source and (r['id'] in excluded)==is_excluded]
+                if not part:
+                    continue
+                ax.scatter([float(r['T_K']) for r in part],[float(r['error_kg_m3']) for r in part],marker=marker,color=color,s=12,label=source+(' excluded' if is_excluded else ''))
+        ax.set(title=record+' A7 densities',xlabel='Temperature (K)',ylabel='Native density error (kg/m³)')
+        ax.legend(fontsize=6,frameon=False,loc='upper center',bbox_to_anchor=(.5,-.18),ncol=2)
+    fig.colorbar(plt.cm.ScalarMappable(norm=plt.Normalize(0,.5),cmap='viridis'),ax=list(axes[0]),label='Loading',shrink=.7)
+    fig.suptitle('Top: A7 circles, A6 crosses, same 47 IDs; bottom: all 210 A7 rows',fontsize=9)
+    save(fig,'loaded-density-errors','A7/A6 share the 47 fitted loaded-density identities, observed values, scales and states. Top panels show ±2s limits only for that fitted cohort; color denotes loading, with source separated. Bottom panels cover all 210 A7 densities and distinguish fitted, non-fitted and excluded rows. No empirical volume translation. Scales are not uniformly measurement uncertainty; 2s is not a 95% interval.', ['density.csv','fitted-rows.csv',str((a.J/'amendment-6/selected-assessment/density.csv').relative_to(a.ROOT))])
+    fig,axes=plt.subplots(2,3,figsize=(FULL_WIDTH,5.4),layout='constrained',sharex=True,sharey=True)
+    for row,record in enumerate(['A6','A7']):
+        grid={}
+        for index,r in paired[record].items():
+            if index:
+                grid.setdefault((r['temperature_K'],r['loading']),[]).append(r)
+        assert len(grid)==24 and all(len(v)==3 for v in grid.values())
+        for group in grid.values():
+            for rank,r in enumerate(sorted(group,key=lambda x:float(x['pressure_Pa']))):
+                ax=axes[row,rank]
+                resolved=int(r['resolved_trials'])>0
+                marker='s' if 'single-liquid' in r['classification'] else 'o'
+                ax.scatter(float(r['temperature_K']),float(r['loading']),marker=marker,s=30,
+                           facecolors='#D55E00' if resolved else 'none',edgecolors='#D55E00' if resolved else '#0072B2')
+                if r['final_success']!='True' or int(r['failed_trial_optimizers']):
+                    ax.annotate('!'+r['failed_trial_optimizers'],(float(r['temperature_K']),float(r['loading'])),fontsize=6)
+        for rank,ax in enumerate(axes[row]):
+            ax.set(title=record+' / '+['lowest','middle','highest'][rank]+' pressure',xlabel='Temperature (K)')
+            ax.set_xticks([313.15,318.15,333.15],labels=['313.15','318.15','333.15'])
+            ax.set_yticks([1e-5,.1,.3,.5],labels=[r'$10^{-5}$','0.1','0.3','0.5'])
+            ax.grid(alpha=.15)
+        axes[row,0].set_ylabel(LOADING)
+    witness=paired['A7'][0]
+    fig.suptitle('Resolved-descent points: A6 12/73; A7 0/73',fontsize=10)
+    fig.supxlabel('Orange filled: resolved; blue open: none resolved; square: single liquid; circle: two-phase\nSeparate index-0 witness: '+witness['temperature_K']+' K, α='+witness['loading']+', P='+witness['pressure_Pa']+' Pa\nA6/A7 witness: no resolved descent; both two-phase; !n marks failed trial optimizers',fontsize=7)
+    save(fig,'phase-family','73 specified T/P/loading states, A6 versus A7 on the same wheel: 12/73 and 0/73 resolved-descent points. The three pressure levels vary with temperature/loading; S4 supplies exact pressures. The additional index-0 witness is reported separately from index 41. Zero resolved trials means no numerically resolved descent, not zero Gibbs change. Two-phase classifications do not identify two liquids. Finite searches do not certify a continuous stable region or states at 353 K.', ['phase-family.csv'])
+    provenance=dict(generator=str(a.bind(a.ROOT/'analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py').relative_to(a.ROOT)),
+                    parameter_sha256=fit['record_sha256'],engine=fit['engine'],inputs=dict(sorted(a.INPUTS.items())),outputs=OUTPUTS)
+    (OUT/'provenance.json').write_text(json.dumps(provenance,indent=2,sort_keys=True)+'\n')
+    print('Wrote five PDF/PNG figures and provenance.json; retained states only.')
+
+
+if __name__=='__main__':
+    main()
