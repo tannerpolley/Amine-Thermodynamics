@@ -1,0 +1,135 @@
+"""Disposable phase diagnosis through the pinned Engine; no fitting or code changes."""
+import copy
+import hashlib
+import json
+import math
+from pathlib import Path
+import sys
+import final_evidence as f
+
+base = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6')
+out = base/'selected-checks/phase-diagnosis'
+record = base/'joint-mea-water/held/fit/usable-budget-endpoint.json'
+mapping = f.s.parameter_mapping(record)
+request = __import__('heat_evidence_170').request
+
+def load(index):
+    return json.loads((base/f'selected-checks/phase-family/point-{index}.json').read_text())
+
+def model_for(data):
+    return f.epcsaft.Mixture(f.epcsaft.Parameters.from_mapping(data),thermochemistry=f.thermal.record())
+
+mode = sys.argv[1]
+if mode == 'split':
+    for index in map(int,sys.argv[2:]):
+        old = load(index)
+        model = model_for(mapping)
+        req = request(mapping,313.15,.11)
+        phases = [f.eq.Phase(p['identity'],kind=p['role'],support=p['support']) for p in old['final']['phases']]
+        phases.append(f.eq.Phase('L2',kind='liquid',support=f.s.COMPONENT_IDS))
+        problem = f.flash_problem(req,old['loading'],old['temperature_K'],old['pressure_Pa'],phases)
+        trials = [(i,t) for i,t in enumerate(old['stability'][0]['trials']) if t['resolved_descent']]
+        # Two distinct descending compositions at each requested point, not duplicate seeds.
+        chosen = [trials[0]]
+        if len(trials)>1:
+            chosen.append(max(trials[1:],key=lambda it:sum(abs(a-b) for a,b in zip(it[1]['composition'],trials[0][1]['composition']))))
+        rows=[]
+        for i,t in chosen:
+            # The retained split has primal coordinates only; declared starts require complete coordinates
+            # or physical amounts/compositions/packings (gibbs_minimizer.cpp:1683-1745).
+            cursor=0; compositions=[]; amounts=[]; packings=[]
+            for phase in phases:
+                count=len(phase.support)
+                compositions.append([math.exp(v) for v in t['split_coordinates'][cursor:cursor+count]])
+                amounts.append(t['split_coordinates'][cursor+count])
+                packings.append(math.exp(t['split_coordinates'][cursor+count+1]))
+                cursor+=count+2
+            assert cursor==len(t['split_coordinates'])
+            start=f.eq.EquilibriumStart(compositions=compositions,amounts=amounts,packing_fractions=packings)
+            batch=f.eq.solve_equilibrium_starts(model,problem,[start],
+                f.eq.EquilibriumWorkLimits(attempts=1,attempt_iterations=400,iterations=400))
+            result=batch.results[0]
+            row=dict(index=index,trial_index=i,seed=t['seed'],causes=list(batch.causes),selected=batch.selected,
+                     original_G_over_RT=old['final']['objective'],single_liquid_G_over_RT=old['liquid']['objective'],
+                     seed_finite_split_delta_G_over_RT=t['quantities']['split_delta_g_over_rt'],
+                     seed_error_estimate_over_RT=t['quantities']['split_error_estimate_over_rt'])
+            if result is not None:
+                row['result']=f.phase_payload(model,problem,result)
+                row['delta_G_over_RT_vs_original']=result.objective-old['final']['objective']
+                row['delta_G_over_RT_vs_single_liquid']=result.objective-old['liquid']['objective']
+                if result.success:
+                    row['stability']=f.stability(model,problem,result)
+            rows.append(row)
+            f.s.write_json(out/f'split-seeded-{index}.json',rows)
+            print('split',index,i,'selected',batch.selected,'dG',row.get('delta_G_over_RT_vs_original'),
+                  'message',row.get('result',{}).get('message'),flush=True)
+elif mode == 'parameter':
+    changes = {
+        'bicarbonate-water-minus-0.2':('pair/bicarbonate-anion/water/k_ij',.4531773314415551),
+        'bicarbonate-water-0.8':('pair/bicarbonate-anion/water/k_ij',.8),
+        'carbamate-meah-minus-0.8':('pair/carbamate-anion/protonated-monoethanolamine/k_ij',-.8),
+        'meah-born-4.5':('component/protonated-monoethanolamine/born_diameter',4.5),
+        'carbamate-born-4.5':('component/carbamate-anion/born_diameter',4.5),
+    }
+    for index in map(int,sys.argv[2:]):
+        for name,(identity,value) in changes.items():
+            data=copy.deepcopy(mapping)
+            nodes=[n for n in f.s._identified(data) if n['identity']==identity]
+            assert len(nodes)==1
+            before=nodes[0]['value']['magnitude']
+            nodes[0]['value']['magnitude']=value
+            p=out/'parameter-probes'/f'{index}-{name}'
+            p.mkdir(parents=True,exist_ok=True)
+            f.s.write_json(p/'diagnostic-input.json',data)
+            old=load(index)
+            row={k:old[k] for k in ('index','loading','temperature_K','pressure_Pa')}
+            row['diagnostic_change']=dict(identity=identity,before=before,after=value)
+            f.family_job(data,request(data,313.15,.11),row,[],p/'point.json')
+            desc=[t for r in row.get('stability',[]) for t in r['trials'] if t['resolved_descent']]
+            print('parameter',index,name,row['classification'],'descents',len(desc),
+                  'min_tpd',min((t['quantities']['tpd_over_rt'] for t in desc),default=None),flush=True)
+elif mode == 'settings':
+    index=int(sys.argv[2]); old=load(index); model=model_for(mapping)
+    phases=[f.eq.Phase(p['identity'],kind=p['role'],support=p['support']) for p in old['final']['phases']]
+    problem=f.flash_problem(request(mapping,313.15,.11),old['loading'],old['temperature_K'],old['pressure_Pa'],phases)
+    batch=f.eq.solve_equilibrium_starts(model,problem,[f.eq.EquilibriumStart(coordinates=old['final']['coordinates'])],
+        f.eq.EquilibriumWorkLimits(attempts=1,attempt_iterations=400,iterations=400))
+    assert batch.selected is not None
+    result=batch.results[batch.selected]
+    f.s.write_json(out/f'settings-candidate-{index}.json',f.phase_payload(model,problem,result))
+    for name,packing,budget in [('default',None,None),('liquid-packing-0.4',.4,None),('larger-trial-budget',None,100)]:
+        options=f.eq.StabilityOptions()
+        trials=copy.copy(problem)
+        trials.phases=[f.eq.Phase('trial-L',kind='liquid',support=f.s.COMPONENT_IDS,packing_guess=packing),
+                       f.eq.Phase('trial-V',kind='vapor',support=f.s.COMPONENT_IDS[:3])]
+        options.trials=trials._native(model).phases
+        if budget is not None:options.trial_budget=budget
+        report=f.eq.stability_test(f.eq.compile_problem(model,problem),result,options)
+        payload={k:f.s._jsonable(getattr(report,k)) for k in ('completed','message','work')}
+        payload['trials']=[dict(seed=t.seed,evidence=t.evidence,message=t.message,
+            success=t.optimizer.success,composition=list(t.composition),quantities=dict(t.quantities),
+            phase_kind=t.phase.kind.name.lower()) for t in report.trials]
+        f.s.write_json(out/f'settings-{index}-{name}.json',payload)
+        print('settings',index,name,report.message,flush=True)
+elif mode == 'roots':
+    model=model_for(mapping); rows=[]
+    for index in [21,24,27,33,36,45,54,62,63,70,71,72]:
+        old=load(index)
+        for i,t in enumerate(old['stability'][0]['trials']):
+            if not t['resolved_descent']:continue
+            row=dict(index=index,trial_index=i,trial_rho_mol_m3=1/t['quantities']['volume_m3_per_mol'])
+            for branch in ['liquid','vapor']:
+                state=model.state(old['temperature_K'],P=old['pressure_Pa'],x=t['composition'],phase=branch)
+                row[branch]=dict(rho_mol_m3=state.molar_density,pressure_Pa=state.pressure,
+                    pressure_density_derivative=state.pressure_density_derivative,
+                    density_branch=state.density_branch.name,stable_root_count=state.stable_root_count)
+            rows.append(row)
+    f.s.write_json(out/'descending-trial-roots.json',rows)
+    print('descending roots',len(rows),flush=True)
+elif mode == 'identity':
+    f.s.verify_wheel()
+    f.s.write_json(out/'engine-identity.json',dict(wheel=str(f.s.installed_wheel()),wheel_sha256=f.s.ENGINE_WHEEL_SHA256,module=f.epcsaft.__file__,
+        parameter_document_sha256=hashlib.sha256(record.read_bytes()).hexdigest(),
+        mapping_sha256=hashlib.sha256(json.dumps(mapping,sort_keys=True).encode()).hexdigest()))
+else:
+    raise ValueError(mode)

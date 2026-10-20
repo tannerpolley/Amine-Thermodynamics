@@ -1,0 +1,28 @@
+"""Disclosed scratch diagnosis (#170 A6): do tiny perturbations of the held-B start remove the rank-deficiency on the 25 failing
+pCO2 rows (rows.json)? Each variant changes one parameter by about 1e-6 relative.
+Run from the checkout root: PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file>"""
+import json, time
+import fit_campaign as f
+import fit_observations as o
+D = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/held-followups/diagnosis'
+H = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs'
+spec, B = f.load(f'{H}/held-followups/held-B-information.json'), f.load(f'{H}/held-followups/held-B-start.json')
+fail = {x['id'] for x in json.load(open(f'{D}/rows.json'))['failing']}
+variants = {'B': {}, 'k_carbamate_MEAH=-0.999999': {'pair/carbamate-anion/protonated-monoethanolamine/k_ij': -0.999999},
+            'MEAH_born*(1+1e-6)': {'component/protonated-monoethanolamine/born_diameter': 4.0*(1+1e-6)},
+            'R5_a_k+1e-3': {'reaction:R5:correlation:a_k': 3037.6399534696106+1e-3}}
+out = {}
+for name, upd in variants.items():
+    m = o.s.with_parameter_values(B, upd) if upd else B
+    params, rows = o.stage6_rows(spec, m)
+    coords = f.stage6_coordinates(spec, params, m)
+    sel = [(r, i) for r, i in rows if r['id'] in fail]
+    clock = time.monotonic()
+    try:
+        v = o.reg.differentiate(params, coords, [i for _, i in sel], optimizer=[0.]*len(coords), thermochemistry=o.thermal.record())
+        out[name] = dict(ok=True, available=sum(s.name == 'Available' for s in v.statuses), n=len(sel))
+    except Exception as e:
+        out[name] = dict(ok=False, error=f'{type(e).__name__}: {e}', n=len(sel))
+    out[name]['wall_s'] = round(time.monotonic()-clock, 2)
+    print(name, out[name], flush=True)
+json.dump(out, open(f'{D}/nudge.json', 'w'), indent=1)

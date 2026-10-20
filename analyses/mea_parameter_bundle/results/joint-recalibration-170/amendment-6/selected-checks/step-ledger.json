@@ -1,0 +1,44 @@
+{
+ "authority": "\u00a70b selected-vector phase family and gas-root evidence for Held larger-A (joint MEA-water), #170 comment 6279085063",
+ "selected": {
+  "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json",
+  "sha256": "ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7"
+ },
+ "allocation": {
+  "wall_s": 2000,
+  "cpu_s": 3500,
+  "basis": "\u00a70b allocation \"Selected-vector full phase family and gas-root evidence\" 2,000 s / 3,500 CPU-s"
+ },
+ "operator_check": {
+  "program_charged_wall_s": 15565,
+  "program_charged_cpu_s": 126343.61,
+  "program_remaining_wall_s": 6035,
+  "note": "mandatory; x3 sensitivity fit and the selected-vector assessment run concurrently and are charged separately"
+ },
+ "calls": [
+  {
+   "call": "gas-root first attempt (existing output directory; no Engine call)",
+   "wall_s": 0.05,
+   "cpu_s": 0.05
+  },
+  {
+   "call": "gas-root probe",
+   "wall_s": 4.62,
+   "cpu_s": 4.61
+  },
+  {
+   "call": "73-point phase family",
+   "wall_s": 34.47,
+   "cpu_s": 34.4
+  }
+ ],
+ "results": {
+  "gas_root": "pass (gas-root/run/gas-root.json)",
+  "phase_family": {
+   "failed": 12,
+   "passed-single-liquid": 0,
+   "passed-two-phase": 0,
+   "unresolved": 61
+  }
+ }
+}

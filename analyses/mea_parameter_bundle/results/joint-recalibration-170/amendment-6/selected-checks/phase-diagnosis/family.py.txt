@@ -1,0 +1,14 @@
+"""Disclosed diagnostic: unchanged final_evidence phase family on one record."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+import final_evidence as f
+
+record, output = map(Path, sys.argv[1:])
+output.mkdir(parents=True, exist_ok=True)
+points = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/revision-3/phase/family-points.txt')
+f.main(output_dir=output, documents={'diagnostic': {'record': str(record)}},
+       phase_points=(points, '6e1231d9506fd6dd9e965a64120ff952cebf1c4778da5d66cfb0f888e8b7f44b'))
+(output/'document-identity.json').write_text(json.dumps({'path':str(record), 'sha256':hashlib.sha256(record.read_bytes()).hexdigest()}, indent=2)+'\n')
+print(json.loads((output/'summary.json').read_text()), flush=True)

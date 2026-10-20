@@ -1,0 +1,66 @@
+{
+  "input": {
+    "id": "Hartono2014_density_25C_alpha0.11",
+    "retained_row": "density-rows/0108.json"
+  },
+  "kind": "declared-density",
+  "result": {
+    "P_Pa": 100000.0,
+    "T_K": 298.15,
+    "declaration": {
+      "P_Pa": 100000.0,
+      "T_K": 298.15,
+      "analytical_feed": {
+        "carbon-dioxide": 0.11,
+        "monoethanolamine": 1.0,
+        "water": 7.911062165
+      },
+      "form": "difference",
+      "id": "Hartono2014_density_25C_alpha0.11",
+      "observed": 1028.87,
+      "quantity": "phase_density",
+      "scale": 1.9913504368895074,
+      "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=25 degC; own first row; alpha=0.11; x3=0.0130",
+      "weight": 0.019230769230769232
+    },
+    "error_kg_m3": 2.3546087778865967,
+    "error_over_s": 1.1824180888846965,
+    "error_percent": 0.2288538666582364,
+    "id": "Hartono2014_density_25C_alpha0.11",
+    "lifecycle_status": "property_target_candidate",
+    "loading": 0.11,
+    "mea_mass_fraction": 0.3,
+    "numerical_evidence": {
+      "requested_tolerance_met": true,
+      "route": "fit_observations.stage6_rows (includes stage2_rows), exact declared analytical feed",
+      "stable_root_count": null
+    },
+    "observed_kg_m3": 1028.87,
+    "parameter_sha256": "ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7",
+    "predicted_kg_m3": 1031.2246087778865,
+    "s_kg_m3": 1.9913504368895074,
+    "source": "Hartono2014",
+    "source_expanded_uncertainty_unit": "kg/m^3",
+    "source_expanded_uncertainty_value": "0.02",
+    "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=25 degC; own first row; alpha=0.11; x3=0.0130",
+    "source_seed_minus_declared_prediction_kg_m3": -0.00026295397651665553,
+    "source_seed_numerical_evidence": {
+      "max_abs_raw_residual": 8.526512829121202e-14,
+      "pressure_Pa": [
+        100000.0
+      ],
+      "reduced_hessian_minimum": 8.37343254646317e-11,
+      "requested_tolerance_met": true,
+      "route": "source_feed_request and native phase_density",
+      "stable_root_count": null,
+      "temperature_K": [
+        298.15
+      ]
+    },
+    "source_seed_prediction_kg_m3": 1031.22434582391,
+    "source_uncertainty_scope": "Table 3 footnotes b-c: u(rho)=U(rho)=0.02 kg/m^3 as printed; no standard-uncertainty conversion adopted.",
+    "source_uncertainty_unit": "kg/m^3",
+    "source_uncertainty_value": "0.02"
+  },
+  "status": "Available"
+}
