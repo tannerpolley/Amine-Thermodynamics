@@ -107,3 +107,50 @@ None of the four evaluated sizes passes all 47 loaded-density limits. The smalle
 
 Charge (stage bound-probe, allowance 180 / 200): 153.51 wall-s / 152.00 CPU-s.
 A7 calls total 614.48 wall-s so far.
+
+## Second restricted fit, MEAH⁺ size ≥ 5.35 Å (owner, 2026-10-20)
+
+**Also ineligible on the same three rows: no resolved descent, loaded density 44/47 (worst 2.43s).**
+The declaration is `../inputs/restricted-2-*.json`, built by `build-2.py.txt`
+(readiness review r1 Ready). It starts at the first endpoint and changes only the
+MEAH⁺ size box, to [5.35, 5.8] Å. Outputs are in `../restricted-2/`. The phase
+family and gates are in `../fixed-study/wheel-8298c602/restricted-2-endpoint/`.
+
+| Gate | Limit | First endpoint | Second endpoint |
+|---|---|---:|---:|
+| Points with a resolved descent (73) | 0 | 0 | **0** (69 two-phase, 4 single-liquid; 657 `no_resolved_descent` trials; 0 failed trial optimizers) |
+| Loaded density within 2s | 47/47 | 44/47, max 2.70 | **44/47, max 2.43** |
+| Loaded e/s min / max (span) | | −2.70 / +1.48 (4.18) | −2.43 / +1.45 (3.88) |
+| CO₂-free max \|e\| | ≤ 1.0 kg/m³ | 0.55 | 0.56 |
+| Cai cost | ≤ 95.90 | 91.92 | 91.91 |
+| C149 | ≤ 35.26 | 24.10 | 23.87 |
+| Pressure / species AARD | ≤ 15.81 / 9.89 % | 11.89 / 7.10 | 11.86 / 7.10 |
+| Vinjarapu RMSE | ≤ 3.13 kJ/mol | 1.83 | 1.83 |
+| 307-row objective | report | 149.246 | 148.905 |
+
+The failing rows are the same three 353.15 K states:
+
+| Row | α, mol CO₂/mol MEA | Error, kg/m³ | e/s |
+|---|---:|---:|---:|
+| Hartono2014_density_80C_alpha0.39 | 0.39 | −4.41 | −2.43 |
+| Amundsen2009_state_081 | 0.30 | −5.52 | −2.28 |
+| Hartono2014_density_80C_alpha0.29 | 0.29 | −4.16 | −2.05 |
+
+The fit converged on function tolerance (|Δcost|/cost 3.6 × 10⁻⁹) after 12 iterations, with cost
+149.246 → 148.905, in 45.51 wall-s / 560.75 CPU-s. The cold replay agrees with its native
+predictions within 3.3 × 10⁻¹³ relative. The MEAH⁺ segment diameter again ends on
+its lower bound, now 5.35 Å. Over the same fit the carbamate segment diameter moved
+4.689 → 4.866 Å; no causal link between the two is established. MEAH⁺–water k stays at
+−0.5, unlike-ion k at −1, Born diameters at 5 Å, and the total R5 shift at +10,000 J/mol.
+Total R2 shift: −1,387.4 J/mol. Unshifted R5 aₖ: 2831.7 K.
+
+**Meaning and limits.** Lowering the size bound by 0.14 Å narrowed the worst
+loaded-density miss from 2.70s to 2.43s and the span from 4.18s to 3.88s. The
+same 80 °C rows still fail, at 0.39–0.53 % of the measured density. Both are single
+local fits from one start. They show that these two declared boxes did not yield an eligible
+endpoint. They do not show that no eligible vector exists. Under the owner's
+scope, no further fit is authorized.
+
+Charge (stage second-fit, allowance 1,200 / 7,000): release 186.27 / 185.66,
+fit 45.51 / 560.75, replay 15.21 / 15.16, family 34.56 / 34.43, gates 28.59 / 28.15;
+total 310.14 / 824.15. All A7 calls: 924.62 wall-s / 2,263.71 CPU-s.
