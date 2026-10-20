@@ -70,25 +70,25 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 44f4f368d79244d8cc134e03e5d3cf9756de1453f4eeabc643b08a8e1a2080da
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1786\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.1034\linewidth}>{\raggedright\arraybackslash}p{0.1034\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}@{}}
-\caption{Acceptance quantities and retained endpoint values. F1-derived ceilings originate in \#172; A7 explicitly retains them (amendment-7-phase-stable-density.md, lines 209--218). Earlier design.md line 313 forbids automatic transfer of the dielectric rule to density trade-offs. Density failures remain failures; owner acceptance changes no threshold. Unavailable means no retained assessment here. A6/A7 phase comparisons use the same 8298c602 wheel.}\label{tab:acceptance-limits}\\
+\caption{Acceptance limits and endpoint values. The declared rounded ceilings allow a 10\,\% increase in common-subset cost, two percentage points in pressure and species AARD, and \SI{1}{\kilo\joule\per\mole} in each heat RMSE relative to F1; these absolute limits were explicitly retained for A7. The Cai ceiling is the rounded value of 1.05 times the preceding constant-interaction Cai-only cost. Density and finite-phase requirements were set separately. The three density failures remain failures; accepting A7 with them changed no limit. Unavailable means no retained assessment. A6 and A7 phase values come from the same software build.}\label{tab:acceptance-limits}\\
 \toprule
-Quantity & Limit & Authority & F1 reference & A6 & First A7 & Accepted A7 \\
+Quantity & Limit & Authority & F1 reference & A6 & First restricted fit & A7 \\
 \midrule\endfirsthead
 \toprule
-Quantity & Limit & Authority & F1 reference & A6 & First A7 & Accepted A7 \\
+Quantity & Limit & Authority & F1 reference & A6 & First restricted fit & A7 \\
 \midrule\endhead
 \bottomrule\endfoot
-common149 cost & 35.26 & A7 retained absolute limit from \#172 & 32.0567 & 24.9231 & 24.1008 & 23.866 \\
-Pressure AARD (\%) & 15.81 & A7 retains \#172 F1 + 2 percentage points & 13.8148 & 12.4737 & 11.8875 & 11.8608 \\
-Species AARD (\%) & 9.89 & A7 retained absolute limit & 7.89143 & 7.14514 & 7.10495 & 7.10358 \\
-Vinjarapu RMSE (kJ/\allowbreak{}mol) & 3.13 & A7 retained heat limit & 2.12657 & 1.82153 & 1.83317 & 1.83486 \\
-Loaded within 2s & 47/\allowbreak{}47 & A7 density requirement; three failures accepted by owner & inapplicable & 47 & 44 & 44 \\
-Cai cost & 95.90 & A7 Cai requirement & inapplicable & 91.8115 & 91.9217 & 91.9078 \\
-Descent points & 0/\allowbreak{}73 & A7 finite family; no continuous certificate & omitted & 12/\allowbreak{}73 & 0/\allowbreak{}73 & 0/\allowbreak{}73 \\
-CO2-free max absolute error (kg/\allowbreak{}m3) & 1.0 & A7 density requirement & inapplicable & 0.570926 & 0.554181 & 0.557182 \\
-307-row cost & no common149 limit & distinct objective; not comparable to F1 & inapplicable & 148.238 & 149.246 & 148.905 \\
-Arcis2011 RMSE (kJ/\allowbreak{}mol) & 9.36 & A7 retained heat acceptance check & 8.36442 & 8.05036 & unavailable & 8.1144 \\
+Common-subset cost & 35.26 & F1 value + 10\% (rounded; retained for A7) & 32.0567 & 24.9231 & 24.1008 & 23.866 \\
+Pressure AARD (\%) & 15.81 & F1 value + 2 percentage points (rounded; retained for A7) & 13.8148 & 12.4737 & 11.8875 & 11.8608 \\
+Species AARD (\%) & 9.89 & F1 value + 2 percentage points (rounded; retained for A7) & 7.89143 & 7.14514 & 7.10495 & 7.10358 \\
+Vinjarapu RMSE (kJ/\allowbreak{}mol) & 3.13 & F1 value + 1 kJ/\allowbreak{}mol (rounded; retained for A7) & 2.12657 & 1.82153 & 1.83317 & 1.83486 \\
+Loaded within 2s & 47/\allowbreak{}47 & declared density requirement; three failures disclosed & inapplicable & 47 & 44 & 44 \\
+Cai cost & 95.90 & constant-interaction Cai cost + 5\% (rounded; retained for A7) & inapplicable & 91.8115 & 91.9217 & 91.9078 \\
+Descent points & 0/\allowbreak{}73 & declared finite-family requirement; no continuous certificate & omitted & 12/\allowbreak{}73 & 0/\allowbreak{}73 & 0/\allowbreak{}73 \\
+CO2-free max absolute error (kg/\allowbreak{}m3) & 1.0 & declared density requirement & inapplicable & 0.570926 & 0.554181 & 0.557182 \\
+307-row cost & none & report only; not comparable to F1 total cost & inapplicable & 148.238 & 149.246 & 148.905 \\
+Arcis RMSE (kJ/\allowbreak{}mol) & 9.36 & F1 value + 1 kJ/\allowbreak{}mol (rounded; acceptance check) & 8.36442 & 8.05036 & unavailable & 8.1144 \\
 \end{longtable}\endgroup

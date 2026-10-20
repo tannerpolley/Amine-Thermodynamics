@@ -7,10 +7,10 @@ A model can reproduce the pressure with an implausible distribution of \MEA, \ME
 
 % P:introduction-02
 Speciation measurements for loaded \MEA differ in what they observe.
-Quantitative NMR resolves carbamate, but fast proton exchange merges \MEA with \MEAH and bicarbonate with carbonate into common peaks: B\"ottinger et al.\ report the amine sum~\cite[p.~134]{Bottinger2008}, whereas Jakobsen et al.\ separate each pair through calibrated chemical shifts~\cite[pp.~9895--9896]{Jakobsen2005}.
+Quantitative NMR resolves carbamate. B\"ottinger et al.\ report the sum of molecular and protonated amine and tabulate bicarbonate, noting that carbonate is practically absent in their studied solutions~\cite[p.~134, Table~3]{Bottinger2008}; Jakobsen et al.\ use calibrated chemical shifts to separate molecular from protonated amine and bicarbonate from carbonate~\cite[pp.~9895--9896]{Jakobsen2005}.
 Matin et al.\ obtained all four major species from acid and base titrations combined with a total carbon measurement~\cite{matinFacileMethodDetermination2012}.
 They reported agreement with NMR for free amine, protonated amine and carbamate, and bicarbonate higher than the NMR values~\cite[pp.~6616--6617]{matinFacileMethodDetermination2012}.
-When such observations enter a parameter fit, the choice of which measurements to fit can affect which model form is selected.
+Each comparison must distinguish the reported observable from the calculated observation operator, including any approximation used to relate them.
 
 % P:introduction-03
 Excess-Gibbs-energy models with chemical equilibria represent this system with fitted interaction parameters.
@@ -41,17 +41,19 @@ B\"ulow et al.\ added the Born term for the solvation Gibbs energy of ions to MD
 Related work added concentration-dependent permittivity to the Born and Debye--H\"uckel terms~\cite{Bulow2020,Rueben2024} and predicted \COtwo solubility in aqueous and organic salt solutions~\cite{Schick2023}.
 Figiel et al.\ modified the Born term to account for the solvation-shell volume and dielectric saturation near an ion (SSM+DS), with parameters estimated from ion solvation and salt activity data in water and alcohols at \SI{298.15}{\kelvin}~\cite{Figiel2025}; a later correction restored a missing bracket and the ion-region permittivity in its Eq.~(7)~\cite{Figiel2026Correction}.
 MDEA is a tertiary amine and forms no carbamate.
-The natural next step in this line is the primary amine \MEA, in which carbamate formation makes the ion population and the solvent composition change together with \COtwo loading.
+The primary amine \MEA forms carbamate, so its ion population and solvent composition change together with \COtwo loading.
 
 % P:introduction-05
 Density and phase descent test different consequences of the same fitted Helmholtz energy.
 A pressure/speciation fit need not reproduce liquid volume, and a converged equilibrium state can still admit a lower-Gibbs-energy phase arrangement.
+A descent is numerically resolved here only when the calculated Gibbs-energy decrease is distinguishable from its estimated numerical error.
 These checks must therefore accompany a joint fit when the intended use requires both volumetric agreement and a reacting liquid at prescribed conditions.
 A finite search can reject a parameterization by finding descent; the absence of resolved descent at its specified states does not establish global phase stability.
 
 % P:introduction-06
-This work asks whether one nine-species ePC-SAFT parameterization with explicit carbamate chemistry can jointly represent pressure, speciation, integral heat, density, heat capacity and the \MEA--water binary while showing no resolved descent on a declared phase family.
-The selected parameterization, A7, is compared with an earlier local endpoint, A6, to show the observed phase/density trade-off.
+This work asks whether one nine-species ePC-SAFT parameterization with explicit carbamate chemistry can jointly represent pressure, speciation, integral heat, density, heat capacity and the \MEA--water binary while showing no resolved descent on a declared family of 73 temperature/pressure/loading states, and what that restriction costs in the other properties.
+An endpoint is the parameter vector at which a local fit stopped.
+Two local fits to the same 307-row objective are compared: A6, which meets every loaded-density requirement but has resolved descent at 12 of the 73 states, and the selected A7, obtained through two sequential restricted fits, which has no resolved descent there but misses three loaded densities.
 The contributions are a joint multi-property calibration with explicit observation operators and weights, a paired finite phase search, and disclosure of the density failures and other discrepancies that remain.
 All fitted deviations describe calibration; comparisons outside the objective retain their data-access history.
 The resulting scope is thermodynamic assessment of these local endpoints, without qualification for absorber or stripper calculations.

@@ -66,10 +66,10 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 44f4f368d79244d8cc134e03e5d3cf9756de1453f4eeabc643b08a8e1a2080da
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}>{\raggedright\arraybackslash}p{0.0376\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}@{}}
-\caption{A7 objective operators. Rows partition eight disjoint groups and 307 quantities; common149 contains pressure, species and heat. Cai contains 25 temperatures and 25 vapour fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; LogRatio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales retain their declared meaning; they are not uniformly measurement uncertainties.}\label{tab:objective-groups}\\
+\caption{A7 objective operators. Rows partition eight disjoint groups and 307 quantities; common subset contains pressure, species and heat. Cai contains 25 temperatures and 25 vapor fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; log ratio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales retain their declared meaning; they are not uniformly measurement uncertainties.}\label{tab:objective-groups}\\
 \toprule
 Group & Operator & Unit/\allowbreak{}basis & n & Residual & Scale & Weight & Cost \\
 \midrule\endfirsthead
@@ -77,18 +77,18 @@ Group & Operator & Unit/\allowbreak{}basis & n & Residual & Scale & Weight & Cos
 Group & Operator & Unit/\allowbreak{}basis & n & Residual & Scale & Weight & Cost \\
 \midrule\endhead
 \bottomrule\endfoot
-common149 & CO2 vapour partial pressure & Pa & 47 & LogRatio & 1 & 11.1111 & 5.98341 \\
-common149 & liquid species /\allowbreak{} declared aggregate & mole fraction & 94 & Difference & 0.0014 to 0.01154 (row-specific) & 1 & 16.6691 \\
-common149 & integral heat of absorption & J/\allowbreak{}mol CO2 & 8 & Difference & 3000 to 6000 (row-specific) & 1 & 1.21347 \\
+common subset & CO2 vapor partial pressure & Pa & 47 & log ratio & 1 & 11.1111 & 5.98341 \\
+common subset & liquid species /\allowbreak{} declared aggregate & mole fraction & 94 & Difference & 0.0014 to 0.01154 (row-specific) & 1 & 16.6691 \\
+common subset & integral heat of absorption & J/\allowbreak{}mol CO2 & 8 & Difference & 3000 to 6000 (row-specific) & 1 & 1.21347 \\
 restored species & liquid species fraction & liquid mole fraction & 7 & Difference & 0.00244 to 0.01109 (row-specific) & 1 & 2.4503 \\
 Jakobsen & (bicarbonate + carbonate) /\allowbreak{} total amine & mol/\allowbreak{}mol total amine & 6 & Difference & 0.00172793 to 0.0548869 (row-specific) & 1 & 13.1171 \\
-Kiepe & CO2-water bubble pressure & Pa & 39 & LogRatio & 1 & 0.025641 & 0.000679019 \\
+Kiepe & CO2-water bubble pressure & Pa & 39 & log ratio & 1 & 0.025641 & 0.000679019 \\
 CO2-free density & liquid density & kg/\allowbreak{}m3 & 5 & Difference & 0.5 & 10 & 11.6112 \\
 Cai & MEA-water bubble temperature & K & 25 & Difference & 1 & 1 & 39.9903 \\
-Cai & vapour water fraction & vapour water fraction & 25 & Difference & 0.01 & 1 & 51.9175 \\
+Cai & vapor water fraction & vapor water fraction & 25 & Difference & 0.01 & 1 & 51.9175 \\
 loaded density & liquid density & kg/\allowbreak{}m3 & 47 & Difference & 1.79111 to 2.41635 (row-specific) & 0.0212766 & 0.565751 \\
 Cp & equilibrium isobaric Cp & J/\allowbreak{}(mol K), feed basis & 4 & Difference & 1.59309 to 1.76153 (row-specific) & 1 & 5.38658 \\
-common149 subtotal (already included) & -- & -- & 149 & -- & -- & -- & 23.866 \\
+common subset subtotal (already included) & -- & -- & 149 & -- & -- & -- & 23.866 \\
 Cai subtotal (already included) & -- & -- & 50 & -- & -- & -- & 91.9078 \\
 Objective total & -- & -- & 307 & -- & -- & -- & 148.905 \\
 \end{longtable}\endgroup

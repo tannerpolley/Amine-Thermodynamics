@@ -3,13 +3,14 @@
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the unloaded-solvent mass fraction is $w_{\MEA}=m_{\MEA}/(m_{\MEA}+m_{\HtwoO})$.
 Neither is a true-species mole fraction of the reacting liquid.
 Source molalities, measured temperatures and aggregate-species definitions are preserved in each observation operator.
-The objective has eight disjoint groups and 307 rows (\cref{tab:objective-groups}); the common group contains 47 pressures, 94 species and eight integral heats, which are not counted again as additional groups.
-The seven restored species and six Jakobsen bicarbonate-plus-carbonate/total-amine amount ratios are additional fitted quantities.
+\Cref{tab:mea-data-inventory} lists each observation set, its role and its prior use during model development.
+The objective has eight disjoint groups and 307 rows (\cref{tab:objective-groups}); the common subset is the 149-row objective of the predecessor fit F1 (Supplement S1), containing 47 pressures, 94 species and eight integral heats, which are not counted again as additional groups.
+The seven restored species, further B\"ottinger and Matin species observations outside the common subset, and six Jakobsen bicarbonate-plus-carbonate/total-amine amount ratios \cite{Jakobsen2005} are additional fitted quantities.
 The latter ratios differ from the carbonate share of dissolved carbon used in the comparison outside the objective.
 Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute a bubble temperature and a vapor-water fraction at each of 25 binary states, giving 50 quantities rather than 50 independent experiments.
 
 % P:methods-02
-B\"ottinger et al.\ observe \ce{MEA + MEAH+} as an NMR sum, and report the bicarbonate/carbonate signal as an aggregate \cite[Sect.~3, Table~3]{Bottinger2008}.
+B\"ottinger et al.\ observe \ce{MEA + MEAH+} as an NMR sum and tabulate bicarbonate, noting that carbonate is practically absent in their studied solutions \cite[p.~134, Table~3]{Bottinger2008}. The present calculations compare their bicarbonate-labelled observations with calculated \ce{HCO3- + CO3^{2-}}, using the retained observation operator.
 Matin et al.\ derive \MEA, \MEAH and \MEACOO from titrations and carbon balance; their bicarbonate operator includes carbonate \cite[pp.~6614--6616, Eqs.~18--19b]{matinFacileMethodDetermination2012}.
 Their source figures label \SI{21}{\degreeCelsius}; the calculations retain the declared \SI{20}{\degreeCelsius} approximation.
 All 19 Matin bicarbonate/carbonate pool rows remain outside the A7 objective.
@@ -26,24 +27,24 @@ Observation or view & Rows & Role and prior access \\
 \midrule
 Objective & 307 & Joint calibration; eight disjoint groups in \cref{tab:objective-groups} \\
 Canonical pressure & 159 & Fitted rows and previously accessed comparisons; three source rows above \SI{393.15}{\kelvin} excluded \\
-Wagner pressure & 23 & Outside the objective; assessed after A7 acceptance, but previously accessed during model development \\
+Wagner pressure~\cite{wagnerSolubilityCarbonDioxide2013} & 23 & Outside the objective; assessed after A7 acceptance, but previously accessed during model development \\
 15/45 wt\% pressure & 70 & Concentration transfer outside the objective; previously accessed \\
 Arcis integral heat & 14 & Outside the objective; used as an acceptance check \\
 Matin pool & 19 & Report-only comparison; previously accessed \\
 Jakobsen carbonate share & 10 & Report-only comparison; source used in earlier development \\
 Native density & 210 & Includes fitted, non-fitted and excluded observations; 47 loaded and five \COtwo-free rows fitted \\
-Hilliard heat capacity & 4 & Fitted, at the declared source composition and pressure \\
+Hilliard heat capacity & 4 & Fitted at the source composition; evaluated at the declared calculation pressure \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 % P:methods-03
-The canonical pressure view combines six published sources \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
+The canonical pressure view contains 159 evaluated observations from six published sources \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}; Wagner and concentration-transfer pressures are reported separately.
 Hilliard and Xu observations use the measured molality and temperature rather than a nominal solvent composition \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
 The three Xu rows above the declared reacting-temperature domain are not evaluated.
 A B\"ottinger state with quantifiable oxazolidone is excluded because that species is absent from the model.
-Five Amundsen loading-0.4 source-conflict densities remain excluded from the objective and its density requirement; their values remain in the full comparison.
-The canonical and pressure-packet views overlap and must not be pooled as independent observations.
+
+The pressure-packet view is the pressure subset of the retained pressure/species data packet; it contains both fitted and non-fitted observations and overlaps the canonical view, so the two pressure views are not pooled as independent observations.
 Supplement S7 gives source corrections, and S2 gives named comparison cohorts with their data-access labels.
 
 \subsection{Caloric and density observation operators}\label{sec:heat-method}
@@ -62,21 +63,22 @@ No matched A7 calculation omitting heat from the objective was made, so no isola
 
 % P:methods-heat-02
 All densities are native equation-of-state values, without empirical volume translation.
-The 47 fitted loaded rows comprise 15 Amundsen and 32 Hartono observations; five \COtwo-free densities use exactly zero analytical carbon.
+The 47 fitted loaded rows comprise 15 Amundsen \cite{Amundsen2009} and 32 Hartono \cite{Hartono2014} observations; five \COtwo-free densities use exactly zero analytical carbon, and the 67 Han et al.\ densities \cite{hanDensityWater12012} are comparisons only.
+Five Amundsen densities at loading 0.4 are excluded from the objective and its density requirement following comparison with Hartono et al.\ \cite{Hartono2014}, whose densities were linearly interpolated to that loading at the shared temperatures and nominal unloaded-solvent composition; the exclusion does not establish which source is correct, and all five observations remain in the full comparison.
 The density calculations use \SI{100000}{\pascal} where declared, including all Amundsen rows; this is a calculation convention where the source pressure is unreported.
 The declared loaded-density scale $s_j$ retains source-local loading sensitivity and source uncertainty qualifications.
 It is not uniformly a measured standard uncertainty, and $2s$ is not a 95\,\% interval.
 Amundsen's exact high-temperature/loading uncertainty boundary remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
-The four Hilliard heat capacities use 7 mol \MEA/kg water and \SI{101325}{\pascal}, with nominal unloaded calculations using the declared $10^{-6}$ loading proxy.
+The four Hilliard heat capacities use 7 mol \MEA/kg water and a declared calculation pressure of \SI{101325}{\pascal}; the source measurements used sealed sample pans in a differential scanning calorimeter \cite[Sects.~4.5--4.6, App.~G.2]{Hilliard2008}. Nominal unloaded calculations use the declared $10^{-6}$ loading proxy.
 Their comparison is on the complete analytical-feed mass basis; enthalpy and proxy checks are reported in S9.
 
 \section{Parameter estimation and numerical checks}\label{sec:parameters}
 % P:methods-04
-A7 varies 16 declared coordinates: binary interactions, \MEAH and \MEACOO sizes and dispersion energies, their Born diameters, and R2/R5 chemistry.
+A7 varies 16 adjustable parameters, called coordinates below: binary interactions, \MEAH and \MEACOO sizes and dispersion energies, their Born diameters, and R2/R5 chemistry.
 \Cref{tab:fitted-coordinates} gives their values, bounds, transformations, ties and conditional standard errors.
 The remaining parameters are fixed within this fit, including the shared water parameterization, association topology, dielectric coefficients, \COtwo--water interaction and the \COtwo dispersion energy of \SI{169.21}{\kelvin}.
 Fixed includes values estimated in earlier calibration; it does not mean independently measured.
-The full species and binary inputs, with their source qualifications, appear in \cref{tab:full-ionic-ssm-ds-parameters,tab:binary-interaction-parameters}.
+The full species, association and binary inputs, with their sources, appear in Supplement S10.
 
 \subsection{Weighted objective and restricted fits}
 % P:methods-05
@@ -92,29 +94,32 @@ The bounded least-squares problem minimizes
 \end{equation}
 \Cref{tab:objective-groups} states each observation operator, units, scale and weight.
 Loaded densities have weight $1/47$; the \COtwo-free rows have scale \SI{0.5}{\kilogram\per\cubic\metre} and weight 10.
-Cai temperature and vapor-fraction scales are \SI{1}{\kelvin} and 0.01 with unit weight, and Kiepe pressures retain weight $1/39$.
+Cai temperature and vapor-fraction scales are \SI{1}{\kelvin} and 0.01 with unit weight, and Kiepe \COtwo--water pressures \cite{kiepeExperimentalDeterminationPrediction2002} retain weight $1/39$.
 The pressure and species scales express fitting priorities, and the printed heat intervals are not established independent one-standard-deviation errors.
 Thus the share of cost assigned to one property reflects the objective as well as its deviations.
 
 \input{tables/objective_groups}
 
 % P:methods-06
-The common-subset cost and pressure ceilings originated in a comparison with the F1 predecessor and were explicitly retained for A7; the density, Cai and phase requirements were declared separately.
+F1, the predecessor parameterization, was fitted to the common subset without density; the common-subset cost, pressure/species and heat ceilings were derived from F1 and explicitly retained for A7, whereas the density, Cai and phase requirements have separate origins.
 \Cref{tab:acceptance-limits} distinguishes those limits from the total 307-row cost, which has no F1 common-subset ceiling.
 Accepting the three disclosed density failures did not change their thresholds or turn them into passes.
-The restriction was imposed through a chosen parameter box, followed by a phase test of each endpoint; the fit did not constrain every intermediate parameter vector to pass the phase search.
+The restriction narrowed the A6 bounds on the \MEAH segment diameter and the \MEAH--water interaction (\cref{tab:fitted-coordinates}), while retaining the other physical bounds and the objective rows, scales and weights.
+The R2/R5 coordinate declarations were rebased to preserve their physical bounds when inherited enthalpy shifts changed.
+Each endpoint was then tested on the phase family; the fit did not constrain every intermediate parameter vector to pass the phase search.
 Two sequential restricted fits were made, each from one start.
 The second started from the first endpoint and lowered the \MEAH segment-size bound from \SI{5.49}{\angstrom} to \SI{5.35}{\angstrom}; it stopped on function tolerance after 12 iterations.
 The bounds were sampled, not certified as a region without phase descent, and these fits establish neither a global optimum nor absence of another eligible vector.
 
-\input{tables/acceptance_limits}
 \input{tables/fitted_coordinates}
+\input{tables/acceptance_limits}
 
 \subsection{Finite phase search}\label{sec:phase-method}
 % P:methods-phase-01
 The paired A6/A7 search uses 73 specified temperature/pressure/loading states at 313.15--\SI{333.15}{\kelvin} and $\alpha=10^{-5}$--0.5 on the same software build.
+This family was retained unchanged from the A6 assessment and specified before the restricted A7 fits; its temperature ceiling does not establish phase behavior at the \SI{353.15}{\kelvin} density failures.
 Each state uses its declared pressure; the lowest, middle and highest pressure levels vary with temperature and loading.
-Supplement S4 gives every exact state, preserving the additional index-0 witness separately from index 41.
+Supplement S4 gives every specified entry; index 0 has the same temperature and loading as index 41 (\SI{318.15}{\kelvin}, $\alpha\simeq0.2556$), but its pressure is rounded to \SI{5918.5286}{\pascal}, and both entries are retained.
 At a converged reacting state, nine declared trials examine tangent-plane, donor and finite-split descent, comparing numerical descent with its estimated numerical error.
 A negative value inside that error estimate is not a resolved descent.
 A resolved descent rejects the candidate even if a subsequent split solve fails; successful split-seeded solves provide separate phase evidence.
@@ -139,7 +144,7 @@ Supplement S6 supplies the coordinate order and correlations.
 
 % P:methods-08
 The 375 assessed equilibrium states have maximum reported conservation, charge and stationarity residuals no greater than $2.2\times10^{-12}$ on their declared bases.
-A separate 153-identity replay of the selected record reproduces the required common-subset and heat-capacity quantities within $8.39\times10^{-16}$ relative difference.
+A separate re-evaluation of the selected parameter file reproduces 153 named common-subset and heat-capacity quantities within $8.39\times10^{-16}$ relative difference.
 These are numerical verification results; neither validates phase behavior or absorber/stripper performance.
 Supplement S9 distinguishes the replay, solution residuals and caloric consistency checks.
 Agreement with observations is summarized by
@@ -150,6 +155,3 @@ Agreement with observations is summarized by
 \end{equation}
 with root-mean-square error (RMSE) in the observable's units and signed logarithmic bias $\langle\ln(y^{\mathrm{calc}}/y^{\mathrm{obs}})\rangle$ where applicable.
 Mixed-property cost or relative-error averages are not interpreted as overall physical accuracy.
-
-\input{tables/full_ionic_ssm_ds_parameters}
-\input{tables/binary_interaction_parameters}

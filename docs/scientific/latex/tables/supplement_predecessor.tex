@@ -68,10 +68,10 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 44f4f368d79244d8cc134e03e5d3cf9756de1453f4eeabc643b08a8e1a2080da
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3948\linewidth}>{\raggedright\arraybackslash}p{0.0564\linewidth}>{\raggedright\arraybackslash}p{0.1692\linewidth}>{\raggedright\arraybackslash}p{0.1692\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}@{}}
-\caption{F1 predecessor versus A7. Common149 identities, observations, units and effective residual scales/weights reconcile, with 47 pressures, 94 species and eight heats. F1 uses its original retained parameter and Engine identities; its 152-quantity wheel-transfer check does not qualify other results. Native F1 density uses eos\_density\_kg\_m3 without translation at 101325 Pa; A7 uses 100000 Pa (1325 Pa difference). Rows match temperature, loading and unloaded-solvent mass fraction exactly, not pressure. No pressure-density derivative is retained in these density records, so no magnitude bound is claimed. These Amundsen states exclude unmatched temperatures/loadings and other sources. Matched 68 of 68 F1 rows; exact matched IDs and exclusions follow in the generated provenance comments. Orchestrator amendment 2026-10-20: pressure basis disclosed, not matched.}\label{tab:supplement-predecessor}\\
+\caption{F1 predecessor versus A7. Common-subset identities, observations, units and effective residual scales/weights reconcile, with 47 pressures, 94 species and eight heats. F1 uses its original retained parameter and Engine identities; its 152-quantity wheel-transfer check does not qualify other results. Native F1 density uses eos\_density\_kg\_m3 without translation at 101325 Pa; A7 uses 100000 Pa (1325 Pa difference). Rows match temperature, loading and unloaded-solvent mass fraction exactly, not pressure. No pressure-density derivative is retained in these density records, so no magnitude bound is claimed. These Amundsen states exclude unmatched temperatures/loadings and other sources. Matched 68 of 68 F1 rows; the pressure basis is disclosed, not matched.}\label{tab:supplement-predecessor}\\
 \toprule
 Metric & n & F1 & A7 & Unit \\
 \midrule\endfirsthead
@@ -82,7 +82,7 @@ Metric & n & F1 & A7 & Unit \\
 Pressure AARD & 47 & 13.8148 & 11.8608 & \% \\
 Species AARD & 94 & 7.89143 & 7.10358 & \% \\
 Vinjarapu RMSE & 8 & 2.12657 & 1.83486 & kJ/\allowbreak{}mol CO2 \\
-common149 cost & 149 & 32.0567 & 23.866 & 1 \\
+Common-subset cost & 149 & 32.0567 & 23.866 & 1 \\
 Native F1 density matched AARD & 68 & 11.8433 & -- & \% \\
 A7 density matched AARD & 68 & -- & 0.490695 & \% \\
 \end{longtable}\endgroup

@@ -1,86 +1,120 @@
-# #197 Stage 3 Writer handoff
+# #197 Write fix round 1 handoff
 
-Writer implementation is complete in the authorized worktree on `build-197-manuscript-generators`, based on `ed43f9e1fbd63fc22a6b8bccb5635c45d2d385a6`. Independent manuscript reviews and owner review remain open. No external publication or GitHub write occurred.
+Fix round 1 is applied locally. Confirming scientific-number/cited-claim and reader-story reviews, owner review and merge remain open. Issue #197 is not complete. This record supersedes the build and page-count statements in the preceding Writer handoff and the earlier `submission_readiness.md`; it does not authorize publication or submission.
 
-## File-by-file changes
+Branch: `issue-197-stage-3-rewrite-the-mea-manuscript`.
+Worktree: `/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-197-stage-3-rewrite-the-mea-manuscript`.
+The worktree fast-forwarded from the main-based branch to `21b4e472de4bf0c902b1bf3d6ad67a1fd9025b21` before editing. The build worktree was read only. Selected scientific evidence and promoted notebook basis remain `8f40c125e5945ac785cc0ad1889fc79bea2096c9`.
 
-| File under docs/scientific/latex | Change |
-| --- | --- |
-| `main.tex` | Title, abstract, current A7 question and compact results; five reviewed figures and main-table inputs integrated through the sections. |
-| `sections/introduction.tex` | Density/phase question and contributions; Zhang, Nasrifar, Lloret and Najafloo source-based positioning. |
-| `sections/epc_saft_equation_of_state.tex` | A7 temperature-dependent interactions, sizes, density/temperature permittivity law, association inputs and shifted reaction-coordinate conventions. |
-| `sections/data_methods.tex` | Eight disjoint groups and observation roles; heat/density/Cp operators, weighted objective, sequential single-start fits, finite search, conditional covariance and numerical verification. |
-| `sections/mea_system_modeling_results.tex` | Local A6–A7 phase/density trade-off first; all three density failures; fitted native-unit deviations; five generated figures; comparisons and limitations. |
-| `sections/conclusion.tex` | Joint-calibration result and finite-state wording, with density, local-fit, uncertainty, data-access and process-use limits. |
-| `sections/nomenclature.tex` | Current observation, dielectric, fitting and phase notation; F1–F6 removed from current-model nomenclature. |
-| `sections/data_code_availability.tex` | A7 DOI pending, exact promoted/Engine identities and local staging; earlier F1 deposit distinguished; approved declarations retained. |
-| `supplement.tex` | S1–S9 rewritten; separate predecessor studies, complete density/carbonate/phase/covariance inputs; phase tables placed in landscape without edits; source corrections and S8 historical-inventory clarification. |
-| `tables/literature_model_comparison.tex` | Authored comparison table: Zhang and Nasrifar added, Lloret heat comparison included, Najafloo ambiguity preserved, current A7 roles specified. No accuracy ranking. |
-| `references.bib` | Approved cited-snapshot script refresh from existing export. Added Yang2024, removed Held2008 and archerDielectricConstantWater1990; no existing-entry field drift. |
-| `source_log.md` | Promotion statement, retained evidence map, exact software identities, literature passages read, bibliography diff and R2/R5 inheritance history. |
-| `submission/chemrxiv.md` | A7 title/abstract and local submission fields; DOI pending and prior F1 release distinguished. |
-| `submission/cover_letter.md` | A7 question, results and claim limits for author review. |
-| `submission/highlights.txt` | Five A7 highlights, lengths74/61/80/79/75 characters. |
-| `submission_metadata.yml` | A7 identities, current PDF hash, pending DOI and review/publication gates; historical F1 deposit nested separately. |
-| `submission_readiness.md` | Rewrite-specific mechanical checks and open reviews replace historical ticks; retained-inventory inconsistency explicit. |
-| `builds/verification-receipt.json` | Main-PDF input and output hashes written by the build/freshness command. |
-| `builds/197-displayed-number-sources.md` | Authored-number source locators, every numerical generated-table row and every figure-input row locator. |
-| `builds/197-writer-handoff.md` | This file-by-file and claim-limit handoff. |
+The controlling records are `tmp/joint-design/write-review-numbers-r1.md`, `write-review-story-r1.md` and `write-review-numbers-r2.md`. The r2 science ruling wins every conflict. No Engine calculation, retained-evidence edit, selected-parameter edit or notebook edit occurred.
 
-## Mandatory limits and additional owner conditions
+## Fix-by-fix application
 
-| Limit | Implementation file:line | How it is met |
-| --- | --- | --- |
-| Calibration and prior data access | `sections/data_methods.tex:21`; `sections/mea_system_modeling_results.tex:52`; `sections/mea_system_modeling_results.tex:109`; `sections/mea_system_modeling_results.tex:124` | Fitted deviations are calibration; Wagner/transfer retain prior access; Arcis is an acceptance check. |
-| Finite phase wording and domain | `sections/mea_system_modeling_results.tex:6`; `sections/mea_system_modeling_results.tex:10`; `supplement.tex:94` | Verbatim finite-search wording; only specified T/P/loading states. No claim above333.15K/alpha.5 or at353.15K density failures; two-phase is not two liquids. |
-| Fits and sampled bounds | `sections/data_methods.tex:106`; `sections/data_methods.tex:108` | Two sequential restricted fits, each one start; no global optimum or stable-box certificate. |
-| Conditional uncertainty | `sections/data_methods.tex:133`; `sections/data_methods.tex:135`; `sections/data_methods.tex:136` | Ten free/rankten/sixbounds/297dof; fixed weights/inputs/bounds and local linearization; no measurement uncertainty or prediction intervals. |
-| Three density failures | `sections/mea_system_modeling_results.tex:21`; `sections/mea_system_modeling_results.tex:27`; `sections/data_methods.tex:68`; `sections/data_methods.tex:69` | Amundsen081:-5.52kg/m3,-2.28s;Hartonoalpha.29:-4.16,-2.05s;alpha.39:-4.41,-2.43s.2s is not95%;source boundary unresolved. |
-| Verification versus validation | `sections/data_methods.tex:141`; `sections/data_methods.tex:142`; `sections/data_methods.tex:143` | 375 states with residual≤2.2e-12; separate153-identity replay. Neither validates phase behavior or absorber/stripper performance. |
-| Kiepe and Cai | `sections/mea_system_modeling_results.tex:45`; `sections/mea_system_modeling_results.tex:46` | Fixed CO2–water check, cost≈.0007; Cai≈62% cost is an objective statement, not relative accuracy. |
-| Other discrepancies | `sections/mea_system_modeling_results.tex:79`; `sections/mea_system_modeling_results.tex:115`; `sections/mea_system_modeling_results.tex:127` | Cp at318.15K,45wt% transfer,Matin pool and all ten carbonate shares visible; no historical-nine removal. |
-| Local endpoint trade-off | `sections/mea_system_modeling_results.tex:16`; `sections/mea_system_modeling_results.tex:17` | Only these A6/A7 endpoints; no minimum unavoidable penalty or isolated Born/heat effect. |
-| F1 separation and identity | `supplement.tex:43`; `supplement.tex:57`; `supplement.tex:60` | F1–F6 with-heat study and F1–A7 comparison separate. Original wheel preserved. F1 phase values absent. |
-| Pending A7 release | `sections/data_code_availability.tex:3`; `supplement.tex:189`; `submission_metadata.yml:68` | A7 DOI pending. Old DOI is F1 only; staging and omitted dependencies identified. |
-| S8 retained inventory | `supplement.tex:158`; `supplement.tex:165`; `supplement.tex:166`; `supplement.tex:167` | Generated inventory/generator unchanged; superseded extraction/pressure notes explicitly corrected. Other pressures remain row-specific; no pressure-density magnitude bound. |
-| Yang citation boundary | `sections/epc_saft_equation_of_state.tex:74`; `sections/epc_saft_equation_of_state.tex:86` | Yang2024§2.1Eqs1a/2a/2b supports functional form only; own A7 parameter values and branch come from retained inputs. |
+Paths below are relative to `docs/scientific/latex/`, except the figure generator under `analyses/`. For an amended item, the r2 replacement is verbatim; the table identifies partial applications. The machine-readable locator record is `tmp/joint-design/r1-fix-application.json`.
 
-## Displayed-number sources
+| ID | Application | File:line | Detail |
+| --- | --- | --- | --- |
+| A1 | applied verbatim | `main.tex:94` |  |
+| A2 | applied verbatim | `main.tex:95` |  |
+| A3 | amended per r2 | `main.tex:99` |  |
+| A4 | applied verbatim | `main.tex:100` |  |
+| A5 | amended per r2 | `submission/chemrxiv.md:15`; `submission/chemrxiv.md:23` | Story A1/A2/A4 plus r2 A3 and prospective release sentence. |
+| A6 | applied verbatim | `submission/highlights.txt:3`; `submission/highlights.txt:4`; `submission/highlights.txt:5` |  |
+| A7 | amended per r2 | `submission/cover_letter.md:9`; `submission/cover_letter.md:11`; `submission/cover_letter.md:13` | r2 opening comparison; remaining story replacements verbatim. |
+| B1 | amended per r2 | `sections/introduction.tex:13` |  |
+| B2 | applied verbatim | `sections/introduction.tex:44` |  |
+| B3 | amended per r2 | `sections/introduction.tex:48` |  |
+| B4 | amended per r2 | `sections/introduction.tex:54`; `sections/introduction.tex:55` | Story question and endpoint definition; r2 comparison sentence. |
+| C1 | applied verbatim | `sections/data_methods.tex:6`; `sections/data_methods.tex:8` |  |
+| C2 | applied verbatim | `sections/data_methods.tex:30` |  |
+| C3 | amended per r2 | `sections/data_methods.tex:42`; `sections/data_methods.tex:47`; `sections/data_methods.tex:66` |  |
+| C4 | applied verbatim | `sections/data_methods.tex:66` |  |
+| C5 | applied verbatim | `sections/data_methods.tex:77` |  |
+| C6 | applied verbatim | `sections/data_methods.tex:97` |  |
+| C7 | amended per r2 | `sections/data_methods.tex:104`; `sections/data_methods.tex:107` |  |
+| C8 | applied verbatim | `sections/data_methods.tex:114` |  |
+| C9 | amended per r2 | `sections/data_methods.tex:122` |  |
+| C10 | applied verbatim | `sections/data_methods.tex:147` |  |
+| C11 | applied verbatim | `sections/data_methods.tex:81`; `sections/epc_saft_equation_of_state.tex:87`; `supplement.tex:198` | Parameter inventories moved to S10; corrected original locator is pages 10–17. |
+| C12 | amended per r2 | `sections/epc_saft_equation_of_state.tex:86` |  |
+| D1 | applied verbatim | `sections/mea_system_modeling_results.tex:4`; `sections/mea_system_modeling_results.tex:5` |  |
+| D2 | applied verbatim | `sections/mea_system_modeling_results.tex:20` | Phase and density become Figures 1 and 2. |
+| D3 | amended per r2 | `sections/mea_system_modeling_results.tex:92` |  |
+| D4 | amended per r2 | `sections/mea_system_modeling_results.tex:77`; `sections/mea_system_modeling_results.tex:84`; `sections/mea_system_modeling_results.tex:106`; `sections/mea_system_modeling_results.tex:30`; `sections/mea_system_modeling_results.tex:23` | r2 phase caption; remaining story caption edits verbatim. |
+| D5 | applied verbatim | `sections/mea_system_modeling_results.tex:138`; `sections/mea_system_modeling_results.tex:140` |  |
+| D6 | applied verbatim | `sections/mea_system_modeling_results.tex:145` |  |
+| E1 | applied verbatim | `sections/conclusion.tex:3` |  |
+| E2 | applied verbatim | `sections/conclusion.tex:6` |  |
+| E3 | applied verbatim | `sections/data_code_availability.tex:4`; `sections/data_code_availability.tex:5` |  |
+| E4 | applied verbatim | `sections/nomenclature.tex:33` |  |
+| F | applied verbatim | `supplement.tex:47`; `supplement.tex:85`; `supplement.tex:86`; `supplement.tex:95`; `supplement.tex:175`; `supplement.tex:190`; `supplement.tex:158`; `supplement.tex:167`; `supplement.tex:192` | All nine designated supplement edits, including the three explicitly accepted in r2. |
+| G1 | amended per r2 | `scripts/final_rerun_tables.py:255` |  |
+| G2 | applied verbatim | `scripts/final_rerun_tables.py:22` |  |
+| G3 | applied verbatim | `scripts/final_rerun_tables.py:56` |  |
+| G4 | amended per r2 | `scripts/final_rerun_tables.py:29` | Qualification fields retained; readable label, fitted/tied/inherited distinctions and r2 caption. |
+| G5 | applied verbatim | `scripts/final_rerun_tables.py:38` |  |
+| G6 | applied verbatim | `scripts/final_rerun_tables.py:229` |  |
+| G7 | applied verbatim | `scripts/final_rerun_tables.py:316` |  |
+| G8 | applied verbatim | `scripts/final_rerun_tables.py:305` |  |
+| G9 | amended per r2 | `analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:58`; `analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:149` | r2 phase legend; remaining story labels verbatim. |
+| r1-Bottinger | amended per r2 | `sections/introduction.tex:10`; `sections/data_methods.tex:13` | Both merged r2 texts; reported bicarbonate distinguished from the calculated aggregate. |
+| r1-Hilliard | amended per r2 | `sections/data_methods.tex:36`; `sections/data_methods.tex:72` | Inventory row and prose; 101325 Pa is the calculation pressure. |
+| r2-item2 | applied verbatim | `sections/mea_system_modeling_results.tex:94` | Non-fitted density errors and 67-row Han RMSE. |
+| r2-item7 | applied verbatim | `supplement.tex:202` | Exact fixed-input attribution before the S10 tables; G4 retains the qualifications. |
+| r2-item8 | applied verbatim | `sections/data_code_availability.tex:7`; `supplement.tex:183`; `submission/chemrxiv.md:23` | Exact private-Engine disclosure in main, S9 and ChemRxiv. |
+| r2-item9 | applied verbatim | `sections/data_methods.tex:119` | Unchanged-family explanation in Methods. |
+| HSL | applied verbatim | `sections/data_code_availability.tex:13` | Exact owner-required acknowledgement before Funding. |
+| Story optional suggestions | not applied (optional) | Review optional list | All optional deletions, rounding, inventory-generator and legend suggestions excluded. |
+| r1 optional Zhang cell | not applied (optional) | Review optional list | Excluded as instructed. |
 
-The full number→retained-file:line list is `builds/197-displayed-number-sources.md`. Its first table covers authored numerical statements and rounding, followed by all numerical rows in the fourteen reviewed generated tables and all input row locators for the five figures. Their original provenance comments/JSON retain raw-input hashes. No generated display, generator or retained numerical evidence was edited. No Engine calculation was run.
+## Generator Build results
 
-## Literature read and gaps
+All quantitative numerical cells of all fourteen generated tables agree with the pre-edit snapshot at `21b4e47`. The comparison follows numerical columns row by row; approved changes to numbers inside labels, reference locators, units and captions are textual changes, not recalculated values. Records: `r1-baseline-table-rows.json`, `r1-baseline-numeric-content.json` and `r1-numeric-content-equality.json` under `tmp/joint-design/`. The complete printed reconciliation JSON is unchanged before/after and across both runs (`r1-baseline-reconciliation.json`, `r1-after-reconciliation.json` and `r1-after-reconciliation-run2.json`). It retains 307 objective rows, 47 loaded densities, 210 total densities, 22 heats, 16 coordinates, 73 phase entries and 68 matched F1 density rows.
 
-The full passages-read record is `source_log.md`, Literature read and source checks. Required primary passages:
+Both generators were regenerated twice; all 25 outputs are byte-identical. `tmp/joint-design/determinism.json` contains their SHA-256 hashes. The standalone generated-table proof was compiled twice with the requested pdflatex command: 32 pages, zero warnings, missing glyphs, overfull/underfull boxes or undefined references. Logs: `r1-table-compile1.log` and `r1-table-compile2.log`.
 
-- Zhang2011: Zotero PDFM3QDCZM7, §§2.1–2.4,3.1–3.3,Tables6/9/10,Fig6,pp68–74. Table9 contains fitted data; Table10 contains parameters, so the authored outside-fit cell cites Fig6 reaction-law comparisons.
-- Nasrifar2010: local MarkdownFVFWT3P9/currentPDF3G4FGGY4,§§3–4,6–7,Tables2–3.
-- Najafloo2018: localMarkdown7GCRH2RE,§§2,3.1–3.3,4,Tables1–5. Broader data-use wording in its conclusion remains ambiguous relative to its parameter-estimation methods.
-- Lloret2017: ZoteroPDFM9UK6V4P,§§4.4–4.7,5,Table5,Eq26,Figs9–11,pp527–531.
-- Yang2024: ZoteroPDFPELWE2BT,§2.1,Eqs1a/2a/2b,PDFp4; own A7 coefficient values are not attributed to Yang.
-- Other passages read: Böttinger§3/§§5–6/Table3; Jakobsen calibration experiments/TablesA1–A2; Baygi§3/Eq6/Tables2–3; AkulaEq34/§4.2; Uyan/Wangler/Cleeton parameter-estimation/results; FigielModelParameters/Eqs5–12 and2026correctedEq7; Perdomo§§2.2–2.3/4.3.3; Chremos§3.6/Figs11–12; BülowTables1–3; Vinjarapu§§1.1.1/2.2/3.1/Table4; Arcis§2.4/Table5. Exact identities are in source_log.
+The staged release preserves its existing data/presentation scope. Changed staged files, the 32-page proof, README and check records were refreshed. Its checksum inventory contains 702 files, excluding `SHA256SUMS` itself. A copy into an empty temporary directory was regenerated using this worktree's `.venv/bin/python -E -s`; both generators reproduced all 25 outputs byte for byte and the temporary copy was deleted. Record: `r1-isolated-release-reproduction.json`. The generator commands read retained numbers; they perform no Engine calculation.
 
-No unread required Zhang/Nasrifar/Najafloo/Lloret/Yang passage remains. Missing local Zhang/Lloret/Chremos reading copies were resolved through their existing Zotero PDFs, read-only. Unchanged historical inventory rows and unchanged background literature claims retain earlier source support; this Writer handoff does not assert a new reading of every source in that historical inventory. Najafloo data-use ambiguity and Amundsen uncertainty-boundary ambiguity remain explicit scientific limitations, not invented resolutions.
+Gross-added executable lines against `8f40c12`, including blanks and comments and without offsetting deletions: **622 / 700**, across three executable files; 551 lines removed, zero test additions. The previous build count was 595. `tmp/joint-design/change-accounting.json` retains per-file counts. Checks use the full inherited presentation surface, including `a7_presentation.py`; this round edits only the two named generators.
 
-## Bibliography refresh
+The pinned wheel's worktree path is absent, so normal uv resolution fails. The authorized `UV_NO_SYNC=1` fallback used the copied, existing locked environment for regeneration, main build and freshness. No wheel was built or Engine source imported.
 
-Approved command: `python scripts/cited_bibliography.py > references.bib`, run from the manuscript directory after main/supplement `.aux` files existed. The existing `~/Zotero/exports/references.bib` was read only. Added: `Yang2024`. Removed after dropped citations: `Held2008`, `archerDielectricConstantWater1990`. Existing-entry field drift: none. Missing keys: none. No central export refresh, Zotero edit or hand edit of references.bib.
+## Manuscript builds and inspection
 
-## Builds, inspection and freshness
+- `UV_NO_SYNC=1 nice -n 10 agent-heavy bash scripts/build_manuscript.sh`: passed, main 25 pages, no LaTeX warnings, overfull/underfull boxes, missing glyphs or undefined citations/references; BibTeX zero warnings.
+- Explicit supplement `TEXINPUTS='./styles//:' nice -n 10 agent-heavy latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex`: passed, 45 pages, no LaTeX warnings, overfull boxes, missing glyphs or undefined citations/references. One underfull hbox, badness 3514, is the Uyan bibliography entry on page 45; its text is complete.
+- `UV_NO_SYNC=1 uv run python scripts/check_manuscript_freshness.py`: passed for main. Supplement compilation was checked separately.
+- Repository prose checker: passed on changed manuscript prose, submission aids and all generated tables. It reads the installed CSE plugin-wide/scoped rules; no personal CSE config exists on this machine.
+- Every page of both final PDFs was inspected in color. The five main figure pages were also inspected in grayscale. Figures 1/2 are now the phase/density comparison; S10 starts on page 33 and its parameter tables occupy landscape pages 34–42. No clipped or colliding text was found. Source/species/loading identity uses color in Figures 2–4; marker shapes preserve observed/model and phase classifications, and exact values remain in retained CSVs/tables.
 
-- Main: `UV_NO_SYNC=1 nice -n 10 bash scripts/build_manuscript.sh`, passed;31pages. Normal uv invocation cannot find the pinned wheel at its worktree path, so the authorized UV_NO_SYNC fallback was used.
-- Supplement: explicit `TEXINPUTS='./styles//:' nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex`, passed;35pages.
-- Final main and supplement logs: zero LaTeX warnings,overfull/underfull boxes,undefined references andundefined citations. BibTeX:zero warnings. Earlier intermediate missing citations were resolved by the approved snapshot refresh.
-- Freshness: `UV_NO_SYNC=1 uv run python scripts/check_manuscript_freshness.py`, passed for main. It does not itself certify supplement compilation or A7 source provenance.
-- Both PDFs inspected page by page in color; changed pages reinspected after final edits. Five data-figure pages and rotated/text pages also checked in grayscale. No clipped, overflowing or overlapping display found. Figure1/2/4 source/species/loading identity uses color; grayscale retains model/observation marker distinctions, and exact values remain in tables/CSVs.
-- Stale-claim search for F6,Born-off,1,749,twelve-run,149 targets,five parameters,no-heat,translation coefficient:only F6 in the explicitly historical S1 study. No F1 phase result retained.
-- `main.pdf` SHA-256`3a2ca047db38c6e2105e57307eb2ce9b8e330e05946de1b12d1c5b8acd369796`; scanner candidates`{('warning', 'tight_text_clearance'): 148, ('warning', 'text_graphic_overlap'): 2, ('error', 'text_overlap'): 1}`.
-- `supplement.pdf` SHA-256`8557adbb184a6e3ce299d38b36c3edf27862f9bf565279b52b6a0b2629bb152f`; scanner candidates`{('warning', 'tight_text_clearance'): 24, ('warning', 'text_near_page_edge'): 643}`.
+Two layout changes were needed to typeset the ruled text: `\clearpage` before and after the Results residual longtable prevents floating figures from clipping it; S10 parameter inputs use the existing landscape environment to prevent numerical-cell overruns. They change no scientific text or values.
 
-The main scanner calls equation12 superscripts an overlap and flags fraction rules on pages3–4; visual inspection rejects those candidates. Conservative clearance warnings and supplement edge warnings from rotated pages remain in the raw scanner reports. Those automated reports are not described as passing. Logs/renders: `tmp/joint-design/writer-pdf-qa/`, `tmp/joint-design/writer-main-build-final.log`, `tmp/joint-design/writer-supplement-build-final.log`, `tmp/joint-design/writer-freshness-final.log`.
+Raw scanner results are retained, not described as passing: main `fail` with 151 candidates (148 clearance, two text/graphic, one overlap); supplement `review` with 987 candidates (56 clearance, 931 edge). Main page 7 equation 12 superscript boxes cause the overlap candidate, and page 3 fraction rules cause the graphic candidates. Landscape rotation causes supplement edge candidates. Page-by-page raster inspection rejected these as visual defects. Records/renders: `tmp/joint-design/r1-pdf-final/` and `r1-visual-disposition.json`.
 
-## Open items
+Final logs: `tmp/joint-design/r1-main-final.log`, `r1-supplement-final.log`, `r1-freshness-final.log` and `r1-prose-check.log`. The build refreshed `builds/verification-receipt.json`. The earlier submission-metadata PDF hash is a preceding-draft record; this round's PDF identities below and the recorded input/output hashes govern this handoff.
 
-The retained-inventory inconsistency remains: generated S8 inventory still has old Hilliard extraction and F1-only Amundsen pressure notes. Approved preceding corrections supply four fitted Hilliard rows,103Amundsen rows at100000Pa,other pressures row-specific,and matched68 F1/A7 pressures101325/100000Pa without a derivative/magnitude bound. Reviewers can decide whether a later inventory-generator correction is warranted.
+`main.pdf` SHA-256: `b50653850891acb3af0c717eb84cd9a4916b7d40efd8621faf39b176e978dd67`.
 
-Independent number/claim and reader-story reviews, their accepted fixes, owner review,A7 DOI publication,and any Overleaf/preprint/journal action remain outside this Writer completion. No review or publication readiness is inferred from historical ticks.
+`supplement.pdf` SHA-256: `0431b6b36873443a025288a580324913f094c4a458585e487342c6e49160840d`.
+
+## Bibliography and source checks
+
+The approved command `python scripts/cited_bibliography.py > references.bib` ran from `docs/scientific/latex/` after both main and supplement auxiliary files existed. Added keys: none. Removed keys: none. Existing-entry drift: none. Missing keys: none. The new in-text uses of Baygi2015, Schick2023, Uyan2015, Wagner, Kiepe, Han, Amundsen and Hartono already exist in the cited snapshot because of the shared source inventory. No Zotero or central-export write and no hand edit of `references.bib` occurred. Record: `tmp/joint-design/r1-bibliography-changes.json`.
+
+The current Zotero companions and local shelf hashes for Böttinger, Baygi, Schick and Uyan agree (`r1-source-hashes.json`). The assigned passages were read: Böttinger §3/Table 3; Baygi association/parameter methods and Table 2; Schick §2.4.2/Table 1; Uyan §4.1/Table 4; the preceding project-water calibration README. This implementor check applies the reviewed rulings; it does not replace the pending independent check of every cited claim. The durable `source_log.md` retains the prior Writer's broader literature-read record.
+
+`builds/197-displayed-number-sources.md` now records all new or changed numerical statements, refreshed generated-table row locators and figure ordering. The two non-fitted density errors, Han RMSE, rounded phase-entry pressure/loading, limit origins, fixed-input attribution and solver evidence are explicitly mapped.
+
+## HSL acknowledgement and limits
+
+The exact owner-required acknowledgement appears in `sections/data_code_availability.tex` under Acknowledgements, before Funding, on main page 22:
+
+> Calculations on the A7 software build used the MA57 linear solver from HSL, a collection of Fortran codes for large-scale scientific computation. https://www.hsl.rl.ac.uk/.
+
+Evidence: `analyses/mea_parameter_bundle/results/engine-8298c602-adoption/comparison.json:26` records `"linear_solver": "ma57"` on this machine; `~/.profile:50` sets `EPCSAFT_HSL_LIBRARY`. The A7 records do not record the solver per run. No MA57 attribution is made for F1 or the original A6 assessment on Engine `21e761c3`. The distinction between original A6 assessment and paired A6/A7 calculations on the A7 software build remains in S9 and figure provenance.
+
+## Remaining gates and unchanged limitations
+
+Confirming number/cited-claim and reader-story reviews, owner review and merge remain open. No merge into main, push, pull request, GitHub comment, Overleaf synchronization, public data deposit, DOI creation or submission occurred. Issue #197 remains open.
+
+The source inventory in S8 retains its historical Hilliard extraction and F1 Amundsen pressure notes, with the approved corrections immediately before it. Its optional generator correction was not applied. The science limits remain calibration/prior-access comparisons, finite phase states with a pressure-rounded repeat, three fitted-density failures outside the phase family's temperatures, unmatched F1/A7 density pressures without a magnitude bound, conditional errors and no physical validation of phase behavior or absorber/stripper performance. The private Engine wheel remains an omitted dependency of the planned release.

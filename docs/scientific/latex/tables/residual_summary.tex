@@ -66,7 +66,7 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 44f4f368d79244d8cc134e03e5d3cf9756de1453f4eeabc643b08a8e1a2080da
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2256\linewidth}>{\raggedright\arraybackslash}p{0.1974\linewidth}>{\raggedright\arraybackslash}p{0.0376\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}@{}}
 \caption{A7 property deviations. AARD denotes mean absolute relative deviation. Calibration errors and acceptance checks do not establish physical validation; Cai operators use native units. Cp remains on its source mass basis.}\label{tab:residual-summary}\\
@@ -77,21 +77,21 @@ Cohort & Role & n & Statistic & Value & Unit \\
 Cohort & Role & n & Statistic & Value & Unit \\
 \midrule\endhead
 \bottomrule\endfoot
-common149 pressure & calibration & 47 & AARD & 11.8608 & \% \\
-common149 species & calibration & 94 & AARD & 7.10358 & \% \\
+common subset pressure & calibration & 47 & AARD & 11.8608 & \% \\
+common subset species & calibration & 94 & AARD & 7.10358 & \% \\
 restored species & calibration & 7 & AARD & 9.0037 & \% \\
 Jakobsen & calibration & 6 & AARD & 17.4975 & \% \\
 Kiepe & calibration; Kiepe checks fixed inputs & 39 & AARD & 2.66652 & \% \\
 loaded density & calibration & 47 & AARD & 0.177022 & \% \\
 CO2-free density & calibration & 5 & AARD & 0.0279577 & \% \\
 Cai temperature & calibration & 25 & RMSE; bias & 1.78864; 0.109139 & K \\
-Cai mole\_\allowbreak{}fraction & calibration & 25 & RMSE; bias & 0.0203799; -0.00259361 & vapour water fraction \\
-Vinjarapu2024 & calibration & 8 & RMSE; bias & 1.83486; 0.472904 & kJ/\allowbreak{}mol CO2 \\
-Arcis2011 & acceptance check & 14 & RMSE; bias & 8.1144; 7.1819 & kJ/\allowbreak{}mol CO2 \\
-Arcis2011 at 510000.0 Pa & acceptance check & 8 & RMSE; bias & 10.331; 10.2098 & kJ/\allowbreak{}mol CO2 \\
-Arcis2011 at 1030000.0 Pa & acceptance check & 6 & RMSE; bias & 3.36566; 3.14463 & kJ/\allowbreak{}mol CO2 \\
-Hilliard2008\_\allowbreak{}Cp\_\allowbreak{}318.15\_\allowbreak{}0.0 & calibration & 1 & signed error & 5.53403 & \% \\
-Hilliard2008\_\allowbreak{}Cp\_\allowbreak{}318.15\_\allowbreak{}0.358 & calibration & 1 & signed error & 2.56666 & \% \\
-Hilliard2008\_\allowbreak{}Cp\_\allowbreak{}353.15\_\allowbreak{}0.0 & calibration & 1 & signed error & 1.14996 & \% \\
-Hilliard2008\_\allowbreak{}Cp\_\allowbreak{}353.15\_\allowbreak{}0.358 & calibration & 1 & signed error & -2.13471 & \% \\
+Cai vapor water fraction & calibration & 25 & RMSE; bias & 0.0203799; -0.00259361 & vapor water fraction \\
+Vinjarapu & calibration & 8 & RMSE; bias & 1.83486; 0.472904 & kJ/\allowbreak{}mol CO2 \\
+Arcis & acceptance check & 14 & RMSE; bias & 8.1144; 7.1819 & kJ/\allowbreak{}mol CO2 \\
+Arcis at 0.51 MPa & acceptance check & 8 & RMSE; bias & 10.331; 10.2098 & kJ/\allowbreak{}mol CO2 \\
+Arcis at 1.03 MPa & acceptance check & 6 & RMSE; bias & 3.36566; 3.14463 & kJ/\allowbreak{}mol CO2 \\
+Hilliard Cp, 318.15 K, loading 0.0 & calibration & 1 & signed error & 5.53403 & \% \\
+Hilliard Cp, 318.15 K, loading 0.358 & calibration & 1 & signed error & 2.56666 & \% \\
+Hilliard Cp, 353.15 K, loading 0.0 & calibration & 1 & signed error & 1.14996 & \% \\
+Hilliard Cp, 353.15 K, loading 0.358 & calibration & 1 & signed error & -2.13471 & \% \\
 \end{longtable}\endgroup
