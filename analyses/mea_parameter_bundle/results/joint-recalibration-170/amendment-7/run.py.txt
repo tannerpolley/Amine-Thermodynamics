@@ -5,6 +5,7 @@ holds this amendment's per-stage allocations; each call's exact command and comb
 From the worktree root:
     python3 run.py.txt probe STAGE NAME NEED_WALL NEED_CPU ARGS...   fixed-study/study.py.txt ARGS, timeout NEED_WALL
     python3 run.py.txt release|fit|replay STAGE FORM                inputs/FORM-{information,fit}.json, output FORM/
+    python3 run.py.txt script STAGE NAME NEED_WALL NEED_CPU PATH ARGS...   a disclosed one-off script, timeout NEED_WALL
 """
 import hashlib, json, math, os, subprocess, sys
 from pathlib import Path
@@ -61,6 +62,10 @@ if MODE == 'probe':
     name, need_wall, need_cpu, *args = sys.argv[3:]
     check(STAGE, f'{name} fixed-vector probe', float(need_wall), float(need_cpu))
     sys.exit(timed(STAGE, name, A7/'fixed-study/calls', [PY, str(A7/'fixed-study/study.py.txt'), *args], need_wall))
+if MODE == 'script':
+    name, need_wall, need_cpu, script, *args = sys.argv[3:]
+    check(STAGE, f'{name} disclosed script', float(need_wall), float(need_cpu))
+    sys.exit(timed(STAGE, name, A7/'calls', [PY, script, *args], need_wall))
 FORM = sys.argv[3]
 if MODE == 'release':
     info_spec = load(A7/f'inputs/{FORM}-information.json')

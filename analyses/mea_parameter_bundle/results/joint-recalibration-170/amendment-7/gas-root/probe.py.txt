@@ -1,0 +1,251 @@
+"""Disclosed one-off #170 amendment-6 gas-root probe; no parameter fitting.
+A7 copy for the accepted second restricted endpoint on Engine 8298c602: only the wheel identity and the location of the
+unchanged, hash-checked amendment-6 falsifier inputs differ."""
+import copy
+import csv
+import hashlib
+import importlib.util
+import json
+import math
+import os
+from pathlib import Path
+import sys
+import time
+import traceback
+
+STARTED = time.monotonic()
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[5]
+BUNDLE = ROOT / 'analyses/mea_parameter_bundle'
+for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'NUMEXPR_NUM_THREADS', 'VECLIB_MAXIMUM_THREADS'):
+    os.environ[key] = '1'
+sys.path[:0] = [str(BUNDLE / 'scripts'), str(ROOT / 'src')]
+import fit_campaign as campaign
+
+T, P, LOADING = 318.15, 3699.0803800848512, .25557798094241313
+DENSITIES = (1e-6, 1e-3, .01, .1, 1.4, 10., 100.)
+WHEEL_SHA = '8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3'
+ENGINE_COMMIT = '8298c6029ebb8b467929badc4a223c580ec591ab'
+INPUT_HASHES = {
+    'falsifier-gas.json': '452d4a49b6504eed62e749f79cde0c93ed94a6c88f512028f3c2a098a5c4c1fa',
+    'falsifier-physical.json': '72374832a6afd8c0b615712b63d767855a48bc3700352d0fc775647c54c19fef',
+    'engine-decomposition.csv': '323bd8dbf4d4208a783ebb4ccc38e7cb22a82ad755d13d5415863e9b7b287ba8',
+}
+
+
+def save(path, row):
+    # Preserve unavailable floating-point diagnostics without emitting invalid JSON.
+    nonfinite = []
+    def plain(value, location=''):
+        if isinstance(value, float) and not math.isfinite(value):
+            nonfinite.append(dict(path=location, value=repr(value)))
+            return None
+        if isinstance(value, dict):
+            return {k: plain(v, location + '/' + k) for k, v in value.items()}
+        if isinstance(value, (list, tuple)):
+            return [plain(v, location + '/' + str(i)) for i, v in enumerate(value)]
+        if value is None or isinstance(value, (str, bool, int, float)):
+            return value
+        raise TypeError(f'Native object must be serialized explicitly at {location}: {type(value).__name__}')
+    output = plain(row)
+    output['nonfinite_diagnostics'] = row.get('nonfinite_diagnostics', []) + nonfinite
+    temporary = path.with_suffix('.json.tmp')
+    temporary.write_text(json.dumps(output, indent=2, allow_nan=False) + '\n')
+    temporary.replace(path)
+
+
+def closure(compiled, coordinates):
+    value = compiled.evaluate(coordinates)
+    rows = [dict(kind=r.kind.name, phase=r.phase, index=r.index, eqid=r.eqid, residual=v)
+            for r, v in zip(compiled.rows, value.values, strict=True)]
+    return dict(coordinates=list(coordinates), G_over_RT=value.objective, roundoff_floor=value.floor,
+                rows=rows, max_abs_raw_residual=max(map(abs, value.values), default=0.),
+                max_abs_by_kind={kind: max(abs(r['residual']) for r in rows if r['kind'] == kind)
+                                 for kind in sorted({r['kind'] for r in rows})})
+
+
+def contribution(model, off, amount, x, rho):
+    state = model.state(T, rho=rho, x=x)
+    bulk = off.state(T, rho=rho, x=x).born
+    return dict(amount_mol=amount, mole_fractions=list(x), molar_density_mol_m3=rho,
+        EOS_pressure_Pa=state.pressure, pressure_difference_Pa=state.pressure-P,
+        pressure_density_derivative_Pa_m3_mol=state.pressure_density_derivative,
+        bulk_epsilon=state.bulk_relative_permittivity, hard_chain_over_RT=amount*state.hard_chain,
+        dispersion_over_RT=amount*state.dispersion, association_over_RT=amount*state.association,
+        polar_over_RT=amount*state.dipolar, DH_over_RT=amount*state.debye_huckel,
+        Born_bulk_over_RT=amount*bulk, Born_shell_over_RT=amount*(state.born-bulk),
+        residual_A_over_RT=amount*state.residual_helmholtz)
+
+
+def classify(row):
+    roots = row.get('root_requests', [])
+    # A stable ionic root on the design's dilute support is already a falsifier.
+    if any(r.get('stable_root_in_scan_support') for r in roots):
+        return 'fail', 'A native mechanically stable ionic density root lies in the declared gas-density scan support.'
+    if row.get('error') or row.get('timing', {}).get('interrupted') or row.get('timing', {}).get('exitcode', 0) != 0:
+        return 'unresolved', 'The bounded calculation did not complete; retained partial quantities and diagnostic identify the stopping point.'
+    if len(roots) != 2 or {r['request'] for r in roots} != {'vapor', 'liquid'} or any('error' in r for r in roots):
+        return 'unresolved', 'Both native root requests did not complete.'
+    if not all(r.get('single_stable_root') for r in roots):
+        return 'unresolved', 'The native requests did not establish a single stable root.'
+    physical = row.get('physical_solve', {})
+    raw = physical.get('closure', {}).get('max_abs_raw_residual')
+    if not (physical.get('success') and physical.get('requested_tolerance_met') and raw is not None and raw <= 1e-10
+            and physical.get('reduced_hessian_minimum') is not None and physical['reduced_hessian_minimum'] >= 0
+            and physical.get('amounts') and all(v is not None and math.isfinite(v) and v >= 0 for v in physical['amounts'])
+            and physical.get('pressure_density_derivatives') and all(v is not None and math.isfinite(v) and v > 0 for v in physical['pressure_density_derivatives'])):
+        return 'unresolved', 'The new physical solve is inconclusive at the declared closure and local-minimum requirements.'
+    densities = [r['molar_density_mol_m3'] for r in roots]
+    if densities[0] != densities[1] or densities[0] < max(physical['molar_densities']):
+        return 'unresolved', 'The sole ionic root was not established as the same root denser than the newly solved liquid; no guessed gas/liquid density cutoff is used.'
+    if len(row.get('witnesses', {})) != 2 or len(row.get('density_scan', [])) != len(DENSITIES):
+        return 'unresolved', 'Witness or dilution evidence is incomplete.'
+    if not row.get('dilution', {}).get('approaches_vacuum_limits'):
+        return 'unresolved', 'The seven retained points do not establish the requested dilution trend.'
+    return 'pass', 'Both native requests return the same sole ionic root, denser than the newly solved liquid; no separate stable ionic gas root is present, and the physical solve and dilution checks completed.'
+
+
+def charge_closure(charges, compositions, amounts):
+    per_phase = [math.fsum(z*v for z, v in zip(charges, x, strict=True)) for x in compositions]
+    return dict(charge_per_mole_by_phase=per_phase,
+                total_charge_mol=math.fsum(n*z for n, z in zip(amounts, per_phase, strict=True)))
+
+
+def calculate(row, path, document):
+    origin = Path(importlib.util.find_spec('epcsaft').origin).resolve()
+    if not origin.is_relative_to(Path(sys.prefix).resolve()):
+        raise ValueError(f'Engine source checkout rejected before import: {origin}')
+    import epcsaft
+    import final_evidence as f
+    import heat_evidence_170 as heat
+    s, eq = f.s, f.eq
+    row['engine'] = campaign.verify(dict(inputs=[], engine=dict(
+        wheel_path=f'build/engine-wheels/main-{ENGINE_COMMIT}/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl',
+        wheel_sha256=WHEEL_SHA, packages={'epcsaft': '0.2.0.dev0', 'numpy': '2.5.4', 'scipy': '1.18.1'})))
+    row['engine']['commit'] = ENGINE_COMMIT
+    mapping = s.parameter_mapping(document)
+    request = heat.request(mapping, 313.15, .11)  # Same chemistry/reference preparation as phase_family.
+    row['candidate_reaction_system'] = request['reaction_system']
+    solvent, ratios = s._neutral_reference_data(request)
+    row['neutral_reference'] = dict(solvent=solvent, solute_molality_ratios=ratios, standard_molality_mol_per_kg=1.)
+    model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping), thermochemistry=f.thermal.record())
+    off_mapping = copy.deepcopy(mapping)
+    electrolyte = next(v for v in off_mapping['model_families'] if v['kind'] == 'electrolyte')
+    if electrolyte['choice'] == 'born':
+        electrolyte['c_dielectric'] = 0.  # Historical native bulk/shell decomposition only.
+    off = epcsaft.Mixture(epcsaft.Parameters.from_mapping(off_mapping))
+    problem = f.flash_problem(request, LOADING, T, P)
+    row['feed_mol'] = dict(problem.feed.values)
+    row['component_ids'] = list(model.component_ids)
+    compiled = eq.compile_problem(model, problem)
+    witnesses = {kind: campaign.load((HERE.parents[1] / 'amendment-6/gas-root/inputs') / f'falsifier-{kind}.json')['row'] for kind in ('gas', 'physical')}
+    decomposition = list(csv.DictReader((HERE / 'inputs/engine-decomposition.csv').open()))
+    labels = ('CO2', 'MEA', 'water', 'MEAH', 'carbamate', 'HCO3', 'CO3', 'H3O', 'OH')
+    row['witnesses'] = {}
+    charges = request['reaction_system']['charges']
+    for kind, witness in witnesses.items():
+        point = compiled.generic_point()
+        point[:16] = [*[math.log(float(witness['xL_' + v])) for v in labels], float(witness['N_L']), float(witness['lneta_L']),
+            *[math.log(float(witness['yV_' + v])) for v in labels[:3]], max(0., float(witness['N_V'])), float(witness['lneta_V'])]
+        record = dict(meaning='Old packing-coordinate witness evaluation; not a new converged state.',
+                      source=witness, evaluation=closure(compiled, point), source_density_contributions=[])
+        for phase, offset, width in [('L', 0, 9), ('V', 11, 3)]:
+            x = [math.exp(v) for v in point[offset:offset+width]] + [0.] * (9-width)
+            rho = float(next(r for r in decomposition if r['label'] == ('classA_end' if kind == 'gas' else 'physical') and r['phase'] == phase)['rho_mol_m3'])
+            record['source_density_contributions'].append(dict(phase=phase,
+                **contribution(model, off, point[offset+width], x, rho)))
+        record['charge_closure'] = charge_closure(charges,
+            [r['mole_fractions'] for r in record['source_density_contributions']], [point[9], point[14]])
+        row['witnesses'][kind] = record
+        save(path, row)
+    x = [float(witnesses['gas']['xL_' + v]) for v in labels]
+    x = [v / sum(x) for v in x]
+    amount = float(witnesses['gas']['N_L'])
+    row['root_requests'] = []
+    for branch in ('vapor', 'liquid'):
+        root = dict(request=branch, composition_meaning='Normalized retained gas witness L composition, including ions.')
+        try:
+            state = model.state(T, P=P, x=x, phase=branch)
+            root.update(stable_root_count=state.stable_root_count, native_branch=state.density_branch.name,
+                density_convergence={k: getattr(state.density_convergence, k) for k in ('residual', 'floor', 'iterations', 'evaluations')},
+                density_stop=state.density_convergence.stop.name,
+                **contribution(model, off, amount, x, state.molar_density))
+            root['stable_root_in_scan_support'] = (state.stable_root_count is not None and state.stable_root_count > 0
+                and DENSITIES[0] <= state.molar_density <= DENSITIES[-1] and state.pressure_density_derivative > 0)
+            root['single_stable_root'] = (state.stable_root_count == 1
+                and state.pressure_density_derivative > 0 and state.density_convergence.stop.name in ('converged', 'converged_to_floor'))
+        except Exception as error:
+            root['error'] = f'{type(error).__name__}: {error}'
+        row['root_requests'].append(root)
+        save(path, row)
+    row['density_scan'] = []
+    for rho in DENSITIES:
+        row['density_scan'].append(contribution(model, off, amount, x, rho))
+        save(path, row)
+    scan = row['density_scan']
+    eps_errors = [abs(r['bulk_epsilon'] - 1.) for r in scan]
+    born_errors = [abs(r['Born_bulk_over_RT']) for r in scan]
+    row['dilution'] = dict(epsilon_minus_one=[r['bulk_epsilon']-1. for r in scan],
+        Born_bulk_over_RT=[r['Born_bulk_over_RT'] for r in scan],
+        approaches_vacuum_limits=all(a <= b for values in (eps_errors, born_errors) for a, b in zip(values, values[1:]))
+            and eps_errors[0] < eps_errors[-1] and born_errors[0] < born_errors[-1],
+        meaning='Finite-support trend toward epsilon=1 and bulk Born=0; no extrapolated zero-density value or additional threshold.',
+        finite_shell_disclosed_over_RT=scan[0]['Born_shell_over_RT'])
+    row['stage'] = 'new-physical-solve'
+    save(path, row)
+    result = eq.solve_equilibrium(model, problem)
+    physical = f.phase_payload(None, None, result)
+    row['physical_solve'] = physical
+    save(path, row)
+    physical.update(f.phase_payload(model, problem, result))
+    if result.coordinates:
+        physical['closure'] = closure(compiled, result.coordinates)
+    if result.success:
+        physical['charge_closure'] = charge_closure(charges,
+            [result.phase_mole_fractions(i) for i in range(result.phase_count)], result.amounts)
+        physical['contributions'] = [dict(phase=problem.phases[i].name,
+            **contribution(model, off, result.amounts[i], result.phase_mole_fractions(i), result.molar_densities[i]))
+            for i in range(result.phase_count)]
+        for record in row['witnesses'].values():
+            record['comparison_physical_G_over_RT'] = physical['closure']['G_over_RT']
+            record['witness_minus_physical_G_over_RT'] = record['evaluation']['G_over_RT'] - physical['closure']['G_over_RT']
+        physical['native_objective_re_evaluation_difference_over_RT'] = physical['closure']['G_over_RT'] - result.objective
+        assert abs(physical['native_objective_re_evaluation_difference_over_RT']) < 1e-8
+    row['stage'] = 'completed'
+    save(path, row)
+
+
+def main():
+    document_arg, expected, output_arg = sys.argv[1:]
+    output = Path(output_arg).resolve()
+    output.mkdir(parents=True, exist_ok=False)
+    path = output / 'gas-root.json'
+    row = dict(parameter_document=document_arg, parameter_sha256=expected,
+        temperature_K=T, pressure_Pa=P, loading_mol_CO2_per_mol_MEA=LOADING,
+        probe_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), historical_source_commit='5ebcb37',
+        input_hashes=INPUT_HASHES, scan_densities_mol_m3=list(DENSITIES), wall_limit_s=300.,
+        classification='unresolved', reason='Calculation not completed.', stage='input-check',
+        evidence_use='Numerical probe only; candidate adoption and physical validation are not established.',
+        thread_environment={k: os.environ[k] for k in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS')})
+    save(path, row)
+    def child():
+        try:
+            document = campaign.checked(document_arg, expected)
+            for name, sha in INPUT_HASHES.items():
+                campaign.checked((HERE.parents[1] / 'amendment-6/gas-root/inputs') / name, sha)
+            calculate(row, path, document)
+        except Exception as error:
+            retained = json.loads(path.read_text())
+            retained.update(error=f'{type(error).__name__}: {error}', traceback=traceback.format_exc())
+            save(path, retained)
+    timing = campaign.bounded_call(child, max(0., 300. - (time.monotonic() - STARTED)))
+    row = json.loads(path.read_text())
+    row['timing'] = timing
+    row['classification'], row['reason'] = classify(row)
+    row['whole_probe_wall_s'] = time.monotonic() - STARTED
+    save(path, row)
+    print(json.dumps(dict(classification=row['classification'], reason=row['reason'], timing=timing)), flush=True)
+
+
+if __name__ == '__main__':
+    main()
