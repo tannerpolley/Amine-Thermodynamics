@@ -14,6 +14,8 @@ resources:
   - results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md
   - results/engine-21e761c3-adoption/comparison.json
   - results/engine-21e761c3-adoption/checks.json
+  - results/engine-8298c602-adoption/comparison.json
+  - results/engine-8298c602-adoption/checks.json
   - results/selected-current-best-parameters.json
   - results/heat-final-170/conditional-uncertainty.json
   - results/heat-final-170/fit-comparison.csv
@@ -325,6 +327,12 @@ The [wheel-adoption comparison](results/engine-21e761c3-adoption/README.md) find
 Selected document version 3, SHA-256 `7b0b4bb5669c1b2061fd7ec26e5fb4c8491005bdb5ba8f9e22e4c0b0b4b84308`, differs from the frozen heat F1 record only by its version and explicit CO₂/MEA no-cross-association declaration. This keeps the existing model without claiming the physical interaction is absent. The relative wheel pin identifies merged Engine commit `21e761c318c2ac5b555a245365c844d38a93e4cb`, SHA-256 `d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357`.
 
 The separate source snapshot `data/input/parameters.json` is version 2. Both wheels refuse it after the existing `c_shell`/`c_dielectric` defaults: `ParameterError: missing model/electrolyte/ionic_dispersion`. No ionic-dispersion choice was inserted and no predictions from that snapshot were compared. The [existing checks](results/engine-21e761c3-adoption/checks.json) retain seven pytest failures, 678 lint findings and the missing local manuscript PDF. Historical numerical outputs and figure locks remain unchanged. This is bounded numerical verification, adds no physical validation or use domain, and has not been independently reviewed or promoted for manuscript use.
+
+## Engine adoption: selected predictions unchanged to roundoff (8298c602)
+
+The [8298c602 adoption comparison](results/engine-8298c602-adoption/README.md) recomputes the same 152 selected-record quantities on Engine `8298c6029ebb8b467929badc4a223c580ec591ab`, SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`. The old values are the retained 21e761c3 values. The worst relative difference is **2.9 × 10⁻¹²** (MEAH⁺ mole fraction, Matin 2012 state 5); pressures agree to 1.4 × 10⁻¹³ and heats to 1.0 × 10⁻¹³ relative. 13 of the 152 quantities are bitwise equal. These differences are far below the 10⁻¹⁰ equilibrium row tolerance. The new wheel's IPOPT uses MA57 where the old one used MUMPS, which is consistent with differences at roundoff rather than bitwise equality. No single cause was isolated. [Old/new values](results/engine-8298c602-adoption/comparison.json) retain each prediction.
+
+The wheel contains Engine #660, which the #170 amendment-7 strict gate requires. It also returns equilibrium temperature and pressure as plain numbers. This required 23 one-line read replacements in MEA code, 11 of them in the counted campaign files, with the ceiling raised to 1,332 by the owner ([#170 comment 6297147461](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6297147461)). The source snapshot is still refused with the same missing ionic-dispersion error, and the repository tests pass (76/76). This is numerical verification of fixed-state predictions. Stability classification, phase families and fitting on this wheel are requalified separately under amendment 7.
 
 # Current parameters {#selected-parameters}
 

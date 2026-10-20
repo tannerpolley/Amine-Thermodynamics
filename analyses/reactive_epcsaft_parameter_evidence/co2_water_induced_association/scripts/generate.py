@@ -275,7 +275,7 @@ def main() -> None:
             continue
         start = result
         observed_kpa = float(row["observed_pressure_kpa"])
-        model_kpa = result.pressure[0] / 1000.0
+        model_kpa = result.pressure / 1000.0
         residual = math.log(model_kpa / observed_kpa)
         predictions.append(
             {

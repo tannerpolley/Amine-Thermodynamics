@@ -1,0 +1,86 @@
+"""Engine 8298c602 adoption check: the selected record's 152 retained Engine 21e761c3 predictions, recomputed on the new wheel.
+
+Disclosed scratch adapted from the 21e761c3 adoption's tmp/engine-21e761c3-adoption/evaluate.py: same evaluators
+(fit_observations rows_for/replay on the `base` set; heat_evidence_170 cp_check/HILLIARD), declaration and record. No fit.
+The old values are those retained in ../engine-21e761c3-adoption/comparison.json (its `new_prediction`, Engine 21e761c3).
+Run from the checkout root with the locked environment:  .venv/bin/python <this file>
+"""
+import concurrent.futures as cf
+import hashlib
+import importlib.metadata
+import json
+import math
+import multiprocessing as mp
+import os
+from pathlib import Path
+import struct
+import sys
+
+ROOT = Path.cwd()
+sys.path[:0] = [str(ROOT/'analyses/mea_parameter_bundle/scripts'), str(ROOT/'src')]
+import epcsaft
+import fit_observations as observations
+import heat_evidence_170 as heat
+import shared_evaluation as shared
+
+OUT = ROOT/'analyses/mea_parameter_bundle/results/engine-8298c602-adoption'
+OLD = json.loads((ROOT/'analyses/mea_parameter_bundle/results/engine-21e761c3-adoption/comparison.json').read_text())
+sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+shared.verify_wheel()
+DOCUMENT = ROOT/OLD['selected_record']['path']
+SPEC = ROOT/OLD['method']['declaration_path']
+assert sha(DOCUMENT) == OLD['selected_record']['new_sha256'] and sha(SPEC) == OLD['method']['declaration_sha256']
+MAPPING = shared.parameter_mapping(DOCUMENT)
+_, ROWS = observations.rows_for(json.loads(SPEC.read_text()), MAPPING, 'base')
+assert len(ROWS) == 149
+
+
+def evaluate(index):
+    try:
+        if index < len(ROWS):
+            row = observations.replay(MAPPING, [ROWS[index]])[0]
+            return dict(quantity=('pressure_Pa' if row['form'] == 'LogRatio' else
+                        'integral_heat_J_mol_CO2' if row['target'].startswith('vinjarapu') else 'species_mole_fraction'), **row)
+        T, loading, measured = heat.HILLIARD[index-len(ROWS)]
+        row = heat.cp_check(MAPPING, T, loading, measured)
+        return dict(target=f'Hilliard-Cp-{T}-{loading}', quantity='equilibrium_cp_kJ_kg_K',
+                    predicted=row['equilibrium_cp_kJ_kg_K'], status='Available', **row)
+    except Exception as exc:
+        return dict(index=index, status='Failed', diagnostic=f'{type(exc).__name__}: {exc}')
+
+
+if __name__ == '__main__':
+    jobs = range(len(ROWS)+len(heat.HILLIARD))
+    with cf.ProcessPoolExecutor(max_workers=os.cpu_count(), mp_context=mp.get_context('fork')) as pool:
+        values = list(pool.map(evaluate, jobs))
+    old = {r['target']: r for r in OLD['rows']}
+    bits = lambda x: struct.pack('>d', x)
+    rows = []
+    for v in values:
+        assert v['status'] == 'Available' and math.isfinite(v['predicted']), v
+        o = old[v['target']]
+        assert o['quantity'] == v['quantity']
+        rows.append(dict(target=v['target'], quantity=v['quantity'], old_prediction=o['new_prediction'], new_prediction=v['predicted'],
+                         absolute_difference=abs(v['predicted']-o['new_prediction']),
+                         relative_difference=abs(v['predicted']-o['new_prediction'])/abs(o['new_prediction']),
+                         bitwise_equal=bits(v['predicted']) == bits(o['new_prediction'])))
+    assert {r['target'] for r in rows} == set(old)
+    kinds = sorted({r['quantity'] for r in rows})
+    summary = dict(quantities_compared=len(rows), bitwise_equal=sum(r['bitwise_equal'] for r in rows),
+        quantity_counts={k: sum(r['quantity'] == k for r in rows) for k in kinds},
+        bitwise_equal_by_quantity={k: sum(r['bitwise_equal'] for r in rows if r['quantity'] == k) for k in kinds},
+        worst_absolute_difference_by_quantity={k: max(r['absolute_difference'] for r in rows if r['quantity'] == k) for k in kinds},
+        worst_relative_difference_by_quantity={k: max(r['relative_difference'] for r in rows if r['quantity'] == k) for k in kinds},
+        worst_relative_difference=max(r['relative_difference'] for r in rows),
+        worst_target=max(rows, key=lambda r: r['relative_difference'])['target'])
+    wheel = shared.installed_wheel()
+    result = dict(question='Does Engine 8298c602 reproduce the selected record\'s 152 Engine 21e761c3 predictions?',
+        evidence_type='numerical verification; not physical validation',
+        old_engine=OLD['new_engine'], new_engine=dict(commit=shared.ENGINE_COMMIT, wheel_path=str(wheel.relative_to(ROOT)) if wheel.is_relative_to(ROOT) else str(wheel),
+            wheel_sha256=sha(wheel), python=sys.executable, packages={p: importlib.metadata.version(p) for p in ('epcsaft', 'numpy', 'scipy')},
+            module=epcsaft.__file__, linear_solver=epcsaft._core.linear_solver()),
+        selected_record=dict(path=OLD['selected_record']['path'], sha256=sha(DOCUMENT)), method=OLD['method'] | dict(old_values=
+            'analyses/mea_parameter_bundle/results/engine-21e761c3-adoption/comparison.json rows[].new_prediction', script_sha256=sha(__file__)),
+        summary=summary, rows=rows)
+    (OUT/'comparison.json').write_text(json.dumps(result, indent=1, allow_nan=False)+'\n')
+    print(json.dumps(summary), flush=True)
