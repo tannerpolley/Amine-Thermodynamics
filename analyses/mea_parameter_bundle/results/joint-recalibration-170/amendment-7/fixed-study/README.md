@@ -4,8 +4,8 @@ Owner decisions: [#170 comment 6283064075](https://github.com/tannerpolley/Amine
 (route, strict phase gate, endpoint-only split rule, 5,100.38 s plan). Design:
 `tmp/joint-design/amendment-7-phase-stable-density.md` §5. Wheel `d2f61e3a…0357`
 (Engine main-21e761c3). Probe: `study.py.txt` (disclosed, outside campaign code).
-Calls: `calls.json`, **218.38 wall-s / 217.71 CPU-s** of the 400 / 600 allocation,
-charged 219 / 218 in `amendment-4/compute-ledger.json`.
+Calls: `calls.json`, **239.78 wall-s / 239.09 CPU-s** of the 400 / 600 allocation,
+charged 240 / 240 in `amendment-4/compute-ledger.json`.
 
 Vectors are the Held A4 control moved toward the selected A6 vector by one path
 fraction per block (A7-1 block by block); the uniform-fraction construction
@@ -81,6 +81,33 @@ diameters and carbamate–MEAH⁺ k already sit on their bounds. Sampled vectors
 73 points is not a stability proof. No physical phase-separation data exist for
 comparison; the splits are model predictions with numerical verification.
 
-**Step 4 outcome: no useful bound restriction emerged.** Per design §5 the
-method stops here; the declared fallback or a measured feasibility question
-returns to the owner.
+**Step 4 outcome: no bound restriction that keeps the density fit.** The owner
+chose a restricted feasibility fit instead of stopping (decision recorded on #170),
+after a 24-point sub-block probe of the ion–water block (points 63/70/72):
+
+| Single coefficient | 0.125 with it at 0.25 | 0.25 with it at 0.125 |
+|---|---|---|
+| **MEAH⁺–water k** | **63/70/72, −4.13×10⁻³** | **none** |
+| carbamate–water k | none | 63/70/72, −4.01×10⁻³ |
+| bicarbonate–water k | none | 70/72, −7.04×10⁻⁴ |
+| MEAH⁺–water slope | none | 70/72, −4.71×10⁻⁴ |
+
+The MEAH⁺–water k change (−0.204 → +0.027, weaker MEAH⁺ solvation) alone
+switches the onset on and off; the carbamate–water change (−0.045 → −0.187,
+stronger carbamate solvation) suppresses it. That carbamate–water change also
+raises the loaded density (linearized, about +33 s in the mean), so it stays free.
+
+**Bound proposal for the feasibility fit** (inside the existing boxes; all 16
+coordinates retained; everything else unchanged):
+
+| Coordinate | Existing box | Proposed box | Evidence |
+|---|---|---|---|
+| MEAH⁺ segment diameter (packing 0.88σ, DH σ tied) | [2, 5.8] Å | **[5.49, 5.8] Å** | t = 0.1875 (σ = 5.4916) has no descent on 73 points; σ = 4.978 with the energies at A6 splits |
+| MEAH⁺–water k | [−0.5, 0.5] | **[−0.5, −0.161]** | t = 0.1875 (k = −0.16101) has no descent on 73 points; k = −0.14659 alone splits at 63/70/72 |
+
+Start: the screened path t = 0.125 vector (MEAH⁺ σ 5.5944 Å, MEAH⁺–water k
+−0.17544; both well inside), with the declared interior-start treatment for
+carbamate σ (5.8 → 5.798 Å, ties reapplied) and its own 73-point screen before
+release. These intervals are sampled evidence, not a certified split-free box;
+the endpoint's 73-point family with split-seeded confirmation remains the
+falsifier, and density may simply fail with the size lever removed.

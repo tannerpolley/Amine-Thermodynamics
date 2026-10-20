@@ -289,8 +289,44 @@
    "exit_code": 0,
    "max_rss_kb": 94652,
    "cpu_s": 16.83
+  },
+  {
+   "name": "subexchanges",
+   "command": [
+    "/usr/bin/time",
+    "-f",
+    "{\"wall_s\":%e,\"user_s\":%U,\"system_s\":%S,\"exit_code\":%x,\"max_rss_kb\":%M}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/family-0p1875-time.json",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/subexchanges-time.json",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "80s",
+    "60s",
+    "-n",
+    "10",
+    "env",
+    "PYTHONPATH=src:analyses/mea_parameter_bundle/scripts",
+    "OMP_NUM_THREADS=1",
+    "OPENBLAS_NUM_THREADS=1",
+    "MKL_NUM_THREADS=1",
+    "BLIS_NUM_THREADS=1",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "subexchanges"
+   ],
+   "log": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/subexchanges.log",
+   "timeout_s": 60,
+   "wall_s": 21.4,
+   "user_s": 20.68,
+   "system_s": 0.7,
+   "exit_code": 0,
+   "max_rss_kb": 90464,
+   "cpu_s": 21.38,
+   "script_sha256": "5f09c20a413e76492a1a931c14f855b975908e0593089c20bb75d11a55ded60d",
+   "note": "Owner-approved sub-block probe after the step-4 decision (restricted feasibility fit); script extended with single ion-water coefficients after commit e079711, whose study.py.txt hash is the stage-level script_sha256."
   }
  ],
- "wall_s": 218.38,
- "cpu_s": 217.71
+ "wall_s": 239.78,
+ "cpu_s": 239.09
 }
