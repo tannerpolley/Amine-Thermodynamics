@@ -439,6 +439,81 @@
    "need_wall_s": 240.0,
    "need_cpu_s": 240.0,
    "admitted": true
+  },
+  {
+   "stage": "hartono-x3",
+   "launch": "restricted-2-x3 release information (mandatory)",
+   "program_prior_wall_s": 17861,
+   "program_prior_cpu_s": 130453.07,
+   "stage_used": {
+    "wall_s": 257.64,
+    "cpu_s": 112.89
+   },
+   "budget_wall_s": 942.36,
+   "budget_cpu_s": 6887.11,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "stage": "hartono-x3",
+   "launch": "restricted-2-x3 candidate fit (mandatory)",
+   "program_prior_wall_s": 18052,
+   "program_prior_cpu_s": 130643.2,
+   "stage_used": {
+    "wall_s": 448.89,
+    "cpu_s": 303.02
+   },
+   "budget_wall_s": 751.11,
+   "budget_cpu_s": 6696.98,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "stage": "hartono-x3",
+   "launch": "restricted-2-x3 endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 18105,
+   "program_prior_cpu_s": 131263.66,
+   "stage_used": {
+    "wall_s": 501.57,
+    "cpu_s": 923.48
+   },
+   "budget_wall_s": 698.43,
+   "budget_cpu_s": 6076.52,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "stage": "hartono-x3",
+   "launch": "x3-endpoint-family fixed-vector probe",
+   "program_prior_wall_s": 18121,
+   "program_prior_cpu_s": 131280.13,
+   "stage_used": {
+    "wall_s": 518.06,
+    "cpu_s": 939.95
+   },
+   "budget_wall_s": 681.94,
+   "budget_cpu_s": 6060.05,
+   "need_wall_s": 240.0,
+   "need_cpu_s": 240.0,
+   "admitted": true
+  },
+  {
+   "stage": "hartono-x3",
+   "launch": "x3-endpoint-score fixed-vector probe",
+   "program_prior_wall_s": 18159,
+   "program_prior_cpu_s": 131318.14,
+   "stage_used": {
+    "wall_s": 556.13,
+    "cpu_s": 977.96
+   },
+   "budget_wall_s": 643.87,
+   "budget_cpu_s": 6022.04,
+   "need_wall_s": 80.0,
+   "need_cpu_s": 80.0,
+   "admitted": true
   }
  ],
  "calls": [
@@ -1103,6 +1178,130 @@
    "exit_code": 0,
    "wall_s": 137.63,
    "cpu_s": 49.47
+  },
+  {
+   "stage": "hartono-x3",
+   "call": "release",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/release-command-time.json",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/scripts/fit_campaign.py",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/inputs/restricted-2-x3-information.json",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/release",
+    "--operation",
+    "information",
+    "--case",
+    "stage6"
+   ],
+   "exit_code": 0,
+   "wall_s": 191.25,
+   "cpu_s": 190.13
+  },
+  {
+   "stage": "hartono-x3",
+   "call": "fit",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/fit-command-time.json",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/scripts/fit_campaign.py",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/fit-spec.json",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/fit",
+    "--operation",
+    "fit",
+    "--case",
+    "stage6"
+   ],
+   "exit_code": 0,
+   "wall_s": 52.68,
+   "cpu_s": 620.46
+  },
+  {
+   "stage": "hartono-x3",
+   "call": "replay",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/replay-command-time.json",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "-c",
+    "import json,os,sys,shared_evaluation as s; s.ENGINE_WHEEL_SHA256, s.ENGINE_COMMIT = os.environ[\"ENGINE_WHEEL_SHA256\"], os.environ[\"ENGINE_COMMIT\"]; s.verify_wheel(); import final_evidence as f; f.main(output_dir=sys.argv[1], documents=json.loads(sys.argv[2]), declaration=json.load(open(sys.argv[3])))",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/replay",
+    "{\"A7-restricted-2-x3\": {\"record\": \"analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/fit/usable-budget-endpoint.json\", \"raw\": \"analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/fit/native.json\", \"density_weight\": 1.0, \"kiepe_reference\": \"analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/kiepe-reference.json\"}}",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/fit-spec.json"
+   ],
+   "exit_code": 0,
+   "wall_s": 16.49,
+   "cpu_s": 16.47
+  },
+  {
+   "stage": "hartono-x3",
+   "call": "x3-endpoint-family",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/x3-endpoint-family-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "240s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "screen",
+    "wheel-8298c602/restricted-2-x3-endpoint",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/fit/usable-budget-endpoint.json"
+   ],
+   "exit_code": 0,
+   "wall_s": 38.07,
+   "cpu_s": 38.01
+  },
+  {
+   "stage": "hartono-x3",
+   "call": "x3-endpoint-score",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/x3-endpoint-score-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "80s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "score",
+    "wheel-8298c602/restricted-2-x3-endpoint"
+   ],
+   "exit_code": 0,
+   "wall_s": 16.51,
+   "cpu_s": 16.49
   }
  ]
 }
