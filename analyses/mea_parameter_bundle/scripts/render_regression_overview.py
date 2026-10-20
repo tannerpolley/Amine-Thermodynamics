@@ -14,19 +14,19 @@ import matplotlib.pyplot as plt
 
 from manuscript_style import apply_style
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "figures/regression_overview/output"
-DATA = ROOT / "results/heat-final-170"
+OUT = ROOT / "figures/a7_regression_overview/output"
+DATA = ROOT / "results/a7-paper-evidence"
 PRESSURE = DATA / "pressure-figure-data.csv"
 SPECIES_DATA = DATA / "species-figure-data.csv"
 POOL = DATA / "pool-figure-data.csv"
-NATIVE_FIT = DATA / "F1-A/native-fit.json"
-PHYSICAL = ROOT / "results/heat-160/A-parameters.json"
+NATIVE_FIT = DATA / "fitted-rows.csv"
+PHYSICAL = ROOT / "results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json"
 PARAM = ROOT / "results/selected-current-best-parameters.json"
-QUALIFICATION = DATA / "evaluation/execution.json"
+QUALIFICATION = DATA / "fit-summary.json"
 # Separate legacy diagnostic renderer reads this file; this notebook does not.
 FIT = ROOT / "results/current-best-fit-residuals.csv"
 HCO3_POOL_LABEL = "HCO3- + CO3^2-"
-ENGINE_COMMIT = "heat F1, Engine 026b3031"
+ENGINE_COMMIT = "A7, Engine 8298c602"
 COLORS = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9"]
 SOURCES = ["Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011"]
 MARKERS = dict(zip(SOURCES, ["*", "o", "D", "^", "h", "v"], strict=True))
@@ -140,7 +140,7 @@ def render_isotherms(pressure, colors, title):
     legend.set_axis_off()
     handles = [Line2D([], [], linestyle='none', marker=MARKERS[s], markerfacecolor='none',
                       markeredgecolor=c, label=s) for s, c in colors.items()]
-    handles += [Line2D([], [], linestyle='none', marker='+', color='black', label='heat F1 at observed loading')]
+    handles += [Line2D([], [], linestyle='none', marker='+', color='black', label='A7 at observed loading')]
     legend.legend(handles=handles, loc='center', frameon=False, title='Observed (open) / calculated (+)')
     save(fig, 'pressure')
 
@@ -213,7 +213,7 @@ def render_speciation(rows):
                for s, c in species_colors.items()]
     handles += [Line2D([], [], linestyle='none', marker=m, color='black',
                        markerfacecolor='none', label=l) for m, l in
-                [('o', 'Observation, fitted'), ('s', 'Observation, not fitted'), ('+', 'heat F1 at observed loading')]]
+                [('o', 'Observation, fitted'), ('s', 'Observation, not fitted'), ('+', 'A7 at observed loading')]]
     axes.flat[-1].legend(handles=handles, loc='center', frameon=False)
     save(fig, 'speciation')
 
@@ -224,7 +224,7 @@ def render_pool(rows):
     ax.scatter([float(r['loading']) for r in rows], [float(r['observed']) for r in rows],
                marker='s', facecolors='none', edgecolors='#009E73', label='Matin observations')
     ax.scatter([float(r['loading']) for r in rows], [float(r['predicted']) for r in rows],
-               marker='+', color='black', label='heat F1 pool comparison')
+               marker='+', color='black', label='A7 pool comparison')
     ax.set(xlabel='CO₂ loading (mol/mol MEA)', ylabel='HCO₃⁻ + CO₃²⁻ mole fraction',
            title='Matin pool · report-only · 20 °C')
     ax.legend(frameon=False)
@@ -232,11 +232,25 @@ def render_pool(rows):
                     marker='s', facecolors='none', edgecolors='#009E73')
     axes[1].axhline(0, color='black', lw=.8)
     axes[1].set(xlabel='CO₂ loading (mol/mol MEA)', ylabel='Scaled species residual',
-                title='Excluded from the 94 fitted species targets')
+                title='Report-only; excluded from fitting')
     for ax in axes:
         ax.grid(alpha=.18)
     save(fig, 'matin-pool')
 
+
+def render_heat(rows):
+    fig, ax = plt.subplots(figsize=(8, 5), layout='constrained')
+    for index, source in enumerate(('Vinjarapu2024', 'Arcis2011')):
+        group = [r for r in rows if r['source'] == source]
+        ax.scatter([float(r['loading']) for r in group], [float(r['observed_kJ_mol']) for r in group],
+                   marker=('o', 's')[index], facecolors='none', edgecolors=COLORS[index], label=source + ' observed')
+        ax.scatter([float(r['loading']) for r in group], [float(r['predicted_kJ_mol']) for r in group],
+                   marker='+', color=COLORS[index], label=source + ' A7 at measured states')
+    ax.set(xlabel='CO₂ loading (mol/mol MEA)', ylabel='Integral addition enthalpy (kJ/mol CO₂)',
+           title='A7 · Vinjarapu fitted; Arcis non-fitted prediction')
+    ax.legend(frameon=False, fontsize=8)
+    ax.grid(alpha=.18)
+    save(fig, 'heat-of-absorption')
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
@@ -245,18 +259,17 @@ def main():
     plt.rcParams['svg.hashsalt'] = 'mea-regression-overview'
     qualification = json.loads(QUALIFICATION.read_text())
     assert digest(PARAM) == digest(PHYSICAL)
-    fitted = set(json.loads(NATIVE_FIT.read_text())['targets'])
-    fit_comparison = next(r for r in read(DATA / 'fit-comparison.csv')
-                          if r['problem'] == 'F1' and r['objective'] == 'with heat')
-    pressure, species, pool = ([r for r in read(path) if r['problem'] == 'F1']
-                               for path in (PRESSURE, SPECIES_DATA, POOL))
+    fitted_rows = read(NATIVE_FIT)
+    fitted = {r['id'] for r in fitted_rows}
+    common = {r['id'] for r in fitted_rows if r['group'] == 'common149'}
+    pressure, species, pool = (read(path) for path in (PRESSURE, SPECIES_DATA, POOL))
     for row in pressure + species:
         row.update(temperature_C=float(row['temperature_K']) - 273.15,
                    loading_mol_CO2_per_mol_MEA=row['loading'], fitted=row['target'] in fitted)
     assert {r['record_sha256'] for r in pressure + species + pool} == {digest(PHYSICAL)}
-    assert [sum(r['fitted'] for r in rows) for rows in (pressure, species)] == [47, 94]
+    assert [sum(r['fitted'] for r in rows) for rows in (pressure, species)] == [47, 101]
     assert {r['target'] for r in pressure + species if r['fitted']} < fitted
-    assert len(fitted) == 149
+    assert len(fitted) == 307
     assert len(positive(pressure + species)) == len(pressure + species)
     pool = [r for r in pool if r['source'] == 'Matin2012' and r['species'] == 'HCO3-']
     assert not any(r['target'] in fitted for r in pool)
@@ -264,10 +277,10 @@ def main():
     for family, rows in [('pressure', pressure), ('species', species), ('Matin pool', pool)]:
         statistics_rows.append(ln_statistics(family, 'displayed', 'all', rows))
         if family != 'Matin pool':
-            sub = [r for r in rows if r['fitted']]
-            statistics_rows.append(ln_statistics(family, 'fitted', 'all', sub))
+            sub = [r for r in rows if r['target'] in common]
+            statistics_rows.append(ln_statistics(family, 'common149 fitted', 'all', sub))
             assert math.isclose(statistics_rows[-1]['aard_percent'],
-                                float(fit_comparison[family + '_AARD_percent']), rel_tol=1e-10)
+                                qualification['groups']['common149 ' + family]['AARD_percent'], rel_tol=1e-10)
         statistics_rows += [ln_statistics(family, 'displayed source', s, [r for r in rows if r['source'] == s])
                             for s in sorted({r['source'] for r in rows})]
     with (OUT / 'statistics.csv').open('w', newline='') as stream:
@@ -283,24 +296,25 @@ def main():
     species_colors = {'Bottinger2008': COLORS[0], 'Matin2012': COLORS[2]}
     MARKERS.update(Bottinger2008='o', Matin2012='s')
     render_isotherms(pressure, pressure_colors, '')
-    render_parity(pressure, pressure_colors, 'heat F1 pressure · all 79 retained display rows')
-    render_residuals(pressure, pressure_colors, 'heat F1 pressure · all displayed rows by source')
+    render_parity(pressure, pressure_colors, 'A7 pressure · all 79 retained display rows')
+    render_residuals(pressure, pressure_colors, 'A7 pressure · all displayed rows by source')
     strict_species = [r for r in species if not (r['source'] == 'Matin2012' and r['species'] == 'HCO3-')]
-    render_parity(strict_species, species_colors, 'heat F1 species · Matin pool shown separately',
+    render_parity(strict_species, species_colors, 'A7 species · Matin pool shown separately',
                   'species-parity', 'mole fraction / aggregate', 1)
-    render_residuals(strict_species, species_colors, 'heat F1 species · Matin pool shown separately',
+    render_residuals(strict_species, species_colors, 'A7 species · Matin pool shown separately',
                      'species-residuals', species=True)
     render_speciation(species)
     render_pool(pool)
-    inputs = [PRESSURE, SPECIES_DATA, POOL, DATA / 'fit-comparison.csv', PARAM, PHYSICAL, NATIVE_FIT, QUALIFICATION,
+    render_heat(read(DATA / 'heat.csv'))
+    inputs = [PRESSURE, SPECIES_DATA, POOL, DATA / 'heat.csv', DATA / 'fit-summary.json', PARAM, PHYSICAL, NATIVE_FIT, QUALIFICATION,
               Path(__file__), Path(__file__).with_name('manuscript_style.py')]
     (OUT / 'provenance.json').write_text(json.dumps({
         'inputs': {str(p.relative_to(ROOT)): digest(p) for p in inputs},
-        'fit_figure_wheel_sha256': qualification['wheel_sha256'],
-        'engine_commit': '026b30311b959f1a5db4feef4c15e243f7044a5f', 'model_executed': False,
-        'series': 'Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from F1 fitting.',
+        'fit_figure_wheel_sha256': qualification['engine']['wheel_sha256'],
+        'engine_commit': '8298c6029ebb8b467929badc4a223c580ec591ab', 'model_executed': False,
+        'series': 'Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from A7 fitting.',
         'outputs': {p.name: digest(p) for p in sorted(OUT.iterdir())
-                    if p.suffix in ('.csv', '.svg', '.pdf') and not p.name.startswith(('heat', 'water-deviations'))}
+                    if p.suffix in ('.csv', '.svg', '.pdf', '.png')}
     }, indent=2) + '\n')
     for row in statistics_rows:
         print(f"{row['family']} · {row['group_type']} · {row['group']}: "
