@@ -154,3 +154,39 @@ scope, no further fit is authorized.
 Charge (stage second-fit, allowance 1,200 / 7,000): release 186.27 / 185.66,
 fit 45.51 / 560.75, replay 15.21 / 15.16, family 34.56 / 34.43, gates 28.59 / 28.15;
 total 310.14 / 824.15. All A7 calls: 924.62 wall-s / 2,263.71 CPU-s.
+
+## Accepted endpoint and Hartono x₃ sensitivity (owner, #170 comment 6298116916)
+
+The owner accepted the second restricted endpoint with the three 353.15 K
+loaded-density misses disclosed as a limitation, not as a gate pass. The single
+Hartono x₃ loading-basis sensitivity follows the design's A6 construction, built
+by `../inputs/build-x3.py.txt`. Only the 32 Hartono feeds and loadings change to
+the x₃ basis. The printed-α density scales stay frozen, and the boxes are the
+second declaration's. The MEAH⁺ size started 0.002 Å inside its 5.35 Å bound.
+
+| Item | Result |
+|---|---|
+| Moved start, 73-point screen | First attempt killed by its 120 s timeout at point 72 under host load (load average about 67; 63 CPU-s). Retained, not counted. Rerun: 73 passed, 657 `no_resolved_descent` trials. |
+| Release | Passed; binding `a694665f…`; 14 columns, rank 14, condition 6.8 × 10³ |
+| Fit | Converged (function tolerance, 4.5 × 10⁻⁸) in 15 iterations; x₃-basis cost 149.212 → 149.007 |
+| Cold replay | Within 8.2 × 10⁻¹³ relative of the native predictions |
+| Endpoint family | 73 passed (69 two-phase, 4 single-liquid); 657 `no_resolved_descent`; 0 failed trial optimizers |
+| Loaded density, own x₃ basis | 44/47 within 2s; e/s −2.91 to +1.87. Failing: Amundsen 081 −2.91, Amundsen 077 −2.48, Hartono 80 °C α 0.39 −2.43 |
+| Same vector on the nominal printed-α rows | 40/47 within 2s, max 3.50. A cross-basis evaluation, reported only |
+| Other gates on nominal rows | C149 23.83; pressure / species AARD 11.85 / 7.10 %; Cai 91.91; CO₂-free max 0.56 kg/m³; Vinjarapu 1.83 kJ/mol |
+
+Parameter changes from the accepted endpoint are small:
+- carbamate segment diameter 4.866 → 4.899 Å;
+- bicarbonate–water k 0.725 → 0.740;
+- MEAH⁺ and carbamate dispersion energies +0.6 K and −1.1 K;
+- MEAH⁺–water slope −41.9 → −41.3 K;
+- total R2 shift −1,387.4 → −1,293.1 J/mol.
+
+The MEAH⁺ size returns to its 5.35 Å bound, and every other bound-active
+coordinate stays where it was. On its own basis, the loading-basis choice
+neither removes the warm loaded-density miss nor causes a split at the 73 points.
+This is sensitivity evidence for one alternative loading basis. It does not
+replace the primary result.
+
+Charge (stage hartono-x3, re-funded 1,200 / 7,000): 572.64 wall-s / 994.45 CPU-s,
+including both start-screen attempts.
