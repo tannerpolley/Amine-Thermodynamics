@@ -1,0 +1,209 @@
+{
+ "authority": "#170 owner decisions (comment 6283064075: strict gate, endpoint-only split rule, 5,100.38 s plan; comment 6283335389: restricted feasibility fit, bounds and start). Design tmp/joint-design/amendment-7-phase-stable-density.md section 6 allocation table.",
+ "wheel": {
+  "engine_commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+  "release": "https://github.com/tannerpolley/ePC-SAFT/releases/tag/main-8298c6029ebb8b467929badc4a223c580ec591ab",
+  "path": "build/engine-wheels/main-8298c6029ebb8b467929badc4a223c580ec591ab/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+  "sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3",
+  "contains": "Engine #660 (closed, delivered on main 655871fc: PRs #666, #672, #673, #677)",
+  "interpreter": "tmp/a7/venv in the main checkout (uv venv, Python 3.13.14) with exactly this wheel, numpy 2.5.4, scipy 1.18.1"
+ },
+ "environment": {
+  "PYTHONPATH": "src:analyses/mea_parameter_bundle/scripts",
+  "OMP_NUM_THREADS": "1",
+  "OPENBLAS_NUM_THREADS": "1",
+  "MKL_NUM_THREADS": "1",
+  "BLIS_NUM_THREADS": "1",
+  "ENGINE_WHEEL_SHA256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3",
+  "ENGINE_COMMIT": "8298c6029ebb8b467929badc4a223c580ec591ab"
+ },
+ "allocations": {
+  "qualification": {
+   "wall_s": 346,
+   "cpu_s": 980.47,
+   "basis": "Accepted merged #660 wheel qualification: replay affected quantities; both A4-control and A6 diagnostic families; 350 / 1,000 less 4 / 19.53 charged in the program ledger for the Engine 8298c602 adoption check (#170 comment 6297147461)"
+  },
+  "restricted-fit": {
+   "wall_s": 1162,
+   "cpu_s": 6962,
+   "basis": "One selected-method fit, release and replay, 1,200 / 7,000, less 38 / 38 charged for the old-wheel start screen"
+  },
+  "hartono-x3": {
+   "wall_s": 1200,
+   "cpu_s": 7000,
+   "basis": "One eligible-candidate Hartono x3 sensitivity, release/replay"
+  },
+  "final-evidence": {
+   "wall_s": 1950.38,
+   "cpu_s": 9200,
+   "basis": "Protected final evidence/verification reserve"
+  }
+ },
+ "operator_checks": [
+  {
+   "stage": "qualification",
+   "launch": "q1-a4-control-family fixed-vector probe",
+   "program_prior_wall_s": 16670,
+   "program_prior_cpu_s": 128039.61,
+   "stage_used": {
+    "wall_s": 0,
+    "cpu_s": 0
+   },
+   "budget_wall_s": 350,
+   "budget_cpu_s": 1000,
+   "need_wall_s": 80.0,
+   "need_cpu_s": 80.0,
+   "admitted": true
+  },
+  {
+   "stage": "qualification",
+   "launch": "q1-a4-control-family fixed-vector probe",
+   "program_prior_wall_s": 16671,
+   "program_prior_cpu_s": 128039.91,
+   "stage_used": {
+    "wall_s": 0.35,
+    "cpu_s": 0.3
+   },
+   "budget_wall_s": 349.65,
+   "budget_cpu_s": 999.7,
+   "need_wall_s": 80.0,
+   "need_cpu_s": 80.0,
+   "admitted": true
+  },
+  {
+   "stage": "qualification",
+   "launch": "q2-a6-selected-family fixed-vector probe",
+   "program_prior_wall_s": 16683,
+   "program_prior_cpu_s": 128052.27,
+   "stage_used": {
+    "wall_s": 12.81,
+    "cpu_s": 12.66
+   },
+   "budget_wall_s": 337.19,
+   "budget_cpu_s": 987.34,
+   "need_wall_s": 80.0,
+   "need_cpu_s": 80.0,
+   "admitted": true
+  },
+  {
+   "stage": "qualification",
+   "launch": "q3-a6-selected-replay fixed-vector probe",
+   "program_prior_wall_s": 16696,
+   "program_prior_cpu_s": 128065.22,
+   "stage_used": {
+    "wall_s": 25.81,
+    "cpu_s": 25.61
+   },
+   "budget_wall_s": 324.19,
+   "budget_cpu_s": 974.39,
+   "need_wall_s": 40.0,
+   "need_cpu_s": 40.0,
+   "admitted": true
+  }
+ ],
+ "calls": [
+  {
+   "stage": "qualification",
+   "call": "q1-a4-control-family",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/q1-a4-control-family-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "80s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "screen",
+    "wheel-8298c602/a4-control",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/matched-larger-dV/control/usable-budget-endpoint.json"
+   ],
+   "exit_code": 1,
+   "wall_s": 0.35,
+   "cpu_s": 0.3
+  },
+  {
+   "stage": "qualification",
+   "call": "q1-a4-control-family",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/q1-a4-control-family-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "80s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "screen",
+    "wheel-8298c602/a4-control",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/matched-larger-dV/control/usable-budget-endpoint.json"
+   ],
+   "exit_code": 0,
+   "wall_s": 12.46,
+   "cpu_s": 12.36
+  },
+  {
+   "stage": "qualification",
+   "call": "q2-a6-selected-family",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/q2-a6-selected-family-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "80s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "screen",
+    "wheel-8298c602/a6-selected",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json"
+   ],
+   "exit_code": 0,
+   "wall_s": 13.0,
+   "cpu_s": 12.95
+  },
+  {
+   "stage": "qualification",
+   "call": "q3-a6-selected-replay",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/q3-a6-selected-replay-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "40s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "score",
+    "wheel-8298c602/a6-selected"
+   ],
+   "exit_code": 1,
+   "wall_s": 11.92,
+   "cpu_s": 11.72
+  }
+ ]
+}
