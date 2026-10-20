@@ -61,7 +61,7 @@ def anchor(problem: object, result: object) -> tuple[shared.Anchor, dict[str, li
     phases = {p.name: [result.mole_fractions[i * width + shared.COMPONENT_IDS.index(c)]
                        for c in (p.support or shared.COMPONENT_IDS)]
               for i, p in enumerate(problem.phases)}
-    return shared.Anchor(0, 0.0, result.pressure[0],
+    return shared.Anchor(0, 0.0, result.pressure,
                          tuple(result.mole_fractions[liquid * width:(liquid + 1) * width]),
                          1.0 / result.molar_densities[liquid]), phases
 
@@ -87,7 +87,7 @@ def observables(problem: object) -> list[tuple[str, object, callable]]:
         for i, c in enumerate(shared.COMPONENT_IDS)]
     if len(problem.phases) > 1:
         rows.append(("P", equilibrium.SolvedStateObservable(equilibrium.SolvedStateObservableKind.Pressure),
-                     lambda r: r.pressure[0]))
+                     lambda r: r.pressure))
     return rows
 
 
@@ -97,7 +97,7 @@ def phase_index(problem: object, role: str) -> int:
 
 def pco2(result: object, problem: object) -> float:
     vapor = phase_index(problem, "vapor")
-    return result.pressure[0] * result.mole_fractions[vapor * len(shared.COMPONENT_IDS) + CO2]
+    return result.pressure * result.mole_fractions[vapor * len(shared.COMPONENT_IDS) + CO2]
 
 
 def contractions(model: object, base: dict, temperature: float, pressure: float,
@@ -164,7 +164,7 @@ def main() -> None:
                             "status": item.status.name, "action_per_K": action,
                             "resolve_fine_per_K": fine, "resolve_coarse_per_K": coarse,
                             "passed": passed})
-        pressure = central.pressure[0]
+        pressure = central.pressure
         lower_c = contractions(model, base, temperature - STEPS_K[1], pressure, warm)
         upper_c = contractions(model, base, temperature + STEPS_K[1], pressure, warm)
         center = central.neutral_reference_diagnostics
