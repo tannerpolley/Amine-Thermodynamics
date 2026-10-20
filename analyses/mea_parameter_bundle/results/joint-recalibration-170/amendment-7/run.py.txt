@@ -1,0 +1,109 @@
+"""One-off launcher for the #170 A7 strict-gate sequence on the merged #660 wheel. Disclosed scratch, not campaign code.
+
+Adapted from amendment-6/held-followups/candidate.py.txt (same admission check and GNU-time charge). One step ledger
+holds this amendment's per-stage allocations; each call's exact command and combined output are retained beside it.
+From the worktree root:
+    python3 run.py.txt probe STAGE NAME NEED_WALL NEED_CPU ARGS...   fixed-study/study.py.txt ARGS, timeout NEED_WALL
+    python3 run.py.txt release|fit|replay STAGE FORM                inputs/FORM-{information,fit}.json, output FORM/
+    python3 run.py.txt script STAGE NAME NEED_WALL NEED_CPU PATH ARGS...   a disclosed one-off script, timeout NEED_WALL
+"""
+import hashlib, json, math, os, subprocess, sys
+from pathlib import Path
+
+A7 = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7')
+PY = '/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python'
+LEDGER, STEP = A7.parent/'amendment-4/compute-ledger.json', A7/'step-ledger.json'
+load = lambda p: json.loads(Path(p).read_text())
+dump = lambda p, x: Path(p).write_text(json.dumps(x, indent=1) + '\n')
+ENV = dict(os.environ, **load(STEP)['environment'])
+total = lambda calls, key: sum(c[key] for c in calls)
+
+
+def timed(stage, label, directory, argv, limit=None):
+    directory.mkdir(parents=True, exist_ok=True)
+    clock = directory/f'{label}-command-time.json'
+    assert not clock.exists() and not (directory/f'{label}-output.txt').exists(), f'{label}: retained call output exists; use a new label'
+    command = ['nice', '-n', '10', '/usr/bin/time', '-f', '{"whole_command_user_s":%U,"whole_command_system_s":%S,"wall_s":%e}',
+               '-o', str(clock), *(['timeout', '--signal=TERM', '--kill-after=5s', f'{limit}s'] if limit else []), *argv]
+    with (directory/f'{label}-output.txt').open('w') as out:
+        code = subprocess.call(command, env=ENV, stdout=out, stderr=subprocess.STDOUT)
+    t = json.loads(next(line for line in clock.read_text().splitlines() if line.startswith('{')))
+    step = load(STEP)
+    step['calls'].append(dict(stage=stage, call=label, command=command, exit_code=code, wall_s=t['wall_s'],
+                              cpu_s=round(t['whole_command_user_s']+t['whole_command_system_s'], 2)))
+    dump(STEP, step)
+    print(stage, label, 'exit', code, step['calls'][-1]['wall_s'], 'wall-s', step['calls'][-1]['cpu_s'], 'CPU-s', flush=True)
+    print((directory/f'{label}-output.txt').read_text()[-3000:], flush=True)
+    return code
+
+
+def check(stage, launch, need_wall, need_cpu):
+    led, step = load(LEDGER), load(STEP)
+    mine = [c for c in step['calls'] if c['stage'] == stage]
+    prior = dict(wall_s=math.ceil(led['compute_wall_charged_s']+total(step['calls'], 'wall_s')),
+                 cpu_s=round(led['program_cpu_charge_s']+total(step['calls'], 'cpu_s'), 2))
+    allocation = step['allocations'][stage]
+    budget = dict(wall_s=min(allocation['wall_s']-total(mine, 'wall_s'), led['compute_wall_cap_s']-prior['wall_s']),
+                  cpu_s=min(allocation['cpu_s']-total(mine, 'cpu_s'), led['program_cpu_limit_s']-prior['cpu_s']))
+    entry = dict(stage=stage, launch=launch, program_prior_wall_s=prior['wall_s'], program_prior_cpu_s=prior['cpu_s'],
+                 stage_used=dict(wall_s=round(total(mine, 'wall_s'), 2), cpu_s=round(total(mine, 'cpu_s'), 2)),
+                 budget_wall_s=round(budget['wall_s'], 2), budget_cpu_s=round(budget['cpu_s'], 2), need_wall_s=need_wall, need_cpu_s=need_cpu,
+                 admitted=budget['wall_s'] >= need_wall and budget['cpu_s'] >= need_cpu)
+    step['operator_checks'].append(entry)
+    dump(STEP, step)
+    print(entry, flush=True)
+    if not entry['admitted']:
+        sys.exit(f'{launch}: allocation does not cover the launch; return to owner')
+    return entry
+
+
+MODE, STAGE = sys.argv[1:3]
+if MODE == 'probe':
+    name, need_wall, need_cpu, *args = sys.argv[3:]
+    check(STAGE, f'{name} fixed-vector probe', float(need_wall), float(need_cpu))
+    sys.exit(timed(STAGE, name, A7/'fixed-study/calls', [PY, str(A7/'fixed-study/study.py.txt'), *args], need_wall))
+if MODE == 'script':
+    name, need_wall, need_cpu, script, *args = sys.argv[3:]
+    check(STAGE, f'{name} disclosed script', float(need_wall), float(need_cpu))
+    sys.exit(timed(STAGE, name, A7/'calls', [PY, script, *args], need_wall))
+FORM = sys.argv[3]
+if MODE == 'release':
+    info_spec = load(A7/f'inputs/{FORM}-information.json')
+    check(STAGE, f'{FORM} release information (mandatory)', info_spec['nonfit_wall_s'], info_spec['nonfit_cpu_s'])
+    code = timed(STAGE, 'release', A7/FORM, [PY, 'analyses/mea_parameter_bundle/scripts/fit_campaign.py', str(A7/f'inputs/{FORM}-information.json'),
+                                             str(A7/FORM/'release'), '--operation', 'information', '--case', 'stage6'])
+    released = code == 0 and all(r['released'] for r in load(A7/FORM/'release/release-tests.json'))
+    print(FORM, 'RELEASE', 'PASSED' if released else 'FAILED', flush=True)
+    sys.exit(0 if released else 1)
+if MODE == 'fit':
+    spec = load(A7/f'inputs/{FORM}-fit.json')
+    release = Path(spec['release_tests_path'])
+    assert all(r['released'] for r in load(release)), 'release not passed'
+    gate = check(STAGE, f'{FORM} candidate fit (mandatory)', spec['fit_wall_s']+120, spec['fit_cpu_s'])
+    spec.update(release_tests_sha256=hashlib.sha256(release.read_bytes()).hexdigest(), budget_wall_s=gate['budget_wall_s'],
+                budget_cpu_s=gate['budget_cpu_s'], program_prior_wall_s=gate['program_prior_wall_s'], program_prior_cpu_s=gate['program_prior_cpu_s'])
+    dump(A7/FORM/'fit-spec.json', spec)
+    if timed(STAGE, 'fit', A7/FORM, [PY, 'analyses/mea_parameter_bundle/scripts/fit_campaign.py', str(A7/FORM/'fit-spec.json'), str(A7/FORM/'fit'),
+                                     '--operation', 'fit', '--case', 'stage6']):
+        sys.exit(f'{FORM} fit failed; return to owner before another fit')
+    sys.exit(0)
+assert MODE == 'replay', MODE
+spec = load(A7/FORM/'fit-spec.json')
+# Kiepe reference: the 39 CO2-water rows at the release start, sqrt(weight) * residual (same wheel, fixed binary).
+start = spec['information_starts'][0]['id']
+info = load(A7/FORM/f'release/information/{start}/native.json')
+rows = [r for r in info['rows'] if r['id'].startswith('kiepe-')]
+assert len(rows) == 39
+dump(A7/FORM/'kiepe-reference.json', dict(source=str(A7/FORM/f'release/information/{start}/native.json'), rows=rows,
+     weighted_residuals=[math.sqrt(r['weight'])*x for r, x in zip(info['rows'], info['residuals']) if r['id'].startswith('kiepe-')]))
+check(STAGE, f'{FORM} endpoint cold replay (mandatory)', spec['nonfit_wall_s'], spec['nonfit_cpu_s'])
+documents = {f'A7-{FORM}': dict(record=str(A7/FORM/'fit/usable-budget-endpoint.json'), raw=str(A7/FORM/'fit/native.json'),
+                                density_weight=spec['fit_case']['density_weight'], kiepe_reference=str(A7/FORM/'kiepe-reference.json'))}
+(A7/FORM/'replay').mkdir(exist_ok=True)
+# The replay binds the declared wheel explicitly, as study.py.txt does, so execution.json records and verifies it.
+assert spec['engine']['wheel_sha256'] == ENV['ENGINE_WHEEL_SHA256']
+code = timed(STAGE, 'replay', A7/FORM, [PY, '-c', 'import json,os,sys,shared_evaluation as s; s.ENGINE_WHEEL_SHA256, s.ENGINE_COMMIT = os.environ["ENGINE_WHEEL_SHA256"], os.environ["ENGINE_COMMIT"]; s.verify_wheel(); '
+                                        'import final_evidence as f; f.main(output_dir=sys.argv[1], documents=json.loads(sys.argv[2]), declaration=json.load(open(sys.argv[3])))',
+                                        str(A7/FORM/'replay'), json.dumps(documents), str(A7/FORM/'fit-spec.json')])
+print(FORM, 'REPLAY', 'PASSED' if code == 0 else 'FAILED', flush=True)
+sys.exit(code)

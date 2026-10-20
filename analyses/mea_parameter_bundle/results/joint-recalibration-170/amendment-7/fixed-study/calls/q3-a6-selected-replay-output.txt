@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a7-strict-gate/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt", line 260, in <module>
+    score(sys.argv[2])
+    ~~~~~^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a7-strict-gate/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt", line 200, in score
+    _, rows = o.stage6_rows(spec, mapping)
+              ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a7-strict-gate/analyses/mea_parameter_bundle/scripts/fit_observations.py", line 96, in stage6_rows
+    params, added = stage2_rows(spec, mapping, spec['cases'][0], assessment=True)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a7-strict-gate/analyses/mea_parameter_bundle/scripts/fit_observations.py", line 261, in stage2_rows
+    problem.P = eq.Free(previous.pressure[0])
+                        ~~~~~~~~~~~~~~~~~^^^
+TypeError: 'float' object is not subscriptable

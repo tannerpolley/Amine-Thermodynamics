@@ -1,0 +1,78 @@
+"""Disclosed declaration preparation for the #170 A7 second restricted fit; no fit or solve.
+
+Owner decision 2026-10-20 ("One more fit, size >= 5.35 A"): start at the first restricted fit's endpoint
+(restricted/fit/usable-budget-endpoint.json, 73 passed with no resolved descent), with its own inherited
+R2/R5 totals and unshifted R5 a_k from the chemistry-coordinates.json beside it; MEAH+ segment diameter
+bound lowered from 5.49 to 5.35 A on the size-probe evidence (restricted/README.md). Every other box,
+row, scale, tie and engine field is the first restricted declaration's. No segment diameter starts
+within two largest derivative steps of a bound, so no interior move is made (asserted).
+
+Run from the checkout root with the pinned interpreter and PYTHONPATH=src:analyses/mea_parameter_bundle/scripts.
+"""
+import importlib.machinery
+import importlib.util
+import json
+import math
+from pathlib import Path
+
+R = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170')
+OUT = R/'amendment-7/inputs'
+loader = importlib.machinery.SourceFileLoader('a6_followups', str(R/'amendment-6/inputs/held-followups/build.py.txt'))
+helpers = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
+loader.exec_module(helpers)
+f, o = helpers.f, helpers.o
+
+START = R/'amendment-7/restricted/fit/usable-budget-endpoint.json'
+CHEMISTRY = START.with_name('chemistry-coordinates.json')
+FIRST = OUT/'restricted-fit.json'
+LEDGER = R/'amendment-4/compute-ledger.json'
+BOUNDS = {'component/protonated-monoethanolamine/segment_diameter': [5.35, 5.8],
+          'pair/protonated-monoethanolamine/water/k_ij': [-0.5, -0.161]}
+FORM, IDENTITY = 'restricted-2', 'a7-restricted-2-endpoint'
+
+
+def build():
+    mapping, chemistry, first = f.load(START), f.load(CHEMISTRY), f.load(FIRST)
+    totals, unshifted = chemistry['enthalpy_shifts_J_mol'], chemistry['R5_unshifted_a_k']
+    values = o.s.parameter_values(mapping)
+    assert math.isclose(values['reaction:R5:correlation:a_k'], unshifted + totals['R5']/(o.thermal.R*math.log(10.)), abs_tol=1e-9, rel_tol=0.)
+    base = f.load(helpers.BASE/'held-information.json')
+    step = max(base['verification']['steps_optimizer'])
+    for c in base['information_coordinates']:
+        if c.get('family') == 'segment_diameter':
+            lo, hi = BOUNDS.get(c['identity'], c['bounds'])
+            assert lo + 2*step*c['scale'] <= values[c['identity']] <= hi - 2*step*c['scale'], c['identity']
+    assert f.stage6_ties(base, mapping)
+    purpose = (f'Amendment 7 second restricted fit (owner, 2026-10-20): start = first restricted endpoint ({START}, sha256 '
+        f'{helpers.sha(START)}); bounds MEAH+ segment diameter [5.35, 5.8] A and MEAH+-water k [-0.5, -0.161].')
+    mapping['purpose'] = purpose
+    specs = helpers.declarations(FORM, IDENTITY, mapping, totals, purpose, OUT)
+    ledger = f.load(LEDGER)
+    for spec in specs:
+        for c in spec['information_coordinates']:
+            if c['identity'] in BOUNDS:
+                c['bounds'] = BOUNDS[c['identity']]
+        spec['amendment_url'] = first['amendment_url']
+        spec['design_url'] = first['design_url']
+        spec['budget_wall_s'], spec['budget_cpu_s'] = 1200, 7000
+        spec['program_prior_wall_s'], spec['program_prior_cpu_s'] = ledger['compute_wall_charged_s'], ledger['program_cpu_charge_s']
+        spec['ledger'] = first['ledger']
+        if 'release_tests_path' in spec:
+            spec['release_tests_path'] = str(R/f'amendment-7/{FORM}/release/release-tests.json')
+        spec['engine'] = first['engine']
+        for path in (CHEMISTRY, START):
+            if not any(r['path'] == str(path) for r in spec['inputs']):
+                spec['inputs'].append(dict(path=str(path), sha256=helpers.sha(path)))
+    # Only the start, purpose, MEAH+ size bound, rebased R2/R5 boxes, input list and release path differ from the first declaration.
+    differs = sorted(k for k in specs[1] if specs[1][k] != first.get(k))
+    result = helpers.check(specs, mapping)
+    helpers.write_specs(FORM, specs, OUT)
+    result.update(start_sha256=helpers.sha(OUT/f'{FORM}-start.json'), inherited_totals_J_mol=totals, R5_unshifted_a_k=unshifted,
+                  bounds=BOUNDS, program_prior_wall_s=ledger['compute_wall_charged_s'], fit_fields_differing_from_first=differs,
+                  start_parameter_values_equal_endpoint=o.s.parameter_values(f.load(OUT/f'{FORM}-start.json')) == values)
+    helpers.dump(OUT/f'{FORM}-build-check.json', result)
+    return result
+
+
+if __name__ == '__main__':
+    print(json.dumps(build(), indent=1, default=str))

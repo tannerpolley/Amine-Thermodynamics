@@ -1,0 +1,115 @@
+"""Disclosed declaration preparation for the #170 A7 Hartono x3 sensitivity fit; no fit or solve.
+
+Owner decision 2026-10-20 (#170 comment 6298116916): accept the second restricted endpoint with a disclosed
+loaded-density limitation and complete its evidence, starting with the single Hartono x3 loading-basis
+sensitivity (design A7 sections 3 and 5). This is A6's held-followups x3 construction (frozen printed-alpha
+density scales; only the 32 Hartono feeds and alphas change to the x3 basis) applied to the second restricted
+declaration's boxes, engine and budget instead of A6's. The interior-start rule uses those boxes, so the
+MEAH+ segment diameter on its 5.35 A bound starts two largest derivative steps inside it, Held ties reapplied;
+that moved start needs its own 73-point screen before release.
+
+Run from the checkout root with the pinned interpreter and PYTHONPATH=src:analyses/mea_parameter_bundle/scripts.
+"""
+import copy
+import csv
+import importlib.machinery
+import importlib.util
+import json
+import math
+from pathlib import Path
+
+R = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170')
+OUT = R/'amendment-7/inputs'
+loader = importlib.machinery.SourceFileLoader('a6_followups', str(R/'amendment-6/inputs/held-followups/build.py.txt'))
+helpers = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
+loader.exec_module(helpers)
+f, o = helpers.f, helpers.o
+
+ENDPOINT = R/'amendment-7/restricted-2/fit/usable-budget-endpoint.json'
+CHEMISTRY = ENDPOINT.with_name('chemistry-coordinates.json')
+PRIMARY = OUT/'restricted-2-fit.json'
+LEDGER = R/'amendment-4/compute-ledger.json'
+FORM = 'restricted-2-x3'
+
+
+def build():
+    mapping, chemistry, primary = f.load(ENDPOINT), f.load(CHEMISTRY), f.load(PRIMARY)
+    totals = chemistry['enthalpy_shifts_J_mol']
+    assert math.isclose(o.s.parameter_values(mapping)['reaction:R5:correlation:a_k'],
+        chemistry['R5_unshifted_a_k'] + totals['R5']/(o.thermal.R*math.log(10.)), abs_tol=1e-10, rel_tol=0.)
+    boxes = {c['identity']: c['bounds'] for c in primary['information_coordinates']}
+    step = max(primary['verification']['steps_optimizer'])
+    values, inward = o.s.parameter_values(mapping), {}
+    for c in primary['information_coordinates']:
+        if c.get('family') == 'segment_diameter':
+            lo, hi = c['bounds']; v = values[c['identity']]; room = 2*step*c['scale']
+            if v > hi - room or v < lo + room:
+                inward[c['identity']] = (v, min(max(v, lo + room), hi - room))
+    assert set(inward) == {'component/protonated-monoethanolamine/segment_diameter'}, inward
+    base = f.load(helpers.BASE/'held-information.json')
+    mapping = helpers.held_sizes(o.s.with_parameter_values(mapping, {k: new for k, (_, new) in inward.items()}), base)
+    purpose = (f'Amendment 7 Hartono x3 sensitivity (owner, #170 comment 6298116916) from the second restricted endpoint '
+        f'{ENDPOINT} (sha256 {helpers.sha(ENDPOINT)}); nominal 30 mass % solvent, frozen printed-alpha density scales retained; '
+        'MEAH+ segment diameter starts two largest derivative steps inside its 5.35 A bound.')
+    mapping['purpose'] = purpose
+    specs = helpers.declarations(FORM, 'a7-restricted-2-x3', mapping, totals, purpose, OUT)
+    with helpers.HARTONO.open() as stream:
+        source = {r['record_id']: r for r in csv.DictReader(stream)}
+    density_rows = f.load(base['density_source_rows_path'])
+    hartono_ids = {r['id'] for r in base['direct_rows'] if r['id'].startswith('Hartono2014_density_')}
+    assert len(hartono_ids) == 32
+    for row in density_rows:
+        if row['id'] in hartono_ids:
+            cell = source[row['id']]
+            assert float(cell['mea_mass_fraction']) == .30
+            assert float(cell['temperature_K']) == row['T_K'] and float(cell['value']) == row['observed']
+            row['alpha'] = float(cell['co2_loading_from_mole_fraction_mol_per_mol_mea'])
+    density_path = OUT/f'{FORM}-density-source-rows.json'
+    density_sha = helpers.dump(density_path, density_rows)
+    frozen_path = base['density_scale_path']
+    frozen = f.load(frozen_path)
+    ledger = f.load(LEDGER)
+    for spec in specs:
+        for c in spec['information_coordinates']:
+            if not c.get('enthalpy_shift') and c['identity'] != 'reaction:R5:correlation:a_k':
+                c['bounds'] = boxes[c['identity']]
+        assert {c['identity'] for c in spec['information_coordinates']} == set(boxes)
+        spec['amendment_url'] = 'https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6298116916'
+        spec['design_url'] = primary['design_url']
+        spec['budget_wall_s'], spec['budget_cpu_s'] = 1200, 7000
+        spec['program_prior_wall_s'], spec['program_prior_cpu_s'] = ledger['compute_wall_charged_s'], ledger['program_cpu_charge_s']
+        spec['ledger'] = primary['ledger']
+        spec['engine'] = primary['engine']
+        if 'release_tests_path' in spec:
+            spec['release_tests_path'] = str(R/f'amendment-7/{FORM}/release/release-tests.json')
+        spec['density_source_rows_path'] = str(density_path)
+        spec['frozen_density_scale_path'] = spec.pop('density_scale_path')
+        spec['inputs'] = [dict(r, path=str(density_path), sha256=density_sha) if r['path'] == base['density_source_rows_path'] else r
+                          for r in spec['inputs']]
+        for path in (ENDPOINT, CHEMISTRY):
+            if not any(r['path'] == str(path) for r in spec['inputs']):
+                spec['inputs'].append(dict(path=str(path), sha256=helpers.sha(path)))
+        for row in spec['direct_rows']:
+            if row['id'] in hartono_ids:
+                row['analytical_feed']['carbon-dioxide'] = float(source[row['id']]['co2_loading_from_mole_fraction_mol_per_mol_mea'])
+        assert {r['id']: r['scale'] for r in spec['direct_rows'] if r['id'] in {s['id'] for s in frozen}} == {r['id']: r['scale'] for r in frozen}
+        expected = copy.deepcopy(base['direct_rows'])
+        for row in expected:
+            if row['id'] in hartono_ids:
+                row['analytical_feed']['carbon-dioxide'] = float(source[row['id']]['co2_loading_from_mole_fraction_mol_per_mol_mea'])
+        assert spec['direct_rows'] == expected
+    # The sensitivity keeps the primary's 16 boxes; only the R2/R5 shift and stored-a_k boxes rebase to this start's totals.
+    primary_rebased = {c['identity']: c['bounds'] for c in primary['information_coordinates']}
+    changed_boxes = sorted(i for i, b in ((c['identity'], c['bounds']) for c in specs[1]['information_coordinates']) if b != primary_rebased[i])
+    assert set(changed_boxes) <= {'reaction:R2:enthalpy_shift', 'reaction:R5:enthalpy_shift', 'reaction:R5:correlation:a_k'}, changed_boxes
+    result = helpers.check(specs, mapping)
+    helpers.write_specs(FORM, specs, OUT)
+    result.update(start_sha256=helpers.sha(OUT/f'{FORM}-start.json'), endpoint_sha256=helpers.sha(ENDPOINT), interior_start=inward,
+                  inherited_totals_J_mol=totals, hartono_rows_changed=len(hartono_ids), frozen_scale_sha256=helpers.sha(frozen_path),
+                  boxes_rebased_from_primary=changed_boxes, program_prior_wall_s=ledger['compute_wall_charged_s'])
+    helpers.dump(OUT/f'{FORM}-build-check.json', result)
+    return result
+
+
+if __name__ == '__main__':
+    print(json.dumps(build(), indent=1, default=str))

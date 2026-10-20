@@ -1,0 +1,73 @@
+"""Old-wheel versus merged-#660-wheel comparison of retained records; no Engine import, no solve.
+
+    python3 compare.py.txt family NEW_DIR OLD_DIR     point-*.json of two 73-point families -> NEW_DIR/comparison.json
+    python3 compare.py.txt replay NEW_JSON OLD_JSON   two 307-row replays -> NEW_JSON's directory/replay-comparison.json
+"""
+import json
+import math
+from pathlib import Path
+import sys
+
+
+def points(directory):
+    return {int(p.stem.split('-')[1]): json.loads(p.read_text()) for p in Path(directory).glob('point-*.json')}
+
+
+def descents(row):
+    found = {}
+    for report in row.get('stability', []):
+        for t in report['trials']:
+            if t['resolved_descent']:
+                key = f"{t['phase']}|{t['seed']}|{t['donor']}"
+                assert key not in found, key
+                found[key] = t['quantities']['tpd_over_rt']
+    return found
+
+
+def family(new_dir, old_dir):
+    new, old = points(new_dir), points(old_dir)
+    assert new.keys() == old.keys() and len(new) == 73
+    rows, changed = [], []
+    for i in sorted(new):
+        a, b = old[i], new[i]
+        da, db = descents(a), descents(b)
+        trials = [t for r in b.get('stability', []) for t in r['trials']]
+        both = a.get('final', {}).get('success') and b.get('final', {}).get('success')
+        rows.append(dict(index=i, old=a['classification'], new=b['classification'], new_stability_reports=len(b.get('stability', [])),
+            new_trials=len(trials), new_failed_trial_optimizers=sum(not t['optimizer']['success'] for t in trials),
+            new_evidence=sorted({t['evidence'] for t in trials}), old_descents=len(da), new_descents=len(db),
+            descents_only_old=sorted(da.keys()-db.keys()), descents_only_new=sorted(db.keys()-da.keys()),
+            max_abs_tpd_change=max((abs(da[k]-db[k]) for k in da.keys() & db.keys()), default=None),
+            final_objective_change=b['final']['objective']-a['final']['objective'] if both else None))
+        if a['classification'] != b['classification']:
+            changed.append(i)
+    count = lambda key: {c: sum(r[key] == c for r in rows) for c in ('passed-single-liquid', 'passed-two-phase', 'unresolved', 'failed')}
+    finite = [abs(r['final_objective_change']) for r in rows if r['final_objective_change'] is not None]
+    summary = dict(new_dir=str(new_dir), old_dir=str(old_dir), old_counts=count('old'), new_counts=count('new'), changed_classification=changed,
+        old_descent_points=[r['index'] for r in rows if r['old_descents']], new_descent_points=[r['index'] for r in rows if r['new_descents']],
+        descents_only_old=sum(len(r['descents_only_old']) for r in rows), descents_only_new=sum(len(r['descents_only_new']) for r in rows),
+        matched_descents=sum(r['new_descents']-len(r['descents_only_new']) for r in rows),
+        max_abs_matched_tpd_change=max((r['max_abs_tpd_change'] for r in rows if r['max_abs_tpd_change'] is not None), default=None),
+        points_without_stability_report=[r['index'] for r in rows if not r['new_stability_reports']],
+        new_failed_trial_optimizers=sum(r['new_failed_trial_optimizers'] for r in rows),
+        final_objective_compared=len(finite), max_abs_final_objective_change=max(finite, default=None), points=rows)
+    Path(new_dir, 'comparison.json').write_text(json.dumps(summary, indent=1)+'\n')
+    print(json.dumps({k: v for k, v in summary.items() if k != 'points'}), flush=True)
+
+
+def replay(new_path, old_path):
+    new = {v['target']: v for v in json.loads(Path(new_path).read_text())}
+    old = {v['target']: v for v in json.loads(Path(old_path).read_text())}
+    assert new.keys() == old.keys() and len(new) == 307
+    rel = {k: abs(new[k]['predicted']-old[k]['predicted'])/abs(old[k]['observed']) for k in new}
+    worst = max(rel, key=rel.get)
+    summary = dict(new=str(new_path), old=str(old_path), rows=len(new), new_unavailable=sorted(k for k in new if new[k]['status'] != 'Available'),
+        old_cost=math.fsum(v['cost'] for v in old.values()), new_cost=math.fsum(v['cost'] for v in new.values()),
+        max_abs_cost_change=max(abs(new[k]['cost']-old[k]['cost']) for k in new),
+        max_relative_prediction_change=rel[worst], worst_target=worst, worst_old=old[worst]['predicted'], worst_new=new[worst]['predicted'],
+        rows_above_relative_1e_8=sorted(k for k in rel if rel[k] > 1e-8))
+    Path(new_path).with_name('replay-comparison.json').write_text(json.dumps(summary, indent=1)+'\n')
+    print(json.dumps(summary), flush=True)
+
+
+{'family': family, 'replay': replay}[sys.argv[1]](*sys.argv[2:4])

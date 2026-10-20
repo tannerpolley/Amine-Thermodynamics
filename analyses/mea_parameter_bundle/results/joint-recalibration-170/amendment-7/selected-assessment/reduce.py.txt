@@ -1,0 +1,176 @@
+"""Presentation-only reduction of retained per-row results; never imports the Engine.
+A7 copy of amendment-6/selected-assessment/reduce.py.txt: A7 record/declaration paths; the A6-specific C149 value check
+reads this endpoint's retained 307-row gate score instead; the budget check reads the A7 step ledger; A6's prose README
+generator is removed (README.md is written by hand from summary.json and verification.json)."""
+import csv,hashlib,json,math
+from pathlib import Path
+OUT=Path(__file__).resolve().parent
+ROOT=Path.cwd()
+
+def load(name):return json.loads((OUT/name).read_text())
+def write(name,data):(OUT/name).write_text(json.dumps(data,indent=2,allow_nan=False)+'\n')
+def table(name,rows):
+ if not rows:return
+ with (OUT/name).open('w',newline='') as f:
+  w=csv.DictWriter(f,list(dict.fromkeys(k for r in rows for k in r)));w.writeheader();w.writerows(rows)
+def files(mode):return [json.loads(p.read_text()) for p in sorted((OUT/(mode+'-rows')).glob('*.json'))]
+def stats(rows,obs,pred,error):
+ usable=[r for r in rows if r.get(pred) is not None];n=len(usable)
+ if not n:return dict(n_total=len(rows),n_available=0,n_unavailable=len(rows))
+ errors=[r[error] for r in usable];positive=[r for r in usable if r[obs]>0 and r[pred]>0]
+ return dict(n_total=len(rows),n_available=n,n_unavailable=len(rows)-n,bias=sum(errors)/n,RMSE=math.sqrt(sum(e*e for e in errors)/n),AARD_percent=100*sum(abs(r[pred]/r[obs]-1) for r in usable if r[obs]!=0)/sum(r[obs]!=0 for r in usable),mean_signed_relative_error_percent=100*sum(r[pred]/r[obs]-1 for r in usable if r[obs]!=0)/sum(r[obs]!=0 for r in usable),mean_ln_calc_over_obs=sum(math.log(r[pred]/r[obs]) for r in positive)/len(positive) if positive else None,min_error=min(errors),max_error=max(errors),max_abs_error=max(map(abs,errors)))
+
+raw=files('density');density=[]
+for r in raw:
+ if r['status']=='Available':v=dict(r['result'],status=r['status'])
+ else:v=dict(id=r['input']['id'],source=r['input']['source_key'],status=r['status'],failure=r['error'],loading=float(r['input']['co2_loading_mol_per_mol_mea'] or 0))
+ density.append(v)
+table('density.csv',[{k:v for k,v in r.items() if k!='numerical_evidence'} for r in density])
+# Exact declared density observations replace seed-based evaluations for objective/gate rows.
+declared=[r['result'] for r in files('declared-density') if r['status']=='Available']
+by_id={r['id']:dict(r,status='Available') for r in declared}
+density=[by_id.get(r['id'],r) for r in density]
+table('density.csv',[{k:v for k,v in r.items() if k not in ('numerical_evidence','source_seed_numerical_evidence','declaration')} for r in density])
+cohorts={}
+for source in ('Amundsen2009','Hartono2014','Han2012'):
+ rr=[r for r in density if r['source']==source]
+ cohorts[source]=rr
+ cohorts[source+' loaded']=[r for r in rr if r['loading']>0]
+ cohorts[source+' unloaded']=[r for r in rr if r['loading']==0]
+scales={r['id']:r for r in json.loads((ROOT/'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-scales.json').read_text())}
+cohorts['Amundsen fitted 15']=[r for r in density if r['id'] in scales and r['source']=='Amundsen2009']
+cohorts['Hartono fitted 32']=[r for r in density if r['id'] in scales and r['source']=='Hartono2014']
+conflict={'Amundsen2009_state_'+n for n in ('063','068','073','078','082')}
+cohorts['Amundsen source-conflict five']=[r for r in density if r['id'] in conflict]
+cohorts['Amundsen CO2-free gate five']=[r for r in density if r['source']=='Amundsen2009' and r.get('mea_mass_fraction')==.3 and r['loading']==0]
+cohorts['Hartono loading 0.50 eight']=[r for r in density if r['source']=='Hartono2014' and r['loading']==.5]
+denscores={}
+for name,rr in cohorts.items():
+ score=stats(rr,'observed_kg_m3','predicted_kg_m3','error_kg_m3')
+ score.update(units='kg/m3 for bias, RMSE and errors',row_ids=[r['id'] for r in rr],unavailable=[r['id'] for r in rr if r['status']!='Available'])
+ defined=[r for r in rr if r.get('s_kg_m3')];score.update(s_defined_n=len(defined),within_2s=sum(abs(r['error_over_s'])<=2 for r in defined))
+ if name in ('Amundsen fitted 15','Hartono fitted 32'):score['gate_passed']=len(defined)==len(rr) and all(abs(r['error_over_s'])<=2 for r in defined)
+ if name=='Amundsen CO2-free gate five':score.update(gate_limit_kg_m3=1.,within_gate=sum(abs(r.get('error_kg_m3',float('inf')))<=1 for r in rr),gate_passed=len(rr)==5 and all(abs(r.get('error_kg_m3',float('inf')))<=1 for r in rr))
+ if name.startswith('Han2012'):
+  for field,label in [('source_uncertainty_value','within_stated_combined_uncertainty'),('source_expanded_uncertainty_value','within_stated_expanded_uncertainty')]:
+   score[label]=sum(abs(r.get('error_kg_m3',float('inf')))<=float(r[field]) for r in rr if r.get(field))
+ denscores[name]=score
+write('density-summary.json',denscores)
+
+raw=files('calorics')+files('cp');heats=[r['result'] for r in raw if r['kind']=='heat' and r['status']=='Available'];cp=[r['result'] for r in raw if r['kind']=='cp' and r['status']=='Available'];fails=[r for r in raw if r['status']!='Available']
+table('heats.csv',[{k:v for k,v in r.items() if k!='source_row'} for r in heats]);write('calorics-unavailable.json',fails)
+heatstats={}
+for source,P,ceiling in [('Vinjarapu2024',None,3.13),('Arcis2011',None,9.36),('Arcis2011',510000.,None),('Arcis2011',1030000.,None)]:
+ rr=[r for r in heats if r['source']==source and(P is None or r['P_Pa']==P)]
+ ss=stats(rr,'observed_kJ_mol','predicted_kJ_mol','error_kJ_mol');ss.update(row_ids=[r['id'] for r in rr],units='kJ/mol CO2 for bias, RMSE and errors')
+ if ceiling is not None:ss.update(gate_RMSE_ceiling_kJ_mol=ceiling,gate_passed=ss.get('RMSE',float('inf'))<=ceiling and len(rr)==(8 if source=='Vinjarapu2024' else 14))
+ heatstats[source+(' at '+str(P)+' Pa' if P else '')]=ss
+write('heat-summary.json',heatstats)
+# Final displayed Cp uses the selected parameter document's declared molar masses.
+# Native actions/enthalpies are retained; this is only a mass-unit conversion.
+mapping=json.loads((ROOT/'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json').read_text())
+parameter_masses={c['component_id']:c['fixed']['molar_mass']['value']['magnitude'] for c in mapping['components']}
+for r in cp:
+ oldmass=r['declared_feed_mass_kg'];newmass=sum(n*parameter_masses[c] for c,n in r['analytical_feed'].items());factor=oldmass/newmass
+ r['mass_basis_conversion']=dict(from_retained_feed_mass_kg=oldmass,to_parameter_document_feed_mass_kg=newmass,factor=factor)
+ r['declared_feed_mass_kg']=newmass;r['declared_molar_masses_kg_mol']=parameter_masses
+ for k in ('equilibrium_cp_kJ_kg_K','frozen_cp_kJ_kg_K'):r[k]*=factor
+ r['deviation_percent']=100*(r['equilibrium_cp_kJ_kg_K']/r['observed_kJ_kg_K']-1)
+ for step in r['enthalpy_ladder']:
+  step['cp_kJ_kg_K']*=factor
+  for side in ('minus','plus'):step[side]['mass_kg']=newmass
+cpstats=[]
+for identity in sorted({r['id'] for r in cp}):
+ rr=sorted([r for r in cp if r['id']==identity],key=lambda r:r['proxy'],reverse=True);r=rr[0]
+ proxyrel=abs(rr[0]['equilibrium_cp_kJ_kg_K']/rr[1]['equilibrium_cp_kJ_kg_K']-1) if len(rr)==2 else None
+ available=all(v['resolve_passed'] for v in rr) and(proxyrel is None or proxyrel<=1e-6)
+ cpstats.append(dict(id=identity,T_K=r['T_K'],loading=r['loading'],equilibrium_cp_kJ_kg_K=r['equilibrium_cp_kJ_kg_K'],frozen_cp_kJ_kg_K=r['frozen_cp_kJ_kg_K'],observed_kJ_kg_K=r['observed_kJ_kg_K'],error_percent=r['deviation_percent'],within_3_percent=abs(r['deviation_percent'])<=3 if available else None,proxy_relative_difference=proxyrel,proxy_check_passed=proxyrel<=1e-6 if proxyrel is not None else None,enthalpy_checks_passed=all(v['resolve_passed'] for v in rr),available_for_interpretation=available,proxy_rows=rr))
+write('cp-summary.json',cpstats);table('cp.csv',[{k:v for k,v in r.items() if k!='proxy_rows'} for r in cpstats])
+
+raw=files('states')+files('carbonate');state_rows=[r for r in raw if r['kind']=='state'];targets=[t for r in state_rows if r['status']=='Available' for t in r['result']['targets']]
+excluded=[json.loads(p.read_text()) for p in sorted((OUT/'excluded').glob('*.json'))]
+fail=[r for r in state_rows if r['status']!='Available'];write('states-unavailable.json',fail);write('states-excluded.json',excluded)
+for t in targets:t.update(error=t['predicted']-t['observed'],relative_error_percent=100*(t['predicted']/t['observed']-1),status='Available')
+table('state-targets.csv',targets)
+groups=load('observation-groups.json');pressure=lambda r:r['quantity']=='pressure'
+cohorts={kind:[t for t in targets if t['kind']==kind and pressure(t)] for kind in groups}
+cohorts['canonical 100-120 C']=[t for t in cohorts['canonical'] if round(t['temperature_K']-273.15)>=100]
+cohorts['packet 100-120 C']=[t for t in cohorts['packet'] if round(t['temperature_K']-273.15)>=100]
+for base in ('canonical 100-120 C','packet 100-120 C'):
+ for source in sorted({r['source'] for r in cohorts[base]}):
+  for temp in (100,120):
+   cohorts[base+' '+source+' '+str(temp)+' C']=[r for r in cohorts[base] if r['source']==source and round((r['temperature_K']-273.15)/20)*20==temp]
+for temp in (353.15,392.15):cohorts['Wagner near '+str(temp)+' K']=[r for r in cohorts['wagner'] if(r['temperature_K']<355)==(temp<355)]
+# Frozen transfer source coordinates supply the 15/45 wt% membership.
+canonical_rows=list(csv.DictReader((ROOT/'data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv').open()))
+for w in (.15,.45):
+ ids={'transfer:canonical:'+r['observation_id'] for r in canonical_rows if abs(float(r['MEA_weight_fraction'])-w)<1e-10}
+ cohorts['transfer '+str(int(100*w))+' wt%']=[r for r in cohorts['transfer'] if r['identity'] in ids]
+cohorts['Matin 19 pools']=[r for r in targets if r['target'].startswith('Matin') and r['target'].endswith('::HCO3-')]
+state_scores={}
+for name,rr in cohorts.items():
+ if not rr:continue
+ score=stats(rr,'observed','predicted','error');score.update(units='Pa for pressure bias/RMSE/errors; true-species mole fraction for Matin pool',row_ids=[r['target'] for r in rr],state_ids=[r['identity'] for r in rr],cost=sum(r['cost'] for r in rr))
+ state_scores[name]=score
+# Preserve all admitted/failed/inadmissible state identities independently of available target reductions.
+write('state-summary.json',dict(scores=state_scores,availability={k:dict(requested=len(v),available=sum(r['status']=='Available' and r['input']['group']==k for r in state_rows),failed=[r['input']['observation']['identity'] for r in fail if r['input']['group']==k],inadmissible=[r['observation']['identity'] for r in excluded if r['group']==k]) for k,v in groups.items()},paired_with_without_heat='Not run: this task supplied one selected explicit document; no comparison document selected or substituted.'))
+carbonate=[r['result'] for r in raw if r['kind']=='carbonate' and r['status']=='Available'];table('carbonate-share.csv',[{k:v for k,v in r.items() if k!='liquid'} for r in carbonate])
+carbon_scores={}
+for name,rr in [('all ten',carbonate),('historical nine',[r for r in carbonate if r['historical_nine_included']]),('previously excluded 40 C maxload 0.21',[r for r in carbonate if not r['historical_nine_included']])]:
+ carbon_scores[name]=dict(n=len(rr),row_ids=[r['id'] for r in rr],calc_over_obs_min=min((r['calc_over_obs'] for r in rr),default=None),calc_over_obs_max=max((r['calc_over_obs'] for r in rr),default=None),mean_calc_over_obs=sum(r['calc_over_obs'] for r in rr)/len(rr) if rr else None)
+write('carbonate-summary.json',carbon_scores)
+# Auditable source and producer identities, without modifying the canonical inputs.
+paths={'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit-spec.json'}
+paths.update('data/reference/MEA/observations/density_viscosity/'+n+'.csv' for n in ('Amundsen_2009_density_viscosity','Hartono_2014_loaded_density','Han_2012_loaded_density'))
+paths.update('analyses/mea_parameter_bundle/scripts/'+n+'.py' for n in ('fit_observations','heat_evidence_170','final_evidence','shared_evaluation','verify_reference_calorics','verify_solution_heat_capacity'))
+paths.add('data/reference/MEA/observations/liquid_speciation/Jakobsen_2005_ChEq.csv')
+spec=json.loads((ROOT/'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit-spec.json').read_text())
+paths.update(spec[k] for k in ('packet_path','heat_rows_path','stage2_rows_path','state_requests_path','density_scale_path','density_source_rows_path'))
+write('input-hashes.json',{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in sorted(paths)})
+assert len(density)==210 and len({r['id'] for r in density})==210
+assert len(cohorts['Matin 19 pools'])==19,'Missing or duplicated Matin pools'
+assert len(carbonate)==10,'Missing corrected carbonate rows'
+assert all(r['max_abs_raw_residual']<1e-8 for r in carbonate)
+assert len(cohorts['transfer 15 wt%'])==33 and len(cohorts['transfer 45 wt%'])==37
+assert len(cohorts['canonical'])==159 and len(cohorts['packet'])==79
+assert len(cohorts['canonical 100-120 C'])==54 and len(cohorts['packet 100-120 C'])==20
+print('Density',[(k,v['n_available'],v.get('RMSE'),v.get('gate_passed')) for k,v in denscores.items()])
+print('Heat',[(k,v.get('RMSE'),v.get('gate_passed')) for k,v in heatstats.items()]);print('Cp',[(r['id'],r['error_percent'],r['available_for_interpretation']) for r in cpstats]);print('States',[(k,v['n_available'],v['AARD_percent'],v['mean_ln_calc_over_obs']) for k,v in state_scores.items()]);print('Carbonate',carbon_scores)
+
+# Numerical checks against this exact vector's own fit, not a historical selection.
+base=OUT.parent/'restricted-2'
+native=json.loads((base/'fit/native.json').read_text());native_predictions={r['id']:v for r,v in zip(native['rows'],native['predictions'],strict=True)}
+added=json.loads((ROOT/spec['stage2_rows_path']).read_text())['F1']
+zero_declarations=[r for r in added if r['quantity']=='phase_density']
+zero_replay=[]
+for r in [r for r in density if r['source']=='Amundsen2009' and r.get('mea_mass_fraction')==.3 and r['loading']==0]:
+ d=next(x for x in zero_declarations if x['T_K']==r['T_K'] and abs(x['observed']-r['observed_kg_m3'])<1e-8)
+ zero_replay.append(dict(source_id=r['id'],declaration_id=d['id'],predicted_kg_m3=r['predicted_kg_m3'],native_fit_predicted_kg_m3=native_predictions[d['id']],absolute_difference=abs(r['predicted_kg_m3']-native_predictions[d['id']])))
+density_replay_max=max([abs(r['predicted_kg_m3']-native_predictions[r['id']]) for r in declared]+[r['absolute_difference'] for r in zero_replay])
+common_ids=set(spec['observations'][0]['ordered_row_ids']);common=[r for r in targets if r['kind']=='packet' and r['target'] in common_ids];common_heats=[r for r in heats if r['id'] in common_ids]
+common149=sum(r['cost'] for r in common)+sum(.5*r['scaled_residual']**2 for r in common_heats)
+common_scores={k:stats([r for r in common if r['quantity']==k],'observed','predicted','error') for k in ('pressure','species')}
+checks=[r['result']['record']['numerical_checks'] for r in state_rows if r['status']=='Available']
+checks_summary=dict(states=len(checks),max_abs_stationarity=max(r['max_abs_stationarity'] for r in checks),max_abs_material_residual_mol=max(abs(v) for r in checks for v in r['material_residuals_mol']),max_abs_charge_residual_mol=max(abs(r['charge_residual_mol']) for r in checks))
+cp_replay=[]
+for r in cpstats:
+ declaration=next(x for x in spec['direct_rows'] if x['id']==r['id'])
+ expected=native_predictions[r['id']]*declaration['feed_amount_mol']/declaration['feed_mass_kg']/1000
+ cp_replay.append(dict(id=r['id'],native_fit_mass_converted_kJ_kg_K=expected,assessment_kJ_kg_K=r['equilibrium_cp_kJ_kg_K'],absolute_difference=abs(expected-r['equilibrium_cp_kJ_kg_K'])))
+heat_replay_max=max(abs(r['predicted_kJ_mol']*1000-native_predictions[r['id']]) for r in common_heats)
+native_rows={r['id']:r for r in native['rows']}
+heat_scaled_replay_max=max(abs(r['predicted_kJ_mol']*1000-native_predictions[r['id']])/native_rows[r['id']]['scale'] for r in common_heats)
+ledger=json.loads((OUT.parent/'step-ledger.json').read_text());stage=[c for c in ledger['calls'] if c['stage']=='final-evidence']
+gate_C149=json.loads((OUT.parent/'fixed-study/wheel-8298c602/restricted-2-endpoint/score.json').read_text())['C149']
+verification=dict(density_declared_rows=len(declared)+len(zero_replay),direct_stage6_rows=len(declared),exact_zero_carbon_replay=zero_replay,density_replay_max_abs_kg_m3=density_replay_max,heat_replay_max_abs_J_mol=heat_replay_max,heat_replay_max_abs_scaled_residual=heat_scaled_replay_max,cp_replay=cp_replay,common149=dict(n=len(common)+len(common_heats),cost=common149,pressure_species=common_scores),state_numerical_checks=checks_summary,wall_s=round(sum(c['wall_s'] for c in stage),2),cpu_s=round(sum(c['cpu_s'] for c in stage),2),independently_reviewed=False)
+assert len(declared)==47 and len(zero_replay)==5 and density_replay_max<=1e-8
+assert len(common)+len(common_heats)==149 and abs(common149-gate_C149)<1e-8
+assert heat_scaled_replay_max<=spec['verification']['row_replay_absolute'] and all(r['absolute_difference']<1e-10 for r in cp_replay)
+assert sum(c['wall_s'] for c in stage)<=ledger['allocations']['final-evidence']['wall_s'] and sum(c['cpu_s'] for c in stage)<=ledger['allocations']['final-evidence']['cpu_s']
+assert checks_summary['max_abs_stationarity']<1e-8 and checks_summary['max_abs_material_residual_mol']<1e-7 and checks_summary['max_abs_charge_residual_mol']<1e-7
+assert not fail and not fails
+write('verification.json',verification)
+summary=dict(parameter_sha256=load('provenance.json')['parameter_sha256'],engine_wheel_sha256=load('provenance.json')['engine_wheel_sha256'],density=denscores,Cp=cpstats,heat=heatstats,state=load('state-summary.json'),carbonate=carbon_scores,verification=verification,unavailable_rows=[],inadmissible_rows=[r['observation']['identity'] for r in excluded],not_done=['Paired with/without-heat comparison: only the selected explicit vector was supplied; no comparison vector selected or substituted.','Pure-water #189 reuse was not independently bound to its complete historical qualification inputs; no new water sweep was run.','Parent-owned research notebook integration, independent review and investigator promotion.'])
+write('summary.json',summary)
+
+# A7: the A6 prose README is not generated here; README.md is written from summary.json and verification.json.
