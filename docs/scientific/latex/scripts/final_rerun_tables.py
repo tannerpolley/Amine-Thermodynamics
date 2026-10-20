@@ -261,7 +261,7 @@ def main():
           ['Index','Seed','Success','Delta vs original','Delta vs single liquid','Densities','Phases'],split_rows,[.06,.17,.09,.14,.14,.18,.22])
     OUTPUTS['supplement_phase_family.tex']=previous+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-states')
     previous=OUTPUTS['supplement_phase_family.tex']
-    table('supplement_phase_family.tex', r'A6 successful split phase amounts (mol), densities (mol/m3) and mole fractions in source order: CO2, MEA, water, MEAH+, carbamate, bicarbonate, carbonate, hydronium, hydroxide. The same original Engine identity applies.',
+    table('supplement_phase_family.tex', r'A6 successful split phase amounts (mol), densities (mol/m3) and mole fractions in source order: CO2, MEA, water, MEAH+, carbamate, bicarbonate, carbonate, hydronium, hydroxide. Vapour rows list only their three supported neutral species (CO2, MEA, water); liquid rows list all nine. The same original Engine identity applies.',
           ['Index','Seed / phase','Amount','Density','Mole fractions in declared order'],split_phases,[.05,.20,.11,.12,.52])
     OUTPUTS['supplement_phase_family.tex']=previous+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-compositions')
     previous=OUTPUTS['supplement_correlations.tex']
