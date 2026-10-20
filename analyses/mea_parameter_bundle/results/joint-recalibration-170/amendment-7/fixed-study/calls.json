@@ -41,7 +41,9 @@
    "system_s": 3.07,
    "exit_code": 0,
    "max_rss_kb": 88500,
-   "cpu_s": 37.7
+   "cpu_s": 37.7,
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/reduction.json and summary.json"
   },
   {
    "name": "family-0p21875",
@@ -77,7 +79,9 @@
    "system_s": 2.94,
    "exit_code": 0,
    "max_rss_kb": 85352,
-   "cpu_s": 38.12
+   "cpu_s": 38.12,
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/reduction.json and summary.json"
   },
   {
    "name": "exchanges",
@@ -111,7 +115,9 @@
    "system_s": 1.03,
    "exit_code": 0,
    "max_rss_kb": 89856,
-   "cpu_s": 30.3
+   "cpu_s": 30.3,
+   "log_retained": false,
+   "printed_values_retained_in": "exchange-*/reduction.json"
   },
   {
    "name": "coupled-1",
@@ -147,7 +153,9 @@
    "system_s": 2.96,
    "exit_code": 0,
    "max_rss_kb": 85236,
-   "cpu_s": 38.65
+   "cpu_s": 38.65,
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/reduction.json and summary.json"
   },
   {
    "name": "splits-coupled-1",
@@ -182,7 +190,9 @@
    "system_s": 0.13,
    "exit_code": 0,
    "max_rss_kb": 88492,
-   "cpu_s": 8.44
+   "cpu_s": 8.44,
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/split-summary.json"
   },
   {
    "name": "coupled-2",
@@ -218,7 +228,9 @@
    "system_s": 3.1,
    "exit_code": 0,
    "max_rss_kb": 85240,
-   "cpu_s": 40.35
+   "cpu_s": 40.35,
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/reduction.json and summary.json"
   },
   {
    "name": "splits-coupled-2",
@@ -253,7 +265,9 @@
    "system_s": 0.12,
    "exit_code": 0,
    "max_rss_kb": 90684,
-   "cpu_s": 7.32
+   "cpu_s": 7.32,
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/split-summary.json"
   },
   {
    "name": "score-0p1875",
@@ -288,7 +302,9 @@
    "system_s": 0.28,
    "exit_code": 0,
    "max_rss_kb": 94652,
-   "cpu_s": 16.83
+   "cpu_s": 16.83,
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/score.json"
   },
   {
    "name": "subexchanges",
@@ -324,7 +340,9 @@
    "max_rss_kb": 90464,
    "cpu_s": 21.38,
    "script_sha256": "5f09c20a413e76492a1a931c14f855b975908e0593089c20bb75d11a55ded60d",
-   "note": "Owner-approved sub-block probe after the step-4 decision (restricted feasibility fit); script extended with single ion-water coefficients after commit e079711, whose study.py.txt hash is the stage-level script_sha256."
+   "note": "Owner-approved sub-block probe after the step-4 decision (restricted feasibility fit); script extended with single ion-water coefficients after commit e079711, whose study.py.txt hash is the stage-level script_sha256.",
+   "log_retained": false,
+   "printed_values_retained_in": "exchange-*/reduction.json"
   },
   {
    "name": "splits-rest-coupled-2",
@@ -361,7 +379,9 @@
    "max_rss_kb": 91132,
    "cpu_s": 5.77,
    "script_sha256": "5875378fb2a46217feb944a7bf3888d0b6fcccabde277b0147b525260201ed9d",
-   "note": "Remaining distinct descending compositions (design \u00a74), after readiness review r1 finding 2."
+   "note": "Remaining distinct descending compositions (design \u00a74), after readiness review r1 finding 2.",
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/split-summary-distinct.json"
   },
   {
    "name": "splits-rest-coupled-1",
@@ -398,7 +418,9 @@
    "max_rss_kb": 89296,
    "cpu_s": 6.0,
    "script_sha256": "5875378fb2a46217feb944a7bf3888d0b6fcccabde277b0147b525260201ed9d",
-   "note": "Remaining distinct descending compositions (design \u00a74), after readiness review r1 finding 2."
+   "note": "Remaining distinct descending compositions (design \u00a74), after readiness review r1 finding 2.",
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/split-summary-distinct.json"
   }
  ],
  "wall_s": 251.57,
@@ -441,8 +463,11 @@
    "max_rss_kb": 85732,
    "cpu_s": 37.1,
    "script_sha256": "ef0ea310e807501221da7f97de591c213ef9f11773cf61affdeb2ad057b3254e",
-   "parameter_sha256": "fe9ed68f7abb83179a875f3fcecd7da927ce5d41b6a6d83218282aed15f3c3ea"
+   "parameter_sha256": "fe9ed68f7abb83179a875f3fcecd7da927ce5d41b6a6d83218282aed15f3c3ea",
+   "log_retained": false,
+   "printed_values_retained_in": "<label>/reduction.json and summary.json"
   }
  ],
- "command_basis": "Every command array is the expansion of the single shell launcher used for all calls in this session (GNU time -> timeout -> nice -n 10 -> env -> pinned interpreter -> study.py.txt), written from its name, limit and arguments after the run; the earlier subexchanges entry was a malformed reconstruction and is replaced (readiness review r1 finding 5). study.py.txt changed after e079711 (single coefficients), after e2fb0eb (screen mode) and after b5e8ee9 (splits-rest); each call after the first change records its script hash."
+ "command_basis": "Every command array is the expansion of the single shell launcher used for all calls in this session (GNU time -> timeout -> nice -n 10 -> env -> pinned interpreter -> study.py.txt), written from its name, limit and arguments after the run; the earlier subexchanges entry was a malformed reconstruction and is replaced (readiness review r1 finding 5). study.py.txt changed after e079711 (single coefficients), after e2fb0eb (screen mode) and after b5e8ee9 (splits-rest); each call after the first change records its script hash.",
+ "log_note": "The tee logs matched the repository *.log ignore rule, were not force-added, and were deleted with the worktree at integration (2026-10-19). Each run printed only its reduction or split-summary lines, which are retained in the JSON named per call; the logs were not reconstructed."
 }
