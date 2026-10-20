@@ -196,6 +196,5 @@ definition.
 The executable changes replace F1 assumptions in the existing table and
 figure renderers, add one explicit default-path reproduction and one retained
 value reduction, and update the active test pin. Campaign code is unchanged.
-The final count is **363 gross-added nonblank, non-comment executable lines**
-against base `5d5735c`, below the 500 ceiling; tests add one line separately.
+Against base `5d5735c`, the corrected change adds 395 lines in executable files, including blanks and comments: replay 73, reduction 213, parameter renderer 66, and figure renderer 43. This is below the approved 500-line ceiling. The filtered nonblank, non-comment count is 367 and is supplementary. Tests add one line separately; deletions do not offset additions.
 The change-accounting results and file checks are retained in `checks/`.

@@ -20,8 +20,11 @@ def magnitude(coefficient):
 
 
 def rounded(value, se):
-    # Two significant digits of the conditional standard error set the displayed decimals.
-    return format(value, '.6g') if se is None else f'{value:.{max(0, 1 - math.floor(math.log10(se)))}f}'
+    # Two significant digits of the conditional standard error set the rounding place.
+    if se is None:
+        return format(value, '.6g')
+    decimals = 1 - math.floor(math.log10(se))
+    return f'{round(value, decimals):.{max(0, decimals)}f}'
 
 
 def cell(value, fitted=False, fixed=False, title='', se=None):
