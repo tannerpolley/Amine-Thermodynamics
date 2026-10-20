@@ -13,7 +13,7 @@ coefficients of each reaction law move together.
     study.py.txt splits LABEL        one split-seeded solve per descending point
     study.py.txt splits-rest LABEL   one per remaining distinct descending composition
     study.py.txt score LABEL         exact 307-row replay and A6 gates
-    study.py.txt screen LABEL PATH   all 73 family points for a parameter document
+    study.py.txt screen LABEL PATH   all 73 family points for a parameter document (also written as LABEL/fixed-parameters.json)
 
 SPEC is "default" or "default,name=fraction,...", where name is a block or a
 single ion-water coefficient, e.g. "0.125,meah-size=0.25".
@@ -23,9 +23,15 @@ import copy
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import sys
 
+import shared_evaluation as shared
+# Strict gate: ../run.py.txt binds the merged #660 wheel explicitly, before calibration-misfit/probe.py verifies the
+# wheel on import; without it the shared pinned wheel applies.
+if 'ENGINE_WHEEL_SHA256' in os.environ:
+    shared.ENGINE_WHEEL_SHA256, shared.ENGINE_COMMIT = os.environ['ENGINE_WHEEL_SHA256'], os.environ['ENGINE_COMMIT']
 import final_evidence as f
 from heat_evidence_170 import request
 
@@ -59,6 +65,7 @@ BLOCKS = {
 changed = {k for k in new if start[k] != finish[k]}
 assert sorted(sum(BLOCKS.values(), [])) == sorted(changed), changed ^ set(sum(BLOCKS.values(), []))
 POINTS = [63, 70, 72]
+assert f.s is shared and f.probe.shared is shared
 f.s.verify_wheel()
 
 
@@ -227,7 +234,12 @@ if mode in ('family', 'points'):
 elif mode == 'screen':
     run = output/sys.argv[2]
     run.mkdir(parents=True, exist_ok=False)
-    family(f.s.parameter_mapping(Path(sys.argv[3])), run)
+    source = Path(sys.argv[3])
+    data = f.s.parameter_mapping(source)
+    f.s.write_json(run/'fixed-parameters.json', data)
+    f.s.write_json(run/'provenance.json', dict(source=str(source), source_sha256=f.s.sha256(source), wheel_path=str(f.s.installed_wheel()),
+        wheel_sha256=f.s.ENGINE_WHEEL_SHA256, engine_commit=f.s.ENGINE_COMMIT, module=f.epcsaft.__file__, script_sha256=f.s.sha256(Path(__file__))))
+    family(data, run)
 elif mode == 'exchanges':
     for lo, hi in ((0.125, 0.25), (0.25, 0.125)):
         for block in BLOCKS:
