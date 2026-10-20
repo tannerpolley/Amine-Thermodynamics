@@ -13,18 +13,21 @@ TABLES = ROOT / 'docs/scientific/latex/tables'
 OUTPUTS = {}
 NAMES = {'carbon-dioxide': 'CO2', 'monoethanolamine': 'MEA', 'water': 'water',
          'protonated-monoethanolamine': 'MEAH+', 'carbamate-anion': 'MEACOO-',
-         'bicarbonate-anion': 'HCO3-', 'carbonate-anion': 'CO3--', 'hydronium-cation': 'H3O+', 'hydroxide-anion': 'OH-'}
+         'bicarbonate-anion': 'HCO3-', 'carbonate-anion': r'\ce{CO3^{2-}}', 'hydronium-cation': 'H3O+', 'hydroxide-anion': 'OH-'}
 UNITS = dict(PartialPressure='Pa', PhaseMoleFraction='mole fraction', AdditionEnthalpy='J/mol CO2',
              amount_ratio='mol/mol total amine', pressure='Pa', phase_density='kg/m3', temperature='K',
              mole_fraction='vapour water fraction', equilibrium_isobaric_heat_capacity='J/(mol K), feed basis')
 
 
 def tex(value):
+    parts = re.split(r'(\\ce\{(?:[^{}]|\{[^{}]*\})*\})', str(value))
+    if len(parts) > 1:
+        return ''.join(part if part.startswith(r'\ce{') else tex(part) for part in parts)
     if value == 'angstrom':
         return r'\AA'
     if value == 'dimensionless':
         return '1'
-    escaped = ''.join({'&': r'\&', '%': r'\%', '_': r'\_\allowbreak{}', '#': r'\#', '$': r'\$', '{': r'\{', '}': r'\}'}.get(c, c) for c in str(value)).replace('/', r'/\allowbreak{}')
+    escaped = ''.join({'^': r'\textasciicircum{}', '&': r'\&', '%': r'\%', '_': r'\_\allowbreak{}', '#': r'\#', '$': r'\$', '{': r'\{', '}': r'\}'}.get(c, c) for c in str(value)).replace('/', r'/\allowbreak{}')
     return re.sub(r'[a-f0-9]{64}', lambda m: r'\allowbreak{}'.join(m.group()[i:i+8] for i in range(0,64,8)), escaped)
 
 
@@ -39,6 +42,7 @@ def label(identity):
 
 
 def table(name, caption, headings, data, widths=None):
+    caption = caption.replace('CO₂', r'\ce{CO2}')
     widths = widths or [1/len(headings)]*len(headings)
     cols = '@{}' + ''.join(r'>{\raggedright\arraybackslash}p{' + f'{w*.94:.4f}' + r'\linewidth}' for w in widths) + '@{}'
     head = ' & '.join(tex(h) for h in headings) + r' \\'
@@ -100,15 +104,36 @@ def main():
                     role = 'tied to ' + label(tie['identity'])
                 source = c.get('provenance', {})
                 row = [label(identity), num(c['value']['magnitude'], 10), c['value']['unit'], role,
-                       source.get('source_id', '') + '; ' + c.get('qualification', '') + ('; Tref='+str(c['reference_temperature']['magnitude'])+' K' if 'reference_temperature' in c else '')]
+                       '; '.join(filter(None, [source.get('source_id', ''), c.get('qualification', '')])) + ('; Tref='+str(c['reference_temperature']['magnitude'])+' K' if 'reference_temperature' in c else '')]
                 (parameter_rows if kind == 'components' else pair_rows).append(row)
+    source_locators = {}
+    def sources(node):
+        entries = node.get('source', {}).get('provenance', [node.get('provenance', {})])
+        for entry in entries:
+            if entry:
+                source_locators[entry['source_id'], entry['locator']] = None
+        return '; '.join(filter(None, [*dict.fromkeys(entry['source_id'] for entry in entries if entry), node.get('qualification', '')]))
+
     for node in document['correlations'] + document['model_coefficients'] + document['topology']['edges']:
         for identity, c in a.coefficients(node):
-            parameter_rows.append([label(identity), num(c['value']['magnitude'], 10), c['value']['unit'], 'fixed correlation/association input', node.get('qualification', '')])
+            parameter_rows.append([label(identity), num(c['value']['magnitude'], 10), c['value']['unit'], 'fixed correlation/association input', sources(node)])
+    for site in document['topology']['sites']:
+        parameter_rows.append([label(site['component_id'])+' site '+site['site_id'], site['multiplicity'], '--',
+                               'fixed '+site['site_role']+' site', sources(site)])
+    for edge in document['topology']['edges']:
+        source = edge['source']
+        if source['kind'] == 'combining-rule':
+            endpoints = [label(edge[k]['component_id'])+'('+edge[k]['site_id']+')' for k in ['endpoint_a','endpoint_b']]
+            parameter_rows.append(['–'.join(endpoints), source['rule_id'], '--', 'fixed combining rule; '+
+                                   '; '.join(k+': '+', '.join(label(x) for x in v) for k,v in source['inputs'].items()), sources(edge)])
     for family in document['model_families']:
         parameter_rows.append([family['family_id'], family['choice'], '--', 'model choice', family.get('qualification', '')])
-    table('full_ionic_ssm_ds_parameters.tex', r'A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. Source identifiers and extrapolation qualifications are retained from the selected JSON; fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here.',
+    table('full_ionic_ssm_ds_parameters.tex', r'A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. Source identifiers and extrapolation qualifications are retained from the selected JSON; fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: CO₂, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.',
           ['Parameter/input', 'Value', 'Unit', 'Role', 'Source/qualification'], parameter_rows, [.33,.13,.12,.20,.22])
+    previous = OUTPUTS['full_ionic_ssm_ds_parameters.tex']
+    table('full_ionic_ssm_ds_parameters.tex', r'Retained source and transformation locators for fixed correlation and association inputs. The MEA association volume retains its conversion from the source diameter convention to the Engine convention; no combining rule is evaluated here.',
+          ['Source', 'Retained locator'], [[source, locator] for source, locator in source_locators], [.25,.75])
+    OUTPUTS['full_ionic_ssm_ds_parameters.tex'] = previous + OUTPUTS['full_ionic_ssm_ds_parameters.tex'].replace('tab:full-ionic-ssm-ds-parameters','tab:association-source-locators')
     table('binary_interaction_parameters.tex', r'A7 binary parameters. Temperature slopes multiply $(1/T-1/T_{\rm ref})$, with retained reference temperatures listed explicitly. Unlisted interactions retain the selected document conventions, including the same-sign ion dispersion exclusion. Fixed inputs are not new A7 fitted coordinates.',
           ['Parameter', 'Value', 'Unit', 'Role', 'Source/qualification'], pair_rows, [.31,.16,.12,.19,.22])
     reaction = a.load(a.ROOT / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json')
@@ -118,7 +143,7 @@ def main():
         selected = next((x for x in document['reaction_correlations'] if x['reaction_id'] == rid), None)
         coeff = '; '.join(label(c['identity'].split(':')[-1]) + '=' + num(c['value']['magnitude'], 10) for c in selected['coefficients']) if selected else '; '.join(k+'='+str(v) for k,v in r['correlation'].items())
         offset = reaction['common_source_standard_state']['source_to_common_ln_k_offsets'][i]
-        reaction_rows.append([rid + ': ' + r['equation'], coeff, r['selected_source'], str(r['temperature_range_k']),
+        reaction_rows.append([rid + r': \ce{' + r['equation'].replace('CO3--', 'CO3^{2-}').replace('HCO3-', 'HCO3^-') + '}', coeff, r['selected_source'], str(r['temperature_range_k']),
                               'offset included in serialized R2' if rid == 'R2' else 'add source-to-common offset '+num(offset)])
     table('reaction_equilibrium_constants.tex', r'A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 are serialized selected coefficients. R2 uses $\ln K=a+b/T+c\ln T+dT$, R4 $\ln K=a+b/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.',
           ['Reaction', 'Coefficients', 'Source', 'Source range (K)', 'Offset'], reaction_rows, [.25,.28,.20,.10,.17])
@@ -192,6 +217,11 @@ def main():
     fixed = a.J / 'amendment-7/fixed-study/wheel-8298c602'
     endpoints = ['after-adoption/a6-selected','restricted-endpoint','restricted-2-endpoint']
     scores = [a.load(fixed / p / 'score.json') for p in endpoints]
+    a6_provenance = a.load(a.J/'amendment-6/selected-assessment/provenance.json')
+    first_endpoint = a.bind(a.J/'amendment-7/restricted/fit/usable-budget-endpoint.json')
+    assert a.INPUTS[str(first_endpoint.relative_to(a.ROOT))] == scores[1]['parameter_sha256']
+    comparison_identities = dict(A6_original_assessment=a.record_identity(a6_provenance['parameter_sha256'], a6_provenance['engine']),
+                                **{name: a.phase_identity(fixed/path, fit['engine']) for name,path in zip(['A6_after_adoption','First_A7','Accepted_A7'], endpoints, strict=True)})
     a.bind(a.J / 'amendment-7/restricted/README.md')
     reductions = [a.load(fixed / p / 'reduction.json') for p in endpoints]
     acceptance = []
@@ -245,7 +275,7 @@ def main():
     for i in range(73):
         x,y=paired['A6'][i],paired['A7'][i]
         phase_rows.append([i,x['temperature_K'],x['loading'],x['pressure_Pa'],x['classification']+'; trials '+x['resolved_trials']+'; success '+x['final_success']+'; failed '+x['failed_trial_optimizers'],y['classification']+'; trials '+y['resolved_trials']+'; success '+y['final_success']+'; failed '+y['failed_trial_optimizers']])
-    table('supplement_phase_family.tex',r'The 73 matched A6/A7 states on wheel 8298c602: 12/73 versus 0/73 resolved-descent points. Resolved counts are trial counts, not Gibbs changes. Blank minimum fields report no resolved minimum. Index 0 is the separate witness and is retained alongside index 41. Two-phase is not a liquid--liquid split. This finite search does not certify a continuous stable region.',
+    table('supplement_phase_family.tex',r'The 73 matched A6/A7 states on wheel 8298c602: 12/73 versus 0/73 resolved-descent points. Resolved counts are trial counts, not Gibbs changes. Blank minimum fields report no resolved minimum. Index 0 is the separate witness and is retained alongside index 41. A two-phase classification alone does not establish a liquid–liquid split. This finite search does not certify a continuous stable region.',
           ['Index','T (K)','Loading (exact)','P (Pa, exact)','A6','A7'],phase_rows,[.05,.08,.22,.21,.22,.22])
     previous=OUTPUTS['supplement_phase_family.tex']
     split_rows=[]
@@ -271,6 +301,9 @@ def main():
     for name, body in OUTPUTS.items():
         head='% Generator: docs/scientific/latex/scripts/final_rerun_tables.py; do not hand-edit.\n'
         head+='% A7 parameter SHA256: '+fit['record_sha256']+'\n'
+        if name == 'acceptance_limits.tex':
+            head += '% Record identities: '+json.dumps(comparison_identities,sort_keys=True)+'\n'
+            head += '% '+a.A6_ASSESSMENT_NOTE+'\n'
         head+='% F1 original wheel SHA256: '+old_engine['wheel_sha256']+'\n' if name in ['supplement_fits.tex','supplement_predecessor.tex','acceptance_limits.tex'] else ''
         head+='% F1 predecessor inputs/identity: '+json.dumps(old,sort_keys=True)+'\n' if name in ['supplement_fits.tex','supplement_predecessor.tex','acceptance_limits.tex'] else ''
         head+=''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))
