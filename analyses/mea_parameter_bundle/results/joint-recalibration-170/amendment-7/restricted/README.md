@@ -103,12 +103,7 @@ Every probed vector is phase-clean in the same sense as the endpoint: 73 passed
 **Meaning.** The density miss is a temperature spread, not an offset. With the
 other parameters fixed, a smaller MEAH⁺ size raises every loaded density. At
 5.45 Å the 80 °C rows pass, but the 20–30 °C α 0.39 Hartono rows exceed +2s.
-No σ value alone brings the span (smallest 4.01s at 5.45 Å) inside the 4s window, so
-the Jacobian estimate of about 0.02 Å (fixed-others, row-by-row) does not carry over to the
-whole gate. Passing the gate needs other coordinates to change the temperature
-dependence of the loaded densities, which only a refit can test. Within this fixed
-background, MEAH⁺ sizes down to 5.35 Å show no detected split. Those are three checked
-vectors, not a certified box.
+None of the four evaluated sizes passes all 47 loaded-density limits. The smallest sampled residual span is 4.01s at 5.45 Å, slightly above the 4s gate window. These evaluations do not establish the minimum span between sampled sizes or rule out an untested size that passes. The approved refit tests whether jointly varying the declared coordinates can satisfy all unchanged gates. The three lower-size vectors at 5.45, 5.40 and 5.35 Å show no resolved descent on the 73-point family; they do not certify a continuous interval or the surrounding parameter box.
 
 Charge (stage bound-probe, allowance 180 / 200): 153.51 wall-s / 152.00 CPU-s.
 A7 calls total 614.48 wall-s so far.
