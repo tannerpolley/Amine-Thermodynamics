@@ -1,0 +1,68 @@
+"""NOTE: run at 17:13-17:15 after held-B-start.json was rewritten (17:12:10, k_ij carbamate-MEAH+ = -0.99, SHA cb4096a6); "B" in its JSON is that -0.99 start, not the frozen -1.0 start (f55f17aa) used by jacobian.json and pressure_column.json.
+Disclosed scratch diagnosis (#170 A6), follow-up to pressure_column.json: at start B the 40 C generic-point sigma_min
+falls linearly with T toward ~313.4 K. Scan T for the vle_obs_0186 problem (same declaration, only T replaced) at A
+and B: Engine rank, sigma_min of the raw Jacobian, and sign/log|det| and sigma_min of the Jacobian with the free-
+pressure column multiplied by its seed (pressure in units of the seed). A det sign change marks an exact singular
+temperature of the generic-point Jacobian. At the B crossing, report the scaled right/left singular vectors.
+Run from the checkout root: PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file>"""
+import dataclasses, json, time
+import numpy as np
+import epcsaft
+from epcsaft import equilibrium as eq
+import fit_campaign as f
+import fit_observations as o
+s = o.s
+D = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/held-followups/diagnosis'
+H = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs'
+spec = f.load(f'{H}/held-followups/held-B-information.json')
+A, B = f.load(f'{H}/revision-3/held-start.json'), f.load(f'{H}/held-followups/held-B-start.json')
+packet = s.load_state_packet(o.ROOT / spec['packet_path'])['observations']
+targets = o.indexed([dict(t, state=ob) for ob in packet for t in ob['targets']], 'identity')
+anchors = o.indexed([json.loads(line) for line in (o.ROOT / spec['anchors_path']).open()], 'identity')
+st = targets['vle_obs_0186-pco2']['state']
+clock, out = time.monotonic(), {}
+
+
+def jac(model, problem):
+    c = eq.compile_problem(model, problem); p = c.generic_point()
+    J = np.array(c.jacobian(p)).reshape(len(c.rows), len(p)); k = c.primal_size - 1
+    S = J.copy(); S[:, k] *= p[k]
+    return c, J, S, k
+
+
+def record(c, J, S):
+    sign, logdet = np.linalg.slogdet(S)
+    return dict(rank=c.jacobian_rank, sigma_min=float(np.linalg.svd(J, compute_uv=False)[-1]),
+                scaled_sigma_min=float(np.linalg.svd(S, compute_uv=False)[-1]), scaled_det_sign=int(sign), scaled_log10_det=float(logdet/np.log(10)))
+
+
+for name, mapping in (('A', A), ('B', B)):
+    model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping), thermochemistry=o.thermal.record())
+    base = s._problem_from_request(s.corrected_request(st['request'], s.reaction_values(mapping)), s.anchor_from(anchors[st['identity']]))
+    coarse = {}
+    for T in np.arange(295.15, 391.16, 2.0):  # inside the 293.15-393.15 K correlation domain
+        c, J, S = jac(model, dataclasses.replace(base, T=float(T)))[:3]
+        coarse[f'{T:.2f}'] = record(c, J, S)
+    fine = {}
+    for T in np.arange(312.65, 314.16, 0.05):
+        c, J, S = jac(model, dataclasses.replace(base, T=float(T)))[:3]
+        fine[f'{T:.2f}'] = record(c, J, S)
+    out[name] = dict(coarse=coarse, fine=fine,
+                     coarse_sign_changes=[(a, b) for a, b in zip(coarse, list(coarse)[1:]) if coarse[a]['scaled_det_sign'] != coarse[b]['scaled_det_sign']],
+                     fine_sign_changes=[(a, b) for a, b in zip(fine, list(fine)[1:]) if fine[a]['scaled_det_sign'] != fine[b]['scaled_det_sign']],
+                     fine_rank_19=[T for T, r in fine.items() if r['rank'] < 20])
+    if name == 'B' and out[name]['fine_sign_changes']:
+        lo, hi = map(float, out[name]['fine_sign_changes'][0])
+        for _ in range(40):  # bisect the scaled determinant sign
+            mid = 0.5*(lo+hi); c, J, S = jac(model, dataclasses.replace(base, T=mid))[:3]
+            if np.linalg.slogdet(S)[0] == fine[out[name]['fine_sign_changes'][0][0]]['scaled_det_sign']: lo = mid
+            else: hi = mid
+        c, J, S, k = jac(model, dataclasses.replace(base, T=mid)); U, sv, Vt = np.linalg.svd(S); rows = list(c.rows)
+        out[name]['singular_T_K'] = mid
+        out[name]['at_singular_T'] = dict(record(c, J, S), scaled_singular=[f'{x:.3e}' for x in sv[-4:]],
+            right_vector={j: round(float(v), 4) for j, v in enumerate(Vt[-1]) if abs(v) > 0.02},
+            left_vector={f'{r.kind.name}[{r.phase},{r.index}]': round(float(u), 4) for r, u in zip(rows, U[:, -1]) if abs(u) > 0.02},
+            columns='phase0 x 0-8 (support order), amount 9, log-volume 10; phase1 x 11-13, log-volume 14; P 15; lambda 16-19')
+    print(name, {k: out[name][k] for k in ('coarse_sign_changes', 'fine_sign_changes', 'fine_rank_19')}, out[name].get('singular_T_K'), flush=True)
+out['wall_s'] = round(time.monotonic()-clock, 2)
+json.dump(out, open(f'{D}/temperature_scan.json', 'w'), indent=1)

@@ -1,0 +1,30 @@
+"""Disclosed scratch diagnosis (#170 A6): bisect the held-B start's rows to the observation(s) whose evaluation reports
+rank-deficient declared equations. One process builds the rows once and evaluates slices (zero optimizer).
+Run from the checkout root: PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file>"""
+import json, time
+import fit_campaign as f
+import fit_observations as o
+H = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs'
+spec, m = f.load(f'{H}/held-followups/held-B-information.json'), f.load(f'{H}/held-followups/held-B-start.json')
+params, rows = o.stage6_rows(spec, m)
+coords = f.stage6_coordinates(spec, params, m)
+def fails(idx):
+    try:
+        o.reg.differentiate(params, coords, [rows[i][1] for i in idx], optimizer=[0.]*len(coords), thermochemistry=o.thermal.record())
+        return None
+    except Exception as e:
+        return f'{type(e).__name__}: {e}'
+clock, log = time.monotonic(), []
+todo, found = [list(range(len(rows)))], []
+while todo:
+    idx = todo.pop()
+    err = fails(idx)
+    log.append(dict(n=len(idx), first=rows[idx[0]][0]['id'], error=err))
+    if err is None:
+        continue
+    if len(idx) == 1:
+        found.append(dict(id=rows[idx[0]][0]['id'], row={k: v for k, v in rows[idx[0]][0].items() if k in ('quantity', 'T_K', 'P_Pa', 'feed', 'analytical_feed', 'state_id', 'request_id', 'observed')}, error=err))
+        continue
+    h = len(idx)//2
+    todo += [idx[:h], idx[h:]]
+print(json.dumps(dict(rows=len(rows), failing=found, evaluations=len(log), wall_s=round(time.monotonic()-clock, 1)), indent=1))

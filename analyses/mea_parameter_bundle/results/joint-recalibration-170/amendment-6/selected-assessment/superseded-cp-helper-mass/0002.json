@@ -1,0 +1,79 @@
+{
+  "input": {
+    "P_Pa": 101325.0,
+    "T_K": 318.15,
+    "analytical_feed": {
+      "carbon-dioxide": 0.358,
+      "monoethanolamine": 1.0,
+      "water": 7.929776437398854
+    },
+    "feed_amount_mol": 9.287776437398854,
+    "feed_mass_kg": 0.21969272285714286,
+    "id": "Hilliard2008_Cp_318.15_0.358",
+    "observed": 79.65472136500112,
+    "proxy": 1e-06,
+    "quantity": "equilibrium_isobaric_heat_capacity",
+    "scale": 1.5930944273000225,
+    "source_loading": 0.358,
+    "source_locator": "Appendix G.2 p.937/PDF994",
+    "source_molality_mol_kg_water": 7.0,
+    "source_observed_kJ_kg_K": 3.3675,
+    "weight": 1.0
+  },
+  "kind": "cp",
+  "result": {
+    "T_K": 318.15,
+    "deviation_percent": 2.5734070491460814,
+    "enthalpy_ladder": [
+      {
+        "cp_kJ_kg_K": 3.4541595487352232,
+        "minus": {
+          "H_J": -2487388.8053937117,
+          "T_K": 318.04999999999995,
+          "iterations": 13,
+          "mass_kg": 0.21969564385714285,
+          "max_abs_raw_residual": 4.547473508864641e-13
+        },
+        "plus": {
+          "H_J": -2487237.0326325027,
+          "T_K": 318.25,
+          "iterations": 13,
+          "mass_kg": 0.21969564385714285,
+          "max_abs_raw_residual": 3.979039320256561e-13
+        },
+        "relative_error": 1.921023853440891e-08,
+        "step_K": 0.1
+      },
+      {
+        "cp_kJ_kg_K": 3.4541594989252222,
+        "minus": {
+          "H_J": -2487350.860667952,
+          "T_K": 318.09999999999997,
+          "iterations": 13,
+          "mass_kg": 0.21969564385714285,
+          "max_abs_raw_residual": 4.547473508864641e-13
+        },
+        "plus": {
+          "H_J": -2487274.9742884417,
+          "T_K": 318.2,
+          "iterations": 13,
+          "mass_kg": 0.21969564385714285,
+          "max_abs_raw_residual": 4.547473508864641e-13
+        },
+        "relative_error": 4.789943214719698e-09,
+        "step_K": 0.05
+      }
+    ],
+    "equilibrium_cp_kJ_kg_K": 3.4541594823799944,
+    "frozen_cp_kJ_kg_K": 3.43298166993835,
+    "id": "Hilliard2008_Cp_318.15_0.358",
+    "loading": 0.358,
+    "model_loading": 0.358,
+    "observed_kJ_kg_K": 3.3675,
+    "parameter_sha256": "ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7",
+    "proxy": 1e-06,
+    "resolve_passed": true,
+    "source_locator": "Appendix G.2 p.937/PDF994"
+  },
+  "status": "Available"
+}

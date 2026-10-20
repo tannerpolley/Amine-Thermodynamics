@@ -1,0 +1,155 @@
+"""Retain and summarize existing diagnosis numbers; no Engine import or solve."""
+import collections
+import csv
+import hashlib
+import json
+from pathlib import Path
+import shutil
+import subprocess
+
+base=Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6')
+out=base/'selected-checks/phase-diagnosis'
+original=base/'selected-checks/phase-family'
+species=['carbon-dioxide','monoethanolamine','water','protonated-monoethanolamine','carbamate-anion',
+         'bicarbonate-anion','carbonate-anion','hydronium-cation','hydroxide-anion']
+short=['CO2','MEA','water','MEAH+','carbamate','bicarbonate','carbonate','H3O+','OH-']
+def load(p):return json.loads(p.read_text())
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def table(path,rows):
+    with path.open('w',newline='') as h:
+        w=csv.DictWriter(h,fieldnames=list(dict.fromkeys(k for r in rows for k in r)))
+        w.writeheader();w.writerows(rows)
+
+roots={(r['index'],r['trial_index']):r for r in load(out/'descending-trial-roots.json')}
+desc=[]; trials=[]; points=[]
+for index in range(73):
+    p=original/f'point-{index}.json';d=load(p);points.append(d)
+    for ri,r in enumerate(d['stability']):
+        for ti,t in enumerate(r['trials']):
+            tr=dict(index=index,trial_index=ti,source=str(p),phase_kind=t['phase']['kind'],seed=t['seed'],
+                evidence=t['evidence'],optimizer_success=t['optimizer']['success'],message=t['message'],
+                tpd_over_rt=t['quantities'].get('tpd_over_rt'),
+                descent_error_estimate_over_rt=t['quantities'].get('descent_error_estimate_over_rt'))
+            trials.append(tr)
+            if not t['resolved_descent']:continue
+            donor=d['final']['phases'][t['donor']]
+            native=roots[(index,ti)]
+            row=dict(index=index,trial_index=ti,temperature_K=d['temperature_K'],loading=d['loading'],
+                pressure_Pa=d['pressure_Pa'],phase_kind=t['phase']['kind'],seed=t['seed'],donor=t['donor'],
+                molar_density_mol_m3=1/t['quantities']['volume_m3_per_mol'],
+                density_branch=native['liquid']['density_branch'],stable_root_count=native['liquid']['stable_root_count'],
+                pressure_density_derivative=native['liquid']['pressure_density_derivative'],
+                enriched_species=';'.join(species[i] for i,x in enumerate(t['composition']) if x>donor['mole_fractions'][i]),
+                **{k:t['quantities'][k] for k in ['tpd_over_rt','descent_error_estimate_over_rt','donor_slope_over_rt',
+                    'split_delta_g_over_rt','split_error_estimate_over_rt','split_beta_mol']},
+                **{'x_'+s:x for s,x in zip(species,t['composition'],strict=True)},
+                **{'donor_x_'+s:x for s,x in zip(species,donor['mole_fractions'],strict=True)})
+            desc.append(row)
+assert len(desc)==29 and len({r['index'] for r in desc})==12
+table(out/'descending-trials.csv',desc);table(out/'all-selected-trials.csv',trials)
+(out/'descending-trials.json').write_text(json.dumps(desc,indent=2)+'\n')
+families=[]
+for name,folder,record in [
+    ('selected Held',original,base/'joint-mea-water/held/fit/usable-budget-endpoint.json'),
+    ('tied joint',out/'tied-family',base/'joint-mea-water/tied/fit/usable-budget-endpoint.json'),
+    ('A4 larger-dV control',out/'a4-family',base.parent/'amendment-4/matched-larger-dV/control/usable-budget-endpoint.json'),
+    ('exact fallback 66ff7715',out/'fallback-family',Path('analyses/mea_parameter_bundle/results/heat-160/A-parameters.json')),
+    ('declaration successor 7b0b4bb5',out/'successor-family',Path('analyses/mea_parameter_bundle/results/selected-current-best-parameters.json'))]:
+    rr=[load(folder/f'point-{i}.json') for i in range(73)]
+    counts=load(folder/'summary.json')['counts'];assert sum(counts.values())==73
+    families.append(dict(name=name,record=str(record),document_sha256=sha(record),**counts,
+        resolved_descent_points=sum(any(t['resolved_descent'] for r in d.get('stability',[]) for t in r['trials']) for d in rr),
+        final_solve_successes=sum(d.get('final',{}).get('success',False) for d in rr),
+        input_failures=sum('failure' in d for d in rr),summary=str(folder/'summary.json')))
+table(out/'family-comparison.csv',families)
+probes=[]
+for p in sorted((out/'parameter-probes').glob('*/point.json')):
+    d=load(p);tt=[t for r in d.get('stability',[]) for t in r['trials'] if t['resolved_descent']]
+    probes.append(dict(index=d['index'],**d['diagnostic_change'],classification=d['classification'],
+        resolved_descents=len(tt),minimum_resolved_tpd_over_rt=min((t['quantities']['tpd_over_rt'] for t in tt),default=None),source=str(p)))
+table(out/'parameter-probes.csv',probes)
+calls=load(out/'calls.json');assert all(c['status']=='complete' for c in calls)
+wall=sum(c['wall_s'] for c in calls);cpu=sum(c['whole_command_user_s']+c['whole_command_system_s'] for c in calls)
+assert wall<=600 and cpu<=1000
+for name in ['family.py.txt','probes.py.txt','run.py.txt','report.py.txt']:
+    shutil.copyfile(Path('tmp/phase-diagnosis')/name,out/name)
+for name in ['historical-family-summary.csv','historical-provenance.json','historical-probe.py.txt',
+             'historical-recover.py.txt','historical-diagnose.py.txt','phase_stability.cpp.txt']:
+    shutil.copyfile(Path('tmp/phase-diagnosis')/name,out/name)
+inputs=[Path('AGENTS.md'),Path('docs/scientific/README.md'),Path('docs/scientific/CONTEXT.md'),
+        Path('tmp/joint-design/amendment-6-paper-candidate.md'),
+        Path('analyses/mea_parameter_bundle/scripts/final_evidence.py'),
+        Path('analyses/mea_parameter_bundle/scripts/shared_evaluation.py'),
+        base/'inputs/revision-3/phase/family-points.txt']+[Path(f['record']) for f in families]
+provenance=dict(inputs={str(p):sha(p) for p in inputs},engine=load(out/'engine-identity.json'),
+    engine_source_commit='21e761c318c2ac5b555a245365c844d38a93e4cb',
+    archived_screen_tag='archive/172-screening-probe-schreckenberg-permittivity',
+    archived_screen_commit=subprocess.check_output(['git','rev-parse','archive/172-screening-probe-schreckenberg-permittivity'],text=True).strip(),
+    measured_engine_command_wall_s=wall,measured_engine_command_cpu_s=cpu,
+    drivers={name:sha(out/name) for name in ['family.py.txt','probes.py.txt','run.py.txt','report.py.txt']})
+(out/'provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+
+lines=[
+'**Cause: both a model-predicted liquid split and a method limitation are present.** The selected Held endpoint predicts additional dense liquid phases at the 12 failed family points. All 29 retained descending trials have a finite, conserved split with a Gibbs decrease larger than its estimated numerical error. New split-seeded equilibrium calculations converge to two liquids at points 63 and 70 and two liquids plus vapor at point 21. Separately, zero passes is shared by the tied endpoint and A4 control: the A4 control has no resolved descent but still yields 73 unresolved points. The current classifier requires every trial optimizer to succeed and rejects near-zero negative tangent-plane distances classified as indeterminate. These two causes must remain separate.',
+'This is numerical verification of predictions of the specified thermodynamic models. No experimental phase-separation observations were evaluated, so it is not physical validation of liquid–liquid separation in real aqueous MEA. No parameter was fitted, selected, adopted or repaired.',
+'**Basis and identity.** The 73 states use feed 9.7292821 mol MEA, 76.9751925 mol water and loading × MEA mol CO2, with the nine-species liquid and neutral CO2/MEA/water vapor supports. Temperature, pressure and loading are the unchanged design points; the row tolerance is 1e-10. The exact points SHA-256 is `6e1231d9506fd6dd9e965a64120ff952cebf1c4778da5d66cfb0f888e8b7f44b`. Every Engine call uses the requested pinned interpreter and wheel, `nice -n 10` and one BLAS thread. See [engine-identity.json](engine-identity.json), [provenance.json](provenance.json), [calls.json](calls.json) and the disclosed `*.py.txt` drivers.',
+'The selected parameter document is SHA-256 `ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7`. Its runtime mapping SHA-256 is `3018fe9aaeddab6271299d22166fa5ddce2449625a3833ec6f417d188678894d`, matching the supplied family summary. The exact document and native endpoint both give bicarbonate–water k_ij = **0.6531773314415551**, rather than +1.0. Carbamate–MEAH+ k_ij = -1.0 and both relevant Born diameters = 5.0 Å. Diagnostic changes below start from that actual document.',
+'**1. Same-driver comparison.** Each new family calls unchanged `final_evidence.main(documents=…, phase_points=…)`; the original selected family is reused by exact mapping identity. Counts and document hashes are in [family-comparison.csv](family-comparison.csv).',
+'| Record | Passed two-phase | Passed single-liquid | Unresolved | Failed | Points with resolved descent | Final solve successes |',
+'|---|---:|---:|---:|---:|---:|---:|']
+for f in families:
+    lines.append(f"| {f['name']} | {f['passed-two-phase']} | {f['passed-single-liquid']} | {f['unresolved']} | {f['failed']} | {f['resolved_descent_points']} | {f['final_solve_successes']} |")
+lines += [
+'The exact fallback document `results/heat-160/A-parameters.json`, SHA-256 `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`, has 73 input-construction failures: `missing cross association or no_cross_association: carbon-dioxide/monoethanolamine`. The classifier calls them failed, but they establish no physical behavior. Its existing declaration-only successor `selected-current-best-parameters.json` (SHA-256 `7b0b4bb5669c1b2061fd7ec26e5fb4c8491005bdb5ba8f9e22e4c0b0b4b84308`) was therefore also tested without editing either document. Its 64 failures comprise 48 points with resolved descent and 16 without an accepted final solve; nine other points are unresolved. It is not a passing family comparison.',
+'The A4 control has 73 accepted final solves and no resolved descent; nevertheless 72 points have a failed trial optimizer and 46 have an indeterminate trial (overlapping sets). The selected Held record has a failed trial optimizer at every point. Thus zero passes is **not specific to the selected vector**, and it cannot by itself measure the severity of a physical instability. These checks do not prove that every possible parameter vector must have zero passes.',
+'**Historical #172 counts are different evidence.** The archived `permittivity-screen-172/flash-family-summary.csv` reports successful two-phase solves, not classifications under the current stability rule. Current-record baseline: 46/73 cold, 53/73 after bounded starts. All six Schreckenberg variants: 65–69/73 cold, 69/73 after starts. Engine case-7 baseline: 69/73 cold, 73/73 after starts; its six variants: 63–68/73 cold, 72/73 after starts. For the six current-record variants, the four remaining points were 63 and 70–72, above their own bubble pressure, with converged single-liquid diagnoses. They were not promoted to stability-qualified passes. No historical passed/unresolved/failed classification counts exist in that screen.',
+'The archived `permittivity_probe.family_job` uses `accepted = r.success and r.requested_tolerance_met`; the recovery drivers retain the same solve-based meaning. They do not call `stability_test`. The archived wheel is commit `81d1e38a3f04f60834719f758f35a079974ccd57`, SHA-256 `3fd8140211aac1fb1e82807f066cdf507be733b36c6c27bf41377e7bb939aa86`; the current pinned wheel is commit `21e761c3`, SHA-256 `d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357`. Engine `phase_stability.cpp` also differs (49 added/34 removed lines): changes include support resolution, density-domain admission for charged trials with density-independent permittivity, root anchoring, and declared-root evaluation of finite splits. Consequently neither the classifier nor the Engine revision is identical. The archived solve counts cannot be compared to current stability passes as though only the parameter vector changed. The copied [historical-family-summary.csv](historical-family-summary.csv), [historical-provenance.json](historical-provenance.json) and disclosed historical drivers retain the evidence.',
+'**2. All 29 resolved descending splits.** [descending-trials.csv](descending-trials.csv) and [descending-trials.json](descending-trials.json) retain all nine trial mole fractions, all nine donor fractions, every enriched species, tangent-plane distance, donor slope, finite-split Gibbs difference, both numerical-error estimates, seed and source point. Trial indices are zero based. The following table gives every resolved trial, including repeated seeds that reached the same composition. MEA/water/MEAH+/carbamate/bicarbonate entries are mole fractions; remaining trace species are retained at full precision in those files.',
+'| Point / trial / seed | x(MEA) | x(water) | x(MEAH+) | x(carbamate) | x(bicarbonate) | t/RT | Estimated error in slope/RT | Finite ΔG/RT | Estimated error in ΔG/RT |',
+'|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
+for r in desc:
+    x=[r['x_'+s] for s in species]
+    lines.append(f"| {r['index']} / {r['trial_index']} / {r['seed']} | {x[1]:.6g} | {x[2]:.6g} | {x[3]:.6g} | {x[4]:.6g} | {x[5]:.6g} | {r['tpd_over_rt']:.6g} | {r['descent_error_estimate_over_rt']:.3g} | {r['split_delta_g_over_rt']:.6g} | {r['split_error_estimate_over_rt']:.3g} |")
+lines += [
+'All 29 trials were declared liquid and draw material from the existing liquid, not from the neutral-only vapor. Trial densities span 22220.94–51242.16 mol/m³. Independent native liquid/vapor root requests verify that 21 trials lie on the native liquid branch; the other eight have one sole dense root returned by both requests, labelled `Unspecified` by the Engine. Every liquid-request root matches the retained trial density to relative difference ≤7.4e-15 and has positive pressure-density derivative (minimum 63989.1 Pa m³/mol). They are dense-liquid splits, not the vapor-like trace-ion trials responsible for optimizer failure. See [descending-trial-roots.json](descending-trial-roots.json). No arbitrary density cutoff was used to select a branch.',
+'Both water-rich and ion-rich descents occur. For example, point 21 trial 3 enriches MEAH+ from 0.0465143 to 0.1180714, carbamate from 0.0457042 to 0.1154095 and bicarbonate from 0.000799537 to 0.00265833 while water falls from 0.5600454 to 0.3849788. Other trials, such as point 63 trials 2/3, move toward a water-rich liquid. Species enrichment is always compared with that trial’s actual donor, not with the analytical feed.',
+'The weakest finite decrease among the 29 still exceeds its estimated error by more than 1.3e5. The estimates quantify Engine arithmetic, association, feasibility and standard-term contributions; they are not parameter confidence intervals or measurement uncertainties.',
+'**Split-seeded equilibrium calculations.** The native finite-split coordinates supply physical compositions, amounts and packing fractions to `solve_equilibrium_starts`, allowing 400 iterations per attempt and retaining the original row tolerance. [split-seeded-63.json](split-seeded-63.json), [split-seeded-70.json](split-seeded-70.json) and [split-seeded-21.json](split-seeded-21.json) retain full returned states, all attempts and their stability reports.',
+'| Point; conditions | New phase amounts (mol) | New phase densities (mol/m³) | ΔG/RT versus original | ΔG (J for the stated feed) | Maximum classified row residual |',
+'|---|---|---|---:|---:|---:|']
+R=8.31446261815324
+for idx in [63,70,21]:
+    rs=load(out/f'split-seeded-{idx}.json');d=next(r for r in rs if r.get('result',{}).get('success'));r=d['result'];old=points[idx]
+    lines.append(f"| {idx}; {old['temperature_K']} K, α={old['loading']:.8g}, {old['pressure_Pa']:.6g} Pa | "+', '.join(f'{x:.8g}' for x in r['amounts'])+' | '+', '.join(f'{x:.8g}' for x in r['molar_densities'])+f" | {d['delta_G_over_RT_vs_original']:.12g} | {d['delta_G_over_RT_vs_original']*R*old['temperature_K']:.8g} | {r['convergence']['residual']:.3g} |")
+lines += [
+'Points 63 and 70 compare directly with their single-liquid state. Point 21 compares with its original liquid–vapor state; its new liquid–liquid–vapor state is also 15.7928158 in native G/RT below the separately solved single liquid. At point 70 two distinct descending seeds converge to the same two-liquid state, agreeing in G/RT within 3.64e-12. Water-rich/ion-rich liquid compositions at point 70 include x(water)=0.97582695 versus 0.58953876 and x(MEAH+)=0.00731709 versus 0.19662685. All three accepted new states have positive phase amounts, positive pressure-density derivatives and positive reported reduced-Hessian minima.',
+'The new states have no resolved descent in the same finite trial family, but still contain a failed trace-ion trial optimizer and, at points 63/70, near-zero indeterminate trials. They establish a lower-Gibbs admissible phase-separated state, not certified global minima. Alternative starts at 63 and 21 lose a phase and are retained as unsuccessful attempts. The first six split attempts passed primal-only coordinates where the declared-start interface requires all unknowns; they returned `initialization: invalid declared seed` before solving. Those non-results remain in `split-*.json` and `split-solves-time.json`; the corrected physical starts are the source of the numerical claims.',
+'**3. One-parameter diagnostic probes.** Every probe re-solves the original family state under the changed mapping and runs the same declared nine-species-liquid/neutral-vapor stability search. Only the named coefficient is changed. Values and source paths are in [parameter-probes.csv](parameter-probes.csv); complete diagnostic inputs remain beside each point. These are sensitivity probes, not candidate changes.',
+'| Changed parameter | Before → after | Point 21: resolved trials / lowest t/RT | Point 70: resolved trials / lowest t/RT |',
+'|---|---|---|---|']
+for identity,after in [("pair/bicarbonate-anion/water/k_ij",.4531773314415551),("pair/bicarbonate-anion/water/k_ij",.8),
+    ("pair/carbamate-anion/protonated-monoethanolamine/k_ij",-.8),
+    ("component/protonated-monoethanolamine/born_diameter",4.5),("component/carbamate-anion/born_diameter",4.5)]:
+    rr=[next(r for r in probes if r['identity']==identity and r['after']==after and r['index']==idx) for idx in [21,70]]
+    cells=[f"{r['resolved_descents']} / {r['minimum_resolved_tpd_over_rt']:.9g}" if r['minimum_resolved_tpd_over_rt'] is not None else '0 / no resolved descent; unresolved' for r in rr]
+    lines.append(f"| `{identity}` | {rr[0]['before']:.9g} → {after:.9g} | {cells[0]} | {cells[1]} |")
+lines += [
+'For comparison the original minima are -0.00515385858 at point 21 and -0.128872208 at point 70. Weakening the extreme carbamate–MEAH+ attraction to k_ij=-0.8 removes the detected point-21 descent while leaving the family point unresolved because the trace-ion optimizer still fails. It reduces but does not remove the point-70 descent. Each Born-diameter reduction weakens the point-21 descent by about 430-fold, without removing the finite descent. Lowering bicarbonate–water k_ij by 0.2 reduces the magnitude at both points; raising it to 0.8 worsens the strongest descent at both. The endpoint is not at +1.0, so the proposed “1.0 → 0.8” interpretation does not apply. No single tested coordinate explains or removes all these instabilities. The finite probes do not identify a unique mechanism or a useful fitted replacement.',
+'**4. Why the unresolved trials remain unresolved.** Across the selected family, 155 converged trials and six failed-optimizer trials are `indeterminate`. Every one has t/RT between -8.5265e-14 and -1.4211e-14, whereas the corresponding slope-error estimates span 2.5761e-12–9.1234e-9. The signed distance is negative but the descent is not numerically resolved. These 161 outcomes are distinct from the 29 well-resolved finite splits. They arise at 43 of the 73 points.',
+'All 73 failed optimizers use the nine-species liquid support and seed `near-pure-0` (99% neutral CO2 initially). Of these, 31 stall, 31 fail the local-curvature check inside its rounding band, and 11 have negative equilibrated curvature outside that band. Their returned/reconstructed compositions approach the existing neutral vapor: for two-phase parent states the largest composition L1 difference is 2.96e-7. Their density range is 0.9270–26.4074 mol/m³, and the smallest supported mole fraction ranges from 9.51e-238 to 1.00e-8. Thus this particular nominal-liquid trial moves to a vapor-like state with a formally positive trace-ion support. Trial failure is not a failed parent equilibrium solve.',
+'Examples: point 38 stalls at residual 5.33565e-6 after 26 iterations (requested 1e-10). Point 52 has residual 4.67203e-12 but equilibrated minimum -1.52219e-7 within rounding band 2.61655e-7. Point 0 reports minimum -2.69969e-7 outside band 1.44614e-7, with a trace fraction 5.58e-231. The latter must remain a failed local-minimum certification; this diagnosis does not prove its negative curvature is a rounding artifact. [all-selected-trials.csv](all-selected-trials.csv) gives every exact message and source index.',
+'Engine source at `21e761c3`, copied to [phase_stability.cpp.txt](phase_stability.cpp.txt), explains the classification: lines 432–462 generate the neutral-base, near-pure-neutral and ideal-gas seeds; lines 499–543 retain nonfatal optimizer points and reconstruct positive, charge-balanced compositions. Line 543 enters `donor_descent` on any strictly negative t/RT. Lines 349–350 assign `indeterminate` before checking whether the donor slope exceeds its error estimate. Lines 550–556 count indeterminate trials in the report message. `completed=true` therefore means that the scheduled search finished; it does not certify every trial. `final_evidence.py:405–431` additionally rejects any failed optimizer even when its evidence is `no_resolved_descent`.',
+'Engine `gibbs_minimizer.cpp:46–91` explicitly treats trace log-composition curvature through a scaled Hessian and a computed rounding band. Lines 1296–1312 reject a curvature certificate that is nonpositive or unresolved. The observed trace-support pathology and near-zero-distance cancellation are therefore direct method limitations; attributing all 11 resolved negative-curvature certificates to floating-point error would require further evidence.',
+'**Declared settings probe.** At point 0, replaying the accepted coordinates and rerunning the default stability search removes the tiny-negative indeterminate labels through a roundoff-level change, but the same `near-pure-0` optimizer still fails. Declaring liquid packing_guess=0.4 or trial_budget=100 gives exactly the same nine trials, work counts and values as that replayed default. The point is still unresolved under the unchanged classifier. See [settings-candidate-0.json](settings-candidate-0.json) and the three `settings-0-*.json` files. This demonstrates sign sensitivity of near-zero distances without resolving the local-minimum requirement.',
+'`StabilityOptions` exposes supplied-trial evaluation, trial supports, declaration/trial budgets and standard-term uncertainty, but no per-trial optimizer iteration limit. `phase_stability.cpp:478–483` honors packing_guess only for supplied-trial evaluation; ordinary optimization regenerates the density root. The trial compiler (`request_compile.cpp:1347–1384`) makes its own problem and fixes the trial row tolerance. A larger trial budget cannot help when the default is unlimited and all nine trials already ran. Supplied-trial evaluation returns `evaluated`/`evaluated_without_positive_donor` and does not run a successful optimizer, so it cannot earn a pass under the existing classifier. Removing ionic support, omitting the failed seed or changing the near-zero rule would change the declared method; none was done. No tested declared setting resolves this point, and no assertion is made that every conceivable numerical change has been exhausted.',
+'**Scientific meaning, uncertainty and owner options.** The evidence establishes unintended phase separation in this selected model for the stated family, with numerical error estimates far below the observed energy changes. It does not establish measured liquid–liquid separation, unique physical ion parameters, or global stability of the new states. The independent gas-root falsifier’s pass addresses a different failure mechanism and does not exclude these dense-liquid splits. The owner can separate a request to the Engine owner about near-zero/trace-support certification from a scientific decision about the selected model’s dense-liquid instability; keep A4 as a no-resolved-descent comparison with unresolved qualification; or assess the existing paper successor within its demonstrated 48 descent points and 16 unavailable final states. No parameter adoption, classifier change, model correction or new fitting study is selected here.',
+'For the general thermodynamic interpretation, Pereira et al. (2012), §3.1, distinguishes finding a negative tangent-plane distance from proving stability; §3.3.3 discusses trace components; §3.4 and §4 discuss local solutions and assessment; §6 gives the scope and limitations of its SRK/SAFT examples. The actual source companion `Pereira2012--Y2J6BEAZ.md` and its current Zotero source were read and verified against indexed SHA-256 `f5cb0f043b6e9b9f19ac25f07a9694e7cd3eb985146fafaf7a0599619152c543`. It is an equilibrium-method analogy, not evidence of MEA phase behavior or the source of a new tolerance. The numerical claims above come from the pinned Engine and retained results.',
+f'**Measured compute.** This diagnosis used {wall:.2f} s summed whole-command wall time and {cpu:.2f} CPU-s (user + system), including unsuccessful initialization attempts, imports and wheel verification; limits were 600 s / 1,000 CPU-s. The supplied selected-family run was reused, not charged as a new calculation (its existing time is 34.47 s). No timed command was killed or exceeded its allowance. [calls.json](calls.json) owns all invocation timings; preparation/read-only inspection and report reduction are outside the Engine-compute sum.',
+'All new files are confined to the authorized phase-diagnosis directory and `tmp/phase-diagnosis/`. Campaign scripts, fits, source records, Git index/branches and the research notebook were not changed. This is an exploratory diagnosis for the owner, without a new promotion or independent delivered review.'
+]
+rendered=[]
+for i,line in enumerate(lines):
+    if i and not (line.startswith('|') and lines[i-1].startswith('|')):rendered.append('')
+    rendered.append(line)
+(out/'report.md').write_text('\n'.join(rendered)+'\n')
+print(json.dumps(dict(descending_trials=len(desc),failed_points=12,wall_s=wall,cpu_s=cpu,report=str(out/'report.md')),indent=2))

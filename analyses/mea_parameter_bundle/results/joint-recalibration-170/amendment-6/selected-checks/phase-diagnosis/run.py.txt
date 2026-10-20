@@ -1,0 +1,36 @@
+"""Budgeted subprocess launcher. No Engine imports here; every call is timed."""
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+out = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis')
+out.mkdir(parents=True,exist_ok=True)
+ledger = out/'calls.json'
+calls = json.loads(ledger.read_text()) if ledger.exists() else []
+used_wall = sum(c.get('wall_s',0) for c in calls)
+used_cpu = sum(c.get('whole_command_user_s',0)+c.get('whole_command_system_s',0) for c in calls)
+name, limit, script, *args = sys.argv[1:]
+limit = min(float(limit), 590-used_wall, 990-used_cpu)
+assert limit > 0, (used_wall,used_cpu)
+env = dict(os.environ, PYTHONPATH='src:analyses/mea_parameter_bundle/scripts',
+           PYTHONDONTWRITEBYTECODE='1', OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1',
+           TMPDIR=str(Path('tmp/phase-diagnosis').resolve()), MPLCONFIGDIR=str(Path('tmp/phase-diagnosis/mpl').resolve()))
+timing = out/(name+'-time.json')
+cmd = ['/usr/bin/time','-f','{"whole_command_user_s":%U,"whole_command_system_s":%S,"wall_s":%e}',
+       '-o',str(timing),'timeout','--signal=TERM','--kill-after=2',str(limit),
+       'nice','-n','10','/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python',script,*args]
+row = {'name':name,'command':cmd,'timeout_s':limit,'status':'running'}
+calls.append(row)
+ledger.write_text(json.dumps(calls,indent=2)+'\n')
+with (out/(name+'-stdout.txt')).open('w') as stdout, (out/(name+'-stderr.txt')).open('w') as stderr:
+    result = subprocess.run(cmd,env=env,stdout=stdout,stderr=stderr)
+row.update(status='complete',exit_code=result.returncode)
+if timing.exists():
+    row.update(json.loads(timing.read_text().splitlines()[-1]))
+ledger.write_text(json.dumps(calls,indent=2)+'\n')
+print(json.dumps(row),flush=True)
+print((out/(name+'-stdout.txt')).read_text()[-4000:],flush=True)
+print((out/(name+'-stderr.txt')).read_text()[-2000:],flush=True)

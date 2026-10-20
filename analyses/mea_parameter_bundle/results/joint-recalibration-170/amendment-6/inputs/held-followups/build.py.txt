@@ -1,0 +1,354 @@
+"""Disclosed declaration preparation for #170 amendment 6; no fit or solve.
+
+Run from the checkout root using the pinned environment and
+PYTHONPATH=src:analyses/mea_parameter_bundle/scripts. With no arguments, write
+B/smaller-A declarations and this directory's README. For the later sensitivity:
+  python <this file> x3 <selected usable-budget-endpoint.json> [output directory]
+The endpoint must have its own chemistry-coordinates.json beside it. A scratch
+output directory under tmp/ permits a dry run without declaring a selected fit.
+"""
+import copy
+import csv
+import hashlib
+import json
+import math
+from pathlib import Path
+import subprocess
+import sys
+
+import fit_campaign as f
+import fit_observations as o
+
+A6 = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6')
+OUT, BASE = A6/'inputs/held-followups', A6/'inputs/joint-mea-water'
+REFERENCE = A6/'inputs/revision-3/held-start.json'
+FROZEN_B = Path('analyses/mea_parameter_bundle/data/input/fit-campaigns/frozen-172/larger-dV/F1-B/start-parameters.json')
+SMALLER_A = A6.parent/'amendment-4/matched-smaller-dV/control-start-parameters.json'
+HARTONO = Path('data/reference/MEA/observations/density_viscosity/Hartono_2014_loaded_density.csv')
+RECEIPT = 'analyses/mea_parameter_bundle/results/reaction-temperature-fit/candidate-receipt.json'
+RECEIPT_COMMIT = 'c369705'
+KIJ_B, START_B_KIJ = 'pair/carbamate-anion/protonated-monoethanolamine/k_ij', -0.99
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def dump(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2, allow_nan=False)+'\n')
+    return sha(path)
+
+
+def changes(before, after):
+    a, b = o.s.parameter_values(before), o.s.parameter_values(after)
+    assert a.keys() == b.keys()
+    return [(i, a[i], b[i]) for i in sorted(a) if a[i] != b[i]]
+
+
+def held_sizes(mapping, spec):
+    values = o.s.parameter_values(mapping)
+    return o.s.with_parameter_values(mapping, {
+        f'component/{ion}/{family}': factor*values[f'component/{ion}/segment_diameter']
+        for ion in spec['ion_ids']
+        for family, factor in [('debye_huckel_diameter', 1.), ('packing_diameter', .88)]})
+
+
+def rebase(spec, totals):
+    """Same physical chemistry box as start A for a start carrying inherited R2/R5 totals (parent, #170 §0b
+    "Rebase R2/R5 increments/bounds to the same total-shift box"). Enthalpy-shift increments are bounded so the total
+    shift stays in the declared interval, and the stored-R5 a_k bounds move by the inherited R5 contribution so the
+    unshifted coefficient stays in [2400, 3000] K (fit_campaign.py:620-624 convention)."""
+    dk = totals['R5']/(o.thermal.R*math.log(10.))
+    for c in spec['information_coordinates']:
+        if c.get('enthalpy_shift'):
+            c['bounds'] = [b-totals[c['reaction']] for b in c['bounds']]
+        elif c['identity'] == 'reaction:R5:correlation:a_k':
+            c['bounds'] = [b+dk for b in c['bounds']]
+    return spec
+
+
+def declarations(form, identity, mapping, totals, purpose, output=OUT):
+    start_path = output/f'{form}-start.json'
+    start_sha = dump(start_path, mapping)
+    specs = []
+    for kind in ('information', 'fit'):
+        spec = rebase(f.load(BASE/f'held-{kind}.json'), totals)
+        old = spec['information_starts'][0]['parameters_path']
+        spec['information_starts'] = [dict(id=identity, parameters_path=str(start_path),
+            sha256=start_sha, reaction_enthalpy_shifts_J_mol=totals)]
+        spec['inputs'] = [dict(r, path=str(start_path), sha256=start_sha) if r['path']==old else r
+                          for r in spec['inputs']]
+        assert sum(r['path']==str(start_path) for r in spec['inputs']) == 1
+        spec['purpose'] += ' '+purpose
+        if kind == 'fit':
+            spec['fit_case']['start'] = identity
+            spec['release_tests_path'] = str(A6/f'held-followups/{form}/release/release-tests.json')
+            spec['release_tests_sha256'] = 'PENDING_FRESH_RELEASE'
+        specs.append(spec)
+    return specs
+
+
+def check(specs, mapping):
+    information, fit = specs
+    verified = [f.verify(spec) for spec in specs]
+    assert f.stage6_ties(information, mapping) and f.stage6_ties(fit, mapping)
+    bindings = [f.stage6_binding(spec, spec['information_starts'][0], 1.) for spec in specs]
+    assert bindings[0] == bindings[1]
+    params = o.epcsaft.Parameters.from_mapping(mapping)
+    coordinates = f.stage6_coordinates(information, params, mapping)
+    assert len(coordinates) == 16
+    return dict(binding=bindings[0], ties=True, coordinates_constructed=len(coordinates),
+                installed_files_verified=verified[0]['installed_files_verified'],
+                wheel_sha256=verified[0]['wheel_sha256'])
+
+
+def write_specs(form, specs, output=OUT):
+    for kind, spec in zip(('information', 'fit'), specs, strict=True):
+        dump(output/f'{form}-{kind}.json', spec)
+
+
+def x3(endpoint_path, output=OUT):
+    """Use the selected Held endpoint unchanged, changing only Hartono feeds/alpha.
+
+    Frozen density scales are reference inputs, not recomputed from alternate
+    compositions. The assertions below check their equality to every fitted row.
+    """
+    output, endpoint = Path(output), Path(endpoint_path)
+    mapping = f.load(endpoint)
+    chemistry_path = endpoint.with_name('chemistry-coordinates.json')
+    chemistry = f.load(chemistry_path)
+    totals = chemistry['enthalpy_shifts_J_mol']
+    assert set(totals) == {'R2', 'R5'} and all(math.isfinite(v) for v in totals.values())
+    assert math.isclose(o.s.parameter_values(mapping)['reaction:R5:correlation:a_k'],
+        chemistry['R5_unshifted_a_k']+totals['R5']/(o.thermal.R*math.log(10.)), abs_tol=1e-10, rel_tol=0.)
+    # Parent decision 2026-10-19 (same rule as the owner-approved start B): the release's centered size derivatives cannot
+    # step past a bound, so a segment diameter that ends on its bound starts two largest steps inside it; Held ties re-applied.
+    primary_spec = f.load(BASE/'held-information.json')
+    step = max(primary_spec['verification']['steps_optimizer'])
+    values = o.s.parameter_values(mapping)
+    inward = {}
+    for c in primary_spec['information_coordinates']:
+        if c.get('family') == 'segment_diameter' or c['identity'].endswith('/segment_diameter'):
+            lo, hi = c['bounds']; v = values[c['identity']]; room = 2*step*c['scale']
+            if v > hi - room or v < lo + room:
+                inward[c['identity']] = (v, min(max(v, lo + room), hi - room))
+    if inward:
+        mapping = held_sizes(o.s.with_parameter_values(mapping, {k: new for k, (_, new) in inward.items()}), primary_spec)
+    print('x3 start moved inside the bounds:', inward)
+    specs = declarations('held-x3', 'held-x3', mapping, totals,
+        f'Hartono x3 sensitivity from endpoint {endpoint} (sha256 {sha(endpoint)}); '
+        'nominal 30 mass % solvent, frozen printed-alpha density scales retained; bound-active segment diameters start two largest derivative steps inside their bounds.', output)
+    with HARTONO.open() as stream:
+        source = {r['record_id']: r for r in csv.DictReader(stream)}
+    primary = f.load(BASE/'held-information.json')
+    density_rows = f.load(primary['density_source_rows_path'])
+    hartono_ids = {r['id'] for r in primary['direct_rows'] if r['id'].startswith('Hartono2014_density_')}
+    assert len(hartono_ids) == 32
+    for row in density_rows:
+        if row['id'] in hartono_ids:
+            cell = source[row['id']]
+            assert float(cell['mea_mass_fraction']) == .30
+            assert float(cell['temperature_K']) == row['T_K'] and float(cell['value']) == row['observed']
+            row['alpha'] = float(cell['co2_loading_from_mole_fraction_mol_per_mol_mea'])
+    density_path = output/'held-x3-density-source-rows.json'
+    density_sha = dump(density_path, density_rows)
+    frozen_path = primary['density_scale_path']
+    frozen = f.load(frozen_path)
+    recomputed = f.density_scales(density_rows)
+    assert frozen != recomputed
+    changed_scales = [(a['id'], a['scale'], b['scale']) for a,b in zip(frozen, recomputed, strict=True)
+                      if a['scale'] != b['scale']]
+    assert {i for i,_,_ in changed_scales} == hartono_ids
+    for spec in specs:
+        spec['density_source_rows_path'] = str(density_path)
+        # Only verify uses density_scale_path: it requires exact recomputation,
+        # including alpha, secants and scales. Retain the frozen file, hash and
+        # binding via a reference path instead of asserting that false identity.
+        spec['frozen_density_scale_path'] = spec.pop('density_scale_path')
+        spec['inputs'] = [dict(r, path=str(density_path), sha256=density_sha)
+            if r['path']==primary['density_source_rows_path'] else r for r in spec['inputs']]
+        for path in (endpoint, chemistry_path):
+            if not any(r['path']==str(path) for r in spec['inputs']):
+                spec['inputs'].append(dict(path=str(path), sha256=sha(path)))
+        for row in spec['direct_rows']:
+            if row['id'] in hartono_ids:
+                row['analytical_feed']['carbon-dioxide'] = float(source[row['id']]['co2_loading_from_mole_fraction_mol_per_mol_mea'])
+        assert {r['id']:r['scale'] for r in spec['direct_rows'] if r['id'] in {s['id'] for s in frozen}} == {r['id']:r['scale'] for r in frozen}
+        expected = copy.deepcopy(primary['direct_rows'])
+        for row in expected:
+            if row['id'] in hartono_ids:
+                row['analytical_feed']['carbon-dioxide'] = float(source[row['id']]['co2_loading_from_mole_fraction_mol_per_mol_mea'])
+        assert spec['direct_rows'] == expected
+        assert spec['information_coordinates'] == rebase(copy.deepcopy(primary), totals)['information_coordinates']
+        assert any(r['path']==frozen_path and r['sha256']==sha(frozen_path) for r in spec['inputs'])
+    result = check(specs, mapping)
+    # Demonstrate the exact original verification failure without any solve.
+    incompatible = dict(specs[0], density_scale_path=frozen_path)
+    try:
+        f.verify(incompatible)
+    except AssertionError:
+        result['original_scale_recomputation'] = 'AssertionError at fit_campaign.py:47'
+    else:
+        raise AssertionError('alternate loadings unexpectedly preserve the recomputed scale file')
+    write_specs('held-x3', specs, output)
+    result.update(endpoint_sha256=sha(endpoint), hartono_rows_changed=len(hartono_ids),
+                  frozen_scale_sha256=sha(frozen_path), inherited_totals_J_mol=totals,
+                  recomputed_scale_changes=len(changed_scales),
+                  example_recomputed_scale=dict(id=changed_scales[0][0], frozen=changed_scales[0][1], recomputed=changed_scales[0][2]))
+    return result
+
+
+def build():
+    reference = f.load(REFERENCE)
+    spec = f.load(BASE/'held-information.json')
+    assert sha(FROZEN_B) == 'be92bc06ff4b8681c56a0a5e2fb23f0f098c2eaecd9885879a8f30d1f7fd689d'
+    original = subprocess.check_output(['git', 'show', f'32129e5:analyses/mea_parameter_bundle/results/permittivity-refit-172/larger-dV/F1-B/start-parameters.json'])
+    assert hashlib.sha256(original).hexdigest() == sha(FROZEN_B)
+    receipt = subprocess.check_output(['git', 'show', f'{RECEIPT_COMMIT}:{RECEIPT}'])
+    assert hashlib.sha256(receipt).hexdigest() == 'e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1'
+    totals = {r: 1000*json.loads(receipt)['candidate_shifts_kj_mol'][r] for r in ('R2', 'R5')}
+    b_values = o.s.parameter_values(f.load(FROZEN_B))
+    updates, clipped = {}, []
+    for c in spec['information_coordinates']:
+        identity = c['identity']
+        if identity.startswith('pair/monoethanolamine/water/') or c.get('enthalpy_shift'):
+            continue
+        value = b_values[identity]
+        lo, hi = rebase(dict(information_coordinates=[copy.deepcopy(c)]), totals)['information_coordinates'][0]['bounds']
+        bounded = min(max(value, lo), hi)
+        updates[identity] = bounded
+        if bounded != value:
+            clipped.append((identity, value, bounded))
+    # R2/R5 shifts live in the stored correlations, not identified shift fields.
+    updates.update({i:v for i,v in b_values.items() if i.startswith(('reaction:R2:correlation:', 'reaction:R5:correlation:'))
+                    and i != 'reaction:R5:correlation:a_k'})
+    b = held_sizes(o.s.with_parameter_values(reference, updates), spec)
+    # Owner decision 2026-10-19 (#170): frozen B has carbamate-MEAH+ k_ij at its -1.0 bound, where the Engine refuses 25 CO2
+    # partial-pressure problems before solving (NOT_RUN, rank-deficient at the generic point; held-followups/diagnosis/).
+    # Start 1 % inside the bound; the optimizer may return to -1.0.
+    assert b_values[KIJ_B] == -1.0
+    b = o.s.with_parameter_values(b, {KIJ_B: START_B_KIJ})
+    smaller = f.load(SMALLER_A)
+    # Reuse the corrected neutral pair declaration, including the single slope.
+    old_pair = next(p for p in reference['pairs'] if any(c['identity']=='pair/monoethanolamine/water/k_ij' for c in p['coefficients']))
+    smaller['pairs'] = [copy.deepcopy(old_pair) if any(c['identity']=='pair/monoethanolamine/water/k_ij' for c in p['coefficients']) else p for p in smaller['pairs']]
+    smaller = held_sizes(smaller, spec)
+    delta = changes(reference, smaller)
+    assert {i for i,_,_ in delta} == {'component/monoethanolamine/dielectric_volume', 'component/monoethanolamine/dielectric_temperature'}
+    reports = []
+    for form, identity, mapping, inherited, purpose in (
+        ('held-B', 'held-larger-B', b, totals, 'Held larger-dV B: frozen #172 start-coordinate values rebased on the corrected Held declaration; chemistry bounds rebased to the same unshifted-a_k/total-shift box as start A; carbamate-MEAH+ k_ij started at -0.99, 1 % inside its -1.0 bound (owner decision; Engine refuses the frozen -1.0 start).'),
+        ('held-smaller-A', 'held-smaller-A', smaller, dict(R2=0., R5=0.), 'Held smaller-dV A: A4 control start with the same stage-2b neutral pair and all-six-ion Held diameter corrections.')):
+        mapping['purpose'] = purpose
+        specs = declarations(form, identity, mapping, inherited, purpose)
+        result = check(specs, mapping)
+        write_specs(form, specs)
+        reports.append((form, mapping, inherited, result))
+    dryrun = x3(A6/'joint-mea-water/held/fit/usable-budget-endpoint.json', Path('tmp/held-followups-x3'))
+    readme(reports, clipped, dryrun)
+    print('x3 scratch dry run:', json.dumps(dryrun, indent=2))
+    return {form: result for form, _, _, result in reports}
+
+
+def readme(reports, clipped, dryrun):
+    lines = [
+        '# Held follow-up declarations (#170 amendment 6)', '',
+        'Declarations only; no fit, release, derivative evaluation or Engine solve was run.',
+        'Authority: `tmp/joint-design/amendment-6-paper-candidate.md` §0b, “Matched F1 fits and selection”,',
+        'and owner comments 6278610430, 6278891898 and 6279085063 (2026-10-19).',
+        'The five Amundsen loading-0.4 rows stay excluded, the 50 Cai rows and all 16 coordinates stay',
+        'unchanged, and the CO₂-free assessment limit is 1.0 kg/m³ (2u).', '',
+        '## Frozen B identity and chemistry', '',
+        f'B uses `{FROZEN_B}`; SHA-256 `{sha(FROZEN_B)}`.',
+        'Exact locator: `stage3/qualification/current/spec.json`, case `larger-dV/F1`, start `B`,',
+        '`source.commit = 32129e5`, `source.path = analyses/mea_parameter_bundle/results/permittivity-refit-172/larger-dV/F1-B/start-parameters.json`.',
+        'The source bytes at that commit equal the frozen file. Its historical `run.py`, function `fit`,',
+        'reads `heat-final-170/F1-B/start-parameters.json`, substitutes the measured dielectric branch and',
+        'sets B Born diameters to (4, 3) Å. This identifies the original B initialization, rather than an',
+        'optimizer endpoint, CO₂–MEA variant or another F-family. The historical README section',
+        '“Same-wheel replay and fitting” states: “All 24 original attempts retain the original starts”.',
+        'The earlier screen at `5ebcb37` contains fixed-parameter dielectric variants, not this measured-route B start.', '',
+        f'Inherited totals are recovered from `{RECEIPT_COMMIT}:{RECEIPT}`,',
+        'SHA-256 `e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1`,',
+        'matching the hash in B’s R2/R5 provenance. Use `candidate_shifts_kj_mol`, multiplied by 1000.',
+        'The current file at the same path has been replaced by a later study and does not supply these totals.',
+        'The retained `amendment-2/diagnosis-refresh-swap/README.md`, “Basis and fixed-vector method”,',
+        'independently records R2 = −8201.884540544 J/mol and R5 = 8418.523404172 J/mol.',
+        'These inherited totals are needed by `fit_campaign.py` lines 620–625 when writing later chemistry totals.',
+        'Existing `stage6_coordinates` bounds enthalpy-shift increments about the supplied start, and the',
+        'stored R5 a_k directly. `rebase` therefore moves B\'s two increment boxes by −(inherited total) and',
+        'its a_k box by +(inherited R5)/(R ln 10) = +439.73 K, so the total shifts stay in ±10000 J/mol and',
+        'the unshifted a_k in [2400, 3000] K, the same physical box as start A (parent correction, 2026-10-19).',
+        'R4 and all undeclared neutral/trace-ion quantities remain those of the corrected Held start.', '',
+        'With the rebased box no start value is clipped (B stored a_k 3037.64 K, unshifted 2597.91 K).',
+        'One start modification (owner decision, 2026-10-19): carbamate–MEAH⁺ k_ij starts at −0.99 instead of the frozen',
+        '−1.0 (its lower bound). At −1.0 with B\'s other ion values the Engine refuses 25 CO₂ partial-pressure problems',
+        'before solving (`NOT_RUN: rank-deficient declared equations`); −1.0 × (1 − 1e-6) still refuses, −0.99 evaluates all',
+        '307 rows. Evidence: `../../held-followups/diagnosis/`.', '',
+        '| Clipped identity | Frozen B value | Start value |', '|---|---:|---:|']
+    lines += [f'| `{i}` | {a!r} | {b!r} |' for i,a,b in clipped]
+    for form, mapping, totals, result in reports:
+        lines += ['', f'## {form}', '', f'Start SHA-256: `{sha(OUT/f"{form}-start.json")}`.',
+                  f'Inherited totals (J/mol): R2 = {totals["R2"]!r}; R5 = {totals["R5"]!r}.',
+                  'All differing identified parameter magnitudes against `inputs/revision-3/held-start.json`:', '',
+                  '| Parameter identity | Held larger-A reference | Prepared start |', '|---|---:|---:|']
+        lines += [f'| `{i}` | {a!r} | {b!r} |' for i,a,b in changes(f.load(REFERENCE), mapping)]
+        lines += ['', 'Checks: both declarations pass `fit_campaign.verify`; both pass `stage6_ties`;',
+                  f'16 coordinate objects construct without solving; {result["installed_files_verified"]} installed Engine files match the wheel.',
+                  f'Information/fit binding is identical: `{result["binding"]}`.',
+                  'Only the declared start, its input-list hash, purpose, fit-case start ID and pending fresh-release',
+                  'path/hash and the three chemistry bounds rebased by the inherited totals (unchanged when they are zero) differ from `inputs/joint-mea-water/held-*.json`. No rows, scales or weights change.']
+    lines += ['', '## Smaller-A correction boundary', '',
+        'Starting from A4 smaller-dV control, copy the corrected larger-A MEA–water pair (k and the',
+        'single b coefficient with its metadata), set all six Debye–Hückel diameters to σ and retain',
+        'packing = 0.88σ. The complete magnitude comparison above leaves exactly the two MEA dielectric',
+        'coefficients different. The A4 smaller-branch topology provenance locator remains branch-specific.',
+        'Purpose text describes the prepared start. No additional physical parameter correction is present',
+        'in the revision-3 / without-Amundsen / joint-MEA–water declaration chain.', '',
+        '## Hartono x₃ sensitivity function', '',
+        '`x3(endpoint_path, output=OUT)` copies the selected Held endpoint without changing any parameter,',
+        'and reads its sibling `chemistry-coordinates.json` for inherited totals. It writes',
+        '`held-x3-start.json`, `held-x3-density-source-rows.json`, `held-x3-information.json` and `held-x3-fit.json`.',
+        'Exactly 32 Hartono carbon-dioxide feeds and source-row alpha values are replaced by the CSV’s',
+        '`co2_loading_from_mole_fraction_mol_per_mol_mea`; nominal 30 mass % solvent and all other observations,',
+        'IDs, coordinates, scales and weights remain unchanged. Source values and temperatures are checked',
+        'against the CSV; endpoint and chemistry files enter the hashed input list.', '',
+        '`fit_campaign.verify` line 47 asserts equality of the entire frozen scale document with',
+        '`density_scales(updated_source_rows)`. This fails after the alpha replacement: the returned rows',
+        'contain changed alpha, secants, loading contributions and scales. Even numerically unchanged scales',
+        'would not preserve equality of the complete documents. Regenerating scales would violate §0b.', '',
+        'Minimal declaration-only arrangement: rename `density_scale_path` to `frozen_density_scale_path`,',
+        'retain the original frozen file/hash in `inputs`, and bind the renamed reference path through',
+        '`stage6_binding`. No consumer except `verify` reads the old field. The function explicitly checks',
+        'every fitted loaded-row scale against the frozen file before calling `verify`. This preserves',
+        'scale verification against the adopted file without falsely requiring composition-based recomputation.',
+        'The function also exercises the incompatible declaration and requires its exact AssertionError.', '',
+        'No x₃ declarations are selected or generated in this directory by `build()`. Its scratch dry run',
+        'writes only under `tmp/held-followups-x3/`, using the existing Held endpoint to check construction.',
+        f'Checked endpoint SHA-256: `{dryrun["endpoint_sha256"]}`. Exactly 32 Hartono feeds/alpha values change;',
+        'both declarations pass `verify`, all six ion ties and construction of 16 coordinate objects.',
+        f'Information/fit binding: `{dryrun["binding"]}`.',
+        f'Frozen scale-file SHA-256: `{dryrun["frozen_scale_sha256"]}`.',
+        f'All {dryrun["recomputed_scale_changes"]} Hartono scales would change if recomputed; for',
+        f'`{dryrun["example_recomputed_scale"]["id"]}` the frozen scale is {dryrun["example_recomputed_scale"]["frozen"]!r}',
+        f'and the recomputed value is {dryrun["example_recomputed_scale"]["recomputed"]!r} kg/m³.',
+        'The incompatible declaration reproduces `AssertionError` at `fit_campaign.py:47`.',
+        'The dry run selects no fit. To generate the later selected-endpoint declarations, use:', '',
+        '```bash',
+        'PYTHONPATH=src:analyses/mea_parameter_bundle/scripts /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python '+str(OUT/'build.py.txt')+' x3 <selected-endpoint-path>',
+        '```', '',
+        '## Reproduction and limits', '',
+        'From the checkout root:', '', '```bash',
+        'PYTHONPATH=src:analyses/mea_parameter_bundle/scripts /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python '+str(OUT/'build.py.txt'),
+        '```', '',
+        'The parent must generate fresh information releases and fill their hashes before fitting.',
+        'These checks establish declaration consistency, not density predictions, convergence, physical validation',
+        'or permission to adopt a parameter record. Campaign scripts are unchanged. The disclosed generator',
+        'owns only the requested start/declaration preparation; it introduces no numerical method.', '']
+    (OUT/'README.md').write_text('\n'.join(lines))
+
+
+if __name__ == '__main__':
+    result = x3(sys.argv[2], Path(sys.argv[3]) if len(sys.argv)>3 else OUT) if sys.argv[1:2]==['x3'] else build()
+    print(json.dumps(result, indent=2))

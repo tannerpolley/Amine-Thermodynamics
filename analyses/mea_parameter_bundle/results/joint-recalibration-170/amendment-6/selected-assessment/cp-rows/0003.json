@@ -1,0 +1,106 @@
+{
+  "input": {
+    "P_Pa": 101325.0,
+    "T_K": 353.15,
+    "analytical_feed": {
+      "carbon-dioxide": 1e-06,
+      "monoethanolamine": 1.0,
+      "water": 7.929776437398854
+    },
+    "feed_amount_mol": 8.929777437398855,
+    "feed_mass_kg": 0.20393718686714285,
+    "id": "Hilliard2008_Cp_353.15_0.0",
+    "observed": 88.0765685802941,
+    "proxy": 1e-06,
+    "quantity": "equilibrium_isobaric_heat_capacity",
+    "scale": 1.7615313716058818,
+    "source_loading": 0.0,
+    "source_locator": "Appendix G.2 p.937/PDF994",
+    "source_molality_mol_kg_water": 7.0,
+    "source_observed_kJ_kg_K": 3.8566,
+    "weight": 1.0
+  },
+  "kind": "cp",
+  "result": {
+    "T_K": 353.15,
+    "analytical_feed": {
+      "carbon-dioxide": 1e-06,
+      "monoethanolamine": 1.0,
+      "water": 7.929776437398854
+    },
+    "declared_feed_mass_kg": 0.2039372568245031,
+    "declared_molar_masses_kg_mol": {
+      "bicarbonate-anion": 0.06101667666666688,
+      "carbamate-anion": 0.10408199125000012,
+      "carbon-dioxide": 0.04400839250000016,
+      "carbonate-anion": 0.06000973958333358,
+      "hydronium-cation": 0.019022158333333324,
+      "hydroxide-anion": 0.01700828416666672,
+      "monoethanolamine": 0.061080535833333255,
+      "protonated-monoethanolamine": 0.06208747291666655,
+      "water": 0.018015221250000022
+    },
+    "deviation_percent": 0.7526120532840741,
+    "enthalpy_ladder": [
+      {
+        "cp_kJ_kg_K": 3.885625284977732,
+        "minus": {
+          "H_J": -2289058.0522454735,
+          "T_K": 353.04999999999995,
+          "iterations": 15,
+          "mass_kg": 0.2039372568245031,
+          "max_abs_raw_residual": 3.126388037344441e-13
+        },
+        "plus": {
+          "H_J": -2288899.56749314,
+          "T_K": 353.25,
+          "iterations": 15,
+          "mass_kg": 0.2039372568245031,
+          "max_abs_raw_residual": 1.9895196601282805e-13
+        },
+        "relative_error": 1.2489824660807534e-08,
+        "step_K": 0.1
+      },
+      {
+        "cp_kJ_kg_K": 3.8856252485696263,
+        "minus": {
+          "H_J": -2289018.431007725,
+          "T_K": 353.09999999999997,
+          "iterations": 15,
+          "mass_kg": 0.2039372568245031,
+          "max_abs_raw_residual": 1.7053025658242404e-13
+        },
+        "plus": {
+          "H_J": -2288939.188632301,
+          "T_K": 353.2,
+          "iterations": 15,
+          "mass_kg": 0.2039372568245031,
+          "max_abs_raw_residual": 1.1368683772161603e-13
+        },
+        "relative_error": 3.1198769484942852e-09,
+        "step_K": 0.05
+      }
+    ],
+    "equilibrium_cp_kJ_kg_K": 3.8856252364469537,
+    "frozen_cp_kJ_kg_K": 3.885531070178135,
+    "helper_mass_basis_values": {
+      "T_K": 353.15,
+      "deviation_percent": 0.7511151216826883,
+      "equilibrium_cp_kJ_kg_K": 3.8855675057828143,
+      "frozen_cp_kJ_kg_K": 3.885473340913071,
+      "helper_mass_kg": 0.2039402868666428,
+      "loading": 0.0,
+      "model_loading": 1e-06,
+      "observed_kJ_kg_K": 3.8566
+    },
+    "id": "Hilliard2008_Cp_353.15_0.0",
+    "loading": 0.0,
+    "model_loading": 1e-06,
+    "observed_kJ_kg_K": 3.8566,
+    "parameter_sha256": "ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7",
+    "proxy": 1e-06,
+    "resolve_passed": true,
+    "source_locator": "Appendix G.2 p.937/PDF994"
+  },
+  "status": "Available"
+}

@@ -1,0 +1,115 @@
+{
+ "authority": "#170 amendment 6 revision 3 (design Ready 352bda1, merged 8d9e315); build 78b87ca delivered review 2026-10-19: launchable for stage-2b substitution and the two initial candidate fits",
+ "operator_checks": [
+  {
+   "launch": "tied and held release information calls (mandatory)",
+   "program_prior_wall_s": 12168,
+   "program_prior_cpu_s": 107386.61,
+   "remaining_wall_s": 9432,
+   "remaining_cpu_s": 92613.39,
+   "per_call_nonfit_wall_s": 180,
+   "per_call_nonfit_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "tied candidate fit (mandatory)",
+   "program_prior_wall_s": 12493,
+   "program_prior_cpu_s": 107710.81,
+   "allocation_used": {
+    "wall_s": 324.43,
+    "cpu_s": 324.20000000000005
+   },
+   "budget_wall_s": 1175.57,
+   "budget_cpu_s": 11675.8,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "tied endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 12591,
+   "program_prior_cpu_s": 109154.34,
+   "allocation_used": {
+    "wall_s": 422.13,
+    "cpu_s": 1767.73
+   },
+   "budget_wall_s": 1077.87,
+   "budget_cpu_s": 10232.27,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "launch": "held candidate fit (mandatory)",
+   "program_prior_wall_s": 12607,
+   "program_prior_cpu_s": 109170.63,
+   "allocation_used": {
+    "wall_s": 438.46000000000004,
+    "cpu_s": 1784.02
+   },
+   "budget_wall_s": 1061.54,
+   "budget_cpu_s": 10215.98,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "launch": "held endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 12766,
+   "program_prior_cpu_s": 111452.7,
+   "allocation_used": {
+    "wall_s": 597.52,
+    "cpu_s": 4066.09
+   },
+   "budget_wall_s": 902.48,
+   "budget_cpu_s": 7933.91,
+   "need_wall_s": 180,
+   "need_cpu_s": 500,
+   "admitted": true
+  }
+ ],
+ "calls": [
+  {
+   "form": "tied",
+   "call": "release information",
+   "exit_code": 0,
+   "wall_s": 162.94,
+   "cpu_s": 162.83
+  },
+  {
+   "form": "held",
+   "call": "release information",
+   "exit_code": 0,
+   "wall_s": 161.49,
+   "cpu_s": 161.37
+  },
+  {
+   "form": "tied",
+   "call": "fit",
+   "exit_code": 0,
+   "wall_s": 97.7,
+   "cpu_s": 1443.53
+  },
+  {
+   "form": "tied",
+   "call": "replay",
+   "exit_code": 0,
+   "wall_s": 16.33,
+   "cpu_s": 16.29
+  },
+  {
+   "form": "held",
+   "call": "fit",
+   "exit_code": 0,
+   "wall_s": 159.06,
+   "cpu_s": 2282.07
+  },
+  {
+   "form": "held",
+   "call": "replay",
+   "exit_code": 0,
+   "wall_s": 15.44,
+   "cpu_s": 15.42
+  }
+ ]
+}

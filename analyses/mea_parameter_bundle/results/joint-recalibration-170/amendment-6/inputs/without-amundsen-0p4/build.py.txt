@@ -1,0 +1,45 @@
+"""Disclosed scratch (#170 A6 r3, owner decision comment 6278610430): the revision-3 declarations without the five Amundsen 2009
+loading-0.4 rows. Run from the checkout root with the pinned environment:
+  PYTHONPATH=src:analyses/mea_parameter_bundle/scripts tmp/a6/venv/bin/python <this file>"""
+import hashlib, json
+from pathlib import Path
+import fit_campaign as f
+A6 = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6')
+OLD, NEW = A6/'inputs/revision-3', A6/'inputs/without-amundsen-0p4'
+DROP = {'Amundsen2009_state_063', 'Amundsen2009_state_068', 'Amundsen2009_state_073', 'Amundsen2009_state_078', 'Amundsen2009_state_082'}
+def dump(path, obj):
+    text = json.dumps(obj, indent=2) + '\n'
+    path.write_text(text)
+    return hashlib.sha256(text.encode()).hexdigest()
+source = [r for r in json.loads((OLD/'density-source-rows.json').read_text()) if r['id'] not in DROP]
+assert len(source) == 47 and all(r['alpha'] == 0.4 for r in json.loads((OLD/'density-source-rows.json').read_text()) if r['id'] in DROP)
+scales = f.density_scales(source)
+paths = {'density_source_rows_path': (NEW/'density-source-rows.json', dump(NEW/'density-source-rows.json', source)),
+         'density_scale_path': (NEW/'density-scales.json', dump(NEW/'density-scales.json', scales))}
+scale = {r['id']: r['scale'] for r in scales}
+for form in ('tied', 'held'):
+    start = OLD/f'{form}-start.json'
+    for kind in ('information', 'fit'):
+        spec = json.loads((OLD/f'{form}-{kind}.json').read_text())
+        spec['direct_rows'] = [dict(r, scale=scale.get(r['id'], r['scale'])) for r in spec['direct_rows'] if r['id'] not in DROP]
+        spec['loaded_density_ids'] = [i for i in spec['loaded_density_ids'] if i not in DROP]
+        assert len(spec['direct_rows']) == 51 and len(spec['loaded_density_ids']) == 47
+        old_inputs = {str(OLD/'density-source-rows.json'): 'density_source_rows_path', str(OLD/'density-scales.json'): 'density_scale_path'}
+        inputs = []
+        for r in spec['inputs']:
+            if r['path'] in old_inputs:
+                p, h = paths[old_inputs[r['path']]]
+                r = dict(r, path=str(p), sha256=h)
+            elif r['path'] == str(OLD/f'{form}-start-pending-stage2b.json'):
+                r = dict(r, path=str(start), sha256=hashlib.sha256(start.read_bytes()).hexdigest())
+            inputs.append(r)
+        spec['inputs'] = inputs
+        for k, (p, _) in paths.items():
+            spec[k] = str(p)
+        spec['purpose'] = spec['purpose'] + ' Five Amundsen 2009 loading-0.4 rows removed from the objective and gate (owner, #170 comment 6278610430).'
+        if kind == 'fit':
+            spec['release_tests_path'] = str(A6/f'without-amundsen-0p4/{form}/release/release-tests.json')
+            spec['release_tests_sha256'] = 'PENDING_FRESH_RELEASE'
+        print(form, kind, dump(NEW/f'{form}-{kind}.json', spec))
+changed = {r['id']: (r['scale'], scale[r['id']]) for r in json.loads((OLD/'density-scales.json').read_text()) if r['id'] in scale and r['scale'] != scale[r['id']]}
+print('scale changes', changed)
