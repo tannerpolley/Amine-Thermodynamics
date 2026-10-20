@@ -1,58 +1,31 @@
-# ChemRxiv submission sheet
+# ChemRxiv draft fields for the A7 rewrite
 
-Sources for ChemRxiv's fields (search-result excerpts only; the pages themselves returned HTTP 403 to the fetch tool, so nothing below is verified against the live form):
-- https://chemrxiv.org/submission-guide (search excerpt)
-- https://chemrxiv.org/engage/chemrxiv/submission-information (FAQs, search excerpt)
-- https://chemrxiv.org/terms (listed in search, not read)
-- https://www.elsevier.com/about/policies-and-standards/sharing/policy-faq and the Fluid Phase Equilibria guide for authors (search excerpts)
+This is a local submission aid. No preprint update or publication is authorized here. Portal fields and licence choices require checking at submission; this rewrite makes no claim about the live form.
 
 ## Title
-Electrolyte PC-SAFT with carbamate chemistry for CO2 in aqueous monoethanolamine: the role of the Born term and of speciation data
+
+Electrolyte PC-SAFT with carbamate chemistry for CO2 in aqueous monoethanolamine: joint calibration and a finite phase test
 
 ## Author and affiliation
-- Tanner W. Polley (corresponding author), ORCID 0009-0008-5957-4152, tpolley3@byu.edu
-- Department of Chemical Engineering, Brigham Young University, Provo, UT 84602, United States
+
+Tanner W. Polley (corresponding author), ORCID 0009-0008-5957-4152, tpolley3@byu.edu. Department of Chemical Engineering, Brigham Young University, Provo, UT 84602, United States.
 
 ## Abstract
-The effect of the Born term on reactive vapor–liquid equilibrium is examined for aqueous monoethanolamine (MEA), whose carbamate chemistry changes the ion population with CO₂ loading. A nine-species electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model combines explicit ionic speciation with Debye–Hückel and Born contributions. Five binary interaction parameters are fitted to 47 CO₂ pressures at 40 and 60 °C, 94 liquid species measurements at 20–60 °C and eight integral heats at 40 °C in 30 wt% MEA. Fitted-pressure and species average absolute relative deviations (AARD) are 13.81 and 7.89 %. Wagner pressures near 80 and 119 °C, which entered no fitting or selection step, give 23.11 and 16.23 %; other high-temperature data informed fixed inputs. Within the tested model, bounds, objective and two starts, removing the Born term and refitting raises fitted-pressure AARD to 80.25 %, without establishing physical necessity or a mechanism. The solvation-shell and dielectric-saturation form retains the lower cost both with and without the titration bicarbonate pool. Against a matched no-heat fit, heat root-mean-square error (RMSE) falls from 4.57 to 2.13 kJ/mol for fitted Vinjarapu data and from 11.63 to 8.36 for predicted Arcis data, while Hilliard/Jou packet pressure AARD rises from 18.12 to 29.66 % at 100 °C and from 24.11 to 41.55 % at 120 °C. This trade-off and the conditional parameter uncertainty limit temperature extrapolation and concentration transfer.
+
+Can one explicit-ion equation of state represent equilibrium and caloric properties of 30 wt% aqueous monoethanolamine (MEA) while avoiding resolved phase descent at specified states? A nine-species electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model with carbamate chemistry is jointly calibrated through 16 coordinates against 307 quantities in eight groups: pressure, species and integral heat in a common subset, restored species, bicarbonate/carbonate amount ratios, loaded density, CO2-free density, MEA–water equilibrium, CO2–water pressure and heat capacity. The common pressure and species subsets give average absolute relative deviations of 11.86 and 7.10%, and fitted integral-heat root-mean-square error is 1.83 kJ/mol CO2. Without empirical volume translation, 44 of 47 fitted loaded densities fall within twice their declared scales. No descent was numerically resolved in 657 trials at 73 specified states (313.15–333.15 K, α 10⁻⁵–0.5). Relative to a preceding local endpoint with resolved descent, this endpoint retains three density failures at 353.15 K, 0.40–0.53% below measurement, outside the phase family's temperatures. Comparisons outside the objective retain their prior data access: Arcis heat is an acceptance check; Wagner pressure and concentration transfer were previously seen. Carbonate share, the titration bicarbonate pool, unloaded heat capacity at 318.15 K and 45 wt% pressure transfer remain discrepant. Two sequential fits, each from one start in sampled bounds, establish a constrained local feasibility result with disclosed density failures, conditional errors and finite phase evidence; they establish neither a global optimum nor physical validation of phase behavior or process performance.
 
 ## Keywords
-CO2 solubility; ePC-SAFT; modified Born term; monoethanolamine; chemical speciation; reactive vapor–liquid equilibrium
 
-## Recommended subject categories
-ChemRxiv's list per its search-result excerpt (names as shown there; confirm in the form): Chemical Engineering and Industrial Chemistry; Physical Chemistry; Theoretical and Computational Chemistry; also Energy, Catalysis, and others.
-1. **Chemical Engineering and Industrial Chemistry**: CO₂ capture solvent, absorber-relevant vapor–liquid equilibrium.
-2. **Physical Chemistry**: equation-of-state thermodynamics, electrolyte solutions, speciation.
-3. **Theoretical and Computational Chemistry** (optional): model fitting and electrolyte-term comparison; drop it if the form wants only two.
+CO2 solubility; ePC-SAFT; joint parameter estimation; monoethanolamine; chemical speciation; reactive vapor–liquid equilibrium.
 
-## Licence
-Recommend **CC BY 4.0** (the owner's earlier choice). ChemRxiv offers CC BY 4.0, CC BY-NC 4.0 and CC BY-NC-ND 4.0, requires no copyright assignment, and says CC licences are compatible with most publishers' agreements. Elsevier states a preprint on a preprint server is not prior publication, and the Fluid Phase Equilibria guide allows prior preprint posting; Elsevier's FAQ was not read in full, so check the "preprint licence" wording if the journal asks.
+## Data availability
 
-## Statements (exact text from sections/data_code_availability.tex)
+The A7 data release DOI is pending. Local preparation is `tmp/joint-design/a7-data-release/`, with file roles, reproduction commands, omitted dependencies and `SHA256SUMS`. The evidence/notebook commit is `8f40c125e5945ac785cc0ad1889fc79bea2096c9`; selected parameter SHA-256 is `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e`. A7 uses Engine commit `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`. The older deposit DOI `10.5281/zenodo.23323107` is the F1 predecessor and is not the A7 release.
 
-**Data availability**
-The processed observations, parameter files, calculation scripts, results and figure data supporting this article are archived on Zenodo, https://doi.org/10.5281/zenodo.23323107, as release manuscript-fpe-v1 of https://github.com/tannerpolley/Amine-Thermodynamics (MIT licence). The ePC-SAFT software used for all calculations is attached to that GitHub release as a binary wheel with its SHA-256 hash; its source code is not public. The Supplementary Material lists the calculation files and software identities.
+## Declarations
 
-**Funding**
-This research received no specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
+Funding, competing-interest and generative-AI statements are the approved text in `sections/data_code_availability.tex` and `submission_metadata.yml`. They must be reviewed by the author with the assembled rewrite before submission. The prior licence preference was CC BY 4.0; no licence or portal attestation is submitted by this task.
 
-**Competing interests**
-The author declares no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+## Files and remaining gates
 
-**Generative AI declaration**
-During preparation of this manuscript, OpenAI Codex and Claude (Anthropic) were used to draft and revise manuscript text, check computational consistency, and assist with bibliography checking and correction. The author reviewed and edited the content and takes responsibility for the final manuscript.
-
-**Ethics**: no human or animal subjects (not stated in the manuscript; owner to confirm if the form asks).
-
-## Files to upload
-- Main file: `docs/scientific/latex/builds/main.pdf`
-- Supplementary: `docs/scientific/latex/builds/supplement.pdf`
-- Format and size limits, and whether the form asks for separate AI or data-availability fields, could not be verified.
-
-## Link to a later journal version
-Not verified. ChemRxiv's help pages were inaccessible. Expected route: after journal acceptance, add the published-article DOI to the preprint record via a new version or "update" on the item page; confirm in the ChemRxiv FAQ before relying on it.
-
-## Owner checklist
-1. Upload to ChemRxiv: main PDF, supplement and the fields above.
-2. Data deposit: done, Zenodo DOI 10.5281/zenodo.23323107 (release manuscript-fpe-v1, 2026-10-12).
-3. After acceptance, update the preprint with the DOI link.
+The local main and supplement PDFs are `builds/main.pdf` and `builds/supplement.pdf`. Independent number/claim and reader-story reviews, owner review, A7 data publication approval and submission authorization remain open. Historical readiness checks and the F1 deposit do not certify this rewrite.

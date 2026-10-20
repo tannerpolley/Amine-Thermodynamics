@@ -1,101 +1,75 @@
-# Source log: manuscript version 1
+# A7 manuscript sources and numerical provenance (#197, 2026-10-20)
+
+The investigator promoted notebook commit `8f40c125e5945ac785cc0ad1889fc79bea2096c9` and the accepted A7 endpoint `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e` for the joint-calibration and finite-phase-test manuscript, subject to the density failures, finite state domain, single-start/local-fit, conditional-error and prior-data-access limits in issue #197.
+
+## Numerical sources and identities
+
+`E/` means `analyses/mea_parameter_bundle/results/a7-paper-evidence/`; `J/` means `analyses/mea_parameter_bundle/results/joint-recalibration-170/`. The selected parameter JSON is `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json`, byte-identical to `J/amendment-7/restricted-2/fit/usable-budget-endpoint.json`. Its SHA-256 is `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e`.
+
+A7 uses Engine commit `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`. The paired phase-family classification comparison uses this same Engine for A6 and A7. A6 density, Arcis and separate split-confirmation results retain their original Engine identities below. F1 retains its original wheel; no historical result is relabeled as an A7-wheel calculation.
+
+The fourteen generated numerical tables come from `docs/scientific/latex/scripts/final_rerun_tables.py`; five A7 figure pairs and `figures/generated/provenance.json` come from `analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py`. The delivered r2 review supported these inputs. Write did not edit their files, generators or retained evidence, and ran no Engine calculation. The obsolete pool-effect figure is not included.
+
+| Displayed quantity | Retained source and field |
+| --- | --- |
+| 16 coordinates, bounds, ties, signed transformations and values | `E/fit-summary.json`, `coordinates`; `E/conditional-standard-errors.csv`, scientific coordinate rows |
+| 307 rows; total cost 148.905254; common149 cost 23.865964; 47/94/8 common subgroups | `E/README.md`, objective reconciliation; `E/fit-summary.json`, `cost`, `groups` |
+| Pressure/species AARD 11.86/7.10% (11.8608/7.1036% in results) | `E/fit-summary.json`, `groups.common149 pressure/species.AARD_percent` |
+| Eight group operators, scales, weights; loaded 1/47, CO2-free 0.5 kg/m3 and weight 10, Cai 1 K/0.01, Kiepe 1/39 | `E/fitted-rows.csv`, `form`, `scale`, `weight`, `declaration`; generated `tables/objective_groups.tex` |
+| Cai native-unit RMSE/bias and approximate 62% cost share | Generated `tables/residual_summary.tex`, Cai rows; `E/fit-summary.json`, Cai cost 91.9077547440675 and total 148.90525398237165; cost share rounded to integer percent as required in #197 |
+| Kiepe cost approximately 0.0007 | `E/fit-summary.json`, `groups.Kiepe.cost` |
+| 44/47 densities; all three named failures; 0.40–0.53% low | `E/density.csv`, IDs Amundsen2009_state_081 and Hartono2014_density_80C_alpha0.29/0.39, errors/scales; `J/amendment-7/restricted/README.md`, second-restricted-fit limits |
+| All 210 density rows; all 103 Amundsen rows at A7 100000 Pa; other pressures remain row-specific | `E/density.csv`, all records, `source` and `P_Pa`; Han2012 high-temperature rows include 700000 Pa, so the Amundsen convention is not generalized |
+| All ten carbonate shares, mass fraction 0.27142748, mean ratio 0.07305 and range 0.00633–0.26703 | `E/carbonate-share.csv`, all ten records; `E/summary.json`, `carbonate_share` |
+| All 19 Matin pools, AARD 67.4808%, log ratio −1.26582 | `E/pool-figure-data.csv`; `E/state-summary.json`, Matin pool cohort |
+| Vinjarapu 1.83486, Arcis 8.11440 RMSE and +7.18190 bias; pressure-separated RMSE 10.3310/3.36566 kJ/mol CO2 | `E/heat.csv`; `E/summary.json`, `heat`, pressure groups; generated residual table |
+| Four Cp errors +5.534/+2.567/+1.150/−2.135%; 318.15/353.15 K, nominal loadings 0/0.358, 101325 Pa and 7 mol/kg | `E/cp.csv`; notebook `Density and heat capacity`; generated residual table |
+| Canonical 159-pressure AARD 20.5537%; Wagner 22.2026/9.2542%; transfer 29.5070/56.0168% and signed log ratios | `E/state-summary.json`, named cohorts; generated `tables/supplement_outside_fit.tex` for objective-excluded rows; full canonical statistic is not the 112-row excluded subset |
+| Canonical/packet high-temperature 24.3499/27.5380%, 54/20 rows | `E/high-temperature-comparison.csv`, first two data rows |
+| 73 paired phase states, 657 trials, A6 12 descent points, A7 zero; 69 two-phase/four single-liquid A7 states | `E/phase-family.csv`; `J/amendment-7/restricted/README.md`, second endpoint; generated phase table |
+| MEAH size probes 5.49/5.45/5.40/5.35 Å and 44/44/22/7 of 47; first/accepted worst 2.70/2.43s | `J/amendment-7/restricted/README.md`, size probe and second fit; `J/amendment-7/fixed-study/wheel-8298c602/size-probe/` |
+| Hartono x3 own-basis 44/47 and cross-basis 40/47 | `J/amendment-7/restricted/README.md`, Hartono x3 sensitivity; `J/amendment-7/restricted-2-x3/` |
+| Ten free/rank ten, six at bounds, 297 degrees of freedom, variance factor 1.002729 | `E/README.md`, conditional uncertainty; `E/conditional-uncertainty.json` |
+| Bicarbonate-water 0.7253 ± 1.2671; R2 −1.4 ± 5.3 kJ/mol; MEAH-water −41.93 ± 60.29 K (also rounded −42 ± 60 K) | `E/conditional-standard-errors.csv`, corresponding coordinate rows |
+| 375 states; residual bound 2.2e-12 and detailed residuals | `E/verification.json`, `state_numerical_checks` |
+| 153-identity replay; 8.39e-16 relative difference | `E/default-replay/summary.json`, distinct count and worst relative difference |
+| F1 comparable common149 metrics, untranslated 68-row density baseline and pressure difference | Generated `tables/supplement_predecessor.tex`; `E/predecessor-f1.json`; `heat-final-170/corrected-densities.csv`, only `eos_density_kg_m3`; release README, Density comparison amendment |
+| Predecessor F1–F6 numbers | Unchanged `heat-final-170/fit-comparison.csv`, `with heat` rows; generated `tables/supplement_fits.tex`; no F1 phase result is used |
+
+A working sentence/cell list with precise source line locators is retained in `builds/197-displayed-number-sources.md`. It lists generated table cells by their generated source line, whose provenance comments identify raw inputs and hashes; prose rounding is stated beside its source. Chemical subscripts, equation numbers, bibliography years and software hashes are identities rather than measured values.
+
+## Literature read and source checks
+
+The main checkout's ignored `literature/README.md` and `index.csv` were read. Indexed raw-source SHA-256 and Markdown-output SHA-256 values were checked on their distinct declared bases against the current Zotero files and reading copies; no drift was found. The reading shelf itself was not edited. Source PDFs were read where no local Markdown was available, without Zotero writes or conversion services.
+
+| Source | Passages used and source identity |
+| --- | --- |
+| Zhang2011 | Zotero parent `MMAGNPIH`, PDF `M3QDCZM7`; §§2.1–2.4, 3.1–3.3, Tables 6, 9 and 10, pp. 68–74. Liquid electrolyte NRTL and PC-SAFT vapor; binary and ternary multi-property fitted roles. No independent prediction or accuracy ranking is inferred from the word “predicted” in the paper. |
+| Nasrifar2010 | Parent `CBRPAXQG`, Markdown `FVFWT3P9`, PDF `3G4FGGY4`; §§3–4, 6–7, Tables 2–3. Ideal reaction activities, effective water containing ions, pure/binary parameter use and loaded-solubility comparisons. |
+| Najafloo2018 | Parent `7MICDGGJ`, Markdown `7GCRH2RE`; §§2, 3.1–3.3 and 4, Tables 1–5. Methods use pure-MEA calibration, imported CO2–water interaction and zero other binary coefficients, whereas the conclusion describes broader ternary data use. That ambiguity is preserved; it is not resolved by inference. |
+| Lloret 2017 | Parent `NXYH6NLG`, PDF `M9UK6V4P`; §§4.4–4.7 and 5, Table 5, Eq. 26, Figs. 9–11, pp. 527–531. Reactive association is fitted to ternary data; heat is estimated from the pressure–temperature derivative, with stated underestimation and no calculated temperature dependence; concentration transfer is a separate test. |
+| Yang2024 | Parent `LQMTYLCE`, PDF `PELWE2BT`; §2.1, Eqs. 1a, 2a and 2b, PDF p.4. Supports only the Schreckenberg functional form and solvent-number averages. A7 coefficient values, branch choice and qualifications come from its own selected record and retained stage-5 evidence, not from this paper. |
+| Böttinger2008 and Jakobsen2005 | Current hash-verified Markdown; Böttinger §3 and §§5–6, Table 3, pp. 134–142; Jakobsen calibration experiments, pp. 9895–9896 and Tables A1–A2. Aggregate NMR observations, chemical-shift separation and fitted reaction constants. |
+| Baygi2015 | Hash-verified Markdown `ICDS2PAA`; §3 parameter estimation, Eq. 6, Tables 2–3, and ternary ideal-speciation methods/results. Existing literature-table row retained on that support. |
+| Akula2023a | Parent `RVYVQKSF`, PDF `IIYKTEG7`; Eq. 34 and §4.2: joint pressure/heat objective, speciation and Cp outside fitting. |
+| Uyan2015, Wangler2018, Cleeton2020 | Hash-verified Markdown `9C7EACSK`, `RIUUBS2B`, `IEBNHBR2`; parameter-estimation and results passages, including Uyan solvent/ion treatment, Wangler Eq. 33 and water–MDEA–HCl osmotic data, Cleeton binary-parameter construction and competitive acid-gas results. The rows retain their own fitted/predicted roles, not a common assessment domain. |
+| Figiel2025 and 2026 correction | Hash-verified main Markdown `2M74BKJG`, Model Parameters and Eqs. 5–12; correction PDF `QS7QHR5L`, p.7782, corrected Eq. 7. Born equation checked against the correction. Scope is ions in the paper's single/mixed solvents; transfer to loaded MEA is a model assumption. |
+| Perdomo 2023 | Hash-verified Markdown; §§2.2–2.3 and 4.3.3, Tables 6–7, Figs. 13–14. Primary alkanolamine–CO2 parameters fitted at the stated two MEA isotherms; species are association-derived comparisons. |
+| Chremos 2016 | Parent `CP4EWGIM`, PDF `CB9CSV5I`; §3.6, Figs. 11–12, pp. 290–292. Existing SAFT-gamma square-well row checked against reactive association fitting and speciation comparisons. No shelf copy was available, so the live Zotero PDF was used. |
+| Bülow2021a | Hash-verified Markdown; ePC-SAFT model and pure/binary parameter sections, Tables 1–3. Born inclusion and reduced binary-parameter use in its specified MDEA blends. |
+| Vinjarapu and Arcis | Vinjarapu PDF `CE8AP5BM`, §§1.1.1, 2.2, 3.1 and Table 4; Arcis PDF `UAIPQMND`, §2.4 and Table 5. Integral finite-addition heat, source conditions and declared heat intervals; no isolated heat-fitting effect is claimed. |
+
+The other unchanged literature-table rows retain their existing source support; published accuracy statistics are not ranked. Exact numerical transcriptions in generated tables remain bound to the selected parameter document and declared source observations. The retained-inventory inconsistency is disclosed in S8: its Hilliard “not extracted” note and F1-only Amundsen pressure convention are superseded by immediately preceding A7 corrections, while the generated inventory and its generator remain unchanged.
 
 ## Bibliography
 
-`references.bib` holds only the entries cited in the manuscript. It is copied one way from
-the central Zotero export `~/Zotero/exports/references.bib` (Better BibTeX), with local
-`file` fields dropped. The copy is never edited by hand. To regenerate it after a build:
+The owner-approved local refresh uses only `python scripts/cited_bibliography.py > references.bib` from this directory after main and supplement builds have written their `.aux` files. It reads the existing `~/Zotero/exports/references.bib`; no central export or Zotero record is modified. The snapshot is never hand-edited. Yang2024 is added only for the equations actually read. The final diff adds `Yang2024` and removes `Held2008` and `archerDielectricConstantWater1990`, following the rewritten citations. All other entry text is unchanged: no existing-entry field drift and no local `file` fields.
 
-```bash
-python scripts/cited_bibliography.py > references.bib
-```
+## A7 release and review state
 
-The three hand-kept files `manuscript_references.bib`, `project_sources.bib` and
-`official_sources.bib` were removed, as the owner decided on 2026-09-30 (#68).
+The A7 DOI remains pending. Local staging is `tmp/joint-design/a7-data-release/`, with README, SHA256SUMS, file roles, exact identities and reproduction commands. The existing F1 DOI `10.5281/zenodo.23323107` and tag `manuscript-fpe-v1` are historical; neither is presented as the A7 release. This writing task authorizes no publication, Overleaf sync, push or submission. The two manuscript reviews and owner review remain open after this Writer handoff. Historical readiness ticks do not certify the rewrite.
 
-On 2026-09-30 the Zotero record `Figiel2026Correction` (item `UDSKTAF2`) was corrected with a
-version-checked PATCH request to the Zotero local server (`http://127.0.0.1:23119/api/users/0/items/UDSKTAF2`) that the owner approved. The authors changed from
-Adam Figiel / Yuan Yu to Paul Figiel, Gangqiang Yu and Christoph Held, and volume 65 and page
-7782 were added. The source is the correction PDF (attachment `QS7QHR5L`), p. 7782. The export
-was then refreshed with `cse-zotero bibliography-export --apply`.
-
-## Cited sources and their use
-
-| Key | Use and locator |
-| --- | --- |
-| `matinFacileMethodDetermination2012` | Titration speciation method. Experimental Section and Method Description, pp. 6614–6616; Eqs. 18–19b. The authors report bicarbonate above Jakobsen's NMR values (Fig. 2, p. 6616) and an order-of-magnitude difference from NMR bicarbonate (Fig. 3 and its discussion, p. 6617). Figures are labeled 21 °C. |
-| `Bottinger2008` | Online ¹H/¹³C NMR. MEA + MEAH⁺ is observed only as a sum (§3). Pitzer model constants fitted iteratively (§5); VLE comparison (§6). |
-| `Jakobsen2005` | NMR bicarbonate and carbonate at 20/40 °C, used for the carbonate-share comparison. |
-| `Figiel2025` | SSM+DS Born term, Eqs. 5–10, pp. 9407–9409. Parameter estimation: Born diameters fitted to solvation Gibbs energies at infinite dilution, k_ij to mean ionic activity coefficients at 298.15 K (Model Parameters, pp. 9411–9412). Mixed-solvent predictions, Figs. 6–9. |
-| `Figiel2026Correction` | Corrected Eq. 7 (missing bracket; ε_ion in the second term), p. 7782. |
-| `Akula2023a` | Electrolyte NRTL for MEA. Joint pressure/heat objective, Eq. 34 (ω_p = 1, ω_h = 0.2). NMR speciation and Cp outside the fit (§4.2). Read from the Zotero PDF `RVYVQKSF/IIYKTEG7`. |
-| `Held2014` | Ion parameters from densities and osmotic coefficients; dispersion between unlike-charged ions only. |
-| `Uyan2015`, `Wangler2018` | MDEA ePC-SAFT with explicit ions. Prediction from pure-component and binary parameters, one sense of "predictive" that this work does not use. |
-| `Baygi2015`, `Najafloo2018` | PC-SAFT and SAFT-HR for loaded MEA, with separate chemical equilibrium. |
-| `Gross2001`, `Gross2002`, `Cameretti2005`, `Bulow2020`, `Rueben2024`, `Schick2023` | Lineage of the equation of state and of the permittivity/Born terms. |
-| `archerDielectricConstantWater1990` | Water relative permittivity. The manuscript uses the Engine's polynomial approximation (eq. `eq:water-permittivity`), not the full Archer–Wang equation, so no equation or table locator is cited. Zotero item `BWBDFZ6J` (PDF `VII3CVVA`); title, authors, year and DOI 10.1063/1.555853 checked against the item. |
-| `Jou1995`, `Hilliard2008`, `Aronu2011`, `idrisSpeciationMEACO2Adducts2014`, `Mamun2005`, `Xu2011` | Pressure observations. Hilliard App. D.4 and Xu Table 1 supply the measured molality and temperature used in calculation. |
-| `Amundsen2009` | Loaded-density limitation; Table 3, p. 3097; uncertainty scope pp. 3099–3100. |
-
-Writer A's methods, equation-of-state and table files may add keys; `scripts/cited_bibliography.py`
-fails if any cited key is absent from the export.
-
-## Numerical evidence (2026-10-08 numbers pass)
-
-The investigator authorized manuscript use of notebook commit `398c1d3` in this implementation task, subject to #170's reviewed claim limits: calibration for fitted pressure, species, heat and four density states; conditional predictions outside the fit with prior access disclosed; numerical verification rather than physical validation.
-
-The manuscript consumes the adopted heat-augmented record `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`. Engine commit `026b30311b959f1a5db4feef4c15e243f7044a5f`, immutable wheel `94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a`. The fitting-stage provenance snapshot is `7ad8156`; public deposit/tag remains pending. Numerical files were merged from evidence branch `398c1d3` without conflicts and remain unchanged.
-
-Paths below are relative to `analyses/mea_parameter_bundle/results/heat-final-170/`.
-
-| Manuscript quantity | Retained file |
-| --- | --- |
-| All 128 old/new entries and paragraph locators | `awaiting-rerun-numbers.csv`; disposition in `docs/scientific/latex/builds/numbers-pass-170.csv` |
-| Six heat fits: 149 base or 167 pool targets, costs, AARDs and coordinates | `fit-comparison.csv`; `fit-summary.json`; each selected native-fit file |
-| Source/observable AARDs | `evaluation/targets.csv`, restricted to each native-fit target-ID set |
-| Conditional errors, correlations and bound gradients | `conditional-uncertainty.json`; `conditional-standard-errors.csv` |
-| Outside-fit AARDs and mean log ratios | `evaluation/scores.csv` |
-| Carbonate comparison | `evaluation/jakobsen-carbonate-share.csv` |
-| Four density-translation calibration states at 0.100 MPa | `corrected-densities.csv`, restricted to 30 wt%, 50/70 °C, loading 0.3/0.4 |
-| Uncorrected density comparisons at 101325 Pa, explicitly separate | `evaluation/density.csv` |
-| Vinjarapu fitted and Arcis predicted heats; matched no-heat comparison | `heat-comparison.csv`; `figure-data/heat.csv` |
-| Separately named Hilliard/Jou packet and canonical pressure cohorts | `high-temperature-comparison.csv` |
-| Heat-capacity spot checks | `heat-capacity-comparison.csv` |
-| 1,374 current and 375 no-heat equilibrium states, replay/balance residuals | `evaluation/replay-checks.json`; `evaluation/execution.json` |
-
-The 83 pressure/species states and 141 targets remain the #152 corrected basis. Eight Vinjarapu observations bring each base fit to 149; 18 Matin pool values bring F4/F5 to 167. Historical source corrections and fixed reaction shifts retain their existing cited records and are not re-estimated here.
-
-The unavailable ion-free ionic reference prevents the decomposition. Its numerical checks, hypotheses, offsets, activity/speciation interpretations, figure and table are removed. The supported Born claim is the tested refit comparison, 13.81% against 80.25% fitted-pressure AARD. The Matin pool does not reverse the Born ordering. The slope's 107.96 ± 22.93 K uncertainty is conditional, and the heat/high-temperature-pressure change is a trade-off of the parameterization, without a uniquely diagnosed chemistry cause.
-
-## Heat sources read for this pass
-
-The worktree lacks its ignored literature shelf. The existing Zotero PDFs were read directly without changing Zotero or refreshing the bibliography: Vinjarapu (2024), attachment `CE8AP5BM`, Sections 1.1.1, 2.2 and 3.1, Table 4; Arcis (2011), attachment `UAIPQMND`, Section 2.4 and Table 5. These support the integral-heat definition, conditions and observation roles. Prior literature positioning is retained from the approved restructuring; no new literature ranking or molecular mechanism is asserted.
-
-## Presentation and build
-
-`scripts/render_manuscript_figures.py` reads the current retained tables and writes pressure, speciation, pool-effect and heat-of-absorption figures under `figures/generated/`. Model values are discrete markers at measured states; pressures are in kPa, species in mole fraction, and heat in kJ/mol CO2. Rendering evaluates no model. `scripts/final_rerun_tables.py` writes result tables from the same current evidence.
-
-The manuscript build remains `scripts/build_manuscript.sh`; the supplement uses `latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex` from the LaTeX directory. Both run through `agent-heavy --max 3G --timeout 10m`. Final build counts, warnings and visual checks are recorded in `builds/numbers-pass-170.md`.
-
-The data statement remains pending a public deposit or immutable manuscript tag. Independent manuscript evidence/prose review and owner publication remain open.
-
-## A7 prerequisite presentation and R2/R5 inheritance (2026-10-20, #197)
-
-This section records retained inputs for the prerequisite Build. It does not
-update the historical F1 narrative above or begin the manuscript Write stage.
-The selected A7 document is
-`analyses/mea_parameter_bundle/results/selected-current-best-parameters.json`,
-SHA-256 `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e`.
-It is byte-identical to
-`analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json`.
-The A7 calculation Engine is merged commit
-`8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256
-`8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`.
-Presentation reads retained values only; no fit, covariance calculation or
-Engine evaluation is part of this Build.
-
-Paths starting with `J/` below mean
-`analyses/mea_parameter_bundle/results/joint-recalibration-170/`.
+## R2/R5 inheritance and F1 density pressure basis
 
 ### Reaction sources and earlier adjustments
 
