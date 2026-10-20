@@ -377,7 +377,7 @@ def phase_payload(model, problem, result):
         row.update(raw_residuals=list(point.values),raw_objective=point.objective,roundoff_floor=point.floor,
             phases=[s._phase_payload(problem,result,i,len(model.component_ids)) for i in range(result.phase_count)],
             row_kinds=[r.kind.name for r in result.rows])
-        row['pressure_density_derivatives'] = [model.state(result.temperature[0],rho=result.molar_densities[i],
+        row['pressure_density_derivatives'] = [model.state(result.temperature,rho=result.molar_densities[i],
             x=dict(zip(model.component_ids,result.phase_mole_fractions(i),strict=True))).pressure_density_derivative for i in range(result.phase_count)]
     return row
 
@@ -451,8 +451,8 @@ def diagnose(model, request, row, out):
     bubble = eq.solve_equilibrium(model,problem)
     row['bubble'] = phase_payload(model,problem,bubble)
     if bubble.success:
-        row['bubble_pressure_Pa'] = bubble.pressure[0]
-        row['pressure_uncertainty_Pa'] = bubble.pressure[0]*max(bubble.convergence.residual,bubble.convergence.floor or 0.,bubble.convergence.criterion.value if bubble.convergence.criterion else 0.)
+        row['bubble_pressure_Pa'] = bubble.pressure
+        row['pressure_uncertainty_Pa'] = bubble.pressure*max(bubble.convergence.residual,bubble.convergence.floor or 0.,bubble.convergence.criterion.value if bubble.convergence.criterion else 0.)
     s.write_json(out,row)
     return problem,liquid,bubble
 
@@ -478,7 +478,7 @@ def family_job(mapping, request, row, retained, out):
         result = recover(model,problem,row,retained,out)
     bubble_problem,liquid,bubble = diagnose(model,request,row,out)
     if bubble is not None and bubble.success:
-        if row['pressure_Pa']>bubble.pressure[0] and liquid.success:
+        if row['pressure_Pa']>bubble.pressure and liquid.success:
             problem = flash_problem(request,row['loading'],row['temperature_K'],row['pressure_Pa'],[eq.Phase('L',kind='liquid',support=s.COMPONENT_IDS)])
             result = liquid
         elif result is None or not result.success:

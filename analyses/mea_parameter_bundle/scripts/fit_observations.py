@@ -206,11 +206,11 @@ def water_assessment(spec, mapping):
                 solved = eq.solve_equilibrium(model,problem)
                 row.update(saturation_termination=solved.message,saturation_success=solved.success,
                     saturation_max_abs_residual=max(map(abs,solved.residuals)),saturation_phase_kinds=['liquid','vapor'],
-                    saturation_molar_densities=list(solved.molar_densities),saturation_pressure_Pa=solved.pressure[0])
+                    saturation_molar_densities=list(solved.molar_densities),saturation_pressure_Pa=solved.pressure)
                 sat = model.state(row['T_K'],rho=solved.molar_densities[0])
                 row.update(saturated_dP_drho=sat.pressure_density_derivative,saturated_liquid_rho_kg_m3=solved.molar_densities[0]*spec['molar_mass_kg_mol'],
                     saturated_liquid_rho_error_relative=solved.molar_densities[0]*spec['molar_mass_kg_mol']/float(ref['saturated_liquid_rho_kg_m3'])-1,
-                    psat_error_relative=solved.pressure[0]/float(ref['psat_Pa'])-1)
+                    psat_error_relative=solved.pressure/float(ref['psat_Pa'])-1)
             row['evaluated'] = all(math.isfinite(v) for k,v in row.items() if isinstance(v,(int,float)))
         except Exception as error:
             row['failure'] = f'{type(error).__name__}: {error}'
@@ -258,7 +258,7 @@ def stage2_rows(spec, mapping, case, assessment=False):
                 model = epcsaft.Mixture(params,thermochemistry=thermal.record())
                 previous = adjacent.get(row['T_K'])
                 if previous is not None:
-                    problem.P = eq.Free(previous.pressure[0])
+                    problem.P = eq.Free(previous.pressure)
                     for i,phase in enumerate(problem.phases):
                         payload = s._phase_payload(problem,previous,i,len(model.component_ids))
                         phase.composition_guess = dict(zip(payload['support'],payload['mole_fractions'],strict=True))
@@ -319,8 +319,8 @@ def stage2_native(spec, mapping, case, operation, workers=0, output_path=None):
                 phases = [s._phase_payload(problem,state,i,len(model.component_ids)) for i in range(state.phase_count)]
                 evidence = dict(success=state.success,message=state.message,raw_residuals=list(point.values),
                     classified_residuals=list(state.classified_residuals),reduced_hessian_minimum=state.reduced_hessian_minimum,
-                    temperature=list(state.temperature),pressure=list(state.pressure),phases=phases,
-                    dP_drho=[model.state(state.temperature[0],rho=state.molar_densities[i],x={k:v for k,v in zip(p['support'],p['mole_fractions'],strict=True)}).pressure_density_derivative for i,p in enumerate(phases)])
+                    temperature=state.temperature,pressure=state.pressure,phases=phases,
+                    dP_drho=[model.state(state.temperature,rho=state.molar_densities[i],x={k:v for k,v in zip(p['support'],p['mole_fractions'],strict=True)}).pressure_density_derivative for i,p in enumerate(phases)])
                 solved[row['state_id']] = evidence
             retained['equilibrium'] = solved[row['state_id']]
         result.append(retained)

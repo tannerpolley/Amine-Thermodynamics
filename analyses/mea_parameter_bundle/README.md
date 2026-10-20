@@ -19,11 +19,13 @@ are now document version 3, SHA-256 `7b0b4bb5669c1b2061fd7ec26e5fb4c8491005bdb5b
 from the unchanged [heat-160/A-parameters.json](results/heat-160/A-parameters.json)
 only by the #191 CO2/MEA no-cross-association declaration and document version.
 The declaration keeps the existing model and makes no claim that this physical
-interaction is absent. Engine commit `21e761c318c2ac5b555a245365c844d38a93e4cb`,
-wheel SHA-256 `d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357`, is pinned
+interaction is absent. Engine commit `8298c6029ebb8b467929badc4a223c580ec591ab`,
+wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`, is pinned
 by the relative path in `pyproject.toml` and `uv.lock`.
-The [adoption comparison](results/engine-21e761c3-adoption/README.md) retains
-152/152 bitwise-equal predictions and the existing source-input refusal.
+The [8298c602 adoption comparison](results/engine-8298c602-adoption/README.md) reproduces
+the same 152 predictions to at most 2.9 × 10⁻¹² relative difference and retains the
+existing source-input refusal; the [21e761c3 adoption](results/engine-21e761c3-adoption/README.md)
+holds the earlier bitwise comparison.
 The [notebook](notebook.qmd) owns the
 conditions, retained comparisons and limits, including the 100–120 °C pressure
 trade-off. [History](results/parameter-record-history.csv) lists every

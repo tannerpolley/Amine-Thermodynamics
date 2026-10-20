@@ -71,7 +71,7 @@ def n2():
     for T in (298.15, 318.15):
         psat = b.saturation_pressure(model, T)
         for m in (1.0, 3.0):
-            p_b = b.bubble(model, T, m, 0.97 * psat).pressure[0]
+            p_b = b.bubble(model, T, m, 0.97 * psat).pressure
             ln_aw = b.activity(model, T, p_b, m)[1]
             ln_aw_atm = b.activity(model, T, P_ATM, m)[1]
             identity = b.identity_ln_aw(model, T, p_b)
