@@ -159,6 +159,81 @@
    "need_wall_s": 120.0,
    "need_cpu_s": 120.0,
    "admitted": true
+  },
+  {
+   "stage": "restricted-fit",
+   "launch": "restricted release information (mandatory)",
+   "program_prior_wall_s": 16833,
+   "program_prior_cpu_s": 128229.76,
+   "stage_used": {
+    "wall_s": 33.37,
+    "cpu_s": 33.27
+   },
+   "budget_wall_s": 1128.63,
+   "budget_cpu_s": 6928.73,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "stage": "restricted-fit",
+   "launch": "restricted candidate fit (mandatory)",
+   "program_prior_wall_s": 17002,
+   "program_prior_cpu_s": 128399.32,
+   "stage_used": {
+    "wall_s": 202.99,
+    "cpu_s": 202.83
+   },
+   "budget_wall_s": 959.01,
+   "budget_cpu_s": 6759.17,
+   "need_wall_s": 720,
+   "need_cpu_s": 6000,
+   "admitted": true
+  },
+  {
+   "stage": "restricted-fit",
+   "launch": "restricted endpoint cold replay (mandatory)",
+   "program_prior_wall_s": 17075,
+   "program_prior_cpu_s": 129299.8,
+   "stage_used": {
+    "wall_s": 275.91,
+    "cpu_s": 1103.31
+   },
+   "budget_wall_s": 886.09,
+   "budget_cpu_s": 5858.69,
+   "need_wall_s": 300,
+   "need_cpu_s": 500,
+   "admitted": true
+  },
+  {
+   "stage": "restricted-fit",
+   "launch": "e1-restricted-endpoint-family fixed-vector probe",
+   "program_prior_wall_s": 17091,
+   "program_prior_cpu_s": 129315.15,
+   "stage_used": {
+    "wall_s": 291.28,
+    "cpu_s": 1118.66
+   },
+   "budget_wall_s": 870.72,
+   "budget_cpu_s": 5843.34,
+   "need_wall_s": 120.0,
+   "need_cpu_s": 120.0,
+   "admitted": true
+  },
+  {
+   "stage": "restricted-fit",
+   "launch": "e2-restricted-endpoint-score fixed-vector probe",
+   "program_prior_wall_s": 17125,
+   "program_prior_cpu_s": 129349.11,
+   "stage_used": {
+    "wall_s": 325.31,
+    "cpu_s": 1152.62
+   },
+   "budget_wall_s": 836.69,
+   "budget_cpu_s": 5809.38,
+   "need_wall_s": 40.0,
+   "need_cpu_s": 40.0,
+   "admitted": true
   }
  ],
  "calls": [
@@ -367,6 +442,130 @@
    "exit_code": 0,
    "wall_s": 33.37,
    "cpu_s": 33.27
+  },
+  {
+   "stage": "restricted-fit",
+   "call": "release",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/release-command-time.json",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/scripts/fit_campaign.py",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/inputs/restricted-information.json",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/release",
+    "--operation",
+    "information",
+    "--case",
+    "stage6"
+   ],
+   "exit_code": 0,
+   "wall_s": 169.62,
+   "cpu_s": 169.56
+  },
+  {
+   "stage": "restricted-fit",
+   "call": "fit",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit-command-time.json",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/scripts/fit_campaign.py",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit-spec.json",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit",
+    "--operation",
+    "fit",
+    "--case",
+    "stage6"
+   ],
+   "exit_code": 0,
+   "wall_s": 72.92,
+   "cpu_s": 900.48
+  },
+  {
+   "stage": "restricted-fit",
+   "call": "replay",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/replay-command-time.json",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "-c",
+    "import json,os,sys,shared_evaluation as s; s.ENGINE_WHEEL_SHA256, s.ENGINE_COMMIT = os.environ[\"ENGINE_WHEEL_SHA256\"], os.environ[\"ENGINE_COMMIT\"]; s.verify_wheel(); import final_evidence as f; f.main(output_dir=sys.argv[1], documents=json.loads(sys.argv[2]), declaration=json.load(open(sys.argv[3])))",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/replay",
+    "{\"A7-restricted\": {\"record\": \"analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/usable-budget-endpoint.json\", \"raw\": \"analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/native.json\", \"density_weight\": 1.0, \"kiepe_reference\": \"analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/kiepe-reference.json\"}}",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit-spec.json"
+   ],
+   "exit_code": 0,
+   "wall_s": 15.37,
+   "cpu_s": 15.35
+  },
+  {
+   "stage": "restricted-fit",
+   "call": "e1-restricted-endpoint-family",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/e1-restricted-endpoint-family-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "120s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "screen",
+    "wheel-8298c602/restricted-endpoint",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/usable-budget-endpoint.json"
+   ],
+   "exit_code": 0,
+   "wall_s": 34.03,
+   "cpu_s": 33.96
+  },
+  {
+   "stage": "restricted-fit",
+   "call": "e2-restricted-endpoint-score",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/e2-restricted-endpoint-score-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "40s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "score",
+    "wheel-8298c602/restricted-endpoint"
+   ],
+   "exit_code": 0,
+   "wall_s": 14.93,
+   "cpu_s": 14.92
   }
  ]
 }
