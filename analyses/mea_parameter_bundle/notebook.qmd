@@ -925,7 +925,7 @@ The retained [program ledger](results/joint-recalibration-170/amendment-4/comput
 
 ## Amendment 7: split-free restricted refit; three warm loaded densities disclosed
 
-**Delivered, review pending; the owner accepted the endpoint with a disclosed loaded-density limitation.** On the qualified Engine 8298c602 wheel, a restricted refit of the same 307-row objective converges to a vector with **no resolved descent at any of the 73 family points**, where the A6 selected vector has 12 descent points. It meets every fitted-property gate except loaded density. **44/47** fitted loaded densities are within $2s$. The three misses are all at **353.15 K, α 0.29–0.39**, 4.2–5.5 kg/m³ low (0.40–0.53 %, worst **2.43$s$**). They exceed the sources' stated density and loading uncertainty. The owner chose this disclosed density miss over A6's resolved dense-liquid splits ([#170 comment 6298116916](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6298116916)).
+**Delivered, review pending; the owner accepted the endpoint with a disclosed loaded-density limitation.** On the qualified Engine 8298c602 wheel, a restricted refit of the same 307-row objective converges to a vector with **no resolved descent at any of the 73 family points**, where the A6 selected vector has 12 descent points. It meets every fitted-property gate except loaded density. **44/47** fitted loaded densities are within $2s$. The three misses are all at **353.15 K, α 0.29–0.39**, 4.2–5.5 kg/m³ low (0.40–0.53 %, worst **2.43$s$**). All three exceed the adopted $2s$ limits. The Hartono residuals exceed both the printed density uncertainty and the loading contributions estimated by the retained source-local secants. The Amundsen residual exceeds its adopted scale, but the source excludes the highest temperatures/loadings from its general uncertainty estimate and leaves the exact row boundary unresolved. The owner chose this disclosed density miss over A6's resolved dense-liquid splits ([#170 comment 6298116916](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6298116916)).
 
 ### Engine wheel and phase qualification
 
@@ -974,7 +974,7 @@ The [full assessment](results/joint-recalibration-170/amendment-7/selected-asses
 | Han 2012 67 densities RMSE (assessment only) | 5.91 kg/m³ | 7.55 kg/m³ |
 | Amundsen 103 densities RMSE | 6.42 kg/m³ | 4.96 kg/m³ |
 | Arcis 14 heats RMSE (gate ≤ 9.36) | 8.11 kJ/mol | 8.05 kJ/mol |
-| Hilliard Cp errors, 318.15 K α 0 / 0.358; 353.15 K α 0 / 0.358 | +5.53 / +2.57 / +1.15 / −2.13 % | +5.04 / +2.58 / +0.75 / −1.56 % |
+| Hilliard Cp errors, 318.15 K α 0 / 0.358; 353.15 K α 0 / 0.358 | +5.53 / +2.57 / +1.15 / −2.13 % | +5.04 / +2.57 / +0.75 / −1.55 % |
 | Matin 19 species pools AARD | 67.5 % | 66.8 % |
 
 All 210 densities, 22 heats, four Cp states and 375 admitted states are available. Replays of the fitted rows agree within 1.2 × 10⁻¹¹ kg/m³. State stationarity, material and charge residuals are at most 2.2 × 10⁻¹² ([verification](results/joint-recalibration-170/amendment-7/selected-assessment/verification.json)).

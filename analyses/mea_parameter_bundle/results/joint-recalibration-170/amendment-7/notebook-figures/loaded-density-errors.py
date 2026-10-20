@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 HERE = Path(__file__).resolve().parent
 A7 = HERE.parent/"selected-assessment"
 A6 = HERE.parents[1]/"amendment-6/selected-assessment"
-INPUTS = {A7/"density.csv": "1983f82ba4b030623d909b364ecceb7dc60466b5ea4f327222fa199827dd2fdd", A7/"summary.json": "4d02aef2fa28534994d65e5364c0146e6d86e9d4f45aa656376a9333cd74c095",
+INPUTS = {A7/"density.csv": "1983f82ba4b030623d909b364ecceb7dc60466b5ea4f327222fa199827dd2fdd", A7/"summary.json": "39ea65e25e503038a9e47ea158602af1b2ae27b1c38e69bebed6f8b49dbd9883",
           A6/"density.csv": "2918d2dec72687161fa01161012ad46d70e76349d8cfbd8652d568e9207144a4",
           A6/"summary.json": "af775385eadbb7396eacb69cbd9abd1defbec46eed35b3bfa300fec619edbd3d"}
 for path, expected in INPUTS.items():
