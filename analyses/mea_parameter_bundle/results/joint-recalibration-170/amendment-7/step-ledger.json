@@ -514,6 +514,141 @@
    "need_wall_s": 80.0,
    "need_cpu_s": 80.0,
    "admitted": true
+  },
+  {
+   "stage": "final-evidence",
+   "launch": "g1-gas-root disclosed script",
+   "program_prior_wall_s": 18176,
+   "program_prior_cpu_s": 131334.63,
+   "stage_used": {
+    "wall_s": 0,
+    "cpu_s": 0
+   },
+   "budget_wall_s": 1950.38,
+   "budget_cpu_s": 9200,
+   "need_wall_s": 120.0,
+   "need_cpu_s": 120.0,
+   "admitted": true
+  },
+  {
+   "stage": "final-evidence",
+   "launch": "a-inventory disclosed script",
+   "program_prior_wall_s": 18181,
+   "program_prior_cpu_s": 131340.24,
+   "stage_used": {
+    "wall_s": 5.65,
+    "cpu_s": 5.61
+   },
+   "budget_wall_s": 1944.73,
+   "budget_cpu_s": 9194.39,
+   "need_wall_s": 240.0,
+   "need_cpu_s": 1200.0,
+   "admitted": true
+  },
+  {
+   "stage": "final-evidence",
+   "launch": "a-density disclosed script",
+   "program_prior_wall_s": 18196,
+   "program_prior_cpu_s": 131354.67,
+   "stage_used": {
+    "wall_s": 20.15,
+    "cpu_s": 20.04
+   },
+   "budget_wall_s": 1930.23,
+   "budget_cpu_s": 9179.96,
+   "need_wall_s": 240.0,
+   "need_cpu_s": 1200.0,
+   "admitted": true
+  },
+  {
+   "stage": "final-evidence",
+   "launch": "a-calorics disclosed script",
+   "program_prior_wall_s": 18212,
+   "program_prior_cpu_s": 131419.8,
+   "stage_used": {
+    "wall_s": 35.98,
+    "cpu_s": 85.17
+   },
+   "budget_wall_s": 1914.4,
+   "budget_cpu_s": 9114.83,
+   "need_wall_s": 240.0,
+   "need_cpu_s": 1200.0,
+   "admitted": true
+  },
+  {
+   "stage": "final-evidence",
+   "launch": "a-states disclosed script",
+   "program_prior_wall_s": 18226,
+   "program_prior_cpu_s": 131440.93,
+   "stage_used": {
+    "wall_s": 50.52,
+    "cpu_s": 106.3
+   },
+   "budget_wall_s": 1899.86,
+   "budget_cpu_s": 9093.7,
+   "need_wall_s": 240.0,
+   "need_cpu_s": 1200.0,
+   "admitted": true
+  },
+  {
+   "stage": "final-evidence",
+   "launch": "a-carbonate disclosed script",
+   "program_prior_wall_s": 18245,
+   "program_prior_cpu_s": 131566.67,
+   "stage_used": {
+    "wall_s": 68.76,
+    "cpu_s": 232.04
+   },
+   "budget_wall_s": 1881.62,
+   "budget_cpu_s": 8967.96,
+   "need_wall_s": 240.0,
+   "need_cpu_s": 1200.0,
+   "admitted": true
+  },
+  {
+   "stage": "final-evidence",
+   "launch": "a-cp disclosed script",
+   "program_prior_wall_s": 18257,
+   "program_prior_cpu_s": 131580.42,
+   "stage_used": {
+    "wall_s": 81.44,
+    "cpu_s": 245.79
+   },
+   "budget_wall_s": 1868.94,
+   "budget_cpu_s": 8954.21,
+   "need_wall_s": 240.0,
+   "need_cpu_s": 1200.0,
+   "admitted": true
+  },
+  {
+   "stage": "final-evidence",
+   "launch": "a-declared-density disclosed script",
+   "program_prior_wall_s": 18271,
+   "program_prior_cpu_s": 131597.4,
+   "stage_used": {
+    "wall_s": 94.81,
+    "cpu_s": 262.77
+   },
+   "budget_wall_s": 1855.57,
+   "budget_cpu_s": 8937.23,
+   "need_wall_s": 240.0,
+   "need_cpu_s": 1200.0,
+   "admitted": true
+  },
+  {
+   "stage": "final-evidence",
+   "launch": "g2-gas-root-rerun disclosed script",
+   "program_prior_wall_s": 18287,
+   "program_prior_cpu_s": 131615.2,
+   "stage_used": {
+    "wall_s": 111.28,
+    "cpu_s": 280.57
+   },
+   "budget_wall_s": 1839.1,
+   "budget_cpu_s": 8919.43,
+   "need_wall_s": 120.0,
+   "need_cpu_s": 120.0,
+   "admitted": true
   }
  ],
  "calls": [
@@ -1302,6 +1437,226 @@
    "exit_code": 0,
    "wall_s": 16.51,
    "cpu_s": 16.49
+  },
+  {
+   "stage": "final-evidence",
+   "call": "g1-gas-root",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/calls/g1-gas-root-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "120s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/gas-root/probe.py.txt",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json",
+    "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/gas-root/run"
+   ],
+   "exit_code": 0,
+   "wall_s": 5.65,
+   "cpu_s": 5.61
+  },
+  {
+   "stage": "final-evidence",
+   "call": "a-inventory",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/calls/a-inventory-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "240s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+    "inventory"
+   ],
+   "exit_code": 0,
+   "wall_s": 14.5,
+   "cpu_s": 14.43
+  },
+  {
+   "stage": "final-evidence",
+   "call": "a-density",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/calls/a-density-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "240s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+    "density"
+   ],
+   "exit_code": 0,
+   "wall_s": 15.83,
+   "cpu_s": 65.13
+  },
+  {
+   "stage": "final-evidence",
+   "call": "a-calorics",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/calls/a-calorics-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "240s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+    "calorics"
+   ],
+   "exit_code": 0,
+   "wall_s": 14.54,
+   "cpu_s": 21.13
+  },
+  {
+   "stage": "final-evidence",
+   "call": "a-states",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/calls/a-states-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "240s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+    "states"
+   ],
+   "exit_code": 0,
+   "wall_s": 18.24,
+   "cpu_s": 125.74
+  },
+  {
+   "stage": "final-evidence",
+   "call": "a-carbonate",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/calls/a-carbonate-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "240s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+    "carbonate"
+   ],
+   "exit_code": 0,
+   "wall_s": 12.68,
+   "cpu_s": 13.75
+  },
+  {
+   "stage": "final-evidence",
+   "call": "a-cp",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/calls/a-cp-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "240s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+    "cp"
+   ],
+   "exit_code": 0,
+   "wall_s": 13.37,
+   "cpu_s": 16.98
+  },
+  {
+   "stage": "final-evidence",
+   "call": "a-declared-density",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/calls/a-declared-density-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "240s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+    "declared-density"
+   ],
+   "exit_code": 0,
+   "wall_s": 16.47,
+   "cpu_s": 17.8
+  },
+  {
+   "stage": "final-evidence",
+   "call": "g2-gas-root-rerun",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/calls/g2-gas-root-rerun-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "120s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/gas-root/probe.py.txt",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json",
+    "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/gas-root/run-2"
+   ],
+   "exit_code": 0,
+   "wall_s": 6.1,
+   "cpu_s": 6.02
   }
  ]
 }
