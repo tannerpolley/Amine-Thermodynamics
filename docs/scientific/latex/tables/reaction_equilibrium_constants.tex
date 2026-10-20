@@ -1,21 +1,73 @@
-\begin{table*}[t]
-    \centering
-    \footnotesize
-    \caption{Liquid reactions and the equilibrium-constant coefficients of F1--F5, with \(T\) in kelvin; F6 uses the R2 and R5 source coefficients given in the third column.
-    R1--R3 use \(\ln K_r=A_r+B_r/T+C_r\ln T+D_rT\) on the source mole-fraction basis, and \(\Delta_r\) is the offset of \cref{eq:molality-conversion} to the aqueous-molality basis.
-    R2 is given directly on the molality basis: its \(A_2\) and \(B_2\) contain the +4.0165 conversion and the fixed \SI{-8.2019}{\kilo\joule\per\mole} enthalpy shift, so it has no separate \(\Delta_2\).
-    R4 uses \(\ln K_4=A_4+B_4/T\), and R5 uses \(\ln K_5=-\ln10\,(A_5/T+B_5+C_5T)\), both on the aqueous-molality basis.
-    The last column gives the temperature range of the source correlation.}
-    \label{tab:reaction-equilibrium-constants}
-    \begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}p{3.7cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{4.5cm}c@{}}
-        \toprule
-        ID & Reaction & Source and treatment & Coefficients used & Source range (K) \\
-        \midrule
-        R1 & \(2\HtwoO \rightleftharpoons \HthreeO+\Hydroxide\) & Austgen \cite[Table~V]{Austgen1991}; unchanged & \(A=132.899\), \(B=-13445.9\), \(C=-22.4773\), \(D=0\); \(\Delta=8.0331\) & 273.15--498.15 \\
-        R2 & \(\COtwo+2\HtwoO \rightleftharpoons \HCOthree+\HthreeO\) & Austgen \cite[Table~V]{Austgen1991}, \(A=231.465\), \(B=-12092.1\); molality conversion and fixed enthalpy shift included & \(A=232.3314\), \(B=-11105.6400\), \(C=-36.7816\), \(D=0\) & 273.15--498.15 \\
-        R3 & \(\HCOthree+\HtwoO \rightleftharpoons \COthree+\HthreeO\) & Austgen \cite[Table~V]{Austgen1991}; unchanged & \(A=216.049\), \(B=-12431.7\), \(C=-35.4819\), \(D=0\); \(\Delta=4.0165\) & 273.15--498.15 \\
-        R4 & \(\MEACOO+\HtwoO \rightleftharpoons \MEA+\HCOthree\) & Tong et al.\ \cite[Table~5]{Tong2012}, from Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}; unchanged & \(A=2.151\), \(B=-1545.3\) & 293.15--323.15 \\
-        R5 & \(\MEAH+\HtwoO \rightleftharpoons \MEA+\HthreeO\) & Bates--Pinching form \cite[Table~5]{Bottinger2008}, \(A=2677.91\), \(B=0.3869\), \(C=4.277\times10^{-4}\); two fixed changes (\cref{sec:data-methods}) & \(A=3037.6400\), \(B=-1.0173\), \(C=4.277\times10^{-4}\) & 273.15--323.15 \\
-        \bottomrule
-    \end{tabularx}
-\end{table*}
+% Generator: docs/scientific/latex/scripts/final_rerun_tables.py; do not hand-edit.
+% A7 parameter SHA256: e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/carbonate-share.csv SHA256 5f83a18d5dfbf3bcacf0bf9ca2d7aa193ee14fbea0dbd7074f6bd7ce126ff16a
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-correlations.csv SHA256 46246a65a498f1b244852cb33f61c0d64b77bb48ae2887f353cedc897856f1a7
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-standard-errors.csv SHA256 d49a822d79a7eaec5e15668d4ee755abca86709ae7a9f01ba221047ee406c7b8
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-uncertainty.json SHA256 1076eea7056bbf44f462ac2eb332c166a77fc62a6f75cb4e33001ec1e584020e
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/cp.csv SHA256 47b1c85ce78c05e7b240e183237d01289060496e42bee6e2dddae70e06c2ac72
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv SHA256 1983f82ba4b030623d909b364ecceb7dc60466b5ea4f327222fa199827dd2fdd
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json SHA256 5a5dda4b70f5463fb6d0d78cf3e9dac49e98002c7c7575bb4cb4d3b6a70c856a
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/fitted-rows.csv SHA256 0643ec9c6dc323409be7fbd5f1984c0cc166cfcd94192e6a7bb79e20d3ed2ce3
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv SHA256 35e7d7d1166698059295361e8e0a002aa5ed57099cf8c1c5b9fce7e539a5f57d
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/input-hashes.json SHA256 1cf1f0d19b086292c197edb6d6efa098034f63a12bc6a4f183006968f69212e8
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv SHA256 fd16142967e4fef1408b907a40839780923bef381da6a685eac8d9ae4b8db6a7
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/predecessor-f1.json SHA256 20e922e230a6401f7f4c03ac0b5e790bf4731fa25453c088dbecc73808ca010d
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/state-summary.json SHA256 5e59bcb4219e80cf16c6801ece44e9172b2fe794f5aff148b385cda826ee8c64
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/state-targets.csv SHA256 aeda99577000150980ec858a1b2fd237d90941879819db50f7c0e86bb3f89809
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json SHA256 39ea65e25e503038a9e47ea158602af1b2ae27b1c38e69bebed6f8b49dbd9883
+% Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/README.md SHA256 51957a9dc31eb8351976306ce775e7abb393481d6fd03d86ca1d1937fa4c6db6
+% Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/checks.json SHA256 5d18e3313805a07c8fc518be37878ee50181d2424fd8bdb354897b7cb5c2cdb1
+% Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/comparison.json SHA256 8bead5a2273dd698b08b0926f6147470bd0ba000ed2c5d9896b57dffb0c8dedb
+% Input: analyses/mea_parameter_bundle/results/heat-160/A-parameters.json SHA256 66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/F1-A/native-fit.json SHA256 9c36dc8a3ba9f98f8a293414fc1a1416c417b39cb44ecc1fc4c11578f9a6d14c
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/corrected-densities.csv SHA256 9a5e301f5277bd5db696c350165113bda80dfd1dfb5653d7c3dcc0e0a11f8b9a
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/density-states.json SHA256 c2c505e13cf56d260f7d352fee37a298764451fbee483d68ec4842d60c5a8468
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/evaluation/execution.json SHA256 213164bd58f26f69696a1b2506b3d905ca567fb3879294b3a5abb3788ac218bd
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/fit-comparison.csv SHA256 81f5390ace97df8669b125d347447dc665a34f33dc4a2fb09dc3359c092bf8cc
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/heat-capacity-comparison.csv SHA256 303a8043a48f6a5dbf7de527c30f3de19e6d74274ed95dd20748be30d45665a2
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/heat-comparison.csv SHA256 4947609fcc14da10744363771907d39c0744be4331a7c0fb5132fbb48555e4be
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/high-temperature-comparison.csv SHA256 e9039244d75b3fa83ea3fb7cd1f98eb28ea39577d3b6eb7c7d4988d9ca1aaa1d
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/pressure-figure-data.csv SHA256 ecce5c18740fab3d989c8e72598e9dc7733f8a97ba751f53fb8265af5032e3b2
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/species-figure-data.csv SHA256 74bb9a8622dae4b0fc4d70b26957f5f2a46d5c695713fbcbdd4636384ba7a941
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/summary.json SHA256 af775385eadbb7396eacb69cbd9abd1defbec46eed35b3bfa300fec619edbd3d
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/engine-identity.json SHA256 141cd2510868b06ac421dc58288a57b412b306e72d65bf1294b61e85b17e9098
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-21.json SHA256 abae0fed350582529b24c0072023ab30fe98695b1aba51d792e0d71a2537d5e5
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-63.json SHA256 a61a929b1a24aa1dde4c895e3379572be83f465afee7fe1264141e513b86ad98
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-70.json SHA256 e94273ed88193eec6040ab9a57c8dc804abd1894d87f0a922d2f24c1edb05e7f
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/reduction.json SHA256 e3052afac7b4ac1e77b2b8a75c646480027b7ad23854ecfcd91398a3199b7dac
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/score.json SHA256 46ab42a394d8e03b378b4805fb20fd647406b9889dcf83236355a2c746470d0c
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/reduction.json SHA256 684937329082c7bbb6d531ad8266472f4ffcfa967cd75a258861b0ab8322c63b
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/score.json SHA256 a8639493c30a08d8e69896c09bb0c4bf91369f431cb9706c102a3094bc64c7bc
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/reduction.json SHA256 2bca815588c7d7e60df62b2ff7d97c58b7a46569afe586555e40657586b4d0a6
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/score.json SHA256 194138834abbef0c6067d2fcb64efbc31a7c4bf531ad297c3d1370eacd6533d8
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit-spec.json SHA256 0cb68ee3718ec812f2f8676df297ca3f7be293a9d13b416e39e6f38aaa2387f6
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json SHA256 e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/replay/A7-restricted-2-full-replay.json SHA256 7f319393cc095cf593661ca02a003113fd33e96b9b23e20e988aa31617d8e10e
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md SHA256 80e31743f7c1485c8a437908982b5bff4b150a8514c8f78083cbef5f95225e47
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/carbonate-share.csv SHA256 5f83a18d5dfbf3bcacf0bf9ca2d7aa193ee14fbea0dbd7074f6bd7ce126ff16a
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/cp.csv SHA256 47b1c85ce78c05e7b240e183237d01289060496e42bee6e2dddae70e06c2ac72
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/density.csv SHA256 1983f82ba4b030623d909b364ecceb7dc60466b5ea4f327222fa199827dd2fdd
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/state-summary.json SHA256 5e59bcb4219e80cf16c6801ece44e9172b2fe794f5aff148b385cda826ee8c64
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/state-targets.csv SHA256 aeda99577000150980ec858a1b2fd237d90941879819db50f7c0e86bb3f89809
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/summary.json SHA256 39ea65e25e503038a9e47ea158602af1b2ae27b1c38e69bebed6f8b49dbd9883
+% Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 53aadadf425fe16b0d91180d4eca2921c9542fc1651bbbb83b0c9748d54a7b21
+% Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
+% Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 ea72eeb337fe24284069c82b3cbc5d830a0fb4d6f9b1574adecb280e025ba12e
+\begingroup\small\setlength{\tabcolsep}{2pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.2632\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.1598\linewidth}@{}}
+\caption{A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 are serialized selected coefficients. R2 uses $\ln K=a+b/T+c\ln T+dT$, R4 $\ln K=a+b/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.}\label{tab:reaction-equilibrium-constants}\\
+\toprule
+Reaction & Coefficients & Source & Source range (K) & Offset \\
+\midrule\endfirsthead
+\toprule
+Reaction & Coefficients & Source & Source range (K) & Offset \\
+\midrule\endhead
+\bottomrule\endfoot
+R1: 2 H2O <=> H3O+ + OH- & kind=ln\_\allowbreak{}a\_\allowbreak{}plus\_\allowbreak{}b\_\allowbreak{}over\_\allowbreak{}t\_\allowbreak{}plus\_\allowbreak{}c\_\allowbreak{}ln\_\allowbreak{}t\_\allowbreak{}plus\_\allowbreak{}d\_\allowbreak{}t; a=132.899; b\_\allowbreak{}k=-13445.9; c=-22.4773; d\_\allowbreak{}per\_\allowbreak{}k=0.0 & Austgen1991\_\allowbreak{}TableV\_\allowbreak{}reaction\_\allowbreak{}1a & [273.15, 498.15] & add source-to-common offset 8.03307 \\
+R2: CO2 + 2 H2O <=> HCO3- + H3O+ & a=234.9486708; b k=-11925.23357; c=-36.7816; d per k=0 & Austgen1991\_\allowbreak{}TableV\_\allowbreak{}reaction\_\allowbreak{}4a & [273.15, 498.15] & offset included in serialized R2 \\
+R3: HCO3- + H2O <=> CO3-- + H3O+ & kind=ln\_\allowbreak{}a\_\allowbreak{}plus\_\allowbreak{}b\_\allowbreak{}over\_\allowbreak{}t\_\allowbreak{}plus\_\allowbreak{}c\_\allowbreak{}ln\_\allowbreak{}t\_\allowbreak{}plus\_\allowbreak{}d\_\allowbreak{}t; a=216.049; b\_\allowbreak{}k=-12431.7; c=-35.4819; d\_\allowbreak{}per\_\allowbreak{}k=0.0 & Austgen1991\_\allowbreak{}TableV\_\allowbreak{}reaction\_\allowbreak{}5a & [273.15, 498.15] & add source-to-common offset 4.01653 \\
+R4: MEACOO- + H2O <=> HCO3- + MEA & a=2.151; b k=-1545.3 & Tong2012\_\allowbreak{}Table5\_\allowbreak{}K5\_\allowbreak{}MEA\_\allowbreak{}via\_\allowbreak{}Aroua1999 & [293.15, 323.15] & add source-to-common offset 0 \\
+R5: MEAH+ + H2O <=> MEA + H3O+ & a k=3354.017165; b=-1.281106391; c per k=0.0004277 & BatesPinching1951\_\allowbreak{}equation\_\allowbreak{}7 & [273.15, 323.15] & add source-to-common offset 0 \\
+\end{longtable}\endgroup
