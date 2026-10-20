@@ -139,7 +139,7 @@ def calculate(row, path, document):
     row['component_ids'] = list(model.component_ids)
     compiled = eq.compile_problem(model, problem)
     witnesses = {kind: campaign.load((HERE.parents[1] / 'amendment-6/gas-root/inputs') / f'falsifier-{kind}.json')['row'] for kind in ('gas', 'physical')}
-    decomposition = list(csv.DictReader((HERE / 'inputs/engine-decomposition.csv').open()))
+    decomposition = list(csv.DictReader((HERE.parents[1] / 'amendment-6/gas-root/inputs/engine-decomposition.csv').open()))
     labels = ('CO2', 'MEA', 'water', 'MEAH', 'carbamate', 'HCO3', 'CO3', 'H3O', 'OH')
     row['witnesses'] = {}
     charges = request['reaction_system']['charges']
