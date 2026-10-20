@@ -78,12 +78,12 @@ and retained physical interactions. This plan applies it as follows:
    the final reactive regression.
 
 These qualification steps are scientific requirements, not a declaration that
-the historical configuration is the current selected vector. The exploratory
-incumbent in `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json`
-uses extended Born and solvent-only mass-fraction dielectric mixing, with
-reaction-temperature and CO2 dispersion selections. Engine Issue #80 describes
-a distinct source-tier campaign baseline. Preserve both identities; compare
-them only through a declared same-row calculation. A favorable historical
+the historical configuration is the current selected vector. The owner-adopted
+A7 record is `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json`;
+its exact identity, formulation, retained comparisons and limits are in
+[the current scientific context](CONTEXT.md) and [working notebook](../../analyses/mea_parameter_bundle/notebook.qmd).
+Engine Issue #80 describes a distinct source-tier campaign baseline. Preserve
+both identities; compare them only through a declared same-row calculation. A favorable historical
 ablation does not settle model choice for a changed parameter vector.
 
 A paper reproduction is evidence for equations, parameter transfer, numerical

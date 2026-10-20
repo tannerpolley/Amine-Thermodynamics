@@ -11,31 +11,42 @@ candidate-specific notebook copies or parallel status notes.
 
 ## Current limited-domain working record
 
-On 2026-10-08 the investigator adopted the reviewed heat-augmented F1 fit
-(#147/#170): the #160 141 pressure/species targets plus the 8 Vinjarapu heats
-of absorption, with the unchanged density-only volume translation.
-[Selected parameters](results/selected-current-best-parameters.json)
-are now document version 3, SHA-256 `7b0b4bb5669c1b2061fd7ec26e5fb4c8491005bdb5ba8f9e22e4c0b0b4b84308`, and differ
-from the unchanged [heat-160/A-parameters.json](results/heat-160/A-parameters.json)
-only by the #191 CO2/MEA no-cross-association declaration and document version.
-The declaration keeps the existing model and makes no claim that this physical
-interaction is absent. Engine commit `8298c6029ebb8b467929badc4a223c580ec591ab`,
-wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`, is pinned
-by the relative path in `pyproject.toml` and `uv.lock`.
-The [8298c602 adoption comparison](results/engine-8298c602-adoption/README.md) reproduces
-the same 152 predictions to at most 2.9 × 10⁻¹² relative difference and retains the
-existing source-input refusal; the [21e761c3 adoption](results/engine-21e761c3-adoption/README.md)
-holds the earlier bitwise comparison.
-The [notebook](notebook.qmd) owns the
-conditions, retained comparisons and limits, including the 100–120 °C pressure
-trade-off. [History](results/parameter-record-history.csv) lists every
-replaced record.
+On 2026-10-20 the owner adopted the A7 second restricted endpoint under
+[#196](https://github.com/tannerpolley/Amine-Thermodynamics/issues/196), following
+[#170 acceptance](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6298116916).
+[Selected parameters](results/selected-current-best-parameters.json) are byte-identical
+to the [endpoint](results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json),
+document version 2, SHA-256 `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e`.
+The [A7 package](results/a7-paper-evidence/README.md) retains 307 objective rows,
+462 state-target rows, 22 heats, 210 densities, four Cp rows, ten carbonate states,
+the A7/A6 73-point phase classifications and conditional errors for ten free coordinates.
+The default-path replay reproduces all 153 required identities within 8.39 × 10⁻¹⁶ relative difference.
 
-This working use is limited to 30 wt% MEA on a CO₂-free basis at 40–80 °C.
-The empirical volume translation applies to reported density only; native
-molar density, equilibrium and calorics keep their original meanings.
-Solution Cp misses remain reported; #124 keeps its original unmet joint
-requirements.
+Engine commit `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256
+`8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`, remains pinned in
+`pyproject.toml` and `uv.lock`. A7 varies 16 declared coordinates, uses the retained
+shared stage-5 water and solvent-density-temperature permittivity, and applies no
+empirical density translation. The [notebook](notebook.qmd) owns the reported values,
+conditions and limits; [history](results/parameter-record-history.csv) records adoption.
+
+The three 353.15 K loaded-density failures remain failures accepted with disclosure.
+Amundsen's high-temperature/loading source-uncertainty boundary remains unresolved;
+density residual scales are not uniformly measured uncertainties. The phase evidence
+is the finite 73-point family (313.15–333.15 K, loading 10⁻⁵–0.5), not a stability
+certificate. Both restricted fits are single local fits from one start, with sampled
+bounds. Conditional errors depend on residual weights, fixed inputs, active bounds
+and local linearization; they establish neither parameter uniqueness nor prediction
+intervals. Non-fitted comparisons retain their source-state basis and data-access
+history. Adoption is the owner's working-record choice, not physical validation,
+process-use qualification or manuscript promotion.
+
+The [heat F1 predecessor](results/a7-paper-evidence/predecessor-f1.json), its original
+parameter, Engine and source-state identities, and historical figures remain retained.
+The [8298c602 transfer check](results/engine-8298c602-adoption/README.md) covers only
+its named 152 F1 quantities, within 2.9 × 10⁻¹² relative difference. It does not
+qualify every retained F1 result on the current wheel. Historical guards remain;
+future unpinned default-consuming commands use A7 without relabeling prior outputs.
+Manuscript freshness checks concern retained LaTeX inputs and do not establish A7 adoption.
 
 ## Presentation map
 
