@@ -1,0 +1,50 @@
+"""Confirm every detected path-vector descent with a physical split start; no fit.
+
+Uses the already diagnosed A6 finite-split coordinate interpretation and the
+existing Engine start interface. One most-negative trial per descending point.
+"""
+import json
+import math
+from pathlib import Path
+import final_evidence as f
+from heat_evidence_170 import request
+
+root = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/design-probes')
+f.s.verify_wheel()
+summary = []
+for label in ['path-0p25','path-0p5']:
+    mapping = f.s.parameter_mapping(root/label/'fixed-parameters.json')
+    model = f.epcsaft.Mixture(f.epcsaft.Parameters.from_mapping(mapping),thermochemistry=f.thermal.record())
+    for path in sorted((root/label).glob('point-*.json')):
+        old = json.loads(path.read_text())
+        trials = [t for r in old.get('stability',[]) for t in r['trials'] if t['resolved_descent']]
+        if not trials:
+            continue
+        trial = min(trials,key=lambda t:t['quantities']['split_delta_g_over_rt'])
+        phases = [f.eq.Phase(p['identity'],kind=p['role'],support=p['support']) for p in old['final']['phases']]
+        phases.append(f.eq.Phase('L2',kind='liquid',support=f.s.COMPONENT_IDS))
+        problem = f.flash_problem(request(mapping,313.15,.11),old['loading'],old['temperature_K'],old['pressure_Pa'],phases)
+        cursor = 0
+        amounts, compositions, packings = [], [], []
+        for phase in phases:
+            count = len(phase.support)
+            compositions.append([math.exp(v) for v in trial['split_coordinates'][cursor:cursor+count]])
+            amounts.append(trial['split_coordinates'][cursor+count])
+            packings.append(math.exp(trial['split_coordinates'][cursor+count+1]))
+            cursor += count+2
+        assert cursor == len(trial['split_coordinates'])
+        start = f.eq.EquilibriumStart(compositions=compositions,amounts=amounts,packing_fractions=packings)
+        batch = f.eq.solve_equilibrium_starts(model,problem,[start],
+            f.eq.EquilibriumWorkLimits(attempts=1,attempt_iterations=400,iterations=400))
+        result = batch.results[0]
+        row = dict(label=label,index=old['index'],seed=trial['seed'],selected=batch.selected,causes=list(batch.causes),
+            original_G_over_RT=old['final']['objective'],finite_split_delta_G_over_RT=trial['quantities']['split_delta_g_over_rt'],
+            finite_split_error_over_RT=trial['quantities']['split_error_estimate_over_rt'])
+        if result is not None:
+            row['result'] = f.phase_payload(model,problem,result)
+            row['delta_G_over_RT'] = result.objective-old['final']['objective']
+        f.s.write_json(root/label/f"split-seeded-{old['index']}.json",row)
+        summary.append({k:v for k,v in row.items() if k!='result'} | dict(success=result is not None and result.success,
+            requested_tolerance_met=result is not None and result.requested_tolerance_met))
+        print(summary[-1],flush=True)
+f.s.write_json(root/'split-summary.json',summary)

@@ -1,0 +1,34 @@
+"""Fixed-vector density and Cai comparisons at existing path mappings; no fit."""
+import json
+from pathlib import Path
+import sys
+import fit_observations as o
+import fit_campaign as c
+
+root = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170')
+output = root/'amendment-7/design-probes'
+spec = c.load(root/'amendment-6/joint-mea-water/held/fit-spec.json')
+loaded = set(spec['loaded_density_ids'])
+cai = {r['id'] for r in c.load(spec['stage2_rows_path'])['F1'] if r['id'].startswith('cai-')}
+o.s.verify_wheel()
+result = []
+for label in sys.argv[1:]:
+    record = output/label/'fixed-parameters.json'
+    mapping = o.s.parameter_mapping(record)
+    _, rows = o.stage6_rows(spec, mapping)
+    weights = c.stage6_weights(spec, [r for r,_ in rows], 1.)
+    chosen = [(r['id'], item, weight) for (r,item),weight in zip(rows,weights,strict=True)
+        if r['id'] in loaded or r['id'].startswith('AMU-DENS-') or r['id'] in cai]
+    values = o.replay(mapping, chosen)
+    assert len(values) == 102 and len(cai) == 50
+    assert all(r['status']=='Available' for r in values)
+    o.s.write_json(output/label/'density-cai-rows.json',values)
+    loaded_rows = [r for r in values if r['target'] in loaded]
+    unloaded = [r for r in values if r['target'].startswith('AMU-DENS-')]
+    result.append(dict(label=label, parameter_sha256=o.s.sha256(record), loaded_count=len(loaded_rows),
+        loaded_within_2s=sum(abs(r['residual'])<=2 for r in loaded_rows),
+        loaded_max_abs_error_over_s=max(abs(r['residual']) for r in loaded_rows),
+        unloaded_count=len(unloaded), unloaded_max_abs_error_kg_m3=max(abs(r['predicted']-r['observed']) for r in unloaded),
+        cai_cost=sum(r['cost'] for r in values if r['target'] in cai)))
+    print(result[-1],flush=True)
+o.s.write_json(output/'density-cai-summary.json',result)
