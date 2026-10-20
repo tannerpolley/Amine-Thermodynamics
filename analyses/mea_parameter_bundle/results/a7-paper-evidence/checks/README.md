@@ -44,12 +44,8 @@ in `analyses/_cse-manuscript.json`, keeping its sidebar links consistent with
 the required A7 notebook presentation and validation. Unrelated untracked
 LaTeX PDFs are outside this change and must not be staged.
 
-The final executable count against 5d5735c is 363 gross-added nonblank,
-non-comment Python lines: replay 67, reduction 193, parameter renderer 61,
-figure renderer 42. Tests add one line, counted separately. No executable
-`.py.txt` changed. Deletions do not offset additions. The separate CSE
-change-accounting report includes blank/comment additions and generated files;
-the owner's 500-line ceiling uses the nonblank, non-comment count above.
+Against base `5d5735c`, the corrected change adds 395 lines in executable files, including blanks and comments: replay 73, reduction 213, parameter renderer 66, and figure renderer 43. This is below the approved 500-line ceiling. The filtered nonblank, non-comment count is 367 and is supplementary. Tests add one line separately; deletions do not offset additions.
+The ceiling counts every added line in executable files (delivered review r1); the 363/390 totals of commit `ffd6722` predate the rounding correction.
 
 This task charges 40 rounded-up compute wall-s and 38.74 CPU-s, including both
 reductions and the complete repository test command. The program ledger now
@@ -65,4 +61,4 @@ also retains its original whitespace. Source and authored prose diffs are clean.
 The CSE accounting report includes nine unrelated untracked LaTeX PDFs in its
 other/binary category; they are excluded from the commit. Retained numerical
 JSON/CSV and plots are also in that report’s other category, with no runtime
-code hidden there. Its executable additions including blanks/comments are 390.
+code hidden there. Its executable additions including blanks/comments are 395 after the delivered-review r1 corrections.

@@ -317,7 +317,7 @@ Both nine-column matrices have rank 9 at the declared cutoff. The local R5 cost 
 
 At the end of the chemistry diagnosis, before the subsequent carbonate diagnosis, cumulative program charges recorded on 15 October 2026, including the authorized diagnosis, are **1289.168845 CPU-s / at least 441.633360 active wall-s**, leaving at that point at most **142710.831155 CPU-s / 21158.366640 wall-s**. Diagnosis includes a conservative 64 CPU-s / 2 wall-s charge for short unmetered commands; earlier unmetered startup/verification overhead remains unknown. The reader correction and code accounting are disclosed in the stage-4 report. This conditional calibration and numerical verification has not been independently reviewed or promoted for manuscript use. It establishes no physical model limit or unique ion properties. Including the subsequent carbonate diagnosis, the latest retained cumulative charge is 1398.791530720 CPU-s / at least 467.340689828 active wall-s, leaving at most 142601.208469280 CPU-s / 21132.659310172 active wall-s. Earlier unmetered overhead remains unknown; these are charges, not thermodynamic results.
 
-The superseded 160 K stage-3 endpoint and its pressure/species trade-off remain in the [historical stage-3 report](results/joint-recalibration-170/stage3/README.md). It was not used as a start or precursor in this attempt. The adopted record below remains the prior record.
+The superseded 160 K stage-3 endpoint and its pressure/species trade-off remain in the [historical stage-3 report](results/joint-recalibration-170/stage3/README.md). It was not used as a start or precursor in this attempt. At the time of this historical attempt, heat F1 remained the adopted record; the current section below now reports the A7 record adopted under #196.
 
 # Current working record {#working-record}
 
@@ -428,8 +428,8 @@ The stored temperature dependence is $k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b(1/T-1
 | component/MEACOO⁻/segment_diameter | <span class="evidence-2" title="exact 4.866040008417222">4.866</span>[★](#fitted-coordinates){.fit-star} | angstrom | 0.079 | Free |
 | component/MEAH⁺/born_diameter | <span class="evidence-2" title="exact 5.0">5</span>[★](#fitted-coordinates){.fit-star} | angstrom | — | On bound; no symmetric error |
 | component/MEACOO⁻/born_diameter | <span class="evidence-2" title="exact 5.0">5</span>[★](#fitted-coordinates){.fit-star} | angstrom | — | On bound; no symmetric error |
-| reaction:R5:correlation:a_k | <span class="evidence-2" title="exact 2831.6809640586557">2832</span>[★](#fitted-coordinates){.fit-star} | K | 1.7e+02 | Free |
-| reaction:R2:enthalpy_shift | <span class="evidence-2" title="exact -1387.404676576437">-1387</span>[★](#fitted-coordinates){.fit-star} | J/mol | 5.3e+03 | Free |
+| reaction:R5:correlation:a_k | <span class="evidence-2" title="exact 2831.6809640586557">2830</span>[★](#fitted-coordinates){.fit-star} | K | 1.7e+02 | Free |
+| reaction:R2:enthalpy_shift | <span class="evidence-2" title="exact -1387.404676576437">-1400</span>[★](#fitted-coordinates){.fit-star} | J/mol | 5.3e+03 | Free |
 | reaction:R5:enthalpy_shift | <span class="evidence-2" title="exact 10000.0">10000</span>[★](#fitted-coordinates){.fit-star} | J/mol | — | On bound; no symmetric error |
 | pair/MEA/H₂O/k_ij | <span class="evidence-2" title="exact -0.08990482269248873">-0.0899</span>[★](#fitted-coordinates){.fit-star} | dimensionless | 0.001 | Free |
 | pair/MEA/H₂O/k_ij/reciprocal_temperature_slope | <span class="evidence-2" title="exact -8.06991337259403">-8.1</span>[★](#fitted-coordinates){.fit-star} | K | 1.8 | Free |
