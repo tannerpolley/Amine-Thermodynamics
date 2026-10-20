@@ -239,6 +239,96 @@
    "need_wall_s": 40.0,
    "need_cpu_s": 40.0,
    "admitted": true
+  },
+  {
+   "stage": "bound-probe",
+   "launch": "b-5p45-family fixed-vector probe",
+   "program_prior_wall_s": 17139,
+   "program_prior_cpu_s": 129364.03,
+   "stage_used": {
+    "wall_s": 0,
+    "cpu_s": 0
+   },
+   "budget_wall_s": 180,
+   "budget_cpu_s": 200,
+   "need_wall_s": 60.0,
+   "need_cpu_s": 60.0,
+   "admitted": true
+  },
+  {
+   "stage": "bound-probe",
+   "launch": "b-5p45-score fixed-vector probe",
+   "program_prior_wall_s": 17175,
+   "program_prior_cpu_s": 129399.46,
+   "stage_used": {
+    "wall_s": 35.61,
+    "cpu_s": 35.43
+   },
+   "budget_wall_s": 144.39,
+   "budget_cpu_s": 164.57,
+   "need_wall_s": 30.0,
+   "need_cpu_s": 30.0,
+   "admitted": true
+  },
+  {
+   "stage": "bound-probe",
+   "launch": "b-5p40-family fixed-vector probe",
+   "program_prior_wall_s": 17190,
+   "program_prior_cpu_s": 129414.27,
+   "stage_used": {
+    "wall_s": 50.43,
+    "cpu_s": 50.24
+   },
+   "budget_wall_s": 129.57,
+   "budget_cpu_s": 149.76,
+   "need_wall_s": 60.0,
+   "need_cpu_s": 60.0,
+   "admitted": true
+  },
+  {
+   "stage": "bound-probe",
+   "launch": "b-5p40-score fixed-vector probe",
+   "program_prior_wall_s": 17223,
+   "program_prior_cpu_s": 129446.86,
+   "stage_used": {
+    "wall_s": 83.09,
+    "cpu_s": 82.83
+   },
+   "budget_wall_s": 96.91,
+   "budget_cpu_s": 117.17,
+   "need_wall_s": 30.0,
+   "need_cpu_s": 30.0,
+   "admitted": true
+  },
+  {
+   "stage": "bound-probe",
+   "launch": "b-5p35-family fixed-vector probe",
+   "program_prior_wall_s": 17237,
+   "program_prior_cpu_s": 129461.74,
+   "stage_used": {
+    "wall_s": 98.0,
+    "cpu_s": 97.71
+   },
+   "budget_wall_s": 82.0,
+   "budget_cpu_s": 102.29,
+   "need_wall_s": 60.0,
+   "need_cpu_s": 60.0,
+   "admitted": true
+  },
+  {
+   "stage": "bound-probe",
+   "launch": "b-5p35-score fixed-vector probe",
+   "program_prior_wall_s": 17273,
+   "program_prior_cpu_s": 129496.89,
+   "stage_used": {
+    "wall_s": 133.42,
+    "cpu_s": 132.86
+   },
+   "budget_wall_s": 46.58,
+   "budget_cpu_s": 67.14,
+   "need_wall_s": 30.0,
+   "need_cpu_s": 30.0,
+   "admitted": true
   }
  ],
  "calls": [
@@ -571,6 +661,162 @@
    "exit_code": 0,
    "wall_s": 14.93,
    "cpu_s": 14.92
+  },
+  {
+   "stage": "bound-probe",
+   "call": "b-5p45-family",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/b-5p45-family-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "60s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "size",
+    "wheel-8298c602/size-probe/meah-5p45",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/usable-budget-endpoint.json",
+    "5.45"
+   ],
+   "exit_code": 0,
+   "wall_s": 35.61,
+   "cpu_s": 35.43
+  },
+  {
+   "stage": "bound-probe",
+   "call": "b-5p45-score",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/b-5p45-score-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "30s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "score",
+    "wheel-8298c602/size-probe/meah-5p45"
+   ],
+   "exit_code": 0,
+   "wall_s": 14.82,
+   "cpu_s": 14.81
+  },
+  {
+   "stage": "bound-probe",
+   "call": "b-5p40-family",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/b-5p40-family-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "60s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "size",
+    "wheel-8298c602/size-probe/meah-5p40",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/usable-budget-endpoint.json",
+    "5.40"
+   ],
+   "exit_code": 0,
+   "wall_s": 32.66,
+   "cpu_s": 32.59
+  },
+  {
+   "stage": "bound-probe",
+   "call": "b-5p40-score",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/b-5p40-score-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "30s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "score",
+    "wheel-8298c602/size-probe/meah-5p40"
+   ],
+   "exit_code": 0,
+   "wall_s": 14.91,
+   "cpu_s": 14.88
+  },
+  {
+   "stage": "bound-probe",
+   "call": "b-5p35-family",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/b-5p35-family-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "60s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "size",
+    "wheel-8298c602/size-probe/meah-5p35",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/usable-budget-endpoint.json",
+    "5.35"
+   ],
+   "exit_code": 0,
+   "wall_s": 35.42,
+   "cpu_s": 35.15
+  },
+  {
+   "stage": "bound-probe",
+   "call": "b-5p35-score",
+   "command": [
+    "nice",
+    "-n",
+    "10",
+    "/usr/bin/time",
+    "-f",
+    "{\"whole_command_user_s\":%U,\"whole_command_system_s\":%S,\"wall_s\":%e}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/calls/b-5p35-score-command-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "30s",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a7/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "score",
+    "wheel-8298c602/size-probe/meah-5p35"
+   ],
+   "exit_code": 0,
+   "wall_s": 20.09,
+   "cpu_s": 19.14
   }
  ]
 }
