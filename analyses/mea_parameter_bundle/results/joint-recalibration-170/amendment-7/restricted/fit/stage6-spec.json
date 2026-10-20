@@ -1,0 +1,1776 @@
+{
+ "study": "joint-recalibration-170",
+ "stage": 6,
+ "implementation_base": "8d9e315a3d59d6bd647ad41ff1408ed524f52844",
+ "design_url": "tmp/joint-design/amendment-7-phase-stable-density.md",
+ "controls_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000919",
+ "purpose": "Amendment 6 revision 3 held form; stage-2b MEA-water pair substituted. Five Amundsen 2009 loading-0.4 rows removed from the objective and gate (owner, #170 comment 6278610430). MEA-water k and slope fitted jointly with the 50 Cai 1996 rows (owner, #170 comment 6278891898). Amendment 7 restricted feasibility fit (owner, #170 comments 6283064075 and 6283335389): start = design path t = 0.125 vector (analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/design-probes/path-0p125/fixed-parameters.json, sha256 c9f062478a7a38dde923f5e27fbc67aebe6dff25f1b53bf24c3de16336f946d8), carbamate segment diameter 5.8 -> 5.798 A with Held ties; bounds MEAH+ segment diameter [5.49, 5.8] A and MEAH+-water k [-0.5, -0.161].",
+ "inputs": [
+  {
+   "path": "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/parameters.json",
+   "sha256": "59acacc310a6dbea73b33599e9fdca3a474e4eccf12ccd139c27816cbef75a7f"
+  },
+  {
+   "path": "data/reference/MEA/observations/vapor_liquid_equilibrium/Cai_1996_MEA_H2O_VLE.csv",
+   "sha256": "c7857f045757881662f1836913e25216f808bc9fdcf5c74f3b4d03c76c134a8b"
+  },
+  {
+   "path": "analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/source/kiepe_2002_table_1.csv",
+   "sha256": "e2ecb652867832f70dfba06417687d6667c1e11932262912b8490247d9195e2e"
+  },
+  {
+   "path": "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
+   "sha256": "7322b7dc7f0c961d09dbfb356dccde00851c0de20ba589d150d9c3834900f70c"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/data/input/state-packet.json.gz",
+   "sha256": "e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba"
+  },
+  {
+   "path": "data/reference/MEA/thermal/physical-ideal-gas-calorics.json",
+   "sha256": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a"
+  },
+  {
+   "path": "src/MEA/common/mea_source_contracts.py",
+   "sha256": "242973e500e33530a1d0315475fa4a6f974e57c6f7354706081c07bf94820ef5"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-rows.json",
+   "sha256": "e50fc34ff22deeb8c65d8e4a77934b5f9fd2952c9338c1b99e1c473db8a4c72a"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json",
+   "sha256": "36c827bdb5e8b27997f3bc82439ef22d70f7fe8648526e0aa2ac1b6079e6d237"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/co2-water/slope/co2-water/B/parameters.json",
+   "sha256": "b1ec1ddc22abe5ced8d08116fc91a7b3da1361864db1b34c33dda121b642a5e2"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage3-rows.json",
+   "sha256": "2ce00fa3101cf348e0b1dbc5d22d2447824782a8b80d45dbe98162a315337a60"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage3-requests.json",
+   "sha256": "e67abfa192b7fa91754340ad98bfd7ef58b75d90ab543edbd2b559c1f454801b"
+  },
+  {
+   "path": "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
+   "sha256": "d5cd6ea0d5d75f9994f5ed354463776a09b8f3cd081eb72ddef98dd4a356c53a"
+  },
+  {
+   "path": "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv",
+   "sha256": "38326453cfe11b30f2e83e2c33e9342037a8f2bbbec0d95938384806e935383b"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/frozen-inputs.json",
+   "sha256": "4abf21d682f9eb2eced9e32569f95742bd88706c0446a0abce6a4e18fa8d9739"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage4/initial-source-chemistry/reference-parameters.json",
+   "sha256": "d1e7fa321640ed752b926c3c42da237005a139335641365e21b9e6da635701e8"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-rows.json",
+   "sha256": "57efc1c0f8aac14259a7dd255e1b51a88bd34f5c215d94bfb01af1e8bcbc3216"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-requests.json",
+   "sha256": "93f1edac419ddd4804db4108d036b0bb4d7573118c7305c59c0740c6ee324601"
+  },
+  {
+   "path": "data/reference/MEA/observations/liquid_speciation/Bottinger_2007_ChEq.csv",
+   "sha256": "583a3f7a26f4ea8cdae97cf7c2606bdbefafbb18cac085dbedd9cc2234aa3c71"
+  },
+  {
+   "path": "data/reference/MEA/observations/liquid_speciation/Matin_2012_ChEq.csv",
+   "sha256": "8625f8dd06c26f9230fedbc50c97f907cc555f986521a270c873634f9ea5776f"
+  },
+  {
+   "path": "data/reference/MEA/observations/liquid_speciation/Jakobsen_2005_ChEq.csv",
+   "sha256": "f3479866b0693a5e122e3f35e8b91fdb524ac358986e05b269a6b872e4cae3c3"
+  },
+  {
+   "path": "data/reference/MEA/manifests/speciation_target_membership.csv",
+   "sha256": "216600eb7bf1bb4ff7a5796ebfd11c5b5b9d4a9b9cd458e0c88fcedf029d8cf5"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/reference-parameters.json",
+   "sha256": "f96374436ef7c61eb6bda5a0f46455a4969e902752d8fbe05e7d34a558979e38"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/precursor-rows.json",
+   "sha256": "b4dee6f0f55178e50b45ab9237b1211834a34f5d45a4ae532fd42edcf914ee4e"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/precursor-requests.json",
+   "sha256": "9393e9e9d10bfc7a81d423926ba3b82218fdbd74fc166c50335a88c30bba0c0c"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/stage4-rows.json",
+   "sha256": "506d151b8654a2947f2b805599d9c691bd80ff6d3ad4f77911e9fecb67aa2635"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/stage4-requests.json",
+   "sha256": "f6fdaff18269e474cd7dea1aa05b4abe47864a12203730068ba65472d3162583"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/overlap.json",
+   "sha256": "a3775619c67da356ac12c08b0797374cc92d89cecd99710ee3940667c9ee8884"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/source-corrections-152/state-packet.json.gz",
+   "sha256": "3fca278be8790d58ab30e5474b2b3892c47225d8230ac40fd4f87c066e8eaf2d"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/source-corrections-152/accepted-wave/packet.jsonl",
+   "sha256": "b61c7789ad8bd225a991245dc2124ba6f6b6abaf0c8cba34265f6b8e7afe7bcb"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/heat-rows.json",
+   "sha256": "2a508e7e2d8fee57533eea4b565cdcfc03c8fc77358fc1fb5070380cd16133fe"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json",
+   "sha256": "0fcb0ef01b78e44ebe1e3c6e3338b46303e9821dd5efac61ad3e39d477851e71"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2/added-rows.json",
+   "sha256": "8f217b877e7051e77ebe846d35cfb263fe986b0c1af211c0d42873b7920f05fb"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/target-rows.json",
+   "sha256": "a0590568a02e559232eec3387e5f2cf166d245cbfc31a18988a09455bf8a5edd"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2/A/start-parameters.json",
+   "sha256": "f9a9d6ea7a46e900721eefbf8eb77a94a21fadfcee89ab44e43774b6ab6a3815"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2/B/start-parameters.json",
+   "sha256": "b0cd251a29bcd826e895813a43f01b96ed41ce7963318e598ba9d2df554dd468"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2b/added-rows.json",
+   "sha256": "2c5285ec469b0b99a42149f8231346d64f90a98acb8aea51bb6e53553c0eb83f"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2b/smaller-dV/start-parameters.json",
+   "sha256": "f9a9d6ea7a46e900721eefbf8eb77a94a21fadfcee89ab44e43774b6ab6a3815"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/route2b/larger-dV/start-parameters.json",
+   "sha256": "aee26a2dc1149854ff0840d4bd5bfac58ec423aac1cfec7b870b1ccbbbc2d202"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/neutral-fit/A/native.json",
+   "sha256": "7d89b86f3dd08655e7cbd20d17a211648bf8b0acc9a1ff51474155de101b7135"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/joint-mea-water/joint-added-rows.json",
+   "sha256": "a11c35b4cfaea1b893d60e6f4742954f765f01404e1da387de6df46723c8566d"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-source-rows.json",
+   "sha256": "dff190a684a4e4b94c7d9e3fd9b875c55381e4b61bf2a0d6b2aade5803186a32"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-scales.json",
+   "sha256": "ee61922f62b40e8a3f947e85bb9d0e1247ff5dd97e567e554f7b90e589dc95ce"
+  },
+  {
+   "path": "data/reference/MEA/observations/density_viscosity/Hartono_2014_loaded_density.csv",
+   "sha256": "be0daa47de963643c498af015b430ae785a3f0b0103a23f3d5f9f81102cee7b4"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/inputs/restricted-start.json",
+   "sha256": "fe9ed68f7abb83179a875f3fcecd7da927ce5d41b6a6d83218282aed15f3c3ea"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/matched-larger-dV/control/chemistry-coordinates.json",
+   "sha256": "2fc47215f66e96ccb79088b94651899f68bdb646a591c2a3e268be5414359764"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/chemistry-coordinates.json",
+   "sha256": "e358167b0f438bcc9b00bc7b8f9e12d063c8534925f7e09725b416198ad8c1ea"
+  },
+  {
+   "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/design-probes/path-0p125/fixed-parameters.json",
+   "sha256": "c9f062478a7a38dde923f5e27fbc67aebe6dff25f1b53bf24c3de16336f946d8"
+  }
+ ],
+ "engine": {
+  "wheel_path": "build/engine-wheels/main-8298c6029ebb8b467929badc4a223c580ec591ab/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+  "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3",
+  "packages": {
+   "epcsaft": "0.2.0.dev0",
+   "numpy": "2.5.4",
+   "scipy": "1.18.1"
+  }
+ },
+ "water_path": "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/parameters.json",
+ "packet_path": "analyses/mea_parameter_bundle/results/source-corrections-152/state-packet.json.gz",
+ "stage2_rows_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/joint-mea-water/joint-added-rows.json",
+ "starting_assumptions": {
+  "component/carbon-dioxide/dispersion_energy_over_k": 169.21,
+  "reaction:R2:correlation:a": 235.4815349923,
+  "reaction:R2:correlation:b_k": -12092.1,
+  "reaction:R2:correlation:c": -36.7816,
+  "reaction:R2:correlation:d_per_k": 0.0,
+  "reaction:R4:correlation:a": 2.151,
+  "reaction:R4:correlation:b_k": -1545.3,
+  "reaction:R5:correlation:a_k": 2677.91,
+  "reaction:R5:correlation:b": 0.3869,
+  "reaction:R5:correlation:c_per_k": 0.0004277,
+  "component/protonated-monoethanolamine/segment_diameter": 3.563,
+  "component/protonated-monoethanolamine/packing_diameter": 3.13544,
+  "component/protonated-monoethanolamine/debye_huckel_diameter": 3.13544,
+  "component/protonated-monoethanolamine/born_diameter": 3.563,
+  "component/protonated-monoethanolamine/dispersion_energy_over_k": 228.71,
+  "component/carbamate-anion/segment_diameter": 3.5605,
+  "component/carbamate-anion/packing_diameter": 3.1332400000000002,
+  "component/carbamate-anion/debye_huckel_diameter": 3.1332400000000002,
+  "component/carbamate-anion/born_diameter": 3.5605,
+  "component/carbamate-anion/dispersion_energy_over_k": 533.11,
+  "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+  "pair/carbamate-anion/water/k_ij": 0.0,
+  "pair/protonated-monoethanolamine/water/k_ij": 0.0,
+  "pair/carbon-dioxide/monoethanolamine/k_ij": 0.0,
+  "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 0.0,
+  "pair/carbon-dioxide/monoethanolamine/k_ij/reciprocal_temperature_slope": 0.0,
+  "pair/monoethanolamine/water/k_ij": 0.0
+ },
+ "controls": {
+  "maximum_iterations": 180,
+  "function_tolerance": 1e-06,
+  "parameter_tolerance": 1e-10,
+  "gradient_tolerance": 1e-08
+ },
+ "budget_cpu_s": 6759.17,
+ "budget_wall_s": 959.01,
+ "nonfit_wall_s": 300,
+ "worker_memory": {
+  "allowance_bytes": 268435456,
+  "basis": "Conservative reacting-row estimate; limited by measured available physical memory."
+ },
+ "verification": {
+  "cost_replay_relative": 1e-08,
+  "row_replay_absolute": 1e-08,
+  "start_cost_relative": 1e-06,
+  "derivative_relative": 1e-05,
+  "derivative_absolute": 1e-08,
+  "steps_optimizer": [
+   0.01,
+   0.005
+  ],
+  "raw_residual": 1e-10,
+  "smaller_steps_optimizer": [
+   0.0025,
+   0.00125
+  ]
+ },
+ "cases": [
+  {
+   "id": "F1",
+   "neutral_domain_ids": [
+    "mea-candidate-293-15-to-393-15-k",
+    "cai-1996-neutral-refit"
+   ],
+   "neutral_domain": {
+    "kind": "fit-range",
+    "temperature_min": {
+     "magnitude": 293.15,
+     "unit": "kelvin"
+    },
+    "temperature_max": {
+     "magnitude": 436.85,
+     "unit": "kelvin"
+    },
+    "pressure_min": {
+     "magnitude": 1.0,
+     "unit": "pascal"
+    },
+    "pressure_max": {
+     "magnitude": 100000000.0,
+     "unit": "pascal"
+    }
+   },
+   "kiepe_continuation": "all rows in each isotherm; pressure, phase composition and packing guesses from preceding converged row at identical parameters"
+  }
+ ],
+ "prior_cpu_charge_s": 0,
+ "prior_wall_charge_s": 0,
+ "amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6283335389",
+ "reference_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json",
+ "state_requests_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/stage4-requests.json",
+ "program_prior_cpu_s": 128399.32,
+ "program_prior_wall_s": 17002,
+ "program_cpu_limit_s": 200000,
+ "program_wall_limit_s": 21600,
+ "shared_stage5": {
+  "reduction_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/reduction.json",
+  "reduction_sha256": "bed06086cfa121d0c69b55d9e584eaf60ca198635d2588988c7d6cef7da66717",
+  "branches": [
+   {
+    "branch": "smaller-dV",
+    "dielectric_volume_L_mol": 0.2464540312088979,
+    "dielectric_temperature_K": 2436.4423007273617,
+    "max_abs_native_replay_epsilon": 2.842170943040401e-14,
+    "scale_covariance_dV_dT": [
+     [
+      5.5615001884638315e-05,
+      -0.36591386274737514
+     ],
+     [
+      -0.36591386274737514,
+      2581.6453473103675
+     ]
+    ],
+    "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json",
+    "sha256": "0fcb0ef01b78e44ebe1e3c6e3338b46303e9821dd5efac61ad3e39d477851e71"
+   },
+   {
+    "branch": "larger-dV",
+    "dielectric_volume_L_mol": 0.7309888238084122,
+    "dielectric_temperature_K": 1019.0786110170793,
+    "max_abs_native_replay_epsilon": 2.842170943040401e-14,
+    "scale_covariance_dV_dT": [
+     [
+      0.0003017059746775267,
+      -0.3659138627473755
+     ],
+     [
+      -0.36591386274737553,
+      475.88786072133706
+     ]
+    ],
+    "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/larger-dV-parameters.json",
+    "sha256": "2ce456134fc6bc716ea28708a09f73ac2daf5bc392f61a38c2a06846097ba1d2"
+   }
+  ]
+ },
+ "nonfit_cpu_s": 500,
+ "information_density_weights": [
+  1.0
+ ],
+ "matched_density_weights": [
+  1.0
+ ],
+ "fit_cpu_s": 6000,
+ "fit_wall_s": 600,
+ "information_starts": [
+  {
+   "id": "a7-restricted-t0p125",
+   "parameters_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/inputs/restricted-start.json",
+   "sha256": "fe9ed68f7abb83179a875f3fcecd7da927ce5d41b6a6d83218282aed15f3c3ea",
+   "reaction_enthalpy_shifts_J_mol": {
+    "R2": 2806.6888916827156,
+    "R5": 3831.9492961094343
+   }
+  }
+ ],
+ "anchors_path": "analyses/mea_parameter_bundle/results/source-corrections-152/accepted-wave/packet.jsonl",
+ "heat_rows_path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/heat-rows.json",
+ "observations": [
+  {
+   "id": "base",
+   "table": "analyses/mea_parameter_bundle/data/input/fit-campaigns/target-rows.json",
+   "ordered_row_ids": [
+    "vle_obs_0119-pco2",
+    "vle_obs_0120-pco2",
+    "vle_obs_0121-pco2",
+    "vle_obs_0122-pco2",
+    "vle_obs_0123-pco2",
+    "vle_obs_0124-pco2",
+    "vle_obs_0125-pco2",
+    "vle_obs_0126-pco2",
+    "vle_obs_0127-pco2",
+    "vle_obs_0128-pco2",
+    "vle_obs_0129-pco2",
+    "vle_obs_0130-pco2",
+    "vle_obs_0131-pco2",
+    "vle_obs_0132-pco2",
+    "vle_obs_0133-pco2",
+    "vle_obs_0134-pco2",
+    "vle_obs_0135-pco2",
+    "vle_obs_0136-pco2",
+    "vle_obs_0137-pco2",
+    "vle_obs_0138-pco2",
+    "vle_obs_0139-pco2",
+    "vle_obs_0140-pco2",
+    "vle_obs_0141-pco2",
+    "vle_obs_0142-pco2",
+    "vle_obs_0143-pco2",
+    "vle_obs_0144-pco2",
+    "vle_obs_0145-pco2",
+    "vle_obs_0146-pco2",
+    "vle_obs_0147-pco2",
+    "vle_obs_0149-pco2",
+    "vle_obs_0186-pco2",
+    "vle_obs_0187-pco2",
+    "vle_obs_0188-pco2",
+    "vle_obs_0189-pco2",
+    "vle_obs_0190-pco2",
+    "vle_obs_0191-pco2",
+    "vle_obs_0192-pco2",
+    "vle_obs_0193-pco2",
+    "vle_obs_0194-pco2",
+    "vle_obs_0195-pco2",
+    "vle_obs_0196-pco2",
+    "vle_obs_0197-pco2",
+    "vle_obs_0198-pco2",
+    "vle_obs_0199-pco2",
+    "vle_obs_0200-pco2",
+    "vle_obs_0201-pco2",
+    "vle_obs_0202-pco2",
+    "Bottinger2008_state_030::MEA + MEAH+",
+    "Bottinger2008_state_030::MEACOO-",
+    "Bottinger2008_state_031::MEA + MEAH+",
+    "Bottinger2008_state_031::MEACOO-",
+    "Bottinger2008_state_032::MEA + MEAH+",
+    "Bottinger2008_state_032::MEACOO-",
+    "Bottinger2008_state_033::MEA + MEAH+",
+    "Bottinger2008_state_033::MEACOO-",
+    "Bottinger2008_state_034::MEA + MEAH+",
+    "Bottinger2008_state_034::MEACOO-",
+    "Bottinger2008_state_035::MEA + MEAH+",
+    "Bottinger2008_state_035::MEACOO-",
+    "Bottinger2008_state_043::MEA + MEAH+",
+    "Bottinger2008_state_043::MEACOO-",
+    "Bottinger2008_state_044::MEA + MEAH+",
+    "Bottinger2008_state_044::MEACOO-",
+    "Bottinger2008_state_045::MEA + MEAH+",
+    "Bottinger2008_state_045::MEACOO-",
+    "Bottinger2008_state_047::MEA + MEAH+",
+    "Bottinger2008_state_047::MEACOO-",
+    "Bottinger2008_state_048::MEA + MEAH+",
+    "Bottinger2008_state_048::MEACOO-",
+    "Bottinger2008_state_049::MEA + MEAH+",
+    "Bottinger2008_state_049::MEACOO-",
+    "Bottinger2008_state_049::HCO3-",
+    "Bottinger2008_state_050::MEA + MEAH+",
+    "Bottinger2008_state_050::MEACOO-",
+    "Bottinger2008_state_050::HCO3-",
+    "Bottinger2008_state_055::MEA + MEAH+",
+    "Bottinger2008_state_055::MEACOO-",
+    "Bottinger2008_state_056::MEA + MEAH+",
+    "Bottinger2008_state_056::MEACOO-",
+    "Bottinger2008_state_057::MEA + MEAH+",
+    "Bottinger2008_state_057::MEACOO-",
+    "Bottinger2008_state_058::MEA + MEAH+",
+    "Bottinger2008_state_058::MEACOO-",
+    "Bottinger2008_state_058::HCO3-",
+    "Bottinger2008_state_059::MEA + MEAH+",
+    "Bottinger2008_state_059::MEACOO-",
+    "Bottinger2008_state_059::HCO3-",
+    "Matin2012_state_001::MEA",
+    "Matin2012_state_001::MEAH+",
+    "Matin2012_state_001::MEACOO-",
+    "Matin2012_state_002::MEA",
+    "Matin2012_state_002::MEAH+",
+    "Matin2012_state_002::MEACOO-",
+    "Matin2012_state_003::MEA",
+    "Matin2012_state_003::MEAH+",
+    "Matin2012_state_003::MEACOO-",
+    "Matin2012_state_004::MEA",
+    "Matin2012_state_004::MEAH+",
+    "Matin2012_state_004::MEACOO-",
+    "Matin2012_state_005::MEA",
+    "Matin2012_state_005::MEAH+",
+    "Matin2012_state_005::MEACOO-",
+    "Matin2012_state_006::MEA",
+    "Matin2012_state_006::MEAH+",
+    "Matin2012_state_006::MEACOO-",
+    "Matin2012_state_007::MEA",
+    "Matin2012_state_007::MEAH+",
+    "Matin2012_state_007::MEACOO-",
+    "Matin2012_state_008::MEA",
+    "Matin2012_state_008::MEAH+",
+    "Matin2012_state_008::MEACOO-",
+    "Matin2012_state_009::MEA",
+    "Matin2012_state_009::MEAH+",
+    "Matin2012_state_009::MEACOO-",
+    "Matin2012_state_010::MEA",
+    "Matin2012_state_010::MEAH+",
+    "Matin2012_state_010::MEACOO-",
+    "Matin2012_state_011::MEA",
+    "Matin2012_state_011::MEAH+",
+    "Matin2012_state_011::MEACOO-",
+    "Matin2012_state_012::MEA",
+    "Matin2012_state_012::MEAH+",
+    "Matin2012_state_012::MEACOO-",
+    "Matin2012_state_013::MEA",
+    "Matin2012_state_013::MEAH+",
+    "Matin2012_state_013::MEACOO-",
+    "Matin2012_state_014::MEA",
+    "Matin2012_state_014::MEAH+",
+    "Matin2012_state_014::MEACOO-",
+    "Matin2012_state_015::MEA",
+    "Matin2012_state_015::MEAH+",
+    "Matin2012_state_015::MEACOO-",
+    "Matin2012_state_017::MEA",
+    "Matin2012_state_017::MEAH+",
+    "Matin2012_state_017::MEACOO-",
+    "Matin2012_state_018::MEA",
+    "Matin2012_state_018::MEAH+",
+    "Matin2012_state_018::MEACOO-",
+    "Matin2012_state_019::MEA",
+    "Matin2012_state_019::MEAH+",
+    "Matin2012_state_019::MEACOO-",
+    "vinjarapu2024_source_table4_01",
+    "vinjarapu2024_source_table4_02",
+    "vinjarapu2024_source_table4_03",
+    "vinjarapu2024_source_table4_04",
+    "vinjarapu2024_source_table4_05",
+    "vinjarapu2024_source_table4_06",
+    "vinjarapu2024_source_table4_07",
+    "vinjarapu2024_source_table4_08"
+   ],
+   "weights": [
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    11.11111111111111,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ]
+  }
+ ],
+ "information_coordinates": [
+  {
+   "identity": "pair/carbamate-anion/water/k_ij",
+   "family": "k_ij",
+   "scale": 0.01,
+   "bounds": [
+    -0.5,
+    0.5
+   ],
+   "target": [
+    "carbamate-anion",
+    "water"
+   ]
+  },
+  {
+   "identity": "pair/protonated-monoethanolamine/water/k_ij",
+   "family": "k_ij",
+   "scale": 0.01,
+   "bounds": [
+    -0.5,
+    -0.161
+   ],
+   "target": [
+    "protonated-monoethanolamine",
+    "water"
+   ]
+  },
+  {
+   "identity": "pair/bicarbonate-anion/water/k_ij",
+   "family": "k_ij",
+   "scale": 0.01,
+   "bounds": [
+    -0.5,
+    1.0
+   ],
+   "target": [
+    "bicarbonate-anion",
+    "water"
+   ]
+  },
+  {
+   "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "family": "k_ij",
+   "scale": 0.01,
+   "bounds": [
+    -1.0,
+    1.0
+   ],
+   "target": [
+    "carbamate-anion",
+    "protonated-monoethanolamine"
+   ]
+  },
+  {
+   "identity": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+   "family": "k_ij_reciprocal_temperature_slope",
+   "scale": 10.0,
+   "bounds": [
+    -1000.0,
+    1000.0
+   ],
+   "target": [
+    "protonated-monoethanolamine",
+    "water"
+   ]
+  },
+  {
+   "identity": "component/protonated-monoethanolamine/segment_diameter",
+   "family": "segment_diameter",
+   "target": "protonated-monoethanolamine",
+   "bounds": [
+    5.49,
+    5.8
+   ],
+   "scale": 0.1,
+   "targets": [
+    {
+     "family": "segment_diameter",
+     "target": "protonated-monoethanolamine",
+     "factor": 1.0
+    },
+    {
+     "family": "packing_diameter",
+     "target": "protonated-monoethanolamine",
+     "factor": 0.88
+    },
+    {
+     "family": "debye_huckel_diameter",
+     "target": "protonated-monoethanolamine",
+     "factor": 1.0
+    }
+   ],
+   "ties": [
+    {
+     "identity": "component/protonated-monoethanolamine/packing_diameter",
+     "factor": 0.88
+    },
+    {
+     "identity": "component/protonated-monoethanolamine/debye_huckel_diameter",
+     "factor": 1.0
+    }
+   ]
+  },
+  {
+   "identity": "component/carbamate-anion/segment_diameter",
+   "family": "segment_diameter",
+   "target": "carbamate-anion",
+   "bounds": [
+    2,
+    5.8
+   ],
+   "scale": 0.1,
+   "targets": [
+    {
+     "family": "segment_diameter",
+     "target": "carbamate-anion",
+     "factor": 1.0
+    },
+    {
+     "family": "packing_diameter",
+     "target": "carbamate-anion",
+     "factor": 0.88
+    },
+    {
+     "family": "debye_huckel_diameter",
+     "target": "carbamate-anion",
+     "factor": 1.0
+    }
+   ],
+   "ties": [
+    {
+     "identity": "component/carbamate-anion/packing_diameter",
+     "factor": 0.88
+    },
+    {
+     "identity": "component/carbamate-anion/debye_huckel_diameter",
+     "factor": 1.0
+    }
+   ]
+  },
+  {
+   "identity": "component/protonated-monoethanolamine/born_diameter",
+   "family": "born_diameter",
+   "target": "protonated-monoethanolamine",
+   "bounds": [
+    2.0,
+    5.0
+   ],
+   "scale": 0.1
+  },
+  {
+   "identity": "component/carbamate-anion/born_diameter",
+   "family": "born_diameter",
+   "target": "carbamate-anion",
+   "bounds": [
+    2.0,
+    5.0
+   ],
+   "scale": 0.1
+  },
+  {
+   "identity": "reaction:R5:correlation:a_k",
+   "reaction": "R5",
+   "coefficient": "b",
+   "source_to_native_factor": -2.302585092994046,
+   "bounds": [
+    2600.156583854245,
+    3200.156583854245
+   ],
+   "scale": 80.0
+  },
+  {
+   "identity": "reaction:R2:enthalpy_shift",
+   "reaction": "R2",
+   "enthalpy_shift": true,
+   "bounds": [
+    -12806.688891682716,
+    7193.311108317284
+   ],
+   "scale": 2500.0
+  },
+  {
+   "identity": "reaction:R5:enthalpy_shift",
+   "reaction": "R5",
+   "enthalpy_shift": true,
+   "bounds": [
+    -13831.949296109435,
+    6168.050703890565
+   ],
+   "scale": 2500.0
+  },
+  {
+   "identity": "pair/monoethanolamine/water/k_ij",
+   "family": "k_ij",
+   "target": [
+    "monoethanolamine",
+    "water"
+   ],
+   "scale": 0.01,
+   "bounds": [
+    -0.5,
+    0.5
+   ]
+  },
+  {
+   "identity": "pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+   "family": "k_ij_reciprocal_temperature_slope",
+   "target": [
+    "monoethanolamine",
+    "water"
+   ],
+   "scale": 10.0,
+   "bounds": [
+    -1000.0,
+    1000.0
+   ]
+  },
+  {
+   "identity": "component/protonated-monoethanolamine/dispersion_energy_over_k",
+   "family": "dispersion_energy_over_k",
+   "target": "protonated-monoethanolamine",
+   "bounds": [
+    50,
+    950
+   ],
+   "scale": 10
+  },
+  {
+   "identity": "component/carbamate-anion/dispersion_energy_over_k",
+   "family": "dispersion_energy_over_k",
+   "target": "carbamate-anion",
+   "bounds": [
+    50,
+    1000
+   ],
+   "scale": 10
+  }
+ ],
+ "direct_rows": [
+  {
+   "id": "Amundsen2009_state_060",
+   "quantity": "phase_density",
+   "T_K": 298.15,
+   "P_Pa": 100000.0,
+   "observed": 1028.0,
+   "scale": 2.039607805437114,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.1
+   }
+  },
+  {
+   "id": "Amundsen2009_state_061",
+   "quantity": "phase_density",
+   "T_K": 298.15,
+   "P_Pa": 100000.0,
+   "observed": 1048.0,
+   "scale": 2.169239498073,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.2
+   }
+  },
+  {
+   "id": "Amundsen2009_state_062",
+   "quantity": "phase_density",
+   "T_K": 298.15,
+   "P_Pa": 100000.0,
+   "observed": 1070.0,
+   "scale": 2.396330528120026,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.3
+   }
+  },
+  {
+   "id": "Amundsen2009_state_065",
+   "quantity": "phase_density",
+   "T_K": 313.15,
+   "P_Pa": 100000.0,
+   "observed": 1020.9999999999999,
+   "scale": 2.0396078054371145,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.1
+   }
+  },
+  {
+   "id": "Amundsen2009_state_066",
+   "quantity": "phase_density",
+   "T_K": 313.15,
+   "P_Pa": 100000.0,
+   "observed": 1041.0,
+   "scale": 2.1684658171158704,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.2
+   }
+  },
+  {
+   "id": "Amundsen2009_state_067",
+   "quantity": "phase_density",
+   "T_K": 313.15,
+   "P_Pa": 100000.0,
+   "observed": 1062.8999999999999,
+   "scale": 2.3930307143870886,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.3
+   }
+  },
+  {
+   "id": "Amundsen2009_state_070",
+   "quantity": "phase_density",
+   "T_K": 323.15,
+   "P_Pa": 100000.0,
+   "observed": 1016.0,
+   "scale": 2.037670238286853,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.1
+   }
+  },
+  {
+   "id": "Amundsen2009_state_071",
+   "quantity": "phase_density",
+   "T_K": 323.15,
+   "P_Pa": 100000.0,
+   "observed": 1035.5,
+   "scale": 2.169239498073,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.2
+   }
+  },
+  {
+   "id": "Amundsen2009_state_072",
+   "quantity": "phase_density",
+   "T_K": 323.15,
+   "P_Pa": 100000.0,
+   "observed": 1058.0,
+   "scale": 2.412985702402731,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.3
+   }
+  },
+  {
+   "id": "Amundsen2009_state_075",
+   "quantity": "phase_density",
+   "T_K": 343.15,
+   "P_Pa": 100000.0,
+   "observed": 1004.0,
+   "scale": 2.039607805437114,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.1
+   }
+  },
+  {
+   "id": "Amundsen2009_state_076",
+   "quantity": "phase_density",
+   "T_K": 343.15,
+   "P_Pa": 100000.0,
+   "observed": 1024.0,
+   "scale": 2.1723498797385297,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.2
+   }
+  },
+  {
+   "id": "Amundsen2009_state_077",
+   "quantity": "phase_density",
+   "T_K": 343.15,
+   "P_Pa": 100000.0,
+   "observed": 1046.4,
+   "scale": 2.4096339971041276,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.3
+   }
+  },
+  {
+   "id": "Amundsen2009_state_079",
+   "quantity": "phase_density",
+   "T_K": 353.15,
+   "P_Pa": 100000.0,
+   "observed": 997.0,
+   "scale": 2.0419951028344805,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.1
+   }
+  },
+  {
+   "id": "Amundsen2009_state_080",
+   "quantity": "phase_density",
+   "T_K": 353.15,
+   "P_Pa": 100000.0,
+   "observed": 1017.6,
+   "scale": 2.178645450733093,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.2
+   }
+  },
+  {
+   "id": "Amundsen2009_state_081",
+   "quantity": "phase_density",
+   "T_K": 353.15,
+   "P_Pa": 100000.0,
+   "observed": 1040.2,
+   "scale": 2.4163476571056584,
+   "weight": 0.019230769230769232,
+   "source_locator": "3QJR6RHH/NGQVTDX7 Table 3; pressure unreported; uncertainty pp.3099-3100",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165006594,
+    "carbon-dioxide": 0.3
+   }
+  },
+  {
+   "id": "Hartono2014_density_20C_alpha0.11",
+   "quantity": "phase_density",
+   "T_K": 293.15,
+   "P_Pa": 100000.0,
+   "observed": 1030.99,
+   "scale": 1.9913504368895074,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=20 degC; own first row; alpha=0.11; x3=0.0130",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.11
+   }
+  },
+  {
+   "id": "Hartono2014_density_20C_alpha0.19",
+   "quantity": "phase_density",
+   "T_K": 293.15,
+   "P_Pa": 100000.0,
+   "observed": 1046.92,
+   "scale": 2.1062060707218793,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=20 degC; own first row; alpha=0.19; x3=0.0215",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.19
+   }
+  },
+  {
+   "id": "Hartono2014_density_20C_alpha0.29",
+   "quantity": "phase_density",
+   "T_K": 293.15,
+   "P_Pa": 100000.0,
+   "observed": 1068.9,
+   "scale": 1.9986000725507858,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=20 degC; own first row; alpha=0.29; x3=0.0328",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.29
+   }
+  },
+  {
+   "id": "Hartono2014_density_20C_alpha0.39",
+   "quantity": "phase_density",
+   "T_K": 293.15,
+   "P_Pa": 100000.0,
+   "observed": 1086.89,
+   "scale": 1.799111169438954,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=20 degC; own first row; alpha=0.39; x3=0.0431",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.39
+   }
+  },
+  {
+   "id": "Hartono2014_density_25C_alpha0.11",
+   "quantity": "phase_density",
+   "T_K": 298.15,
+   "P_Pa": 100000.0,
+   "observed": 1028.87,
+   "scale": 1.9913504368895074,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=25 degC; own first row; alpha=0.11; x3=0.0130",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.11
+   }
+  },
+  {
+   "id": "Hartono2014_density_25C_alpha0.19",
+   "quantity": "phase_density",
+   "T_K": 298.15,
+   "P_Pa": 100000.0,
+   "observed": 1044.8,
+   "scale": 2.1050950097323455,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=25 degC; own first row; alpha=0.19; x3=0.0215",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.19
+   }
+  },
+  {
+   "id": "Hartono2014_density_25C_alpha0.29",
+   "quantity": "phase_density",
+   "T_K": 298.15,
+   "P_Pa": 100000.0,
+   "observed": 1066.76,
+   "scale": 1.9951002481078535,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=25 degC; own first row; alpha=0.29; x3=0.0328",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.29
+   }
+  },
+  {
+   "id": "Hartono2014_density_25C_alpha0.39",
+   "quantity": "phase_density",
+   "T_K": 298.15,
+   "P_Pa": 100000.0,
+   "observed": 1084.7,
+   "scale": 1.7941114792565198,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=25 degC; own first row; alpha=0.39; x3=0.0431",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.39
+   }
+  },
+  {
+   "id": "Hartono2014_density_30C_alpha0.11",
+   "quantity": "phase_density",
+   "T_K": 303.15,
+   "P_Pa": 100000.0,
+   "observed": 1026.65,
+   "scale": 1.991350436889479,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=30 degC; own first row; alpha=0.11; x3=0.0130",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.11
+   }
+  },
+  {
+   "id": "Hartono2014_density_30C_alpha0.19",
+   "quantity": "phase_density",
+   "T_K": 303.15,
+   "P_Pa": 100000.0,
+   "observed": 1042.58,
+   "scale": 2.1045394792574124,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=30 degC; own first row; alpha=0.19; x3=0.0215",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.19
+   }
+  },
+  {
+   "id": "Hartono2014_density_30C_alpha0.29",
+   "quantity": "phase_density",
+   "T_K": 303.15,
+   "P_Pa": 100000.0,
+   "observed": 1064.53,
+   "scale": 1.9931003487030012,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=30 degC; own first row; alpha=0.29; x3=0.0328",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.29
+   }
+  },
+  {
+   "id": "Hartono2014_density_30C_alpha0.39",
+   "quantity": "phase_density",
+   "T_K": 303.15,
+   "P_Pa": 100000.0,
+   "observed": 1082.44,
+   "scale": 1.7911116659773136,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=30 degC; own first row; alpha=0.39; x3=0.0431",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.39
+   }
+  },
+  {
+   "id": "Hartono2014_density_40C_alpha0.11",
+   "quantity": "phase_density",
+   "T_K": 313.15,
+   "P_Pa": 100000.0,
+   "observed": 1021.88,
+   "scale": 1.9951002481078393,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=40 degC; own first row; alpha=0.11; x3=0.0130",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.11
+   }
+  },
+  {
+   "id": "Hartono2014_density_40C_alpha0.19",
+   "quantity": "phase_density",
+   "T_K": 313.15,
+   "P_Pa": 100000.0,
+   "observed": 1037.84,
+   "scale": 2.1073171317642605,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=40 degC; own first row; alpha=0.19; x3=0.0215",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.19
+   }
+  },
+  {
+   "id": "Hartono2014_density_40C_alpha0.29",
+   "quantity": "phase_density",
+   "T_K": 313.15,
+   "P_Pa": 100000.0,
+   "observed": 1059.81,
+   "scale": 1.995600222990571,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=40 degC; own first row; alpha=0.29; x3=0.0328",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.29
+   }
+  },
+  {
+   "id": "Hartono2014_density_40C_alpha0.39",
+   "quantity": "phase_density",
+   "T_K": 313.15,
+   "P_Pa": 100000.0,
+   "observed": 1077.75,
+   "scale": 1.7941114792565198,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=40 degC; own first row; alpha=0.39; x3=0.0431",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.39
+   }
+  },
+  {
+   "id": "Hartono2014_density_50C_alpha0.11",
+   "quantity": "phase_density",
+   "T_K": 323.15,
+   "P_Pa": 100000.0,
+   "observed": 1016.6,
+   "scale": 2.002599872665514,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=50 degC; own first row; alpha=0.11; x3=0.0130",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.11
+   }
+  },
+  {
+   "id": "Hartono2014_density_50C_alpha0.19",
+   "quantity": "phase_density",
+   "T_K": 323.15,
+   "P_Pa": 100000.0,
+   "observed": 1032.62,
+   "scale": 2.113427968438432,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=50 degC; own first row; alpha=0.19; x3=0.0215",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.19
+   }
+  },
+  {
+   "id": "Hartono2014_density_50C_alpha0.29",
+   "quantity": "phase_density",
+   "T_K": 323.15,
+   "P_Pa": 100000.0,
+   "observed": 1054.64,
+   "scale": 1.9991000475213851,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=50 degC; own first row; alpha=0.29; x3=0.0328",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.29
+   }
+  },
+  {
+   "id": "Hartono2014_density_50C_alpha0.39",
+   "quantity": "phase_density",
+   "T_K": 323.15,
+   "P_Pa": 100000.0,
+   "observed": 1072.6,
+   "scale": 1.796111355122485,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=50 degC; own first row; alpha=0.39; x3=0.0431",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.39
+   }
+  },
+  {
+   "id": "Hartono2014_density_60C_alpha0.11",
+   "quantity": "phase_density",
+   "T_K": 333.15,
+   "P_Pa": 100000.0,
+   "observed": 1010.9,
+   "scale": 2.0125993764284065,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=60 degC; own first row; alpha=0.11; x3=0.0130",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.11
+   }
+  },
+  {
+   "id": "Hartono2014_density_60C_alpha0.19",
+   "quantity": "phase_density",
+   "T_K": 333.15,
+   "P_Pa": 100000.0,
+   "observed": 1027.0,
+   "scale": 2.123427522767006,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=60 degC; own first row; alpha=0.19; x3=0.0215",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.19
+   }
+  },
+  {
+   "id": "Hartono2014_density_60C_alpha0.29",
+   "quantity": "phase_density",
+   "T_K": 333.15,
+   "P_Pa": 100000.0,
+   "observed": 1049.12,
+   "scale": 2.0055997232748064,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=60 degC; own first row; alpha=0.29; x3=0.0328",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.29
+   }
+  },
+  {
+   "id": "Hartono2014_density_60C_alpha0.39",
+   "quantity": "phase_density",
+   "T_K": 333.15,
+   "P_Pa": 100000.0,
+   "observed": 1067.11,
+   "scale": 1.799111169438954,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=60 degC; own first row; alpha=0.39; x3=0.0431",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.39
+   }
+  },
+  {
+   "id": "Hartono2014_density_70C_alpha0.11",
+   "quantity": "phase_density",
+   "T_K": 343.15,
+   "P_Pa": 100000.0,
+   "observed": 1004.8,
+   "scale": 2.0263487020994235,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=70 degC; own first row; alpha=0.11; x3=0.0130",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.11
+   }
+  },
+  {
+   "id": "Hartono2014_density_70C_alpha0.19",
+   "quantity": "phase_density",
+   "T_K": 343.15,
+   "P_Pa": 100000.0,
+   "observed": 1021.01,
+   "scale": 2.135093674759966,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=70 degC; own first row; alpha=0.19; x3=0.0215",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.19
+   }
+  },
+  {
+   "id": "Hartono2014_density_70C_alpha0.29",
+   "quantity": "phase_density",
+   "T_K": 343.15,
+   "P_Pa": 100000.0,
+   "observed": 1043.23,
+   "scale": 2.0135993270757706,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=70 degC; own first row; alpha=0.29; x3=0.0328",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.29
+   }
+  },
+  {
+   "id": "Hartono2014_density_70C_alpha0.39",
+   "quantity": "phase_density",
+   "T_K": 343.15,
+   "P_Pa": 100000.0,
+   "observed": 1061.28,
+   "scale": 1.805110799923368,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=70 degC; own first row; alpha=0.39; x3=0.0431",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.39
+   }
+  },
+  {
+   "id": "Hartono2014_density_80C_alpha0.11",
+   "quantity": "phase_density",
+   "T_K": 353.15,
+   "P_Pa": 100000.0,
+   "observed": 998.31,
+   "scale": 2.0438478569844705,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=80 degC; own first row; alpha=0.11; x3=0.0130",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.11
+   }
+  },
+  {
+   "id": "Hartono2014_density_80C_alpha0.19",
+   "quantity": "phase_density",
+   "T_K": 353.15,
+   "P_Pa": 100000.0,
+   "observed": 1014.66,
+   "scale": 2.1517596158596453,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=80 degC; own first row; alpha=0.19; x3=0.0215",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.19
+   }
+  },
+  {
+   "id": "Hartono2014_density_80C_alpha0.29",
+   "quantity": "phase_density",
+   "T_K": 353.15,
+   "P_Pa": 100000.0,
+   "observed": 1037.04,
+   "scale": 2.025098763023676,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=80 degC; own first row; alpha=0.29; x3=0.0328",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.29
+   }
+  },
+  {
+   "id": "Hartono2014_density_80C_alpha0.39",
+   "quantity": "phase_density",
+   "T_K": 353.15,
+   "P_Pa": 100000.0,
+   "observed": 1055.16,
+   "scale": 1.8121103719144818,
+   "weight": 0.019230769230769232,
+   "source_locator": "5VGPDVGB/L7SKR73P Table 3 p.1810 (PDF p.3); t=80 degC; own first row; alpha=0.39; x3=0.0431",
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.911062165,
+    "carbon-dioxide": 0.39
+   }
+  },
+  {
+   "id": "Hilliard2008_Cp_318.15_0.0",
+   "quantity": "equilibrium_isobaric_heat_capacity",
+   "T_K": 318.15,
+   "P_Pa": 101325.0,
+   "observed": 84.94549521194936,
+   "scale": 1.6989099042389872,
+   "weight": 1.0,
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.929776437398854,
+    "carbon-dioxide": 1e-06
+   },
+   "source_observed_kJ_kg_K": 3.7195,
+   "source_molality_mol_kg_water": 7.0,
+   "source_loading": 0.0,
+   "source_locator": "Appendix G.2 p.937/PDF994",
+   "feed_mass_kg": 0.20393718686714285,
+   "feed_amount_mol": 8.929777437398855
+  },
+  {
+   "id": "Hilliard2008_Cp_318.15_0.358",
+   "quantity": "equilibrium_isobaric_heat_capacity",
+   "T_K": 318.15,
+   "P_Pa": 101325.0,
+   "observed": 79.65472136500112,
+   "scale": 1.5930944273000225,
+   "weight": 1.0,
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.929776437398854,
+    "carbon-dioxide": 0.358
+   },
+   "source_observed_kJ_kg_K": 3.3675,
+   "source_molality_mol_kg_water": 7.0,
+   "source_loading": 0.358,
+   "source_locator": "Appendix G.2 p.937/PDF994",
+   "feed_mass_kg": 0.21969272285714286,
+   "feed_amount_mol": 9.287776437398854
+  },
+  {
+   "id": "Hilliard2008_Cp_353.15_0.0",
+   "quantity": "equilibrium_isobaric_heat_capacity",
+   "T_K": 353.15,
+   "P_Pa": 101325.0,
+   "observed": 88.0765685802941,
+   "scale": 1.7615313716058818,
+   "weight": 1.0,
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.929776437398854,
+    "carbon-dioxide": 1e-06
+   },
+   "source_observed_kJ_kg_K": 3.8566,
+   "source_molality_mol_kg_water": 7.0,
+   "source_loading": 0.0,
+   "source_locator": "Appendix G.2 p.937/PDF994",
+   "feed_mass_kg": 0.20393718686714285,
+   "feed_amount_mol": 8.929777437398855
+  },
+  {
+   "id": "Hilliard2008_Cp_353.15_0.358",
+   "quantity": "equilibrium_isobaric_heat_capacity",
+   "T_K": 353.15,
+   "P_Pa": 101325.0,
+   "observed": 82.09581037609783,
+   "scale": 1.6419162075219567,
+   "weight": 1.0,
+   "analytical_feed": {
+    "monoethanolamine": 1.0,
+    "water": 7.929776437398854,
+    "carbon-dioxide": 0.358
+   },
+   "source_observed_kJ_kg_K": 3.4707,
+   "source_molality_mol_kg_water": 7.0,
+   "source_loading": 0.358,
+   "source_locator": "Appendix G.2 p.937/PDF994",
+   "feed_mass_kg": 0.21969272285714286,
+   "feed_amount_mol": 9.287776437398854
+  }
+ ],
+ "workers": 32,
+ "controls_amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6231190005",
+ "ledger": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-4/compute-ledger.json (compute-only wall); priors read at declaration build; operator rechecks before each launch.",
+ "loaded_density_ids": [
+  "Amundsen2009_state_060",
+  "Amundsen2009_state_061",
+  "Amundsen2009_state_062",
+  "Amundsen2009_state_065",
+  "Amundsen2009_state_066",
+  "Amundsen2009_state_067",
+  "Amundsen2009_state_070",
+  "Amundsen2009_state_071",
+  "Amundsen2009_state_072",
+  "Amundsen2009_state_075",
+  "Amundsen2009_state_076",
+  "Amundsen2009_state_077",
+  "Amundsen2009_state_079",
+  "Amundsen2009_state_080",
+  "Amundsen2009_state_081",
+  "Hartono2014_density_20C_alpha0.11",
+  "Hartono2014_density_20C_alpha0.19",
+  "Hartono2014_density_20C_alpha0.29",
+  "Hartono2014_density_20C_alpha0.39",
+  "Hartono2014_density_25C_alpha0.11",
+  "Hartono2014_density_25C_alpha0.19",
+  "Hartono2014_density_25C_alpha0.29",
+  "Hartono2014_density_25C_alpha0.39",
+  "Hartono2014_density_30C_alpha0.11",
+  "Hartono2014_density_30C_alpha0.19",
+  "Hartono2014_density_30C_alpha0.29",
+  "Hartono2014_density_30C_alpha0.39",
+  "Hartono2014_density_40C_alpha0.11",
+  "Hartono2014_density_40C_alpha0.19",
+  "Hartono2014_density_40C_alpha0.29",
+  "Hartono2014_density_40C_alpha0.39",
+  "Hartono2014_density_50C_alpha0.11",
+  "Hartono2014_density_50C_alpha0.19",
+  "Hartono2014_density_50C_alpha0.29",
+  "Hartono2014_density_50C_alpha0.39",
+  "Hartono2014_density_60C_alpha0.11",
+  "Hartono2014_density_60C_alpha0.19",
+  "Hartono2014_density_60C_alpha0.29",
+  "Hartono2014_density_60C_alpha0.39",
+  "Hartono2014_density_70C_alpha0.11",
+  "Hartono2014_density_70C_alpha0.19",
+  "Hartono2014_density_70C_alpha0.29",
+  "Hartono2014_density_70C_alpha0.39",
+  "Hartono2014_density_80C_alpha0.11",
+  "Hartono2014_density_80C_alpha0.19",
+  "Hartono2014_density_80C_alpha0.29",
+  "Hartono2014_density_80C_alpha0.39"
+ ],
+ "density_scale_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-scales.json",
+ "density_source_rows_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-source-rows.json",
+ "ion_ids": [
+  "protonated-monoethanolamine",
+  "carbamate-anion",
+  "bicarbonate-anion",
+  "carbonate-anion",
+  "hydronium-cation",
+  "hydroxide-anion"
+ ],
+ "dh_factor": 1.0,
+ "fit_case": {
+  "start": "a7-restricted-t0p125",
+  "density_weight": 1.0
+ },
+ "release_tests_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/release/release-tests.json",
+ "release_tests_sha256": "b058614ccd0ae8180fb9182f1d62f488572a801ea86c4bb6288a16e28e52b82a"
+}

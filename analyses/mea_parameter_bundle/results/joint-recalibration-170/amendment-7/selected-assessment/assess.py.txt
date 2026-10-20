@@ -1,0 +1,225 @@
+"""One-off fixed-vector assessment: existing producers only; no fit or volume translation.
+A7 copy of amendment-6/selected-assessment/assess.py.txt for the accepted second restricted endpoint (#170 comment
+6298116916) on Engine 8298c602: record, declaration and provenance paths changed; one solved-state T/P read follows the
+scalar Engine interface. Execute through ../run.py.txt script mode (stage final-evidence).
+"""
+import concurrent.futures as cf
+import copy
+import csv
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import sys
+import traceback
+
+OUT = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment').resolve()
+BASE = OUT.parent/'restricted-2'
+RECORD = BASE/'fit/usable-budget-endpoint.json'
+SPEC = json.loads((BASE/'fit-spec.json').read_text())
+import shared_evaluation as s
+import fit_observations as fo
+import heat_evidence_170 as he
+import final_evidence as fe
+import epcsaft
+from epcsaft import equilibrium as eq, regression as reg
+s.RUNS = OUT/'cache'
+MAPPING = s.parameter_mapping(RECORD)
+SHA = s.sha256(RECORD)
+assert SHA=='e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e', 'selected document changed'
+PARAMS = epcsaft.Parameters.from_mapping(MAPPING)
+TEMPLATE = s.load_state_packet(fo.ROOT/SPEC['packet_path'])['observations'][0]['request']
+SCALES = {r['id']:r for r in fo.load(SPEC['density_scale_path'])}
+
+
+def write(name, data):
+    s.write_json(OUT/name, data)
+
+
+def safe(task):
+    kind, row = task
+    try:
+        value = {'density':density, 'cp':cp, 'heat':heat, 'state':state, 'carbonate':carbonate, 'declared-density':declared_density}[kind](row)
+        return dict(kind=kind, input=row, status='Available', result=value)
+    except Exception as exc:
+        return dict(kind=kind, input=row, status='Unavailable', error=f'{type(exc).__name__}: {exc}', traceback=traceback.format_exc())
+
+
+def density(row):
+    identity = row['id']; a = float(row.get('co2_loading_mol_per_mol_mea') or 0)
+    T = float(row['temperature_C'])+273.15; w = float(row['mea_mass_fraction'])
+    P = float(row['pressure_kPa'])*1000 if row.get('pressure_kPa') else 100000.
+    obs = float(row['value'])*(1000 if row['value_unit']=='g/cm^3' else 1)
+    if w==1 and a==0:
+        model = epcsaft.Pure(epcsaft.Parameters.from_mapping(MAPPING, components=['monoethanolamine']))
+        state = model.state(T, P=P, phase='liquid')
+        mass = next(c['fixed']['molar_mass']['value']['magnitude'] for c in MAPPING['components'] if c['component_id']=='monoethanolamine')
+        rho = state.molar_density*mass
+        evidence = dict(route='pure MEA native state', dP_drho=state.pressure_density_derivative)
+    else:
+        if a==0:
+            problem = s.unloaded_density_problem(MAPPING,TEMPLATE,dict(T_K=T,P_Pa=P,MEA_weight_fraction=w))
+        else:
+            req = he.request(MAPPING,T,a,density=True)
+            req = s.source_feed_request(req,dict(source_key='Amundsen2009', CO2_loading=a,temperature_reported_C=T-273.15,MEA_weight_fraction=w))
+            problem = s._problem_from_request(s.corrected_request(req,s.reaction_values(MAPPING)))
+            problem.P = P
+        model = epcsaft.Mixture(PARAMS, thermochemistry=he.vrc.record())
+        item = reg.observation(PARAMS,'phase_density',problem,observed=obs,form='difference',scale=1.,phase=problem.phases[0].name,mass_basis=True)
+        pred = reg.predict(model,item)
+        if pred.status.name!='Available': raise RuntimeError(f'{pred.status.name}: {pred.message}')
+        rho = pred.value
+        solved = eq.solve_equilibrium(model,problem)
+        if not solved.success: raise RuntimeError(solved.message)
+        point = eq.compile_problem(model,problem).evaluate(solved.coordinates)
+        evidence = dict(route='unloaded_density_problem' if a==0 else 'source_feed_request and native phase_density',max_abs_raw_residual=max(map(abs,point.values)),requested_tolerance_met=pred.requested_tolerance_met,stable_root_count=pred.stable_root_count,
+            pressure_Pa=solved.pressure,temperature_K=solved.temperature,reduced_hessian_minimum=solved.reduced_hessian_minimum)
+    scale = SCALES.get(identity,{}).get('scale')
+    if scale is None and a==0 and row['source_key']=='Amundsen2009': scale=.5
+    error = rho-obs
+    return dict(id=identity,source=row['source_key'],T_K=T,P_Pa=P,loading=a,mea_mass_fraction=w,observed_kg_m3=obs,predicted_kg_m3=rho,error_kg_m3=error,error_percent=100*error/obs,s_kg_m3=scale,error_over_s=error/scale if scale else None,
+        source_uncertainty_value=row.get('uncertainty_value'),source_uncertainty_unit=row.get('uncertainty_unit'),source_expanded_uncertainty_value=row.get('density_expanded_uncertainty_value'),source_expanded_uncertainty_unit=row.get('density_expanded_uncertainty_unit'),source_uncertainty_scope=row.get('uncertainty_scope'),source_locator=row['source_locator'],lifecycle_status=row.get('lifecycle_status'),numerical_evidence=evidence,parameter_sha256=SHA)
+
+
+def declared_density(row):
+    source_value=json.loads((OUT/row['retained_row']).read_text())['result']
+    declaration,item=DIRECT_ITEMS[row['id']]
+    value=fo.predict(MAPPING,[item])[0]
+    error=value.value-declaration['observed']
+    source_value.update(source_seed_prediction_kg_m3=source_value['predicted_kg_m3'],source_seed_minus_declared_prediction_kg_m3=source_value['predicted_kg_m3']-value.value,
+        source_seed_numerical_evidence=source_value.pop('numerical_evidence'),predicted_kg_m3=value.value,error_kg_m3=error,error_percent=100*error/declaration['observed'],
+        s_kg_m3=declaration['scale'],error_over_s=error/declaration['scale'],numerical_evidence=dict(route='fit_observations.stage6_rows (includes stage2_rows), exact declared analytical feed',requested_tolerance_met=value.requested_tolerance_met,stable_root_count=value.stable_root_count),declaration=declaration)
+    return source_value
+
+
+def cp(row):
+    proxy=row['proxy']; T=row['T_K']; a=row['source_loading']
+    value=he.cp_check(MAPPING,T,a,row['source_observed_kJ_kg_K'],row=row,proxy_loading=proxy)
+    feed=dict(row['analytical_feed'],**{'carbon-dioxide':max(a,proxy)})
+    declared_masses={c['component_id']:c['fixed']['molar_mass']['value']['magnitude'] for c in MAPPING['components']}
+    declared_mass=sum(n*declared_masses[c] for c,n in feed.items())
+    helper_mass=sum(feed.get(c,0)*m for c,m in zip(s.COMPONENT_IDS,he.hc.MOLAR_MASS))/1000
+    # The helper's hard-coded mass vector differs from the declared frozen masses.
+    # Re-express its native extensive Cp using the design's complete declared feed mass.
+    value['helper_mass_basis_values']=dict(value,helper_mass_kg=helper_mass)
+    for key in ('equilibrium_cp_kJ_kg_K','frozen_cp_kJ_kg_K'):value[key]*=helper_mass/declared_mass
+    value.update(declared_feed_mass_kg=declared_mass,declared_molar_masses_kg_mol=declared_masses,analytical_feed=feed,deviation_percent=100*(value['equilibrium_cp_kJ_kg_K']/row['source_observed_kJ_kg_K']-1))
+    model=epcsaft.Mixture(PARAMS,thermochemistry=he.vrc.record())
+    def solved_at(t):
+        problem=s._problem_from_request(he.request(MAPPING,t,max(a,1e-5)))
+        problem.feed=eq.Amounts(dict(row['analytical_feed'],**{'carbon-dioxide':max(a,proxy)}))
+        problem.P=row['P_Pa']
+        result=eq.solve_equilibrium(model,problem)
+        if not result.success or max(map(abs,result.residuals))>1e-9: raise RuntimeError(result.message)
+        (h,_),(n,_)=he.vrc.first_actions(model,problem,result,[he.vrc.observable('PhaseProperty',0,prop=epcsaft.PropertyObservable.TotalEnthalpy),he.vrc.observable('PhaseAmount',0)],[(0.,0.,None)])[0]
+        mass=sum(n*declared_masses[c] for c,n in problem.feed.values.items())
+        return dict(T_K=t,H_J=h*n,mass_kg=mass,max_abs_raw_residual=max(map(abs,result.residuals)),iterations=result.iterations if hasattr(result,'iterations') else None)
+    ladder=[]
+    for dt in (.1,.05):
+        lo,hi=solved_at(T-dt),solved_at(T+dt)
+        fd=(hi['H_J']-lo['H_J'])/(2*dt)/lo['mass_kg']/1000
+        ladder.append(dict(step_K=dt,minus=lo,plus=hi,cp_kJ_kg_K=fd,relative_error=abs(fd-value['equilibrium_cp_kJ_kg_K'])/abs(fd)))
+    coarse,fine=ladder
+    value.update(id=row['id'],proxy=proxy,enthalpy_ladder=ladder,resolve_passed=fine['relative_error']<=1e-6 and abs(fine['cp_kJ_kg_K']-value['equilibrium_cp_kJ_kg_K'])<=abs(coarse['cp_kJ_kg_K']-value['equilibrium_cp_kJ_kg_K'])/2,source_locator=row['source_locator'],parameter_sha256=SHA)
+    return value
+
+
+def heat(row):
+    item=fo.heat_items(MAPPING,PARAMS,[row],he.request(MAPPING,313.15,.11))[0]
+    v=fo.predict(MAPPING,[item])[0]
+    return dict(id=row['record_id'],source='Vinjarapu2024' if row['record_id'].startswith('vinjarapu') else 'Arcis2011',T_K=row['temperature_K'],P_Pa=row['system_pressure_Pa'],loading=row['alpha_final'],observed_kJ_mol=row['observed_addition_enthalpy_J_per_mol_CO2']/1000,predicted_kJ_mol=v.value/1000,error_kJ_mol=(v.value-row['observed_addition_enthalpy_J_per_mol_CO2'])/1000,scaled_residual=v.residual,requested_tolerance_met=v.requested_tolerance_met,source_row=row,parameter_sha256=SHA)
+
+
+def state(row):
+    rec,wall=fe.job('Held',str(RECORD),row['group'],row['observation'],output_dir=OUT)
+    return dict(id=rec['identity'],group=row['group'],record=rec,targets=fe.score_rows('Held',[rec]),wall_s=wall)
+
+
+def carbonate(row):
+    req=s.source_feed_request(fo.load(SPEC['state_requests_path'])['Jakobsen2005_state_011'],dict(source_key='Jakobsen2005',MEA_weight_fraction=.2714274817259226,CO2_loading=float(row['loadNMR']),temperature_reported_C=float(row['temperature'])))
+    req=s.corrected_request(req,s.reaction_values(MAPPING))
+    write('carbonate-requests/'+row['id']+'.json',req)
+    problem=s._problem_from_request(req); model=epcsaft.Mixture(PARAMS)
+    result=eq.solve_equilibrium(model,problem)
+    if not result.success: raise RuntimeError(result.message)
+    phase=s._phase_payload(problem,result,0,len(s.COMPONENT_IDS))
+    x=dict(zip(phase['support'],phase['mole_fractions'],strict=True))
+    share=x['carbonate-anion']/sum(x[c] for c in ('carbon-dioxide','carbamate-anion','bicarbonate-anion','carbonate-anion'))
+    obs=float(row['CO3^2-'])/sum(float(row[k] or 0) for k in ('CO2','MEACOO^-','HCO3^-','CO3^2-'))
+    return dict(id=row['id'],T_K=float(row['temperature'])+273.15,maxload=float(row['maxload']),model_loading=float(row['loadNMR']),mea_mass_fraction=.2714274817259226,observed_share=obs,predicted_share=share,calc_over_obs=share/obs,historical_nine_included=not(float(row['temperature'])==40 and float(row['maxload'])==.21),source_locator=row['source_locator'],liquid=phase,max_abs_raw_residual=max(map(abs,eq.compile_problem(model,problem).evaluate(result.coordinates).values)),parameter_sha256=SHA)
+
+
+def inventory():
+    files=[RECORD,BASE/'fit-spec.json',BASE/'fit/native.json',OUT.parent/'restricted/README.md',Path('tmp/joint-design/amendment-7-phase-stable-density.md')]
+    packet,groups=fe.observations()
+    # Corrected source-backed requests override nominal packet feeds for restored Matin 016.
+    requests=fo.load(SPEC['state_requests_path'])
+    for group in groups.values():
+        for o in group:
+            if o['identity'] in requests: o['request']=requests[o['identity']]
+    write('observation-groups.json',groups)
+    write('provenance.json',dict(parameter_sha256=SHA,engine_wheel_sha256=s.ENGINE_WHEEL_SHA256,engine_module=epcsaft.__file__,files={str(p):s.sha256(p) for p in files},engine=SPEC['engine'],claim='Assessment of fitted vector; non-fitted rows are predictions, not physical validation.',exclusions='Five 30 wt% Amundsen loading-0.4 source-conflict rows excluded from objective/gate. Canonical rows above 393.15 K inadmissible.'))
+    print('inventory',SHA,{k:len(v) for k,v in groups.items()},flush=True)
+
+
+def tasks_for(mode):
+    tasks=[]
+    if mode=='density':
+        for name in ('Amundsen_2009_density_viscosity','Hartono_2014_loaded_density','Han_2012_loaded_density'):
+            path=Path('data/reference/MEA/observations/density_viscosity')/(name+'.csv')
+            rows=[r for r in csv.DictReader(path.open()) if r['property']=='density']
+            for i,row in enumerate(rows,1):
+                # Full source-table order provides the historical Amundsen state IDs.
+                row['id']=row.get('record_id') or f'Amundsen2009_state_{i:03d}'
+                tasks.append(('density',row))
+        write('density-inputs.json',tasks)
+    if mode=='cp':
+        for row in SPEC['direct_rows']:
+            if row['quantity']=='equilibrium_isobaric_heat_capacity':
+                tasks.extend(('cp',dict(row,proxy=p)) for p in ((1e-6,1e-7) if row['source_loading']==0 else (1e-6,)))
+    if mode=='calorics':tasks.extend(('heat',r) for r in fo.load(SPEC['heat_rows_path']))
+    if mode=='states':
+        groups=json.loads((OUT/'observation-groups.json').read_text())
+        fe.binding('Held',str(RECORD))
+        for kind,rows in groups.items():
+            for o in rows:
+                T=o['request']['temperature']['value']
+                reason=fe.probe.reaction_domain_status(o)
+                if reason or not 293.15<=T<=393.15:
+                    write('excluded/'+kind+'-'+o['identity'].replace(':','_')+'.json',dict(group=kind,observation=o,status='Inadmissible',reason=reason or 'outside 293.15–393.15 K'))
+                    continue
+                tasks.append(('state',dict(group=kind,observation=o)))
+        write('state-inputs.json',tasks)
+    if mode=='declared-density':
+        for p in sorted((OUT/'density-rows').glob('*.json')):
+            r=json.loads(p.read_text())
+            if r['input']['id'] in DIRECT_ITEMS:tasks.append(('declared-density',dict(id=r['input']['id'],retained_row=str(p.relative_to(OUT)))))
+    if mode=='carbonate':
+        source=Path('data/reference/MEA/observations/liquid_speciation/Jakobsen_2005_ChEq.csv')
+        for i,row in enumerate(csv.DictReader(source.open()),1):
+            if float(row['MEA_weight_fraction'])==.3 and float(row['maxload'])<=.5:
+                tasks.append(('carbonate',dict(row,id=f'Jakobsen2005_state_{i:03d}')))
+    return tasks
+
+
+def main():
+    mode=sys.argv[1]
+    inventory()
+    if mode=='inventory':return
+    global DIRECT_ITEMS
+    if mode=='declared-density':
+        _,rows=fo.stage6_rows(SPEC,MAPPING)
+        DIRECT_ITEMS={r['id']:(r,item) for r,item in rows if r['quantity']=='phase_density'}
+    tasks=tasks_for(mode)
+    # Independent fixed states use every available core, with BLAS/OpenMP at one thread.
+    with cf.ProcessPoolExecutor(max_workers=os.cpu_count()) as pool:
+        futures={pool.submit(safe,t):i for i,t in enumerate(tasks)}
+        for f in cf.as_completed(futures):
+            i=futures[f];result=f.result()
+            write(f'{mode}-rows/{i:04d}.json',result)
+            print(mode,i,result['status'],result.get('error',''),flush=True)
+    write(mode+'-complete.json',dict(tasks=len(tasks)))
+
+
+if __name__=='__main__': main()

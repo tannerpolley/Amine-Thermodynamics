@@ -16,6 +16,14 @@ resources:
   - results/engine-21e761c3-adoption/checks.json
   - results/engine-8298c602-adoption/comparison.json
   - results/engine-8298c602-adoption/checks.json
+  - results/joint-recalibration-170/amendment-7/restricted/README.md
+  - results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/README.md
+  - results/joint-recalibration-170/amendment-7/selected-assessment/README.md
+  - results/joint-recalibration-170/amendment-7/selected-assessment/summary.json
+  - results/joint-recalibration-170/amendment-7/selected-assessment/density.csv
+  - results/joint-recalibration-170/amendment-7/selected-assessment/verification.json
+  - results/joint-recalibration-170/amendment-7/gas-root/run-2/gas-root.json
+  - results/joint-recalibration-170/amendment-7/step-ledger.json
   - results/selected-current-best-parameters.json
   - results/heat-final-170/conditional-uncertainty.json
   - results/heat-final-170/fit-comparison.csv
@@ -914,3 +922,71 @@ The source-uncertainty scales and deterministic point estimates do not propagate
 The retained [program ledger](results/joint-recalibration-170/amendment-4/compute-ledger.json) charges **16,190 / 21,600 s** compute wall time and **127,560.61 / 200,000 CPU-s**, leaving 5,410 s and 72,439.39 CPU-s. The historical [follow-up accounting](results/joint-recalibration-170/amendment-6/held-followups/uncharged-compute.json) is now included once in that ledger (1,559 s / 7,317 CPU-s rounded charge); its “not yet charged” note describes the earlier handoff, not an additional pending charge. Campaign executable gross additions are **1,321 / 1,325**, under [the owner's code-ceiling decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6278338236). Notebook and figure preparation uses retained values only.
 
 **Decision.** The selected Held endpoint passes the revised fitted-property gates, while the phase-family evidence prevents adoption. The unresolved trial searches and the model's resolved dense-liquid splits are distinct remaining questions. This revision is **delivered, review pending; adoption withheld (phase-family gate)**. The notebook update has not been independently reviewed or promoted for manuscript use; it does not authorize an absorber/stripper model or replacement of the currently adopted parameter record.
+
+## Amendment 7: split-free restricted refit; three warm loaded densities disclosed
+
+**Delivered, review pending; the owner accepted the endpoint with a disclosed loaded-density limitation.** On the qualified Engine 8298c602 wheel, a restricted refit of the same 307-row objective converges to a vector with **no resolved descent at any of the 73 family points**, where the A6 selected vector has 12 descent points. It meets every fitted-property gate except loaded density. **44/47** fitted loaded densities are within $2s$. The three misses are all at **353.15 K, α 0.29–0.39**, 4.2–5.5 kg/m³ low (0.40–0.53 %, worst **2.43$s$**). All three exceed the adopted $2s$ limits. The Hartono residuals exceed both the printed density uncertainty and the loading contributions estimated by the retained source-local secants. The Amundsen residual exceeds its adopted scale, but the source excludes the highest temperatures/loadings from its general uncertainty estimate and leaves the exact row boundary unresolved. The owner chose this disclosed density miss over A6's resolved dense-liquid splits ([#170 comment 6298116916](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6298116916)).
+
+### Engine wheel and phase qualification
+
+The strict gate needed a merged Engine wheel with #660. That wheel also returns equilibrium temperature and pressure as plain numbers, so the repository [adopted Engine 8298c602](results/engine-8298c602-adoption/README.md) first (previous section). The [requalification](results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/README.md) reran the A4 control and A6 selected families and the A6 307-row replay:
+
+| Check | Engine 21e761c3 | Engine 8298c602 |
+|---|---|---|
+| A4 control family (passed / unresolved / failed) | 0 / 73 / 0 | 73 / 0 / 0 |
+| A6 selected family | 0 / 61 / 12 | 61 / 0 / 12; same 29 resolved descents, \|Δ tpd/RT\| ≤ 1.1 × 10⁻¹³ |
+| A6 307-row replay, max relative prediction change | | 2.1 × 10⁻¹³ |
+
+No new descent appeared and no equation changed. The classification changes are the Engine #660 relabelling. A `no_resolved_descent` trial records that this finite trial set resolved no descent. It does not certify global stability.
+
+### Restricted fits
+
+The owner [chose a restricted feasibility fit](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6283335389) with MEAH⁺ segment diameter in [5.49, 5.8] Å and MEAH⁺–water $k$ in [−0.5, −0.161]. Every other box, row, scale and weight of the A6 Held declaration was kept, and the start was the screened fixed-path vector. That endpoint ([record](results/joint-recalibration-170/amendment-7/restricted/README.md)) was split-free but failed density (44/47, worst 2.70$s$) on its MEAH⁺ size bound.
+
+Fixed-vector probes at 5.45/5.40/5.35 Å showed no resolved descent but did not pass density with size alone. The owner then approved one more fit with the size bound lowered to 5.35 Å (readiness review r1 Ready). No further fit is authorized.
+
+| Gate (unchanged limits) | First endpoint | Accepted endpoint | A6 selected |
+|---|---:|---:|---:|
+| Points with resolved descent (73) | 0 | **0** | 12 |
+| Loaded density within 2s (47) | 44, max 2.70 | **44, max 2.43** | 47, max 1.98 |
+| CO₂-free density max \|e\| (≤ 1.0 kg/m³) | 0.55 | 0.56 | 0.57 |
+| Cai cost (≤ 95.90) | 91.92 | 91.91 | 91.81 |
+| C149 (≤ 35.26) | 24.10 | 23.87 | 24.92 |
+| Pressure / species AARD (≤ 15.81 / 9.89 %) | 11.89 / 7.10 | 11.86 / 7.10 | 12.47 / 7.15 |
+| Vinjarapu RMSE (≤ 3.13 kJ/mol) | 1.83 | 1.83 | 1.82 |
+| 307-row objective | 149.246 | 148.905 | 148.238 |
+
+![Fitted loaded-density errors divided by their adopted propagated scales. Filled points are the accepted A7 endpoint, coloured by nominal loading. Grey open markers are the A6 selected vector at the same states (circles Amundsen, squares Hartono; the legend shows the square form). Shading and dashed limits denote ±2s. Points are predictions at the measured states; no line is implied.](results/joint-recalibration-170/amendment-7/notebook-figures/loaded-density-errors.png)
+
+The accepted endpoint ([`e234e860…`](results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json)) converged in 12 iterations, and its cold replay matches within 3.3 × 10⁻¹³. MEAH⁺ size ends on 5.35 Å, and MEAH⁺–water $k$ on −0.5. The unlike-ion $k$ (−1), the Born diameters (5 Å) and the total R5 shift (+10,000 J/mol) are on bounds as in A6. Across the warm loaded states, the split-free vectors underpredict density more than A6 does. At lower temperature both fit within the gate.
+
+### Sensitivity, assessment and gas root
+
+The single Hartono $x_3$ loading-basis sensitivity starts 0.002 Å inside the size bound; its moved start was screened first. It moves the parameters little: carbamate size +0.033 Å and the R2 total shift +94 J/mol. It also has no resolved descent at the 73 points. On its own basis it misses three loaded densities, worst 2.91$s$ ([record](results/joint-recalibration-170/amendment-7/restricted/README.md)).
+
+The [full assessment](results/joint-recalibration-170/amendment-7/selected-assessment/README.md) of the accepted endpoint, against A6:
+
+| Assessment (non-fitted rows are predictions) | A7 accepted | A6 selected |
+|---|---:|---:|
+| Concentration transfer, 70 states at 15/45 wt %, pressure AARD | 43.5 % | 168.7 % |
+| Wagner 23 pressures AARD | 15.4 % | 20.1 % |
+| Canonical 159 / 100–120 °C 54 pressure AARD | 20.6 / 24.3 % | 20.9 / 24.5 % |
+| Han 2012 67 densities RMSE (assessment only) | 5.91 kg/m³ | 7.55 kg/m³ |
+| Amundsen 103 densities RMSE | 6.42 kg/m³ | 4.96 kg/m³ |
+| Arcis 14 heats RMSE (gate ≤ 9.36) | 8.11 kJ/mol | 8.05 kJ/mol |
+| Hilliard Cp errors, 318.15 K α 0 / 0.358; 353.15 K α 0 / 0.358 | +5.53 / +2.57 / +1.15 / −2.13 % | +5.04 / +2.57 / +0.75 / −1.55 % |
+| Matin 19 species pools AARD | 67.5 % | 66.8 % |
+
+All 210 densities, 22 heats, four Cp states and 375 admitted states are available. Replays of the fitted rows agree within 1.2 × 10⁻¹¹ kg/m³. State stationarity, material and charge residuals are at most 2.2 × 10⁻¹² ([verification](results/joint-recalibration-170/amendment-7/selected-assessment/verification.json)).
+
+The [gas-root falsifier](results/joint-recalibration-170/amendment-7/gas-root/run-2/gas-root.json) at 318.15 K, 3699.08 Pa, α 0.2556 **passes**. Its first attempt stopped at an input-path check before witness evaluation, root requests, dilution scanning and the physical solve; Engine initialization and problem compilation had already occurred. The attempt is retained and charged.
+
+### Limits and decision
+
+- **Phase evidence.** The phase evidence is the finite 73-point family at 313.15–333.15 K, α $10^{-5}$–0.5. It is not a stability certificate for the reacting domain.
+- **Fit evidence.** Both restricted fits are single local fits from one start. They do not show that no vector passes every gate.
+- **Bounds.** The lowered size bound rests on three checked vectors, not a certified box.
+- **Uncertainty.** The density scales are frozen source-local loading secants. Parameter, source-correlation and model-form uncertainty are not propagated.
+- **Compute.** Amendment 7 calls total 1,614.64 wall-s / 3,544.75 CPU-s ([step ledger](results/joint-recalibration-170/amendment-7/step-ledger.json)). They are charged to the program ledger at integration.
+
+**Decision.** The owner accepted the A7 second restricted endpoint for evidence completion, with the 80 °C loaded-density miss disclosed. That evidence is now complete. It does not replace the [selected parameter record](results/selected-current-best-parameters.json); adopting it is a separate step. This notebook update has not been independently reviewed or promoted for manuscript use. It does not authorize an absorber/stripper model.

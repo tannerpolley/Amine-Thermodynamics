@@ -1,0 +1,48 @@
+{
+  "parameter_document": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json",
+  "parameter_sha256": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
+  "temperature_K": 318.15,
+  "pressure_Pa": 3699.080380084851,
+  "loading_mol_CO2_per_mol_MEA": 0.25557798094241313,
+  "probe_sha256": "8412b22ebe30a16d96edd2b3918a897beb9b763cfe2ba981b14d9bbe96c9a9be",
+  "historical_source_commit": "5ebcb37",
+  "input_hashes": {
+    "falsifier-gas.json": "452d4a49b6504eed62e749f79cde0c93ed94a6c88f512028f3c2a098a5c4c1fa",
+    "falsifier-physical.json": "72374832a6afd8c0b615712b63d767855a48bc3700352d0fc775647c54c19fef",
+    "engine-decomposition.csv": "323bd8dbf4d4208a783ebb4ccc38e7cb22a82ad755d13d5415863e9b7b287ba8"
+  },
+  "scan_densities_mol_m3": [
+    1e-06,
+    0.001,
+    0.01,
+    0.1,
+    1.4,
+    10.0,
+    100.0
+  ],
+  "wall_limit_s": 300.0,
+  "classification": "unresolved",
+  "reason": "The bounded calculation did not complete; retained partial quantities and diagnostic identify the stopping point.",
+  "stage": "input-check",
+  "evidence_use": "Numerical probe only; candidate adoption and physical validation are not established.",
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "nonfinite_diagnostics": [],
+  "error": "FileNotFoundError: [Errno 2] No such file or directory: '/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a7-strict-gate/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/gas-root/inputs/engine-decomposition.csv'",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a7-strict-gate/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/gas-root/probe.py.txt\", line 236, in child\n    calculate(row, path, document)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a7-strict-gate/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/gas-root/probe.py.txt\", line 142, in calculate\n    decomposition = list(csv.DictReader((HERE / 'inputs/engine-decomposition.csv').open()))\n                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/pathlib/_local.py\", line 537, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/170-a7-strict-gate/analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/gas-root/inputs/engine-decomposition.csv'\n",
+  "timing": {
+    "cpu_s": 5.552562,
+    "wall_s": 5.5913951710008405,
+    "exitcode": 0,
+    "interrupted": false,
+    "host_load": [
+      14.109375,
+      25.796875,
+      32.01171875
+    ]
+  },
+  "whole_probe_wall_s": 5.614903007999601
+}
