@@ -59,7 +59,7 @@ only the MEAH⁺ size fraction.
 | Vector | MEAH⁺ σ, Å | Descent points | Lowest $t_{plane}/(RT)$ | Converged lower-Gibbs splits, $\Delta G/(RT)$, 333.15 K |
 |---|---:|---|---:|---|
 | `coupled-half-size-energies-at-selected` | 4.97768 | 63, 70, 71, 72 | −3.17×10⁻³ | 63 (α 0.4): −0.0271; 70/71/72 (α 0.5): −0.0917 / −0.0962 / −0.0962 |
-| `coupled-size-energies-at-selected` | 4.15536 | 24, 33, 36, 45, 54, 62, 63, 70, 71, 72 | −5.77×10⁻² | 36 (α 0.2): −0.0561; 45 (α 0.256): −0.0427; 63 (α 0.4): −0.876; 70/71/72 (α 0.5): −1.342 |
+| `coupled-size-energies-at-selected` | 4.15536 | 24, 33, 36, 45, 54, 62, 63, 70, 71, 72 | −5.77×10⁻² | 36 (α 0.2): −0.0561; 45 (α 0.256): −0.0427; 63 (α 0.4): −0.876; 70/71/72 (α 0.5): −1.34257 / −1.34246 / −1.34241 |
 
 Twenty-three split-seeded attempts cover every distinct descending liquid
 composition (max |Δx| > 10⁻⁶) at the fourteen descending points: one per point
