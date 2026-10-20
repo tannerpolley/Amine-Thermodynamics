@@ -78,17 +78,21 @@ def main():
     fig.legend(handles=handles,fontsize=7,frameon=False,loc='outside upper center',ncol=3)
     fig.supxlabel('Open circles: fitted ID; open squares: other; crosses: A7',fontsize=8)
     save(fig,'speciation','Species observation operators retain aggregates: NMR MEA + MEAH+, titration species, and the separate 19-row Matin HCO3− + CO3²− pool. All values are mole fractions at retained states; pool rows are outside the objective and previously accessed.', ['species-figure-data.csv','pool-figure-data.csv','fitted-rows.csv'])
-    fig,axes=plt.subplots(1,3,figsize=(FULL_WIDTH,3.0),layout='constrained',sharey=True)
+    fig,axes=plt.subplots(3,1,figsize=(FULL_WIDTH,6.8),layout='constrained',sharey=True)
     for ax,(source,pressure) in zip(axes,[('Vinjarapu2024',1734000),('Arcis2011',510000),('Arcis2011',1030000)]):
         part=[r for r in heat if r['source']==source and float(r['P_Pa'])==pressure]
         ax.errorbar([float(r['loading']) for r in part],[float(r['observed_kJ_mol']) for r in part],
                     yerr=[float(r['scale_J_mol_CO2'])/1000 for r in part],fmt='o',mfc='none',color='#0072B2',ms=4,lw=.6)
         ax.scatter([float(r['loading']) for r in part],[float(r['predicted_kJ_mol']) for r in part],marker='x',s=16,color='#D55E00')
-        ax.set(title=f'{source}\n{pressure/1e6:g} MPa; '+('fitted' if source=='Vinjarapu2024' else 'acceptance check'),xlabel=LOADING)
+        temperatures = {float(r['T_K']) for r in part}
+        roles = {r['role'] for r in part}
+        assert len(temperatures) == len(roles) == 1 and roles in ({'fitted'}, {'non-fitted prediction'})
+        role = 'fitted' if roles == {'fitted'} else 'acceptance check'
+        ax.set(title=f'{source} — {temperatures.pop():g} K; {pressure/1e6:g} MPa; {role}',xlabel=LOADING)
+        ax.set_ylabel(r'Integral heat (kJ/mol CO$_2$)')
         ax.grid(alpha=.15)
-    axes[0].set_ylabel(r'Integral heat (kJ/mol CO$_2$)')
     fig.suptitle('Open: observed; crosses: A7; bars: retained heat scale',fontsize=9)
-    save(fig,'heat-of-absorption','Eight fitted Vinjarapu heats and fourteen Arcis acceptance-check heats, separated by retained source pressure. Bars show scale_J_mol_CO2 / 1000, not a declared confidence interval. There is no A7 no-heat series.', ['heat.csv'])
+    save(fig,'heat-of-absorption','Eight fitted Vinjarapu heats at 313.15 K and 1.734 MPa, and fourteen Arcis acceptance-check heats at 322.5 K, separated into the 0.51 and 1.03 MPa source-pressure groups. Bars show `scale_J_mol_CO2 / 1000`, not a declared confidence interval. There is no A7 no-heat series.', ['heat.csv'])
     a6=a.rows(a.J/'amendment-6/selected-assessment/density.csv')
     by_id={r['id']:r for r in a6}
     loaded=[r for r in density if r['id'] in spec['loaded_density_ids']]
@@ -144,8 +148,16 @@ def main():
     fig.suptitle('Resolved-descent points: A6 12/73; A7 0/73',fontsize=10)
     fig.supxlabel('Orange filled: resolved; blue open: none resolved; square: single liquid; circle: two-phase\nSeparate index-0 witness: '+witness['temperature_K']+' K, α='+witness['loading']+', P='+witness['pressure_Pa']+' Pa\nA6/A7 witness: no resolved descent; both two-phase; !n marks failed trial optimizers',fontsize=7)
     save(fig,'phase-family','73 specified T/P/loading states, A6 versus A7 on the same wheel: 12/73 and 0/73 resolved-descent points. The three pressure levels vary with temperature/loading; S4 supplies exact pressures. The additional index-0 witness is reported separately from index 41. Zero resolved trials means no numerically resolved descent, not zero Gibbs change. Two-phase classifications do not identify two liquids. Finite searches do not certify a continuous stable region or states at 353 K.', ['phase-family.csv'])
+    a6_assessment = a.load(a.J/'amendment-6/selected-assessment/provenance.json')
+    fixed = a.J/'amendment-7/fixed-study/wheel-8298c602'
+    records = dict(A7=a.record_identity(fit['record_sha256'], fit['engine']),
+                   A6_assessment=a.record_identity(a6_assessment['parameter_sha256'], a6_assessment['engine']),
+                   A6_phase_family=a.phase_identity(fixed/'after-adoption/a6-selected', fit['engine']),
+                   A7_phase_family=a.phase_identity(fixed/'restricted-2-endpoint', fit['engine']))
+    for name, output in OUTPUTS.items():
+        output['records'] = {key: records[key] for key in (['A6_phase_family','A7_phase_family'] if name == 'phase-family' else ['A7','A6_assessment'] if name == 'loaded-density-errors' else ['A7'])}
     provenance=dict(generator=str(a.bind(a.ROOT/'analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py').relative_to(a.ROOT)),
-                    parameter_sha256=fit['record_sha256'],engine=fit['engine'],inputs=dict(sorted(a.INPUTS.items())),outputs=OUTPUTS)
+                    records=records, explanation=a.A6_ASSESSMENT_NOTE, inputs=dict(sorted(a.INPUTS.items())),outputs=OUTPUTS)
     (OUT/'provenance.json').write_text(json.dumps(provenance,indent=2,sort_keys=True)+'\n')
     print('Wrote five PDF/PNG figures and provenance.json; retained states only.')
 

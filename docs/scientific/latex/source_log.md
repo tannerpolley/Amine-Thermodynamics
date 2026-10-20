@@ -202,3 +202,5 @@ The 152-quantity transfer check named in
 `analyses/mea_parameter_bundle/results/a7-paper-evidence/predecessor-f1.json`
 does not qualify every retained F1 result on the A7 wheel. F1 phase results
 are omitted from the generated manuscript and supplement inputs.
+
+A6 density and Arcis assessment values retain parameter SHA-256 `ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7`, Engine commit `21e761c318c2ac5b555a245365c844d38a93e4cb`, and wheel SHA-256 `d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357`. The paired A6/A7 phase-family classifications were evaluated on Engine `8298c6029ebb8b467929badc4a223c580ec591ab`.

@@ -52,6 +52,27 @@ def stats(part, observed='observed', predicted='predicted'):
                 AARD_percent=100*math.fsum(abs(x/float(r[observed])) for x, r in zip(errors, part))/len(part))
 
 
+def record_identity(parameter_sha256, engine):
+    return dict(parameter_sha256=parameter_sha256, engine=dict(engine,
+                commit=Path(engine['wheel_path']).parts[-2].removeprefix('main-')))
+
+
+def phase_identity(directory, engine):
+    provenance = load(directory/'provenance.json')
+    summary = load(directory/'summary.json')
+    mapping = load(directory/'fixed-parameters.json')
+    assert mapping == load(ROOT/provenance['source'])
+    assert hashlib.sha256(json.dumps(mapping, sort_keys=True).encode()).hexdigest() == summary['parameter_sha256']
+    identity = record_identity(provenance['source_sha256'], engine)
+    assert identity['engine']['commit'] == provenance['engine_commit']
+    assert engine['wheel_sha256'] == provenance['wheel_sha256']
+    return dict(identity, fixed_parameter_sha256=INPUTS[str((directory/'fixed-parameters.json').relative_to(ROOT))],
+                phase_mapping_sha256=summary['parameter_sha256'])
+
+
+A6_ASSESSMENT_NOTE = "A6 density and Arcis assessment values retain parameter SHA-256 `ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7`, Engine commit `21e761c318c2ac5b555a245365c844d38a93e4cb`, and wheel SHA-256 `d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357`. The paired A6/A7 phase-family classifications were evaluated on Engine `8298c6029ebb8b467929badc4a223c580ec591ab`."
+
+
 def checked():
     bind(Path(__file__))
     for path, digest in load(E / 'input-hashes.json').items():
