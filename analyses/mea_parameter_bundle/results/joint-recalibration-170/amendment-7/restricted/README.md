@@ -81,3 +81,34 @@ scales s are the frozen source-local loading secants, not measurement uncertaint
 
 Unused: restricted-fit 821.76 / 5,794.46; Hartono x₃ 1,200 / 7,000;
 final-evidence reserve 1,950.38 / 9,200; qualification 221.27 / 843.12.
+
+## MEAH⁺ size bound probe (owner, 2026-10-20)
+
+At the endpoint, only the MEAH⁺ segment diameter σ moves (packing 0.88σ and
+Debye–Hückel σ reapplied); every other parameter is held fixed. No fit is run
+(`../fixed-study/wheel-8298c602/size-probe/`, `study.py.txt size`).
+
+| MEAH⁺ σ, Å | Descent points (73) | Loaded within 2s | Min / max e/s | Span, s | 80 °C rows e/s | C149 | Pressure AARD, % |
+|---:|---:|---:|---|---:|---|---:|---:|
+| 5.49, endpoint | 0 | 44/47 | −2.70 / +1.48 | 4.18 | −2.70, −2.35, −2.12 | 24.10 | 11.89 |
+| 5.45 | 0 | 44/47 | −1.38 / +2.62 | 4.01 | −1.01, −1.38, −1.01 | 24.20 | 11.70 |
+| 5.40 | 0 | 22/47 | −0.19 / +4.80 | 4.99 | +1.09, −0.19, +0.36 | 24.88 | 12.29 |
+| 5.35 | 0 | 7/47 | +0.98 / +6.96 | 5.97 | +3.16, +0.98, +1.71 | 26.20 | 13.39 |
+| A6 selected | 12 | 47/47 | −1.98 / +1.22 | 3.20 | | 24.92 | 12.47 |
+
+The 80 °C rows are Hartono α 0.39, Amundsen state 81 (α 0.30) and Hartono α 0.29.
+Every probed vector is phase-clean in the same sense as the endpoint: 73 passed
+(68 two-phase, 5 single-liquid), with no resolved descent.
+
+**Meaning.** The density miss is a temperature spread, not an offset. With the
+other parameters fixed, a smaller MEAH⁺ size raises every loaded density. At
+5.45 Å the 80 °C rows pass, but the 20–30 °C α 0.39 Hartono rows exceed +2s.
+No σ value alone brings the span (smallest 4.01s at 5.45 Å) inside the 4s window, so
+the Jacobian estimate of about 0.02 Å (fixed-others, row-by-row) does not carry over to the
+whole gate. Passing the gate needs other coordinates to change the temperature
+dependence of the loaded densities, which only a refit can test. Within this fixed
+background, MEAH⁺ sizes down to 5.35 Å show no detected split. Those are three checked
+vectors, not a certified box.
+
+Charge (stage bound-probe, allowance 180 / 200): 153.51 wall-s / 152.00 CPU-s.
+A7 calls total 614.48 wall-s so far.
