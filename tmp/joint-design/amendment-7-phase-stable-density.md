@@ -300,7 +300,7 @@ Engine fitting-method requirement, addressed by option (d) below.
 |---|---|---|
 | **(a) Restrict unlike-ion/Born bounds immediately** | A4 and A6 share $k=-1$ and Born diameters 5 Å. Existing −1→−0.8 probe removes descent at 21 but not 70; 5→4.5 Å Born probes leave both. No tested full region free of descents exists. Bounds alone are available through declarations, but their physical usefulness is unknown. | Do not guess a new box or label one stable. Use restrictions only after the coupled study supplies evidence and the owner accepts numerical bounds. |
 | **(b) Path plus coupled-coordinate study** | New full-family probes locate detected onset between 0.125 and 0.25; straight-path density remains poor. Single block reversions retain descents. This identifies a specific unanswered question: which off-path combinations improve density without the detected high-loading split? Existing fixed-state and phase producers suffice. | **Primary.** Retain the current objective; spend a bounded diagnostic allowance before committing to fit bounds. |
-| **(c) Reduce loaded-density weight** | A4 at zero weight has no detected descent and poor density; A6 at one fits density and splits. Earlier 0.1 fits use different rows/coordinates and have no matching phase qualification, so they do not answer this new 307-row question. The relation between weight and phase behavior need not be monotonic. | **Fallback:** one $\lambda=0.1$ fit with the same 307 rows/scales and original 16-coordinate physical box, starting at the screened Held $t=0.125$ vector. It competes for the single primary-fit allowance, not an additional scan. All density/Cai/calibration/phase gates stay unchanged. |
+| **(c) Reduce loaded-density weight** | A4 at zero weight has no detected descent and poor density; A6 at one fits density and splits. Earlier 0.1 fits use different rows/coordinates and have no matching phase qualification, so they do not answer this new 307-row question. The relation between weight and phase behavior need not be monotonic. | **Fallback:** one $\lambda=0.1$ fit with the same 307 rows/scales and original 16-coordinate physical box, starting at the screened Held $t=0.125$ vector with the interior-start treatment below (carbamate 5.798 Å, re-screened). It competes for the single primary-fit allowance, not an additional scan. All density/Cai/calibration/phase gates stay unchanged. |
 | **(d) Stability term or constraint inside the objective** | Existing `stage6_rows`/`reg.fit` fits declared property observations; `final_evidence.stability` is a separate post-fit call. There is no declared stability residual/constraint in this campaign. Replacing failed trials by a penalty would hide missing evidence. | Not feasible within four remaining campaign lines. Engine would need a declared finite-split or stability inequality, parameter derivatives through its changing trial/donor solution, explicit treatment of incomplete searches and optimizer constraint handling; MEA would then declare states/scales and retain endpoint confirmation. No Engine equations, local differentiator or penalty wrapper is commissioned here. |
 
 **Primary sequence after owner approval:**
@@ -339,6 +339,24 @@ Engine fitting-method requirement, addressed by option (d) below.
    as sensitivity evidence and returned to the owner; it cannot replace the
    primary result.
 
+**Start treatment for the release check (readiness r1 correction).** The
+release evaluates centered segment-diameter derivatives at optimizer steps up to
+0.01 with scale 0.1 Å, i.e. ±0.001 Å, and Engine `21e761c3` rejects an evaluated
+point outside the declared box; A6 already lost 115.72 wall-s this way
+(`A6/held-followups/held-x3-at-bound-release-failed/`). Every vector proposed
+here has the carbamate segment diameter on its 5.8 Å upper bound: both path
+endpoints, $t=0.125$, and every block exchange in step 2, none of which changes
+it. Each fit start (primary, fallback and the Hartono sensitivity) is therefore
+**declared** as an interior start: any segment diameter within two largest steps
+(0.002 Å) of a bound starts that distance inside it (carbamate 5.8 → 5.798 Å),
+with its packing (0.88σ) and Debye–Hückel (σ) ties reapplied, exactly as the A6
+$x_3$ start (`A6/inputs/held-followups/build.py.txt`, `x3`). The box is
+unchanged, the derivative gate is not skipped, and the optimizer may return to
+the bound. Because the moved start is a different parameter identity, it gets
+its own 73-point phase screen (≈35 s) before release, and its release and fit
+proceed only if that screen shows no resolved descent; a descent returns the
+start to the owner. This treatment is part of owner decision 5.
+
 The fallback is a measured density/phase trade-off, not permission to relax
 density. If the primary fit has already run and failed, this design authorizes
 no automatic second fit: return its numbers and unused budget to the owner.
@@ -371,7 +389,7 @@ after rounding the aggregates up once. Program totals are now **16,380 /
 |---|---:|---:|---|
 | Accepted merged #660 wheel qualification, if required | 350 | 1,000 | Immutable wheel/hash; replay affected quantities; both A4-control and A6 diagnostic families. New physical descents or changed equations return to Design. No source-checkout runtime. |
 | Remaining path/block study and reductions | 400 | 600 | At most four new full families (two bracket, two coupled vectors), 36 point probes and two fixed 307-row evaluations. New allowance, not use of this task's unused diagnostic permission. Stop at aggregate allowance. |
-| **One selected-method fit**, release and replay | 1,200 | 7,000 | Typical release ≈180 s, fit 35–400 s / 450–4,200 CPU-s; plan release allowance 300 + native fit 600 + cleanup allowance 120 + replay 180. Primary and fallback are alternatives. |
+| **One selected-method fit**, release and replay | 1,200 | 7,000 | Typical release ≈180 s, fit 35–400 s / 450–4,200 CPU-s; plan release allowance 300 + native fit 600 + cleanup allowance 120 + replay 180, which also covers the ≈35 s phase screen of the interior start. Primary and fallback are alternatives. |
 | One eligible-candidate Hartono $x_3$ sensitivity, release/replay | 1,200 | 7,000 | Same one-fit allowance; skip only if no eligible primary exists, not to qualify a primary incompletely. |
 | Protected final evidence/verification reserve | **1,950.38** | **9,200** | Full selected assessment, 73-point family, split confirmations, gas-root check, replays/derivatives and affected-wheel checks. Family measured ≈35 s; gas root ≈5 s; retain margin for failures. |
 | **Total reserved** | **5,100.38** | **24,800** | Leaves **119.62 wall-s / 47,449.39 CPU-s** unallocated after this design charge. |
@@ -444,7 +462,8 @@ owner adoption, and exact notebook promotion precedes manuscript use.
 4. Accept the 5,100.38-wall-s / 24,800-CPU-s allocation, protected checks and
    absence of automatic additional fits/comparisons; caps remain unchanged.
 5. After the bounded fixed study, accept/reject its **actual numerical bounds**
-   and obtain independent readiness **Ready** before fitting. No useful bounds
+   and the declared interior-start treatment of §5 (re-screened start), and
+   obtain independent readiness **Ready** before fitting. No useful bounds
    are claimed by this draft; the owner is not asked to approve invented ones.
 6. After complete evidence and delivered review, decide adoption or continued
    withholding. Neither A4 nor the old paper successor is automatically
