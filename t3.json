@@ -1,0 +1,12 @@
+{
+  "$schema": "https://t3.codes/schema/t3.json",
+  "scripts": [
+    {
+      "name": "MEA notebook (live preview)",
+      "command": "curl -sf -o /dev/null http://127.0.0.1:8770/mea_parameter_bundle/notebook.html && echo 'MEA notebook from the always-on preview of local main: http://127.0.0.1:8770/mea_parameter_bundle/notebook.html' || echo 'The always-on Quarto preview (cse-preview-Amine-Thermodynamics user service) is not answering on 127.0.0.1:8770.'",
+      "icon": "play",
+      "previewUrl": "http://127.0.0.1:8770/mea_parameter_bundle/notebook.html",
+      "autoOpenPreview": true
+    }
+  ]
+}
