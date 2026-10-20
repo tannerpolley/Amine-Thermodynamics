@@ -27,7 +27,7 @@ retained selected Held vector assessed in `amendment-6/selected-assessment/`.
 | All 210 densities: Amundsen 103 / Hartono 40 / Han 67 RMSE, kg/m³ | 6.42 / 2.42 / 5.91 | 4.96 / 3.53 / 7.55 | report |
 | Hartono loading 0.50 (8) RMSE, kg/m³ | 3.23 | 7.14 | report |
 | Amundsen source-conflict five RMSE, kg/m³ | 10.27 | 8.65 | report; excluded from fit |
-| Hilliard Cp error at 318.15 K α 0 / α 0.358; 353.15 K α 0 / α 0.358 | +5.53 / +2.57 / +1.15 / −2.13 % | +5.04 / +2.58 / +0.75 / −1.56 % | report |
+| Hilliard Cp error at 318.15 K α 0 / α 0.358; 353.15 K α 0 / α 0.358 | +5.53 / +2.57 / +1.15 / −2.13 % | +5.04 / +2.57 / +0.75 / −1.55 % | report |
 | Pressure AARD: canonical 159 / packet 79 / Wagner 23, % | 20.55 / 15.47 / 15.45 | 20.86 / 15.79 / 20.10 | report |
 | Concentration transfer 70 (15 and 45 wt %) AARD, % | 43.52 | 168.71 | report |
 | Canonical 100–120 °C (54) pressure AARD, % | 24.35 | 24.51 | report |
@@ -45,9 +45,9 @@ enthalpy with a zero-loading reference. The Arcis gate applies to the combined 1
 α 0.25557798094241313. Both native density-root requests return the same sole ionic
 root, denser than the newly solved liquid, so no separate stable ionic gas root exists. The
 physical solve and the 10⁻⁶–100 mol/m³ dilution scan completed. The first attempt
-(`../gas-root/run/`, 5.65 wall-s) stopped at its input check on a path the copy had not
-updated (`engine-decomposition.csv`). No Engine calculation ran in that attempt, and it is
-retained and charged.
+(`../gas-root/run/`, 5.65 wall-s) stopped at an input path the copy had not updated
+(`engine-decomposition.csv`), before witness evaluation, root requests, dilution scanning and the physical
+solve; Engine initialization and problem compilation had already occurred. It is retained and charged.
 
 ## Numerical verification
 
@@ -69,4 +69,4 @@ wall-s; seven assessment calls 105.63 wall-s / 274.96 CPU-s. The stage total is
 117.38 / 286.59. All A7 calls total 1,614.64 wall-s / 3,544.75 CPU-s, charged to the
 program ledger at integration.
 
-Not done: independent delivered review, notebook integration and adoption.
+Not done: adoption. The notebook section is integrated; delivered review r1 corrections are applied.

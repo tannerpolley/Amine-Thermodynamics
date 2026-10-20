@@ -5,7 +5,7 @@
 
 | Call (`../../step-ledger.json`) | Exit | Wall-s / CPU-s | What failed |
 |---|---:|---:|---|
-| q1-a4-control-family, first | 1 | 0.35 / 0.30 | `RuntimeError: installed Engine wheel does not match the pinned SHA-256`, raised on import by `calibration-misfit/probe.py:27`: the study's explicit wheel binding then ran after `import final_evidence`. Its output file was overwritten by the second q1 call; the message is quoted from that call's terminal output. |
+| q1-a4-control-family, first | 1 | 0.35 / 0.30 | `RuntimeError: installed Engine wheel does not match the pinned SHA-256`, raised on import by `calibration-misfit/probe.py:27`: the study's explicit wheel binding then ran after `import final_evidence`. The first attempt's output and GNU-time files were overwritten by the second q1 call. Its failure message is quoted from terminal output, and its 0.35 wall-s / 0.30 CPU-s charge remains in step-ledger.json; the original timing record is unavailable for independent verification. |
 | q1-a4-control-family | 0 | 12.46 / 12.36 | `a4-control/`: all 73 points `failed` with `TypeError: object of type 'float' has no len()` before any stability test |
 | q2-a6-selected-family | 0 | 13.00 / 12.95 | `a6-selected/`: the same failure at all 73 points |
 | q3-a6-selected-replay | 1 | 11.92 / 11.72 | `fit_observations.py:261` `previous.pressure[0]`: `TypeError: 'float' object is not subscriptable` |
