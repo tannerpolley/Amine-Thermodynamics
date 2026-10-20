@@ -1,0 +1,101 @@
+"""Disclosed declaration preparation for the #170 amendment 7 restricted feasibility fit; no fit or solve.
+
+Owner decisions: #170 comments 6283064075 (route, strict gate, endpoint rule, budget) and
+6283335389 (restricted fit, bounds, start). Start: the design path t = 0.125 vector
+(no resolved descent recorded in its 72 returned stability reports; point 1 lacked a
+report because of the positive-support correction failure) with the design §5 interior-start
+treatment: a segment diameter within two largest derivative steps of a bound starts
+that distance inside it, Held ties reapplied (carbamate 5.8 -> 5.798 A).
+Bounds: MEAH+ segment diameter [5.49, 5.8] A; MEAH+-water k [-0.5, -0.161];
+the other 14 coordinates keep the selected A6 Held declaration's boxes.
+
+Inherited R2/R5 totals: both reaction laws are affine in (unshifted a_k, total
+shift), so the linearly interpolated stored coefficients carry the linearly
+interpolated A4/A6 totals; asserted against the stored R5 a_k below.
+
+Run from the checkout root with the pinned interpreter and
+PYTHONPATH=src:analyses/mea_parameter_bundle/scripts:
+    python <this file> [wheel_path wheel_sha256]
+The wheel arguments rebind both declarations to the qualified #660 wheel; budget
+priors are read from the cumulative ledger at build time.
+"""
+import importlib.machinery
+import importlib.util
+import json
+import math
+from pathlib import Path
+import sys
+
+R = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170')
+OUT = R/'amendment-7/inputs'
+loader = importlib.machinery.SourceFileLoader('a6_followups', str(R/'amendment-6/inputs/held-followups/build.py.txt'))
+helpers = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
+loader.exec_module(helpers)
+f, o = helpers.f, helpers.o
+
+START = R/'amendment-7/design-probes/path-0p125/fixed-parameters.json'
+T = 0.125
+A4_CHEMISTRY = R/'amendment-4/matched-larger-dV/control/chemistry-coordinates.json'
+A6_CHEMISTRY = R/'amendment-6/joint-mea-water/held/fit/chemistry-coordinates.json'
+LEDGER = R/'amendment-4/compute-ledger.json'
+BOUNDS = {'component/protonated-monoethanolamine/segment_diameter': [5.49, 5.8],
+          'pair/protonated-monoethanolamine/water/k_ij': [-0.5, -0.161]}
+FORM, IDENTITY = 'restricted', 'a7-restricted-t0p125'
+
+
+def build(wheel=None):
+    assert helpers.sha(START) == 'c9f062478a7a38dde923f5e27fbc67aebe6dff25f1b53bf24c3de16336f946d8'
+    mapping = f.load(START)
+    a4, a6 = f.load(A4_CHEMISTRY), f.load(A6_CHEMISTRY)
+    totals = {r: (1-T)*a4['enthalpy_shifts_J_mol'][r] + T*a6['enthalpy_shifts_J_mol'][r] for r in ('R2', 'R5')}
+    unshifted = (1-T)*a4['R5_unshifted_a_k'] + T*a6['R5_unshifted_a_k']
+    values = o.s.parameter_values(mapping)
+    assert math.isclose(values['reaction:R5:correlation:a_k'], unshifted + totals['R5']/(o.thermal.R*math.log(10.)), abs_tol=1e-9, rel_tol=0.)
+    assert 2400 <= unshifted <= 3000 and all(abs(v) <= 10000 for v in totals.values())
+    base = f.load(helpers.BASE/'held-information.json')
+    step = max(base['verification']['steps_optimizer'])
+    inward = {}
+    for c in base['information_coordinates']:
+        if c.get('family') == 'segment_diameter':
+            lo, hi = BOUNDS.get(c['identity'], c['bounds'])
+            v, room = values[c['identity']], 2*step*c['scale']
+            if v > hi-room or v < lo+room:
+                inward[c['identity']] = (v, min(max(v, lo+room), hi-room))
+    assert set(inward) == {'component/carbamate-anion/segment_diameter'}, inward
+    mapping = helpers.held_sizes(o.s.with_parameter_values(mapping, {k: new for k, (_, new) in inward.items()}), base)
+    for identity, (lo, hi) in BOUNDS.items():
+        assert lo < o.s.parameter_values(mapping)[identity] < hi
+    purpose = ('Amendment 7 restricted feasibility fit (owner, #170 comments 6283064075 and 6283335389): '
+        f'start = design path t = {T} vector ({START}, sha256 {helpers.sha(START)}), carbamate segment diameter '
+        f'{inward["component/carbamate-anion/segment_diameter"][0]} -> {inward["component/carbamate-anion/segment_diameter"][1]} A '
+        'with Held ties; bounds MEAH+ segment diameter [5.49, 5.8] A and MEAH+-water k [-0.5, -0.161].')
+    mapping['purpose'] = purpose
+    specs = helpers.declarations(FORM, IDENTITY, mapping, totals, purpose, OUT)
+    ledger = f.load(LEDGER)
+    for spec in specs:
+        for c in spec['information_coordinates']:
+            if c['identity'] in BOUNDS:
+                c['bounds'] = BOUNDS[c['identity']]
+        spec['amendment_url'] = 'https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6283335389'
+        spec['design_url'] = 'tmp/joint-design/amendment-7-phase-stable-density.md'
+        spec['budget_wall_s'], spec['budget_cpu_s'] = 1200, 7000
+        spec['program_prior_wall_s'], spec['program_prior_cpu_s'] = ledger['compute_wall_charged_s'], ledger['program_cpu_charge_s']
+        spec['ledger'] = f'{LEDGER} (compute-only wall); priors read at declaration build; operator rechecks before each launch.'
+        if 'release_tests_path' in spec:
+            spec['release_tests_path'] = str(R/f'amendment-7/{FORM}/release/release-tests.json')
+        if wheel:
+            spec['engine'] = dict(spec['engine'], wheel_path=wheel[0], wheel_sha256=wheel[1])
+        for path in (A4_CHEMISTRY, A6_CHEMISTRY, START):
+            if not any(r['path'] == str(path) for r in spec['inputs']):
+                spec['inputs'].append(dict(path=str(path), sha256=helpers.sha(path)))
+    result = helpers.check(specs, mapping)
+    helpers.write_specs(FORM, specs, OUT)
+    result.update(start_sha256=helpers.sha(OUT/f'{FORM}-start.json'), inherited_totals_J_mol=totals, R5_unshifted_a_k=unshifted,
+                  interior_start=inward, bounds=BOUNDS, program_prior_wall_s=ledger['compute_wall_charged_s'],
+                  changes_from_selected_start=helpers.changes(f.load(helpers.REFERENCE), mapping))
+    helpers.dump(OUT/'build-check.json', result)
+    return result
+
+
+if __name__ == '__main__':
+    print(json.dumps(build(sys.argv[1:3] or None), indent=1, default=str))
