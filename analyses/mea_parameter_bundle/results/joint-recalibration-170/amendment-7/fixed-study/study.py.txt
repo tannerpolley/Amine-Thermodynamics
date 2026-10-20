@@ -12,6 +12,7 @@ coefficients of each reaction law move together.
     study.py.txt subexchanges        the 8 single ion-water exchanges, points 63/70/72
     study.py.txt splits LABEL        one split-seeded solve per descending point
     study.py.txt score LABEL         exact 307-row replay and A6 gates
+    study.py.txt screen LABEL PATH   all 73 family points for a parameter document
 
 SPEC is "default" or "default,name=fraction,...", where name is a block or a
 single ion-water coefficient, e.g. "0.125,meah-size=0.25".
@@ -199,15 +200,20 @@ def score(label):
     print(summary, flush=True)
 
 
+def family(data, run):
+    f.phase_family(data, request(data, 313.15, .11), root/'amendment-6/inputs/revision-3/phase/family-points.txt',
+        '6e1231d9506fd6dd9e965a64120ff952cebf1c4778da5d66cfb0f888e8b7f44b', run)
+    reduce(run)
+
+
 mode = sys.argv[1]
 if mode in ('family', 'points'):
     data, run = build(sys.argv[2], sys.argv[3])
-    if mode == 'family':
-        f.phase_family(data, request(data, 313.15, .11), root/'amendment-6/inputs/revision-3/phase/family-points.txt',
-            '6e1231d9506fd6dd9e965a64120ff952cebf1c4778da5d66cfb0f888e8b7f44b', run)
-        reduce(run)
-    else:
-        points(data, run, POINTS)
+    family(data, run) if mode == 'family' else points(data, run, POINTS)
+elif mode == 'screen':
+    run = output/sys.argv[2]
+    run.mkdir(parents=True, exist_ok=False)
+    family(f.s.parameter_mapping(Path(sys.argv[3])), run)
 elif mode == 'exchanges':
     for lo, hi in ((0.125, 0.25), (0.25, 0.125)):
         for block in BLOCKS:

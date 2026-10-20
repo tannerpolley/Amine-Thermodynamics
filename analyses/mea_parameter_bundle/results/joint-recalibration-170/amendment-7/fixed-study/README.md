@@ -111,3 +111,30 @@ carbamate σ (5.8 → 5.798 Å, ties reapplied) and its own 73-point screen befo
 release. These intervals are sampled evidence, not a certified split-free box;
 the endpoint's 73-point family with split-seeded confirmation remains the
 falsifier, and density may simply fail with the size lever removed.
+
+## Restricted-fit declaration and start screen
+
+Owner approval of the bounds and start: [#170 comment 6283335389](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6283335389).
+`../inputs/build.py.txt` writes `restricted-{start,information,fit}.json` and
+`build-check.json`, reusing the A6 follow-up helpers (`declarations`, `rebase`,
+`held_sizes`, `check`); no solve.
+
+- **Bounds:** the only coordinate-box changes from the selected A6 Held declaration are the
+  two approved bounds and the R2/R5 boxes, rebased by the start's inherited totals.
+  The inherited totals are R2 2806.69 J/mol and R5 3831.95 J/mol, with unshifted R5 aₖ 2463.35 K,
+  linearly interpolated because both laws are affine in (unshifted aₖ, total shift).
+  The rebased R5 aₖ box is [2600.16, 3200.16] K. The other declaration fields
+  are identical apart from start, inputs, purpose, URLs, budget and release path.
+- **Budget:** 1,200 wall-s / 7,000 CPU-s; fit 600 / 6,000; release 300 / 500.
+  Program priors are read from the ledger at build time.
+- **Checks:** both declarations pass `verify`, the ties check, 16-coordinate construction and an
+  identical binding (`f5d8bce3…ee58` on wheel `d2f61e3a…0357`).
+- **Start screen:** the interior start (carbamate σ 5.798 Å; MEAH⁺ σ 5.5944 Å;
+  MEAH⁺–water k −0.17544) shows **no resolved descent on 73 points**: 0 failed,
+  73 unresolved, all from the known near-pure-0 trial optimizer (#660). The screen took
+  37.21 wall-s / 37.10 CPU-s, charged 38 / 38 against the restricted-fit allocation.
+
+Strict-gate consequence: the release, fit and endpoint family run only on the
+merged #660 wheel. Rebuilding with `build.py.txt <wheel_path> <wheel_sha256>`
+rebinds the engine and refreshes the ledger priors; the start screen repeats on
+that wheel before release.

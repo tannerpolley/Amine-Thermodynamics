@@ -328,5 +328,46 @@
   }
  ],
  "wall_s": 239.78,
- "cpu_s": 239.09
+ "cpu_s": 239.09,
+ "restricted_fit_calls": [
+  {
+   "name": "restricted-start-screen",
+   "stage": "restricted-fit allocation (1,200 wall-s / 7,000 CPU-s), design \u00a75 interior-start screen",
+   "command": [
+    "/usr/bin/time",
+    "-f",
+    "{\"wall_s\":%e,\"user_s\":%U,\"system_s\":%S,\"exit_code\":%x,\"max_rss_kb\":%M}",
+    "-o",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/restricted-start-screen-time.json",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "80s",
+    "nice",
+    "-n",
+    "10",
+    "env",
+    "PYTHONPATH=src:analyses/mea_parameter_bundle/scripts",
+    "OMP_NUM_THREADS=1",
+    "OPENBLAS_NUM_THREADS=1",
+    "MKL_NUM_THREADS=1",
+    "BLIS_NUM_THREADS=1",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/a6/venv/bin/python",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt",
+    "screen",
+    "restricted-start-screen",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/inputs/restricted-start.json"
+   ],
+   "log": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/restricted-start-screen.log",
+   "timeout_s": 80,
+   "wall_s": 37.21,
+   "user_s": 34.11,
+   "system_s": 2.99,
+   "exit_code": 0,
+   "max_rss_kb": 85732,
+   "cpu_s": 37.1,
+   "script_sha256": "ef0ea310e807501221da7f97de591c213ef9f11773cf61affdeb2ad057b3254e",
+   "parameter_sha256": "fe9ed68f7abb83179a875f3fcecd7da927ce5d41b6a6d83218282aed15f3c3ea"
+  }
+ ]
 }
