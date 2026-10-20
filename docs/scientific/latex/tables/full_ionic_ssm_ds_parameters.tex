@@ -66,106 +66,106 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 44f4f368d79244d8cc134e03e5d3cf9756de1453f4eeabc643b08a8e1a2080da
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3102\linewidth}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}@{}}
-\caption{A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. Source identifiers and extrapolation qualifications are retained from the selected JSON; fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: \ce{CO2}, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.}\label{tab:full-ionic-ssm-ds-parameters}\\
+\caption{A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. The provenance column distinguishes the A7 fit from inherited project inputs and source ancestry; inherited labels do not establish that every current value was reported directly in the named source. Entries marked ``candidate extrapolation'' retain that qualification from the selected parameter file; absence of the label does not establish validation. fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: \ce{CO2}, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.}\label{tab:full-ionic-ssm-ds-parameters}\\
 \toprule
-Parameter/\allowbreak{}input & Value & Unit & Role & Source/\allowbreak{}qualification \\
+Parameter/\allowbreak{}input & Value & Unit & Role & Provenance/\allowbreak{}qualification \\
 \midrule\endfirsthead
 \toprule
-Parameter/\allowbreak{}input & Value & Unit & Role & Source/\allowbreak{}qualification \\
+Parameter/\allowbreak{}input & Value & Unit & Role & Provenance/\allowbreak{}qualification \\
 \midrule\endhead
 \bottomrule\endfoot
-component/\allowbreak{}CO2/\allowbreak{}dispersion energy over k & 169.21 & kelvin & fixed in A7 & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}CO2/\allowbreak{}segment count & 2.0729 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}CO2/\allowbreak{}segment diameter & 2.7852 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}CO2/\allowbreak{}solvation factor & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}CO2/\allowbreak{}dielectric volume & 1e-08 & liter /\allowbreak{} mole & fixed in A7 & joint-recalibration-170-stage5 \\
-component/\allowbreak{}CO2/\allowbreak{}dielectric temperature & 1403 & kelvin & fixed in A7 & joint-recalibration-170-stage5 \\
-component/\allowbreak{}MEA/\allowbreak{}dispersion energy over k & 277.174 & kelvin & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEA/\allowbreak{}segment count & 3.0353 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEA/\allowbreak{}segment diameter & 3.0435 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEA/\allowbreak{}solvation factor & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEA/\allowbreak{}dielectric volume & 0.7309888238 & liter /\allowbreak{} mole & fixed in A7 & joint-recalibration-170-stage5 \\
-component/\allowbreak{}MEA/\allowbreak{}dielectric temperature & 1019.078611 & kelvin & fixed in A7 & joint-recalibration-170-stage5 \\
-component/\allowbreak{}water/\allowbreak{}dispersion energy over k & 432.3788131 & kelvin & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}water/\allowbreak{}segment count & 1.252753838 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}water/\allowbreak{}solvation factor & 1.5 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}water/\allowbreak{}dielectric volume & 0.3777 & liter /\allowbreak{} mole & fixed in A7 & joint-recalibration-170-stage5 \\
-component/\allowbreak{}water/\allowbreak{}dielectric temperature & 1403 & kelvin & fixed in A7 & joint-recalibration-170-stage5 \\
-component/\allowbreak{}MEAH+/\allowbreak{}born diameter & 5 & \AA & fitted in A7 & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEAH+/\allowbreak{}debye huckel diameter & 5.35 & \AA & tied to component/\allowbreak{}MEAH+/\allowbreak{}segment diameter & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEAH+/\allowbreak{}dispersion energy over k & 177.7950548 & kelvin & fitted in A7 & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEAH+/\allowbreak{}packing diameter & 4.708 & \AA & tied to component/\allowbreak{}MEAH+/\allowbreak{}segment diameter & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEAH+/\allowbreak{}segment count & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEAH+/\allowbreak{}segment diameter & 5.35 & \AA & fitted in A7 & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEAH+/\allowbreak{}solvation factor & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEACOO-/\allowbreak{}born diameter & 5 & \AA & fitted in A7 & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEACOO-/\allowbreak{}debye huckel diameter & 4.866040008 & \AA & tied to component/\allowbreak{}MEACOO-/\allowbreak{}segment diameter & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEACOO-/\allowbreak{}dispersion energy over k & 207.2745967 & kelvin & fitted in A7 & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEACOO-/\allowbreak{}packing diameter & 4.282115207 & \AA & tied to component/\allowbreak{}MEACOO-/\allowbreak{}segment diameter & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEACOO-/\allowbreak{}segment count & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEACOO-/\allowbreak{}segment diameter & 4.866040008 & \AA & fitted in A7 & joint-recalibration-170; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}MEACOO-/\allowbreak{}solvation factor & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}HCO3-/\allowbreak{}born diameter & 3 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}HCO3-/\allowbreak{}debye huckel diameter & 2.9296 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}HCO3-/\allowbreak{}dispersion energy over k & 70 & kelvin & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}HCO3-/\allowbreak{}packing diameter & 2.578048 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}HCO3-/\allowbreak{}segment count & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}HCO3-/\allowbreak{}segment diameter & 2.9296 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}HCO3-/\allowbreak{}solvation factor & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}\ce{CO3^{2-}}/\allowbreak{}born diameter & 3 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}\ce{CO3^{2-}}/\allowbreak{}debye huckel diameter & 2.4422 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}\ce{CO3^{2-}}/\allowbreak{}dispersion energy over k & 249.26 & kelvin & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}\ce{CO3^{2-}}/\allowbreak{}packing diameter & 2.149136 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}\ce{CO3^{2-}}/\allowbreak{}segment count & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}\ce{CO3^{2-}}/\allowbreak{}segment diameter & 2.4422 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}\ce{CO3^{2-}}/\allowbreak{}solvation factor & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}H3O+/\allowbreak{}born diameter & 1.218 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}H3O+/\allowbreak{}debye huckel diameter & 3.4654 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}H3O+/\allowbreak{}dispersion energy over k & 500 & kelvin & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}H3O+/\allowbreak{}packing diameter & 3.049552 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}H3O+/\allowbreak{}segment count & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}H3O+/\allowbreak{}segment diameter & 3.4654 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}H3O+/\allowbreak{}solvation factor & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}OH-/\allowbreak{}born diameter & 3.081076894 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}OH-/\allowbreak{}debye huckel diameter & 2.0177 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}OH-/\allowbreak{}dispersion energy over k & 650 & kelvin & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}OH-/\allowbreak{}packing diameter & 1.775576 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}OH-/\allowbreak{}segment count & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}OH-/\allowbreak{}segment diameter & 2.0177 & \AA & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}OH-/\allowbreak{}solvation factor & 1 & 1 & fixed in A7 & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}water/\allowbreak{}segment diameter/\allowbreak{}constant-plus-sum-of-exponentials/\allowbreak{}constant & 2.780432615 & \AA & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}water/\allowbreak{}segment diameter/\allowbreak{}constant-plus-sum-of-exponentials/\allowbreak{}term-0/\allowbreak{}amplitude & 10.11 & \AA & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}water/\allowbreak{}segment diameter/\allowbreak{}constant-plus-sum-of-exponentials/\allowbreak{}term-0/\allowbreak{}exponent coefficient & -0.01775 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}water/\allowbreak{}segment diameter/\allowbreak{}constant-plus-sum-of-exponentials/\allowbreak{}term-1/\allowbreak{}amplitude & -1.417 & \AA & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-component/\allowbreak{}water/\allowbreak{}segment diameter/\allowbreak{}constant-plus-sum-of-exponentials/\allowbreak{}term-1/\allowbreak{}exponent coefficient & -0.01146 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-model/\allowbreak{}relative permittivity/\allowbreak{}ionic region relative permittivity & 8 & 1 & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-association/\allowbreak{}MEA/\allowbreak{}a/\allowbreak{}MEA/\allowbreak{}b/\allowbreak{}energy over k & 2586.3 & kelvin & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; fakouri-baygi-pahlavanzadeh-2015; candidate\_\allowbreak{}extrapolation \\
-association/\allowbreak{}MEA/\allowbreak{}a/\allowbreak{}MEA/\allowbreak{}b/\allowbreak{}volume & 0.036287 & 1 & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; fakouri-baygi-pahlavanzadeh-2015; candidate\_\allowbreak{}extrapolation \\
-association/\allowbreak{}water/\allowbreak{}a/\allowbreak{}water/\allowbreak{}b/\allowbreak{}energy over k & 1756.649796 & kelvin & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-association/\allowbreak{}water/\allowbreak{}a/\allowbreak{}water/\allowbreak{}b/\allowbreak{}volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-association/\allowbreak{}CO2/\allowbreak{}a/\allowbreak{}water/\allowbreak{}b/\allowbreak{}energy over k & 878.3248982 & kelvin & fixed correlation/\allowbreak{}association input & schick-2023-pabsch-2020-induced-association; candidate\_\allowbreak{}extrapolation \\
-association/\allowbreak{}CO2/\allowbreak{}a/\allowbreak{}water/\allowbreak{}b/\allowbreak{}volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & schick-2023-pabsch-2020-induced-association; candidate\_\allowbreak{}extrapolation \\
-association/\allowbreak{}CO2/\allowbreak{}b/\allowbreak{}water/\allowbreak{}a/\allowbreak{}energy over k & 878.3248982 & kelvin & fixed correlation/\allowbreak{}association input & schick-2023-pabsch-2020-induced-association; candidate\_\allowbreak{}extrapolation \\
-association/\allowbreak{}CO2/\allowbreak{}b/\allowbreak{}water/\allowbreak{}a/\allowbreak{}volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & schick-2023-pabsch-2020-induced-association; candidate\_\allowbreak{}extrapolation \\
-MEA site a & 1 & -- & fixed donor site & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-MEA site b & 1 & -- & fixed acceptor site & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-water site a & 1 & -- & fixed donor site & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-water site b & 1 & -- & fixed acceptor site & mea-retained-phase-two-artifact; candidate\_\allowbreak{}extrapolation \\
-CO2 site a & 1 & -- & fixed donor site & schick-2023-pabsch-2020-induced-association; candidate\_\allowbreak{}extrapolation \\
-CO2 site b & 1 & -- & fixed acceptor site & schick-2023-pabsch-2020-induced-association; candidate\_\allowbreak{}extrapolation \\
-MEA(a)–water(b) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: association/\allowbreak{}MEA/\allowbreak{}a/\allowbreak{}MEA/\allowbreak{}b/\allowbreak{}energy over k, association/\allowbreak{}water/\allowbreak{}a/\allowbreak{}water/\allowbreak{}b/\allowbreak{}energy over k; volume: association/\allowbreak{}MEA/\allowbreak{}a/\allowbreak{}MEA/\allowbreak{}b/\allowbreak{}volume, association/\allowbreak{}water/\allowbreak{}a/\allowbreak{}water/\allowbreak{}b/\allowbreak{}volume & mea-retained-phase-two-artifact; fakouri-baygi-pahlavanzadeh-2015; candidate\_\allowbreak{}extrapolation \\
-MEA(b)–water(a) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: association/\allowbreak{}MEA/\allowbreak{}a/\allowbreak{}MEA/\allowbreak{}b/\allowbreak{}energy over k, association/\allowbreak{}water/\allowbreak{}a/\allowbreak{}water/\allowbreak{}b/\allowbreak{}energy over k; volume: association/\allowbreak{}MEA/\allowbreak{}a/\allowbreak{}MEA/\allowbreak{}b/\allowbreak{}volume, association/\allowbreak{}water/\allowbreak{}a/\allowbreak{}water/\allowbreak{}b/\allowbreak{}volume & mea-retained-phase-two-artifact; fakouri-baygi-pahlavanzadeh-2015; candidate\_\allowbreak{}extrapolation \\
-model/\allowbreak{}base & pc-saft & -- & model choice & candidate\_\allowbreak{}extrapolation \\
-model/\allowbreak{}association & general-site & -- & model choice & candidate\_\allowbreak{}extrapolation \\
-model/\allowbreak{}electrolyte & born & -- & model choice & candidate\_\allowbreak{}extrapolation \\
-model/\allowbreak{}relative\_\allowbreak{}permittivity & solvent-density-temperature & -- & model choice & candidate\_\allowbreak{}extrapolation \\
+CO2 dispersion energy/\allowbreak{}k & 169.21 & kelvin & fixed in A7 & this work; candidate extrapolation \\
+CO2 segment count & 2.0729 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+CO2 segment diameter & 2.7852 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+CO2 solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+CO2 dielectric volume & 1e-08 & liter /\allowbreak{} mole & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+CO2 dielectric temperature & 1403 & kelvin & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+MEA dispersion energy/\allowbreak{}k & 277.174 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEA segment count & 3.0353 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEA segment diameter & 3.0435 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEA solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEA dielectric volume & 0.7309888238 & liter /\allowbreak{} mole & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+MEA dielectric temperature & 1019.078611 & kelvin & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+water dispersion energy/\allowbreak{}k & 432.3788131 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+water segment count & 1.252753838 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+water solvation factor & 1.5 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+water dielectric volume & 0.3777 & liter /\allowbreak{} mole & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+water dielectric temperature & 1403 & kelvin & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+MEAH+ born diameter & 5 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEAH+ Debye–Hückel diameter & 5.35 & \AA & tied to MEAH+ segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\
+MEAH+ dispersion energy/\allowbreak{}k & 177.7950548 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEAH+ packing diameter & 4.708 & \AA & tied to MEAH+ segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\
+MEAH+ segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEAH+ segment diameter & 5.35 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEAH+ solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEACOO- born diameter & 5 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEACOO- Debye–Hückel diameter & 4.866040008 & \AA & tied to MEACOO- segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\
+MEACOO- dispersion energy/\allowbreak{}k & 207.2745967 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEACOO- packing diameter & 4.282115207 & \AA & tied to MEACOO- segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\
+MEACOO- segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEACOO- segment diameter & 4.866040008 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEACOO- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- born diameter & 3 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- Debye–Hückel diameter & 2.9296 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- dispersion energy/\allowbreak{}k & 70 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- packing diameter & 2.578048 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- segment diameter & 2.9296 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} born diameter & 3 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} Debye–Hückel diameter & 2.4422 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} dispersion energy/\allowbreak{}k & 249.26 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} packing diameter & 2.149136 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} segment diameter & 2.4422 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ born diameter & 1.218 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ Debye–Hückel diameter & 3.4654 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ dispersion energy/\allowbreak{}k & 500 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ packing diameter & 3.049552 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ segment diameter & 3.4654 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- born diameter & 3.081076894 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- Debye–Hückel diameter & 2.0177 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- dispersion energy/\allowbreak{}k & 650 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- packing diameter & 1.775576 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- segment diameter & 2.0177 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials constant & 2.780432615 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials term-0 amplitude & 10.11 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials term-0 exponent coefficient & -0.01775 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials term-1 amplitude & -1.417 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials term-1 exponent coefficient & -0.01146 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+model/\allowbreak{}relative permittivity/\allowbreak{}ionic region relative permittivity & 8 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+MEA(a)–MEA(b) association energy/\allowbreak{}k & 2586.3 & kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\
+MEA(a)–MEA(b) association volume & 0.036287 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\
+water(a)–water(b) association energy/\allowbreak{}k & 1756.649796 & kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water(a)–water(b) association volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+CO2(a)–water(b) association energy/\allowbreak{}k & 878.3248982 & kelvin & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+CO2(a)–water(b) association volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+CO2(b)–water(a) association energy/\allowbreak{}k & 878.3248982 & kelvin & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+CO2(b)–water(a) association volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+MEA site a & 1 & -- & fixed donor site & inherited project inputs; candidate extrapolation \\
+MEA site b & 1 & -- & fixed acceptor site & inherited project inputs; candidate extrapolation \\
+water site a & 1 & -- & fixed donor site & inherited project inputs; candidate extrapolation \\
+water site b & 1 & -- & fixed acceptor site & inherited project inputs; candidate extrapolation \\
+CO2 site a & 1 & -- & fixed donor site & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+CO2 site b & 1 & -- & fixed acceptor site & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+MEA(a)–water(b) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: MEA(a)–MEA(b) association energy/\allowbreak{}k, water(a)–water(b) association energy/\allowbreak{}k; volume: MEA(a)–MEA(b) association volume, water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\
+MEA(b)–water(a) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: MEA(a)–MEA(b) association energy/\allowbreak{}k, water(a)–water(b) association energy/\allowbreak{}k; volume: MEA(a)–MEA(b) association volume, water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\
+model/\allowbreak{}base & pc-saft & -- & model choice & candidate extrapolation \\
+model/\allowbreak{}association & general-site & -- & model choice & candidate extrapolation \\
+model/\allowbreak{}electrolyte & born & -- & model choice & candidate extrapolation \\
+model/\allowbreak{}relative\_\allowbreak{}permittivity & solvent-density-temperature & -- & model choice & candidate extrapolation \\
 \end{longtable}\endgroup
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.7050\linewidth}@{}}
-\caption{Retained source and transformation locators for fixed correlation and association inputs. The MEA association volume retains its conversion from the source diameter convention to the Engine convention; no combining rule is evaluated here.}\label{tab:association-source-locators}\\
+\caption{Retained source and transformation locators for fixed correlation and association inputs. The MEA association volume retains its conversion from the source diameter convention to the $\sigma_{ij}^3$ convention used here; no combining rule is evaluated here.}\label{tab:association-source-locators}\\
 \toprule
 Source & Retained locator \\
 \midrule\endfirsthead
@@ -173,17 +173,17 @@ Source & Retained locator \\
 Source & Retained locator \\
 \midrule\endhead
 \bottomrule\endfoot
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=segment\_\allowbreak{}diameter:status=retained-literature-lineage \\
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:ionic-dielc=8:status=transferred-diagnostic \\
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\
-fakouri-baygi-pahlavanzadeh-2015 & Eq. 4 (p. 791) uses d\_\allowbreak{}ij\textasciicircum{}3; Table 2 (p. 792) 2B kappa = 0.037470 under that convention. Converted to the Engine sigma\_\allowbreak{}ij\textasciicircum{}3 convention as the constant kappa that best reproduces Baygi's d\textasciicircum{}3 model (Eq. 8 form, p\_\allowbreak{}sat and saturated liquid density) over the packet domain 293.15-393.15 K, with m, sigma, epsilon fixed: analyses/\allowbreak{}2026-mea-association-diameter \\
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\
-schick-2023-pabsch-2020-induced-association & Schick et al. (2023), Table 1 and Section 2.4.2; Pabsch et al. (2020) CO2-water parameterization \\
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\
-mea-retained-phase-two-artifact & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\
-fakouri-baygi-pahlavanzadeh-2015 & Eq. 6, Wolbach-Sandler volume rule including the size factor, used with the Table 2 MEA 2B parameters \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=segment\_\allowbreak{}diameter:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:ionic-dielc=8:status=transferred-diagnostic \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\
+Fakouri Baygi and Pahlavanzadeh 2015 & Eq. 4 (p. 791) uses d\_\allowbreak{}ij\textasciicircum{}3; Table 2 (p. 792) 2B kappa = 0.037470 under that convention. Converted to the Engine sigma\_\allowbreak{}ij\textasciicircum{}3 convention as the constant kappa that best reproduces Baygi's d\textasciicircum{}3 model (Eq. 8 form, p\_\allowbreak{}sat and saturated liquid density) over the packet domain 293.15-393.15 K, with m, sigma, epsilon fixed: analyses/\allowbreak{}2026-mea-association-diameter \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\
+Schick et al. 2023; Pabsch et al. 2020 & Schick et al. (2023), Table 1 and Section 2.4.2; Pabsch et al. (2020) CO2-water parameterization \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\
+Fakouri Baygi and Pahlavanzadeh 2015 & Eq. 6, Wolbach-Sandler volume rule including the size factor, used with the Table 2 MEA 2B parameters \\
 \end{longtable}\endgroup

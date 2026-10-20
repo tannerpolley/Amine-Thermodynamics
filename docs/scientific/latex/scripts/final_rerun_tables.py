@@ -19,6 +19,24 @@ UNITS = dict(PartialPressure='Pa', PhaseMoleFraction='mole fraction', AdditionEn
              mole_fraction='vapour water fraction', equilibrium_isobaric_heat_capacity='J/(mol K), feed basis')
 
 
+DISPLAY = {'Common149': 'Common-subset', 'common149': 'common subset', 'vapour': 'vapor', 'LogRatio': 'log ratio', 'Cai mole_fraction': 'Cai vapor water fraction', 'Vinjarapu2024': 'Vinjarapu', 'Arcis2011': 'Arcis', ' at 510000.0 Pa': ' at 0.51 MPa', ' at 1030000.0 Pa': ' at 1.03 MPa'}
+def display(value):
+    value = str(value)
+    for old, new in DISPLAY.items():
+        value = value.replace(old, new)
+    return value
+
+ORIGIN = {
+    'mea-retained-phase-two-artifact': 'inherited project inputs',
+    'joint-recalibration-170': 'this work',
+    'joint-recalibration-170-stage5': 'earlier dielectric calibration and fixed inputs',
+    'mea-model-d-p5conv-a-11-28181e72': 'earlier project calibration (ancestry)',
+    'schick-2023-pabsch-2020-induced-association': 'Schick et al. 2023; Pabsch et al. 2020',
+    'fakouri-baygi-pahlavanzadeh-2015': 'Fakouri Baygi and Pahlavanzadeh 2015',
+}
+
+SOURCE_TEXT = {'Austgen1991_TableV_reaction_1a': 'Austgen 1991, Table V, reaction 1a', 'Austgen1991_TableV_reaction_4a': 'Austgen 1991, Table V, reaction 4a', 'Austgen1991_TableV_reaction_5a': 'Austgen 1991, Table V, reaction 5a', 'Tong2012_Table5_K5_MEA_via_Aroua1999': 'Tong 2012, Table 5, via Aroua 1999', 'BatesPinching1951_equation_7': 'Bates and Pinching 1951, Eq. 7'}
+
 def tex(value):
     parts = re.split(r'(\\ce\{(?:[^{}]|\{[^{}]*\})*\})', str(value))
     if len(parts) > 1:
@@ -38,11 +56,19 @@ def num(value, digits=6):
 def label(identity):
     for source, name in sorted(NAMES.items(), key=lambda item: -len(item[0])):
         identity = identity.replace(source, name)
-    return identity.replace('reciprocal_temperature_slope', 'temperature slope').replace('_', ' ')
-
+    identity = identity.replace('reciprocal_temperature_slope', 'temperature slope').replace('_', ' ')
+    kind, _, rest = identity.partition('/')
+    parts = rest.split('/')
+    if kind == 'component':
+        identity = ' '.join(parts)
+    elif kind == 'pair':
+        identity = parts[0] + '–' + parts[1] + ' ' + ' '.join(parts[2:]).replace('k ij', 'kij')
+    elif kind == 'association' and len(parts) >= 5:
+        identity = f'{parts[0]}({parts[1]})–{parts[2]}({parts[3]}) association ' + ' '.join(parts[4:])
+    return identity.replace(' over k', '/k').replace('debye huckel', 'Debye–Hückel').replace('reaction:', '').replace(':correlation:a k', ' A').replace(':', ' ')
 
 def table(name, caption, headings, data, widths=None):
-    caption = caption.replace('CO₂', r'\ce{CO2}')
+    caption = display(caption.replace('CO₂', r'\ce{CO2}'))
     widths = widths or [1/len(headings)]*len(headings)
     cols = '@{}' + ''.join(r'>{\raggedright\arraybackslash}p{' + f'{w*.94:.4f}' + r'\linewidth}' for w in widths) + '@{}'
     head = ' & '.join(tex(h) for h in headings) + r' \\'
@@ -50,7 +76,7 @@ def table(name, caption, headings, data, widths=None):
             r'\caption{' + caption + r'}\label{tab:' + name.removesuffix('.tex').replace('_', '-') + r'}\\',
             r'\toprule', head, r'\midrule\endfirsthead', r'\toprule', head, r'\midrule\endhead',
             r'\bottomrule\endfoot']
-    body += [' & '.join(tex(x) for x in row) + r' \\' for row in data]
+    body += [' & '.join(tex(display(x)) for x in row) + r' \\' for row in data]
     OUTPUTS[name] = '\n'.join(body + [r'\end{longtable}\endgroup', ''])
 
 
@@ -90,7 +116,7 @@ def main():
     for name, s in summary['heat'].items():
         residual.append([name, 'calibration' if name == 'Vinjarapu2024' else 'acceptance check', s['n_total'], 'RMSE; bias', num(s['RMSE']) + '; ' + num(s['bias']), 'kJ/mol CO2'])
     for r in a.rows(a.E / 'cp.csv'):
-        residual.append([r['id'], 'calibration', 1, 'signed error', num(r['error_percent']), '%'])
+        residual.append([f"Hilliard Cp, {r['T_K']} K, loading {r['loading']}", 'calibration', 1, 'signed error', num(r['error_percent']), '%'])
     table('residual_summary.tex', r'A7 property deviations. AARD denotes mean absolute relative deviation. Calibration errors and acceptance checks do not establish physical validation; Cai operators use native units. Cp remains on its source mass basis.',
           ['Cohort', 'Role', 'n', 'Statistic', 'Value', 'Unit'], residual, [.24,.21,.04,.16,.20,.15])
     parameter_rows, pair_rows = [], []
@@ -103,8 +129,9 @@ def main():
                 if tie:
                     role = 'tied to ' + label(tie['identity'])
                 source = c.get('provenance', {})
+                origin = 'A7 joint fit (this work)' if identity in coords else 'tied to an A7 fitted coordinate' if tie else ORIGIN.get(source.get('source_id', ''), source.get('source_id', ''))
                 row = [label(identity), num(c['value']['magnitude'], 10), c['value']['unit'], role,
-                       '; '.join(filter(None, [source.get('source_id', ''), c.get('qualification', '')])) + ('; Tref='+str(c['reference_temperature']['magnitude'])+' K' if 'reference_temperature' in c else '')]
+                       '; '.join(filter(None, [origin, c.get('qualification', '').replace('candidate_extrapolation', 'candidate extrapolation')])) + ('; Tref='+str(c['reference_temperature']['magnitude'])+' K' if 'reference_temperature' in c else '')]
                 (parameter_rows if kind == 'components' else pair_rows).append(row)
     source_locators = {}
     def sources(node):
@@ -112,7 +139,7 @@ def main():
         for entry in entries:
             if entry:
                 source_locators[entry['source_id'], entry['locator']] = None
-        return '; '.join(filter(None, [*dict.fromkeys(entry['source_id'] for entry in entries if entry), node.get('qualification', '')]))
+        return '; '.join(filter(None, [*dict.fromkeys(ORIGIN.get(entry['source_id'], entry['source_id']) for entry in entries if entry), node.get('qualification', '').replace('candidate_extrapolation', 'candidate extrapolation')]))
 
     for node in document['correlations'] + document['model_coefficients'] + document['topology']['edges']:
         for identity, c in a.coefficients(node):
@@ -127,25 +154,25 @@ def main():
             parameter_rows.append(['–'.join(endpoints), source['rule_id'], '--', 'fixed combining rule; '+
                                    '; '.join(k+': '+', '.join(label(x) for x in v) for k,v in source['inputs'].items()), sources(edge)])
     for family in document['model_families']:
-        parameter_rows.append([family['family_id'], family['choice'], '--', 'model choice', family.get('qualification', '')])
-    table('full_ionic_ssm_ds_parameters.tex', r'A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. Source identifiers and extrapolation qualifications are retained from the selected JSON; fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: CO₂, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.',
-          ['Parameter/input', 'Value', 'Unit', 'Role', 'Source/qualification'], parameter_rows, [.33,.13,.12,.20,.22])
+        parameter_rows.append([family['family_id'], family['choice'], '--', 'model choice', family.get('qualification', '').replace('candidate_extrapolation', 'candidate extrapolation')])
+    table('full_ionic_ssm_ds_parameters.tex', r"""A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. The provenance column distinguishes the A7 fit from inherited project inputs and source ancestry; inherited labels do not establish that every current value was reported directly in the named source. Entries marked ``candidate extrapolation'' retain that qualification from the selected parameter file; absence of the label does not establish validation. fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: CO₂, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.""",
+          ['Parameter/input', 'Value', 'Unit', 'Role', 'Provenance/qualification'], parameter_rows, [.33,.13,.12,.20,.22])
     previous = OUTPUTS['full_ionic_ssm_ds_parameters.tex']
-    table('full_ionic_ssm_ds_parameters.tex', r'Retained source and transformation locators for fixed correlation and association inputs. The MEA association volume retains its conversion from the source diameter convention to the Engine convention; no combining rule is evaluated here.',
-          ['Source', 'Retained locator'], [[source, locator] for source, locator in source_locators], [.25,.75])
+    table('full_ionic_ssm_ds_parameters.tex', r'Retained source and transformation locators for fixed correlation and association inputs. The MEA association volume retains its conversion from the source diameter convention to the $\sigma_{ij}^3$ convention used here; no combining rule is evaluated here.',
+          ['Source', 'Retained locator'], [[ORIGIN.get(source, source), locator] for source, locator in source_locators], [.25,.75])
     OUTPUTS['full_ionic_ssm_ds_parameters.tex'] = previous + OUTPUTS['full_ionic_ssm_ds_parameters.tex'].replace('tab:full-ionic-ssm-ds-parameters','tab:association-source-locators')
     table('binary_interaction_parameters.tex', r'A7 binary parameters. Temperature slopes multiply $(1/T-1/T_{\rm ref})$, with retained reference temperatures listed explicitly. Unlisted interactions retain the selected document conventions, including the same-sign ion dispersion exclusion. Fixed inputs are not new A7 fitted coordinates.',
-          ['Parameter', 'Value', 'Unit', 'Role', 'Source/qualification'], pair_rows, [.31,.16,.12,.19,.22])
+          ['Parameter', 'Value', 'Unit', 'Role', 'Provenance/qualification'], pair_rows, [.31,.16,.12,.19,.22])
     reaction = a.load(a.ROOT / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json')
     reaction_rows = []
     for i, r in enumerate(reaction['reactions']):
         rid = r['reaction_id']
         selected = next((x for x in document['reaction_correlations'] if x['reaction_id'] == rid), None)
-        coeff = '; '.join(label(c['identity'].split(':')[-1]) + '=' + num(c['value']['magnitude'], 10) for c in selected['coefficients']) if selected else '; '.join(k+'='+str(v) for k,v in r['correlation'].items())
+        coeff = '; '.join(label(c['identity'].split(':')[-1]).split()[0].upper() + ' = ' + num(c['value']['magnitude'], 10) for c in selected['coefficients']) if selected else '; '.join(k.split('_')[0].upper() + ' = ' + str(v) for k, v in r['correlation'].items() if k != 'kind')
         offset = reaction['common_source_standard_state']['source_to_common_ln_k_offsets'][i]
-        reaction_rows.append([rid + r': \ce{' + r['equation'].replace('CO3--', 'CO3^{2-}').replace('HCO3-', 'HCO3^-') + '}', coeff, r['selected_source'], str(r['temperature_range_k']),
+        reaction_rows.append([rid + r': \ce{' + r['equation'].replace('CO3--', 'CO3^{2-}').replace('HCO3-', 'HCO3^-') + '}', coeff, SOURCE_TEXT.get(r['selected_source'], r['selected_source']), str(r['temperature_range_k']),
                               'offset included in serialized R2' if rid == 'R2' else 'add source-to-common offset '+num(offset)])
-    table('reaction_equilibrium_constants.tex', r'A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 are serialized selected coefficients. R2 uses $\ln K=a+b/T+c\ln T+dT$, R4 $\ln K=a+b/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.',
+    table('reaction_equilibrium_constants.tex', r'A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.',
           ['Reaction', 'Coefficients', 'Source', 'Source range (K)', 'Offset'], reaction_rows, [.25,.28,.20,.10,.17])
     coordinate_rows = []
     for c, se in zip(fit['coordinates'], errors, strict=True):
@@ -181,7 +208,7 @@ def main():
     predecessor = [[q, n, num(f1[key]), num(fit['groups'][group]['AARD_percent']), '%'] for q,n,key,group in
                    [('Pressure AARD',47,'pressure_AARD_percent','common149 pressure'),('Species AARD',94,'species_AARD_percent','common149 species')]]
     predecessor += [['Vinjarapu RMSE',8,num(next(x['RMSE_kJ_mol'] for x in oldheat if x['source']=='Vinjarapu2024')),num(summary['heat']['Vinjarapu2024']['RMSE']),'kJ/mol CO2'],
-                    ['common149 cost',149,num(f1['cost']),num(fit['groups']['common149']['cost']),'dimensionless']]
+                    ['Common-subset cost',149,num(f1['cost']),num(fit['groups']['common149']['cost']),'dimensionless']]
     old_density = a.rows(a.F / 'corrected-densities.csv')
     old_states = a.load(a.F / 'density-states.json')
     assert len(old_states) == len(old_density) == 68
@@ -199,7 +226,7 @@ def main():
     for title, key in [('Native F1 density','eos_density_kg_m3'),('A7 density','predicted_kg_m3')]:
         part=[{'observed':r['observed_kg_m3'],'predicted':r[key] if key in r else d[key]} for r,d in matched]
         predecessor.append([title+' matched AARD',len(part),num(a.stats(part)['AARD_percent']) if key=='eos_density_kg_m3' else '--',num(a.stats(part)['AARD_percent']) if key!='eos_density_kg_m3' else '--','%'])
-    table('supplement_predecessor.tex', r'F1 predecessor versus A7. Common149 identities, observations, units and effective residual scales/weights reconcile, with 47 pressures, 94 species and eight heats. F1 uses its original retained parameter and Engine identities; its 152-quantity wheel-transfer check does not qualify other results. Native F1 density uses eos\_density\_kg\_m3 without translation at 101325 Pa; A7 uses 100000 Pa (1325 Pa difference). Rows match temperature, loading and unloaded-solvent mass fraction exactly, not pressure. No pressure-density derivative is retained in these density records, so no magnitude bound is claimed. These Amundsen states exclude unmatched temperatures/loadings and other sources. Matched ' + str(len(matched)) + ' of ' + str(len(old_density)) + r' F1 rows; exact matched IDs and exclusions follow in the generated provenance comments. Orchestrator amendment 2026-10-20: pressure basis disclosed, not matched.',
+    table('supplement_predecessor.tex', r'F1 predecessor versus A7. Common149 identities, observations, units and effective residual scales/weights reconcile, with 47 pressures, 94 species and eight heats. F1 uses its original retained parameter and Engine identities; its 152-quantity wheel-transfer check does not qualify other results. Native F1 density uses eos\_density\_kg\_m3 without translation at 101325 Pa; A7 uses 100000 Pa (1325 Pa difference). Rows match temperature, loading and unloaded-solvent mass fraction exactly, not pressure. No pressure-density derivative is retained in these density records, so no magnitude bound is claimed. These Amundsen states exclude unmatched temperatures/loadings and other sources. Matched ' + str(len(matched)) + ' of ' + str(len(old_density)) + r' F1 rows; the pressure basis is disclosed, not matched.',
           ['Metric', 'n', 'F1', 'A7', 'Unit'], predecessor, [.42,.06,.18,.18,.16])
     OUTPUTS['supplement_predecessor.tex'] += '% Temperature/loading/mass-fraction matched IDs (pressure disclosed, not matched): '+', '.join(d['id'] for _,d in matched)+'\n'
     OUTPUTS['supplement_predecessor.tex'] += '% F1 excluded rows: none. A7 rows outside baseline: '+', '.join(d['id'] for d in density if d['id'] not in {x['id'] for _,x in matched})+'\n'
@@ -225,16 +252,16 @@ def main():
     a.bind(a.J / 'amendment-7/restricted/README.md')
     reductions = [a.load(fixed / p / 'reduction.json') for p in endpoints]
     acceptance = []
-    for title,key,limit,authority,f1value in [('common149 cost','C149','35.26','A7 retained absolute limit from #172',f1['cost']),('Pressure AARD (%)','pressure_AARD_pct','15.81','A7 retains #172 F1 + 2 percentage points',f1['pressure_AARD_percent']),('Species AARD (%)','species_AARD_pct','9.89','A7 retained absolute limit',f1['species_AARD_percent']),('Vinjarapu RMSE (kJ/mol)','vinjarapu_rmse_kJ_mol','3.13','A7 retained heat limit',next(x['RMSE_kJ_mol'] for x in oldheat if x['source']=='Vinjarapu2024')),('Loaded within 2s','loaded_within_2s','47/47','A7 density requirement; three failures accepted by owner',''),('Cai cost','cai_cost','95.90','A7 Cai requirement','')]:
+    for title,key,limit,authority,f1value in [('Common-subset cost','C149','35.26','F1 value + 10% (rounded; retained for A7)',f1['cost']),('Pressure AARD (%)','pressure_AARD_pct','15.81','F1 value + 2 percentage points (rounded; retained for A7)',f1['pressure_AARD_percent']),('Species AARD (%)','species_AARD_pct','9.89','F1 value + 2 percentage points (rounded; retained for A7)',f1['species_AARD_percent']),('Vinjarapu RMSE (kJ/mol)','vinjarapu_rmse_kJ_mol','3.13','F1 value + 1 kJ/mol (rounded; retained for A7)',next(x['RMSE_kJ_mol'] for x in oldheat if x['source']=='Vinjarapu2024')),('Loaded within 2s','loaded_within_2s','47/47','declared density requirement; three failures disclosed',''),('Cai cost','cai_cost','95.90','constant-interaction Cai cost + 5% (rounded; retained for A7)','')]:
         acceptance.append([title,limit,authority,num(f1value) if f1value!='' else 'inapplicable']+[num(s[key]) for s in scores])
-    acceptance.append(['Descent points','0/73','A7 finite family; no continuous certificate','omitted']+[str(sum(x['resolved_trials']>0 for x in d))+'/73' for d in reductions])
-    acceptance.append(['CO2-free max absolute error (kg/m3)','1.0','A7 density requirement','inapplicable']+[num(max(abs(x) for x in s['co2_free_errors'].values())) for s in scores])
-    acceptance.append(['307-row cost','no common149 limit','distinct objective; not comparable to F1','inapplicable']+[num(s['cost']) for s in scores])
+    acceptance.append(['Descent points','0/73','declared finite-family requirement; no continuous certificate','omitted']+[str(sum(x['resolved_trials']>0 for x in d))+'/73' for d in reductions])
+    acceptance.append(['CO2-free max absolute error (kg/m3)','1.0','declared density requirement','inapplicable']+[num(max(abs(x) for x in s['co2_free_errors'].values())) for s in scores])
+    acceptance.append(['307-row cost','none','report only; not comparable to F1 total cost','inapplicable']+[num(s['cost']) for s in scores])
     for name,ceiling in [('Arcis2011',9.36)]:
         a6=a.load(a.J/'amendment-6/selected-assessment/summary.json')
-        acceptance.append([name+' RMSE (kJ/mol)',num(ceiling),'A7 retained heat acceptance check',num(next(x['RMSE_kJ_mol'] for x in oldheat if x['source']==name)),num(a6['heat'][name]['RMSE']),'unavailable',num(summary['heat'][name]['RMSE'])])
-    table('acceptance_limits.tex', r'Acceptance quantities and retained endpoint values. F1-derived ceilings originate in \#172; A7 explicitly retains them (amendment-7-phase-stable-density.md, lines 209--218). Earlier design.md line 313 forbids automatic transfer of the dielectric rule to density trade-offs. Density failures remain failures; owner acceptance changes no threshold. Unavailable means no retained assessment here. A6/A7 phase comparisons use the same 8298c602 wheel.',
-          ['Quantity','Limit','Authority','F1 reference','A6','First A7','Accepted A7'],acceptance,[.19,.10,.25,.11,.11,.12,.12])
+        acceptance.append(['Arcis RMSE (kJ/mol)',num(ceiling),'F1 value + 1 kJ/mol (rounded; acceptance check)',num(next(x['RMSE_kJ_mol'] for x in oldheat if x['source']==name)),num(a6['heat'][name]['RMSE']),'unavailable',num(summary['heat'][name]['RMSE'])])
+    table('acceptance_limits.tex', r'Acceptance limits and endpoint values. The declared rounded ceilings allow a 10\,\% increase in common-subset cost, two percentage points in pressure and species AARD, and \SI{1}{\kilo\joule\per\mole} in each heat RMSE relative to F1; these absolute limits were explicitly retained for A7. The Cai ceiling is the rounded value of 1.05 times the preceding constant-interaction Cai-only cost. Density and finite-phase requirements were set separately. The three density failures remain failures; accepting A7 with them changed no limit. Unavailable means no retained assessment. A6 and A7 phase values come from the same software build.',
+          ['Quantity','Limit','Authority','F1 reference','A6','First restricted fit','A7'],acceptance,[.19,.10,.25,.11,.11,.12,.12])
     state = a.rows(a.E/'state-targets.csv')
     source_rows = []
     meta = {r['target']:r for r in state if r['kind']=='packet'}
@@ -275,7 +302,7 @@ def main():
     for i in range(73):
         x,y=paired['A6'][i],paired['A7'][i]
         phase_rows.append([i,x['temperature_K'],x['loading'],x['pressure_Pa'],x['classification']+'; trials '+x['resolved_trials']+'; success '+x['final_success']+'; failed '+x['failed_trial_optimizers'],y['classification']+'; trials '+y['resolved_trials']+'; success '+y['final_success']+'; failed '+y['failed_trial_optimizers']])
-    table('supplement_phase_family.tex',r'The 73 matched A6/A7 states on wheel 8298c602: 12/73 versus 0/73 resolved-descent points. Resolved counts are trial counts, not Gibbs changes. Blank minimum fields report no resolved minimum. Index 0 is the separate witness and is retained alongside index 41. A two-phase classification alone does not establish a liquid–liquid split. This finite search does not certify a continuous stable region.',
+    table('supplement_phase_family.tex',r'The 73 matched A6/A7 states on the A7 software build: 12/73 versus 0/73 resolved-descent points. Resolved counts are trial counts, not Gibbs changes. Blank minimum fields report no resolved minimum. Index 0 repeats the index-41 state with a rounded pressure; both are listed. A two-phase classification alone does not establish a liquid–liquid split. This finite search does not certify a continuous stable region.',
           ['Index','T (K)','Loading (exact)','P (Pa, exact)','A6','A7'],phase_rows,[.05,.08,.22,.21,.22,.22])
     previous=OUTPUTS['supplement_phase_family.tex']
     split_rows=[]
@@ -286,7 +313,7 @@ def main():
                 split_phases.append([i,r['seed']+' / '+phase['identity'],num(phase['amount_mol']),num(phase['molar_density_mol_m3']),'; '.join(num(x) for x in phase['mole_fractions'])])
             split_rows.append([i,r['seed'],str(r['result']['success']),num(r['delta_G_over_RT_vs_original'],10),num(r['delta_G_over_RT_vs_single_liquid'],10),'; '.join(num(v) for v in r['result']['molar_densities']),'; '.join(p['identity']+' ('+p['role']+')' for p in r['result'].get('phases', [])) or 'unavailable: failed split'])
     identity=a.load(a.J/'amendment-6/selected-checks/phase-diagnosis/engine-identity.json')
-    identity='wheel '+identity['wheel']+'; SHA256 '+identity['wheel_sha256']
+    identity='wheel SHA-256 '+identity['wheel_sha256']
     table('supplement_phase_family.tex',r'Separately seeded A6 split solves, including failed attempts. Original Engine identity (not the same-wheel classification comparison): '+tex(identity.strip())+r'. Gibbs differences are dimensionless G/RT; phase densities are mol/m3. Only successful split solves support the split comparison.',
           ['Index','Seed','Success','Delta vs original','Delta vs single liquid','Densities','Phases'],split_rows,[.06,.17,.09,.14,.14,.18,.22])
     OUTPUTS['supplement_phase_family.tex']=previous+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-states')

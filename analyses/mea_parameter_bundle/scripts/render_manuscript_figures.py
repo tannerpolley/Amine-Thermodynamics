@@ -55,7 +55,7 @@ def main():
     axes.flat[-1].set_axis_off()
     handles = [Line2D([], [], marker='o', markerfacecolor='none', color=c, linestyle='none', label=s) for s,c in zip(sources,COLORS)]
     handles += [Line2D([], [], marker=m, markerfacecolor='none', color='black', linestyle='none', label=meaning)
-                for m,meaning in [('o','Observed, fitted ID'),('s','Observed, other ID'),('x','A7 at retained state')]]
+                for m,meaning in [('o','Observed, fitted'),('s','Observed, not fitted'),('x','A7 at measured state')]]
     axes.flat[-2].set_axis_off()
     axes.flat[-2].legend(handles=handles, loc='center', frameon=False, fontsize=7)
     save(fig,'pressure','Canonical and Wagner pressure views only; packet view establishes fitted IDs and is not appended. Pa converted to kPa. Nominal temperatures group retained measured states; Wagner was assessed after acceptance and previously accessed. No phase claim above 333.15 K or loading 0.5.', ['canonical-pressure.csv','wagner-pressure.csv','pressure-figure-data.csv','fitted-rows.csv'])
@@ -76,7 +76,7 @@ def main():
     ax.set(title='Matin pool, report-only (19)',xlabel=LOADING,ylabel='HCO3− + CO3²− mole fraction')
     handles=[Line2D([],[],marker='o',color=c,linestyle='none',label=(r'HCO$_3^-$ + CO$_3^{2-}$ pool' if n=='HCO3-' else n)) for n,c in zip(names,COLORS)]
     fig.legend(handles=handles,fontsize=7,frameon=False,loc='outside upper center',ncol=3)
-    fig.supxlabel('Open circles: fitted ID; open squares: other; crosses: A7',fontsize=8)
+    fig.supxlabel('Open circles: fitted; open squares: not fitted; crosses: A7',fontsize=8)
     save(fig,'speciation','Species observation operators retain aggregates: NMR MEA + MEAH+, titration species, and the separate 19-row Matin HCO3− + CO3²− pool. All values are mole fractions at retained states; pool rows are outside the objective and previously accessed.', ['species-figure-data.csv','pool-figure-data.csv','fitted-rows.csv'])
     fig,axes=plt.subplots(3,1,figsize=(FULL_WIDTH,6.8),layout='constrained',sharey=True)
     for ax,(source,pressure) in zip(axes,[('Vinjarapu2024',1734000),('Arcis2011',510000),('Arcis2011',1030000)]):
@@ -91,7 +91,7 @@ def main():
         ax.set(title=f'{source} — {temperatures.pop():g} K; {pressure/1e6:g} MPa; {role}',xlabel=LOADING)
         ax.set_ylabel(r'Integral heat (kJ/mol CO$_2$)')
         ax.grid(alpha=.15)
-    fig.suptitle('Open: observed; crosses: A7; bars: retained heat scale',fontsize=9)
+    fig.suptitle('Open: observed; crosses: A7; bars: declared heat scale',fontsize=9)
     save(fig,'heat-of-absorption','Eight fitted Vinjarapu heats at 313.15 K and 1.734 MPa, and fourteen Arcis acceptance-check heats at 322.5 K, separated into the 0.51 and 1.03 MPa source-pressure groups. Bars show `scale_J_mol_CO2 / 1000`, not a declared confidence interval. There is no A7 no-heat series.', ['heat.csv'])
     a6=a.rows(a.J/'amendment-6/selected-assessment/density.csv')
     by_id={r['id']:r for r in a6}
@@ -106,7 +106,7 @@ def main():
             ax.scatter(float(r['T_K']),float(by_id[r['id']]['error_over_s']),color=color,marker='x',s=18)
         ax.axhline(2,color='grey',ls='--',lw=.6)
         ax.axhline(-2,color='grey',ls='--',lw=.6)
-        ax.set(title=source+' fitted loaded',xlabel='Temperature (K)',ylabel='Error / retained scale s')
+        ax.set(title=source+' fitted loaded',xlabel='Temperature (K)',ylabel='Error / declared scale s')
     excluded=set(summary['density']['Amundsen source-conflict five']['row_ids'])
     free=set(summary['density']['Amundsen CO2-free gate five']['row_ids'])
     for ax,record,group in [(axes[1,0],'Fitted', [r for r in density if r['id'] in set(spec['loaded_density_ids'])|free]),
@@ -120,7 +120,7 @@ def main():
         ax.set(title=record+' A7 densities',xlabel='Temperature (K)',ylabel='Native density error (kg/m³)')
         ax.legend(fontsize=6,frameon=False,loc='upper center',bbox_to_anchor=(.5,-.18),ncol=2)
     fig.colorbar(plt.cm.ScalarMappable(norm=plt.Normalize(0,.5),cmap='viridis'),ax=list(axes[0]),label='Loading',shrink=.7)
-    fig.suptitle('Top: A7 circles, A6 crosses, same 47 IDs; bottom: all 210 A7 rows',fontsize=9)
+    fig.suptitle('Top: A7 circles, A6 crosses, same 47 states; bottom: all 210 A7 rows',fontsize=9)
     save(fig,'loaded-density-errors','A7/A6 share the 47 fitted loaded-density identities, observed values, scales and states. Top panels show ±2s limits only for that fitted cohort; color denotes loading, with source separated. Bottom panels cover all 210 A7 densities and distinguish fitted, non-fitted and excluded rows. No empirical volume translation. Scales are not uniformly measurement uncertainty; 2s is not a 95% interval.', ['density.csv','fitted-rows.csv',str((a.J/'amendment-6/selected-assessment/density.csv').relative_to(a.ROOT))])
     fig,axes=plt.subplots(2,3,figsize=(FULL_WIDTH,5.4),layout='constrained',sharex=True,sharey=True)
     for row,record in enumerate(['A6','A7']):
@@ -146,7 +146,9 @@ def main():
         axes[row,0].set_ylabel(LOADING)
     witness=paired['A7'][0]
     fig.suptitle('Resolved-descent points: A6 12/73; A7 0/73',fontsize=10)
-    fig.supxlabel('Orange filled: resolved; blue open: none resolved; square: single liquid; circle: two-phase\nSeparate index-0 witness: '+witness['temperature_K']+' K, α='+witness['loading']+', P='+witness['pressure_Pa']+' Pa\nA6/A7 witness: no resolved descent; both two-phase; !n marks failed trial optimizers',fontsize=7)
+    fig.supxlabel('Orange filled: resolved; blue open: none resolved; square: single liquid; circle: two-phase'
+                     '\nIndex 0 shares index 41 temperature/loading (318.15 K, α ≈ 0.2556), with P rounded to 5918.5286 Pa'
+'\nIndex 0: no resolved descent for A6 or A7; both classified two-phase',fontsize=7)
     save(fig,'phase-family','73 specified T/P/loading states, A6 versus A7 on the same wheel: 12/73 and 0/73 resolved-descent points. The three pressure levels vary with temperature/loading; S4 supplies exact pressures. The additional index-0 witness is reported separately from index 41. Zero resolved trials means no numerically resolved descent, not zero Gibbs change. Two-phase classifications do not identify two liquids. Finite searches do not certify a continuous stable region or states at 353 K.', ['phase-family.csv'])
     a6_assessment = a.load(a.J/'amendment-6/selected-assessment/provenance.json')
     fixed = a.J/'amendment-7/fixed-study/wheel-8298c602'

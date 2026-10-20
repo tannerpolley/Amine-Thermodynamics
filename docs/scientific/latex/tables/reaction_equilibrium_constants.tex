@@ -66,10 +66,10 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 44f4f368d79244d8cc134e03e5d3cf9756de1453f4eeabc643b08a8e1a2080da
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.2632\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.1598\linewidth}@{}}
-\caption{A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 are serialized selected coefficients. R2 uses $\ln K=a+b/T+c\ln T+dT$, R4 $\ln K=a+b/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.}\label{tab:reaction-equilibrium-constants}\\
+\caption{A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.}\label{tab:reaction-equilibrium-constants}\\
 \toprule
 Reaction & Coefficients & Source & Source range (K) & Offset \\
 \midrule\endfirsthead
@@ -77,9 +77,9 @@ Reaction & Coefficients & Source & Source range (K) & Offset \\
 Reaction & Coefficients & Source & Source range (K) & Offset \\
 \midrule\endhead
 \bottomrule\endfoot
-R1: \ce{2 H2O <=> H3O+ + OH-} & kind=ln\_\allowbreak{}a\_\allowbreak{}plus\_\allowbreak{}b\_\allowbreak{}over\_\allowbreak{}t\_\allowbreak{}plus\_\allowbreak{}c\_\allowbreak{}ln\_\allowbreak{}t\_\allowbreak{}plus\_\allowbreak{}d\_\allowbreak{}t; a=132.899; b\_\allowbreak{}k=-13445.9; c=-22.4773; d\_\allowbreak{}per\_\allowbreak{}k=0.0 & Austgen1991\_\allowbreak{}TableV\_\allowbreak{}reaction\_\allowbreak{}1a & [273.15, 498.15] & add source-to-common offset 8.03307 \\
-R2: \ce{CO2 + 2 H2O <=> HCO3^- + H3O+} & a=234.9486708; b k=-11925.23357; c=-36.7816; d per k=0 & Austgen1991\_\allowbreak{}TableV\_\allowbreak{}reaction\_\allowbreak{}4a & [273.15, 498.15] & offset included in serialized R2 \\
-R3: \ce{HCO3^- + H2O <=> CO3^{2-} + H3O+} & kind=ln\_\allowbreak{}a\_\allowbreak{}plus\_\allowbreak{}b\_\allowbreak{}over\_\allowbreak{}t\_\allowbreak{}plus\_\allowbreak{}c\_\allowbreak{}ln\_\allowbreak{}t\_\allowbreak{}plus\_\allowbreak{}d\_\allowbreak{}t; a=216.049; b\_\allowbreak{}k=-12431.7; c=-35.4819; d\_\allowbreak{}per\_\allowbreak{}k=0.0 & Austgen1991\_\allowbreak{}TableV\_\allowbreak{}reaction\_\allowbreak{}5a & [273.15, 498.15] & add source-to-common offset 4.01653 \\
-R4: \ce{MEACOO- + H2O <=> HCO3^- + MEA} & a=2.151; b k=-1545.3 & Tong2012\_\allowbreak{}Table5\_\allowbreak{}K5\_\allowbreak{}MEA\_\allowbreak{}via\_\allowbreak{}Aroua1999 & [293.15, 323.15] & add source-to-common offset 0 \\
-R5: \ce{MEAH+ + H2O <=> MEA + H3O+} & a k=3354.017165; b=-1.281106391; c per k=0.0004277 & BatesPinching1951\_\allowbreak{}equation\_\allowbreak{}7 & [273.15, 323.15] & add source-to-common offset 0 \\
+R1: \ce{2 H2O <=> H3O+ + OH-} & A = 132.899; B = -13445.9; C = -22.4773; D = 0.0 & Austgen 1991, Table V, reaction 1a & [273.15, 498.15] & add source-to-common offset 8.03307 \\
+R2: \ce{CO2 + 2 H2O <=> HCO3^- + H3O+} & A = 234.9486708; B = -11925.23357; C = -36.7816; D = 0 & Austgen 1991, Table V, reaction 4a & [273.15, 498.15] & offset included in serialized R2 \\
+R3: \ce{HCO3^- + H2O <=> CO3^{2-} + H3O+} & A = 216.049; B = -12431.7; C = -35.4819; D = 0.0 & Austgen 1991, Table V, reaction 5a & [273.15, 498.15] & add source-to-common offset 4.01653 \\
+R4: \ce{MEACOO- + H2O <=> HCO3^- + MEA} & A = 2.151; B = -1545.3 & Tong 2012, Table 5, via Aroua 1999 & [293.15, 323.15] & add source-to-common offset 0 \\
+R5: \ce{MEAH+ + H2O <=> MEA + H3O+} & A = 3354.017165; B = -1.281106391; C = 0.0004277 & Bates and Pinching 1951, Eq. 7 & [273.15, 323.15] & add source-to-common offset 0 \\
 \end{longtable}\endgroup
