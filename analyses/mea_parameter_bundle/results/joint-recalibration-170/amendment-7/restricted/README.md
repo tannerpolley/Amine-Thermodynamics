@@ -146,7 +146,7 @@ Total R2 shift: −1,387.4 J/mol. Unshifted R5 aₖ: 2831.7 K.
 
 **Meaning and limits.** Lowering the size bound by 0.14 Å narrowed the worst
 loaded-density miss from 2.70s to 2.43s and the span from 4.18s to 3.88s. The
-same 80 °C rows still fail, at 0.39–0.53 % of the measured density. Both are single
+same 80 °C rows still fail, at 0.40–0.53 % of the measured density. Both are single
 local fits from one start. They show that these two declared boxes did not yield an eligible
 endpoint. They do not show that no eligible vector exists. Under the owner's
 scope, no further fit is authorized.
