@@ -9,10 +9,12 @@ coefficients of each reaction law move together.
     study.py.txt family LABEL SPEC   all 73 family points
     study.py.txt points LABEL SPEC   points 63/70/72
     study.py.txt exchanges           the 12 step-2 exchanges, points 63/70/72
+    study.py.txt subexchanges        the 8 single ion-water exchanges, points 63/70/72
     study.py.txt splits LABEL        one split-seeded solve per descending point
     study.py.txt score LABEL         exact 307-row replay and A6 gates
 
-SPEC is "default" or "default,block=fraction,...", e.g. "0.125,meah-size=0.25".
+SPEC is "default" or "default,name=fraction,...", where name is a block or a
+single ion-water coefficient, e.g. "0.125,meah-size=0.25".
 Run from the worktree root through the pinned interpreter, GNU time and nice.
 """
 import copy
@@ -58,25 +60,29 @@ POINTS = [63, 70, 72]
 f.s.verify_wheel()
 
 
+# Single ion-water coefficients, for the owner-approved sub-block probe (#170 step-4 decision).
+SINGLE = {'carbamate-water': 'pair/carbamate-anion/water/k_ij', 'meah-water': 'pair/protonated-monoethanolamine/water/k_ij',
+          'bicarbonate-water': 'pair/bicarbonate-anion/water/k_ij', 'meah-water-slope': 'pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope'}
+assert sorted(SINGLE.values()) == sorted(BLOCKS['ion-water'])
+
+
 def fractions(spec):
     head, *rest = spec.split(',')
-    out = dict.fromkeys(BLOCKS, float(head))
+    out = dict.fromkeys(changed, float(head))
     for item in rest:
-        block, value = item.split('=')
-        assert block in BLOCKS
-        out[block] = float(value)
+        name, value = item.split('=')
+        for k in BLOCKS.get(name) or [SINGLE[name]]:
+            out[k] = float(value)
     assert all(0 <= v <= 1 for v in out.values())
     return out
 
 
 def vector(share):
     data = copy.deepcopy(a6)
-    block_of = {k: b for b, ks in BLOCKS.items() for k in ks}
     for node in f.s._identified(data):
         k = node['identity']
-        if k in block_of:
-            t = share[block_of[k]]
-            node['value']['magnitude'] = (1-t)*start[k] + t*finish[k]
+        if k in share:
+            node['value']['magnitude'] = (1-share[k])*start[k] + share[k]*finish[k]
     return data
 
 
@@ -207,6 +213,12 @@ elif mode == 'exchanges':
         for block in BLOCKS:
             label = f"exchange-{str(lo).replace('.', 'p')}-{block}-to-{str(hi).replace('.', 'p')}"
             data, run = build(label, f'{lo},{block}={hi}')
+            points(data, run, POINTS)
+elif mode == 'subexchanges':
+    for lo, hi in ((0.125, 0.25), (0.25, 0.125)):
+        for name in SINGLE:
+            label = f"exchange-{str(lo).replace('.', 'p')}-{name}-to-{str(hi).replace('.', 'p')}"
+            data, run = build(label, f'{lo},{name}={hi}')
             points(data, run, POINTS)
 elif mode == 'splits':
     splits(sys.argv[2])
