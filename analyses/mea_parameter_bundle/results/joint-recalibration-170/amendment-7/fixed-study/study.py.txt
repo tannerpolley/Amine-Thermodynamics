@@ -11,6 +11,7 @@ coefficients of each reaction law move together.
     study.py.txt exchanges           the 12 step-2 exchanges, points 63/70/72
     study.py.txt subexchanges        the 8 single ion-water exchanges, points 63/70/72
     study.py.txt splits LABEL        one split-seeded solve per descending point
+    study.py.txt splits-rest LABEL   one per remaining distinct descending composition
     study.py.txt score LABEL         exact 307-row replay and A6 gates
     study.py.txt screen LABEL PATH   all 73 family points for a parameter document
 
@@ -131,42 +132,55 @@ def points(data, run, indices):
     reduce(run)
 
 
-def splits(label):
+def distinct(trials):
+    """Descending trials with distinct liquid compositions (max |dx| > 1e-6), most negative split first."""
+    kept = []
+    for t in sorted(trials, key=lambda t: t['quantities']['split_delta_g_over_rt']):
+        if all(max(abs(a-b) for a, b in zip(t['composition'], k['composition'])) > 1e-6 for k in kept):
+            kept.append(t)
+    return kept
+
+
+def splits(label, rest=False):
+    """One split-seeded solve per descending point (most negative split), or with rest=True one per
+    remaining distinct descending composition (design §4, readiness review r1 finding 2)."""
     run = output/label
     mapping = f.s.parameter_mapping(run/'fixed-parameters.json')
     model = f.epcsaft.Mixture(f.epcsaft.Parameters.from_mapping(mapping), thermochemistry=f.thermal.record())
     summary = []
     for path in sorted(run.glob('point-*.json'), key=lambda p: int(p.stem.split('-')[1])):
         old_row = json.loads(path.read_text())
-        trials = [t for r in old_row.get('stability', []) for t in r['trials'] if t['resolved_descent']]
-        if not trials:
-            continue
-        trial = min(trials, key=lambda t: t['quantities']['split_delta_g_over_rt'])
-        phases = [f.eq.Phase(p['identity'], kind=p['role'], support=p['support']) for p in old_row['final']['phases']]
-        phases.append(f.eq.Phase('L2', kind='liquid', support=f.s.COMPONENT_IDS))
-        problem = f.flash_problem(request(mapping, 313.15, .11), old_row['loading'], old_row['temperature_K'], old_row['pressure_Pa'], phases)
-        cursor, amounts, compositions, packings = 0, [], [], []
-        for phase in phases:
-            count = len(phase.support)
-            compositions.append([math.exp(v) for v in trial['split_coordinates'][cursor:cursor+count]])
-            amounts.append(trial['split_coordinates'][cursor+count])
-            packings.append(math.exp(trial['split_coordinates'][cursor+count+1]))
-            cursor += count+2
-        assert cursor == len(trial['split_coordinates'])
-        begin = f.eq.EquilibriumStart(compositions=compositions, amounts=amounts, packing_fractions=packings)
-        batch = f.eq.solve_equilibrium_starts(model, problem, [begin], f.eq.EquilibriumWorkLimits(attempts=1, attempt_iterations=400, iterations=400))
-        result = batch.results[0]
-        row = dict(label=label, index=old_row['index'], seed=trial['seed'], selected=batch.selected, causes=list(batch.causes),
-            original_G_over_RT=old_row['final']['objective'], finite_split_delta_G_over_RT=trial['quantities']['split_delta_g_over_rt'],
-            finite_split_error_over_RT=trial['quantities']['split_error_estimate_over_rt'])
-        if result is not None:
-            row['result'] = f.phase_payload(model, problem, result)
-            row['delta_G_over_RT'] = result.objective-old_row['final']['objective']
-        f.s.write_json(run/f"split-seeded-{old_row['index']}.json", row)
-        summary.append({k: v for k, v in row.items() if k != 'result'} | dict(success=result is not None and result.success,
-            requested_tolerance_met=result is not None and result.requested_tolerance_met))
-        print(summary[-1], flush=True)
-    f.s.write_json(run/'split-summary.json', summary)
+        trials = distinct([t for r in old_row.get('stability', []) for t in r['trials'] if t['resolved_descent']])
+        for trial in trials[1:] if rest else trials[:1]:
+            split(run, label, model, mapping, old_row, trial, rest, summary)
+    f.s.write_json(run/('split-summary-distinct.json' if rest else 'split-summary.json'), summary)
+
+
+def split(run, label, model, mapping, old_row, trial, rest, summary):
+    phases = [f.eq.Phase(p['identity'], kind=p['role'], support=p['support']) for p in old_row['final']['phases']]
+    phases.append(f.eq.Phase('L2', kind='liquid', support=f.s.COMPONENT_IDS))
+    problem = f.flash_problem(request(mapping, 313.15, .11), old_row['loading'], old_row['temperature_K'], old_row['pressure_Pa'], phases)
+    cursor, amounts, compositions, packings = 0, [], [], []
+    for phase in phases:
+        count = len(phase.support)
+        compositions.append([math.exp(v) for v in trial['split_coordinates'][cursor:cursor+count]])
+        amounts.append(trial['split_coordinates'][cursor+count])
+        packings.append(math.exp(trial['split_coordinates'][cursor+count+1]))
+        cursor += count+2
+    assert cursor == len(trial['split_coordinates'])
+    begin = f.eq.EquilibriumStart(compositions=compositions, amounts=amounts, packing_fractions=packings)
+    batch = f.eq.solve_equilibrium_starts(model, problem, [begin], f.eq.EquilibriumWorkLimits(attempts=1, attempt_iterations=400, iterations=400))
+    result = batch.results[0]
+    row = dict(label=label, index=old_row['index'], seed=trial['seed'], selected=batch.selected, causes=list(batch.causes),
+        original_G_over_RT=old_row['final']['objective'], finite_split_delta_G_over_RT=trial['quantities']['split_delta_g_over_rt'],
+        finite_split_error_over_RT=trial['quantities']['split_error_estimate_over_rt'])
+    if result is not None:
+        row['result'] = f.phase_payload(model, problem, result)
+        row['delta_G_over_RT'] = result.objective-old_row['final']['objective']
+    f.s.write_json(run/(f"split-seeded-{old_row['index']}-{trial['seed']}.json" if rest else f"split-seeded-{old_row['index']}.json"), row)
+    summary.append({k: v for k, v in row.items() if k != 'result'} | dict(success=result is not None and result.success,
+        requested_tolerance_met=result is not None and result.requested_tolerance_met))
+    print(summary[-1], flush=True)
 
 
 def score(label):
@@ -228,6 +242,8 @@ elif mode == 'subexchanges':
             points(data, run, POINTS)
 elif mode == 'splits':
     splits(sys.argv[2])
+elif mode == 'splits-rest':
+    splits(sys.argv[2], rest=True)
 elif mode == 'score':
     score(sys.argv[2])
 else:
