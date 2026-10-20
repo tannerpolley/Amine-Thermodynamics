@@ -10,7 +10,8 @@ The active parameter-bundle handoff uses the relative wheel pin in
 `2a03b675aebdccb854c27857e95f493a1aea1436f7d2e236630bd621d9d82f05`. Only the document version and explicit
 CO2/MEA no-cross-association declaration changed in #191. This keeps the model
 without claiming the physical interaction is absent. Both wheels in the
-[adoption comparison](../../results/engine-21e761c3-adoption/README.md) refuse
+[adoption comparison](../../results/engine-21e761c3-adoption/README.md) and wheel
+8298c602 ([its adoption](../../results/engine-8298c602-adoption/README.md)) refuse
 this source snapshot because `model/electrolyte/ionic_dispersion` is missing;
 no new physical choice was inserted.
 
