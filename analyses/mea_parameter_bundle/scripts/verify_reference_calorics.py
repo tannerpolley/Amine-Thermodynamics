@@ -162,7 +162,7 @@ def main() -> None:
     for temperature in vt.TEMPERATURES_K:
         problem, central = vt.solve(model, vt.request_at(speciation, temperature), warm)
         rows.append({"state": f"058@{temperature:g}K", **liquid_heat(model, speciation, temperature,
-                                                                     central.pressure[0], vt.anchor(problem, central))})
+                                                                     central.pressure, vt.anchor(problem, central))})
     measured = [r for r in csv.DictReader(CALORIMETRY.open())
                 if float(r["temperature_K"]) == 313.15 and r["mea_mass_fraction"] in ("0.30", "0.3")
                 and 0.25 <= float(r["co2_loading_mol_per_mol_mea"]) <= 0.46 and r["source"].startswith("Kim")]

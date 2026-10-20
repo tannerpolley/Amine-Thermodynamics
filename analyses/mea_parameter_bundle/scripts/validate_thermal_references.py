@@ -45,7 +45,7 @@ def consistency_rows(model) -> list[dict[str, object]]:
             request = corrected_request(heat_request(templates, temperature_c, loading), reactions)
             problem, result = vt.solve(model, request, warm)
             warm = vt.anchor(problem, result)
-            heat = vrc.liquid_heat(model, request, temperature_c + 273.15, result.pressure[0], warm)
+            heat = vrc.liquid_heat(model, request, temperature_c + 273.15, result.pressure, warm)
             rows.append({"check": "reference_chain_consistency", "temperature_C": temperature_c, "loading": loading,
                          **{k: heat[k] for k in ("P_Pa", "heat_kJ_per_mol", "gibbs_helmholtz_kJ_per_mol",
                                                   "identity_rel", "resolve_rel")}})

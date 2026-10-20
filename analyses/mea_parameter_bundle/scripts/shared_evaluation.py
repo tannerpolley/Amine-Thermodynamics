@@ -33,8 +33,8 @@ ANALYSIS = Path(__file__).resolve().parents[1]
 INPUT = ANALYSIS / "data/input"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 # Identity of the immutable published wheel pinned in pyproject.toml and uv.lock.
-ENGINE_WHEEL_SHA256 = "d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357"
-ENGINE_COMMIT = "21e761c318c2ac5b555a245365c844d38a93e4cb"
+ENGINE_WHEEL_SHA256 = "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3"
+ENGINE_COMMIT = "8298c6029ebb8b467929badc4a223c580ec591ab"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
@@ -825,7 +825,7 @@ def _phase_payload(problem: object, result: object, index: int, width: int) -> d
         }
     mole_fractions = [float(flat[positions[name]]) for name in support]
     rho = float(result.molar_densities[index])
-    pressure = result.pressure[index] if index < len(result.pressure) else result.pressure[0]
+    pressure = result.pressure
     return {
         "identity": declared.name,
         "role": declared.kind,
@@ -852,7 +852,7 @@ def _stop_code(result: object) -> tuple[str, str]:
 def _output_value(output: dict[str, object], problem: object, result: object, phases: list[dict[str, object]]) -> float | None:
     selector = output.get("selector")
     if selector == "system.pressure":
-        return float(result.pressure[0])
+        return float(result.pressure)
     phase_name = output.get("phase_identity")
     if not isinstance(phase_name, str):
         raise ValueError(f"output {output.get('identity')} lacks phase identity")
@@ -967,7 +967,7 @@ def _snapshot_from_result(model: object, problem: object, request: dict[str, obj
             if abs(actual_charge) > 1e-7:
                 validation_errors.append("charge_balance")
         lower, upper = map(float, request.get("pressure", {}).get("bounds", (1.0, 1.0e7)))
-        if any(not lower <= float(value) <= upper for value in result.pressure):
+        if not lower <= float(result.pressure) <= upper:
             validation_errors.append("pressure_outside_packet")
         try:
             rows.extend(_central_action_rows(model, problem, result, phases))

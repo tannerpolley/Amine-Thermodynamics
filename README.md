@@ -27,7 +27,7 @@ The lockfile pins the legacy `pcsaft.flashTQ` baseline to an immutable Git
 revision and declares its Cython/NumPy build requirements. It also pins the
 notebook's `epcsaft` runtime to a hash-checked wheel under the ignored relative
 `build/engine-wheels/` directory. Download and verify the exact wheel before
-`uv sync --locked`; see the [adoption instructions](analyses/mea_parameter_bundle/results/engine-21e761c3-adoption/README.md).
+`uv sync --locked`; see the [adoption instructions](analyses/mea_parameter_bundle/results/engine-8298c602-adoption/README.md).
 The historical Engine lock under `data/reference/MEA/manifests/` identifies a
 different calculation and must not be substituted for the notebook wheel.
 
