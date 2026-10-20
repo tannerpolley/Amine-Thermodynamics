@@ -63,7 +63,7 @@ def main() -> None:
         "engine_commit": shared.ENGINE_COMMIT, "wheel_sha256": shared.ENGINE_WHEEL_SHA256,
         "producer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "parameter_sha256": shared.sha256(shared.PARAMETERS), "case": "vle_obs_0130",
-        "pressure_pa": result.pressure[0], "raw_residual_max": max(map(abs, result.residuals)),
+        "pressure_pa": result.pressure, "raw_residual_max": max(map(abs, result.residuals)),
         "csv_sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "rows": len(rows),
         "criterion": "relative agreement <= 1e-5, no absolute floor", "fixed_sources": fixed,
         "claim_limit": "One actual ionic reference; held-coordinate pressure perturbations, not global stability.",
