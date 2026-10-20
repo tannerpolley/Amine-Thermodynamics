@@ -1,0 +1,93 @@
+"""Disclosed fixed-vector path probe for amendment 7 Design; no fitting.
+
+Interpolate every identified coefficient magnitude from the A4 control to the
+selected A6 vector, on the Held form throughout. Add the absent MEA-water slope
+as zero at A4, and reset all six DH diameters to sigma before interpolation.
+Stored reaction-law coefficients travel together; no enthalpy shift is reapplied.
+Run from the worktree root through the pinned interpreter, GNU time and nice.
+"""
+import copy
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+import final_evidence as f
+from heat_evidence_170 import request
+
+root = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170')
+output = root/'amendment-7/design-probes'
+a4_path = root/'amendment-4/matched-larger-dV/control/usable-budget-endpoint.json'
+a6_path = root/'amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json'
+a4 = f.s.parameter_mapping(a4_path)
+a6 = f.s.parameter_mapping(a6_path)
+old = {n['identity']: n for n in f.s._identified(a4)}
+new = {n['identity']: n for n in f.s._identified(a6)}
+slope = 'pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope'
+assert new.keys() - old.keys() == {slope} and not old.keys() - new.keys()
+assert hashlib.sha256(a4_path.read_bytes()).hexdigest() == '365758b80c7f701ac7c09c4319d4e216cf5b270374e856381f7d2ba8d1ea7f29'
+assert hashlib.sha256(a6_path.read_bytes()).hexdigest() == 'ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7'
+for identity, node in old.items():
+    if identity.endswith('/debye_huckel_diameter'):
+        node['value']['magnitude'] = old[identity.replace('/debye_huckel_diameter', '/segment_diameter')]['value']['magnitude']
+f.s.verify_wheel()
+
+mode = sys.argv[1]
+fraction = float(sys.argv[2])
+assert 0 <= fraction <= 1
+data = copy.deepcopy(a6)
+changes = []
+for node in f.s._identified(data):
+    identity = node['identity']
+    start = 0.0 if identity == slope else old[identity]['value']['magnitude']
+    finish = node['value']['magnitude']
+    assert identity == slope or node['value']['unit'] == old[identity]['value']['unit']
+    node['value']['magnitude'] = (1-fraction)*start + fraction*finish
+    if start != finish:
+        changes.append(dict(identity=identity, start=start, selected=finish, value=node['value']['magnitude']))
+
+label = 'path-' + str(fraction).replace('.', 'p')
+if mode == 'swap':
+    # Exchange one coupled coordinate block back to A4 on the selected vector.
+    assert fraction == 1
+    block = sys.argv[3]
+    identities = {
+        'meah-size': [k for k in old if k.startswith('component/protonated-monoethanolamine/') and k.endswith(('segment_diameter','packing_diameter','debye_huckel_diameter'))],
+        'interactions': [k for k in old if k.startswith('pair/') and old[k]['value']['magnitude'] != new[k]['value']['magnitude']],
+        'energies': [k for k in old if k.endswith('/dispersion_energy_over_k') and old[k]['value']['magnitude'] != new[k]['value']['magnitude']],
+    }[block]
+    for node in f.s._identified(data):
+        if node['identity'] in identities:
+            node['value']['magnitude'] = old[node['identity']]['value']['magnitude']
+    changes = [dict(identity=k, selected=new[k]['value']['magnitude'], value=old[k]['value']['magnitude']) for k in identities]
+    label = 'selected-with-a4-' + block
+run = output/label
+run.mkdir(parents=True, exist_ok=False)
+f.s.write_json(run/'fixed-parameters.json', data)
+f.s.write_json(run/'provenance.json', dict(mode=mode, fraction=fraction, changes=changes,
+    a4_path=str(a4_path), a4_sha256=f.s.sha256(a4_path), a6_path=str(a6_path), a6_sha256=f.s.sha256(a6_path),
+    wheel_path=str(f.s.installed_wheel()), wheel_sha256=f.s.ENGINE_WHEEL_SHA256, module=f.epcsaft.__file__,
+    script_sha256=f.s.sha256(Path(__file__)), form='Held: all six DH=sigma; packing unchanged at 0.88 sigma'))
+if mode == 'family':
+    points = root/'amendment-6/inputs/revision-3/phase/family-points.txt'
+    f.phase_family(data, request(data,313.15,.11), points,
+        '6e1231d9506fd6dd9e965a64120ff952cebf1c4778da5d66cfb0f888e8b7f44b', run)
+elif mode in ('points', 'swap'):
+    indices = [21,63,70]
+    for index in indices:
+        prior = json.loads((root/f'amendment-6/selected-checks/phase-family/point-{index}.json').read_text())
+        row = {k:prior[k] for k in ('index','loading','temperature_K','pressure_Pa')}
+        f.family_job(data, request(data,313.15,.11), row, [], run/f'point-{index}.json')
+else:
+    raise ValueError(mode)
+rows = [json.loads(p.read_text()) for p in sorted(run.glob('point-*.json'))]
+summary = []
+for row in rows:
+    trials = [t for r in row.get('stability',[]) for t in r['trials']]
+    descents = [t for t in trials if t['resolved_descent']]
+    summary.append(dict(index=row['index'], classification=row['classification'], final_success=row.get('final',{}).get('success',False),
+        resolved_trials=len(descents), minimum_resolved_tpd_over_rt=min((t['quantities']['tpd_over_rt'] for t in descents),default=None),
+        failed_trial_optimizers=sum(not t['optimizer']['success'] for t in trials)))
+f.s.write_json(run/'reduction.json',summary)
+print(label, 'points', len(rows), 'descent_points', sum(r['resolved_trials'] > 0 for r in summary),
+      'classifications', {key:sum(r['classification']==key for r in summary) for key in ('failed','unresolved','passed-two-phase','passed-single-liquid')}, flush=True)
