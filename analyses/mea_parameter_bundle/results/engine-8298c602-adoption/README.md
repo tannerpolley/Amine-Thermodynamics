@@ -41,11 +41,11 @@ The owner chose repo-wide adoption
 ## Code and record changes
 
 - **Engine reads:** the T/P reads change from `x[0]`/`list(x)` to `x`. There are
-  23 one-line replacements in 10 files, with no algorithm change:
+  22 one-line replacements in 10 files, with no algorithm change:
   - `shared_evaluation.py` 3, `fit_observations.py` 5, `final_evidence.py` 4;
   - `verify_temperature_reference.py` 4, `verify_reference_calorics.py` 1;
   - `validate_thermal_references.py` 1, `verify_pressure_reference.py` 1;
-  - `fit_neutral_co2_mea.py` 1, `check_neutral_co2_mea.py` 1;
+  - `check_neutral_co2_mea.py` 1;
   - `model-d/checks.py` 1;
   - `analyses/reactive_epcsaft_parameter_evidence/.../generate.py` 1.
 
@@ -56,13 +56,15 @@ The owner chose repo-wide adoption
 - **Pin:** `ENGINE_WHEEL_SHA256` and `ENGINE_COMMIT` in `shared_evaluation.py`
   (two lines), the relative wheel path in `pyproject.toml` and `uv.lock`, and
   `analysis.yaml`.
-- **Campaign-code ceiling:** 11 of those lines are in the counted
+- **Campaign-code ceiling:** 10 of those lines are in the counted
   campaign files (`fit_observations.py` 5, `final_evidence.py` 4,
-  `fit_neutral_co2_mea.py` 1, `check_neutral_co2_mea.py` 1). The gross total is
-  now 1,332 against the owner-raised ceiling of 1,332 (`../joint-recalibration-170/amendment-4/compute-ledger.json`).
+  `check_neutral_co2_mea.py` 1). The gross total is now 1,331 against the
+  owner-raised ceiling of 1,331 (`../joint-recalibration-170/amendment-4/compute-ledger.json`).
 - **Not changed:** `analyses/mdea_kuranov_refit` (#126) pins wheel 21e761c3 in
   its own scripts and refuses any other wheel. Its six list reads and its results
-  stay on that wheel; re-pinning belongs to #126. Retained numerical outputs,
+  stay on that wheel; re-pinning belongs to #126. `fit_neutral_co2_mea.py`
+  declares the amendment-4 21e761c3 wheel and package versions in its own
+  `campaign.verify` guard, so it keeps its list reads and runs only on that wheel. Retained numerical outputs,
   parameter documents and figure locks are byte-unchanged.
 - **Other Engine changes since 21e761c3:**
   - Charged-molecule ions (#641) and cation mixing are declaration opt-ins that
@@ -101,5 +103,10 @@ with this one.
   `ParameterError: missing model/electrolyte/ionic_dispersion`
   ([source-construction.json](source-construction.json)).
 - Ruff and manuscript freshness were not run.
-- Compute: comparison 3.38 wall-s / 17.28 CPU-s and source construction
-  0.19 / 2.25. Both are charged against the A7 qualification allocation.
+- Compute: comparison run 1, 3.38 wall-s / 17.28 CPU-s; run 2, 3.45 / 17.33; source
+  construction 0.19 / 2.25. Total 8 wall-s (rounded up) / 36.86 CPU-s, charged against
+  the A7 qualification allocation. Run 2 replaced run 1's relative difference
+  |new − old|/|old| with the 21e761c3 adoption's declared definition,
+  |new − old|/max(|old|, |new|, 10⁻³⁰⁰). The 152 predictions are bitwise
+  identical between the runs, and 64 relative differences change. Run 1's output and
+  timing are `evaluate-r1-*`.
