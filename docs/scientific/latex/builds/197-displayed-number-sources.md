@@ -1,0 +1,1748 @@
+# Displayed-number sources for #197
+
+Paths start at the worktree root. This list copies retained values and maps displays; it evaluates no model. Chemical subscripts, equation numbering, reference years/locators and software hashes are identifiers. The fourteen approved generated tables are retained presentation sources; their header comments identify raw files and hashes. Fix round 1 changes labels and provenance text only; all quantitative cells and the generator reconciliation remain equal to 21b4e47.
+
+## Authored numerical statements
+
+| Displayed numbers | Retained source file:line | Rounding and use |
+| --- | --- | --- |
+| 16 coordinates;307 rows;eight disjoint groups;149 common=47 pressures+94 species+eight heats;seven restored,six Jakobsen,47 loaded densities,five CO2-free,50 Cai,39 Kiepe,four Cp | `analyses/mea_parameter_bundle/results/a7-paper-evidence/README.md:76`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json:61` | Retained group counts; common subgroups not counted twice. |
+| 11.86/7.10% compact;11.8608/7.1036% results | `analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json:47`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json:57` | Common pressure/species AARD; two/four decimals. |
+| Total148.905254 or148.905;common23.865964 | `analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json:2`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json:6` | Six/three decimals as printed. |
+| Cai RMSE1.78864K/.0203799;bias+.109139K/-.00259361 | `docs/scientific/latex/tables/residual_summary.tex:87`; `docs/scientific/latex/tables/residual_summary.tex:88` | Native units; generated rounding. |
+| Cai91.9078/148.905≈62%;Kiepe≈.0007 | `analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json:31`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json:21` | Cost share integer rounding expressly required by #197; no accuracy ranking. |
+| 25 states;25 temperatures+25 vapor fractions=50 quantities | `docs/scientific/latex/tables/objective_groups.tex:72` | Not50 independent experimental states. |
+| Loaded weight1/47;CO2-free scale.5kg/m3,weight10;Cai scales1K/.01;Kiepe weight1/39 | `docs/scientific/latex/tables/objective_groups.tex:89`; `docs/scientific/latex/tables/objective_groups.tex:86`; `docs/scientific/latex/tables/objective_groups.tex:87`; `docs/scientific/latex/tables/objective_groups.tex:85` | Declared exact fractions; generated weight rounding retained. |
+| Two sequential restricted fits;one start each;12 iterations;5.49→5.35Angstrom bound | `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:149`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json:60`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-standard-errors.csv:7` | Local fits and sampled bounds only. |
+| A6 47/47;A7 44/47;353.15K failures .40–.53% low | `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:14`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:149` | Owner acceptance does not change thresholds. |
+| Amundsen081:alpha.30,-5.52kg/m3,-2.28s | `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:82` | Two-decimal presentation required by #197. |
+| Hartonoalpha.29:-4.16kg/m3,-2.05s | `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:142` | Two-decimal presentation required by #197. |
+| Hartonoalpha.39:-4.41kg/m3,-2.43s | `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:143` | Two-decimal presentation required by #197. |
+| 210 densities;103Amundsen;15Amundsen+32Hartono loaded fitted;fiveCO2-free | `analyses/mea_parameter_bundle/results/a7-paper-evidence/README.md:68`; `analyses/mea_parameter_bundle/notebook.qmd:541`; `docs/scientific/latex/tables/supplement_source_aard.tex:92`; `docs/scientific/latex/tables/supplement_source_aard.tex:93` | Complete retained counts. |
+| A7 all103Amundsen densities100000Pa;other pressures row-specific;matched68:F1 101325Pa,A7 100000Pa,difference1325Pa | `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:1`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:180`; `tmp/joint-design/a7-data-release/README.md:58` | No retained derivative; no magnitude bound. |
+| Loaded AARD.177022%;CO2-free absolute limit1.0kg/m3 | `analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json:37`; `docs/scientific/latex/tables/acceptance_limits.tex:91` | Six-decimal AARD; only declared fitted cohort uses gate. |
+| 5.49/5.45/5.40/5.35Angstrom probes;44/44/22/7 of47;worst2.70→2.43s | `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:93`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:94`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:95`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:96`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:122` | Exact sampled vectors only; not a minimum penalty. |
+| Hartono x3:32 feeds;44/47 own basis;40/47 cross basis;657 trials/73 states | `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:163`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:174`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:175`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:173` | Completed sensitivity result, not replacement fit. |
+| Phase73 states/657 trials;313.15–333.15K;alpha1e-5–.5;A6 12,A7zero;69two-phase/foursingle-liquid;zero failed A7 trials | `analyses/mea_parameter_bundle/results/a7-paper-evidence/README.md:137`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md:121`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:1` | Finite exact-state evidence only. |
+| Index0 distinct from41;nine trials/state;A6 split confirmations21/63/70 | `docs/scientific/latex/tables/supplement_phase_family.tex:72`; `docs/scientific/latex/figures/generated/provenance.json:12` | Exact pressures and split values are in the generated rows below; counts657/73 refer to nine declared trials per state. |
+| Vinjarapu eight;313.15K,1.734MPa,30wt%;RMSE1.83486 or1.83compact | `analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json:1347`; `analyses/mea_parameter_bundle/notebook.qmd:474` | Five-decimal/compact two-decimal RMSE; integral heat from zero loading. |
+| Arcis14;322.5K;.51/1.03MPa;RMSE8.11440,bias+7.18190;groupRMSE10.3310/3.36566 | `analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json:1373`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json:1372`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json:1405`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json:1429`; `analyses/mea_parameter_bundle/notebook.qmd:474` | Acceptance check; printed precision retained. |
+| FourCp:318.15/353.15K,loadings0/.358;errors+5.534,+2.567,+1.150,-2.135%;5.53%compact | `analyses/mea_parameter_bundle/results/a7-paper-evidence/cp.csv:2`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/cp.csv:3`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/cp.csv:4`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/cp.csv:5` | Three-decimal signed errors and two-decimal largest discrepancy. |
+| Cp7molMEA/kgwater;101325Pa;unloadedproxy1e-6 | `analyses/mea_parameter_bundle/notebook.qmd:551` | Complete analytical-feed mass conversion retained. |
+| Canonical159:AARD20.5537%;Wagner23:near353/392K,22.2026/9.2542%,-.252026/-.0718582logbias | `analyses/mea_parameter_bundle/results/a7-paper-evidence/state-summary.json:9`; `docs/scientific/latex/tables/supplement_outside_fit.tex:93`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/README.md:65` | Full canonical includes fitting rows; Fig3 keeps nominal120C label with actual near392K caveat. |
+| 100–120C canonical/packet54/20 rows,24.3499/27.5380%;meanlogbias opposite signs | `analyses/mea_parameter_bundle/results/a7-paper-evidence/high-temperature-comparison.csv:2`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/high-temperature-comparison.csv:3` | Four-decimal AARD; overlapping cohorts not pooled. |
+| Transfer15/45wt%,70 rows:AARD29.5070/56.0168%,logbias-.204430/+.148690 | `docs/scientific/latex/tables/supplement_outside_fit.tex:95`; `docs/scientific/latex/tables/supplement_outside_fit.tex:96`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/README.md:65` | Previously accessed comparisons. |
+| Matin19 pools:AARD67.4808%,logbias-1.26582;source21C approximated20C | `docs/scientific/latex/tables/supplement_outside_fit.tex:97`; `analyses/mea_parameter_bundle/notebook.qmd:462`; `docs/scientific/latex/tables/supplement_data_inventory.tex:75` | Retained temperature convention; source MatinEqs18–19b/source figures as recorded in source_log. |
+| Carbonate10;massfraction.27142748;meanratio.07305;range.00633–.26703;historicalnine retained only as provenance | `analyses/mea_parameter_bundle/results/a7-paper-evidence/carbonate-share.csv:2`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json:3021`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json:3023` | Five-decimal ratios; NMR loadings. |
+| Tenfree/rankten;sixbounds;297dof;variance1.002729 | `analyses/mea_parameter_bundle/results/a7-paper-evidence/README.md:112`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-uncertainty.json:421`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-uncertainty.json:444`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-uncertainty.json:58` | Local conditional covariance. |
+| Bicarbonate.7253±1.2671;R2-1.4±5.3kJ/mol;MEAHslope-41.93±60.29K  | `analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-standard-errors.csv:4`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-standard-errors.csv:12`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-standard-errors.csv:6` | Exact slope/standard-error presentation after D6; no prediction intervals. |
+| 375 states;residualbound2.2e-12;stationarity2.1885e-12;material8.5310e-13;charge2.1176e-13 | `analyses/mea_parameter_bundle/results/a7-paper-evidence/verification.json:103`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/verification.json:104`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/verification.json:105`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/verification.json:106` | Two significant figures for common bound; five for S9 details. |
+| 153 replay identities;relative difference8.39e-16;F1 separate152quantity check | `analyses/mea_parameter_bundle/results/a7-paper-evidence/default-replay/summary.json:4`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/default-replay/summary.json:6`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/README.md:144` | Separate numerical verification results. |
+| Theory:nine species,five reactions,three neutral vapor species;feed1molMEA;standard1mol/kg;offset4.0165;source100kPa;domain293.15–393.15K;R4/R5sourceend323.15K | `analyses/mea_parameter_bundle/notebook.qmd:444`; `analyses/mea_parameter_bundle/notebook.qmd:456`; `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:72` | Chemical identities/standard definitions; declared coefficient/range table below. |
+| Packing.88sigma;Debye=sigma;sixions;Tref313.15K;CO2energy169.21K;association878.3248982K;MEAvolume.037470→.036287over293.15–393.15K | `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:72`; `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:80`; `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:149`; `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:180`; `analyses/mea_parameter_bundle/notebook.qmd:412` | Fixed/fitted roles retained; no combining rule evaluated by Write. |
+| Born epsion8;switches1;waterfactor1.5;others1;fmix1+.5xwater | `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:144`; `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:94` | Fixed selected inputs; Figiel2025Table2/2026correctedEq7; algebraic form. |
+| R2/R5inherit-1811.8989/+10000J/mol;final-1387.4047/+10000;unshiftedR5A2831.681K | `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/chemistry-coordinates.json:4`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/chemistry-coordinates.json:4`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/chemistry-coordinates.json:2` | S7; earlier exact source/adjustment ancestry recorded in source_log. |
+
+## Fix round 1: new or changed numerical statements
+
+| Displayed numbers | Retained source file:line | Basis and limits |
+| --- | --- | --- |
+| Non-fitted Amundsen: −21.51 kg/m³; 40 wt%; 353.15 K; loading 0.4 | `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:104` | Rounded from −21.509625802918663; 100000 Pa calculation basis; conditional comparison. |
+| Non-fitted Han: −20.02 kg/m³; 30 wt%; 393.15 K; loading 0.56 | `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:194` | Rounded from −20.017553459948886; 700000 Pa calculation basis; conditional comparison. |
+| Han: 67 comparisons, RMSE 5.905 kg/m³ | `analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json:397`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json:401` | RMSE 5.905245824904775; all 67 outside the objective. |
+| 68 matched observations; F1/A7 AARD 11.8433%/0.490695%; 101325/100000 Pa | `docs/scientific/latex/tables/supplement_predecessor.tex:86`; `docs/scientific/latex/tables/supplement_predecessor.tex:87` | Temperature, loading and unloaded-solvent composition matched; pressure differs by 1325 Pa, without a magnitude bound. |
+| Index 0 and 41: 318.15 K, loading ≈0.2556; index 0 pressure 5918.5286 Pa | `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:75`; `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:116` | Retain both entries in 73 states/657 trials; index 41 pressure 5918.528608135763 Pa. |
+| A6: 47/47 density requirements; 12/73 descent points; loadings 0.4 and 0.5 at 333.15 K | `docs/scientific/latex/tables/acceptance_limits.tex:88`; `docs/scientific/latex/tables/acceptance_limits.tex:90`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/report.md:71`; `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/report.md:72` | Separate split-seeded-63.json and split-seeded-70.json in amendment-6/selected-checks/phase-diagnosis confirm lower-Gibbs-energy two-liquid solutions; not observed separation. |
+| Ceiling origins: 10%; two percentage points; 1 kJ/mol; Cai 1.05× baseline (+5%) | `docs/scientific/latex/tables/acceptance_limits.tex:76` | Exact r2 G1 text: declared rounded absolute limits retained for A7, not exact unrounded arithmetic identities. |
+| S10: 2B MEA, model transfer H+ to H3O+, IAPWS-95 reference | `Baygi2015 Table 2`; `Schick2023 Table 1`; `Uyan2015 Table 4`; `analyses/mea_parameter_bundle/results/water-124/README.md:7` | Parameter-subset attribution from r2 item 7; no new parameter values; full tables below. |
+| HSL MA57 on A7 software build | `analyses/mea_parameter_bundle/results/engine-8298c602-adoption/comparison.json:26`; `~/.profile:50` | Machine/software evidence only; A7 records lack per-run solver identity. No MA57 attribution to F1 or original A6 Engine 21e761c3 assessment. |
+
+## Every generated numerical table cell
+
+Each entry quotes the current generated row exactly. Every numerical cell maps to the file and line shown; the generated provenance comments identify its retained inputs.
+
+### acceptance_limits.tex
+
+- `docs/scientific/latex/tables/acceptance_limits.tex:76` → `\caption{Acceptance limits and endpoint values. The declared rounded ceilings allow a 10\,\% increase in common-subset cost, two percentage points in pressure and species AARD, and \SI{1}{\kilo\joule\per\mole} in each heat RMSE relative to F1; these absolute limits were explicitly retained for A7. The Cai ceiling is the rounded value of 1.05 times the preceding constant-interaction Cai-only cost. Density and finite-phase requirements were set separately. The three density failures remain failures; accepting A7 with them changed no limit. Unavailable means no retained assessment. A6 and A7 phase values come from the same software build.}\label{tab:acceptance-limits}\\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:78` → `Quantity & Limit & Authority & F1 reference & A6 & First restricted fit & A7 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:81` → `Quantity & Limit & Authority & F1 reference & A6 & First restricted fit & A7 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:84` → `Common-subset cost & 35.26 & F1 value + 10\% (rounded; retained for A7) & 32.0567 & 24.9231 & 24.1008 & 23.866 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:85` → `Pressure AARD (\%) & 15.81 & F1 value + 2 percentage points (rounded; retained for A7) & 13.8148 & 12.4737 & 11.8875 & 11.8608 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:86` → `Species AARD (\%) & 9.89 & F1 value + 2 percentage points (rounded; retained for A7) & 7.89143 & 7.14514 & 7.10495 & 7.10358 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:87` → `Vinjarapu RMSE (kJ/\allowbreak{}mol) & 3.13 & F1 value + 1 kJ/\allowbreak{}mol (rounded; retained for A7) & 2.12657 & 1.82153 & 1.83317 & 1.83486 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:88` → `Loaded within 2s & 47/\allowbreak{}47 & declared density requirement; three failures disclosed & inapplicable & 47 & 44 & 44 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:89` → `Cai cost & 95.90 & constant-interaction Cai cost + 5\% (rounded; retained for A7) & inapplicable & 91.8115 & 91.9217 & 91.9078 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:90` → `Descent points & 0/\allowbreak{}73 & declared finite-family requirement; no continuous certificate & omitted & 12/\allowbreak{}73 & 0/\allowbreak{}73 & 0/\allowbreak{}73 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:91` → `CO2-free max absolute error (kg/\allowbreak{}m3) & 1.0 & declared density requirement & inapplicable & 0.570926 & 0.554181 & 0.557182 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:92` → `307-row cost & none & report only; not comparable to F1 total cost & inapplicable & 148.238 & 149.246 & 148.905 \\`
+- `docs/scientific/latex/tables/acceptance_limits.tex:93` → `Arcis RMSE (kJ/\allowbreak{}mol) & 9.36 & F1 value + 1 kJ/\allowbreak{}mol (rounded; acceptance check) & 8.36442 & 8.05036 & unavailable & 8.1144 \\`
+
+### binary_interaction_parameters.tex
+
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:72` → `\caption{A7 binary parameters. Temperature slopes multiply $(1/T-1/T_{\rm ref})$, with retained reference temperatures listed explicitly. Unlisted interactions retain the selected document conventions, including the same-sign ion dispersion exclusion. Fixed inputs are not new A7 fitted coordinates.}\label{tab:binary-interaction-parameters}\\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:80` → `HCO3-–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:81` → `MEACOO-–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:82` → `HCO3-–CO2 kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:83` → `MEACOO-–CO2 kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:84` → `CO2–\ce{CO3^{2-}} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:85` → `CO2–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:86` → `CO2–OH- kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:87` → `CO2–MEA kij & 0 & 1 & fixed in A7 & this work; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:88` → `CO2–MEA kij temperature slope & 0 & kelvin & fixed in A7 & this work; candidate extrapolation; Tref=313.15 K \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:89` → `CO2–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:90` → `CO2–water kij & -0.04641690112 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:91` → `CO2–water kij temperature slope & -35.66505221 & kelvin & fixed in A7 & this work; candidate extrapolation; Tref=313.15 K \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:92` → `\ce{CO3^{2-}}–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:93` → `H3O+–OH- kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:94` → `HCO3-–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:95` → `MEACOO-–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:96` → `\ce{CO3^{2-}}–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:97` → `H3O+–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:98` → `OH-–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:99` → `MEA–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:100` → `MEA–water kij & -0.08990482269 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:101` → `MEA–water kij temperature slope & -8.069913373 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:102` → `HCO3-–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:103` → `MEACOO-–MEAH+ kij & -1 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:104` → `\ce{CO3^{2-}}–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:105` → `OH-–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:106` → `HCO3-–water kij & 0.7253209981 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:107` → `MEACOO-–water kij & -0.003863204449 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:108` → `\ce{CO3^{2-}}–water kij & -0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:109` → `H3O+–water kij & 0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:110` → `OH-–water kij & -0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:111` → `MEAH+–water kij & -0.5 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:112` → `MEAH+–water kij temperature slope & -41.92964086 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\`
+
+### fitted_coordinates.tex
+
+- `docs/scientific/latex/tables/fitted_coordinates.tex:72` → `\caption{All 16 A7 scientific coordinates in optimizer-column order. Transformation: value = origin + signed slope times optimizer coordinate. R5 A is unshifted; enthalpy shifts are inherited-plus-fitted totals. Conditional standard errors (SE) depend on weights, fixed inputs, active bounds and local linearization; they are not measurement uncertainties or prediction intervals.}\label{tab:fitted-coordinates}\\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:80` → `0: MEACOO-–water kij & -0.0038632044 & 1 & -0.5 to 0.5 & 0.0032213889; 0.01 & 0.182038 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:81` → `1: MEAH+–water kij & -0.5 & 1 & -0.5 to -0.161 & -0.5; 0.01 & bound; no symmetric SE &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:82` → `2: HCO3-–water kij & 0.725321 & 1 & -0.5 to 1 & 0.65955826; 0.01 & 1.26715 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:83` → `3: MEACOO-–MEAH+ kij & -1 & 1 & -1 to 1 & -1; 0.01 & bound; no symmetric SE &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:84` → `4: MEAH+–water kij temperature slope & -41.929641 & K & -1000 to 1000 & -46.030841; 10 & 60.2876 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:85` → `5: MEAH+ segment diameter & 5.35 & \AA & 5.35 to 5.8 & 5.49; 0.1 & bound; no symmetric SE & MEAH+ packing diameter = 0.88 times coordinate; MEAH+ Debye–Hückel diameter = 1.0 times coordinate \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:86` → `6: MEACOO- segment diameter & 4.86604 & \AA & 2 to 5.8 & 4.6887051; 0.1 & 0.0794313 & MEACOO- packing diameter = 0.88 times coordinate; MEACOO- Debye–Hückel diameter = 1.0 times coordinate \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:87` → `7: MEAH+ born diameter & 5 & \AA & 2 to 5 & 5; 0.1 & bound; no symmetric SE &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:88` → `8: MEACOO- born diameter & 5 & \AA & 2 to 5 & 5; 0.1 & bound; no symmetric SE &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:89` → `9: R5 A & 2831.681 & K & 2400 to 3000 & 2848.516; -80 & 172.434 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:90` → `10: R2 enthalpy shift & -1387.4047 & J/\allowbreak{}mol & -10000 to 10000 & -1811.8989; 2500 & 5292.47 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:91` → `11: R5 enthalpy shift & 10000 & J/\allowbreak{}mol & -10000 to 10000 & 10000; 2500 & bound; no symmetric SE &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:92` → `12: MEA–water kij & -0.089904823 & 1 & -0.5 to 0.5 & -0.090088134; 0.01 & 0.00102441 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:93` → `13: MEA–water kij temperature slope & -8.0699134 & K & -1000 to 1000 & -8.300348; 10 & 1.80605 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:94` → `14: MEAH+ dispersion energy/\allowbreak{}k & 177.79505 & K & 50 to 950 & 173.18304; 10 & 47.9471 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:95` → `15: MEACOO- dispersion energy/\allowbreak{}k & 207.2746 & K & 50 to 1000 & 217.55547; 10 & 83.7489 &  \\`
+
+### full_ionic_ssm_ds_parameters.tex
+
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:72` → `\caption{A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. The provenance column distinguishes the A7 fit from inherited project inputs and source ancestry; inherited labels do not establish that every current value was reported directly in the named source. Entries marked ``candidate extrapolation'' retain that qualification from the selected parameter file; absence of the label does not establish validation. fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: \ce{CO2}, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.}\label{tab:full-ionic-ssm-ds-parameters}\\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:80` → `CO2 dispersion energy/\allowbreak{}k & 169.21 & kelvin & fixed in A7 & this work; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:81` → `CO2 segment count & 2.0729 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:82` → `CO2 segment diameter & 2.7852 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:83` → `CO2 solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:84` → `CO2 dielectric volume & 1e-08 & liter /\allowbreak{} mole & fixed in A7 & earlier dielectric calibration and fixed inputs \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:85` → `CO2 dielectric temperature & 1403 & kelvin & fixed in A7 & earlier dielectric calibration and fixed inputs \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:86` → `MEA dispersion energy/\allowbreak{}k & 277.174 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:87` → `MEA segment count & 3.0353 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:88` → `MEA segment diameter & 3.0435 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:89` → `MEA solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:90` → `MEA dielectric volume & 0.7309888238 & liter /\allowbreak{} mole & fixed in A7 & earlier dielectric calibration and fixed inputs \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:91` → `MEA dielectric temperature & 1019.078611 & kelvin & fixed in A7 & earlier dielectric calibration and fixed inputs \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:92` → `water dispersion energy/\allowbreak{}k & 432.3788131 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:93` → `water segment count & 1.252753838 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:94` → `water solvation factor & 1.5 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:95` → `water dielectric volume & 0.3777 & liter /\allowbreak{} mole & fixed in A7 & earlier dielectric calibration and fixed inputs \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:96` → `water dielectric temperature & 1403 & kelvin & fixed in A7 & earlier dielectric calibration and fixed inputs \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:97` → `MEAH+ born diameter & 5 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:98` → `MEAH+ Debye–Hückel diameter & 5.35 & \AA & tied to MEAH+ segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:99` → `MEAH+ dispersion energy/\allowbreak{}k & 177.7950548 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:100` → `MEAH+ packing diameter & 4.708 & \AA & tied to MEAH+ segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:101` → `MEAH+ segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:102` → `MEAH+ segment diameter & 5.35 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:103` → `MEAH+ solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:104` → `MEACOO- born diameter & 5 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:105` → `MEACOO- Debye–Hückel diameter & 4.866040008 & \AA & tied to MEACOO- segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:106` → `MEACOO- dispersion energy/\allowbreak{}k & 207.2745967 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:107` → `MEACOO- packing diameter & 4.282115207 & \AA & tied to MEACOO- segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:108` → `MEACOO- segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:109` → `MEACOO- segment diameter & 4.866040008 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:110` → `MEACOO- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:111` → `HCO3- born diameter & 3 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:112` → `HCO3- Debye–Hückel diameter & 2.9296 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:113` → `HCO3- dispersion energy/\allowbreak{}k & 70 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:114` → `HCO3- packing diameter & 2.578048 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:115` → `HCO3- segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:116` → `HCO3- segment diameter & 2.9296 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:117` → `HCO3- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:118` → `\ce{CO3^{2-}} born diameter & 3 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:119` → `\ce{CO3^{2-}} Debye–Hückel diameter & 2.4422 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:120` → `\ce{CO3^{2-}} dispersion energy/\allowbreak{}k & 249.26 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:121` → `\ce{CO3^{2-}} packing diameter & 2.149136 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:122` → `\ce{CO3^{2-}} segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:123` → `\ce{CO3^{2-}} segment diameter & 2.4422 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:124` → `\ce{CO3^{2-}} solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:125` → `H3O+ born diameter & 1.218 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:126` → `H3O+ Debye–Hückel diameter & 3.4654 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:127` → `H3O+ dispersion energy/\allowbreak{}k & 500 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:128` → `H3O+ packing diameter & 3.049552 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:129` → `H3O+ segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:130` → `H3O+ segment diameter & 3.4654 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:131` → `H3O+ solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:132` → `OH- born diameter & 3.081076894 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:133` → `OH- Debye–Hückel diameter & 2.0177 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:134` → `OH- dispersion energy/\allowbreak{}k & 650 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:135` → `OH- packing diameter & 1.775576 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:136` → `OH- segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:137` → `OH- segment diameter & 2.0177 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:138` → `OH- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:139` → `water segment diameter constant-plus-sum-of-exponentials constant & 2.780432615 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:140` → `water segment diameter constant-plus-sum-of-exponentials term-0 amplitude & 10.11 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:141` → `water segment diameter constant-plus-sum-of-exponentials term-0 exponent coefficient & -0.01775 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:142` → `water segment diameter constant-plus-sum-of-exponentials term-1 amplitude & -1.417 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:143` → `water segment diameter constant-plus-sum-of-exponentials term-1 exponent coefficient & -0.01146 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:144` → `model/\allowbreak{}relative permittivity/\allowbreak{}ionic region relative permittivity & 8 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:145` → `MEA(a)–MEA(b) association energy/\allowbreak{}k & 2586.3 & kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:146` → `MEA(a)–MEA(b) association volume & 0.036287 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:147` → `water(a)–water(b) association energy/\allowbreak{}k & 1756.649796 & kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:148` → `water(a)–water(b) association volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:149` → `CO2(a)–water(b) association energy/\allowbreak{}k & 878.3248982 & kelvin & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:150` → `CO2(a)–water(b) association volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:151` → `CO2(b)–water(a) association energy/\allowbreak{}k & 878.3248982 & kelvin & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:152` → `CO2(b)–water(a) association volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:153` → `MEA site a & 1 & -- & fixed donor site & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:154` → `MEA site b & 1 & -- & fixed acceptor site & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:155` → `water site a & 1 & -- & fixed donor site & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:156` → `water site b & 1 & -- & fixed acceptor site & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:157` → `CO2 site a & 1 & -- & fixed donor site & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:158` → `CO2 site b & 1 & -- & fixed acceptor site & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:159` → `MEA(a)–water(b) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: MEA(a)–MEA(b) association energy/\allowbreak{}k, water(a)–water(b) association energy/\allowbreak{}k; volume: MEA(a)–MEA(b) association volume, water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:160` → `MEA(b)–water(a) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: MEA(a)–MEA(b) association energy/\allowbreak{}k, water(a)–water(b) association energy/\allowbreak{}k; volume: MEA(a)–MEA(b) association volume, water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:168` → `\caption{Retained source and transformation locators for fixed correlation and association inputs. The MEA association volume retains its conversion from the source diameter convention to the $\sigma_{ij}^3$ convention used here; no combining rule is evaluated here.}\label{tab:association-source-locators}\\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:176` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=segment\_\allowbreak{}diameter:status=retained-literature-lineage \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:177` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:ionic-dielc=8:status=transferred-diagnostic \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:178` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:179` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:180` → `Fakouri Baygi and Pahlavanzadeh 2015 & Eq. 4 (p. 791) uses d\_\allowbreak{}ij\textasciicircum{}3; Table 2 (p. 792) 2B kappa = 0.037470 under that convention. Converted to the Engine sigma\_\allowbreak{}ij\textasciicircum{}3 convention as the constant kappa that best reproduces Baygi's d\textasciicircum{}3 model (Eq. 8 form, p\_\allowbreak{}sat and saturated liquid density) over the packet domain 293.15-393.15 K, with m, sigma, epsilon fixed: analyses/\allowbreak{}2026-mea-association-diameter \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:181` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:182` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:183` → `Schick et al. 2023; Pabsch et al. 2020 & Schick et al. (2023), Table 1 and Section 2.4.2; Pabsch et al. (2020) CO2-water parameterization \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:184` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:185` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:186` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:187` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:188` → `Fakouri Baygi and Pahlavanzadeh 2015 & Eq. 6, Wolbach-Sandler volume rule including the size factor, used with the Table 2 MEA 2B parameters \\`
+
+### objective_groups.tex
+
+- `docs/scientific/latex/tables/objective_groups.tex:72` → `\caption{A7 objective operators. Rows partition eight disjoint groups and 307 quantities; common subset contains pressure, species and heat. Cai contains 25 temperatures and 25 vapor fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; log ratio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales retain their declared meaning; they are not uniformly measurement uncertainties.}\label{tab:objective-groups}\\`
+- `docs/scientific/latex/tables/objective_groups.tex:80` → `common subset & CO2 vapor partial pressure & Pa & 47 & log ratio & 1 & 11.1111 & 5.98341 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:81` → `common subset & liquid species /\allowbreak{} declared aggregate & mole fraction & 94 & Difference & 0.0014 to 0.01154 (row-specific) & 1 & 16.6691 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:82` → `common subset & integral heat of absorption & J/\allowbreak{}mol CO2 & 8 & Difference & 3000 to 6000 (row-specific) & 1 & 1.21347 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:83` → `restored species & liquid species fraction & liquid mole fraction & 7 & Difference & 0.00244 to 0.01109 (row-specific) & 1 & 2.4503 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:84` → `Jakobsen & (bicarbonate + carbonate) /\allowbreak{} total amine & mol/\allowbreak{}mol total amine & 6 & Difference & 0.00172793 to 0.0548869 (row-specific) & 1 & 13.1171 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:85` → `Kiepe & CO2-water bubble pressure & Pa & 39 & log ratio & 1 & 0.025641 & 0.000679019 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:86` → `CO2-free density & liquid density & kg/\allowbreak{}m3 & 5 & Difference & 0.5 & 10 & 11.6112 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:87` → `Cai & MEA-water bubble temperature & K & 25 & Difference & 1 & 1 & 39.9903 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:88` → `Cai & vapor water fraction & vapor water fraction & 25 & Difference & 0.01 & 1 & 51.9175 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:89` → `loaded density & liquid density & kg/\allowbreak{}m3 & 47 & Difference & 1.79111 to 2.41635 (row-specific) & 0.0212766 & 0.565751 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:90` → `Cp & equilibrium isobaric Cp & J/\allowbreak{}(mol K), feed basis & 4 & Difference & 1.59309 to 1.76153 (row-specific) & 1 & 5.38658 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:91` → `common subset subtotal (already included) & -- & -- & 149 & -- & -- & -- & 23.866 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:92` → `Cai subtotal (already included) & -- & -- & 50 & -- & -- & -- & 91.9078 \\`
+- `docs/scientific/latex/tables/objective_groups.tex:93` → `Objective total & -- & -- & 307 & -- & -- & -- & 148.905 \\`
+
+### reaction_equilibrium_constants.tex
+
+- `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:72` → `\caption{A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.}\label{tab:reaction-equilibrium-constants}\\`
+- `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:80` → `R1: \ce{2 H2O <=> H3O+ + OH-} & A = 132.899; B = -13445.9; C = -22.4773; D = 0.0 & Austgen 1991, Table V, reaction 1a & [273.15, 498.15] & add source-to-common offset 8.03307 \\`
+- `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:81` → `R2: \ce{CO2 + 2 H2O <=> HCO3^- + H3O+} & A = 234.9486708; B = -11925.23357; C = -36.7816; D = 0 & Austgen 1991, Table V, reaction 4a & [273.15, 498.15] & offset included in serialized R2 \\`
+- `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:82` → `R3: \ce{HCO3^- + H2O <=> CO3^{2-} + H3O+} & A = 216.049; B = -12431.7; C = -35.4819; D = 0.0 & Austgen 1991, Table V, reaction 5a & [273.15, 498.15] & add source-to-common offset 4.01653 \\`
+- `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:83` → `R4: \ce{MEACOO- + H2O <=> HCO3^- + MEA} & A = 2.151; B = -1545.3 & Tong 2012, Table 5, via Aroua 1999 & [293.15, 323.15] & add source-to-common offset 0 \\`
+- `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:84` → `R5: \ce{MEAH+ + H2O <=> MEA + H3O+} & A = 3354.017165; B = -1.281106391; C = 0.0004277 & Bates and Pinching 1951, Eq. 7 & [273.15, 323.15] & add source-to-common offset 0 \\`
+
+### residual_summary.tex
+
+- `docs/scientific/latex/tables/residual_summary.tex:72` → `\caption{A7 property deviations. AARD denotes mean absolute relative deviation. Calibration errors and acceptance checks do not establish physical validation; Cai operators use native units. Cp remains on its source mass basis.}\label{tab:residual-summary}\\`
+- `docs/scientific/latex/tables/residual_summary.tex:80` → `common subset pressure & calibration & 47 & AARD & 11.8608 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:81` → `common subset species & calibration & 94 & AARD & 7.10358 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:82` → `restored species & calibration & 7 & AARD & 9.0037 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:83` → `Jakobsen & calibration & 6 & AARD & 17.4975 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:84` → `Kiepe & calibration; Kiepe checks fixed inputs & 39 & AARD & 2.66652 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:85` → `loaded density & calibration & 47 & AARD & 0.177022 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:86` → `CO2-free density & calibration & 5 & AARD & 0.0279577 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:87` → `Cai temperature & calibration & 25 & RMSE; bias & 1.78864; 0.109139 & K \\`
+- `docs/scientific/latex/tables/residual_summary.tex:88` → `Cai vapor water fraction & calibration & 25 & RMSE; bias & 0.0203799; -0.00259361 & vapor water fraction \\`
+- `docs/scientific/latex/tables/residual_summary.tex:89` → `Vinjarapu & calibration & 8 & RMSE; bias & 1.83486; 0.472904 & kJ/\allowbreak{}mol CO2 \\`
+- `docs/scientific/latex/tables/residual_summary.tex:90` → `Arcis & acceptance check & 14 & RMSE; bias & 8.1144; 7.1819 & kJ/\allowbreak{}mol CO2 \\`
+- `docs/scientific/latex/tables/residual_summary.tex:91` → `Arcis at 0.51 MPa & acceptance check & 8 & RMSE; bias & 10.331; 10.2098 & kJ/\allowbreak{}mol CO2 \\`
+- `docs/scientific/latex/tables/residual_summary.tex:92` → `Arcis at 1.03 MPa & acceptance check & 6 & RMSE; bias & 3.36566; 3.14463 & kJ/\allowbreak{}mol CO2 \\`
+- `docs/scientific/latex/tables/residual_summary.tex:93` → `Hilliard Cp, 318.15 K, loading 0.0 & calibration & 1 & signed error & 5.53403 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:94` → `Hilliard Cp, 318.15 K, loading 0.358 & calibration & 1 & signed error & 2.56666 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:95` → `Hilliard Cp, 353.15 K, loading 0.0 & calibration & 1 & signed error & 1.14996 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:96` → `Hilliard Cp, 353.15 K, loading 0.358 & calibration & 1 & signed error & -2.13471 & \% \\`
+
+### supplement_carbonate_density.tex
+
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:72` → `\caption{All 210 native A7 densities. Temperature is K, pressure Pa, density/error/scale are kg/m3; mass fraction uses unloaded solvent. Scales are not uniformly source uncertainties, and 2s is not a 95 percent interval. Amundsen source pressure is unreported; 100000 Pa is the declared calculation basis. Its high-temperature/loading uncertainty boundary remains unresolved; source locators and per-row uncertainty scope remain in density.csv. The 47-row gate does not apply to non-fitted/excluded rows.}\label{tab:supplement-carbonate-density}\\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:80` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}001 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0; 0.2 & 1005.3; 1006.21 & 0.906168; 0.5; 1.81234 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:81` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}002 & Amundsen2009; fitted CO2-free & 298.15 & 100000 & 0; 0.3 & 1010.6; 1010.04 & -0.557182; 0.5; -1.11436 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:82` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}003 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0; 0.4 & 1015.8; 1013.46 & -2.34162; 0.5; -4.68324 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:83` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}004 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0; 0.5 & 1020.8; 1016.32 & -4.47911; 0.5; -8.95822 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:84` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}005 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0; 0.7 & 1026.2; 1019.58 & -6.62359; 0.5; -13.2472 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:85` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}006 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0; 0.9 & 1020; 1017.13 & -2.87393; 0.5; -5.74785 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:86` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}007 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0; 1 & 1012.3; 1012.08 & -0.220262; 0.5; -0.440525 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:87` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}008 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0; 0.2 & 999.1; 1000.08 & 0.975304; 0.5; 1.95061 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:88` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}009 & Amundsen2009; fitted CO2-free & 313.15 & 100000 & 0; 0.3 & 1003.4; 1003.32 & -0.0806099; 0.5; -0.16122 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:89` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}010 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0; 0.4 & 1007.7; 1006.1 & -1.59926; 0.5; -3.19853 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:90` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}011 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0; 0.5 & 1011.7; 1008.29 & -3.41444; 0.5; -6.82887 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:91` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}012 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0; 0.7 & 1015.5; 1010.05 & -5.44765; 0.5; -10.8953 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:92` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}013 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0; 0.9 & 1008.4; 1005.96 & -2.4389; 0.5; -4.8778 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:93` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}014 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0; 1 & 1000.3; 1000.07 & -0.226243; 0.5; -0.452487 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:94` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}015 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0; 0.2 & 994.3; 995.119 & 0.818897; 0.5; 1.63779 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:95` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}016 & Amundsen2009; fitted CO2-free & 323.15 & 100000 & 0; 0.3 & 998.1; 998.068 & -0.0321115; 0.5; -0.064223 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:96` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}017 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0; 0.4 & 1001.8; 1000.53 & -1.26896; 0.5; -2.53792 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:97` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}018 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0; 0.5 & 1005.3; 1002.37 & -2.92627; 0.5; -5.85255 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:98` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}019 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0; 0.7 & 1008.2; 1003.38 & -4.81629; 0.5; -9.63258 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:99` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}020 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0; 0.9 & 1000.6; 998.455 & -2.1449; 0.5; -4.2898 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:100` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}021 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0; 1 & 992.3; 992.139 & -0.160737; 0.5; -0.321475 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:101` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}022 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0; 0.2 & 983; 983.666 & 0.666459; 0.5; 1.33292 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:102` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}023 & Amundsen2009; fitted CO2-free & 343.15 & 100000 & 0; 0.3 & 985.8; 986.195 & 0.394744; 0.5; 0.789489 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:103` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}024 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0; 0.4 & 988.9; 988.199 & -0.70078; 0.5; -1.40156 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:104` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}025 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0; 0.5 & 991.5; 989.544 & -1.95581; 0.5; -3.91161 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:105` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}026 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0; 0.7 & 993; 989.442 & -3.55767; 0.5; -7.11534 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:106` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}027 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0; 0.9 & 984.6; 983.276 & -1.32442; 0.5; -2.64884 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:107` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}028 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0; 1 & 976; 976.326 & 0.325582; 0.5; 0.651165 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:108` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}029 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0; 0.2 & 976.6; 977.348 & 0.748475; 0.5; 1.49695 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:109` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}030 & Amundsen2009; fitted CO2-free & 353.15 & 100000 & 0; 0.3 & 979.4; 979.727 & 0.326733; 0.5; 0.653466 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:110` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}031 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0; 0.4 & 981.9; 981.565 & -0.334616; 0.5; -0.669233 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:111` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}032 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0; 0.5 & 984.2; 982.728 & -1.47157; 0.5; -2.94315 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:112` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}033 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0; 0.7 & 985; 982.215 & -2.78458; 0.5; -5.56915 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:113` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}034 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0; 0.9 & 976.4; 975.587 & -0.813021; 0.5; -1.62604 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:114` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}035 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0; 1 & 967.8; 968.399 & 0.599446; 0.5; 1.19889 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:115` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}036 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.1; 0.2 & 1018.8; 1019.48 & 0.681208; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:116` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}037 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.2; 0.2 & 1032.7; 1032.73 & 0.0283104; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:117` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}038 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.3; 0.2 & 1047.6; 1045.92 & -1.67576; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:118` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}039 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.4; 0.2 & 1064; 1059.01 & -4.98766; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:119` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}040 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.5; 0.2 & 1080; 1071.59 & -8.41011; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:120` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}041 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.1; 0.2 & 1012.5; 1013.18 & 0.677647; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:121` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}042 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.2; 0.2 & 1026.4; 1026.24 & -0.157223; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:122` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}043 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.3; 0.2 & 1041.3; 1039.24 & -2.05722; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:123` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}044 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.4; 0.2 & 1057.9; 1052.1 & -5.79529; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:124` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}045 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.5; 0.2 & 1073.5; 1064.41 & -9.09198; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:125` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}046 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.1; 0.2 & 1007.6; 1008.09 & 0.489881; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:126` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}047 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.2; 0.2 & 1021.5; 1021.02 & -0.48392; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:127` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}048 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.3; 0.2 & 1036.4; 1033.87 & -2.533; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:128` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}049 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.4; 0.2 & 1053; 1046.56 & -6.44096; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:129` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}050 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.5; 0.2 & 1068; 1058.66 & -9.33861; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:130` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}051 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0.1; 0.2 & 996.5; 996.345 & -0.155269; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:131` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}052 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0.2; 0.2 & 1010.5; 1008.96 & -1.54017; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:132` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}053 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0.3; 0.2 & 1025.4; 1021.48 & -3.92317; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:133` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}054 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0.4; 0.2 & 1041.9; 1033.79 & -8.11099; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:134` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}055 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0.5; 0.2 & 1057; 1045.43 & -11.5735; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:135` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}056 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0.1; 0.2 & 990.2; 989.868 & -0.331664; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:136` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}057 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0.2; 0.2 & 1004.3; 1002.31 & -1.98597; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:137` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}058 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0.3; 0.2 & 1019.2; 1014.65 & -4.55195; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:138` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}059 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0.4; 0.2 & 1036; 1026.75 & -9.25184; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:139` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}060 & Amundsen2009; fitted loaded & 298.15 & 100000 & 0.1; 0.3 & 1028; 1029.73 & 1.73361; 2.03961; 0.849972 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:140` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}061 & Amundsen2009; fitted loaded & 298.15 & 100000 & 0.2; 0.3 & 1048; 1049.31 & 1.30976; 2.16924; 0.603786 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:141` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}062 & Amundsen2009; fitted loaded & 298.15 & 100000 & 0.3; 0.3 & 1070; 1068.8 & -1.20242; 2.39633; -0.501774 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:142` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}063 & Amundsen2009; excluded source conflict & 298.15 & 100000 & 0.4; 0.3 & 1095.7; 1088.16 & -7.54395; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:143` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}064 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.5; 0.3 & 1121.1; 1106.76 & -14.3366; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:144` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}065 & Amundsen2009; fitted loaded & 313.15 & 100000 & 0.1; 0.3 & 1021; 1022.73 & 1.7339; 2.03961; 0.850114 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:145` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}066 & Amundsen2009; fitted loaded & 313.15 & 100000 & 0.2; 0.3 & 1041; 1042.02 & 1.01784; 2.16847; 0.469382 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:146` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}067 & Amundsen2009; fitted loaded & 313.15 & 100000 & 0.3; 0.3 & 1062.9; 1061.19 & -1.70611; 2.39303; -0.712951 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:147` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}068 & Amundsen2009; excluded source conflict & 313.15 & 100000 & 0.4; 0.3 & 1088.5; 1080.2 & -8.30181; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:148` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}069 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.5; 0.3 & 1114; 1098.36 & -15.6443; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:149` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}070 & Amundsen2009; fitted loaded & 323.15 & 100000 & 0.1; 0.3 & 1016; 1017.27 & 1.2749; 2.03767; 0.625667 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:150` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}071 & Amundsen2009; fitted loaded & 323.15 & 100000 & 0.2; 0.3 & 1035.5; 1036.34 & 0.839219; 2.16924; 0.386873 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:151` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}072 & Amundsen2009; fitted loaded & 323.15 & 100000 & 0.3; 0.3 & 1058; 1055.28 & -2.71874; 2.41299; -1.12671 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:152` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}073 & Amundsen2009; excluded source conflict & 323.15 & 100000 & 0.4; 0.3 & 1083; 1074.02 & -8.97859; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:153` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}074 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.5; 0.3 & 1108; 1091.85 & -16.1499; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:154` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}075 & Amundsen2009; fitted loaded & 343.15 & 100000 & 0.1; 0.3 & 1004; 1004.94 & 0.943247; 2.03961; 0.462465 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:155` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}076 & Amundsen2009; fitted loaded & 343.15 & 100000 & 0.2; 0.3 & 1024; 1023.52 & -0.479049; 2.17235; -0.220521 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:156` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}077 & Amundsen2009; fitted loaded & 343.15 & 100000 & 0.3; 0.3 & 1046.4; 1041.94 & -4.45628; 2.40963; -1.84936 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:157` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}078 & Amundsen2009; excluded source conflict & 343.15 & 100000 & 0.4; 0.3 & 1071.9; 1060.1 & -11.804; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:158` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}079 & Amundsen2009; fitted loaded & 353.15 & 100000 & 0.1; 0.3 & 997; 998.228 & 1.22833; 2.042; 0.601532 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:159` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}080 & Amundsen2009; fitted loaded & 353.15 & 100000 & 0.2; 0.3 & 1017.6; 1016.54 & -1.05721; 2.17865; -0.485261 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:160` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}081 & Amundsen2009; fitted loaded; FAIL >2s & 353.15 & 100000 & 0.3; 0.3 & 1040.2; 1034.68 & -5.5171; 2.41635; -2.28324 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:161` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}082 & Amundsen2009; excluded source conflict & 353.15 & 100000 & 0.4; 0.3 & 1066; 1052.51 & -13.4915; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:162` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}083 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.1; 0.4 & 1038; 1039.32 & 1.3152; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:163` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}084 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.2; 0.4 & 1063; 1064.9 & 1.90351; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:164` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}085 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.3; 0.4 & 1093; 1090.32 & -2.68093; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:165` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}086 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.4; 0.4 & 1128.5; 1115.58 & -12.9219; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:166` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}087 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0.5; 0.4 & 1159.7; 1139.87 & -19.8257; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:167` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}088 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.1; 0.4 & 1030; 1031.56 & 1.56122; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:168` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}089 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.2; 0.4 & 1055; 1056.73 & 1.72852; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:169` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}090 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.3; 0.4 & 1085; 1081.7 & -3.30327; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:170` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}091 & Amundsen2009; non-fitted comparison & 313.15 & 100000 & 0.4; 0.4 & 1121; 1106.45 & -14.5458; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:171` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}092 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.1; 0.4 & 1024; 1025.7 & 1.69832; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:172` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}093 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.2; 0.4 & 1049; 1050.55 & 1.55402; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:173` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}094 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.3; 0.4 & 1079.7; 1075.19 & -4.50874; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:174` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}095 & Amundsen2009; non-fitted comparison & 323.15 & 100000 & 0.4; 0.4 & 1115; 1099.58 & -15.4213; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:175` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}096 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0.1; 0.4 & 1012; 1012.73 & 0.725341; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:176` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}097 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0.2; 0.4 & 1037; 1036.9 & -0.101856; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:177` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}098 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0.3; 0.4 & 1068; 1060.81 & -7.19143; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:178` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}099 & Amundsen2009; non-fitted comparison & 343.15 & 100000 & 0.4; 0.4 & 1104; 1084.38 & -19.6212; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:179` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}100 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0.1; 0.4 & 1005; 1005.75 & 0.748462; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:180` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}101 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0.2; 0.4 & 1031; 1029.55 & -1.44558; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:181` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}102 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0.3; 0.4 & 1062; 1053.07 & -8.92799; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:182` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}103 & Amundsen2009; non-fitted comparison & 353.15 & 100000 & 0.4; 0.4 & 1097.7; 1076.19 & -21.5096; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:183` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}20C\_\allowbreak{}alpha0.11 & Hartono2014; fitted loaded & 293.15 & 100000 & 0.11; 0.3 & 1030.99; 1033.65 & 2.65952; 1.99135; 1.33554 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:184` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}20C\_\allowbreak{}alpha0.19 & Hartono2014; fitted loaded & 293.15 & 100000 & 0.19; 0.3 & 1046.92; 1049.38 & 2.45862; 2.10621; 1.16732 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:185` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}20C\_\allowbreak{}alpha0.29 & Hartono2014; fitted loaded & 293.15 & 100000 & 0.29; 0.3 & 1068.9; 1068.97 & 0.0660846; 1.9986; 0.0330655 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:186` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}20C\_\allowbreak{}alpha0.39 & Hartono2014; fitted loaded & 293.15 & 100000 & 0.39; 0.3 & 1086.89; 1088.45 & 1.5588; 1.79911; 0.866431 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:187` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}20C\_\allowbreak{}alpha0.50 & Hartono2014; non-fitted comparison & 293.15 & 100000 & 0.5; 0.3 & 1108.2; 1109.13 & 0.930284; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:188` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.11 & Hartono2014; fitted loaded & 298.15 & 100000 & 0.11; 0.3 & 1028.87; 1031.7 & 2.82579; 1.99135; 1.41903 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:189` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.19 & Hartono2014; fitted loaded & 298.15 & 100000 & 0.19; 0.3 & 1044.8; 1047.36 & 2.55632; 2.1051; 1.21435 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:190` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.29 & Hartono2014; fitted loaded & 298.15 & 100000 & 0.29; 0.3 & 1066.76; 1066.85 & 0.0928373; 1.9951; 0.0465326 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:191` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.39 & Hartono2014; fitted loaded & 298.15 & 100000 & 0.39; 0.3 & 1084.7; 1086.23 & 1.53257; 1.79411; 0.854223 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:192` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.50 & Hartono2014; non-fitted comparison & 298.15 & 100000 & 0.5; 0.3 & 1105.88; 1106.76 & 0.883394; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:193` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}30C\_\allowbreak{}alpha0.11 & Hartono2014; fitted loaded & 303.15 & 100000 & 0.11; 0.3 & 1026.65; 1029.53 & 2.88445; 1.99135; 1.44849 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:194` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}30C\_\allowbreak{}alpha0.19 & Hartono2014; fitted loaded & 303.15 & 100000 & 0.19; 0.3 & 1042.58; 1045.12 & 2.54148; 2.10454; 1.20762 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:195` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}30C\_\allowbreak{}alpha0.29 & Hartono2014; fitted loaded & 303.15 & 100000 & 0.29; 0.3 & 1064.53; 1064.52 & -0.00934406; 1.9931; -0.0046882 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:196` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}30C\_\allowbreak{}alpha0.39 & Hartono2014; fitted loaded & 303.15 & 100000 & 0.39; 0.3 & 1082.44; 1083.79 & 1.35062; 1.79111; 0.754067 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:197` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}30C\_\allowbreak{}alpha0.50 & Hartono2014; non-fitted comparison & 303.15 & 100000 & 0.5; 0.3 & 1103.51; 1104.16 & 0.654574; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:198` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.11 & Hartono2014; fitted loaded & 313.15 & 100000 & 0.11; 0.3 & 1021.88; 1024.67 & 2.78755; 1.9951; 1.3972 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:199` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.19 & Hartono2014; fitted loaded & 313.15 & 100000 & 0.19; 0.3 & 1037.84; 1040.09 & 2.25435; 2.10732; 1.06977 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:200` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.29 & Hartono2014; fitted loaded & 313.15 & 100000 & 0.29; 0.3 & 1059.81; 1059.28 & -0.528421; 1.9956; -0.264793 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:201` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.39 & Hartono2014; fitted loaded & 313.15 & 100000 & 0.39; 0.3 & 1077.75; 1078.31 & 0.563648; 1.79411; 0.314166 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:202` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.50 & Hartono2014; non-fitted comparison & 313.15 & 100000 & 0.5; 0.3 & 1098.66; 1098.36 & -0.304266; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:203` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.11 & Hartono2014; fitted loaded & 323.15 & 100000 & 0.11; 0.3 & 1016.6; 1019.19 & 2.5871; 2.0026; 1.29187 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:204` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.19 & Hartono2014; fitted loaded & 323.15 & 100000 & 0.19; 0.3 & 1032.62; 1034.44 & 1.81824; 2.11343; 0.860325 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:205` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.29 & Hartono2014; fitted loaded & 323.15 & 100000 & 0.29; 0.3 & 1054.64; 1053.39 & -1.24673; 1.9991; -0.623644 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:206` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.39 & Hartono2014; fitted loaded & 323.15 & 100000 & 0.39; 0.3 & 1072.6; 1072.17 & -0.4343; 1.79611; -0.2418 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:207` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.50 & Hartono2014; non-fitted comparison & 323.15 & 100000 & 0.5; 0.3 & 1093.45; 1091.85 & -1.59992; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:208` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.11 & Hartono2014; fitted loaded & 333.15 & 100000 & 0.11; 0.3 & 1010.9; 1013.2 & 2.30438; 2.0126; 1.14497 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:209` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.19 & Hartono2014; fitted loaded & 333.15 & 100000 & 0.19; 0.3 & 1027; 1028.27 & 1.26663; 2.12343; 0.596501 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:210` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.29 & Hartono2014; fitted loaded & 333.15 & 100000 & 0.29; 0.3 & 1049.12; 1046.97 & -2.14807; 2.0056; -1.07104 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:211` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.39 & Hartono2014; fitted loaded & 333.15 & 100000 & 0.39; 0.3 & 1067.11; 1065.47 & -1.64487; 1.79911; -0.914269 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:212` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.50 & Hartono2014; non-fitted comparison & 333.15 & 100000 & 0.5; 0.3 & 1087.88; 1084.76 & -3.12087; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:213` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.11 & Hartono2014; fitted loaded & 343.15 & 100000 & 0.11; 0.3 & 1004.8; 1006.81 & 2.00794; 2.02635; 0.990915 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:214` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.19 & Hartono2014; fitted loaded & 343.15 & 100000 & 0.19; 0.3 & 1021.01; 1021.67 & 0.659849; 2.13509; 0.309049 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:215` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.29 & Hartono2014; fitted loaded & 343.15 & 100000 & 0.29; 0.3 & 1043.23; 1040.11 & -3.12024; 2.0136; -1.54958 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:216` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.39 & Hartono2014; fitted loaded & 343.15 & 100000 & 0.39; 0.3 & 1061.28; 1058.3 & -2.97541; 1.80511; -1.64833 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:217` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.50 & Hartono2014; non-fitted comparison & 343.15 & 100000 & 0.5; 0.3 & 1082; 1077.16 & -4.83943; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:218` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.11 & Hartono2014; fitted loaded & 353.15 & 100000 & 0.11; 0.3 & 998.31; 1000.07 & 1.75736; 2.04385; 0.859828 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:219` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.19 & Hartono2014; fitted loaded & 353.15 & 100000 & 0.19; 0.3 & 1014.66; 1014.72 & 0.0587208; 2.15176; 0.0272897 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:220` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.29 & Hartono2014; fitted loaded; FAIL >2s & 353.15 & 100000 & 0.29; 0.3 & 1037.04; 1032.88 & -4.16151; 2.0251; -2.05497 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:221` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.39 & Hartono2014; fitted loaded; FAIL >2s & 353.15 & 100000 & 0.39; 0.3 & 1055.16; 1050.75 & -4.40653; 1.81211; -2.43171 \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:222` → `Hartono2014\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.50 & Hartono2014; non-fitted comparison & 353.15 & 100000 & 0.5; 0.3 & 1075.85; 1069.1 & -6.75293; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:223` → `Han2012\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 298.15 & 100000 & 0.1; 0.3 & 1033.3; 1029.73 & -3.56664; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:224` → `Han2012\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 298.15 & 100000 & 0.21; 0.3 & 1053.4; 1051.26 & -2.13807; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:225` → `Han2012\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 298.15 & 100000 & 0.32; 0.3 & 1075.6; 1072.68 & -2.91681; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:226` → `Han2012\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 298.15 & 100000 & 0.44; 0.3 & 1096.4; 1095.79 & -0.609602; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:227` → `Han2012\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 298.15 & 100000 & 0.56; 0.3 & 1114.2; 1116.52 & 2.32049; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:228` → `Han2012\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 313.15 & 100000 & 0.1; 0.3 & 1025.3; 1022.73 & -2.56633; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:229` → `Han2012\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 313.15 & 100000 & 0.21; 0.3 & 1046.4; 1043.94 & -2.46011; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:230` → `Han2012\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 313.15 & 100000 & 0.32; 0.3 & 1066.9; 1065.01 & -1.88653; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:231` → `Han2012\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 313.15 & 100000 & 0.44; 0.3 & 1089.1; 1087.66 & -1.43622; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:232` → `Han2012\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 313.15 & 100000 & 0.56; 0.3 & 1106.8; 1107.84 & 1.04047; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:233` → `Han2012\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 323.15 & 100000 & 0.1; 0.3 & 1019.6; 1017.27 & -2.32532; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:234` → `Han2012\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 323.15 & 100000 & 0.21; 0.3 & 1041.2; 1038.24 & -2.96135; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:235` → `Han2012\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 323.15 & 100000 & 0.32; 0.3 & 1061.3; 1059.05 & -2.24863; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:236` → `Han2012\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 323.15 & 100000 & 0.44; 0.3 & 1083.8; 1081.36 & -2.43662; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:237` → `Han2012\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 323.15 & 100000 & 0.56; 0.3 & 1101.4; 1101.11 & -0.29455; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:238` → `Han2012\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 333.15 & 100000 & 0.1; 0.3 & 1013.8; 1011.32 & -2.48498; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:239` → `Han2012\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 333.15 & 100000 & 0.21; 0.3 & 1035.6; 1032.02 & -3.58149; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:240` → `Han2012\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 333.15 & 100000 & 0.32; 0.3 & 1055.6; 1052.55 & -3.04936; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:241` → `Han2012\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 333.15 & 100000 & 0.44; 0.3 & 1078.2; 1074.5 & -3.70084; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:242` → `Han2012\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 333.15 & 100000 & 0.56; 0.3 & 1095.7; 1093.72 & -1.97558; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:243` → `Han2012\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 343.15 & 100000 & 0.1; 0.3 & 1007.6; 1004.94 & -2.65696; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:244` → `Han2012\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 343.15 & 100000 & 0.21; 0.3 & 1029.7; 1025.37 & -4.32979; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:245` → `Han2012\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 343.15 & 100000 & 0.32; 0.3 & 1049.6; 1045.6 & -3.9961; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:246` → `Han2012\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 343.15 & 100000 & 0.44; 0.3 & 1072.3; 1067.16 & -5.13872; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:247` → `Han2012\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 343.15 & 100000 & 0.56; 0.3 & 1088.7; 1085.75 & -2.94877; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:248` → `Han2012\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 353.15 & 100000 & 0.1; 0.3 & 1000.2; 998.228 & -1.97188; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:249` → `Han2012\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 353.15 & 100000 & 0.21; 0.3 & 1023.4; 1018.36 & -5.03516; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:250` → `Han2012\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 353.15 & 100000 & 0.32; 0.3 & 1043.4; 1038.28 & -5.11722; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:251` → `Han2012\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 353.15 & 100000 & 0.44; 0.3 & 1066; 1059.41 & -6.58705; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:252` → `Han2012\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 353.15 & 100000 & 0.56; 0.3 & 1081.2; 1077.21 & -3.99147; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:253` → `Han2012\_\allowbreak{}density\_\allowbreak{}90C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 363.15 & 100000 & 0.1; 0.3 & 993.6; 991.224 & -2.37618; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:254` → `Han2012\_\allowbreak{}density\_\allowbreak{}90C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 363.15 & 100000 & 0.21; 0.3 & 1016.7; 1011.06 & -5.64321; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:255` → `Han2012\_\allowbreak{}density\_\allowbreak{}90C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 363.15 & 100000 & 0.32; 0.3 & 1036.7; 1030.64 & -6.05994; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:256` → `Han2012\_\allowbreak{}density\_\allowbreak{}90C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 363.15 & 100000 & 0.44; 0.3 & 1059.5; 1051.29 & -8.21114; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:257` → `Han2012\_\allowbreak{}density\_\allowbreak{}90C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 363.15 & 100000 & 0.56; 0.3 & 1074.9; 1068.1 & -6.80019; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:258` → `Han2012\_\allowbreak{}density\_\allowbreak{}100C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 373.15 & 700000 & 0.1; 0.3 & 986.5; 984.132 & -2.36771; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:259` → `Han2012\_\allowbreak{}density\_\allowbreak{}100C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 373.15 & 700000 & 0.21; 0.3 & 1009.2; 1003.66 & -5.54455; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:260` → `Han2012\_\allowbreak{}density\_\allowbreak{}100C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 373.15 & 700000 & 0.32; 0.3 & 1030.6; 1022.89 & -7.71202; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:261` → `Han2012\_\allowbreak{}density\_\allowbreak{}100C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 373.15 & 700000 & 0.44; 0.3 & 1054.5; 1042.98 & -11.5223; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:262` → `Han2012\_\allowbreak{}density\_\allowbreak{}100C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 373.15 & 700000 & 0.56; 0.3 & 1069.1; 1058.62 & -10.4827; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:263` → `Han2012\_\allowbreak{}density\_\allowbreak{}110C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 383.15 & 700000 & 0.1; 0.3 & 980.1; 976.665 & -3.4351; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:264` → `Han2012\_\allowbreak{}density\_\allowbreak{}110C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 383.15 & 700000 & 0.21; 0.3 & 1002.3; 995.855 & -6.44471; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:265` → `Han2012\_\allowbreak{}density\_\allowbreak{}110C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 383.15 & 700000 & 0.32; 0.3 & 1024.2; 1014.69 & -9.50581; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:266` → `Han2012\_\allowbreak{}density\_\allowbreak{}110C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 383.15 & 700000 & 0.44; 0.3 & 1048.2; 1034.08 & -14.1221; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:267` → `Han2012\_\allowbreak{}density\_\allowbreak{}110C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 383.15 & 700000 & 0.56; 0.3 & 1063.3; 1048.38 & -14.9188; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:268` → `Han2012\_\allowbreak{}density\_\allowbreak{}120C\_\allowbreak{}alpha0.10 & Han2012; non-fitted comparison & 393.15 & 700000 & 0.1; 0.3 & 973.7; 968.997 & -4.70277; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:269` → `Han2012\_\allowbreak{}density\_\allowbreak{}120C\_\allowbreak{}alpha0.21 & Han2012; non-fitted comparison & 393.15 & 700000 & 0.21; 0.3 & 995.7; 987.834 & -7.8663; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:270` → `Han2012\_\allowbreak{}density\_\allowbreak{}120C\_\allowbreak{}alpha0.32 & Han2012; non-fitted comparison & 393.15 & 700000 & 0.32; 0.3 & 1018.3; 1006.22 & -12.0778; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:271` → `Han2012\_\allowbreak{}density\_\allowbreak{}120C\_\allowbreak{}alpha0.44 & Han2012; non-fitted comparison & 393.15 & 700000 & 0.44; 0.3 & 1041.7; 1024.7 & -17.0025; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:272` → `Han2012\_\allowbreak{}density\_\allowbreak{}120C\_\allowbreak{}alpha0.56 & Han2012; non-fitted comparison & 393.15 & 700000 & 0.56; 0.3 & 1057.6; 1037.58 & -20.0176; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:273` → `Han2012\_\allowbreak{}density\_\allowbreak{}25C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 298.15 & 100000 & 0; 0.3 & 1010.9; 1010.04 & -0.857182; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:274` → `Han2012\_\allowbreak{}density\_\allowbreak{}30C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 303.15 & 100000 & 0; 0.3 & 1008.4; 1007.98 & -0.422679; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:275` → `Han2012\_\allowbreak{}density\_\allowbreak{}35C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 308.15 & 100000 & 0; 0.3 & 1006.2; 1005.73 & -0.469712; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:276` → `Han2012\_\allowbreak{}density\_\allowbreak{}40C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 313.15 & 100000 & 0; 0.3 & 1003.5; 1003.32 & -0.18061; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:277` → `Han2012\_\allowbreak{}density\_\allowbreak{}45C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 318.15 & 100000 & 0; 0.3 & 1001.1; 1000.76 & -0.33949; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:278` → `Han2012\_\allowbreak{}density\_\allowbreak{}50C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 323.15 & 100000 & 0; 0.3 & 998.1; 998.068 & -0.0321115; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:279` → `Han2012\_\allowbreak{}density\_\allowbreak{}55C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 328.15 & 100000 & 0; 0.3 & 995.5; 995.254 & -0.245738; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:280` → `Han2012\_\allowbreak{}density\_\allowbreak{}60C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 333.15 & 100000 & 0; 0.3 & 992.3; 992.331 & 0.0309879; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:281` → `Han2012\_\allowbreak{}density\_\allowbreak{}65C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 338.15 & 100000 & 0; 0.3 & 989.5; 989.308 & -0.191834; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:282` → `Han2012\_\allowbreak{}density\_\allowbreak{}70C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 343.15 & 100000 & 0; 0.3 & 986.1; 986.195 & 0.0947443; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:283` → `Han2012\_\allowbreak{}density\_\allowbreak{}75C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 348.15 & 100000 & 0; 0.3 & 983; 982.999 & -0.0013796; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:284` → `Han2012\_\allowbreak{}density\_\allowbreak{}80C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 353.15 & 100000 & 0; 0.3 & 979.4; 979.727 & 0.326733; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:285` → `Han2012\_\allowbreak{}density\_\allowbreak{}85C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 358.15 & 100000 & 0; 0.3 & 976.1; 976.385 & 0.285147; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:286` → `Han2012\_\allowbreak{}density\_\allowbreak{}90C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 363.15 & 100000 & 0; 0.3 & 972.5; 972.979 & 0.479128; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:287` → `Han2012\_\allowbreak{}density\_\allowbreak{}100C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 373.15 & 700000 & 0; 0.3 & 965.3; 966.147 & 0.846716; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:288` → `Han2012\_\allowbreak{}density\_\allowbreak{}110C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 383.15 & 700000 & 0; 0.3 & 957.4; 958.953 & 1.55317; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:289` → `Han2012\_\allowbreak{}density\_\allowbreak{}120C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 393.15 & 700000 & 0; 0.3 & 949.1; 951.568 & 2.46834; --; -- \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:293` → `\caption{All ten carbonate-share comparisons (different observables from the six fitted Jakobsen amount ratios). Corrected unloaded MEA mass fraction is 0.2714274817; model loading uses NMR. Historical-nine membership is provenance, not an exclusion. Source: VDRXENRB/XVFDEJM2, Tables A1--A2 p.9902 and Table 2 p.9896.}\label{tab:supplement-carbonate-share}\\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:301` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}009 & 293.15 & 0.09; 0.11 & 0.00934579 & 0.00249556 & 0.267025 & True \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:302` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}010 & 293.15 & 0.19; 0.21 & 0.0189573 & 0.00147617 & 0.0778682 & True \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:303` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}011 & 293.15 & 0.29; 0.29 & 0.0190476 & 0.000983695 & 0.051644 & True \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:304` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}012 & 293.15 & 0.25; 0.25 & 0.0212766 & 0.00115064 & 0.0540803 & True \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:305` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}013 & 293.15 & 0.37; 0.4 & 0.0269663 & 0.000720853 & 0.0267316 & True \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:306` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}017 & 313.15 & 0.09; 0.11 & 0.00952381 & 0.00136497 & 0.143322 & True \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:307` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}018 & 313.15 & 0.21; 0.21 & 0.118943 & 0.000752492 & 0.00632651 & False \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:308` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}019 & 313.15 & 0.27; 0.29 & 0.0137457 & 0.000592196 & 0.0430822 & True \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:309` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}020 & 313.15 & 0.26; 0.25 & 0.0148699 & 0.000615774 & 0.0414108 & True \\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:310` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}021 & 313.15 & 0.39; 0.4 & 0.0193424 & 0.000368059 & 0.0190287 & True \\`
+
+### supplement_correlations.tex
+
+- `docs/scientific/latex/tables/supplement_correlations.tex:72` → `\caption{A7 conditional correlations: ten free coordinates, rank ten, 297 degrees of freedom. Variance factor 1.002728983. Free-coordinate indices below follow: 0: MEACOO-–water kij; 1: HCO3-–water kij; 2: MEAH+–water kij temperature slope; 3: MEACOO- segment diameter; 4: R5 A; 5: R2 enthalpy shift; 6: MEA–water kij; 7: MEA–water kij temperature slope; 8: MEAH+ dispersion energy/\allowbreak{}k; 9: MEACOO- dispersion energy/\allowbreak{}k. Six active-bound coordinates and all conditional errors are in the coordinate table. This local calculation does not establish uniqueness or prediction intervals.}\label{tab:supplement-correlations}\\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:80` → `0 & 0 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:81` → `0 & 1 & 0.91128359 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:82` → `0 & 2 & 0.31076522 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:83` → `0 & 3 & -0.73659989 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:84` → `0 & 4 & -0.94953179 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:85` → `0 & 5 & 0.24394447 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:86` → `0 & 6 & -0.20180961 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:87` → `0 & 7 & -0.11840239 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:88` → `0 & 8 & 0.76713705 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:89` → `0 & 9 & -0.69161383 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:90` → `1 & 0 & 0.91128359 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:91` → `1 & 1 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:92` → `1 & 2 & 0.25286429 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:93` → `1 & 3 & -0.70037045 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:94` → `1 & 4 & -0.80336479 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:95` → `1 & 5 & 0.15258343 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:96` → `1 & 6 & -0.22443119 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:97` → `1 & 7 & -0.14833678 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:98` → `1 & 8 & 0.95660965 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:99` → `1 & 9 & -0.92468495 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:100` → `2 & 0 & 0.31076522 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:101` → `2 & 1 & 0.25286429 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:102` → `2 & 2 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:103` → `2 & 3 & -0.2205341 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:104` → `2 & 4 & -0.33587637 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:105` → `2 & 5 & 0.96715699 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:106` → `2 & 6 & 0.19634115 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:107` → `2 & 7 & 0.3136322 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:108` → `2 & 8 & 0.17359419 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:109` → `2 & 9 & -0.17171717 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:110` → `3 & 0 & -0.73659989 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:111` → `3 & 1 & -0.70037045 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:112` → `3 & 2 & -0.2205341 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:113` → `3 & 3 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:114` → `3 & 4 & 0.73204638 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:115` → `3 & 5 & -0.15227342 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:116` → `3 & 6 & 0.14909337 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:117` → `3 & 7 & 0.089657819 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:118` → `3 & 8 & -0.58122349 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:119` → `3 & 9 & 0.59086341 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:120` → `4 & 0 & -0.94953179 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:121` → `4 & 1 & -0.80336479 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:122` → `4 & 2 & -0.33587637 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:123` → `4 & 3 & 0.73204638 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:124` → `4 & 4 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:125` → `4 & 5 & -0.28656024 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:126` → `4 & 6 & 0.19831169 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:127` → `4 & 7 & 0.1081261 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:128` → `4 & 8 & -0.59581647 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:129` → `4 & 9 & 0.5723395 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:130` → `5 & 0 & 0.24394447 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:131` → `5 & 1 & 0.15258343 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:132` → `5 & 2 & 0.96715699 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:133` → `5 & 3 & -0.15227342 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:134` → `5 & 4 & -0.28656024 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:135` → `5 & 5 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:136` → `5 & 6 & 0.16089408 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:137` → `5 & 7 & 0.25571261 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:138` → `5 & 8 & 0.063784745 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:139` → `5 & 9 & -0.056331857 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:140` → `6 & 0 & -0.20180961 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:141` → `6 & 1 & -0.22443119 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:142` → `6 & 2 & 0.19634115 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:143` → `6 & 3 & 0.14909337 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:144` → `6 & 4 & 0.19831169 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:145` → `6 & 5 & 0.16089408 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:146` → `6 & 6 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:147` → `6 & 7 & 0.77832794 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:148` → `6 & 8 & -0.21190509 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:149` → `6 & 9 & 0.20210765 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:150` → `7 & 0 & -0.11840239 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:151` → `7 & 1 & -0.14833678 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:152` → `7 & 2 & 0.3136322 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:153` → `7 & 3 & 0.089657819 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:154` → `7 & 4 & 0.1081261 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:155` → `7 & 5 & 0.25571261 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:156` → `7 & 6 & 0.77832794 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:157` → `7 & 7 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:158` → `7 & 8 & -0.15252571 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:159` → `7 & 9 & 0.14480635 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:160` → `8 & 0 & 0.76713705 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:161` → `8 & 1 & 0.95660965 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:162` → `8 & 2 & 0.17359419 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:163` → `8 & 3 & -0.58122349 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:164` → `8 & 4 & -0.59581647 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:165` → `8 & 5 & 0.063784745 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:166` → `8 & 6 & -0.21190509 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:167` → `8 & 7 & -0.15252571 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:168` → `8 & 8 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:169` → `8 & 9 & -0.96625099 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:170` → `9 & 0 & -0.69161383 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:171` → `9 & 1 & -0.92468495 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:172` → `9 & 2 & -0.17171717 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:173` → `9 & 3 & 0.59086341 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:174` → `9 & 4 & 0.5723395 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:175` → `9 & 5 & -0.056331857 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:176` → `9 & 6 & 0.20210765 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:177` → `9 & 7 & 0.14480635 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:178` → `9 & 8 & -0.96625099 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:179` → `9 & 9 & 1 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:183` → `\caption{A7 conditional errors in the complete scientific-coordinate order, including six bound-active coordinates without symmetric SE. These are local sensitivities conditional on the stated weights, fixed inputs and bounds.}\label{tab:supplement-conditional-errors}\\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:191` → `MEACOO-–water kij & -0.0038632044 & 1 & 0.182038 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:192` → `MEAH+–water kij & -0.5 & 1 & bound; unavailable \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:193` → `HCO3-–water kij & 0.725321 & 1 & 1.26715 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:194` → `MEACOO-–MEAH+ kij & -1 & 1 & bound; unavailable \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:195` → `MEAH+–water kij temperature slope & -41.929641 & K & 60.2876 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:196` → `MEAH+ segment diameter & 5.35 & \AA & bound; unavailable \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:197` → `MEACOO- segment diameter & 4.86604 & \AA & 0.0794313 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:198` → `MEAH+ born diameter & 5 & \AA & bound; unavailable \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:199` → `MEACOO- born diameter & 5 & \AA & bound; unavailable \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:200` → `R5 A & 2831.681 & K & 172.434 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:201` → `R2 enthalpy shift & -1387.4047 & J/\allowbreak{}mol & 5292.47 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:202` → `R5 enthalpy shift & 10000 & J/\allowbreak{}mol & bound; unavailable \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:203` → `MEA–water kij & -0.089904823 & 1 & 0.00102441 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:204` → `MEA–water kij temperature slope & -8.0699134 & K & 1.80605 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:205` → `MEAH+ dispersion energy/\allowbreak{}k & 177.79505 & K & 47.9471 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:206` → `MEACOO- dispersion energy/\allowbreak{}k & 207.2746 & K & 83.7489 \\`
+
+### supplement_fits.tex
+
+- `docs/scientific/latex/tables/supplement_fits.tex:74` → `\caption{Predecessor-model F1--F6 with-heat study. Each fit retains its own target count and costs; F4/F5 include pool targets. These are different models, not A7 Born, pool or source-law controls. AARD order is pressure/species/heat. Coordinates follow in a separate table.}\label{tab:supplement-fits}\\`
+- `docs/scientific/latex/tables/supplement_fits.tex:82` → `F1 & 149 & 8.38039 & 21.9505 & 1.72582 & 32.0567 & 13.8148/\allowbreak{}7.89143/\allowbreak{}2.29839 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:83` → `F2 & 149 & 34.3552 & 22.9941 & 2.65875 & 60.0081 & 36.0678/\allowbreak{}8.44348/\allowbreak{}2.85411 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:84` → `F3 & 149 & 111.173 & 45.102 & 4.28006 & 160.555 & 80.2452/\allowbreak{}11.9813/\allowbreak{}3.5794 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:85` → `F4 & 167 & 8.75574 & 37.4081 & 1.45045 & 47.6143 & 13.3442/\allowbreak{}14.083/\allowbreak{}2.06831 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:86` → `F5 & 167 & 32.9802 & 30.9845 & 2.63711 & 66.6018 & 34.3375/\allowbreak{}12.1191/\allowbreak{}2.8115 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:87` → `F6 & 149 & 8.31679 & 22.2384 & 10.3466 & 40.9018 & 14.7318/\allowbreak{}7.98992/\allowbreak{}5.45252 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:91` → `\caption{Predecessor fitted coordinates: 0: MEACOO-–water kij; 1: MEAH+–water kij; 2: HCO3-–water kij; 3: MEACOO-–MEAH+ kij; 4: MEAH+–water kij temperature slope.}\label{tab:supplement-fits-coordinates}\\`
+- `docs/scientific/latex/tables/supplement_fits.tex:93` → `Fit & 0 & 1 & 2 & 3 & 4 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:96` → `Fit & 0 & 1 & 2 & 3 & 4 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:99` → `F1 & 0.2239503 & -0.31245311 & 0.5 & -0.96828675 & 107.96396 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:100` → `F2 & 0.091804431 & 0.15468258 & 0.5 & -1 & 106.99308 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:101` → `F3 & 0.077791972 & 0.12356323 & 0.5 & -1 & 63.80802 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:102` → `F4 & 0.13661884 & -0.19850897 & 0.24951675 & -0.9578785 & 111.41727 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:103` → `F5 & 0.073288268 & 0.16944399 & 0.5 & -1 & 117.95227 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:104` → `F6 & 0.24435717 & -0.39771824 & 0.5 & -0.75800201 & 599.14114 \\`
+
+### supplement_outside_fit.tex
+
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:72` → `\caption{A7 retained state cohorts. Fitted IDs are removed from each retained cohort; canonical and packet subsets still overlap and must not be pooled. Named high-temperature, transfer, Wagner and Matin-pool comparisons retain prior data access. Arcis is an acceptance check in the property table, not independent validation.}\label{tab:supplement-outside-fit}\\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:80` → `canonical & outside objective IDs; previously accessed & 112 & 24.2016 & -0.134065 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:81` → `packet & outside objective IDs; previously accessed & 32 & 20.7673 & 0.144056 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:82` → `transfer & outside objective IDs; previously accessed & 70 & 43.5194 & -0.0177807 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:83` → `wagner & outside objective IDs; previously accessed & 23 & 15.4469 & -0.158026 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:84` → `canonical 100-120 C & outside objective IDs; previously accessed & 54 & 24.3499 & -0.0195026 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:85` → `packet 100-120 C & outside objective IDs; previously accessed & 20 & 27.538 & 0.191152 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:86` → `canonical 100-120 C Jou1995 100 C & outside objective IDs; previously accessed & 10 & 23.5022 & 0.18856 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:87` → `canonical 100-120 C Jou1995 120 C & outside objective IDs; previously accessed & 10 & 31.5737 & 0.193744 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:88` → `canonical 100-120 C Mamun2005 120 C & outside objective IDs; previously accessed & 19 & 18.5405 & -0.207611 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:89` → `canonical 100-120 C Xu2011 100 C & outside objective IDs; previously accessed & 8 & 26.8979 & -0.254415 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:90` → `canonical 100-120 C Xu2011 120 C & outside objective IDs; previously accessed & 7 & 28.0976 & 0.15768 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:91` → `packet 100-120 C Jou1995 100 C & outside objective IDs; previously accessed & 10 & 23.5022 & 0.18856 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:92` → `packet 100-120 C Jou1995 120 C & outside objective IDs; previously accessed & 10 & 31.5737 & 0.193744 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:93` → `Wagner near 353.15 K & outside objective IDs; previously accessed & 11 & 22.2026 & -0.252026 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:94` → `Wagner near 392.15 K & outside objective IDs; previously accessed & 12 & 9.2542 & -0.0718582 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:95` → `transfer 15 wt\% & outside objective IDs; previously accessed & 33 & 29.507 & -0.20443 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:96` → `transfer 45 wt\% & outside objective IDs; previously accessed & 37 & 56.0168 & 0.14869 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:97` → `Matin 19 pools & outside objective IDs; previously accessed & 19 & 67.4808 & -1.26582 \\`
+
+### supplement_phase_family.tex
+
+- `docs/scientific/latex/tables/supplement_phase_family.tex:72` → `\caption{The 73 matched A6/A7 states on the A7 software build: 12/73 versus 0/73 resolved-descent points. Resolved counts are trial counts, not Gibbs changes. Blank minimum fields report no resolved minimum. Index 0 repeats the index-41 state with a rounded pressure; both are listed. A two-phase classification alone does not establish a liquid–liquid split. This finite search does not certify a continuous stable region.}\label{tab:supplement-phase-family}\\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:74` → `Index & T (K) & Loading (exact) & P (Pa, exact) & A6 & A7 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:77` → `Index & T (K) & Loading (exact) & P (Pa, exact) & A6 & A7 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:80` → `0 & 318.15 & 0.25557798094241313 & 5918.5286 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:81` → `1 & 313.15 & 1e-05 & 2412.7560274401717 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:82` → `2 & 313.15 & 1e-05 & 3860.409643904275 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:83` → `3 & 313.15 & 1e-05 & 4584.236452136326 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:84` → `4 & 318.15 & 1e-05 & 3607.956071980319 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:85` → `5 & 318.15 & 1e-05 & 5772.729715168511 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:86` → `6 & 318.15 & 1e-05 & 6855.116536762605 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:87` → `7 & 333.15 & 1e-05 & 8505.621860365041 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:88` → `8 & 333.15 & 1e-05 & 13608.994976584067 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:89` → `9 & 333.15 & 1e-05 & 16160.681534693578 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:90` → `10 & 313.15 & 0.05 & 2453.460424952099 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:91` → `11 & 313.15 & 0.05 & 3925.5366799233584 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:92` → `12 & 313.15 & 0.05 & 4661.574807408988 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:93` → `13 & 318.15 & 0.05 & 3625.273065583389 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:94` → `14 & 318.15 & 0.05 & 5800.436904933423 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:95` → `15 & 318.15 & 0.05 & 6888.018824608438 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:96` → `16 & 333.15 & 0.05 & 8513.375857142428 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:97` → `17 & 333.15 & 0.05 & 13621.401371427884 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:98` → `18 & 333.15 & 0.05 & 16175.414128570612 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:99` → `19 & 313.15 & 0.1 & 2493.232875577335 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:100` → `20 & 313.15 & 0.1 & 3989.1726009237364 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:101` → `21 & 313.15 & 0.1 & 4737.142463596936 & failed; trials 3; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:102` → `22 & 318.15 & 0.1 & 3643.3537775021746 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:103` → `23 & 318.15 & 0.1 & 5829.36604400348 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:104` → `24 & 318.15 & 0.1 & 6922.372177254131 & failed; trials 1; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:105` → `25 & 333.15 & 0.1 & 8529.819287400303 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:106` → `26 & 333.15 & 0.1 & 13647.710859840487 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:107` → `27 & 333.15 & 0.1 & 16206.656646060575 & failed; trials 1; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:108` → `28 & 313.15 & 0.2 & 2568.3981428732964 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:109` → `29 & 313.15 & 0.2 & 4109.437028597275 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:110` → `30 & 313.15 & 0.2 & 4879.9564714592625 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:111` → `31 & 318.15 & 0.2 & 3679.6896602151487 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:112` → `32 & 318.15 & 0.2 & 5887.503456344239 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:113` → `33 & 318.15 & 0.2 & 6991.410354408782 & failed; trials 3; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:114` → `34 & 333.15 & 0.2 & 8606.813482883337 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:115` → `35 & 333.15 & 0.2 & 13770.90157261334 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:116` → `36 & 333.15 & 0.2 & 16352.945617478339 & failed; trials 3; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:117` → `37 & 313.15 & 0.25557798094241313 & 2606.1297045711713 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:118` → `38 & 313.15 & 0.25557798094241313 & 4169.807527313874 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:119` → `39 & 313.15 & 0.25557798094241313 & 4951.646438685225 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:120` → `40 & 318.15 & 0.25557798094241313 & 3699.080380084851 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:121` → `41 & 318.15 & 0.25557798094241313 & 5918.528608135763 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:122` → `42 & 318.15 & 0.25557798094241313 & 7028.252722161217 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:123` → `43 & 333.15 & 0.25557798094241313 & 8730.744643878326 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:124` → `44 & 333.15 & 0.25557798094241313 & 13969.191430205323 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:125` → `45 & 333.15 & 0.25557798094241313 & 16588.414823368817 & failed; trials 2; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:126` → `46 & 313.15 & 0.3 & 2632.934653199548 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:127` → `47 & 313.15 & 0.3 & 4212.695445119277 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:128` → `48 & 313.15 & 0.3 & 5002.57584107914 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:129` → `49 & 318.15 & 0.3 & 3713.776788880621 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:130` → `50 & 318.15 & 0.3 & 5942.042862208994 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:131` → `51 & 318.15 & 0.3 & 7056.17589887318 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:132` → `52 & 333.15 & 0.3 & 8960.34335874687 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:133` → `53 & 333.15 & 0.3 & 14336.549373994992 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:134` → `54 & 333.15 & 0.3 & 17024.652381619053 & failed; trials 2; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:135` → `55 & 313.15 & 0.4 & 2674.2603096108387 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:136` → `56 & 313.15 & 0.4 & 4278.816495377342 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:137` → `57 & 313.15 & 0.4 & 5081.094588260593 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:138` → `58 & 318.15 & 0.4 & 3742.9774552205404 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:139` → `59 & 318.15 & 0.4 & 5988.763928352865 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:140` → `60 & 318.15 & 0.4 & 7111.657164919026 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:141` → `61 & 333.15 & 0.4 & 11467.27685838807 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:142` → `62 & 333.15 & 0.4 & 18347.642973420912 & failed; trials 2; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:143` → `63 & 333.15 & 0.4 & 21787.826030937333 & failed; trials 3; success True; failed 0 & passed-single-liquid; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:144` → `64 & 313.15 & 0.5 & 2664.0259082793073 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:145` → `65 & 313.15 & 0.5 & 4262.441453246892 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:146` → `66 & 313.15 & 0.5 & 5061.649225730684 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:147` → `67 & 318.15 & 0.5 & 3761.1431213212936 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:148` → `68 & 318.15 & 0.5 & 6017.82899411407 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:149` → `69 & 318.15 & 0.5 & 7146.171930510458 & passed-two-phase; trials 0; success True; failed 0 & passed-two-phase; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:150` → `70 & 333.15 & 0.5 & 38286.78424652173 & failed; trials 3; success True; failed 0 & passed-single-liquid; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:151` → `71 & 333.15 & 0.5 & 61258.854794434774 & failed; trials 3; success True; failed 0 & passed-single-liquid; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:152` → `72 & 333.15 & 0.5 & 72744.8900683913 & failed; trials 3; success True; failed 0 & passed-single-liquid; trials 0; success True; failed 0 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:156` → `\caption{Separately seeded A6 split solves, including failed attempts. Original Engine identity (not the same-wheel classification comparison): wheel SHA-256 d2f61e3a\allowbreak{}5961b859\allowbreak{}151fbe04\allowbreak{}87f4ab63\allowbreak{}3405b116\allowbreak{}20d9dd64\allowbreak{}682656a6\allowbreak{}8a110357. Gibbs differences are dimensionless G/RT; phase densities are mol/m3. Only successful split solves support the split comparison.}\label{tab:supplement-split-states}\\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:164` → `21 & positive-neutral-base & False & -1.541483289e-05 & -15.7739494 &  & unavailable: failed split \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:165` → `21 & near-pure-2 & True & -0.01888181089 & -15.7928158 & 28936.1; 1.82056; 22654 & L (liquid); V (vapor); L2 (liquid) \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:166` → `63 & positive-neutral-base & True & -2.110512844 & -2.110512844 & 49835.8; 27919.2 & L (liquid); L2 (liquid) \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:167` → `63 & near-pure-2 & False & -0.000139901731 & -0.000139901731 &  & unavailable: failed split \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:168` → `70 & positive-neutral-base & True & -3.249645552 & -3.249645552 & 51838; 29027.8 & L (liquid); L2 (liquid) \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:169` → `70 & near-pure-2 & True & -3.249645552 & -3.249645552 & 51838; 29027.8 & L (liquid); L2 (liquid) \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:173` → `\caption{A6 successful split phase amounts (mol), densities (mol/m3) and mole fractions in source order: CO2, MEA, water, MEAH+, carbamate, bicarbonate, carbonate, hydronium, hydroxide. Vapour rows list only their three supported neutral species (CO2, MEA, water); liquid rows list all nine. The same original Engine identity applies.}\label{tab:supplement-split-compositions}\\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:181` → `21 & near-pure-2 /\allowbreak{} L & 16.7699 & 28936.1 & 3.48722e-10; 0.330399; 0.612275; 0.0286653; 0.0281885; 0.000465392; 5.15445e-06; 5.15161e-11; 1.06487e-06 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:182` → `21 & near-pure-2 /\allowbreak{} V & 65.4076 & 1.82056 & 2.65393e-06; 0.00832746; 0.99167 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:183` → `21 & near-pure-2 /\allowbreak{} L2 & 4.5271 & 22654 & 9.23121e-10; 0.379219; 0.403357; 0.108713; 0.106357; 0.00235177; 2.01854e-06; 3.79157e-11; 3.81276e-07 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:184` → `63 & positive-neutral-base /\allowbreak{} L & 68.9281 & 49835.8 & 1.62718e-06; 0.0249904; 0.958308; 0.00835587; 0.00770816; 0.000623204; 1.20904e-05; 1.45566e-10; 3.32625e-07 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:185` → `63 & positive-neutral-base /\allowbreak{} L2 & 17.7768 & 27919.2 & 2.09336e-05; 0.0379672; 0.588927; 0.186542; 0.163607; 0.0229353; 4.06803e-08; 2.27064e-11; 2.62509e-09 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:186` → `70 & positive-neutral-base /\allowbreak{} L & 64.3792 & 51838 & 1.01632e-05; 0.00954194; 0.975827; 0.00731709; 0.00617633; 0.00111414; 1.32271e-05; 3.13872e-10; 1.6096e-07 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:187` → `70 & positive-neutral-base /\allowbreak{} L2 & 22.3292 & 29027.8 & 0.000146394; 0.0170612; 0.589539; 0.196627; 0.155618; 0.0410092; 2.32101e-08; 5.89452e-11; 7.94193e-10 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:188` → `70 & near-pure-2 /\allowbreak{} L & 64.3792 & 51838 & 1.01632e-05; 0.00954194; 0.975827; 0.00731709; 0.00617633; 0.00111414; 1.32271e-05; 3.13872e-10; 1.6096e-07 \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:189` → `70 & near-pure-2 /\allowbreak{} L2 & 22.3292 & 29027.8 & 0.000146394; 0.0170612; 0.589539; 0.196627; 0.155618; 0.0410092; 2.32101e-08; 5.89452e-11; 7.94193e-10 \\`
+
+### supplement_predecessor.tex
+
+- `docs/scientific/latex/tables/supplement_predecessor.tex:74` → `\caption{F1 predecessor versus A7. Common-subset identities, observations, units and effective residual scales/weights reconcile, with 47 pressures, 94 species and eight heats. F1 uses its original retained parameter and Engine identities; its 152-quantity wheel-transfer check does not qualify other results. Native F1 density uses eos\_density\_kg\_m3 without translation at 101325 Pa; A7 uses 100000 Pa (1325 Pa difference). Rows match temperature, loading and unloaded-solvent mass fraction exactly, not pressure. No pressure-density derivative is retained in these density records, so no magnitude bound is claimed. These Amundsen states exclude unmatched temperatures/loadings and other sources. Matched 68 of 68 F1 rows; the pressure basis is disclosed, not matched.}\label{tab:supplement-predecessor}\\`
+- `docs/scientific/latex/tables/supplement_predecessor.tex:76` → `Metric & n & F1 & A7 & Unit \\`
+- `docs/scientific/latex/tables/supplement_predecessor.tex:79` → `Metric & n & F1 & A7 & Unit \\`
+- `docs/scientific/latex/tables/supplement_predecessor.tex:82` → `Pressure AARD & 47 & 13.8148 & 11.8608 & \% \\`
+- `docs/scientific/latex/tables/supplement_predecessor.tex:83` → `Species AARD & 94 & 7.89143 & 7.10358 & \% \\`
+- `docs/scientific/latex/tables/supplement_predecessor.tex:84` → `Vinjarapu RMSE & 8 & 2.12657 & 1.83486 & kJ/\allowbreak{}mol CO2 \\`
+- `docs/scientific/latex/tables/supplement_predecessor.tex:85` → `Common-subset cost & 149 & 32.0567 & 23.866 & 1 \\`
+- `docs/scientific/latex/tables/supplement_predecessor.tex:86` → `Native F1 density matched AARD & 68 & 11.8433 & -- & \% \\`
+- `docs/scientific/latex/tables/supplement_predecessor.tex:87` → `A7 density matched AARD & 68 & -- & 0.490695 & \% \\`
+
+### supplement_source_aard.tex
+
+- `docs/scientific/latex/tables/supplement_source_aard.tex:72` → `\caption{A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapor water mole fraction. It does not combine quantities into an accuracy ranking. Costs sum disjoint fitted rows; quantity meanings and native units are in the objective table.}\label{tab:supplement-source-aard}\\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:80` → `Hilliard2008 & common subset & PartialPressure & 30 & 9.14056 & 2.27512 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:81` → `Jou1995 & common subset & PartialPressure & 17 & 16.6612 & 3.70829 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:82` → `Bottinger2008 & common subset & PhaseMoleFraction & 40 & 4.58652 & 2.48924 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:83` → `Matin2012 & common subset & PhaseMoleFraction & 54 & 8.96807 & 14.1798 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:84` → `vinjarapu2024 & common subset & AdditionEnthalpy & 8 & 1.87714 & 1.21347 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:85` → `Bottinger2008 & restored species & mole fraction & 4 & 3.71214 & 0.220532 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:86` → `Matin2012 & restored species & mole fraction & 3 & 16.0591 & 2.22976 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:87` → `Jakobsen2005 & Jakobsen & amount ratio & 6 & 17.4975 & 13.1171 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:88` → `kiepe & Kiepe & pressure & 39 & 2.66652 & 0.000679019 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:89` → `AMU & CO2-free density & phase density & 5 & 0.0279577 & 11.6112 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:90` → `cai1996 & Cai & temperature & 25 & 1.78864 & 39.9903 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:91` → `cai1996 & Cai & mole fraction & 25 & 0.0203799 & 51.9175 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:92` → `Amundsen2009 & loaded density & phase density & 15 & 0.174779 & 0.149934 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:93` → `Hartono2014 & loaded density & phase density & 32 & 0.178073 & 0.415817 \\`
+- `docs/scientific/latex/tables/supplement_source_aard.tex:94` → `Hilliard2008 & Cp & equilibrium isobaric heat capacity & 4 & 2.84634 & 5.38658 \\`
+
+## Figure points
+
+The five included figures remain unchanged. Full input hashes and output identities are in `docs/scientific/latex/figures/generated/provenance.json`. Each point is a retained CSV row; model values remain markers at measured states. The following keys map all source rows to file:line. Fitting membership also uses `fitted-rows.csv`.
+
+### Fig3
+
+- `canonical:vle_obs_0034 / vle_obs_0034-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:2`
+- `canonical:vle_obs_0035 / vle_obs_0035-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:3`
+- `canonical:vle_obs_0036 / vle_obs_0036-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:4`
+- `canonical:vle_obs_0037 / vle_obs_0037-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:5`
+- `canonical:vle_obs_0038 / vle_obs_0038-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:6`
+- `canonical:vle_obs_0039 / vle_obs_0039-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:7`
+- `canonical:vle_obs_0040 / vle_obs_0040-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:8`
+- `canonical:vle_obs_0041 / vle_obs_0041-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:9`
+- `canonical:vle_obs_0042 / vle_obs_0042-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:10`
+- `canonical:vle_obs_0043 / vle_obs_0043-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:11`
+- `canonical:vle_obs_0044 / vle_obs_0044-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:12`
+- `canonical:vle_obs_0045 / vle_obs_0045-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:13`
+- `canonical:vle_obs_0046 / vle_obs_0046-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:14`
+- `canonical:vle_obs_0047 / vle_obs_0047-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:15`
+- `canonical:vle_obs_0048 / vle_obs_0048-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:16`
+- `canonical:vle_obs_0049 / vle_obs_0049-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:17`
+- `canonical:vle_obs_0050 / vle_obs_0050-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:18`
+- `canonical:vle_obs_0051 / vle_obs_0051-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:19`
+- `canonical:vle_obs_0052 / vle_obs_0052-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:20`
+- `canonical:vle_obs_0053 / vle_obs_0053-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:21`
+- `canonical:vle_obs_0054 / vle_obs_0054-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:22`
+- `canonical:vle_obs_0055 / vle_obs_0055-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:23`
+- `canonical:vle_obs_0056 / vle_obs_0056-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:24`
+- `canonical:vle_obs_0057 / vle_obs_0057-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:25`
+- `canonical:vle_obs_0058 / vle_obs_0058-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:26`
+- `canonical:vle_obs_0059 / vle_obs_0059-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:27`
+- `canonical:vle_obs_0060 / vle_obs_0060-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:28`
+- `canonical:vle_obs_0061 / vle_obs_0061-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:29`
+- `canonical:vle_obs_0062 / vle_obs_0062-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:30`
+- `canonical:vle_obs_0063 / vle_obs_0063-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:31`
+- `canonical:vle_obs_0064 / vle_obs_0064-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:32`
+- `canonical:vle_obs_0065 / vle_obs_0065-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:33`
+- `canonical:vle_obs_0066 / vle_obs_0066-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:34`
+- `canonical:vle_obs_0067 / vle_obs_0067-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:35`
+- `canonical:vle_obs_0068 / vle_obs_0068-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:36`
+- `canonical:vle_obs_0069 / vle_obs_0069-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:37`
+- `canonical:vle_obs_0119 / vle_obs_0119-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:38`
+- `canonical:vle_obs_0120 / vle_obs_0120-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:39`
+- `canonical:vle_obs_0121 / vle_obs_0121-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:40`
+- `canonical:vle_obs_0122 / vle_obs_0122-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:41`
+- `canonical:vle_obs_0123 / vle_obs_0123-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:42`
+- `canonical:vle_obs_0124 / vle_obs_0124-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:43`
+- `canonical:vle_obs_0125 / vle_obs_0125-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:44`
+- `canonical:vle_obs_0126 / vle_obs_0126-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:45`
+- `canonical:vle_obs_0127 / vle_obs_0127-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:46`
+- `canonical:vle_obs_0128 / vle_obs_0128-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:47`
+- `canonical:vle_obs_0129 / vle_obs_0129-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:48`
+- `canonical:vle_obs_0130 / vle_obs_0130-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:49`
+- `canonical:vle_obs_0131 / vle_obs_0131-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:50`
+- `canonical:vle_obs_0132 / vle_obs_0132-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:51`
+- `canonical:vle_obs_0133 / vle_obs_0133-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:52`
+- `canonical:vle_obs_0134 / vle_obs_0134-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:53`
+- `canonical:vle_obs_0135 / vle_obs_0135-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:54`
+- `canonical:vle_obs_0136 / vle_obs_0136-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:55`
+- `canonical:vle_obs_0137 / vle_obs_0137-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:56`
+- `canonical:vle_obs_0138 / vle_obs_0138-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:57`
+- `canonical:vle_obs_0139 / vle_obs_0139-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:58`
+- `canonical:vle_obs_0140 / vle_obs_0140-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:59`
+- `canonical:vle_obs_0141 / vle_obs_0141-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:60`
+- `canonical:vle_obs_0142 / vle_obs_0142-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:61`
+- `canonical:vle_obs_0143 / vle_obs_0143-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:62`
+- `canonical:vle_obs_0144 / vle_obs_0144-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:63`
+- `canonical:vle_obs_0145 / vle_obs_0145-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:64`
+- `canonical:vle_obs_0146 / vle_obs_0146-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:65`
+- `canonical:vle_obs_0147 / vle_obs_0147-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:66`
+- `canonical:vle_obs_0148 / vle_obs_0148-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:67`
+- `canonical:vle_obs_0149 / vle_obs_0149-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:68`
+- `canonical:vle_obs_0162 / vle_obs_0162-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:69`
+- `canonical:vle_obs_0163 / vle_obs_0163-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:70`
+- `canonical:vle_obs_0164 / vle_obs_0164-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:71`
+- `canonical:vle_obs_0165 / vle_obs_0165-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:72`
+- `canonical:vle_obs_0166 / vle_obs_0166-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:73`
+- `canonical:vle_obs_0167 / vle_obs_0167-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:74`
+- `canonical:vle_obs_0168 / vle_obs_0168-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:75`
+- `canonical:vle_obs_0169 / vle_obs_0169-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:76`
+- `canonical:vle_obs_0170 / vle_obs_0170-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:77`
+- `canonical:vle_obs_0171 / vle_obs_0171-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:78`
+- `canonical:vle_obs_0186 / vle_obs_0186-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:79`
+- `canonical:vle_obs_0187 / vle_obs_0187-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:80`
+- `canonical:vle_obs_0188 / vle_obs_0188-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:81`
+- `canonical:vle_obs_0189 / vle_obs_0189-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:82`
+- `canonical:vle_obs_0190 / vle_obs_0190-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:83`
+- `canonical:vle_obs_0191 / vle_obs_0191-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:84`
+- `canonical:vle_obs_0192 / vle_obs_0192-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:85`
+- `canonical:vle_obs_0193 / vle_obs_0193-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:86`
+- `canonical:vle_obs_0194 / vle_obs_0194-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:87`
+- `canonical:vle_obs_0195 / vle_obs_0195-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:88`
+- `canonical:vle_obs_0196 / vle_obs_0196-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:89`
+- `canonical:vle_obs_0197 / vle_obs_0197-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:90`
+- `canonical:vle_obs_0198 / vle_obs_0198-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:91`
+- `canonical:vle_obs_0199 / vle_obs_0199-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:92`
+- `canonical:vle_obs_0200 / vle_obs_0200-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:93`
+- `canonical:vle_obs_0201 / vle_obs_0201-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:94`
+- `canonical:vle_obs_0202 / vle_obs_0202-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:95`
+- `canonical:vle_obs_0203 / vle_obs_0203-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:96`
+- `canonical:vle_obs_0204 / vle_obs_0204-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:97`
+- `canonical:vle_obs_0205 / vle_obs_0205-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:98`
+- `canonical:vle_obs_0206 / vle_obs_0206-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:99`
+- `canonical:vle_obs_0207 / vle_obs_0207-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:100`
+- `canonical:vle_obs_0208 / vle_obs_0208-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:101`
+- `canonical:vle_obs_0209 / vle_obs_0209-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:102`
+- `canonical:vle_obs_0210 / vle_obs_0210-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:103`
+- `canonical:vle_obs_0211 / vle_obs_0211-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:104`
+- `canonical:vle_obs_0212 / vle_obs_0212-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:105`
+- `canonical:vle_obs_0213 / vle_obs_0213-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:106`
+- `canonical:vle_obs_0214 / vle_obs_0214-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:107`
+- `canonical:vle_obs_0215 / vle_obs_0215-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:108`
+- `canonical:vle_obs_0216 / vle_obs_0216-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:109`
+- `canonical:vle_obs_0217 / vle_obs_0217-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:110`
+- `canonical:vle_obs_0218 / vle_obs_0218-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:111`
+- `canonical:vle_obs_0219 / vle_obs_0219-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:112`
+- `canonical:vle_obs_0220 / vle_obs_0220-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:113`
+- `canonical:vle_obs_0221 / vle_obs_0221-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:114`
+- `canonical:vle_obs_0222 / vle_obs_0222-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:115`
+- `canonical:vle_obs_0223 / vle_obs_0223-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:116`
+- `canonical:vle_obs_0224 / vle_obs_0224-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:117`
+- `canonical:vle_obs_0225 / vle_obs_0225-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:118`
+- `canonical:vle_obs_0226 / vle_obs_0226-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:119`
+- `canonical:vle_obs_0227 / vle_obs_0227-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:120`
+- `canonical:vle_obs_0228 / vle_obs_0228-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:121`
+- `canonical:vle_obs_0229 / vle_obs_0229-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:122`
+- `canonical:vle_obs_0230 / vle_obs_0230-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:123`
+- `canonical:vle_obs_0231 / vle_obs_0231-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:124`
+- `canonical:vle_obs_0232 / vle_obs_0232-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:125`
+- `canonical:vle_obs_0233 / vle_obs_0233-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:126`
+- `canonical:vle_obs_0246 / vle_obs_0246-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:127`
+- `canonical:vle_obs_0247 / vle_obs_0247-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:128`
+- `canonical:vle_obs_0248 / vle_obs_0248-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:129`
+- `canonical:vle_obs_0249 / vle_obs_0249-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:130`
+- `canonical:vle_obs_0250 / vle_obs_0250-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:131`
+- `canonical:vle_obs_0251 / vle_obs_0251-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:132`
+- `canonical:vle_obs_0252 / vle_obs_0252-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:133`
+- `canonical:vle_obs_0253 / vle_obs_0253-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:134`
+- `canonical:vle_obs_0254 / vle_obs_0254-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:135`
+- `canonical:vle_obs_0255 / vle_obs_0255-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:136`
+- `canonical:vle_obs_0256 / vle_obs_0256-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:137`
+- `canonical:vle_obs_0257 / vle_obs_0257-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:138`
+- `canonical:vle_obs_0258 / vle_obs_0258-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:139`
+- `canonical:vle_obs_0259 / vle_obs_0259-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:140`
+- `canonical:vle_obs_0260 / vle_obs_0260-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:141`
+- `canonical:vle_obs_0261 / vle_obs_0261-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:142`
+- `canonical:vle_obs_0262 / vle_obs_0262-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:143`
+- `canonical:vle_obs_0263 / vle_obs_0263-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:144`
+- `canonical:vle_obs_0264 / vle_obs_0264-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:145`
+- `canonical:vle_obs_0265 / vle_obs_0265-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:146`
+- `canonical:vle_obs_0266 / vle_obs_0266-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:147`
+- `canonical:vle_obs_0267 / vle_obs_0267-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:148`
+- `canonical:vle_obs_0268 / vle_obs_0268-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:149`
+- `canonical:vle_obs_0269 / vle_obs_0269-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:150`
+- `canonical:vle_obs_0270 / vle_obs_0270-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:151`
+- `canonical:vle_obs_0271 / vle_obs_0271-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:152`
+- `canonical:vle_obs_0272 / vle_obs_0272-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:153`
+- `canonical:vle_obs_0279 / vle_obs_0279-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:154`
+- `canonical:vle_obs_0280 / vle_obs_0280-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:155`
+- `canonical:vle_obs_0281 / vle_obs_0281-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:156`
+- `canonical:vle_obs_0282 / vle_obs_0282-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:157`
+- `canonical:vle_obs_0283 / vle_obs_0283-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:158`
+- `canonical:vle_obs_0284 / vle_obs_0284-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:159`
+- `canonical:vle_obs_0285 / vle_obs_0285-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/canonical-pressure.csv:160`
+
+### Fig3 Wagner
+
+- `Wagner2013:csv-row-37 / Wagner2013:csv-row-37-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:2`
+- `Wagner2013:csv-row-38 / Wagner2013:csv-row-38-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:3`
+- `Wagner2013:csv-row-39 / Wagner2013:csv-row-39-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:4`
+- `Wagner2013:csv-row-40 / Wagner2013:csv-row-40-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:5`
+- `Wagner2013:csv-row-41 / Wagner2013:csv-row-41-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:6`
+- `Wagner2013:csv-row-42 / Wagner2013:csv-row-42-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:7`
+- `Wagner2013:csv-row-43 / Wagner2013:csv-row-43-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:8`
+- `Wagner2013:csv-row-44 / Wagner2013:csv-row-44-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:9`
+- `Wagner2013:csv-row-45 / Wagner2013:csv-row-45-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:10`
+- `Wagner2013:csv-row-46 / Wagner2013:csv-row-46-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:11`
+- `Wagner2013:csv-row-47 / Wagner2013:csv-row-47-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:12`
+- `Wagner2013:csv-row-48 / Wagner2013:csv-row-48-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:13`
+- `Wagner2013:csv-row-49 / Wagner2013:csv-row-49-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:14`
+- `Wagner2013:csv-row-50 / Wagner2013:csv-row-50-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:15`
+- `Wagner2013:csv-row-51 / Wagner2013:csv-row-51-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:16`
+- `Wagner2013:csv-row-52 / Wagner2013:csv-row-52-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:17`
+- `Wagner2013:csv-row-53 / Wagner2013:csv-row-53-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:18`
+- `Wagner2013:csv-row-54 / Wagner2013:csv-row-54-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:19`
+- `Wagner2013:csv-row-55 / Wagner2013:csv-row-55-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:20`
+- `Wagner2013:csv-row-56 / Wagner2013:csv-row-56-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:21`
+- `Wagner2013:csv-row-57 / Wagner2013:csv-row-57-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:22`
+- `Wagner2013:csv-row-58 / Wagner2013:csv-row-58-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:23`
+- `Wagner2013:csv-row-59 / Wagner2013:csv-row-59-pco2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/wagner-pressure.csv:24`
+
+### Fig4
+
+- `Bottinger2008_state_030 / Bottinger2008_state_030::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:2`
+- `Bottinger2008_state_030 / Bottinger2008_state_030::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:3`
+- `Bottinger2008_state_031 / Bottinger2008_state_031::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:4`
+- `Bottinger2008_state_031 / Bottinger2008_state_031::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:5`
+- `Bottinger2008_state_032 / Bottinger2008_state_032::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:6`
+- `Bottinger2008_state_032 / Bottinger2008_state_032::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:7`
+- `Bottinger2008_state_033 / Bottinger2008_state_033::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:8`
+- `Bottinger2008_state_033 / Bottinger2008_state_033::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:9`
+- `Bottinger2008_state_034 / Bottinger2008_state_034::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:10`
+- `Bottinger2008_state_034 / Bottinger2008_state_034::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:11`
+- `Bottinger2008_state_035 / Bottinger2008_state_035::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:12`
+- `Bottinger2008_state_035 / Bottinger2008_state_035::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:13`
+- `Bottinger2008_state_042 / Bottinger2008_state_042::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:14`
+- `Bottinger2008_state_042 / Bottinger2008_state_042::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:15`
+- `Bottinger2008_state_043 / Bottinger2008_state_043::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:16`
+- `Bottinger2008_state_043 / Bottinger2008_state_043::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:17`
+- `Bottinger2008_state_044 / Bottinger2008_state_044::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:18`
+- `Bottinger2008_state_044 / Bottinger2008_state_044::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:19`
+- `Bottinger2008_state_045 / Bottinger2008_state_045::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:20`
+- `Bottinger2008_state_045 / Bottinger2008_state_045::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:21`
+- `Bottinger2008_state_046 / Bottinger2008_state_046::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:22`
+- `Bottinger2008_state_046 / Bottinger2008_state_046::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:23`
+- `Bottinger2008_state_047 / Bottinger2008_state_047::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:24`
+- `Bottinger2008_state_047 / Bottinger2008_state_047::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:25`
+- `Bottinger2008_state_048 / Bottinger2008_state_048::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:26`
+- `Bottinger2008_state_048 / Bottinger2008_state_048::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:27`
+- `Bottinger2008_state_049 / Bottinger2008_state_049::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:28`
+- `Bottinger2008_state_049 / Bottinger2008_state_049::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:29`
+- `Bottinger2008_state_049 / Bottinger2008_state_049::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:30`
+- `Bottinger2008_state_050 / Bottinger2008_state_050::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:31`
+- `Bottinger2008_state_050 / Bottinger2008_state_050::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:32`
+- `Bottinger2008_state_050 / Bottinger2008_state_050::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:33`
+- `Bottinger2008_state_055 / Bottinger2008_state_055::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:34`
+- `Bottinger2008_state_055 / Bottinger2008_state_055::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:35`
+- `Bottinger2008_state_056 / Bottinger2008_state_056::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:36`
+- `Bottinger2008_state_056 / Bottinger2008_state_056::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:37`
+- `Bottinger2008_state_057 / Bottinger2008_state_057::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:38`
+- `Bottinger2008_state_057 / Bottinger2008_state_057::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:39`
+- `Bottinger2008_state_058 / Bottinger2008_state_058::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:40`
+- `Bottinger2008_state_058 / Bottinger2008_state_058::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:41`
+- `Bottinger2008_state_058 / Bottinger2008_state_058::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:42`
+- `Bottinger2008_state_059 / Bottinger2008_state_059::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:43`
+- `Bottinger2008_state_059 / Bottinger2008_state_059::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:44`
+- `Bottinger2008_state_059 / Bottinger2008_state_059::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:45`
+- `Bottinger2008_state_063 / Bottinger2008_state_063::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:46`
+- `Bottinger2008_state_063 / Bottinger2008_state_063::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:47`
+- `Bottinger2008_state_064 / Bottinger2008_state_064::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:48`
+- `Bottinger2008_state_064 / Bottinger2008_state_064::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:49`
+- `Bottinger2008_state_065 / Bottinger2008_state_065::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:50`
+- `Bottinger2008_state_065 / Bottinger2008_state_065::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:51`
+- `Bottinger2008_state_066 / Bottinger2008_state_066::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:52`
+- `Bottinger2008_state_066 / Bottinger2008_state_066::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:53`
+- `Bottinger2008_state_067 / Bottinger2008_state_067::MEA + MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:54`
+- `Bottinger2008_state_067 / Bottinger2008_state_067::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:55`
+- `Bottinger2008_state_067 / Bottinger2008_state_067::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:56`
+- `Matin2012_state_001 / Matin2012_state_001::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:57`
+- `Matin2012_state_001 / Matin2012_state_001::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:58`
+- `Matin2012_state_001 / Matin2012_state_001::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:59`
+- `Matin2012_state_001 / Matin2012_state_001::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:60`
+- `Matin2012_state_002 / Matin2012_state_002::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:61`
+- `Matin2012_state_002 / Matin2012_state_002::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:62`
+- `Matin2012_state_002 / Matin2012_state_002::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:63`
+- `Matin2012_state_002 / Matin2012_state_002::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:64`
+- `Matin2012_state_003 / Matin2012_state_003::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:65`
+- `Matin2012_state_003 / Matin2012_state_003::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:66`
+- `Matin2012_state_003 / Matin2012_state_003::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:67`
+- `Matin2012_state_003 / Matin2012_state_003::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:68`
+- `Matin2012_state_004 / Matin2012_state_004::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:69`
+- `Matin2012_state_004 / Matin2012_state_004::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:70`
+- `Matin2012_state_004 / Matin2012_state_004::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:71`
+- `Matin2012_state_004 / Matin2012_state_004::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:72`
+- `Matin2012_state_005 / Matin2012_state_005::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:73`
+- `Matin2012_state_005 / Matin2012_state_005::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:74`
+- `Matin2012_state_005 / Matin2012_state_005::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:75`
+- `Matin2012_state_005 / Matin2012_state_005::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:76`
+- `Matin2012_state_006 / Matin2012_state_006::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:77`
+- `Matin2012_state_006 / Matin2012_state_006::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:78`
+- `Matin2012_state_006 / Matin2012_state_006::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:79`
+- `Matin2012_state_006 / Matin2012_state_006::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:80`
+- `Matin2012_state_007 / Matin2012_state_007::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:81`
+- `Matin2012_state_007 / Matin2012_state_007::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:82`
+- `Matin2012_state_007 / Matin2012_state_007::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:83`
+- `Matin2012_state_007 / Matin2012_state_007::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:84`
+- `Matin2012_state_008 / Matin2012_state_008::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:85`
+- `Matin2012_state_008 / Matin2012_state_008::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:86`
+- `Matin2012_state_008 / Matin2012_state_008::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:87`
+- `Matin2012_state_008 / Matin2012_state_008::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:88`
+- `Matin2012_state_009 / Matin2012_state_009::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:89`
+- `Matin2012_state_009 / Matin2012_state_009::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:90`
+- `Matin2012_state_009 / Matin2012_state_009::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:91`
+- `Matin2012_state_009 / Matin2012_state_009::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:92`
+- `Matin2012_state_010 / Matin2012_state_010::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:93`
+- `Matin2012_state_010 / Matin2012_state_010::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:94`
+- `Matin2012_state_010 / Matin2012_state_010::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:95`
+- `Matin2012_state_010 / Matin2012_state_010::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:96`
+- `Matin2012_state_011 / Matin2012_state_011::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:97`
+- `Matin2012_state_011 / Matin2012_state_011::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:98`
+- `Matin2012_state_011 / Matin2012_state_011::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:99`
+- `Matin2012_state_011 / Matin2012_state_011::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:100`
+- `Matin2012_state_012 / Matin2012_state_012::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:101`
+- `Matin2012_state_012 / Matin2012_state_012::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:102`
+- `Matin2012_state_012 / Matin2012_state_012::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:103`
+- `Matin2012_state_012 / Matin2012_state_012::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:104`
+- `Matin2012_state_013 / Matin2012_state_013::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:105`
+- `Matin2012_state_013 / Matin2012_state_013::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:106`
+- `Matin2012_state_013 / Matin2012_state_013::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:107`
+- `Matin2012_state_013 / Matin2012_state_013::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:108`
+- `Matin2012_state_014 / Matin2012_state_014::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:109`
+- `Matin2012_state_014 / Matin2012_state_014::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:110`
+- `Matin2012_state_014 / Matin2012_state_014::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:111`
+- `Matin2012_state_014 / Matin2012_state_014::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:112`
+- `Matin2012_state_015 / Matin2012_state_015::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:113`
+- `Matin2012_state_015 / Matin2012_state_015::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:114`
+- `Matin2012_state_015 / Matin2012_state_015::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:115`
+- `Matin2012_state_015 / Matin2012_state_015::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:116`
+- `Matin2012_state_016 / Matin2012_state_016::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:117`
+- `Matin2012_state_016 / Matin2012_state_016::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:118`
+- `Matin2012_state_016 / Matin2012_state_016::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:119`
+- `Matin2012_state_016 / Matin2012_state_016::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:120`
+- `Matin2012_state_017 / Matin2012_state_017::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:121`
+- `Matin2012_state_017 / Matin2012_state_017::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:122`
+- `Matin2012_state_017 / Matin2012_state_017::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:123`
+- `Matin2012_state_017 / Matin2012_state_017::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:124`
+- `Matin2012_state_018 / Matin2012_state_018::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:125`
+- `Matin2012_state_018 / Matin2012_state_018::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:126`
+- `Matin2012_state_018 / Matin2012_state_018::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:127`
+- `Matin2012_state_018 / Matin2012_state_018::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:128`
+- `Matin2012_state_019 / Matin2012_state_019::MEA` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:129`
+- `Matin2012_state_019 / Matin2012_state_019::MEAH+` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:130`
+- `Matin2012_state_019 / Matin2012_state_019::MEACOO-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:131`
+- `Matin2012_state_019 / Matin2012_state_019::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/species-figure-data.csv:132`
+
+### Fig4 Matin pool
+
+- `Matin2012_state_001 / Matin2012_state_001::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:2`
+- `Matin2012_state_002 / Matin2012_state_002::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:3`
+- `Matin2012_state_003 / Matin2012_state_003::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:4`
+- `Matin2012_state_004 / Matin2012_state_004::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:5`
+- `Matin2012_state_005 / Matin2012_state_005::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:6`
+- `Matin2012_state_006 / Matin2012_state_006::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:7`
+- `Matin2012_state_007 / Matin2012_state_007::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:8`
+- `Matin2012_state_008 / Matin2012_state_008::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:9`
+- `Matin2012_state_009 / Matin2012_state_009::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:10`
+- `Matin2012_state_010 / Matin2012_state_010::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:11`
+- `Matin2012_state_011 / Matin2012_state_011::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:12`
+- `Matin2012_state_012 / Matin2012_state_012::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:13`
+- `Matin2012_state_013 / Matin2012_state_013::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:14`
+- `Matin2012_state_014 / Matin2012_state_014::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:15`
+- `Matin2012_state_015 / Matin2012_state_015::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:16`
+- `Matin2012_state_016 / Matin2012_state_016::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:17`
+- `Matin2012_state_017 / Matin2012_state_017::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:18`
+- `Matin2012_state_018 / Matin2012_state_018::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:19`
+- `Matin2012_state_019 / Matin2012_state_019::HCO3-` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/pool-figure-data.csv:20`
+
+### Fig5
+
+- `vinjarapu2024_source_table4_01` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:2`
+- `vinjarapu2024_source_table4_02` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:3`
+- `vinjarapu2024_source_table4_03` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:4`
+- `vinjarapu2024_source_table4_04` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:5`
+- `vinjarapu2024_source_table4_05` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:6`
+- `vinjarapu2024_source_table4_06` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:7`
+- `vinjarapu2024_source_table4_07` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:8`
+- `vinjarapu2024_source_table4_08` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:9`
+- `10.1021/je2002946/table5/T322.5K/p0.51MPa/row01` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:10`
+- `10.1021/je2002946/table5/T322.5K/p0.51MPa/row02` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:11`
+- `10.1021/je2002946/table5/T322.5K/p0.51MPa/row03` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:12`
+- `10.1021/je2002946/table5/T322.5K/p0.51MPa/row04` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:13`
+- `10.1021/je2002946/table5/T322.5K/p0.51MPa/row05` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:14`
+- `10.1021/je2002946/table5/T322.5K/p0.51MPa/row06` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:15`
+- `10.1021/je2002946/table5/T322.5K/p0.51MPa/row07` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:16`
+- `10.1021/je2002946/table5/T322.5K/p0.51MPa/row08` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:17`
+- `10.1021/je2002946/table5/T322.5K/p1.03MPa/row01` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:18`
+- `10.1021/je2002946/table5/T322.5K/p1.03MPa/row02` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:19`
+- `10.1021/je2002946/table5/T322.5K/p1.03MPa/row03` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:20`
+- `10.1021/je2002946/table5/T322.5K/p1.03MPa/row04` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:21`
+- `10.1021/je2002946/table5/T322.5K/p1.03MPa/row05` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:22`
+- `10.1021/je2002946/table5/T322.5K/p1.03MPa/row06` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv:23`
+
+### Fig2 A7
+
+- `Amundsen2009_state_001` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:2`
+- `Amundsen2009_state_002` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:3`
+- `Amundsen2009_state_003` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:4`
+- `Amundsen2009_state_004` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:5`
+- `Amundsen2009_state_005` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:6`
+- `Amundsen2009_state_006` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:7`
+- `Amundsen2009_state_007` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:8`
+- `Amundsen2009_state_008` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:9`
+- `Amundsen2009_state_009` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:10`
+- `Amundsen2009_state_010` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:11`
+- `Amundsen2009_state_011` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:12`
+- `Amundsen2009_state_012` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:13`
+- `Amundsen2009_state_013` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:14`
+- `Amundsen2009_state_014` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:15`
+- `Amundsen2009_state_015` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:16`
+- `Amundsen2009_state_016` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:17`
+- `Amundsen2009_state_017` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:18`
+- `Amundsen2009_state_018` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:19`
+- `Amundsen2009_state_019` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:20`
+- `Amundsen2009_state_020` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:21`
+- `Amundsen2009_state_021` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:22`
+- `Amundsen2009_state_022` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:23`
+- `Amundsen2009_state_023` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:24`
+- `Amundsen2009_state_024` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:25`
+- `Amundsen2009_state_025` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:26`
+- `Amundsen2009_state_026` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:27`
+- `Amundsen2009_state_027` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:28`
+- `Amundsen2009_state_028` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:29`
+- `Amundsen2009_state_029` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:30`
+- `Amundsen2009_state_030` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:31`
+- `Amundsen2009_state_031` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:32`
+- `Amundsen2009_state_032` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:33`
+- `Amundsen2009_state_033` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:34`
+- `Amundsen2009_state_034` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:35`
+- `Amundsen2009_state_035` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:36`
+- `Amundsen2009_state_036` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:37`
+- `Amundsen2009_state_037` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:38`
+- `Amundsen2009_state_038` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:39`
+- `Amundsen2009_state_039` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:40`
+- `Amundsen2009_state_040` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:41`
+- `Amundsen2009_state_041` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:42`
+- `Amundsen2009_state_042` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:43`
+- `Amundsen2009_state_043` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:44`
+- `Amundsen2009_state_044` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:45`
+- `Amundsen2009_state_045` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:46`
+- `Amundsen2009_state_046` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:47`
+- `Amundsen2009_state_047` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:48`
+- `Amundsen2009_state_048` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:49`
+- `Amundsen2009_state_049` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:50`
+- `Amundsen2009_state_050` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:51`
+- `Amundsen2009_state_051` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:52`
+- `Amundsen2009_state_052` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:53`
+- `Amundsen2009_state_053` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:54`
+- `Amundsen2009_state_054` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:55`
+- `Amundsen2009_state_055` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:56`
+- `Amundsen2009_state_056` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:57`
+- `Amundsen2009_state_057` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:58`
+- `Amundsen2009_state_058` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:59`
+- `Amundsen2009_state_059` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:60`
+- `Amundsen2009_state_060` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:61`
+- `Amundsen2009_state_061` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:62`
+- `Amundsen2009_state_062` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:63`
+- `Amundsen2009_state_063` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:64`
+- `Amundsen2009_state_064` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:65`
+- `Amundsen2009_state_065` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:66`
+- `Amundsen2009_state_066` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:67`
+- `Amundsen2009_state_067` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:68`
+- `Amundsen2009_state_068` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:69`
+- `Amundsen2009_state_069` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:70`
+- `Amundsen2009_state_070` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:71`
+- `Amundsen2009_state_071` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:72`
+- `Amundsen2009_state_072` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:73`
+- `Amundsen2009_state_073` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:74`
+- `Amundsen2009_state_074` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:75`
+- `Amundsen2009_state_075` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:76`
+- `Amundsen2009_state_076` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:77`
+- `Amundsen2009_state_077` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:78`
+- `Amundsen2009_state_078` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:79`
+- `Amundsen2009_state_079` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:80`
+- `Amundsen2009_state_080` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:81`
+- `Amundsen2009_state_081` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:82`
+- `Amundsen2009_state_082` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:83`
+- `Amundsen2009_state_083` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:84`
+- `Amundsen2009_state_084` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:85`
+- `Amundsen2009_state_085` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:86`
+- `Amundsen2009_state_086` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:87`
+- `Amundsen2009_state_087` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:88`
+- `Amundsen2009_state_088` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:89`
+- `Amundsen2009_state_089` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:90`
+- `Amundsen2009_state_090` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:91`
+- `Amundsen2009_state_091` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:92`
+- `Amundsen2009_state_092` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:93`
+- `Amundsen2009_state_093` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:94`
+- `Amundsen2009_state_094` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:95`
+- `Amundsen2009_state_095` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:96`
+- `Amundsen2009_state_096` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:97`
+- `Amundsen2009_state_097` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:98`
+- `Amundsen2009_state_098` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:99`
+- `Amundsen2009_state_099` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:100`
+- `Amundsen2009_state_100` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:101`
+- `Amundsen2009_state_101` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:102`
+- `Amundsen2009_state_102` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:103`
+- `Amundsen2009_state_103` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:104`
+- `Hartono2014_density_20C_alpha0.11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:105`
+- `Hartono2014_density_20C_alpha0.19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:106`
+- `Hartono2014_density_20C_alpha0.29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:107`
+- `Hartono2014_density_20C_alpha0.39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:108`
+- `Hartono2014_density_20C_alpha0.50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:109`
+- `Hartono2014_density_25C_alpha0.11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:110`
+- `Hartono2014_density_25C_alpha0.19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:111`
+- `Hartono2014_density_25C_alpha0.29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:112`
+- `Hartono2014_density_25C_alpha0.39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:113`
+- `Hartono2014_density_25C_alpha0.50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:114`
+- `Hartono2014_density_30C_alpha0.11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:115`
+- `Hartono2014_density_30C_alpha0.19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:116`
+- `Hartono2014_density_30C_alpha0.29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:117`
+- `Hartono2014_density_30C_alpha0.39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:118`
+- `Hartono2014_density_30C_alpha0.50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:119`
+- `Hartono2014_density_40C_alpha0.11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:120`
+- `Hartono2014_density_40C_alpha0.19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:121`
+- `Hartono2014_density_40C_alpha0.29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:122`
+- `Hartono2014_density_40C_alpha0.39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:123`
+- `Hartono2014_density_40C_alpha0.50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:124`
+- `Hartono2014_density_50C_alpha0.11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:125`
+- `Hartono2014_density_50C_alpha0.19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:126`
+- `Hartono2014_density_50C_alpha0.29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:127`
+- `Hartono2014_density_50C_alpha0.39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:128`
+- `Hartono2014_density_50C_alpha0.50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:129`
+- `Hartono2014_density_60C_alpha0.11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:130`
+- `Hartono2014_density_60C_alpha0.19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:131`
+- `Hartono2014_density_60C_alpha0.29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:132`
+- `Hartono2014_density_60C_alpha0.39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:133`
+- `Hartono2014_density_60C_alpha0.50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:134`
+- `Hartono2014_density_70C_alpha0.11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:135`
+- `Hartono2014_density_70C_alpha0.19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:136`
+- `Hartono2014_density_70C_alpha0.29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:137`
+- `Hartono2014_density_70C_alpha0.39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:138`
+- `Hartono2014_density_70C_alpha0.50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:139`
+- `Hartono2014_density_80C_alpha0.11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:140`
+- `Hartono2014_density_80C_alpha0.19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:141`
+- `Hartono2014_density_80C_alpha0.29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:142`
+- `Hartono2014_density_80C_alpha0.39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:143`
+- `Hartono2014_density_80C_alpha0.50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:144`
+- `Han2012_density_25C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:145`
+- `Han2012_density_25C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:146`
+- `Han2012_density_25C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:147`
+- `Han2012_density_25C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:148`
+- `Han2012_density_25C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:149`
+- `Han2012_density_40C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:150`
+- `Han2012_density_40C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:151`
+- `Han2012_density_40C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:152`
+- `Han2012_density_40C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:153`
+- `Han2012_density_40C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:154`
+- `Han2012_density_50C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:155`
+- `Han2012_density_50C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:156`
+- `Han2012_density_50C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:157`
+- `Han2012_density_50C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:158`
+- `Han2012_density_50C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:159`
+- `Han2012_density_60C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:160`
+- `Han2012_density_60C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:161`
+- `Han2012_density_60C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:162`
+- `Han2012_density_60C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:163`
+- `Han2012_density_60C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:164`
+- `Han2012_density_70C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:165`
+- `Han2012_density_70C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:166`
+- `Han2012_density_70C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:167`
+- `Han2012_density_70C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:168`
+- `Han2012_density_70C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:169`
+- `Han2012_density_80C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:170`
+- `Han2012_density_80C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:171`
+- `Han2012_density_80C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:172`
+- `Han2012_density_80C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:173`
+- `Han2012_density_80C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:174`
+- `Han2012_density_90C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:175`
+- `Han2012_density_90C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:176`
+- `Han2012_density_90C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:177`
+- `Han2012_density_90C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:178`
+- `Han2012_density_90C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:179`
+- `Han2012_density_100C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:180`
+- `Han2012_density_100C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:181`
+- `Han2012_density_100C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:182`
+- `Han2012_density_100C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:183`
+- `Han2012_density_100C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:184`
+- `Han2012_density_110C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:185`
+- `Han2012_density_110C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:186`
+- `Han2012_density_110C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:187`
+- `Han2012_density_110C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:188`
+- `Han2012_density_110C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:189`
+- `Han2012_density_120C_alpha0.10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:190`
+- `Han2012_density_120C_alpha0.21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:191`
+- `Han2012_density_120C_alpha0.32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:192`
+- `Han2012_density_120C_alpha0.44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:193`
+- `Han2012_density_120C_alpha0.56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:194`
+- `Han2012_density_25C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:195`
+- `Han2012_density_30C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:196`
+- `Han2012_density_35C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:197`
+- `Han2012_density_40C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:198`
+- `Han2012_density_45C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:199`
+- `Han2012_density_50C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:200`
+- `Han2012_density_55C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:201`
+- `Han2012_density_60C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:202`
+- `Han2012_density_65C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:203`
+- `Han2012_density_70C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:204`
+- `Han2012_density_75C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:205`
+- `Han2012_density_80C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:206`
+- `Han2012_density_85C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:207`
+- `Han2012_density_90C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:208`
+- `Han2012_density_100C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:209`
+- `Han2012_density_110C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:210`
+- `Han2012_density_120C_unloaded` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv:211`
+
+### Fig1
+
+- `A7 / 0` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:2`
+- `A7 / 1` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:3`
+- `A7 / 2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:4`
+- `A7 / 3` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:5`
+- `A7 / 4` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:6`
+- `A7 / 5` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:7`
+- `A7 / 6` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:8`
+- `A7 / 7` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:9`
+- `A7 / 8` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:10`
+- `A7 / 9` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:11`
+- `A7 / 10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:12`
+- `A7 / 11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:13`
+- `A7 / 12` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:14`
+- `A7 / 13` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:15`
+- `A7 / 14` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:16`
+- `A7 / 15` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:17`
+- `A7 / 16` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:18`
+- `A7 / 17` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:19`
+- `A7 / 18` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:20`
+- `A7 / 19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:21`
+- `A7 / 20` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:22`
+- `A7 / 21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:23`
+- `A7 / 22` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:24`
+- `A7 / 23` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:25`
+- `A7 / 24` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:26`
+- `A7 / 25` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:27`
+- `A7 / 26` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:28`
+- `A7 / 27` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:29`
+- `A7 / 28` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:30`
+- `A7 / 29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:31`
+- `A7 / 30` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:32`
+- `A7 / 31` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:33`
+- `A7 / 32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:34`
+- `A7 / 33` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:35`
+- `A7 / 34` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:36`
+- `A7 / 35` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:37`
+- `A7 / 36` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:38`
+- `A7 / 37` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:39`
+- `A7 / 38` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:40`
+- `A7 / 39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:41`
+- `A7 / 40` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:42`
+- `A7 / 41` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:43`
+- `A7 / 42` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:44`
+- `A7 / 43` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:45`
+- `A7 / 44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:46`
+- `A7 / 45` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:47`
+- `A7 / 46` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:48`
+- `A7 / 47` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:49`
+- `A7 / 48` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:50`
+- `A7 / 49` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:51`
+- `A7 / 50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:52`
+- `A7 / 51` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:53`
+- `A7 / 52` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:54`
+- `A7 / 53` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:55`
+- `A7 / 54` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:56`
+- `A7 / 55` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:57`
+- `A7 / 56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:58`
+- `A7 / 57` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:59`
+- `A7 / 58` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:60`
+- `A7 / 59` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:61`
+- `A7 / 60` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:62`
+- `A7 / 61` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:63`
+- `A7 / 62` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:64`
+- `A7 / 63` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:65`
+- `A7 / 64` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:66`
+- `A7 / 65` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:67`
+- `A7 / 66` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:68`
+- `A7 / 67` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:69`
+- `A7 / 68` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:70`
+- `A7 / 69` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:71`
+- `A7 / 70` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:72`
+- `A7 / 71` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:73`
+- `A7 / 72` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:74`
+- `A6 / 0` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:75`
+- `A6 / 1` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:76`
+- `A6 / 2` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:77`
+- `A6 / 3` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:78`
+- `A6 / 4` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:79`
+- `A6 / 5` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:80`
+- `A6 / 6` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:81`
+- `A6 / 7` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:82`
+- `A6 / 8` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:83`
+- `A6 / 9` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:84`
+- `A6 / 10` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:85`
+- `A6 / 11` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:86`
+- `A6 / 12` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:87`
+- `A6 / 13` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:88`
+- `A6 / 14` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:89`
+- `A6 / 15` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:90`
+- `A6 / 16` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:91`
+- `A6 / 17` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:92`
+- `A6 / 18` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:93`
+- `A6 / 19` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:94`
+- `A6 / 20` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:95`
+- `A6 / 21` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:96`
+- `A6 / 22` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:97`
+- `A6 / 23` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:98`
+- `A6 / 24` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:99`
+- `A6 / 25` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:100`
+- `A6 / 26` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:101`
+- `A6 / 27` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:102`
+- `A6 / 28` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:103`
+- `A6 / 29` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:104`
+- `A6 / 30` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:105`
+- `A6 / 31` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:106`
+- `A6 / 32` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:107`
+- `A6 / 33` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:108`
+- `A6 / 34` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:109`
+- `A6 / 35` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:110`
+- `A6 / 36` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:111`
+- `A6 / 37` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:112`
+- `A6 / 38` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:113`
+- `A6 / 39` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:114`
+- `A6 / 40` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:115`
+- `A6 / 41` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:116`
+- `A6 / 42` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:117`
+- `A6 / 43` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:118`
+- `A6 / 44` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:119`
+- `A6 / 45` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:120`
+- `A6 / 46` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:121`
+- `A6 / 47` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:122`
+- `A6 / 48` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:123`
+- `A6 / 49` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:124`
+- `A6 / 50` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:125`
+- `A6 / 51` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:126`
+- `A6 / 52` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:127`
+- `A6 / 53` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:128`
+- `A6 / 54` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:129`
+- `A6 / 55` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:130`
+- `A6 / 56` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:131`
+- `A6 / 57` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:132`
+- `A6 / 58` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:133`
+- `A6 / 59` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:134`
+- `A6 / 60` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:135`
+- `A6 / 61` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:136`
+- `A6 / 62` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:137`
+- `A6 / 63` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:138`
+- `A6 / 64` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:139`
+- `A6 / 65` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:140`
+- `A6 / 66` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:141`
+- `A6 / 67` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:142`
+- `A6 / 68` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:143`
+- `A6 / 69` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:144`
+- `A6 / 70` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:145`
+- `A6 / 71` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:146`
+- `A6 / 72` → `analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv:147`
+
+### Fig2 A6
+
+- `Amundsen2009_state_001` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:2`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_002` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:3`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_003` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:4`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_004` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:5`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_005` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:6`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_006` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:7`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_007` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:8`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_008` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:9`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_009` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:10`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_010` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:11`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_011` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:12`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_012` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:13`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_013` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:14`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_014` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:15`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_015` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:16`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_016` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:17`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_017` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:18`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_018` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:19`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_019` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:20`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_020` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:21`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_021` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:22`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_022` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:23`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_023` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:24`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_024` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:25`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_025` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:26`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_026` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:27`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_027` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:28`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_028` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:29`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_029` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:30`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_030` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:31`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_031` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:32`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_032` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:33`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_033` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:34`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_034` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:35`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_035` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:36`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_036` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:37`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_037` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:38`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_038` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:39`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_039` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:40`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_040` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:41`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_041` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:42`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_042` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:43`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_043` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:44`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_044` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:45`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_045` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:46`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_046` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:47`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_047` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:48`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_048` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:49`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_049` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:50`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_050` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:51`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_051` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:52`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_052` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:53`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_053` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:54`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_054` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:55`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_055` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:56`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_056` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:57`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_057` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:58`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_058` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:59`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_059` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:60`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_060` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:61`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_061` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:62`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_062` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:63`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_063` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:64`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_064` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:65`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_065` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:66`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_066` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:67`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_067` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:68`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_068` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:69`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_069` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:70`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_070` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:71`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_071` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:72`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_072` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:73`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_073` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:74`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_074` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:75`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_075` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:76`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_076` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:77`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_077` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:78`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_078` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:79`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_079` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:80`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_080` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:81`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_081` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:82`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_082` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:83`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_083` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:84`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_084` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:85`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_085` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:86`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_086` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:87`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_087` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:88`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_088` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:89`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_089` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:90`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_090` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:91`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_091` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:92`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_092` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:93`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_093` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:94`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_094` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:95`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_095` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:96`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_096` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:97`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_097` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:98`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_098` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:99`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_099` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:100`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_100` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:101`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_101` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:102`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_102` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:103`; only IDs in the47 fitted loaded cohort are plotted.
+- `Amundsen2009_state_103` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:104`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_20C_alpha0.11` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:105`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_20C_alpha0.19` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:106`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_20C_alpha0.29` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:107`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_20C_alpha0.39` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:108`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_20C_alpha0.50` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:109`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_25C_alpha0.11` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:110`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_25C_alpha0.19` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:111`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_25C_alpha0.29` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:112`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_25C_alpha0.39` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:113`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_25C_alpha0.50` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:114`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_30C_alpha0.11` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:115`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_30C_alpha0.19` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:116`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_30C_alpha0.29` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:117`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_30C_alpha0.39` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:118`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_30C_alpha0.50` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:119`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_40C_alpha0.11` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:120`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_40C_alpha0.19` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:121`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_40C_alpha0.29` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:122`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_40C_alpha0.39` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:123`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_40C_alpha0.50` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:124`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_50C_alpha0.11` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:125`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_50C_alpha0.19` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:126`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_50C_alpha0.29` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:127`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_50C_alpha0.39` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:128`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_50C_alpha0.50` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:129`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_60C_alpha0.11` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:130`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_60C_alpha0.19` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:131`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_60C_alpha0.29` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:132`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_60C_alpha0.39` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:133`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_60C_alpha0.50` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:134`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_70C_alpha0.11` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:135`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_70C_alpha0.19` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:136`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_70C_alpha0.29` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:137`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_70C_alpha0.39` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:138`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_70C_alpha0.50` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:139`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_80C_alpha0.11` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:140`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_80C_alpha0.19` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:141`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_80C_alpha0.29` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:142`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_80C_alpha0.39` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:143`; only IDs in the47 fitted loaded cohort are plotted.
+- `Hartono2014_density_80C_alpha0.50` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:144`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_25C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:145`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_25C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:146`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_25C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:147`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_25C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:148`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_25C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:149`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_40C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:150`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_40C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:151`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_40C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:152`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_40C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:153`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_40C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:154`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_50C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:155`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_50C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:156`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_50C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:157`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_50C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:158`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_50C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:159`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_60C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:160`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_60C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:161`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_60C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:162`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_60C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:163`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_60C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:164`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_70C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:165`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_70C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:166`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_70C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:167`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_70C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:168`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_70C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:169`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_80C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:170`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_80C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:171`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_80C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:172`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_80C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:173`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_80C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:174`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_90C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:175`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_90C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:176`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_90C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:177`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_90C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:178`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_90C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:179`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_100C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:180`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_100C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:181`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_100C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:182`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_100C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:183`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_100C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:184`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_110C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:185`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_110C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:186`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_110C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:187`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_110C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:188`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_110C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:189`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_120C_alpha0.10` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:190`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_120C_alpha0.21` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:191`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_120C_alpha0.32` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:192`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_120C_alpha0.44` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:193`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_120C_alpha0.56` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:194`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_25C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:195`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_30C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:196`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_35C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:197`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_40C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:198`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_45C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:199`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_50C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:200`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_55C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:201`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_60C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:202`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_65C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:203`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_70C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:204`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_75C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:205`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_80C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:206`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_85C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:207`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_90C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:208`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_100C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:209`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_110C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:210`; only IDs in the47 fitted loaded cohort are plotted.
+- `Han2012_density_120C_unloaded` → `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/density.csv:211`; only IDs in the47 fitted loaded cohort are plotted.
+
+## Historical inventory and literature numbers
+
+The unchanged generated broad inventory is historical, not an A7 fitting inventory. S8 corrects its Hilliard extraction note and pressure convention immediately before inclusion. Its existing counts and source ranges are not reinterpreted as A7 fitting counts. Published temperatures and concentrations in the authored literature table have section/table/page locators in that table and the passages-read list in `source_log.md`. No published accuracy values are ranked. R2/R5 earlier exact source coefficients and inheritance values in `source_log.md` retain their named JSON/source fields and are not applied again to serialized A7 coefficients. Yang2024 supports only §2.1Eqs1a/2a/2b; A7 coefficients use the selected record through the generated parameter table.
