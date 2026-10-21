@@ -4,8 +4,8 @@ Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the 
 Neither is a true-species mole fraction of the reacting liquid.
 Source molalities, measured temperatures and aggregate-species definitions are preserved in each observation operator.
 \Cref{tab:mea-data-inventory} lists each observation set, its role and its prior use during model development.
-The objective has eight disjoint groups and 307 rows (\cref{tab:objective-groups}); the common subset is the 149-row objective of the predecessor fit F1 (Supplement S1), containing 47 pressures, 94 species and eight integral heats, which are not counted again as additional groups.
-The seven restored species, further B\"ottinger and Matin species observations outside the common subset, and six Jakobsen bicarbonate-plus-carbonate/total-amine amount ratios \cite{Jakobsen2005} are additional fitted quantities.
+The objective has eight disjoint groups and 307 rows (\cref{tab:objective-groups}); the common subset is the 149-row objective of the predecessor fit F1 (Section~S1), containing 47 pressures, 94 species and eight integral heats, which are not counted again as additional groups.
+The additional fitted quantities are seven species observations outside the common subset (four B\"ottinger and three Matin), called the restored species in \cref{tab:objective-groups}, and six Jakobsen bicarbonate-plus-carbonate/total-amine amount ratios \cite{Jakobsen2005}.
 The latter ratios differ from the carbonate share of dissolved carbon used in the comparison outside the objective.
 Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute a bubble temperature and a vapor-water fraction at each of 25 binary states, giving 50 quantities rather than 50 independent experiments.
 
@@ -19,7 +19,7 @@ Actual fitted membership follows observation identity and operator, including th
 
 \begin{table}[pos=!tb]
 \centering\small
-\caption{Data roles in the A7 assessment. Counts in comparison views can overlap objective rows or other views and are not additive. The historical broad inventory in Supplement S8 is separate from this fitting inventory.}
+\caption{Data roles in the A7 assessment. Counts in comparison views can overlap objective rows or other views and are not additive. The historical broad inventory in Section~S8 is separate from this fitting inventory.}
 \label{tab:mea-data-inventory}
 \begin{tabularx}{\linewidth}{@{}p{3.4cm}rX@{}}
 \toprule
@@ -27,7 +27,7 @@ Observation or view & Rows & Role and prior access \\
 \midrule
 Objective & 307 & Joint calibration; eight disjoint groups in \cref{tab:objective-groups} \\
 Canonical pressure & 159 & Fitted rows and previously accessed comparisons; three source rows above \SI{393.15}{\kelvin} excluded \\
-Wagner pressure~\cite{wagnerSolubilityCarbonDioxide2013} & 23 & Outside the objective; assessed after A7 acceptance, but previously accessed during model development \\
+Wagner pressure~\cite{wagnerSolubilityCarbonDioxide2013} & 23 & Outside the objective; assessed after A7 was selected, but previously accessed during model development \\
 15/45 wt\% pressure & 70 & Concentration transfer outside the objective; previously accessed \\
 Arcis integral heat & 14 & Outside the objective; used as an acceptance check \\
 Matin pool & 19 & Report-only comparison; previously accessed \\
@@ -44,8 +44,8 @@ Hilliard and Xu observations use the measured molality and temperature rather th
 The three Xu rows above the declared reacting-temperature domain are not evaluated.
 A B\"ottinger state with quantifiable oxazolidone is excluded because that species is absent from the model.
 
-The pressure-packet view is the pressure subset of the retained pressure/species data packet; it contains both fitted and non-fitted observations and overlaps the canonical view, so the two pressure views are not pooled as independent observations.
-Supplement S7 gives source corrections, and S2 gives named comparison cohorts with their data-access labels.
+The pressure-packet view is the pressure subset of the retained pressure/species data set; it contains both fitted and non-fitted observations and overlaps the canonical view, so the two pressure views are not pooled as independent observations.
+Section~S7 gives source corrections, and Section~S2 gives named comparison cohorts with their data-access labels.
 
 \subsection{Caloric and density observation operators}\label{sec:heat-method}
 % P:methods-heat-01
@@ -70,7 +70,7 @@ The declared loaded-density scale $s_j$ retains source-local loading sensitivity
 It is not uniformly a measured standard uncertainty, and $2s$ is not a 95\,\% interval.
 Amundsen's exact high-temperature/loading uncertainty boundary remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
 The four Hilliard heat capacities use 7 mol \MEA/kg water and a declared calculation pressure of \SI{101325}{\pascal}; the source measurements used sealed sample pans in a differential scanning calorimeter \cite[Sects.~4.5--4.6, App.~G.2]{Hilliard2008}. Nominal unloaded calculations use the declared $10^{-6}$ loading proxy.
-Their comparison is on the complete analytical-feed mass basis; enthalpy and proxy checks are reported in S9.
+Their comparison is on the complete analytical-feed mass basis; enthalpy and proxy checks are reported in Section~S9.
 
 \section{Parameter estimation and numerical checks}\label{sec:parameters}
 % P:methods-04
@@ -78,7 +78,7 @@ A7 varies 16 adjustable parameters, called coordinates below: binary interaction
 \Cref{tab:fitted-coordinates} gives their values, bounds, transformations, ties and conditional standard errors.
 The remaining parameters are fixed within this fit, including the shared water parameterization, association topology, dielectric coefficients, \COtwo--water interaction and the \COtwo dispersion energy of \SI{169.21}{\kelvin}.
 Fixed includes values estimated in earlier calibration; it does not mean independently measured.
-The full species, association and binary inputs, with their sources, appear in Supplement S10.
+The full species, association and binary inputs, with their sources, appear in Section~S10.
 
 \subsection{Weighted objective and restricted fits}
 % P:methods-05
@@ -105,7 +105,7 @@ F1, the predecessor parameterization, was fitted to the common subset without de
 \Cref{tab:acceptance-limits} distinguishes those limits from the total 307-row cost, which has no F1 common-subset ceiling.
 Accepting the three disclosed density failures did not change their thresholds or turn them into passes.
 The restriction narrowed the A6 bounds on the \MEAH segment diameter and the \MEAH--water interaction (\cref{tab:fitted-coordinates}), while retaining the other physical bounds and the objective rows, scales and weights.
-The R2/R5 coordinate declarations were rebased to preserve their physical bounds when inherited enthalpy shifts changed.
+The optimizer bounds of the R2 and R5 coordinates were recomputed from the enthalpy shifts inherited by each start, so their physical bounds in \cref{tab:fitted-coordinates} stayed unchanged.
 Each endpoint was then tested on the phase family; the fit did not constrain every intermediate parameter vector to pass the phase search.
 Two sequential restricted fits were made, each from one start.
 The second started from the first endpoint and lowered the \MEAH segment-size bound from \SI{5.49}{\angstrom} to \SI{5.35}{\angstrom}; it stopped on function tolerance after 12 iterations.
@@ -119,11 +119,13 @@ The bounds were sampled, not certified as a region without phase descent, and th
 The paired A6/A7 search uses 73 specified temperature/pressure/loading states at 313.15--\SI{333.15}{\kelvin} and $\alpha=10^{-5}$--0.5 on the same software build.
 This family was retained unchanged from the A6 assessment and specified before the restricted A7 fits; its temperature ceiling does not establish phase behavior at the \SI{353.15}{\kelvin} density failures.
 Each state uses its declared pressure; the lowest, middle and highest pressure levels vary with temperature and loading.
-Supplement S4 gives every specified entry; index 0 has the same temperature and loading as index 41 (\SI{318.15}{\kelvin}, $\alpha\simeq0.2556$), but its pressure is rounded to \SI{5918.5286}{\pascal}, and both entries are retained.
-At a converged reacting state, nine declared trials examine tangent-plane, donor and finite-split descent, comparing numerical descent with its estimated numerical error.
+Section~S4 gives every specified entry; index 0 has the same temperature and loading as index 41 (\SI{318.15}{\kelvin}, $\alpha\simeq0.2556$), but its pressure is rounded to \SI{5918.5286}{\pascal}, and both entries are retained.
+At a converged reacting state, nine declared trials evaluate the tangent-plane distance of a trial phase and the Gibbs-energy slope for transferring material from an existing donor phase that contains positive amounts of every trial species.
+A negative tangent-plane distance and a donor slope below minus its estimated numerical error trigger a finite split that preserves each component amount.
+Descent is resolved only when the finite Gibbs-energy decrease exceeds its propagated numerical-error estimate.
 A negative value inside that error estimate is not a resolved descent.
 A resolved descent rejects the candidate even if a subsequent split solve fails; successful split-seeded solves provide separate phase evidence.
-The A6 split-confirmation states retain their original software identity in S4.
+Section~S4 identifies the software build of the original A6 assessment, which made the A6 split-confirmation calculations.
 A two-phase classification by itself does not identify a liquid--liquid split: the allowed supports include neutral vapor.
 
 \subsection{Conditional uncertainty and numerical verification}
@@ -140,13 +142,13 @@ The six bound-active coordinates have no symmetric standard error.
 These errors describe local sensitivity conditional on weights, fixed inputs, active bounds and local linearization.
 They are neither measurement uncertainty nor prediction intervals, and a variance factor near one proves nothing about the scales.
 Residual dependence among quantities from a shared experiment is not propagated.
-Supplement S6 supplies the coordinate order and correlations.
+Section~S6 supplies the coordinate order and correlations.
 
 % P:methods-08
 The 375 assessed equilibrium states have maximum reported conservation, charge and stationarity residuals no greater than $2.2\times10^{-12}$ on their declared bases.
 A separate re-evaluation of the selected parameter file reproduces 153 named common-subset and heat-capacity quantities within $8.39\times10^{-16}$ relative difference.
 These are numerical verification results; neither validates phase behavior or absorber/stripper performance.
-Supplement S9 distinguishes the replay, solution residuals and caloric consistency checks.
+Section~S9 distinguishes the re-evaluation, solution residuals and caloric consistency checks.
 Agreement with observations is summarized by
 \begin{equation}
  \operatorname{AARD}=\frac{100\,\%}{n}\sum_{j=1}^n

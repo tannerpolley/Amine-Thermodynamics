@@ -38,7 +38,7 @@ These diameter choices define the present parameterization; they are not indepen
 % P:theory-03
 Water and \MEA carry two association sites (2B), and \COtwo carries two induced-association sites that bond only with water \cite{Kleiner2007,Pabsch2020,Schick2023}.
 The \COtwo--water cross-association energy is \SI{878.3248982}{\kelvin}, half the adopted water self-association energy, with the adopted water association volume.
-The topology follows the induced-association treatment of Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}; its numerical inputs use the water parameters of this work.
+The topology follows the induced-association treatment of Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}; its numerical inputs use the water parameterization retained from the preceding pure-water calibration of this project (Section~S10).
 \MEA--water cross-association follows the Wolbach--Sandler rule used by Fakouri Baygi and Pahlavanzadeh \cite[Eq.~6]{Baygi2015}.
 The association strength carries \(\sigma_{ij}^3\), so their \MEA association volume, reported for a \(d_{ij}^3\) strength \cite[Table~2]{Baygi2015}, was converted from 0.037470 to 0.036287, the constant value that best reproduces the vapor pressure and saturated-liquid density of their model at 293.15--\SI{393.15}{\kelvin}.
 
@@ -84,7 +84,7 @@ The dielectric-volume and dielectric-temperature coefficients have units of volu
 The ion amounts do not enter the neutral mixing averages; their presence affects the phase density and neutral amounts.
 This law approaches unity as the phase density approaches zero at fixed composition.
 Its \MEA coefficients were estimated earlier from unloaded \MEA--water permittivities with the adopted equation-of-state densities; the retained solution with the larger \MEA dielectric volume is used, and both \MEA coefficients, the water coefficients and the assumed \COtwo coefficients remain fixed in A7.
-These coefficient values and their qualifications are in Supplement S10.
+These coefficient values and their qualifications are in Section~S10.
 Temperature and loaded-solution transfer of the dielectric law remain model assumptions.
 
 \subsection{Reactions and phase equilibrium}
@@ -116,7 +116,7 @@ R1--R3 use the Austgen correlation form \cite[Table~V]{Austgen1991},
 \end{equation}
 where $\Delta_r$ converts the source to the common aqueous-molality basis.
 R4 follows Tong et al.\ \cite[Table~5]{Tong2012}, via Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}, and R5 has the Bates--Pinching form summarized by B\"ottinger et al.\ \cite[Table~5]{Bottinger2008}.
-The serialized R2 coefficients already include their molality conversion and fitted enthalpy shift; R5 already includes its fitted unshifted $A_5$ and total enthalpy shift.
+The tabulated R2 coefficients already include their molality conversion and fitted enthalpy shift; R5 already includes its fitted unshifted $A_5$ and total enthalpy shift.
 Neither shift is added again when evaluating the constants in \cref{tab:reaction-equilibrium-constants}.
 For either reaction the constant-enthalpy adjustment has the pivot-preserving form
 \begin{equation}
@@ -124,7 +124,7 @@ For either reaction the constant-enthalpy adjustment has the pivot-preserving fo
  \left(\frac1T-\frac1{T_{\mathrm{ref}}}\right).
  \label{eq:reaction-shift}
 \end{equation}
-R1 and R3 remain fixed source laws; R2 and R5 are calibrated chemistry coordinates rather than independent measurements of reaction enthalpy.
+R1 and R3 remain fixed source laws; R2 and R5 are calibrated chemistry parameters rather than independent measurements of reaction enthalpy.
 The reacting calculations use a declared domain of 293.15--\SI{393.15}{\kelvin}; R4 and R5 are extrapolated above their source upper limit of \SI{323.15}{\kelvin}.
 
 \input{tables/reaction_equilibrium_constants}

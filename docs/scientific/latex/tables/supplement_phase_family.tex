@@ -66,7 +66,7 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 2ba9bf16ad7d430eac5d3f57fdb3267070520462a4e7437fe7c8e848f123fb1f
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.0470\linewidth}>{\raggedright\arraybackslash}p{0.0752\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}>{\raggedright\arraybackslash}p{0.1974\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}@{}}
 \caption{The 73 matched A6/A7 states on the A7 software build: 12/73 versus 0/73 resolved-descent points. Resolved counts are trial counts, not Gibbs changes. Blank minimum fields report no resolved minimum. Index 0 repeats the index-41 state with a rounded pressure; both are listed. A two-phase classification alone does not establish a liquid–liquid split. This finite search does not certify a continuous stable region.}\label{tab:supplement-phase-family}\\
@@ -153,7 +153,7 @@ Index & T (K) & Loading (exact) & P (Pa, exact) & A6 & A7 \\
 \end{longtable}\endgroup
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.0564\linewidth}>{\raggedright\arraybackslash}p{0.1598\linewidth}>{\raggedright\arraybackslash}p{0.0846\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1692\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}@{}}
-\caption{Separately seeded A6 split solves, including failed attempts. Original Engine identity (not the same-wheel classification comparison): wheel SHA-256 d2f61e3a\allowbreak{}5961b859\allowbreak{}151fbe04\allowbreak{}87f4ab63\allowbreak{}3405b116\allowbreak{}20d9dd64\allowbreak{}682656a6\allowbreak{}8a110357. Gibbs differences are dimensionless G/RT; phase densities are mol/m3. Only successful split solves support the split comparison.}\label{tab:supplement-split-states}\\
+\caption{Separately seeded A6 split solves, including failed attempts. Original Engine identity (not the same-wheel classification comparison): wheel SHA-256 d2f61e3a\allowbreak{}5961b859\allowbreak{}151fbe04\allowbreak{}87f4ab63\allowbreak{}3405b116\allowbreak{}20d9dd64\allowbreak{}682656a6\allowbreak{}8a110357. Gibbs differences are extensive $\Delta G/(RT)$ values in mol for the retained feed amounts; phase densities are mol/m3. Only successful split solves support the split comparison.}\label{tab:supplement-split-states}\\
 \toprule
 Index & Seed & Success & Delta vs original & Delta vs single liquid & Densities & Phases \\
 \midrule\endfirsthead
@@ -161,12 +161,12 @@ Index & Seed & Success & Delta vs original & Delta vs single liquid & Densities 
 Index & Seed & Success & Delta vs original & Delta vs single liquid & Densities & Phases \\
 \midrule\endhead
 \bottomrule\endfoot
-21 & positive-neutral-base & False & -1.541483289e-05 & -15.7739494 &  & unavailable: failed split \\
-21 & near-pure-2 & True & -0.01888181089 & -15.7928158 & 28936.1; 1.82056; 22654 & L (liquid); V (vapor); L2 (liquid) \\
-63 & positive-neutral-base & True & -2.110512844 & -2.110512844 & 49835.8; 27919.2 & L (liquid); L2 (liquid) \\
-63 & near-pure-2 & False & -0.000139901731 & -0.000139901731 &  & unavailable: failed split \\
-70 & positive-neutral-base & True & -3.249645552 & -3.249645552 & 51838; 29027.8 & L (liquid); L2 (liquid) \\
-70 & near-pure-2 & True & -3.249645552 & -3.249645552 & 51838; 29027.8 & L (liquid); L2 (liquid) \\
+21 & positive-neutral-base & False & \mbox{-1.541483289e-05} & \mbox{-15.7739494} &  & unavailable: failed split \\
+21 & near-pure-2 & True & \mbox{-0.01888181089} & \mbox{-15.7928158} & 28936.1; 1.82056; 22654 & L (liquid); V (vapor); L2 (liquid) \\
+63 & positive-neutral-base & True & \mbox{-2.110512844} & \mbox{-2.110512844} & 49835.8; 27919.2 & L (liquid); L2 (liquid) \\
+63 & near-pure-2 & False & \mbox{-0.000139901731} & \mbox{-0.000139901731} &  & unavailable: failed split \\
+70 & positive-neutral-base & True & \mbox{-3.249645552} & \mbox{-3.249645552} & 51838; 29027.8 & L (liquid); L2 (liquid) \\
+70 & near-pure-2 & True & \mbox{-3.249645552} & \mbox{-3.249645552} & 51838; 29027.8 & L (liquid); L2 (liquid) \\
 \end{longtable}\endgroup
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.0470\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.1034\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.4888\linewidth}@{}}

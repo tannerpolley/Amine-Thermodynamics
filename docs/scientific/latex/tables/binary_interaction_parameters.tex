@@ -66,7 +66,7 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 2ba9bf16ad7d430eac5d3f57fdb3267070520462a4e7437fe7c8e848f123fb1f
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2914\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1786\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}@{}}
 \caption{A7 binary parameters. Temperature slopes multiply $(1/T-1/T_{\rm ref})$, with retained reference temperatures listed explicitly. Unlisted interactions retain the selected document conventions, including the same-sign ion dispersion exclusion. Fixed inputs are not new A7 fitted coordinates.}\label{tab:binary-interaction-parameters}\\
@@ -84,11 +84,11 @@ MEACOO-–CO2 kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate ex
 CO2–\ce{CO3^{2-}} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
 CO2–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
 CO2–OH- kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-CO2–MEA kij & 0 & 1 & fixed in A7 & this work; candidate extrapolation \\
-CO2–MEA kij temperature slope & 0 & kelvin & fixed in A7 & this work; candidate extrapolation; Tref=313.15 K \\
+CO2–MEA kij & 0 & 1 & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation \\
+CO2–MEA kij temperature slope & 0 & kelvin & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation; Tref=313.15 K \\
 CO2–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-CO2–water kij & -0.04641690112 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-CO2–water kij temperature slope & -35.66505221 & kelvin & fixed in A7 & this work; candidate extrapolation; Tref=313.15 K \\
+CO2–water kij & \mbox{-0.04641690112} & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+CO2–water kij temperature slope & \mbox{-35.66505221} & kelvin & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation; Tref=313.15 K \\
 \ce{CO3^{2-}}–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
 H3O+–OH- kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
 HCO3-–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
@@ -97,17 +97,17 @@ MEACOO-–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate ex
 H3O+–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
 OH-–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
 MEA–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-MEA–water kij & -0.08990482269 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
-MEA–water kij temperature slope & -8.069913373 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\
+MEA–water kij & \mbox{-0.08990482269} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEA–water kij temperature slope & \mbox{-8.069913373} & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\
 HCO3-–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-MEACOO-–MEAH+ kij & -1 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEACOO-–MEAH+ kij & \mbox{-1} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
 \ce{CO3^{2-}}–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
 OH-–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
 HCO3-–water kij & 0.7253209981 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
-MEACOO-–water kij & -0.003863204449 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
-\ce{CO3^{2-}}–water kij & -0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEACOO-–water kij & \mbox{-0.003863204449} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+\ce{CO3^{2-}}–water kij & \mbox{-0.25} & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
 H3O+–water kij & 0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-OH-–water kij & -0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-MEAH+–water kij & -0.5 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
-MEAH+–water kij temperature slope & -41.92964086 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\
+OH-–water kij & \mbox{-0.25} & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEAH+–water kij & \mbox{-0.5} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEAH+–water kij temperature slope & \mbox{-41.92964086} & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\
 \end{longtable}\endgroup

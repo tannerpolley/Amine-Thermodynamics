@@ -1,120 +1,85 @@
-# #197 Write fix round 1 handoff
+# #197 Write fix round 2 handoff
 
-Fix round 1 is applied locally. Confirming scientific-number/cited-claim and reader-story reviews, owner review and merge remain open. Issue #197 is not complete. This record supersedes the build and page-count statements in the preceding Writer handoff and the earlier `submission_readiness.md`; it does not authorize publication or submission.
+Fix round 2 is applied locally. The confirming check, owner review and merge remain open; issue #197 is not complete. This record supersedes the round 1 build/page-count handoff and does not authorize publication or submission.
 
-Branch: `issue-197-stage-3-rewrite-the-mea-manuscript`.
-Worktree: `/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-197-stage-3-rewrite-the-mea-manuscript`.
-The worktree fast-forwarded from the main-based branch to `21b4e472de4bf0c902b1bf3d6ad67a1fd9025b21` before editing. The build worktree was read only. Selected scientific evidence and promoted notebook basis remain `8f40c125e5945ac785cc0ad1889fc79bea2096c9`.
+Branch: `issue-197-stage-3-rewrite-the-mea-manuscript-5`.
+Worktree: `/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-197-stage-3-rewrite-the-mea-manuscript-5`.
+The clean main-based worktree started at `ff8c84e34d55ab3c515e3ebe8b1653816e3ddc3c` and merged `issue-197-stage-3-rewrite-the-mea-manuscript` without conflict in `c6b87a52d4b135bf0aa3d63eb3983f322cdfe363`; `ea401614668f96aca9b4614cc9a11a00f93024e3` is an ancestor. Ignored review/release records were copied from that worktree. All subsequent writes occurred here. The notebook paragraph from `ff8c84e` is preserved without a round 2 edit.
 
-The controlling records are `tmp/joint-design/write-review-numbers-r1.md`, `write-review-story-r1.md` and `write-review-numbers-r2.md`. The r2 science ruling wins every conflict. No Engine calculation, retained-evidence edit, selected-parameter edit or notebook edit occurred.
+The controlling records are `tmp/joint-design/write-review-story-r2.md` and `write-review-numbers-r4.md`. The r4 science ruling governs conflicts. The live #197 body was reread before handoff and is unchanged, SHA-256 `f4acadc97f2ebd3da2ccc9b963cc399bad923ae579d50847b37399de7e50595b`. The owner already promoted notebook commit `8f40c125e5945ac785cc0ad1889fc79bea2096c9` for the joint-calibration/finite-phase-test manuscript with the stated limitations. This round applies the accepted wording and citations; it does not replace the pending independent confirmation of their support.
 
-## Fix-by-fix application
+No Engine calculation, retained-evidence change, selected-parameter edit or notebook edit occurred. The selected record remains SHA-256 `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e`.
 
-Paths below are relative to `docs/scientific/latex/`, except the figure generator under `analyses/`. For an amended item, the r2 replacement is verbatim; the table identifies partial applications. The machine-readable locator record is `tmp/joint-design/r1-fix-application.json`.
+## Item-by-item application
 
-| ID | Application | File:line | Detail |
+Paths in the table are relative to `docs/scientific/latex/`, except the review record. The machine-readable application and location records are `tmp/joint-design/r2-fix-application.json` and `r2-item-locations.json`.
+
+| Item | Application | File:line | Detail |
 | --- | --- | --- | --- |
-| A1 | applied verbatim | `main.tex:94` |  |
-| A2 | applied verbatim | `main.tex:95` |  |
-| A3 | amended per r2 | `main.tex:99` |  |
-| A4 | applied verbatim | `main.tex:100` |  |
-| A5 | amended per r2 | `submission/chemrxiv.md:15`; `submission/chemrxiv.md:23` | Story A1/A2/A4 plus r2 A3 and prospective release sentence. |
-| A6 | applied verbatim | `submission/highlights.txt:3`; `submission/highlights.txt:4`; `submission/highlights.txt:5` |  |
-| A7 | amended per r2 | `submission/cover_letter.md:9`; `submission/cover_letter.md:11`; `submission/cover_letter.md:13` | r2 opening comparison; remaining story replacements verbatim. |
-| B1 | amended per r2 | `sections/introduction.tex:13` |  |
-| B2 | applied verbatim | `sections/introduction.tex:44` |  |
-| B3 | amended per r2 | `sections/introduction.tex:48` |  |
-| B4 | amended per r2 | `sections/introduction.tex:54`; `sections/introduction.tex:55` | Story question and endpoint definition; r2 comparison sentence. |
-| C1 | applied verbatim | `sections/data_methods.tex:6`; `sections/data_methods.tex:8` |  |
-| C2 | applied verbatim | `sections/data_methods.tex:30` |  |
-| C3 | amended per r2 | `sections/data_methods.tex:42`; `sections/data_methods.tex:47`; `sections/data_methods.tex:66` |  |
-| C4 | applied verbatim | `sections/data_methods.tex:66` |  |
-| C5 | applied verbatim | `sections/data_methods.tex:77` |  |
-| C6 | applied verbatim | `sections/data_methods.tex:97` |  |
-| C7 | amended per r2 | `sections/data_methods.tex:104`; `sections/data_methods.tex:107` |  |
-| C8 | applied verbatim | `sections/data_methods.tex:114` |  |
-| C9 | amended per r2 | `sections/data_methods.tex:122` |  |
-| C10 | applied verbatim | `sections/data_methods.tex:147` |  |
-| C11 | applied verbatim | `sections/data_methods.tex:81`; `sections/epc_saft_equation_of_state.tex:87`; `supplement.tex:198` | Parameter inventories moved to S10; corrected original locator is pages 10–17. |
-| C12 | amended per r2 | `sections/epc_saft_equation_of_state.tex:86` |  |
-| D1 | applied verbatim | `sections/mea_system_modeling_results.tex:4`; `sections/mea_system_modeling_results.tex:5` |  |
-| D2 | applied verbatim | `sections/mea_system_modeling_results.tex:20` | Phase and density become Figures 1 and 2. |
-| D3 | amended per r2 | `sections/mea_system_modeling_results.tex:92` |  |
-| D4 | amended per r2 | `sections/mea_system_modeling_results.tex:77`; `sections/mea_system_modeling_results.tex:84`; `sections/mea_system_modeling_results.tex:106`; `sections/mea_system_modeling_results.tex:30`; `sections/mea_system_modeling_results.tex:23` | r2 phase caption; remaining story caption edits verbatim. |
-| D5 | applied verbatim | `sections/mea_system_modeling_results.tex:138`; `sections/mea_system_modeling_results.tex:140` |  |
-| D6 | applied verbatim | `sections/mea_system_modeling_results.tex:145` |  |
-| E1 | applied verbatim | `sections/conclusion.tex:3` |  |
-| E2 | applied verbatim | `sections/conclusion.tex:6` |  |
-| E3 | applied verbatim | `sections/data_code_availability.tex:4`; `sections/data_code_availability.tex:5` |  |
-| E4 | applied verbatim | `sections/nomenclature.tex:33` |  |
-| F | applied verbatim | `supplement.tex:47`; `supplement.tex:85`; `supplement.tex:86`; `supplement.tex:95`; `supplement.tex:175`; `supplement.tex:190`; `supplement.tex:158`; `supplement.tex:167`; `supplement.tex:192` | All nine designated supplement edits, including the three explicitly accepted in r2. |
-| G1 | amended per r2 | `scripts/final_rerun_tables.py:255` |  |
-| G2 | applied verbatim | `scripts/final_rerun_tables.py:22` |  |
-| G3 | applied verbatim | `scripts/final_rerun_tables.py:56` |  |
-| G4 | amended per r2 | `scripts/final_rerun_tables.py:29` | Qualification fields retained; readable label, fitted/tied/inherited distinctions and r2 caption. |
-| G5 | applied verbatim | `scripts/final_rerun_tables.py:38` |  |
-| G6 | applied verbatim | `scripts/final_rerun_tables.py:229` |  |
-| G7 | applied verbatim | `scripts/final_rerun_tables.py:316` |  |
-| G8 | applied verbatim | `scripts/final_rerun_tables.py:305` |  |
-| G9 | amended per r2 | `analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:58`; `analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:149` | r2 phase legend; remaining story labels verbatim. |
-| r1-Bottinger | amended per r2 | `sections/introduction.tex:10`; `sections/data_methods.tex:13` | Both merged r2 texts; reported bicarbonate distinguished from the calculated aggregate. |
-| r1-Hilliard | amended per r2 | `sections/data_methods.tex:36`; `sections/data_methods.tex:72` | Inventory row and prose; 101325 Pa is the calculation pressure. |
-| r2-item2 | applied verbatim | `sections/mea_system_modeling_results.tex:94` | Non-fitted density errors and 67-row Han RMSE. |
-| r2-item7 | applied verbatim | `supplement.tex:202` | Exact fixed-input attribution before the S10 tables; G4 retains the qualifications. |
-| r2-item8 | applied verbatim | `sections/data_code_availability.tex:7`; `supplement.tex:183`; `submission/chemrxiv.md:23` | Exact private-Engine disclosure in main, S9 and ChemRxiv. |
-| r2-item9 | applied verbatim | `sections/data_methods.tex:119` | Unchanged-family explanation in Methods. |
-| HSL | applied verbatim | `sections/data_code_availability.tex:13` | Exact owner-required acknowledgement before Funding. |
-| Story optional suggestions | not applied (optional) | Review optional list | All optional deletions, rounding, inventory-generator and legend suggestions excluded. |
-| r1 optional Zhang cell | not applied (optional) | Review optional list | Excluded as instructed. |
+| 1 | applied verbatim | `sections/data_methods.tex:7`; `sections/data_methods.tex:22`; `sections/data_methods.tex:48`; `sections/data_methods.tex:73`; `sections/data_methods.tex:81`; `sections/data_methods.tex:122`; `sections/data_methods.tex:128`; `sections/data_methods.tex:145`; `sections/data_methods.tex:151`; `sections/epc_saft_equation_of_state.tex:41`; `sections/epc_saft_equation_of_state.tex:87`; `sections/mea_system_modeling_results.tex:6`; `sections/mea_system_modeling_results.tex:10`; `sections/mea_system_modeling_results.tex:23`; `sections/mea_system_modeling_results.tex:30`; `sections/mea_system_modeling_results.tex:54`; `sections/mea_system_modeling_results.tex:118`; `sections/mea_system_modeling_results.tex:146`; `sections/mea_system_modeling_results.tex:151`; `sections/nomenclature.tex:34`; `supplement.tex:103`; `supplement.tex:168`; `supplement.tex:188`; `supplement.tex:189` | All named supplement section references explicitly say Section; Table S3 is retained. |
+| 2 | applied verbatim | `sections/data_methods.tex:8` |  |
+| 3 | applied verbatim | `sections/conclusion.tex:17`; `sections/data_methods.tex:30`; `sections/introduction.tex:58`; `sections/mea_system_modeling_results.tex:116`; `sections/mea_system_modeling_results.tex:165`; `supplement.tex:67` |  |
+| 4 | applied verbatim | `sections/data_code_availability.tex:6`; `supplement.tex:185` |  |
+| 5 | applied verbatim | `sections/data_methods.tex:151` |  |
+| 6 | applied verbatim | `sections/epc_saft_equation_of_state.tex:119`; `supplement.tex:155` |  |
+| 7 | applied verbatim | `sections/epc_saft_equation_of_state.tex:127` |  |
+| 8 | applied verbatim | `sections/data_methods.tex:47` |  |
+| 9 | applied verbatim | `sections/data_methods.tex:108` | Also the exact r4 correction 5 sentence. |
+| 10 | amended per r4 | `sections/data_methods.tex:123` | The three r4 correction 4 sentences replace the story sentence; subsequent limitations remain. |
+| 11 | applied verbatim | `sections/data_methods.tex:128` |  |
+| 12 | applied verbatim | `sections/mea_system_modeling_results.tex:30`; `sections/mea_system_modeling_results.tex:71`; `sections/mea_system_modeling_results.tex:77` |  |
+| 13 | applied verbatim | `submission/cover_letter.md:7` |  |
+| 14 | applied verbatim | `submission/cover_letter.md:9`; `submission/cover_letter.md:13` | Includes the exact private-Engine disclosure from r4 correction 7. |
+| 15 | applied verbatim | `submission/highlights.txt:1`; `submission/highlights.txt:2` |  |
+| 16 | applied verbatim | `submission/chemrxiv.md:23` |  |
+| 17 | amended per r4 | `scripts/final_rerun_tables.py:40` | Whole-cell guard before parts = re.split; the proposed global regex is excluded. |
+| 18 | applied verbatim | `scripts/final_rerun_tables.py:223`; `scripts/final_rerun_tables.py:288`; `scripts/final_rerun_tables.py:292` |  |
+| 19 | applied verbatim | `scripts/final_rerun_tables.py:156` |  |
+| 20 | applied verbatim | `scripts/final_rerun_tables.py:153` |  |
+| 21 | applied verbatim | `scripts/final_rerun_tables.py:168` |  |
+| 22 | amended per r4 | `scripts/final_rerun_tables.py:138`; `supplement.tex:209` | Locator table and collector removed; sources() retained; two r4 correction 1 sentences inserted after S10 attribution. |
+| `flag2` | applied verbatim from r4 | `scripts/final_rerun_tables.py:31` | Single ORIGIN entry; fitted/tied precedence retained. |
+| `flag3` | applied verbatim from r4 | `sections/epc_saft_equation_of_state.tex:41` | Complete water-parameter sentence. |
+| `flag6` | applied verbatim from r4 | `supplement.tex:122` | First two S5 sentences replaced by the five ruled sentences; remaining paragraph retained. |
+| `Gibbs-unit` | applied verbatim from r4 | `scripts/final_rerun_tables.py:311` | Exact extensive Gibbs-difference unit substring; no numerical change. |
+| Story optional suggestions | not applied (optional) | `tmp/joint-design/write-review-story-r2.md` | All optional suggestions excluded. |
 
-## Generator Build results
+## Generator Build evidence
 
-All quantitative numerical cells of all fourteen generated tables agree with the pre-edit snapshot at `21b4e47`. The comparison follows numerical columns row by row; approved changes to numbers inside labels, reference locators, units and captions are textual changes, not recalculated values. Records: `r1-baseline-table-rows.json`, `r1-baseline-numeric-content.json` and `r1-numeric-content-equality.json` under `tmp/joint-design/`. The complete printed reconciliation JSON is unchanged before/after and across both runs (`r1-baseline-reconciliation.json`, `r1-after-reconciliation.json` and `r1-after-reconciliation-run2.json`). It retains 307 objective rows, 47 loaded densities, 210 total densities, 22 heats, 16 coordinates, 73 phase entries and 68 matched F1 density rows.
+The existing table generator remains the single owner, called by the manuscript/supplement inputs and the standalone proof. This round replaces labels and deletes the unused source-locator collector and its table; `sources()` still returns provenance and qualifications. The parameter-value and figure owners remain unchanged.
 
-Both generators were regenerated twice; all 25 outputs are byte-identical. `tmp/joint-design/determinism.json` contains their SHA-256 hashes. The standalone generated-table proof was compiled twice with the requested pdflatex command: 32 pages, zero warnings, missing glyphs, overfull/underfull boxes or undefined references. Logs: `r1-table-compile1.log` and `r1-table-compile2.log`.
+Before editing, `r2-baseline-tables.json`, `r2-baseline-table-rows.json` and `r2-baseline-number-tokens.json` captured every generated table and its number tokens. `r2-baseline-reconciliation.json` captured the generator's complete printed reconciliation. All fourteen fragments preserve their quantitative cells (`r2-numeric-content-equality.json`). Every number token in every retained data/header row also agrees after normalizing the approved inherited-provenance label change (`r2-all-row-number-equality.json`); the deleted locator table is the sole removed table. Approved captions, labels and whole-cell `\mbox{}` guards change no sign or digit. Both post-edit reconciliation outputs equal the baseline exactly.
 
-The staged release preserves its existing data/presentation scope. Changed staged files, the 32-page proof, README and check records were refreshed. Its checksum inventory contains 702 files, excluding `SHA256SUMS` itself. A copy into an empty temporary directory was regenerated using this worktree's `.venv/bin/python -E -s`; both generators reproduced all 25 outputs byte for byte and the temporary copy was deleted. Record: `r1-isolated-release-reproduction.json`. The generator commands read retained numbers; they perform no Engine calculation.
+Two runs of both generators reproduce all 25 files byte for byte. Their hashes are in `tmp/joint-design/determinism.json`. The exact r4 guard passed an in-memory comparison for four negative forms and eleven nonnegative/identifier/range/chemistry examples. All six complete r4 prose replacement blocks match the review verbatim (`r2-verbatim-checks.json`). The figures did not change.
 
-Gross-added executable lines against `8f40c12`, including blanks and comments and without offsetting deletions: **622 / 700**, across three executable files; 551 lines removed, zero test additions. The previous build count was 595. `tmp/joint-design/change-accounting.json` retains per-file counts. Checks use the full inherited presentation surface, including `a7_presentation.py`; this round edits only the two named generators.
+The final generated-table proof was compiled twice from `docs/scientific/latex/` with the requested `TEXINPUTS='./styles//:' nice -n 10 pdflatex -interaction=nonstopmode -halt-on-error -output-directory=../../../tmp/joint-design/latex-check ../../../tmp/joint-design/latex-check/generated-tables.tex` command, through `agent-heavy`: **34 pages**, zero LaTeX warnings, overfull/underfull boxes, missing glyphs or undefined references/citations. Logs: `r2-table-compile1.log` and `r2-table-compile2.log`. The new Jakobsen citation required the cited bibliography in the proof. Two proof inputs use landscape pages to keep the boxed numeric cells separate; the source fragments and scientific wording were not altered for that layout. The overview and enlarged proof pages 11 and 33 show complete numbers and separate cells. The conservative proof scanner reports `review`, with 236 rotation/clearance candidates and no errors; those are not a scanner Pass.
 
-The pinned wheel's worktree path is absent, so normal uv resolution fails. The authorized `UV_NO_SYNC=1` fallback used the copied, existing locked environment for regeneration, main build and freshness. No wheel was built or Engine source imported.
+The refreshed local release contains **703 checksum entries**, including the bibliography needed by the proof. Existing data/presentation scope is preserved. Both generators ran from a copy in an empty temporary directory, with this worktree's `.venv/bin/python -E -s`. All 25 outputs matched both the worktree bytes and `determinism.json`, the reconciliation matched, checksums passed before/after regeneration, and the isolated copy was deleted. Record: `r2-isolated-release-reproduction.json`.
 
-## Manuscript builds and inspection
+Gross-added executable lines against `8f40c12`, including comments and blank lines without offsetting deletions: **616 / 700**; 551 lines removed; zero test additions. The three source-file counts are 149/0 (`a7_presentation.py`), 151/210 (`render_manuscript_figures.py`) and 316/341 (`final_rerun_tables.py`), additions/removals respectively. `tmp/joint-design/change-accounting.json` retains the final accounting. No new permanent test or helper was added.
 
-- `UV_NO_SYNC=1 nice -n 10 agent-heavy bash scripts/build_manuscript.sh`: passed, main 25 pages, no LaTeX warnings, overfull/underfull boxes, missing glyphs or undefined citations/references; BibTeX zero warnings.
-- Explicit supplement `TEXINPUTS='./styles//:' nice -n 10 agent-heavy latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex`: passed, 45 pages, no LaTeX warnings, overfull boxes, missing glyphs or undefined citations/references. One underfull hbox, badness 3514, is the Uyan bibliography entry on page 45; its text is complete.
-- `UV_NO_SYNC=1 uv run python scripts/check_manuscript_freshness.py`: passed for main. Supplement compilation was checked separately.
-- Repository prose checker: passed on changed manuscript prose, submission aids and all generated tables. It reads the installed CSE plugin-wide/scoped rules; no personal CSE config exists on this machine.
-- Every page of both final PDFs was inspected in color. The five main figure pages were also inspected in grayscale. Figures 1/2 are now the phase/density comparison; S10 starts on page 33 and its parameter tables occupy landscape pages 34–42. No clipped or colliding text was found. Source/species/loading identity uses color in Figures 2–4; marker shapes preserve observed/model and phase classifications, and exact values remain in retained CSVs/tables.
+This worktree initially lacked `.venv`; the existing environment was copied here. The pinned wheel path in `pyproject.toml` is absent, so the authorized `UV_NO_SYNC=1` fallback was used for presentation, main build and freshness. No wheel was built and no Engine source imported.
 
-Two layout changes were needed to typeset the ruled text: `\clearpage` before and after the Results residual longtable prevents floating figures from clipping it; S10 parameter inputs use the existing landscape environment to prevent numerical-cell overruns. They change no scientific text or values.
+## Builds, bibliography and visual inspection
 
-Raw scanner results are retained, not described as passing: main `fail` with 151 candidates (148 clearance, two text/graphic, one overlap); supplement `review` with 987 candidates (56 clearance, 931 edge). Main page 7 equation 12 superscript boxes cause the overlap candidate, and page 3 fraction rules cause the graphic candidates. Landscape rotation causes supplement edge candidates. Page-by-page raster inspection rejected these as visual defects. Records/renders: `tmp/joint-design/r1-pdf-final/` and `r1-visual-disposition.json`.
+- `UV_NO_SYNC=1 nice -n 10 agent-heavy bash scripts/build_manuscript.sh`: passed, **25 main pages**, zero LaTeX/BibTeX warnings, undefined citations/references, missing glyphs or underfull boxes. One 1.9224 pt overfull box is the whole negative number in Table 4; its digits and unit remain separate and readable on page 8.
+- Explicit `TEXINPUTS='./styles//:' nice -n 10 agent-heavy latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex`: passed, **44 supplement pages**, zero LaTeX/BibTeX warnings, undefined citations/references, missing glyphs or overfull boxes. One underfull bibliography hbox, badness 3514, remains on page 44 (Uyan); its text is complete.
+- `UV_NO_SYNC=1 uv run python scripts/check_manuscript_freshness.py`: passed. Submission metadata `pdf_sha256`, the actual main PDF and `builds/verification-receipt.json` agree.
+- `python scripts/cited_bibliography.py > references.bib` ran only after both auxiliary files existed, from `docs/scientific/latex/`. Added keys: none; removed keys: none; existing-entry drift: none; bibliography bytes unchanged. No hand edits or Zotero writes. Record: `r2-bibliography-changes.json`.
+- The repository CSE prose checker passed on changed manuscript/submission prose, all generated tables, the refreshed number-source list and this handoff.
 
-Final logs: `tmp/joint-design/r1-main-final.log`, `r1-supplement-final.log`, `r1-freshness-final.log` and `r1-prose-check.log`. The build refreshed `builds/verification-receipt.json`. The earlier submission-metadata PDF hash is a preceding-draft record; this round's PDF identities below and the recorded input/output hashes govern this handoff.
+Every page of both final PDFs was inspected in color, with all five main figure pages also inspected in grayscale. Front matter, all section/table references, Table 4 on main page 8, S5 on supplement page 22, S10 on page 33 and the former locator-table position on pages 39–40 were inspected. The binary table is now S15 on pages 39–41. No clipping, missing row or colliding glyph was found. Color continues to encode source/species/loading in Figures 2–4; marker shapes retain measured/calculated and phase categories, and exact values remain in the retained tables.
 
-`main.pdf` SHA-256: `b50653850891acb3af0c717eb84cd9a4916b7d40efd8621faf39b176e978dd67`.
+The main scanner returns `fail` with 152 candidates: 149 clearance warnings, two fraction-rule graphic candidates on page 3 and one equation-superscript overlap candidate on page 7. The latter is a bounding-box false positive; rendered glyphs are separate. The supplement scanner returns `review` with 974 candidates (919 rotated-page edge warnings, 55 clearance warnings). The complete page inspection found no corresponding defect. Reports and color/grayscale rasters are in `tmp/joint-design/r2-pdf-final/`; raw scanner results are retained, not called passing.
 
-`supplement.pdf` SHA-256: `0431b6b36873443a025288a580324913f094c4a458585e487342c6e49160840d`.
+Main PDF SHA-256: `6f9e537e108169f993764bd4ade11536733a5ae2737b445d9b65c219b2c041d4`.
 
-## Bibliography and source checks
+Supplement PDF SHA-256: `f418ab73c76f7edc23f05e567a17cc44c80c2bbb56c43c4c75d5dbe14d4c1819`.
 
-The approved command `python scripts/cited_bibliography.py > references.bib` ran from `docs/scientific/latex/` after both main and supplement auxiliary files existed. Added keys: none. Removed keys: none. Existing-entry drift: none. Missing keys: none. The new in-text uses of Baygi2015, Schick2023, Uyan2015, Wagner, Kiepe, Han, Amundsen and Hartono already exist in the cited snapshot because of the shared source inventory. No Zotero or central-export write and no hand edit of `references.bib` occurred. Record: `tmp/joint-design/r1-bibliography-changes.json`.
+Logs: `tmp/joint-design/r2-main-final.log`, `r2-supplement-initial.log`, `r2-freshness-final.log`, `r2-prose-check.log`, `r2-handoff-prose-check.log` and `r2-release-reproduction.log`.
 
-The current Zotero companions and local shelf hashes for Böttinger, Baygi, Schick and Uyan agree (`r1-source-hashes.json`). The assigned passages were read: Böttinger §3/Table 3; Baygi association/parameter methods and Table 2; Schick §2.4.2/Table 1; Uyan §4.1/Table 4; the preceding project-water calibration README. This implementor check applies the reviewed rulings; it does not replace the pending independent check of every cited claim. The durable `source_log.md` retains the prior Writer's broader literature-read record.
+## Remaining gates
 
-`builds/197-displayed-number-sources.md` now records all new or changed numerical statements, refreshed generated-table row locators and figure ordering. The two non-fitted density errors, Han RMSE, rounded phase-entry pressure/loading, limit origins, fixed-input attribution and solver evidence are explicitly mapped.
+The confirming check, owner review and merge remain open. This implementor has not performed the independent confirming review. No merge into main, push, PR, GitHub comment, Overleaf synchronization, submission, deposit or DOI creation occurred. Unrelated untracked figure PDFs were not staged. Optional story suggestions were not applied.
 
-## HSL acknowledgement and limits
-
-The exact owner-required acknowledgement appears in `sections/data_code_availability.tex` under Acknowledgements, before Funding, on main page 22:
-
-> Calculations on the A7 software build used the MA57 linear solver from HSL, a collection of Fortran codes for large-scale scientific computation. https://www.hsl.rl.ac.uk/.
-
-Evidence: `analyses/mea_parameter_bundle/results/engine-8298c602-adoption/comparison.json:26` records `"linear_solver": "ma57"` on this machine; `~/.profile:50` sets `EPCSAFT_HSL_LIBRARY`. The A7 records do not record the solver per run. No MA57 attribution is made for F1 or the original A6 assessment on Engine `21e761c3`. The distinction between original A6 assessment and paired A6/A7 calculations on the A7 software build remains in S9 and figure provenance.
-
-## Remaining gates and unchanged limitations
-
-Confirming number/cited-claim and reader-story reviews, owner review and merge remain open. No merge into main, push, pull request, GitHub comment, Overleaf synchronization, public data deposit, DOI creation or submission occurred. Issue #197 remains open.
-
-The source inventory in S8 retains its historical Hilliard extraction and F1 Amundsen pressure notes, with the approved corrections immediately before it. Its optional generator correction was not applied. The science limits remain calibration/prior-access comparisons, finite phase states with a pressure-rounded repeat, three fitted-density failures outside the phase family's temperatures, unmatched F1/A7 density pressures without a magnitude bound, conditional errors and no physical validation of phase behavior or absorber/stripper performance. The private Engine wheel remains an omitted dependency of the planned release.
+The accepted scientific limits remain: fitted agreement is calibration; comparisons examined during model development and Arcis acceptance checks are not independent validation; the phase search covers its declared finite states; the three fitted-density failures remain failures; conditional errors are not prediction intervals; physical phase/process validation is absent; and the private Engine wheel is an omitted dependency.
