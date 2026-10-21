@@ -28,7 +28,7 @@ def display(value):
 
 ORIGIN = {
     'mea-retained-phase-two-artifact': 'inherited project inputs',
-    'joint-recalibration-170': 'this work',
+    'joint-recalibration-170': 'earlier project inputs; fixed in A7',
     'joint-recalibration-170-stage5': 'earlier dielectric calibration and fixed inputs',
     'mea-model-d-p5conv-a-11-28181e72': 'earlier project calibration (ancestry)',
     'schick-2023-pabsch-2020-induced-association': 'Schick et al. 2023; Pabsch et al. 2020',
@@ -38,6 +38,8 @@ ORIGIN = {
 SOURCE_TEXT = {'Austgen1991_TableV_reaction_1a': 'Austgen 1991, Table V, reaction 1a', 'Austgen1991_TableV_reaction_4a': 'Austgen 1991, Table V, reaction 4a', 'Austgen1991_TableV_reaction_5a': 'Austgen 1991, Table V, reaction 5a', 'Tong2012_Table5_K5_MEA_via_Aroua1999': 'Tong 2012, Table 5, via Aroua 1999', 'BatesPinching1951_equation_7': 'Bates and Pinching 1951, Eq. 7'}
 
 def tex(value):
+    if re.fullmatch(r'-(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?', str(value)):
+        return r'\mbox{' + str(value) + '}'
     parts = re.split(r'(\\ce\{(?:[^{}]|\{[^{}]*\})*\})', str(value))
     if len(parts) > 1:
         return ''.join(part if part.startswith(r'\ce{') else tex(part) for part in parts)
@@ -133,12 +135,8 @@ def main():
                 row = [label(identity), num(c['value']['magnitude'], 10), c['value']['unit'], role,
                        '; '.join(filter(None, [origin, c.get('qualification', '').replace('candidate_extrapolation', 'candidate extrapolation')])) + ('; Tref='+str(c['reference_temperature']['magnitude'])+' K' if 'reference_temperature' in c else '')]
                 (parameter_rows if kind == 'components' else pair_rows).append(row)
-    source_locators = {}
     def sources(node):
         entries = node.get('source', {}).get('provenance', [node.get('provenance', {})])
-        for entry in entries:
-            if entry:
-                source_locators[entry['source_id'], entry['locator']] = None
         return '; '.join(filter(None, [*dict.fromkeys(ORIGIN.get(entry['source_id'], entry['source_id']) for entry in entries if entry), node.get('qualification', '').replace('candidate_extrapolation', 'candidate extrapolation')]))
 
     for node in document['correlations'] + document['model_coefficients'] + document['topology']['edges']:
@@ -152,15 +150,11 @@ def main():
         if source['kind'] == 'combining-rule':
             endpoints = [label(edge[k]['component_id'])+'('+edge[k]['site_id']+')' for k in ['endpoint_a','endpoint_b']]
             parameter_rows.append(['–'.join(endpoints), source['rule_id'], '--', 'fixed combining rule; '+
-                                   '; '.join(k+': '+', '.join(label(x) for x in v) for k,v in source['inputs'].items()), sources(edge)])
+                                   '; '.join(k.replace('energy_over_k', 'energy')+' from '+' and '.join(label(x) for x in v) for k,v in source['inputs'].items()), sources(edge)])
     for family in document['model_families']:
         parameter_rows.append([family['family_id'], family['choice'], '--', 'model choice', family.get('qualification', '').replace('candidate_extrapolation', 'candidate extrapolation')])
-    table('full_ionic_ssm_ds_parameters.tex', r"""A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. The provenance column distinguishes the A7 fit from inherited project inputs and source ancestry; inherited labels do not establish that every current value was reported directly in the named source. Entries marked ``candidate extrapolation'' retain that qualification from the selected parameter file; absence of the label does not establish validation. fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: CO₂, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.""",
+    table('full_ionic_ssm_ds_parameters.tex', r"""A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. The provenance column distinguishes the A7 fit from inherited project inputs and source ancestry; inherited labels do not establish that every current value was reported directly in the named source. Entries marked ``candidate extrapolation'' retain that qualification from the selected parameter file; absence of the label does not establish validation. ``Fixed'' means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: CO₂, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.""",
           ['Parameter/input', 'Value', 'Unit', 'Role', 'Provenance/qualification'], parameter_rows, [.33,.13,.12,.20,.22])
-    previous = OUTPUTS['full_ionic_ssm_ds_parameters.tex']
-    table('full_ionic_ssm_ds_parameters.tex', r'Retained source and transformation locators for fixed correlation and association inputs. The MEA association volume retains its conversion from the source diameter convention to the $\sigma_{ij}^3$ convention used here; no combining rule is evaluated here.',
-          ['Source', 'Retained locator'], [[ORIGIN.get(source, source), locator] for source, locator in source_locators], [.25,.75])
-    OUTPUTS['full_ionic_ssm_ds_parameters.tex'] = previous + OUTPUTS['full_ionic_ssm_ds_parameters.tex'].replace('tab:full-ionic-ssm-ds-parameters','tab:association-source-locators')
     table('binary_interaction_parameters.tex', r'A7 binary parameters. Temperature slopes multiply $(1/T-1/T_{\rm ref})$, with retained reference temperatures listed explicitly. Unlisted interactions retain the selected document conventions, including the same-sign ion dispersion exclusion. Fixed inputs are not new A7 fitted coordinates.',
           ['Parameter', 'Value', 'Unit', 'Role', 'Provenance/qualification'], pair_rows, [.31,.16,.12,.19,.22])
     reaction = a.load(a.ROOT / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json')
@@ -171,7 +165,7 @@ def main():
         coeff = '; '.join(label(c['identity'].split(':')[-1]).split()[0].upper() + ' = ' + num(c['value']['magnitude'], 10) for c in selected['coefficients']) if selected else '; '.join(k.split('_')[0].upper() + ' = ' + str(v) for k, v in r['correlation'].items() if k != 'kind')
         offset = reaction['common_source_standard_state']['source_to_common_ln_k_offsets'][i]
         reaction_rows.append([rid + r': \ce{' + r['equation'].replace('CO3--', 'CO3^{2-}').replace('HCO3-', 'HCO3^-') + '}', coeff, SOURCE_TEXT.get(r['selected_source'], r['selected_source']), str(r['temperature_range_k']),
-                              'offset included in serialized R2' if rid == 'R2' else 'add source-to-common offset '+num(offset)])
+                              'offset included in R2 coefficients' if rid == 'R2' else 'add source-to-common offset '+num(offset)])
     table('reaction_equilibrium_constants.tex', r'A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.',
           ['Reaction', 'Coefficients', 'Source', 'Source range (K)', 'Offset'], reaction_rows, [.25,.28,.20,.10,.17])
     coordinate_rows = []
@@ -226,7 +220,7 @@ def main():
     for title, key in [('Native F1 density','eos_density_kg_m3'),('A7 density','predicted_kg_m3')]:
         part=[{'observed':r['observed_kg_m3'],'predicted':r[key] if key in r else d[key]} for r,d in matched]
         predecessor.append([title+' matched AARD',len(part),num(a.stats(part)['AARD_percent']) if key=='eos_density_kg_m3' else '--',num(a.stats(part)['AARD_percent']) if key!='eos_density_kg_m3' else '--','%'])
-    table('supplement_predecessor.tex', r'F1 predecessor versus A7. Common149 identities, observations, units and effective residual scales/weights reconcile, with 47 pressures, 94 species and eight heats. F1 uses its original retained parameter and Engine identities; its 152-quantity wheel-transfer check does not qualify other results. Native F1 density uses eos\_density\_kg\_m3 without translation at 101325 Pa; A7 uses 100000 Pa (1325 Pa difference). Rows match temperature, loading and unloaded-solvent mass fraction exactly, not pressure. No pressure-density derivative is retained in these density records, so no magnitude bound is claimed. These Amundsen states exclude unmatched temperatures/loadings and other sources. Matched ' + str(len(matched)) + ' of ' + str(len(old_density)) + r' F1 rows; the pressure basis is disclosed, not matched.',
+    table('supplement_predecessor.tex', r'F1 predecessor versus A7. Common149 identities, observations, units and effective residual scales/weights reconcile, with 47 pressures, 94 species and eight heats. F1 uses its original retained parameter and Engine identities; its 152-quantity wheel-transfer check does not qualify other results. Native F1 density is the untranslated equation-of-state density at 101325 Pa; A7 uses 100000 Pa (1325 Pa difference). Rows match temperature, loading and unloaded-solvent mass fraction exactly, not pressure. No pressure-density derivative is retained in these density records, so no magnitude bound is claimed. These Amundsen states exclude unmatched temperatures/loadings and other sources. Matched ' + str(len(matched)) + ' of ' + str(len(old_density)) + r' F1 rows; the pressure basis is disclosed, not matched.',
           ['Metric', 'n', 'F1', 'A7', 'Unit'], predecessor, [.42,.06,.18,.18,.16])
     OUTPUTS['supplement_predecessor.tex'] += '% Temperature/loading/mass-fraction matched IDs (pressure disclosed, not matched): '+', '.join(d['id'] for _,d in matched)+'\n'
     OUTPUTS['supplement_predecessor.tex'] += '% F1 excluded rows: none. A7 rows outside baseline: '+', '.join(d['id'] for d in density if d['id'] not in {x['id'] for _,x in matched})+'\n'
@@ -291,11 +285,11 @@ def main():
         if r['id'] in loaded_ids and abs(float(r['error_over_s'])) > 2:
             role += '; FAIL >2s'
         density_rows.append([r['id'],r['source']+'; '+role,num(r['T_K']),num(r['P_Pa']),num(r['loading'])+'; '+num(r['mea_mass_fraction']),num(r['observed_kg_m3'])+'; '+num(r['predicted_kg_m3']),num(r['error_kg_m3'])+'; '+num(r['s_kg_m3'])+'; '+num(r['error_over_s'])])
-    table('supplement_carbonate_density.tex',r'All 210 native A7 densities. Temperature is K, pressure Pa, density/error/scale are kg/m3; mass fraction uses unloaded solvent. Scales are not uniformly source uncertainties, and 2s is not a 95 percent interval. Amundsen source pressure is unreported; 100000 Pa is the declared calculation basis. Its high-temperature/loading uncertainty boundary remains unresolved; source locators and per-row uncertainty scope remain in density.csv. The 47-row gate does not apply to non-fitted/excluded rows.',
+    table('supplement_carbonate_density.tex',r'All 210 native A7 densities. Temperature is K, pressure Pa, density/error/scale are kg/m3; mass fraction uses unloaded solvent. Scales are not uniformly source uncertainties, and 2s is not a 95 percent interval. Amundsen source pressure is unreported; 100000 Pa is the declared calculation basis. Its high-temperature/loading uncertainty boundary remains unresolved; source locators and per-row uncertainty scope remain in density.csv. The $2s$ requirement on the 47 fitted loaded densities does not apply to non-fitted or excluded rows.',
           ['Row ID','Source; role','T','P','Loading; mass fraction','Observed; calculated','Error; s; e/s'],density_rows,[.22,.20,.07,.08,.12,.16,.15])
     previous=OUTPUTS['supplement_carbonate_density.tex']
     carbonate=a.rows(a.E/'carbonate-share.csv')
-    table('supplement_carbonate_density.tex',r'All ten carbonate-share comparisons (different observables from the six fitted Jakobsen amount ratios). Corrected unloaded MEA mass fraction is '+num(float(carbonate[0]['mea_mass_fraction']),10)+r'; model loading uses NMR. Historical-nine membership is provenance, not an exclusion. Source: VDRXENRB/XVFDEJM2, Tables A1--A2 p.9902 and Table 2 p.9896.',
+    table('supplement_carbonate_density.tex',r'All ten carbonate-share comparisons (different observables from the six fitted Jakobsen amount ratios). Corrected unloaded MEA mass fraction is '+num(float(carbonate[0]['mea_mass_fraction']),10)+r'; model loading uses NMR. Historical-nine membership is provenance, not an exclusion. Source: Jakobsen et al.\ \cite{Jakobsen2005}, Tables A1--A2 (p.~9902) and Table~2 (p.~9896).',
           ['ID','T (K)','NMR loading; maxload','Observed share','Calculated share','Calc/obs','Historical nine'],[[r['id'],r['T_K'],num(r['model_loading'])+'; '+num(r['maxload']),num(r['observed_share']),num(r['predicted_share']),num(r['calc_over_obs']),r['historical_nine_included']] for r in carbonate],[.25,.08,.17,.13,.13,.12,.12])
     OUTPUTS['supplement_carbonate_density.tex']=previous+OUTPUTS['supplement_carbonate_density.tex'].replace('tab:supplement-carbonate-density','tab:supplement-carbonate-share')
     phase_rows=[]
@@ -314,7 +308,7 @@ def main():
             split_rows.append([i,r['seed'],str(r['result']['success']),num(r['delta_G_over_RT_vs_original'],10),num(r['delta_G_over_RT_vs_single_liquid'],10),'; '.join(num(v) for v in r['result']['molar_densities']),'; '.join(p['identity']+' ('+p['role']+')' for p in r['result'].get('phases', [])) or 'unavailable: failed split'])
     identity=a.load(a.J/'amendment-6/selected-checks/phase-diagnosis/engine-identity.json')
     identity='wheel SHA-256 '+identity['wheel_sha256']
-    table('supplement_phase_family.tex',r'Separately seeded A6 split solves, including failed attempts. Original Engine identity (not the same-wheel classification comparison): '+tex(identity.strip())+r'. Gibbs differences are dimensionless G/RT; phase densities are mol/m3. Only successful split solves support the split comparison.',
+    table('supplement_phase_family.tex',r'Separately seeded A6 split solves, including failed attempts. Original Engine identity (not the same-wheel classification comparison): '+tex(identity.strip())+r'. Gibbs differences are extensive $\Delta G/(RT)$ values in mol for the retained feed amounts; phase densities are mol/m3. Only successful split solves support the split comparison.',
           ['Index','Seed','Success','Delta vs original','Delta vs single liquid','Densities','Phases'],split_rows,[.06,.17,.09,.14,.14,.18,.22])
     OUTPUTS['supplement_phase_family.tex']=previous+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-states')
     previous=OUTPUTS['supplement_phase_family.tex']

@@ -64,7 +64,7 @@ The separate 152-quantity wheel-transfer check covers only its named quantities,
 The first table partitions A7 fitted rows by source, operator and objective group; the second reports only rows outside the objective.
 Calibration deviations do not constitute independent prediction.
 Arcis is an acceptance check, and Wagner and concentration-transfer data were previously accessed.
-Wagner entered this A7 assessment after acceptance, which does not erase its earlier access history.
+Wagner was assessed after A7 was selected but had been examined during model development.
 Canonical and packet views overlap and are not combined.
 The main text reports the complete canonical pressure view separately from the objective-excluded canonical rows below.
 
@@ -100,7 +100,7 @@ The result makes no stability claim above \SI{333.15}{\kelvin}, above loading 0.
 A two-phase classification does not mean two liquid phases, and a blank minimum-descent value does not mean zero Gibbs change.
 
 % P:supplement-07
-The paired family classifications use Engine commit \nolinkurl{8298c6029ebb8b467929badc4a223c580ec591ab} and its A7 wheel identified in S9.
+The paired family classifications use Engine commit \nolinkurl{8298c6029ebb8b467929badc4a223c580ec591ab} and its A7 wheel identified in Section~S9.
 The separately confirmed A6 split states at indices 21, 63 and 70 retain the original Engine commit \nolinkurl{21e761c318c2ac5b555a245365c844d38a93e4cb} and wheel SHA-256 \nolinkurl{d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357}.
 Their phase compositions, amounts, densities and Gibbs changes are separate evidence from the common-wheel classification comparison.
 A failed split confirmation would not turn a resolved descent into an accepted state.
@@ -119,8 +119,11 @@ The samples neither establish the minimum residual span between them nor exclude
 The subsequent joint refit uses a \MEAH size lower bound of \SI{5.35}{\angstrom} and ends at that bound, with 44 of 47 densities within $2s$.
 
 % P:supplement-09
-The separate Hartono $x_3$ sensitivity changes only the declared 32 Hartono feed/loadings, keeps the printed-loading scales frozen, and refits in the second restricted box.
-It retains 44 of 47 densities within $2s$ on its own basis, with failures at Amundsen 081, Amundsen 077 and Hartono \SI{353.15}{\kelvin}, $\alpha=0.39$.
+Hartono et al.\ report the apparent \COtwo component mole fraction $x_3$ alongside the printed loading $\alpha$ \cite[Table~3, footnote~a, p.~1810]{Hartono2014}.
+The sensitivity uses the alternative loading $\alpha_{x_3}=x_3(1+W)/(1-x_3)$, where $W=7.911062165$ is the declared molar ratio of water to \MEA in the nominal 30 wt\% \COtwo-free solvent.
+Here $x_3$ is an apparent component fraction, not the true-species mole fraction of molecular \COtwo in the reacting liquid.
+The separate sensitivity changes only the declared 32 Hartono feed/loadings to this basis, keeps the printed-loading scales frozen, and refits in the second restricted box.
+It retains 44 of 47 densities within $2s$ on its own basis, with failures at Amundsen 081, Amundsen 077 and the Hartono \SI{353.15}{\kelvin} observation in the column labelled $\alpha=0.39$ in the source.
 The same sensitivity endpoint evaluated on nominal printed-loading rows has 40 of 47 within $2s$; this is a cross-basis comparison, not a replacement fit.
 Its endpoint family also has no resolved descent in 657 trials at its 73 states.
 This single sensitivity does not replace the primary A7 result or validate one loading interpretation.
@@ -149,7 +152,7 @@ The five Amundsen source-conflict rows are displayed but excluded from the fitti
 R2 begins with the Austgen source correlation and its aqueous-molality conversion; R5 begins with the Bates--Pinching correlation.
 Earlier joint fits and the interpolated starting record supplied inherited chemistry shifts, rather than a new zero-shift start.
 The accepted second restricted fit inherits total R2/R5 shifts of $-1811.8989$ and $+10000$~\si{\joule\per\mole} and ends at $-1387.4047$ and $+10000$~\si{\joule\per\mole}, with unshifted R5 $A=\SI{2831.681}{\kelvin}$.
-The serialized selected R2/R5 coefficients already contain those transformations.
+The selected R2/R5 coefficients in main-text Table~1 already contain those transformations.
 Their earlier data use is calibration history, not independent validation of a reaction law.
 Exact source correlations, earlier adjustments, starts, transformations and file hashes are documented in \nolinkurl{docs/scientific/latex/source_log.md} and the accompanying calculation files.
 
@@ -162,7 +165,7 @@ The current objective is the eight-group table in the main text.
 % P:supplement-14
 Two retained-inventory inconsistencies require explicit correction before reading the table.
 A7 fits four Hilliard2008 heat-capacity rows, at 318.15 and \SI{353.15}{\kelvin} and loadings 0 and 0.358; the inventory's ``not extracted'' heat-capacity note is superseded for those rows (\nolinkurl{analyses/mea_parameter_bundle/results/a7-paper-evidence/cp.csv}).
-All 103 Amundsen2009 density rows in A7 use \SI{100000}{\pascal} (\nolinkurl{analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv}, field \texttt{P\_Pa}); other density pressures are row-specific and listed in S3.
+All 103 Amundsen2009 density rows in A7 use \SI{100000}{\pascal} (\nolinkurl{analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv}, field \texttt{P\_Pa}); other density pressures are row-specific and listed in Section~S3.
 In the matched 68-row F1 density comparison, F1 uses \SI{101325}{\pascal} and A7 \SI{100000}{\pascal}, a \SI{1325}{\pascal} difference.
 No pressure-density derivative is retained, so no magnitude claim is made for that difference (A7 data release README).
 These corrections apply to interpreting the historical table; they do not imply that its generated contents were updated.
@@ -179,11 +182,11 @@ These results verify numerical solutions and reproduction; they validate neither
 
 % P:supplement-16
 The selected A7 parameter file is \nolinkurl{analyses/mea_parameter_bundle/results/selected-current-best-parameters.json}, SHA-256 \nolinkurl{e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e}.
-It is byte-identical to the accepted second restricted endpoint, and the promoted notebook evidence is commit \nolinkurl{8f40c125e5945ac785cc0ad1889fc79bea2096c9}.
+It is byte-identical to the endpoint of the second restricted fit, and the evidence commit, including the analysis notebook, is \nolinkurl{8f40c125e5945ac785cc0ad1889fc79bea2096c9}.
 A7 calculations use the ePC-SAFT Engine software from the private repository \url{https://github.com/tannerpolley/ePC-SAFT}, at commit \nolinkurl{8298c6029ebb8b467929badc4a223c580ec591ab}, with wheel SHA-256 \nolinkurl{8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3}.
 The Engine wheel is not bundled with the planned A7 data release; reproducing the thermodynamic calculations requires access to that dependency.
-A6 density and Arcis assessments retain the earlier Engine and wheel identity stated in S4; the paired A6/A7 phase search uses the A7 Engine.
-F1 retains the original parameter and wheel identities stated in S1, with Engine commit \nolinkurl{026b30311b959f1a5db4feef4c15e243f7044a5f}.
+A6 density and Arcis assessments retain the earlier Engine and wheel identity stated in Section~S4; the paired A6/A7 phase search uses the A7 Engine.
+F1 retains the original parameter and wheel identities stated in Section~S1, with Engine commit \nolinkurl{026b30311b959f1a5db4feef4c15e243f7044a5f}.
 
 % P:supplement-17
 The A7 data release DOI is pending.
@@ -204,6 +207,8 @@ The fixed \COtwo segment count, segment diameter and dispersion energy agree wit
 Water's segment count, diameter-law constant, dispersion energy, self-association energy and association volume were estimated in the preceding pure-water calibration of this project against IAPWS-95 reference values and then held fixed; the remaining diameter-law coefficients were retained.
 The fixed bicarbonate, carbonate and hydroxide segment diameters and dispersion energies retain the aqueous-electrolyte values tabulated by Uyan et al.\ \cite[Table~4]{Uyan2015}; the corresponding source \ce{H+} values are assigned here to \ce{H3O+} as a model transfer.
 These citations identify the stated parameter subsets, not every Born, dielectric or binary input; the other entries retain their separate project, source and transfer qualifications.
+The selected parameter file in the planned A7 data release preserves source and transformation locators, including inherited lineage labels.
+The parameter attributions above distinguish those labels from the origin of the values used here.
 
 \begin{landscape}
 \input{tables/full_ionic_ssm_ds_parameters}

@@ -1,6 +1,6 @@
 # Displayed-number sources for #197
 
-Paths start at the worktree root. This list copies retained values and maps displays; it evaluates no model. Chemical subscripts, equation numbering, reference years/locators and software hashes are identifiers. The fourteen approved generated tables are retained presentation sources; their header comments identify raw files and hashes. Fix round 1 changes labels and provenance text only; all quantitative cells and the generator reconciliation remain equal to 21b4e47.
+Paths start at the worktree root. This list copies retained values and maps displays; it evaluates no model. Chemical subscripts, equation numbering, reference years/locators and software hashes are identifiers. The fourteen approved generated tables are retained presentation sources; their header comments identify raw files and hashes. Fix round 2 changes ruled labels and text only, removes the source-locator table, and boxes whole-cell negative numbers; every retained numerical row token and the generator reconciliation remain equal to ea40161.
 
 ## Authored numerical statements
 
@@ -57,11 +57,23 @@ Paths start at the worktree root. This list copies retained values and maps disp
 | S10: 2B MEA, model transfer H+ to H3O+, IAPWS-95 reference | `Baygi2015 Table 2`; `Schick2023 Table 1`; `Uyan2015 Table 4`; `analyses/mea_parameter_bundle/results/water-124/README.md:7` | Parameter-subset attribution from r2 item 7; no new parameter values; full tables below. |
 | HSL MA57 on A7 software build | `analyses/mea_parameter_bundle/results/engine-8298c602-adoption/comparison.json:26`; `~/.profile:50` | Machine/software evidence only; A7 records lack per-run solver identity. No MA57 attribution to F1 or original A6 Engine 21e761c3 assessment. |
 
+## Fix round 2: definitions, provenance and table numbering
+
+| Displayed quantity or attribution | Retained source | Application and limits |
+| --- | --- | --- |
+| Four Böttinger plus three Matin observations outside the common subset; six Jakobsen ratios | `analyses/mea_parameter_bundle/results/a7-paper-evidence/fitted-rows.csv`; `fit-summary.json` | Story item 2 accepted by r4; group membership unchanged. |
+| Hartono apparent component fraction $x_3$; $\alpha_{x_3}=x_3(1+W)/(1-x_3)$; $W=7.911062165$ | `data/reference/MEA/observations/density_viscosity/README.md:65`; Hartono2014 Table 3 footnote a, p.1810; `amendment-7/inputs/build-x3.py.txt` under the joint-recalibration result directory | R4 correction 6 defines the retained 32-feed sensitivity; printed $\alpha=0.39$ identifies the source column, whose derived loading is 0.401365638323. The 44/47 own-basis and 40/47 cross-basis statements are preserved. |
+| A6 split differences $\Delta G/(RT)$ in mol | `analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/probes.py.txt:58`; `report.md:69` | R4 corrects the extensive unit label only. Table S9 retains its signs and digits and original Engine identity. |
+| CO2 energy 169.21 K; CO2–MEA interaction 0; its slope 0 K; CO2–water slope −35.66505220645838 K | `analyses/mea_parameter_bundle/results/selected-current-best-parameters.json` | R4 correction 2 labels these earlier project inputs fixed in A7. Fitted/tied labels keep their precedence. |
+| Table S14 species/association inputs; Table S15 binary parameters | Final `docs/scientific/latex/builds/supplement.aux` | Former locator Table S15 deleted; binary Table S16 becomes S15. Section S10 attribution is on p.33; S14 opens p.34 and S15 p.39. Section references explicitly say Section S followed by its number. |
+
 ## Every generated numerical table cell
 
-Each entry quotes the current generated row exactly. Every numerical cell maps to the file and line shown; the generated provenance comments identify its retained inputs.
+Each entry quotes the current generated row exactly. Numerical cells map to the file and line shown; header comments identify the retained inputs. Table numbers and opening pages come from the final main/supplement auxiliary files.
 
 ### acceptance_limits.tex
+
+Table 5 (main p. 9).
 
 - `docs/scientific/latex/tables/acceptance_limits.tex:76` → `\caption{Acceptance limits and endpoint values. The declared rounded ceilings allow a 10\,\% increase in common-subset cost, two percentage points in pressure and species AARD, and \SI{1}{\kilo\joule\per\mole} in each heat RMSE relative to F1; these absolute limits were explicitly retained for A7. The Cai ceiling is the rounded value of 1.05 times the preceding constant-interaction Cai-only cost. Density and finite-phase requirements were set separately. The three density failures remain failures; accepting A7 with them changed no limit. Unavailable means no retained assessment. A6 and A7 phase values come from the same software build.}\label{tab:acceptance-limits}\\`
 - `docs/scientific/latex/tables/acceptance_limits.tex:78` → `Quantity & Limit & Authority & F1 reference & A6 & First restricted fit & A7 \\`
@@ -79,6 +91,8 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 
 ### binary_interaction_parameters.tex
 
+Table S15 (supplement p. 39).
+
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:72` → `\caption{A7 binary parameters. Temperature slopes multiply $(1/T-1/T_{\rm ref})$, with retained reference temperatures listed explicitly. Unlisted interactions retain the selected document conventions, including the same-sign ion dispersion exclusion. Fixed inputs are not new A7 fitted coordinates.}\label{tab:binary-interaction-parameters}\\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:80` → `HCO3-–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:81` → `MEACOO-–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
@@ -87,11 +101,11 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:84` → `CO2–\ce{CO3^{2-}} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:85` → `CO2–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:86` → `CO2–OH- kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:87` → `CO2–MEA kij & 0 & 1 & fixed in A7 & this work; candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:88` → `CO2–MEA kij temperature slope & 0 & kelvin & fixed in A7 & this work; candidate extrapolation; Tref=313.15 K \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:87` → `CO2–MEA kij & 0 & 1 & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:88` → `CO2–MEA kij temperature slope & 0 & kelvin & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation; Tref=313.15 K \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:89` → `CO2–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:90` → `CO2–water kij & -0.04641690112 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:91` → `CO2–water kij temperature slope & -35.66505221 & kelvin & fixed in A7 & this work; candidate extrapolation; Tref=313.15 K \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:90` → `CO2–water kij & \mbox{-0.04641690112} & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:91` → `CO2–water kij temperature slope & \mbox{-35.66505221} & kelvin & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation; Tref=313.15 K \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:92` → `\ce{CO3^{2-}}–H3O+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:93` → `H3O+–OH- kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:94` → `HCO3-–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
@@ -100,44 +114,48 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:97` → `H3O+–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:98` → `OH-–MEA kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:99` → `MEA–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:100` → `MEA–water kij & -0.08990482269 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:101` → `MEA–water kij temperature slope & -8.069913373 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:100` → `MEA–water kij & \mbox{-0.08990482269} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:101` → `MEA–water kij temperature slope & \mbox{-8.069913373} & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:102` → `HCO3-–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:103` → `MEACOO-–MEAH+ kij & -1 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:103` → `MEACOO-–MEAH+ kij & \mbox{-1} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:104` → `\ce{CO3^{2-}}–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:105` → `OH-–MEAH+ kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:106` → `HCO3-–water kij & 0.7253209981 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:107` → `MEACOO-–water kij & -0.003863204449 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:108` → `\ce{CO3^{2-}}–water kij & -0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:107` → `MEACOO-–water kij & \mbox{-0.003863204449} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:108` → `\ce{CO3^{2-}}–water kij & \mbox{-0.25} & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/binary_interaction_parameters.tex:109` → `H3O+–water kij & 0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:110` → `OH-–water kij & -0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:111` → `MEAH+–water kij & -0.5 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
-- `docs/scientific/latex/tables/binary_interaction_parameters.tex:112` → `MEAH+–water kij temperature slope & -41.92964086 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:110` → `OH-–water kij & \mbox{-0.25} & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:111` → `MEAH+–water kij & \mbox{-0.5} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\`
+- `docs/scientific/latex/tables/binary_interaction_parameters.tex:112` → `MEAH+–water kij temperature slope & \mbox{-41.92964086} & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\`
 
 ### fitted_coordinates.tex
 
+Table 4 (main p. 8).
+
 - `docs/scientific/latex/tables/fitted_coordinates.tex:72` → `\caption{All 16 A7 scientific coordinates in optimizer-column order. Transformation: value = origin + signed slope times optimizer coordinate. R5 A is unshifted; enthalpy shifts are inherited-plus-fitted totals. Conditional standard errors (SE) depend on weights, fixed inputs, active bounds and local linearization; they are not measurement uncertainties or prediction intervals.}\label{tab:fitted-coordinates}\\`
-- `docs/scientific/latex/tables/fitted_coordinates.tex:80` → `0: MEACOO-–water kij & -0.0038632044 & 1 & -0.5 to 0.5 & 0.0032213889; 0.01 & 0.182038 &  \\`
-- `docs/scientific/latex/tables/fitted_coordinates.tex:81` → `1: MEAH+–water kij & -0.5 & 1 & -0.5 to -0.161 & -0.5; 0.01 & bound; no symmetric SE &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:80` → `0: MEACOO-–water kij & \mbox{-0.0038632044} & 1 & -0.5 to 0.5 & 0.0032213889; 0.01 & 0.182038 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:81` → `1: MEAH+–water kij & \mbox{-0.5} & 1 & -0.5 to -0.161 & -0.5; 0.01 & bound; no symmetric SE &  \\`
 - `docs/scientific/latex/tables/fitted_coordinates.tex:82` → `2: HCO3-–water kij & 0.725321 & 1 & -0.5 to 1 & 0.65955826; 0.01 & 1.26715 &  \\`
-- `docs/scientific/latex/tables/fitted_coordinates.tex:83` → `3: MEACOO-–MEAH+ kij & -1 & 1 & -1 to 1 & -1; 0.01 & bound; no symmetric SE &  \\`
-- `docs/scientific/latex/tables/fitted_coordinates.tex:84` → `4: MEAH+–water kij temperature slope & -41.929641 & K & -1000 to 1000 & -46.030841; 10 & 60.2876 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:83` → `3: MEACOO-–MEAH+ kij & \mbox{-1} & 1 & -1 to 1 & -1; 0.01 & bound; no symmetric SE &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:84` → `4: MEAH+–water kij temperature slope & \mbox{-41.929641} & K & -1000 to 1000 & -46.030841; 10 & 60.2876 &  \\`
 - `docs/scientific/latex/tables/fitted_coordinates.tex:85` → `5: MEAH+ segment diameter & 5.35 & \AA & 5.35 to 5.8 & 5.49; 0.1 & bound; no symmetric SE & MEAH+ packing diameter = 0.88 times coordinate; MEAH+ Debye–Hückel diameter = 1.0 times coordinate \\`
 - `docs/scientific/latex/tables/fitted_coordinates.tex:86` → `6: MEACOO- segment diameter & 4.86604 & \AA & 2 to 5.8 & 4.6887051; 0.1 & 0.0794313 & MEACOO- packing diameter = 0.88 times coordinate; MEACOO- Debye–Hückel diameter = 1.0 times coordinate \\`
 - `docs/scientific/latex/tables/fitted_coordinates.tex:87` → `7: MEAH+ born diameter & 5 & \AA & 2 to 5 & 5; 0.1 & bound; no symmetric SE &  \\`
 - `docs/scientific/latex/tables/fitted_coordinates.tex:88` → `8: MEACOO- born diameter & 5 & \AA & 2 to 5 & 5; 0.1 & bound; no symmetric SE &  \\`
 - `docs/scientific/latex/tables/fitted_coordinates.tex:89` → `9: R5 A & 2831.681 & K & 2400 to 3000 & 2848.516; -80 & 172.434 &  \\`
-- `docs/scientific/latex/tables/fitted_coordinates.tex:90` → `10: R2 enthalpy shift & -1387.4047 & J/\allowbreak{}mol & -10000 to 10000 & -1811.8989; 2500 & 5292.47 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:90` → `10: R2 enthalpy shift & \mbox{-1387.4047} & J/\allowbreak{}mol & -10000 to 10000 & -1811.8989; 2500 & 5292.47 &  \\`
 - `docs/scientific/latex/tables/fitted_coordinates.tex:91` → `11: R5 enthalpy shift & 10000 & J/\allowbreak{}mol & -10000 to 10000 & 10000; 2500 & bound; no symmetric SE &  \\`
-- `docs/scientific/latex/tables/fitted_coordinates.tex:92` → `12: MEA–water kij & -0.089904823 & 1 & -0.5 to 0.5 & -0.090088134; 0.01 & 0.00102441 &  \\`
-- `docs/scientific/latex/tables/fitted_coordinates.tex:93` → `13: MEA–water kij temperature slope & -8.0699134 & K & -1000 to 1000 & -8.300348; 10 & 1.80605 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:92` → `12: MEA–water kij & \mbox{-0.089904823} & 1 & -0.5 to 0.5 & -0.090088134; 0.01 & 0.00102441 &  \\`
+- `docs/scientific/latex/tables/fitted_coordinates.tex:93` → `13: MEA–water kij temperature slope & \mbox{-8.0699134} & K & -1000 to 1000 & -8.300348; 10 & 1.80605 &  \\`
 - `docs/scientific/latex/tables/fitted_coordinates.tex:94` → `14: MEAH+ dispersion energy/\allowbreak{}k & 177.79505 & K & 50 to 950 & 173.18304; 10 & 47.9471 &  \\`
 - `docs/scientific/latex/tables/fitted_coordinates.tex:95` → `15: MEACOO- dispersion energy/\allowbreak{}k & 207.2746 & K & 50 to 1000 & 217.55547; 10 & 83.7489 &  \\`
 
 ### full_ionic_ssm_ds_parameters.tex
 
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:72` → `\caption{A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. The provenance column distinguishes the A7 fit from inherited project inputs and source ancestry; inherited labels do not establish that every current value was reported directly in the named source. Entries marked ``candidate extrapolation'' retain that qualification from the selected parameter file; absence of the label does not establish validation. fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: \ce{CO2}, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.}\label{tab:full-ionic-ssm-ds-parameters}\\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:80` → `CO2 dispersion energy/\allowbreak{}k & 169.21 & kelvin & fixed in A7 & this work; candidate extrapolation \\`
+Table S14 (supplement p. 34).
+
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:72` → `\caption{A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. The provenance column distinguishes the A7 fit from inherited project inputs and source ancestry; inherited labels do not establish that every current value was reported directly in the named source. Entries marked ``candidate extrapolation'' retain that qualification from the selected parameter file; absence of the label does not establish validation. ``Fixed'' means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: \ce{CO2}, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.}\label{tab:full-ionic-ssm-ds-parameters}\\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:80` → `CO2 dispersion energy/\allowbreak{}k & 169.21 & kelvin & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:81` → `CO2 segment count & 2.0729 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:82` → `CO2 segment diameter & 2.7852 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:83` → `CO2 solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
@@ -198,9 +216,9 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:138` → `OH- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:139` → `water segment diameter constant-plus-sum-of-exponentials constant & 2.780432615 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:140` → `water segment diameter constant-plus-sum-of-exponentials term-0 amplitude & 10.11 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:141` → `water segment diameter constant-plus-sum-of-exponentials term-0 exponent coefficient & -0.01775 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:142` → `water segment diameter constant-plus-sum-of-exponentials term-1 amplitude & -1.417 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:143` → `water segment diameter constant-plus-sum-of-exponentials term-1 exponent coefficient & -0.01146 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:141` → `water segment diameter constant-plus-sum-of-exponentials term-0 exponent coefficient & \mbox{-0.01775} & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:142` → `water segment diameter constant-plus-sum-of-exponentials term-1 amplitude & \mbox{-1.417} & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:143` → `water segment diameter constant-plus-sum-of-exponentials term-1 exponent coefficient & \mbox{-0.01146} & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:144` → `model/\allowbreak{}relative permittivity/\allowbreak{}ionic region relative permittivity & 8 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:145` → `MEA(a)–MEA(b) association energy/\allowbreak{}k & 2586.3 & kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:146` → `MEA(a)–MEA(b) association volume & 0.036287 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
@@ -216,24 +234,12 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:156` → `water site b & 1 & -- & fixed acceptor site & inherited project inputs; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:157` → `CO2 site a & 1 & -- & fixed donor site & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\`
 - `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:158` → `CO2 site b & 1 & -- & fixed acceptor site & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:159` → `MEA(a)–water(b) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: MEA(a)–MEA(b) association energy/\allowbreak{}k, water(a)–water(b) association energy/\allowbreak{}k; volume: MEA(a)–MEA(b) association volume, water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:160` → `MEA(b)–water(a) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: MEA(a)–MEA(b) association energy/\allowbreak{}k, water(a)–water(b) association energy/\allowbreak{}k; volume: MEA(a)–MEA(b) association volume, water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:168` → `\caption{Retained source and transformation locators for fixed correlation and association inputs. The MEA association volume retains its conversion from the source diameter convention to the $\sigma_{ij}^3$ convention used here; no combining rule is evaluated here.}\label{tab:association-source-locators}\\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:176` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=segment\_\allowbreak{}diameter:status=retained-literature-lineage \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:177` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:ionic-dielc=8:status=transferred-diagnostic \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:178` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:179` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:180` → `Fakouri Baygi and Pahlavanzadeh 2015 & Eq. 4 (p. 791) uses d\_\allowbreak{}ij\textasciicircum{}3; Table 2 (p. 792) 2B kappa = 0.037470 under that convention. Converted to the Engine sigma\_\allowbreak{}ij\textasciicircum{}3 convention as the constant kappa that best reproduces Baygi's d\textasciicircum{}3 model (Eq. 8 form, p\_\allowbreak{}sat and saturated liquid density) over the packet domain 293.15-393.15 K, with m, sigma, epsilon fixed: analyses/\allowbreak{}2026-mea-association-diameter \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:181` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:182` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:183` → `Schick et al. 2023; Pabsch et al. 2020 & Schick et al. (2023), Table 1 and Section 2.4.2; Pabsch et al. (2020) CO2-water parameterization \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:184` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:185` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:186` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:187` → `inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\`
-- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:188` → `Fakouri Baygi and Pahlavanzadeh 2015 & Eq. 6, Wolbach-Sandler volume rule including the size factor, used with the Table 2 MEA 2B parameters \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:159` → `MEA(a)–water(b) & wolbach-sandler & -- & fixed combining rule; energy from MEA(a)–MEA(b) association energy/\allowbreak{}k and water(a)–water(b) association energy/\allowbreak{}k; volume from MEA(a)–MEA(b) association volume and water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
+- `docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex:160` → `MEA(b)–water(a) & wolbach-sandler & -- & fixed combining rule; energy from MEA(a)–MEA(b) association energy/\allowbreak{}k and water(a)–water(b) association energy/\allowbreak{}k; volume from MEA(a)–MEA(b) association volume and water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\`
 
 ### objective_groups.tex
+
+Table 3 (main p. 7).
 
 - `docs/scientific/latex/tables/objective_groups.tex:72` → `\caption{A7 objective operators. Rows partition eight disjoint groups and 307 quantities; common subset contains pressure, species and heat. Cai contains 25 temperatures and 25 vapor fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; log ratio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales retain their declared meaning; they are not uniformly measurement uncertainties.}\label{tab:objective-groups}\\`
 - `docs/scientific/latex/tables/objective_groups.tex:80` → `common subset & CO2 vapor partial pressure & Pa & 47 & log ratio & 1 & 11.1111 & 5.98341 \\`
@@ -253,14 +259,18 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 
 ### reaction_equilibrium_constants.tex
 
+Table 1 (main p. 5).
+
 - `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:72` → `\caption{A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.}\label{tab:reaction-equilibrium-constants}\\`
 - `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:80` → `R1: \ce{2 H2O <=> H3O+ + OH-} & A = 132.899; B = -13445.9; C = -22.4773; D = 0.0 & Austgen 1991, Table V, reaction 1a & [273.15, 498.15] & add source-to-common offset 8.03307 \\`
-- `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:81` → `R2: \ce{CO2 + 2 H2O <=> HCO3^- + H3O+} & A = 234.9486708; B = -11925.23357; C = -36.7816; D = 0 & Austgen 1991, Table V, reaction 4a & [273.15, 498.15] & offset included in serialized R2 \\`
+- `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:81` → `R2: \ce{CO2 + 2 H2O <=> HCO3^- + H3O+} & A = 234.9486708; B = -11925.23357; C = -36.7816; D = 0 & Austgen 1991, Table V, reaction 4a & [273.15, 498.15] & offset included in R2 coefficients \\`
 - `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:82` → `R3: \ce{HCO3^- + H2O <=> CO3^{2-} + H3O+} & A = 216.049; B = -12431.7; C = -35.4819; D = 0.0 & Austgen 1991, Table V, reaction 5a & [273.15, 498.15] & add source-to-common offset 4.01653 \\`
 - `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:83` → `R4: \ce{MEACOO- + H2O <=> HCO3^- + MEA} & A = 2.151; B = -1545.3 & Tong 2012, Table 5, via Aroua 1999 & [293.15, 323.15] & add source-to-common offset 0 \\`
 - `docs/scientific/latex/tables/reaction_equilibrium_constants.tex:84` → `R5: \ce{MEAH+ + H2O <=> MEA + H3O+} & A = 3354.017165; B = -1.281106391; C = 0.0004277 & Bates and Pinching 1951, Eq. 7 & [273.15, 323.15] & add source-to-common offset 0 \\`
 
 ### residual_summary.tex
+
+Table 7 (main p. 14).
 
 - `docs/scientific/latex/tables/residual_summary.tex:72` → `\caption{A7 property deviations. AARD denotes mean absolute relative deviation. Calibration errors and acceptance checks do not establish physical validation; Cai operators use native units. Cp remains on its source mass basis.}\label{tab:residual-summary}\\`
 - `docs/scientific/latex/tables/residual_summary.tex:80` → `common subset pressure & calibration & 47 & AARD & 11.8608 & \% \\`
@@ -279,11 +289,13 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 - `docs/scientific/latex/tables/residual_summary.tex:93` → `Hilliard Cp, 318.15 K, loading 0.0 & calibration & 1 & signed error & 5.53403 & \% \\`
 - `docs/scientific/latex/tables/residual_summary.tex:94` → `Hilliard Cp, 318.15 K, loading 0.358 & calibration & 1 & signed error & 2.56666 & \% \\`
 - `docs/scientific/latex/tables/residual_summary.tex:95` → `Hilliard Cp, 353.15 K, loading 0.0 & calibration & 1 & signed error & 1.14996 & \% \\`
-- `docs/scientific/latex/tables/residual_summary.tex:96` → `Hilliard Cp, 353.15 K, loading 0.358 & calibration & 1 & signed error & -2.13471 & \% \\`
+- `docs/scientific/latex/tables/residual_summary.tex:96` → `Hilliard Cp, 353.15 K, loading 0.358 & calibration & 1 & signed error & \mbox{-2.13471} & \% \\`
 
 ### supplement_carbonate_density.tex
 
-- `docs/scientific/latex/tables/supplement_carbonate_density.tex:72` → `\caption{All 210 native A7 densities. Temperature is K, pressure Pa, density/error/scale are kg/m3; mass fraction uses unloaded solvent. Scales are not uniformly source uncertainties, and 2s is not a 95 percent interval. Amundsen source pressure is unreported; 100000 Pa is the declared calculation basis. Its high-temperature/loading uncertainty boundary remains unresolved; source locators and per-row uncertainty scope remain in density.csv. The 47-row gate does not apply to non-fitted/excluded rows.}\label{tab:supplement-carbonate-density}\\`
+Table S6 (supplement p. 4); Table S7 (supplement p. 14).
+
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:72` → `\caption{All 210 native A7 densities. Temperature is K, pressure Pa, density/error/scale are kg/m3; mass fraction uses unloaded solvent. Scales are not uniformly source uncertainties, and 2s is not a 95 percent interval. Amundsen source pressure is unreported; 100000 Pa is the declared calculation basis. Its high-temperature/loading uncertainty boundary remains unresolved; source locators and per-row uncertainty scope remain in density.csv. The $2s$ requirement on the 47 fitted loaded densities does not apply to non-fitted or excluded rows.}\label{tab:supplement-carbonate-density}\\`
 - `docs/scientific/latex/tables/supplement_carbonate_density.tex:80` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}001 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0; 0.2 & 1005.3; 1006.21 & 0.906168; 0.5; 1.81234 \\`
 - `docs/scientific/latex/tables/supplement_carbonate_density.tex:81` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}002 & Amundsen2009; fitted CO2-free & 298.15 & 100000 & 0; 0.3 & 1010.6; 1010.04 & -0.557182; 0.5; -1.11436 \\`
 - `docs/scientific/latex/tables/supplement_carbonate_density.tex:82` → `Amundsen2009\_\allowbreak{}state\_\allowbreak{}003 & Amundsen2009; non-fitted comparison & 298.15 & 100000 & 0; 0.4 & 1015.8; 1013.46 & -2.34162; 0.5; -4.68324 \\`
@@ -494,7 +506,7 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 - `docs/scientific/latex/tables/supplement_carbonate_density.tex:287` → `Han2012\_\allowbreak{}density\_\allowbreak{}100C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 373.15 & 700000 & 0; 0.3 & 965.3; 966.147 & 0.846716; --; -- \\`
 - `docs/scientific/latex/tables/supplement_carbonate_density.tex:288` → `Han2012\_\allowbreak{}density\_\allowbreak{}110C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 383.15 & 700000 & 0; 0.3 & 957.4; 958.953 & 1.55317; --; -- \\`
 - `docs/scientific/latex/tables/supplement_carbonate_density.tex:289` → `Han2012\_\allowbreak{}density\_\allowbreak{}120C\_\allowbreak{}unloaded & Han2012; non-fitted comparison & 393.15 & 700000 & 0; 0.3 & 949.1; 951.568 & 2.46834; --; -- \\`
-- `docs/scientific/latex/tables/supplement_carbonate_density.tex:293` → `\caption{All ten carbonate-share comparisons (different observables from the six fitted Jakobsen amount ratios). Corrected unloaded MEA mass fraction is 0.2714274817; model loading uses NMR. Historical-nine membership is provenance, not an exclusion. Source: VDRXENRB/XVFDEJM2, Tables A1--A2 p.9902 and Table 2 p.9896.}\label{tab:supplement-carbonate-share}\\`
+- `docs/scientific/latex/tables/supplement_carbonate_density.tex:293` → `\caption{All ten carbonate-share comparisons (different observables from the six fitted Jakobsen amount ratios). Corrected unloaded MEA mass fraction is 0.2714274817; model loading uses NMR. Historical-nine membership is provenance, not an exclusion. Source: Jakobsen et al.\ \cite{Jakobsen2005}, Tables A1--A2 (p.~9902) and Table~2 (p.~9896).}\label{tab:supplement-carbonate-share}\\`
 - `docs/scientific/latex/tables/supplement_carbonate_density.tex:301` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}009 & 293.15 & 0.09; 0.11 & 0.00934579 & 0.00249556 & 0.267025 & True \\`
 - `docs/scientific/latex/tables/supplement_carbonate_density.tex:302` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}010 & 293.15 & 0.19; 0.21 & 0.0189573 & 0.00147617 & 0.0778682 & True \\`
 - `docs/scientific/latex/tables/supplement_carbonate_density.tex:303` → `Jakobsen2005\_\allowbreak{}state\_\allowbreak{}011 & 293.15 & 0.29; 0.29 & 0.0190476 & 0.000983695 & 0.051644 & True \\`
@@ -508,126 +520,130 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 
 ### supplement_correlations.tex
 
+Table S11 (supplement p. 22); Table S12 (supplement p. 24).
+
 - `docs/scientific/latex/tables/supplement_correlations.tex:72` → `\caption{A7 conditional correlations: ten free coordinates, rank ten, 297 degrees of freedom. Variance factor 1.002728983. Free-coordinate indices below follow: 0: MEACOO-–water kij; 1: HCO3-–water kij; 2: MEAH+–water kij temperature slope; 3: MEACOO- segment diameter; 4: R5 A; 5: R2 enthalpy shift; 6: MEA–water kij; 7: MEA–water kij temperature slope; 8: MEAH+ dispersion energy/\allowbreak{}k; 9: MEACOO- dispersion energy/\allowbreak{}k. Six active-bound coordinates and all conditional errors are in the coordinate table. This local calculation does not establish uniqueness or prediction intervals.}\label{tab:supplement-correlations}\\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:80` → `0 & 0 & 1 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:81` → `0 & 1 & 0.91128359 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:82` → `0 & 2 & 0.31076522 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:83` → `0 & 3 & -0.73659989 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:84` → `0 & 4 & -0.94953179 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:83` → `0 & 3 & \mbox{-0.73659989} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:84` → `0 & 4 & \mbox{-0.94953179} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:85` → `0 & 5 & 0.24394447 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:86` → `0 & 6 & -0.20180961 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:87` → `0 & 7 & -0.11840239 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:86` → `0 & 6 & \mbox{-0.20180961} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:87` → `0 & 7 & \mbox{-0.11840239} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:88` → `0 & 8 & 0.76713705 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:89` → `0 & 9 & -0.69161383 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:89` → `0 & 9 & \mbox{-0.69161383} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:90` → `1 & 0 & 0.91128359 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:91` → `1 & 1 & 1 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:92` → `1 & 2 & 0.25286429 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:93` → `1 & 3 & -0.70037045 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:94` → `1 & 4 & -0.80336479 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:93` → `1 & 3 & \mbox{-0.70037045} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:94` → `1 & 4 & \mbox{-0.80336479} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:95` → `1 & 5 & 0.15258343 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:96` → `1 & 6 & -0.22443119 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:97` → `1 & 7 & -0.14833678 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:96` → `1 & 6 & \mbox{-0.22443119} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:97` → `1 & 7 & \mbox{-0.14833678} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:98` → `1 & 8 & 0.95660965 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:99` → `1 & 9 & -0.92468495 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:99` → `1 & 9 & \mbox{-0.92468495} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:100` → `2 & 0 & 0.31076522 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:101` → `2 & 1 & 0.25286429 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:102` → `2 & 2 & 1 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:103` → `2 & 3 & -0.2205341 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:104` → `2 & 4 & -0.33587637 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:103` → `2 & 3 & \mbox{-0.2205341} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:104` → `2 & 4 & \mbox{-0.33587637} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:105` → `2 & 5 & 0.96715699 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:106` → `2 & 6 & 0.19634115 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:107` → `2 & 7 & 0.3136322 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:108` → `2 & 8 & 0.17359419 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:109` → `2 & 9 & -0.17171717 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:110` → `3 & 0 & -0.73659989 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:111` → `3 & 1 & -0.70037045 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:112` → `3 & 2 & -0.2205341 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:109` → `2 & 9 & \mbox{-0.17171717} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:110` → `3 & 0 & \mbox{-0.73659989} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:111` → `3 & 1 & \mbox{-0.70037045} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:112` → `3 & 2 & \mbox{-0.2205341} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:113` → `3 & 3 & 1 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:114` → `3 & 4 & 0.73204638 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:115` → `3 & 5 & -0.15227342 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:115` → `3 & 5 & \mbox{-0.15227342} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:116` → `3 & 6 & 0.14909337 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:117` → `3 & 7 & 0.089657819 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:118` → `3 & 8 & -0.58122349 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:118` → `3 & 8 & \mbox{-0.58122349} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:119` → `3 & 9 & 0.59086341 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:120` → `4 & 0 & -0.94953179 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:121` → `4 & 1 & -0.80336479 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:122` → `4 & 2 & -0.33587637 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:120` → `4 & 0 & \mbox{-0.94953179} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:121` → `4 & 1 & \mbox{-0.80336479} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:122` → `4 & 2 & \mbox{-0.33587637} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:123` → `4 & 3 & 0.73204638 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:124` → `4 & 4 & 1 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:125` → `4 & 5 & -0.28656024 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:125` → `4 & 5 & \mbox{-0.28656024} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:126` → `4 & 6 & 0.19831169 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:127` → `4 & 7 & 0.1081261 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:128` → `4 & 8 & -0.59581647 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:128` → `4 & 8 & \mbox{-0.59581647} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:129` → `4 & 9 & 0.5723395 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:130` → `5 & 0 & 0.24394447 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:131` → `5 & 1 & 0.15258343 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:132` → `5 & 2 & 0.96715699 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:133` → `5 & 3 & -0.15227342 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:134` → `5 & 4 & -0.28656024 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:133` → `5 & 3 & \mbox{-0.15227342} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:134` → `5 & 4 & \mbox{-0.28656024} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:135` → `5 & 5 & 1 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:136` → `5 & 6 & 0.16089408 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:137` → `5 & 7 & 0.25571261 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:138` → `5 & 8 & 0.063784745 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:139` → `5 & 9 & -0.056331857 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:140` → `6 & 0 & -0.20180961 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:141` → `6 & 1 & -0.22443119 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:139` → `5 & 9 & \mbox{-0.056331857} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:140` → `6 & 0 & \mbox{-0.20180961} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:141` → `6 & 1 & \mbox{-0.22443119} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:142` → `6 & 2 & 0.19634115 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:143` → `6 & 3 & 0.14909337 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:144` → `6 & 4 & 0.19831169 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:145` → `6 & 5 & 0.16089408 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:146` → `6 & 6 & 1 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:147` → `6 & 7 & 0.77832794 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:148` → `6 & 8 & -0.21190509 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:148` → `6 & 8 & \mbox{-0.21190509} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:149` → `6 & 9 & 0.20210765 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:150` → `7 & 0 & -0.11840239 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:151` → `7 & 1 & -0.14833678 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:150` → `7 & 0 & \mbox{-0.11840239} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:151` → `7 & 1 & \mbox{-0.14833678} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:152` → `7 & 2 & 0.3136322 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:153` → `7 & 3 & 0.089657819 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:154` → `7 & 4 & 0.1081261 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:155` → `7 & 5 & 0.25571261 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:156` → `7 & 6 & 0.77832794 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:157` → `7 & 7 & 1 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:158` → `7 & 8 & -0.15252571 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:158` → `7 & 8 & \mbox{-0.15252571} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:159` → `7 & 9 & 0.14480635 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:160` → `8 & 0 & 0.76713705 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:161` → `8 & 1 & 0.95660965 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:162` → `8 & 2 & 0.17359419 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:163` → `8 & 3 & -0.58122349 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:164` → `8 & 4 & -0.59581647 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:163` → `8 & 3 & \mbox{-0.58122349} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:164` → `8 & 4 & \mbox{-0.59581647} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:165` → `8 & 5 & 0.063784745 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:166` → `8 & 6 & -0.21190509 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:167` → `8 & 7 & -0.15252571 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:166` → `8 & 6 & \mbox{-0.21190509} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:167` → `8 & 7 & \mbox{-0.15252571} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:168` → `8 & 8 & 1 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:169` → `8 & 9 & -0.96625099 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:170` → `9 & 0 & -0.69161383 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:171` → `9 & 1 & -0.92468495 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:172` → `9 & 2 & -0.17171717 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:169` → `8 & 9 & \mbox{-0.96625099} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:170` → `9 & 0 & \mbox{-0.69161383} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:171` → `9 & 1 & \mbox{-0.92468495} \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:172` → `9 & 2 & \mbox{-0.17171717} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:173` → `9 & 3 & 0.59086341 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:174` → `9 & 4 & 0.5723395 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:175` → `9 & 5 & -0.056331857 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:175` → `9 & 5 & \mbox{-0.056331857} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:176` → `9 & 6 & 0.20210765 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:177` → `9 & 7 & 0.14480635 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:178` → `9 & 8 & -0.96625099 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:178` → `9 & 8 & \mbox{-0.96625099} \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:179` → `9 & 9 & 1 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:183` → `\caption{A7 conditional errors in the complete scientific-coordinate order, including six bound-active coordinates without symmetric SE. These are local sensitivities conditional on the stated weights, fixed inputs and bounds.}\label{tab:supplement-conditional-errors}\\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:191` → `MEACOO-–water kij & -0.0038632044 & 1 & 0.182038 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:192` → `MEAH+–water kij & -0.5 & 1 & bound; unavailable \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:191` → `MEACOO-–water kij & \mbox{-0.0038632044} & 1 & 0.182038 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:192` → `MEAH+–water kij & \mbox{-0.5} & 1 & bound; unavailable \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:193` → `HCO3-–water kij & 0.725321 & 1 & 1.26715 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:194` → `MEACOO-–MEAH+ kij & -1 & 1 & bound; unavailable \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:195` → `MEAH+–water kij temperature slope & -41.929641 & K & 60.2876 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:194` → `MEACOO-–MEAH+ kij & \mbox{-1} & 1 & bound; unavailable \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:195` → `MEAH+–water kij temperature slope & \mbox{-41.929641} & K & 60.2876 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:196` → `MEAH+ segment diameter & 5.35 & \AA & bound; unavailable \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:197` → `MEACOO- segment diameter & 4.86604 & \AA & 0.0794313 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:198` → `MEAH+ born diameter & 5 & \AA & bound; unavailable \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:199` → `MEACOO- born diameter & 5 & \AA & bound; unavailable \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:200` → `R5 A & 2831.681 & K & 172.434 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:201` → `R2 enthalpy shift & -1387.4047 & J/\allowbreak{}mol & 5292.47 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:201` → `R2 enthalpy shift & \mbox{-1387.4047} & J/\allowbreak{}mol & 5292.47 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:202` → `R5 enthalpy shift & 10000 & J/\allowbreak{}mol & bound; unavailable \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:203` → `MEA–water kij & -0.089904823 & 1 & 0.00102441 \\`
-- `docs/scientific/latex/tables/supplement_correlations.tex:204` → `MEA–water kij temperature slope & -8.0699134 & K & 1.80605 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:203` → `MEA–water kij & \mbox{-0.089904823} & 1 & 0.00102441 \\`
+- `docs/scientific/latex/tables/supplement_correlations.tex:204` → `MEA–water kij temperature slope & \mbox{-8.0699134} & K & 1.80605 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:205` → `MEAH+ dispersion energy/\allowbreak{}k & 177.79505 & K & 47.9471 \\`
 - `docs/scientific/latex/tables/supplement_correlations.tex:206` → `MEACOO- dispersion energy/\allowbreak{}k & 207.2746 & K & 83.7489 \\`
 
 ### supplement_fits.tex
+
+Table S1 (supplement p. 1); Table S2 (supplement p. 1).
 
 - `docs/scientific/latex/tables/supplement_fits.tex:74` → `\caption{Predecessor-model F1--F6 with-heat study. Each fit retains its own target count and costs; F4/F5 include pool targets. These are different models, not A7 Born, pool or source-law controls. AARD order is pressure/species/heat. Coordinates follow in a separate table.}\label{tab:supplement-fits}\\`
 - `docs/scientific/latex/tables/supplement_fits.tex:82` → `F1 & 149 & 8.38039 & 21.9505 & 1.72582 & 32.0567 & 13.8148/\allowbreak{}7.89143/\allowbreak{}2.29839 \\`
@@ -639,36 +655,40 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 - `docs/scientific/latex/tables/supplement_fits.tex:91` → `\caption{Predecessor fitted coordinates: 0: MEACOO-–water kij; 1: MEAH+–water kij; 2: HCO3-–water kij; 3: MEACOO-–MEAH+ kij; 4: MEAH+–water kij temperature slope.}\label{tab:supplement-fits-coordinates}\\`
 - `docs/scientific/latex/tables/supplement_fits.tex:93` → `Fit & 0 & 1 & 2 & 3 & 4 \\`
 - `docs/scientific/latex/tables/supplement_fits.tex:96` → `Fit & 0 & 1 & 2 & 3 & 4 \\`
-- `docs/scientific/latex/tables/supplement_fits.tex:99` → `F1 & 0.2239503 & -0.31245311 & 0.5 & -0.96828675 & 107.96396 \\`
-- `docs/scientific/latex/tables/supplement_fits.tex:100` → `F2 & 0.091804431 & 0.15468258 & 0.5 & -1 & 106.99308 \\`
-- `docs/scientific/latex/tables/supplement_fits.tex:101` → `F3 & 0.077791972 & 0.12356323 & 0.5 & -1 & 63.80802 \\`
-- `docs/scientific/latex/tables/supplement_fits.tex:102` → `F4 & 0.13661884 & -0.19850897 & 0.24951675 & -0.9578785 & 111.41727 \\`
-- `docs/scientific/latex/tables/supplement_fits.tex:103` → `F5 & 0.073288268 & 0.16944399 & 0.5 & -1 & 117.95227 \\`
-- `docs/scientific/latex/tables/supplement_fits.tex:104` → `F6 & 0.24435717 & -0.39771824 & 0.5 & -0.75800201 & 599.14114 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:99` → `F1 & 0.2239503 & \mbox{-0.31245311} & 0.5 & \mbox{-0.96828675} & 107.96396 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:100` → `F2 & 0.091804431 & 0.15468258 & 0.5 & \mbox{-1} & 106.99308 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:101` → `F3 & 0.077791972 & 0.12356323 & 0.5 & \mbox{-1} & 63.80802 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:102` → `F4 & 0.13661884 & \mbox{-0.19850897} & 0.24951675 & \mbox{-0.9578785} & 111.41727 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:103` → `F5 & 0.073288268 & 0.16944399 & 0.5 & \mbox{-1} & 117.95227 \\`
+- `docs/scientific/latex/tables/supplement_fits.tex:104` → `F6 & 0.24435717 & \mbox{-0.39771824} & 0.5 & \mbox{-0.75800201} & 599.14114 \\`
 
 ### supplement_outside_fit.tex
 
+Table S5 (supplement p. 3).
+
 - `docs/scientific/latex/tables/supplement_outside_fit.tex:72` → `\caption{A7 retained state cohorts. Fitted IDs are removed from each retained cohort; canonical and packet subsets still overlap and must not be pooled. Named high-temperature, transfer, Wagner and Matin-pool comparisons retain prior data access. Arcis is an acceptance check in the property table, not independent validation.}\label{tab:supplement-outside-fit}\\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:80` → `canonical & outside objective IDs; previously accessed & 112 & 24.2016 & -0.134065 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:80` → `canonical & outside objective IDs; previously accessed & 112 & 24.2016 & \mbox{-0.134065} \\`
 - `docs/scientific/latex/tables/supplement_outside_fit.tex:81` → `packet & outside objective IDs; previously accessed & 32 & 20.7673 & 0.144056 \\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:82` → `transfer & outside objective IDs; previously accessed & 70 & 43.5194 & -0.0177807 \\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:83` → `wagner & outside objective IDs; previously accessed & 23 & 15.4469 & -0.158026 \\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:84` → `canonical 100-120 C & outside objective IDs; previously accessed & 54 & 24.3499 & -0.0195026 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:82` → `transfer & outside objective IDs; previously accessed & 70 & 43.5194 & \mbox{-0.0177807} \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:83` → `wagner & outside objective IDs; previously accessed & 23 & 15.4469 & \mbox{-0.158026} \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:84` → `canonical 100-120 C & outside objective IDs; previously accessed & 54 & 24.3499 & \mbox{-0.0195026} \\`
 - `docs/scientific/latex/tables/supplement_outside_fit.tex:85` → `packet 100-120 C & outside objective IDs; previously accessed & 20 & 27.538 & 0.191152 \\`
 - `docs/scientific/latex/tables/supplement_outside_fit.tex:86` → `canonical 100-120 C Jou1995 100 C & outside objective IDs; previously accessed & 10 & 23.5022 & 0.18856 \\`
 - `docs/scientific/latex/tables/supplement_outside_fit.tex:87` → `canonical 100-120 C Jou1995 120 C & outside objective IDs; previously accessed & 10 & 31.5737 & 0.193744 \\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:88` → `canonical 100-120 C Mamun2005 120 C & outside objective IDs; previously accessed & 19 & 18.5405 & -0.207611 \\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:89` → `canonical 100-120 C Xu2011 100 C & outside objective IDs; previously accessed & 8 & 26.8979 & -0.254415 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:88` → `canonical 100-120 C Mamun2005 120 C & outside objective IDs; previously accessed & 19 & 18.5405 & \mbox{-0.207611} \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:89` → `canonical 100-120 C Xu2011 100 C & outside objective IDs; previously accessed & 8 & 26.8979 & \mbox{-0.254415} \\`
 - `docs/scientific/latex/tables/supplement_outside_fit.tex:90` → `canonical 100-120 C Xu2011 120 C & outside objective IDs; previously accessed & 7 & 28.0976 & 0.15768 \\`
 - `docs/scientific/latex/tables/supplement_outside_fit.tex:91` → `packet 100-120 C Jou1995 100 C & outside objective IDs; previously accessed & 10 & 23.5022 & 0.18856 \\`
 - `docs/scientific/latex/tables/supplement_outside_fit.tex:92` → `packet 100-120 C Jou1995 120 C & outside objective IDs; previously accessed & 10 & 31.5737 & 0.193744 \\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:93` → `Wagner near 353.15 K & outside objective IDs; previously accessed & 11 & 22.2026 & -0.252026 \\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:94` → `Wagner near 392.15 K & outside objective IDs; previously accessed & 12 & 9.2542 & -0.0718582 \\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:95` → `transfer 15 wt\% & outside objective IDs; previously accessed & 33 & 29.507 & -0.20443 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:93` → `Wagner near 353.15 K & outside objective IDs; previously accessed & 11 & 22.2026 & \mbox{-0.252026} \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:94` → `Wagner near 392.15 K & outside objective IDs; previously accessed & 12 & 9.2542 & \mbox{-0.0718582} \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:95` → `transfer 15 wt\% & outside objective IDs; previously accessed & 33 & 29.507 & \mbox{-0.20443} \\`
 - `docs/scientific/latex/tables/supplement_outside_fit.tex:96` → `transfer 45 wt\% & outside objective IDs; previously accessed & 37 & 56.0168 & 0.14869 \\`
-- `docs/scientific/latex/tables/supplement_outside_fit.tex:97` → `Matin 19 pools & outside objective IDs; previously accessed & 19 & 67.4808 & -1.26582 \\`
+- `docs/scientific/latex/tables/supplement_outside_fit.tex:97` → `Matin 19 pools & outside objective IDs; previously accessed & 19 & 67.4808 & \mbox{-1.26582} \\`
 
 ### supplement_phase_family.tex
+
+Table S8 (supplement p. 16); Table S9 (supplement p. 20); Table S10 (supplement p. 20).
 
 - `docs/scientific/latex/tables/supplement_phase_family.tex:72` → `\caption{The 73 matched A6/A7 states on the A7 software build: 12/73 versus 0/73 resolved-descent points. Resolved counts are trial counts, not Gibbs changes. Blank minimum fields report no resolved minimum. Index 0 repeats the index-41 state with a rounded pressure; both are listed. A two-phase classification alone does not establish a liquid–liquid split. This finite search does not certify a continuous stable region.}\label{tab:supplement-phase-family}\\`
 - `docs/scientific/latex/tables/supplement_phase_family.tex:74` → `Index & T (K) & Loading (exact) & P (Pa, exact) & A6 & A7 \\`
@@ -746,13 +766,13 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 - `docs/scientific/latex/tables/supplement_phase_family.tex:150` → `70 & 333.15 & 0.5 & 38286.78424652173 & failed; trials 3; success True; failed 0 & passed-single-liquid; trials 0; success True; failed 0 \\`
 - `docs/scientific/latex/tables/supplement_phase_family.tex:151` → `71 & 333.15 & 0.5 & 61258.854794434774 & failed; trials 3; success True; failed 0 & passed-single-liquid; trials 0; success True; failed 0 \\`
 - `docs/scientific/latex/tables/supplement_phase_family.tex:152` → `72 & 333.15 & 0.5 & 72744.8900683913 & failed; trials 3; success True; failed 0 & passed-single-liquid; trials 0; success True; failed 0 \\`
-- `docs/scientific/latex/tables/supplement_phase_family.tex:156` → `\caption{Separately seeded A6 split solves, including failed attempts. Original Engine identity (not the same-wheel classification comparison): wheel SHA-256 d2f61e3a\allowbreak{}5961b859\allowbreak{}151fbe04\allowbreak{}87f4ab63\allowbreak{}3405b116\allowbreak{}20d9dd64\allowbreak{}682656a6\allowbreak{}8a110357. Gibbs differences are dimensionless G/RT; phase densities are mol/m3. Only successful split solves support the split comparison.}\label{tab:supplement-split-states}\\`
-- `docs/scientific/latex/tables/supplement_phase_family.tex:164` → `21 & positive-neutral-base & False & -1.541483289e-05 & -15.7739494 &  & unavailable: failed split \\`
-- `docs/scientific/latex/tables/supplement_phase_family.tex:165` → `21 & near-pure-2 & True & -0.01888181089 & -15.7928158 & 28936.1; 1.82056; 22654 & L (liquid); V (vapor); L2 (liquid) \\`
-- `docs/scientific/latex/tables/supplement_phase_family.tex:166` → `63 & positive-neutral-base & True & -2.110512844 & -2.110512844 & 49835.8; 27919.2 & L (liquid); L2 (liquid) \\`
-- `docs/scientific/latex/tables/supplement_phase_family.tex:167` → `63 & near-pure-2 & False & -0.000139901731 & -0.000139901731 &  & unavailable: failed split \\`
-- `docs/scientific/latex/tables/supplement_phase_family.tex:168` → `70 & positive-neutral-base & True & -3.249645552 & -3.249645552 & 51838; 29027.8 & L (liquid); L2 (liquid) \\`
-- `docs/scientific/latex/tables/supplement_phase_family.tex:169` → `70 & near-pure-2 & True & -3.249645552 & -3.249645552 & 51838; 29027.8 & L (liquid); L2 (liquid) \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:156` → `\caption{Separately seeded A6 split solves, including failed attempts. Original Engine identity (not the same-wheel classification comparison): wheel SHA-256 d2f61e3a\allowbreak{}5961b859\allowbreak{}151fbe04\allowbreak{}87f4ab63\allowbreak{}3405b116\allowbreak{}20d9dd64\allowbreak{}682656a6\allowbreak{}8a110357. Gibbs differences are extensive $\Delta G/(RT)$ values in mol for the retained feed amounts; phase densities are mol/m3. Only successful split solves support the split comparison.}\label{tab:supplement-split-states}\\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:164` → `21 & positive-neutral-base & False & \mbox{-1.541483289e-05} & \mbox{-15.7739494} &  & unavailable: failed split \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:165` → `21 & near-pure-2 & True & \mbox{-0.01888181089} & \mbox{-15.7928158} & 28936.1; 1.82056; 22654 & L (liquid); V (vapor); L2 (liquid) \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:166` → `63 & positive-neutral-base & True & \mbox{-2.110512844} & \mbox{-2.110512844} & 49835.8; 27919.2 & L (liquid); L2 (liquid) \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:167` → `63 & near-pure-2 & False & \mbox{-0.000139901731} & \mbox{-0.000139901731} &  & unavailable: failed split \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:168` → `70 & positive-neutral-base & True & \mbox{-3.249645552} & \mbox{-3.249645552} & 51838; 29027.8 & L (liquid); L2 (liquid) \\`
+- `docs/scientific/latex/tables/supplement_phase_family.tex:169` → `70 & near-pure-2 & True & \mbox{-3.249645552} & \mbox{-3.249645552} & 51838; 29027.8 & L (liquid); L2 (liquid) \\`
 - `docs/scientific/latex/tables/supplement_phase_family.tex:173` → `\caption{A6 successful split phase amounts (mol), densities (mol/m3) and mole fractions in source order: CO2, MEA, water, MEAH+, carbamate, bicarbonate, carbonate, hydronium, hydroxide. Vapour rows list only their three supported neutral species (CO2, MEA, water); liquid rows list all nine. The same original Engine identity applies.}\label{tab:supplement-split-compositions}\\`
 - `docs/scientific/latex/tables/supplement_phase_family.tex:181` → `21 & near-pure-2 /\allowbreak{} L & 16.7699 & 28936.1 & 3.48722e-10; 0.330399; 0.612275; 0.0286653; 0.0281885; 0.000465392; 5.15445e-06; 5.15161e-11; 1.06487e-06 \\`
 - `docs/scientific/latex/tables/supplement_phase_family.tex:182` → `21 & near-pure-2 /\allowbreak{} V & 65.4076 & 1.82056 & 2.65393e-06; 0.00832746; 0.99167 \\`
@@ -766,7 +786,9 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 
 ### supplement_predecessor.tex
 
-- `docs/scientific/latex/tables/supplement_predecessor.tex:74` → `\caption{F1 predecessor versus A7. Common-subset identities, observations, units and effective residual scales/weights reconcile, with 47 pressures, 94 species and eight heats. F1 uses its original retained parameter and Engine identities; its 152-quantity wheel-transfer check does not qualify other results. Native F1 density uses eos\_density\_kg\_m3 without translation at 101325 Pa; A7 uses 100000 Pa (1325 Pa difference). Rows match temperature, loading and unloaded-solvent mass fraction exactly, not pressure. No pressure-density derivative is retained in these density records, so no magnitude bound is claimed. These Amundsen states exclude unmatched temperatures/loadings and other sources. Matched 68 of 68 F1 rows; the pressure basis is disclosed, not matched.}\label{tab:supplement-predecessor}\\`
+Table S3 (supplement p. 2).
+
+- `docs/scientific/latex/tables/supplement_predecessor.tex:74` → `\caption{F1 predecessor versus A7. Common-subset identities, observations, units and effective residual scales/weights reconcile, with 47 pressures, 94 species and eight heats. F1 uses its original retained parameter and Engine identities; its 152-quantity wheel-transfer check does not qualify other results. Native F1 density is the untranslated equation-of-state density at 101325 Pa; A7 uses 100000 Pa (1325 Pa difference). Rows match temperature, loading and unloaded-solvent mass fraction exactly, not pressure. No pressure-density derivative is retained in these density records, so no magnitude bound is claimed. These Amundsen states exclude unmatched temperatures/loadings and other sources. Matched 68 of 68 F1 rows; the pressure basis is disclosed, not matched.}\label{tab:supplement-predecessor}\\`
 - `docs/scientific/latex/tables/supplement_predecessor.tex:76` → `Metric & n & F1 & A7 & Unit \\`
 - `docs/scientific/latex/tables/supplement_predecessor.tex:79` → `Metric & n & F1 & A7 & Unit \\`
 - `docs/scientific/latex/tables/supplement_predecessor.tex:82` → `Pressure AARD & 47 & 13.8148 & 11.8608 & \% \\`
@@ -777,6 +799,8 @@ Each entry quotes the current generated row exactly. Every numerical cell maps t
 - `docs/scientific/latex/tables/supplement_predecessor.tex:87` → `A7 density matched AARD & 68 & -- & 0.490695 & \% \\`
 
 ### supplement_source_aard.tex
+
+Table S4 (supplement p. 2).
 
 - `docs/scientific/latex/tables/supplement_source_aard.tex:72` → `\caption{A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapor water mole fraction. It does not combine quantities into an accuracy ranking. Costs sum disjoint fitted rows; quantity meanings and native units are in the objective table.}\label{tab:supplement-source-aard}\\`
 - `docs/scientific/latex/tables/supplement_source_aard.tex:80` → `Hilliard2008 & common subset & PartialPressure & 30 & 9.14056 & 2.27512 \\`

@@ -3,11 +3,11 @@
 % P:results-01
 A7 meets every acceptance limit in \cref{tab:acceptance-limits} except loaded density, and no descent is resolved at any family state.
 On the paired finite search, A6 has resolved descent at 12 of 73 states and A7 at none (\cref{fig:phase-family}).
-Most A6 descent points lie at \SI{333.15}{\kelvin} (\cref{fig:phase-family}), where separately seeded split solves confirmed lower-Gibbs-energy two-liquid states at loadings 0.4 and 0.5 (Supplement S4).
+Most A6 descent points lie at \SI{333.15}{\kelvin} (\cref{fig:phase-family}), where separately seeded split solves confirmed lower-Gibbs-energy two-liquid states at loadings 0.4 and 0.5 (Section~S4).
 No descent was numerically resolved in 657 trials at 73 specified states (313.15--\SI{333.15}{\kelvin}, $\alpha$ $10^{-5}$--0.5).
 There were no failed A7 trial optimizers; its final classifications comprise 69 two-phase and four single-liquid states.
 Those two-phase classifications are not evidence of two liquid phases.
-The absence of resolved descent applies only at the specified temperature, pressure and loading combinations in S4.
+The absence of resolved descent applies only at the specified temperature, pressure and loading combinations in Section~S4.
 No stability claim accompanies pressure calculations at temperatures above \SI{333.15}{\kelvin} or loadings above $\alpha=0.5$, and none is made at the \SI{353.15}{\kelvin} density misses.
 
 % P:results-02
@@ -20,14 +20,14 @@ Changing ion sizes, interactions and reaction coordinates together also prevents
 \begin{figure}[pos=p]
 \centering
 \includegraphics[width=\linewidth,height=0.76\textheight,keepaspectratio]{phase-family.pdf}
-\caption{Paired finite searches at 73 specified temperature/pressure/loading states: A6 has 12 resolved-descent points and A7 none. Orange filled markers mean at least one resolved descent; blue open markers mean no descent was numerically resolved. Circles identify two-phase classifications and squares single-liquid classifications; two-phase does not mean two liquids. The three pressure levels vary with temperature and loading; S4 supplies their exact pressures. Index 0 shares the temperature and loading of index 41 but uses a rounded pressure, as stated in the legend; both entries remain in the reported counts. No continuous region or global phase-stability certificate follows. In particular, these searches make no claim at the \SI{353.15}{\kelvin} density failures.}
+\caption{Paired finite searches at 73 specified temperature/pressure/loading states: A6 has 12 resolved-descent points and A7 none. Orange filled markers mean at least one resolved descent; blue open markers mean no descent was numerically resolved. Circles identify two-phase classifications and squares single-liquid classifications; two-phase does not mean two liquids. The three pressure levels vary with temperature and loading; Section~S4 supplies their exact pressures. Index 0 shares the temperature and loading of index 41 but uses a rounded pressure, as stated in the legend; both entries remain in the reported counts. No continuous region or global phase-stability certificate follows. In particular, these searches make no claim at the \SI{353.15}{\kelvin} density failures.}
 \label{fig:phase-family}
 \end{figure}
 
 \begin{figure}[pos=p]
 \centering
 \includegraphics[width=\linewidth,height=0.76\textheight,keepaspectratio]{loaded-density-errors.pdf}
-\caption{Native density errors without volume translation. Upper panels compare A7 circles and A6 crosses on the same 47 fitted loaded-density IDs, with color showing loading; dashed lines mark $\pm2s$. Lower panels show all 210 A7 rows from Amundsen et al.\ \cite{Amundsen2009}, Hartono et al.\ \cite{Hartono2014} and Han et al.\ \cite{hanDensityWater12012}, with fitted, non-fitted and excluded roles distinguished. These reference limits govern only the fitted loaded cohort. A6 density values come from its original assessment (Supplement S9). All three A7 fitted failures occur at \SI{353.15}{\kelvin}, outside the phase family's temperature range. Exact scales and source qualifications are in S3.}
+\caption{Native density errors without volume translation. Upper panels compare A7 circles and A6 crosses at the same 47 fitted loaded-density states, with color showing loading; dashed lines mark $\pm2s$. Lower panels show all 210 A7 rows from Amundsen et al.\ \cite{Amundsen2009}, Hartono et al.\ \cite{Hartono2014} and Han et al.\ \cite{hanDensityWater12012}, with fitted, non-fitted and excluded roles distinguished. These reference limits govern only the fitted loaded cohort. A6 density values come from its original assessment (Section~S9). All three A7 fitted failures occur at \SI{353.15}{\kelvin}, outside the phase family's temperature range. Exact scales and source qualifications are in Section~S3.}
 \label{fig:density-errors}
 \end{figure}
 
@@ -51,7 +51,7 @@ A fixed-parameter size probe around the first restricted endpoint explains why r
 At sampled \MEAH segment diameters from \SI{5.49}{\angstrom} down to \SI{5.35}{\angstrom}, smaller size raised the loaded densities, improving the warm failures while creating positive cold-density deviations.
 None of those sampled vectors met every loaded-density limit, although none had resolved descent on its finite phase search.
 The second joint fit at the lower size bound reduced the worst miss from $2.70s$ to $2.43s$ and retained the same three failing states.
-These probes neither exclude an untested passing size nor certify the parameter box; S5 gives the sampled values and loading-basis sensitivity.
+These probes neither exclude an untested passing size nor certify the parameter box; Section~S5 gives the sampled values and loading-basis sensitivity.
 
 \subsection{Agreement with fitted properties}\label{sec:results-calibration}
 % P:results-04
@@ -68,13 +68,13 @@ Cai contributes approximately 62\,\% of the objective cost, 91.9078 of 148.905; 
 The common 47-pressure and 94-species subsets give AARDs of 11.8608 and 7.1036\,\%, respectively (\cref{fig:pressure,fig:speciation}).
 These are subset calibration statistics, not summaries of every fitted species quantity.
 The restored species and Jakobsen amount-ratio groups remain separate in \cref{tab:residual-summary}.
-\Cref{fig:pressure} distinguishes fitted observations by their actual identities and evaluates model values only at the measured states.
+\Cref{fig:pressure} marks which observations were fitted and evaluates model values only at the measured states.
 \Cref{fig:speciation} preserves NMR aggregate meanings and displays the report-only Matin pool alongside the fitted species.
 
 \begin{figure}[pos=p]
 \centering
 \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{pressure.pdf}
-\caption{Measured and A7 calculated \COtwo partial pressures at measured states. Open circles identify fitted observations, open squares other observations, and crosses A7 values; color identifies the source. The canonical view contains 159 evaluated pressures, including calibration and comparison rows; 23 Wagner pressures are shown separately near 353 and \SI{392}{\kelvin}. The panel labelled nominal \SI{120}{\degreeCelsius} for Wagner represents its actual near-\SI{392}{\kelvin} states. Canonical and packet views are not appended to one another. Three source rows above \SI{393.15}{\kelvin} are excluded. No interpolated model curves or phase-stability claims accompany these pressures.}
+\caption{Measured and A7 calculated \COtwo partial pressures at measured states. Open circles identify fitted observations, open squares other observations, and crosses A7 values; color identifies the source. The canonical view contains 159 evaluated pressures, including calibration and comparison rows; 23 Wagner pressures are shown separately near 353 and \SI{392}{\kelvin}. The panel labelled nominal \SI{120}{\degreeCelsius} for Wagner represents its actual near-\SI{392}{\kelvin} states. The canonical and pressure-packet views overlap and are not combined. Three source rows above \SI{393.15}{\kelvin} are excluded. No interpolated model curves or phase-stability claims accompany these pressures.}
 \label{fig:pressure}
 \end{figure}
 
@@ -113,9 +113,9 @@ Heat capacity uses the declared feed-mass conversion and unloaded proxy, rather 
 % P:results-08
 The canonical 159-pressure view has AARD 20.5537\,\%, mixing fitted observations with previously accessed comparisons.
 Wagner pressures near 353 and \SI{392}{\kelvin} give 22.2026 and 9.2542\,\%; their mean logarithmic biases are $-0.252026$ and $-0.0718582$.
-These rows were assessed after A7 acceptance but had been accessed before, so their deviations are not untouched validation results.
+These rows were assessed after A7 was selected but had been examined during model development, so their deviations are not independent validation.
 At 100--\SI{120}{\degreeCelsius}, canonical and packet pressure AARDs are 24.3499 and 27.5380\,\% on 54 and 20 rows, respectively.
-The cohorts overlap but differ in membership and source-state basis; S2 lists each view separately.
+The cohorts overlap but differ in membership and source-state basis; Section~S2 lists each view separately.
 Their mean logarithmic biases also differ in sign, so a single high-temperature bias direction would hide source dependence.
 
 % P:results-09
@@ -143,12 +143,12 @@ The carbonate, pool, heat-capacity and 45 wt\% discrepancies together bound the 
 % P:results-12
 Six coordinates are at bounds: \MEAH--water and \MEAH--\MEACOO interactions, \MEAH segment diameter, both fitted Born diameters and total R5 enthalpy shift.
 The free bicarbonate--water coefficient is $0.7253$ with conditional standard error $1.2671$; the R2 total shift is approximately $-1.4\pm5.3$~\si{\kilo\joule\per\mole}, and the \MEAH--water slope is $-41.93$~\si{\kelvin} with conditional standard error \SI{60.29}{\kelvin}.
-These local uncertainties and the correlations in S6 limit physical interpretation of individual coefficients.
+These local uncertainties and the correlations in Section~S6 limit physical interpretation of individual coefficients.
 They do not identify unique ion dimensions or reaction enthalpies, and they do not supply prediction intervals for pressures or process duties.
 
 \subsection{Predecessor and published models}\label{sec:results-literature}
 % P:results-13
-F1 is the predecessor used to establish the common-subset acceptance limits and the native-density baseline; S1 preserves its separate six-fit study and the matched F1--A7 comparison.
+F1 is the predecessor used to establish the common-subset acceptance limits and the native-density baseline; Section~S1 preserves its separate six-fit study and the matched F1--A7 comparison.
 Those calculations concern a different parameterization and supply no A7 comparison of Born forms, pool inclusion or source reaction laws.
 Among the published models in \cref{tab:literature-model-comparison}, Zhang et al.\ provide the closest multi-property calibration, combining solubility, absorption heat, heat capacity and NMR information \cite[Sect.~3.3, Tables~6 and 9]{Zhang2011}.
 Nasrifar and Tafazzol provide a PC-SAFT predecessor with ideal reaction speciation and ions lumped into an effective water component \cite[Sects.~3, 4 and 6, Table~3]{Nasrifar2010}.
@@ -162,5 +162,5 @@ The data sets, operators, fitted properties and access histories differ, so no a
 The result is one adopted local parameterization with joint calibration, numerical verification and a finite phase test.
 Its three warm-density failures remain accepted with disclosure, while the phase family covers only its stated temperature/pressure/loading combinations.
 The chosen bounds, single starts, conditional covariance, assumed dielectric transfer and source reaction extrapolations prevent a global-optimum or broad predictive claim.
-Previously accessed comparisons and the Arcis acceptance check preserve their data-use limits.
+Comparisons examined during model development and the Arcis acceptance check are not independent validation.
 Physical phase validation and absorber/stripper performance validation remain absent.

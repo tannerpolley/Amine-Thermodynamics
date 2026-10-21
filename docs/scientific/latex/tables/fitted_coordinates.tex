@@ -66,7 +66,7 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 2ba9bf16ad7d430eac5d3f57fdb3267070520462a4e7437fe7c8e848f123fb1f
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2162\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.0658\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}@{}}
 \caption{All 16 A7 scientific coordinates in optimizer-column order. Transformation: value = origin + signed slope times optimizer coordinate. R5 A is unshifted; enthalpy shifts are inherited-plus-fitted totals. Conditional standard errors (SE) depend on weights, fixed inputs, active bounds and local linearization; they are not measurement uncertainties or prediction intervals.}\label{tab:fitted-coordinates}\\
@@ -77,20 +77,20 @@ Coordinate & Value & Unit & Bounds & Origin; signed slope & Conditional SE & Tie
 Coordinate & Value & Unit & Bounds & Origin; signed slope & Conditional SE & Ties \\
 \midrule\endhead
 \bottomrule\endfoot
-0: MEACOO-–water kij & -0.0038632044 & 1 & -0.5 to 0.5 & 0.0032213889; 0.01 & 0.182038 &  \\
-1: MEAH+–water kij & -0.5 & 1 & -0.5 to -0.161 & -0.5; 0.01 & bound; no symmetric SE &  \\
+0: MEACOO-–water kij & \mbox{-0.0038632044} & 1 & -0.5 to 0.5 & 0.0032213889; 0.01 & 0.182038 &  \\
+1: MEAH+–water kij & \mbox{-0.5} & 1 & -0.5 to -0.161 & -0.5; 0.01 & bound; no symmetric SE &  \\
 2: HCO3-–water kij & 0.725321 & 1 & -0.5 to 1 & 0.65955826; 0.01 & 1.26715 &  \\
-3: MEACOO-–MEAH+ kij & -1 & 1 & -1 to 1 & -1; 0.01 & bound; no symmetric SE &  \\
-4: MEAH+–water kij temperature slope & -41.929641 & K & -1000 to 1000 & -46.030841; 10 & 60.2876 &  \\
+3: MEACOO-–MEAH+ kij & \mbox{-1} & 1 & -1 to 1 & -1; 0.01 & bound; no symmetric SE &  \\
+4: MEAH+–water kij temperature slope & \mbox{-41.929641} & K & -1000 to 1000 & -46.030841; 10 & 60.2876 &  \\
 5: MEAH+ segment diameter & 5.35 & \AA & 5.35 to 5.8 & 5.49; 0.1 & bound; no symmetric SE & MEAH+ packing diameter = 0.88 times coordinate; MEAH+ Debye–Hückel diameter = 1.0 times coordinate \\
 6: MEACOO- segment diameter & 4.86604 & \AA & 2 to 5.8 & 4.6887051; 0.1 & 0.0794313 & MEACOO- packing diameter = 0.88 times coordinate; MEACOO- Debye–Hückel diameter = 1.0 times coordinate \\
 7: MEAH+ born diameter & 5 & \AA & 2 to 5 & 5; 0.1 & bound; no symmetric SE &  \\
 8: MEACOO- born diameter & 5 & \AA & 2 to 5 & 5; 0.1 & bound; no symmetric SE &  \\
 9: R5 A & 2831.681 & K & 2400 to 3000 & 2848.516; -80 & 172.434 &  \\
-10: R2 enthalpy shift & -1387.4047 & J/\allowbreak{}mol & -10000 to 10000 & -1811.8989; 2500 & 5292.47 &  \\
+10: R2 enthalpy shift & \mbox{-1387.4047} & J/\allowbreak{}mol & -10000 to 10000 & -1811.8989; 2500 & 5292.47 &  \\
 11: R5 enthalpy shift & 10000 & J/\allowbreak{}mol & -10000 to 10000 & 10000; 2500 & bound; no symmetric SE &  \\
-12: MEA–water kij & -0.089904823 & 1 & -0.5 to 0.5 & -0.090088134; 0.01 & 0.00102441 &  \\
-13: MEA–water kij temperature slope & -8.0699134 & K & -1000 to 1000 & -8.300348; 10 & 1.80605 &  \\
+12: MEA–water kij & \mbox{-0.089904823} & 1 & -0.5 to 0.5 & -0.090088134; 0.01 & 0.00102441 &  \\
+13: MEA–water kij temperature slope & \mbox{-8.0699134} & K & -1000 to 1000 & -8.300348; 10 & 1.80605 &  \\
 14: MEAH+ dispersion energy/\allowbreak{}k & 177.79505 & K & 50 to 950 & 173.18304; 10 & 47.9471 &  \\
 15: MEACOO- dispersion energy/\allowbreak{}k & 207.2746 & K & 50 to 1000 & 217.55547; 10 & 83.7489 &  \\
 \end{longtable}\endgroup
