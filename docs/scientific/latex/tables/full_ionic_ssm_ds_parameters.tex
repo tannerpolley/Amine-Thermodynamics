@@ -1,27 +1,189 @@
-\begin{table*}[t]
-    \centering
-    \caption{Component parameters of F1.
-    All values are held fixed in the fit; F6 uses \(u_{\COtwo}/k_{\mathrm{B}}=\SI{169.21}{\kelvin}\) \cite{Gross2001}.
-    Ion hard-chain and Debye--H\"uckel diameters are \(0.88\,\sigma_i\).
-    The water segment diameter is \(\sigma_{\HtwoO}/\text{\AA}=2.7176052+10.11\exp(-0.01775\,T/\mathrm{K})-1.417\exp(-0.01146\,T/\mathrm{K})\) (correlation form \cite{Held2008}), and its permittivity is \cref{eq:water-permittivity}.
-    Association columns give the self-association volume \(\kappa^{AB}\) (\(\sigma^3\) convention) and energy \(\epsilon^{AB}/k_{\mathrm{B}}\) of the 2B scheme; \COtwo has two induced-association sites that bond only with water (\cref{sec:theory}).
-    A dash marks a parameter that the component does not have.}
-    \label{tab:full-ionic-ssm-ds-parameters}
-    \footnotesize
-    \setlength{\tabcolsep}{3pt}% 12 columns: leave room for the source column
-    \begin{tabularx}{\textwidth}{@{}lrrrrrrrrrr>{\raggedright\arraybackslash}X@{}}
-        \toprule
-        Species & \(z_i\) & \makecell{\(M_i\)\\(kg/mol)} & \(m_i\) & \makecell{\(\sigma_i\)\\(\AA)} & \makecell{\(u_i/k_{\mathrm{B}}\)\\(K)} & \makecell{\(d_i^{\mathrm{Born}}\)\\(\AA)} & \(f_k\) & \(\varepsilon_i\) & \(\kappa^{AB}\) & \makecell{\(\epsilon^{AB}/k_{\mathrm{B}}\)\\(K)} & Source and role \\
-        \midrule
-        \COtwo & 0 & 0.04401 & 2.0729 & 2.7852 & 173.440 & -- & 1 & -- & -- & -- & \(m\), \(\sigma\) \cite{Gross2001}; \(u/k_{\mathrm{B}}\) estimated from data (\cref{tab:parameter-accounting}); induced association \cite{Schick2023} \\
-        \MEA & 0 & 0.06108 & 3.0353 & 3.0435 & 277.174 & -- & 1 & 32 & 0.036287 & 2586.3 & \cite[Table~2]{Baygi2015}; \(\kappa^{AB}\) converted from 0.037470; \(\varepsilon_i\) assumed (\cref{sec:parameters}) \\
-        \HtwoO & 0 & 0.01801528 & 1.3340338 & \(\sigma_{\HtwoO}(T)\) & 415.47578 & -- & 1.5 & \(\varepsilon_{\HtwoO}(T)\) & 0.0461035 & 1725.6848 & Fitted water values; \cite{Held2008,Cameretti2005} form; \(f_{\HtwoO}\) \cite[Table~2]{Figiel2025}; \(\varepsilon_{\HtwoO}(T)\) Archer--Wang approximation \cite{archerDielectricConstantWater1990} \\
-        \MEAH & \(+1\) & 0.06209 & 1 & 3.4851 & 232.687 & 3.5332 & 1 & -- & -- & -- & Fitted to speciation data (\cref{sec:data-methods}) \\
-        \MEACOO & \(-1\) & 0.10408 & 1 & 3.5354 & 453.265 & 3.5411 & 1 & -- & -- & -- & Fitted to speciation data (\cref{sec:data-methods}) \\
-        \HCOthree & \(-1\) & 0.0610168 & 1 & 2.9296 & 70.00 & 3.0 & 1 & -- & -- & -- & \(\sigma\), \(u/k_{\mathrm{B}}\) \cite[Table~2]{Held2014}; \(d^{\mathrm{Born}}\) \cref{sec:data-methods} \\
-        \COthree & \(-2\) & 0.06001 & 1 & 2.4422 & 249.26 & 3.0 & 1 & -- & -- & -- & \(\sigma\), \(u/k_{\mathrm{B}}\) \cite[Table~2]{Held2014}; \(d^{\mathrm{Born}}\) \cref{sec:data-methods} \\
-        \HthreeO & \(+1\) & 0.01902 & 1 & 3.4654 & 500.00 & 1.218 & 1 & -- & -- & -- & \cite[Table~2]{Held2014}; \(d^{\mathrm{Born}}\) \cite[Table~3]{Figiel2025} \\
-        \Hydroxide & \(-1\) & 0.01701 & 1 & 2.0177 & 650.00 & 3.0811 & 1 & -- & -- & -- & \(\sigma\), \(u/k_{\mathrm{B}}\) \cite[Table~2]{Held2014}; \(d^{\mathrm{Born}}\) inverted from the hydration Gibbs energy \\
-        \bottomrule
-    \end{tabularx}
-\end{table*}
+% Generator: docs/scientific/latex/scripts/final_rerun_tables.py; do not hand-edit.
+% A7 parameter SHA256: e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/carbonate-share.csv SHA256 5f83a18d5dfbf3bcacf0bf9ca2d7aa193ee14fbea0dbd7074f6bd7ce126ff16a
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-correlations.csv SHA256 46246a65a498f1b244852cb33f61c0d64b77bb48ae2887f353cedc897856f1a7
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-standard-errors.csv SHA256 d49a822d79a7eaec5e15668d4ee755abca86709ae7a9f01ba221047ee406c7b8
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-uncertainty.json SHA256 1076eea7056bbf44f462ac2eb332c166a77fc62a6f75cb4e33001ec1e584020e
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/cp.csv SHA256 47b1c85ce78c05e7b240e183237d01289060496e42bee6e2dddae70e06c2ac72
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv SHA256 1983f82ba4b030623d909b364ecceb7dc60466b5ea4f327222fa199827dd2fdd
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json SHA256 5a5dda4b70f5463fb6d0d78cf3e9dac49e98002c7c7575bb4cb4d3b6a70c856a
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/fitted-rows.csv SHA256 0643ec9c6dc323409be7fbd5f1984c0cc166cfcd94192e6a7bb79e20d3ed2ce3
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv SHA256 35e7d7d1166698059295361e8e0a002aa5ed57099cf8c1c5b9fce7e539a5f57d
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/input-hashes.json SHA256 1cf1f0d19b086292c197edb6d6efa098034f63a12bc6a4f183006968f69212e8
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv SHA256 fd16142967e4fef1408b907a40839780923bef381da6a685eac8d9ae4b8db6a7
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/predecessor-f1.json SHA256 20e922e230a6401f7f4c03ac0b5e790bf4731fa25453c088dbecc73808ca010d
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/state-summary.json SHA256 5e59bcb4219e80cf16c6801ece44e9172b2fe794f5aff148b385cda826ee8c64
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/state-targets.csv SHA256 aeda99577000150980ec858a1b2fd237d90941879819db50f7c0e86bb3f89809
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json SHA256 39ea65e25e503038a9e47ea158602af1b2ae27b1c38e69bebed6f8b49dbd9883
+% Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/README.md SHA256 51957a9dc31eb8351976306ce775e7abb393481d6fd03d86ca1d1937fa4c6db6
+% Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/checks.json SHA256 5d18e3313805a07c8fc518be37878ee50181d2424fd8bdb354897b7cb5c2cdb1
+% Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/comparison.json SHA256 8bead5a2273dd698b08b0926f6147470bd0ba000ed2c5d9896b57dffb0c8dedb
+% Input: analyses/mea_parameter_bundle/results/heat-160/A-parameters.json SHA256 66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/F1-A/native-fit.json SHA256 9c36dc8a3ba9f98f8a293414fc1a1416c417b39cb44ecc1fc4c11578f9a6d14c
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/corrected-densities.csv SHA256 9a5e301f5277bd5db696c350165113bda80dfd1dfb5653d7c3dcc0e0a11f8b9a
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/density-states.json SHA256 c2c505e13cf56d260f7d352fee37a298764451fbee483d68ec4842d60c5a8468
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/evaluation/execution.json SHA256 213164bd58f26f69696a1b2506b3d905ca567fb3879294b3a5abb3788ac218bd
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/fit-comparison.csv SHA256 81f5390ace97df8669b125d347447dc665a34f33dc4a2fb09dc3359c092bf8cc
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/heat-capacity-comparison.csv SHA256 303a8043a48f6a5dbf7de527c30f3de19e6d74274ed95dd20748be30d45665a2
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/heat-comparison.csv SHA256 4947609fcc14da10744363771907d39c0744be4331a7c0fb5132fbb48555e4be
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/high-temperature-comparison.csv SHA256 e9039244d75b3fa83ea3fb7cd1f98eb28ea39577d3b6eb7c7d4988d9ca1aaa1d
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/pressure-figure-data.csv SHA256 ecce5c18740fab3d989c8e72598e9dc7733f8a97ba751f53fb8265af5032e3b2
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/species-figure-data.csv SHA256 74bb9a8622dae4b0fc4d70b26957f5f2a46d5c695713fbcbdd4636384ba7a941
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json SHA256 ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/provenance.json SHA256 1ea9f49238b7f6fb3413e2ddddb40e5abf5dc4b68ce54d03a442b78246581827
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/summary.json SHA256 af775385eadbb7396eacb69cbd9abd1defbec46eed35b3bfa300fec619edbd3d
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/engine-identity.json SHA256 141cd2510868b06ac421dc58288a57b412b306e72d65bf1294b61e85b17e9098
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-21.json SHA256 abae0fed350582529b24c0072023ab30fe98695b1aba51d792e0d71a2537d5e5
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-63.json SHA256 a61a929b1a24aa1dde4c895e3379572be83f465afee7fe1264141e513b86ad98
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-70.json SHA256 e94273ed88193eec6040ab9a57c8dc804abd1894d87f0a922d2f24c1edb05e7f
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/fixed-parameters.json SHA256 5fd94d8494926c0a1ec0a64a8b3080384c386a04fe5fd64ca0b330c407641971
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/provenance.json SHA256 dcaf8dfcb4593d88d5f496ef54d4b2ac41a8528f4af5025f0d4cfc4723aa63e4
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/reduction.json SHA256 e3052afac7b4ac1e77b2b8a75c646480027b7ad23854ecfcd91398a3199b7dac
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/score.json SHA256 46ab42a394d8e03b378b4805fb20fd647406b9889dcf83236355a2c746470d0c
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/summary.json SHA256 30c74a39b4e35968f8d43dd00a3bc3c0c8fcdb9acf5651cd87a6fd331c18d26f
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/fixed-parameters.json SHA256 e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/provenance.json SHA256 e2113811e3b4c8185b86ad369a47929c38355caf8f16e2bb158f58281e7df9bb
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/reduction.json SHA256 684937329082c7bbb6d531ad8266472f4ffcfa967cd75a258861b0ab8322c63b
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/score.json SHA256 a8639493c30a08d8e69896c09bb0c4bf91369f431cb9706c102a3094bc64c7bc
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/summary.json SHA256 2274b0a6576fef2a08f3b6054d091a082df3f3a29583a9c177e0ffa959da4b1f
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/fixed-parameters.json SHA256 e0c6acd35f1fbb2c8ecd902b6ca3d790d20e3e931b4052399ce0e2d4e8c2892d
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/provenance.json SHA256 d954882c149645645c9f95518d866c0576b4783db9c78d64130fa548ac16cc70
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/reduction.json SHA256 2bca815588c7d7e60df62b2ff7d97c58b7a46569afe586555e40657586b4d0a6
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/score.json SHA256 194138834abbef0c6067d2fcb64efbc31a7c4bf531ad297c3d1370eacd6533d8
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/summary.json SHA256 32db942030258879a0731123617bf39f38359222a8bb993fa2b5c455663e1b01
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit-spec.json SHA256 0cb68ee3718ec812f2f8676df297ca3f7be293a9d13b416e39e6f38aaa2387f6
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json SHA256 e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/replay/A7-restricted-2-full-replay.json SHA256 7f319393cc095cf593661ca02a003113fd33e96b9b23e20e988aa31617d8e10e
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md SHA256 80e31743f7c1485c8a437908982b5bff4b150a8514c8f78083cbef5f95225e47
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/usable-budget-endpoint.json SHA256 e0c6acd35f1fbb2c8ecd902b6ca3d790d20e3e931b4052399ce0e2d4e8c2892d
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/carbonate-share.csv SHA256 5f83a18d5dfbf3bcacf0bf9ca2d7aa193ee14fbea0dbd7074f6bd7ce126ff16a
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/cp.csv SHA256 47b1c85ce78c05e7b240e183237d01289060496e42bee6e2dddae70e06c2ac72
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/density.csv SHA256 1983f82ba4b030623d909b364ecceb7dc60466b5ea4f327222fa199827dd2fdd
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/state-summary.json SHA256 5e59bcb4219e80cf16c6801ece44e9172b2fe794f5aff148b385cda826ee8c64
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/state-targets.csv SHA256 aeda99577000150980ec858a1b2fd237d90941879819db50f7c0e86bb3f89809
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/summary.json SHA256 39ea65e25e503038a9e47ea158602af1b2ae27b1c38e69bebed6f8b49dbd9883
+% Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
+% Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
+% Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9046c562677f4bc2d1ba06e1a5ec09a2ec8ee377b790ac1bbf649ef321d264fa
+\begingroup\small\setlength{\tabcolsep}{2pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3102\linewidth}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}@{}}
+\caption{A7 species, association and correlation inputs. Packing diameters are $0.88\sigma$ and the six ion Debye--H\"uckel diameters equal $\sigma$. The provenance column distinguishes the A7 fit from inherited project inputs and source ancestry; inherited labels do not establish that every current value was reported directly in the named source. Entries marked ``candidate extrapolation'' retain that qualification from the selected parameter file; absence of the label does not establish validation. fixed means fixed in A7, including inputs estimated earlier. Water diameter is constant plus the sum of amplitude times exponential of coefficient times temperature; no new values are evaluated here. Fixed association topology: \ce{CO2}, MEA and water each have one donor site a and one acceptor site b. MEA(a)–water(b) and MEA(b)–water(a) use the retained Wolbach–Sandler combining rule with the corresponding self-association inputs. These topology declarations are fixed in A7.}\label{tab:full-ionic-ssm-ds-parameters}\\
+\toprule
+Parameter/\allowbreak{}input & Value & Unit & Role & Provenance/\allowbreak{}qualification \\
+\midrule\endfirsthead
+\toprule
+Parameter/\allowbreak{}input & Value & Unit & Role & Provenance/\allowbreak{}qualification \\
+\midrule\endhead
+\bottomrule\endfoot
+CO2 dispersion energy/\allowbreak{}k & 169.21 & kelvin & fixed in A7 & this work; candidate extrapolation \\
+CO2 segment count & 2.0729 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+CO2 segment diameter & 2.7852 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+CO2 solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+CO2 dielectric volume & 1e-08 & liter /\allowbreak{} mole & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+CO2 dielectric temperature & 1403 & kelvin & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+MEA dispersion energy/\allowbreak{}k & 277.174 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEA segment count & 3.0353 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEA segment diameter & 3.0435 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEA solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEA dielectric volume & 0.7309888238 & liter /\allowbreak{} mole & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+MEA dielectric temperature & 1019.078611 & kelvin & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+water dispersion energy/\allowbreak{}k & 432.3788131 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+water segment count & 1.252753838 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+water solvation factor & 1.5 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+water dielectric volume & 0.3777 & liter /\allowbreak{} mole & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+water dielectric temperature & 1403 & kelvin & fixed in A7 & earlier dielectric calibration and fixed inputs \\
+MEAH+ born diameter & 5 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEAH+ Debye–Hückel diameter & 5.35 & \AA & tied to MEAH+ segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\
+MEAH+ dispersion energy/\allowbreak{}k & 177.7950548 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEAH+ packing diameter & 4.708 & \AA & tied to MEAH+ segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\
+MEAH+ segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEAH+ segment diameter & 5.35 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEAH+ solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEACOO- born diameter & 5 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEACOO- Debye–Hückel diameter & 4.866040008 & \AA & tied to MEACOO- segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\
+MEACOO- dispersion energy/\allowbreak{}k & 207.2745967 & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEACOO- packing diameter & 4.282115207 & \AA & tied to MEACOO- segment diameter & tied to an A7 fitted coordinate; candidate extrapolation \\
+MEACOO- segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+MEACOO- segment diameter & 4.866040008 & \AA & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
+MEACOO- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- born diameter & 3 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- Debye–Hückel diameter & 2.9296 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- dispersion energy/\allowbreak{}k & 70 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- packing diameter & 2.578048 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- segment diameter & 2.9296 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+HCO3- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} born diameter & 3 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} Debye–Hückel diameter & 2.4422 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} dispersion energy/\allowbreak{}k & 249.26 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} packing diameter & 2.149136 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} segment diameter & 2.4422 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+\ce{CO3^{2-}} solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ born diameter & 1.218 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ Debye–Hückel diameter & 3.4654 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ dispersion energy/\allowbreak{}k & 500 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ packing diameter & 3.049552 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ segment diameter & 3.4654 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+H3O+ solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- born diameter & 3.081076894 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- Debye–Hückel diameter & 2.0177 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- dispersion energy/\allowbreak{}k & 650 & kelvin & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- packing diameter & 1.775576 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- segment count & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- segment diameter & 2.0177 & \AA & fixed in A7 & inherited project inputs; candidate extrapolation \\
+OH- solvation factor & 1 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials constant & 2.780432615 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials term-0 amplitude & 10.11 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials term-0 exponent coefficient & -0.01775 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials term-1 amplitude & -1.417 & \AA & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water segment diameter constant-plus-sum-of-exponentials term-1 exponent coefficient & -0.01146 & 1 /\allowbreak{} kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+model/\allowbreak{}relative permittivity/\allowbreak{}ionic region relative permittivity & 8 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+MEA(a)–MEA(b) association energy/\allowbreak{}k & 2586.3 & kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\
+MEA(a)–MEA(b) association volume & 0.036287 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\
+water(a)–water(b) association energy/\allowbreak{}k & 1756.649796 & kelvin & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+water(a)–water(b) association volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & inherited project inputs; candidate extrapolation \\
+CO2(a)–water(b) association energy/\allowbreak{}k & 878.3248982 & kelvin & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+CO2(a)–water(b) association volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+CO2(b)–water(a) association energy/\allowbreak{}k & 878.3248982 & kelvin & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+CO2(b)–water(a) association volume & 0.03761972795 & 1 & fixed correlation/\allowbreak{}association input & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+MEA site a & 1 & -- & fixed donor site & inherited project inputs; candidate extrapolation \\
+MEA site b & 1 & -- & fixed acceptor site & inherited project inputs; candidate extrapolation \\
+water site a & 1 & -- & fixed donor site & inherited project inputs; candidate extrapolation \\
+water site b & 1 & -- & fixed acceptor site & inherited project inputs; candidate extrapolation \\
+CO2 site a & 1 & -- & fixed donor site & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+CO2 site b & 1 & -- & fixed acceptor site & Schick et al. 2023; Pabsch et al. 2020; candidate extrapolation \\
+MEA(a)–water(b) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: MEA(a)–MEA(b) association energy/\allowbreak{}k, water(a)–water(b) association energy/\allowbreak{}k; volume: MEA(a)–MEA(b) association volume, water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\
+MEA(b)–water(a) & wolbach-sandler & -- & fixed combining rule; energy\_\allowbreak{}over\_\allowbreak{}k: MEA(a)–MEA(b) association energy/\allowbreak{}k, water(a)–water(b) association energy/\allowbreak{}k; volume: MEA(a)–MEA(b) association volume, water(a)–water(b) association volume & inherited project inputs; Fakouri Baygi and Pahlavanzadeh 2015; candidate extrapolation \\
+model/\allowbreak{}base & pc-saft & -- & model choice & candidate extrapolation \\
+model/\allowbreak{}association & general-site & -- & model choice & candidate extrapolation \\
+model/\allowbreak{}electrolyte & born & -- & model choice & candidate extrapolation \\
+model/\allowbreak{}relative\_\allowbreak{}permittivity & solvent-density-temperature & -- & model choice & candidate extrapolation \\
+\end{longtable}\endgroup
+\begingroup\small\setlength{\tabcolsep}{2pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.7050\linewidth}@{}}
+\caption{Retained source and transformation locators for fixed correlation and association inputs. The MEA association volume retains its conversion from the source diameter convention to the $\sigma_{ij}^3$ convention used here; no combining rule is evaluated here.}\label{tab:association-source-locators}\\
+\toprule
+Source & Retained locator \\
+\midrule\endfirsthead
+\toprule
+Source & Retained locator \\
+\midrule\endhead
+\bottomrule\endfoot
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=segment\_\allowbreak{}diameter:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:ionic-dielc=8:status=transferred-diagnostic \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\
+Fakouri Baygi and Pahlavanzadeh 2015 & Eq. 4 (p. 791) uses d\_\allowbreak{}ij\textasciicircum{}3; Table 2 (p. 792) 2B kappa = 0.037470 under that convention. Converted to the Engine sigma\_\allowbreak{}ij\textasciicircum{}3 convention as the constant kappa that best reproduces Baygi's d\textasciicircum{}3 model (Eq. 8 form, p\_\allowbreak{}sat and saturated liquid density) over the packet domain 293.15-393.15 K, with m, sigma, epsilon fixed: analyses/\allowbreak{}2026-mea-association-diameter \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}energy\_\allowbreak{}over\_\allowbreak{}k:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}volume:status=retained-literature-lineage \\
+Schick et al. 2023; Pabsch et al. 2020 & Schick et al. (2023), Table 1 and Section 2.4.2; Pabsch et al. (2020) CO2-water parameterization \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=MEA:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}a:status=retained-literature-lineage \\
+inherited project inputs & data/\allowbreak{}reference/\allowbreak{}epcsaft\_\allowbreak{}datasets/\allowbreak{}MEA\_\allowbreak{}CO2\_\allowbreak{}H2O\_\allowbreak{}phase2/\allowbreak{}pure/\allowbreak{}any\_\allowbreak{}solvent.csv:component=H2O:family=association\_\allowbreak{}site\_\allowbreak{}b:status=retained-literature-lineage \\
+Fakouri Baygi and Pahlavanzadeh 2015 & Eq. 6, Wolbach-Sandler volume rule including the size factor, used with the Table 2 MEA 2B parameters \\
+\end{longtable}\endgroup
