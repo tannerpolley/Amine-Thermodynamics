@@ -92,7 +92,7 @@ def main():
         groups.setdefault((r['group'], r['quantity']), []).append(r)
     objective = []
     operators = {'PartialPressure':'CO2 vapour partial pressure', 'PhaseMoleFraction':'liquid species / declared aggregate',
-                 'AdditionEnthalpy':'integral heat of absorption', 'amount_ratio':'(bicarbonate + carbonate) / total amine',
+                 'AdditionEnthalpy':'integral heat of absorption', 'amount_ratio':r'(\ce{MEAH+}, \ce{MEACOO-}, \ce{HCO3- + CO3^{2-}}) / total amine; two states',
                  'pressure':'CO2-water bubble pressure', 'phase_density':'liquid density',
                  'temperature':'MEA-water bubble temperature', 'mole_fraction':'vapour water fraction',
                  'equilibrium_isobaric_heat_capacity':'equilibrium isobaric Cp'}

@@ -66,7 +66,7 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 2ba9bf16ad7d430eac5d3f57fdb3267070520462a4e7437fe7c8e848f123fb1f
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 10dcd6f95526e206394a8ec361d2331efcee4f229d377fe1748237aec6628d30
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}>{\raggedright\arraybackslash}p{0.0376\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}@{}}
 \caption{A7 objective operators. Rows partition eight disjoint groups and 307 quantities; common subset contains pressure, species and heat. Cai contains 25 temperatures and 25 vapor fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; log ratio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales retain their declared meaning; they are not uniformly measurement uncertainties.}\label{tab:objective-groups}\\
@@ -81,7 +81,7 @@ common subset & CO2 vapor partial pressure & Pa & 47 & log ratio & 1 & 11.1111 &
 common subset & liquid species /\allowbreak{} declared aggregate & mole fraction & 94 & Difference & 0.0014 to 0.01154 (row-specific) & 1 & 16.6691 \\
 common subset & integral heat of absorption & J/\allowbreak{}mol CO2 & 8 & Difference & 3000 to 6000 (row-specific) & 1 & 1.21347 \\
 restored species & liquid species fraction & liquid mole fraction & 7 & Difference & 0.00244 to 0.01109 (row-specific) & 1 & 2.4503 \\
-Jakobsen & (bicarbonate + carbonate) /\allowbreak{} total amine & mol/\allowbreak{}mol total amine & 6 & Difference & 0.00172793 to 0.0548869 (row-specific) & 1 & 13.1171 \\
+Jakobsen & (\ce{MEAH+}, \ce{MEACOO-}, \ce{HCO3- + CO3^{2-}}) /\allowbreak{} total amine; two states & mol/\allowbreak{}mol total amine & 6 & Difference & 0.00172793 to 0.0548869 (row-specific) & 1 & 13.1171 \\
 Kiepe & CO2-water bubble pressure & Pa & 39 & log ratio & 1 & 0.025641 & 0.000679019 \\
 CO2-free density & liquid density & kg/\allowbreak{}m3 & 5 & Difference & 0.5 & 10 & 11.6112 \\
 Cai & MEA-water bubble temperature & K & 25 & Difference & 1 & 1 & 39.9903 \\
