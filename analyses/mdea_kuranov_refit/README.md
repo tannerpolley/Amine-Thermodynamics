@@ -56,14 +56,15 @@ to 1.2; that source ambiguity remains. Row 58's non-monotone pressure is kept.
 
 ## Held-out Ermatchkov comparison
 
-All 101 Ermatchkov 2006 Tables 1–3 CO₂ partial-pressure observations are
-reported, without fitting them or applying a pass condition.
+The 88 Ermatchkov 2006 Tables 1–3 CO₂ partial-pressure observations within
+the concentration scope lead the comparison, without fitting them or applying
+a pass condition. All 101 observations remain in the supplementary comparison.
 
-| Model | Solved | CO₂ partial-pressure ARD / % | Retained rows |
-|:--|--:|--:|:--|
-| Reading (A), original Wangler temperature laws (gate model) | 101/101 | 47.6504 | [gate](results/ermatchkov-gate.csv) |
-| Constant start | 101/101 | 60.2291 | [start](results/ermatchkov-start.csv) |
-| Fitted endpoint | 101/101 | 62.4440 | [fit](results/ermatchkov-fitted.csv) |
+| Model | Within scope: 88/88 solved, ARD / % | Above 49 mass %: 13/13 solved, ARD / % | Supplementary: 101/101 solved, ARD / % | Retained rows |
+|:--|--:|--:|--:|:--|
+| Reading (A), original Wangler temperature laws (gate model) | 42.7243 | 80.9962 | 47.6504 | [gate](results/ermatchkov-gate.csv) |
+| Constant start | 55.7815 | 90.3358 | 60.2291 | [start](results/ermatchkov-start.csv) |
+| Fitted endpoint | 60.9722 | 72.4068 | 62.4440 | [fit](results/ermatchkov-fitted.csv) |
 
 The prediction compared with the measured partial pressure is $y_{\mathrm{CO_2}}P$,
 not the bubble total pressure. Both quantities and vapor compositions are
@@ -71,10 +72,11 @@ retained. The source's kPa values are multiplied by 1000. This is an outside-fit
 comparison; it shows no held-out improvement from the fitted constants.
 
 The source covers 313.15, 353.15 and 393.15 K, MDEA molalities 1.905–8.441,
-loadings about 0.0028–0.784, and partial pressures 0.12–69.3 kPa. The explicitly
-requested full 101-row report includes **13 rows above 49 mass % MDEA**, up to
-50.146%; they lie outside the issue's nominal concentration limit and are
-neither fitted nor silently excluded. Ermatchkov's cells contain nitrogen;
+loadings about 0.0028–0.784, and partial pressures 0.12–69.3 kPa.
+
+The issue's concentration limit admits 88 Ermatchkov rows. Their CO₂ partial-pressure ARDs are 42.7243% for the temperature-law gate, 55.7815% for the constant start and 60.9722% for the fitted endpoint. The full 101-row comparison is supplementary: it includes 13 rows above 49 mass % MDEA, up to 50.1458 mass % MDEA. Those rows were not fitted.
+
+Ermatchkov's cells contain nitrogen;
 this calculation uses the declared water/MDEA/CO₂ vapor without nitrogen and
 does not reconstruct the full experimental headspace. Its discrepancy is not
 separated into experimental and model errors. Source caveats include 33 rows
@@ -138,6 +140,9 @@ the former local construction and is used for both evaluation and fitting.
   Reaction constants are Uyan Table 1 on the mole-fraction basis, water relative
   to pure water and every solute at infinite dilution in water. No Born term,
   fitted reaction constant, slope, or additional fitted coordinate was added.
+
+Fixed neutral-component values retain Uyan Table 3's additional precision rather than Wangler Table 4's rounded values. Water permittivity uses the repository quadratic recorded in `model.PERMITTIVITY`; Uyan Eq. (5) cites Floriano and Nascimento for its pure-water temperature dependence. Pure-MDEA permittivity uses a line through Hsieh Table 2, with Hsieh Table 3's quadratic evaluated separately as a sensitivity. These are inherited fixed-input choices, not fitted quantities or confirmation of the original authors' exact implementation.
+
 - **Permittivity uses free water/free MDEA mass weighting.** The distinction
   from weighting the initial CO₂-free solvent is unresolved; the present fit
   uses the Engine's speciated solvent basis throughout.
@@ -156,7 +161,9 @@ is checked separately. The independently replayed fitted pressures differ
 from the native fit predictions by at most 8.91 × 10⁻¹³ relative; the replayed
 log-pressure cost is 2.757566830526, consistent with the native final cost.
 These checks verify numerical bookkeeping, not experimental accuracy or
-phase stability. No new stability study was performed.
+phase stability. No new stability study was performed. The concentration summaries
+use $w=mM/(1+mM)$ on the CO₂-free solvent basis, with $M=0.1191622$ kg/mol
+from the retained MDEA component declaration.
 
 Earlier readings and their evidence remain in `results/reproduction-*`,
 `results/diagnosis.json`, `results/conventions.json` and
@@ -190,11 +197,11 @@ sha256sum build/engine-wheels/main-8298c6029ebb8b467929badc4a223c580ec591ab/epcs
 nice -n 10 uv sync --locked
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1
 # Reproduction gate only:
-nice -n 10 agent-heavy uv run --locked python analyses/mdea_kuranov_refit/score.py
+nice -n 10 uv run --locked python analyses/mdea_kuranov_refit/score.py
 # Re-evaluate the retained fitted endpoint, all held-out models, and sensitivity; no optimization:
-nice -n 10 agent-heavy uv run --locked python analyses/mdea_kuranov_refit/fit.py --score-only
+nice -n 10 uv run --locked python analyses/mdea_kuranov_refit/fit.py --score-only
 # Optional full re-estimation from the issue's prescribed start (up to eight workers):
-nice -n 10 agent-heavy uv run --locked python analyses/mdea_kuranov_refit/fit.py
+nice -n 10 uv run --locked python analyses/mdea_kuranov_refit/fit.py
 # Verify and present retained numbers without running the Engine:
 nice -n 10 uv run --locked python analyses/mdea_kuranov_refit/check_results.py
 nice -n 10 uv run --locked python analyses/mdea_kuranov_refit/plot.py
@@ -213,6 +220,6 @@ reproduce the endpoint results above.
 The presentation-profile refresh stopped with `manuscript failed: [Errno 2] No such file or directory: 'snakemake'`. No Snakemake installation or service change was made. The ordinary HTML view was instead rendered with execution disabled:
 
 ```bash
-nice -n 10 agent-heavy quarto render analyses/mdea_kuranov_refit/notebook.qmd --to html --no-execute
-nice -n 10 agent-heavy quarto render analyses/index.qmd --to html --no-execute
+nice -n 10 quarto render analyses/mdea_kuranov_refit/notebook.qmd --to html --no-execute
+nice -n 10 quarto render analyses/index.qmd --to html --no-execute
 ```

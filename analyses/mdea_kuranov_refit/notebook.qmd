@@ -20,14 +20,14 @@ The native log-pressure least-squares cost decreases from 10.75645410 to
 2.75756683 in three iterations with no failed trials. This does not minimize
 ARD directly or establish a unique parameter value.
 
-| Model | Solved Kuranov rows | ARD / % | Solved Ermatchkov rows | Partial-pressure ARD / % |
+| Model | Solved Kuranov rows | ARD / % | Solved in-scope Ermatchkov rows | Partial-pressure ARD / % |
 |:--|--:|--:|--:|--:|
-| Original Wangler temperature laws, reading (A) | 82/82 | 17.6485 | 101/101 | 47.6504 |
-| Constant start | 82/82 | 32.5553 | 101/101 | 60.2291 |
-| Constant fitted endpoint | 82/82 | 19.5432 | 101/101 | 62.4440 |
+| Original Wangler temperature laws, reading (A) | 82/82 | 17.6485 | 88/88 | 42.7243 |
+| Constant start | 82/82 | 32.5553 | 88/88 | 55.7815 |
+| Constant fitted endpoint | 82/82 | 19.5432 | 88/88 | 60.9722 |
 
 The fit improves its constant start but is worse than the original
-temperature-law model on both pressure comparisons. Ermatchkov's 101 rows
+temperature-law model on both pressure comparisons. Ermatchkov's 88 in-scope rows
 were held out and are reported without a pass condition. Kamps 2001 and
 Jakobsen 2005 MDEA remain unscored because their rows are not transcribed.
 
@@ -44,11 +44,23 @@ The error metric is
 
 $$\mathrm{ARD}=\frac{100}{N}\sum_i\left|1-\frac{p_{i,\mathrm{calc}}}{p_{i,\mathrm{exp}}}\right|.$$
 
-For Kuranov $N=82$ and pressure is total pressure; for Ermatchkov $N=101$
-and pressure is $y_{\mathrm{CO_2}}P$. The held-out set spans 313.15–393.15 K,
-MDEA molalities 1.905–8.441 and partial pressures 0.12–69.3 kPa. The explicitly
-requested 101-row comparison includes 13 rows above the issue's nominal
-49 mass % limit (maximum 50.146%). Nitrogen in the experimental headspace is
+For Kuranov $N=82$ and pressure is total pressure; for the in-scope Ermatchkov
+comparison $N=88$ and pressure is $y_{\mathrm{CO_2}}P$. The full held-out set
+spans 313.15–393.15 K, MDEA molalities 1.905–8.441 and partial pressures
+0.12–69.3 kPa.
+
+The issue's concentration limit admits 88 Ermatchkov rows. Their CO₂ partial-pressure ARDs are 42.7243% for the temperature-law gate, 55.7815% for the constant start and 60.9722% for the fitted endpoint. The full 101-row comparison is supplementary: it includes 13 rows above 49 mass % MDEA, up to 50.1458 mass % MDEA. Those rows were not fitted.
+
+| Model | Above 49 mass %: 13 rows, ARD / % | Supplementary: all 101 rows, ARD / % |
+|:--|--:|--:|
+| Temperature-law gate | 80.9962 | 47.6504 |
+| Constant start | 90.3358 | 60.2291 |
+| Fitted endpoint | 72.4068 | 62.4440 |
+
+The concentration split uses $w=mM/(1+mM)$ on the CO₂-free solvent basis,
+with $m$ in mol/kg water and MDEA molar mass $M=0.1191622$ kg/mol.
+
+Nitrogen in the experimental headspace is
 not represented in this model's vapor; the full headspace is not reconstructed.
 
 Decision D1 uses MDEAH⁺ with self-dispersion and the neutral temperature-dependent
