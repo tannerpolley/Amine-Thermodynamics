@@ -17,6 +17,7 @@ from epcsaft import regression as reg
 import diagnose
 import model
 import score
+from check_results import ermatchkov_scopes
 
 ERMATCHKOV = score.KURANOV.with_name('Ermatchkov_2006_CO2_MDEA_partial_pressure.csv')
 PAIRS = ((model.W, model.MDEAH), (model.W, model.HCO3))
@@ -160,6 +161,9 @@ def score_endpoint(report, endpoint):
         # The held-out set includes 8 mol/kg: its own isotherm/series groups avoid the Kuranov half labels.
         report['ermatchkov'][name] = score.summary(held, partial)
         del report['ermatchkov'][name]['ARD_percent_by_MDEA_molality']
+        with (score.RESULTS / ('ermatchkov-' + name + '.csv')).open() as handle:
+            report['ermatchkov'][name]['concentration_scopes'] = ermatchkov_scopes(
+                list(csv.DictReader(handle)), model.COMPONENTS[model.MDEA][0])
         write_json('refit-summary.json', report)
         print('Ermatchkov ' + name + ':', json.dumps(report['ermatchkov'][name]), flush=True)
     # Hsieh 2007 Table 3, epsilon = a + b*T + c*T^2, rewritten exactly about T_REF.

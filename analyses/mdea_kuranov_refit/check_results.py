@@ -9,8 +9,26 @@ from pathlib import Path
 RESULTS = Path(__file__).resolve().parent / 'results'
 
 
+def ermatchkov_scopes(rows, molar_mass):
+    """CO2-free solvent mass fraction from mol/kg water and kg/mol MDEA."""
+    fractions = [float(r['m_mdea']) * molar_mass / (1 + float(r['m_mdea']) * molar_mass) for r in rows]
+    scopes = {}
+    for name, within in (('within_scope', True), ('above_49_mass_percent', False)):
+        subset = [(r, w) for r, w in zip(rows, fractions) if (w <= .49) == within]
+        solved = [r for r, _ in subset if r['success'] == 'True']
+        scopes[name] = dict(rows=len(subset), solved=len(solved),
+            unsolved_rows=[int(r['row']) for r, _ in subset if r['success'] != 'True'],
+            maximum_MDEA_mass_percent=100 * max(w for _, w in subset),
+            ARD_percent_solved_rows=100 * sum(abs(1-float(r['p_calc'])/float(r['p_exp'])) for r in solved)/len(solved)
+            if solved else None)
+    return scopes
+
+
 def main():
     report = json.loads((RESULTS / 'refit-summary.json').read_text())
+    parameters = json.loads((RESULTS / 'fitted-parameters.json').read_text())
+    molar_mass = next(c['fixed']['molar_mass']['value']['magnitude'] for c in parameters['components']
+                      if c['component_id'] == 'methyldiethanolamine')
     cases = {'reading-a-reproduction-rows.csv': json.loads((RESULTS / 'reading-a-reproduction-summary.json').read_text()),
              'constant-start-kuranov.csv': report['constant_start'], 'fitted-kuranov.csv': report['fit']['kuranov'],
              'fitted-hsieh-quadratic-kuranov.csv': report['permittivity_sensitivity']}
@@ -39,6 +57,12 @@ def main():
         assert max(errors.values()) < 1e-12, (filename, errors)  # roundoff check on these dimensionless invariants
         checks[filename] = dict(rows=len(rows), ARD_percent=ard, maximum_invariant_errors=errors,
                                sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+        if filename.startswith('ermatchkov-'):
+            scopes = ermatchkov_scopes(rows, molar_mass)
+            assert scopes == summary['concentration_scopes'], filename
+            assert [s['rows'] for s in scopes.values()] == [88, 13], filename
+            assert all(s['solved'] == s['rows'] for s in scopes.values()), filename
+            checks[filename]['concentration_scopes'] = scopes
         if filename == 'fitted-kuranov.csv':
             checks[filename]['max_relative_difference_from_native_fit'] = max(abs(float(r['p_calc'])/p-1)
                 for r, p in zip(rows, report['fit']['predictions_Pa']))
