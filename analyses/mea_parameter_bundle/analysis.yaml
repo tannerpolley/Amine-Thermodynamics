@@ -1,12 +1,44 @@
 id: mea_parameter_bundle
 title: Nine-Species MEA ePC-SAFT Parameter Bundle
 status: active
-summary: Owner-adopted A7 second restricted endpoint (#196), 307 objective rows and 16 coordinates on Engine 8298c602; native density with three disclosed 353.15 K loaded-density failures; finite 73-point phase family; single local fits; conditional uncertainty; no physical validation or manuscript promotion.
+summary: Owner-adopted A7 second restricted endpoint (#196), 307 objective rows and 16 coordinates on Engine 8298c602; native density with three disclosed 353.15 K loaded-density failures; finite 73-point phase family; single local fits; conditional uncertainty; no physical validation; the owner approved A7 for manuscript use on 2026-10-20.
 working_record_sha256: e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
 working_engine_wheel_sha256: 8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3
 bundle_snakemake: held_under_issue_133
 owner: Amine-Thermodynamics
 children:
+  - id: joint-recalibration
+    title: "A7 joint recalibration and adoption"
+    category: coupled_assessment
+    report: joint-recalibration/index.qmd
+  - id: high-temperature
+    title: "A7 high-temperature pressure comparison"
+    category: coupled_assessment
+    report: high-temperature/index.qmd
+  - id: neutral-co2
+    title: "Neutral CO₂–MEA solubility and amendment 4"
+    category: formulation
+    report: neutral-co2/index.qmd
+  - id: loaded-density
+    title: "Loaded density and phase comparison: amendment 6"
+    category: coupled_assessment
+    report: loaded-density/index.qmd
+  - id: joint-recalibration-history
+    title: "A7 joint recalibration: how the adopted record was reached"
+    category: historical_context
+    report: joint-recalibration-history/index.qmd
+  - id: heat-f1
+    title: "Heat F1 predecessor and six-fit comparison"
+    category: historical_context
+    report: heat-f1/index.qmd
+  - id: engine-adoptions
+    title: "Engine adoptions and numerical transfer"
+    category: historical_context
+    report: engine-adoptions/index.qmd
+  - id: open-work
+    title: "Remaining questions and follow-up work"
+    category: remaining_questions
+    report: open-work/index.qmd
   - id: neutral-mea-water
     title: Neutral MEA–water fit
     category: formulation

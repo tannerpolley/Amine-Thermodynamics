@@ -6,73 +6,101 @@ resources:
   - results/selected-current-best-parameters.json
 ---
 
-# Current working record {#working-record}
+**A7 adopted parameter record · adopted 20 October 2026 · record `e234e860…` · Engine `8298c602` · [Download exact parameters](results/selected-current-best-parameters.json)**
 
-**The owner adopted the A7 second restricted endpoint as the repository working record on 20 October 2026 ([#196](https://github.com/tannerpolley/Amine-Thermodynamics/issues/196)).** The [selected JSON](results/selected-current-best-parameters.json) is byte-identical to the [accepted endpoint](results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json), document version 2, SHA-256 `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e`. The record declares 16 fitted coordinates across binary interactions, ion dimensions and energies, and R2/R5 chemistry, with the retained shared stage-5 water and solvent-density-temperature permittivity. Native density replaces the predecessor's empirical density translation.
+# Adopted record and result {#working-record}
 
-This is the owner's working-record choice, not physical validation. The three loaded-density failures at 353.15 K remain failures accepted with disclosure. Phase evidence covers the finite 73-point family at 313.15–333.15 K and loading $10^{-5}$–0.5; it is not a stability certificate. Both restricted fits are single local fits from one start, with sampled bounds. Non-fitted comparisons preserve their source-state basis and data-access history. Concentration transfer and absorber/stripper use are not qualified. **The owner approved A7 for manuscript use on 20 October 2026 ([#170](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6301568416)); the manuscript on `main` uses it since [#197](https://github.com/tannerpolley/Amine-Thermodynamics/issues/197) (`dfc2780`), with the owner's review of the PDFs open.**
+The adopted A7 record fits 16 adjustable coordinates to 307 objective rows, using native equation-of-state densities without empirical volume translation. For the common calibration subset, average absolute relative deviations are 11.86% for 47 pressures and 7.10% for 94 species targets; the eight fitted Vinjarapu heats have a root-mean-square error of 1.83 kJ/mol CO₂. Of 47 fitted loaded densities, 44 meet their row-specific limits, with three disclosed failures at 353.15 K; one of four heat-capacity points exceeds the 3% comparison limit. No descent was resolved in the finite 73-point phase family at 313.15–333.15 K and loading $10^{-5}$–0.5, which does not establish global phase stability. The record is approved for manuscript use, but its single-start local fits, active bounds and conditional uncertainty do not establish parameter uniqueness, independent physical validation, concentration transfer or absorber/stripper qualification.
 
 <!-- RESULTS:working-record:BEGIN -->
 
-The adopted A7 [307 objective rows](results/a7-paper-evidence/fitted-rows.csv) have cost **148.905254**. The common 149 cost is **23.865964**: 47 pressures, 94 species targets and eight Vinjarapu heats. Their pressure and species average absolute relative deviations (AARDs) are **11.860789%** and **7.103579%**. The added targets and their separate costs appear below.
+| Objective | Rows | Cost (dimensionless) |
+| --- | --- | --- |
+| A7 joint objective | 307 | 148.9053 |
+| Common calibration subset | 149 | 23.8660 |
 
 <!-- RESULTS:working-record:END -->
 
-# Current parameters {#selected-parameters}
+The [joint-calibration record](joint-recalibration/index.qmd#records) retains the full parameter and Engine identities, replay evidence, and the owner’s adoption and manuscript-use decisions. The figures show calibration and named comparison evidence.
 
-These tables read the [selected JSON](results/selected-current-best-parameters.json), [fit summary](results/a7-paper-evidence/fit-summary.json), and [conditional uncertainty](results/a7-paper-evidence/conditional-uncertainty.json). Values with a conditional standard error are rounded using two significant digits of that error; hovering shows the exact value. The [input hashes](figures/a7_regression_overview/output/parameter-table-inputs.json) identify the inputs.
+# Parameters {#selected-parameters}
+
+These tables read the [selected JSON](results/selected-current-best-parameters.json), [fit summary](results/a7-paper-evidence/fit-summary.json), and [conditional uncertainty](results/a7-paper-evidence/conditional-uncertainty.json). Parameter point estimates use about four significant figures; conditional standard errors use two. Hovering shows exact point estimates. Full precision remains in the linked JSON and CSV records. The [input hashes](figures/a7_regression_overview/output/parameter-table-inputs.json) identify the inputs.
 
 [Green: a fixed charge or formulation definition]{.evidence-1} · [Blue: a numerical input with recorded qualifications]{.evidence-2}. [★](#fitted-coordinates){.fit-star} identifies fitted component or pair inputs and all 16 declared coordinates. Tied diameters and transformed chemistry are described explicitly. Green does not certify fitted properties.
 
 <!-- CURRENT-PARAMETERS:BEGIN -->
 
-## Species parameters
+## Species parameters {#species-parameters}
 
 Lengths are Å; energy parameters are K. Association volumes, segment counts, permittivities and solvation factors are dimensionless. A dash means the input is absent, not a fitted zero.
 
 ::: {.parameter-table .species-table}
-| Species | $m$ | $\sigma$ | $\epsilon/k$ | $\epsilon^{AB}/k$ | $\kappa^{AB}$ | Scheme | $z$ | $\epsilon_r$ | $d_B$ | $f_{\mathrm{solv}}$ |
-| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| CO₂ | <span class="evidence-2" title="">2.0729</span> | <span class="evidence-2" title="">2.7852</span> | <span class="evidence-2" title="">169.21</span> | — | — | <span class="evidence-1" title="">2B</span> | <span class="evidence-1" title="">0</span> | <span class="evidence-2" title="">solvent law</span> | — | <span class="evidence-2" title="">1</span> |
-| MEA | <span class="evidence-2" title="">3.0353</span> | <span class="evidence-2" title="">3.0435</span> | <span class="evidence-2" title="">277.174</span> | <span class="evidence-2" title="">2586.3</span> | <span class="evidence-2" title="">0.036287</span> | <span class="evidence-1" title="">2B</span> | <span class="evidence-1" title="">0</span> | <span class="evidence-2" title="">solvent law</span> | — | <span class="evidence-2" title="">1</span> |
-| H₂O | <span class="evidence-2" title="">1.25275383793</span> | <span class="evidence-2" title="">water law</span> | <span class="evidence-2" title="">432.378813093</span> | <span class="evidence-2" title="">1756.64979645</span> | <span class="evidence-2" title="">0.0376197279503</span> | <span class="evidence-1" title="">2B</span> | <span class="evidence-1" title="">0</span> | <span class="evidence-2" title="">solvent law</span> | — | <span class="evidence-2" title="">1.5</span> |
-| MEAH⁺ | <span class="evidence-2" title="">1</span> | <span class="evidence-2" title="exact 5.35">5.35</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="exact 177.79505478642625">178</span>[★](#fitted-coordinates){.fit-star} | — | — | <span class="evidence-1" title="">—</span> | <span class="evidence-1" title="">1</span> | <span class="evidence-2" title="">8</span> | <span class="evidence-2" title="exact 5.0">5</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="">1</span> |
-| MEACOO⁻ | <span class="evidence-2" title="">1</span> | <span class="evidence-2" title="exact 4.866040008417222">4.866</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="exact 207.27459667183842">207</span>[★](#fitted-coordinates){.fit-star} | — | — | <span class="evidence-1" title="">—</span> | <span class="evidence-1" title="">-1</span> | <span class="evidence-2" title="">8</span> | <span class="evidence-2" title="exact 5.0">5</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="">1</span> |
-| HCO₃⁻ | <span class="evidence-2" title="">1</span> | <span class="evidence-2" title="">2.9296</span> | <span class="evidence-2" title="">70</span> | — | — | <span class="evidence-1" title="">—</span> | <span class="evidence-1" title="">-1</span> | <span class="evidence-2" title="">8</span> | <span class="evidence-2" title="">3</span> | <span class="evidence-2" title="">1</span> |
-| CO₃²⁻ | <span class="evidence-2" title="">1</span> | <span class="evidence-2" title="">2.4422</span> | <span class="evidence-2" title="">249.26</span> | — | — | <span class="evidence-1" title="">—</span> | <span class="evidence-1" title="">-2</span> | <span class="evidence-2" title="">8</span> | <span class="evidence-2" title="">3</span> | <span class="evidence-2" title="">1</span> |
-| H₃O⁺ | <span class="evidence-2" title="">1</span> | <span class="evidence-2" title="">3.4654</span> | <span class="evidence-2" title="">500</span> | — | — | <span class="evidence-1" title="">—</span> | <span class="evidence-1" title="">1</span> | <span class="evidence-2" title="">8</span> | <span class="evidence-2" title="">1.218</span> | <span class="evidence-2" title="">1</span> |
-| OH⁻ | <span class="evidence-2" title="">1</span> | <span class="evidence-2" title="">2.0177</span> | <span class="evidence-2" title="">650</span> | — | — | <span class="evidence-1" title="">—</span> | <span class="evidence-1" title="">-1</span> | <span class="evidence-2" title="">8</span> | <span class="evidence-2" title="">3.081076894</span> | <span class="evidence-2" title="">1</span> |
+| Species | $m$ (1) | $\sigma$ (Å) | $\epsilon/k$ (K) | $\epsilon^{AB}/k$ (K) | $\kappa^{AB}$ (1) | Scheme |
+| :-- | :-- | :-- | :-- | :-- | :-- | :-- |
+| CO₂ | <span class="evidence-2" title="">2.073</span> | <span class="evidence-2" title="">2.785</span> | <span class="evidence-2" title="">169.2</span> | — | — | <span class="evidence-1" title="">2B</span> |
+| MEA | <span class="evidence-2" title="">3.035</span> | <span class="evidence-2" title="">3.043</span> | <span class="evidence-2" title="">277.2</span> | <span class="evidence-2" title="">2586</span> | <span class="evidence-2" title="">0.03629</span> | <span class="evidence-1" title="">2B</span> |
+| H₂O | <span class="evidence-2" title="">1.253</span> | <span class="evidence-2" title="">water law</span> | <span class="evidence-2" title="">432.4</span> | <span class="evidence-2" title="">1757</span> | <span class="evidence-2" title="">0.03762</span> | <span class="evidence-1" title="">2B</span> |
+| MEAH⁺ | <span class="evidence-2" title="">1.000</span> | <span class="evidence-2" title="exact 5.35">5.350</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="exact 177.79505478642625">177.8</span>[★](#fitted-coordinates){.fit-star} | — | — | <span class="evidence-1" title="">—</span> |
+| MEACOO⁻ | <span class="evidence-2" title="">1.000</span> | <span class="evidence-2" title="exact 4.866040008417222">4.866</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="exact 207.27459667183842">207.3</span>[★](#fitted-coordinates){.fit-star} | — | — | <span class="evidence-1" title="">—</span> |
+| HCO₃⁻ | <span class="evidence-2" title="">1.000</span> | <span class="evidence-2" title="">2.930</span> | <span class="evidence-2" title="">70.00</span> | — | — | <span class="evidence-1" title="">—</span> |
+| CO₃²⁻ | <span class="evidence-2" title="">1.000</span> | <span class="evidence-2" title="">2.442</span> | <span class="evidence-2" title="">249.3</span> | — | — | <span class="evidence-1" title="">—</span> |
+| H₃O⁺ | <span class="evidence-2" title="">1.000</span> | <span class="evidence-2" title="">3.465</span> | <span class="evidence-2" title="">500.0</span> | — | — | <span class="evidence-1" title="">—</span> |
+| OH⁻ | <span class="evidence-2" title="">1.000</span> | <span class="evidence-2" title="">2.018</span> | <span class="evidence-2" title="">650.0</span> | — | — | <span class="evidence-1" title="">—</span> |
+:::
+
+### Electrostatic inputs
+
+::: {.parameter-table .species-table}
+| Species | $z$ (1) | $\epsilon_r$ (1) | $d_B$ (Å) | $f_{\mathrm{solv}}$ (1) |
+| :-- | :-- | :-- | :-- | :-- |
+| CO₂ | <span class="evidence-1" title="">0</span> | <span class="evidence-2" title="">solvent law</span> | — | <span class="evidence-2" title="">1.000</span> |
+| MEA | <span class="evidence-1" title="">0</span> | <span class="evidence-2" title="">solvent law</span> | — | <span class="evidence-2" title="">1.000</span> |
+| H₂O | <span class="evidence-1" title="">0</span> | <span class="evidence-2" title="">solvent law</span> | — | <span class="evidence-2" title="">1.500</span> |
+| MEAH⁺ | <span class="evidence-1" title="">1.000</span> | <span class="evidence-2" title="">8.000</span> | <span class="evidence-2" title="exact 5.0">5.000</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="">1.000</span> |
+| MEACOO⁻ | <span class="evidence-1" title="">−1.000</span> | <span class="evidence-2" title="">8.000</span> | <span class="evidence-2" title="exact 5.0">5.000</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="">1.000</span> |
+| HCO₃⁻ | <span class="evidence-1" title="">−1.000</span> | <span class="evidence-2" title="">8.000</span> | <span class="evidence-2" title="">3.000</span> | <span class="evidence-2" title="">1.000</span> |
+| CO₃²⁻ | <span class="evidence-1" title="">−2.000</span> | <span class="evidence-2" title="">8.000</span> | <span class="evidence-2" title="">3.000</span> | <span class="evidence-2" title="">1.000</span> |
+| H₃O⁺ | <span class="evidence-1" title="">1.000</span> | <span class="evidence-2" title="">8.000</span> | <span class="evidence-2" title="">1.218</span> | <span class="evidence-2" title="">1.000</span> |
+| OH⁻ | <span class="evidence-1" title="">−1.000</span> | <span class="evidence-2" title="">8.000</span> | <span class="evidence-2" title="">3.081</span> | <span class="evidence-2" title="">1.000</span> |
 :::
 
 CO₂ has induced 2B association with water and no self-association; its cross-association inputs are in `topology.edges` of the selected file. Ion association is absent.
 
-Water diameter, with $T$ in K and $\sigma$ in Å:
 
-$$\sigma_{\mathrm{H_2O}}(T)=2.78043261494+10.11 e^{-0.01775T}-1.417 e^{-0.01146T}$$
+::: {title="Exact water-diameter constant 2.78043261494 Å; full coefficients in the selected JSON"}
+
+Water diameter (rounded display; use the selected JSON for numerical work), with $T$ in K and $\sigma$ in Å. The constant and amplitudes are in Å; exponent coefficients are in K⁻¹:
+
+$$\sigma_{\mathrm{H_2O}}(T)=2.78+10.11 e^{-0.01775T}-1.417 e^{-0.01146T}$$
+
+:::
 
 The selected file uses solvent-density-temperature permittivity with the retained shared stage-5 water parameters. It excludes dispersion between ions with the same charge sign. For MEAH⁺ and MEACOO⁻, packing diameter is 0.88 times segment diameter and Debye–Hückel diameter equals segment diameter; Born diameters vary separately. No empirical density translation is applied. Fixed and transferred inputs carry their recorded qualifications; these tables confer no new physical validation.
 
-Solvent-density-temperature permittivity inputs (retained shared stage 5):
+## Permittivity inputs
+
+Solvent-density-temperature inputs (retained shared stage 5):
 
 ::: {.parameter-table .summary-table}
 | Component | Dielectric volume (L/mol) | Dielectric temperature (K) |
 | :-- | :-- | :-- |
-| CO₂ | <span class="evidence-2" title="">1e-08</span> | <span class="evidence-2" title="">1403</span> |
-| MEA | <span class="evidence-2" title="">0.730988823808</span> | <span class="evidence-2" title="">1019.07861102</span> |
+| CO₂ | <span class="evidence-2" title="">1.000e−08</span> | <span class="evidence-2" title="">1403</span> |
+| MEA | <span class="evidence-2" title="">0.7310</span> | <span class="evidence-2" title="">1019</span> |
 | H₂O | <span class="evidence-2" title="">0.3777</span> | <span class="evidence-2" title="">1403</span> |
 :::
 
 ## Binary interactions
 
-Symmetric $k_{ij}$, upper triangle. A blue zero is a serialized fixed input, not a measured absence of interaction. Green exclusions state the selected formulation rule.
+Symmetric dimensionless $k_{ij}$ at the reference temperature, upper triangle. A blue zero is a serialized fixed input, not a measured absence of interaction. Green exclusions state the selected formulation rule.
 
 ::: {.parameter-table .binary-interactions-table}
 |  | CO₂ | MEA | H₂O | MEAH⁺ | MEACOO⁻ | HCO₃⁻ | CO₃²⁻ | H₃O⁺ | OH⁻ |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| CO₂ | — | <span class="evidence-2" title="https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=H2O:status=explicit-diagnostic">-0.0464169011206</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=MEAH+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=MEACOO-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=OH-:status=explicit-diagnostic">0</span> |
-| MEA |  | — | <span class="evidence-2" title="exact -0.08990482269248873; A7 second restricted fit">-0.0899</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=MEAH+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=MEACOO-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=OH-:status=explicit-diagnostic">0</span> |
-| H₂O |  |  | — | <span class="evidence-2" title="exact -0.5; A7 second restricted fit">-0.5</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="exact -0.0038632044486184474; A7 second restricted fit">-0.00</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="exact 0.725320998100705; A7 second restricted fit">0.7</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=CO3^2-:status=explicit-diagnostic">-0.25</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=H3O+:status=explicit-diagnostic">0.25</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=OH-:status=explicit-diagnostic">-0.25</span> |
-| MEAH⁺ |  |  |  | — | <span class="evidence-2" title="exact -1.0; A7 second restricted fit">-1</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=OH-:status=explicit-diagnostic">0</span> |
+| CO₂ | — | <span class="evidence-2" title="https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=H2O:status=explicit-diagnostic">−0.04642</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=MEAH+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=MEACOO-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=OH-:status=explicit-diagnostic">0</span> |
+| MEA |  | — | <span class="evidence-2" title="exact -0.08990482269248873; A7 second restricted fit">−0.08990</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=MEAH+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=MEACOO-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=OH-:status=explicit-diagnostic">0</span> |
+| H₂O |  |  | — | <span class="evidence-2" title="exact -0.5; A7 second restricted fit">−0.5000</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="exact -0.0038632044486184474; A7 second restricted fit">−0.003863</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="exact 0.725320998100705; A7 second restricted fit">0.7253</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=CO3^2-:status=explicit-diagnostic">−0.2500</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=H3O+:status=explicit-diagnostic">0.2500</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=OH-:status=explicit-diagnostic">−0.2500</span> |
+| MEAH⁺ |  |  |  | — | <span class="evidence-2" title="exact -1.0; A7 second restricted fit">−1.000</span>[★](#fitted-coordinates){.fit-star} | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=HCO3-:status=explicit-diagnostic">0</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=CO3^2-:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=OH-:status=explicit-diagnostic">0</span> |
 | MEACOO⁻ |  |  |  |  | — | <span class="evidence-1" title="">excluded</span> | <span class="evidence-1" title="">excluded</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEACOO-:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> |
 | HCO₃⁻ |  |  |  |  |  | — | <span class="evidence-1" title="">excluded</span> | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=HCO3-:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> |
 | CO₃²⁻ |  |  |  |  |  |  | — | <span class="evidence-2" title="data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO3^2-:column=H3O+:status=explicit-diagnostic">0</span> | <span class="evidence-1" title="">excluded</span> |
@@ -86,67 +114,102 @@ The stored temperature dependence is $k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b(1/T-1
 | Pair | $b$ (K) | $T_{\mathrm{ref}}$ (K) |
 | :-- | :-- | :-- |
 | CO₂–MEA | <span class="evidence-2" title="">0</span> | 313.15 |
-| CO₂–H₂O | <span class="evidence-2" title="">-35.6650522065</span> | 313.15 |
-| MEA–H₂O | <span class="evidence-2" title="exact -8.06991337259403">-8.1</span>[★](#fitted-coordinates){.fit-star} | 313.15 |
-| MEAH⁺–H₂O | <span class="evidence-2" title="exact -41.92964086462912">-42</span>[★](#fitted-coordinates){.fit-star} | 313.15 |
+| CO₂–H₂O | <span class="evidence-2" title="">−35.67</span> | 313.15 |
+| MEA–H₂O | <span class="evidence-2" title="exact -8.06991337259403">−8.070</span>[★](#fitted-coordinates){.fit-star} | 313.15 |
+| MEAH⁺–H₂O | <span class="evidence-2" title="exact -41.92964086462912">−41.93</span>[★](#fitted-coordinates){.fit-star} | 313.15 |
 :::
 
-## Sixteen fitted coordinates {#fitted-coordinates}
+## Fitted coordinates and conditional uncertainty {#fitted-coordinates}
 
 ::: {.parameter-table .summary-table}
-| Coordinate | Current value | Unit | Conditional standard error | Bound |
+| Coordinate | Current value | Unit | Conditional standard error (same unit) | Bounds (same unit) |
 | :-- | :-- | :-- | :-- | :-- |
-| pair/MEACOO⁻/H₂O/k_ij | <span class="evidence-2" title="exact -0.0038632044486184474">-0.00</span>[★](#fitted-coordinates){.fit-star} | dimensionless | 0.18 | Free |
-| pair/MEAH⁺/H₂O/k_ij | <span class="evidence-2" title="exact -0.5">-0.5</span>[★](#fitted-coordinates){.fit-star} | dimensionless | — | On bound; no symmetric error |
-| pair/HCO₃⁻/H₂O/k_ij | <span class="evidence-2" title="exact 0.725320998100705">0.7</span>[★](#fitted-coordinates){.fit-star} | dimensionless | 1.3 | Free |
-| pair/MEACOO⁻/MEAH⁺/k_ij | <span class="evidence-2" title="exact -1.0">-1</span>[★](#fitted-coordinates){.fit-star} | dimensionless | — | On bound; no symmetric error |
-| pair/MEAH⁺/H₂O/k_ij/reciprocal_temperature_slope | <span class="evidence-2" title="exact -41.92964086462912">-42</span>[★](#fitted-coordinates){.fit-star} | K | 60 | Free |
-| component/MEAH⁺/segment_diameter | <span class="evidence-2" title="exact 5.35">5.35</span>[★](#fitted-coordinates){.fit-star} | angstrom | — | On bound; no symmetric error |
-| component/MEACOO⁻/segment_diameter | <span class="evidence-2" title="exact 4.866040008417222">4.866</span>[★](#fitted-coordinates){.fit-star} | angstrom | 0.079 | Free |
-| component/MEAH⁺/born_diameter | <span class="evidence-2" title="exact 5.0">5</span>[★](#fitted-coordinates){.fit-star} | angstrom | — | On bound; no symmetric error |
-| component/MEACOO⁻/born_diameter | <span class="evidence-2" title="exact 5.0">5</span>[★](#fitted-coordinates){.fit-star} | angstrom | — | On bound; no symmetric error |
-| reaction:R5:correlation:a_k | <span class="evidence-2" title="exact 2831.6809640586557">2830</span>[★](#fitted-coordinates){.fit-star} | K | 1.7e+02 | Free |
-| reaction:R2:enthalpy_shift | <span class="evidence-2" title="exact -1387.404676576437">-1400</span>[★](#fitted-coordinates){.fit-star} | J/mol | 5.3e+03 | Free |
-| reaction:R5:enthalpy_shift | <span class="evidence-2" title="exact 10000.0">10000</span>[★](#fitted-coordinates){.fit-star} | J/mol | — | On bound; no symmetric error |
-| pair/MEA/H₂O/k_ij | <span class="evidence-2" title="exact -0.08990482269248873">-0.0899</span>[★](#fitted-coordinates){.fit-star} | dimensionless | 0.001 | Free |
-| pair/MEA/H₂O/k_ij/reciprocal_temperature_slope | <span class="evidence-2" title="exact -8.06991337259403">-8.1</span>[★](#fitted-coordinates){.fit-star} | K | 1.8 | Free |
-| component/MEAH⁺/dispersion_energy_over_k | <span class="evidence-2" title="exact 177.79505478642625">178</span>[★](#fitted-coordinates){.fit-star} | K | 48 | Free |
-| component/MEACOO⁻/dispersion_energy_over_k | <span class="evidence-2" title="exact 207.27459667183842">207</span>[★](#fitted-coordinates){.fit-star} | K | 84 | Free |
+| MEACOO⁻–H₂O interaction | <span class="evidence-2" title="exact -0.0038632044486184474">−0.003863</span>[★](#fitted-coordinates){.fit-star} | 1 | 0.18 | Free; -0.5 to 0.5 |
+| MEAH⁺–H₂O interaction | <span class="evidence-2" title="exact -0.5">−0.5000</span>[★](#fitted-coordinates){.fit-star} | 1 | — | On bound; -0.5 to -0.161 |
+| HCO₃⁻–H₂O interaction | <span class="evidence-2" title="exact 0.725320998100705">0.7253</span>[★](#fitted-coordinates){.fit-star} | 1 | 1.3 | Free; -0.5 to 1 |
+| MEACOO⁻–MEAH⁺ interaction | <span class="evidence-2" title="exact -1.0">−1.000</span>[★](#fitted-coordinates){.fit-star} | 1 | — | On bound; -1 to 1 |
+| MEAH⁺–H₂O reciprocal-temperature slope | <span class="evidence-2" title="exact -41.92964086462912">−41.93</span>[★](#fitted-coordinates){.fit-star} | K | 60 | Free; -1000 to 1000 |
+| MEAH⁺–segment diameter | <span class="evidence-2" title="exact 5.35">5.350</span>[★](#fitted-coordinates){.fit-star} | Å | — | On bound; 5.35 to 5.8 |
+| MEACOO⁻–segment diameter | <span class="evidence-2" title="exact 4.866040008417222">4.866</span>[★](#fitted-coordinates){.fit-star} | Å | 0.079 | Free; 2 to 5.8 |
+| MEAH⁺–Born diameter | <span class="evidence-2" title="exact 5.0">5.000</span>[★](#fitted-coordinates){.fit-star} | Å | — | On bound; 2 to 5 |
+| MEACOO⁻–Born diameter | <span class="evidence-2" title="exact 5.0">5.000</span>[★](#fitted-coordinates){.fit-star} | Å | — | On bound; 2 to 5 |
+| R5 unshifted source A | <span class="evidence-2" title="exact 2831.6809640586557">2832</span>[★](#fitted-coordinates){.fit-star} | K | 1.7e+02 | Free; 2400 to 3000 |
+| R2 total enthalpy shift | <span class="evidence-2" title="exact -1387.404676576437">−1387</span>[★](#fitted-coordinates){.fit-star} | J/mol | 5.3e+03 | Free; -10000 to 10000 |
+| R5 total enthalpy shift | <span class="evidence-2" title="exact 10000.0">1.000e+04</span>[★](#fitted-coordinates){.fit-star} | J/mol | — | On bound; -10000 to 10000 |
+| MEA–H₂O interaction | <span class="evidence-2" title="exact -0.08990482269248873">−0.08990</span>[★](#fitted-coordinates){.fit-star} | 1 | 0.001 | Free; -0.5 to 0.5 |
+| MEA–H₂O reciprocal-temperature slope | <span class="evidence-2" title="exact -8.06991337259403">−8.070</span>[★](#fitted-coordinates){.fit-star} | K | 1.8 | Free; -1000 to 1000 |
+| MEAH⁺–dispersion energy/k | <span class="evidence-2" title="exact 177.79505478642625">177.8</span>[★](#fitted-coordinates){.fit-star} | K | 48 | Free; 50 to 950 |
+| MEACOO⁻–dispersion energy/k | <span class="evidence-2" title="exact 207.27459667183842">207.3</span>[★](#fitted-coordinates){.fit-star} | K | 84 | Free; 50 to 1000 |
 :::
 
-The ten free coordinates have rank 10 at the campaign cutoff 1e-14. The residual variance factor is 1.0027289830 with 307 − 10 = 297 degrees of freedom. R5 A is the unshifted source coordinate; enthalpy shifts are totals including inherited shifts. The errors condition on residual weights, fixed inputs, active bounds and local linearization. They do not establish independent-error measurement uncertainty, parameter uniqueness or prediction intervals.
+The ten free coordinates have rank 10 at the campaign cutoff 1e-14. The residual variance factor is 1.003 with 307 − 10 = 297 degrees of freedom. R5 A is the unshifted source coordinate; enthalpy shifts are totals including inherited shifts. The errors condition on residual weights, fixed inputs, active bounds and local linearization. They do not establish independent-error measurement uncertainty, parameter uniqueness or prediction intervals.
 
-## Reactions
+## Reaction correlations
 
 R2/R4/R5 below are generated from the current selected JSON. It does not serialize fixed R1/R3; those rows and the reaction equations come from the retained [chemistry declaration](https://github.com/tannerpolley/Amine-Thermodynamics/blob/30ce082/data/reference/MEA/manifests/chemical_reaction_source_contract.json), including its stored aqueous-molality offsets.
 
 ::: {.parameter-table .summary-table}
-| Reaction | $A$ | $B$ | $C$ | $D$ | $\Delta$ | Input owner |
+| Reaction | $A$ (1) | $B$ (K) | $C$ (1) | $D$ (K⁻¹) | $\Delta$ (1) | Input owner |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| R1 · 2 H₂O ⇌ H₃O⁺ + OH⁻ | <span class="evidence-2" title="">132.899</span> | <span class="evidence-2" title="">-13445.9</span> | <span class="evidence-2" title="">-22.4773</span> | <span class="evidence-2" title="">0</span> | <span class="evidence-2" title="">8.0330699846</span> | Fixed chemistry |
-| R2 · CO₂ + 2 H₂O ⇌ HCO₃⁻ + H₃O⁺ | <span class="evidence-2" title="">234.948670781</span> | <span class="evidence-2" title="">-11925.2335722</span> | <span class="evidence-2" title="">-36.7816</span> | <span class="evidence-2" title="">0</span> | — | Selected JSON |
-| R3 · HCO₃⁻ + H₂O ⇌ CO₃²⁻ + H₃O⁺ | <span class="evidence-2" title="">216.049</span> | <span class="evidence-2" title="">-12431.7</span> | <span class="evidence-2" title="">-35.4819</span> | <span class="evidence-2" title="">0</span> | <span class="evidence-2" title="">4.0165349923</span> | Fixed chemistry |
-| R4 · MEACOO⁻ + H₂O ⇌ HCO₃⁻ + MEA | <span class="evidence-2" title="">2.151</span> | <span class="evidence-2" title="">-1545.3</span> | — | — | — | Selected JSON |
-| R5 · MEAH⁺ + H₂O ⇌ MEA + H₃O⁺ | <span class="evidence-2" title="">3354.01716526</span> | <span class="evidence-2" title="">-1.28110639057</span> | <span class="evidence-2" title="">0.0004277</span> | — | — | Selected JSON |
+| R1 · 2 H₂O ⇌ H₃O⁺ + OH⁻ | <span class="evidence-2" title="">132.9</span> | <span class="evidence-2" title="">−1.345e+04</span> | <span class="evidence-2" title="">−22.48</span> | <span class="evidence-2" title="">0</span> | <span class="evidence-2" title="">8.033</span> | Fixed chemistry |
+| R2 · CO₂ + 2 H₂O ⇌ HCO₃⁻ + H₃O⁺ | <span class="evidence-2" title="">234.9</span> | <span class="evidence-2" title="">−1.193e+04</span> | <span class="evidence-2" title="">−36.78</span> | <span class="evidence-2" title="">0</span> | — | Selected JSON |
+| R3 · HCO₃⁻ + H₂O ⇌ CO₃²⁻ + H₃O⁺ | <span class="evidence-2" title="">216.0</span> | <span class="evidence-2" title="">−1.243e+04</span> | <span class="evidence-2" title="">−35.48</span> | <span class="evidence-2" title="">0</span> | <span class="evidence-2" title="">4.017</span> | Fixed chemistry |
+| R4 · MEACOO⁻ + H₂O ⇌ HCO₃⁻ + MEA | <span class="evidence-2" title="">2.151</span> | <span class="evidence-2" title="">−1545</span> | — | — | — | Selected JSON |
+:::
+
+R5 uses a base-10 logarithm and different coefficient units:
+
+::: {.parameter-table .summary-table}
+| Reaction | $A$ (K) | $B$ (1) | $C$ (K⁻¹) | Input owner |
+| :-- | :-- | :-- | :-- | :-- |
+| R5 · MEAH⁺ + H₂O ⇌ MEA + H₃O⁺ | <span class="evidence-2" title="">3354</span> | <span class="evidence-2" title="">−1.281</span> | <span class="evidence-2" title="">0.0004277</span> | Selected JSON |
 :::
 
 For R1–R3, $\ln K=A+B/T+C\ln T+DT+\Delta$; R2 already includes the conversion in $A$ and has no separate offset. For R4, $\ln K=A+B/T$. For R5, $-\log_{10}K=A/T+B+CT$. The displayed layouts therefore give $B$ in K for R1–R4 and $A$ in K for R5; $D$ for R1–R3 and $C$ for R5 are in K⁻¹. Other coefficients are dimensionless. R2/R5 include the fitted pivot-preserving enthalpy shifts at 313.15 K; R5 also varies its unshifted source A. The displayed reaction coefficients include these transformations and are not independent fitted coordinates or new source measurements.
 
 <!-- CURRENT-PARAMETERS:END -->
 
-# Pressure and speciation
+# Fitting plots
+
+## CO₂ pressure {#pressure-and-speciation}
 
 The figures read A7's retained packet [pressure](results/a7-paper-evidence/pressure-figure-data.csv), [species](results/a7-paper-evidence/species-figure-data.csv), and [19 report-only Matin pool](results/a7-paper-evidence/pool-figure-data.csv) rows, derived from the single [462-row state table](results/a7-paper-evidence/state-targets.csv). The [cohort summaries and availability](results/a7-paper-evidence/state-summary.json) preserve canonical, Wagner and transfer comparisons, exclusions and historical data access. **Model values are markers at measured states**; no continuous curve is inferred. Pressure CSV values are Pa and the axes use kPa. [Figure provenance](figures/a7_regression_overview/output/provenance.json) records the input hashes. Rendering executes no model.
 
 ![A7 pressure against loading. Open markers are observations; + markers are calculated at measured states. The 40/60 °C panels include calibration and comparison rows; 80–120 °C are non-fitted predictions.](figures/a7_regression_overview/output/pressure.svg){#fig-pressure}
 
-![A7 pressure parity. Equality is a reference line; each comparison is a point.](figures/a7_regression_overview/output/pressure-parity.svg){#fig-pressure-parity}
+<!-- RESULTS:pressure:BEGIN -->
 
-![A7 pressure residuals by loading and temperature: ln(calculated/observed pressure).](figures/a7_regression_overview/output/pressure-residuals.svg){#fig-pressure-residuals}
+| Cohort / role | Evaluated / requested | AARD (%) | RMS ln(calc/obs) (1) |
+| --- | --- | --- | --- |
+| pressure · displayed · all | 79 / 79 | 15.47 | 0.1923 |
+| pressure · common149 fitted · all | 47 / 47 | 11.86 | 0.1514 |
+| pressure · all fitted · all | 47 / 47 | 11.86 | 0.1514 |
+| pressure · displayed source · Hilliard2008 | 31 / 31 | 9.42 | 0.1187 |
+| pressure · displayed source · Jou1995 | 48 / 48 | 19.37 | 0.2276 |
+
+<!-- RESULTS:pressure:END -->
+
+## Speciation
 
 ![A7 species and aggregate mole fractions. Open circles identify fitted observations; squares identify non-fitted observations; + marks calculated values. Matin HCO₃⁻ denotes the HCO₃⁻ + CO₃²⁻ pool, excluded from A7 fitting.](figures/a7_regression_overview/output/speciation.svg){#fig-speciation}
 
-# Heat of absorption
+<!-- RESULTS:species:BEGIN -->
+
+| Cohort / role | Evaluated / requested | AARD (%) | RMS ln(calc/obs) (1) |
+| --- | --- | --- | --- |
+| species · displayed · all | 131 / 131 | 16.21 | 0.5312 |
+| species · common149 fitted · all | 94 / 94 | 7.10 | 0.1014 |
+| species · all fitted · all | 101 / 101 | 7.24 | 0.1038 |
+| species · restored fitted · all | 7 / 7 | 9.00 | 0.1319 |
+| species · displayed source · Bottinger2008 | 55 / 55 | 5.62 | 0.0790 |
+| species · displayed source · Matin2012 | 76 / 76 | 23.88 | 0.6941 |
+| Matin pool · displayed · all | 19 / 19 | 67.48 | 1.3710 |
+
+<!-- RESULTS:species:END -->
+
+The common calibration subset contains 94 species targets; seven restored fitted targets are reported separately. The 19 Matin bicarbonate/carbonate pools are report-only comparisons and overlap the displayed population. See the [exact row membership and diagnostics](joint-recalibration/index.qmd).
+
+## Integral heat of absorption {#heat-of-absorption}
 
 The [22 retained heat rows](results/a7-paper-evidence/heat.csv) join by record ID to `heat-rows.json`, preserving the declared scales, roles and units. Eight Vinjarapu rows at 313.15 K and 1.734 MPa enter the objective; 14 Arcis rows at 322.5 K are non-fitted predictions at their source pressures. Heat is the integral finite-addition enthalpy from zero carbon. Negative heat denotes exothermic absorption. The retained A7 assessment has no matched no-heat control.
 
@@ -158,26 +221,36 @@ Root-mean-square error (RMSE) and calculated-minus-observed bias are in kJ/mol C
 
 | Source / role | n | RMSE (kJ/mol CO₂) | Bias (kJ/mol CO₂) |
 | --- | --- | --- | --- |
-| Vinjarapu2024 · fitted | 8 | 1.8349 | 0.4729 |
-| Arcis2011 · non-fitted prediction | 14 | 8.1144 | 7.1819 |
+| Vinjarapu2024 · fitted | 8 | 1.83 | +0.473 |
+| Arcis2011 · non-fitted prediction | 14 | 8.11 | +7.18 |
 
 <!-- RESULTS:heat:END -->
 
-# Density and heat capacity
-
-## Density
+## Density {#density-and-heat-capacity}
 
 The [210 retained densities](results/a7-paper-evidence/density.csv) are native equation-of-state predictions, with no empirical volume translation. The objective contains 47 loaded and five CO₂-free densities. Source pressures remain the retained assumptions, including 0.100 MPa where unreported. The other retained rows preserve their non-fitted roles and exclusions.
 
+![A7 fitted loaded-density errors, normalized by each row’s retained scale. Dashed lines are the row-specific 2s limits after normalization; the three named failures are at 353.15 K. These scales are not uniformly measured uncertainties.](figures/a7_regression_overview/output/loaded-density-errors.svg){#fig-density}
+
 <!-- RESULTS:density:BEGIN -->
 
-| Source (all retained states) | n | RMSE (kg/m³) | AARD (%) |
+| Fitted cohort | Evaluated / requested | Within limit | Max abs(e)/s (1) | RMSE (kg/m³) | AARD (%) |
+| --- | --- | --- | --- | --- | --- |
+| Amundsen fitted 15 | 15 / 15 | 14 / 15 | 2.28 | 2.264 | 0.17 |
+| Hartono fitted 32 | 32 / 32 | 30 / 32 | 2.43 | 2.175 | 0.18 |
+| Amundsen CO2-free gate five | 5 / 5 | 5 / 5 | 1.11 | 0.341 | 0.03 |
+
+Loaded rows use their row-specific $2s$ limits; the CO₂-free five use 1.0 kg/m³.
+
+| Source (all retained states; overlaps fitted rows) | n | RMSE (kg/m³) | AARD (%) |
 | --- | --- | --- | --- |
-| Amundsen2009 | 103 | 6.4197 | 0.3822 |
-| Hartono2014 | 40 | 2.4230 | 0.1864 |
-| Han2012 | 67 | 5.9052 | 0.3924 |
+| Amundsen2009 | 103 | 6.420 | 0.38 |
+| Hartono2014 | 40 | 2.423 | 0.19 |
+| Han2012 | 67 | 5.905 | 0.39 |
 
 <!-- RESULTS:density:END -->
+
+The accepted warm-density underprediction range is **4.2–5.5 kg/m³ (0.40–0.53%)**.
 
 **Three fitted loaded densities fail the 2s gate at 353.15 K:** `Amundsen2009_state_081` (−2.2832s), `Hartono2014_density_80C_alpha0.29` (−2.0550s), and `Hartono2014_density_80C_alpha0.39` (−2.4317s). They remain failures accepted with disclosure. Amundsen's exact source-uncertainty boundary at high temperature and loading remains unresolved (source pp. 3099–3100, locators retained per row); the density scales are not uniformly measured uncertainties. The five source-conflict Amundsen loading-0.4 rows remain excluded from the objective and gate.
 
@@ -185,18 +258,36 @@ The [210 retained densities](results/a7-paper-evidence/density.csv) are native e
 
 The four [Hilliard Cp rows](results/a7-paper-evidence/cp.csv) enter the objective at 7 mol MEA/kg water, 101325 Pa, with the declared $10^{-6}$ unloaded CO₂ proxy. Cp uses the parameter-document molar masses for the complete analytical-feed mass, following the retained assessment conversion. The [verification record](results/a7-paper-evidence/verification.json) preserves the unloaded proxy and enthalpy checks; no new heat-capacity sweep was run.
 
+![Observed and calculated mass-specific heat capacity at the four retained states. Points show Hilliard observations and A7 predictions at measured states; labels are signed deviations. No continuous curve is implied.](figures/a7_regression_overview/output/heat-capacity.svg){#fig-cp}
+
 <!-- RESULTS:heat-capacity:BEGIN -->
 
-| Temperature (K) | Nominal loading (mol/mol MEA) | Cp (kJ/(kg·K)) | Observed Cp (kJ/(kg·K)) | Deviation (%) |
-| --- | --- | --- | --- | --- |
-| 318.15 | 0.0 | 3.9253 | 3.7195 | 5.5340 |
-| 318.15 | 0.358 | 3.4539 | 3.3675 | 2.5667 |
-| 353.15 | 0.0 | 3.9009 | 3.8566 | 1.1500 |
-| 353.15 | 0.358 | 3.3966 | 3.4707 | -2.1347 |
+| Temperature (K) | Nominal loading (mol/mol MEA) | Cp (kJ/(kg·K)) | Observed Cp (kJ/(kg·K)) | Deviation (%) | Within 3% |
+| --- | --- | --- | --- | --- | --- |
+| 318.15 | 0.0 | 3.9253 | 3.7195 | +5.53 | No |
+| 318.15 | 0.358 | 3.4539 | 3.3675 | +2.57 | Yes |
+| 353.15 | 0.0 | 3.9009 | 3.8566 | +1.15 | Yes |
+| 353.15 | 0.358 | 3.3966 | 3.4707 | -2.13 | Yes |
 
 1 of 4 states exceed the 3% comparison limit.
 
 <!-- RESULTS:heat-capacity:END -->
 
-The historical [#161 Cp check](results/cp-unloaded-161/README.md) remains tied to its original F1 record and source basis. It is not an A7 result. Conditional parameter errors, the finite phase family and these spot comparisons do not establish prediction intervals, parameter uniqueness, global physical validation or process-use qualification.
+The historical [#161 Cp check](heat-f1/index.qmd) remains tied to its original F1 record and source basis. It is not an A7 result. Conditional parameter errors, the finite phase family and these spot comparisons do not establish prediction intervals, parameter uniqueness, global physical validation or process-use qualification.
 
+# Where to find more
+
+| Reader question | Page / exact records |
+| --- | --- |
+| Joint calibration, assessment and adoption | [A7 joint recalibration and adoption](joint-recalibration/index.qmd) · [A7 evidence package](results/a7-paper-evidence/README.md) |
+| How the record was reached | [Joint recalibration history](joint-recalibration-history/index.qmd) · [Parameter adoption history](results/parameter-record-history.csv) |
+| Neutral CO₂ solubility and the CO₂–MEA pair | [Neutral CO₂ study](neutral-co2/index.qmd) |
+| Loaded density and phase assessment before A7 | [Amendment 6](loaded-density/index.qmd) |
+| Heat F1 predecessor | [F1 identity and six-fit comparison](heat-f1/index.qmd) |
+| Numerical reproduction and Engine transfers | [Engine adoptions](engine-adoptions/index.qmd) · [Default-path reproduction](joint-recalibration/index.qmd#numerical-reproduction) |
+| High-temperature pressure and transfer | [High-temperature comparison](high-temperature/index.qmd) |
+| Remaining scientific questions | [Open work](open-work/index.qmd) |
+| Formulation and earlier fitting | [Neutral MEA–water](neutral-mea-water/index.qmd) · [Association topology](association-topology/index.qmd) · [CO₂ and R4](co2-r4-calibration/index.qmd) · [Born and permittivity](born-permittivity/index.qmd) |
+| Earlier coupled assessment | [Reaction-temperature fit](reaction-temperature-fit/index.qmd) · [Calorimetry](calorimetry/index.qmd) · [Coupling and identification](coupling-and-identification/index.qmd) |
+| Earlier designs and ion fitting | [Ionic/speciation fit](ionic-speciation-fit/index.qmd) · [Historical designs](historical-designs/index.qmd) |
+| Sources and provenance | [Evidence map](../evidence-map.qmd) · [Parameter-table input hashes](figures/a7_regression_overview/output/parameter-table-inputs.json) |
