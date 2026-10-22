@@ -1,0 +1,13 @@
+---
+title: "Engine adoptions and numerical transfer"
+resources:
+  - ../results/engine-21e761c3-adoption/comparison.json
+  - ../results/engine-21e761c3-adoption/checks.json
+  - ../results/engine-8298c602-adoption/comparison.json
+  - ../results/engine-8298c602-adoption/checks.json
+---
+
+The pinned Engine is merged commit `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`, with numpy 2.5.4 and scipy 1.18.1 for this replay. No Engine source checkout is imported.
+
+Where the A7 calculations on this wheel call Ipopt, it used the MA57 linear solver. The wheel selects MA57 when the owner's licensed HSL library loads through `EPCSAFT_HSL_LIBRARY`, and MUMPS otherwise (Engine #605). The login environment has set that library since 18 October 2026, and the [A7 launcher](../results/joint-recalibration-170/amendment-7/run.py.txt) passes the inherited environment to every call. The A7 result files do not store the solver; the [8298c602 transfer comparison](../results/engine-8298c602-adoption/comparison.json), run on the same wheel and machine, records `ma57`. The previous pin, 21e761c3, predates that selection and used [MUMPS 5.6](../results/engine-8298c602-adoption/README.md). The Engine reports MA57 and MUMPS states agreeing within about 10⁻¹¹; this repository has not compared the two solvers on A7. Acknowledgement: HSL, a collection of Fortran codes for large-scale scientific computation. <https://www.hsl.rl.ac.uk/>
+

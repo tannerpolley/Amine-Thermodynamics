@@ -1,0 +1,172 @@
+---
+title: "Neutral CO₂–MEA solubility and amendment 4"
+resources:
+  - ../results/joint-recalibration-170/amendment-4/final-prerequisites/**
+  - ../results/joint-recalibration-170/amendment-4/b1-vapor-bound/**
+  - ../results/joint-recalibration-170/amendment-4/neutral-fit/**
+  - ../results/joint-recalibration-170/amendment-4/matched-larger-dV/README.md
+  - ../results/joint-recalibration-170/amendment-4/matched-larger-dV/matched-checks.json
+  - ../results/joint-recalibration-170/amendment-4/matched-smaller-dV/README.md
+  - ../results/joint-recalibration-170/amendment-4/matched-smaller-dV/matched-checks.json
+  - ../results/joint-recalibration-170/amendment-4/dilute-bubble/README.md
+  - ../results/joint-recalibration-170/amendment-4/dilute-bubble/summary.json
+  - ../results/joint-recalibration-170/amendment-4/dilute-bubble/results.json
+  - ../results/joint-recalibration-170/amendment-4/dilute-bubble/pressure-properties.json
+  - ../results/joint-recalibration-170/amendment-4/dilute-bubble/target-replay.json
+---
+
+# Dilute neutral CO₂ observation for amendment 4
+
+**The fixed stage-2 model supplies a numerically verified dilute CO₂ partial
+pressure, so a mole-fraction Henry observation can be declared natively.**
+This 16 October 2026 design preflight uses Engine `84ca269d`, CO₂–MEA
+intercept and slope both zero, T=293.15–360.25 K, source gas-free MEA mass
+fractions 0.12208545–0.48838927, no reactions and neutral phase support.
+It does not change the adopted parameter set discussed above.
+
+The [retained calculation](../results/joint-recalibration-170/amendment-4/dilute-bubble/summary.json)
+compares 22 distinct states at liquid CO₂ mole fractions 1e-5, 1e-6 and 1e-7.
+All 66 native partial-pressure predictions are Available with tolerance met;
+the table reports the quantities supporting that conclusion.
+
+| Quantity | Retained result |
+|---|---:|
+| Selected liquid CO₂ mole fraction | 1e-5 |
+| pCO₂ at selected dilution / Pa | 565.458365–2244.447500 |
+| Total bubble pressure / Pa | 2329.641493–57404.683320 |
+| Maximum relative change of pCO₂/x to next decade | 8.75251e-5 |
+| Maximum raw equilibrium residual | 1.57208e-13 |
+| Cold-replay pressure change / Pa | 0 |
+
+These scalar verification bounds are reported as a table; a plot would not
+clarify the declaration check.
+
+The [data owner](../../../data/reference/MEA/physical_solubility/README.md),
+Eqs.N2O-5–N2O-7, converts the 23 analogy-derived Hc values using measured
+unloaded densities: Hx=Hc times gas-free total molar density. Xu Table 4
+matches all 16 Xu states exactly. Hartono Table 3 requires temperature
+interpolation; its 360.25 K row uses Karunarathne Table 3 measurements at
+353.15 and 363.15 K. The resulting Hx range is 1.20998549e8–3.69615034e8 Pa.
+Density interpolation, cross-campaign differences and analogy uncertainty
+are unquantified; propagated N₂O uncertainty does not include them.
+
+A conditional pressure estimate to 101325 Pa, using a stated 100 cm³/mol
+absolute partial-molar-volume envelope, is 0.416577% for the liquid Poynting
+term and at most 0.695049% including native gas-fugacity changes at fixed
+bubble-vapor composition. This is below the 1% engineering threshold for that diagnostic. It does
+not establish transfer from Hartono's N₂O gas reference: SI Table S2 provides
+partial N₂O pressures, not the total pressure or a complete gas-fugacity
+translation. Xu's actual Henry pressures and gas reference also remain
+unverified because Table S3 is unread. Xu's 7.2% water-calibration discrepancy
+is a separate source limitation, not a Hartono uncertainty allowance. The [evidence and limits](../results/joint-recalibration-170/amendment-4/dilute-bubble/README.md)
+retain this distinction. Start-B, derivative, dielectric-branch and exact
+gas-free density checks also remain unrun. No neutral or reacting fit ran.
+
+The density-uncertainty correction uses Karunarathne Table 3's expanded
+±7.10 kg/m³ (k=2, 95% confidence); §3's ±7.80 kg/m³ applies separately to
+CO₂-loaded solutions. The two retained density central values and all
+historical Hc-times-density Hx values remain unchanged.
+
+Orchestrator decision, 2026-10-16 (owner away): use Hartono SI Table S2 direct
+pN₂O/xN₂O, converted by the unchanged N₂O-to-CO₂ water ratio, as the primary
+Hartono Hx basis. It already uses mole fraction and needs no density
+conversion. Table 11 Hc times measured gas-free total molar density exceeds
+the SI ratio by 0.85368–3.09128%; retain this as a source-representation
+difference, without claiming to have resolved the source volume convention.
+The [derived CSV](../../../data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv)
+retains both source representations and selects the SI primary targets
+(151298904.50–358676232.10 Pa). Their uncertainty is unquantified here;
+Table 11's Hc uncertainty is not transferred to them.
+
+Only seven Hartono observations at gas-free wMEA=0.30 and 298.35–360.25 K
+are primary neutral calibration candidates, in six temperature groups.
+The two 312.65 K repeats split one group weight. For repeat group g the
+native log_ratio weight is 1/[6 m_g (0.05)²]; 0.05 is an engineering residual
+scale. All 16 Xu rows are conditional comparisons with zero fitting weight
+until Table S3 and its pressure/gas reference are verified. Preserve the
+historical preflight's numerical results and identify its earlier `primary`
+labels as the superseded 15-row, two-source proposal. The retained target
+replays used Table 11 Hc-times-density Hartono targets; they do not qualify
+the selected SI targets. The Hartono mean absolute relative error ≤10%,
+maximum ≤20%, two-start identification checks and original numerical stops
+remain. No neutral observation enters the 205-row reacting objective.
+
+Source pressure/gas-reference qualification for Hartono and the remaining
+original numerical checks still stop calibration. The representation choice
+is supplied; no owner answer is pending. No pair is selected or adopted, no
+fit ran, and executable additions remain 861/900 with zero added by these
+text/data corrections.
+
+These results support the calculation declaration and basis conversion,
+with numerical solution verification. They do not supply physical validation,
+independent review, source-pressure equivalence or parameter promotion.
+This new section has not been independently reviewed or promoted for
+manuscript use.
+
+## Amendment 4: neutral CO₂–MEA pair determined; it does not change the reacting fit
+
+**The CO₂–MEA dispersion correction is now determined independently from
+neutral physical solubility, and fixing it leaves the reacting fit
+unchanged.** Run 18 October 2026 on Engine `main-21e761c3`. Records:
+[B1 transfer](../results/joint-recalibration-170/amendment-4/b1-vapor-bound/README.md),
+[neutral fit](../results/joint-recalibration-170/amendment-4/neutral-fit/README.md),
+[larger-d_V pair](../results/joint-recalibration-170/amendment-4/matched-larger-dV/README.md),
+[smaller-d_V pair](../results/joint-recalibration-170/amendment-4/matched-smaller-dV/README.md).
+Not yet independently reviewed as a delivered result.
+
+**Source transfer (B1).** Hartono, Juliussen & Svendsen 2008 defines the N₂O
+pressure as total minus measured solvent pressure (Eq. 5). On that basis the
+N₂O vapor fugacity differs from the reported pressure by 0.37–0.60 %, and
+each target carries that correction. The transfer left after it is at most
+0.36–0.51 % (rows 1–6) and 0.83 % (360.25 K), inside the 1 % rule. The
+source's Peng–Robinson gas balance biases its H low by 0.16–3.85 %, depending
+on an unprinted fill pressure; that is a disclosed source limitation, pending
+owner ratification.
+
+**Neutral fit.** Seven Hartono 2014 rows at 30 wt % MEA, 298.35–360.25 K,
+observed as the model's dilute-bubble CO₂ partial pressure at CO₂ mole
+fraction 10⁻⁶. Both starts reach k(313.15 K) = 0.098720 and b = −50.989 K in
+k(T) = k + b(1/T − 1/313.15 K), interior, condition 5.499, cold replay exact.
+The fitted rows lie within −1.41 to +1.32 % (@fig-neutral-henry). The Xu &
+Wang 2018 rows, not fitted, lie between −7.7 and +22.5 %, rising with
+temperature and MEA content; near 30 wt % at 313 K they sit about 12 % above
+the model while Hartono's sit within 0.5 %. The fit therefore calibrates to
+one solubility campaign; transfer to other MEA contents is not shown.
+b is weakly determined (local conditioning 64 K at the declared weights).
+
+![Relative error of the model's CO₂ Henry constant at the released neutral pair. Circles are the fitted Hartono targets (30 wt %); filled markers are Xu & Wang 2018 comparison rows by MEA mass fraction. Every point is one source state; the shaded band is the falsifier's ±10 % mean-error limit.](../results/joint-recalibration-170/amendment-4/neutral-fit/neutral-henry-errors.svg){#fig-neutral-henry}
+
+**Matched reacting comparison.** Both arms free the same 14 coordinates on
+the same 205 rows; the control fixes the CO₂–MEA pair at (0, 0) and the
+variant at the neutral value.
+
+| Branch | C166 control | C166 variant | Ratio | C149 ratio | Active bounds (both arms) |
+|---|---:|---:|---:|---:|---|
+| larger d_V | 39.6902 | 39.7134 | 1.00059 | 0.99999 | carbamate–MEAH⁺ k = −1; segment diameters 5.8 Å; Born diameters 5.0 Å |
+| smaller d_V | 39.7366 | 39.7601 | 1.00059 | 1.00001 | the same |
+
+The rule required C166 at least 10 % lower with the neutral pair; it is
+0.06 % higher on both branches, as stated before the fits. A ratio table is
+used because the result is four scalars. Cold replay (≤ 7e-12) and Kiepe
+invariance (3e-15) pass in every arm. Three endpoint misses keep the decision
+formally undecidable: the nine free columns have condition 3.7e4 (6.2e4 for
+all 14; limit 1e4), with the weakest direction mostly on the
+bicarbonate–water k_ij; the fixed-step derivative check misses at the two ion
+dispersion energies by truncation (error ratio 4.0 per step halving); and
+the projected gradient (0.008–0.010) is above 1e-8, although a Gauss–Newton
+step would lower the cost by at most 3.6e-4. None can turn a 0.06 % increase
+into a 10 % reduction. The loaded-density and per-row heat assessments were
+not run at these endpoints.
+
+**Meaning.** The five active bounds persist with or without the neutral
+pair, so the CO₂–MEA interaction is not what drives the ion parameters to
+their limits. This is numerical evidence on this objective, not physical
+validation.
+
+**Endpoint documents.** A campaign defect wrote R2's fitted ln K constant in
+the Engine's c ln(T/T_ref) form into documents that use c ln T, 211.4 too low
+(Route 2 and both Route 2b endpoint documents carry it).
+The fits were unaffected; corrected documents replay cold. The same defect
+caused the Route 2b endpoint-replay stop: with the constant corrected, the
+Route 2b larger-d_V document replays all 205 rows to 6.7e-13.
+
