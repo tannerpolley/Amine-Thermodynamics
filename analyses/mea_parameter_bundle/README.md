@@ -37,8 +37,9 @@ certificate. Both restricted fits are single local fits from one start, with sam
 bounds. Conditional errors depend on residual weights, fixed inputs, active bounds
 and local linearization; they establish neither parameter uniqueness nor prediction
 intervals. Non-fitted comparisons retain their source-state basis and data-access
-history. Adoption is the owner's working-record choice, not physical validation,
-process-use qualification or manuscript promotion.
+history. Adoption is the owner's working-record choice, not physical validation or
+process-use qualification. The owner approved A7 for manuscript use on
+2026-10-20, and the manuscript uses it since #197 (`dfc2780`).
 
 The [heat F1 predecessor](results/a7-paper-evidence/predecessor-f1.json), its original
 parameter, Engine and source-state identities, and historical figures remain retained.

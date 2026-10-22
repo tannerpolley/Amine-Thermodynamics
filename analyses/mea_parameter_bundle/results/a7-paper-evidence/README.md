@@ -13,9 +13,9 @@ was used to produce this package. The separate default-path reproduction is
 the only new Engine evaluation for adoption.
 
 This is the owner's working-record choice, not physical validation. The
-manuscript remains on the retained heat F1 inputs pending Stage 3; A7 has not
-been promoted for manuscript or absorber/stripper use. Delivered review of
-this adoption remains with the orchestrator.
+owner approved A7 for manuscript use on 2026-10-20, and the manuscript uses it
+since #197 (`dfc2780`). A7 is not qualified for absorber/stripper use. The
+delivered review of this adoption was Supported in round 2 (#196).
 
 ## Numerical reproduction
 
