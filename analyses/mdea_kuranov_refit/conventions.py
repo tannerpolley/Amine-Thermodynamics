@@ -1,7 +1,7 @@
 """Issue #126 convention diagnosis: which declaration or evaluation convention makes Uyan 2015 reproduce its Kuranov
 ARD on this Engine, and does it carry to Wangler 2018?  Each variant names its declared changes from a base model.
 
-Usage: python conventions.py [variant name or index ...]   (default: every variant, one process each, at most 16)
+Usage: python conventions.py [variant name or index ...]   (default: every variant, one process each, at most 8)
 Writes results/runs/conventions/<variant>.json (ignored scratch) and, when every variant ran, results/conventions.json.
 Variants marked "local diagnostic" emulate a convention the Engine cannot declare (a ln K shift per reaction, or Uyan
 Eq. 5 recomputed per state); they must not feed adopted results.
@@ -77,61 +77,8 @@ def coefficient(doc, cid, family):
     return next(c for c in comp["coefficients"] if c["family"] == family)["value"]
 
 
-SUPPRESS = 1e-8  # u_i -> u_i * SUPPRESS removes ion i's self-dispersion; every k_ij of i is rescaled to keep u_ij exact
-
-
-def self_dispersion(*keep):
-    """Dispersion between two ions of the same species kept for `keep` (all ions if empty); every unlike same-sign pair
-    stays excluded.  Declared exactly: Engine all-ion-pairs, k_ij = 1 on unlike same-sign pairs, and for every other ion
-    u_i scaled by 1e-8 with each of its k_ij rescaled so sqrt(u_i u_j)(1 - k_ij) is unchanged."""
-    def apply(doc, T, m_mdea):
-        next(f for f in doc["model_families"] if f["kind"] == "electrolyte")["ionic_dispersion"] = "all-ion-pairs"
-        z = charges(doc)
-        ions = [c for c in z if z[c]]
-        doc["pairs"] += [{"component_id_a": a, "component_id_b": b, "provenance": "diagnostic: no unlike same-sign dispersion",
-                          "coefficients": [{"family": "k_ij", "identity": f"pair/{a}/{b}/k_ij",
-                                            "value": {"magnitude": 1.0, "unit": "dimensionless"}}]}
-                         for k, a in enumerate(ions) for b in ions[k + 1:] if z[a] * z[b] > 0]
-        scale = 1 / math.sqrt(SUPPRESS)
-        for ion in ions:
-            if keep and ion not in keep:
-                coefficient(doc, ion, "dispersion_energy_over_k")["magnitude"] *= SUPPRESS
-                for pair in doc["pairs"]:
-                    if ion in (pair["component_id_a"], pair["component_id_b"]):
-                        k = pair["coefficients"][0]
-                        # only power terms are rescaled: a reciprocal-temperature slope would need its own rule
-                        assert set(k.get("temperature_law", {})) <= {"form", "reference_temperature", "terms"}, k
-                        terms = (((t["power"], t["coefficient"]["value"]) for t in k["temperature_law"]["terms"])
-                                 if "temperature_law" in k else [(0, k["value"])])
-                        for power, v in terms:
-                            v["magnitude"] = 1 - scale * (1 - v["magnitude"]) if power == 0 else scale * v["magnitude"]
-        return doc
-    return apply
-
-
-def check_self_dispersion(T=313.15):
-    """Self-check: suppressing every ion's self-dispersion through all-ion-pairs reproduces exclude-same-sign-ion-pairs,
-    so the rescaled k_ij keep every cross term (temperature laws included)."""
-    x = [0.86, 0.06, 0.01, 0.03, 0.028, 0.001, 1e-9, 1e-9]
-    x = [v / sum(x) for v in x]
-    for base in (uyan, model.document):
-        a, b = (epcsaft.Mixture(epcsaft.Parameters.from_mapping(d)).state(T, P=2e5, x=x, phase="liquid").log_fugacity_coefficient
-                for d in (base(), self_dispersion("no-such-ion")(base(), T, 0.0)))
-        assert max(abs(u - v) for u, v in zip(a, b)) < 1e-6, (a, b)
-
-
-def eq11_diameter(*ions):
-    """Packing diameter of the named ions from Uyan Eq. 11 / Wangler Eq. 6, sigma (1 - 0.12 exp(-3u/kT)), instead of
-    Eq. 10 / Eq. 7 (0.88 sigma)."""
-    def apply(doc, T, m_mdea):
-        for ion in ions:
-            sigma, u = model.COMPONENTS[ion][3], model.COMPONENTS[ion][4]
-            coefficient(doc, ion, "packing_diameter")["magnitude"] = sigma * (1 - 0.12 * math.exp(-3 * u / T))
-        return doc
-    return apply
-
-
-charged_mdea_diameter = eq11_diameter(MDEAH)
+def charged_molecules(*ions):
+    return lambda doc, T, m_mdea: model.charged_molecule_ions(doc, *ions)
 
 
 def mdeah_volume_correction(value):
@@ -217,7 +164,7 @@ def dilute(solvent, e=1e-12):
 
 NONE = lambda doc_of_row: (lambda r: {})  # noqa: E731
 U, WG = f"{UYAN}", f"{WANGLER}"
-CHARGED_MDEA = (self_dispersion(MDEAH), charged_mdea_diameter)
+CHARGED_MDEA = (charged_molecules(MDEAH),)
 CHARGED = f"MDEAH+ = charged MDEA: MDEA's self-dispersion and Eq. 11 diameter ({U} section 4.1)"
 VARIANTS = {  # name: (base, document changes, reaction-reference convention, change and locator)
     "uyan": ("uyan", (), NONE, f"base: {U} as printed; MDEAH+ = MDEA segment number 3.675 (section 4.1, Table 4 note a)"),
@@ -229,30 +176,22 @@ VARIANTS = {  # name: (base, document changes, reaction-reference convention, ch
     "uyan, initial-solvent permittivity": ("uyan", (initial_permittivity,), NONE, f"local diagnostic: {U} Eq. 5 on the initial solvent"),
     "uyan, MDEAH+ non-associating": ("uyan", (non_associating_mdeah,), NONE, "Bulow 2021a text after Eq. 18"),
     "uyan, spherical MDEAH+": ("uyan", (spherical,), NONE, "Bulow 2021a Table 2 (segment number 1)"),
-    "uyan, MDEAH+ self-dispersion": ("uyan", (self_dispersion(MDEAH),), NONE,
-                                     f"{U} section 4.1 'inherited from MDEA'; {WG} section 3 excludes only 'cross dispersion'"),
-    "uyan, all-ion self-dispersion": ("uyan", (self_dispersion(),), NONE, "side-effect bound: every ion keeps its self-dispersion"),
-    "uyan, MDEAH+ Eq. 11 diameter": ("uyan", (charged_mdea_diameter,), NONE, f"{U} Eq. 11 instead of Eq. 10 for MDEAH+"),
     "uyan, MDEAH+ as charged MDEA": ("uyan", CHARGED_MDEA, NONE, CHARGED),
     "uyan, MDEAH+ as charged MDEA, k(water-MDEAH+) = 0": ("uyan-k0", CHARGED_MDEA, NONE, f"{CHARGED}; section 4.2.1"),
     "uyan, MDEAH+ as charged MDEA, initial-solvent permittivity": ("uyan", CHARGED_MDEA + (initial_permittivity,), NONE,
                                                                   f"{CHARGED}; Eq. 5 on the initial solvent"),
-    "uyan, MDEAH+ self-dispersion, initial-solvent permittivity": ("uyan", (self_dispersion(MDEAH), initial_permittivity), NONE,
-                                                                   "self-dispersion and Eq. 5 on the initial solvent"),
     "uyan, MDEAH+ as charged MDEA, k_hb(water-MDEAH+) = 0.015": ("uyan", CHARGED_MDEA + (mdeah_volume_correction(0.015),), NONE,
                                                                   f"{CHARGED}; MDEA's k_hb also inherited"),
-    "uyan, every ion as a charged molecule": ("uyan", (self_dispersion(), eq11_diameter(MDEAH, HCO3, CO3, H, OH)), NONE,
+    "uyan, every ion as a charged molecule": ("uyan", (charged_molecules(MDEAH, HCO3, CO3, H, OH),), NONE,
                                               "no ion-specific rule: self-dispersion and Eq. 11 diameter for every ion"),
     "uyan, MDEAH+ as charged MDEA, water permittivity": ("uyan", CHARGED_MDEA + (water_permittivity,), NONE,
                                                          f"{CHARGED}; pure-water permittivity instead of Eq. 5"),
     "wangler": ("wangler", (), NONE, f"base: {WG} as printed (score.py 'as-printed')"),
     "wangler, MDEAH+ as charged MDEA, water permittivity": ("wangler", CHARGED_MDEA + (water_permittivity,), NONE,
                                                             f"{CHARGED}; pure-water permittivity instead of Eq. 5"),
-    "wangler, every ion as a charged molecule": ("wangler", (self_dispersion(), eq11_diameter(MDEAH, HCO3, CO3, H, OH)), NONE,
+    "wangler, every ion as a charged molecule": ("wangler", (charged_molecules(MDEAH, HCO3, CO3, H, OH),), NONE,
                                                  "no ion-specific rule: self-dispersion and Eq. 11 diameter for every ion"),
     "wangler, gamma0 CO2": ("wangler", (), pure_reference(CO2), "pure-CO2 reference (not Wangler Eq. 15)"),
-    "wangler, MDEAH+ self-dispersion": ("wangler", (self_dispersion(MDEAH),), NONE, "self-dispersion only"),
-    "wangler, MDEAH+ Eq. 11 diameter": ("wangler", (charged_mdea_diameter,), NONE, "Eq. 6 instead of Eq. 7 for MDEAH+"),
     "wangler, MDEAH+ as charged MDEA": ("wangler", CHARGED_MDEA, NONE, CHARGED),
     "wangler, MDEAH+ as charged MDEA, initial-solvent permittivity": ("wangler", CHARGED_MDEA + (initial_permittivity,), NONE,
                                                                      f"{CHARGED}; Eq. 5 on the initial solvent"),
@@ -332,7 +271,7 @@ def wangler_lines_check(name):
                         guess = (dict(zip(model.SPECIES, result.phase_mole_fractions(0))),
                                  dict(zip(model.NEUTRAL, result.phase_mole_fractions(1)[:3])))
                         break
-                P = result.pressure[0] / 1e5 if result.success else None
+                P = result.pressure / 1e5 if result.success else None
                 points.append({"alpha": a, "p_line_bar": p_line, "P_calc_bar": P,
                                "p_CO2_calc_bar": P * result.phase_mole_fractions(1)[2] if result.success else None})
             ok = [q for q in points if q["P_calc_bar"]]
@@ -360,7 +299,7 @@ def fig5_check(name):
                     break
             if alpha in points:
                 out.append({"T": T, "alpha": alpha, "p_Uyan_line_bar": points[alpha],
-                            "p_calc_bar": result.pressure[0] / 1e5 if result.success else None})
+                            "p_calc_bar": result.pressure / 1e5 if result.success else None})
     ratios = [math.log(o["p_calc_bar"] / o["p_Uyan_line_bar"]) for o in out if o["p_calc_bar"]]
     return {"points": out, "mean_ln_ratio_to_Uyan_line": sum(ratios) / len(ratios)}
 
@@ -386,7 +325,7 @@ def speciation(name):
         x = dict(zip(model.SPECIES, result.phase_mole_fractions(0)))
         guess = (x, dict(zip(model.NEUTRAL, result.phase_mole_fractions(1)[:3])))
         if alpha in targets:
-            out[alpha] = {"P_Pa": result.pressure[0], **x}
+            out[alpha] = {"P_Pa": result.pressure, **x}
     return out
 
 
@@ -500,10 +439,9 @@ def collect():
 
 
 if __name__ == "__main__":
-    assert epcsaft.provenance()[1] == score.WHEEL_SHA256, "installed Engine wheel is not the pinned 21e761c3 wheel"
-    check_self_dispersion()
+    assert epcsaft.provenance()[1] == score.WHEEL_SHA256, "installed Engine wheel is not the pinned 8298c602 wheel"
     names = [list(VARIANTS)[int(a)] if a.isdigit() else a for a in sys.argv[1:]] or list(VARIANTS)  # name or index
-    with ProcessPoolExecutor(min(16, len(names))) as pool:  # run with OMP_NUM_THREADS=1
+    with ProcessPoolExecutor(min(8, len(names))) as pool:  # run with OMP_NUM_THREADS=1
         list(pool.map(run, names))
     if not sys.argv[1:]:
         collect()

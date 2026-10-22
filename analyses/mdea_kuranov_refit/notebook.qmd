@@ -1,0 +1,116 @@
+---
+title: "MDEA–CO₂–H₂O: constant ion–water fit on Kuranov 1996"
+subtitle: "All rows solve; the fitted endpoint misses the 10.9% total-pressure ARD rule"
+---
+
+## Result
+
+The fitted reading-(A) model solves **82/82 Kuranov Table 2 rows** but has
+**19.5432% average relative deviation (ARD)**, above the issue's required
+10.9%. The 19 and 32 mass % halves give 16.5453% and 22.5410%, respectively.
+The result is a failed calibration criterion with useful numerical evidence;
+it is not a numerical non-result. Independent review and investigator
+promotion for manuscript use remain open.
+
+The fitted constant is $k_{\mathrm{MDEAH^+,water}}=-0.2297985443$, inside
+[−0.3, +0.3]. Bicarbonate–water remains fixed at −0.0765. The smaller
+column-normalized start-Jacobian singular value is 0.02194035, below the
+issue's 0.1 rule, so only the MDEAH⁺–water coordinate was fitted.
+The native log-pressure least-squares cost decreases from 10.75645410 to
+2.75756683 in three iterations with no failed trials. This does not minimize
+ARD directly or establish a unique parameter value.
+
+| Model | Solved Kuranov rows | ARD / % | Solved in-scope Ermatchkov rows | Partial-pressure ARD / % |
+|:--|--:|--:|--:|--:|
+| Original Wangler temperature laws, reading (A) | 82/82 | 17.6485 | 88/88 | 42.7243 |
+| Constant start | 82/82 | 32.5553 | 88/88 | 55.7815 |
+| Constant fitted endpoint | 82/82 | 19.5432 | 88/88 | 60.9722 |
+
+The fit improves its constant start but is worse than the original
+temperature-law model on both pressure comparisons. Ermatchkov's 88 in-scope rows
+were held out and are reported without a pass condition. Kamps 2001 and
+Jakobsen 2005 MDEA remain unscored because their rows are not transcribed.
+
+## Pressure comparison
+
+![The constant ion–water fit improves the constant start but misses the issue's ARD criterion. Each column uses the same 82 Kuranov total-pressure observations, split by MDEA concentration. Open markers are measured pressures; filled markers are calculated at those observed states. Marker shape and color indicate nominal temperature; no interpolated model curves or uncertainty intervals are implied. The logarithmic pressure axis resolves the range from CO₂-free solvent pressure to loaded-solution pressure.](figures/kuranov-pressure-comparison.png){#fig-kuranov-pressure}
+
+## Conditions and interpretation
+
+Kuranov 1996 Table 2 supplies total bubble pressures at 313.11–413.16 K and
+about 19/32 mass % MDEA, on a stoichiometric molality basis per kg water.
+All four CO₂-free rows and the five rows above loading 1.2 are included.
+The error metric is
+
+$$\mathrm{ARD}=\frac{100}{N}\sum_i\left|1-\frac{p_{i,\mathrm{calc}}}{p_{i,\mathrm{exp}}}\right|.$$
+
+For Kuranov $N=82$ and pressure is total pressure; for the in-scope Ermatchkov
+comparison $N=88$ and pressure is $y_{\mathrm{CO_2}}P$. The full held-out set
+spans 313.15–393.15 K, MDEA molalities 1.905–8.441 and partial pressures
+0.12–69.3 kPa.
+
+The issue's concentration limit admits 88 Ermatchkov rows. Their CO₂ partial-pressure ARDs are 42.7243% for the temperature-law gate, 55.7815% for the constant start and 60.9722% for the fitted endpoint. The full 101-row comparison is supplementary: it includes 13 rows above 49 mass % MDEA, up to 50.1458 mass % MDEA. Those rows were not fitted.
+
+| Model | Above 49 mass %: 13 rows, ARD / % | Supplementary: all 101 rows, ARD / % |
+|:--|--:|--:|
+| Temperature-law gate | 80.9962 | 47.6504 |
+| Constant start | 90.3358 | 60.2291 |
+| Fitted endpoint | 72.4068 | 62.4440 |
+
+The concentration split uses $w=mM/(1+mM)$ on the CO₂-free solvent basis,
+with $m$ in mol/kg water and MDEA molar mass $M=0.1191622$ kg/mol.
+
+Nitrogen in the experimental headspace is
+not represented in this model's vapor; the full headspace is not reconstructed.
+
+Decision D1 uses MDEAH⁺ with self-dispersion and the neutral temperature-dependent
+diameter, through the Engine's charged-molecule ion declaration. Uyan 2015
+p. 93/Eq. (10) and Wangler 2018 Eqs. (6)–(7) state the opposite convention.
+The reproduction gate's 17.6485% ARD is numerical support for reading (A),
+not evidence that the papers prescribe it. The high-CO₂ pressure shortfall in
+the earlier source-line comparisons remains open; Wangler Table 10 and Fig. 14
+are untested with this reading. Both ion–water temperature laws are replaced
+by constants in the fit; other temperature laws and reaction constants stay fixed.
+
+## Permittivity sensitivity and uncertainty
+
+One evaluation at the fixed endpoint replaces the straight-line pure-MDEA
+permittivity with Hsieh 2007 Eq. (3)/Table 3 (pp. 620–621):
+
+$$\varepsilon=44.1399-0.046824(T/\mathrm K)-8.82158\times10^{-5}(T/\mathrm K)^2.$$
+
+All 82 rows solve. Kuranov ARD changes from **19.54315195% to 19.50895456%**,
+a decrease of **0.03419739 percentage points**, leaving the failed criterion
+unchanged. Both functions extrapolate above 328.15 K; 61 Kuranov rows lie
+above the measured 303.15–328.15 K range. This is a model sensitivity, not a
+validation of permittivity extrapolation.
+
+No confidence interval, propagated measurement uncertainty, parameter-uniqueness
+claim, phase-stability certificate or process-use qualification is established.
+Ermatchkov's source includes 33 rows below its stated calibration range and
+18 whose reproducibility exceeds its reported pressure uncertainty. These
+rows are retained rather than assigned new weights or excluded after scoring.
+
+## Evidence and numerical verification
+
+The [fit summary](results/refit-summary.json) owns optimizer output and metrics;
+[fitted Kuranov rows](results/fitted-kuranov.csv),
+[Ermatchkov gate](results/ermatchkov-gate.csv),
+[start](results/ermatchkov-start.csv), [fit](results/ermatchkov-fitted.csv) and
+[quadratic sensitivity](results/fitted-hsieh-quadratic-kuranov.csv) retain the
+calculated and observed pressures, phase compositions and solve messages.
+The figure reads those retained values and does not rerun the model.
+
+[Numerical checks](results/numerical-checks.json) recompute all seven pressure
+tables, including the gate and constant start. Phase normalization, charge,
+loading and water/MDEA conservation errors are at most 6.67 × 10⁻¹⁶.
+Replayed endpoint pressures agree with native fit predictions within
+8.91 × 10⁻¹³ relative. These are numerical checks; the held-out comparison
+is prediction at measured states, and no physical validation is claimed.
+
+Calculations use merged Engine commit `8298c6029ebb8b467929badc4a223c580ec591ab`,
+wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`,
+and MA57. See the [analysis README](README.md) for source locators, source-copy
+verification, earlier diagnosis, exact reproduction commands and retained-code
+responsibilities. Further modeling changes require a separate decision; this
+study does not select a replacement formulation or parameter set.
