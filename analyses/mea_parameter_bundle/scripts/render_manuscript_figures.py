@@ -73,7 +73,7 @@ def main():
         ax.grid(alpha=.15)
     ax=axes.flat[-1]
     measured(ax,pool,'#0072B2','Matin pool',set())
-    ax.set(title='Matin pool, report-only (19)',xlabel=LOADING,ylabel=r'HCO$_3^-$ + CO$_3^{2-}$ mole fraction')
+    ax.set(title='Matin pool, report-only (19)',xlabel=LOADING,ylabel=r'HCO$_3^-$ + CO$_3$²$^-$ mole fraction')
     handles=[Line2D([],[],marker='o',color=c,linestyle='none',label=(r'HCO$_3^-$ + CO$_3^{2-}$ pool' if n=='HCO3-' else n)) for n,c in zip(names,COLORS)]
     fig.legend(handles=handles,fontsize=7,frameon=False,loc='outside upper center',ncol=3)
     fig.supxlabel('Open circles: fitted; open squares: not fitted; crosses: A7',fontsize=8)
