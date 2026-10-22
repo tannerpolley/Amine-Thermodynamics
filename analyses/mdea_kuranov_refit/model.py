@@ -157,6 +157,15 @@ def document(kij=KIJ):
                                        "basis": STANDARD_STATE_ID} for r, (s, c) in REACTIONS.items()]}
 
 
+def charged_molecule_ions(doc, *ions):
+    """Reading (A), issue #126 D1: keep self dispersion and the neutral diameter (Engine #641)."""
+    for comp in doc["components"]:
+        if comp["component_id"] in ions:
+            comp["fixed"]["charged_molecule_ion"] = {"value": _value(1, "dimensionless")}
+            comp["coefficients"] = [c for c in comp["coefficients"] if c["family"] != "packing_diameter"]
+    return doc
+
+
 def spherical_mdeah(doc):
     """Interpretation (i): MDEAH+ segment number 1 instead of MDEA's 3.675 (README, 'Diagnosis')."""
     comp = next(c for c in doc["components"] if c["component_id"] == MDEAH)
@@ -214,5 +223,5 @@ def bubble_problem(T, m_mdea, m_co2, p_guess, liquid_guess=None, vapor_guess=Non
 
 
 if __name__ == "__main__":
-    PARAMETERS.write_text(json.dumps(document(), indent=1) + "\n")
+    PARAMETERS.write_text(json.dumps(charged_molecule_ions(document(), MDEAH), indent=1) + "\n")
     print(PARAMETERS, epcsaft.Parameters.from_mapping(document()).component_ids)
