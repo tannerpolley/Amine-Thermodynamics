@@ -78,7 +78,7 @@ Location in `observations/` does not by itself make a row a regression target. M
 - Treat microwave dielectric measurements and fitted dispersion limits according to their actual frequency basis.
 - Treat analog salts and prepared byproduct mixtures as analog or byproduct evidence, not target-ion measurements.
 
-**Jakobsen 2005 model states.** `observations/liquid_speciation/Jakobsen_2005_ChEq.csv` and the canonical and membership tables keep the printed batch labels, `maxload` and `loadNMR`. Their `CO2_loading=maxload` convention column is historical: A7 evidence hashes those files, so it is left as it was. `Jakobsen_2005_model_states.csv` owns the composition and loading at which a model evaluates each of the 24 samples (owner decision, [#184](https://github.com/tannerpolley/Amine-Thermodynamics/issues/184), 2026-10-13):
+**Jakobsen 2005 model states.** `observations/liquid_speciation/Jakobsen_2005_ChEq.csv` keeps the printed batch labels, `maxload` and `loadNMR`; its `CO2_loading=maxload` convention column is historical. The derived `Canonical_Combined_ChEq.csv` and `manifests/speciation_target_membership.csv` carry the nominal composition and `maxload` in `mea_mass_fraction` and `co2_loading_mol_per_mol_mea`. A7 evidence hashes all three files, so they are left as they were. `Jakobsen_2005_model_states.csv` owns the composition and loading at which a model evaluates each of the 24 samples (owner decision, [#184](https://github.com/tannerpolley/Amine-Thermodynamics/issues/184), 2026-10-13):
 - **Feed composition:** the Table 2 batch masses after the stated "∼10 %" D₂O dilution. Amine and dioxane mass fractions are taken as 0.90 of their batch values.
 - **D₂O:** counted as water mole-for-mole.
 - **Dioxane:** omitted.

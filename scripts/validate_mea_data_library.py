@@ -562,7 +562,7 @@ def validate() -> list[str]:
         errors.append(f"Frozen volumetric split drift: {dict(volumetric_roles)}")
 
     for path in ROOT.rglob("*"):
-        if any(part in {"tmp", ".venv", ".git", "baseline"} for part in path.relative_to(ROOT).parts):
+        if any(part in {"tmp", ".venv", ".git", ".worktrees", "baseline"} for part in path.relative_to(ROOT).parts):
             continue
         if (
             not path.is_file()
