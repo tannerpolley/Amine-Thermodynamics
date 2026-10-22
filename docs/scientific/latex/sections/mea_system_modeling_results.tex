@@ -17,14 +17,14 @@ The three failures are 0.40--0.53\,\% below the measured densities at \SI{353.15
 This is an observed trade-off between these local endpoints, not a minimum unavoidable density penalty for excluding phase descent.
 Changing ion sizes, interactions and reaction coordinates together also prevents attribution to an isolated Born or heat effect.
 
-\begin{figure}[pos=p]
+\begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,height=0.76\textheight,keepaspectratio]{phase-family.pdf}
 \caption{Paired finite searches at 73 specified temperature/pressure/loading states: A6 has 12 resolved-descent points and A7 none. Orange filled markers mean at least one resolved descent; blue open markers mean no descent was numerically resolved. Circles identify two-phase classifications and squares single-liquid classifications; two-phase does not mean two liquids. The three pressure levels vary with temperature and loading; Section~S4 supplies their exact pressures. Index 0 shares the temperature and loading of index 41 but uses a rounded pressure, as stated in the legend; both entries remain in the reported counts. No continuous region or global phase-stability certificate follows. In particular, these searches make no claim at the \SI{353.15}{\kelvin} density failures.}
 \label{fig:phase-family}
 \end{figure}
 
-\begin{figure}[pos=p]
+\begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,height=0.76\textheight,keepaspectratio]{loaded-density-errors.pdf}
 \caption{Native density errors without volume translation. Upper panels compare A7 circles and A6 crosses at the same 47 fitted loaded-density states, with color showing loading; dashed lines mark $\pm2s$. Lower panels show all 210 A7 rows from Amundsen et al.\ \cite{Amundsen2009}, Hartono et al.\ \cite{Hartono2014} and Han et al.\ \cite{hanDensityWater12012}, with fitted, non-fitted and excluded roles distinguished. These reference limits govern only the fitted loaded cohort. A6 density values come from its original assessment (Section~S9). All three A7 fitted failures occur at \SI{353.15}{\kelvin}, outside the phase family's temperature range. Exact scales and source qualifications are in Section~S3.}
@@ -53,6 +53,7 @@ None of those sampled vectors met every loaded-density limit, although none had 
 The second joint fit at the lower size bound reduced the worst miss from $2.70s$ to $2.43s$ and retained the same three failing states.
 These probes neither exclude an untested passing size nor certify the parameter box; Section~S5 gives the sampled values and loading-basis sensitivity.
 
+\FloatBarrier
 \subsection{Agreement with fitted properties}\label{sec:results-calibration}
 % P:results-04
 \Cref{tab:residual-summary} reports A7 deviations by observable, keeping calibration and acceptance checks separate.
@@ -60,9 +61,9 @@ The \MEA--water constraints give Cai temperature RMSE \SI{1.78864}{\kelvin} and 
 The Kiepe pressure cohort \cite{kiepeExperimentalDeterminationPrediction2002} is a check of fixed \COtwo--water inputs, with cost approximately 0.0007.
 Cai contributes approximately 62\,\% of the objective cost, 91.9078 of 148.905; this describes the objective's weighting and deviations, not relative accuracy across properties.
 
-\clearpage
+\FloatBarrier
 \input{tables/residual_summary}
-\clearpage
+\FloatBarrier
 
 % P:results-05
 The common 47-pressure and 94-species subsets give AARDs of 11.8608 and 7.1036\,\%, respectively (\cref{fig:pressure,fig:speciation}).

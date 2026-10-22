@@ -11,15 +11,15 @@ import a7_presentation as a  # noqa: E402
 
 TABLES = ROOT / 'docs/scientific/latex/tables'
 OUTPUTS = {}
-NAMES = {'carbon-dioxide': 'CO2', 'monoethanolamine': 'MEA', 'water': 'water',
-         'protonated-monoethanolamine': 'MEAH+', 'carbamate-anion': 'MEACOO-',
-         'bicarbonate-anion': 'HCO3-', 'carbonate-anion': r'\ce{CO3^{2-}}', 'hydronium-cation': 'H3O+', 'hydroxide-anion': 'OH-'}
+NAMES = {'carbon-dioxide': r'\ce{CO2}', 'monoethanolamine': r'\ce{MEA}', 'water': 'water',
+         'protonated-monoethanolamine': r'\ce{MEAH+}', 'carbamate-anion': r'\ce{MEACOO-}',
+         'bicarbonate-anion': r'\ce{HCO3-}', 'carbonate-anion': r'\ce{CO3^{2-}}', 'hydronium-cation': r'\ce{H3O+}', 'hydroxide-anion': r'\ce{OH-}'}
 UNITS = dict(PartialPressure='Pa', PhaseMoleFraction='mole fraction', AdditionEnthalpy='J/mol CO2',
              amount_ratio='mol/mol total amine', pressure='Pa', phase_density='kg/m3', temperature='K',
              mole_fraction='vapour water fraction', equilibrium_isobaric_heat_capacity='J/(mol K), feed basis')
 
 
-DISPLAY = {'Common149': 'Common-subset', 'common149': 'common subset', 'vapour': 'vapor', 'LogRatio': 'log ratio', 'Cai mole_fraction': 'Cai vapor water fraction', 'Vinjarapu2024': 'Vinjarapu', 'Arcis2011': 'Arcis', ' at 510000.0 Pa': ' at 0.51 MPa', ' at 1030000.0 Pa': ' at 1.03 MPa'}
+DISPLAY = {'Common149': 'Common-subset', 'common149': 'common subset', 'vapour': 'vapor', 'LogRatio': 'log ratio', 'Cai mole_fraction': 'Cai vapor water fraction', 'Vinjarapu2024': 'Vinjarapu', 'Arcis2011': 'Arcis', ' at 510000.0 Pa': ' at 0.51 MPa', ' at 1030000.0 Pa': ' at 1.03 MPa', 'kg/m3': r'\si{\kilogram\per\cubic\metre}'}
 def display(value):
     value = str(value)
     for old, new in DISPLAY.items():
@@ -40,9 +40,9 @@ SOURCE_TEXT = {'Austgen1991_TableV_reaction_1a': 'Austgen 1991, Table V, reactio
 def tex(value):
     if re.fullmatch(r'-(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?', str(value)):
         return r'\mbox{' + str(value) + '}'
-    parts = re.split(r'(\\ce\{(?:[^{}]|\{[^{}]*\})*\})', str(value))
+    parts = re.split(r'(\\(?:ce|si)\{(?:[^{}]|\{[^{}]*\})*\})', str(value))
     if len(parts) > 1:
-        return ''.join(part if part.startswith(r'\ce{') else tex(part) for part in parts)
+        return ''.join(part if part.startswith((r'\ce{', r'\si{')) else tex(part) for part in parts)
     if value == 'angstrom':
         return r'\AA'
     if value == 'dimensionless':
