@@ -2,17 +2,43 @@
 title: "Remaining questions and follow-up work"
 ---
 
-# Open work
+Status reconciled 22 October 2026. The owner approved [A7 for manuscript use](../notebook.qmd#working-record) on 20 October 2026.
 
-The paper ([#170](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170)) is updated only after one joint MEA refit, which takes:
+# Question
 
-- [#172](https://github.com/tannerpolley/Amine-Thermodynamics/issues/172): Schreckenberg permittivity with the low-density limit;
-- [#124](https://github.com/tannerpolley/Amine-Thermodynamics/issues/124): a water refit at 3% Cp without worse density, then solution Cp;
-- [#182](https://github.com/tannerpolley/Amine-Thermodynamics/issues/182): fit the two Böttinger 40 °C states and Matin state 016;
-- [#183](https://github.com/tannerpolley/Amine-Thermodynamics/issues/183): loaded-solution density in the physical fit;
-- [#184](https://github.com/tannerpolley/Amine-Thermodynamics/issues/184): the Jakobsen D₂O dilution and loading basis.
+Which scientific limits remain after the adopted A7 evidence and the completed prerequisite work?
 
-This notebook supplies retained evidence, not manuscript promotion or submission authority. Past records are owned by [parameter-record-history.csv](../results/parameter-record-history.csv) and Git. Rendering this live notebook never runs the thermodynamic model.
+# Result
 
+The former prerequisite issues are closed. The remaining questions concern the scope of the evidence rather than an unfinished prerequisite list.
 
+# Basis and method
 
+Use the retained A7 uncertainty, source limits and assessment records to identify what is unresolved. A closed implementation issue does not remove a stated scientific limitation.
+
+# Values
+
+| Completed prerequisite | Topic | State |
+| --- | --- | --- |
+| [#172](https://github.com/tannerpolley/Amine-Thermodynamics/issues/172) | Schreckenberg permittivity and low-density limit | Closed |
+| [#124](https://github.com/tannerpolley/Amine-Thermodynamics/issues/124) | Water refit and solution heat capacity | Closed |
+| [#182](https://github.com/tannerpolley/Amine-Thermodynamics/issues/182) | Böttinger and Matin restored states | Closed |
+| [#183](https://github.com/tannerpolley/Amine-Thermodynamics/issues/183) | Loaded-solution density in the fit | Closed |
+| [#184](https://github.com/tannerpolley/Amine-Thermodynamics/issues/184) | Jakobsen dilution and loading basis | Closed |
+
+# Limits and evidence type
+
+| Remaining question | Existing evidence and limit |
+| --- | --- |
+| Warm loaded-density disagreement | [Overview density comparison](../notebook.qmd#density-and-heat-capacity): failures remain disclosed; Amundsen’s source-uncertainty boundary is unresolved. |
+| Parameter identification and uncertainty | [Conditional errors](../notebook.qmd#fitted-coordinates) condition on weights, fixed inputs, bounds and local linearization. |
+| Phase and concentration domain | [A7 assessment](../joint-recalibration/index.qmd): finite phase evidence and named transfer comparisons do not qualify a process model. |
+| Source transfer | [Neutral CO₂ study](../neutral-co2/index.qmd): historical representation and campaign-transfer qualifications remain attached to their results. |
+
+# Records
+
+[Parameter adoption history](../results/parameter-record-history.csv) · [A7 evidence package](../results/a7-paper-evidence/README.md) · [Adoption and decision](../joint-recalibration/index.qmd).
+
+## Execution record
+
+Rendering this notebook reads retained evidence and never runs the thermodynamic model.

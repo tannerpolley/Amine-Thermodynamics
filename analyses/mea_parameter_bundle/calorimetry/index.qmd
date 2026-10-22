@@ -1,6 +1,6 @@
 ---
 title: "Calorimetry and thermal assessment"
-subtitle: "Paired absorption-heat data, fit membership and the remaining high-temperature bias"
+subtitle: "Historical model-D finite-dose heat assessment"
 resources:
   - ../results/calorimetry/calorimetry-observation-partition-record.json
   - ../results/calorimetry/current-selected-direct-enthalpy-comparison.csv
@@ -10,7 +10,7 @@ resources:
 ---
 
 ::: {.callout-note}
-Heat values are finite-dose total-enthalpy differences on the pinned Engine
+These historical model-D heat values are finite-dose total-enthalpy differences on the pinned Engine
 (wheel `28181e72`): the Engine's record-anchored total enthalpy
 ([ePC-SAFT #84](https://github.com/tannerpolley/ePC-SAFT/issues/84),
 [#138](https://github.com/tannerpolley/ePC-SAFT/issues/138)) with MEA's neutral
@@ -42,7 +42,7 @@ the reactions and their reference chain.
 
 # Numerical result
 
-The serialized working record is `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241`, with SSM+DS model D `p5conv-a-11`, source R4 and the inherited assessed R1–R3/R5 corrections. The current wheel is `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2`. All 113 retained intervals and all endpoint states evaluate; no interval is omitted.
+The historical serialized model-D record is `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241`, with SSM+DS model D `p5conv-a-11`, source R4 and the inherited assessed R1–R3/R5 corrections. This assessment used wheel `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2`. All 113 retained intervals and all endpoint states evaluate; no interval is omitted.
 
 | Cohort | Intervals scored | RMSE (kJ mol⁻¹ CO₂) | Bias (kJ mol⁻¹ CO₂) |
 |:--|--:|--:|--:|
@@ -50,11 +50,11 @@ The serialized working record is `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d
 | Kim 2014 model-selection comparison | 27 / 27 | 6.670190 | -0.252200 |
 | Kim–Svendsen 120 °C comparison outside working range | 20 / 20 | 30.124813 | -13.250753 |
 
-![Promoted-record finite-dose absorption heat at 40, 80 and 120 °C. The 120 °C values are out-of-domain comparisons.](../figures/calorimetry/output/current-selected-direct-enthalpy.svg)
+![Historical model-D finite-dose absorption heat at 40, 80 and 120 °C. The 120 °C values are out-of-domain comparisons.](../figures/calorimetry/output/current-selected-direct-enthalpy.svg)
 
 # Conclusion and limits
 
-The promoted record has 8.027440 kJ mol⁻¹ CO₂ RMSE on the 40/80 °C calibration intervals and 30.124813 kJ mol⁻¹ on the 120 °C cohort, with mean biases −3.617420 and −13.250753 kJ mol⁻¹. This is numerical verification and reported calibration/assessment evidence. It supplies no caloric or process-column qualification and does not extend the working domain beyond 30 wt% MEA at 40–80 °C. The regenerated thermal consistency checks are reported below; pure-water heat-capacity disagreement and the absence of a verified pure-MEA liquid reference remain separate limits.
+The table above reports the historical calibration errors and high-temperature bias. Current [A7 heat statistics](../notebook.qmd#heat-of-absorption) are separate. This is numerical verification and reported calibration/assessment evidence. It supplies no caloric or process-column qualification and does not extend the working domain beyond 30 wt% MEA at 40–80 °C. The regenerated thermal consistency checks are reported below; pure-water heat-capacity disagreement and the absence of a verified pure-MEA liquid reference remain separate limits.
 
 The historical September-incumbent comparison on wheel `b66c7b96` evaluated 109/113 intervals: calibration RMSE 11.77 (bias +0.4), 120 °C RMSE 29.28 (bias −15.8), and Kim 2014 RMSE 10.80 (bias +1.4) kJ mol⁻¹. Those values describe `868a5018`; the new comparison changes both parameter record and producing wheel and is not a wheel-only experiment.
 

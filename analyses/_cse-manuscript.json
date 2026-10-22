@@ -2,7 +2,17 @@
   "project": {
     "render": [
       "index.qmd",
+      "ideal_reaction_equilibrium/index.qmd",
+      "enrtl_six_species_ideal_comparison/notebook.qmd",
+      "mdea_kuranov_refit/notebook.qmd",
+      "evidence-map.qmd",
+      "historical_fixed_parameter_epcsaft_evaluation/index.qmd",
+      "reactive_epcsaft_parameter_evidence/index.qmd",
       "mea_parameter_bundle/notebook.qmd",
+      "mea_parameter_bundle/joint-recalibration/index.qmd",
+      "mea_parameter_bundle/high-temperature/index.qmd",
+      "mea_parameter_bundle/neutral-co2/index.qmd",
+      "mea_parameter_bundle/loaded-density/index.qmd",
       "mea_parameter_bundle/neutral-mea-water/index.qmd",
       "mea_parameter_bundle/co2-r4-calibration/index.qmd",
       "mea_parameter_bundle/born-permittivity/index.qmd",
@@ -10,14 +20,12 @@
       "mea_parameter_bundle/reaction-temperature-fit/index.qmd",
       "mea_parameter_bundle/calorimetry/index.qmd",
       "mea_parameter_bundle/coupling-and-identification/index.qmd",
+      "mea_parameter_bundle/joint-recalibration-history/index.qmd",
+      "mea_parameter_bundle/heat-f1/index.qmd",
+      "mea_parameter_bundle/engine-adoptions/index.qmd",
       "mea_parameter_bundle/ionic-speciation-fit/index.qmd",
       "mea_parameter_bundle/historical-designs/index.qmd",
-      "ideal_reaction_equilibrium/index.qmd",
-      "enrtl_six_species_ideal_comparison/notebook.qmd",
-      "mdea_kuranov_refit/notebook.qmd",
-      "evidence-map.qmd",
-      "historical_fixed_parameter_epcsaft_evaluation/index.qmd",
-      "reactive_epcsaft_parameter_evidence/index.qmd"
+      "mea_parameter_bundle/open-work/index.qmd"
     ]
   },
   "website": {
@@ -43,323 +51,6 @@
             {
               "text": "Publication rules",
               "href": "index.qmd#publication-rules"
-            }
-          ]
-        },
-        {
-          "section": "MEA parameter bundle",
-          "contents": [
-            {
-              "text": "Overview",
-              "href": "mea_parameter_bundle/notebook.qmd"
-            },
-            {
-              "text": "Current working record",
-              "href": "mea_parameter_bundle/notebook.qmd#working-record"
-            },
-            {
-              "text": "Current parameters",
-              "href": "mea_parameter_bundle/notebook.qmd#selected-parameters"
-            },
-            {
-              "text": "Pressure and speciation",
-              "href": "mea_parameter_bundle/notebook.qmd#pressure-and-speciation"
-            },
-            {
-              "text": "Heat of absorption",
-              "href": "mea_parameter_bundle/notebook.qmd#heat-of-absorption"
-            },
-            {
-              "text": "Joint fit objective groups",
-              "href": "mea_parameter_bundle/notebook.qmd#joint-fit-objective-groups"
-            },
-            {
-              "text": "High-temperature pressure comparison",
-              "href": "mea_parameter_bundle/notebook.qmd#high-temperature-pressure-comparison"
-            },
-            {
-              "text": "Density and heat capacity",
-              "href": "mea_parameter_bundle/notebook.qmd#density-and-heat-capacity"
-            },
-            {
-              "text": "Dilute neutral CO\u2082 observation for amendment 4",
-              "href": "mea_parameter_bundle/notebook.qmd#dilute-neutral-co\u2082-observation-for-amendment-4"
-            },
-            {
-              "text": "Open work",
-              "href": "mea_parameter_bundle/notebook.qmd#open-work"
-            }
-          ]
-        },
-        {
-          "section": "Active formulation",
-          "contents": [
-            {
-              "section": "Neutral MEA\u2013water fit",
-              "contents": [
-                {
-                  "text": "Overview",
-                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd"
-                },
-                {
-                  "text": "Question",
-                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#question"
-                },
-                {
-                  "text": "Starting point and strategy",
-                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#starting-point-and-strategy"
-                },
-                {
-                  "text": "Numerical result",
-                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#numerical-result"
-                },
-                {
-                  "text": "Conclusion and limits",
-                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#conclusion-and-limits"
-                },
-                {
-                  "text": "Records",
-                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#records"
-                }
-              ]
-            },
-            {
-              "section": "CO\u2082 dispersion and R4 calibration",
-              "contents": [
-                {
-                  "text": "Overview",
-                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd"
-                },
-                {
-                  "text": "Question",
-                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#question"
-                },
-                {
-                  "text": "Starting point and strategy",
-                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#starting-point-and-strategy"
-                },
-                {
-                  "text": "Numerical result",
-                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#numerical-result"
-                },
-                {
-                  "text": "Conclusion and limits",
-                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#conclusion-and-limits"
-                },
-                {
-                  "text": "Records",
-                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#records"
-                }
-              ]
-            },
-            {
-              "section": "Born and permittivity study",
-              "contents": [
-                {
-                  "text": "Overview",
-                  "href": "mea_parameter_bundle/born-permittivity/index.qmd"
-                },
-                {
-                  "text": "Question",
-                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#question"
-                },
-                {
-                  "text": "Starting point and strategy",
-                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#starting-point-and-strategy"
-                },
-                {
-                  "text": "Numerical result",
-                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#numerical-result"
-                },
-                {
-                  "text": "Conclusion and limits",
-                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#conclusion-and-limits"
-                },
-                {
-                  "text": "Records",
-                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#records"
-                }
-              ]
-            },
-            {
-              "section": "Association topology analysis",
-              "contents": [
-                {
-                  "text": "Overview",
-                  "href": "mea_parameter_bundle/association-topology/index.qmd"
-                },
-                {
-                  "text": "Starting point",
-                  "href": "mea_parameter_bundle/association-topology/index.qmd#starting-point"
-                },
-                {
-                  "text": "Strategy",
-                  "href": "mea_parameter_bundle/association-topology/index.qmd#strategy"
-                },
-                {
-                  "text": "Association evidence record",
-                  "href": "mea_parameter_bundle/association-topology/index.qmd#association-evidence-record"
-                },
-                {
-                  "text": "Numerical result",
-                  "href": "mea_parameter_bundle/association-topology/index.qmd#numerical-result"
-                },
-                {
-                  "text": "Conclusion",
-                  "href": "mea_parameter_bundle/association-topology/index.qmd#conclusion"
-                },
-                {
-                  "text": "References",
-                  "href": "mea_parameter_bundle/association-topology/index.qmd#references"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "section": "Coupled assessment",
-          "contents": [
-            {
-              "section": "Reaction-temperature fit",
-              "contents": [
-                {
-                  "text": "Overview",
-                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd"
-                },
-                {
-                  "text": "Question",
-                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#question"
-                },
-                {
-                  "text": "Starting point and strategy",
-                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#starting-point-and-strategy"
-                },
-                {
-                  "text": "Numerical result",
-                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#numerical-result"
-                },
-                {
-                  "text": "Conclusion and limits",
-                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#conclusion-and-limits"
-                },
-                {
-                  "text": "Records",
-                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#records"
-                }
-              ]
-            },
-            {
-              "section": "Calorimetry and thermal assessment",
-              "contents": [
-                {
-                  "text": "Overview",
-                  "href": "mea_parameter_bundle/calorimetry/index.qmd"
-                },
-                {
-                  "text": "Question",
-                  "href": "mea_parameter_bundle/calorimetry/index.qmd#question"
-                },
-                {
-                  "text": "Starting point and strategy",
-                  "href": "mea_parameter_bundle/calorimetry/index.qmd#starting-point-and-strategy"
-                },
-                {
-                  "text": "Numerical result",
-                  "href": "mea_parameter_bundle/calorimetry/index.qmd#numerical-result"
-                },
-                {
-                  "text": "Conclusion and limits",
-                  "href": "mea_parameter_bundle/calorimetry/index.qmd#conclusion-and-limits"
-                },
-                {
-                  "text": "Records",
-                  "href": "mea_parameter_bundle/calorimetry/index.qmd#records"
-                }
-              ]
-            },
-            {
-              "section": "Coupling and parameter identification",
-              "contents": [
-                {
-                  "text": "Overview",
-                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd"
-                },
-                {
-                  "text": "Chemical coupling",
-                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd#chemical-coupling"
-                },
-                {
-                  "text": "What has been tested",
-                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd#what-has-been-tested"
-                },
-                {
-                  "text": "Remaining identification boundary",
-                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd#remaining-identification-boundary"
-                },
-                {
-                  "text": "Records",
-                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd#records"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "section": "Historical background",
-          "contents": [
-            {
-              "section": "Historical ionic/speciation fit",
-              "contents": [
-                {
-                  "text": "Overview",
-                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd"
-                },
-                {
-                  "text": "Question",
-                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#question"
-                },
-                {
-                  "text": "Starting point and strategy",
-                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#starting-point-and-strategy"
-                },
-                {
-                  "text": "Numerical result",
-                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#numerical-result"
-                },
-                {
-                  "text": "Conclusion and limits",
-                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#conclusion-and-limits"
-                },
-                {
-                  "text": "Records",
-                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#records"
-                }
-              ]
-            },
-            {
-              "section": "Historical designs and discarded strategies",
-              "contents": [
-                {
-                  "text": "Overview",
-                  "href": "mea_parameter_bundle/historical-designs/index.qmd"
-                },
-                {
-                  "text": "July coupled-regression designs",
-                  "href": "mea_parameter_bundle/historical-designs/index.qmd#july-coupled-regression-designs"
-                },
-                {
-                  "text": "What was learned afterward",
-                  "href": "mea_parameter_bundle/historical-designs/index.qmd#what-was-learned-afterward"
-                },
-                {
-                  "text": "How to use this history",
-                  "href": "mea_parameter_bundle/historical-designs/index.qmd#how-to-use-this-history"
-                },
-                {
-                  "text": "Records",
-                  "href": "mea_parameter_bundle/historical-designs/index.qmd#records"
-                }
-              ]
             }
           ]
         },
@@ -543,6 +234,572 @@
                 {
                   "text": "Render retained figures",
                   "href": "reactive_epcsaft_parameter_evidence/index.qmd#render-retained-figures"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "MEA parameter bundle",
+          "contents": [
+            {
+              "section": "MEA parameter bundle",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/notebook.qmd"
+                },
+                {
+                  "text": "Adopted record and result",
+                  "href": "mea_parameter_bundle/notebook.qmd#working-record"
+                },
+                {
+                  "text": "Parameters",
+                  "href": "mea_parameter_bundle/notebook.qmd#selected-parameters"
+                },
+                {
+                  "text": "Fitting plots",
+                  "href": "mea_parameter_bundle/notebook.qmd#fitting-plots"
+                },
+                {
+                  "text": "Where to find more",
+                  "href": "mea_parameter_bundle/notebook.qmd#where-to-find-more"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "MEA parameter studies",
+          "contents": [
+            {
+              "section": "A7 joint recalibration and adoption",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/joint-recalibration/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/joint-recalibration/index.qmd#question"
+                },
+                {
+                  "text": "Result",
+                  "href": "mea_parameter_bundle/joint-recalibration/index.qmd#result"
+                },
+                {
+                  "text": "Basis and method",
+                  "href": "mea_parameter_bundle/joint-recalibration/index.qmd#basis-and-method"
+                },
+                {
+                  "text": "Values",
+                  "href": "mea_parameter_bundle/joint-recalibration/index.qmd#values"
+                },
+                {
+                  "text": "Limits and evidence type",
+                  "href": "mea_parameter_bundle/joint-recalibration/index.qmd#limits-and-evidence-type"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/joint-recalibration/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "A7 high-temperature pressure comparison",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/high-temperature/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/high-temperature/index.qmd#question"
+                },
+                {
+                  "text": "Result",
+                  "href": "mea_parameter_bundle/high-temperature/index.qmd#result"
+                },
+                {
+                  "text": "Basis and method",
+                  "href": "mea_parameter_bundle/high-temperature/index.qmd#basis-and-method"
+                },
+                {
+                  "text": "Values",
+                  "href": "mea_parameter_bundle/high-temperature/index.qmd#values"
+                },
+                {
+                  "text": "Limits and evidence type",
+                  "href": "mea_parameter_bundle/high-temperature/index.qmd#limits-and-evidence-type"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/high-temperature/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Neutral CO\u2082\u2013MEA solubility and amendment 4",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/neutral-co2/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/neutral-co2/index.qmd#question"
+                },
+                {
+                  "text": "Result",
+                  "href": "mea_parameter_bundle/neutral-co2/index.qmd#result"
+                },
+                {
+                  "text": "Basis and method",
+                  "href": "mea_parameter_bundle/neutral-co2/index.qmd#basis-and-method"
+                },
+                {
+                  "text": "Values",
+                  "href": "mea_parameter_bundle/neutral-co2/index.qmd#values"
+                },
+                {
+                  "text": "Limits and evidence type",
+                  "href": "mea_parameter_bundle/neutral-co2/index.qmd#limits-and-evidence-type"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/neutral-co2/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Loaded density and phase comparison: amendment 6",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/loaded-density/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/loaded-density/index.qmd#question"
+                },
+                {
+                  "text": "Result",
+                  "href": "mea_parameter_bundle/loaded-density/index.qmd#result"
+                },
+                {
+                  "text": "Basis and method",
+                  "href": "mea_parameter_bundle/loaded-density/index.qmd#basis-and-method"
+                },
+                {
+                  "text": "Values",
+                  "href": "mea_parameter_bundle/loaded-density/index.qmd#values"
+                },
+                {
+                  "text": "Limits and evidence type",
+                  "href": "mea_parameter_bundle/loaded-density/index.qmd#limits-and-evidence-type"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/loaded-density/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Neutral MEA\u2013water fit",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#question"
+                },
+                {
+                  "text": "Starting point and strategy",
+                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#starting-point-and-strategy"
+                },
+                {
+                  "text": "Numerical result",
+                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#numerical-result"
+                },
+                {
+                  "text": "Conclusion and limits",
+                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#conclusion-and-limits"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/neutral-mea-water/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "CO\u2082 dispersion and R4 calibration",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#question"
+                },
+                {
+                  "text": "Starting point and strategy",
+                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#starting-point-and-strategy"
+                },
+                {
+                  "text": "Numerical result",
+                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#numerical-result"
+                },
+                {
+                  "text": "Conclusion and limits",
+                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#conclusion-and-limits"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/co2-r4-calibration/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Born and permittivity study",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/born-permittivity/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#question"
+                },
+                {
+                  "text": "Starting point and strategy",
+                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#starting-point-and-strategy"
+                },
+                {
+                  "text": "Numerical result",
+                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#numerical-result"
+                },
+                {
+                  "text": "Conclusion and limits",
+                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#conclusion-and-limits"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/born-permittivity/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Association topology analysis",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/association-topology/index.qmd"
+                },
+                {
+                  "text": "Starting point",
+                  "href": "mea_parameter_bundle/association-topology/index.qmd#starting-point"
+                },
+                {
+                  "text": "Strategy",
+                  "href": "mea_parameter_bundle/association-topology/index.qmd#strategy"
+                },
+                {
+                  "text": "Association evidence record",
+                  "href": "mea_parameter_bundle/association-topology/index.qmd#association-evidence-record"
+                },
+                {
+                  "text": "Numerical result",
+                  "href": "mea_parameter_bundle/association-topology/index.qmd#numerical-result"
+                },
+                {
+                  "text": "Conclusion",
+                  "href": "mea_parameter_bundle/association-topology/index.qmd#conclusion"
+                },
+                {
+                  "text": "References",
+                  "href": "mea_parameter_bundle/association-topology/index.qmd#references"
+                }
+              ]
+            },
+            {
+              "section": "Reaction-temperature fit",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#question"
+                },
+                {
+                  "text": "Starting point and strategy",
+                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#starting-point-and-strategy"
+                },
+                {
+                  "text": "Numerical result",
+                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#numerical-result"
+                },
+                {
+                  "text": "Conclusion and limits",
+                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#conclusion-and-limits"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/reaction-temperature-fit/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Calorimetry and thermal assessment",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/calorimetry/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/calorimetry/index.qmd#question"
+                },
+                {
+                  "text": "Starting point and strategy",
+                  "href": "mea_parameter_bundle/calorimetry/index.qmd#starting-point-and-strategy"
+                },
+                {
+                  "text": "Numerical result",
+                  "href": "mea_parameter_bundle/calorimetry/index.qmd#numerical-result"
+                },
+                {
+                  "text": "Conclusion and limits",
+                  "href": "mea_parameter_bundle/calorimetry/index.qmd#conclusion-and-limits"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/calorimetry/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Coupling and parameter identification",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd"
+                },
+                {
+                  "text": "Chemical coupling",
+                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd#chemical-coupling"
+                },
+                {
+                  "text": "What has been tested",
+                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd#what-has-been-tested"
+                },
+                {
+                  "text": "Remaining identification boundary",
+                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd#remaining-identification-boundary"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/coupling-and-identification/index.qmd#records"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "Parameter and Engine history",
+          "contents": [
+            {
+              "section": "A7 joint recalibration: how the adopted record was reached",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/joint-recalibration-history/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/joint-recalibration-history/index.qmd#question"
+                },
+                {
+                  "text": "Result",
+                  "href": "mea_parameter_bundle/joint-recalibration-history/index.qmd#result"
+                },
+                {
+                  "text": "Basis and method",
+                  "href": "mea_parameter_bundle/joint-recalibration-history/index.qmd#basis-and-method"
+                },
+                {
+                  "text": "Values",
+                  "href": "mea_parameter_bundle/joint-recalibration-history/index.qmd#values"
+                },
+                {
+                  "text": "Limits and evidence type",
+                  "href": "mea_parameter_bundle/joint-recalibration-history/index.qmd#limits-and-evidence-type"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/joint-recalibration-history/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Heat F1 predecessor and six-fit comparison",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/heat-f1/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/heat-f1/index.qmd#question"
+                },
+                {
+                  "text": "Result",
+                  "href": "mea_parameter_bundle/heat-f1/index.qmd#result"
+                },
+                {
+                  "text": "Basis and method",
+                  "href": "mea_parameter_bundle/heat-f1/index.qmd#basis-and-method"
+                },
+                {
+                  "text": "Values",
+                  "href": "mea_parameter_bundle/heat-f1/index.qmd#values"
+                },
+                {
+                  "text": "Limits and evidence type",
+                  "href": "mea_parameter_bundle/heat-f1/index.qmd#limits-and-evidence-type"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/heat-f1/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Engine adoptions and numerical transfer",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/engine-adoptions/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/engine-adoptions/index.qmd#question"
+                },
+                {
+                  "text": "Result",
+                  "href": "mea_parameter_bundle/engine-adoptions/index.qmd#result"
+                },
+                {
+                  "text": "Basis and method",
+                  "href": "mea_parameter_bundle/engine-adoptions/index.qmd#basis-and-method"
+                },
+                {
+                  "text": "Values",
+                  "href": "mea_parameter_bundle/engine-adoptions/index.qmd#values"
+                },
+                {
+                  "text": "Limits and evidence type",
+                  "href": "mea_parameter_bundle/engine-adoptions/index.qmd#limits-and-evidence-type"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/engine-adoptions/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Historical ionic/speciation fit",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#question"
+                },
+                {
+                  "text": "Starting point and strategy",
+                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#starting-point-and-strategy"
+                },
+                {
+                  "text": "Numerical result",
+                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#numerical-result"
+                },
+                {
+                  "text": "Conclusion and limits",
+                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#conclusion-and-limits"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/ionic-speciation-fit/index.qmd#records"
+                }
+              ]
+            },
+            {
+              "section": "Historical designs and discarded strategies",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/historical-designs/index.qmd"
+                },
+                {
+                  "text": "July coupled-regression designs",
+                  "href": "mea_parameter_bundle/historical-designs/index.qmd#july-coupled-regression-designs"
+                },
+                {
+                  "text": "What was learned afterward",
+                  "href": "mea_parameter_bundle/historical-designs/index.qmd#what-was-learned-afterward"
+                },
+                {
+                  "text": "How to use this history",
+                  "href": "mea_parameter_bundle/historical-designs/index.qmd#how-to-use-this-history"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/historical-designs/index.qmd#records"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "Remaining questions",
+          "contents": [
+            {
+              "section": "Remaining questions and follow-up work",
+              "contents": [
+                {
+                  "text": "Overview",
+                  "href": "mea_parameter_bundle/open-work/index.qmd"
+                },
+                {
+                  "text": "Question",
+                  "href": "mea_parameter_bundle/open-work/index.qmd#question"
+                },
+                {
+                  "text": "Result",
+                  "href": "mea_parameter_bundle/open-work/index.qmd#result"
+                },
+                {
+                  "text": "Basis and method",
+                  "href": "mea_parameter_bundle/open-work/index.qmd#basis-and-method"
+                },
+                {
+                  "text": "Values",
+                  "href": "mea_parameter_bundle/open-work/index.qmd#values"
+                },
+                {
+                  "text": "Limits and evidence type",
+                  "href": "mea_parameter_bundle/open-work/index.qmd#limits-and-evidence-type"
+                },
+                {
+                  "text": "Records",
+                  "href": "mea_parameter_bundle/open-work/index.qmd#records"
                 }
               ]
             }

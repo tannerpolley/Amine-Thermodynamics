@@ -7,7 +7,41 @@ resources:
   - ../results/engine-8298c602-adoption/checks.json
 ---
 
+Historical transfers: 18–19 October 2026; A7 runtime identity retained separately below.
+
+# Question
+
+Did the two Engine adoptions preserve the named F1 predictions, and which numerical solver supplied the A7 calculations?
+
+# Result
+
+Both transfers reproduced their named F1 quantities. These checks qualify only that record and those quantities; the [A7 default-path replay](../joint-recalibration/index.qmd#numerical-reproduction) is a separate check.
+
+# Basis and method
+
+Each transfer compares installed merged-commit wheels on the same declared states. F1 is the earlier density-corrected parameter record, not A7. The retained comparison records bind the parameter document, declarations and both wheels.
+
+# Values
+
+| Engine commits | Quantities compared | Bitwise equal | Worst relative difference (1) | Record |
+| --- | --- | --- | --- | --- |
+| 84ca269d → 21e761c3 | 152 | 152 | 0 | [Comparison](../results/engine-21e761c3-adoption/comparison.json) |
+| 21e761c3 → 8298c602 | 152 | 13 | 2.89e-12 | [Comparison](../results/engine-8298c602-adoption/comparison.json) |
+
+The 8298c602 transfer covers 152 F1 quantities within 2.9 × 10⁻¹² relative difference. It does not qualify every retained F1 result on that wheel.
+
+# Limits and evidence type
+
+This is numerical verification, not physical validation. The earlier source snapshot was refused on both wheels for its missing ionic-dispersion declaration; it supplies no prediction comparison.
+
+# Records
+
 The pinned Engine is merged commit `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`, with numpy 2.5.4 and scipy 1.18.1 for this replay. No Engine source checkout is imported.
 
 Where the A7 calculations on this wheel call Ipopt, it used the MA57 linear solver. The wheel selects MA57 when the owner's licensed HSL library loads through `EPCSAFT_HSL_LIBRARY`, and MUMPS otherwise (Engine #605). The login environment has set that library since 18 October 2026, and the [A7 launcher](../results/joint-recalibration-170/amendment-7/run.py.txt) passes the inherited environment to every call. The A7 result files do not store the solver; the [8298c602 transfer comparison](../results/engine-8298c602-adoption/comparison.json), run on the same wheel and machine, records `ma57`. The previous pin, 21e761c3, predates that selection and used [MUMPS 5.6](../results/engine-8298c602-adoption/README.md). The Engine reports MA57 and MUMPS states agreeing within about 10⁻¹¹; this repository has not compared the two solvers on A7. Acknowledgement: HSL, a collection of Fortran codes for large-scale scientific computation. <https://www.hsl.rl.ac.uk/>
 
+[First adoption](../results/engine-21e761c3-adoption/README.md) · [Second adoption](../results/engine-8298c602-adoption/README.md) · [F1 identity](../heat-f1/index.qmd).
+
+## Execution record
+
+Transfer commands, timings and installed-wheel checks remain in the linked adoption records.

@@ -15,14 +15,32 @@ resources:
   - ../results/joint-recalibration-170/amendment-4/dilute-bubble/target-replay.json
 ---
 
-# Dilute neutral CO₂ observation for amendment 4
+Historical records: preflight 16 October 2026; neutral fit and matched comparison 18 October 2026.
+
+# Question
+
+Can neutral CO₂ solubility identify the CO₂–MEA interaction, and does that independently calibrated pair improve the reacting fit?
+
+# Result
+
+The neutral pair was determined on one Hartono campaign. Fixing it in the matched reacting comparisons did not deliver the required improvement; transfer and endpoint qualifications remain disclosed below.
+
+# Basis and method
+
+The CO₂–MEA interaction is dimensionless; its reciprocal-temperature slope is in K. $d_V$ means the MEA dielectric-volume branch (L/mol), and source/seed A names the retained initialization. The preflight and completed fit are different dated evidence stages. Their source representations and numerical declarations remain attached to their results.
+
+The cost label $C_n$ denotes half the sum of squared weighted residuals for the declared target subset: $C_{149}$ is the common pressure/species/Vinjarapu subset, $C_{166}$ adds the restored species, Jakobsen ratios and heat capacities, and $C_{205}$ also includes the Kiepe pressures. These costs are dimensionless and depend on their declared weights.
+
+# Values
+
+## Dilute neutral CO₂ declaration (16 October 2026) {#dilute-neutral-co2}
 
 **The fixed stage-2 model supplies a numerically verified dilute CO₂ partial
 pressure, so a mole-fraction Henry observation can be declared natively.**
 This 16 October 2026 design preflight uses Engine `84ca269d`, CO₂–MEA
 intercept and slope both zero, T=293.15–360.25 K, source gas-free MEA mass
 fractions 0.12208545–0.48838927, no reactions and neutral phase support.
-It does not change the adopted parameter set discussed above.
+It did not change the then-adopted parameter record.
 
 The [retained calculation](../results/joint-recalibration-170/amendment-4/dilute-bubble/summary.json)
 compares 22 distinct states at liquid CO₂ mole fractions 1e-5, 1e-6 and 1e-7.
@@ -32,8 +50,8 @@ the table reports the quantities supporting that conclusion.
 | Quantity | Retained result |
 |---|---:|
 | Selected liquid CO₂ mole fraction | 1e-5 |
-| pCO₂ at selected dilution / Pa | 565.458365–2244.447500 |
-| Total bubble pressure / Pa | 2329.641493–57404.683320 |
+| pCO₂ at selected dilution / Pa | <span title="exact 565.458365">565.5</span>–<span title="exact 2244.447500">2244</span> |
+| Total bubble pressure / Pa | <span title="exact 2329.641493">2330</span>–<span title="exact 57404.683320">5.74e+04</span> |
 | Maximum relative change of pCO₂/x to next decade | 8.75251e-5 |
 | Maximum raw equilibrium residual | 1.57208e-13 |
 | Cold-replay pressure change / Pa | 0 |
@@ -41,7 +59,7 @@ the table reports the quantities supporting that conclusion.
 These scalar verification bounds are reported as a table; a plot would not
 clarify the declaration check.
 
-The [data owner](../../../data/reference/MEA/physical_solubility/README.md),
+The [data owner](https://github.com/tannerpolley/Amine-Thermodynamics/blob/4822946494a9c48f2fcbb02f9b3f9627077c1fe5/data/reference/MEA/physical_solubility/README.md),
 Eqs.N2O-5–N2O-7, converts the 23 analogy-derived Hc values using measured
 unloaded densities: Hx=Hc times gas-free total molar density. Xu Table 4
 matches all 16 Xu states exactly. Hartono Table 3 requires temperature
@@ -73,7 +91,7 @@ Hartono Hx basis. It already uses mole fraction and needs no density
 conversion. Table 11 Hc times measured gas-free total molar density exceeds
 the SI ratio by 0.85368–3.09128%; retain this as a source-representation
 difference, without claiming to have resolved the source volume convention.
-The [derived CSV](../../../data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv)
+The [derived CSV](https://github.com/tannerpolley/Amine-Thermodynamics/blob/4822946494a9c48f2fcbb02f9b3f9627077c1fe5/data/reference/MEA/physical_solubility/CO2_physical_from_N2O.csv)
 retains both source representations and selects the SI primary targets
 (151298904.50–358676232.10 Pa). Their uncertainty is unquantified here;
 Table 11's Hc uncertainty is not transferred to them.
@@ -93,17 +111,14 @@ remain. No neutral observation enters the 205-row reacting objective.
 
 Source pressure/gas-reference qualification for Hartono and the remaining
 original numerical checks still stop calibration. The representation choice
-is supplied; no owner answer is pending. No pair is selected or adopted, no
-fit ran, and executable additions remain 861/900 with zero added by these
-text/data corrections.
+is supplied; no owner answer is pending. At the 16 October 2026 preflight, no pair was selected or adopted and no fit had run. Executable additions remained 861/900 with zero added by those text/data corrections.
 
 These results support the calculation declaration and basis conversion,
 with numerical solution verification. They do not supply physical validation,
 independent review, source-pressure equivalence or parameter promotion.
-This new section has not been independently reviewed or promoted for
-manuscript use.
+At the 16 October 2026 preflight, this section had not been independently reviewed or promoted for manuscript use.
 
-## Amendment 4: neutral CO₂–MEA pair determined; it does not change the reacting fit
+### Neutral CO₂–MEA pair and reacting comparison (A4; 18 October 2026)
 
 **The CO₂–MEA dispersion correction is now determined independently from
 neutral physical solubility, and fixing it leaves the reacting fit
@@ -112,7 +127,7 @@ unchanged.** Run 18 October 2026 on Engine `main-21e761c3`. Records:
 [neutral fit](../results/joint-recalibration-170/amendment-4/neutral-fit/README.md),
 [larger-d_V pair](../results/joint-recalibration-170/amendment-4/matched-larger-dV/README.md),
 [smaller-d_V pair](../results/joint-recalibration-170/amendment-4/matched-smaller-dV/README.md).
-Not yet independently reviewed as a delivered result.
+At the 18 October 2026 delivery, independent review of this result was pending.
 
 **Source transfer (B1).** Hartono, Juliussen & Svendsen 2008 defines the N₂O
 pressure as total minus measured solvent pressure (Eq. 5). On that basis the
@@ -142,8 +157,8 @@ variant at the neutral value.
 
 | Branch | C166 control | C166 variant | Ratio | C149 ratio | Active bounds (both arms) |
 |---|---:|---:|---:|---:|---|
-| larger d_V | 39.6902 | 39.7134 | 1.00059 | 0.99999 | carbamate–MEAH⁺ k = −1; segment diameters 5.8 Å; Born diameters 5.0 Å |
-| smaller d_V | 39.7366 | 39.7601 | 1.00059 | 1.00001 | the same |
+| larger d_V | 39.6902 | 39.7134 | <span title="exact 1.00059">1.001</span> | <span title="exact 0.99999">1</span> | carbamate–MEAH⁺ k = −1; segment diameters 5.8 Å; Born diameters 5.0 Å |
+| smaller d_V | 39.7366 | 39.7601 | <span title="exact 1.00059">1.001</span> | <span title="exact 1.00001">1</span> | the same |
 
 The rule required C166 at least 10 % lower with the neutral pair; it is
 0.06 % higher on both branches, as stated before the fits. A ratio table is
@@ -163,10 +178,23 @@ pair, so the CO₂–MEA interaction is not what drives the ion parameters to
 their limits. This is numerical evidence on this objective, not physical
 validation.
 
-**Endpoint documents.** A campaign defect wrote R2's fitted ln K constant in
+#### Endpoint documents {#endpoint-documents}
+
+ A campaign defect wrote R2's fitted ln K constant in
 the Engine's c ln(T/T_ref) form into documents that use c ln T, 211.4 too low
 (Route 2 and both Route 2b endpoint documents carry it).
 The fits were unaffected; corrected documents replay cold. The same defect
 caused the Route 2b endpoint-replay stop: with the constant corrected, the
 Route 2b larger-d_V document replays all 205 rows to 6.7e-13.
 
+# Limits and evidence type
+
+The neutral fit is calibration to one solubility campaign, with named non-fitted comparisons. The matched reacting comparison is numerical evidence on the declared objective. Neither establishes concentration transfer or physical validation.
+
+# Records
+
+The linked preflight, vapor-bound, neutral-fit and matched-comparison records own exact rows, source locators and endpoint corrections. The [history page](../joint-recalibration-history/index.qmd) retains the earlier Route 2b stop.
+
+## Execution record
+
+Execution identities and charges remain in the linked historical records.
