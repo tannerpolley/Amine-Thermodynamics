@@ -19,7 +19,7 @@ import model
 ROOT = model.HERE.parents[1]
 KURANOV = ROOT / "data/reference/MDEA/Kuranov_1996_CO2_MDEA_total_pressure.csv"
 RESULTS = model.HERE / "results"
-WHEEL_SHA256 = "d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357"
+WHEEL_SHA256 = "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3"
 
 
 def kuranov_rows():
@@ -49,8 +49,9 @@ def solve_rows(doc, rows, problem_options=lambda r: {}):
         if ok:
             previous[r["series"]] = (dict(zip(model.SPECIES, result.phase_mole_fractions(0))),
                                      dict(zip(model.NEUTRAL, result.phase_mole_fractions(1)[:3])))
-        out[r["row"]] = {"success": ok, "message": result.message, "p_calc": result.pressure[0] if ok else math.nan,
-                         "x_liquid": result.phase_mole_fractions(0) if ok else []}
+        out[r["row"]] = {"success": ok, "message": result.message, "linear_solver": result.linear_solver, "p_calc": result.pressure if ok else math.nan,
+                         "x_liquid": result.phase_mole_fractions(0) if ok else [],
+                         "y_vapor": result.phase_mole_fractions(1)[:3] if ok else []}
     return out
 
 
@@ -113,28 +114,33 @@ VARIANTS = {  # name: (document or per-row document function, role)
 def main():
     check_temperature_laws()
     if epcsaft.provenance()[1] != WHEEL_SHA256:
-        sys.exit("installed Engine wheel is not the pinned 21e761c3 wheel")
+        sys.exit("installed Engine wheel is not the pinned 8298c602 wheel")
     rows = kuranov_rows()
     RESULTS.mkdir(exist_ok=True)
-    report, table = {}, {r["row"]: dict(r) for r in rows}
-    for name, (doc, role) in VARIANTS.items():
-        solved = solve_rows(doc, rows)
-        report[name] = {"role": role, **summary(rows, solved)}
-        for r in rows:
-            table[r["row"]][f"p_calc_Pa[{name}]"] = solved[r["row"]]["p_calc"]
-        print(name, json.dumps({k: v for k, v in report[name].items() if k != "ARD_percent_by_series"}), flush=True)
+    doc = model.charged_molecule_ions(model.document(), model.MDEAH)
+    solved = solve_rows(doc, rows)
+    report = summary(rows, solved)
+    ard = report["ARD_percent_solved_rows"]
+    report["gate_pass"] = report["solved"] == 82 and 16.7 <= ard <= 22.7 and abs(ard - 17.648538) < 0.01
+    print(json.dumps(report), flush=True)
+    table = [dict(r, **solved[r["row"]]) for r in rows]
     model_doc = model.PARAMETERS.read_bytes()
-    assert json.loads(model_doc) == json.loads(json.dumps(model.document())), "wangler-2018-parameters.json is stale: run model.py"
+    assert json.loads(model_doc) == json.loads(json.dumps(doc)), "wangler-2018-parameters.json is stale: run model.py"
     report["provenance"] = {
-        "engine_wheel_sha256": WHEEL_SHA256, "kuranov_csv_sha256": hashlib.sha256(KURANOV.read_bytes()).hexdigest(),
+        "engine_wheel_sha256": WHEEL_SHA256, "engine_commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+        "engine_wheel_path": str(epcsaft.provenance()[0]),
+        "linear_solver": sorted({v["linear_solver"] for v in solved.values()}), "kuranov_csv_sha256": hashlib.sha256(KURANOV.read_bytes()).hexdigest(),
         "parameters_sha256": hashlib.sha256(model_doc).hexdigest(),
         "scripts_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (model.HERE / "model.py", Path(__file__))},
         "benchmark": "Wangler 2018 Table 11: 19.7 % ARD on 82 Kuranov rows; working gate 16.7-22.7 %"}
-    (RESULTS / "reproduction-summary.json").write_text(json.dumps(report, indent=1) + "\n")
-    with (RESULTS / "reproduction-rows.csv").open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, list(next(iter(table.values()))), lineterminator="\n")
+    (RESULTS / "reading-a-reproduction-summary.json").write_text(json.dumps(report, indent=1) + "\n")
+    with (RESULTS / "reading-a-reproduction-rows.csv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, list(table[0]), lineterminator="\n")
         writer.writeheader()
-        writer.writerows(table[k] for k in sorted(table))
+        writer.writerows(table)
+
+    if not report["gate_pass"]:
+        sys.exit("Reading-(A) reproduction gate failed; do not fit")
 
 
 if __name__ == "__main__":
