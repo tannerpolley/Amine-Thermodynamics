@@ -57,7 +57,7 @@ def ln_gamma(mix, T, P, x):
 def state_checks(row):
     mix = epcsaft.Mixture(epcsaft.Parameters.from_mapping(published()))
     solved = equilibrium.solve_equilibrium(mix, model.bubble_problem(row["T"], row["m_mdea"], row["m_co2"], row["p_exp"]))
-    T, P, x = row["T"], solved.pressure[0], solved.phase_mole_fractions(0)
+    T, P, x = row["T"], solved.pressure, solved.phase_mole_fractions(0)
     g = ln_gamma(mix, T, P, x)
     xs = dict(zip(model.SPECIES, x))
     mass_action = {}
@@ -140,7 +140,7 @@ def wangler_speciation():
             if r.success:
                 guess = (x, dict(zip(model.NEUTRAL, r.phase_mole_fractions(1)[:3])))
             out[name][f"alpha={alpha}"] = {"success": r.success, "H+": x.get(model.H), "MDEAH+": x.get(MDEAH),
-                                           "P_Pa": r.pressure[0] if r.success else None}
+                                           "P_Pa": r.pressure if r.success else None}
     return out
 
 
@@ -157,7 +157,7 @@ def main():
                     return model.initial_solvent_permittivity(d, r["T"], r["m_mdea"]) if initial else d
                 corners[f"{name}: k(w-MDEAH+)={k_mdeah}, k(w-HCO3-)={k_hco3}"] = score.summary(rows, score.solve_rows(doc, rows))
     report["box_corners_constant_kij"] = corners
-    assert epcsaft.provenance()[1] == score.WHEEL_SHA256, "installed Engine wheel is not the pinned 21e761c3 wheel"
+    assert epcsaft.provenance()[1] == score.WHEEL_SHA256, "installed Engine wheel is not the pinned 8298c602 wheel"
     report["provenance"] = {"engine_wheel_sha256": score.WHEEL_SHA256,
                             "kuranov_csv_sha256": hashlib.sha256(score.KURANOV.read_bytes()).hexdigest(),
                             "scripts_sha256": {p: hashlib.sha256((model.HERE / p).read_bytes()).hexdigest()
