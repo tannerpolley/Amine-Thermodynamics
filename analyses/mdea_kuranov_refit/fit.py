@@ -2,6 +2,8 @@
 
 Run score.py first. Native Engine observations own log-pressure residuals and exact derivatives.
 """
+import argparse
+import copy
 import csv
 import hashlib
 import json
@@ -24,8 +26,12 @@ BOUNDS = (-0.3, 0.3)
 
 def constant_document(values):
     doc = model.charged_molecule_ions(model.document(), model.MDEAH)
+    doc['document_id'] = 'mdea-kuranov-constant-ion-water'
+    doc['purpose'] = 'Issue #126 reading-(A) constant ion-water candidate; not an adopted parameter set'
     for pair, value in zip(PAIRS, values):
         diagnose.set_kij(doc, *pair, value)
+        entry = next(p for p in doc['pairs'] if {p['component_id_a'], p['component_id_b']} == set(pair))
+        entry['provenance'] = 'Issue #126 constant; start from Wangler 2018 Table 6; fitted value in refit-summary.json'
     return doc
 
 
@@ -118,10 +124,28 @@ def main():
     values = list(result.physical) + list(START[active_count:])
     endpoint = constant_document(values)
     write_json('fitted-parameters.json', endpoint)
+    score_endpoint(report, endpoint)
+
+
+def score_endpoint(report, endpoint):
+    """Score a retained fit without optimizing again; preserve the original fit provenance."""
+    assert epcsaft.provenance()[1] == score.WHEEL_SHA256, 'wrong Engine wheel'
+    assert report['provenance']['engine_wheel_sha256'] == score.WHEEL_SHA256
+    for path in (score.KURANOV, ERMATCHKOV):
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == report['provenance']['input_sha256'][path.name]
+    values = list(report['fit']['physical']) + list(START[report['active_parameters']:])
+    assert endpoint == json.loads(json.dumps(constant_document(values))), 'endpoint differs from retained fit'
+    rows = score.kuranov_rows()
+    assert len(rows) == 82
+    report['scoring_provenance'] = dict(engine_wheel_sha256=score.WHEEL_SHA256,
+        parameters_sha256=hashlib.sha256((score.RESULTS / 'fitted-parameters.json').read_bytes()).hexdigest(),
+        scripts_sha256={p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in
+                       (Path(__file__), model.HERE / 'model.py', model.HERE / 'score.py', model.HERE / 'diagnose.py')})
     solved = score.solve_rows(endpoint, rows)
     write_rows('fitted-kuranov.csv', rows, solved)
     fit = report['fit']
-    fit.update(values=values, bounds_status=['lower' if v == BOUNDS[0] else 'upper' if v == BOUNDS[1] else 'interior' for v in values],
+    fit.update(values=values, bounds_status=['fixed' if k >= report['active_parameters'] else
+               'lower' if v == BOUNDS[0] else 'upper' if v == BOUNDS[1] else 'interior' for k, v in enumerate(values)],
                kuranov=score.summary(rows, solved))
     fit['pass_10_9_percent'] = fit['kuranov']['solved'] == 82 and fit['kuranov']['ARD_percent_solved_rows'] < 10.9
     write_json('refit-summary.json', report)
@@ -129,7 +153,8 @@ def main():
     held = ermatchkov_rows()
     assert len(held) == 101
     report['ermatchkov'] = {}
-    for name, d in (('start', doc), ('fitted', endpoint)):
+    gate_doc = model.charged_molecule_ions(model.document(), model.MDEAH)
+    for name, d in (('gate', gate_doc), ('start', constant_document(START)), ('fitted', endpoint)):
         partial = partial_pressures(d, held)
         write_rows('ermatchkov-' + name + '.csv', held, partial)
         # The held-out set includes 8 mol/kg: its own isotherm/series groups avoid the Kuranov half labels.
@@ -139,12 +164,17 @@ def main():
         print('Ermatchkov ' + name + ':', json.dumps(report['ermatchkov'][name]), flush=True)
     # Hsieh 2007 Table 3, epsilon = a + b*T + c*T^2, rewritten exactly about T_REF.
     a, b, c = 44.1399, -0.046824, -8.82158e-5
-    law = next(v for v in endpoint['correlations'] if v['component_id'] == model.MDEA)
+    quadratic = copy.deepcopy(endpoint)
+    law = next(v for v in quadratic['correlations'] if v['component_id'] == model.MDEA)
     law['constant']['value']['magnitude'] = a + b * model.T_REF + c * model.T_REF**2
     law['terms'] = [dict(power=p, coefficient=dict(identity=f"{law['correlation_id']}/a{p}",
         value=model._value(v, unit))) for p, v, unit in ((1, b + 2*c*model.T_REF, '1 / kelvin'), (2, c, '1 / kelvin ** 2'))]
     law['provenance'] = 'Hsieh2007 Table 3, pure MDEA, 303.15-328.15 K; extrapolated above'
-    sensitivity = score.solve_rows(endpoint, rows)
+    for T in (303.15, 328.15, 413.15):
+        declared = law['constant']['value']['magnitude'] + sum(
+            term['coefficient']['value']['magnitude'] * (T-model.T_REF)**term['power'] for term in law['terms'])
+        assert abs(declared - (a+b*T+c*T*T)) < 1e-12, 'quadratic translation differs from Hsieh Table 3'
+    sensitivity = score.solve_rows(quadratic, rows)
     write_rows('fitted-hsieh-quadratic-kuranov.csv', rows, sensitivity)
     report['permittivity_sensitivity'] = score.summary(rows, sensitivity)
     report['permittivity_sensitivity']['ARD_change_points'] = report['permittivity_sensitivity']['ARD_percent_solved_rows'] - fit['kuranov']['ARD_percent_solved_rows']
@@ -153,4 +183,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--score-only', action='store_true', help='score the retained fitted endpoint without refitting')
+    if parser.parse_args().score_only:
+        score_endpoint(json.loads((score.RESULTS / 'refit-summary.json').read_text()),
+                       json.loads((score.RESULTS / 'fitted-parameters.json').read_text()))
+    else:
+        main()
