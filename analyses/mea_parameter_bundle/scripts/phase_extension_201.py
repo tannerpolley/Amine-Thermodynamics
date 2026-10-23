@@ -194,6 +194,14 @@ def reduce(states, stop):
     return rows, trials, confirmations
 
 
+def check_frozen_inputs():  # before screening: the seven inputs against run 2's recorded SHA-256 values; every reference-pressure file against its run-2 original
+    hashes = lambda root, d: {str(p.relative_to(root)):f.s.sha256(p) for p in sorted((root/d).rglob('*')) if p.is_file()}
+    inputs, references = hashes(OUT,'inputs'), hashes(OUT,'reference-pressure')
+    assert inputs==load(FROZEN/'input-hashes.json') and len(inputs)==7
+    assert references==hashes(FROZEN,'reference-pressure') and len(references)==31
+    write(OUT/'frozen-input-check.json',dict(inputs=len(inputs),inputs_against=str((FROZEN/'input-hashes.json').relative_to(R)),reference_pressure_files=len(references),reference_pressure_against=str((FROZEN/'reference-pressure').relative_to(R)),identical=True))
+
+
 def main():
     OUT.mkdir(exist_ok=False)
     for directory in ('A6','A7'):
@@ -203,7 +211,7 @@ def main():
     f.s.verify_wheel()
     # Run 2's states, family points and reference pressures (Engine 8298c602) are frozen design inputs; none is recomputed here.
     shutil.copytree(FROZEN/'inputs',OUT/'inputs'); shutil.copytree(FROZEN/'reference-pressure',OUT/'reference-pressure')
-    assert {str(p.relative_to(OUT)):f.s.sha256(p) for p in (OUT/'inputs').iterdir()}==load(FROZEN/'input-hashes.json')
+    check_frozen_inputs()
     states = load(OUT/'inputs/states.json')
     assert len(states)==81 and sum(not s['admitted'] for s in states)==21
     provenance = dict(commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),python=sys.version,libraries={k:importlib.metadata.version(k) for k in ('epcsaft','numpy','scipy')},wheel_path=str(f.s.installed_wheel()),wheel_sha256=f.s.ENGINE_WHEEL_SHA256,engine_commit=f.s.ENGINE_COMMIT,producers={str(p):f.s.sha256(p) for p in (Path(__file__),Path(f.__file__))},inputs={str(p):h for p,h in expected.items()},frozen_inputs=str(FROZEN.relative_to(R)))
