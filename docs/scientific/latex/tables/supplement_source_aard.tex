@@ -75,31 +75,37 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 799e701b0c2e3dae3fe017cd1571e508e1f086ebb709bca74c815cc998f56202
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1692\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.2256\linewidth}>{\raggedright\arraybackslash}p{0.0470\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1598\linewidth}@{}}
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}ll>{\raggedright\arraybackslash}p{0.2200\linewidth}rrr@{}}
 \caption{Reported fit calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapor water mole fraction. It does not combine quantities into an accuracy ranking. Entry costs add to the total objective cost of 148.9; quantity definitions, units and weights are in Section~S2.}\label{tab:supplement-source-aard}\\
 \toprule
-Source & Group & Observable & n & Deviation & Cost \\
+Source & Group & Observable & n & AARD (\%) & Cost \\
 \midrule\endfirsthead
 \toprule
-Source & Group & Observable & n & Deviation & Cost \\
+Source & Group & Observable & n & AARD (\%) & Cost \\
 \midrule\endhead
 \bottomrule\endfoot
-Hilliard (2008) & common subset & \ce{CO2} partial pressure & 30 & 9.141 & 2.275 \\
-Jou et al. (1995) & common subset & \ce{CO2} partial pressure & 17 & 16.66 & 3.708 \\
-Böttinger et al. (2008) & common subset & species mole fraction & 40 & 4.587 & 2.489 \\
-Matin et al. (2012) & common subset & species mole fraction & 54 & 8.968 & 14.18 \\
-Vinjarapu et al. (2024) & common subset & integral heat & 8 & 1.877 & 1.213 \\
-Böttinger et al. (2008) & additional species & mole fraction & 4 & 3.712 & 0.2205 \\
-Matin et al. (2012) & additional species & mole fraction & 3 & 16.06 & 2.23 \\
-Jakobsen et al. (2005) & Jakobsen & amount ratio & 6 & 17.5 & 13.12 \\
-Kiepe et al. (2002) & Kiepe & pressure & 39 & 2.667 & 0.000679 \\
-Amundsen et al. (2009) & \ce{CO2}-free density & phase density & 5 & 0.02796 & 11.61 \\
-Cai et al. (1996) & Cai & temperature & 25 & 1.789 & 39.99 \\
-Cai et al. (1996) & Cai & mole fraction & 25 & 0.02038 & 51.92 \\
-Amundsen et al. (2009) & loaded density & phase density & 15 & 0.1748 & 0.1499 \\
-Hartono et al. (2014) & loaded density & phase density & 32 & 0.1781 & 0.4158 \\
-Hilliard (2008) & $C_P$ & equilibrium isobaric heat capacity & 4 & 2.846 & 5.387 \\
+Hilliard (2008) & common subset & \ce{CO2} partial pressure & $30$ & $9.141$ & $2.275$ \\
+Jou et al. (1995) & common subset & \ce{CO2} partial pressure & $17$ & $16.66$ & $3.708$ \\
+Böttinger et al. (2008) & common subset & species mole fraction & $40$ & $4.587$ & $2.489$ \\
+Matin et al. (2012) & common subset & species mole fraction & $54$ & $8.968$ & $14.18$ \\
+Vinjarapu et al. (2024) & common subset & integral heat & $8$ & $1.877$ & $1.213$ \\
+Böttinger et al. (2008) & additional species & mole fraction & $4$ & $3.712$ & $0.2205$ \\
+Matin et al. (2012) & additional species & mole fraction & $3$ & $16.06$ & $2.23$ \\
+Jakobsen et al. (2005) & Jakobsen & amount ratio & $6$ & $17.5$ & $13.12$ \\
+Kiepe et al. (2002) & Kiepe & pressure & $39$ & $2.667$ & $0.000679$ \\
+Amundsen et al. (2009) & \ce{CO2}-free density & phase density & $5$ & $0.02796$ & $11.61$ \\
+Amundsen et al. (2009) & loaded density & phase density & $15$ & $0.1748$ & $0.1499$ \\
+Hartono et al. (2014) & loaded density & phase density & $32$ & $0.1781$ & $0.4158$ \\
+Hilliard (2008) & $C_P$ & equilibrium isobaric heat capacity & $4$ & $2.846$ & $5.387$ \\
+\midrule
+ &  &  &  & RMSE (K) &  \\
+\midrule
+Cai et al. (1996) & Cai & temperature & $25$ & $1.789$ & $39.99$ \\
+\midrule
+ &  &  &  & RMSE &  \\
+\midrule
+Cai et al. (1996) & Cai & mole fraction & $25$ & $0.02038$ & $51.92$ \\
 \end{longtable}\endgroup

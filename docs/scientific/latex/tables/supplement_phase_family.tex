@@ -75,10 +75,10 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 799e701b0c2e3dae3fe017cd1571e508e1f086ebb709bca74c815cc998f56202
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.3008\linewidth}>{\raggedright\arraybackslash}p{0.3008\linewidth}@{}}
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}rrrr@{}}
 \caption{Phase-search summary for both fits. The complete 73-state temperature, pressure, loading and trial data are supplied as CSV in the data deposit. One 318.15 K state (loading 0.2556) is evaluated twice, once at its pressure rounded to 5918.5286 Pa; both evaluations are counted. Two-phase classifications include liquid--vapor equilibrium.}\label{tab:supplement-phase-family}\\
 \toprule
 T (K) & Test states & Comparison fit & Reported fit \\
@@ -87,46 +87,59 @@ T (K) & Test states & Comparison fit & Reported fit \\
 T (K) & Test states & Comparison fit & Reported fit \\
 \midrule\endhead
 \bottomrule\endfoot
-313.15 & 24 & 1 & 0 \\
-318.15 & 25 & 2 & 0 \\
-333.15 & 24 & 9 & 0 \\
+$313.15$ & $24$ & $1$ & $0$ \\
+$318.15$ & $25$ & $2$ & $0$ \\
+$333.15$ & $24$ & $9$ & $0$ \\
 \end{longtable}\endgroup
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.0564\linewidth}>{\raggedright\arraybackslash}p{0.1598\linewidth}>{\raggedright\arraybackslash}p{0.0846\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1692\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}@{}}
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}rllrrllr@{}}
 \caption{Separately seeded comparison fit split solves, including failed attempts. Gibbs differences are extensive $\Delta G/(RT)$ values in mol for 9.7292821 mol analytical MEA, 76.9751925 mol water and 9.7292821 times loading mol \ce{CO2}; phase densities are mol/m3. States 21, 63 and 70 are $(T,\alpha,P/\mathrm{kPa})=(313.15,0.1,4.737142)$, $(333.15,0.4,21.78783)$ and $(333.15,0.5,38.28678)$. Only successful split solves support the split comparison.}\label{tab:supplement-split-states}\\
 \toprule
-State & Seed & Success & Delta vs original & Delta vs single liquid & Densities & Phases \\
+State & Seed & Success & \makecell[rb]{Delta vs\\original (mol)} & \makecell[rb]{Delta vs single\\liquid (mol)} & Phase & Role & Density (\si{\mole\per\cubic\metre}) \\
 \midrule\endfirsthead
 \toprule
-State & Seed & Success & Delta vs original & Delta vs single liquid & Densities & Phases \\
+State & Seed & Success & \makecell[rb]{Delta vs\\original (mol)} & \makecell[rb]{Delta vs single\\liquid (mol)} & Phase & Role & Density (\si{\mole\per\cubic\metre}) \\
 \midrule\endhead
 \bottomrule\endfoot
-21 & uniform & no & $4.7645\times10^{-7}$ & $-15.774$ &  & unavailable: failed split \\
-21 & water-rich & yes & $-0.018882$ & $-15.793$ & $2.894\times10^{4}$; 1.821; $2.265\times10^{4}$ & L (liquid); V (vapor); L2 (liquid) \\
-63 & uniform & yes & $-2.1105$ & $-2.1105$ & $4.984\times10^{4}$; $2.792\times10^{4}$ & L (liquid); L2 (liquid) \\
-63 & water-rich & yes & $-2.1105$ & $-2.1105$ & $2.792\times10^{4}$; $4.984\times10^{4}$ & L (liquid); L2 (liquid) \\
-70 & uniform & yes & $-3.2496$ & $-3.2496$ & $5.184\times10^{4}$; $2.903\times10^{4}$ & L (liquid); L2 (liquid) \\
-70 & water-rich & yes & $-3.2496$ & $-3.2496$ & $5.184\times10^{4}$; $2.903\times10^{4}$ & L (liquid); L2 (liquid) \\
+$21$ & uniform & no & $4.7645\times10^{-7}$ & $-15.774$ & -- & -- & -- \\
+\addlinespace
+$21$ & water-rich & yes & $-0.018882$ & $-15.793$ & L & liquid & $2.894\times10^{4}$ \\
+ &  &  &  &  & V & vapor & $1.821$ \\
+ &  &  &  &  & L2 & liquid & $2.265\times10^{4}$ \\
+\addlinespace
+$63$ & uniform & yes & $-2.1105$ & $-2.1105$ & L & liquid & $4.984\times10^{4}$ \\
+ &  &  &  &  & L2 & liquid & $2.792\times10^{4}$ \\
+\addlinespace
+$63$ & water-rich & yes & $-2.1105$ & $-2.1105$ & L & liquid & $2.792\times10^{4}$ \\
+ &  &  &  &  & L2 & liquid & $4.984\times10^{4}$ \\
+\addlinespace
+$70$ & uniform & yes & $-3.2496$ & $-3.2496$ & L & liquid & $5.184\times10^{4}$ \\
+ &  &  &  &  & L2 & liquid & $2.903\times10^{4}$ \\
+\addlinespace
+$70$ & water-rich & yes & $-3.2496$ & $-3.2496$ & L & liquid & $5.184\times10^{4}$ \\
+ &  &  &  &  & L2 & liquid & $2.903\times10^{4}$ \\
 \end{longtable}\endgroup
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.0470\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.1034\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.4888\linewidth}@{}}
+\begin{landscape}
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}rllrrrrrrrrrrr@{}}
 \caption{Comparison fit successful split phase amounts (mol), densities (mol/m3) and mole fractions in source order: \ce{CO2}, MEA, water, MEAH+, carbamate, bicarbonate, carbonate, hydronium, hydroxide. Vapor rows list only their three supported neutral species (\ce{CO2}, MEA, water); liquid rows list all nine.}\label{tab:supplement-split-compositions}\\
 \toprule
-State & Seed /\allowbreak{} phase & Amount & Density & Mole fractions (order in caption) \\
+State & Seed & Phase & \makecell[rb]{Amount\\(mol)} & \makecell[rb]{Density\\(\si{\mole\per\cubic\metre})} & \ce{CO2} & \ce{MEA} & water & \ce{MEAH+} & \ce{MEACOO-} & \ce{HCO3-} & \ce{CO3^{2-}} & \ce{H3O+} & \ce{OH-} \\
 \midrule\endfirsthead
 \toprule
-State & Seed /\allowbreak{} phase & Amount & Density & Mole fractions (order in caption) \\
+State & Seed & Phase & \makecell[rb]{Amount\\(mol)} & \makecell[rb]{Density\\(\si{\mole\per\cubic\metre})} & \ce{CO2} & \ce{MEA} & water & \ce{MEAH+} & \ce{MEACOO-} & \ce{HCO3-} & \ce{CO3^{2-}} & \ce{H3O+} & \ce{OH-} \\
 \midrule\endhead
 \bottomrule\endfoot
-21 & water-rich /\allowbreak{} L & 16.77 & $2.894\times10^{4}$ & $3.487\times10^{-10}$; 0.3304; 0.6123; 0.02867; 0.02819; 0.0004654; $5.154\times10^{-6}$; $5.152\times10^{-11}$; $1.065\times10^{-6}$ \\
-21 & water-rich /\allowbreak{} V & 65.41 & 1.821 & $2.654\times10^{-6}$; 0.008327; 0.9917 \\
-21 & water-rich /\allowbreak{} L2 & 4.527 & $2.265\times10^{4}$ & $9.231\times10^{-10}$; 0.3792; 0.4034; 0.1087; 0.1064; 0.002352; $2.019\times10^{-6}$; $3.792\times10^{-11}$; $3.813\times10^{-7}$ \\
-63 & uniform /\allowbreak{} L & 68.93 & $4.984\times10^{4}$ & $1.627\times10^{-6}$; 0.02499; 0.9583; 0.008356; 0.007708; 0.0006232; $1.209\times10^{-5}$; $1.456\times10^{-10}$; $3.326\times10^{-7}$ \\
-63 & uniform /\allowbreak{} L2 & 17.78 & $2.792\times10^{4}$ & $2.093\times10^{-5}$; 0.03797; 0.5889; 0.1865; 0.1636; 0.02294; $4.068\times10^{-8}$; $2.271\times10^{-11}$; $2.625\times10^{-9}$ \\
-63 & water-rich /\allowbreak{} L & 17.78 & $2.792\times10^{4}$ & $2.093\times10^{-5}$; 0.03797; 0.5889; 0.1865; 0.1636; 0.02294; $4.068\times10^{-8}$; $2.271\times10^{-11}$; $2.625\times10^{-9}$ \\
-63 & water-rich /\allowbreak{} L2 & 68.93 & $4.984\times10^{4}$ & $1.627\times10^{-6}$; 0.02499; 0.9583; 0.008356; 0.007708; 0.0006232; $1.209\times10^{-5}$; $1.456\times10^{-10}$; $3.326\times10^{-7}$ \\
-70 & uniform /\allowbreak{} L & 64.38 & $5.184\times10^{4}$ & $1.016\times10^{-5}$; 0.009542; 0.9758; 0.007317; 0.006176; 0.001114; $1.323\times10^{-5}$; $3.139\times10^{-10}$; $1.61\times10^{-7}$ \\
-70 & uniform /\allowbreak{} L2 & 22.33 & $2.903\times10^{4}$ & 0.0001464; 0.01706; 0.5895; 0.1966; 0.1556; 0.04101; $2.321\times10^{-8}$; $5.895\times10^{-11}$; $7.942\times10^{-10}$ \\
-70 & water-rich /\allowbreak{} L & 64.38 & $5.184\times10^{4}$ & $1.016\times10^{-5}$; 0.009542; 0.9758; 0.007317; 0.006176; 0.001114; $1.323\times10^{-5}$; $3.139\times10^{-10}$; $1.61\times10^{-7}$ \\
-70 & water-rich /\allowbreak{} L2 & 22.33 & $2.903\times10^{4}$ & 0.0001464; 0.01706; 0.5895; 0.1966; 0.1556; 0.04101; $2.321\times10^{-8}$; $5.895\times10^{-11}$; $7.942\times10^{-10}$ \\
+$21$ & water-rich & L & $16.77$ & $2.894\times10^{4}$ & $3.487\times10^{-10}$ & $0.3304$ & $0.6123$ & $0.02867$ & $0.02819$ & $0.0004654$ & $5.154\times10^{-6}$ & $5.152\times10^{-11}$ & $1.065\times10^{-6}$ \\
+$21$ & water-rich & V & $65.41$ & $1.821$ & $2.654\times10^{-6}$ & $0.008327$ & $0.9917$ & -- & -- & -- & -- & -- & -- \\
+$21$ & water-rich & L2 & $4.527$ & $2.265\times10^{4}$ & $9.231\times10^{-10}$ & $0.3792$ & $0.4034$ & $0.1087$ & $0.1064$ & $0.002352$ & $2.019\times10^{-6}$ & $3.792\times10^{-11}$ & $3.813\times10^{-7}$ \\
+$63$ & uniform & L & $68.93$ & $4.984\times10^{4}$ & $1.627\times10^{-6}$ & $0.02499$ & $0.9583$ & $0.008356$ & $0.007708$ & $0.0006232$ & $1.209\times10^{-5}$ & $1.456\times10^{-10}$ & $3.326\times10^{-7}$ \\
+$63$ & uniform & L2 & $17.78$ & $2.792\times10^{4}$ & $2.093\times10^{-5}$ & $0.03797$ & $0.5889$ & $0.1865$ & $0.1636$ & $0.02294$ & $4.068\times10^{-8}$ & $2.271\times10^{-11}$ & $2.625\times10^{-9}$ \\
+$63$ & water-rich & L & $17.78$ & $2.792\times10^{4}$ & $2.093\times10^{-5}$ & $0.03797$ & $0.5889$ & $0.1865$ & $0.1636$ & $0.02294$ & $4.068\times10^{-8}$ & $2.271\times10^{-11}$ & $2.625\times10^{-9}$ \\
+$63$ & water-rich & L2 & $68.93$ & $4.984\times10^{4}$ & $1.627\times10^{-6}$ & $0.02499$ & $0.9583$ & $0.008356$ & $0.007708$ & $0.0006232$ & $1.209\times10^{-5}$ & $1.456\times10^{-10}$ & $3.326\times10^{-7}$ \\
+$70$ & uniform & L & $64.38$ & $5.184\times10^{4}$ & $1.016\times10^{-5}$ & $0.009542$ & $0.9758$ & $0.007317$ & $0.006176$ & $0.001114$ & $1.323\times10^{-5}$ & $3.139\times10^{-10}$ & $1.61\times10^{-7}$ \\
+$70$ & uniform & L2 & $22.33$ & $2.903\times10^{4}$ & $0.0001464$ & $0.01706$ & $0.5895$ & $0.1966$ & $0.1556$ & $0.04101$ & $2.321\times10^{-8}$ & $5.895\times10^{-11}$ & $7.942\times10^{-10}$ \\
+$70$ & water-rich & L & $64.38$ & $5.184\times10^{4}$ & $1.016\times10^{-5}$ & $0.009542$ & $0.9758$ & $0.007317$ & $0.006176$ & $0.001114$ & $1.323\times10^{-5}$ & $3.139\times10^{-10}$ & $1.61\times10^{-7}$ \\
+$70$ & water-rich & L2 & $22.33$ & $2.903\times10^{4}$ & $0.0001464$ & $0.01706$ & $0.5895$ & $0.1966$ & $0.1556$ & $0.04101$ & $2.321\times10^{-8}$ & $5.895\times10^{-11}$ & $7.942\times10^{-10}$ \\
 \end{longtable}\endgroup
+\end{landscape}

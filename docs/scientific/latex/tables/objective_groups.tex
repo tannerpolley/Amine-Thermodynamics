@@ -75,30 +75,31 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 799e701b0c2e3dae3fe017cd1571e508e1f086ebb709bca74c815cc998f56202
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1209\linewidth}>{\raggedright\arraybackslash}p{0.1488\linewidth}>{\raggedright\arraybackslash}p{0.1395\linewidth}>{\raggedright\arraybackslash}p{0.0372\linewidth}>{\raggedright\arraybackslash}p{0.1116\linewidth}>{\raggedright\arraybackslash}p{0.1488\linewidth}>{\raggedright\arraybackslash}p{0.0930\linewidth}>{\raggedright\arraybackslash}p{0.1302\linewidth}@{}}
-\caption{Reported fit objective groups. The eight groups are disjoint and contain 307 quantities; common subset contains pressure, species and heat. Cai contains 25 temperatures and 25 vapor fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; log ratio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales are not uniformly measurement uncertainties.}\label{tab:objective-groups}\\
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1600\linewidth}>{\raggedright\arraybackslash}p{0.1800\linewidth}>{\raggedright\arraybackslash}p{0.1200\linewidth}rlrrrr@{}}
+\caption{Reported fit objective groups. The eight groups are disjoint and contain 307 quantities; common subset contains pressure, species and heat. Cai contains 25 temperatures and 25 vapor fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; log ratio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales are not uniformly measurement uncertainties. Where a highest scale is listed, the scale varies per observation between the two values.}\label{tab:objective-groups}\\
 \toprule
-Group & Quantity & Unit/\allowbreak{}basis & n & Residual & Scale & Weight & Cost \\
+Group & Quantity & Unit/\allowbreak{}basis & n & Residual & \makecell[rb]{Lowest\\scale} & \makecell[rb]{Highest\\scale} & Weight & Cost \\
 \midrule\endfirsthead
 \toprule
-Group & Quantity & Unit/\allowbreak{}basis & n & Residual & Scale & Weight & Cost \\
+Group & Quantity & Unit/\allowbreak{}basis & n & Residual & \makecell[rb]{Lowest\\scale} & \makecell[rb]{Highest\\scale} & Weight & Cost \\
 \midrule\endhead
 \bottomrule\endfoot
-common subset & \ce{CO2} vapor partial pressure & Pa & 47 & log ratio & 1 & 100/\allowbreak{}9 & 5.983 \\
-common subset & liquid species or reported species sum & mole fraction & 94 & Difference & 0.0014 to 0.01154 (per observation) & 1 & 16.67 \\
-common subset & integral heat of absorption & kJ/\allowbreak{}mol \ce{CO2} & 8 & Difference & 3 to 6 & 1 & 1.213 \\
-additional species & liquid species fraction & liquid mole fraction & 7 & Difference & 0.00244 to 0.01109 (per observation) & 1 & 2.45 \\
-Jakobsen & (\ce{MEAH+}, \ce{MEACOO-}, \ce{HCO3- + CO3^{2-}}) /\allowbreak{} total amine; two states & mol/\allowbreak{}mol total amine & 6 & Difference & 0.001728 to 0.05489 (per observation) & 1 & 13.12 \\
-Kiepe & \ce{CO2}-water bubble pressure & Pa & 39 & log ratio & 1 & 1/\allowbreak{}39 & 0.000679 \\
-\ce{CO2}-free density & liquid density & \si{\kilogram\per\cubic\metre} & 5 & Difference & 0.5 & 10 & 11.61 \\
-Cai & MEA-water bubble temperature & K & 25 & Difference & 1 & 1 & 39.99 \\
-Cai & vapor water fraction & vapor water fraction & 25 & Difference & 0.01 & 1 & 51.92 \\
-loaded density & liquid density & \si{\kilogram\per\cubic\metre} & 47 & Difference & 1.791 to 2.416 (per observation) & 1/\allowbreak{}47 & 0.5658 \\
-$C_P$ & equilibrium heat capacity per mole analytical feed & J/\allowbreak{}(mol K); total analytical feed & 4 & Difference & 1.593 to 1.762 (per observation) & 1 & 5.387 \\
-common subset subtotal (already included) & -- & -- & 149 & -- & -- & -- & 23.87 \\
-Cai subtotal (already included) & -- & -- & 50 & -- & -- & -- & 91.91 \\
-Objective total & -- & -- & 307 & -- & -- & -- & 148.9 \\
+common subset & \ce{CO2} vapor partial pressure & Pa & $47$ & log ratio & $1$ & -- & 100/\allowbreak{}9 & $5.983$ \\
+common subset & liquid species or reported species sum & mole fraction & $94$ & Difference & $0.0014$ & $0.01154$ & $1$ & $16.67$ \\
+common subset & integral heat of absorption & kJ/\allowbreak{}mol \ce{CO2} & $8$ & Difference & $3$ & $6$ & $1$ & $1.213$ \\
+additional species & liquid species fraction & liquid mole fraction & $7$ & Difference & $0.00244$ & $0.01109$ & $1$ & $2.45$ \\
+Jakobsen & (\ce{MEAH+}, \ce{MEACOO-}, \ce{HCO3- + CO3^{2-}}) /\allowbreak{} total amine; two states & mol/\allowbreak{}mol total amine & $6$ & Difference & $0.001728$ & $0.05489$ & $1$ & $13.12$ \\
+Kiepe & \ce{CO2}-water bubble pressure & Pa & $39$ & log ratio & $1$ & -- & 1/\allowbreak{}39 & $0.000679$ \\
+\ce{CO2}-free density & liquid density & \si{\kilogram\per\cubic\metre} & $5$ & Difference & $0.5$ & -- & $10$ & $11.61$ \\
+Cai & MEA-water bubble temperature & K & $25$ & Difference & $1$ & -- & $1$ & $39.99$ \\
+Cai & vapor water fraction & vapor water fraction & $25$ & Difference & $0.01$ & -- & $1$ & $51.92$ \\
+loaded density & liquid density & \si{\kilogram\per\cubic\metre} & $47$ & Difference & $1.791$ & $2.416$ & 1/\allowbreak{}47 & $0.5658$ \\
+$C_P$ & equilibrium heat capacity per mole analytical feed & J/\allowbreak{}(mol K); total analytical feed & $4$ & Difference & $1.593$ & $1.762$ & $1$ & $5.387$ \\
+\midrule
+common subset subtotal (already included) & -- & -- & $149$ & -- & -- & -- & -- & $23.87$ \\
+Cai subtotal (already included) & -- & -- & $50$ & -- & -- & -- & -- & $91.91$ \\
+Objective total & -- & -- & $307$ & -- & -- & -- & -- & $148.9$ \\
 \end{longtable}\endgroup

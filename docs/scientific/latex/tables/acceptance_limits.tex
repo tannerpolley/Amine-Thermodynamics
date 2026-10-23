@@ -79,26 +79,26 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 799e701b0c2e3dae3fe017cd1571e508e1f086ebb709bca74c815cc998f56202
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.0846\linewidth}>{\raggedright\arraybackslash}p{0.2726\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}@{}}
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2400\linewidth}r>{\raggedright\arraybackslash}p{0.3100\linewidth}rrr@{}}
 \caption{Study-specific limits and values for the density-free, comparison and reported fits. Section~S10 explains the tolerances.}\label{tab:acceptance-limits}\\
 \toprule
-Quantity & Limit & Origin of limit & Density-free fit & Comparison fit & Reported fit \\
+Quantity & Limit & Origin of limit & \makecell[rb]{Density-free\\fit} & \makecell[rb]{Comparison\\fit} & \makecell[rb]{Reported\\fit} \\
 \midrule\endfirsthead
 \toprule
-Quantity & Limit & Origin of limit & Density-free fit & Comparison fit & Reported fit \\
+Quantity & Limit & Origin of limit & \makecell[rb]{Density-free\\fit} & \makecell[rb]{Comparison\\fit} & \makecell[rb]{Reported\\fit} \\
 \midrule\endhead
 \bottomrule\endfoot
-Common-subset cost & 35.26 & density-free fit value + 10\% (rounded) & 32.06 & 24.92 & 23.87 \\
-Pressure AARD (\%) & 15.81 & density-free fit value + 2 percentage points (rounded) & 13.81 & 12.47 & 11.86 \\
-Species AARD (\%) & 9.89 & density-free fit value + 2 percentage points (rounded) & 7.891 & 7.145 & 7.104 \\
-Vinjarapu RMSE (kJ/\allowbreak{}mol) & 3.13 & density-free fit value + 1 kJ/\allowbreak{}mol (rounded) & 2.127 & 1.822 & 1.835 \\
-Loaded within 2s & 47/\allowbreak{}47 & density requirement (Section~S5) & -- & 47 & 44 \\
-Cai cost & 95.90 & constant-interaction Cai cost + 5\% (rounded) & -- & 91.81 & 91.91 \\
+Common-subset cost & $35.26$ & density-free fit value + 10\% (rounded) & $32.06$ & $24.92$ & $23.87$ \\
+Pressure AARD (\%) & $15.81$ & density-free fit value + 2 percentage points (rounded) & $13.81$ & $12.47$ & $11.86$ \\
+Species AARD (\%) & $9.89$ & density-free fit value + 2 percentage points (rounded) & $7.891$ & $7.145$ & $7.104$ \\
+Vinjarapu RMSE (kJ/\allowbreak{}mol) & $3.13$ & density-free fit value + 1 kJ/\allowbreak{}mol (rounded) & $2.127$ & $1.822$ & $1.835$ \\
+Loaded within 2s & 47/\allowbreak{}47 & density requirement (Section~S5) & -- & $47$ & $44$ \\
+Cai cost & $95.90$ & constant-interaction Cai cost + 5\% (rounded) & -- & $91.81$ & $91.91$ \\
 States with detected instability & 0/\allowbreak{}73 & finite search at the specified states & -- & 12/\allowbreak{}73 & 0/\allowbreak{}73 \\
-\ce{CO2}-free max absolute error (\si{\kilogram\per\cubic\metre}) & 1.0 & density requirement & -- & 0.5709 & 0.5572 \\
-Total cost (307 quantities) & -- & not comparable with the density-free-fit cost & -- & 148.2 & 148.9 \\
-Arcis RMSE (kJ/\allowbreak{}mol) & 9.36 & density-free fit value + 1 kJ/\allowbreak{}mol (rounded) & 8.364 & 8.05 & 8.114 \\
+\ce{CO2}-free max absolute error (\si{\kilogram\per\cubic\metre}) & $1.0$ & density requirement & -- & $0.5709$ & $0.5572$ \\
+Total cost (307 quantities) & -- & not comparable with the density-free-fit cost & -- & $148.2$ & $148.9$ \\
+Arcis RMSE (kJ/\allowbreak{}mol) & $9.36$ & density-free fit value + 1 kJ/\allowbreak{}mol (rounded) & $8.364$ & $8.05$ & $8.114$ \\
 \end{longtable}\endgroup
