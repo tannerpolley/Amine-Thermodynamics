@@ -1,0 +1,978 @@
+{
+  "input": {
+    "group": "canonical",
+    "observation": {
+      "identity": "canonical:vle_obs_0137",
+      "request": {
+        "continuation": {
+          "identity": "vle_obs_0137-candidate-v1",
+          "state": {
+            "parameter_fingerprint": "sha256:927cc368a166c5503566778d997e847f04a51c3e4d54b548fb3a0afe474640e1",
+            "phase_identities": [
+              "mea-nine-species-liquid",
+              "mea-neutral-incipient-vapor"
+            ],
+            "phases": [
+              {
+                "chemical_potential_component_ids": [
+                  "carbon-dioxide",
+                  "monoethanolamine",
+                  "water",
+                  "protonated-monoethanolamine",
+                  "carbamate-anion",
+                  "bicarbonate-anion",
+                  "carbonate-anion",
+                  "hydronium-cation",
+                  "hydroxide-anion"
+                ],
+                "chemical_potential_over_rt": [
+                  4.116559174393568,
+                  -7.180964521883273,
+                  0.887626084352557,
+                  -138.8781256891798,
+                  -144.26138217145592,
+                  -160.81456919417343,
+                  -693.2161843038538,
+                  -433.94056281636927,
+                  -187.09315651269907
+                ],
+                "mechanical_class": "strict_stable_local_minimum",
+                "molar_density_mol_m3": 52053.98259841573,
+                "molar_volume_m3_per_mol": 1.921082595571535e-05,
+                "mole_fractions": [
+                  0.0012153520310548235,
+                  0.018042964309425154,
+                  0.8786902085830312,
+                  0.051036389740816826,
+                  0.04300312940679943,
+                  0.00799065140437,
+                  2.1304448757205686e-05,
+                  2.1806246747167226e-11,
+                  5.393923785309246e-11
+                ],
+                "packing_fraction": 0.44700115996842255,
+                "pressure_pa": 167343.38445599005,
+                "role": "liquid",
+                "support": "all_components",
+                "supported_component_ids": [
+                  "carbon-dioxide",
+                  "monoethanolamine",
+                  "water",
+                  "protonated-monoethanolamine",
+                  "carbamate-anion",
+                  "bicarbonate-anion",
+                  "carbonate-anion",
+                  "hydronium-cation",
+                  "hydroxide-anion"
+                ]
+              },
+              {
+                "chemical_potential_component_ids": [
+                  "carbon-dioxide",
+                  "monoethanolamine",
+                  "water"
+                ],
+                "chemical_potential_over_rt": [
+                  4.116559174396304,
+                  -7.180964521880547,
+                  0.8876260843552861
+                ],
+                "mechanical_class": "strict_stable_vapor",
+                "molar_density_mol_m3": 64.77324729884883,
+                "molar_volume_m3_per_mol": 0.015438472543861057,
+                "mole_fractions": [
+                  0.9614621230104877,
+                  1.2341434470239651e-05,
+                  0.03852553555504214
+                ],
+                "packing_fraction": 0.0008411815605810325,
+                "pressure_pa": 167343.38445615646,
+                "role": "vapor",
+                "support": "declared_neutral_components",
+                "supported_component_ids": [
+                  "carbon-dioxide",
+                  "monoethanolamine",
+                  "water"
+                ]
+              }
+            ],
+            "pressure_pa": 167343.38445615658,
+            "problem_fingerprint": "sha256:df027bae08634fddf83c80d851ec2e41486fbbce34c3f4600356933273c64e7c",
+            "reaction_fingerprint": "sha256:35be03d6850a46ba6a0da006685a17b0b698cde4bbdca330524dff8004fcb6c7",
+            "topology_fingerprint": "sha256:1f2c9d9bbd495c42104ef161c714366848b64f4ea2e8b2d1ed680e0d72ae31c2"
+          }
+        },
+        "feed": {
+          "generation": "source-corrections-152",
+          "source": "reaction_system.analytical_feed_contract"
+        },
+        "identity": "vle_obs_0137",
+        "intensive_boundaries": [],
+        "outputs": [
+          {
+            "aggregate_identity": null,
+            "basis": "total-state-pressure",
+            "censor_limit": null,
+            "coefficients": [],
+            "covariance_identity": null,
+            "identity": "system-pressure",
+            "phase_identity": null,
+            "selector": "system.pressure",
+            "solvent_mass_coefficients_kg_per_mol": [],
+            "support": "positive",
+            "unit": "pascal"
+          },
+          {
+            "aggregate_identity": null,
+            "basis": "true-species-vapor-mole-fraction",
+            "censor_limit": null,
+            "coefficients": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "covariance_identity": null,
+            "identity": "vapor-y-co2",
+            "phase_identity": "mea-neutral-incipient-vapor",
+            "selector": "phase.mole_fraction",
+            "solvent_mass_coefficients_kg_per_mol": [],
+            "support": "positive",
+            "unit": "dimensionless"
+          },
+          {
+            "aggregate_identity": null,
+            "basis": "true-species-vapor-mole-fraction",
+            "censor_limit": null,
+            "coefficients": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "covariance_identity": null,
+            "identity": "vapor-y-mea",
+            "phase_identity": "mea-neutral-incipient-vapor",
+            "selector": "phase.mole_fraction",
+            "solvent_mass_coefficients_kg_per_mol": [],
+            "support": "positive",
+            "unit": "dimensionless"
+          },
+          {
+            "aggregate_identity": null,
+            "basis": "true-species-vapor-mole-fraction",
+            "censor_limit": null,
+            "coefficients": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "covariance_identity": null,
+            "identity": "vapor-y-water",
+            "phase_identity": "mea-neutral-incipient-vapor",
+            "selector": "phase.mole_fraction",
+            "solvent_mass_coefficients_kg_per_mol": [],
+            "support": "positive",
+            "unit": "dimensionless"
+          },
+          {
+            "aggregate_identity": null,
+            "basis": "true-species-vapor-partial-pressure",
+            "censor_limit": null,
+            "coefficients": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "covariance_identity": null,
+            "identity": "co2-partial-pressure",
+            "phase_identity": "mea-neutral-incipient-vapor",
+            "selector": "phase.partial_pressure",
+            "solvent_mass_coefficients_kg_per_mol": [],
+            "support": "positive",
+            "unit": "pascal"
+          }
+        ],
+        "phase_reactions": null,
+        "phases": [
+          {
+            "amount_role": "finite",
+            "fluid_role": "liquid",
+            "identity": "mea-nine-species-liquid",
+            "model": {
+              "admissible_packing_fraction_interval": [
+                1e-06,
+                0.74
+              ],
+              "kind": "provider",
+              "reference_id": "installed-provider-eos"
+            },
+            "start": null,
+            "support": {
+              "component_ids": [],
+              "kind": "all_components"
+            }
+          },
+          {
+            "amount_role": "incipient",
+            "fluid_role": "vapor",
+            "identity": "mea-neutral-incipient-vapor",
+            "model": {
+              "admissible_packing_fraction_interval": [
+                1e-08,
+                0.25
+              ],
+              "kind": "provider",
+              "reference_id": "installed-provider-eos"
+            },
+            "start": null,
+            "support": {
+              "component_ids": [
+                "carbon-dioxide",
+                "monoethanolamine",
+                "water"
+              ],
+              "kind": "declared_neutral_components"
+            }
+          }
+        ],
+        "pressure": {
+          "bounds": [
+            1.0,
+            10000000.0
+          ],
+          "initial": 100000.0,
+          "role": "solved",
+          "starts": [
+            166054.01866850923
+          ],
+          "unit": "pascal"
+        },
+        "reaction_phase_ids": [
+          "mea-nine-species-liquid"
+        ],
+        "reaction_system": {
+          "analytical_feed_contract": {
+            "basis": "source_molality",
+            "molar_masses_kg_per_mol": [
+              0.04400839250000016,
+              0.061080535833333255,
+              0.018015221250000022,
+              0.06208747291666655,
+              0.10408199125000012,
+              0.06101667666666688,
+              0.06000973958333358,
+              0.019022158333333324,
+              0.01700828416666672
+            ],
+            "neutral_analytical_amounts_mol": [
+              0.466,
+              1.0,
+              7.929802297440154,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "seed_extents_mol": [
+              1e-05,
+              0.0001,
+              1e-05,
+              -1e-05,
+              -1e-05
+            ],
+            "source_coordinates": {
+              "CO2_loading": "0.466",
+              "CO2_loading_uncertainty": "",
+              "CO2_pressure": "0.574",
+              "CO2_pressure_uncertainty": "",
+              "H2O_pressure": "6.75",
+              "MEA_pressure": "0.0027",
+              "MEA_weight_fraction": "0.2995058893753394",
+              "MEA_weight_fraction_nominal": "0.3",
+              "active_row_id": "vle_0036",
+              "active_view_member": "yes",
+              "disposition_reason": "Retained in the byte-stable Combined_VLE.csv active-v1 view.",
+              "doi": "",
+              "lifecycle_status": "active_v1",
+              "normalization_group": "",
+              "notes": "",
+              "observation_id": "vle_obs_0137",
+              "pressure_MEA_raoult": "",
+              "replicate_group": "Hilliard2008|w=0.3|T=40",
+              "source_file": "Hilliard_2008_VLE.csv",
+              "source_key": "Hilliard2008",
+              "source_molality_mol_per_kg_water": "7.00",
+              "source_row": "31",
+              "source_table_or_figure": "DNQUPRMT/LB7LUETY Appendix D.4 pp.914-915 (PDF971-972)",
+              "temperature_canonical_C": "39.930",
+              "temperature_measured_C": "39.930",
+              "temperature_normalized": "no",
+              "temperature_reported_C": "39.930",
+              "temperature_series_C": "40",
+              "temperature_series_origin": "source_nominal",
+              "total_pressure": "7.3267"
+            },
+            "temperature_measured_C": 39.93
+          },
+          "balance_matrix": [
+            [
+              1.0,
+              2.0,
+              0.0,
+              2.0,
+              3.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "charges": [
+            0,
+            0,
+            0,
+            1,
+            -1,
+            -1,
+            -2,
+            1,
+            -1
+          ],
+          "conserved_totals": [
+            2.466,
+            1.0
+          ],
+          "equilibrium_constants": [
+            [
+              -39.20847211814555,
+              "Austgen1991",
+              "aqueous-molality-infinite-dilution-water-v1",
+              "products_positive",
+              "source-standard-state-to-provider-neutral-reference",
+              true
+            ],
+            [
+              -18.52157205941222,
+              "Austgen1991",
+              "aqueous-molality-infinite-dilution-water-v1",
+              "products_positive",
+              "source-standard-state-to-provider-neutral-reference",
+              true
+            ],
+            [
+              -27.55307337666852,
+              "Austgen1991",
+              "aqueous-molality-infinite-dilution-water-v1",
+              "products_positive",
+              "source-standard-state-to-provider-neutral-reference",
+              true
+            ],
+            [
+              -2.7836958326680508,
+              "Tong2012+Aroua1999",
+              "aqueous-molality-infinite-dilution-water-v1",
+              "products_positive",
+              "source-standard-state-to-provider-neutral-reference",
+              true,
+              {
+                "coefficient_identities": [
+                  "reaction:R4:correlation:a",
+                  "reaction:R4:correlation:b_k"
+                ],
+                "coefficient_values": [
+                  2.151,
+                  -1545.3
+                ],
+                "kind": "ln-k-a-plus-b-over-t",
+                "reaction_id": "R4"
+              }
+            ],
+            [
+              -20.889878783626997,
+              "BatesPinching1951",
+              "aqueous-molality-infinite-dilution-water-v1",
+              "products_positive",
+              "source-standard-state-to-provider-neutral-reference",
+              true,
+              {
+                "coefficient_identities": [
+                  "reaction:R5:correlation:a_k",
+                  "reaction:R5:correlation:b",
+                  "reaction:R5:correlation:c_per_k"
+                ],
+                "coefficient_values": [
+                  2677.91,
+                  0.3869,
+                  0.0004277
+                ],
+                "kind": "negative-log10-temperature-polynomial",
+                "reaction_id": "R5"
+              }
+            ]
+          ],
+          "feed_amounts_mol": [
+            0.46590000000000004,
+            0.99998,
+            7.929592297440154,
+            1e-05,
+            1e-05,
+            8e-05,
+            1e-05,
+            0.00011,
+            1e-05
+          ],
+          "molar_masses_kg_per_mol": [
+            0.04400839250000016,
+            0.061080535833333255,
+            0.018015221250000022,
+            0.06208747291666655,
+            0.10408199125000012,
+            0.06101667666666688,
+            0.06000973958333358,
+            0.019022158333333324,
+            0.01700828416666672
+          ],
+          "reaction_matrix": [
+            [
+              0.0,
+              0.0,
+              -2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            [
+              -1.0,
+              0.0,
+              -2.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              0.0,
+              0.0,
+              -1.0,
+              1.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              -1.0,
+              0.0,
+              -1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              -1.0,
+              -1.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ]
+          ],
+          "source_standard_state": {
+            "activity_convention_id": "molality-infinite-dilution-v1",
+            "activity_scale_id": "aqueous-molality-infinite-dilution-water-v1",
+            "component_ids": [
+              "carbon-dioxide",
+              "monoethanolamine",
+              "water",
+              "protonated-monoethanolamine",
+              "carbamate-anion",
+              "bicarbonate-anion",
+              "carbonate-anion",
+              "hydronium-cation",
+              "hydroxide-anion"
+            ],
+            "id": "aqueous-molality-infinite-dilution-water-v1",
+            "ion_pairs": [
+              [
+                [
+                  "protonated-monoethanolamine",
+                  "carbamate-anion"
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              [
+                [
+                  "protonated-monoethanolamine",
+                  "bicarbonate-anion"
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              [
+                [
+                  "protonated-monoethanolamine",
+                  "carbonate-anion"
+                ],
+                [
+                  2,
+                  1
+                ]
+              ],
+              [
+                [
+                  "protonated-monoethanolamine",
+                  "hydroxide-anion"
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              [
+                [
+                  "hydronium-cation",
+                  "carbamate-anion"
+                ],
+                [
+                  1,
+                  1
+                ]
+              ]
+            ],
+            "log_activity_scale_factors": [
+              -4.016534992299479,
+              -4.016534992299479,
+              0.0,
+              -4.016534992299479,
+              -4.016534992299479,
+              -4.016534992299479,
+              -4.016534992299479,
+              -4.016534992299479,
+              -4.016534992299479
+            ],
+            "phase": "liquid",
+            "pure_components": [],
+            "reference_convention": "molality-infinite-dilution",
+            "reference_pressure_pa": 100000.0,
+            "solvent_composition": [
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "standard_molality_mol_per_kg": 1.0
+          },
+          "species_ids": [
+            "carbon-dioxide",
+            "monoethanolamine",
+            "water",
+            "protonated-monoethanolamine",
+            "carbamate-anion",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ],
+          "strict_interior_amount_floor_mol": 1e-12
+        },
+        "temperature": {
+          "role": "fixed",
+          "unit": "kelvin",
+          "value": 313.08
+        }
+      },
+      "targets": [
+        {
+          "basis": "true-species-vapor-partial-pressure",
+          "identity": "vle_obs_0137-pco2",
+          "observed": 574.0,
+          "prediction_identity": "co2-partial-pressure",
+          "scale": null,
+          "source_identity": "Hilliard2008"
+        }
+      ]
+    }
+  },
+  "kind": "state",
+  "result": {
+    "group": "canonical",
+    "id": "canonical:vle_obs_0137",
+    "record": {
+      "T": 313.08,
+      "check": {
+        "balance_errors": [],
+        "failure_code": "",
+        "max_abs_stationarity": 1.2789769243681803e-13,
+        "solver_status": "SUCCESS",
+        "tolerance_met": true
+      },
+      "evidence": [
+        [
+          "success",
+          true
+        ],
+        [
+          "message",
+          "converged: residual 1.2789769243681803e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 1.4960977960161549e-10, amplification 0"
+        ],
+        [
+          "solver_status",
+          "SUCCESS"
+        ],
+        [
+          "requested_tolerance_met",
+          true
+        ],
+        [
+          "residuals",
+          [
+            -9.947598300641403e-14,
+            -1.2789769243681803e-13,
+            -2.842170943040401e-14,
+            -6.394884621840902e-14,
+            -5.684341886080802e-14,
+            5.684341886080802e-14,
+            5.684341886080802e-14,
+            2.842170943040401e-14,
+            0.0,
+            -2.5246426267421543e-14,
+            -7.105427357601002e-14,
+            -4.973799150320701e-14,
+            -2.842170943040401e-14,
+            4.954934462665408e-16,
+            9.453028539890077e-17,
+            5.908142837431298e-18,
+            0.0,
+            1.1816285674862596e-17,
+            0.0,
+            -1.1102230246251565e-16
+          ]
+        ],
+        [
+          "classified_residuals",
+          [
+            -9.947598300641403e-14,
+            -1.2789769243681803e-13,
+            -2.842170943040401e-14,
+            -6.394884621840902e-14,
+            -5.684341886080802e-14,
+            5.684341886080802e-14,
+            5.684341886080802e-14,
+            2.842170943040401e-14,
+            0.0,
+            -2.5246426267421543e-14,
+            -7.105427357601002e-14,
+            -4.973799150320701e-14,
+            -2.842170943040401e-14,
+            4.954934462665408e-16,
+            9.453028539890077e-17,
+            5.908142837431298e-18,
+            0.0,
+            1.1816285674862596e-17,
+            0.0,
+            -1.1102230246251565e-16
+          ]
+        ],
+        [
+          "iterations/evaluations/hessian_calls",
+          [
+            17,
+            27,
+            19
+          ]
+        ],
+        [
+          "jacobian_rank/generic_nullity",
+          [
+            20,
+            0
+          ]
+        ],
+        [
+          "reduced_hessian_minimum",
+          0.0
+        ],
+        [
+          "topology_event",
+          "None_"
+        ],
+        [
+          "neutral_reference_diagnostics",
+          [
+            {
+              "message": "",
+              "observed_terminal_change": 3.001332515850663e-11,
+              "reaction_index": 0,
+              "reference_pressure_pa": 6993.256666892577,
+              "status": "Available",
+              "terminal_contraction": -577.0418507603515,
+              "terminal_contraction_pressure_derivative": -6.206818756093591e-09,
+              "terminal_contraction_pressure_second_derivative": 3.3487020004525184e-18
+            },
+            {
+              "message": "",
+              "observed_terminal_change": 2.2282620193436742e-11,
+              "reaction_index": 1,
+              "reference_pressure_pa": 6993.256666892577,
+              "status": "Available",
+              "terminal_contraction": -572.2203406784689,
+              "terminal_contraction_pressure_derivative": -1.2890144030253083e-08,
+              "terminal_contraction_pressure_second_derivative": 2.4429429903780553e-18
+            },
+            {
+              "message": "",
+              "observed_terminal_change": 5.661604518536478e-11,
+              "reaction_index": 2,
+              "reference_pressure_pa": 6993.256666892577,
+              "status": "Available",
+              "terminal_contraction": -942.5387026531425,
+              "terminal_contraction_pressure_derivative": -4.956243707385804e-09,
+              "terminal_contraction_pressure_second_derivative": 6.0917148349653375e-18
+            },
+            {
+              "message": "",
+              "observed_terminal_change": 2.8421709430404007e-12,
+              "reaction_index": 3,
+              "reference_pressure_pa": 100000.0,
+              "status": "Available",
+              "terminal_contraction": -65.46947738905402,
+              "terminal_contraction_pressure_derivative": 0.0,
+              "terminal_contraction_pressure_second_derivative": 0.0
+            },
+            {
+              "message": "",
+              "observed_terminal_change": 1.057287590811029e-11,
+              "reaction_index": 4,
+              "reference_pressure_pa": 100000.0,
+              "status": "Available",
+              "terminal_contraction": -313.142730467889,
+              "terminal_contraction_pressure_derivative": 0.0,
+              "terminal_contraction_pressure_second_derivative": 0.0
+            }
+          ]
+        ],
+        [
+          "compiled_point_evaluation",
+          {
+            "floor": 1.4960977960161549e-10,
+            "objective": -2032.1498205672033,
+            "raw_stationarity": [
+              -9.947598300641403e-14,
+              -1.2789769243681803e-13,
+              -2.842170943040401e-14,
+              -6.394884621840902e-14,
+              -5.684341886080802e-14,
+              5.684341886080802e-14,
+              5.684341886080802e-14,
+              2.842170943040401e-14,
+              0.0,
+              -2.5246426267421543e-14,
+              -7.105427357601002e-14,
+              -4.973799150320701e-14,
+              -2.842170943040401e-14,
+              4.954934462665408e-16,
+              9.453028539890077e-17,
+              5.908142837431298e-18,
+              0.0,
+              1.1816285674862596e-17,
+              0.0,
+              -1.1102230246251565e-16
+            ],
+            "raw_stationarity_max_abs": 1.2789769243681803e-13
+          }
+        ]
+      ],
+      "feed": [
+        0.46590000000000004,
+        0.99998,
+        7.929592297440154,
+        1e-05,
+        1e-05,
+        8e-05,
+        1e-05,
+        0.00011,
+        1e-05
+      ],
+      "identity": "canonical:vle_obs_0137",
+      "kind": "canonical",
+      "liquid": {
+        "amount_mol": 8.929859763420895,
+        "identity": "mea-nine-species-liquid",
+        "mechanical_class": "mechanical_class_unavailable",
+        "molar_density_mol_m3": 43457.24598331543,
+        "molar_volume_m3_per_mol": 2.3011122250681296e-05,
+        "mole_fractions": [
+          6.43526127657652e-06,
+          0.012560165666763032,
+          0.8830703376387107,
+          0.052185009932365765,
+          0.04723866586009195,
+          0.0049324103950890725,
+          6.958603539283072e-06,
+          8.60287846247778e-11,
+          1.6556134942259997e-08
+        ],
+        "packing_fraction": 0.4648958582139167,
+        "pressure_pa": 6993.256666892577,
+        "role": "liquid",
+        "support": [
+          "carbon-dioxide",
+          "monoethanolamine",
+          "water",
+          "protonated-monoethanolamine",
+          "carbamate-anion",
+          "bicarbonate-anion",
+          "carbonate-anion",
+          "hydronium-cation",
+          "hydroxide-anion"
+        ]
+      },
+      "numerical_checks": {
+        "balance_errors": [],
+        "charge_residual_mol": 1.7927362496822743e-16,
+        "complete": true,
+        "failure_code": "",
+        "material_residuals_mol": [
+          -4.440892098500626e-16,
+          0.0
+        ],
+        "max_abs_stationarity": 1.2789769243681803e-13,
+        "solver_status": null,
+        "tolerance_met": true
+      },
+      "phases": [
+        {
+          "amount_mol": 8.929859763420895,
+          "identity": "mea-nine-species-liquid",
+          "mechanical_class": "mechanical_class_unavailable",
+          "molar_density_mol_m3": 43457.24598331543,
+          "molar_volume_m3_per_mol": 2.3011122250681296e-05,
+          "mole_fractions": [
+            6.43526127657652e-06,
+            0.012560165666763032,
+            0.8830703376387107,
+            0.052185009932365765,
+            0.04723866586009195,
+            0.0049324103950890725,
+            6.958603539283072e-06,
+            8.60287846247778e-11,
+            1.6556134942259997e-08
+          ],
+          "packing_fraction": 0.4648958582139167,
+          "pressure_pa": 6993.256666892577,
+          "role": "liquid",
+          "support": [
+            "carbon-dioxide",
+            "monoethanolamine",
+            "water",
+            "protonated-monoethanolamine",
+            "carbamate-anion",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        },
+        {
+          "amount_mol": 0.0,
+          "identity": "mea-neutral-incipient-vapor",
+          "mechanical_class": "mechanical_class_unavailable",
+          "molar_density_mol_m3": 2.6887694268987787,
+          "molar_volume_m3_per_mol": 0.371917349995086,
+          "mole_fractions": [
+            0.08614373262530824,
+            0.0002599507341976734,
+            0.9135963166404941
+          ],
+          "packing_fraction": 2.3796802319717236e-05,
+          "pressure_pa": 6993.256666892577,
+          "role": "vapor",
+          "support": [
+            "carbon-dioxide",
+            "monoethanolamine",
+            "water"
+          ]
+        }
+      ],
+      "predictions": {
+        "co2-partial-pressure": 602.4252324929485,
+        "system-pressure": 6993.256666892577,
+        "vapor-y-co2": 0.08614373262530824,
+        "vapor-y-mea": 0.0002599507341976734,
+        "vapor-y-water": 0.9135963166404941
+      },
+      "problem": "Held",
+      "record_sha256": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
+      "sets": {},
+      "status": "evaluated",
+      "targets": [
+        {
+          "basis": "true-species-vapor-partial-pressure",
+          "identity": "vle_obs_0137-pco2",
+          "observed": 574.0,
+          "prediction_identity": "co2-partial-pressure",
+          "scale": null,
+          "source_identity": "Hilliard2008"
+        }
+      ],
+      "wall_s": 0.2340079009954934,
+      "wheel": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804"
+    },
+    "targets": [
+      {
+        "basis": "true-species-vapor-partial-pressure",
+        "cost": 0.012978842183307018,
+        "identity": "canonical:vle_obs_0137",
+        "kind": "canonical",
+        "ln_pred_over_obs": 0.048334165897378045,
+        "loading": 0.4659093181863638,
+        "observed": 574.0,
+        "predicted": 602.4252324929485,
+        "problem": "Held",
+        "quantity": "pressure",
+        "record_sha256": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
+        "scaled_residual": 0.1611138863245935,
+        "source": "Hilliard2008",
+        "species": "pCO2",
+        "target": "vle_obs_0137-pco2",
+        "temperature_K": 313.08
+      }
+    ],
+    "wall_s": 0.23927312700106995
+  },
+  "status": "Available"
+}

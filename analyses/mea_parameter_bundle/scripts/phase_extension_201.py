@@ -1,4 +1,4 @@
-"""Issue 201 revision 2: paired finite phase searches; no fitting or solver changes."""
+"""Issue 201 revision 2 searches rerun from run 2's frozen states (#203 step 5); no fitting, solver or reference-pressure changes."""
 import ctypes
 import importlib.metadata
 import json
@@ -6,6 +6,7 @@ import math
 import os
 from pathlib import Path
 import resource
+import shutil
 import signal
 import subprocess
 import sys
@@ -18,13 +19,10 @@ import final_evidence as f
 from heat_evidence_170 import request
 
 R = f.BUNDLE/'results'
-OUT = R/'phase-extension-201/run-2'
+OUT, FROZEN = R/'phase-extension-201/run-3', R/'phase-extension-201/run-2'
 J = R/'joint-recalibration-170'
 FITS = {'A6': J/'amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json', 'A7': f.s.PARAMETERS}
 TEMPERATURES = (353.15, 373.15, 393.15)
-LOADINGS = (1e-5, .05, .1, .2, .25557798094241313, .3, .4, .5, .6)
-FRACTIONS = (.5, .8, .95)
-ANCHORS = ((313.15, 1e-5, 4825.512054880343), (318.15, .25557798094241313, 7398.160760169702), (333.15, .5, 76573.56849304347))
 SCHEDULE = [(kind, seed) for kind in ('liquid', 'vapor') for seed in ('positive-neutral-base', 'near-pure-0', 'near-pure-1', 'near-pure-2', 'ideal-gas') if kind=='vapor' or seed!='ideal-gas']
 load, write = f.campaign.load, f.s.write_json
 
@@ -112,25 +110,6 @@ def bounded(action, path, deadline):
     write(path, dict(load(path), timing=timing))
 
 
-def reference(T, loading, path):
-    mapping, data = load(OUT/'inputs/reference-runtime.json'), load(OUT/'inputs/engine-case7-reactions.json')
-    model = f.epcsaft.Mixture(f.epcsaft.Parameters.from_mapping(mapping, components=f.s.COMPONENT_IDS))
-    reactions = [f.eq.Reaction(nu, correlation=f.eq.ReactionLogPolynomial(a, 0., 0., 0., data['T_ref'], data['T_min'], data['T_max'], f.eq.EOS_STANDARD_STATE_ID)) for nu, a in zip(data['stoichiometry'], data['ln_k'], strict=True)]
-    problem = f.eq.Problem(T=T, P=f.eq.Free(7398.16), feed=f.eq.Amounts({'carbon-dioxide':loading*9.7292821, 'monoethanolamine':9.7292821, 'water':76.9751925}), reactions=reactions, row_tolerance=1e-10,
-        phases=[f.eq.Phase('L', kind='liquid'), f.eq.Phase('V', kind='vapor', support=f.s.COMPONENT_IDS[:3], amount=f.eq.Pinned(0.))])
-    seeds = [p for t in reversed(TEMPERATURES) if t<T for p in [OUT.parent/'reference-pressure'/f'reference-{t}-{LOADINGS.index(loading)}.json'] if load(p).get('result',{}).get('success')] if T in TEMPERATURES else []
-    if seeds:
-        for phase, values in zip(problem.phases, load(seeds[0])['result']['phases'], strict=True):
-            phase.composition_guess = values['mole_fractions']
-            phase.packing_guess = values['packing_fraction']
-        problem.phases[0].amount = f.eq.Free(load(seeds[0])['result']['amounts'][0])
-        problem.P = f.eq.Free(load(seeds[0])['result']['pressure'])
-    result = f.eq.solve_equilibrium(model, problem)
-    payload = f.phase_payload(model, problem, result)
-    admitted = result.success and result.requested_tolerance_met and math.isfinite(result.pressure) and 1 <= result.pressure <= 1e7 and result.amounts[0]>0 and result.amounts[1]==0 and max(map(abs, payload['raw_residuals']))<=1e-10 and result.reduced_hessian_minimum>=0 and all(v>0 for v in payload['pressure_density_derivatives'])
-    write(path, dict(temperature_K=T, loading=loading, result=payload, admitted=admitted, start=str(seeds[0].relative_to(R)) if seeds else 'cold', start_sha256=f.s.sha256(seeds[0]) if seeds else None, cause='' if admitted else 'inadmissible reference pressure' if result.success and result.requested_tolerance_met and not 1 <= result.pressure <= 1e7 else 'reference numerical admission failed'))
-
-
 def split(mapping, old, index, trial, path):
     model = f.epcsaft.Mixture(f.epcsaft.Parameters.from_mapping(mapping), thermochemistry=f.thermal.record())
     phases = [f.eq.Phase(p['identity'], kind=p['role'], support=p['support']) for p in old['final']['phases']]
@@ -161,24 +140,18 @@ def split(mapping, old, index, trial, path):
 
 
 def chain(mode, label, deadline):
-    if mode in ('anchors', 'reference'):
-        cases = ANCHORS if mode=='anchors' else [(float(label), a, None) for a in LOADINGS]
-        for i, (T, a, expected) in enumerate(cases):
-            path = OUT/'reference-pressure'/f'{mode}-{label}-{i}.json'
-            bounded(lambda: reference(T,a,path),path,deadline)
+    fit, T = label.split(':')
+    mapping = f.s.parameter_mapping(FITS[fit])
+    if mode=='screen':
+        indices = [r['index'] for r in load(OUT/'inputs/states.json') if r['temperature_K']==float(T) and r['admitted']]
+        if indices:
+            f.phase_family(mapping,request(mapping,313.15,.11),OUT/'inputs/family-points.txt',f.s.sha256(OUT/'inputs/family-points.txt'),OUT/fit,indices,deadline,continue_bubble=True)
     else:
-        fit, T = label.split(':')
-        mapping = f.s.parameter_mapping(FITS[fit])
-        if mode=='screen':
-            indices = [r['index'] for r in load(OUT/'inputs/states.json') if r['temperature_K']==float(T) and r['admitted']]
-            if indices:
-                f.phase_family(mapping,request(mapping,313.15,.11),OUT/'inputs/family-points.txt',f.s.sha256(OUT/'inputs/family-points.txt'),OUT/fit,indices,deadline,continue_bubble=True)
-        else:
-            for item in load(OUT/fit/'split-summary.json'):
-                if item['temperature_K']==float(T) and item['representative']==item['native_trial_index']:
-                    old = load(OUT/fit/f"point-{item['index']}.json")
-                    trial = old['stability'][0]['trials'][item['native_trial_index']]
-                    bounded(lambda: split(mapping,old,item['native_trial_index'],trial,OUT/item['path']),OUT/item['path'],deadline)
+        for item in load(OUT/fit/'split-summary.json'):
+            if item['temperature_K']==float(T) and item['representative']==item['native_trial_index']:
+                old = load(OUT/fit/f"point-{item['index']}.json")
+                trial = old['stability'][0]['trials'][item['native_trial_index']]
+                bounded(lambda: split(mapping,old,item['native_trial_index'],trial,OUT/item['path']),OUT/item['path'],deadline)
 
 
 def reduce(states, stop):
@@ -221,47 +194,34 @@ def reduce(states, stop):
     return rows, trials, confirmations
 
 
+def check_frozen_inputs():  # before screening: the seven inputs against run 2's recorded SHA-256 values; every reference-pressure file against its run-2 original
+    hashes = lambda root, d: {str(p.relative_to(root)):f.s.sha256(p) for p in sorted((root/d).rglob('*')) if p.is_file()}
+    inputs, references = hashes(OUT,'inputs'), hashes(OUT,'reference-pressure')
+    assert inputs==load(FROZEN/'input-hashes.json') and len(inputs)==7
+    assert references==hashes(FROZEN,'reference-pressure') and len(references)==31
+    write(OUT/'frozen-input-check.json',dict(inputs=len(inputs),inputs_against=str((FROZEN/'input-hashes.json').relative_to(R)),reference_pressure_files=len(references),reference_pressure_against=str((FROZEN/'reference-pressure').relative_to(R)),identical=True))
+
+
 def main():
     OUT.mkdir(exist_ok=False)
-    for directory in ('inputs','reference-pressure','A6','A7'):
+    for directory in ('A6','A7'):
         (OUT/directory).mkdir()
     expected = dict(zip([*FITS.values(),R/'a7-paper-evidence/phase-family.csv',J/'amendment-6/inputs/revision-3/phase/family-points.txt'],['ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7','e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e','fd16142967e4fef1408b907a40839780923bef381da6a685eac8d9ae4b8db6a7','6e1231d9506fd6dd9e965a64120ff952cebf1c4778da5d66cfb0f888e8b7f44b']))
     assert all(f.s.sha256(p)==h for p,h in expected.items())
     f.s.verify_wheel()
-    for name in ('engine-case7-parameters.json', 'engine-case7-reactions.json', 'reference-runtime.json'):
-        path = OUT/'inputs'/name
-        path.write_bytes((OUT.parent/'inputs'/name).read_bytes())
-        assert f.s.sha256(path)==load(OUT.parent/'input-hashes.json')['inputs/'+name]
-    write(OUT/'inputs/study.json',dict(issue=201,design_sha256='fb771344530184e34fe80c884cbd552780472db9d8abab8c217adc9945992b49',readiness='GPT-6 Astra xhigh round 2 Ready; parent instruction',temperatures_K=TEMPERATURES,loadings=LOADINGS,fractions=FRACTIONS,feed_mol=dict(MEA=9.7292821,water=76.9751925),row_tolerance=1e-10,state_wall_s=300,stage_wall_s=600,stage_cpu_s=1800,workers=6,reference_workers=3,pressure_fit_temperature_K=[313.,333.15],temperature_extrapolation=True,topology_change='explicit absent CO2-MEA cross edge only; baseline.py:139-144 at Engine 8298c602'))
-    provenance = dict(commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),python=sys.version,libraries={k:importlib.metadata.version(k) for k in ('epcsaft','numpy','scipy')},wheel_path=str(f.s.installed_wheel()),wheel_sha256=f.s.ENGINE_WHEEL_SHA256,engine_commit=f.s.ENGINE_COMMIT,producers={str(p):f.s.sha256(p) for p in (Path(__file__),Path(f.__file__))},inputs={str(p):h for p,h in expected.items()})
+    # Run 2's states, family points and reference pressures (Engine 8298c602) are frozen design inputs; none is recomputed here.
+    shutil.copytree(FROZEN/'inputs',OUT/'inputs'); shutil.copytree(FROZEN/'reference-pressure',OUT/'reference-pressure')
+    check_frozen_inputs()
+    states = load(OUT/'inputs/states.json')
+    assert len(states)==81 and sum(not s['admitted'] for s in states)==21
+    provenance = dict(commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),python=sys.version,libraries={k:importlib.metadata.version(k) for k in ('epcsaft','numpy','scipy')},wheel_path=str(f.s.installed_wheel()),wheel_sha256=f.s.ENGINE_WHEEL_SHA256,engine_commit=f.s.ENGINE_COMMIT,producers={str(p):f.s.sha256(p) for p in (Path(__file__),Path(f.__file__))},inputs={str(p):h for p,h in expected.items()},frozen_inputs=str(FROZEN.relative_to(R)))
     write(OUT/'provenance.json',provenance)
     cpu_start = 0.
     assert ctypes.CDLL(None).prctl(36,1,0,0,0)==0  # Reap only this supervisor's orphaned solve children.
-    stop = supervise([['anchors','all']],'reference-and-screen',START,cpu_start)
-    anchors = [load(p) if p.exists() else {} for i in range(3) for p in [OUT/'reference-pressure'/f'anchors-all-{i}.json']]
-    if stop or any(not r.get('admitted') or abs(r['result']['pressure']/a[2]-1)>1e-8 for r,a in zip(anchors,ANCHORS)):
-        raise RuntimeError('anchor qualification stopped dependent work; diagnose retained reference solves')
-    stop = supervise([['reference',str(T)] for T in TEMPERATURES],'reference-and-screen',START,cpu_start)
-    states, references = [], []
-    for j, a in enumerate(LOADINGS):
-        for T in TEMPERATURES:
-            path = OUT/'reference-pressure'/f'reference-{T}-{j}.json'
-            ref = load(path) if path.exists() else dict(cause=stop or 'reference chain stopped')
-            P = ref.get('result',{}).get('pressure')
-            for fraction in (1., *FRACTIONS):
-                pressure = P*fraction if P is not None else None
-                domain = dict(diagnostic_interval=pressure is not None and 10<=pressure<=300000,candidate_interval=pressure is not None and 1<=pressure<=1e7,observed_total_interval=pressure is not None and {353.15:1e5,373.15:1.1e5,393.15:2.5e5}[T]<=pressure<={353.15:1e6,373.15:1e6,393.15:3e6}[T])
-                references.append(dict(temperature_K=T,loading=a,fraction=fraction,pressure_Pa=pressure,reference_path=str(path.relative_to(OUT)),admitted=ref.get('admitted',False) and domain['candidate_interval'],cause=ref.get('cause','') or ('' if domain['candidate_interval'] else 'pressure outside candidate interval or unavailable'),**domain))
-                if fraction!=1.:
-                    states.append(dict(references[-1],index=len(states),temperature_extrapolation=True))
-    f.table(OUT/'reference-pressure/reference-pressures.csv',references)
-    write(OUT/'inputs/states.json',states)
-    f.table(OUT/'inputs/states.csv',states)
-    (OUT/'inputs/family-points.txt').write_text(''.join(f'{s["loading"]!r} {s["temperature_K"]!r} {s["pressure_Pa"] if s["pressure_Pa"] is not None else "nan"}\n' for s in states))
     for fit,path in FITS.items():
         write(OUT/fit/'provenance.json',dict(parameter_path=str(path),parameter_bytes_sha256=f.s.sha256(path),mapping_sha256=__import__('hashlib').sha256(json.dumps(f.s.parameter_mapping(path),sort_keys=True).encode()).hexdigest(),states_sha256=f.s.sha256(OUT/'inputs/states.csv'),**provenance))
     commands = [[mode,f'{fit}:{T}'] for fit in FITS for T in TEMPERATURES for mode in ['screen']]
-    stop = stop or supervise(commands,'reference-and-screen',START,cpu_start)
+    stop = supervise(commands,'screen',START,cpu_start)
     rows,trials,confirmations = reduce(states,stop)
     confirm_start, confirm_cpu = time.monotonic(),cpu_used()
     confirm_stop = supervise([['confirm',f'{fit}:{T}'] for fit in FITS for T in TEMPERATURES if any(c['record']==fit and c['temperature_K']==T for c in confirmations)],'confirmation',confirm_start,confirm_cpu)
@@ -277,7 +237,7 @@ def main():
     old = list(f.csv.DictReader((R/'a7-paper-evidence/phase-family.csv').open()))
     f.table(OUT/'phase-family-combined.csv',[dict(r,family='original-73',combined_index=int(r['index']),source_path='a7-paper-evidence/phase-family.csv') for r in old]+[dict(r,family='extension-81',combined_index=73+r['index']) for r in rows])
     assert all(f.s.sha256(p)==h for p,h in expected.items())
-    write(OUT/'input-hashes.json',{str(p.relative_to(OUT)):f.s.sha256(p) for p in (OUT/'inputs').iterdir()})
+    write(OUT/'input-hashes.json',{str(p.relative_to(OUT)):f.s.sha256(p) for d in ('inputs','reference-pressure') for p in sorted((OUT/d).iterdir())})
 
 
 if __name__=='__main__':
