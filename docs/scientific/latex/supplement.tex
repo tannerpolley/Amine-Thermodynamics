@@ -301,10 +301,11 @@ A two-phase classification includes liquid--vapor equilibrium and alone does not
 The comparison fit and reported fit use the same 16 adjustable parameters and 307 quantities.
 The reported fit is the parameter set reported here.
 The restriction changes the \MEAH segment-diameter bounds from 2--\SI{5.8}{\angstrom} to 5.35--\SI{5.8}{\angstrom}, and the \MEAH--water interaction bounds from $[-0.5,0.5]$ to $[-0.5,-0.161]$; all other physical bounds, observations, scales and weights are unchanged.
-The earlier fit to the 149 pressure, species and heat quantities without density (the density-free fit) supplies comparison limits and the untranslated density baseline (Section~\ref{sec:s-fits}).
-It has different fixed inputs and is not a control isolating one model term.
+\Cref{tab:comparison-fit-parameters} lists the comparison-fit values that differ from the reported fit, so that both parameter sets are fully specified.
 \Cref{tab:supplement-fitted-parameters} gives the selected values, bounds and conditional standard errors.
 Fixed inputs include earlier pure-water, binary and permittivity estimates, documented with their sources in Section~\ref{sec:s-parameters}.
+
+\input{tables/comparison_fit_parameters}
 
 % P:supplement-bounds-02
 The fit uses Ceres bounded Levenberg--Marquardt least squares with dense QR, affine parameter scaling and exact equation-of-state and implicit equilibrium derivatives.
@@ -327,15 +328,10 @@ A separate sensitivity uses $\alpha_{x_3}=x_3(1+W)/(1-x_3)$, with water/MEA mola
 It gives 44/47 densities within $2s$ on its own loading basis and 40/47 when evaluated on the nominal printed loadings; its 73-state phase search has no resolved instability.
 This comparison leaves the loading ambiguity unresolved and does not replace the reported fit.
 
-\section{Density-free fit and the limits used to accept the reported fit}\label{sec:s-fits}
+\section{Limits used to accept the reported fit}\label{sec:s-fits}
 % P:supplement-01
-The density-free fit supplies the comparisons below; its numerical inputs differ from those of the present fit.
-The shared pressure/species/heat comparison matches observation identities, values, units and effective residual scales and weights.
-All 68 density-free-fit densities match the reported fit in temperature, loading and unloaded-solvent composition, while calculation pressures differ: 101325 and 100000 Pa, respectively.
-No pressure-density derivative is available for a correction or magnitude bound.
-Exact parameter and software identities are listed in the data-deposit README.
-
-\input{tables/supplement_predecessor}
+Several limits were set from an earlier fit to the 149 pressure, species and heat quantities without density, the density-free fit.
+That fit used different fixed inputs and permittivity law; its parameters are not reported here, so its own deviations are not shown.
 
 % P:supplement-acceptance-01
 \Cref{tab:acceptance-limits} gives this study's comparison limits.
