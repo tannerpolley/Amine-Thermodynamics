@@ -31,9 +31,8 @@ def run(producer, edits, argv, file=None):
 def gate(family, rows):  # rows: (identity, old, new); delta and zero rule of issue #203
     out = []
     for identity, old, new in rows:
-        new = float('nan') if new in (None, '') else float(new)
-        old = float(old)
-        delta = abs(new-old)/max(abs(old), abs(new), 1e-300) if math.isfinite(new) else math.inf
+        old, new = (float('nan') if x in (None, '') else float(x) for x in (old, new))  # a missing or nonfinite value on either side fails
+        delta = abs(new-old)/max(abs(old), abs(new), 1e-300) if math.isfinite(new-old) else math.inf
         out.append(dict(family=family, identity=identity, old=old, new=new, delta=delta,
                         passed=math.isfinite(new) and (delta <= 1e-10 or old == 0 and abs(new) <= 1e-300)))
     return out
@@ -109,10 +108,11 @@ else:
                                   phases=[{k: p[k] for k in ('amount_mol', 'molar_density_mol_m3', 'mole_fractions')} for p in r['result'].get('phases', [])])
             split += [dict(r, identity=f"{i}/{o['seed']}{r['identity']}", accepted=(i, o['seed']) in ACCEPTED, passed=r['delta'] <= 1e-6 or (i, o['seed']) in ACCEPTED)
                       for r in paired('supplement splits', pick(o), pick(n))]
+    SOLVED = {'pressure': [('pressure_Pa', 'Pa')], 'mea-water': [('temperature_K', 'K')]}  # solved outputs (total bubble pressure, bubble temperature), gated apart from value
     wheels = {}  # engine_wheel_sha256 is the expected provenance change, recorded apart from the identity match
     for name, declared in (('pressure', 'temperature_K analytical_loading mea_mass_fraction'), ('species', 'temperature_K pressure_Pa analytical_loading mea_mass_fraction'),
                            ('heat', 'temperature_K pressure_Pa analytical_loading'), ('density', 'temperature_K pressure_Pa analytical_loading mea_mass_fraction'), ('mea-water', 'pressure_Pa liquid_mea_mole_fraction')):
-        key = ('curve', 'sampling', *declared.split(), 'quantity', 'unit', 'parameter_sha256')  # declared state, quantity and unit; solved columns (pressure_Pa in pressure, temperature_K in mea-water) excluded
+        key = ('curve', 'sampling', *declared.split(), 'quantity', 'unit', 'parameter_sha256')  # declared state, quantity and unit; SOLVED columns excluded
         old, new = (list(csv.DictReader(open(d/f'{name}.csv'))) for d in (R/'model-curves', OUT/'model-curves'))
         wheels[name] = [sorted({r['engine_wheel_sha256'] for r in side}) for side in (old, new)]
         by_identity = [{tuple(r[k] for k in key): r for r in side} for side in (old, new)]
@@ -121,6 +121,8 @@ else:
         assert old.keys() == new.keys(), f'{name}: missing or mismatched identity {sorted(old.keys() ^ new.keys())[:2]}'
         assert all(old[k]['status'] == new[k]['status'] for k in old), name
         rows += gate(f'model curves: {name}.csv', [('|'.join(k[:-1]), old[k]['value'], new[k]['value']) for k in old if old[k]['status'] == 'available'])
+        for field, unit in SOLVED.get(name, ()):
+            rows += gate(f'model curves: {name}.csv solved {field}', [(f"{'|'.join(k[:-1])}/{field} [{unit}]", old[k][field], new[k][field]) for k in old if old[k]['status'] == 'available'])
     families = {}
     for r in rows+split:
         f = families.setdefault(r['family'], dict(count=0, failed=0, worst_delta=0., worst_row=None))

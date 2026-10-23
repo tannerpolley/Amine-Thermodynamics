@@ -2,7 +2,8 @@
 
 Engine `3e83e19c` reproduces every current-result value the manuscript reports **bitwise**
 (largest relative difference 0): the reference fit's 152 predictions, both 307-row replays,
-712 selected-assessment rows and 452 reductions, 2,019 model-curve values, and the
+712 selected-assessment rows and 452 reductions, 2,019 model-curve values with their 380 total
+bubble pressures and 140 bubble temperatures, and the
 state-by-state classification of both 73-state phase families. The only changed values are
 two seeded split attempts of the comparison fit (A6, `ceefc95c…`) in supplement Table S10.
 The orchestrator accepted both as disclosed numerical changes
@@ -29,6 +30,7 @@ the supplement splits were computed on Engine `21e761c3`. Every compared old and
 | (d) 73-state families, both fits: classification, final success and every trial's kind, start, optimizer success, evidence and resolved descent | 146 states | 0 | identical |
 | (d) Supplement seeded splits at A6 states 21, 63 and 70 | 129 | 0 (28 accepted changes) | 3.9 × 10⁻¹⁰ outside the accepted attempts |
 | (e) #202 model curves: every available value in the five CSV files | 2,019 | 0 | 0 |
+| (e) #202 model curves: solved total bubble pressure `pressure_Pa` (Pa) in `pressure.csv` and bubble temperature `temperature_K` (K) in `mea-water.csv` | 380 + 140 | 0 | 0 |
 
 Totals are unchanged: replay cost 148.90525398237165 (reported parameters) and
 148.23773148349386 (comparison fit); phase families 0/73 failed for the reported parameters
@@ -112,7 +114,9 @@ Numerical-method changes, disclosed under the issue's stop rule:
 `model_curves.main`. Its `compare` mode reads the retained files only. After the acceptance it
 was rerun with the two accepted attempts marked; no producer was rerun. Model-curve rows are paired
 by curve, sampling, declared state, quantity, unit and parameter SHA-256; a missing, duplicate or
-unmatched identity, or a changed `status` value, stops the comparison. The wheel SHA-256 column is the
+unmatched identity, or a changed `status` value, stops the comparison. The solved outputs (`pressure_Pa` in
+`pressure.csv`, `temperature_K` in `mea-water.csv`) are not part of the identity; each is gated as its own
+family, and a missing or nonfinite value on either side fails. The wheel SHA-256 column is the
 expected provenance change and is recorded apart, under `summary.model_curve_wheels`.
 The reference-fit document was recovered from commit `eb0d1d6` into
 [inputs/reference-fit-parameters.json](inputs/reference-fit-parameters.json) and its SHA-256 checked.
@@ -147,13 +151,17 @@ Fresh checkout: build the wheel from that commit into that directory as above, t
 - Review round 1 corrections, with no producer rerun. Model curves: the identity-paired `compare`
   rerun passes with the same 2,019 values and δ = 0. Throwaway probes on a copy of the new
   `pressure.csv` (one temperature label `313.15 K` → `313.16 K`; one unit `Pa` → `kPa`; one duplicated
-  row) each stop the comparison; reversed row order passes. Run 3 inputs: run 3 checked only its seven
+  row) each stop the comparison; reversed row order passes. Review round 2 added the solved-output gate
+  and reran `compare` only: all 380 total bubble pressures and 140 bubble temperatures pass with δ = 0,
+  and every earlier row is unchanged. Throwaway probes on the new files (one `pressure_Pa` doubled; one
+  `mea-water.csv` `temperature_K` raised by 1 K; one `pressure_Pa` set to NaN; one `temperature_K` left
+  empty) each fail the gate. Run 3 inputs: run 3 checked only its seven
   copied inputs before screening. `phase_extension_201.py` now also compares the relative paths and
   SHA-256 of all 31 copied reference-pressure files with the run-2 originals. Applied to the retained
   run-3 copies, it found all 31 identical
   ([frozen-input-check.json](../phase-extension-201/run-3/frozen-input-check.json)); a byte appended to,
   renamed or removed reference file each fails it.
-- Change accounting for the whole issue against base `d578555`: **168 gross added executable lines**
-  of the approved 175. They are `adopt.py.txt` 135, `scripts/phase_extension_201.py` 31 (71 removed)
+- Change accounting for the whole issue against base `d578555`: **170 gross added executable lines**
+  of the approved 175. They are `adopt.py.txt` 137, `scripts/phase_extension_201.py` 31 (71 removed)
   and `scripts/shared_evaluation.py` 2. The run-3 files `phase_extension_201.py.txt` and
   `final_evidence.py.txt` are byte copies of the producers that ran at `123a9ae` and add no code. No test was added.
