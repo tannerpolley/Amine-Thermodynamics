@@ -141,3 +141,7 @@ Fresh checkout: build the wheel from that commit into that directory as above, t
 - Compute for step 3: 15 calls, 238 wall-s and 632 CPU-s at niceness 10, one numerical-library
   thread per process and process pools sized at one worker per available gigabyte. The largest
   resident memory was 112,468 KiB for one process.
+- Change accounting for the whole issue against base `d578555`: **154 gross added executable lines**
+  of the approved 160. They are `adopt.py.txt` 129, `scripts/phase_extension_201.py` 23 (71 removed)
+  and `scripts/shared_evaluation.py` 2. The run-3 files `phase_extension_201.py.txt` and
+  `final_evidence.py.txt` are byte copies of the committed producers and add no code. No test was added.
