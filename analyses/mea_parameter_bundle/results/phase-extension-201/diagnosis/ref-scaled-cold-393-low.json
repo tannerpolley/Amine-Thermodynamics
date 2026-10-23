@@ -1,0 +1,336 @@
+{
+  "mode": "reference",
+  "probe_sha256": "664243d3a13c4c191c89a0098abdbddb16dbfb5c79d341ab2d148627a6fdb322",
+  "source_commit": "86ee3bad6ab5521a010154e63d24eece4738c451",
+  "python": "3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]",
+  "engine_commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+  "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3",
+  "engine_path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-3/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "nice": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "libraries": {
+    "epcsaft": "0.2.0.dev0",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1"
+  },
+  "row_tolerance": 1e-10,
+  "seed": null,
+  "basis_mol": {
+    "MEA": 9.7292821,
+    "water": 76.9751925
+  },
+  "temperature_K": 393.15,
+  "loading": 1e-05,
+  "pressure_guess_Pa": 7398.16,
+  "feed_scale": 0.01,
+  "actual_feed_mol": {
+    "carbon-dioxide": 9.7292821e-07,
+    "monoethanolamine": 0.09729282100000002,
+    "water": 0.7697519250000001
+  },
+  "reaction_domain_K": [
+    250,
+    450
+  ],
+  "result": {
+    "success": false,
+    "message": "infeasible: residual 0.093625512552071244 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 114 iterations, contraction absent, floor 1.3528960619231895e-10, amplification 0",
+    "solver_status": "LOCAL_INFEASIBILITY",
+    "requested_tolerance_met": false,
+    "temperature": null,
+    "pressure": null,
+    "amounts": [],
+    "mole_fractions": [],
+    "molar_densities": [],
+    "packing_fractions": [],
+    "coordinates": [],
+    "residuals": [
+      0.0,
+      -1.4210854715202004e-14,
+      -2.842170943040401e-14,
+      -8.398615136684384e-12,
+      -8.355982572538778e-12,
+      -8.469669410260394e-12,
+      -3.3651303965598345e-11,
+      -8.469669410260394e-12,
+      -8.412825991399586e-12,
+      0.09362551255207124,
+      1.4210854715202004e-14,
+      -7.105427357601002e-15,
+      0.0,
+      -3.156020325518984e-14,
+      -4.353586208108682e-15,
+      0.08390179637869802,
+      0.08390204637652776,
+      -2.7978193719757262e-14,
+      9.43689570931383e-14,
+      -2.9976021664879227e-14
+    ],
+    "classified_residuals": [
+      0.0,
+      -1.4210854715202004e-14,
+      -2.842170943040401e-14,
+      -8.398615136684384e-12,
+      -8.355982572538778e-12,
+      -8.469669410260394e-12,
+      -3.3651303965598345e-11,
+      -8.469669410260394e-12,
+      -8.412825991399586e-12,
+      0.09362551255207124,
+      1.4210854715202004e-14,
+      -7.105427357601002e-15,
+      0.0,
+      -3.156020325518984e-14,
+      -4.353586208108682e-15,
+      0.08390179637869802,
+      0.08390204637652776,
+      -2.7978193719757262e-14,
+      9.43689570931383e-14,
+      -2.9976021664879227e-14
+    ],
+    "multipliers": [],
+    "constraint_multipliers": [],
+    "iterations": 127,
+    "evaluations": 150,
+    "hessian_calls": 128,
+    "objective": -228.53152861824253,
+    "reduced_hessian_minimum": 0.0,
+    "jacobian_rank": 20,
+    "generic_nullity": 0,
+    "convergence": {
+      "residual": 0.09362551255207124,
+      "floor": 1.3528960619231895e-10,
+      "amplification": 0.0,
+      "contraction": null,
+      "iterations": 114,
+      "evaluations": 117,
+      "stop": "infeasible"
+    },
+    "closure_criterion": 1e-10,
+    "solver_settings": {
+      "acceptable_tol": 1e-10,
+      "constr_viol_tol": 1e-10,
+      "dual_inf_tol": 1e-10,
+      "tol": 1e-10
+    },
+    "linear_solver": "ma57",
+    "rows": [
+      {
+        "index": 0,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 1,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 1,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -1.4210854715202004e-14,
+        "classified": -1.4210854715202004e-14
+      },
+      {
+        "index": 2,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 2,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -2.842170943040401e-14,
+        "classified": -2.842170943040401e-14
+      },
+      {
+        "index": 3,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 3,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -8.398615136684384e-12,
+        "classified": -8.398615136684384e-12
+      },
+      {
+        "index": 4,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 4,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -8.355982572538778e-12,
+        "classified": -8.355982572538778e-12
+      },
+      {
+        "index": 5,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 5,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -8.469669410260394e-12,
+        "classified": -8.469669410260394e-12
+      },
+      {
+        "index": 6,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 6,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -3.3651303965598345e-11,
+        "classified": -3.3651303965598345e-11
+      },
+      {
+        "index": 7,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 7,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -8.469669410260394e-12,
+        "classified": -8.469669410260394e-12
+      },
+      {
+        "index": 8,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 8,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -8.412825991399586e-12,
+        "classified": -8.412825991399586e-12
+      },
+      {
+        "index": 9,
+        "kind": "Pressure",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "pressure_equality",
+        "residual": 0.09362551255207124,
+        "classified": 0.09362551255207124
+      },
+      {
+        "index": 10,
+        "kind": "Chemical",
+        "phase": 1,
+        "species_or_moiety": 0,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 1.4210854715202004e-14,
+        "classified": 1.4210854715202004e-14
+      },
+      {
+        "index": 11,
+        "kind": "Chemical",
+        "phase": 1,
+        "species_or_moiety": 1,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -7.105427357601002e-15,
+        "classified": -7.105427357601002e-15
+      },
+      {
+        "index": 12,
+        "kind": "Chemical",
+        "phase": 1,
+        "species_or_moiety": 2,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 13,
+        "kind": "Pressure",
+        "phase": 1,
+        "species_or_moiety": 0,
+        "eqid": "pressure_equality",
+        "residual": -3.156020325518984e-14,
+        "classified": -3.156020325518984e-14
+      },
+      {
+        "index": 14,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "material_balance",
+        "residual": -4.353586208108682e-15,
+        "classified": -4.353586208108682e-15
+      },
+      {
+        "index": 15,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 1,
+        "eqid": "material_balance",
+        "residual": 0.08390179637869802,
+        "classified": 0.08390179637869802
+      },
+      {
+        "index": 16,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 2,
+        "eqid": "material_balance",
+        "residual": 0.08390204637652776,
+        "classified": 0.08390204637652776
+      },
+      {
+        "index": 17,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 3,
+        "eqid": "material_balance",
+        "residual": -2.7978193719757262e-14,
+        "classified": -2.7978193719757262e-14
+      },
+      {
+        "index": 18,
+        "kind": "Normalization",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "phase_normalization",
+        "residual": 9.43689570931383e-14,
+        "classified": 9.43689570931383e-14
+      },
+      {
+        "index": 19,
+        "kind": "Normalization",
+        "phase": 1,
+        "species_or_moiety": 0,
+        "eqid": "phase_normalization",
+        "residual": -2.9976021664879227e-14,
+        "classified": -2.9976021664879227e-14
+      }
+    ],
+    "failing_classified_rows": [
+      {
+        "index": 9,
+        "kind": "Pressure",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "pressure_equality",
+        "residual": 0.09362551255207124,
+        "classified": 0.09362551255207124
+      },
+      {
+        "index": 15,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 1,
+        "eqid": "material_balance",
+        "residual": 0.08390179637869802,
+        "classified": 0.08390179637869802
+      },
+      {
+        "index": 16,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 2,
+        "eqid": "material_balance",
+        "residual": 0.08390204637652776,
+        "classified": 0.08390204637652776
+      }
+    ]
+  },
+  "admitted": false
+}

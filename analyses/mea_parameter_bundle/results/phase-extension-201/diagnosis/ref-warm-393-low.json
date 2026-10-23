@@ -1,0 +1,433 @@
+{
+  "mode": "reference",
+  "source_commit": "86ee3bad6ab5521a010154e63d24eece4738c451",
+  "python": "3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]",
+  "engine_commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+  "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3",
+  "engine_path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-3/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "nice": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "libraries": {
+    "epcsaft": "0.2.0.dev0",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1"
+  },
+  "row_tolerance": 1e-10,
+  "seed": "analyses/mea_parameter_bundle/results/phase-extension-201/reference-pressure/reference-353.15-0.json",
+  "basis_mol": {
+    "MEA": 9.7292821,
+    "water": 76.9751925
+  },
+  "temperature_K": 393.15,
+  "loading": 1e-05,
+  "pressure_guess_Pa": 40648.52897651652,
+  "reaction_domain_K": [
+    250,
+    450
+  ],
+  "result": {
+    "success": true,
+    "message": "converged: residual 5.6843418860808015e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 12 iterations, contraction absent, floor 3.1882733378201537e-10, amplification 0",
+    "solver_status": "SUCCESS",
+    "requested_tolerance_met": true,
+    "temperature": 393.15,
+    "pressure": 173333.00198051374,
+    "amounts": [
+      86.70457188869062,
+      0.0
+    ],
+    "mole_fractions": [
+      1.1220710569880028e-06,
+      0.11221186933755521,
+      0.8877870084961131,
+      4.7637341769108856e-11,
+      4.7600830833440324e-11,
+      3.650909987760194e-14,
+      1.5863136834131035e-56,
+      1.6332094438168277e-40,
+      1.835759780499466e-18,
+      0.0013647653650406284,
+      0.00619662225074322,
+      0.9924386123842162,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "molar_densities": [
+      41533.35910894304,
+      54.10541130843042
+    ],
+    "packing_fractions": [
+      0.41613830650846545,
+      0.0004403230439288708
+    ],
+    "coordinates": [
+      -13.700334422220227,
+      -2.1873665041663863,
+      -0.1190234200570191,
+      -23.767404171295695,
+      -23.76817090035946,
+      -30.94121485368012,
+      -128.48335232127823,
+      -91.61285665691456,
+      -40.839073228762544,
+      86.70457188869062,
+      -0.8767376064075426,
+      -6.596772758863766,
+      -5.0837509336548115,
+      -0.0075901198357237725,
+      -7.728001909690715,
+      173333.00198051374,
+      -237.0774335996473,
+      -215.1346392994556,
+      -346.00525549986503,
+      -61.05420813958309
+    ],
+    "residuals": [
+      -2.842170943040401e-14,
+      -1.4210854715202004e-14,
+      -2.842170943040401e-14,
+      2.1316282072803006e-14,
+      2.842170943040401e-14,
+      0.0,
+      -5.684341886080802e-14,
+      0.0,
+      5.684341886080802e-14,
+      -8.52992908954726e-15,
+      0.0,
+      7.105427357601002e-15,
+      -2.842170943040401e-14,
+      2.6265126484654857e-16,
+      0.0,
+      2.031990345868741e-21,
+      2.031990345868741e-21,
+      -2.048746450874674e-17,
+      0.0,
+      0.0
+    ],
+    "classified_residuals": [
+      -2.842170943040401e-14,
+      -1.4210854715202004e-14,
+      -2.842170943040401e-14,
+      2.1316282072803006e-14,
+      2.842170943040401e-14,
+      0.0,
+      -5.684341886080802e-14,
+      0.0,
+      5.684341886080802e-14,
+      -8.52992908954726e-15,
+      0.0,
+      7.105427357601002e-15,
+      -2.842170943040401e-14,
+      2.6265126484654857e-16,
+      0.0,
+      2.031990345868741e-21,
+      2.031990345868741e-21,
+      -2.048746450874674e-17,
+      0.0,
+      0.0
+    ],
+    "multipliers": [
+      -237.0774335996473,
+      -215.1346392994556,
+      -346.00525549986503,
+      -61.05420813958309
+    ],
+    "constraint_multipliers": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.0
+    ],
+    "iterations": 25,
+    "evaluations": 49,
+    "hessian_calls": 27,
+    "objective": -18843.10316613966,
+    "reduced_hessian_minimum": 0.0,
+    "jacobian_rank": 20,
+    "generic_nullity": 0,
+    "convergence": {
+      "residual": 5.684341886080802e-14,
+      "floor": 3.1882733378201537e-10,
+      "amplification": 0.0,
+      "contraction": null,
+      "iterations": 12,
+      "evaluations": 16,
+      "stop": "converged"
+    },
+    "closure_criterion": 1e-10,
+    "raw_residuals": [
+      -2.842170943040401e-14,
+      -1.4210854715202004e-14,
+      -2.842170943040401e-14,
+      2.1316282072803006e-14,
+      2.842170943040401e-14,
+      0.0,
+      -5.684341886080802e-14,
+      0.0,
+      5.684341886080802e-14,
+      -8.52992908954726e-15,
+      0.0,
+      7.105427357601002e-15,
+      -2.842170943040401e-14,
+      2.6265126484654857e-16,
+      0.0,
+      2.031990345868741e-21,
+      2.031990345868741e-21,
+      -2.048746450874674e-17,
+      0.0,
+      0.0
+    ],
+    "raw_objective": -18843.10316613966,
+    "roundoff_floor": 3.1882733378201537e-10,
+    "phases": [
+      {
+        "identity": "L",
+        "role": "liquid",
+        "support": [
+          "carbon-dioxide",
+          "monoethanolamine",
+          "water",
+          "protonated-monoethanolamine",
+          "carbamate-anion",
+          "bicarbonate-anion",
+          "carbonate-anion",
+          "hydronium-cation",
+          "hydroxide-anion"
+        ],
+        "pressure_pa": 173333.00198051374,
+        "amount_mol": 86.70457188869062,
+        "molar_density_mol_m3": 41533.35910894304,
+        "packing_fraction": 0.41613830650846545,
+        "mechanical_class": "mechanical_class_unavailable",
+        "mole_fractions": [
+          1.1220710569880028e-06,
+          0.11221186933755521,
+          0.8877870084961131,
+          4.7637341769108856e-11,
+          4.7600830833440324e-11,
+          3.650909987760194e-14,
+          1.5863136834131035e-56,
+          1.6332094438168277e-40,
+          1.835759780499466e-18
+        ],
+        "molar_volume_m3_per_mol": 2.4077031606737488e-05
+      },
+      {
+        "identity": "V",
+        "role": "vapor",
+        "support": [
+          "carbon-dioxide",
+          "monoethanolamine",
+          "water"
+        ],
+        "pressure_pa": 173333.00198051374,
+        "amount_mol": 0.0,
+        "molar_density_mol_m3": 54.10541130843042,
+        "packing_fraction": 0.0004403230439288708,
+        "mechanical_class": "mechanical_class_unavailable",
+        "mole_fractions": [
+          0.0013647653650406284,
+          0.00619662225074322,
+          0.9924386123842162
+        ],
+        "molar_volume_m3_per_mol": 0.018482439663926653
+      }
+    ],
+    "row_kinds": [
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Pressure",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Pressure",
+      "Moiety",
+      "Moiety",
+      "Moiety",
+      "Moiety",
+      "Normalization",
+      "Normalization"
+    ],
+    "pressure_density_derivatives": [
+      64786.3521253014,
+      3139.7271362041206
+    ],
+    "rows": [
+      {
+        "index": 0,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758cb30>",
+        "residual": -2.842170943040401e-14,
+        "classified": -2.842170943040401e-14
+      },
+      {
+        "index": 1,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758cf30>",
+        "residual": -1.4210854715202004e-14,
+        "classified": -1.4210854715202004e-14
+      },
+      {
+        "index": 2,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758fef0>",
+        "residual": -2.842170943040401e-14,
+        "classified": -2.842170943040401e-14
+      },
+      {
+        "index": 3,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758eeb0>",
+        "residual": 2.1316282072803006e-14,
+        "classified": 2.1316282072803006e-14
+      },
+      {
+        "index": 4,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758ea30>",
+        "residual": 2.842170943040401e-14,
+        "classified": 2.842170943040401e-14
+      },
+      {
+        "index": 5,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758de90>",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 6,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758dbd0>",
+        "residual": -5.684341886080802e-14,
+        "classified": -5.684341886080802e-14
+      },
+      {
+        "index": 7,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758f1b0>",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 8,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758dd90>",
+        "residual": 5.684341886080802e-14,
+        "classified": 5.684341886080802e-14
+      },
+      {
+        "index": 9,
+        "kind": "Pressure",
+        "description": "<epcsaft._core.Row object at 0x7eedd758c090>",
+        "residual": -8.52992908954726e-15,
+        "classified": -8.52992908954726e-15
+      },
+      {
+        "index": 10,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758cd70>",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 11,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758e370>",
+        "residual": 7.105427357601002e-15,
+        "classified": 7.105427357601002e-15
+      },
+      {
+        "index": 12,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7eedd758c170>",
+        "residual": -2.842170943040401e-14,
+        "classified": -2.842170943040401e-14
+      },
+      {
+        "index": 13,
+        "kind": "Pressure",
+        "description": "<epcsaft._core.Row object at 0x7eedd758fab0>",
+        "residual": 2.6265126484654857e-16,
+        "classified": 2.6265126484654857e-16
+      },
+      {
+        "index": 14,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7eedd758cab0>",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 15,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7eedd758c330>",
+        "residual": 2.031990345868741e-21,
+        "classified": 2.031990345868741e-21
+      },
+      {
+        "index": 16,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7eedd758c110>",
+        "residual": 2.031990345868741e-21,
+        "classified": 2.031990345868741e-21
+      },
+      {
+        "index": 17,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7eedd758f7d0>",
+        "residual": -2.048746450874674e-17,
+        "classified": -2.048746450874674e-17
+      },
+      {
+        "index": 18,
+        "kind": "Normalization",
+        "description": "<epcsaft._core.Row object at 0x7eedd758f330>",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 19,
+        "kind": "Normalization",
+        "description": "<epcsaft._core.Row object at 0x7eedd758f210>",
+        "residual": 0.0,
+        "classified": 0.0
+      }
+    ],
+    "failing_classified_rows": []
+  },
+  "admitted": true
+}
