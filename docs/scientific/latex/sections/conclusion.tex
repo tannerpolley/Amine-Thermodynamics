@@ -1,13 +1,15 @@
 \section{Conclusions}\label{sec:conclusion}
 % P:conclusion-01
-A nine-species ePC-SAFT model with explicit carbamate chemistry jointly represents several equilibrium, caloric and volumetric properties of 30 wt\% aqueous MEA through 16 fitted parameters and 307 quantities.
-The leading limitation is that its finite phase test covers only 313.15--333.15 K and loading $10^{-5}$--0.5, below the three density failures at 353.15 K.
-The restricted-bound fit gives pressure/species AARDs of 11.86/7.10\,\% and fitted integral-heat RMSE of 1.83 kJ/mol \COtwo.
-Densities are calculated without volume translation; 44 of 47 fitted loaded densities lie within $2s$.
+One explicit-ion ePC-SAFT formulation represents the selected equilibrium, caloric and density observations for nominal 30 wt\% MEA.
+It calculates the five target properties from one thermodynamic formulation, including loaded density without volume translation.
+Pressure AARD is 11.86\,\% over 47 fitted observations and 20.55\,\% over the 159-pressure comparison.
+Its pressure deviations are within the range reported for related models on different data sets.
+At 15 and 45 wt\% MEA the pressure deviations rise to 29.5 and 56.0\,\%, so the parameters do not transfer across solvent concentration.
+The available comparisons do not yet establish its suitability across an absorber's operating range.
 
 % P:conclusion-02
-Restricting the protonated-amine size and water-interaction bounds removes all instabilities detected for the original-bound fit at the specified states, while increasing total cost by 0.45\,\% and leaving three densities 0.40--0.53\,\% low.
-This is a comparison of local solutions under chosen bounds, rather than a minimum density penalty or a global optimum.
-The fitted R5 law departs from Bates--Pinching, and heat temperature dependence remains untested beyond the fitted and compared states.
-Carbonate share, titration bicarbonate, unloaded heat capacity and pressures at 45 wt\% MEA limit further use.
-The evidence supports calibration and finite numerical phase searches; independent phase-behavior and absorber/stripper validation remain outstanding.
+The phase comparison shows that similar property agreement can accompany additional calculated liquids.
+Narrowing two parameter bounds removes the detected instabilities at the specified states, at a small fitting-cost increase and with three fitted density limits missed.
+This result covers 133 searched states at six temperatures between 313.15 and \SI{393.15}{\kelvin}, with loadings $10^{-5}$--0.5 in the first search and $10^{-5}$--0.6 in the extension; 21 extension states are excluded because their reference pressure exceeds \SI{10}{\mega\pascal}.
+The comparison fit has detected instabilities at 33 of these states, while the reported parameters have none; this finite search is not a global-stability certificate or physical validation.
+Independent phase-behavior comparisons and caloric tests over a broader temperature range remain necessary before process use.

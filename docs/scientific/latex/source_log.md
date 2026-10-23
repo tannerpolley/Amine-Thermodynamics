@@ -212,3 +212,11 @@ does not qualify every retained F1 result on the A7 wheel. F1 phase results
 are omitted from the generated manuscript and supplement inputs.
 
 A6 density and Arcis assessment values retain parameter SHA-256 `ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7`, Engine commit `21e761c318c2ac5b555a245365c844d38a93e4cb`, and wheel SHA-256 `d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357`. The paired A6/A7 phase-family classifications were evaluated on Engine `8298c6029ebb8b467929badc4a223c580ec591ab`.
+
+## Issue 197 reframe, 23 October 2026
+
+The owner-approved reframe and writer brief promote the notebook at `59c8d9067ffe62733707775a7e6a5e20e46740c6` (included in base `d578555`) for the equilibrium-property manuscript, subject to its fitted/comparison roles, unresolved property discrepancies and finite 313.15–333.15 K phase domain. This continues the adoption and manuscript-use authority recorded in #196 and adds the #202 fixed-parameter curves explicitly authorized for this rewrite. No new model evaluation or parameter estimation was performed.
+
+The accepted plan is [the 23 October reframe comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/197#issuecomment-6359283213). Its complete checklist, current displayed-number evidence, build commands, hashes and page inspection are retained under `builds/197-reframe-*`. The bibliography snapshot is unchanged. The local literature shelf is in the main checkout rather than this worktree; relevant indexed companions were compared with their current Zotero-storage files. Zhang (2011) Tables 9–11 and Neumann (2022) Section 4.2 were also read directly from their existing local PDFs. No Zotero or bibliography write was made.
+
+The 2.32% amine-sum deviation covers 25 comparisons, including 20 fitted observations; the fitted-only value is 1.72%. The Han mean density errors in the rewrite refer to five loaded 30 wt% observations at each temperature, excluding the zero-loading value. All 67 Han observations remain outside the objective. Binary dashed lines denote the vapor branch; dashed species/density curves denote single-liquid states imposed below their own bubble pressure. These distinct meanings are stated in the captions.

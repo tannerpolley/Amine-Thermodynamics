@@ -1,0 +1,514 @@
+{
+  "baseline_commit": "67fd1eae7e38c58151ab79cb1c56b97a36052f0f",
+  "merged_main": "d5c9bd1",
+  "pre_fix_merge_commit": "60cc96181830931a5c9e78b29a01ef1e4ed24b03",
+  "branch": "issue-197-stage-3-rewrite-the-mea-manuscript-2",
+  "source_date_epoch": 1792750003,
+  "source_identity": "Final source hashes below. PDFs built before the fix commit using the merge-commit epoch. Reproduce PDF bytes with this explicit epoch, not the later fix-commit timestamp.",
+  "abstract_words": 227,
+  "abstract_word_count_method": "Whitespace words in pdftotext -raw first page, from We examine through before 1. Introduction.",
+  "commands": {
+    "main": "nice -n 10 agent-heavy bash scripts/build_manuscript.sh",
+    "supplement": "SOURCE_DATE_EPOCH=1792750003 FORCE_SOURCE_DATE=1 nice -n 10 agent-heavy latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex",
+    "byte_reproduction_from_latex_directory": "SOURCE_DATE_EPOCH=1792750003 FORCE_SOURCE_DATE=1 nice -n 10 agent-heavy latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds main.tex; repeat for supplement.tex",
+    "figures": "nice -n 10 agent-heavy uv run --frozen python analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py",
+    "tables": "nice -n 10 agent-heavy uv run --frozen python docs/scientific/latex/scripts/final_rerun_tables.py",
+    "visual_qa": "nice -n 10 agent-heavy python /home/tnnrpolley21/.codex/plugins/cache/cse/cse/local/scripts/visualize/latex_visual_qa.py <pdf> --profile article --output-dir docs/scientific/latex/builds/qa-reframe-fix1/<name> --contact-sheet"
+  },
+  "outputs": {
+    "main": {
+      "pages": 18,
+      "sha256": "eaa423b44b5eeaeeaec7c6e345f5614bf4436bee057ff2c194d4446f41536789",
+      "log_checks": {
+        "overfull": false,
+        "undefined_reference_or_citation": false,
+        "latex_warning": false,
+        "font_substitution": false,
+        "underfull": false
+      },
+      "automated_visual_qa": {
+        "status": "review",
+        "findings": {
+          "warning:tight_text_clearance": 41,
+          "warning:text_graphic_overlap": 17
+        },
+        "report": "docs/scientific/latex/builds/qa-reframe-fix1/main/report.json"
+      },
+      "manual_visual_inspection": {
+        "color_pages": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "grayscale_pages": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "disposition": "Every page inspected at full size in color and grayscale. Text, equations, table continuations, plots, dash patterns, legends and captions are readable; no unintended clipping or overlap. Automated clearance/fraction-bar/landscape-edge warnings accepted after inspection."
+      }
+    },
+    "supplement": {
+      "pages": 22,
+      "sha256": "494ee52685120dd4a9603bd7d2c69ef3cbfcab9191a499828920aa7ef4e3be50",
+      "log_checks": {
+        "overfull": false,
+        "undefined_reference_or_citation": false,
+        "latex_warning": false,
+        "font_substitution": false,
+        "underfull": true
+      },
+      "automated_visual_qa": {
+        "status": "review",
+        "findings": {
+          "warning:tight_text_clearance": 85,
+          "warning:text_near_page_edge": 11
+        },
+        "report": "docs/scientific/latex/builds/qa-reframe-fix1/supplement/report.json"
+      },
+      "manual_visual_inspection": {
+        "color_pages": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "grayscale_pages": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "disposition": "Every page inspected at full size in color and grayscale. Text, equations, table continuations, plots, dash patterns, legends and captions are readable; no unintended clipping or overlap. Automated clearance/fraction-bar/landscape-edge warnings accepted after inspection."
+      },
+      "underfull_disposition": "One bibliography paragraph at supplement.bbl lines 26\u201330 (Uyan reference, PDF p. 20); readable after inspection. No overfull box."
+    }
+  },
+  "numerical_evidence": {
+    "verified_checks": 63,
+    "bound_inputs": 82,
+    "generated_table_files": 24,
+    "audit_file": "docs/scientific/latex/builds/197-reframe-fix1-numeric-check.json",
+    "scientific_result_files_edited_by_writer": false,
+    "scope": "Publication of owner-promoted retained evidence and verification of presentation/arithmetic; no new model computation or physical validation."
+  },
+  "first_cited_supplement_sections": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "bibliography": {
+    "entries": 54,
+    "cited_keys": 49,
+    "missing_keys": [],
+    "unchanged_from_baseline": true
+  },
+  "findings": [
+    {
+      "finding": "Astra 1",
+      "disposition": "Applied: both generated density-domain cells corrected to 20\u2013100 wt%.",
+      "locations": [
+        "docs/scientific/latex/scripts/final_rerun_tables.py:431",
+        "docs/scientific/latex/tables/current_data_inventory.tex:104",
+        "docs/scientific/latex/tables/supplement_data_roles.tex:111"
+      ]
+    },
+    {
+      "finding": "Astra 2",
+      "disposition": "Applied verbatim: calculated pressures are the subject of the 46\u201370% discrepancy.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:21"
+      ]
+    },
+    {
+      "finding": "Opus M1",
+      "disposition": "Applied verbatim; duplicate results answer deleted and the six-sentence conclusion appears once.",
+      "locations": [
+        "docs/scientific/latex/sections/conclusion.tex:3",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:163"
+      ]
+    },
+    {
+      "finding": "Opus M2",
+      "disposition": "Applied; species caption says long-dashed to distinguish the below-bubble segments from species-specific dashes required by S7.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:45",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:109"
+      ]
+    },
+    {
+      "finding": "Opus M3",
+      "disposition": "Applied verbatim: six source deviations and all 159 counts; obsolete supplement pointer removed.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:20"
+      ]
+    },
+    {
+      "finding": "Opus M4",
+      "disposition": "Applied with A2: bound locations and choice, density tradeoff, homogeneous-liquid context, extended search and finite-search limits.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:125",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:149",
+        "docs/scientific/latex/supplement.tex:311"
+      ]
+    },
+    {
+      "finding": "Opus M5",
+      "disposition": "Applied: comparison/reported/density-free fit names, one definition, revised captions and data roles; obsolete data-use column removed.",
+      "locations": [
+        "docs/scientific/latex/supplement.tex:300",
+        "docs/scientific/latex/scripts/final_rerun_tables.py:293",
+        "docs/scientific/latex/scripts/final_rerun_tables.py:338"
+      ]
+    },
+    {
+      "finding": "Opus S1",
+      "disposition": "Applied verbatim: common thermodynamic basis, MEA carbamate chemistry and phase-search motivation.",
+      "locations": [
+        "docs/scientific/latex/sections/introduction.tex:13",
+        "docs/scientific/latex/sections/introduction.tex:21",
+        "docs/scientific/latex/sections/introduction.tex:29"
+      ]
+    },
+    {
+      "finding": "Opus S2",
+      "disposition": "Applied as A1 directs; Astra 2 replaces the first proposed sentence and source/model states are explicit.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:23"
+      ]
+    },
+    {
+      "finding": "Opus S3",
+      "disposition": "Applied verbatim: five non-fitted 353.15 K species states and their errors.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:53"
+      ]
+    },
+    {
+      "finding": "Opus S4",
+      "disposition": "Applied verbatim: Matin species deviations and high-loading free-MEA underprediction.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:59"
+      ]
+    },
+    {
+      "finding": "Opus S5",
+      "disposition": "Applied verbatim: practical property scope and remaining discrepancies; the required preceding scope sentences remain.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:117",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:118"
+      ]
+    },
+    {
+      "finding": "Opus S6",
+      "disposition": "Applied with A3: plain-language abstract, 133 searched states through 393.15 K; 227 rendered words.",
+      "locations": [
+        "docs/scientific/latex/main.tex:97",
+        "docs/scientific/latex/main.tex:100"
+      ]
+    },
+    {
+      "finding": "Opus S7",
+      "disposition": "Applied: logarithmic minor-species panels, distinct line patterns, maxima moved into caption and duplicate prose removed.",
+      "locations": [
+        "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:87",
+        "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:91",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:45"
+      ]
+    },
+    {
+      "finding": "Opus S8",
+      "disposition": "Applied: Xu star and neutral square fit-status keys. Optional lower-axis-limit change not taken.",
+      "locations": [
+        "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:18",
+        "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:80"
+      ]
+    },
+    {
+      "finding": "Opus S9",
+      "disposition": "Applied with A2 and S14: pressure fractions, six temperatures, excluded crosses and updated caption/pointer.",
+      "locations": [
+        "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:216",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:137"
+      ]
+    },
+    {
+      "finding": "Opus S10",
+      "disposition": "Applied: all three identified caption bookkeeping sentences removed.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:11",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:36",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:81"
+      ]
+    },
+    {
+      "finding": "Opus S11",
+      "disposition": "Applied: repeated prose cut, explicit 307-quantity enumeration and generated table wording revised.",
+      "locations": [
+        "docs/scientific/latex/sections/data_methods.tex:5",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:88",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:61",
+        "docs/scientific/latex/scripts/final_rerun_tables.py:453"
+      ]
+    },
+    {
+      "finding": "Opus S12",
+      "disposition": "Applied with existing citations retained: non-fitted/not-blind and candidate-acceptance roles spelled out.",
+      "locations": [
+        "docs/scientific/latex/sections/data_methods.tex:22",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:76",
+        "docs/scientific/latex/scripts/final_rerun_tables.py:431"
+      ]
+    },
+    {
+      "finding": "Opus S13",
+      "disposition": "Applied: two duplicated rows removed and pressure subset renamed Hilliard and Jou pressures.",
+      "locations": [
+        "docs/scientific/latex/scripts/final_rerun_tables.py:332",
+        "docs/scientific/latex/tables/supplement_outside_fit.tex:82"
+      ]
+    },
+    {
+      "finding": "Opus S14",
+      "disposition": "Applied: supplement follows actual first citation, new source-conventions citation, bound-choice and density-free sections last, correlation-table pointer fixed.",
+      "locations": [
+        "docs/scientific/latex/supplement.tex:41",
+        "docs/scientific/latex/sections/data_methods.tex:19",
+        "docs/scientific/latex/supplement.tex:177",
+        "docs/scientific/latex/supplement.tex:295",
+        "docs/scientific/latex/supplement.tex:326"
+      ]
+    },
+    {
+      "finding": "Opus O4",
+      "disposition": "Applied verbatim: Najafloo cell states the methods/conclusion discrepancy.",
+      "locations": [
+        "docs/scientific/latex/scripts/final_rerun_tables.py:476"
+      ]
+    },
+    {
+      "finding": "Opus O5",
+      "disposition": "Applied: lower pressure axis states the relative-deviation formula.",
+      "locations": [
+        "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py:75"
+      ]
+    },
+    {
+      "finding": "A1",
+      "disposition": "Applied verbatim: Astra pressure attribution followed by state-specific Aronu/Hilliard/model comparison.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:22",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:23"
+      ]
+    },
+    {
+      "finding": "A2",
+      "disposition": "Applied: both searches, 81 declared/21 excluded/60 admitted extension states, 133 total, confirmations, frozen pressures and one six-temperature figure.",
+      "locations": [
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:131",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:150",
+        "docs/scientific/latex/supplement.tex:222",
+        "docs/scientific/latex/tables/phase_extension.tex:82"
+      ]
+    },
+    {
+      "finding": "A3",
+      "disposition": "Applied: abstract, conclusion and property-scope paragraph consistent with extended phase-search claims and limits.",
+      "locations": [
+        "docs/scientific/latex/main.tex:100",
+        "docs/scientific/latex/sections/conclusion.tex:13",
+        "docs/scientific/latex/sections/mea_system_modeling_results.tex:117"
+      ]
+    },
+    {
+      "finding": "A4",
+      "disposition": "Applied: all three replacement split inputs, changed success/diagnostic rows and phase labels; different-build caption removed. Old Table S10 is now Tables S21\u2013S22 after reordering.",
+      "locations": [
+        "docs/scientific/latex/scripts/final_rerun_tables.py:408",
+        "docs/scientific/latex/tables/supplement_phase_family.tex:107",
+        "docs/scientific/latex/tables/supplement_phase_family.tex:104"
+      ]
+    },
+    {
+      "finding": "A5",
+      "disposition": "Applied: identities stated once in Data and Code Availability, pointers in methods and supplement, original conditional-error provenance retained.",
+      "locations": [
+        "docs/scientific/latex/sections/data_code_availability.tex:6",
+        "docs/scientific/latex/sections/data_methods.tex:73",
+        "docs/scientific/latex/supplement.tex:227"
+      ]
+    }
+  ],
+  "source_files_sha256": {
+    "docs/scientific/latex/main.tex": "97c62a2e81c606a46b28502afd981da89ac36b3120d2d27fba6be6c88b381b4b",
+    "docs/scientific/latex/supplement.tex": "71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df",
+    "docs/scientific/latex/sections/introduction.tex": "f5ce1353f134a1ac6ed3562ee2c2abbf6861f4b51573615b0f6f54dae0d7d9fc",
+    "docs/scientific/latex/sections/mea_system_modeling_results.tex": "34adf6598d217bfae9ee182a6d3844cd888eb07565c04443aab4ea2fb8780a07",
+    "docs/scientific/latex/sections/conclusion.tex": "9dd9b8bbf4a9be57c66c9b2fc7b9197e05a6fbf181727807d12e7c80a7e323f7",
+    "docs/scientific/latex/sections/epc_saft_equation_of_state.tex": "ce9eedbcc941602f3fae552c6dbc9fc9fa27d3f4fad7e826658e61b2bcbbee72",
+    "docs/scientific/latex/sections/nomenclature.tex": "145d743948a02756fd66e5097a7d4ecec7b9a1d7fdbca432890cd96b92e80c7e",
+    "docs/scientific/latex/sections/data_code_availability.tex": "1eaad6ab8f6350ebc788df9fe948e8fdb60159109f40c9a11a7f8be2b3e1a555",
+    "docs/scientific/latex/sections/data_methods.tex": "9a4518c95e3339c21d446a165cd26328da25d60095dbe563a1e9715819db8c4d",
+    "docs/scientific/latex/tables/supplement_phase_family.tex": "e37ea2a29c799373a10d7ab4502cee62e6f6338bea779315679e5744ddc33b4d",
+    "docs/scientific/latex/tables/ideal_calorics.tex": "a59d701d8b8c535486cfcd768e52ead1490ceb5b09b6ffea343bce7d7fe2087a",
+    "docs/scientific/latex/tables/density_scales.tex": "2e717162f060d643dc9dc2914ac71e1d161b93a7f0214eed973de80f4d5b97a1",
+    "docs/scientific/latex/tables/supplement_correlations.tex": "2a8f886c810a4db01fc74ef1e447edfd2cfa6e7f54d540d79a4112c534718e4d",
+    "docs/scientific/latex/tables/supplement_carbonate_density.tex": "268debc04b04eb3e6b6dabd5c8f0b2f3d2d0c9915bf5302628112bdfcf2be41e",
+    "docs/scientific/latex/tables/density_failures.tex": "d9cb67ab94daf91f0cc7806fbedb4582e3017a1010697407cf334cc4b9f39f0f",
+    "docs/scientific/latex/tables/supplement_data_roles.tex": "b9dae070d999e90afbdc19975022a4b975eee02e6859038b3429c42a7d1f8eff",
+    "docs/scientific/latex/tables/supplement_fitted_parameters.tex": "3ae66c5c0b205f282c2623ca367eb2ea4b12984db4a1699f5bdfe43345af0cb5",
+    "docs/scientific/latex/tables/reaction_equilibrium_constants.tex": "7526f858332bde67ba1ef3b43070344095b85ae337d90e623affb2a94b05eb1f",
+    "docs/scientific/latex/tables/acceptance_limits.tex": "99ba6416243c7230272a7c54fed053cc87f6d2177430d6788ea2ed951cf60383",
+    "docs/scientific/latex/tables/binary_interaction_parameters.tex": "e4b21867eabda6acea3cba67ca6f95b49a8c15ecae8df418b83636baede53cfc",
+    "docs/scientific/latex/tables/nomenclature.tex": "0fe8e0a47ec58039f4e2c285546f86416c5fa0be813b092af224d0e08ef5ee82",
+    "docs/scientific/latex/tables/literature_model_comparison.tex": "0bd611058abe6e3061583efc14d625df96ac64ff8633134fdcb87fce6fc555c6",
+    "docs/scientific/latex/tables/phase_extension.tex": "801d57f10a3cf7b6762a2a3cbdcdf84e80e00460b417f8bcc4983ea786d515f1",
+    "docs/scientific/latex/tables/supplement_source_aard.tex": "3dd8586395cbee15cf37f58af12765cb0c106417aa1a1a7c13f53ccba81f87f4",
+    "docs/scientific/latex/tables/phase_reference_pressures.tex": "08b1b38eb183587960f61c2a83951acc3faf74d0be3a691421a86b36b5e07073",
+    "docs/scientific/latex/tables/residual_summary.tex": "c8bbe5d1d1419d92ca35d5b3be48a84be40abfe3e7d02c8f62a9c81a0af92163",
+    "docs/scientific/latex/tables/fitted_coordinates.tex": "c8acaea9e97f6e67b6506dd74e42bbd79835d13ea4bf304da3a8c73720286033",
+    "docs/scientific/latex/tables/current_data_inventory.tex": "12277222db99aa1b4ed2718902eca83288d73db7f3916a958da7a74c98f5035a",
+    "docs/scientific/latex/tables/supplement_outside_fit.tex": "f643e29fa691504898a23c7c3e74e8ecdf825c92dbd2dbfe95fa4a0ac358e533",
+    "docs/scientific/latex/tables/density_source_differences.tex": "d2abaeb0d41a0b827c944dd53451b25c240af1a7953ed05b66240c323d2acc0e",
+    "docs/scientific/latex/tables/objective_groups.tex": "316bc22c5d1bbc3d87b5fec2cef763a9c0b892df041adef41d8f8e60ca670d17",
+    "docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex": "3d288574502ca2fb12cece99fbaf391bf020ceda6ffbe56ad069c4fdebf60201",
+    "docs/scientific/latex/tables/supplement_predecessor.tex": "fbd50caea1ee6c6fdbf0868f84bd6d9d2d5e623e405bc1598630beec055e6798",
+    "docs/scientific/latex/scripts/final_rerun_tables.py": "115a7d5af6ee35d0bbb673fa190c18484a9de1528affea30a461e13958162a47",
+    "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py": "cb05c8f5945ed5c21d3c2220c0945d849b68bb7b66c31f47afa4a8be03f0f7f0",
+    "docs/scientific/latex/references.bib": "1f049622819e2422d646533dccaa1b4af6c74c53894d41bf1da23bb4be62df93"
+  },
+  "remaining_reviews": [
+    "Parent independent science and reader-story review of this fix round",
+    "Owner review before external publication"
+  ],
+  "checks": {
+    "main_build_exit_code": 0,
+    "supplement_build_exit_code": 0,
+    "cse_prose": "Prose check passed for plugin-wide and scoped rules.",
+    "git_diff_check_exit_code": 0,
+    "required_literature_phase_sentence_unchanged": true,
+    "pdf_development_labels": [],
+    "line_endings_preserved": {
+      "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py": "LF",
+      "docs/scientific/latex/main.tex": "LF",
+      "docs/scientific/latex/scripts/final_rerun_tables.py": "LF",
+      "docs/scientific/latex/sections/conclusion.tex": "LF",
+      "docs/scientific/latex/sections/data_code_availability.tex": "LF",
+      "docs/scientific/latex/sections/data_methods.tex": "LF",
+      "docs/scientific/latex/sections/epc_saft_equation_of_state.tex": "LF",
+      "docs/scientific/latex/sections/introduction.tex": "LF",
+      "docs/scientific/latex/sections/mea_system_modeling_results.tex": "LF",
+      "docs/scientific/latex/supplement.tex": "LF",
+      "docs/scientific/latex/tables/acceptance_limits.tex": "LF",
+      "docs/scientific/latex/tables/binary_interaction_parameters.tex": "LF",
+      "docs/scientific/latex/tables/current_data_inventory.tex": "LF",
+      "docs/scientific/latex/tables/density_failures.tex": "LF",
+      "docs/scientific/latex/tables/density_scales.tex": "LF",
+      "docs/scientific/latex/tables/density_source_differences.tex": "LF",
+      "docs/scientific/latex/tables/fitted_coordinates.tex": "LF",
+      "docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex": "LF",
+      "docs/scientific/latex/tables/ideal_calorics.tex": "LF",
+      "docs/scientific/latex/tables/literature_model_comparison.tex": "LF",
+      "docs/scientific/latex/tables/nomenclature.tex": "LF",
+      "docs/scientific/latex/tables/objective_groups.tex": "LF",
+      "docs/scientific/latex/tables/phase_reference_pressures.tex": "LF",
+      "docs/scientific/latex/tables/reaction_equilibrium_constants.tex": "LF",
+      "docs/scientific/latex/tables/residual_summary.tex": "LF",
+      "docs/scientific/latex/tables/supplement_carbonate_density.tex": "LF",
+      "docs/scientific/latex/tables/supplement_correlations.tex": "LF",
+      "docs/scientific/latex/tables/supplement_data_roles.tex": "LF",
+      "docs/scientific/latex/tables/supplement_fitted_parameters.tex": "LF",
+      "docs/scientific/latex/tables/supplement_outside_fit.tex": "LF",
+      "docs/scientific/latex/tables/supplement_phase_family.tex": "LF",
+      "docs/scientific/latex/tables/supplement_predecessor.tex": "LF",
+      "docs/scientific/latex/tables/supplement_source_aard.tex": "LF"
+    }
+  },
+  "brief_and_review_sha256": {
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/reframe-197/fix-round-1-brief.md": "d22d3b7ea0fd0693e73df6ededfcd589f1a438afea74be509287bc635d0725b9",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/reframe-197/reviews/astra.md": "7e17cb6a5644de815cc2b05b3c817fff0fe8bf5fc597f8c726b2f8a570768ab4",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/tmp/reframe-197/reviews/opus.md": "438cef4062dc4f5f9bd00f26396becaca0c284619bbfa6d6684f660720fbc00e"
+  },
+  "evidence_files_sha256": {
+    "docs/scientific/latex/builds/197-reframe-fix1-numeric-check.json": "f9827fe7b66277215b1a7ee5cf8cc3cae3d67a1cea18009ff89a8359ca7e4895",
+    "docs/scientific/latex/builds/197-reframe-fix1-generated-check.json": "ff9e7893b4efef0952950dce66a1b2df8c1590f31b308694ba199e0137750637",
+    "docs/scientific/latex/builds/197-reframe-fix1-prose-check.log": "3fcfb68a25c7d663522228dcc33b5045d60615d3b516b190c93e6e787dfd0041",
+    "docs/scientific/latex/builds/197-reframe-fix1-main-build.log": "326dcd06a53ca43a68ab79e6f8cc437570d7edef8f3f09cf1dc70bf0ab9c4996",
+    "docs/scientific/latex/builds/197-reframe-fix1-supplement-build.log": "c4636754b398b55d80d64dc115d9f4ff9804bfccd0823a1c23326cdb650860f8",
+    "docs/scientific/latex/builds/197-reframe-fix1-handoff.md": "6b148cfb45d06af5670484a3a29388962767d8c678cdbf3eba6e6099c34dd813",
+    "docs/scientific/latex/builds/197-reframe-number-sources.md": "c27e2d1a778a5887240d1a5a9787a53ad7c5bc4da9915d1b1731fcbb2c4ed874"
+  }
+}

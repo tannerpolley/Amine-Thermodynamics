@@ -1,0 +1,504 @@
+{
+  "baseline_commit": "d57855530e80118b990e0a7cfc4ae012625faf79",
+  "source_date_epoch": 1792744075,
+  "source_identity": "Final source files in this commit; hashes below. PDFs were built before the source/evidence commit using the baseline timestamp. The repository build wrapper uses the current HEAD timestamp; use the explicit epoch below to reproduce these PDF bytes.",
+  "abstract_words": 194,
+  "chemrxiv_abstract_words": 189,
+  "highlight_characters": [
+    78,
+    79,
+    83,
+    81,
+    85
+  ],
+  "commands": {
+    "main": "UV_PROJECT_ENVIRONMENT=/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv UV_NO_SYNC=1 nice -n 10 bash scripts/build_manuscript.sh",
+    "supplement": "SOURCE_DATE_EPOCH=1792744075 FORCE_SOURCE_DATE=1 nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex",
+    "byte_reproduction_from_latex_directory": "SOURCE_DATE_EPOCH=1792744075 FORCE_SOURCE_DATE=1 nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds main.tex; repeat for supplement.tex",
+    "visual_qa": "nice -n 10 python /home/tnnrpolley21/.codex/plugins/cache/cse/cse/local/scripts/visualize/latex_visual_qa.py <pdf> --profile article --output-dir <qa-directory> --contact-sheet"
+  },
+  "outputs": {
+    "main": {
+      "pages": 17,
+      "sha256": "45c77179e1b93b985935b0df0bb9e425cd42897798b37efefbe7f5f6238a1416",
+      "log_checks": {
+        "overfull": false,
+        "undefined_reference_or_citation": false,
+        "font_substitution": false,
+        "latex_warning": false,
+        "underfull": false
+      },
+      "automated_visual_qa": {
+        "status": "review",
+        "findings": {
+          "warning:tight_text_clearance": 40,
+          "warning:text_graphic_overlap": 16
+        },
+        "report": "docs/scientific/latex/builds/qa-reframe/main/report.json"
+      },
+      "manual_visual_inspection": {
+        "color_pages": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "grayscale_pages": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "disposition": "All pages inspected at full size. Text, equations, table continuations, legends and captions remain legible. No unintended clipping or overlap. Tight title/caption leading, equation fraction bars and landscape-page edge warnings are accepted after inspection. The automated result remains review."
+      }
+    },
+    "supplement": {
+      "pages": 21,
+      "sha256": "2e7cc54d113be2f1ad940c945b9107d3858bb71aa9dfb0f105ae9d048e4c4c7a",
+      "log_checks": {
+        "overfull": false,
+        "undefined_reference_or_citation": false,
+        "font_substitution": false,
+        "latex_warning": false,
+        "underfull": true
+      },
+      "automated_visual_qa": {
+        "status": "review",
+        "findings": {
+          "warning:tight_text_clearance": 74,
+          "warning:text_near_page_edge": 11
+        },
+        "report": "docs/scientific/latex/builds/qa-reframe/supplement/report.json"
+      },
+      "manual_visual_inspection": {
+        "color_pages": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "grayscale_pages": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "disposition": "All pages inspected at full size. Text, equations, table continuations, legends and captions remain legible. No unintended clipping or overlap. Tight title/caption leading, equation fraction bars and landscape-page edge warnings are accepted after inspection. The automated result remains review."
+      },
+      "underfull_disposition": "One underfull bibliography paragraph (Uyan reference, p. 21; supplement.bbl source lines 92\u201396). Inspected and legible; no overfull box."
+    }
+  },
+  "numerical_evidence": {
+    "verified_metrics": 41,
+    "identified_paragraphs": 73,
+    "generated_table_files": 23,
+    "audit_file": "docs/scientific/latex/builds/197-reframe-numeric-check.json",
+    "scientific_result_files_changed": false,
+    "scope": "Verification of retained values, selection populations, arithmetic and presentation; no new model calculations or physical validation."
+  },
+  "generated_reproduction": {
+    "checked_files": {
+      "docs/scientific/latex/tables/objective_groups.tex": "0cf3f5bc4674b8e581a56ed23974ccc23b9a7d68793f8768bcd5bcfb666ccc7e",
+      "docs/scientific/latex/tables/residual_summary.tex": "7dc309112c99496c9938c7a6f63fac7290fd42ad895d3e196b60b9f6a2ebec15",
+      "docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex": "fbdeda87a27fd84119ca987570ec06f7c7b6fd5333cd8a6efa9339e570135b41",
+      "docs/scientific/latex/tables/binary_interaction_parameters.tex": "1e5da328c07e890570da780bc8c611cb414902acfa333d8b55c643c48af3eefb",
+      "docs/scientific/latex/tables/reaction_equilibrium_constants.tex": "2c87cd2e4243dd148c498a82232ff499258efa3d941b76fa036ef35a6cc755b4",
+      "docs/scientific/latex/tables/supplement_fitted_parameters.tex": "261d6ca604b7d242344a8222669cba9c54d1e65df702e7d74b562d5a920f9955",
+      "docs/scientific/latex/tables/fitted_coordinates.tex": "de2bd16334e8952c6e4130a6240326b873e5c790b2e94c1fe4d2389c17a15907",
+      "docs/scientific/latex/tables/supplement_correlations.tex": "0a0103f675c17936e298d237f8c5208cfdd550a125359aceea23afc13d2b4762",
+      "docs/scientific/latex/tables/supplement_predecessor.tex": "d9992046a5c73320bf9b9571bec29ce9b8cc6b5bfa139ad4d816f87754b052e6",
+      "docs/scientific/latex/tables/acceptance_limits.tex": "84ac677ed1193c3f8e0f3f46713c2abd7f8e8da93c101f03ed7675008ab56c2b",
+      "docs/scientific/latex/tables/supplement_source_aard.tex": "ceb76bd4bc394f91ebb449b69fa7ea65a2b731c912e3e6a580579af8393b7626",
+      "docs/scientific/latex/tables/supplement_outside_fit.tex": "1268e3c13cd423d958222d630bc1d603ff02b256d52a9c4ad8189f6ff34a2baf",
+      "docs/scientific/latex/tables/supplement_carbonate_density.tex": "555b3cf7f58cf7243a24c29529b321a4f81e10b2ad807af7287ba13a47322528",
+      "docs/scientific/latex/tables/phase_reference_pressures.tex": "ec347d92b91f4aa2890fb9a7ac2038e2da19e99372438e701f2df849df38b2ac",
+      "docs/scientific/latex/tables/supplement_phase_family.tex": "4dc1cc6ed4c220556cd8f1da1b241b326435db1834a1d9961c696b98668d169c",
+      "docs/scientific/latex/tables/supplement_data_roles.tex": "5480ba60a6314475fe1f4215f19de9563a17734d882edca87cd5817e701d9082",
+      "docs/scientific/latex/tables/current_data_inventory.tex": "36278697b1a7684129359852b2447453e6d2bace60f056a11ba65cd05d09200c",
+      "docs/scientific/latex/tables/density_failures.tex": "91a700593a658f98e0a49443b2f3e3e934781ac6fb317df71a2b1df1f7f6a248",
+      "docs/scientific/latex/tables/density_scales.tex": "7beb5c33a86d66e43df63b266a1ca6f715baf04243a71af3d189f701b2538024",
+      "docs/scientific/latex/tables/density_source_differences.tex": "03532fb08e64a2a33a01ce4c921b90acf17f60bf9752067fa8bfbb45a3cce313",
+      "docs/scientific/latex/tables/ideal_calorics.tex": "2af60e6ac16ef4cd65f7c3d8567d85fd14fa1e2fc9d1287057430e3a7bb39b65",
+      "docs/scientific/latex/tables/literature_model_comparison.tex": "f844a3452818dee92100e576ab40624b82d075ea4f49d88535abd0d86eea438f",
+      "docs/scientific/latex/tables/nomenclature.tex": "8e046ec2e03d3e9f197ea6cac701eaf2e55fb8d5c6a9d62551a0e4ab7f9792a6",
+      "docs/scientific/latex/figures/generated/pressure.pdf": "67ff281df700c1e437552417fa013c4bba393741c984e4941289ab34422f60ef",
+      "docs/scientific/latex/figures/generated/pressure.png": "c7dc809ac4026eaeff778c99172b669466687e75e1d78832126c2c9687cdd9f8",
+      "docs/scientific/latex/figures/generated/speciation.pdf": "035bdf519a1d84c0fac3211a863164c940b8e0b1c8de155641d7684bbd0783ca",
+      "docs/scientific/latex/figures/generated/speciation.png": "8d184b5f3f5cf5b3006ed6cacc1d4263bf150edb28986d7425132283585e6844",
+      "docs/scientific/latex/figures/generated/heat-of-absorption.pdf": "3cd01480356e60392a271eeeba4f1e6dfe62480ef6afa5a52d40264f2afc51dc",
+      "docs/scientific/latex/figures/generated/heat-of-absorption.png": "a1b5f1ac4a31bb217e0a6f6e1abe6011bb02a77dbcdd5f30921cf4fe9e169b16",
+      "docs/scientific/latex/figures/generated/loaded-density-errors.pdf": "a29543a60a5a9c99be19b32d432b96b7e4d587304657d2e22038c680b687a255",
+      "docs/scientific/latex/figures/generated/loaded-density-errors.png": "b72d4f17de45d99def030cd5e2a966a46243b291fa667af06e819120962dbc92",
+      "docs/scientific/latex/figures/generated/density-curves.pdf": "c9695ca67e8e6d89c20e0d305fcaee0c5aeddef870d1c770f96a56c539150940",
+      "docs/scientific/latex/figures/generated/density-curves.png": "1692d8e353591a7ed5db9416ec3656bb4d790000d5d5876b9d42261e86b24e66",
+      "docs/scientific/latex/figures/generated/mea-water.pdf": "6fca7e52610b3948f95e8fcb7698890d3712e64ffb11ac431c6db2b54b4665f5",
+      "docs/scientific/latex/figures/generated/mea-water.png": "819b799bae96ca46f0de233d9e4bd23c873b000bcc59e65911faa3948f6fcdb5",
+      "docs/scientific/latex/figures/generated/phase-family.pdf": "64913a948b852c60fd93d65b3db4e8b3aae7ae0e2ae29fcac52a7f541d908062",
+      "docs/scientific/latex/figures/generated/phase-family.png": "b6db6e7310b551249ac53c8575ac346607ed9433e6d7a7ceef70f6394d0414a6",
+      "docs/scientific/latex/figures/generated/provenance.json": "64d27113d52d1e8b5fe25144285efd9791fc9199ec39af2c6d31b8ef409853a2"
+    },
+    "writes_performed": false
+  },
+  "unchanged_or_moved_table_data": {
+    "docs/scientific/latex/tables/supplement_phase_family.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/ideal_calorics.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/density_scales.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/supplement_correlations.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/supplement_carbonate_density.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/density_failures.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/reaction_equilibrium_constants.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/binary_interaction_parameters.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/nomenclature.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/supplement_source_aard.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/phase_reference_pressures.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/residual_summary.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/supplement_outside_fit.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/density_source_differences.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/objective_groups.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/supplement_predecessor.tex": "all data cells unchanged from d578555",
+    "docs/scientific/latex/tables/supplement_fitted_parameters.tex": "all data cells preserved from fitted_coordinates.tex",
+    "docs/scientific/latex/tables/supplement_data_roles.tex": "all data cells preserved from current_data_inventory.tex"
+  },
+  "bibliography": {
+    "unchanged_from_baseline": true,
+    "sha256": "1f049622819e2422d646533dccaa1b4af6c74c53894d41bf1da23bb4be62df93",
+    "missing_citation_keys": []
+  },
+  "line_endings": [
+    {
+      "file": "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/builds/verification-receipt.json",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/figures/generated/provenance.json",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/main.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/scripts/final_rerun_tables.py",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/sections/conclusion.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/sections/data_methods.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/sections/epc_saft_equation_of_state.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/sections/introduction.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/sections/mea_system_modeling_results.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/source_log.md",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/submission/chemrxiv.md",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/submission/cover_letter.md",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/submission/highlights.txt",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/submission_metadata.yml",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/supplement.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/acceptance_limits.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/binary_interaction_parameters.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/current_data_inventory.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/density_failures.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/density_scales.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/density_source_differences.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/fitted_coordinates.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/ideal_calorics.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/literature_model_comparison.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/nomenclature.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/objective_groups.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/phase_reference_pressures.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/reaction_equilibrium_constants.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/residual_summary.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/supplement_carbonate_density.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/supplement_correlations.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/supplement_outside_fit.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/supplement_phase_family.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/supplement_predecessor.tex",
+      "before": "LF",
+      "after": "LF"
+    },
+    {
+      "file": "docs/scientific/latex/tables/supplement_source_aard.tex",
+      "before": "LF",
+      "after": "LF"
+    }
+  ],
+  "source_files_sha256": {
+    "docs/scientific/latex/chemistry_macros.tex": "7ae0aa3ce81f004eef2ae91f92035d659fef1663532f037841c856dfc1e90f25",
+    "docs/scientific/latex/figures/generated/density-curves.pdf": "c9695ca67e8e6d89c20e0d305fcaee0c5aeddef870d1c770f96a56c539150940",
+    "docs/scientific/latex/figures/generated/density-curves.png": "1692d8e353591a7ed5db9416ec3656bb4d790000d5d5876b9d42261e86b24e66",
+    "docs/scientific/latex/figures/generated/heat-of-absorption.pdf": "3cd01480356e60392a271eeeba4f1e6dfe62480ef6afa5a52d40264f2afc51dc",
+    "docs/scientific/latex/figures/generated/heat-of-absorption.png": "a1b5f1ac4a31bb217e0a6f6e1abe6011bb02a77dbcdd5f30921cf4fe9e169b16",
+    "docs/scientific/latex/figures/generated/loaded-density-errors.pdf": "a29543a60a5a9c99be19b32d432b96b7e4d587304657d2e22038c680b687a255",
+    "docs/scientific/latex/figures/generated/loaded-density-errors.png": "b72d4f17de45d99def030cd5e2a966a46243b291fa667af06e819120962dbc92",
+    "docs/scientific/latex/figures/generated/mea-water.pdf": "6fca7e52610b3948f95e8fcb7698890d3712e64ffb11ac431c6db2b54b4665f5",
+    "docs/scientific/latex/figures/generated/mea-water.png": "819b799bae96ca46f0de233d9e4bd23c873b000bcc59e65911faa3948f6fcdb5",
+    "docs/scientific/latex/figures/generated/phase-family.pdf": "64913a948b852c60fd93d65b3db4e8b3aae7ae0e2ae29fcac52a7f541d908062",
+    "docs/scientific/latex/figures/generated/phase-family.png": "b6db6e7310b551249ac53c8575ac346607ed9433e6d7a7ceef70f6394d0414a6",
+    "docs/scientific/latex/figures/generated/pressure.pdf": "67ff281df700c1e437552417fa013c4bba393741c984e4941289ab34422f60ef",
+    "docs/scientific/latex/figures/generated/pressure.png": "c7dc809ac4026eaeff778c99172b669466687e75e1d78832126c2c9687cdd9f8",
+    "docs/scientific/latex/figures/generated/speciation.pdf": "035bdf519a1d84c0fac3211a863164c940b8e0b1c8de155641d7684bbd0783ca",
+    "docs/scientific/latex/figures/generated/speciation.png": "8d184b5f3f5cf5b3006ed6cacc1d4263bf150edb28986d7425132283585e6844",
+    "docs/scientific/latex/main.tex": "c843bd2ca7b776ac0e5e23386bb518a25d0bada6283a44e8f765a793f02cec03",
+    "docs/scientific/latex/references.bib": "1f049622819e2422d646533dccaa1b4af6c74c53894d41bf1da23bb4be62df93",
+    "docs/scientific/latex/sections/conclusion.tex": "3d302786c5cbe6b0c03c230a37118cae3d91f6ab34f8108e1efcb51428f11957",
+    "docs/scientific/latex/sections/data_code_availability.tex": "69cef8b04bc7e76a78b0882cc59870dfac084c5661d5484effba1d3a424b2abf",
+    "docs/scientific/latex/sections/data_methods.tex": "f229dfbc79227988e43a1f662cc66c3266872a4c3afc28d6d75415e950bdfab5",
+    "docs/scientific/latex/sections/epc_saft_equation_of_state.tex": "1ce73037f3d8c205e4c1fc246799647ab5c45e1e08c359ee1ed05f572426f2e7",
+    "docs/scientific/latex/sections/introduction.tex": "a8f036c3634e762df54df195081127a12a5971be916c24911c3a620740d05fe3",
+    "docs/scientific/latex/sections/mea_system_modeling_results.tex": "94743d8490ae60125cfce5bcc5edaaaebbee6b5cee0e182cf1755570c403da10",
+    "docs/scientific/latex/sections/nomenclature.tex": "145d743948a02756fd66e5097a7d4ecec7b9a1d7fdbca432890cd96b92e80c7e",
+    "docs/scientific/latex/styles/cas-common.sty": "99223246fe1f0c85e957b7d5edf8e581a1bef3216e1772cc130579e9c2ed292d",
+    "docs/scientific/latex/styles/cas-sc.cls": "d135f82db43b004a0fb6f4505e97b11bb675078668d33c8f170beb398ef43d45",
+    "docs/scientific/latex/styles/model1-num-names.bst": "b87650629c103f61e031bd6216e8de34c953c34cbe9d8914dd5b41fb24a3384c",
+    "docs/scientific/latex/supplement.tex": "971bc3159e74be0ec27f770d6fff659bb18a830d4b78fbc4784fb2b5961c0bf6",
+    "docs/scientific/latex/tables/acceptance_limits.tex": "84ac677ed1193c3f8e0f3f46713c2abd7f8e8da93c101f03ed7675008ab56c2b",
+    "docs/scientific/latex/tables/binary_interaction_parameters.tex": "1e5da328c07e890570da780bc8c611cb414902acfa333d8b55c643c48af3eefb",
+    "docs/scientific/latex/tables/current_data_inventory.tex": "36278697b1a7684129359852b2447453e6d2bace60f056a11ba65cd05d09200c",
+    "docs/scientific/latex/tables/density_failures.tex": "91a700593a658f98e0a49443b2f3e3e934781ac6fb317df71a2b1df1f7f6a248",
+    "docs/scientific/latex/tables/density_scales.tex": "7beb5c33a86d66e43df63b266a1ca6f715baf04243a71af3d189f701b2538024",
+    "docs/scientific/latex/tables/density_source_differences.tex": "03532fb08e64a2a33a01ce4c921b90acf17f60bf9752067fa8bfbb45a3cce313",
+    "docs/scientific/latex/tables/fitted_coordinates.tex": "de2bd16334e8952c6e4130a6240326b873e5c790b2e94c1fe4d2389c17a15907",
+    "docs/scientific/latex/tables/full_ionic_ssm_ds_parameters.tex": "fbdeda87a27fd84119ca987570ec06f7c7b6fd5333cd8a6efa9339e570135b41",
+    "docs/scientific/latex/tables/ideal_calorics.tex": "2af60e6ac16ef4cd65f7c3d8567d85fd14fa1e2fc9d1287057430e3a7bb39b65",
+    "docs/scientific/latex/tables/literature_model_comparison.tex": "f844a3452818dee92100e576ab40624b82d075ea4f49d88535abd0d86eea438f",
+    "docs/scientific/latex/tables/nomenclature.tex": "8e046ec2e03d3e9f197ea6cac701eaf2e55fb8d5c6a9d62551a0e4ab7f9792a6",
+    "docs/scientific/latex/tables/objective_groups.tex": "0cf3f5bc4674b8e581a56ed23974ccc23b9a7d68793f8768bcd5bcfb666ccc7e",
+    "docs/scientific/latex/tables/phase_reference_pressures.tex": "ec347d92b91f4aa2890fb9a7ac2038e2da19e99372438e701f2df849df38b2ac",
+    "docs/scientific/latex/tables/reaction_equilibrium_constants.tex": "2c87cd2e4243dd148c498a82232ff499258efa3d941b76fa036ef35a6cc755b4",
+    "docs/scientific/latex/tables/residual_summary.tex": "7dc309112c99496c9938c7a6f63fac7290fd42ad895d3e196b60b9f6a2ebec15",
+    "docs/scientific/latex/tables/supplement_carbonate_density.tex": "555b3cf7f58cf7243a24c29529b321a4f81e10b2ad807af7287ba13a47322528",
+    "docs/scientific/latex/tables/supplement_correlations.tex": "0a0103f675c17936e298d237f8c5208cfdd550a125359aceea23afc13d2b4762",
+    "docs/scientific/latex/tables/supplement_data_roles.tex": "5480ba60a6314475fe1f4215f19de9563a17734d882edca87cd5817e701d9082",
+    "docs/scientific/latex/tables/supplement_fitted_parameters.tex": "261d6ca604b7d242344a8222669cba9c54d1e65df702e7d74b562d5a920f9955",
+    "docs/scientific/latex/tables/supplement_outside_fit.tex": "1268e3c13cd423d958222d630bc1d603ff02b256d52a9c4ad8189f6ff34a2baf",
+    "docs/scientific/latex/tables/supplement_phase_family.tex": "4dc1cc6ed4c220556cd8f1da1b241b326435db1834a1d9961c696b98668d169c",
+    "docs/scientific/latex/tables/supplement_predecessor.tex": "d9992046a5c73320bf9b9571bec29ce9b8cc6b5bfa139ad4d816f87754b052e6",
+    "docs/scientific/latex/tables/supplement_source_aard.tex": "ceb76bd4bc394f91ebb449b69fa7ea65a2b731c912e3e6a580579af8393b7626"
+  },
+  "remaining_reviews": [
+    "Independent number/claim review by the parent",
+    "Independent reader-story review by the parent",
+    "Owner review before external publication"
+  ],
+  "checks": {
+    "main_build_exit_code": 0,
+    "supplement_build_exit_code": 0,
+    "freshness": "Manuscript PDF is current",
+    "cse_prose": "Prose check passed for plugin-wide and scoped rules.",
+    "git_diff_check_exit_code": 0,
+    "source_and_pdf_checks": {
+      "main": {
+        "forbidden_development_terms": [],
+        "sha256": "45c77179e1b93b985935b0df0bb9e425cd42897798b37efefbe7f5f6238a1416"
+      },
+      "supplement": {
+        "forbidden_development_terms": [],
+        "sha256": "2e7cc54d113be2f1ad940c945b9107d3858bb71aa9dfb0f105ae9d048e4c4c7a"
+      },
+      "bibliography": {
+        "keys": 54,
+        "cited_keys": 49,
+        "missing_keys": [],
+        "unchanged": true
+      }
+    }
+  },
+  "evidence_files_sha256": {
+    "docs/scientific/latex/builds/197-reframe-numeric-check.json": "591364a9aaf9b879a6b526aa905f98f2aa12afb0678e1fe260ba49f8dd86aab8",
+    "docs/scientific/latex/builds/197-reframe-number-sources.md": "8c667baf2905b88dc5e1d9e16378b190dcaa825b698924520246c510addffd3c",
+    "docs/scientific/latex/builds/197-reframe-handoff.md": "70375ad978352288f50081e517178fd871c83406daca2dcc2566d11e93adb4ce",
+    "docs/scientific/latex/builds/197-reframe-main-build.log": "5690a3357a3f7763aa3ca5971489121d87bf3699919b89c8945817eb3525b44d",
+    "docs/scientific/latex/builds/197-reframe-supplement-build.log": "e38a87ea7d6b44794490fe28c769287af1c6db5e9874826bbdd3548512d84b8a"
+  },
+  "build_log_format": "Compiler output preserved; trailing blank lines removed from the supplement output for the whitespace check."
+}
