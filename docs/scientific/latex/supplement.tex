@@ -38,182 +38,201 @@
 \begin{document}
 \maketitle
 
-\section{F1 predecessor and the separate six-fit study}\label{sec:s-fits}
+\section{Reference fit and matched comparison}\label{sec:s-fits}
 % P:supplement-01
-F1 is the predecessor used to define the common-subset acceptance limits and the native-density baseline for A7.
-The F1--F6 study below concerns a different model and its original software build; it supplies no A7 Born-form, pool-inclusion or source-law comparison.
-All six predecessor fits include the Vinjarapu heats.
-F1 and F2 use the solvation-shell/dielectric-saturation and original Born forms, F3 omits Born, F4 and F5 add the titration pool to those two forms, and F6 uses source reaction correlations with the published \COtwo dispersion energy.
-Table~S1 gives their target counts and component costs, and Table~S2 their fitted coordinates.
-
-\input{tables/supplement_fits}
-
-% P:supplement-02
-The separate F1--A7 comparison matches common-subset observation identities, values, units and effective scales/weights.
-Its density baseline uses F1's native untranslated density, not a corrected-density column.
-All 68 F1 density rows match A7 on temperature, loading and unloaded-solvent mass fraction, but F1 uses \SI{101325}{\pascal} and A7 \SI{100000}{\pascal}.
-The \SI{1325}{\pascal} difference is disclosed rather than corrected: no pressure-density derivative is retained, so no magnitude bound is claimed.
-The remaining A7 density rows are outside that matched cohort.
-F1 retains parameter SHA-256 \nolinkurl{66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778} and original wheel SHA-256 \nolinkurl{94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a}.
-The separate 152-quantity wheel-transfer check covers only its named quantities, not every predecessor result.
+The reference fit used 149 pressure, species and integral-heat quantities without density.
+It supplies the main-text comparison limits and the untranslated density baseline; the numerical inputs differ from those of the present fit.
+The shared pressure/species/heat comparison matches observation identities, values, units and effective residual scales and weights.
+All 68 reference-fit densities match the selected fit in temperature, loading and unloaded-solvent composition, while calculation pressures differ: 101325 and 100000 Pa, respectively.
+No pressure-density derivative is available for a correction or magnitude bound.
+Exact parameter and software identities are listed in the data-deposit README.
 
 \input{tables/supplement_predecessor}
 
-\section{Per-source A7 deviations and comparisons}\label{sec:s-outside}
-% P:supplement-03
-The first table partitions A7 fitted rows by source, operator and objective group; the second reports only rows outside the objective.
-Calibration deviations do not constitute independent prediction.
-Arcis is an acceptance check, and Wagner and concentration-transfer data were previously accessed.
-Wagner was assessed after A7 was selected but had been examined during model development.
-Canonical and packet views overlap and are not combined.
-The main text reports the complete canonical pressure view separately from the objective-excluded canonical rows below.
+\section{Source-specific deviations}\label{sec:s-outside}
+% P:supplement-02
+The first table partitions fitted observations by source and property; the second gives comparisons outside the objective.
+Fitted observations are removed from each comparison set separately, so overlapping pressure views are not additive.
+Arcis heats were used in parameter selection; Wagner and concentration-transfer data were examined during model development.
 
 \input{tables/supplement_source_aard}
 \input{tables/supplement_outside_fit}
 
-\section{All native A7 densities and carbonate shares}\label{sec:s-density}
-% P:supplement-04
-All 210 native densities remain listed, including comparison rows and the five excluded Amundsen loading-0.4 source-conflict rows.
-No empirical volume translation is applied.
-The $2s$ requirement concerns the 47 fitted loaded densities only; density scales are not uniformly measured uncertainties and $2s$ is not a 95\,\% interval.
-Amundsen's exact high-temperature/loading source-uncertainty boundary remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
-The failures at \SI{353.15}{\kelvin} are Amundsen 081 ($-5.52$~\si{\kilogram\per\cubic\metre}, $-2.28s$), Hartono $\alpha=0.29$ ($-4.16$, $-2.05s$) and Hartono $\alpha=0.39$ ($-4.41$, $-2.43s$).
-They remain failures accepted with disclosure, at temperatures outside the phase family.
+\section{Density scales, source differences and carbonate shares}\label{sec:s-density}
+% P:supplement-03
+The complete 210-observation density table is supplied as CSV in the data deposit, including the five excluded Amundsen loading-0.4 observations.
+The source summary below retains all observations and applies no volume translation.
+The $2s$ requirement applies only to the 47 fitted loaded densities.
+Amundsen density and loading inputs to the scale are 2 kg/m3 and 2\,\% of loading; the exact high-temperature/loading applicability of the density estimate remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
+Hartono inputs are 0.02 kg/m3 and 0.01 loading; the density value is reported as expanded uncertainty with coverage factor two and was used in the assigned scale without division by that factor \cite[Table~3]{Hartono2014}.
+Thus these scales do not uniformly represent standard uncertainties.
 
-% P:supplement-05
-All ten Jakobsen carbonate-share comparisons use the NMR loadings and unloaded \MEA mass fraction 0.27142748.
-Both printed loadings, NMR and maximum, are listed.
-The last column marks the nine observations used in an earlier version of this comparison; all ten are assessed here.
-The mean calculated/observed share is 0.07305, with range 0.00633--0.26703.
-These carbonate shares are distinct from the six fitted amount ratios to total amine for \MEAH, \MEACOO and \ce{HCO3- + CO3^{2-}} at each of two Jakobsen states.
-
+\input{tables/density_scales}
+\input{tables/density_source_differences}
 \input{tables/supplement_carbonate_density}
 
-\section{Finite phase-family states and A6 split confirmations}\label{sec:s-phase}
+% P:supplement-04
+All ten Jakobsen carbonate shares use the NMR loading and unloaded MEA mass fraction 0.2714, accounting for dilution during NMR sample preparation \cite[Tables~A1--A2; Sample preparation]{Jakobsen2005}.
+Their calculated/observed ratios have mean 0.0731 and range 0.00633--0.267.
+These shares of dissolved carbon differ from the six ratios to total amine used for fitting.
+
+\section{Phase-search definition and confirmed splits}\label{sec:s-phase}
+% P:supplement-05
+The complete paired 73-state table is supplied as CSV in the data deposit.
+Its pressure design specifies three levels, $P/P_*=0.50$, 0.80 and 0.95, at each temperature/loading pair; $P_*$ is the fixed reference pressure in the following table.
+These reference pressures are numerical design inputs, rather than bubble pressures recalculated from either fitted parameter set.
+The additional state at 318.15 K and loading 0.25557798 uses pressure 5918.5286 Pa, while its matched grid state has pressure 5918.528608 Pa; both are counted.
+Phase calculations use 9.7292821 mol analytical MEA, 76.9751925 mol water and $9.7292821\alpha$ mol \COtwo.
+All extensive Gibbs differences and phase amounts below refer to that feed, rather than the one-mole total-amine property basis.
+
+\input{tables/phase_reference_pressures}
+
 % P:supplement-06
-The table gives the exact 73 paired temperature/pressure/loading states and the resolved-trial counts for A6 and A7.
-Index 0 repeats the index-41 state with its pressure rounded to \SI{5918.5286}{\pascal}; both are listed.
-At each grid location, the three pressure levels have their stated values rather than one shared pressure across the family.
-A6 has 12 resolved-descent points and A7 none.
-No descent was numerically resolved in 657 trials at 73 specified states (313.15--\SI{333.15}{\kelvin}, $\alpha$ $10^{-5}$--0.5).
-The result makes no stability claim above \SI{333.15}{\kelvin}, above loading 0.5 or at the \SI{353.15}{\kelvin} density failures.
-A two-phase classification does not mean two liquid phases, and a blank minimum-descent value does not mean zero Gibbs change.
+Four liquid starts and five vapor starts are used at each converged equilibrium state.
+The liquid starts are a uniform positive composition and three compositions with 0.99 assigned to \COtwo, MEA or water, distributing 0.01 among the other species in proportion to an existing full-support phase.
+The uniform composition is charge-balanced by multiplying positive-ion amounts by $\sqrt{q_-/q_+}$ and dividing negative-ion amounts by the same factor, then normalizing; $q_+$ and $q_-$ are the positive and absolute negative charge sums.
+This reconstruction is also applied after forming each nearly pure start, followed by an arithmetic correction on the largest positive and negative ion entries.
+Vapor starts are uniform, nearly pure \COtwo, nearly pure MEA, nearly pure water, and the ideal-gas estimate $w_i\propto\exp(\pi_i-s_i)$, where $\pi_i=(B^{\mathsf T}\boldsymbol\lambda)_i$ and $s_i$ is the dimensionless standard chemical potential in the density representation.
+Only the three neutral species enter a vapor start.
+Each start obtains a density on its specified liquid or vapor branch before the reacting constrained tangent-plane minimization.
 
 % P:supplement-07
-The paired family classifications use Engine commit \nolinkurl{8298c6029ebb8b467929badc4a223c580ec591ab} and its A7 wheel identified in Section~S9.
-The separately confirmed A6 split states at indices 21, 63 and 70 retain the original Engine commit \nolinkurl{21e761c318c2ac5b555a245365c844d38a93e4cb} and wheel SHA-256 \nolinkurl{d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357}.
-Their phase compositions, amounts, densities and Gibbs changes are separate evidence from the common-wheel classification comparison.
-A failed split confirmation would not turn a resolved descent into an accepted state.
+Reacting equilibrium and trial calculations use logarithmic positive species fractions and packing fraction, phase amounts, and Lagrange multipliers for the independent balances.
+A Newton procedure and the shared Ipopt minimization use exact first and second derivatives, with MA57 linear algebra and an equilibrium-row tolerance of $10^{-10}$ recomputed in the unscaled equations.
+When an initial two-phase solve fails, up to two converged neighboring states at the same temperature provide ordered starts; if needed, the bubble solution initializes liquid fractions 0.5 and 0.9, with at most 400 iterations per attempt and 800 total.
+The final state must satisfy material and charge balances, positive compressibility and nonnegative reduced-Hessian curvature.
+A separate single-liquid/bubble calculation distinguishes a liquid from liquid--vapor equilibrium at the fixed test pressure.
 
-\begin{landscape}
-\input{tables/supplement_phase_family}
-\end{landscape}
-
-\section{Restricted-box probes and Hartono loading sensitivity}\label{sec:s-probes}
 % P:supplement-08
-The fixed-parameter size probe changes only the \MEAH segment diameter and its packing/Debye--H\"uckel ties at the first restricted endpoint.
-The sampled sizes are 5.49, 5.45, 5.40 and \SI{5.35}{\angstrom}; the corresponding numbers within $2s$ are 44, 44, 22 and 7 of 47 fitted loaded densities.
-No sampled vector has resolved descent on its 73-point family.
-Reducing size raises densities: improving the warm rows can move cold Hartono rows above $+2s$.
-The samples neither establish the minimum residual span between them nor exclude an untested size meeting the requirement.
-The subsequent joint refit uses a \MEAH size lower bound of \SI{5.35}{\angstrom} and ends at that bound, with 44 of 47 densities within $2s$.
+For each optimized trial, the tangent-plane distance $D$ is Eq.~\ref{eq:tpd-supp}; the multipliers refer to the existing reacting equilibrium.
+A donor phase $d$ with positive amounts of every supported trial species has transfer capacity $\beta_{\max}=\min_i(N_dx_{di}/w_i)$.
+The donor with greatest capacity is used.
+The transfer slope is
+\begin{equation}
+ S=g_w/(RT)-\sum_iw_i\mu_{di}/(RT)+r_{P,d},\qquad
+ r_{P,d}=1-v_d F_{v,d}-Pv_d/(RT),\qquad F=A^{\mathrm{res}}/(RT),
+ \label{eq:donor-slope}
+\end{equation}
+where $v_d$ is molar volume and $F$ is evaluated on a one-mole phase basis.
+The small pressure-row term corrects residual pressure closure in the existing phase.
+For completeness, the distance is
+\begin{equation}
+ D=g_w/(RT)-\sum_iw_i\pi_i,\qquad \pi_i=(B^{\mathsf T}\boldsymbol\lambda)_i.
+ \label{eq:tpd-supp}
+\end{equation}
+A negative $D$ and $S<-E_S$ trigger finite transfers at $\beta=\beta_{\max}/2,\ldots,\beta_{\max}/512$.
+Each transfer conserves every species amount: $x'_{di}=(N_dx_{di}-\beta w_i)/(N_d-\beta)$, leaving the other phases unchanged.
+Both phase densities are closed at the specified pressure.
+A trial is a resolved instability only if $\Delta G/(RT)<-E_{\Delta G}$ for an admitted transfer; a negative value within that error estimate remains unresolved as a decrease.
 
 % P:supplement-09
-Hartono et al.\ report the apparent \COtwo component mole fraction $x_3$ alongside the printed loading $\alpha$ \cite[Table~3, footnote~a, p.~1810]{Hartono2014}.
-The sensitivity uses the alternative loading $\alpha_{x_3}=x_3(1+W)/(1-x_3)$, where $W=7.911062165$ is the declared molar ratio of water to \MEA in the nominal 30 wt\% \COtwo-free solvent.
-Here $x_3$ is an apparent component fraction, not the true-species mole fraction of molecular \COtwo in the reacting liquid.
-The separate sensitivity changes only the declared 32 Hartono feed/loadings to this basis, keeps the printed-loading scales frozen, and refits in the second restricted box.
-It retains 44 of 47 densities within $2s$ on its own basis, with failures at Amundsen 081, Amundsen 077 and the Hartono \SI{353.15}{\kelvin} observation in the column labelled $\alpha=0.39$ in the source.
-The same sensitivity endpoint evaluated on nominal printed-loading rows has 40 of 47 within $2s$; this is a cross-basis comparison, not a replacement fit.
-Its endpoint family also has no resolved descent in 657 trials at its 73 states.
-This single sensitivity does not replace the primary A7 result or validate one loading interpretation.
-The exact inputs and results are in \nolinkurl{analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2-x3/}; the primary size-probe reductions are in \nolinkurl{amendment-7/fixed-study/wheel-8298c602/size-probe/} under the same result directory.
+The numerical-error estimate combines association-solver derivative error, the Euler identity defect, floating-point summation and the material-balance repair.
+For a one-mole phase define
+\begin{align}
+ E(w)&=(1+|v|)f+\left|F-vF_v-\sum_iw_iF_{n_i}\right|+\gamma_{2N+4}M,\\
+ E_S&=E(w)+(1+|v_d|)f_d+E_{\mathrm{feas}}+\gamma_{N+3}M_S,\\
+ E_{\Delta G}&=(N_d-\beta)E(x'_d)+\beta E(w)+N_dE(x_d)+E_{\mathrm{feas}}+\gamma_{N+3}M_G.
+ \label{eq:phase-error}
+\end{align}
+Here $f$ is the reported residual-Helmholtz gradient error estimate in the SI volume and amount columns, $N=9$, $\gamma_m=m\epsilon/(1-m\epsilon)$ and $\epsilon$ is machine precision.
+The sum magnitude is $M=|F|+\sum_i|w_i[\ln(w_i/v)-1+s_i]|+|Pv/(RT)|$.
+$M_S=|g_w/(RT)|+\sum_i|w_i\mu_{di}/(RT)|+|r_{P,d}|$ and $M_G$ sums absolute values of the three extensive Gibbs terms in the transfer difference.
+The feasibility estimate is $E_{\mathrm{feas}}=\sum_{p,i}(|\delta n_{pi}|+|\delta n^{\mathrm{intended}}_{pi}-\delta n_{pi}|)|\mu_{pi}/(RT)|$, where the correction solves the balance and charge defects with amount-weighted linear algebra.
+No uncertainty in the supplied standard-state functions is included in this numerical estimate.
+Finite-transfer compositions must normalize and be charge-neutral to $10^{-12}$; species and conserved-quantity amount errors must be at most $10^{-12}\max(1,n_{\mathrm{feed}})$ mol.
+These are numerical resolution rules, not experimental uncertainty bounds or a global stability proof.
 
-\section{Conditional covariance and correlations}\label{sec:s-uncertainty}
+\input{tables/supplement_phase_family}
+
+\section{Diameter probes and loading sensitivity}\label{sec:s-probes}
 % P:supplement-10
-A7 has ten free coordinates of rank ten and six bound-active coordinates, with 297 degrees of freedom and variance factor 1.002729.
-The table retains scientific-coordinate order, signed transformations and ties; R5 $A$ is unshifted and the R2/R5 enthalpy shifts are inherited-plus-fitted totals.
-Bound-active coordinates have no symmetric standard error.
-Errors and correlations condition on residual weights, fixed inputs, active bounds and local linearization.
-They are not measurement uncertainty, parameter-uniqueness evidence or prediction intervals; a variance factor near one does not validate the scales.
+A fixed-parameter probe of the initial restricted fit changes only the \MEAH segment diameter and its packing/Debye--H\"uckel ties.
+At diameters 5.49, 5.45, 5.40 and 5.35 angstrom, 44, 44, 22 and 7 of 47 densities lie within $2s$, respectively; none of the sampled parameter sets has resolved phase instability on the specified states.
+Reducing size improves the warm densities while raising cold Hartono densities above $+2s$.
+The subsequent joint fit at the 5.35 angstrom lower bound returns 44/47 within $2s$.
 
-\input{tables/supplement_correlations}
-
-\section{Source corrections and reaction-coordinate provenance}\label{sec:s-corrections}
 % P:supplement-11
-Hilliard pressure observations retain the measured molality and temperature \cite[App.~D.4]{Hilliard2008}, and Xu observations retain their source molality and actual temperatures \cite[Table~1]{Xu2011}.
-The three Xu rows above \SI{393.15}{\kelvin} remain excluded from reacting calculations.
-B\"ottinger solvent compositions follow Table~3, including the 31 wt\% high-temperature series; oxazolidone is not represented by the nine-species model \cite[Table~3]{Bottinger2008}.
-Matin pool observations use the bicarbonate-plus-carbonate operator, with the declared temperature approximation identified in the main text \cite[Eqs.~18--19b, Supplement Table~S.1]{matinFacileMethodDetermination2012}.
-Both Jakobsen loadings are preserved, and the carbonate-share assessment uses the NMR loading rather than the maximum loading \cite[Tables~A1--A2]{Jakobsen2005}.
-The five Amundsen source-conflict rows are displayed but excluded from the fitting and density requirement.
+Hartono et al.\ report apparent \COtwo component fraction $x_3$ as well as loading \cite[Table~3, footnote~a]{Hartono2014}.
+A separate sensitivity uses $\alpha_{x_3}=x_3(1+W)/(1-x_3)$, with water/MEA molar ratio $W=7.911062165$, for the 32 fitted Hartono observations, while keeping the printed-loading density scales fixed.
+It gives 44/47 densities within $2s$ on its own loading basis and 40/47 when evaluated on the nominal printed loadings; its 73-state phase search has no resolved instability.
+This comparison leaves the loading ambiguity unresolved and does not replace the selected fit.
 
+\section{Conditional correlations}\label{sec:s-uncertainty}
 % P:supplement-12
-R2 begins with the Austgen source correlation and its aqueous-molality conversion; R5 begins with the Bates--Pinching correlation.
-Earlier joint fits and the interpolated starting record supplied inherited chemistry shifts, rather than a new zero-shift start.
-The accepted second restricted fit inherits total R2/R5 shifts of $-1811.8989$ and $+10000$~\si{\joule\per\mole} and ends at $-1387.4047$ and $+10000$~\si{\joule\per\mole}, with unshifted R5 $A=\SI{2831.681}{\kelvin}$.
-The selected R2/R5 coefficients in main-text Table~1 already contain those transformations.
-Their earlier data use is calibration history, not independent validation of a reaction law.
-Exact source correlations, earlier adjustments, starts, transformations and file hashes are documented in \nolinkurl{docs/scientific/latex/source_log.md} and the accompanying calculation files.
-
-\section{Historical broad source inventory}\label{sec:s-data-inventory}
-% P:supplement-13
-The following broad source inventory predates the A7 fit and is not its fitting inventory.
-Counts and extraction notes describe that inventory's source review, not current A7 observation roles.
-The current objective is the eight-group table in the main text.
-
-% P:supplement-14
-Two retained-inventory inconsistencies require explicit correction before reading the table.
-A7 fits four Hilliard2008 heat-capacity rows, at 318.15 and \SI{353.15}{\kelvin} and loadings 0 and 0.358; the inventory's ``not extracted'' heat-capacity note is superseded for those rows (\nolinkurl{analyses/mea_parameter_bundle/results/a7-paper-evidence/cp.csv}).
-All 103 Amundsen2009 density rows in A7 use \SI{100000}{\pascal} (\nolinkurl{analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv}, field \texttt{P\_Pa}); other density pressures are row-specific and listed in Section~S3.
-In the matched 68-row F1 density comparison, F1 uses \SI{101325}{\pascal} and A7 \SI{100000}{\pascal}, a \SI{1325}{\pascal} difference.
-No pressure-density derivative is retained, so no magnitude claim is made for that difference (A7 data release README).
-These corrections apply to interpreting the historical table; they do not imply that its generated contents were updated.
-
-\input{tables/supplement_data_inventory}
-
-\section{Numerical checks and calculation files}\label{sec:s-files}
-% P:supplement-15
-The 375 equilibrium states have maximum absolute stationarity $2.1885\times10^{-12}$, material-balance residual $8.5310\times10^{-13}$~mol and charge residual $2.1176\times10^{-13}$~mol.
-A separate re-evaluation of the selected parameter file reproduces 153 named quantities with maximum relative difference $8.39\times10^{-16}$.
-Density replay, integral-heat replay and the four heat-capacity conversions are retained in \nolinkurl{analyses/mea_parameter_bundle/results/a7-paper-evidence/verification.json}; the 153-identity comparison is in \nolinkurl{default-replay/comparison.json} below that directory.
-The heat-capacity check retains the nominal unloaded $10^{-6}$ loading proxy and the complete feed-mass conversion.
-These results verify numerical solutions and reproduction; they validate neither phase behavior nor absorber/stripper performance.
-
-% P:supplement-16
-The selected A7 parameter file is \nolinkurl{analyses/mea_parameter_bundle/results/selected-current-best-parameters.json}, SHA-256 \nolinkurl{e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e}.
-It is byte-identical to the endpoint of the second restricted fit, and the evidence commit, including the analysis notebook, is \nolinkurl{8f40c125e5945ac785cc0ad1889fc79bea2096c9}.
-A7 calculations use the ePC-SAFT Engine software from the private repository \url{https://github.com/tannerpolley/ePC-SAFT}, at commit \nolinkurl{8298c6029ebb8b467929badc4a223c580ec591ab}, with wheel SHA-256 \nolinkurl{8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3}.
-The Engine wheel is not bundled with the planned A7 data release; reproducing the thermodynamic calculations requires access to that dependency.
-A6 density and Arcis assessments retain the earlier Engine and wheel identity stated in Section~S4; the paired A6/A7 phase search uses the A7 Engine.
-F1 retains the original parameter and wheel identities stated in Section~S1, with Engine commit \nolinkurl{026b30311b959f1a5db4feef4c15e243f7044a5f}.
-
-% P:supplement-17
-The A7 data release DOI is pending.
-The A7 data release preserves repository-relative files, their SHA-256 checksums, roles and reproduction commands.
-Its README lists omitted dependencies, including the Engine wheel binary and primary source PDFs.
-The earlier deposit, DOI \nolinkurl{10.5281/zenodo.23323107}, concerns the F1 predecessor and is not an A7 release.
-The A7 evidence package includes fitted-row and state-target tables, all densities and heats, heat capacities, carbonate shares, conditional errors and paired phase-family points.
-The manuscript's numerical tables and figures read those retained values through \nolinkurl{docs/scientific/latex/scripts/final_rerun_tables.py} and \nolinkurl{analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py}; figure input hashes and identities are in \nolinkurl{docs/scientific/latex/figures/generated/provenance.json}.
-Presentation regeneration evaluates no thermodynamic model.
-The repository software and original documentation use the MIT License; third-party measurements retain their source terms and provenance.
-
-\section{Complete A7 species, association and binary inputs}\label{sec:s-parameters}
-% P:supplement-18
-These tables list every species, association, correlation and binary input of the selected A7 parameter file, with its fitted, tied or fixed role.
-
-The fixed neutral \MEA segment count, segment diameter, dispersion energy and self-association energy are the 2B values of Fakouri Baygi and Pahlavanzadeh \cite[Table~2]{Baygi2015}; the association-volume conversion used here is described in the main text.
-The fixed \COtwo segment count, segment diameter and dispersion energy agree with the values tabulated by Schick et al.\ \cite[Table~1]{Schick2023}.
-Water's segment count, diameter-law constant, dispersion energy, self-association energy and association volume were estimated in the preceding pure-water calibration of this project against IAPWS-95 reference values and then held fixed; the remaining diameter-law coefficients were retained.
-The fixed bicarbonate, carbonate and hydroxide segment diameters and dispersion energies retain the aqueous-electrolyte values tabulated by Uyan et al.\ \cite[Table~4]{Uyan2015}; the corresponding source \ce{H+} values are assigned here to \ce{H3O+} as a model transfer.
-These citations identify the stated parameter subsets, not every Born, dielectric or binary input; the other entries retain their separate project, source and transfer qualifications.
-The selected parameter file in the planned A7 data release preserves source and transformation locators, including inherited lineage labels.
-The parameter attributions above distinguish those labels from the origin of the values used here.
+The ten free parameters have rank ten, six further parameters are at bounds, and the covariance has 297 degrees of freedom with variance factor 1.003.
+The matrix and errors condition on the specified weights, fixed inputs, active bounds and local linearization.
+Optimizer starting values and signed affine transformations are supplied electronically.
 
 \begin{landscape}
+\input{tables/supplement_correlations}
+\end{landscape}
+
+\section{Source conventions and reaction parameters}\label{sec:s-corrections}
+% P:supplement-13
+Hilliard and Xu pressures use measured molality and temperature; the three Xu states above 393.15 K are excluded \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
+B\"ottinger compositions follow Table~3, including the 31 wt\% high-temperature series \cite{Bottinger2008}.
+Matin bicarbonate-labelled values are compared with calculated bicarbonate plus carbonate as the approximation explained in the main text \cite[Eqs.~18--19b]{matinFacileMethodDetermination2012}.
+Both printed Jakobsen loadings are preserved, while calculations use the NMR rather than maximum loading \cite[Tables~A1--A2]{Jakobsen2005}.
+
+% P:supplement-14
+R2 starts from Austgen's source correlation and the molality conversion; R5 starts from Bates--Pinching \cite[Table~V]{Austgen1991}\cite[Eq.~10, p.~351]{batesAcidicDissociationConstant1951}.
+The source R5 is $\mathrm{p}K=2677.91/T+0.3869+0.0004277T$.
+The selected fit changes it by +0.60 pK at 298.15 K and +0.49 at 313.15 K; the source and fitted dissociation enthalpies at 313.15 K are 50.5 and 63.4 kJ/mol.
+The +10 kJ/mol enthalpy adjustment is at its bound, and the reciprocal-temperature coefficient is also fitted.
+Full starting values, total shifts and their transformations are supplied in the electronic data; the coefficients in the main reaction table already include the shifts.
+
+\section{Current data inventory}\label{sec:s-data-inventory}
+% P:supplement-15
+The current inventory lists source, property, conditions and role; overlapping comparison sets are not additional independent measurements.
+Exact source locations, uncertainties and individual observation identities are supplied with the CSV files.
+
+\input{tables/current_data_inventory}
+
+\section{Caloric inputs and numerical checks}\label{sec:s-files}
+% P:supplement-16
+The neutral ideal-gas caloric functions are \COtwo and water Shomate correlations from NIST-JANAF, and the MEA heat-capacity polynomial tabulated by Zhang et al.\ \cite{chaseNISTJANAFThermochemicalTables1998}\cite[Table~3]{Zhang2011}.
+The standard pressure is 100 kPa; \COtwo and water formation-enthalpy constants and all correlation coefficients are tabulated below.
+The water function is extrapolated below its published 500 K lower limit over the liquid-study temperatures.
+MEA enthalpy and entropy are zero at 313.15 K as a conserved-component reference convention.
+The five ionic reference functions follow the reaction constraints and the temperature-dependent infinite-dilution corrections; they are not extra fitted heat-capacity functions.
+
+\input{tables/ideal_calorics}
+
+% P:supplement-17
+The 375 equilibrium states have maximum absolute stationarity residual $2.19\times10^{-12}$, material-balance residual $8.53\times10^{-13}$ mol and charge residual $2.12\times10^{-13}$ mol.
+The heat-capacity consistency checks include equilibrium enthalpy derivatives, the $10^{-6}$ unloaded loading approximation and conversion by the complete analytical-feed mass.
+These checks verify numerical solutions rather than physical phase behavior.
+All retained values, software identities, file checksums and reproduction commands are indexed in the data-deposit README.
+The Zenodo DOI will be added at submission; the exact compiled ePC-SAFT Engine package will be provided to referees through restricted access coordinated by the corresponding author.
+
+\section{Complete model inputs and fixed-parameter provenance}\label{sec:s-parameters}
+% P:supplement-18
+Neutral MEA parameters are the 2B values of Baygi and Pahlavanzadeh, with the association-volume conversion stated in the main text \cite[Table~2]{Baygi2015}.
+\COtwo segment count, diameter and dispersion energy are from Gross and Sadowski \cite[Table~1]{Gross2001}.
+Bicarbonate, carbonate and hydroxide sizes and dispersion energies follow Uyan et al.; their hydrogen-ion parameters are transferred here to hydronium \cite[Table~4]{Uyan2015}.
+Ion segment count one and the diameter ties are modeling assumptions.
+Fixed Born diameters for bicarbonate, carbonate, hydronium and hydroxide, and the fixed water interactions with carbonate, hydronium and hydroxide, are model inputs without independent MEA-specific parameter measurements.
+Their exact values are tabulated; they are not attributed to the cited size/dispersion source.
+Water's solvation factor and ion-region permittivity follow Figiel et al.; unit solvation factors for the other components are assumptions \cite[Table~2, Eqs.~5--10]{Figiel2025}.
+
+% P:supplement-19
+Five water parameters (segment count, diameter-law constant, dispersion energy, association energy and association volume) were fitted to IAPWS-95 density, saturation pressure and heat capacity on 20 temperatures from 298.15 to 393.15 K \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
+The two exponential terms in $\sigma_w(T)=\sigma_0+10.11\exp(-0.01775T)-1.417\exp(-0.01146T)$ were fixed while $\sigma_0$ was fitted; diameters are in angstrom and temperature in kelvin.
+The objective scales were relative 0.0004885 for saturated density, 0.006187 for saturation pressure and 0.03 for heat capacity, with heat-capacity weight 0.1 relative to the other property groups.
+On the fitting temperature grid, mean absolute relative errors were 0.0363\,\% for saturated-liquid density, 0.0754\,\% for saturation pressure and 0.440\,\% for heat capacity.
+An interleaved 19-temperature grid gave 0.0343, 0.0700 and 0.416\,\%, respectively.
+These are comparisons with a reference equation, rather than independent measurements.
+The \COtwo--water interaction intercept and slope were then fitted to the 39 Kiepe pressures and held fixed in the present joint fit \cite{kiepeExperimentalDeterminationPrediction2002}.
+
+% P:supplement-20
+The MEA permittivity coefficients were estimated by weighted least squares from 14 unloaded MEA--water permittivities at 298.15 K, using calculated densities and relative scale 0.01 \cite[ESI Tables~S1--S2]{agieienkoWhatGasStream2024a}.
+Water coefficients, 0.3777 L/mol and 1403 K, follow Yang et al.; the \COtwo dielectric volume $10^{-8}$ L/mol and temperature 1403 K are assumptions \cite[Table~6]{Yang2024}.
+The quadratic composition dependence gives two coefficient pairs with identical fitted cost 1.934: $(d_V,d_T)=(0.24645\ \mathrm{L/mol},2436.44\ \mathrm{K})$ or $(0.73099\ \mathrm{L/mol},1019.08\ \mathrm{K})$.
+The larger-volume solution is used here; the permittivity data alone do not distinguish these solutions, so that selection is a model assumption.
+Temperature and loaded-solution extrapolation of this fit remain untested by these permittivity data.
+
 \input{tables/full_ionic_ssm_ds_parameters}
 \input{tables/binary_interaction_parameters}
-\end{landscape}
 
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references}

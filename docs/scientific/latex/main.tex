@@ -9,6 +9,7 @@
 \usepackage{subcaption}
 \usepackage{longtable}
 \usepackage{placeins}
+\usepackage{needspace}
 \usepackage{mathtools}
 \usepackage{tabularx}
 \usepackage{makecell}
@@ -70,7 +71,7 @@
 \def\floatpagepagefraction{1}
 \def\textpagefraction{.001}
 
-\shorttitle{ePC-SAFT with carbamate chemistry for CO2 in aqueous MEA}
+\shorttitle{ePC-SAFT with carbamate chemistry for \texorpdfstring{\ce{CO2}}{CO2} in aqueous MEA}
 \shortauthors{Polley}
 
 \title[mode = title]{\texorpdfstring{Electrolyte PC-SAFT with carbamate chemistry for \ce{CO2} in aqueous monoethanolamine: joint calibration and a finite phase test}{Electrolyte PC-SAFT with carbamate chemistry for CO2 in aqueous monoethanolamine: joint calibration and a finite phase test}}
@@ -91,15 +92,16 @@
 
 \begin{abstract}
 % P:abstract-01
-Can one explicit-ion equation of state represent equilibrium, caloric and density properties of 30 wt\% aqueous monoethanolamine without a numerically resolved Gibbs-energy descent, that is, a lower-Gibbs-energy phase arrangement, at specified states, and what does that restriction cost?
-A nine-species electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model with carbamate chemistry is jointly calibrated through 16 adjustable parameters against 307 quantities: pressures, species, heats, densities, heat capacities and binary equilibria.
-Pressure and species data also fitted by a predecessor parameterization give average absolute relative deviations of 11.86 and 7.10\,\%, and fitted integral-heat root-mean-square error is \SI{1.83}{\kilo\joule\per\mole} \COtwo.
-Without empirical volume translation, 44 of 47 fitted loaded densities fall within twice their declared scales.
-No descent was numerically resolved in 657 trials at 73 specified states (313.15--\SI{333.15}{\kelvin}, $\alpha$ $10^{-5}$--0.5).
-A preceding fit to the same objective met all 47 loaded-density requirements but had resolved descent at 12 of these states; the selected endpoint has three density failures at \SI{353.15}{\kelvin}, 0.40--0.53\,\% below measurement and outside the phase-search temperatures.
-Comparisons outside the objective are not independent validation: Arcis heats served as an acceptance check, and Wagner pressures and transfer data were examined during model development.
-Carbonate share, the titration bicarbonate pool, unloaded heat capacity at \SI{318.15}{\kelvin} and 45 wt\% pressure transfer remain discrepant.
-Two sequential single-start fits in sampled bounds establish a constrained local feasibility result with conditional errors and finite phase evidence, not a global optimum or physical validation of phase behavior or process performance.
+We jointly calibrate a nine-species electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model of \COtwo absorption in 30 wt\% aqueous monoethanolamine (MEA), with explicit carbamate chemistry and a solvation-shell Born term.
+Sixteen parameters are fitted to 307 quantities: pressures, species fractions, integral heats, densities, heat capacities and binary equilibria.
+The selected fit gives average absolute relative deviations of 11.86 and 7.10\,\% for 47 fitted pressures and 94 species fractions, and integral-heat root-mean-square error of \SI{1.83}{\kilo\joule\per\mole} \COtwo.
+Densities are calculated without volume translation; 44 of 47 fitted loaded densities lie within twice their assigned scale.
+The leading limitation is the phase-test range: 73 states at 313.15--\SI{333.15}{\kelvin} and loading $10^{-5}$--0.5, below the \SI{353.15}{\kelvin} density failures.
+An original-bound fit has numerically resolved instability at 12 states; restricting the protonated-amine size and water-interaction bounds removes all detected instabilities in 657 trials, while increasing total cost by 0.45\,\% and leaving three densities 0.40--0.53\,\% low.
+The fitted protonated-amine dissociation pK exceeds Bates--Pinching by 0.49 pK at \SI{313.15}{\kelvin}.
+Carbonate share, titration bicarbonate, unloaded heat capacity and 45 wt\% pressure transfer remain discrepant.
+Heat temperature dependence is untested beyond the fitted and compared states.
+The results describe local calibration and finite numerical searches; previously examined comparisons and the heat-based selection check provide no independent validation of phase behavior or process performance.
 \end{abstract}
 
 \begin{keywords}

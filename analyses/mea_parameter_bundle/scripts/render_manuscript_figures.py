@@ -13,6 +13,10 @@ OUT = a.ROOT / 'docs/scientific/latex/figures/generated'
 COLORS = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#7B5D00', '#006B75', '#555555']
 LOADING = r'Loading (mol CO$_2$/mol MEA)'
 OUTPUTS = {}
+MARKERS = ['o', 's', '^', 'v', 'D', 'P', 'h']
+SOURCE_NAMES = {'Bottinger2008':'Böttinger et al. (2008)', 'Matin2012':'Matin et al. (2012)', 'Vinjarapu2024':'Vinjarapu et al. (2024)', 'Arcis2011':'Arcis et al. (2011)', 'Amundsen2009':'Amundsen et al. (2009)', 'Hartono2014':'Hartono et al. (2014)', 'Han2012':'Han et al. (2012)', 'Aronu2011':'Aronu et al. (2011)', 'Hilliard2008':'Hilliard (2008)', 'Idris2014':'Idris et al. (2014)', 'Jou1995':'Jou et al. (1995)', 'Mamun2005':"Ma’mun et al. (2005)", 'Wagner2013':'Wagner et al. (2013)', 'Xu2011':'Xu and Rochelle (2011)'}
+SPECIES_NAMES = {'MEA':r'MEA', 'MEAH+':r'MEAH$^+$', 'MEACOO-':r'MEACOO$^-$', 'MEA + MEAH+':r'MEA + MEAH$^+$', 'HCO3-':r'HCO$_3^-$ + CO$_3^{2-}$'}
+
 
 
 def save(fig, name, caption, inputs):
@@ -23,14 +27,12 @@ def save(fig, name, caption, inputs):
     plt.close(fig)
 
 
-def measured(ax, part, color, label, fitted):
-    for marker, member in [('o', True), ('s', False)]:
+def measured(ax, part, color, label, fitted, marker='o'):
+    for member in [True, False]:
         rows = [r for r in part if (r['target'] in fitted) == member]
         ax.scatter([float(r['loading']) for r in rows], [float(r['observed']) for r in rows],
-                   marker=marker, facecolors='none', edgecolors=color, s=16, linewidths=.7,
-                   label=label if member else None)
-    ax.scatter([float(r['loading']) for r in part], [float(r['predicted']) for r in part],
-               marker='x', color=color, s=12, linewidths=.7)
+                   marker=marker, facecolors=color if member else 'none', edgecolors=color, s=20, linewidths=.7)
+    ax.scatter([float(r['loading']) for r in part], [float(r['predicted']) for r in part], marker='x', color='black', s=10, linewidths=.55)
 
 
 def main():
@@ -48,16 +50,21 @@ def main():
     for ax, (view, t) in zip(axes.flat, configurations):
         part = [dict(r, observed=float(r['observed'])/1000, predicted=float(r['predicted'])/1000)
                 for r in (canonical if view=='canonical' else wagner) if min(panels, key=lambda x: abs(x-(float(r['temperature_K'])-273.15))) == t]
-        for source, color in zip(sources, COLORS):
-            measured(ax, [r for r in part if r['source'] == source], color, source, packet_fit)
-        ax.set(title=('Wagner, ' if view=='wagner' else '')+f'{t} °C (nominal)', xlabel=LOADING, yscale='log', ylabel=r'$p_{CO_2}$ (kPa)')
+        for source, color, marker in zip(sources, COLORS, MARKERS):
+            measured(ax, [r for r in part if r['source'] == source], color, source, packet_fit, marker)
+        ax.set(title=(f'Wagner, {353 if t==80 else 392} K' if view=='wagner' else f'{t} °C (nominal)'), xlabel=LOADING, yscale='log', ylabel=r'$p_{CO_2}$ (kPa)')
         ax.grid(alpha=.15)
-    axes.flat[-1].set_axis_off()
-    handles = [Line2D([], [], marker='o', markerfacecolor='none', color=c, linestyle='none', label=s) for s,c in zip(sources,COLORS)]
-    handles += [Line2D([], [], marker=m, markerfacecolor='none', color='black', linestyle='none', label=meaning)
-                for m,meaning in [('o','Observed, fitted'),('s','Observed, not fitted'),('x','A7 at measured state')]]
+    diagnostic=axes.flat[-1]
+    for source,color,marker in zip(sources,COLORS,MARKERS):
+        part=[r for r in canonical+wagner if r['source']==source]
+        diagnostic.scatter([float(r['loading']) for r in part], [100*(float(r['predicted'])/float(r['observed'])-1) for r in part], color=color,marker=marker,s=12)
+    diagnostic.axhline(0,color='grey',lw=.6)
+    diagnostic.set(title='Pressure deviations',xlabel=LOADING,ylabel='Calculated − observed (%)')
+    handles = [Line2D([], [], marker=m, markerfacecolor='none', color=c, linestyle='none', label=SOURCE_NAMES.get(source,source)) for source,c,m in zip(sources,COLORS,MARKERS)]
+    handles += [Line2D([], [], marker=m, markerfacecolor=fill, color='black', linestyle='none', label=meaning)
+                for m,fill,meaning in [('o','black','Fitted'),('o','none','Not fitted'),('x','black','Calculated')]]
     axes.flat[-2].set_axis_off()
-    axes.flat[-2].legend(handles=handles, loc='center', frameon=False, fontsize=7)
+    axes.flat[-2].legend(handles=handles, loc='center', frameon=False, fontsize=8)
     save(fig,'pressure','Canonical and Wagner pressure views only; packet view establishes fitted IDs and is not appended. Pa converted to kPa. Nominal temperatures group retained measured states; Wagner was assessed after acceptance and previously accessed. No phase claim above 333.15 K or loading 0.5.', ['canonical-pressure.csv','wagner-pressure.csv','pressure-figure-data.csv','fitted-rows.csv'])
     species, pool = a.rows(a.E/'species-figure-data.csv'), a.rows(a.E/'pool-figure-data.csv')
     assert len(pool)==19 and not any(r['target'] in fitted_ids for r in pool)
@@ -66,17 +73,17 @@ def main():
     groups = [('Matin2012',20)]+[('Bottinger2008',t) for t in [20,40,60,80]]
     names = sorted({r['species'] for r in species})
     for ax,(source,t) in zip(axes.flat,groups):
-        for name,color in zip(names,COLORS):
+        for name,color,marker in zip(names,COLORS,MARKERS):
             part=[r for r in species if r['source']==source and round(float(r['temperature_K'])-273.15)==t and r['species']==name]
-            measured(ax,part,color,name,fitted_ids)
-        ax.set(title=f'{source}, {t} °C',xlabel=LOADING,ylabel='Liquid mole fraction')
+            measured(ax,part,color,name,fitted_ids,marker)
+        ax.set(title=f'{SOURCE_NAMES.get(source,source)}, {t} °C',xlabel=LOADING,ylabel='Liquid mole fraction')
         ax.grid(alpha=.15)
     ax=axes.flat[-1]
-    measured(ax,pool,'#0072B2','Matin pool',set())
-    ax.set(title='Matin pool, report-only (19)',xlabel=LOADING,ylabel=r'HCO$_3^-$ + CO$_3$²$^-$ mole fraction')
-    handles=[Line2D([],[],marker='o',color=c,linestyle='none',label=(r'HCO$_3^-$ + CO$_3^{2-}$ pool' if n=='HCO3-' else n)) for n,c in zip(names,COLORS)]
-    fig.legend(handles=handles,fontsize=7,frameon=False,loc='outside upper center',ncol=3)
-    fig.supxlabel('Open circles: fitted; open squares: not fitted; crosses: A7',fontsize=8)
+    measured(ax,pool,'#0072B2','Matin bicarbonate + carbonate',set())
+    ax.set(title='Matin: non-fitted bicarbonate (19)',xlabel=LOADING,ylabel=r'HCO$_3^-$ + CO$_3^{2-}$ mole fraction')
+    handles=[Line2D([],[],marker=m,color=c,linestyle='none',label=SPECIES_NAMES.get(n,n)) for n,c,m in zip(names,COLORS,MARKERS)]
+    fig.legend(handles=handles,fontsize=8,frameon=False,loc='outside upper center',ncol=3)
+    fig.supxlabel('Filled: fitted; open: not fitted; black crosses: calculated',fontsize=8)
     save(fig,'speciation','Species observation operators retain aggregates: NMR MEA + MEAH+, titration species, and the separate 19-row Matin HCO3− + CO3²− pool. All values are mole fractions at retained states; pool rows are outside the objective and previously accessed.', ['species-figure-data.csv','pool-figure-data.csv','fitted-rows.csv'])
     fig,axes=plt.subplots(3,1,figsize=(FULL_WIDTH,6.8),layout='constrained',sharey=True)
     for ax,(source,pressure) in zip(axes,[('Vinjarapu2024',1734000),('Arcis2011',510000),('Arcis2011',1030000)]):
@@ -88,10 +95,10 @@ def main():
         roles = {r['role'] for r in part}
         assert len(temperatures) == len(roles) == 1 and roles in ({'fitted'}, {'non-fitted prediction'})
         role = 'fitted' if roles == {'fitted'} else 'acceptance check'
-        ax.set(title=f'{source} — {temperatures.pop():g} K; {pressure/1e6:g} MPa; {role}',xlabel=LOADING)
+        ax.set(title=f'{SOURCE_NAMES.get(source,source)} — {temperatures.pop():g} K; {pressure/1e6:g} MPa; {role}',xlabel=LOADING)
         ax.set_ylabel(r'Integral heat (kJ/mol CO$_2$)')
         ax.grid(alpha=.15)
-    fig.suptitle('Open: observed; crosses: A7; bars: declared heat scale',fontsize=9)
+    fig.suptitle('Open: observed; crosses: calculated; bars: residual heat scale',fontsize=9)
     save(fig,'heat-of-absorption','Eight fitted Vinjarapu heats at 313.15 K and 1.734 MPa, and fourteen Arcis acceptance-check heats at 322.5 K, separated into the 0.51 and 1.03 MPa source-pressure groups. Bars show `scale_J_mol_CO2 / 1000`, not a declared confidence interval. There is no A7 no-heat series.', ['heat.csv'])
     a6=a.rows(a.J/'amendment-6/selected-assessment/density.csv')
     by_id={r['id']:r for r in a6}
@@ -106,23 +113,23 @@ def main():
             ax.scatter(float(r['T_K']),float(by_id[r['id']]['error_over_s']),color=color,marker='x',s=18)
         ax.axhline(2,color='grey',ls='--',lw=.6)
         ax.axhline(-2,color='grey',ls='--',lw=.6)
-        ax.set(title=source+' fitted loaded',xlabel='Temperature (K)',ylabel='Error / declared scale s')
+        ax.set(title=SOURCE_NAMES[source]+'; fitted loaded',xlabel='Temperature (K)',ylabel='Error / scale s')
     excluded=set(summary['density']['Amundsen source-conflict five']['row_ids'])
     free=set(summary['density']['Amundsen CO2-free gate five']['row_ids'])
     for ax,record,group in [(axes[1,0],'Fitted', [r for r in density if r['id'] in set(spec['loaded_density_ids'])|free]),
                             (axes[1,1],'Non-fitted / excluded',[r for r in density if r['id'] not in set(spec['loaded_density_ids'])|free])]:
-        for source,color in zip(sorted({r['source'] for r in density}),COLORS):
-            for marker,is_excluded in [('o',False),('x',True)]:
+        for source,color,source_marker in zip(sorted({r['source'] for r in density}),COLORS,MARKERS):
+            for marker,is_excluded in [(source_marker,False),('x',True)]:
                 part=[r for r in group if r['source']==source and (r['id'] in excluded)==is_excluded]
                 if not part:
                     continue
-                ax.scatter([float(r['T_K']) for r in part],[float(r['error_kg_m3']) for r in part],marker=marker,color=color,s=12,label=source+(' excluded' if is_excluded else ''))
-        ax.set(title=record+' A7 densities',xlabel='Temperature (K)',ylabel='Native density error (kg/m³)')
-        ax.legend(fontsize=6,frameon=False,loc='upper center',bbox_to_anchor=(.5,-.18),ncol=2)
+                ax.scatter([float(r['T_K']) for r in part],[float(r['error_kg_m3']) for r in part],marker=marker,color=color,s=12,label=SOURCE_NAMES[source]+(' excluded' if is_excluded else ''))
+        ax.set(title=record+' densities',xlabel='Temperature (K)',ylabel='Native density error (kg/m³)')
+        ax.legend(fontsize=8,frameon=False,loc='upper center',bbox_to_anchor=(.5,-.18),ncol=1)
     fig.colorbar(plt.cm.ScalarMappable(norm=plt.Normalize(0,.5),cmap='viridis'),ax=list(axes[0]),label='Loading',shrink=.7)
-    fig.suptitle('Top: A7 circles, A6 crosses, same 47 states; bottom: all 210 A7 rows',fontsize=9)
+
     save(fig,'loaded-density-errors','A7/A6 share the 47 fitted loaded-density identities, observed values, scales and states. Top panels show ±2s limits only for that fitted cohort; color denotes loading, with source separated. Bottom panels cover all 210 A7 densities and distinguish fitted, non-fitted and excluded rows. No empirical volume translation. Scales are not uniformly measurement uncertainty; 2s is not a 95% interval.', ['density.csv','fitted-rows.csv',str((a.J/'amendment-6/selected-assessment/density.csv').relative_to(a.ROOT))])
-    fig,axes=plt.subplots(2,3,figsize=(FULL_WIDTH,5.4),layout='constrained',sharex=True,sharey=True)
+    fig,axes=plt.subplots(2,3,figsize=(FULL_WIDTH,4.4),layout='constrained',sharex=True,sharey=True)
     for row,record in enumerate(['A6','A7']):
         grid={}
         for index,r in paired[record].items():
@@ -139,16 +146,14 @@ def main():
                 if r['final_success']!='True' or int(r['failed_trial_optimizers']):
                     ax.annotate('!'+r['failed_trial_optimizers'],(float(r['temperature_K']),float(r['loading'])),fontsize=6)
         for rank,ax in enumerate(axes[row]):
-            ax.set(title=record+' / '+['lowest','middle','highest'][rank]+' pressure',xlabel='Temperature (K)')
+            ax.set(title=['lowest','middle','highest'][rank]+' pressure',xlabel='Temperature (K)')
             ax.set_xticks([313.15,318.15,333.15],labels=['313.15','318.15','333.15'])
             ax.set_yticks([1e-5,.1,.3,.5],labels=[r'$10^{-5}$','0.1','0.3','0.5'])
             ax.grid(alpha=.15)
-        axes[row,0].set_ylabel(LOADING)
+        axes[row,0].set_ylabel(('Original bounds' if row==0 else 'Restricted bounds')+'\n'+LOADING)
     witness=paired['A7'][0]
-    fig.suptitle('Resolved-descent points: A6 12/73; A7 0/73',fontsize=10)
-    fig.supxlabel('Orange filled: resolved; blue open: none resolved; square: single liquid; circle: two-phase'
-                     '\nIndex 0 shares index 41 temperature/loading (318.15 K, α ≈ 0.2556), with P rounded to 5918.5286 Pa'
-'\nIndex 0: no resolved descent for A6 or A7; both classified two-phase',fontsize=7)
+    fig.suptitle('Detected instabilities: original bounds 12/73; restricted bounds 0/73',fontsize=10)
+    fig.supxlabel('Filled: instability detected; open: none; squares: single liquid; circles: liquid + vapor',fontsize=8)
     save(fig,'phase-family','73 specified T/P/loading states, A6 versus A7 on the same wheel: 12/73 and 0/73 resolved-descent points. The three pressure levels vary with temperature/loading; S4 supplies exact pressures. The additional index-0 witness is reported separately from index 41. Zero resolved trials means no numerically resolved descent, not zero Gibbs change. Two-phase classifications do not identify two liquids. Finite searches do not certify a continuous stable region or states at 353 K.', ['phase-family.csv'])
     a6_assessment = a.load(a.J/'amendment-6/selected-assessment/provenance.json')
     fixed = a.J/'amendment-7/fixed-study/wheel-8298c602'

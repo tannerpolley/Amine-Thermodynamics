@@ -1,19 +1,20 @@
-<!-- Local draft for author review; no submission or publication is authorized. -->
+Dear Editors of Fluid Phase Equilibria,
 
-Dear Editor,
+Please consider “Electrolyte PC-SAFT with carbamate chemistry for CO₂ in aqueous monoethanolamine: joint calibration and a finite phase test” for publication as a research article.
 
-Please consider “Electrolyte PC-SAFT with carbamate chemistry for CO2 in aqueous monoethanolamine: joint calibration and a finite phase test” for *Fluid Phase Equilibria*.
+The manuscript examines an explicit-ion equation of state with carbamate chemistry and a solvation-shell Born term. Sixteen parameters are fitted jointly to 307 pressure, species, integral-heat, density, heat-capacity and binary-equilibrium quantities. The selected fit gives pressure and species average absolute relative deviations of 11.86% and 7.10%, and fitted integral-heat root-mean-square error of 1.83 kJ/mol CO₂. Densities are calculated without volume translation; 44 of 47 fitted loaded densities lie within twice their assigned scale.
 
-The manuscript asks whether one explicit-ion equation of state can jointly represent pressure, speciation, caloric and density observations while showing no resolved phase descent at specified states. A nine-species ePC-SAFT model with carbamate chemistry is calibrated through 16 adjustable parameters against 307 quantities in eight groups. On the pressure and species subsets shared with a predecessor fit, average absolute relative deviations are 11.86% and 7.10%, and fitted integral-heat RMSE is 1.83 kJ/mol CO2.
+The phase test covers only 313.15–333.15 K and loading 10⁻⁵–0.5. An original-bound fit has detected instability at 12 of 73 states; restricting its protonated-amine size and water-interaction bounds removes those detected instabilities in 657 trial phases, while increasing total cost by 0.45% and leaving three density deviations of 0.40–0.53% at 353.15 K. Those density states lie outside the phase-test temperature range. The paper reports the fitted MEAH⁺ dissociation law’s 0.49 pK departure from Bates–Pinching at 313.15 K and discusses parameters at bounds, source-data conflicts and remaining property discrepancies.
 
-The central comparison is between local fits to the same 307-row objective under different parameter bounds. An earlier endpoint (A6) meets every fitted loaded-density requirement but has resolved Gibbs-energy descent, a lower-Gibbs-energy phase arrangement, at 12 of 73 specified states; for the selected endpoint (A7), no descent was numerically resolved in 657 trials at 73 specified states (313.15–333.15 K, α 10⁻⁵–0.5). A7 has three density failures at 353.15 K, with 44 of 47 fitted loaded densities within twice their declared scales, without empirical volume translation. The warm-density failures lie outside the phase family's temperatures. This comparison establishes no minimum density penalty, isolated Born or heat effect, global optimum or physical phase validation.
+Joint multi-property fitting is established in the MEA literature. This work contributes the explicit-ion ePC-SAFT application and its paired property/phase-search comparison. Published model comparisons distinguish fitting roles, parameter counts, domains and error metrics. The conclusions concern local calibration and finite numerical searches; independent validation of phase behavior and process performance remains outstanding.
 
-The paper reports the remaining carbonate-share and titration-pool discrepancies, unloaded heat capacity at 318.15 K and 45 wt% pressure transfer beside the fitted agreement. Arcis heats served as an acceptance check, and the Wagner and concentration-transfer data were examined during model development. Two sequential fits each use one start, and parameter errors are conditional on weights, fixed inputs, active bounds and local linearization. No accuracy ranking against published models or absorber/stripper performance claim is made.
+Processed observations, parameters, retained calculations and presentation code are prepared for a Zenodo deposit, with the DOI to be added at submission. The exact compiled ePC-SAFT Engine package will be provided to referees through restricted access coordinated by the corresponding author. Deposit publication, access arrangements and submission require the author’s final action.
 
-The A7 data release DOI is pending; the release will identify the selected parameter file by its SHA-256 checksum. The calculations use the ePC-SAFT Engine software from a private repository; its wheel is not bundled with the release, so reproducing the thermodynamic calculations requires access to that dependency. An earlier deposit concerns a predecessor parameterization and is cited only as such.
+The manuscript and Supplementary Material include the approved funding, competing-interest and generative-AI declarations. This letter is a local submission draft.
 
 Sincerely,
 
 Tanner W. Polley
 Department of Chemical Engineering, Brigham Young University
+Provo, UT 84602, United States
 tpolley3@byu.edu
