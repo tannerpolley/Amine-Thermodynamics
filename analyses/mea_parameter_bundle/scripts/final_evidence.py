@@ -459,7 +459,7 @@ def diagnose(model, request, row, out):
 
 def bubble_recover(model, problem, bubble, row, out):
     starts = [eq.EquilibriumStart(amounts=[bubble.amounts[0]*f,bubble.amounts[0]*(1-f)],
-        compositions=[bubble.phase_mole_fractions(0),bubble.phase_mole_fractions(1)],packing_fractions=bubble.packing_fractions) for f in (.5,.9)]
+        compositions=[[bubble.phase_mole_fractions(i)[model.component_ids.index(species)] for species in phase.support] for i,phase in enumerate(problem.phases)],packing_fractions=bubble.packing_fractions) for f in (.5,.9)]
     batch = eq.solve_equilibrium_starts(model,problem,starts,eq.EquilibriumWorkLimits(attempts=2,attempt_iterations=400,iterations=800))
     row['bubble_causes'] = list(batch.causes)
     row['bubble_selected'] = batch.selected

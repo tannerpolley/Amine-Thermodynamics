@@ -1,0 +1,84 @@
+{
+  "original_run_1_files_checked": 155,
+  "original_run_1_unchanged": true,
+  "run_2_files_checked": 285,
+  "run_2_unchanged": true,
+  "original_input_hashes": {
+    "selected-current-best-parameters.json": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
+    "joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json": "ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7",
+    "a7-paper-evidence/phase-family.csv": "fd16142967e4fef1408b907a40839780923bef381da6a685eac8d9ae4b8db6a7",
+    "joint-recalibration-170/amendment-6/inputs/revision-3/phase/family-points.txt": "6e1231d9506fd6dd9e965a64120ff952cebf1c4778da5d66cfb0f888e8b7f44b"
+  },
+  "corrected_counts": {
+    "A6": {
+      "states": 81,
+      "scheduled_trials": 729,
+      "returned_trials": 540,
+      "unresolved": 0,
+      "pressure_excluded": 21,
+      "parent_numerical_failures": 0,
+      "descent_states": 21,
+      "resolved_trials": 41
+    },
+    "A7": {
+      "states": 81,
+      "scheduled_trials": 729,
+      "returned_trials": 540,
+      "unresolved": 6,
+      "pressure_excluded": 21,
+      "parent_numerical_failures": 0,
+      "descent_states": 0,
+      "resolved_trials": 0
+    }
+  },
+  "all_1458_slots_unique": true,
+  "combined_154_states_per_fit_preserved": true,
+  "exact_parent_reproductions": [
+    25,
+    42,
+    51
+  ],
+  "new_continuation_corrections_succeeded": [],
+  "probe_count": 8,
+  "whole_command_wall_s": 40.21,
+  "whole_command_cpu_s": 39.88,
+  "summed_worker_wall_s": 39.92324167100378,
+  "summed_worker_cpu_s": 39.589165,
+  "killed": 0,
+  "limits": {
+    "wall_s": 600,
+    "cpu_s": 1800
+  },
+  "targeted_tests": {
+    "command": "pytest tests/test_phase_extension_201.py -q -p no:cacheprovider",
+    "passed": 3,
+    "elapsed_s": 4.63
+  },
+  "readiness": "Ready revision 2 inherited",
+  "delivered_review": "pending for correction",
+  "manuscript_promotion": "pending",
+  "retained_hash_lists_passed": 10,
+  "retained_hash_entries_checked": 74,
+  "presentation_workflows_passed": 10,
+  "checks": {
+    "sync": "synced",
+    "validate": "valid",
+    "prepare": "passed on retry with prepared UV_PROJECT_ENVIRONMENT",
+    "initial_prepare_failure": "ModuleNotFoundError: No module named 'MEA'",
+    "render": "analyses/_site/mea_parameter_bundle/joint-recalibration/index.html",
+    "render_exitcode": 0,
+    "rendered_values_checked": true,
+    "prose": "passed",
+    "targeted_tests": "3 passed in 4.63s"
+  },
+  "line_accounting": {
+    "base": "2738fcee88f1c1cad2dec4e6f87ecd1cf0f995fc",
+    "study_additions": 300,
+    "study_ceiling": 300,
+    "diagnosis_additions": 195,
+    "diagnosis_ceiling": 250,
+    "total_executable_additions": 495,
+    "test_additions": 73
+  },
+  "issue_rechecked_unchanged": true
+}

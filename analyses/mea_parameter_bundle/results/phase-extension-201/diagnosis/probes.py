@@ -25,8 +25,8 @@ def write(path, value):
 
 def supervise(args):
     ledger = read(HERE/'budget.json') if (HERE/'budget.json').exists() else []
-    wall_left = 900 - sum(r['wall_s'] for r in ledger)
-    cpu_left = 2700 - sum(r['cpu_s'] for r in ledger)
+    wall_left = (600 if args.run_2 else 900) - sum(r['wall_s'] for r in ledger)
+    cpu_left = (1800 if args.run_2 else 2700) - sum(r['cpu_s'] for r in ledger)
     assert min(wall_left, cpu_left) > 0
     name = args.name
     assert not (HERE/f'{name}.json').exists() and not (HERE/f'{name}.log').exists()
@@ -57,13 +57,14 @@ def supervise(args):
 def worker(args):
     for key in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS'):
         os.environ[key] = '1'
-    sys.path.insert(0, str(HERE.parents[2]/'scripts'))
+    sys.path.insert(0, str(Path(__file__).resolve().parents[3]/'scripts'))
     import phase_extension_201 as extension
     f, eq = extension.f, extension.f.eq
     f.s.verify_wheel()
 
+    phase_payload = f.phase_payload
     def payload(model, problem, result):
-        value = f.phase_payload(model, problem, result)
+        value = phase_payload(model, problem, result)
         value['solver_settings'] = result.solver_settings
         value['linear_solver'] = result.linear_solver
         value['rows'] = [dict(index=i, kind=r.kind.name, phase=r.phase, species_or_moiety=r.index, eqid=r.eqid,
@@ -71,6 +72,7 @@ def worker(args):
                          for i, r in enumerate(result.rows)]
         value['failing_classified_rows'] = [r for r in value['rows'] if abs(r['classified']) > 1e-10]
         return value
+    f.phase_payload = payload
 
     def seed_phases(problem, seed):
         for i, phase in enumerate(problem.phases):
@@ -113,10 +115,12 @@ def worker(args):
         mapping = f.s.parameter_mapping(extension.FITS[args.fit])
         model = f.epcsaft.Mixture(f.epcsaft.Parameters.from_mapping(mapping),thermochemistry=f.thermal.record())
         request = extension.request(mapping,313.15,.11)
-        meta.update(fit=args.fit,index=args.index,temperature_K=old['temperature_K'],loading=old['loading'],pressure_Pa=old['pressure_Pa'])
+        meta.update(fit=args.fit,index=args.index,temperature_K=old['temperature_K'],loading=old['loading'],pressure_Pa=old['pressure_Pa'],
+                    parent_sha256=f.s.sha256(RUN/args.fit/f'point-{args.index}.json'), seed_sha256=f.s.sha256(Path(args.seed)) if args.seed else None,
+                    parameter_sha256=f.s.sha256(extension.FITS[args.fit]), producer_sha256=f.s.sha256(Path(f.__file__)))
         if args.mode == 'parent':
             history = [] if not args.seed else [read(args.seed)]
-            row = {k:old[k] for k in ('index','temperature_K','loading','pressure_Pa')}
+            row = {k:old[k] for k in ('index','temperature_K','loading','pressure_Pa','bubble_start') if k in old}
             f.family_job(mapping,request,row,history,result_path)
             meta['row'] = read(result_path)
         elif args.mode == 'bubble':
@@ -154,6 +158,9 @@ def worker(args):
                 problem.phases[0].packing_guess = seed['packing_fractions'][0]
                 problem.phases[0].amount = eq.Free(seed['amounts'][0])
             result = eq.solve_equilibrium(model,problem)
+            if args.run_2 and not args.seed:
+                assert result.coordinates == old['final']['coordinates']
+                meta['retained_parent_reproduced_exactly'] = True
             meta.update(result=payload(model,problem,result),stability=f.stability(model,problem,result))
     write(result_path,meta)
     if 'result' in meta:
@@ -167,6 +174,7 @@ def worker(args):
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--worker',action='store_true')
+    parser.add_argument('--run-2',action='store_true')
     parser.add_argument('mode',choices=['reference','parent','bubble','trials'])
     parser.add_argument('name')
     parser.add_argument('--temperature',type=float)
@@ -177,6 +185,10 @@ if __name__ == '__main__':
     parser.add_argument('--pressure-guess',type=float)
     parser.add_argument('--feed-scale',type=float,default=1.)
     args=parser.parse_args()
+    if args.run_2:
+        RUN = RUN/'run-2'
+        HERE = HERE/'run-2-corrections'
+        HERE.mkdir(exist_ok=True)
     if args.worker:
         worker(args)
     else:
