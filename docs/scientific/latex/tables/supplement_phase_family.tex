@@ -69,7 +69,7 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 93386805442d43d4e9e6003771ed6d4ccd1ca33863d35f0db3b722ce5d1615e5
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 bd1c7ab5175897f964605d4ef443ae9e8147004053dfc74712dec3cdbd17ab7a
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.3008\linewidth}>{\raggedright\arraybackslash}p{0.3008\linewidth}@{}}
 \caption{Paired phase-search summary. The complete 73-state temperature, pressure, loading and trial data are supplied as CSV in the data deposit. Index 0 repeats index 41 at 318.15 K and loading 0.2556, with pressure rounded to 5918.5286 Pa; both count. Two-phase classifications include vapor.}\label{tab:supplement-phase-family}\\
@@ -94,12 +94,12 @@ State & Seed & Success & Delta vs original & Delta vs single liquid & Densities 
 State & Seed & Success & Delta vs original & Delta vs single liquid & Densities & Phases \\
 \midrule\endhead
 \bottomrule\endfoot
-21 & uniform & no & $-1.5415e-05$ & $-15.774$ &  & unavailable: failed split \\
-21 & water-rich & yes & $-0.018882$ & $-15.793$ & 2.894e+04; 1.821; 2.265e+04 & L (liquid); V (vapor); L2 (liquid) \\
-63 & uniform & yes & $-2.1105$ & $-2.1105$ & 4.984e+04; 2.792e+04 & L (liquid); L2 (liquid) \\
+21 & uniform & no & $-1.5415\times10^{-5}$ & $-15.774$ &  & unavailable: failed split \\
+21 & water-rich & yes & $-0.018882$ & $-15.793$ & $2.894\times10^{4}$; 1.821; $2.265\times10^{4}$ & L (liquid); V (vapor); L2 (liquid) \\
+63 & uniform & yes & $-2.1105$ & $-2.1105$ & $4.984\times10^{4}$; $2.792\times10^{4}$ & L (liquid); L2 (liquid) \\
 63 & water-rich & no & $-0.0001399$ & $-0.0001399$ &  & unavailable: failed split \\
-70 & uniform & yes & $-3.2496$ & $-3.2496$ & 5.184e+04; 2.903e+04 & L (liquid); L2 (liquid) \\
-70 & water-rich & yes & $-3.2496$ & $-3.2496$ & 5.184e+04; 2.903e+04 & L (liquid); L2 (liquid) \\
+70 & uniform & yes & $-3.2496$ & $-3.2496$ & $5.184\times10^{4}$; $2.903\times10^{4}$ & L (liquid); L2 (liquid) \\
+70 & water-rich & yes & $-3.2496$ & $-3.2496$ & $5.184\times10^{4}$; $2.903\times10^{4}$ & L (liquid); L2 (liquid) \\
 \end{longtable}\endgroup
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.0470\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.1034\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.4888\linewidth}@{}}
@@ -111,13 +111,13 @@ State & Seed /\allowbreak{} phase & Amount & Density & Mole fractions in declare
 State & Seed /\allowbreak{} phase & Amount & Density & Mole fractions in declared order \\
 \midrule\endhead
 \bottomrule\endfoot
-21 & water-rich /\allowbreak{} L & 16.77 & 2.894e+04 & 3.487e-10; 0.3304; 0.6123; 0.02867; 0.02819; 0.0004654; 5.154e-06; 5.152e-11; 1.065e-06 \\
-21 & water-rich /\allowbreak{} V & 65.41 & 1.821 & 2.654e-06; 0.008327; 0.9917 \\
-21 & water-rich /\allowbreak{} L2 & 4.527 & 2.265e+04 & 9.231e-10; 0.3792; 0.4034; 0.1087; 0.1064; 0.002352; 2.019e-06; 3.792e-11; 3.813e-07 \\
-63 & uniform /\allowbreak{} L & 68.93 & 4.984e+04 & 1.627e-06; 0.02499; 0.9583; 0.008356; 0.007708; 0.0006232; 1.209e-05; 1.456e-10; 3.326e-07 \\
-63 & uniform /\allowbreak{} L2 & 17.78 & 2.792e+04 & 2.093e-05; 0.03797; 0.5889; 0.1865; 0.1636; 0.02294; 4.068e-08; 2.271e-11; 2.625e-09 \\
-70 & uniform /\allowbreak{} L & 64.38 & 5.184e+04 & 1.016e-05; 0.009542; 0.9758; 0.007317; 0.006176; 0.001114; 1.323e-05; 3.139e-10; 1.61e-07 \\
-70 & uniform /\allowbreak{} L2 & 22.33 & 2.903e+04 & 0.0001464; 0.01706; 0.5895; 0.1966; 0.1556; 0.04101; 2.321e-08; 5.895e-11; 7.942e-10 \\
-70 & water-rich /\allowbreak{} L & 64.38 & 5.184e+04 & 1.016e-05; 0.009542; 0.9758; 0.007317; 0.006176; 0.001114; 1.323e-05; 3.139e-10; 1.61e-07 \\
-70 & water-rich /\allowbreak{} L2 & 22.33 & 2.903e+04 & 0.0001464; 0.01706; 0.5895; 0.1966; 0.1556; 0.04101; 2.321e-08; 5.895e-11; 7.942e-10 \\
+21 & water-rich /\allowbreak{} L & 16.77 & $2.894\times10^{4}$ & $3.487\times10^{-10}$; 0.3304; 0.6123; 0.02867; 0.02819; 0.0004654; $5.154\times10^{-6}$; $5.152\times10^{-11}$; $1.065\times10^{-6}$ \\
+21 & water-rich /\allowbreak{} V & 65.41 & 1.821 & $2.654\times10^{-6}$; 0.008327; 0.9917 \\
+21 & water-rich /\allowbreak{} L2 & 4.527 & $2.265\times10^{4}$ & $9.231\times10^{-10}$; 0.3792; 0.4034; 0.1087; 0.1064; 0.002352; $2.019\times10^{-6}$; $3.792\times10^{-11}$; $3.813\times10^{-7}$ \\
+63 & uniform /\allowbreak{} L & 68.93 & $4.984\times10^{4}$ & $1.627\times10^{-6}$; 0.02499; 0.9583; 0.008356; 0.007708; 0.0006232; $1.209\times10^{-5}$; $1.456\times10^{-10}$; $3.326\times10^{-7}$ \\
+63 & uniform /\allowbreak{} L2 & 17.78 & $2.792\times10^{4}$ & $2.093\times10^{-5}$; 0.03797; 0.5889; 0.1865; 0.1636; 0.02294; $4.068\times10^{-8}$; $2.271\times10^{-11}$; $2.625\times10^{-9}$ \\
+70 & uniform /\allowbreak{} L & 64.38 & $5.184\times10^{4}$ & $1.016\times10^{-5}$; 0.009542; 0.9758; 0.007317; 0.006176; 0.001114; $1.323\times10^{-5}$; $3.139\times10^{-10}$; $1.61\times10^{-7}$ \\
+70 & uniform /\allowbreak{} L2 & 22.33 & $2.903\times10^{4}$ & 0.0001464; 0.01706; 0.5895; 0.1966; 0.1556; 0.04101; $2.321\times10^{-8}$; $5.895\times10^{-11}$; $7.942\times10^{-10}$ \\
+70 & water-rich /\allowbreak{} L & 64.38 & $5.184\times10^{4}$ & $1.016\times10^{-5}$; 0.009542; 0.9758; 0.007317; 0.006176; 0.001114; $1.323\times10^{-5}$; $3.139\times10^{-10}$; $1.61\times10^{-7}$ \\
+70 & water-rich /\allowbreak{} L2 & 22.33 & $2.903\times10^{4}$ & 0.0001464; 0.01706; 0.5895; 0.1966; 0.1556; 0.04101; $2.321\times10^{-8}$; $5.895\times10^{-11}$; $7.942\times10^{-10}$ \\
 \end{longtable}\endgroup

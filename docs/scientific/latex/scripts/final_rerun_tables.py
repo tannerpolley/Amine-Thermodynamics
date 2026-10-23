@@ -20,15 +20,15 @@ UNITS = dict(PartialPressure='Pa', PhaseMoleFraction='mole fraction', AdditionEn
 
 
 DISPLAY = {'Common149': 'Common-subset', 'common149': 'common subset', 'vapour': 'vapor', 'LogRatio': 'log ratio', 'Cai mole_fraction': 'Cai vapor water fraction', 'Vinjarapu2024': 'Vinjarapu', 'Arcis2011': 'Arcis', ' at 510000.0 Pa': ' at 0.51 MPa', ' at 1030000.0 Pa': ' at 1.03 MPa', 'kg/m3': r'\si{\kilogram\per\cubic\metre}'}
-SOURCE_NAMES = {'Bottinger2008':'Böttinger et al. (2008)', 'Matin2012':'Matin et al. (2012)', 'vinjarapu2024':'Vinjarapu et al. (2024)', 'Vinjarapu2024':'Vinjarapu et al. (2024)', 'Arcis2011':'Arcis et al. (2011)', 'Amundsen2009':'Amundsen et al. (2009)', 'Hartono2014':'Hartono et al. (2014)', 'Han2012':'Han et al. (2012)', 'Jakobsen2005':'Jakobsen et al. (2005)', 'Hilliard2008':'Hilliard (2008)', 'Jou1995':'Jou et al. (1995)', 'cai1996':'Cai et al. (1996)', 'kiepe':'Kiepe et al. (2002)', 'AMU':'Amundsen et al. (2009)'}
+SOURCE_NAMES = {'Bottinger2008':'Böttinger et al. (2008)', 'Matin2012':'Matin et al. (2012)', 'vinjarapu2024':'Vinjarapu et al. (2024)', 'Vinjarapu2024':'Vinjarapu et al. (2024)', 'Arcis2011':'Arcis et al. (2011)', 'Amundsen2009':'Amundsen et al. (2009)', 'Hartono2014':'Hartono et al. (2014)', 'Han2012':'Han et al. (2012)', 'Jakobsen2005':'Jakobsen et al. (2005)', 'Hilliard2008':'Hilliard (2008)', 'Jou1995':'Jou et al. (1995)', 'Mamun2005':'Ma’mun et al. (2005)', 'Xu2011':'Xu and Rochelle (2011)', 'cai1996':'Cai et al. (1996)', 'kiepe':'Kiepe et al. (2002)', 'AMU':'Amundsen et al. (2009)'}
 def display(value):
-    value = str(value)
+    value = str(value).replace('pooled', 'added together')
     parts = re.split(r'(\\cite\{[^}]*\})', value)
     if len(parts) > 1:
         return ''.join(part if part.startswith(r'\cite{') else display(part) for part in parts)
     for old, new in SOURCE_NAMES.items():
         value = value.replace(old, new)
-    substitutions = {'A7': 'restricted-bound fit', 'A6': 'original-bound fit', 'F1': 'reference fit', 'restored species': 'additional species', 'canonical': 'six-source', 'packet': 'pressure/species subset', 'pool': 'bicarbonate + carbonate total', 'endpoint': 'parameter set', 'Authority': 'Origin of limit', 'Cp': '$C_P$', 'kij': '$k_{ij}$'}
+    substitutions = {'A7': 'restricted-bound fit', 'A6': 'original-bound fit', 'F1': 'reference fit', 'restored species': 'additional species', 'canonical': 'six-source', 'packet': 'pressure/species subset', 'pool': 'bicarbonate + carbonate total', 'endpoint': 'parameter set', 'PartialPressure':'CO2 partial pressure', 'PhaseMoleFraction':'species mole fraction', 'AdditionEnthalpy':'integral heat', 'Authority': 'Origin of limit', 'Cp': '$C_P$', 'kij': '$k_{ij}$'}
     for old, new in {**DISPLAY, **substitutions}.items():
         value = value.replace(old, new)
     return re.sub(r'(?<!\{)\bCO2\b', lambda _: r'\ce{CO2}', value)
@@ -38,6 +38,10 @@ def parameter_source(identity, fitted=False, tied=False):
         return 'fitted (this work)'
     if tied:
         return 'diameter tie (this work)'
+    if 'packing_diameter' in identity:
+        return r'$0.88\sigma$ (this work)'
+    if 'debye_huckel_diameter' in identity:
+        return r'$\sigma$ (this work)'
     if 'dielectric' in identity:
         return r'Yang et al., Table 6 \cite{Yang2024}' if '/water/' in identity else 'permittivity fit, Section S10' if '/monoethanolamine/' in identity else 'assumed (this work)'
     if 'solvation_factor' in identity:
@@ -56,17 +60,24 @@ def parameter_source(identity, fitted=False, tied=False):
 
 SOURCE_TEXT = {'Austgen1991_TableV_reaction_1a': 'Austgen 1991, Table V, reaction 1a', 'Austgen1991_TableV_reaction_4a': 'Austgen 1991, Table V, reaction 4a', 'Austgen1991_TableV_reaction_5a': 'Austgen 1991, Table V, reaction 5a', 'Tong2012_Table5_K5_MEA_via_Aroua1999': 'Tong 2012, Table 5, via Aroua 1999', 'BatesPinching1951_equation_7': r'Bates and Pinching, Eq. 10; fitted here \cite{batesAcidicDissociationConstant1951}'}
 
+def scientific(value):
+    mantissa, exponent = re.split('[eE]', value) if re.search('[eE]', value) else (value, None)
+    return mantissa + r'\times10^{' + str(int(exponent)) + '}' if exponent is not None else value
+
 def tex(value):
     if re.fullmatch(r'-(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?', str(value)):
-        return '$' + str(value) + '$'
+        return '$' + scientific(str(value)) + '$'
     parts = re.split(r'(\$[^$]+\$|\\(?:ce|si|cite)\{(?:[^{}]|\{[^{}]*\})*\})', str(value))
     if len(parts) > 1:
         return ''.join(part if part.startswith(('$', r'\ce{', r'\si{', r'\cite{')) else tex(part) for part in parts)
+    if re.fullmatch(r'[-+]?\d+(?:\.\d*)?[eE][-+]?\d+', str(value)):
+        return '$' + scientific(str(value)) + '$'
     if value == 'angstrom':
         return r'\AA'
     if value == 'dimensionless':
         return '1'
     escaped = ''.join({'^': r'\textasciicircum{}', '&': r'\&', '%': r'\%', '_': r'\_\allowbreak{}', '#': r'\#', '$': r'\$', '{': r'\{', '}': r'\}'}.get(c, c) for c in str(value)).replace('/', r'/\allowbreak{}')
+    escaped = re.sub(r'(?<![\w.])[-+]?\d+(?:\.\d*)?[eE][-+]?\d+(?![\w.])', lambda m: '$' + scientific(m.group()) + '$', escaped)
     return re.sub(r'[a-f0-9]{64}', lambda m: r'\allowbreak{}'.join(m.group()[i:i+8] for i in range(0,64,8)), escaped)
 
 
@@ -267,8 +278,8 @@ def main():
         if part:
             score = a.stats(part)
             bias = math.fsum(math.log(float(r['predicted'])/float(r['observed'])) for r in part)/len(part)
-            outside.append([name, 'outside objective IDs; previously accessed', len(part), num(score['AARD_percent']), num(bias)])
-    table('supplement_outside_fit.tex',r'A7 retained state cohorts. Fitted IDs are removed from each retained cohort; canonical and packet subsets still overlap and must not be pooled. Named high-temperature, transfer, Wagner and Matin-pool comparisons retain prior data access. Arcis is an acceptance check in the property table, not independent validation.',
+            outside.append([name, 'not fitted; examined earlier', len(part), num(score['AARD_percent']), num(bias)])
+    table('supplement_outside_fit.tex',r'A7 retained state cohorts. Fitted observations are removed from each comparison; the six-source and pressure/species views still overlap and must not be added together. Named high-temperature, transfer, Wagner and Matin-pool comparisons retain prior data access. Arcis is an acceptance check in the property table, not independent validation.',
           ['Cohort/view','Data use','n','AARD (%)','Mean ln(calc/obs)'],outside,[.30,.29,.06,.15,.20])
     loaded_ids=set(spec['loaded_density_ids'])
     excluded=set(summary['density']['Amundsen source-conflict five']['row_ids'])
@@ -281,8 +292,8 @@ def main():
           ['Source','n','Fitted','T (K)','Error range','RMSE'],density_rows,[.23,.06,.09,.21,.24,.17])
     previous=OUTPUTS['supplement_carbonate_density.tex']
     carbonate=a.rows(a.E/'carbonate-share.csv')
-    table('supplement_carbonate_density.tex',r'All ten carbonate-share comparisons (different observables from the six fitted Jakobsen amount ratios). Corrected unloaded MEA mass fraction is '+num(float(carbonate[0]['mea_mass_fraction']),10)+r'; model loading uses NMR. Source: Jakobsen et al.\ \cite{Jakobsen2005}, Tables A1--A2 (p.~9902) and Table~2 (p.~9896).',
-          ['ID','T (K)','NMR loading; maxload','Observed share','Calculated share','Calc/obs'],[[r['id'],r['T_K'],num(r['model_loading'])+'; '+num(r['maxload']),num(r['observed_share']),num(r['predicted_share']),num(r['calc_over_obs'])] for r in carbonate],[.20,.10,.20,.17,.17,.16])
+    table('supplement_carbonate_density.tex',r'All ten carbonate-share comparisons (different observables from the six fitted Jakobsen amount ratios). Corrected unloaded MEA mass fraction is '+num(float(carbonate[0]['mea_mass_fraction']))+r'; model loading uses NMR. Source: Jakobsen et al.\ \cite{Jakobsen2005}, Tables A1--A2 (p.~9902) and Table~2 (p.~9896).',
+          ['Row','T (K)','NMR loading; maxload','Observed share','Calculated share','Calc/obs'],[[i,r['T_K'],num(r['model_loading'])+'; '+num(r['maxload']),num(r['observed_share']),num(r['predicted_share']),num(r['calc_over_obs'])] for i,r in enumerate(carbonate,1)],[.08,.13,.24,.19,.19,.17])
     OUTPUTS['supplement_carbonate_density.tex']=previous+OUTPUTS['supplement_carbonate_density.tex'].replace('tab:supplement-carbonate-density','tab:supplement-carbonate-share')
     reference_rows=[]
     loadings=sorted({float(r['loading']) for i,r in paired['A7'].items() if i})
@@ -357,11 +368,11 @@ def main():
         [r'Baygi and Pahlavanzadeh \cite{Baygi2015}','PC-SAFT/ideal reactions; 5 pure-MEA + 1 binary parameter','Pure properties; binary VLE','Ternary pressure 36.42% (691), outside fit (Table 5)','NMR (Fig. 8), binary excess enthalpy (Fig. 6); ternary uses 3B MEA/4C water'],
         [r'Najafloo and Zarei \cite{Najafloo2018}','SAFT-HR/ideal reactions; 5 pure-MEA parameters','Pure vapor pressure/density','Ternary pressure 34.71% (691), Table 5','Methods imply no ternary fit; conclusion describes broader data use'],
         [r'Lloret et al. \cite{lloretConsistentTransferableThermodynamic2017}','soft-SAFT; 2 reactive-association parameters','30 wt% VLE; 313.15--373.15 K','No aggregate pressure error stated; Section 4.7','Heat from pressure derivative underpredicted; no calculated temperature dependence'],
-        [r'Akula et al. \cite{Akula2023a}','eNRTL; 10 ternary parameters','263 pressures + 93 differential heats','MAPE pressure 40.5%, differential heat 5.9% (Section 4.2)','NMR and heat capacity outside objective'],
+        [r'Akula et al. \cite{Akula2023a}','eNRTL; 10 ternary parameters','263 pressures + 93 differential heats','Mean absolute percentage error: pressure 40.5%, differential heat 5.9% (Section 4.2)','NMR and heat capacity outside objective'],
         [r'Hessen et al. \cite{Hessen2010}','Refined eNRTL; temperature-dependent interactions (Table 2)','Binary VLE, freezing point, excess enthalpy and ternary pressures','No aggregate MEA pressure statistic stated','Speciation and activity comparisons; Section 4'],
-        [r'Aronu et al. \cite{Aronu2011}','Extended UNIQUAC; ion size/surface and pair coefficients (Tables 7--9)','VLE at 15--60 wt%; N2O-derived physical solubility','Fitted CO2 partial pressure 24.3%; total pressure 11.7%; physical solubility 2.7% (Section 5)','NMR and absorption heat compared outside objective'],
-        [r'Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013}','Electrolyte cubic two-state association; 7 MEA ternary parameters','VLE; 298.15--366.68 K; 15.2--30 wt%','Pressure AAD 12.5%, fitted (Tables 5, 8)','Parameters from earlier subsystems retained'],
-        [r'Neumann et al. \cite{neumannNewModelCombining2022}','Helmholtz energy/eNRTL; ternary eNRTL unchanged; binary EOS adjusted','Binary EOS and published eNRTL inputs','Ternary density AARD 0.92% Hartono; 3.5% complete Han (Section 4.2)','VLE/density comparisons; density cohorts differ from this work'],
+        [r'Aronu et al. \cite{Aronu2011}','Extended UNIQUAC; ion size/surface and pair coefficients (Tables 7--9)',r'VLE at 15--60 wt%; \ce{N2O}-derived physical solubility','Fitted CO2 partial pressure 24.3%; total pressure 11.7%; physical solubility 2.7% (Section 5)','NMR and absorption heat compared outside objective'],
+        [r'Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013}','Electrolyte cubic two-state association; 7 MEA ternary parameters','VLE; 298.15--366.68 K; 15.2--30 wt%','Relative pressure deviation 12.5%, fitted (Tables 5, 8)','Parameters from earlier subsystems retained'],
+        [r'Neumann et al. \cite{neumannNewModelCombining2022}','Helmholtz energy/eNRTL; ternary eNRTL unchanged; binary equation of state adjusted','Binary equation of state and published eNRTL inputs','Ternary density AARD 0.92% Hartono; 3.5% complete Han (Section 4.2)','VLE/density comparisons; density cohorts differ from this work'],
         ['This work','16 fitted parameters; 6 at bounds','307 quantities; 8 groups','Fitted pressure/species 11.86/7.10%; integral heat RMSE 1.83 kJ/mol','159-pressure comparison 20.55%; prior data access as stated in Section 3']]
     table('literature_model_comparison.tex',r'Model complexity, data roles and reported deviations in related MEA studies. Parameter counts refer to the stated fit, excluding earlier subsystem fits. Relative pressure deviations and caloric metrics use each source\'s own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.',
           ['Study','Model; fitted parameters','Fitted data','Reported agreement','Other comparisons or qualification'],literature,[.15,.22,.19,.24,.20])
