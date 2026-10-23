@@ -296,7 +296,7 @@ The distance in Eq.~\ref{eq:tpd-supp} is minimized over positive trial fractions
 Liquid trials support all nine species, and vapor trials support only \COtwo, MEA and water.
 A two-phase classification includes liquid--vapor equilibrium and alone does not establish a second liquid.
 
-\section{Diameter probes and loading sensitivity}\label{sec:s-probes}
+\section{Comparison fit and bound restriction}\label{sec:s-probes}
 % P:supplement-bounds-01
 The comparison fit and reported fit use the same 16 adjustable parameters and 307 quantities.
 The reported fit is the parameter set reported here.
@@ -313,20 +313,12 @@ The deposited starting parameter vectors and affine transformations specify the 
 Function, parameter and gradient tolerances are $10^{-6}$, $10^{-10}$ and $10^{-8}$, respectively, with a maximum of 180 iterations.
 Two sequential restricted fits were made, each from one start.
 The first used a \MEAH size lower bound of \SI{5.49}{\angstrom}; the second started from its solution and lowered that bound to \SI{5.35}{\angstrom}, stopping on function tolerance after 12 iterations.
-The restrictions were chosen from fixed-parameter probes: smaller diameters raise density but can overshoot the colder Hartono observations (Section~\ref{sec:s-probes}).
+The restrictions were chosen from fixed-parameter probes: smaller diameters raise density but can overshoot the colder Hartono observations.
 Phase searches were applied to the resulting parameter sets, rather than imposed as constraints at every optimizer iteration.
-
-% P:supplement-10
-A fixed-parameter probe of the initial restricted fit changes only the \MEAH segment diameter and its packing/Debye--H\"uckel ties.
-At diameters 5.49, 5.45, 5.40 and 5.35 angstrom, 44, 44, 22 and 7 of 47 densities lie within $2s$, respectively; none of the sampled parameter sets has resolved phase instability on the specified states.
-Reducing size improves the warm densities while raising cold Hartono densities above $+2s$.
-The subsequent joint fit at the 5.35 angstrom lower bound returns 44/47 within $2s$.
 
 % P:supplement-11
 Hartono et al.\ report apparent \COtwo component fraction $x_3$ as well as loading \cite[Table~3, footnote~a]{Hartono2014}.
-A separate sensitivity uses $\alpha_{x_3}=x_3(1+W)/(1-x_3)$, with water/MEA molar ratio $W=7.911062165$, for the 32 fitted Hartono observations, while keeping the printed-loading density scales fixed.
-It gives 44/47 densities within $2s$ on its own loading basis and 40/47 when evaluated on the nominal printed loadings; its 73-state phase search has no resolved instability.
-This comparison leaves the loading ambiguity unresolved and does not replace the reported fit.
+A separate fit on the loading basis $\alpha_{x_3}=x_3(1+W)/(1-x_3)$ left this ambiguity unresolved and does not replace the reported fit.
 
 \section{Limits used to accept the reported fit}\label{sec:s-fits}
 % P:supplement-01
@@ -336,7 +328,7 @@ That fit used different fixed inputs and permittivity law; its parameters are no
 % P:supplement-acceptance-01
 \Cref{tab:acceptance-limits} gives this study's comparison limits.
 Allowances relative to the density-free fit preserve pressure, species and heat agreement while other properties enter the fit: 10\,\% in shared-subset cost, two percentage points in pressure/species deviation and \SI{1}{\kilo\joule\per\mole} in each heat RMSE.
-The Cai allowance is 5\,\% above a binary-only fit with a constant \MEA--water interaction, whose cost is 91.33.
+The Cai allowance is 5\,\% above the Cai cost of 91.33 given by a constant \MEA--water interaction, $k_{ij}=-0.084393880$ with no temperature slope, fitted earlier to the Cai data and three \COtwo-free densities; all other inputs of that calculation are those of the reported fit.
 The density limits are twice the assigned scale, or \SI{1}{\kilogram\per\cubic\metre} for carbon-free states; the phase requirement rejects any resolved lower-Gibbs-energy arrangement in the specified search.
 These are study-specific tolerances for retaining property agreement, not published accuracy standards; the three densities outside $2s$ are reported as misses.
 
