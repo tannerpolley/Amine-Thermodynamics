@@ -37,8 +37,8 @@ These diameter choices define the present parameterization; they are not indepen
 
 % P:theory-03
 Water and \MEA carry two association sites (2B), and \COtwo carries two induced-association sites that bond only with water \cite{Kleiner2007,Pabsch2020,Schick2023}.
-The \COtwo--water cross-association energy is \SI{878.325}{\kelvin}, half the selected water self-association energy, with the selected water association volume.
-The topology follows the induced-association treatment of Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}; its numerical inputs use the pure-water fit against IAPWS-95 described in Section~S10.
+The \COtwo--water cross-association energy is \SI{878.325}{\kelvin}, half the water self-association energy, with the same water association volume (Table S14).
+The topology follows the induced-association treatment of Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}; its numerical inputs use the pure-water fit against IAPWS-95 described in Section~S9.
 \MEA--water cross-association follows the Wolbach--Sandler rule used by Fakouri Baygi and Pahlavanzadeh \cite[Eq.~6]{Baygi2015}.
 The association strength carries \(\sigma_{ij}^3\), so their \MEA association volume, reported for a \(d_{ij}^3\) strength \cite[Table~2]{Baygi2015}, was converted from 0.037470 to 0.036287, the constant value that best reproduces the vapor pressure and saturated-liquid density of their model at 293.15--\SI{393.15}{\kelvin}.
 
@@ -64,7 +64,7 @@ The Born term follows the solvation-shell and dielectric-saturation (SSM+DS) for
     \label{eq:born-shell-diameter}
 \end{equation}
 Here \(\mathcal{I}\) is the set of ions, \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell and \(\varepsilon_{\mathrm{ion}}=8\) is the fixed permittivity assigned to the region between the ion surface and that shell.
-The selected model uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\), reproducing the corrected Eq.~7.
+This work uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\), reproducing the corrected Eq.~7.
 The water solvation factor is \(f_{\HtwoO}=1.5\) \cite[Table~2]{Figiel2025}, and every other component, including \MEA, \COtwo and all ions, has \(f_k=1\).
 Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents; here it runs over all nine components, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\).
 The shell diameter therefore changes with loading through the water mole fraction, and the Born term contributes to the water activity.
@@ -83,9 +83,9 @@ Here $n_s=\sum_{i\in\mathcal S}n_i$, $V$ is the phase volume, and the neutral se
 The dielectric-volume and dielectric-temperature coefficients have units of volume per mole and kelvin, respectively, using consistent units for $n_s/V$.
 The ion amounts do not enter the neutral mixing averages; their presence affects the phase density and neutral amounts.
 This law approaches unity as the phase density approaches zero at fixed composition.
-Its \MEA coefficients were estimated from unloaded \MEA--water permittivities using equation-of-state densities, as described in Section~S10; the water and assumed \COtwo coefficients remain fixed.
-These coefficient values and their qualifications are in Section~S10.
-Temperature and loaded-solution transfer of the dielectric law remain model assumptions.
+Its \MEA coefficients were estimated from unloaded \MEA--water permittivities using equation-of-state densities, as described in Section~S9; the water and assumed \COtwo coefficients remain fixed.
+These coefficient values and their qualifications are in Section~S9.
+Use of the dielectric law at other temperatures and in loaded solutions is a model assumption.
 
 \subsection{Reactions and phase equilibrium}
 % P:theory-06
@@ -106,7 +106,7 @@ Writing the equation-of-state fugacity coefficient as $\ln\phi_i=\mu_i^{\mathrm{
  \label{eq:activities}
 \end{equation}
 Here $M_w$ is water's molar mass in kg/mol, $\rho$ is molar density and $m^\circ=\SI{1}{\mole\per\kilogram}$.
-The infinite-dilution reference is evaluated along a charge-neutral dilution path in pure water; only charge-neutral reaction contractions are required.
+The infinite-dilution reference is evaluated along a charge-neutral dilution path in pure water; only charge-neutral combinations of species, as they appear in the reactions, require this reference.
 Thus $a_i=(m_i/m^\circ)\gamma_i^{(m)}$, with $m_i=x_i/(M_wx_w)$ and $\gamma_i^{(m)}=x_w\phi_iP/(\phi_i^{\infty,w}P^\circ)$.
 A molality-basis constant relates to the corresponding mole-fraction constant by
 \begin{equation}
@@ -124,9 +124,9 @@ R1--R3 use the Austgen correlation form \cite[Table~V]{Austgen1991},
 \end{equation}
 where $\Delta_r$ converts the source to the common aqueous-molality basis.
 R4 follows Tong et al.\ \cite[Table~5]{Tong2012}, via Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}; the R5 starting law is Bates and Pinching \cite[Eq.~10, Table~2, p.~351]{batesAcidicDissociationConstant1951}, also tabulated by B\"ottinger et al.\ \cite[Table~5]{Bottinger2008}.
-The tabulated R2 coefficients already include their molality conversion and fitted enthalpy shift; R5 already includes its fitted unshifted $A_5$ and total enthalpy shift.
+The tabulated R2 coefficients already include their molality conversion and fitted enthalpy shift; R5 already includes its two fitted quantities: the reciprocal-temperature coefficient $A_5$ of its p$K$ form (2832~K before the enthalpy shift; Bates--Pinching 2677.91~K) and the total enthalpy shift.
 Neither shift is added again when evaluating the constants in \cref{tab:reaction-equilibrium-constants}.
-For either reaction the constant-enthalpy adjustment has the pivot-preserving form
+For either reaction the constant-enthalpy adjustment has a form that leaves $K_r(T_{\mathrm{ref}})$ unchanged
 \begin{equation}
  \delta\ln K_r(T)=-\frac{\delta h_r}{R}
  \left(\frac1T-\frac1{T_{\mathrm{ref}}}\right).

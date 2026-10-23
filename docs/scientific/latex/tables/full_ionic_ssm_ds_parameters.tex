@@ -69,10 +69,10 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 bd1c7ab5175897f964605d4ef443ae9e8147004053dfc74712dec3cdbd17ab7a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a06a40a30f2097dc482b9d106944cf96c5d28dd7a81221cd83d45cd1f393b651
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3478\linewidth}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.3478\linewidth}@{}}
-\caption{Species, association and correlation inputs. Lengths are in angstrom, energies divided by Boltzmann constant in kelvin. Ion packing diameters are $0.88\sigma$ and Debye--Huckel diameters equal $\sigma$. \ce{CO2}, MEA and water each have one donor and one acceptor site; \ce{CO2} associates only with water. MEA--water association follows the Wolbach--Sandler rule. Fixed model inputs and transfer assumptions are explained in Section S10.}\label{tab:full-ionic-ssm-ds-parameters}\\
+\caption{Species, association and correlation inputs. Lengths are in angstrom, energies divided by Boltzmann constant in kelvin. Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$. \ce{CO2}, MEA and water each have one donor and one acceptor site; \ce{CO2} associates only with water. MEA--water association follows the Wolbach--Sandler rule. Fixed model inputs and assumptions for use in reacting mixtures are explained in Section S9.}\label{tab:full-ionic-ssm-ds-parameters}\\
 \toprule
 Parameter & Value & Unit & Source or estimation \\
 \midrule\endfirsthead
@@ -90,65 +90,65 @@ Parameter & Value & Unit & Source or estimation \\
 \ce{MEA} segment count & 3.0353 & 1 & Baygi and Pahlavanzadeh, Table 2 \cite{Baygi2015} \\
 \ce{MEA} segment diameter & 3.0435 & \AA & Baygi and Pahlavanzadeh, Table 2 \cite{Baygi2015} \\
 \ce{MEA} solvation factor & 1 & 1 & assumed unity (this work) \\
-\ce{MEA} dielectric volume & 0.730989 & liter /\allowbreak{} mole & permittivity fit, Section S10 \\
-\ce{MEA} dielectric temperature & 1019.08 & kelvin & permittivity fit, Section S10 \\
-water dispersion energy/\allowbreak{}k & 432.379 & kelvin & pure-water fit or fixed shape, Section S10 \\
-water segment count & 1.25275 & 1 & pure-water fit or fixed shape, Section S10 \\
+\ce{MEA} dielectric volume & 0.730989 & liter /\allowbreak{} mole & permittivity fit, Section S9 \\
+\ce{MEA} dielectric temperature & 1019.08 & kelvin & permittivity fit, Section S9 \\
+water dispersion energy/\allowbreak{}k & 432.379 & kelvin & fitted to IAPWS-95 (Section S9) \\
+water segment count & 1.25275 & 1 & fitted to IAPWS-95 (Section S9) \\
 water solvation factor & 1.5 & 1 & Figiel et al., Table 2 \cite{Figiel2025} \\
 water dielectric volume & 0.3777 & liter /\allowbreak{} mole & Yang et al., Table 6 \cite{Yang2024} \\
 water dielectric temperature & 1403 & kelvin & Yang et al., Table 6 \cite{Yang2024} \\
-\ce{MEAH+} born diameter & 5 & \AA & fitted (this work) \\
+\ce{MEAH+} Born diameter & 5 & \AA & fitted (this work) \\
 \ce{MEAH+} Debye–Hückel diameter & 5.35 & \AA & diameter tie (this work) \\
 \ce{MEAH+} dispersion energy/\allowbreak{}k & 177.795 & kelvin & fitted (this work) \\
 \ce{MEAH+} packing diameter & 4.708 & \AA & diameter tie (this work) \\
 \ce{MEAH+} segment count & 1 & 1 & spherical ion assumption \\
 \ce{MEAH+} segment diameter & 5.35 & \AA & fitted (this work) \\
 \ce{MEAH+} solvation factor & 1 & 1 & assumed unity (this work) \\
-\ce{MEACOO-} born diameter & 5 & \AA & fitted (this work) \\
+\ce{MEACOO-} Born diameter & 5 & \AA & fitted (this work) \\
 \ce{MEACOO-} Debye–Hückel diameter & 4.86604 & \AA & diameter tie (this work) \\
 \ce{MEACOO-} dispersion energy/\allowbreak{}k & 207.275 & kelvin & fitted (this work) \\
 \ce{MEACOO-} packing diameter & 4.28212 & \AA & diameter tie (this work) \\
 \ce{MEACOO-} segment count & 1 & 1 & spherical ion assumption \\
 \ce{MEACOO-} segment diameter & 4.86604 & \AA & fitted (this work) \\
 \ce{MEACOO-} solvation factor & 1 & 1 & assumed unity (this work) \\
-\ce{HCO3-} born diameter & 3 & \AA & fixed model input (this work); Section S10 \\
+\ce{HCO3-} Born diameter & 3 & \AA & fixed model input (this work); Section S9 \\
 \ce{HCO3-} Debye–Hückel diameter & 2.9296 & \AA & $\sigma$ (this work) \\
 \ce{HCO3-} dispersion energy/\allowbreak{}k & 70 & kelvin & Uyan et al., Table 4 \cite{Uyan2015} \\
 \ce{HCO3-} packing diameter & 2.57805 & \AA & $0.88\sigma$ (this work) \\
 \ce{HCO3-} segment count & 1 & 1 & spherical ion assumption \\
 \ce{HCO3-} segment diameter & 2.9296 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
 \ce{HCO3-} solvation factor & 1 & 1 & assumed unity (this work) \\
-\ce{CO3^{2-}} born diameter & 3 & \AA & fixed model input (this work); Section S10 \\
+\ce{CO3^{2-}} Born diameter & 3 & \AA & fixed model input (this work); Section S9 \\
 \ce{CO3^{2-}} Debye–Hückel diameter & 2.4422 & \AA & $\sigma$ (this work) \\
 \ce{CO3^{2-}} dispersion energy/\allowbreak{}k & 249.26 & kelvin & Uyan et al., Table 4 \cite{Uyan2015} \\
 \ce{CO3^{2-}} packing diameter & 2.14914 & \AA & $0.88\sigma$ (this work) \\
 \ce{CO3^{2-}} segment count & 1 & 1 & spherical ion assumption \\
 \ce{CO3^{2-}} segment diameter & 2.4422 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
 \ce{CO3^{2-}} solvation factor & 1 & 1 & assumed unity (this work) \\
-\ce{H3O+} born diameter & 1.218 & \AA & fixed model input (this work); Section S10 \\
+\ce{H3O+} Born diameter & 1.218 & \AA & fixed model input (this work); Section S9 \\
 \ce{H3O+} Debye–Hückel diameter & 3.4654 & \AA & $\sigma$ (this work) \\
 \ce{H3O+} dispersion energy/\allowbreak{}k & 500 & kelvin & Uyan et al., Table 4 \cite{Uyan2015}; hydrogen-ion values transferred to hydronium \\
 \ce{H3O+} packing diameter & 3.04955 & \AA & $0.88\sigma$ (this work) \\
 \ce{H3O+} segment count & 1 & 1 & spherical ion assumption \\
 \ce{H3O+} segment diameter & 3.4654 & \AA & Uyan et al., Table 4 \cite{Uyan2015}; hydrogen-ion values transferred to hydronium \\
 \ce{H3O+} solvation factor & 1 & 1 & assumed unity (this work) \\
-\ce{OH-} born diameter & 3.08108 & \AA & fixed model input (this work); Section S10 \\
+\ce{OH-} Born diameter & 3.08108 & \AA & fixed model input (this work); Section S9 \\
 \ce{OH-} Debye–Hückel diameter & 2.0177 & \AA & $\sigma$ (this work) \\
 \ce{OH-} dispersion energy/\allowbreak{}k & 650 & kelvin & Uyan et al., Table 4 \cite{Uyan2015} \\
 \ce{OH-} packing diameter & 1.77558 & \AA & $0.88\sigma$ (this work) \\
 \ce{OH-} segment count & 1 & 1 & spherical ion assumption \\
 \ce{OH-} segment diameter & 2.0177 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
 \ce{OH-} solvation factor & 1 & 1 & assumed unity (this work) \\
-water segment diameter constant-plus-sum-of-exponentials constant & 2.78043 & \AA & pure-water fit or fixed shape, Section S10 \\
-water segment diameter constant-plus-sum-of-exponentials term-0 amplitude & 10.11 & \AA & pure-water fit or fixed shape, Section S10 \\
-water segment diameter constant-plus-sum-of-exponentials term-0 exponent coefficient & $-0.01775$ & 1 /\allowbreak{} kelvin & pure-water fit or fixed shape, Section S10 \\
-water segment diameter constant-plus-sum-of-exponentials term-1 amplitude & $-1.417$ & \AA & pure-water fit or fixed shape, Section S10 \\
-water segment diameter constant-plus-sum-of-exponentials term-1 exponent coefficient & $-0.01146$ & 1 /\allowbreak{} kelvin & pure-water fit or fixed shape, Section S10 \\
-model/\allowbreak{}relative permittivity/\allowbreak{}ionic region relative permittivity & 8 & 1 & Figiel et al., Eqs. 5--10 \cite{Figiel2025} \\
-\ce{MEA}(a)–\ce{MEA}(b) association energy/\allowbreak{}k & 2586.3 & kelvin & Baygi and Pahlavanzadeh, Table 2 \cite{Baygi2015} \\
-\ce{MEA}(a)–\ce{MEA}(b) association volume & 0.036287 & 1 & Baygi and Pahlavanzadeh, Table 2 \cite{Baygi2015}; volume converted here \\
-water(a)–water(b) association energy/\allowbreak{}k & 1756.65 & kelvin & pure-water fit or fixed shape, Section S10 \\
-water(a)–water(b) association volume & 0.0376197 & 1 & pure-water fit or fixed shape, Section S10 \\
+$\sigma_0$ & 2.78043 & \AA & fitted to IAPWS-95 (Section S9) \\
+$a_1$ & 10.11 & \AA & fixed (Section S9) \\
+$b_1$ & $-0.01775$ & 1 /\allowbreak{} kelvin & fixed (Section S9) \\
+$a_2$ & $-1.417$ & \AA & fixed (Section S9) \\
+$b_2$ & $-0.01146$ & 1 /\allowbreak{} kelvin & fixed (Section S9) \\
+ion-region permittivity $\varepsilon_{\mathrm{ion}}$ & 8 & 1 & Figiel et al., Eqs. 5--10 \cite{Figiel2025} \\
+\ce{MEA}–\ce{MEA} association energy/\allowbreak{}k & 2586.3 & kelvin & Baygi and Pahlavanzadeh, Table 2 \cite{Baygi2015} \\
+\ce{MEA}–\ce{MEA} association volume & 0.036287 & 1 & Baygi and Pahlavanzadeh, Table 2 \cite{Baygi2015}; volume converted here \\
+water–water association energy/\allowbreak{}k & 1756.65 & kelvin & fitted to IAPWS-95 (Section S9) \\
+water–water association volume & 0.0376197 & 1 & fitted to IAPWS-95 (Section S9) \\
 \ce{CO2}(a)–water(b) association energy/\allowbreak{}k & 878.325 & kelvin & induced association; half water energy and water volume \\
 \ce{CO2}(a)–water(b) association volume & 0.0376197 & 1 & induced association; half water energy and water volume \\
 \ce{CO2}(b)–water(a) association energy/\allowbreak{}k & 878.325 & kelvin & induced association; half water energy and water volume \\

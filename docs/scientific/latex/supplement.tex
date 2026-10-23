@@ -43,7 +43,7 @@
 The reference fit used 149 pressure, species and integral-heat quantities without density.
 It supplies the main-text comparison limits and the untranslated density baseline; the numerical inputs differ from those of the present fit.
 The shared pressure/species/heat comparison matches observation identities, values, units and effective residual scales and weights.
-All 68 reference-fit densities match the selected fit in temperature, loading and unloaded-solvent composition, while calculation pressures differ: 101325 and 100000 Pa, respectively.
+All 68 reference-fit densities match the restricted-bound fit in temperature, loading and unloaded-solvent composition, while calculation pressures differ: 101325 and 100000 Pa, respectively.
 No pressure-density derivative is available for a correction or magnitude bound.
 Exact parameter and software identities are listed in the data-deposit README.
 
@@ -53,7 +53,7 @@ Exact parameter and software identities are listed in the data-deposit README.
 % P:supplement-02
 The first table partitions fitted observations by source and property; the second gives comparisons outside the objective.
 Fitted observations are removed from each comparison set separately, so overlapping pressure views are not additive.
-Arcis heats were used in parameter selection; Wagner and concentration-transfer data were examined during model development.
+Arcis heats were used in parameter selection; Wagner pressures and pressures at 15 and 45 wt\% MEA were examined during model development.
 
 \input{tables/supplement_source_aard}
 \input{tables/supplement_outside_fit}
@@ -114,7 +114,7 @@ The transfer slope is
  \label{eq:donor-slope}
 \end{equation}
 where $v_d$ is molar volume and $F$ is evaluated on a one-mole phase basis.
-The small pressure-row term corrects residual pressure closure in the existing phase.
+The term $r_{P,d}$ corrects for the small pressure residual of the existing phase.
 For completeness, the distance is
 \begin{equation}
  D=g_w/(RT)-\sum_iw_i\pi_i,\qquad \pi_i=(B^{\mathsf T}\boldsymbol\lambda)_i.
@@ -126,7 +126,7 @@ Both phase densities are closed at the specified pressure.
 A trial is a resolved instability only if $\Delta G/(RT)<-E_{\Delta G}$ for an admitted transfer; a negative value within that error estimate remains unresolved as a decrease.
 
 % P:supplement-09
-The numerical-error estimate combines association-solver derivative error, the Euler identity defect, floating-point summation and the material-balance repair.
+The numerical-error estimate combines association-solver derivative error, the Euler identity defect, floating-point summation and the correction applied to restore the material balance.
 For a one-mole phase define
 \begin{align}
  E(w)&=(1+|v|)f+\left|F-vF_v-\sum_iw_iF_{n_i}\right|+\gamma_{2N+4}M,\\
@@ -155,7 +155,7 @@ The subsequent joint fit at the 5.35 angstrom lower bound returns 44/47 within $
 Hartono et al.\ report apparent \COtwo component fraction $x_3$ as well as loading \cite[Table~3, footnote~a]{Hartono2014}.
 A separate sensitivity uses $\alpha_{x_3}=x_3(1+W)/(1-x_3)$, with water/MEA molar ratio $W=7.911062165$, for the 32 fitted Hartono observations, while keeping the printed-loading density scales fixed.
 It gives 44/47 densities within $2s$ on its own loading basis and 40/47 when evaluated on the nominal printed loadings; its 73-state phase search has no resolved instability.
-This comparison leaves the loading ambiguity unresolved and does not replace the selected fit.
+This comparison leaves the loading ambiguity unresolved and does not replace the restricted-bound fit.
 
 \section{Conditional correlations}\label{sec:s-uncertainty}
 % P:supplement-12
@@ -177,16 +177,9 @@ Both printed Jakobsen loadings are preserved, while calculations use the NMR rat
 % P:supplement-14
 R2 starts from Austgen's source correlation and the molality conversion; R5 starts from Bates--Pinching \cite[Table~V]{Austgen1991}\cite[Eq.~10, p.~351]{batesAcidicDissociationConstant1951}.
 The source R5 is $\mathrm{p}K=2677.91/T+0.3869+0.0004277T$.
-The selected fit changes it by +0.60 pK at 298.15 K and +0.49 at 313.15 K; the source and fitted dissociation enthalpies at 313.15 K are 50.5 and 63.4 kJ/mol.
+The restricted-bound fit changes it by +0.60 pK at 298.15 K and +0.49 at 313.15 K; the source and fitted dissociation enthalpies at 313.15 K are 50.5 and 63.4 kJ/mol.
 The +10 kJ/mol enthalpy adjustment is at its bound, and the reciprocal-temperature coefficient is also fitted.
 Full starting values, total shifts and their transformations are supplied in the electronic data; the coefficients in the main reaction table already include the shifts.
-
-\section{Current data inventory}\label{sec:s-data-inventory}
-% P:supplement-15
-The current inventory lists source, property, conditions and role; overlapping comparison sets are not additional independent measurements.
-Exact source locations, uncertainties and individual observation identities are supplied with the CSV files.
-
-\input{tables/current_data_inventory}
 
 \section{Caloric inputs and numerical checks}\label{sec:s-files}
 % P:supplement-16
@@ -194,7 +187,8 @@ The neutral ideal-gas caloric functions are \COtwo and water Shomate correlation
 The standard pressure is 100 kPa; \COtwo and water formation-enthalpy constants and all correlation coefficients are tabulated below.
 The water function is extrapolated below its published 500 K lower limit over the liquid-study temperatures.
 MEA enthalpy and entropy are zero at 313.15 K as a conserved-component reference convention.
-The five ionic reference functions follow the reaction constraints and the temperature-dependent infinite-dilution corrections; they are not extra fitted heat-capacity functions.
+The six ionic reference functions are completed from the five reaction constraints and the temperature-dependent infinite-dilution corrections.
+A minimum-norm convention fixes the remaining charge-proportional reference freedom, which cancels in electroneutral phases; no additional ionic heat-capacity functions are fitted.
 
 \input{tables/ideal_calorics}
 
@@ -217,7 +211,7 @@ Water's solvation factor and ion-region permittivity follow Figiel et al.; unit 
 
 % P:supplement-19
 Five water parameters (segment count, diameter-law constant, dispersion energy, association energy and association volume) were fitted to IAPWS-95 density, saturation pressure and heat capacity on 20 temperatures from 298.15 to 393.15 K \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
-The two exponential terms in $\sigma_w(T)=\sigma_0+10.11\exp(-0.01775T)-1.417\exp(-0.01146T)$ were fixed while $\sigma_0$ was fitted; diameters are in angstrom and temperature in kelvin.
+The two exponential terms in $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$, with $a_1=10.11$, $b_1=-0.01775$, $a_2=-1.417$ and $b_2=-0.01146$, were fixed while $\sigma_0$ was fitted; diameters are in angstrom and temperature in kelvin.
 The objective scales were relative 0.0004885 for saturated density, 0.006187 for saturation pressure and 0.03 for heat capacity, with heat-capacity weight 0.1 relative to the other property groups.
 On the fitting temperature grid, mean absolute relative errors were 0.0363\,\% for saturated-liquid density, 0.0754\,\% for saturation pressure and 0.440\,\% for heat capacity.
 An interleaved 19-temperature grid gave 0.0343, 0.0700 and 0.416\,\%, respectively.

@@ -69,10 +69,10 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 bd1c7ab5175897f964605d4ef443ae9e8147004053dfc74712dec3cdbd17ab7a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a06a40a30f2097dc482b9d106944cf96c5d28dd7a81221cd83d45cd1f393b651
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}>{\raggedright\arraybackslash}p{0.0376\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}@{}}
-\caption{restricted-bound fit objective operators. Rows partition eight disjoint groups and 307 quantities; common subset contains pressure, species and heat. Cai contains 25 temperatures and 25 vapor fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; log ratio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales retain their declared meaning; they are not uniformly measurement uncertainties.}\label{tab:objective-groups}\\
+\caption{Restricted-bound fit objective operators. Rows partition eight disjoint groups and 307 quantities; common subset contains pressure, species and heat. Cai contains 25 temperatures and 25 vapor fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; log ratio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales retain their declared meaning; they are not uniformly measurement uncertainties.}\label{tab:objective-groups}\\
 \toprule
 Group & Operator & Unit/\allowbreak{}basis & n & Residual & Scale & Weight & Cost \\
 \midrule\endfirsthead
@@ -81,7 +81,7 @@ Group & Operator & Unit/\allowbreak{}basis & n & Residual & Scale & Weight & Cos
 \midrule\endhead
 \bottomrule\endfoot
 common subset & \ce{CO2} vapor partial pressure & Pa & 47 & log ratio & 1 & 100/\allowbreak{}9 & 5.983 \\
-common subset & liquid species /\allowbreak{} declared aggregate & mole fraction & 94 & Difference & 0.0014 to 0.01154 (row-specific) & 1 & 16.67 \\
+common subset & liquid species or reported species sum & mole fraction & 94 & Difference & 0.0014 to 0.01154 (row-specific) & 1 & 16.67 \\
 common subset & integral heat of absorption & kJ/\allowbreak{}mol \ce{CO2} & 8 & Difference & 3 to 6 & 1 & 1.213 \\
 additional species & liquid species fraction & liquid mole fraction & 7 & Difference & 0.00244 to 0.01109 (row-specific) & 1 & 2.45 \\
 Jakobsen & (\ce{MEAH+}, \ce{MEACOO-}, \ce{HCO3- + CO3^{2-}}) /\allowbreak{} total amine; two states & mol/\allowbreak{}mol total amine & 6 & Difference & 0.001728 to 0.05489 (row-specific) & 1 & 13.12 \\

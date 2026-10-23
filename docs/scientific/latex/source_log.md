@@ -1,3 +1,13 @@
+## Review correction round (2026-10-22)
+
+The science review of `703fb86` and the reader review were applied under issue #197's explicit fix-round authority. Science correction 7 overrides story R5: only restricted-bound marker shapes identify single-liquid versus liquid--vapor states. Science correction 8 and story R3 agree on Table S1; the story replacement supplies the complete grammatical sentence. No other scientific conflict was found.
+
+All table edits pass through `scripts/final_rerun_tables.py`; figure edits pass through `analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py`. Removing the duplicated inventory renumbers caloric inputs to Section S8, complete inputs to Section S9, ideal calorics to Table S13 and component inputs to Table S14. References follow those changes. The water exponential coefficients keep their values and now use symbols defined in the supplement equation. No #201 result is included.
+
+For story R15, Zotero metadata were previewed and corrected for 33 cited records: 31 Better BibTeX raw title overrides protect chemistry and proper nouns, Bates's title reads “from 0 to 50 °C”, and Chase's place field no longer contains “-1”. The raw overrides use `tex.title=`, following the [Better BibTeX extra-field documentation](https://retorque.re/zotero-better-bibtex/exporting/extra-fields/). The canonical path-sanitized export was regenerated and verified, then `scripts/cited_bibliography.py` copied the cited entries. The project bibliography was not hand-edited. Extra trailing commas reflect the exporter, and other bibliographic fields were checked for drift.
+
+`builds/197-fix-round-numeric-check.json` records the before/after numeric comparison against `703fb86`. The retained parameter and results files are unchanged. Generator guards again reconcile the exact 307 quantities and phase pairs. This is a correction of reviewed presentation, without a fit, model calculation or new scientific claim. The parent owns the confirming review and delivery.
+
 # Manuscript sources and numerical provenance (#197)
 
 ## Current revision (2026-10-22)
