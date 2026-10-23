@@ -1,7 +1,7 @@
 schema_version: 1
 scientific_lane: nine_species_epcsaft_joint_calibration_and_finite_phase_test
 scientific_claim: >
-  A7 jointly calibrates 16 coordinates to 307 quantities in eight objective
+  The restricted-bound fit jointly calibrates 16 parameters to 307 quantities in eight objective
   groups. Common pressure/species AARDs are 11.86/7.10%; fitted integral-heat
   RMSE is 1.83 kJ/mol CO2. Native loaded densities meet the declared 2s
   requirement at 44/47 fitted rows; three 353.15 K failures remain accepted
@@ -9,7 +9,7 @@ scientific_claim: >
   specified states (313.15-333.15 K, alpha 1e-5-0.5). This finite evidence
   establishes no stability outside those states, global optimum, unique
   parameters or physical validation of phase behavior or process performance.
-  Arcis is an acceptance check; Wagner and concentration-transfer comparisons
+  Arcis is a selection check; Wagner and 15/45 wt% pressure comparisons
   were previously accessed. Conditional errors depend on weights, fixed
   inputs, active bounds and local linearization.
 author:
@@ -57,12 +57,12 @@ release_tag: null
 release_commit: null
 data_commit: 8f40c125e5945ac785cc0ad1889fc79bea2096c9
 fitting_stage_commit: null
-data_delivery: local A7 release preparation; DOI pending
+data_delivery: local Zenodo deposit preparation; DOI added at submission
 local_data_release: tmp/joint-design/a7-data-release/
 parameter_record_sha256: e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
 engine_commit: 8298c6029ebb8b467929badc4a223c580ec591ab
 engine_wheel_sha256: 8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3
-pdf_sha256: bc67f0d56b8ced7010a11a9abc96e4fcfe81ff8bcc2946ec72b8550c27f954c2
+pdf_sha256: 9c765cff6ba65a1368ef151616fd6beb1b58043d7a80a47edccd5d2ff1e806ed
 source_zip_sha256: null
 archive_doi: null
 archive_doi_status: pending
@@ -80,7 +80,7 @@ submission_aids:
 excluded_from_upload:
   - docs/scientific/latex/submission_metadata.yml
 remaining_human_gate:
-  - independent number/claim and reader-story reviews of the A7 rewrite
+  - independent number/claim and reader-story reviews of the rewrite
   - owner review of the rewritten manuscript and supplement
-  - owner authorization for A7 data publication and DOI creation
+  - owner authorization for data publication and DOI creation
   - owner authorization for Overleaf sync, preprint update and journal submission

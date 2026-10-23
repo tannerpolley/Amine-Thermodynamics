@@ -1,0 +1,21 @@
+# Issue 197 revision: numeric changes and checks (2026-10-22)
+
+The before/after source comparison starts at `2738fcee88f1c1cad2dec4e6f87ecd1cf0f995fc`. It covers the assembled prose and generated table fragments, excluding comments, paths, hashes, citation keys, chemical subscripts and layout declarations. It records 825 distinct added numeric tokens across file contexts and 1949 removed tokens across 32 changed files. All added tokens have a retained/source value or an explicit arithmetic/notation classification; unresolved classifications: 0. Individual tokens, occurrence counts and source locators are in `197-revision-numeric-check.json`. A lexical value match is a traceability aid; it does not replace the parent's independent scientific review.
+
+Every removed numeric token is classified as rounding, duplicate/label removal, or deliberate removal from rewritten prose, redundant history or a bulk table moved to the deposit. The six-fit history and obsolete inventory are deliberate cuts; their raw evidence is unchanged. All 210 density values and 73 paired phase states are preserved electronically. The present revision changes no retained calculation, observed value, hashed input or selected parameter. Generated-table guards reconcile the 307 fitted quantities, objective groups, exact parameter record, reference-fit subset and phase-state pairs.
+
+New physical numbers come from these sources:
+
+- R5 departures: Bates–Pinching Eq. 10 and Table 2, p.351, and selected serialized R5 coefficients. At 298.15 K source/fitted pK = 9.4961729056/10.0958410589, difference +0.5996681533. At 313.15 K: 9.0723590834/9.5634047933, difference +0.4910457099. At 313.15 K, R ln(10)(A − C T²) gives 50.46497796/63.40888580 kJ/mol. Böttinger Table 5, p.138, retains the Bates–Pinching law. The +10 kJ/mol adjustment is at its bound and does not alone account for the departure.
+- The original fit bounds, Ceres tolerances/scaling and iteration counts come from retained fit declarations/results. The phase method and arithmetic error rule were inspected in the exact Engine source identity. The full feed is declared in `final_evidence.py` and confirmed by split inventories.
+- Reference pressure table: lowest retained pressure divided by 0.50, expressed in kPa; the other levels are checked at 0.80 and 0.95. The historical calculation producing these reference pressures is untraced, and the manuscript treats them as fixed design inputs rather than current bubble pressures.
+- The density-scale inputs and interpolated source differences come from the retained scale and source-disagreement JSON files. The newly printed failure values and all summary statistics are reductions of unchanged CSV values.
+- Neutral caloric coefficients, water reference-fit statistics, permittivity coefficients/branch ambiguity and source domains come from their retained declarations/estimates. Unit conversion from J/mol to kJ/mol is explicit for reaction shifts.
+- Published model metrics were read in the actual papers. Zhang Table 9 species deviation is 35.7%, not the erroneous 5.7% suggested in one review. Téllez-Arredondo uses electrolyte cubic two-state association, not ePC-SAFT. Source locators are recorded in `source_log.md` and the comparison table.
+- Arcis Table 5 itself gives −92.6/−85.9 kJ/mol at loadings 0.181/0.183 and −94.4/−85.5 at 0.391/0.405 in the 0.51/1.03 MPa series; the manuscript does not claim an exact loading match or isolate pressure effects.
+
+Executable additions count gross added nonblank, noncomment lines; deletions do not offset additions. This conservative count includes literal data rows and multiline statements: table generator 195, figure generator 41, total 236 against the 400-line allowance. No test code is added.
+
+The abstract's synchronized ChemRxiv plain-text copy has 217 whitespace-delimited words. The rendered abstract has 223 words after joining line-end hyphenation; final PDF hashes are recorded in the Writer handoff. Highlight lengths are 82, 69, 69, 73 and 79 characters.
+
+The only new calculations in this audit are arithmetic reductions of retained numbers and evaluation of a verified source correlation. No Engine model evaluation, parameter fit, computed isotherm or issue #201 phase calculation ran. Required independent science and reader reviews remain with the parent.

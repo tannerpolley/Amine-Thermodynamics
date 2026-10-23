@@ -33,6 +33,8 @@
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/high-temperature-comparison.csv SHA256 e9039244d75b3fa83ea3fb7cd1f98eb28ea39577d3b6eb7c7d4988d9ca1aaa1d
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/pressure-figure-data.csv SHA256 ecce5c18740fab3d989c8e72598e9dc7733f8a97ba751f53fb8265af5032e3b2
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/species-figure-data.csv SHA256 74bb9a8622dae4b0fc4d70b26957f5f2a46d5c695713fbcbdd4636384ba7a941
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/density-sweep-1b/summary.json SHA256 52a57183596b4a7a4cd9f573d551b96cb1188020401d23b0ad965a6e822273f9
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-scales.json SHA256 ee61922f62b40e8a3f947e85bb9d0e1247ff5dd97e567e554f7b90e589dc95ce
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json SHA256 ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/provenance.json SHA256 1ea9f49238b7f6fb3413e2ddddb40e5abf5dc4b68ce54d03a442b78246581827
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/summary.json SHA256 af775385eadbb7396eacb69cbd9abd1defbec46eed35b3bfa300fec619edbd3d
@@ -70,25 +72,26 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 05a5ae41119a1f8b54f0b6de2e842be1ea37d832b3c00e388be7248bf2bc9787
+% Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a06a40a30f2097dc482b9d106944cf96c5d28dd7a81221cd83d45cd1f393b651
 \begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1786\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.1034\linewidth}>{\raggedright\arraybackslash}p{0.1034\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}@{}}
-\caption{Acceptance limits and endpoint values. The declared rounded ceilings allow a 10\,\% increase in common-subset cost, two percentage points in pressure and species AARD, and \SI{1}{\kilo\joule\per\mole} in each heat RMSE relative to F1; these absolute limits were explicitly retained for A7. The Cai ceiling is the rounded value of 1.05 times the preceding constant-interaction Cai-only cost. Density and finite-phase requirements were set separately. The three density failures remain failures; accepting A7 with them changed no limit. Unavailable means no retained assessment. A6 and A7 phase values come from the same software build.}\label{tab:acceptance-limits}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.0846\linewidth}>{\raggedright\arraybackslash}p{0.2726\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}@{}}
+\caption{Study-specific limits and values for the reference, original-bound and restricted-bound fits. Section 4.1 explains the tolerances.}\label{tab:acceptance-limits}\\
 \toprule
-Quantity & Limit & Authority & F1 reference & A6 & First restricted fit & A7 \\
+Quantity & Limit & Origin of limit & Reference fit & Original bounds & Restricted bounds \\
 \midrule\endfirsthead
 \toprule
-Quantity & Limit & Authority & F1 reference & A6 & First restricted fit & A7 \\
+Quantity & Limit & Origin of limit & Reference fit & Original bounds & Restricted bounds \\
 \midrule\endhead
 \bottomrule\endfoot
-Common-subset cost & 35.26 & F1 value + 10\% (rounded; retained for A7) & 32.0567 & 24.9231 & 24.1008 & 23.866 \\
-Pressure AARD (\%) & 15.81 & F1 value + 2 percentage points (rounded; retained for A7) & 13.8148 & 12.4737 & 11.8875 & 11.8608 \\
-Species AARD (\%) & 9.89 & F1 value + 2 percentage points (rounded; retained for A7) & 7.89143 & 7.14514 & 7.10495 & 7.10358 \\
-Vinjarapu RMSE (kJ/\allowbreak{}mol) & 3.13 & F1 value + 1 kJ/\allowbreak{}mol (rounded; retained for A7) & 2.12657 & 1.82153 & 1.83317 & 1.83486 \\
-Loaded within 2s & 47/\allowbreak{}47 & declared density requirement; three failures disclosed & inapplicable & 47 & 44 & 44 \\
-Cai cost & 95.90 & constant-interaction Cai cost + 5\% (rounded; retained for A7) & inapplicable & 91.8115 & 91.9217 & 91.9078 \\
-Descent points & 0/\allowbreak{}73 & declared finite-family requirement; no continuous certificate & omitted & 12/\allowbreak{}73 & 0/\allowbreak{}73 & 0/\allowbreak{}73 \\
-CO2-free max absolute error (\si{\kilogram\per\cubic\metre}) & 1.0 & declared density requirement & inapplicable & 0.570926 & 0.554181 & 0.557182 \\
-307-row cost & none & report only; not comparable to F1 total cost & inapplicable & 148.238 & 149.246 & 148.905 \\
-Arcis RMSE (kJ/\allowbreak{}mol) & 9.36 & F1 value + 1 kJ/\allowbreak{}mol (rounded; acceptance check) & 8.36442 & 8.05036 & unavailable & 8.1144 \\
+Common-subset cost & 35.26 & reference fit value + 10\% (rounded) & 32.06 & 24.92 & 23.87 \\
+Pressure AARD (\%) & 15.81 & reference fit value + 2 percentage points (rounded) & 13.81 & 12.47 & 11.86 \\
+Species AARD (\%) & 9.89 & reference fit value + 2 percentage points (rounded) & 7.891 & 7.145 & 7.104 \\
+Vinjarapu RMSE (kJ/\allowbreak{}mol) & 3.13 & reference fit value + 1 kJ/\allowbreak{}mol (rounded) & 2.127 & 1.822 & 1.835 \\
+Loaded within 2s & 47/\allowbreak{}47 & density requirement (Section 4.1) & -- & 47 & 44 \\
+Cai cost & 95.90 & constant-interaction Cai cost + 5\% (rounded) & -- & 91.81 & 91.91 \\
+States with detected instability & 0/\allowbreak{}73 & finite search at the specified states & -- & 12/\allowbreak{}73 & 0/\allowbreak{}73 \\
+\ce{CO2}-free max absolute error (\si{\kilogram\per\cubic\metre}) & 1.0 & density requirement & -- & 0.5709 & 0.5572 \\
+Total cost (307 quantities) & -- & not comparable with the reference-fit cost & -- & 148.2 & 148.9 \\
+Arcis RMSE (kJ/\allowbreak{}mol) & 9.36 & reference fit value + 1 kJ/\allowbreak{}mol (rounded) & 8.364 & 8.05 & 8.114 \\
 \end{longtable}\endgroup
