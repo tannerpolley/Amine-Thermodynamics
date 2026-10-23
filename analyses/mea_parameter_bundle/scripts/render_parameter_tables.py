@@ -255,7 +255,7 @@ def results():
     blocks['heat-capacity'] += f"\n{sum(abs(float(r['error_percent'])) > 3 for r in cp)} of {len(cp)} states exceed the 3% comparison limit.\n"
     stats = read(OUT / 'statistics.csv')
     labels = {
-        ('pressure', 'displayed', 'all'): 'All shown (Hilliard 2008 + Jou 1995)',
+        ('pressure', 'displayed', 'all'): 'Hilliard 2008 + Jou 1995 comparison subset',
         ('pressure', 'common149 fitted', 'all'): 'Fitted (common calibration subset)',
         ('pressure', 'displayed source', 'Hilliard2008'): 'Hilliard 2008',
         ('pressure', 'displayed source', 'Jou1995'): 'Jou 1995',
@@ -273,6 +273,9 @@ def results():
               f"{float(r['aard_percent']):.2f}", f"{float(r['rms_ln_pred_over_obs']):.4f}"]
              for r in stats if (r['family'], r['group_type'], r['group']) in labels
              and (r['family'] == family or (family == 'species' and r['family'] == 'Matin pool'))])
+    subset = next(r['attempted'] for r in stats if (r['family'], r['group_type'], r['group']) == ('pressure', 'displayed', 'all'))
+    shown = sum(len(read(DATA / f'{n}-pressure.csv')) for n in ('canonical', 'wagner'))
+    blocks['pressure'] += f'\nThese statistics cover {subset} of the {shown} measurements in the CO₂ pressure figure.\n'
     return blocks
 
 
