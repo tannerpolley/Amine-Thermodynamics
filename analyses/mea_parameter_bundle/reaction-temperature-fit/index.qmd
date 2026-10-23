@@ -7,17 +7,25 @@ resources:
   - ../results/reaction-temperature-fit/sensitivity-check-record.json
 ---
 
-::: {.callout-warning}
-This historical study ran on Engine `8438ce5f` (wheel `40fba7cf`). The coefficient table describes the September incumbent `868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be` (earlier serialization `568f7a5f`), whose writer saved R2/R4/R5 while its broader replay used all five shifts. Those results are preserved with that limitation. The later historical model-D replay used record `9055458d…`, model D `p5conv-a-11`, and wheel `28181e72`, including source R4. The [adopted A7 overview](../notebook.qmd#pressure-and-speciation) is separate. The historical screen and fit are unchanged; the calorimetry page contains that separate historical model-D replay.
-:::
+Historical September reaction-temperature study.
 
 # Question
 
 Can temperature-dependent reaction corrections improve the three coupled
 observables—CO₂ pressure, species distribution and absorption heat—without
-reopening the EOS parameters?
+reopening the equation-of-state (EOS) parameters?
 
-# Starting point and strategy
+# Result
+
+The exact sparse weighted residual norm changed **1.0000 → 0.7530** for the
+bounded fit and **0.6559** for the selected proposal. The selected sparse
+root-mean-square errors (RMSEs) were 0.1634 for pressure, 0.0998 for speciation and 7.1813 kJ mol⁻¹
+CO₂ for heat. Native carbamate-hydrolysis (R4)/protonated-amine-dissociation (R5) derivatives differed from finite differences by at
+most 0.22% over 45 checked rows.
+
+# Basis and method
+
+[]{#starting-point-and-strategy}
 
 The revised screen retained 33 targets common to all perturbations: five Jou
 1995 pressure rows at 80/120 °C, 22 Böttinger 2008 speciation targets at
@@ -30,9 +38,13 @@ With EOS parameters fixed, baseline and ±2.5 kJ mol⁻¹ perturbations of all f
 reactions supplied finite-difference sensitivities. The fit preserved each
 reaction's $\ln K$ at 313.15 K, used log-ratio residuals for pressure/speciation
 and kJ mol⁻¹ CO₂ differences for heat, balanced target families and then
-retained two SVD directions. Bounded least squares reached both ±5 kJ mol⁻¹
+retained two singular-value-decomposition (SVD) directions. Bounded least squares reached both ±5 kJ mol⁻¹
 direction limits; one recenter tested the unbounded proposal through exact
 Engine calculations.
+
+# Values
+
+[]{#numerical-result}
 
 ::: {.parameter-table .reaction-coefficients-table}
 | Reaction | Historical coefficients (incumbent 868a5018) | Historical enthalpy shift (kJ mol⁻¹) |
@@ -41,14 +53,6 @@ Engine calculations.
 | R4 · carbamate hydrolysis | $A=1.5050153742$; $B=-1317.0490$ K | −4.8078 |
 | R5 · MEAH⁺ dissociation | $a=3037.6400$ K; $b=-1.0173151$ | +8.4185 |
 :::
-
-# Numerical result
-
-The exact sparse weighted residual norm changed **1.0000 → 0.7530** for the
-bounded fit and **0.6559** for the selected proposal. The selected sparse
-RMSEs were 0.1634 for pressure, 0.0998 for speciation and 7.1813 kJ mol⁻¹
-CO₂ for heat. Native R4/R5 derivatives differed from finite differences by at
-most 0.22% over 45 checked rows.
 
 ::: {.parameter-table .numeric-table}
 | Cohort | Paired targets | Baseline RMSE → candidate RMSE |
@@ -69,16 +73,24 @@ branch (carbamate 3.53 × 10⁻⁵ against 0.0492 observed). That one wrong-solu
 state inflated both speciation values. On Engine `83ac1126`, record `868a5018` scores all 131
 speciation targets at log₁₀ RMSE 0.2322 (overview table).
 
-# Conclusion and limits
+# Limits and evidence type
+
+[]{#conclusion-and-limits}
 
 The two retained directions improved pressure and heat more than speciation.
 Carbamate and bicarbonate partition remained poor, and the 120 °C heat bias
 remained large. The paired table is candidate-replay evidence, not an exact
-replay of the selected JSON because R1/R3 shifts were omitted from that
+replay of the selected JSON because water-ionization (R1)/bicarbonate-dissociation (R3) shifts were omitted from that
 document. A selected-JSON heat replay (file `568f7a5f…`, same coefficients, superseded Engine) gives 11.8497, 31.1500 and
 10.7128 kJ mol⁻¹ CO₂ for the three heat cohorts. No independent identification
 of each coefficient or confidence interval was established.
 
+This is calibration, candidate-replay comparison and numerical derivative verification, not independent physical validation.
+
 # Records
 
-[Screen targets, weights and directions](../results/reaction-temperature-fit/screen-record.json) · [Candidate result](../results/reaction-temperature-fit/README.md) · [Paired replay and omission record](../results/reaction-temperature-fit/README.md) · [Derivative check](../results/reaction-temperature-fit/sensitivity-check-record.json) · [Study README](../results/reaction-temperature-fit/README.md)
+::: {.callout-warning}
+This historical study ran on Engine `8438ce5f` (wheel `40fba7cf`). The coefficient table describes the September incumbent `868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be` (earlier serialization `568f7a5f`), whose writer saved hydration (R2), carbamate hydrolysis (R4) and protonated-amine dissociation (R5) while its broader replay used all five shifts. Those results are preserved with that limitation. The later historical model-D replay used record `9055458d…`, model D (the historical corrected-Born formulation, `p5conv-a-11`), and wheel `28181e72`, including source R4. The [adopted seventh-amendment (A7) overview](../notebook.qmd#pressure-and-speciation) is separate. The historical screen and fit are unchanged; the calorimetry page contains that separate historical model-D replay.
+:::
+
+[Historical screen targets, weights and directions](https://github.com/tannerpolley/Amine-Thermodynamics/blob/2d395186063acef738e679dac876c765a4318f0d/analyses/mea_parameter_bundle/results/reaction-temperature-fit/screen-record.json) · [Historical candidate result](https://github.com/tannerpolley/Amine-Thermodynamics/blob/2d395186063acef738e679dac876c765a4318f0d/analyses/mea_parameter_bundle/results/reaction-temperature-fit/candidate-record.json) · [Paired replay and omission record](../results/reaction-temperature-fit/README.md) · [Derivative check](../results/reaction-temperature-fit/sensitivity-check-record.json) · [Study README](../results/reaction-temperature-fit/README.md)

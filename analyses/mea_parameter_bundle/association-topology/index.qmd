@@ -3,23 +3,30 @@ title: "Association topology analysis"
 subtitle: "Historical model-D association topology and transfer rules"
 ---
 
-This page records the association-formulation decision separately from the
-species parameter table. It is an analysis of topology and transfer rules, not
-an independently fitted pair-parameter packet. The selected component values
-remain in the [overview table](../notebook.qmd#species-parameters).
+Historical association-topology decision for model D, the corrected-Born parameter formulation.
 
-The historical model-D record (wheel `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2`) is `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241`. Its packet-v5 topology uses the explicit Wolbach–Sandler MEA–water rule; historical values are tabulated below. The [adopted A7 record](../notebook.qmd#working-record) is separate.
+# Question
 
-## Starting point
+Which association topology and cross-association values were retained for historical model D in aqueous monoethanolamine (MEA), and were those values independently fitted?
+
+# Result
+
+Historical model D retained the two-site (2B) topology and induced CO₂–water association with energy [**1212.8500 K**]{.evidence-1}. These were declared or combining-rule inputs used in the bounded comparison, not independently fitted cross-association parameters. The retained choice does not establish topology uniqueness.
+
+# Basis and method
+
+The historical model-D record (the corrected-Born parameter formulation) (wheel `28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2`) is `9055458d8b7cd767a0d08e9f37e4fd28631e29c363364d7b842ebade645cb241`. Its packet-v5 topology uses the explicit Wolbach–Sandler MEA–water rule; historical values are tabulated below. The [adopted seventh-amendment (A7) record](../notebook.qmd#working-record) is separate.
+
+[]{#starting-point}
 
 The neutral components were represented with one donor and one acceptor site
 (2B). The MEA choice follows the MEA association-scheme comparison in Baygi and
-Pahlavanzadeh; the water and induced CO₂ choices follow the ePC-SAFT lineage
+Pahlavanzadeh; the water and induced CO₂ choices follow the electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) lineage
 used for aqueous electrolyte mixtures. Association-scheme parameters are
-conditional on the chosen scheme: changing 2B to 3B or 4C would require a new
+conditional on the chosen scheme: changing 2B to three-site (3B) or four-site (4C) would require a new
 pure-component parameterization, not a relabeling of the current numbers.
 
-## Strategy
+[]{#strategy}
 
 The analysis keeps the topology fixed while checking whether the retained
 cross-association rule is sufficient for the bounded CO₂–MEA pressure screen.
@@ -28,40 +35,51 @@ topology; its association is induced through water. The usual combining rules
 provide MEA–water values, while the CO₂–water edge uses the retained induced
 association volume and half the water association energy.
 
-## Association evidence record
+# Values
+
+[]{#association-evidence-record}
 
 These values describe that historical model-D association graph and the numerical values
 used by the corresponding formulation. A dash means the edge is disabled or
 not present in the topology.
 
 ::: {.parameter-table .association-table}
-| Pair | $\epsilon^{AB}/k$ (K) | $\kappa^{AB}$ | Role | Evidence |
+| Pair | $\epsilon^{AB}/k$ (K) | $\kappa^{AB}$ (dimensionless) | Role | Evidence |
 |:--|--:|--:|:--|:--|
 | MEA–MEA | [2586.3000]{.evidence-1} | [0.036287]{.evidence-1} | Self-association | Literature 2B lineage [1, 2] |
 | H₂O–H₂O | [2425.7000]{.evidence-1} | [0.0451]{.evidence-1} | Self-association | ePC-SAFT aqueous-electrolyte lineage [1, 3] |
-| CO₂–H₂O | [1212.8500]{.evidence-1} | [0.0451]{.evidence-1} | Induced cross-association | ePC-SAFT advanced formulation [1] |
+| CO₂–H₂O | Half the water energy | [0.0451]{.evidence-1} | Induced cross-association | ePC-SAFT advanced formulation [1] |
 | MEA–H₂O | Geometric energy rule | Wolbach–Sandler volume rule | Combining-rule value | Packet-v5 MEA 2B inputs; includes the segment-size factor |
 | CO₂–CO₂ | — | — | Disabled | No CO₂ self-association in the selected topology |
 :::
 
-## Numerical result
+# Limits and evidence type
 
-The retained CO₂–water induced edge was sufficient for the bounded comparison
-used in the parameter selection. That result is conditional on the tested
+[]{#numerical-result}
+
+That result is conditional on the tested
 association graph, the selected dielectric formulation, the reaction network,
 and the available pressure data. It does not establish that the topology is
 unique, or that a different association scheme would fail after its own pure
 parameter regression.
 
-## Conclusion
+[]{#conclusion}
 
-Keep the 2B and induced-association topology as a declared formulation choice
-for the limited-domain working record. Do not place the pair table in
+Do not place the pair table in
 the main input table or treat its derived cross values as independently
 regressed parameters. Reopen the topology only with a scheme-specific pure
 component comparison and a coupled pressure/speciation assessment.
 
-## References
+This is historical formulation and bounded calibration evidence, not independent physical validation.
+
+# Records
+
+This page records the association-formulation decision separately from the
+species parameter table. It is an analysis of topology and transfer rules, not
+an independently fitted pair-parameter packet. The selected component values
+remain in the [overview table](../notebook.qmd#species-parameters).
+
+[]{#references}
 
 1. S. Baygi and M. Pahlavanzadeh, “Application of the PC-SAFT equation of state for modeling CO₂ solubility in aqueous monoethanolamine solutions,” <em>Chemical Engineering Research and Design</em> (2015). [doi:10.1016/j.cherd.2014.07.017](https://doi.org/10.1016/j.cherd.2014.07.017)
 2. J. Gross and G. Sadowski, “Application of the PC-SAFT equation of state to associating systems,” <em>Industrial &amp; Engineering Chemistry Research</em> (2002). [doi:10.1021/ie010954d](https://doi.org/10.1021/ie010954d)
