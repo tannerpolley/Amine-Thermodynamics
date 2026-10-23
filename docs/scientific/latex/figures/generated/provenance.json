@@ -36,6 +36,8 @@
     "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/state-summary.json": "5e59bcb4219e80cf16c6801ece44e9172b2fe794f5aff148b385cda826ee8c64",
     "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/state-targets.csv": "aeda99577000150980ec858a1b2fd237d90941879819db50f7c0e86bb3f89809",
     "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/summary.json": "39ea65e25e503038a9e47ea158602af1b2ae27b1c38e69bebed6f8b49dbd9883",
+    "analyses/mea_parameter_bundle/results/mea-water-permittivity/rows.csv": "c86c137833b3ff190873cb3a414ee1887c2b7809a8758a4b5c1770f7f224bd24",
+    "analyses/mea_parameter_bundle/results/mea-water-permittivity/summary.json": "4916bbbddd19410f8a03b12f9d029523cb11fc97348d46650dabfa349d3582b6",
     "analyses/mea_parameter_bundle/results/model-curves/density.csv": "bfebeff76cc1a791c12bfb1b8126694db86dda344b5afff44611a0f298f93059",
     "analyses/mea_parameter_bundle/results/model-curves/heat.csv": "ba739d260478ed4905316a4e56f662d3e2de1722efeeebd7d6e24b36072807df",
     "analyses/mea_parameter_bundle/results/model-curves/mea-water.csv": "5afe65f8923e4324eb1749f725bf2e978a386de0e80583a512a676b3d997cd6d",
@@ -46,13 +48,40 @@
     "analyses/mea_parameter_bundle/results/phase-extension-201/run-3/provenance.json": "1f7dd1e517ff588de8f8cf4e5cc724b9c7d81f6f3bcbeed0ce3875a74c6043bc",
     "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
     "analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv": "ceee9107ca784936126b9f32e08af8cb1e9a7088a87b4667796d9abac94f5bcc",
+    "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/parameters.json": "59acacc310a6dbea73b33599e9fdca3a474e4eccf12ccd139c27816cbef75a7f",
+    "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/water.csv": "84470f02b4ade8b53a965c17a092ffa930929430030b59ea1466ca1b45743fbc",
     "analyses/mea_parameter_bundle/scripts/a7_presentation.py": "b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14",
     "analyses/mea_parameter_bundle/scripts/manuscript_style.py": "3fc8954f156270979cabb95d5668b8e7b1e2fcf70ba9cfded95bf5b7a566b27d",
-    "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py": "a1ba644dffb2b9acbce958c2a8b2e05a19e0928045afe7f0f3388c753973af66",
+    "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py": "0c39420de829cc09cb8959fb25fce6446ec6299be6e8f4de5b7a01e0e7262c3c",
     "data/reference/MEA/manifests/speciation_target_membership.csv": "216600eb7bf1bb4ff7a5796ebfd11c5b5b9d4a9b9cd458e0c88fcedf029d8cf5",
     "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "d5cd6ea0d5d75f9994f5ed354463776a09b8f3cd081eb72ddef98dd4a356c53a"
   },
   "outputs": {
+    "co2-water": {
+      "caption": "Bubble pressure of CO2-water at the 39 Kiepe et al. (2002) states, measured and calculated at the same temperature and liquid composition, with relative deviations.",
+      "files": [
+        "co2-water.pdf",
+        "co2-water.png"
+      ],
+      "inputs": [
+        "fitted-rows.csv"
+      ],
+      "records": {
+        "A7": {
+          "engine": {
+            "commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+            "packages": {
+              "epcsaft": "0.2.0.dev0",
+              "numpy": "2.5.4",
+              "scipy": "1.18.1"
+            },
+            "wheel_path": "build/engine-wheels/main-8298c6029ebb8b467929badc4a223c580ec591ab/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+            "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3"
+          },
+          "parameter_sha256": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e"
+        }
+      }
+    },
     "density-curves": {
       "caption": "Liquid density of 30 wt% MEA against analytical loading: model curves at six temperatures and the 30 wt% measurements at those temperatures. Single liquids are imposed at 0.1 MPa up to 353.15 K and at 0.7 MPa at 373.15 and 393.15 K, as in the retained Han comparison; zero loading carries exactly zero carbon. Dashed segments lie below their bubble pressure. No empirical volume translation.",
       "files": [
@@ -131,6 +160,31 @@
           },
           "parameter_sha256": "ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7"
         },
+        "A7": {
+          "engine": {
+            "commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+            "packages": {
+              "epcsaft": "0.2.0.dev0",
+              "numpy": "2.5.4",
+              "scipy": "1.18.1"
+            },
+            "wheel_path": "build/engine-wheels/main-8298c6029ebb8b467929badc4a223c580ec591ab/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+            "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3"
+          },
+          "parameter_sha256": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e"
+        }
+      }
+    },
+    "mea-permittivity": {
+      "caption": "Relative permittivity of unloaded MEA-water at 298.15 K and 101325 Pa: the 14 Agieienko-Buchner measurements and the solvent law at the equation-of-state density, with the reported parameters.",
+      "files": [
+        "mea-permittivity.pdf",
+        "mea-permittivity.png"
+      ],
+      "inputs": [
+        "analyses/mea_parameter_bundle/results/mea-water-permittivity/rows.csv"
+      ],
+      "records": {
         "A7": {
           "engine": {
             "commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
@@ -302,6 +356,31 @@
       "inputs": [
         "species-figure-data.csv",
         "fitted-rows.csv"
+      ],
+      "records": {
+        "A7": {
+          "engine": {
+            "commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+            "packages": {
+              "epcsaft": "0.2.0.dev0",
+              "numpy": "2.5.4",
+              "scipy": "1.18.1"
+            },
+            "wheel_path": "build/engine-wheels/main-8298c6029ebb8b467929badc4a223c580ec591ab/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+            "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3"
+          },
+          "parameter_sha256": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e"
+        }
+      }
+    },
+    "water-iapws": {
+      "caption": "Relative deviations of the pure-water parameters from IAPWS-95 at the 20 fitted temperatures, 19 interleaved temperatures and three atmospheric heat-capacity states.",
+      "files": [
+        "water-iapws.pdf",
+        "water-iapws.png"
+      ],
+      "inputs": [
+        "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/water.csv"
       ],
       "records": {
         "A7": {
