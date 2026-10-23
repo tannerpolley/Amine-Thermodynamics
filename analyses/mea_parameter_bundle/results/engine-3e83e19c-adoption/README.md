@@ -87,7 +87,7 @@ Numerical-method changes, disclosed under the issue's stop rule:
 - **Interface adaptation, `scripts/phase_extension_201.py`** (`123a9ae`): the #201 reference-pressure
   generator set `problem.phases[0].amount = Free(<seeded amount>)`, which `12f200ef` refuses. On
   `8298c602` that guess was ignored. Run 3 does not regenerate reference pressures: it copies
-  run 2's states, family points and reference evidence and checks their hashes. The generator was
+  run 2's states, family points and reference evidence and checks their hashes (see Checks). The generator was
   therefore removed rather than rewritten; its run-2 form is retained as
   `../phase-extension-201/run-2/phase_extension_201.py.txt`. Classifier, trials, chains and
   stage ceilings are unchanged.
@@ -110,7 +110,10 @@ Numerical-method changes, disclosed under the issue's stop rule:
 `amendment-7/fixed-study/study.py.txt` (`screen`, `score`), `amendment-6/selected-checks/phase-diagnosis/probes.py.txt`
 (`split 21 63 70`), `amendment-7/selected-assessment/assess.py.txt` and `reduce.py.txt`, and
 `model_curves.main`. Its `compare` mode reads the retained files only. After the acceptance it
-was rerun with the two accepted attempts marked; no producer was rerun.
+was rerun with the two accepted attempts marked; no producer was rerun. Model-curve rows are paired
+by curve, sampling, declared state, quantity, unit and parameter SHA-256; a missing, duplicate or
+unmatched identity, or a changed `status` value, stops the comparison. The wheel SHA-256 column is the
+expected provenance change and is recorded apart, under `summary.model_curve_wheels`.
 The reference-fit document was recovered from commit `eb0d1d6` into
 [inputs/reference-fit-parameters.json](inputs/reference-fit-parameters.json) and its SHA-256 checked.
 Three assessment inputs (`observation-groups.json`, `state-inputs.json`, `density-inputs.json`) were
@@ -141,7 +144,16 @@ Fresh checkout: build the wheel from that commit into that directory as above, t
 - Compute for step 3: 15 calls, 238 wall-s and 632 CPU-s at niceness 10, one numerical-library
   thread per process and process pools sized at one worker per available gigabyte. The largest
   resident memory was 112,468 KiB for one process.
-- Change accounting for the whole issue against base `d578555`: **154 gross added executable lines**
-  of the approved 160. They are `adopt.py.txt` 129, `scripts/phase_extension_201.py` 23 (71 removed)
+- Review round 1 corrections, with no producer rerun. Model curves: the identity-paired `compare`
+  rerun passes with the same 2,019 values and δ = 0. Throwaway probes on a copy of the new
+  `pressure.csv` (one temperature label `313.15 K` → `313.16 K`; one unit `Pa` → `kPa`; one duplicated
+  row) each stop the comparison; reversed row order passes. Run 3 inputs: run 3 checked only its seven
+  copied inputs before screening. `phase_extension_201.py` now also compares the relative paths and
+  SHA-256 of all 31 copied reference-pressure files with the run-2 originals. Applied to the retained
+  run-3 copies, it found all 31 identical
+  ([frozen-input-check.json](../phase-extension-201/run-3/frozen-input-check.json)); a byte appended to,
+  renamed or removed reference file each fails it.
+- Change accounting for the whole issue against base `d578555`: **168 gross added executable lines**
+  of the approved 175. They are `adopt.py.txt` 135, `scripts/phase_extension_201.py` 31 (71 removed)
   and `scripts/shared_evaluation.py` 2. The run-3 files `phase_extension_201.py.txt` and
-  `final_evidence.py.txt` are byte copies of the committed producers and add no code. No test was added.
+  `final_evidence.py.txt` are byte copies of the producers that ran at `123a9ae` and add no code. No test was added.

@@ -191,5 +191,31 @@
    ],
    "note": "the same four tests fail with identical assertion and ParameterError messages on Engine 8298c602 at base d578555 (main checkout environment); not caused by this adoption"
   }
+ ],
+ "review_round_1": [
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt compare (model curves paired by identity and unit; no producer rerun)",
+   "exit": 0,
+   "passed": true,
+   "user_s": 0.24,
+   "system_s": 0.01,
+   "wall_s": 0.26,
+   "max_rss_kib": 25176,
+   "note": "2,019 model-curve values, delta 0; other families unchanged apart from row order"
+  },
+  {
+   "command": "throwaway probes on the new model-curves/pressure.csv, restored afterward: temperature label 313.15 K -> 313.16 K, unit Pa -> kPa, duplicated row, reversed row order",
+   "result": "first three stop compare with AssertionError; reversed order passes"
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python -c 'import phase_extension_201 as p; p.check_frozen_inputs()' on the retained run-3 copies (run 3 not repeated)",
+   "exit": 0,
+   "record": "../phase-extension-201/run-3/frozen-input-check.json",
+   "note": "7 inputs match run-2 input-hashes.json; 31 reference-pressure files match the run-2 originals by relative path and SHA-256"
+  },
+  {
+   "command": "throwaway probes on a temporary copy of run-3 reference-pressure: one byte appended, one file renamed, one file removed",
+   "result": "each fails check_frozen_inputs; the unchanged copy passes"
+  }
  ]
 }
