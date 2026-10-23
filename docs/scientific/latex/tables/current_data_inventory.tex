@@ -69,37 +69,30 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d2026f7b5441113dcf988dc5dd1945de8fa701d8f8dbe0c94ad8690d6a260cdf
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 136e261436dc99c58f8e2e3e66542758e006e4d46a5b99346e1a378999d5daa8
 \begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1692\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.0470\linewidth}>{\raggedright\arraybackslash}p{0.3384\linewidth}>{\raggedright\arraybackslash}p{0.1974\linewidth}@{}}
-\caption{Experimental data and their use. Counts in comparison sets overlap fitted observations and are not additive. Exact states, source locators and exclusions are in the electronic data. Pressure and species calculations use each source's reported solvent composition.}\label{tab:current-data-inventory}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2162\linewidth}>{\raggedright\arraybackslash}p{0.1974\linewidth}>{\raggedright\arraybackslash}p{0.0564\linewidth}>{\raggedright\arraybackslash}p{0.2726\linewidth}>{\raggedright\arraybackslash}p{0.1974\linewidth}@{}}
+\caption{Fitted and compared observations. Counts in comparison sets overlap fitted observations and are not additive. The 307 fitted quantities form eight disjoint objective groups specified in Section S10. Source-specific conditions and roles are listed in the supplement.}\label{tab:current-data-inventory}\\
 \toprule
-Source & Property & n & Conditions & Role \\
+Source & Quantity & n & Conditions & Use \\
 \midrule\endfirsthead
 \toprule
-Source & Property & n & Conditions & Role \\
+Source & Quantity & n & Conditions & Use \\
 \midrule\endhead
 \bottomrule\endfoot
-Hilliard (2008) & \ce{CO2} vapor partial pressure & 30 & 313--333.114 K; loading 0.1139--0.5909 & fitted \\
-Jou et al. (1995) & \ce{CO2} vapor partial pressure & 17 & 313.15--333.15 K; loading 0.0563--0.6679 & fitted \\
-Böttinger et al. (2008) & liquid species or reported species sum & 40 & 293.15--333.15 K; loading 0.0749--0.4889 & fitted \\
-Matin et al. (2012) & liquid species or reported species sum & 54 & 293.15 K; loading 0.1059--0.5309 & fitted \\
-Vinjarapu et al. (2024) & integral heat of absorption & 8 & 313.15 K; 1.734 MPa; 30 wt\% & fitted \\
-Böttinger et al. (2008) & liquid species fraction & 4 & 313.15 K; loading 0.1249--0.3429 & fitted \\
-Matin et al. (2012) & liquid species fraction & 3 & 293.15 K; loading 0.4549 & fitted \\
-Jakobsen et al. (2005) & (\ce{MEAH+}, \ce{MEACOO-}, \ce{HCO3- + CO3^{2-}}) /\allowbreak{} total amine; two states & 6 & 293.15/\allowbreak{}313.15 K; NMR composition & fitted \\
-Kiepe et al. (2002) & \ce{CO2}-water bubble pressure & 39 & Binary \ce{CO2}--water; 313.20--393.17 K & fitted \\
-Amundsen et al. (2009) & liquid density & 5 & 298.15--353.15 K; loading 0 & fitted \\
-Cai et al. (1996) & MEA-water bubble temperature & 25 & Binary MEA--water; 66.66/\allowbreak{}101.33 kPa & fitted \\
-Cai et al. (1996) & vapor water fraction & 25 & Binary MEA--water; 66.66/\allowbreak{}101.33 kPa & fitted \\
-Amundsen et al. (2009) & liquid density & 15 & 298.15--353.15 K; loading 0.1--0.3 & fitted \\
-Hartono et al. (2014) & liquid density & 32 & 293.15--353.15 K; loading 0.11--0.39 & fitted \\
-Hilliard (2008) & equilibrium heat capacity & 4 & 318.15/\allowbreak{}353.15 K; loading 0/\allowbreak{}0.358; 7 mol/\allowbreak{}kg water & fitted \\
-Six-source pressure & pressure & 159 & 313.00--393.15 K; nominal 30 wt\% & 47 fitted; remainder compared \\
-Wagner & pressure & 23 & near 353/\allowbreak{}392 K; 30 wt\% & not fitted; seen during development \\
-Aronu et al. (2011) & pressure & 70 & 15/\allowbreak{}45 wt\%; source states & not fitted; seen during development \\
-Arcis & heat & 14 & 322.5 K; 0.51/\allowbreak{}1.03 MPa & selection check \\
-Matin bicarbonate + carbonate & species & 19 & 293.15 K approximation; 30 wt\% & compared \\
-Jakobsen carbonate share & species & 10 & 293.15/\allowbreak{}313.15 K; diluted NMR samples & compared \\
-All densities & density & 210 & 293.15--393.15 K; 20--60 wt\% & 52 fitted; others compared \\
+Hilliard, Jou \cite{Hilliard2008,Jou1995} & \ce{CO2} partial pressure & 47 & 30 wt\%; source states & fitted \\
+Böttinger, Matin \cite{Bottinger2008,matinFacileMethodDetermination2012} & Species fractions & 101 & 293.15--333.15 K; source compositions & fitted \\
+Jakobsen \cite{Jakobsen2005} & Species/\allowbreak{}total-amine ratios & 6 & 293.15/\allowbreak{}313.15 K; diluted samples & fitted \\
+Vinjarapu \cite{HemaBhavya2025} & Integral heat & 8 & 313.15 K; 1.734 MPa; 30 wt\% & fitted \\
+Amundsen, Hartono \cite{Amundsen2009,Hartono2014} & Loaded density & 47 & 293.15--353.15 K; 30 wt\% & fitted \\
+Amundsen \cite{Amundsen2009} & \ce{CO2}-free density & 5 & 298.15--353.15 K; 30 wt\% & fitted \\
+Cai \cite{caiBinaryIsobaricVaporLiquid1996} & Bubble T; vapor fraction & 50 & MEA--water; 66.66/\allowbreak{}101.33 kPa & fitted; 25 states \\
+Kiepe \cite{kiepeExperimentalDeterminationPrediction2002} & \ce{CO2}--water pressure & 39 & 313.20--393.17 K & fitted earlier; fixed input check \\
+Hilliard \cite{Hilliard2008} & Heat capacity & 4 & 318.15/\allowbreak{}353.15 K; 7 mol MEA/\allowbreak{}kg water & fitted \\
+Six-source pressure comparison & \ce{CO2} partial pressure & 159 & 313.00--393.15 K; nominal 30 wt\% & 47 fitted; 112 not fitted \\
+Wagner \cite{wagnerSolubilityCarbonDioxide2013} & \ce{CO2} partial pressure & 23 & near 353/\allowbreak{}392 K; 30 wt\% & not fitted; previously examined \\
+Aronu \cite{Aronu2011} & \ce{CO2} partial pressure & 70 & 15/\allowbreak{}45 wt\%; source states & not fitted; previously examined \\
+Arcis \cite{arcisEnthalpySolutionCarbon2011} & Integral heat & 14 & 322.5 K; 0.51/\allowbreak{}1.03 MPa & selection comparison \\
+Matin; Jakobsen & Bicarbonate total; carbonate share & 19; 10 & source states; Sections S2--S3 & not fitted \\
+Amundsen, Hartono, Han \cite{hanDensityWater12012} & All densities & 210 & 293.15--393.15 K; 20--60 wt\% & 52 fitted; others compared \\
 \end{longtable}\endgroup
