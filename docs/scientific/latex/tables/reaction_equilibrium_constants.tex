@@ -75,21 +75,24 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 115a7d5af6ee35d0bbb673fa190c18484a9de1528affea30a461e13958162a47
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.2632\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.1598\linewidth}@{}}
-\caption{Reaction correlations and source conventions for the reported parameters. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\mathrm{p}K=A_5/T+B_5+C_5T$. The R2 and R5 coefficients already include the fitted shifts. For R1--R3, B is in K and D in 1/K; for R4, B is in K; for R5, $A_5$ is in K and $C_5$ in 1/K. Other coefficients are dimensionless and logarithms use numerical temperature in K. Source ranges are not validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.}\label{tab:reaction-equilibrium-constants}\\
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}llrrrrll@{}}
+\caption{Reaction equilibrium constants for the reported parameters. R1--R4 use $\ln K=A+B/T+C\ln T+DT+\Delta_r$ and R5 uses $\mathrm{p}K=A_5/T+B_5+C_5T$, with $T$ in K; a dash marks a term the correlation does not include. R1 and R3 are fixed source laws; R2, R4 and R5 list the selected coefficients, and the R2 and R5 coefficients already include the fitted shifts. The offset $\Delta_r$ converts each source to the common aqueous molality standard, 1 mol/kg at infinite dilution in water: it is 8.033 for R1 and 4.017 for R3, is already included in the R2 coefficients and is zero for R4 and R5. Source ranges are not validation domains.}\label{tab:reaction-equilibrium-constants}\\
 \toprule
-Reaction & Coefficients & Source & Source range (K) & Offset \\
+ & Reaction & $A$ & $B$ (K) & $C$ & $D$ (K$^{-1}$) & Range (K) & Source \\
 \midrule\endfirsthead
 \toprule
-Reaction & Coefficients & Source & Source range (K) & Offset \\
+ & Reaction & $A$ & $B$ (K) & $C$ & $D$ (K$^{-1}$) & Range (K) & Source \\
 \midrule\endhead
 \bottomrule\endfoot
-R1: \ce{2 H2O <=> H3O+ + OH-} & A = 132.899; B = $-$13445.9; C = $-$22.4773; D = 0.0 & Austgen 1991, Table V, reaction 1a & [273.15, 498.15] & $\Delta_r=8.033$ \\
-R2: \ce{CO2 + 2 H2O <=> HCO3^- + H3O+} & A = 234.949; B = $-$11925.2; C = $-$36.7816; D = 0 & Austgen 1991, Table V, reaction 4a & [273.15, 498.15] & offset included in R2 coefficients \\
-R3: \ce{HCO3^- + H2O <=> CO3^{2-} + H3O+} & A = 216.049; B = $-$12431.7; C = $-$35.4819; D = 0.0 & Austgen 1991, Table V, reaction 5a & [273.15, 498.15] & $\Delta_r=4.017$ \\
-R4: \ce{MEACOO- + H2O <=> HCO3^- + MEA} & A = 2.151; B = $-$1545.3 & Tong 2012, Table 5, via Aroua 1999 & [293.15, 323.15] & $\Delta_r=0$ \\
-R5: \ce{MEAH+ + H2O <=> MEA + H3O+} & $A_5$ = 3354.02; $B_5$ = $-$1.28111; $C_5$ = 0.0004277 & Bates and Pinching, Eq. 10; fitted here \cite{batesAcidicDissociationConstant1951} & [273.15, 323.15] & $\Delta_r=0$ \\
+R1 & \ce{2 H2O} $\rightleftharpoons$ \ce{H3O+ + OH-} & $132.899$ & $-13445.9$ & $-22.4773$ & $0$ & 273.15--498.15 & \cite[Table~V, 1a]{Austgen1991} \\
+R2 & \ce{CO2 + 2 H2O} $\rightleftharpoons$ \ce{HCO3^- + H3O+} & $234.949$ & $-11925.2$ & $-36.7816$ & $0$ & 273.15--498.15 & \cite[Table~V, 4a]{Austgen1991} \\
+R3 & \ce{HCO3^- + H2O} $\rightleftharpoons$ \ce{CO3^{2-} + H3O+} & $216.049$ & $-12431.7$ & $-35.4819$ & $0$ & 273.15--498.15 & \cite[Table~V, 5a]{Austgen1991} \\
+R4 & \ce{MEACOO- + H2O} $\rightleftharpoons$ \ce{HCO3^- + MEA} & $2.151$ & $-1545.3$ & -- & -- & 293.15--323.15 & \cite[Table~5]{Tong2012}, via \cite{arouaEquilibriumConstantCarbamate1999} \\
+\midrule
+ & & $A_5$ (K) & $B_5$ & $C_5$ (K$^{-1}$) & & & \\
+\midrule
+R5 & \ce{MEAH+ + H2O} $\rightleftharpoons$ \ce{MEA + H3O+} & $3354.02$ & $-1.28111$ & $0.0004277$ &  & 273.15--323.15 & \cite[Eq.~10]{batesAcidicDissociationConstant1951} \\
 \end{longtable}\endgroup
