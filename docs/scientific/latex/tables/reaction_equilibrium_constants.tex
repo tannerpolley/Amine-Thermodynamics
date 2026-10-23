@@ -29,6 +29,8 @@
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/high-temperature-comparison.csv SHA256 e9039244d75b3fa83ea3fb7cd1f98eb28ea39577d3b6eb7c7d4988d9ca1aaa1d
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/pressure-figure-data.csv SHA256 ecce5c18740fab3d989c8e72598e9dc7733f8a97ba751f53fb8265af5032e3b2
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/species-figure-data.csv SHA256 74bb9a8622dae4b0fc4d70b26957f5f2a46d5c695713fbcbdd4636384ba7a941
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/density-sweep-1b/summary.json SHA256 52a57183596b4a7a4cd9f573d551b96cb1188020401d23b0ad965a6e822273f9
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-scales.json SHA256 ee61922f62b40e8a3f947e85bb9d0e1247ff5dd97e567e554f7b90e589dc95ce
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json SHA256 ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/provenance.json SHA256 1ea9f49238b7f6fb3413e2ddddb40e5abf5dc4b68ce54d03a442b78246581827
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/summary.json SHA256 af775385eadbb7396eacb69cbd9abd1defbec46eed35b3bfa300fec619edbd3d
@@ -66,10 +68,11 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 05a5ae41119a1f8b54f0b6de2e842be1ea37d832b3c00e388be7248bf2bc9787
+% Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 93386805442d43d4e9e6003771ed6d4ccd1ca33863d35f0db3b722ce5d1615e5
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.2632\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.1598\linewidth}@{}}
-\caption{A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. Source ranges are not A7 validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.}\label{tab:reaction-equilibrium-constants}\\
+\caption{restricted-bound fit reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\ln K=-\ln(10)(A/T+B+CT)$. R2/R5 fitted shifts are already included: do not apply them again. For R1--R3, B is in K and D in 1/K; for R4, B is in K; for R5, A is in K and C in 1/K. Other coefficients are dimensionless and logarithms use numerical temperature in K. Source ranges are not validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.}\label{tab:reaction-equilibrium-constants}\\
 \toprule
 Reaction & Coefficients & Source & Source range (K) & Offset \\
 \midrule\endfirsthead
@@ -77,9 +80,9 @@ Reaction & Coefficients & Source & Source range (K) & Offset \\
 Reaction & Coefficients & Source & Source range (K) & Offset \\
 \midrule\endhead
 \bottomrule\endfoot
-R1: \ce{2 H2O <=> H3O+ + OH-} & A = 132.899; B = -13445.9; C = -22.4773; D = 0.0 & Austgen 1991, Table V, reaction 1a & [273.15, 498.15] & add source-to-common offset 8.03307 \\
-R2: \ce{CO2 + 2 H2O <=> HCO3^- + H3O+} & A = 234.9486708; B = -11925.23357; C = -36.7816; D = 0 & Austgen 1991, Table V, reaction 4a & [273.15, 498.15] & offset included in R2 coefficients \\
-R3: \ce{HCO3^- + H2O <=> CO3^{2-} + H3O+} & A = 216.049; B = -12431.7; C = -35.4819; D = 0.0 & Austgen 1991, Table V, reaction 5a & [273.15, 498.15] & add source-to-common offset 4.01653 \\
+R1: \ce{2 H2O <=> H3O+ + OH-} & A = 132.899; B = -13445.9; C = -22.4773; D = 0.0 & Austgen 1991, Table V, reaction 1a & [273.15, 498.15] & add source-to-common offset 8.033 \\
+R2: \ce{CO2 + 2 H2O <=> HCO3^- + H3O+} & A = 234.949; B = -11925.2; C = -36.7816; D = 0 & Austgen 1991, Table V, reaction 4a & [273.15, 498.15] & offset included in R2 coefficients \\
+R3: \ce{HCO3^- + H2O <=> CO3^{2-} + H3O+} & A = 216.049; B = -12431.7; C = -35.4819; D = 0.0 & Austgen 1991, Table V, reaction 5a & [273.15, 498.15] & add source-to-common offset 4.017 \\
 R4: \ce{MEACOO- + H2O <=> HCO3^- + MEA} & A = 2.151; B = -1545.3 & Tong 2012, Table 5, via Aroua 1999 & [293.15, 323.15] & add source-to-common offset 0 \\
-R5: \ce{MEAH+ + H2O <=> MEA + H3O+} & A = 3354.017165; B = -1.281106391; C = 0.0004277 & Bates and Pinching 1951, Eq. 7 & [273.15, 323.15] & add source-to-common offset 0 \\
+R5: \ce{MEAH+ + H2O <=> MEA + H3O+} & A = 3354.02; B = -1.28111; C = 0.0004277 & Bates and Pinching, Eq. 10; fitted here \cite{batesAcidicDissociationConstant1951} & [273.15, 323.15] & add source-to-common offset 0 \\
 \end{longtable}\endgroup
