@@ -493,14 +493,18 @@ def family_job(mapping, request, row, retained, out):
 
 
 
-def phase_family(mapping, request, points_path, points_sha256, output_dir):
+def phase_family(mapping, request, points_path, points_sha256, output_dir, indices=None, deadline=None):
     points = campaign.checked(points_path,points_sha256)
     inputs = [list(map(float,line.split())) for line in points.read_text().splitlines()]
-    assert len(inputs)==73
-    old = campaign.load(points.with_name('old-index-63.json'))['diagnosis']
+    indices = list(range(len(inputs))) if indices is None else list(indices)
+    assert indices == sorted(set(indices)) and all(0 <= i < len(inputs) for i in indices)
+    old = campaign.load(BUNDLE/'results/joint-recalibration-170/amendment-6/inputs/revision-3/phase/old-index-63.json')['diagnosis']
     assert phase_classification(dict(old,final=dict(success=old['liquid_accepted'],requested_tolerance_met=old['liquid_residual']<=1e-10)))=='unresolved'
     retained, output = [], Path(output_dir)
-    for index,(loading,T,P) in enumerate(inputs):
+    for index in indices:
+        if deadline is not None and time.monotonic() >= deadline:
+            break
+        loading,T,P = inputs[index]
         path = output/f'point-{index}.json'
         row = dict(index=index,loading=loading,temperature_K=T,pressure_Pa=P,attempts=[])
         s.write_json(path,row)
@@ -510,15 +514,16 @@ def phase_family(mapping, request, points_path, points_sha256, output_dir):
             except Exception as error:
                 saved = campaign.load(path)
                 s.write_json(path,dict(saved,failure=f'{type(error).__name__}: {error}'))
-        timing = campaign.bounded_call(child,300.)
+        timing = campaign.bounded_call(child,min(300., max(0., deadline-time.monotonic())) if deadline else 300.)
         row = dict(campaign.load(path),timing=timing)
         row['classification'] = phase_classification(row)
         s.write_json(path,row)
         retained.append(row)
     counts = {label:sum(r['classification']==label for r in retained) for label in
         ('failed','unresolved','passed-two-phase','passed-single-liquid')}
-    assert sum(counts.values())==73
-    s.write_json(output/'summary.json',dict(counts=counts,eligible=counts['failed']==counts['unresolved']==0,
+    assert sum(counts.values())==len(retained)
+    summary_path = output/('summary.json' if indices==list(range(len(inputs))) else f'summary-{indices[0]}.json')
+    s.write_json(summary_path,dict(counts=counts,eligible=len(retained)==len(indices) and counts['failed']==counts['unresolved']==0,
         points_sha256=points_sha256,parameter_sha256=__import__('hashlib').sha256(json.dumps(mapping,sort_keys=True).encode()).hexdigest()))
     return retained
 
