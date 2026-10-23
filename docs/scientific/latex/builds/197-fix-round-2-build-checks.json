@@ -1,0 +1,48 @@
+{
+  "source_commit": "05195cb",
+  "build_commit": "30bae4121c0011de79d6f0ea77b2394715846536",
+  "source_date_epoch": 1792734244,
+  "abstract_words": 247,
+  "chemrxiv_words": 240,
+  "highlight_characters": [
+    82,
+    77,
+    72,
+    73,
+    79
+  ],
+  "table_reproduction": "21 files reproduce exactly",
+  "bibliography": "54 keys unchanged; 10 title-only semantic changes; cited subset reproduces exactly",
+  "checks": {
+    "main_build": 0,
+    "supplement_build": 0,
+    "freshness": "Manuscript PDF is current",
+    "prose": "Prose check passed for plugin-wide and scoped rules.",
+    "diff_check": 0
+  },
+  "outputs": {
+    "main": {
+      "pages": 22,
+      "sha256": "9d933bac29124caaa4d82f2982dee19549fd2ecde8e341c56770e5bca827a814",
+      "qa_status": "fail",
+      "qa_findings": {
+        "warning:tight_text_clearance": 61,
+        "warning:text_graphic_overlap": 2,
+        "error:text_overlap": 3
+      },
+      "qa_report": "docs/scientific/latex/builds/qa-round-2/main/report.json"
+    },
+    "supplement": {
+      "pages": 14,
+      "sha256": "cd46c55c3dd9a1934bef6c5d7a892b57a2b3920b7805691dba800213c8151c1e",
+      "qa_status": "review",
+      "qa_findings": {
+        "warning:tight_text_clearance": 57,
+        "warning:text_near_page_edge": 11
+      },
+      "qa_report": "docs/scientific/latex/builds/qa-round-2/supplement/report.json"
+    }
+  },
+  "visual_inspection": "All 36 rendered pages inspected. Changed spans render correctly. Three automated overlap errors are the pre-existing log-ratio superscript (main p.7) and rotated Figure 1 labels (main p.11); visually separated. Remaining warnings concern tight leading, intentional equation geometry, and landscape page edges. No new clipping or unintended overlap in corrected spans.",
+  "warnings": "No undefined references/citations, missing citations, overfull boxes or font substitutions. One pre-existing supplement underfull hbox at source lines 77\u201381."
+}
