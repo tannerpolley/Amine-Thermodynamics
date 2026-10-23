@@ -393,16 +393,19 @@ def main():
     acceptance.append(['States with detected instability','0/73','finite search at the specified states']+[str(sum(x['resolved_trials']>0 for x in reductions[i]))+'/73' for i in [0,2]])
     acceptance.append(['CO2-free max absolute error','1.0','density requirement']+[num(max(abs(x) for x in scores[i]['co2_free_errors'].values())) for i in [0,2]])
     acceptance.append(['Total cost (307 quantities)','--','no limit']+[num(scores[i]['cost']) for i in [0,2]])
-    a6=a.load(a.J/'amendment-6/selected-assessment/summary.json')
-    acceptance.append(['Arcis RMSE','9.36','F1 value + 1 kJ/mol (rounded)',num(a6['heat']['Arcis2011']['RMSE']),num(summary['heat']['Arcis2011']['RMSE'])])
+    # Arcis heats for both fits on the pinned Engine 3e83e19c; the comparison fit is its adopted 3e83e19c refit (#207).
+    refits = a.BUNDLE/'results/engine-3e83e19c-refits'
+    arcis = a.load(refits/'displays/summary.json')['arcis']
+    assert math.isclose(arcis['reported']['RMSE_kJ_mol'], summary['heat']['Arcis2011']['RMSE'], rel_tol=1e-12)
+    acceptance.append(['Arcis RMSE','9.36','F1 value + 1 kJ/mol (rounded)',num(arcis['comparison']['RMSE_kJ_mol']),num(arcis['reported']['RMSE_kJ_mol'])])
     kinds = {'cost': ('Cost', ''), 'AARD': ('AARD', r'\%'), 'RMSE': ('RMSE', 'kJ/mol'), 'within': ('Count', ''), 'instability': ('Count', ''), 'error': ('Absolute error', r'\si{\kilogram\per\cubic\metre}')}
     acceptance = blocks([(*next(v for k, v in kinds.items() if k in r[0]), r) for r in acceptance], 5)
     table('acceptance_limits.tex', r'Study-specific limits and values for the comparison and reported fits. Section~\\ref{sec:s-fits} explains the tolerances.',
           ['Quantity','Limit','Origin of limit',r'\makecell[rb]{Comparison\\fit}',r'\makecell[rb]{Reported\\fit}'],acceptance,[.26,'r',.36,'r','r'])
     # Comparison fit (A6): same model and fixed inputs as the reported fit; only its joint-fit values, their diameter ties and the shifted R2/R5 coefficients differ.
-    comparison_path = a.J/'amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json'
+    comparison_path = refits/'a6/run/fit/usable-budget-endpoint.json'  # adopted 3e83e19c refit of the comparison fit (#207)
     comparison_record = a.load(comparison_path)
-    assert a.INPUTS[str(comparison_path.relative_to(a.ROOT))] == a6_provenance['parameter_sha256']
+    assert a.load(refits/'comparison.json')['a6'][0]['max_relative_difference'] < 1e-8
     record_values = lambda d: {i: c for i, c in a.coefficients({k: d[k] for k in ('components', 'pairs', 'correlations', 'model_coefficients', 'reaction_correlations', 'topology')})}
     reported_values, comparison_values = record_values(document), record_values(comparison_record)
     assert reported_values.keys() == comparison_values.keys() and document['model_families'] == comparison_record['model_families']

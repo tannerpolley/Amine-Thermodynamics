@@ -117,7 +117,8 @@ def displays():
     # Arcis heats for the reported and comparison fits (Table S23), through the assessment's heat call.
     heat_rows = [x for x in json.loads((ROOT / spec['heat_rows_path']).read_text()) if not x['record_id'].startswith('vinjarapu')]
     heats = {}
-    for name, record in (('reported', a.SELECTED), ('comparison', J / 'amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json')):
+    # The comparison fit is the adopted 3e83e19c refit endpoint.
+    for name, record in (('reported', a.SELECTED), ('comparison', OUT / 'a6/run/fit/usable-budget-endpoint.json')):
         mapping = o.s.parameter_mapping(record)
         params = epcsaft.Parameters.from_mapping(mapping)
         errors = {}
