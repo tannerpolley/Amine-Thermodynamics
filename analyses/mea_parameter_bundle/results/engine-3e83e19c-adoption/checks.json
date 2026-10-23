@@ -159,5 +159,37 @@
   }
  ],
  "total_wall_s": 237.99,
- "total_cpu_s": 632.33
+ "total_cpu_s": 632.33,
+ "pin_switch": [
+  {
+   "command": "adopt.py.txt compare (no producer rerun) after marking the accepted state-21 positive-neutral-base and state-63 near-pure-2 split attempts",
+   "exit": 0,
+   "passed": true,
+   "commit": "cc7e356"
+  },
+  {
+   "command": "pin edits committed (shared_evaluation.py ENGINE_WHEEL_SHA256/ENGINE_COMMIT, pyproject.toml and uv.lock wheel path and hash, analysis.yaml working_engine_wheel_sha256); sha256sum --check --strict on the wheel",
+   "exit": 0,
+   "commit": "86f0384"
+  },
+  {
+   "command": "uv sync --frozen",
+   "exit": 0,
+   "note": "replaced the 8298c602 wheel with the 3e83e19c wheel; verify_wheel passed"
+  },
+  {
+   "command": "OMP_NUM_THREADS=1 nice -n 10 .venv/bin/python -m pytest -q",
+   "exit": 1,
+   "passed": 95,
+   "failed": 4,
+   "wall_s": 15.04,
+   "failed_tests": [
+    "analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_campaigns_use_candidate_reactions_and_retain_failures",
+    "analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_failed_comparison_retains_failures_without_selecting_candidate",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_pinned_engine_state_and_cached_replay",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_source_normalizer_keeps_common_r2_and_converts_only_log10_form"
+   ],
+   "note": "the same four tests fail with identical assertion and ParameterError messages on Engine 8298c602 at base d578555 (main checkout environment); not caused by this adoption"
+  }
+ ]
 }
