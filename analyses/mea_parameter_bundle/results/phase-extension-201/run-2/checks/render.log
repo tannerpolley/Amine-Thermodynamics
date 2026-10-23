@@ -1,0 +1,40 @@
+synced
+
+pandoc 
+  to: html
+  output-file: index.html
+  standalone: true
+  embed-resources: false
+  title-prefix: Analyses
+  section-divs: true
+  html-math-method: mathjax
+  wrap: none
+  default-image-extension: png
+  css:
+    - ../../site.css
+  toc: false
+  
+metadata
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  page-layout: full
+  theme: cosmo
+  fontsize: 16px
+  title: A7 joint recalibration and adoption
+  resources:
+    - ../results/phase-extension-201/run-2/
+    - ../results/phase-extension-201/diagnosis/report.md
+    - ../results/joint-recalibration-170/amendment-7/restricted/README.md
+    - ../results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/README.md
+    - ../results/joint-recalibration-170/amendment-7/selected-assessment/README.md
+    - ../results/joint-recalibration-170/amendment-7/selected-assessment/summary.json
+    - ../results/joint-recalibration-170/amendment-7/selected-assessment/density.csv
+    - ../results/joint-recalibration-170/amendment-7/selected-assessment/verification.json
+    - ../results/joint-recalibration-170/amendment-7/gas-root/run-2/gas-root.json
+    - ../results/joint-recalibration-170/amendment-7/step-ledger.json
+  latex-auto-install: false
+  
+Output created: ../../_site/mea_parameter_bundle/joint-recalibration/index.html
+

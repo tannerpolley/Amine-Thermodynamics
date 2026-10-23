@@ -1,0 +1,276 @@
+{
+  "mode": "reference",
+  "source_commit": "86ee3bad6ab5521a010154e63d24eece4738c451",
+  "python": "3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]",
+  "engine_commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+  "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3",
+  "engine_path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-3/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "nice": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "libraries": {
+    "epcsaft": "0.2.0.dev0",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1"
+  },
+  "row_tolerance": 1e-10,
+  "seed": null,
+  "basis_mol": {
+    "MEA": 9.7292821,
+    "water": 76.9751925
+  },
+  "temperature_K": 393.15,
+  "loading": 1e-05,
+  "pressure_guess_Pa": 7398.16,
+  "reaction_domain_K": [
+    250,
+    450
+  ],
+  "result": {
+    "success": false,
+    "message": "infeasible: residual 0.093625520489689418 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 96 iterations, contraction absent, floor 1.35289606837796e-10, amplification 0",
+    "solver_status": "LOCAL_INFEASIBILITY",
+    "requested_tolerance_met": false,
+    "temperature": null,
+    "pressure": null,
+    "amounts": [],
+    "mole_fractions": [],
+    "molar_densities": [],
+    "packing_fractions": [],
+    "coordinates": [],
+    "residuals": [
+      4.263256414560601e-14,
+      2.842170943040401e-14,
+      0.0,
+      -7.105427357601002e-15,
+      2.842170943040401e-14,
+      0.0,
+      2.2737367544323206e-13,
+      1.4210854715202004e-13,
+      5.684341886080802e-14,
+      0.09362552048968942,
+      2.842170943040401e-14,
+      1.4210854715202004e-14,
+      0.0,
+      -2.8823532148644075e-14,
+      -1.638997160699739e-15,
+      0.08390179240929078,
+      0.0839020424071192,
+      -3.044437225999765e-14,
+      9.237055564881302e-14,
+      -2.9976021664879227e-14
+    ],
+    "classified_residuals": [
+      4.263256414560601e-14,
+      2.842170943040401e-14,
+      0.0,
+      -7.105427357601002e-15,
+      2.842170943040401e-14,
+      0.0,
+      2.2737367544323206e-13,
+      1.4210854715202004e-13,
+      5.684341886080802e-14,
+      0.09362552048968942,
+      2.842170943040401e-14,
+      1.4210854715202004e-14,
+      0.0,
+      -2.8823532148644075e-14,
+      -1.638997160699739e-15,
+      0.08390179240929078,
+      0.0839020424071192,
+      -3.044437225999765e-14,
+      9.237055564881302e-14,
+      -2.9976021664879227e-14
+    ],
+    "multipliers": [],
+    "constraint_multipliers": [],
+    "iterations": 109,
+    "evaluations": 132,
+    "hessian_calls": 110,
+    "objective": -22853.152672360364,
+    "reduced_hessian_minimum": 0.0,
+    "jacobian_rank": 20,
+    "generic_nullity": 0,
+    "convergence": {
+      "residual": 0.09362552048968942,
+      "floor": 1.35289606837796e-10,
+      "amplification": 0.0,
+      "contraction": null,
+      "iterations": 96,
+      "evaluations": 99,
+      "stop": "infeasible"
+    },
+    "closure_criterion": 1e-10,
+    "rows": [
+      {
+        "index": 0,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffb3d0>",
+        "residual": 4.263256414560601e-14,
+        "classified": 4.263256414560601e-14
+      },
+      {
+        "index": 1,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ff9d70>",
+        "residual": 2.842170943040401e-14,
+        "classified": 2.842170943040401e-14
+      },
+      {
+        "index": 2,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffb810>",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 3,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ff9370>",
+        "residual": -7.105427357601002e-15,
+        "classified": -7.105427357601002e-15
+      },
+      {
+        "index": 4,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ff93f0>",
+        "residual": 2.842170943040401e-14,
+        "classified": 2.842170943040401e-14
+      },
+      {
+        "index": 5,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ff89d0>",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 6,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffb0d0>",
+        "residual": 2.2737367544323206e-13,
+        "classified": 2.2737367544323206e-13
+      },
+      {
+        "index": 7,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffa5b0>",
+        "residual": 1.4210854715202004e-13,
+        "classified": 1.4210854715202004e-13
+      },
+      {
+        "index": 8,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ff8070>",
+        "residual": 5.684341886080802e-14,
+        "classified": 5.684341886080802e-14
+      },
+      {
+        "index": 9,
+        "kind": "Pressure",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffa170>",
+        "residual": 0.09362552048968942,
+        "classified": 0.09362552048968942
+      },
+      {
+        "index": 10,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ff8c10>",
+        "residual": 2.842170943040401e-14,
+        "classified": 2.842170943040401e-14
+      },
+      {
+        "index": 11,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ff89b0>",
+        "residual": 1.4210854715202004e-14,
+        "classified": 1.4210854715202004e-14
+      },
+      {
+        "index": 12,
+        "kind": "Chemical",
+        "description": "<epcsaft._core.Row object at 0x7d3310ff8650>",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 13,
+        "kind": "Pressure",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffabb0>",
+        "residual": -2.8823532148644075e-14,
+        "classified": -2.8823532148644075e-14
+      },
+      {
+        "index": 14,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffb4f0>",
+        "residual": -1.638997160699739e-15,
+        "classified": -1.638997160699739e-15
+      },
+      {
+        "index": 15,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffa630>",
+        "residual": 0.08390179240929078,
+        "classified": 0.08390179240929078
+      },
+      {
+        "index": 16,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffb8f0>",
+        "residual": 0.0839020424071192,
+        "classified": 0.0839020424071192
+      },
+      {
+        "index": 17,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffbe50>",
+        "residual": -3.044437225999765e-14,
+        "classified": -3.044437225999765e-14
+      },
+      {
+        "index": 18,
+        "kind": "Normalization",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffa3f0>",
+        "residual": 9.237055564881302e-14,
+        "classified": 9.237055564881302e-14
+      },
+      {
+        "index": 19,
+        "kind": "Normalization",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffa8b0>",
+        "residual": -2.9976021664879227e-14,
+        "classified": -2.9976021664879227e-14
+      }
+    ],
+    "failing_classified_rows": [
+      {
+        "index": 9,
+        "kind": "Pressure",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffa170>",
+        "residual": 0.09362552048968942,
+        "classified": 0.09362552048968942
+      },
+      {
+        "index": 15,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffa630>",
+        "residual": 0.08390179240929078,
+        "classified": 0.08390179240929078
+      },
+      {
+        "index": 16,
+        "kind": "Moiety",
+        "description": "<epcsaft._core.Row object at 0x7d3310ffb8f0>",
+        "residual": 0.0839020424071192,
+        "classified": 0.0839020424071192
+      }
+    ]
+  },
+  "admitted": false
+}
