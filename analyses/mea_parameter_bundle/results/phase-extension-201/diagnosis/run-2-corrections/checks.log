@@ -1,0 +1,921 @@
+Prior targeted test command: nice -n 10 uv run --frozen --no-sync pytest tests/test_phase_extension_201.py -q -p no:cacheprovider
+Observed harness output: ... [100%]
+3 passed in 4.63s
+
+
+COMMAND ["sha256sum", "-c", "analyses/enrtl_historical_evidence/retained-results.sha256"]
+analyses/enrtl_historical_evidence/conversion_receipt.json: OK
+EXIT 0
+
+COMMAND ["sha256sum", "-c", "analyses/enrtl_six_species_ideal_comparison/retained-results.sha256"]
+analyses/enrtl_six_species_ideal_comparison/figures/output/source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/figures/output/uq_source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/epcsaft_scipy_packet_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/uq_run_receipt.json: OK
+analyses/enrtl_six_species_ideal_comparison/results/epcsaft_scipy_lane_status.csv: OK
+EXIT 0
+
+COMMAND ["sha256sum", "-c", "analyses/film_chemistry_work_package_a/retained-results.sha256"]
+analyses/film_chemistry_work_package_a/results/validation_report.json: OK
+data/reference/MEA/film_chemistry_inputs/3/input.json: OK
+data/reference/MEA/film_chemistry_inputs/3/schema.json: OK
+data/reference/MEA/film_chemistry_inputs/3.receipt.json: OK
+EXIT 0
+
+COMMAND ["sha256sum", "-c", "analyses/historical_fixed_parameter_epcsaft_evaluation/retained-results.sha256"]
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_activity_constant_candidates.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_equilibrium_results.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_parameter_artifact_manifest.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_metrics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_results.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_speciation_parity.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_reaction_constant_basis.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_reaction_constant_source_verification.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_readiness_status.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_required_output_status.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_residual_acceptance_audit.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_solver_diagnostics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_source_residual_summary.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_activity_curves.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_metrics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_reference_points.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_target_roles.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_activity_speciation_problem.json: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/controlled_comparison/paired_pressure_rows.csv: OK
+EXIT 0
+
+COMMAND ["sha256sum", "-c", "analyses/ideal_reaction_equilibrium/retained-results.sha256"]
+analyses/ideal_reaction_equilibrium/results/ideal_reference_parameter_table.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_pressure_metrics.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_pressure_results.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_reaction_constant_table.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_residual_acceptance_audit.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_curve.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_metrics.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_reference_points.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_results.csv: OK
+EXIT 0
+
+COMMAND ["sha256sum", "-c", "analyses/neutral_pcsaft_pressure_reference/retained-results.sha256"]
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_metrics.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_summary.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_curves.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_summary.json: OK
+EXIT 0
+
+COMMAND ["sha256sum", "-c", "analyses/paper_validation/retained-results.sha256"]
+analyses/paper_validation/2015_baygi/data/input_baygi_2015.md: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_table2_pure_parameters.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_table3_mea_h2o_association_comparison.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_neutral_epcsaft_pcsaft_pressure_parity_summary.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_neutral_epcsaft_pcsaft_pressure_parity_raw.csv: OK
+EXIT 0
+
+COMMAND ["sha256sum", "-c", "analyses/reactive_epcsaft_parameter_evidence/retained-results.sha256"]
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/state_results.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/parameter_table.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/speciation_comparison.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/summary.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_2b_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_2b_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_3b_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_3b_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_4c_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_4c_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/pressure_packet_receipt.json: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/source/kiepe_2002_table_1.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/parameter_table.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/summary.json: OK
+analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json: OK
+analyses/reactive_epcsaft_parameter_evidence/results/readiness/regression_readiness_summary.json: OK
+EXIT 0
+
+COMMAND ["sha256sum", "-c", "analyses/six_species_solubility_reference/retained-results.sha256"]
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_metrics.csv: OK
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_summary.csv: OK
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_curves.csv: OK
+analyses/six_species_solubility_reference/results/speciation/six_species_speciation_curves.csv: OK
+analyses/six_species_solubility_reference/results/speciation/six_species_speciation_reference.csv: OK
+EXIT 0
+
+COMMAND ["sha256sum", "-c", "analyses/speciation_evidence_harmonization/retained-results.sha256"]
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_mole_fraction_grid_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_loaded_molkg_grid_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_wong_source_molkg_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_source_summary.csv: OK
+EXIT 0
+
+COMMAND ["python3", "analyses/manuscript.py", "sync", "analyses"]
+synced
+EXIT 0
+
+COMMAND ["python3", "analyses/manuscript.py", "validate", "analyses"]
+valid
+EXIT 0
+
+COMMAND ["python3", "analyses/manuscript.py", "prepare", "analyses"]
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:04:47
+  Workflow ID: e6e3d4d9-121a-4ab7-bb3a-878928b9dfe0
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:04:47 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/enrtl_historical_evidence/conversion_receipt.json: OK
+Using CPython 3.13.14
+Creating virtual environment at: .venv
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    from MEA.common.data_access import verify_source_hashes
+ModuleNotFoundError: No module named 'MEA'
+RuleException:
+CalledProcessError in file "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence/Snakefile", line 22:
+Command '['/home/tnnrpolley21/.local/bin/uv', 'run', '--no-sync', 'python', '-c', 'import json\nfrom pathlib import Path\nfrom MEA.common.data_access import verify_source_hashes\nanalysis = Path("analyses/enrtl_historical_evidence")\nrecord = json.loads((analysis / "conversion_receipt.json").read_text())\nverify_source_hashes({str(analysis / record["output"]): record["output_sha256"]}, repo_root=Path.cwd())\n']' returned non-zero exit status 1.
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence/Snakefile", line 22, in __rule_present
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/subprocess.py", line 577, in run
+Exiting because a job execution failed. Look above for error messages
+WorkflowError:
+At least one job did not complete successfully.
+[Thu Oct 22 23:04:48 2026]
+Error in rule present:
+    message: None
+    jobid: 0
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence/retained-results.sha256
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error messages
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence/.snakemake/log/2026-10-22T230447.289102.snakemake.log
+Elapsed time: 0:00:01.666119
+WorkflowError:
+At least one job did not complete successfully.
+presentation failed in /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence; retained view is stale
+EXIT 1
+
+Retry with prepared UV_PROJECT_ENVIRONMENT and all numerical thread counts set to 1.
+
+COMMAND ["python3", "analyses/manuscript.py", "prepare", "analyses"]
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:05:52
+  Workflow ID: 3437f32d-8eb1-4f1a-bae3-2c8e081e7c38
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:05:52 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/enrtl_historical_evidence/conversion_receipt.json: OK
+analyses/enrtl_historical_evidence/conversion_receipt.json: OK
+[Thu Oct 22 23:05:53 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_historical_evidence/.snakemake/log/2026-10-22T230552.210117.snakemake.log
+Elapsed time: 0:00:01.697136
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:05:55
+  Workflow ID: d418cf04-1168-4ee6-aff3-7dbd84061f7a
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_six_species_ideal_comparison/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_six_species_ideal_comparison
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_six_species_ideal_comparison
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_six_species_ideal_comparison
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:05:55 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_six_species_ideal_comparison/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/enrtl_six_species_ideal_comparison/figures/output/source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/figures/output/uq_source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/epcsaft_scipy_packet_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/uq_run_receipt.json: OK
+analyses/enrtl_six_species_ideal_comparison/results/epcsaft_scipy_lane_status.csv: OK
+historical input data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv: retained results use its 910f630 version
+historical input data/reference/MEA/observations/liquid_speciation/Combined_ChEq.csv: retained results use its 910f630 version
+Rendered matched comparison figures under /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_six_species_ideal_comparison/figures/output
+Rendered UQ figures under /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_six_species_ideal_comparison/figures/output
+analyses/enrtl_six_species_ideal_comparison/figures/output/source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/figures/output/uq_source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/epcsaft_scipy_packet_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/uq_run_receipt.json: OK
+analyses/enrtl_six_species_ideal_comparison/results/epcsaft_scipy_lane_status.csv: OK
+historical input data/reference/MEA/observations/vapor_liquid_equilibrium/Combined_VLE.csv: retained results use its 910f630 version
+historical input data/reference/MEA/observations/liquid_speciation/Combined_ChEq.csv: retained results use its 910f630 version
+[Thu Oct 22 23:06:03 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/enrtl_six_species_ideal_comparison/.snakemake/log/2026-10-22T230555.019710.snakemake.log
+Elapsed time: 0:00:08.546172
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:06:04
+  Workflow ID: c8a9e92a-2a90-4c0d-b1c4-6af8b1f026b0
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/film_chemistry_work_package_a/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/film_chemistry_work_package_a
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/film_chemistry_work_package_a
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/film_chemistry_work_package_a
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:06:04 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/film_chemistry_work_package_a/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/film_chemistry_work_package_a/results/validation_report.json: OK
+data/reference/MEA/film_chemistry_inputs/3/input.json: OK
+data/reference/MEA/film_chemistry_inputs/3/schema.json: OK
+data/reference/MEA/film_chemistry_inputs/3.receipt.json: OK
+analyses/film_chemistry_work_package_a/results/validation_report.json: OK
+data/reference/MEA/film_chemistry_inputs/3/input.json: OK
+data/reference/MEA/film_chemistry_inputs/3/schema.json: OK
+data/reference/MEA/film_chemistry_inputs/3.receipt.json: OK
+[Thu Oct 22 23:06:06 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/film_chemistry_work_package_a/.snakemake/log/2026-10-22T230604.783228.snakemake.log
+Elapsed time: 0:00:01.657903
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:06:07
+  Workflow ID: 0b730039-3607-487c-ac4e-4c87160fd3e4
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/historical_fixed_parameter_epcsaft_evaluation/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/historical_fixed_parameter_epcsaft_evaluation
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/historical_fixed_parameter_epcsaft_evaluation
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/historical_fixed_parameter_epcsaft_evaluation
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:06:07 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/historical_fixed_parameter_epcsaft_evaluation/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_activity_constant_candidates.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_equilibrium_results.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_parameter_artifact_manifest.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_metrics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_results.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_speciation_parity.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_reaction_constant_basis.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_reaction_constant_source_verification.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_readiness_status.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_required_output_status.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_residual_acceptance_audit.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_solver_diagnostics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_source_residual_summary.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_activity_curves.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_metrics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_reference_points.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_target_roles.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_activity_speciation_problem.json: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/controlled_comparison/paired_pressure_rows.csv: OK
+historical fixed-parameter ePC-SAFT evaluation activity-speciation plot artifacts: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/historical_fixed_parameter_epcsaft_evaluation/figures/speciation/output
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_activity_constant_candidates.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_equilibrium_results.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_parameter_artifact_manifest.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_metrics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_results.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_speciation_parity.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_reaction_constant_basis.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_reaction_constant_source_verification.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_readiness_status.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_required_output_status.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_residual_acceptance_audit.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_solver_diagnostics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_source_residual_summary.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_activity_curves.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_metrics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_reference_points.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_target_roles.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_activity_speciation_problem.json: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/controlled_comparison/paired_pressure_rows.csv: OK
+[Thu Oct 22 23:06:15 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/historical_fixed_parameter_epcsaft_evaluation/.snakemake/log/2026-10-22T230607.661170.snakemake.log
+Elapsed time: 0:00:08.036986
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:06:16
+  Workflow ID: 82a66962-8f9b-4405-8839-608eb777e36a
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/ideal_reaction_equilibrium/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/ideal_reaction_equilibrium
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/ideal_reaction_equilibrium
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/ideal_reaction_equilibrium
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:06:16 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/ideal_reaction_equilibrium/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/ideal_reaction_equilibrium/results/ideal_reference_parameter_table.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_pressure_metrics.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_pressure_results.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_reaction_constant_table.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_residual_acceptance_audit.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_curve.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_metrics.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_reference_points.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_results.csv: OK
+ideal reaction-equilibrium reference curated artifacts: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/ideal_reaction_equilibrium/results
+analyses/ideal_reaction_equilibrium/results/ideal_reference_parameter_table.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_pressure_metrics.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_pressure_results.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_reaction_constant_table.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_residual_acceptance_audit.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_curve.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_metrics.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_reference_points.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_results.csv: OK
+[Thu Oct 22 23:06:21 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/ideal_reaction_equilibrium/.snakemake/log/2026-10-22T230616.818578.snakemake.log
+Elapsed time: 0:00:04.584593
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:06:22
+  Workflow ID: 5fda3f76-4835-4e44-afdd-fda36bf39617
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/neutral_pcsaft_pressure_reference/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/neutral_pcsaft_pressure_reference
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/neutral_pcsaft_pressure_reference
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/neutral_pcsaft_pressure_reference
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:06:22 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/neutral_pcsaft_pressure_reference/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_metrics.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_summary.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_curves.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_summary.json: OK
+Neutral ePC-SAFT pressure plot: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_pcsaft_parity.png
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_metrics.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_summary.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_curves.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_summary.json: OK
+[Thu Oct 22 23:06:25 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/neutral_pcsaft_pressure_reference/.snakemake/log/2026-10-22T230622.560716.snakemake.log
+Elapsed time: 0:00:02.762505
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:06:26
+  Workflow ID: 8d440033-5f6a-4dd3-9e21-de01c806bbb3
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:06:26 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/paper_validation/2015_baygi/data/input_baygi_2015.md: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_table2_pure_parameters.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_table3_mea_h2o_association_comparison.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_neutral_epcsaft_pcsaft_pressure_parity_summary.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_neutral_epcsaft_pcsaft_pressure_parity_raw.csv: OK
+Baygi pressure plot data: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity_plot_data.csv
+Baygi style sidecar: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.mpl.yaml
+Baygi pressure SVG: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.svg
+Baygi pressure PNG: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.png
+Baygi pressure PDF: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation/2015_baygi/results/neutral_parity/baygi_neutral_epcsaft_pcsaft_pressure_parity.pdf
+analyses/paper_validation/2015_baygi/data/input_baygi_2015.md: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_table2_pure_parameters.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_table3_mea_h2o_association_comparison.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_neutral_epcsaft_pcsaft_pressure_parity_summary.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_neutral_epcsaft_pcsaft_pressure_parity_raw.csv: OK
+[Thu Oct 22 23:06:29 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/paper_validation/.snakemake/log/2026-10-22T230626.470349.snakemake.log
+Elapsed time: 0:00:02.678672
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:06:30
+  Workflow ID: 25f16a04-0365-47e4-9fd2-3cb96dfd8699
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/reactive_epcsaft_parameter_evidence/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/reactive_epcsaft_parameter_evidence
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/reactive_epcsaft_parameter_evidence
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/reactive_epcsaft_parameter_evidence
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:06:30 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/reactive_epcsaft_parameter_evidence/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/state_results.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/parameter_table.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/speciation_comparison.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/summary.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_2b_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_2b_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_3b_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_3b_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_4c_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_4c_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/pressure_packet_receipt.json: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/source/kiepe_2002_table_1.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/parameter_table.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/summary.json: OK
+analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json: OK
+analyses/reactive_epcsaft_parameter_evidence/results/readiness/regression_readiness_summary.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/figures/cai_held_water_mea_family_comparison.png
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/figures/cai_held_water_mea_family_comparison.svg
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/figures/cai_held_water_mea_family_comparison.pdf
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/figures/cai_held_water_mea_family_plot_data.csv
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/figures/cai_held_water_mea_family_summary.csv
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/state_results.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/parameter_table.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/speciation_comparison.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/summary.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_2b_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_2b_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_3b_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_3b_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_4c_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_4c_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/pressure_packet_receipt.json: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/source/kiepe_2002_table_1.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/parameter_table.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/summary.json: OK
+analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json: OK
+analyses/reactive_epcsaft_parameter_evidence/results/readiness/regression_readiness_summary.json: OK
+[Thu Oct 22 23:06:38 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/reactive_epcsaft_parameter_evidence/.snakemake/log/2026-10-22T230630.249962.snakemake.log
+Elapsed time: 0:00:07.856769
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:06:39
+  Workflow ID: e10b7e01-ada0-4ce0-ae0c-56fe740de573
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/six_species_solubility_reference/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/six_species_solubility_reference
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/six_species_solubility_reference
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/six_species_solubility_reference
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:06:39 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/six_species_solubility_reference/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_metrics.csv: OK
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_summary.csv: OK
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_curves.csv: OK
+analyses/six_species_solubility_reference/results/speciation/six_species_speciation_curves.csv: OK
+analyses/six_species_solubility_reference/results/speciation/six_species_speciation_reference.csv: OK
+Six-species pressure plot: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_recomputed_fit.png
+Six-species speciation plot: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/six_species_solubility_reference/results/speciation/speciation.png
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_metrics.csv: OK
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_summary.csv: OK
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_curves.csv: OK
+analyses/six_species_solubility_reference/results/speciation/six_species_speciation_curves.csv: OK
+analyses/six_species_solubility_reference/results/speciation/six_species_speciation_reference.csv: OK
+[Thu Oct 22 23:06:43 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/six_species_solubility_reference/.snakemake/log/2026-10-22T230639.319838.snakemake.log
+Elapsed time: 0:00:04.057710
+Assuming unrestricted shared filesystem usage.
+
+SNAKEMAKE
+=========
+  Date: 2026-10-22 23:06:44
+  Workflow ID: 78b22a5b-87d0-47eb-b187-67fd1e6881c1
+  Platform: Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+  Host: tnnrpolley21-MS-7C95
+  User: tnnrpolley21
+  Snakemake version: 9.27.0
+  Python version: 3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]
+  Command: /home/tnnrpolley21/.cache/cse-quarto-demo/.venv/bin/snakemake --cores 1 present
+  Snakefile: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/Snakefile
+  Base directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization
+  Run directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization
+  Working directory: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization
+  Config file(s): []
+  Config MD5: 99914b932bd37a50b983c5e7c90ae93b
+
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job        count
+-------  -------
+present        1
+total          1
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Oct 22 23:06:44 2026]
+localrule present:
+    input: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/retained-results.sha256
+    jobid: 0
+    reason: Rules with a run or shell declaration but no output are always executed.
+    resources: tmpdir=/tmp
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_mole_fraction_grid_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_loaded_molkg_grid_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_wong_source_molkg_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_source_summary.csv: OK
+Saved PNG: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_mole_fraction_grid.png
+Saved SVG: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_mole_fraction_grid.svg
+Saved PDF: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_mole_fraction_grid.pdf
+Saved sidecar: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_mole_fraction_grid.mpl.yaml
+Saved PNG: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_loaded_molkg_grid.png
+Saved SVG: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_loaded_molkg_grid.svg
+Saved PDF: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_loaded_molkg_grid.pdf
+Saved sidecar: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_loaded_molkg_grid.mpl.yaml
+Saved PNG: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_wong_source_molkg.png
+Saved SVG: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_wong_source_molkg.svg
+Saved PDF: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_wong_source_molkg.pdf
+Saved sidecar: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_wong_source_molkg.mpl.yaml
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_mole_fraction_grid_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_loaded_molkg_grid_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_wong_source_molkg_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_source_summary.csv: OK
+[Thu Oct 22 23:06:52 2026]
+Finished jobid: 0 (Rule: present)
+1 of 1 steps (100%) done
+Complete log(s): /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-5/analyses/speciation_evidence_harmonization/.snakemake/log/2026-10-22T230644.529807.snakemake.log
+Elapsed time: 0:00:07.859767
+EXIT 0
+
+COMMAND ["bash", "analyses/render.sh", "mea_parameter_bundle/joint-recalibration/index.qmd", "--profile", "presentation", "--no-execute"]
+synced
+
+pandoc
+  to: html
+  output-file: index.html
+  standalone: true
+  embed-resources: false
+  title-prefix: Analyses
+  section-divs: true
+  html-math-method: mathjax
+  wrap: none
+  default-image-extension: png
+  css:
+    - ../../site.css
+  toc: false
+
+metadata
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  page-layout: full
+  theme: cosmo
+  fontsize: 16px
+  title: A7 joint recalibration and adoption
+  resources:
+    - ../results/phase-extension-201/run-2/
+    - ../results/phase-extension-201/diagnosis/run-2-corrections/
+    - ../results/phase-extension-201/diagnosis/report.md
+    - ../results/joint-recalibration-170/amendment-7/restricted/README.md
+    - ../results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/README.md
+    - ../results/joint-recalibration-170/amendment-7/selected-assessment/README.md
+    - ../results/joint-recalibration-170/amendment-7/selected-assessment/summary.json
+    - ../results/joint-recalibration-170/amendment-7/selected-assessment/density.csv
+    - ../results/joint-recalibration-170/amendment-7/selected-assessment/verification.json
+    - ../results/joint-recalibration-170/amendment-7/gas-root/run-2/gas-root.json
+    - ../results/joint-recalibration-170/amendment-7/step-ledger.json
+  latex-auto-install: false
+
+Output created: ../../_site/mea_parameter_bundle/joint-recalibration/index.html
+
+EXIT 0
+analyses/enrtl_historical_evidence/conversion_receipt.json: OK
+analyses/enrtl_six_species_ideal_comparison/figures/output/source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/figures/output/uq_source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/source_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/epcsaft_scipy_packet_manifest.csv: OK
+analyses/enrtl_six_species_ideal_comparison/results/uq_run_receipt.json: OK
+analyses/enrtl_six_species_ideal_comparison/results/epcsaft_scipy_lane_status.csv: OK
+analyses/film_chemistry_work_package_a/results/validation_report.json: OK
+data/reference/MEA/film_chemistry_inputs/3/input.json: OK
+data/reference/MEA/film_chemistry_inputs/3/schema.json: OK
+data/reference/MEA/film_chemistry_inputs/3.receipt.json: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_activity_constant_candidates.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_equilibrium_results.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_parameter_artifact_manifest.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_metrics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_results.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_pressure_speciation_parity.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_reaction_constant_basis.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_reaction_constant_source_verification.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_readiness_status.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_required_output_status.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_residual_acceptance_audit.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_solver_diagnostics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_source_residual_summary.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_activity_curves.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_metrics.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_reference_points.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_speciation_target_roles.csv: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/historical_activity_evaluation_activity_speciation_problem.json: OK
+analyses/historical_fixed_parameter_epcsaft_evaluation/results/controlled_comparison/paired_pressure_rows.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_parameter_table.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_pressure_metrics.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_pressure_results.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_reaction_constant_table.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_residual_acceptance_audit.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_curve.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_metrics.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_reference_points.csv: OK
+analyses/ideal_reaction_equilibrium/results/ideal_reference_speciation_results.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_metrics.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_summary.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_curves.csv: OK
+analyses/neutral_pcsaft_pressure_reference/results/pressure/epcsaft_neutral_jou_parity_summary.json: OK
+analyses/paper_validation/2015_baygi/data/input_baygi_2015.md: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_table2_pure_parameters.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_table3_mea_h2o_association_comparison.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_neutral_epcsaft_pcsaft_pressure_parity_summary.csv: OK
+analyses/paper_validation/2015_baygi/data/processed/baygi_neutral_epcsaft_pcsaft_pressure_parity_raw.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/state_results.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/parameter_table.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/speciation_comparison.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/born_permittivity_sensitivity/results/summary.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_2b_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_2b_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_3b_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_3b_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_4c_predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/cai_held_water_mea_4c_fit.json: OK
+analyses/reactive_epcsaft_parameter_evidence/pressure_first/results/pressure_packet_receipt.json: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/source/kiepe_2002_table_1.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/predictions.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/parameter_table.csv: OK
+analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/results/summary.json: OK
+analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json: OK
+analyses/reactive_epcsaft_parameter_evidence/results/readiness/regression_readiness_summary.json: OK
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_metrics.csv: OK
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_summary.csv: OK
+analyses/six_species_solubility_reference/results/pressure/legacy_pcsaft_jou_fit_curves.csv: OK
+analyses/six_species_solubility_reference/results/speciation/six_species_speciation_curves.csv: OK
+analyses/six_species_solubility_reference/results/speciation/six_species_speciation_reference.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_mole_fraction_grid_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_loaded_molkg_grid_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_wong_source_molkg_plot_data.csv: OK
+analyses/speciation_evidence_harmonization/figures/speciation/output/canonical_speciation_source_summary.csv: OK
+
+Post-presentation retained-result hash check:
+All 10 hash inventories passed after presentation; 74 retained files.

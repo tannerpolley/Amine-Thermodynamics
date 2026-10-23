@@ -52,3 +52,22 @@ def test_continued_reference_and_parent_recover_diagnosed_cases():
     trials = parent['stability'][0]['trials']
     assert len(trials)==9 and all(t['optimizer']['success'] for t in trials)
     assert not any(t['resolved_descent'] for t in trials)
+
+
+def test_bubble_recovery_projects_model_order_onto_declared_support(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    f = study.f
+    model = SimpleNamespace(component_ids=list(f.s.COMPONENT_IDS))
+    liquid, vapor = [.2,.3,.5]+[0.]*6, [.1,.2,.7]+[0.]*6
+    bubble = SimpleNamespace(amounts=[10.,0.],packing_fractions=[.4,.001],
+                             phase_mole_fractions=lambda i: [liquid,vapor][i])
+    problem = SimpleNamespace(phases=[f.eq.Phase('L',support=model.component_ids),
+        f.eq.Phase('V',support=model.component_ids[:3][::-1])])
+    def solve(model, problem, starts, limits):
+        assert [s.compositions for s in starts] == [[liquid,[.7,.2,.1]]]*2
+        assert [s.amounts for s in starts] == [[5.,5.],[9.,10.*(1.-.9)]]
+        assert all(s.packing_fractions==bubble.packing_fractions for s in starts)
+        assert (limits.attempts,limits.attempt_iterations,limits.iterations)==(2,400,800)
+        return SimpleNamespace(causes=['unattempted']*2,selected=None,results=[None,None])
+    monkeypatch.setattr(f.eq,'solve_equilibrium_starts',solve)
+    assert f.bubble_recover(model,problem,bubble,dict(attempts=[]),tmp_path/'point.json') is None
