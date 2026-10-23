@@ -1,0 +1,374 @@
+{
+  "mode": "reference",
+  "source_commit": "86ee3bad6ab5521a010154e63d24eece4738c451",
+  "python": "3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]",
+  "engine_commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+  "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3",
+  "engine_path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-3/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "nice": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "libraries": {
+    "epcsaft": "0.2.0.dev0",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1"
+  },
+  "row_tolerance": 1e-10,
+  "seed": "analyses/mea_parameter_bundle/results/phase-extension-201/diagnosis/ref-warm-393-low.json",
+  "basis_mol": {
+    "MEA": 9.7292821,
+    "water": 76.9751925
+  },
+  "temperature_K": 393.15,
+  "loading": 0.05,
+  "pressure_guess_Pa": 173333.00198051374,
+  "reaction_domain_K": [
+    250,
+    450
+  ],
+  "result": {
+    "success": false,
+    "message": "infeasible: residual 1.0000001814483908 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 102 iterations, contraction absent, floor 3.6709691796112576e-09, amplification 0",
+    "solver_status": "LOCAL_INFEASIBILITY",
+    "requested_tolerance_met": false,
+    "temperature": null,
+    "pressure": null,
+    "amounts": [],
+    "mole_fractions": [],
+    "molar_densities": [],
+    "packing_fractions": [],
+    "coordinates": [],
+    "residuals": [
+      -6.110667527536862e-13,
+      2.842170943040401e-14,
+      -3.694822225952521e-13,
+      -1.2860823517257813e-12,
+      1.6200374375330284e-12,
+      2.2737367544323206e-13,
+      6.821210263296962e-13,
+      -2.1032064978498966e-12,
+      1.0231815394945443e-12,
+      1.0000001814483908,
+      2.5579538487363607e-13,
+      7.887024366937112e-13,
+      2.8421709430404007e-13,
+      1.0000001679016346,
+      -0.8716761811666759,
+      -0.005579292509897065,
+      -0.00557929533066255,
+      -0.11158592692995348,
+      -0.9999999925423724,
+      -0.9999999919336002
+    ],
+    "classified_residuals": [
+      -6.110667527536862e-13,
+      2.842170943040401e-14,
+      -3.694822225952521e-13,
+      -1.2860823517257813e-12,
+      1.6200374375330284e-12,
+      2.2737367544323206e-13,
+      6.821210263296962e-13,
+      -2.1032064978498966e-12,
+      1.0231815394945443e-12,
+      1.0000001814483908,
+      2.5579538487363607e-13,
+      7.887024366937112e-13,
+      2.8421709430404007e-13,
+      1.0000001679016346,
+      -0.8716761811666759,
+      -0.005579292509897065,
+      -0.00557929533066255,
+      -0.11158592692995348,
+      -0.9999999925423724,
+      -0.9999999919336002
+    ],
+    "multipliers": [],
+    "constraint_multipliers": [],
+    "iterations": 115,
+    "evaluations": 151,
+    "hessian_calls": 116,
+    "objective": -7.834269377685589e-05,
+    "reduced_hessian_minimum": 0.0,
+    "jacobian_rank": 20,
+    "generic_nullity": 0,
+    "convergence": {
+      "residual": 1.0000001814483908,
+      "floor": 3.6709691796112576e-09,
+      "amplification": 0.0,
+      "contraction": null,
+      "iterations": 102,
+      "evaluations": 125,
+      "stop": "infeasible"
+    },
+    "closure_criterion": 1e-10,
+    "solver_settings": {
+      "acceptable_tol": 1e-10,
+      "constr_viol_tol": 1e-10,
+      "dual_inf_tol": 8.71909e-09,
+      "tol": 1e-10
+    },
+    "linear_solver": "ma57",
+    "rows": [
+      {
+        "index": 0,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -6.110667527536862e-13,
+        "classified": -6.110667527536862e-13
+      },
+      {
+        "index": 1,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 1,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 2.842170943040401e-14,
+        "classified": 2.842170943040401e-14
+      },
+      {
+        "index": 2,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 2,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -3.694822225952521e-13,
+        "classified": -3.694822225952521e-13
+      },
+      {
+        "index": 3,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 3,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -1.2860823517257813e-12,
+        "classified": -1.2860823517257813e-12
+      },
+      {
+        "index": 4,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 4,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 1.6200374375330284e-12,
+        "classified": 1.6200374375330284e-12
+      },
+      {
+        "index": 5,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 5,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 2.2737367544323206e-13,
+        "classified": 2.2737367544323206e-13
+      },
+      {
+        "index": 6,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 6,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 6.821210263296962e-13,
+        "classified": 6.821210263296962e-13
+      },
+      {
+        "index": 7,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 7,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -2.1032064978498966e-12,
+        "classified": -2.1032064978498966e-12
+      },
+      {
+        "index": 8,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 8,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 1.0231815394945443e-12,
+        "classified": 1.0231815394945443e-12
+      },
+      {
+        "index": 9,
+        "kind": "Pressure",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "pressure_equality",
+        "residual": 1.0000001814483908,
+        "classified": 1.0000001814483908
+      },
+      {
+        "index": 10,
+        "kind": "Chemical",
+        "phase": 1,
+        "species_or_moiety": 0,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 2.5579538487363607e-13,
+        "classified": 2.5579538487363607e-13
+      },
+      {
+        "index": 11,
+        "kind": "Chemical",
+        "phase": 1,
+        "species_or_moiety": 1,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 7.887024366937112e-13,
+        "classified": 7.887024366937112e-13
+      },
+      {
+        "index": 12,
+        "kind": "Chemical",
+        "phase": 1,
+        "species_or_moiety": 2,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 2.8421709430404007e-13,
+        "classified": 2.8421709430404007e-13
+      },
+      {
+        "index": 13,
+        "kind": "Pressure",
+        "phase": 1,
+        "species_or_moiety": 0,
+        "eqid": "pressure_equality",
+        "residual": 1.0000001679016346,
+        "classified": 1.0000001679016346
+      },
+      {
+        "index": 14,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "material_balance",
+        "residual": -0.8716761811666759,
+        "classified": -0.8716761811666759
+      },
+      {
+        "index": 15,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 1,
+        "eqid": "material_balance",
+        "residual": -0.005579292509897065,
+        "classified": -0.005579292509897065
+      },
+      {
+        "index": 16,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 2,
+        "eqid": "material_balance",
+        "residual": -0.00557929533066255,
+        "classified": -0.00557929533066255
+      },
+      {
+        "index": 17,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 3,
+        "eqid": "material_balance",
+        "residual": -0.11158592692995348,
+        "classified": -0.11158592692995348
+      },
+      {
+        "index": 18,
+        "kind": "Normalization",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "phase_normalization",
+        "residual": -0.9999999925423724,
+        "classified": -0.9999999925423724
+      },
+      {
+        "index": 19,
+        "kind": "Normalization",
+        "phase": 1,
+        "species_or_moiety": 0,
+        "eqid": "phase_normalization",
+        "residual": -0.9999999919336002,
+        "classified": -0.9999999919336002
+      }
+    ],
+    "failing_classified_rows": [
+      {
+        "index": 9,
+        "kind": "Pressure",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "pressure_equality",
+        "residual": 1.0000001814483908,
+        "classified": 1.0000001814483908
+      },
+      {
+        "index": 13,
+        "kind": "Pressure",
+        "phase": 1,
+        "species_or_moiety": 0,
+        "eqid": "pressure_equality",
+        "residual": 1.0000001679016346,
+        "classified": 1.0000001679016346
+      },
+      {
+        "index": 14,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "material_balance",
+        "residual": -0.8716761811666759,
+        "classified": -0.8716761811666759
+      },
+      {
+        "index": 15,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 1,
+        "eqid": "material_balance",
+        "residual": -0.005579292509897065,
+        "classified": -0.005579292509897065
+      },
+      {
+        "index": 16,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 2,
+        "eqid": "material_balance",
+        "residual": -0.00557929533066255,
+        "classified": -0.00557929533066255
+      },
+      {
+        "index": 17,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 3,
+        "eqid": "material_balance",
+        "residual": -0.11158592692995348,
+        "classified": -0.11158592692995348
+      },
+      {
+        "index": 18,
+        "kind": "Normalization",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "phase_normalization",
+        "residual": -0.9999999925423724,
+        "classified": -0.9999999925423724
+      },
+      {
+        "index": 19,
+        "kind": "Normalization",
+        "phase": 1,
+        "species_or_moiety": 0,
+        "eqid": "phase_normalization",
+        "residual": -0.9999999919336002,
+        "classified": -0.9999999919336002
+      }
+    ]
+  },
+  "admitted": false
+}
