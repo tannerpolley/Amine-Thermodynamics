@@ -23,7 +23,7 @@ Can neutral CO₂ solubility identify the CO₂–MEA interaction, and does that
 
 # Result
 
-The neutral pair was determined on one Hartono campaign. Fixing it in the matched reacting comparisons did not deliver the required improvement; transfer and endpoint qualifications remain disclosed below.
+Partly. Seven Hartono 2014 rows at 30 wt % MEA give $k(313.15\,\mathrm{K})=0.0987$ and $b=-51.0$ K, with fitted errors of −1.41 to +1.32%. The unfitted Xu & Wang 2018 rows deviate by −7.7 to +22.5%, so transfer across MEA content is not established. Fixing this pair in the matched reacting fits raised $C_{166}$ by 0.06% on both dielectric branches, against a required 10% decrease. Conditioning, fixed-step derivative and projected-gradient checks missed their limits, so the formal decision remains undecidable; the retained local cost-decrease estimates are too small to bridge the gap between a 0.06% increase and a 10% decrease.
 
 # Basis and method
 
@@ -56,9 +56,6 @@ the table reports the quantities supporting that conclusion.
 | Maximum raw equilibrium residual | 1.57208e-13 |
 | Cold-replay pressure change / Pa | 0 |
 
-These scalar verification bounds are reported as a table; a plot would not
-clarify the declaration check.
-
 The [data owner](https://github.com/tannerpolley/Amine-Thermodynamics/blob/4822946494a9c48f2fcbb02f9b3f9627077c1fe5/data/reference/MEA/physical_solubility/README.md),
 Eqs.N2O-5–N2O-7, converts the 23 analogy-derived Hc values using measured
 unloaded densities: Hx=Hc times gas-free total molar density. Xu Table 4
@@ -85,8 +82,8 @@ The density-uncertainty correction uses Karunarathne Table 3's expanded
 CO₂-loaded solutions. The two retained density central values and all
 historical Hc-times-density Hx values remain unchanged.
 
-Orchestrator decision, 2026-10-16 (owner away): use Hartono SI Table S2 direct
-pN₂O/xN₂O, converted by the unchanged N₂O-to-CO₂ water ratio, as the primary
+Hartono basis (chosen 16 October 2026): Hartono SI Table S2 direct
+pN₂O/xN₂O, converted by the unchanged N₂O-to-CO₂ water ratio, is the primary
 Hartono Hx basis. It already uses mole fraction and needs no density
 conversion. Table 11 Hc times measured gas-free total molar density exceeds
 the SI ratio by 0.85368–3.09128%; retain this as a source-representation
@@ -111,23 +108,21 @@ remain. No neutral observation enters the 205-row reacting objective.
 
 Source pressure/gas-reference qualification for Hartono and the remaining
 original numerical checks still stop calibration. The representation choice
-is supplied; no owner answer is pending. At the 16 October 2026 preflight, no pair was selected or adopted and no fit had run. Executable additions remained 861/900 with zero added by those text/data corrections.
+is supplied; no owner answer is pending. At the 16 October 2026 preflight, no pair was selected or adopted and no fit had run.
 
 These results support the calculation declaration and basis conversion,
 with numerical solution verification. They do not supply physical validation,
 independent review, source-pressure equivalence or parameter promotion.
-At the 16 October 2026 preflight, this section had not been independently reviewed or promoted for manuscript use.
 
 ### Neutral CO₂–MEA pair and reacting comparison (A4; 18 October 2026)
 
-**The CO₂–MEA dispersion correction is now determined independently from
+**The CO₂–MEA dispersion correction is determined independently from
 neutral physical solubility, and fixing it leaves the reacting fit
 unchanged.** Run 18 October 2026 on Engine `main-21e761c3`. Records:
-[B1 transfer](../results/joint-recalibration-170/amendment-4/b1-vapor-bound/README.md),
+[B1 source-vapor transfer correction](../results/joint-recalibration-170/amendment-4/b1-vapor-bound/README.md),
 [neutral fit](../results/joint-recalibration-170/amendment-4/neutral-fit/README.md),
 [larger-d_V pair](../results/joint-recalibration-170/amendment-4/matched-larger-dV/README.md),
 [smaller-d_V pair](../results/joint-recalibration-170/amendment-4/matched-smaller-dV/README.md).
-At the 18 October 2026 delivery, independent review of this result was pending.
 
 **Source transfer (B1).** Hartono, Juliussen & Svendsen 2008 defines the N₂O
 pressure as total minus measured solvent pressure (Eq. 5). On that basis the
@@ -135,8 +130,7 @@ N₂O vapor fugacity differs from the reported pressure by 0.37–0.60 %, and
 each target carries that correction. The transfer left after it is at most
 0.36–0.51 % (rows 1–6) and 0.83 % (360.25 K), inside the 1 % rule. The
 source's Peng–Robinson gas balance biases its H low by 0.16–3.85 %, depending
-on an unprinted fill pressure; that is a disclosed source limitation, pending
-owner ratification.
+on an unprinted fill pressure; that is a disclosed source limitation.
 
 **Neutral fit.** Seven Hartono 2014 rows at 30 wt % MEA, 298.35–360.25 K,
 observed as the model's dilute-bubble CO₂ partial pressure at CO₂ mole
@@ -161,8 +155,7 @@ variant at the neutral value.
 | smaller d_V | 39.7366 | 39.7601 | <span title="exact 1.00059">1.001</span> | <span title="exact 1.00001">1</span> | the same |
 
 The rule required C166 at least 10 % lower with the neutral pair; it is
-0.06 % higher on both branches, as stated before the fits. A ratio table is
-used because the result is four scalars. Cold replay (≤ 7e-12) and Kiepe
+0.06 % higher on both branches, as stated before the fits. Cold replay (≤ 7e-12) and Kiepe
 invariance (3e-15) pass in every arm. Three endpoint misses keep the decision
 formally undecidable: the nine free columns have condition 3.7e4 (6.2e4 for
 all 14; limit 1e4), with the weakest direction mostly on the
@@ -180,9 +173,10 @@ validation.
 
 #### Endpoint documents {#endpoint-documents}
 
- A campaign defect wrote R2's fitted ln K constant in
-the Engine's c ln(T/T_ref) form into documents that use c ln T, 211.4 too low
-(Route 2 and both Route 2b endpoint documents carry it).
+A campaign defect wrote R2’s fitted ln K constant in
+the Engine’s c ln(T/T_ref) form into documents that use c ln T, 211.4 too low.
+The Route 2 joint pressure/speciation/heat fit of 15–16 October and both
+Route 2b dielectric-volume branches carry it (see [history](../joint-recalibration-history/index.qmd)).
 The fits were unaffected; corrected documents replay cold. The same defect
 caused the Route 2b endpoint-replay stop: with the constant corrected, the
 Route 2b larger-d_V document replays all 205 rows to 6.7e-13.

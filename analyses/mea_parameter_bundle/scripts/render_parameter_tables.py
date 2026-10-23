@@ -226,11 +226,22 @@ def results():
           f"{math.sqrt(sum(float(r['error_kJ_mol'])**2 for r in rows)/len(rows)):.2f}",
           f"{sum(float(r['error_kJ_mol']) for r in rows)/len(rows):+.3g}"]
          for name in ('Vinjarapu2024', 'Arcis2011') for rows in [[r for r in heats if r['source']==name]]])
+    cohort_labels = {
+        'canonical 100-120 C': 'Canonical, 100–120 °C',
+        'packet 100-120 C': 'Packet (Jou subset), 100–120 °C',
+        'canonical 100-120 C Jou1995 100 C': 'Jou 1995, 100 °C (canonical and packet)',
+        'canonical 100-120 C Jou1995 120 C': 'Jou 1995, 120 °C (canonical and packet)',
+        'canonical 100-120 C Mamun2005 120 C': 'Mamun 2005, 120 °C',
+        'canonical 100-120 C Xu2011 100 C': 'Xu 2011, 100 °C',
+        'canonical 100-120 C Xu2011 120 C': 'Xu 2011, 120 °C',
+    }
     blocks['high-temperature'] = plain(['Cohort', 'n', 'A7 pressure AARD (%)'],
-        [[r['cohort'], r['n_total'], f4(r['AARD_percent'])] for r in read(DATA / 'high-temperature-comparison.csv')])
+        [[cohort_labels[r['cohort']], r['n_total'], f"{float(r['AARD_percent']):.2f}"]
+         for r in read(DATA / 'high-temperature-comparison.csv') if r['cohort'] in cohort_labels])
     density = read(DATA / 'density.csv')
-    blocks['density'] = plain(['Fitted cohort', 'Evaluated / requested', 'Within limit', 'Max abs(e)/s (1)', 'RMSE (kg/m³)', 'AARD (%)'],
-        [[name, f"{r['n_available']} / {r['n_total']}", f"{r.get('within_gate', r['within_2s'])} / {r['n_total']}",
+    blocks['density'] = plain(['Fitted cohort', 'Evaluated / requested', 'Within limit', 'Max \\|error\\|/s (1)', 'RMSE (kg/m³)', 'AARD (%)'],
+        [[('Amundsen, CO₂-free (5 rows)' if name == 'Amundsen CO2-free gate five' else name),
+          f"{r['n_available']} / {r['n_total']}", f"{r.get('within_gate', r['within_2s'])} / {r['n_total']}",
           f"{max(abs(float(row['error_over_s'])) for row in density if row['id'] in r['row_ids']):.2f}",
           f"{r['RMSE']:.3f}", f"{r['AARD_percent']:.2f}"] for name, r in summary['density'].items()
          if name in ('Amundsen fitted 15', 'Hartono fitted 32', 'Amundsen CO2-free gate five')])
@@ -243,11 +254,25 @@ def results():
         [[r['T_K'], r['loading'], f4(r['equilibrium_cp_kJ_kg_K']), f4(r['observed_kJ_kg_K']), f"{float(r['error_percent']):+.2f}", 'Yes' if r['within_3_percent'] == 'True' else 'No'] for r in cp])
     blocks['heat-capacity'] += f"\n{sum(abs(float(r['error_percent'])) > 3 for r in cp)} of {len(cp)} states exceed the 3% comparison limit.\n"
     stats = read(OUT / 'statistics.csv')
+    labels = {
+        ('pressure', 'displayed', 'all'): 'All shown (Hilliard 2008 + Jou 1995)',
+        ('pressure', 'common149 fitted', 'all'): 'Fitted (common calibration subset)',
+        ('pressure', 'displayed source', 'Hilliard2008'): 'Hilliard 2008',
+        ('pressure', 'displayed source', 'Jou1995'): 'Jou 1995',
+        ('species', 'displayed', 'all'): 'All shown (Böttinger 2008 + Matin 2012)',
+        ('species', 'common149 fitted', 'all'): 'Fitted, common calibration subset (94 targets)',
+        ('species', 'all fitted', 'all'): 'Fitted, including 7 restored targets (101 targets)',
+        ('species', 'restored fitted', 'all'): 'Restored targets only (7)',
+        ('species', 'displayed source', 'Bottinger2008'): 'Böttinger 2008',
+        ('species', 'displayed source', 'Matin2012'): 'Matin 2012',
+        ('Matin pool', 'displayed', 'all'): 'Matin HCO₃⁻ + CO₃²⁻ pool (report only)',
+    }
     for family in ('pressure', 'species'):
         blocks[family] = plain(['Cohort / role', 'Evaluated / requested', 'AARD (%)', 'RMS ln(calc/obs) (1)'],
-            [[r['family'] + ' · ' + r['group_type'] + ' · ' + r['group'], f"{r['evaluated_positive']} / {r['attempted']}",
+            [[labels[(r['family'], r['group_type'], r['group'])], f"{r['evaluated_positive']} / {r['attempted']}",
               f"{float(r['aard_percent']):.2f}", f"{float(r['rms_ln_pred_over_obs']):.4f}"]
-             for r in stats if r['family'] == family or (family == 'species' and r['family'] == 'Matin pool' and r['group_type'] == 'displayed')])
+             for r in stats if (r['family'], r['group_type'], r['group']) in labels
+             and (r['family'] == family or (family == 'species' and r['family'] == 'Matin pool'))])
     return blocks
 
 

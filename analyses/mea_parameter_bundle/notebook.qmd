@@ -8,9 +8,11 @@ resources:
 
 **A7 adopted parameter record · adopted 20 October 2026 · record `e234e860…` · Engine `8298c602` · [Download exact parameters](results/selected-current-best-parameters.json)**
 
+These are electrolyte PC-SAFT (ePC-SAFT) parameters for aqueous MEA–CO₂, with nine liquid species (CO₂, MEA, H₂O, MEAH⁺, MEACOO⁻, HCO₃⁻, CO₃²⁻, H₃O⁺, OH⁻) and five reactions R1–R5. A7 is the seventh amendment of the joint-recalibration plan in [#170](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170); it is the record adopted on 20 October 2026.
+
 # Adopted record and result {#working-record}
 
-The adopted A7 record fits 16 adjustable coordinates to 307 objective rows, using native equation-of-state densities without empirical volume translation. For the common calibration subset, average absolute relative deviations are 11.86% for 47 pressures and 7.10% for 94 species targets; the eight fitted Vinjarapu heats have a root-mean-square error of 1.83 kJ/mol CO₂. Of 47 fitted loaded densities, 44 meet their row-specific limits, with three disclosed failures at 353.15 K; one of four heat-capacity points exceeds the 3% comparison limit. No descent was resolved in the finite 73-point phase family at 313.15–333.15 K and loading $10^{-5}$–0.5, which does not establish global phase stability. The record is approved for manuscript use, but its single-start local fits, active bounds and conditional uncertainty do not establish parameter uniqueness, independent physical validation, concentration transfer or absorber/stripper qualification.
+The adopted A7 record fits 16 adjustable parameters to 307 objective rows, using native equation-of-state densities without empirical volume translation. For the common calibration subset, average absolute relative deviations are 11.86% for 47 pressures and 7.10% for 94 species targets; the eight fitted Vinjarapu heats have a root-mean-square error of 1.83 kJ/mol CO₂. Of 47 fitted loaded densities, 44 meet their row-specific limits, with three disclosed failures at 353.15 K; one of four heat-capacity points exceeds the 3% comparison limit. At 73 tested states (313.15–333.15 K, CO₂ loading $10^{-5}$–0.5), the phase-stability search found no phase split with lower Gibbs energy; this finite test does not establish global phase stability. The record is approved for manuscript use, but its single-start local fits, active bounds and conditional uncertainty do not establish parameter uniqueness, independent physical validation, concentration transfer or absorber/stripper qualification.
 
 <!-- RESULTS:working-record:BEGIN -->
 
@@ -25,7 +27,7 @@ The [joint-calibration record](joint-recalibration/index.qmd#records) retains th
 
 # Parameters {#selected-parameters}
 
-These tables read the [selected JSON](results/selected-current-best-parameters.json), [fit summary](results/a7-paper-evidence/fit-summary.json), and [conditional uncertainty](results/a7-paper-evidence/conditional-uncertainty.json). Parameter point estimates use about four significant figures; conditional standard errors use two. Hovering shows exact point estimates. Full precision remains in the linked JSON and CSV records. The [input hashes](figures/a7_regression_overview/output/parameter-table-inputs.json) identify the inputs.
+These tables read the [selected JSON](results/selected-current-best-parameters.json), [fit summary](results/a7-paper-evidence/fit-summary.json), and [conditional uncertainty](results/a7-paper-evidence/conditional-uncertainty.json). Parameter point estimates use about four significant figures; conditional standard errors use two. Hover over starred fitted estimates to see their full-precision values. Full precision remains in the linked JSON and CSV records. The [input hashes](figures/a7_regression_overview/output/parameter-table-inputs.json) identify the inputs.
 
 [Green: a fixed charge or formulation definition]{.evidence-1} · [Blue: a numerical input with recorded qualifications]{.evidence-2}. [★](#fitted-coordinates){.fit-star} identifies fitted component or pair inputs and all 16 declared coordinates. Tied diameters and transformed chemistry are described explicitly. Green does not certify fitted properties.
 
@@ -173,7 +175,7 @@ For R1–R3, $\ln K=A+B/T+C\ln T+DT+\Delta$; R2 already includes the conversion 
 
 ## CO₂ pressure {#pressure-and-speciation}
 
-The figures read A7's retained packet [pressure](results/a7-paper-evidence/pressure-figure-data.csv), [species](results/a7-paper-evidence/species-figure-data.csv), and [19 report-only Matin pool](results/a7-paper-evidence/pool-figure-data.csv) rows, derived from the single [462-row state table](results/a7-paper-evidence/state-targets.csv). The [cohort summaries and availability](results/a7-paper-evidence/state-summary.json) preserve canonical, Wagner and transfer comparisons, exclusions and historical data access. **Model values are markers at measured states**; no continuous curve is inferred. Pressure CSV values are Pa and the axes use kPa. [Figure provenance](figures/a7_regression_overview/output/provenance.json) records the input hashes. Rendering executes no model.
+Model values are calculated at each measured state and shown as + markers; no continuous curve is drawn. Pressures are plotted in kPa. [Figure data and provenance](figures/a7_regression_overview/output/provenance.json).
 
 ![A7 pressure against loading. Open markers are observations; + markers are calculated at measured states. The 40/60 °C panels include calibration and comparison rows; 80–120 °C are non-fitted predictions.](figures/a7_regression_overview/output/pressure.svg){#fig-pressure}
 
@@ -181,11 +183,10 @@ The figures read A7's retained packet [pressure](results/a7-paper-evidence/press
 
 | Cohort / role | Evaluated / requested | AARD (%) | RMS ln(calc/obs) (1) |
 | --- | --- | --- | --- |
-| pressure · displayed · all | 79 / 79 | 15.47 | 0.1923 |
-| pressure · common149 fitted · all | 47 / 47 | 11.86 | 0.1514 |
-| pressure · all fitted · all | 47 / 47 | 11.86 | 0.1514 |
-| pressure · displayed source · Hilliard2008 | 31 / 31 | 9.42 | 0.1187 |
-| pressure · displayed source · Jou1995 | 48 / 48 | 19.37 | 0.2276 |
+| All shown (Hilliard 2008 + Jou 1995) | 79 / 79 | 15.47 | 0.1923 |
+| Fitted (common calibration subset) | 47 / 47 | 11.86 | 0.1514 |
+| Hilliard 2008 | 31 / 31 | 9.42 | 0.1187 |
+| Jou 1995 | 48 / 48 | 19.37 | 0.2276 |
 
 <!-- RESULTS:pressure:END -->
 
@@ -197,13 +198,13 @@ The figures read A7's retained packet [pressure](results/a7-paper-evidence/press
 
 | Cohort / role | Evaluated / requested | AARD (%) | RMS ln(calc/obs) (1) |
 | --- | --- | --- | --- |
-| species · displayed · all | 131 / 131 | 16.21 | 0.5312 |
-| species · common149 fitted · all | 94 / 94 | 7.10 | 0.1014 |
-| species · all fitted · all | 101 / 101 | 7.24 | 0.1038 |
-| species · restored fitted · all | 7 / 7 | 9.00 | 0.1319 |
-| species · displayed source · Bottinger2008 | 55 / 55 | 5.62 | 0.0790 |
-| species · displayed source · Matin2012 | 76 / 76 | 23.88 | 0.6941 |
-| Matin pool · displayed · all | 19 / 19 | 67.48 | 1.3710 |
+| All shown (Böttinger 2008 + Matin 2012) | 131 / 131 | 16.21 | 0.5312 |
+| Fitted, common calibration subset (94 targets) | 94 / 94 | 7.10 | 0.1014 |
+| Fitted, including 7 restored targets (101 targets) | 101 / 101 | 7.24 | 0.1038 |
+| Restored targets only (7) | 7 / 7 | 9.00 | 0.1319 |
+| Böttinger 2008 | 55 / 55 | 5.62 | 0.0790 |
+| Matin 2012 | 76 / 76 | 23.88 | 0.6941 |
+| Matin HCO₃⁻ + CO₃²⁻ pool (report only) | 19 / 19 | 67.48 | 1.3710 |
 
 <!-- RESULTS:species:END -->
 
@@ -211,7 +212,7 @@ The common calibration subset contains 94 species targets; seven restored fitted
 
 ## Integral heat of absorption {#heat-of-absorption}
 
-The [22 retained heat rows](results/a7-paper-evidence/heat.csv) join by record ID to `heat-rows.json`, preserving the declared scales, roles and units. Eight Vinjarapu rows at 313.15 K and 1.734 MPa enter the objective; 14 Arcis rows at 322.5 K are non-fitted predictions at their source pressures. Heat is the integral finite-addition enthalpy from zero carbon. Negative heat denotes exothermic absorption. The retained A7 assessment has no matched no-heat control.
+The [22 retained heat rows](results/a7-paper-evidence/heat.csv) comprise the fitted and non-fitted comparisons below. Eight Vinjarapu rows at 313.15 K and 1.734 MPa enter the objective; 14 Arcis rows at 322.5 K are non-fitted predictions at their source pressures. Heat is the integral finite-addition enthalpy from zero carbon. Negative heat denotes exothermic absorption.
 
 ![A7 integral heat of absorption. Open markers are observations; + markers are calculated at measured states. Vinjarapu is fitted and Arcis is a non-fitted prediction.](figures/a7_regression_overview/output/heat-of-absorption.svg){#fig-heat}
 
@@ -234,11 +235,11 @@ The [210 retained densities](results/a7-paper-evidence/density.csv) are native e
 
 <!-- RESULTS:density:BEGIN -->
 
-| Fitted cohort | Evaluated / requested | Within limit | Max abs(e)/s (1) | RMSE (kg/m³) | AARD (%) |
+| Fitted cohort | Evaluated / requested | Within limit | Max \|error\|/s (1) | RMSE (kg/m³) | AARD (%) |
 | --- | --- | --- | --- | --- | --- |
 | Amundsen fitted 15 | 15 / 15 | 14 / 15 | 2.28 | 2.264 | 0.17 |
 | Hartono fitted 32 | 32 / 32 | 30 / 32 | 2.43 | 2.175 | 0.18 |
-| Amundsen CO2-free gate five | 5 / 5 | 5 / 5 | 1.11 | 0.341 | 0.03 |
+| Amundsen, CO₂-free (5 rows) | 5 / 5 | 5 / 5 | 1.11 | 0.341 | 0.03 |
 
 Loaded rows use their row-specific $2s$ limits; the CO₂-free five use 1.0 kg/m³.
 
@@ -250,13 +251,11 @@ Loaded rows use their row-specific $2s$ limits; the CO₂-free five use 1.0 kg/m
 
 <!-- RESULTS:density:END -->
 
-The accepted warm-density underprediction range is **4.2–5.5 kg/m³ (0.40–0.53%)**.
-
-**Three fitted loaded densities fail the 2s gate at 353.15 K:** `Amundsen2009_state_081` (−2.2832s), `Hartono2014_density_80C_alpha0.29` (−2.0550s), and `Hartono2014_density_80C_alpha0.39` (−2.4317s). They remain failures accepted with disclosure. Amundsen's exact source-uncertainty boundary at high temperature and loading remains unresolved (source pp. 3099–3100, locators retained per row); the density scales are not uniformly measured uncertainties. The five source-conflict Amundsen loading-0.4 rows remain excluded from the objective and gate.
+Three fitted loaded densities at 353.15 K fall outside their $2s$ limits (−2.28$s$, −2.06$s$, −2.43$s$). These three rows are underpredicted by 4.2–5.5 kg/m³ (0.40–0.53%). The source-uncertainty discussion and the five excluded Amundsen rows are on the [A7 page](joint-recalibration/index.qmd).
 
 ## Heat capacity
 
-The four [Hilliard Cp rows](results/a7-paper-evidence/cp.csv) enter the objective at 7 mol MEA/kg water, 101325 Pa, with the declared $10^{-6}$ unloaded CO₂ proxy. Cp uses the parameter-document molar masses for the complete analytical-feed mass, following the retained assessment conversion. The [verification record](results/a7-paper-evidence/verification.json) preserves the unloaded proxy and enthalpy checks; no new heat-capacity sweep was run.
+The four [Hilliard Cp rows](results/a7-paper-evidence/cp.csv) enter the objective at 7 mol MEA/kg water, 101325 Pa, with the declared $10^{-6}$ unloaded CO₂ proxy.
 
 ![Observed and calculated mass-specific heat capacity at the four retained states. Points show Hilliard observations and A7 predictions at measured states; labels are signed deviations. No continuous curve is implied.](figures/a7_regression_overview/output/heat-capacity.svg){#fig-cp}
 
@@ -273,8 +272,6 @@ The four [Hilliard Cp rows](results/a7-paper-evidence/cp.csv) enter the objectiv
 
 <!-- RESULTS:heat-capacity:END -->
 
-The historical [#161 Cp check](heat-f1/index.qmd) remains tied to its original F1 record and source basis. It is not an A7 result. Conditional parameter errors, the finite phase family and these spot comparisons do not establish prediction intervals, parameter uniqueness, global physical validation or process-use qualification.
-
 # Where to find more
 
 | Reader question | Page / exact records |
@@ -282,7 +279,7 @@ The historical [#161 Cp check](heat-f1/index.qmd) remains tied to its original F
 | Joint calibration, assessment and adoption | [A7 joint recalibration and adoption](joint-recalibration/index.qmd) · [A7 evidence package](results/a7-paper-evidence/README.md) |
 | How the record was reached | [Joint recalibration history](joint-recalibration-history/index.qmd) · [Parameter adoption history](results/parameter-record-history.csv) |
 | Neutral CO₂ solubility and the CO₂–MEA pair | [Neutral CO₂ study](neutral-co2/index.qmd) |
-| Loaded density and phase assessment before A7 | [Amendment 6](loaded-density/index.qmd) |
+| Loaded density and phase assessment before A7 | [Loaded density and phase comparison before A7](loaded-density/index.qmd) |
 | Heat F1 predecessor | [F1 identity and six-fit comparison](heat-f1/index.qmd) |
 | Numerical reproduction and Engine transfers | [Engine adoptions](engine-adoptions/index.qmd) · [Default-path reproduction](joint-recalibration/index.qmd#numerical-reproduction) |
 | High-temperature pressure and transfer | [High-temperature comparison](high-temperature/index.qmd) |
