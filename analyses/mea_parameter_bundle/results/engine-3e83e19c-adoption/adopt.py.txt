@@ -100,14 +100,15 @@ else:
     for name in ('density-summary.json', 'heat-summary.json', 'carbonate-summary.json'):
         rows += paired(f'selected assessment: {name}', json.load(open(S/name)), json.load(open(N/name)))
     rows += paired('selected assessment: state-summary.json', json.load(open(S/'state-summary.json'))['scores'], json.load(open(N/'state-summary.json'))['scores'])
-    split = []
+    split, ACCEPTED = [], {(21, 'positive-neutral-base'), (63, 'near-pure-2')}  # accepted as disclosed numerical changes; the 3e83e19c values are retained
     for i in (21, 63, 70):
         old, new = (json.load(open(d/f'split-seeded-{i}.json')) for d in (ROOT/SPLITS, OUT/'A6-supplement-splits'))
         for o, n in zip(old, new, strict=True):
             assert (o['trial_index'], o['seed']) == (n['trial_index'], n['seed'])
             pick = lambda r: dict(selected=str(r['selected']), success=r['result']['success'], delta_vs_original=r['delta_G_over_RT_vs_original'], delta_vs_single_liquid=r['delta_G_over_RT_vs_single_liquid'],
                                   phases=[{k: p[k] for k in ('amount_mol', 'molar_density_mol_m3', 'mole_fractions')} for p in r['result'].get('phases', [])])
-            split += [dict(r, identity=f"{i}/{o['seed']}{r['identity']}", passed=r['delta'] <= 1e-6) for r in paired('supplement splits', pick(o), pick(n))]
+            split += [dict(r, identity=f"{i}/{o['seed']}{r['identity']}", accepted=(i, o['seed']) in ACCEPTED, passed=r['delta'] <= 1e-6 or (i, o['seed']) in ACCEPTED)
+                      for r in paired('supplement splits', pick(o), pick(n))]
     for name in ('pressure', 'species', 'heat', 'density', 'mea-water'):
         old, new = (list(csv.DictReader(open(d/f'{name}.csv'))) for d in (R/'model-curves', OUT/'model-curves'))
         assert len(old) == len(new) and all({k: v for k, v in o.items() if k != 'value'}.keys() == n.keys() - {'value'} for o, n in zip(old, new))
@@ -121,6 +122,8 @@ else:
         if r['delta'] >= f['worst_delta']: f['worst_delta'], f['worst_row'] = r['delta'], r['identity']
     phase_ok = all(p['identical'] for p in phase)
     summary = dict(gate='delta=abs(new-old)/max(abs(old),abs(new),1e-300) <= 1e-10; supplement splits <= 1e-6', families=families, phase_states_identical=phase_ok,
+                   accepted_split_changes=dict(attempts=sorted(map(list, ACCEPTED)), rows=sum(r['accepted'] and r['delta'] > 1e-6 for r in split), retained_engine='3e83e19ccc771b51d8ebc038931ab25192f4c5b5',
+                                               decision='https://github.com/tannerpolley/Amine-Thermodynamics/issues/203#issuecomment-6361213910'),
                    passed=phase_ok and all(f['failed'] == 0 for f in families.values()))
     (OUT/'adoption-check.json').write_text(json.dumps(dict(summary=summary, phase_states=phase, rows=rows, supplement_splits=split), indent=1, allow_nan=True)+'\n')
     print(json.dumps(summary, indent=1))
