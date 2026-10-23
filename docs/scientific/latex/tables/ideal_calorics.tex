@@ -75,19 +75,40 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
-% Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1786\linewidth}>{\raggedright\arraybackslash}p{0.5076\linewidth}>{\raggedright\arraybackslash}p{0.2538\linewidth}@{}}
-\caption{Ideal-gas caloric inputs. Shomate $C_P=A+Bt+Ct^2+Dt^3+E/t^2$, $t=T/1000$, in J/(mol K); enthalpy is $h_f+1000(At+Bt^2/2+Ct^3/3+Dt^4/4-E/t+F-H)$. MEA uses $C_P=a+bT+cT^2+dT^3$ with $h=s=0$ at 313.15 K. Shomate entries list A--H in order.}\label{tab:ideal-calorics}\\
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a22d78194960a8fc5b0d43d17502bfc3b551d44d6eba2d0433fb31be21f4648b
+% Input: docs/scientific/latex/supplement.tex SHA256 92dc5a106940d1b48eb24217fe12597bc26d2923a49d0ecfb5cfa7838670b470
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Ideal-gas caloric inputs. Shomate $C_P=A+Bt+Ct^2+Dt^3+E/t^2$, $t=T/1000$, in J/(mol K); enthalpy is $h_f+1000(At+Bt^2/2+Ct^3/3+Dt^4/4-E/t+F-H)$. MEA uses $C_P=a+bT+cT^2+dT^3$ with $h=s=0$ at 313.15 K. Shomate entries list A--H in order.}\label{tab:ideal-calorics}
+\begin{tabular}{@{}lrr@{}}
 \toprule
-Component; form & Coefficients & Source range; reference \\
-\midrule\endfirsthead
-\toprule
-Component; form & Coefficients & Source range; reference \\
-\midrule\endhead
-\bottomrule\endfoot
-\ce{CO2}; Shomate & 24.99735, 55.18696, \textminus{}33.69137, 7.948387, \textminus{}0.136638, \textminus{}403.6075, 228.2431, \textminus{}393.5224 & [298.0, 1200.0] K; formation enthalpy \textminus{}393510.0 J/\allowbreak{}mol \\
-Water; Shomate & 30.092, 6.832514, 6.793435, \textminus{}2.53448, 0.082139, \textminus{}250.881, 223.3967, \textminus{}241.8264 & [500.0, 1700.0] K; formation enthalpy \textminus{}241826.0 J/\allowbreak{}mol \\
-MEA; $C_P$ polynomial & 13.207, 0.28158, \textminus{}0.0001513, $3.1287\times10^{-8}$ & [283.0, 1000.0] K; Zhang Table 3 \\
-\end{longtable}\endgroup
+Shomate coefficient & \ce{CO2} & Water \\
+\midrule
+$A$ & $24.99735$ & $30.092$ \\*
+$B$ & $55.18696$ & $6.832514$ \\*
+$C$ & $-33.69137$ & $6.793435$ \\*
+$D$ & $7.948387$ & $-2.53448$ \\*
+$E$ & $-0.136638$ & $0.082139$ \\*
+$F$ & $-403.6075$ & $-250.881$ \\*
+$G$ & $228.2431$ & $223.3967$ \\*
+$H$ & $-393.5224$ & $-241.8264$ \\
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape Source temperature (K)} \\*
+Lowest & $298.0$ & $500.0$ \\*
+Highest & $1200.0$ & $1700.0$ \\
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape Formation enthalpy (J/mol)} \\*
+$h_f$ & $-393510.0$ & $-241826.0$ \\
+\midrule
+Quantity & \ce{MEA} &  \\*
+\midrule
+\multicolumn{3}{@{}l}{\itshape \ce{MEA} $C_P$ polynomial coefficient} \\*
+$a$ & $13.207$ &  \\*
+$b$ & $0.28158$ &  \\*
+$c$ & $-0.0001513$ &  \\*
+$d$ & $3.1287\times10^{-8}$ &  \\
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape \ce{MEA} source temperature (K)} \\*
+Lowest & $283.0$ &  \\*
+Highest & $1000.0$ &  \\
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape \ce{MEA} source} \\*
+Reference & Zhang Table 3 &  \\
+\bottomrule
+\end{tabular}
+\end{table}

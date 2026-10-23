@@ -75,31 +75,31 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
-% Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2162\linewidth}>{\raggedright\arraybackslash}p{0.1974\linewidth}>{\raggedright\arraybackslash}p{0.0564\linewidth}>{\raggedright\arraybackslash}p{0.2726\linewidth}>{\raggedright\arraybackslash}p{0.1974\linewidth}@{}}
-\caption{Fitted and compared observations. Counts in comparison sets overlap fitted observations and are not additive. Section~S2 defines the objective. Source-specific conditions and roles are listed in the supplement.}\label{tab:current-data-inventory}\\
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a22d78194960a8fc5b0d43d17502bfc3b551d44d6eba2d0433fb31be21f4648b
+% Input: docs/scientific/latex/supplement.tex SHA256 92dc5a106940d1b48eb24217fe12597bc26d2923a49d0ecfb5cfa7838670b470
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Fitted and compared observations. Counts in comparison sets overlap fitted observations and are not additive. Section~S2 defines the objective. Source-specific conditions and roles are listed in the supplement.}\label{tab:current-data-inventory}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.2100\linewidth}r>{\raggedright\arraybackslash}p{0.2500\linewidth}>{\raggedright\arraybackslash}p{0.1500\linewidth}@{}}
 \toprule
 Source & Quantity & n & Conditions & Use \\
-\midrule\endfirsthead
-\toprule
-Source & Quantity & n & Conditions & Use \\
-\midrule\endhead
-\bottomrule\endfoot
-Hilliard, Jou \cite{Hilliard2008,Jou1995} & \ce{CO2} partial pressure & 47 & 30 wt\%; source states & fitted \\
-Böttinger, Matin \cite{Bottinger2008,matinFacileMethodDetermination2012} & Species fractions & 101 & 293.15--333.15 K; source compositions & fitted \\
-Jakobsen \cite{Jakobsen2005} & Species/\allowbreak{}total-amine ratios & 6 & 293.15/\allowbreak{}313.15 K; diluted samples & fitted \\
-Vinjarapu \cite{HemaBhavya2025} & Integral heat & 8 & 313.15 K; 1.734 MPa; 30 wt\% & fitted \\
-Amundsen, Hartono \cite{Amundsen2009,Hartono2014} & Loaded density & 47 & 293.15--353.15 K; 30 wt\% & fitted \\
-Amundsen \cite{Amundsen2009} & \ce{CO2}-free density & 5 & 298.15--353.15 K; 30 wt\% & fitted \\
-Cai \cite{caiBinaryIsobaricVaporLiquid1996} & Bubble T; vapor fraction & 50 & MEA--water; 66.66/\allowbreak{}101.33 kPa & fitted; 25 states \\
-Kiepe \cite{kiepeExperimentalDeterminationPrediction2002} & \ce{CO2}--water pressure & 39 & 313.20--393.17 K & fitted earlier; fixed input check \\
-Hilliard \cite{Hilliard2008} & Heat capacity & 4 & 318.15/\allowbreak{}353.15 K; 7 mol MEA/\allowbreak{}kg water & fitted \\
-Six-source pressure comparison & \ce{CO2} partial pressure & 159 & 313.00--393.15 K; nominal 30 wt\% & 47 fitted; 112 not fitted \\
-Wagner \cite{wagnerSolubilityCarbonDioxide2013} & \ce{CO2} partial pressure & 23 & near 353/\allowbreak{}392 K; 30 wt\% & not fitted; not blind \\
-Aronu \cite{Aronu2011} & \ce{CO2} partial pressure & 70 & 15/\allowbreak{}45 wt\%; source states & not fitted; not blind \\
-Arcis \cite{arcisEnthalpySolutionCarbon2011} & Integral heat & 14 & 322.5 K; 0.51/\allowbreak{}1.03 MPa & not fitted; used to accept fits \\
-Matin; Jakobsen & Bicarbonate total; carbonate share & 19; 10 & source states & not fitted \\
-Amundsen, Hartono, Han \cite{hanDensityWater12012} & All densities & 210 & 293.15--393.15 K; 20--100 wt\% & 52 fitted; others compared \\
-\end{longtable}\endgroup
+\midrule
+Hilliard, Jou \cite{Hilliard2008,Jou1995} & \ce{CO2} partial pressure & $47$ & 30 wt\%; source states & fitted \\
+Böttinger, Matin \cite{Bottinger2008,matinFacileMethodDetermination2012} & Species fractions & $101$ & 293.15--333.15 K; source compositions & fitted \\
+Jakobsen \cite{Jakobsen2005} & Species/\allowbreak{}total-amine ratios & $6$ & 293.15/\allowbreak{}313.15 K; diluted samples & fitted \\
+Vinjarapu \cite{HemaBhavya2025} & Integral heat & $8$ & 313.15 K; 1.734 MPa; 30 wt\% & fitted \\
+Amundsen, Hartono \cite{Amundsen2009,Hartono2014} & Loaded density & $47$ & 293.15--353.15 K; 30 wt\% & fitted \\
+Amundsen \cite{Amundsen2009} & \ce{CO2}-free density & $5$ & 298.15--353.15 K; 30 wt\% & fitted \\
+Cai \cite{caiBinaryIsobaricVaporLiquid1996} & Bubble T; vapor fraction & $50$ & MEA--water; 66.66/\allowbreak{}101.33 kPa & fitted; 25 states \\
+Kiepe \cite{kiepeExperimentalDeterminationPrediction2002} & \ce{CO2}--water pressure & $39$ & 313.20--393.17 K & fitted earlier; fixed input check \\
+Hilliard \cite{Hilliard2008} & Heat capacity & $4$ & 318.15/\allowbreak{}353.15 K; 7 mol MEA/\allowbreak{}kg water & fitted \\
+\midrule
+Six-source pressure comparison & \ce{CO2} partial pressure & $159$ & 313.00--393.15 K; nominal 30 wt\% & 47 fitted; 112 not fitted \\
+Wagner \cite{wagnerSolubilityCarbonDioxide2013} & \ce{CO2} partial pressure & $23$ & near 353/\allowbreak{}392 K; 30 wt\% & not fitted; not blind \\
+Aronu \cite{Aronu2011} & \ce{CO2} partial pressure & $70$ & 15/\allowbreak{}45 wt\%; source states & not fitted; not blind \\
+Arcis \cite{arcisEnthalpySolutionCarbon2011} & Integral heat & $14$ & 322.5 K; 0.51/\allowbreak{}1.03 MPa & not fitted; used to accept fits \\
+Matin & Bicarbonate total & $19$ & source states & not fitted \\
+Jakobsen & Carbonate share & $10$ & source states & not fitted \\
+Amundsen, Hartono, Han \cite{hanDensityWater12012} & All densities & $210$ & 293.15--393.15 K; 20--100 wt\% & 52 fitted; others compared \\
+\bottomrule
+\end{tabular}
+\end{table}

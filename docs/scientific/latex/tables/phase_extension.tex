@@ -75,74 +75,68 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
-% Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1395\linewidth}>{\raggedright\arraybackslash}p{0.1023\linewidth}>{\raggedright\arraybackslash}p{0.1116\linewidth}>{\raggedright\arraybackslash}p{0.1116\linewidth}>{\raggedright\arraybackslash}p{0.1116\linewidth}>{\raggedright\arraybackslash}p{0.1116\linewidth}>{\raggedright\arraybackslash}p{0.1209\linewidth}>{\raggedright\arraybackslash}p{0.1209\linewidth}@{}}
-\caption{Extended phase-search counts by temperature and fit. Declared states with reference pressure above 10 MPa are excluded before the search. All trial optimizations at admitted states complete, with no unresolved trials or numerical failures.}\label{tab:phase-extension}\\
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a22d78194960a8fc5b0d43d17502bfc3b551d44d6eba2d0433fb31be21f4648b
+% Input: docs/scientific/latex/supplement.tex SHA256 92dc5a106940d1b48eb24217fe12597bc26d2923a49d0ecfb5cfa7838670b470
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Extended phase-search counts by temperature and fit. Declared states with reference pressure above 10 MPa are excluded before the search. All trial optimizations at admitted states complete, with no unresolved trials or numerical failures.}\label{tab:phase-extension}
+\begin{tabular}{@{}lrrrrrrr@{}}
 \toprule
 Fit & T (K) & Declared & Excluded & Searched & Trials & Descending trials & Instability states \\
-\midrule\endfirsthead
+\midrule
+comparison fit & $353.15$ & $27$ & $6$ & $21$ & $189$ & $22$ & $12$ \\
+comparison fit & $373.15$ & $27$ & $6$ & $21$ & $189$ & $19$ & $9$ \\
+comparison fit & $393.15$ & $27$ & $9$ & $18$ & $162$ & $0$ & $0$ \\
+reported fit & $353.15$ & $27$ & $6$ & $21$ & $189$ & $0$ & $0$ \\
+reported fit & $373.15$ & $27$ & $6$ & $21$ & $189$ & $0$ & $0$ \\
+reported fit & $393.15$ & $27$ & $9$ & $18$ & $162$ & $0$ & $0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Frozen extension reference pressures $P_*$ in kPa. Each row generates pressures of 0.50, 0.80 and 0.95 times $P_*$. References above 10000 kPa exclude all three states; the reference values were reused unchanged.}\label{tab:phase-extension-references}
+\begin{tabular}{@{}rrrr@{}}
 \toprule
-Fit & T (K) & Declared & Excluded & Searched & Trials & Descending trials & Instability states \\
-\midrule\endhead
-\bottomrule\endfoot
-comparison fit & 353.15 & 27 & 6 & 21 & 189 & 22 & 12 \\
-comparison fit & 373.15 & 27 & 6 & 21 & 189 & 19 & 9 \\
-comparison fit & 393.15 & 27 & 9 & 18 & 162 & 0 & 0 \\
-reported fit & 353.15 & 27 & 6 & 21 & 189 & 0 & 0 \\
-reported fit & 373.15 & 27 & 6 & 21 & 189 & 0 & 0 \\
-reported fit & 393.15 & 27 & 9 & 18 & 162 & 0 & 0 \\
-\end{longtable}\endgroup
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.2350\linewidth}>{\raggedright\arraybackslash}p{0.2350\linewidth}@{}}
-\caption{Frozen extension reference pressures $P_*$ in kPa. Each row generates pressures of 0.50, 0.80 and 0.95 times $P_*$. References above 10000 kPa exclude all three states; the reference values were reused unchanged.}\label{tab:phase-extension-references}\\
-\toprule
-Loading & 353.15 K & 373.15 K & 393.15 K \\
-\midrule\endfirsthead
-\toprule
-Loading & 353.15 K & 373.15 K & 393.15 K \\
-\midrule\endhead
-\bottomrule\endfoot
-$1\times10^{-5}$ & 40.64853 & 87.80681 & 173.333 \\
-0.05 & 816.9123 & 1179.294 & 1386.128 \\
-0.1 & 1698.879 & 2283.888 & 2613.493 \\
-0.2 & 3569.576 & 4558.137 & 5137.766 \\
-0.25557798 & 4670.917 & 5881.7 & 6601.825 \\
-0.3 & 5592.23 & 6986.181 & 7817.78 \\
-0.4 & 7869.732 & 9713.111 & 10775.51 \\
-0.5 & 10722.18 & 13071.49 & 14233.28 \\
-0.6 & 15491.86 & 17843.2 & 18564.97 \\
-\end{longtable}\endgroup
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1692\linewidth}>{\raggedright\arraybackslash}p{0.1692\linewidth}>{\raggedright\arraybackslash}p{0.2632\linewidth}>{\raggedright\arraybackslash}p{0.1692\linewidth}>{\raggedright\arraybackslash}p{0.1692\linewidth}@{}}
-\caption{Separately seeded two-liquid confirmations for the comparison fit in the extension. Attempts count distinct split solves; repeated trial seeds that share one solve are counted once. Confirmations occur at 17 of 21 tested instability states, in 23 of 27 attempts.}\label{tab:phase-extension-confirmations}\\
+Loading & \makecell[rb]{$P_*$ (kPa)\\at 353.15 K} & \makecell[rb]{$P_*$ (kPa)\\at 373.15 K} & \makecell[rb]{$P_*$ (kPa)\\at 393.15 K} \\
+\midrule
+$1\times10^{-5}$ & $40.64853$ & $87.80681$ & $173.333$ \\
+$0.05$ & $816.9123$ & $1179.294$ & $1386.128$ \\
+$0.1$ & $1698.879$ & $2283.888$ & $2613.493$ \\
+$0.2$ & $3569.576$ & $4558.137$ & $5137.766$ \\
+$0.25557798$ & $4670.917$ & $5881.7$ & $6601.825$ \\
+$0.3$ & $5592.23$ & $6986.181$ & $7817.78$ \\
+$0.4$ & $7869.732$ & $9713.111$ & $10775.51$ \\
+$0.5$ & $10722.18$ & $13071.49$ & $14233.28$ \\
+$0.6$ & $15491.86$ & $17843.2$ & $18564.97$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Separately seeded two-liquid confirmations for the comparison fit in the extension. Attempts count distinct split solves; repeated trial seeds that share one solve are counted once. Confirmations occur at 17 of 21 tested instability states, in 23 of 27 attempts.}\label{tab:phase-extension-confirmations}
+\begin{tabular}{@{}rrrrr@{}}
 \toprule
 T (K) & Loading & P (kPa) & Attempts & Confirmed \\
-\midrule\endfirsthead
-\toprule
-T (K) & Loading & P (kPa) & Attempts & Confirmed \\
-\midrule\endhead
-\bottomrule\endfoot
-353.15 & 0.2 & 1784.788 & 1 & 0 \\
-353.15 & 0.2 & 2855.661 & 1 & 1 \\
-353.15 & 0.2 & 3391.097 & 1 & 1 \\
-353.15 & 0.2556 & 2335.459 & 1 & 1 \\
-353.15 & 0.2556 & 3736.734 & 1 & 1 \\
-353.15 & 0.2556 & 4437.371 & 1 & 1 \\
-373.15 & 0.2556 & 2940.85 & 1 & 0 \\
-373.15 & 0.2556 & 4705.36 & 1 & 0 \\
-373.15 & 0.2556 & 5587.615 & 1 & 1 \\
-353.15 & 0.3 & 2796.115 & 1 & 1 \\
-353.15 & 0.3 & 4473.784 & 1 & 1 \\
-353.15 & 0.3 & 5312.618 & 1 & 1 \\
-373.15 & 0.3 & 3493.091 & 1 & 0 \\
-373.15 & 0.3 & 5588.945 & 1 & 1 \\
-373.15 & 0.3 & 6636.872 & 1 & 1 \\
-353.15 & 0.4 & 3934.866 & 2 & 2 \\
-353.15 & 0.4 & 6295.786 & 2 & 2 \\
-353.15 & 0.4 & 7476.245 & 2 & 2 \\
-373.15 & 0.4 & 4856.555 & 2 & 2 \\
-373.15 & 0.4 & 7770.489 & 2 & 2 \\
-373.15 & 0.4 & 9227.455 & 2 & 2 \\
-\end{longtable}\endgroup
+\midrule
+$353.15$ & $0.2$ & $1784.788$ & $1$ & $0$ \\
+$353.15$ & $0.2$ & $2855.661$ & $1$ & $1$ \\
+$353.15$ & $0.2$ & $3391.097$ & $1$ & $1$ \\
+$353.15$ & $0.2556$ & $2335.459$ & $1$ & $1$ \\
+$353.15$ & $0.2556$ & $3736.734$ & $1$ & $1$ \\
+$353.15$ & $0.2556$ & $4437.371$ & $1$ & $1$ \\
+$373.15$ & $0.2556$ & $2940.85$ & $1$ & $0$ \\
+$373.15$ & $0.2556$ & $4705.36$ & $1$ & $0$ \\
+$373.15$ & $0.2556$ & $5587.615$ & $1$ & $1$ \\
+$353.15$ & $0.3$ & $2796.115$ & $1$ & $1$ \\
+$353.15$ & $0.3$ & $4473.784$ & $1$ & $1$ \\
+$353.15$ & $0.3$ & $5312.618$ & $1$ & $1$ \\
+$373.15$ & $0.3$ & $3493.091$ & $1$ & $0$ \\
+$373.15$ & $0.3$ & $5588.945$ & $1$ & $1$ \\
+$373.15$ & $0.3$ & $6636.872$ & $1$ & $1$ \\
+$353.15$ & $0.4$ & $3934.866$ & $2$ & $2$ \\
+$353.15$ & $0.4$ & $6295.786$ & $2$ & $2$ \\
+$353.15$ & $0.4$ & $7476.245$ & $2$ & $2$ \\
+$373.15$ & $0.4$ & $4856.555$ & $2$ & $2$ \\
+$373.15$ & $0.4$ & $7770.489$ & $2$ & $2$ \\
+$373.15$ & $0.4$ & $9227.455$ & $2$ & $2$ \\
+\bottomrule
+\end{tabular}
+\end{table}
