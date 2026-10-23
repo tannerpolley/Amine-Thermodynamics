@@ -52,7 +52,7 @@ Exact parameter and software identities are listed in the data-deposit README.
 \section{Source-specific deviations}\label{sec:s-outside}
 % P:supplement-02
 The first table partitions fitted observations by source and property; the second gives comparisons outside the objective.
-Fitted observations are removed from each comparison set separately, so overlapping pressure views are not additive.
+Fitted observations are removed from each comparison set separately, so the overlapping pressure sets are not additive.
 Arcis heats were used in parameter selection; Wagner pressures and pressures at 15 and 45 wt\% MEA were examined during model development.
 
 \input{tables/supplement_source_aard}
@@ -98,7 +98,7 @@ Each start obtains a density on its specified liquid or vapor branch before the 
 
 % P:supplement-07
 Reacting equilibrium and trial calculations use logarithmic positive species fractions and packing fraction, phase amounts, and Lagrange multipliers for the independent balances.
-A Newton procedure and the shared Ipopt minimization use exact first and second derivatives, with MA57 linear algebra and an equilibrium-row tolerance of $10^{-10}$ recomputed in the unscaled equations.
+A Newton procedure and the shared Ipopt minimization use exact first and second derivatives, with MA57 linear algebra and a tolerance of $10^{-10}$ on the recomputed residuals used to decide convergence, after the solver's row scaling.
 When an initial two-phase solve fails, up to two converged neighboring states at the same temperature provide ordered starts; if needed, the bubble solution initializes liquid fractions 0.5 and 0.9, with at most 400 iterations per attempt and 800 total.
 The final state must satisfy material and charge balances, positive compressibility and nonnegative reduced-Hessian curvature.
 A separate single-liquid/bubble calculation distinguishes a liquid from liquid--vapor equilibrium at the fixed test pressure.
@@ -197,7 +197,7 @@ The 375 equilibrium states have maximum absolute stationarity residual $2.19\tim
 The heat-capacity consistency checks include equilibrium enthalpy derivatives, the $10^{-6}$ unloaded loading approximation and conversion by the complete analytical-feed mass.
 These checks verify numerical solutions rather than physical phase behavior.
 All retained values, software identities, file checksums and reproduction commands are indexed in the data-deposit README.
-The Zenodo DOI will be added at submission; the exact compiled ePC-SAFT Engine package will be provided to referees through restricted access coordinated by the corresponding author.
+The Zenodo DOI will be added at submission; the compiled ePC-SAFT library used here will be provided to referees through restricted access coordinated by the corresponding author.
 
 \section{Complete model inputs and fixed-parameter provenance}\label{sec:s-parameters}
 % P:supplement-18

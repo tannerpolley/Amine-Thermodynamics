@@ -129,7 +129,7 @@ For trial composition $\boldsymbol w$, the reduced distance is
 where $B$ represents conserved component combinations and $\boldsymbol\lambda$ their equilibrium chemical-potential multipliers.
 Liquid trials support all nine species; vapor trials support only \COtwo, \MEA and water.
 The nine initial trials, Gibbs-energy error estimate and finite-transfer test are specified in Section~S4.
-The reacting equilibria and trials use the ePC-SAFT solver's Newton and Ipopt procedures with exact derivatives, MA57 linear algebra and a tolerance of $10^{-10}$ on the equilibrium-equation residuals, recomputed in unscaled form.
+The reacting equilibria and trials use the ePC-SAFT solver's Newton and Ipopt procedures with exact derivatives, MA57 linear algebra and a tolerance of $10^{-10}$ on the recomputed residuals used to decide convergence, after the solver's row scaling.
 An equilibrium is classified as unstable only when a negative tangent-plane distance is accompanied by a material-conserving finite transfer that decreases Gibbs energy by more than its numerical-error estimate.
 Separately seeded two-liquid solves confirm selected instabilities of the original-bound fit; a two-phase classification by itself does not indicate a second liquid, because it includes liquid--vapor equilibrium.
 

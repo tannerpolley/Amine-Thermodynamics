@@ -69,10 +69,10 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a06a40a30f2097dc482b9d106944cf96c5d28dd7a81221cd83d45cd1f393b651
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d2026f7b5441113dcf988dc5dd1945de8fa701d8f8dbe0c94ad8690d6a260cdf
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.3008\linewidth}>{\raggedright\arraybackslash}p{0.3008\linewidth}@{}}
-\caption{Paired phase-search summary. The complete 73-state temperature, pressure, loading and trial data are supplied as CSV in the data deposit. Index 0 repeats index 41 at 318.15 K and loading 0.2556, with pressure rounded to 5918.5286 Pa; both count. Two-phase classifications include vapor.}\label{tab:supplement-phase-family}\\
+\caption{Phase-search summary for both fits. The complete 73-state temperature, pressure, loading and trial data are supplied as CSV in the data deposit. One 318.15 K state (loading 0.2556) is evaluated twice, once at its pressure rounded to 5918.5286 Pa; both evaluations are counted. Two-phase classifications include liquid--vapor equilibrium.}\label{tab:supplement-phase-family}\\
 \toprule
 T (K) & Test states & Original-bound instabilities & Restricted-bound instabilities \\
 \midrule\endfirsthead
@@ -105,10 +105,10 @@ State & Seed & Success & Delta vs original & Delta vs single liquid & Densities 
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.0470\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.1034\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.4888\linewidth}@{}}
 \caption{Original-bound fit successful split phase amounts (mol), densities (mol/m3) and mole fractions in source order: \ce{CO2}, MEA, water, MEAH+, carbamate, bicarbonate, carbonate, hydronium, hydroxide. Vapor rows list only their three supported neutral species (\ce{CO2}, MEA, water); liquid rows list all nine.}\label{tab:supplement-split-compositions}\\
 \toprule
-State & Seed /\allowbreak{} phase & Amount & Density & Mole fractions in declared order \\
+State & Seed /\allowbreak{} phase & Amount & Density & Mole fractions (order in caption) \\
 \midrule\endfirsthead
 \toprule
-State & Seed /\allowbreak{} phase & Amount & Density & Mole fractions in declared order \\
+State & Seed /\allowbreak{} phase & Amount & Density & Mole fractions (order in caption) \\
 \midrule\endhead
 \bottomrule\endfoot
 21 & water-rich /\allowbreak{} L & 16.77 & $2.894\times10^{4}$ & $3.487\times10^{-10}$; 0.3304; 0.6123; 0.02867; 0.02819; 0.0004654; $5.154\times10^{-6}$; $5.152\times10^{-11}$; $1.065\times10^{-6}$ \\
