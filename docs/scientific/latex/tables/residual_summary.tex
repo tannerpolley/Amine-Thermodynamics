@@ -75,39 +75,29 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a22d78194960a8fc5b0d43d17502bfc3b551d44d6eba2d0433fb31be21f4648b
-% Input: docs/scientific/latex/supplement.tex SHA256 92dc5a106940d1b48eb24217fe12597bc26d2923a49d0ecfb5cfa7838670b470
-\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Reported fit property deviations. AARD denotes average absolute relative deviation. Fitted deviations and the Arcis comparison do not establish physical validation; Cai deviations are in K and mole fraction. $C_P$ remains on its source mass basis.}\label{tab:residual-summary}
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.2400\linewidth}rrrr@{}}
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 072458e2764affd752be1cf938239bf24035918a68d828991b3b69eddc07a8b4
+% Input: docs/scientific/latex/supplement.tex SHA256 a74df58846715ee08c4c207d24e131ddf082fa57b9363a58c55ce01f1e034b68
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Deviations of the joint fit by data group, calculated with the reported parameters. AARD is the average absolute relative deviation; RMSE and bias, the mean calculated-minus-measured value, are in the units given with each group. Heat capacity is compared on the source mass basis.}\label{tab:residual-summary}
+\begin{tabular}{@{}lrrrr@{}}
 \toprule
-Data set & Role & n & AARD (\%) &  &  \\
+Data group & n & AARD (\%) & RMSE & Bias \\
 \midrule
-common subset pressure & calibration & $47$ & $11.86$ &  &  \\*
-common subset species & calibration & $94$ & $7.104$ &  &  \\*
-additional species & calibration & $7$ & $9.004$ &  &  \\*
-Jakobsen & calibration & $6$ & $17.5$ &  &  \\*
-Kiepe & calibration; Kiepe checks fixed inputs & $39$ & $2.667$ &  &  \\*
-loaded density & calibration & $47$ & $0.177$ &  &  \\*
-\ce{CO2}-free density & calibration & $5$ & $0.02796$ &  &  \\
-\addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape RMSE and bias (K)} \\*
- &  &  & RMSE & Bias &  \\*
-Cai temperature & calibration & $25$ & $1.789$ & $0.1091$ &  \\
-\addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape RMSE and bias} \\*
- &  &  & RMSE & Bias &  \\*
-Cai vapor water fraction & calibration & $25$ & $0.02038$ & $-0.002594$ &  \\
-\addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape RMSE and bias (kJ/mol \ce{CO2})} \\*
- &  &  & RMSE & Bias &  \\*
-Vinjarapu et al. (2024) & calibration & $8$ & $1.835$ & $0.4729$ &  \\*
-Arcis et al. (2011) & used to accept fits & $14$ & $8.114$ & $7.182$ &  \\*
-Arcis et al. (2011) at 0.51 MPa & used to accept fits & $8$ & $10.33$ & $10.21$ &  \\*
-Arcis et al. (2011) at 1.03 MPa & used to accept fits & $6$ & $3.366$ & $3.145$ &  \\
-\addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape Signed error (\%), $T$ (K) and loading} \\*
- &  &  & Signed error (\%) & $T$ (K) & Loading \\*
-Hilliard $C_P$ & calibration & $1$ & $5.534$ & $318.15$ & $0.0$ \\*
-Hilliard $C_P$ & calibration & $1$ & $2.567$ & $318.15$ & $0.358$ \\*
-Hilliard $C_P$ & calibration & $1$ & $1.15$ & $353.15$ & $0.0$ \\*
-Hilliard $C_P$ & calibration & $1$ & $-2.135$ & $353.15$ & $0.358$ \\
+\multicolumn{5}{@{}l}{\itshape Fitted} \\*
+\ce{CO2} partial pressure (Hilliard, Jou) & $47$ & $11.86$ & -- & -- \\*
+Species fractions, shared subset (Böttinger, Matin) & $94$ & $7.104$ & -- & -- \\*
+Species fractions, additional (Böttinger, Matin) & $7$ & $9.004$ & -- & -- \\*
+Species/\allowbreak{}total-amine ratios (Jakobsen) & $6$ & $17.5$ & -- & -- \\*
+\ce{CO2}--water pressure (Kiepe) & $39$ & $2.667$ & -- & -- \\*
+Loaded density (Amundsen, Hartono) & $47$ & $0.177$ & -- & -- \\*
+\ce{CO2}-free density (Amundsen) & $5$ & $0.02796$ & -- & -- \\*
+Heat capacity (Hilliard) & $4$ & $2.846$ & -- & -- \\*
+Bubble temperature, K (Cai) & $25$ & -- & $1.789$ & $0.1091$ \\*
+Vapor water mole fraction (Cai) & $25$ & -- & $0.02038$ & $-0.002594$ \\*
+Integral heat, kJ/\allowbreak{}mol \ce{CO2} (Vinjarapu) & $8$ & -- & $1.835$ & $0.4729$ \\
+\addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Not fitted; used to accept fits} \\*
+Integral heat, kJ/\allowbreak{}mol \ce{CO2} (Arcis, 0.51 MPa) & $8$ & -- & $10.33$ & $10.21$ \\*
+Integral heat, kJ/\allowbreak{}mol \ce{CO2} (Arcis, 1.03 MPa) & $6$ & -- & $3.366$ & $3.145$ \\
 \bottomrule
 \end{tabular}
 \end{table}
