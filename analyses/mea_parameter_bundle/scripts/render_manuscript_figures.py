@@ -20,6 +20,7 @@ SOURCE_NAMES = {'Bottinger2008':'Böttinger et al. (2008)', 'Matin2012':'Matin e
 SPECIES_NAMES = {'MEA':r'MEA', 'MEAH+':r'MEAH$^+$', 'MEACOO-':r'MEACOO$^-$', 'MEA + MEAH+':r'MEA + MEAH$^+$', 'HCO3-':r'HCO$_3^-$ + CO$_3^{2-}$', 'HCO3- + CO3^2-':r'HCO$_3^-$ + CO$_3^{2-}$'}
 CURVES = a.BUNDLE / 'results/model-curves'
 DASHED = 'Dashed: imposed single liquid below its bubble pressure'
+SPECIES_LINES = ((0, (5, 2)), ':')  # #205: dashed; dotted and lighter below the bubble pressure; an unavailable comparison has no style and fails
 UNKNOWN = lambda rows: any(r.get('below_bubble_pressure') == 'unavailable' for r in rows)
 
 
@@ -32,15 +33,15 @@ def save(fig, name, caption, inputs):
     plt.close(fig)
 
 
-def curve(ax, rows, quantity, color, scale=1., dashes=()):
-    """Model curve over its ordered states, with gaps at unavailable states; each segment takes its less certain end's style (below the bubble pressure: dashed; comparison unavailable: dotted)."""
+def curve(ax, rows, quantity, color, scale=1., styles=((0, ()), (0, (8, 3)), ':'), below_alpha=None):
+    """Model curve over its ordered states, with gaps at unavailable states; each segment takes its less certain end's style (default below the bubble pressure: dashed; comparison unavailable: dotted)."""
     part = sorted((r for r in rows if r['quantity'] == quantity), key=lambda r: float(r['analytical_loading']))
     x = [float(r['analytical_loading']) for r in part]
     y = [float(r['value'])*scale if r['status'] == 'available' else math.nan for r in part]
     rank = [{'False': 0, 'True': 1}.get(r.get('below_bubble_pressure', 'False'), 2) for r in part]
     for style, run in groupby(range(len(x) - 1), key=lambda i: max(rank[i], rank[i+1])):
         i = list(run)
-        ax.plot(x[i[0]:i[-1]+2], y[i[0]:i[-1]+2], color=color, lw=1, ls=((0, dashes), (0, (8, 3) + dashes), ':')[style])
+        ax.plot(x[i[0]:i[-1]+2], y[i[0]:i[-1]+2], color=color, lw=1, ls=styles[style], alpha=below_alpha if style == 1 else None)
 
 
 def points(ax, x, y, marker, color, filled):
@@ -84,33 +85,50 @@ def main():
     loading = {r['membership_id'].replace('|', '::'): float(r['co2_loading_mol_per_mol_mea']) for r in membership}
     species = list({r['target']: r for r in a.rows(a.E/'species-figure-data.csv')}.values())  # Matin rows de-duplicated by target identity
     assert all(r['basis'] in {'true-species-liquid-mole-fraction','true-species-liquid-mole-fraction-linear-aggregate'} for r in species)
-    fig, axes = plt.subplots(4, 2, figsize=(FULL_WIDTH, 6.2), layout='constrained', sharex=True, height_ratios=[2, 1, 2, 1])
-    curves, handles = a.rows(CURVES/'species.csv'), []
-    styles = {'MEA': ('MEA', 'P'), 'MEAH+': ('MEAH+', 'X'), 'MEACOO-': ('MEACOO-', 's'), 'HCO3-': ('HCO3- + CO3^2-', '^'), 'MEA + MEAH+': ('MEA + MEAH+', 'o')}
-    colors = dict(zip(['MEA + MEAH+', 'MEACOO-', 'HCO3- + CO3^2-', 'MEA', 'MEAH+'], COLORS))
-    dash_patterns = dict(zip(colors, [(), (5, 2), (1, 1), (4, 1, 1, 1), (5, 1, 1, 1, 1, 1)]))
-    for panel, T in enumerate([293.15, 313.15, 333.15, 353.15]):
-        ax, minor = axes[2*(panel//2), panel%2], axes[2*(panel//2)+1, panel%2]
-        for name, color in colors.items():
-            curve(ax, [r for r in curves if float(r['temperature_K']) == T], name, color, dashes=dash_patterns[name])
-        curve(minor, [r for r in curves if float(r['temperature_K']) == T], 'HCO3- + CO3^2-', colors['HCO3- + CO3^2-'], dashes=dash_patterns['HCO3- + CO3^2-'])
-        for source, name in dict.fromkeys((r['source'], r['species']) for r in species):
-            marker = styles[name][1] if source == 'Bottinger2008' else {'MEACOO-': 'D', 'HCO3-': 'v'}.get(name, styles[name][1])
-            for fill in (True, False):
-                part = [r for r in species if (r['source'], r['species']) == (source, name) and float(r['temperature_K']) == T and (r['target'] in fitted_ids) == fill]
-                points(ax, [loading[r['target']] for r in part], [float(r['observed']) for r in part], marker, colors[styles[name][0]], fill)
-                if name == 'HCO3-':
-                    points(minor, [loading[r['target']] for r in part], [float(r['observed']) for r in part], marker, colors[styles[name][0]], fill)
-            handles.append(Line2D([], [], marker=marker, markerfacecolor='none', color=colors[styles[name][0]], ls=(0, dash_patterns[styles[name][0]]), label=f'{SPECIES_NAMES[name]}, {SOURCE_NAMES[source]}'))
-        ax.set(title=f'{T:g} K, {31 if T > 350 else 30} wt% MEA', ylabel='Liquid mole fraction')
+    for r in species:  # fitted status rule (#205): all fitted except the 353.15 K Böttinger states and Matin's HCO3- + CO3^2- totals
+        assert (r['target'] in fitted_ids) == (float(r['temperature_K']) < 350 and (r['source'], r['species']) != ('Matin2012', 'HCO3-')), r['target']
+    curves, temperatures = a.rows(CURVES/'species.csv'), [293.15, 313.15, 333.15, 353.15]
+    at = lambda T: [r for r in curves if float(r['temperature_K']) == T]
+    shapes = {'MEA + MEAH+': 'o', 'MEACOO-': 's', 'MEAH+': '^', 'MEA': 'D', 'HCO3-': 'v'}  # one shape per species; fill = source
+    tcolor = dict(zip(temperatures, plt.colormaps['plasma']([0, .33, .6, .82])))  # cold to warm, luminance rising for grayscale
+    quantity = lambda name: {'HCO3-': 'HCO3- + CO3^2-'}.get(name, name)
+    marks = lambda ax, rows, x, y, color: [points(ax, [x(r)], [y(r)], shapes[r['species']], color(r), r['source'] == 'Bottinger2008') for r in rows]
+    source = [Line2D([], [], marker='o', ls='none', color='black', markerfacecolor=f, label=l) for f, l in (('black', 'Filled: NMR (Böttinger)'), ('none', 'Open: titration (Matin)'))]
+    shape = [Line2D([], [], marker=m, ls='none', color='black', markerfacecolor='none', label=SPECIES_NAMES[n]) for n, m in shapes.items()]
+    legend = lambda top, **k: fig.legend(handles=[h for pair in zip(top + source[:1], shape + source[1:]) for h in pair], loc='outside lower center', ncol=6, fontsize=7.5,
+                                         frameon=False, handlelength=1.8, columnspacing=1, **k)  # rows: temperature and line keys, species shapes; source last
+    temperature_key = lambda **k: [Line2D([], [], color=tcolor[T], label=f'{T-273.15:.0f} °C' + (' (31 wt%)' if T > 350 else ''), **k) for T in temperatures]
+    fig = plt.figure(figsize=(FULL_WIDTH, 5.2), layout='constrained')
+    grid = fig.add_gridspec(2, 3, width_ratios=[1.35, 1, 1])
+    ax = fig.add_subplot(grid[:, 0])
+    for name, (x, offset, align) in {'MEA + MEAH+': (.53, (0, 22), ('center', 'bottom')), 'MEAH+': (.6, (4, 0), ('left', 'center')), 'MEACOO-': (.6, (4, 0), ('left', 'center')),
+                                     'HCO3-': (.27, (0, 5), ('center', 'bottom')), 'MEA': (.6, (4, 0), ('left', 'center'))}.items():  # where each curve stands apart
+        curve(ax, at(313.15), quantity(name), 'black', styles=SPECIES_LINES, below_alpha=.5)
+        y = float(min((r for r in at(313.15) if r['quantity'] == quantity(name)), key=lambda r: abs(float(r['analytical_loading']) - x))['value'])
+        ax.annotate(SPECIES_NAMES[name], (x, y), xytext=offset, textcoords='offset points', ha=align[0], va=align[1], fontsize=8, arrowprops=dict(arrowstyle='-', lw=.5) if offset[1] > 10 else None)
+    marks(ax, [r for r in species if float(r['temperature_K']) == 313.15], lambda r: loading[r['target']], lambda r: float(r['observed']), lambda r: 'black')
+    ax.set(title='(a) Speciation at 40 °C', xlabel=LOADING, ylabel='Liquid mole fraction', xlim=(0, .8), xticks=[0, .2, .4, .6])
+    for (row, col), name, label in (((0, 1), 'MEA + MEAH+', '(b)'), ((0, 2), 'MEACOO-', '(c)'), ((1, 1), 'MEAH+', '(d)'), ((1, 2), 'HCO3-', '(e)')):
+        ax = fig.add_subplot(grid[row, col])
+        for T in temperatures:
+            curve(ax, at(T), quantity(name), tcolor[T], styles=SPECIES_LINES, below_alpha=.5)
+        marks(ax, [r for r in species if r['species'] == name], lambda r: loading[r['target']], lambda r: float(r['observed']), lambda r: tcolor[float(r['temperature_K'])])
+        ax.set(title=f'{label} {SPECIES_NAMES[name]}', xlabel='Loading' if row else None)
+    ax.set(yscale='log', ylim=(1e-5, 3e-2))
+    for ax in fig.axes:
         ax.grid(alpha=.15)
-        minor.set(yscale='log', ylim=(1e-5, 2e-2), ylabel=r'HCO$_3^-$ + CO$_3^{2-}$')
-        minor.grid(alpha=.15)
-    for ax in axes[-1]:
-        ax.set_xlabel(LOADING)
-    handles = list({h.get_label(): h for h in handles}.values()) + [Line2D([], [], marker='o', markerfacecolor=f, color='black', linestyle='none', label=l) for f, l in (('black', 'Fitted'), ('none', 'Not fitted'))]
-    fig.legend(handles=handles, loc='outside upper center', ncol=3, fontsize=8, frameon=False)
-    save(fig, 'speciation', 'True-species liquid mole fractions of loaded MEA against analytical loading: model curves and the Böttinger and Matin measurements, with MEA + MEAH+ and HCO3− + CO3²− as the reported aggregates. States are single liquids imposed at 101 325 Pa; the 353.15 K panel uses 31 wt% MEA to match Böttinger’s samples, and its states above loading 0.51 lie below their bubble pressure.', ['species-figure-data.csv','fitted-rows.csv','model-curves/species.csv'])
+    legend(temperature_key(ls=SPECIES_LINES[0]) + [Line2D([], [], color='black', ls=':', alpha=.5, label='Below bubble pressure')])
+    save(fig, 'speciation', 'True-species liquid mole fractions of loaded MEA against analytical loading: (a) all reported species at 313.15 K; (b)-(e) one species or aggregate at four temperatures. Dashed lines are single liquids imposed at 101 325 Pa (31 wt% MEA at 353.15 K), dotted where below their bubble pressure; markers are Böttinger NMR (filled) and Matin titration (open) measurements, shaped by species.', ['species-figure-data.csv','fitted-rows.csv','model-curves/species.csv'])
+    fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 4.2), layout='constrained')
+    for ax, names, limits, scale, title in ((axes[0], {'MEA + MEAH+', 'MEACOO-', 'MEAH+', 'MEA'}, (0, .12), 'linear', '(a) Amine species'), (axes[1], {'HCO3-'}, (1e-4, 2e-2), 'log', '(b) ' + SPECIES_NAMES['HCO3-'])):
+        marks(ax, [r for r in species if r['species'] in names], lambda r: float(r['observed']), lambda r: float(r['predicted']), lambda r: tcolor[float(r['temperature_K'])])
+        ax.plot(limits, limits, color='black', lw=.7)
+        for factor in (.9, 1.1):
+            ax.plot(limits, [factor*v for v in limits], color='black', ls=':', lw=.6)
+        ax.set(xlim=limits, ylim=limits, xscale=scale, yscale=scale, box_aspect=1, title=title, xlabel='Measured mole fraction', ylabel='Calculated mole fraction')
+        ax.grid(alpha=.15)
+    legend(temperature_key(marker='o', ls='none') + [Line2D([], [], color='black', ls=':', lw=.6, label='±10 %')])
+    save(fig, 'species-parity', 'Calculated against measured true-species liquid mole fractions at the measured states, from the retained point predictions: (a) amine species, (b) HCO3− + CO3²− totals on logarithmic axes. Solid line 1:1, dotted ±10 %. Shape, color and fill as in the speciation figure.', ['species-figure-data.csv','fitted-rows.csv'])
     fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.8), layout='constrained')
     curves, handles = a.rows(CURVES/'heat.csv'), []
     for (T, P, source, marker), color in zip([(313.15, 1734000., 'Vinjarapu2024', 'o'), (322.5, 510000., 'Arcis2011', 's'), (322.5, 1030000., 'Arcis2011', '^')], COLORS):
