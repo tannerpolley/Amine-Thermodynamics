@@ -3,32 +3,38 @@ title: "Historical ionic/speciation fit"
 subtitle: "What the seven-coordinate MEAH⁺/MEACOO⁻ fit did—and did not—establish"
 ---
 
-::: {.callout-warning}
-This fit is historical evidence behind the exploratory bundle values. It is
-retained for provenance and diagnosis, not as an accepted ionic parameter set.
-Its numbers come from the historical ePC-SAFT 1.5.2 runtime and are not
-regenerated on the later historical wheel `28181e72`; current per-species scores for the
-adopted record are in the [overview](../notebook.qmd#pressure-and-speciation).
-:::
+Historical speciation-only parameter fit.
 
 # Question
 
 Could a small set of MEAH⁺ and MEACOO⁻ segment, dispersion, Born and mutual
-interaction parameters improve the available MEA speciation data while
+interaction parameters improve the available monoethanolamine (MEA) speciation data while
 remaining numerically and scientifically interpretable?
 
-# Starting point and strategy
+# Result
+
+Overall log root-mean-square error (RMSE) changed from **0.27144 to 0.26766** (about 1.4%), but the final statistic includes predictions from a nonconverged state. This small in-sample improvement did not qualify the fitted ionic parameters or establish their separate identification.
+
+# Basis and method
+
+[]{#starting-point-and-strategy}
 
 Eight nominally 30 mass% MEA states at ambient pressure supplied 22 species
 residuals. The states came from Böttinger 2008 (four), Jakobsen, Krane &
 Svendsen 2005 (two), and Matin et al. 2012 (two), covering MEAH⁺, carbamate,
 bicarbonate, carbonate and combined free/protonated MEA observations.
 
-The historical ePC-SAFT 1.5.2 runtime was used. A bounded soft-L1 least-squares
+The historical electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) 1.5.2 runtime was used. A bounded soft-L1 least-squares
 fit used log₁₀(model/data) residuals, scaled parameter coordinates and a weak
 pull toward the starting vector. Seven coordinates moved simultaneously:
 
+# Values
+
+[]{#numerical-result}
+
 ::: {.parameter-table .parameter-change-table}
+The symbols $\sigma$, $\epsilon/k$, $d_B$ and $k_{ij}$ denote segment diameter, dispersion energy, Born diameter and mutual binary interaction, respectively.
+
 | Parameter | Starting value → retained value |
 |:--|:--|
 | MEAH⁺ $\sigma$ (Å) | 3.563 → 3.48508556586 |
@@ -40,19 +46,21 @@ pull toward the starting vector. Seven coordinates moved simultaneously:
 | MEAH⁺–MEACOO⁻ $k_{ij}$ | 0 → −0.00201813457644 |
 :::
 
-# Numerical result
+| Log-residual statistic | Starting → retained (dimensionless) |
+|:--|--:|
+| Mean absolute log residual | 0.17390 → 0.17025 |
+| Median absolute log residual | 0.10105 → 0.09885 |
+| Carbamate RMSE | 0.09008 → 0.08282 |
+| Combined MEA + MEAH⁺ RMSE | 0.10685 → 0.10976 |
 
-Overall log-RMSE changed from **0.27144 to 0.26766** (about 1.4%). Mean
-absolute log residual changed 0.17390 → 0.17025 and median absolute log
-residual changed 0.10105 → 0.09885. Carbamate RMSE improved 0.09008 →
-0.08282, while combined MEA + MEAH⁺ slightly worsened 0.10685 → 0.10976.
+# Limits and evidence type
+
+[]{#conclusion-and-limits}
 
 Two final residual rows at the Böttinger 20 °C, loading 0.075 state came from
 a nonconverged solve. Best-effort finite predictions remained in the reported
 metrics. The fit was speciation-only: pressure parity was not regenerated, no
 independent validation was run, and no confidence interval was established.
-
-# Conclusion and limits
 
 The fit records a small in-sample improvement, but the improvement is too
 small and too entangled with failed-state predictions to qualify the seven
@@ -63,6 +71,16 @@ separately estimated. The later volumetric and coupled-fit plans therefore
 kept these roles explicit rather than treating this fit as a solved ionic
 parameter fit.
 
+This is in-sample calibration evidence containing failed-state predictions, not independent physical validation.
+
 # Records
 
-[Original fit summary](https://github.com/tannerpolley/Amine-Thermodynamics/blob/897bb6e8842b17016ce5995c30d9021fcf1d44c/analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_fit_summary.json) · [Exact target states](https://github.com/tannerpolley/Amine-Thermodynamics/blob/897bb6e8842b17016ce5995c30d9021fcf1d44c/analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_speciation_fit_data.csv) · [Species statistics](https://github.com/tannerpolley/Amine-Thermodynamics/blob/897bb6e8842b17016ce5995c30d9021fcf1d44c/analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_fit_statistics.csv) · [Current source audit](https://github.com/tannerpolley/Amine-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/ePC-SAFT/full-component-parameter-source-audit.md#species-audit)
+::: {.callout-warning}
+This fit is historical evidence behind the exploratory bundle values. It is
+retained for provenance and diagnosis, not as an accepted ionic parameter set.
+Its numbers come from the historical ePC-SAFT 1.5.2 runtime and are not
+regenerated on the later historical wheel `28181e72`; current per-species scores for the
+adopted record are in the [overview](../notebook.qmd#pressure-and-speciation).
+:::
+
+[Original fit summary](https://github.com/tannerpolley/Amine-Thermodynamics/blob/897bb6ef8842b17016ce5995c30d9021fcf1d44c/analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_fit_summary.json) · [Exact target states](https://github.com/tannerpolley/Amine-Thermodynamics/blob/897bb6ef8842b17016ce5995c30d9021fcf1d44c/analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_speciation_fit_data.csv) · [Species statistics](https://github.com/tannerpolley/Amine-Thermodynamics/blob/897bb6ef8842b17016ce5995c30d9021fcf1d44c/analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_fit_statistics.csv) · [Retained source audit](https://github.com/tannerpolley/Amine-Thermodynamics/blob/597baed504e202c8133f262e27fdc924ebc5a3c1/docs/ePC-SAFT/full-component-parameter-source-audit.md#species-audit)
