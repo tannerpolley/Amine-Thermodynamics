@@ -15,16 +15,18 @@ MAPPING = s.parameter_mapping()
 PARAMS, (PACKET, GROUPS) = epcsaft.Parameters.from_mapping(MAPPING), fe.observations()
 MODEL = epcsaft.Mixture(PARAMS, thermochemistry=he.vrc.record())
 fe.binding('Held', str(s.PARAMETERS))
+first_start = s.attempt_plan  # this analysis keeps only the declared first start; a failure there stays unavailable
+s.attempt_plan = lambda *state: first_start(*state)[:1]
 TEMPLATE, HEAT_REQUEST, IDENTITY = PACKET[0]['request'], he.request(MAPPING, 313.15, .11), dict(parameter_sha256=s.sha256(s.PARAMETERS), engine_wheel_sha256=s.ENGINE_WHEEL_SHA256)
 CARBON, NITROGEN, CHARGE = (1, 0, 0, 0, 1, 1, 1, 0, 0), (0, 1, 0, 1, 1, 0, 0, 0, 0), TEMPLATE['reaction_system']['charges']
 SPECIES = {'MEA': (1,), 'MEAH+': (3,), 'MEACOO-': (4,), 'HCO3-': (5,), 'CO3^2-': (6,), 'CO2': (0,), 'MEA + MEAH+': (1, 3), 'HCO3- + CO3^2-': (5, 6)}
 QUANTITIES = {'pressure': {'CO2 partial pressure': 'Pa'}, 'species': {k: 'mole fraction' for k in SPECIES}, 'heat': {'integral heat of absorption': 'kJ/mol CO2'},
               'density': {'liquid density': 'kg/m3'}, 'mea-water': {'bubble temperature': 'K', 'vapor water mole fraction': 'mole fraction'}}
 IMBALANCES = ('max_scaled_residual', 'carbon_imbalance_relative', 'nitrogen_imbalance_relative', 'charge_imbalance_relative')
-# Check 1 references: each isotherm and Wagner, each species panel (both aggregates, 31 wt%), each heat condition,
-# both density pressures and zero loading, and both Cai isobars.
+# Check 1 references: each isotherm and Wagner, each species panel (both aggregates, 31 wt%), Matin's MEA and MEAH+,
+# each heat condition, both density pressures and zero loading, and both Cai isobars.
 REFERENCES = {'canonical:vle_obs_0163', 'canonical:vle_obs_0055', 'canonical:vle_obs_0066', 'canonical:vle_obs_0217', 'canonical:vle_obs_0255', 'Wagner2013:csv-row-37', 'Bottinger2008_state_030',
-              'Bottinger2008_state_049', 'Bottinger2008_state_058', 'Bottinger2008_state_067', 'vinjarapu2024_source_table4_01', '10.1021/je2002946/table5/T322.5K/p0.51MPa/row01',
+              'Bottinger2008_state_049', 'Bottinger2008_state_058', 'Bottinger2008_state_067', 'Matin2012_state_001', 'vinjarapu2024_source_table4_01', '10.1021/je2002946/table5/T322.5K/p0.51MPa/row01',
               '10.1021/je2002946/table5/T322.5K/p1.03MPa/row01', 'Han2012_density_40C_alpha0.10', 'Han2012_density_100C_alpha0.10', 'Amundsen2009_state_002', 'cai1996_10133_008', 'cai1996_06666_008'}
 CAI = [r for r in fo.load(SPEC['stage2_rows_path'])['F1'] if r['id'].startswith('cai')]
 # Pressure: geometric below 0.2 (log pressure nearly linear in log loading), 0.01 steps above (check 3 refinement).
@@ -136,17 +138,19 @@ def run(family, state):
         try:
             row.update(bubble_pressure_Pa=(total := bubble_pressure(state['T'], state['a'], state['w'])), below_bubble_pressure=state['P'] < total)
         except Exception as exc:
-            row['bubble_pressure_cause'] = f'{type(exc).__name__}: {exc}'[:300]
+            row.update(below_bubble_pressure='unavailable', bubble_pressure_cause=f'{type(exc).__name__}: {exc}'[:300])
     return [dict(row, quantity=q, value=values.get(q), unit=u, **IDENTITY) for q, u in QUANTITIES[family].items()]
 
 def references():  # check 1: the curve calls at each reference's source declaration against its retained prediction
     E = {n: list(csv.DictReader((EVIDENCE / f'{n}.csv').open())) for n in ('canonical-pressure', 'wagner-pressure', 'species-figure-data', 'heat', 'density', 'fitted-rows')}
     o = {o['identity']: o for o in PACKET + GROUPS['canonical'] + GROUPS['wagner']}
-    c = lambda i: o[i]['request']['reaction_system']['analytical_feed_contract']['source_coordinates']
+    m = {r['state_id']: dict(MEA_weight_fraction=r['mea_mass_fraction'], CO2_loading=r['co2_loading_mol_per_mol_mea'])
+         for r in csv.DictReader((BUNDLE.parents[1] / 'data/reference/MEA/manifests/speciation_target_membership.csv').open())}
+    c = lambda i: o[i]['request']['reaction_system'].get('analytical_feed_contract', {}).get('source_coordinates') or m[i]  # Matin requests carry no feed contract
     declared = lambda i, **k: dict(T=o[i]['request']['temperature']['value'], w=float(c(i)['MEA_weight_fraction']), a=float(c(i)['CO2_loading']), **k)
     cases = [('pressure', declared(r['identity']), 'CO2 partial pressure', r['identity'], r['predicted']) for r in E['canonical-pressure'] + E['wagner-pressure'] if r['identity'] in REFERENCES]
     cases += [('species', declared(r['identity'], P=101325.), {'HCO3-': 'HCO3- + CO3^2-'}.get(r['species'], r['species']), r['target'], r['predicted'])
-              for r in E['species-figure-data'] if r['identity'] in REFERENCES]
+              for r in {r['target']: r for r in E['species-figure-data']}.values() if r['identity'] in REFERENCES]
     cases += [('heat', dict(T=float(r['T_K']), P=float(r['P_Pa']), a=float(r['loading'])), 'integral heat of absorption', r['id'], r['predicted_kJ_mol']) for r in E['heat'] if r['id'] in REFERENCES]
     cases += [('density', dict(T=float(r['T_K']), w=float(r['mea_mass_fraction']), P=float(r['P_Pa']), a=float(r['loading'])), 'liquid density', r['id'], r['predicted_kg_m3'])
               for r in E['density'] if r['id'] in REFERENCES]
