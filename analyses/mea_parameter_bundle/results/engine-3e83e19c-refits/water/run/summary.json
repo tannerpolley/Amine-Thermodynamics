@@ -1,0 +1,112 @@
+{
+  "candidates": [
+    {
+      "id": "lambda-0.1-A",
+      "passed": true,
+      "gates": {
+        "complete": true,
+        "cp": true,
+        "numerical": true,
+        "primary/saturated_liquid_rho/mean_absolute_relative_error": true,
+        "primary/saturated_liquid_rho/maximum_absolute_relative_error": true,
+        "primary/psat/mean_absolute_relative_error": true,
+        "primary/psat/maximum_absolute_relative_error": true,
+        "staggered/saturated_liquid_rho/mean_absolute_relative_error": true,
+        "staggered/saturated_liquid_rho/maximum_absolute_relative_error": true,
+        "staggered/psat/mean_absolute_relative_error": true,
+        "staggered/psat/maximum_absolute_relative_error": true
+      },
+      "metrics": [
+        {
+          "grid": "primary",
+          "quantity": "cp",
+          "requested_rows": 20,
+          "evaluated_rows": 20,
+          "mean_absolute_relative_error": 0.004400325391641297,
+          "maximum_absolute_relative_error": 0.014869404238780692
+        },
+        {
+          "grid": "primary",
+          "quantity": "rho",
+          "requested_rows": 20,
+          "evaluated_rows": 20,
+          "mean_absolute_relative_error": 0.00037397918332106593,
+          "maximum_absolute_relative_error": 0.0009544955017837253
+        },
+        {
+          "grid": "primary",
+          "quantity": "saturated_liquid_rho",
+          "requested_rows": 20,
+          "evaluated_rows": 20,
+          "mean_absolute_relative_error": 0.0003629471419502428,
+          "maximum_absolute_relative_error": 0.0009846511177773465
+        },
+        {
+          "grid": "primary",
+          "quantity": "psat",
+          "requested_rows": 20,
+          "evaluated_rows": 20,
+          "mean_absolute_relative_error": 0.0007541296177260792,
+          "maximum_absolute_relative_error": 0.001709012979544955
+        },
+        {
+          "grid": "staggered",
+          "quantity": "cp",
+          "requested_rows": 19,
+          "evaluated_rows": 19,
+          "mean_absolute_relative_error": 0.004159041116332181,
+          "maximum_absolute_relative_error": 0.013613240019876294
+        },
+        {
+          "grid": "staggered",
+          "quantity": "rho",
+          "requested_rows": 19,
+          "evaluated_rows": 19,
+          "mean_absolute_relative_error": 0.00035405670529953834,
+          "maximum_absolute_relative_error": 0.0007452354282713181
+        },
+        {
+          "grid": "staggered",
+          "quantity": "saturated_liquid_rho",
+          "requested_rows": 19,
+          "evaluated_rows": 19,
+          "mean_absolute_relative_error": 0.0003432980694657817,
+          "maximum_absolute_relative_error": 0.0007795724060157827
+        },
+        {
+          "grid": "staggered",
+          "quantity": "psat",
+          "requested_rows": 19,
+          "evaluated_rows": 19,
+          "mean_absolute_relative_error": 0.0007003893670678558,
+          "maximum_absolute_relative_error": 0.0014105339586414356
+        },
+        {
+          "grid": "atmospheric-controls",
+          "quantity": "cp",
+          "requested_rows": 3,
+          "evaluated_rows": 3,
+          "mean_absolute_relative_error": 0.007844100369050403,
+          "maximum_absolute_relative_error": 0.014845347996367275
+        },
+        {
+          "grid": "atmospheric-controls",
+          "quantity": "rho",
+          "requested_rows": 3,
+          "evaluated_rows": 3,
+          "mean_absolute_relative_error": 0.00037820910719991535,
+          "maximum_absolute_relative_error": 0.0005312489676039256
+        }
+      ],
+      "physical": [
+        1.2527538379341716,
+        2.7804326149431615,
+        432.3788130933721,
+        1756.6497964508417,
+        0.03761972795023448
+      ]
+    }
+  ],
+  "cpu_s": 7.410474000000001,
+  "wall_s": 2.709776387997408
+}

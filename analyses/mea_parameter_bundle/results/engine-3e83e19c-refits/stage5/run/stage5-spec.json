@@ -1,0 +1,213 @@
+{
+  "study": "joint-recalibration-170",
+  "stage": 5,
+  "implementation_base": "6c8d20073fd0e5fda8dd323a51f55551d12b7486",
+  "design_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+  "controls_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000919",
+  "purpose": "Measured Schreckenberg coefficient calibration on the revised neutral binary, retaining both roots; no parameter adoption.",
+  "inputs": [
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/inputs/parameters-81b67e0a.json",
+      "sha256": "22aaa54eea6c10db97684e12590a0498e5e12fa438c02ca663b3946d810b2d8c"
+    },
+    {
+      "path": "data/reference/MEA/observations/vapor_liquid_equilibrium/Cai_1996_MEA_H2O_VLE.csv",
+      "sha256": "c7857f045757881662f1836913e25216f808bc9fdcf5c74f3b4d03c76c134a8b"
+    },
+    {
+      "path": "analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/source/kiepe_2002_table_1.csv",
+      "sha256": "e2ecb652867832f70dfba06417687d6667c1e11932262912b8490247d9195e2e"
+    },
+    {
+      "path": "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv",
+      "sha256": "7322b7dc7f0c961d09dbfb356dccde00851c0de20ba589d150d9c3834900f70c"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/state-packet.json.gz",
+      "sha256": "e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba"
+    },
+    {
+      "path": "data/reference/MEA/thermal/physical-ideal-gas-calorics.json",
+      "sha256": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a"
+    },
+    {
+      "path": "src/MEA/common/mea_source_contracts.py",
+      "sha256": "242973e500e33530a1d0315475fa4a6f974e57c6f7354706081c07bf94820ef5"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-rows.json",
+      "sha256": "e50fc34ff22deeb8c65d8e4a77934b5f9fd2952c9338c1b99e1c473db8a4c72a"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/inputs/parameters-baf5cc4d.json",
+      "sha256": "af3dbff18ed6358679dba4129cdde11d4040fa6129378a0c7de3bf623160ddf0"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/inputs/parameters-a4cb8d5b.json",
+      "sha256": "86164662b82d45afd7cf2632adbf418b56aca74992e4d1f97c2552162bedb940"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage3-rows.json",
+      "sha256": "2ce00fa3101cf348e0b1dbc5d22d2447824782a8b80d45dbe98162a315337a60"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage3-requests.json",
+      "sha256": "e67abfa192b7fa91754340ad98bfd7ef58b75d90ab543edbd2b559c1f454801b"
+    },
+    {
+      "path": "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
+      "sha256": "d5cd6ea0d5d75f9994f5ed354463776a09b8f3cd081eb72ddef98dd4a356c53a"
+    },
+    {
+      "path": "data/reference/MEA/observations/liquid_speciation/Canonical_Combined_ChEq.csv",
+      "sha256": "38326453cfe11b30f2e83e2c33e9342037a8f2bbbec0d95938384806e935383b"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/frozen-inputs.json",
+      "sha256": "4abf21d682f9eb2eced9e32569f95742bd88706c0446a0abce6a4e18fa8d9739"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/inputs/reference-parameters-d922ff58.json",
+      "sha256": "df3c18085e4b35ae83ec9f99ce80716ecf4a379f402805b37b190b6043124ad3"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-rows.json",
+      "sha256": "57efc1c0f8aac14259a7dd255e1b51a88bd34f5c215d94bfb01af1e8bcbc3216"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-stage4-requests.json",
+      "sha256": "93f1edac419ddd4804db4108d036b0bb4d7573118c7305c59c0740c6ee324601"
+    },
+    {
+      "path": "data/reference/MEA/observations/liquid_speciation/Bottinger_2007_ChEq.csv",
+      "sha256": "583a3f7a26f4ea8cdae97cf7c2606bdbefafbb18cac085dbedd9cc2234aa3c71"
+    },
+    {
+      "path": "data/reference/MEA/observations/liquid_speciation/Matin_2012_ChEq.csv",
+      "sha256": "8625f8dd06c26f9230fedbc50c97f907cc555f986521a270c873634f9ea5776f"
+    },
+    {
+      "path": "data/reference/MEA/observations/liquid_speciation/Jakobsen_2005_ChEq.csv",
+      "sha256": "f3479866b0693a5e122e3f35e8b91fdb524ac358986e05b269a6b872e4cae3c3"
+    },
+    {
+      "path": "data/reference/MEA/manifests/speciation_target_membership.csv",
+      "sha256": "216600eb7bf1bb4ff7a5796ebfd11c5b5b9d4a9b9cd458e0c88fcedf029d8cf5"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/inputs/reference-parameters-d084f0c4.json",
+      "sha256": "7fc3d98254e29e761c046f69feb832cc02238e536884252d0480679bf182049a"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/precursor-rows.json",
+      "sha256": "b4dee6f0f55178e50b45ab9237b1211834a34f5d45a4ae532fd42edcf914ee4e"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/precursor-requests.json",
+      "sha256": "9393e9e9d10bfc7a81d423926ba3b82218fdbd74fc166c50335a88c30bba0c0c"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/stage4-rows.json",
+      "sha256": "506d151b8654a2947f2b805599d9c691bd80ff6d3ad4f77911e9fecb67aa2635"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/stage4-requests.json",
+      "sha256": "f6fdaff18269e474cd7dea1aa05b4abe47864a12203730068ba65472d3162583"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/overlap.json",
+      "sha256": "a3775619c67da356ac12c08b0797374cc92d89cecd99710ee3940667c9ee8884"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-dielectric-rows.csv",
+      "sha256": "369f77ffe83bba2a814316278ef88325355e535d4aa400afc194260d19b741a6"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/inputs/start-parameters-4719427e.json",
+      "sha256": "6f503c35f86ca97b81ca18ff8cecbe675b3ab497724438e6b78c3b9074d14b8b"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/dielectric-source-provenance.json",
+      "sha256": "378ecfa90c3c900524339c4658128a79936b8053b906dcb7933bb6f49752d65a"
+    }
+  ],
+  "engine": {
+    "wheel_path": "build/engine-wheels/main-3e83e19ccc771b51d8ebc038931ab25192f4c5b5/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+    "wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
+    "packages": {
+      "epcsaft": "0.2.0.dev0",
+      "numpy": "2.4.4",
+      "scipy": "1.17.1"
+    }
+  },
+  "water_path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/inputs/parameters-81b67e0a.json",
+  "packet_path": "analyses/mea_parameter_bundle/data/input/state-packet.json.gz",
+  "stage2_rows_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/precursor-rows.json",
+  "starting_assumptions": {
+    "component/carbon-dioxide/dispersion_energy_over_k": 169.21,
+    "reaction:R2:correlation:a": 235.4815349923,
+    "reaction:R2:correlation:b_k": -12092.1,
+    "reaction:R2:correlation:c": -36.7816,
+    "reaction:R2:correlation:d_per_k": 0.0,
+    "reaction:R4:correlation:a": 2.151,
+    "reaction:R4:correlation:b_k": -1545.3,
+    "reaction:R5:correlation:a_k": 2677.91,
+    "reaction:R5:correlation:b": 0.3869,
+    "reaction:R5:correlation:c_per_k": 0.0004277,
+    "component/protonated-monoethanolamine/segment_diameter": 3.563,
+    "component/protonated-monoethanolamine/packing_diameter": 3.13544,
+    "component/protonated-monoethanolamine/debye_huckel_diameter": 3.13544,
+    "component/protonated-monoethanolamine/born_diameter": 3.563,
+    "component/protonated-monoethanolamine/dispersion_energy_over_k": 228.71,
+    "component/carbamate-anion/segment_diameter": 3.5605,
+    "component/carbamate-anion/packing_diameter": 3.1332400000000002,
+    "component/carbamate-anion/debye_huckel_diameter": 3.1332400000000002,
+    "component/carbamate-anion/born_diameter": 3.5605,
+    "component/carbamate-anion/dispersion_energy_over_k": 533.11,
+    "pair/carbamate-anion/protonated-monoethanolamine/k_ij": 0.0,
+    "pair/carbamate-anion/water/k_ij": 0.0,
+    "pair/protonated-monoethanolamine/water/k_ij": 0.0,
+    "pair/carbon-dioxide/monoethanolamine/k_ij": 0.0,
+    "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 0.0,
+    "pair/carbon-dioxide/monoethanolamine/k_ij/reciprocal_temperature_slope": 0.0,
+    "pair/monoethanolamine/water/k_ij": 0.0
+  },
+  "controls": {
+    "maximum_iterations": 40,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08
+  },
+  "budget_cpu_s": 120.0,
+  "budget_wall_s": 120.0,
+  "nonfit_wall_s": 60,
+  "worker_memory": {
+    "allowance_bytes": 268435456,
+    "basis": "Conservative reacting-row estimate; limited by measured available physical memory."
+  },
+  "verification": {
+    "cost_replay_relative": 1e-08,
+    "row_replay_absolute": 1e-08,
+    "start_cost_relative": 1e-06,
+    "derivative_relative": 1e-05,
+    "derivative_absolute": 1e-08,
+    "steps_optimizer": [
+      0.01,
+      0.005
+    ],
+    "raw_residual": 1e-10
+  },
+  "cases": [],
+  "prior_cpu_charge_s": 0.0,
+  "prior_wall_charge_s": 0.0,
+  "prior_charge_basis": "Initial-record derivation and paired density replays; conservative CPU bound retained in derived-starts.json",
+  "amendment_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6204801680",
+  "reference_path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/inputs/reference-parameters-d084f0c4.json",
+  "state_requests_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/shared/precursor-requests.json",
+  "program_prior_cpu_s": 1413.8716587200001,
+  "program_prior_wall_s": 482.5471373929927,
+  "program_cpu_limit_s": 144000,
+  "program_wall_limit_s": 21600,
+  "dielectric_rows_path": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-dielectric-rows.csv",
+  "dielectric_template_path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/inputs/start-parameters-4719427e.json"
+}

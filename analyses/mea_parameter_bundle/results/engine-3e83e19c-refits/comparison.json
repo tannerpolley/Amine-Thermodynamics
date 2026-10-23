@@ -1,0 +1,100 @@
+{
+  "water": [
+    {
+      "new": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/water/run/lambda-0.1-A/parameters.json",
+      "retained": "analyses/mea_parameter_bundle/results/water-124/lambda-0.1-A/parameters.json",
+      "coefficients": 111,
+      "bitwise_equal": false,
+      "max_relative_difference": 9.600532682633963e-13,
+      "differing": {
+        "component/water/dispersion_energy_over_k": 1.8273872313783997e-13,
+        "component/water/segment_count": 1.878799123127147e-13,
+        "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant": 7.171403980483394e-14,
+        "association/water/a/water/b/energy_over_k": 3.313560906167467e-14,
+        "association/water/a/water/b/volume": 9.600532682633963e-13
+      }
+    }
+  ],
+  "stage2": [
+    {
+      "new": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage2/run/neutral-mea-water/A/parameters.json",
+      "retained": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/neutral-mea-water/A/parameters.json",
+      "coefficients": 111,
+      "bitwise_equal": false,
+      "max_relative_difference": 5.919864816316643e-15,
+      "differing": {
+        "pair/monoethanolamine/water/k_ij": 5.919864816316643e-15
+      }
+    }
+  ],
+  "co2-slope": [
+    {
+      "new": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/co2-slope/run/co2-water/B/parameters.json",
+      "retained": "analyses/mea_parameter_bundle/results/joint-recalibration-170/stage2/co2-water/slope/co2-water/B/parameters.json",
+      "coefficients": 112,
+      "bitwise_equal": false,
+      "max_relative_difference": 2.3309513078149247e-14,
+      "differing": {
+        "pair/carbon-dioxide/water/k_ij": 6.727080398251696e-15,
+        "pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope": 2.3309513078149247e-14
+      }
+    }
+  ],
+  "stage5": [
+    {
+      "new": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/run/larger-dV-parameters.json",
+      "retained": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/larger-dV-parameters.json",
+      "coefficients": 114,
+      "bitwise_equal": false,
+      "max_relative_difference": 2.2311691461790613e-16,
+      "differing": {
+        "component/monoethanolamine/dielectric_volume": 1.5187961682381881e-16,
+        "component/monoethanolamine/dielectric_temperature": 2.2311691461790613e-16
+      }
+    }
+  ],
+  "a6": [
+    {
+      "new": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/a6/run/fit/usable-budget-endpoint.json",
+      "retained": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json",
+      "coefficients": 115,
+      "bitwise_equal": false,
+      "max_relative_difference": 6.195841623918316e-09,
+      "differing": {
+        "component/protonated-monoethanolamine/debye_huckel_diameter": 4.439437936474369e-13,
+        "component/protonated-monoethanolamine/dispersion_energy_over_k": 3.2349527357430095e-11,
+        "component/protonated-monoethanolamine/packing_diameter": 4.438806423658965e-13,
+        "component/protonated-monoethanolamine/segment_diameter": 4.439437936474369e-13,
+        "component/carbamate-anion/dispersion_energy_over_k": 1.2606916570568467e-11,
+        "pair/monoethanolamine/water/k_ij": 1.487019282944966e-11,
+        "pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope": 2.9957827532661245e-10,
+        "pair/bicarbonate-anion/water/k_ij": 1.0268112573978082e-09,
+        "pair/carbamate-anion/water/k_ij": 6.311267739298392e-10,
+        "pair/protonated-monoethanolamine/water/k_ij": 6.195841623918316e-09,
+        "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": 4.079242405080493e-09,
+        "reaction:R2:correlation:a": 7.73730905902446e-12,
+        "reaction:R2:correlation:b_k": 4.588765097471143e-11
+      }
+    }
+  ],
+  "restricted": [
+    {
+      "new": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/restricted/run/fit/usable-budget-endpoint.json",
+      "retained": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/usable-budget-endpoint.json",
+      "coefficients": 115,
+      "bitwise_equal": true,
+      "max_relative_difference": 0.0,
+      "differing": {}
+    }
+  ],
+  "restricted-2": [
+    {
+      "new": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/restricted-2/run/fit/usable-budget-endpoint.json",
+      "retained": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json",
+      "coefficients": 115,
+      "bitwise_equal": true,
+      "max_relative_difference": 0.0,
+      "differing": {}
+    }
+  ]
+}
