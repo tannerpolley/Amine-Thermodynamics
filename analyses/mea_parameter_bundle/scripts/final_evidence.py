@@ -447,7 +447,7 @@ def diagnose(model, request, row, out):
         return problem,liquid,None
     problem.phases = [eq.Phase('L',kind='liquid',support=s.COMPONENT_IDS,composition_guess=liquid.phase_mole_fractions(0),packing_guess=liquid.packing_fractions[0]),
         eq.Phase('V',kind='vapor',support=s.COMPONENT_IDS[:3],amount=eq.Pinned(0.))]
-    problem.P = eq.Free(row['pressure_Pa'])
+    problem.P = eq.Free(row['bubble_start']['bubble']['pressure'] if row.get('bubble_start') else row['pressure_Pa'])
     bubble = eq.solve_equilibrium(model,problem)
     row['bubble'] = phase_payload(model,problem,bubble)
     if bubble.success:
@@ -459,7 +459,7 @@ def diagnose(model, request, row, out):
 
 def bubble_recover(model, problem, bubble, row, out):
     starts = [eq.EquilibriumStart(amounts=[bubble.amounts[0]*f,bubble.amounts[0]*(1-f)],
-        compositions=[bubble.phase_mole_fractions(0),bubble.phase_mole_fractions(1)],packing_fractions=bubble.packing_fractions) for f in (.5,.9)]
+        compositions=[[bubble.phase_mole_fractions(i)[model.component_ids.index(species)] for species in phase.support] for i,phase in enumerate(problem.phases)],packing_fractions=bubble.packing_fractions) for f in (.5,.9)]
     batch = eq.solve_equilibrium_starts(model,problem,starts,eq.EquilibriumWorkLimits(attempts=2,attempt_iterations=400,iterations=800))
     row['bubble_causes'] = list(batch.causes)
     row['bubble_selected'] = batch.selected
@@ -493,16 +493,22 @@ def family_job(mapping, request, row, retained, out):
 
 
 
-def phase_family(mapping, request, points_path, points_sha256, output_dir):
+def phase_family(mapping, request, points_path, points_sha256, output_dir, indices=None, deadline=None, continue_bubble=False):
     points = campaign.checked(points_path,points_sha256)
     inputs = [list(map(float,line.split())) for line in points.read_text().splitlines()]
-    assert len(inputs)==73
-    old = campaign.load(points.with_name('old-index-63.json'))['diagnosis']
+    indices = list(range(len(inputs))) if indices is None else list(indices)
+    assert indices == sorted(set(indices)) and all(0 <= i < len(inputs) for i in indices)
+    old = campaign.load(BUNDLE/'results/joint-recalibration-170/amendment-6/inputs/revision-3/phase/old-index-63.json')['diagnosis']
     assert phase_classification(dict(old,final=dict(success=old['liquid_accepted'],requested_tolerance_met=old['liquid_residual']<=1e-10)))=='unresolved'
     retained, output = [], Path(output_dir)
-    for index,(loading,T,P) in enumerate(inputs):
+    for index in indices:
+        if deadline is not None and time.monotonic() >= deadline:
+            break
+        loading,T,P = inputs[index]
         path = output/f'point-{index}.json'
         row = dict(index=index,loading=loading,temperature_K=T,pressure_Pa=P,attempts=[])
+        neighbours = [r for r in retained if r['temperature_K']==T and r.get('bubble',{}).get('success')] if continue_bubble else []
+        row['bubble_start'] = {k:v for k,v in min(neighbours, key=lambda r:abs(r['loading']-loading)+abs(math.log(r['pressure_Pa']/P))).items() if k in ('index','bubble')} if neighbours else None
         s.write_json(path,row)
         def child():
             try:
@@ -510,15 +516,16 @@ def phase_family(mapping, request, points_path, points_sha256, output_dir):
             except Exception as error:
                 saved = campaign.load(path)
                 s.write_json(path,dict(saved,failure=f'{type(error).__name__}: {error}'))
-        timing = campaign.bounded_call(child,300.)
+        timing = campaign.bounded_call(child,min(300., max(0., deadline-time.monotonic())) if deadline else 300.)
         row = dict(campaign.load(path),timing=timing)
         row['classification'] = phase_classification(row)
         s.write_json(path,row)
         retained.append(row)
     counts = {label:sum(r['classification']==label for r in retained) for label in
         ('failed','unresolved','passed-two-phase','passed-single-liquid')}
-    assert sum(counts.values())==73
-    s.write_json(output/'summary.json',dict(counts=counts,eligible=counts['failed']==counts['unresolved']==0,
+    assert sum(counts.values())==len(retained)
+    summary_path = output/('summary.json' if indices==list(range(len(inputs))) else f'summary-{indices[0]}.json')
+    s.write_json(summary_path,dict(counts=counts,eligible=len(retained)==len(indices) and counts['failed']==counts['unresolved']==0,
         points_sha256=points_sha256,parameter_sha256=__import__('hashlib').sha256(json.dumps(mapping,sort_keys=True).encode()).hexdigest()))
     return retained
 

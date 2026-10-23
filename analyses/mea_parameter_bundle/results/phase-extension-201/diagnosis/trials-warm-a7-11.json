@@ -1,0 +1,2056 @@
+{
+  "mode": "trials",
+  "probe_sha256": "664243d3a13c4c191c89a0098abdbddb16dbfb5c79d341ab2d148627a6fdb322",
+  "source_commit": "86ee3bad6ab5521a010154e63d24eece4738c451",
+  "python": "3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]",
+  "engine_commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+  "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3",
+  "engine_path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-201-extend-the-finite-phase-test-to-353-393-3/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "nice": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "libraries": {
+    "epcsaft": "0.2.0.dev0",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1"
+  },
+  "row_tolerance": 1e-10,
+  "seed": "analyses/mea_parameter_bundle/results/phase-extension-201/A7/point-9.json",
+  "basis_mol": {
+    "MEA": 9.7292821,
+    "water": 76.9751925
+  },
+  "fit": "A7",
+  "index": 11,
+  "temperature_K": 353.15,
+  "loading": 0.05,
+  "pressure_Pa": 776066.6499761352,
+  "result": {
+    "success": true,
+    "message": "converged: residual 3.7161351380347953e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 1.5260484985701381e-10, amplification 0",
+    "solver_status": "SUCCESS",
+    "requested_tolerance_met": true,
+    "temperature": 353.15,
+    "pressure": 776066.6499761352,
+    "amounts": [
+      86.70448331749465
+    ],
+    "mole_fractions": [
+      1.0054260511091974e-07,
+      0.10118336594704072,
+      0.8875916269219466,
+      0.005613280756678708,
+      0.00541533735681984,
+      0.00019350614601381253,
+      1.6551575881992003e-06,
+      1.1631922748285834e-10,
+      1.1270549878808125e-06
+    ],
+    "molar_densities": [
+      42831.24493348327
+    ],
+    "packing_fractions": [
+      0.44460583106290624
+    ],
+    "coordinates": [
+      -16.112684267828893,
+      -2.2908209037509364,
+      -0.11924352135942044,
+      -5.182619925267335,
+      -5.218520100041364,
+      -8.550201283653566,
+      -13.311614334212623,
+      -22.87468274347507,
+      -13.695902532720842,
+      86.70448331749465,
+      -0.810567162236862,
+      -217.50771158854255,
+      -195.578360969856,
+      -311.4472219730125,
+      -35.11004274462609
+    ],
+    "residuals": [
+      -7.105427357601002e-14,
+      -7.105427357601002e-14,
+      -2.842170943040401e-14,
+      -1.4210854715202004e-13,
+      -8.526512829121202e-14,
+      -5.684341886080802e-14,
+      0.0,
+      -1.1368683772161603e-13,
+      -5.684341886080802e-14,
+      -3.736984509248686e-14,
+      3.2597090767155776e-16,
+      1.2733238580920225e-18,
+      0.0,
+      0.0,
+      -1.1102230246251565e-16
+    ],
+    "classified_residuals": [
+      -7.104124090900567e-21,
+      -7.149398872545331e-15,
+      -2.5086125638942665e-14,
+      -7.932446749020781e-16,
+      -4.591632993932759e-16,
+      -1.0938182253125212e-17,
+      0.0,
+      -1.3150186037599208e-23,
+      -6.370822385069972e-20,
+      -3.716135138034795e-14,
+      3.2597090767155776e-16,
+      1.2733238580920225e-18,
+      0.0,
+      0.0,
+      -1.1102230246251565e-16
+    ],
+    "multipliers": [
+      -217.50771158854255,
+      -195.578360969856,
+      -311.4472219730125,
+      -35.11004274462609
+    ],
+    "constraint_multipliers": [
+      18964.701548981433,
+      17052.66088334708,
+      27155.375640891467,
+      3061.2775848766237,
+      0.0
+    ],
+    "iterations": 13,
+    "evaluations": 21,
+    "hessian_calls": 14,
+    "objective": -17119.32383808944,
+    "reduced_hessian_minimum": 1.0085398669502604e-08,
+    "jacobian_rank": 15,
+    "generic_nullity": 0,
+    "convergence": {
+      "residual": 3.716135138034795e-14,
+      "floor": 1.526048498570138e-10,
+      "amplification": 0.0,
+      "contraction": null,
+      "iterations": 13,
+      "evaluations": 21,
+      "stop": "converged"
+    },
+    "closure_criterion": 1e-10,
+    "raw_residuals": [
+      -7.105427357601002e-14,
+      -7.105427357601002e-14,
+      -2.842170943040401e-14,
+      -1.4210854715202004e-13,
+      -8.526512829121202e-14,
+      -5.684341886080802e-14,
+      0.0,
+      -1.1368683772161603e-13,
+      -5.684341886080802e-14,
+      -3.736984509248686e-14,
+      3.2597090767155776e-16,
+      1.2733238580920225e-18,
+      0.0,
+      0.0,
+      -1.1102230246251565e-16
+    ],
+    "raw_objective": -17119.32383808944,
+    "roundoff_floor": 1.526048498570138e-10,
+    "phases": [
+      {
+        "identity": "L",
+        "role": "liquid",
+        "support": [
+          "carbon-dioxide",
+          "monoethanolamine",
+          "water",
+          "protonated-monoethanolamine",
+          "carbamate-anion",
+          "bicarbonate-anion",
+          "carbonate-anion",
+          "hydronium-cation",
+          "hydroxide-anion"
+        ],
+        "pressure_pa": 776066.6499761352,
+        "amount_mol": 86.70448331749465,
+        "molar_density_mol_m3": 42831.24493348327,
+        "packing_fraction": 0.44460583106290624,
+        "mechanical_class": "mechanical_class_unavailable",
+        "mole_fractions": [
+          1.0054260511091974e-07,
+          0.10118336594704072,
+          0.8875916269219466,
+          0.005613280756678708,
+          0.00541533735681984,
+          0.00019350614601381253,
+          1.6551575881992003e-06,
+          1.1631922748285834e-10,
+          1.1270549878808125e-06
+        ],
+        "molar_volume_m3_per_mol": 2.3347441839549504e-05
+      }
+    ],
+    "row_kinds": [
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Chemical",
+      "Pressure",
+      "Moiety",
+      "Moiety",
+      "Moiety",
+      "Moiety",
+      "Normalization"
+    ],
+    "pressure_density_derivatives": [
+      93721.11895959773
+    ],
+    "solver_settings": {
+      "acceptable_tol": 1e-11,
+      "constr_viol_tol": 1e-11,
+      "dual_inf_tol": 8.71909e-10,
+      "tol": 1e-11
+    },
+    "linear_solver": "ma57",
+    "rows": [
+      {
+        "index": 0,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -7.105427357601002e-14,
+        "classified": -7.104124090900567e-21
+      },
+      {
+        "index": 1,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 1,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -7.105427357601002e-14,
+        "classified": -7.149398872545331e-15
+      },
+      {
+        "index": 2,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 2,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -2.842170943040401e-14,
+        "classified": -2.5086125638942665e-14
+      },
+      {
+        "index": 3,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 3,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -1.4210854715202004e-13,
+        "classified": -7.932446749020781e-16
+      },
+      {
+        "index": 4,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 4,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -8.526512829121202e-14,
+        "classified": -4.591632993932759e-16
+      },
+      {
+        "index": 5,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 5,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -5.684341886080802e-14,
+        "classified": -1.0938182253125212e-17
+      },
+      {
+        "index": 6,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 6,
+        "eqid": "chemical_potential_stationarity",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 7,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 7,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -1.1368683772161603e-13,
+        "classified": -1.3150186037599208e-23
+      },
+      {
+        "index": 8,
+        "kind": "Chemical",
+        "phase": 0,
+        "species_or_moiety": 8,
+        "eqid": "chemical_potential_stationarity",
+        "residual": -5.684341886080802e-14,
+        "classified": -6.370822385069972e-20
+      },
+      {
+        "index": 9,
+        "kind": "Pressure",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "pressure_equality",
+        "residual": -3.736984509248686e-14,
+        "classified": -3.716135138034795e-14
+      },
+      {
+        "index": 10,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "material_balance",
+        "residual": 3.2597090767155776e-16,
+        "classified": 3.2597090767155776e-16
+      },
+      {
+        "index": 11,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 1,
+        "eqid": "material_balance",
+        "residual": 1.2733238580920225e-18,
+        "classified": 1.2733238580920225e-18
+      },
+      {
+        "index": 12,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 2,
+        "eqid": "material_balance",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 13,
+        "kind": "Moiety",
+        "phase": 0,
+        "species_or_moiety": 3,
+        "eqid": "material_balance",
+        "residual": 0.0,
+        "classified": 0.0
+      },
+      {
+        "index": 14,
+        "kind": "Normalization",
+        "phase": 0,
+        "species_or_moiety": 0,
+        "eqid": "phase_normalization",
+        "residual": -1.1102230246251565e-16,
+        "classified": -1.1102230246251565e-16
+      }
+    ],
+    "failing_classified_rows": []
+  },
+  "stability": {
+    "completed": true,
+    "message": "no witness in the recorded trial set; unresolved trials 0",
+    "candidate_coordinates": [
+      -16.112684267828893,
+      -2.2908209037509364,
+      -0.1192435213594204,
+      -5.182619925267335,
+      -5.2185201000413635,
+      -8.550201283653566,
+      -13.311614334212623,
+      -22.87468274347507,
+      -13.695902532720842,
+      86.70448331749463,
+      -0.8105671622368619
+    ],
+    "standard_over_rt": [
+      -67.05953212642328,
+      -32.14289039812594,
+      -220.15283483378187,
+      77.4160582706353,
+      -45.27316787250939,
+      -169.52146123242383,
+      281.85416123135644,
+      189.6588849609968,
+      -81.83875012614763
+    ],
+    "plane_over_rt": [
+      -72.01015976578338,
+      -35.11004274462609,
+      -217.50771158854255,
+      -13.180692125939572,
+      -129.04955312909595,
+      -311.4472219730125,
+      -333.3765725916991,
+      -195.578360969856,
+      -239.4370622072292
+    ],
+    "present_phases": [
+      {
+        "association_energy_estimate_over_rt": 1.5260841278987029e-10,
+        "association_residual": 6.717991661179939e-16,
+        "association_site_pivot_ratio": 10.740524771418311,
+        "association_site_rank": 6.0,
+        "charge_residual": 4.105992211815221e-19,
+        "chemical_plus_electric_contraction": -2.9698908845080457e-14,
+        "correction_l1_mol": 1.6601346018399768e-14,
+        "euler_defect_over_rt": 1.7763568394002505e-15,
+        "feasibility_estimate_over_rt": 3.880580285918493e-12,
+        "g_over_rt": -197.44450555574923,
+        "gradient_floor_max_si_columns": 1.526048498570138e-10,
+        "normalization_residual": -2.1690184438577682e-17,
+        "present_identity_defect_over_rt": 9.101431682451544e-14,
+        "pressure_row": -2.3949720311777038e-14,
+        "summation_estimate_over_rt": 9.690689450980463e-13,
+        "tpd_over_rt": 8.526512829121202e-14,
+        "volume_m3_per_mol": 2.3347441839549508e-05
+      }
+    ],
+    "work": {
+      "association_diagnostic_evaluations": 10.0,
+      "driver_invocations": 9.0,
+      "energy_evaluations": 632.0,
+      "evaluations": 364.0,
+      "hessian_calls": 185.0,
+      "iterations": 176.0,
+      "reconstruction_evaluations": 18.0,
+      "root_calls": 9.0,
+      "root_evaluations": 181.0,
+      "trial_driver_invocations": 9.0,
+      "trial_invocations": 9.0
+    },
+    "trials": [
+      {
+        "seed": "positive-neutral-base",
+        "evidence": "no_resolved_descent",
+        "message": "converged: residual 3.8054653675046705e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 26 iterations, contraction absent, floor 1.5260484985701448e-10, amplification 0",
+        "raw_coordinates": [
+          -16.112684267828886,
+          -2.2908209037509484,
+          -0.119243521359419,
+          -5.18261992526734,
+          -5.218520100041317,
+          -8.55020128365351,
+          -13.311614334212315,
+          -22.874682743475105,
+          -13.695902532720819,
+          1.0,
+          -0.810567162236861,
+          -6.736057837221074e-14,
+          1.1512813431057076e-13
+        ],
+        "raw_residuals": [
+          5.4492642141757e-14,
+          1.1266832863211521e-13,
+          4.1169965846255146e-14,
+          1.2420399723301875e-13,
+          8.78099837357098e-14,
+          2.5448554444977608e-15,
+          1.1224554113266133e-13,
+          6.736057837221071e-14,
+          -5.429856341631024e-14,
+          3.8054653675046705e-14,
+          0.0,
+          5.551115123125783e-17,
+          2.220446049250313e-16
+        ],
+        "composition": [
+          1.0054260511092045e-07,
+          0.1011833659470395,
+          0.8875916269219477,
+          0.005613280756678824,
+          0.005415337356819953,
+          0.00019350614601381814,
+          1.6551575881996657e-06,
+          1.1631922748285723e-10,
+          1.127054987880809e-06
+        ],
+        "split_coordinates": [],
+        "basis": [
+          [
+            0.6666666666666667,
+            0.6666666666666665,
+            0.6666666666666664,
+            0.9999999999999999,
+            0.3333333333333334,
+            0.3333333333333327,
+            0.0,
+            0.9999999999999997,
+            0.3333333333333334
+          ],
+          [
+            0.3333333333333334,
+            0.33333333333333315,
+            0.33333333333333304,
+            0.0,
+            0.6666666666666666,
+            0.6666666666666663,
+            0.9999999999999999,
+            0.0,
+            0.6666666666666666
+          ]
+        ],
+        "row_transformation": [
+          [
+            0.6666666666666665,
+            0.3333333333333332
+          ],
+          [
+            0.3333333333333332,
+            -0.33333333333333315
+          ]
+        ],
+        "quantities": {
+          "association_energy_estimate_over_rt": 1.5260841278987083e-10,
+          "association_residual": 5.751421562132939e-16,
+          "association_site_pivot_ratio": 10.740524771418333,
+          "association_site_rank": 6.0,
+          "charge_residual": -5.61159327555974e-20,
+          "euler_defect_over_rt": 0.0,
+          "g_over_rt": -197.44450555574946,
+          "gradient_floor_max_si_columns": 1.5260484985701435e-10,
+          "normalization_residual": 2.1249875536771216e-16,
+          "pressure_row": 7.307279177471134e-15,
+          "raw_objective_over_rt": 2.220446049250313e-15,
+          "reconstruction_l1": 2.93050744643028e-16,
+          "summation_estimate_over_rt": 9.690689450980475e-13,
+          "tpd_over_rt": 5.684341886080802e-14,
+          "trial_dual_over_rt": -6.531007477950243e-15,
+          "trial_identity_defect_over_rt": 6.337442633875826e-14,
+          "volume_m3_per_mol": 2.3347441839549457e-05
+        },
+        "split_checks": [],
+        "donor": null,
+        "resolved_descent": false,
+        "phase": {
+          "name": "trial-L",
+          "kind": "liquid",
+          "support": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        "optimizer": {
+          "success": true,
+          "message": "converged: residual 3.8054653675046705e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 26 iterations, contraction absent, floor 1.5260484985701448e-10, amplification 0",
+          "solver_status": "SUCCESS",
+          "requested_tolerance_met": true,
+          "temperature": 353.15,
+          "pressure": 776066.6499761352,
+          "amounts": [
+            1.0
+          ],
+          "mole_fractions": [
+            1.0054260511092042e-07,
+            0.10118336594703947,
+            0.8875916269219475,
+            0.005613280756678676,
+            0.0054153373568200935,
+            0.0001935061460138231,
+            1.6551575881997083e-06,
+            1.1631922748285418e-10,
+            1.127054987880838e-06
+          ],
+          "molar_densities": [
+            42831.24493348338
+          ],
+          "packing_fractions": [
+            0.4446058310629067
+          ],
+          "coordinates": [
+            -16.112684267828886,
+            -2.2908209037509484,
+            -0.119243521359419,
+            -5.18261992526734,
+            -5.218520100041317,
+            -8.55020128365351,
+            -13.311614334212315,
+            -22.874682743475105,
+            -13.695902532720819,
+            1.0,
+            -0.810567162236861,
+            -6.736057837221074e-14,
+            1.1512813431057076e-13
+          ],
+          "residuals": [
+            5.4492642141757e-14,
+            1.1266832863211521e-13,
+            4.1169965846255146e-14,
+            1.2420399723301875e-13,
+            8.78099837357098e-14,
+            2.5448554444977608e-15,
+            1.1224554113266133e-13,
+            6.736057837221071e-14,
+            -5.429856341631024e-14,
+            3.8054653675046705e-14,
+            0.0,
+            5.551115123125783e-17,
+            2.220446049250313e-16
+          ],
+          "classified_residuals": [
+            5.478832200309376e-21,
+            1.1400160726624622e-14,
+            3.6542116965798625e-14,
+            6.971919075706759e-16,
+            4.755206852257542e-16,
+            4.924451692270565e-19,
+            1.8578405914730693e-19,
+            7.835330439053807e-24,
+            -6.119746673311647e-20,
+            3.8054653675046705e-14,
+            0.0,
+            5.551115123125783e-17,
+            2.220446049250313e-16
+          ],
+          "multipliers": [
+            -6.736057837221074e-14,
+            1.1512813431057076e-13
+          ],
+          "constraint_multipliers": [
+            6.736057837221074e-14,
+            -1.1512813431057076e-13,
+            0.0
+          ],
+          "iterations": 26,
+          "evaluations": 31,
+          "hessian_calls": 27,
+          "objective": 2.220446049250313e-15,
+          "reduced_hessian_minimum": 1.1631922778286496e-10,
+          "jacobian_rank": 13,
+          "generic_nullity": 0,
+          "convergence": {
+            "residual": 3.8054653675046705e-14,
+            "floor": 1.5260484985701448e-10,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 26,
+            "evaluations": 31,
+            "stop": "converged"
+          },
+          "closure_criterion": 1e-10
+        }
+      },
+      {
+        "seed": "near-pure-0",
+        "evidence": "no_resolved_descent",
+        "message": "stalled: residual 3.5381673851336821e-06 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 21 iterations, contraction absent, floor 1.4504848519303763e-14, amplification 0",
+        "raw_coordinates": [
+          -7.656019733844677,
+          -5.40065850542669,
+          -0.004999360811614757,
+          -17.03438575020568,
+          -18.420679372564923,
+          -18.420679897446256,
+          -18.420680718573287,
+          -18.420680361898558,
+          -18.42068006763465,
+          1.0000000000000009,
+          -6.035183057273001,
+          -3.8324263971358543,
+          16.25246326519725
+        ],
+        "raw_residuals": [
+          1.1008305378368277e-10,
+          1.6073764541602031e-10,
+          -1.3811174426336947e-13,
+          39.96984857759111,
+          18.487290021239907,
+          48.233700788553776,
+          353.81672953382525,
+          200.5128706536922,
+          65.67670326187272,
+          0.0,
+          1.1102230246251565e-16,
+          0.0,
+          0.0
+        ],
+        "composition": [
+          0.0004731870780381079,
+          0.004513607728598094,
+          0.9950131151933053,
+          4.0000025490227345e-08,
+          1.0000013736985859e-08,
+          1.000000843265558e-08,
+          1.0000000221381714e-08,
+          1.0000003852947885e-08,
+          1.0000006730770357e-08
+        ],
+        "split_coordinates": [],
+        "basis": [
+          [
+            0.6666666666666667,
+            0.6666666666666665,
+            0.6666666666666664,
+            0.9999999999999999,
+            0.3333333333333334,
+            0.3333333333333327,
+            0.0,
+            0.9999999999999997,
+            0.3333333333333334
+          ],
+          [
+            0.3333333333333334,
+            0.33333333333333315,
+            0.33333333333333304,
+            0.0,
+            0.6666666666666666,
+            0.6666666666666663,
+            0.9999999999999999,
+            0.0,
+            0.6666666666666666
+          ]
+        ],
+        "row_transformation": [
+          [
+            0.6666666666666665,
+            0.3333333333333332
+          ],
+          [
+            0.3333333333333332,
+            -0.33333333333333315
+          ]
+        ],
+        "quantities": {
+          "association_energy_estimate_over_rt": 1.455603458719647e-14,
+          "association_residual": 1.481398985186377e-16,
+          "association_site_pivot_ratio": 1.0705039069966038,
+          "association_site_rank": 6.0,
+          "charge_residual": 1.6543612251060553e-24,
+          "euler_defect_over_rt": 0.0,
+          "g_over_rt": -213.75304025006517,
+          "gradient_floor_max_si_columns": 1.450484851930375e-14,
+          "normalization_residual": -5.192377975681743e-17,
+          "pressure_row": 0.0,
+          "raw_objective_over_rt": 2.8625452897123473,
+          "reconstruction_l1": 5.609062847347879e-16,
+          "summation_estimate_over_rt": 1.0532921657089348e-12,
+          "tpd_over_rt": 2.862545289712301,
+          "trial_dual_over_rt": 2.8625368236418485,
+          "trial_identity_defect_over_rt": 8.466070452683994e-06,
+          "volume_m3_per_mol": 0.0035288936540492995
+        },
+        "split_checks": [],
+        "donor": null,
+        "resolved_descent": false,
+        "phase": {
+          "name": "trial-L",
+          "kind": "liquid",
+          "support": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        "optimizer": {
+          "success": false,
+          "message": "stalled: residual 3.5381673851336821e-06 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 21 iterations, contraction absent, floor 1.4504848519303763e-14, amplification 0",
+          "solver_status": "SUCCESS",
+          "requested_tolerance_met": false,
+          "temperature": null,
+          "pressure": null,
+          "amounts": [],
+          "mole_fractions": [],
+          "molar_densities": [],
+          "packing_fractions": [],
+          "coordinates": [],
+          "residuals": [
+            1.1008305378368277e-10,
+            1.6073764541602031e-10,
+            -1.3811174426336947e-13,
+            39.96984857759111,
+            18.487290021239907,
+            48.233700788553776,
+            353.81672953382525,
+            200.5128706536922,
+            65.67670326187272,
+            0.0,
+            1.1102230246251565e-16,
+            0.0,
+            0.0
+          ],
+          "classified_residuals": [
+            5.2089878561412785e-14,
+            7.255066786264102e-13,
+            -1.3742299690427653e-13,
+            1.5987949545438546e-06,
+            1.848731537449469e-07,
+            4.823374161869351e-07,
+            3.538167385133682e-06,
+            2.0051294726041266e-06,
+            6.567674768020577e-07,
+            0.0,
+            1.1102230246251565e-16,
+            0.0,
+            0.0
+          ],
+          "multipliers": [],
+          "constraint_multipliers": [],
+          "iterations": 21,
+          "evaluations": 154,
+          "hessian_calls": 22,
+          "objective": 2.8625452897123473,
+          "reduced_hessian_minimum": 0.0,
+          "jacobian_rank": 13,
+          "generic_nullity": 0,
+          "convergence": {
+            "residual": 3.538167385133682e-06,
+            "floor": 1.4504848519303763e-14,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 21,
+            "evaluations": 154,
+            "stop": "stalled"
+          },
+          "closure_criterion": 1e-10
+        }
+      },
+      {
+        "seed": "near-pure-1",
+        "evidence": "no_resolved_descent",
+        "message": "converged: residual 1.2228345503308921e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 21 iterations, contraction absent, floor 1.5260484985701456e-10, amplification 0",
+        "raw_coordinates": [
+          -16.11268426782888,
+          -2.2908209037509555,
+          -0.11924352135941821,
+          -5.182619925267328,
+          -5.218520100041363,
+          -8.550201283653525,
+          -13.31161433421218,
+          -22.87468274347504,
+          -13.69590253272078,
+          1.0,
+          -0.8105671622368615,
+          -3.2253754045465456e-14,
+          5.5819292314890766e-14
+        ],
+        "raw_residuals": [
+          -1.3091139629255542e-14,
+          -3.48515109119086e-14,
+          -7.762069111054778e-15,
+          -5.301137424574657e-14,
+          -4.067246490997402e-14,
+          1.9600992356319854e-15,
+          3.9892805857157335e-13,
+          3.2253754045465444e-14,
+          3.0381808666035996e-14,
+          -1.2228345503308921e-14,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "composition": [
+          1.0054260511092116e-07,
+          0.10118336594703878,
+          0.8875916269219484,
+          0.005613280756678733,
+          0.0054153373568198585,
+          0.00019350614601382077,
+          1.655157588199935e-06,
+          1.1631922748286143e-10,
+          1.1270549878808843e-06
+        ],
+        "split_coordinates": [],
+        "basis": [
+          [
+            0.6666666666666667,
+            0.6666666666666665,
+            0.6666666666666664,
+            0.9999999999999999,
+            0.3333333333333334,
+            0.3333333333333327,
+            0.0,
+            0.9999999999999997,
+            0.3333333333333334
+          ],
+          [
+            0.3333333333333334,
+            0.33333333333333315,
+            0.33333333333333304,
+            0.0,
+            0.6666666666666666,
+            0.6666666666666663,
+            0.9999999999999999,
+            0.0,
+            0.6666666666666666
+          ]
+        ],
+        "row_transformation": [
+          [
+            0.6666666666666665,
+            0.3333333333333332
+          ],
+          [
+            0.3333333333333332,
+            -0.33333333333333315
+          ]
+        ],
+        "quantities": {
+          "association_energy_estimate_over_rt": 1.5260841278987093e-10,
+          "association_residual": 5.751421562132986e-16,
+          "association_site_pivot_ratio": 10.740524771418322,
+          "association_site_rank": 6.0,
+          "charge_residual": 1.7025362239811437e-19,
+          "euler_defect_over_rt": 3.552713678800501e-15,
+          "g_over_rt": -197.44450555574957,
+          "gradient_floor_max_si_columns": 1.5260484985701445e-10,
+          "normalization_residual": 2.985706435776683e-17,
+          "pressure_row": -1.2568095497757271e-14,
+          "raw_objective_over_rt": -3.774758283725532e-15,
+          "reconstruction_l1": 1.9439194588044532e-17,
+          "summation_estimate_over_rt": 9.690689450980482e-13,
+          "tpd_over_rt": 5.684341886080802e-14,
+          "trial_dual_over_rt": -2.896071925346725e-15,
+          "trial_identity_defect_over_rt": 5.973949078615474e-14,
+          "volume_m3_per_mol": 2.3347441839549423e-05
+        },
+        "split_checks": [],
+        "donor": null,
+        "resolved_descent": false,
+        "phase": {
+          "name": "trial-L",
+          "kind": "liquid",
+          "support": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        "optimizer": {
+          "success": true,
+          "message": "converged: residual 1.2228345503308921e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 21 iterations, contraction absent, floor 1.5260484985701456e-10, amplification 0",
+          "solver_status": "SUCCESS",
+          "requested_tolerance_met": true,
+          "temperature": 353.15,
+          "pressure": 776066.6499761352,
+          "amounts": [
+            1.0
+          ],
+          "mole_fractions": [
+            1.0054260511092116e-07,
+            0.10118336594703878,
+            0.8875916269219484,
+            0.005613280756678742,
+            0.005415337356819849,
+            0.00019350614601382042,
+            1.6551575881999321e-06,
+            1.1631922748286163e-10,
+            1.1270549878808824e-06
+          ],
+          "molar_densities": [
+            42831.24493348342
+          ],
+          "packing_fractions": [
+            0.44460583106290646
+          ],
+          "coordinates": [
+            -16.11268426782888,
+            -2.2908209037509555,
+            -0.11924352135941821,
+            -5.182619925267328,
+            -5.218520100041363,
+            -8.550201283653525,
+            -13.31161433421218,
+            -22.87468274347504,
+            -13.69590253272078,
+            1.0,
+            -0.8105671622368615,
+            -3.2253754045465456e-14,
+            5.5819292314890766e-14
+          ],
+          "residuals": [
+            -1.3091139629255542e-14,
+            -3.48515109119086e-14,
+            -7.762069111054778e-15,
+            -5.301137424574657e-14,
+            -4.067246490997402e-14,
+            1.9600992356319854e-15,
+            3.9892805857157335e-13,
+            3.2253754045465444e-14,
+            3.0381808666035996e-14,
+            -1.2228345503308921e-14,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "classified_residuals": [
+            -1.3162172821961707e-21,
+            -3.526393182406863e-15,
+            -6.889547550561712e-15,
+            -2.975677269387443e-16,
+            -2.2025511862092677e-16,
+            3.792912488917808e-19,
+            6.602888032906066e-19,
+            3.7517317539907634e-24,
+            3.424196899789849e-20,
+            -1.2228345503308921e-14,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "multipliers": [
+            -3.2253754045465456e-14,
+            5.5819292314890766e-14
+          ],
+          "constraint_multipliers": [
+            3.2253754045465456e-14,
+            -5.5819292314890766e-14,
+            0.0
+          ],
+          "iterations": 21,
+          "evaluations": 26,
+          "hessian_calls": 22,
+          "objective": -3.774758283725532e-15,
+          "reduced_hessian_minimum": 1.1631922775900537e-10,
+          "jacobian_rank": 13,
+          "generic_nullity": 0,
+          "convergence": {
+            "residual": 1.2228345503308921e-14,
+            "floor": 1.5260484985701456e-10,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 21,
+            "evaluations": 26,
+            "stop": "converged"
+          },
+          "closure_criterion": 1e-10
+        }
+      },
+      {
+        "seed": "near-pure-2",
+        "evidence": "no_resolved_descent",
+        "message": "converged: residual 4.7902094920385562e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 18 iterations, contraction absent, floor 1.5260484985701396e-10, amplification 0",
+        "raw_coordinates": [
+          -16.112684267828875,
+          -2.2908209037509604,
+          -0.1192435213594177,
+          -5.18261992526731,
+          -5.218520100041356,
+          -8.550201283653557,
+          -13.311614334212397,
+          -22.8746827434751,
+          -13.695902532720797,
+          0.9999999999999997,
+          -0.8105671622368631,
+          -4.912093034431844e-15,
+          3.921302438953376e-14
+        ],
+        "raw_residuals": [
+          -7.552148249803263e-14,
+          -1.3813806108689145e-13,
+          -4.532341622822836e-14,
+          -1.514073088327902e-13,
+          -1.2398063492129257e-13,
+          -5.2926361345282557e-14,
+          1.881606510536983e-13,
+          -5.193132582637617e-14,
+          -2.4504651914878556e-14,
+          -4.790209492038558e-14,
+          0.0,
+          5.551115123125783e-17,
+          0.0
+        ],
+        "composition": [
+          1.0054260511092152e-07,
+          0.10118336594703829,
+          0.8875916269219489,
+          0.005613280756678799,
+          0.00541533735681993,
+          0.00019350614601381595,
+          1.655157588199588e-06,
+          1.1631922748285401e-10,
+          1.1270549878808722e-06
+        ],
+        "split_coordinates": [],
+        "basis": [
+          [
+            0.6666666666666667,
+            0.6666666666666665,
+            0.6666666666666664,
+            0.9999999999999999,
+            0.3333333333333334,
+            0.3333333333333327,
+            0.0,
+            0.9999999999999997,
+            0.3333333333333334
+          ],
+          [
+            0.3333333333333334,
+            0.33333333333333315,
+            0.33333333333333304,
+            0.0,
+            0.6666666666666666,
+            0.6666666666666663,
+            0.9999999999999999,
+            0.0,
+            0.6666666666666666
+          ]
+        ],
+        "row_transformation": [
+          [
+            0.6666666666666665,
+            0.3333333333333332
+          ],
+          [
+            0.3333333333333332,
+            -0.33333333333333315
+          ]
+        ],
+        "quantities": {
+          "association_energy_estimate_over_rt": 1.5260841278987034e-10,
+          "association_residual": 1.1502843124265906e-15,
+          "association_site_pivot_ratio": 10.740524771418306,
+          "association_site_rank": 6.0,
+          "charge_residual": 4.969965818014607e-19,
+          "euler_defect_over_rt": 0.0,
+          "g_over_rt": -197.44450555574969,
+          "gradient_floor_max_si_columns": 1.5260484985701386e-10,
+          "normalization_residual": 1.6171637732273828e-16,
+          "pressure_row": -6.251134468166459e-14,
+          "raw_objective_over_rt": 3.108624468950437e-15,
+          "reconstruction_l1": 9.71419745769105e-17,
+          "summation_estimate_over_rt": 9.690689450980486e-13,
+          "tpd_over_rt": 8.526512829121202e-14,
+          "trial_dual_over_rt": 9.796279440223346e-15,
+          "trial_identity_defect_over_rt": 7.546884885098867e-14,
+          "volume_m3_per_mol": 2.334744183954945e-05
+        },
+        "split_checks": [],
+        "donor": null,
+        "resolved_descent": false,
+        "phase": {
+          "name": "trial-L",
+          "kind": "liquid",
+          "support": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        "optimizer": {
+          "success": true,
+          "message": "converged: residual 4.7902094920385562e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 18 iterations, contraction absent, floor 1.5260484985701396e-10, amplification 0",
+          "solver_status": "SUCCESS",
+          "requested_tolerance_met": true,
+          "temperature": 353.15,
+          "pressure": 776066.6499761352,
+          "amounts": [
+            0.9999999999999997
+          ],
+          "mole_fractions": [
+            1.0054260511092152e-07,
+            0.10118336594703829,
+            0.8875916269219489,
+            0.005613280756678847,
+            0.005415337356819883,
+            0.00019350614601381424,
+            1.6551575881995734e-06,
+            1.1631922748285503e-10,
+            1.1270549878808622e-06
+          ],
+          "molar_densities": [
+            42831.244933483365
+          ],
+          "packing_fractions": [
+            0.44460583106290574
+          ],
+          "coordinates": [
+            -16.112684267828875,
+            -2.2908209037509604,
+            -0.1192435213594177,
+            -5.18261992526731,
+            -5.218520100041356,
+            -8.550201283653557,
+            -13.311614334212397,
+            -22.8746827434751,
+            -13.695902532720797,
+            0.9999999999999997,
+            -0.8105671622368631,
+            -4.912093034431844e-15,
+            3.921302438953376e-14
+          ],
+          "residuals": [
+            -7.552148249803263e-14,
+            -1.3813806108689145e-13,
+            -4.532341622822836e-14,
+            -1.514073088327902e-13,
+            -1.2398063492129257e-13,
+            -5.2926361345282557e-14,
+            1.881606510536983e-13,
+            -5.193132582637617e-14,
+            -2.4504651914878556e-14,
+            -4.790209492038558e-14,
+            0.0,
+            5.551115123125783e-17,
+            0.0
+          ],
+          "classified_residuals": [
+            -7.593126592191062e-21,
+            -1.3977273986169264e-14,
+            -4.022868474767386e-14,
+            -8.498917330916322e-16,
+            -6.713969638115231e-16,
+            -1.0241576206460137e-17,
+            3.1143552939210066e-19,
+            -6.040611702284512e-24,
+            -2.761809016694819e-20,
+            -4.790209492038556e-14,
+            0.0,
+            5.551115123125783e-17,
+            0.0
+          ],
+          "multipliers": [
+            -4.912093034431844e-15,
+            3.921302438953376e-14
+          ],
+          "constraint_multipliers": [
+            4.912093034431844e-15,
+            -3.921302438953376e-14,
+            0.0
+          ],
+          "iterations": 18,
+          "evaluations": 34,
+          "hessian_calls": 19,
+          "objective": 3.108624468950437e-15,
+          "reduced_hessian_minimum": 1.1631922779031598e-10,
+          "jacobian_rank": 13,
+          "generic_nullity": 0,
+          "convergence": {
+            "residual": 4.790209492038556e-14,
+            "floor": 1.5260484985701396e-10,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 18,
+            "evaluations": 34,
+            "stop": "converged"
+          },
+          "closure_criterion": 1e-10
+        }
+      },
+      {
+        "seed": "positive-neutral-base",
+        "evidence": "no_resolved_descent",
+        "message": "converged: residual 8.8374925215175898e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 1.4504773820213046e-14, amplification 0",
+        "raw_coordinates": [
+          -7.656014849999741,
+          -5.40065801524641,
+          -0.004999274906621677,
+          1.0000000000000002,
+          -6.035185897621658,
+          2.862536911463095
+        ],
+        "raw_residuals": [
+          -8.881784197001252e-16,
+          -4.440892098500626e-16,
+          8.881784197001252e-16,
+          0.0,
+          1.1102230246251565e-16,
+          0.0
+        ],
+        "composition": [
+          0.0004731893890160663,
+          0.004513609941080135,
+          0.9950132006699038,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "split_coordinates": [],
+        "basis": [
+          [
+            1.0,
+            1.0,
+            0.9999999999999998,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "row_transformation": [
+          [
+            1.0
+          ]
+        ],
+        "quantities": {
+          "association_energy_estimate_over_rt": 1.455595976410544e-14,
+          "association_residual": 1.4814020834375107e-16,
+          "association_site_pivot_ratio": 1.0705037239455657,
+          "association_site_rank": 6.0,
+          "charge_residual": 0.0,
+          "euler_defect_over_rt": 2.7755575615628914e-17,
+          "g_over_rt": -213.7530548481054,
+          "gradient_floor_max_si_columns": 1.4504773820213053e-14,
+          "normalization_residual": 1.1102230246251565e-16,
+          "pressure_row": 2.0059492719604141e-16,
+          "raw_objective_over_rt": 2.8625369114630956,
+          "reconstruction_l1": 0.0,
+          "summation_estimate_over_rt": 1.0532921930853334e-12,
+          "tpd_over_rt": 2.8625369114630814,
+          "trial_dual_over_rt": 2.8625369114630947,
+          "trial_identity_defect_over_rt": -1.3322676295501878e-14,
+          "volume_m3_per_mol": 0.0035289032787988433
+        },
+        "split_checks": [],
+        "donor": null,
+        "resolved_descent": false,
+        "phase": {
+          "name": "trial-V",
+          "kind": "vapor",
+          "support": [
+            0,
+            1,
+            2
+          ]
+        },
+        "optimizer": {
+          "success": true,
+          "message": "converged: residual 8.8374925215175898e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 1.4504773820213046e-14, amplification 0",
+          "solver_status": "SUCCESS",
+          "requested_tolerance_met": true,
+          "temperature": 353.15,
+          "pressure": 776066.6499761352,
+          "amounts": [
+            1.0000000000000002
+          ],
+          "mole_fractions": [
+            0.0004731893890160663,
+            0.004513609941080135,
+            0.9950132006699038,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "molar_densities": [
+            283.37415933382476
+          ],
+          "packing_fractions": [
+            0.002393051623391962
+          ],
+          "coordinates": [
+            -7.656014849999741,
+            -5.40065801524641,
+            -0.004999274906621677,
+            1.0000000000000002,
+            -6.035185897621658,
+            2.862536911463095
+          ],
+          "residuals": [
+            -8.881784197001252e-16,
+            -4.440892098500626e-16,
+            8.881784197001252e-16,
+            0.0,
+            1.1102230246251565e-16,
+            0.0
+          ],
+          "classified_residuals": [
+            -4.202766037551577e-19,
+            -2.004445472305665e-18,
+            8.83749252151759e-16,
+            0.0,
+            1.1102230246251565e-16,
+            0.0
+          ],
+          "multipliers": [
+            2.862536911463095
+          ],
+          "constraint_multipliers": [
+            -2.862536911463095,
+            0.0
+          ],
+          "iterations": 13,
+          "evaluations": 16,
+          "hessian_calls": 14,
+          "objective": 2.8625369114630956,
+          "reduced_hessian_minimum": 0.00047340595426609755,
+          "jacobian_rank": 6,
+          "generic_nullity": 0,
+          "convergence": {
+            "residual": 8.83749252151759e-16,
+            "floor": 1.4504773820213046e-14,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 13,
+            "evaluations": 16,
+            "stop": "converged"
+          },
+          "closure_criterion": 1e-10
+        }
+      },
+      {
+        "seed": "near-pure-0",
+        "evidence": "no_resolved_descent",
+        "message": "converged: residual 4.4187462607587949e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 16 iterations, contraction absent, floor 1.4504773820213046e-14, amplification 0",
+        "raw_coordinates": [
+          -7.656014849999739,
+          -5.4006580152464085,
+          -0.004999274906621717,
+          1.0000000000000002,
+          -6.035185897621658,
+          2.8625369114630965
+        ],
+        "raw_residuals": [
+          -4.440892098500626e-16,
+          0.0,
+          -4.440892098500626e-16,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "composition": [
+          0.00047318938901606713,
+          0.004513609941080143,
+          0.9950132006699038,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "split_coordinates": [],
+        "basis": [
+          [
+            1.0,
+            1.0,
+            0.9999999999999998,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "row_transformation": [
+          [
+            1.0
+          ]
+        ],
+        "quantities": {
+          "association_energy_estimate_over_rt": 1.455595976410544e-14,
+          "association_residual": 1.4814020834375107e-16,
+          "association_site_pivot_ratio": 1.0705037239455657,
+          "association_site_rank": 6.0,
+          "charge_residual": 0.0,
+          "euler_defect_over_rt": 2.7755575615628914e-17,
+          "g_over_rt": -213.7530548481054,
+          "gradient_floor_max_si_columns": 1.4504773820213053e-14,
+          "normalization_residual": 1.1102230246251565e-16,
+          "pressure_row": 2.0059492719604141e-16,
+          "raw_objective_over_rt": 2.8625369114630956,
+          "reconstruction_l1": 0.0,
+          "summation_estimate_over_rt": 1.0532921930853334e-12,
+          "tpd_over_rt": 2.8625369114630814,
+          "trial_dual_over_rt": 2.8625369114630965,
+          "trial_identity_defect_over_rt": -1.509903313490213e-14,
+          "volume_m3_per_mol": 0.0035289032787988433
+        },
+        "split_checks": [],
+        "donor": null,
+        "resolved_descent": false,
+        "phase": {
+          "name": "trial-V",
+          "kind": "vapor",
+          "support": [
+            0,
+            1,
+            2
+          ]
+        },
+        "optimizer": {
+          "success": true,
+          "message": "converged: residual 4.4187462607587949e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 16 iterations, contraction absent, floor 1.4504773820213046e-14, amplification 0",
+          "solver_status": "SUCCESS",
+          "requested_tolerance_met": true,
+          "temperature": 353.15,
+          "pressure": 776066.6499761352,
+          "amounts": [
+            1.0000000000000002
+          ],
+          "mole_fractions": [
+            0.00047318938901606713,
+            0.004513609941080143,
+            0.9950132006699038,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "molar_densities": [
+            283.37415933382476
+          ],
+          "packing_fractions": [
+            0.002393051623391962
+          ],
+          "coordinates": [
+            -7.656014849999739,
+            -5.4006580152464085,
+            -0.004999274906621717,
+            1.0000000000000002,
+            -6.035185897621658,
+            2.8625369114630965
+          ],
+          "residuals": [
+            -4.440892098500626e-16,
+            0.0,
+            -4.440892098500626e-16,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "classified_residuals": [
+            -2.101383018775792e-19,
+            0.0,
+            -4.418746260758795e-16,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "multipliers": [
+            2.8625369114630965
+          ],
+          "constraint_multipliers": [
+            -2.8625369114630965,
+            0.0
+          ],
+          "iterations": 16,
+          "evaluations": 20,
+          "hessian_calls": 17,
+          "objective": 2.8625369114630956,
+          "reduced_hessian_minimum": 0.0004734059542661328,
+          "jacobian_rank": 6,
+          "generic_nullity": 0,
+          "convergence": {
+            "residual": 4.418746260758795e-16,
+            "floor": 1.4504773820213046e-14,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 16,
+            "evaluations": 20,
+            "stop": "converged"
+          },
+          "closure_criterion": 1e-10
+        }
+      },
+      {
+        "seed": "near-pure-1",
+        "evidence": "no_resolved_descent",
+        "message": "converged: residual 5.0497813674636429e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 21 iterations, contraction absent, floor 1.5711231492605671e-10, amplification 0",
+        "raw_coordinates": [
+          -16.174040616860943,
+          -2.247309018918994,
+          -0.11169534773806294,
+          1.0000000000000002,
+          -0.8113886395012283,
+          0.010216284025609607
+        ],
+        "raw_residuals": [
+          2.252018016513091e-14,
+          6.977057820378718e-15,
+          5.646524914304507e-15,
+          4.360707019350454e-15,
+          2.220446049250313e-16,
+          0.0
+        ],
+        "composition": [
+          9.455911742152029e-08,
+          0.10568323384152734,
+          0.8943166715993554,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "split_coordinates": [],
+        "basis": [
+          [
+            1.0,
+            1.0,
+            0.9999999999999998,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "row_transformation": [
+          [
+            1.0
+          ]
+        ],
+        "quantities": {
+          "association_energy_estimate_over_rt": 1.571159343771463e-10,
+          "association_residual": 5.691864553370008e-16,
+          "association_site_pivot_ratio": 10.892950959305892,
+          "association_site_rank": 6.0,
+          "charge_residual": 0.0,
+          "euler_defect_over_rt": 8.881784197001252e-16,
+          "g_over_rt": -198.2211060578158,
+          "gradient_floor_max_si_columns": 1.571123149260567e-10,
+          "normalization_residual": 1.1102230246251565e-16,
+          "pressure_row": 4.360707019350454e-15,
+          "raw_objective_over_rt": 0.010216284025608148,
+          "reconstruction_l1": 0.0,
+          "summation_estimate_over_rt": 9.68365886238181e-13,
+          "tpd_over_rt": 0.010216284025602818,
+          "trial_dual_over_rt": 0.010216284025609607,
+          "trial_identity_defect_over_rt": -6.789707684973223e-15,
+          "volume_m3_per_mol": 2.3037348098980166e-05
+        },
+        "split_checks": [],
+        "donor": null,
+        "resolved_descent": false,
+        "phase": {
+          "name": "trial-V",
+          "kind": "vapor",
+          "support": [
+            0,
+            1,
+            2
+          ]
+        },
+        "optimizer": {
+          "success": true,
+          "message": "converged: residual 5.0497813674636429e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 21 iterations, contraction absent, floor 1.5711231492605671e-10, amplification 0",
+          "solver_status": "SUCCESS",
+          "requested_tolerance_met": true,
+          "temperature": 353.15,
+          "pressure": 776066.6499761352,
+          "amounts": [
+            1.0000000000000002
+          ],
+          "mole_fractions": [
+            9.455911742152029e-08,
+            0.10568323384152734,
+            0.8943166715993554,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "molar_densities": [
+            43407.774006951295
+          ],
+          "packing_fractions": [
+            0.44424074745555553
+          ],
+          "coordinates": [
+            -16.174040616860943,
+            -2.247309018918994,
+            -0.11169534773806294,
+            1.0000000000000002,
+            -0.8113886395012283,
+            0.010216284025609607
+          ],
+          "residuals": [
+            2.252018016513091e-14,
+            6.977057820378718e-15,
+            5.646524914304507e-15,
+            4.360707019350454e-15,
+            2.220446049250313e-16,
+            0.0
+          ],
+          "classified_residuals": [
+            2.1294883605884066e-21,
+            7.373580331569412e-16,
+            5.049781367463643e-15,
+            4.360707019350455e-15,
+            2.220446049250313e-16,
+            0.0
+          ],
+          "multipliers": [
+            0.010216284025609607
+          ],
+          "constraint_multipliers": [
+            -0.010216284025609607,
+            0.0
+          ],
+          "iterations": 21,
+          "evaluations": 24,
+          "hessian_calls": 22,
+          "objective": 0.010216284025608148,
+          "reduced_hessian_minimum": 9.455905483021157e-08,
+          "jacobian_rank": 6,
+          "generic_nullity": 0,
+          "convergence": {
+            "residual": 5.049781367463643e-15,
+            "floor": 1.571123149260567e-10,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 21,
+            "evaluations": 24,
+            "stop": "converged"
+          },
+          "closure_criterion": 1e-10
+        }
+      },
+      {
+        "seed": "near-pure-2",
+        "evidence": "no_resolved_descent",
+        "message": "converged: residual 2.0044454723056667e-18 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 26 iterations, contraction absent, floor 1.4504773820213046e-14, amplification 0",
+        "raw_coordinates": [
+          -7.65601484999974,
+          -5.400658015246409,
+          -0.004999274906621749,
+          1.0,
+          -6.035185897621658,
+          2.862536911463096
+        ],
+        "raw_residuals": [
+          -8.881784197001252e-16,
+          -4.440892098500626e-16,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "composition": [
+          0.0004731893890160667,
+          0.004513609941080139,
+          0.9950132006699038,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "split_coordinates": [],
+        "basis": [
+          [
+            1.0,
+            1.0,
+            0.9999999999999998,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "row_transformation": [
+          [
+            1.0
+          ]
+        ],
+        "quantities": {
+          "association_energy_estimate_over_rt": 1.455595976410544e-14,
+          "association_residual": 1.4814020834375107e-16,
+          "association_site_pivot_ratio": 1.0705037239455657,
+          "association_site_rank": 6.0,
+          "charge_residual": 0.0,
+          "euler_defect_over_rt": 2.7755575615628914e-17,
+          "g_over_rt": -213.7530548481054,
+          "gradient_floor_max_si_columns": 1.4504773820213053e-14,
+          "normalization_residual": 1.1102230246251565e-16,
+          "pressure_row": 2.0059492719604141e-16,
+          "raw_objective_over_rt": 2.862536911463095,
+          "reconstruction_l1": 0.0,
+          "summation_estimate_over_rt": 1.0532921930853334e-12,
+          "tpd_over_rt": 2.8625369114630814,
+          "trial_dual_over_rt": 2.8625369114630956,
+          "trial_identity_defect_over_rt": -1.4210854715202004e-14,
+          "volume_m3_per_mol": 0.0035289032787988433
+        },
+        "split_checks": [],
+        "donor": null,
+        "resolved_descent": false,
+        "phase": {
+          "name": "trial-V",
+          "kind": "vapor",
+          "support": [
+            0,
+            1,
+            2
+          ]
+        },
+        "optimizer": {
+          "success": true,
+          "message": "converged: residual 2.0044454723056667e-18 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 26 iterations, contraction absent, floor 1.4504773820213046e-14, amplification 0",
+          "solver_status": "SUCCESS",
+          "requested_tolerance_met": true,
+          "temperature": 353.15,
+          "pressure": 776066.6499761352,
+          "amounts": [
+            1.0
+          ],
+          "mole_fractions": [
+            0.0004731893890160667,
+            0.004513609941080139,
+            0.9950132006699038,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "molar_densities": [
+            283.37415933382476
+          ],
+          "packing_fractions": [
+            0.002393051623391962
+          ],
+          "coordinates": [
+            -7.65601484999974,
+            -5.400658015246409,
+            -0.004999274906621749,
+            1.0,
+            -6.035185897621658,
+            2.862536911463096
+          ],
+          "residuals": [
+            -8.881784197001252e-16,
+            -4.440892098500626e-16,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "classified_residuals": [
+            -4.202766037551579e-19,
+            -2.0044454723056667e-18,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "multipliers": [
+            2.862536911463096
+          ],
+          "constraint_multipliers": [
+            -2.862536911463096,
+            0.0
+          ],
+          "iterations": 26,
+          "evaluations": 36,
+          "hessian_calls": 27,
+          "objective": 2.862536911463095,
+          "reduced_hessian_minimum": 0.00047340595426608676,
+          "jacobian_rank": 6,
+          "generic_nullity": 0,
+          "convergence": {
+            "residual": 2.0044454723056667e-18,
+            "floor": 1.4504773820213046e-14,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 26,
+            "evaluations": 36,
+            "stop": "converged"
+          },
+          "closure_criterion": 1e-10
+        }
+      },
+      {
+        "seed": "ideal-gas",
+        "evidence": "no_resolved_descent",
+        "message": "converged: residual 2.0044454723056682e-18 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.4504773820213046e-14, amplification 0",
+        "raw_coordinates": [
+          -7.656014849999739,
+          -5.4006580152464085,
+          -0.004999274906621704,
+          1.0,
+          -6.035185897621658,
+          2.862536911463096
+        ],
+        "raw_residuals": [
+          0.0,
+          4.440892098500626e-16,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "composition": [
+          0.00047318938901606713,
+          0.004513609941080143,
+          0.9950132006699038,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "split_coordinates": [],
+        "basis": [
+          [
+            1.0,
+            1.0,
+            0.9999999999999998,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "row_transformation": [
+          [
+            1.0
+          ]
+        ],
+        "quantities": {
+          "association_energy_estimate_over_rt": 1.455595976410544e-14,
+          "association_residual": 1.4814020834375107e-16,
+          "association_site_pivot_ratio": 1.0705037239455657,
+          "association_site_rank": 6.0,
+          "charge_residual": 0.0,
+          "euler_defect_over_rt": 2.7755575615628914e-17,
+          "g_over_rt": -213.7530548481054,
+          "gradient_floor_max_si_columns": 1.4504773820213053e-14,
+          "normalization_residual": 1.1102230246251565e-16,
+          "pressure_row": 2.0059492719604141e-16,
+          "raw_objective_over_rt": 2.862536911463095,
+          "reconstruction_l1": 0.0,
+          "summation_estimate_over_rt": 1.0532921930853334e-12,
+          "tpd_over_rt": 2.8625369114630814,
+          "trial_dual_over_rt": 2.8625369114630956,
+          "trial_identity_defect_over_rt": -1.4210854715202004e-14,
+          "volume_m3_per_mol": 0.0035289032787988433
+        },
+        "split_checks": [],
+        "donor": null,
+        "resolved_descent": false,
+        "phase": {
+          "name": "trial-V",
+          "kind": "vapor",
+          "support": [
+            0,
+            1,
+            2
+          ]
+        },
+        "optimizer": {
+          "success": true,
+          "message": "converged: residual 2.0044454723056682e-18 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.4504773820213046e-14, amplification 0",
+          "solver_status": "SUCCESS",
+          "requested_tolerance_met": true,
+          "temperature": 353.15,
+          "pressure": 776066.6499761352,
+          "amounts": [
+            1.0
+          ],
+          "mole_fractions": [
+            0.00047318938901606713,
+            0.004513609941080143,
+            0.9950132006699038,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "molar_densities": [
+            283.37415933382476
+          ],
+          "packing_fractions": [
+            0.002393051623391962
+          ],
+          "coordinates": [
+            -7.656014849999739,
+            -5.4006580152464085,
+            -0.004999274906621704,
+            1.0,
+            -6.035185897621658,
+            2.862536911463096
+          ],
+          "residuals": [
+            0.0,
+            4.440892098500626e-16,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "classified_residuals": [
+            0.0,
+            2.0044454723056682e-18,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "multipliers": [
+            2.862536911463096
+          ],
+          "constraint_multipliers": [
+            -2.862536911463096,
+            0.0
+          ],
+          "iterations": 14,
+          "evaluations": 23,
+          "hessian_calls": 15,
+          "objective": 2.862536911463095,
+          "reduced_hessian_minimum": 0.00047340595426600854,
+          "jacobian_rank": 6,
+          "generic_nullity": 0,
+          "convergence": {
+            "residual": 2.0044454723056682e-18,
+            "floor": 1.4504773820213046e-14,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 14,
+            "evaluations": 23,
+            "stop": "converged"
+          },
+          "closure_criterion": 1e-10
+        }
+      }
+    ]
+  }
+}
