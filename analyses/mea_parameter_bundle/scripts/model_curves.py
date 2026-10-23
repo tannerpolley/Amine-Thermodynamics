@@ -1,7 +1,7 @@
 """Continuous model curves for the reported MEA parameter set (#202); fixed parameters, no fit. Each state uses the call behind
 the retained point predictions (probe.evaluate on source_feed_request feeds, the assessment density path, unloaded_density_problem,
 heat_items/predict, stage2_rows). Writes results/model-curves/; run with `nice -n 10`."""
-import concurrent.futures as cf, csv, math, multiprocessing, os, sys
+import concurrent.futures as cf, csv, json, math, multiprocessing, os, sys
 from pathlib import Path
 import numpy as np
 BUNDLE = Path(__file__).resolve().parents[1]
@@ -31,7 +31,7 @@ REFERENCES = {'canonical:vle_obs_0163', 'canonical:vle_obs_0055', 'canonical:vle
 CAI = [r for r in fo.load(SPEC['stage2_rows_path'])['F1'] if r['id'].startswith('cai')]
 # Pressure: geometric below 0.2 (log pressure nearly linear in log loading), 0.01 steps above (check 3 refinement).
 GRIDS = {'pressure': [dict(T=T, w=.3, a=a) for T in (313.15, 333.15, 353.15, 373.15, 393.15) for a in [*np.geomspace(.003, .2, 24), *np.linspace(.2, .69, 50)[1:]]],
-         'species': [dict(T=T, w=.31 if T > 350 else .3, P=101325., a=a) for T in (293.15, 313.15, 333.15, 353.15) for a in np.linspace(0, .55, 32)],
+         'species': [dict(T=T, w=.31 if T > 350 else .3, P=101325., a=a) for T in (293.15, 313.15, 333.15, 353.15) for a in [*np.linspace(0, .55, 32), *np.linspace(.55, .6, 4)[1:]]],  # #205: to 0.6
          'heat': [dict(T=T, P=P, a=a) for T, P in ((313.15, 1734000.), (322.5, 510000.), (322.5, 1030000.)) for a in np.linspace(.01, .55, 28)],
          'density': [dict(T=T, w=.3, P=7e5 if T > 364 else 1e5, a=a) for T in (298.15, 313.15, 333.15, 353.15, 373.15, 393.15) for a in np.linspace(0, .56, 22)],
          'mea-water': [dict(P=P, x=x) for P in (101330., 66660.) for x in np.linspace(*(f(r['feed']['monoethanolamine'] for r in CAI if r['P_Pa'] == P) for f in (min, max)), 32)]}
@@ -141,7 +141,7 @@ def run(family, state):
             row.update(below_bubble_pressure='unavailable', bubble_pressure_cause=f'{type(exc).__name__}: {exc}'[:300])
     return [dict(row, quantity=q, value=values.get(q), unit=u, **IDENTITY) for q, u in QUANTITIES[family].items()]
 
-def references():  # check 1: the curve calls at each reference's source declaration against its retained prediction
+def references(families):  # check 1: the curve calls at each reference's source declaration against its retained prediction
     E = {n: list(csv.DictReader((EVIDENCE / f'{n}.csv').open())) for n in ('canonical-pressure', 'wagner-pressure', 'species-figure-data', 'heat', 'density', 'fitted-rows')}
     o = {o['identity']: o for o in PACKET + GROUPS['canonical'] + GROUPS['wagner']}
     m = {r['state_id']: dict(MEA_weight_fraction=r['mea_mass_fraction'], CO2_loading=r['co2_loading_mol_per_mol_mea'])
@@ -157,18 +157,34 @@ def references():  # check 1: the curve calls at each reference's source declara
     cases += [('mea-water', dict(declared=i, P=next(x['P_Pa'] for x in CAI if x['state_id'] == i)), 'bubble temperature' if q == 'temperature' else 'vapor water mole fraction', r['id'], r['predicted'])
               for r in E['fitted-rows'] for i, q in [r['id'].rpartition('-')[::2]] if i in REFERENCES]
     out = []
-    for family, state, quantity, identity, retained in cases:  # heat: absolute kJ/mol CO2; otherwise relative
+    for family, state, quantity, identity, retained in (c for c in cases if c[0] in families):  # heat: absolute kJ/mol CO2; otherwise relative
         new, retained = next(r['value'] for r in run(family, state) if r['quantity'] == quantity), float(retained)
         difference = math.inf if new is None else abs(new - retained) / (1. if family == 'heat' else max(abs(new), abs(retained), 1e-300))
         out.append(dict(family=family, identity=identity, quantity=quantity, retained=retained, replayed=new, difference=difference, passed=difference <= (1e-3 if family == 'heat' else 1e-6)))
     return out
-def main():
+
+def delta(new, old):  # #203 relative difference; equal within 1e-300 counts as zero
+    new, old = float(new), float(old)
+    return 0. if abs(new - old) <= 1e-300 else abs(new - old) / max(abs(new), abs(old))
+
+def main(families=tuple(GRIDS)):  # a family subset refreshes only its own summary entries
     workers = max(1, min(os.cpu_count(), int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1]) // 1_000_000))  # ~1 GB per worker
-    summary = dict(IDENTITY, engine_commit=s.ENGINE_COMMIT, workers=workers, check_1_reference_replay=references(), families={})
+    summary = dict(IDENTITY, engine_commit=s.ENGINE_COMMIT, workers=workers, check_1_reference_replay=references(families), families={})
+    tables = {}  # written only after every requested family reproduces
     with cf.ProcessPoolExecutor(workers, mp_context=multiprocessing.get_context('fork')) as pool:
-        for family, states in GRIDS.items():
+        for family, states in ((f, GRIDS[f]) for f in families):
             axis = 'liquid_mea_mole_fraction' if family == 'mea-water' else 'analytical_loading'
             rows, picks = [r for rr in pool.map(run, [family] * len(states), states) for r in rr], []
+            # retained grid rows must reproduce (#203 gate) before the family file is replaced
+            old = {(r['curve'], float(r[axis]), r['quantity']): r for r in csv.DictReader(path.open()) if r['sampling'] == 'grid'} if (path := OUT / f'{family}.csv').exists() else {}
+            pairs = [(r, old[k]) for r in rows if r['sampling'] == 'grid' and (k := (r['curve'], r[axis], r['quantity'])) in old]
+            d = [(delta(r[k], o[k]), r['curve'], r[axis], r['quantity'], k) for r, o in pairs for k in ('value', 'bubble_pressure_Pa') if o.get(k) and r.get(k) is not None]
+            worst = max(d, default=(0.,))
+            reproduction = dict(retained_rows=len(old), compared_rows=len(pairs), worst_delta=worst[0],
+                                passed=len(pairs) == len(old) and all(r['status'] == o['status'] for r, o in pairs) and worst[0] <= 1e-10)
+            if not reproduction['passed']:  # nothing has been written yet: every retained CSV and summary.json stay as they were
+                sys.exit(f"{family}: retained grid rows do not reproduce; no file replaced. {reproduction}; worst comparison (curve, {axis}, quantity, column): {worst[1:]}; "
+                         f"status changes: {[(r['curve'], r[axis], r['quantity'], o['status'], r['status']) for r, o in pairs if r['status'] != o['status']]}")
             for key in dict.fromkeys((r['curve'], r['quantity']) for r in rows):  # check 3: largest absolute second differences
                 part = sorted((r for r in rows if (r['curve'], r['quantity']) == key and r['status'] == 'available'), key=lambda r: r[axis])
                 y = [math.log(r['value']) if family == 'pressure' else r['value'] for r in part]
@@ -185,20 +201,27 @@ def main():
                 tolerance = {'pressure': .01 * (value or 0), 'species': max(.01 * (value or 0), 1e-4)}.get(family, .005 if 'vapor' in lo['quantity'] else .2)
                 sampling.append(dict(curve=lo['curve'], quantity=lo['quantity'], interval=[lo[axis], hi[axis]], direct=value, interpolated=interpolated,
                                      tolerance=tolerance, passed=value is not None and abs(value - interpolated) <= tolerance))
-            he.table(OUT / f'{family}.csv', rows)
-            curves = {}
+            tables[family], curves = rows, {}
             for c in dict.fromkeys(r['curve'] for r in rows):
                 states = list({(r[axis], r['sampling']): r for r in rows if r['curve'] == c}.values())
                 fine = [r for r in states if r['status'] == 'available']
                 passed = all(x['passed'] for x in sampling + summary['check_1_reference_replay'] if x.get('curve', c) == c and x.get('family', family) == family)
                 curves[c] = dict(states=len(states), failed=len(states) - len(fine), causes=sorted({r['cause'] for r in states if r['status'] != 'available'}),
                                  **{k: max(r[k] for r in fine) for k in IMBALANCES}, checks_1_and_3_passed=passed, usable=passed and len(fine) >= .9 * len(states))
-            summary['families'][family] = dict(csv_sha256=s.sha256(OUT / f'{family}.csv'), curves=curves, check_3_sampling=sampling)
+            summary['families'][family] = dict(engine_commit=s.ENGINE_COMMIT, engine_wheel_sha256=s.ENGINE_WHEEL_SHA256, workers=workers, csv_sha256=None,
+                                               curves=curves, check_3_sampling=sampling, retained_grid_reproduction=reproduction)
+    for family, rows in tables.items():
+        he.table(OUT / f'{family}.csv', rows)
+        summary['families'][family]['csv_sha256'] = s.sha256(OUT / f'{family}.csv')
     value = {(float(r['temperature_K']), float(r['analytical_loading'])): float(r['value']) for r in csv.DictReader((OUT / 'pressure.csv').open()) if r['status'] == 'available' and r['sampling'] == 'grid'}
     Ts, alphas = sorted({k[0] for k in value}), sorted({k[1] for k in value})  # exceptions: [T, loading, next loading] and [loading, T, next T]
     summary['check_4_physical_direction'] = dict(loading=[[T, a, b] for T in Ts for a, b in zip(alphas, alphas[1:]) if (T, a) in value and (T, b) in value and value[T, b] <= value[T, a]],
         temperature=[[a, T, U] for a in alphas for T, U in zip(Ts, Ts[1:]) if (T, a) in value and (U, a) in value and value[U, a] <= value[T, a]])
+    if set(families) != set(GRIDS):  # the other families keep their retained record and run identity
+        old = json.loads((OUT / 'summary.json').read_text())
+        summary = dict(old, families={**old['families'], **summary['families']}, check_4_physical_direction=summary['check_4_physical_direction'],
+                       check_1_reference_replay=[r for r in old['check_1_reference_replay'] if r['family'] not in families] + summary['check_1_reference_replay'])
     s.write_json(OUT / 'summary.json', summary)
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:] or tuple(GRIDS))
