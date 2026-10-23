@@ -170,6 +170,7 @@ def delta(new, old):  # #203 relative difference; equal within 1e-300 counts as 
 def main(families=tuple(GRIDS)):  # a family subset refreshes only its own summary entries
     workers = max(1, min(os.cpu_count(), int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1]) // 1_000_000))  # ~1 GB per worker
     summary = dict(IDENTITY, engine_commit=s.ENGINE_COMMIT, workers=workers, check_1_reference_replay=references(families), families={})
+    tables = {}  # written only after every requested family reproduces
     with cf.ProcessPoolExecutor(workers, mp_context=multiprocessing.get_context('fork')) as pool:
         for family, states in ((f, GRIDS[f]) for f in families):
             axis = 'liquid_mea_mole_fraction' if family == 'mea-water' else 'analytical_loading'
@@ -177,9 +178,13 @@ def main(families=tuple(GRIDS)):  # a family subset refreshes only its own summa
             # retained grid rows must reproduce (#203 gate) before the family file is replaced
             old = {(r['curve'], float(r[axis]), r['quantity']): r for r in csv.DictReader(path.open()) if r['sampling'] == 'grid'} if (path := OUT / f'{family}.csv').exists() else {}
             pairs = [(r, old[k]) for r in rows if r['sampling'] == 'grid' and (k := (r['curve'], r[axis], r['quantity'])) in old]
-            d = [delta(r[k], o[k]) for r, o in pairs for k in ('value', 'bubble_pressure_Pa') if o.get(k) and r.get(k) is not None]
-            reproduction = dict(retained_rows=len(old), compared_rows=len(pairs), worst_delta=max(d, default=0.),
-                                passed=len(pairs) == len(old) and all(r['status'] == o['status'] for r, o in pairs) and max(d, default=0.) <= 1e-10)
+            d = [(delta(r[k], o[k]), r['curve'], r[axis], r['quantity'], k) for r, o in pairs for k in ('value', 'bubble_pressure_Pa') if o.get(k) and r.get(k) is not None]
+            worst = max(d, default=(0.,))
+            reproduction = dict(retained_rows=len(old), compared_rows=len(pairs), worst_delta=worst[0],
+                                passed=len(pairs) == len(old) and all(r['status'] == o['status'] for r, o in pairs) and worst[0] <= 1e-10)
+            if not reproduction['passed']:  # nothing has been written yet: every retained CSV and summary.json stay as they were
+                sys.exit(f"{family}: retained grid rows do not reproduce; no file replaced. {reproduction}; worst comparison (curve, {axis}, quantity, column): {worst[1:]}; "
+                         f"status changes: {[(r['curve'], r[axis], r['quantity'], o['status'], r['status']) for r, o in pairs if r['status'] != o['status']]}")
             for key in dict.fromkeys((r['curve'], r['quantity']) for r in rows):  # check 3: largest absolute second differences
                 part = sorted((r for r in rows if (r['curve'], r['quantity']) == key and r['status'] == 'available'), key=lambda r: r[axis])
                 y = [math.log(r['value']) if family == 'pressure' else r['value'] for r in part]
@@ -196,16 +201,18 @@ def main(families=tuple(GRIDS)):  # a family subset refreshes only its own summa
                 tolerance = {'pressure': .01 * (value or 0), 'species': max(.01 * (value or 0), 1e-4)}.get(family, .005 if 'vapor' in lo['quantity'] else .2)
                 sampling.append(dict(curve=lo['curve'], quantity=lo['quantity'], interval=[lo[axis], hi[axis]], direct=value, interpolated=interpolated,
                                      tolerance=tolerance, passed=value is not None and abs(value - interpolated) <= tolerance))
-            he.table(OUT / f'{family}.csv', rows)
-            curves = {}
+            tables[family], curves = rows, {}
             for c in dict.fromkeys(r['curve'] for r in rows):
                 states = list({(r[axis], r['sampling']): r for r in rows if r['curve'] == c}.values())
                 fine = [r for r in states if r['status'] == 'available']
                 passed = all(x['passed'] for x in sampling + summary['check_1_reference_replay'] if x.get('curve', c) == c and x.get('family', family) == family)
                 curves[c] = dict(states=len(states), failed=len(states) - len(fine), causes=sorted({r['cause'] for r in states if r['status'] != 'available'}),
                                  **{k: max(r[k] for r in fine) for k in IMBALANCES}, checks_1_and_3_passed=passed, usable=passed and len(fine) >= .9 * len(states))
-            summary['families'][family] = dict(engine_commit=s.ENGINE_COMMIT, engine_wheel_sha256=s.ENGINE_WHEEL_SHA256, workers=workers, csv_sha256=s.sha256(OUT / f'{family}.csv'),
+            summary['families'][family] = dict(engine_commit=s.ENGINE_COMMIT, engine_wheel_sha256=s.ENGINE_WHEEL_SHA256, workers=workers, csv_sha256=None,
                                                curves=curves, check_3_sampling=sampling, retained_grid_reproduction=reproduction)
+    for family, rows in tables.items():
+        he.table(OUT / f'{family}.csv', rows)
+        summary['families'][family]['csv_sha256'] = s.sha256(OUT / f'{family}.csv')
     value = {(float(r['temperature_K']), float(r['analytical_loading'])): float(r['value']) for r in csv.DictReader((OUT / 'pressure.csv').open()) if r['status'] == 'available' and r['sampling'] == 'grid'}
     Ts, alphas = sorted({k[0] for k in value}), sorted({k[1] for k in value})  # exceptions: [T, loading, next loading] and [loading, T, next T]
     summary['check_4_physical_direction'] = dict(loading=[[T, a, b] for T in Ts for a, b in zip(alphas, alphas[1:]) if (T, a) in value and (T, b) in value and value[T, b] <= value[T, a]],
