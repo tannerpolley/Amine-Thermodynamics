@@ -60,7 +60,7 @@ def parameter_source(identity, fitted=False, tied=False):
         return r'Uyan et al., Table 4 \cite{Uyan2015}' + ('; hydrogen-ion values transferred to hydronium' if 'hydronium-cation' in identity else '')
     return 'fitted to IAPWS-95 (Section~\\ref{sec:s-parameters})'
 
-SOURCE_TEXT = {'Austgen1991_TableV_reaction_1a': 'Austgen 1991, Table V, reaction 1a', 'Austgen1991_TableV_reaction_4a': 'Austgen 1991, Table V, reaction 4a', 'Austgen1991_TableV_reaction_5a': 'Austgen 1991, Table V, reaction 5a', 'Tong2012_Table5_K5_MEA_via_Aroua1999': 'Tong 2012, Table 5, via Aroua 1999', 'BatesPinching1951_equation_7': r'Bates and Pinching, Eq. 10; fitted here \cite{batesAcidicDissociationConstant1951}'}
+SOURCE_CITE = {'Austgen1991_TableV_reaction_1a': r'\cite[Table~V, 1a]{Austgen1991}', 'Austgen1991_TableV_reaction_4a': r'\cite[Table~V, 4a]{Austgen1991}', 'Austgen1991_TableV_reaction_5a': r'\cite[Table~V, 5a]{Austgen1991}', 'Tong2012_Table5_K5_MEA_via_Aroua1999': r'\cite[Table~5]{Tong2012}, via \cite{arouaEquilibriumConstantCarbamate1999}', 'BatesPinching1951_equation_7': r'\cite[Eq.~10]{batesAcidicDissociationConstant1951}'}
 
 def scientific(value):
     mantissa, exponent = re.split('[eE]', value) if re.search('[eE]', value) else (value, None)
@@ -221,19 +221,28 @@ def main():
     table('binary_interaction_parameters.tex', r'Binary interactions. Slopes multiply $(1/T-1/T_{\rm ref})$. All fixed ion interactions are model assumptions, rather than measured pair energies. Dispersion between ions of the same charge sign is excluded.',
           ['Parameter', 'Value', 'Unit', 'Source or estimation'], pair_rows, [.39,.14,.13,.34])
     reaction = a.load(a.ROOT / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json')
+    offsets = reaction['common_source_standard_state']['source_to_common_ln_k_offsets']
+    assert offsets[3] == offsets[4] == 0
     reaction_rows = []
-    for i, r in enumerate(reaction['reactions']):
+    for r in reaction['reactions']:
         rid = r['reaction_id']
         selected = next((x for x in document['reaction_correlations'] if x['reaction_id'] == rid), None)
-        coeff = '; '.join(label(c['identity'].split(':')[-1]).split()[0].upper() + ' = ' + num(c['value']['magnitude'], 6) for c in selected['coefficients']) if selected else '; '.join(k.split('_')[0].upper() + ' = ' + str(v) for k, v in r['correlation'].items() if k != 'kind')
-        coeff = re.sub(r'-(?=\d)', lambda _: '$-$', coeff)
-        if rid == 'R5':
-            coeff = re.sub(r'\b([ABC]) =', lambda m: '$' + m[1] + '_5$ =', coeff)
-        offset = reaction['common_source_standard_state']['source_to_common_ln_k_offsets'][i]
-        reaction_rows.append([rid + r': \ce{' + r['equation'].replace('CO3--', 'CO3^{2-}').replace('HCO3-', 'HCO3^-') + '}', coeff, SOURCE_TEXT.get(r['selected_source'], r['selected_source']), str(r['temperature_range_k']),
-                              'offset included in R2 coefficients' if rid == 'R2' else r'$\Delta_r='+num(offset)+'$'])
-    table('reaction_equilibrium_constants.tex', r'Reaction correlations and source conventions for the reported parameters. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\mathrm{p}K=A_5/T+B_5+C_5T$. The R2 and R5 coefficients already include the fitted shifts. For R1--R3, B is in K and D in 1/K; for R4, B is in K; for R5, $A_5$ is in K and $C_5$ in 1/K. Other coefficients are dimensionless and logarithms use numerical temperature in K. Source ranges are not validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.',
-          ['Reaction', 'Coefficients', 'Source', 'Source range (K)', 'Offset'], reaction_rows, [.25,.28,.20,.10,.17])
+        values = ({label(c['identity'].split(':')[-1]).split()[0].upper(): c['value']['magnitude'] for c in selected['coefficients']} if selected
+                  else {k.split('_')[0].upper(): v for k, v in r['correlation'].items() if k != 'kind'})
+        lhs, rhs = (r'\ce{' + side.replace('CO3--', 'CO3^{2-}').replace('HCO3-', 'HCO3^-') + '}' for side in r['equation'].split(' <=> '))
+        cells = ['$' + num(values[k], 6) + '$' if k in values else '--' for k in 'ABCD']
+        if rid == 'R5':  # pK form: its A5, B5, C5 sit under a sub-header in the A, B, C columns
+            cells[3] = ''
+            reaction_rows += [r'\midrule', r' & & $A_5$ (K) & $B_5$ & $C_5$ (K$^{-1}$) & & & \\', r'\midrule']
+        reaction_rows.append(' & '.join([rid, lhs + r' $\rightleftharpoons$ ' + rhs, *cells, '--'.join(num(x, 6) for x in r['temperature_range_k']), SOURCE_CITE[r['selected_source']]]) + r' \\')
+    caption = (r'Reaction equilibrium constants for the reported parameters. R1--R4 use $\ln K=A+B/T+C\ln T+DT+\Delta_r$ and R5 uses $\mathrm{p}K=A_5/T+B_5+C_5T$, with $T$ in K; a dash marks a term the correlation does not include. '
+               r'R1 and R3 are fixed source laws; R2, R4 and R5 list the selected coefficients, and the R2 and R5 coefficients already include the fitted shifts. '
+               r'The offset $\Delta_r$ converts each source to the common aqueous molality standard, 1 mol/kg at infinite dilution in water: it is ' + num(offsets[0]) + ' for R1 and ' + num(offsets[2])
+               + r' for R3, is already included in the R2 coefficients and is zero for R4 and R5. Source ranges are not validation domains.')
+    head = r' & Reaction & $A$ & $B$ (K) & $C$ & $D$ (K$^{-1}$) & Range (K) & Source \\'
+    OUTPUTS['reaction_equilibrium_constants.tex'] = '\n'.join([r'\begingroup\small\setlength{\tabcolsep}{3pt}', r'\begin{longtable}{@{}llrrrrll@{}}',
+        r'\caption{' + caption + r'}\label{tab:reaction-equilibrium-constants}\\', r'\toprule', head, r'\midrule\endfirsthead', r'\toprule', head,
+        r'\midrule\endhead', r'\bottomrule\endfoot', *reaction_rows, r'\end{longtable}\endgroup', ''])
     coordinate_rows = []
     for c, se in zip(fit['coordinates'], errors, strict=True):
         factor = .001 if c['unit'] in ['joule / mole', 'J/mol'] else 1
