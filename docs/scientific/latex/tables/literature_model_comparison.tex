@@ -1,29 +1,95 @@
-\begingroup\small
-    \begin{longtable}{@{}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{5.0cm}@{}}
-    \caption{Fitted and outside-fit quantities in published models closest to the present model and in this work.
-    ``Outside fit'' refers to quantities excluded from the parameter-estimation step described in each row.
-    A7 uses 16 coordinates and eight objective groups; outside-objective comparisons retain their access history and are not independent validation. Published rows describe their own model/data use and do not define a common accuracy ranking.}
-    \label{tab:literature-model-comparison}
-    \\
-        \toprule
-        Study & System and model & Quantities used for fitting & Quantities outside the fit \\
-        \midrule\endfirsthead
-        \toprule
-        Study & System and model & Quantities used for fitting & Quantities outside the fit \\
-        \midrule\endhead
-        \bottomrule\endfoot
-        B\"ottinger et al.~\cite{Bottinger2008} & \MEA--\HtwoO--\COtwo; extended Pitzer excess Gibbs energy with chemical equilibria & \MEA carbamate-formation and oxazolidone-formation constants fitted to NMR; \MEA protonation constant and \MEA interaction parameters retained from the literature (\S\S5--6) & Vapor--liquid equilibrium (\S6) \\
-        Zhang et al.~\cite{Zhang2011} & \MEA--\HtwoO--\COtwo; electrolyte NRTL liquid, PC-SAFT vapor & Binary VLE, excess enthalpy and heat capacity; ternary VLE, absorption heat, heat capacity and NMR species for interactions and ion standard-state properties (\S\S2--3.3, Tables~6 and 9) & Reaction constants compared with literature laws (\S3.3, Fig.~6); Table~9 identifies fitted ternary data \\
-        Nasrifar and Tafazzol~\cite{Nasrifar2010} & Aqueous MEA, DEA and MDEA; PC-SAFT with ideal reaction speciation and ions lumped with water & Pure-amine properties; binary amine--water VLE interactions (\S6, Tables~2--3) & Acid-gas solubility without loaded-solution parameter fitting; speciation comparison with ideal activities (\S\S3--4, 6) \\
-        Baygi and Pahlavanzadeh~\cite{Baygi2015} & \MEA--\HtwoO--\COtwo; PC-SAFT with separate chemical-equilibrium calculation & \MEA pure-component parameters; binary interaction parameters from binary vapor--liquid equilibrium & Ternary \COtwo solubility \\
-        Najafloo and Zarei~\cite{Najafloo2018} & \MEA--\HtwoO--\COtwo; SAFT-HR & Pure-\MEA vapor pressure and liquid density (\S3.1); literature \COtwo--\HtwoO interaction and zero \COtwo--\MEA and \MEA--\HtwoO interactions (\S3.2) & Ternary solubility comparisons (\S3.3); the conclusion describes the data use more broadly than the parameter-estimation methods \\
-        Chremos et al.~\cite{chremosModellingPhaseChemical2016} & \MEA--\HtwoO--\COtwo; SAFT-$\gamma$ square well with association-derived species & Group parameters from pure and mixture data; reactive interactions from 30 wt\% \MEA solubility at \SI{353.15}{\kelvin} (\S3.6) & Carbamate and bicarbonate speciation; temperature and amine transfer \\
-        Perdomo et al.~\cite{perdomoPredictiveGroupcontributionFramework2023} & Aqueous amines--\COtwo; SAFT-$\gamma$ Mie with association-derived species & Group interactions from pure and mixture properties; primary alkanolamine--\COtwo interactions from 30 wt\% \MEA VLE at 298.15 and \SI{313.15}{\kelvin} (\S4.3.3) & \MEA/DEA speciation; higher-temperature VLE \\
-        Lloret et al.~\cite{lloretConsistentTransferableThermodynamic2017} & \MEA--\HtwoO--\COtwo; soft-SAFT with reactive association & Molecular and cross-association parameters from pure/binary data; reactive \COtwo association sites from ternary VLE (\S4.7) & Concentration transfer; absorption enthalpy from the pressure--temperature derivative, with reported underestimation and no calculated temperature dependence (\S4.7, Eq.~26, Figs.~10b--11) \\
-        Akula et al.~\cite{Akula2023a} & \MEA--\HtwoO--\COtwo; electrolyte NRTL & \COtwo partial pressure and heat of absorption, jointly (Eq.~34) & NMR speciation and liquid heat capacity (\S4.2) \\
-        Uyan et al.~\cite{Uyan2015} & MDEA--\HtwoO--\COtwo; ePC-SAFT with explicit ions & Literature pure-component and ion parameters; binary parameters from binary subsystems & Ternary \COtwo solubility \\
-        Wangler et al.~\cite{Wangler2018} & MDEA--\HtwoO--\COtwo/\ce{H2S}; ePC-SAFT with explicit ions & Binary parameters including osmotic coefficients of water--MDEA--HCl & \COtwo and \ce{H2S} solubility; enthalpy of absorption \\
-        Figiel et al.~\cite{Figiel2025} & Salts in water, methanol and ethanol; ePC-SAFT with SSM+DS Born term & Born diameters to infinite-dilution solvation Gibbs energies in water; solvent factors to NaBr activity coefficients; aqueous ion interactions to salt activity or osmotic data; ion--methanol and ion--ethanol interactions to infinite-dilution solvation Gibbs energies; \SI{298.15}{\kelvin} & Transfer Gibbs energies and activity coefficients in mixed solvents \\
-        This work & Aqueous \MEA--\HtwoO--\COtwo; nine-species ePC-SAFT with explicit ions and SSM+DS & 16 coordinates; 307 quantities in eight objective groups: common pressure/species/heat, restored species, amount ratios, loaded and \COtwo-free density, Cai, Kiepe and heat capacity & Previously accessed pressure/concentration, Matin pool and carbonate shares; Arcis heat acceptance check. Finite phase search is numerical verification, not experimental validation \\
-    \end{longtable}
-\endgroup
+% Generator: docs/scientific/latex/scripts/final_rerun_tables.py; do not hand-edit.
+% A7 parameter SHA256: e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/carbonate-share.csv SHA256 5f83a18d5dfbf3bcacf0bf9ca2d7aa193ee14fbea0dbd7074f6bd7ce126ff16a
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-correlations.csv SHA256 46246a65a498f1b244852cb33f61c0d64b77bb48ae2887f353cedc897856f1a7
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-standard-errors.csv SHA256 d49a822d79a7eaec5e15668d4ee755abca86709ae7a9f01ba221047ee406c7b8
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/conditional-uncertainty.json SHA256 1076eea7056bbf44f462ac2eb332c166a77fc62a6f75cb4e33001ec1e584020e
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/cp.csv SHA256 47b1c85ce78c05e7b240e183237d01289060496e42bee6e2dddae70e06c2ac72
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/density.csv SHA256 1983f82ba4b030623d909b364ecceb7dc60466b5ea4f327222fa199827dd2fdd
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/fit-summary.json SHA256 5a5dda4b70f5463fb6d0d78cf3e9dac49e98002c7c7575bb4cb4d3b6a70c856a
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/fitted-rows.csv SHA256 0643ec9c6dc323409be7fbd5f1984c0cc166cfcd94192e6a7bb79e20d3ed2ce3
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/heat.csv SHA256 35e7d7d1166698059295361e8e0a002aa5ed57099cf8c1c5b9fce7e539a5f57d
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/input-hashes.json SHA256 1cf1f0d19b086292c197edb6d6efa098034f63a12bc6a4f183006968f69212e8
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/phase-family.csv SHA256 fd16142967e4fef1408b907a40839780923bef381da6a685eac8d9ae4b8db6a7
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/predecessor-f1.json SHA256 20e922e230a6401f7f4c03ac0b5e790bf4731fa25453c088dbecc73808ca010d
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/state-summary.json SHA256 5e59bcb4219e80cf16c6801ece44e9172b2fe794f5aff148b385cda826ee8c64
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/state-targets.csv SHA256 aeda99577000150980ec858a1b2fd237d90941879819db50f7c0e86bb3f89809
+% Input: analyses/mea_parameter_bundle/results/a7-paper-evidence/summary.json SHA256 39ea65e25e503038a9e47ea158602af1b2ae27b1c38e69bebed6f8b49dbd9883
+% Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/README.md SHA256 51957a9dc31eb8351976306ce775e7abb393481d6fd03d86ca1d1937fa4c6db6
+% Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/checks.json SHA256 5d18e3313805a07c8fc518be37878ee50181d2424fd8bdb354897b7cb5c2cdb1
+% Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/comparison.json SHA256 8bead5a2273dd698b08b0926f6147470bd0ba000ed2c5d9896b57dffb0c8dedb
+% Input: analyses/mea_parameter_bundle/results/heat-160/A-parameters.json SHA256 66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/F1-A/native-fit.json SHA256 9c36dc8a3ba9f98f8a293414fc1a1416c417b39cb44ecc1fc4c11578f9a6d14c
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/corrected-densities.csv SHA256 9a5e301f5277bd5db696c350165113bda80dfd1dfb5653d7c3dcc0e0a11f8b9a
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/density-states.json SHA256 c2c505e13cf56d260f7d352fee37a298764451fbee483d68ec4842d60c5a8468
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/evaluation/execution.json SHA256 213164bd58f26f69696a1b2506b3d905ca567fb3879294b3a5abb3788ac218bd
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/fit-comparison.csv SHA256 81f5390ace97df8669b125d347447dc665a34f33dc4a2fb09dc3359c092bf8cc
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/heat-capacity-comparison.csv SHA256 303a8043a48f6a5dbf7de527c30f3de19e6d74274ed95dd20748be30d45665a2
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/heat-comparison.csv SHA256 4947609fcc14da10744363771907d39c0744be4331a7c0fb5132fbb48555e4be
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/high-temperature-comparison.csv SHA256 e9039244d75b3fa83ea3fb7cd1f98eb28ea39577d3b6eb7c7d4988d9ca1aaa1d
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/pressure-figure-data.csv SHA256 ecce5c18740fab3d989c8e72598e9dc7733f8a97ba751f53fb8265af5032e3b2
+% Input: analyses/mea_parameter_bundle/results/heat-final-170/species-figure-data.csv SHA256 74bb9a8622dae4b0fc4d70b26957f5f2a46d5c695713fbcbdd4636384ba7a941
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/density-sweep-1b/summary.json SHA256 52a57183596b4a7a4cd9f573d551b96cb1188020401d23b0ad965a6e822273f9
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-scales.json SHA256 ee61922f62b40e8a3f947e85bb9d0e1247ff5dd97e567e554f7b90e589dc95ce
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json SHA256 ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/provenance.json SHA256 1ea9f49238b7f6fb3413e2ddddb40e5abf5dc4b68ce54d03a442b78246581827
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/summary.json SHA256 af775385eadbb7396eacb69cbd9abd1defbec46eed35b3bfa300fec619edbd3d
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/engine-identity.json SHA256 141cd2510868b06ac421dc58288a57b412b306e72d65bf1294b61e85b17e9098
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-21.json SHA256 abae0fed350582529b24c0072023ab30fe98695b1aba51d792e0d71a2537d5e5
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-63.json SHA256 a61a929b1a24aa1dde4c895e3379572be83f465afee7fe1264141e513b86ad98
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-70.json SHA256 e94273ed88193eec6040ab9a57c8dc804abd1894d87f0a922d2f24c1edb05e7f
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/fixed-parameters.json SHA256 5fd94d8494926c0a1ec0a64a8b3080384c386a04fe5fd64ca0b330c407641971
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/provenance.json SHA256 dcaf8dfcb4593d88d5f496ef54d4b2ac41a8528f4af5025f0d4cfc4723aa63e4
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/reduction.json SHA256 e3052afac7b4ac1e77b2b8a75c646480027b7ad23854ecfcd91398a3199b7dac
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/score.json SHA256 46ab42a394d8e03b378b4805fb20fd647406b9889dcf83236355a2c746470d0c
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/after-adoption/a6-selected/summary.json SHA256 30c74a39b4e35968f8d43dd00a3bc3c0c8fcdb9acf5651cd87a6fd331c18d26f
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/fixed-parameters.json SHA256 e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/provenance.json SHA256 e2113811e3b4c8185b86ad369a47929c38355caf8f16e2bb158f58281e7df9bb
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/reduction.json SHA256 684937329082c7bbb6d531ad8266472f4ffcfa967cd75a258861b0ab8322c63b
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/score.json SHA256 a8639493c30a08d8e69896c09bb0c4bf91369f431cb9706c102a3094bc64c7bc
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-2-endpoint/summary.json SHA256 2274b0a6576fef2a08f3b6054d091a082df3f3a29583a9c177e0ffa959da4b1f
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/fixed-parameters.json SHA256 e0c6acd35f1fbb2c8ecd902b6ca3d790d20e3e931b4052399ce0e2d4e8c2892d
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/provenance.json SHA256 d954882c149645645c9f95518d866c0576b4783db9c78d64130fa548ac16cc70
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/reduction.json SHA256 2bca815588c7d7e60df62b2ff7d97c58b7a46569afe586555e40657586b4d0a6
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/score.json SHA256 194138834abbef0c6067d2fcb64efbc31a7c4bf531ad297c3d1370eacd6533d8
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/wheel-8298c602/restricted-endpoint/summary.json SHA256 32db942030258879a0731123617bf39f38359222a8bb993fa2b5c455663e1b01
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit-spec.json SHA256 0cb68ee3718ec812f2f8676df297ca3f7be293a9d13b416e39e6f38aaa2387f6
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json SHA256 e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/replay/A7-restricted-2-full-replay.json SHA256 7f319393cc095cf593661ca02a003113fd33e96b9b23e20e988aa31617d8e10e
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/README.md SHA256 80e31743f7c1485c8a437908982b5bff4b150a8514c8f78083cbef5f95225e47
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/usable-budget-endpoint.json SHA256 e0c6acd35f1fbb2c8ecd902b6ca3d790d20e3e931b4052399ce0e2d4e8c2892d
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/carbonate-share.csv SHA256 5f83a18d5dfbf3bcacf0bf9ca2d7aa193ee14fbea0dbd7074f6bd7ce126ff16a
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/cp.csv SHA256 47b1c85ce78c05e7b240e183237d01289060496e42bee6e2dddae70e06c2ac72
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/density.csv SHA256 1983f82ba4b030623d909b364ecceb7dc60466b5ea4f327222fa199827dd2fdd
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/state-summary.json SHA256 5e59bcb4219e80cf16c6801ece44e9172b2fe794f5aff148b385cda826ee8c64
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/state-targets.csv SHA256 aeda99577000150980ec858a1b2fd237d90941879819db50f7c0e86bb3f89809
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/summary.json SHA256 39ea65e25e503038a9e47ea158602af1b2ae27b1c38e69bebed6f8b49dbd9883
+% Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
+% Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
+% Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
+% Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d2026f7b5441113dcf988dc5dd1945de8fa701d8f8dbe0c94ad8690d6a260cdf
+\begingroup\small\setlength{\tabcolsep}{2pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1410\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}>{\raggedright\arraybackslash}p{0.1786\linewidth}>{\raggedright\arraybackslash}p{0.2256\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}@{}}
+\caption{Model complexity, data roles and reported deviations in related MEA studies. Parameter counts refer to the stated fit, excluding earlier subsystem fits. Relative pressure deviations and caloric metrics use each source's own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.}\label{tab:literature-model-comparison}\\
+\toprule
+Study & Model; fitted parameters & Fitted data & Reported agreement & Other comparisons or qualification \\
+\midrule\endfirsthead
+\toprule
+Study & Model; fitted parameters & Fitted data & Reported agreement & Other comparisons or qualification \\
+\midrule\endhead
+\bottomrule\endfoot
+Böttinger et al. \cite{Bottinger2008} & Pitzer; 6 coefficients in 2 MEA reaction laws & NMR; 293--353 K & No aggregate MEA error stated; R5 fixed to Bates--Pinching & VLE compared with earlier VLE-fitted interactions (Tables 5--6) \\
+Zhang et al. \cite{Zhang2011} & eNRTL/\allowbreak{}PC-SAFT vapor; 12 ternary coefficients & Pressure, differential heat, heat capacity, NMR & Pressure 13.5--35.5\% by source; heat 10.9\% (84); $C_P$ 2.4\% (102); species 35.7\% (24), Table 9 & Additional pressure sources 28.6--112\% (Table 11) \\
+Nasrifar and Tafazzol \cite{Nasrifar2010} & PC-SAFT/\allowbreak{}ideal reactions; 5 pure-MEA + 1 MEA--water parameter & Pure and binary properties & Pure-MEA density 0.50\%, vapor pressure 3.36\% (Table 2); no aggregate ternary error & Acid-gas solubility; ideal-activity speciation \\
+Baygi and Pahlavanzadeh \cite{Baygi2015} & PC-SAFT/\allowbreak{}ideal reactions; 5 pure-MEA + 1 binary parameter & Pure properties; binary VLE & Ternary pressure 36.42\% (691), outside fit (Table 5) & NMR (Fig. 8), binary excess enthalpy (Fig. 6); ternary uses 3B MEA/\allowbreak{}4C water \\
+Najafloo and Zarei \cite{Najafloo2018} & SAFT-HR/\allowbreak{}ideal reactions; 5 pure-MEA parameters & Pure vapor pressure/\allowbreak{}density & Ternary pressure 34.71\% (691), Table 5 & Methods imply no ternary fit; conclusion describes broader data use \\
+Lloret et al. \cite{lloretConsistentTransferableThermodynamic2017} & soft-SAFT; 2 reactive-association parameters & 30 wt\% VLE; 313.15--373.15 K & No aggregate pressure error stated; Section 4.7 & Heat from pressure derivative underpredicted; no calculated temperature dependence \\
+Akula et al. \cite{Akula2023a} & eNRTL; 10 ternary parameters & 263 pressures + 93 differential heats & Mean absolute percentage error: pressure 40.5\%, differential heat 5.9\% (Section 4.2) & NMR and heat capacity outside objective \\
+Hessen et al. \cite{Hessen2010} & Refined eNRTL; temperature-dependent interactions (Table 2) & Binary VLE, freezing point, excess enthalpy and ternary pressures & No aggregate MEA pressure statistic stated & Speciation and activity comparisons; Section 4 \\
+Aronu et al. \cite{Aronu2011} & Extended UNIQUAC; ion size/\allowbreak{}surface and pair coefficients (Tables 7--9) & VLE at 15--60 wt\%; \ce{N2O}-derived physical solubility & Fitted \ce{CO2} partial pressure 24.3\%; total pressure 11.7\%; physical solubility 2.7\% (Section 5) & NMR and absorption heat compared outside objective \\
+Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013} & Electrolyte cubic two-state association; 7 MEA ternary parameters & VLE; 15.2--30 wt\%; 298.15--393.15 K in Table~2 and Fig.~8; Section~4.3.3 instead states an upper limit of 366.68 K & Relative pressure deviation 12.5\%, fitted (Tables 5, 8) & Parameters from earlier subsystems retained \\
+Neumann et al. \cite{neumannNewModelCombining2022} & Helmholtz energy/\allowbreak{}eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained & Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data & Ternary density AARD 0.92\% Hartono; 3.5\% complete Han (Section 4.2) & VLE/\allowbreak{}density comparisons; density data sets differ from this work \\
+This work & 16 fitted parameters; 6 at bounds & 307 quantities; 8 groups & Fitted pressure/\allowbreak{}species 11.86/\allowbreak{}7.10\%; integral heat RMSE 1.83 kJ/\allowbreak{}mol & 159-pressure comparison 20.55\%; not blind tests (Section 3) \\
+\end{longtable}\endgroup
