@@ -1,0 +1,100 @@
+{
+  "q": [
+    0.8228208900415063,
+    -0.4549224750919604
+  ],
+  "rank": 2,
+  "singular_values": [
+    102.08207134075276,
+    16.52860937504142
+  ],
+  "condition": 6.17608348194731,
+  "discriminant": 3.223939978455011,
+  "scale_covariance": [
+    [
+      0.0014712713021224515,
+      -0.0017351410740542104
+    ],
+    [
+      -0.0017351410740542106,
+      0.0022850811529242683
+    ]
+  ],
+  "cost": 1.9338797460270256,
+  "branches": [
+    {
+      "branch": "smaller-dV",
+      "dielectric_volume_L_mol": 0.24645403120889786,
+      "dielectric_temperature_K": 2436.442300727361,
+      "max_abs_native_replay_epsilon": 2.842170943040401e-14,
+      "scale_covariance_dV_dT": [
+        [
+          5.5615001884638396e-05,
+          -0.3659138627473756
+        ],
+        [
+          -0.3659138627473755,
+          2581.645347310369
+        ]
+      ],
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/run/parameters.json",
+      "sha256": "d511c56177a08e0e414d0f332e844dd1e4da670a764b9f1ccae436a140798981"
+    },
+    {
+      "branch": "larger-dV",
+      "dielectric_volume_L_mol": 0.7309888238084121,
+      "dielectric_temperature_K": 1019.0786110170791,
+      "max_abs_native_replay_epsilon": 2.842170943040401e-14,
+      "scale_covariance_dV_dT": [
+        [
+          0.00030170597467752666,
+          -0.3659138627473754
+        ],
+        [
+          -0.3659138627473754,
+          475.88786072133695
+        ]
+      ],
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/stage5/run/larger-dV-parameters.json",
+      "sha256": "83e1226e152d24bb48ca4b2d5eb768123cb16a2d5b5bbbd8374d5e33949b2999"
+    }
+  ],
+  "sensitivity": [
+    {
+      "coherent_permittivity_factor": 0.99,
+      "q": [
+        0.7409752156336729,
+        -0.3860673770086789
+      ],
+      "discriminant": 2.7104613920352185,
+      "pairs": [
+        [
+          0.25554003963740735,
+          2345.2562688583266
+        ],
+        [
+          0.6998162988168439,
+          1045.6570500222122
+        ]
+      ]
+    },
+    {
+      "coherent_permittivity_factor": 1.01,
+      "q": [
+        0.9046665644493398,
+        -0.523777573175242
+      ],
+      "discriminant": 3.7508159937133496,
+      "pairs": [
+        [
+          0.2384496630512423,
+          2524.4643128631337
+        ],
+        [
+          0.7610797085291265,
+          995.664191745208
+        ]
+      ]
+    }
+  ]
+}
