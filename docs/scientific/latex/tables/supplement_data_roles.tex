@@ -75,18 +75,14 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 c903af428326a980013578c4c226807a0e9ce388e5a5d69abf746a4dab7bc5d9
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d5ebd08fa86778db6d8fb3a4122495f2f280d5c5d797a6454d8bfb636a935680
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}l>{\raggedright\arraybackslash}p{0.2000\linewidth}r>{\raggedright\arraybackslash}p{0.2700\linewidth}>{\raggedright\arraybackslash}p{0.1600\linewidth}@{}}
-\caption{Experimental data and their use by source. Counts in comparison sets overlap fitted observations and are not additive. Exact states, source locators and exclusions are in the electronic data. Pressure and species calculations use each source's reported solvent composition.}\label{tab:supplement-data-roles}\\
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Experimental data and their use by source. Counts in comparison sets overlap fitted observations and are not additive. Exact states, source locators and exclusions are in the electronic data. Pressure and species calculations use each source's reported solvent composition.}\label{tab:supplement-data-roles}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.2000\linewidth}r>{\raggedright\arraybackslash}p{0.2700\linewidth}>{\raggedright\arraybackslash}p{0.1600\linewidth}@{}}
 \toprule
 Source & Property & n & Conditions & Role \\
-\midrule\endfirsthead
-\toprule
-Source & Property & n & Conditions & Role \\
-\midrule\endhead
-\bottomrule\endfoot
+\midrule
 Hilliard (2008) & \ce{CO2} vapor partial pressure & $30$ & 313--333.114 K; loading 0.1139--0.5909 & fitted \\
 Jou et al. (1995) & \ce{CO2} vapor partial pressure & $17$ & 313.15--333.15 K; loading 0.0563--0.6679 & fitted \\
 Böttinger et al. (2008) & liquid species or reported species sum & $40$ & 293.15--333.15 K; loading 0.0749--0.4889 & fitted \\
@@ -110,4 +106,6 @@ Arcis & heat & $14$ & 322.5 K; 0.51/\allowbreak{}1.03 MPa & used to accept fits 
 Matin bicarbonate + carbonate & species & $19$ & 293.15 K approximation; 30 wt\% & compared \\
 Jakobsen carbonate share & species & $10$ & 293.15/\allowbreak{}313.15 K; diluted NMR samples & compared \\
 All densities & density & $210$ & 293.15--393.15 K; 20--100 wt\% & 52 fitted; others compared \\
-\end{longtable}\endgroup
+\bottomrule
+\end{tabular}
+\end{table}

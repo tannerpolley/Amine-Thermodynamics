@@ -13,11 +13,12 @@ BASE = sys.argv[1] if len(sys.argv) > 1 else 'main'
 
 def tokens(text):
     lines = [line for line in text.splitlines() if not line.startswith('%')]
-    # The repeated page header, the column specification, the group font settings and the sub-header rule rows are not displayed values.
-    lines = [line for line in lines if not line.startswith((r'\begingroup', r'\begin{longtable}', r'\begin{landscape}', r'\end{landscape}', r'\noalign'))]
+    # The repeated page header, the column specification, the float and group font settings and the sub-header rule rows are not displayed values.
+    lines = [line for line in lines if not line.startswith((r'\begingroup', r'\begin{longtable}', r'\begin{table}', r'\begin{tabular}', r'\begin{landscape}', r'\end{landscape}', r'\noalign'))]
     text = re.sub(r'\\midrule\\endfirsthead.*?\\midrule\\endhead', '', '\n'.join(lines), flags=re.S)
     cites = [key.strip() for keys in re.findall(r'\\cite(?:\[[^]]*\])?\{([^}]*)\}', text) for key in keys.split(',')]
     text = re.sub(r'\\cite(?:\[([^]]*)\])?\{[^}]*\}', r' \1 ', text)
+    text = re.sub(r'\\multicolumn\{\d+\}', ' ', text)  # a block label's column span is not a value
     text = re.sub(r'\\label\{[^}]*\}|\\ce\{(?:[^{}]|\{[^{}]*\})*\}', ' ', text)  # chemical formulas carry no values
     text = text.replace(r'\textminus{}', '-').replace(r'\allowbreak{}', '').replace('--', ' -- ')
     text = re.sub(r'\\times10\^\{([-+]?\d+)\}', r'e\1', text)

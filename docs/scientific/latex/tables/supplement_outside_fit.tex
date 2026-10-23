@@ -75,18 +75,14 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 c903af428326a980013578c4c226807a0e9ce388e5a5d69abf746a4dab7bc5d9
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d5ebd08fa86778db6d8fb3a4122495f2f280d5c5d797a6454d8bfb636a935680
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}lrrr@{}}
-\caption{Reported fit comparisons outside the fit. Fitted observations are removed from each set; sets overlap and are not additive. None of these observations was fitted; all were compared with intermediate parameter sets during model development, so none is a blind test. Hilliard and Jou pressures are the 79 Jou and Hilliard pressures used in the pressure and species calculations, 47 of them fitted.}\label{tab:supplement-outside-fit}\\
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Reported fit comparisons outside the fit. Fitted observations are removed from each set; sets overlap and are not additive. None of these observations was fitted; all were compared with intermediate parameter sets during model development, so none is a blind test. Hilliard and Jou pressures are the 79 Jou and Hilliard pressures used in the pressure and species calculations, 47 of them fitted.}\label{tab:supplement-outside-fit}
+\begin{tabular}{@{}lrrr@{}}
 \toprule
 Data set & n & AARD (\%) & Mean ln(calc/\allowbreak{}obs) \\
-\midrule\endfirsthead
-\toprule
-Data set & n & AARD (\%) & Mean ln(calc/\allowbreak{}obs) \\
-\midrule\endhead
-\bottomrule\endfoot
+\midrule
 Six-source pressures & $112$ & $24.2$ & $-0.1341$ \\
 Hilliard and Jou pressures & $32$ & $20.77$ & $0.1441$ \\
 Aronu et al. (2011), 15 and 45 wt\% & $70$ & $43.52$ & $-0.01778$ \\
@@ -103,4 +99,6 @@ Wagner et al. (2013), near 392 K & $12$ & $9.254$ & $-0.07186$ \\
 Aronu et al. (2011), 15 wt\% & $33$ & $29.51$ & $-0.2044$ \\
 Aronu et al. (2011), 45 wt\% & $37$ & $56.02$ & $0.1487$ \\
 Matin 19 bicarbonate + carbonate totals & $19$ & $67.48$ & $-1.266$ \\
-\end{longtable}\endgroup
+\bottomrule
+\end{tabular}
+\end{table}

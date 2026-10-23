@@ -75,19 +75,17 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 c903af428326a980013578c4c226807a0e9ce388e5a5d69abf746a4dab7bc5d9
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d5ebd08fa86778db6d8fb3a4122495f2f280d5c5d797a6454d8bfb636a935680
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}lrrr@{}}
-\caption{Three fitted loaded densities outside $\pm2s$ at \SI{353.15}{\kelvin}. Error is calculated minus observed.}\label{tab:density-failures}\\
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Three fitted loaded densities outside $\pm2s$ at \SI{353.15}{\kelvin}. Error is calculated minus observed.}\label{tab:density-failures}
+\begin{tabular}{@{}lrrr@{}}
 \toprule
 Source & Loading & Error (\si{\kilogram\per\cubic\metre}) & $e/s$ \\
-\midrule\endfirsthead
-\toprule
-Source & Loading & Error (\si{\kilogram\per\cubic\metre}) & $e/s$ \\
-\midrule\endhead
-\bottomrule\endfoot
+\midrule
 Amundsen et al. (2009) & $0.3$ & $-5.52$ & $-2.28$ \\
 Hartono et al. (2014) & $0.29$ & $-4.16$ & $-2.05$ \\
 Hartono et al. (2014) & $0.39$ & $-4.41$ & $-2.43$ \\
-\end{longtable}\endgroup
+\bottomrule
+\end{tabular}
+\end{table}

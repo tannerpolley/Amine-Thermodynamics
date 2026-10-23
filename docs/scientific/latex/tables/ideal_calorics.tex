@@ -75,59 +75,37 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 c903af428326a980013578c4c226807a0e9ce388e5a5d69abf746a4dab7bc5d9
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d5ebd08fa86778db6d8fb3a4122495f2f280d5c5d797a6454d8bfb636a935680
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}lrr@{}}
-\caption{Ideal-gas caloric inputs. Shomate $C_P=A+Bt+Ct^2+Dt^3+E/t^2$, $t=T/1000$, in J/(mol K); enthalpy is $h_f+1000(At+Bt^2/2+Ct^3/3+Dt^4/4-E/t+F-H)$. MEA uses $C_P=a+bT+cT^2+dT^3$ with $h=s=0$ at 313.15 K. Shomate entries list A--H in order.}\label{tab:ideal-calorics}\\
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Ideal-gas caloric inputs. Shomate $C_P=A+Bt+Ct^2+Dt^3+E/t^2$, $t=T/1000$, in J/(mol K); enthalpy is $h_f+1000(At+Bt^2/2+Ct^3/3+Dt^4/4-E/t+F-H)$. MEA uses $C_P=a+bT+cT^2+dT^3$ with $h=s=0$ at 313.15 K. Shomate entries list A--H in order.}\label{tab:ideal-calorics}
+\begin{tabular}{@{}lrr@{}}
 \toprule
 Shomate coefficient & \ce{CO2} & Water \\
-\midrule\endfirsthead
-\toprule
-Shomate coefficient & \ce{CO2} & Water \\
-\midrule\endhead
-\bottomrule\endfoot
-$A$ & $24.99735$ & $30.092$ \\
-$B$ & $55.18696$ & $6.832514$ \\
-$C$ & $-33.69137$ & $6.793435$ \\
-$D$ & $7.948387$ & $-2.53448$ \\
-$E$ & $-0.136638$ & $0.082139$ \\
-$F$ & $-403.6075$ & $-250.881$ \\
-$G$ & $228.2431$ & $223.3967$ \\
+\midrule
+$A$ & $24.99735$ & $30.092$ \\*
+$B$ & $55.18696$ & $6.832514$ \\*
+$C$ & $-33.69137$ & $6.793435$ \\*
+$D$ & $7.948387$ & $-2.53448$ \\*
+$E$ & $-0.136638$ & $0.082139$ \\*
+$F$ & $-403.6075$ & $-250.881$ \\*
+$G$ & $228.2431$ & $223.3967$ \\*
 $H$ & $-393.5224$ & $-241.8264$ \\
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-Source temperature & \ce{CO2} (K) & Water (K) \\*
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-Lowest & $298.0$ & $500.0$ \\
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape Source temperature (K)} \\*
+Lowest & $298.0$ & $500.0$ \\*
 Highest & $1200.0$ & $1700.0$ \\
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-Formation enthalpy & \ce{CO2} (J/mol) & Water (J/mol) \\*
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape Formation enthalpy (J/mol)} \\*
 $h_f$ & $-393510.0$ & $-241826.0$ \\
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-$C_P$ polynomial coefficient & \ce{MEA} &  \\*
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-$a$ & $13.207$ &  \\
-$b$ & $0.28158$ &  \\
-$c$ & $-0.0001513$ &  \\
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape \ce{MEA} $C_P$ polynomial coefficient} \\*
+$a$ & $13.207$ &  \\*
+$b$ & $0.28158$ &  \\*
+$c$ & $-0.0001513$ &  \\*
 $d$ & $3.1287\times10^{-8}$ &  \\
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-Source temperature & \ce{MEA} (K) &  \\*
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-Lowest & $283.0$ &  \\
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape \ce{MEA} source temperature (K)} \\*
+Lowest & $283.0$ &  \\*
 Highest & $1000.0$ &  \\
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-Source & \ce{MEA} &  \\*
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape \ce{MEA} source} \\*
 Reference & Zhang Table 3 &  \\
-\end{longtable}\endgroup
+\bottomrule
+\end{tabular}
+\end{table}
