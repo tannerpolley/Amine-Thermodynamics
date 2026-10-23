@@ -208,12 +208,9 @@ def main():
     ax.grid(alpha=.15)
     save(fig, 'mea-water', 'Bubble temperature and incipient vapor composition of the neutral MEA-water binary (no reactions) at 101.33 and 66.66 kPa, over each isobar’s measured liquid range, with the Cai et al. (1996) measurements. Liquid and vapor MEA mole fractions are on the same basis; the vapor value is one minus the retained water mole fraction.', ['fitted-rows.csv','model-curves/mea-water.csv'])
     # Separate fits (#207): every plotted value is calculated with the reported parameters.
-    water_fit = a.BUNDLE/'results/water-124/lambda-0.1-A'
-    flat = lambda d: {i: c['value'] for n in d['components'] + d['correlations'] + d['topology']['edges'] for i, c in a.coefficients(n) if '/water/' in i and 'carbon-dioxide' not in i}
-    water_values = flat(a.load(water_fit/'parameters.json'))
-    assert {'component/water/segment_count', 'component/water/dispersion_energy_over_k', 'component/water/segment_diameter/constant-plus-sum-of-exponentials/constant',
-            'association/water/a/water/b/energy_over_k', 'association/water/a/water/b/volume'} <= water_values.keys() and all(flat(document)[i] == v for i, v in water_values.items() if i in flat(document))
-    water = a.rows(water_fit/'water.csv')
+    displays = a.BUNDLE/'results/engine-3e83e19c-refits/displays'  # reported parameters on the pinned Engine 3e83e19c
+    assert a.load(displays/'summary.json')['parameter_sha256'] == fit['record_sha256']
+    water = a.rows(displays/'water.csv')
     fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH, 2.7), layout='constrained', sharex=True)
     for ax, column, title in zip(axes, ['saturated_liquid_rho_error_relative', 'psat_error_relative', 'cp_error_relative'], ['(a) Saturated-liquid density', '(b) Saturation pressure', r'(c) $C_P$ at 0.3 and 0.101 MPa']):
         for grid, marker, filled in (('primary', 'o', True), ('staggered', 'o', False), ('atmospheric-controls', '^', True)):
@@ -226,7 +223,7 @@ def main():
     fig.legend(handles=[Line2D([], [], marker=m, ls='none', color=COLORS[0], markerfacecolor=COLORS[0] if f else 'none', label=l) for m, f, l in
                         (('o', True, 'Fitted, 0.3 MPa or saturation'), ('o', False, 'Not fitted, interleaved temperatures'), ('^', True, 'Fitted, 0.101 MPa'))],
                loc='outside lower center', ncol=3, fontsize=8, frameon=False)
-    save(fig, 'water-iapws', 'Relative deviations of the pure-water parameters from IAPWS-95 at the 20 fitted temperatures, 19 interleaved temperatures and three atmospheric heat-capacity states.', [str((water_fit/'water.csv').relative_to(a.ROOT))])
+    save(fig, 'water-iapws', 'Relative deviations of the pure-water parameters from IAPWS-95 at the 20 fitted temperatures, 19 interleaved temperatures and three atmospheric heat-capacity states.', [str((displays/'water.csv').relative_to(a.ROOT))])
     kiepe = [dict(r, state=ast.literal_eval(r['declaration'])) for r in fitted if r['group'] == 'Kiepe']
     temperatures = sorted({round(r['state']['T_K'], 1) for r in kiepe})
     tcolor = dict(zip(temperatures, plt.colormaps['plasma']([.82*i/(len(temperatures)-1) for i in range(len(temperatures))])))
