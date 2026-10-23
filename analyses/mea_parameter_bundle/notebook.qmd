@@ -174,7 +174,7 @@ For R1–R3, $\ln K=A+B/T+C\ln T+DT+\Delta$; R2 already includes the conversion 
 
 # Fitting plots
 
-Lines are [model curves](results/model-curves/summary.json) of the adopted record at fixed parameters, at nominal solvent composition against analytical loading, and markers are measurements. Each curve reproduces the retained point predictions at its reference states, converges with balances closed to 10⁻¹⁰ and passes a midpoint sampling check, but it is a calculation, not a new fit, a phase-stability result or physical validation; the tables keep the point-wise statistics of record.
+Lines are [model curves](results/model-curves/summary.json) of the adopted record at fixed parameters and nominal solvent composition, and markers are measurements. The loaded-MEA figures (CO₂ pressure, speciation, heat of absorption and density) use the analytical loading, moles of CO₂ fed per mole of total MEA; the MEA–water figure uses the liquid and vapor MEA mole fractions of the CO₂-free binary. Each curve reproduces the retained point predictions at its reference states, converges with balances closed to 10⁻¹⁰ and passes a midpoint sampling check, but it is a calculation, not a new fit, a phase-stability result or physical validation; the tables keep the point-wise statistics of record.
 
 ## CO₂ pressure {#pressure-and-speciation}
 
@@ -186,10 +186,12 @@ Pressures are plotted in kPa; the lower panel gives deviations at the measured s
 
 | Cohort / role | Evaluated / requested | AARD (%) | RMS ln(calc/obs) (1) |
 | --- | --- | --- | --- |
-| All shown (Hilliard 2008 + Jou 1995) | 79 / 79 | 15.47 | 0.1923 |
+| Hilliard 2008 + Jou 1995 comparison subset | 79 / 79 | 15.47 | 0.1923 |
 | Fitted (common calibration subset) | 47 / 47 | 11.86 | 0.1514 |
 | Hilliard 2008 | 31 / 31 | 9.42 | 0.1187 |
 | Jou 1995 | 48 / 48 | 19.37 | 0.2276 |
+
+These statistics cover 79 of the 182 measurements in the CO₂ pressure figure.
 
 <!-- RESULTS:pressure:END -->
 

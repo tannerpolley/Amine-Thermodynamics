@@ -1,6 +1,7 @@
 """Render the manuscript figures from retained states and the retained model curves (#197, #202); no Engine compute."""
 import json
 import math
+from itertools import groupby
 
 import matplotlib
 matplotlib.use('Agg')
@@ -19,6 +20,7 @@ SOURCE_NAMES = {'Bottinger2008':'Böttinger et al. (2008)', 'Matin2012':'Matin e
 SPECIES_NAMES = {'MEA':r'MEA', 'MEAH+':r'MEAH$^+$', 'MEACOO-':r'MEACOO$^-$', 'MEA + MEAH+':r'MEA + MEAH$^+$', 'HCO3-':r'HCO$_3^-$ + CO$_3^{2-}$', 'HCO3- + CO3^2-':r'HCO$_3^-$ + CO$_3^{2-}$'}
 CURVES = a.BUNDLE / 'results/model-curves'
 DASHED = 'Dashed: imposed single liquid below its bubble pressure'
+UNKNOWN = lambda rows: any(r.get('below_bubble_pressure') == 'unavailable' for r in rows)
 
 
 
@@ -31,26 +33,18 @@ def save(fig, name, caption, inputs):
 
 
 def curve(ax, rows, quantity, color, scale=1.):
-    """Model curve through its grid and midpoint states; unavailable states are gaps; dashed below the bubble pressure."""
+    """Model curve over its ordered states, with gaps at unavailable states; each segment takes its less certain end's style (below the bubble pressure: dashed; comparison unavailable: dotted)."""
     part = sorted((r for r in rows if r['quantity'] == quantity), key=lambda r: float(r['analytical_loading']))
     x = [float(r['analytical_loading']) for r in part]
     y = [float(r['value'])*scale if r['status'] == 'available' else math.nan for r in part]
-    below = [r.get('below_bubble_pressure') == 'True' for r in part]
-    ax.plot(x, [v if not b else math.nan for v, b in zip(y, below)], color=color, lw=1)
-    if any(below):
-        ax.plot(x, [v if b or (i+1 < len(y) and below[i+1]) else math.nan for i, (v, b) in enumerate(zip(y, below))], color=color, lw=1, ls='--')
+    rank = [{'False': 0, 'True': 1}.get(r.get('below_bubble_pressure', 'False'), 2) for r in part]
+    for style, run in groupby(range(len(x) - 1), key=lambda i: max(rank[i], rank[i+1])):
+        i = list(run)
+        ax.plot(x[i[0]:i[-1]+2], y[i[0]:i[-1]+2], color=color, lw=1, ls=('-', '--', ':')[style])
 
 
 def points(ax, x, y, marker, color, filled):
     ax.scatter(x, y, marker=marker, facecolors=color if filled else 'none', edgecolors=color, s=18, linewidths=.7, zorder=3)
-
-
-def measured(ax, part, color, label, fitted, marker='o'):
-    for member in [True, False]:
-        rows = [r for r in part if (r['target'] in fitted) == member]
-        ax.scatter([float(r['loading']) for r in rows], [float(r['observed']) for r in rows],
-                   marker=marker, facecolors=color if member else 'none', edgecolors=color, s=20, linewidths=.7)
-    ax.scatter([float(r['loading']) for r in part], [float(r['predicted']) for r in part], marker='x', color='black', s=10, linewidths=.55)
 
 
 def main():
@@ -109,7 +103,8 @@ def main():
         ax.set_xlabel(LOADING)
     handles = list({h.get_label(): h for h in handles}.values()) + [Line2D([], [], marker='o', markerfacecolor=f, color='black', linestyle='none', label=l) for f, l in (('black', 'Fitted'), ('none', 'Not fitted'))]
     fig.legend(handles=handles, loc='outside upper center', ncol=3, fontsize=8, frameon=False)
-    fig.supxlabel(DASHED, fontsize=8)
+    top = {q: f'{m}$\\times10^{{{int(e)}}}$' for q in ('CO3^2-', 'CO2') for m, e in [f'{max(float(r["value"]) for r in curves if r["quantity"] == q and r["status"] == "available"):.1e}'.split('e')]}
+    fig.supxlabel(DASHED + ('; dotted: bubble-pressure comparison unavailable' if UNKNOWN(curves) else '') + f"\nLargest calculated mole fractions, not drawn: CO$_3^{{2-}}$ {top['CO3^2-']}, dissolved CO$_2$ {top['CO2']};\nHCO$_3^-$ therefore makes up the plotted HCO$_3^-$ + CO$_3^{{2-}}$ curve", fontsize=8)
     save(fig, 'speciation', 'True-species liquid mole fractions of loaded MEA against analytical loading: model curves and the Böttinger and Matin measurements, with MEA + MEAH+ and HCO3− + CO3²− as the reported aggregates. States are single liquids imposed at 101 325 Pa; the 353.15 K panel uses 31 wt% MEA to match Böttinger’s samples, and its states above loading 0.51 lie below their bubble pressure.', ['species-figure-data.csv','fitted-rows.csv','model-curves/species.csv'])
     fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.8), layout='constrained')
     curves, handles = a.rows(CURVES/'heat.csv'), []
@@ -166,7 +161,7 @@ def main():
     handles = [Line2D([], [], color=c, label=f"{T:g} K, {0.7 if T > 364 else 0.1:g} MPa") for T, c in zip(temperatures, COLORS)]
     handles += [Line2D([], [], marker=m, markerfacecolor='none', color='black', linestyle='none', label=SOURCE_NAMES[s]) for s, m in zip(sources, MARKERS)]
     handles += [Line2D([], [], marker='o', markerfacecolor=f, color='black', linestyle='none', label=l) for f, l in (('black', 'Fitted'), ('none', 'Not fitted'))]
-    fig.legend(handles=handles+[Line2D([], [], color='black', ls='--', label='Below bubble pressure')], fontsize=8, frameon=False, loc='outside right upper')
+    fig.legend(handles=handles + [Line2D([], [], color='black', ls='--', label='Below bubble pressure')] + [Line2D([], [], color='black', ls=':', label='Bubble comparison unavailable')]*UNKNOWN(curves), fontsize=8, frameon=False, loc='outside right upper')
     ax.set(xlabel=LOADING, ylabel='Liquid density (kg/m³)')
     ax.grid(alpha=.15)
     save(fig, 'density-curves', 'Liquid density of 30 wt% MEA against analytical loading: model curves at six temperatures and the 30 wt% measurements at those temperatures. Single liquids are imposed at 0.1 MPa up to 353.15 K and at 0.7 MPa at 373.15 and 393.15 K, as in the retained Han comparison; zero loading carries exactly zero carbon. Dashed segments lie below their bubble pressure. No empirical volume translation.', ['density.csv','fitted-rows.csv','model-curves/density.csv'])
@@ -175,8 +170,8 @@ def main():
     observed = {r['id']: float(r['observed']) for r in fitted if r['group'] == 'Cai'}
     for P, color in zip((101330., 66660.), COLORS):
         state = {}
-        for r in (r for r in curves if float(r['pressure_Pa']) == P and r['status'] == 'available'):
-            state.setdefault(float(r['liquid_mea_mole_fraction']), {})[r['quantity']] = float(r['value'])
+        for r in (r for r in curves if float(r['pressure_Pa']) == P):  # full ordered grid; unavailable states are gaps in both branches
+            state.setdefault(float(r['liquid_mea_mole_fraction']), {})[r['quantity']] = float(r['value']) if r['status'] == 'available' else math.nan
         x = sorted(state)
         ax.plot(x, [state[v]['bubble temperature'] for v in x], color=color)
         ax.plot([1-state[v]['vapor water mole fraction'] for v in x], [state[v]['bubble temperature'] for v in x], color=color, ls='--')
