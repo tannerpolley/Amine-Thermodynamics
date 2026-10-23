@@ -1,3 +1,11 @@
+## Second mechanical correction round (2026-10-22)
+
+The confirming science and story reports for `ae15c4d` were applied under issue #197. The science definition of the row-scaled residuals used to decide convergence overrides story N7's unscaled-equation wording. The appended Table S2 correction replaces the earlier N8 text. Table changes were regenerated from `scripts/final_rerun_tables.py`; the Figure 2 change is in the caption source.
+
+For N9, the native scope question returned “All N9 records” in Don't Ask mode. The correction therefore covers the ten explicitly listed title records: Neumann's Helmholtz capitalization plus nine H2O/H2S titles, rather than the brief's two-record limit. Only their Better BibTeX `tex.title=` overrides were changed, after inspecting the exact old/new preview. Zotero keys: `MIWSMGMV`, `RVYVQKSF`, `NL4W5CA6`, `E322TKPZ`, `MMI98GID`, `9GBQCJNU`, `VDRXENRB`, `P9HDI8CX`, `UC2KB9PU`, `ZILDPWWE`. The authorized canonical export was regenerated with `cse-zotero bibliography-export --apply`, verified to omit attachment paths, then the cited subset was regenerated with `scripts/cited_bibliography.py` using the preceding build's unchanged citation set. All 54 keys and every non-title bibliography field are semantically unchanged; the exporter adds trailing field commas.
+
+This round changes presentation only. No model calculation or parameter estimation was run. The phase-search claims remain limited to 313.15–333.15 K; the issue #201 files already present on the starting branch were not used or changed. The parent owns confirming review and delivery.
+
 ## Review correction round (2026-10-22)
 
 The science review of `703fb86` and the reader review were applied under issue #197's explicit fix-round authority. Science correction 7 overrides story R5: only restricted-bound marker shapes identify single-liquid versus liquid--vapor states. Science correction 8 and story R3 agree on Table S1; the story replacement supplies the complete grammatical sentence. No other scientific conflict was found.

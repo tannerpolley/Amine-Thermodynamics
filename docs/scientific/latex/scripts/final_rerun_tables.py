@@ -79,6 +79,7 @@ def tex(value):
     if value == 'dimensionless':
         return '1'
     escaped = ''.join({'^': r'\textasciicircum{}', '&': r'\&', '%': r'\%', '_': r'\_\allowbreak{}', '#': r'\#', '$': r'\$', '{': r'\{', '}': r'\}'}.get(c, c) for c in str(value)).replace('/', r'/\allowbreak{}')
+    escaped = re.sub(r'(?<![\w.-])-(?=\d)', r'\\textminus{}', escaped)
     escaped = re.sub(r'(?<![\w.])[-+]?\d+(?:\.\d*)?[eE][-+]?\d+(?![\w.])', lambda m: '$' + scientific(m.group()) + '$', escaped)
     return re.sub(r'[a-f0-9]{64}', lambda m: r'\allowbreak{}'.join(m.group()[i:i+8] for i in range(0,64,8)), escaped)
 
@@ -171,13 +172,13 @@ def main():
         def unique(key):
             return ', '.join(num(x) if key != 'form' else x for x in sorted({r[key] for r in part}, key=lambda x: float(x) if key != 'form' else x))
         scales = [float(r['scale']) for r in part]
-        scale = num(scales[0]) if len(set(scales)) == 1 else num(min(scales)) + ' to ' + num(max(scales)) + ' (row-specific)'
+        scale = num(scales[0]) if len(set(scales)) == 1 else num(min(scales)) + ' to ' + num(max(scales)) + ' (per observation)'
         objective.append([group, 'liquid species fraction' if group=='restored species' else operators[quantity], 'liquid mole fraction' if group=='restored species' else UNITS[quantity], len(part), unique('form'), (num(min(scales)/1000)+' to '+num(max(scales)/1000)) if quantity=='AdditionEnthalpy' else scale, {1/47:'1/47',1/39:'1/39',100/9:'100/9'}.get(float(part[0]['weight']),unique('weight')), num(math.fsum(float(r['cost']) for r in part))])
     for group in ['common149','Cai']:
         objective.append([group+' subtotal (already included)', '--', '--', fit['groups'][group]['n'], '--', '--', '--', num(fit['groups'][group]['cost'])])
     objective.append(['Objective total', '--', '--', 307, '--', '--', '--', num(fit['cost'])])
-    table('objective_groups.tex', r'A7 objective operators. Rows partition eight disjoint groups and 307 quantities; common149 contains pressure, species and heat. Cai contains 25 temperatures and 25 vapour fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; LogRatio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales retain their declared meaning; they are not uniformly measurement uncertainties.',
-          ['Group', 'Operator', 'Unit/basis', 'n', 'Residual', 'Scale', 'Weight', 'Cost'], objective, [.13,.16,.15,.04,.12,.16,.10,.14])
+    table('objective_groups.tex', r'A7 objective groups. The eight groups are disjoint and contain 307 quantities; common149 contains pressure, species and heat. Cai contains 25 temperatures and 25 vapour fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; LogRatio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales are not uniformly measurement uncertainties.',
+          ['Group', 'Quantity', 'Unit/basis', 'n', 'Residual', 'Scale', 'Weight', 'Cost'], objective, [.13,.16,.15,.04,.12,.16,.10,.14])
     residual = []
     for name in ['common149 pressure', 'common149 species', 'restored species', 'Jakobsen', 'Kiepe', 'loaded density', 'CO2-free density']:
         s = fit['groups'][name]
@@ -313,7 +314,7 @@ def main():
         by_source.setdefault((source,r['group'],r['quantity']),[]).append(r)
     for (source,group,quantity), part in by_source.items():
         source_rows.append([source,group,label(quantity),len(part),num(a.stats(part)['RMSE']) if group=='Cai' else num(a.stats(part)['AARD_percent']),num(math.fsum(float(r['cost']) for r in part))])
-    table('supplement_source_aard.tex',r'A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapour water mole fraction. It does not combine quantities into an accuracy ranking. Costs sum disjoint fitted rows; quantity meanings and native units are in the objective table.',
+    table('supplement_source_aard.tex',r'A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapour water mole fraction. It does not combine quantities into an accuracy ranking. Entry costs add to the total objective cost of 148.9; quantity definitions and units are in main-text Table 3.',
           ['Source','Group','Observable','n','Deviation','Cost'],source_rows,[.18,.20,.24,.05,.16,.17])
     outside=[]
     for name,s in a.load(a.E/'state-summary.json')['scores'].items():
@@ -322,7 +323,7 @@ def main():
             score = a.stats(part)
             bias = math.fsum(math.log(float(r['predicted'])/float(r['observed'])) for r in part)/len(part)
             outside.append([comparison_label(name), 'not fitted; seen during development', len(part), num(score['AARD_percent']), num(bias)])
-    table('supplement_outside_fit.tex',r'A7 comparisons outside the fit. Fitted observations are removed from each set; sets overlap and are not additive. These comparisons were not fitted but were seen during model development.',
+    table('supplement_outside_fit.tex',r'A7 comparisons outside the fit. Fitted observations are removed from each set; sets overlap and are not additive. These comparisons were not fitted but were seen during model development. The pressure/species subset is the 79 Jou and Hilliard pressures used in the pressure and species calculations, 47 of them fitted.',
           ['Data set','Data use','n','AARD (%)','Mean ln(calc/obs)'],outside,[.30,.29,.06,.15,.20])
     loaded_ids=set(spec['loaded_density_ids'])
     excluded=set(summary['density']['Amundsen source-conflict five']['row_ids'])
@@ -353,7 +354,7 @@ def main():
     for temperature in sorted({float(r['temperature_K']) for r in paired['A7'].values()}):
         part=[i for i,r in paired['A7'].items() if float(r['temperature_K'])==temperature]
         phase_rows.append([num(temperature,6),len(part),sum(int(paired['A6'][i]['resolved_trials'])>0 for i in part),sum(int(paired['A7'][i]['resolved_trials'])>0 for i in part)])
-    table('supplement_phase_family.tex',r'Paired phase-search summary. The complete 73-state temperature, pressure, loading and trial data are supplied as CSV in the data deposit. Index 0 repeats index 41 at 318.15 K and loading 0.2556, with pressure rounded to 5918.5286 Pa; both count. Two-phase classifications include vapor.',
+    table('supplement_phase_family.tex',r'Phase-search summary for both fits. The complete 73-state temperature, pressure, loading and trial data are supplied as CSV in the data deposit. One 318.15 K state (loading 0.2556) is evaluated twice, once at its pressure rounded to 5918.5286 Pa; both evaluations are counted. Two-phase classifications include liquid--vapor equilibrium.',
           ['T (K)','Test states','Original-bound instabilities','Restricted-bound instabilities'],phase_rows,[.16,.20,.32,.32])
     previous=OUTPUTS['supplement_phase_family.tex']
     split_rows=[]
@@ -370,7 +371,7 @@ def main():
     OUTPUTS['supplement_phase_family.tex']=previous+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-states')
     previous=OUTPUTS['supplement_phase_family.tex']
     table('supplement_phase_family.tex', r'A6 successful split phase amounts (mol), densities (mol/m3) and mole fractions in source order: CO2, MEA, water, MEAH+, carbamate, bicarbonate, carbonate, hydronium, hydroxide. Vapour rows list only their three supported neutral species (CO2, MEA, water); liquid rows list all nine.',
-          ['State','Seed / phase','Amount','Density','Mole fractions in declared order'],split_phases,[.05,.20,.11,.12,.52])
+          ['State','Seed / phase','Amount','Density','Mole fractions (order in caption)'],split_phases,[.05,.20,.11,.12,.52])
     OUTPUTS['supplement_phase_family.tex']=previous+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-compositions')
     inventory=[]
     meta_by_target={r['target']:r for r in state if r['kind']=='packet'}
@@ -403,7 +404,7 @@ def main():
           ['T (K)','Difference (kg/m3)'],[[num(r['T_K'],6),num(r['amundsen_minus_hartono'])] for r in sorted(conflicts,key=lambda r:r['T_K'])])
     calorics=a.load(a.ROOT/'data/reference/MEA/thermal/physical-ideal-gas-calorics.json')
     table('ideal_calorics.tex',r'Ideal-gas caloric inputs. Shomate $C_P=A+Bt+Ct^2+Dt^3+E/t^2$, $t=T/1000$, in J/(mol K); enthalpy is $h_f+1000(At+Bt^2/2+Ct^3/3+Dt^4/4-E/t+F-H)$. MEA uses $C_P=a+bT+cT^2+dT^3$ with $h=s=0$ at 313.15 K. Shomate entries list A--H in order.',
-          ['Component; form','Coefficients','Source range; reference'],[[name+'; '+calorics['components'][key]['representation'].replace('cp_', r'$C_P$ '),', '.join(str(v) for v in calorics['components'][key]['coefficients']),str(calorics['components'][key].get('source_range_k',calorics['components'][key]['range_k']))+' K; '+('formation enthalpy '+str(calorics['components'][key]['formation_enthalpy_j_per_mol'])+' J/mol' if key!='monoethanolamine' else 'Zhang Table 3')] for name,key in [('CO2','carbon-dioxide'),('Water','water'),('MEA','monoethanolamine')]],[.19,.54,.27])
+          ['Component; form','Coefficients','Source range; reference'],[[name+'; '+calorics['components'][key]['representation'].replace('cp_', r'$C_P$ ').replace('shomate', 'Shomate'),', '.join(str(v) for v in calorics['components'][key]['coefficients']),str(calorics['components'][key].get('source_range_k',calorics['components'][key]['range_k']))+' K; '+('formation enthalpy '+str(calorics['components'][key]['formation_enthalpy_j_per_mol'])+' J/mol' if key!='monoethanolamine' else 'Zhang Table 3')] for name,key in [('CO2','carbon-dioxide'),('Water','water'),('MEA','monoethanolamine')]],[.19,.54,.27])
     literature=[
         [r'Böttinger et al. \cite{Bottinger2008}','Pitzer; 6 coefficients in 2 MEA reaction laws','NMR; 293--353 K','No aggregate MEA error stated; R5 fixed to Bates--Pinching','VLE compared with earlier VLE-fitted interactions (Tables 5--6)'],
         [r'Zhang et al. \cite{Zhang2011}','eNRTL/PC-SAFT vapor; 12 ternary coefficients','Pressure, differential heat, heat capacity, NMR','Pressure 13.5--35.5% by source; heat 10.9% (84); Cp 2.4% (102); species 35.7% (24), Table 9','Additional pressure sources 28.6--112% (Table 11)'],
@@ -415,7 +416,7 @@ def main():
         [r'Hessen et al. \cite{Hessen2010}','Refined eNRTL; temperature-dependent interactions (Table 2)','Binary VLE, freezing point, excess enthalpy and ternary pressures','No aggregate MEA pressure statistic stated','Speciation and activity comparisons; Section 4'],
         [r'Aronu et al. \cite{Aronu2011}','Extended UNIQUAC; ion size/surface and pair coefficients (Tables 7--9)',r'VLE at 15--60 wt%; \ce{N2O}-derived physical solubility','Fitted CO2 partial pressure 24.3%; total pressure 11.7%; physical solubility 2.7% (Section 5)','NMR and absorption heat compared outside objective'],
         [r'Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013}','Electrolyte cubic two-state association; 7 MEA ternary parameters','VLE; 15.2--30 wt%; 298.15--393.15 K in Table~2 and Fig.~8; Section~4.3.3 instead states an upper limit of 366.68 K','Relative pressure deviation 12.5%, fitted (Tables 5, 8)','Parameters from earlier subsystems retained'],
-        [r'Neumann et al. \cite{neumannNewModelCombining2022}','Helmholtz energy/eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained',r'Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data','Ternary density AARD 0.92% Hartono; 3.5% complete Han (Section 4.2)','VLE/density comparisons; density cohorts differ from this work'],
+        [r'Neumann et al. \cite{neumannNewModelCombining2022}','Helmholtz energy/eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained',r'Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data','Ternary density AARD 0.92% Hartono; 3.5% complete Han (Section 4.2)','VLE/density comparisons; density data sets differ from this work'],
         ['This work','16 fitted parameters; 6 at bounds','307 quantities; 8 groups','Fitted pressure/species 11.86/7.10%; integral heat RMSE 1.83 kJ/mol','159-pressure comparison 20.55%; not blind tests (Section 3)']]
     table('literature_model_comparison.tex',r'Model complexity, data roles and reported deviations in related MEA studies. Parameter counts refer to the stated fit, excluding earlier subsystem fits. Relative pressure deviations and caloric metrics use each source\'s own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.',
           ['Study','Model; fitted parameters','Fitted data','Reported agreement','Other comparisons or qualification'],literature,[.15,.22,.19,.24,.20])
