@@ -6,7 +6,7 @@ resources:
   - ../results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md
 ---
 
-Historical record: amendment 6, 19–20 October 2026. The [adopted A7 overview](../notebook.qmd) reports the later record.
+Historical record: amendment 6 (A6), the sixth revision of the #170 joint-recalibration plan, 19–20 October 2026. The later adopted A7 record is on the [overview](../notebook.qmd).
 
 # Question
 
@@ -18,7 +18,7 @@ The revised joint fit met its fitted-density limits but retained resolved phase 
 
 # Basis and method
 
-The density residual weight $\lambda$ scales the density contribution to the objective. MEA dielectric volume $d_V$ (L/mol) distinguishes the retained smaller and larger branches. The [retained form comparison](../results/joint-recalibration-170/amendment-6/candidates/README.md) defines “Held” as Debye–Hückel ion diameter equal to segment diameter $\sigma$, and “tied” as $0.88\sigma$. $C_{149}$ is the dimensionless weighted cost for the common pressure/species/Vinjarapu subset. The following dated records preserve source pressures, composition basis, row roles and exact parameter/Engine identities; they are predecessor comparisons.
+The density residual weight $\lambda$ scales the density contribution to the objective. MEA dielectric volume $d_V$ (L/mol) distinguishes the retained smaller and larger branches. The [retained form comparison](../results/joint-recalibration-170/amendment-6/candidates/README.md) defines “Held” as Debye–Hückel ion diameter equal to segment diameter $\sigma$, and “tied” as $0.88\sigma$. $C_{149}$ is the dimensionless weighted cost for the common pressure/species/Vinjarapu subset. The following dated records preserve source pressures, composition basis, row roles and exact parameter/Engine identities; they are predecessor comparisons. Starts A and B are the two retained initial parameter vectors. “A4 controls” are the amendment-4 endpoints ([neutral CO₂](../neutral-co2/index.qmd)). F1 is the heat-fit record adopted before A7 ([heat F1](../heat-f1/index.qmd)). The revised #183 loaded-density requirement applied here is $|\rho_{calc}-\rho_{obs}|\leq2s$ for each of 15 Amundsen 2009 and 32 Hartono 2014 rows at nominal 30 wt % MEA, using frozen row-specific density and loading scales; the five Amundsen loading-0.4 rows are excluded. The five CO₂-free rows use 1.0 kg/m³. These scales are not uniformly measured uncertainties; the earlier screens below retain their superseded ±2 kg/m³ rule.
 
 ## Basis, source roles and the MEA–water fit
 
@@ -46,15 +46,14 @@ Here $k$ is dimensionless and $b$ is in kelvin. Both starts converge to $k=-0.08
 Run 18 October 2026 on Engine `main-21e761c3`. Records:
 [smaller-d_V densities](../results/joint-recalibration-170/amendment-6/smaller-dV-density/README.md),
 [density-weighted screen](../results/joint-recalibration-170/amendment-6/density-sweep/README.md).
-Delivered review (independent, three rounds of record corrections, no new calculation): Supported at b5d794b.
 
-**Density at λ = 0.** The #183 gate requires each of the 20 loaded 30 wt % rows (loading up to 0.4) within 2 kg/m³. On its 12 fitted rows:
+**Density at λ = 0.** The original #183 gate required each of the 20 loaded 30 wt % rows (loading up to 0.4) within 2 kg/m³. On its 12 fitted rows:
 - Both A4 controls miss by −24.3 to −108.2 kg/m³. The two dielectric branches differ by at most 0.009 kg/m³.
 - The paper record F1 without translation misses by +136 to +190 kg/m³ at its four retained states.
 - With the empirical translation, the paper record still has 15 of the 20 gate rows outside ±2 kg/m³ (−3.68 to +3.85).
 - Before amendment 6, no joint-refit fit had weighted density: every earlier retained `fit_case` has `density_weight = 0`.
 
-**First screen: larger d_V, start A, λ = 0.01.** Here λ/12 is the weight of each density row, at scale 2 kg/m³. The fit stopped at the 100-iteration limit, so the runner refused the λ = 0.1 and λ = 1 fits until the owner decides. At that unconverged endpoint:
+**First screen: larger d_V, start A, λ = 0.01.** Here λ/12 is the weight of each density row, at scale 2 kg/m³. The fit stopped at the 100-iteration limit, so the runner refused the λ = 0.1 and λ = 1 fits. At that unconverged endpoint:
 
 | | λ = 0 (A4 control) | λ = 0.01 (iteration 100) |
 |---|---:|---:|
@@ -66,8 +65,6 @@ Delivered review (independent, three rounds of record corrections, no new calcul
 | Free-column condition (limit 1e4) | 37,393 | 3,768 |
 | Projected gradient (limit 1e-8) | 0.00812 | 0.00513 |
 
-The table compares two endpoints across nine quantities, so a table rather than a figure.
-
 - **Where the cost moved:** the non-density reacting cost rose 2.65 %, mostly from the corrected Jakobsen ratios (+0.86) and the Vinjarapu heats (+0.47). Pressures (−0.27) and the Matin species (−0.17) improved.
 - **What stayed on bounds:** the carbamate size and both Born diameters, plus three other coordinates.
 - **Shape of the remaining errors:** they grow with loading, from about −3 kg/m³ at 0.1 to about −24 kg/m³ at 0.4.
@@ -77,7 +74,7 @@ The table compares two endpoints across nine quantities, so a table rather than 
 
 ### Density weights and the second source (A6 step 1b)
 
-**Weighting the loaded densities cuts the loaded-density error by one to two orders of magnitude, but no endpoint passes the existing density gate.** The aggregate calibration cost changes little, while the Vinjarapu heat error rises 22–24 %. Run 19 October 2026, under the owner's authorization of that date. Record: [step 1b](../results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md). Delivered review (independent, two rounds of record corrections, no new fit): Supported at ceb40c1.
+**Weighting the loaded densities cuts the loaded-density error by one to two orders of magnitude, but no endpoint passes the existing density gate.** The aggregate calibration cost changes little, while the Vinjarapu heat error rises 22–24 %. Run 19 October 2026, under the owner's authorization of that date. Record: [step 1b](../results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md).
 
 | Endpoint (converged) | C149 | Pressure / species AARD, % | Vinjarapu RMSE, kJ/mol | Amundsen loaded density errors, kg/m³ | Hartono 32 density errors, kg/m³ |
 |---|---:|---|---:|---|---|
@@ -85,8 +82,6 @@ The table compares two endpoints across nine quantities, so a table rather than 
 | λ = 0.1, Amundsen targets | 23.472 | 11.82 / 7.05 | 1.88 | −7.3 to +2.5 (9 of 20 within 2) | −0.6 to +5.1 |
 | λ = 1, Amundsen targets | 24.726 | 12.44 / 7.10 | 1.88 | −4.5 to +2.9 (7 of 20) | +0.6 to +6.3 |
 | λ = 1, Hartono targets | 24.678 | 12.40 / 7.10 | 1.86 | −10.1 to +1.0 (10 of 20) | −3.4 to +2.1 |
-
-The table compares four endpoints across six quantities, so a table rather than a figure.
 
 - **The two sources disagree at high loading.** Amundsen lies 0.4–1.6 kg/m³ above Hartono at loadings 0.1–0.3 and 8.5–9.1 kg/m³ above at 0.4. Hartono reports ±0.02 kg/m³ in density and ±0.01 in loading.
 - **These fits follow the source they are given.** Fitted to Hartono, the model is within about ±1 kg/m³ (−1.00 to +1.03) of Amundsen at loadings 0.1–0.2 and below Amundsen at 0.3–0.4. Fitted to Amundsen, it lies above Hartono.
@@ -98,7 +93,7 @@ The Hartono rows are a diagnostic transcription, not adopted data. None of these
 
 ### Joint density fit and phase assessment (A6 revision 3)
 
-**At the amendment-6 delivery on 20 October 2026, review was pending and adoption was withheld (phase-family gate).** The selected Held larger-dielectric-volume start-A endpoint has cost **148.2377** and reproduces **47/47 fitted loaded densities within $2s$**, with maximum absolute error **1.98$s$**. Its five CO₂-free densities pass the owner's revised **$2u=1.0$ kg/m³** gate. The same vector has **0 passed / 61 unresolved / 12 failed** phase-family points; retained split-seeded calculations confirm lower-Gibbs two-liquid states at 333.15 K and loadings 0.4 and 0.5. Density agreement therefore does not qualify this vector for adoption. These are calibration results and numerical verification of model predictions, without physical validation of phase separation. Sources: [joint-fit scores](../results/joint-recalibration-170/amendment-6/joint-mea-water/summary.json), [selected assessment](../results/joint-recalibration-170/amendment-6/selected-assessment/summary.json), [phase-family counts](../results/joint-recalibration-170/amendment-6/selected-checks/phase-family/summary.json) and [phase diagnosis](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/report.md).
+**The selected vector met the fitted-density limits but showed resolved phase descents at 12 of 73 states, so it was not adopted.** The selected Held larger-dielectric-volume start-A endpoint has cost **148.2377** and reproduces **47/47 fitted loaded densities within $2s$**, with maximum absolute error **1.98$s$**. Its five CO₂-free densities pass the owner's revised **$2u=1.0$ kg/m³** gate. The same vector has **0 passed / 61 unresolved / 12 failed** phase-family points; retained split-seeded calculations confirm lower-Gibbs two-liquid states at 333.15 K and loadings 0.4 and 0.5. Density agreement therefore does not qualify this vector for adoption. These are calibration results and numerical verification of model predictions, without physical validation of phase separation. Sources: [joint-fit scores](../results/joint-recalibration-170/amendment-6/joint-mea-water/summary.json), [selected assessment](../results/joint-recalibration-170/amendment-6/selected-assessment/summary.json), [phase-family counts](../results/joint-recalibration-170/amendment-6/selected-checks/phase-family/summary.json) and [phase diagnosis](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/report.md).
 
 #### Candidate comparison and selected endpoint
 
@@ -231,7 +226,7 @@ The [selected numerical checks](../results/joint-recalibration-170/amendment-6/s
 
 The source-uncertainty scales and deterministic point estimates do not propagate parameter, source-correlation or model-form uncertainty. Bound activity, start dependence, loading-basis sensitivity and remaining source disagreements limit parameter interpretation. Non-fitted rows are conditional predictions; previously accessed rows and overlapping cohorts do not establish untouched predictive validation. The selected assessment did not perform a paired with/without-heat comparison or independently bind the complete historical #189 pure-water qualification inputs. No new pure-water sweep is inferred from this result.
 
-**Decision.** The selected Held endpoint passes the revised fitted-property gates, while the phase-family evidence prevents adoption. The unresolved trial searches and the model's resolved dense-liquid splits are distinct remaining questions. At that historical delivery, this revision was **delivered, review pending; adoption withheld (phase-family gate)**. The notebook update has not been independently reviewed or promoted for manuscript use; it does not authorize an absorber/stripper model or replacement of the currently adopted parameter record.
+**Decision.** The selected Held endpoint passes the revised fitted-property gates, while the phase-family evidence prevents adoption. The unresolved trial searches and the model's resolved dense-liquid splits are distinct remaining questions.
 
 
 ## Execution record
