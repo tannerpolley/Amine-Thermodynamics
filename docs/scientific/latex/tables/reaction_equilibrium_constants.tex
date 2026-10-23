@@ -24,9 +24,7 @@
 % Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/checks.json SHA256 5d18e3313805a07c8fc518be37878ee50181d2424fd8bdb354897b7cb5c2cdb1
 % Input: analyses/mea_parameter_bundle/results/engine-8298c602-adoption/comparison.json SHA256 8bead5a2273dd698b08b0926f6147470bd0ba000ed2c5d9896b57dffb0c8dedb
 % Input: analyses/mea_parameter_bundle/results/heat-160/A-parameters.json SHA256 66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778
-% Input: analyses/mea_parameter_bundle/results/heat-final-170/F1-A/native-fit.json SHA256 9c36dc8a3ba9f98f8a293414fc1a1416c417b39cb44ecc1fc4c11578f9a6d14c
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/corrected-densities.csv SHA256 9a5e301f5277bd5db696c350165113bda80dfd1dfb5653d7c3dcc0e0a11f8b9a
-% Input: analyses/mea_parameter_bundle/results/heat-final-170/density-states.json SHA256 c2c505e13cf56d260f7d352fee37a298764451fbee483d68ec4842d60c5a8468
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/evaluation/execution.json SHA256 213164bd58f26f69696a1b2506b3d905ca567fb3879294b3a5abb3788ac218bd
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/fit-comparison.csv SHA256 81f5390ace97df8669b125d347447dc665a34f33dc4a2fb09dc3359c092bf8cc
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/heat-capacity-comparison.csv SHA256 303a8043a48f6a5dbf7de527c30f3de19e6d74274ed95dd20748be30d45665a2
@@ -72,11 +70,10 @@
 % Input: analyses/mea_parameter_bundle/results/phase-extension-201/run-3/split-confirmations.csv SHA256 d9eaeb190cf38f5f53d154d2f17e91e27540c28d142afd037e9658839ecd43d0
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
-% Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 072458e2764affd752be1cf938239bf24035918a68d828991b3b69eddc07a8b4
-% Input: docs/scientific/latex/supplement.tex SHA256 a74df58846715ee08c4c207d24e131ddf082fa57b9363a58c55ce01f1e034b68
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 e96f8ccfb188ba82a47a6d4590a4592a32d6b783b274ddad7bccb995a4cb5ff2
+% Input: docs/scientific/latex/supplement.tex SHA256 1be07af8c35b621ee1931224c1e02ef5808bb3d409d97ba064daa47be7ce2c40
 \begingroup\small\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}llrrrrll@{}}
 \caption{Reaction equilibrium constants for the reported parameters. R1--R4 use $\ln K=A+B/T+C\ln T+DT+\Delta_r$ and R5 uses $\mathrm{p}K=A_5/T+B_5+C_5T$, with $T$ in K; a dash marks a term the correlation does not include. R1 and R3 are fixed source laws; R2, R4 and R5 list the selected coefficients, and the R2 and R5 coefficients already include the fitted shifts. The offset $\Delta_r$ converts each source to the common aqueous molality standard, 1 mol/kg at infinite dilution in water: it is 8.033 for R1 and 4.017 for R3, is already included in the R2 coefficients and is zero for R4 and R5. Source ranges are not validation domains.}\label{tab:reaction-equilibrium-constants}\\
@@ -88,11 +85,11 @@
 \midrule\endhead
 \bottomrule\endfoot
 R1 & \ce{2 H2O} $\rightleftharpoons$ \ce{H3O+ + OH-} & $132.899$ & $-13445.9$ & $-22.4773$ & $0$ & 273.15--498.15 & \cite[Table~V, 1a]{Austgen1991} \\
-R2 & \ce{CO2 + 2 H2O} $\rightleftharpoons$ \ce{HCO3^- + H3O+} & $234.949$ & $-11925.2$ & $-36.7816$ & $0$ & 273.15--498.15 & \cite[Table~V, 4a]{Austgen1991} \\
+R2 & \ce{CO2 + 2 H2O} $\rightleftharpoons$ \ce{HCO3^- + H3O+} & $234.94867$ & $-11925.234$ & $-36.7816$ & $0$ & 273.15--498.15 & \cite[Table~V, 4a]{Austgen1991} \\
 R3 & \ce{HCO3^- + H2O} $\rightleftharpoons$ \ce{CO3^{2-} + H3O+} & $216.049$ & $-12431.7$ & $-35.4819$ & $0$ & 273.15--498.15 & \cite[Table~V, 5a]{Austgen1991} \\
-R4 & \ce{MEACOO- + H2O} $\rightleftharpoons$ \ce{HCO3^- + MEA} & $2.151$ & $-1545.3$ & -- & -- & 293.15--323.15 & \cite[Table~5]{Tong2012}, via \cite{arouaEquilibriumConstantCarbamate1999} \\
+R4 & \ce{MEACOO- + H2O} $\rightleftharpoons$ \ce{HCO3^- + MEA} & $2.151$ & $-1545.3$ & -- & -- & 293.15--323.15 & \cite[Table~5]{Tong2012} \\
 \midrule
  & & $A_5$ (K) & $B_5$ & $C_5$ (K$^{-1}$) & & & \\
 \midrule
-R5 & \ce{MEAH+ + H2O} $\rightleftharpoons$ \ce{MEA + H3O+} & $3354.02$ & $-1.28111$ & $0.0004277$ &  & 273.15--323.15 & \cite[Eq.~10]{batesAcidicDissociationConstant1951} \\
+R5 & \ce{MEAH+ + H2O} $\rightleftharpoons$ \ce{MEA + H3O+} & $3354.0172$ & $-1.2811064$ & $0.0004277$ &  & 273.15--323.15 & \cite[Eq.~10]{batesAcidicDissociationConstant1951} \\
 \end{longtable}\endgroup

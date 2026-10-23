@@ -60,7 +60,7 @@ def parameter_source(identity, fitted=False, tied=False):
         return r'\cite[Table~4]{Uyan2015}' + ('; hydrogen-ion values transferred to hydronium' if 'hydronium-cation' in identity else '')
     return 'fitted to IAPWS-95 (Section~\\ref{sec:s-parameters})'
 
-SOURCE_CITE = {'Austgen1991_TableV_reaction_1a': r'\cite[Table~V, 1a]{Austgen1991}', 'Austgen1991_TableV_reaction_4a': r'\cite[Table~V, 4a]{Austgen1991}', 'Austgen1991_TableV_reaction_5a': r'\cite[Table~V, 5a]{Austgen1991}', 'Tong2012_Table5_K5_MEA_via_Aroua1999': r'\cite[Table~5]{Tong2012}, via \cite{arouaEquilibriumConstantCarbamate1999}', 'BatesPinching1951_equation_7': r'\cite[Eq.~10]{batesAcidicDissociationConstant1951}'}
+SOURCE_CITE = {'Austgen1991_TableV_reaction_1a': r'\cite[Table~V, 1a]{Austgen1991}', 'Austgen1991_TableV_reaction_4a': r'\cite[Table~V, 4a]{Austgen1991}', 'Austgen1991_TableV_reaction_5a': r'\cite[Table~V, 5a]{Austgen1991}', 'Tong2012_Table5_K5_MEA_via_Aroua1999': r'\cite[Table~5]{Tong2012}', 'BatesPinching1951_equation_7': r'\cite[Eq.~10]{batesAcidicDissociationConstant1951}'}
 
 def scientific(value):
     mantissa, exponent = re.split('[eE]', value) if re.search('[eE]', value) else (value, None)
@@ -82,6 +82,10 @@ def tex(value):
     escaped = re.sub(r'(?<![\w.-])-(?=\d)', r'\\textminus{}', escaped)
     escaped = re.sub(r'(?<![\w.])[-+]?\d+(?:\.\d*)?[eE][-+]?\d+(?![\w.])', lambda m: '$' + scientific(m.group()) + '$', escaped)
     return re.sub(r'[a-f0-9]{64}', lambda m: r'\allowbreak{}'.join(m.group()[i:i+8] for i in range(0,64,8)), escaped)
+
+
+# Parameters print 8 significant figures: with them every joint-fit statistic reproduces at its printed digits (results/parameter-rounding).
+PARAMETER_DIGITS = 8
 
 
 def num(value, digits=4):
@@ -267,7 +271,7 @@ def main():
             for c in node['coefficients']:
                 identity = c['identity']
                 tie = any(t['identity'] == identity for x in fit['coordinates'] for t in x['ties'])
-                row = [label(identity), num(c['value']['magnitude'], 6), parameter_source(identity, identity in coords, tie)]
+                row = [label(identity), num(c['value']['magnitude'], PARAMETER_DIGITS), parameter_source(identity, identity in coords, tie)]
                 if 'reference_temperature' in c:
                     assert c['reference_temperature'] == {'magnitude': 313.15, 'unit': 'kelvin'}
                 if kind == 'pairs' and 'carbon-dioxide/water' in identity:
@@ -276,7 +280,7 @@ def main():
     for node in document['correlations'] + document['model_coefficients'] + document['topology']['edges']:
         for identity, c in a.coefficients(node):
             source = r'\cite[Eqs.~5--10]{Figiel2025}' if 'ionic_region' in identity else 'induced association; half water energy and water volume' if 'carbon-dioxide' in identity else parameter_source(identity)
-            parameter_rows.append((identity, c['value']['unit'], [label(identity), num(c['value']['magnitude'],6), source]))
+            parameter_rows.append((identity, c['value']['unit'], [label(identity), num(c['value']['magnitude'], PARAMETER_DIGITS), source]))
     table('full_ionic_ssm_ds_parameters.tex', r'Species, association and correlation inputs. Lengths are in angstrom, energies divided by Boltzmann constant in kelvin. Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$. CO2, MEA and water each have one donor and one acceptor site; CO2 associates only with water. MEA--water association follows the Wolbach--Sandler rule. Fixed model inputs and assumptions for use in reacting mixtures are explained in Section~\\ref{sec:s-parameters}.',
           ['Parameter', 'Value', 'Source or estimation'], parameter_blocks(parameter_rows, 3), ['l','r',.5])
     table('binary_interaction_parameters.tex', r'Binary interactions. Slopes multiply $(1/T-1/T_{\rm ref})$ with $T_{\rm ref}=313.15$ K. All fixed ion interactions are model assumptions, rather than measured pair energies. Dispersion between ions of the same charge sign is excluded.',
@@ -291,7 +295,7 @@ def main():
         values = ({label(c['identity'].split(':')[-1]).split()[0].upper(): c['value']['magnitude'] for c in selected['coefficients']} if selected
                   else {k.split('_')[0].upper(): v for k, v in r['correlation'].items() if k != 'kind'})
         lhs, rhs = (r'\ce{' + side.replace('CO3--', 'CO3^{2-}').replace('HCO3-', 'HCO3^-') + '}' for side in r['equation'].split(' <=> '))
-        cells = ['$' + num(values[k], 6) + '$' if k in values else '--' for k in 'ABCD']
+        cells = ['$' + num(values[k], PARAMETER_DIGITS) + '$' if k in values else '--' for k in 'ABCD']
         if rid == 'R5':  # pK form: its A5, B5, C5 sit under a sub-header in the A, B, C columns
             cells[3] = ''
             reaction_rows += [r'\midrule', r' & & $A_5$ (K) & $B_5$ & $C_5$ (K$^{-1}$) & & & \\', r'\midrule']
@@ -325,7 +329,7 @@ def main():
         if identity not in values:
             return '--'
         shown.add(identity)
-        return ('**' if identity in coords or identity in separate else '') + num(values[identity]) + ('†' if identity in coords else '') + ('*' if identity in at_bound else '') + mark
+        return ('**' if identity in coords or identity in separate else '') + num(values[identity], PARAMETER_DIGITS) + ('†' if identity in coords else '') + ('*' if identity in at_bound else '') + mark
     species = [n['component_id'] for n in document['components']]
     charge = {s: n.get('fixed', {}).get('charge_number', {}).get('value', {}).get('magnitude', 0) for s, n in zip(species, document['components'])}
     symbol = {**NAMES, 'water': r'\ce{H2O}'}
@@ -344,7 +348,7 @@ def main():
           r'Water and MEA each have one donor and one acceptor site, with Wolbach--Sandler MEA--water cross-association; double daggers mark the \ce{CO2} values, which apply only to its induced association with water. '
           r'The dielectric coefficients apply to the neutral species; the ion-region permittivity is $\varepsilon_{\mathrm{ion}}=8$. A dash marks an input the model does not use.',
           ['Species', '$m$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$u/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
-           r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}'], species_rows, 'l' + 'r'*10, sep=6)
+           r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}'], species_rows, 'l' + 'r'*10, sep=4)
     def pair(s, t, quantity=''):
         if charge[s] * charge[t] > 0:  # same-sign ions: dispersion excluded
             return '--'
@@ -372,42 +376,7 @@ def main():
     for path, digest in old['inputs'].items():
         a.bind(a.ROOT / path)
         assert a.INPUTS[path] == digest
-    comparison = [r for r in a.rows(a.F / 'fit-comparison.csv') if r['objective'] == 'with heat']
-    f1 = next(r for r in comparison if r['problem'] == 'F1')
-    oldheat = [r for r in a.rows(a.F / 'heat-comparison.csv') if r['record'] == 'heat F1' and not r['pressure_Pa']]
-    native = a.load(a.F / 'F1-A/native-fit.json')
-    common = {r['id']: r for r in fitted if r['group'] == 'common149'}
-    assert set(native['targets']) == set(common) and len(common) == 149
-    for identity, obs, pred, residual in zip(native['targets'], native['observed'], native['predictions'], native['weighted_residuals'], strict=True):
-        r = common[identity]
-        a.close(obs, r['observed'])
-        raw = math.log(pred/obs) if r['form'] == 'LogRatio' else pred-obs
-        a.close(raw/float(r['scale'])*math.sqrt(float(r['weight'])), residual)
-    predecessor = [('AARD', r'\%', [q, n, num(f1[key]), num(fit['groups'][group]['AARD_percent'])]) for q,n,key,group in
-                   [('Pressure AARD',47,'pressure_AARD_percent','common149 pressure'),('Species AARD',94,'species_AARD_percent','common149 species')]]
-    predecessor += [('RMSE', r'kJ/mol \ce{CO2}', ['Vinjarapu RMSE',8,num(next(x['RMSE_kJ_mol'] for x in oldheat if x['source']=='Vinjarapu2024')),num(summary['heat']['Vinjarapu2024']['RMSE'])]),
-                    ('Cost', '', ['Common-subset cost',149,num(f1['cost']),num(fit['groups']['common149']['cost'])])]
-    old_density = a.rows(a.F / 'corrected-densities.csv')
-    old_states = a.load(a.F / 'density-states.json')
-    assert len(old_states) == len(old_density) == 68
-    assert all(x['solved_state']['phases'][0]['pressure_pa'] == 101325 for x in old_states)
-    a.bind(a.BUNDLE / 'scripts/heat_evidence_170.py')
-    matched = []
-    for r in old_density:
-        matches = [d for d in density if d['source']=='Amundsen2009' and float(d['P_Pa'])==100000 and all(float(d[k])==float(r[field]) for k,field in [('T_K','temperature_K'),('loading','loading'),('mea_mass_fraction','mea_mass_fraction')])]
-        assert len(matches) <= 1
-        if matches:
-            d=matches[0]
-            a.close(d['observed_kg_m3'],r['observed_kg_m3'])
-            matched.append((r,d))
-    assert matched
-    for title, key in [('Density-free-fit density','eos_density_kg_m3'),('Reported-fit density','predicted_kg_m3')]:
-        part=[{'observed':r['observed_kg_m3'],'predicted':r[key] if key in r else d[key]} for r,d in matched]
-        predecessor.append(('AARD', r'\%', [title+' matched AARD',len(part),num(a.stats(part)['AARD_percent']) if key=='eos_density_kg_m3' else '--',num(a.stats(part)['AARD_percent']) if key!='eos_density_kg_m3' else '--']))
-    table('supplement_predecessor.tex', r'Density-free and reported fits on the shared 149 calibration quantities and 68 matched Amundsen densities. Density states match temperature, loading and unloaded-solvent composition; calculation pressures are 101325 and 100000 Pa, respectively (1325 Pa difference). No density-pressure derivative is retained, so this difference is not corrected. Density-free calculations retain their software identity, listed in the deposit README.',
-          ['Metric', 'n', 'Density-free fit', 'Reported fit'], blocks(predecessor, 4), 'lrrr')
-    OUTPUTS['supplement_predecessor.tex'] += '% Temperature/loading/mass-fraction matched IDs (pressure disclosed, not matched): '+', '.join(d['id'] for _,d in matched)+'\n'
-    OUTPUTS['supplement_predecessor.tex'] += '% F1 excluded rows: none. A7 rows outside baseline: '+', '.join(d['id'] for d in density if d['id'] not in {x['id'] for _,x in matched})+'\n'
+    common = {r['id'] for r in fitted if r['group'] == 'common149'}
     fixed = a.J / 'amendment-7/fixed-study/wheel-8298c602'
     endpoints = ['after-adoption/a6-selected','restricted-endpoint','restricted-2-endpoint']
     scores = [a.load(fixed / p / 'score.json') for p in endpoints]
@@ -419,18 +388,36 @@ def main():
     a.bind(a.J / 'amendment-7/restricted/README.md')
     reductions = [a.load(fixed / p / 'reduction.json') for p in endpoints]
     acceptance = []
-    for title,key,limit,authority,f1value in [('Common-subset cost','C149','35.26','F1 value + 10% (rounded)',f1['cost']),('Pressure AARD','pressure_AARD_pct','15.81','F1 value + 2 percentage points (rounded)',f1['pressure_AARD_percent']),('Species AARD','species_AARD_pct','9.89','F1 value + 2 percentage points (rounded)',f1['species_AARD_percent']),('Vinjarapu RMSE','vinjarapu_rmse_kJ_mol','3.13','F1 value + 1 kJ/mol (rounded)',next(x['RMSE_kJ_mol'] for x in oldheat if x['source']=='Vinjarapu2024')),('Loaded within 2s','loaded_within_2s','47/47','density requirement (Section~\\ref{sec:s-density})',''),('Cai cost','cai_cost','95.90','constant-interaction Cai cost + 5% (rounded)','')]:
-        acceptance.append([title,limit,authority,num(f1value) if f1value!='' else '--']+[num(scores[i][key]) for i in [0,2]])
-    acceptance.append(['States with detected instability','0/73','finite search at the specified states','--']+[str(sum(x['resolved_trials']>0 for x in reductions[i]))+'/73' for i in [0,2]])
-    acceptance.append(['CO2-free max absolute error','1.0','density requirement','--']+[num(max(abs(x) for x in scores[i]['co2_free_errors'].values())) for i in [0,2]])
-    acceptance.append(['Total cost (307 quantities)','--','not comparable with the density-free-fit cost','--']+[num(scores[i]['cost']) for i in [0,2]])
-    for name,ceiling in [('Arcis2011',9.36)]:
-        a6=a.load(a.J/'amendment-6/selected-assessment/summary.json')
-        acceptance.append(['Arcis RMSE',num(ceiling),'F1 value + 1 kJ/mol (rounded)',num(next(x['RMSE_kJ_mol'] for x in oldheat if x['source']==name)),num(a6['heat'][name]['RMSE']),num(summary['heat'][name]['RMSE'])])
+    for title,key,limit,authority in [('Common-subset cost','C149','35.26','F1 value + 10% (rounded)'),('Pressure AARD','pressure_AARD_pct','15.81','F1 value + 2 percentage points (rounded)'),('Species AARD','species_AARD_pct','9.89','F1 value + 2 percentage points (rounded)'),('Vinjarapu RMSE','vinjarapu_rmse_kJ_mol','3.13','F1 value + 1 kJ/mol (rounded)'),('Loaded within 2s','loaded_within_2s','47/47','density requirement (Section~\\ref{sec:s-density})'),('Cai cost','cai_cost','95.90','constant-interaction Cai cost + 5% (rounded)')]:
+        acceptance.append([title,limit,authority]+[num(scores[i][key]) for i in [0,2]])
+    acceptance.append(['States with detected instability','0/73','finite search at the specified states']+[str(sum(x['resolved_trials']>0 for x in reductions[i]))+'/73' for i in [0,2]])
+    acceptance.append(['CO2-free max absolute error','1.0','density requirement']+[num(max(abs(x) for x in scores[i]['co2_free_errors'].values())) for i in [0,2]])
+    acceptance.append(['Total cost (307 quantities)','--','no limit']+[num(scores[i]['cost']) for i in [0,2]])
+    a6=a.load(a.J/'amendment-6/selected-assessment/summary.json')
+    acceptance.append(['Arcis RMSE','9.36','F1 value + 1 kJ/mol (rounded)',num(a6['heat']['Arcis2011']['RMSE']),num(summary['heat']['Arcis2011']['RMSE'])])
     kinds = {'cost': ('Cost', ''), 'AARD': ('AARD', r'\%'), 'RMSE': ('RMSE', 'kJ/mol'), 'within': ('Count', ''), 'instability': ('Count', ''), 'error': ('Absolute error', r'\si{\kilogram\per\cubic\metre}')}
-    acceptance = blocks([(*next(v for k, v in kinds.items() if k in r[0]), r) for r in acceptance], 6)
-    table('acceptance_limits.tex', r'Study-specific limits and values for the density-free, comparison and reported fits. Section~\\ref{sec:s-fits} explains the tolerances.',
-          ['Quantity','Limit','Origin of limit',r'\makecell[rb]{Density-free\\fit}',r'\makecell[rb]{Comparison\\fit}',r'\makecell[rb]{Reported\\fit}'],acceptance,[.24,'r',.31,'r','r','r'])
+    acceptance = blocks([(*next(v for k, v in kinds.items() if k in r[0]), r) for r in acceptance], 5)
+    table('acceptance_limits.tex', r'Study-specific limits and values for the comparison and reported fits. Section~\\ref{sec:s-fits} explains the tolerances.',
+          ['Quantity','Limit','Origin of limit',r'\makecell[rb]{Comparison\\fit}',r'\makecell[rb]{Reported\\fit}'],acceptance,[.26,'r',.36,'r','r'])
+    # Comparison fit (A6): same model and fixed inputs as the reported fit; only its joint-fit values, their diameter ties and the shifted R2/R5 coefficients differ.
+    comparison_path = a.J/'amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json'
+    comparison_record = a.load(comparison_path)
+    assert a.INPUTS[str(comparison_path.relative_to(a.ROOT))] == a6_provenance['parameter_sha256']
+    record_values = lambda d: {i: c for i, c in a.coefficients({k: d[k] for k in ('components', 'pairs', 'correlations', 'model_coefficients', 'reaction_correlations', 'topology')})}
+    reported_values, comparison_values = record_values(document), record_values(comparison_record)
+    assert reported_values.keys() == comparison_values.keys() and document['model_families'] == comparison_record['model_families']
+    differ = [i for i in reported_values if not math.isclose(reported_values[i]['value']['magnitude'], comparison_values[i]['value']['magnitude'], rel_tol=1e-12)]
+    for i in differ:
+        if 'debye_huckel_diameter' in i or 'packing_diameter' in i:
+            factor = .88 if 'packing' in i else 1
+            assert math.isclose(comparison_values[i]['value']['magnitude'], factor*comparison_values[i.rsplit('/', 1)[0] + '/segment_diameter']['value']['magnitude'], rel_tol=1e-12)
+    shown_rows = [(i, comparison_values[i]['value']['unit'], [label(i), num(comparison_values[i]['value']['magnitude'], PARAMETER_DIGITS), num(reported_values[i]['value']['magnitude'], PARAMETER_DIGITS)])
+                  for i in differ if not i.startswith('reaction:') and 'debye_huckel' not in i and 'packing' not in i]
+    reaction_names = {'reaction:R2:correlation:a': 'R2 $A$', 'reaction:R2:correlation:b_k': 'R2 $B$ (K)', 'reaction:R5:correlation:a_k': 'R5 $A_5$ (K)'}
+    assert {i for i in differ if i.startswith('reaction:')} == reaction_names.keys()
+    comparison_rows = parameter_blocks(shown_rows, 3) + [block(3, r'Reaction coefficient, as in main-text Table~1')] + [[name, num(comparison_values[i]['value']['magnitude'], PARAMETER_DIGITS), num(reported_values[i]['value']['magnitude'], PARAMETER_DIGITS)] for i, name in reaction_names.items()]
+    table('comparison_fit_parameters.tex', r'Comparison-fit parameters that differ from the reported fit. All other parameters and model choices are those of main-text Tables~3, 4 and 1, and the ion packing and Debye--H\"uckel diameters follow the same ties. The R2 and R5 coefficients include the fitted enthalpy shifts.',
+          ['Parameter', r'\makecell[rb]{Comparison\\fit}', r'\makecell[rb]{Reported\\fit}'], comparison_rows, 'lrr')
     state = a.rows(a.E/'state-targets.csv')
     source_rows, cai_rows = [], []
     meta = {r['target']:r for r in state if r['kind']=='packet'}
@@ -661,7 +648,7 @@ def main():
         head+='% F1 predecessor inputs/identity: '+json.dumps(old,sort_keys=True)+'\n' if name in ['supplement_fits.tex','supplement_predecessor.tex','acceptance_limits.tex'] else ''
         head+=''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))
         (TABLES/name).write_text(head+body)
-    print(json.dumps(dict(objective_rows=len(fitted),group_costs=fit['groups'],loaded_density=len(loaded_ids),densities=len(density),heats=len(heat),coordinates=len(errors),phase_points=73,matched_F1_densities=len(matched)),indent=2))
+    print(json.dumps(dict(objective_rows=len(fitted),group_costs=fit['groups'],loaded_density=len(loaded_ids),densities=len(density),heats=len(heat),coordinates=len(errors),phase_points=73),indent=2))
 
 
 if __name__ == '__main__':
