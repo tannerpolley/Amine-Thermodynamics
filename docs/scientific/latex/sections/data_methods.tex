@@ -2,7 +2,7 @@
 % P:methods-01
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and unloaded-solvent mass fraction is $w_{\MEA}=m_{\MEA}/(m_{\MEA}+m_{\HtwoO})$.
 \Cref{tab:current-data-inventory} summarizes the fitted and compared observations.
-Eight disjoint groups supply 307 fitted quantities, including 47 \COtwo pressures, 101 species fractions, six species ratios, eight integral heats, 52 densities, 50 binary MEA--water quantities, 39 \COtwo--water pressures and four heat capacities.
+The objective contains 307 quantities: 47 \COtwo pressures, 101 species fractions, six species ratios, eight integral heats, 52 densities, 50 binary MEA--water quantities, 39 \COtwo--water pressures and four heat capacities.
 The species ratios are \MEAH, \MEACOO and \ce{HCO3- + CO3^{2-}} relative to \ce{MEA + MEAH+ + MEACOO-} at each of two Jakobsen states \cite{Jakobsen2005}.
 The \COtwo--water pressures check interaction parameters estimated earlier and held fixed here \cite{kiepeExperimentalDeterminationPrediction2002}.
 
@@ -16,11 +16,11 @@ Their figures label \SI{21}{\degreeCelsius}, approximated here by \SI{20}{\degre
 \input{tables/current_data_inventory}
 
 % P:methods-03
-Pressure and species calculations use each source's reported solvent composition, including measured molalities and temperatures for Hilliard and Xu \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
+Pressure and species calculations use each source's reported solvent composition, including measured molalities and temperatures for Hilliard and Xu \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}; Section~S3 gives the source conventions.
 Three Xu observations above \SI{393.15}{\kelvin} and a B\"ottinger state with quantifiable oxazolidone are excluded; oxazolidone is absent from the model.
 The six-source pressure comparison includes 159 observations from Aronu, Hilliard, Idris, Jou, Ma'mun and Xu \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
-Arcis heats were used in parameter selection; Wagner pressures \cite{wagnerSolubilityCarbonDioxide2013} and the 15 and 45 wt\% Aronu pressures were not fitted but were previously examined.
-These comparisons are therefore not blind tests.
+Arcis heats were not fitted but were used to accept or reject candidate parameter sets, and the Wagner pressures \cite{wagnerSolubilityCarbonDioxide2013} and the 15 and 45 wt\% Aronu pressures were compared with intermediate parameter sets during model development.
+None of these comparisons is therefore a blind test.
 Experimental carrier gas is omitted: the three-neutral-species bubble calculation compares $y_{\COtwo}P$ with the measured \COtwo partial pressure rather than imposing the experimental total pressure.
 This approximation may matter at low \COtwo pressure; Neumann et al.\ include nitrogen in such comparisons \cite[Sect.~4.2, Fig.~5]{neumannNewModelCombining2022}.
 
@@ -33,7 +33,7 @@ The signed heat per mole of added \COtwo is
  \label{eq:addition-heat}
 \end{equation}
 where both equilibrium liquid enthalpies and the pure-\COtwo feed enthalpy are evaluated at the stated temperature and pressure; negative values denote exothermic absorption.
-Fourteen Arcis heats at \SI{322.5}{\kelvin} and \SI{0.51}{\mega\pascal} or \SI{1.03}{\mega\pascal} are checks used in parameter selection \cite[Sect.~2.4, Table~5]{arcisEnthalpySolutionCarbon2011}.
+Fourteen Arcis heats at \SI{322.5}{\kelvin} and \SI{0.51}{\mega\pascal} or \SI{1.03}{\mega\pascal} were not fitted but were used to accept or reject candidate parameter sets \cite[Sect.~2.4, Table~5]{arcisEnthalpySolutionCarbon2011}.
 
 % P:methods-heat-02
 Total enthalpy follows the same Helmholtz energy and reaction standard states as the equilibrium calculation:
@@ -44,7 +44,7 @@ Total enthalpy follows the same Helmholtz energy and reaction standard states as
 \end{equation}
 Neutral ideal-gas functions supply the caloric reference; the ionic functions are completed from the five reaction laws, including $\Delta_rh^\circ=RT^2d\ln K_r/dT$ and the derivatives of the infinite-dilution reference corrections.
 Reaction enthalpies are therefore included once through the standard-state functions.
-Section~S8 gives the ideal-gas correlations, coefficients and reference convention, including the extrapolation of the water Shomate function below \SI{500}{\kelvin}.
+Section~S4 gives the ideal-gas correlations, coefficients and reference convention, including the extrapolation of the water Shomate function below \SI{500}{\kelvin}.
 Equilibrium isobaric heat capacity is $C_P=(dH_{\mathrm{eq}}/dT)_{P,\boldsymbol n_{\mathrm{feed}}}$, including the change in speciation.
 The objective uses $C_P/n_{\mathrm{feed}}$ per mole of complete analytical feed, with source mass-specific values converted on that same basis.
 The mass-specific value is $c_P=C_P/m_{\mathrm{feed}}$, where $m_{\mathrm{feed}}=n_{\MEA}M_{\MEA}+n_wM_w+n_{\COtwo}M_{\COtwo}$ is the complete analytical-feed mass.
@@ -61,15 +61,16 @@ The loaded-density scale is
  \label{eq:density-scale}
 \end{equation}
 where $g_j$ is the density--loading secant between neighboring observations at the same source temperature and solvent composition, using a one-sided secant at the ends.
-Section~S3 gives the source-specific scales and qualifications.
+Section~S5 gives the source-specific scales and qualifications.
 The scales combine heterogeneous uncertainty information; $2s$ is not uniformly a 95\,\% interval, and Amundsen's precise high-temperature/loading uncertainty boundary remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
 
 
 \subsection{Parameters and fitting}\label{sec:parameters}
 % P:methods-04
-\Cref{tab:fitted-coordinates} specifies the 16 fitted parameters and their final bounds; Section~S9 gives every fixed species and interaction input with its source or modeling assumption.
-The bounded least-squares objective uses property-specific scales and weights to combine the observations; Section~S10 gives the residual definitions and full objective.
+\Cref{tab:fitted-coordinates} specifies the 16 fitted parameters and their final bounds; Section~S1 gives every fixed species and interaction input with its source or modeling assumption.
+The bounded least-squares objective uses property-specific scales and weights to combine the observations; Section~S2 gives the residual definitions and full objective.
 The solver uses bounded Levenberg--Marquardt least squares with exact equation-of-state and implicit equilibrium derivatives.
+Software identities and numerical reproduction are specified in Data and Code Availability.
 
 % P:methods-05
 Six parameters reach bounds: the \MEAH--water and \MEAH--\MEACOO interactions, the \MEAH segment diameter, both fitted Born diameters and the R5 enthalpy shift.
@@ -87,4 +88,4 @@ Agreement is reported as average absolute relative deviation (AARD),
  \label{eq:aard}
 \end{equation}
 and root-mean-square error (RMSE) in the observable's units.
-The solution checks for the fitted and compared pressure and species states are reported in Section~S8; they establish numerical convergence rather than physical validation.
+The solution checks for the fitted and compared pressure and species states are reported in Section~S4; they establish numerical convergence rather than physical validation.

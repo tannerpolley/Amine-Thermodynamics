@@ -8,23 +8,24 @@ This binary comparison constrains the solvent interaction before assessing the l
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{mea-water.pdf}
-\caption{Binary MEA--water VLE at 101.33 and \SI{66.66}{\kilo\pascal}. Lines are fixed-parameter calculations over the measured binary composition ranges; solid lines use liquid MEA mole fraction and dashed lines vapor MEA mole fraction as abscissa. Circles and squares are Cai's fitted liquid and vapor observations \cite{caiBinaryIsobaricVaporLiquid1996}; no non-fitted observations are shown. This binary figure varies solvent composition rather than fixing 30 wt\% MEA; its dashed lines denote the vapor branch.}
+\caption{Binary MEA--water VLE at 101.33 and \SI{66.66}{\kilo\pascal}. Lines are fixed-parameter calculations over the measured binary composition ranges; solid lines use liquid MEA mole fraction and dashed lines vapor MEA mole fraction as abscissa. Circles and squares are Cai's fitted liquid and vapor observations \cite{caiBinaryIsobaricVaporLiquid1996}; no non-fitted observations are shown.}
 \label{fig:mea-water}
 \end{figure}
 \FloatBarrier
 
 \subsection{\texorpdfstring{\COtwo}{CO2} solubility}\label{sec:results-pressure}
 % P:results-pressure-01
-The model pressure rises with analytical loading and temperature across the calculated isotherms (\cref{fig:pressure}).
-At loading 0.69 it increases from \SI{159}{\kilo\pascal} at \SI{313.15}{\kelvin} to \SI{2.848}{\mega\pascal} at \SI{393.15}{\kelvin}.
+\Cref{fig:pressure} compares calculated \COtwo partial pressures with measurements from six sources at 313--\SI{393}{\kelvin}.
 The AARD is 11.86\,\% over the 47 fitted pressures and 20.55\,\% over the complete 159-pressure comparison, including 112 observations not fitted.
-By source, the latter comparison gives 9.42\,\% for Hilliard, 19.37\,\% for Jou and 29.76\,\% for Aronu (Section~S2).
-The deviation panel exposes discrepancies that are less apparent on the logarithmic pressure axis: Aronu's non-fitted \SI{40}{\degreeCelsius} points at analytical loading 0.46--0.52 are 46--70\,\% below measurement.
-The difference between source-specific errors prevents the fitted average alone from describing pressure accuracy.
+By source, the 159-pressure comparison gives 9.42\,\% for Hilliard (31 observations), 18.54\,\% for Ma'mun (19), 19.37\,\% for Jou (48), 21.05\,\% for Idris (10), 27.46\,\% for Xu (15) and 29.76\,\% for Aronu (36).
+The deviation panel exposes discrepancies that are less apparent on the logarithmic pressure axis.
+At Aronu's non-fitted \SI{40}{\degreeCelsius} observations with analytical loading 0.46--0.52, the calculated \COtwo partial pressures are 46--70\,\% below the measured values.
+The sources disagree there: at loading 0.489, Aronu reports \SI{2.86}{\kilo\pascal}, whereas Hilliard reports \SI{1.10}{\kilo\pascal} at loading 0.491; the model gives \SI{1.17}{\kilo\pascal} at Aronu's state.
+Hilliard and Jou pressures at \SI{40}{\degreeCelsius} and loading 0.46--0.52 lie within 24\,\% of the model.
 
 % P:results-pressure-02
 At 100--\SI{120}{\degreeCelsius}, the 54 six-source pressures give AARD 24.35\,\%, with bias direction differing between sources.
-The 23 additional Wagner pressures give AARDs of 22.20\,\% near \SI{353}{\kelvin} and 9.25\,\% near \SI{392}{\kelvin} (Section~S2).
+The 23 additional Wagner pressures give AARDs of 22.20\,\% near \SI{353}{\kelvin} and 9.25\,\% near \SI{392}{\kelvin} (Section~S7).
 Pressure agreement deteriorates at other solvent concentrations: the 33 Aronu observations at 15 wt\% and 37 at 45 wt\% give AARDs of 29.5 and 56.0\,\%, respectively.
 Their mean logarithmic biases are $-0.204$ and $+0.149$, so the model underpredicts at 15 wt\% and overpredicts at 45 wt\% on logarithmic average.
 The reported parameters therefore do not support concentration transfer across that range.
@@ -32,32 +33,33 @@ The reported parameters therefore do not support concentration transfer across t
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{pressure.pdf}
-\caption{\COtwo partial pressure against analytical loading (mol added \COtwo/mol total amine). Lines are fixed-parameter reactive bubble calculations for nominal 30 wt\% MEA. Source-specific markers show measured values, filled if fitted and open if not fitted; the six-source comparison and Wagner observations are assigned to isotherms within \SI{2}{\kelvin}, retaining their reported solvent compositions for the point calculations. The lower panel shows calculated-minus-measured relative deviations at those source states. All pressure curves are bubble states; imposed single-liquid segments, shown dashed in the liquid-property figures, are not used here.}
+\caption{\COtwo partial pressure against analytical loading (mol added \COtwo/mol total amine). Lines are fixed-parameter reactive bubble calculations for nominal 30 wt\% MEA. Source-specific markers show measured values, filled if fitted and open if not fitted; the six-source comparison and Wagner observations are assigned to isotherms within \SI{2}{\kelvin}, retaining their reported solvent compositions for the point calculations. The lower panel shows calculated-minus-measured relative deviations at those source states.}
 \label{fig:pressure}
 \end{figure}
 \FloatBarrier
 
 \subsection{Liquid speciation}\label{sec:results-species}
+\begin{figure}[pos=!htbp]
+\centering
+\includegraphics[width=\linewidth,keepaspectratio]{speciation.pdf}
+\caption{Liquid species mole fractions against analytical loading. Lines are fixed-parameter single-liquid calculations at \SI{101325}{\pascal}, using nominal 30 wt\% MEA except for the 31 wt\% panel at \SI{353.15}{\kelvin}. Markers distinguish B\"ottinger NMR and Matin titration observations \cite{Bottinger2008,matinFacileMethodDetermination2012}, with filled markers fitted and open markers not fitted. The reported \ce{MEA + MEAH+} sum and bicarbonate-labelled values are compared with the model aggregates defined in Section~\ref{sec:data-methods}; the denominator is total true-species liquid amount. The source's \SI{21}{\degreeCelsius} titration data are approximated by \SI{20}{\degreeCelsius}. Species-specific line patterns identify the model quantities; the lower panels enlarge bicarbonate plus carbonate on a logarithmic scale. Long-dashed segments at \SI{353.15}{\kelvin} mark states whose calculated bubble pressure exceeds \SI{101325}{\pascal}, so the single liquid is imposed below its bubble pressure. The largest calculated mole fractions not drawn separately are $1.8\times10^{-5}$ for carbonate and $9.7\times10^{-4}$ for dissolved \COtwo.}
+\label{fig:speciation}
+\end{figure}
+
 % P:results-species-01
 The speciation curves show conversion of molecular MEA into protonated amine and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}).
 The combined \ce{MEA + MEAH+} observable gives AARD 2.32\,\% over 25 compared observations, of which 20 were fitted; all 94 species fractions in the shared fitted subset give 7.10\,\%.
 Agreement with this amine sum does not independently test the separate molecular and protonated fractions.
-Calculated carbonate mole fraction remains at or below $1.8\times10^{-5}$ on the curves.
-The ten Jakobsen carbonate-share comparisons are also low: calculated/observed share has mean 0.0731 and range 0.00633--0.267 (Section~S3).
+The five non-fitted B\"ottinger states at \SI{353.15}{\kelvin} and 31 wt\% test the model above the fitted species temperatures: the amine sum agrees within 1.3\,\% up to loading 0.25 but is 6.4 and 14.5\,\% low at loadings 0.34 and 0.40, where calculated carbamate is 9 and 26\,\% high.
+The ten Jakobsen carbonate-share comparisons are also low: calculated/observed share has mean 0.0731 and range 0.00633--0.267 (Section~S5).
 Those calculations account for dilution of the NMR samples and use their NMR loadings \cite[Sample preparation, Tables~A1--A2]{Jakobsen2005}; Jakobsen's warning about quantifying minor components is discussed by Matin et al.\ \cite[p.~6616]{matinFacileMethodDetermination2012}.
 
 % P:results-species-02
 The 19 non-fitted Matin bicarbonate + carbonate totals give AARD 67.48\,\% and mean logarithmic bias $-1.266$.
-Their systematic underprediction remains despite agreement with other titration species.
+Matin's other titration species agree more closely, with AARDs of 7.76\,\% for \MEAH and 8.10\,\% for \MEACOO, although free \MEA is 16--35\,\% low above loading 0.4.
 Matin et al.\ found their inferred bicarbonate values higher than the NMR values \cite[pp.~6616--6617]{matinFacileMethodDetermination2012}, so the discrepancy may partly reflect disagreement between sources as well as limitations of the model.
-The carbonate share and titration bicarbonate comparisons constrain the interpretation of a good pressure fit.
+A good pressure fit therefore does not ensure accurate bicarbonate and carbonate fractions.
 
-\begin{figure}[pos=!htbp]
-\centering
-\includegraphics[width=\linewidth,keepaspectratio]{speciation.pdf}
-\caption{Liquid species mole fractions against analytical loading. Lines are fixed-parameter single-liquid calculations at \SI{101325}{\pascal}, using nominal 30 wt\% MEA except for the 31 wt\% panel at \SI{353.15}{\kelvin}. Markers distinguish B\"ottinger NMR and Matin titration observations \cite{Bottinger2008,matinFacileMethodDetermination2012}, with filled markers fitted and open markers not fitted. The reported \ce{MEA + MEAH+} sum and bicarbonate-labelled values are compared with the model aggregates defined in Section~\ref{sec:data-methods}; the denominator is total true-species liquid amount. The source's \SI{21}{\degreeCelsius} titration data are approximated by \SI{20}{\degreeCelsius}. Dashed segments denote single-liquid states imposed below their own bubble pressure; dotted segments denote unavailable bubble-pressure comparisons.}
-\label{fig:speciation}
-\end{figure}
 \FloatBarrier
 
 \subsection{Heat of absorption}\label{sec:results-heat}
@@ -71,41 +73,40 @@ The model's pressure effect is small; increasing pressure between those two seri
 The Arcis measurements themselves differ between pressure series: heats at nearby loadings 0.181 and 0.183 are $-92.6$ and $-85.9$~\si{\kilo\joule\per\mole}, and at loadings 0.391 and 0.405 are $-94.4$ and $-85.5$~\si{\kilo\joule\per\mole} \cite[Table~5, pp.~3355--3356]{arcisEnthalpySolutionCarbon2011}.
 These are not exact matched-loading comparisons, and both temperature and pressure differ from Vinjarapu's conditions.
 The available data do not isolate a cause for the discrepancy.
-Arcis was used in parameter selection, and absorption heat has been checked only at 313.15 and \SI{322.5}{\kelvin}; these comparisons do not establish its temperature dependence across an absorber or stripper.
+The Arcis data were used to accept candidate parameter sets, and absorption heat has been checked only at 313.15 and \SI{322.5}{\kelvin}; these comparisons do not establish its temperature dependence across an absorber or stripper.
 
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{heat-of-absorption.pdf}
-\caption{Integral absorption heat against analytical loading, per mole of added \COtwo from zero loading; negative values denote exothermic absorption. Lines are fixed-parameter calculations for nominal 30 wt\% MEA at the stated temperature and pressure. Filled circles are fitted Vinjarapu observations; open squares and triangles are Arcis observations not fitted but used in parameter selection \cite{HemaBhavya2025,arcisEnthalpySolutionCarbon2011}. Final and initial equilibrium-liquid enthalpies and the pure-\COtwo feed enthalpy use the same temperature and pressure. Dashed segments, where present in single-liquid curves, denote states imposed below their own bubble pressure; no such segments occur in these heat curves.}
+\caption{Integral absorption heat against analytical loading, per mole of added \COtwo from zero loading; negative values denote exothermic absorption. Lines are fixed-parameter calculations for nominal 30 wt\% MEA at the stated temperature and pressure. Filled circles are fitted Vinjarapu observations; open squares and triangles are Arcis observations not fitted but used to accept candidate parameter sets \cite{HemaBhavya2025,arcisEnthalpySolutionCarbon2011}. Final and initial equilibrium-liquid enthalpies and the pure-\COtwo feed enthalpy use the same temperature and pressure.}
 \label{fig:heat}
 \end{figure}
 \FloatBarrier
 
 \subsection{Density and heat capacity}\label{sec:results-density}
 % P:results-density-01
-Loaded densities are calculated directly without volume translation (\cref{fig:density-curves}).
-The 47 fitted loaded densities give AARD 0.18\,\%, with 44 within $2s$.
+The 47 fitted loaded densities give AARD 0.18\,\%, with 44 within $2s$ (\cref{fig:density-curves}).
 Three fitted values at \SI{353.15}{\kelvin} are 0.40--0.53\,\% low: Amundsen at loading 0.3 has error \SI{-5.52}{\kilogram\per\cubic\metre} ($-2.28s$), and Hartono at loadings 0.29 and 0.39 has errors \SI{-4.16}{\kilogram\per\cubic\metre} ($-2.05s$) and \SI{-4.41}{\kilogram\per\cubic\metre} ($-2.43s$).
 All five fitted \COtwo-free densities lie within \SI{1}{\kilogram\per\cubic\metre} of measurement.
-Section~S3 gives the source scales, the complete density comparison and the density-error figure.
+Section~S5 gives the source scales, the complete density comparison and the density-error figure.
 
 % P:results-density-02
 None of Han's densities was fitted.
 For its five loaded 30 wt\% observations at each temperature, the mean signed error grows from $-0.43$\,\% at \SI{353.15}{\kelvin} to $-0.72$\,\% at \SI{373.15}{\kelvin} and $-1.20$\,\% at \SI{393.15}{\kelvin}.
 The largest error is \SI{-20.02}{\kilogram\per\cubic\metre} at loading 0.56 and \SI{393.15}{\kelvin}: \SI{1037.58}{\kilogram\per\cubic\metre} calculated against \SI{1057.60}{\kilogram\per\cubic\metre} measured.
 Non-fitted 30 wt\% Amundsen loaded observations at 25--\SI{80}{\degreeCelsius} lie up to about 1.5\,\% above the model and above the other sources in \cref{fig:density-curves}.
-The five loading-0.4 Amundsen observations excluded from fitting remain in this comparison; the cross-source differences do not establish which source is more accurate (Section~S3).
+The five loading-0.4 Amundsen observations excluded from fitting remain in this comparison; the cross-source differences do not establish which source is more accurate (Section~S5).
 
 % P:results-density-03
 Heat capacity is fitted only at 318.15 and \SI{353.15}{\kelvin}, at nominally zero loading and loading 0.358.
-The four signed errors are $+5.53$ and $+2.57$\,\% at \SI{318.15}{\kelvin}, and $+1.15$ and $-2.13$\,\% at \SI{353.15}{\kelvin}, in unloaded/loaded order (Section~S2).
+The four signed errors are $+5.53$ and $+2.57$\,\% at \SI{318.15}{\kelvin}, and $+1.15$ and $-2.13$\,\% at \SI{353.15}{\kelvin}, in unloaded/loaded order (Section~S7).
 The largest error remains at the unloaded colder state despite inclusion in the objective.
 These four observations do not determine heat capacity over the full temperature and loading domain of the pressure curves.
 
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{density-curves.pdf}
-\caption{Liquid density against analytical loading, calculated without volume translation. Lines are fixed-parameter calculations for nominal 30 wt\% MEA at the stated temperatures, with single liquids imposed at \SI{0.1}{\mega\pascal} through \SI{353.15}{\kelvin} and \SI{0.7}{\mega\pascal} at 373.15 and \SI{393.15}{\kelvin}. Source-specific markers identify Amundsen, Hartono and Han measurements \cite{Amundsen2009,Hartono2014,hanDensityWater12012}; filled markers were fitted and open markers were not fitted, including the excluded Amundsen observations. Point calculations use the source states. Dashed segments denote single-liquid states imposed below their own bubble pressure; dotted segments denote unavailable bubble-pressure comparisons.}
+\caption{Liquid density against analytical loading, calculated without volume translation. Lines are fixed-parameter calculations for nominal 30 wt\% MEA at the stated temperatures, with single liquids imposed at \SI{0.1}{\mega\pascal} through \SI{353.15}{\kelvin} and \SI{0.7}{\mega\pascal} at 373.15 and \SI{393.15}{\kelvin}. Source-specific markers identify Amundsen, Hartono and Han measurements \cite{Amundsen2009,Hartono2014,hanDensityWater12012}; filled markers were fitted and open markers were not fitted, including the excluded Amundsen observations. Point calculations use the source states. Dashed segments at 353.15 and \SI{393.15}{\kelvin} mark states whose calculated bubble pressure exceeds the imposed pressure.}
 \label{fig:density-curves}
 \end{figure}
 \FloatBarrier
@@ -113,19 +114,30 @@ These four observations do not determine heat capacity over the full temperature
 % P:results-scope-01
 The model calculates the five target properties within one thermodynamic formulation, using ePC-SAFT, reaction standard states and ideal-gas caloric references.
 Loaded densities are calculated directly without volume translation.
-The comparisons support use as a representation of the selected nominal 30 wt\% equilibrium observations, with the property-specific errors above.
-They do not establish concentration transfer, accurate minor-species fractions or caloric behavior beyond the measured temperatures, nor do they qualify absorber or stripper performance.
+For nominal 30 wt\% MEA, the model can therefore supply \COtwo partial pressure, the \ce{MEA + MEAH+} and carbamate fractions, integral heat near \SI{313}{\kelvin}, loaded density up to \SI{353.15}{\kelvin} and heat capacity at the measured states, with the deviations reported above.
+It should not be used for pressure at other MEA concentrations or for bicarbonate and carbonate fractions; its heat of absorption and heat capacity are untested away from the measured temperatures, and at 373.15--\SI{393.15}{\kelvin} calculated loaded densities are on average 0.7--1.2\,\% low.
 
 \subsection{Phase stability}\label{sec:phase-method}
 % P:results-phase-01
 A comparison fit with wider bounds on the protonated-amine diameter and its water interaction gives similar property agreement but predicts additional liquid phases at some tested states.
 Narrowing both bounds and refitting removes the detected instabilities in the finite search, while increasing the fitting cost by 0.45\%.
-The \MEAH segment diameter changes from \SI{4.16}{\angstrom} in the comparison fit to \SI{5.35}{\angstrom} in the reported parameters, and its water interaction at \SI{313.15}{\kelvin} changes from $+0.027$ to $-0.5$.
-The number of fitted loaded densities within $2s$ changes from 47/47 to 44/47; the three misses occur at \SI{353.15}{\kelvin}, above the searched temperatures.
-This comparison measures a difference between local fits, not a minimum density penalty or a global optimum.
+The finite searches are defined in Section~S8.
+Both narrowed limits appear in \cref{tab:fitted-coordinates}: the reported \MEAH segment diameter lies on the new \SI{5.35}{\angstrom} lower bound, and the \MEAH--water interaction lies at $-0.5$, the opposite end of its narrowed range $[-0.5,-0.161]$; Section~S9 describes how the limits were chosen, and Section~S10 gives the density-free fit and comparison limits.
+The diameter changes from \SI{4.16}{\angstrom} in the comparison fit to \SI{5.35}{\angstrom}, and the water interaction at \SI{313.15}{\kelvin} changes from $+0.027$ to $-0.5$.
+The number of fitted loaded densities within $2s$ falls from 47/47 to 44/47; the three misses occur at \SI{353.15}{\kelvin}, a temperature included in the extended search.
+Both parameter sets are local optima, so these differences are not the smallest possible cost of removing the instabilities.
 
 % P:results-phase-02
-The finite search covers 73 specified temperature, pressure and loading states for nominal 30 wt\% MEA at 313.15--\SI{333.15}{\kelvin} and $\alpha=10^{-5}$--0.5 (\cref{fig:phase-family}).
+The first search covers 73 specified temperature, pressure and loading states for nominal 30 wt\% MEA at 313.15, 318.15 and \SI{333.15}{\kelvin} and $\alpha=10^{-5}$--0.5 (\cref{fig:phase-family}).
+The extension declares 81 states at 353.15, 373.15 and \SI{393.15}{\kelvin}, at loadings $10^{-5}$, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5 and 0.6, using pressures 0.50, 0.80 and 0.95 times a fixed reference pressure at each temperature and loading.
+Twenty-one states are excluded because their reference pressure exceeds \SI{10}{\mega\pascal}, leaving 60 admitted extension states and 133 searched states in total.
+\begin{figure}[pos=!htbp]
+\centering
+\includegraphics[width=\linewidth,keepaspectratio]{phase-family.pdf}
+\caption{Finite phase searches in nominal 30 wt\% MEA at six temperatures from 313.15 to \SI{393.15}{\kelvin} and analytical loading $10^{-5}$--0.6 for the comparison fit (top) and the reported parameters (bottom). Filled markers mark states with a resolved lower-Gibbs-energy arrangement; open markers mark none. Crosses mark 21 excluded states whose reference pressure exceeds \SI{10}{\mega\pascal}. Columns show pressures of 0.50, 0.80 and 0.95 times a fixed reference pressure for each temperature and loading (Section~S8); one repeated state at \SI{318.15}{\kelvin} is counted in the totals but not drawn. For the reported parameters, circles denote liquid--vapor and squares single-liquid states. The figure summarizes 133 searched and 21 excluded states, not a continuous stable region.}
+\label{fig:phase-family}
+\end{figure}
+
 The tangent-plane criterion \cite[Sect.~2]{Michelsen1982} is applied to reacting, charge-neutral trials, with reduced distance
 \begin{equation}
  D(\boldsymbol w)=g(T,P,\boldsymbol w)/(RT)-\boldsymbol w^{\mathsf T}B^{\mathsf T}\boldsymbol\lambda,
@@ -133,18 +145,14 @@ The tangent-plane criterion \cite[Sect.~2]{Michelsen1982} is applied to reacting
  \label{eq:tpd}
 \end{equation}
 where $B$ represents conserved component combinations and $\boldsymbol\lambda$ their chemical-potential multipliers in the existing equilibrium.
-A resolved instability requires a negative distance and a material-conserving finite transfer that lowers Gibbs energy beyond its numerical-error estimate; Section~S4 gives the complete method and states.
-The comparison fit admits descent at 12 states, whereas none is resolved for the reported parameters.
-Separately seeded calculations confirm a water-rich liquid and an amine- and ion-rich liquid at \SI{333.15}{\kelvin}, loadings 0.4 and 0.5 (Section~S4).
-A liquid--vapor classification alone is not evidence for two liquids.
-The search does not establish stability over a continuous property domain or at the warmer density and pressure states.
+A resolved instability requires a negative distance and a material-conserving finite transfer that lowers Gibbs energy beyond its numerical-error estimate; Section~S8 gives the complete method and states.
+The comparison fit has a resolved lower-Gibbs-energy arrangement at 12 of the first 73 states, nine of them at \SI{333.15}{\kelvin}, and at 21 extension states: 12 at \SI{353.15}{\kelvin}, nine at \SI{373.15}{\kelvin} and none at \SI{393.15}{\kelvin}.
+It therefore has detected instabilities at 33 of 133 searched states; the reported parameters have none, with all 540 trial optimizations completing at the 60 admitted extension states.
+Separately seeded calculations for the comparison fit confirm two liquids at \SI{333.15}{\kelvin} and loadings 0.4 and 0.5; at loading 0.4 their water mole fractions are about 0.96 and 0.59 (Section~S8).
+In the extension, 23 of 27 seeded attempts confirm two liquids at 17 of the 21 states with detected instability (Section~S8).
+These splits have no experimental counterpart in the cited homogeneous-liquid data \cite[Sect.~4.2]{neumannNewModelCombining2022}.
+This is a finite search at declared states, not a global-stability certificate or physical validation of phase behavior.
 
-\begin{figure}[pos=!htbp]
-\centering
-\includegraphics[width=\linewidth,keepaspectratio]{phase-family.pdf}
-\caption{Finite phase searches for the comparison fit and reported parameters in nominal 30 wt\% MEA at 313.15--\SI{333.15}{\kelvin} and analytical loading $10^{-5}$--0.5. Filled markers identify a resolved lower-Gibbs-energy arrangement and open markers identify none. For the reported parameters, circles denote liquid--vapor and squares single-liquid classifications. Columns show the lowest, middle and highest prescribed pressures at each temperature/loading pair; these pressures vary across the figure. Section~S4 supplies exact pressures and the additional pressure-rounded evaluation, counted in the totals but not drawn separately. The figure summarizes 73 specified states, not a continuous stable region.}
-\label{fig:phase-family}
-\end{figure}
 \FloatBarrier
 
 % P:results-phase-03
@@ -161,8 +169,3 @@ Their data sets, fitting roles and domains differ, and Zhang's differential heat
 \Cref{tab:literature-model-comparison} gives the quantities and data roles for these and other MEA models; the statistics locate the present model within the published range without establishing equal or better accuracy.
 
 \input{tables/literature_model_comparison}
-
-% P:results-literature-02
-One explicit-ion ePC-SAFT formulation represents the selected equilibrium, caloric and density observations for nominal 30 wt\% MEA.
-Its pressure deviations are within the range reported for related models on different data sets.
-The available comparisons do not yet establish its suitability across an absorber's operating range.
