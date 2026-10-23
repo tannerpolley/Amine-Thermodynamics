@@ -29,6 +29,8 @@
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/high-temperature-comparison.csv SHA256 e9039244d75b3fa83ea3fb7cd1f98eb28ea39577d3b6eb7c7d4988d9ca1aaa1d
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/pressure-figure-data.csv SHA256 ecce5c18740fab3d989c8e72598e9dc7733f8a97ba751f53fb8265af5032e3b2
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/species-figure-data.csv SHA256 74bb9a8622dae4b0fc4d70b26957f5f2a46d5c695713fbcbdd4636384ba7a941
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/density-sweep-1b/summary.json SHA256 52a57183596b4a7a4cd9f573d551b96cb1188020401d23b0ad965a6e822273f9
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-scales.json SHA256 ee61922f62b40e8a3f947e85bb9d0e1247ff5dd97e567e554f7b90e589dc95ce
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json SHA256 ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/provenance.json SHA256 1ea9f49238b7f6fb3413e2ddddb40e5abf5dc4b68ce54d03a442b78246581827
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/summary.json SHA256 af775385eadbb7396eacb69cbd9abd1defbec46eed35b3bfa300fec619edbd3d
@@ -66,31 +68,32 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 05a5ae41119a1f8b54f0b6de2e842be1ea37d832b3c00e388be7248bf2bc9787
+% Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a06a40a30f2097dc482b9d106944cf96c5d28dd7a81221cd83d45cd1f393b651
 \begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2162\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.0658\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}@{}}
-\caption{All 16 A7 scientific coordinates in optimizer-column order. Transformation: value = origin + signed slope times optimizer coordinate. R5 A is unshifted; enthalpy shifts are inherited-plus-fitted totals. Conditional standard errors (SE) depend on weights, fixed inputs, active bounds and local linearization; they are not measurement uncertainties or prediction intervals.}\label{tab:fitted-coordinates}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3666\linewidth}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.1692\linewidth}@{}}
+\caption{Sixteen fitted parameters. Conditional standard errors (SE) depend on weights, fixed inputs, bounds and local linearization. Born diameters and segment diameters are separate. Packing diameter is $0.88\sigma$ and Debye--H\"uckel diameter is $\sigma$. The R5 reciprocal-temperature coefficient is given before its enthalpy shift; R2/R5 shifts are total adjustments. Full optimizer transformations are in the data deposit.}\label{tab:fitted-coordinates}\\
 \toprule
-Coordinate & Value & Unit & Bounds & Origin; signed slope & Conditional SE & Ties \\
+Parameter & Value & Unit & Bounds & Conditional SE \\
 \midrule\endfirsthead
 \toprule
-Coordinate & Value & Unit & Bounds & Origin; signed slope & Conditional SE & Ties \\
+Parameter & Value & Unit & Bounds & Conditional SE \\
 \midrule\endhead
 \bottomrule\endfoot
-0: \ce{MEACOO-}–water kij & \mbox{-0.0038632044} & 1 & -0.5 to 0.5 & 0.0032213889; 0.01 & 0.182038 &  \\
-1: \ce{MEAH+}–water kij & \mbox{-0.5} & 1 & -0.5 to -0.161 & -0.5; 0.01 & bound; no symmetric SE &  \\
-2: \ce{HCO3-}–water kij & 0.725321 & 1 & -0.5 to 1 & 0.65955826; 0.01 & 1.26715 &  \\
-3: \ce{MEACOO-}–\ce{MEAH+} kij & \mbox{-1} & 1 & -1 to 1 & -1; 0.01 & bound; no symmetric SE &  \\
-4: \ce{MEAH+}–water kij temperature slope & \mbox{-41.929641} & K & -1000 to 1000 & -46.030841; 10 & 60.2876 &  \\
-5: \ce{MEAH+} segment diameter & 5.35 & \AA & 5.35 to 5.8 & 5.49; 0.1 & bound; no symmetric SE & \ce{MEAH+} packing diameter = 0.88 times coordinate; \ce{MEAH+} Debye–Hückel diameter = 1.0 times coordinate \\
-6: \ce{MEACOO-} segment diameter & 4.86604 & \AA & 2 to 5.8 & 4.6887051; 0.1 & 0.0794313 & \ce{MEACOO-} packing diameter = 0.88 times coordinate; \ce{MEACOO-} Debye–Hückel diameter = 1.0 times coordinate \\
-7: \ce{MEAH+} born diameter & 5 & \AA & 2 to 5 & 5; 0.1 & bound; no symmetric SE &  \\
-8: \ce{MEACOO-} born diameter & 5 & \AA & 2 to 5 & 5; 0.1 & bound; no symmetric SE &  \\
-9: R5 A & 2831.681 & K & 2400 to 3000 & 2848.516; -80 & 172.434 &  \\
-10: R2 enthalpy shift & \mbox{-1387.4047} & J/\allowbreak{}mol & -10000 to 10000 & -1811.8989; 2500 & 5292.47 &  \\
-11: R5 enthalpy shift & 10000 & J/\allowbreak{}mol & -10000 to 10000 & 10000; 2500 & bound; no symmetric SE &  \\
-12: \ce{MEA}–water kij & \mbox{-0.089904823} & 1 & -0.5 to 0.5 & -0.090088134; 0.01 & 0.00102441 &  \\
-13: \ce{MEA}–water kij temperature slope & \mbox{-8.0699134} & K & -1000 to 1000 & -8.300348; 10 & 1.80605 &  \\
-14: \ce{MEAH+} dispersion energy/\allowbreak{}k & 177.79505 & K & 50 to 950 & 173.18304; 10 & 47.9471 &  \\
-15: \ce{MEACOO-} dispersion energy/\allowbreak{}k & 207.2746 & K & 50 to 1000 & 217.55547; 10 & 83.7489 &  \\
+\ce{MEACOO-}–water $k_{ij}$ & $-0.003863$ & 1 & $[-0.5, 0.5]$ & 0.182 \\
+\ce{MEAH+}–water $k_{ij}$ & $-0.5$ & 1 & $[-0.5, -0.161]$ & at bound \\
+\ce{HCO3-}–water $k_{ij}$ & 0.7253 & 1 & $[-0.5, 1]$ & 1.267 \\
+\ce{MEACOO-}–\ce{MEAH+} $k_{ij}$ & $-1$ & 1 & $[-1, 1]$ & at bound \\
+\ce{MEAH+}–water $k_{ij}$ temperature slope & $-41.93$ & K & $[-1000, 1000]$ & 60.29 \\
+\ce{MEAH+} segment diameter & 5.35 & \AA & $[5.35, 5.8]$ & at bound \\
+\ce{MEACOO-} segment diameter & 4.866 & \AA & $[2, 5.8]$ & 0.07943 \\
+\ce{MEAH+} Born diameter & 5 & \AA & $[2, 5]$ & at bound \\
+\ce{MEACOO-} Born diameter & 5 & \AA & $[2, 5]$ & at bound \\
+R5 $A_5$ (before enthalpy shift) & 2832 & K & $[2400, 3000]$ & 172.4 \\
+R2 enthalpy shift & $-1.387$ & kJ/\allowbreak{}mol & $[-10, 10]$ & 5.292 \\
+R5 enthalpy shift & 10 & kJ/\allowbreak{}mol & $[-10, 10]$ & at bound \\
+\ce{MEA}–water $k_{ij}$ & $-0.0899$ & 1 & $[-0.5, 0.5]$ & 0.001024 \\
+\ce{MEA}–water $k_{ij}$ temperature slope & $-8.07$ & K & $[-1000, 1000]$ & 1.806 \\
+\ce{MEAH+} dispersion energy/\allowbreak{}k & 177.8 & K & $[50, 950]$ & 47.95 \\
+\ce{MEACOO-} dispersion energy/\allowbreak{}k & 207.3 & K & $[50, 1000]$ & 83.75 \\
 \end{longtable}\endgroup
