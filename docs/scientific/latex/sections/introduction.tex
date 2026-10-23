@@ -1,45 +1,29 @@
 \section{Introduction}\label{sec:introduction}
 % P:introduction-01
-Monoethanolamine (\MEA) in water is the reference solvent for \COtwo absorption, and its vapor--liquid equilibrium (VLE) has been measured extensively~\cite{Jou1995,Mamun2005,Hilliard2008,Aronu2011,Xu2011}.
-Absorbed \COtwo reacts with water and amine to form protonated amine, carbamate, bicarbonate and carbonate.
-The equilibrium \COtwo partial pressure at a given loading therefore depends on both the phase equilibrium and the liquid speciation.
-A model can reproduce the pressure with an implausible distribution of \MEA, \MEAH, \MEACOO, \HCOthree and \COthree, so speciation measurements provide a separate test of the same thermodynamic state.
+Models of \COtwo absorption in aqueous monoethanolamine (\MEA) need consistent descriptions of equilibrium pressure, liquid species, heat of absorption, density and heat capacity.
+These properties determine different parts of an absorber calculation, yet each depends on the same reacting liquid.
+Absorbed \COtwo forms protonated amine, carbamate, bicarbonate and carbonate, coupling the equilibrium pressure to the distribution of molecular and ionic species.
+We ask whether one explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) formulation with carbamate chemistry can represent these properties for loaded aqueous MEA.
 
 % P:introduction-02
-Speciation measurements for loaded \MEA differ in what they observe.
-Quantitative nuclear magnetic resonance (NMR) resolves carbamate. B\"ottinger et al.\ report the sum of molecular and protonated amine and tabulate bicarbonate, noting that carbonate is practically absent in their studied solutions~\cite[p.~134, Table~3]{Bottinger2008}; Jakobsen et al.\ use calibrated chemical shifts to separate molecular from protonated amine and bicarbonate from carbonate~\cite[pp.~9895--9896]{Jakobsen2005}.
-Matin et al.\ obtained all four major species from acid and base titrations combined with a total carbon measurement~\cite{matinFacileMethodDetermination2012}.
-They reported agreement with NMR for free amine, protonated amine and carbamate, and bicarbonate higher than the NMR values~\cite[pp.~6616--6617]{matinFacileMethodDetermination2012}.
-Each comparison must therefore calculate the quantity the method actually reports and state any approximation that relates it to the model species.
+Multi-property models of aqueous MEA already exist.
+B\"ottinger et al.\ combined a Pitzer activity model with carbamate equilibria estimated from nuclear magnetic resonance (NMR) data and earlier vapor--liquid-equilibrium (VLE) interactions \cite[Sects.~5--7, Tables~5--6]{Bottinger2008}.
+Zhang et al.\ fitted electrolyte non-random two-liquid (NRTL) parameters to solubility, differential absorption heat, heat capacity and NMR data \cite[Sect.~3.3, Tables~9--11]{Zhang2011}; refined electrolyte NRTL and extended UNIQUAC also describe aqueous amine equilibria \cite[Sect.~4]{Hessen2010}\cite[Sects.~3--5]{Aronu2011}.
+Neumann et al.\ combined electrolyte NRTL with Helmholtz-energy equations of state to calculate VLE, speciation and density \cite[Sects.~3--4]{neumannNewModelCombining2022}.
+In an equation of state such as ePC-SAFT, the liquid density and enthalpy follow from the same Helmholtz energy that gives the phase and reaction equilibria, without a separate volume or excess-enthalpy model.
 
 % P:introduction-03
-Multi-property calibration of aqueous \MEA is established in electrolyte excess-Gibbs-energy models.
-B\"ottinger et al.\ fitted carbamate formation to NMR while retaining the Bates--Pinching protonation law and previously estimated Pitzer interactions \cite[Sects.~5--6, Tables~5--6]{Bottinger2008}.
-Zhang et al.\ jointly fitted electrolyte non-random two-liquid (NRTL) parameters to solubility, absorption heat, heat capacity and NMR; Akula et al.\ fitted pressure and differential heat, then compared NMR and heat capacity \cite[Sect.~3.3, Tables~9--11]{Zhang2011}\cite[Sects.~3.3 and 4.2]{Akula2023a}.
-Hessen et al.\ re-estimated refined electrolyte NRTL (eNRTL) interactions against binary properties and ternary pressures, while Aronu et al.\ used extended UNIQUAC for their 15--60 wt\% MEA measurements \cite[Sect.~4.1, Table~2]{Hessen2010}\cite[Sects.~3--4]{Aronu2011}.
-Here we examine a different combination: explicit-ion ePC-SAFT with carbamate chemistry and a solvation-shell Born term, assessed against both property data and finite phase searches.
-
-% P:introduction-07
-SAFT models represent reactive absorption either through association sites or through separate chemical species.
-SAFT-VR, SAFT-$\gamma$ square-well and SAFT-$\gamma$ Mie treatments derive associated species from bonded-site fractions \cite{MacDowell2010,Rodriguez2012,chremosModellingPhaseChemical2016,perdomoPredictiveGroupcontributionFramework2023}; soft-SAFT also estimates absorption enthalpy after fitting solubility \cite[Sect.~4.7]{lloretConsistentTransferableThermodynamic2017}.
-Neutral-species PC-SAFT and Huang--Radosz SAFT instead combine phase fugacities with ideal reaction equilibria \cite{Nasrifar2010,Baygi2015,Najafloo2018}.
-In Nasrifar and Tafazzol's water balance, hydroxide, bicarbonate and carbonate amounts contribute to the effective water amount \cite[Eq.~12]{Nasrifar2010}; these approaches do not assign separate nonideal activities to each ion.
-Explicit-ion alternatives include T\'ellez-Arredondo and Medeiros' electrolyte cubic two-state association model and Neumann et al.'s combination of Helmholtz-energy equations of state with electrolyte NRTL \cite{tellez-arredondoModelingCO2H2S2013,neumannNewModelCombining2022}.
-Their different species representations and fitted data are compared quantitatively in \cref{tab:literature-model-comparison}.
+SAFT models differ in how they represent the reaction products.
+Reactive-association models obtain chemically bound \COtwo from bonded-site fractions, as in SAFT-VR and soft-SAFT \cite{MacDowell2010}\cite[Sect.~4.7]{lloretConsistentTransferableThermodynamic2017}.
+Neutral-species PC-SAFT and Huang--Radosz SAFT combine molecular phase fugacities with ideal reaction equilibria \cite[Sects.~3--6]{Nasrifar2010}\cite[Sect.~3]{Baygi2015,Najafloo2018}.
+Explicit-ion models instead assign nonideal activities to separate ions; examples include electrolyte cubic two-state association for MEA and ePC-SAFT for aqueous N-methyldiethanolamine (MDEA) \cite{tellez-arredondoModelingCO2H2S2013,Uyan2015,Wangler2018}.
+The MDEA ePC-SAFT work extends to mixed solvents and competitive acid-gas absorption \cite{Bulow2021a,Cleeton2020}.
+These ePC-SAFT studies treat MDEA, a tertiary amine that forms no carbamate.
+In loaded MEA, carbamate carries most of the absorbed \COtwo below a loading of about 0.5 \cite[Table~3]{Bottinger2008}, so an explicit-ion description of MEA must include carbamate ions and their formation reaction.
 
 % P:introduction-04
-Electrolyte PC-SAFT (ePC-SAFT) adds a Debye--H\"uckel contribution for charged species~\cite{Cameretti2005}, and Held et al.\ estimated ion parameters from densities and osmotic coefficients of aqueous salt solutions, with dispersion between ions of the same sign excluded~\cite{Held2014}.
-With explicit ions and activity-based reaction equilibria, ePC-SAFT described acid-gas solubility in aqueous MDEA from parameters obtained from pure components and binary subsystems~\cite{Uyan2015,Wangler2018}, and was extended to competitive \ce{H2S}--\COtwo absorption~\cite{Cleeton2020}.
-B\"ulow et al.\ added the Born term for the solvation Gibbs energy of ions to MDEA blends with sulfolane or an ionic liquid, which reduced the number of binary interaction parameters~\cite{Bulow2021a}.
-Related work added concentration-dependent permittivity to the Born and Debye--H\"uckel terms~\cite{Bulow2020,Rueben2024} and predicted \COtwo solubility in aqueous and organic salt solutions~\cite{Schick2023}.
-Figiel et al.\ modified the Born term to account for the solvation-shell volume and dielectric saturation near an ion (SSM+DS), with parameters estimated from ion solvation and salt activity data in water and alcohols at \SI{298.15}{\kelvin}~\cite{Figiel2025}; a later correction supplied a missing bracket and the ion-region permittivity in its Eq.~(7)~\cite{Figiel2026Correction}.
-MDEA is a tertiary amine and forms no carbamate.
-The primary amine \MEA forms carbamate, so its ion population and solvent composition change together with \COtwo loading.
-
-% P:introduction-05
-Density and phase searches test different consequences of a fitted Helmholtz energy.
-Agreement with pressure and speciation need not imply accurate liquid volume, and a converged equilibrium state may still admit a lower-Gibbs-energy phase arrangement.
-We ask whether one parameter set can represent pressure, speciation, caloric, density and binary data without predicting a spurious phase split, and what avoiding such a split costs in property agreement.
-We therefore test each fitted parameter set with tangent-plane searches, comparing fits under the original and narrowed parameter bounds.
-The searches are finite: they cover 73 fixed states at 313.15--\SI{333.15}{\kelvin} and loading $10^{-5}$--0.5 with nine trial phases each, so they can detect instability at those states but cannot exclude it elsewhere, including at the higher temperatures of the property comparisons.
-This comparison addresses thermodynamic representation, with the scope and unresolved discrepancies stated in \cref{sec:results-limits}.
+Here the same ePC-SAFT Helmholtz energy, reaction standard states and ideal-gas caloric references provide the five target properties.
+A solvation-shell Born term accounts for dielectric saturation near the ions \cite{Figiel2025,Figiel2026Correction}.
+Parameters are fitted jointly to pressure, species, caloric, density and binary VLE observations, and calculated curves are compared with measurements at nominal 30 wt\% MEA.
+The property comparisons identify the useful domain and the remaining discrepancies.
+Because the objective contains no phase-stability condition, a parameter set can match the measured properties while predicting a second liquid phase; a finite phase search tests the reported parameters for such splits.
