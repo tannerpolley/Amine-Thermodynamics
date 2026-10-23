@@ -1,0 +1,163 @@
+{
+ "candidate_wheel": {
+  "commit": "3e83e19ccc771b51d8ebc038931ab25192f4c5b5",
+  "path": "build/engine-wheels/main-3e83e19ccc771b51d8ebc038931ab25192f4c5b5/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+  "sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
+  "built_from": "ignored clone upstream/ePC-SAFT, tools/build-engine.sh --wheel"
+ },
+ "preparation": [
+  {
+   "command": "upstream/ePC-SAFT: git fetch origin; git switch main; git merge --ff-only origin/main; git checkout --detach 3e83e19ccc771b51d8ebc038931ab25192f4c5b5",
+   "exit": 0
+  },
+  {
+   "command": "EPCSAFT_BUILD_JOBS=8 nice -n 10 bash .codex/environments/setup.sh && nice -n 10 bash tools/build-engine.sh --wheel build/engine-wheels/main-3e83e19ccc771b51d8ebc038931ab25192f4c5b5",
+   "exit": 0,
+   "wall_s": 35.2,
+   "note": "fresh native tree created after checkout; compiler cache"
+  },
+  {
+   "command": "uncommitted pin edits (shared_evaluation.py ENGINE_WHEEL_SHA256/ENGINE_COMMIT, pyproject.toml wheel path), uv lock (epcsaft source and hash only), uv sync --frozen",
+   "exit": 0,
+   "packages": {
+    "epcsaft": "0.2.0.dev0",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1"
+   },
+   "linear_solver": "ma57"
+  },
+  {
+   "command": "pin edits discarded after the failed check: git checkout -- shared_evaluation.py pyproject.toml uv.lock",
+   "exit": 0
+  }
+ ],
+ "calls": [
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt reference-fit",
+   "user_s": 11.52,
+   "system_s": 0.38,
+   "wall_s": 3.3,
+   "max_rss_kib": 84388,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt screen A7",
+   "user_s": 34.35,
+   "system_s": 2.69,
+   "wall_s": 37.39,
+   "max_rss_kib": 92148,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt screen A6",
+   "user_s": 36.21,
+   "system_s": 2.68,
+   "wall_s": 39.19,
+   "max_rss_kib": 89820,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt splits",
+   "user_s": 6.59,
+   "system_s": 0.14,
+   "wall_s": 6.75,
+   "max_rss_kib": 77348,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt score A7",
+   "user_s": 16.2,
+   "system_s": 0.26,
+   "wall_s": 16.52,
+   "max_rss_kib": 97524,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt score A6",
+   "user_s": 15.66,
+   "system_s": 0.27,
+   "wall_s": 15.97,
+   "max_rss_kib": 101300,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt assess density",
+   "user_s": 54.85,
+   "system_s": 1.29,
+   "wall_s": 14.77,
+   "max_rss_kib": 84556,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt assess cp",
+   "user_s": 15.57,
+   "system_s": 0.27,
+   "wall_s": 12.87,
+   "max_rss_kib": 86112,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt assess calorics",
+   "user_s": 16.8,
+   "system_s": 0.58,
+   "wall_s": 12.54,
+   "max_rss_kib": 86632,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt assess states",
+   "user_s": 93.39,
+   "system_s": 7.19,
+   "wall_s": 17.57,
+   "max_rss_kib": 112468,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt assess carbonate",
+   "user_s": 12.83,
+   "system_s": 0.34,
+   "wall_s": 12.21,
+   "max_rss_kib": 86540,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt assess declared-density",
+   "user_s": 15.54,
+   "system_s": 0.34,
+   "wall_s": 14.87,
+   "max_rss_kib": 91828,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt reduce",
+   "user_s": 0.3,
+   "system_s": 0.04,
+   "wall_s": 0.35,
+   "max_rss_kib": 63204,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt curves",
+   "user_s": 271.61,
+   "system_s": 14.21,
+   "wall_s": 33.45,
+   "max_rss_kib": 85228,
+   "exit": 0
+  },
+  {
+   "command": "nice -n 10 .venv/bin/python analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt compare",
+   "user_s": 0.22,
+   "system_s": 0.01,
+   "wall_s": 0.24,
+   "max_rss_kib": 23216,
+   "exit": 0
+  },
+  {
+   "command": "same splits mode from an extracted d578555 tree with the main-checkout environment (Engine 8298c602 wheel 8897a0ca, verify_wheel passed); outputs copied to A6-supplement-splits-on-8298c602/",
+   "wall_s": null,
+   "note": "attribution probe"
+  }
+ ],
+ "total_wall_s": 237.99,
+ "total_cpu_s": 632.33
+}
