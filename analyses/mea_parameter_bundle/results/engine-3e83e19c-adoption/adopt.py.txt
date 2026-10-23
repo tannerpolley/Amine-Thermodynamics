@@ -1,0 +1,137 @@
+"""Engine 3e83e19c adoption check (#203 step 3). Each retained producer runs unchanged except for the listed output-path
+edits; no fit and no new science code. Old values are the retained Engine 8298c602 results (21e761c3 for the supplement splits).
+Run from the checkout root, one mode per process:  nice -n 10 .venv/bin/python <this file> MODE [ARG]
+Modes: reference-fit | screen FIT | score FIT | splits | assess STAGE | reduce | curves | compare."""
+import csv, json, math, os, sys
+from pathlib import Path
+for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'BLIS_NUM_THREADS', 'NUMEXPR_NUM_THREADS'):
+    os.environ[key] = '1'
+ROOT, REL = Path.cwd(), 'analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption'
+B, OUT = ROOT/'analyses/mea_parameter_bundle', ROOT/REL
+R, A7 = B/'results', 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7'
+SPLITS = 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis'
+OLD = {'A7': ROOT/A7/'fixed-study/wheel-8298c602/restricted-2-endpoint', 'A6': ROOT/A7/'fixed-study/wheel-8298c602/after-adoption/a6-selected'}
+SOURCE = {'A7': 'analyses/mea_parameter_bundle/results/selected-current-best-parameters.json',
+          'A6': 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json'}
+WORKERS = min(os.cpu_count(), int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])//1_000_000)  # ~1 GB each
+sys.path[:0] = [str(B/'scripts'), str(B/'calibration-misfit'), str(ROOT/'src')]
+
+
+def run(producer, edits, argv, file=None):
+    # Execute in __main__ so the producer's fork pools can pickle its functions by name.
+    text = (ROOT/producer).read_text()
+    for old, new in edits:
+        assert old in text, old
+        text = text.replace(old, new)
+    sys.argv, namespace = [producer, *argv], sys.modules['__main__'].__dict__
+    namespace['__file__'] = str(file or ROOT/producer)
+    exec(compile(text, producer, 'exec'), namespace)
+
+
+def gate(family, rows):  # rows: (identity, old, new); delta and zero rule of issue #203
+    out = []
+    for identity, old, new in rows:
+        old, new = (float('nan') if x in (None, '') else float(x) for x in (old, new))  # a missing or nonfinite value on either side fails
+        delta = abs(new-old)/max(abs(old), abs(new), 1e-300) if math.isfinite(new-old) else math.inf
+        out.append(dict(family=family, identity=identity, old=old, new=new, delta=delta,
+                        passed=math.isfinite(new) and (delta <= 1e-10 or old == 0 and abs(new) <= 1e-300)))
+    return out
+
+
+def leaves(value, path=''):
+    if isinstance(value, dict):
+        return [x for k, v in value.items() for x in leaves(v, f'{path}/{k}')]
+    if isinstance(value, list):
+        return [x for i, v in enumerate(value) for x in leaves(v, f'{path}/{i}')]
+    return [(path, value)]
+
+
+def paired(family, old, new):  # numeric leaves are gated; any other differing leaf fails
+    old, new = dict(leaves(old)), dict(leaves(new))  # a leaf present on one side only also fails
+    numeric = [k for k in old.keys() & new.keys() if type(old[k]) in (int, float)]
+    return gate(family, [(k, old[k], new[k]) for k in numeric]) + [dict(family=family, identity=k, old=old.get(k, 'absent'), new=new.get(k, 'absent'), delta=math.inf,
+        passed=False) for k in sorted(old.keys() | new.keys()) if k not in numeric and old.get(k, 'absent') != new.get(k, 'absent')]
+
+
+def table(path, key, fields):
+    return {tuple(r[k] for k in key): {f: float(r[f]) if r[f] not in ('', 'None') else None for f in fields} for r in csv.DictReader(open(path))}
+
+
+mode, arg = sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None
+if mode == 'reference-fit':
+    run(R/'engine-8298c602-adoption/evaluate.py.txt', [('8298c602', '3e83e19c'), ('21e761c3', '8298c602'), ("selected record\\'s", "reference fit\\'s"),
+        ("ROOT/OLD['selected_record']['path']", "OUT/'inputs/reference-fit-parameters.json'"), ("['new_sha256']", "['sha256']"),
+        ("selected_record=dict(path=OLD['selected_record']['path']", "reference_fit=dict(path=str(DOCUMENT.relative_to(ROOT))"),
+        ('max_workers=os.cpu_count()', f'max_workers={WORKERS}')], [])
+elif mode in ('screen', 'score'):
+    run(A7+'/fixed-study/study.py.txt', [("output = root/'amendment-7/fixed-study'", f"output = Path('{REL}')")], [mode, arg] + [SOURCE[arg]]*(mode == 'screen'))
+elif mode == 'splits':
+    run(SPLITS+'/probes.py.txt', [("base/'selected-checks/phase-diagnosis'", f"Path('{REL}/A6-supplement-splits')")], ['split', '21', '63', '70'])
+elif mode == 'assess':
+    run(A7+'/selected-assessment/assess.py.txt', [(A7+'/selected-assessment', REL+'/selected-assessment'), ('OUT.parent', f"Path('{A7}').resolve()"),
+        ('max_workers=os.cpu_count()', f'max_workers={WORKERS}')], [arg])
+elif mode == 'reduce':
+    run(A7+'/selected-assessment/reduce.py.txt', [('OUT.parent', f"Path('{A7}').resolve()")], [], OUT/'selected-assessment/reduce.py.txt')
+elif mode == 'curves':
+    import model_curves as mc
+    mc.OUT, mc.RUNS = OUT/'model-curves', OUT/'model-curves/runs'
+    mc.OUT.mkdir()
+    mc.main()
+else:
+    rows = gate('reference fit: 152 fixed-state predictions', [(r['target'], r['old_prediction'], r['new_prediction']) for r in json.load(open(OUT/'comparison.json'))['rows']])
+    phase = []
+    for fit in OLD:
+        old, new = ({v['target']: v for v in json.load(open(d/'full-replay.json'))} for d in (OLD[fit], OUT/fit))
+        assert old.keys() == new.keys() and len(new) == 307 and all(v['status'] == 'Available' for v in new.values())
+        rows += gate(f'{fit} 307-row replay', [(f'{k}/{f}', old[k][f], new[k][f]) for k in old for f in ('predicted', 'cost')])
+        rows += gate(f'{fit} 307-row replay', [('total cost', math.fsum(v['cost'] for v in old.values()), math.fsum(v['cost'] for v in new.values()))])
+        rows += paired(f'{fit} 307-row replay', *({**json.load(open(d/'score.json')), 'label': fit} for d in (OLD[fit], OUT/fit)))  # label is the folder name
+        for i in range(73):
+            o, n = (json.load(open(d/f'point-{i}.json')) for d in (OLD[fit], OUT/fit))
+            state = lambda p: (p['classification'], p['final']['success'], [(t['phase']['kind'], t['seed'], t['optimizer']['success'], t['evidence'], t['resolved_descent']) for s in p['stability'] for t in s['trials']])
+            phase.append(dict(fit=fit, index=i, old=o['classification'], new=n['classification'], identical=state(o) == state(n)))
+    S, N = ROOT/A7/'selected-assessment', OUT/'selected-assessment'
+    for name, key, fields in (('density.csv', ('id',), ('predicted_kg_m3',)), ('heats.csv', ('id',), ('predicted_kJ_mol',)), ('carbonate-share.csv', ('id',), ('predicted_share',)),
+                              ('cp.csv', ('id',), ('equilibrium_cp_kJ_kg_K', 'frozen_cp_kJ_kg_K')), ('state-targets.csv', ('identity', 'target'), ('predicted',))):
+        old, new = table(S/name, key, fields), table(N/name, key, fields)
+        assert old.keys() == new.keys(), name
+        rows += gate(f'selected assessment: {name}', [('|'.join(k)+'/'+f, old[k][f], new[k][f]) for k in old for f in fields])
+    for name in ('density-summary.json', 'heat-summary.json', 'carbonate-summary.json'):
+        rows += paired(f'selected assessment: {name}', json.load(open(S/name)), json.load(open(N/name)))
+    rows += paired('selected assessment: state-summary.json', json.load(open(S/'state-summary.json'))['scores'], json.load(open(N/'state-summary.json'))['scores'])
+    split, ACCEPTED = [], {(21, 'positive-neutral-base'), (63, 'near-pure-2')}  # accepted as disclosed numerical changes; the 3e83e19c values are retained
+    for i in (21, 63, 70):
+        old, new = (json.load(open(d/f'split-seeded-{i}.json')) for d in (ROOT/SPLITS, OUT/'A6-supplement-splits'))
+        for o, n in zip(old, new, strict=True):
+            assert (o['trial_index'], o['seed']) == (n['trial_index'], n['seed'])
+            pick = lambda r: dict(selected=str(r['selected']), success=r['result']['success'], delta_vs_original=r['delta_G_over_RT_vs_original'], delta_vs_single_liquid=r['delta_G_over_RT_vs_single_liquid'],
+                                  phases=[{k: p[k] for k in ('amount_mol', 'molar_density_mol_m3', 'mole_fractions')} for p in r['result'].get('phases', [])])
+            split += [dict(r, identity=f"{i}/{o['seed']}{r['identity']}", accepted=(i, o['seed']) in ACCEPTED, passed=r['delta'] <= 1e-6 or (i, o['seed']) in ACCEPTED)
+                      for r in paired('supplement splits', pick(o), pick(n))]
+    SOLVED = {'pressure': [('pressure_Pa', 'Pa')], 'mea-water': [('temperature_K', 'K')]}  # solved outputs (total bubble pressure, bubble temperature), gated apart from value
+    wheels = {}  # engine_wheel_sha256 is the expected provenance change, recorded apart from the identity match
+    for name, declared in (('pressure', 'temperature_K analytical_loading mea_mass_fraction'), ('species', 'temperature_K pressure_Pa analytical_loading mea_mass_fraction'),
+                           ('heat', 'temperature_K pressure_Pa analytical_loading'), ('density', 'temperature_K pressure_Pa analytical_loading mea_mass_fraction'), ('mea-water', 'pressure_Pa liquid_mea_mole_fraction')):
+        key = ('curve', 'sampling', *declared.split(), 'quantity', 'unit', 'parameter_sha256')  # declared state, quantity and unit; SOLVED columns excluded
+        old, new = (list(csv.DictReader(open(d/f'{name}.csv'))) for d in (R/'model-curves', OUT/'model-curves'))
+        wheels[name] = [sorted({r['engine_wheel_sha256'] for r in side}) for side in (old, new)]
+        by_identity = [{tuple(r[k] for k in key): r for r in side} for side in (old, new)]
+        assert [len(d) for d in by_identity] == [len(old), len(new)], f'{name}: duplicate identity'
+        old, new = by_identity
+        assert old.keys() == new.keys(), f'{name}: missing or mismatched identity {sorted(old.keys() ^ new.keys())[:2]}'
+        assert all(old[k]['status'] == new[k]['status'] for k in old), name
+        rows += gate(f'model curves: {name}.csv', [('|'.join(k[:-1]), old[k]['value'], new[k]['value']) for k in old if old[k]['status'] == 'available'])
+        for field, unit in SOLVED.get(name, ()):
+            rows += gate(f'model curves: {name}.csv solved {field}', [(f"{'|'.join(k[:-1])}/{field} [{unit}]", old[k][field], new[k][field]) for k in old if old[k]['status'] == 'available'])
+    families = {}
+    for r in rows+split:
+        f = families.setdefault(r['family'], dict(count=0, failed=0, worst_delta=0., worst_row=None))
+        f['count'] += 1; f['failed'] += not r['passed']
+        if r['delta'] >= f['worst_delta']: f['worst_delta'], f['worst_row'] = r['delta'], r['identity']
+    phase_ok = all(p['identical'] for p in phase)
+    summary = dict(gate='delta=abs(new-old)/max(abs(old),abs(new),1e-300) <= 1e-10; supplement splits <= 1e-6', families=families, phase_states_identical=phase_ok,
+                   accepted_split_changes=dict(attempts=sorted(map(list, ACCEPTED)), rows=sum(r['accepted'] and r['delta'] > 1e-6 for r in split), retained_engine='3e83e19ccc771b51d8ebc038931ab25192f4c5b5',
+                                               decision='https://github.com/tannerpolley/Amine-Thermodynamics/issues/203#issuecomment-6361213910'),
+                   model_curve_wheels=wheels, passed=phase_ok and all(f['failed'] == 0 for f in families.values()))
+    (OUT/'adoption-check.json').write_text(json.dumps(dict(summary=summary, phase_states=phase, rows=rows, supplement_splits=split), indent=1, allow_nan=True)+'\n')
+    print(json.dumps(summary, indent=1))
