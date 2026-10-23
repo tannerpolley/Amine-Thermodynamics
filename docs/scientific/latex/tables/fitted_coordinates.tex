@@ -75,32 +75,60 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 799e701b0c2e3dae3fe017cd1571e508e1f086ebb709bca74c815cc998f56202
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 c903af428326a980013578c4c226807a0e9ce388e5a5d69abf746a4dab7bc5d9
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
 \begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}lrlrr@{}}
+\begin{longtable}{@{}lrrr@{}}
 \caption{Sixteen fitted parameters and final bounds. An asterisk marks a parameter at a bound. Interactions and slopes use 313.15 K as reference temperature. Born and segment diameters are separate. R5 $A_5$ is specified before the enthalpy shift; R2/R5 shifts are total adjustments already included in the reaction coefficients. Section~S6 gives conditional errors.}\label{tab:fitted-coordinates}\\
 \toprule
-Parameter & Value & Unit & Lower bound & Upper bound \\
+Parameter & Value & Lower bound & Upper bound \\
 \midrule\endfirsthead
 \toprule
-Parameter & Value & Unit & Lower bound & Upper bound \\
+Parameter & Value & Lower bound & Upper bound \\
 \midrule\endhead
 \bottomrule\endfoot
-\ce{MEACOO-}–water $k_{ij}$ & $-0.003863$ & 1 & $-0.5$ & $0.5$ \\
-\ce{MEAH+}–water $k_{ij}$ & $-0.5$\rlap{*} & 1 & $-0.5$ & $-0.161$ \\
-\ce{HCO3-}–water $k_{ij}$ & $0.7253$ & 1 & $-0.5$ & $1$ \\
-\ce{MEACOO-}–\ce{MEAH+} $k_{ij}$ & $-1$\rlap{*} & 1 & $-1$ & $1$ \\
-\ce{MEAH+}–water $k_{ij}$ temperature slope & $-41.93$ & K & $-1000$ & $1000$ \\
-\ce{MEAH+} segment diameter & $5.35$\rlap{*} & \AA & $5.35$ & $5.8$ \\
-\ce{MEACOO-} segment diameter & $4.866$ & \AA & $2$ & $5.8$ \\
-\ce{MEAH+} Born diameter & $5$\rlap{*} & \AA & $2$ & $5$ \\
-\ce{MEACOO-} Born diameter & $5$\rlap{*} & \AA & $2$ & $5$ \\
-R5 $A_5$ (before enthalpy shift) & $2832$ & K & $2400$ & $3000$ \\
-R2 enthalpy shift & $-1.387$ & kJ/\allowbreak{}mol & $-10$ & $10$ \\
-R5 enthalpy shift & $10$\rlap{*} & kJ/\allowbreak{}mol & $-10$ & $10$ \\
-\ce{MEA}–water $k_{ij}$ & $-0.0899$ & 1 & $-0.5$ & $0.5$ \\
-\ce{MEA}–water $k_{ij}$ temperature slope & $-8.07$ & K & $-1000$ & $1000$ \\
-\ce{MEAH+} dispersion energy/\allowbreak{}k & $177.8$ & K & $50$ & $950$ \\
-\ce{MEACOO-} dispersion energy/\allowbreak{}k & $207.3$ & K & $50$ & $1000$ \\
+Interaction $k_{ij}$ &  &  &  \\*
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{MEACOO-}–water $k_{ij}$ & $-0.003863$ & $-0.5$ & $0.5$ \\
+\ce{MEAH+}–water $k_{ij}$ & $-0.5$\rlap{*} & $-0.5$ & $-0.161$ \\
+\ce{HCO3-}–water $k_{ij}$ & $0.7253$ & $-0.5$ & $1$ \\
+\ce{MEACOO-}–\ce{MEAH+} $k_{ij}$ & $-1$\rlap{*} & $-1$ & $1$ \\
+\ce{MEA}–water $k_{ij}$ & $-0.0899$ & $-0.5$ & $0.5$ \\
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Temperature slope $b_{ij}$ & (K) & (K) & (K) \\*
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{MEAH+}–water $k_{ij}$ temperature slope & $-41.93$ & $-1000$ & $1000$ \\
+\ce{MEA}–water $k_{ij}$ temperature slope & $-8.07$ & $-1000$ & $1000$ \\
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Diameter & (\AA) & (\AA) & (\AA) \\*
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{MEAH+} segment diameter & $5.35$\rlap{*} & $5.35$ & $5.8$ \\
+\ce{MEACOO-} segment diameter & $4.866$ & $2$ & $5.8$ \\
+\ce{MEAH+} Born diameter & $5$\rlap{*} & $2$ & $5$ \\
+\ce{MEACOO-} Born diameter & $5$\rlap{*} & $2$ & $5$ \\
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Dispersion energy $u_i/k_B$ & (K) & (K) & (K) \\*
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{MEAH+} dispersion energy/\allowbreak{}k & $177.8$ & $50$ & $950$ \\
+\ce{MEACOO-} dispersion energy/\allowbreak{}k & $207.3$ & $50$ & $1000$ \\
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Reaction coefficient & (K) & (K) & (K) \\*
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+R5 $A_5$ (before enthalpy shift) & $2832$ & $2400$ & $3000$ \\
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Enthalpy shift $\delta h_r$ & (kJ/mol) & (kJ/mol) & (kJ/mol) \\*
+\noalign{\vskip\aboverulesep}\multispan{4}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+R2 enthalpy shift & $-1.387$ & $-10$ & $10$ \\
+R5 enthalpy shift & $10$\rlap{*} & $-10$ & $10$ \\
 \end{longtable}\endgroup

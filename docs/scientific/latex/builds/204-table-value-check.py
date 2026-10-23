@@ -13,8 +13,8 @@ BASE = sys.argv[1] if len(sys.argv) > 1 else 'main'
 
 def tokens(text):
     lines = [line for line in text.splitlines() if not line.startswith('%')]
-    # The repeated page header, the column specification and the group font settings are not displayed values.
-    lines = [line for line in lines if not line.startswith((r'\begingroup', r'\begin{longtable}', r'\begin{landscape}', r'\end{landscape}'))]
+    # The repeated page header, the column specification, the group font settings and the sub-header rule rows are not displayed values.
+    lines = [line for line in lines if not line.startswith((r'\begingroup', r'\begin{longtable}', r'\begin{landscape}', r'\end{landscape}', r'\noalign'))]
     text = re.sub(r'\\midrule\\endfirsthead.*?\\midrule\\endhead', '', '\n'.join(lines), flags=re.S)
     cites = [key.strip() for keys in re.findall(r'\\cite(?:\[[^]]*\])?\{([^}]*)\}', text) for key in keys.split(',')]
     text = re.sub(r'\\cite(?:\[([^]]*)\])?\{[^}]*\}', r' \1 ', text)
@@ -25,6 +25,23 @@ def tokens(text):
     return collections.Counter(numbers), collections.Counter(cites)
 
 
+def unit_cells(text):
+    """Remove and list cells under a 'Unit' heading: units, such as the dimensionless '1', that move into block sub-headers."""
+    lines, column, units = [], None, []
+    for line in text.splitlines():
+        cells = re.split(r'(?<!\\)&', line)
+        names = [c.strip().removesuffix('\\\\').strip() for c in cells]
+        if 'Unit' in names:
+            column = names.index('Unit')
+        elif line.startswith(r'\end{longtable}'):
+            column = None
+        elif column is not None and line.endswith('\\\\') and len(cells) > column:
+            units.append(f'{names[0]}: {names[column]}')
+            line = '&'.join(cells[:column] + cells[column + 1:])
+        lines.append(line)
+    return '\n'.join(lines), units
+
+
 def captions(text):
     return re.findall(r'\\caption\{(.*)\}\\label', text)
 
@@ -32,9 +49,10 @@ def captions(text):
 report = {'base': subprocess.check_output(['git', 'rev-parse', BASE], cwd=ROOT, text=True).strip(), 'tables': {}}
 for path in sorted((ROOT / TABLES).glob('*.tex')):
     old = subprocess.check_output(['git', 'show', f'{BASE}:{TABLES}/{path.name}'], cwd=ROOT, text=True)
-    new = path.read_text()
+    (old, old_units), (new, new_units) = unit_cells(old), unit_cells(path.read_text())
     (old_numbers, old_cites), (new_numbers, new_cites) = tokens(old), tokens(new)
     report['tables'][path.name] = dict(
+        unit_cells_only_in_base=old_units, unit_cells_in_new=new_units,
         numeric_tokens=sum(new_numbers.values()), citation_keys=sum(new_cites.values()),
         identical=old_numbers == new_numbers and old_cites == new_cites,
         numbers_only_in_base=dict(old_numbers - new_numbers), numbers_only_in_new=dict(new_numbers - old_numbers),
