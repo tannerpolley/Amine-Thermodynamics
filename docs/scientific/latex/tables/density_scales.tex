@@ -75,18 +75,18 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 799e701b0c2e3dae3fe017cd1571e508e1f086ebb709bca74c815cc998f56202
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1880\linewidth}>{\raggedright\arraybackslash}p{0.0940\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}>{\raggedright\arraybackslash}p{0.3854\linewidth}@{}}
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}lrrrrr>{\raggedright\arraybackslash}p{0.3000\linewidth}@{}}
 \caption{Source inputs for $s_\rho=[u_\rho^2+(g u_\alpha)^2]^{1/2}$. Density scales are in \si{\kilogram\per\cubic\metre} and loading is mol \ce{CO2}/mol total amine. Exact secant pairs and per-observation scales are in the deposit.}\label{tab:density-scales}\\
 \toprule
-Source & $u_\rho$ & $u_\alpha$ & $s_\rho$ & Qualification \\
+Source & $u_\rho$ & \makecell[rb]{Lowest\\$u_\alpha$} & \makecell[rb]{Highest\\$u_\alpha$} & \makecell[rb]{Lowest\\$s_\rho$} & \makecell[rb]{Highest\\$s_\rho$} & Qualification \\
 \midrule\endfirsthead
 \toprule
-Source & $u_\rho$ & $u_\alpha$ & $s_\rho$ & Qualification \\
+Source & $u_\rho$ & \makecell[rb]{Lowest\\$u_\alpha$} & \makecell[rb]{Highest\\$u_\alpha$} & \makecell[rb]{Lowest\\$s_\rho$} & \makecell[rb]{Highest\\$s_\rho$} & Qualification \\
 \midrule\endhead
 \bottomrule\endfoot
-Amundsen et al. (2009) & 2 & 0.002--0.006 & 2.038--2.416 & 2\% of loading; density uncertainty scope unresolved at high T/\allowbreak{}loading \\
-Hartono et al. (2014) & 0.02 & 0.01--0.01 & 1.791--2.152 & loading 0.01; density expanded k=2 value used without division \\
+Amundsen et al. (2009) & $2$ & $0.002$ & $0.006$ & $2.038$ & $2.416$ & 2\% of loading; density uncertainty scope unresolved at high T/\allowbreak{}loading \\
+Hartono et al. (2014) & $0.02$ & $0.01$ & $0.01$ & $1.791$ & $2.152$ & loading 0.01; density expanded k=2 value used without division \\
 \end{longtable}\endgroup
