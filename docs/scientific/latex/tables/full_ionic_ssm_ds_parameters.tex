@@ -69,7 +69,7 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 93386805442d43d4e9e6003771ed6d4ccd1ca33863d35f0db3b722ce5d1615e5
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 bd1c7ab5175897f964605d4ef443ae9e8147004053dfc74712dec3cdbd17ab7a
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3478\linewidth}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.3478\linewidth}@{}}
 \caption{Species, association and correlation inputs. Lengths are in angstrom, energies divided by Boltzmann constant in kelvin. Ion packing diameters are $0.88\sigma$ and Debye--Huckel diameters equal $\sigma$. \ce{CO2}, MEA and water each have one donor and one acceptor site; \ce{CO2} associates only with water. MEA--water association follows the Wolbach--Sandler rule. Fixed model inputs and transfer assumptions are explained in Section S10.}\label{tab:full-ionic-ssm-ds-parameters}\\
@@ -84,7 +84,7 @@ Parameter & Value & Unit & Source or estimation \\
 \ce{CO2} segment count & 2.0729 & 1 & Gross and Sadowski, Table 1 \cite{Gross2001} \\
 \ce{CO2} segment diameter & 2.7852 & \AA & Gross and Sadowski, Table 1 \cite{Gross2001} \\
 \ce{CO2} solvation factor & 1 & 1 & assumed unity (this work) \\
-\ce{CO2} dielectric volume & 1e-08 & liter /\allowbreak{} mole & assumed (this work) \\
+\ce{CO2} dielectric volume & $1\times10^{-8}$ & liter /\allowbreak{} mole & assumed (this work) \\
 \ce{CO2} dielectric temperature & 1403 & kelvin & assumed (this work) \\
 \ce{MEA} dispersion energy/\allowbreak{}k & 277.174 & kelvin & Baygi and Pahlavanzadeh, Table 2 \cite{Baygi2015} \\
 \ce{MEA} segment count & 3.0353 & 1 & Baygi and Pahlavanzadeh, Table 2 \cite{Baygi2015} \\
@@ -112,30 +112,30 @@ water dielectric temperature & 1403 & kelvin & Yang et al., Table 6 \cite{Yang20
 \ce{MEACOO-} segment diameter & 4.86604 & \AA & fitted (this work) \\
 \ce{MEACOO-} solvation factor & 1 & 1 & assumed unity (this work) \\
 \ce{HCO3-} born diameter & 3 & \AA & fixed model input (this work); Section S10 \\
-\ce{HCO3-} Debye–Hückel diameter & 2.9296 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
+\ce{HCO3-} Debye–Hückel diameter & 2.9296 & \AA & $\sigma$ (this work) \\
 \ce{HCO3-} dispersion energy/\allowbreak{}k & 70 & kelvin & Uyan et al., Table 4 \cite{Uyan2015} \\
-\ce{HCO3-} packing diameter & 2.57805 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
+\ce{HCO3-} packing diameter & 2.57805 & \AA & $0.88\sigma$ (this work) \\
 \ce{HCO3-} segment count & 1 & 1 & spherical ion assumption \\
 \ce{HCO3-} segment diameter & 2.9296 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
 \ce{HCO3-} solvation factor & 1 & 1 & assumed unity (this work) \\
 \ce{CO3^{2-}} born diameter & 3 & \AA & fixed model input (this work); Section S10 \\
-\ce{CO3^{2-}} Debye–Hückel diameter & 2.4422 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
+\ce{CO3^{2-}} Debye–Hückel diameter & 2.4422 & \AA & $\sigma$ (this work) \\
 \ce{CO3^{2-}} dispersion energy/\allowbreak{}k & 249.26 & kelvin & Uyan et al., Table 4 \cite{Uyan2015} \\
-\ce{CO3^{2-}} packing diameter & 2.14914 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
+\ce{CO3^{2-}} packing diameter & 2.14914 & \AA & $0.88\sigma$ (this work) \\
 \ce{CO3^{2-}} segment count & 1 & 1 & spherical ion assumption \\
 \ce{CO3^{2-}} segment diameter & 2.4422 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
 \ce{CO3^{2-}} solvation factor & 1 & 1 & assumed unity (this work) \\
 \ce{H3O+} born diameter & 1.218 & \AA & fixed model input (this work); Section S10 \\
-\ce{H3O+} Debye–Hückel diameter & 3.4654 & \AA & Uyan et al., Table 4 \cite{Uyan2015}; hydrogen-ion values transferred to hydronium \\
+\ce{H3O+} Debye–Hückel diameter & 3.4654 & \AA & $\sigma$ (this work) \\
 \ce{H3O+} dispersion energy/\allowbreak{}k & 500 & kelvin & Uyan et al., Table 4 \cite{Uyan2015}; hydrogen-ion values transferred to hydronium \\
-\ce{H3O+} packing diameter & 3.04955 & \AA & Uyan et al., Table 4 \cite{Uyan2015}; hydrogen-ion values transferred to hydronium \\
+\ce{H3O+} packing diameter & 3.04955 & \AA & $0.88\sigma$ (this work) \\
 \ce{H3O+} segment count & 1 & 1 & spherical ion assumption \\
 \ce{H3O+} segment diameter & 3.4654 & \AA & Uyan et al., Table 4 \cite{Uyan2015}; hydrogen-ion values transferred to hydronium \\
 \ce{H3O+} solvation factor & 1 & 1 & assumed unity (this work) \\
 \ce{OH-} born diameter & 3.08108 & \AA & fixed model input (this work); Section S10 \\
-\ce{OH-} Debye–Hückel diameter & 2.0177 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
+\ce{OH-} Debye–Hückel diameter & 2.0177 & \AA & $\sigma$ (this work) \\
 \ce{OH-} dispersion energy/\allowbreak{}k & 650 & kelvin & Uyan et al., Table 4 \cite{Uyan2015} \\
-\ce{OH-} packing diameter & 1.77558 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
+\ce{OH-} packing diameter & 1.77558 & \AA & $0.88\sigma$ (this work) \\
 \ce{OH-} segment count & 1 & 1 & spherical ion assumption \\
 \ce{OH-} segment diameter & 2.0177 & \AA & Uyan et al., Table 4 \cite{Uyan2015} \\
 \ce{OH-} solvation factor & 1 & 1 & assumed unity (this work) \\
