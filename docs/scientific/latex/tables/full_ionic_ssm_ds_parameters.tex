@@ -75,89 +75,137 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 799e701b0c2e3dae3fe017cd1571e508e1f086ebb709bca74c815cc998f56202
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 c903af428326a980013578c4c226807a0e9ce388e5a5d69abf746a4dab7bc5d9
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
 \begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}lrl>{\raggedright\arraybackslash}p{0.4300\linewidth}@{}}
+\begin{longtable}{@{}lr>{\raggedright\arraybackslash}p{0.5000\linewidth}@{}}
 \caption{Species, association and correlation inputs. Lengths are in angstrom, energies divided by Boltzmann constant in kelvin. Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$. \ce{CO2}, MEA and water each have one donor and one acceptor site; \ce{CO2} associates only with water. MEA--water association follows the Wolbach--Sandler rule. Fixed model inputs and assumptions for use in reacting mixtures are explained in Section~S1.}\label{tab:full-ionic-ssm-ds-parameters}\\
 \toprule
-Parameter & Value & Unit & Source or estimation \\
+Parameter & Value & Source or estimation \\
 \midrule\endfirsthead
 \toprule
-Parameter & Value & Unit & Source or estimation \\
+Parameter & Value & Source or estimation \\
 \midrule\endhead
 \bottomrule\endfoot
-\ce{CO2} dispersion energy/\allowbreak{}k & $169.21$ & kelvin & \cite[Table~1]{Gross2001} \\
-\ce{CO2} segment count & $2.0729$ & 1 & \cite[Table~1]{Gross2001} \\
-\ce{CO2} segment diameter & $2.7852$ & \AA & \cite[Table~1]{Gross2001} \\
-\ce{CO2} solvation factor & $1$ & 1 & assumed unity (this work) \\
-\ce{CO2} dielectric volume & $1\times10^{-8}$ & liter /\allowbreak{} mole & assumed (this work) \\
-\ce{CO2} dielectric temperature & $1403$ & kelvin & assumed (this work) \\
-\ce{MEA} dispersion energy/\allowbreak{}k & $277.174$ & kelvin & \cite[Table~2]{Baygi2015} \\
-\ce{MEA} segment count & $3.0353$ & 1 & \cite[Table~2]{Baygi2015} \\
-\ce{MEA} segment diameter & $3.0435$ & \AA & \cite[Table~2]{Baygi2015} \\
-\ce{MEA} solvation factor & $1$ & 1 & assumed unity (this work) \\
-\ce{MEA} dielectric volume & $0.730989$ & liter /\allowbreak{} mole & permittivity fit, Section~S1 \\
-\ce{MEA} dielectric temperature & $1019.08$ & kelvin & permittivity fit, Section~S1 \\
-water dispersion energy/\allowbreak{}k & $432.379$ & kelvin & fitted to IAPWS-95 (Section~S1) \\
-water segment count & $1.25275$ & 1 & fitted to IAPWS-95 (Section~S1) \\
-water solvation factor & $1.5$ & 1 & \cite[Table~2]{Figiel2025} \\
-water dielectric volume & $0.3777$ & liter /\allowbreak{} mole & \cite[Table~6]{Yang2024} \\
-water dielectric temperature & $1403$ & kelvin & \cite[Table~6]{Yang2024} \\
-\ce{MEAH+} Born diameter & $5$ & \AA & fitted (this work) \\
-\ce{MEAH+} Debye–Hückel diameter & $5.35$ & \AA & diameter tie (this work) \\
-\ce{MEAH+} dispersion energy/\allowbreak{}k & $177.795$ & kelvin & fitted (this work) \\
-\ce{MEAH+} packing diameter & $4.708$ & \AA & diameter tie (this work) \\
-\ce{MEAH+} segment count & $1$ & 1 & spherical ion assumption \\
-\ce{MEAH+} segment diameter & $5.35$ & \AA & fitted (this work) \\
-\ce{MEAH+} solvation factor & $1$ & 1 & assumed unity (this work) \\
-\ce{MEACOO-} Born diameter & $5$ & \AA & fitted (this work) \\
-\ce{MEACOO-} Debye–Hückel diameter & $4.86604$ & \AA & diameter tie (this work) \\
-\ce{MEACOO-} dispersion energy/\allowbreak{}k & $207.275$ & kelvin & fitted (this work) \\
-\ce{MEACOO-} packing diameter & $4.28212$ & \AA & diameter tie (this work) \\
-\ce{MEACOO-} segment count & $1$ & 1 & spherical ion assumption \\
-\ce{MEACOO-} segment diameter & $4.86604$ & \AA & fitted (this work) \\
-\ce{MEACOO-} solvation factor & $1$ & 1 & assumed unity (this work) \\
-\ce{HCO3-} Born diameter & $3$ & \AA & fixed model input (this work); Section~S1 \\
-\ce{HCO3-} Debye–Hückel diameter & $2.9296$ & \AA & $\sigma$ (this work) \\
-\ce{HCO3-} dispersion energy/\allowbreak{}k & $70$ & kelvin & \cite[Table~4]{Uyan2015} \\
-\ce{HCO3-} packing diameter & $2.57805$ & \AA & $0.88\sigma$ (this work) \\
-\ce{HCO3-} segment count & $1$ & 1 & spherical ion assumption \\
-\ce{HCO3-} segment diameter & $2.9296$ & \AA & \cite[Table~4]{Uyan2015} \\
-\ce{HCO3-} solvation factor & $1$ & 1 & assumed unity (this work) \\
-\ce{CO3^{2-}} Born diameter & $3$ & \AA & fixed model input (this work); Section~S1 \\
-\ce{CO3^{2-}} Debye–Hückel diameter & $2.4422$ & \AA & $\sigma$ (this work) \\
-\ce{CO3^{2-}} dispersion energy/\allowbreak{}k & $249.26$ & kelvin & \cite[Table~4]{Uyan2015} \\
-\ce{CO3^{2-}} packing diameter & $2.14914$ & \AA & $0.88\sigma$ (this work) \\
-\ce{CO3^{2-}} segment count & $1$ & 1 & spherical ion assumption \\
-\ce{CO3^{2-}} segment diameter & $2.4422$ & \AA & \cite[Table~4]{Uyan2015} \\
-\ce{CO3^{2-}} solvation factor & $1$ & 1 & assumed unity (this work) \\
-\ce{H3O+} Born diameter & $1.218$ & \AA & fixed model input (this work); Section~S1 \\
-\ce{H3O+} Debye–Hückel diameter & $3.4654$ & \AA & $\sigma$ (this work) \\
-\ce{H3O+} dispersion energy/\allowbreak{}k & $500$ & kelvin & \cite[Table~4]{Uyan2015}; hydrogen-ion values transferred to hydronium \\
-\ce{H3O+} packing diameter & $3.04955$ & \AA & $0.88\sigma$ (this work) \\
-\ce{H3O+} segment count & $1$ & 1 & spherical ion assumption \\
-\ce{H3O+} segment diameter & $3.4654$ & \AA & \cite[Table~4]{Uyan2015}; hydrogen-ion values transferred to hydronium \\
-\ce{H3O+} solvation factor & $1$ & 1 & assumed unity (this work) \\
-\ce{OH-} Born diameter & $3.08108$ & \AA & fixed model input (this work); Section~S1 \\
-\ce{OH-} Debye–Hückel diameter & $2.0177$ & \AA & $\sigma$ (this work) \\
-\ce{OH-} dispersion energy/\allowbreak{}k & $650$ & kelvin & \cite[Table~4]{Uyan2015} \\
-\ce{OH-} packing diameter & $1.77558$ & \AA & $0.88\sigma$ (this work) \\
-\ce{OH-} segment count & $1$ & 1 & spherical ion assumption \\
-\ce{OH-} segment diameter & $2.0177$ & \AA & \cite[Table~4]{Uyan2015} \\
-\ce{OH-} solvation factor & $1$ & 1 & assumed unity (this work) \\
-$\sigma_0$ & $2.78043$ & \AA & fitted to IAPWS-95 (Section~S1) \\
-$a_1$ & $10.11$ & \AA & fixed (Section~S1) \\
-$b_1$ & $-0.01775$ & 1 /\allowbreak{} kelvin & fixed (Section~S1) \\
-$a_2$ & $-1.417$ & \AA & fixed (Section~S1) \\
-$b_2$ & $-0.01146$ & 1 /\allowbreak{} kelvin & fixed (Section~S1) \\
-ion-region permittivity $\varepsilon_{\mathrm{ion}}$ & $8$ & 1 & \cite[Eqs.~5--10]{Figiel2025} \\
-\ce{MEA}–\ce{MEA} association energy/\allowbreak{}k & $2586.3$ & kelvin & \cite[Table~2]{Baygi2015} \\
-\ce{MEA}–\ce{MEA} association volume & $0.036287$ & 1 & \cite[Table~2]{Baygi2015}; volume converted here \\
-water–water association energy/\allowbreak{}k & $1756.65$ & kelvin & fitted to IAPWS-95 (Section~S1) \\
-water–water association volume & $0.0376197$ & 1 & fitted to IAPWS-95 (Section~S1) \\
-\ce{CO2}(a)–water(b) association energy/\allowbreak{}k & $878.325$ & kelvin & induced association; half water energy and water volume \\
-\ce{CO2}(a)–water(b) association volume & $0.0376197$ & 1 & induced association; half water energy and water volume \\
-\ce{CO2}(b)–water(a) association energy/\allowbreak{}k & $878.325$ & kelvin & induced association; half water energy and water volume \\
-\ce{CO2}(b)–water(a) association volume & $0.0376197$ & 1 & induced association; half water energy and water volume \\
+Segment count &  &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{CO2} segment count & $2.0729$ & \cite[Table~1]{Gross2001} \\
+\ce{MEA} segment count & $3.0353$ & \cite[Table~2]{Baygi2015} \\
+water segment count & $1.25275$ & fitted to IAPWS-95 (Section~S1) \\
+\ce{MEAH+} segment count & $1$ & spherical ion assumption \\
+\ce{MEACOO-} segment count & $1$ & spherical ion assumption \\
+\ce{HCO3-} segment count & $1$ & spherical ion assumption \\
+\ce{CO3^{2-}} segment count & $1$ & spherical ion assumption \\
+\ce{H3O+} segment count & $1$ & spherical ion assumption \\
+\ce{OH-} segment count & $1$ & spherical ion assumption \\
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Diameter & (\AA) &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{CO2} segment diameter & $2.7852$ & \cite[Table~1]{Gross2001} \\
+\ce{MEA} segment diameter & $3.0435$ & \cite[Table~2]{Baygi2015} \\
+\ce{MEAH+} Born diameter & $5$ & fitted (this work) \\
+\ce{MEAH+} Debye–Hückel diameter & $5.35$ & diameter tie (this work) \\
+\ce{MEAH+} packing diameter & $4.708$ & diameter tie (this work) \\
+\ce{MEAH+} segment diameter & $5.35$ & fitted (this work) \\
+\ce{MEACOO-} Born diameter & $5$ & fitted (this work) \\
+\ce{MEACOO-} Debye–Hückel diameter & $4.86604$ & diameter tie (this work) \\
+\ce{MEACOO-} packing diameter & $4.28212$ & diameter tie (this work) \\
+\ce{MEACOO-} segment diameter & $4.86604$ & fitted (this work) \\
+\ce{HCO3-} Born diameter & $3$ & fixed model input (this work); Section~S1 \\
+\ce{HCO3-} Debye–Hückel diameter & $2.9296$ & $\sigma$ (this work) \\
+\ce{HCO3-} packing diameter & $2.57805$ & $0.88\sigma$ (this work) \\
+\ce{HCO3-} segment diameter & $2.9296$ & \cite[Table~4]{Uyan2015} \\
+\ce{CO3^{2-}} Born diameter & $3$ & fixed model input (this work); Section~S1 \\
+\ce{CO3^{2-}} Debye–Hückel diameter & $2.4422$ & $\sigma$ (this work) \\
+\ce{CO3^{2-}} packing diameter & $2.14914$ & $0.88\sigma$ (this work) \\
+\ce{CO3^{2-}} segment diameter & $2.4422$ & \cite[Table~4]{Uyan2015} \\
+\ce{H3O+} Born diameter & $1.218$ & fixed model input (this work); Section~S1 \\
+\ce{H3O+} Debye–Hückel diameter & $3.4654$ & $\sigma$ (this work) \\
+\ce{H3O+} packing diameter & $3.04955$ & $0.88\sigma$ (this work) \\
+\ce{H3O+} segment diameter & $3.4654$ & \cite[Table~4]{Uyan2015}; hydrogen-ion values transferred to hydronium \\
+\ce{OH-} Born diameter & $3.08108$ & fixed model input (this work); Section~S1 \\
+\ce{OH-} Debye–Hückel diameter & $2.0177$ & $\sigma$ (this work) \\
+\ce{OH-} packing diameter & $1.77558$ & $0.88\sigma$ (this work) \\
+\ce{OH-} segment diameter & $2.0177$ & \cite[Table~4]{Uyan2015} \\
+$\sigma_0$ & $2.78043$ & fitted to IAPWS-95 (Section~S1) \\
+$a_1$ & $10.11$ & fixed (Section~S1) \\
+$a_2$ & $-1.417$ & fixed (Section~S1) \\
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Diameter exponent coefficient & (\si{\per\kelvin}) &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+$b_1$ & $-0.01775$ & fixed (Section~S1) \\
+$b_2$ & $-0.01146$ & fixed (Section~S1) \\
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Dispersion energy $u_i/k_B$ & (K) &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{CO2} dispersion energy/\allowbreak{}k & $169.21$ & \cite[Table~1]{Gross2001} \\
+\ce{MEA} dispersion energy/\allowbreak{}k & $277.174$ & \cite[Table~2]{Baygi2015} \\
+water dispersion energy/\allowbreak{}k & $432.379$ & fitted to IAPWS-95 (Section~S1) \\
+\ce{MEAH+} dispersion energy/\allowbreak{}k & $177.795$ & fitted (this work) \\
+\ce{MEACOO-} dispersion energy/\allowbreak{}k & $207.275$ & fitted (this work) \\
+\ce{HCO3-} dispersion energy/\allowbreak{}k & $70$ & \cite[Table~4]{Uyan2015} \\
+\ce{CO3^{2-}} dispersion energy/\allowbreak{}k & $249.26$ & \cite[Table~4]{Uyan2015} \\
+\ce{H3O+} dispersion energy/\allowbreak{}k & $500$ & \cite[Table~4]{Uyan2015}; hydrogen-ion values transferred to hydronium \\
+\ce{OH-} dispersion energy/\allowbreak{}k & $650$ & \cite[Table~4]{Uyan2015} \\
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Association energy $\epsilon^{AB}/k_B$ & (K) &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{MEA}–\ce{MEA} association energy/\allowbreak{}k & $2586.3$ & \cite[Table~2]{Baygi2015} \\
+water–water association energy/\allowbreak{}k & $1756.65$ & fitted to IAPWS-95 (Section~S1) \\
+\ce{CO2}(a)–water(b) association energy/\allowbreak{}k & $878.325$ & induced association; half water energy and water volume \\
+\ce{CO2}(b)–water(a) association energy/\allowbreak{}k & $878.325$ & induced association; half water energy and water volume \\
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Association volume $\kappa^{AB}$ &  &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{MEA}–\ce{MEA} association volume & $0.036287$ & \cite[Table~2]{Baygi2015}; volume converted here \\
+water–water association volume & $0.0376197$ & fitted to IAPWS-95 (Section~S1) \\
+\ce{CO2}(a)–water(b) association volume & $0.0376197$ & induced association; half water energy and water volume \\
+\ce{CO2}(b)–water(a) association volume & $0.0376197$ & induced association; half water energy and water volume \\
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Solvation factor $f_i$ &  &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{CO2} solvation factor & $1$ & assumed unity (this work) \\
+\ce{MEA} solvation factor & $1$ & assumed unity (this work) \\
+water solvation factor & $1.5$ & \cite[Table~2]{Figiel2025} \\
+\ce{MEAH+} solvation factor & $1$ & assumed unity (this work) \\
+\ce{MEACOO-} solvation factor & $1$ & assumed unity (this work) \\
+\ce{HCO3-} solvation factor & $1$ & assumed unity (this work) \\
+\ce{CO3^{2-}} solvation factor & $1$ & assumed unity (this work) \\
+\ce{H3O+} solvation factor & $1$ & assumed unity (this work) \\
+\ce{OH-} solvation factor & $1$ & assumed unity (this work) \\
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Dielectric volume $d_{V,i}$ & (L/mol) &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{CO2} dielectric volume & $1\times10^{-8}$ & assumed (this work) \\
+\ce{MEA} dielectric volume & $0.730989$ & permittivity fit, Section~S1 \\
+water dielectric volume & $0.3777$ & \cite[Table~6]{Yang2024} \\
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Dielectric temperature $d_{T,i}$ & (K) &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+\ce{CO2} dielectric temperature & $1403$ & assumed (this work) \\
+\ce{MEA} dielectric temperature & $1019.08$ & permittivity fit, Section~S1 \\
+water dielectric temperature & $1403$ & \cite[Table~6]{Yang2024} \\
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+Relative permittivity &  &  \\*
+\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
+\noalign{\vskip\belowrulesep}
+ion-region permittivity $\varepsilon_{\mathrm{ion}}$ & $8$ & \cite[Eqs.~5--10]{Figiel2025} \\
 \end{longtable}\endgroup
