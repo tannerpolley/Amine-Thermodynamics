@@ -1,4 +1,5 @@
 """Render the manuscript figures from retained states and the retained model curves (#197, #202); no Engine compute."""
+import ast
 import json
 import math
 from itertools import groupby
@@ -206,6 +207,59 @@ def main():
     ax.set(xlabel='MEA mole fraction', ylabel='Temperature (K)')
     ax.grid(alpha=.15)
     save(fig, 'mea-water', 'Bubble temperature and incipient vapor composition of the neutral MEA-water binary (no reactions) at 101.33 and 66.66 kPa, over each isobar’s measured liquid range, with the Cai et al. (1996) measurements. Liquid and vapor MEA mole fractions are on the same basis; the vapor value is one minus the retained water mole fraction.', ['fitted-rows.csv','model-curves/mea-water.csv'])
+    # Separate fits (#207): every plotted value is calculated with the reported parameters.
+    water_fit = a.BUNDLE/'results/water-124/lambda-0.1-A'
+    flat = lambda d: {i: c['value'] for n in d['components'] + d['correlations'] + d['topology']['edges'] for i, c in a.coefficients(n) if '/water/' in i and 'carbon-dioxide' not in i}
+    water_values = flat(a.load(water_fit/'parameters.json'))
+    assert {'component/water/segment_count', 'component/water/dispersion_energy_over_k', 'component/water/segment_diameter/constant-plus-sum-of-exponentials/constant',
+            'association/water/a/water/b/energy_over_k', 'association/water/a/water/b/volume'} <= water_values.keys() and all(flat(document)[i] == v for i, v in water_values.items() if i in flat(document))
+    water = a.rows(water_fit/'water.csv')
+    fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH, 2.7), layout='constrained', sharex=True)
+    for ax, column, title in zip(axes, ['saturated_liquid_rho_error_relative', 'psat_error_relative', 'cp_error_relative'], ['(a) Saturated-liquid density', '(b) Saturation pressure', r'(c) $C_P$ at 0.3 and 0.101 MPa']):
+        for grid, marker, filled in (('primary', 'o', True), ('staggered', 'o', False), ('atmospheric-controls', '^', True)):
+            part = [r for r in water if r['grid'] == grid and r[column] not in ('', 'nan')]
+            points(ax, [float(r['T_K']) for r in part], [100*float(r[column]) for r in part], marker, COLORS[0], filled)
+        ax.axhline(0, color='grey', lw=.6)
+        ax.set(title=title, xlabel='Temperature (K)')
+        ax.grid(alpha=.15)
+    axes[0].set_ylabel('(calc. − IAPWS-95)/IAPWS-95 (%)')
+    fig.legend(handles=[Line2D([], [], marker=m, ls='none', color=COLORS[0], markerfacecolor=COLORS[0] if f else 'none', label=l) for m, f, l in
+                        (('o', True, 'Fitted, 0.3 MPa or saturation'), ('o', False, 'Not fitted, interleaved temperatures'), ('^', True, 'Fitted, 0.101 MPa'))],
+               loc='outside lower center', ncol=3, fontsize=8, frameon=False)
+    save(fig, 'water-iapws', 'Relative deviations of the pure-water parameters from IAPWS-95 at the 20 fitted temperatures, 19 interleaved temperatures and three atmospheric heat-capacity states.', [str((water_fit/'water.csv').relative_to(a.ROOT))])
+    kiepe = [dict(r, state=ast.literal_eval(r['declaration'])) for r in fitted if r['group'] == 'Kiepe']
+    temperatures = sorted({round(r['state']['T_K'], 1) for r in kiepe})
+    tcolor = dict(zip(temperatures, plt.colormaps['plasma']([.82*i/(len(temperatures)-1) for i in range(len(temperatures))])))
+    fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 3.0), layout='constrained')
+    for r in kiepe:
+        T, x = round(r['state']['T_K'], 1), r['state']['feed']['carbon-dioxide']
+        points(axes[0], [x], [float(r['observed'])/1e6], 'o', tcolor[T], False)
+        axes[0].scatter([x], [float(r['predicted'])/1e6], marker='x', color=tcolor[T], s=18, linewidths=.7, zorder=3)
+        points(axes[1], [float(r['observed'])/1e6], [100*(float(r['predicted'])/float(r['observed'])-1)], 'o', tcolor[T], True)
+    axes[0].set(xlabel=r'Liquid CO$_2$ mole fraction', ylabel='Total pressure (MPa)', title='(a) Bubble pressure')
+    axes[1].axhline(0, color='grey', lw=.6)
+    axes[1].set(xlabel='Measured pressure (MPa)', ylabel='(calc. − meas.)/meas. (%)', title='(b) Deviation')
+    for ax in axes:
+        ax.grid(alpha=.15)
+    fig.legend(handles=[Line2D([], [], marker='o', ls='none', color=tcolor[T], label=f'{T:g} K') for T in temperatures] +
+                       [Line2D([], [], marker=m, ls='none', color='black', markerfacecolor='none', label=l) for m, l in (('o', 'Measured'), ('x', 'Calculated'))],
+               loc='outside right upper', fontsize=8, frameon=False)
+    save(fig, 'co2-water', 'Bubble pressure of CO2-water at the 39 Kiepe et al. (2002) states, measured and calculated at the same temperature and liquid composition, with relative deviations.', ['fitted-rows.csv'])
+    permittivity = a.BUNDLE/'results/mea-water-permittivity'
+    assert a.load(permittivity/'summary.json')['parameter_sha256'] == fit['record_sha256']
+    rows = a.rows(permittivity/'rows.csv')
+    fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 2.8), layout='constrained')
+    w = [float(r['MEA_wt_percent']) for r in rows]
+    points(axes[0], w, [float(r['observed_epsilon']) for r in rows], 'o', COLORS[0], False)
+    axes[0].scatter(w, [float(r['calculated_epsilon']) for r in rows], marker='x', color=COLORS[0], s=18, linewidths=.7, zorder=3)
+    points(axes[1], w, [float(r['calculated_epsilon'])-float(r['observed_epsilon']) for r in rows], 'o', COLORS[0], True)
+    axes[0].set(xlabel='MEA mass fraction (wt%)', ylabel='Relative permittivity', title='(a) Permittivity at 298.15 K')
+    axes[1].axhline(0, color='grey', lw=.6)
+    axes[1].set(xlabel='MEA mass fraction (wt%)', ylabel='Calc. − meas.', title='(b) Deviation')
+    for ax in axes:
+        ax.grid(alpha=.15)
+    axes[0].legend(handles=[Line2D([], [], marker=m, ls='none', color=COLORS[0], markerfacecolor='none', label=l) for m, l in (('o', 'Measured'), ('x', 'Calculated'))], fontsize=8, frameon=False)
+    save(fig, 'mea-permittivity', 'Relative permittivity of unloaded MEA-water at 298.15 K and 101325 Pa: the 14 Agieienko-Buchner measurements and the solvent law at the equation-of-state density, with the reported parameters.', [str((permittivity/'rows.csv').relative_to(a.ROOT))])
     extension = a.BUNDLE/'results/phase-extension-201/run-3'
     all_phase = a.rows(extension/'phase-family-combined.csv')
     temperatures = sorted({float(r['temperature_K']) for r in all_phase})
