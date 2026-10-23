@@ -75,32 +75,26 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 c903af428326a980013578c4c226807a0e9ce388e5a5d69abf746a4dab7bc5d9
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d5ebd08fa86778db6d8fb3a4122495f2f280d5c5d797a6454d8bfb636a935680
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}rrrr@{}}
-\caption{Phase-search summary for both fits. The complete 73-state temperature, pressure, loading and trial data are supplied as CSV in the data deposit. One 318.15 K state (loading 0.2556) is evaluated twice, once at its pressure rounded to 5918.5286 Pa; both evaluations are counted. Two-phase classifications include liquid--vapor equilibrium.}\label{tab:supplement-phase-family}\\
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Phase-search summary for both fits. The complete 73-state temperature, pressure, loading and trial data are supplied as CSV in the data deposit. One 318.15 K state (loading 0.2556) is evaluated twice, once at its pressure rounded to 5918.5286 Pa; both evaluations are counted. Two-phase classifications include liquid--vapor equilibrium.}\label{tab:supplement-phase-family}
+\begin{tabular}{@{}rrrr@{}}
 \toprule
 T (K) & Test states & Comparison fit & Reported fit \\
-\midrule\endfirsthead
-\toprule
-T (K) & Test states & Comparison fit & Reported fit \\
-\midrule\endhead
-\bottomrule\endfoot
+\midrule
 $313.15$ & $24$ & $1$ & $0$ \\
 $318.15$ & $25$ & $2$ & $0$ \\
 $333.15$ & $24$ & $9$ & $0$ \\
-\end{longtable}\endgroup
-\begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}rllrrllr@{}}
-\caption{Separately seeded comparison fit split solves, including failed attempts. Gibbs differences are extensive $\Delta G/(RT)$ values in mol for 9.7292821 mol analytical MEA, 76.9751925 mol water and 9.7292821 times loading mol \ce{CO2}; phase densities are mol/m3. States 21, 63 and 70 are $(T,\alpha,P/\mathrm{kPa})=(313.15,0.1,4.737142)$, $(333.15,0.4,21.78783)$ and $(333.15,0.5,38.28678)$. Only successful split solves support the split comparison.}\label{tab:supplement-split-states}\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Separately seeded comparison fit split solves, including failed attempts. Gibbs differences are extensive $\Delta G/(RT)$ values in mol for 9.7292821 mol analytical MEA, 76.9751925 mol water and 9.7292821 times loading mol \ce{CO2}; phase densities are mol/m3. States 21, 63 and 70 are $(T,\alpha,P/\mathrm{kPa})=(313.15,0.1,4.737142)$, $(333.15,0.4,21.78783)$ and $(333.15,0.5,38.28678)$. Only successful split solves support the split comparison.}\label{tab:supplement-split-states}
+\begin{tabular}{@{}rllrrllr@{}}
 \toprule
 State & Seed & Success & \makecell[rb]{Delta vs\\original (mol)} & \makecell[rb]{Delta vs single\\liquid (mol)} & Phase & Role & Density (\si{\mole\per\cubic\metre}) \\
-\midrule\endfirsthead
-\toprule
-State & Seed & Success & \makecell[rb]{Delta vs\\original (mol)} & \makecell[rb]{Delta vs single\\liquid (mol)} & Phase & Role & Density (\si{\mole\per\cubic\metre}) \\
-\midrule\endhead
-\bottomrule\endfoot
+\midrule
 $21$ & uniform & no & $4.7645\times10^{-7}$ & $-15.774$ & -- & -- & -- \\
 \addlinespace
 $21$ & water-rich & yes & $-0.018882$ & $-15.793$ & L & liquid & $2.894\times10^{4}$ \\
@@ -118,7 +112,9 @@ $70$ & uniform & yes & $-3.2496$ & $-3.2496$ & L & liquid & $5.184\times10^{4}$ 
 \addlinespace
 $70$ & water-rich & yes & $-3.2496$ & $-3.2496$ & L & liquid & $5.184\times10^{4}$ \\
  &  &  &  &  & L2 & liquid & $2.903\times10^{4}$ \\
-\end{longtable}\endgroup
+\bottomrule
+\end{tabular}
+\end{table}
 \begin{landscape}
 \begingroup\small\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}rllrrrrrrrrrrr@{}}

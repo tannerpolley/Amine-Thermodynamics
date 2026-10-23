@@ -75,7 +75,7 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 c903af428326a980013578c4c226807a0e9ce388e5a5d69abf746a4dab7bc5d9
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d5ebd08fa86778db6d8fb3a4122495f2f280d5c5d797a6454d8bfb636a935680
 % Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
 \begingroup\small\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}lr>{\raggedright\arraybackslash}p{0.5000\linewidth}@{}}
@@ -87,45 +87,39 @@ Parameter & Value & Source or estimation \\
 Parameter & Value & Source or estimation \\
 \midrule\endhead
 \bottomrule\endfoot
-Interaction $k_{ij}$ &  &  \\*
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-\ce{HCO3-}–\ce{H3O+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{MEACOO-}–\ce{H3O+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{HCO3-}–\ce{CO2} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{MEACOO-}–\ce{CO2} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{CO2}–\ce{CO3^{2-}} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{CO2}–\ce{H3O+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{CO2}–\ce{OH-} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{CO2}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{CO2}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{CO2}–water $k_{ij}$ & $-0.0464169$ & Kiepe pressure fit, Section~S1 \cite{kiepeExperimentalDeterminationPrediction2002} \\
-\ce{CO3^{2-}}–\ce{H3O+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{H3O+}–\ce{OH-} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{HCO3-}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{MEACOO-}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{CO3^{2-}}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{H3O+}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{OH-}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{MEA}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{MEA}–water $k_{ij}$ & $-0.0899048$ & fitted (this work) \\
-\ce{HCO3-}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{MEACOO-}–\ce{MEAH+} $k_{ij}$ & $-1$ & fitted (this work) \\
-\ce{CO3^{2-}}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{OH-}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\
-\ce{HCO3-}–water $k_{ij}$ & $0.725321$ & fitted (this work) \\
-\ce{MEACOO-}–water $k_{ij}$ & $-0.0038632$ & fitted (this work) \\
-\ce{CO3^{2-}}–water $k_{ij}$ & $-0.25$ & fixed model input (this work); Section~S1 \\
-\ce{H3O+}–water $k_{ij}$ & $0.25$ & fixed model input (this work); Section~S1 \\
-\ce{OH-}–water $k_{ij}$ & $-0.25$ & fixed model input (this work); Section~S1 \\
+\multicolumn{3}{@{}l}{\itshape Interaction $k_{ij}$} \\*
+\ce{HCO3-}–\ce{H3O+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{MEACOO-}–\ce{H3O+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{HCO3-}–\ce{CO2} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{MEACOO-}–\ce{CO2} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{CO2}–\ce{CO3^{2-}} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{CO2}–\ce{H3O+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{CO2}–\ce{OH-} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{CO2}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{CO2}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{CO2}–water $k_{ij}$ & $-0.0464169$ & Kiepe pressure fit, Section~S1 \cite{kiepeExperimentalDeterminationPrediction2002} \\*
+\ce{CO3^{2-}}–\ce{H3O+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{H3O+}–\ce{OH-} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{HCO3-}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{MEACOO-}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{CO3^{2-}}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{H3O+}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{OH-}–\ce{MEA} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{MEA}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{MEA}–water $k_{ij}$ & $-0.0899048$ & fitted (this work) \\*
+\ce{HCO3-}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{MEACOO-}–\ce{MEAH+} $k_{ij}$ & $-1$ & fitted (this work) \\*
+\ce{CO3^{2-}}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{OH-}–\ce{MEAH+} $k_{ij}$ & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{HCO3-}–water $k_{ij}$ & $0.725321$ & fitted (this work) \\*
+\ce{MEACOO-}–water $k_{ij}$ & $-0.0038632$ & fitted (this work) \\*
+\ce{CO3^{2-}}–water $k_{ij}$ & $-0.25$ & fixed model input (this work); Section~S1 \\*
+\ce{H3O+}–water $k_{ij}$ & $0.25$ & fixed model input (this work); Section~S1 \\*
+\ce{OH-}–water $k_{ij}$ & $-0.25$ & fixed model input (this work); Section~S1 \\*
 \ce{MEAH+}–water $k_{ij}$ & $-0.5$ & fitted (this work) \\
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-Temperature slope $b_{ij}$ & (K) &  \\*
-\noalign{\vskip\aboverulesep}\multispan{3}\leaders\hrule height\lightrulewidth\hfill \\*
-\noalign{\vskip\belowrulesep}
-\ce{CO2}–\ce{MEA} $k_{ij}$ temperature slope & $0$ & fixed model input (this work); Section~S1 \\
-\ce{CO2}–water $k_{ij}$ temperature slope & $-35.6651$ & Kiepe pressure fit, Section~S1 \cite{kiepeExperimentalDeterminationPrediction2002} \\
-\ce{MEA}–water $k_{ij}$ temperature slope & $-8.06991$ & fitted (this work) \\
+\addlinespace[\aboverulesep]\multicolumn{3}{@{}l}{\itshape Temperature slope $b_{ij}$ (K)} \\*
+\ce{CO2}–\ce{MEA} $k_{ij}$ temperature slope & $0$ & fixed model input (this work); Section~S1 \\*
+\ce{CO2}–water $k_{ij}$ temperature slope & $-35.6651$ & Kiepe pressure fit, Section~S1 \cite{kiepeExperimentalDeterminationPrediction2002} \\*
+\ce{MEA}–water $k_{ij}$ temperature slope & $-8.06991$ & fitted (this work) \\*
 \ce{MEAH+}–water $k_{ij}$ temperature slope & $-41.9296$ & fitted (this work) \\
 \end{longtable}\endgroup

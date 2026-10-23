@@ -121,22 +121,18 @@ def cell(value, kind):
     return tex(display(value))
 
 
-# Sub-header rows that start a block of rows with a different form or unit. Each rule copies the booktabs
-# longtable \midrule (a spanning rule row) but forbids the page break that \midrule allows below itself.
-def block(*cells):
-    rule = r'\noalign{\vskip\aboverulesep}\multispan{' + str(len(cells)) + r'}\leaders\hrule height\lightrulewidth\hfill \\*' + '\n' + r'\noalign{\vskip\belowrulesep}'
-    return [rule, ' & '.join(cells) + r' \\*', rule]
+# A block of rows with a different form or unit starts with one spanning label that carries the unit once.
+# table() keeps a block's rows together, so a page breaks only before a label, never between it and its rows.
+def block(ncols, label, first=False):
+    return ('' if first else r'\addlinespace[\aboverulesep]') + r'\multicolumn{' + str(ncols) + r'}{@{}l}{\itshape ' + label + r'} \\*'
 
 
-# rows: (heading, unit, cells). One block per heading and unit, in first-appearance order; the unit heads each column marked 'u' in mask.
-def blocks(rows, mask):
+# rows: (heading, unit, cells). One block per heading and unit, in first-appearance order.
+def blocks(rows, ncols):
     groups = {}
     for heading, unit, cells in rows:
-        groups.setdefault((heading, unit), []).append(cells)
-    out = []
-    for (heading, unit), part in groups.items():
-        out += block(heading, *(f'({unit})' if m == 'u' and unit else '' for m in mask))[1 if not out else 0:] + part
-    return out
+        groups.setdefault(heading + (f' ({unit})' if unit else ''), []).append(cells)
+    return [row for i, (label, part) in enumerate(groups.items()) for row in [block(ncols, label, i == 0), *part]]
 
 
 # Parameter quantity by the last identity part, in display order; units as block headings show them.
@@ -150,14 +146,14 @@ UNIT_HEADS = {'dimensionless': '', 'kelvin': 'K', 'K': 'K', 'angstrom': r'\AA', 
 
 
 # rows: (identity, unit, cells); blocks ordered as QUANTITY, source order kept within a block.
-def parameter_blocks(rows, mask):
+def parameter_blocks(rows, ncols):
     order = list(QUANTITY.values())
     rows = [(QUANTITY[re.split('[/:]', identity)[-1]], UNIT_HEADS[unit], cells) for identity, unit, cells in rows]
-    return blocks(sorted(rows, key=lambda r: order.index(r[0])), mask)
+    return blocks(sorted(rows, key=lambda r: order.index(r[0])), ncols)
 
 
 # cols: one entry per column: 'l' label, 'r' number, or a float width (fraction of linewidth) for wrapped text.
-def table(name, caption, headings, data, cols=None):
+def table(name, caption, headings, data, cols=None, landscape=False):
     section_order = re.findall(r'\\section\{[^}]*\}\\label\{(sec:s-[^}]+)\}', a.bind(ROOT/'docs/scientific/latex/supplement.tex').read_text())
     sections = {label: f'S{i}' for i,label in enumerate(section_order,1)}
     def section_refs(value):
@@ -170,12 +166,20 @@ def table(name, caption, headings, data, cols=None):
     cols = cols or 'r'*len(headings)
     spec = '@{}' + ''.join(r'>{\raggedright\arraybackslash}p{' + f'{c:.4f}' + r'\linewidth}' if isinstance(c, float) else c for c in cols) + '@{}'
     head = ' & '.join(tex(display(h)) for h in headings) + r' \\'
-    body = [r'\begingroup\small\setlength{\tabcolsep}{3pt}', r'\begin{longtable}{' + spec + '}',
-            r'\caption{' + caption + r'}\label{tab:' + name.removesuffix('.tex').replace('_', '-') + r'}\\',
-            r'\toprule', head, r'\midrule\endfirsthead', r'\toprule', head, r'\midrule\endhead',
-            r'\bottomrule\endfoot']
-    body += [row if isinstance(row, str) else ' & '.join(cell(x, c) for x, c in zip(row, cols, strict=True)) + r' \\' for row in data]
-    OUTPUTS[name] = '\n'.join(body + [r'\end{longtable}\endgroup', ''])
+    caption = r'\caption{' + caption + r'}\label{tab:' + name.removesuffix('.tex').replace('_', '-') + '}'
+    # In a table with block labels, a row followed by another row ends with longtable's no-break \\*.
+    blocked = any(isinstance(row, str) and r'\multicolumn' in row for row in data)
+    rows = [row if isinstance(row, str) else ' & '.join(cell(x, c) for x, c in zip(row, cols, strict=True)) + (r' \\*' if blocked and isinstance(after, list) else r' \\')
+            for row, after in zip(data, [*data[1:], None])]
+    if len(data) <= 32 and not landscape:  # a table that fits on one page floats whole instead of breaking; a landscape page holds its table whole
+        # The main text's journal class reads the table placement as its pos key; the supplement's article class reads it directly.
+        place = '[!htbp]' if '{tables/' + name.removesuffix('.tex') + '}' in (ROOT/'docs/scientific/latex/supplement.tex').read_text() else '[pos=!htbp]'
+        OUTPUTS[name] = '\n'.join([r'\begin{table}' + place + r'\small\setlength{\tabcolsep}{3pt}\centering', caption, r'\begin{tabular}{' + spec + '}',
+                                   r'\toprule', head, r'\midrule', *rows, r'\bottomrule', r'\end{tabular}', r'\end{table}', ''])
+        return
+    body = [r'\begingroup\small\setlength{\tabcolsep}{3pt}', r'\begin{longtable}{' + spec + '}', caption + r'\\',
+            r'\toprule', head, r'\midrule\endfirsthead', r'\toprule', head, r'\midrule\endhead', r'\bottomrule\endfoot']
+    OUTPUTS[name] = '\n'.join(body + rows + [r'\end{longtable}\endgroup', ''])
 
 
 def span(values, digits=6):
@@ -238,11 +242,11 @@ def main():
     for quantity, unit in [('temperature', ' (K)'), ('mole_fraction', '')]:
         part = groups['Cai', quantity]
         s = a.stats(part)
-        residual += [*block('', '', '', 'RMSE' + unit, 'Bias' + unit, ''), ['Cai ' + quantity, 'calibration', len(part), num(s['RMSE']), num(s['bias']), '']]
-    residual += block('', '', '', r'\makecell[rb]{RMSE\\(kJ/mol \ce{CO2})}', r'\makecell[rb]{Bias\\(kJ/mol \ce{CO2})}', '')
+        residual += [block(6, 'RMSE and bias' + unit), ['Cai ' + quantity, 'calibration', len(part), num(s['RMSE']), num(s['bias']), '']]
+    residual.append(block(6, r'RMSE and bias (kJ/mol \ce{CO2})'))
     for name, s in summary['heat'].items():
         residual.append([name, 'calibration' if name == 'Vinjarapu2024' else 'used to accept fits', s['n_total'], num(s['RMSE']), num(s['bias']), ''])
-    residual += block('', '', '', r'Signed error (\%)', '$T$ (K)', 'Loading')
+    residual.append(block(6, r'Signed error (\%), $T$ (K) and loading'))
     for r in a.rows(a.E / 'cp.csv'):
         residual.append(['Hilliard Cp', 'calibration', 1, num(r['error_percent']), r['T_K'], r['loading']])
     table('residual_summary.tex', r'A7 property deviations. AARD denotes average absolute relative deviation. Fitted deviations and the Arcis comparison do not establish physical validation; Cai deviations are in K and mole fraction. Cp remains on its source mass basis.',
@@ -264,9 +268,9 @@ def main():
             source = r'\cite[Eqs.~5--10]{Figiel2025}' if 'ionic_region' in identity else 'induced association; half water energy and water volume' if 'carbon-dioxide' in identity else parameter_source(identity)
             parameter_rows.append((identity, c['value']['unit'], [label(identity), num(c['value']['magnitude'],6), source]))
     table('full_ionic_ssm_ds_parameters.tex', r'Species, association and correlation inputs. Lengths are in angstrom, energies divided by Boltzmann constant in kelvin. Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$. CO2, MEA and water each have one donor and one acceptor site; CO2 associates only with water. MEA--water association follows the Wolbach--Sandler rule. Fixed model inputs and assumptions for use in reacting mixtures are explained in Section~\\ref{sec:s-parameters}.',
-          ['Parameter', 'Value', 'Source or estimation'], parameter_blocks(parameter_rows, 'u-'), ['l','r',.5])
+          ['Parameter', 'Value', 'Source or estimation'], parameter_blocks(parameter_rows, 3), ['l','r',.5])
     table('binary_interaction_parameters.tex', r'Binary interactions. Slopes multiply $(1/T-1/T_{\rm ref})$ with $T_{\rm ref}=313.15$ K. All fixed ion interactions are model assumptions, rather than measured pair energies. Dispersion between ions of the same charge sign is excluded.',
-          ['Parameter', 'Value', 'Source or estimation'], parameter_blocks(pair_rows, 'u-'), ['l','r',.5])
+          ['Parameter', 'Value', 'Source or estimation'], parameter_blocks(pair_rows, 3), ['l','r',.5])
     reaction = a.load(a.ROOT / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json')
     offsets = reaction['common_source_standard_state']['source_to_common_ln_k_offsets']
     assert offsets[3] == offsets[4] == 0
@@ -297,10 +301,10 @@ def main():
                                 *(num(v*factor) for v in c['bounds']),
                                 '--' if se['bound_active'] == 'True' else num(float(se['conditional_standard_error'])*factor)]))
     table('supplement_fitted_parameters.tex', r'Sixteen fitted parameters and conditional standard errors (SE). Errors depend on weights, fixed inputs, bounds and local linearization. Born and segment diameters are separate; packing diameter is $0.88\sigma$ and Debye--H\"uckel diameter is $\sigma$. The R5 reciprocal-temperature coefficient precedes its enthalpy shift; R2/R5 shifts are total adjustments. Full optimizer transformations are in the data deposit. A dash marks a parameter at a bound, for which no conditional SE is reported.',
-          ['Parameter', 'Value', 'Lower bound', 'Upper bound', 'Conditional SE'], parameter_blocks(coordinate_rows, 'uuuu'), 'lrrrr')
+          ['Parameter', 'Value', 'Lower bound', 'Upper bound', 'Conditional SE'], parameter_blocks(coordinate_rows, 5), 'lrrrr')
     table('fitted_coordinates.tex', r'Sixteen fitted parameters and final bounds. An asterisk marks a parameter at a bound. Interactions and slopes use 313.15 K as reference temperature. Born and segment diameters are separate. R5 $A_5$ is specified before the enthalpy shift; R2/R5 shifts are total adjustments already included in the reaction coefficients. Section~\\ref{sec:s-uncertainty} gives conditional errors.',
           ['Parameter', 'Value', 'Lower bound', 'Upper bound'],
-          parameter_blocks([(i, u, [r[0], r[1]+('*' if r[4]=='--' else ''), *r[2:4]]) for i, u, r in coordinate_rows], 'uuu'), 'lrrr')
+          parameter_blocks([(i, u, [r[0], r[1]+('*' if r[4]=='--' else ''), *r[2:4]]) for i, u, r in coordinate_rows], 4), 'lrrr')
     uncertainty = a.load(a.E / 'conditional-uncertainty.json')
     correlations = a.rows(a.E / 'conditional-correlations.csv')
     free = uncertainty['free_coordinates']
@@ -308,7 +312,7 @@ def main():
     corr = {(r['coordinate_a'],r['coordinate_b']): float(r['correlation']) for r in correlations}
     corr_rows = [[str(i+1)]+[num(corr[n,m],3) if k <= i else '' for k,m in enumerate(free)] for i,n in enumerate(free)]
     table('supplement_correlations.tex', r'Lower-triangular conditional correlation matrix. Ten free parameters have rank ten and 297 degrees of freedom; variance factor ' + num(uncertainty['residual_variance']) + r'. Parameter order: ' + tex('; '.join(str(i+1)+': '+label(n) for i,n in enumerate(free))) + '.',
-          ['Parameter']+[str(i+1) for i in range(10)], corr_rows)
+          ['Parameter']+[str(i+1) for i in range(10)], corr_rows, landscape=True)
     old = a.load(a.E / 'predecessor-f1.json')
     old_engine = a.load(a.F / 'evaluation/execution.json')
     for path, digest in old['inputs'].items():
@@ -347,7 +351,7 @@ def main():
         part=[{'observed':r['observed_kg_m3'],'predicted':r[key] if key in r else d[key]} for r,d in matched]
         predecessor.append(('AARD', r'\%', [title+' matched AARD',len(part),num(a.stats(part)['AARD_percent']) if key=='eos_density_kg_m3' else '--',num(a.stats(part)['AARD_percent']) if key!='eos_density_kg_m3' else '--']))
     table('supplement_predecessor.tex', r'Density-free and reported fits on the shared 149 calibration quantities and 68 matched Amundsen densities. Density states match temperature, loading and unloaded-solvent composition; calculation pressures are 101325 and 100000 Pa, respectively (1325 Pa difference). No density-pressure derivative is retained, so this difference is not corrected. Density-free calculations retain their software identity, listed in the deposit README.',
-          ['Metric', 'n', 'Density-free fit', 'Reported fit'], blocks(predecessor, '-uu'), 'lrrr')
+          ['Metric', 'n', 'Density-free fit', 'Reported fit'], blocks(predecessor, 4), 'lrrr')
     OUTPUTS['supplement_predecessor.tex'] += '% Temperature/loading/mass-fraction matched IDs (pressure disclosed, not matched): '+', '.join(d['id'] for _,d in matched)+'\n'
     OUTPUTS['supplement_predecessor.tex'] += '% F1 excluded rows: none. A7 rows outside baseline: '+', '.join(d['id'] for d in density if d['id'] not in {x['id'] for _,x in matched})+'\n'
     fixed = a.J / 'amendment-7/fixed-study/wheel-8298c602'
@@ -370,7 +374,7 @@ def main():
         a6=a.load(a.J/'amendment-6/selected-assessment/summary.json')
         acceptance.append(['Arcis RMSE',num(ceiling),'F1 value + 1 kJ/mol (rounded)',num(next(x['RMSE_kJ_mol'] for x in oldheat if x['source']==name)),num(a6['heat'][name]['RMSE']),num(summary['heat'][name]['RMSE'])])
     kinds = {'cost': ('Cost', ''), 'AARD': ('AARD', r'\%'), 'RMSE': ('RMSE', 'kJ/mol'), 'within': ('Count', ''), 'instability': ('Count', ''), 'error': ('Absolute error', r'\si{\kilogram\per\cubic\metre}')}
-    acceptance = blocks([(*next(v for k, v in kinds.items() if k in r[0]), r) for r in acceptance], 'u-uuu')
+    acceptance = blocks([(*next(v for k, v in kinds.items() if k in r[0]), r) for r in acceptance], 6)
     table('acceptance_limits.tex', r'Study-specific limits and values for the density-free, comparison and reported fits. Section~\\ref{sec:s-fits} explains the tolerances.',
           ['Quantity','Limit','Origin of limit',r'\makecell[rb]{Density-free\\fit}',r'\makecell[rb]{Comparison\\fit}',r'\makecell[rb]{Reported\\fit}'],acceptance,[.24,'r',.31,'r','r','r'])
     state = a.rows(a.E/'state-targets.csv')
@@ -382,7 +386,7 @@ def main():
         by_source.setdefault((source,r['group'],r['quantity']),[]).append(r)
     for (source,group,quantity), part in by_source.items():
         row = [source,group,label(quantity),len(part),num(a.stats(part)['RMSE' if group=='Cai' else 'AARD_percent']),num(math.fsum(float(r['cost']) for r in part))]
-        (cai_rows.extend([*block('', '', '', '', 'RMSE (K)' if quantity=='temperature' else 'RMSE', ''), row]) if group=='Cai' else source_rows.append(row))
+        (cai_rows.extend([block(6, 'RMSE (K)' if quantity=='temperature' else 'RMSE'), row]) if group=='Cai' else source_rows.append(row))
     table('supplement_source_aard.tex',r'A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapour water mole fraction. It does not combine quantities into an accuracy ranking. Entry costs add to the total objective cost of 148.9; quantity definitions, units and weights are in Section~\\ref{sec:s-objective}.',
           ['Source','Group','Observable','n','AARD (%)','Cost'],source_rows+cai_rows,['l','l',.22,'r','r','r'])
     outside=[]
@@ -476,7 +480,7 @@ def main():
     OUTPUTS['supplement_phase_family.tex']=previous+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-states')
     previous=OUTPUTS['supplement_phase_family.tex']
     table('supplement_phase_family.tex', r'A6 successful split phase amounts (mol), densities (mol/m3) and mole fractions in source order: CO2, MEA, water, MEAH+, carbamate, bicarbonate, carbonate, hydronium, hydroxide. Vapour rows list only their three supported neutral species (CO2, MEA, water); liquid rows list all nine.',
-          ['State','Seed','Phase',r'\makecell[rb]{Amount\\(mol)}',r'\makecell[rb]{Density\\(\si{\mole\per\cubic\metre})}',*NAMES.values()],split_phases,'rllrr'+'r'*len(NAMES))
+          ['State','Seed','Phase',r'\makecell[rb]{Amount\\(mol)}',r'\makecell[rb]{Density\\(\si{\mole\per\cubic\metre})}',*NAMES.values()],split_phases,'rllrr'+'r'*len(NAMES),landscape=True)
     OUTPUTS['supplement_phase_family.tex']=previous+'\\begin{landscape}\n'+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-compositions')+'\\end{landscape}\n'
     inventory=[]
     meta_by_target={r['target']:r for r in state if r['kind']=='packet'}
@@ -535,10 +539,10 @@ def main():
     assert [c['representation'] for c in shomate] == ['shomate']*2 and mea['representation'].startswith('cp_')
     ranges = lambda c, j: str(c.get('source_range_k', c['range_k'])[j])
     caloric_rows = [[f'${x}$', *(str(c['coefficients'][j]) for c in shomate)] for j, x in enumerate('ABCDEFGH')]
-    caloric_rows += [*block('Source temperature', r'\ce{CO2} (K)', 'Water (K)'), ['Lowest', *(ranges(c, 0) for c in shomate)], ['Highest', *(ranges(c, 1) for c in shomate)]]
-    caloric_rows += [*block('Formation enthalpy', r'\ce{CO2} (J/mol)', 'Water (J/mol)'), ['$h_f$', *(str(c['formation_enthalpy_j_per_mol']) for c in shomate)]]
-    caloric_rows += [*block(r'$C_P$ polynomial coefficient', r'\ce{MEA}', ''), *([f'${x}$', str(v), ''] for x, v in zip('abcd', mea['coefficients'], strict=True))]
-    caloric_rows += [*block('Source temperature', r'\ce{MEA} (K)', ''), ['Lowest', ranges(mea, 0), ''], ['Highest', ranges(mea, 1), ''], *block('Source', r'\ce{MEA}', ''), ['Reference', 'Zhang Table 3', '']]
+    caloric_rows += [block(3, 'Source temperature (K)'), ['Lowest', *(ranges(c, 0) for c in shomate)], ['Highest', *(ranges(c, 1) for c in shomate)]]
+    caloric_rows += [block(3, 'Formation enthalpy (J/mol)'), ['$h_f$', *(str(c['formation_enthalpy_j_per_mol']) for c in shomate)]]
+    caloric_rows += [block(3, r'\ce{MEA} $C_P$ polynomial coefficient'), *([f'${x}$', str(v), ''] for x, v in zip('abcd', mea['coefficients'], strict=True))]
+    caloric_rows += [block(3, r'\ce{MEA} source temperature (K)'), ['Lowest', ranges(mea, 0), ''], ['Highest', ranges(mea, 1), ''], block(3, r'\ce{MEA} source'), ['Reference', 'Zhang Table 3', '']]
     table('ideal_calorics.tex',r'Ideal-gas caloric inputs. Shomate $C_P=A+Bt+Ct^2+Dt^3+E/t^2$, $t=T/1000$, in J/(mol K); enthalpy is $h_f+1000(At+Bt^2/2+Ct^3/3+Dt^4/4-E/t+F-H)$. MEA uses $C_P=a+bT+cT^2+dT^3$ with $h=s=0$ at 313.15 K. Shomate entries list A--H in order.',
           ['Shomate coefficient','CO2','Water'],caloric_rows,'lrr')
     literature=[
