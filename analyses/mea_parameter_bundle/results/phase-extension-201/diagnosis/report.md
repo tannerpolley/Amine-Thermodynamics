@@ -299,7 +299,7 @@ information, and maximum resident memory. `.log` files retain command output.
 All commands used this prefix from the task worktree:
 
 ```bash
-nice -n 10 agent-heavy uv run --frozen --no-sync python \
+nice -n 10 uv run --frozen --no-sync python \
   analyses/mea_parameter_bundle/results/phase-extension-201/diagnosis/probes.py
 ```
 
@@ -311,8 +311,7 @@ The narrowest parent diagnostic reproduction appends
 `bubble bubble-cold-a7-28 --index 28`; its successful correction appends
 `bubble bubble-warm-a7-28 --index 28 --seed analyses/mea_parameter_bundle/results/phase-extension-201/A7/point-27.json`.
 The trial reproduction appends `trials trials-cold-a7-10 --index 10`.
-These are the actual executed commands; the script rejects existing output
-names, so a later authorized repetition must use a fresh name. The supervisor
+The original execution included `agent-heavy`; the reproduction commands above omit it under the owner’s direct-run instruction. The script rejects existing output names; a later authorized repetition must use a fresh name. The supervisor
 charges every process, including solver failures and unsuccessful correction
 attempts, and enforces the cumulative compute ceilings with a captured
 process group and a maximum 150-second command allowance. Only its own
