@@ -1,0 +1,49 @@
+---
+title: "A7 high-temperature pressure comparison"
+---
+
+A7 comparison record; adopted parameter identity linked from the [overview](../notebook.qmd#working-record).
+
+# Question
+
+How well does A7 reproduce the retained high-temperature CO₂ pressures?
+
+# Result
+
+A7 predicts the 54 canonical 100–120 °C pressures with 24.3% AARD, ranging from 18.5% (Mamun 2005, 120 °C) to 31.6% (Jou 1995, 120 °C). These are non-fitted predictions and do not qualify high-temperature process use.
+
+# Basis and method
+
+Average absolute relative deviation (AARD) is computed within each named retained cohort; source, temperature, pressure basis and row availability remain in the source-state assessment.
+
+# Values
+
+## Cohort comparison {#high-temperature-pressure-comparison}
+
+A7’s 100–120 °C comparisons preserve source and cohort membership from [state-targets.csv](../results/a7-paper-evidence/state-targets.csv). The packet view contains the same Jou rows as the canonical view; the two Jou source/temperature rows below each represent both views.
+
+<!-- RESULTS:high-temperature:BEGIN -->
+
+| Cohort | n | A7 pressure AARD (%) |
+| --- | --- | --- |
+| Canonical, 100–120 °C | 54 | 24.35 |
+| Packet (Jou subset), 100–120 °C | 20 | 27.54 |
+| Jou 1995, 100 °C (canonical and packet) | 10 | 23.50 |
+| Jou 1995, 120 °C (canonical and packet) | 10 | 31.57 |
+| Mamun 2005, 120 °C | 19 | 18.54 |
+| Xu 2011, 100 °C | 8 | 26.90 |
+| Xu 2011, 120 °C | 7 | 28.10 |
+
+<!-- RESULTS:high-temperature:END -->
+
+# Limits and evidence type
+
+These are non-fitted comparisons at the retained source states. Data-access history and overlapping membership limit an independent-prediction interpretation. No matched no-heat calculation was made.
+
+# Records
+
+[Exact cohort reductions](../results/a7-paper-evidence/high-temperature-comparison.csv) · [State rows](../results/a7-paper-evidence/state-targets.csv) · [Availability and source basis](../results/a7-paper-evidence/state-summary.json).
+
+## Execution record
+
+The assessment provenance is retained with the A7 evidence package; rendering runs no model.

@@ -1,5 +1,8 @@
 {
   "inputs": {
+    "results/a7-paper-evidence/density.csv": "1983f82ba4b030623d909b364ecceb7dc60466b5ea4f327222fa199827dd2fdd",
+    "results/a7-paper-evidence/summary.json": "39ea65e25e503038a9e47ea158602af1b2ae27b1c38e69bebed6f8b49dbd9883",
+    "results/a7-paper-evidence/cp.csv": "47b1c85ce78c05e7b240e183237d01289060496e42bee6e2dddae70e06c2ac72",
     "results/a7-paper-evidence/pressure-figure-data.csv": "c4d788d4b65b205f575fcceb11679acb0097090bcab8ce3ab535879e17c12cbd",
     "results/a7-paper-evidence/species-figure-data.csv": "7ecf4b05119a245cad767efd4402851360895682025dbf9236ac476482aaf127",
     "results/a7-paper-evidence/pool-figure-data.csv": "e7cc2b110be9d42fd2467abb15393e3291827fb93861da8fda9fd970fbfc27c9",
@@ -8,17 +11,24 @@
     "results/selected-current-best-parameters.json": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
     "results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
     "results/a7-paper-evidence/fitted-rows.csv": "0643ec9c6dc323409be7fbd5f1984c0cc166cfcd94192e6a7bb79e20d3ed2ce3",
-    "scripts/render_regression_overview.py": "fc454b172d6259b4682aed5ae4e214bdb9e84b83c140833535fbfd21a964aa64",
+    "scripts/render_regression_overview.py": "8bf6e76a095c9e62e851a3f5fb59c54ab395948fa01625d479db64df5f3db02f",
     "scripts/manuscript_style.py": "3fc8954f156270979cabb95d5668b8e7b1e2fcf70ba9cfded95bf5b7a566b27d"
   },
   "fit_figure_wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3",
   "engine_commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
   "model_executed": false,
-  "series": "Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from A7 fitting.",
+  "series": "Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Density limits use the retained scale s of each row, not uniform measurement uncertainty; Cp is on the complete-feed mass basis. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from A7 fitting.",
   "outputs": {
+    "density-statistics.csv": "865bc0ee23aa98fc185a944c3a6bcf6b58b99763f1562223fe8d5374f5b572ed",
+    "heat-capacity.pdf": "21c5ccc2dfbe1abadb8fc0fe8258021c284a1e84d4ade25bb0c4227258428cf0",
+    "heat-capacity.png": "2b6453bf87e59f97fb403a3d53799536bfeadb98eb73b27c532b27e39758b353",
+    "heat-capacity.svg": "1242d549299906988fa78e50f96b65551b0d9f0f65c58d4886421827fe1bc370",
     "heat-of-absorption.pdf": "61b7e454d7d3968f6dc0853e333879ca4f284cf528d05d618b50eb6473c1937d",
     "heat-of-absorption.png": "29648cbc9a6376673f7f300727b219004e45a3f242bb4d2cbedb6d5863ee7b26",
     "heat-of-absorption.svg": "f839ae965a6f41dafab2e22f0e3c17d78c58838a0c9cf170092f14c3849f865d",
+    "loaded-density-errors.pdf": "8b5a7523f8dcb47f224f9c31925ad66fa675cf9a15861527be542d24edba81e5",
+    "loaded-density-errors.png": "b4f89e59277dbcf84f385504b79cac483d244a60313b76d6adacfc500ea08e08",
+    "loaded-density-errors.svg": "ff3f0cc5c9eb011efc3005c44c2804db9f1ce6e635c0e2c7b18879b7cfa0d4c4",
     "matin-pool.pdf": "2e52362593ff91fb0ff50984e873de871e40c4d9903447f20397a99658df11c4",
     "matin-pool.png": "b2977c74583ddbe7b7beab8f58a956b790a4dbe0ed6615234a4aeaa0f45cb9bd",
     "matin-pool.svg": "774ccf07c10d22b4ececdf856be3d88c180d10835aac89de016464bc026a8b08",
@@ -42,6 +52,6 @@
     "species-residuals.pdf": "1377c0e3281f739d012e34657206e8549fa48829566eea41dd2e54c232f038b1",
     "species-residuals.png": "f08825f2c67a4b994160a896942e5bcf7b7bd00eb6c245485ca60949563de265",
     "species-residuals.svg": "4309fde6260cb312590c44578212ed4f2cd2a4812684df7e371c6e02e1a4c45b",
-    "statistics.csv": "1acb11a6f8cd0d674878e2a098040d5bd842e9aad0ed17d955438cba1e7a60fe"
+    "statistics.csv": "ea98462eefc6833e6024e62e3a345eca3a97bbf8560e552d531eb82a9a1b326a"
   }
 }

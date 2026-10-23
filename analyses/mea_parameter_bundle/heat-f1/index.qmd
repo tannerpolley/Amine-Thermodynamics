@@ -1,0 +1,63 @@
+---
+title: "Heat F1 predecessor and six-fit comparison"
+resources:
+  - ../results/heat-final-170/conditional-uncertainty.json
+  - ../results/heat-final-170/fit-comparison.csv
+  - ../results/heat-final-170/high-temperature-comparison.csv
+  - ../results/heat-final-170/heat-comparison.csv
+  - ../results/heat-final-170/heat-capacity-comparison.csv
+  - ../results/cp-unloaded-161/summary.json
+  - ../results/heat-final-170/corrected-densities.csv
+  - ../results/heat-final-170/figure-data/heat.csv
+  - ../results/heat-final-170/figure-data/input-hashes.json
+  - ../figures/regression_overview/output/provenance.json
+  - ../figures/regression_overview/output/statistics.csv
+  - ../figures/regression_overview/output/parameter-table-inputs.json
+---
+
+Historical F1 predecessor; superseded by [A7 adoption](../notebook.qmd#working-record) on 20 October 2026.
+
+# Question
+
+What did the heat-including F1 fit establish relative to the other retained starts and the no-heat controls?
+
+# Result
+
+Among the 149-row declarations with heat, F1 had the lowest cost (32.06; pressure/species AARD 13.81/7.89%). Adding the eight Vinjarapu heats raised F1’s cost from 30.09 to 32.06 and its pressure AARD from 13.26 to 13.81%. F1 became the heat-fit record that A7 replaced.
+
+# Basis and method
+
+F1–F6 name the six retained fit declarations; “with heat” adds the Vinjarapu heat targets to that declaration. Objective row counts differ between declarations, so costs do not rank identical populations across every row.
+
+# Values
+
+| Fit | Objective | Rows | Cost (1) | Pressure AARD (%) | Species AARD (%) |
+| --- | --- | --- | --- | --- | --- |
+| F1 | no heat | 141 | 30.0898 | 13.26 | 7.94 |
+| F2 | no heat | 141 | 57.2430 | 36.08 | 8.46 |
+| F3 | no heat | 141 | 154.6342 | 79.57 | 11.65 |
+| F4 | no heat | 159 | 46.0544 | 13.87 | 14.07 |
+| F5 | no heat | 159 | 63.8898 | 34.47 | 11.97 |
+| F6 | no heat | 141 | 30.1794 | 14.33 | 7.97 |
+| F1 | with heat | 149 | 32.0567 | 13.81 | 7.89 |
+| F2 | with heat | 149 | 60.0081 | 36.07 | 8.44 |
+| F3 | with heat | 149 | 160.5551 | 80.25 | 11.98 |
+| F4 | with heat | 167 | 47.6143 | 13.34 | 14.08 |
+| F5 | with heat | 167 | 66.6018 | 34.34 | 12.12 |
+| F6 | with heat | 149 | 40.9018 | 14.73 | 7.99 |
+
+![Historical six-fit absorption-heat comparison; these are predecessor predictions, not A7 statistics.](../results/heat-final-170/figures/heat-of-absorption.png)
+
+# Limits and evidence type
+
+This is predecessor calibration and assessment evidence. The historical [Cp check](../results/cp-unloaded-161/README.md) retains its original feed and proxy basis.
+
+# Records
+
+Heat F1 remains [predecessor evidence](../results/a7-paper-evidence/predecessor-f1.json) with its original parameter, Engine and source-state identities. Its frozen [heat-160 record](../results/heat-160/A-parameters.json) has SHA-256 `66ff7715958e9d22e77bd129faf7f67822204e3285b50993bf3f67d72c3b9778`; the replaced selected version 3 had SHA-256 `7b0b4bb5669c1b2061fd7ec26e5fb4c8491005bdb5ba8f9e22e4c0b0b4b84308`. The [six-fit study](../results/heat-final-170/fit-comparison.csv) and its [figures](../results/heat-final-170/figures/heat-of-absorption.png) remain retained. The [Engine transfer table](../engine-adoptions/index.qmd) owns the named F1 transfer comparison. Historical guards, including [Cp](../results/cp-unloaded-161/evaluate.py) and [density](../results/density-current-record-123/replay.py), remain unchanged. The LaTeX manuscript uses A7 since #197 (`dfc2780`); manuscript freshness checks concern its retained LaTeX inputs and do not establish A7 adoption.
+
+**Provenance of the retained heat-fit evaluation.** [Frozen heat F1 record](../results/heat-160/A-parameters.json); original producing Engine wheel SHA-256 `94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a` from merged Engine commit `026b30311b959f1a5db4feef4c15e243f7044a5f`; [evaluation execution](../results/heat-final-170/evaluation/execution.json) records its use.
+
+## Execution record
+
+The linked evaluation execution record retains the original producing Engine and source-state execution identities.

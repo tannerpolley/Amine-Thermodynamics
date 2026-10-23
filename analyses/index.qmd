@@ -4,34 +4,22 @@ subtitle: "Root Quarto website for the repository's retained analysis records"
 order: 1
 ---
 
-This article is the home page of the root Quarto analysis website.
-`manuscript.py` manages the website: `_quarto.yml` holds its shared HTML
-presentation, and `_cse-manuscript.json` owns the published pages and sidebar.
-Each analysis keeps its scientific metadata in its own `analysis.yaml`.
+This site traces the MEA–water–CO₂ thermodynamic model from retained source observations to parameter calibration and assessment. The [MEA parameter bundle](mea_parameter_bundle/notebook.qmd) is the main reading path for parameters, fitting plots and their limits.
 
-The [MEA parameter bundle](mea_parameter_bundle/notebook.qmd) is the main
-parameter-development result. Its overview is the parent page for the
-formulation, coupled-assessment, and historical-background reports listed below.
-The other published pages are reference and decision evidence that support
-selecting and assessing the bundle.
+On 2026-10-20 the owner adopted [A7](mea_parameter_bundle/notebook.qmd#working-record) and approved manuscript use. Its overview owns the adopted values and conditions; [joint calibration](mea_parameter_bundle/joint-recalibration/index.qmd) records the detailed evidence. Earlier records remain in the [parameter history](mea_parameter_bundle/results/parameter-record-history.csv).
 
-On 2026-10-20 the owner adopted the [A7 record](mea_parameter_bundle/notebook.qmd#working-record) ([#196](https://github.com/tannerpolley/Amine-Thermodynamics/issues/196)) as the working record. It fits 16 coordinates to 307 objective rows, with native equation-of-state densities and no empirical volume translation. 44 of 47 fitted loaded densities meet their limits; the three failures at 353.15 K are accepted with disclosure. The finite 73-point phase family (313.15–333.15 K, loading 10⁻⁵–0.5) has no resolved descent; it is not a stability certificate. The manuscript uses A7 since #197. This is calibration and numerical verification, not physical validation or absorber/stripper qualification. Earlier records, including the #160 F1″ record, are in the [parameter history](mea_parameter_bundle/results/parameter-record-history.csv).
-
-The [independent chemical temperature study](mea_parameter_bundle/notebook.qmd#reaction-constants-140)
-preserves the low-temperature loaded-solution fit but gives 28.58% canonical
-80 °C pressure AARD, compared with 29.33% for the restored-source control and
-20.27% for the then-adopted #107 record. This is a frozen diagnostic point-estimate
-comparison: source measurement uncertainty is unavailable, chemical consistency
-remains unresolved, and the new record has not been adopted or promoted for
-manuscript use.
+The historical [independent chemical temperature study](mea_parameter_bundle/results/temperature-reanchor-140/stage-2/comparison-scores.csv) retains its own cohort scores, input identities and limits. It is separate from A7 adoption.
 
 ## Published pages
 
 | Group | Pages |
 |:--|:--|
 | MEA parameter bundle | [Overview](mea_parameter_bundle/notebook.qmd) |
-| Active formulation | [Neutral MEA–water fit](mea_parameter_bundle/neutral-mea-water/index.qmd) · [CO₂ dispersion and R4 calibration](mea_parameter_bundle/co2-r4-calibration/index.qmd) · [Born and permittivity study](mea_parameter_bundle/born-permittivity/index.qmd) · [Association topology analysis](mea_parameter_bundle/association-topology/index.qmd) |
-| Coupled assessment | [Reaction-temperature fit](mea_parameter_bundle/reaction-temperature-fit/index.qmd) · [Calorimetry and thermal assessment](mea_parameter_bundle/calorimetry/index.qmd) · [Coupling and parameter identification](mea_parameter_bundle/coupling-and-identification/index.qmd) |
+| MEA parameter studies | [A7 joint calibration](mea_parameter_bundle/joint-recalibration/index.qmd) · [High-temperature pressure](mea_parameter_bundle/high-temperature/index.qmd) · [Neutral CO₂](mea_parameter_bundle/neutral-co2/index.qmd) · [Loaded density and phase](mea_parameter_bundle/loaded-density/index.qmd) |
+| Parameter and Engine history | [Joint recalibration history](mea_parameter_bundle/joint-recalibration-history/index.qmd) · [Heat F1 predecessor](mea_parameter_bundle/heat-f1/index.qmd) · [Engine transfers](mea_parameter_bundle/engine-adoptions/index.qmd) |
+| Remaining questions | [Open work](mea_parameter_bundle/open-work/index.qmd) |
+| Historical formulation studies | [Neutral MEA–water fit](mea_parameter_bundle/neutral-mea-water/index.qmd) · [CO₂ dispersion and R4 calibration](mea_parameter_bundle/co2-r4-calibration/index.qmd) · [Born and permittivity study](mea_parameter_bundle/born-permittivity/index.qmd) · [Association topology analysis](mea_parameter_bundle/association-topology/index.qmd) |
+| Earlier coupled assessment | [Reaction-temperature fit](mea_parameter_bundle/reaction-temperature-fit/index.qmd) · [Calorimetry and thermal assessment](mea_parameter_bundle/calorimetry/index.qmd) · [Coupling and parameter identification](mea_parameter_bundle/coupling-and-identification/index.qmd) |
 | Historical background | [Historical ionic/speciation fit](mea_parameter_bundle/ionic-speciation-fit/index.qmd) · [Historical designs and discarded strategies](mea_parameter_bundle/historical-designs/index.qmd) |
 | Reference and comparison | [Ideal reaction-equilibrium reference](ideal_reaction_equilibrium/index.qmd) · [Matched six- and nine-species comparison](enrtl_six_species_ideal_comparison/notebook.qmd) |
 | MDEA extension | [Kuranov constant ion–water fit](mdea_kuranov_refit/notebook.qmd) |
@@ -46,7 +34,7 @@ accepted parameter suite:
 
 | Role | Folders and purpose |
 |:--|:--|
-| Parameter bundle | `mea_parameter_bundle/` — current candidate display, formulation studies, coupled assessment, and historical bundle background. This is the only active parameter-development parent. |
+| Parameter bundle | `mea_parameter_bundle/` — adopted parameter overview, formulation studies, coupled assessment, and historical bundle background. This is the only active parameter-development parent. |
 | Reference and comparison | `six_species_solubility_reference/`, `neutral_pcsaft_pressure_reference/`, `ideal_reaction_equilibrium/`, and `paper_validation/2015_baygi/` — source-aligned baselines and parity checks used to define or assess candidates. |
 | Historical and decision evidence | `historical_fixed_parameter_epcsaft_evaluation/`, `reactive_epcsaft_parameter_evidence/`, and `enrtl_six_species_ideal_comparison/` — completed configurations, packet-specific comparisons, and supported-negative gates. |
 | Source and input-qualification records | `film_chemistry_work_package_a/` and `speciation_evidence_harmonization/` — qualified inputs and harmonization work that feed later studies but are not parameter authorities. |

@@ -3,61 +3,30 @@
 This directory is the canonical, update-in-place research notebook for the
 single nine-species MEA ePC-SAFT parameter bundle. The rendered view is part
 of the root Quarto analysis website at `analyses/`: [`notebook.qmd`](notebook.qmd) is
-the parent overview with the selected parameter tables and the main pressure,
-speciation and heat figures; each child analysis folder contains one
+the parent overview with the selected parameter tables and five fitting plots; each child analysis folder contains one
 `index.qmd` report. Keep the overview and child reports synchronized with the
 retained evidence. Link to detailed records rather than creating
 candidate-specific notebook copies or parallel status notes.
 
 ## Current limited-domain working record
 
-On 2026-10-20 the owner adopted the A7 second restricted endpoint under
-[#196](https://github.com/tannerpolley/Amine-Thermodynamics/issues/196), following
-[#170 acceptance](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6298116916).
-[Selected parameters](results/selected-current-best-parameters.json) are byte-identical
-to the [endpoint](results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json),
-document version 2, SHA-256 `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e`.
-The [A7 package](results/a7-paper-evidence/README.md) retains 307 objective rows,
-462 state-target rows, 22 heats, 210 densities, four Cp rows, ten carbonate states,
-the A7/A6 73-point phase classifications and conditional errors for ten free coordinates.
-The default-path replay reproduces all 153 required identities within 8.39 × 10⁻¹⁶ relative difference.
-
-Engine commit `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256
-`8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`, remains pinned in
-`pyproject.toml` and `uv.lock`. A7 varies 16 declared coordinates, uses the retained
-shared stage-5 water and solvent-density-temperature permittivity, and applies no
-empirical density translation. The [notebook](notebook.qmd) owns the reported values,
-conditions and limits; [history](results/parameter-record-history.csv) records adoption.
-
-The three 353.15 K loaded-density failures remain failures accepted with disclosure.
-Amundsen's high-temperature/loading source-uncertainty boundary remains unresolved;
-density residual scales are not uniformly measured uncertainties. The phase evidence
-is the finite 73-point family (313.15–333.15 K, loading 10⁻⁵–0.5), not a stability
-certificate. Both restricted fits are single local fits from one start, with sampled
-bounds. Conditional errors depend on residual weights, fixed inputs, active bounds
-and local linearization; they establish neither parameter uniqueness nor prediction
-intervals. Non-fitted comparisons retain their source-state basis and data-access
-history. Adoption is the owner's working-record choice, not physical validation or
-process-use qualification. The owner approved A7 for manuscript use on
-2026-10-20, and the manuscript uses it since #197 (`dfc2780`).
-
-The [heat F1 predecessor](results/a7-paper-evidence/predecessor-f1.json), its original
-parameter, Engine and source-state identities, and historical figures remain retained.
-The [8298c602 transfer check](results/engine-8298c602-adoption/README.md) covers only
-its named 152 F1 quantities, within 2.9 × 10⁻¹² relative difference. It does not
-qualify every retained F1 result on the current wheel. Historical guards remain;
-future unpinned default-consuming commands use A7 without relabeling prior outputs.
-Manuscript freshness checks concern retained LaTeX inputs and do not establish A7 adoption.
+On 2026-10-20 the owner adopted A7 under [#196](https://github.com/tannerpolley/Amine-Thermodynamics/issues/196) and approved manuscript use. The [overview](notebook.qmd#working-record) owns the parameter tables, fitting plots and limits; the [joint-calibration page](joint-recalibration/index.qmd) owns detailed evidence and numerical reproduction. Earlier records retain their original identities in the [parameter history](results/parameter-record-history.csv).
 
 ## Presentation map
 
-`analyses/manuscript.py` registers the overview and nine child reports in
+`analyses/manuscript.py` registers the overview and seventeen detail reports in
 `analyses/_cse-manuscript.json`; the analysis index and sidebar preserve their
-groups (formulation, coupled assessment, historical background), and the
+study, history and remaining-question groups, and the
 sidebar links each page back to Home. The parent/child tree is also recorded in
 [`analysis.yaml`](analysis.yaml). The historical page preserves the July
 designs as retained background on discarded strategies, with exact Git
 retrievals, rather than presenting them as the current plan.
+
+| Group | Detail pages |
+| --- | --- |
+| MEA parameter studies | [A7 joint calibration](joint-recalibration/index.qmd) · [High-temperature pressure](high-temperature/index.qmd) · [Neutral CO₂](neutral-co2/index.qmd) · [Loaded density and phase](loaded-density/index.qmd) |
+| Parameter and Engine history | [Joint recalibration history](joint-recalibration-history/index.qmd) · [Heat F1 predecessor](heat-f1/index.qmd) · [Engine transfers](engine-adoptions/index.qmd) |
+| Remaining questions | [Open work](open-work/index.qmd) |
 
 From `analyses/`, validate and render the uncertified working view with:
 
@@ -69,8 +38,8 @@ bash render.sh
 The overview is `analyses/_site/mea_parameter_bundle/notebook.html`; each child
 report is `index.html` in its folder under `_site/`. The CSE wrapper renders
 HTML by default and always passes `--no-execute`; Quarto reads retained tables,
-figures and records but never runs the thermodynamic model. Evidence links to retained
-CSV/JSON files resolve only in the repository checkout, not in `_site/`.
+figures and records but never runs the thermodynamic model. Explicit resources provide the retained CSV/JSON downloads in `_site/`;
+repository-level source links use their audited Git commit.
 
 The following strict-certification and archive commands belong to the older
 figure/heat/thermal generation records. They require their owners to regenerate
@@ -191,9 +160,13 @@ The earlier adoption writer still omits scored R1/R3 shifts; do not invoke
 unfinished publication and this known adoption limitation do not block the
 fixed-EOS F/S screen. Old v2 caches cannot be relabeled as current v3 results.
 
-## Retained parameter evidence
+## Historical parameter evidence (September 2026)
 
-The selected JSON owns the exploratory incumbent; the notebook describes its
+The following account describes the earlier records and wheels at that date.
+Its “selected” and “current” labels are historical; use the A7 overview above
+for the adopted record.
+
+At that date, the selected JSON owned the exploratory incumbent; the notebook describes its
 retained evidence and does not establish an accepted MEA parameter set. Its molecular
 starting vector comes from ePC-SAFT Issues #80 and #119 and closed, unmerged PR
 #134; a full 123-state comparison then selected solvent-only mass-fraction

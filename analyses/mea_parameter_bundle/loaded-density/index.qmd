@@ -1,0 +1,234 @@
+---
+title: "Loaded density and phase comparison: amendment 6"
+resources:
+  - ../results/joint-recalibration-170/amendment-6/smaller-dV-density/README.md
+  - ../results/joint-recalibration-170/amendment-6/density-sweep/README.md
+  - ../results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md
+---
+
+Historical record: amendment 6 (A6), the sixth revision of the #170 joint-recalibration plan, 19–20 October 2026. The later adopted A7 record is on the [overview](../notebook.qmd).
+
+# Question
+
+Could fitting loaded density constrain the ion parameters while preserving the other property comparisons and the finite phase-family requirement?
+
+# Result
+
+The revised joint fit met its fitted-density limits but retained resolved phase descents, so adoption was withheld. Earlier density-weighted endpoints and source disagreement are retained below.
+
+# Basis and method
+
+The density residual weight $\lambda$ scales the density contribution to the objective. MEA dielectric volume $d_V$ (L/mol) distinguishes the retained smaller and larger branches. The [retained form comparison](../results/joint-recalibration-170/amendment-6/candidates/README.md) defines “Held” as Debye–Hückel ion diameter equal to segment diameter $\sigma$, and “tied” as $0.88\sigma$. $C_{149}$ is the dimensionless weighted cost for the common pressure/species/Vinjarapu subset. The following dated records preserve source pressures, composition basis, row roles and exact parameter/Engine identities; they are predecessor comparisons. Starts A and B are the two retained initial parameter vectors. “A4 controls” are the amendment-4 endpoints ([neutral CO₂](../neutral-co2/index.qmd)). F1 is the heat-fit record adopted before A7 ([heat F1](../heat-f1/index.qmd)). The revised #183 loaded-density requirement applied here is $|\rho_{calc}-\rho_{obs}|\leq2s$ for each of 15 Amundsen 2009 and 32 Hartono 2014 rows at nominal 30 wt % MEA, using frozen row-specific density and loading scales; the five Amundsen loading-0.4 rows are excluded. The five CO₂-free rows use 1.0 kg/m³. These scales are not uniformly measured uncertainties; the earlier screens below retain their superseded ±2 kg/m³ rule.
+
+## Basis, source roles and the MEA–water fit
+
+The 19 October 2026 revision asks whether uncertainty-scaled loaded densities and the MEA–water temperature dependence can be fitted jointly while retaining the pressure, species, heat and neutral-mixture ceilings. The fitted density composition is **30 mass % MEA on a CO₂-free solvent basis**, with loading $\alpha=n_{\mathrm{CO_2}}/n_{\mathrm{MEA}}$. The principal loaded-density comparison uses Amundsen at 25–80 °C and Hartono at 20–80 °C, with assumed pressure 100000 Pa and **no empirical volume translation**. The final objective includes 15 Amundsen loaded rows, 32 Hartono loaded rows, five Amundsen CO₂-free rows, and the 50 Cai neutral-mixture rows alongside the retained reacting-property targets. The adopted propagated density scale $s$ is row-specific; $|\rho_{calc}-\rho_{obs}|\leq2s$ is not a universal ±2 kg/m³ requirement. Exact rows, source locators and scales are in the [selected density table](../results/joint-recalibration-170/amendment-6/selected-assessment/density.csv); the [assessment methods](../results/joint-recalibration-170/amendment-6/selected-assessment/README.md) distinguish exact zero-carbon, trace-carbon proxy and source-feed calculations.
+
+The owner [removed the five Amundsen loading-0.4 rows from the objective and gate and retained Han 2012 for assessment only](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6278610430), [required joint fitting of the MEA–water pair with all 50 Cai rows](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6278891898), and [selected Held with a CO₂-free gate of $2u=1.0$ kg/m³](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6279085063). The [selected-vector assessment decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6279829306) withholds adoption. These decisions supersede the earlier sections' data roles and 0.5 kg/m³ CO₂-free gate for this revision only.
+
+The retained [third-source comparison](../results/joint-recalibration-170/amendment-6/source-conflict/README.md), with exact values in [third-source-values.csv](../results/joint-recalibration-170/amendment-6/source-conflict/third-source-values.csv), does not resolve the source disagreement unanimously: at loading 0.4, Han's interpolated values are closer to Hartono over the shared temperatures, whereas Weiland's printed 25 °C value is closer to Amundsen. The source comparison records interpolation, preparation and uncertainty limits, including Weiland's incomplete loaded-density uncertainty. Removing five rows is an owner-selected scope change, not proof that those measurements are wrong. The excluded rows remain visible in the assessment below.
+
+The preliminary [stage-2b fit](../results/joint-recalibration-170/amendment-6/stage2b/README.md) uses
+
+$$
+k_{\mathrm{MEA,H_2O}}(T)=k_{\mathrm{MEA,H_2O}}(313.15\,\mathrm{K})+b\left(\frac{1}{T}-\frac{1}{313.15\,\mathrm{K}}\right).
+$$
+
+Here $k$ is dimensionless and $b$ is in kelvin. Both starts converge to $k=-0.0898918$, $b=-8.948$ K, with no active bound. Cai cost is 92.615 against 95.895, and CO₂-free errors at 25/40/50/70/80 °C are −0.479, −0.016, +0.023, +0.431, +0.353 kg/m³. This preliminary result is superseded by the joint fit: the selected Held document has $k=-0.08848725$ and $b=-6.268895$ K ([explicit endpoint](../results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json)). Stage-2b covariance is a conditional local linearization, not measurement-propagated uncertainty for the selected endpoint.
+
+
+# Values
+
+### Density-weighted comparison (A6 first screen)
+
+**Neither evaluated amendment-4 control nor the paper record meets the loaded-density gate.** Weighting density moved the MEAH⁺ size off its bound and brought the free-column conditioning under its limit. At the unfinished endpoint the common-row cost rose 0.1 % while the Vinjarapu heat error rose from 1.52 to 1.79 kJ/mol.
+
+Run 18 October 2026 on Engine `main-21e761c3`. Records:
+[smaller-d_V densities](../results/joint-recalibration-170/amendment-6/smaller-dV-density/README.md),
+[density-weighted screen](../results/joint-recalibration-170/amendment-6/density-sweep/README.md).
+
+**Density at λ = 0.** The original #183 gate required each of the 20 loaded 30 wt % rows (loading up to 0.4) within 2 kg/m³. On its 12 fitted rows:
+- Both A4 controls miss by −24.3 to −108.2 kg/m³. The two dielectric branches differ by at most 0.009 kg/m³.
+- The paper record F1 without translation misses by +136 to +190 kg/m³ at its four retained states.
+- With the empirical translation, the paper record still has 15 of the 20 gate rows outside ±2 kg/m³ (−3.68 to +3.85).
+- Before amendment 6, no joint-refit fit had weighted density: every earlier retained `fit_case` has `density_weight = 0`.
+
+**First screen: larger d_V, start A, λ = 0.01.** Here λ/12 is the weight of each density row, at scale 2 kg/m³. The fit stopped at the 100-iteration limit, so the runner refused the λ = 0.1 and λ = 1 fits. At that unconverged endpoint:
+
+| | λ = 0 (A4 control) | λ = 0.01 (iteration 100) |
+|---|---:|---:|
+| C149 | 24.561 | 24.585 |
+| Pressure / species AARD, % | 12.76 / 7.17 | 12.36 / 7.12 |
+| Vinjarapu RMSE, kJ/mol | 1.52 | 1.79 |
+| 12 loaded-density errors, kg/m³ | −24 to −108 | −2.9 to −24.4 |
+| MEAH⁺ / carbamate segment diameter, Å | 5.8 / 5.8 | 4.47 / 5.8 |
+| Free-column condition (limit 1e4) | 37,393 | 3,768 |
+| Projected gradient (limit 1e-8) | 0.00812 | 0.00513 |
+
+- **Where the cost moved:** the non-density reacting cost rose 2.65 %, mostly from the corrected Jakobsen ratios (+0.86) and the Vinjarapu heats (+0.47). Pressures (−0.27) and the Matin species (−0.17) improved.
+- **What stayed on bounds:** the carbamate size and both Born diameters, plus three other coordinates.
+- **Shape of the remaining errors:** they grow with loading, from about −3 kg/m³ at 0.1 to about −24 kg/m³ at 0.4.
+- **Checks:** the start release tests pass at λ = 0.01, 0.1 and 1 (augmented condition up to 4,887). The endpoint cold replay agrees on all 217 rows to 1.8e-12.
+
+**Meaning.** The loaded densities add information the λ = 0 fits lacked. A small weight moves the MEAH⁺ size off its bound, cuts the loaded-density errors 4.4–8.6× row by row (mean absolute error 5.3× smaller), and brings the free-column condition under 1e4. The common-row cost rises only 0.1 % because improved pressure and species offset a worse Vinjarapu heat. The carbamate size held at 5.8 Å is one untested possible contributor to the remaining loading trend. This is numerical evidence from one unconverged fit, not a candidate or physical validation. Whether a converged fit, or a larger λ, can meet 2 kg/m³ is untested.
+
+### Density weights and the second source (A6 step 1b)
+
+**Weighting the loaded densities cuts the loaded-density error by one to two orders of magnitude, but no endpoint passes the existing density gate.** The aggregate calibration cost changes little, while the Vinjarapu heat error rises 22–24 %. Run 19 October 2026, under the owner's authorization of that date. Record: [step 1b](../results/joint-recalibration-170/amendment-6/density-sweep-1b/README.md).
+
+| Endpoint (converged) | C149 | Pressure / species AARD, % | Vinjarapu RMSE, kJ/mol | Amundsen loaded density errors, kg/m³ | Hartono 32 density errors, kg/m³ |
+|---|---:|---|---:|---|---|
+| λ = 0 (A4) | 24.561 | 12.76 / 7.17 | 1.52 | −108 to −24 (12 fitted rows) | — |
+| λ = 0.1, Amundsen targets | 23.472 | 11.82 / 7.05 | 1.88 | −7.3 to +2.5 (9 of 20 within 2) | −0.6 to +5.1 |
+| λ = 1, Amundsen targets | 24.726 | 12.44 / 7.10 | 1.88 | −4.5 to +2.9 (7 of 20) | +0.6 to +6.3 |
+| λ = 1, Hartono targets | 24.678 | 12.40 / 7.10 | 1.86 | −10.1 to +1.0 (10 of 20) | −3.4 to +2.1 |
+
+- **The two sources disagree at high loading.** Amundsen lies 0.4–1.6 kg/m³ above Hartono at loadings 0.1–0.3 and 8.5–9.1 kg/m³ above at 0.4. Hartono reports ±0.02 kg/m³ in density and ±0.01 in loading.
+- **These fits follow the source they are given.** Fitted to Hartono, the model is within about ±1 kg/m³ (−1.00 to +1.03) of Amundsen at loadings 0.1–0.2 and below Amundsen at 0.3–0.4. Fitted to Amundsen, it lies above Hartono.
+- **Source disagreement does not explain every remaining error.** At 50 °C and loading 0.2, the Amundsen-targeted fit misses by +2.9 kg/m³ where the sources differ by 0.7.
+- **The CO₂-free 25 °C row stays at about −1.0 kg/m³** against a 0.5 kg/m³ limit. Unloaded heat capacity is nearly unchanged; loaded heat capacity shifts (+1.55 to +2.20 % at 318 K, loading 0.358, at λ = 0.1).
+- **Linear screens of model-form changes,** retained in the record, give at best about 2.03 kg/m³ maximum Amundsen error at no more than a 5 % C149 increase. That is a linear prediction only.
+
+The Hartono rows are a diagnostic transcription, not adopted data. None of these endpoints is a candidate.
+
+### Joint density fit and phase assessment (A6 revision 3)
+
+**The selected vector met the fitted-density limits but showed resolved phase descents at 12 of 73 states, so it was not adopted.** The selected Held larger-dielectric-volume start-A endpoint has cost **148.2377** and reproduces **47/47 fitted loaded densities within $2s$**, with maximum absolute error **1.98$s$**. Its five CO₂-free densities pass the owner's revised **$2u=1.0$ kg/m³** gate. The same vector has **0 passed / 61 unresolved / 12 failed** phase-family points; retained split-seeded calculations confirm lower-Gibbs two-liquid states at 333.15 K and loadings 0.4 and 0.5. Density agreement therefore does not qualify this vector for adoption. These are calibration results and numerical verification of model predictions, without physical validation of phase separation. Sources: [joint-fit scores](../results/joint-recalibration-170/amendment-6/joint-mea-water/summary.json), [selected assessment](../results/joint-recalibration-170/amendment-6/selected-assessment/summary.json), [phase-family counts](../results/joint-recalibration-170/amendment-6/selected-checks/phase-family/summary.json) and [phase diagnosis](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/report.md).
+
+#### Candidate comparison and selected endpoint
+
+The [initial tied/Held pair](../results/joint-recalibration-170/amendment-6/candidates/README.md), scored in [candidates/summary.json](../results/joint-recalibration-170/amendment-6/candidates/summary.json), gives costs 56.6003/56.6632 and only 47/52 loaded rows within $2s$; both miss all five Amundsen loading-0.4 rows. With those rows removed but MEA–water still fixed, the [47-row refits](../results/joint-recalibration-170/amendment-6/without-amundsen-0p4/summary.json) give costs 56.2077/56.2441 and 46/47 within $2s$: both still miss Amundsen at 80 °C, loading 0.3. Costs from these objectives cannot be compared directly with the following joint costs, which also include the 50 Cai rows.
+
+| Joint fit | Cost | Loaded densities within $2s$ | Largest $\lvert e\rvert/s$ | CO₂-free rows within 1.0 kg/m³ | Cai cost |
+|---|---:|---:|---:|---:|---:|
+| Tied, larger branch, A | 148.2505 | 47/47 | 1.977 | 5/5 | 91.8277 |
+| **Held, larger branch, A: selected** | **148.2377** | **47/47** | **1.976** | **5/5** | **91.8115** |
+| Held, larger branch, B | 148.5323 | 46/47 | 2.112 | 5/5 | 91.8876 |
+| Held, smaller branch, A | 148.5639 | 46/47 | 2.119 | 5/5 | 91.8890 |
+
+Sources: [joint-mea-water/summary.json](../results/joint-recalibration-170/amendment-6/joint-mea-water/summary.json) and [held-followups/summary.json](../results/joint-recalibration-170/amendment-6/held-followups/summary.json). The tied form uses Debye–Hückel diameter $0.88\sigma$; Held uses $\sigma$. Held larger-A is the lower-cost joint endpoint, consistent with the recorded preference for Held within 1%. Its common-149 cost is **24.9231** (ceiling 35.26), pressure/species average absolute relative deviations (AARD) are **12.47/7.15 %** (ceilings 15.81/9.89 %), and Vinjarapu root mean square error (RMSE) is **1.82 kJ/mol CO₂** (ceiling 3.13). Cai cost is **91.81 ≤ 95.90**. These are fitted-data comparisons.
+
+Selected CO₂-free errors at **25/40/50/70/80 °C** are **−0.571, −0.082, −0.026, +0.413, +0.351 kg/m³**. The 25 °C row still misses the former 0.5 kg/m³ gate. A [local linear trade-off calculation](../results/joint-recalibration-170/amendment-6/joint-mea-water/tradeoff.json) predicts that forcing it to −0.5 kg/m³ raises Held cost by 0.3311 and the largest loaded error to 2.0057$s$. This is a linearized prediction, not a re-solved constrained fit; the owner's revised gate supplies the reported pass.
+
+![The 47 fitted loaded-density errors of the selected Held larger-A endpoint, divided by their adopted propagated scales. Shading and dashed limits denote ±2s. Points are predictions at the measured states, without interpolation. The Amundsen 80 °C, loading-0.3 point is only 0.024s inside the lower limit.](../results/joint-recalibration-170/amendment-6/notebook-figures/loaded-density-errors.png){#fig-amendment6-revision3-density}
+
+The figure is generated solely from [density.csv](../results/joint-recalibration-170/amendment-6/selected-assessment/density.csv), using cohort row identities from [summary.json](../results/joint-recalibration-170/amendment-6/selected-assessment/summary.json). The disclosed [rendering script](../results/joint-recalibration-170/amendment-6/notebook-figures/loaded-density-errors.py) verifies both input SHA-256 hashes and the selected parameter identity, selects exactly 15 + 32 rows and makes no Engine calls. The scales describe the adopted observation uncertainty treatment, not parameter confidence bands. Excluded source-conflict and assessment-only rows are not plotted.
+
+**Bounds and stopping condition.** Six selected coordinates remain at bounds: carbamate–MEAH⁺ $k_{ij}=-1.0$; carbamate segment diameter **5.8 Å**; MEAH⁺ and carbamate Born diameters **5.0 Å each**; R5 **unshifted** $a_k=2400$ K; and R5 enthalpy shift **+10 kJ/mol**. Bicarbonate–water $k_{ij}=0.6531773314$ is **interior**, unlike the earlier candidates' +1.0 bound. The [native fit](../results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/native.json), [explicit endpoint](../results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json) and [chemistry coordinates](../results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/chemistry-coordinates.json) distinguish the unshifted R5 coefficient from its serialized, enthalpy-adjusted value. The fit stops by relative function tolerance $10^{-6}$ at iteration 17; projected gradient 0.01334 exceeds the declared $10^{-8}$ gradient tolerance. Convergence by function tolerance and bound-active point estimates do not establish a unique optimum or uniquely identified ion properties.
+
+**Starts and loading-basis sensitivity.** The frozen B start originally gives an Engine pre-solve refusal, `NOT_RUN: rank-deficient declared equations`, on 25 pressure rows. The [retained diagnosis](../results/joint-recalibration-170/amendment-6/held-followups/diagnosis/README.md) traces this to the parameter-dependent declared-equation rank check at the Engine's generic point; it does not establish the Engine-internal cause of the rank loss. The owner authorized carbamate–MEAH⁺ $k_{ij}=-0.99$ at B's start, with the optimizer free to return to −1.0. The resulting B and smaller-branch A fits both miss Amundsen at **80 °C, $\alpha=0.3$**, by **2.11–2.12$s$**. The Hartono $x_3$ loading-basis sensitivity, starting from the selected endpoint with the frozen printed-loading density scales, gives cost **148.3398** but only **13/15 Amundsen rows within $2s$** ([declaration](../results/joint-recalibration-170/amendment-6/held-followups/held-x3/fit-spec.json), [retained values](../results/joint-recalibration-170/amendment-6/held-followups/held-x3/fit/native.json)). It is sensitivity evidence, not a replacement selection. The other reading of the same Hartono record, printed loading with a solvent near 30.5–30.9 mass % MEA rather than nominal 30 %, is estimated at **+0.9 to +2.3 kg/m³** and is kept separate from $s$ ([source README](https://github.com/tannerpolley/Amine-Thermodynamics/blob/4822946494a9c48f2fcbb02f9b3f9627077c1fe5/data/reference/MEA/observations/density_viscosity/README.md), "Adopted fitting basis"); neither reading is resolved by the source.
+
+#### Selected-vector assessment beyond the fitted rows
+
+All cohorts below use the same explicit Held document. The [assessment README](../results/joint-recalibration-170/amendment-6/selected-assessment/README.md) records methods and limitations; [summary.json](../results/joint-recalibration-170/amendment-6/selected-assessment/summary.json) retains full-precision cohort reductions. Counts describe available/requested rows; subset rows overlap their source totals.
+
+| Density cohort | Rows | Bias, kg/m³ | RMSE, kg/m³ | Role or limit |
+|---|---:|---:|---:|---|
+| Amundsen, all / loaded / unloaded | 103/103; 68/68; 35/35 | −2.799; −3.522; −1.394 | 4.958; 5.855; 2.399 | Broad source assessment |
+| Amundsen, fitted loaded | 15/15 | −0.739 | 2.100 | 15/15 within $2s$ |
+| Amundsen, excluded loading-0.4 | 5/5 | −8.582 | 8.646 | Outside objective and gate |
+| Amundsen, CO₂-free gate | 5/5 | +0.017 | 0.354 | 5/5 within 1.0 kg/m³ |
+| Hartono, all loaded | 40/40 | +1.791 | 3.533 | No unloaded Hartono rows in this assessment |
+| Hartono, fitted loaded | 32/32 | +0.469 | 1.688 | 32/32 within $2s$ |
+| Hartono, loading 0.50 | 8/8 | +7.080 | 7.143 | Assessment only |
+| Han, all / loaded / unloaded | 67/67; 50/50; 17/17 | +0.133; +0.105; +0.212 | 7.549; 8.725; 0.824 | Assessment only |
+
+All **210 density rows** are available ([row values and source uncertainties](../results/joint-recalibration-170/amendment-6/selected-assessment/density.csv)). The five excluded Amundsen errors range from **−10.324 to −7.712 kg/m³**; Hartono at loading 0.50 ranges from **+4.998 to +7.991 kg/m³**. For Han, 6/50 loaded and 9/17 unloaded errors fall within the stated combined density uncertainties; 12/50 and 13/17 fall within the stated expanded uncertainties. These source-uncertainty counts are not adoption gates. Adopted propagated scales are not available for every assessment row, so a universal $2s$ pass fraction is not reported.
+
+At **7 mol MEA/kg water and 101325 Pa**, the Hilliard heat-capacity comparisons are below. Cp is reported in **kJ kg⁻¹ K⁻¹, with mass based on the complete loaded analytical feed**; loadings are 0 and 0.358. The final conversion uses molar masses in the explicit parameter document ([Cp values](../results/joint-recalibration-170/amendment-6/selected-assessment/cp.csv), [mass-basis and numerical checks](../results/joint-recalibration-170/amendment-6/selected-assessment/cp-summary.json)).
+
+| Temperature, K | Loading | Observed Cp | Equilibrium Cp | Frozen-composition Cp | Error, % |
+|---|---:|---:|---:|---:|---:|
+| 318.15 | 0 | 3.7195 | <span title="exact 3.90691">3.907</span> | <span title="exact 3.90689">3.907</span> | +5.04 |
+| 318.15 | 0.358 | 3.3675 | <span title="exact 3.45421">3.454</span> | <span title="exact 3.43303">3.433</span> | +2.57 |
+| 353.15 | 0 | 3.8566 | <span title="exact 3.88563">3.886</span> | <span title="exact 3.88553">3.886</span> | +0.75 |
+| 353.15 | 0.358 | 3.4707 | <span title="exact 3.41674">3.417</span> | <span title="exact 3.38674">3.387</span> | −1.55 |
+
+All six evaluations, including the two smaller-carbon-proxy evaluations, pass re-solved enthalpy-difference checks at 0.1/0.05 K. Zero-loading proxy comparisons differ by $2.25\times10^{-7}$ and $2.61\times10^{-7}$ relative. Three of four states lie within 3% of measured Cp; the 318.15 K unloaded state does not. Cp adequacy remains report-only.
+
+| Integral addition heat cohort | Rows | Bias, kJ/mol CO₂ | RMSE, kJ/mol CO₂ | AARD, % | Assessment |
+|---|---:|---:|---:|---:|---|
+| Vinjarapu | 8/8 | +0.337 | 1.822 | 1.92 | Fitted; RMSE ≤3.13 |
+| Arcis, combined | 14/14 | +7.113 | 8.050 | 7.67 | Previously accessed, outside objective; RMSE ≤9.36 |
+| Arcis, 510000 Pa | 8/8 | +10.141 | 10.259 | 10.77 | Pressure subset, report only |
+| Arcis, 1030000 Pa | 6/6 | +3.076 | 3.300 | 3.52 | Pressure subset, report only |
+
+The heat reference is zero loading; negative addition enthalpy denotes heat release. The Arcis ceiling applies to the **combined** 14-row RMSE, not to each pressure subset. Values and conditions are retained in [heats.csv](../results/joint-recalibration-170/amendment-6/selected-assessment/heats.csv) and [heat-summary.json](../results/joint-recalibration-170/amendment-6/selected-assessment/heat-summary.json).
+
+| Pressure or pooled-species cohort | Available rows | AARD, % | Mean signed relative error, % |
+|---|---:|---:|---:|
+| Canonical pressure | 159 | 20.86 | −8.30 |
+| Packet pressure | 79 | 15.79 | +3.80 |
+| Canonical pressure, 100–120 °C | 54 | 24.51 | −5.90 |
+| Packet pressure, 100–120 °C | 20 | 25.37 | +11.77 |
+| Concentration transfer, combined | 70 | 168.71 | +97.06 |
+| Transfer, 15 mass % | 33 | 281.87 | +281.87 |
+| Transfer, 45 mass % | 37 | 67.79 | −67.77 |
+| Wagner pressure, combined | 23 | 20.10 | −20.10 |
+| Wagner, near 353.15 K | 11 | 25.48 | −25.48 |
+| Wagner, near 392.15 K | 12 | 15.18 | −15.18 |
+| Matin bicarbonate + carbonate pools | 19 | 66.79 | −66.79 |
+
+All **375 admitted states** were available: 123 packet states (including 79 pressure targets), 159 canonical, 70 transfer and 23 Wagner. Canonical/packet overlap is not independent replication. The 54 canonical high-temperature rows comprise 18 nominal-100 °C and 36 nominal-120 °C rows.
+
+| Canonical source | Temperature (°C) | Rows | Pressure AARD (%) |
+| --- | --- | --- | --- |
+| Jou | 100 | 10 | 18.18 |
+| Jou | 120 | 10 | 32.56 |
+| Mamun | 120 | 19 | 23.14 |
+| Xu | 100 | 8 | 26.50 |
+| Xu | 120 | 7 | 23.51 |
+
+The separate 20-row packet cohort is ten plus ten Jou-labelled rows with the same Jou reductions. Three canonical rows above 393.15 K (`vle_obs_0286`–`0288`) are explicitly inadmissible and excluded, rather than unavailable. [state-targets.csv](../results/joint-recalibration-170/amendment-6/selected-assessment/state-targets.csv) and [state-summary.json](../results/joint-recalibration-170/amendment-6/selected-assessment/state-summary.json) retain exact identities, measured temperatures, signed errors and overlapping memberships. Matin pool cost is **33.5122**; the pool is outside F1 fitting.
+
+All **ten Jakobsen carbonate-share states** are available from liquid-only calculations at 101325 Pa, solvent MEA mass fraction 0.2714274817 and each printed `loadNMR`. The carbon share is $n(\mathrm{CO_3^{2-}})/[n(\mathrm{CO_2})+n(\mathrm{MEACOO^-})+n(\mathrm{HCO_3^-})+n(\mathrm{CO_3^{2-}})]$. Calculated/observed share ranges **0.00634–0.35031** over all ten and **0.01455–0.35031** over the historical nine. The additional 40 °C/maxload-0.21 state gives **0.00634**. Approximate dilution, mole-for-mole D₂O-as-water, omitted dioxane, inferred `loadNMR` and the unresolved source denominator limit interpretation; one fitted ratio state overlaps this comparison. The earlier bubble-template attempts are superseded by the fixed-pressure rows ([carbonate-share.csv](../results/joint-recalibration-170/amendment-6/selected-assessment/carbonate-share.csv), [carbonate-summary.json](../results/joint-recalibration-170/amendment-6/selected-assessment/carbonate-summary.json)). Concentration transfer, high-temperature pressure, Matin pools and carbonate shares therefore remain material limitations despite fitted-density agreement.
+
+#### Gas-root and phase-family evidence
+
+The [gas-root scratch probe](../results/joint-recalibration-170/amendment-6/selected-checks/gas-root/run/gas-root.json) **passes** at **318.15 K, 3699.0804 Pa, $\alpha=0.25557798$**. Both native root requests return the same sole ionic root, denser than the newly solved liquid; no separate stable ionic gas root is found, and physical-solve and dilution checks complete. This is the bounded numerical probe authorized in [owner comment 6278338236](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6278338236), not evidence of global phase stability.
+
+The phase family uses **73 unchanged design states**, a feed of **9.7292821 mol MEA + 76.9751925 mol water + $\alpha\times9.7292821$ mol CO₂**, nine-species liquid and neutral CO₂/MEA/water vapor supports, and row tolerance $10^{-10}$. The [same-driver comparison](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/family-comparison.csv) and [diagnosis](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/report.md) separate accepted equilibrium solutions from stability qualification:
+
+| Parameter record | Passed | Unresolved | Failed | Points with resolved descent | Accepted final solves |
+|---|---:|---:|---:|---:|---:|
+| Selected Held | 0 | 61 | 12 | 12 | 73 |
+| Tied joint | 0 | 59 | 14 | 14 | 73 |
+| A4 larger-branch control | 0 | 73 | 0 | 0 | 73 |
+| Paper declaration successor `7b0b4bb5` | 0 | 9 | 64 | 48 | 57 |
+
+The exact older paper document `66ff7715` has 73 input-construction failures because the CO₂–MEA cross-association declaration is missing; those failures establish no phase behavior. Its existing declaration-only successor `7b0b4bb5` has **48 resolved-descent points plus 16 without an accepted final solve**, accounting for its 64 failures. Historical #172 successful-solve counts use a different wheel and solve-based rule and are not interchangeable with these stability-qualified counts.
+
+For selected Held, all **29 resolved descending trials** admit conserved finite dense-liquid splits whose Gibbs decreases exceed their estimated numerical errors; the weakest decrease exceeds its estimate by more than $1.3\times10^5$ ([descending trials](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/descending-trials.csv)). Split-seeded equilibrium calculations give:
+
+| Temperature, K | Loading | Pressure, Pa | New phase state | $\Delta G/(RT)$ versus original, for the stated feed | Largest classified row residual |
+|---|---:|---:|---|---:|---:|
+| 333.15 | 0.4 | 21787.8 | Two liquids | **−2.1105** | $1.64\times10^{-14}$ |
+| 333.15 | 0.5 | 38286.8 | Two liquids | **−3.2496** | $3.90\times10^{-14}$ |
+| 313.15 | 0.1 | 4737.14 | Two liquids + vapor | −0.01888 | $5.03\times10^{-15}$ |
+
+Sources: [split-seeded-63.json](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-63.json), [split-seeded-70.json](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-70.json) and [split-seeded-21.json](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/split-seeded-21.json). Points 63/70 compare with single liquid; point 21 compares with its original liquid–vapor state. The two-liquid changes correspond to **−5846 and −9001 J for the stated finite feed**, respectively; $\Delta G/(RT)$ is not a molar Gibbs-energy difference. These are admissible lower-Gibbs model states, not certified global minima: the new states still retain failed or indeterminate trial searches.
+
+Zero passes also reflects a separate numerical limitation. Every selected-family point has a failed nominal-liquid, near-pure-CO₂ trial optimizer that approaches a vapor-like trace-ion state. Other tiny negative tangent-plane distances are smaller than their estimated numerical errors. The A4 control has **no resolved descent** but remains unresolved at all 73 points; its zero-pass count does not imply the selected model's dense-liquid instability. The [diagnosis report](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/report.md) also records that no tested single parameter change removes all selected-model descents and no tested declared numerical setting earns a pass. Neither the gas-root pass nor the unresolved-trial diagnosis removes the demonstrated lower-Gibbs splits. No measured liquid–liquid separation was assessed.
+
+# Limits and evidence type
+
+This is historical calibration and numerical phase assessment. The finite phase family is not a global stability certificate; source scales and loading assumptions retain their stated limits. No amendment-6 endpoint was adopted here.
+
+# Records
+
+The linked assessment CSVs, phase-family records and immutable endpoint identify each comparison. See [A7 adoption](../joint-recalibration/index.qmd) for the later decision.
+
+## Evidence identity, uncertainty and decision limit
+
+The selected [parameter document](../results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json) has SHA-256 **`ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7`**. Its runtime mapping has SHA-256 `3018fe9aaeddab6271299d22166fa5ddce2449625a3833ec6f417d188678894d`; the phase-family summary names that mapping identity. All results above use the merged Engine commit **`21e761c318c2ac5b555a245365c844d38a93e4cb`**, wheel SHA-256 **`d2f61e3a5961b859151fbe0487f4ab633405b11620d9dd64682656a68a110357`** ([assessment provenance](../results/joint-recalibration-170/amendment-6/selected-assessment/provenance.json), [input hashes](../results/joint-recalibration-170/amendment-6/selected-assessment/input-hashes.json), [phase identities](../results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/provenance.json)).
+
+The [selected numerical checks](../results/joint-recalibration-170/amendment-6/selected-assessment/verification.json) reproduce the 47 fitted loaded plus five CO₂-free densities within **$1.82\times10^{-12}$ kg/m³**, heat values within **$2.97\times10^{-8}$ J/mol**, and the four mass-converted Cp values within **$10^{-10}$ kJ kg⁻¹ K⁻¹** of the native fit. Across 375 states, maximum stationarity, material and charge residuals are **$7.11\times10^{-13}$**, **$7.13\times10^{-13}$ mol** and **$2.27\times10^{-13}$ mol**. These finite-state replay and balance checks support numerical verification; they do not establish global stability.
+
+The source-uncertainty scales and deterministic point estimates do not propagate parameter, source-correlation or model-form uncertainty. Bound activity, start dependence, loading-basis sensitivity and remaining source disagreements limit parameter interpretation. Non-fitted rows are conditional predictions; previously accessed rows and overlapping cohorts do not establish untouched predictive validation. The selected assessment did not perform a paired with/without-heat comparison or independently bind the complete historical #189 pure-water qualification inputs. No new pure-water sweep is inferred from this result.
+
+**Decision.** The selected Held endpoint passes the revised fitted-property gates, while the phase-family evidence prevents adoption. The unresolved trial searches and the model's resolved dense-liquid splits are distinct remaining questions.
+
+
+## Execution record
+
+The retained [program ledger](../results/joint-recalibration-170/amendment-4/compute-ledger.json) charges **16,190 / 21,600 s** compute wall time and **127,560.61 / 200,000 CPU-s**, leaving 5,410 s and 72,439.39 CPU-s. The historical [follow-up accounting](../results/joint-recalibration-170/amendment-6/held-followups/uncharged-compute.json) is now included once in that ledger (1,559 s / 7,317 CPU-s rounded charge); its “not yet charged” note describes the earlier handoff, not an additional pending charge. Campaign executable gross additions are **1,321 / 1,325**, under [the owner's code-ceiling decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6278338236). Notebook and figure preparation uses retained values only.
