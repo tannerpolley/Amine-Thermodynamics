@@ -447,7 +447,7 @@ def diagnose(model, request, row, out):
         return problem,liquid,None
     problem.phases = [eq.Phase('L',kind='liquid',support=s.COMPONENT_IDS,composition_guess=liquid.phase_mole_fractions(0),packing_guess=liquid.packing_fractions[0]),
         eq.Phase('V',kind='vapor',support=s.COMPONENT_IDS[:3],amount=eq.Pinned(0.))]
-    problem.P = eq.Free(row['pressure_Pa'])
+    problem.P = eq.Free(row['bubble_start']['bubble']['pressure'] if row.get('bubble_start') else row['pressure_Pa'])
     bubble = eq.solve_equilibrium(model,problem)
     row['bubble'] = phase_payload(model,problem,bubble)
     if bubble.success:
@@ -493,7 +493,7 @@ def family_job(mapping, request, row, retained, out):
 
 
 
-def phase_family(mapping, request, points_path, points_sha256, output_dir, indices=None, deadline=None):
+def phase_family(mapping, request, points_path, points_sha256, output_dir, indices=None, deadline=None, continue_bubble=False):
     points = campaign.checked(points_path,points_sha256)
     inputs = [list(map(float,line.split())) for line in points.read_text().splitlines()]
     indices = list(range(len(inputs))) if indices is None else list(indices)
@@ -507,6 +507,8 @@ def phase_family(mapping, request, points_path, points_sha256, output_dir, indic
         loading,T,P = inputs[index]
         path = output/f'point-{index}.json'
         row = dict(index=index,loading=loading,temperature_K=T,pressure_Pa=P,attempts=[])
+        neighbours = [r for r in retained if r['temperature_K']==T and r.get('bubble',{}).get('success')] if continue_bubble else []
+        row['bubble_start'] = {k:v for k,v in min(neighbours, key=lambda r:abs(r['loading']-loading)+abs(math.log(r['pressure_Pa']/P))).items() if k in ('index','bubble')} if neighbours else None
         s.write_json(path,row)
         def child():
             try:

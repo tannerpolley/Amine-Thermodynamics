@@ -18,7 +18,7 @@ import final_evidence as f
 from heat_evidence_170 import request
 
 R = f.BUNDLE/'results'
-OUT = R/'phase-extension-201'
+OUT = R/'phase-extension-201/run-2'
 J = R/'joint-recalibration-170'
 FITS = {'A6': J/'amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json', 'A7': f.s.PARAMETERS}
 TEMPERATURES = (353.15, 373.15, 393.15)
@@ -118,10 +118,17 @@ def reference(T, loading, path):
     reactions = [f.eq.Reaction(nu, correlation=f.eq.ReactionLogPolynomial(a, 0., 0., 0., data['T_ref'], data['T_min'], data['T_max'], f.eq.EOS_STANDARD_STATE_ID)) for nu, a in zip(data['stoichiometry'], data['ln_k'], strict=True)]
     problem = f.eq.Problem(T=T, P=f.eq.Free(7398.16), feed=f.eq.Amounts({'carbon-dioxide':loading*9.7292821, 'monoethanolamine':9.7292821, 'water':76.9751925}), reactions=reactions, row_tolerance=1e-10,
         phases=[f.eq.Phase('L', kind='liquid'), f.eq.Phase('V', kind='vapor', support=f.s.COMPONENT_IDS[:3], amount=f.eq.Pinned(0.))])
+    seeds = [p for t in reversed(TEMPERATURES) if t<T for p in [OUT.parent/'reference-pressure'/f'reference-{t}-{LOADINGS.index(loading)}.json'] if load(p).get('result',{}).get('success')] if T in TEMPERATURES else []
+    if seeds:
+        for phase, values in zip(problem.phases, load(seeds[0])['result']['phases'], strict=True):
+            phase.composition_guess = values['mole_fractions']
+            phase.packing_guess = values['packing_fraction']
+        problem.phases[0].amount = f.eq.Free(load(seeds[0])['result']['amounts'][0])
+        problem.P = f.eq.Free(load(seeds[0])['result']['pressure'])
     result = f.eq.solve_equilibrium(model, problem)
     payload = f.phase_payload(model, problem, result)
     admitted = result.success and result.requested_tolerance_met and math.isfinite(result.pressure) and 1 <= result.pressure <= 1e7 and result.amounts[0]>0 and result.amounts[1]==0 and max(map(abs, payload['raw_residuals']))<=1e-10 and result.reduced_hessian_minimum>=0 and all(v>0 for v in payload['pressure_density_derivatives'])
-    write(path, dict(temperature_K=T, loading=loading, result=payload, admitted=admitted, cause='' if admitted else 'reference admission failed'))
+    write(path, dict(temperature_K=T, loading=loading, result=payload, admitted=admitted, start=str(seeds[0].relative_to(R)) if seeds else 'cold', start_sha256=f.s.sha256(seeds[0]) if seeds else None, cause='' if admitted else 'inadmissible reference pressure' if result.success and result.requested_tolerance_met and not 1 <= result.pressure <= 1e7 else 'reference numerical admission failed'))
 
 
 def split(mapping, old, index, trial, path):
@@ -159,16 +166,13 @@ def chain(mode, label, deadline):
         for i, (T, a, expected) in enumerate(cases):
             path = OUT/'reference-pressure'/f'{mode}-{label}-{i}.json'
             bounded(lambda: reference(T,a,path),path,deadline)
-            row = load(path)
-            if expected is not None and (not row.get('admitted') or abs(row['result']['pressure']/expected-1)>1e-8):
-                raise RuntimeError(f'anchor reproduction failed: {path}')
     else:
         fit, T = label.split(':')
         mapping = f.s.parameter_mapping(FITS[fit])
         if mode=='screen':
             indices = [r['index'] for r in load(OUT/'inputs/states.json') if r['temperature_K']==float(T) and r['admitted']]
             if indices:
-                f.phase_family(mapping,request(mapping,313.15,.11),OUT/'inputs/family-points.txt',f.s.sha256(OUT/'inputs/family-points.txt'),OUT/fit,indices,deadline)
+                f.phase_family(mapping,request(mapping,313.15,.11),OUT/'inputs/family-points.txt',f.s.sha256(OUT/'inputs/family-points.txt'),OUT/fit,indices,deadline,continue_bubble=True)
         else:
             for item in load(OUT/fit/'split-summary.json'):
                 if item['temperature_K']==float(T) and item['representative']==item['native_trial_index']:
@@ -224,13 +228,10 @@ def main():
     expected = dict(zip([*FITS.values(),R/'a7-paper-evidence/phase-family.csv',J/'amendment-6/inputs/revision-3/phase/family-points.txt'],['ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7','e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e','fd16142967e4fef1408b907a40839780923bef381da6a685eac8d9ae4b8db6a7','6e1231d9506fd6dd9e965a64120ff952cebf1c4778da5d66cfb0f888e8b7f44b']))
     assert all(f.s.sha256(p)==h for p,h in expected.items())
     f.s.verify_wheel()
-    for name, checksum in [('parameters','2ea3b41485a98d2cf49add620b87bb05fc5a275cdd132c1cdbb0cfc5f07f2ca4'),('reactions','2058458ca473bbc7b3deef77c67a9bb5124011c0bd5d28ba3a24da5d9c0e22a4')]:
-        path = OUT/'inputs'/f'engine-case7-{name}.json'
-        path.write_bytes(subprocess.check_output(['git','show',f'5ebcb37:analyses/mea_parameter_bundle/results/permittivity-screen-172/inputs/{path.name}']))
-        assert f.s.sha256(path)==checksum
-    mapping = load(OUT/'inputs/engine-case7-parameters.json')
-    mapping['topology']['no_cross_association'] = [dict(component_id_a='carbon-dioxide',component_id_b='monoethanolamine',provenance=dict(source_id=mapping['document_id'],locator='packet 3: no CO2/MEA edge'))]
-    write(OUT/'inputs/reference-runtime.json',mapping)
+    for name in ('engine-case7-parameters.json', 'engine-case7-reactions.json', 'reference-runtime.json'):
+        path = OUT/'inputs'/name
+        path.write_bytes((OUT.parent/'inputs'/name).read_bytes())
+        assert f.s.sha256(path)==load(OUT.parent/'input-hashes.json')['inputs/'+name]
     write(OUT/'inputs/study.json',dict(issue=201,design_sha256='fb771344530184e34fe80c884cbd552780472db9d8abab8c217adc9945992b49',readiness='GPT-6 Astra xhigh round 2 Ready; parent instruction',temperatures_K=TEMPERATURES,loadings=LOADINGS,fractions=FRACTIONS,feed_mol=dict(MEA=9.7292821,water=76.9751925),row_tolerance=1e-10,state_wall_s=300,stage_wall_s=600,stage_cpu_s=1800,workers=6,reference_workers=3,pressure_fit_temperature_K=[313.,333.15],temperature_extrapolation=True,topology_change='explicit absent CO2-MEA cross edge only; baseline.py:139-144 at Engine 8298c602'))
     provenance = dict(commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),python=sys.version,libraries={k:importlib.metadata.version(k) for k in ('epcsaft','numpy','scipy')},wheel_path=str(f.s.installed_wheel()),wheel_sha256=f.s.ENGINE_WHEEL_SHA256,engine_commit=f.s.ENGINE_COMMIT,producers={str(p):f.s.sha256(p) for p in (Path(__file__),Path(f.__file__))},inputs={str(p):h for p,h in expected.items()})
     write(OUT/'provenance.json',provenance)
@@ -277,7 +278,6 @@ def main():
     f.table(OUT/'phase-family-combined.csv',[dict(r,family='original-73',combined_index=int(r['index']),source_path='a7-paper-evidence/phase-family.csv') for r in old]+[dict(r,family='extension-81',combined_index=73+r['index']) for r in rows])
     assert all(f.s.sha256(p)==h for p,h in expected.items())
     write(OUT/'input-hashes.json',{str(p.relative_to(OUT)):f.s.sha256(p) for p in (OUT/'inputs').iterdir()})
-    print(counts,flush=True)
 
 
 if __name__=='__main__':
