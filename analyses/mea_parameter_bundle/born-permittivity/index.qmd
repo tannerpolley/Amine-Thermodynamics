@@ -9,62 +9,81 @@ resources:
   - ../results/historical/permittivity-formulation-comparison.json
 ---
 
-::: {.callout-warning}
-This is a formulation and sensitivity study around a fixed exploratory bundle.
-It does not authorize a new parameter adoption or establish a universal
-permittivity model. The superseding study ran on Engine `d782cc9d` (wheel
-`11634405`) with its own parameter record (`0ea2ab19…`); it is not regenerated
-on the later historical model-D wheel `28181e72`, and Born variants B and C use
-permittivity rules that later Engine did not admit.
-:::
+Historical dielectric-formulation study.
 
 # Question
 
-Which dielectric treatment is consistent with the retained ePC-SAFT
+Which dielectric treatment is consistent with the retained electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT)
 formulation, and can bounded changes to Born diameters, solvent mixing or
 reaction temperature dependence resolve the pressure/speciation mismatch?
 
-# Starting point and strategy
+# Result
+
+On the common comparison, Uyan solvent-only mixing was closer on 53 pressure
+targets and 77 speciation targets; Schick temperature mixing was closer on 12
+pressure and 54 speciation targets.
+
+# Basis and method
+
+[]{#starting-point-and-strategy}
 
 The study kept the molecular parameter packet, state packet and Engine identity
 fixed while comparing the retained ion-specific formulation with derived
 temperature/component mixing and the Uyan solvent-only mixing transferred from
-MDEA to MEA. The later superseding study also screened original Born against
-SSM+DS activation, Figiel and Zuber analog/fallback-ion choices, CO₂ pool
+methyldiethanolamine (MDEA) to monoethanolamine (MEA). The later superseding study also screened original Born against
+solvation-shell and dielectric-saturation (SSM+DS) activation, Figiel and Zuber analog/fallback-ion choices, CO₂ pool
 inclusion, and bounded joint sensitivity directions.
 
 The active mapping is automatic: positive unique ion Born diameters with a
 non-unit neutral solvation factor activate corrected SSM+DS; a zero Born
 diameter inherits the Debye–Hückel diameter and recovers original Born. CO₂
-remains an EOS component even when excluded from the salt-free neutral
+remains an equation-of-state (EOS) component even when excluded from the salt-free neutral
 permittivity pool.
 
-# Numerical result
+# Values
 
-The earlier three-formulation comparison evaluated 120/123 total states. On
-the common comparison, Uyan solvent-only mixing was closer on 53 pressure
-targets and 77 speciation targets; Schick temperature mixing was closer on 12
-pressure and 54 speciation targets. The comparison used a different parameter
-and Engine identity from the current selected record, so those counts are
-formulation evidence rather than current bundle scores.
+[]{#numerical-result}
+
+| Earlier three-formulation comparison | States (count) |
+|:--|--:|
+| Evaluated / requested | 120/123 |
 
 The superseding fixed-bundle study retains the complete pressure/speciation
 comparison, failure characterization, paired common-row statistics, parity
 checks, density-anchor timing and bounded Born/solvation-factor sensitivity.
-Its historical selected mapping was the switch-free selected JSON. The retained
+Its historical selected mapping was the JSON parameter document with automatic Born activation. The retained
 joint direction improved selected rows only within the tested bounded screen;
 it did not demonstrate separate ionic parameter identification.
 
-# Conclusion and limits
+![Joint sensitivity figure](../figures/born_permittivity/output/selected-bundle-joint-sensitivity.svg)
+
+# Limits and evidence type
+
+[]{#conclusion-and-limits}
 
 Solvent-only mass-fraction dielectric mixing was the selected formulation for
 this historical study (`0ea2ab19…`, Engine `d782cc9d`, wheel `11634405`).
-The [adopted A7 overview](../notebook.qmd#working-record) records the later
+The [adopted seventh-amendment (A7) overview](../notebook.qmd#working-record) records the later
 solvent-density-temperature formulation. The evidence supports a formulation decision for this bundle, not a
 claim that Born diameters or dielectric mixing are independently fitted from
 MEA observations. The pressure/speciation trade-off and preserved failures
 must remain visible in any later parameter fit or process-model claim.
 
+This is historical formulation and bounded sensitivity evidence, not independent physical validation.
+
 # Records
 
-[Superseding study summary](../results/born-permittivity-study/study-summary.json) · [Common-row statistics](../results/born-permittivity-study/full-common-row-statistics.csv) · [Reaction-synchronized comparison](../results/born-permittivity-study/current-fast-common-comparison.csv) · [Joint sensitivity figure](../figures/born_permittivity/output/selected-bundle-joint-sensitivity.svg) · [Earlier formulation comparison](../results/historical/permittivity-formulation-comparison.json)
+::: {.callout-warning}
+This is a formulation and sensitivity study around a fixed exploratory bundle.
+It does not authorize a new parameter adoption or establish a universal
+permittivity model. The superseding study ran on Engine `d782cc9d` (wheel
+`11634405`) with its own parameter record (`0ea2ab19…`); it is not regenerated
+on the later historical model-D (corrected-Born formulation) wheel `28181e72`, and Born variants B and C (the alternative permittivity-rule cases) use
+permittivity rules that later Engine did not admit.
+:::
+
+The earlier comparison used a different parameter
+and Engine identity from the current selected record, so those counts are
+formulation evidence rather than current bundle scores.
+
+[Superseding study summary](../results/born-permittivity-study/study-summary.json) · [Common-row statistics](../results/born-permittivity-study/full-common-row-statistics.csv) · [Reaction-synchronized comparison](../results/born-permittivity-study/current-fast-common-comparison.csv) · [Earlier formulation comparison](../results/historical/permittivity-formulation-comparison.json)
