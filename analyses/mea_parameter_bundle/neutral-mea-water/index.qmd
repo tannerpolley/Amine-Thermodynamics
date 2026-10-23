@@ -5,18 +5,23 @@ resources:
   - ../results/selected-current-best-parameters.json
 ---
 
-::: {.callout-warning}
-This is a retained parameter-estimation study. Its internal pressure-level
-holdout is not independent validation of the reactive MEA model.
-:::
+Historical neutral binary-fit study.
 
 # Question
 
-Can a neutral MEA–water binary-VLE fit distinguish the 2B, 3B and 4C
+Can a neutral monoethanolamine (MEA)–water binary vapor–liquid equilibrium (VLE) fit distinguish the two-site (2B), three-site (3B) and four-site (4C)
 association topologies and provide a defensible value of
 $k_{\mathrm{MEA,H_2O}}$ for the later reactive calculations?
 
-# Starting point and strategy
+# Result
+
+The pressure-grouped one-standard-error rule selected 2B; refitting all 25 rows gave **$k_{ij}=−0.07352750$** with scaled root-mean-square error **2.09643**. The grouped mean score was 9.2128 with standard error 1.8449, compared with
+102.7293 for 3B. The 4C run failed its phase, bounds or uncertainty gates
+before a complete score could be assigned.
+
+# Basis and method
+
+[]{#starting-point-and-strategy}
 
 The study started from the source-based pure-component parameters and the
 numerical interaction value $k_{\mathrm{MEA,H_2O}}=-0.052$. Cai et al. (1996),
@@ -27,27 +32,29 @@ no reactive observations entered this fit.
 The three association topologies were compared by leaving one pressure level
 out at a time. Each row used a boiling-temperature residual scaled by 1 K and
 a vapor-water mole-fraction residual scaled by 0.01. The bounded one-coordinate
-iteration used exact Engine sensitivities and at most 12 iterations. The
-pressure-grouped one-standard-error rule selected 2B; the selected topology was
+iteration used exact Engine sensitivities and at most 12 iterations. The selected topology was
 then refit to all 25 rows.
 
-# Numerical result
+# Values
+
+[]{#numerical-result}
 
 ::: {.parameter-table .numeric-table}
-| 2B fit | Fitted $k_{ij}$ | Training scaled RMSE | Held-pressure mean squared scaled residual |
+| 2B fit | Fitted $k_{ij}$ | Training scaled root-mean-square error (RMSE) | Held-pressure mean squared scaled residual |
 |:--|--:|--:|--:|
 | Train 101.33 kPa; hold 66.66 kPa | −0.06325729 | 1.08622 | 11.05763 |
 | Train 66.66 kPa; hold 101.33 kPa | −0.08221555 | 2.06247 | 7.36788 |
-| Refit all 25 rows | **−0.07352750** | 2.09643 | — |
 :::
 
-The grouped mean score was 9.2128 with standard error 1.8449, compared with
-102.7293 for 3B. The 4C run failed its phase, bounds or uncertainty gates
-before a complete score could be assigned. The conditional local-linearized
-95% interval for the 2B value is [−0.07791917, −0.06913583], with standard
-error 0.00224065 and 49 residual degrees of freedom.
+| Conditional local-linearized uncertainty for the 2B interaction | Value (dimensionless) |
+|:--|--:|
+| 95% interval | [−0.07791917, −0.06913583] |
+| Standard error | 0.00224065 |
+| Residual degrees of freedom | 49 |
 
-# Conclusion and limits
+# Limits and evidence type
+
+[]{#conclusion-and-limits}
 
 The study supports 2B over the tested alternatives for the Cai binary-VLE
 range and records a conditional value for the MEA–water interaction. It does
@@ -60,6 +67,13 @@ extended domain.
 The value is therefore a documented neutral starting point for the bundle,
 not a stand-alone qualification of the full nine-species model.
 
+This is calibration with an internal pressure-level comparison; it is not independent physical validation.
+
 # Records
+
+::: {.callout-warning}
+This is a retained parameter-estimation study. Its internal pressure-level
+holdout is not independent validation of the reactive MEA model.
+:::
 
 [Immutable fit report](https://github.com/tannerpolley/ePC-SAFT/blob/186e81617b632ccf9189131033fef46719109476/validation/campaigns/2026-mea-parameter-estimation/analysis/neutral-mea-water/README.md) · [Complete fit, rows, uncertainty and failures](https://github.com/tannerpolley/ePC-SAFT/blob/186e81617b632ccf9189131033fef46719109476/validation/campaigns/2026-mea-parameter-estimation/analysis/neutral-mea-water/results/neutral-mea-water.json) · [Selected bundle](../results/selected-current-best-parameters.json)

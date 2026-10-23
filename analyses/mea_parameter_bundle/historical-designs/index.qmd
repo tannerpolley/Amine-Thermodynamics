@@ -5,15 +5,23 @@ resources:
   - ../../reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json
 ---
 
-::: {.callout-note}
-The designs on this page are historical. They are included so future agents
-can see what was already considered and why a new study would need a distinct
-question or evidence source.
-:::
+Historical July designs and subsequent retained studies.
 
-# July coupled-regression designs
+# Question
 
-The 13 July designs specified a joint pressure/speciation objective, frozen
+Did the earlier joint-fitting designs and subsequent screens establish transferable parameters, or leave a bounded negative result?
+
+# Result
+
+The shared-ion density/speciation fit converged but worsened pressure. In its retained metric, pressure
+training/active median absolute log error changed **0.432 → 0.869** and the
+reserved comparison changed **0.542 → 0.730**.
+
+# Basis and method
+
+[]{#july-coupled-regression-designs}
+
+The July designs specified a joint pressure/speciation objective, frozen
 parameter bounds, grouped data partitions, multistart behavior and explicit
 identification checks. The independent-assessment design separated fitting
 rows from comparison rows and required coverage and failure accounting.
@@ -23,24 +31,20 @@ that stage. Later studies changed the active coordinates, model choices and
 assessment sequence. The designs were never a parameter adoption and should
 not be rerun simply because their prose is older.
 
-# What was learned afterward
+# Values
 
-The 28 July shared-ion density/speciation fit produced a stable converged
-solution but worsened pressure. In its exact retained metric, pressure
-training/active median absolute log error changed **0.432 → 0.869** and the
-reserved comparison changed **0.542 → 0.730**. The August pressure-first
-screening explored directions, conditioning, bounds and loading trends without
-resolving the coupled fit. The consolidated Issue 70 comparison therefore
-recorded a supported-negative decision rather than exporting transferable
-parameters.
+[]{#what-was-learned-afterward}
 
-The later reaction-temperature study changed the question: EOS parameters were
-held fixed while two sensitivity directions spanning pressure, speciation and
-heat were tested. It improved pressure and heat more than speciation and left
-carbamate/bicarbonate partition unresolved. That is the current retained
-lesson from the sequence.
+| Study period | Retained outcome |
+|:--|:--|
+| 13 July | Joint pressure/speciation designs and independent-assessment design; no parameter adoption. |
+| 28 July | Converged shared-ion fit; pressure errors worsened as reported above. |
+| August | Pressure-first screening explored directions, conditioning, bounds and loading trends without resolving the coupled fit. The consolidated Issue 70 comparison therefore recorded a supported-negative decision rather than exporting transferable parameters. |
+| Later reaction-temperature study | The later reaction-temperature study changed the question: equation-of-state (EOS) parameters were held fixed while two sensitivity directions spanning pressure, speciation and heat were tested. It improved pressure and heat more than speciation and left carbamate/bicarbonate partition unresolved. That is the retained lesson from the sequence. |
 
-# How to use this history
+# Limits and evidence type
+
+[]{#how-to-use-this-history}
 
 Use the July records to avoid repeating objective-design work. A new numerical
 study needs to state what changed in the question, inputs, model/Engine
@@ -49,7 +53,15 @@ failed states, residual definitions, parameter identity and independent
 assessment rule. A historical design is retained background; it is not permission to
 revive a discarded strategy or to promote its vector.
 
+This is design history with retained calibration and comparison evidence, not independent physical validation.
+
 # Records
+
+::: {.callout-note}
+The designs on this page are historical. They are included so future agents
+can see what was already considered and why a new study would need a distinct
+question or evidence source.
+:::
 
 - `git show 7953c00:docs/superpowers/specs/2026-07-13-coupled-regression-parameter-promotion-design.md`
 - `git show 7953c00:docs/superpowers/specs/2026-07-13-independent-validation-identifiability-design.md`

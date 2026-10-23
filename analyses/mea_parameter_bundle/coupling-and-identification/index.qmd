@@ -6,27 +6,36 @@ resources:
   - ../results/parameter-record-history.csv
 ---
 
-::: {.callout-note}
-This page connects retained analyses. It does not introduce a new parameter regression or
-replace the exact calculation records linked below.
-:::
+Historical coupling and identification synthesis.
 
-# Chemical coupling
+# Question
 
-The six-species comparison derives carbamate formation as R2 − R4 − R5 and
-bicarbonate formation as R2 − R5. Their log equilibrium constants differ by
-−ln K₄. Both net reactions share MEA, CO₂ and MEAH⁺, so carbon, amine and
-charge balances couple their amounts. Activity coefficients also change with
-the shared mixture composition.
+For aqueous monoethanolamine (MEA) and CO₂, can the carbamate/bicarbonate split
+separately identify reaction constants from ionic Born/dispersion and dielectric
+effects under the exact model and data domain?
 
-The later reaction-temperature fit retained all five reactions and two SVD
+# Result
+
+Independent identification is not established. The historical reaction-temperature fit retained all five reactions and two singular-value-decomposition (SVD)
 directions. Those two directions reduce fitting freedom; they are not the two
 net reactions. This distinction prevents a numerical rank statement from being
 mistaken for a chemical species reduction.
 
-# What has been tested
+# Basis and method
 
-The staged work already tested neutral binary VLE, historical ionic/speciation parameter
+[]{#chemical-coupling}
+
+The six-species comparison derives carbamate formation as CO₂ hydration (R2) − carbamate hydrolysis (R4) − MEAH⁺ dissociation (R5) and
+bicarbonate formation as R2 − R5. Their log equilibrium constants differ by
+−ln K₄, the negative log equilibrium constant of carbamate hydrolysis. Both net reactions share MEA, CO₂ and MEAH⁺, so carbon, amine and
+charge balances couple their amounts. Activity coefficients also change with
+the shared mixture composition.
+
+# Values
+
+[]{#what-has-been-tested}
+
+The staged work already tested neutral binary vapor–liquid equilibrium (VLE), historical ionic/speciation parameter
 regression, bounded CO₂/R4 calibration, dielectric formulations, reaction
 temperature directions and paired heat. The [volumetric source inventory](https://github.com/tannerpolley/Amine-Thermodynamics/blob/4822946494a9c48f2fcbb02f9b3f9627077c1fe5/docs/ePC-SAFT/meah-meacoo-volumetric-evidence.md)
 keeps analog densities, bulk MEA densities and derived volumes separate. It found no numerical exact aqueous MEAH⁺/MEACOO⁻ salt-density
@@ -39,20 +48,27 @@ pressure-first screen did not resolve the fit; Issue 70 retained a supported
 negative decision. These results make the estimation strategy established
 work, not an unresearched gap.
 
-# Remaining identification boundary
+# Limits and evidence type
 
-The unresolved question is whether the carbamate/bicarbonate split can
-separately identify reaction constants from ionic Born/dispersion and dielectric
-effects under the exact model and data domain. The historical [reaction-temperature fit](../reaction-temperature-fit/index.qmd)
-held EOS parameters fixed and barely changed paired speciation error. The earlier ionic fit was not a joint identification study
+[]{#remaining-identification-boundary}
+
+The historical [reaction-temperature fit](../reaction-temperature-fit/index.qmd)
+held equation-of-state (EOS) parameters fixed and barely changed paired speciation error. The earlier ionic fit was not a joint identification study
 of the current selection.
 
+This is a synthesis of historical calibration and diagnostic evidence; it is not an independent identification or physical-validation study.
+
+# Records
+
+::: {.callout-note}
+This page connects retained analyses. It does not introduce a new parameter regression or
+replace the exact calculation records linked below.
+:::
+
 Before another fit, reconcile the reviewed evaluator correction and owner-held
-F/S and ionic-screen results in the [scientific context map](https://github.com/tannerpolley/Amine-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/scientific/docs/scientific/CONTEXT.md)
+formation/partition reaction-intercept sensitivity results (F/S) and ionic-screen results in the [scientific context map](https://github.com/tannerpolley/Amine-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/scientific/docs/scientific/CONTEXT.md)
 and [September audit](https://github.com/tannerpolley/Amine-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/scientific/REPOSITORY_AUDIT_2026-09-08.md).
 Do not treat a successful solve, a historical fit vector or a two-dimensional
 sensitivity subspace as evidence of independent parameter identification.
-
-# Records
 
 [Six-/nine-species comparison](https://github.com/tannerpolley/Amine-Thermodynamics/blob/codex/born-permittivity-formulation-study/analyses/enrtl_six_species_ideal_comparison/notebook.qmd) · [Volumetric evidence and staged plan](https://github.com/tannerpolley/Amine-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/ePC-SAFT/meah-meacoo-volumetric-evidence.md) · [Scientific plan](https://github.com/tannerpolley/Amine-Thermodynamics/blob/codex/born-permittivity-formulation-study/docs/scientific/PREDICTIVE_MEA_PROGRAM.md) · [Issue 70 decision](../../reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json) · [Parameter history](../results/parameter-record-history.csv)
