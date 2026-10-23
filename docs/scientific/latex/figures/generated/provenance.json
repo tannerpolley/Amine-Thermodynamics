@@ -40,15 +40,15 @@
     "analyses/mea_parameter_bundle/results/model-curves/heat.csv": "ba739d260478ed4905316a4e56f662d3e2de1722efeeebd7d6e24b36072807df",
     "analyses/mea_parameter_bundle/results/model-curves/mea-water.csv": "5afe65f8923e4324eb1749f725bf2e978a386de0e80583a512a676b3d997cd6d",
     "analyses/mea_parameter_bundle/results/model-curves/pressure.csv": "6185c3f93317d67f039bddb4314d1f63dbdbdfe1890e11f88bca4369275b558e",
-    "analyses/mea_parameter_bundle/results/model-curves/species.csv": "db1c2df017b5f89f822f079535d90480e1898b919148b8adb548910b3fdbd42c",
-    "analyses/mea_parameter_bundle/results/model-curves/summary.json": "11b908fdb66260da883894f47c5520e1efd1b0ea453b9996b693ffcf7ecb52be",
+    "analyses/mea_parameter_bundle/results/model-curves/species.csv": "1c0072719b4f52d310c3a7f7c796811d3b7f1177f9989dcc25404fbd43b28545",
+    "analyses/mea_parameter_bundle/results/model-curves/summary.json": "5fe6c4cb80661f132b209629c2dd47a3916b8afe414af39614f6111f6e6533b7",
     "analyses/mea_parameter_bundle/results/phase-extension-201/run-3/phase-family-combined.csv": "5a071ae7f55d74dbba2efcc2e2476b0ac9a457d9444f5fce08b7e58de6ca53fe",
     "analyses/mea_parameter_bundle/results/phase-extension-201/run-3/provenance.json": "1f7dd1e517ff588de8f8cf4e5cc724b9c7d81f6f3bcbeed0ce3875a74c6043bc",
     "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
     "analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv": "ceee9107ca784936126b9f32e08af8cb1e9a7088a87b4667796d9abac94f5bcc",
     "analyses/mea_parameter_bundle/scripts/a7_presentation.py": "b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14",
     "analyses/mea_parameter_bundle/scripts/manuscript_style.py": "3fc8954f156270979cabb95d5668b8e7b1e2fcf70ba9cfded95bf5b7a566b27d",
-    "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py": "cb05c8f5945ed5c21d3c2220c0945d849b68bb7b66c31f47afa4a8be03f0f7f0",
+    "analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py": "a1ba644dffb2b9acbce958c2a8b2e05a19e0928045afe7f0f3388c753973af66",
     "data/reference/MEA/manifests/speciation_target_membership.csv": "216600eb7bf1bb4ff7a5796ebfd11c5b5b9d4a9b9cd458e0c88fcedf029d8cf5",
     "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "d5cd6ea0d5d75f9994f5ed354463776a09b8f3cd081eb72ddef98dd4a356c53a"
   },
@@ -267,7 +267,7 @@
       }
     },
     "speciation": {
-      "caption": "True-species liquid mole fractions of loaded MEA against analytical loading: model curves and the B\u00f6ttinger and Matin measurements, with MEA + MEAH+ and HCO3\u2212 + CO3\u00b2\u2212 as the reported aggregates. States are single liquids imposed at 101 325 Pa; the 353.15 K panel uses 31 wt% MEA to match B\u00f6ttinger\u2019s samples, and its states above loading 0.51 lie below their bubble pressure.",
+      "caption": "True-species liquid mole fractions of loaded MEA against analytical loading: (a) all reported species at 313.15 K; (b)-(e) one species or aggregate at four temperatures. Dashed lines are single liquids imposed at 101 325 Pa (31 wt% MEA at 353.15 K), dotted where below their bubble pressure; markers are B\u00f6ttinger NMR (filled) and Matin titration (open) measurements, shaped by species.",
       "files": [
         "speciation.pdf",
         "speciation.png"
@@ -276,6 +276,32 @@
         "species-figure-data.csv",
         "fitted-rows.csv",
         "model-curves/species.csv"
+      ],
+      "records": {
+        "A7": {
+          "engine": {
+            "commit": "8298c6029ebb8b467929badc4a223c580ec591ab",
+            "packages": {
+              "epcsaft": "0.2.0.dev0",
+              "numpy": "2.5.4",
+              "scipy": "1.18.1"
+            },
+            "wheel_path": "build/engine-wheels/main-8298c6029ebb8b467929badc4a223c580ec591ab/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+            "wheel_sha256": "8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3"
+          },
+          "parameter_sha256": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e"
+        }
+      }
+    },
+    "species-parity": {
+      "caption": "Calculated against measured true-species liquid mole fractions at the measured states, from the retained point predictions: (a) amine species, (b) HCO3\u2212 + CO3\u00b2\u2212 totals on logarithmic axes. Solid line 1:1, dotted \u00b110 %. Shape, color and fill as in the speciation figure.",
+      "files": [
+        "species-parity.pdf",
+        "species-parity.png"
+      ],
+      "inputs": [
+        "species-figure-data.csv",
+        "fitted-rows.csv"
       ],
       "records": {
         "A7": {
