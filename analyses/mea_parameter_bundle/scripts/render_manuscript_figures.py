@@ -52,12 +52,12 @@ def main():
                 for r in (canonical if view=='canonical' else wagner) if min(panels, key=lambda x: abs(x-(float(r['temperature_K'])-273.15))) == t]
         for source, color, marker in zip(sources, COLORS, MARKERS):
             measured(ax, [r for r in part if r['source'] == source], color, source, packet_fit, marker)
-        ax.set(title=(f'Wagner, {353 if t==80 else 392} K' if view=='wagner' else f'{t} °C (nominal)'), xlabel=LOADING, yscale='log', ylabel=r'$p_{CO_2}$ (kPa)')
+        ax.set(title=(f'Wagner, {353 if t==80 else 392} K' if view=='wagner' else f'{t} °C (nominal)'), xlabel=LOADING, yscale='log' if view=='canonical' else 'linear', ylabel=r'$p_{CO_2}$ (kPa)')
         ax.grid(alpha=.15)
     diagnostic=axes.flat[-1]
     for source,color,marker in zip(sources,COLORS,MARKERS):
         part=[r for r in canonical+wagner if r['source']==source]
-        diagnostic.scatter([float(r['loading']) for r in part], [100*(float(r['predicted'])/float(r['observed'])-1) for r in part], color=color,marker=marker,s=12)
+        diagnostic.scatter([float(r['loading']) for r in part], [100*(float(r['predicted'])/float(r['observed'])-1) for r in part], facecolors=[color if r['target'] in packet_fit else 'none' for r in part],edgecolors=color,marker=marker,s=12)
     diagnostic.axhline(0,color='grey',lw=.6)
     diagnostic.set(title='Pressure deviations',xlabel=LOADING,ylabel='Calculated − observed (%)')
     handles = [Line2D([], [], marker=m, markerfacecolor='none', color=c, linestyle='none', label=SOURCE_NAMES.get(source,source)) for source,c,m in zip(sources,COLORS,MARKERS)]
@@ -94,12 +94,12 @@ def main():
         temperatures = {float(r['T_K']) for r in part}
         roles = {r['role'] for r in part}
         assert len(temperatures) == len(roles) == 1 and roles in ({'fitted'}, {'non-fitted prediction'})
-        role = 'fitted' if roles == {'fitted'} else 'acceptance check'
+        role = 'fitted' if roles == {'fitted'} else 'selection check'
         ax.set(title=f'{SOURCE_NAMES.get(source,source)} — {temperatures.pop():g} K; {pressure/1e6:g} MPa; {role}',xlabel=LOADING)
         ax.set_ylabel(r'Integral heat (kJ/mol CO$_2$)')
         ax.grid(alpha=.15)
     fig.suptitle('Open: observed; crosses: calculated; bars: residual heat scale',fontsize=9)
-    save(fig,'heat-of-absorption','Eight fitted Vinjarapu heats at 313.15 K and 1.734 MPa, and fourteen Arcis acceptance-check heats at 322.5 K, separated into the 0.51 and 1.03 MPa source-pressure groups. Bars show `scale_J_mol_CO2 / 1000`, not a declared confidence interval. There is no A7 no-heat series.', ['heat.csv'])
+    save(fig,'heat-of-absorption','Eight fitted Vinjarapu heats at 313.15 K and 1.734 MPa, and fourteen Arcis selection-check heats at 322.5 K, separated into the 0.51 and 1.03 MPa source-pressure groups. Bars show `scale_J_mol_CO2 / 1000`, not a declared confidence interval. There is no A7 no-heat series.', ['heat.csv'])
     a6=a.rows(a.J/'amendment-6/selected-assessment/density.csv')
     by_id={r['id']:r for r in a6}
     loaded=[r for r in density if r['id'] in spec['loaded_density_ids']]
@@ -124,7 +124,7 @@ def main():
                 if not part:
                     continue
                 ax.scatter([float(r['T_K']) for r in part],[float(r['error_kg_m3']) for r in part],marker=marker,color=color,s=12,label=SOURCE_NAMES[source]+(' excluded' if is_excluded else ''))
-        ax.set(title=record+' densities',xlabel='Temperature (K)',ylabel='Native density error (kg/m³)')
+        ax.set(title=record+' densities',xlabel='Temperature (K)',ylabel='Density error, calc. − obs. (kg/m³)')
         ax.legend(fontsize=8,frameon=False,loc='upper center',bbox_to_anchor=(.5,-.18),ncol=1)
     fig.colorbar(plt.cm.ScalarMappable(norm=plt.Normalize(0,.5),cmap='viridis'),ax=list(axes[0]),label='Loading',shrink=.7)
 
@@ -153,7 +153,7 @@ def main():
         axes[row,0].set_ylabel(('Original bounds' if row==0 else 'Restricted bounds')+'\n'+LOADING)
     witness=paired['A7'][0]
     fig.suptitle('Detected instabilities: original bounds 12/73; restricted bounds 0/73',fontsize=10)
-    fig.supxlabel('Filled: instability detected; open: none; squares: single liquid; circles: liquid + vapor',fontsize=8)
+    fig.supxlabel('Filled: instability detected; open: none\nRestricted bounds only: squares, single liquid; circles, liquid + vapor',fontsize=8)
     save(fig,'phase-family','73 specified T/P/loading states, A6 versus A7 on the same wheel: 12/73 and 0/73 resolved-descent points. The three pressure levels vary with temperature/loading; S4 supplies exact pressures. The additional index-0 witness is reported separately from index 41. Zero resolved trials means no numerically resolved descent, not zero Gibbs change. Two-phase classifications do not identify two liquids. Finite searches do not certify a continuous stable region or states at 353 K.', ['phase-family.csv'])
     a6_assessment = a.load(a.J/'amendment-6/selected-assessment/provenance.json')
     fixed = a.J/'amendment-7/fixed-study/wheel-8298c602'

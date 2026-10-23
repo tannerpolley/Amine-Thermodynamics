@@ -1,12 +1,13 @@
 \section{Results and discussion}\label{sec:mea-system-modeling-results}
 \subsection{Phase-search and density trade-off}\label{sec:results-tradeoff}
 % P:results-01
-The leading limitation is that the phase test covers only 313.15--\SI{333.15}{\kelvin}, below the \SI{353.15}{\kelvin} density failures and many pressure comparisons.
-Within that range, the original-bound fit has resolved instability at 12 of 73 states; the restricted-bound fit has none in 657 trial phases (\cref{fig:phase-family}).
+At the 73 test states (313.15--\SI{333.15}{\kelvin}), the original-bound fit has resolved instability at 12 states and the restricted-bound fit at none in 657 trial phases (\cref{fig:phase-family}).
+These states lie below the \SI{353.15}{\kelvin} density failures and many pressure comparisons.
 Nine of the original-bound instabilities occur at \SI{333.15}{\kelvin}, where separately seeded calculations confirm two-liquid states at loadings 0.4 and 0.5 (Section~S4).
+The other three lie at 313.15 and \SI{318.15}{\kelvin}, loading 0.1--0.2 and the highest test pressure; a seeded calculation at \SI{313.15}{\kelvin} and loading 0.1 finds a second liquid coexisting with liquid and vapor (Table~S10).
 At loading 0.4, the calculated split separates a water-rich liquid from a liquid richer in amine and ions; the water mole fractions are approximately 0.958 and 0.589.
 The cited MEA property studies describe homogeneous liquid data rather than an observed two-liquid split \cite[Sect.~4.2]{neumannNewModelCombining2022}; the calculated splits have no experimental confirmation in these sources.
-The selected fit has no failed trial optimizer and gives 69 liquid--vapor and four single-liquid classifications.
+All trial minimizations converged for the restricted-bound fit, which gives 69 liquid--vapor and four single-liquid classifications.
 
 % P:results-02
 Restricting the bounds increases total cost from 148.24 to 148.91, or 0.45\,\%, and changes the loaded-density count within $2s$ from 47/47 to 44/47 (\cref{fig:density-errors,tab:density-failures}).
@@ -18,7 +19,7 @@ This comparison quantifies the difference between two local fits; it does not es
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{phase-family.pdf}
-\caption{Finite phase searches for nominal 30 wt\% MEA with the original-bound and restricted-bound fits. Filled markers identify at least one resolved lower-Gibbs-energy arrangement; open markers identify none. Circles denote liquid--vapor classifications and squares single-liquid classifications for the selected fit. The three fixed pressure levels vary with temperature and loading; Section~S4 and the electronic data give the exact states. The additional pressure-rounded state counts separately.}
+\caption{Finite phase searches for nominal 30 wt\% MEA with the original-bound and restricted-bound fits. Filled markers identify at least one resolved lower-Gibbs-energy arrangement; open markers identify none. For the restricted-bound fit only, circles denote liquid--vapor and squares single-liquid classifications. Columns use 0.50, 0.80 and 0.95 times a fixed reference pressure that varies with temperature and loading (Section~S4). The plot shows the 72-state grid; the repeated evaluation of one \SI{318.15}{\kelvin} state is not drawn.}
 \label{fig:phase-family}
 \end{figure}
 
@@ -34,9 +35,9 @@ This comparison quantifies the difference between two local fits; it does not es
 \FloatBarrier
 \subsection{Agreement with fitted properties}\label{sec:results-calibration}
 % P:results-04
-\Cref{tab:residual-summary} reports deviations by observable, keeping calibration and acceptance checks separate.
+\Cref{tab:residual-summary} reports deviations by observable, separating fitted quantities from those used only to choose between fits.
 The \MEA--water constraints give Cai temperature RMSE \SI{1.79}{\kelvin} and vapor-water-fraction RMSE 0.0204; their signed biases are \SI{0.109}{\kelvin} and $-0.00259$.
-The Kiepe pressure cohort \cite{kiepeExperimentalDeterminationPrediction2002} is a check of fixed \COtwo--water inputs, with cost approximately 0.0007.
+The 39 Kiepe \COtwo--water pressures \cite{kiepeExperimentalDeterminationPrediction2002} are in the objective, but the \COtwo--water interaction they inform is fixed (Section~S9), so they check that input; their cost is approximately 0.0007.
 Cai contributes approximately 62\,\% of the objective cost, 91.91 of 148.91; the binary temperature/fraction data dominate the remaining weighted mismatch.
 For comparison, Baygi and Pahlavanzadeh report liquid- and vapor-MEA-fraction deviations of 3.54 and 1.54\,\% for their selected 3B-MEA/4C-water binary model \cite[Table~3]{Baygi2015}.
 Those relative composition errors differ from the temperature and absolute vapor-water-fraction RMSEs used here, and their selected association scheme differs from the present 2B model.
@@ -49,12 +50,12 @@ Those relative composition errors differ from the temperature and absolute vapor
 The common 47-pressure and 94-species subsets give AARDs of 11.86 and 7.10\,\%, respectively (\cref{fig:pressure,fig:speciation}).
 The additional species and Jakobsen amount-ratio groups remain separate in \cref{tab:residual-summary}.
 \Cref{fig:pressure} marks which observations were fitted and evaluates model values only at the measured states.
-\Cref{fig:speciation} preserves NMR aggregate meanings and displays the non-fitted Matin bicarbonate + carbonate total alongside the fitted species.
+\Cref{fig:speciation} shows the NMR sums as reported and displays the non-fitted Matin bicarbonate + carbonate total alongside the fitted species.
 
 \begin{figure}[pos=p]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{pressure.pdf}
-\caption{Measured and calculated \COtwo partial pressures at source states for nominal 30 wt\% MEA, using source-specific solvent compositions where reported. Marker shape identifies source; filled observations were fitted, open observations were not, and smaller black crosses show the selected fit. The six-source comparison includes 159 observations and Wagner contributes 23 further observations near 353 and 392 K. The lower diagnostic panel shows relative errors at the same states; no interpolated model curves are implied.}
+\caption{Measured and calculated \COtwo partial pressures at source states for nominal 30 wt\% MEA, using source-specific solvent compositions where reported. Marker shape identifies source; filled observations were fitted, open observations were not, and smaller black crosses show the restricted-bound fit. The six-source comparison includes 159 observations and Wagner contributes 23 further observations near 353 and 392 K. The lower diagnostic panel shows relative errors at the same states; no interpolated model curves are implied.}
 \label{fig:pressure}
 \end{figure}
 
@@ -69,16 +70,15 @@ The additional species and Jakobsen amount-ratio groups remain separate in \cref
 The 47 fitted loaded densities give AARD 0.177\,\%, but the three failures in \cref{tab:density-failures} remain visible despite that small average.
 All five \COtwo-free densities lie within the declared \SI{1.0}{\kilogram\per\cubic\metre} absolute-error limit (\cref{tab:acceptance-limits}).
 \Cref{fig:density-errors} also shows all 210 restricted-bound fit densities, separating fitted rows from non-fitted and excluded comparisons; the fitted $2s$ requirement is not extended to every row.
-For the 68 Amundsen observations matched in temperature, loading and unloaded-solvent mass fraction, the untranslated reference fit densities have AARD 11.84\,\% and restricted-bound fit 0.491\,\% (Table~S3).
-reference fit was fitted without density and used \SI{101325}{\pascal}, whereas restricted-bound fit used \SI{100000}{\pascal}; no correction or magnitude bound for the pressure difference is inferred.
+For the 68 Amundsen observations matched in temperature, loading and unloaded-solvent mass fraction, densities calculated without volume translation have AARD 11.84\,\% for the reference fit and 0.491\,\% for the restricted-bound fit (Table~S1).
+The reference fit was fitted without density and evaluated at \SI{101325}{\pascal}; the restricted-bound fit uses \SI{100000}{\pascal}, and this pressure difference is not corrected.
 Outside the fitted density rows, calculated-minus-observed errors reach \SI{-21.51}{\kilogram\per\cubic\metre} for Amundsen at 40 wt\% \MEA, \SI{353.15}{\kelvin} and loading 0.4, and \SI{-20.02}{\kilogram\per\cubic\metre} for Han at 30 wt\% \MEA, \SI{393.15}{\kelvin} and loading 0.56.
 All 67 Han densities are comparisons outside the objective, with RMSE \SI{5.905}{\kilogram\per\cubic\metre}.
 
 % P:results-07
 Vinjarapu fitted integral-heat RMSE is \SI{1.83}{\kilo\joule\per\mole} \COtwo (\cref{fig:heat}).
 The four fitted heat-capacity errors, in source row order, are $+5.534$, $+2.567$, $+1.150$ and $-2.135$\,\%.
-The largest is the nominally unloaded \SI{318.15}{\kelvin} state, so fitting caloric quantities does not remove their discrepancies.
-Heat capacity uses the declared feed-mass conversion and unloaded proxy, rather than a new source-independent mass basis.
+The largest error, at the nominally unloaded \SI{318.15}{\kelvin} state, remains although heat capacity is fitted.
 
 \begin{figure}[pos=p]
 \centering
@@ -91,17 +91,13 @@ Heat capacity uses the declared feed-mass conversion and unloaded proxy, rather 
 
 \subsection{Comparisons outside the objective}\label{sec:results-comparisons}
 % P:results-08
-The six-source 159-pressure view has AARD 20.55\,\%, mixing fitted observations with previously accessed comparisons.
+Across all 159 six-source pressures, 47 fitted and 112 not fitted, the AARD is 20.55\,\%.
 Wagner pressures near 353 and \SI{392}{\kelvin} give 22.20 and 9.25\,\%; their mean logarithmic biases are $-0.252$ and $-0.0719$.
-At 100--\SI{120}{\degreeCelsius}, six-source and pressure/speciation pressure AARDs are 24.35 and 27.54\,\% on 54 and 20 rows, respectively.
-The cohorts overlap but differ in membership and source-state basis; Section~S2 lists each view separately.
-Their mean logarithmic biases also differ in sign, so a single high-temperature bias direction would hide source dependence.
+At 100--\SI{120}{\degreeCelsius}, the 54 six-source pressures have AARD 24.35\,\%; the mean logarithmic bias changes sign between sources (Table~S3), so no single high-temperature bias direction describes the model.
 
 % P:results-09
-The Aronu et al.\ concentration-transfer comparisons \cite{Aronu2011} give AARDs of 29.51\,\% at 15 wt\% and 56.02\,\% at 45 wt\%.
-Their mean logarithmic biases are $-0.204$ and $+0.149$: the average logarithmic pressure deviation changes sign between concentrations.
-In particular, the 45 wt\% result limits concentration transfer despite the agreement on fitted 30 wt\% rows.
-None of these higher-temperature or concentration comparisons extends the finite phase-search domain.
+Pressures at 15 and 45 wt\% MEA \cite{Aronu2011}, calculated with parameters fitted at 30 wt\%, give AARDs of 29.51 and 56.02\,\%.
+Their mean logarithmic biases are $-0.204$ and $+0.149$, so the model underpredicts at 15 wt\% and overpredicts at 45 wt\%; the 45 wt\% error limits use of these parameters away from 30 wt\%.
 
 % P:results-10
 Arcis heat RMSE is \SI{8.11}{\kilo\joule\per\mole} \COtwo, with calculated-minus-observed bias \SI{+7.18}{\kilo\joule\per\mole}; the restricted-bound fit is less exothermic on average.
@@ -114,11 +110,11 @@ Both source pressure and temperature differ from the Vinjarapu calibration; this
 % P:results-11
 The 19 non-fitted Matin bicarbonate + carbonate total rows give AARD 67.48\,\% and mean log ratio $-1.266$ (\cref{fig:speciation}).
 The calculated aggregate is systematically low, even though other titration species enter the fit; Matin et al.\ themselves found bicarbonate substantially higher than NMR, so part of this discrepancy may reflect a conflict between data sources \cite[pp.~6616--6617]{matinFacileMethodDetermination2012}.
-The ten Jakobsen carbonate-share observations are all retained: calculated/observed share has mean 0.0731 and range 0.00633--0.267.
+The ten Jakobsen carbonate-share observations are all compared: calculated/observed share has mean 0.0731 and range 0.00633--0.267.
 The calculation uses unloaded \MEA mass fraction 0.2714, accounting for NMR sample dilution with \ce{D2O} and dioxane, and the NMR loading of each sample \cite[Sample preparation]{Jakobsen2005}.
 Jakobsen et al.\ caution that components below 10\,\% of the total are not quantitatively reliable, as discussed by Matin et al.\ \cite[p.~6616]{matinFacileMethodDetermination2012}.
 These shares differ from the six amount ratios to total amine for \MEAH, \MEACOO and \ce{HCO3- + CO3^{2-}} at each of two Jakobsen states used for calibration.
-The carbonate, bicarbonate + carbonate total, heat-capacity and 45 wt\% discrepancies together bound the use of the selected parameterization.
+The carbonate, bicarbonate + carbonate total, heat-capacity and 45 wt\% discrepancies together limit where the restricted-bound parameters can be used.
 
 \subsection{Parameters and local identifiability}\label{sec:results-uncertainty}
 % P:results-12
@@ -144,9 +140,9 @@ These statistics place the present agreement in the range of related MEA models,
 \subsection{Scope and limitations}\label{sec:results-limits}
 % P:results-14
 The phase searches cover only 313.15--333.15 K and loading $10^{-5}$--0.5; phase behavior remains untested at the 353.15 K density failures and at higher-temperature pressure comparisons.
-The selected fit misses three loaded-density limits and retains discrepancies in carbonate share, titration bicarbonate, the unloaded 318.15 K heat capacity and pressure transfer to 45 wt\% MEA.
+The restricted-bound fit misses three loaded-density limits and retains discrepancies in carbonate share, titration bicarbonate, the unloaded 318.15 K heat capacity and pressures at 45 wt\% MEA.
 R5's 0.49 pK departure at 313.15 K and its 50.5 to 63.4 kJ/mol dissociation-enthalpy change may compensate for model error.
 The heat temperature dependence is untested beyond the fitted 313.15 K and compared 322.5 K states; no fit with R5 fixed and no matched fit omitting heat was made.
-Two sequential single-start fits with sampled bounds establish local solutions; the conditional covariance gives neither unique physical parameters nor prediction intervals.
-Permittivity transfer to reacting mixtures and reaction-law extrapolation above their source ranges remain assumptions.
+Two sequential single-start fits with bounds chosen from fixed-diameter test calculations, give local solutions; the conditional covariance gives neither unique physical parameters nor prediction intervals.
+Use of the permittivity law in reacting mixtures and reaction-law extrapolation above their source ranges remain assumptions.
 Fitted agreement is calibration, the phase searches and solution residuals are numerical evidence, and previously examined comparisons and Arcis-based selection do not provide independent validation of phase behavior or absorber/stripper performance.
