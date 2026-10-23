@@ -156,7 +156,7 @@ The immutable, hash-addressed snapshot of MEA-curated inputs consumed by the uni
 
 - Status: authoritative repository definition under ePC-SAFT Governance D-038
 - Scope: aqueous monoethanolamine (MEA)--water--carbon dioxide thermodynamics
-- Current parameter status (2026-10-20, #196 Stages 1–2): the owner adopted the [#170 A7 second restricted endpoint](../../analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json) as the byte-identical selected record, document version 2, SHA-256 `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e`. The [A7 evidence package](../../analyses/mea_parameter_bundle/results/a7-paper-evidence/README.md) preserves the 307 objective rows, 462 state-target rows and conditional uncertainty; the default-path replay reproduces all 153 required identities within 8.39 × 10⁻¹⁶ relative difference. Engine remains merged commit `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`. A7 varies 16 declared coordinates across pairs, ion sizes and energies, and R2/R5 chemistry; it uses retained shared stage-5 water and solvent-density-temperature permittivity, without empirical density translation. Three loaded densities fail at 353.15 K and remain accepted with disclosure; Amundsen's source-uncertainty boundary is unresolved and density scales are not uniformly measured uncertainties. Phase evidence is the finite 73-point family (313.15–333.15 K, loading 10⁻⁵–0.5), not a stability certificate. Both restricted fits are single local fits from one start, with sampled bounds. Conditional errors depend on residual weights, fixed inputs, active bounds and local linearization, without parameter-uniqueness or prediction-interval claims. Non-fitted comparisons retain their source-state basis and data-access history. This is the owner's working-record choice, not physical validation or process-use qualification; the owner approved A7 for manuscript use on 2026-10-20 ([#170](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6301568416)), and the manuscript uses it since #197 (`dfc2780`). Heat F1 remains predecessor evidence with original parameter, Engine and source-state identities; the [8298c602 transfer check](../../analyses/mea_parameter_bundle/results/engine-8298c602-adoption/README.md) covers only its named 152 F1 quantities (at most 2.9 × 10⁻¹² relative difference), not every retained F1 result. Historical guards, including the Cp and density probes, remain unchanged; future unpinned default-consuming commands use A7 without rerunning or relabeling retained outputs. Manuscript freshness checks concern retained LaTeX inputs and do not establish A7 adoption; bundle Snakemake remains held under #133. The [notebook](../../analyses/mea_parameter_bundle/notebook.qmd) owns values and limits, and [parameter history](../../analyses/mea_parameter_bundle/results/parameter-record-history.csv) owns adoption history.
+- Current parameter status (2026-10-20, #196 Stages 1–2): the owner adopted A7 and approved it for manuscript use. The [overview](../../analyses/mea_parameter_bundle/notebook.qmd#working-record) owns parameter values, property comparisons and limits; the [joint-calibration record](../../analyses/mea_parameter_bundle/joint-recalibration/index.qmd) owns evidence and numerical reproduction. The [parameter history](../../analyses/mea_parameter_bundle/results/parameter-record-history.csv) owns adoption history, and [Engine adoptions](../../analyses/mea_parameter_bundle/engine-adoptions/index.qmd) owns transfer scope. Engine remains pinned in `pyproject.toml` and `uv.lock`. Historical guards, including the Cp and density probes, remain unchanged; future unpinned default-consuming commands use A7 without rerunning or relabeling retained outputs. Manuscript freshness checks concern retained LaTeX inputs and do not establish A7 adoption; bundle Snakemake remains held under #133. The manuscript uses A7 since #197 (`dfc2780`); this does not qualify process use.
 
 ## Question and intended use
 
@@ -176,7 +176,7 @@ not mean the method, data search or fitting strategy is unstudied.
 |---|---|---|
 | How should amine ePC-SAFT parameters be estimated? | Literature synthesis, staged neutral/binary/ionic/reactive estimation, observation roles and explicit comparison criteria are documented. | [Scientific plan, §§4–7](PREDICTIVE_MEA_PROGRAM.md); [amine literature synthesis](../ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md) |
 | What transfers from MDEA to MEA? | Model lineage and parameter provenance distinguish shared methods, common species and MDEA-specific analog seeds. | [Component audit](../ePC-SAFT/full-component-parameter-source-audit.md); Uyan, Wangler, Cleeton and Bülow companions in [the reading shelf](../../literature/README.md) |
-| How can MEAH+ and MEACOO- be constrained? | A detailed staged identification plan already uses shared-cation analogs, restricted carbamate correction and coupled density/speciation. It records 128 analog densities and 103 bulk MEA densities, with derived volumes kept separate. | [Volumetric evidence and frozen staged plan](../ePC-SAFT/meah-meacoo-volumetric-evidence.md); [exact objectives, active coordinates, scales and multistart settings](../../analyses/reactive_epcsaft_parameter_evidence/ionic_volumetric_fit_preregistration.json) |
+| How can MEAH+ and MEACOO- be constrained? | A detailed staged identification plan already uses shared-cation analogs, restricted carbamate correction and coupled density/speciation. Its linked inventory keeps analog densities, bulk MEA densities and derived volumes separate. | [Volumetric evidence and frozen staged plan](../ePC-SAFT/meah-meacoo-volumetric-evidence.md); [exact objectives, active coordinates, scales and multistart settings](../../analyses/reactive_epcsaft_parameter_evidence/ionic_volumetric_fit_preregistration.json) |
 | Which measurement and reaction conventions are known? | Reaction direction, standard-state conversion, source conflicts, aggregate speciation, oxazolidone onset and pressure-pairing limitations have been audited. | [Primary-source audit](../ePC-SAFT/mea-reaction-and-sentinel-primary-source-audit.md); `data/reference/MEA/manifests/` |
 | Have neutral and electrostatic choices been studied? | Neutral-family comparisons, CO2–water induced association and Born/permittivity comparisons are retained. Their conclusions belong to the tested parameter/Engine identities. | [Historical parameter evidence](../../analyses/reactive_epcsaft_parameter_evidence/README.md); [later bundle studies](../../analyses/mea_parameter_bundle/README.md) |
 | Have coupled fits and predictive comparisons been attempted? | Issue 70 retains a supported-negative decision. Later work includes full retained-state dielectric comparison, Born studies, reaction-temperature fitting and holdout access. The May small fit is not the latest evidence. | [Issue 70 decision](../../analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json); [working notebook](../../analyses/mea_parameter_bundle/notebook.qmd); [parameter history](../../analyses/mea_parameter_bundle/results/parameter-record-history.csv) |
@@ -212,9 +212,9 @@ The remaining questions are narrower than “develop an estimation strategy”:
 - **Independent assessment:** `holdout-evaluations.csv` records previously accessed
   Xu and Kim data. A new untouched comparison cannot be assumed from an old
   “reserved” label. The scientific plan owns the partition rules.
-- **Publication/adoption:** the working notebook has unresolved numerical
-  freshness and adoption-writer issues recorded in the September audit. These
-  do not erase the completed research or justify repeating it.
+- **Publication/adoption:** the September audit records historical numerical freshness
+  and adoption-writer issues. The later A7 adoption and manuscript-use approval
+  are linked above; the old certification records retain their own identities.
 
 ### Historical retrieval and known documentation defects
 
@@ -248,10 +248,10 @@ or evidence. Update the existing owning record when that answer changes.
 - **Analyses:** each populated directory under `analyses/` owns one bounded
   reproduction, diagnostic, or retained evidence set.
 - **Research notebooks:** `analyses/mea_parameter_bundle/notebook.qmd` is the
-  active exploratory working view; its HTML is not a certified numerical
+  adopted A7 overview; its HTML is not a certified numerical
   publication. `analyses/enrtl_six_species_ideal_comparison/notebook.qmd`
-  retains a separate packet-specific comparison. Neither notebook establishes
-  an accepted parameter set or replaces its identified inputs and results.
+  retains a separate packet-specific comparison. Adoption is recorded separately; neither notebook replaces its identified
+  inputs, results or owner decisions.
 - **Manuscript:** the CAS journal source is `docs/scientific/latex/main.tex`.
 - **Bibliography:** tracked CAS inputs are `docs/scientific/latex/manuscript_references.bib`,
   `docs/scientific/latex/project_sources.bib`, and `docs/scientific/latex/official_sources.bib`;
@@ -295,10 +295,10 @@ and prose are consumers, never upstream evidence.
 Issue #70 records a supported negative decision and downstream refusal. Its
 raw evidence, exact hashes, and decision record remain authoritative history.
 The qualified Kiepe CO2--water induced-association evidence is also retained.
-Engine Issue #80 owns the current method and parameter campaign. Until that
-campaign succeeds and MEA accepts an immutable packet, this repository has no
-active MEA parameter set. Once such inputs exist, MEA may reproduce the pinned
-calculation directly through the installed Engine public callables.
+Engine Issue #80 owned that historical method and parameter campaign. Its
+no-active-parameter conclusion describes the Issue 70 record, not the later A7
+adoption linked above. MEA may reproduce identified inputs through the
+installed pinned Engine public callables.
 
 The [8 September 2026 audit](REPOSITORY_AUDIT_2026-09-08.md) records a checkout
 boundary: this branch still uses shared evaluator v3, while MEA Issues #85/#86

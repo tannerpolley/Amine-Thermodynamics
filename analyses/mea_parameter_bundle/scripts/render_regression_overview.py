@@ -252,6 +252,68 @@ def render_heat(rows):
     ax.grid(alpha=.18)
     save(fig, 'heat-of-absorption')
 
+def render_density(rows, summary):
+    cohorts = ('Amundsen fitted 15', 'Hartono fitted 32')
+    ids = {rid for name in cohorts for rid in summary['density'][name]['row_ids']}
+    rows = [r for r in rows if r['id'] in ids]
+    assert len(rows) == 47 and all(r['parameter_sha256'] == digest(PARAM) for r in rows)
+    failures = [r for r in rows if abs(float(r['error_over_s'])) > 2]
+    assert len(failures) == 3 and {float(r['T_K']) for r in failures} == {353.15}
+    temperatures = sorted({float(r['T_K']) for r in rows})
+    fig, axes = plt.subplots(1, 2, figsize=(11, 6))
+    fig.subplots_adjust(bottom=.37, top=.9, wspace=.2)
+    for ax, source in zip(axes, ('Amundsen2009', 'Hartono2014')):
+        ax.axhspan(-2, 2, color='grey', alpha=.12)
+        for limit in (-2, 2):
+            ax.axhline(limit, color='black', linestyle='--', lw=.8)
+        ax.axhline(0, color='black', lw=.5)
+        for i, temperature in enumerate(temperatures):
+            group = [r for r in rows if r['source'] == source and float(r['T_K']) == temperature]
+            ax.scatter([float(r['loading']) for r in group], [float(r['error_over_s']) for r in group],
+                       marker=('o', 's', '^', 'D', 'v', 'P', 'X', '*')[i],
+                       facecolors='none', edgecolors=COLORS[i % len(COLORS)], label=f'{temperature:.2f} K')
+        for i, row in enumerate(failures, 1):
+            if row['source'] == source:
+                ax.annotate(str(i), (float(row['loading']), float(row['error_over_s'])),
+                            xytext=(5, -12), textcoords='offset points', fontsize=9)
+        ax.set(title=source + ' · fitted loaded rows', xlabel='CO₂ loading (mol/mol MEA)',
+               ylabel='(Density calculated − observed) / row scale s (1)', ylim=(-3.1, 2.5))
+        ax.grid(alpha=.18)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc='lower center', bbox_to_anchor=(.5, .21), ncol=4, frameon=False)
+    fig.text(.06, .16, 'Dashed limits: ±2s for each row, normalized by its own retained s; 44/47 within limits.', fontsize=9)
+    for i, row in enumerate(failures, 1):
+        fig.text(.06, .16 - i * .04, f"{i}. {row['id']} · {float(row['error_over_s']):+.4f}s", fontsize=9)
+    save(fig, 'loaded-density-errors')
+    with (OUT / 'density-statistics.csv').open('w', newline='') as stream:
+        writer = csv.writer(stream, lineterminator='\n')
+        writer.writerow(['cohort', 'n', 'within_2s', 'max_abs_error_over_s', 'RMSE_kg_m3'])
+        for name in cohorts:
+            group = [r for r in rows if r['id'] in summary['density'][name]['row_ids']]
+            writer.writerow([name, len(group), sum(abs(float(r['error_over_s'])) <= 2 for r in group),
+                             max(abs(float(r['error_over_s'])) for r in group), summary['density'][name]['RMSE']])
+
+
+def render_cp(rows):
+    assert len(rows) == 4 and all(r['available_for_interpretation'] == 'True' for r in rows)
+    fig, axes = plt.subplots(1, 2, figsize=(9, 4), sharey=True, layout='constrained')
+    for ax, loading in zip(axes, (0, .358)):
+        group = [r for r in rows if float(r['loading']) == loading]
+        x = [float(r['T_K']) for r in group]
+        ax.scatter(x, [float(r['observed_kJ_kg_K']) for r in group], marker='o',
+                   facecolors='none', edgecolors=COLORS[0], label='Hilliard observed')
+        ax.scatter(x, [float(r['equilibrium_cp_kJ_kg_K']) for r in group], marker='+',
+                   color='black', label='A7 at measured states')
+        for row in group:
+            ax.annotate(f"{float(row['error_percent']):+.2f}%", (float(row['T_K']), float(row['equilibrium_cp_kJ_kg_K'])),
+                        xytext=(0, 9), textcoords='offset points', ha='center', fontsize=9)
+        ax.set(title=f'Loading {loading:g} mol CO₂/mol MEA', xlabel='Temperature (K)',
+               ylabel='Heat capacity (kJ kg⁻¹ K⁻¹)', xlim=(310, 361), ylim=(3.2, 4.1))
+        ax.grid(alpha=.18)
+    axes[1].legend(loc='lower right', frameon=False, fontsize=8)
+    save(fig, 'heat-capacity')
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     apply_style()
@@ -281,6 +343,11 @@ def main():
             statistics_rows.append(ln_statistics(family, 'common149 fitted', 'all', sub))
             assert math.isclose(statistics_rows[-1]['aard_percent'],
                                 qualification['groups']['common149 ' + family]['AARD_percent'], rel_tol=1e-10)
+        if family != 'Matin pool':
+            for role, subset in [('all fitted', [r for r in rows if r['fitted']]),
+                                 ('restored fitted', [r for r in rows if r['fitted'] and r['target'] not in common])]:
+                if subset:
+                    statistics_rows.append(ln_statistics(family, role, 'all', subset))
         statistics_rows += [ln_statistics(family, 'displayed source', s, [r for r in rows if r['source'] == s])
                             for s in sorted({r['source'] for r in rows})]
     with (OUT / 'statistics.csv').open('w', newline='') as stream:
@@ -306,13 +373,15 @@ def main():
     render_speciation(species)
     render_pool(pool)
     render_heat(read(DATA / 'heat.csv'))
-    inputs = [PRESSURE, SPECIES_DATA, POOL, DATA / 'heat.csv', DATA / 'fit-summary.json', PARAM, PHYSICAL, NATIVE_FIT, QUALIFICATION,
+    render_density(read(DATA / 'density.csv'), json.loads((DATA / 'summary.json').read_text()))
+    render_cp(read(DATA / 'cp.csv'))
+    inputs = [DATA / 'density.csv', DATA / 'summary.json', DATA / 'cp.csv', PRESSURE, SPECIES_DATA, POOL, DATA / 'heat.csv', DATA / 'fit-summary.json', PARAM, PHYSICAL, NATIVE_FIT, QUALIFICATION,
               Path(__file__), Path(__file__).with_name('manuscript_style.py')]
     (OUT / 'provenance.json').write_text(json.dumps({
         'inputs': {str(p.relative_to(ROOT)): digest(p) for p in inputs},
         'fit_figure_wheel_sha256': qualification['engine']['wheel_sha256'],
         'engine_commit': '8298c6029ebb8b467929badc4a223c580ec591ab', 'model_executed': False,
-        'series': 'Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from A7 fitting.',
+        'series': 'Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Density limits use the retained scale s of each row, not uniform measurement uncertainty; Cp is on the complete-feed mass basis. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from A7 fitting.',
         'outputs': {p.name: digest(p) for p in sorted(OUT.iterdir())
                     if p.suffix in ('.csv', '.svg', '.pdf', '.png')}
     }, indent=2) + '\n')
