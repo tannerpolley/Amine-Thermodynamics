@@ -4,6 +4,7 @@ resources:
   - results/a7-paper-evidence/**
   - figures/a7_regression_overview/output/**
   - results/selected-current-best-parameters.json
+  - results/model-curves/**
 ---
 
 **A7 adopted parameter record · adopted 20 October 2026 · record `e234e860…` · Engine `8298c602` · [Download exact parameters](results/selected-current-best-parameters.json)**
@@ -173,11 +174,13 @@ For R1–R3, $\ln K=A+B/T+C\ln T+DT+\Delta$; R2 already includes the conversion 
 
 # Fitting plots
 
+Lines are [model curves](results/model-curves/summary.json) of the adopted record at fixed parameters, at nominal solvent composition against analytical loading, and markers are measurements. Each curve reproduces the retained point predictions at its reference states, converges with balances closed to 10⁻¹⁰ and passes a midpoint sampling check, but it is a calculation, not a new fit, a phase-stability result or physical validation; the tables keep the point-wise statistics of record.
+
 ## CO₂ pressure {#pressure-and-speciation}
 
-Model values are calculated at each measured state and shown as + markers; no continuous curve is drawn. Pressures are plotted in kPa. [Figure data and provenance](figures/a7_regression_overview/output/provenance.json).
+Pressures are plotted in kPa; the lower panel gives deviations at the measured states. [Figure data and provenance](../../docs/scientific/latex/figures/generated/provenance.json).
 
-![A7 pressure against loading. Open markers are observations; + markers are calculated at measured states. The 40/60 °C panels include calibration and comparison rows; 80–120 °C are non-fitted predictions.](figures/a7_regression_overview/output/pressure.svg){#fig-pressure}
+![CO₂ partial pressure of 30 wt% MEA against loading on five isotherms, with the canonical and Wagner measurements; filled markers are fitted rows. Lower panel: calculated − measured at the measured states.](../../docs/scientific/latex/figures/generated/pressure.png){#fig-pressure}
 
 <!-- RESULTS:pressure:BEGIN -->
 
@@ -192,7 +195,7 @@ Model values are calculated at each measured state and shown as + markers; no co
 
 ## Speciation
 
-![A7 species and aggregate mole fractions. Open circles identify fitted observations; squares identify non-fitted observations; + marks calculated values. Matin HCO₃⁻ denotes the HCO₃⁻ + CO₃²⁻ pool, excluded from A7 fitting.](figures/a7_regression_overview/output/speciation.svg){#fig-speciation}
+![True-species liquid mole fractions against loading at 293.15–353.15 K, single liquids imposed at 101 325 Pa; the 353.15 K panel uses 31 wt% MEA and is dashed where the state lies below its bubble pressure. Matin HCO₃⁻ denotes the HCO₃⁻ + CO₃²⁻ pool, excluded from fitting.](../../docs/scientific/latex/figures/generated/speciation.png){#fig-speciation}
 
 <!-- RESULTS:species:BEGIN -->
 
@@ -214,7 +217,7 @@ The common calibration subset contains 94 species targets; seven restored fitted
 
 The [22 retained heat rows](results/a7-paper-evidence/heat.csv) comprise the fitted and non-fitted comparisons below. Eight Vinjarapu rows at 313.15 K and 1.734 MPa enter the objective; 14 Arcis rows at 322.5 K are non-fitted predictions at their source pressures. Heat is the integral finite-addition enthalpy from zero carbon. Negative heat denotes exothermic absorption.
 
-![A7 integral heat of absorption. Open markers are observations; + markers are calculated at measured states. Vinjarapu is fitted and Arcis is a non-fitted prediction.](figures/a7_regression_overview/output/heat-of-absorption.svg){#fig-heat}
+![Integral heat of absorption against loading at the three measured temperature–pressure conditions. Vinjarapu is fitted and Arcis is a non-fitted prediction.](../../docs/scientific/latex/figures/generated/heat-of-absorption.png){#fig-heat}
 
 Root-mean-square error (RMSE) and calculated-minus-observed bias are in kJ/mol CO₂.
 
@@ -230,6 +233,8 @@ Root-mean-square error (RMSE) and calculated-minus-observed bias are in kJ/mol C
 ## Density {#density-and-heat-capacity}
 
 The [210 retained densities](results/a7-paper-evidence/density.csv) are native equation-of-state predictions, with no empirical volume translation. The objective contains 47 loaded and five CO₂-free densities. Source pressures remain the retained assumptions, including 0.100 MPa where unreported. The other retained rows preserve their non-fitted roles and exclusions.
+
+![Liquid density of 30 wt% MEA against loading at six temperatures, imposed at 0.1 MPa up to 353.15 K and 0.7 MPa above; dashed segments lie below their bubble pressure.](../../docs/scientific/latex/figures/generated/density-curves.png){#fig-density-curves}
 
 ![A7 fitted loaded-density errors, normalized by each row’s retained scale. Dashed lines are the row-specific 2s limits after normalization; the three named failures are at 353.15 K. These scales are not uniformly measured uncertainties.](figures/a7_regression_overview/output/loaded-density-errors.svg){#fig-density}
 
@@ -252,6 +257,12 @@ Loaded rows use their row-specific $2s$ limits; the CO₂-free five use 1.0 kg/m
 <!-- RESULTS:density:END -->
 
 Three fitted loaded densities at 353.15 K fall outside their $2s$ limits (−2.28$s$, −2.06$s$, −2.43$s$). These three rows are underpredicted by 4.2–5.5 kg/m³ (0.40–0.53%). The source-uncertainty discussion and the five excluded Amundsen rows are on the [A7 page](joint-recalibration/index.qmd).
+
+## MEA–water
+
+The neutral MEA–water binary (no reactions) gives bubble temperature and incipient vapor composition at the two Cai isobars over each isobar’s measured liquid range.
+
+![Bubble temperature and vapor MEA mole fraction of MEA–water at 101.33 and 66.66 kPa with the fitted Cai et al. (1996) measurements.](../../docs/scientific/latex/figures/generated/mea-water.png){#fig-mea-water}
 
 ## Heat capacity
 
