@@ -29,6 +29,8 @@
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/high-temperature-comparison.csv SHA256 e9039244d75b3fa83ea3fb7cd1f98eb28ea39577d3b6eb7c7d4988d9ca1aaa1d
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/pressure-figure-data.csv SHA256 ecce5c18740fab3d989c8e72598e9dc7733f8a97ba751f53fb8265af5032e3b2
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/species-figure-data.csv SHA256 74bb9a8622dae4b0fc4d70b26957f5f2a46d5c695713fbcbdd4636384ba7a941
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/density-sweep-1b/summary.json SHA256 52a57183596b4a7a4cd9f573d551b96cb1188020401d23b0ad965a6e822273f9
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-scales.json SHA256 ee61922f62b40e8a3f947e85bb9d0e1247ff5dd97e567e554f7b90e589dc95ce
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json SHA256 ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/provenance.json SHA256 1ea9f49238b7f6fb3413e2ddddb40e5abf5dc4b68ce54d03a442b78246581827
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/summary.json SHA256 af775385eadbb7396eacb69cbd9abd1defbec46eed35b3bfa300fec619edbd3d
@@ -66,48 +68,49 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 05a5ae41119a1f8b54f0b6de2e842be1ea37d832b3c00e388be7248bf2bc9787
+% Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d2026f7b5441113dcf988dc5dd1945de8fa701d8f8dbe0c94ad8690d6a260cdf
 \begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2914\linewidth}>{\raggedright\arraybackslash}p{0.1504\linewidth}>{\raggedright\arraybackslash}p{0.1128\linewidth}>{\raggedright\arraybackslash}p{0.1786\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}@{}}
-\caption{A7 binary parameters. Temperature slopes multiply $(1/T-1/T_{\rm ref})$, with retained reference temperatures listed explicitly. Unlisted interactions retain the selected document conventions, including the same-sign ion dispersion exclusion. Fixed inputs are not new A7 fitted coordinates.}\label{tab:binary-interaction-parameters}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3666\linewidth}>{\raggedright\arraybackslash}p{0.1316\linewidth}>{\raggedright\arraybackslash}p{0.1222\linewidth}>{\raggedright\arraybackslash}p{0.3196\linewidth}@{}}
+\caption{Binary interactions. Slopes multiply $(1/T-1/T_{\rm ref})$. All fixed ion interactions are model assumptions, rather than measured pair energies. Dispersion between ions of the same charge sign is excluded.}\label{tab:binary-interaction-parameters}\\
 \toprule
-Parameter & Value & Unit & Role & Provenance/\allowbreak{}qualification \\
+Parameter & Value & Unit & Source or estimation \\
 \midrule\endfirsthead
 \toprule
-Parameter & Value & Unit & Role & Provenance/\allowbreak{}qualification \\
+Parameter & Value & Unit & Source or estimation \\
 \midrule\endhead
 \bottomrule\endfoot
-\ce{HCO3-}–\ce{H3O+} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{MEACOO-}–\ce{H3O+} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{HCO3-}–\ce{CO2} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{MEACOO-}–\ce{CO2} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{CO2}–\ce{CO3^{2-}} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{CO2}–\ce{H3O+} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{CO2}–\ce{OH-} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{CO2}–\ce{MEA} kij & 0 & 1 & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation \\
-\ce{CO2}–\ce{MEA} kij temperature slope & 0 & kelvin & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation; Tref=313.15 K \\
-\ce{CO2}–\ce{MEAH+} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{CO2}–water kij & \mbox{-0.04641690112} & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{CO2}–water kij temperature slope & \mbox{-35.66505221} & kelvin & fixed in A7 & earlier project inputs; fixed in A7; candidate extrapolation; Tref=313.15 K \\
-\ce{CO3^{2-}}–\ce{H3O+} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{H3O+}–\ce{OH-} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{HCO3-}–\ce{MEA} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{MEACOO-}–\ce{MEA} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{CO3^{2-}}–\ce{MEA} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{H3O+}–\ce{MEA} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{OH-}–\ce{MEA} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{MEA}–\ce{MEAH+} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{MEA}–water kij & \mbox{-0.08990482269} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
-\ce{MEA}–water kij temperature slope & \mbox{-8.069913373} & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\
-\ce{HCO3-}–\ce{MEAH+} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{MEACOO-}–\ce{MEAH+} kij & \mbox{-1} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
-\ce{CO3^{2-}}–\ce{MEAH+} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{OH-}–\ce{MEAH+} kij & 0 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{HCO3-}–water kij & 0.7253209981 & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
-\ce{MEACOO-}–water kij & \mbox{-0.003863204449} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
-\ce{CO3^{2-}}–water kij & \mbox{-0.25} & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{H3O+}–water kij & 0.25 & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{OH-}–water kij & \mbox{-0.25} & 1 & fixed in A7 & inherited project inputs; candidate extrapolation \\
-\ce{MEAH+}–water kij & \mbox{-0.5} & 1 & fitted in A7 & A7 joint fit (this work); candidate extrapolation \\
-\ce{MEAH+}–water kij temperature slope & \mbox{-41.92964086} & kelvin & fitted in A7 & A7 joint fit (this work); candidate extrapolation; Tref=313.15 K \\
+\ce{HCO3-}–\ce{H3O+} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{MEACOO-}–\ce{H3O+} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{HCO3-}–\ce{CO2} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{MEACOO-}–\ce{CO2} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{CO2}–\ce{CO3^{2-}} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{CO2}–\ce{H3O+} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{CO2}–\ce{OH-} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{CO2}–\ce{MEA} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{CO2}–\ce{MEA} $k_{ij}$ temperature slope & 0 & kelvin & fixed model input (this work); Section S9; reference temperature 313.15 K \\
+\ce{CO2}–\ce{MEAH+} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{CO2}–water $k_{ij}$ & $-0.0464169$ & 1 & Kiepe pressure fit, Section S9 \cite{kiepeExperimentalDeterminationPrediction2002} \\
+\ce{CO2}–water $k_{ij}$ temperature slope & $-35.6651$ & kelvin & Kiepe pressure fit, Section S9 \cite{kiepeExperimentalDeterminationPrediction2002} \\
+\ce{CO3^{2-}}–\ce{H3O+} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{H3O+}–\ce{OH-} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{HCO3-}–\ce{MEA} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{MEACOO-}–\ce{MEA} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{CO3^{2-}}–\ce{MEA} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{H3O+}–\ce{MEA} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{OH-}–\ce{MEA} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{MEA}–\ce{MEAH+} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{MEA}–water $k_{ij}$ & $-0.0899048$ & 1 & fitted (this work) \\
+\ce{MEA}–water $k_{ij}$ temperature slope & $-8.06991$ & kelvin & fitted (this work); reference temperature 313.15 K \\
+\ce{HCO3-}–\ce{MEAH+} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{MEACOO-}–\ce{MEAH+} $k_{ij}$ & $-1$ & 1 & fitted (this work) \\
+\ce{CO3^{2-}}–\ce{MEAH+} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{OH-}–\ce{MEAH+} $k_{ij}$ & 0 & 1 & fixed model input (this work); Section S9 \\
+\ce{HCO3-}–water $k_{ij}$ & 0.725321 & 1 & fitted (this work) \\
+\ce{MEACOO-}–water $k_{ij}$ & $-0.0038632$ & 1 & fitted (this work) \\
+\ce{CO3^{2-}}–water $k_{ij}$ & $-0.25$ & 1 & fixed model input (this work); Section S9 \\
+\ce{H3O+}–water $k_{ij}$ & 0.25 & 1 & fixed model input (this work); Section S9 \\
+\ce{OH-}–water $k_{ij}$ & $-0.25$ & 1 & fixed model input (this work); Section S9 \\
+\ce{MEAH+}–water $k_{ij}$ & $-0.5$ & 1 & fitted (this work) \\
+\ce{MEAH+}–water $k_{ij}$ temperature slope & $-41.9296$ & kelvin & fitted (this work); reference temperature 313.15 K \\
 \end{longtable}\endgroup

@@ -1,18 +1,13 @@
 \section{Conclusions}\label{sec:conclusion}
 % P:conclusion-01
-One nine-species ePC-SAFT parameterization with explicit carbamate chemistry can be calibrated jointly to \COtwo partial pressure, speciation, integral heat, loaded and \COtwo-free density, heat capacity and \MEA--water binary data for 30 wt\% \MEA, subject to disclosed failures; this is a feasibility result for one constrained local fit, not an optimum.
-The 16-coordinate, 307-row calibration gives common-subset pressure/species AARDs of 11.86/7.10\,\% and Vinjarapu integral-heat RMSE of \SI{1.83}{\kilo\joule\per\mole} \COtwo.
-Native densities require no empirical volume translation, but only 44 of the 47 fitted loaded rows meet the declared $2s$ requirement.
-The three misses, one Amundsen state at loading 0.30 and Hartono states at loadings 0.29 and 0.39, are all low at \SI{353.15}{\kelvin}.
+A nine-species ePC-SAFT model with explicit carbamate chemistry jointly represents several equilibrium, caloric and volumetric properties of 30 wt\% aqueous MEA through 16 fitted parameters and 307 quantities.
+The leading limitation is that its finite phase test covers only 313.15--333.15 K and loading $10^{-5}$--0.5, below the three density failures at 353.15 K.
+The restricted-bound fit gives pressure/species AARDs of 11.86/7.10\,\% and fitted integral-heat RMSE of 1.83 kJ/mol \COtwo.
+Densities are calculated without volume translation; 44 of 47 fitted loaded densities lie within $2s$.
 
 % P:conclusion-02
-No descent was numerically resolved in 657 trials at 73 specified states (313.15--\SI{333.15}{\kelvin}, $\alpha$ $10^{-5}$--0.5).
-Compared with A6, this endpoint exchanges resolved descent at some specified states for poorer agreement at three warm-density states outside the phase family's temperatures.
-The comparison neither establishes a minimum density penalty nor isolates a Born or heat effect.
-No stability claim is made above \SI{333.15}{\kelvin}, above loading 0.5 or at the density failures.
-
-% P:conclusion-03
-The carbonate share, titration bicarbonate/carbonate pool, unloaded \SI{318.15}{\kelvin} heat capacity and 45 wt\% pressure transfer remain substantial limitations.
-Two sequential single-start local fits in sampled bounds and conditional parameter errors provide no global optimum, parameter uniqueness or prediction intervals.
-Fitted agreement is calibration; the finite phase search and the re-evaluation of the selected parameter file are numerical verification; comparisons examined during model development are not independent validation.
-This evidence does not validate phase behavior or absorber/stripper performance.
+Restricting the protonated-amine size and water-interaction bounds removes all instabilities detected for the original-bound fit at the specified states, while increasing total cost by 0.45\,\% and leaving three densities 0.40--0.53\,\% low.
+This is a comparison of local solutions under chosen bounds, rather than a minimum density penalty or a global optimum.
+The fitted R5 law departs from Bates--Pinching, and heat temperature dependence remains untested beyond the fitted and compared states.
+Carbonate share, titration bicarbonate, unloaded heat capacity and pressures at 45 wt\% MEA limit further use.
+The evidence supports calibration and finite numerical phase searches; independent phase-behavior and absorber/stripper validation remain outstanding.

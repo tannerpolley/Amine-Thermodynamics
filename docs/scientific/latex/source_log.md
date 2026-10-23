@@ -1,4 +1,38 @@
-# A7 manuscript sources and numerical provenance (#197, 2026-10-20)
+## Second mechanical correction round (2026-10-22)
+
+The confirming science and story reports for `ae15c4d` were applied under issue #197. The science definition of the row-scaled residuals used to decide convergence overrides story N7's unscaled-equation wording. The appended Table S2 correction replaces the earlier N8 text. Table changes were regenerated from `scripts/final_rerun_tables.py`; the Figure 2 change is in the caption source.
+
+For N9, the native scope question returned “All N9 records” in Don't Ask mode. The correction therefore covers the ten explicitly listed title records: Neumann's Helmholtz capitalization plus nine H2O/H2S titles, rather than the brief's two-record limit. Only their Better BibTeX `tex.title=` overrides were changed, after inspecting the exact old/new preview. Zotero keys: `MIWSMGMV`, `RVYVQKSF`, `NL4W5CA6`, `E322TKPZ`, `MMI98GID`, `9GBQCJNU`, `VDRXENRB`, `P9HDI8CX`, `UC2KB9PU`, `ZILDPWWE`. The authorized canonical export was regenerated with `cse-zotero bibliography-export --apply`, verified to omit attachment paths, then the cited subset was regenerated with `scripts/cited_bibliography.py` using the preceding build's unchanged citation set. All 54 keys and every non-title bibliography field are semantically unchanged; the exporter adds trailing field commas.
+
+This round changes presentation only. No model calculation or parameter estimation was run. The phase-search claims remain limited to 313.15–333.15 K; the issue #201 files already present on the starting branch were not used or changed. The parent owns confirming review and delivery.
+
+## Review correction round (2026-10-22)
+
+The science review of `703fb86` and the reader review were applied under issue #197's explicit fix-round authority. Science correction 7 overrides story R5: only restricted-bound marker shapes identify single-liquid versus liquid--vapor states. Science correction 8 and story R3 agree on Table S1; the story replacement supplies the complete grammatical sentence. No other scientific conflict was found.
+
+All table edits pass through `scripts/final_rerun_tables.py`; figure edits pass through `analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py`. Removing the duplicated inventory renumbers caloric inputs to Section S8, complete inputs to Section S9, ideal calorics to Table S13 and component inputs to Table S14. References follow those changes. The water exponential coefficients keep their values and now use symbols defined in the supplement equation. No #201 result is included.
+
+For story R15, Zotero metadata were previewed and corrected for 33 cited records: 31 Better BibTeX raw title overrides protect chemistry and proper nouns, Bates's title reads “from 0 to 50 °C”, and Chase's place field no longer contains “-1”. The raw overrides use `tex.title=`, following the [Better BibTeX extra-field documentation](https://retorque.re/zotero-better-bibtex/exporting/extra-fields/). The canonical path-sanitized export was regenerated and verified, then `scripts/cited_bibliography.py` copied the cited entries. The project bibliography was not hand-edited. Extra trailing commas reflect the exporter, and other bibliographic fields were checked for drift.
+
+`builds/197-fix-round-numeric-check.json` records the before/after numeric comparison against `703fb86`. The retained parameter and results files are unchanged. Generator guards again reconcile the exact 307 quantities and phase pairs. This is a correction of reviewed presentation, without a fit, model calculation or new scientific claim. The parent owns the confirming review and delivery.
+
+# Manuscript sources and numerical provenance (#197)
+
+## Current revision (2026-10-22)
+
+The current draft implements the merged referee plan with retained results only. The investigator promotion and scientific parameter identities below are unchanged. The historical entries below document the preceding draft; statements about unchanged presentation generators, historical inventory or six-fit tables are superseded by this revision.
+
+- Names: original-bound fit (A6), restricted-bound fit (A7), reference fit (F1). The paired 73-state phase evidence remains limited to 313.15–333.15 K. No results from issue #201 are used.
+- R5 verified directly against Bates and Pinching, Zotero parent `TAE3BGEB`, PDF `A9H4U73D`, Eq. 10 and Table 2, printed p.351; and Böttinger PDF `TJCRKTFQ`, Table 5, printed p.138. The source equation is pK = 2677.91/T + 0.3869 + 0.0004277 T. At 298.15 K source/fitted pK are 9.4961729056/10.0958410589 (difference +0.5996681533); at 313.15 K they are 9.0723590834/9.5634047933 (difference +0.4910457099). At 313.15 K dissociation enthalpy from R ln(10)(A − C T²) is 50.46497796/63.40888580 kJ/mol. The serialized coefficients already contain the +10 kJ/mol total shift. The unshifted reciprocal-temperature coefficient also changes; the departure is not the shift alone. Table 2 reports temperature-specific experimental deviations, not a uniform ±0.0014 pK uncertainty. The source declaration is preserved unchanged, including its obsolete Eq. 7 locator; only presentation is corrected.
+- Literature additions checked in the actual sources: Zhang PDF `M3QDCZM7`, Tables 9–11 (species deviation 35.7%, not 5.7%); Baygi Table 5 and Table 3; Nasrifar Table 2 and Eq. 12; Najafloo Table 5; Akula PDF `IIYKTEG7`, Section 4.2; Lloret PDF `M9UK6V4P`, Section 4.7; Téllez-Arredondo PDF `562Y8VTS`, Tables 5 and 8 (electrolyte cubic two-state association, not ePC-SAFT); Neumann PDF `G3U3WRF8`, Section 4.2; Hessen PDF `PMT4R63N`, Sections 3–4 and Table 2; Aronu PDF `W2NNU9H6`, Sections 3–5, Tables 7–10, including its appended correction. Parameter counts are stated only where established.
+- The phase algorithm and numerical-error formulas were read from Engine commit `8298c6029ebb8b467929badc4a223c580ec591ab`, `engine/native/equilibrium/phase_stability.cpp`, and its documented algorithms. This was a read-only source inspection; no Engine calculation ran. Fixed reference pressures are defined from the retained state grid with ratios 0.50/0.80/0.95; the historical calculation that first produced those reference pressures is not traced. The manuscript identifies them as design inputs and supplies their exact states, rather than claiming they are current bubble pressures.
+- New table inputs: density scales and source differences from `J/amendment-6/inputs/without-amundsen-0p4/density-scales.json` and `J/amendment-6/density-sweep-1b/summary.json`; neutral calorics from `data/reference/MEA/thermal/physical-ideal-gas-calorics.json`; original bounds from `J/amendment-6/joint-mea-water/held/fit-spec.json`. Pure-water fitting details come from `J/stage3/qualification/water-spec.json`, its assessment and `results/water-124/lambda-0.1-A/assessment.json`. Permittivity branch ambiguity and fitting observations come from the retained stage-5 estimates. The exact data are preserved.
+- The 210 density observations and 73 paired phase states are supplied as CSV in the staged deposit. The supplement prints source summaries, confirmed splits and a 10 by 10 lower-triangular correlation matrix. The obsolete inventory and six-fit history are removed. All table changes pass through `scripts/final_rerun_tables.py`; all figure changes through `render_manuscript_figures.py`.
+- Availability follows the authorized Zenodo plan: DOI added at submission and restricted Engine wheel access for referees. No DOI is invented and nothing is published. The staged deposit README contains hashes, software identities and reproduction commands.
+- The local bibliography is refreshed only through the existing approved script and existing central export, after both auxiliary files exist. Existing-entry metadata are copied unchanged; capitalization corrections requiring central metadata changes are deferred. No Zotero mutation or central export refresh is performed.
+- Numeric changes and executable additions are recorded in `builds/197-revision-numeric-check.json` and its Markdown explanation. The parent conducts the independent scientific and reader reviews after delivery.
+
+## Preceding-draft evidence record (2026-10-20)
 
 The investigator promoted notebook commit `8f40c125e5945ac785cc0ad1889fc79bea2096c9` and the accepted A7 endpoint `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e` for the joint-calibration and finite-phase-test manuscript, subject to the density failures, finite state domain, single-start/local-fit, conditional-error and prior-data-access limits in issue #197.
 
@@ -78,7 +112,7 @@ The source owner is
 `reactions` R2/R5 and `common_source_standard_state`. R2 uses Austgen (1991),
 Table V, with source coefficients 231.465, −12092.1 K, −36.7816 and zero in
 `ln K = a + b/T + c ln T + d T`. Its source-to-common molality offset is
-+4.016534992299479. R5 uses Bates and Pinching (1951), equation 7, p.349:
++4.016534992299479. R5 uses Bates and Pinching (1951), Eq. 10 and Table 2, p.351:
 `−log10 K = 2677.91/T + 0.3869 + 0.0004277 T`; its source-to-common offset
 is zero. These are the retained, previously adjudicated source declarations;
 this presentation Build does not claim a new reading of the papers.

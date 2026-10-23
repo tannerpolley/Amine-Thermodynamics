@@ -29,6 +29,8 @@
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/high-temperature-comparison.csv SHA256 e9039244d75b3fa83ea3fb7cd1f98eb28ea39577d3b6eb7c7d4988d9ca1aaa1d
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/pressure-figure-data.csv SHA256 ecce5c18740fab3d989c8e72598e9dc7733f8a97ba751f53fb8265af5032e3b2
 % Input: analyses/mea_parameter_bundle/results/heat-final-170/species-figure-data.csv SHA256 74bb9a8622dae4b0fc4d70b26957f5f2a46d5c695713fbcbdd4636384ba7a941
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/density-sweep-1b/summary.json SHA256 52a57183596b4a7a4cd9f573d551b96cb1188020401d23b0ad965a6e822273f9
+% Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/density-scales.json SHA256 ee61922f62b40e8a3f947e85bb9d0e1247ff5dd97e567e554f7b90e589dc95ce
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json SHA256 ceefc95cd051fb291e0c08675c4cb6f159bf10dca0116ef1251ba78c243f79c7
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/provenance.json SHA256 1ea9f49238b7f6fb3413e2ddddb40e5abf5dc4b68ce54d03a442b78246581827
 % Input: analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-assessment/summary.json SHA256 af775385eadbb7396eacb69cbd9abd1defbec46eed35b3bfa300fec619edbd3d
@@ -66,33 +68,34 @@
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 b3756fe010aa848c4c065f31bd986a9fe7556d07539eec59740a883d11b53c14
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 05a5ae41119a1f8b54f0b6de2e842be1ea37d832b3c00e388be7248bf2bc9787
+% Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 d2026f7b5441113dcf988dc5dd1945de8fa701d8f8dbe0c94ad8690d6a260cdf
 \begingroup\small\setlength{\tabcolsep}{2pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2820\linewidth}>{\raggedright\arraybackslash}p{0.2726\linewidth}>{\raggedright\arraybackslash}p{0.0564\linewidth}>{\raggedright\arraybackslash}p{0.1410\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}@{}}
-\caption{A7 retained state cohorts. Fitted IDs are removed from each retained cohort; canonical and packet subsets still overlap and must not be pooled. Named high-temperature, transfer, Wagner and Matin-pool comparisons retain prior data access. Arcis is an acceptance check in the property table, not independent validation.}\label{tab:supplement-outside-fit}\\
+\caption{Restricted-bound fit comparisons outside the fit. Fitted observations are removed from each set; sets overlap and are not additive. These comparisons were not fitted but were seen during model development. The pressure/species subset is the 79 Jou and Hilliard pressures used in the pressure and species calculations, 47 of them fitted.}\label{tab:supplement-outside-fit}\\
 \toprule
-Cohort/\allowbreak{}view & Data use & n & AARD (\%) & Mean ln(calc/\allowbreak{}obs) \\
+Data set & Data use & n & AARD (\%) & Mean ln(calc/\allowbreak{}obs) \\
 \midrule\endfirsthead
 \toprule
-Cohort/\allowbreak{}view & Data use & n & AARD (\%) & Mean ln(calc/\allowbreak{}obs) \\
+Data set & Data use & n & AARD (\%) & Mean ln(calc/\allowbreak{}obs) \\
 \midrule\endhead
 \bottomrule\endfoot
-canonical & outside objective IDs; previously accessed & 112 & 24.2016 & \mbox{-0.134065} \\
-packet & outside objective IDs; previously accessed & 32 & 20.7673 & 0.144056 \\
-transfer & outside objective IDs; previously accessed & 70 & 43.5194 & \mbox{-0.0177807} \\
-wagner & outside objective IDs; previously accessed & 23 & 15.4469 & \mbox{-0.158026} \\
-canonical 100-120 C & outside objective IDs; previously accessed & 54 & 24.3499 & \mbox{-0.0195026} \\
-packet 100-120 C & outside objective IDs; previously accessed & 20 & 27.538 & 0.191152 \\
-canonical 100-120 C Jou1995 100 C & outside objective IDs; previously accessed & 10 & 23.5022 & 0.18856 \\
-canonical 100-120 C Jou1995 120 C & outside objective IDs; previously accessed & 10 & 31.5737 & 0.193744 \\
-canonical 100-120 C Mamun2005 120 C & outside objective IDs; previously accessed & 19 & 18.5405 & \mbox{-0.207611} \\
-canonical 100-120 C Xu2011 100 C & outside objective IDs; previously accessed & 8 & 26.8979 & \mbox{-0.254415} \\
-canonical 100-120 C Xu2011 120 C & outside objective IDs; previously accessed & 7 & 28.0976 & 0.15768 \\
-packet 100-120 C Jou1995 100 C & outside objective IDs; previously accessed & 10 & 23.5022 & 0.18856 \\
-packet 100-120 C Jou1995 120 C & outside objective IDs; previously accessed & 10 & 31.5737 & 0.193744 \\
-Wagner near 353.15 K & outside objective IDs; previously accessed & 11 & 22.2026 & \mbox{-0.252026} \\
-Wagner near 392.15 K & outside objective IDs; previously accessed & 12 & 9.2542 & \mbox{-0.0718582} \\
-transfer 15 wt\% & outside objective IDs; previously accessed & 33 & 29.507 & \mbox{-0.20443} \\
-transfer 45 wt\% & outside objective IDs; previously accessed & 37 & 56.0168 & 0.14869 \\
-Matin 19 pools & outside objective IDs; previously accessed & 19 & 67.4808 & \mbox{-1.26582} \\
+Six-source pressures & not fitted; seen during development & 112 & 24.2 & $-0.1341$ \\
+Pressure/\allowbreak{}species subset & not fitted; seen during development & 32 & 20.77 & 0.1441 \\
+Aronu et al. (2011), 15 and 45 wt\% & not fitted; seen during development & 70 & 43.52 & $-0.01778$ \\
+Wagner et al. (2013) & not fitted; seen during development & 23 & 15.45 & $-0.158$ \\
+Six-source pressures, 100--120 $^\circ$C & not fitted; seen during development & 54 & 24.35 & $-0.0195$ \\
+Pressure/\allowbreak{}species subset, 100--120 $^\circ$C & not fitted; seen during development & 20 & 27.54 & 0.1912 \\
+100--120 $^\circ$C: Jou et al. (1995), 100 $^\circ$C & not fitted; seen during development & 10 & 23.5 & 0.1886 \\
+100--120 $^\circ$C: Jou et al. (1995), 120 $^\circ$C & not fitted; seen during development & 10 & 31.57 & 0.1937 \\
+100--120 $^\circ$C: Ma’mun et al. (2005), 120 $^\circ$C & not fitted; seen during development & 19 & 18.54 & $-0.2076$ \\
+100--120 $^\circ$C: Xu and Rochelle (2011), 100 $^\circ$C & not fitted; seen during development & 8 & 26.9 & $-0.2544$ \\
+100--120 $^\circ$C: Xu and Rochelle (2011), 120 $^\circ$C & not fitted; seen during development & 7 & 28.1 & 0.1577 \\
+Pressure/\allowbreak{}species subset, 100--120 $^\circ$C: Jou et al. (1995), 100 $^\circ$C & not fitted; seen during development & 10 & 23.5 & 0.1886 \\
+Pressure/\allowbreak{}species subset, 100--120 $^\circ$C: Jou et al. (1995), 120 $^\circ$C & not fitted; seen during development & 10 & 31.57 & 0.1937 \\
+Wagner et al. (2013), near 353 K & not fitted; seen during development & 11 & 22.2 & $-0.252$ \\
+Wagner et al. (2013), near 392 K & not fitted; seen during development & 12 & 9.254 & $-0.07186$ \\
+Aronu et al. (2011), 15 wt\% & not fitted; seen during development & 33 & 29.51 & $-0.2044$ \\
+Aronu et al. (2011), 45 wt\% & not fitted; seen during development & 37 & 56.02 & 0.1487 \\
+Matin 19 bicarbonate + carbonate totals & not fitted; seen during development & 19 & 67.48 & $-1.266$ \\
 \end{longtable}\endgroup
