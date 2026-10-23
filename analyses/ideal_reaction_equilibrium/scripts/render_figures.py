@@ -24,14 +24,13 @@ from MEA.common.plot_style import (
     temperature_color,
     write_mpl_sidecar,
 )
-from MEA.common.analysis_io import copy_file_as, normalize_svg, read_required_csv
+from MEA.common.analysis_io import normalize_svg, read_required_csv
 from MEA.common.speciation_figures import write_speciation_plot
 
 ANALYSIS_DIR = Path(__file__).resolve().parents[1]
 OUT_DIR = ANALYSIS_DIR / "results"
 PRESSURE_FIGURE_OUT = ANALYSIS_DIR / "figures" / "pressure" / "output"
 SPECIATION_FIGURE_OUT = ANALYSIS_DIR / "figures" / "speciation" / "output"
-LATEX_FIGURES_DIR = REPO_ROOT / "docs" / "scientific" / "latex" / "figures"
 PRESSURE_MODEL_LABELS = {
     "legacy_pcsaft_smith_missen": ("Legacy PC-SAFT Smith-Missen", LEGACY_PCSAFT_LINESTYLE, REFERENCE_LINEWIDTH),
     "neutral_pcsaft_pressure_reference": ("Neutral ePC-SAFT parity", EPCSAFT_NEUTRAL_LINESTYLE, MODEL_LINEWIDTH),
@@ -163,7 +162,6 @@ def plot_pressure(pressure_results: pd.DataFrame) -> None:
         data_path=plot_data_path,
         style_source="analyses/ideal_reaction_equilibrium/scripts/render_figures.py",
     )
-    copy_file_as(pdf, LATEX_FIGURES_DIR / "mea_ideal_pressure_vs_loading.pdf")
 
 
 def plot_speciation(speciation_curve: pd.DataFrame, speciation_reference_points: pd.DataFrame) -> None:
@@ -196,8 +194,6 @@ def plot_speciation(speciation_curve: pd.DataFrame, speciation_reference_points:
             style_source="analyses/ideal_reaction_equilibrium/scripts/render_figures.py",
             temperature_C=float(temperature_C),
         )
-        if int(round(float(temperature_C))) in {20, 40}:
-            copy_file_as(pdf, LATEX_FIGURES_DIR / f"mea_ideal_speciation_{int(round(float(temperature_C)))}C.pdf")
     write_mpl_sidecar(
         SPECIATION_FIGURE_OUT / "ideal_reference_speciation_figure_family.mpl.yaml",
         png_name="ideal_reference_speciation_40C.png",

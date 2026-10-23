@@ -13,7 +13,7 @@ SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-from MEA.common.analysis_io import copy_file_as, normalize_svg, read_required_csv, remove_matching_files  # noqa: E402
+from MEA.common.analysis_io import normalize_svg, read_required_csv, remove_matching_files  # noqa: E402
 from MEA.common.plot_style import (  # noqa: E402
     EPCSAFT_IONIC_LINESTYLE,
     JOU_DATA_MARKER,
@@ -38,7 +38,6 @@ CONTROLLED_COMPARISON_INPUT = (
 CONTROLLED_COMPARISON_FIGURE_OUT = (
     ANALYSIS_DIR / "figures" / "controlled_comparison" / "output"
 )
-LATEX_FIGURES_DIR = REPO_ROOT / "docs" / "scientific" / "latex" / "figures"
 STALE_SCAFFOLD_PATTERNS = (
     "historical_activity_evaluation_speciation_scaffold_curve.csv",
     "historical_activity_evaluation_speciation_scaffold_*C.png",
@@ -215,7 +214,6 @@ def plot_controlled_comparison(
     )
     output = CONTROLLED_COMPARISON_FIGURE_OUT
     output.mkdir(parents=True, exist_ok=True)
-    LATEX_FIGURES_DIR.mkdir(parents=True, exist_ok=True)
     plot_data = prepare_controlled_comparison_plot_data(rows)
     plot_data_path = output / "controlled_pressure_comparison_plot_data.csv"
     plot_data.to_csv(plot_data_path, index=False, lineterminator="\n")
@@ -335,10 +333,6 @@ def plot_controlled_comparison(
         data_path=plot_data_path,
         style_source="analyses/historical_fixed_parameter_epcsaft_evaluation/scripts/render_figures.py",
     )
-    copy_file_as(
-        pdf,
-        LATEX_FIGURES_DIR / "mea_controlled_pressure_comparison.pdf",
-    )
     return png, svg, pdf, plot_data_path, sidecar
 
 
@@ -424,7 +418,6 @@ def plot_pressure(pressure_results: pd.DataFrame) -> None:
         data_path=plot_data_path,
         style_source="analyses/historical_fixed_parameter_epcsaft_evaluation/scripts/render_figures.py",
     )
-    copy_file_as(pdf, LATEX_FIGURES_DIR / "mea_activity_pressure_vs_loading.pdf")
 
 
 def main() -> int:
@@ -456,7 +449,6 @@ def main() -> int:
             style_source="analyses/historical_fixed_parameter_epcsaft_evaluation/scripts/render_figures.py",
             temperature_C=float(temperature_C),
         )
-        copy_file_as(pdf, LATEX_FIGURES_DIR / f"mea_activity_speciation_{int(round(float(temperature_C)))}C.pdf")
     write_mpl_sidecar(
         SPECIATION_FIGURE_OUT / "historical_activity_evaluation_speciation_figure_family.mpl.yaml",
         png_name="historical_activity_evaluation_speciation_40C.png",
