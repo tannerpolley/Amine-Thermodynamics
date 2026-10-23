@@ -135,6 +135,11 @@ def blocks(rows, ncols):
     return [row for i, (label, part) in enumerate(groups.items()) for row in [block(ncols, label, i == 0), *part]]
 
 
+# A local column-header row names the columns beneath it where they differ from the table head.
+def columns(*names):
+    return ' & '.join(names) + r' \\*'
+
+
 # Parameter quantity by the last identity part, in display order; units as block headings show them.
 QUANTITY = {'k_ij': r'Interaction $k_{ij}$', 'reciprocal_temperature_slope': r'Temperature slope $b_{ij}$', 'segment_count': 'Segment count',
             **dict.fromkeys(['segment_diameter', 'born_diameter', 'debye_huckel_diameter', 'packing_diameter', 'constant', 'amplitude'], 'Diameter'),
@@ -242,11 +247,11 @@ def main():
     for quantity, unit in [('temperature', ' (K)'), ('mole_fraction', '')]:
         part = groups['Cai', quantity]
         s = a.stats(part)
-        residual += [block(6, 'RMSE and bias' + unit), ['Cai ' + quantity, 'calibration', len(part), num(s['RMSE']), num(s['bias']), '']]
-    residual.append(block(6, r'RMSE and bias (kJ/mol \ce{CO2})'))
+        residual += [block(6, 'RMSE and bias' + unit), columns('', '', '', 'RMSE', 'Bias', ''), ['Cai ' + quantity, 'calibration', len(part), num(s['RMSE']), num(s['bias']), '']]
+    residual += [block(6, r'RMSE and bias (kJ/mol \ce{CO2})'), columns('', '', '', 'RMSE', 'Bias', '')]
     for name, s in summary['heat'].items():
         residual.append([name, 'calibration' if name == 'Vinjarapu2024' else 'used to accept fits', s['n_total'], num(s['RMSE']), num(s['bias']), ''])
-    residual.append(block(6, r'Signed error (\%), $T$ (K) and loading'))
+    residual += [block(6, r'Signed error (\%), $T$ (K) and loading'), columns('', '', '', r'Signed error (\%)', '$T$ (K)', 'Loading')]
     for r in a.rows(a.E / 'cp.csv'):
         residual.append(['Hilliard Cp', 'calibration', 1, num(r['error_percent']), r['T_K'], r['loading']])
     table('residual_summary.tex', r'A7 property deviations. AARD denotes average absolute relative deviation. Fitted deviations and the Arcis comparison do not establish physical validation; Cai deviations are in K and mole fraction. Cp remains on its source mass basis.',
@@ -541,7 +546,7 @@ def main():
     caloric_rows = [[f'${x}$', *(str(c['coefficients'][j]) for c in shomate)] for j, x in enumerate('ABCDEFGH')]
     caloric_rows += [block(3, 'Source temperature (K)'), ['Lowest', *(ranges(c, 0) for c in shomate)], ['Highest', *(ranges(c, 1) for c in shomate)]]
     caloric_rows += [block(3, 'Formation enthalpy (J/mol)'), ['$h_f$', *(str(c['formation_enthalpy_j_per_mol']) for c in shomate)]]
-    caloric_rows += [block(3, r'\ce{MEA} $C_P$ polynomial coefficient'), *([f'${x}$', str(v), ''] for x, v in zip('abcd', mea['coefficients'], strict=True))]
+    caloric_rows += [r'\midrule', columns('Quantity', r'\ce{MEA}', ''), r'\midrule', block(3, r'\ce{MEA} $C_P$ polynomial coefficient', True), *([f'${x}$', str(v), ''] for x, v in zip('abcd', mea['coefficients'], strict=True))]
     caloric_rows += [block(3, r'\ce{MEA} source temperature (K)'), ['Lowest', ranges(mea, 0), ''], ['Highest', ranges(mea, 1), ''], block(3, r'\ce{MEA} source'), ['Reference', 'Zhang Table 3', '']]
     table('ideal_calorics.tex',r'Ideal-gas caloric inputs. Shomate $C_P=A+Bt+Ct^2+Dt^3+E/t^2$, $t=T/1000$, in J/(mol K); enthalpy is $h_f+1000(At+Bt^2/2+Ct^3/3+Dt^4/4-E/t+F-H)$. MEA uses $C_P=a+bT+cT^2+dT^3$ with $h=s=0$ at 313.15 K. Shomate entries list A--H in order.',
           ['Shomate coefficient','CO2','Water'],caloric_rows,'lrr')
