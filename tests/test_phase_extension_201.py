@@ -34,3 +34,21 @@ def test_missing_phase_evidence_and_failed_confirmation_preserve_descent(tmp_pat
     assert all(t['resolved_descent'] is None for t in slots if t['index']==1)
     assert len({(t['record'],t['index'],t['phase_kind'],t['seed']) for t in slots})==1458
     assert confirmations and all(c['path'].endswith(f"trial-{c['representative']}.json") for c in confirmations)
+
+
+def test_continued_reference_and_parent_recover_diagnosed_cases():
+    run = study.R/'phase-extension-201/run-2'
+    reference = json.loads((run/'reference-pressure/reference-393.15-0.json').read_text())
+    assert reference['admitted'] and reference['start'].endswith('reference-353.15-0.json')
+    assert abs(reference['result']['pressure']-173333.00198051374)<1e-5
+    assert max(map(abs, reference['result']['raw_residuals']))<1e-10
+    excluded = json.loads((run/'reference-pressure/reference-393.15-6.json').read_text())
+    assert excluded['result']['success'] and excluded['result']['pressure']>1e7
+    assert not excluded['admitted']
+    parent = json.loads((run/'A7/point-28.json').read_text())
+    assert parent['bubble_start']['index']==27
+    assert abs(parent['bubble_pressure_Pa']-41767.47872334231)<1e-5
+    assert parent['classification']=='passed-single-liquid'
+    trials = parent['stability'][0]['trials']
+    assert len(trials)==9 and all(t['optimizer']['success'] for t in trials)
+    assert not any(t['resolved_descent'] for t in trials)
