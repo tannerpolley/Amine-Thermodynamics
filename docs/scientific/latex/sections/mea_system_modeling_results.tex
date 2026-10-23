@@ -1,7 +1,7 @@
 \section{Results and discussion}\label{sec:mea-system-modeling-results}
 \subsection{Pure-water parameters}\label{sec:results-water}
 % P:results-water-01
-Five water parameters, the segment number, the constant $\sigma_0$ of the diameter law, the dispersion energy and the association energy and volume, were fitted to IAPWS-95 saturated-liquid densities, saturation pressures and heat capacities at 20 temperatures from 298.15 to \SI{393.15}{\kelvin} \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
+Five water parameters were fitted to IAPWS-95 saturated-liquid densities, saturation pressures and heat capacities at 20 temperatures from 298.15 to \SI{393.15}{\kelvin} \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}: the segment count, the diameter-law constant $\sigma_0$, the dispersion energy, and the association energy and volume.
 The heat capacities are at \SI{0.3}{\mega\pascal} and at three atmospheric states; the two exponential terms of $\sigma_w(T)$ were fixed (Section~S1).
 At the 20 fitted temperatures, the mean absolute relative deviations are 0.0363\,\% for saturated-liquid density, 0.0754\,\% for saturation pressure and 0.440\,\% for heat capacity at \SI{0.3}{\mega\pascal}, and the largest are 0.0985, 0.171 and 1.49\,\% (\cref{fig:water-iapws}); the three atmospheric heat capacities give 0.784\,\%.
 The calculated heat capacity is low at every temperature, most at \SI{298.15}{\kelvin}.
@@ -11,21 +11,21 @@ These are comparisons with a reference equation rather than with independent mea
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{water-iapws.pdf}
-\caption{Relative deviations of pure water from IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, calculated with the reported parameters: (a) saturated-liquid density, (b) saturation pressure and (c) isobaric heat capacity at \SI{0.3}{\mega\pascal} (circles) and \SI{0.101}{\mega\pascal} (triangles). Filled markers are the fitted states and open markers the interleaved temperatures that were not fitted.}
+\caption{Relative deviations of pure water from IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}: (a) saturated-liquid density, (b) saturation pressure and (c) isobaric heat capacity at \SI{0.3}{\mega\pascal} (circles) and \SI{0.101}{\mega\pascal} (triangles). Filled markers are the fitted states and open markers the interleaved temperatures that were not fitted.}
 \label{fig:water-iapws}
 \end{figure}
 
 \subsection{\texorpdfstring{\COtwo}{CO2}--water interaction}\label{sec:results-co2-water}
 % P:results-co2-water-01
 The \COtwo--water interaction and its temperature slope were fitted to 39 bubble pressures of Kiepe et al.\ at 313.2--\SI{393.2}{\kelvin} and up to \SI{9.3}{\mega\pascal} \cite{kiepeExperimentalDeterminationPrediction2002}, then held fixed.
-With the reported parameters, the AARD is 2.67\,\% and the mean signed deviation $+0.33$\,\% (\cref{fig:co2-water}).
+The AARD is 2.67\,\% and the mean signed deviation $+0.33$\,\% (\cref{fig:co2-water}).
 By isotherm, the AARDs are 1.50, 3.83, 0.97 and 6.65\,\% at 313.2, 353.1, 373.3 and \SI{393.2}{\kelvin}, and the largest deviation is $-11.3$\,\% at \SI{393.2}{\kelvin}.
 These 39 pressures remain in the joint objective as a check on the fixed interaction.
 
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{co2-water.pdf}
-\caption{\COtwo--water bubble pressure at the 39 states of Kiepe et al.\ \cite{kiepeExperimentalDeterminationPrediction2002}: (a) measured (circles) and calculated (crosses) total pressure against liquid \COtwo mole fraction at the measured temperature and composition; (b) calculated-minus-measured relative deviation. Calculations use the reported parameters.}
+\caption{\COtwo--water bubble pressure at the 39 states of Kiepe et al.\ \cite{kiepeExperimentalDeterminationPrediction2002}: (a) measured (circles) and calculated (crosses) total pressure against liquid \COtwo mole fraction at the measured temperature and composition; (b) calculated-minus-measured relative deviation.}
 \label{fig:co2-water}
 \end{figure}
 
@@ -40,7 +40,7 @@ The data are at one temperature and without \COtwo, so they do not test the temp
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{mea-permittivity.pdf}
-\caption{Relative permittivity of unloaded \MEA--water at \SI{298.15}{\kelvin} and \SI{101325}{\pascal}: (a) the 14 measurements of Agieienko and Buchner \cite{agieienkoWhatGasStream2024a} (circles) and \cref{eq:solvent-permittivity} at the equation-of-state density (crosses), and (b) calculated minus measured. Calculations use the reported parameters.}
+\caption{Relative permittivity of unloaded \MEA--water at \SI{298.15}{\kelvin} and \SI{101325}{\pascal}: (a) the 14 measurements of Agieienko and Buchner \cite{agieienkoWhatGasStream2024a} (circles) and \cref{eq:solvent-permittivity} at the equation-of-state density (crosses), and (b) calculated minus measured.}
 \label{fig:mea-permittivity}
 \end{figure}
 
@@ -55,7 +55,7 @@ The 16 joint-fit parameters, marked with daggers in \cref{tab:species-parameters
 % P:results-binary-01
 \Cref{fig:mea-water} compares the model with Cai's binary MEA--water data at 101.33 and \SI{66.66}{\kilo\pascal} \cite{caiBinaryIsobaricVaporLiquid1996}.
 The 25 fitted bubble temperatures give RMSE \SI{1.79}{\kelvin}, and the 25 fitted vapor-water mole fractions give RMSE 0.0204.
-This binary comparison constrains the solvent interaction before assessing the loaded liquid.
+These binary data constrain the \MEA--water interaction within the joint fit.
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -123,7 +123,7 @@ The model's pressure effect is small; increasing pressure between those two seri
 The Arcis measurements themselves differ between pressure series: heats at nearby loadings 0.181 and 0.183 are $-92.6$ and $-85.9$~\si{\kilo\joule\per\mole}, and at loadings 0.391 and 0.405 are $-94.4$ and $-85.5$~\si{\kilo\joule\per\mole} \cite[Table~5, pp.~3355--3356]{arcisEnthalpySolutionCarbon2011}.
 These are not exact matched-loading comparisons, and both temperature and pressure differ from Vinjarapu's conditions.
 The available data do not isolate a cause for the discrepancy.
-The Arcis data were used to accept candidate parameter sets, and absorption heat has been checked only at 313.15 and \SI{322.5}{\kelvin}; these comparisons do not establish its temperature dependence across an absorber or stripper.
+Because the Arcis data informed parameter selection, and absorption heat has been checked only at 313.15 and \SI{322.5}{\kelvin}, these comparisons do not establish its temperature dependence across an absorber or stripper.
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -161,6 +161,7 @@ These four observations do not determine heat capacity over the full temperature
 \end{figure}
 \FloatBarrier
 
+\subsubsection{Domain of use}\label{sec:results-domain}
 % P:results-scope-01
 The model calculates the five target properties within one thermodynamic formulation, using ePC-SAFT, reaction standard states and ideal-gas caloric references.
 Loaded densities are calculated directly without volume translation.
