@@ -118,7 +118,8 @@ def table(name, caption, headings, data, widths=None):
     caption = caption[:1].upper() + caption[1:]
     caption = re.sub(r'(?<!\\)%', r'\%', caption).replace("\\'s", "'s")
     widths = widths or [1/len(headings)]*len(headings)
-    cols = '@{}' + ''.join(r'>{\raggedright\arraybackslash}p{' + f'{w*.94:.4f}' + r'\linewidth}' for w in widths) + '@{}'
+    width_fraction = .93 if len(headings) >= 8 else .94
+    cols = '@{}' + ''.join(r'>{\raggedright\arraybackslash}p{' + f'{w*width_fraction:.4f}' + r'\linewidth}' for w in widths) + '@{}'
     head = ' & '.join(tex(display(h)) for h in headings) + r' \\'
     body = [r'\begingroup\small\setlength{\tabcolsep}{2pt}', r'\begin{longtable}{' + cols + '}',
             r'\caption{' + caption + r'}\label{tab:' + name.removesuffix('.tex').replace('_', '-') + r'}\\',
@@ -225,7 +226,7 @@ def main():
         offset = reaction['common_source_standard_state']['source_to_common_ln_k_offsets'][i]
         reaction_rows.append([rid + r': \ce{' + r['equation'].replace('CO3--', 'CO3^{2-}').replace('HCO3-', 'HCO3^-') + '}', coeff, SOURCE_TEXT.get(r['selected_source'], r['selected_source']), str(r['temperature_range_k']),
                               'offset included in R2 coefficients' if rid == 'R2' else r'$\Delta_r='+num(offset)+'$'])
-    table('reaction_equilibrium_constants.tex', r'A7 reaction correlations and source conventions. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\mathrm{p}K=A_5/T+B_5+C_5T$. The R2 and R5 coefficients already include the fitted shifts. For R1--R3, B is in K and D in 1/K; for R4, B is in K; for R5, $A_5$ is in K and $C_5$ in 1/K. Other coefficients are dimensionless and logarithms use numerical temperature in K. Source ranges are not validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.',
+    table('reaction_equilibrium_constants.tex', r'Reaction correlations and source conventions for the reported parameters. R1/R3 are fixed source laws; R2/R4/R5 list the selected coefficients. R1--R3 use $\ln K=A+B/T+C\ln T+DT$, R4 $\ln K=A+B/T$, and R5 $\mathrm{p}K=A_5/T+B_5+C_5T$. The R2 and R5 coefficients already include the fitted shifts. For R1--R3, B is in K and D in 1/K; for R4, B is in K; for R5, $A_5$ is in K and $C_5$ in 1/K. Other coefficients are dimensionless and logarithms use numerical temperature in K. Source ranges are not validation domains. The common aqueous molality standard is 1 mol/kg at infinite dilution in water.',
           ['Reaction', 'Coefficients', 'Source', 'Source range (K)', 'Offset'], reaction_rows, [.25,.28,.20,.10,.17])
     coordinate_rows = []
     for c, se in zip(fit['coordinates'], errors, strict=True):
@@ -233,8 +234,11 @@ def main():
         coordinate_rows.append([label(c['identity']), num(c['value']*factor), 'kJ/mol' if factor != 1 else c['unit'],
                                 '$[' + ', '.join(num(v*factor) for v in c['bounds']) + ']$',
                                 'at bound' if se['bound_active'] == 'True' else num(float(se['conditional_standard_error'])*factor)])
-    table('fitted_coordinates.tex', r'Sixteen fitted parameters. Conditional standard errors (SE) depend on weights, fixed inputs, bounds and local linearization. Born diameters and segment diameters are separate. Packing diameter is $0.88\sigma$ and Debye--H\"uckel diameter is $\sigma$. The R5 reciprocal-temperature coefficient is given before its enthalpy shift; R2/R5 shifts are total adjustments. Full optimizer transformations are in the data deposit.',
-          ['Parameter', 'Value', 'Unit', 'Bounds', 'Conditional SE'], coordinate_rows, [.39,.13,.10,.20,.18])
+    table('supplement_fitted_parameters.tex', r'Sixteen fitted parameters and conditional standard errors (SE). Errors depend on weights, fixed inputs, bounds and local linearization. Born and segment diameters are separate; packing diameter is $0.88\sigma$ and Debye--H\"uckel diameter is $\sigma$. The R5 reciprocal-temperature coefficient precedes its enthalpy shift; R2/R5 shifts are total adjustments. Full optimizer transformations are in the data deposit.',
+          ['Parameter', 'Value', 'Unit', 'Bounds', 'Conditional SE'], coordinate_rows, [.36,.12,.10,.20,.22])
+    table('fitted_coordinates.tex', r'Sixteen fitted parameters and final bounds. An asterisk marks a parameter at a bound. Interactions and slopes use 313.15 K as reference temperature. Born and segment diameters are separate. R5 $A_5$ is specified before the enthalpy shift; R2/R5 shifts are total adjustments already included in the reaction coefficients. Section S6 gives conditional errors.',
+          ['Parameter', 'Value', 'Unit', 'Bounds'],
+          [[r[0], r[1]+('*' if r[4]=='at bound' else ''), r[2], r[3]] for r in coordinate_rows], [.46,.14,.12,.28])
     uncertainty = a.load(a.E / 'conditional-uncertainty.json')
     correlations = a.rows(a.E / 'conditional-correlations.csv')
     free = uncertainty['free_coordinates']
@@ -295,7 +299,7 @@ def main():
     a.bind(a.J / 'amendment-7/restricted/README.md')
     reductions = [a.load(fixed / p / 'reduction.json') for p in endpoints]
     acceptance = []
-    for title,key,limit,authority,f1value in [('Common-subset cost','C149','35.26','F1 value + 10% (rounded)',f1['cost']),('Pressure AARD (%)','pressure_AARD_pct','15.81','F1 value + 2 percentage points (rounded)',f1['pressure_AARD_percent']),('Species AARD (%)','species_AARD_pct','9.89','F1 value + 2 percentage points (rounded)',f1['species_AARD_percent']),('Vinjarapu RMSE (kJ/mol)','vinjarapu_rmse_kJ_mol','3.13','F1 value + 1 kJ/mol (rounded)',next(x['RMSE_kJ_mol'] for x in oldheat if x['source']=='Vinjarapu2024')),('Loaded within 2s','loaded_within_2s','47/47','density requirement (Section 4.1)',''),('Cai cost','cai_cost','95.90','constant-interaction Cai cost + 5% (rounded)','')]:
+    for title,key,limit,authority,f1value in [('Common-subset cost','C149','35.26','F1 value + 10% (rounded)',f1['cost']),('Pressure AARD (%)','pressure_AARD_pct','15.81','F1 value + 2 percentage points (rounded)',f1['pressure_AARD_percent']),('Species AARD (%)','species_AARD_pct','9.89','F1 value + 2 percentage points (rounded)',f1['species_AARD_percent']),('Vinjarapu RMSE (kJ/mol)','vinjarapu_rmse_kJ_mol','3.13','F1 value + 1 kJ/mol (rounded)',next(x['RMSE_kJ_mol'] for x in oldheat if x['source']=='Vinjarapu2024')),('Loaded within 2s','loaded_within_2s','47/47','density requirement (Section S3)',''),('Cai cost','cai_cost','95.90','constant-interaction Cai cost + 5% (rounded)','')]:
         acceptance.append([title,limit,authority,num(f1value) if f1value!='' else '--']+[num(scores[i][key]) for i in [0,2]])
     acceptance.append(['States with detected instability','0/73','finite search at the specified states','--']+[str(sum(x['resolved_trials']>0 for x in reductions[i]))+'/73' for i in [0,2]])
     acceptance.append(['CO2-free max absolute error (kg/m3)','1.0','density requirement','--']+[num(max(abs(x) for x in scores[i]['co2_free_errors'].values())) for i in [0,2]])
@@ -303,7 +307,7 @@ def main():
     for name,ceiling in [('Arcis2011',9.36)]:
         a6=a.load(a.J/'amendment-6/selected-assessment/summary.json')
         acceptance.append(['Arcis RMSE (kJ/mol)',num(ceiling),'F1 value + 1 kJ/mol (rounded)',num(next(x['RMSE_kJ_mol'] for x in oldheat if x['source']==name)),num(a6['heat'][name]['RMSE']),num(summary['heat'][name]['RMSE'])])
-    table('acceptance_limits.tex', r'Study-specific limits and values for the reference, original-bound and restricted-bound fits. Section 4.1 explains the tolerances.',
+    table('acceptance_limits.tex', r'Study-specific limits and values for the reference, original-bound and restricted-bound fits. Section S1 explains the tolerances.',
           ['Quantity','Limit','Origin of limit','Reference fit','Original bounds','Restricted bounds'],acceptance,[.20,.09,.29,.12,.15,.15])
     state = a.rows(a.E/'state-targets.csv')
     source_rows = []
@@ -314,7 +318,7 @@ def main():
         by_source.setdefault((source,r['group'],r['quantity']),[]).append(r)
     for (source,group,quantity), part in by_source.items():
         source_rows.append([source,group,label(quantity),len(part),num(a.stats(part)['RMSE']) if group=='Cai' else num(a.stats(part)['AARD_percent']),num(math.fsum(float(r['cost']) for r in part))])
-    table('supplement_source_aard.tex',r'A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapour water mole fraction. It does not combine quantities into an accuracy ranking. Entry costs add to the total objective cost of 148.9; quantity definitions and units are in main-text Table 3.',
+    table('supplement_source_aard.tex',r'A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapour water mole fraction. It does not combine quantities into an accuracy ranking. Entry costs add to the total objective cost of 148.9; quantity definitions, units and weights are in Section S10.',
           ['Source','Group','Observable','n','Deviation','Cost'],source_rows,[.18,.20,.24,.05,.16,.17])
     outside=[]
     for name,s in a.load(a.E/'state-summary.json')['scores'].items():
@@ -387,8 +391,28 @@ def main():
         inventory.append([source,'liquid species fraction' if group=='restored species' else 'equilibrium heat capacity' if group=='Cp' else operators.get(quantity,quantity),len(part),domain,'fitted'])
     for source,n,domain,role in [('Six-source pressure',159,'313.00--393.15 K; nominal 30 wt%','47 fitted; remainder compared'),('Wagner',23,'near 353/392 K; 30 wt%','not fitted; seen during development'),('Aronu et al. (2011)',70,'15/45 wt%; source states','not fitted; seen during development'),('Arcis',14,'322.5 K; 0.51/1.03 MPa','selection check'),('Matin bicarbonate + carbonate',19,'293.15 K approximation; 30 wt%','compared'),('Jakobsen carbonate share',10,'293.15/313.15 K; diluted NMR samples','compared'),('All densities',210,'293.15--393.15 K; 20--60 wt%','52 fitted; others compared')]:
         inventory.append([source,'pressure' if 'pressure' in source or source=='Aronu et al. (2011)' else 'heat' if source=='Arcis' else 'density' if source=='All densities' else 'pressure' if source=='Wagner' else 'species',n,domain,role])
-    table('current_data_inventory.tex',r'Experimental data and their use. Counts in comparison sets overlap fitted observations and are not additive. Exact states, source locators and exclusions are in the electronic data. Pressure and species calculations use each source\'s reported solvent composition.',
+    table('supplement_data_roles.tex', r'Experimental data and their use by source. Counts in comparison sets overlap fitted observations and are not additive. Exact states, source locators and exclusions are in the electronic data. Pressure and species calculations use each source\'s reported solvent composition.',
           ['Source','Property','n','Conditions','Role'],inventory,[.18,.20,.05,.36,.21])
+    species_states = [meta_by_target[r['id']] for r in fitted if r['quantity']=='PhaseMoleFraction' or r['group']=='restored species']
+    fitted_density_states = [r for r in density if r['id'] in loaded_ids]
+    data_rows = [
+        [r'Hilliard, Jou \cite{Hilliard2008,Jou1995}', 'CO2 partial pressure', fit['groups']['common149 pressure']['n'], '30 wt%; source states', 'fitted'],
+        [r'Böttinger, Matin \cite{Bottinger2008,matinFacileMethodDetermination2012}', 'Species fractions', fit['groups']['common149 species']['n']+fit['groups']['restored species']['n'], span(float(r['temperature_K']) for r in species_states)+' K; source compositions', 'fitted'],
+        [r'Jakobsen \cite{Jakobsen2005}', 'Species/total-amine ratios', fit['groups']['Jakobsen']['n'], '293.15/313.15 K; diluted samples', 'fitted'],
+        [r'Vinjarapu \cite{HemaBhavya2025}', 'Integral heat', fit['groups']['common149 heat']['n'], '313.15 K; 1.734 MPa; 30 wt%', 'fitted'],
+        [r'Amundsen, Hartono \cite{Amundsen2009,Hartono2014}', 'Loaded density', len(loaded_ids), span(float(r['T_K']) for r in fitted_density_states)+' K; 30 wt%', 'fitted'],
+        [r'Amundsen \cite{Amundsen2009}', 'CO2-free density', len(free_ids), '298.15--353.15 K; 30 wt%', 'fitted'],
+        [r'Cai \cite{caiBinaryIsobaricVaporLiquid1996}', 'Bubble T; vapor fraction', fit['groups']['Cai']['n'], 'MEA--water; 66.66/101.33 kPa', 'fitted; 25 states'],
+        [r'Kiepe \cite{kiepeExperimentalDeterminationPrediction2002}', 'CO2--water pressure', fit['groups']['Kiepe']['n'], '313.20--393.17 K', 'fitted earlier; fixed input check'],
+        [r'Hilliard \cite{Hilliard2008}', 'Heat capacity', fit['groups']['Cp']['n'], '318.15/353.15 K; 7 mol MEA/kg water', 'fitted'],
+        ['Six-source pressure comparison', 'CO2 partial pressure', 159, '313.00--393.15 K; nominal 30 wt%', '47 fitted; 112 not fitted'],
+        [r'Wagner \cite{wagnerSolubilityCarbonDioxide2013}', 'CO2 partial pressure', 23, 'near 353/392 K; 30 wt%', 'not fitted; previously examined'],
+        [r'Aronu \cite{Aronu2011}', 'CO2 partial pressure', 70, '15/45 wt%; source states', 'not fitted; previously examined'],
+        [r'Arcis \cite{arcisEnthalpySolutionCarbon2011}', 'Integral heat', 14, '322.5 K; 0.51/1.03 MPa', 'selection comparison'],
+        ['Matin; Jakobsen', 'Bicarbonate total; carbonate share', '19; 10', 'source states; Sections S2--S3', 'not fitted'],
+        [r'Amundsen, Hartono, Han \cite{hanDensityWater12012}', 'All densities', len(density), '293.15--393.15 K; 20--60 wt%', '52 fitted; others compared']]
+    table('current_data_inventory.tex', r'Fitted and compared observations. Counts in comparison sets overlap fitted observations and are not additive. The 307 fitted quantities form eight disjoint objective groups specified in Section S10. Source-specific conditions and roles are listed in the supplement.',
+          ['Source','Quantity','n','Conditions','Use'],data_rows,[.23,.21,.06,.29,.21])
     failures=[r for r in density if r['id'] in loaded_ids and abs(float(r['error_over_s']))>2]
     assert len(failures)==3 and all(float(r['T_K'])==353.15 for r in failures)
     table('density_failures.tex',r'Three fitted loaded-density failures at 353.15 K. Error is calculated minus observed. The requirement is $|e|\leq2s$.',
@@ -417,7 +441,7 @@ def main():
         [r'Aronu et al. \cite{Aronu2011}','Extended UNIQUAC; ion size/surface and pair coefficients (Tables 7--9)',r'VLE at 15--60 wt%; \ce{N2O}-derived physical solubility','Fitted CO2 partial pressure 24.3%; total pressure 11.7%; physical solubility 2.7% (Section 5)','NMR and absorption heat compared outside objective'],
         [r'Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013}','Electrolyte cubic two-state association; 7 MEA ternary parameters','VLE; 15.2--30 wt%; 298.15--393.15 K in Table~2 and Fig.~8; Section~4.3.3 instead states an upper limit of 366.68 K','Relative pressure deviation 12.5%, fitted (Tables 5, 8)','Parameters from earlier subsystems retained'],
         [r'Neumann et al. \cite{neumannNewModelCombining2022}','Helmholtz energy/eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained',r'Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data','Ternary density AARD 0.92% Hartono; 3.5% complete Han (Section 4.2)','VLE/density comparisons; density data sets differ from this work'],
-        ['This work','16 fitted parameters; 6 at bounds','307 quantities; 8 groups','Fitted pressure/species 11.86/7.10%; integral heat RMSE 1.83 kJ/mol','159-pressure comparison 20.55%; not blind tests (Section 3)']]
+        ['This work','16 fitted parameters; 6 at bounds','307 quantities; 8 groups','Fitted pressure/species 11.86/7.10%; integral heat RMSE 1.83 kJ/mol','159-pressure comparison 20.55%; previously examined data']]
     table('literature_model_comparison.tex',r'Model complexity, data roles and reported deviations in related MEA studies. Parameter counts refer to the stated fit, excluding earlier subsystem fits. Relative pressure deviations and caloric metrics use each source\'s own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.',
           ['Study','Model; fitted parameters','Fitted data','Reported agreement','Other comparisons or qualification'],literature,[.15,.22,.19,.24,.20])
     symbols=[

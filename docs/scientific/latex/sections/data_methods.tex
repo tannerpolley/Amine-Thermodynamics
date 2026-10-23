@@ -1,30 +1,28 @@
-\section{Experimental data}\label{sec:data-methods}
+\section{Data and parameter estimation}\label{sec:data-methods}
 % P:methods-01
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and unloaded-solvent mass fraction is $w_{\MEA}=m_{\MEA}/(m_{\MEA}+m_{\HtwoO})$.
-Source molalities, measured temperatures and aggregate-species definitions determine the calculated counterpart of each measurement.
-The objective contains eight disjoint groups and 307 quantities (\cref{tab:objective-groups}); 149 of these, comprising 47 pressures, 94 species fractions and eight integral heats, are shared with the reference fit defined in \cref{sec:fit-definitions}.
-Seven additional species observations (four B\"ottinger and three Matin) and six Jakobsen ratios to total amine form separate objective groups.
-The Jakobsen ratios are \MEAH, \MEACOO and \ce{HCO3- + CO3^{2-}} relative to \ce{MEA + MEAH+ + MEACOO-} at each of two states \cite{Jakobsen2005}.
-Cai et al.\ contribute a bubble temperature and vapor-water fraction at each of 25 binary states, giving 50 quantities \cite{caiBinaryIsobaricVaporLiquid1996}.
+\Cref{tab:current-data-inventory} summarizes the fitted and compared observations.
+Eight disjoint groups supply 307 fitted quantities, including 47 \COtwo pressures, 101 species fractions, six species ratios, eight integral heats, 52 densities, 50 binary MEA--water quantities, 39 \COtwo--water pressures and four heat capacities.
+The species ratios are \MEAH, \MEACOO and \ce{HCO3- + CO3^{2-}} relative to \ce{MEA + MEAH+ + MEACOO-} at each of two Jakobsen states \cite{Jakobsen2005}.
+The \COtwo--water pressures check interaction parameters estimated earlier and held fixed here \cite{kiepeExperimentalDeterminationPrediction2002}.
 
 % P:methods-02
-B\"ottinger et al.\ observe \ce{MEA + MEAH+} as an NMR sum and tabulate bicarbonate, noting that carbonate is practically absent \cite[p.~134, Table~3]{Bottinger2008}.
-Their bicarbonate-labelled values are compared here with calculated \ce{HCO3- + CO3^{2-}}.
+Each calculated species observable follows its analytical definition.
+B\"ottinger et al.\ observe \ce{MEA + MEAH+} as an NMR sum and tabulate bicarbonate, noting that carbonate is practically absent \cite[p.~134, Table~3]{Bottinger2008}; their bicarbonate-labelled values are compared here with calculated \ce{HCO3- + CO3^{2-}}.
 Matin et al.\ infer bicarbonate from titration and carbon balance after neglecting carbonate in their working balances \cite[pp.~6615--6616, Eqs.~18--19b]{matinFacileMethodDetermination2012}.
-Comparing these values with calculated \ce{HCO3- + CO3^{2-}} is an observation approximation, consistent with their discussion of carbonate entering the inferred bicarbonate amount.
-All 19 such Matin observations remain outside the objective.
+Comparing those observations with calculated \ce{HCO3- + CO3^{2-}} is an observation approximation; all 19 such values remain outside the objective.
 Their figures label \SI{21}{\degreeCelsius}, approximated here by \SI{20}{\degreeCelsius}.
-Quantities from the same prepared solution need not be statistically independent.
 
 \input{tables/current_data_inventory}
 
 % P:methods-03
-The six-source pressure comparison includes 159 observations from Aronu, Hilliard, Idris, Jou, Ma'mun and Xu \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
-Hilliard and Xu calculations use measured molalities and temperatures \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
+Pressure and species calculations use each source's reported solvent composition, including measured molalities and temperatures for Hilliard and Xu \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
 Three Xu observations above \SI{393.15}{\kelvin} and a B\"ottinger state with quantifiable oxazolidone are excluded; oxazolidone is absent from the model.
-Arcis heats were used to choose between fits; Wagner pressures \cite{wagnerSolubilityCarbonDioxide2013} and the 15 and 45 wt\% Aronu pressures were not fitted, but they were examined during model development, so they are not blind tests; the same applies in the supplement.
-Experimental carrier gas is omitted: pressure calculations solve the three-neutral-species bubble problem and compare $y_{\COtwo}P$ with the reported \COtwo partial pressure, rather than imposing the experimental total pressure.
-This approximation may matter at low \COtwo pressures; Neumann et al.\ explicitly include nitrogen in such comparisons \cite[Sect.~4.2, Fig.~5]{neumannNewModelCombining2022}.
+The six-source pressure comparison includes 159 observations from Aronu, Hilliard, Idris, Jou, Ma'mun and Xu \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
+Arcis heats were used in parameter selection; Wagner pressures \cite{wagnerSolubilityCarbonDioxide2013} and the 15 and 45 wt\% Aronu pressures were not fitted but were previously examined.
+These comparisons are therefore not blind tests.
+Experimental carrier gas is omitted: the three-neutral-species bubble calculation compares $y_{\COtwo}P$ with the measured \COtwo partial pressure rather than imposing the experimental total pressure.
+This approximation may matter at low \COtwo pressure; Neumann et al.\ include nitrogen in such comparisons \cite[Sect.~4.2, Fig.~5]{neumannNewModelCombining2022}.
 
 \subsection{Caloric and density calculations}\label{sec:heat-method}
 % P:methods-heat-01
@@ -66,91 +64,27 @@ where $g_j$ is the density--loading secant between neighboring observations at t
 Section~S3 gives the source-specific scales and qualifications.
 The scales combine heterogeneous uncertainty information; $2s$ is not uniformly a 95\,\% interval, and Amundsen's precise high-temperature/loading uncertainty boundary remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
 
-\section{Parameter estimation and numerical checks}\label{sec:parameters}
-\subsection{Fit definitions, bounds and objective}\label{sec:fit-definitions}
+
+\subsection{Parameters and fitting}\label{sec:parameters}
 % P:methods-04
-The original-bound fit and restricted-bound fit use the same 16 adjustable parameters and 307 quantities.
-The restricted-bound fit is the parameter set reported here.
-The restriction changes the \MEAH segment-diameter bounds from 2--\SI{5.8}{\angstrom} to 5.35--\SI{5.8}{\angstrom}, and the \MEAH--water interaction bounds from $[-0.5,0.5]$ to $[-0.5,-0.161]$; all other physical bounds, observations, scales and weights are unchanged.
-The reference fit is an earlier pressure--speciation--heat calibration to the shared 149 quantities, without density; it supplies comparison limits and the untranslated density baseline (Section~S1).
-It has different fixed inputs and is not a control isolating one model term.
-\Cref{tab:fitted-coordinates} gives the selected values, bounds and conditional standard errors.
-Fixed inputs include earlier pure-water, binary and permittivity estimates, documented with their sources in Section~S9.
+\Cref{tab:fitted-coordinates} specifies the 16 fitted parameters and their final bounds; Section~S9 gives every fixed species and interaction input with its source or modeling assumption.
+The bounded least-squares objective uses property-specific scales and weights to combine the observations; Section~S10 gives the residual definitions and full objective.
+The solver uses bounded Levenberg--Marquardt least squares with exact equation-of-state and implicit equilibrium derivatives.
 
 % P:methods-05
-The bounded least-squares problem minimizes
-\begin{equation}
- C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad
- r_j=\begin{cases}(y_j^{\mathrm{calc}}-y_j^{\mathrm{obs}})/s_j,&\text{difference},\\
- \ln(y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}})/s_j,&\text{log ratio}.
- \end{cases}\label{eq:fit-residuals}
-\end{equation}
-Loaded densities have weight $1/47$, so their group contributes a mean scaled squared error rather than a sum growing with its observation count.
-They contribute 0.566 of the total cost 148.9, or 0.38\,\%; the separate $2s$ check prevents their small cost share from hiding individual failures.
-Carbon-free densities have scale \SI{0.5}{\kilogram\per\cubic\metre} and weight 10; Cai temperature and vapor-fraction scales are \SI{1}{\kelvin} and 0.01 with unit weight, and Kiepe \COtwo--water pressures have weight $1/39$ \cite{kiepeExperimentalDeterminationPrediction2002}.
-These weights set fitting priorities; the heat scales are not measured standard uncertainties.
-\Cref{tab:objective-groups} specifies every group.
+Six parameters reach bounds: the \MEAH--water and \MEAH--\MEACOO interactions, the \MEAH segment diameter, both fitted Born diameters and the R5 enthalpy shift.
+Both Born diameters are \SI{5}{\angstrom}, and the fitted unlike-ion interaction $k_{ij}=-1$ doubles the unlike-ion dispersion energy in \cref{eq:dispersion-combining-rule}.
+The fitted R5 dissociation p$K$ exceeds Bates--Pinching by 0.49 at \SI{313.15}{\kelvin}, with dissociation enthalpy \SI{63.4}{\kilo\joule\per\mole} rather than \SI{50.5}{\kilo\joule\per\mole}; its total enthalpy shift reaches \SI{+10}{\kilo\joule\per\mole}.
+The fitted reaction and interaction parameters can compensate for other model errors and do not independently measure ion dimensions or reaction enthalpies.
+Conditional errors and correlations in Section~S6 describe local sensitivity given the weights, fixed inputs and active bounds; they do not provide prediction intervals.
 
-\input{tables/objective_groups}
+\input{tables/fitted_coordinates}
 
 % P:methods-06
-The fit uses Ceres bounded Levenberg--Marquardt least squares with dense QR, affine parameter scaling and exact equation-of-state and implicit equilibrium derivatives.
-The deposited starting parameter vectors and affine transformations specify the numerical scaling.
-Function, parameter and gradient tolerances are $10^{-6}$, $10^{-10}$ and $10^{-8}$, respectively, with a maximum of 180 iterations.
-Two sequential restricted fits were made, each from one start.
-The first used a \MEAH size lower bound of \SI{5.49}{\angstrom}; the second started from its solution and lowered that bound to \SI{5.35}{\angstrom}, stopping on function tolerance after 12 iterations.
-The restrictions were chosen from fixed-parameter probes: smaller diameters raise density but can overshoot the colder Hartono observations (Section~S5).
-Phase searches were applied to the resulting parameter sets, rather than imposed as constraints at every optimizer iteration.
-
-% P:methods-07
-\Cref{tab:acceptance-limits} gives this study's comparison limits.
-Allowances relative to the reference fit preserve pressure, species and heat agreement while other properties enter the fit: 10\,\% in shared-subset cost, two percentage points in pressure/species deviation and \SI{1}{\kilo\joule\per\mole} in each heat RMSE.
-The Cai allowance is 5\,\% above a binary-only fit with a constant \MEA--water interaction, whose cost is 91.33.
-The density limits are twice the assigned scale, or \SI{1}{\kilogram\per\cubic\metre} for carbon-free states; the phase requirement rejects any resolved lower-Gibbs-energy arrangement in the specified search.
-These are study-specific tolerances for retaining property agreement, not published accuracy standards; the three density failures remain failures.
-
-\Needspace{25\baselineskip}
-\input{tables/fitted_coordinates}
-\input{tables/acceptance_limits}
-
-\subsection{Finite phase search}\label{sec:phase-method}
-% P:methods-phase-01
-Both fits are searched at the same 73 states at 313.15--\SI{333.15}{\kelvin} and $\alpha=10^{-5}$--0.5 for nominal 30 wt\% solvent.
-The state list was fixed before the restricted fits.
-At each temperature and loading, pressures are 0.50, 0.80 and 0.95 times a fixed reference pressure $P_*$ listed in Section~S4; one grid state (\SI{318.15}{\kelvin}, loading 0.256) was also evaluated at a pressure rounded to 5918.5286~Pa, and both evaluations are counted, so the 73 states contain 72 distinct conditions (Section~S4).
-Each parameter set is then solved at those same fixed pressures, so its single-liquid or liquid--vapor classification depends on its own bubble pressure.
-The tangent-plane criterion follows Michelsen \cite[Sect.~2]{Michelsen1982}, extended here to reacting, charge-neutral trial phases.
-For trial composition $\boldsymbol w$, the reduced distance is
-\begin{equation}
- D(\boldsymbol w)=g(T,P,\boldsymbol w)/(RT)-\boldsymbol w^{\mathsf T}B^{\mathsf T}\boldsymbol\lambda,
- \quad \sum_iw_i=1,\quad\sum_i z_iw_i=0,\quad w_i>0,
- \label{eq:tpd}
-\end{equation}
-where $B$ represents conserved component combinations and $\boldsymbol\lambda$ their equilibrium chemical-potential multipliers.
-Liquid trials support all nine species; vapor trials support only \COtwo, \MEA and water.
-The nine initial trials, Gibbs-energy error estimate and finite-transfer test are specified in Section~S4.
-The reacting equilibria and trials use the ePC-SAFT solver's Newton and Ipopt procedures with exact derivatives, MA57 linear algebra and a tolerance of $10^{-10}$ on the recomputed residuals used to decide convergence, after the solver's row scaling.
-An equilibrium is classified as unstable only when a negative tangent-plane distance is accompanied by a material-conserving finite transfer that decreases Gibbs energy by more than its numerical-error estimate.
-Separately seeded two-liquid solves confirm selected instabilities of the original-bound fit; a two-phase classification by itself does not indicate a second liquid, because it includes liquid--vapor equilibrium.
-
-\subsection{Conditional uncertainty and numerical verification}
-% P:methods-08
-For the ten parameters free of active bounds, the weighted residual Jacobian $J_I$ gives
-\begin{equation}
- \operatorname{cov}(\boldsymbol\theta_I)=s_C^2(J_I^{\mathsf T}J_I)^{-1},\qquad s_C^2=\frac{2C}{307-10}.
- \label{eq:conditional-covariance}
-\end{equation}
-The Jacobian has rank ten, 297 degrees of freedom and variance factor 1.003.
-The six parameters at bounds have no symmetric standard error.
-These local errors condition on the weights, fixed inputs, bounds and linearization; dependence between measurements from the same experiment is not propagated.
-Section~S6 gives the parameter order and correlations.
-
-% P:methods-09
-The 375 equilibrium states for the fitted and compared pressure and species observations have maximum reported conservation, charge and stationarity residuals no greater than $2.2\times10^{-12}$ on their stated bases (Section~S8).
-Agreement with observations is reported as average absolute relative deviation (AARD),
+Agreement is reported as average absolute relative deviation (AARD),
 \begin{equation}
  \operatorname{AARD}=\frac{100\,\%}{n}\sum_{j=1}^{n}\left|y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}}-1\right|,
  \label{eq:aard}
 \end{equation}
-root-mean-square error (RMSE) in the observable's units, and signed logarithmic bias $\langle\ln(y^{\mathrm{calc}}/y^{\mathrm{obs}})\rangle$ where applicable.
-Mixed-property costs are not overall physical-accuracy measures.
+and root-mean-square error (RMSE) in the observable's units.
+The solution checks for the fitted and compared pressure and species states are reported in Section~S8; they establish numerical convergence rather than physical validation.

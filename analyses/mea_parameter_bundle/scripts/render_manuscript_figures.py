@@ -200,14 +200,14 @@ def main():
                 if r['final_success']!='True' or int(r['failed_trial_optimizers']):
                     ax.annotate('!'+r['failed_trial_optimizers'],(float(r['temperature_K']),float(r['loading'])),fontsize=6)
         for rank,ax in enumerate(axes[row]):
-            ax.set(title=['lowest','middle','highest'][rank]+' pressure',xlabel='Temperature (K)')
+            ax.set(title=('Comparison fit' if row==0 else 'Reported parameters')+'\n'+['lowest','middle','highest'][rank]+' pressure',xlabel='Temperature (K)')
             ax.set_xticks([313.15,318.15,333.15],labels=['313.15','318.15','333.15'])
             ax.set_yticks([1e-5,.1,.3,.5],labels=[r'$10^{-5}$','0.1','0.3','0.5'])
             ax.grid(alpha=.15)
-        axes[row,0].set_ylabel(('Original bounds' if row==0 else 'Restricted bounds')+'\n'+LOADING)
+        axes[row,0].set_ylabel(LOADING)
     witness=paired['A7'][0]
-    fig.suptitle('Detected instabilities: original bounds 12/73; restricted bounds 0/73',fontsize=10)
-    fig.supxlabel('Filled: instability detected; open: none\nRestricted bounds only: squares, single liquid; circles, liquid + vapor',fontsize=8)
+    fig.suptitle('Detected instabilities: comparison fit 12/73; reported parameters 0/73',fontsize=10)
+    fig.supxlabel('Filled: instability detected; open: none\nReported parameters: squares, single liquid; circles, liquid + vapor',fontsize=8)
     save(fig,'phase-family','73 specified T/P/loading states, A6 versus A7 on the same wheel: 12/73 and 0/73 resolved-descent points. The three pressure levels vary with temperature/loading; S4 supplies exact pressures. The additional index-0 witness is reported separately from index 41. Zero resolved trials means no numerically resolved descent, not zero Gibbs change. Two-phase classifications do not identify two liquids. Finite searches do not certify a continuous stable region or states at 353 K.', ['phase-family.csv'])
     a6_assessment = a.load(a.J/'amendment-6/selected-assessment/provenance.json')
     fixed = a.J/'amendment-7/fixed-study/wheel-8298c602'

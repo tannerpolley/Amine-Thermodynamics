@@ -1,7 +1,8 @@
 \section{Thermodynamic model}\label{sec:theory}
 % P:theory-01
 The liquid contains nine true species: \COtwo, \MEA, \HtwoO, \MEAH, \MEACOO, \HCOthree, \COthree, \HthreeO and \Hydroxide.
-Each pressure or species calculation uses a reactive bubble state of one liquid and one incipient vapor at the measured temperature and apparent composition.
+Pressure calculations use a reactive bubble state of one liquid and one incipient vapor at the measured temperature and apparent composition.
+Species comparisons use single-liquid states at \SI{101325}{\pascal}.
 Only the neutral species \COtwo, \MEA and \HtwoO enter the vapor, and the calculated \COtwo partial pressure is \(p_{\COtwo}=y_{\COtwo}P\).
 The same ePC-SAFT equation of state describes both phases.
 
@@ -37,10 +38,9 @@ These diameter choices define the present parameterization; they are not indepen
 
 % P:theory-03
 Water and \MEA carry two association sites (2B), and \COtwo carries two induced-association sites that bond only with water \cite{Kleiner2007,Pabsch2020,Schick2023}.
-The \COtwo--water cross-association energy is \SI{878.325}{\kelvin}, half the water self-association energy, with the same water association volume (Table S14).
-The topology follows the induced-association treatment of Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}; its numerical inputs use the pure-water fit against IAPWS-95 described in Section~S9.
-\MEA--water cross-association follows the Wolbach--Sandler rule used by Fakouri Baygi and Pahlavanzadeh \cite[Eq.~6]{Baygi2015}.
-The association strength carries \(\sigma_{ij}^3\), so their \MEA association volume, reported for a \(d_{ij}^3\) strength \cite[Table~2]{Baygi2015}, was converted from 0.037470 to 0.036287, the constant value that best reproduces the vapor pressure and saturated-liquid density of their model at 293.15--\SI{393.15}{\kelvin}.
+The induced-association topology follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}, with water inputs estimated against IAPWS-95 (Section~S9).
+\MEA--water cross-association uses the Wolbach--Sandler rule \cite[Eq.~6]{Baygi2015}.
+The \MEA parameters use Baygi and Pahlavanzadeh's 2B model with its association volume converted to the present $\sigma_{ij}^3$ convention (Section~S9).
 
 \subsection{Born contribution with solvation shell and dielectric saturation}
 % P:theory-04
@@ -93,7 +93,8 @@ Property calculations use an apparent feed of \SI{1}{\mole} of total amine, intr
 The water amount follows from the reported \MEA molality where the source gives one and otherwise from the reported \COtwo-free \MEA mass fraction.
 The liquid conserves the carbon, hydrogen, nitrogen and oxygen amounts of this feed.
 For these nine species the four element balances imply electroneutrality and leave the five independent reactions of \cref{tab:reaction-equilibrium-constants}.
-The equilibrium state satisfies equal chemical potentials of \COtwo, \MEA and \HtwoO in the two phases and, for each reaction \(r\),
+Bubble states satisfy equal chemical potentials of \COtwo, \MEA and \HtwoO between phases.
+Every reacting liquid satisfies, for each reaction \(r\),
 \begin{equation}
     \sum_i\nu_{ri}\ln a_i=\ln K_r(T),
     \label{eq:activity-reaction-equilibrium}
@@ -133,10 +134,6 @@ For either reaction the constant-enthalpy adjustment has a form that leaves $K_r
  \label{eq:reaction-shift}
 \end{equation}
 R1 and R3 remain fixed source laws; R2 and R5 are calibrated chemistry parameters rather than independent measurements of reaction enthalpy.
-Relative to Bates--Pinching, the fitted R5 raises pK by 0.60 at \SI{298.15}{\kelvin} and 0.49 at \SI{313.15}{\kelvin}.
-At \SI{313.15}{\kelvin}, $\Delta_r h^\circ=RT^2\,d\ln K_r/dT$ increases from 50.5 to \SI{63.4}{\kilo\joule\per\mole}; the fitted enthalpy shift is at its \SI{+10}{\kilo\joule\per\mole} bound.
-The simultaneous change in the reciprocal-temperature coefficient also contributes to this departure.
-B\"ottinger et al.\ kept the source protonation law; here R5 can compensate for other model errors and is not an independent determination of that law.
 The reacting calculations use a domain of 293.15--\SI{393.15}{\kelvin}; R4 and R5 are extrapolated above their source upper limit of \SI{323.15}{\kelvin}.
 
 \input{tables/reaction_equilibrium_constants}

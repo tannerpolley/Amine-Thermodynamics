@@ -1,17 +1,18 @@
 schema_version: 1
-scientific_lane: nine_species_epcsaft_joint_calibration_and_finite_phase_test
+scientific_lane: explicit_ion_epcsaft_equilibrium_properties_loaded_mea
 scientific_claim: >
-  The restricted-bound fit jointly calibrates 16 parameters to 307 quantities in eight objective
-  groups. Common pressure/species AARDs are 11.86/7.10%; fitted integral-heat
-  RMSE is 1.83 kJ/mol CO2. Native loaded densities meet the declared 2s
-  requirement at 44/47 fitted rows; three 353.15 K failures remain accepted
-  with disclosure. No descent was numerically resolved in 657 trials at 73
-  specified states (313.15-333.15 K, alpha 1e-5-0.5). This finite evidence
-  establishes no stability outside those states, global optimum, unique
-  parameters or physical validation of phase behavior or process performance.
-  Arcis is a selection check; Wagner and 15/45 wt% pressure comparisons
-  were previously accessed. Conditional errors depend on weights, fixed
-  inputs, active bounds and local linearization.
+  One explicit-ion ePC-SAFT formulation represents the selected equilibrium,
+  caloric and density observations for nominal 30 wt% MEA. Its pressure
+  deviations are within the range reported for related models on different
+  data sets. The available comparisons do not yet establish its suitability
+  across an absorber's operating range. Pressure AARD is 11.86% over 47 fitted
+  observations and 20.55% over the 159-pressure comparison. Fitted species
+  AARD is 7.10% over 94 observations, integral-heat RMSE 1.83 kJ/mol CO2 over
+  eight observations, and loaded-density AARD 0.18% over 47 fitted observations.
+  No descent was resolved in the finite search at 73 specified states
+  (313.15-333.15 K, alpha 1e-5-0.5). Arcis is a selection comparison; Wagner
+  and 15/45 wt% pressure comparisons were previously examined. Phase behavior
+  and absorber or stripper performance are not physically validated.
 author:
   name: Tanner W. Polley
   orcid: 0009-0008-5957-4152
@@ -41,8 +42,7 @@ declarations:
   authority_status: author_approved_2026-10-01
 target_venue: Fluid Phase Equilibria
 title: >
-  Electrolyte PC-SAFT with carbamate chemistry for CO2 in aqueous
-  monoethanolamine: joint calibration and a finite phase test
+  Modeling CO2 absorption in aqueous monoethanolamine with ePC-SAFT
 keywords:
   - CO2 solubility
   - ePC-SAFT
@@ -62,7 +62,7 @@ local_data_release: tmp/joint-design/a7-data-release/
 parameter_record_sha256: e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e
 engine_commit: 8298c6029ebb8b467929badc4a223c580ec591ab
 engine_wheel_sha256: 8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3
-pdf_sha256: 9d933bac29124caaa4d82f2982dee19549fd2ecde8e341c56770e5bca827a814
+pdf_sha256: 45c77179e1b93b985935b0df0bb9e425cd42897798b37efefbe7f5f6238a1416
 source_zip_sha256: null
 archive_doi: null
 archive_doi_status: pending
