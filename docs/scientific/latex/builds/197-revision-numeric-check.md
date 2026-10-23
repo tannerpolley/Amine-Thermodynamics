@@ -16,6 +16,6 @@ New physical numbers come from these sources:
 
 Executable additions count gross added nonblank, noncomment lines; deletions do not offset additions. This conservative count includes literal data rows and multiline statements: table generator 182, figure generator 41, total 223 against the 400-line allowance. No test code is added.
 
-The abstract's synchronized ChemRxiv plain-text copy has 217 whitespace-delimited words. Final rendered-text counting and final PDF hashes are recorded in the Writer handoff. Highlight lengths are 82, 69, 69, 73 and 79 characters.
+The abstract's synchronized ChemRxiv plain-text copy has 217 whitespace-delimited words. The rendered abstract has 223 words after joining line-end hyphenation; final PDF hashes are recorded in the Writer handoff. Highlight lengths are 82, 69, 69, 73 and 79 characters.
 
 The only new calculations in this audit are arithmetic reductions of retained numbers and evaluation of a verified source correlation. No Engine model evaluation, parameter fit, computed isotherm or issue #201 phase calculation ran. Required independent science and reader reviews remain with the parent.

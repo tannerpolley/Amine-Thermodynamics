@@ -4,7 +4,7 @@ The current draft uses the investigator-promoted scientific results and implemen
 
 - [x] Rewrite, generated tables/figures, synchronized abstract/highlights and cover letter.
 - [x] R5 departure checked against Bates–Pinching Eq. 10/Table 2 and Böttinger Table 5.
-- [x] Bulk density and paired phase CSVs staged in the local Zenodo preparation with current manifest/checksums; no publication.
+- [x] Bulk density and paired phase CSVs staged in the local Zenodo preparation with current file inventory and checksums; no publication.
 - [x] No retained results or hashed inputs changed; no Engine calculation or new fit.
 - [ ] Independent scientific and reader reviews by the parent, then accepted corrections.
 - [ ] Author manuscript review.

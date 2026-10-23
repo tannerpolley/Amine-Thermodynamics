@@ -18,7 +18,7 @@ CO₂ solubility; ePC-SAFT; joint parameter estimation; monoethanolamine; chemic
 
 ## Data availability
 
-Processed observations, selected parameters, retained calculations and presentation code will be deposited in Zenodo; the DOI will be added at submission. The deposit README will identify the exact software versions, checksums and reproduction commands. Thermodynamic calculations require the compiled ePC-SAFT Engine package, to be supplied to referees through restricted access arranged by the corresponding author. The analysis code is at https://github.com/tannerpolley/Amine-Thermodynamics under the MIT license; third-party measurements retain their source terms.
+Processed observations, selected parameters, retained calculations and presentation code will be deposited in Zenodo; the DOI will be added at submission. The deposit README will identify the exact software versions, checksums and reproduction commands. Thermodynamic calculations require the compiled ePC-SAFT Engine package, to be supplied to referees through restricted access arranged by the corresponding author. The analysis code will be included in the deposit under the MIT license; its development repository is https://github.com/tannerpolley/Amine-Thermodynamics. Third-party measurements retain their source terms.
 
 ## Declarations and submission state
 
