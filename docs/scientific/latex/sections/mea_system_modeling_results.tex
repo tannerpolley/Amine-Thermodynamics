@@ -1,5 +1,57 @@
 \section{Results and discussion}\label{sec:mea-system-modeling-results}
-\subsection{MEA--water vapor--liquid equilibrium}\label{sec:results-binary}
+\subsection{Pure-water parameters}\label{sec:results-water}
+% P:results-water-01
+Five water parameters, the segment number, the constant $\sigma_0$ of the diameter law, the dispersion energy and the association energy and volume, were fitted to IAPWS-95 saturated-liquid densities, saturation pressures and heat capacities at 20 temperatures from 298.15 to \SI{393.15}{\kelvin} \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
+The heat capacities are at \SI{0.3}{\mega\pascal} and at three atmospheric states; the two exponential terms of $\sigma_w(T)$ were fixed (Section~S1).
+At the 20 fitted temperatures, the mean absolute relative deviations are 0.0363\,\% for saturated-liquid density, 0.0754\,\% for saturation pressure and 0.440\,\% for heat capacity at \SI{0.3}{\mega\pascal}, and the largest are 0.0985, 0.171 and 1.49\,\% (\cref{fig:water-iapws}); the three atmospheric heat capacities give 0.784\,\%.
+The calculated heat capacity is low at every temperature, most at \SI{298.15}{\kelvin}.
+At 19 interleaved temperatures that were not fitted, the mean deviations are 0.0343, 0.0700 and 0.416\,\%.
+These are comparisons with a reference equation rather than with independent measurements.
+
+\begin{figure}[pos=!htbp]
+\centering
+\includegraphics[width=\linewidth,keepaspectratio]{water-iapws.pdf}
+\caption{Relative deviations of pure water from IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, calculated with the reported parameters: (a) saturated-liquid density, (b) saturation pressure and (c) isobaric heat capacity at \SI{0.3}{\mega\pascal} (circles) and \SI{0.101}{\mega\pascal} (triangles). Filled markers are the fitted states and open markers the interleaved temperatures that were not fitted.}
+\label{fig:water-iapws}
+\end{figure}
+
+\subsection{\texorpdfstring{\COtwo}{CO2}--water interaction}\label{sec:results-co2-water}
+% P:results-co2-water-01
+The \COtwo--water interaction and its temperature slope were fitted to 39 bubble pressures of Kiepe et al.\ at 313.2--\SI{393.2}{\kelvin} and up to \SI{9.3}{\mega\pascal} \cite{kiepeExperimentalDeterminationPrediction2002}, then held fixed.
+With the reported parameters, the AARD is 2.67\,\% and the mean signed deviation $+0.33$\,\% (\cref{fig:co2-water}).
+By isotherm, the AARDs are 1.50, 3.83, 0.97 and 6.65\,\% at 313.2, 353.1, 373.3 and \SI{393.2}{\kelvin}, and the largest deviation is $-11.3$\,\% at \SI{393.2}{\kelvin}.
+These 39 pressures remain in the joint objective as a check on the fixed interaction.
+
+\begin{figure}[pos=!htbp]
+\centering
+\includegraphics[width=\linewidth,keepaspectratio]{co2-water.pdf}
+\caption{\COtwo--water bubble pressure at the 39 states of Kiepe et al.\ \cite{kiepeExperimentalDeterminationPrediction2002}: (a) measured (circles) and calculated (crosses) total pressure against liquid \COtwo mole fraction at the measured temperature and composition; (b) calculated-minus-measured relative deviation. Calculations use the reported parameters.}
+\label{fig:co2-water}
+\end{figure}
+
+\subsection{\texorpdfstring{\MEA}{MEA} permittivity}\label{sec:results-permittivity}
+% P:results-permittivity-01
+The \MEA dielectric coefficients of \cref{eq:solvent-permittivity} were fitted by weighted least squares to 14 permittivities of unloaded \MEA--water at \SI{298.15}{\kelvin}, from water to pure \MEA, using equation-of-state densities and relative scale 0.01 \cite[ESI Tables~S1--S2]{agieienkoWhatGasStream2024a}.
+The water and \COtwo coefficients were fixed (Section~S1).
+The coefficients were not refitted after the joint fit changed the \MEA--water interaction, and with it the calculated densities.
+With the reported parameters, the 14 permittivities give RMSE 0.301, largest absolute deviation 0.464 and AARD 0.453\,\% (\cref{fig:mea-permittivity}).
+The data are at one temperature and without \COtwo, so they do not test the temperature or loading dependence of the permittivity.
+
+\begin{figure}[pos=!htbp]
+\centering
+\includegraphics[width=\linewidth,keepaspectratio]{mea-permittivity.pdf}
+\caption{Relative permittivity of unloaded \MEA--water at \SI{298.15}{\kelvin} and \SI{101325}{\pascal}: (a) the 14 measurements of Agieienko and Buchner \cite{agieienkoWhatGasStream2024a} (circles) and \cref{eq:solvent-permittivity} at the equation-of-state density (crosses), and (b) calculated minus measured. Calculations use the reported parameters.}
+\label{fig:mea-permittivity}
+\end{figure}
+
+\subsection{Joint fit}\label{sec:results-joint}
+% P:results-joint-01
+The 16 joint-fit parameters, marked with daggers in \cref{tab:species-parameters,tab:interaction-matrix} and included in the R2 and R5 constants of \cref{tab:reaction-equilibrium-constants}, were fitted to the 307 quantities of \cref{tab:current-data-inventory}.
+\Cref{tab:residual-summary} gives the deviations by data group, and the following subsections compare calculated curves with the measurements for each property.
+
+\input{tables/residual_summary}
+
+\subsubsection{MEA--water vapor--liquid equilibrium}\label{sec:results-binary}
 % P:results-binary-01
 \Cref{fig:mea-water} compares the model with Cai's binary MEA--water data at 101.33 and \SI{66.66}{\kilo\pascal} \cite{caiBinaryIsobaricVaporLiquid1996}.
 The 25 fitted bubble temperatures give RMSE \SI{1.79}{\kelvin}, and the 25 fitted vapor-water mole fractions give RMSE 0.0204.
@@ -11,9 +63,8 @@ This binary comparison constrains the solvent interaction before assessing the l
 \caption{Binary MEA--water VLE at 101.33 and \SI{66.66}{\kilo\pascal}. Lines are fixed-parameter calculations over the measured binary composition ranges; solid lines use liquid MEA mole fraction and dashed lines vapor MEA mole fraction as abscissa. Circles and squares are Cai's fitted liquid and vapor observations \cite{caiBinaryIsobaricVaporLiquid1996}; no non-fitted observations are shown.}
 \label{fig:mea-water}
 \end{figure}
-\FloatBarrier
 
-\subsection{\texorpdfstring{\COtwo}{CO2} solubility}\label{sec:results-pressure}
+\subsubsection{\texorpdfstring{\COtwo}{CO2} solubility}\label{sec:results-pressure}
 % P:results-pressure-01
 \Cref{fig:pressure} compares calculated \COtwo partial pressures with measurements from six sources at 313--\SI{393}{\kelvin}.
 The AARD is 11.86\,\% over the 47 fitted pressures and 20.55\,\% over the complete 159-pressure comparison, including 112 observations not fitted.
@@ -36,9 +87,8 @@ The reported parameters therefore do not support concentration transfer across t
 \caption{\COtwo partial pressure against analytical loading (mol added \COtwo/mol total amine). Lines are fixed-parameter reactive bubble calculations for nominal 30 wt\% MEA. Source-specific markers show measured values, filled if fitted and open if not fitted; the six-source comparison and Wagner observations are assigned to isotherms within \SI{2}{\kelvin}, retaining their reported solvent compositions for the point calculations. The lower panel shows calculated-minus-measured relative deviations at those source states.}
 \label{fig:pressure}
 \end{figure}
-\FloatBarrier
 
-\subsection{Liquid speciation}\label{sec:results-species}
+\subsubsection{Liquid speciation}\label{sec:results-species}
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{speciation.pdf}
@@ -62,7 +112,7 @@ A good pressure fit therefore does not ensure accurate bicarbonate and carbonate
 
 \FloatBarrier
 
-\subsection{Heat of absorption}\label{sec:results-heat}
+\subsubsection{Heat of absorption}\label{sec:results-heat}
 % P:results-heat-01
 The fitted Vinjarapu integral heats give RMSE \SI{1.83}{\kilo\joule\per\mole} \COtwo at \SI{313.15}{\kelvin} (\cref{fig:heat}).
 For Arcis at \SI{322.5}{\kelvin}, the mean calculated-minus-measured differences are \SI{+10.21}{\kilo\joule\per\mole} at \SI{0.51}{\mega\pascal} and \SI{+3.14}{\kilo\joule\per\mole} at \SI{1.03}{\mega\pascal}: the calculated absorption is less exothermic.
@@ -83,7 +133,7 @@ The Arcis data were used to accept candidate parameter sets, and absorption heat
 \end{figure}
 \FloatBarrier
 
-\subsection{Density and heat capacity}\label{sec:results-density}
+\subsubsection{Density and heat capacity}\label{sec:results-density}
 % P:results-density-01
 The 47 fitted loaded densities give AARD 0.18\,\%, with 44 within $2s$ (\cref{fig:density-curves}).
 Three fitted values at \SI{353.15}{\kelvin} are 0.40--0.53\,\% low: Amundsen at loading 0.3 has error \SI{-5.52}{\kilogram\per\cubic\metre} ($-2.28s$), and Hartono at loadings 0.29 and 0.39 has errors \SI{-4.16}{\kilogram\per\cubic\metre} ($-2.05s$) and \SI{-4.41}{\kilogram\per\cubic\metre} ($-2.43s$).
@@ -122,7 +172,7 @@ It should not be used for pressure at other MEA concentrations or for bicarbonat
 A comparison fit with wider bounds on the protonated-amine diameter and its water interaction gives similar property agreement but predicts additional liquid phases at some tested states.
 Narrowing both bounds and refitting removes the detected instabilities in the finite search, while increasing the fitting cost by 0.45\%.
 The finite searches are defined in Section~S8.
-Both narrowed limits appear in \cref{tab:fitted-coordinates}: the reported \MEAH segment diameter lies on the new \SI{5.35}{\angstrom} lower bound, and the \MEAH--water interaction lies at $-0.5$, the opposite end of its narrowed range $[-0.5,-0.161]$; Section~S9 describes how the limits were chosen, and Section~S10 gives the density-free fit and comparison limits.
+Both narrowed limits appear in Table~S11: the reported \MEAH segment diameter lies on the new \SI{5.35}{\angstrom} lower bound, and the \MEAH--water interaction lies at $-0.5$, the opposite end of its narrowed range $[-0.5,-0.161]$; Section~S9 describes how the limits were chosen, and Section~S10 gives the density-free fit and comparison limits.
 The diameter changes from \SI{4.16}{\angstrom} in the comparison fit to \SI{5.35}{\angstrom}, and the water interaction at \SI{313.15}{\kelvin} changes from $+0.027$ to $-0.5$.
 The number of fitted loaded densities within $2s$ falls from 47/47 to 44/47; the three misses occur at \SI{353.15}{\kelvin}, a temperature included in the extended search.
 Both parameter sets are local optima, so these differences are not the smallest possible cost of removing the instabilities.

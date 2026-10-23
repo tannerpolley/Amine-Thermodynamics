@@ -113,11 +113,13 @@ def label(identity):
         identity = (f'{parts[0]}–{parts[2]} association ' if parts[0] == parts[2] else f'{parts[0]}({parts[1]})–{parts[2]}({parts[3]}) association ') + ' '.join(parts[4:])
     return identity.replace(' over k', '/k').replace('debye huckel', 'Debye–Hückel').replace('born diameter', 'Born diameter').replace('reaction:', '').replace(':correlation:a k', r' $A_5$ (before enthalpy shift)').replace(':', ' ')
 
-# Numbers in right-aligned columns are math, as in Table 1; an at-bound asterisk hangs outside the alignment.
+# Numbers in right-aligned columns are math, as in Table 1; a leading ** sets a fitted value bold, and note marks (joint fit †, at bound *, ‡) hang outside the alignment.
+MARKS = {'†': r'\dagger', '*': '*', '‡': r'\ddagger'}
 def cell(value, kind):
-    number = re.fullmatch(r'(-?\d+(?:\.\d*)?(?:[eE][-+]?\d+)?)(\*?)', str(value))
+    number = re.fullmatch(r'(\*\*)?(-?\d+(?:\.\d*)?(?:[eE][-+]?\d+)?)([†*‡]*)', str(value))
     if kind == 'r' and number:
-        return '$' + scientific(number[1]) + '$' + (r'\rlap{*}' if number[2] else '')
+        body = scientific(number[2])
+        return '$' + (r'\mathbf{' + body + '}' if number[1] else body) + '$' + (r'\rlap{$^{' + ''.join(MARKS[m] for m in number[3]) + '}$}' if number[3] else '')
     return tex(display(value))
 
 
@@ -158,7 +160,7 @@ def parameter_blocks(rows, ncols):
 
 
 # cols: one entry per column: 'l' label, 'r' number, or a float width (fraction of linewidth) for wrapped text.
-def table(name, caption, headings, data, cols=None, landscape=False):
+def table(name, caption, headings, data, cols=None, landscape=False, sep=3):
     section_order = re.findall(r'\\section\{[^}]*\}\\label\{(sec:s-[^}]+)\}', a.bind(ROOT/'docs/scientific/latex/supplement.tex').read_text())
     sections = {label: f'S{i}' for i,label in enumerate(section_order,1)}
     def section_refs(value):
@@ -179,7 +181,7 @@ def table(name, caption, headings, data, cols=None, landscape=False):
     if len(data) <= 32 and not landscape:  # a table that fits on one page floats whole instead of breaking; a landscape page holds its table whole
         # The main text's journal class reads the table placement as its pos key; the supplement's article class reads it directly.
         place = '[!htbp]' if '{tables/' + name.removesuffix('.tex') + '}' in (ROOT/'docs/scientific/latex/supplement.tex').read_text() else '[pos=!htbp]'
-        OUTPUTS[name] = '\n'.join([r'\begin{table}' + place + r'\small\setlength{\tabcolsep}{3pt}\centering', caption, r'\begin{tabular}{' + spec + '}',
+        OUTPUTS[name] = '\n'.join([r'\begin{table}' + place + r'\small\setlength{\tabcolsep}{' + str(sep) + r'pt}\centering', caption, r'\begin{tabular}{' + spec + '}',
                                    r'\toprule', head, r'\midrule', *rows, r'\bottomrule', r'\end{tabular}', r'\end{table}', ''])
         return
     body = [r'\begingroup\small\setlength{\tabcolsep}{3pt}', r'\begin{longtable}{' + spec + '}', caption + r'\\',
@@ -240,22 +242,25 @@ def main():
     objective.append(['Objective total', '--', '--', 307, '--', '--', '--', '--', num(fit['cost'])])
     table('objective_groups.tex', r'A7 objective groups. The eight groups are disjoint and contain 307 quantities; common149 contains pressure, species and heat. Cai contains 25 temperatures and 25 vapour fractions at 25 states. Difference residuals are $(y_c-y_o)/s$; LogRatio residuals are $\ln(y_c/y_o)/s$. Cost is $\frac12\sum w r^2$. Scales are not uniformly measurement uncertainties. Where a highest scale is listed, the scale varies per observation between the two values.',
           ['Group', 'Quantity', 'Unit/basis', 'n', 'Residual', r'\makecell[rb]{Lowest\\scale}', r'\makecell[rb]{Highest\\scale}', 'Weight', 'Cost'], objective, [.16,.18,.12,'r','l','r','r','r','r'])
-    residual = []
-    for name in ['common149 pressure', 'common149 species', 'restored species', 'Jakobsen', 'Kiepe', 'loaded density', 'CO2-free density']:
-        s = fit['groups'][name]
-        residual.append([name, 'calibration; Kiepe checks fixed inputs' if name == 'Kiepe' else 'calibration', s['n'], num(s['AARD_percent']), '', ''])
-    for quantity, unit in [('temperature', ' (K)'), ('mole_fraction', '')]:
-        part = groups['Cai', quantity]
-        s = a.stats(part)
-        residual += [block(6, 'RMSE and bias' + unit), columns('', '', '', 'RMSE', 'Bias', ''), ['Cai ' + quantity, 'calibration', len(part), num(s['RMSE']), num(s['bias']), '']]
-    residual += [block(6, r'RMSE and bias (kJ/mol \ce{CO2})'), columns('', '', '', 'RMSE', 'Bias', '')]
-    for name, s in summary['heat'].items():
-        residual.append([name, 'calibration' if name == 'Vinjarapu2024' else 'used to accept fits', s['n_total'], num(s['RMSE']), num(s['bias']), ''])
-    residual += [block(6, r'Signed error (\%), $T$ (K) and loading'), columns('', '', '', r'Signed error (\%)', '$T$ (K)', 'Loading')]
-    for r in a.rows(a.E / 'cp.csv'):
-        residual.append(['Hilliard Cp', 'calibration', 1, num(r['error_percent']), r['T_K'], r['loading']])
-    table('residual_summary.tex', r'A7 property deviations. AARD denotes average absolute relative deviation. Fitted deviations and the Arcis comparison do not establish physical validation; Cai deviations are in K and mole fraction. Cp remains on its source mass basis.',
-          ['Data set', 'Role', 'n', 'AARD (%)', '', ''], residual, ['l',.24,'r','r','r','r'])
+    # Joint-fit deviations by data group (main text): relative groups give AARD, absolute groups RMSE and bias (mean calculated minus measured).
+    residual = [block(5, 'Fitted', True)]
+    for name, group in [('common149 pressure', r'\ce{CO2} partial pressure (Hilliard, Jou)'), ('common149 species', 'Species fractions, shared subset (Böttinger, Matin)'),
+                        ('restored species', 'Species fractions, additional (Böttinger, Matin)'), ('Jakobsen', 'Species/total-amine ratios (Jakobsen)'),
+                        ('Kiepe', r'\ce{CO2}--water pressure (Kiepe)'), ('loaded density', 'Loaded density (Amundsen, Hartono)'), ('CO2-free density', r'\ce{CO2}-free density (Amundsen)')]:
+        residual.append([group, fit['groups'][name]['n'], num(fit['groups'][name]['AARD_percent']), '--', '--'])
+    cp_rows = a.rows(a.E / 'cp.csv')
+    residual.append(['Heat capacity (Hilliard)', len(cp_rows), num(math.fsum(abs(float(r['error_percent'])) for r in cp_rows)/len(cp_rows)), '--', '--'])
+    for quantity, group in [('temperature', 'Bubble temperature, K (Cai)'), ('mole_fraction', 'Vapor water mole fraction (Cai)')]:
+        stat = a.stats(groups['Cai', quantity])
+        residual.append([group, stat['n'], '--', num(stat['RMSE']), num(stat['bias'])])
+    heat_label = r'Integral heat, kJ/mol \ce{CO2}'
+    residual.append([heat_label + ' (Vinjarapu)', summary['heat']['Vinjarapu2024']['n_total'], '--', num(summary['heat']['Vinjarapu2024']['RMSE']), num(summary['heat']['Vinjarapu2024']['bias'])])
+    residual.append(block(5, 'Not fitted; used to accept fits'))
+    for P in ('510000.0', '1030000.0'):
+        stat = summary['heat'][f'Arcis2011 at {P} Pa']
+        residual.append([heat_label + f' (Arcis, {float(P)/1e6:g} MPa)', stat['n_total'], '--', num(stat['RMSE']), num(stat['bias'])])
+    table('residual_summary.tex', r'Deviations of the joint fit by data group, calculated with the reported parameters. AARD is the average absolute relative deviation; RMSE and bias, the mean calculated-minus-measured value, are in the units given with each group. Heat capacity is compared on the source mass basis.',
+          ['Data group', 'n', 'AARD (%)', 'RMSE', 'Bias'], residual, 'lrrrr')
     parameter_rows, pair_rows = [], []
     for kind in ['components', 'pairs']:
         for node in document[kind]:
@@ -307,9 +312,53 @@ def main():
                                 '--' if se['bound_active'] == 'True' else num(float(se['conditional_standard_error'])*factor)]))
     table('supplement_fitted_parameters.tex', r'Sixteen fitted parameters and conditional standard errors (SE). Errors depend on weights, fixed inputs, bounds and local linearization. Born and segment diameters are separate; packing diameter is $0.88\sigma$ and Debye--H\"uckel diameter is $\sigma$. The R5 reciprocal-temperature coefficient precedes its enthalpy shift; R2/R5 shifts are total adjustments. Full optimizer transformations are in the data deposit. A dash marks a parameter at a bound, for which no conditional SE is reported.',
           ['Parameter', 'Value', 'Lower bound', 'Upper bound', 'Conditional SE'], parameter_blocks(coordinate_rows, 5), 'lrrrr')
-    table('fitted_coordinates.tex', r'Sixteen fitted parameters and final bounds. An asterisk marks a parameter at a bound. Interactions and slopes use 313.15 K as reference temperature. Born and segment diameters are separate. R5 $A_5$ is specified before the enthalpy shift; R2/R5 shifts are total adjustments already included in the reaction coefficients. Section~\\ref{sec:s-uncertainty} gives conditional errors.',
-          ['Parameter', 'Value', 'Lower bound', 'Upper bound'],
-          parameter_blocks([(i, u, [r[0], r[1]+('*' if r[4]=='--' else ''), *r[2:4]]) for i, u, r in coordinate_rows], 4), 'lrrr')
+    # Main-text Tables 3 and 4: every species and pair input of the selected record, fitted values marked † and at-bound values *.
+    at_bound = {c['identity'] for c, se in zip(fit['coordinates'], errors, strict=True) if se['bound_active'] == 'True'}
+    values = {c['identity']: c['value']['magnitude'] for n in document['components'] + document['pairs'] for c in n['coefficients']}
+    values |= {i: c['value']['magnitude'] for n in document['topology']['edges'] for i, c in a.coefficients(n)}
+    # Parameters set by the three fits before the joint fit (Results): pure water to IAPWS-95, CO2-water to Kiepe pressures, MEA dielectric pair to permittivities.
+    separate = {'component/water/segment_count', 'component/water/dispersion_energy_over_k', 'association/water/a/water/b/energy_over_k', 'association/water/a/water/b/volume',
+                'pair/carbon-dioxide/water/k_ij', 'pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope',
+                'component/monoethanolamine/dielectric_volume', 'component/monoethanolamine/dielectric_temperature'}
+    shown = set()
+    def value(identity, mark=''):
+        if identity not in values:
+            return '--'
+        shown.add(identity)
+        return ('**' if identity in coords or identity in separate else '') + num(values[identity]) + ('†' if identity in coords else '') + ('*' if identity in at_bound else '') + mark
+    species = [n['component_id'] for n in document['components']]
+    charge = {s: n.get('fixed', {}).get('charge_number', {}).get('value', {}).get('magnitude', 0) for s, n in zip(species, document['components'])}
+    symbol = {**NAMES, 'water': r'\ce{H2O}'}
+    def association(s, quantity):
+        if s == 'carbon-dioxide':  # induced association with water only, marked ‡
+            return value(f'association/carbon-dioxide/a/water/b/{quantity}', '‡')
+        return value(f'association/{s}/a/{s}/b/{quantity}')
+    species_rows = [[symbol[s], value(f'component/{s}/segment_count'),
+                     r'$\boldsymbol{\sigma_w(T)}$' if s == 'water' else value(f'component/{s}/segment_diameter'),
+                     value(f'component/{s}/dispersion_energy_over_k'), association(s, 'energy_over_k'), association(s, 'volume'),
+                     f'${int(charge[s]):+d}$' if charge[s] else '0', value(f'component/{s}/born_diameter'), value(f'component/{s}/solvation_factor'),
+                     value(f'component/{s}/dielectric_volume'), value(f'component/{s}/dielectric_temperature')] for s in species]
+    table('species_parameters.tex', r'Species parameters of the reported fit. Bold values were fitted: water to IAPWS-95 (\cref{sec:results-water}), the MEA dielectric coefficients to permittivities (\cref{sec:results-permittivity}) and, marked with a dagger, in the joint fit (\cref{sec:results-joint}); an asterisk marks a joint-fit value at its bound. '
+          r'The other joint-fit parameters are interactions in \cref{tab:interaction-matrix} and the R5 coefficient $A_5$ and R2 and R5 enthalpy shifts included in \cref{tab:reaction-equilibrium-constants}. '
+          r'Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$; the water diameter law $\sigma_w(T)$, whose constant was fitted, and the sources of all fixed inputs are given in Section~\\ref{sec:s-parameters}. '
+          r'Water and MEA each have one donor and one acceptor site, with Wolbach--Sandler MEA--water cross-association; double daggers mark the \ce{CO2} values, which apply only to its induced association with water. '
+          r'The dielectric coefficients apply to the neutral species; the ion-region permittivity is $\varepsilon_{\mathrm{ion}}=8$. A dash marks an input the model does not use.',
+          ['Species', '$m$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$u/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
+           r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}'], species_rows, 'l' + 'r'*10, sep=6)
+    def pair(s, t, quantity=''):
+        if charge[s] * charge[t] > 0:  # same-sign ions: dispersion excluded
+            return '--'
+        identity = next((i for i in [f'pair/{s}/{t}/k_ij', f'pair/{t}/{s}/k_ij'] if i in values), None)
+        return value(identity + quantity) if identity else '--'
+    matrix = lambda quantity, rows: [[symbol[s]] + [pair(s, t, quantity) if j > i else '' for j, t in enumerate(species) if j > 0] for i, s in enumerate(species) if s in rows]
+    slopes = [[r[0]] + [x.replace('--', '') for x in r[1:]] for r in matrix('/reciprocal_temperature_slope', species[:-1])]
+    slopes = [r for r in slopes if any(r[1:])]
+    table('interaction_matrix.tex', r'Binary interactions of the reported fit, $k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b_{ij}(1/T-1/T_{\mathrm{ref}})$ with $T_{\mathrm{ref}}=313.15$ K, for the pair in each row and column. '
+          r'Bold values were fitted: \ce{CO2}--water to Kiepe pressures (\cref{sec:results-co2-water}) and, marked with a dagger, in the joint fit (\cref{sec:results-joint}); an asterisk marks a joint-fit value at its bound. A dash marks two ions of the same charge sign, whose dispersion is excluded; a blank slope means a temperature-independent $k_{ij}$. '
+          r'The fixed ion interactions are model inputs rather than measured pair energies (Section~\\ref{sec:s-parameters}).',
+          ['', *(symbol[s] for s in species[1:])], [block(9, r'Interaction $k_{ij}(T_{\mathrm{ref}})$', True), *matrix('', species[:-1]), block(9, r'Temperature slope $b_{ij}$ (K)'), *slopes], 'l' + 'r'*8, sep=6)
+    reaction_coordinates = {c['identity'] for c in fit['coordinates'] if c['identity'].startswith('reaction:')}
+    assert coords.keys() == (shown & coords.keys()) | reaction_coordinates and len(reaction_coordinates) == 3
     uncertainty = a.load(a.E / 'conditional-uncertainty.json')
     correlations = a.rows(a.E / 'conditional-correlations.csv')
     free = uncertainty['free_coordinates']
@@ -506,24 +555,30 @@ def main():
           ['Source','Property','n','Conditions','Role'],inventory,['l',.2,'r',.27,.16])
     species_states = [meta_by_target[r['id']] for r in fitted if r['quantity']=='PhaseMoleFraction' or r['group']=='restored species']
     fitted_density_states = [r for r in density if r['id'] in loaded_ids]
+    # Grouped by quantity in Results order; fitted rows lead each block and the Use column keeps the role.
     data_rows = [
-        [r'Hilliard, Jou \cite{Hilliard2008,Jou1995}', 'CO2 partial pressure', fit['groups']['common149 pressure']['n'], '30 wt%; source states', 'fitted'],
-        [r'Böttinger, Matin \cite{Bottinger2008,matinFacileMethodDetermination2012}', 'Species fractions', fit['groups']['common149 species']['n']+fit['groups']['restored species']['n'], span(float(r['temperature_K']) for r in species_states)+' K; source compositions', 'fitted'],
-        [r'Jakobsen \cite{Jakobsen2005}', 'Species/total-amine ratios', fit['groups']['Jakobsen']['n'], '293.15/313.15 K; diluted samples', 'fitted'],
-        [r'Vinjarapu \cite{HemaBhavya2025}', 'Integral heat', fit['groups']['common149 heat']['n'], '313.15 K; 1.734 MPa; 30 wt%', 'fitted'],
-        [r'Amundsen, Hartono \cite{Amundsen2009,Hartono2014}', 'Loaded density', len(loaded_ids), span(float(r['T_K']) for r in fitted_density_states)+' K; 30 wt%', 'fitted'],
-        [r'Amundsen \cite{Amundsen2009}', 'CO2-free density', len(free_ids), '298.15--353.15 K; 30 wt%', 'fitted'],
+        block(5, 'Binary vapor--liquid equilibrium', True),
         [r'Cai \cite{caiBinaryIsobaricVaporLiquid1996}', 'Bubble T; vapor fraction', fit['groups']['Cai']['n'], 'MEA--water; 66.66/101.33 kPa', 'fitted; 25 states'],
         [r'Kiepe \cite{kiepeExperimentalDeterminationPrediction2002}', 'CO2--water pressure', fit['groups']['Kiepe']['n'], '313.20--393.17 K', 'fitted earlier; fixed input check'],
-        [r'Hilliard \cite{Hilliard2008}', 'Heat capacity', fit['groups']['Cp']['n'], '318.15/353.15 K; 7 mol MEA/kg water', 'fitted'],
-        r'\midrule',
+        block(5, r'\ce{CO2} partial pressure'),
+        [r'Hilliard, Jou \cite{Hilliard2008,Jou1995}', 'CO2 partial pressure', fit['groups']['common149 pressure']['n'], '30 wt%; source states', 'fitted'],
         ['Six-source pressure comparison', 'CO2 partial pressure', 159, '313.00--393.15 K; nominal 30 wt%', '47 fitted; 112 not fitted'],
         [r'Wagner \cite{wagnerSolubilityCarbonDioxide2013}', 'CO2 partial pressure', 23, 'near 353/392 K; 30 wt%', 'not fitted; not blind'],
         [r'Aronu \cite{Aronu2011}', 'CO2 partial pressure', 70, '15/45 wt%; source states', 'not fitted; not blind'],
-        [r'Arcis \cite{arcisEnthalpySolutionCarbon2011}', 'Integral heat', 14, '322.5 K; 0.51/1.03 MPa', 'not fitted; used to accept fits'],
+        block(5, 'Liquid species'),
+        [r'Böttinger, Matin \cite{Bottinger2008,matinFacileMethodDetermination2012}', 'Species fractions', fit['groups']['common149 species']['n']+fit['groups']['restored species']['n'], span(float(r['temperature_K']) for r in species_states)+' K; source compositions', 'fitted'],
+        [r'Jakobsen \cite{Jakobsen2005}', 'Species/total-amine ratios', fit['groups']['Jakobsen']['n'], '293.15/313.15 K; diluted samples', 'fitted'],
         ['Matin', 'Bicarbonate total', 19, 'source states', 'not fitted'],
         ['Jakobsen', 'Carbonate share', 10, 'source states', 'not fitted'],
-        [r'Amundsen, Hartono, Han \cite{hanDensityWater12012}', 'All densities', len(density), '293.15--393.15 K; 20--100 wt%', '52 fitted; others compared']]
+        block(5, 'Integral heat of absorption'),
+        [r'Vinjarapu \cite{HemaBhavya2025}', 'Integral heat', fit['groups']['common149 heat']['n'], '313.15 K; 1.734 MPa; 30 wt%', 'fitted'],
+        [r'Arcis \cite{arcisEnthalpySolutionCarbon2011}', 'Integral heat', 14, '322.5 K; 0.51/1.03 MPa', 'not fitted; used to accept fits'],
+        block(5, 'Density'),
+        [r'Amundsen, Hartono \cite{Amundsen2009,Hartono2014}', 'Loaded density', len(loaded_ids), span(float(r['T_K']) for r in fitted_density_states)+' K; 30 wt%', 'fitted'],
+        [r'Amundsen \cite{Amundsen2009}', 'CO2-free density', len(free_ids), '298.15--353.15 K; 30 wt%', 'fitted'],
+        [r'Amundsen, Hartono, Han \cite{hanDensityWater12012}', 'All densities', len(density), '293.15--393.15 K; 20--100 wt%', '52 fitted; others compared'],
+        block(5, 'Heat capacity'),
+        [r'Hilliard \cite{Hilliard2008}', 'Heat capacity', fit['groups']['Cp']['n'], '318.15/353.15 K; 7 mol MEA/kg water', 'fitted']]
     table('current_data_inventory.tex', r'Fitted and compared observations. Counts in comparison sets overlap fitted observations and are not additive. Section~\\ref{sec:s-objective} defines the objective. Source-specific conditions and roles are listed in the supplement.',
           ['Source','Quantity','n','Conditions','Use'],data_rows,['l',.21,'r',.25,.15])
     failures=[r for r in density if r['id'] in loaded_ids and abs(float(r['error_over_s']))>2]

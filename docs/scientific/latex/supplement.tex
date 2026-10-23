@@ -54,18 +54,13 @@ The topology follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.
 The association strength here carries $\sigma_{ij}^3$, so Baygi and Pahlavanzadeh's MEA association volume, reported for a $d_{ij}^3$ strength \cite[Table~2]{Baygi2015}, was converted from 0.037470 to 0.036287, the constant value that best reproduces their model vapor pressure and saturated-liquid density at 293.15--\SI{393.15}{\kelvin}.
 
 % P:supplement-19
-Five water parameters (segment count, diameter-law constant, dispersion energy, association energy and association volume) were fitted to IAPWS-95 density, saturation pressure and heat capacity on 20 temperatures from 298.15 to 393.15 K \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
-The two exponential terms in $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$, with $a_1=10.11$, $b_1=-0.01775$, $a_2=-1.417$ and $b_2=-0.01146$, were fixed while $\sigma_0$ was fitted; diameters are in angstrom and temperature in kelvin.
+The main text reports the fits of the five water parameters to IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, the \COtwo--water interaction to Kiepe pressures \cite{kiepeExperimentalDeterminationPrediction2002} and the \MEA dielectric coefficients to permittivities.
+In the water fit, the two exponential terms in $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$, with $a_1=10.11$, $b_1=-0.01775$, $a_2=-1.417$ and $b_2=-0.01146$, were fixed while $\sigma_0$ was fitted; diameters are in angstrom and temperature in kelvin.
 The objective scales were relative 0.0004885 for saturated density, 0.006187 for saturation pressure and 0.03 for heat capacity, with heat-capacity weight 0.1 relative to the other property groups.
-On the fitting temperature grid, mean absolute relative errors were 0.0363\,\% for saturated-liquid density, 0.0754\,\% for saturation pressure and 0.440\,\% for heat capacity.
-An interleaved 19-temperature grid gave 0.0343, 0.0700 and 0.416\,\%, respectively.
-These are comparisons with a reference equation, rather than independent measurements.
-The \COtwo--water interaction intercept and slope were then fitted to the 39 Kiepe pressures and held fixed in the present joint fit \cite{kiepeExperimentalDeterminationPrediction2002}.
 
 % P:supplement-20
-The MEA permittivity coefficients were estimated by weighted least squares from 14 unloaded MEA--water permittivities at 298.15 K, using calculated densities and relative scale 0.01 \cite[ESI Tables~S1--S2]{agieienkoWhatGasStream2024a}.
-Water coefficients, 0.3777 L/mol and 1403 K, follow Yang et al.; the \COtwo dielectric volume $10^{-8}$ L/mol and temperature 1403 K are assumptions \cite[Table~6]{Yang2024}.
-The quadratic composition dependence gives two coefficient pairs with identical fitted cost 1.934: $(d_V,d_T)=(0.24645\ \mathrm{L/mol},2436.44\ \mathrm{K})$ or $(0.73099\ \mathrm{L/mol},1019.08\ \mathrm{K})$.
+In the permittivity fit, water coefficients, 0.3777 L/mol and 1403 K, follow Yang et al.; the \COtwo dielectric volume $10^{-8}$ L/mol and temperature 1403 K are assumptions \cite[Table~6]{Yang2024}.
+At 298.15 K the quadratic composition dependence gives two coefficient pairs with identical permittivities at any density: $(d_V,d_T)=(0.24645\ \mathrm{L/mol},2436.44\ \mathrm{K})$ or $(0.73099\ \mathrm{L/mol},1019.08\ \mathrm{K})$.
 The larger-volume solution is used here; the permittivity data alone do not distinguish these solutions, so that selection is a model assumption.
 Temperature and loaded-solution extrapolation of this fit remain untested by these permittivity data.
 
@@ -194,7 +189,7 @@ They do not identify unique ion dimensions or reaction enthalpies, and they do n
 
 \section{Source-specific deviations}\label{sec:s-outside}
 % P:supplement-02
-The tables report property deviations, fitted observations by source and property, and comparisons outside the objective.
+The tables report fitted observations by source and property and comparisons outside the objective; deviations by data group are in the main text.
 Fitted observations are removed from each comparison set separately, so the overlapping pressure sets are not additive.
 Arcis heats were used to accept candidate parameter sets; Wagner pressures and pressures at 15 and 45 wt\% MEA were compared with intermediate parameter sets during model development.
 \Cref{fig:species-parity} compares calculated and measured liquid species mole fractions at each B\"ottinger and Matin state.
@@ -202,11 +197,10 @@ Arcis heats were used to accept candidate parameter sets; Wagner pressures and p
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{species-parity.pdf}
-\caption{Calculated against measured true-species liquid mole fractions at the B\"ottinger NMR and Matin titration states \cite{Bottinger2008,matinFacileMethodDetermination2012}, from fixed-parameter calculations at the measured states. (a) \ce{MEA + MEAH+}, \MEACOO, \MEAH and \MEA on linear axes; (b) bicarbonate plus carbonate totals on logarithmic axes. The solid line marks equality and the dotted lines $\pm10$\,\%. Marker shape identifies the species, color the temperature and fill the source (filled, NMR; open, titration), as in main-text Fig.~3. All observations were fitted except the B\"ottinger states at \SI{353.15}{\kelvin} and Matin's bicarbonate plus carbonate totals.}
+\caption{Calculated against measured true-species liquid mole fractions at the B\"ottinger NMR and Matin titration states \cite{Bottinger2008,matinFacileMethodDetermination2012}, from fixed-parameter calculations at the measured states. (a) \ce{MEA + MEAH+}, \MEACOO, \MEAH and \MEA on linear axes; (b) bicarbonate plus carbonate totals on logarithmic axes. The solid line marks equality and the dotted lines $\pm10$\,\%. Marker shape identifies the species, color the temperature and fill the source (filled, NMR; open, titration), as in main-text Fig.~6. All observations were fitted except the B\"ottinger states at \SI{353.15}{\kelvin} and Matin's bicarbonate plus carbonate totals.}
 \label{fig:species-parity}
 \end{figure}
 
-\input{tables/residual_summary}
 \input{tables/supplement_source_aard}
 \input{tables/supplement_outside_fit}
 
