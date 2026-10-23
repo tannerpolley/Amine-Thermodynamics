@@ -50,7 +50,7 @@ supplement splits (21 water-rich, 63 uniform, 70 both) are bitwise equal on `829
 The `8298c602` column comes from the same split command run from an extracted `d578555` tree
 with the main checkout's pinned environment ([A6-supplement-splits-on-8298c602](A6-supplement-splits-on-8298c602/)).
 It shows that the 63 water-rich failure was already numerically different on the current pin
-(−4.150 × 10⁻⁵ against the printed −1.399 × 10⁻⁴), while its failed status matched the supplement.
+(−4.150 × 10⁻⁵ against the printed −1.399 × 10⁻⁴), while it still failed, as in the supplement.
 Only `3e83e19c` turns a reported failed split into a converged one.
 
 ## What the owner must decide
