@@ -75,18 +75,14 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
-% Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1410\linewidth}>{\raggedright\arraybackslash}p{0.2068\linewidth}>{\raggedright\arraybackslash}p{0.1786\linewidth}>{\raggedright\arraybackslash}p{0.2256\linewidth}>{\raggedright\arraybackslash}p{0.1880\linewidth}@{}}
-\caption{Model complexity, data roles and reported deviations in related MEA studies. Parameter counts refer to the stated fit, excluding earlier subsystem fits. Relative pressure deviations and caloric metrics use each source's own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.}\label{tab:literature-model-comparison}\\
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a22d78194960a8fc5b0d43d17502bfc3b551d44d6eba2d0433fb31be21f4648b
+% Input: docs/scientific/latex/supplement.tex SHA256 92dc5a106940d1b48eb24217fe12597bc26d2923a49d0ecfb5cfa7838670b470
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Model complexity, data roles and reported deviations in related MEA studies. Parameter counts refer to the stated fit, excluding earlier subsystem fits. Relative pressure deviations and caloric metrics use each source's own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.}\label{tab:literature-model-comparison}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.1400\linewidth}>{\raggedright\arraybackslash}p{0.2100\linewidth}>{\raggedright\arraybackslash}p{0.1800\linewidth}>{\raggedright\arraybackslash}p{0.2300\linewidth}>{\raggedright\arraybackslash}p{0.1800\linewidth}@{}}
 \toprule
 Study & Model; fitted parameters & Fitted data & Reported agreement & Other comparisons or qualification \\
-\midrule\endfirsthead
-\toprule
-Study & Model; fitted parameters & Fitted data & Reported agreement & Other comparisons or qualification \\
-\midrule\endhead
-\bottomrule\endfoot
+\midrule
 Böttinger et al. \cite{Bottinger2008} & Pitzer; 6 coefficients in 2 MEA reaction laws & NMR; 293--353 K & No aggregate MEA error stated; R5 fixed to Bates--Pinching & VLE compared with earlier VLE-fitted interactions (Tables 5--6) \\
 Zhang et al. \cite{Zhang2011} & eNRTL/\allowbreak{}PC-SAFT vapor; 12 ternary coefficients & Pressure, differential heat, heat capacity, NMR & Pressure 13.5--35.5\% by source; heat 10.9\% (84); $C_P$ 2.4\% (102); species 35.7\% (24), Table 9 & Additional pressure sources 28.6--112\% (Table 11) \\
 Nasrifar and Tafazzol \cite{Nasrifar2010} & PC-SAFT/\allowbreak{}ideal reactions; 5 pure-MEA + 1 MEA--water parameter & Pure and binary properties & Pure-MEA density 0.50\%, vapor pressure 3.36\% (Table 2); no aggregate ternary error & Acid-gas solubility; ideal-activity speciation \\
@@ -99,4 +95,6 @@ Aronu et al. \cite{Aronu2011} & Extended UNIQUAC; ion size/\allowbreak{}surface 
 Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013} & Electrolyte cubic two-state association; 7 MEA ternary parameters & VLE; 15.2--30 wt\%; 298.15--393.15 K in Table~2 and Fig.~8; Section~4.3.3 instead states an upper limit of 366.68 K & Relative pressure deviation 12.5\%, fitted (Tables 5, 8) & Parameters from earlier subsystems retained \\
 Neumann et al. \cite{neumannNewModelCombining2022} & Helmholtz energy/\allowbreak{}eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained & Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data & Ternary density AARD 0.92\% Hartono; 3.5\% complete Han (Section 4.2) & VLE/\allowbreak{}density comparisons; density data sets differ from this work \\
 This work & 16 fitted parameters; 6 at bounds & 307 quantities: pressure, species, heat, density, heat capacity and binary VLE & Fitted pressure/\allowbreak{}species 11.86/\allowbreak{}7.10\%; integral heat RMSE 1.83 kJ/\allowbreak{}mol & 159-pressure comparison 20.55\%; previously examined data \\
-\end{longtable}\endgroup
+\bottomrule
+\end{tabular}
+\end{table}

@@ -75,10 +75,10 @@
 % Input: analyses/mea_parameter_bundle/scripts/heat_evidence_170.py SHA256 14e1543f10e5e3aece39831894369b4fba54953399623d76d750421698024f88
 % Input: data/reference/MEA/manifests/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: data/reference/MEA/thermal/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 9a89dacd9e84d5b1cff4d1b241a1448f6761685cd61e982b259a58ea435b2243
-% Input: docs/scientific/latex/supplement.tex SHA256 71b9acf6e39a0f5d328b403cf0eebcc7f49497f6763497dfce9762726185c9df
-\begingroup\small\setlength{\tabcolsep}{2pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.1116\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}>{\raggedright\arraybackslash}p{0.0818\linewidth}@{}}
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a22d78194960a8fc5b0d43d17502bfc3b551d44d6eba2d0433fb31be21f4648b
+% Input: docs/scientific/latex/supplement.tex SHA256 92dc5a106940d1b48eb24217fe12597bc26d2923a49d0ecfb5cfa7838670b470
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}rrrrrrrrrrr@{}}
 \caption{Lower-triangular conditional correlation matrix. Ten free parameters have rank ten and 297 degrees of freedom; variance factor 1.003. Parameter order: 1: \ce{MEACOO-}–water $k_{ij}$; 2: \ce{HCO3-}–water $k_{ij}$; 3: \ce{MEAH+}–water $k_{ij}$ temperature slope; 4: \ce{MEACOO-} segment diameter; 5: R5 $A_5$ (before enthalpy shift); 6: R2 enthalpy shift; 7: \ce{MEA}–water $k_{ij}$; 8: \ce{MEA}–water $k_{ij}$ temperature slope; 9: \ce{MEAH+} dispersion energy/\allowbreak{}k; 10: \ce{MEACOO-} dispersion energy/\allowbreak{}k.}\label{tab:supplement-correlations}\\
 \toprule
 Parameter & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
@@ -87,14 +87,14 @@ Parameter & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
 Parameter & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
 \midrule\endhead
 \bottomrule\endfoot
-1 & 1 &  &  &  &  &  &  &  &  &  \\
-2 & 0.911 & 1 &  &  &  &  &  &  &  &  \\
-3 & 0.311 & 0.253 & 1 &  &  &  &  &  &  &  \\
-4 & $-0.737$ & $-0.7$ & $-0.221$ & 1 &  &  &  &  &  &  \\
-5 & $-0.95$ & $-0.803$ & $-0.336$ & 0.732 & 1 &  &  &  &  &  \\
-6 & 0.244 & 0.153 & 0.967 & $-0.152$ & $-0.287$ & 1 &  &  &  &  \\
-7 & $-0.202$ & $-0.224$ & 0.196 & 0.149 & 0.198 & 0.161 & 1 &  &  &  \\
-8 & $-0.118$ & $-0.148$ & 0.314 & 0.0897 & 0.108 & 0.256 & 0.778 & 1 &  &  \\
-9 & 0.767 & 0.957 & 0.174 & $-0.581$ & $-0.596$ & 0.0638 & $-0.212$ & $-0.153$ & 1 &  \\
-10 & $-0.692$ & $-0.925$ & $-0.172$ & 0.591 & 0.572 & $-0.0563$ & 0.202 & 0.145 & $-0.966$ & 1 \\
+$1$ & $1$ &  &  &  &  &  &  &  &  &  \\
+$2$ & $0.911$ & $1$ &  &  &  &  &  &  &  &  \\
+$3$ & $0.311$ & $0.253$ & $1$ &  &  &  &  &  &  &  \\
+$4$ & $-0.737$ & $-0.7$ & $-0.221$ & $1$ &  &  &  &  &  &  \\
+$5$ & $-0.95$ & $-0.803$ & $-0.336$ & $0.732$ & $1$ &  &  &  &  &  \\
+$6$ & $0.244$ & $0.153$ & $0.967$ & $-0.152$ & $-0.287$ & $1$ &  &  &  &  \\
+$7$ & $-0.202$ & $-0.224$ & $0.196$ & $0.149$ & $0.198$ & $0.161$ & $1$ &  &  &  \\
+$8$ & $-0.118$ & $-0.148$ & $0.314$ & $0.0897$ & $0.108$ & $0.256$ & $0.778$ & $1$ &  &  \\
+$9$ & $0.767$ & $0.957$ & $0.174$ & $-0.581$ & $-0.596$ & $0.0638$ & $-0.212$ & $-0.153$ & $1$ &  \\
+$10$ & $-0.692$ & $-0.925$ & $-0.172$ & $0.591$ & $0.572$ & $-0.0563$ & $0.202$ & $0.145$ & $-0.966$ & $1$ \\
 \end{longtable}\endgroup
