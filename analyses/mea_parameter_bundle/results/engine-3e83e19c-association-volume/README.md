@@ -4,8 +4,13 @@
 absolute-error search supports the printed volume, but the native least-squares
 optimum rounds to a different value. The owner must decide which estimator
 defines the paper's conversion. No parameter, subsequent fit or manuscript was
-changed. These results have not been independently reviewed or promoted for
-manuscript use.
+changed by this calculation.
+
+**Owner decision (2026-10-24):** the Engine native least-squares value defines
+the conversion, fixed at its eight-significant-figure value `0.036305439` in
+every calculation; dependent fits are refitted on the same wheel. The
+independent delivered review (2026-10-24) returned Supported. The
+absolute-error value is the bounded-search optimum at `xatol=1e-8`.
 
 | Estimator | Optimum, dimensionless | Five significant figures | Numerical completion |
 |---|---:|---:|---|
