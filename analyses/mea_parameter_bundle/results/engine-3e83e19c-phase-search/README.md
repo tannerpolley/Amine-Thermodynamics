@@ -1,0 +1,5 @@
+# MEA finite phase search on Engine 3e83e19c
+
+The current calculation and evidence are in [run-2/README.md](run-2/README.md). It removes the selected-record dependency found by delivered review and repeats the complete census under the same limits. The reported record has zero descents; the comparison has 54 descent states, 143 descending trials and 51 confirmed paths across 32 states. Every reference and state completed.
+
+The first census remains in this directory, at commit `62cc2bd30fea8e43400bc47fc9235e924a9c9009`. Its numerical records and [provenance](provenance.json) are unchanged. Its [original README](run-2/first-run-README.md) is retained byte for byte; the old statement that the selected working record was not an input was incorrect. The historical provenance's README hash refers to that original copy. [The numerical comparison](run-2/comparison-with-first-run.json) records exact equality of the two censuses after excluding execution duration and output locations. The current [notebook](../../joint-recalibration/index.qmd#phase-extension-201) uses run 2. Independent delivered review and investigator promotion remain open.
