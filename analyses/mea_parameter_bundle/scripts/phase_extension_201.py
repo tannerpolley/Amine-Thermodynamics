@@ -32,7 +32,7 @@ def descendants(pid):
     for child in Path(f'/proc/{pid}/task/{pid}/children').read_text().split():
         try:
             found.extend(descendants(int(child)))
-        except FileNotFoundError:
+        except (FileNotFoundError, ProcessLookupError):
             pass
     return [pid] + found
 
@@ -45,7 +45,7 @@ def cpu_used():
         try:
             stat = Path(f'/proc/{pid}/stat').read_text().rsplit(')', 1)[1].split()
             cpu += sum(int(stat[i]) for i in (11, 12, 13, 14))/ticks
-        except FileNotFoundError:
+        except (FileNotFoundError, ProcessLookupError):
             pass
     return cpu
 
