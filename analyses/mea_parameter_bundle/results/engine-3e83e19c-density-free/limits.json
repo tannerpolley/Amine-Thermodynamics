@@ -1,0 +1,99 @@
+{
+  "decision": "passes",
+  "limits": {
+    "common149_cost": {
+      "reference_value": 23.77563947432554,
+      "multiplier": 1.1,
+      "increment": 0.0,
+      "definition": "1.10 * density-free common149 cost",
+      "limit": 26.153203421758096,
+      "candidate_value": 23.860996312136727,
+      "margin": 2.292207109621369,
+      "passes": true
+    },
+    "pressure_AARD_percent": {
+      "reference_value": 11.898355269557591,
+      "multiplier": 1.0,
+      "increment": 2.0,
+      "definition": "density-free pressure AARD + 2 percentage points",
+      "limit": 13.898355269557591,
+      "candidate_value": 11.862562814041896,
+      "margin": 2.035792455515695,
+      "passes": true
+    },
+    "species_AARD_percent": {
+      "reference_value": 7.090199842730563,
+      "multiplier": 1.0,
+      "increment": 2.0,
+      "definition": "density-free species AARD + 2 percentage points",
+      "limit": 9.090199842730563,
+      "candidate_value": 7.102842181553149,
+      "margin": 1.9873576611774135,
+      "passes": true
+    },
+    "Vinjarapu_RMSE_kJ_mol": {
+      "reference_value": 1.8225957856620474,
+      "multiplier": 1.0,
+      "increment": 1.0,
+      "definition": "density-free Vinjarapu RMSE + 1 kJ/mol CO2",
+      "limit": 2.822595785662047,
+      "candidate_value": 1.8350098647473438,
+      "margin": 0.9875859209147033,
+      "passes": true
+    },
+    "Arcis_RMSE_kJ_mol": {
+      "reference_value": 8.070718549141134,
+      "multiplier": 1.0,
+      "increment": 1.0,
+      "definition": "density-free Arcis RMSE + 1 kJ/mol CO2",
+      "limit": 9.070718549141134,
+      "candidate_value": 8.115640714619083,
+      "margin": 0.9550778345220508,
+      "passes": true
+    },
+    "cai_cost": {
+      "reference_value": 91.29322049026165,
+      "multiplier": 1.05,
+      "increment": 0.0,
+      "definition": "1.05 * refitted constant-interaction Cai cost",
+      "limit": 95.85788151477473,
+      "candidate_value": 91.87458520309771,
+      "margin": 3.983296311677023,
+      "passes": true
+    }
+  },
+  "inputs": [
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/spec.json",
+      "sha256": "83b9781fc6874530293e3e655942c807abbe3ea3b9b8a04ef0c104f1feeacf40"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/reference-quantities.json",
+      "sha256": "300da6bf358a0551716583269454e9c50fa9ffd9c2d65bc07663ef8ebf7552b2"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/candidate-quantities.json",
+      "sha256": "806b576aa4c7e344b0427201c09b49c7750b57ec6258e968a0780512c14ff401"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json",
+      "sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/reported/full-replay.json",
+      "sha256": "aeb3331cf95cb174faa9cfa5891e887dbae0829448b5c67a2da17727ed386560"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/reported/score.json",
+      "sha256": "a1aba0ded55be8d51efc88f259e9c36ca4d4a52ba33f20528ec8b5a3e66793e9"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/summary.json",
+      "sha256": "ed5f1c9216a3acba94e07643229c0df4ef1086803032f58d3879d2d6f524bedd"
+    },
+    {
+      "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/cai-constant-replay.json",
+      "sha256": "bbdba85ee6aaca496e99c2e97a68de13f3e954fd4563659c037b3b3df768317e"
+    }
+  ]
+}
