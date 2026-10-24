@@ -3,7 +3,7 @@ title: "Association topology analysis"
 subtitle: "Historical model-D association topology and transfer rules"
 ---
 
-Historical association-topology decision for model D, the corrected-Born parameter formulation.
+Historical association-topology decision for model D, the corrected-Born parameter formulation adopted on 30 September 2026 ([parameter history](../results/parameter-record-history.csv)), record `9055458d…`.
 
 # Question
 
@@ -40,13 +40,13 @@ association volume and half the water association energy.
 []{#association-evidence-record}
 
 These values describe that historical model-D association graph and the numerical values
-used by the corresponding formulation. A dash means the edge is disabled or
+used by the corresponding formulation, including its historical MEA association volume 0.036287. The [frozen model-D inputs](../model-d/born-form-diagnosis/p5conv-a-11-diagnostic-parameters.json) preserve this graph. The current record `00e77608…`, adopted on 24 October 2026, instead fixes the MEA association volume at **0.036305439**, chosen under [#210](../joint-recalibration/index.qmd#association-volume-210) and serialized in the [current reported parameters](../results/engine-3e83e19c-paper-evidence/reported-parameters.json). The other historical pair values below are not current parameter estimates. A dash means the edge is disabled or
 not present in the topology.
 
 ::: {.parameter-table .association-table}
 | Pair | $\epsilon^{AB}/k$ (K) | $\kappa^{AB}$ (dimensionless) | Role | Evidence |
 |:--|--:|--:|:--|:--|
-| MEA–MEA | [2586.3000]{.evidence-1} | [0.036287]{.evidence-1} | Self-association | Literature 2B lineage [1, 2] |
+| MEA–MEA (historical model D) | [2586.3000]{.evidence-1} | [0.036287]{.evidence-1} | Self-association | Literature 2B lineage [1, 2] |
 | H₂O–H₂O | [2425.7000]{.evidence-1} | [0.0451]{.evidence-1} | Self-association | ePC-SAFT aqueous-electrolyte lineage [1, 3] |
 | CO₂–H₂O | Half the water energy | [0.0451]{.evidence-1} | Induced cross-association | ePC-SAFT advanced formulation [1] |
 | MEA–H₂O | Geometric energy rule | Wolbach–Sandler volume rule | Combining-rule value | Packet-v5 MEA 2B inputs; includes the segment-size factor |
