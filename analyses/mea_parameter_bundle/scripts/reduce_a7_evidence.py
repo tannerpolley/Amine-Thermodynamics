@@ -12,8 +12,10 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[3]
 BUNDLE = ROOT / 'analyses/mea_parameter_bundle'
-BASE = BUNDLE / 'results/joint-recalibration-170/amendment-7'
-OUT = BUNDLE / 'results/a7-paper-evidence'
+BASE = BUNDLE / 'results/engine-3e83e19c-refit-chain'
+OUT = BUNDLE / 'results/engine-3e83e19c-paper-evidence'
+FIT = BASE / 'restricted-2/attempt-3'
+ASSESSMENT = OUT / 'selected-assessment'
 INPUTS = {}
 
 
@@ -118,17 +120,16 @@ def uncertainty(spec, native, endpoint):
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     bind(Path(__file__))
-    endpoint = load(BASE / 'restricted-2/fit/usable-budget-endpoint.json')
-    selected = bind(BUNDLE / 'results/selected-current-best-parameters.json')
+    endpoint = load(FIT / 'run/fit/usable-budget-endpoint.json')
+    selected = bind(FIT / 'run/fit/usable-budget-endpoint.json')
     sha = INPUTS[str(selected.relative_to(ROOT))]
-    assert selected.read_bytes() == (BASE / 'restricted-2/fit/usable-budget-endpoint.json').read_bytes()
-    assert sha == 'e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e'
-    spec = load(BASE / 'restricted-2/fit-spec.json')
+    assert sha == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
+    spec = load(FIT / 'spec.json')
     for item in spec['inputs']:
         assert INPUTS.setdefault(item['path'], hashlib.sha256((ROOT / item['path']).read_bytes()).hexdigest()) == item['sha256']
-    native = load(BASE / 'restricted-2/fit/native.json')
-    replay = load(BASE / 'restricted-2/replay/A7-restricted-2-full-replay.json')
-    score = load(BASE / 'fixed-study/wheel-8298c602/restricted-2-endpoint/score.json')
+    native = load(FIT / 'run/fit/native.json')
+    replay = load(BASE / 'displays/reported/full-replay.json')
+    score = load(BASE / 'displays/reported/score.json')
     declarations = {r['id']: r for r in native['rows']}
     assert len(replay) == len(declarations) == 307 and {r['target'] for r in replay} == set(declarations)
     common = set(spec['observations'][0]['ordered_row_ids'])
@@ -158,13 +159,17 @@ def main():
     assert math.isclose(cost, score['cost'], rel_tol=1e-10) and math.isclose(cost, native['final_cost'], rel_tol=1e-10)
     assert math.isclose(stats['common149']['cost'], score['C149'], rel_tol=1e-10)
     table('fitted-rows.csv', fitted)
-    coordinates = uncertainty(spec, native, endpoint)
+    conditional = BASE / 'displays/conditional'
+    for name in ('conditional-uncertainty.json','conditional-standard-errors.csv','conditional-correlations.csv'):
+        shutil.copyfile(bind(conditional / name), OUT / name)
+    coordinates = load(conditional / 'conditional-uncertainty.json')['coordinate_map']
+    bind(FIT / 'run/fit/chemistry-coordinates.json')
     write('fit-summary.json', dict(cost=cost, groups=stats, iterations=native['iterations'], coordinates=coordinates,
         active_bounds=native['covariance']['active_bounds'], gate_score=score, engine=spec['engine'], record_sha256=sha))
     for name in ('state-targets.csv', 'state-summary.json', 'states-excluded.json', 'states-unavailable.json',
                  'summary.json', 'verification.json', 'density.csv', 'cp.csv', 'carbonate-share.csv'):
-        shutil.copyfile(bind(BASE / 'selected-assessment' / name), OUT / name)
-    states = read(BASE / 'selected-assessment/state-targets.csv')
+        shutil.copyfile(bind(ASSESSMENT / name), OUT / name)
+    states = read(ASSESSMENT / 'state-targets.csv')
     assert len(states) == len({(r['kind'],r['identity'],r['target']) for r in states}) == 462
     assert all(r['status']=='Available' and r['record_sha256']==sha for r in states)
     for name, kind, quantity, count in [('pressure-figure-data.csv','packet','pressure',79),
@@ -176,7 +181,7 @@ def main():
     pool = [r for r in states if r['kind']=='packet' and r['source']=='Matin2012' and r['species']=='HCO3-']
     assert len(pool)==19 and not any(r['target'] in declarations for r in pool)
     table('pool-figure-data.csv', pool)
-    state_summary = load(BASE / 'selected-assessment/state-summary.json')
+    state_summary = load(ASSESSMENT / 'state-summary.json')
     for name, cohort in state_summary['scores'].items():
         rows = [r for r in states if r['target'] in cohort['row_ids'] and r['identity'] in cohort['state_ids']]
         assert len(rows)==cohort['n_total'] and set(cohort['row_ids'])=={r['target'] for r in rows}
@@ -184,27 +189,14 @@ def main():
         assert math.isclose(aard, cohort['AARD_percent'], rel_tol=1e-12)
     table('high-temperature-comparison.csv', [dict(cohort=k, **{f:v for f,v in c.items() if f not in ('row_ids','state_ids')})
         for k,c in state_summary['scores'].items() if '100-120' in k])
-    heats = read(BASE / 'selected-assessment/heats.csv')
+    heats = read(ASSESSMENT / 'heats.csv')
     sources = {r['record_id']:r for r in load(ROOT / spec['heat_rows_path'])}
     assert len(heats)==22 and {r['id'] for r in heats}==set(sources)
     table('heat.csv', [dict(r, scale_J_mol_CO2=sources[r['id']]['uH_J_per_mol_CO2'], unit='kJ/mol CO2',
         role='fitted' if r['id'] in declarations else 'non-fitted prediction', source_row=sources[r['id']]) for r in heats])
-    phase = []
-    for label, directory in [('A7','restricted-2-endpoint'), ('A6','after-adoption/a6-selected')]:
-        path = BASE / 'fixed-study/wheel-8298c602' / directory
-        reduction = load(path / 'reduction.json')
-        assert len(reduction)==73 and {r['index'] for r in reduction}==set(range(73))
-        for row in reduction:
-            point = load(path / f"point-{row['index']}.json")
-            phase.append(dict(record=label, **row, **{k:point[k] for k in ('temperature_K','loading','pressure_Pa')}))
+    phase = read(BUNDLE / 'results/engine-3e83e19c-phase-search/run-2/phase-family.csv')
+    assert len(phase)==324
     table('phase-family.csv', phase)
-    predecessor = BUNDLE / 'results/heat-final-170'
-    paths = [bind(predecessor / name) for name in ('fit-comparison.csv','pressure-figure-data.csv', 'species-figure-data.csv',
-        'heat-comparison.csv', 'high-temperature-comparison.csv', 'corrected-densities.csv', 'heat-capacity-comparison.csv', 'evaluation/execution.json')]
-    paths += [bind(BUNDLE / ('results/' + name)) for name in ('heat-160/A-parameters.json', 'engine-8298c602-adoption/comparison.json',
-        'engine-8298c602-adoption/checks.json', 'engine-8298c602-adoption/README.md')]
-    write('predecessor-f1.json', dict(inputs={str(p.relative_to(ROOT)):INPUTS[str(p.relative_to(ROOT))] for p in paths},
-        wheel_transfer='152 named F1 quantities only, worst relative difference 2.9e-12; no qualification of other retained F1 results.'))
     write('input-hashes.json', INPUTS)
     print(json.dumps(dict(objective_rows=307, cost=cost, groups=stats, state_rows=462, phase_rows=len(phase)), indent=2))
 
