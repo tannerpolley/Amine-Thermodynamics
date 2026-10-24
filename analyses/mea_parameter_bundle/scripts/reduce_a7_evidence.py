@@ -5,10 +5,7 @@ import json
 import math
 from pathlib import Path
 import shutil
-import sys
-from types import SimpleNamespace
 
-import numpy as np
 
 ROOT = Path(__file__).resolve().parents[3]
 BUNDLE = ROOT / 'analyses/mea_parameter_bundle'
@@ -41,80 +38,6 @@ def table(name, rows):
         writer = csv.DictWriter(stream, list(dict.fromkeys(k for r in rows for k in r)), lineterminator='\n')
         writer.writeheader()
         writer.writerows(rows)
-
-
-def coefficients(node):
-    if isinstance(node, dict):
-        if 'identity' in node and isinstance(node.get('value'), dict) and 'magnitude' in node['value']:
-            yield node['identity'], node['value']['magnitude']
-        for value in node.values():
-            yield from coefficients(value)
-    elif isinstance(node, list):
-        for value in node:
-            yield from coefficients(value)
-
-
-def uncertainty(spec, native, endpoint):
-    sys.path.insert(0, str(BUNDLE / 'calibration-misfit'))
-    import refit
-    import verify_reference_calorics as thermal
-    for path in ('calibration-misfit/refit.py', 'scripts/fit_campaign.py', 'scripts/verify_reference_calorics.py'):
-        bind(BUNDLE / path)
-    chemistry = load(BASE / 'restricted-2/fit/chemistry-coordinates.json')
-    start = spec['information_starts'][0]
-    initial = dict(coefficients(load(ROOT / start['parameters_path'])))
-    values = dict(coefficients(endpoint))
-    coordinates, lower, upper, physical, slopes = [], [], [], [], []
-    for index, c in enumerate(spec['information_coordinates']):
-        identity = c['identity']
-        factor = math.copysign(c['scale'], c.get('source_to_native_factor', 1.))
-        origin = initial.get(identity, 0.)
-        shift = 0.
-        if c.get('enthalpy_shift'):
-            origin = start['reaction_enthalpy_shifts_J_mol'][c['reaction']]
-            shift = origin
-            value = chemistry['enthalpy_shifts_J_mol'][c['reaction']]
-        elif 'reaction' in c:
-            shift = -start['reaction_enthalpy_shifts_J_mol'][c['reaction']] / (thermal.R * math.log(10.))
-            origin += shift
-            value = chemistry['R5_unshifted_a_k']
-        else:
-            value = values[identity]
-        assert math.isclose(value, origin + factor * native['optimizer'][index], rel_tol=1e-12, abs_tol=1e-10)
-        for tie in c.get('ties', []):
-            assert math.isclose(values[tie['identity']], tie['factor'] * value, rel_tol=1e-14)
-        lo, hi = [b + shift for b in c['bounds']]
-        coordinates.append(dict(identity=identity, optimizer_column=index, value=value, bounds=[lo, hi],
-            origin=origin, d_scientific_d_optimizer=factor, ties=c.get('ties', []),
-            unit='J/mol' if c.get('enthalpy_shift') else 'K' if 'reaction' in c or c['family'] in
-                 ('dispersion_energy_over_k', 'k_ij_reciprocal_temperature_slope') else 'angstrom' if 'diameter' in c['family'] else 'dimensionless'))
-        lower.append(lo); upper.append(hi); physical.append(value); slopes.append(factor)
-    r5 = 'reaction:R5:correlation:a_k'
-    assert math.isclose(values[r5], chemistry['R5_unshifted_a_k'] + chemistry['enthalpy_shifts_J_mol']['R5'] /
-                        (thermal.R * math.log(10.)), rel_tol=0., abs_tol=1e-10)
-    active = native['covariance']['active_bounds']
-    assert active == [1, 3, 5, 7, 8, 11]
-    ids = [c['identity'] for c in coordinates]
-    free = [i for i in range(16) if i not in active]
-    J = np.asarray(native['optimizer_jacobian']).reshape(307, 16) / np.asarray(slopes)
-    residual = np.asarray(native['weighted_residuals'])
-    spectrum = np.linalg.svd(J[:, free], compute_uv=False)
-    rank = int(np.sum(spectrum > spectrum[0] * 1e-14))
-    assert rank == 10 and np.isfinite(J).all() and np.isfinite(residual).all()
-    proxy = SimpleNamespace(physical=physical, covariance=SimpleNamespace(active_bounds=active))
-    result = refit.identifiability(proxy, J, residual, ids, lower, upper)
-    assert np.isfinite(list(result['conditional_standard_error'].values())).all()
-    assert np.isfinite(result['conditional_correlation']).all()
-    result.update(coordinate_map=coordinates, free_rank=rank, free_spectrum=spectrum.tolist(), rank_relative_cutoff=1e-14,
-        active_bound_indices=active, residual_count=307, degrees_of_freedom=297,
-        basis='R5 unshifted source A; total inherited-plus-fitted enthalpy shifts; tied diameters as declared',
-        meaning='Conditional on residual weights, fixed inputs, active bounds and local linearization; no measurement-error, uniqueness or prediction-interval claim.')
-    write('conditional-uncertainty.json', result)
-    table('conditional-standard-errors.csv', [dict(c, bound_active=i in active,
-        conditional_standard_error=result['conditional_standard_error'].get(c['identity'])) for i, c in enumerate(coordinates)])
-    table('conditional-correlations.csv', [dict(coordinate_a=a, coordinate_b=b, correlation=result['conditional_correlation'][i][j])
-        for i, a in enumerate(result['free_coordinates']) for j, b in enumerate(result['free_coordinates'])])
-    return coordinates
 
 
 def main():

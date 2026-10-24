@@ -1,0 +1,24 @@
+pressure · displayed · all: n=79; AARD=15.460739%
+pressure · common149 fitted · all: n=47; AARD=11.862563%
+pressure · all fitted · all: n=47; AARD=11.862563%
+pressure · displayed source · Hilliard2008: n=31; AARD=9.427010%
+pressure · displayed source · Jou1995: n=48; AARD=19.357522%
+species · displayed · all: n=131; AARD=16.208438%
+species · common149 fitted · all: n=94; AARD=7.102842%
+species · all fitted · all: n=101; AARD=7.234438%
+species · restored fitted · all: n=7; AARD=9.001586%
+species · displayed source · Bottinger2008: n=55; AARD=5.625598%
+species · displayed source · Matin2012: n=76; AARD=23.867072%
+Matin pool · displayed · all: n=19; AARD=67.456346%
+Matin pool · displayed source · Matin2012: n=19; AARD=67.456346%
+Traceback (most recent call last):
+  File "<string>", line 8, in <module>
+    m.main()
+    ~~~~~~^^
+  File "/tmp/issue215-candidate-check/analyses/mea_parameter_bundle/scripts/check_a7_selected.py", line 38, in main
+    for row in csv.DictReader(path.open()):
+                              ~~~~~~~~~^^
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/pathlib/_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/issue215-candidate-check/analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/selected-assessment/state-targets.csv'

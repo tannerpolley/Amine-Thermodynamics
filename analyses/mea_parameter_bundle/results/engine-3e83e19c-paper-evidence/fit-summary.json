@@ -1,0 +1,328 @@
+{
+  "cost": 148.87893934557388,
+  "groups": {
+    "common149": {
+      "n": 149,
+      "cost": 23.860996312136727,
+      "AARD_percent": 8.323668415324331
+    },
+    "restored species": {
+      "n": 7,
+      "cost": 2.4486746519412517,
+      "AARD_percent": 9.001586275329114
+    },
+    "Jakobsen": {
+      "n": 6,
+      "cost": 13.122182452954206,
+      "AARD_percent": 17.514390498018685
+    },
+    "Kiepe": {
+      "n": 39,
+      "cost": 0.0006790194987316589,
+      "AARD_percent": 2.6665235636903297
+    },
+    "CO2-free density": {
+      "n": 5,
+      "cost": 11.625713440586951,
+      "AARD_percent": 0.02797780982025433
+    },
+    "Cai": {
+      "n": 50,
+      "cost": 91.87458520309771,
+      "AARD_percent": 1.4799292819942051
+    },
+    "loaded density": {
+      "n": 47,
+      "cost": 0.5654031419421082,
+      "AARD_percent": 0.176969446813676
+    },
+    "Cp": {
+      "n": 4,
+      "cost": 5.380705123416196,
+      "AARD_percent": 2.8446236859301615
+    },
+    "common149 pressure": {
+      "n": 47,
+      "cost": 5.9858458970068975,
+      "AARD_percent": 11.862562814041896
+    },
+    "common149 heat": {
+      "n": 8,
+      "cost": 1.2137453025769942,
+      "AARD_percent": 1.8773720696700344
+    },
+    "common149 species": {
+      "n": 94,
+      "cost": 16.66140511255284,
+      "AARD_percent": 7.102842181553149
+    }
+  },
+  "iterations": 8,
+  "coordinates": [
+    {
+      "identity": "pair/carbamate-anion/water/k_ij",
+      "optimizer_column": 0,
+      "value": -0.0036580495327475336,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "origin": 0.0018882601582545233,
+      "d_scientific_d_optimizer": 0.01,
+      "ties": [],
+      "unit": "dimensionless"
+    },
+    {
+      "identity": "pair/protonated-monoethanolamine/water/k_ij",
+      "optimizer_column": 1,
+      "value": -0.5,
+      "bounds": [
+        -0.5,
+        -0.161
+      ],
+      "origin": -0.5,
+      "d_scientific_d_optimizer": 0.01,
+      "ties": [],
+      "unit": "dimensionless"
+    },
+    {
+      "identity": "pair/bicarbonate-anion/water/k_ij",
+      "optimizer_column": 2,
+      "value": 0.7270558477497251,
+      "bounds": [
+        -0.5,
+        1.0
+      ],
+      "origin": 0.6477497791183318,
+      "d_scientific_d_optimizer": 0.01,
+      "ties": [],
+      "unit": "dimensionless"
+    },
+    {
+      "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+      "optimizer_column": 3,
+      "value": -1.0,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "origin": -1.0,
+      "d_scientific_d_optimizer": 0.01,
+      "ties": [],
+      "unit": "dimensionless"
+    },
+    {
+      "identity": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "optimizer_column": 4,
+      "value": -41.61963413672365,
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "origin": -46.08801876676449,
+      "d_scientific_d_optimizer": 10.0,
+      "ties": [],
+      "unit": "K"
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/segment_diameter",
+      "optimizer_column": 5,
+      "value": 5.35,
+      "bounds": [
+        5.35,
+        5.8
+      ],
+      "origin": 5.49,
+      "d_scientific_d_optimizer": 0.1,
+      "ties": [
+        {
+          "identity": "component/protonated-monoethanolamine/packing_diameter",
+          "factor": 0.88
+        },
+        {
+          "identity": "component/protonated-monoethanolamine/debye_huckel_diameter",
+          "factor": 1.0
+        }
+      ],
+      "unit": "angstrom"
+    },
+    {
+      "identity": "component/carbamate-anion/segment_diameter",
+      "optimizer_column": 6,
+      "value": 4.866108647520244,
+      "bounds": [
+        2.0,
+        5.8
+      ],
+      "origin": 4.689208659753741,
+      "d_scientific_d_optimizer": 0.1,
+      "ties": [
+        {
+          "identity": "component/carbamate-anion/packing_diameter",
+          "factor": 0.88
+        },
+        {
+          "identity": "component/carbamate-anion/debye_huckel_diameter",
+          "factor": 1.0
+        }
+      ],
+      "unit": "angstrom"
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/born_diameter",
+      "optimizer_column": 7,
+      "value": 5.0,
+      "bounds": [
+        2.0,
+        5.0
+      ],
+      "origin": 5.0,
+      "d_scientific_d_optimizer": 0.1,
+      "ties": [],
+      "unit": "angstrom"
+    },
+    {
+      "identity": "component/carbamate-anion/born_diameter",
+      "optimizer_column": 8,
+      "value": 5.0,
+      "bounds": [
+        2.0,
+        5.0
+      ],
+      "origin": 5.0,
+      "d_scientific_d_optimizer": 0.1,
+      "ties": [],
+      "unit": "angstrom"
+    },
+    {
+      "identity": "reaction:R5:correlation:a_k",
+      "optimizer_column": 9,
+      "value": 2831.763028071159,
+      "bounds": [
+        2400.0,
+        3000.0
+      ],
+      "origin": 2849.3879204709965,
+      "d_scientific_d_optimizer": -80.0,
+      "ties": [],
+      "unit": "K"
+    },
+    {
+      "identity": "reaction:R2:enthalpy_shift",
+      "optimizer_column": 10,
+      "value": -1363.931574116721,
+      "bounds": [
+        -10000.0,
+        10000.0
+      ],
+      "origin": -1811.930108185226,
+      "d_scientific_d_optimizer": 2500.0,
+      "ties": [],
+      "unit": "J/mol"
+    },
+    {
+      "identity": "reaction:R5:enthalpy_shift",
+      "optimizer_column": 11,
+      "value": 10000.0,
+      "bounds": [
+        -10000.0,
+        10000.0
+      ],
+      "origin": 10000.0,
+      "d_scientific_d_optimizer": 2500.0,
+      "ties": [],
+      "unit": "J/mol"
+    },
+    {
+      "identity": "pair/monoethanolamine/water/k_ij",
+      "optimizer_column": 12,
+      "value": -0.08990160794755829,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "origin": -0.09008613503435584,
+      "d_scientific_d_optimizer": 0.01,
+      "ties": [],
+      "unit": "dimensionless"
+    },
+    {
+      "identity": "pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+      "optimizer_column": 13,
+      "value": -8.057331218929972,
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "origin": -8.29065086003104,
+      "d_scientific_d_optimizer": 10.0,
+      "ties": [],
+      "unit": "K"
+    },
+    {
+      "identity": "component/protonated-monoethanolamine/dispersion_energy_over_k",
+      "optimizer_column": 14,
+      "value": 177.89333334239393,
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "origin": 172.7277598299822,
+      "d_scientific_d_optimizer": 10.0,
+      "ties": [],
+      "unit": "K"
+    },
+    {
+      "identity": "component/carbamate-anion/dispersion_energy_over_k",
+      "optimizer_column": 15,
+      "value": 207.21694618033155,
+      "bounds": [
+        50.0,
+        1000.0
+      ],
+      "origin": 218.50491106114046,
+      "d_scientific_d_optimizer": 10.0,
+      "ties": [],
+      "unit": "K"
+    }
+  ],
+  "active_bounds": [
+    1,
+    3,
+    5,
+    7,
+    8,
+    11
+  ],
+  "gate_score": {
+    "C149": 23.860996312136727,
+    "cai_cost": 91.87458520309771,
+    "co2_free_errors": {
+      "AMU-DENS-002": -0.557484452458425,
+      "AMU-DENS-009": -0.08075602163683016,
+      "AMU-DENS-016": -0.03214825225916229,
+      "AMU-DENS-023": 0.39494028640649503,
+      "AMU-DENS-030": 0.32705333252499713
+    },
+    "cost": 148.87893934557388,
+    "label": "reported",
+    "loaded_count": 47,
+    "loaded_density_cost": 0.5654031419421082,
+    "loaded_max_abs_error_over_s": 2.430831623760042,
+    "loaded_within_2s": 44,
+    "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+    "pressure_AARD_pct": 11.862562814041896,
+    "species_AARD_pct": 7.102842181553149,
+    "vinjarapu_rmse_kJ_mol": 1.8350098647473436
+  },
+  "engine": {
+    "wheel_path": "build/engine-wheels/main-3e83e19ccc771b51d8ebc038931ab25192f4c5b5/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+    "wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
+    "packages": {
+      "epcsaft": "0.2.0.dev0",
+      "numpy": "2.4.4",
+      "scipy": "1.17.1"
+    }
+  },
+  "record_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91"
+}

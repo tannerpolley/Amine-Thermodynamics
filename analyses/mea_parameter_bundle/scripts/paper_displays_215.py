@@ -34,6 +34,7 @@ def main(mode):
         result = fo.water_assessment(json.loads(water_path.read_text()), fo.s.parameter_mapping(CANDIDATE))
         rows = result['rows']
         c.write(OUT / 'water-checks.json', result)
+        c.write(OUT / 'water-summary.json', dict(parameter_sha256=fo.s.sha256(CANDIDATE), engine=spec['engine'], metrics=result['metrics'], states=len(rows)))
         assert len(rows) == 42 and all(r['evaluated'] and r['cp_verified'] for r in rows)
         he.table(OUT / 'water.csv', [{k:v for k,v in r.items() if k != 'enthalpy_ladder'} for r in rows])
         inputs.append(water_path)
