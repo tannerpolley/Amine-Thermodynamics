@@ -524,6 +524,29 @@
           11.267578125
         ]
       }
+    },
+    "restricted-2": {
+      "status": "converged",
+      "usable": true,
+      "iterations": 8,
+      "initial_cost": 149.21952645122371,
+      "final_cost": 148.87893934555717,
+      "timing": {
+        "wall_s": 257.16627309200703,
+        "cpu_s": 662.710976
+      },
+      "available_rows": 307,
+      "active_bound_indices": [
+        1,
+        3,
+        5,
+        7,
+        8,
+        11
+      ],
+      "attempt": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3",
+      "native_C149": 23.860996312137765,
+      "native_Cai_cost": 91.87458520309647
     }
   },
   "stage5": {
@@ -570,20 +593,6 @@
       }
     ]
   },
-  "stopped": {
-    "condition": "numerical completion: fresh second-restricted information call incomplete",
-    "cause": "Host turn was interrupted and its unified-exec process ended before the second-restricted information call returned. No native result, release-tests.json, terminal timing, or fit endpoint was written; no matching calculation process remained after resumption.",
-    "disposition": "Stopped without another information call, a fit retry, budget changes or added starts.",
-    "retained_evaluation_count": 5,
-    "second_restricted_fit_started": false,
-    "fixed_calculations_started": false,
-    "information_CPU_s": null,
-    "information_wall_s": null,
-    "elapsed_wall_lower_bound_to_last_retained_evaluation_s": 109.45210289955139,
-    "last_retained_evaluation_UTC": "2026-10-24T06:59:16.907935+00:00",
-    "meaning": "An execution interruption, not a failed derivative check or evidence of physical-model failure. Completion cannot be asserted.",
-    "last_sampled_coordinate": "component/protonated-monoethanolamine/segment_diameter"
-  },
   "notebook": "analyses/mea_parameter_bundle/joint-recalibration/index.qmd",
   "executed_producers": {
     "ff714da": {
@@ -598,17 +607,124 @@
     }
   },
   "final_producer_sha256": "0f8710fd540b2ded14628abe0e10c187889677d58a14eb5e705f0174e9828675",
-  "new_reported_candidate_exists": false,
+  "new_reported_candidate_exists": true,
   "selected_record_sha256": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
-  "notebook_validation": "python3 analyses/manuscript.py validate analyses: valid",
+  "notebook_validation": "nice -n 10 .venv/bin/python -I analyses/manuscript.py validate analyses: valid",
   "prose_check": "plugin-wide and scoped rules passed",
   "render": {
-    "path": "/tmp/issue-212-quarto/mea_parameter_bundle/joint-recalibration/index.html",
-    "sha256": "3ca19a1761c024a550d4d9af20b87f6f32f3f42e7ee4cfabd8675cb9230d47a2",
-    "command": "nice -n 10 quarto render analyses/mea_parameter_bundle/joint-recalibration/index.qmd --to html --no-execute --output-dir /tmp/issue-212-quarto",
-    "expected_values_found": true,
-    "linked_refit_files_copied": true
+    "path": "/tmp/issue-212-continuation-quarto/mea_parameter_bundle/joint-recalibration/index.html",
+    "command": "nice -n 10 quarto render analyses/mea_parameter_bundle/joint-recalibration/index.qmd --to html --no-execute --output-dir /tmp/issue-212-continuation-quarto",
+    "sha256": "a0b064f4026a3820d5aa07aa87cf80954d2a744812a1a64fa1049489adf3ad7a",
+    "expected_values_found": true
   },
   "code_additions_gross": 150,
-  "code_accounting_base": "3f01bc1188280fee1c031293cda2e33f0b3f58e5"
+  "code_accounting_base": "3f01bc1188280fee1c031293cda2e33f0b3f58e5",
+  "previous_interruption": {
+    "condition": "numerical completion: fresh second-restricted information call incomplete",
+    "cause": "Host turn was interrupted and its unified-exec process ended before the second-restricted information call returned. No native result, release-tests.json, terminal timing, or fit endpoint was written; no matching calculation process remained after resumption.",
+    "disposition": "Stopped without another information call, a fit retry, budget changes or added starts.",
+    "retained_evaluation_count": 5,
+    "second_restricted_fit_started": false,
+    "fixed_calculations_started": false,
+    "information_CPU_s": null,
+    "information_wall_s": null,
+    "elapsed_wall_lower_bound_to_last_retained_evaluation_s": 109.45210289955139,
+    "last_retained_evaluation_UTC": "2026-10-24T06:59:16.907935+00:00",
+    "meaning": "An execution interruption, not a failed derivative check or evidence of physical-model failure. Completion cannot be asserted.",
+    "last_sampled_coordinate": "component/protonated-monoethanolamine/segment_diameter"
+  },
+  "stopped": null,
+  "interrupted_attempt_unchanged": true,
+  "information_declaration_identical": true,
+  "release_binding_identical": true,
+  "reported_density": {
+    "within_2s": 44,
+    "count": 47,
+    "miss_ids": [
+      "Amundsen2009_state_081",
+      "Hartono2014_density_80C_alpha0.29",
+      "Hartono2014_density_80C_alpha0.39"
+    ],
+    "largest_CO2_free_error_kg_m3": 0.557484452458425,
+    "CO2_free_signed_errors_kg_m3": {
+      "AMU-DENS-002": -0.557484452458425,
+      "AMU-DENS-009": -0.08075602163683016,
+      "AMU-DENS-016": -0.03214825225916229,
+      "AMU-DENS-023": 0.39494028640649503,
+      "AMU-DENS-030": 0.32705333252499713
+    },
+    "rule_passed": true
+  },
+  "conditional_uncertainty": {
+    "rank": 10,
+    "active_bound_indices": [
+      1,
+      3,
+      5,
+      7,
+      8,
+      11
+    ],
+    "degrees_of_freedom": 297,
+    "meaning": "Conditional on residual weights, fixed inputs, active bounds and local linearization; no measurement-error, uniqueness or prediction-interval claim."
+  },
+  "fixed_replays": {
+    "reported": {
+      "rows": 307,
+      "all_available": true,
+      "all_finite": true,
+      "all_requested_tolerances_met": true,
+      "cost": 148.87893934557388,
+      "native_cost_absolute_difference": 1.6711965145077556e-11
+    },
+    "comparison": {
+      "rows": 307,
+      "all_available": true,
+      "all_finite": true,
+      "all_requested_tolerances_met": true,
+      "cost": 148.21150759040813,
+      "native_cost_absolute_difference": 1.7621459846850485e-12
+    }
+  },
+  "cai_constant": {
+    "rows": 50,
+    "all_available": true,
+    "all_finite": true,
+    "all_requested_tolerances_met": true,
+    "cost": 91.29322049026165
+  },
+  "arcis": {
+    "reported": {
+      "n": 14,
+      "RMSE_kJ_mol": 8.115640714619083,
+      "by_pressure": {
+        "510000.0": {
+          "n": 8,
+          "RMSE_kJ_mol": 10.332399122695893,
+          "bias_kJ_mol": 10.211247802748986
+        },
+        "1030000.0": {
+          "n": 6,
+          "RMSE_kJ_mol": 3.3670700883078895,
+          "bias_kJ_mol": 3.146124930561627
+        }
+      }
+    },
+    "comparison": {
+      "n": 14,
+      "RMSE_kJ_mol": 8.05184864877517,
+      "by_pressure": {
+        "510000.0": {
+          "n": 8,
+          "RMSE_kJ_mol": 10.260693886454757,
+          "bias_kJ_mol": 10.143001732341713
+        },
+        "1030000.0": {
+          "n": 6,
+          "RMSE_kJ_mol": 3.3014396109050015,
+          "bias_kJ_mol": 3.0771468465963068
+        }
+      }
+    }
+  }
 }

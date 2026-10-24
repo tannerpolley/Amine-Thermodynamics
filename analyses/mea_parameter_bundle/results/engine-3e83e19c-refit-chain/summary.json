@@ -2,20 +2,6 @@
   "engine_commit": "3e83e19ccc771b51d8ebc038931ab25192f4c5b5",
   "wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
   "association_volume": 0.036305439,
-  "stop": {
-    "condition": "numerical completion: fresh second-restricted information call incomplete",
-    "cause": "Host turn was interrupted and its unified-exec process ended before the second-restricted information call returned. No native result, release-tests.json, terminal timing, or fit endpoint was written; no matching calculation process remained after resumption.",
-    "disposition": "Stopped without another information call, a fit retry, budget changes or added starts.",
-    "retained_evaluation_count": 5,
-    "second_restricted_fit_started": false,
-    "fixed_calculations_started": false,
-    "information_CPU_s": null,
-    "information_wall_s": null,
-    "elapsed_wall_lower_bound_to_last_retained_evaluation_s": 109.45210289955139,
-    "last_retained_evaluation_UTC": "2026-10-24T06:59:16.907935+00:00",
-    "meaning": "An execution interruption, not a failed derivative check or evidence of physical-model failure. Completion cannot be asserted.",
-    "last_sampled_coordinate": "component/protonated-monoethanolamine/segment_diameter"
-  },
   "fits": {
     "stage2-A": {
       "status": "converged",
@@ -98,27 +84,69 @@
       ]
     },
     "restricted-2": {
-      "status": "information interrupted; fit not started",
-      "iterations": null,
-      "final_cost": null
+      "status": "converged",
+      "usable": true,
+      "iterations": 8,
+      "initial_cost": 149.21952645122371,
+      "final_cost": 148.87893934555717,
+      "timing": {
+        "wall_s": 257.16627309200703,
+        "cpu_s": 662.710976
+      },
+      "available_rows": 307,
+      "active_bound_indices": [
+        1,
+        3,
+        5,
+        7,
+        8,
+        11
+      ],
+      "attempt": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3",
+      "native_C149": 23.860996312137765,
+      "native_Cai_cost": 91.87458520309647
     }
   },
-  "new_reported_candidate": null,
+  "new_reported_candidate": {
+    "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json",
+    "sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+    "adopted": false
+  },
   "reported_costs": {
-    "307_rows": null,
-    "149_quantities": null,
-    "Cai": null
+    "307_rows": 148.87893934557388,
+    "149_quantities": 23.860996312136727,
+    "Cai": 91.87458520309771
   },
   "reported_density": {
-    "within_2s": null,
-    "count": null,
-    "miss_ids": null,
-    "largest_CO2_free_error_kg_m3": null
+    "within_2s": 44,
+    "count": 47,
+    "miss_ids": [
+      "Amundsen2009_state_081",
+      "Hartono2014_density_80C_alpha0.29",
+      "Hartono2014_density_80C_alpha0.39"
+    ],
+    "largest_CO2_free_error_kg_m3": 0.557484452458425,
+    "CO2_free_signed_errors_kg_m3": {
+      "AMU-DENS-002": -0.557484452458425,
+      "AMU-DENS-009": -0.08075602163683016,
+      "AMU-DENS-016": -0.03214825225916229,
+      "AMU-DENS-023": 0.39494028640649503,
+      "AMU-DENS-030": 0.32705333252499713
+    },
+    "rule_passed": true
   },
   "conditional_uncertainty": {
-    "rank": null,
-    "active_bound_indices": null,
-    "reason": "No new second-restricted endpoint or native Jacobian."
+    "rank": 10,
+    "active_bound_indices": [
+      1,
+      3,
+      5,
+      7,
+      8,
+      11
+    ],
+    "degrees_of_freedom": 297,
+    "meaning": "Conditional on residual weights, fixed inputs, active bounds and local linearization; no measurement-error, uniqueness or prediction-interval claim."
   },
   "stage5": {
     "q": [
@@ -219,5 +247,116 @@
         ]
       }
     ]
+  },
+  "previous_interruption": {
+    "condition": "numerical completion: fresh second-restricted information call incomplete",
+    "cause": "Host turn was interrupted and its unified-exec process ended before the second-restricted information call returned. No native result, release-tests.json, terminal timing, or fit endpoint was written; no matching calculation process remained after resumption.",
+    "disposition": "Stopped without another information call, a fit retry, budget changes or added starts.",
+    "retained_evaluation_count": 5,
+    "second_restricted_fit_started": false,
+    "fixed_calculations_started": false,
+    "information_CPU_s": null,
+    "information_wall_s": null,
+    "elapsed_wall_lower_bound_to_last_retained_evaluation_s": 109.45210289955139,
+    "last_retained_evaluation_UTC": "2026-10-24T06:59:16.907935+00:00",
+    "meaning": "An execution interruption, not a failed derivative check or evidence of physical-model failure. Completion cannot be asserted.",
+    "last_sampled_coordinate": "component/protonated-monoethanolamine/segment_diameter"
+  },
+  "stop": null,
+  "comparison_costs": {
+    "307_rows": 148.21150759040813,
+    "149_quantities": 24.920645016884034,
+    "Cai": 91.77764784327805
+  },
+  "cai_constant_interaction_cost": 91.29322049026165,
+  "arcis": {
+    "reported": {
+      "errors_kJ_mol": {
+        "510000.0": [
+          11.100683741167188,
+          13.520160180981213,
+          9.08178231931408,
+          8.828667151706876,
+          10.564567902425363,
+          10.275946663568611,
+          10.308172913790157,
+          8.010001549038396
+        ],
+        "1030000.0": [
+          2.565034831488447,
+          2.127486153829435,
+          3.1982644696198403,
+          4.8447525014663695,
+          4.547020781284024,
+          1.5941908456816454
+        ]
+      },
+      "n": 14,
+      "RMSE_kJ_mol": 8.115640714619083,
+      "by_pressure": {
+        "510000.0": {
+          "n": 8,
+          "RMSE_kJ_mol": 10.332399122695893,
+          "bias_kJ_mol": 10.211247802748986
+        },
+        "1030000.0": {
+          "n": 6,
+          "RMSE_kJ_mol": 3.3670700883078895,
+          "bias_kJ_mol": 3.146124930561627
+        }
+      }
+    },
+    "comparison": {
+      "errors_kJ_mol": {
+        "510000.0": [
+          10.996974262904084,
+          13.412627414577116,
+          8.975464866081078,
+          8.728178373685397,
+          10.476192716714577,
+          10.198221271690098,
+          10.285068017656041,
+          8.071286935425306
+        ],
+        "1030000.0": [
+          2.461204441669979,
+          2.0291478755994468,
+          3.108809214926441,
+          4.773640134873393,
+          4.498515561670123,
+          1.5915638508384582
+        ]
+      },
+      "n": 14,
+      "RMSE_kJ_mol": 8.05184864877517,
+      "by_pressure": {
+        "510000.0": {
+          "n": 8,
+          "RMSE_kJ_mol": 10.260693886454757,
+          "bias_kJ_mol": 10.143001732341713
+        },
+        "1030000.0": {
+          "n": 6,
+          "RMSE_kJ_mol": 3.3014396109050015,
+          "bias_kJ_mol": 3.0771468465963068
+        }
+      }
+    }
+  },
+  "reported_permittivity": {
+    "aard_percent": 0.45273994351848046,
+    "checks": "native permittivity equals the solvent law at the equation-of-state density within 1e-10; pure water reproduces the fit stage",
+    "cost": 1.9123762682171106,
+    "engine_commit": "3e83e19ccc771b51d8ebc038931ab25192f4c5b5",
+    "engine_wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
+    "inputs": {
+      "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-dielectric-rows.csv": "369f77ffe83bba2a814316278ef88325355e535d4aa400afc194260d19b741a6",
+      "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/stage5/run/rows.json": "4da186d1875c038c3f0836099780a39e734570f3587686d6f48b7573f6277a0a"
+    },
+    "max_abs_change_from_fit_stage": 0.04105772532765428,
+    "max_abs_error": 0.46375059357632864,
+    "n": 14,
+    "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+    "rmse": 0.30144843492606227
   }
 }
