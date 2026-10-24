@@ -1,0 +1,47 @@
+{
+  "saturation_solves": 722,
+  "admitted_saturation_solves": 722,
+  "max_abs_equation_residual": 5.81756864903582e-14,
+  "absolute_search_evaluations": 25,
+  "history_evaluations_including_cross": 27,
+  "reporting_rows": 124,
+  "reference_rows": 31,
+  "native_final_observations": 42,
+  "native_trial_failures": 0,
+  "native_cost": 0.00038357705069510953,
+  "replayed_native_cost": 0.0003835770506949749,
+  "native_cost_absolute_replay_difference": 1.3465790982269965e-16,
+  "final_producer_sha256": "9fbc0447adc33d3f87c461e13733b375307168f52ef5bfa0094e05653bf80f25",
+  "producer_correction": "Final producer casts the acceptance comparison to Python bool for JSON. No numerical calls repeated after the retained complete run.",
+  "source_sha256": "7e8e77577a34bd9867489faee992dd192e8cbbc728c50a26e8264b0e09192365",
+  "executed_to_final_change": [
+    {
+      "before": "absolute_pass = format(best.x, '.5g') == '0.036287' and abs(best.x / ORIGINAL - 1) <= 1e-6",
+      "after": "absolute_pass = bool(format(best.x, '.5g') == '0.036287' and abs(best.x / ORIGINAL - 1) <= 1e-6)",
+      "executed_source_reconstructed_hash_verified": true
+    },
+    {
+      "before": "json.dumps(row, allow_nan=False)",
+      "after": "json.dumps(jsonable(row), allow_nan=False)",
+      "reason": "Preserve nonfinite rejected-state values as explicit strings in JSON."
+    },
+    {
+      "before": "csv.DictWriter(stream, fieldnames=list(rows[0]))",
+      "after": "csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator='\\n')",
+      "reason": "Use LF line endings for the retained CSV; numeric fields unchanged."
+    }
+  ],
+  "nonfinite_rejected_state_serialization_checked": true,
+  "reporting_csv_json_and_relative_errors_checked": true,
+  "native_observation_scales_units_and_controls_checked": true,
+  "notebook_validation": {
+    "source": "analyses/mea_parameter_bundle/joint-recalibration/index.qmd",
+    "source_sha256": "fbd98f4f5074656dcd7576b631c95812946827f7aa291ad882e6e64be772b6ca",
+    "render": "/tmp/issue-210-render/joint-recalibration/index.html",
+    "render_nonempty": true,
+    "full_precision_values_and_unique_heading_checked": true,
+    "command": "nice -n 10 bash /tmp/issue-210-render/render.sh /tmp/issue-210-render/joint-recalibration/index.qmd --to html",
+    "execution_disabled": true
+  },
+  "csv_line_endings_normalized_without_numerical_changes": true
+}
