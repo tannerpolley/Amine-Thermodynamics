@@ -1,0 +1,23 @@
+{
+  "prepare": "nice -n 10 /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I analyses/mea_parameter_bundle/scripts/density_free_213.py prepare",
+  "fit": "systemd-run --user --unit=issue213-fit --same-dir --collect -p Nice=10 /bin/bash -o pipefail -c '/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I -u analyses/mea_parameter_bundle/scripts/density_free_213.py fit 2>&1 | tee analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/fit.log'",
+  "wait": "while systemctl --user is-active --quiet issue213-fit; do sleep 10; done",
+  "unit": "issue213-fit.service",
+  "invocation_id": "1a2953bd56d844268f0d5f619f48892e",
+  "execution_producer_sha256": "e737cb92808d80f51e7298d894b908d3743547eafcebb832132d20bb2bd7fd97",
+  "base_commit": "0ee470579d3eaaad84c549db258a5fc2668a840b",
+  "analyze": {
+    "argv": [
+      "nice",
+      "-n",
+      "10",
+      "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+      "-I",
+      "-u",
+      "-"
+    ],
+    "stdin": "import hashlib,json,pathlib,runpy,sys,time,traceback\nout=pathlib.Path('analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free')\np=pathlib.Path('analyses/mea_parameter_bundle/scripts/density_free_213.py')\nsys.argv=[str(p),'analyze']; before=time.monotonic(); error=None\ntry: runpy.run_path(str(p),run_name='__main__')\nexcept BaseException:\n error=traceback.format_exc(); raise\nfinally:\n (out/'analysis-timing.json').write_text(json.dumps(dict(wall_s=time.monotonic()-before,producer_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),error=error),indent=2)+'\\n')\n"
+  },
+  "notebook_validation": "nice -n 10 /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I analyses/manuscript.py validate analyses",
+  "notebook_render": "nice -n 10 bash analyses/render.sh mea_parameter_bundle/joint-recalibration/index.qmd --to html --output-dir /tmp/issue213-quarto > /tmp/issue213-quarto-render.log 2>&1"
+}
