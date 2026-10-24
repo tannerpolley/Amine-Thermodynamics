@@ -1,6 +1,7 @@
 ---
 title: "A7 joint recalibration and adoption"
 resources:
+  - ../results/engine-3e83e19c-refit-chain/
   - ../results/engine-3e83e19c-phase/
   - ../results/phase-extension-201/run-3/
   - ../results/phase-extension-201/run-2/
@@ -34,7 +35,7 @@ Yes, at one disclosed cost. The phase search resolves no Gibbs-energy decrease a
 
 ## Pure-MEA association-volume conversion {#association-volume-210}
 
-**The two converged estimators require an owner decision under [#210](https://github.com/tannerpolley/Amine-Thermodynamics/issues/210).** On the pinned Engine `3e83e19c` wheel, the original SciPy bounded absolute-error search gives $\kappa=0.03628703079971812$, which rounds to `0.036287` at five significant figures and differs from the historical optimum by $1.4089\times10^{-13}$ relative (required: at most $10^{-6}$). The native least-squares fit gives $0.03630543900419865$, rounding to `0.036305`; this triggers the specified stop. No parameter or manuscript text was changed.
+**The owner chose the native least-squares conversion under [#210](https://github.com/tannerpolley/Amine-Thermodynamics/issues/210), fixing $\kappa=0.036305439$ in dependent calculations.** On the pinned Engine `3e83e19c` wheel, the original SciPy bounded absolute-error search gives $\kappa=0.03628703079971812$, which rounds to `0.036287` at five significant figures and differs from the historical optimum by $1.4089\times10^{-13}$ relative (required: at most $10^{-6}$). The native least-squares fit gives $0.03630543900419865$. Its different five-significant-figure rounding triggered the historical estimator stop, resolved by the owner's choice of the eight-significant-figure value. The selected parameter file and manuscript remain unchanged by the dependent-refit work below.
 
 Both fits compare pure-MEA saturation pressure and liquid molar density with Baygi's own model at 21 temperatures, 293.15–393.15 K in 5 K steps, holding the other pure parameters fixed. The reference volume is $0.037470[1-0.12\exp(-3(277.174)/T)]^3$, from Baygi and Pahlavanzadeh (2015), Eqs. (4)–(5), p. 791 and Table 2, p. 792. The original search minimizes the sum of absolute relative errors; the native fit minimizes half the sum of their squares with unit weights and observations in Pa and mol/m³. The two final objectives are:
 
@@ -45,7 +46,22 @@ Both fits compare pure-MEA saturation pressure and liquid molar density with Bay
 
 SciPy reports success after 25 evaluations. The native fit is usable and converged by function tolerance after three iterations, with all 42 final observations available and finite. All 722 retained saturation solves pass the $10^{-10}$ equation-residual limit; the largest absolute residual is $5.8176\times10^{-14}$. The [retained comparison](../results/engine-3e83e19c-association-volume/README.md) provides both objectives at each optimum, the full [31-temperature table](../results/engine-3e83e19c-association-volume/reporting-grid.csv), percentage average absolute deviations over both requested intervals, the exact fitting declaration and provenance. For the printed volume `0.036287`, pressure/density average absolute deviations from Baygi's model are 0.525156%/0.00253596% over 293.15–393.15 K and 0.793280%/0.00897262% over 303.15–443.15 K. A scalar table suffices for the rounding decision; the retained grid supports inspection of its temperature dependence.
 
-This is numerical reproduction against deterministic model targets, not physical validation. It applies only to pure MEA and isothermal properties; the 293.15–303.15 K portion extends below Baygi's pure-parameter fitting interval (303.15–443.15 K, §3.1, p. 792). Neither the difference between optima nor the native covariance is physical parameter uncertainty. This subsection has not been independently reviewed or promoted for manuscript use. Issue #211 awaits the owner's estimator decision.
+This is numerical reproduction against deterministic model targets, not physical validation. It applies only to pure MEA and isothermal properties; the 293.15–303.15 K portion extends below Baygi's pure-parameter fitting interval (303.15–443.15 K, §3.1, p. 792). Neither the difference between optima nor the native covariance is physical parameter uncertainty. The #210 delivered review returned Supported; the owner authorized its fixed conversion value. The following #212 results remain unreviewed and unpromoted for manuscript use.
+
+**Dependent refits at the fixed volume ([#212](https://github.com/tannerpolley/Amine-Thermodynamics/issues/212)): stopped before a new reported candidate.** The retained [refit account](../results/engine-3e83e19c-refit-chain/README.md) and [numerical summary](../results/engine-3e83e19c-refit-chain/summary.json) bind the same Engine wheel, SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`. The stage-2 neutral MEA–water refit passes both starts, selecting $k_{\mathrm{MEA,H_2O}}=-0.08439986221195522$. Its serialized cost is 91.80963081696862. The rebuilt stage-5 reduction passes all 14 rows, rank two, distinct positive admissible branches and native replay within $10^{-10}$. The larger-volume branch supplied to every joint start is 0.7309865858310542 L/mol and 1019.0802597119892 K. Both branches and all changes against preceding endpoints are retained in [parameter-changes.csv](../results/engine-3e83e19c-refit-chain/parameter-changes.csv).
+
+| Fit at $\kappa=0.036305439$ | Numerical completion | Iterations | Native objective cost |
+|---|---|---:|---:|
+| Neutral MEA–water, A | Converged and usable; checks pass | 1 | 91.80963081696791 |
+| Neutral MEA–water, B | Converged and usable; checks pass | 1 | 91.80963081698934 |
+| A6 comparison | Converged and usable; information checks pass | 5 | 148.2115075904099 |
+| Hartono x₃ sensitivity | Converged and usable; information checks pass | 5 | 148.31366430715744 |
+| First restricted | Converged and usable; information checks pass | 4 | 149.21952645124134 |
+| Second restricted | Information interrupted; fit not started | Unavailable | Unavailable |
+
+The three completed joint fits each have all 307 finite, available rows. Their new starts preserve observations, scales, controls, physical bounds and diameter ties; reaction boxes are rebuilt from the original unshifted bounds using each endpoint's inherited totals. The second restricted declaration starts from the new first restricted endpoint, with inherited R2 = −1811.930108185226 J/mol and R5 = 10000 J/mol and the MEAH⁺ size lower bound at 5.35 Å. Its inward-move check requires no diameter change.
+
+The host turn interruption terminated that second restricted information calculation after the baseline and four MEAH⁺ size perturbations, before the native result or release checks were written. The [retained stopping point](../results/engine-3e83e19c-refit-chain/restricted-2/stop.json) applies the numerical-completion stop; no retry, added start or budget extension followed. The new reported candidate's parameters, 307-row/149-quantity/Cai costs, loaded-density counts and miss IDs, CO₂-free density error and conditional-uncertainty rank/active set are unavailable. No fixed replay, reported permittivity, constant-interaction Cai comparison or Arcis heat calculation was launched. Scalar fit costs and completion limits describe the result; a plot would not resolve the interrupted information calculation. These partial results establish numerical verification and calibration behavior only. They establish neither independent physical validation nor phase stability, and do not replace the historical adopted A7 results below. Independent delivered review remains open.
 
 ## Joint fit objective groups
 
