@@ -102,6 +102,7 @@ def run(mode):
         path = directory/'information-spec.json'
         c.write(path, information)
         c.run(path, directory/'release', case_ids=['stage6'], operation='information')
+        assert not list(OUT.glob('*/stop.json')), 'another refit stopped; no further fit launched'
         release = directory/'release/release-tests.json'
         spec.update(release_tests_path=str(release.relative_to(ROOT)), release_tests_sha256=h.sha(release))
     spec['engine'] = r.ENGINE
