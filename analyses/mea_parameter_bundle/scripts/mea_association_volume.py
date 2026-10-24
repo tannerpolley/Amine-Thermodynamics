@@ -17,7 +17,7 @@ from epcsaft import equilibrium as eq, regression as reg  # noqa: E402
 from scipy.optimize import minimize_scalar  # noqa: E402
 
 OUT = ROOT / 'analyses/mea_parameter_bundle/results/engine-3e83e19c-association-volume'
-RECORD = s.PARAMETERS
+RECORD = ROOT / 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json'
 MEA, EDGE = 'monoethanolamine', 'association/monoethanolamine/a/monoethanolamine/b/volume'
 GRID = [293.15 + 5.0 * i for i in range(31)]
 BOUNDS, BAYGI, ORIGINAL = (0.033723, 0.037470), 0.037470, 0.03628703079972324

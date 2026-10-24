@@ -15,18 +15,18 @@ import matplotlib.pyplot as plt
 from manuscript_style import apply_style
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "figures/a7_regression_overview/output"
-DATA = ROOT / "results/a7-paper-evidence"
+DATA = ROOT / "results/engine-3e83e19c-paper-evidence"
 PRESSURE = DATA / "pressure-figure-data.csv"
 SPECIES_DATA = DATA / "species-figure-data.csv"
 POOL = DATA / "pool-figure-data.csv"
 NATIVE_FIT = DATA / "fitted-rows.csv"
-PHYSICAL = ROOT / "results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json"
+PHYSICAL = ROOT / "results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json"
 PARAM = ROOT / "results/selected-current-best-parameters.json"
 QUALIFICATION = DATA / "fit-summary.json"
 # Separate legacy diagnostic renderer reads this file; this notebook does not.
 FIT = ROOT / "results/current-best-fit-residuals.csv"
 HCO3_POOL_LABEL = "HCO3- + CO3^2-"
-ENGINE_COMMIT = "A7, Engine 8298c602"
+ENGINE_COMMIT = "A7, Engine 3e83e19c"
 COLORS = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9"]
 SOURCES = ["Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011"]
 MARKERS = dict(zip(SOURCES, ["*", "o", "D", "^", "h", "v"], strict=True))
@@ -380,7 +380,7 @@ def main():
     (OUT / 'provenance.json').write_text(json.dumps({
         'inputs': {str(p.relative_to(ROOT)): digest(p) for p in inputs},
         'fit_figure_wheel_sha256': qualification['engine']['wheel_sha256'],
-        'engine_commit': '8298c6029ebb8b467929badc4a223c580ec591ab', 'model_executed': False,
+        'engine_commit': '3e83e19ccc771b51d8ebc038931ab25192f4c5b5', 'model_executed': False,
         'series': 'Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Density limits use the retained scale s of each row, not uniform measurement uncertainty; Cp is on the complete-feed mass basis. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from A7 fitting.',
         'outputs': {p.name: digest(p) for p in sorted(OUT.iterdir())
                     if p.suffix in ('.csv', '.svg', '.pdf', '.png')}

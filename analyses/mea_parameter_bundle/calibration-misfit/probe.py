@@ -81,7 +81,7 @@ def _base_model():
 def base_record(o):
     """The evaluator record of one state at RECORD; its liquid anchor warm-starts perturbed solves and declares fit states."""
     return shared.evaluate_state(_base_model(), o['request'], reactions(), o['identity'], [], budget_s=90,
-                                 model_fingerprint=_BASE['fingerprint'])
+                                 model_fingerprint=_BASE['fingerprint'], mapping=shared.parameter_mapping(RECORD), parameter_path=RECORD)
 
 
 SLOPE = '/k_ij/reciprocal_temperature_slope'
@@ -132,7 +132,7 @@ def evaluate(sets=None, filters=(), canonical=False, states=None):
         anchors = []
         if sets:
             anchors = [a for a in [shared.anchor_from(base_record(o))] if a]
-        r = shared.evaluate_state(model, o['request'], values, ident, anchors, budget_s=90, model_fingerprint=fp)
+        r = shared.evaluate_state(model, o['request'], values, ident, anchors, budget_s=90, model_fingerprint=fp, mapping=mapping, parameter_path=RECORD)
         liq = next((p for p in r.get('phases') or [] if p.get('role') == 'liquid'), None)
         yield {'identity': ident, 'status': r['status'], 'predictions': r['predictions'], 'check': check(r),
                'liquid': liq, 'phases': r.get('phases', []), 'evidence': r.get('evidence', []),

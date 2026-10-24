@@ -21,7 +21,7 @@ from heat_evidence_170 import request
 R = f.BUNDLE/'results'
 OUT, FROZEN = R/'phase-extension-201/run-3', R/'phase-extension-201/run-2'
 J = R/'joint-recalibration-170'
-FITS = {'A6': J/'amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json', 'A7': f.s.PARAMETERS}
+FITS = {'A6': J/'amendment-6/joint-mea-water/held/fit/usable-budget-endpoint.json', 'A7': J/'amendment-7/restricted-2/fit/usable-budget-endpoint.json'}
 TEMPERATURES = (353.15, 373.15, 393.15)
 SCHEDULE = [(kind, seed) for kind in ('liquid', 'vapor') for seed in ('positive-neutral-base', 'near-pure-0', 'near-pure-1', 'near-pure-2', 'ideal-gas') if kind=='vapor' or seed!='ideal-gas']
 load, write = f.campaign.load, f.s.write_json

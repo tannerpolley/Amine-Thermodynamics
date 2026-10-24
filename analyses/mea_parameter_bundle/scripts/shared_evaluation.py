@@ -271,7 +271,7 @@ def unloaded_density_problem(mapping: dict, template: dict, row: dict) -> object
     """Exact carbon-free analytical feed; retain water and MEA protonation."""
     masses = dict(zip(COMPONENT_IDS, template['reaction_system']['molar_masses_kg_per_mol'], strict=True))
     water = masses['monoethanolamine']*(1-row['MEA_weight_fraction'])/(row['MEA_weight_fraction']*masses['water'])
-    records = _engine_reaction_records(template, reaction_values(mapping))
+    records = _engine_reaction_records(template, reaction_values(mapping), mapping=mapping)
     reactions = [equilibrium.Reaction(dict(zip(COMPONENT_IDS, r['stoichiometry'], strict=True)), name=r['reaction_id'],
         correlation=_reaction_correlation(r, r['reaction_id']), reference=_reaction_reference(r, r['reaction_id'])) for r in records]
     return equilibrium.Problem(T=row['T_K'], P=row['P_Pa'], feed=equilibrium.Amounts({'monoethanolamine':1., 'water':water}),
@@ -731,14 +731,14 @@ def _selected_reactions(mapping: dict | None = None) -> dict[str, float]:
     return reaction_values(parameter_mapping() if mapping is None else mapping)
 
 
-def provenance(reactions: dict[str, float] | None = None) -> dict[str, object]:
-    values = _selected_reactions() if reactions is None else reactions
-    selected = _reaction_identity(_selected_reactions())
+def provenance(reactions: dict[str, float] | None = None, *, mapping: dict | None = None, parameter_path: Path = PARAMETERS) -> dict[str, object]:
+    values = _selected_reactions(mapping) if reactions is None else reactions
+    selected = _reaction_identity(_selected_reactions(mapping))
     effective = _reaction_identity(values)
     return {
         "evaluator_version": EVALUATOR_VERSION,
-        "parameter_sha256": sha256(PARAMETERS),
-        "parameter_role": "selected" if effective == selected else "candidate",
+        "parameter_sha256": sha256(parameter_path),
+        "parameter_role": "selected" if mapping is None and effective == selected else "candidate",
         "effective_reaction_values_sha256": effective,
         "engine_commit": ENGINE_COMMIT,
         "engine_wheel_sha256": ENGINE_WHEEL_SHA256,
@@ -1162,6 +1162,7 @@ def solve_with_recovery(
     anchors: list[Anchor],
     budget_s: float = math.inf,
     limits: EvaluationLimits | None = None,
+    mapping: dict | None = None,
 ) -> tuple[object | None, list[dict[str, object]]]:
     limits = limits or EvaluationLimits(
         state_timeout_s=60.0, overall_timeout_s=budget_s
@@ -1174,7 +1175,7 @@ def solve_with_recovery(
     )
     if limits.deadline_monotonic is not None:
         deadline = min(deadline, limits.deadline_monotonic)
-    base = corrected_request(request, reactions)
+    base = corrected_request(request, reactions, mapping=mapping)
     temperature_c = round(float(base["temperature"]["value"]) - 273.15)
     seen: set[tuple[object, ...]] = set()
     attempts: list[dict[str, object]] = []
@@ -1318,6 +1319,8 @@ def evaluate_state(
     budget_s: float = math.inf,
     limits: EvaluationLimits | None = None,
     model_fingerprint: str | None = None,
+    mapping: dict | None = None,
+    parameter_path: Path = PARAMETERS,
 ) -> dict[str, object]:
     """Evaluate one state with identity-complete cache and bounded recovery.
 
@@ -1325,12 +1328,12 @@ def evaluate_state(
     selected record (see ``parameter_fingerprint``); without it, cached states of a
     different model would be reused.
     """
-    provenance_data = provenance(reactions)
-    model_fingerprint = model_fingerprint or f"sha256:{sha256(PARAMETERS)}"
-    corrected = corrected_request(request, reactions)
+    provenance_data = provenance(reactions, mapping=mapping, parameter_path=parameter_path)
+    model_fingerprint = model_fingerprint or f"sha256:{sha256(parameter_path)}"
+    corrected = corrected_request(request, reactions, mapping=mapping)
     provenance_data["parameter_role"] = (
         "selected"
-        if reactions == _selected_reactions()
+        if mapping is None and reactions == _selected_reactions(mapping)
         else "candidate"
     )
     key_parts = {
@@ -1380,6 +1383,7 @@ def evaluate_state(
         anchors,
         budget_s,
         limits,
+        mapping,
     )
     if (
         limits

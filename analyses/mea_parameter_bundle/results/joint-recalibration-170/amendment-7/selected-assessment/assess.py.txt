@@ -14,10 +14,11 @@ from pathlib import Path
 import sys
 import traceback
 
-OUT = Path('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment').resolve()
-BASE = OUT.parent/'restricted-2'
-RECORD = BASE/'fit/usable-budget-endpoint.json'
-SPEC = json.loads((BASE/'fit-spec.json').read_text())
+OUT = Path('analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/selected-assessment').resolve()
+BASE = OUT.parents[1]/'engine-3e83e19c-refit-chain/restricted-2/attempt-3'
+RECORD = BASE/'run/fit/usable-budget-endpoint.json'
+SPEC = json.loads((BASE/'spec.json').read_text())
+sys.path[:0] = [str(Path('analyses/mea_parameter_bundle/scripts').resolve()), str(Path('src').resolve())]
 import shared_evaluation as s
 import fit_observations as fo
 import heat_evidence_170 as he
@@ -27,7 +28,7 @@ from epcsaft import equilibrium as eq, regression as reg
 s.RUNS = OUT/'cache'
 MAPPING = s.parameter_mapping(RECORD)
 SHA = s.sha256(RECORD)
-assert SHA=='e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e', 'selected document changed'
+assert SHA=='00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91', 'candidate document changed'
 PARAMS = epcsaft.Parameters.from_mapping(MAPPING)
 TEMPLATE = s.load_state_packet(fo.ROOT/SPEC['packet_path'])['observations'][0]['request']
 SCALES = {r['id']:r for r in fo.load(SPEC['density_scale_path'])}
@@ -63,7 +64,7 @@ def density(row):
         else:
             req = he.request(MAPPING,T,a,density=True)
             req = s.source_feed_request(req,dict(source_key='Amundsen2009', CO2_loading=a,temperature_reported_C=T-273.15,MEA_weight_fraction=w))
-            problem = s._problem_from_request(s.corrected_request(req,s.reaction_values(MAPPING)))
+            problem = s._problem_from_request(s.corrected_request(req,s.reaction_values(MAPPING),mapping=MAPPING))
             problem.P = P
         model = epcsaft.Mixture(PARAMS, thermochemistry=he.vrc.record())
         item = reg.observation(PARAMS,'phase_density',problem,observed=obs,form='difference',scale=1.,phase=problem.phases[0].name,mass_basis=True)
@@ -138,7 +139,7 @@ def state(row):
 
 def carbonate(row):
     req=s.source_feed_request(fo.load(SPEC['state_requests_path'])['Jakobsen2005_state_011'],dict(source_key='Jakobsen2005',MEA_weight_fraction=.2714274817259226,CO2_loading=float(row['loadNMR']),temperature_reported_C=float(row['temperature'])))
-    req=s.corrected_request(req,s.reaction_values(MAPPING))
+    req=s.corrected_request(req,s.reaction_values(MAPPING),mapping=MAPPING)
     write('carbonate-requests/'+row['id']+'.json',req)
     problem=s._problem_from_request(req); model=epcsaft.Mixture(PARAMS)
     result=eq.solve_equilibrium(model,problem)
@@ -151,7 +152,7 @@ def carbonate(row):
 
 
 def inventory():
-    files=[RECORD,BASE/'fit-spec.json',BASE/'fit/native.json',OUT.parent/'restricted/README.md',Path('tmp/joint-design/amendment-7-phase-stable-density.md')]
+    files=[RECORD,BASE/'spec.json',BASE/'run/fit/native.json',OUT.parent/'assessments-timing.json',OUT.parents[1]/'engine-3e83e19c-refit-chain/displays/reported/full-replay.json',OUT.parents[1]/'engine-3e83e19c-refit-chain/displays/reported/score.json',Path(__file__),OUT.parent/'gate-verification.json']+[Path(r['path']) for r in SPEC['inputs']]
     packet,groups=fe.observations()
     # Corrected source-backed requests override nominal packet feeds for restored Matin 016.
     requests=fo.load(SPEC['state_requests_path'])
@@ -159,7 +160,7 @@ def inventory():
         for o in group:
             if o['identity'] in requests: o['request']=requests[o['identity']]
     write('observation-groups.json',groups)
-    write('provenance.json',dict(parameter_sha256=SHA,engine_wheel_sha256=s.ENGINE_WHEEL_SHA256,engine_module=epcsaft.__file__,files={str(p):s.sha256(p) for p in files},engine=SPEC['engine'],claim='Assessment of fitted vector; non-fitted rows are predictions, not physical validation.',exclusions='Five 30 wt% Amundsen loading-0.4 source-conflict rows excluded from objective/gate. Canonical rows above 393.15 K inadmissible.'))
+    write('provenance.json',dict(parameter_sha256=SHA,engine_wheel_sha256=s.ENGINE_WHEEL_SHA256,engine_module=epcsaft.__file__,files={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files},engine=SPEC['engine'],claim='Assessment of fitted vector; non-fitted rows are predictions, not physical validation.',exclusions='Five 30 wt% Amundsen loading-0.4 source-conflict rows excluded from objective/gate. Canonical rows above 393.15 K inadmissible.'))
     print('inventory',SHA,{k:len(v) for k,v in groups.items()},flush=True)
 
 
@@ -213,7 +214,8 @@ def main():
         DIRECT_ITEMS={r['id']:(r,item) for r,item in rows if r['quantity']=='phase_density'}
     tasks=tasks_for(mode)
     # Independent fixed states use every available core, with BLAS/OpenMP at one thread.
-    with cf.ProcessPoolExecutor(max_workers=os.cpu_count()) as pool:
+    workers = min(os.cpu_count(), max(1, int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1]) // 1_000_000))
+    with cf.ProcessPoolExecutor(max_workers=workers) as pool:
         futures={pool.submit(safe,t):i for i,t in enumerate(tasks)}
         for f in cf.as_completed(futures):
             i=futures[f];result=f.result()
