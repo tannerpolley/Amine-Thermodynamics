@@ -1,0 +1,7 @@
+{
+  "command": "systemd-run --user --unit=issue212-restricted2 --same-dir --collect -p Nice=10 /bin/bash -o pipefail -c '.venv/bin/python -I -u analyses/mea_parameter_bundle/scripts/fit_campaign.py analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/information-spec.json analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/release --operation information --case stage6 2>&1 | tee analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/information.log'",
+  "invocation_id": "5c63625cc0fe4f0da1eb65c956b6a4a3",
+  "unit": "issue212-restricted2.service",
+  "declared_sha256": "8e4e1e2902b73d7ad91d240b38b0e223e468fd03a89387be38c8f01b4f7414af",
+  "producer_sha256": "d7415c8cd373a7d351af18c1c86f23c2547bf36e825fdb37e970edbbdff81e56"
+}

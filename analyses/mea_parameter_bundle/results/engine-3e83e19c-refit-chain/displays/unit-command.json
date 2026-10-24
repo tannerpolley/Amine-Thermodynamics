@@ -1,0 +1,5 @@
+{
+  "command": "systemd-run --user --unit=issue212-restricted2 --same-dir --collect -p Nice=10 /bin/bash -o pipefail -c '.venv/bin/python -I -u analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py displays 2>&1 | tee analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/execution.log'",
+  "unit": "issue212-restricted2.service",
+  "invocation_id": "9a22e0ff1c904f3f89ca848942d03f79"
+}

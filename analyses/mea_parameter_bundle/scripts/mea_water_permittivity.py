@@ -13,8 +13,8 @@ OUT = BUNDLE / 'results/mea-water-permittivity'
 T, P = 298.15, 101325.
 
 
-def main():
-    mapping = s.parameter_mapping()
+def main(parameters=s.PARAMETERS):
+    mapping = s.parameter_mapping(parameters)
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping))
     value = {c['identity']: c['value']['magnitude'] for n in mapping['components'] for c in n['coefficients']}
     mass = {c['component_id']: c['fixed']['molar_mass']['value']['magnitude'] for c in mapping['components']}
@@ -38,7 +38,7 @@ def main():
                         relative_deviation=calculated / observed - 1))
     assert len(out) == 14 and out[0]['MEA_wt_percent'] == '0' and abs(out[0]['calculated_epsilon'] - out[0]['fit_stage_epsilon']) < 1e-10  # water alone is unchanged
     error = [r['calculated_epsilon'] - r['observed_epsilon'] for r in out]
-    summary = dict(parameter_sha256=s.sha256(s.PARAMETERS), engine_commit=s.ENGINE_COMMIT, engine_wheel_sha256=s.ENGINE_WHEEL_SHA256,
+    summary = dict(parameter_sha256=s.sha256(parameters), engine_commit=s.ENGINE_COMMIT, engine_wheel_sha256=s.ENGINE_WHEEL_SHA256,
                    inputs={str(p.relative_to(BUNDLE.parents[1])): s.sha256(p) for p in (ROWS, FIT_STAGE)}, n=len(out),
                    rmse=math.sqrt(sum(e * e for e in error) / len(error)), max_abs_error=max(map(abs, error)),
                    aard_percent=100 * sum(abs(r['relative_deviation']) for r in out) / len(out),
