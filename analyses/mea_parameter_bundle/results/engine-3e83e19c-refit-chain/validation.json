@@ -1,0 +1,730 @@
+{
+  "base_commit": "3f01bc1",
+  "stage2": {
+    "A": {
+      "native_cost": 91.80963081696791,
+      "iterations": 1,
+      "replay": {
+        "cost": 91.80963081696862,
+        "relative_cost_difference": 7.739305010131625e-15,
+        "maximum_weighted_row_difference": 9.18919779678562e-13,
+        "ids_equal": true,
+        "start_cost": 91.80965334818437
+      },
+      "coordinate_rank": 1,
+      "active_bounds": [],
+      "derivative_checks": 106,
+      "all_derivatives_passed": true
+    },
+    "B": {
+      "native_cost": 91.80963081698934,
+      "iterations": 1,
+      "replay": {
+        "cost": 91.80963081698997,
+        "relative_cost_difference": 6.810588408914248e-15,
+        "maximum_weighted_row_difference": 6.563712247331654e-13,
+        "ids_equal": true,
+        "start_cost": 91.80965358096383
+      },
+      "coordinate_rank": 1,
+      "active_bounds": [],
+      "derivative_checks": 106,
+      "all_derivatives_passed": true
+    }
+  },
+  "joint": {
+    "a6": {
+      "iterations": 5,
+      "native_cost": 148.2115075904099,
+      "available_rows": 307,
+      "release": [
+        {
+          "start": "held-larger-A",
+          "density_weight": 1.0,
+          "row_count": 307,
+          "full": {
+            "columns": 14,
+            "rank": 14,
+            "condition": 3423.259580248107,
+            "singular_values": [
+              18.995045738747148,
+              12.727756865890631,
+              5.878827222092073,
+              3.9231700098806606,
+              2.9027893742002018,
+              1.3596740997134493,
+              0.3345499727425506,
+              0.13709050625252128,
+              0.06125221533161287,
+              0.04491084807503128,
+              0.03545438030627698,
+              0.011913757363036598,
+              0.007474870975789021,
+              0.005548818397630964
+            ],
+            "weakest_direction": [
+              0.1699033642505672,
+              -0.2670226405564535,
+              0.9034568279502009,
+              0.08033787110632595,
+              -0.03804009070691023,
+              0.01076536767717498,
+              -0.006948711190538623,
+              0.21047608384077945,
+              0.17238185399133318,
+              -0.006481811238565144,
+              -0.03299327540952686,
+              -0.01948925771696758,
+              -0.0015202574404376695,
+              -0.0019283699782747096
+            ]
+          },
+          "mandatory_free": {
+            "columns": 9,
+            "rank": 9,
+            "condition": 2511.3788601474275,
+            "singular_values": [
+              18.31975540390055,
+              6.800503414666804,
+              4.780364407347949,
+              2.2098219021755408,
+              1.447549086840959,
+              1.2079984465697828,
+              0.29824615962023776,
+              0.13410358391944024,
+              0.00729470001305383
+            ],
+            "weakest_direction": [
+              -0.18034637005526527,
+              0.25032009477380945,
+              -0.9506792400926314,
+              0.030994159963914202,
+              -0.0021210323181522286,
+              0.0012903289321579692,
+              0.007083786118719979,
+              0.0016652205065385561,
+              0.0020651279354095926
+            ]
+          },
+          "augmented_free": {
+            "columns": 11,
+            "rank": 11,
+            "condition": 3545.177373636283,
+            "singular_values": [
+              18.409213947908647,
+              8.5046725582227,
+              5.6214964581647475,
+              2.91832375877734,
+              2.305404942407028,
+              1.793663603840346,
+              0.39859660326220686,
+              0.13415707686534425,
+              0.11420547035170862,
+              0.04968505977122114,
+              0.005192748347320728
+            ],
+            "weakest_direction": [
+              0.1409636607251637,
+              -0.20286100005997343,
+              0.9675990679415337,
+              -0.0300463278240929,
+              -0.0056331399724786416,
+              0.0037316277255495522,
+              -0.006820821005211758,
+              -0.0014467658211082535,
+              -0.0018076584177279273,
+              0.04030795257300308,
+              -0.010180874277285062
+            ]
+          },
+          "projected_dispersions": {
+            "columns": 2,
+            "rank": 2,
+            "condition": 4.8282531775337665,
+            "singular_values": [
+              0.3469014844124651,
+              0.07184823820478686
+            ],
+            "weakest_direction": [
+              -0.9952823167910312,
+              0.09702118265140568
+            ]
+          },
+          "active_columns": [
+            3,
+            7,
+            8,
+            9,
+            11
+          ],
+          "free_columns": [
+            0,
+            1,
+            2,
+            4,
+            5,
+            6,
+            10,
+            12,
+            13
+          ],
+          "binding": "c9ed119bea95697e98873a9f8b09a56bcf40a07374a7f236a43362c3aaa7c0e3",
+          "released": true
+        }
+      ],
+      "information_call": {
+        "start": "held-larger-A",
+        "cpu_s": 194.32421399999998,
+        "wall_s": 194.4903250060015,
+        "exitcode": 0,
+        "interrupted": false,
+        "host_load": [
+          15.42333984375,
+          11.4970703125,
+          9.86279296875
+        ]
+      },
+      "fit_call": {
+        "start": "held-larger-A",
+        "cpu_s": 355.362574,
+        "wall_s": 63.17871709600149,
+        "exitcode": 0,
+        "interrupted": false,
+        "host_load": [
+          27.45068359375,
+          15.95849609375,
+          11.52587890625
+        ]
+      }
+    },
+    "held-x3": {
+      "iterations": 5,
+      "native_cost": 148.31366430715744,
+      "available_rows": 307,
+      "release": [
+        {
+          "start": "held-x3",
+          "density_weight": 1.0,
+          "row_count": 307,
+          "full": {
+            "columns": 14,
+            "rank": 14,
+            "condition": 3421.474461378796,
+            "singular_values": [
+              18.99466340151497,
+              12.737235434345576,
+              5.876347050465869,
+              3.9879598837373402,
+              2.907569757984127,
+              1.3829927183905082,
+              0.33596209843781993,
+              0.14005422723501962,
+              0.06197609238435897,
+              0.04652019359561822,
+              0.03492699497479038,
+              0.011772997847027332,
+              0.007543512395797621,
+              0.005551601689834167
+            ],
+            "weakest_direction": [
+              -0.17082243534105357,
+              0.26793858234345935,
+              -0.9116262269257548,
+              -0.06941767905884627,
+              0.03607588515134434,
+              -0.010579761046885995,
+              0.006760966234074128,
+              -0.16083908619880724,
+              -0.1853033384290563,
+              0.006728748610337926,
+              0.03235525221400693,
+              0.01958933433841344,
+              0.0015027256733997074,
+              0.0019054929170369285
+            ]
+          },
+          "mandatory_free": {
+            "columns": 9,
+            "rank": 9,
+            "condition": 2521.852873450145,
+            "singular_values": [
+              18.3184815902777,
+              6.819114649800747,
+              4.831142074464356,
+              2.216444169143154,
+              1.487392133421714,
+              1.2304829339042889,
+              0.29915062865313147,
+              0.13684749538346427,
+              0.007263897820183379
+            ],
+            "weakest_direction": [
+              -0.17996354189285896,
+              0.24637197467886043,
+              -0.9518273962495856,
+              0.02962410621639131,
+              -0.0021470045258279516,
+              0.001332371407069488,
+              0.006917295672666637,
+              0.001632340163814583,
+              0.0020237109467238406
+            ]
+          },
+          "augmented_free": {
+            "columns": 11,
+            "rank": 11,
+            "condition": 3590.696882422809,
+            "singular_values": [
+              18.4095476629905,
+              8.538903107878678,
+              5.623549437448221,
+              2.9754255728317136,
+              2.334942508640396,
+              1.8453811973543135,
+              0.4021815953917238,
+              0.13688435281229405,
+              0.11561853640431255,
+              0.05134688838241272,
+              0.005127012461873064
+            ],
+            "weakest_direction": [
+              0.14002443735067294,
+              -0.19921291082091414,
+              0.9685809427092442,
+              -0.028725579809466432,
+              -0.005399439508921449,
+              0.003645586648677021,
+              -0.006676771767040769,
+              -0.0014142435231171008,
+              -0.0017670179598472592,
+              0.03912939035368031,
+              -0.01048410392215618
+            ]
+          },
+          "projected_dispersions": {
+            "columns": 2,
+            "rank": 2,
+            "condition": 4.665060897098755,
+            "singular_values": [
+              0.34885292530349793,
+              0.07477992956543243
+            ],
+            "weakest_direction": [
+              -0.9934249404706038,
+              0.11448531631164582
+            ]
+          },
+          "active_columns": [
+            3,
+            7,
+            8,
+            9,
+            11
+          ],
+          "free_columns": [
+            0,
+            1,
+            2,
+            4,
+            5,
+            6,
+            10,
+            12,
+            13
+          ],
+          "binding": "992efe3515ca27e652ecf6f4200c01a148e2e38771a270146ac2ce34be858f8e",
+          "released": true
+        }
+      ],
+      "information_call": {
+        "start": "held-x3",
+        "cpu_s": 192.63156299999997,
+        "wall_s": 192.7606011750031,
+        "exitcode": 0,
+        "interrupted": false,
+        "host_load": [
+          15.42333984375,
+          11.4970703125,
+          9.86279296875
+        ]
+      },
+      "fit_call": {
+        "start": "held-x3",
+        "cpu_s": 365.75736300000005,
+        "wall_s": 61.65205093000259,
+        "exitcode": 0,
+        "interrupted": false,
+        "host_load": [
+          28.099609375,
+          15.89013671875,
+          11.47998046875
+        ]
+      }
+    },
+    "restricted": {
+      "iterations": 4,
+      "native_cost": 149.21952645124134,
+      "available_rows": 307,
+      "release": [
+        {
+          "start": "a7-restricted-t0p125",
+          "density_weight": 1.0,
+          "row_count": 307,
+          "full": {
+            "columns": 14,
+            "rank": 14,
+            "condition": 10348.809416100943,
+            "singular_values": [
+              18.784027216275252,
+              12.818049698608428,
+              5.932638496678985,
+              3.254723211195256,
+              2.95299718406373,
+              1.2277779163380738,
+              0.1939404023534976,
+              0.16238181453890685,
+              0.1293973435046259,
+              0.1102946433501845,
+              0.009993362263503324,
+              0.0065413062409183905,
+              0.005878453374712242,
+              0.0018150906506260113
+            ],
+            "weakest_direction": [
+              0.19202366999435255,
+              -0.1733282860124275,
+              0.7906490079782817,
+              0.04992353324771598,
+              -0.0062229423797550846,
+              -0.00401618181397524,
+              0.004476259180172103,
+              0.044029187872821667,
+              0.15305317563783455,
+              -0.0029712168557132212,
+              0.37149550726464714,
+              0.3768415130171578,
+              -2.32484364134089e-05,
+              1.838226956195647e-05
+            ]
+          },
+          "mandatory_free": {
+            "columns": 9,
+            "rank": 9,
+            "condition": 651.9153176281342,
+            "singular_values": [
+              18.74114805653776,
+              12.584843884759458,
+              5.849879515561447,
+              3.2386983747663436,
+              2.1908931653405697,
+              1.1334001941847103,
+              0.18197325232239325,
+              0.1290726367026177,
+              0.028747825905861127
+            ],
+            "weakest_direction": [
+              0.310279982392856,
+              0.9469322335736289,
+              0.04918147800810559,
+              0.025834881025309273,
+              -0.04571448838109475,
+              0.03958686315654314,
+              0.017389555920169993,
+              -0.0002771243230736964,
+              -0.00010513507148253096
+            ]
+          },
+          "augmented_free": {
+            "columns": 11,
+            "rank": 11,
+            "condition": 3742.4192170798824,
+            "singular_values": [
+              19.689044727719192,
+              15.316866389866577,
+              5.98066936362774,
+              3.3610333286613647,
+              2.842535602676598,
+              2.1908913384853537,
+              0.8189718786282302,
+              0.18810101489388384,
+              0.14168054271256966,
+              0.08759846851725413,
+              0.005261047356175685
+            ],
+            "weakest_direction": [
+              0.0937378619201542,
+              0.989576151880807,
+              0.017761120092781857,
+              -0.028259302685357562,
+              0.033806063897408284,
+              0.01491562667667179,
+              0.0050216851870508806,
+              0.00039741365135131934,
+              0.0004919418023506617,
+              0.03907518509697899,
+              -0.08899659579993807
+            ]
+          },
+          "projected_dispersions": {
+            "columns": 2,
+            "rank": 2,
+            "condition": 18.210338921587592,
+            "singular_values": [
+              0.9607141220150125,
+              0.05275652068595638
+            ],
+            "weakest_direction": [
+              -0.3949261693631492,
+              0.9187128608831756
+            ]
+          },
+          "active_columns": [
+            1,
+            3,
+            7,
+            8,
+            11
+          ],
+          "free_columns": [
+            0,
+            2,
+            4,
+            5,
+            6,
+            9,
+            10,
+            12,
+            13
+          ],
+          "binding": "32633b0fb8e0f53cd6939f0ac7ba8d209d7a6b1fd7396b71922140c6b5b44be3",
+          "released": true
+        }
+      ],
+      "information_call": {
+        "start": "a7-restricted-t0p125",
+        "cpu_s": 191.901464,
+        "wall_s": 192.01531499200064,
+        "exitcode": 0,
+        "interrupted": false,
+        "host_load": [
+          15.373046875,
+          11.4208984375,
+          9.82958984375
+        ]
+      },
+      "fit_call": {
+        "start": "a7-restricted-t0p125",
+        "cpu_s": 308.5923640000001,
+        "wall_s": 53.436878992004495,
+        "exitcode": 0,
+        "interrupted": false,
+        "host_load": [
+          27.55712890625,
+          15.37451171875,
+          11.267578125
+        ]
+      }
+    },
+    "restricted-2": {
+      "status": "converged",
+      "usable": true,
+      "iterations": 8,
+      "initial_cost": 149.21952645122371,
+      "final_cost": 148.87893934555717,
+      "timing": {
+        "wall_s": 257.16627309200703,
+        "cpu_s": 662.710976
+      },
+      "available_rows": 307,
+      "active_bound_indices": [
+        1,
+        3,
+        5,
+        7,
+        8,
+        11
+      ],
+      "attempt": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3",
+      "native_C149": 23.860996312137765,
+      "native_Cai_cost": 91.87458520309647
+    }
+  },
+  "stage5": {
+    "row_count": 14,
+    "rank": 2,
+    "discriminant": 3.2239026967341973,
+    "cost": 1.9338548589681683,
+    "branches": [
+      {
+        "branch": "smaller-dV",
+        "dielectric_volume_L_mol": 0.24645459482573953,
+        "dielectric_temperature_K": 2436.43575418438,
+        "max_abs_native_replay_epsilon": 2.842170943040401e-14,
+        "scale_covariance_dV_dT": [
+          [
+            5.561571404050877e-05,
+            -0.365917144382574
+          ],
+          [
+            -0.36591714438257394,
+            2581.6568728534085
+          ]
+        ],
+        "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/stage5/run/parameters.json",
+        "sha256": "5942f5cf8b47b983dd7a6d9b157585b18398c22368b0701f8057c0e95d80e79e"
+      },
+      {
+        "branch": "larger-dV",
+        "dielectric_volume_L_mol": 0.7309865858310542,
+        "dielectric_temperature_K": 1019.0802597119892,
+        "max_abs_native_replay_epsilon": 2.842170943040401e-14,
+        "scale_covariance_dV_dT": [
+          [
+            0.0003017073216190035,
+            -0.36591714438257406
+          ],
+          [
+            -0.36591714438257406,
+            475.89395451477725
+          ]
+        ],
+        "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/stage5/run/larger-dV-parameters.json",
+        "sha256": "eabfb9bb5e842d63b81308a918cc015c082bc87732378daa487e235ac4ffcee8"
+      }
+    ]
+  },
+  "notebook": "analyses/mea_parameter_bundle/joint-recalibration/index.qmd",
+  "executed_producers": {
+    "ff714da": {
+      "path": "analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py",
+      "sha256": "9d3aab63996f85d4c7996c47782619aa3e0475c9e92ead8abf6f75e4d0105633",
+      "gross_lines": 122
+    },
+    "95439c7": {
+      "path": "analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py",
+      "sha256": "e6a7e3b8726da1ff67edfcbe3592e9ba200d02046a45acb4c1a15b63341378a7",
+      "gross_lines": 123
+    }
+  },
+  "final_producer_sha256": "0f8710fd540b2ded14628abe0e10c187889677d58a14eb5e705f0174e9828675",
+  "new_reported_candidate_exists": true,
+  "selected_record_sha256": "e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e",
+  "notebook_validation": "nice -n 10 .venv/bin/python -I analyses/manuscript.py validate analyses: valid",
+  "prose_check": "plugin-wide and scoped rules passed",
+  "render": {
+    "path": "/tmp/issue-212-continuation-quarto/mea_parameter_bundle/joint-recalibration/index.html",
+    "command": "nice -n 10 quarto render analyses/mea_parameter_bundle/joint-recalibration/index.qmd --to html --no-execute --output-dir /tmp/issue-212-continuation-quarto",
+    "sha256": "a0b064f4026a3820d5aa07aa87cf80954d2a744812a1a64fa1049489adf3ad7a",
+    "expected_values_found": true
+  },
+  "code_additions_gross": 150,
+  "code_accounting_base": "3f01bc1188280fee1c031293cda2e33f0b3f58e5",
+  "previous_interruption": {
+    "condition": "numerical completion: fresh second-restricted information call incomplete",
+    "cause": "Host turn was interrupted and its unified-exec process ended before the second-restricted information call returned. No native result, release-tests.json, terminal timing, or fit endpoint was written; no matching calculation process remained after resumption.",
+    "disposition": "Stopped without another information call, a fit retry, budget changes or added starts.",
+    "retained_evaluation_count": 5,
+    "second_restricted_fit_started": false,
+    "fixed_calculations_started": false,
+    "information_CPU_s": null,
+    "information_wall_s": null,
+    "elapsed_wall_lower_bound_to_last_retained_evaluation_s": 109.45210289955139,
+    "last_retained_evaluation_UTC": "2026-10-24T06:59:16.907935+00:00",
+    "meaning": "An execution interruption, not a failed derivative check or evidence of physical-model failure. Completion cannot be asserted.",
+    "last_sampled_coordinate": "component/protonated-monoethanolamine/segment_diameter"
+  },
+  "stopped": null,
+  "interrupted_attempt_unchanged": true,
+  "information_declaration_identical": true,
+  "release_binding_identical": true,
+  "reported_density": {
+    "within_2s": 44,
+    "count": 47,
+    "miss_ids": [
+      "Amundsen2009_state_081",
+      "Hartono2014_density_80C_alpha0.29",
+      "Hartono2014_density_80C_alpha0.39"
+    ],
+    "largest_CO2_free_error_kg_m3": 0.557484452458425,
+    "CO2_free_signed_errors_kg_m3": {
+      "AMU-DENS-002": -0.557484452458425,
+      "AMU-DENS-009": -0.08075602163683016,
+      "AMU-DENS-016": -0.03214825225916229,
+      "AMU-DENS-023": 0.39494028640649503,
+      "AMU-DENS-030": 0.32705333252499713
+    },
+    "rule_passed": true
+  },
+  "conditional_uncertainty": {
+    "rank": 10,
+    "active_bound_indices": [
+      1,
+      3,
+      5,
+      7,
+      8,
+      11
+    ],
+    "degrees_of_freedom": 297,
+    "meaning": "Conditional on residual weights, fixed inputs, active bounds and local linearization; no measurement-error, uniqueness or prediction-interval claim."
+  },
+  "fixed_replays": {
+    "reported": {
+      "rows": 307,
+      "all_available": true,
+      "all_finite": true,
+      "all_requested_tolerances_met": true,
+      "cost": 148.87893934557388,
+      "native_cost_absolute_difference": 1.6711965145077556e-11
+    },
+    "comparison": {
+      "rows": 307,
+      "all_available": true,
+      "all_finite": true,
+      "all_requested_tolerances_met": true,
+      "cost": 148.21150759040813,
+      "native_cost_absolute_difference": 1.7621459846850485e-12
+    }
+  },
+  "cai_constant": {
+    "rows": 50,
+    "all_available": true,
+    "all_finite": true,
+    "all_requested_tolerances_met": true,
+    "cost": 91.29322049026165
+  },
+  "arcis": {
+    "reported": {
+      "n": 14,
+      "RMSE_kJ_mol": 8.115640714619083,
+      "by_pressure": {
+        "510000.0": {
+          "n": 8,
+          "RMSE_kJ_mol": 10.332399122695893,
+          "bias_kJ_mol": 10.211247802748986
+        },
+        "1030000.0": {
+          "n": 6,
+          "RMSE_kJ_mol": 3.3670700883078895,
+          "bias_kJ_mol": 3.146124930561627
+        }
+      }
+    },
+    "comparison": {
+      "n": 14,
+      "RMSE_kJ_mol": 8.05184864877517,
+      "by_pressure": {
+        "510000.0": {
+          "n": 8,
+          "RMSE_kJ_mol": 10.260693886454757,
+          "bias_kJ_mol": 10.143001732341713
+        },
+        "1030000.0": {
+          "n": 6,
+          "RMSE_kJ_mol": 3.3014396109050015,
+          "bias_kJ_mol": 3.0771468465963068
+        }
+      }
+    }
+  }
+}

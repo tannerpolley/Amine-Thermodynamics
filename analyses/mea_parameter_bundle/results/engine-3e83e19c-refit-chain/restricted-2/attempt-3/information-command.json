@@ -1,0 +1,6 @@
+{
+  "command": "systemd-run --user --unit=issue212-restricted2 --same-dir --collect -p Nice=10 /bin/bash -o pipefail -c '.venv/bin/python -I -u -c '\\''import runpy; n=runpy.run_path(\"analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py\"); n[\"c\"].run(\"analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/information-spec.json\",\"analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release\",case_ids=[\"stage6\"],operation=\"information\")'\\'' 2>&1 | tee analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/information.log'",
+  "unit": "issue212-restricted2.service",
+  "invocation_id": "71d38917846847f4bab2729f3cab6818",
+  "producer_sha256": "0f8710fd540b2ded14628abe0e10c187889677d58a14eb5e705f0174e9828675"
+}
