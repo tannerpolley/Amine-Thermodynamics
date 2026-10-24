@@ -245,6 +245,8 @@ def comparisons():
         compare('loaded density errors',key,*[s[key]['predicted']-s[key]['observed'] for s in sides],limit=1e-10,unit='kg/m3')
     score = lambda r:dict({k:v for k,v in r.items() if k not in ('label','parameter_sha256')},co2_free_max_abs_error_kg_m3=max(map(abs,r['co2_free_errors'].values())))
     compare('replay score','A6',*(score(load(p/'A6/score.json')) for p in (OLD,OUT/'original-73')),limit=1e-10,unit='score field unit')
+    compare('Table S23','comparison fit / Arcis RMSE',*[load(R/'engine-3e83e19c-refits/displays/summary.json')['arcis']['comparison']['RMSE_kJ_mol']]*2,limit=1e-10,unit='kJ/mol CO2')
+    rows[-1].update(old_printed=f'{rows[-1]["old"]:.2f}',new_printed=f'{rows[-1]["new"]:.2f}',source='analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/displays/summary.json',source_sha256=f.s.sha256(R/'engine-3e83e19c-refits/displays/summary.json'))
     table(OUT/'old-new-comparison.csv',rows)
     write(OUT/'comparison-summary.json',{group:dict(rows=len(part),owner_returns=sum(r['owner_return'] for r in part),largest=max((r for r in part if r['delta'] is not None),key=lambda r:r['delta'],default=None)) for group in sorted({r['group'] for r in rows}) for part in [[r for r in rows if r['group']==group]]})
     combined = [dict(r,family=family,combined_index=r['index']+(73 if family=='extension-81' else 0)) for family in ('original-73','extension-81') for fit in FITS for r in load(OUT/family/fit/'reduction.json')]
@@ -259,7 +261,7 @@ def comparisons():
 def provenance():
     producers = [Path(__file__),EXTENSION,Path(f.__file__),REFERENCE,STUDY,PROBES,OLD/'adopt.py.txt']
     inputs = [*FITS.values(),*sorted((OUT/'reference-pressure/inputs').iterdir()),J/'amendment-6/joint-mea-water/held/fit-spec.json',R/'engine-3e83e19c-refits/displays/summary.json']
-    base = dict(engine_commit=f.s.ENGINE_COMMIT,wheel_path=str(f.s.installed_wheel()),wheel_sha256=f.s.sha256(f.s.installed_wheel()),interpreter=sys.executable,environment='main checkout verified environment; no worktree environment',packages={k:importlib.metadata.version(k) for k in ('epcsaft','numpy','scipy')},linear_solver=f.epcsaft._core.linear_solver(),numerical_library_threads=1,reference_pool_sizing='min(os.cpu_count(), MemAvailable_kib//1000000)',producers={str(p.relative_to(ROOT)):f.s.sha256(p) for p in producers},inputs={str(p.relative_to(ROOT)):f.s.sha256(p) for p in inputs})
+    base = dict(engine_commit=f.s.ENGINE_COMMIT,wheel_path=str(f.s.installed_wheel()),wheel_sha256=f.s.sha256(f.s.installed_wheel()),interpreter=sys.executable,environment='main checkout verified environment; no worktree environment',packages={k:importlib.metadata.version(k) for k in ('epcsaft','numpy','scipy')},linear_solver=f.epcsaft._core.linear_solver(),numerical_library_threads=1,reference_pool_sizing='min(os.cpu_count(), MemAvailable_kib//1000000)',final_tree_producers={str(p.relative_to(ROOT)):f.s.sha256(p) for p in producers},executions=load(OUT/'execution-source-recovery.json')['executions'],inputs={str(p.relative_to(ROOT)):f.s.sha256(p) for p in inputs})
     write(OUT/'provenance.json',base)
     for family in ('original-73','extension-81'):
         for fit,record in FITS.items():
@@ -293,6 +295,7 @@ if __name__=='__main__':
     supervisor = edited(function(EXTENSION,'supervise'), [('sys.executable, __file__', "sys.executable, '-I', __file__")])
     exec(compile(supervisor,str(EXTENSION),'exec'),vars(extension))
     mode = sys.argv[1] if len(sys.argv)>1 else 'references'
+    write(OUT/'execution-source-captures'/('-'.join(sys.argv[1:3]) or 'references'),dict(argv=sys.argv,captured_unix_s=time.time(),sources={str(p.relative_to(ROOT)):f.s.sha256(p) for p in (Path(__file__),EXTENSION,Path(f.__file__),REFERENCE,STUDY,PROBES,OLD/'adopt.py.txt')}))
     if mode=='references':
         references()
     elif mode in ('original-73','extension-81'):
