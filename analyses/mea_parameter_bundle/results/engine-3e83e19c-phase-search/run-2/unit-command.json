@@ -1,0 +1,22 @@
+{
+  "command": "systemd-run --user --unit=issue214-phase-r2 --same-dir --collect -p Nice=10 --wait --pipe /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I -u analyses/mea_parameter_bundle/scripts/phase_search_214.py",
+  "environment": {
+    "interpreter": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+    "temporary_build_link": "removed after verification; no Engine source imports",
+    "wheel_storage": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/build"
+  },
+  "exitcode": 0,
+  "invocation_id": "10b8473672b6406b85fb42641c4ff7ca",
+  "niceness": 10,
+  "preflight_attempt": {
+    "cause": "FileNotFoundError for the declared wheel under worktree build/; failure before dispatch or reference calculation",
+    "exitcode": 1,
+    "fix": "Restored build symlink to the main checkout retained wheel storage; removed only the three empty run-2 directories created by that attempt",
+    "invocation_id": "d6d547c83ade44d09f1b0ec0989964b8",
+    "numerical_states_executed": 0
+  },
+  "service_cpu_s": 344.652,
+  "service_wall_s": 52.941,
+  "unit": "issue214-phase-r2.service",
+  "wait": "systemd-run --wait --pipe"
+}

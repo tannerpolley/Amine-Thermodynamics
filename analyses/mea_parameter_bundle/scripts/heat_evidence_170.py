@@ -76,7 +76,7 @@ def request(mapping, T, loading, density=False):
     if density:
         req['outputs'] = [dict(identity='phase-density', selector='phase.density',
             phase_identity=req['phases'][0]['identity'], unit='kilogram / meter ** 3')]
-    return s.corrected_request(req, s.reaction_values(mapping))
+    return s.corrected_request(req, s.reaction_values(mapping), mapping)
 
 def cp_check(mapping, T, loading, observed, row=None, proxy_loading=1e-6):
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(mapping), thermochemistry=vrc.record())

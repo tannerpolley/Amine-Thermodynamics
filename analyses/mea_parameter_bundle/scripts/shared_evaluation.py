@@ -365,21 +365,18 @@ def source_corrected_packet() -> dict:
 
 
 def corrected_request(
-    request: dict[str, object], reaction_values: dict[str, float] | None = None
+    request: dict[str, object], reaction_values: dict[str, float] | None = None, mapping: dict | None = None
 ) -> dict[str, object]:
     """Normalize phase model metadata without inventing source-to-EOS reactions."""
     corrected = copy.deepcopy(request)
     if reaction_values is None:
-        reaction_values = _selected_reactions()
+        reaction_values = _selected_reactions(mapping)
     for phase in corrected.get("phases", ()):
         phase.setdefault("model", {})["kind"] = "eos"
         phase["model"]["reference_id"] = "installed-eos"
     if reaction_values:
-        selected_specs = {
-            str(item.get("reaction_id")): item
-            for item in parameter_mapping().get("reaction_correlations", ())
-        }
-        adopted = reaction_values == _selected_reactions()
+        selected_specs = _reaction_specifications(mapping)
+        adopted = mapping is None and reaction_values == _selected_reactions(mapping)
         records = corrected.get("reaction_system", {}).get("equilibrium_constants", ())
         for index, record in enumerate(records):
             reaction_id = f"R{index + 1}"
@@ -432,20 +429,20 @@ def corrected_request(
         # contraction.
         if "reaction_matrix" in corrected.get("reaction_system", {}):
             corrected["reaction_system"]["engine_reactions"] = _engine_reaction_records(
-                corrected, reaction_values
+                corrected, reaction_values, **({"mapping": mapping} if mapping is not None else {})
             )
     return corrected
 
 
-def _reaction_specifications() -> dict[str, dict[str, object]]:
+def _reaction_specifications(mapping: dict | None = None) -> dict[str, dict[str, object]]:
     return {
         str(item["reaction_id"]): item
-        for item in parameter_mapping().get("reaction_correlations", ())
+        for item in (parameter_mapping() if mapping is None else mapping).get("reaction_correlations", ())
     }
 
 
-def _parameter_domain(domain_id: object) -> tuple[float, float] | None:
-    for domain in parameter_mapping().get("domains", ()):
+def _parameter_domain(domain_id: object, mapping: dict | None = None) -> tuple[float, float] | None:
+    for domain in (parameter_mapping() if mapping is None else mapping).get("domains", ()):
         if domain.get("domain_id") == domain_id:
             lower = domain.get("temperature_min", {}).get("magnitude")
             upper = domain.get("temperature_max", {}).get("magnitude")
@@ -455,11 +452,11 @@ def _parameter_domain(domain_id: object) -> tuple[float, float] | None:
 
 
 def _engine_reaction_records(
-    request: dict[str, object], reaction_values: dict[str, float]
+    request: dict[str, object], reaction_values: dict[str, float], mapping: dict | None = None
 ) -> list[dict[str, object]]:
     """Normalize source forms to native polynomial fields without EOS conversion."""
-    selected_specs = _reaction_specifications()
-    selected_values = _selected_reactions()
+    selected_specs = _reaction_specifications(mapping)
+    selected_values = _selected_reactions() if mapping is None else None
     adopted = reaction_values == selected_values
     records = []
     for index, row in enumerate(request["reaction_system"]["reaction_matrix"]):
@@ -500,7 +497,7 @@ def _engine_reaction_records(
                 REACTION_REFERENCE_TEMPERATURE_K
             )
         selected_domain = (
-            _parameter_domain(selected_spec.get("candidate_domain_id"))
+            _parameter_domain(selected_spec.get("candidate_domain_id"), mapping)
             if selected_spec is not None and (adopted or effective)
             else None
         )
@@ -730,8 +727,8 @@ def _reaction_identity(reactions: dict[str, float]) -> str:
     ).hexdigest()
 
 
-def _selected_reactions() -> dict[str, float]:
-    return reaction_values(parameter_mapping())
+def _selected_reactions(mapping: dict | None = None) -> dict[str, float]:
+    return reaction_values(parameter_mapping() if mapping is None else mapping)
 
 
 def provenance(reactions: dict[str, float] | None = None) -> dict[str, object]:
