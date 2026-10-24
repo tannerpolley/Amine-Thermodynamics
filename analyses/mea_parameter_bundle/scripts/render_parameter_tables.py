@@ -9,8 +9,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PARAM = ROOT / 'results/selected-current-best-parameters.json'
-DATA = ROOT / 'results/a7-paper-evidence'
-PHYSICAL = ROOT / 'results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json'
+DATA = ROOT / 'results/engine-3e83e19c-paper-evidence'
+PHYSICAL = ROOT / 'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'
 CHEMISTRY = ROOT.parents[1] / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json'
 OUT = ROOT / 'figures/a7_regression_overview/output'
 
@@ -275,7 +275,7 @@ def results():
              and (r['family'] == family or (family == 'species' and r['family'] == 'Matin pool'))])
     subset = next(r['attempted'] for r in stats if (r['family'], r['group_type'], r['group']) == ('pressure', 'displayed', 'all'))
     shown = sum(len(read(DATA / f'{n}-pressure.csv')) for n in ('canonical', 'wagner'))
-    blocks['pressure'] += f'\nThese statistics cover {subset} of the {shown} measurements in the CO₂ pressure figure.\n'
+    blocks['pressure'] += f'\nThese statistics cover {subset} comparison points; {shown} canonical and Wagner pressure measurements are retained in the package.\n'
     return blocks
 
 

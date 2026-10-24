@@ -152,7 +152,7 @@ def carbonate(row):
 
 
 def inventory():
-    files=[RECORD,BASE/'spec.json',BASE/'run/fit/native.json',OUT.parent/'execution.json',OUT.parents[1]/'engine-3e83e19c-refit-chain/displays/reported/full-replay.json',OUT.parents[1]/'engine-3e83e19c-refit-chain/displays/reported/score.json']
+    files=[RECORD,BASE/'spec.json',BASE/'run/fit/native.json',OUT.parent/'assessments-timing.json',OUT.parents[1]/'engine-3e83e19c-refit-chain/displays/reported/full-replay.json',OUT.parents[1]/'engine-3e83e19c-refit-chain/displays/reported/score.json',Path(__file__),OUT.parent/'gate-verification.json']+[Path(r['path']) for r in SPEC['inputs']]
     packet,groups=fe.observations()
     # Corrected source-backed requests override nominal packet feeds for restored Matin 016.
     requests=fo.load(SPEC['state_requests_path'])
@@ -160,7 +160,7 @@ def inventory():
         for o in group:
             if o['identity'] in requests: o['request']=requests[o['identity']]
     write('observation-groups.json',groups)
-    write('provenance.json',dict(parameter_sha256=SHA,engine_wheel_sha256=s.ENGINE_WHEEL_SHA256,engine_module=epcsaft.__file__,files={str(p):s.sha256(p) for p in files},engine=SPEC['engine'],claim='Assessment of fitted vector; non-fitted rows are predictions, not physical validation.',exclusions='Five 30 wt% Amundsen loading-0.4 source-conflict rows excluded from objective/gate. Canonical rows above 393.15 K inadmissible.'))
+    write('provenance.json',dict(parameter_sha256=SHA,engine_wheel_sha256=s.ENGINE_WHEEL_SHA256,engine_module=epcsaft.__file__,files={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files},engine=SPEC['engine'],claim='Assessment of fitted vector; non-fitted rows are predictions, not physical validation.',exclusions='Five 30 wt% Amundsen loading-0.4 source-conflict rows excluded from objective/gate. Canonical rows above 393.15 K inadmissible.'))
     print('inventory',SHA,{k:len(v) for k,v in groups.items()},flush=True)
 
 

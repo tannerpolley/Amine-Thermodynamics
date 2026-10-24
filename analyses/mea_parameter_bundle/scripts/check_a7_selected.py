@@ -10,18 +10,18 @@ import heat_evidence_170 as he
 import shared_evaluation as s
 
 ROOT = Path(__file__).resolve().parents[3]
-BASE = ROOT / 'analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7'
-OUT = ROOT / 'analyses/mea_parameter_bundle/results/a7-paper-evidence/default-replay'
+BASE = ROOT / 'analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3'
+OUT = ROOT / 'analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/default-replay'
 
 
 def main():
-    endpoint = BASE / 'restricted-2/fit/usable-budget-endpoint.json'
+    endpoint = BASE / 'run/fit/usable-budget-endpoint.json'
     assert s.PARAMETERS.read_bytes() == endpoint.read_bytes()
-    assert s.sha256(endpoint) == 'e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e'
+    assert s.sha256(endpoint) == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
     s.verify_wheel()
-    spec = fo.load(BASE / 'restricted-2/fit-spec.json')
+    spec = fo.load(BASE / 'spec.json')
     mapping = s.parameter_mapping()
-    inputs = [s.PARAMETERS, endpoint, BASE / 'restricted-2/fit-spec.json', Path(__file__),
+    inputs = [s.PARAMETERS, endpoint, BASE / 'spec.json', Path(__file__),
               ROOT / spec['engine']['wheel_path']]
     inputs += [ROOT / spec[k] for k in ('packet_path', 'anchors_path', 'heat_rows_path')]
     inputs += [ROOT / d['table'] for d in spec['observations']]
@@ -33,7 +33,7 @@ def main():
         ('state-targets.csv', 'target', 'predicted', 1., 'Pa or mole fraction'),
         ('heats.csv', 'id', 'predicted_kJ_mol', 1000., 'J/mol CO2'),
         ('cp.csv', 'id', 'equilibrium_cp_kJ_kg_K', 1., 'kJ/(kg K)')):
-        path = BASE / 'selected-assessment' / filename
+        path = OUT.parent / 'selected-assessment' / filename
         inputs.append(path)
         for row in csv.DictReader(path.open()):
             if filename != 'state-targets.csv' or row['kind'] == 'packet':
