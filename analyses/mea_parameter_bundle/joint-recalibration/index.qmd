@@ -110,7 +110,7 @@ This is a comparison reference calibrated to the same 149 quantities without den
 
 ## Joint fit objective groups
 
-The table preserves all 307 objective rows and their separate costs from the [fit summary](../results/a7-paper-evidence/fit-summary.json). The common-149 pressure, species and heat subgroups are shown separately beneath their combined group and must not be added a second time. The added seven restored species and six Jakobsen amount ratios preserve their declared observation operators. Costs depend on the declared scales and weights; density scales are not uniformly measured uncertainties. The [historical F1–F6 comparison](../results/heat-final-170/fit-comparison.csv) remains predecessor evidence.
+The table preserves all 307 objective rows and their separate costs from the [fit summary](../results/engine-3e83e19c-paper-evidence/fit-summary.json). The common-149 pressure, species and heat subgroups are shown separately beneath their combined group and must not be added a second time. The added seven restored species and six Jakobsen amount ratios preserve their declared observation operators. Costs depend on the declared scales and weights; density scales are not uniformly measured uncertainties. The [historical F1–F6 comparison](../results/heat-final-170/fit-comparison.csv) remains predecessor evidence.
 
 The objective table below reads the record adopted under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215), SHA-256 `00e77608…`, on Engine `3e83e19c`. Earlier adoption approvals and numerical records on this page retain their historical parameter and Engine identities. See the [current overview](../notebook.qmd#working-record).
 
@@ -195,7 +195,7 @@ Calibration with named non-fitted comparisons and numerical verification; not ph
 
 The three loaded-density failures at 353.15 K remain failures accepted with disclosure. The owner approved A7 for manuscript use on 20 October 2026 ([#170](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6301568416)); the manuscript on `main` uses it since [#197](https://github.com/tannerpolley/Amine-Thermodynamics/issues/197) (`dfc2780`).
 
-The figures read retained [pressure](../results/a7-paper-evidence/pressure-figure-data.csv), [species](../results/a7-paper-evidence/species-figure-data.csv), and [19 report-only Matin pool](../results/a7-paper-evidence/pool-figure-data.csv) rows derived from the single [462-row state table](../results/a7-paper-evidence/state-targets.csv). The [cohort summaries and availability](../results/a7-paper-evidence/state-summary.json) preserve canonical, Wagner and transfer comparisons, exclusions and historical data access.
+The figures read retained [pressure](../results/engine-3e83e19c-paper-evidence/pressure-figure-data.csv), [species](../results/engine-3e83e19c-paper-evidence/species-figure-data.csv), and [19 report-only Matin pool](../results/engine-3e83e19c-paper-evidence/pool-figure-data.csv) rows derived from the single [462-row state table](../results/engine-3e83e19c-paper-evidence/state-targets.csv). The [cohort summaries and availability](../results/engine-3e83e19c-paper-evidence/state-summary.json) preserve canonical, Wagner and transfer comparisons, exclusions and historical data access.
 
 ## Engine wheel and phase qualification
 
@@ -216,7 +216,7 @@ No new descent appeared and no equation changed. The classification changes are 
 
 ## Numerical reproduction {#numerical-reproduction}
 
-The [fresh-process replay](../results/a7-paper-evidence/default-replay/summary.json) loads the selected file through the default path and reproduces **153/153 identities**: 47 pressures (Pa), 94 species mole fractions, eight Vinjarapu integral heats (J/mol CO₂), and four Hilliard heat capacities (kJ/(kg K)). Worst relative difference is **8.39 × 10⁻¹⁶**, below $10^{-10}$. [Per-row values](../results/a7-paper-evidence/default-replay/comparison.json), [input hashes](../results/a7-paper-evidence/default-replay/input-hashes.json), and [timing](../results/a7-paper-evidence/default-replay/command-time.json) retain the check. It took 10.99 wall-s / 10.84 CPU-s. This verifies numerical reproduction of A7 only.
+The [fresh-process replay](../results/engine-3e83e19c-paper-evidence/default-replay/summary.json) loads the adopted selected file through the default path and reproduces **153/153 identities**: 47 pressures (Pa), 94 species mole fractions, eight Vinjarapu integral heats (J/mol CO₂), and four Hilliard heat capacities (kJ/(kg K)). Worst relative difference is **2.73 × 10⁻¹⁵**, below $10^{-10}$. [Per-row values](../results/engine-3e83e19c-paper-evidence/default-replay/comparison.json) and [input hashes](../results/engine-3e83e19c-paper-evidence/default-replay/input-hashes.json) retain the check. This verifies numerical reproduction of the adopted record only.
 
 ## Execution record
 
