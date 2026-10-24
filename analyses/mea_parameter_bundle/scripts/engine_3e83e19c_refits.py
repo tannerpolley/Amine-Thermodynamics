@@ -89,7 +89,7 @@ def compare(new, old):
                 bitwise_equal=not diff, max_relative_difference=max(diff.values(), default=0.), differing=diff)
 
 
-def displays():
+def displays(*, constant_kij=-0.0843938800264992):
     """Displayed values that the joint-fit replay does not cover, with the reported parameters (and the comparison fit) on this wheel."""
     import csv, shutil
     import fit_observations as o, heat_evidence_170 as he, reduce_a7_evidence as r, epcsaft
@@ -108,11 +108,12 @@ def displays():
         w.writerows(rows)
     # Cai cost with the earlier constant MEA-water interaction and every other input reported (S10 limit base).
     spec = json.loads((OUT / 'restricted-2/spec.json').read_text())
-    constant = o.s.with_parameter_values(reported, {'pair/monoethanolamine/water/k_ij': -0.0843938800264992, 'pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope': 0.})
+    constant = o.s.with_parameter_values(reported, {'pair/monoethanolamine/water/k_ij': constant_kij, 'pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope': 0.})
     _, declared = o.stage6_rows(spec, constant)
     weights = c.stage6_weights(spec, [x for x, _ in declared], 1.)
     cai = [(x['id'], item, wt) for (x, item), wt in zip(declared, weights, strict=True) if x['id'].startswith('cai1996')]
     cai_values = o.replay(constant, cai)
+    c.write(out/'cai-constant-replay.json', cai_values)
     assert len(cai_values) == 50 and all(v['status'] == 'Available' for v in cai_values)
     # Arcis heats for the reported and comparison fits (Table S23), through the assessment's heat call.
     heat_rows = [x for x in json.loads((ROOT / spec['heat_rows_path']).read_text()) if not x['record_id'].startswith('vinjarapu')]
@@ -126,7 +127,7 @@ def displays():
             v = o.predict(mapping, o.heat_items(mapping, params, [x], he.request(mapping, 313.15, .11)))[0]
             errors.setdefault(x['system_pressure_Pa'], []).append((v.value - x['observed_addition_enthalpy_J_per_mol_CO2']) / 1000)
         rmse = lambda e: math.sqrt(math.fsum(z * z for z in e) / len(e))
-        heats[name] = dict(n=sum(map(len, errors.values())), RMSE_kJ_mol=rmse([z for e in errors.values() for z in e]),
+        heats[name] = dict(errors_kJ_mol=errors, n=sum(map(len, errors.values())), RMSE_kJ_mol=rmse([z for e in errors.values() for z in e]),
                            by_pressure={str(p): dict(n=len(e), RMSE_kJ_mol=rmse(e), bias_kJ_mol=math.fsum(e) / len(e)) for p, e in errors.items()})
     # Conditional standard errors and correlations from the restricted-2 fit on this wheel.
     base = out / 'conditional-base'

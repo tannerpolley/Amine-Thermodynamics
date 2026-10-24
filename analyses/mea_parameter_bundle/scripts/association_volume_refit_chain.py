@@ -1,5 +1,5 @@
 """Issue 212: declarations and refits at the owner-fixed MEA association volume."""
-import copy
+import ast
 import importlib.machinery
 import importlib.util
 import os
@@ -68,7 +68,7 @@ def run(mode):
         boxes = {x['identity']: x['bounds'] for x in original if 'reaction' in x}
         for coordinate in spec['information_coordinates']:
             if coordinate['identity'] in boxes:
-                coordinate['bounds'] = copy.deepcopy(boxes[coordinate['identity']])
+                coordinate['bounds'] = boxes[coordinate['identity']]
         h.rebase(spec, totals)
         branch = OUT/'stage5/run/larger-dV-parameters.json'
         dielectric = {k: v for k,v in o.s.parameter_values(c.load(branch)).items() if k.startswith('component/monoethanolamine/dielectric_')}
@@ -110,12 +110,32 @@ def run(mode):
     c.run(directory/'spec.json', directory/('run/fit' if mode not in ('stage2','stage5') else 'run'), case_ids=['stage'+str(spec['stage'])], operation='fit')
 
 
+def displays():
+    import mea_water_permittivity as p
+    r.OUT, r.a.SELECTED = OUT, OUT/'restricted-2/run/fit/usable-budget-endpoint.json'
+    source = J/'amendment-7/fixed-study/study.py.txt'
+    score = next(n for n in ast.parse(source.read_text()).body if isinstance(n, ast.FunctionDef) and n.name=='score')
+    namespace = dict(output=OUT/'displays', root=J, math=r.math)
+    exec(compile(ast.Module(body=[score], type_ignores=[]), str(source), 'exec'), namespace)
+    loaded = c.load(OUT/'restricted-2/spec.json')['loaded_density_ids']
+    for name, label in (('restricted-2','reported'), ('a6','comparison')):
+        directory = OUT/'displays'/label
+        save(directory/'fixed-parameters.json', c.load(OUT/name/'run/fit/usable-budget-endpoint.json'))
+        namespace['score'](label)
+        if label=='reported':
+            assert {v['target'] for v in c.load(directory/'full-replay.json') if v['target'] in loaded and abs(v['residual'])>2} <= {'Amundsen2009_state_081','Hartono2014_density_80C_alpha0.29','Hartono2014_density_80C_alpha0.39'}
+            assert max(map(abs,c.load(directory/'score.json')['co2_free_errors'].values()))<=1
+    p.FIT_STAGE, p.OUT = OUT/'stage5/run/rows.json', OUT/'displays/permittivity'
+    p.main(r.a.SELECTED)
+    r.displays(constant_kij=c.load(OUT/'stage2/run/selection.json')[0]['selected']['k_ij'])
+
+
 if __name__ == '__main__':
     mode, started, cpu = sys.argv[1], time.monotonic(), c.cpu_seconds()
     assert r.ENGINE['wheel_sha256']=='0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804'
     save(OUT/mode/'command.json', dict(argv=sys.orig_argv, engine=r.ENGINE, producer_sha256=h.sha(__file__)))
     try:
-        run(mode)
+        displays() if mode=='displays' else run(mode)
     except Exception:
         save(OUT/mode/'stop.json', dict(cause=traceback.format_exc()))
         raise
