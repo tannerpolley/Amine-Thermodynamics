@@ -1,6 +1,414 @@
 {
   "engine_commit": "3e83e19ccc771b51d8ebc038931ab25192f4c5b5",
   "environment": "main checkout verified environment; no worktree environment",
+  "executions": [
+    {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+        "-I",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py"
+      ],
+      "command_log": "reference-command.log",
+      "command_log_sha256": "9322a62b90b301260b85bedf5820bc60383339abc69fd54c030d622568f4cff6",
+      "effective_source_sha256": {
+        "reference": "6977e9a6f865303f111e641868e0673473cfb3ed2f9cbb7b79964c219dc90993"
+      },
+      "launch_event_line": 129,
+      "launch_utc": "2026-10-24T01:27:52.002Z",
+      "mode": "references",
+      "output_patterns": [
+        "reference-pressure/**/*.json",
+        "original-73/{inputs/*,states.csv,family-points.txt,reference-pressure/*}",
+        "extension-81/{inputs/*,states.csv,family-points.txt,reference-pressure/*}"
+      ],
+      "recovered_snapshot": "references",
+      "sources": {
+        "analyses/mea_parameter_bundle/results/phase-extension-201/run-2/phase_extension_201.py.txt": "1a6ebb74bbca6302a6cd68af3aee577b34894cbf4c16172cc233b8f39b1fd22c",
+        "analyses/mea_parameter_bundle/scripts/final_evidence.py": "823f7b760fdc2cdb11355ab2b62719b230ac879240189236216f7e3185fd1fc7",
+        "analyses/mea_parameter_bundle/scripts/phase_extension_201.py": "797925817762054133e8639976e7944902aefab2790c9eee02275a9463d52776",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py": "ab9bcb21cdfb71466f5986bcfe6f84b9c0dbae97a69ca6f9fcf11c17d99288f3"
+      },
+      "timing": {
+        "max_rss_kib": 85740,
+        "system_s": 0.97,
+        "user_s": 7.97,
+        "wall_s": 4.68
+      },
+      "timing_file": "reference-time.json"
+    },
+    {
+      "child_command_note": "The supervisor crashed before it wrote screen calls.json. The recovered supervise() and run_searches() fix the child command; original child logs/timing identify both invocations. Its monotonic deadline argument is not retained. No claim is made that the final-tree supervisor ran.",
+      "child_invocations": [
+        {
+          "adapter_sha256": "c0797704e6b8bf091431488e1f74bc5f05e8995dec8bbba6299539886cc2c073",
+          "fit": "A6",
+          "log": "original-73/command-screen-0-36285766708418.log",
+          "mode": "screen-original",
+          "timing": {
+            "max_rss_kib": 89776,
+            "system_s": 2.64,
+            "user_s": 35.39,
+            "wall_s": 38.15
+          }
+        },
+        {
+          "adapter_sha256": "c0797704e6b8bf091431488e1f74bc5f05e8995dec8bbba6299539886cc2c073",
+          "fit": "A7",
+          "log": "original-73/command-screen-1-36285767173005.log",
+          "mode": "screen-original",
+          "timing": {
+            "max_rss_kib": 89944,
+            "system_s": 2.5,
+            "user_s": 33.98,
+            "wall_s": 36.6
+          }
+        }
+      ],
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+        "-I",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+        "original-73"
+      ],
+      "command_log": "original-command.log",
+      "command_log_sha256": "b0591b3898f40fff3874d3fb2da4c932057b78a44e299fb80ee7af75659456cb",
+      "effective_source_sha256": {
+        "reduce": "24daa080373489194458e2a01cc73f1a94fefa0a5524081486fa9d35d0a0ae13",
+        "run_searches-original-73": "66c445dc1aa12ac9770da6fcfbfbed87a5cf0bc00823f2ed410408ae5901c2a6",
+        "supervise": "60fdd840dc6f6635a59cabf0f197d02019d47509d141ae2e9b4758880da80622"
+      },
+      "launch_event_line": 168,
+      "launch_utc": "2026-10-24T01:29:35.577Z",
+      "mode": "original-73",
+      "output_patterns": [
+        "original-73/{A6,A7}/{point-*.json,fixed-parameters.json}"
+      ],
+      "recovered_snapshot": "searches",
+      "sources": {
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt": "655004959aba01adc808d596131d834d342207a93cd1e649ebd70a377f138081",
+        "analyses/mea_parameter_bundle/scripts/final_evidence.py": "823f7b760fdc2cdb11355ab2b62719b230ac879240189236216f7e3185fd1fc7",
+        "analyses/mea_parameter_bundle/scripts/phase_extension_201.py": "797925817762054133e8639976e7944902aefab2790c9eee02275a9463d52776",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py": "c0797704e6b8bf091431488e1f74bc5f05e8995dec8bbba6299539886cc2c073"
+      },
+      "timing": {
+        "max_rss_kib": 84772,
+        "system_s": 0.15,
+        "user_s": 3.74,
+        "wall_s": 17.74
+      },
+      "timing_file": "original-time.json"
+    },
+    {
+      "child_commands": [
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/extension-81/command-screen-0-36296038751627.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "screen",
+          "A6:353.15",
+          "36896.038666597"
+        ],
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/extension-81/command-screen-1-36296039279954.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "screen",
+          "A6:373.15",
+          "36896.038666597"
+        ],
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/extension-81/command-screen-2-36296039705362.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "screen",
+          "A6:393.15",
+          "36896.038666597"
+        ],
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/extension-81/command-screen-3-36296040217329.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "screen",
+          "A7:353.15",
+          "36896.038666597"
+        ],
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/extension-81/command-screen-4-36296040761836.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "screen",
+          "A7:373.15",
+          "36896.038666597"
+        ],
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/extension-81/command-screen-5-36296041452773.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "screen",
+          "A7:393.15",
+          "36896.038666597"
+        ],
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/extension-81/command-confirmation-0-36329810822080.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "confirm",
+          "A6:353.15",
+          "36929.81073019"
+        ],
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/extension-81/command-confirmation-1-36329811207028.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "confirm",
+          "A6:373.15",
+          "36929.81073019"
+        ]
+      ],
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+        "-I",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+        "extension-81"
+      ],
+      "command_log": "extension-command.log",
+      "command_log_sha256": "3f7af54aa262bca153d368eb630521787e0dc5c8891952d2ad19db23af858fc8",
+      "effective_source_sha256": {
+        "reduce": "24daa080373489194458e2a01cc73f1a94fefa0a5524081486fa9d35d0a0ae13",
+        "run_searches-extension-81": "d2e2cfe0ae436ea85cf2a6ec18fa47f5667ac3918d2e8d28821de44a175fab9a",
+        "supervise": "60fdd840dc6f6635a59cabf0f197d02019d47509d141ae2e9b4758880da80622"
+      },
+      "launch_event_line": 175,
+      "launch_utc": "2026-10-24T01:29:45.575Z",
+      "mode": "extension-81",
+      "output_patterns": [
+        "extension-81/{A6,A7}/{point-*.json,fixed-parameters.json,reduction.json,split-*.json}",
+        "extension-81/{phase-family.csv,trials.csv,counts-by-temperature.csv,outcomes-by-temperature.csv,split-confirmations.csv,input-hashes.json,calls.json}"
+      ],
+      "recovered_snapshot": "searches",
+      "sources": {
+        "analyses/mea_parameter_bundle/scripts/final_evidence.py": "823f7b760fdc2cdb11355ab2b62719b230ac879240189236216f7e3185fd1fc7",
+        "analyses/mea_parameter_bundle/scripts/phase_extension_201.py": "797925817762054133e8639976e7944902aefab2790c9eee02275a9463d52776",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py": "c0797704e6b8bf091431488e1f74bc5f05e8995dec8bbba6299539886cc2c073"
+      },
+      "timing": {
+        "max_rss_kib": 85168,
+        "system_s": 12.29,
+        "user_s": 201.4,
+        "wall_s": 45.76
+      },
+      "timing_file": "extension-time.json"
+    },
+    {
+      "child_commands": [
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/original-73/command-confirmation-0-36372557707741.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "confirm",
+          "A6:313.15",
+          "36972.557616842"
+        ],
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/original-73/command-confirmation-1-36372558148069.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "confirm",
+          "A6:318.15",
+          "36972.557616842"
+        ],
+        [
+          "/usr/bin/time",
+          "-f",
+          "{\"user_s\":%U,\"system_s\":%S,\"wall_s\":%e,\"max_rss_kib\":%M}",
+          "-o",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/original-73/command-confirmation-2-36372558598167.time.json",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+          "-I",
+          "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-208-regenerate-the-phase-stability-study-and/analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+          "confirm",
+          "A6:333.15",
+          "36972.557616842"
+        ]
+      ],
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+        "-I",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+        "original-retained"
+      ],
+      "command_log": "original-reduction-command.log",
+      "command_log_sha256": "2a3b890718053e3d4b98d2ef8de17ccd154740d873c5664d749c824aa1568d89",
+      "effective_source_sha256": {
+        "reduce": "24daa080373489194458e2a01cc73f1a94fefa0a5524081486fa9d35d0a0ae13",
+        "run_searches-original-73": "e105e937fb4fa411b6db639c9c119bbe56dde1bed746af5f124d72f4f04e1bc4",
+        "supervise": "60fdd840dc6f6635a59cabf0f197d02019d47509d141ae2e9b4758880da80622"
+      },
+      "launch_event_line": 226,
+      "launch_utc": "2026-10-24T01:31:02.202Z",
+      "mode": "original-retained",
+      "output_patterns": [
+        "original-73/{A6,A7}/{reduction.json,split-*.json}",
+        "original-73/{phase-family.csv,trials.csv,counts-by-temperature.csv,outcomes-by-temperature.csv,split-confirmations.csv,input-hashes.json,calls.json}"
+      ],
+      "recovered_snapshot": "original-retained",
+      "sources": {
+        "analyses/mea_parameter_bundle/scripts/final_evidence.py": "823f7b760fdc2cdb11355ab2b62719b230ac879240189236216f7e3185fd1fc7",
+        "analyses/mea_parameter_bundle/scripts/phase_extension_201.py": "c43b11761932215dc9edcfffc8cf0ce07cea462b6bb01fa9ee631cba8c783a5e",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py": "ccebb1abb350041a9f0f472b65f21a7c8454cf5a852e7864d6aeb23ee70c2a97"
+      },
+      "timing": {
+        "max_rss_kib": 85260,
+        "system_s": 0.76,
+        "user_s": 20.2,
+        "wall_s": 11.73
+      },
+      "timing_file": "original-reduction-time.json"
+    },
+    {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+        "-I",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+        "score"
+      ],
+      "command_log": "score-command.log",
+      "command_log_sha256": "9e5d29d7caf73b649f6c0acf694f662791775fbb7f881e55bd6bb3c4adf38ac8",
+      "effective_source_sha256": {
+        "study-A6": "5c9646b68043424c61af9ff64cbb3dbd39d829e222bf76480ec3f11191c59ec5"
+      },
+      "launch_event_line": 233,
+      "launch_utc": "2026-10-24T01:31:33.353Z",
+      "mode": "score",
+      "output_patterns": [
+        "original-73/A6/{full-replay.json,score.json,loaded-density-errors.csv}"
+      ],
+      "recovered_snapshot": "score-and-supplement",
+      "sources": {
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt": "655004959aba01adc808d596131d834d342207a93cd1e649ebd70a377f138081",
+        "analyses/mea_parameter_bundle/scripts/final_evidence.py": "823f7b760fdc2cdb11355ab2b62719b230ac879240189236216f7e3185fd1fc7",
+        "analyses/mea_parameter_bundle/scripts/phase_extension_201.py": "c43b11761932215dc9edcfffc8cf0ce07cea462b6bb01fa9ee631cba8c783a5e",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py": "e8c9f95e61701a2a9d9427183129d3e47777c6ff9a930f473857eac336a5cc83"
+      },
+      "timing": {
+        "max_rss_kib": 100444,
+        "system_s": 0.23,
+        "user_s": 12.94,
+        "wall_s": 13.23
+      },
+      "timing_file": "score-time.json"
+    },
+    {
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+        "-I",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py",
+        "supplement"
+      ],
+      "command_log": "supplement-command.log",
+      "command_log_sha256": "81bca6dfa736fd3037612820bc865705534f9d9044cbdd83630af9ce8506193a",
+      "effective_source_sha256": {
+        "supplement": "b8090f66c8945d28f4c45ee66a1dc808bd59c4989a3f528c9a7a976916b2f209"
+      },
+      "launch_event_line": 238,
+      "launch_utc": "2026-10-24T01:31:38.903Z",
+      "mode": "supplement",
+      "output_patterns": [
+        "A6-supplement-splits/{split-seeded-*.json,seed-availability-*.json}"
+      ],
+      "recovered_snapshot": "score-and-supplement",
+      "sources": {
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/probes.py.txt": "1e81766099d87f0c99c8fd7b2b45e6846d44c2bad64f0cf016ebfb90c2beb7ce",
+        "analyses/mea_parameter_bundle/scripts/final_evidence.py": "823f7b760fdc2cdb11355ab2b62719b230ac879240189236216f7e3185fd1fc7",
+        "analyses/mea_parameter_bundle/scripts/phase_extension_201.py": "c43b11761932215dc9edcfffc8cf0ce07cea462b6bb01fa9ee631cba8c783a5e",
+        "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py": "e8c9f95e61701a2a9d9427183129d3e47777c6ff9a930f473857eac336a5cc83"
+      },
+      "timing": {
+        "max_rss_kib": 94048,
+        "system_s": 0.13,
+        "user_s": 5.83,
+        "wall_s": 5.98
+      },
+      "timing_file": "supplement-time.json"
+    }
+  ],
+  "final_tree_producers": {
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt": "6022caa6e04b4c91fd99502a9daf504218598e33ed67478a76eee2204ab72838",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/probes.py.txt": "1e81766099d87f0c99c8fd7b2b45e6846d44c2bad64f0cf016ebfb90c2beb7ce",
+    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt": "655004959aba01adc808d596131d834d342207a93cd1e649ebd70a377f138081",
+    "analyses/mea_parameter_bundle/results/phase-extension-201/run-2/phase_extension_201.py.txt": "1a6ebb74bbca6302a6cd68af3aee577b34894cbf4c16172cc233b8f39b1fd22c",
+    "analyses/mea_parameter_bundle/scripts/final_evidence.py": "823f7b760fdc2cdb11355ab2b62719b230ac879240189236216f7e3185fd1fc7",
+    "analyses/mea_parameter_bundle/scripts/phase_extension_201.py": "c43b11761932215dc9edcfffc8cf0ce07cea462b6bb01fa9ee631cba8c783a5e",
+    "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py": "f52e98f6250ab6b63754f836ff7cdde5b9327aeb7512bda634811f53a5f1fecd"
+  },
   "inputs": {
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/reference-pressure/inputs/engine-case7-parameters.json": "2ea3b41485a98d2cf49add620b87bb05fc5a275cdd132c1cdbb0cfc5f07f2ca4",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/reference-pressure/inputs/engine-case7-reactions.json": "2058458ca473bbc7b3deef77c67a9bb5124011c0bd5d28ba3a24da5d9c0e22a4",
@@ -22,15 +430,6 @@
   "parameter_path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refits/a6/run/fit/usable-budget-endpoint.json",
   "points_sha256": "38705da4e846dcd21fc8dd7365d5e4aff174cfde45a414b8f42ef7e4054672a3",
   "producer_sha256": "1e81766099d87f0c99c8fd7b2b45e6846d44c2bad64f0cf016ebfb90c2beb7ce",
-  "producers": {
-    "analyses/mea_parameter_bundle/results/engine-3e83e19c-adoption/adopt.py.txt": "6022caa6e04b4c91fd99502a9daf504218598e33ed67478a76eee2204ab72838",
-    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/probes.py.txt": "1e81766099d87f0c99c8fd7b2b45e6846d44c2bad64f0cf016ebfb90c2beb7ce",
-    "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/fixed-study/study.py.txt": "655004959aba01adc808d596131d834d342207a93cd1e649ebd70a377f138081",
-    "analyses/mea_parameter_bundle/results/phase-extension-201/run-2/phase_extension_201.py.txt": "1a6ebb74bbca6302a6cd68af3aee577b34894cbf4c16172cc233b8f39b1fd22c",
-    "analyses/mea_parameter_bundle/scripts/final_evidence.py": "823f7b760fdc2cdb11355ab2b62719b230ac879240189236216f7e3185fd1fc7",
-    "analyses/mea_parameter_bundle/scripts/phase_extension_201.py": "c43b11761932215dc9edcfffc8cf0ce07cea462b6bb01fa9ee631cba8c783a5e",
-    "analyses/mea_parameter_bundle/scripts/phase_regeneration_208.py": "d78978aecce57b9027a8741c4e62c16c206c86f4f7b4e99a25abc6a290b477b0"
-  },
   "reference_pool_sizing": "min(os.cpu_count(), MemAvailable_kib//1000000)",
   "runtime_mapping_sha256": "7c513646c74e290d9b2b1d923a035390375edec37b8b0b5664fa7a74a7a98423",
   "states_sha256": "16d293638bda4bbe7c08e5d8c5a5952ad2b4c17947ae20be2a0bf73f0f86be9d",
