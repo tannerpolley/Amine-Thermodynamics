@@ -1,0 +1,26 @@
+{
+  "before_selected_reads": 7,
+  "before_with_guard": "selected record blocked by issue214 read guard",
+  "after": {
+    "reported": {
+      "selected_open_attempts": 0,
+      "request_equal_to_first_route": true,
+      "request_sha256": "ff8ff648d0051d2068d4b8787d73c88d01a2ee70514770810c67ddf94a387d67"
+    },
+    "comparison": {
+      "selected_open_attempts": 0,
+      "request_equal_to_first_route": true,
+      "request_sha256": "20bacebe9ad7efce29e45b22852605c57d014e86a5af4cbc50618053d6ccf81c"
+    }
+  },
+  "default_request_and_selected_and_baseline_reactions_unchanged": true,
+  "provided_domain_perturbation_reaches_engine": true,
+  "wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
+  "installed_engine_files_checked": 12,
+  "producer_hashes": {
+    "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "1f1c08ecf33009deadf7ef3343bdd602fadbadb644155cadc4282c297e8112da",
+    "analyses/mea_parameter_bundle/scripts/heat_evidence_170.py": "d3c1c5dc9c5db333634e1da551984d29409b0267417b90f2a598fec47c9c6850"
+  },
+  "guard": "sys.addaudithook; event=open; selected absolute path raises RuntimeError before any read",
+  "no_mapping_two_argument_builder_preserved": true
+}
