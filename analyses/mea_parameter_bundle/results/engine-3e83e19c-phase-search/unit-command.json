@@ -1,0 +1,7 @@
+{
+  "command": "systemd-run --user --unit=issue214-phase --same-dir --collect -p Nice=10 /bin/bash -o pipefail -c '.venv/bin/python -I -u analyses/mea_parameter_bundle/scripts/phase_search_214.py 2>&1 | tee /tmp/issue214-phase-execution.log'",
+  "unit": "issue214-phase.service",
+  "invocation_id": "0336ff69fc1b4870afbcd25ceb1b2db9",
+  "wait_command": "while systemctl --user is-active --quiet issue214-phase; do sleep 10; done",
+  "niceness": 10
+}
