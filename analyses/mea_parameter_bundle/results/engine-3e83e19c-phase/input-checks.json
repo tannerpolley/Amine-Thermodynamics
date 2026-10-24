@@ -51,7 +51,22 @@
       "matched": true
     }
   ],
-  "inspected_producers": [
+  "numerical_execution": {
+    "started": true,
+    "requested_stages_have_results": true,
+    "charged_cpu_s": 341.12,
+    "wall_time": "per-command measurements in README; concurrent commands not summed",
+    "owner_return": "confirmation representative changes and replay residual/cost/error reproduction limits",
+    "original_supervisor": "process-exit read error; complete numerical screens retained; reduction/confirmations continued without rerun"
+  },
+  "code_budget": {
+    "base": "a7c1240",
+    "accepted_gross_added_executable_lines": 320,
+    "measured_added_executable_lines": 317,
+    "measured_removed_executable_lines": 2,
+    "approval": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/208#issuecomment-6378132112"
+  },
+  "initial_inspected_producers_at_3da7b34": [
     {
       "path": "analyses/mea_parameter_bundle/scripts/phase_extension_201.py",
       "sha256": "797925817762054133e8639976e7944902aefab2790c9eee02275a9463d52776",
@@ -83,13 +98,7 @@
       "physical_lines": 135
     }
   ],
-  "numerical_execution": {
-    "started": false,
-    "wall_s": 0.0,
-    "cpu_s": 0.0,
-    "reason": "Foreseeable code-budget overrun; no Engine model constructed or solved."
-  },
-  "validation": {
+  "initial_notebook_validation": {
     "command": "nice -n 10 python3 manuscript.py validate .",
     "cwd": "analyses",
     "stdout": "valid",
@@ -101,12 +110,9 @@
       "max_rss_kib": 167688
     }
   },
-  "code_budget": {
-    "accepted_gross_added_executable_lines": 160,
-    "measured_added_executable_lines": 0,
-    "measured_removed_executable_lines": 0,
-    "estimated_added_executable_lines": 300,
-    "proposed_ceiling": 320,
-    "estimate_is_not_implemented_measurement": true
+  "validation_path": "notebook-validation.json",
+  "issue_rechecked_before_handoff": {
+    "body_utf8_sha256": "5ec36d50c15a075c622aa02133cbe25420a21c3bbbbdfa9c78411b322875b6b0",
+    "updated_at": "2026-10-24T01:25:09Z"
   }
 }

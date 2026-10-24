@@ -1,6 +1,7 @@
 ---
 title: "A7 joint recalibration and adoption"
 resources:
+  - ../results/engine-3e83e19c-phase/
   - ../results/phase-extension-201/run-3/
   - ../results/phase-extension-201/run-2/
   - ../results/phase-extension-201/diagnosis/run-2-corrections/
@@ -149,27 +150,31 @@ The first gas-root attempt stopped at an input-path check before witness evaluat
 
 ## Question
 
-Does the adopted A7 vector show any resolved Gibbs-energy descent in the declared extension at 353.15, 373.15 and 393.15 K, and how does it compare with A6?
+Do the reported A7 parameters and the adopted A6 comparison endpoint reproduce the declared finite phase searches when the reference pressures, both grids, searches, split confirmations and comparison replay all use Engine `3e83e19c`?
 
 ## Result
 
-**On Engine 3e83e19c (run 3), A7 completes the declared finite search with no resolved descent.** All 60 admitted A7 states complete the nine-trial search: 540 of 540 scheduled trials return with successful optimizers, and none resolves a Gibbs-energy descent. The other 21 of the 81 declared states remain excluded by their reference pressure, with all 189 of their slots recorded as unavailable. This meets the design's complete no-descent outcome for these 60 states. It is a finite search at declared states, not a global-stability certificate and not physical validation. The six A7 states left unresolved in run 2 now return successful liquid trials with tangent-plane distances $\mathrm{tpd}/(RT)$ of 2.35–2.89.
+**The descent counts reproduce; the comparison-fit replay and confirmation representative assignments require an owner decision.** The reported record has no resolved descent at all 133 admitted states: 73 original states and 60 extension states. The comparison fit has descents at 12/73 original states and 21/60 admitted extension states, or 33/133 combined. The original A7 classifications remain 69 liquid–vapor and four single-liquid states. Each fit returns all 657 original trials and all 540 trials scheduled at admitted extension states. The 189 remaining extension slots per fit belong to the same 21 pressure-excluded states; they are unavailable, not completed trials.
 
-A6 resolves the same 41 descending trials at the same 21 of 81 states as run 2. Seeded confirmations find admissible lower-Gibbs two-liquid states at 17 of those 21 states, against 13 in run 2. Failed confirmations do not erase the finite descents.
+The extension again has 27 distinct confirmation attempts, 23 confirmed attempts and 17 states with a confirmation. The most-negative-first reduction chooses different representative seeds for composition groups at indices 49, 56, 57 and 58. Twelve descending-trial links change their representative assignment; no confirmed/unconfirmed result or count changes. All successful split values remain within the $10^{-6}$ reproduction limit. The changed assignments and the replay differences below are retained for the owner before issue #211 uses these results.
+
+These calculations provide finite-search numerical verification and model-predicted descent evidence at declared states. They provide neither a global-stability certificate nor physical validation. No new fit, search design, solver setting or numerical admission rule was used.
 
 ## Basis and method
 
-The 81 declarations per fit are three temperatures × nine loadings ($10^{-5}$, 0.05, 0.1, 0.2, 0.25557798094241313, 0.3, 0.4, 0.5 and 0.6 mol CO₂/mol MEA) × pressure fractions 0.50, 0.80 and 0.95 of the frozen case-7 bubble pressure. Both fits use identical states, on a feed of 9.7292821 mol analytical MEA, 76.9751925 mol water and loading × 9.7292821 mol CO₂; this is 30 mass % MEA in the unloaded solvent. Charged species remain liquid-only. The reference and imposed pressure must both lie in 1–10,000,000 Pa.
+The new evidence is retained under [engine-3e83e19c-phase](../results/engine-3e83e19c-phase/README.md). Every numerical call uses Engine commit `3e83e19ccc771b51d8ebc038931ab25192f4c5b5`, wheel SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`, from the main checkout's verified environment. MA57 is the loaded linear solver. The reported parameter document is SHA-256 `e234e8601ebc47b3dec25383ee0a0a8029cabb9f7f92c87866f595c505c7e58e`; the adopted comparison document is SHA-256 `968ed8c035e23011687edfa502d31a935545abadfca87b6261a498e0b14569a4`. Document-byte and runtime-mapping hashes are recorded separately, including for split parents.
 
-Run 2 continues reference composition, packing, liquid amount and pressure from a converged lower-temperature reference at the same loading retained in run 1. The 393.15 K trace-loading reference uses 353.15 K; the other 393.15 K references use 373.15 K. Reference starts and their byte hashes are retained per solve. Within each ordered fit/temperature chain, the parent bubble pressure guess uses the nearest prior successful same-temperature bubble, retaining the target liquid composition and packing. Each point records that source index and bubble. These are the initialization corrections supported by the [diagnosis](../results/phase-extension-201/diagnosis/report.md); history order, nine trials, tolerances, iteration limits, pressure admission, decision rule and Engine settings are unchanged.
+The pressure reference is the separate frozen Engine case-7 model, with its own [parameter document](../results/engine-3e83e19c-phase/reference-pressure/inputs/engine-case7-parameters.json), [runtime mapping](../results/engine-3e83e19c-phase/reference-pressure/inputs/reference-runtime.json), [reaction declaration](../results/engine-3e83e19c-phase/reference-pressure/inputs/engine-case7-reactions.json) and [construction declaration](../results/engine-3e83e19c-phase/reference-pressure/declaration.json). Neither fitted record produces these reference pressures. The feed is 9.7292821 mol analytical MEA, 76.9751925 mol water and loading × 9.7292821 mol CO₂. Charged species remain liquid-only.
 
-Run 3 repeats only the screening and confirmations, on Engine 3e83e19c. It copies run 2's 81 state declarations, family points and reference-pressure files. Before screening, it checked the seven copied input files against run 2's recorded SHA-256 values, so both runs use the same states and the same 21 exclusions per fit. Run 2 recorded no hashes for its 31 reference-pressure files, so the 31 copies are compared with the run-2 originals themselves: the same relative paths and the same SHA-256 for every file. That comparison was added after run 3; applied to the retained run-3 copies, it found all 31 identical ([check record](../results/phase-extension-201/run-3/frozen-input-check.json)). The extension script now runs both checks before screening. The reference pressures are frozen numerical design inputs computed on Engine 8298c602; run 3 does not recompute them. Screening uses the same `final_evidence.py` as the run-2 caller correction (SHA-256 `823f7b76…`), with the same classifier, nine trials, ordered same-temperature chains and stage ceilings of 600 wall-s and 1,800 CPU-s. The Engine reports that its #811 fix, a stability-polish step limit, completes the six trials run 2 left unresolved; this repository did not isolate the responsible commit, and the [adoption record](../results/engine-3e83e19c-adoption/README.md) lists every numerical change between the two Engines.
+Three anchors qualify at relative pressure difference at most $10^{-8}$. The 24 original-grid references are cold liquid/zero-vapor solves at 313.15, 318.15 and 333.15 K, with pressure guess 7398.16 Pa and row tolerance $10^{-10}$. The original grid preserves its loading/temperature/factor order and literal index-0 pressure of 5918.5286 Pa. That literal is $8.13574115\times10^{-6}$ Pa below the newly calculated corresponding 0.80-pressure state.
 
-A completed state has all nine returned, successful trial optimizers and complete numerical evidence; a resolved descent may occur in a completed state. Unresolved means a returned search fails a trial check. Unavailable means pressure exclusion or no converged final parent/search. These reporting categories preserve the native classifier separately: its `failed` category includes resolved descents and missing parents and must not be read as a numerical-failure count. Each temperature/fit retains 27 states and 243 scheduled trial slots. The categorical counts below answer the question directly; plotting these categories would not clarify the finite-search result.
+For the extension, nine cold 353.15 K and eight nonzero-loading cold 373.15 K predecessors are retained separately. Each 373.15 K final reference uses its cold 353.15 K predecessor; at 393.15 K, loading $10^{-5}$ uses cold 353.15 K and the other loadings use cold 373.15 K. Composition, packing and pressure guesses continue from those exact new predecessors. The ignored historical liquid-amount guess is replaced by `Free()`; no amount guess is supplied. Every consumed seed has a retained byte hash. All required predecessors and all 27 final references pass the numerical checks. Seven final references exceed 10 MPa and exclude all three dependent pressure fractions, even when an imposed fractional pressure is below 10 MPa.
+
+The extension is three temperatures × nine loadings ($10^{-5}$, 0.05, 0.1, 0.2, 0.25557798094241313, 0.3, 0.4, 0.5 and 0.6 mol CO₂/mol MEA) × fractions 0.50, 0.80 and 0.95. Both fits consume identical grid hashes. The original family keeps its default bubble initialization; the extension keeps ordered same-temperature bubble continuation. The four liquid and five vapor starts, 400-per-attempt/800-total recovery limits, 300 s state bound and 600 wall-s/1800 CPU-s extension stage ceilings are unchanged.
 
 ## Values
 
-### Run 3 on Engine 3e83e19c
+The categorical counts answer the finite-search question directly; plotting these categories would not clarify the result.
 
 | Fit | Temperature / K | Completed / 27 | Unresolved / 27 | Unavailable: pressure / 27 | Unavailable: numerical / 27 | Returned trials / 243 | Descending states / 27 | Resolved trials / 243 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -180,92 +185,39 @@ A completed state has all nine returned, successful trial optimizers and complet
 | A7 | 373.15 | 21 | 0 | 6 | 0 | 189 | 0 | 0 |
 | A7 | 393.15 | 18 | 0 | 9 | 0 | 162 | 0 | 0 |
 
-Per fit, 540 of 729 slots return and the other 189 belong to the 21 pressure-excluded states. No parent fails, no trial optimizer fails and no trial is indeterminate. The same reduction applied to the corrected run-2 rows reproduces the retained run-2 outcome table exactly.
+A completed state has all nine returned successful trial optimizers and complete numerical evidence; it can still have a resolved descent. The native classifier calls a resolved descent `failed`, so that label must not be interpreted as a numerical-failure count. The combined CSV retains all 308 declared fit-state rows and the separate exclusion and completion fields.
 
-Run 3 differs from the corrected run 2 in classification at six states only, all A7 and all formerly unresolved. Each had one liquid `near-pure-0` trial that did not converge in run 2:
+All 27 extension reference pressures reproduce exactly. Across all 51 reference pressures, the largest relative change is $6.78772\times10^{-14}$ at 313.15 K and loading 0.25557798094241313: 5212.2594091423425 → 5212.259409142696 Pa, an absolute change of $3.53793\times10^{-10}$ Pa. All imposed pressures meet the $10^{-8}$ reproduction limit. The largest imposed-pressure relative change is $6.80517\times10^{-14}$ at original index 38, the 0.80 fraction of that reference.
 
-| A7 index | Temperature / K | Loading | Pressure / Pa | Run 2 | Run 3 trial tpd/(RT) |
-|---|---:|---:|---:|---|---:|
-| 10 | 353.15 | 0.05 | 653,529.811 | unresolved | 2.70204 |
-| 11 | 353.15 | 0.05 | 776,066.650 | unresolved | 2.86254 |
-| 22 | 373.15 | 0.1 | 1,827,110.124 | unresolved | 2.88586 |
-| 25 | 393.15 | 0.1 | 2,090,794.024 | unresolved | 2.35112 |
-| 42 | 393.15 | 0.25557798094241313 | 3,300,912.558 | unresolved | 2.63345 |
-| 51 | 393.15 | 0.3 | 3,908,890.022 | unresolved | 2.69334 |
+The largest successful extension split Gibbs change is at index 41, 373.15 K: −0.10883542018369406 → −0.10883544840114669 J, relative change $2.59267\times10^{-7}$. Its additional liquid amount changes from 0.2056506850503224 to 0.20565069702508576 mol, relative change $5.82287\times10^{-8}$. Both meet the $10^{-6}$ split limit.
 
-All six are now single-liquid passes. At five states the converged distance lies within $9\times10^{-6}$ of run 2's unconverged value; at index 42 the trial converges to a different point (2.63345 against 2.79935), where run 2 had found negative curvature. Outside these six states, trial values agree with run 2 to rounding: tpd/(RT) within $8.6\times10^{-14}$ absolute, $G/(RT)$ within $4.3\times10^{-13}$ relative, and the 41 A6 split $\Delta G/(RT)$ values within $7.3\times10^{-12}$ absolute.
+The supplement preserves the `positive-neutral-base` and `near-pure-2` seeds at states 21, 63 and 70. Five attempts succeed; state 21's `positive-neutral-base` attempt remains unsuccessful. Its diagnostic $\Delta G/(RT)$ against the parent is $4.76447894\times10^{-7}$ and is not physical split evidence. The successful state-21 `near-pure-2` result has liquid water fractions 0.6122753913710857 and 0.40335676622856037. The state-63 liquid fractions are approximately 0.958308348672 and 0.588927060967, with phase labels interchanged between the two seeds; state 70 gives 0.975826952602 and 0.589538759246. The largest successful supplement Gibbs relative change is $1.43071\times10^{-10}$ at state 63, `near-pure-2`, against the parent. The largest supported-composition relative change is $8.11077\times10^{-9}$ for the state-21 additional-liquid carbonate fraction. All successful amounts, molar densities and supported compositions meet the split reproduction limit.
 
-### Run 2 with the caller correction
+### Comparison-fit replay
 
-The corrected view replaces only index 6 of each fit with the separately retained recovery and search. All 285 run-2 files remain byte-identical. The three A7 continuation probes below remain diagnostic evidence and do not replace run-2 states.
+The adopted comparison endpoint is replayed on the original 307 identities, observed values, scales, weights and objective. All 307 predictions meet $10^{-10}$: the largest relative prediction change is $4.75089\times10^{-11}$ for `Jakobsen2005_state_011::HCO3- + CO3^2-`, 0.008313864966748104 → 0.008313864966353121 mol/mol. This small prediction movement is amplified in small residuals and costs.
 
-| Fit | Temperature / K | Completed / 27 | Unresolved / 27 | Unavailable: pressure / 27 | Unavailable: numerical / 27 | Returned trials / 243 | Descending states / 27 | Resolved trials / 243 |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| A6 | 353.15 | 21 | 0 | 6 | 0 | 189 | 12 | 22 |
-| A6 | 373.15 | 21 | 0 | 6 | 0 | 189 | 9 | 19 |
-| A6 | 393.15 | 18 | 0 | 9 | 0 | 162 | 0 | 0 |
-| A7 | 353.15 | 19 | 2 | 6 | 0 | 189 | 0 | 0 |
-| A7 | 373.15 | 20 | 1 | 6 | 0 | 189 | 0 | 0 |
-| A7 | 393.15 | 15 | 3 | 9 | 0 | 162 | 0 | 0 |
+| Reduction | Historical comparison | Adopted endpoint on the pinned wheel |
+|---|---:|---:|
+| Total cost | 148.23773148349386 | 148.23773148351188 |
+| C149 | 24.923085270769047 | 24.923085270733207 |
+| Cai cost | 91.8114657752254 | 91.8114657754144 |
+| Loaded-density cost | 0.36848798227942536 | 0.36848798230279123 |
+| Pressure AARD / % | 12.473669356154305 | 12.47366935635063 |
+| Species AARD / % | 7.14513802536318 | 7.145138025313051 |
+| Vinjarapu RMSE / kJ mol⁻¹ | 1.8215300546857307 | 1.821530054692655 |
+| Loaded densities within two scales | 47/47 | 47/47 |
+| Largest loaded-density absolute error/scale | 1.976414633822788 | 1.9764146339510436 |
+| Largest CO₂-free density absolute error / kg m⁻³ | 0.570926228099097 | 0.5709262280848861 |
 
-All 27 new reference roots converged, but seven exceed 10 MPa: loadings 0.5 and 0.6 at 353.15 and 373.15 K, and 0.4, 0.5 and 0.6 at 393.15 K. Their dependent states remain excluded even when a pressure fraction is below 10 MPa. Thus each fit has 21/81 pressure-unavailable states. No reference is numerically unavailable in run 2.
+The largest replay cost relative change is $5.67897\times10^{-9}$ for `Hartono2014_density_80C_alpha0.19`: $7.690633216480888\times10^{-6}$ → $7.690633172806042\times10^{-6}$, an absolute change of $4.36748\times10^{-14}$. Two score fields exceed $10^{-10}$: the CO₂-free density errors at `AMU-DENS-009` and `AMU-DENS-016`. The latter changes by $7.84439\times10^{-12}$ kg/m³, relative change $3.02251\times10^{-10}$. Thirteen of the 47 loaded-density errors exceed the reproduction limit; the largest is the same Hartono row, 0.05785471105468787 → 0.05785471089041039 kg/m³, relative change $2.83948\times10^{-9}$. These are numerical reproduction labels, not physical uncertainty bounds.
 
-The caller supplied a nine-component vapor vector to a declared three-species neutral support. Projecting each phase composition through its declared support corrects that mismatch. At index 6 (393.15 K, loading $10^{-5}$, 86,666.5009903 Pa), both fits now return admissible liquid–vapor parents and nine successful trials with zero resolved descents. Probe 1 (A6) has maximum raw parent residual $2.84\times10^{-14}$ and reported reduced-Hessian minimum $4.22\times10^{-12}$; probe 2 (A7) has $2.79\times10^{-12}$ and $3.89\times10^{-11}$, respectively. Both have positive amounts and pressure-density derivatives. The first declared recovery start, with liquid fraction 0.5, converges; the Engine then leaves the 0.9 start unattempted. The two-start 400/800 limits, amounts, packing fractions and acceptance checks are unchanged. Neither state requires a seeded split confirmation.
+## Limits, owner return and records
 
-A7's unresolved liquid `near-pure-0` trials remain indices 10 and 11 at 353.15 K (residuals $3.70\times10^{-6}$ and $3.54\times10^{-6}$), index 22 at 373.15 K ($2.50\times10^{-6}$), and indices 25, 42 and 51 at 393.15 K. The first three retain their earlier diagnosis and were not probed again. The new [diagnosis and proposed Engine work](../results/phase-extension-201/diagnosis/run-2-corrections/report.md) reproduces the latter three from exactly identical parent coordinates before testing same-temperature parent continuation:
+The retained [old/new comparison](../results/engine-3e83e19c-phase/old-new-comparison.csv) separates successful continuous quantities, discrete outcomes and failed-solve diagnostics. The [comparison summary](../results/engine-3e83e19c-phase/comparison-summary.json) records every group. The owner-return reasons are the changed confirmation representative assignments and the replay residual/cost/error values above their reproduction limit. The adopted comparison record remains unchanged. No extra fit, numerical retry or changed admission is authorized by this result.
 
-| A7 index | Retained-parent reproduction | Continuation probe and source | Outcome of the same liquid trial |
-|---|---|---|---|
-| 25, loading 0.1, 2,090,794.02407 Pa | Probe 3: stalled at $2.37213009350\times10^{-6}$ | Probe 6, source index 24 | Still stalled at $2.37213009353\times10^{-6}$ |
-| 42, loading 0.25557798094241313, 3,300,912.55753 Pa | Probe 4: row residual $4.04\times10^{-16}$; equilibrated Hessian minimum −1.05810485004 | Probe 7, source index 43 | Row residual $2.02\times10^{-15}$; minimum remains −1.05810485004, against rounding band $4.97\times10^{-14}$ |
-| 51, loading 0.3, 3,908,890.02184 Pa | Probe 5: stalled at $1.70739701185\times10^{-6}$ | Probe 8, source index 52 | Still stalled at $1.70739701307\times10^{-6}$ |
+All extension temperatures extrapolate beyond the fitted pressure observations at 313.0–333.15 K. The Engine's numerical error estimates govern resolved descent; parameter, measurement and model-form uncertainty are not propagated. Neither these counts nor the confirmed model splits establish physical liquid separation or absorber/stripper performance. Excluded states remain outside this search's evidence.
 
-At indices 25 and 51, all six failing rows are ionic chemical-stationarity rows, with carbonate giving the largest classified residual. Five ionic log mole fractions remain near $\log(10^{-8})$; protonated MEA is near $4\times10^{-8}$ in mole fraction. Both reproductions and both continuation attempts retain `trial preparation failed: invalid composition`. The retained compositions and pressure, normalization and charge rows are admissible; the message records a rejected preparation during optimization, whose rejected coordinates are unavailable. This supports a trace-composition numerical-conditioning explanation but does not identify the exact rejected step or prove a unique cause. The positive evaluated tangent-plane distances, about 2.3511 and 2.6933, do not complete those optimizations.
+The original-screen supervisor encountered a process-exit race while reading `/proc`. Both screens completed all 73 states and 657 trials per fit. Their raw results and child timing files were retained; only reduction and the required confirmations continued after correcting the vanished-process exception. No search was repeated. The extension screen used 33.6523 wall-s/194.2878 CPU-s and its confirmation stage used 8.0822 wall-s/15.3926 CPU-s, within their ceilings. The [README](../results/engine-3e83e19c-phase/README.md) records all command timings, including the unsuccessful supervisor.
 
-Index 42 has converged stationarity and a failed minimum check. Its positive tangent-plane distance, about 2.7993, does not waive the negative curvature, which is far outside the rounding band. The unchanged continuation correction fails at all three states. Any additional optimizer, trial-start, tolerance or iteration-limit correction belongs to Design and the Engine owner; none was applied here.
-
-### Comparison with run 1
-
-| Fit | Temperature / K | Completed / 27 | Unresolved / 27 | Unavailable: pressure / 27 | Unavailable: numerical / 27 | Returned trials / 243 | Descending states / 27 | Resolved trials / 243 |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| A6 | 353.15 | 12 | 0 | 6 | 9 | 108 | 3 | 4 |
-| A6 | 373.15 | 9 | 0 | 6 | 12 | 81 | 2 | 2 |
-| A6 | 393.15 | 0 | 0 | 0 | 27 | 0 | 0 | 0 |
-| A7 | 353.15 | 10 | 2 | 6 | 9 | 108 | 0 | 0 |
-| A7 | 373.15 | 8 | 1 | 6 | 12 | 81 | 0 | 0 |
-| A7 | 393.15 | 0 | 0 | 0 | 27 | 0 | 0 | 0 |
-
-Returned trials rise from 189/729 in run 1 to 531/729 in run 2 and 540/729 after the caller correction, per fit. A7 completed states rise from 18/81 to 53/81 to 54/81; A6 from 21/81 to 59/81 to 60/81. A7's zero observed descents is unchanged. A6's descending states increase from 5/81 to 21/81 and resolved trials from 6/729 to 41/729. All 18 original missing-parent states per fit now return their searches. The new reference roots also expose numerical cases that run 1 could not reach. The original 155 run-1 files remain byte-identical; its numerical-unavailable categories are classified from its retained roots, without substituting run-2 values.
-
-### Seeded confirmations
-
-Every descending trial is linked to a representative within its phase-kind/support group, with the most negative finite split attempted first. All 41 descending A6 trials are retained and linked to 27 representative attempts across all 21 descending states; A7 needs no confirmation because it returned no descent.
-
-| Fit | Temperature / K | Descending states | Representative attempts | Run 3 confirmed attempts | Run 3 states with a confirmation | Run 2 confirmed attempts | Run 2 states with a confirmation |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| A6 | 353.15 | 12/27 | 15 | 14/15 | 11/12 | 14/15 | 11/12 |
-| A6 | 373.15 | 9/27 | 12 | 9/12 | 6/9 | 3/12 | 2/9 |
-| A6 | 393.15 | 0/27 | 0 | 0/0 | 0/0 | 0/0 | 0/0 |
-
-The 23 run-3 confirmed attempts contain two liquid phases, positive amounts and pressure-density derivatives, positive reported reduced-Hessian minimum and raw residuals below $10^{-10}$. Their $\Delta G/(RT)$ ranges from −0.979132548127 to $-3.5079438021\times10^{-5}$ on the stated feed basis; $\Delta G$ ranges from −2874.98036642 to −0.108835420184 J. The smallest decrease is at index 41 (373.15 K). All 23 subsequent finite searches return nine successful trials and no resolved descent, which still does not establish a global minimum. The six attempts confirmed in run 3 but not in run 2 are at 373.15 K (indices 41, 49, 50, 58 and two at 59); in run 2 they were unconfirmed, with $\Delta G/(RT)$ between $-1.55\times10^{-5}$ and $1.21\times10^{-5}$. All four unsuccessful run-3 attempts (indices 27, 39, 40 and 48) return coincident phases. Full causes, compositions, densities, amounts, residuals and native quantities remain in the [run-3 confirmation records](../results/phase-extension-201/run-3/A6/split-summary.json).
-
-## Limits and evidence type
-
-This is finite-search numerical verification and model-predicted descent evidence at the stated discrete conditions, with no global stability claim and no physical validation. All three temperatures extrapolate beyond the fitted pressure observations at 313.0–333.15 K. Loading 0.6 lies within the aggregate fitted-pressure loading interval, which does not remove that temperature extrapolation. The reference pressures define numerical diagnostic states; retained experimental total-pressure ranges include nitrogen-containing experiments and are comparison labels, not validation of this nitrogen-free declaration. Per-reference and imposed-pressure range labels are retained.
-
-The Engine's numerical error estimates govern resolved descent; parameter, measurement and model-form uncertainty are not propagated. Neither these counts nor confirmed model splits establish physical liquid separation or absorber/stripper performance. The distinction between a detected negative trial and a global solution follows Pereira et al. (2012), §§3.1 and 3.4, as read in the source companion identified in the diagnosis. Its HELD method supplies no MEA validation data and is not substituted for the Engine procedure.
-
-Delivered review round 1 returned Not supported on run 2. The caller correction, the added diagnosis and run 3 have not had a new independent delivered review or investigator promotion for manuscript use; issue #203 makes manuscript use conditional on that review returning Supported. Issue #197 owns any manuscript claim changes; no manuscript source was edited here.
-
-## Records
-
-Run 3: [outcomes](../results/phase-extension-201/run-3/outcomes-by-temperature.csv) · [native counts](../results/phase-extension-201/run-3/counts-by-temperature.csv) · [state rows](../results/phase-extension-201/run-3/phase-family.csv) · [all 1458 scheduled slots](../results/phase-extension-201/run-3/trials.csv) · [confirmations](../results/phase-extension-201/run-3/split-confirmations.csv) · [combined families](../results/phase-extension-201/run-3/phase-family-combined.csv) · [input hashes](../results/phase-extension-201/run-3/input-hashes.json) · [provenance](../results/phase-extension-201/run-3/provenance.json) · [stage records](../results/phase-extension-201/run-3/calls.json).
-
-Run 2: [Corrected outcomes and comparison](../results/phase-extension-201/diagnosis/run-2-corrections/outcomes-by-temperature.csv) · [Corrected native counts](../results/phase-extension-201/diagnosis/run-2-corrections/counts-by-temperature.csv) · [Corrected state rows](../results/phase-extension-201/diagnosis/run-2-corrections/phase-family.csv) · [All 1458 corrected scheduled slots](../results/phase-extension-201/diagnosis/run-2-corrections/trials.csv) · [Unchanged descending-trial confirmation links](../results/phase-extension-201/diagnosis/run-2-corrections/split-confirmations.csv) · [Combined families, 154 states per fit](../results/phase-extension-201/diagnosis/run-2-corrections/phase-family-combined.csv) · [New diagnosis, probes and proposal](../results/phase-extension-201/diagnosis/run-2-corrections/report.md) · [Verification](../results/phase-extension-201/diagnosis/run-2-corrections/verification.json) · [Frozen run-2 reference admission](../results/phase-extension-201/run-2/reference-pressure/reference-pressures.csv) · [Run-2 provenance](../results/phase-extension-201/run-2/provenance.json).
-
-The eight new commands used 40.21 wall-s and 39.88 CPU-s against 600 wall-s and 1,800 CPU-s; all successful and unsuccessful probes are charged, with none killed. They used niceness 10 and single-threaded numerical libraries. Against base `2738fce`, the study implementation adds 300 gross executable lines (284 in the launcher, 16 in `final_evidence.py`), within its 300-line ceiling. Diagnosis scripts add 195 lines within their separately approved 250-line ceiling. The total is 495 executable lines; the prior 299-line statement excluded diagnosis code. Tests, prose and generated results are reported separately in the accounting file.
-Design revision 2 SHA-256 is `fb771344530184e34fe80c884cbd552780472db9d8abab8c217adc9945992b49`. Inputs, A6/A7 byte and mapping hashes, installed wheel identity, source-start hashes and producer hashes remain in the run directory. Run 2 used Engine commit `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`.
-
-Reference qualification/construction plus screening uses 38.2041/600 wall-s and 156.1557/1800 CPU-s, including active child work and the supervisor. Confirmation uses 8.3806/600 wall-s and 16.5461/1800 CPU-s. Earlier reference entries in `calls.json` are cumulative snapshots of the same first stage, not additional allocations. There are no ceiling stops, killed solves or state deadlines; maximum screened-state wall time is 1.5861/300 s. GNU time for the complete command records 46.83 wall-s, 163.80 user-s, 9.07 system-s and maximum resident memory 85,544 KiB. Three reference chains and six ordered screening chains use niceness 10 and one numerical-library thread each. The 27 representative confirmations run in the two temperature chains with descents. No budget increase or automatic retry was used.
-
-Run 3 screening uses 40.89/600 wall-s and 210.70/1800 CPU-s; confirmation uses 9.85/600 wall-s and 18.95/1800 CPU-s. There are no ceiling stops, killed solves or state deadlines; maximum screened-state wall time is 3.06/300 s. GNU time for the complete command records 51.02 wall-s, 217.23 user-s, 12.61 system-s and maximum resident memory 84,008 KiB, at niceness 10 with one numerical-library thread per chain. Run 3 ran on Engine `3e83e19ccc771b51d8ebc038931ab25192f4c5b5`, wheel SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`, from commit `123a9ae`. The outcome table was reduced from `phase-family.csv` and `trials.csv` with the category definitions above: completed means admitted, a successful final parent, nine returned trials with successful optimizers, no indeterminate trial and a classification other than unresolved.
+This notebook and the new evidence have not received independent delivered review or investigator promotion for manuscript use. Issue #211 must wait for the owner-return disposition and a Supported review. Its inputs are the new [combined families](../results/engine-3e83e19c-phase/phase-family-combined.csv), [extension outcomes](../results/engine-3e83e19c-phase/extension-81/outcomes-by-temperature.csv), [reference pressures](../results/engine-3e83e19c-phase/extension-81/reference-pressure/reference-pressures.csv), [confirmation records](../results/engine-3e83e19c-phase/extension-81/A6/split-summary.json), [supplement splits](../results/engine-3e83e19c-phase/A6-supplement-splits/provenance.json), [307-row replay](../results/engine-3e83e19c-phase/original-73/A6/full-replay.json), [score](../results/engine-3e83e19c-phase/original-73/A6/score.json) and [47 loaded-density errors](../results/engine-3e83e19c-phase/original-73/A6/loaded-density-errors.csv). Arcis heats retain #207's [adopted-endpoint source](../results/engine-3e83e19c-refits/displays/summary.json). Historical result directories and manuscript sources remain unchanged.

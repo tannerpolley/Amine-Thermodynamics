@@ -1,0 +1,34 @@
+{
+  "notebook": "analyses/mea_parameter_bundle/joint-recalibration/index.qmd",
+  "source_sha256": "7099c014d2f460049e08ac72a4ad1ca9773875842ad7f809bc5452c0a81491af",
+  "validate": {
+    "command": "nice -n 10 python3 -I manuscript.py validate .",
+    "cwd": "analyses",
+    "exit_code": 0,
+    "stdout": "valid",
+    "timing": {
+      "wall_s": 9.72,
+      "user_s": 8.6,
+      "system_s": 2.58,
+      "max_rss_kib": 187636
+    }
+  },
+  "render": {
+    "command": "nice -n 10 bash analyses/render.sh mea_parameter_bundle/joint-recalibration/index.qmd --output-dir /tmp/issue-208-notebook --no-execute",
+    "exit_code": 0,
+    "output": "/tmp/issue-208-notebook/mea_parameter_bundle/joint-recalibration/index.html",
+    "sha256": "26414a4340009518af07f54bf4a88fffeb425ff50a18663c0ce66eb0fd8697b3",
+    "timing": {
+      "wall_s": 21.98,
+      "user_s": 18.7,
+      "system_s": 5.27,
+      "max_rss_kib": 436828
+    },
+    "execute": false,
+    "browser": false
+  },
+  "prose_check": "passed plugin-wide and scoped rules",
+  "checks": "reference admissions and consumed seed hashes; document/runtime/grid bindings; 308 unique declared identities; every scheduled trial slot; split parent hashes; 47 density rows",
+  "independent_review": "pending",
+  "investigator_promotion": "pending owner-return disposition and Supported review"
+}
