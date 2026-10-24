@@ -1,0 +1,1271 @@
+{
+  "old": {
+    "reaction_values": {
+      "reaction:R2:correlation:a": 234.9486707807428,
+      "reaction:R2:correlation:b_k": -11925.23357215086,
+      "reaction:R2:correlation:c": -36.7816,
+      "reaction:R2:correlation:d_per_k": 0.0,
+      "reaction:R4:correlation:a": 2.151,
+      "reaction:R4:correlation:b_k": -1545.3,
+      "reaction:R5:correlation:a_k": 3354.017165264302,
+      "reaction:R5:correlation:b": -1.2811063905656925,
+      "reaction:R5:correlation:c_per_k": 0.00042769999999999993
+    },
+    "reaction_correlations": [
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "coefficients": [
+          {
+            "identity": "reaction:R2:correlation:a",
+            "name": "a",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 234.9486707807428,
+              "unit": "dimensionless"
+            }
+          },
+          {
+            "identity": "reaction:R2:correlation:b_k",
+            "name": "b_k",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": -11925.23357215086,
+              "unit": "kelvin"
+            }
+          },
+          {
+            "identity": "reaction:R2:correlation:c",
+            "name": "c",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": -36.7816,
+              "unit": "dimensionless"
+            }
+          },
+          {
+            "identity": "reaction:R2:correlation:d_per_k",
+            "name": "d_per_k",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 0.0,
+              "unit": "1 / kelvin"
+            }
+          }
+        ],
+        "kind": "ln-k-a-plus-b-over-t-plus-c-ln-t-plus-d-t",
+        "qualification": "candidate_extrapolation",
+        "reaction_id": "R2",
+        "source": {
+          "locator": "src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923",
+          "source_id": "chemical_reaction_source_contract"
+        },
+        "source_sha256": "sha256:e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1"
+      },
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "coefficients": [
+          {
+            "identity": "reaction:R4:correlation:a",
+            "name": "a",
+            "optimizer_domain": {
+              "lower": -20.0,
+              "upper": 20.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 2.151,
+              "unit": "dimensionless"
+            }
+          },
+          {
+            "identity": "reaction:R4:correlation:b_k",
+            "name": "b_k",
+            "optimizer_domain": {
+              "lower": -10000.0,
+              "upper": 5000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": -1545.3,
+              "unit": "kelvin"
+            }
+          }
+        ],
+        "kind": "ln-k-a-plus-b-over-t",
+        "qualification": "candidate_extrapolation",
+        "reaction_id": "R4",
+        "source": {
+          "locator": "src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923",
+          "source_id": "chemical_reaction_source_contract"
+        },
+        "source_sha256": "sha256:e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1"
+      },
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "coefficients": [
+          {
+            "identity": "reaction:R5:correlation:a_k",
+            "name": "a_k",
+            "optimizer_domain": {
+              "lower": 500.0,
+              "upper": 6000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 3354.017165264302,
+              "unit": "kelvin"
+            }
+          },
+          {
+            "identity": "reaction:R5:correlation:b",
+            "name": "b",
+            "optimizer_domain": {
+              "lower": -10.0,
+              "upper": 10.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": -1.2811063905656925,
+              "unit": "dimensionless"
+            }
+          },
+          {
+            "identity": "reaction:R5:correlation:c_per_k",
+            "name": "c_per_k",
+            "optimizer_domain": {
+              "lower": -0.01,
+              "upper": 0.01
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 0.00042769999999999993,
+              "unit": "1 / kelvin"
+            }
+          }
+        ],
+        "kind": "negative-log10-temperature-polynomial",
+        "qualification": "candidate_extrapolation",
+        "reaction_id": "R5",
+        "source": {
+          "locator": "src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923",
+          "source_id": "chemical_reaction_source_contract"
+        },
+        "source_sha256": "sha256:e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1"
+      }
+    ],
+    "domains": [
+      {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "kind": "fit-range",
+        "pressure_max": {
+          "magnitude": 300000.0,
+          "unit": "pascal"
+        },
+        "pressure_min": {
+          "magnitude": 10.0,
+          "unit": "pascal"
+        },
+        "temperature_max": {
+          "magnitude": 393.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 293.15,
+          "unit": "kelvin"
+        }
+      },
+      {
+        "domain_id": "mea-provider-source-qualified-313-15-k",
+        "kind": "reported-conditions",
+        "pressure_max": {
+          "magnitude": 100000.0,
+          "unit": "pascal"
+        },
+        "pressure_min": {
+          "magnitude": 100000.0,
+          "unit": "pascal"
+        },
+        "temperature_max": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        }
+      },
+      {
+        "domain_id": "mea-candidate-293-15-to-393-15-k",
+        "kind": "fit-range",
+        "pressure_max": {
+          "magnitude": 10000000.0,
+          "unit": "pascal"
+        },
+        "pressure_min": {
+          "magnitude": 1.0,
+          "unit": "pascal"
+        },
+        "temperature_max": {
+          "magnitude": 393.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 293.15,
+          "unit": "kelvin"
+        }
+      },
+      {
+        "domain_id": "cai-1996-neutral-refit",
+        "kind": "unknown"
+      },
+      {
+        "domain_id": "mea-working-313-15-to-353-15-k",
+        "kind": "reported-conditions",
+        "temperature_max": {
+          "magnitude": 353.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        }
+      }
+    ],
+    "engine_reactions": [
+      {
+        "reaction_id": "R1",
+        "stoichiometry": [
+          0.0,
+          0.0,
+          -2.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0
+        ],
+        "engine_correlation": {
+          "a": 3.7290977365566675,
+          "b": -13445.9,
+          "c": -22.4773,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 273.15,
+          "temperature_max": 498.15,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution",
+          "reference_pressure_pa": null
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R2",
+        "stoichiometry": [
+          -1.0,
+          0.0,
+          -2.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 23.576500765079572,
+          "b": -11925.23357215086,
+          "c": -36.7816,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 393.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": null
+        },
+        "parameter_role": "selected"
+      },
+      {
+        "reaction_id": "R3",
+        "stoichiometry": [
+          0.0,
+          0.0,
+          -1.0,
+          0.0,
+          0.0,
+          -1.0,
+          1.0,
+          1.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 12.145792981306897,
+          "b": -12431.7,
+          "c": -35.4819,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 273.15,
+          "temperature_max": 498.15,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution",
+          "reference_pressure_pa": null
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R4",
+        "stoichiometry": [
+          0.0,
+          1.0,
+          -1.0,
+          0.0,
+          -1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 2.151,
+          "b": -1545.3,
+          "c": 0.0,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 393.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": 100000.0
+        },
+        "parameter_role": "selected"
+      },
+      {
+        "reaction_id": "R5",
+        "stoichiometry": [
+          0.0,
+          1.0,
+          -1.0,
+          -1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 2.9498564774559717,
+          "b": -7722.909926383729,
+          "c": 0.0,
+          "d": -0.0009848156442735533,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 393.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": 100000.0
+        },
+        "parameter_role": "selected"
+      }
+    ]
+  },
+  "reported": {
+    "reaction_values": {
+      "reaction:R2:correlation:a": 234.95768615776015,
+      "reaction:R2:correlation:b_k": -11928.056737463849,
+      "reaction:R2:correlation:c": -36.7816,
+      "reaction:R2:correlation:d_per_k": 0.0,
+      "reaction:R4:correlation:a": 2.151,
+      "reaction:R4:correlation:b_k": -1545.3,
+      "reaction:R5:correlation:a_k": 3354.099229276806,
+      "reaction:R5:correlation:b": -1.2811063905656925,
+      "reaction:R5:correlation:c_per_k": 0.00042769999999999993
+    },
+    "reaction_correlations": [
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "coefficients": [
+          {
+            "identity": "reaction:R2:correlation:a",
+            "name": "a",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 234.95768615776015,
+              "unit": "dimensionless"
+            }
+          },
+          {
+            "identity": "reaction:R2:correlation:b_k",
+            "name": "b_k",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": -11928.056737463849,
+              "unit": "kelvin"
+            }
+          },
+          {
+            "identity": "reaction:R2:correlation:c",
+            "name": "c",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": -36.7816,
+              "unit": "dimensionless"
+            }
+          },
+          {
+            "identity": "reaction:R2:correlation:d_per_k",
+            "name": "d_per_k",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 0.0,
+              "unit": "1 / kelvin"
+            }
+          }
+        ],
+        "kind": "ln-k-a-plus-b-over-t-plus-c-ln-t-plus-d-t",
+        "qualification": "candidate_extrapolation",
+        "reaction_id": "R2",
+        "source": {
+          "locator": "src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923",
+          "source_id": "chemical_reaction_source_contract"
+        },
+        "source_sha256": "sha256:e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1"
+      },
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "coefficients": [
+          {
+            "identity": "reaction:R4:correlation:a",
+            "name": "a",
+            "optimizer_domain": {
+              "lower": -20.0,
+              "upper": 20.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 2.151,
+              "unit": "dimensionless"
+            }
+          },
+          {
+            "identity": "reaction:R4:correlation:b_k",
+            "name": "b_k",
+            "optimizer_domain": {
+              "lower": -10000.0,
+              "upper": 5000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": -1545.3,
+              "unit": "kelvin"
+            }
+          }
+        ],
+        "kind": "ln-k-a-plus-b-over-t",
+        "qualification": "candidate_extrapolation",
+        "reaction_id": "R4",
+        "source": {
+          "locator": "src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923",
+          "source_id": "chemical_reaction_source_contract"
+        },
+        "source_sha256": "sha256:e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1"
+      },
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "coefficients": [
+          {
+            "identity": "reaction:R5:correlation:a_k",
+            "name": "a_k",
+            "optimizer_domain": {
+              "lower": 500.0,
+              "upper": 6000.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 3354.099229276806,
+              "unit": "kelvin"
+            }
+          },
+          {
+            "identity": "reaction:R5:correlation:b",
+            "name": "b",
+            "optimizer_domain": {
+              "lower": -10.0,
+              "upper": 10.0
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": -1.2811063905656925,
+              "unit": "dimensionless"
+            }
+          },
+          {
+            "identity": "reaction:R5:correlation:c_per_k",
+            "name": "c_per_k",
+            "optimizer_domain": {
+              "lower": -0.01,
+              "upper": 0.01
+            },
+            "provenance": {
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+              "source_id": "joint-recalibration-170"
+            },
+            "value": {
+              "magnitude": 0.00042769999999999993,
+              "unit": "1 / kelvin"
+            }
+          }
+        ],
+        "kind": "negative-log10-temperature-polynomial",
+        "qualification": "candidate_extrapolation",
+        "reaction_id": "R5",
+        "source": {
+          "locator": "src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923",
+          "source_id": "chemical_reaction_source_contract"
+        },
+        "source_sha256": "sha256:e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1"
+      }
+    ],
+    "domains": [
+      {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "kind": "fit-range",
+        "pressure_max": {
+          "magnitude": 300000.0,
+          "unit": "pascal"
+        },
+        "pressure_min": {
+          "magnitude": 10.0,
+          "unit": "pascal"
+        },
+        "temperature_max": {
+          "magnitude": 393.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 293.15,
+          "unit": "kelvin"
+        }
+      },
+      {
+        "domain_id": "mea-provider-source-qualified-313-15-k",
+        "kind": "reported-conditions",
+        "pressure_max": {
+          "magnitude": 100000.0,
+          "unit": "pascal"
+        },
+        "pressure_min": {
+          "magnitude": 100000.0,
+          "unit": "pascal"
+        },
+        "temperature_max": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        }
+      },
+      {
+        "domain_id": "mea-candidate-293-15-to-393-15-k",
+        "kind": "fit-range",
+        "pressure_max": {
+          "magnitude": 10000000.0,
+          "unit": "pascal"
+        },
+        "pressure_min": {
+          "magnitude": 1.0,
+          "unit": "pascal"
+        },
+        "temperature_max": {
+          "magnitude": 393.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 293.15,
+          "unit": "kelvin"
+        }
+      },
+      {
+        "domain_id": "cai-1996-neutral-refit",
+        "kind": "unknown"
+      },
+      {
+        "domain_id": "mea-working-313-15-to-353-15-k",
+        "kind": "reported-conditions",
+        "temperature_max": {
+          "magnitude": 353.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        }
+      }
+    ],
+    "engine_reactions": [
+      {
+        "reaction_id": "R1",
+        "stoichiometry": [
+          0.0,
+          0.0,
+          -2.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0
+        ],
+        "engine_correlation": {
+          "a": 3.7290977365566675,
+          "b": -13445.9,
+          "c": -22.4773,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 273.15,
+          "temperature_max": 498.15,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution",
+          "reference_pressure_pa": null
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R2",
+        "stoichiometry": [
+          -1.0,
+          0.0,
+          -2.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 23.585516142096935,
+          "b": -11928.056737463849,
+          "c": -36.7816,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 393.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": null
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R3",
+        "stoichiometry": [
+          0.0,
+          0.0,
+          -1.0,
+          0.0,
+          0.0,
+          -1.0,
+          1.0,
+          1.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 12.145792981306897,
+          "b": -12431.7,
+          "c": -35.4819,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 273.15,
+          "temperature_max": 498.15,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution",
+          "reference_pressure_pa": null
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R4",
+        "stoichiometry": [
+          0.0,
+          1.0,
+          -1.0,
+          0.0,
+          -1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 2.151,
+          "b": -1545.3,
+          "c": 0.0,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 393.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": 100000.0
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R5",
+        "stoichiometry": [
+          0.0,
+          1.0,
+          -1.0,
+          -1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 2.9498564774559717,
+          "b": -7723.098885755592,
+          "c": 0.0,
+          "d": -0.0009848156442735533,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 393.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": 100000.0
+        },
+        "parameter_role": "candidate"
+      }
+    ]
+  },
+  "comparison": {
+    "reaction_values": {
+      "reaction:R2:correlation:a": 236.80381394199247,
+      "reaction:R2:correlation:b_k": -12506.171653096195,
+      "reaction:R2:correlation:c": -36.7816,
+      "reaction:R2:correlation:d_per_k": 0.0,
+      "reaction:R4:correlation:a": 2.151,
+      "reaction:R4:correlation:b_k": -1545.3,
+      "reaction:R5:correlation:a_k": 2922.336201205647,
+      "reaction:R5:correlation:b": -1.2811063905656928,
+      "reaction:R5:correlation:c_per_k": 0.00042769999999999993
+    },
+    "reaction_correlations": [
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "coefficients": [
+          {
+            "identity": "reaction:R2:correlation:a",
+            "name": "a",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "value": {
+              "magnitude": 236.80381394199247,
+              "unit": "dimensionless"
+            },
+            "provenance": {
+              "source_id": "joint-recalibration-170",
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+            }
+          },
+          {
+            "identity": "reaction:R2:correlation:b_k",
+            "name": "b_k",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "value": {
+              "magnitude": -12506.171653096195,
+              "unit": "kelvin"
+            },
+            "provenance": {
+              "source_id": "joint-recalibration-170",
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+            }
+          },
+          {
+            "identity": "reaction:R2:correlation:c",
+            "name": "c",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "value": {
+              "magnitude": -36.7816,
+              "unit": "dimensionless"
+            },
+            "provenance": {
+              "source_id": "joint-recalibration-170",
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+            }
+          },
+          {
+            "identity": "reaction:R2:correlation:d_per_k",
+            "name": "d_per_k",
+            "optimizer_domain": {
+              "lower": -1000000.0,
+              "upper": 1000000.0
+            },
+            "value": {
+              "magnitude": 0.0,
+              "unit": "1 / kelvin"
+            },
+            "provenance": {
+              "source_id": "joint-recalibration-170",
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+            }
+          }
+        ],
+        "kind": "ln-k-a-plus-b-over-t-plus-c-ln-t-plus-d-t",
+        "qualification": "candidate_extrapolation",
+        "reaction_id": "R2",
+        "source": {
+          "source_id": "chemical_reaction_source_contract",
+          "locator": "src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923"
+        },
+        "source_sha256": "sha256:e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1"
+      },
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "coefficients": [
+          {
+            "identity": "reaction:R4:correlation:a",
+            "name": "a",
+            "optimizer_domain": {
+              "lower": -20.0,
+              "upper": 20.0
+            },
+            "value": {
+              "magnitude": 2.151,
+              "unit": "dimensionless"
+            },
+            "provenance": {
+              "source_id": "joint-recalibration-170",
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+            }
+          },
+          {
+            "identity": "reaction:R4:correlation:b_k",
+            "name": "b_k",
+            "optimizer_domain": {
+              "lower": -10000.0,
+              "upper": 5000.0
+            },
+            "value": {
+              "magnitude": -1545.3,
+              "unit": "kelvin"
+            },
+            "provenance": {
+              "source_id": "joint-recalibration-170",
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+            }
+          }
+        ],
+        "kind": "ln-k-a-plus-b-over-t",
+        "qualification": "candidate_extrapolation",
+        "reaction_id": "R4",
+        "source": {
+          "source_id": "chemical_reaction_source_contract",
+          "locator": "src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923"
+        },
+        "source_sha256": "sha256:e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1"
+      },
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "coefficients": [
+          {
+            "identity": "reaction:R5:correlation:a_k",
+            "name": "a_k",
+            "optimizer_domain": {
+              "lower": 500.0,
+              "upper": 6000.0
+            },
+            "value": {
+              "magnitude": 2922.336201205647,
+              "unit": "kelvin"
+            },
+            "provenance": {
+              "source_id": "joint-recalibration-170",
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+            }
+          },
+          {
+            "identity": "reaction:R5:correlation:b",
+            "name": "b",
+            "optimizer_domain": {
+              "lower": -10.0,
+              "upper": 10.0
+            },
+            "value": {
+              "magnitude": -1.2811063905656928,
+              "unit": "dimensionless"
+            },
+            "provenance": {
+              "source_id": "joint-recalibration-170",
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+            }
+          },
+          {
+            "identity": "reaction:R5:correlation:c_per_k",
+            "name": "c_per_k",
+            "optimizer_domain": {
+              "lower": -0.01,
+              "upper": 0.01
+            },
+            "value": {
+              "magnitude": 0.00042769999999999993,
+              "unit": "1 / kelvin"
+            },
+            "provenance": {
+              "source_id": "joint-recalibration-170",
+              "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+            }
+          }
+        ],
+        "kind": "negative-log10-temperature-polynomial",
+        "qualification": "candidate_extrapolation",
+        "reaction_id": "R5",
+        "source": {
+          "source_id": "chemical_reaction_source_contract",
+          "locator": "src/MEA/common/mea_source_contracts.py; R2 common-molality offset 4.0165349923"
+        },
+        "source_sha256": "sha256:e01a4f75b4b7027a02c20f70b66ad47ce52f3df42676fab909c82667cc8a46f1"
+      }
+    ],
+    "domains": [
+      {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "kind": "fit-range",
+        "pressure_max": {
+          "magnitude": 300000.0,
+          "unit": "pascal"
+        },
+        "pressure_min": {
+          "magnitude": 10.0,
+          "unit": "pascal"
+        },
+        "temperature_max": {
+          "magnitude": 393.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 293.15,
+          "unit": "kelvin"
+        }
+      },
+      {
+        "domain_id": "mea-provider-source-qualified-313-15-k",
+        "kind": "reported-conditions",
+        "pressure_max": {
+          "magnitude": 100000.0,
+          "unit": "pascal"
+        },
+        "pressure_min": {
+          "magnitude": 100000.0,
+          "unit": "pascal"
+        },
+        "temperature_max": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        }
+      },
+      {
+        "domain_id": "mea-candidate-293-15-to-393-15-k",
+        "kind": "fit-range",
+        "pressure_max": {
+          "magnitude": 10000000.0,
+          "unit": "pascal"
+        },
+        "pressure_min": {
+          "magnitude": 1.0,
+          "unit": "pascal"
+        },
+        "temperature_max": {
+          "magnitude": 393.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 293.15,
+          "unit": "kelvin"
+        }
+      },
+      {
+        "domain_id": "cai-1996-neutral-refit",
+        "kind": "unknown"
+      },
+      {
+        "domain_id": "mea-working-313-15-to-353-15-k",
+        "kind": "reported-conditions",
+        "temperature_max": {
+          "magnitude": 353.15,
+          "unit": "kelvin"
+        },
+        "temperature_min": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        }
+      }
+    ],
+    "engine_reactions": [
+      {
+        "reaction_id": "R1",
+        "stoichiometry": [
+          0.0,
+          0.0,
+          -2.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0
+        ],
+        "engine_correlation": {
+          "a": 3.7290977365566675,
+          "b": -13445.9,
+          "c": -22.4773,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 273.15,
+          "temperature_max": 498.15,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution",
+          "reference_pressure_pa": null
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R2",
+        "stoichiometry": [
+          -1.0,
+          0.0,
+          -2.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 25.431643926329258,
+          "b": -12506.171653096195,
+          "c": -36.7816,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 393.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": null
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R3",
+        "stoichiometry": [
+          0.0,
+          0.0,
+          -1.0,
+          0.0,
+          0.0,
+          -1.0,
+          1.0,
+          1.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 12.145792981306897,
+          "b": -12431.7,
+          "c": -35.4819,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 273.15,
+          "temperature_max": 498.15,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution",
+          "reference_pressure_pa": null
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R4",
+        "stoichiometry": [
+          0.0,
+          1.0,
+          -1.0,
+          0.0,
+          -1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 2.151,
+          "b": -1545.3,
+          "c": 0.0,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 393.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": 100000.0
+        },
+        "parameter_role": "candidate"
+      },
+      {
+        "reaction_id": "R5",
+        "stoichiometry": [
+          0.0,
+          1.0,
+          -1.0,
+          -1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        "engine_correlation": {
+          "a": 2.949856477455972,
+          "b": -6728.927773612972,
+          "c": 0.0,
+          "d": -0.0009848156442735533,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 393.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "engine_reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": 100000.0
+        },
+        "parameter_role": "candidate"
+      }
+    ]
+  }
+}
