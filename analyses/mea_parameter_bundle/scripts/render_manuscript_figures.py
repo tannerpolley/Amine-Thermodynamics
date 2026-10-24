@@ -20,9 +20,7 @@ MARKERS = ['o', 's', '^', 'v', 'D', 'P', '*']
 SOURCE_NAMES = {'Bottinger2008':'Böttinger et al. (2008)', 'Matin2012':'Matin et al. (2012)', 'Vinjarapu2024':'Vinjarapu et al. (2024)', 'Arcis2011':'Arcis et al. (2011)', 'Amundsen2009':'Amundsen et al. (2009)', 'Hartono2014':'Hartono et al. (2014)', 'Han2012':'Han et al. (2012)', 'Aronu2011':'Aronu et al. (2011)', 'Hilliard2008':'Hilliard (2008)', 'Idris2014':'Idris et al. (2014)', 'Jou1995':'Jou et al. (1995)', 'Mamun2005':"Ma’mun et al. (2005)", 'Wagner2013':'Wagner et al. (2013)', 'Xu2011':'Xu and Rochelle (2011)'}
 SPECIES_NAMES = {'MEA':r'MEA', 'MEAH+':r'MEAH$^+$', 'MEACOO-':r'MEACOO$^-$', 'MEA + MEAH+':r'MEA + MEAH$^+$', 'HCO3-':r'HCO$_3^-$ + CO$_3^{2-}$', 'HCO3- + CO3^2-':r'HCO$_3^-$ + CO$_3^{2-}$'}
 CURVES = a.BUNDLE / 'results/model-curves'
-DASHED = 'Dashed: imposed single liquid below its bubble pressure'
 SPECIES_LINES = ((0, (5, 2)), ':')  # #205: dashed; dotted and lighter below the bubble pressure; an unavailable comparison has no style and fails
-UNKNOWN = lambda rows: any(r.get('below_bubble_pressure') == 'unavailable' for r in rows)
 
 
 
@@ -66,7 +64,7 @@ def main():
     fig, (top, bottom) = plt.subplots(2, 1, figsize=(FULL_WIDTH, 6.4), layout='constrained', sharex=True, height_ratios=[2.3, 1])
     isotherms, sources, curves = [313.15, 333.15, 353.15, 373.15, 393.15], sorted({r['source'] for r in canonical+wagner}), a.rows(CURVES/'pressure.csv')
     for T, color in zip(isotherms, COLORS):
-        curve(top, [r for r in curves if float(r['temperature_K']) == T], 'CO2 partial pressure', color, 1e-3)
+        curve(top, [r for r in curves if float(r['temperature_K']) == T], 'CO2 partial pressure', color, 1e-3, styles=SPECIES_LINES, below_alpha=.5)
         for source, marker in zip(sources, MARKERS):
             for fill in (True, False):
                 part = [r for r in canonical+wagner if r['source'] == source and abs(float(r['temperature_K'])-T) <= 2 and (r['target'] in packet_fit) == fill]
@@ -77,11 +75,11 @@ def main():
     bottom.set(xlabel=LOADING, ylabel='(calc. − meas.)/meas. (%)')
     for ax in (top, bottom):
         ax.grid(alpha=.15)
-    handles = [Line2D([], [], color=c, label=f'{T:g} K') for T, c in zip(isotherms, COLORS)]
+    handles = [Line2D([], [], color=c, ls=SPECIES_LINES[0], label=f'{T:g} K') for T, c in zip(isotherms, COLORS)]
     handles += [Line2D([], [], marker=m, markerfacecolor='none', color='black', linestyle='none', label=SOURCE_NAMES[s]) for s, m in zip(sources, MARKERS)]
     handles += [Line2D([], [], marker='s', markerfacecolor=f, color='black', linestyle='none', label=l) for f, l in (('black', 'Fitted'), ('none', 'Not fitted'))]
-    top.legend(handles=handles, loc='lower right', ncol=2, fontsize=8, frameon=False)
-    save(fig, 'pressure', 'CO2 partial pressure of the bubble-point vapor of 30 wt% MEA against analytical loading: model curves on five isotherms and the canonical and Wagner measurements, each assigned to the isotherm within 2 K. The lower panel gives calculated-minus-measured deviations at the measured states from the retained point predictions. Pa converted to kPa; sources differ slightly from the nominal 30 wt% solvent.', ['canonical-pressure.csv','wagner-pressure.csv','pressure-figure-data.csv','fitted-rows.csv','model-curves/pressure.csv'])
+    top.legend(handles=handles, title='Dashed: calculated; markers: measured', title_fontsize=8, loc='lower right', ncol=2, fontsize=8, frameon=False)
+    save(fig, 'pressure', 'CO2 partial pressure of the bubble-point vapor of 30 wt% MEA against analytical loading: dashed model curves on five isotherms and the canonical and Wagner measurements, each assigned to the isotherm within 2 K. The lower panel gives calculated-minus-measured deviations at the measured states from the retained point predictions. Pa converted to kPa; sources differ slightly from the nominal 30 wt% solvent.', ['canonical-pressure.csv','wagner-pressure.csv','pressure-figure-data.csv','fitted-rows.csv','model-curves/pressure.csv'])
     membership = a.rows(a.ROOT/'data/reference/MEA/manifests/speciation_target_membership.csv')
     loading = {r['membership_id'].replace('|', '::'): float(r['co2_loading_mol_per_mol_mea']) for r in membership}
     species = list({r['target']: r for r in a.rows(a.E/'species-figure-data.csv')}.values())  # Matin rows de-duplicated by target identity
@@ -133,16 +131,16 @@ def main():
     fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.8), layout='constrained')
     curves, handles = a.rows(CURVES/'heat.csv'), []
     for (T, P, source, marker), color in zip([(313.15, 1734000., 'Vinjarapu2024', 'o'), (322.5, 510000., 'Arcis2011', 's'), (322.5, 1030000., 'Arcis2011', '^')], COLORS):
-        curve(ax, [r for r in curves if float(r['temperature_K']) == T and float(r['pressure_Pa']) == P], 'integral heat of absorption', color)
+        curve(ax, [r for r in curves if float(r['temperature_K']) == T and float(r['pressure_Pa']) == P], 'integral heat of absorption', color, styles=SPECIES_LINES, below_alpha=.5)
         part = [r for r in heat if r['source'] == source and float(r['P_Pa']) == P]
         assert {float(r['T_K']) for r in part} == {T}
         points(ax, [float(r['loading']) for r in part], [float(r['observed_kJ_mol']) for r in part], marker, color, source == 'Vinjarapu2024')
-        handles.append(Line2D([], [], color=color, marker=marker, markerfacecolor=color if source == 'Vinjarapu2024' else 'none',
+        handles.append(Line2D([], [], color=color, ls=SPECIES_LINES[0], marker=marker, markerfacecolor=color if source == 'Vinjarapu2024' else 'none',
                               label=f"{SOURCE_NAMES[source]}, {T:g} K, {P/1e6:g} MPa ({'fitted' if source == 'Vinjarapu2024' else 'not fitted'})"))
     ax.set(xlabel=LOADING, ylabel=r'Integral heat of absorption (kJ/mol CO$_2$)')
     ax.grid(alpha=.15)
-    fig.legend(handles=handles, fontsize=8, frameon=False, loc='outside lower center', ncol=2)
-    save(fig, 'heat-of-absorption', 'Integral heat of absorption of CO2 into 30 wt% MEA from zero loading, per mole of CO2 absorbed; negative values are exothermic. Model curves at the three measured temperature-pressure conditions with the Vinjarapu (fitted) and Arcis (not fitted) measurements. Both liquids are equilibrium liquids and the CO2 feed is pure CO2 vapor at the same temperature and pressure.', ['heat.csv','model-curves/heat.csv'])
+    fig.legend(handles=handles, title='Dashed: calculated; markers: measured', title_fontsize=8, fontsize=8, frameon=False, loc='outside lower center', ncol=2)
+    save(fig, 'heat-of-absorption', 'Integral heat of absorption of CO2 into 30 wt% MEA from zero loading, per mole of CO2 absorbed; negative values are exothermic. Dashed model curves at the three measured temperature-pressure conditions with the Vinjarapu (fitted) and Arcis (not fitted) measurements. Both liquids are equilibrium liquids and the CO2 feed is pure CO2 vapor at the same temperature and pressure.', ['heat.csv','model-curves/heat.csv'])
     a6=a.rows(a.J/'amendment-6/selected-assessment/density.csv')
     by_id={r['id']:r for r in a6}
     loaded=[r for r in density if r['id'] in spec['loaded_density_ids']]
@@ -177,18 +175,18 @@ def main():
     data = [r for r in density if r['mea_mass_fraction'] == '0.3' and float(r['T_K']) in temperatures]
     sources, fitted_density = sorted({r['source'] for r in data}), set(spec['loaded_density_ids']) | free
     for T, color in zip(temperatures, COLORS):
-        curve(ax, [r for r in curves if float(r['temperature_K']) == T], 'liquid density', color)
+        curve(ax, [r for r in curves if float(r['temperature_K']) == T], 'liquid density', color, styles=SPECIES_LINES, below_alpha=.5)
         for source, marker in zip(sources, MARKERS):
             for fill in (True, False):
                 part = [r for r in data if float(r['T_K']) == T and r['source'] == source and (r['id'] in fitted_density) == fill]
                 points(ax, [float(r['loading']) for r in part], [float(r['observed_kg_m3']) for r in part], marker, color, fill)
-    handles = [Line2D([], [], color=c, label=f"{T:g} K, {0.7 if T > 364 else 0.1:g} MPa") for T, c in zip(temperatures, COLORS)]
+    handles = [Line2D([], [], color=c, ls=SPECIES_LINES[0], label=f"{T:g} K, {0.7 if T > 364 else 0.1:g} MPa") for T, c in zip(temperatures, COLORS)]
     handles += [Line2D([], [], marker=m, markerfacecolor='none', color='black', linestyle='none', label=SOURCE_NAMES[s]) for s, m in zip(sources, MARKERS)]
     handles += [Line2D([], [], marker='o', markerfacecolor=f, color='black', linestyle='none', label=l) for f, l in (('black', 'Fitted'), ('none', 'Not fitted'))]
-    fig.legend(handles=handles + [Line2D([], [], color='black', ls='--', label='Below bubble pressure')] + [Line2D([], [], color='black', ls=':', label='Bubble comparison unavailable')]*UNKNOWN(curves), fontsize=8, frameon=False, loc='outside right upper')
+    fig.legend(handles=handles + [Line2D([], [], color='black', ls=SPECIES_LINES[1], alpha=.5, label='Below bubble pressure')], title='Dashed: calculated\nMarkers: measured', title_fontsize=8, fontsize=8, frameon=False, loc='outside right upper')
     ax.set(xlabel=LOADING, ylabel='Liquid density (kg/m³)')
     ax.grid(alpha=.15)
-    save(fig, 'density-curves', 'Liquid density of 30 wt% MEA against analytical loading: model curves at six temperatures and the 30 wt% measurements at those temperatures. Single liquids are imposed at 0.1 MPa up to 353.15 K and at 0.7 MPa at 373.15 and 393.15 K, as in the retained Han comparison; zero loading carries exactly zero carbon. Dashed segments lie below their bubble pressure. No empirical volume translation.', ['density.csv','fitted-rows.csv','model-curves/density.csv'])
+    save(fig, 'density-curves', 'Liquid density of 30 wt% MEA against analytical loading: dashed model curves at six temperatures and the 30 wt% measurements at those temperatures. Single liquids are imposed at 0.1 MPa up to 353.15 K and at 0.7 MPa at 373.15 and 393.15 K, as in the retained Han comparison; zero loading carries exactly zero carbon. Dotted, lighter segments lie below their bubble pressure. No empirical volume translation.', ['density.csv','fitted-rows.csv','model-curves/density.csv'])
     fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.6), layout='constrained')
     curves, cai, handles = a.rows(CURVES/'mea-water.csv'), [r for r in a.load(a.ROOT/spec['stage2_rows_path'])['F1'] if r['id'].startswith('cai')], []
     observed = {r['id']: float(r['observed']) for r in fitted if r['group'] == 'Cai'}
