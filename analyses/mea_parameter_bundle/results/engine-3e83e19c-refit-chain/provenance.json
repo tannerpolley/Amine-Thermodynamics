@@ -9,7 +9,7 @@
     "numpy": "2.4.4",
     "scipy": "1.17.1"
   },
-  "issue_body_path": "/tmp/issue-212-current-body.md",
+  "issue_body_path": "/tmp/issue-212-continuation-current-body.md",
   "issue_body_sha256": "42b4823fdb695a8d1e3519f58af8b9a6a4cc746eb22bda149f121d2ef0744f24",
   "commands": {
     "stage2": {
@@ -119,6 +119,44 @@
         }
       },
       "producer_sha256": "0f8710fd540b2ded14628abe0e10c187889677d58a14eb5e705f0174e9828675"
+    },
+    "restricted-2-continuation": {
+      "information": {
+        "command": "systemd-run --user --unit=issue212-restricted2 --same-dir --collect -p Nice=10 /bin/bash -o pipefail -c '.venv/bin/python -I -u -c '\\''import runpy; n=runpy.run_path(\"analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py\"); n[\"c\"].run(\"analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/information-spec.json\",\"analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release\",case_ids=[\"stage6\"],operation=\"information\")'\\'' 2>&1 | tee analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/information.log'",
+        "unit": "issue212-restricted2.service",
+        "invocation_id": "71d38917846847f4bab2729f3cab6818",
+        "producer_sha256": "0f8710fd540b2ded14628abe0e10c187889677d58a14eb5e705f0174e9828675"
+      },
+      "fit": {
+        "command": "systemd-run --user --unit=issue212-restricted2 --same-dir --collect -p Nice=10 /bin/bash -o pipefail -c '.venv/bin/python -I -u -c '\\''import runpy; n=runpy.run_path(\"analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py\"); n[\"c\"].run(\"analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json\",\"analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit\",case_ids=[\"stage6\"],operation=\"fit\")'\\'' 2>&1 | tee analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/fit.log'",
+        "unit": "issue212-restricted2.service",
+        "invocation_id": "801f90b1212c46fb9b184c4c246a7c5b",
+        "producer_sha256": "0f8710fd540b2ded14628abe0e10c187889677d58a14eb5e705f0174e9828675"
+      }
+    },
+    "displays": {
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py",
+        "displays"
+      ],
+      "engine": {
+        "wheel_path": "build/engine-wheels/main-3e83e19ccc771b51d8ebc038931ab25192f4c5b5/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+        "wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
+        "packages": {
+          "epcsaft": "0.2.0.dev0",
+          "numpy": "2.4.4",
+          "scipy": "1.17.1"
+        }
+      },
+      "producer_sha256": "0f8710fd540b2ded14628abe0e10c187889677d58a14eb5e705f0174e9828675",
+      "unit": {
+        "command": "systemd-run --user --unit=issue212-restricted2 --same-dir --collect -p Nice=10 /bin/bash -o pipefail -c '.venv/bin/python -I -u analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py displays 2>&1 | tee analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/execution.log'",
+        "unit": "issue212-restricted2.service",
+        "invocation_id": "9a22e0ff1c904f3f89ca848942d03f79"
+      }
     }
   },
   "inputs": {
@@ -199,7 +237,13 @@
     "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/chemistry-coordinates.json": "74b6efa0eb1eedc4705cb2250dccc6ad2baeae60734efd6c20081dbc43c783be",
     "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted/fit/usable-budget-endpoint.json": "e0c6acd35f1fbb2c8ecd902b6ca3d790d20e3e931b4052399ce0e2d4e8c2892d",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted/run/fit/usable-budget-endpoint.json": "d0af148a8db25760f541f6c702768d51c7b2e51a38b3a31691034216eccfb858",
-    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted/run/fit/chemistry-coordinates.json": "d4ac8b6a11d2f0e768d02a83dab81ce07f5d13aac8521eb1b34485b46c5b4499"
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted/run/fit/chemistry-coordinates.json": "d4ac8b6a11d2f0e768d02a83dab81ce07f5d13aac8521eb1b34485b46c5b4499",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/information-spec.json": "8e4e1e2902b73d7ad91d240b38b0e223e468fd03a89387be38c8f01b4f7414af",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json": "41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/continuation.json": "30fef3e8a213e68dd214e2ba44db68403811308b562a16f7e9adb49931fbe6b1",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/reported/fixed-parameters.json": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/comparison/fixed-parameters.json": "efb2a9abe3787410734394f5ee32e6eade42d7cb6f5ad23445a357423690b2f3",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/permittivity/summary.json": "b707b7ff5edddd9e58049da48776a74fbd6faf3dc7736805fa48974676b385ef"
   },
   "final_producers": {
     "analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py": "0f8710fd540b2ded14628abe0e10c187889677d58a14eb5e705f0174e9828675",
@@ -223,16 +267,21 @@
       "path": "analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py",
       "sha256": "e6a7e3b8726da1ff67edfcbe3592e9ba200d02046a45acb4c1a15b63341378a7",
       "gross_lines": 123
+    },
+    "1e8a16f": {
+      "path": "analyses/mea_parameter_bundle/scripts/association_volume_refit_chain.py",
+      "sha256": "0f8710fd540b2ded14628abe0e10c187889677d58a14eb5e705f0174e9828675",
+      "gross_lines": 143
     }
   },
   "notebook": {
     "path": "analyses/mea_parameter_bundle/joint-recalibration/index.qmd",
-    "sha256": "229cf42c6f34c1f58f6d4549fad1201abd2035d466cbb8946398961c4f734bac"
+    "sha256": "8bbd484eb800ee452e4660e4f747fe41b51646fccbd53748b96d617d2fa388e7"
   },
   "render": {
-    "path": "/tmp/issue-212-quarto/mea_parameter_bundle/joint-recalibration/index.html",
-    "sha256": "3ca19a1761c024a550d4d9af20b87f6f32f3f42e7ee4cfabd8675cb9230d47a2",
-    "command": "nice -n 10 quarto render analyses/mea_parameter_bundle/joint-recalibration/index.qmd --to html --no-execute --output-dir /tmp/issue-212-quarto",
+    "path": "/tmp/issue-212-continuation-quarto/mea_parameter_bundle/joint-recalibration/index.html",
+    "command": "nice -n 10 quarto render analyses/mea_parameter_bundle/joint-recalibration/index.qmd --to html --no-execute --output-dir /tmp/issue-212-continuation-quarto",
+    "sha256": "a0b064f4026a3820d5aa07aa87cf80954d2a744812a1a64fa1049489adf3ad7a",
     "expected_values_found": true,
     "linked_refit_files_copied": true
   },
@@ -241,7 +290,7 @@
     "change-accounting.json (final change accounting)"
   ],
   "outputs": {
-    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/README.md": "e7994e2389e91e63d926254ee0928e3431b5175eaea91327fd6a513c88fabca7",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/README.md": "7da1548f4fc1318cebb01d03d3995aaa2678d9365f9a04046457e0914889a12e",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/a6/chemistry-start.json": "3f8aeb6feff81761d7809e9b82f28cf24e1f892806f1981f6d4a96ac4e649d4f",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/a6/command-timing.json": "f048820d05a019a903157fe43eff4f4cb882b64f80d6cbba982ca8a2ae8d83d2",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/a6/command.json": "9d72aa10c5d7cc70de9bdcb82dce9ad348ad03de1e6c7097a6b95ebb7d515e44",
@@ -268,6 +317,25 @@
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/a6/run/fit/usable-budget-endpoint.json": "efb2a9abe3787410734394f5ee32e6eade42d7cb6f5ad23445a357423690b2f3",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/a6/spec.json": "4f09b9e7eb2ff883f12144c1482e847a4786c106bf383385239e5106871b2172",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/a6/start.json": "149a6c45a4822f341cf71c3ad2988e8d22e2fad98e23cd0747f7ae4d78592577",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/cai-constant-replay.json": "bbdba85ee6aaca496e99c2e97a68de13f3e954fd4563659c037b3b3df768317e",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/command-timing.json": "a7a458cc2282b051a0732b0515d86ae8a17a4b9eb57b7a5d9a41e6291956d4d2",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/command.json": "d190734812e9c7f66833cbc5158bfaa5eb1fbac528095c7addcbe0112e58a171",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/comparison/fixed-parameters.json": "efb2a9abe3787410734394f5ee32e6eade42d7cb6f5ad23445a357423690b2f3",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/comparison/full-replay.json": "2887a71f05ef70647af232964b1aeef538555cd079b5acf66c8330f45ba795a7",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/comparison/score.json": "b9e15f88f43b7b1decbf68ffdbaa0c30f5692f21fc2d53070c1aa24c7e80c7d9",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/conditional/conditional-correlations.csv": "cbb2a35a48285bd4b4cd8b6a0b6a27b1c13d46793ce31b86ef06003e0a71aed8",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/conditional/conditional-standard-errors.csv": "4cd6f82953a4f619dee0f1110558cd4c241278f2870a2ee5646cb487ec475e0d",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/conditional/conditional-uncertainty.json": "07058e4cc7401bd0b8731989c531d25c0a6450df4087080d20679fa89f939538",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/conditional-base/restricted-2/fit/chemistry-coordinates.json": "ed15a32884d7b64ae92733bd324e2296957ccec3f327e34fa41c2b8f03a033fb",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/execution.log": "d1b3245d2d6ccd78779d73f708e8b0e49c51ed37eddcd78fe96f7662f475e376",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/permittivity/rows.csv": "ad0e49cc4aeeb18e442deeb48328e7d07eeead4e47853c9e4ddd24c7694f8503",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/permittivity/summary.json": "b707b7ff5edddd9e58049da48776a74fbd6faf3dc7736805fa48974676b385ef",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/reported/fixed-parameters.json": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/reported/full-replay.json": "aeb3331cf95cb174faa9cfa5891e887dbae0829448b5c67a2da17727ed386560",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/reported/score.json": "a1aba0ded55be8d51efc88f259e9c36ca4d4a52ba33f20528ec8b5a3e66793e9",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/summary.json": "ed5f1c9216a3acba94e07643229c0df4ef1086803032f58d3879d2d6f524bedd",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/unit-command.json": "8f7bb2b3ce98a3ca180b79a746620f5e85a846c7b74aac21bfb4d5af75fdcd37",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/displays/water.csv": "c8b9ba5f151f854a03f3c07831f9092d7ce1f4b60c2dce30469abd4794979d82",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/held-x3/chemistry-start.json": "fbaa55d89203e9fb1f561adb1ab4cbeab46f424e724b95ad93980087d14f80a9",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/held-x3/command-timing.json": "049fe75ddfe9827b736b9a618c62356bd4179c599f42f35166fa852e0b7a1a75",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/held-x3/command.json": "5a841f138eaa69f3d75be0314a707eff37f92914954d77e7e91bab532b5529db",
@@ -294,8 +362,8 @@
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/held-x3/run/fit/usable-budget-endpoint.json": "9084c6be8e74f7ee71b6a7ac4db929db89462ad753b8cfe89b9cc9a96145a740",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/held-x3/spec.json": "c3d67a7973ac48ffceaecd26a76ab77a273aa704f906c190492b1db78f928e69",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/held-x3/start.json": "82d9c61ed2fef7020fa5c4c69ebf88e32fe87a1196b1897faae7476193399573",
-    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/parameter-changes.csv": "8174c845aece02a3c5c4d973200bd9f9d8f69040b64be9ad504860cb6d4a588e",
-    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/parameter-changes.json": "dd350d559d1aba5e1289a57611e6f0593c20264a7cd818f41558a2ea71cee687",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/parameter-changes.csv": "04b2649bf0f0046345c5ea2540bbf2c20b01fa2e09fb4ac46d9ea27cc8f56e66",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/parameter-changes.json": "d5a737e86eb68705c628ea1aed18fc9bcdfbf247534028e65c5950f533a08315",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/reference/parameters.json": "5eaec63502626af2d4e304b071d7ec9a16d74b7303f35536938aff164b5d7867",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted/chemistry-start.json": "74b6efa0eb1eedc4705cb2250dccc6ad2baeae60734efd6c20081dbc43c783be",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted/command-timing.json": "1843c17c8a4550f46f4166f3421bfb45293e34759feb27c3eb9c2b16a17cb56b",
@@ -323,6 +391,40 @@
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted/run/fit/usable-budget-endpoint.json": "d0af148a8db25760f541f6c702768d51c7b2e51a38b3a31691034216eccfb858",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted/spec.json": "1a644ace7166e09163732d824ee86400f505bc830fde2b21e8d5d78f678d6129",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted/start.json": "8ada3a3a2e2b0e72cf8bc93e3406c797c71580c4bfca16a1cf4a948f580336ff",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/continuation.json": "d4fffdf8e82fdda5b628f00355753dff870d4a5ec50d7c6719e45c2706d0f5ce",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/information-command.json": "9ce87af79999ae9a72a591ea8cdb73057ca66614a631d6c96e5dc20a68b2287e",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/information-spec.json": "8e4e1e2902b73d7ad91d240b38b0e223e468fd03a89387be38c8f01b4f7414af",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/information.log": "9563d286f3041444b9d907c6092f14e584e5ede7f601fda7a165b1ae65d4a50c",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/release/failure.json": "fb8d1921fc1f2ae69253d6ce2c4243a473fe0bbd2f0091c20a3d0256261c7095",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/release/inputs.json": "1c9262ce23824c4af3ec7c4616716ea62879e0649e17720d12e74070ef3336f3",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-2/release/stage6-spec.json": "8e4e1e2902b73d7ad91d240b38b0e223e468fd03a89387be38c8f01b4f7414af",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/command-timing.json": "dc8677e1eaa9095498c426e3f24cb5e361bc95c862d2b71bbb932140a6261473",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/continuation.json": "30fef3e8a213e68dd214e2ba44db68403811308b562a16f7e9adb49931fbe6b1",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/fit-command.json": "b1c41335a53bafabf81e947eb867d9176dadb42f084a7c264169860ba988e05c",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/fit.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/information-command.json": "49ce0ea6126fe5641d03a33b020f59a7aa47a0a585afed265b209f0636b6b68c",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/information-spec.json": "8e4e1e2902b73d7ad91d240b38b0e223e468fd03a89387be38c8f01b4f7414af",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/information.log": "d30958890a29c5d1159f5359ac8212742f1b57c7734b3e9ba93daf04657673cd",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/parameter-changes.json": "b6dc9b4590033b900886a020d724386903050b0b3f13232298fc386d56488d24",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/information/a7-restricted-2-endpoint/derivative-evaluations.json": "bb30ff79cae01b82e98d6b4dd3644dbc480cb097833326b742e1b1ecf61e3176",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/information/a7-restricted-2-endpoint/derivatives.json": "c7f6a88d2607a2846c409dbf4dcd5082e525944964c0a268811b2aec5d6d5507",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/information/a7-restricted-2-endpoint/lambda-1.0.json": "d288084b4d8c4260d523579f3ed78409bc6b0904c230705b49ebcd82d943efbe",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/information/a7-restricted-2-endpoint/native.json": "82c437d67843182f9d18b35f3e1e57b69828ec8f3afb16d0c6b49bedc4733cad",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/inputs.json": "1c9262ce23824c4af3ec7c4616716ea62879e0649e17720d12e74070ef3336f3",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/machine.json": "7de9f8966c7f799850d99dbe79c7b351eb5ac4035e3eb91a3a13544f1a13bc06",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/release-tests.json": "82f3d54a7152c1bd669bc173d4dfb348c3b15adcf6897e8bb2eee32c79781fce",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/stage6-spec.json": "8e4e1e2902b73d7ad91d240b38b0e223e468fd03a89387be38c8f01b4f7414af",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/summary.json": "b522a77ef4aa9c979944f876d215583b0d21d489bcf44c34dfde9c7317c77c95",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/release/timing.json": "f826a25b2851c51870db9e3204f7868c09942758144f35eea785ee5d4e772f66",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/chemistry-coordinates.json": "ed15a32884d7b64ae92733bd324e2296957ccec3f327e34fa41c2b8f03a033fb",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/inputs.json": "1c9262ce23824c4af3ec7c4616716ea62879e0649e17720d12e74070ef3336f3",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/machine.json": "caee5a33edbff23a0493f718d77d003aa3e6a1444db2cf447bc2285ff6ac541f",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/native.json": "eaf0acffda6068af4832b35ba2469e387409e1716c1037742eaad8dca3d0ca4d",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/stage6-spec.json": "41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/summary.json": "ab2ba78ddf6505a00b39bc144ee5a6fb257adc4d6474e32d08cc27133aa05a55",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/timing.json": "f432092b7ca112d71c0a786f9f6a21f715ffeaac7bd148c45e21ecbcf767b93b",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json": "41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/chemistry-start.json": "d4ac8b6a11d2f0e768d02a83dab81ce07f5d13aac8521eb1b34485b46c5b4499",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/command.json": "bd94b1bb15bd2ec59c72d807d98a7873a2d970385be0e4b353dba1b35b7d9625",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/information-spec.json": "8e4e1e2902b73d7ad91d240b38b0e223e468fd03a89387be38c8f01b4f7414af",
@@ -386,13 +488,25 @@
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/stage5/run/stage5-spec.json": "044df5909d48dc3fd495754477c1dcd0b2dc491631973b9831dd3382ff2cee75",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/stage5/run/timing.json": "0eeb7e03eb49a3117496d418b9f75b86264e7e29fabe72a274d5d1d0467dde33",
     "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/stage5/spec.json": "044df5909d48dc3fd495754477c1dcd0b2dc491631973b9831dd3382ff2cee75",
-    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/summary.json": "5148b4cda318197d648076b99812dfd3325951a10a1920a416efa72d90189c09",
-    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/validation.json": "bf7ed6674d0b483f38f536c2fc470496e283eec15c4ac6bb5ddf06711ca59472"
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/summary.json": "e40ddba5355c7294d9fe12fda0cc43cde5b80b60bb8ef4af586660877ab30e4f",
+    "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/validation.json": "676f8087149407cdb2e7b72d49a60e75b185a8f21cd9062f2c8ccde61ce16be7"
   },
-  "postprocessing": "summary.json and parameter-changes.{csv,json} reduce retained native weighted residuals and coefficient magnitudes only; no Engine call. Relative changes use (refitted - previous)/previous, with null for zero denominators. Validation checks retained completion values, row availability, declared timing ceilings and the selected-record hash; no scientific model was rerun.",
+  "postprocessing": "Summary and coefficient-change tables reduce retained native fit values and fixed replays only; no additional Engine call. Signed relative coefficient change is (refitted - previous)/previous, null for a zero denominator. Validation checks completion, available finite rows, requested tolerances, declared timing ceilings, fresh information binding, density and conditional-uncertainty assertions, the original interrupted files, and the unchanged selected record.",
   "code_accounting": {
     "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/change-accounting.json",
-    "sha256": "ef344d6de3b41225b25de5d7cf4099e561de329aa761807b1cf2f5b4c5fa96f1",
+    "sha256": "412f784c3aa396807edcbbb645fa323cd849f526d7b9040f82d7f6266937d21a",
     "gross_executable_additions": 150
-  }
+  },
+  "continuation_base_commit": "1e8a16fac17a4861602de2cb054fe4370352a75f",
+  "continuation_authority": "User-delivered orchestrator decision 2026-10-24: identical execution after host turn interruption; no numerical retry.",
+  "environment_links": {
+    ".venv": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv",
+    "build": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/build"
+  },
+  "environment_link_disposition": "Temporary local links to the pinned installed environment and wheel directory; removed after calculation. No environment or build directory is committed.",
+  "temporary_display_bindings": {
+    "restricted-2/spec.json": "restricted-2/attempt-3/spec.json",
+    "restricted-2/run": "restricted-2/attempt-3/run"
+  },
+  "temporary_display_binding_disposition": "Relative links used by the unchanged fixed-calculation producer, then removed before notebook validation; canonical outputs remain under attempt-3."
 }
