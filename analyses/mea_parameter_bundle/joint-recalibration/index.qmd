@@ -32,6 +32,21 @@ Yes, at one disclosed cost. The phase search resolves no Gibbs-energy decrease a
 
 # Values
 
+## Pure-MEA association-volume conversion {#association-volume-210}
+
+**The two converged estimators require an owner decision under [#210](https://github.com/tannerpolley/Amine-Thermodynamics/issues/210).** On the pinned Engine `3e83e19c` wheel, the original SciPy bounded absolute-error search gives $\kappa=0.03628703079971812$, which rounds to `0.036287` at five significant figures and differs from the historical optimum by $1.4089\times10^{-13}$ relative (required: at most $10^{-6}$). The native least-squares fit gives $0.03630543900419865$, rounding to `0.036305`; this triggers the specified stop. No parameter or manuscript text was changed.
+
+Both fits compare pure-MEA saturation pressure and liquid molar density with Baygi's own model at 21 temperatures, 293.15–393.15 K in 5 K steps, holding the other pure parameters fixed. The reference volume is $0.037470[1-0.12\exp(-3(277.174)/T)]^3$, from Baygi and Pahlavanzadeh (2015), Eqs. (4)–(5), p. 791 and Table 2, p. 792. The original search minimizes the sum of absolute relative errors; the native fit minimizes half the sum of their squares with unit weights and observations in Pa and mol/m³. The two final objectives are:
+
+| Estimator | Sum of absolute relative errors | Half sum of squared relative errors |
+|---|---:|---:|
+| Absolute-error optimum | 0.11081423588344319 | 0.0003857111510874517 |
+| Least-squares optimum | 0.11088518051704765 | 0.0003835770506949749 |
+
+SciPy reports success after 25 evaluations. The native fit is usable and converged by function tolerance after three iterations, with all 42 final observations available and finite. All 722 retained saturation solves pass the $10^{-10}$ equation-residual limit; the largest absolute residual is $5.8176\times10^{-14}$. The [retained comparison](../results/engine-3e83e19c-association-volume/README.md) provides both objectives at each optimum, the full [31-temperature table](../results/engine-3e83e19c-association-volume/reporting-grid.csv), percentage average absolute deviations over both requested intervals, the exact fitting declaration and provenance. For the printed volume `0.036287`, pressure/density average absolute deviations from Baygi's model are 0.525156%/0.00253596% over 293.15–393.15 K and 0.793280%/0.00897262% over 303.15–443.15 K. A scalar table suffices for the rounding decision; the retained grid supports inspection of its temperature dependence.
+
+This is numerical reproduction against deterministic model targets, not physical validation. It applies only to pure MEA and isothermal properties; the 293.15–303.15 K portion extends below Baygi's pure-parameter fitting interval (303.15–443.15 K, §3.1, p. 792). Neither the difference between optima nor the native covariance is physical parameter uncertainty. This subsection has not been independently reviewed or promoted for manuscript use. Issue #211 awaits the owner's estimator decision.
+
 ## Joint fit objective groups
 
 The table preserves all 307 objective rows and their separate costs from the [fit summary](../results/a7-paper-evidence/fit-summary.json). The common-149 pressure, species and heat subgroups are shown separately beneath their combined group and must not be added a second time. The added seven restored species and six Jakobsen amount ratios preserve their declared observation operators. Costs depend on the declared scales and weights; density scales are not uniformly measured uncertainties. The [historical F1–F6 comparison](../results/heat-final-170/fit-comparison.csv) remains predecessor evidence.
