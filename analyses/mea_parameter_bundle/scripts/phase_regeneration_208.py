@@ -20,7 +20,7 @@ sys.path[:0] = [str(B/'scripts'), str(B/'calibration-misfit'), str(ROOT/'src')]
 import final_evidence as f
 import phase_extension_201 as extension
 R, J, OUT = B/'results', B/'results/joint-recalibration-170', B/'results/engine-3e83e19c-phase'
-FITS = {'A6': R/'engine-3e83e19c-refits/a6/run/fit/usable-budget-endpoint.json', 'A7': R/'selected-current-best-parameters.json'}
+FITS = {'A6': R/'engine-3e83e19c-refits/a6/run/fit/usable-budget-endpoint.json', 'A7': R/'joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json'}
 WORKERS = min(os.cpu_count(), int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])//1_000_000)
 load, write, table = f.campaign.load, f.s.write_json, f.table
 REFERENCE = R/'phase-extension-201/run-2/phase_extension_201.py.txt'

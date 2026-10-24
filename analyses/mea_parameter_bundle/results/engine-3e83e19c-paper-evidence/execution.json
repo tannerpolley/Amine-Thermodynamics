@@ -1,0 +1,408 @@
+{
+  "base_commit": "74bb89a45987e0f1062edbcc32c723b8d20fcfde",
+  "calls": [
+    {
+      "stage": "assessments",
+      "mode": "cp",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+        "cp"
+      ],
+      "exit_code": 0,
+      "wall_s": 9.906133390999457,
+      "cpu_s": 12.432747999999998
+    },
+    {
+      "stage": "assessments",
+      "mode": "density",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+        "density"
+      ],
+      "exit_code": 0,
+      "wall_s": 11.028083982004318,
+      "cpu_s": 43.283314000000004
+    },
+    {
+      "stage": "assessments",
+      "mode": "declared-density",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+        "declared-density"
+      ],
+      "exit_code": 0,
+      "wall_s": 11.333012301998679,
+      "cpu_s": 12.311653
+    },
+    {
+      "stage": "assessments",
+      "mode": "calorics",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+        "calorics"
+      ],
+      "exit_code": 0,
+      "wall_s": 9.483401712001069,
+      "cpu_s": 13.812813999999998
+    },
+    {
+      "stage": "assessments",
+      "mode": "carbonate",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+        "carbonate"
+      ],
+      "exit_code": 0,
+      "wall_s": 9.299421183000959,
+      "cpu_s": 10.111579000000011
+    },
+    {
+      "stage": "assessments",
+      "mode": "states",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+        "states"
+      ],
+      "exit_code": 0,
+      "wall_s": 13.427397175000806,
+      "cpu_s": 90.05748299999999
+    },
+    {
+      "stage": "assessment provenance",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/assess.py.txt",
+        "inventory"
+      ],
+      "exit_code": 0,
+      "wall_s": 9.01102620799793,
+      "cpu_s": 8.990718999999999
+    },
+    {
+      "stage": "assessment reduction",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/selected-assessment/reduce.py.txt"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.2379061269966769,
+      "cpu_s": 0.2142140000000012
+    },
+    {
+      "stage": "package point-data reduction",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/scripts/reduce_a7_evidence.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.07765474600455491,
+      "cpu_s": 0.062681
+    },
+    {
+      "stage": "replay identity",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "-c",
+        "import json,sys,math,hashlib\nfrom pathlib import Path\nroot=Path.cwd(); b=root/'analyses/mea_parameter_bundle'; sys.path[:0]=[str(b/'scripts'),str(root/'src')]\nimport fit_observations as fo, fit_campaign as c\nout=b/'results/engine-3e83e19c-paper-evidence'; base=b/'results/engine-3e83e19c-refit-chain'\nspec_path=base/'restricted-2/attempt-3/spec.json'; record=spec_path.parent/'run/fit/usable-budget-endpoint.json'\nspec=json.loads(spec_path.read_text()); runtime=c.verify(spec); mapping=fo.s.parameter_mapping(record)\n_,rows=fo.stage6_rows(spec,mapping); weights=c.stage6_weights(spec,[r for r,_ in rows],1.)\nvalues=fo.replay(mapping,[(r['id'],item,w) for (r,item),w in zip(rows,weights,strict=True)])\nfo.s.write_json(out/'full-replay.json',values)\nreference=base/'displays/reported/full-replay.json'; old={r['target']:r for r in json.loads(reference.read_text())}; new={r['target']:r for r in values}\nassert len(values)==len(new)==len(old)==307 and set(new)==set(old)\nchecks=[]\nfor identity,a in new.items():\n    o=old[identity]; declarations=all(a[k]==o[k] for k in ('target','observed','scale','weight','form'))\n    differences={k:abs(a[k]-o[k])/max(abs(a[k]),abs(o[k]),1e-300) for k in ('predicted','residual','weighted_residual','cost')}\n    finite=all(math.isfinite(r[k]) for r in (a,o) for k in differences)\n    zeros=all(abs(a[k]-o[k])<=1e-300 for k in differences if a[k]==0 or o[k]==0)\n    checks.append(dict(target=identity,declarations_equal=declarations,finite=finite,zeros_equal=zeros,relative_differences=differences,passed=declarations and finite and zeros and max(differences.values())<=1e-10 and a['status']==o['status']=='Available'))\na,z=(math.fsum(r['cost'] for r in side.values()) for side in (new,old)); cost_delta=abs(a-z)/max(abs(a),abs(z),1e-300)\nresult=dict(rows=307,parameter_sha256=fo.s.sha256(record),engine=spec['engine'],runtime=runtime,checks=checks,summed_cost=a,reference_summed_cost=z,summed_cost_relative_difference=cost_delta,worst_relative_difference=max(v for r in checks for v in r['relative_differences'].values()),passed=all(r['passed'] for r in checks) and math.isfinite(a) and math.isfinite(z) and cost_delta<=1e-10,inputs={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (record,spec_path,reference)})\nfo.s.write_json(out/'replay-identity.json',result)\nprint({k:v for k,v in result.items() if k not in ('checks','runtime')},flush=True)\nassert result['passed']\n"
+      ],
+      "exit_code": 0,
+      "wall_s": 9.133172251997166,
+      "cpu_s": 9.113509
+    },
+    {
+      "stage": "comparison density export",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/scripts/paper_displays_215.py",
+        "comparison-density"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.25922060199809493,
+      "cpu_s": 0.23573199999999947
+    },
+    {
+      "stage": "water display",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "analyses/mea_parameter_bundle/scripts/paper_displays_215.py",
+        "water"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.2739995660012937,
+      "cpu_s": 0.2638120000000011
+    },
+    {
+      "stage": "model curves",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-u",
+        "analyses/mea_parameter_bundle/scripts/model_curves.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 38.564223123001284,
+      "cpu_s": 494.57365100000004
+    },
+    {
+      "stage": "candidate consumer checks",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "-c",
+        "import sys,importlib.util\nfrom pathlib import Path\nroot=Path.cwd(); tmp=Path('/tmp/issue215-candidate-check'); rel=Path('analyses/mea_parameter_bundle'); sys.path[:0]=[str(root/rel/'scripts'),str(root/'src')]\nfor name in ('render_regression_overview','render_parameter_tables','check_a7_selected'):\n    path=tmp/rel/'scripts'/(name+'.py'); spec=importlib.util.spec_from_file_location('candidate_'+name,path); m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)\n    if name=='check_a7_selected':\n        m.s.PARAMETERS=tmp/rel/'results/selected-current-best-parameters.json';m.s.parameter_mapping.__defaults__=(m.s.PARAMETERS,)\n    m.main()\n"
+      ],
+      "exit_code": 1,
+      "wall_s": 6.887390032003168,
+      "cpu_s": 6.860067
+    },
+    {
+      "stage": "candidate default-record check",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-u",
+        "-c",
+        "import sys,importlib.util\nfrom pathlib import Path\nroot=Path.cwd(); tmp=Path('/tmp/issue215-candidate-check'); rel=Path('analyses/mea_parameter_bundle'); sys.path[:0]=[str(root/rel/'scripts'),str(root/'src')]\nfor name in ('check_a7_selected',):\n    path=tmp/rel/'scripts'/(name+'.py'); spec=importlib.util.spec_from_file_location('candidate_'+name,path); m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)\n    if name=='check_a7_selected':\n        m.s.PARAMETERS=tmp/rel/'results/selected-current-best-parameters.json';m.s.parameter_mapping.__defaults__=(m.s.PARAMETERS,)\n    m.main()\n"
+      ],
+      "exit_code": 0,
+      "wall_s": 7.870004668999172,
+      "cpu_s": 7.847697
+    },
+    {
+      "stage": "updated selected-record hash assertion",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_source_corrections_152.py::test_declared_domain_pre_dispatch_and_protected_rows"
+      ],
+      "exit_code": 0,
+      "wall_s": 3.7814612119982485,
+      "cpu_s": 3.741353
+    },
+    {
+      "stage": "adopted default-record check",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-u",
+        "analyses/mea_parameter_bundle/scripts/check_a7_selected.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 7.835925374994986,
+      "cpu_s": 7.817371
+    },
+    {
+      "stage": "notebook figures",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-u",
+        "analyses/mea_parameter_bundle/scripts/render_regression_overview.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 6.7751533440023195,
+      "cpu_s": 6.762007
+    },
+    {
+      "stage": "notebook tables",
+      "argv": [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        "-u",
+        "analyses/mea_parameter_bundle/scripts/render_parameter_tables.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.0544347690010909,
+      "cpu_s": 0.03912399999999944
+    },
+    {
+      "stage": "notebook validation",
+      "argv": [
+        "python3",
+        "-I",
+        "analyses/manuscript.py",
+        "validate",
+        "analyses"
+      ],
+      "exit_code": 0,
+      "wall_s": 9.186910368000099,
+      "cpu_s": 10.671628000000002
+    },
+    {
+      "stage": "notebook HTML render",
+      "argv": [
+        "bash",
+        "analyses/render.sh",
+        "mea_parameter_bundle/notebook.qmd",
+        "--output-dir",
+        "/tmp/issue215-notebook-render"
+      ],
+      "exit_code": 0,
+      "wall_s": 21.878581880999263,
+      "cpu_s": 24.245214999999998
+    },
+    {
+      "stage": "final notebook validation",
+      "argv": [
+        "python3",
+        "-I",
+        "analyses/manuscript.py",
+        "validate",
+        "analyses"
+      ],
+      "exit_code": 0,
+      "wall_s": 9.222912819001067,
+      "cpu_s": 10.721827000000001
+    },
+    {
+      "stage": "final change accounting",
+      "argv": [
+        "bash",
+        "-c",
+        "python3 -I /home/tnnrpolley21/.codex/plugins/cache/cse/cse/local/scripts/workflow/change_accounting.py --repo . --base 74bb89a45987e0f1062edbcc32c723b8d20fcfde --json > analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/change-accounting.json"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.18805426700419048,
+      "cpu_s": 0.23208399999999907
+    }
+  ],
+  "transient_units_started": [
+    "issue215-assessments",
+    "issue215-assessment-reduction",
+    "issue215-point-data",
+    "issue215-replay-water",
+    "issue215-model-curves",
+    "issue215-candidate-consumers",
+    "issue215-candidate-replay",
+    "issue215-adopted-consumers",
+    "issue215-notebook",
+    "issue215-final-checks"
+  ],
+  "adopted": true,
+  "stop": null,
+  "code_gross_added_lines": 141,
+  "code_ceiling": 150,
+  "validation": {
+    "syntax_parsed_files": 15,
+    "git_diff_check": "passed with core.whitespace=cr-at-eol; CSV CRLF bytes are preserved",
+    "numerical_checks_run": true,
+    "selected_record_hash_test": "1 passed in 3.57s",
+    "notebook_validation": "valid",
+    "notebook_html": "/tmp/issue215-notebook-render/mea_parameter_bundle/notebook.html",
+    "notebook_browser": {
+      "ready": "complete",
+      "viewport_width": 1280,
+      "broken_images": 0,
+      "horizontal_overflow": false,
+      "new_record_shown": true,
+      "new_cost_shown": true,
+      "screenshot": "Preview automation snapshot timed out after 15000ms. (two attempts)",
+      "figure_png_visually_inspected": "loaded-density-errors.png"
+    },
+    "candidate_sandbox_omission": "The first candidate check omitted selected-assessment/state-targets.csv, heats.csv and cp.csv; copied those retained files and reran the check successfully. No numerical input or tolerance changed.",
+    "final_notebook_validation": "valid"
+  },
+  "issue_body_sha256": "433e3c5df818fbbc83adce0ca4ed8618ef01748f2c4068f0fca5f4f23561cbfa",
+  "runtime": "uv --no-sync with the shared installed pinned wheel; ignored environment and wheel-storage links",
+  "existing_test_lines_added": 1,
+  "assessment_mode_evaluations": 670,
+  "displayed_curve_states": 874,
+  "displayed_curve_quantity_rows": 2211,
+  "water_states": 42,
+  "comparison_density_rows": 47,
+  "code_accounting": {
+    "base": null,
+    "executable_additions": 141,
+    "py_txt_additions": 24,
+    "existing_test_additions": 1,
+    "conservative_total": 142,
+    "ceiling": 150
+  }
+}

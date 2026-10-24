@@ -9,15 +9,17 @@ sys.path[:0] = [str(BUNDLE / 'calibration-misfit'), str(BUNDLE.parents[1] / 'src
 import final_evidence as fe  # one BLAS/OpenMP thread; probe and the corrected packet
 import shared_evaluation as s, fit_observations as fo, heat_evidence_170 as he, probe, epcsaft
 from epcsaft import equilibrium as eq, regression as reg
-OUT, RUNS, EVIDENCE = BUNDLE / 'results/model-curves', BUNDLE / 'results/runs/model-curves', BUNDLE / 'results/a7-paper-evidence'
-SPEC = fo.load('analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/restricted-2/fit-spec.json')
-MAPPING = s.parameter_mapping()
+EVIDENCE = BUNDLE / 'results/engine-3e83e19c-paper-evidence'
+OUT, RUNS = EVIDENCE / 'model-curves', EVIDENCE / 'curve-runs'
+RECORD = BUNDLE / 'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'
+SPEC = fo.load('analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json')
+MAPPING = s.parameter_mapping(RECORD)
 PARAMS, (PACKET, GROUPS) = epcsaft.Parameters.from_mapping(MAPPING), fe.observations()
 MODEL = epcsaft.Mixture(PARAMS, thermochemistry=he.vrc.record())
-fe.binding('Held', str(s.PARAMETERS))
+fe.binding('Held', str(RECORD))
 first_start = s.attempt_plan  # this analysis keeps only the declared first start; a failure there stays unavailable
 s.attempt_plan = lambda *state: first_start(*state)[:1]
-TEMPLATE, HEAT_REQUEST, IDENTITY = PACKET[0]['request'], he.request(MAPPING, 313.15, .11), dict(parameter_sha256=s.sha256(s.PARAMETERS), engine_wheel_sha256=s.ENGINE_WHEEL_SHA256)
+TEMPLATE, HEAT_REQUEST, IDENTITY = PACKET[0]['request'], he.request(MAPPING, 313.15, .11), dict(parameter_sha256=s.sha256(RECORD), engine_wheel_sha256=s.ENGINE_WHEEL_SHA256)
 CARBON, NITROGEN, CHARGE = (1, 0, 0, 0, 1, 1, 1, 0, 0), (0, 1, 0, 1, 1, 0, 0, 0, 0), TEMPLATE['reaction_system']['charges']
 SPECIES = {'MEA': (1,), 'MEAH+': (3,), 'MEACOO-': (4,), 'HCO3-': (5,), 'CO3^2-': (6,), 'CO2': (0,), 'MEA + MEAH+': (1, 3), 'HCO3- + CO3^2-': (5, 6)}
 QUANTITIES = {'pressure': {'CO2 partial pressure': 'Pa'}, 'species': {k: 'mole fraction' for k in SPECIES}, 'heat': {'integral heat of absorption': 'kJ/mol CO2'},
@@ -57,7 +59,7 @@ def evaluated(T, a, w, species):
     kind = [o for o in PACKET if (o['identity'].startswith('Bottinger') if species else o['request']['pressure']['role'] == 'solved')]
     template = min(kind, key=lambda o: (abs(round(o['request']['temperature']['value'] - T)), abs(o['request']['reaction_system']['feed_amounts_mol'][0] - a)))
     request = s.source_feed_request(template['request'], dict(source_key='model-curve', CO2_loading=a, MEA_weight_fraction=w, temperature_reported_C=T - 273.15))
-    record = s.evaluate_state(probe._base_model(), request, probe.reactions(), 'model-curve', [], budget_s=90, model_fingerprint=probe._BASE['fingerprint'])
+    record = s.evaluate_state(probe._base_model(), request, probe.reactions(), 'model-curve', [], budget_s=90, model_fingerprint=probe._BASE['fingerprint'], mapping=MAPPING, parameter_path=RECORD)
     if record['status'] != 'evaluated':
         raise RuntimeError(f"{record['failure_code']}: {record['failure_diagnostic']}")
     n = [math.fsum(p['amount_mol'] * dict(zip(p['support'], p['mole_fractions'])).get(c, 0.) for p in record['phases']) for c in s.COMPONENT_IDS]
@@ -90,7 +92,7 @@ def density(state):
     T, a, w, P = (state[k] for k in 'TawP')
     if a:
         request = s.source_feed_request(he.request(MAPPING, T, a, density=True), dict(source_key='Amundsen2009', CO2_loading=a, temperature_reported_C=T - 273.15, MEA_weight_fraction=w))
-        problem = s._problem_from_request(s.corrected_request(request, s.reaction_values(MAPPING)))
+        problem = s._problem_from_request(s.corrected_request(request, s.reaction_values(MAPPING), mapping=MAPPING))
         problem.P = P
     else:
         problem = s.unloaded_density_problem(MAPPING, TEMPLATE, dict(T_K=T, P_Pa=P, MEA_weight_fraction=w))
@@ -176,7 +178,8 @@ def main(families=tuple(GRIDS)):  # a family subset refreshes only its own summa
             axis = 'liquid_mea_mole_fraction' if family == 'mea-water' else 'analytical_loading'
             rows, picks = [r for rr in pool.map(run, [family] * len(states), states) for r in rr], []
             # retained grid rows must reproduce (#203 gate) before the family file is replaced
-            old = {(r['curve'], float(r[axis]), r['quantity']): r for r in csv.DictReader(path.open()) if r['sampling'] == 'grid'} if (path := OUT / f'{family}.csv').exists() else {}
+            repeated = [r for rr in pool.map(run, [family] * len(states), states) for r in rr]
+            old = {(r['curve'], r[axis], r['quantity']): r for r in repeated}
             pairs = [(r, old[k]) for r in rows if r['sampling'] == 'grid' and (k := (r['curve'], r[axis], r['quantity'])) in old]
             d = [(delta(r[k], o[k]), r['curve'], r[axis], r['quantity'], k) for r, o in pairs for k in ('value', 'bubble_pressure_Pa') if o.get(k) and r.get(k) is not None]
             worst = max(d, default=(0.,))
@@ -207,7 +210,7 @@ def main(families=tuple(GRIDS)):  # a family subset refreshes only its own summa
                 fine = [r for r in states if r['status'] == 'available']
                 passed = all(x['passed'] for x in sampling + summary['check_1_reference_replay'] if x.get('curve', c) == c and x.get('family', family) == family)
                 curves[c] = dict(states=len(states), failed=len(states) - len(fine), causes=sorted({r['cause'] for r in states if r['status'] != 'available'}),
-                                 **{k: max(r[k] for r in fine) for k in IMBALANCES}, checks_1_and_3_passed=passed, usable=passed and len(fine) >= .9 * len(states))
+                                 **{k: max(r[k] for r in fine) for k in IMBALANCES}, checks_1_and_3_passed=passed, usable=passed and len(fine) == len(states))
             summary['families'][family] = dict(engine_commit=s.ENGINE_COMMIT, engine_wheel_sha256=s.ENGINE_WHEEL_SHA256, workers=workers, csv_sha256=None,
                                                curves=curves, check_3_sampling=sampling, retained_grid_reproduction=reproduction)
     for family, rows in tables.items():

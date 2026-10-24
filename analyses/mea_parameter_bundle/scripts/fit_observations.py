@@ -26,7 +26,7 @@ def indexed(rows, key):
 
 
 def heat_items(mapping, params, sources, request):
-    request = s.corrected_request(request, s.reaction_values(mapping))
+    request = s.corrected_request(request, s.reaction_values(mapping), mapping=mapping)
     reactions = s._problem_from_request(request).reactions
     masses = {c['component_id']: c['fixed']['molar_mass']['value']['magnitude'] for c in mapping['components']}
     solvent = {'monoethanolamine': 1., 'water': masses['monoethanolamine']*.7/(.3*masses['water'])}
@@ -69,7 +69,7 @@ def rows_for(spec, mapping, observation_id):
             target = targets[identity]
             o = target['state']
             if o['identity'] not in groups:
-                request = s.corrected_request(o['request'], s.reaction_values(mapping))
+                request = s.corrected_request(o['request'], s.reaction_values(mapping), mapping=mapping)
                 groups[o['identity']] = s._problem_from_request(request, s.anchor_from(anchors[o['identity']]))
             problem = groups[o['identity']]
             output = indexed(o['request']['outputs'], 'identity')[target['prediction_identity']]
@@ -98,7 +98,7 @@ def stage6_rows(spec, mapping):
         form=item.form.name, quantity=item.kind.name), item) for i, item, w in common]
     rows.extend((row, item) for row, item, _ in added)
     template = s.load_state_packet(ROOT/spec['packet_path'])['observations'][0]['request']
-    request = s.corrected_request(template, s.reaction_values(mapping))
+    request = s.corrected_request(template, s.reaction_values(mapping), mapping=mapping)
     reactions = s._problem_from_request(request).reactions
     for row in spec['direct_rows']:
         problem = eq.Problem(T=row['T_K'], P=row['P_Pa'], feed=eq.Amounts(row['analytical_feed']),
@@ -243,7 +243,7 @@ def stage2_rows(spec, mapping, case, assessment=False):
         group = row['state_id']
         if group not in problems:
             if 'request_id' in row:
-                request = s.corrected_request(load(spec['state_requests_path'])[row['request_id']],s.reaction_values(mapping))
+                request = s.corrected_request(load(spec['state_requests_path'])[row['request_id']],s.reaction_values(mapping),mapping=mapping)
                 problem = s._problem_from_request(request)
             elif row['quantity'] == 'phase_density':
                 problem = s.unloaded_density_problem(mapping,template,row)

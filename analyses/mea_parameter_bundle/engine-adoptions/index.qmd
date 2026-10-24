@@ -11,7 +11,7 @@ resources:
   - ../results/engine-3e83e19c-adoption/checks.json
 ---
 
-Transfers: 18–19 October 2026 (F1 checks) and 23 October 2026 (current results, [#203](https://github.com/tannerpolley/Amine-Thermodynamics/issues/203)); A7 runtime identity retained separately below.
+Historical transfers: 18–19 October 2026 (F1 checks) and 23 October 2026 ([#203](https://github.com/tannerpolley/Amine-Thermodynamics/issues/203)). The 23 October comparison used the frozen [20 October A7 record](../results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json), `e234e860…`, MEA association volume 0.036287, and its original A6 comparison. Its [transfer account](../results/engine-3e83e19c-adoption/README.md) preserves those identities. The current #215 record, `00e77608…` at association volume 0.036305439, has separate [one-wheel evidence](../results/engine-3e83e19c-paper-evidence/README.md).
 
 # Question
 
@@ -19,13 +19,13 @@ Did each Engine adoption preserve the numbers it was checked against, and which 
 
 # Result
 
-All three transfers reproduced their compared quantities. The first two checked 152 F1 quantities only. The third, to Engine 3e83e19c, checked every current-result value the manuscript reports and changed none of them: all 4,595 compared values are bitwise equal, and the 146 phase-family states of A7 and A6 keep identical classifications and trial outcomes. The only changed values are two seeded split attempts for the A6 comparison fit in supplement Table S10; issue #203 accepted them as disclosed numerical changes. The [A7 default-path replay](../joint-recalibration/index.qmd#numerical-reproduction) is a separate check.
+All three transfers reproduced their compared quantities. The first two checked 152 F1 quantities only. The third, to Engine 3e83e19c, checked every then-current result value reported by the manuscript and changed none of them: all 4,595 compared values are bitwise equal, and the 146 phase-family states of A7 and A6 keep identical classifications and trial outcomes. The only changed values are two seeded split attempts for the A6 comparison fit in supplement Table S10; issue #203 accepted them as disclosed numerical changes. The [current #215 default-path replay](../joint-recalibration/index.qmd#numerical-reproduction) is a separate check.
 
 # Basis and method
 
 Each transfer compares installed merged-commit wheels on the same declared states. F1 is the earlier density-corrected parameter record, not A7. The retained comparison records bind the parameter document, declarations and both wheels.
 
-The 3e83e19c check reran the existing producers with only their output paths redirected and compared every value by row identity with relative difference $|y_\mathrm{new}-y_\mathrm{old}|/\max(|y_\mathrm{old}|,|y_\mathrm{new}|,10^{-300})$, gate $10^{-10}$ ($10^{-6}$ for the supplement splits). It covers the F1 reference fit's 152 predictions, both 307-row replays (total costs 148.90525398237165 for A7 and 148.23773148349386 for A6), 712 selected-assessment rows and 452 reductions, 2,019 model-curve values, both 73-state phase families, and the A6 seeded splits at states 21, 63 and 70.
+The 23 October 3e83e19c transfer check reran the existing producers with only their output paths redirected and compared every value by row identity with relative difference $|y_\mathrm{new}-y_\mathrm{old}|/\max(|y_\mathrm{old}|,|y_\mathrm{new}|,10^{-300})$, gate $10^{-10}$ ($10^{-6}$ for the supplement splits). It covers the F1 reference fit's 152 predictions, both 307-row replays (total costs 148.90525398237165 for A7 and 148.23773148349386 for A6), 712 selected-assessment rows and 452 reductions, 2,019 model-curve values, both 73-state phase families, and the A6 seeded splits at states 21, 63 and 70.
 
 # Values
 
@@ -44,7 +44,7 @@ The A6 seeded splits were computed on Engine 21e761c3. On 3e83e19c, 101 of their
 | 63, water-rich | failed; $\Delta G/(RT)$ −1.3990 × 10⁻⁴ | converged to the same two-liquid state as the uniform start; $\Delta G/(RT)$ −2.1105128438 |
 | 21, uniform | failed; $\Delta G/(RT)$ vs original −1.5415 × 10⁻⁵ | still failed; +4.76 × 10⁻⁷ |
 
-Both attempts were already failures on the previous pin, 8298c602. The state-63 change makes the two seeded starts at that state agree. The state-21 values belong to a failed solve and carry no physical meaning. Neither changes a number for the A7 reported parameters, a classification, or a fitted or compared quantity. The `3e83e19c` values are retained for Table S10 ([decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/203#issuecomment-6361213910)).
+Both attempts were already failures on the previous pin, 8298c602. The state-63 change makes the two seeded starts at that state agree. The state-21 values belong to a failed solve and carry no physical meaning. Neither changes a number for the historical A7 parameters, a classification, or a fitted or compared quantity. The `3e83e19c` values are retained for Table S10 ([decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/203#issuecomment-6361213910)).
 
 The Engine diff between 8298c602 and 3e83e19c changes no equation, species or phase support, reaction convention or observation operator these declarations select. It changes numerical methods: the stability-polish step limit (the Engine #811 fix), association Newton damping, physical-mole recovery, energy-action caching, and refusal of a phase-amount guess that the old interface ignored. The [adoption record](../results/engine-3e83e19c-adoption/README.md) lists each commit.
 
@@ -54,12 +54,12 @@ This is numerical verification, not physical validation. The earlier source snap
 
 # Records
 
-The pinned Engine is merged commit `3e83e19ccc771b51d8ebc038931ab25192f4c5b5`, wheel SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`, built from that commit with numpy 2.4.4 and scipy 1.17.1. The previous pin was `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`. No Engine source checkout is imported. The A7 parameter results were computed on 8298c602 and reproduce bitwise on 3e83e19c.
+The pinned Engine is merged commit `3e83e19ccc771b51d8ebc038931ab25192f4c5b5`, wheel SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`, built from that commit with numpy 2.4.4 and scipy 1.17.1. The previous pin was `8298c6029ebb8b467929badc4a223c580ec591ab`, wheel SHA-256 `8897a0caab9f2508ed642f42c8b5226957fbe7035ed7bfdad71e4166798785b3`. No Engine source checkout is imported. The historical A7 results for `e234e860…` were computed on 8298c602 and reproduced bitwise on 3e83e19c in the 23 October transfer; that comparison does not describe the later #212 refits.
 
-Where the A7 calculations call Ipopt, they used the MA57 linear solver; the 3e83e19c wheel also reports MA57. The wheel selects MA57 when the owner's licensed HSL library loads through `EPCSAFT_HSL_LIBRARY`, and MUMPS otherwise (Engine #605). The login environment has set that library since 18 October 2026, and the [A7 launcher](../results/joint-recalibration-170/amendment-7/run.py.txt) passes the inherited environment to every call. The A7 result files do not store the solver; the [8298c602 transfer comparison](../results/engine-8298c602-adoption/comparison.json), run on the same wheel and machine, records `ma57`. The pin before that, 21e761c3, predates that selection and used [MUMPS 5.6](../results/engine-8298c602-adoption/README.md). The Engine reports MA57 and MUMPS states agreeing within about 10⁻¹¹; this repository has not compared the two solvers on A7. Acknowledgement: HSL, a collection of Fortran codes for large-scale scientific computation. <https://www.hsl.rl.ac.uk/>
+Where the historical 20 October A7 calculations called Ipopt, they used the MA57 linear solver; the 3e83e19c wheel also reports MA57. The wheel selects MA57 when the owner's licensed HSL library loads through `EPCSAFT_HSL_LIBRARY`, and MUMPS otherwise (Engine #605). The login environment has set that library since 18 October 2026, and the [A7 launcher](../results/joint-recalibration-170/amendment-7/run.py.txt) passes the inherited environment to every call. The A7 result files do not store the solver; the [8298c602 transfer comparison](../results/engine-8298c602-adoption/comparison.json), run on the same wheel and machine, records `ma57`. The pin before that, 21e761c3, predates that selection and used [MUMPS 5.6](../results/engine-8298c602-adoption/README.md). The Engine reports MA57 and MUMPS states agreeing within about 10⁻¹¹; this repository has not compared the two solvers on A7. Acknowledgement: HSL, a collection of Fortran codes for large-scale scientific computation. <https://www.hsl.rl.ac.uk/>
 
 [First adoption](../results/engine-21e761c3-adoption/README.md) · [Second adoption](../results/engine-8298c602-adoption/README.md) · [Third adoption](../results/engine-3e83e19c-adoption/README.md) · [F1 identity](../heat-f1/index.qmd).
 
 ## Execution record
 
-Transfer commands, timings and installed-wheel checks remain in the linked adoption records. The 3e83e19c check used 15 calls, 238 wall-s and 632 CPU-s at niceness 10 ([checks](../results/engine-3e83e19c-adoption/checks.json)). On the new pin, pytest passes 95 tests; the four that fail fail identically on 8298c602 at the base commit.
+Transfer commands, timings and installed-wheel checks remain in the linked adoption records. The 3e83e19c check used 15 calls, 238 wall-s and 632 CPU-s at niceness 10 ([checks](../results/engine-3e83e19c-adoption/checks.json)). At that historical transfer commit, pytest passed 95 tests; the four failures were identical on 8298c602 at the base commit.
