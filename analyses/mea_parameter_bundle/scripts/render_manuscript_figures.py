@@ -1,4 +1,4 @@
-"""Render the manuscript figures from retained states and the retained model curves (#197, #202); no Engine compute."""
+"""Render the manuscript figures from the retained Engine 3e83e19c states and model curves of #212-#215 (#211); no Engine compute."""
 import ast
 import json
 import math
@@ -19,7 +19,7 @@ OUTPUTS = {}
 MARKERS = ['o', 's', '^', 'v', 'D', 'P', '*']
 SOURCE_NAMES = {'Bottinger2008':'Böttinger et al. (2008)', 'Matin2012':'Matin et al. (2012)', 'Vinjarapu2024':'Vinjarapu et al. (2024)', 'Arcis2011':'Arcis et al. (2011)', 'Amundsen2009':'Amundsen et al. (2009)', 'Hartono2014':'Hartono et al. (2014)', 'Han2012':'Han et al. (2012)', 'Aronu2011':'Aronu et al. (2011)', 'Hilliard2008':'Hilliard (2008)', 'Idris2014':'Idris et al. (2014)', 'Jou1995':'Jou et al. (1995)', 'Mamun2005':"Ma’mun et al. (2005)", 'Wagner2013':'Wagner et al. (2013)', 'Xu2011':'Xu and Rochelle (2011)'}
 SPECIES_NAMES = {'MEA':r'MEA', 'MEAH+':r'MEAH$^+$', 'MEACOO-':r'MEACOO$^-$', 'MEA + MEAH+':r'MEA + MEAH$^+$', 'HCO3-':r'HCO$_3^-$ + CO$_3^{2-}$', 'HCO3- + CO3^2-':r'HCO$_3^-$ + CO$_3^{2-}$'}
-CURVES = a.BUNDLE / 'results/model-curves'
+CURVES = a.E / 'model-curves'
 SPECIES_LINES = ((0, (5, 2)), ':')  # #205: dashed; dotted and lighter below the bubble pressure; an unavailable comparison has no style and fails
 
 
@@ -141,11 +141,11 @@ def main():
     ax.grid(alpha=.15)
     fig.legend(handles=handles, title='Dashed: calculated; markers: measured', title_fontsize=8, fontsize=8, frameon=False, loc='outside lower center', ncol=2)
     save(fig, 'heat-of-absorption', 'Integral heat of absorption of CO2 into 30 wt% MEA from zero loading, per mole of CO2 absorbed; negative values are exothermic. Dashed model curves at the three measured temperature-pressure conditions with the Vinjarapu (fitted) and Arcis (not fitted) measurements. Both liquids are equilibrium liquids and the CO2 feed is pure CO2 vapor at the same temperature and pressure.', ['heat.csv','model-curves/heat.csv'])
-    a6=a.rows(a.J/'amendment-6/selected-assessment/density.csv')
-    by_id={r['id']:r for r in a6}
+    by_id={r['id']:r for r in a.rows(a.E/'comparison-loaded-density-errors.csv')}  # comparison fit at the same 47 fitted loaded states
     loaded=[r for r in density if r['id'] in spec['loaded_density_ids']]
+    assert len(by_id)==len(loaded)==47
     for r in loaded:
-        assert all(r[k]==by_id[r['id']][k] for k in ['T_K','P_Pa','loading','observed_kg_m3','s_kg_m3'])
+        assert all(float(r[k])==float(by_id[r['id']][k]) for k in ['T_K','P_Pa','observed_kg_m3','s_kg_m3']) and math.isclose(float(r['loading']),float(by_id[r['id']]['loading']),rel_tol=1e-12)
     fig,axes=plt.subplots(2,2,figsize=(FULL_WIDTH,5.5),layout='constrained')
     for ax,source in zip(axes[0],['Amundsen2009','Hartono2014']):
         for r in [x for x in loaded if x['source']==source]:
@@ -169,7 +169,7 @@ def main():
         ax.legend(fontsize=8,frameon=False,loc='upper center',bbox_to_anchor=(.5,-.18),ncol=1)
     fig.colorbar(plt.cm.ScalarMappable(norm=plt.Normalize(0,.5),cmap='viridis'),ax=list(axes[0]),label='Loading',shrink=.7)
 
-    save(fig,'loaded-density-errors','A7/A6 share the 47 fitted loaded-density identities, observed values, scales and states. Top panels show ±2s limits only for that fitted cohort; color denotes loading, with source separated. Bottom panels cover all 210 A7 densities and distinguish fitted, non-fitted and excluded rows. No empirical volume translation. Scales are not uniformly measurement uncertainty; 2s is not a 95% interval.', ['density.csv','fitted-rows.csv',str((a.J/'amendment-6/selected-assessment/density.csv').relative_to(a.ROOT))])
+    save(fig,'loaded-density-errors','The reported and comparison fits share the 47 fitted loaded-density states, observed values and scales. Top panels show ±2s limits only for that fitted cohort; color denotes loading, with source separated. Bottom panels cover all 210 reported-fit densities and distinguish fitted, non-fitted and excluded rows. No empirical volume translation. Scales are not uniformly measurement uncertainty; 2s is not a 95% interval.', ['density.csv','fitted-rows.csv','comparison-loaded-density-errors.csv'])
     fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.8), layout='constrained')
     temperatures, curves = [298.15, 313.15, 333.15, 353.15, 373.15, 393.15], a.rows(CURVES/'density.csv')
     data = [r for r in density if r['mea_mass_fraction'] == '0.3' and float(r['T_K']) in temperatures]
@@ -188,7 +188,7 @@ def main():
     ax.grid(alpha=.15)
     save(fig, 'density-curves', 'Liquid density of 30 wt% MEA against analytical loading: dashed model curves at six temperatures and the 30 wt% measurements at those temperatures. Single liquids are imposed at 0.1 MPa up to 353.15 K and at 0.7 MPa at 373.15 and 393.15 K, as in the retained Han comparison; zero loading carries exactly zero carbon. Dotted, lighter segments lie below their bubble pressure. No empirical volume translation.', ['density.csv','fitted-rows.csv','model-curves/density.csv'])
     fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.6), layout='constrained')
-    curves, cai, handles = a.rows(CURVES/'mea-water.csv'), [r for r in a.load(a.ROOT/spec['stage2_rows_path'])['F1'] if r['id'].startswith('cai')], []
+    curves, cai, handles = a.rows(CURVES/'mea-water.csv'), [ast.literal_eval(r['declaration']) for r in fitted if r['group'] == 'Cai'], []
     observed = {r['id']: float(r['observed']) for r in fitted if r['group'] == 'Cai'}
     for P, color in zip((101330., 66660.), COLORS):
         state = {}
@@ -205,10 +205,9 @@ def main():
     ax.set(xlabel='MEA mole fraction', ylabel='Temperature (K)')
     ax.grid(alpha=.15)
     save(fig, 'mea-water', 'Bubble temperature and incipient vapor composition of the neutral MEA-water binary (no reactions) at 101.33 and 66.66 kPa, over each isobar’s measured liquid range, with the Cai et al. (1996) measurements. Liquid and vapor MEA mole fractions are on the same basis; the vapor value is one minus the retained water mole fraction.', ['fitted-rows.csv','model-curves/mea-water.csv'])
-    # Separate fits (#207): every plotted value is calculated with the reported parameters.
-    displays = a.BUNDLE/'results/engine-3e83e19c-refits/displays'  # reported parameters on the pinned Engine 3e83e19c
-    assert a.load(displays/'summary.json')['parameter_sha256'] == fit['record_sha256']
-    water = a.rows(displays/'water.csv')
+    # Separate fits: every plotted value is calculated with the reported parameters.
+    assert a.load(a.E/'water-summary.json')['parameter_sha256'] == fit['record_sha256']
+    water = a.rows(a.E/'water.csv')
     fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH, 2.7), layout='constrained', sharex=True)
     for ax, column, title in zip(axes, ['saturated_liquid_rho_error_relative', 'psat_error_relative', 'cp_error_relative'], ['(a) Saturated-liquid density', '(b) Saturation pressure', r'(c) $C_P$ at 0.3 and 0.101 MPa']):
         for grid, marker, filled in (('primary', 'o', True), ('staggered', 'o', False), ('atmospheric-controls', '^', True)):
@@ -221,7 +220,7 @@ def main():
     fig.legend(handles=[Line2D([], [], marker=m, ls='none', color=COLORS[0], markerfacecolor=COLORS[0] if f else 'none', label=l) for m, f, l in
                         (('o', True, 'Fitted, 0.3 MPa or saturation'), ('o', False, 'Not fitted, interleaved temperatures'), ('^', True, 'Fitted, 0.101 MPa'))],
                loc='outside lower center', ncol=3, fontsize=8, frameon=False)
-    save(fig, 'water-iapws', 'Relative deviations of the pure-water parameters from IAPWS-95 at the 20 fitted temperatures, 19 interleaved temperatures and three atmospheric heat-capacity states.', [str((displays/'water.csv').relative_to(a.ROOT))])
+    save(fig, 'water-iapws', 'Relative deviations of the pure-water parameters from IAPWS-95 at the 20 fitted temperatures, 19 interleaved temperatures and three atmospheric heat-capacity states.', ['water.csv'])
     kiepe = [dict(r, state=ast.literal_eval(r['declaration'])) for r in fitted if r['group'] == 'Kiepe']
     temperatures = sorted({round(r['state']['T_K'], 1) for r in kiepe})
     tcolor = dict(zip(temperatures, plt.colormaps['plasma']([.82*i/(len(temperatures)-1) for i in range(len(temperatures))])))
@@ -240,7 +239,7 @@ def main():
                        [Line2D([], [], marker=m, ls='none', color='black', markerfacecolor='none', label=l) for m, l in (('o', 'Measured'), ('x', 'Calculated'))],
                loc='outside right upper', fontsize=8, frameon=False)
     save(fig, 'co2-water', 'Bubble pressure of CO2-water at the 39 Kiepe et al. (2002) states, measured and calculated at the same temperature and liquid composition, with relative deviations.', ['fitted-rows.csv'])
-    permittivity = a.BUNDLE/'results/mea-water-permittivity'
+    permittivity = a.E/'permittivity'
     assert a.load(permittivity/'summary.json')['parameter_sha256'] == fit['record_sha256']
     rows = a.rows(permittivity/'rows.csv')
     fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH, 2.8), layout='constrained')
@@ -254,53 +253,36 @@ def main():
     for ax in axes:
         ax.grid(alpha=.15)
     axes[0].legend(handles=[Line2D([], [], marker=m, ls='none', color=COLORS[0], markerfacecolor='none', label=l) for m, l in (('o', 'Measured'), ('x', 'Calculated'))], fontsize=8, frameon=False)
-    save(fig, 'mea-permittivity', 'Relative permittivity of unloaded MEA-water at 298.15 K and 101325 Pa: the 14 Agieienko-Buchner measurements and the solvent law at the equation-of-state density, with the reported parameters.', [str((permittivity/'rows.csv').relative_to(a.ROOT))])
-    extension = a.BUNDLE/'results/phase-extension-201/run-3'
-    all_phase = a.rows(extension/'phase-family-combined.csv')
-    temperatures = sorted({float(r['temperature_K']) for r in all_phase})
-    positions = {T:i for i,T in enumerate(temperatures)}
-    assert len(temperatures)==6
-    fig,axes=plt.subplots(2,3,figsize=(FULL_WIDTH,4.7),layout='constrained',sharex=True,sharey=True)
-    for row,record in enumerate(['A6','A7']):
-        grid={}
-        for r in all_phase:
-            if r['record']==record and not (r['family']=='original-73' and int(r['index'])==0):
-                grid.setdefault((r['temperature_K'],r['loading']),[]).append(r)
-        assert len(grid)==51 and all(len(v)==3 for v in grid.values())
-        for group in grid.values():
-            for rank,r in enumerate(sorted(group,key=lambda x:float(x['pressure_Pa']))):
-                ax=axes[row,rank]
-                excluded=r['admitted']=='False'
-                resolved=int(r['resolved_trials'])>0
-                marker='s' if 'single-liquid' in r['classification'] else 'o'
-                if excluded:
-                    ax.scatter(positions[float(r['temperature_K'])],float(r['loading']),marker='x',s=30,color='#555555')
-                else:
-                    assert r['final_success']=='True' and int(r['failed_trial_optimizers'])==0
-                    ax.scatter(positions[float(r['temperature_K'])],float(r['loading']),marker=marker,s=30,
-                               facecolors='#D55E00' if resolved else 'none',edgecolors='#D55E00' if resolved else '#0072B2')
-        for rank,ax in enumerate(axes[row]):
-            ax.set(title=('Comparison fit' if row==0 else 'Reported parameters')+f'\nP = {(.50,.80,.95)[rank]:.2f} P*',xlabel='Temperature (K)')
-            ax.set_xticks(range(len(temperatures)),labels=[f'{T:g}' for T in temperatures],rotation=45,ha='right')
-            ax.set_yticks([1e-5,.1,.3,.5,.6],labels=[r'$10^{-5}$','0.1','0.3','0.5','0.6'])
+    save(fig, 'mea-permittivity', 'Relative permittivity of unloaded MEA-water at 298.15 K and 101325 Pa: the 14 Agieienko-Buchner measurements and the solvent law at the equation-of-state density, with the reported parameters.', ['permittivity/rows.csv'])
+    # One 162-state grid (#214), the same states for both fits; the reference pressures are the reported fit's bubble pressures.
+    temperatures = sorted({float(r['temperature_K']) for r in paired['reported'].values()})
+    fractions = sorted({float(r['fraction']) for r in paired['reported'].values()})
+    positions = {T: i for i, T in enumerate(temperatures)}
+    fig, axes = plt.subplots(2, len(fractions), figsize=(FULL_WIDTH, 4.7), layout='constrained', sharex=True, sharey=True)
+    for row, record in enumerate(['comparison', 'reported']):
+        for r in paired[record].values():
+            resolved = int(r['resolved_trials']) > 0
+            axes[row, fractions.index(float(r['fraction']))].scatter(positions[float(r['temperature_K'])], float(r['loading']), marker='s' if 'single-liquid' in r['classification'] else 'o', s=30,
+                                                                       facecolors='#D55E00' if resolved else 'none', edgecolors='#D55E00' if resolved else '#0072B2')
+        for fraction, ax in zip(fractions, axes[row]):
+            ax.set(title=('Comparison fit' if row == 0 else 'Reported parameters') + f'\nP = {fraction:.2f} P*', xlabel='Temperature (K)')
+            ax.set_xticks(range(len(temperatures)), labels=[f'{T:g}' for T in temperatures], rotation=45, ha='right')
+            ax.set_yticks([1e-5, .1, .3, .5, .6], labels=[r'$10^{-5}$', '0.1', '0.3', '0.5', '0.6'])
             ax.grid(alpha=.15)
-        axes[row,0].set_ylabel(LOADING)
-    assert sum(r['admitted']=='False' for r in all_phase if r['record']=='A7')==21
-    assert sum(int(r['resolved_trials'])>0 for r in all_phase if r['record']=='A6')==33
-    fig.suptitle('Detected instabilities: comparison fit 33/133; reported parameters 0/133',fontsize=10)
-    fig.supxlabel('Filled: instability detected; open: none; crosses: excluded\nReported parameters: squares, single liquid; circles, liquid + vapor',fontsize=8)
-    save(fig,'phase-family','133 searched and 21 excluded specified temperature/pressure/loading states at six temperatures, comparison fit versus reported parameters: 33/133 and 0/133 resolved-descent points. Columns show 0.50, 0.80 and 0.95 times fixed reference pressures. States with reference pressure above 10 MPa are excluded. The additional pressure-rounded state is counted but not drawn. Finite searches do not certify a continuous stable region.', ['phase-extension-201/run-3/phase-family-combined.csv'])
-    a6_assessment = a.load(a.J/'amendment-6/selected-assessment/provenance.json')
-    fixed = a.J/'amendment-7/fixed-study/wheel-8298c602'
-    records = dict(A7=a.record_identity(fit['record_sha256'], fit['engine']),
-                   A6_assessment=a.record_identity(a6_assessment['parameter_sha256'], a6_assessment['engine']),
-                   A6_phase_family=a.phase_identity(fixed/'after-adoption/a6-selected', fit['engine']),
-                   A7_phase_family=a.phase_identity(fixed/'restricted-2-endpoint', fit['engine']))
-    records['extension_phase_family'] = a.load(extension/'provenance.json')
+        axes[row, 0].set_ylabel(LOADING)
+    n = len(paired['reported'])
+    descents = {name: sum(int(r['resolved_trials']) > 0 for r in part.values()) for name, part in paired.items()}
+    fig.suptitle(f"Detected instabilities: comparison fit {descents['comparison']}/{n}; reported parameters {descents['reported']}/{n}", fontsize=10)
+    single = any('single-liquid' in r['classification'] for part in paired.values() for r in part.values())
+    fig.supxlabel('Filled: instability detected; open: none' + ('\nSquares: single liquid; circles: liquid + vapor' if single else '; all states liquid + vapor'), fontsize=8)
+    save(fig, 'phase-family', f"{n} temperature/pressure/loading states at six temperatures, comparison fit versus reported parameters: {descents['comparison']}/{n} and {descents['reported']}/{n} resolved-descent states. Columns show 0.50, 0.80 and 0.95 times reference pressures equal to the reported fit's bubble pressures. Finite searches do not certify a continuous stable region.", ['phase-family.csv'])
+    comparison = a.load(a.E/'comparison-score.json')
+    records = dict(reported=a.record_identity(fit['record_sha256'], fit['engine']), comparison=a.record_identity(comparison['parameter_sha256'], fit['engine']))
     for name, output in OUTPUTS.items():
-        output['records'] = {key: records[key] for key in (['A6_phase_family','A7_phase_family','extension_phase_family'] if name == 'phase-family' else ['A7','A6_assessment'] if name == 'loaded-density-errors' else ['A7'])}
+        output['records'] = {key: records[key] for key in (['reported', 'comparison'] if name in ('phase-family', 'loaded-density-errors') else ['reported'])}
+    a.inventoried()
     provenance=dict(generator=str(a.bind(a.ROOT/'analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py').relative_to(a.ROOT)),
-                    records=records, explanation=a.A6_ASSESSMENT_NOTE, inputs=dict(sorted(a.INPUTS.items())),outputs=OUTPUTS)
+                    records=records, inputs=dict(sorted(a.INPUTS.items())),outputs=OUTPUTS)
     (OUT/'provenance.json').write_text(json.dumps(provenance,indent=2,sort_keys=True)+'\n')
     print(f'Wrote {len(OUTPUTS)} PDF/PNG figures and provenance.json from retained states and model curves.')
 
