@@ -242,5 +242,6 @@ Every generated table and figure now reads these files through `analyses/mea_par
 | MEA association volume 0.036305439, least squares to Baygi's model at 21 temperatures | `../engine-3e83e19c-association-volume/README.md` |
 | Constant-interaction Cai $k_{ij}$ −0.084399862, cost 91.29 | `../engine-3e83e19c-refit-chain/stage2/run/selection.json`; `refit-display-summary.json` |
 | Phase grid, reference pressures, counts and 51 confirmed splits | `../engine-3e83e19c-phase-search/run-2/` |
+| Parameters printed to eight significant figures give the `tab:residual-summary` statistics at printed precision; largest relative prediction change 2.8e-6 (7: 1.9e-5, 6: 2.0e-4, 4: 4.2e-2) | `../engine-3e83e19c-paper-evidence/parameter-rounding/summary.json`, `replay-*.csv`; full-precision replay equal to `full-replay.json` in all 307 rows |
 
-The sentence stating that eight-significant-figure parameters recover the fitted statistics was removed: `results/parameter-rounding/` binds the earlier record `e234e860…`, and no check exists for `00e77608…`.
+The eight-significant-figure sentence in the parameter-fitting subsection of the data and parameter-estimation section is restored from `parameter_rounding_sensitivity.py`, rebound to record `00e77608…`, the restricted-2 specification and the retained replay; the earlier-record result `results/parameter-rounding/` (`e234e860…`) is unchanged.
