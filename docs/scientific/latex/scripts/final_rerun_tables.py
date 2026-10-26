@@ -1,4 +1,4 @@
-"""Generate issue 197 numerical tables from retained files; no Engine compute."""
+"""Generate the manuscript tables from the retained Engine 3e83e19c files of #212-#215 (#211); no Engine compute."""
 import json
 import math
 import re
@@ -55,7 +55,7 @@ def parameter_source(identity, fitted=False, tied=False):
     if 'carbon-dioxide' in identity and not identity.startswith('association'):
         return r'\cite[Table~1]{Gross2001}'
     if '/monoethanolamine/' in identity or 'monoethanolamine(a)' in identity:
-        return r'\cite[Table~2]{Baygi2015}' + ('; volume converted here' if 'volume' in identity else '')
+        return r'\cite[Table~2]{Baygi2015}' + ('; volume fitted to their model, Section~\\ref{sec:s-parameters}' if 'volume' in identity else '')
     if any(x in identity for x in ['bicarbonate-anion','carbonate-anion','hydroxide-anion','hydronium-cation']):
         return r'\cite[Table~4]{Uyan2015}' + ('; hydrogen-ion values transferred to hydronium' if 'hydronium-cation' in identity else '')
     return 'fitted to IAPWS-95 (Section~\\ref{sec:s-parameters})'
@@ -84,8 +84,9 @@ def tex(value):
     return re.sub(r'[a-f0-9]{64}', lambda m: r'\allowbreak{}'.join(m.group()[i:i+8] for i in range(0,64,8)), escaped)
 
 
-# Parameters print 8 significant figures: with them every joint-fit statistic reproduces at its printed digits (results/parameter-rounding).
+# Parameters print 8 significant figures.
 PARAMETER_DIGITS = 8
+WORDS = 'no one two three four five six seven eight nine ten'.split()
 
 
 def num(value, digits=4):
@@ -285,7 +286,7 @@ def main():
           ['Parameter', 'Value', 'Source or estimation'], parameter_blocks(parameter_rows, 3), ['l','r',.5])
     table('binary_interaction_parameters.tex', r'Binary interactions. Slopes multiply $(1/T-1/T_{\rm ref})$ with $T_{\rm ref}=313.15$ K. All fixed ion interactions are model assumptions, rather than measured pair energies. Dispersion between ions of the same charge sign is excluded.',
           ['Parameter', 'Value', 'Source or estimation'], parameter_blocks(pair_rows, 3), ['l','r',.5])
-    reaction = a.load(a.ROOT / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json')
+    reaction = a.load(a.E / 'source-only/chemical_reaction_source_contract.json')
     offsets = reaction['common_source_standard_state']['source_to_common_ln_k_offsets']
     assert offsets[3] == offsets[4] == 0
     reaction_rows = []
@@ -371,41 +372,54 @@ def main():
     corr_rows = [[str(i+1)]+[num(corr[n,m],3) if k <= i else '' for k,m in enumerate(free)] for i,n in enumerate(free)]
     table('supplement_correlations.tex', r'Lower-triangular conditional correlation matrix. Ten free parameters have rank ten and 297 degrees of freedom; variance factor ' + num(uncertainty['residual_variance']) + r'. Parameter order: ' + tex('; '.join(str(i+1)+': '+label(n) for i,n in enumerate(free))) + '.',
           ['Parameter']+[str(i+1) for i in range(10)], corr_rows, landscape=True)
-    old = a.load(a.E / 'predecessor-f1.json')
-    old_engine = a.load(a.F / 'evaluation/execution.json')
-    for path, digest in old['inputs'].items():
-        a.bind(a.ROOT / path)
-        assert a.INPUTS[path] == digest
     common = {r['id'] for r in fitted if r['group'] == 'common149'}
-    fixed = a.J / 'amendment-7/fixed-study/wheel-8298c602'
-    endpoints = ['after-adoption/a6-selected','restricted-endpoint','restricted-2-endpoint']
-    scores = [a.load(fixed / p / 'score.json') for p in endpoints]
-    a6_provenance = a.load(a.J/'amendment-6/selected-assessment/provenance.json')
-    first_endpoint = a.bind(a.J/'amendment-7/restricted/fit/usable-budget-endpoint.json')
-    assert a.INPUTS[str(first_endpoint.relative_to(a.ROOT))] == scores[1]['parameter_sha256']
-    comparison_identities = dict(A6_original_assessment=a.record_identity(a6_provenance['parameter_sha256'], a6_provenance['engine']),
-                                **{name: a.phase_identity(fixed/path, fit['engine']) for name,path in zip(['A6_after_adoption','First_A7','Accepted_A7'], endpoints, strict=True)})
-    a.bind(a.J / 'amendment-7/restricted/README.md')
-    reductions = [a.load(fixed / p / 'reduction.json') for p in endpoints]
+    # Acceptance limits (#213): unrounded limits, definitions and margins from limits.json; display rounding only.
+    limits = a.load(a.D / 'limits.json')
+    assert limits['decision'] == 'passes' and all(x['passes'] for x in limits['limits'].values())
+    reported, comparison = (a.load(a.E / f'{name}-score.json') for name in ('reported', 'comparison'))
+    comparison_record = a.load(a.E / 'comparison-parameters.json')
+    assert comparison['parameter_sha256'] == a.INPUTS[str((a.E / 'comparison-parameters.json').relative_to(a.ROOT))]
+    displays = a.load(a.E / 'refit-display-summary.json')
+    assert displays['parameter_sha256'] == fit['record_sha256']
+    arcis = {name: x['RMSE_kJ_mol'] for name, x in displays['arcis'].items()}
+    a.close(arcis['reported'], summary['heat']['Arcis2011']['RMSE'])
     acceptance = []
-    for title,key,limit,authority in [('Common-subset cost','C149','35.26','F1 value + 10% (rounded)'),('Pressure AARD','pressure_AARD_pct','15.81','F1 value + 2 percentage points (rounded)'),('Species AARD','species_AARD_pct','9.89','F1 value + 2 percentage points (rounded)'),('Vinjarapu RMSE','vinjarapu_rmse_kJ_mol','3.13','F1 value + 1 kJ/mol (rounded)'),('Loaded within 2s','loaded_within_2s','47/47','density requirement (Section~\\ref{sec:s-density})'),('Cai cost','cai_cost','95.90','constant-interaction Cai cost + 5% (rounded)')]:
-        acceptance.append([title,limit,authority]+[num(scores[i][key]) for i in [0,2]])
-    acceptance.append(['States with detected instability','0/73','finite search at the specified states']+[str(sum(x['resolved_trials']>0 for x in reductions[i]))+'/73' for i in [0,2]])
-    acceptance.append(['CO2-free max absolute error','1.0','density requirement']+[num(max(abs(x) for x in scores[i]['co2_free_errors'].values())) for i in [0,2]])
-    acceptance.append(['Total cost (307 quantities)','--','no limit']+[num(scores[i]['cost']) for i in [0,2]])
-    # Arcis heats for both fits on the pinned Engine 3e83e19c; the comparison fit is its adopted 3e83e19c refit (#207).
-    refits = a.BUNDLE/'results/engine-3e83e19c-refits'
-    arcis = a.load(refits/'displays/summary.json')['arcis']
-    assert math.isclose(arcis['reported']['RMSE_kJ_mol'], summary['heat']['Arcis2011']['RMSE'], rel_tol=1e-12)
-    acceptance.append(['Arcis RMSE','9.36','F1 value + 1 kJ/mol (rounded)',num(arcis['comparison']['RMSE_kJ_mol']),num(arcis['reported']['RMSE_kJ_mol'])])
+    for title, key, score, basis, step in [('Common-subset cost', 'common149_cost', 'C149', 'density-free fit', ''),
+                                           ('Pressure AARD', 'pressure_AARD_percent', 'pressure_AARD_pct', 'density-free fit', ' percentage points'),
+                                           ('Species AARD', 'species_AARD_percent', 'species_AARD_pct', 'density-free fit', ' percentage points'),
+                                           ('Vinjarapu RMSE', 'Vinjarapu_RMSE_kJ_mol', 'vinjarapu_rmse_kJ_mol', 'density-free fit', ' kJ/mol'),
+                                           ('Arcis RMSE', 'Arcis_RMSE_kJ_mol', None, 'density-free fit', ' kJ/mol'),
+                                           ('Cai cost', 'cai_cost', 'cai_cost', 'constant-interaction Cai calculation', '')]:
+        x = limits['limits'][key]
+        values = [arcis['comparison'], arcis['reported']] if score is None else [comparison[score], reported[score]]
+        a.close(values[1], x['candidate_value'])
+        a.close(x['margin'], x['limit'] - x['candidate_value'])
+        origin = (f"{x['multiplier']:g} × " if x['multiplier'] != 1 else '') + basis + ' ' + num(x['reference_value']) + (f" + {x['increment']:g}{step}" if x['increment'] else '')
+        acceptance.append([title, num(x['limit']), origin, *(num(v) for v in values), num(x['margin'])])
+    within = lambda s: f"{s['loaded_within_2s']}/{s['loaded_count']}"
+    acceptance.append(['Loaded densities within $2s$', f"{reported['loaded_count'] - len(a.PERMITTED_MISSES)}/{reported['loaded_count']}", 'density requirement; misses only at three listed states (Section~\\ref{sec:s-density})', within(comparison), within(reported), '--'])
+    descents = {name: sum(int(r['resolved_trials']) > 0 for r in part.values()) for name, part in paired.items()}
+    acceptance.append(['States with detected instability', f"0/{len(paired['reported'])}", 'phase requirement: no resolved descent in the finite search', *(f"{descents[n]}/{len(paired[n])}" for n in ('comparison', 'reported')), '--'])
+    acceptance.append(['CO2-free max absolute error', '1', 'density requirement', *(num(max(abs(x) for x in s['co2_free_errors'].values())) for s in (comparison, reported)), '--'])
+    acceptance.append([f'Total cost ({len(fitted)} quantities)', '--', 'no limit', num(comparison['cost']), num(reported['cost']), '--'])
     kinds = {'cost': ('Cost', ''), 'AARD': ('AARD', r'\%'), 'RMSE': ('RMSE', 'kJ/mol'), 'within': ('Count', ''), 'instability': ('Count', ''), 'error': ('Absolute error', r'\si{\kilogram\per\cubic\metre}')}
-    acceptance = blocks([(*next(v for k, v in kinds.items() if k in r[0]), r) for r in acceptance], 5)
-    table('acceptance_limits.tex', r'Study-specific limits and values for the comparison and reported fits. Section~\\ref{sec:s-fits} explains the tolerances.',
-          ['Quantity','Limit','Origin of limit',r'\makecell[rb]{Comparison\\fit}',r'\makecell[rb]{Reported\\fit}'],acceptance,[.26,'r',.36,'r','r'])
-    # Comparison fit (A6): same model and fixed inputs as the reported fit; only its joint-fit values, their diameter ties and the shifted R2/R5 coefficients differ.
-    comparison_path = refits/'a6/run/fit/usable-budget-endpoint.json'  # adopted 3e83e19c refit of the comparison fit (#207)
-    comparison_record = a.load(comparison_path)
-    assert a.load(refits/'comparison.json')['a6'][0]['max_relative_difference'] < 1e-8
+    acceptance = blocks([(*next(v for k, v in kinds.items() if k in r[0]), r) for r in acceptance], 6)
+    table('acceptance_limits.tex', r'Limits and values for the comparison and reported fits. Limits are computed from the density-free fit of \Cref{tab:density-free-parameters} and the constant-interaction Cai calculation and compared unrounded; the margin is the limit minus the reported-fit value. Section~\\ref{sec:s-fits} explains the tolerances.',
+          ['Quantity', 'Limit', 'Origin of limit', r'\makecell[rb]{Comparison\\fit}', r'\makecell[rb]{Reported\\fit}', r'\makecell[rb]{Reported\\margin}'], acceptance, [.22, 'r', .32, 'r', 'r', 'r'])
+    # Density-free fit (#213): five interaction coordinates refitted to the same 149 quantities without density, within the reported-fit bounds.
+    bounds = {c['identity']: c for c in fit['coordinates']}
+    density_free, on_bound = [], []
+    for r in a.rows(a.D / 'parameters.csv'):
+        c, v = bounds[r['coordinate']], float(r['value'])
+        assert r['unit'] == c['unit'] and c['bounds'][0] <= v <= c['bounds'][1]
+        if v in c['bounds']:
+            on_bound.append(label(r['coordinate']) + (' at its lower bound $' if v == c['bounds'][0] else ' at its upper bound $') + num(v) + '$')
+        mark = lambda x: num(x, PARAMETER_DIGITS) + ('*' if x in c['bounds'] else '')
+        density_free.append((r['coordinate'], r['unit'], [label(r['coordinate']), mark(v), mark(c['value']), *(num(b) for b in c['bounds'])]))
+    assert len(density_free) == 5
+    table('density_free_parameters.tex', r'Density-free fit: the five interaction parameters refitted to the same 149 pressure, species and heat quantities without density data, starting from the reported parameters and within the reported-fit bounds. All other parameters are those of the reported fit. ' + WORDS[len(on_bound)].capitalize() + ' of the five density-free values lie on bounds: ' + ' and '.join(on_bound) + '; an asterisk marks a value on a bound.',
+          ['Parameter', r'\makecell[rb]{Density-free\\fit}', r'\makecell[rb]{Reported\\fit}', r'\makecell[rb]{Lower\\bound}', r'\makecell[rb]{Upper\\bound}'], parameter_blocks(density_free, 5), 'lrrrr')
+    # Comparison fit: same model and fixed inputs as the reported fit; only its joint-fit values, their diameter ties and the shifted R2/R5 coefficients differ.
     record_values = lambda d: {i: c for i, c in a.coefficients({k: d[k] for k in ('components', 'pairs', 'correlations', 'model_coefficients', 'reaction_correlations', 'topology')})}
     reported_values, comparison_values = record_values(document), record_values(comparison_record)
     assert reported_values.keys() == comparison_values.keys() and document['model_families'] == comparison_record['model_families']
@@ -431,7 +445,7 @@ def main():
     for (source,group,quantity), part in by_source.items():
         row = [source,group,label(quantity),len(part),num(a.stats(part)['RMSE' if group=='Cai' else 'AARD_percent']),num(math.fsum(float(r['cost']) for r in part))]
         (cai_rows.extend([block(6, 'RMSE (K)' if quantity=='temperature' else 'RMSE'), row]) if group=='Cai' else source_rows.append(row))
-    table('supplement_source_aard.tex',r'A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapour water mole fraction. It does not combine quantities into an accuracy ranking. Entry costs add to the total objective cost of 148.9; quantity definitions, units and weights are in Section~\\ref{sec:s-objective}.',
+    table('supplement_source_aard.tex',r'A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapour water mole fraction. It does not combine quantities into an accuracy ranking. Entry costs add to the total objective cost of '+num(fit['cost'])+'; quantity definitions, units and weights are in Section~\\ref{sec:s-objective}.',
           ['Source','Group','Observable','n','AARD (%)','Cost'],source_rows+cai_rows,['l','l',.22,'r','r','r'])
     outside=[]
     for name,s in a.load(a.E/'state-summary.json')['scores'].items():
@@ -458,74 +472,39 @@ def main():
     table('supplement_carbonate_density.tex',r'All ten carbonate-share comparisons (different observables from the six fitted Jakobsen amount ratios). Corrected unloaded MEA mass fraction is '+num(float(carbonate[0]['mea_mass_fraction']))+r'; model loading uses NMR. Source: Jakobsen et al.\ \cite{Jakobsen2005}, Tables A1--A2 (p.~9902) and Table~2 (p.~9896).',
           ['Row','T (K)','NMR loading','Maximum loading','Observed share','Calculated share','Calc/obs'],[[i,r['T_K'],num(r['model_loading']),num(r['maxload']),num(r['observed_share']),num(r['predicted_share']),num(r['calc_over_obs'])] for i,r in enumerate(carbonate,1)])
     OUTPUTS['supplement_carbonate_density.tex']=previous+OUTPUTS['supplement_carbonate_density.tex'].replace('tab:supplement-carbonate-density','tab:supplement-carbonate-share')
-    reference_rows=[]
-    loadings=sorted({float(r['loading']) for i,r in paired['A7'].items() if i})
-    temperatures=sorted({float(r['temperature_K']) for r in paired['A7'].values()})
-    for loading in loadings:
-        pressures=[]
-        for temperature in temperatures:
-            part=sorted([float(r['pressure_Pa']) for i,r in paired['A7'].items() if i and float(r['loading'])==loading and float(r['temperature_K'])==temperature])
-            assert len(part)==3 and all(math.isclose(p/part[0],factor/.5,rel_tol=1e-12) for p,factor in zip(part,[.5,.8,.95]))
-            pressures.append(num(part[0]/.5/1000,7))
-        reference_rows.append([num(loading,8)]+pressures)
-    table('phase_reference_pressures.tex',r'Fixed reference pressures $P_*$ in kPa defining the test grid. Each row generates three pressure levels at each temperature. The additional pressure-rounded state is described in the text.', ['Loading']+[r'\makecell[rb]{$P_*$ (kPa)\\at '+num(t,6)+' K}' for t in temperatures],reference_rows)
-    phase_rows=[]
-    for temperature in sorted({float(r['temperature_K']) for r in paired['A7'].values()}):
-        part=[i for i,r in paired['A7'].items() if float(r['temperature_K'])==temperature]
-        phase_rows.append([num(temperature,6),len(part),sum(int(paired['A6'][i]['resolved_trials'])>0 for i in part),sum(int(paired['A7'][i]['resolved_trials'])>0 for i in part)])
-    table('supplement_phase_family.tex',r'Phase-search summary for both fits. The complete 73-state temperature, pressure, loading and trial data are supplied as CSV in the data deposit. One 318.15 K state (loading 0.2556) is evaluated twice, once at its pressure rounded to 5918.5286 Pa; both evaluations are counted. Two-phase classifications include liquid--vapor equilibrium.',
-          ['T (K)','Test states','Comparison fit','Reported fit'],phase_rows)
-    previous=OUTPUTS['supplement_phase_family.tex']
-    extension = a.BUNDLE/'results/phase-extension-201/run-3'
-    outcomes = a.rows(extension/'outcomes-by-temperature.csv')
-    counts = a.rows(extension/'counts-by-temperature.csv')
-    assert sum(int(r['completed']) for r in outcomes if r['record']=='A7') == 60
-    assert all(int(r['parent_numerical_failures']) == int(r['failed_trial_optimizers']) == 0 for r in counts)
-    extension_counts = [[r['record'], r['temperature_K'], r['scheduled_states'], r['unavailable_pressure'], r['completed'], r['returned_trials'], r['resolved_trials'], r['descent_states']] for r in outcomes]
-    table('phase_extension.tex',r'Extended phase-search counts by temperature and fit. Declared states with reference pressure above 10 MPa are excluded before the search. All trial optimizations at admitted states complete, with no unresolved trials or numerical failures.',
-          ['Fit','T (K)','Declared','Excluded','Searched','Trials','Descending trials','Instability states'],extension_counts,'lrrrrrrr')
-    previous_extension = OUTPUTS['phase_extension.tex']
-    reference = [r for r in a.rows(extension/'reference-pressure/reference-pressures.csv') if float(r['fraction']) == 1.]
-    reference_temperatures = sorted({float(r['temperature_K']) for r in reference})
-    reference_values = {(float(r['temperature_K']),float(r['loading'])):float(r['pressure_Pa'])/1000 for r in reference}
-    table('phase_extension.tex',r'Frozen extension reference pressures $P_*$ in kPa. Each row generates pressures of 0.50, 0.80 and 0.95 times $P_*$. References above 10000 kPa exclude all three states; the reference values were reused unchanged.',
-          ['Loading']+[r'\makecell[rb]{$P_*$ (kPa)\\at '+num(t,6)+' K}' for t in reference_temperatures],
-          [[num(alpha,8)]+[num(reference_values[t,alpha],7) for t in reference_temperatures] for alpha in sorted({float(r['loading']) for r in reference})])
-    OUTPUTS['phase_extension.tex'] = previous_extension + OUTPUTS['phase_extension.tex'].replace('tab:phase-extension','tab:phase-extension-references')
-    previous_extension = OUTPUTS['phase_extension.tex']
-    confirmations = list({r['path']:r for r in a.rows(extension/'split-confirmations.csv')}.values())
-    assert len(confirmations) == 27 and sum(r['confirmed']=='True' for r in confirmations) == 23
-    states = {int(r['index']):r for r in a.rows(extension/'inputs/states.csv')}
-    confirmation_rows = []
-    for index in sorted({int(r['index']) for r in confirmations}):
-        part = [r for r in confirmations if int(r['index']) == index]
-        extension_state = states[index]
-        confirmation_rows.append([extension_state['temperature_K'],num(extension_state['loading']),num(float(extension_state['pressure_Pa'])/1000,7),len(part),sum(r['confirmed']=='True' for r in part)])
-    assert len(confirmation_rows)==21 and sum(row[-1]>0 for row in confirmation_rows)==17
-    table('phase_extension.tex',r'Separately seeded two-liquid confirmations for the comparison fit in the extension. Attempts count distinct split solves; repeated trial seeds that share one solve are counted once. Confirmations occur at 17 of 21 tested instability states, in 23 of 27 attempts.',
-          ['T (K)','Loading','P (kPa)','Attempts','Confirmed'],confirmation_rows)
-    OUTPUTS['phase_extension.tex'] = previous_extension + OUTPUTS['phase_extension.tex'].replace('tab:phase-extension','tab:phase-extension-confirmations')
-    adoption = a.load(a.BUNDLE/'results/engine-3e83e19c-adoption/adoption-check.json')
-    engine = a.load(a.BUNDLE/'results/engine-3e83e19c-adoption/checks.json')['candidate_wheel']
-    assert adoption['summary']['accepted_split_changes']['retained_engine'] == engine['commit']
-    assert engine['sha256'] == '0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804'
-    split_rows=[]
-    split_phases=[]
-    for i in [21,63,70]:
-        for r in a.load(a.BUNDLE/f'results/engine-3e83e19c-adoption/A6-supplement-splits/split-seeded-{i}.json'):
-            seed = r['seed'].replace('positive-neutral-base','uniform').replace('near-pure-0','CO2-rich').replace('near-pure-1','MEA-rich').replace('near-pure-2','water-rich')
-            phases = r['result'].get('phases', [])
-            for phase in phases:
-                split_phases.append([i,seed,phase['identity'],num(phase['amount_mol']),num(phase['molar_density_mol_m3']),*(num(x) for x in phase['mole_fractions']),*['--']*(len(NAMES)-len(phase['mole_fractions']))])
-            first = [i,seed,'yes' if r['result']['success'] else 'no',num(r['delta_G_over_RT_vs_original'],5),num(r['delta_G_over_RT_vs_single_liquid'],5)]
-            split_rows += ([r'\addlinespace'] if split_rows else []) + ([(first if k == 0 else ['']*5)+[p['identity'],p['role'],num(v)] for k,(p,v) in enumerate(zip(phases,r['result']['molar_densities'],strict=True))] or [first+['--']*3])
-    table('supplement_phase_family.tex',r'Separately seeded A6 split solves, including failed attempts. Gibbs differences are extensive $\Delta G/(RT)$ values in mol for 9.7292821 mol analytical MEA, 76.9751925 mol water and 9.7292821 times loading mol CO2; phase densities are mol/m3. States 21, 63 and 70 are $(T,\alpha,P/\mathrm{kPa})=(313.15,0.1,4.737142)$, $(333.15,0.4,21.78783)$ and $(333.15,0.5,38.28678)$. Only successful split solves support the split comparison.',
-          ['State','Seed','Success',r'\makecell[rb]{Delta vs\\original (mol)}',r'\makecell[rb]{Delta vs single\\liquid (mol)}','Phase','Role',r'Density (\si{\mole\per\cubic\metre})'],split_rows,'rllrrllr')
-    OUTPUTS['supplement_phase_family.tex']=previous+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-states')
-    previous=OUTPUTS['supplement_phase_family.tex']
-    table('supplement_phase_family.tex', r'A6 successful split phase amounts (mol), densities (mol/m3) and mole fractions in source order: CO2, MEA, water, MEAH+, carbamate, bicarbonate, carbonate, hydronium, hydroxide. Vapour rows list only their three supported neutral species (CO2, MEA, water); liquid rows list all nine.',
-          ['State','Seed','Phase',r'\makecell[rb]{Amount\\(mol)}',r'\makecell[rb]{Density\\(\si{\mole\per\cubic\metre})}',*NAMES.values()],split_phases,'rllrr'+'r'*len(NAMES),landscape=True)
-    OUTPUTS['supplement_phase_family.tex']=previous+'\\begin{landscape}\n'+OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family','tab:supplement-split-compositions')+'\\end{landscape}\n'
+    # One 162-state grid (#214): the reference pressures are the reported fit's bubble pressures, and both fits search the same states.
+    states = paired['reported'].values()
+    temperatures, loadings, fractions = (sorted({float(r[k]) for r in states}) for k in ('temperature_K', 'loading', 'fraction'))
+    reference = {(float(r['temperature_K']), float(r['loading'])): float(r['reference_pressure_Pa']) for r in states}
+    assert len(states) == len(temperatures)*len(loadings)*len(fractions) == len(reference)*len(fractions)
+    levels = ', '.join(f'{x:.2f}' for x in fractions[:-1]) + f' and {fractions[-1]:.2f}'
+    table('phase_reference_pressures.tex', r'Reference pressures $P_*$ in kPa: the bubble pressures of the reported fit at each temperature and loading. Each defines three test states, at ' + levels + r' times $P_*$.',
+          ['Loading']+[r'\makecell[rb]{$P_*$ (kPa)\\at '+num(t,6)+' K}' for t in temperatures], [[num(alpha,8)]+[num(reference[t,alpha]/1000,5) for t in temperatures] for alpha in loadings])
+    counts = a.rows(a.P / 'counts-by-temperature.csv')
+    per_state = {int(c['scheduled_trials']) // int(c['states']) for c in counts}
+    assert len(per_state) == 1 and all(int(c['returned_trials']) == int(c['scheduled_trials']) and int(c['trial_unresolved']) == 0 for c in counts)
+    tally = lambda part: [sum(int(r['resolved_trials']) > 0 for r in part[n]) if k == 0 else sum(int(r['resolved_trials']) for r in part[n]) for n in ('comparison', 'reported') for k in (0, 1)]
+    phase_rows = [[num(t, 6), sum(float(r['temperature_K']) == t for r in states), *tally({n: [r for r in p.values() if float(r['temperature_K']) == t] for n, p in paired.items()})] for t in temperatures]
+    phase_rows += [r'\midrule', ['Total', len(states), *tally({n: list(p.values()) for n, p in paired.items()})]]
+    table('supplement_phase_family.tex', f'Phase-search results by temperature for both fits at the same {len(states)} states. Each state has {WORDS[per_state.pop()]} trial phases; every trial optimization completes and none is unresolved. A descent state has at least one trial that lowers the Gibbs energy beyond its numerical-error estimate. The complete state and trial data are supplied as CSV in the data deposit.',
+          ['T (K)', 'States', r'\makecell[rb]{Comparison fit\\descent states}', r'\makecell[rb]{Comparison fit\\descending trials}', r'\makecell[rb]{Reported fit\\descent states}', r'\makecell[rb]{Reported fit\\descending trials}'], phase_rows)
+    previous = OUTPUTS['supplement_phase_family.tex']
+    splits = a.rows(a.P / 'split-confirmations.csv')
+    confirmed = [r for r in splits if r['confirmed'] == 'True']
+    assert len({r['path'] for r in splits}) == len(splits) and {r['record'] for r in splits} == {'comparison'}
+    seeds = {'positive-neutral-base': 'uniform', 'near-pure-0': 'CO2-rich', 'near-pure-1': 'MEA-rich', 'near-pure-2': 'water-rich'}
+    split_rows = []
+    for r in sorted(confirmed, key=lambda r: (int(r['index']), r['seed'])):
+        assert r['L/role'] == r['additional/role'] == 'liquid' and float(r['delta_G_over_RT']) < 0
+        liquids = sorted(['L', 'additional'], key=lambda k: float(r[k + '/x/water']))
+        split_rows.append([num(r['temperature_K'], 6), num(r['loading']), num(float(r['pressure_Pa'])/1000, 5), seeds[r['seed']], num(r['delta_G_over_RT'], 3),
+                           *(num(r[k + x]) for k in liquids for x in ('/amount_mol', '/x/water')), num(r['V/amount_mol']) if r['V/amount_mol'] else '--'])
+    descent_states = sum(int(r['resolved_trials']) > 0 for r in paired['comparison'].values())
+    table('supplement_phase_family.tex', f"All {len(confirmed)} confirmed two-liquid paths of the comparison fit, at {len({r['index'] for r in confirmed})} of its {descent_states} descent states, from {len(splits)} separately seeded attempts; the reported fit has no descent to confirm. "
+          r"The seed is the trial liquid that starts the split. $\Delta G/(RT)$ is the extensive Gibbs-energy change in mol on the feed basis of Section~\\ref{sec:s-phase}. The two liquids are listed in order of increasing water mole fraction $x_w$; different seeds can reach the same split, and a dash marks a split without vapor. The unsuccessful attempts with their numerical causes, and all phase compositions, are supplied as CSV in the data deposit.",
+          ['T (K)', 'Loading', 'P (kPa)', 'Seed', r'\makecell[rb]{$\Delta G/(RT)$\\(mol)}', r'\makecell[rb]{Liquid 1\\(mol)}', r'\makecell[rb]{Liquid 1\\$x_w$}', r'\makecell[rb]{Liquid 2\\(mol)}', r'\makecell[rb]{Liquid 2\\$x_w$}', r'\makecell[rb]{Vapor\\(mol)}'],
+          split_rows, 'rrrlrrrrrr')
+    OUTPUTS['supplement_phase_family.tex'] = previous + OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family', 'tab:phase-splits')
     inventory=[]
     meta_by_target={r['target']:r for r in state if r['kind']=='packet'}
     for (source,group,quantity),part in by_source.items():
@@ -572,19 +551,20 @@ def main():
     table('current_data_inventory.tex', r'Fitted and compared observations. Counts in comparison sets overlap fitted observations and are not additive. Section~\\ref{sec:s-objective} defines the objective. Source-specific conditions and roles are listed in the supplement.',
           ['Source','Quantity','n','Conditions','Use'],data_rows,['l',.21,'r',.25,.15])
     failures=[r for r in density if r['id'] in loaded_ids and abs(float(r['error_over_s']))>2]
-    assert len(failures)==3 and all(float(r['T_K'])==353.15 for r in failures)
-    table('density_failures.tex',r'Three fitted loaded densities outside $\pm2s$ at \SI{353.15}{\kelvin}. Error is calculated minus observed.',
+    assert {r['id'] for r in failures} <= a.PERMITTED_MISSES
+    miss_temperatures = {float(r['T_K']) for r in failures}
+    table('density_failures.tex',WORDS[len(failures)].capitalize()+r' fitted loaded densities outside $\pm2s$'+(r' at \SI{'+num(*miss_temperatures,6)+r'}{\kelvin}' if len(miss_temperatures)==1 else '')+'. Error is calculated minus observed.',
           ['Source','Loading','Error (kg/m3)','$e/s$'],[[r['source'],num(r['loading']),num(r['error_kg_m3'],3),num(r['error_over_s'],3)] for r in failures],'lrrr')
-    scales=a.load(a.J/'amendment-6/inputs/without-amundsen-0p4/density-scales.json')
+    scales=a.load(a.E/'source-only/density-scales.json')
     scale_rows=[]
     for source in ['Amundsen2009','Hartono2014']:
         part=[r for r in scales if r['source']==source]
         scale_rows.append([source,num(min(r['u_rho'] for r in part)),num(min(r['u_alpha'] for r in part)),num(max(r['u_alpha'] for r in part)),num(min(r['scale'] for r in part)),num(max(r['scale'] for r in part)),'2% of loading; density uncertainty scope unresolved at high T/loading' if source=='Amundsen2009' else 'loading 0.01; density expanded k=2 value used without division'])
     table('density_scales.tex',r'Source inputs for $s_\rho=[u_\rho^2+(g u_\alpha)^2]^{1/2}$. Density scales are in kg/m3 and loading is mol CO2/mol total amine. Exact secant pairs and per-observation scales are in the deposit.', ['Source',r'\makecell[rb]{$u_\rho$\\(kg/m3)}',*(r'\makecell[rb]{'+h+r' $u_\alpha$\\(mol CO2/\\mol total\\amine)}' for h in ['Lowest','Highest']),*(r'\makecell[rb]{'+h+r' $s_\rho$\\(kg/m3)}' for h in ['Lowest','Highest']),'Qualification'],scale_rows,['l','r','r','r','r','r',.26])
-    conflicts=[r for r in a.load(a.J/'amendment-6/density-sweep-1b/summary.json')['source_disagreement'] if r['loading']==.4]
+    conflicts=[r for r in a.load(a.E/'source-only/density-source-differences.json') if r['loading']==.4]
     table('density_source_differences.tex',r'Amundsen minus linearly interpolated Hartono densities at loading 0.4 and nominal 30 wt% solvent. These five source differences motivated exclusion from fitting; neither source is thereby established as correct.',
           ['T (K)','Difference (kg/m3)'],[[num(r['T_K'],6),num(r['amundsen_minus_hartono'])] for r in sorted(conflicts,key=lambda r:r['T_K'])])
-    calorics=a.load(a.ROOT/'data/reference/MEA/thermal/physical-ideal-gas-calorics.json')
+    calorics=a.load(a.E/'source-only/physical-ideal-gas-calorics.json')
     shomate, mea = [calorics['components'][k] for k in ['carbon-dioxide','water']], calorics['components']['monoethanolamine']
     assert [c['representation'] for c in shomate] == ['shomate']*2 and mea['representation'].startswith('cp_')
     ranges = lambda c, j: str(c.get('source_range_k', c['range_k'])[j])
@@ -595,6 +575,7 @@ def main():
     caloric_rows += [block(3, r'\ce{MEA} source temperature (K)'), ['Lowest', ranges(mea, 0), ''], ['Highest', ranges(mea, 1), ''], block(3, r'\ce{MEA} source'), ['Reference', 'Zhang Table 3', '']]
     table('ideal_calorics.tex',r'Ideal-gas caloric inputs. Shomate $C_P=A+Bt+Ct^2+Dt^3+E/t^2$, $t=T/1000$, in J/(mol K); enthalpy is $h_f+1000(At+Bt^2/2+Ct^3/3+Dt^4/4-E/t+F-H)$. MEA uses $C_P=a+bT+cT^2+dT^3$ with $h=s=0$ at 313.15 K. Shomate entries list A--H in order.',
           ['Shomate coefficient','CO2','Water'],caloric_rows,'lrr')
+    six_source = a.load(a.E/'state-summary.json')['scores']['canonical']
     literature=[
         [r'Böttinger et al. \cite{Bottinger2008}','Pitzer; 6 coefficients in 2 MEA reaction laws','NMR; 293--353 K','No aggregate MEA error stated; R5 fixed to Bates--Pinching','VLE compared with earlier VLE-fitted interactions (Tables 5--6)'],
         [r'Zhang et al. \cite{Zhang2011}','eNRTL/PC-SAFT vapor; 12 ternary coefficients','Pressure, differential heat, heat capacity, NMR','Pressure 13.5--35.5% by source; heat 10.9% (84); Cp 2.4% (102); species 35.7% (24), Table 9','Additional pressure sources 28.6--112% (Table 11)'],
@@ -607,7 +588,7 @@ def main():
         [r'Aronu et al. \cite{Aronu2011}','Extended UNIQUAC; ion size/surface and pair coefficients (Tables 7--9)',r'VLE at 15--60 wt%; \ce{N2O}-derived physical solubility','Fitted CO2 partial pressure 24.3%; total pressure 11.7%; physical solubility 2.7% (Section 5)','NMR and absorption heat compared outside objective'],
         [r'Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013}','Electrolyte cubic two-state association; 7 MEA ternary parameters','VLE; 15.2--30 wt%; 298.15--393.15 K in Table~2 and Fig.~8; Section~4.3.3 instead states an upper limit of 366.68 K','Relative pressure deviation 12.5%, fitted (Tables 5, 8)','Parameters from earlier subsystems retained'],
         [r'Neumann et al. \cite{neumannNewModelCombining2022}','Helmholtz energy/eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained',r'Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data','Ternary density AARD 0.92% Hartono; 3.5% complete Han (Section 4.2)','VLE/density comparisons; density data sets differ from this work'],
-        ['This work','16 fitted parameters; 6 at bounds','307 quantities: pressure, species, heat, density, heat capacity and binary VLE','Fitted pressure/species 11.86/7.10%; integral heat RMSE 1.83 kJ/mol','159-pressure comparison 20.55%; previously examined data']]
+        ['This work',f"{len(fit['coordinates'])} fitted parameters; {len(fit['active_bounds'])} at bounds",f'{len(fitted)} quantities: pressure, species, heat, density, heat capacity and binary VLE',f"Fitted pressure/species {fit['groups']['common149 pressure']['AARD_percent']:.2f}/{fit['groups']['common149 species']['AARD_percent']:.2f}%; integral heat RMSE {summary['heat']['Vinjarapu2024']['RMSE']:.2f} kJ/mol",f"{six_source['n_available']}-pressure comparison {six_source['AARD_percent']:.2f}%; previously examined data"]]
     table('literature_model_comparison.tex',r'Model complexity, data roles and reported deviations in related MEA studies. Parameter counts refer to the stated fit, excluding earlier subsystem fits. Relative pressure deviations and caloric metrics use each source\'s own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.',
           ['Study','Model; fitted parameters','Fitted data','Reported agreement','Other comparisons or qualification'],literature,[.14,.21,.18,.23,.18])
     symbols=[
@@ -641,17 +622,13 @@ def main():
         [r'$B,\boldsymbol\lambda,D$',r'Conserved-quantity matrix; equilibrium multipliers; tangent-plane distance'],
         ['AARD; RMSE',r'Average absolute relative deviation; root-mean-square error']]
     table('nomenclature.tex','Symbols used in this manuscript.',['Symbol','Definition'],symbols,['l',.7])
+    a.inventoried()
     for name, body in OUTPUTS.items():
         head='% Generator: docs/scientific/latex/scripts/final_rerun_tables.py; do not hand-edit.\n'
-        head+='% A7 parameter SHA256: '+fit['record_sha256']+'\n'
-        if name == 'acceptance_limits.tex':
-            head += '% Record identities: '+json.dumps(comparison_identities,sort_keys=True)+'\n'
-            head += '% '+a.A6_ASSESSMENT_NOTE+'\n'
-        head+='% F1 original wheel SHA256: '+old_engine['wheel_sha256']+'\n' if name in ['supplement_fits.tex','supplement_predecessor.tex','acceptance_limits.tex'] else ''
-        head+='% F1 predecessor inputs/identity: '+json.dumps(old,sort_keys=True)+'\n' if name in ['supplement_fits.tex','supplement_predecessor.tex','acceptance_limits.tex'] else ''
+        head+='% Reported parameter SHA256: '+fit['record_sha256']+'; Engine wheel SHA256: '+fit['engine']['wheel_sha256']+'\n'
         head+=''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))
         (TABLES/name).write_text(head+body)
-    print(json.dumps(dict(objective_rows=len(fitted),group_costs=fit['groups'],loaded_density=len(loaded_ids),densities=len(density),heats=len(heat),coordinates=len(errors),phase_points=73),indent=2))
+    print(json.dumps(dict(objective_rows=len(fitted),group_costs=fit['groups'],loaded_density=len(loaded_ids),densities=len(density),heats=len(heat),coordinates=len(errors),phase_states=len(paired['reported'])),indent=2))
 
 
 if __name__ == '__main__':

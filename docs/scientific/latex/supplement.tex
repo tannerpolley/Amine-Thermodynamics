@@ -40,7 +40,7 @@
 
 \section{Complete model inputs and fixed-parameter provenance}\label{sec:s-parameters}
 % P:supplement-18
-Neutral MEA parameters are the 2B values of Baygi and Pahlavanzadeh, with the association-volume conversion stated in the main text \cite[Table~2]{Baygi2015}.
+Neutral MEA parameters are the 2B values of Baygi and Pahlavanzadeh, except the association volume described below \cite[Table~2]{Baygi2015}.
 \COtwo segment count, diameter and dispersion energy are from Gross and Sadowski \cite[Table~1]{Gross2001}.
 Bicarbonate, carbonate and hydroxide sizes and dispersion energies follow Uyan et al.; their hydrogen-ion parameters are transferred here to hydronium \cite[Table~4]{Uyan2015}.
 Ion segment count one and the diameter ties are modeling assumptions.
@@ -51,7 +51,8 @@ Water's solvation factor and ion-region permittivity follow Figiel et al.; unit 
 % P:supplement-association-01
 The \COtwo--water cross-association energy is \SI{878.325}{\kelvin}, half the fitted water self-association energy, with the same association volume as water.
 The topology follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}.
-The association strength here carries $\sigma_{ij}^3$, so Baygi and Pahlavanzadeh's MEA association volume, reported for a $d_{ij}^3$ strength \cite[Table~2]{Baygi2015}, was converted from 0.037470 to 0.036287, the constant value that best reproduces their model vapor pressure and saturated-liquid density at 293.15--\SI{393.15}{\kelvin}.
+The association strength here carries $\sigma_{ij}^3$, whereas Baygi and Pahlavanzadeh report their MEA association volume, 0.037470, for a $d_{ij}^3$ strength \cite[Table~2]{Baygi2015}.
+The value used here, 0.036305439, is the constant fitted by least squares, with the ePC-SAFT library's fitter, to the vapor pressures and saturated-liquid densities of their own model at 21 temperatures from 293.15 to \SI{393.15}{\kelvin}.
 
 % P:supplement-19
 The main text reports the fits of the five water parameters to IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, the \COtwo--water interaction to Kiepe pressures \cite{kiepeExperimentalDeterminationPrediction2002} and the \MEA dielectric coefficients to permittivities.
@@ -83,7 +84,7 @@ The bounded least-squares problem minimizes
 \end{equation}
 Here $y_{c,j}$ and $y_{o,j}$ denote calculated and observed values.
 Loaded densities have weight $1/47$, so their group contributes a mean scaled squared error rather than a sum growing with its observation count.
-They contribute 0.566 of the total cost 148.9, or 0.38\,\%; the separate $2s$ check prevents their small cost share from hiding individual failures.
+They contribute 0.565 of the total cost 148.9, or 0.38\,\%; the separate $2s$ check prevents their small cost share from hiding individual failures.
 Carbon-free densities have scale \SI{0.5}{\kilogram\per\cubic\metre} and weight 10; Cai temperature and vapor-fraction scales are \SI{1}{\kelvin} and 0.01 with unit weight, and Kiepe \COtwo--water pressures have weight $1/39$ \cite{kiepeExperimentalDeterminationPrediction2002}.
 These weights set fitting priorities; the heat scales are not measured standard uncertainties.
 \Cref{tab:objective-groups} specifies every group.
@@ -91,7 +92,7 @@ These weights set fitting priorities; the heat scales are not measured standard 
 \input{tables/objective_groups}
 
 % P:supplement-objective-02
-Cai's binary quantities contribute 91.91 of the total cost 148.91, approximately 62\,\%; this describes the chosen objective rather than relative physical accuracy.
+Cai's binary quantities contribute 91.87 of the total cost 148.88, approximately 62\,\%; this describes the chosen objective rather than relative physical accuracy.
 The Kiepe pressure contribution is approximately 0.0007 and checks fixed \COtwo--water inputs.
 The source-by-source inventory below distinguishes fitted, compared, previously examined and selection observations; observations from the same prepared solution need not be statistically independent.
 
@@ -123,10 +124,10 @@ A minimum-norm convention fixes the remaining charge-proportional reference free
 \input{tables/ideal_calorics}
 
 % P:supplement-17
-The 375 equilibrium states have maximum absolute stationarity residual $2.19\times10^{-12}$, material-balance residual $8.53\times10^{-13}$ mol and charge residual $2.12\times10^{-13}$ mol.
+The 375 equilibrium states have maximum absolute stationarity residual $2.16\times10^{-12}$, material-balance residual $8.60\times10^{-13}$ mol and charge residual $2.11\times10^{-13}$ mol.
 The heat-capacity consistency checks include equilibrium enthalpy derivatives, the $10^{-6}$ unloaded loading approximation and conversion by the complete analytical-feed mass.
 These checks verify numerical solutions rather than physical phase behavior.
-All retained values, software identities, file checksums and reproduction commands are indexed in the data-deposit README.
+All retained values, software identities, file checksums and calculation commands are indexed in the data-deposit README.
 The Zenodo DOI will be added at submission; the compiled ePC-SAFT library used here will be provided to referees through restricted access coordinated by the corresponding author.
 
 \FloatBarrier
@@ -145,7 +146,7 @@ Thus these scales do not uniformly represent standard uncertainties.
 
 % P:supplement-04
 All ten Jakobsen carbonate shares use the NMR loading and unloaded MEA mass fraction 0.2714, accounting for dilution during NMR sample preparation \cite[Tables~A1--A2; Sample preparation]{Jakobsen2005}.
-Their calculated/observed ratios have mean 0.0731 and range 0.00633--0.267.
+Their calculated/observed ratios have mean 0.0727 and range 0.00629--0.266.
 These shares of dissolved carbon differ from the six ratios to total amine used for fitting.
 
 \begin{figure}[!htbp]
@@ -174,7 +175,7 @@ These local errors condition on the weights, fixed inputs, bounds and linearizat
 
 % P:supplement-covariance-02
 Six of the 16 parameters are at bounds: \MEAH--water and \MEAH--\MEACOO interactions, \MEAH segment diameter, both fitted Born diameters and total R5 enthalpy shift.
-The free bicarbonate--water coefficient is $0.725$ with conditional standard error $1.27$; the R2 total shift is approximately $-1.4\pm5.3$~\si{\kilo\joule\per\mole}, and the \MEAH--water slope is $-41.9$~\si{\kelvin} with conditional standard error \SI{60.3}{\kelvin}.
+The free bicarbonate--water coefficient is $0.727$ with conditional standard error $1.27$; the R2 total shift is approximately $-1.4\pm5.3$~\si{\kilo\joule\per\mole}, and the \MEAH--water slope is $-41.6$~\si{\kelvin} with conditional standard error \SI{60.3}{\kelvin}.
 Both Born diameters reach their 5~\si{\angstrom} upper bound, and the unlike-ion interaction $k_{ij}=-1$ doubles the unlike-ion dispersion energy under the dispersion combining rule.
 These values indicate compensation among solvation, dispersion and reaction terms, rather than measured ion properties.
 The fitted R5 differs from Bates--Pinching by 0.49 pK at 313.15 K, with dissociation enthalpy 63.4 rather than 50.5~\si{\kilo\joule\per\mole}; its total enthalpy shift reaches the +10~\si{\kilo\joule\per\mole} bound.
@@ -207,32 +208,29 @@ Arcis heats were used to accept candidate parameter sets; Wagner pressures and p
 \FloatBarrier
 \section{Phase-search definition and confirmed splits}\label{sec:s-phase}
 % P:supplement-05
-The complete paired 73-state table is supplied as CSV in the data deposit.
-Its pressure design specifies three levels, $P/P_*=0.50$, 0.80 and 0.95, at each temperature/loading pair; $P_*$ is the fixed reference pressure in the following table.
-These reference pressures are numerical design inputs, rather than bubble pressures recalculated from either fitted parameter set.
-The additional state at 318.15 K and loading 0.25557798 uses pressure 5918.5286 Pa, while its matched grid state has pressure 5918.528608 Pa; both are counted.
+The complete 162-state table for both fits is supplied as CSV in the data deposit.
+The grid has six temperatures, 313.15, 318.15, 333.15, 353.15, 373.15 and \SI{393.15}{\kelvin}, and nine loadings, $10^{-5}$, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5 and 0.6.
+At each temperature and loading, the reference pressure $P_*$ is the bubble pressure of the reported fit (\Cref{tab:phase-reference-pressures}), and the three test states are at $P/P_*=0.50$, 0.80 and 0.95.
+Both fits are searched at the same 162 states.
 Phase calculations use 9.7292821 mol analytical MEA, 76.9751925 mol water and $9.7292821\alpha$ mol \COtwo.
 All extensive Gibbs differences and phase amounts below refer to that feed, rather than the one-mole total-amine property basis.
 
 % P:supplement-phase-summary-01
-Both fits use the same 73 states at 313.15--\SI{333.15}{\kelvin} and loading $10^{-5}$--0.5; the list was fixed before the restricted fits.
-Nine trial phases per state give 657 trials for each parameter set.
-No descent is resolved for the reported parameters; all trial minimizations converge, and the existing equilibria comprise 69 liquid--vapor and four single-liquid classifications.
-The comparison fit has resolved instability at 12 states: nine at \SI{333.15}{\kelvin} and three at 313.15 or \SI{318.15}{\kelvin}.
-The two evaluations at nearly identical \SI{318.15}{\kelvin} conditions mean that the 73 specified states contain 72 distinct conditions at the displayed precision.
-At \SI{333.15}{\kelvin} and loading 0.4, separately confirmed split liquids have water mole fractions approximately 0.958 and 0.589; these splits have no experimental confirmation in the cited homogeneous-liquid data \cite[Sect.~4.2]{neumannNewModelCombining2022}.
+Nine trial phases per state give 1458 trials for each fit; every trial optimization completes, and none is unresolved.
+No descent is resolved for the reported parameters, and all 162 of their existing equilibria are liquid--vapor at these pressures, which lie below their bubble pressure.
+The comparison fit has resolved descents at 54 states, with 143 descending trials: ten states each at 313.15 and \SI{318.15}{\kelvin}, nine each at 333.15, 353.15 and \SI{373.15}{\kelvin} and seven at \SI{393.15}{\kelvin} (\Cref{tab:supplement-phase-family}).
+The 81 states at 353.15--\SI{393.15}{\kelvin} lie above the temperatures of the fitted \COtwo pressures.
 
-% P:supplement-phase-extension-01
-The extension declares 81 states at 353.15, 373.15 and \SI{393.15}{\kelvin}, with loadings $10^{-5}$, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5 and 0.6 and the same three pressure fractions.
-States with a fixed reference pressure above \SI{10}{\mega\pascal} are excluded: six at \SI{353.15}{\kelvin}, six at \SI{373.15}{\kelvin} and nine at \SI{393.15}{\kelvin}, for each fit.
-The remaining 60 states complete for both fits, with all 540 trial optimizations converging for each fit and none unresolved.
-The reported parameters have no resolved Gibbs-energy descent; the comparison fit has 41 descending trials at 21 states, with 22 trials at 12 states at \SI{353.15}{\kelvin} and 19 trials at nine states at \SI{373.15}{\kelvin}.
-Separately seeded calculations confirm two liquids at 17 of these 21 states, in 23 of 27 attempts.
-The extension reference pressures were computed with the fitting library and reused unchanged; Data and Code Availability in the main text specifies the software identities.
-The tables below give reference pressures, counts by temperature and fit, and the split confirmations.
+% P:supplement-phase-confirmation-01
+At each descent state, descending trials are grouped by phase kind, supported species and composition, with maximum composition difference $10^{-6}$ within a group, and one representative of each group seeds one split calculation of at most 400 iterations.
+A split is confirmed when it converges to the requested tolerance with negative $\Delta G/(RT)$, raw residuals at most $10^{-10}$, positive reduced-Hessian minimum, positive phase amounts and positive pressure--density derivatives.
+The 91 attempts confirm 51 distinct two-liquid paths at 32 of the 54 descent states, at every temperature (\Cref{tab:phase-splits}).
+The water mole fraction is 0.40--0.74 in the water-poor liquid and 0.68--0.97 in the water-rich liquid.
+The 40 unsuccessful attempts end with vanished or coincident phases or a nonpositive reduced Hessian; failure to confirm does not remove a resolved descent.
+These splits have no experimental confirmation in the cited homogeneous-liquid data \cite[Sect.~4.2]{neumannNewModelCombining2022}.
+The tables below give the reference pressures, the counts by temperature and fit, and the confirmed splits.
 
 \input{tables/phase_reference_pressures}
-\input{tables/phase_extension}
 
 % P:supplement-06
 Four liquid starts and five vapor starts are used at each converged equilibrium state.
@@ -312,7 +310,7 @@ The fit uses Ceres bounded Levenberg--Marquardt least squares with dense QR, aff
 The deposited starting parameter vectors and affine transformations specify the numerical scaling.
 Function, parameter and gradient tolerances are $10^{-6}$, $10^{-10}$ and $10^{-8}$, respectively, with a maximum of 180 iterations.
 Two sequential restricted fits were made, each from one start.
-The first used a \MEAH size lower bound of \SI{5.49}{\angstrom}; the second started from its solution and lowered that bound to \SI{5.35}{\angstrom}, stopping on function tolerance after 12 iterations.
+The first used a \MEAH size lower bound of \SI{5.49}{\angstrom}; the second started from its solution and lowered that bound to \SI{5.35}{\angstrom}, stopping on function tolerance after eight iterations.
 The restrictions were chosen from fixed-parameter probes: smaller diameters raise density but can overshoot the colder Hartono observations.
 Phase searches were applied to the resulting parameter sets, rather than imposed as constraints at every optimizer iteration.
 
@@ -322,16 +320,20 @@ A separate fit on the loading basis $\alpha_{x_3}=x_3(1+W)/(1-x_3)$, where $W$ i
 
 \section{Limits used to accept the reported fit}\label{sec:s-fits}
 % P:supplement-01
-Several limits were set from an earlier fit to the 149 pressure, species and heat quantities without density, the density-free fit.
-That fit used different fixed inputs and permittivity law; its parameters are not reported here, so its own deviations are not shown.
+Several limits were set from the density-free fit, a fit to the same 149 pressure, species and heat quantities without density data.
+It refits the four constant interactions of \MEACOO--water, \MEAH--water, bicarbonate--water and \MEACOO--\MEAH and the \MEAH--water temperature slope, starting from the reported parameters and within the reported-fit bounds; all other parameters are those of the reported fit.
+\Cref{tab:density-free-parameters} lists its parameters.
+Two of the five lie on their lower bounds: the \MEAH--water interaction at $-0.5$ and the \MEACOO--\MEAH interaction at $-1$, the same bound values as in the reported fit.
+
+\input{tables/density_free_parameters}
 
 % P:supplement-acceptance-01
 \Cref{tab:acceptance-limits} gives this study's comparison limits.
 Allowances relative to the density-free fit preserve pressure, species and heat agreement while other properties enter the fit: 10\,\% in shared-subset cost, two percentage points in pressure/species deviation and \SI{1}{\kilo\joule\per\mole} in each heat RMSE.
-The Cai allowance is 5\,\% above the Cai cost of 91.33 given by a constant \MEA--water interaction, $k_{ij}=-0.084393880$ with no temperature slope, fitted earlier to the Cai data and three \COtwo-free densities; all other inputs of that calculation are those of the reported fit.
-The density limits are twice the assigned scale, or \SI{1}{\kilogram\per\cubic\metre} for carbon-free states; the phase requirement rejects any resolved lower-Gibbs-energy arrangement in the specified search.
-These are study-specific tolerances for retaining property agreement, not published accuracy standards; the three densities outside $2s$ are reported as misses.
-
+The Cai allowance is 5\,\% above the Cai cost of 91.29 given by a constant \MEA--water interaction, $k_{ij}=-0.084399862$ with no temperature slope, fitted earlier to the Cai data and three \COtwo-free densities; all other inputs of that calculation are those of the reported fit.
+The density requirements are twice the assigned scale for loaded densities, with misses permitted only at the three states of \Cref{tab:density-failures}, and \SI{1}{\kilogram\per\cubic\metre} for carbon-free states; the phase requirement rejects any resolved lower-Gibbs-energy arrangement in the specified search.
+Limits are compared with unrounded values.
+These are study-specific tolerances for retaining property agreement, not published accuracy standards; the reported fit meets every limit, and its three densities outside $2s$ are reported as misses.
 
 \input{tables/acceptance_limits}
 

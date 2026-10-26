@@ -220,3 +220,27 @@ The owner-approved reframe and writer brief promote the notebook at `59c8d9067ff
 The accepted plan is [the 23 October reframe comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/197#issuecomment-6359283213). Its complete checklist, current displayed-number evidence, build commands, hashes and page inspection are retained under `builds/197-reframe-*`. The bibliography snapshot is unchanged. The local literature shelf is in the main checkout rather than this worktree; relevant indexed companions were compared with their current Zotero-storage files. Zhang (2011) Tables 9–11 and Neumann (2022) Section 4.2 were also read directly from their existing local PDFs. No Zotero or bibliography write was made.
 
 The 2.32% amine-sum deviation covers 25 comparisons, including 20 fitted observations; the fitted-only value is 1.72%. The Han mean density errors in the rewrite refer to five loaded 30 wt% observations at each temperature, excluding the zero-loading value. All 67 Han observations remain outside the objective. Binary dashed lines denote the vapor branch; dashed species/density curves denote single-liquid states imposed below their own bubble pressure. These distinct meanings are stated in the captions.
+
+## Issue 211 one-wheel numbers, 26 October 2026
+
+The owner, acting as investigator, promoted the results of #212–#215 for manuscript use on 2026-10-26 ([#211 comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/211)): the adopted record `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`, the package `analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/`, the density-free limits and the 162-state phase search, subject to their stated limits: calibration statistics and finite-search numerical verification, not physical validation, global stability or process qualification.
+
+Every generated table and figure now reads these files through `analyses/mea_parameter_bundle/scripts/a7_presentation.py`, which checks each bound input against the package's `inventory.json` or `input-hashes.json`. Prose numbers were recomputed from the same files; the ones that changed are:
+
+| Displayed value | Source |
+| --- | --- |
+| Per-source pressure AARD 9.43/18.57/19.36% (Hilliard, Ma'mun, Jou) | `canonical-pressure.csv`, grouped by `source` |
+| Wagner 22.19/9.27%; 15 wt% log bias −0.205; Matin pools 67.46%, −1.265 | `state-summary.json`, named cohorts |
+| Matin carbamate 8.09%; carbonate-share mean 0.0727, range 0.00629–0.266 | `species-figure-data.csv`; `carbonate-share.csv` |
+| Vinjarapu RMSE 1.84 kJ/mol (1.83501); Arcis 1.03 MPa bias +3.15 | `summary.json`, `heat` |
+| Hartono 0.39 error −4.40 kg/m³; Han maximum −20.01, 1037.59 calculated | `density.csv` |
+| Comparison-fit MEAH⁺–water $k_{ij}$ +0.026 | `comparison-parameters.json` |
+| Residual checks 2.16e-12 / 8.60e-13 / 2.11e-13 | `verification.json`, `state_numerical_checks` |
+| Loaded-density cost 0.565; Cai 91.87 of 148.88 | `fit-summary.json`, `groups` |
+| Bicarbonate–water 0.727; MEAH⁺–water slope −41.6 K | `conditional-standard-errors.csv` |
+| Eight iterations, function tolerance | `../engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/native.json` |
+| MEA association volume 0.036305439, least squares to Baygi's model at 21 temperatures | `../engine-3e83e19c-association-volume/README.md` |
+| Constant-interaction Cai $k_{ij}$ −0.084399862, cost 91.29 | `../engine-3e83e19c-refit-chain/stage2/run/selection.json`; `refit-display-summary.json` |
+| Phase grid, reference pressures, counts and 51 confirmed splits | `../engine-3e83e19c-phase-search/run-2/` |
+
+The sentence stating that eight-significant-figure parameters recover the fitted statistics was removed: `results/parameter-rounding/` binds the earlier record `e234e860…`, and no check exists for `00e77608…`.
