@@ -1,7 +1,8 @@
 """Effect of printed parameter precision on the joint-fit statistics (#207). Every coefficient of the reported record is
 rounded to 4 or 6 significant figures, as a reader copying the manuscript tables would obtain, and the 307 objective rows
-are replayed with the A7 fit specification and weights. Fixed parameters, no fit. Writes results/parameter-rounding/;
-run from the checkout root with `nice -n 10`."""
+are replayed with the A7 fit specification and weights. Fixed parameters, no fit. Writes
+results/engine-3e83e19c-paper-evidence/parameter-rounding/; run from the checkout root with `nice -n 10`. The historical
+results/parameter-rounding/ (record e234e860) came from this script at commit 0ebdf6c, whose inputs stay in Git history."""
 import concurrent.futures as cf, copy, csv, json, math, os, sys
 from pathlib import Path
 for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
@@ -10,9 +11,9 @@ B = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(B / 'scripts'), str(B / 'calibration-misfit'), str(B.parents[1] / 'src')]
 import a7_presentation as a, fit_campaign as c, fit_observations as o
 
-SPEC = B / 'results/joint-recalibration-170/amendment-6/joint-mea-water/held/fit-spec.json'  # the specification of the retained replay
-RETAINED = B / 'results/engine-3e83e19c-adoption/A7/full-replay.json'
-OUT = B / 'results/parameter-rounding'
+SPEC = B / 'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json'  # the specification of the retained replay
+RETAINED = B / 'results/engine-3e83e19c-paper-evidence/full-replay.json'
+OUT = B / 'results/engine-3e83e19c-paper-evidence/parameter-rounding'
 DIGITS = (None, 8, 7, 6, 4)
 
 
@@ -52,6 +53,7 @@ def statistics(values, groups, loaded):
 
 def main():
     OUT.mkdir(exist_ok=True)
+    c.verify(c.load(SPEC))  # pinned wheel installed and spec inputs hashed
     fitted = a.rows(a.E / 'fitted-rows.csv')
     groups = {r['id']: (f"{r['group']} {dict(PartialPressure='pressure', PhaseMoleFraction='species', AdditionEnthalpy='heat')[r['quantity']]}"
                         if r['group'] == 'common149' else f"Cai {r['quantity']}" if r['group'] == 'Cai' else r['group']) for r in fitted}
@@ -59,7 +61,7 @@ def main():
     with cf.ProcessPoolExecutor(len(DIGITS)) as pool:
         runs = dict(pool.map(replay, DIGITS))
     retained = {v['target']: v for v in json.loads(RETAINED.read_text())}
-    assert all(abs(v['predicted'] - retained[v['target']]['predicted']) <= 1e-10 * abs(retained[v['target']]['predicted']) for v in runs[None])  # full precision reproduces the record
+    assert all(v['predicted'] == retained[v['target']]['predicted'] for v in runs[None])  # full precision equals the retained replay exactly
     full = {v['target']: v['predicted'] for v in runs[None]}
     summary = dict(parameter_sha256=a.INPUTS.get(str(a.SELECTED.relative_to(a.ROOT))) or o.s.sha256(a.SELECTED), engine_commit=o.s.ENGINE_COMMIT,
                    engine_wheel_sha256=o.s.ENGINE_WHEEL_SHA256, statistics={}, max_relative_prediction_change={})
