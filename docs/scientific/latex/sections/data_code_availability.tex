@@ -1,11 +1,10 @@
 \section*{Data and Code Availability}
 % P:availability-01
 Processed observations, selected parameters, retained calculations, and the code used to generate tables and figures will be deposited in Zenodo; the DOI will be added at submission.
-The deposit README will identify the exact software versions, file checksums, omitted dependencies and reproduction commands.
+The deposit README will identify the exact software versions, file checksums, omitted dependencies and calculation commands.
 The analysis code will be included in the deposit under the MIT license; its development repository is \url{https://github.com/tannerpolley/Amine-Thermodynamics}. Third-party measurements retain their source terms.
-The parameters were fitted with ePC-SAFT Engine \texttt{8298c602}; the reported property values and the 73-state phase classifications reproduce bit for bit with Engine \texttt{3e83e19c}, built from merged main.
-The latter library also computed the 353--\SI{393}{\kelvin} phase search and the separately seeded split calculations; conditional standard errors and correlations retain the fitting-library provenance.
-The deposit README specifies the immutable wheel checksum, and the compiled library will be supplied to referees through restricted access arranged by the corresponding author.
+Every fit and every displayed value was calculated with ePC-SAFT Engine \texttt{3e83e19c}.
+The deposit README specifies the checksum of its immutable wheel, and the compiled library will be supplied to referees through restricted access arranged by the corresponding author.
 
 \section*{Acknowledgements}
 Calculations used the MA57 linear solver from HSL, a collection of Fortran codes for large-scale scientific computation. https://www.hsl.rl.ac.uk/.
