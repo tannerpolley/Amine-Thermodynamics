@@ -19,14 +19,17 @@ PERMITTED_MISSES = {'Amundsen2009_state_081', 'Hartono2014_density_80C_alpha0.29
 TABLE_GENERATOR, INVENTORY_COMMIT = 'docs/scientific/latex/scripts/final_rerun_tables.py', '771410a94f7729915bfe6457bfe7a5a0746f1611'
 # Inputs outside #215's inventory: the display code itself and the Wagner Table 4 loading transcription (no Engine value).
 UNINVENTORIED = {'analyses/mea_parameter_bundle/scripts/a7_presentation.py', 'analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py',
-                 'analyses/mea_parameter_bundle/scripts/manuscript_style.py', 'docs/scientific/latex/supplement.tex',
-                 'analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv'}
+                 'analyses/mea_parameter_bundle/scripts/manuscript_style.py', 'docs/scientific/latex/supplement.tex'}
+# Source-only data read by the figures but absent from #215's inventory: pinned here by SHA-256.
+PINNED = {'analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv':
+          'ceee9107ca784936126b9f32e08af8cb1e9a7088a87b4667796d9abac94f5bcc'}
 INPUTS = {}
 
 
 def bind(path):
-    path = Path(path)
-    INPUTS[str(path.relative_to(ROOT))] = hashlib.sha256(path.read_bytes()).hexdigest()
+    path, key = Path(path), str(Path(path).relative_to(ROOT))
+    INPUTS[key] = hashlib.sha256(path.read_bytes()).hexdigest()
+    assert PINNED.get(key, INPUTS[key]) == INPUTS[key], key  # pinned source data fails before use
     return path
 
 
@@ -174,4 +177,4 @@ def inventoried():
     for path, digest in INPUTS.items():
         if path in UNINVENTORIED or path in anchors or path == TABLE_GENERATOR:
             continue
-        assert inventory.get(path, hashed.get(path)) == digest, path
+        assert PINNED.get(path) or inventory.get(path, hashed.get(path)) == digest, path
