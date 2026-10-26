@@ -40,7 +40,7 @@ These diameter choices define the present parameterization; they are not indepen
 Water and \MEA carry two association sites (2B), and \COtwo carries two induced-association sites that bond only with water \cite{Kleiner2007,Pabsch2020,Schick2023}.
 The induced-association topology follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}, with water inputs fitted to IAPWS-95 (\cref{sec:results-water}).
 \MEA--water cross-association uses the Wolbach--Sandler rule \cite[Eq.~6]{Baygi2015}.
-The \MEA parameters use Baygi and Pahlavanzadeh's 2B model with its association volume converted to the present $\sigma_{ij}^3$ convention (Section~S1).
+The \MEA parameters use Baygi and Pahlavanzadeh's 2B model, with its association volume fitted to their model for the present $\sigma_{ij}^3$ convention (Section~S1).
 
 \subsection{Born contribution with solvation shell and dielectric saturation}
 % P:theory-04
@@ -64,7 +64,7 @@ The Born term follows the solvation-shell and dielectric-saturation (SSM+DS) for
     \label{eq:born-shell-diameter}
 \end{equation}
 Here \(\mathcal{I}\) is the set of ions, \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell and \(\varepsilon_{\mathrm{ion}}=8\) is the fixed permittivity assigned to the region between the ion surface and that shell.
-This work uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\), reproducing the corrected Eq.~7.
+This work uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\), which gives the corrected Eq.~7.
 The water solvation factor is \(f_{\HtwoO}=1.5\) \cite[Table~2]{Figiel2025}, and every other component, including \MEA, \COtwo and all ions, has \(f_k=1\).
 Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents; here it runs over all nine components, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\).
 The shell diameter therefore changes with loading through the water mole fraction, and the Born term contributes to the water activity.
