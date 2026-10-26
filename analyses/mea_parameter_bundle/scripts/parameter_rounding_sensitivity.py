@@ -1,5 +1,5 @@
 """Effect of printed parameter precision on the joint-fit statistics (#207). Every coefficient of the reported record is
-rounded to 4 or 6 significant figures, as a reader copying the manuscript tables would obtain, and the 307 objective rows
+rounded to 4, 6, 7 or 8 significant figures, as a reader copying the manuscript tables would obtain, and the 307 objective rows
 are replayed with the A7 fit specification and weights. Fixed parameters, no fit. Writes
 results/engine-3e83e19c-paper-evidence/parameter-rounding/; run from the checkout root with `nice -n 10`. The historical
 results/parameter-rounding/ (record e234e860) came from this script at commit 0ebdf6c, whose inputs stay in Git history."""
