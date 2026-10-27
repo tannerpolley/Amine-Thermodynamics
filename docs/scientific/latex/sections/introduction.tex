@@ -1,7 +1,8 @@
 \section{Introduction}\label{sec:introduction}
 % P:introduction-01
 Models of \COtwo absorption in aqueous monoethanolamine (\MEA) need consistent descriptions of equilibrium pressure, liquid species, heat of absorption, density and heat capacity.
-These properties determine different parts of an absorber calculation, yet each depends on the same reacting liquid.
+Equilibrium pressure determines the gas--liquid driving force, and liquid speciation supplies the concentrations used in reaction-rate expressions \cite[Sect.~1]{Zhang2011}.
+Absorption heat and heat capacity enter the column energy balance, while density connects mass and volume bases for liquid composition and flow.
 Absorbed \COtwo forms protonated amine, carbamate, bicarbonate and carbonate, coupling the equilibrium pressure to the distribution of molecular and ionic species.
 We ask whether one explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) formulation with carbamate chemistry can represent these properties for loaded aqueous MEA.
 
@@ -10,20 +11,24 @@ Multi-property models of aqueous MEA already exist.
 B\"ottinger et al.\ combined a Pitzer activity model with carbamate equilibria estimated from nuclear magnetic resonance (NMR) data and earlier vapor--liquid-equilibrium (VLE) interactions \cite[Sects.~5--7, Tables~5--6]{Bottinger2008}.
 Zhang et al.\ fitted electrolyte non-random two-liquid (NRTL) parameters to solubility, differential absorption heat, heat capacity and NMR data \cite[Sect.~3.3, Tables~9--11]{Zhang2011}; refined electrolyte NRTL and extended UNIQUAC also describe aqueous amine equilibria \cite[Sect.~4]{Hessen2010}\cite[Sects.~3--5]{Aronu2011}.
 Neumann et al.\ combined electrolyte NRTL with Helmholtz-energy equations of state to calculate VLE, speciation and density \cite[Sects.~3--4]{neumannNewModelCombining2022}.
-In an equation of state such as ePC-SAFT, the liquid density and enthalpy follow from the same Helmholtz energy that gives the phase and reaction equilibria, without a separate volume or excess-enthalpy model.
+In ePC-SAFT the ionic activities, liquid density and enthalpy all follow from one Helmholtz energy, without a separate excess-Gibbs-energy, volume or excess-enthalpy model.
 
 % P:introduction-03
 SAFT models differ in how they represent the reaction products.
 Reactive-association models obtain chemically bound \COtwo from bonded-site fractions, as in SAFT-VR and soft-SAFT \cite{MacDowell2010}\cite[Sect.~4.7]{lloretConsistentTransferableThermodynamic2017}.
 Neutral-species PC-SAFT and Huang--Radosz SAFT combine molecular phase fugacities with ideal reaction equilibria \cite[Sects.~3--6]{Nasrifar2010}\cite[Sect.~3]{Baygi2015,Najafloo2018}.
 Explicit-ion models instead assign nonideal activities to separate ions; examples include electrolyte cubic two-state association for MEA and ePC-SAFT for aqueous N-methyldiethanolamine (MDEA) \cite{tellez-arredondoModelingCO2H2S2013,Uyan2015,Wangler2018}.
+Uyan et al.\ predicted ternary pressure and speciation after fitting binary VLE interactions and retaining literature ion parameters \cite[Sects.~4.1--4.3]{Uyan2015}.
+Wangler et al.\ added interactions fitted to osmotic-coefficient data and predicted reacting-mixture solubility and absorption heat \cite[Sects.~6.1--6.3]{Wangler2018}.
 The MDEA ePC-SAFT work extends to mixed solvents and competitive acid-gas absorption \cite{Bulow2021a,Cleeton2020}.
 These ePC-SAFT studies treat MDEA, a tertiary amine that forms no carbamate.
 In loaded MEA, carbamate carries most of the absorbed \COtwo below a loading of about 0.5 \cite[Table~3]{Bottinger2008}, so an explicit-ion description of MEA must include carbamate ions and their formation reaction.
 
 % P:introduction-04
-Here the same ePC-SAFT Helmholtz energy, reaction standard states and ideal-gas caloric references provide the five target properties.
+Zhang et al.\ fitted equilibrium and caloric properties together, while Neumann et al.\ predicted loaded-liquid densities after VLE fitting and identified multi-property fitting as a possible improvement \cite[Sect.~3.3, Tables~9--10]{Zhang2011}\cite[Sects.~4.1--4.2]{neumannNewModelCombining2022}.
+Here loaded-liquid density enters the joint parameter estimation together with equilibrium and caloric observations in an explicit-ion ePC-SAFT description of carbamate-forming MEA.
+Relative to the cited ePC-SAFT amine studies, this adds carbamate ions and their formation reaction, and relative to the cited explicit-ion MEA model it adds caloric and density data to the joint fit.
 A solvation-shell Born term accounts for dielectric saturation near the ions \cite{Figiel2025,Figiel2026Correction}.
 Water, \COtwo--water and dielectric parameters are fitted separately, and 16 parameters are then fitted jointly to pressure, species, caloric, density and binary VLE observations; calculated curves are compared with measurements at nominal 30 wt\% MEA.
-The property comparisons identify the useful domain and the remaining discrepancies.
+The main articles cited here do not report a tangent-plane stability assessment of their parameter sets \cite[Sect.~4]{Uyan2015}\cite[Sect.~6]{Wangler2018}\cite[Results and Discussion]{Bulow2021a}\cite[Sects.~4--7]{Bottinger2008}\cite[Sects.~4--6]{Nasrifar2010}\cite[Sect.~3]{Baygi2015,Najafloo2018}\cite[Sects.~2--3]{Cleeton2020}\cite[Sects.~2--4]{Schick2023}.
 Because the objective contains no phase-stability condition, a parameter set can match the measured properties while predicting a second liquid phase; a finite phase search tests the reported parameters for such splits.

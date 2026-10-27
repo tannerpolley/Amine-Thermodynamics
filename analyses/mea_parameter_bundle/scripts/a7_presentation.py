@@ -174,6 +174,13 @@ def inventoried():
     for marker in ('literature=[', 'symbols=['):
         start = old.index(marker)
         assert all(line in new for line in old[start:old.index(']]', start)+2].splitlines() if 'This work' not in line), marker
+    # #211 Part 2 permits only the approved present-work row and parameter-count caption.
+    for marker, digest in {
+        "['This work'": '4e353b4fc3fd38196e1982b0248d2e242f3f2d183903a2d58d6a9ad942f282b5',
+        "table('literature_model_comparison.tex'": 'ac15b51184425c0833be514310ed22ce356d10ea23eeada8594fabb30b412772',
+    }.items():
+        line, = (line for line in new.splitlines() if marker in line)
+        assert hashlib.sha256(line.encode()).hexdigest() == digest, marker
     for path, digest in INPUTS.items():
         if path in UNINVENTORIED or path in anchors or path == TABLE_GENERATOR:
             continue

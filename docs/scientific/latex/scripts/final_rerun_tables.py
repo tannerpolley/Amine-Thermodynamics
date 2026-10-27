@@ -28,7 +28,7 @@ def display(value):
         return ''.join(part if part.startswith(r'\cite') else display(part) for part in parts)
     for old, new in SOURCE_NAMES.items():
         value = value.replace(old, new)
-    substitutions = {'A7': 'reported fit', 'A6': 'comparison fit', 'F1': 'density-free fit', 'restored species': 'additional species', 'canonical': 'six-source', 'packet': 'Hilliard and Jou pressures', 'pool': 'bicarbonate + carbonate total', 'endpoint': 'parameter set', 'PartialPressure':'CO2 partial pressure', 'PhaseMoleFraction':'species mole fraction', 'AdditionEnthalpy':'integral heat', 'Authority': 'Origin of limit', 'Cp': '$C_P$', 'kij': '$k_{ij}$'}
+    substitutions = {'A7': 'reported fit', 'A6': 'wider-bound fit', 'F1': 'density-free fit', 'restored species': 'additional species', 'canonical': 'six-source', 'packet': 'Hilliard and Jou pressures', 'pool': 'bicarbonate + carbonate total', 'endpoint': 'parameter set', 'PartialPressure':'CO2 partial pressure', 'PhaseMoleFraction':'species mole fraction', 'AdditionEnthalpy':'integral heat', 'Authority': 'Origin of limit', 'Cp': '$C_P$', 'kij': '$k_{ij}$'}
     for old, new in {**DISPLAY, **substitutions}.items():
         value = value.replace(old, new)
     return re.sub(r'(?<!\{)\bCO2\b', lambda _: r'\ce{CO2}', value)
@@ -404,8 +404,8 @@ def main():
     acceptance.append([f'Total cost ({len(fitted)} quantities)', '--', 'no limit', num(comparison['cost']), num(reported['cost']), '--'])
     kinds = {'cost': ('Cost', ''), 'AARD': ('AARD', r'\%'), 'RMSE': ('RMSE', 'kJ/mol'), 'within': ('Count', ''), 'instability': ('Count', ''), 'error': ('Absolute error', r'\si{\kilogram\per\cubic\metre}')}
     acceptance = blocks([(*next(v for k, v in kinds.items() if k in r[0]), r) for r in acceptance], 6)
-    table('acceptance_limits.tex', r'Limits and values for the comparison and reported fits. Limits are computed from the density-free fit of \Cref{tab:density-free-parameters} and the constant-interaction Cai calculation and compared unrounded; the margin is the limit minus the reported-fit value. Section~\\ref{sec:s-fits} explains the tolerances.',
-          ['Quantity', 'Limit', 'Origin of limit', r'\makecell[rb]{Comparison\\fit}', r'\makecell[rb]{Reported\\fit}', r'\makecell[rb]{Reported\\margin}'], acceptance, [.22, 'r', .32, 'r', 'r', 'r'])
+    table('acceptance_limits.tex', r'Limits and values for the wider-bound and reported fits. Limits are computed from the density-free fit of \Cref{tab:density-free-parameters} and the constant-interaction Cai calculation and compared unrounded; the margin is the limit minus the reported-fit value. Section~\\ref{sec:s-fits} explains the tolerances.',
+          ['Quantity', 'Limit', 'Origin of limit', r'\makecell[rb]{Wider-bound\\fit}', r'\makecell[rb]{Reported\\fit}', r'\makecell[rb]{Reported\\margin}'], acceptance, [.22, 'r', .32, 'r', 'r', 'r'])
     # Density-free fit (#213): five interaction coordinates refitted to the same 149 quantities without density, within the reported-fit bounds.
     bounds = {c['identity']: c for c in fit['coordinates']}
     density_free, on_bound = [], []
@@ -433,8 +433,8 @@ def main():
     reaction_names = {'reaction:R2:correlation:a': 'R2 $A$', 'reaction:R2:correlation:b_k': 'R2 $B$ (K)', 'reaction:R5:correlation:a_k': 'R5 $A_5$ (K)'}
     assert {i for i in differ if i.startswith('reaction:')} == reaction_names.keys()
     comparison_rows = parameter_blocks(shown_rows, 3) + [block(3, r'Reaction coefficient, as in main-text Table~1')] + [[name, num(comparison_values[i]['value']['magnitude'], PARAMETER_DIGITS), num(reported_values[i]['value']['magnitude'], PARAMETER_DIGITS)] for i, name in reaction_names.items()]
-    table('comparison_fit_parameters.tex', r'Comparison-fit parameters that differ from the reported fit. All other parameters and model choices are those of main-text Tables~3, 4 and 1, and the ion packing and Debye--H\"uckel diameters follow the same ties. The R2 and R5 coefficients include the fitted enthalpy shifts.',
-          ['Parameter', r'\makecell[rb]{Comparison\\fit}', r'\makecell[rb]{Reported\\fit}'], comparison_rows, 'lrr')
+    table('comparison_fit_parameters.tex', r'Wider-bound-fit parameters that differ from the reported fit. All other parameters and model choices are those of main-text Tables~3, 4 and 1, and the ion packing and Debye--H\"uckel diameters follow the same ties. The R2 and R5 coefficients include the fitted enthalpy shifts.',
+          ['Parameter', r'\makecell[rb]{Wider-bound\\fit}', r'\makecell[rb]{Reported\\fit}'], comparison_rows, 'lrr')
     state = a.rows(a.E/'state-targets.csv')
     source_rows, cai_rows = [], []
     meta = {r['target']:r for r in state if r['kind']=='packet'}
@@ -487,7 +487,7 @@ def main():
     phase_rows = [[num(t, 6), sum(float(r['temperature_K']) == t for r in states), *tally({n: [r for r in p.values() if float(r['temperature_K']) == t] for n, p in paired.items()})] for t in temperatures]
     phase_rows += [r'\midrule', ['Total', len(states), *tally({n: list(p.values()) for n, p in paired.items()})]]
     table('supplement_phase_family.tex', f'Phase-search results by temperature for both fits at the same {len(states)} states. Each state has {WORDS[per_state.pop()]} trial phases; every trial optimization completes and none is unresolved. A descent state has at least one trial that lowers the Gibbs energy beyond its numerical-error estimate. The complete state and trial data are supplied as CSV in the data deposit.',
-          ['T (K)', 'States', r'\makecell[rb]{Comparison fit\\descent states}', r'\makecell[rb]{Comparison fit\\descending trials}', r'\makecell[rb]{Reported fit\\descent states}', r'\makecell[rb]{Reported fit\\descending trials}'], phase_rows)
+          ['T (K)', 'States', r'\makecell[rb]{Wider-bound fit\\descent states}', r'\makecell[rb]{Wider-bound fit\\descending trials}', r'\makecell[rb]{Reported fit\\descent states}', r'\makecell[rb]{Reported fit\\descending trials}'], phase_rows)
     previous = OUTPUTS['supplement_phase_family.tex']
     splits = a.rows(a.P / 'split-confirmations.csv')
     confirmed = [r for r in splits if r['confirmed'] == 'True']
@@ -500,7 +500,7 @@ def main():
         split_rows.append([num(r['temperature_K'], 6), num(r['loading']), num(float(r['pressure_Pa'])/1000, 5), seeds[r['seed']], num(r['delta_G_over_RT'], 3),
                            *(num(r[k + x]) for k in liquids for x in ('/amount_mol', '/x/water')), num(r['V/amount_mol']) if r['V/amount_mol'] else '--'])
     descent_states = sum(int(r['resolved_trials']) > 0 for r in paired['comparison'].values())
-    table('supplement_phase_family.tex', f"All {len(confirmed)} confirmed two-liquid paths of the comparison fit, at {len({r['index'] for r in confirmed})} of its {descent_states} descent states, from {len(splits)} separately seeded attempts; the reported fit has no descent to confirm. "
+    table('supplement_phase_family.tex', f"All {len(confirmed)} confirmed two-liquid paths of the wider-bound fit, at {len({r['index'] for r in confirmed})} of its {descent_states} descent states, from {len(splits)} separately seeded attempts; the reported fit has no descent to confirm. "
           r"The seed is the trial liquid that starts the split. $\Delta G/(RT)$ is the extensive Gibbs-energy change in mol on the feed basis of Section~\\ref{sec:s-phase}. The two liquids are listed in order of increasing water mole fraction $x_w$; different seeds can reach the same split, and a dash marks a split without vapor. The unsuccessful attempts with their numerical causes, and all phase compositions, are supplied as CSV in the data deposit.",
           ['T (K)', 'Loading', 'P (kPa)', 'Seed', r'\makecell[rb]{$\Delta G/(RT)$\\(mol)}', r'\makecell[rb]{Liquid 1\\(mol)}', r'\makecell[rb]{Liquid 1\\$x_w$}', r'\makecell[rb]{Liquid 2\\(mol)}', r'\makecell[rb]{Liquid 2\\$x_w$}', r'\makecell[rb]{Vapor\\(mol)}'],
           split_rows, 'rrrlrrrrrr')
@@ -588,9 +588,10 @@ def main():
         [r'Aronu et al. \cite{Aronu2011}','Extended UNIQUAC; ion size/surface and pair coefficients (Tables 7--9)',r'VLE at 15--60 wt%; \ce{N2O}-derived physical solubility','Fitted CO2 partial pressure 24.3%; total pressure 11.7%; physical solubility 2.7% (Section 5)','NMR and absorption heat compared outside objective'],
         [r'Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013}','Electrolyte cubic two-state association; 7 MEA ternary parameters','VLE; 15.2--30 wt%; 298.15--393.15 K in Table~2 and Fig.~8; Section~4.3.3 instead states an upper limit of 366.68 K','Relative pressure deviation 12.5%, fitted (Tables 5, 8)','Parameters from earlier subsystems retained'],
         [r'Neumann et al. \cite{neumannNewModelCombining2022}','Helmholtz energy/eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained',r'Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data','Ternary density AARD 0.92% Hartono; 3.5% complete Han (Section 4.2)','VLE/density comparisons; density data sets differ from this work'],
-        ['This work',f"{len(fit['coordinates'])} fitted parameters; {len(fit['active_bounds'])} at bounds",f'{len(fitted)} quantities: pressure, species, heat, density, heat capacity and binary VLE',f"Fitted pressure/species {fit['groups']['common149 pressure']['AARD_percent']:.2f}/{fit['groups']['common149 species']['AARD_percent']:.2f}%; integral heat RMSE {summary['heat']['Vinjarapu2024']['RMSE']:.2f} kJ/mol",f"{six_source['n_available']}-pressure comparison {six_source['AARD_percent']:.2f}%; previously examined data"]]
-    table('literature_model_comparison.tex',r'Model complexity, data roles and reported deviations in related MEA studies. Parameter counts refer to the stated fit, excluding earlier subsystem fits. Relative pressure deviations and caloric metrics use each source\'s own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.',
+        ['This work',f"{len(fit['coordinates'])} fitted parameters; {len(fit['active_bounds'])} at bounds",f'{len(fitted)} quantities: pressure, species, heat, density, heat capacity and binary VLE',f"Fitted pressure {fit['groups']['common149 pressure']['AARD_percent']:.2f}%; shared species subset {fit['groups']['common149 species']['AARD_percent']:.2f}% ({fit['groups']['common149 species']['n']}); integral heat RMSE {summary['heat']['Vinjarapu2024']['RMSE']:.2f} kJ/mol; loaded density {a.stats([r for r in density if r['id'] in loaded_ids], 'observed_kg_m3', 'predicted_kg_m3')['AARD_percent']:.2f}% ({len(loaded_ids)})",f"{six_source['n_available']}-pressure comparison {six_source['AARD_percent']:.2f}%; {six_source['n_available'] - fit['groups']['common149 pressure']['n']} not fitted but examined during model development"]]
+    table('literature_model_comparison.tex',r'Model complexity, data roles and reported deviations in related MEA studies. Parameter counts describe the estimation stages named in each row and are not totals for complete model construction; the present count covers the joint fit and excludes the separate water, \COtwo--water and dielectric fits. Relative pressure deviations and caloric metrics use each source\'s own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.',
           ['Study','Model; fitted parameters','Fitted data','Reported agreement','Other comparisons or qualification'],literature,[.14,.21,.18,.23,.18])
+    OUTPUTS['literature_model_comparison.tex'] = OUTPUTS['literature_model_comparison.tex'].replace(r'\small', r'\footnotesize', 1)
     symbols=[
         [r'$\alpha$',r'Added CO2 per mole total amine'],
         [r'$w_{\mathrm{MEA}}$',r'MEA mass fraction of unloaded solvent'],
