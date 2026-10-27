@@ -245,3 +245,84 @@ Every generated table and figure now reads these files through `analyses/mea_par
 | Parameters printed to eight significant figures give the `tab:residual-summary` statistics at printed precision; largest relative prediction change 2.8e-6 (7: 1.9e-5, 6: 2.0e-4, 4: 4.2e-2) | `../engine-3e83e19c-paper-evidence/parameter-rounding/summary.json`, `replay-*.csv`; full-precision replay equal to `full-replay.json` in all 307 rows |
 
 The eight-significant-figure sentence in the parameter-fitting subsection of the data and parameter-estimation section is restored from `parameter_rounding_sensitivity.py`, rebound to record `00e77608…`, the restricted-2 specification and the retained replay; the earlier-record result `results/parameter-rounding/` (`e234e860…`) is unchanged.
+
+## Issue 211 Part 2 story pass, 26 October 2026
+
+The owner-approved merged edit plan of 26 October 2026, based on `ac073b8`, authorizes A–H and O-C, O-D, O-L and O-W. This pass changes the planned prose, its cross-references and the generated presentation only. The investigator promotion recorded above for #212–#215 supplies the evidence and claim limits: fitted/comparison statistics and finite-search numerical verification, without physical phase validation or process qualification. No model calculation, parameter estimation, source-library edit or bibliography refresh was made.
+
+### Changed spans
+
+Paths below are relative to this directory unless otherwise stated. Existing paragraph identifiers are retained, including the moved `results-scope-01` and reordered `results-phase-01`/`results-phase-02`.
+
+| Plan item | Changed span and outcome |
+| --- | --- |
+| A | `main.tex`, `abstract-01`: added the 0.51 MPa Arcis discrepancy and specified loaded densities; `sections/conclusion.tex`, `conclusion-01`: replaced the opening claim and added the complete discrepancy sentence; `conclusion-02`: replaced the future-work sentence. Done. |
+| B | `sections/mea_system_modeling_results.tex`, `results-scope-01`: removed the two repeated formulation sentences, replaced the domain claim with assessment and extrapolation limits, and moved the whole block after the literature table as subsection 4.7. Added the 162-state sentence with a phase-section reference. Done. |
+| C | `sections/data_methods.tex`, `methods-03`: stated the development role of the 112 non-fitted six-source pressures and distinguished comparison from acceptance limits; retained the citations and replaced the blind-test sentence. `abstract-01` and the generated present-work row state the same development role. Done. |
+| D | `abstract-01` and `conclusion-01`: changed the published-range comparison to the 159-pressure statistic after checking Table 6. Done. |
+| E | `results-phase-02` and `supplement.tex`, `supplement-phase-confirmation-01`: replaced the experimental-counterpart statements with the approved sentence about Neumann's homogeneous-liquid comparisons; retained its Section 4.2 citation. Schick's distinct experimental observation remains. Done. |
+| F | `conclusion-02`: specified three of the 47 fitted loaded densities outside twice the assigned scale; `supplement-acceptance-01`: added the approved sentence explaining that the loaded-density requirement records the three misses. Done. |
+| G | `results-phase-01`: replaced the local-optimum claim with the approved local bounded least-squares limitation. Done. |
+| H | `submission/chemrxiv.md`: synchronized the final abstract; `submission/cover_letter.md`: synchronized pressure, heat, density and phase results, limits and development roles; `submission/highlights.txt`: replaced highlight 5. Replaced the prohibited calculation-command wording in the ChemRxiv availability paragraph. Done. |
+| O-C1 | `sections/introduction.tex`, `introduction-04`: replaced the contribution and relative-contribution sentences; `abstract-01`: added the approved contribution sentence and used the explicitly permitted shorter separate-fit sentence. Done. |
+| O-C2 | Moved the first sentence of `results-phase-03`, with all citations, into `introduction-04` immediately before its final sentence. Done. |
+| O-C3 | Moved the tangent-plane criterion, equation `eq:tpd` and explanation to the end of Methods as `methods-phase-01`; inserted the Methods/S8 reference and reordered subsection 4.5 to grid, wider-bound result, restriction and cost, and the closing observation. Done. |
+| O-C4 | `results-phase-01`: added the active-bound/density trade-off and replaced the 47/47-to-44/47 sentence; `results-phase-02`: added the confirmed split compositions; `methods-heat-03`: appended the density/phase/reaction parameter connection. Done. |
+| O-D1 | New `results-scope-02`: inserted the approved R5 offset, six-of-16 active bounds, compensation and interpretation limits. Done after checking the adopted record. |
+| O-D2 | New `results-scope-03`: combined high-temperature evidence and the R4/R5 source limits; abstract ending now refers to absorber and stripper temperatures. Adapted the quoted density clause to identify Han's loaded 30 wt% observations and the mean errors at 373.15–393.15 K; 0.7–1.2% describes those means, rather than every density. |
+| O-D3 | `abstract-01` and `conclusion-01`: inserted the approved pressure ranges and the shared species subset range, combining the abstract development-role edit from C. Done. |
+| O-D4 | `abstract-01`: added the density denominator, 44 values within twice the assigned scale and three accepted misses at 353.15 K. Done. |
+| O-L1 | `scripts/final_rerun_tables.py`, present-work row: now computes and prints fitted pressure, shared species count/deviation, integral-heat RMSE and loaded-density count/deviation from retained evidence; the comparison note gives the 112 development observations. `results-literature-01`: inserted the approved Zhang/Neumann comparison immediately after the original data-role sentence. Done; the generated table uses the size adjustment described below. |
+| O-L2 | Same generator, literature-table caption: inserted the approved parameter-count qualification. Done; the additional caption and row text required a table-size adjustment. |
+| O-L3 | `introduction-03`: inserted the approved Uyan and Wangler sentences with existing bibliography keys. Done. |
+| O-L4 | `introduction-01`: replaced sentence 2 with the approved driving-force, species, energy-balance and density sentences. Done. |
+| O-L5 | `introduction-02`: replaced the Helmholtz-energy contrast sentence. Done. |
+| O-W1 | Renamed displayed fit text in Methods, Results, Conclusion, supplement, table captions/headers and figure captions/panel titles to wider-bound fit. Internal filenames, labels, record keys and variables are unchanged. The phase paragraph now calls the S10 limits acceptance limits. Done. |
+| O-W2 | Deleted the repeated domain recap, the separate-fit conclusion recap, the closing validation clause in `results-phase-03` and the final Figure 9 caption sentence. One finite-search qualification remains in subsection 4.5 and one in the conclusion. Done. |
+
+### Verified numbers and sources
+
+All evidence paths in this table are under `analyses/mea_parameter_bundle/results/`. These are reductions or checks of promoted retained values, not new analyses.
+
+| Quantity checked | Value and retained source |
+| --- | --- |
+| Fitted pressure | 47 observations; AARD 11.8625628140%, printed 11.86%; `engine-3e83e19c-paper-evidence/fit-summary.json`, `groups.common149 pressure`. Matching `canonical-pressure.csv` targets span 313.00–333.15 K. |
+| Complete pressure comparison | 159 observations; AARD 20.5521214768%, printed 20.55%; `state-summary.json`, `scores.canonical`, and `canonical-pressure.csv`, spanning 313.00–393.15 K. Subtracting the fitted 47 gives 112 non-fitted observations. |
+| Shared fitted species | 94 fractions; AARD 7.10284218155%, printed 7.10%; `fit-summary.json`, `groups.common149 species`. Matching targets in `species-figure-data.csv` span 293.15–333.15 K. |
+| Fitted heat | Eight Vinjarapu integral heats at 313.15 K; RMSE 1.83500986475 kJ/mol, printed 1.84; `summary.json`, `heat.Vinjarapu2024`, and `heat.csv`. The former submission abstract's 1.83 is stale. |
+| Fitted loaded density | 47 observations; AARD 0.176969446814%, printed 0.18%; `density.csv` restricted by `engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json`, `loaded_density_ids`. Exactly 44 within twice the assigned scale. All three misses are low at 353.15 K: Amundsen loading 0.3 and Hartono loadings 0.29/0.39. The wider-bound fit has 47/47 within twice the scale (`comparison-score.json`). |
+| Concentration transfer | 33 observations at 15 wt%: 29.4878365654%, printed 29.5%; 37 at 45 wt%: 56.0373635609%, printed 56.0%; `state-summary.json`, `scores.transfer 15 wt%` and `scores.transfer 45 wt%`. The current abstract and plan agree. |
+| Published pressure range | Table 6 reports related-model CO2 pressure deviations from 12.5% to 112% (and 11.7% for total pressure); the present 20.55% lies within either range. These statistics use different data sets and roles. Zhang Table 9 directly confirms 13.5–35.5% for fitted sources and Table 11 confirms the additional-source range. |
+| High-temperature pressure | 54 six-source observations at 100–120 °C: 24.3476287870%, printed 24.35%; `high-temperature-comparison.csv`, `canonical 100-120 C`. |
+| CO2–water maximum low pressure | −11.3361183453%, printed −11.3%, target `kiepe-393.17-07`, at the isotherm displayed as 393.2 K; `fitted-rows.csv`, `group=Kiepe`. |
+| Han loaded-density means | Five loaded 30 wt% observations at each temperature: −0.721870800161% at 373.15 K and −1.19629859624% at 393.15 K, printed 0.7–1.2% low; `density.csv`, `source=Han2012`, `mea_mass_fraction=0.3`, positive loading. The corresponding 353.15 K mean is −0.433194052296%. |
+| R5 and active bounds | Adopted R5 coefficients give an offset of +0.491307769667 pK at 313.15 K from the source coefficients 2677.91, 0.3869 and 0.0004277; `reported-parameters.json` and `source-only/chemical_reaction_source_contract.json`. Six active coordinates among 16, `fit-summary.json`, `active_bounds`. R4/R5 source upper temperatures are both 323.15 K; the R5 enthalpy shift is at +10 kJ/mol. |
+| Phase grid | 162 states per fit, six temperatures 313.15–393.15 K, nine loadings from 1e-5 to 0.6 and three pressure fractions; `engine-3e83e19c-phase-search/run-2/phase-family.csv`, `counts-by-temperature.csv`, and `reference-pressures.csv`. The wider-bound fit has 54 resolved-descent states and the reported fit zero; nine trials per state give 1458 optimizations per fit. |
+| Confirmed two-liquid compositions | 51 confirmed paths at 32 of 54 descent states; water-poor liquid water fraction 0.402875114547–0.739470616430, printed 0.40–0.74; water-rich 0.675096586314–0.974908506943, printed 0.68–0.97; `split-confirmations.csv`, confirmed rows, sorting the two liquid water fractions for each path. |
+| Fitting-cost change | Reported 148.878939345574 versus wider-bound 148.211507590408; increase 0.450323841932%, printed 0.45%; `reported-score.json` and `comparison-score.json`. |
+| Observation and parameter totals | 307 fitted quantities, 16 coordinates, six active bounds; checked against `fit-summary.json`, `fitted-rows.csv` and `conditional-standard-errors.csv` by the shared presentation checks. |
+
+The literature reading shelf is in the main checkout. Uyan (2015), Sections 4.1–4.3, Wangler (2018), Sections 6.1–6.3, and Böttinger (2008), the equilibrium-constant fitting discussion and Table 5, were read from their indexed companions; each companion matches both its indexed SHA-256 and current Zotero-storage bytes. Zhang (2011), Section 3.3 and Tables 9–11, and Neumann (2022), Sections 4.1–4.2, were read directly from existing Zotero PDFs because those papers are absent from the shelf index. Their attachment keys and SHA-256 values are `M3QDCZM7`, `c37e7370c765257b4c47d60b22b0ed136b7e97b3ef867ff2613d69c572785760`, and `G3U3WRF8`, `3480911860e23b29e2460868a06aa7a3ef3f20f261bd05379ca878906a53eaf1`, respectively. The source-library files and committed bibliography remain unchanged.
+
+### Generation and checks
+
+Table and figure strings were edited only in `scripts/final_rerun_tables.py` and `analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py`. Tables were regenerated with the main checkout's `.venv/bin/python -I`; figures with that interpreter and the specified figure script. Only four table bodies changed: the literature comparison, wider-bound parameter table, acceptance-limit table and phase-count/split tables in `supplement_phase_family.tex`; all other table differences update the generator, shared-check and supplement input hashes. The phase-family PDF/PNG and figure provenance were regenerated. All numerical results remain unchanged.
+
+`a7_presentation.py` retains every original evidence hash, inventory, count and numerical equality check. Its original unchanged-literature/nomenclature comparison against inventoried commit `771410a94f7729915bfe6457bfe7a5a0746f1611` remains in force. The approved present-work generator row and literature-caption line now have exact SHA-256 checks as well. A temporary in-memory check confirmed that an unapproved literature coefficient, nomenclature definition, present-work row or caption modification each raises an assertion, while the approved generator passes. No persistent test or new calculation script was added.
+
+`main.tex` imports prefixed supplement labels through `xr`, so the new references resolve to the actual Table S4 (`tab:supplement-data-roles`) and Section S8 (`sec:s-phase`); the Methods and phase-section references use their existing main-text labels. Three paragraph identifiers were added: `methods-phase-01`, `results-scope-02` and `results-scope-03`. The assembled main text has 50 unique paragraph identifiers.
+
+The first main build found that the enlarged Table 6 exceeded the page height by 31.32335 pt. The generator now selects `footnotesize` for that table only, preserving every approved word and number. The final table fits and remains legible. This is the only layout adaptation. The supplied ban-list directory was stale; the existing file read was `/home/tnnrpolley21/Workspaces/Agentic-Coding/plugins/cse/cse-plugin/plugin/BANNED.md`. The plugin-wide and scoped prose checker passes. No abstract word limit was found in the repository or submission files; the final synchronized plain-text abstract has 296 whitespace-separated words. Highlight lengths are 78, 79, 83, 81 and 76 characters, all within 85.
+
+Both final builds used, from this directory:
+
+```bash
+SOURCE_DATE_EPOCH=1792750003 FORCE_SOURCE_DATE=1 nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex
+SOURCE_DATE_EPOCH=1792750003 FORCE_SOURCE_DATE=1 nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds main.tex
+```
+
+The supplement was built first to supply its cross-reference values. Final outputs are `builds/main.pdf`, 21 pages, SHA-256 `4bfdb4a1dcf427cc72aab1c10e9170297525d5418a700db64297286ea7a384a4`, and `builds/supplement.pdf`, 23 pages, SHA-256 `1dce0e80a8a9154738faa4dac210be2fca50885640d1fbc436abb719316a2254`. Neither final log has overfull boxes, oversized floats, undefined references/citations or missing/substituted fonts. BibTeX uses the unchanged committed snapshot.
+
+All 44 pages were rendered in color and grayscale at 110 dpi under `/tmp/issue-211-part2-pages/{main,supplement}/pages/{color,grayscale}/page-NN.png`; `page-images.txt` lists all 88 paths. Each document also has `contact-sheet.png` and `report.json`. The automated visual checks report 178 main and 52 supplement warnings, rather than an automatic pass: tight text clearances, mathematical/plot text reported against vector graphics, and rotated landscape-table text reported near the page edge. Inspection of the complete contact sheets and full-size revised pages found no clipping or unintended text/graphic collisions; the landscape table remains within its rotated page. The final PDF preserves the finite-search and property-specific limits. These presentation checks are not an independent scientific review.
+
+`nice -n 10 python3 -I scripts/check_manuscript_freshness.py --write-receipt` from the repository root rewrote `builds/verification-receipt.json` for the 67 retained manuscript inputs and final main PDF. It was followed by `git add -u`; the subsequent freshness check and staged whitespace check both pass. Delivery for this implementor is a local issue-branch commit; merging, pushing and the independent manuscript review are outside this pass.

@@ -152,7 +152,7 @@ These shares of dissolved carbon differ from the six ratios to total amine used 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{loaded-density-errors.pdf}
-\caption{Density errors without volume translation. Upper panels compare the reported parameters (circles) and comparison fit (crosses) at the same 47 fitted loaded states; color denotes loading. Dashed lines mark $\pm2s$, with $s$ defined by $s_\rho=[u_\rho^2+(g u_\alpha)^2]^{1/2}$. Lower panels show the reported parameters for all 210 densities, including compositions outside 30 wt\%, with source-specific markers and fitted, non-fitted and excluded observations distinguished. Amundsen, Hartono and Han source data are from Refs.~\cite{Amundsen2009,Hartono2014,hanDensityWater12012}.}
+\caption{Density errors without volume translation. Upper panels compare the reported parameters (circles) and wider-bound fit (crosses) at the same 47 fitted loaded states; color denotes loading. Dashed lines mark $\pm2s$, with $s$ defined by $s_\rho=[u_\rho^2+(g u_\alpha)^2]^{1/2}$. Lower panels show the reported parameters for all 210 densities, including compositions outside 30 wt\%, with source-specific markers and fitted, non-fitted and excluded observations distinguished. Amundsen, Hartono and Han source data are from Refs.~\cite{Amundsen2009,Hartono2014,hanDensityWater12012}.}
 \label{fig:density-errors}
 \end{figure}
 
@@ -218,7 +218,7 @@ All extensive Gibbs differences and phase amounts below refer to that feed, rath
 % P:supplement-phase-summary-01
 Nine trial phases per state give 1458 trials for each fit; every trial optimization completes, and none is unresolved.
 No descent is resolved for the reported parameters, and all 162 of their existing equilibria are liquid--vapor at these pressures, which lie below their bubble pressure.
-The comparison fit has resolved descents at 54 states, with 143 descending trials: ten states each at 313.15 and \SI{318.15}{\kelvin}, nine each at 333.15, 353.15 and \SI{373.15}{\kelvin} and seven at \SI{393.15}{\kelvin} (\Cref{tab:supplement-phase-family}).
+The wider-bound fit has resolved descents at 54 states, with 143 descending trials: ten states each at 313.15 and \SI{318.15}{\kelvin}, nine each at 333.15, 353.15 and \SI{373.15}{\kelvin} and seven at \SI{393.15}{\kelvin} (\Cref{tab:supplement-phase-family}).
 The 81 states at 353.15--\SI{393.15}{\kelvin} lie above the temperatures of the fitted \COtwo pressures.
 
 % P:supplement-phase-confirmation-01
@@ -227,7 +227,7 @@ A split is confirmed when it converges to the requested tolerance with negative 
 The 91 attempts confirm 51 distinct two-liquid paths at 32 of the 54 descent states, at every temperature (\Cref{tab:phase-splits}).
 The water mole fraction is 0.40--0.74 in the water-poor liquid and 0.68--0.97 in the water-rich liquid.
 The 40 unsuccessful attempts end with vanished or coincident phases or a nonpositive reduced Hessian; failure to confirm does not remove a resolved descent.
-These splits have no experimental confirmation in the cited homogeneous-liquid data \cite[Sect.~4.2]{neumannNewModelCombining2022}.
+The homogeneous-liquid density comparisons discussed by Neumann et al.\ do not test phase splitting at the states searched here \cite[Sect.~4.2]{neumannNewModelCombining2022}.
 The tables below give the reference pressures, the counts by temperature and fit, and the confirmed splits.
 
 \input{tables/phase_reference_pressures}
@@ -294,12 +294,12 @@ The distance in Eq.~\ref{eq:tpd-supp} is minimized over positive trial fractions
 Liquid trials support all nine species, and vapor trials support only \COtwo, MEA and water.
 A two-phase classification includes liquid--vapor equilibrium and alone does not establish a second liquid.
 
-\section{Comparison fit and bound restriction}\label{sec:s-probes}
+\section{Wider-bound fit and bound restriction}\label{sec:s-probes}
 % P:supplement-bounds-01
-The comparison fit and reported fit use the same 16 adjustable parameters and 307 quantities.
+The wider-bound fit and reported fit use the same 16 adjustable parameters and 307 quantities.
 The reported fit is the parameter set reported here.
 The restriction changes the \MEAH segment-diameter bounds from 2--\SI{5.8}{\angstrom} to 5.35--\SI{5.8}{\angstrom}, and the \MEAH--water interaction bounds from $[-0.5,0.5]$ to $[-0.5,-0.161]$; all other physical bounds, observations, scales and weights are unchanged.
-\Cref{tab:comparison-fit-parameters} lists the comparison-fit values that differ from the reported fit, so that both parameter sets are fully specified.
+\Cref{tab:comparison-fit-parameters} lists the wider-bound-fit values that differ from the reported fit, so that both parameter sets are fully specified.
 \Cref{tab:supplement-fitted-parameters} gives the selected values, bounds and conditional standard errors.
 Fixed inputs include earlier pure-water, binary and permittivity estimates, documented with their sources in Section~\ref{sec:s-parameters}.
 
@@ -334,6 +334,7 @@ The Cai allowance is 5\,\% above the Cai cost of 91.29 given by a constant \MEA-
 The density requirements are twice the assigned scale for loaded densities, with misses permitted only at the three states of \Cref{tab:density-failures}, and \SI{1}{\kilogram\per\cubic\metre} for carbon-free states; the phase requirement rejects any resolved lower-Gibbs-energy arrangement in the specified search.
 Limits are compared with unrounded values.
 These are study-specific tolerances for retaining property agreement, not published accuracy standards; the reported fit meets every limit, and its three densities outside $2s$ are reported as misses.
+The loaded-density requirement admits exactly the three misses of the reported fit, so it records that outcome rather than testing it.
 
 \input{tables/acceptance_limits}
 

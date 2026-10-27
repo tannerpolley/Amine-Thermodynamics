@@ -41,14 +41,14 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/run-2/split-confirmations.csv SHA256 035a31e81a2141d2385812314af0690e9e12c9108b68d67f546dacfa44547fe8
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
-% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 6dd168742caed56edf49f6adea8888e1f18c34669f0cf216918b15a1eeac2778
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 7d655b44c7ba6983879e96b346075ad5e8bdee7540a510f30376223bc12d3e83
-% Input: docs/scientific/latex/supplement.tex SHA256 34662c3606f844e13caa8565225f618c71183426f3e3fa9c2e3c3437b726acf3
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 5328b0739df6e30433340eb20bfd7132c29288f34d916007d017df5a45f968e5
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 80ffadcfc2e7b6e12bbdf3343590c6252775f3329aacf38d79deecce16616853
+% Input: docs/scientific/latex/supplement.tex SHA256 07beb91c8aeb956279ccac76cb46ca94b3f6dc2cba53e0925bf8449e894e0054
 \begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
 \caption{Phase-search results by temperature for both fits at the same 162 states. Each state has nine trial phases; every trial optimization completes and none is unresolved. A descent state has at least one trial that lowers the Gibbs energy beyond its numerical-error estimate. The complete state and trial data are supplied as CSV in the data deposit.}\label{tab:supplement-phase-family}
 \begin{tabular}{@{}rrrrrr@{}}
 \toprule
-T (K) & States & \makecell[rb]{Comparison fit\\descent states} & \makecell[rb]{Comparison fit\\descending trials} & \makecell[rb]{Reported fit\\descent states} & \makecell[rb]{Reported fit\\descending trials} \\
+T (K) & States & \makecell[rb]{Wider-bound fit\\descent states} & \makecell[rb]{Wider-bound fit\\descending trials} & \makecell[rb]{Reported fit\\descent states} & \makecell[rb]{Reported fit\\descending trials} \\
 \midrule
 $313.15$ & $27$ & $10$ & $27$ & $0$ & $0$ \\
 $318.15$ & $27$ & $10$ & $24$ & $0$ & $0$ \\
@@ -63,7 +63,7 @@ Total & $162$ & $54$ & $143$ & $0$ & $0$ \\
 \end{table}
 \begingroup\small\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}rrrlrrrrrr@{}}
-\caption{All 51 confirmed two-liquid paths of the comparison fit, at 32 of its 54 descent states, from 91 separately seeded attempts; the reported fit has no descent to confirm. The seed is the trial liquid that starts the split. $\Delta G/(RT)$ is the extensive Gibbs-energy change in mol on the feed basis of Section~S8. The two liquids are listed in order of increasing water mole fraction $x_w$; different seeds can reach the same split, and a dash marks a split without vapor. The unsuccessful attempts with their numerical causes, and all phase compositions, are supplied as CSV in the data deposit.}\label{tab:phase-splits}\\
+\caption{All 51 confirmed two-liquid paths of the wider-bound fit, at 32 of its 54 descent states, from 91 separately seeded attempts; the reported fit has no descent to confirm. The seed is the trial liquid that starts the split. $\Delta G/(RT)$ is the extensive Gibbs-energy change in mol on the feed basis of Section~S8. The two liquids are listed in order of increasing water mole fraction $x_w$; different seeds can reach the same split, and a dash marks a split without vapor. The unsuccessful attempts with their numerical causes, and all phase compositions, are supplied as CSV in the data deposit.}\label{tab:phase-splits}\\
 \toprule
 T (K) & Loading & P (kPa) & Seed & \makecell[rb]{$\Delta G/(RT)$\\(mol)} & \makecell[rb]{Liquid 1\\(mol)} & \makecell[rb]{Liquid 1\\$x_w$} & \makecell[rb]{Liquid 2\\(mol)} & \makecell[rb]{Liquid 2\\$x_w$} & \makecell[rb]{Vapor\\(mol)} \\
 \midrule\endfirsthead

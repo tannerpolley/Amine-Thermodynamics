@@ -6,6 +6,8 @@
 \usepackage[numbers]{natbib}
 \usepackage[version=4]{mhchem}
 \usepackage{cleveref}
+\usepackage{xr}
+\externaldocument[supp-]{builds/supplement}
 \usepackage{subcaption}
 \usepackage{longtable}
 \usepackage{placeins}
@@ -93,13 +95,15 @@
 \begin{abstract}
 % P:abstract-01
 We examine whether one explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) formulation with carbamate chemistry can represent the equilibrium, caloric and density properties of loaded aqueous monoethanolamine (MEA).
-After separate fits of the water parameters to IAPWS-95, the \COtwo--water interaction to \COtwo solubility in water and the MEA dielectric coefficients to permittivities, sixteen parameters are fitted jointly to pressure, species, integral absorption heat, density, heat capacity and binary equilibrium data.
-For nominal 30 wt\% MEA, average absolute relative deviations are 11.86\,\% over 47 fitted pressures, 20.55\,\% over 159 pressures from six sources, 112 of them not fitted, and 7.10\,\% over 94 fitted species fractions.
-The fitted integral-heat root-mean-square error is \SI{1.84}{\kilo\joule\per\mole} \COtwo; the average absolute relative density deviation is 0.18\,\% over 47 fitted loaded densities, calculated without volume translation.
-Pressure deviations lie within the range reported for related models on different data sets and with different fitting roles.
+After separate water, \COtwo--water and dielectric fits, sixteen parameters are fitted jointly to pressure, species, integral absorption heat, density, heat capacity and binary equilibrium data.
+For nominal 30 wt\% MEA, one parameter set thus represents \COtwo pressure, the amine and carbamate fractions, integral heat at \SI{313.15}{\kelvin} and loaded density through \SI{353.15}{\kelvin}.
+For nominal 30 wt\% MEA, pressure average absolute relative deviations are 11.86\,\% over 47 fitted observations at 313.00--\SI{333.15}{\kelvin} and 20.55\,\% over 159 observations at 313.00--\SI{393.15}{\kelvin}, including 112 not fitted but examined during model development.
+The shared subset of 94 fitted species fractions gives 7.10\,\% at 293.15--\SI{333.15}{\kelvin}.
+The fitted integral-heat root-mean-square error is \SI{1.84}{\kilo\joule\per\mole} \COtwo; the average absolute relative density deviation is 0.18\,\% over 47 fitted loaded densities, calculated without volume translation, with 44 within twice the assigned scale and three accepted misses at \SI{353.15}{\kelvin}.
+The 159-pressure deviation lies within the range of pressure deviations reported for related MEA models, which use different data sets and fitting roles.
 A fit with wider bounds on the protonated-amine diameter and its water interaction matches the properties similarly but predicts a second liquid phase at some states; narrowing these bounds removes the detected instabilities in a finite search at 162 states between 313.15 and \SI{393.15}{\kelvin}, with a 0.45\,\% higher objective value.
-Carbonate shares, titration bicarbonate, densities above \SI{353.15}{\kelvin} and the unloaded heat capacity at \SI{318.15}{\kelvin} remain discrepant, and pressure deviations reach 29.5 and 56.0\,\% at 15 and 45 wt\% MEA.
-The available comparisons do not yet establish suitability across an absorber's operating range.
+Carbonate shares, titration bicarbonate, the \SI{0.51}{\mega\pascal} Arcis integral heats, loaded densities above \SI{353.15}{\kelvin} and the unloaded heat capacity at \SI{318.15}{\kelvin} remain discrepant, and pressure deviations reach 29.5 and 56.0\,\% at 15 and 45 wt\% MEA.
+The available comparisons do not yet establish suitability across absorber and stripper temperatures.
 \end{abstract}
 
 \begin{keywords}
