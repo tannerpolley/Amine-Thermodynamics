@@ -236,7 +236,7 @@ Every generated table and figure now reads these files through `analyses/mea_par
 | Hartono 0.39 error −4.40 kg/m³; Han maximum −20.01, 1037.59 calculated | `density.csv` |
 | Comparison-fit MEAH⁺–water $k_{ij}$ +0.026 | `comparison-parameters.json` |
 | Residual checks 2.16e-12 / 8.60e-13 / 2.11e-13 | `verification.json`, `state_numerical_checks` |
-| Loaded-density cost 0.565; Cai 91.87 of 148.88 | `fit-summary.json`, `groups` |
+| Loaded-density cost 0.565; Cai 91.87 of 148.9 | `fit-summary.json`, `groups` |
 | Bicarbonate–water 0.727; MEAH⁺–water slope −41.6 K | `conditional-standard-errors.csv` |
 | Eight iterations, function tolerance | `../engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/native.json` |
 | MEA association volume 0.036305439, least squares to Baygi's model at 21 temperatures | `../engine-3e83e19c-association-volume/README.md` |
