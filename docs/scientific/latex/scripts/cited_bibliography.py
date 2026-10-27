@@ -19,4 +19,6 @@ for key in sorted(cited, key=str.lower):
     entry = re.sub(r'^  file = \{.*\},?\n', '', entries[key], flags=re.M)
     # The Elsevier style prints every eprint as arXiv; restore handle URLs that the export turned into eprints.
     entry = re.sub(r'^  eprint = \{(.*)\},\n  eprinttype = \{hdl\},\n', r'  url = {http://hdl.handle.net/\1},\n', entry, flags=re.M)
+    # Crossref titles can carry publisher chemical-formula tags (<fc>...</fc>) that the export escapes as text.
+    entry = re.sub(r'\{\$<\$\}/?fc\{\$>\$\}', '', entry, flags=re.I)
     sys.stdout.write(entry + '\n')
