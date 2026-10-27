@@ -3,92 +3,95 @@
 % P:introduction-01
 Models of \COtwo absorption in aqueous monoethanolamine (\MEA) need consistent descriptions of equilibrium pressure, liquid species, heat of absorption, density and heat capacity.
 Equilibrium pressure determines the gas--liquid driving force, while speciation supplies concentrations for reaction-rate expressions \cite[Sect.~1, p.~67]{Zhang2011}.
-Freguia and Rochelle separate reboiler duty into desorption heat, water vaporization and sensible heating \cite[Eq.~13, Fig.~3, p.~1680]{Freguia2003}; absorption heating also affects the absorber temperature profile \cite[Sect.~5.3, Figs.~10--11]{Kvamsdal2008}.
-Density and viscosity enter column sizing and mass-transfer correlations \cite[Introduction, p.~3096]{Amundsen2009}.
+Freguia and Rochelle separate reboiler duty into desorption heat, water vaporization and sensible heating, which depends on the solvent heat capacity \cite[Eq.~13, Fig.~3, p.~1680]{Freguia2003}; absorption heating also affects the absorber temperature profile \cite[Sect.~5.3, Figs.~10--11]{Kvamsdal2008}.
+Density enters column sizing and mass-transfer correlations \cite[Introduction, p.~3096]{Amundsen2009}.
 
 % P:introduction-02
 MEA forms carbamate through an overall reaction consuming two amine molecules per \COtwo molecule; carbamate reversion to bicarbonate becomes important at higher \COtwo content \cite[Eqs.~1--4, pp.~1883--1884]{MacDowell2010}.
 This differs from tertiary N-methyldiethanolamine (MDEA), which promotes bicarbonate formation without forming carbamate \cite[Sect.~1, p.~1467]{Vaidya2007}.
-The resulting coupling of chemistry, phase equilibrium and caloric properties requires more than a pressure correlation.
+Pressure, speciation and absorption heat therefore depend on the same reaction equilibria, which a model must combine with nonideal activities of the molecular and ionic species.
 
 \subsection{Activity-coefficient models}
 % P:introduction-03
 Liu et al.\ trace the progression from Kent--Eisenberg's ideal activity and fugacity coefficients with fitted reaction constants to Deshmukh--Mather's extended Debye--H\"uckel treatment, the interaction parameters tabulated by Weiland and co-workers, Li--Mather's Pitzer treatment, and Austgen's electrolyte non-random two-liquid (e-NRTL) model \cite[Introduction, pp.~2080--2081]{Liu1999}.
 In their MEA refit, Liu et al.\ warn that simultaneous estimation of the carbamate constant and interaction parameters can overfit scattered solubility data \cite[p.~2083]{Liu1999}.
 B\"ottinger et al.\ instead refitted a Pitzer model's carbamate constant to nuclear magnetic resonance (NMR) observations after finding systematically low calculated carbamate \cite[Sect.~5]{Bottinger2008}.
-Refined e-NRTL fits included binary vapor--liquid equilibrium (VLE), freezing-point depression and excess enthalpy, with speciation predicted \cite[Sect.~5, p.~3646]{Hessen2010}.
+Hessen et al.'s refined e-NRTL fit included binary vapor--liquid equilibrium (VLE), freezing-point depression and excess enthalpy, and predicted speciation \cite[Sect.~5, p.~3646]{Hessen2010}.
 Aronu et al.\ extended the concentration range to 15--60 wt\% MEA using an extended universal quasi-chemical (UNIQUAC) activity model fitted to solubility data, with NMR speciation predicted \cite[Sects.~1, 4.3]{Aronu2011}.
 
 % P:introduction-04
 Joint fitting to several properties is established practice for activity models.
 Hilliard fitted e-NRTL parameters to pressure, absorption heat, heat capacity and NMR data, but 18 of 35 parameter estimates were smaller than their standard errors \cite[Tables~13.4-2--13.4-3, pp.~440--441]{Hilliard2008}.
-Zhang et al.\ also fitted these properties jointly; their \COtwo-pressure average absolute relative deviations (AARDs) of 13.5--35.5\,\% by source describe fitted data \cite[Sect.~3.3, Table~9, p.~72]{Zhang2011}.
+Zhang et al.\ also fitted these properties jointly; their average absolute relative deviations (AARDs) in \COtwo pressure, 13.5--35.5\,\% by source, are for data used in the fit \cite[Sect.~3.3, Table~9, p.~72]{Zhang2011}.
 Akula et al.\ fitted pressure and differential heat using an analytical excess-enthalpy expression, leaving speciation and heat capacity as comparisons outside the fit \cite[Sect.~1, p.~2; pp.~10--11]{Akula2023a}.
-These studies establish multi-property precedents, while parameter correlation and the separate vapor-phase description remain motivations for examining equations of state \cite[Table~7]{Akula2023a}\cite[Introduction, p.~1884]{MacDowell2010}.
+These studies establish joint fitting of pressure, speciation and caloric data, and they show that such fits can leave parameters strongly correlated or poorly determined \cite[Table~7]{Akula2023a}.
+Their activity-coefficient models also need separate descriptions of the vapor phase and the liquid density.
 
 \subsection{SAFT and other equations of state}
 % P:introduction-05
-Statistical associating fluid theory (SAFT) permits one equation of state for both phases \cite[Introduction, p.~1884]{MacDowell2010}, but its treatments of reaction products differ.
+Statistical associating fluid theory (SAFT) describes both phases with one equation of state \cite[Introduction, p.~1884]{MacDowell2010}, which also gives the liquid density.
+SAFT models of aqueous MEA differ in how they represent the reaction products.
 Button and Gubbins's early aqueous-MEA application used association without reactions or ions \cite[Sect.~1, p.~176]{Button1999}.
-Nasrifar and Tafazzol combined perturbed-chain SAFT (PC-SAFT) fugacities for molecular species with literature reaction constants and ideal ions confined to the liquid \cite[Sect.~4]{Nasrifar2010}.
-Baygi and Pahlavanzadeh's PC-SAFT and Najafloo and Zarei's Huang--Radosz SAFT likewise used ideal activities in the chemical equilibria \cite[Sect.~3.3]{Baygi2015,Najafloo2018}.
+Nasrifar and Tafazzol combined perturbed-chain SAFT (PC-SAFT) fugacities for molecular phase equilibrium with literature reaction constants and unit liquid-phase activity coefficients for speciation, with ions confined to the liquid \cite[Sects.~3--4, Table~1; Sect.~6, pp.~7626--7627]{Nasrifar2010}.
+Baygi and Pahlavanzadeh's PC-SAFT and Najafloo and Zarei's Huang--Radosz SAFT likewise used ideal activities in the chemical equilibria \cite[Sect.~3.3]{Baygi2015}\cite[Sect.~3.3]{Najafloo2018}.
 
 % P:introduction-06
 Reactive-association models represent chemistry through molecular bonding, treating carbamate and protonated amine as neutral bound pairs in SAFT for potentials of variable range (SAFT-VR) \cite[pp.~1885, 1887]{MacDowell2010}.
-Rodriguez et al.\ obtained speciation from bonded fractions \cite[Fig.~9b, p.~1341]{Rodriguez2012}, as did Perdomo et al.\ with group-contribution SAFT-\(\gamma\) Mie \cite[Sect.~2.2, Eqs.~7--8; Fig.~14]{perdomoPredictiveGroupcontributionFramework2023}.
-Soft-SAFT describes absorption as aggregation and estimates absorption heat from the pressure--temperature slope \cite[Sect.~4.7, Eq.~26]{lloretConsistentTransferableThermodynamic2017}.
-Caloric agreement remains a concern: Wang et al.\ report that their Peng--Robinson cubic-plus-association model underestimates MEA absorption enthalpy by 49\,\% when carbamate forms, and suggest adding ionic terms \cite[Sect.~4.2.4, p.~83]{wangImprovementPRCPAEquation2018}.
+Rodriguez et al.\ obtained speciation from bonded fractions \cite[Fig.~9b, p.~1341]{Rodriguez2012}, as did Perdomo et al.\ with group-contribution SAFT-\(\gamma\) Mie \cite[Sect.~2.2, Eqs.~10--11; Fig.~14]{perdomoPredictiveGroupcontributionFramework2023}.
+Soft-SAFT describes absorption as aggregation and estimates absorption heat from the pressure--temperature slope, which underestimates the measured heat at \SI{313.15}{\kelvin} \cite[Sect.~4.7, Eq.~26, Fig.~10b]{lloretConsistentTransferableThermodynamic2017}.
+Wang et al.\ report the same difficulty: their Peng--Robinson cubic-plus-association model underestimates MEA absorption enthalpy by 49\,\% when carbamate forms, and they suggest adding ionic terms \cite[Sect.~4.2.4, p.~83]{wangImprovementPRCPAEquation2018}.
 
 % P:introduction-07
-Explicit MEA ions, including carbamate, already appear in T\'ellez-Arredondo and Medeiros's electrolyte cubic two-state association model \cite[Sect.~3, p.~48]{tellez-arredondoModelingCO2H2S2013} and Neumann et al.'s combined Helmholtz-energy/e-NRTL model \cite[Sect.~3, Table~3]{neumannNewModelCombining2022}.
+Explicit-ion models instead carry the ions as separate species with their own nonideal activities.
+MEA ions, including carbamate, appear this way in T\'ellez-Arredondo and Medeiros's electrolyte cubic two-state association model \cite[Sect.~3, p.~48]{tellez-arredondoModelingCO2H2S2013} and Neumann et al.'s combined Helmholtz-energy/e-NRTL model \cite[Sect.~3, Table~3]{neumannNewModelCombining2022}.
 Najafloo et al.\ included carbamate ions of 2-((2-aminoethyl)amino)ethanol (AEEA) in electrolyte Huang--Radosz SAFT with mean spherical approximation and Born terms \cite[p.~148, App.~A]{najaflooMeasuringSolubilityCarbon2015}.
-These precedents leave open the representation of MEA and its carbamate within electrolyte PC-SAFT.
+None of these explicit-ion models is based on PC-SAFT.
 
 \subsection{Electrolyte SAFT and ePC-SAFT}
 % P:introduction-08
 Cameretti et al.\ introduced electrolyte PC-SAFT (ePC-SAFT) by adding a Debye--H\"uckel contribution and fitting ion parameters to aqueous-salt vapor pressures and densities \cite[Sects.~2--3, Table~2]{Cameretti2005}.
 Held et al.\ added mean ionic activity coefficients to parameter estimation because they were more sensitive to ion parameters than VLE \cite[Sect.~3]{Held2008}; revised ePC-SAFT subsequently included cation--anion dispersion \cite[Sect.~3.1.2]{Held2014}.
-In another electrolyte SAFT family, Schreckenberg et al.\ combined SAFT-VR with mean spherical approximation and Born terms and predicted \COtwo salting-out in aqueous sodium chloride \cite[Sects.~2.1--2.2, 5.2.5, Fig.~14]{Schreckenberg2014}.
 For amines, Uyan et al.\ predicted MDEA ternary pressures and speciation after binary estimation \cite[Sects.~4.1--4.3]{Uyan2015}, and Wangler et al.\ fitted additional interactions to osmotic coefficients \cite[Sects.~6.1--6.2]{Wangler2018}.
 Cleeton et al.\ treated competitive acid-gas absorption in MDEA \cite[Sect.~2]{Cleeton2020}, while B\"ulow et al.\ extended the treatment to mixed solvents \cite[Theory, ePC-SAFT parameters]{Bulow2021a}.
+All four ePC-SAFT amine studies treat MDEA, which forms no carbamate.
 
 % P:introduction-09
 Ionic activities, density and residual enthalpy can share one Helmholtz energy, but reaction constants and their heats remain external correlations.
-Cleeton et al.\ add van 't Hoff reaction terms to an equation-of-state derivative \cite[Sect.~2.4, Eq.~15]{Cleeton2020}; Wangler et al.\ combine reaction enthalpies with a Henry-coefficient dissolution term \cite[Sect.~5, Eqs.~23--24]{Wangler2018}.
-Electrostatic choices also matter: ePC-SAFT advanced combines a Born term with concentration-dependent permittivity, whose temperature derivative enters enthalpy \cite[Sect.~2.1, Eq.~6]{Bulow2020}.
-Rueben et al.'s dielectric-decrement model gives average activity-coefficient deviations below 5\,\% for the studied lithium, sodium and potassium salts and hydrogen halides at \SI{298.15}{\kelvin} \cite[Sect.~3, Fig.~1]{Rueben2024}.
-Born diameter and permittivity choices can compensate \cite[Sect.~3.2, Figs.~3--4]{Novak2023}; their application to reacting amine ions therefore needs assessment beyond inorganic salts.
+Cleeton et al.\ add van 't Hoff reaction terms to an equation-of-state derivative \cite[Sect.~2.4, Eq.~15]{Cleeton2020}; Wangler et al.\ combine reaction enthalpies with a Henry-coefficient dissolution term \cite[Sect.~5, Eqs.~22--28]{Wangler2018}.
+Electrostatic choices also matter: the ePC-SAFT advanced revision of B\"ulow et al.\ combines a Born term with concentration-dependent permittivity, whose temperature derivative enters enthalpy \cite[Sect.~2.1, Eq.~6]{Bulow2020}.
+Rueben et al.'s permittivity model with two ion-specific parameters gives average deviations below 5\,\% for mean ionic activity coefficients of the studied lithium, sodium and potassium salts and hydrogen halides at \SI{298.15}{\kelvin} \cite[Sect.~3.1, Fig.~1]{Rueben2024}.
+Because Born diameter and permittivity choices can compensate each other \cite[Sect.~3.2, Figs.~3--4]{Novak2023}, such inorganic-salt results do not fix the Born and permittivity parameters of reacting amine ions or their temperature dependence.
 
-\subsection{Data and multi-property fitting}
+\subsection{Measurements that constrain the model}
 % P:introduction-10
 Different measurements constrain different parts of the description.
 Wagner et al.\ report literature \COtwo pressures over 30 wt\% MEA differing by up to an order of magnitude \cite[Introduction, p.~883]{wagnerSolubilityCarbonDioxide2013}.
-Smith et al.\ show that different constants and activity parameters can reproduce similar pressures while implying different speciation, making species measurements more discriminating \cite[Sect.~6, PDF p.~19]{smithGibbsEnergyMinimization}.
-Those measurements also require care: B\"ottinger's NMR reports molecular and protonated MEA as a sum \cite[Sect.~3, Table~3]{Bottinger2008}, whereas Wong's Raman carbamate concentration is inferred from the amine balance \cite[Sect.~3.2]{Wong2015}.
+Smith et al.\ show that different constants and activity parameters can reproduce similar pressures while implying different speciation, making species measurements more discriminating \cite[Sect.~6]{smithGibbsEnergyMinimization}.
+Those measurements also require care: B\"ottinger's NMR reports molecular and protonated MEA as a sum \cite[Sect.~3, Table~3]{Bottinger2008}, whereas Wong's Raman carbamate calibration uses concentrations inferred from the amine balance \cite[Sect.~3.2, Eq.~13, Table~4]{Wong2015}.
 Jakobsen et al.\ estimate NMR errors of about 5--10\,\% and warn that shared peaks make minor species difficult to quantify \cite[Results]{Jakobsen2005}.
 
 % P:introduction-11
 Kim and Svendsen distinguish directly measured absorption heats from values inferred through solubility slopes and caution against converting integral heats to differential values \cite[Results and Discussion, Eq.~1, Figs.~3, 6]{Kim2007}.
 Loaded-liquid densities constrain volumetric behavior: Hartono et al.\ correlate them through a loading-dependent volume-expansion term \cite[Sect.~3.1, Eqs.~3--5]{Hartono2014}.
-After VLE-only fitting, Neumann et al.\ predict density with 0.92\,\% AARD against Hartono but 3.5\,\% against a 60 wt\% dataset, and recommend multi-property fitting \cite[Sect.~4, p.~7; Sect.~4.2, p.~8]{neumannNewModelCombining2022}.
-Joint equilibrium, caloric and loaded-density fitting thus addresses complementary observations, but property agreement alone does not assess phase stability.
+Neumann et al.\ report predicted loaded-liquid densities with 0.92\,\% AARD against Hartono's data and 3.5\,\% against Han's complete dataset, with individual deviations reaching 12\,\% at 60 wt\% MEA; they recommend multi-property fitting to improve the density description \cite[Sect.~4.1, p.~7; Sect.~4.2, p.~8, Fig.~6]{neumannNewModelCombining2022}.
+Fitting equilibrium, caloric and loaded-density data together therefore combines constraints that no single property supplies, but agreement with these properties does not test phase stability.
 
 \subsection{Phase stability}
 % P:introduction-12
-Michelsen's tangent-plane criterion tests phase stability before a flash calculation because the number of phases is not known beforehand \cite[Introduction, pp.~1--2; Sect.~2]{Michelsen1982}.
-Relevant electrolyte and amine precedents already exist.
+Michelsen applies Gibbs's tangent-plane criterion before a flash calculation because the number of equilibrium phases is not known beforehand \cite[Introduction, pp.~1--2; The tangent plane criterion, pp.~2--4]{Michelsen1982}.
 Tsanas et al.\ applied reactive stability analysis to a carbamate-forming, demixing amine mixture using e-NRTL \cite[Sects.~2.5, 3.1]{Tsanas2022}.
-Perdomo et al.\ obtained liquid splits in implicit-reaction SAFT-\(\gamma\) Mie amine mixtures \cite[Sect.~2.2]{perdomoPredictiveGroupcontributionFramework2023}, while Ascani et al.\ searched stability in ePC-SAFT advanced for fully dissociated salts without reactions \cite[Sect.~3.3, Fig.~1]{Ascani2022}.
+Perdomo et al.\ obtained liquid splits in reactive-association SAFT-\(\gamma\) Mie amine mixtures \cite[Sect.~4.4.2, Figs.~17--18]{perdomoPredictiveGroupcontributionFramework2023}, while Ascani et al.\ searched stability in ePC-SAFT advanced for fully dissociated salts without reactions \cite[Sect.~3.3, Fig.~1]{Ascani2022}.
 Perdomo et al.'s later formal tangent-plane criterion incorporates phase electroneutrality, with its derivation restricted to strong electrolytes \cite[Sects.~1, 6]{Perdomo2025}.
 The explicit-ion ePC-SAFT amine studies reviewed here do not report a tangent-plane assessment of their parameter sets \cite[Sect.~4]{Uyan2015}\cite[Sect.~6]{Wangler2018}\cite[Sects.~2--4]{Cleeton2020}\cite[Results and Discussion]{Bulow2021a}.
-This leaves their phase behavior as a separate question from agreement with fitted properties.
+A fitting objective built from single-phase properties contains no stability condition, so a parameter set can reproduce those properties and still predict an additional liquid phase at some states.
 
-\subsection{Gap and this work}
+\subsection{Aim of this work}
 % P:introduction-13
 No explicit-ion ePC-SAFT treatment of MEA or its carbamate was found in the literature reviewed here.
-We ask whether one such formulation with carbamate chemistry can represent loaded-MEA equilibrium, caloric and density properties.
-Relative to the MDEA ePC-SAFT studies it adds carbamate chemistry; relative to T\'ellez-Arredondo and Medeiros's ternary VLE fit it adds caloric and loaded-liquid density observations to joint estimation \cite[Sect.~4, p.~48]{tellez-arredondoModelingCO2H2S2013}.
-We use Figiel et al.'s solvation-shell Born term, extending its \SI{298.15}{\kelvin} inorganic-ion basis to protonated MEA and carbamate at other temperatures; its Born diameter was not tested at other temperatures in that study \cite[ePC-SAFT section, Table~1]{Figiel2025}.
-Water, \COtwo--water and dielectric parameters are fitted separately, followed by 16 parameters fitted jointly to pressure, species, caloric, loaded-density and binary VLE observations.
-Calculated curves are compared with measurements at nominal 30 wt\% MEA, and a finite phase search tests the reported parameters for additional phases.
-That search assesses specified states and does not establish global stability or physical validation of phase behavior.
+We ask whether one such formulation with carbamate chemistry can represent the equilibrium, caloric and density properties of loaded aqueous MEA.
+Relative to the MDEA ePC-SAFT studies, this work adds carbamate ions and their formation reaction.
+Relative to the explicit-ion MEA models of T\'ellez-Arredondo and Medeiros and of Neumann et al., whose reacting-system parameters were adjusted to VLE data \cite[Sect.~4, p.~48]{tellez-arredondoModelingCO2H2S2013}\cite[Sect.~4.1, p.~7]{neumannNewModelCombining2022}, it adds caloric and loaded-liquid density observations to the joint estimation.
+The Born contribution follows Figiel et al.'s solvation-shell term, which accounts for dielectric saturation near the ions and was parameterized for inorganic ions at \SI{298.15}{\kelvin} \cite[ePC-SAFT section, Table~1]{Figiel2025}; here the Born diameters of protonated MEA and carbamate are fitted, and the term is used at other temperatures.
+Water, \COtwo--water and dielectric parameters are fitted separately; 16 parameters, three of them in the \COtwo-hydrolysis and protonated-MEA dissociation constants, are then fitted jointly to pressure, species, caloric, loaded-density and binary VLE observations.
+Calculated properties are compared with measurements at nominal 30 wt\% MEA, and pressures also at 15 and 45 wt\%.
+The reported parameters and a fit with wider bounds on the protonated-amine diameter and its water interaction are then searched for additional phases at specified states; this finite search does not establish global stability.
