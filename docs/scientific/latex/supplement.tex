@@ -38,13 +38,13 @@
 \begin{document}
 \maketitle
 
-\section{Complete model inputs and fixed-parameter provenance}\label{sec:s-parameters}
+\section{Model inputs and fixed-parameter provenance}\label{sec:s-parameters}
 % P:supplement-18
 Neutral MEA parameters are the 2B values of Baygi and Pahlavanzadeh, except the association volume described below \cite[Table~2]{Baygi2015}.
 \COtwo segment count, diameter and dispersion energy are from Gross and Sadowski \cite[Table~1]{Gross2001}.
 Bicarbonate, carbonate and hydroxide sizes and dispersion energies follow Uyan et al.; their hydrogen-ion parameters are transferred here to hydronium \cite[Table~4]{Uyan2015}.
 Ion segment count one and the diameter ties are modeling assumptions.
-Fixed Born diameters for bicarbonate, carbonate, hydronium and hydroxide, and the fixed water interactions with carbonate, hydronium and hydroxide, are model inputs without independent MEA-specific parameter measurements.
+Fixed Born diameters for bicarbonate, carbonate, hydronium and hydroxide, and the fixed water interactions with carbonate, hydronium and hydroxide, are model inputs without independent MEA-specific parameter measurements. All other non-bold interactions in main-text Table~4 are zero by assumption.
 Main-text Tables~3 and 4 list their exact values; they are not attributed to the cited size/dispersion source.
 Water's solvation factor and ion-region permittivity follow Figiel et al.; unit solvation factors for the other components are assumptions \cite[Table~2, Eqs.~5--10]{Figiel2025}.
 The ion packing diameters, $0.88\sigma$, are 4.708, 4.2821756, 2.578048, 2.149136, 3.049552 and \SI{1.775576}{\angstrom} for \MEAH, \MEACOO, bicarbonate, carbonate, hydronium and hydroxide, respectively; their Debye--H\"uckel diameters equal the segment diameters in main-text Table~3.
@@ -143,7 +143,7 @@ Amundsen exceeds interpolated Hartono by 8.5 to 9.1~\si{\kilogram\per\cubic\metr
 All ten Jakobsen carbonate shares use the NMR loading and unloaded MEA mass fraction 0.2714, accounting for dilution during NMR sample preparation \cite[Tables~A1--A2; Sample preparation]{Jakobsen2005}.
 Their calculated/observed ratios have mean 0.0727 and range 0.00629--0.266.
 These shares of dissolved carbon differ from the six ratios to total amine used for fitting.
-All ten comparisons are listed in \path{carbonate-share.csv} in the data deposit.
+All ten comparisons are listed in the data deposit file \path{carbonate-share.csv}.
 
 \begin{figure}[!htbp]
 \centering
@@ -202,7 +202,7 @@ At each temperature and loading, the reference pressure $P_*$ is the bubble pres
 The 54 reference pressures range from 6.4123 to \SI{1768.9}{\kilo\pascal} and are listed in \path{reference-pressures.csv} in the data deposit.
 Both fits are searched at the same 162 states.
 Phase calculations use 9.7292821 mol analytical MEA, 76.9751925 mol water and $9.7292821\alpha$ mol \COtwo.
-All extensive Gibbs differences and phase amounts below refer to that feed, rather than the one-mole total-amine property basis.
+All extensive Gibbs differences below refer to that feed, rather than the one-mole total-amine property basis.
 
 % P:supplement-phase-summary-01
 Nine trial phases per state give 1458 trials for each fit; every trial optimization completes, and none is unresolved.
@@ -217,7 +217,7 @@ The 91 attempts confirm 51 distinct two-liquid paths at 32 of the 54 descent sta
 The water mole fraction is 0.40--0.74 in the water-poor liquid and 0.68--0.97 in the water-rich liquid.
 The 40 unsuccessful attempts end with vanished or coincident phases or a nonpositive reduced Hessian; failure to confirm does not remove a resolved descent.
 The homogeneous-liquid density comparisons discussed by Neumann et al.\ do not test phase splitting at the states searched here \cite[Sect.~4.2]{neumannNewModelCombining2022}.
-The table below lists every confirmed split; full compositions, amounts, densities and all 40 failed attempts are in \path{engine-3e83e19c-phase-search/run-2/split-confirmations.csv} in the data deposit.
+The table below lists every confirmed split; full compositions, amounts, densities and all 40 failed attempts are in \path{split-confirmations.csv} in the data deposit.
 
 % P:supplement-06
 Four liquid starts and five vapor starts are used at each converged equilibrium state.
@@ -227,7 +227,7 @@ Vapor starts are uniform, nearly pure \COtwo, nearly pure MEA, nearly pure water
 Only the three neutral species enter a vapor start.
 
 % P:supplement-07
-A Newton procedure and the shared Ipopt minimization use exact first and second derivatives, with MA57 linear algebra and a tolerance of $10^{-10}$ on the recomputed residuals used to decide convergence, after the solver's row scaling.
+A Newton procedure and an Ipopt minimization use exact first and second derivatives, with MA57 linear algebra and a tolerance of $10^{-10}$ on the recomputed residuals used to decide convergence, after the solver's row scaling.
 The final state must satisfy material and charge balances, positive compressibility and nonnegative reduced-Hessian curvature.
 
 % P:supplement-08

@@ -452,7 +452,7 @@ def main():
                            *(num(r[k + '/x/water']) for k in liquids(r))])
     descent_states = sum(int(r['resolved_trials']) > 0 for r in paired['comparison'].values())
     table('supplement_phase_family.tex', f"All {len(by_state)} distinct confirmed two-liquid splits of the wider-bound fit at {len(by_state)} of its {descent_states} descent states. The {len(confirmed)} confirmed paths from {len(splits)} separately seeded attempts are combined only where seeds reach the same split; the reported fit has no descent to confirm. "
-          r"Seeds name the trial liquids that start the splits. $\Delta G/(RT)$ is the extensive Gibbs-energy change in mol on the feed basis of Section~\\ref{sec:s-phase}. The two liquids are ordered by increasing water mole fraction $x_w$. Full compositions, amounts, densities and the 40 failed attempts are in \protect\path{engine-3e83e19c-phase-search/run-2/split-confirmations.csv} in the data deposit.",
+          r"Seeds name the trial liquids that start the splits. $\Delta G/(RT)$ is the extensive Gibbs-energy change in mol on the feed basis of Section~\\ref{sec:s-phase}. The two liquids are ordered by increasing water mole fraction $x_w$. Full compositions, amounts, densities and the 40 failed attempts are in \protect\path{split-confirmations.csv} in the data deposit.",
           ['T (K)', 'Loading', 'P (kPa)', 'Seeds', r'$\Delta G/(RT)$ (mol)', r'Liquid 1 $x_w$', r'Liquid 2 $x_w$'],
           split_rows, 'rrrlrrr')
     OUTPUTS['supplement_phase_family.tex'] = OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family', 'tab:phase-splits')
@@ -462,8 +462,9 @@ def main():
     jakobsen_states = [ast.literal_eval(r['declaration']) for r in fitted if r['group']=='Jakobsen']
     for r in jakobsen_states:
         r['loading'] = r['source_locator']['raw']['loadNMR']
-    def conditions(rows, temperature='temperature_K', loading='loading'):
-        return span(float(r[temperature]) for r in rows)+' K; loading '+span((float(r[loading]) for r in rows), 4)
+    def conditions(rows, temperature='temperature_K', loading='loading', discrete=False):
+        shown = (lambda v, d=6: '/'.join(num(x, d) for x in sorted(set(v)))) if discrete else span  # discrete states, not ranges
+        return shown([float(r[temperature]) for r in rows])+' K; loading '+shown([float(r[loading]) for r in rows], 4)
     def source_conditions(rows, sources, temperature='temperature_K'):
         return '; '.join(source+': '+conditions([r for r in rows if r['source']==identity], temperature)
                          for identity, source in sources)
@@ -480,7 +481,7 @@ def main():
         [r'Aronu \cite{Aronu2011}', 'CO2 partial pressure', 70, '15/45 wt%; source states', 'not fitted; not blind'],
         block(5, 'Liquid species'),
         [r'Böttinger, Matin \cite{Bottinger2008,matinFacileMethodDetermination2012}', 'Species fractions', fit['groups']['common149 species']['n']+fit['groups']['restored species']['n'], source_conditions(species_states, [('Bottinger2008', 'Böttinger'), ('Matin2012', 'Matin')]), 'fitted'],
-        [r'Jakobsen \cite{Jakobsen2005}', 'Species/total-amine ratios', fit['groups']['Jakobsen']['n'], conditions(jakobsen_states, 'T_K')+'; diluted samples', 'fitted'],
+        [r'Jakobsen \cite{Jakobsen2005}', 'Species/total-amine ratios', fit['groups']['Jakobsen']['n'], conditions(jakobsen_states, 'T_K', discrete=True)+'; diluted samples', 'fitted'],
         ['Matin', 'Bicarbonate total', 19, 'source states', 'not fitted'],
         ['Jakobsen', 'Carbonate share', 10, 'source states', 'not fitted'],
         block(5, 'Integral heat of absorption'),
@@ -491,7 +492,7 @@ def main():
         [r'Amundsen \cite{Amundsen2009}', 'CO2-free density', len(free_ids), '298.15--353.15 K; loading 0; 30 wt%', 'fitted'],
         [r'Amundsen, Hartono, Han \cite{hanDensityWater12012}', 'All densities', len(density), '293.15--393.15 K; 20--100 wt%', '52 fitted; others compared'],
         block(5, 'Heat capacity'),
-        [r'Hilliard \cite{Hilliard2008}', 'Heat capacity', fit['groups']['Cp']['n'], conditions(cp_rows, 'T_K')+'; 7 mol MEA/kg water', 'fitted']]
+        [r'Hilliard \cite{Hilliard2008}', 'Heat capacity', fit['groups']['Cp']['n'], conditions(cp_rows, 'T_K', discrete=True)+'; 7 mol MEA/kg water', 'fitted']]
     table('current_data_inventory.tex', r'Fitted and compared observations. Counts in comparison sets overlap fitted observations and are not additive. Section~\\ref{sec:s-objective} defines the objective.',
           ['Source','Quantity','n','Conditions','Use'],data_rows,['l',.21,'r',.25,.15])
     scales=a.load(a.E/'source-only/density-scales.json')
