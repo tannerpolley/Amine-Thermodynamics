@@ -266,7 +266,7 @@ def main():
     coordinate_rows = []
     for c, se in zip(fit['coordinates'], errors, strict=True):
         factor = .001 if c['unit'] in ['joule / mole', 'J/mol'] else 1
-        coordinate_rows.append((c['identity'], 'kJ/mol' if factor != 1 else c['unit'], [label(c['identity']), num(c['value']*factor),
+        coordinate_rows.append((c['identity'], 'kJ/mol' if factor != 1 else c['unit'], [label(c['identity']), num(c['value']*factor, PARAMETER_DIGITS if 'diameter' in c['identity'] else 4),
                                 *(num(v*factor) for v in c['bounds']),
                                 '--' if se['bound_active'] == 'True' else num(float(se['conditional_standard_error'])*factor)]))
     table('supplement_fitted_parameters.tex', r'Sixteen fitted parameters and conditional standard errors (SE). Errors depend on weights, fixed inputs, bounds and local linearization. Born and segment diameters are separate; packing diameter is $0.88\sigma$ and Debye--H\"uckel diameter is $\sigma$. The R5 reciprocal-temperature coefficient precedes its enthalpy shift; R2/R5 shifts are total adjustments. Full optimizer transformations are in the data deposit. A dash marks a parameter at a bound, for which no conditional SE is reported.',
@@ -284,7 +284,8 @@ def main():
         if identity not in values:
             return '--'
         shown.add(identity)
-        return ('**' if identity in coords or identity in separate else '') + num(values[identity], PARAMETER_DIGITS) + ('†' if identity in coords else '') + ('*' if identity in at_bound else '') + mark
+        digits = 5 if identity in coords and 'diameter' in identity else PARAMETER_DIGITS  # the supplement fitted-parameter table carries eight
+        return ('**' if identity in coords or identity in separate else '') + num(values[identity], digits) + ('†' if identity in coords else '') + ('*' if identity in at_bound else '') + mark
     species = [n['component_id'] for n in document['components']]
     charge = {s: n.get('fixed', {}).get('charge_number', {}).get('value', {}).get('magnitude', 0) for s, n in zip(species, document['components'])}
     symbol = {**NAMES, 'water': r'\ce{H2O}'}
@@ -299,7 +300,7 @@ def main():
                      value(f'component/{s}/dielectric_volume'), value(f'component/{s}/dielectric_temperature')] for s in species]
     table('species_parameters.tex', r'Species parameters of the reported fit. Bold values were fitted: water to IAPWS-95 (\cref{sec:results-water}), the MEA dielectric coefficients to permittivities (\cref{sec:results-permittivity}) and, marked with a dagger, in the joint fit (\cref{sec:results-joint}); an asterisk marks a joint-fit value at its bound. '
           r'The other joint-fit parameters are interactions in \cref{tab:interaction-matrix} and the R5 coefficient $A_5$ and R2 and R5 enthalpy shifts included in \cref{tab:reaction-equilibrium-constants}. '
-          r'Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$; the water diameter law $\sigma_w(T)$, whose constant was fitted, and the sources of all fixed inputs are given in Section~\\ref{sec:s-parameters}. '
+          r'Fitted diameters are shown to five significant figures; Table~\ref{supp-tab:supplement-fitted-parameters} gives eight. Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$; the water diameter law $\sigma_w(T)$, whose constant was fitted, and the sources of all fixed inputs are given in Section~\\ref{sec:s-parameters}. '
           r'Water and MEA each have one donor and one acceptor site, with Wolbach--Sandler MEA--water cross-association; double daggers mark the \ce{CO2} values, which apply only to its induced association with water. '
           r'The dielectric coefficients apply to the neutral species; the ion-region permittivity is $\varepsilon_{\mathrm{ion}}=8$. A dash marks an input the model does not use.',
           ['Species', '$m$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$u/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
