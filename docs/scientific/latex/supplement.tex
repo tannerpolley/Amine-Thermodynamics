@@ -92,7 +92,7 @@ These weights set fitting priorities; the heat scales are not measured standard 
 \input{tables/objective_groups}
 
 % P:supplement-objective-02
-Cai's binary quantities contribute 91.87 of the total cost 148.88, approximately 62\,\%; this describes the chosen objective rather than relative physical accuracy.
+Cai's binary quantities contribute 91.87 of the total cost 148.9, approximately 62\,\%; this describes the chosen objective rather than relative physical accuracy.
 The Kiepe pressure contribution is approximately 0.0007 and checks fixed \COtwo--water inputs.
 The source-by-source inventory below distinguishes fitted, compared, previously examined and selection observations; observations from the same prepared solution need not be statistically independent.
 
@@ -136,8 +136,8 @@ The Zenodo DOI will be added at submission; the compiled ePC-SAFT library used h
 The complete 210-observation density table is supplied as CSV in the data deposit, including the five excluded Amundsen loading-0.4 observations.
 The source summary below retains all observations and applies no volume translation.
 The $2s$ requirement applies only to the 47 fitted loaded densities.
-Amundsen density and loading inputs to the scale are 2 kg/m3 and 2\,\% of loading; the exact high-temperature/loading applicability of the density estimate remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
-Hartono inputs are 0.02 kg/m3 and 0.01 loading; the density value is reported as expanded uncertainty with coverage factor two and was used in the assigned scale without division by that factor \cite[Table~3]{Hartono2014}.
+Amundsen density and loading inputs to the scale are \SI{2}{\kilogram\per\cubic\metre} and 2\,\% of loading; the exact high-temperature/loading applicability of the density estimate remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
+Hartono inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 loading; the density value is reported as expanded uncertainty with coverage factor two and was used in the assigned scale without division by that factor \cite[Table~3]{Hartono2014}.
 Thus these scales do not uniformly represent standard uncertainties.
 
 \input{tables/density_scales}
@@ -152,7 +152,7 @@ These shares of dissolved carbon differ from the six ratios to total amine used 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{loaded-density-errors.pdf}
-\caption{Density errors without volume translation. Upper panels compare the reported parameters (circles) and comparison fit (crosses) at the same 47 fitted loaded states; color denotes loading. Dashed lines mark $\pm2s$, with $s$ defined by $s_\rho=[u_\rho^2+(g u_\alpha)^2]^{1/2}$. Lower panels show the reported parameters for all 210 densities, including compositions outside 30 wt\%, with source-specific markers and fitted, non-fitted and excluded observations distinguished. Amundsen, Hartono and Han source data are from Refs.~\cite{Amundsen2009,Hartono2014,hanDensityWater12012}.}
+\caption{Density errors without volume translation. Upper panels compare the reported parameters (circles) and wider-bound fit (crosses) at the same 47 fitted loaded states; color denotes loading. Dashed lines mark $\pm2s$, with $s$ defined by $s_\rho=[u_\rho^2+(g u_\alpha)^2]^{1/2}$. Lower panels show the reported parameters for all 210 densities, including compositions outside 30 wt\%, with source-specific markers and fitted, non-fitted and excluded observations distinguished. Amundsen, Hartono and Han source data are from Refs.~\cite{Amundsen2009,Hartono2014,hanDensityWater12012}.}
 \label{fig:density-errors}
 \end{figure}
 
@@ -218,7 +218,7 @@ All extensive Gibbs differences and phase amounts below refer to that feed, rath
 % P:supplement-phase-summary-01
 Nine trial phases per state give 1458 trials for each fit; every trial optimization completes, and none is unresolved.
 No descent is resolved for the reported parameters, and all 162 of their existing equilibria are liquid--vapor at these pressures, which lie below their bubble pressure.
-The comparison fit has resolved descents at 54 states, with 143 descending trials: ten states each at 313.15 and \SI{318.15}{\kelvin}, nine each at 333.15, 353.15 and \SI{373.15}{\kelvin} and seven at \SI{393.15}{\kelvin} (\Cref{tab:supplement-phase-family}).
+The wider-bound fit has resolved descents at 54 states, with 143 descending trials: ten states each at 313.15 and \SI{318.15}{\kelvin}, nine each at 333.15, 353.15 and \SI{373.15}{\kelvin} and seven at \SI{393.15}{\kelvin} (\Cref{tab:supplement-phase-family}).
 The 81 states at 353.15--\SI{393.15}{\kelvin} lie above the temperatures of the fitted \COtwo pressures.
 
 % P:supplement-phase-confirmation-01
@@ -227,7 +227,7 @@ A split is confirmed when it converges to the requested tolerance with negative 
 The 91 attempts confirm 51 distinct two-liquid paths at 32 of the 54 descent states, at every temperature (\Cref{tab:phase-splits}).
 The water mole fraction is 0.40--0.74 in the water-poor liquid and 0.68--0.97 in the water-rich liquid.
 The 40 unsuccessful attempts end with vanished or coincident phases or a nonpositive reduced Hessian; failure to confirm does not remove a resolved descent.
-These splits have no experimental confirmation in the cited homogeneous-liquid data \cite[Sect.~4.2]{neumannNewModelCombining2022}.
+The homogeneous-liquid density comparisons discussed by Neumann et al.\ do not test phase splitting at the states searched here \cite[Sect.~4.2]{neumannNewModelCombining2022}.
 The tables below give the reference pressures, the counts by temperature and fit, and the confirmed splits.
 
 \input{tables/phase_reference_pressures}
@@ -294,12 +294,12 @@ The distance in Eq.~\ref{eq:tpd-supp} is minimized over positive trial fractions
 Liquid trials support all nine species, and vapor trials support only \COtwo, MEA and water.
 A two-phase classification includes liquid--vapor equilibrium and alone does not establish a second liquid.
 
-\section{Comparison fit and bound restriction}\label{sec:s-probes}
+\section{Wider-bound fit and bound restriction}\label{sec:s-probes}
 % P:supplement-bounds-01
-The comparison fit and reported fit use the same 16 adjustable parameters and 307 quantities.
+The wider-bound fit and reported fit use the same 16 adjustable parameters and 307 quantities.
 The reported fit is the parameter set reported here.
 The restriction changes the \MEAH segment-diameter bounds from 2--\SI{5.8}{\angstrom} to 5.35--\SI{5.8}{\angstrom}, and the \MEAH--water interaction bounds from $[-0.5,0.5]$ to $[-0.5,-0.161]$; all other physical bounds, observations, scales and weights are unchanged.
-\Cref{tab:comparison-fit-parameters} lists the comparison-fit values that differ from the reported fit, so that both parameter sets are fully specified.
+\Cref{tab:comparison-fit-parameters} lists the wider-bound-fit values that differ from the reported fit, so that both parameter sets are fully specified.
 \Cref{tab:supplement-fitted-parameters} gives the selected values, bounds and conditional standard errors.
 Fixed inputs include earlier pure-water, binary and permittivity estimates, documented with their sources in Section~\ref{sec:s-parameters}.
 
@@ -328,12 +328,13 @@ Two of the five lie on their lower bounds: the \MEAH--water interaction at $-0.5
 \input{tables/density_free_parameters}
 
 % P:supplement-acceptance-01
-\Cref{tab:acceptance-limits} gives this study's comparison limits.
+\Cref{tab:acceptance-limits} gives this study's acceptance limits.
 Allowances relative to the density-free fit preserve pressure, species and heat agreement while other properties enter the fit: 10\,\% in shared-subset cost, two percentage points in pressure/species deviation and \SI{1}{\kilo\joule\per\mole} in each heat RMSE.
 The Cai allowance is 5\,\% above the Cai cost of 91.29 given by a constant \MEA--water interaction, $k_{ij}=-0.084399862$ with no temperature slope, fitted earlier to the Cai data and three \COtwo-free densities; all other inputs of that calculation are those of the reported fit.
 The density requirements are twice the assigned scale for loaded densities, with misses permitted only at the three states of \Cref{tab:density-failures}, and \SI{1}{\kilogram\per\cubic\metre} for carbon-free states; the phase requirement rejects any resolved lower-Gibbs-energy arrangement in the specified search.
 Limits are compared with unrounded values.
 These are study-specific tolerances for retaining property agreement, not published accuracy standards; the reported fit meets every limit, and its three densities outside $2s$ are reported as misses.
+The loaded-density requirement admits exactly the three misses of the reported fit, so it records that outcome rather than testing it.
 
 \input{tables/acceptance_limits}
 

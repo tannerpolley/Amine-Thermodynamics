@@ -41,11 +41,11 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/run-2/split-confirmations.csv SHA256 035a31e81a2141d2385812314af0690e9e12c9108b68d67f546dacfa44547fe8
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
-% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 6dd168742caed56edf49f6adea8888e1f18c34669f0cf216918b15a1eeac2778
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 7d655b44c7ba6983879e96b346075ad5e8bdee7540a510f30376223bc12d3e83
-% Input: docs/scientific/latex/supplement.tex SHA256 34662c3606f844e13caa8565225f618c71183426f3e3fa9c2e3c3437b726acf3
-\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Model complexity, data roles and reported deviations in related MEA studies. Parameter counts refer to the stated fit, excluding earlier subsystem fits. Relative pressure deviations and caloric metrics use each source's own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.}\label{tab:literature-model-comparison}
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 5328b0739df6e30433340eb20bfd7132c29288f34d916007d017df5a45f968e5
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 80ffadcfc2e7b6e12bbdf3343590c6252775f3329aacf38d79deecce16616853
+% Input: docs/scientific/latex/supplement.tex SHA256 002c15fea510e59eb7d42703f9911e6d03117d46a5c11ee7a940d7e6b04890df
+\begin{table}[pos=!htbp]\footnotesize\setlength{\tabcolsep}{3pt}\centering
+\caption{Model complexity, data roles and reported deviations in related MEA studies. Parameter counts describe the estimation stages named in each row and are not totals for complete model construction; the present count covers the joint fit and excludes the separate water, \COtwo--water and dielectric fits. Relative pressure deviations and caloric metrics use each source's own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.}\label{tab:literature-model-comparison}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.1400\linewidth}>{\raggedright\arraybackslash}p{0.2100\linewidth}>{\raggedright\arraybackslash}p{0.1800\linewidth}>{\raggedright\arraybackslash}p{0.2300\linewidth}>{\raggedright\arraybackslash}p{0.1800\linewidth}@{}}
 \toprule
 Study & Model; fitted parameters & Fitted data & Reported agreement & Other comparisons or qualification \\
@@ -61,7 +61,7 @@ Hessen et al. \cite{Hessen2010} & Refined eNRTL; temperature-dependent interacti
 Aronu et al. \cite{Aronu2011} & Extended UNIQUAC; ion size/\allowbreak{}surface and pair coefficients (Tables 7--9) & VLE at 15--60 wt\%; \ce{N2O}-derived physical solubility & Fitted \ce{CO2} partial pressure 24.3\%; total pressure 11.7\%; physical solubility 2.7\% (Section 5) & NMR and absorption heat compared outside objective \\
 Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013} & Electrolyte cubic two-state association; 7 MEA ternary parameters & VLE; 15.2--30 wt\%; 298.15--393.15 K in Table~2 and Fig.~8; Section~4.3.3 instead states an upper limit of 366.68 K & Relative pressure deviation 12.5\%, fitted (Tables 5, 8) & Parameters from earlier subsystems retained \\
 Neumann et al. \cite{neumannNewModelCombining2022} & Helmholtz energy/\allowbreak{}eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained & Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data & Ternary density AARD 0.92\% Hartono; 3.5\% complete Han (Section 4.2) & VLE/\allowbreak{}density comparisons; density data sets differ from this work \\
-This work & 16 fitted parameters; 6 at bounds & 307 quantities: pressure, species, heat, density, heat capacity and binary VLE & Fitted pressure/\allowbreak{}species 11.86/\allowbreak{}7.10\%; integral heat RMSE 1.84 kJ/\allowbreak{}mol & 159-pressure comparison 20.55\%; previously examined data \\
+This work & 16 fitted parameters; 6 at bounds & 307 quantities: pressure, species, heat, density, heat capacity and binary VLE & Fitted pressure 11.86\%; shared species subset 7.10\% (94); integral heat RMSE 1.84 kJ/\allowbreak{}mol; loaded density 0.18\% (47) & 159-pressure comparison 20.55\%; 112 not fitted but examined during model development \\
 \bottomrule
 \end{tabular}
 \end{table}

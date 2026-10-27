@@ -161,59 +161,64 @@ These four observations do not determine heat capacity over the full temperature
 \end{figure}
 \FloatBarrier
 
-\subsubsection{Domain of use}\label{sec:results-domain}
-% P:results-scope-01
-The model calculates the five target properties within one thermodynamic formulation, using ePC-SAFT, reaction standard states and ideal-gas caloric references.
-Loaded densities are calculated directly without volume translation.
-For nominal 30 wt\% MEA, the model can therefore supply \COtwo partial pressure, the \ce{MEA + MEAH+} and carbamate fractions, integral heat near \SI{313}{\kelvin}, loaded density up to \SI{353.15}{\kelvin} and heat capacity at the measured states, with the deviations reported above.
-It should not be used for pressure at other MEA concentrations or for bicarbonate and carbonate fractions; its heat of absorption and heat capacity are untested away from the measured temperatures, and at 373.15--\SI{393.15}{\kelvin} calculated loaded densities are on average 0.7--1.2\,\% low.
-
 \subsection{Phase stability}\label{sec:phase-method}
-% P:results-phase-01
-A comparison fit with wider bounds on the protonated-amine diameter and its water interaction gives similar property agreement but predicts additional liquid phases at some tested states.
-Narrowing both bounds and refitting removes the detected instabilities in the finite search, while increasing the fitting cost by 0.45\%.
-The finite search is defined in Section~S8.
-Both narrowed limits appear in Table~S11: the reported \MEAH segment diameter lies on the new \SI{5.35}{\angstrom} lower bound, and the \MEAH--water interaction lies at $-0.5$, the opposite end of its narrowed range $[-0.5,-0.161]$; Section~S9 describes how the limits were chosen and lists the comparison-fit parameters, and Section~S10 gives the comparison limits.
-The diameter changes from \SI{4.16}{\angstrom} in the comparison fit to \SI{5.35}{\angstrom}, and the water interaction at \SI{313.15}{\kelvin} changes from $+0.026$ to $-0.5$.
-The number of fitted loaded densities within $2s$ falls from 47/47 to 44/47; the three misses occur at \SI{353.15}{\kelvin}, a temperature included in the search.
-Both parameter sets are local optima, so these differences are not the smallest possible cost of removing the instabilities.
-
 % P:results-phase-02
-The search covers 162 temperature, pressure and loading states for nominal 30 wt\% MEA: six temperatures from 313.15 to \SI{393.15}{\kelvin}, nine loadings from $\alpha=10^{-5}$ to 0.6, and pressures of 0.50, 0.80 and 0.95 times a reference pressure, the bubble pressure of the reported fit at each temperature and loading (\cref{fig:phase-family}).
-Both fits are searched at the same states.
+The search of Section~\ref{sec:methods-phase} covers 162 temperature, pressure and loading states for nominal 30 wt\% MEA: six temperatures from 313.15 to \SI{393.15}{\kelvin}, nine loadings from $\alpha=10^{-5}$ to 0.6, and pressures of 0.50, 0.80 and 0.95 times a reference pressure, the bubble pressure of the reported fit at each temperature and loading (\cref{fig:phase-family}).
+The reported parameters and the wider-bound fit are searched at the same states.
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{phase-family.pdf}
-\caption{Finite phase search in nominal 30 wt\% MEA at six temperatures from 313.15 to \SI{393.15}{\kelvin} and analytical loading $10^{-5}$--0.6 for the comparison fit (top) and the reported parameters (bottom). Filled markers mark states with a resolved lower-Gibbs-energy arrangement; open markers mark none. Columns show pressures of 0.50, 0.80 and 0.95 times the bubble pressure of the reported fit at each temperature and loading (Section~S8); all 162 states of the reported parameters are liquid--vapor equilibria at these pressures. The figure summarizes 162 searched states, not a continuous stable region.}
+\caption{Finite phase search in nominal 30 wt\% MEA at six temperatures from 313.15 to \SI{393.15}{\kelvin} and analytical loading $10^{-5}$--0.6 for the wider-bound fit (top) and the reported parameters (bottom). Filled markers mark states with a resolved lower-Gibbs-energy arrangement; open markers mark none. Columns show pressures of 0.50, 0.80 and 0.95 times the bubble pressure of the reported fit at each temperature and loading (Section~S8); all 162 states of the reported parameters are liquid--vapor equilibria at these pressures.}
 \label{fig:phase-family}
 \end{figure}
 
-The tangent-plane criterion \cite[Sect.~2]{Michelsen1982} is applied to reacting, charge-neutral trials, with reduced distance
-\begin{equation}
- D(\boldsymbol w)=g(T,P,\boldsymbol w)/(RT)-\boldsymbol w^{\mathsf T}B^{\mathsf T}\boldsymbol\lambda,
- \qquad \sum_iw_i=1,\quad\sum_i z_iw_i=0,\quad w_i>0,
- \label{eq:tpd}
-\end{equation}
-where $B$ represents conserved component combinations and $\boldsymbol\lambda$ their chemical-potential multipliers in the existing equilibrium.
-A resolved instability requires a negative distance and a material-conserving finite transfer that lowers Gibbs energy beyond its numerical-error estimate; Section~S8 gives the complete method and states.
-The comparison fit has a resolved lower-Gibbs-energy arrangement at 54 of the 162 states, between seven and ten at each temperature; the reported parameters have none, with all 1458 trial optimizations completing.
-Separately seeded calculations for the comparison fit confirm two liquids at 32 of its 54 descent states, at every temperature (Section~S8).
-These splits have no experimental counterpart in the cited homogeneous-liquid data \cite[Sect.~4.2]{neumannNewModelCombining2022}.
+% P:results-phase-04
+The wider-bound fit has a resolved lower-Gibbs-energy arrangement at 54 of the 162 states, between seven and ten at each temperature; the reported parameters have none, with all 1458 trial optimizations completing.
+Separately seeded calculations for the wider-bound fit confirm two liquids at 32 of its 54 descent states, at every temperature (Section~S8).
+In the confirmed splits, the water mole fraction is 0.40--0.74 in the water-poor liquid and 0.68--0.97 in the water-rich one.
 This is a finite search at specified states, not a global-stability certificate or physical validation of phase behavior.
+
+
+% P:results-phase-01
+Apart from these splits, the wider-bound fit gives property agreement similar to that of the reported fit.
+Narrowing both bounds and refitting removes the detected instabilities in the finite search, while increasing the fitting cost by 0.45\%.
+Both narrowed limits appear in Table~S11: the reported \MEAH segment diameter lies on the new \SI{5.35}{\angstrom} lower bound, and the \MEAH--water interaction lies at $-0.5$, the unchanged lower end of its narrowed range $[-0.5,-0.161]$; Section~S9 describes how the limits were chosen and lists the wider-bound-fit parameters, and Section~S10 gives the acceptance limits.
+The diameter changes from \SI{4.16}{\angstrom} in the wider-bound fit to \SI{5.35}{\angstrom}, and the water interaction at \SI{313.15}{\kelvin} changes from $+0.026$ to $-0.5$.
+The restriction is therefore active: within this formulation, removing the detected splits costs density agreement.
+The number of fitted loaded densities within $2s$ falls from 47/47 to 44/47: a larger protonated-amine diameter lowers the calculated loaded density (Section~S9), and all three misses are low, at \SI{353.15}{\kelvin}.
+Both parameter sets were obtained by local bounded least-squares fitting; this comparison does not establish the minimum fitting-cost increase needed to avoid detected instabilities in the specified search.
 
 \FloatBarrier
 
 % P:results-phase-03
-The main articles cited here do not report a tangent-plane stability assessment of their parameter sets \cite[Sect.~4]{Uyan2015}\cite[Sect.~6]{Wangler2018}\cite[Results and Discussion]{Bulow2021a}\cite[Sects.~4--7]{Bottinger2008}\cite[Sects.~4--6]{Nasrifar2010}\cite[Sect.~3]{Baygi2015,Najafloo2018}\cite[Sects.~2--3]{Cleeton2020}\cite[Sects.~2--4]{Schick2023}.
-Schick et al.\ report experimentally that no demixing was observed \cite[Sect.~3.2]{Schick2023}, which is a different kind of evidence.
-The present calculation illustrates why property agreement should be accompanied by a search for additional phases; it is not physical validation of phase behavior.
+The homogeneous-liquid density comparisons discussed by Neumann et al.\ do not test phase splitting at the states searched here \cite[Sect.~4.2]{neumannNewModelCombining2022}.
+Schick et al.\ report experimentally that no liquid--liquid demixing was observed in their \COtwo--electrolyte-solution measurements \cite[Sect.~3.2]{Schick2023}; this observation is a different kind of evidence from a calculated stability search.
+The present calculation illustrates why property agreement should be accompanied by a search for additional phases.
 
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:results-literature-01
 Zhang et al.\ provide the closest multi-property comparison, with 12 ternary coefficients fitted to solubility, differential heat, heat capacity and NMR \cite[Sect.~3.3, Tables~9--11]{Zhang2011}.
 Their fitted pressure deviations range from 13.5 to 35.5\,\% by source; the present values are 11.86\,\% over 47 fitted pressures and 20.55\,\% over the 159-pressure comparison.
 Najafloo and Zarei and Baygi and Pahlavanzadeh report 34.71 and 36.42\,\%, respectively, over 691 ternary comparisons after pure/binary estimation \cite[Table~5]{Najafloo2018,Baygi2015}.
-Their data sets, fitting roles and domains differ, and Zhang's differential heat differs from the integral heat assessed here.
+Their data sets, fitting roles and domains differ: Zhang's differential-heat data span 313--393 K and differ from the integral heat assessed here, and the heat-capacity fit includes several solvent concentrations \cite[Table~9]{Zhang2011}.
+Here integral heat is fitted at one temperature and heat capacity at four states, while loaded density is included in the joint fit.
+Neumann et al.'s ternary density comparisons instead assess predictions after VLE fitting \cite[Sect.~4.2]{neumannNewModelCombining2022}.
 \Cref{tab:literature-model-comparison} gives the quantities and data roles for these and other MEA models; the statistics locate the present model within the published range without establishing equal or better accuracy.
 
 \input{tables/literature_model_comparison}
+
+\subsection{Domain of use}\label{sec:results-domain}
+% P:results-scope-01
+For nominal 30 wt\% MEA, the comparisons assess \COtwo partial pressure, the \ce{MEA + MEAH+} and carbamate fractions, integral heat near \SI{313}{\kelvin}, loaded density up to \SI{353.15}{\kelvin} and heat capacity at the measured states, with the deviations reported above.
+The property-specific fitting temperatures and loadings are listed in Table~\ref{supp-tab:supplement-data-roles}.
+Pressure and species comparisons above \SI{333.15}{\kelvin} are extrapolations relative to their fitted data; these comparisons do not establish a continuous domain of process use.
+The reported parameters have no detected instability at the 162 searched states (Section~\ref{sec:phase-method}).
+
+% P:results-scope-02
+The agreement depends on calibrated chemistry as well as on ePC-SAFT activities: the fitted \MEAH dissociation constant lies 0.49 p$K$ from Bates--Pinching at \SI{313.15}{\kelvin}, whereas B\"ottinger et al.\ kept it fixed (\cref{tab:literature-model-comparison}), and six of the 16 parameters lie on bounds.
+These values indicate compensation among solvation, dispersion and reaction terms (Section~S6), not physical ion sizes or reaction enthalpies.
+
+% P:results-scope-03
+Every property is least constrained above the fitted temperatures.
+Fitted pressures end near \SI{333}{\kelvin} and fitted densities at \SI{353.15}{\kelvin}, and R4 and R5 are extrapolated above their \SI{323.15}{\kelvin} source limit, with the R5 enthalpy shift at its bound.
+At 100--\SI{120}{\degreeCelsius} the pressure AARD is 24.35\,\%, the \COtwo--water pressures are up to 11.3\,\% low at \SI{393.2}{\kelvin}, loaded densities are on average 0.7--1.2\,\% low for Han's 30 wt\% observations at 373.15--\SI{393.15}{\kelvin}, and absorption heat is untested.

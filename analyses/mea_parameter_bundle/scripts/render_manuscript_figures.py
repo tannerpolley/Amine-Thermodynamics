@@ -169,7 +169,7 @@ def main():
         ax.legend(fontsize=8,frameon=False,loc='upper center',bbox_to_anchor=(.5,-.18),ncol=1)
     fig.colorbar(plt.cm.ScalarMappable(norm=plt.Normalize(0,.5),cmap='viridis'),ax=list(axes[0]),label='Loading',shrink=.7)
 
-    save(fig,'loaded-density-errors','The reported and comparison fits share the 47 fitted loaded-density states, observed values and scales. Top panels show ±2s limits only for that fitted cohort; color denotes loading, with source separated. Bottom panels cover all 210 reported-fit densities and distinguish fitted, non-fitted and excluded rows. No empirical volume translation. Scales are not uniformly measurement uncertainty; 2s is not a 95% interval.', ['density.csv','fitted-rows.csv','comparison-loaded-density-errors.csv'])
+    save(fig,'loaded-density-errors','The reported and wider-bound fits share the 47 fitted loaded-density states, observed values and scales. Top panels show ±2s limits only for that fitted cohort; color denotes loading, with source separated. Bottom panels cover all 210 reported-fit densities and distinguish fitted, non-fitted and excluded rows. No empirical volume translation. Scales are not uniformly measurement uncertainty; 2s is not a 95% interval.', ['density.csv','fitted-rows.csv','comparison-loaded-density-errors.csv'])
     fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.8), layout='constrained')
     temperatures, curves = [298.15, 313.15, 333.15, 353.15, 373.15, 393.15], a.rows(CURVES/'density.csv')
     data = [r for r in density if r['mea_mass_fraction'] == '0.3' and float(r['T_K']) in temperatures]
@@ -265,17 +265,17 @@ def main():
             axes[row, fractions.index(float(r['fraction']))].scatter(positions[float(r['temperature_K'])], float(r['loading']), marker='s' if 'single-liquid' in r['classification'] else 'o', s=30,
                                                                        facecolors='#D55E00' if resolved else 'none', edgecolors='#D55E00' if resolved else '#0072B2')
         for fraction, ax in zip(fractions, axes[row]):
-            ax.set(title=('Comparison fit' if row == 0 else 'Reported parameters') + f'\nP = {fraction:.2f} P*', xlabel='Temperature (K)')
+            ax.set(title=('Wider-bound fit' if row == 0 else 'Reported parameters') + f'\nP = {fraction:.2f} P*', xlabel='Temperature (K)')
             ax.set_xticks(range(len(temperatures)), labels=[f'{T:g}' for T in temperatures], rotation=45, ha='right')
             ax.set_yticks([1e-5, .1, .3, .5, .6], labels=[r'$10^{-5}$', '0.1', '0.3', '0.5', '0.6'])
             ax.grid(alpha=.15)
         axes[row, 0].set_ylabel(LOADING)
     n = len(paired['reported'])
     descents = {name: sum(int(r['resolved_trials']) > 0 for r in part.values()) for name, part in paired.items()}
-    fig.suptitle(f"Detected instabilities: comparison fit {descents['comparison']}/{n}; reported parameters {descents['reported']}/{n}", fontsize=10)
+    fig.suptitle(f"Detected instabilities: wider-bound fit {descents['comparison']}/{n}; reported parameters {descents['reported']}/{n}", fontsize=10)
     single = any('single-liquid' in r['classification'] for part in paired.values() for r in part.values())
     fig.supxlabel('Filled: instability detected; open: none' + ('\nSquares: single liquid; circles: liquid + vapor' if single else '; all states liquid + vapor'), fontsize=8)
-    save(fig, 'phase-family', f"{n} temperature/pressure/loading states at six temperatures, comparison fit versus reported parameters: {descents['comparison']}/{n} and {descents['reported']}/{n} resolved-descent states. Columns show 0.50, 0.80 and 0.95 times reference pressures equal to the reported fit's bubble pressures. Finite searches do not certify a continuous stable region.", ['phase-family.csv'])
+    save(fig, 'phase-family', f"{n} temperature/pressure/loading states at six temperatures, wider-bound fit versus reported parameters: {descents['comparison']}/{n} and {descents['reported']}/{n} resolved-descent states. Columns show 0.50, 0.80 and 0.95 times reference pressures equal to the reported fit's bubble pressures. Finite searches do not certify a continuous stable region.", ['phase-family.csv'])
     comparison = a.load(a.E/'comparison-score.json')
     records = dict(reported=a.record_identity(fit['record_sha256'], fit['engine']), comparison=a.record_identity(comparison['parameter_sha256'], fit['engine']))
     for name, output in OUTPUTS.items():
