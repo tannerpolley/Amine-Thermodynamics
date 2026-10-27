@@ -19,8 +19,8 @@ Their figures label \SI{21}{\degreeCelsius}, approximated here by \SI{20}{\degre
 Pressure and species calculations use each source's reported solvent composition, including measured molalities and temperatures for Hilliard and Xu \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}; Section~S3 gives the source conventions.
 Three Xu observations above \SI{393.15}{\kelvin} and a B\"ottinger state with quantifiable oxazolidone are excluded; oxazolidone is absent from the model.
 The six-source pressure comparison includes 159 observations from Aronu, Hilliard, Idris, Jou, Ma'mun and Xu \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
-Arcis heats were not fitted but were used to accept or reject candidate parameter sets, and the Wagner pressures \cite{wagnerSolubilityCarbonDioxide2013} and the 15 and 45 wt\% Aronu pressures were compared with intermediate parameter sets during model development.
-None of these comparisons is therefore a blind test.
+Arcis heats were not fitted but were used to accept or reject candidate parameter sets, and the 112 non-fitted six-source pressures, the Wagner pressures \cite{wagnerSolubilityCarbonDioxide2013} and the 15 and 45 wt\% Aronu pressures were compared with candidate parameter sets during model development without serving as acceptance limits.
+No comparison in this work is therefore a blind test.
 Experimental carrier gas is omitted: the three-neutral-species bubble calculation compares $y_{\COtwo}P$ with the measured \COtwo partial pressure rather than imposing the experimental total pressure.
 This approximation may matter at low \COtwo pressure; Neumann et al.\ include nitrogen in such comparisons \cite[Sect.~4.2, Fig.~5]{neumannNewModelCombining2022}.
 
@@ -51,7 +51,7 @@ The mass-specific value is $c_P=C_P/m_{\mathrm{feed}}$, where $m_{\mathrm{feed}}
 The four fitted Hilliard heat capacities use 7 mol \MEA/kg water, calculation pressure \SI{101325}{\pascal} and a $10^{-6}$ loading approximation for the nominally unloaded states \cite[Sects.~4.5--4.6, App.~G.2]{Hilliard2008}.
 
 % P:methods-heat-03
-Densities are calculated directly from the equation of state, without volume translation.
+Densities are calculated directly from the equation of state, without volume translation, so the density data constrain the same parameters that set the phase and reaction equilibria.
 The fitted loaded observations comprise 15 Amundsen and 32 Hartono densities; five carbon-free densities use exactly zero analytical carbon, and all 67 Han densities are comparisons \cite{Amundsen2009,Hartono2014,hanDensityWater12012}.
 Five Amundsen densities at loading 0.4 are excluded after comparison with Hartono values interpolated to the same loading, temperature and solvent composition; all five remain in the complete comparison.
 The calculations use \SI{100000}{\pascal} for Amundsen where source pressure is unreported; other pressures follow the individual observations.
@@ -70,7 +70,8 @@ The scales combine heterogeneous uncertainty information; $2s$ is not uniformly 
 Parameters were estimated in four fits, each holding the earlier values fixed.
 Five pure-water parameters were fitted to IAPWS-95, the \COtwo--water interaction and its temperature slope to Kiepe pressures, and the \MEA dielectric coefficients to unloaded \MEA--water permittivities; 16 parameters were then fitted jointly to the observations of \cref{tab:current-data-inventory}.
 \Cref{tab:species-parameters,tab:interaction-matrix} list the species and pair parameters of the reported fit, with fitted values in bold, and \cref{sec:results-water,sec:results-co2-water,sec:results-permittivity,sec:results-joint} report each fit.
-Calculations for the reported fit use this parameter set; the comparison-fit values and the constant-interaction Cai calculation are specified in Table~S18 and Section~S10, respectively.
+A fit with wider bounds on the protonated-amine diameter and its water interaction, the wider-bound fit, is specified in Table~S18; the constant-interaction Cai calculation is specified in Section~S10.
+Calculations for the reported fit use the parameter set listed here.
 Rounding the reported parameter record to eight significant figures gives the fitted-data statistics of \cref{tab:residual-summary} at their printed precision.
 Table~S11 gives the joint-fit bounds and conditional standard errors; Section~S1 gives the source or modeling assumption of every fixed input.
 The joint bounded least-squares objective uses property-specific scales and weights to combine the observations; Section~S2 gives the residual definitions and full objective.
@@ -95,3 +96,13 @@ Agreement is reported as average absolute relative deviation (AARD),
 \end{equation}
 and root-mean-square error (RMSE) in the observable's units.
 The solution checks for the fitted and compared pressure and species states are reported in Section~S4; they establish numerical convergence rather than physical validation.
+
+% P:methods-phase-01
+The tangent-plane criterion \cite[Sect.~2]{Michelsen1982} is applied to reacting, charge-neutral trials, with reduced distance
+\begin{equation}
+ D(\boldsymbol w)=g(T,P,\boldsymbol w)/(RT)-\boldsymbol w^{\mathsf T}B^{\mathsf T}\boldsymbol\lambda,
+ \qquad \sum_iw_i=1,\quad\sum_i z_iw_i=0,\quad w_i>0,
+ \label{eq:tpd}
+\end{equation}
+where $B$ represents conserved component combinations and $\boldsymbol\lambda$ their chemical-potential multipliers in the existing equilibrium.
+A resolved instability requires a negative distance and a material-conserving finite transfer that lowers Gibbs energy beyond its numerical-error estimate; Section~S8 gives the complete method and states.
