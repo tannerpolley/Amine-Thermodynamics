@@ -29,8 +29,6 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/selected-assessment/summary.json SHA256 ad50d8f2698d87795ef6d870b93c92055f3774fbcea7383c9aa9acd5c4634602
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/source-only/chemical_reaction_source_contract.json SHA256 39db0d7ef972dc7eb41328bdf2ec3f67f62c33fc2bf0fdc7bab471ade9aefb55
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/source-only/density-scales.json SHA256 ee61922f62b40e8a3f947e85bb9d0e1247ff5dd97e567e554f7b90e589dc95ce
-% Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/source-only/density-source-differences.json SHA256 3522ac77fe039ac5a807f80ded2e20d7e3a6f5e72790e0313395d38d51ba1fb0
-% Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/source-only/physical-ideal-gas-calorics.json SHA256 c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/state-summary.json SHA256 00ae69922c8fb8c10321090f1cf504f0546d6d38cfcee7b1811de54db8409b2b
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/state-targets.csv SHA256 3009346dd3bdaf8c5cc8282f10b220be37f05385775bfb874819bda460d79c9f
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/summary.json SHA256 ad50d8f2698d87795ef6d870b93c92055f3774fbcea7383c9aa9acd5c4634602
@@ -42,36 +40,36 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 5328b0739df6e30433340eb20bfd7132c29288f34d916007d017df5a45f968e5
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 80ffadcfc2e7b6e12bbdf3343590c6252775f3329aacf38d79deecce16616853
-% Input: docs/scientific/latex/supplement.tex SHA256 002c15fea510e59eb7d42703f9911e6d03117d46a5c11ee7a940d7e6b04890df
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a20faa584feeaacda108ac0cd37ecb9168a10934cf4cd4464fe8e7dcd181e21a
+% Input: docs/scientific/latex/supplement.tex SHA256 f7f2db7ac47cf66cf6550b693eef8b615025be88868aba416c496974582469ee
 \begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Fitted and compared observations. Counts in comparison sets overlap fitted observations and are not additive. Section~S2 defines the objective. Source-specific conditions and roles are listed in the supplement.}\label{tab:current-data-inventory}
+\caption{Fitted and compared observations. Counts in comparison sets overlap fitted observations and are not additive. Section~S2 defines the objective.}\label{tab:current-data-inventory}
 \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.2100\linewidth}r>{\raggedright\arraybackslash}p{0.2500\linewidth}>{\raggedright\arraybackslash}p{0.1500\linewidth}@{}}
 \toprule
 Source & Quantity & n & Conditions & Use \\
 \midrule
 \multicolumn{5}{@{}l}{\itshape Binary vapor--liquid equilibrium} \\*
-Cai \cite{caiBinaryIsobaricVaporLiquid1996} & Bubble T; vapor fraction & $50$ & MEA--water; 66.66/\allowbreak{}101.33 kPa & fitted; 25 states \\*
+Cai \cite{caiBinaryIsobaricVaporLiquid1996} & Bubble T; vapor fraction & $50$ & 362.81--431.85 K; MEA--water; 66.66/\allowbreak{}101.33 kPa & fitted; 25 states \\*
 Kiepe \cite{kiepeExperimentalDeterminationPrediction2002} & \ce{CO2}--water pressure & $39$ & 313.20--393.17 K & fitted earlier; fixed input check \\
 \addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape \ce{CO2} partial pressure} \\*
-Hilliard, Jou \cite{Hilliard2008,Jou1995} & \ce{CO2} partial pressure & $47$ & 30 wt\%; source states & fitted \\*
+Hilliard, Jou \cite{Hilliard2008,Jou1995} & \ce{CO2} partial pressure & $47$ & Hilliard: 313--333.114 K; loading 0.1139--0.5909; Jou: 313.15--333.15 K; loading 0.0563--0.6679; 30 wt\% & fitted \\*
 Six-source pressure comparison & \ce{CO2} partial pressure & $159$ & 313.00--393.15 K; nominal 30 wt\% & 47 fitted; 112 not fitted \\*
 Wagner \cite{wagnerSolubilityCarbonDioxide2013} & \ce{CO2} partial pressure & $23$ & near 353/\allowbreak{}392 K; 30 wt\% & not fitted; not blind \\*
 Aronu \cite{Aronu2011} & \ce{CO2} partial pressure & $70$ & 15/\allowbreak{}45 wt\%; source states & not fitted; not blind \\
 \addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Liquid species} \\*
-Böttinger, Matin \cite{Bottinger2008,matinFacileMethodDetermination2012} & Species fractions & $101$ & 293.15--333.15 K; source compositions & fitted \\*
-Jakobsen \cite{Jakobsen2005} & Species/\allowbreak{}total-amine ratios & $6$ & 293.15/\allowbreak{}313.15 K; diluted samples & fitted \\*
+Böttinger, Matin \cite{Bottinger2008,matinFacileMethodDetermination2012} & Species fractions & $101$ & Böttinger: 293.15--333.15 K; loading 0.0749--0.4889; Matin: 293.15 K; loading 0.1059--0.5309 & fitted \\*
+Jakobsen \cite{Jakobsen2005} & Species/\allowbreak{}total-amine ratios & $6$ & 293.15/\allowbreak{}313.15 K; loading 0.29/\allowbreak{}0.59; diluted samples & fitted \\*
 Matin & Bicarbonate total & $19$ & source states & not fitted \\*
 Jakobsen & Carbonate share & $10$ & source states & not fitted \\
 \addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Integral heat of absorption} \\*
-Vinjarapu \cite{HemaBhavya2025} & Integral heat & $8$ & 313.15 K; 1.734 MPa; 30 wt\% & fitted \\*
+Vinjarapu \cite{HemaBhavya2025} & Integral heat & $8$ & 313.15 K; loading 0.11--0.45; 1.734 MPa; 30 wt\% & fitted \\*
 Arcis \cite{arcisEnthalpySolutionCarbon2011} & Integral heat & $14$ & 322.5 K; 0.51/\allowbreak{}1.03 MPa & not fitted; used to accept fits \\
 \addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Density} \\*
-Amundsen, Hartono \cite{Amundsen2009,Hartono2014} & Loaded density & $47$ & 293.15--353.15 K; 30 wt\% & fitted \\*
-Amundsen \cite{Amundsen2009} & \ce{CO2}-free density & $5$ & 298.15--353.15 K; 30 wt\% & fitted \\*
+Amundsen, Hartono \cite{Amundsen2009,Hartono2014} & Loaded density & $47$ & Amundsen: 298.15--353.15 K; loading 0.1--0.3; Hartono: 293.15--353.15 K; loading 0.11--0.39; 30 wt\% & fitted \\*
+Amundsen \cite{Amundsen2009} & \ce{CO2}-free density & $5$ & 298.15--353.15 K; loading 0; 30 wt\% & fitted \\*
 Amundsen, Hartono, Han \cite{hanDensityWater12012} & All densities & $210$ & 293.15--393.15 K; 20--100 wt\% & 52 fitted; others compared \\
 \addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Heat capacity} \\*
-Hilliard \cite{Hilliard2008} & Heat capacity & $4$ & 318.15/\allowbreak{}353.15 K; 7 mol MEA/\allowbreak{}kg water & fitted \\
+Hilliard \cite{Hilliard2008} & Heat capacity & $4$ & 318.15/\allowbreak{}353.15 K; loading 0/\allowbreak{}0.358; 7 mol MEA/\allowbreak{}kg water & fitted \\
 \bottomrule
 \end{tabular}
 \end{table}

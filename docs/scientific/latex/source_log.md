@@ -352,3 +352,92 @@ Both builds passed. Neither final log contains overfull boxes, undefined referen
 The prose check passed for plugin-wide and scoped rules. Highlight lengths are 78, 79, 83, 77 and 76 characters, all at most 85. The requested isolated-Python freshness command passed and rewrote `builds/verification-receipt.json`, followed by `git add -u`.
 
 All 44 pages were rendered at 110 dpi in color and grayscale under `/tmp/issue-211-part2-pages-r2/{main,supplement}/pages/{color,grayscale}/page-NN.png`. The text comparison identifies changed main pages 1, 2, 7–11 and 15–18, and supplement page 20; `changed-page-images.txt` lists their 24 image paths, and `page-images.txt` lists all 88. The full-document contact sheets and every changed page were inspected, with the changed pages inspected in both color and grayscale. No clipping or unintended overlap was found. The automated checks report 180 main and 52 supplement clearance warnings, zero errors; these warnings include tight mathematical-text clearances and figure text near vector strokes and are not an automatic visual pass. The figures, tables and text fit their pages. This is presentation verification; independent scientific and story confirmation remains with the parent.
+
+
+## Issue #216 approved supplement cuts
+
+Implemented the 15 owner-approved items from issue #216 on base `fa6c7496c1b84c28d2a00e05146b99f80d7aef76`. The supplement falls from 23 to 15 pages; the main text remains 21 pages. This is a presentation change to the accepted retained results. No model calculation, parameter change, source-data change or bibliography refresh was made. Independent scientific review and owner approval of the changed pages remain with the parent.
+
+| Item | Completion |
+| --- | --- |
+| 1 | Done: removed old Table S2; main Table 4 retains the 33 binary interaction values, including zero and fixed ±0.25 entries. |
+| 2 | Done: folded the fitted temperature/loading conditions into main Table 2, retaining separate source ranges for the paired-source rows; removed its last caption sentence and old Table S4; the Section 4.7 sentence now cites main Table 2. |
+| 3 | Done: old Table S12 is portrait Table S5, with the same correlation values and parameter order. |
+| 4 | Done: removed old Table S16, the final repeated method paragraph and the duplicate distance equation (old Eq. 4). The start paragraphs retain the four-liquid/five-vapor list and the convergence rule. The transfer paragraph is unchanged except for the equation pointer and removal of the repeated equation; the error-estimate paragraph is unchanged. |
+| 5 | Done: replaced old Table S7 with the source-difference sentence after checking all five values; retained the loading/composition basis and the qualification that neither source is established as correct. |
+| 6 | Done: removed old Table S10; the acceptance-table row and S10 prose now point to main Section 4.4.5, which prints all three density errors and error/scale values. |
+| 7 | Done: removed the repeated S6 parameter-interpretation paragraph except its final two sentences on interpretation limits. Main Section 3.2 and new Table S4 retain the parameter information. |
+| 8 | Done: supplement bibliography inter-entry spacing is 2 pt. |
+| 9 | Done: removed the float barrier before S5; the resulting density tables, source-difference sentence and figure fit without overfull boxes or clipping. |
+| 10 | Done: appended all four Hilliard heat capacities, conditions and signed errors to old Table S13, now S6. The main Section S7 pointer now has its required support. |
+| 11 | Done: removed old Table S1 only after checking every printed row against main Table 3 and S1 prose; retained the seven otherwise absent numerical values listed below explicitly in S1 prose. |
+| 12 | Done: new Table S8 lists 32 distinct confirmed splits with Seeds. Thirteen rows have one seed and nineteen have two, retaining all 51 confirmed paths. Multiple seeds agree at the printed precision; each row uses one retained calculation, without averaging. Full compositions, amounts, densities and the 40 failed attempts are directed to the deposited split-confirmations file. |
+| 13 | Done: old Table S5 is deposit-only; main Section 3.1 and S4 identify the cited ideal-gas coefficients and the deposit, with the exact JSON filename in S4. |
+| 14 | Done: removed the ten-row carbonate-share table (old S9); the mean, range and NMR/dilution basis remain in S5, with a carbonate-share.csv deposit pointer. |
+| 15 | Done: removed old Table S15; S8 retains the reported-fit bubble-pressure definition, test-pressure factors and reference-pressure range, and cites reference-pressures.csv. |
+
+### Values retained when old Table S1 was removed
+
+These were the only numerical row values absent elsewhere in print. All are in angstrom and now appear explicitly in S1 prose:
+
+| Quantity | Value |
+| --- | ---: |
+| Water diameter-law constant, sigma_0 | 2.7804326 |
+| Protonated-MEA packing diameter | 4.708 |
+| Carbamate packing diameter | 4.2821756 |
+| Bicarbonate packing diameter | 2.578048 |
+| Carbonate packing diameter | 2.149136 |
+| Hydronium packing diameter | 3.049552 |
+| Hydroxide packing diameter | 1.775576 |
+
+Every other old Table S1 row value remains in main Table 3 or existing S1 prose: segment counts and diameters, Born diameters, dispersion and association energies, association volumes, solvation factors, dielectric coefficients, water exponential coefficients and ion-region permittivity. The Debye–Hückel diameters equal the segment diameters in main Table 3; packing diameters also retain their 0.88-sigma tie. S1 keeps the source locators and distinguishes transferred values, assumptions and earlier estimates. No non-fitted input or its source has been silently removed.
+
+### Numerical and pointer checks
+
+The five source differences at loading 0.4, from `engine-3e83e19c-paper-evidence/source-only/density-source-differences.json`, range unrounded from 8.50454545454545 to 9.07454545454516 kg/m³ (previously printed as 8.505 to 9.075). This supports the requested 8.5–9.1 kg/m³ sentence. The four `engine-3e83e19c-paper-evidence/cp.csv` signed percentage errors are 5.529961902140101, 2.570091679465203, 1.1464209865831743 and −2.1320201755320456: new Table S6 prints +5.53, +2.57, +1.15 and −2.13 at 318.15 K/loading 0, 318.15 K/0.358, 353.15 K/0 and 353.15 K/0.358. The reference-pressure range retains the former table's precision, 6.4123–1768.9 kPa.
+
+The table renumbering, checked against both compiled auxiliary files, is:
+
+| Old table | New destination |
+| --- | --- |
+| S1 | Main Table 3 and S1 prose |
+| S2 | Main Table 4 |
+| S3 | S1 |
+| S4 | Main Table 2 |
+| S5 | Deposit: source-only/physical-ideal-gas-calorics.json |
+| S6 | S2 |
+| S7 | S5 source-difference prose |
+| S8 | S3 |
+| S9 | Deposit: carbonate-share.csv |
+| S10 | Main Section 4.4.5 |
+| S11 | S4 |
+| S12 | S5 |
+| S13 | S6, including the four signed heat-capacity errors |
+| S14 | S7 |
+| S15 | Deposit: reference-pressures.csv |
+| S16 | S8 counts in prose |
+| S17 | S8 |
+| S18 | S9 |
+| S19 | S10 |
+| S20 | S11 |
+
+The sweep covered `main.tex`, all `sections/*.tex`, `supplement.tex`, `submission/`, generator captions and this current log entry. Sections S1–S10 and Figures S1–S2 keep their numbers. Main-text bounds pointers change from Table S11 to S4, wider-bound parameters from S18 to S9, and data conditions from S4 to main Table 2. These three targets use labels. The signed-heat-capacity sentence still points to Section S7, which now contains Table S6 with the four signed rows. The acceptance-table row's old Section S5 pointer changes to main Section 4.4.5. The removed supplement Eq. 4 now points to unchanged main Eq. 16; the numerical-error equations renumber from 5–7 to 4–6. The ESI Tables S1–S2 citation to Agieienko's paper is an external source locator and remains unchanged. No supplement pointers occur in the submission aids. Every retained pointer was checked against the content supporting its sentence.
+
+### Generation, builds and page checks
+
+All table edits and removals belong to `scripts/final_rerun_tables.py`; seven obsolete generated files are removed by the generator itself. It ran successfully with the prescribed main-checkout interpreter and `-I`. Twelve remaining table bodies are byte-for-byte unchanged after excluding provenance comments. The correlation rows are identical; only their table environment changes. No figure content, caption or numbering changed, so figure regeneration was unnecessary under the task's explicit “only if needed” instruction.
+
+`analyses/mea_parameter_bundle/scripts/a7_presentation.py` is byte-for-byte unchanged, SHA-256 `5328b0739df6e30433340eb20bfd7132c29288f34d916007d017df5a45f968e5`. Its input hashes, inventory and numerical equalities pass. Temporary in-memory checks confirmed that altered literature entries, a changed symbol definition and changed selected-parameter bytes are rejected. No guard was weakened. The 32-row grouping also asserts equality of the retained seed solutions at printed precision. The detailed numerical checks are retained at `/tmp/issue-216-pages/numerical-checks.json`.
+
+Both final builds passed, in supplement-then-main order, using the required commands from this directory:
+
+```bash
+SOURCE_DATE_EPOCH=1792750003 FORCE_SOURCE_DATE=1 nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex
+SOURCE_DATE_EPOCH=1792750003 FORCE_SOURCE_DATE=1 nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds main.tex
+```
+
+The final main PDF has 21 pages and SHA-256 `e2ee6a6759baa890adc85ee61a6b5bf728f07427d34ef71fd3976cf7195b615a`; the supplement has 15 pages and SHA-256 `51af9a93efd92c6c64cf7408e0cbea0ccebd00e5baa5bc5c03c4e12e24519f7f`. Neither final log contains overfull boxes, undefined references/citations, oversized floats or font warnings. `submission_metadata.yml` records the final main-PDF hash. The prose checker passes the plugin-wide and scoped rules. Displayed prose uses the author's ePC-SAFT implementation; the exact deposited filename retains its existing lowercase prefix.
+
+All 36 final pages were rendered at 110 dpi in color and grayscale under `/tmp/issue-216-pages/{main,supplement}/pages/{color,grayscale}/page-NN.png`. Main pages 5–11, 15, 17–18 and 20 differ from the base text; every supplement page 1–15 changes with the shorter pagination. The directory contains `page-images.txt`, `changed-page-images.txt`, `changed-pages.json` and per-document contact sheets and `report.json`. Automated checks report zero errors, with 179 main and 47 supplement clearance warnings requiring visual judgment. Page inspection found no clipping or unintended overlap; the tables and figures remain legible. The warnings include tight mathematical text and figure text near vector strokes, rather than an automatic visual pass. These are presentation checks, not independent scientific review.
+
+The isolated-Python manuscript freshness command writes the final build hashes, followed by the requested `git add -u`. The three newly deposit-only tables use `engine-3e83e19c-paper-evidence/source-only/physical-ideal-gas-calorics.json`, `engine-3e83e19c-paper-evidence/carbonate-share.csv` and `engine-3e83e19c-phase-search/run-2/reference-pressures.csv`. Updating the staged deposit README and package remains part of #206; it was not edited here. Delivery is a local issue-branch commit without merge or push. Independent read-only review returning Supported and owner approval of the changed pages remain open.
