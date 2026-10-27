@@ -40,14 +40,18 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
 % Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 5328b0739df6e30433340eb20bfd7132c29288f34d916007d017df5a45f968e5
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 ea7183ee76a82c66d0ec8306ece760c57a643f3302fda72395e48f44d5133139
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 21fc3a04d36e04e6938f8f9c14bd8fad33b3eff34015d1aa888fac3318b99998
 % Input: docs/scientific/latex/supplement.tex SHA256 f7f2db7ac47cf66cf6550b693eef8b615025be88868aba416c496974582469ee
-\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Symbols used in this manuscript.}\label{tab:nomenclature}
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.7000\linewidth}@{}}
+\begingroup\small\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}l>{\raggedright\arraybackslash}p{0.7000\linewidth}@{}}
+\caption{Symbols used in this manuscript.}\label{tab:nomenclature}\\
 \toprule
 Symbol & Definition \\
-\midrule
+\midrule\endfirsthead
+\toprule
+Symbol & Definition \\
+\midrule\endhead
+\bottomrule\endfoot
 $\alpha$ & Added \ce{CO2} per mole total amine \\
 $w_{\mathrm{MEA}}$ & MEA mass fraction of unloaded solvent \\
 $T,T_{\mathrm{ref}}$ & Temperature; interaction reference temperature 313.15 K \\
@@ -57,6 +61,12 @@ $z_i,M_i$ & Species charge number and molar mass \\
 $A,a^{\mathrm{res}}$ & Extensive Helmholtz energy; residual Helmholtz energy divided by nRT \\
 $\rho,Z,V$ & Molar density; compressibility factor; phase volume \\
 $\sigma_i,u_i/k_B$ & Segment diameter; dispersion energy divided by Boltzmann constant \\
+$m_i^{\mathrm{seg}},\bar m$ & Segment number; mole-fraction average segment number \\
+$d_i,d_i^{\mathrm{DH}}$ & Hard-sphere packing diameter; Debye--H\"uckel diameter \\
+$\rho_N,\zeta_n,\eta$ & Number density; packing moments; packing fraction \\
+$g_{ij}^{\mathrm{hs}},C_1,I_1,I_2$ & Hard-sphere contact value; dispersion compressibility term and integrals \\
+$X_A,\Delta^{AB}$ & Fraction of molecules not bonded at site A; association strength \\
+$\kappa_{\mathrm D},\chi_i,\mathcal I$ & Inverse Debye screening length; finite-size function; set of ions \\
 $k_{ij},b_{ij}$ & Binary interaction and its reciprocal-temperature slope (K) \\
 $\kappa^{AB},\epsilon^{AB}/k_B$ & Association volume and energy divided by Boltzmann constant \\
 $d_i^{\mathrm{Born}},D_i$ & Born diameter and outer solvation-shell diameter \\
@@ -77,6 +87,4 @@ $u_\rho,u_\alpha,g,s_\rho$ & Density and loading uncertainty inputs; local secan
 $\boldsymbol\theta,J_I,s_C^2$ & Fitted parameters; free-parameter weighted Jacobian; variance factor \\
 $B,\boldsymbol\lambda,D$ & Conserved-quantity matrix; equilibrium multipliers; tangent-plane distance \\
 AARD; RMSE & Average absolute relative deviation; root-mean-square error \\
-\bottomrule
-\end{tabular}
-\end{table}
+\end{longtable}\endgroup
