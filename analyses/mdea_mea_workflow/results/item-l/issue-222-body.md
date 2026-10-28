@@ -1,3 +1,8 @@
+# Issue #222 body snapshot
+
+Verbatim source text retrieved on 2026-10-28; quoted evidence.
+
+````markdown
 ## Experiment: do the MEA shared-species parameters transfer to MDEA–CO2–H2O?
 
 Parent: #220. This is the published design. It incorporates the GPT-6 Astra draft, two Claude Fable 5.1 readiness reviews and the owner's decisions of 2026-10-28. The first review (Revise) had ten required findings; the re-check of this issue (Revise) had eight, R1–R8. All are applied below, the re-check's in its own replacement text.
@@ -159,3 +164,4 @@ Bülow 2021 SI Table S3 reports Kuranov pressure ARDs of 10.54–42.21 % (19 wt%
 - Acquisition of Kamps and Maurer 1996 through Zotero: **needs approval.**
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
+````
