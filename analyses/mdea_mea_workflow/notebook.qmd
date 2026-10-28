@@ -1,8 +1,83 @@
 ---
-title: "MDEA through the MEA formulation: remaining starts and bound-pressure diagnosis"
+title: "MDEA through the MEA formulation: amended A4 phase gate"
 format: html
 ---
-## Item (l): linear MDEA–water law, 2026-10-28
+
+## Amended A4: item (l) remains incomplete
+
+**Stage 2 is blocked by an unresolved A4 phase search.** A4 now takes
+k(MDEAH+–water) = −0.2298 with slope zero, keeping every other value,
+including Bülow's cation sizes and dispersion energy. Its SHA-256 is
+`37dc90fde1e8807dafb1e3b7e7d378ba711ec38da7f6d5291d34a46e549301c0`.
+The amendment is the latest 2026-10-28 ruling on issue #222.
+
+Both Carson states use 298.15 K, the declared 101325 Pa convention and one
+mole of analytical MDEA plus source water and CO2. Neumann ideal-gas Cp and
+the retained item-(l) linear MDEA–water law are unchanged. The Engine wheel
+is 3e83e19c, SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`;
+installed package files were verified byte for byte against the wheel.
+
+| Carson row | Loading, mol CO2/mol MDEA | Maximum equilibrium residual | Descending splits | Unresolved trials | Gate |
+|---|---:|---:|---:|---:|---|
+| 1 | 0.08243367843 | 2.273736754e−13 | 0 | 1 | Unresolved |
+| 10 | 0.2479764498 | 5.115907697e−13 | 0 | 0 | Pass |
+
+The row-10 split previously found at k(MDEAH+–water) = 0 is absent from this
+recorded search. Row 1 prevents qualification: completion of the search and
+absence of a witness do not resolve its remaining trial. Minimum tangent-plane
+values are −2.84217e−14 and −8.52651e−14 in RT units for rows 1 and 10.
+They do not establish a descending split. This is a numerical qualification
+limit, not observed demixing or evidence that the physical model is unstable.
+The reused helper retains trial compositions and minimum values, but omits
+the individual trial optimizer messages; the precise cause of the unresolved
+trial has not been diagnosed. No search budget, tolerance or retry was changed.
+Per the requested stop, no further scientific calculations ran.
+
+| Variant | Distinct starts | Joint-fit endpoints | Representative | Transfer verdict |
+|---|---|---|---|---|
+| A | A1, A3, A4 | Not run | None | Not assessed: A4 start gate unresolved |
+| B | B1, B3 | Not run | None | Not assessed: item (l) incomplete |
+
+A2 and B2 remain recorded duplicates of A1 and B1. No new objective,
+start/endpoint identifiability analysis, weak-direction profile or arbitrary-bound
+assessment exists. Earlier reciprocal-law endpoints below are historical and
+cannot represent this amended model. Neither variant has an Ermatchkov AARD
+or a pass/fail result against 24.2% on the 88 primary rows. All outside-fit
+comparisons and the Wangler heat/Cp sensitivity remain unrun.
+
+The bicarbonate-free and k(MDEA–CO2) control refits, their two-percentage-point
+comparison and the bicarbonate/cation–water correlation were not run.
+Corrected Kamps data remain excluded from that criterion. **No MDEA outcome
+falsifies the MEA bicarbonate value.** Xiao and Zhang remain unscored.
+
+This is numerical evidence at two starting-vector states, not physical
+validation, parameter transfer, adoption or absorber qualification. Independent
+delivered review remains open; nothing is promoted for manuscript use.
+A table suffices for these two scalar checks; a curve would add no information.
+
+Evidence: [A4 summary](results/item-l/A4-amendment-summary.json),
+[search results](results/item-l/A4-amended-carson-search.json),
+[amended start](results/item-l/amended-starts/A4.json),
+[runtime and hashes](results/item-l/A4-amendment-runtime.json), and
+[endpoint inventory](results/item-l/A4-amendment-endpoints.csv).
+The original A4 is retained in Git at base commit `3a2eaab`, path
+`analyses/mdea_mea_workflow/results/item-l/amended-starts/A4.json`;
+the original ten-search file and phase summary remain historical evidence.
+Only the A4 hash changes in the amended-start hash inventory.
+
+Execution used `nice -n 10` and the isolated main-venv interpreter, with two
+processes for the two independent rows on the 32-core machine, one BLAS thread
+per process and 22.86 GB available memory at launch. No worktree environment,
+Engine source import, main-checkout write or Zotero write was used.
+An initial process submission failed before either row ran because its dynamic
+module was not registered for pickling; registering the module corrected that
+execution error without changing a numerical setting.
+
+The presentation-only HTML refresh failed because `snakemake` is unavailable;
+[the error is retained](results/item-l/A4-notebook-refresh.txt). The notebook
+source is current; its HTML view remains stale. No preview service was changed.
+
+## Historical item-(l) result before the A4 amendment
 
 **Return to Design.** The linear-law binary gate passes, but A4 fails the
 Carson row-10 two-liquid search. Item (l) is incomplete; stage 2 did not run.
