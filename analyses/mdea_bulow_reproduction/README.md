@@ -14,7 +14,7 @@ remain fixed. Independent review is the next gate.
 
 - `declaration.json` owns the printed Bülow Tables 1–3 parameters and corrected
   reaction constants. Its SHA-256 is
-  `a491381972ddad9224f1b0833371b82479db7f4f0244dab99fbb9d9cffc2a657`.
+  `8e4aa8461e0cc8d3daf9d53a16118225b89fe4d79afc5ecd3341f5ea26915494` (regenerated 2026-10-28 after the delivered review corrected two provenance strings to Bülow Eqs. 23 and 25; every value and every numerical check is unchanged).
   It binds the source and inventory files by their hashes.
 - The declaration specifies D1's literal free-species mole-fraction sum and D3's
   Hsieh polynomials, with no density term. Its descriptive pending-896 choice
@@ -23,7 +23,9 @@ remain fixed. Independent review is the next gate.
   that permittivity choice.
 - `placeholder-3e83e19c.json` is the Engine-admitted document used only for these
   checks. It removes the descriptive preparation metadata and substitutes the
-  existing component-mixing `solvent-only` permittivity choice. It is not the
+  existing `solvent-only` permittivity choice: ion suppression with α = 0, the
+  normalized mass-weighted salt-free solvent permittivity. It differs from the
+  issue text's "component-mixing" wording, and neither placeholder is Eq. 19. It is not the
   pressure-run declaration. Both document hashes are in `numerical-checks.json`.
 - Every component, including neutrals, has solvation factor 1. The ionic-region
   relative permittivity is 1; it has no effect when both Born coefficients are
@@ -53,7 +55,7 @@ errors are retained in `numerical-checks.json`.
 | Water diameter and Table 3 temperature laws | At 298.15, 333.15 and 393.15 K, native residual Helmholtz energy agrees with independently evaluated constant inputs within 1e-12 absolute; observed difference 0 |
 | Hsieh pure-solvent laws | Native water and MDEA permittivities agree with the printed polynomials within 1e-12 absolute at the same three temperatures |
 | Association | CO2 site fractions 1 in MDEA–CO2 and 0.9869904051415042 in water–CO2 at 333.15 K and 1000 mol/m³; no ionic sites |
-| Cross-association energy and volume | Water–CO2 energy 1212.8 K; explicit Eqs. 24–25 inputs reproduce native association energy with absolute difference 0, tolerance 1e-12 |
+| Cross-association energy and volume | Water–CO2 energy 1212.8 K; explicit Eqs. 23 and 25 inputs reproduce native association energy with absolute difference 0, tolerance 1e-12 |
 | Water pK on molality scale | 13.9983057944 versus 14.00; tolerance 0.005 |
 | MDEAH+ pK on molality scale | 8.5509151552 versus 8.551; tolerance 0.0005 |
 | Carbon hydration pK on molality scale | 6.3590659626 versus 6.359; tolerance 0.0005 |
@@ -105,13 +107,21 @@ not a measurement uncertainty.
 ## Repeat after Engine 896
 
 Qualify an immutable wheel built from merged Engine main and record its full
-commit and SHA-256. Check both native dielectric reference values, 58 and 72.5,
-at solvent permittivities 80 and 20 and mole fractions (0.7, 0.1, 0.1, 0.1),
-within 1e-12 absolute. Check density and molar-mass independence, pure-solvent
-limits, and refusal at a zero solvent denominator. Repeat the neutral and
-charged derivative checks with the new mole-fraction rule, within 1e-5 relative;
-repeat the Born reduction with that rule as well. Recheck document and reference
-admission when mapping the frozen declaration to the merged Engine grammar.
+commit and SHA-256, then:
+
+1. Re-run `prepare.py` in full on that wheel, so every check here (Born reduction,
+   temperature laws, association, Hsieh pure-solvent laws, reaction checks,
+   admission and derivatives) is repeated on the merged build.
+2. Check both native dielectric reference values, 58 and 72.5, at solvent
+   permittivities 80 and 20 and mole fractions (0.7, 0.1, 0.1, 0.1), within
+   1e-12 absolute; density and molar-mass independence; pure-solvent limits; and
+   refusal at a zero solvent denominator.
+3. Build the run document from `declaration.json` the same way the placeholder
+   is built, and assert that only the permittivity entry (renamed to the merged
+   grammar) and the removed preparation block differ.
+4. Record both the frozen declaration hash and the hash of the document the run
+   admits.
+
 The pressure run remains blocked until that wheel is qualified and preparation
 has received independent review.
 
