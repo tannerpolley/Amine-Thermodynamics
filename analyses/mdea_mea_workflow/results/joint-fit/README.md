@@ -162,4 +162,3 @@ converged: Function tolerance reached. |cost_change|/cost: 3.615978e-11 <= 1.000
 | Born angstrom | 2 | yes |
 
 Scaled-Jacobian singular values: 21.086825, 10.6578358, 8.52582944, 4.9592375, 3.41894833, 0.365604892, 0.253842915, 0.0707484718, 0.0234210312. Full right singular vectors and active bounds are in fit.json. Full Carson searches, numerical error estimates, and equilibrium residuals are in carson-phase.json. Endpoint documents and fitted-row replay are retained alongside them.
-

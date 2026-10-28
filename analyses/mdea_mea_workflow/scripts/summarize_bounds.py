@@ -48,7 +48,7 @@ if __name__=='__main__':
    text+='| Group | Cost |\n|---|---:|\n'+'\n'.join(f"| {g} | {r['group_costs'][g]:.9g} |" for g in groups)+'\n\n'
    text+='| Coordinate | Endpoint | Active bound |\n|---|---:|---|\n'+'\n'.join(f"| {n} | {v:.12g} | {'yes' if i in r['active_bounds'] else ''} |" for i,(n,v) in enumerate(r['parameters'].items()))+'\n\n'
    text+='Scaled-Jacobian singular values: '+', '.join(f'{s:.9g}' for s in r['singular_values'])+'. Full right singular vectors and active bounds are in fit.json. Full Carson searches, numerical error estimates, and equilibrium residuals are in carson-phase.json. Endpoint documents and fitted-row replay are retained alongside them.\n\n'
-  (AN/out/'README.md').write_text(text)
+  (AN/out/'README.md').write_text(text.rstrip()+'\n')
  print(table(a));print(table(b))
  for records,out in [(a,'results/joint-fit'),(b,'results/diagnosis-a1-bounds')]:
   with (AN/out/'endpoint-summary.csv').open('w') as stream:
