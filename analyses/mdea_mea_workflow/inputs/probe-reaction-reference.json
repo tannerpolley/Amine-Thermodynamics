@@ -1,0 +1,100 @@
+{
+  "shared": [
+    {
+      "reaction_id": "R1",
+      "stoichiometry": [
+        0.0,
+        0.0,
+        -2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "engine_correlation": {
+        "a": 3.7290977365566675,
+        "b": -13445.9,
+        "c": -22.4773,
+        "d": 0.0,
+        "reference_temperature": 313.15,
+        "temperature_min": 273.15,
+        "temperature_max": 498.15,
+        "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+      },
+      "engine_reference": {
+        "source_basis": "RawMoleFractionInfiniteDilution",
+        "reference_pressure_pa": null
+      },
+      "parameter_role": "candidate"
+    },
+    {
+      "reaction_id": "R2",
+      "stoichiometry": [
+        -1.0,
+        0.0,
+        -2.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "engine_correlation": {
+        "a": 23.585516142096935,
+        "b": -11928.056737463849,
+        "c": -36.7816,
+        "d": 0.0,
+        "reference_temperature": 313.15,
+        "temperature_min": 293.15,
+        "temperature_max": 393.15,
+        "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+      },
+      "engine_reference": {
+        "source_basis": "CommonMolalityInfiniteDilution",
+        "reference_pressure_pa": null
+      },
+      "parameter_role": "candidate"
+    },
+    {
+      "reaction_id": "R3",
+      "stoichiometry": [
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        -1.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "engine_correlation": {
+        "a": 12.145792981306897,
+        "b": -12431.7,
+        "c": -35.4819,
+        "d": 0.0,
+        "reference_temperature": 313.15,
+        "temperature_min": 273.15,
+        "temperature_max": 498.15,
+        "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+      },
+      "engine_reference": {
+        "source_basis": "RawMoleFractionInfiniteDilution",
+        "reference_pressure_pa": null
+      },
+      "parameter_role": "candidate"
+    }
+  ],
+  "MDEA": {
+    "a": -83.491,
+    "b": -819.7,
+    "c": 10.976,
+    "lnKx_to_lnKm": 4.0165,
+    "reference_pressure_Pa": 100000.0,
+    "range_note": "278-368 K original title; extension to 393 K is the issue 222 model assumption; original paper unavailable"
+  },
+  "row_tolerance": 1e-10
+}
