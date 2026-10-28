@@ -59,3 +59,20 @@ is inferred from the printed m̄MDEA. Hsieh's CSV uses the same four locator col
   +0.6/+1.2/+1.8 K at 313/353/393 K. It states no correction for Kuranov 1996 or for its own
   Tables 1–3. The corrected Kamps 2001 data (Ermatchkov Table 6) are not transcribed here.
 - Both authors' MDEA purity is below 99 % (Kuranov ≥ 98 mass %, Ermatchkov ≥ 0.985 mass fraction).
+
+## Issue 222 newer outside-fit sources
+
+`addendum-sources.json` records the Zotero identities, PDF and table hashes,
+locators, units, composition and pressure bases, uncertainty and omissions for
+items (h)–(i). `Zheng2020_stage1.csv` holds six pure-MDEA Table 4 observations;
+`Sedighi2024_stage1.csv` holds all 24 Table 3 observations, with 15 at 10–50 wt%
+designated for later scoring. Printed wt% is divided by 100 for unloaded
+mass fraction. Total pressure is retained per row. Zheng reports relative
+expanded uncertainties of 0.05 on loading and heat; Sedighi reports none.
+Both tables were checked against rendered PDFs; neither was digitized.
+Xiao and Zhang have first-page-only attachments and remain declared but
+unscored, with no extracted observations. The
+[analysis addendum](../../../analyses/mdea_mea_workflow/README.md#stage-1-addendum-starts-and-newer-comparisons)
+records observables, Sedighi's saturation procedure, gas basis and the printed
+loading/mole discrepancy. Source tables have one owner here and are not copied
+into the analysis directory. No outside-fit model predictions have been scored.
