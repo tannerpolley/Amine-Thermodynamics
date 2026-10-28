@@ -1,12 +1,45 @@
 # MDEA–CO₂–H₂O preparation for issue 222
 
-Stage 1 is retained with unresolved completion criteria. Stage 2 has not started.
+Stage 1 is retained below. The owner authorized stage 2 on 2026-10-28.
+Stage-2 inspection found an undefined heat observable before any joint fit.
+The earlier preparation descriptions below retain their stage-1 meaning.
 The useful results are the pure-MDEA association-volume conversion, the
 30-point dielectric fit, eight-species admission for both ion conventions,
 and the two-column pressure sensitivity probe. These are numerical preparation
 and calibration evidence, not a physical validation or a transfer verdict.
 
 The [notebook](notebook.qmd) records quantities, interpretation and limits.
+
+## Stage-2 heat definition awaiting Design
+
+The [retained issue and owner freeze](inputs/stage2-issue-222.json) authorize
+the seven starts on main `4835dfd`. The
+[heat-definition evidence](results/stage2-heat-definition.json) records the
+remaining question: which model loading or loading interval represents
+Merkley's below-saturation slope?
+
+Merkley 1987, Results, printed pp.439–441, obtains the Figure 3 heat from a
+through-origin slope of heat per mole MDEA against loading below saturation.
+The retained twelve markers specify no loading or loading interval: eight
+enter the frozen fit, four are outside-fit comparisons, and six have the
+declared alternative pressure. The paper's experimental loading independence
+does not specify a loading-independent model observable. The reused MEA
+`fit_observations.py::heat_items` calls `reg.addition_enthalpy`, which requires
+two equilibrium endpoints and a positive added amount. Neither a finite
+loading nor a zero-loading limit has been substituted.
+
+The live Merkley PDF and retained table hashes match stage 1. All twelve
+installed Engine wheel files match the pinned wheel, SHA-256
+`0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`.
+No joint optimizer, representative-endpoint selection, outside-fit assessment
+or follow-up has run. A1–A4 and B1–B3 remain unevaluated; neither variant has a
+pass or fail verdict. This is an input-definition finding, not a physical or
+numerical result. The notebook has no new stage-2 results to summarize.
+
+The owner or Design must define the Merkley model observable while preserving
+the frozen roles, pressures, scales, weights and coordinates. No MDEA outcome
+falsifies the MEA bicarbonate value; corrected Kamps remains outside the
+follow-up criterion. The MEA parameter record and manuscript are unchanged.
 [Input hashes](inputs/hashes.json) identify calculation inputs, source tables,
 and the reused MEA methods. [Runtime identity](inputs/runtime.json) verifies
 installed package files against the immutable wheel. [Source provenance](../../data/reference/MDEA/stage1-sources.json)
