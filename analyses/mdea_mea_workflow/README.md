@@ -234,7 +234,7 @@ coefficients, complete input documents, state conditions and per-term outputs;
 `results/numerical-checks.json` links these checks. Table transcriptions were
 checked against rendered PDFs; no plotted-only observations were needed.
 
-## Stage-2 resumption, 2026-10-28
+## Historical stage-2 resumption before the start amendment, 2026-10-28
 
 Item (j) passes: all twelve Fig. 4 loading points have calibrated coordinates,
 ±0.02 mol CO₂/mol MDEA reading allowance, a visually inspected overlay, and
@@ -245,7 +245,7 @@ remain under `data/reference/MDEA/`; calibration and assignments are in
 heat-definition pause; the historical proposals above do not supersede the
 owner's freeze and subsequent heat rulings.
 
-**Current disposition: return to Design for a phase-assumption failure.**
+**Historical disposition before item (k): return to Design for a phase-assumption failure.**
 The owner resolved Carson as integral heat from zero loading and declared
 101325 Pa as a model convention, with a 265000 Pa sensitivity at the
 largest loading and an explicit single-liquid stop. These decisions are in
@@ -285,3 +285,48 @@ phase cases in six processes, one BLAS thread each, sized against free memory.
 The notebook reads retained results without model calls. No subagent ran.
 
 Presentation refresh was attempted on this revision; it stops because `snakemake` is absent. The notebook source is complete, but its HTML view remains stale. The analysis-site section index was refreshed by the native command.
+
+
+## Item (k) and amended joint-fit result, 2026-10-28
+
+Item (k) passes: both Kim-only pre-fit initializations converge to the same
+pair within the owner's tolerances. Primary k = −0.181786994679 at 313.15 K,
+slope −75.539233386 K; pressure AARD = 0.49983125% for all 61 rows.
+All 1,177 binary searches complete without a liquid–liquid witness, all four
+Gibbs-mixing convex hulls are miscible, and all ten amended Carson start
+searches pass. The 170 vapor witnesses are separately classified; all 38
+Kim vapor witnesses have matching positive bubble-pressure residuals.
+See `results/kim-prefit/README.md` for source locators, initialization authority,
+search resolution, numerical evidence and claim limits. All five distinct
+amended documents and duplicate declarations have SHA-256 hashes under
+`inputs/amended-starts/`.
+
+Native question-tool decisions during execution are retained in
+`inputs/item-k-owner-decisions.json`. The two Kim initializations were chosen
+by the orchestrator from diagnosis probes, not from a source. The Jakobsen
+scale is the orchestrator's choice of 10% of each observed ratio within the
+source's stated range, not a source value or MEA-record precedent. Its A1
+endpoint objective contribution is 68.9892933. The owner also amended the
+application reaction upper domains to 395.0 K and moved four low/high-temperature
+Merkley markers out of the fit; the initial domain refusal and original
+objective declaration are retained beside the amended declaration.
+
+**Current disposition: return to Design.** A1 converges after 19 iterations
+with cost 2478.055957, but k(MDEAH+–CO2) = 0.5, k(MDEAH+–HCO3-) = 1.0 and
+Born diameter = 2.0 Å are active arbitrary bounds. All 280 predictions replay
+within 2.2113e−12 relative difference. Carson row 10 at this endpoint also
+admits a descending split, ΔG/RT = −0.04135485, error estimate 2.60e−8;
+row 1 has no witness and zero unresolved trials. No bounds or phases were
+changed to keep this endpoint. Initial and endpoint scaled Jacobians have
+rank nine; their singular values and weak vectors are retained. Profiles
+and subsequent starts stop at the mandatory bound condition.
+
+A has no transfer verdict; B is unassessed because the stop occurred at A1.
+A2/B2 are duplicates. No representative was selected and no outside-fit data,
+Neumann sensitivity or follow-up refits were evaluated. Corrected Kamps remains
+excluded from the two-AARD-point follow-up criterion. No MDEA outcome falsifies
+the MEA bicarbonate value. Xiao and Zhang remain unscored. Evidence is in
+`results/joint-fit/A1/`, `results/kim-prefit/`, `results/stage2-disposition.json`
+and the notebook. This numerical calibration result is not physical validation,
+parameter adoption, absorber qualification or manuscript promotion.
+Independent delivered review remains open.
