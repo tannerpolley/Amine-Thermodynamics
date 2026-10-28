@@ -1,364 +1,155 @@
 ---
-title: "MDEA through the MEA formulation: linear-law joint fit"
+title: "MDEA transfer: diagnostic comparisons and phase-constrained bounds"
 format: html
 ---
 
-## Stage 2: endpoint phase stop, 2026-10-28
+## Question, model and authority
 
-Both variants return to Design at **bound-active endpoints** because fitted-state phase searches admit descending liquid splits. Active bounds are disclosed and do not cause this stop. All four qualified starts have converged fits; A4 is excluded, and A2/B2 are duplicates. No outside-fit data were evaluated and no transfer verdict is available.
+Can the frozen MEA shared-species record describe aqueous MDEA properties under the declared formulation? The owner authorized diagnostic assessment of the phase-failed A1/B1 candidates, followed by ion-bound narrowing selected from phase evidence alone (issue #222, owner decision on the phase stop, 2026-10-28). A1 and B1 were chosen by fitted objective before outside-fit access. Part 1 cannot supply a qualified verdict. Each variant’s verdict comes only from Part 2.
 
-### Endpoint selection before outside-fit access
+AARD means average absolute relative deviation. Variant A treats MDEAH⁺ as a single sphere (m = 1); Variant B treats it as a charged molecule (m = 3.675). Both use the frozen eight-species liquid chemistry.
 
-The objective-preferred candidates are **A1** and **B1**, selected solely from the fitted objective. A1 and A3 agree in objective to 2.92e−9; B1's cost is 21.295568 lower than B3's, a 5.72% gap relative to B1. All four scaled Jacobians have rank nine. The owner’s distinct-endpoint rule (objectives within 1%, then Ermatchkov disagreement above two AARD points) is not triggered by these cost comparisons. Full rank alone does not establish practical identifiability.
+The fixed formulation, input roles, scales and weights are retained in [the issue snapshot](inputs/stage2-diagnostic-narrowing-issue-222.json) and [stage-1 evidence](README.md). The primary MDEA ideal-gas heat capacity is Neumann; Wangler is a sensitivity without refitting. The neutral MDEA–water law is linear in temperature; the cation–water slope retains its declared reciprocal form. Carson uses integral heat from zero loading. Merkley uses integral heat to its digitized loading point, with half-loading and 156 kPa checks. The main fits retain the four Merkley 20/40 wt% states at 333.15 and 388.71 K.
 
-**No qualified representative endpoint is frozen for outside-fit assessment:** each candidate fails the retained phase requirement before that stage. The following table records the objective ranking before any outside-fit access, rather than selecting on pressure performance.
+All calculations use Engine 3e83e19c, wheel SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`, through the isolated main-venv interpreter. The application reaction domain is 293.15–395 K with unchanged coefficients; refused extrapolations are not assigned predictions. No Engine source is imported.
 
-| Start | Cost, ½Σwr² | Iterations | Rank | Smallest scaled singular value | Active coordinate indices, 1-based | Fitted states with liquid witnesses |
-|---|---:|---:|---:|---:|---|---:|
-| A1 | 400.448016085 | 13 | 9 | 0.0026144107 | 3, 4, 6, 9 | 5 |
-| A3 | 400.448016088 | 13 | 9 | 0.0026144109 | 3, 4, 6, 9 | 5 |
-| B1 | 372.165913375 | 12 | 9 | 0.0087070369 | 6, 9 | 2 |
-| B3 | 393.461481043 | 11 | 9 | 0.0052155544 | 4, 9 | 3 |
+## Part 1 — diagnostic transfer test
 
-Coordinate order: MDEA–water k₀, linear c₁ (K⁻¹), k(MDEAH⁺–CO₂), k(MDEAH⁺–water), its reciprocal-temperature slope (K), k(MDEAH⁺–HCO₃⁻), MDEAH⁺ segment diameter (Å), dispersion energy divided by k (K), and Born diameter (Å). A1/A3 have k(MDEAH⁺–CO₂)=0.5, k(MDEAH⁺–water)=−0.5, k(MDEAH⁺–HCO₃⁻)=−1 and Born diameter=7 Å. B1 has unlike-ion k=−1 and Born diameter=7 Å; B3 has cation–water k=−0.5 and Born diameter=7 Å. Exact coordinate values and bounds remain in each native declaration and endpoint document.
+**Every value in this part is diagnostic: phase assumption violated at fitted Merkley saturation states.** These are conditional calculations at endpoints that violate the single-liquid phase assumption, not physical validation or pass/fail verdicts.
 
-### Phase result and bounded diagnosis
+| Candidate | Objective | Ermatchkov 88-row AARD (%) | Removed Merkley indices | Liquid-witness states after removal | Unresolved states after removal |
+|---|---:|---:|---|---:|---:|
+| A1 | 400.448016085 | 26.057105 | — | — | — |
+| A1, unstable Merkley removed | 395.374637991 | 27.293902 | [126, 127, 128] | 32 | 102 |
+| B1 | 372.165913375 | 18.767755 | — | — | — |
+| B1, unstable Merkley removed | 371.795416342 | 19.779119 | [127, 128] | 32 | 108 |
 
-Each endpoint has 324 fitted-state searches, including the two ends of integral-heat observations. Carson rows 1 and 10 pass for all four endpoints: no descending split and zero unresolved trials. This does not establish global stability. Other fitted states do not pass.
+Both removal refits converge but retain resolved liquid witnesses and unresolved trials. Removing these rows does not qualify transfer. Their objectives differ in row count and are not compared as if they used the same objective. The phase searches include the remaining fitted states and declared in-domain comparison states; duplicate states are retained for distinct observations. The omission applies only to the objective: phase searches cover the complete original fitted-state grid, including the omitted Merkley states. Each sensitivity vector has 754 fitted/comparison state records. Earlier objective-row-only phase queries remain archived and do not supply these complete-grid counts.
 
-| Start | Fitted observation | T (K) | MDEA wt% | Finite split ΔG/RT | Estimated numerical error |
-|---|---|---:|---:|---:|---:|
-| A1 | Merkley | 333.15 | 40 | -0.0022001706 | 2.63e-09 |
-| A1 | Merkley | 388.71 | 20 | -0.013355704 | 2.71e-08 |
-| A1 | Merkley | 388.71 | 40 | -0.0044807172 | 2.54e-09 |
-| A3 | Merkley | 333.15 | 40 | -0.0022001376 | 2.63e-09 |
-| A3 | Merkley | 388.71 | 20 | -0.013355661 | 2.57e-08 |
-| A3 | Merkley | 388.71 | 40 | -0.0044806688 | 2.54e-09 |
-| B1 | Merkley | 388.71 | 20 | -0.012280675 | 3.48e-08 |
-| B1 | Merkley | 388.71 | 40 | -0.0099993678 | 3.57e-09 |
-| B3 | Merkley | 333.15 | 40 | -0.00027087268 | 3.63e-09 |
-| B3 | Merkley | 388.71 | 20 | -0.013340875 | 2.63e-08 |
-| B3 | Merkley | 388.71 | 40 | -0.0094171179 | 3.48e-09 |
-
-The Merkley witnesses seed two-liquid solutions at every listed state. Their native solves converge below 10⁻¹⁰; both phase amounts remain positive. These bounded probes retain the frozen parameters and original temperature, pressure, feed and reaction declarations. No change to the physical model, phase rule or search budget was attempted: such a correction would change the frozen experiment and requires Design. Finite descending witnesses violate the stipulated single-liquid assumption even though they do not establish the globally stable phase assemblage or experimental liquid separation.
-
-A1/A3 also have a much smaller liquid witness at Jakobsen row 8, repeated for its two fitted ratios (ΔG/RT about −2.303e−7, estimated error 7.75e−9). Its seeded second liquid is refused by the liquid-root admission check. That distinct limitation is retained, not counted as a converged two-liquid state. It is unnecessary to the stop established by the stronger Merkley witnesses.
-
-Some searches are unresolved, especially zero-loading full-support declarations; some high-temperature ion-free density states admit vapor descent. These are separately retained in the full phase records. The aggregate phase-gate-failure count includes unresolved cases and must not be interpreted as a count of physical phase separations. The stop rests on the listed resolved liquid witnesses at fitted finite-loading states.
-
-### Numerical evidence and identifiability limits
-
-Each endpoint independently replays all 280 fitted predictions within the 10⁻⁸ relative tolerance. Each result directory retains the start and endpoint singular values, weak combinations and active bounds. The numerical audit evaluates charge and C/H/N/O balances from native phase amounts and compositions, and compares all nine exact derivative columns with finite differences for one pressure and one Cp row at the 10⁻⁵ relative tolerance. Native equilibrium defining-row residuals are retained for every fitted-state solve.
-
-| Start | Maximum replay relative error | Maximum derivative relative error | Maximum relative element error | Maximum absolute charge error (mol) |
+| Outside-fit comparison | A1 (%) | B1 (%) | A1 removal (%) | B1 removal (%) |
 |---|---:|---:|---:|---:|
-| A1 | 2.324e-12 | 3.902e-06 | 5.678e-13 | 3.55e-13 |
-| A3 | 1.958e-12 | 1.832e-06 | 5.673e-13 | 3.549e-13 |
-| B1 | 1.374e-12 | 6.578e-07 | 5.795e-13 | 3.217e-13 |
-| B3 | 1.403e-12 | 1.244e-06 | 5.167e-13 | 3.581e-13 |
+| Ermatchkov88 | 26.057105 | 18.767755 | 27.293902 | 19.779119 |
+| Ermatchkov_above49 | 54.527308 | 29.738297 | 56.461170 | 32.464005 |
+| Ermatchkov_below7 | 36.886256 | 19.666241 | 38.715872 | 24.258374 |
+| Ermatchkov88_below7 | 33.268675 | 18.212276 | 35.161421 | 22.346415 |
+| corrected-Kamps | 18.307782 | 23.853466 | 19.147835 | 22.410454 |
+| Bottinger-amine-sum-5bar | 7.194294 | 7.214306 | 7.198144 | 7.215862 |
+| Bottinger-amine-sum-25bar | 7.194306 | 7.214239 | 7.198146 | 7.215796 |
+| Cp-60wt | 13.360851 | 10.906006 | 13.317104 | 11.107686 |
+| density-60wt | 1.309816 | 1.777978 | 1.271323 | 1.769203 |
+| Zheng | 18.933869 | 22.577244 | 20.386123 | 22.610042 |
+| Sedighi | 80.129949 | 75.444763 | 79.517480 | 76.488720 |
 
-All 36 derivative-column comparisons pass. Available-state equilibrium defining-row residuals are at most 2.48e−12, below 10⁻¹⁰. Refused phase-search states remain explicit numerical non-results.
+Ermatchkov has 101 rows: 88 at ≤49 wt%, 13 above 49 wt%, 33 below 7 kPa (29 in the primary 88). All 88 remain in the primary denominator. The #126 contextual AARD references are 42.72% and 60.97%; the qualified pass bar remains ≤24.2%, but is not applied to this part. Corrected Kamps has 28 rows; Böttinger has 58; Weiland 60 wt% has six Cp and 11 density rows; Zheng has six heat rows; Sedighi has 15 scored rows. These percentages use the individual source observable and do not create additional pass criteria.
 
-The owner specified local scans of the two weakest scaled-Jacobian directions at ±0.25, ±0.5 and ±1 optimizer unit within frozen bounds, without refitting. These are **local sensitivity scans, not likelihood profiles**. At A1/A3 both signs of each direction are blocked by different active bounds: no nonzero scan is feasible and no flatness inference follows. B1's second-weakest positive direction and B3's second-weakest negative direction have feasible steps; their objective and maximum relative prediction changes by fitted group are retained. Other requested directions are blocked. No outside-fit predictions enter these scans.
+![Diagnostic Ermatchkov deviations at the fixed and Merkley-removal endpoints. Each point is one retained 88-row aggregate, with no experimental uncertainty assigned to the aggregate.](results/stage2-diagnostic/ermatchkov-aard.png)
 
-### Primary test and remaining comparisons
+### Comparison coverage and caloric sensitivity
 
-| Variant | Ermatchkov 88-row AARD | Verdict |
-|---|---|---|
-| A | Not evaluated | Bound-active endpoint; phase stop before transfer verdict |
-| B | Not evaluated | Bound-active endpoint; phase stop before transfer verdict |
+Böttinger keeps all 58 rows and evaluates each at 500000 and 2500000 Pa, following the owner ruling. Its per-row pressures are missing: the source reports only a 5–25 bar range. Both speciation comparisons and their per-row pressure spread are retained. The earlier atmospheric-pressure comparisons are withdrawn. Vapor witnesses are reported separately from liquid–liquid witnesses. One reported bicarbonate mole fraction is zero, so a 58-row relative AARD is undefined; row-level absolute predictions remain in each `comparisons.json`. The reported carbonate signal is compared with the model sum of bicarbonate and carbonate (Böttinger 2008, Results and Discussion, p.7921). DMDEA and byproduct columns and their ratios to the reported amine sum remain in every row. Rows whose combined contribution exceeds 3% of that amine sum are flagged; none is removed. These species are not separately modeled. These comparisons do not repair the source amine balance. Merkley at 288.71/422.04 K and Kuranov 413 K remain unevaluated under the frozen reaction domain. Only two of eight Merkley outside-fit rows and six of twelve half-loading rows are in-domain and evaluated; no complete-set AARD is reported. The six ambiguous 156 kPa alternatives include three domain refusals and three resolved 333.15 K endpoints. Zheng integral heats are evaluated at reported loading. All six model-saturation loadings are resolved for every diagnostic vector. The approved 0.05–1.50 loading scan retains every native failure, inverts the first adjacent admitted sign change, and finds no multiple admitted sign changes on this prescribed scan. Initial failed fixed-bracket attempts remain retained as numerical diagnostics; the scan replaces their missing endpoint results. Derks remains unresolved; Xiao and Zhang remain unscored because their attachments contain only the first page.
 
-The pass bar remains ≤24.2% for each variant. The #126 reference deviations remain 42.72% and 60.97%. The 13 rows above 49 wt% and 33 rows below 7 kPa (29 in the primary 88) remain declared and unscored here.
+Wangler sensitivity predictions for the fitted Carson/Merkley/Cp observations and in-domain outside-fit heat/Cp comparisons are retained separately in every diagnostic endpoint directory as `wangler-fitted-heat-cp.json` and `wangler-comparisons.json`. They use the same parameters and observations, without refitting. Neumann remains primary.
 
-Corrected Kamps, Böttinger, Merkley 60 wt% and far-temperature markers, Weiland 60 wt%, Kuranov 413 K, Zheng and Sedighi were not evaluated after the phase stop. Derks remains unscored because its numerical room temperature is unresolved in `results/derks-basis.json`. Xiao and Zhang remain unscored. Wangler ideal-gas Cp sensitivity on heat and Cp groups was not run after the stop. Thus no new extrapolation result or outside-fit physical assessment is claimed.
+### Endpoint coordinates and Cp sensitivity
 
-For each variant, the bicarbonate–water-free refit on [−0.5,1] and MDEA–CO₂-free control refit were not run after the phase stop. No two-AARD-point margin or bicarbonate/cation–water correlation is available; |r|>0.95 remains the non-separability threshold. Corrected Kamps remains excluded from that criterion. **No MDEA outcome falsifies the MEA bicarbonate value.**
-
-### Claim limits and provenance
-
-These are calibration and numerical-verification results. They do not support a transfer claim, physical validation or absorber use. The intended outside-fit assessment is within 293–395 K and ≤49 wt% for pressure / ≤50 wt% for other properties; 60 wt% and far-temperature markers are extrapolation. The frozen permittivity above 328.15 K is a model extrapolation, MDEA–water k(T) is linear, and Neumann ideal-gas Cp is the primary choice. Experimental uncertainty and model discrepancy are not represented by numerical residual tolerances.
-
-The latest issue comment “owner decision on bounds” and the native answers governing the 600-line code ceiling and bounded scans were applied. Frozen roles, scales, weights, bounds, MEA record and manuscript were preserved. The immutable Engine 3e83e19c wheel is checked byte for byte through the isolated main-venv interpreter; no Engine source import is used. No subagents ran. Independent review and investigator promotion remain open.
-
-[Summary and endpoint inventory](results/stage2/summary.json), [liquid-witness values](results/stage2/liquid-witnesses.csv), and [runner and reproduction](results/stage2/README.md) own this stage's evidence. Tables are used because the stopping result is a set of discrete feasibility checks, with no continuous physical relation asserted.
-
-## Historical A4 amendment before the exclusion decision
-
-### A4 row 1 before the owner amendment
-
-**Stage 2 is blocked by an unresolved A4 phase search.** A4 now takes
-k(MDEAH+–water) = −0.2298 with slope zero, keeping every other value,
-including Bülow's cation sizes and dispersion energy. Its SHA-256 is
-`37dc90fde1e8807dafb1e3b7e7d378ba711ec38da7f6d5291d34a46e549301c0`.
-The amendment is the latest 2026-10-28 ruling on issue #222.
-
-Both Carson states use 298.15 K, the declared 101325 Pa convention and one
-mole of analytical MDEA plus source water and CO2. Neumann ideal-gas Cp and
-the retained item-(l) linear MDEA–water law are unchanged. The Engine wheel
-is 3e83e19c, SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`;
-installed package files were verified byte for byte against the wheel.
-
-| Carson row | Loading, mol CO2/mol MDEA | Maximum equilibrium residual | Descending splits | Unresolved trials | Gate |
-|---|---:|---:|---:|---:|---|
-| 1 | 0.08243367843 | 2.273736754e−13 | 0 | 1 | Unresolved |
-| 10 | 0.2479764498 | 5.115907697e−13 | 0 | 0 | Pass |
-
-The row-10 split previously found at k(MDEAH+–water) = 0 is absent from this
-recorded search. Row 1 prevents qualification: completion of the search and
-absence of a witness do not resolve its remaining trial. Minimum tangent-plane
-values are −2.84217e−14 and −8.52651e−14 in RT units for rows 1 and 10.
-They do not establish a descending split. This is a numerical qualification
-limit, not observed demixing or evidence that the physical model is unstable.
-The reused helper retains trial compositions and minimum values, but omits
-the individual trial optimizer messages; the precise cause of the unresolved
-trial has not been diagnosed. No search budget, tolerance or retry was changed.
-Per the requested stop, no further scientific calculations ran.
-
-| Variant | Distinct starts | Joint-fit endpoints | Representative | Transfer verdict |
-|---|---|---|---|---|
-| A | A1, A3, A4 | Not run | None | Not assessed: A4 start gate unresolved |
-| B | B1, B3 | Not run | None | Not assessed: item (l) incomplete |
-
-A2 and B2 remain recorded duplicates of A1 and B1. No new objective,
-start/endpoint identifiability analysis, weak-direction profile or arbitrary-bound
-assessment exists. Earlier reciprocal-law endpoints below are historical and
-cannot represent this amended model. Neither variant has an Ermatchkov AARD
-or a pass/fail result against 24.2% on the 88 primary rows. All outside-fit
-comparisons and the Wangler heat/Cp sensitivity remain unrun.
-
-The bicarbonate-free and k(MDEA–CO2) control refits, their two-percentage-point
-comparison and the bicarbonate/cation–water correlation were not run.
-Corrected Kamps data remain excluded from that criterion. **No MDEA outcome
-falsifies the MEA bicarbonate value.** Xiao and Zhang remain unscored.
-
-This is numerical evidence at two starting-vector states, not physical
-validation, parameter transfer, adoption or absorber qualification. Independent
-delivered review remains open; nothing is promoted for manuscript use.
-A table suffices for these two scalar checks; a curve would add no information.
-
-Evidence: [A4 summary](results/item-l/A4-amendment-summary.json),
-[search results](results/item-l/A4-amended-carson-search.json),
-[amended start](results/item-l/amended-starts/A4.json),
-[runtime and hashes](results/item-l/A4-amendment-runtime.json), and
-[endpoint inventory](results/item-l/A4-amendment-endpoints.csv).
-The original A4 is retained in Git at base commit `3a2eaab`, path
-`analyses/mdea_mea_workflow/results/item-l/amended-starts/A4.json`;
-the original ten-search file and phase summary remain historical evidence.
-Only the A4 hash changes in the amended-start hash inventory.
-
-Execution used `nice -n 10` and the isolated main-venv interpreter, with two
-processes for the two independent rows on the 32-core machine, one BLAS thread
-per process and 22.86 GB available memory at launch. No worktree environment,
-Engine source import, main-checkout write or Zotero write was used.
-An initial process submission failed before either row ran because its dynamic
-module was not registered for pickling; registering the module corrected that
-execution error without changing a numerical setting.
-
-The presentation-only HTML refresh failed because `snakemake` is unavailable;
-[the error is retained](results/item-l/A4-notebook-refresh.txt). The notebook
-source is current; its HTML view remains stale. No preview service was changed.
-
-## Historical item-(l) result before the A4 amendment
-
-**Return to Design.** The linear-law binary gate passes, but A4 fails the
-Carson row-10 two-liquid search. Item (l) is incomplete; stage 2 did not run.
-The prior reciprocal-law joint-fit results below remain historical evidence.
-
-The retained Kim-only fit gives k0 = −0.179727220278 and
-c1 = 0.000616832401403 K⁻¹, with reference temperature 313.15 K and pressure
-AARD 0.467971% on 61 Kim states. Both initializations agree, with rank-two
-scaled Jacobians and no active bounds. Neumann ideal-gas Cp is primary.
-At 298.15 K, Weiland Cp errors are +0.9541 / +2.8434 / +3.5230% at
-30 / 40 / 50 wt%. Criterion (3) passes under the owner's ≤50 wt% reading;
-+5.2106% at 60 wt% is extrapolation. Concepción's retained 15-row Cp AARD
-is 2.8079%; Sobrino's 24-row density AARD is 0.14894%.
-
-Criterion (2): all 1,177 searches (61 Kim and 1,116 composition-grid states)
-complete with zero liquid–liquid witnesses or unresolved trials. All four
-hulls are miscible at 293.15, 313.15, 353.15 and 393.15 K. The 171 vapor
-witnesses are classified separately; all 38 Kim vapor witnesses have positive
-bubble-pressure residuals, with no sign mismatch.
-
-Criterion (4): all ten Carson searches complete with zero unresolved trials;
-nine pass. A4 row 10 at 298.15 K, 101325 Pa admits a two-liquid split with
-ΔG/RT = −0.130277337990 and estimated numerical error 2.64057e−8.
-Both liquid phases and their compositions are retained. The five starts and
-the common Neumann caloric file are hashed; A2 and B2 remain duplicates.
-They are not qualified as a set for stage 2.
-
-These are calibration and numerical phase-search results, not physical
-validation or an amine-parameter transfer verdict. The finite search grid
-limits the binary claim; ideal-gas Cp uncertainty remains unquantified.
-Independent delivered review and investigator promotion remain open.
-The [item-(l) README](results/item-l/README.md) links the full search results,
-start hashes, coordinate identities, property comparisons and reproduction
-command. No MEA parameter or manuscript change accompanies this result.
-
-## Earlier reciprocal-law joint-fit evidence
-
-All three distinct Variant A starts converge to the same bound-constrained result; both Variant B starts converge to another bound-constrained result. The A1 omission diagnostics support a conflict between density and Cp within the frozen model. Widening the three active bounds does not resolve the bounds or Carson phase stops. Nothing is adopted, and outside-fit assessment remains blocked. These results have not been independently reviewed or promoted for manuscript use.
-
-## Kim-only pre-fit and amended starts
-
-The ion-free MDEA–water calculation fits all 61 Kim 2008 Table 8 bubble
-pressures, including the pure-water rows, using log-ratio residuals with
-weight one. Vapor mole fractions do not enter the objective. The law is
-$k(T)=k(313.15\,\mathrm{K})+b(1/T-1/313.15\,\mathrm{K})$.
-
-| Initialization | k(313.15 K) endpoint | b endpoint (K) | Termination |
-|---|---:|---:|---|
-| −0.184, 0 K, primary | −0.181786994679 | −75.539233386 | Function tolerance |
-| −0.15, 0 K | −0.181787002961 | −75.539241989 | Gradient tolerance |
-
-Both endpoints converge within the owner's agreement limits of 1e−4 in k
-and 1 K in slope. The primary scaled-Jacobian singular values are
-0.2124813 and 0.02886988, with coordinate scales 0.01 and 10 K and no active
-bounds. Cost is 0.0012265413 and pressure AARD is 0.4998313%. The initial
-zero-pair attempt was refused for local liquid instability before iteration.
-The two subsequent initializations were orchestrator choices from diagnosis
-probes, not source values.
-
-![Kim Table 8 observations and the Kim-only fit at the reported temperatures. Error bars show the source's 0.3 kPa pressure uncertainty; this uncertainty is not an objective weight. Predictions are discrete cross markers.](results/kim-prefit/bubble-pressure.png)
-
-All four Gibbs-mixing convex hulls are miscible at 293.15, 313.15, 353.15 and
-393.15 K. The 1,177 tangent-plane searches cover every Kim state and 279
-compositions per grid temperature, including pure endpoints, at the diagnosis
-pressure of 101325 Pa. All searches complete with zero unresolved trials and
-zero liquid–liquid descent witnesses. This finite grid/search does not prove
-global stability at every continuous composition.
-
-The 170 vapor witnesses are retained separately. The owner confirmed that
-the gate tests liquid miscibility. All 38 Kim states with vapor witnesses
-have the matching positive bubble-pressure residual, with zero sign
-mismatches. Near pure water at 393.15 K and atmospheric pressure, vapor
-formation is expected; it is not liquid demixing.
-
-All ten amended Carson searches pass: A1, A3, A4, B1 and B3 at rows 1 and
-10, 298.15 K and the declared 101325 Pa convention. They complete with
-zero unresolved trials and no descending split. Every start takes the primary
-Kim pair. A1/B1 take ion–water k = −0.2298 with zero slope; A2/B2 are
-recorded as duplicates, not separately run. A4 retains Bülow's ion sizes
-and energy. These are starting-vector checks, not endpoint qualification.
-
-[Fit, phase searches, sign checks and claim limits](results/kim-prefit/README.md)
-and [amended documents and hashes](inputs/amended-starts/hashes.json) retain
-the evidence. Kim source locators are Table 8, p.2524 and experimental
-uncertainties, pp.2526–2527. Source provenance stays in the retained `data/reference/MDEA/stage1-sources.json`.
-
-## Remaining starts
-
-The owner authorized the remaining starts and A1 attribution on 2026-10-28 in issue #222. The objective is unchanged: 280 residuals, the 395.0 K application reaction-domain amendment with unchanged coefficients, and only the four 20/40 wt% Merkley markers at 333.15 and 388.71 K. A2 and B2 are duplicates. Engine 3e83e19c is used through the pinned wheel and isolated main-venv interpreter. No Engine source is imported.
-
-| Case | Cost | Active coordinate indices (1-based) | Carson row 1 ΔG/RT | Carson row 10 ΔG/RT |
-|---|---:|---|---:|---:|
-| A1 | 2478.055957 | 3, 6, 9 | no witness | -0.0413548 |
-| A3 | 2478.055957 | 3, 6, 9 | no witness | -0.0413555 |
-| A4 | 2478.055957 | 3, 6, 9 | no witness | -0.0413507 |
-| B1 | 2685.766932 | 3, 6, 9 | no witness | unresolved |
-| B3 | 2685.766932 | 3, 6, 9 | no witness | no witness |
-
-B1 row 10 has an unresolved trial and no admitted split; B3 has no witness and zero unresolved trials. A finite no-witness search does not prove global stability. Negative split values are model numerical evidence, not observed demixing.
-
-## Joint-fit endpoint evidence
-
-| Case | unloaded-density | Cp | Kuranov | Merkley | Carson | Jakobsen | loaded-density | Kim |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| A1 | 1273.529611 | 751.832429 | 231.610672 | 78.584033 | 70.492352 | 68.989293 | 2.999991 | 0.017576 |
-| A3 | 1273.530902 | 751.832339 | 231.610806 | 78.583580 | 70.491760 | 68.989045 | 2.999950 | 0.017576 |
-| A4 | 1273.533900 | 751.831717 | 231.609540 | 78.583467 | 70.491396 | 68.988319 | 3.000042 | 0.017576 |
-| B1 | 1764.888567 | 777.119985 | 29.830305 | 7.850623 | 67.516462 | 22.293454 | 16.252447 | 0.015089 |
-| B3 | 1764.888672 | 777.119991 | 29.830203 | 7.850590 | 67.516494 | 22.293448 | 16.252446 | 0.015089 |
-
-| Coordinate | A1 | A3 | A4 | B1 | B3 |
-|---|---:|---:|---:|---:|---:|
-| k(MDEA-water) | -0.179560674 | -0.179560658 | -0.179560613 | -0.173759808 | -0.173759807 |
-| slope(MDEA-water) K | -94.3749061 | -94.3748533 | -94.3747302 | -76.2778062 | -76.2778027 |
-| k(MDEAH+-CO2) | 0.5 | 0.5 | 0.5 | 0.5 | 0.5 |
-| k(MDEAH+-water) | 0.360212621 | 0.360211435 | 0.360210423 | -0.205098164 | -0.205100415 |
-| slope(MDEAH+-water) K | -143.775924 | -143.776052 | -143.775509 | -68.662158 | -68.6623898 |
-| k(MDEAH+-HCO3-) | 1 | 1 | 1 | 1 | 1 |
-| sigma angstrom | 6.49720424 | 6.49720274 | 6.49720422 | 3.6619924 | 3.66199242 |
-| u/k K | 836.778941 | 836.773584 | 836.772744 | 251.18119 | 251.179623 |
-| Born angstrom | 2 | 2 | 2 | 2 | 2 |
-
-Coordinate indices in the endpoint tables refer to the coordinate order above. Exact active bounds, all singular values, right vectors, termination messages, and full phase-search records are retained in the linked READMEs.
-
-| Case | Scaled-Jacobian singular values |
-|---|---|
-| A1 | 20.97209, 12.86666, 6.846579, 4.020813, 2.600659, 0.4460133, 0.2299382, 0.1745183, 0.01554123 |
-| A3 | 20.97209, 12.86665, 6.84656, 4.020814, 2.600654, 0.4460117, 0.2299391, 0.1745185, 0.01554114 |
-| A4 | 20.97209, 12.86664, 6.846553, 4.020806, 2.600657, 0.4460112, 0.2299386, 0.1745183, 0.01554096 |
-| B1 | 21.08682, 10.65784, 8.52581, 4.959233, 3.418959, 0.3656064, 0.253843, 0.0707478, 0.02342157 |
-| B3 | 21.08683, 10.65784, 8.525829, 4.959237, 3.418948, 0.3656049, 0.2538429, 0.07074847, 0.02342103 |
-
-## A1 diagnostic endpoint evidence
-
-| Case | Cost | Active coordinate indices (1-based) | Carson row 1 ΔG/RT | Carson row 10 ΔG/RT |
-|---|---:|---|---:|---:|
-| without-unloaded-density | 61.484953 | 3, 4, 6, 9 | no witness | no witness |
-| without-Cp | 337.636025 | 3, 4, 6, 9 | no witness | no witness |
-| without-both | 95.828886 | 4 | no witness | no witness |
-| widened-bounds | 2367.978298 | 6, 9 | -3.45906e-05 | -0.10857 |
-
-The both-removed endpoint is usable for diagnostics but not converged. Omitted group costs below are evaluated on fitted-source rows but excluded from the diagnostic objective.
-
-| Case | unloaded-density | Cp | Kuranov | Merkley | Carson | Jakobsen | loaded-density | Kim |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| without-unloaded-density | 10363.849974 | 8.249669 | 7.495639 | 1.742176 | 21.109666 | 21.371395 | 0.964173 | 0.552236 |
-| without-Cp | 287.568816 | 8207.339608 | 7.571300 | 0.954226 | 19.642378 | 21.326143 | 0.509238 | 0.063923 |
-| without-both | 1158.308217 | 15994.868085 | 23.360466 | 1.301789 | 26.905715 | 21.640104 | 22.415024 | 0.205788 |
-| widened-bounds | 1150.545426 | 764.880822 | 235.894802 | 65.756069 | 53.137047 | 95.699084 | 2.046197 | 0.018851 |
-
-| Coordinate | without-unloaded-density | without-Cp | without-both | widened-bounds |
+| Coordinate | A1 | B1 | A1 removal | B1 removal |
 |---|---:|---:|---:|---:|
-| k(MDEA-water) | -0.213475962 | -0.20627676 | -0.217343222 | -0.181232968 |
-| slope(MDEA-water) K | -17.0813068 | -175.649762 | -240.855266 | -99.5853192 |
-| k(MDEAH+-CO2) | 0.5 | 0.5 | 0.488869576 | 0.850830077 |
-| k(MDEAH+-water) | -0.5 | -0.5 | -0.5 | 0.301906667 |
-| slope(MDEAH+-water) K | 33.4657747 | -151.897403 | -285.284377 | -199.043111 |
-| k(MDEAH+-HCO3-) | -1 | -1 | -0.971174434 | 2 |
-| sigma angstrom | 6.35933345 | 6.38518598 | 6.2263748 | 6.43632122 |
-| u/k K | 181.902121 | 180.234447 | 178.071349 | 501.27973 |
-| Born angstrom | 7 | 7 | 3.43596711 | 1 |
+| MDEA–water k₀ | -0.2061917919 | -0.2063243742 | -0.2062581803 | -0.2063190677 |
+| MDEA–water c₁ (K⁻¹) | 0.001472604436 | 0.001474738954 | 0.001473798568 | 0.00147456385 |
+| MDEAH⁺–CO₂ k | 0.5 | 0.2525104755 | 0.5 | 0.2602035012 |
+| MDEAH⁺–water k₀ | -0.5 | -0.01769004926 | -0.5 | -0.01888193205 |
+| MDEAH⁺–water slope (K) | -89.921158 | -29.72278854 | -88.50429291 | -30.33917115 |
+| MDEAH⁺–HCO₃⁻ k | -1 | 1 | -1 | 1 |
+| MDEAH⁺ σ (Å) | 6.357766042 | 3.650559071 | 6.36100591 | 3.648214426 |
+| MDEAH⁺ u/k (K) | 180.1319886 | 615.8344212 | 179.2005905 | 607.371655 |
+| MDEAH⁺ Born diameter (Å) | 7 | 7 | 7 | 7 |
 
-Coordinate indices in the endpoint tables refer to the coordinate order above. Exact active bounds, all singular values, right vectors, termination messages, and full phase-search records are retained in the linked READMEs.
+| Candidate | Neumann fitted Cp AARD (%) | Wangler fitted Cp AARD (%) |
+|---|---:|---:|
+| A1 | 3.336267 | 4.324865 |
+| B1 | 2.689324 | 3.458774 |
+| A1-removed-Merkley | 3.321275 | 4.304057 |
+| B1-removed-Merkley | 2.733658 | 3.525508 |
 
-| Case | Scaled-Jacobian singular values |
-|---|---|
-| without-unloaded-density | 11.45997, 9.51726, 3.500391, 2.055253, 0.521334, 0.2135959, 0.1349047, 0.01552054, 0.002403977 |
-| without-Cp | 20.84254, 10.92381, 6.02509, 3.776281, 1.819246, 0.2283141, 0.2026911, 0.01137314, 0.001515965 |
-| without-both | 10.53037, 5.653457, 2.113352, 0.5270684, 0.2025864, 0.122074, 0.08873328, 0.03838754, 0.00155278 |
-| widened-bounds | 21.07709, 12.36154, 6.254274, 4.514013, 2.567095, 0.9153348, 0.4830785, 0.2923925, 0.01691204 |
+The isothermal fitted Carson/Merkley heat predictions are unchanged at reported precision under this ideal-gas Cp substitution. Comparisons use the identical retained rows for each vector. The omitted Merkley markers remain separately predicted in the row-level diagnostic files.
 
-## A1 residual patterns
+### Resolved model saturation endpoints
 
-[Every density and Cp residual](results/diagnosis-a1-bounds/a1-density-cp-residuals.csv) retains temperature, unloaded-solvent mass fraction, loading, observed and predicted values, physical units, scaled and weighted residuals, and cost. Density spans 293.15–393.15 K at 10–40 wt%; Cp is at 298.15 K at 30–50 wt%. Density differences range from −4.09935 to +3.01330 kg/m³. Cp differences range from −0.28498 to +0.94890 J/g/K. The residual scales are the frozen objective conventions, not newly assigned measurement uncertainties.
+| Zheng source row | A1 α_sat | B1 α_sat | A1 removal α_sat | B1 removal α_sat |
+|---|---:|---:|---:|---:|
+| 1 | 0.93527325 | 0.95287621 | 0.94175174 | 0.95298597 |
+| 2 | 1.01562046 | 1.01995919 | 1.02042964 | 1.01911426 |
+| 3 | 0.84544606 | 0.87725820 | 0.85865749 | 0.87908946 |
+| 4 | 0.94798659 | 0.96170845 | 0.95752961 | 0.96148033 |
+| 5 | 1.05109905 | 1.03666555 | 1.05796341 | 1.03457810 |
+| 6 | 1.13224107 | 1.09067231 | 1.13831371 | 1.08703053 |
 
-![A1 model-minus-observation residuals on fitted rows only. Points are discrete evaluations, separated by unloaded-solvent composition. Density is compared against temperature; Cp against loading at 298.15 K. No outside-fit rows appear.](results/diagnosis-a1-bounds/a1-density-cp-residuals.png)
+Loading is mol CO₂/mol analytical MDEA. Each source row retains its 323.15 K temperature, solvent composition and total pressure in the row-level file. These are diagnostic single-liquid saturation calculations; they do not qualify a globally stable saturation assemblage.
 
-## Attribution and its limits
+| Candidate | Maximum amine-sum pressure spread (mole fraction) | Maximum carbonate-sum pressure spread (mole fraction) |
+|---|---:|---:|
+| A1 | 4.6978677e-08 | 8.9501611e-07 |
+| B1 | 2.9277335e-07 | 3.4584615e-06 |
+| A1-removed-Merkley | 5.2548777e-08 | 6.2074614e-07 |
+| B1-removed-Merkley | 2.8009633e-07 | 3.308711e-06 |
 
-The evidence supports a conflict among fitted properties within the frozen model and scales. It does not identify a wrong shared parameter or a single erroneous source. Removing either unloaded density or Cp changes the ion endpoint substantially, reverses the cation–bicarbonate and Born bound directions, and removes the Carson witnesses in these two searches. The omitted group then becomes badly misfitted. This is evidence of competing parameter demands; attributing them to a specific physical term or dataset error remains an inference requiring Design.
+These spreads compare 5 and 25 bar at fixed temperature, loading and initial solvent composition. Missing per-row experimental pressure remains a limitation, even when the calculated spread is small.
 
-At A1, the unloaded-density group has cost 1273.529611. All 24 predictions reproduce with only MDEA and water present to 5.69e−13 kg/m³; the seven ion-coordinate Jacobian columns are exactly zero. The density misfit is therefore irreducible by ion coordinates directly. The MDEA–water coordinates remain free: fitting just their existing reciprocal law to density converges locally at cost 287.565760, k(313.15 K) = −0.206213778 and slope −175.541668 K, without active bounds. This leaves a nonzero neutral-model misfit, and is not proof of a global minimum or evidence that pure MDEA parameters alone are wrong. No association correction, pure parameter, data scale or model equation was changed.
+### Carbonate-sum comparison at both pressure limits
 
-The density and Cp groups exert opposing scaled cost gradients on the neutral reciprocal slope: +247.187 and −253.858. Thus density affects the ionic compromise indirectly through shared neutral coordinates. On the three A1 bound-active coordinates, the group gradients give a more specific local attribution: Kuranov contributes −1.33241 of the total −1.11407 cation–CO₂ gradient (pushing upward), −0.27030 of the total −0.13651 cation–bicarbonate gradient (pushing upward), and +1.72877 of the total +3.60992 Born gradient (pushing downward); Cp contributes +1.03331 to the Born gradient. Every group with nonzero Born sensitivity contributes in the downward direction. These derivatives use the frozen scaled coordinates and weights; they describe the local A1 endpoint, not unique physical causation.
+The full 58-row relative AARD is undefined because one reported carbonate signal is zero. Mean absolute mole-fraction errors retain all 58 rows.
 
-Widening the three requested bounds lowers cost by 110.077659 (4.44%) but retains two active bounds and produces Carson witnesses at both rows. Row 1 ΔG/RT = −3.45906e−5 exceeds its estimated numerical error 2.61e−8 in magnitude; row 10 is −0.108570 versus 2.60e−8. It does not solve the bound or phase problem. The two omissions that converge also remain bound-constrained. The both-removed endpoint reaches the iteration limit and cannot support an optimum claim: the density-removed endpoint has a feasible lower cost, 53.235284, on the both-removed objective.
+| Candidate | MAE at 5 bar | MAE at 25 bar |
+|---|---:|---:|
+| A1 | 0.002451332 | 0.002451395 |
+| B1 | 0.002582039 | 0.002581641 |
+| A1-removed-Merkley | 0.002477574 | 0.002477570 |
+| B1-removed-Merkley | 0.002593787 | 0.002593404 |
 
-## Design options, without selection
+## Part 2 — phase-evidence bound narrowing
 
-1. Examine the neutral model's ability to describe density and Cp together before another transfer assessment: fixed pure MDEA inputs, reciprocal interaction law, cross-association and caloric assumptions are possible review boundaries. Changing any of them requires a new design and falsifier.
-2. Audit the property bases and source consistency, and reconsider their roles or scales only with an explicit owner decision. The omission diagnostics do not authorize dropping either group.
-3. If wider ionic bounds are scientifically justified, design the new ranges together with the phase requirement. The present widened run demonstrates that expanding these three intervals alone is insufficient.
-4. Keep the current stops and the outside-fit block until a revised model or objective passes new bound and phase criteria. Further convergence work for the both-removed diagnostic would need an amended execution allowance; its current endpoint is incomplete.
+Each step probes every currently active ion bound one coordinate at a time, inward by 10% of its original interval. The probe is ranked by the least-negative resolved liquid split, with unresolved-state count as the tie-breaker. This selects the bound change using phase evidence only. Every refit starts from the variant’s objective-preferred declared start, projected into the narrowed interval if required. Each step retains bounds, endpoint, objective, group costs and complete phase records. Counts below refer to state records, including duplicate physical states for distinct observables. An unresolved record contains at least one unresolved trial or an unavailable solve; vapor witnesses are listed separately and do not count as liquid instability. All prescribed narrowed saturation scans resolve a bracket and none has multiple admitted sign changes. No Part 2 outside-fit statistic is computed before the bounds pass the phase gate and are frozen.
 
-These are engineering options, not a literature-mandated sequence. Baygi and Pahlavanzadeh (2015), §§3.1–3.3, separate pure/binary calibration from ternary assessment. Uyan et al. (2015), §4.2.3, use a binary cross-association correction and a different temperature law; those features are possible design alternatives, not evidence that they resolve this model's density/Cp conflict. The actual paper passages were read from the ignored shelf in the main checkout; all three Baygi/Uyan/Wangler reading-copy hashes match their indexed live Zotero Markdown files. No exact source equation or table was retranscribed for this diagnosis.
+| Variant | Step | Changed coordinate (zero-based) | New bound | Objective | Liquid witnesses | Unresolved states |
+|---|---:|---:|---:|---:|---:|---:|
+| A | 1 | 3 | -0.4 | 410.725545749 | 39 | 108 |
+| A | 2 | 3 | -0.3 | 429.539551144 | 36 | 106 |
+| A | 3 | 8 | 6.5 | 430.838299602 | 39 | 91 |
+| A | 4 | 3 | -0.2 | 459.901622532 | 40 | 99 |
+| A | 5 | 8 | 6 | 461.445529919 | 40 | 97 |
+| A | 6 | 8 | 5.5 | 463.272605270 | 33 | 112 |
 
-No endpoint is selected or adopted. No outside-fit data, including Ermatchkov, were evaluated. Weak-direction profiles, the Neumann sensitivity and the original transfer follow-ups remain blocked. These are calibration and numerical phase-search results, not physical validation, a transfer verdict, or absorber qualification. Independent delivered review and investigator promotion remain open.
+Variant A: stable narrowed endpoint found: **False**. [Every narrowing step](results/stage2-narrowed/A1/path.json) retains its phase evidence and exact bounds.
 
-## Retained evidence and reproduction
+| Variant | Step | Changed coordinate (zero-based) | New bound | Objective | Liquid witnesses | Unresolved states |
+|---|---:|---:|---:|---:|---:|---:|
+| B | 1 | 5 | 0.8 | 374.125216591 | 33 | 96 |
+| B | 2 | 5 | 0.6 | 376.406032139 | 31 | 111 |
+| B | 3 | 5 | 0.4 | 379.170109819 | 35 | 104 |
+| B | 4 | 5 | 0.2 | 382.590950055 | 30 | 103 |
+| B | 5 | 5 | 0 | 386.846658201 | 26 | 118 |
+| B | 6 | 5 | -0.2 | 392.099097184 | 30 | 101 |
 
-[Joint-fit README](results/joint-fit/README.md) and [diagnosis README](results/diagnosis-a1-bounds/README.md) provide full endpoint tables and commands. Each endpoint includes the declaration, predictions, weighted residuals, scaled Jacobian, singular vectors, active bounds, endpoint document, fitted-row replay and Carson rows 1/10 searches. The reduced objectives also retain omitted-group predictions. The runtime record verifies the installed wheel files byte for byte. The initial derivative-object indexing error is corrected without changing declarations or equations; its failed attempt remains recorded under A3.
+Variant B: stable narrowed endpoint found: **False**. [Every narrowing step](results/stage2-narrowed/B1/path.json) retains its phase evidence and exact bounds.
 
-All eight new endpoints replay below the frozen 1e−8 relative tolerance. The no-ion density replay and zero ion sensitivities establish the stated invariance. No new numerical tolerance or acceptance rule is introduced. Numerical precision does not quantify experimental uncertainty or model discrepancy. The source notebook is retained; the ordinary site refresh is attempted separately and any missing renderer dependency is recorded in the diagnosis README.
+The final active A limits are cation–water k = −0.2 (lower), cation–bicarbonate k = −1 (lower), and Born diameter = 5.5 Å (upper). The final active B limits are cation–bicarbonate k = −0.2 (upper) and Born diameter = 7 Å (upper). [Every coordinate, value and bound at all 12 endpoints](results/stage2-narrowed/coordinates-and-bounds.csv) provides the full disclosure. B1’s original unlike-ion value is +1 in the retained physical vector; the earlier prose value −1 was incorrect.
+
+Coordinate order (zero-based): 0 neutral–water k₀; 1 linear coefficient c₁ (K⁻¹); 2 cation–CO₂ k; 3 cation–water k; 4 cation–water reciprocal slope (K); 5 cation–bicarbonate k; 6 segment diameter (Å); 7 dispersion energy/k (K); 8 Born diameter (Å). Diameter targets retain the linked Debye–Hückel and packing factors. Original A1 active limits are cation–CO₂ 0.5, cation–water −0.5, unlike-ion −1 and Born diameter 7 Å; B1 has unlike-ion +1 and Born diameter 7 Å. All remaining original and narrowed intervals are retained in the declarations and bounds files.
+
+Neither variant achieves the required absence of liquid witnesses and unresolved trials within the retained narrowing path. There is **no stable endpoint and no per-variant Ermatchkov transfer verdict**. Thus the conditional full assessment, weak-direction scans, new numerical audit, Wangler assessment and bicarbonate/control follow-up are not run on a narrowed endpoint. Diagnostic Part 1 percentages are not substituted for these results.
+
+The follow-up rule remains k(HCO₃⁻–water) ∈ [−0.5,1], compared against a free k(MDEA–CO₂) control, requiring at least a two-percentage-point Ermatchkov improvement while keeping the other property results. Corrected Kamps is excluded. A correlation magnitude above 0.95 between bicarbonate–water and cation–water Jacobian columns means non-separable. Neither the margin nor the correlation is available without a qualified endpoint. **No MDEA outcome falsifies the MEA bicarbonate value.**
+
+## Meaning, uncertainty and claim limits
+
+The retained phase evidence is numerical verification of the declared model at specified states. A resolved descending liquid split violates the stipulated single-liquid assumption; it does not demonstrate experimental demixing or the globally stable assemblage. Unresolved trials and refused roots are numerical non-results. A finite search with no witness would not prove global stability. Native trial evidence, split ΔG/RT and its numerical error remain in each phase record.
+
+The strongest intended claim combines calibration on the frozen fit sets with assessment against outside-fit observations within 293–395 K, ≤49 wt% for pressure and ≤50 wt% for the other properties. Bound-active endpoints and all narrowed bounds must be disclosed. Permittivity above Hsieh’s 328.15 K range is extrapolated. The linear neutral interaction law, Neumann ideal-gas Cp, source/digitization uncertainties and frozen residual scales remain limitations. MDEA dissociation above 368 K and the shared reaction laws up to 395 K are extrapolated; nitrogen in the Ermatchkov headspace is not modeled. Numerical precision does not quantify source uncertainty or model discrepancy. No absorber-use, manuscript or universal-ion claim follows.
+
+## Evidence and reproduction
+
+Use the isolated interpreter and `nice -n 10 agent-heavy` with `scripts/stage2.py diagnostic`, then `scripts/stage2.py narrow`. The supplemental diagnostic command retains the saturation/alternative-pressure endpoint calculations and every prescribed loading-scan failure. `scripts/stage2.py present` renders the retained diagnostic AARD figure. Pools use every available core subject to free memory, with one BLAS thread per process. The wheel is checked byte-for-byte; no worktree environment is created. All writes remain in this worktree.
+
+[Diagnostic evidence](results/stage2-diagnostic/README.md), [narrowing evidence](results/stage2-narrowed/README.md), and the immutable [previous four-endpoint evidence](results/stage2/README.md) retain the calculation identities. The actual Merkley methods were read from the Zotero PDF, pp.439–441; the existing Baygi/Uyan/Wangler Markdown copies were checked against live indexed sources. No new literature convention or acceptance limit is inferred. Historical preparation and earlier model diagnostics remain in Git and their retained result directories.
+
+This notebook has not been independently reviewed or promoted for manuscript use. No subagents, MEA-record or manuscript changes, Zotero writes, merge or push occurred.
