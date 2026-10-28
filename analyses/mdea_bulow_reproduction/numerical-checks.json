@@ -3,8 +3,8 @@
   "wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
   "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
   "installed_files_byte_identical": true,
-  "declaration_sha256": "a491381972ddad9224f1b0833371b82479db7f4f0244dab99fbb9d9cffc2a657",
-  "placeholder_sha256": "2087d3cdc7cfae2f67e7924a481fe0991702a5589495c1ed1b1e75434edc35a8",
+  "declaration_sha256": "8e4aa8461e0cc8d3daf9d53a16118225b89fe4d79afc5ecd3341f5ea26915494",
+  "placeholder_sha256": "209d4e1683bb7994ffc181224ecb2a6778e5fb15bd383a4e54be5d83fd4835ad",
   "checks": {
     "born": {
       "status": "pass",
@@ -504,8 +504,10 @@
     }
   },
   "pending_896": [
+    "Re-run prepare.py in full on the qualified merged #896 wheel (records its full commit and SHA-256)",
     "Native dielectric values 58 and 72.5 (1e-12 absolute), density/mass independence, pure-solvent limits and zero-denominator refusal",
-    "Repeat neutral/charged native derivative checks with mole-fraction permittivity; qualify merged wheel by hash; repeat Born check"
+    "Build the run document from declaration.json as the placeholder is built and assert that only the permittivity entry and the removed preparation block differ",
+    "Record both the frozen declaration hash and the hash of the document the run admits"
   ],
   "reproduction_run": false,
   "fitting": false

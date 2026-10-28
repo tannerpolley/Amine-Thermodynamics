@@ -72,7 +72,7 @@ def declaration():
         doc['topology']['edges'].append(dict(endpoint_a=dict(component_id=cid,site_id='a'),endpoint_b=dict(component_id=cid,site_id='b'),source=dict(kind='explicit',provenance='Bülow Table 1 printed volume'),energy_over_k=coefficient(f'association/{cid}/energy',e,'kelvin'),volume=coefficient(f'association/{cid}/volume',v,'dimensionless')))
     for a,b in [(W,M),(W,C)]:
         for donor,acceptor in [(a,b),(b,a)]:
-            doc['topology']['edges'].append(dict(endpoint_a=dict(component_id=donor,site_id='a'),endpoint_b=dict(component_id=acceptor,site_id='b'),source=dict(kind='combining-rule',rule_id='wolbach-sandler',provenance='Bülow Eqs.24–25',inputs=dict(energy_over_k=[f'association/{a}/energy',f'association/{b}/energy'],volume=[f'association/{a}/volume',f'association/{b}/volume']))))
+            doc['topology']['edges'].append(dict(endpoint_a=dict(component_id=donor,site_id='a'),endpoint_b=dict(component_id=acceptor,site_id='b'),source=dict(kind='combining-rule',rule_id='wolbach-sandler',provenance='Bülow Eqs. 23 and 25',inputs=dict(energy_over_k=[f'association/{a}/energy',f'association/{b}/energy'],volume=[f'association/{a}/volume',f'association/{b}/volume']))))
     doc['reaction_correlations']=[dict(reaction_id=r['name'],stoichiometry=r['stoichiometry'],c1_c2_c3_c4=r['c']+[0.],basis='aqueous-mole-fraction-infinite-dilution-water-v1') for r in REACTIONS]
     return doc
 
@@ -113,7 +113,7 @@ def main():
     write('declaration.json',doc)
     placeholder=copy.deepcopy(doc)
     placeholder.pop('preparation')
-    placeholder['model_families'][-1]=dict(kind='permittivity',choice='solvent-only',provenance='Issue 223 §7 component-mixing placeholder only; NOT Eq.19')
+    placeholder['model_families'][-1]=dict(kind='permittivity',choice='solvent-only',provenance='Issue 223 §7 placeholder only: solvent-only = ion suppression with alpha 0, the normalized mass-weighted salt-free solvent permittivity (not the issue text\'s component-mixing rule); NOT Eq.19')
     write('placeholder-3e83e19c.json',placeholder)
     params=epcsaft.Parameters.from_mapping(placeholder)
     model=epcsaft.Mixture(params)
@@ -159,7 +159,7 @@ def main():
         co2sites=[state.site_fractions[i] for i,site in enumerate(params.site_ids) if site[0]==C]
         assert all(v==1 for v in co2sites) if label=='MDEA-CO2' else all(v<1 for v in co2sites)
         association.append(dict(binary=label,T_K=T,rho_mol_m3=1000.,x=composition,CO2_site_fractions=co2sites))
-    # Explicit Eq.24–25 cross strength as independent partner/energy/volume check.
+    # Explicit Eqs. 23 and 25 cross strength as independent partner/energy/volume check.
     explicit=copy.deepcopy(placeholder)
     sigma=2.7927+10.11*math.exp(-.01775*T)-1.417*math.exp(-.01146*T)
     for i,edge in enumerate(explicit['topology']['edges']):
@@ -168,7 +168,7 @@ def main():
         other_sigma=3.563 if other==M else 2.7852
         energy=(2425.6+(2046.6 if other==M else 0))/2
         volume=math.sqrt(.045*(.1238 if other==M else .045))*(math.sqrt(sigma*other_sigma)/((sigma+other_sigma)/2))**3
-        edge['source']=dict(kind='explicit',provenance='Bülow Eqs.24–25 independent arithmetic check')
+        edge['source']=dict(kind='explicit',provenance='Bülow Eqs. 23 and 25 independent arithmetic check')
         edge['energy_over_k']=coefficient(f'cross/{i}/energy',energy,'kelvin')
         edge['volume']=coefficient(f'cross/{i}/volume',volume,'dimensionless')
     replay=epcsaft.Mixture(epcsaft.Parameters.from_mapping(explicit)).state(T,rho=rho,x=x)
@@ -216,7 +216,7 @@ def main():
     prob=eq.Problem(T=T,P=1e5,feed=eq.Amounts({W:55.5084350618,M:2.,C:1.}),phases=[eq.Phase('L',support=IDS,kind='liquid')],reactions=rx,neutral_reference=eq.NeutralReference(solvent=W,standard_molality_mol_per_kg=1.,solute_molality_ratios={M:.125,C:.125,MH:.125,H:.125,B:.125,OH:.0625,D:.03125}))
     compiled=eq.compile_problem(model,prob)
     checks['admission']=dict(status='pass',species=list(params.component_ids),reaction_count=len(rx),charge_rows=compiled.charge_row_count,has_ions=compiled.has_ions,has_reaction=compiled.has_reaction,reference_basis='RawMoleFractionInfiniteDilution',reference_pressure_pa=None,meaning='System-pressure reference; native compile only, no solve',compiled_type=type(compiled).__name__)
-    write('numerical-checks.json',dict(engine_commit='3e83e19ccc771b51d8ebc038931ab25192f4c5b5',wheel_sha256=digest,module=epcsaft.__file__,installed_files_byte_identical=True,declaration_sha256=sha(OUT/'declaration.json'),placeholder_sha256=sha(OUT/'placeholder-3e83e19c.json'),checks=checks,pending_896=['Native dielectric values 58 and 72.5 (1e-12 absolute), density/mass independence, pure-solvent limits and zero-denominator refusal','Repeat neutral/charged native derivative checks with mole-fraction permittivity; qualify merged wheel by hash; repeat Born check'],reproduction_run=False,fitting=False))
+    write('numerical-checks.json',dict(engine_commit='3e83e19ccc771b51d8ebc038931ab25192f4c5b5',wheel_sha256=digest,module=epcsaft.__file__,installed_files_byte_identical=True,declaration_sha256=sha(OUT/'declaration.json'),placeholder_sha256=sha(OUT/'placeholder-3e83e19c.json'),checks=checks,pending_896=['Re-run prepare.py in full on the qualified merged #896 wheel (records its full commit and SHA-256)','Native dielectric values 58 and 72.5 (1e-12 absolute), density/mass independence, pure-solvent limits and zero-denominator refusal','Build the run document from declaration.json as the placeholder is built and assert that only the permittivity entry and the removed preparation block differ','Record both the frozen declaration hash and the hash of the document the run admits'],reproduction_run=False,fitting=False))
     assert all(r['status']=='pass' for r in checks.values()), checks
     print(json.dumps(checks,indent=2))
 
