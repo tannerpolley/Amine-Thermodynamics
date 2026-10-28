@@ -21,7 +21,7 @@ transcription hashes and remaining source gaps. No source observations change ro
 | (d) Dielectric coefficients | Complete | 0.8630669729 L/mol, 1121.773473 K; AARD 3.86106%, cost 318.265. Alternative 0.28087913 L/mol, 2793.648 K; AARD 3.91286%, cost 328.265. MEA larger-volume convention selects the former, also lower cost. Start-1 densities, MDEA–water k = 0; mean deviations −8.1% at x=0.2, +4.7% at x=0.6, −3.4% pure. Absorber x≈0.04–0.13 lies below measured x≥0.2; at 393 K the minima differ by 1.87% at x=0.2 and 6.69% pure. |
 | (e) Admission | Complete for stage 1 | Both full parameter mappings and MDEA ideal-gas record admitted; unloaded and charged liquid terms retained; native neutral selection verifies caloric anchors. Ionic reference completion remains conditional on (g). |
 | (f) CO₂ coordinate | Complete, owner selected | k(MDEAH⁺–CO₂) selected, k(MDEA–CO₂)=0. Raw norms A 4.99072 vs 0.744984, B 9.42712 vs 0.0107344; both dimensionless k. |
-| (g) Original reaction basis | Blocked | Kamps–Maurer 1996 remains unavailable in Zotero; no writes authorized. |
+| (g) Original reaction basis | Complete | Kamps–Maurer 1996 Eq. 12 (Zotero THBMMB2G) is the molality-scale law for MDEAH+ ⇌ MDEA + H+; Uyan's mole-fraction law equals it shifted by −4.0165 to within 0.0019 in ln K over 278–368 K, and pK_m = 8.551 at 298.15 K. Use above 368 K is extrapolation. [Check](results/reaction-basis-kamps-maurer.json) |
 
 
 The ten transcriptions contain 338 observations (including twelve figure points),
@@ -67,7 +67,7 @@ is invoked by the probe. The dielectric reduction follows
 reduction to least squares for two coefficients across the six Hsieh temperatures.
 The density and permittivity equations are replayed by the installed library.
 
-Before stage 2: resolve (g), freeze the proposals for (a), obtain delivered evidence
+Before stage 2: (g) is resolved (2026-10-28); freeze the proposals for (a), obtain delivered evidence
 review, then obtain the owner's issue comment freezing roles, scales, weights,
 bounds and starts. The nine-coordinate fits, three starts per variant,
 outside-fit assessments, phase searches, identifiability profiles and

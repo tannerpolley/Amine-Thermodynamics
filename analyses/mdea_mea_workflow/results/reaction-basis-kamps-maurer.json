@@ -1,0 +1,73 @@
+{
+  "item": "(g) Kamps-Maurer basis check, issue #222",
+  "status": "complete",
+  "source": {
+    "citation": "P\u00e9rez-Salado Kamps and Maurer (1996), J. Chem. Eng. Data 41, 1505-1513",
+    "doi": "10.1021/je960141+",
+    "zotero_item": "THBMMB2G",
+    "zotero_attachment": "HRGBIYIW",
+    "pdf_sha256": "b1aa9fad5e7deaa05d27d988b2173add6bb2a6cc99d15c319c1df40ccc927ead"
+  },
+  "source_findings": {
+    "reaction": "MDEAH+(aq) = MDEA(aq) + H+(aq) (printed p. 1508)",
+    "constant": "K = a_MDEA a_H+ / a_MDEAH+, molality scale, solutes at infinite dilution in water (Eq. 8)",
+    "law": "ln K = -819.7/(T/K) - 79.474 + 10.9756 ln(T/K) (Eq. 12)",
+    "range_K": [
+      278,
+      368
+    ],
+    "fit_quality": "average deviation 0.9 % (0.004 in pK), maximum 2 % (0.009) in K; water impurity of 1.6 mass % would lower K by about 2 %",
+    "pressure": "influence of pressure on the reactions neglected (p. 1509); no separate standard pressure is defined"
+  },
+  "criterion": "reproduce ln K_x of Uyan 2015 Table 1 (and the Jakobsen 2005 table, see reaction-basis-interim.json) at printed precision, and give pK_m = 8.55 at 298.15 K",
+  "result": "Uyan's mole-fraction law is Eq. 12 shifted by -4.0165 = ln(M_w m\u00b0): -79.474 - 4.0165 = -83.4905 against Uyan's -83.491; ln T coefficient 10.9756 against 10.976. The remaining difference is the rounding of 10.976.",
+  "rows": [
+    {
+      "T_K": 278.15,
+      "ln_K_m_Kamps_Maurer": -20.648532274138027,
+      "ln_K_x_Uyan_plus_4.0165": -20.64678100992341,
+      "difference": -0.0017512642146186863,
+      "pK_m": 8.967543626059348
+    },
+    {
+      "T_K": 298.15,
+      "ln_K_m_Kamps_Maurer": -19.688744760107248,
+      "ln_K_x_Uyan_plus_4.0165": -19.686965721421018,
+      "difference": -0.0017790386862301943,
+      "pK_m": 8.550713204916141
+    },
+    {
+      "T_K": 313.15,
+      "ln_K_m_Kamps_Maurer": -19.01830905121801,
+      "ln_K_x_Uyan_plus_4.0165": -19.016510378294413,
+      "difference": -0.0017986729235985877,
+      "pK_m": 8.25954667607465
+    },
+    {
+      "T_K": 333.15,
+      "ln_K_m_Kamps_Maurer": -18.181661685464917,
+      "ln_K_x_Uyan_plus_4.0165": -18.179838248329304,
+      "difference": -0.0018234371356129486,
+      "pK_m": 7.8961953418291895
+    },
+    {
+      "T_K": 353.15,
+      "ln_K_m_Kamps_Maurer": -17.40244034216542,
+      "ln_K_x_Uyan_plus_4.0165": -17.400593585007066,
+      "difference": -0.0018467571583542508,
+      "pK_m": 7.557783812252978
+    },
+    {
+      "T_K": 368.15,
+      "ln_K_m_Kamps_Maurer": -16.851310161239937,
+      "ln_K_x_Uyan_plus_4.0165": -16.849446765054402,
+      "difference": -0.0018633961855343273,
+      "pK_m": 7.3184310158667
+    }
+  ],
+  "conventions_for_stage_2": [
+    "H+ is written as H3O+ with water activity, as for the MEA R5 law (Bates and Pinching, also an H+ form)",
+    "use the MEA R4/R5 source standard pressure convention of 100 kPa; the source neglects pressure",
+    "the law is measured to 368 K; states at 373-393 K use it as an extrapolation, as the MEA paper does for R4 and R5 above 323 K"
+  ]
+}
