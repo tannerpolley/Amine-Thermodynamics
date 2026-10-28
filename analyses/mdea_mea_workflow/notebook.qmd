@@ -1,15 +1,138 @@
 ---
-title: "MDEA through the MEA formulation: stage-1 preparation"
+title: "MDEA through the MEA formulation: loading points and phase-assumption stop"
 format: html
 ---
 
-Stage 1 provides numerical preparation evidence for issue 222. It does not yet
-meet every completion criterion, so no MDEA joint fit or transfer assessment
-has started. The fixed shared-species record is the MEA JSON with SHA-256
+Item (j) passes. Joint fitting stops before the first optimizer because the
+Carson single-liquid requirement fails at the declared A1 and B1 vectors.
+This is a numerical phase-assumption failure under the prescribed model,
+not an outside-fit pressure verdict or experimental evidence of phase separation.
+The results have not been independently reviewed or promoted for manuscript use.
+
+The fixed shared-species record is the MEA JSON with SHA-256
 `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`.
 The installed ePC-SAFT wheel has SHA-256
 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`;
 its package files were checked byte-for-byte against the wheel.
+
+## Loading endpoints and stage-2 disposition
+
+The following tables read retained results only. They do not call the Engine
+or calculate missing fit endpoints.
+
+```{python}
+#| echo: false
+#| output: asis
+import json
+from pathlib import Path
+analysis = next(p for p in (Path("mdea_mea_workflow"), Path("."),
+                            Path("analyses/mdea_mea_workflow"))
+                if (p / "results/stage2-disposition.json").exists())
+loading = json.loads((analysis / "results/merkley-loading-points.json").read_text())
+result = json.loads((analysis / "results/stage2-disposition.json").read_text())
+def table(headers, rows):
+    print("| " + " | ".join(headers) + " |\n| " + " | ".join(["---"]*len(headers))
+                     + " |\n" + "\n".join("| " + " | ".join(map(str,r)) + " |" for r in rows))
+table(["T (K)", "20 wt% αLP", "40 wt% αLP", "60 wt% αLP", "P (kPa)"],
+      [[T, *[r["alpha_LP_mol_CO2_per_mol_MDEA"] for r in loading["rows"] if r["temperature_K"]==T],
+        next(r["pressure_kPa"] for r in loading["rows"] if r["temperature_K"]==T)]
+       for T in dict.fromkeys(r["temperature_K"] for r in loading["rows"])])
+```
+
+Merkley 1987 Fig. 4 (printed p.442, Zotero `ED7IMI2E`) supplies all twelve
+loading points. The linear axes are calibrated at 275/450 K and 0/1.5 mol
+CO₂/mol MDEA. The absolute digitization allowance is ±0.02 mol CO₂/mol MDEA,
+including marker width, axis placement and scan skew; it is not a confidence
+interval or source measurement uncertainty. The 40 wt%, 388.71 K reading is
+0.360, compared with the printed 0.35 in the discussion of Fig. 2 (p.442).
+No source loading-point uncertainty is reported.
+
+![All twelve extracted centres overlaid on Merkley Fig. 4.](results/merkley-loading-overlay.png)
+
+The eight fitted and four outside-fit heat markers each receive αLP at their
+frozen run T/P. Six alternative-pressure assignments retain the required endpoint
+rule `min(alpha_LP, model saturation loading at 156 kPa)`. Their numerical
+model endpoints remain unavailable because fitting stopped. The half-loading
+heat comparison is also uncomputed. All eighteen assignments and the calibration
+are in [the loading-point record](results/merkley-loading-points.json); source
+values and hashes are in [the source directory](../../data/reference/MDEA/Merkley1987_loading_provenance.json).
+
+## Carson pressure check and phase assumption
+
+The owner's 2026-10-28 rulings specify cumulative integral heat from zero
+loading and a model pressure of 101325 Pa. That pressure is a declared convention,
+not a source value. Carson 2000 Table 3 gives T = 298.15 K; pp.1288–1289 give
+265→125 kPa for the injection device, without calorimeter pressures per row.
+The required largest-loading check uses row 10, 10 wt% MDEA, whose printed
+CO₂ mole fraction 0.00408 converts to α = 0.24797645. The source describes
+final loading as approximately 0.2 (p.1289); the computed value is retained
+without imposing an exclusion. Row 1, α = 0.08243368, checks the failure below 0.2.
+
+```{python}
+#| echo: false
+#| output: asis
+table(["Variant, start 1", "Heat at 101325 Pa (kJ/mol CO₂)",
+       "Heat at 265000 Pa (kJ/mol CO₂)", "Absolute relative change (%)"],
+      [[r["variant"], *[round(x["prediction"]["value"]/1000,6) for x in r["pressure_results"]],
+        round(100*r["relative_change"],6)] for r in result["pressure_sensitivity"]])
+table(["Variant, start 1", "Carson row", "α", "Tangent-plane distance / RT",
+       "Split ΔG / RT", "Estimated split error / RT"],
+      [[r["variant"],r["source_row"],round(r["alpha"],8),round(r["tpd_over_RT"],8),
+        round(r["split_delta_G_over_RT"],8),f'{r["split_error_estimate_over_RT"]:.3g}']
+       for r in result["phase_results"]])
+```
+
+Both pressure changes are below the owner's 0.5% limit. The heat values lie on
+the unstable restricted liquid branch and are numerical sensitivities, not
+accepted equilibrium heat predictions. These are checks at
+start 1, not selected endpoint sensitivities, and they do not enter an objective.
+The MEA bundle's `final_evidence.py::stability` supplies the phase search,
+with trial supports mapped to MDEA's eight liquid species and three neutral
+vapor species. The Engine admits charge-balanced, composition-feasible splits
+with lower Gibbs energy for both variants. Every search completes, and each
+has four resolved descending trials out of nine. The neighboring printed row 9
+and lower-loading row 1 reproduce the failure. Equilibrium residuals are below
+4.6 × 10⁻¹³; the feasible split energy changes exceed their estimated numerical
+errors by more than five orders of magnitude. Negative tangent-plane distances
+mean that these single-liquid stationary states are unstable in this model.
+They do not identify the global equilibrium phase assemblage.
+
+This satisfies the issue's phase-assumption stop and the owner's specific
+Carson stop. No authorized correction exists within the frozen Build choices:
+allowing additional phases or changing fitted inputs requires Design. These
+checks establish neither that every declared start is unstable nor that no
+admissible fitted vector could become stable. The numerical failure is shown
+as a table because the sign, feasibility and error estimates decide the stop;
+a plotted trend would imply an unsampled loading dependence.
+
+## Variant verdicts and seven declared endpoints
+
+Both variants return to Design. Neither has an Ermatchkov AARD or a transfer
+pass/fail verdict. The 24.2% limit on the 88 rows remains unchanged.
+
+```{python}
+#| echo: false
+#| output: asis
+table(["Declared start", "Fit endpoint", "Objective / identifiability"],
+      [[r["start"] + (" (Bülow-derived)" if r["start"]=="A4" else ""),
+        "Not run", "Unavailable: phase-assumption stop"] for r in result["seven_endpoints"]])
+```
+
+No representative endpoint was selected. Endpoint identifiability, weak-direction
+profiles, outside-fit comparisons, Neumann Cp sensitivity, and bicarbonate–water
+versus k(MDEA–CO₂) refits are uncomputed. The corrected Kamps data remain outside
+the follow-up criterion. **No MDEA outcome falsifies the MEA bicarbonate value.**
+Xiao and Zhang remain declared but unscored. The frozen MEA record and manuscript
+are unchanged; there is no process-use or manuscript-use claim.
+
+Evidence: [full phase searches](results/carson-phase-check.json),
+[pressure check](results/carson-pressure-check.json),
+[current disposition](results/stage2-disposition.json),
+[owner rulings](inputs/stage2-owner-decisions.json), and
+[wheel verification](results/stage2-runtime.json). The six independent phase jobs
+used six processes, one BLAS thread each, from all 32 available cores, sized
+against free physical memory. The same largest-loading result was reproduced
+before the neighboring cases were evaluated.
 
 ## Pure-MDEA conversion and dielectric calibration
 
