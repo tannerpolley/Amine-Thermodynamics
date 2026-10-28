@@ -2,6 +2,44 @@
 title: "MDEA through the MEA formulation: remaining starts and bound-pressure diagnosis"
 format: html
 ---
+## Item (l): linear MDEA–water law, 2026-10-28
+
+**Return to Design.** The linear-law binary gate passes, but A4 fails the
+Carson row-10 two-liquid search. Item (l) is incomplete; stage 2 did not run.
+The prior reciprocal-law joint-fit results below remain historical evidence.
+
+The retained Kim-only fit gives k0 = −0.179727220278 and
+c1 = 0.000616832401403 K⁻¹, with reference temperature 313.15 K and pressure
+AARD 0.467971% on 61 Kim states. Both initializations agree, with rank-two
+scaled Jacobians and no active bounds. Neumann ideal-gas Cp is primary.
+At 298.15 K, Weiland Cp errors are +0.9541 / +2.8434 / +3.5230% at
+30 / 40 / 50 wt%. Criterion (3) passes under the owner's ≤50 wt% reading;
++5.2106% at 60 wt% is extrapolation. Concepción's retained 15-row Cp AARD
+is 2.8079%; Sobrino's 24-row density AARD is 0.14894%.
+
+Criterion (2): all 1,177 searches (61 Kim and 1,116 composition-grid states)
+complete with zero liquid–liquid witnesses or unresolved trials. All four
+hulls are miscible at 293.15, 313.15, 353.15 and 393.15 K. The 171 vapor
+witnesses are classified separately; all 38 Kim vapor witnesses have positive
+bubble-pressure residuals, with no sign mismatch.
+
+Criterion (4): all ten Carson searches complete with zero unresolved trials;
+nine pass. A4 row 10 at 298.15 K, 101325 Pa admits a two-liquid split with
+ΔG/RT = −0.130277337990 and estimated numerical error 2.64057e−8.
+Both liquid phases and their compositions are retained. The five starts and
+the common Neumann caloric file are hashed; A2 and B2 remain duplicates.
+They are not qualified as a set for stage 2.
+
+These are calibration and numerical phase-search results, not physical
+validation or an amine-parameter transfer verdict. The finite search grid
+limits the binary claim; ideal-gas Cp uncertainty remains unquantified.
+Independent delivered review and investigator promotion remain open.
+The [item-(l) README](results/item-l/README.md) links the full search results,
+start hashes, coordinate identities, property comparisons and reproduction
+command. No MEA parameter or manuscript change accompanies this result.
+
+## Earlier reciprocal-law joint-fit evidence
+
 All three distinct Variant A starts converge to the same bound-constrained result; both Variant B starts converge to another bound-constrained result. The A1 omission diagnostics support a conflict between density and Cp within the frozen model. Widening the three active bounds does not resolve the bounds or Carson phase stops. Nothing is adopted, and outside-fit assessment remains blocked. These results have not been independently reviewed or promoted for manuscript use.
 
 ## Kim-only pre-fit and amended starts
