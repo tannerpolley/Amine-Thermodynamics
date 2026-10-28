@@ -1,11 +1,13 @@
 # Item (l): linear MDEA–water law with Neumann ideal-gas heat capacity
 
-**Return to Design.** At the Kim-only endpoint, unloaded Cp at 298.15 K is
-5.21060% above Weiland 1997 at 60 wt% MDEA (3.339384 versus 3.174 J/g/K).
-The requested stop rule is error above 5% at 298 K; it includes the requested
-30–60 wt% check and supplies no exemption for the 60 wt% outside-fit row.
-The 30–50 wt% errors remain below 5%. No joint fit ran. No amended stage-2
-starts were built and no Carson searches ran. Independent review remains open.
+**Return to Design: criterion (4) fails.** Criterion (2) passes all 1,177
+binary tangent-plane searches and four convex-hull scans. Nine of ten amended
+Carson searches pass; A4 at row 10 has a resolved two-liquid descent,
+ΔG/RT = −0.130277337990 versus estimated numerical error 2.64057e−8.
+Criterion (3) passes under the owner's 2026-10-28 ≤50 wt% claim-domain reading.
+The +5.21060% Cp error at 60 wt% is reported as extrapolation.
+The five amended starts are retained but are not qualified for stage 2 as a
+set. No joint fit ran. Independent delivered review remains open.
 
 ## Scope and basis
 
@@ -13,7 +15,8 @@ This worktree began clean on the task branch at main commit 8c12392. Only
 item (l) was executed. The issue body and comments read on 2026-10-28 are
 retained here. The existing analysis scripts are reused by `run.py`; importing
 `fit_mdea.py` supplies declarations and does not invoke its joint-fit entry.
-All new files are confined to this directory. No MEA parameter record,
+The continuation starts from a clean worktree at main commit 2987259.
+Its changed results are confined to this directory and the analysis notebook. No MEA parameter record,
 manuscript, frozen ionic choice, Zotero record or main-checkout file changed.
 
 Engine 3e83e19ccc771b51d8ebc038931ab25192f4c5b5 was read using
@@ -66,7 +69,7 @@ residuals, predictions, bounds and controls are retained in the fit files.
 These are calibration and numerical-identification evidence, not independent
 physical validation or a guarantee of joint-fit identification.
 
-## Criterion (3): endpoint property comparisons; stop triggered
+## Criterion (3): endpoint property comparisons; passes within the claim domain
 
 Neutral, nonreacting liquid-root Cp is evaluated by the existing
 `diagnose_unloaded_cp.py` helpers, at 101325 Pa for Weiland and 100000 Pa for
@@ -97,49 +100,108 @@ without assigning new uncertainty. The Cp limit is an owner decision and
 is applied to the central predictions, without subtracting uncertainty.
 Neumann ideal-gas uncertainty remains unquantified. The 60 wt% row lies
 outside the ≤50 wt% other-property claim domain but was explicitly requested.
-The linear law greatly reduces the reciprocal-law Cp discrepancy; the
-remaining errors prevent passing the specified check. Concepción's worst
+The linear law greatly reduces the reciprocal-law Cp discrepancy. Under the
+owner reading recorded on issue #222 on 2026-10-28, the 298.15 K gate applies
+within ≤50 wt%: the maximum error there is +3.5230%, which passes. The 60 wt%
+row remains an extrapolation comparison and does not count against this gate. Concepción's worst
 linear-law error is −6.0371% at 353.15 K, 40.01 wt%, a separate limitation
 rather than the 298 K stopping trigger.
 
 `cp-comparison.png` shows the requested 298 K error test; each marker is one
 retained observation-state prediction, with no interpolation. The shaded
-band is the owner's ±5% criterion, not an uncertainty band. `render.py` reads
+band is the owner's ±5% criterion within ≤50 wt%, not an uncertainty band.
+The 60 wt% marker is an extrapolation comparison. `render.py` reads
 the CSV only and uses matplotlib; `comparison.html` displays the same PNG.
 
-## Criteria (2) and (4), amended starts
+## Criterion (2): binary liquid miscibility passes
 
-**Binary miscibility is not fully checked.** Four Gibbs-mixing lower-hull
-scans at 293.15, 313.15, 353.15 and 393.15 K found no gap on the existing
-item-(k) grid, using the exact linear-law value at each temperature. These
-are retained in `mixing-scans.json`. They do not replace the required
-Kim-state and composition-grid tangent-plane searches.
+All 1,177 tangent-plane searches complete: 61 at the Kim measured states and
+1,116 on the existing 279-point x(MDEA) grid (including pure endpoints) at
+293.15, 313.15, 353.15 and 393.15 K, at 101325 Pa for the grid. There are zero
+liquid–liquid witnesses and zero unresolved searches. All four Gibbs-mixing
+convex-hull scans are miscible. The maximum equilibrium residual is
+1.08245e−10 in the Engine's equation residuals. Full trials, compositions,
+search work and split checks are retained in `binary-phase-search.json`.
 
-On the first execution, the runner advanced past the failed Cp check to
-those scans and then failed to submit tangent-plane jobs because the dynamic
-`kim` module function could not be pickled. `first-attempt.log` preserves
-the exact error. The runner now places the Cp stop immediately after its
-comparison and defines a local process entry for any future authorized
-phase run. The final replay reproduced the two fits and property results
-and stopped at the Cp gate; it did not rerun phase searches. The existing
-four hull results therefore belong to the first execution.
+There are 171 searches with vapor witnesses, classified separately under the
+owner's item-(k) ruling. Of these, 38 are Kim states; all 38 have positive
+model-minus-observed bubble-pressure residuals, with zero sign mismatches
+(`vapor-sign-check.json`). Vapor descent does not fail the liquid-miscibility
+gate. These finite searches establish numerical evidence at the specified
+states and grid, not a proof over every composition or experimental miscibility.
 
-**Carson rows 1 and 10 were not run**, and **no amended start documents were
-created**, because the failed Cp gate returns to Design. The retained
-primary caloric and pair endpoint declarations are evidence only and are
-not qualified starts for stage 2. `gate-status.json` records this disposition.
-No independent review or parameter promotion occurred.
+The first execution's dynamic-module pickling failure remains in
+`first-attempt.log`. The continuation submits `run.py::phase_check`, a
+module-level process entry, and installs the linear-law model in that process.
+Search methods, trial sets, tolerances and budgets are unchanged. The binary
+pass calculation now counts liquid witnesses only while requiring a converged
+liquid, completed search and zero unresolved trials.
+
+## Criterion (4): amended Carson starts fail at A4 row 10
+
+Five parameter documents are retained in `amended-starts/`: A1, A3, A4, B1
+and B3. Each differs from its item-(k) document only in the MDEA–water pair:
+k0 = −0.17972722027839907 and c1 = 0.000616832401403298 K⁻¹ at 313.15 K.
+`hashes.json` binds each document to the common Neumann primary caloric file
+and records both `temperature_law_coefficient` coordinate identities and
+origins. Those identities resolve through the pinned Engine. A2 and B2 remain
+duplicates of A1 and B1 and are not run separately. No other frozen value
+changes. Neumann calorics are supplied through `run.py::thermal`.
+
+| Start | Carson row 1 | Carson row 10 |
+|---|---|---|
+| A1 | no witness | no witness |
+| A3 | no witness | no witness |
+| A4 | no witness | two-liquid witness |
+| B1 | no witness | no witness |
+| B3 | no witness | no witness |
+
+All ten liquid solves meet the requested tolerance; all ten searches complete
+with zero unresolved trials. The largest equilibrium residual is 3.55272e−13.
+A4 row 10 at 298.15 K and 101325 Pa gives ΔG/RT = −0.13027733799026464,
+with estimated numerical error 2.6405663928255056e−8. Its admitted split has
+liquid amounts 60.1684007 and 0.362303992 mol on the one-mol-MDEA feed basis;
+the second liquid has x(water) = 0.236090, x(MDEA) = 0.133162, and
+x(MDEAH+) ≈ x(HCO3−) ≈ 0.315366. Both phases are liquid, so this is a gate
+failure rather than a separately classified vapor witness. Full compositions
+and trial diagnostics are in `amended-carson-search.json`; counts are in
+`phase-summary.json`.
+
+The magnitude of the descending split exceeds its numerical error by roughly
+4.9 million. This is a numerical phase-instability finding for the declared
+A4 model and feed, not observed physical demixing. Per the prescribed stop,
+item (l) remains incomplete and stage 2 returns to Design. No new starts,
+parameter changes, retry searches or joint fit follow this failure.
 
 ## Reproduction and evidence
 
 From this worktree, with no worktree virtual environment:
 
 ```bash
-nice -n 10 /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I analyses/mdea_mea_workflow/results/item-l/run.py
+nice -n 10 /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I analyses/mdea_mea_workflow/results/item-l/run.py --finish-gates
 nice -n 10 /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I analyses/mdea_mea_workflow/results/item-l/render.py
 ```
 
-`run.log` records the final scientific stop. `input-hashes.json` identifies
+`run.log` records the earlier Cp stop; `finish-gates.log` records the continuation
+and the A4 phase failure. `--finish-gates` reuses the retained fits and property
+comparisons, verifies the pinned wheel and runs only the prescribed phase gates. `input-hashes.json` identifies
 source data, source PDFs, reused methods and prior evidence. `file-hashes.json`
 identifies the delivered files, excluding itself. The pinned wheel hash is
 0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804.
+
+The ignored `literature/` reading shelf is absent from this worktree. No new
+literature judgment or source transcription was made in this continuation;
+the accepted methods, coefficients and retained comparisons were reused.
+
+Notebook source: `../../notebook.qmd`. The presentation-only site refresh was
+attempted with the pinned interpreter and failed because `snakemake` is
+unavailable. The notebook source and analysis-site navigation are retained;
+the site HTML was not refreshed. No preview service was changed.
+
+Change accounting against 2987259: `run.py` adds 52 executable-file lines and
+removes 40; `render.py` adds 4 and removes 3 (comments/blanks included).
+The runner owns process submission, liquid-only gate accounting, retained-fit
+continuation and amended-start declarations. It reuses the existing scientific
+search owners and replaces the superseded Cp stop interpretation. The figure
+change restricts the gate band to the claim domain. No numerical method,
+search tolerance, physical equation or joint-fit implementation changed.
