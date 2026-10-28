@@ -25,10 +25,13 @@ def saturation_row(row):
               for q in s.j.rows('Merkley1987_loading_points.csv')
               if q['temperature_K'] == row['temperature_K']
               and q['MDEA_mass_percent'] == row['MDEA_mass_percent'])
-    result.update(row=row, alpha_LP=lp)
+    result.update(row=row, source_alpha_LP=lp)
+    lp=float(row.get('declared_alpha_cap',lp))
+    result['alpha_LP']=lp
     if result['status'] == 'Available' and result['sign_changes'] == 1:
         alpha = min(lp, result['alpha_sat'])
-        result.update(alpha_endpoint=alpha, truncation_mol_CO2_per_mol_MDEA=lp-alpha)
+        result.update(alpha_endpoint=alpha, truncation_mol_CO2_per_mol_MDEA=lp-alpha,
+            active_branch='source-cap' if lp<result['alpha_sat'] else 'saturation-cap')
         T, P = float(row['temperature_K']), float(row['proposed_pressure_kPa'])*1000
         nw = s.j.water(float(row['MDEA_mass_percent'])/100)
         item = s.reg.addition_enthalpy(s.params, s.j.problem(T,P,nw,0.),
@@ -64,6 +67,13 @@ def main():
                 mp_context=multiprocessing.get_context('fork')) as pool:
             records = list(pool.map(saturation_row,rows))
         output['rows'].extend(dict(r,start=label) for r in records)
+        if label=='A1':
+            branch_rows=[dict(r,declared_alpha_cap=str(cap)) for r in rows
+                for cap in ((.25,.75) if r['temperature_K']=='388.71' and r['MDEA_mass_percent']=='40'
+                    else (.5,1.25) if r['temperature_K']=='333.15' and r['MDEA_mass_percent']=='20' else ())]
+            with concurrent.futures.ProcessPoolExecutor(max_workers=4,
+                    mp_context=multiprocessing.get_context('fork')) as pool:
+                output['both_branch_acceptance_reference']=list(pool.map(saturation_row,branch_rows))
         try:
             prob = s.j.problem(388.71,1121000.,s.j.water(.4),.36)
             prob.feed = s.eq.Amounts({s.j.W:s.j.water(.4),s.j.M:1.,s.j.C:s.eq.Free(.36)})
