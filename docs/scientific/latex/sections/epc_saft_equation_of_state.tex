@@ -19,12 +19,77 @@ The reduced residual Helmholtz energy, $a^{\mathrm{res}}=A^{\mathrm{res}}/(nRT)$
     +a^{\mathrm{Born}} .
     \label{eq:epcsaft-residual-split}
 \end{equation}
-The hard-chain and dispersion terms follow Gross and Sadowski \cite{Gross2001}, with the dispersion energy of a pair given by
+Each neutral species is modeled as a chain of $m_i^{\mathrm{seg}}$ spherical segments of diameter $\sigma_i$ and dispersion energy $u_i$, and each ion as a single charged sphere with $m_i^{\mathrm{seg}}=1$.
+The first three terms are those of PC-SAFT: hard-chain repulsion, dispersion attraction between segments, and hydrogen bonding between association sites.
+The Debye--H\"uckel term adds the screened Coulomb interactions among ions, and the Born term adds the change in free energy when each ion is charged in the solvent rather than in vacuum.
+The pressure and chemical potentials follow from density and composition derivatives of $a^{\mathrm{res}}$ \cite[Eqs.~A.22, A.32 and A.33]{Gross2001}, and caloric properties from its temperature derivatives (\cref{sec:heat-method}).
+Because the permittivity in the two electrostatic terms depends on density, temperature and composition (\cref{eq:solvent-permittivity}), these derivatives include its variation.
+In the equations below, $\rho_N=N_{\mathrm A}\rho$ is the number density and $\mathcal I$ is the set of ions.
+
+\subsection{Hard-chain and dispersion contributions}
+% P:theory-02a
+The hard-chain term, from Wertheim's first-order perturbation theory with the hard-sphere mixture expressions of Boubl\'ik and Mansoori et al., is \cite[Eqs.~A.4--A.8]{Gross2001}:
+\begin{equation}
+    a^{\mathrm{hc}}=\bar m\,a^{\mathrm{hs}}-\sum_i x_i\left(m_i^{\mathrm{seg}}-1\right)\ln g_{ii}^{\mathrm{hs}},
+    \qquad
+    \bar m=\sum_i x_im_i^{\mathrm{seg}},
+    \label{eq:hard-chain}
+\end{equation}
+\begin{equation}
+    a^{\mathrm{hs}}=\frac{1}{\zeta_0}\left[
+    \frac{3\zeta_1\zeta_2}{1-\zeta_3}
+    +\frac{\zeta_2^3}{\zeta_3\left(1-\zeta_3\right)^2}
+    +\left(\frac{\zeta_2^3}{\zeta_3^2}-\zeta_0\right)\ln\left(1-\zeta_3\right)
+    \right],
+    \label{eq:hard-sphere}
+\end{equation}
+\begin{equation}
+    g_{ij}^{\mathrm{hs}}=\frac{1}{1-\zeta_3}
+    +\frac{d_id_j}{d_i+d_j}\frac{3\zeta_2}{\left(1-\zeta_3\right)^2}
+    +\left(\frac{d_id_j}{d_i+d_j}\right)^2\frac{2\zeta_2^2}{\left(1-\zeta_3\right)^3},
+    \qquad
+    \zeta_n=\frac{\pi}{6}\rho_N\sum_i x_im_i^{\mathrm{seg}}d_i^n,
+    \quad n=0,\dots,3.
+    \label{eq:hard-sphere-contact}
+\end{equation}
+Here $d_i$ is the hard-sphere diameter, $g_{ij}^{\mathrm{hs}}$ is the hard-sphere pair distribution function at contact, and $\eta=\zeta_3$ is the packing fraction.
+Ions have one segment, so they enter the hard-sphere term but not the chain sum.
+For the neutral species the hard-sphere diameter depends on temperature \cite[Eq.~A.9]{Gross2001},
+\begin{equation}
+    d_i=\sigma_i\left[1-0.12\exp\!\left(-\frac{3u_i}{k_BT}\right)\right],
+    \label{eq:hard-sphere-diameter}
+\end{equation}
+with the water diameter law $\sigma_w(T)$ of Section~S1 in place of a constant $\sigma_i$.
+The ion packing diameter is the temperature-independent value $d_i=0.88\sigma_i$; the Debye--H\"uckel diameter equals $\sigma_i$ for all six ions, and the Born diameter is separate.
+These diameter choices define the present parameterization; they are not independently measured ion sizes.
+
+% P:theory-02b
+The dispersion term is Gross and Sadowski's second-order perturbation expansion \cite[Eqs.~A.10--A.19, Table~1]{Gross2001}:
+\begin{equation}
+    a^{\mathrm{disp}}
+    =-2\pi\rho_N I_1\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\frac{u_{ij}}{k_BT}\sigma_{ij}^3
+    -\pi\rho_N\bar m\,C_1I_2\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\left(\frac{u_{ij}}{k_BT}\right)^2\sigma_{ij}^3 ,
+    \label{eq:dispersion}
+\end{equation}
+\begin{equation}
+    C_1=\left[1+\bar m\frac{8\eta-2\eta^2}{\left(1-\eta\right)^4}
+    +\left(1-\bar m\right)\frac{20\eta-27\eta^2+12\eta^3-2\eta^4}{\left[\left(1-\eta\right)\left(2-\eta\right)\right]^2}\right]^{-1},
+    \label{eq:dispersion-compressibility}
+\end{equation}
+\begin{equation}
+    I_1=\sum_{k=0}^{6}a_k(\bar m)\,\eta^k,\qquad
+    I_2=\sum_{k=0}^{6}b_k(\bar m)\,\eta^k,\qquad
+    a_k(\bar m)=a_{0k}+\frac{\bar m-1}{\bar m}a_{1k}+\frac{\bar m-1}{\bar m}\frac{\bar m-2}{\bar m}a_{2k},
+    \label{eq:dispersion-integrals}
+\end{equation}
+where $C_1$ comes from the hard-chain compressibility, and $b_k(\bar m)$ has the same form as $a_k(\bar m)$.
+The coefficients $a_{0k}$--$a_{2k}$ and $b_{0k}$--$b_{2k}$ are Gross and Sadowski's universal constants.
+The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and the dispersion energy of a pair is
 \begin{equation}
     u_{ij}=\sqrt{u_iu_j}\,\left(1-k_{ij}\right).
     \label{eq:dispersion-combining-rule}
 \end{equation}
-Dispersion between ions of the same charge sign, including an ion with itself, is excluded, while ion--solvent and cation--anion pairs keep \cref{eq:dispersion-combining-rule} \cite{Figiel2025}.
+Dispersion between ions of the same charge sign, including an ion with itself, is excluded ($u_{ij}=0$ for $z_iz_j>0$), while ion--solvent and cation--anion pairs keep \cref{eq:dispersion-combining-rule} \cite{Figiel2025}.
 The \COtwo--water, \MEA--water and \MEAH--water interactions have the reciprocal-temperature form
 \begin{equation}
  k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b_{ij}(T^{-1}-T_{\mathrm{ref}}^{-1}),
@@ -33,14 +98,52 @@ The \COtwo--water, \MEA--water and \MEAH--water interactions have the reciprocal
 \end{equation}
 with $b_{ij}$ in kelvin.
 The \COtwo--water coefficients are fixed inputs, whereas the \MEA--water and \MEAH--water intercepts and slopes enter the joint fit.
-The ion packing diameter is $0.88\sigma_i$; the Debye--H\"uckel diameter equals $\sigma_i$ for all six ions, and the Born diameter is separate.
-These diameter choices define the present parameterization; they are not independently measured ion sizes.
 
+\subsection{Association contribution}
 % P:theory-03
-Water and \MEA carry two association sites (2B), and \COtwo carries two induced-association sites that bond only with water \cite{Kleiner2007,Pabsch2020,Schick2023}.
-The induced-association topology follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}, with water inputs fitted to IAPWS-95 (\cref{sec:results-water}).
-\MEA--water cross-association uses the Wolbach--Sandler rule \cite[Eq.~6]{Baygi2015}.
-The \MEA parameters use Baygi and Pahlavanzadeh's 2B model, with its association volume fitted to their model for the present $\sigma_{ij}^3$ convention (Section~S1).
+Hydrogen bonding is described by Wertheim's first-order theory in the form used with PC-SAFT \cite[Eqs.~4--6]{Kleiner2007}:
+\begin{equation}
+    a^{\mathrm{assoc}}=\sum_i x_i\sum_{A\in i}\left(\ln X_A-\frac{X_A}{2}+\frac12\right),
+    \qquad
+    X_A=\left[1+\rho_N\sum_j x_j\sum_{B\in j}X_B\Delta^{AB}\right]^{-1},
+    \label{eq:association}
+\end{equation}
+\begin{equation}
+    \Delta^{AB}=g_{ij}^{\mathrm{hs}}\,\sigma_{ij}^3\,\kappa^{AB}\left[\exp\!\left(\frac{\epsilon^{AB}}{k_BT}\right)-1\right],
+    \label{eq:association-strength}
+\end{equation}
+where $X_A$ is the fraction of molecules $i$ not bonded at site $A$, $B$ runs over the sites on molecule $j$, and $\Delta^{AB}$ is the strength of an $A$--$B$ bond between molecules $i$ and $j$.
+The site fractions are solved at every state.
+Water and \MEA each carry one donor and one acceptor site (2B), and only donor--acceptor pairs bond.
+\COtwo carries one donor and one acceptor induced-association site, each bonding only with the water site of the opposite role: it does not self-associate, and the \COtwo--water bonds use $\epsilon^{AB}=\epsilon_w^{AB}/2$ and $\kappa^{AB}=\kappa_w^{AB}$ (\cref{tab:species-parameters}).
+This induced-association topology \cite{Kleiner2007} follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}, with water inputs fitted to IAPWS-95 (\cref{sec:results-water}).
+\MEA--water cross-association uses the Wolbach--Sandler rule \cite[Eqs.~6 and 7]{Baygi2015}\cite[Eqs.~7 and 8]{Kleiner2007},
+\begin{equation}
+    \epsilon^{AB}_{ij}=\tfrac12\left(\epsilon^{AB}_i+\epsilon^{AB}_j\right),
+    \qquad
+    \kappa^{AB}_{ij}=\sqrt{\kappa^{AB}_i\kappa^{AB}_j}\left(\frac{\sqrt{\sigma_i\sigma_j}}{\sigma_{ij}}\right)^3 ,
+    \label{eq:wolbach-sandler}
+\end{equation}
+and \MEA and \COtwo do not bond with each other.
+The \MEA parameters use Baygi and Pahlavanzadeh's 2B model, with its association volume fitted to their model for the present $\sigma_{ij}^3$ convention of \cref{eq:association-strength} (Section~S1).
+
+\subsection{Debye--H\"uckel contribution}
+% P:theory-03a
+The Debye--H\"uckel term of Cameretti et al.\ describes ions of diameter $d_i^{\mathrm{DH}}$ in a continuum of relative permittivity $\varepsilon_{\mathrm{bulk}}$ \cite[Eqs.~5, 13 and 14]{Cameretti2005}:
+\begin{equation}
+    a^{\mathrm{DH}}=-\frac{\kappa_{\mathrm D}e^2}{12\pi\varepsilon_0\varepsilon_{\mathrm{bulk}}k_BT}\sum_{i\in\mathcal I}x_iz_i^2\chi_i,
+    \qquad
+    \kappa_{\mathrm D}^2=\frac{e^2\rho_N}{\varepsilon_0\varepsilon_{\mathrm{bulk}}k_BT}\sum_{i\in\mathcal I}x_iz_i^2,
+    \label{eq:debye-huckel}
+\end{equation}
+\begin{equation}
+    \chi_i=\frac{3}{\left(\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)^3}
+    \left[\frac32+\ln\left(1+\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)
+    -2\left(1+\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)
+    +\frac12\left(1+\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)^2\right].
+    \label{eq:debye-huckel-chi}
+\end{equation}
+Here $\kappa_{\mathrm D}$ is the inverse Debye screening length, with $\rho_N$ in SI units, and $\chi_i$ accounts for the finite ion size; $\chi_i\to1$ as $\kappa_{\mathrm D}d_i^{\mathrm{DH}}\to0$, which recovers the Debye--H\"uckel limiting law.
 
 \subsection{Born contribution with solvation shell and dielectric saturation}
 % P:theory-04
@@ -63,7 +166,7 @@ The Born term follows the solvation-shell and dielectric-saturation (SSM+DS) for
     f_{\mathrm{mix}}=\frac{\sum_kx_kf_k}{\sum_kx_k}.
     \label{eq:born-shell-diameter}
 \end{equation}
-Here \(\mathcal{I}\) is the set of ions, \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell and \(\varepsilon_{\mathrm{ion}}=8\) is the fixed permittivity assigned to the region between the ion surface and that shell.
+Here \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell and \(\varepsilon_{\mathrm{ion}}=8\) is the fixed permittivity assigned to the region between the ion surface and that shell.
 This work uses \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\), which gives the corrected Eq.~7.
 The water solvation factor is \(f_{\HtwoO}=1.5\) \cite[Table~2]{Figiel2025}, and every other component, including \MEA, \COtwo and all ions, has \(f_k=1\).
 Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents; here it runs over all nine components, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\).
