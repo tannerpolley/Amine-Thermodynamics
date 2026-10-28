@@ -1,0 +1,72 @@
+{
+  "issue": 222,
+  "sources": [
+    {
+      "source_key": "Zheng2020",
+      "zotero_parent_key": "YKU6CMAM",
+      "pdf_attachment_key": "7R5BCAGI",
+      "pdf_sha256": "247df8f67922de28b81a393de63fbb8e4c7216402e82213669add7f0a16654ec",
+      "locator": "Table 4 and footnote, PDF p.5, printed p.3788; definition section 3.1 pp.3787-3788",
+      "units_and_basis": "T K; total pressure MPa; unloaded MDEA wt%; loading mol CO2/mol MDEA; positive -DeltaH_abs kJ/mol CO2",
+      "uncertainty": "Table 4: u(T)=0.01 K, u(P)=0.002 MPa; relative expanded Ur(alpha_sat)=0.05 and Ur(-DeltaH_abs_sat)=0.05; coverage factor not stated in footnote",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Zheng2020_stage1.csv",
+          "sha256": "13982e12aa1cb462f9ac01aaf915c42a0036b1fb6b5ecb8fd6862af1f1c0bb07",
+          "rows": 6
+        }
+      ],
+      "status": "complete",
+      "check": "Printed values checked against rendered source table; blank group temperatures forward-filled; no digitization.",
+      "excluded": "All 40 wt% MDEA + 10 wt% PZ rows, including all 353.15 K rows; SI S1-S2 not present in Zotero, not reconstructed from figures."
+    },
+    {
+      "source_key": "Sedighi2024",
+      "zotero_parent_key": "E7IXZ766",
+      "pdf_attachment_key": "QJDNP3FK",
+      "pdf_sha256": "8e6c5fad1e7087104d846f5c3fda08f0c6d8d87ae2e68303dc366dadecf567e0",
+      "locator": "Table 3 and footnote, PDF p.8, printed p.21; sections 2.1-2.2 pp.15-17 and 4.1 p.20",
+      "units_and_basis": "T K; total pressure kPa; unloaded MDEA wt%; V_CO2 cm3; n_CO2 and n_MDEA mol; alpha mol CO2/mol MDEA",
+      "uncertainty": "Source reports no uncertainty for loading, pressure, temperature or composition; balance accuracy +/-0.1 mg and triplicate averaging are reported, not propagated uncertainty.",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Sedighi2024_stage1.csv",
+          "sha256": "bd4a7a6f46f0a73fb3f8fab12b937b4ce46fd6f9b63286e273b32e652a96eff7",
+          "rows": 24
+        }
+      ],
+      "status": "complete",
+      "check": "Printed values checked against rendered source table; blank group temperatures forward-filled; no digitization.",
+      "gas_phase_basis": "Section 2: 99.995% CO2 feed (Table 1), gas-filled apparatus and manometer open to atmosphere. No inert carrier reported; gas above aqueous solution contains CO2 and solvent vapor. Table 3 footnote is total 101.325 kPa, not a CO2 partial pressure. Section 3.2 p.18 models vapor as CO2 + H2O (MDEA neglected by source). Use total bubble pressure including modeled solvent vapor for issue 222 log-ratio comparison; no subtraction of water vapor from the reported pressure.",
+      "equilibrium_criterion": "Section 2.2 p.16: contact to saturation at spiral-tube exit. Section 4.1 p.20: 2.511 mL/hr selected by preliminary saturation checks; close CO2 inlet when first droplet reaches U-manometer, maintain constant pressure by adjusting mercury height, measure displacement over 20 min (Table 3); average three runs. No quantitative equilibration tolerance or convergence duration criterion reported.",
+      "conversion": "wt% / 100 = unloaded MDEA mass fraction; no molarity-to-mass conversion. Retain printed alpha, rather than recomputing from rounded mole columns."
+    },
+    {
+      "source_key": "Xiao2018",
+      "zotero_parent_key": "WE7ZG7KW",
+      "pdf_attachment_key": "F3EC6J42",
+      "pdf_sha256": "f14148d085d8c538e2bc7e3d1390d3c434acd78d4cd6b1eef9894148ae6f2d5a",
+      "locator": "First page only; full-text table/figure locators unconfirmed",
+      "units_and_basis": "Declared only; no observations extracted",
+      "uncertainty": "Not assessed: full text unavailable",
+      "files": [],
+      "status": "declared-unscored",
+      "pdf_pages": 1,
+      "reason": "First-page-only attachment; no transcription or digitization from abstract. Full-text acquisition requires owner authority; outside this addendum."
+    },
+    {
+      "source_key": "Zhang2023",
+      "zotero_parent_key": "TMHPSMM9",
+      "pdf_attachment_key": "PU7B5G27",
+      "pdf_sha256": "612272632a834d0ff3efad53cf4c72e5f72e599fe42ae275309a0f5c1f548d2e",
+      "locator": "First page only; full-text table/figure locators unconfirmed",
+      "units_and_basis": "Declared only; no observations extracted",
+      "uncertainty": "Not assessed: full text unavailable",
+      "files": [],
+      "status": "declared-unscored",
+      "pdf_pages": 1,
+      "reason": "First-page-only attachment; no transcription or digitization from abstract. Full-text acquisition requires owner authority; outside this addendum."
+    }
+  ],
+  "scoring": "No outside-fit predictions evaluated in stage 1. Newer statistics are context only; no fit entries or pass bars change."
+}

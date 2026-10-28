@@ -117,3 +117,86 @@ including comments and blanks. The additions implement the accepted cubic,
 native caloric admission, alternative dielectric solution, pressure provenance
 and source arithmetic; the source-table copy loop is removed. Generated
 values, source tables and notebook changes are separate from that count.
+
+## Stage-1 addendum: starts and newer comparisons
+
+Items (h) and the authorized Zheng/Sedighi portion of (i) are complete.
+[Start 4](inputs/variant-A-start-4.json) is derived from `inputs/variant-A.json`.
+[Declaration checks](results/start-4-declaration.json) retain the full recursive
+diff, nine strict bound checks, shared component/pair byte comparisons,
+installed-wheel identity, admission message and liquid-state terms.
+The shared owner remains SHA-256 `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`.
+
+Bülow 2021, Eq. 26 (p.6330) and Table 3 (p.6331), gives the cubic about
+298.15 K. Its coefficients re-centered at 313.15 K are
+`[-0.131933125, -0.001070625, -7.575e-6, 1.25e-7]`, in increasing powers
+of temperature displacement. Matching the value and first derivative gives
+`b = 104.9886164016 K`; the document uses `104.9886164 K` and explicitly
+sets `reference_temperature = 313.15 K`. Projection minus cubic is
+**+0.0105989562** at 373.15 K. Native evaluations with the slope and with
+an equivalent constant k agree exactly in pressure, dispersion and residual
+Helmholtz energy at 298.15, 313.15 and 373.15 K (tolerance 1e-8).
+The only changes from start 1 are the four ion diameters and the MDEA–water
+pair; the start-1 identifiers and metadata are retained to keep the diff
+within the issue's allowed entries. This is an initial guess, not a
+reproduction of Bülow's model. [Source identity](inputs/start-4-source.json)
+records the live Zotero PDF and verified reading copy.
+
+At 313.15 K and 100 kPa, the unloaded composition (0.95 water, 0.05 MDEA)
+gives **43792.4928 mol/m³**; the prescribed loaded composition (0.94 water,
+0.04 MDEA, 0.01 MDEAH+, 0.01 bicarbonate) gives **45580.2694 mol/m³**.
+Their dimensionless residual Helmholtz energies are **−8.93473850** and
+**−11.79080043**, respectively; all separate terms are retained. The largest
+pressure residual is **4.30e-6 Pa**. These are numerical admission checks
+at prescribed compositions, not reactive equilibrium or physical validation.
+
+[Addendum source provenance](../../data/reference/MDEA/addendum-sources.json)
+owns attachment hashes, locators, units, bases and uncertainties. The tables
+remain solely under `data/reference/MDEA/`:
+
+- [Zheng 2020](../../data/reference/MDEA/Zheng2020_stage1.csv): six pure-MDEA
+  Table 4 rows (PDF p.5, printed p.3788), two at 30 wt% and four at 50 wt%,
+  all at 323.15 K. Total pressure spans 0.53–4.19 MPa. Retain loading and
+  positive absorption-heat magnitude per mole CO₂, with relative expanded
+  uncertainty 0.05 on both; u(T)=0.01 K and u(P)=0.002 MPa. The comparison
+  is the integral heat from zero loading to reported saturation loading at
+  source T/P, with the model saturation loading beside it. Exclude the
+  piperazine blend and all 353.15 K rows. SI Tables S1–S2 are unavailable.
+- [Sedighi 2024](../../data/reference/MDEA/Sedighi2024_stage1.csv): 24 Table 3
+  rows (PDF p.8, printed p.21), of which 15 at 10–50 wt% are designated for
+  later outside-fit scoring. The nine rows at 60, 80 and 98 wt% remain
+  unscored. Mass fraction is printed wt% divided by 100; no molarity
+  conversion is needed. The pressure per row is **total 101.325 kPa**.
+  Section 2 supplies 99.995% CO₂, with no inert carrier, and an atmospheric
+  manometer; gas above the solution includes solvent vapor. Section 3.2
+  models vapor as CO₂ + water. Compare total model bubble pressure at the
+  printed loading and temperature, including solvent vapor; do not identify
+  atmospheric total pressure as CO₂ partial pressure.
+- Sedighi §2.2 and §4.1 (pp.16,20) describe contact to saturation, preliminary
+  checks at 2.511 mL/hr, closing the CO₂ inlet when the first liquid droplet
+  reaches the manometer, and maintaining pressure by mercury adjustment.
+  Table 3 uses a 20-minute measurement and averages three runs. No numerical
+  equilibration tolerance is given. **The source reports no uncertainty**;
+  its balance accuracy and repeated measurements do not establish one.
+  Printed mole columns and loading are retained separately:
+  [arithmetic check](results/sedighi-loading-arithmetic.json) finds the largest
+  discrepancy in row 18 (323.15 K, 20 wt%): printed loading 0.739 versus
+  0.72922636 from the mole columns. No value is repaired or excluded.
+- Xiao 2018 (`F3EC6J42`) and Zhang 2023 (`PU7B5G27`) each have one PDF page.
+  Their attachment hashes are recorded as declared but unscored; no abstract
+  transcription or digitization was performed. Full-text acquisition remains
+  outside this addendum. Zhang remains designated as extrapolation by #222.
+
+These observations retain their outside-fit roles; no predictions have been
+scored. Their later statistics are supporting comparisons and do not change
+the 24.2% pressure criterion. Item (i) as a four-source task remains incomplete
+until the two full texts are acquired and transcribed. Stage 2 still requires
+the owner's freeze and independent delivered review.
+
+The addendum reuses `prepare.py` for document records and wheel identity and
+`admission_probe.py::caloric_record` for native thermochemistry, using the
+main interpreter with `-I` and `nice -n 10`. No persistent executable code is
+added. The numerical record includes the original and translated polynomial
+coefficients, complete input documents, state conditions and per-term outputs;
+`results/numerical-checks.json` links these checks. Table transcriptions were
+checked against rendered PDFs; no plotted-only observations were needed.
