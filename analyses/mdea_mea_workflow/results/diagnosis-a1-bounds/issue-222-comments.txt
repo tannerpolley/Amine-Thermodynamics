@@ -1,0 +1,486 @@
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Readiness disposition (2026-10-28).**
+- **What was applied:** the re-check by Claude Fable 5.1 xhigh returned Revise with eight required findings, R1–R8. Each finding came with exact replacement text, and all eight are applied in the body above without changing their wording. The other edits are two of its optional suggestions:
+  - the domain wording: ≤ 49 wt% for the pressure test;
+  - a units check on Wangler Eq. 26, from the reviewer's own correction.
+- **Why there is no third review round:** each finding was a completeness gap with its own resolution text, not a recurring failure. The design is treated as ready for **stage 1 only**: preparation, with no optimizer.
+- **Stage 2 gate:** stage 2 (fitting) stays gated by the stage-1 completion criteria and by the owner's freeze comment on this issue.
+
+Kamps–Maurer 1996 (DOI 10.1021/je960141+) is still missing from Zotero. Stage-1 item (g) waits on it; the other items do not.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+--
+author:	tannerpolley
+association:	owner
+edited:	true
+status:	none
+--
+**T3 Code status: Working**
+
+Issue: [#222 MDEA–CO2–H2O through the MEA ePC-SAFT workflow: do the MEA shared-species parameters transfer?](https://github.com/tannerpolley/Amine-Thermodynamics/issues/222)
+
+Thread: thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-remaining-starts-and-attribution
+
+Model: gpt-6.1-sol
+
+Branch: issue-222-mdea-co2-h2o-through-the-mea-epc-saft
+
+Updated: 2026-10-28T16:56:04.762Z
+
+<!-- t3-issue-status:github.com:821573736:6071971828 -->
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+## T3 Code closeout: done
+Issue: [#222 MDEA–CO2–H2O through the MEA ePC-SAFT workflow: do the MEA shared-species parameters transfer?](https://github.com/tannerpolley/Amine-Thermodynamics/issues/222)
+Thread: thread:delegated-task:command%3Amcp%3A425bdb9e-841b-4daa-826d-8d4acc95b348%3Adelegate-task%3Aissue-222-stage-1
+Model: gpt-6.1-sol
+Branch: issue-222-mdea-co2-h2o-through-the-mea-epc-saft
+Completed: 2026-10-28T04:02:55.342Z
+
+Corrected the two flagged prose terms in follow-up commit **`25d0d4561a6988587f043f976cdc5d6c4536428b`**. Numerical results and item dispositions are unchanged; the worktree is clean.
+
+<!-- t3-issue-closeout:github.com:821573736:6071971828:thread:delegated-task:command%3Amcp%3A425bdb9e-841b-4daa-826d-8d4acc95b348%3Adelegate-task%3Aissue-222-stage-1:run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A425bdb9e-841b-4daa-826d-8d4acc95b348%253Adelegate-task%253Aissue-222-stage-1:ordinal:1 -->
+--
+author:	tannerpolley
+association:	owner
+edited:	true
+status:	none
+--
+**Stage-1 owner decisions (2026-10-28).** Stage 1 is commits 7b4430f and 25d0d45 on `issue-222-mdea-co2-h2o-through-the-mea-epc-saft`, not yet merged.
+
+1. **κ conversion accepted:** κ^AB(MDEA) = **0.11800686**, fixed to eight significant figures. Against Pahlavanzadeh's 4C model it gives 1.349 % pressure AARD and 0.00525 % saturated-liquid density AARD at 21 temperatures from 293.15 to 393.15 K. For comparison, the MEA conversion gave 0.525 %. Item (b) is complete.
+2. **Wangler Eq. 26, the factor of T restored:** the literal reading gives an ideal-gas Cp of 2.5–5 J/mol/K, which is below 5R/2 and so physically inadmissible. The restored reading gives 159–213 J/mol/K over 293–423 K. Fit the MDEA ideal-gas polynomial to it within 0.5 %, cross-check one temperature against an independent estimate, and anchor h = s = 0 at 313.15 K.
+3. **CO2 coordinate: k(MDEAH+–CO2), with k(MDEA–CO2) fixed at 0.** The probe as specified ranked unit-normalized columns, which all have length 1, so that wording was a design defect. Both coordinates are dimensionless k, so raw column norms compare directly, and both variants agree: A 4.99 against 0.745, B 9.43 against 0.0107. The "column-normalized" wording in the probe bullet is superseded by this decision.
+4. **Data gaps: declare scales and keep both sets in the fit.**
+   - Loaded density (Weiland 1998): use the MEA loaded-density scale convention, s_ρ = [u_ρ² + (g u_α)²]^½, with u_ρ and u_α stated explicitly. Stage 1 found no source-reported loaded-density uncertainty; verify that.
+   - Merkley 1987: fit the 12 digitized markers at their digitized states, scale 5 % (the source's stated accuracy), each flagged as digitized.
+
+Stage 2 still needs four things: these items closed in stage 1, (g) Kamps–Maurer (the paper is not yet in Zotero), the independent delivered review of stage 1 (running), and the owner's freeze comment.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+## T3 Code closeout: done
+Issue: [#222 MDEA–CO2–H2O through the MEA ePC-SAFT workflow: do the MEA shared-species parameters transfer?](https://github.com/tannerpolley/Amine-Thermodynamics/issues/222)
+Thread: thread:delegated-task:command%3Amcp%3A425bdb9e-841b-4daa-826d-8d4acc95b348%3Adelegate-task%3Aissue-222-stage-1-fixes
+Model: gpt-6.1-sol
+Branch: issue-222-mdea-co2-h2o-through-the-mea-epc-saft-2
+Completed: 2026-10-28T04:31:10.311Z
+
+Committed on `issue-222-mdea-co2-h2o-through-the-mea-epc-saft` as **`666d468f709bcabecad8d1a3485aba508c2de63b`**. The worktree is clean. No merge or push occurred.
+
+| Item | Status and key numbers |
+|---|---|
+| **(a) Source data** | All **338 observations** retained. Density scales and Merkley pressure assignments are explicit proposals awaiting owner freeze. |
+| **(b) Association volume** | Owner acceptance recorded: **κ = 0.11800686**, fixed to eight significant figures. Pressure/density AARDs against the source model: **1.34914% / 0.00525150%**. Unconverted κ = 0.123858 gives **8.38332% / 0.0339482%**. |
+| **(c) Ideal-gas calorics** | Restored factor T adopted. Cubic maximum deviation is **0.022213%** over 293–423 K on a 0.1 K grid, below 0.5%. Native evaluation verifies **h = s = 0 at 313.15 K**. Water and CO₂ checks give **33.575 / 37.243 J/mol/K** at 298.15 K. |
+| **Independent Cp check** | At 298.15 K, Wangler gives **161.218 J/mol/K**, versus **189.200 J/mol/K** from Neumann et al., Eq. 5/Table 8: **−14.79%**. This is an independent estimate comparison, with unquantified ideal-gas Cp uncertainty, rather than physical validation. |
+| **(d) Dielectric fit** | Both minima retained: selected **0.8630669729 L/mol, 1121.773473 K**, cost **318.265**, AARD **3.86106%**; alternative **0.28087913 L/mol, 2793.648 K**, cost **328.265**, AARD **3.91286%**. Selection follows MEA’s larger-volume convention and also has lower cost. |
+| **(e) Admission** | Both variants admit the MDEA ideal-gas record and retain unloaded/charged liquid Helmholtz terms. Native neutral calculations verify calorics. Reaction-completed ionic caloric totals remain conditional on (g). |
+| **(f) CO₂ coordinate** | Owner selection recorded: **k(MDEAH⁺–CO₂)**, with **k(MDEA–CO₂) = 0**. Raw norms: A **4.99072 versus 0.744984**; B **9.42712 versus 0.0107344**. |
+| **(g) Reaction basis** | **Blocked** pending Kamps–Maurer 1996 in Zotero. |
+
+The dielectric evidence now includes the composition biases and the absorber composition limitation. The 393 K replay qualifies the “about 2%” comparison: the minima differ by **1.87% at x = 0.2**, increasing to **6.69% for pure MDEA**.
+
+Carson now uses **integral ΔH/n₁ from zero loading**. All printed numbers remain intact, with row arithmetic retained separately, including row 38’s implied **0.012801 mol**. The probe temperature counts are corrected to **13 at 313 K, five at 333 K, two at 373 K, none at 393 K**. The twelve duplicate source tables and copy loop are removed.
+
+The [README freeze proposals](/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-222-mdea-co2-h2o-through-the-mea-epc-saft/analyses/mdea_mea_workflow/README.md#owner-freeze-proposals) are:
+
+- **Density:** $u_{\rho,j}=0.001\rho_{\mathrm{obs},j}$ and $u_{\alpha,j}=0.01$ mol CO₂/mol MDEA, combined through the MEA density–loading secant method. These are proposed residual scales, not source-reported loaded uncertainties.
+- **Merkley:** retain the **5% scale**; propose **1121 kPa** at 288.71, 333.15 and 388.71 K, and **1466 kPa** at 422.04 K. Keep both **156/1121 kPa** candidates for the six ambiguous low-temperature markers and report the alternative-pressure calculation in stage 2. The text **−66** and digitized **−65.3 kJ/mol** values are both recorded.
+- **Selected CO₂ interaction bound:** recommend **[−0.5, 0.5]**. The start-1 probe provides no evidence for a narrower bound.
+
+All four derivative checks pass **10⁻⁵ relative tolerance**; shared water/CO₂ results remain unchanged. Source identities, row counts, hashes, and the requested prose checker pass.
+
+The notebook is registered in the analysis site, but HTML regeneration stopped because **`snakemake` is unavailable**. Independent delivered review and owner freeze remain open gates. No joint optimizer, stage 2, MEA-record/manuscript changes, Zotero writes, or Engine source imports occurred.
+
+<!-- t3-issue-closeout:github.com:821573736:6071971828:thread:delegated-task:command%3Amcp%3A425bdb9e-841b-4daa-826d-8d4acc95b348%3Adelegate-task%3Aissue-222-stage-1-fixes:run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A425bdb9e-841b-4daa-826d-8d4acc95b348%253Adelegate-task%253Aissue-222-stage-1-fixes:ordinal:1 -->
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Owner decisions, stage-1 follow-up (2026-10-28).** Stage 1 is merged to main at 12afe27.
+
+1. **MDEA ideal-gas Cp: Wangler (restored T factor) is primary, with a declared Neumann sensitivity.**
+   - The primary record is the cubic that fits restored Wangler Eq. 26, max deviation 0.0222 % over 293–423 K. It is anchored at h = s = 0 at 313.15 K.
+   - At 298.15 K it gives 161.2 J/mol/K. Neumann, Baumhögger, Span, Vrabec and Thol 2021 (DOI 10.1007/s10765-021-02933-7, Eq. 5, Table 8) give 189.2 J/mol/K, a difference of −14.8 %.
+   - Neither value is measured; Neumann et al. cannot assign their ideal-gas Cp a reliable uncertainty.
+   - Stage 2 reruns the heat and Cp comparisons with Neumann's ideal-gas Cp as a declared sensitivity, without refitting, and reports both.
+   - Neumann 2021 is to be added to Zotero. The PDF used was the authors' manuscript from static.tu.berlin, SHA-256 f077727a…aa46.
+2. **Loaded-density scale (Weiland 1998), frozen:** u_ρ,j = 0.001 ρ_obs,j and u_α,j = 0.01 mol CO2/mol MDEA, combined by the MEA secant method (data_methods.tex, Eq. density-scale). These are declared residual scales, not source-reported uncertainties; the source reports none for loaded solutions.
+3. **Merkley pressure rule, frozen:**
+   - Fit at 1121 kPa (288.71, 333.15 and 388.71 K) and at 1466 kPa (422.04 K), with the 5 % scale.
+   - For the six markers whose pressure is ambiguous, also report the calculation at the 156 kPa alternative.
+
+**The full stage-2 freeze is not yet given.** The owner asked about item (g) first. Stage 2 also waits on (g).
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Sources for (g) and the Cp sensitivity (2026-10-28).**
+- **Neumann et al. 2021** (DOI 10.1007/s10765-021-02933-7) is now in Zotero: item CA5R9QN8, PDF 4V38X73R, collection 8RZP275E, open-access route.
+- **Kamps and Maurer 1996** (DOI 10.1021/je960141+) still cannot be added by cse-zotero. Every attempt stops at the metadata step with an error the plugin hides; the bug is filed as tannerpolley/agentic-cse#29. The owner adds this item by hand, and item (g) then runs from that copy.
+- **The stage-2 freeze** stays open until (g) passes.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Item (g) complete (2026-10-28, main ca8e1de).**
+- **Source:** Kamps and Maurer 1996 (Zotero THBMMB2G, PDF HRGBIYIW), Eq. 12, gives the molality-scale law for MDEAH+(aq) ⇌ MDEA(aq) + H+(aq), with K = a_MDEA a_H+/a_MDEAH+ (Eq. 8), over 278–368 K.
+- **Match to Uyan:** Uyan's mole-fraction law equals Eq. 12 shifted by −4.0165, to within 0.0019 in ln K, and gives pK_m = 8.551 at 298.15 K.
+- **Pressure:** the source neglects the pressure influence. Stage 2 uses the MEA R5 100 kPa convention, and treats every state above 368 K as an extrapolation.
+- **Record:** `analyses/mdea_mea_workflow/results/reaction-basis-kamps-maurer.json`.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Amendment readiness disposition (2026-10-28).**
+- **What was applied:** the amendment check (Claude Fable 5.1 xhigh) returned Revise with R1–R7. All seven are applied in the body without changing their wording, along with one optional wording fix (MDEAH+ pairs in Bülow Table 3).
+- **Checked against the PDFs:** start 4's values, the [3, 7] Å bound and the SI Table S3 benchmark.
+- **Corrected:**
+  - Zheng's pure-MDEA data are 323.15 K only;
+  - Zhang's 5 mol/L is about 57 wt%, so it is reported as extrapolation;
+  - Sedighi reports no uncertainty;
+  - every newer source now has a declared observable.
+- **Still open:** the Xiao 2018 and Zhang 2023 Zotero PDFs are first-page-only (pdfinfo reports 1 page), so both are declared but unscored until their full text is acquired.
+- **Next:** with this disposition the amendment is treated as ready for the stage-1 addendum, (h) and (i). Stage 2 still waits on the owner's freeze.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+## T3 Code closeout: done
+Issue: [#222 MDEA–CO2–H2O through the MEA ePC-SAFT workflow: do the MEA shared-species parameters transfer?](https://github.com/tannerpolley/Amine-Thermodynamics/issues/222)
+Thread: thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-stage-1-addendum
+Model: gpt-6.1-sol
+Branch: issue-222-mdea-co2-h2o-through-the-mea-epc-saft
+Completed: 2026-10-28T06:44:56.523Z
+
+Committed **`d52024e68c4ceb90b673bc75fa8439ac7e5898d7`** on branch `issue-222-hi`, cut from main at `ca8e1de`. The worktree is clean. No merge or push occurred.
+
+| Item | Status against its criterion and key numbers |
+|---|---|
+| **(h) Start-4 declaration** | **Complete.** Re-centered coefficients are `[-0.131933125, -0.001070625, -7.575e-6, 1.25e-7]`. The projected slope is **104.9886164016 K**, declared as **104.9886164 K** with reference temperature **313.15 K**. Projection minus cubic at 373.15 K is **+0.0105989562**. All **nine coordinates** lie strictly inside their bounds. The diff contains only the four permitted ion diameters and MDEA–water pair changes. Shared component/pair blocks remain byte-identical; the shared owner retains SHA-256 `00e77608…fe9cc91`. |
+| **(h) Native admission** | **Complete on the pinned wheel.** At 313.15 K and 100 kPa, unloaded/loaded liquid densities are **43792.4928 / 45580.2694 mol/m³**. Admission messages and separate Helmholtz contributions are retained. Maximum pressure residual is **4.30 × 10⁻⁶ Pa**. Three-temperature replay confirms the Engine applies the reciprocal law. These are numerical checks at prescribed compositions, not physical validation. |
+| **(i) Zheng 2020** | **Authorized portion complete:** six pure-MDEA rows, all at **323.15 K**, including loading and integral absorption heat. Relative expanded uncertainty is **0.05** on both quantities. Piperazine-blend rows are excluded. |
+| **(i) Sedighi 2024** | **Authorized portion complete:** all **24 rows** retained; **15 at 10–50 wt%** designated for later scoring. Pressure is **total 101.325 kPa**, with CO₂ feed and solvent vapor. Saturation procedure and absence of a quantitative equilibrium tolerance are recorded. **The source reports no uncertainty.** |
+| **(i) Xiao / Zhang** | Declared but unscored, with attachment hashes and verified one-page counts. No abstract transcription or digitization. The full four-source criterion remains open pending full texts. |
+
+Evidence is retained in the [analysis directory](/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-222-mdea-co2-h2o-through-the-mea-epc-saft/.worktrees/issue-222-hi/analyses/mdea_mea_workflow/README.md): `inputs/variant-A-start-4.json`, `results/start-4-declaration.json`, `results/numerical-checks.json`, and the updated notebook. The [source directory](/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-222-mdea-co2-h2o-through-the-mea-epc-saft/.worktrees/issue-222-hi/data/reference/MDEA/README.md) contains `Zheng2020_stage1.csv`, `Sedighi2024_stage1.csv`, and `addendum-sources.json`.
+
+Document, bound, hash, row-count and prose checks pass. Sedighi’s printed row-18 discrepancy—loading **0.739**, versus **0.72922636** from its mole columns—is retained without repair.
+
+No joint optimizer or stage 2 ran. Independent delivered review remains open; notebook HTML was not refreshed because `snakemake` is unavailable in the required interpreter.
+
+<!-- t3-issue-closeout:github.com:821573736:6071971828:thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-stage-1-addendum:run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A77d961e7-b2dd-4e05-b623-636f7f973610%253Adelegate-task%253Aissue-222-stage-1-addendum:ordinal:1 -->
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Owner freeze for stage 2 (2026-10-28).** The owner confirmed it in the T3 question tool, and the orchestrator records it here as the owner's freeze comment. As written in the body above (main 4835dfd), these are frozen:
+- **Data roles:**
+  - the fitted sets: Kuranov 313–393 K, Jakobsen A5, Carson, Merkley 20/40 wt% at the frozen pressure rule, Weiland 1997 Cp 30–50 wt%, Weiland 1998 density 30–50 wt%, Sobrino 0.1 MPa, and Kim bubble pressure;
+  - the outside-fit sets: Ermatchkov's 88 primary rows (pass bar), the corrected Kamps data, Böttinger, Derks if resolved, Merkley 60 wt%, Weiland 60 wt%, Kuranov 413 K, and the newer sources Xiao, Zheng, Zhang and Sedighi.
+- **Scales and weights:** the objective table and paragraph in the body, including u_ρ = 0.1 % ρ_obs, u_α = 0.01, and the 5 % Merkley scale.
+- **Bounds:**
+  - σ(MDEAH+) in [3, 7] Å for Variant A and [3.0, 4.5] Å for Variant B;
+  - Born diameter in [2, 7] Å; u/k in [50, 950] K;
+  - neutral–water and ion–water k in [−0.5, 0.5]; **k(MDEAH+–CO2) in [−0.5, 0.5]**; unlike-ion k in [−1, 1];
+  - slopes ±1000 K, with T_ref = 313.15 K.
+- **Coordinates:** 9 per variant, with k(MDEAH+–CO2) selected and k(MDEA–CO2) fixed at 0.
+- **Declared starts:** seven in total: A starts 1–4 (start 4 Bülow-derived) and B starts 1–3.
+- **Pass bar:** CO2 partial-pressure AARD ≤ 24.2 % on the 88 Ermatchkov rows at ≤ 49 wt%, judged separately for each variant. The follow-up control and margin are frozen as written.
+
+**Exception:** stage-1 item (i) is incomplete only for Xiao 2018 and Zhang 2023, whose Zotero PDFs are first-page-only. Both are outside-fit context, scored once their full texts are attached, and neither can change a fit or a verdict. Stage 2 is authorized.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+## T3 Code closeout: done
+Issue: [#222 MDEA–CO2–H2O through the MEA ePC-SAFT workflow: do the MEA shared-species parameters transfer?](https://github.com/tannerpolley/Amine-Thermodynamics/issues/222)
+Thread: thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-stage-2
+Model: gpt-6.1-sol
+Branch: issue-222-mdea-co2-h2o-through-the-mea-epc-saft
+Completed: 2026-10-28T07:03:02.543Z
+
+**Stage 2 is paused for an owner/Design decision. Neither variant has a pass or fail verdict.** The native question has been submitted to resolve the Merkley heat observable.
+
+Merkley’s Figure 3 reports a slope fitted below saturation (printed pp. 439–441). The retained markers specify temperature, composition and pressure, but no loading or loading interval. The reused MEA `addition_enthalpy` observation requires two equilibrium endpoints and a positive CO₂ addition. Selecting those would add a scientific choice to the frozen objective.
+
+This affects **8 fitted markers**, **4 outside-fit markers**, and **6 alternative-pressure calculations**. No frozen choices were changed.
+
+| Declared start | Fit endpoint | Objective / identifiability |
+|---|---|---|
+| A1 | Not run | Unavailable |
+| A2 | Not run | Unavailable |
+| A3 | Not run | Unavailable |
+| A4, Bülow-derived | Not run | Unavailable |
+| B1 | Not run | Unavailable |
+| B2 | Not run | Unavailable |
+| B3 | Not run | Unavailable |
+
+No representative endpoint was selected, and no outside-fit statistics, phase checks or follow-up refits ran. **No MDEA outcome falsifies the MEA bicarbonate value.** Corrected Kamps remains excluded from the follow-up criterion.
+
+Retained evidence:
+
+- [Heat-definition evidence, row inventory and hashes](analyses/mdea_mea_workflow/results/stage2-heat-definition.json)
+- [Complete issue body, comments and owner freeze](analyses/mdea_mea_workflow/inputs/stage2-issue-222.json)
+- [README disposition](analyses/mdea_mea_workflow/README.md)
+
+The live Merkley PDF and table hashes match stage 1; all **12 installed Engine wheel files** match the pinned wheel. `git diff --check` passed. No new numerical result exists to summarize in the notebook.
+
+Committed as **`182d76a9bf4f1d187ed2e8bb428a397e053b42df`**. The worktree is clean; nothing was merged or pushed. The MEA record and manuscript are unchanged.
+
+**Open gate:** the owner/Design must identify the accepted model loading, interval or slope definition before the joint fits can proceed.
+
+<!-- t3-issue-closeout:github.com:821573736:6071971828:thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-stage-2:run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A77d961e7-b2dd-4e05-b623-636f7f973610%253Adelegate-task%253Aissue-222-stage-2:ordinal:1 -->
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Correction to the frozen heat paragraph (2026-10-28).**
+- **The error:** the body said Carson rows use "the partial-molar heat at the source's loading step". That wording came from the second readiness review, and it predates the stage-1 delivered review.
+- **The evidence:** that review established from Carson's own arithmetic that the printed column is the cumulative integral ΔH/n(CO2) from zero loading (p. 1289; 27 of 40 rows match ΔH/n₁ within 0.03 kJ/mol), and the stage-1 records already use it.
+- **The correction:** the body now states the integral-from-zero observable, matching the source. This corrects a factual error about the source, not a modelling choice. The stage-2 builder raised it before fitting, and the orchestrator answered it; nothing else in the freeze changes.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Carson pressure convention (orchestrator ruling, 2026-10-28; raised by the stage-2 builder before fitting).**
+- **The problem:** Carson 2000 reports no calorimeter pressure for each state, only the 265→125 kPa range of the gas-injection device (pp. 1288–1289), so the body's 'source temperature and pressure' is undefined for these rows.
+- **The convention:** Carson rows are evaluated at **101325 Pa**, a declared convention, not a source value. The cumulative loadings are at most about 0.2, so the states should be single-liquid with all the CO2 absorbed.
+- **The check:** the row with the largest loading is also evaluated at 265 kPa, and the relative change in integral heat is reported. A change above 0.5 %, or any Carson state that is not single-liquid at 101325 Pa, stops the run for a report.
+- **Scope:** the 265 kPa evaluation is not part of the objective. Nothing else in the freeze changes.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+## T3 Code closeout: done
+Issue: [#222 MDEA–CO2–H2O through the MEA ePC-SAFT workflow: do the MEA shared-species parameters transfer?](https://github.com/tannerpolley/Amine-Thermodynamics/issues/222)
+Thread: thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-stage-2-resume
+Model: gpt-6.1-sol
+Branch: issue-222-mdea-co2-h2o-through-the-mea-epc-saft
+Completed: 2026-10-28T15:55:00.050Z
+
+**Item (j) passes. Stage 2 returns to Design because the Carson single-liquid assumption fails at A1 and B1.** No optimizer ran, so neither variant has an Ermatchkov transfer verdict.
+
+All twelve Merkley loading points were digitized with calibrated axes, an inspected QA overlay and an absolute reading allowance of **±0.02 mol CO₂/mol MDEA**. The 40 wt%, 388.71 K point reads **0.360**, consistent with the printed **0.35**. Assignments cover all twelve heat markers and six 156 kPa alternatives; the alternatives retain the required saturation-limited endpoint rule.
+
+At Carson’s largest retained loading, **α = 0.247976**, T = 298.15 K and the declared pressure of 101325 Pa:
+
+| Numerical check at start 1 | Variant A | Variant B |
+|---|---:|---:|
+| Heat change at 265000 Pa | 0.143910% | 0.144992% |
+| Minimum tangent-plane distance / RT | −5.911977 | −6.564092 |
+| Admitted split ΔG / RT | −2.782731 | −3.947438 |
+| Estimated split numerical error / RT | 1.30 × 10⁻⁶ | 1.39 × 10⁻⁶ |
+
+The pressure sensitivity is below the **0.5%** limit. However, the completed phase searches find feasible, charge-balanced splits with lower Gibbs energy. Exact replay, neighboring row 9 and row 1 at **α = 0.082434** reproduce the failure. Liquid equilibrium residuals remain below **4.6 × 10⁻¹³**.
+
+These are numerical results at the declared starting vectors. They do not establish experimental phase separation or prove that every admissible fitted vector is unstable.
+
+| Declared start | Fit endpoint | Objective / identifiability |
+|---|---|---|
+| A1 | Not run | Unavailable: phase-assumption stop |
+| A2 | Not run | Unavailable |
+| A3 | Not run | Unavailable |
+| A4, Bülow-derived | Not run | Unavailable |
+| B1 | Not run | Unavailable: phase-assumption stop |
+| B2 | Not run | Unavailable |
+| B3 | Not run | Unavailable |
+
+No representative endpoint was selected. Outside-fit statistics, weak-direction profiles, Neumann Cp sensitivity and bicarbonate–water versus k(MDEA–CO₂) follow-up refits remain uncomputed. Corrected Kamps remains excluded from the follow-up criterion. **No MDEA outcome falsifies the MEA bicarbonate value.** Xiao and Zhang remain unscored.
+
+Retained evidence:
+
+- [Notebook](analyses/mdea_mea_workflow/notebook.qmd)
+- [Merkley source values](data/reference/MDEA/Merkley1987_loading_points.csv), [calibration and assignments](analyses/mdea_mea_workflow/results/merkley-loading-points.json), and [QA overlay](analyses/mdea_mea_workflow/results/merkley-loading-overlay.png)
+- [Full phase-search evidence](analyses/mdea_mea_workflow/results/carson-phase-check.json) and [pressure sensitivity](analyses/mdea_mea_workflow/results/carson-pressure-check.json)
+- [Current disposition and seven-start table](analyses/mdea_mea_workflow/results/stage2-disposition.json)
+
+Committed as **`4154a850ed34fad0758b4d6774e159f7b9429519`**. The worktree is clean; nothing was merged or pushed. The MEA record and manuscript are unchanged.
+
+Independent delivered review remains open. Notebook HTML refresh could not complete because `snakemake` is unavailable; the retained-result notebook source is complete.
+
+<!-- t3-issue-closeout:github.com:821573736:6071971828:thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-stage-2-resume:run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A77d961e7-b2dd-4e05-b623-636f7f973610%253Adelegate-task%253Aissue-222-stage-2-resume:ordinal:1 -->
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+## T3 Code closeout: done
+Issue: [#222 MDEA–CO2–H2O through the MEA ePC-SAFT workflow: do the MEA shared-species parameters transfer?](https://github.com/tannerpolley/Amine-Thermodynamics/issues/222)
+Thread: thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-diagnose-carson-split
+Model: claude-opus-5-5
+Branch: issue-222-mdea-co2-h2o-through-the-mea-epc-saft
+Completed: 2026-10-28T16:11:40.212Z
+
+Correction: the Kim 2008 comparison holds only at 313.15 K. Only the 40 °C Kim states (x(MDEA) 0.0076–0.107) were checked against the k = 0 gap at that temperature (1.3×10⁻⁵ to 0.765). The 60–100 °C Kim states were not checked, so "puts those states inside its gap" applies only to the 40 °C series.
+
+<!-- t3-issue-closeout:github.com:821573736:6071971828:thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-diagnose-carson-split:run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A77d961e7-b2dd-4e05-b623-636f7f973610%253Adelegate-task%253Aissue-222-diagnose-carson-split:ordinal:1 -->
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Item (k) pre-fit initialization (orchestrator ruling, 2026-10-28; raised by the builder).**
+- **The problem:** the zero-pair initialization was refused for local liquid instability. That is consistent with the diagnosis, where k(MDEA–water) = 0 gives an immiscible binary. Item (k) did not declare a pre-fit start.
+- **The ruling:** the pre-fit runs from two starts, k(313.15 K) = −0.184 and −0.15, both with slope 0 K. Both are taken from the diagnosis probes, not from a source, and all frozen bounds and settings are unchanged.
+- **The test:** the two endpoints must agree to within 1e-4 in k and 1 K in slope, and then the −0.184 endpoint is used. Disagreement or non-convergence stops the work as a non-unique pre-fit and returns it to Design.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Item (k) binary gate (orchestrator ruling, 2026-10-28; raised by the builder).**
+- **The search result:** 1,177 MDEA–water binary searches found **zero liquid–liquid witnesses**, the Gibbs-mixing convex hulls are fully miscible, and all ten amended Carson searches pass.
+- **The vapor witnesses:** 170 searches found vapor descent. That is expected:
+  - pure water at 393.15 K and 101325 Pa is above its normal boiling point;
+  - at Kim's measured bubble points, a vapor witness means the model's bubble pressure exceeds the measured one, which is a fit residual.
+- **The ruling:** gate (2) means **liquid** miscibility and is passed. The vapor witnesses are retained and classified separately, and a sign-consistency diagnostic against the pre-fit's bubble-pressure residuals is reported without gating. Stage 2 proceeds.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Jakobsen A5 scale (orchestrator ruling, 2026-10-28; raised by the builder).**
+- **The problem:** the frozen text cites the source's '5–10 %' estimate without a value per ratio.
+- **The ruling:** both ratios, MDEAH+/total amine and (HCO3- + CO3^2-)/total amine, use a difference residual scaled by **0.10 × y_obs** at all eight states. The upper end was chosen so that the eight NMR states, whose charge imbalances are 8–28 %, do not dominate the objective. This is the orchestrator's choice within the source range, not a source value or an MEA precedent.
+- **Visibility:** the Jakobsen group's cost contribution is reported at each endpoint.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Owner decision, reaction temperature domain (2026-10-28; raised by the stage-2 builder).** The pinned Engine refuses states outside the declared reaction-law domain of 293.15–393.15 K.
+1. **Upper bound widened:** the upper bound of the application reaction domains (R1–R3 and the MDEA dissociation law) is extended to **395.0 K**, with the coefficients unchanged. This is recorded as a 2 K extrapolation. It keeps the two fitted Kuranov rows at 393.16–393.17 K and **all 88 Ermatchkov pass-set rows**, seven of them at 394.9–395.0 K.
+2. **Merkley:** the four fitted markers at 288.71 and 422.04 K (20 and 40 wt%) move **out of the fit**. They are reported, with the two 60 wt% markers at those temperatures, as extrapolation comparisons, or as unevaluated if the Engine refuses them. The fitted Merkley set is now 20 and 40 wt% at 333.15 and 388.71 K.
+3. **Everything else** in the freeze stands.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+## T3 Code closeout: done
+Issue: [#222 MDEA–CO2–H2O through the MEA ePC-SAFT workflow: do the MEA shared-species parameters transfer?](https://github.com/tannerpolley/Amine-Thermodynamics/issues/222)
+Thread: thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-item-k-then-stage-2
+Model: gpt-6.1-sol
+Branch: issue-222-mdea-co2-h2o-through-the-mea-epc-saft
+Completed: 2026-10-28T16:54:43.110Z
+
+**Item (k) passes. Stage 2 returns to Design:** A1 converged on three arbitrary bounds, and its endpoint also fails the Carson row-10 single-liquid check. No representative endpoint was selected; neither variant has a transfer verdict.
+
+The Kim-only fit used all **61 Table 8 rows**, with ion-free MDEA–water bubble-pressure log-ratio residuals and weight one.
+
+| Pre-fit initialization | k(313.15 K) endpoint | Reciprocal slope (K) |
+|---|---:|---:|
+| −0.184, 0 K — primary | −0.181786994679 | −75.539233386 |
+| −0.15, 0 K | −0.181787002961 | −75.539241989 |
+
+Both converge and satisfy the owner’s agreement limits. The primary pressure AARD is **0.499831%**; scaled-Jacobian singular values are **0.2124813 and 0.02886988**, with no active bounds.
+
+All **1,177 binary searches** complete with no liquid–liquid witness or unresolved trial. All four convex-hull scans are miscible, and all **ten amended Carson start checks** pass. The 170 vapor witnesses are retained separately; all 38 Kim vapor witnesses have matching positive bubble-pressure residuals.
+
+| Start | Joint-fit endpoint | Objective | Disposition |
+|---|---|---:|---|
+| A1 | Converged, 19 iterations | 2478.055957 | Return to Design: bounds and phase failure |
+| A2 | Duplicate of A1 | — | Not run |
+| A3 | — | — | Stopped after A1 |
+| A4 | — | — | Stopped after A1 |
+| B1 | — | — | Stopped after A1 |
+| B2 | Duplicate of B1 | — | Not run |
+| B3 | — | — | Stopped after A1 |
+
+A1 reached **k(MDEAH⁺–CO₂) = 0.5**, **k(MDEAH⁺–HCO₃⁻) = 1.0**, and **Born diameter = 2.0 Å**, all active bounds. Its endpoint Jacobian has rank nine, but covariance is flagged `active_bound`. All **280 predictions replay within 2.21 × 10⁻¹² relative difference**, below 10⁻⁸.
+
+At Carson row 10, the endpoint admits **ΔG/RT = −0.04135485**, versus estimated numerical error **2.60 × 10⁻⁸**. Row 1 has no witness or unresolved trials. This is numerical evidence about the fitted model, not experimental demixing.
+
+The Ermatchkov statistic, weak-direction profiles, Neumann sensitivity and bicarbonate–water/control follow-up were not run after the mandatory stop. **No MDEA outcome falsifies the MEA bicarbonate value.** Xiao and Zhang remain unscored.
+
+Evidence is retained in the fresh worktree:
+
+- [Notebook and complete A1 parameter table](../issue-222-item-k/analyses/mdea_mea_workflow/notebook.qmd)
+- [Item (k) results](../issue-222-item-k/analyses/mdea_mea_workflow/results/kim-prefit/README.md)
+- [A1 fit](../issue-222-item-k/analyses/mdea_mea_workflow/results/joint-fit/A1/fit.json), [endpoint document](../issue-222-item-k/analyses/mdea_mea_workflow/results/joint-fit/A1/endpoint.json), and [Carson search](../issue-222-item-k/analyses/mdea_mea_workflow/results/joint-fit/A1/carson-phase.json)
+- [Amended-start hashes](../issue-222-item-k/analyses/mdea_mea_workflow/inputs/amended-starts/hashes.json)
+
+Committed as **`9f25209d5d381fb3573f9bbf52ea52900c008ed9`** on `issue-222-item-k`. The worktree is clean; nothing was merged or pushed.
+
+Independent delivered review remains open. Notebook HTML refresh failed because `snakemake` is unavailable; the notebook source is complete.
+
+<!-- t3-issue-closeout:github.com:821573736:6071971828:thread:delegated-task:command%3Amcp%3A77d961e7-b2dd-4e05-b623-636f7f973610%3Adelegate-task%3Aissue-222-item-k-then-stage-2:run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A77d961e7-b2dd-4e05-b623-636f7f973610%253Adelegate-task%253Aissue-222-item-k-then-stage-2:ordinal:1 -->
+--
+author:	tannerpolley
+association:	owner
+edited:	false
+status:	none
+--
+**Item (k) passed; A1 joint fit stopped (2026-10-28, main 2623829).**
+- **Pre-fit (Kim 2008, 61 rows):** both initializations agree: k(313.15 K) = −0.181787 and slope −75.539 K, with AARD 0.50 % and no active bounds. All 1,177 binary searches are miscible, and all ten amended Carson start checks pass.
+- **A1:** the fit converged (cost 3908.8 → 2478.1) but ended on three bounds: k(MDEAH+–CO2) = 0.5, k(MDEAH+–HCO3-) = 1.0 and Born diameter = 2.0 Å. At the endpoint, k(MDEAH+–water) = +0.36 and u/k = 837 K, and the Carson row-10 split is ΔG/RT = −0.041. Unloaded density (1273.5) and Cp (751.8) carry 82 % of the cost.
+- **Next (owner choice, 2026-10-28):** run the remaining starts A3, A4, B1 and B3 without outside-fit evaluation, and attribute A1's bound-pressure by diagnostic refits: without unloaded density, without Cp, both removed, and widened bounds. Nothing is adopted; the results go to Design.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+--
