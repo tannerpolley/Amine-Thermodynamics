@@ -1,0 +1,512 @@
+{
+  "engine_commit": "3e83e19ccc771b51d8ebc038931ab25192f4c5b5",
+  "wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
+  "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "installed_files_byte_identical": true,
+  "declaration_sha256": "a491381972ddad9224f1b0833371b82479db7f4f0244dab99fbb9d9cffc2a657",
+  "placeholder_sha256": "2087d3cdc7cfae2f67e7924a481fe0991702a5589495c1ed1b1e75434edc35a8",
+  "checks": {
+    "born": {
+      "status": "pass",
+      "T_K": 333.15,
+      "rho_mol_m3": 30000.0,
+      "x": [
+        0.847,
+        0.1,
+        0.02,
+        0.015,
+        0.014,
+        0.001,
+        0.002,
+        0.001
+      ],
+      "epsilon": 45.73574894082213,
+      "native": -5.739844399715162,
+      "Eq20": -5.739844399715162,
+      "relative_error": 0.0,
+      "tolerance": 1e-09,
+      "criterion": "Floating point agreement; CODATA epsilon0 rounding"
+    },
+    "temperature_laws": {
+      "status": "pass",
+      "cases": [
+        {
+          "T_K": 298.15,
+          "water_sigma_A": 2.797059952289552,
+          "k_water_MDEA": -0.118,
+          "k_water_CO2": -0.0021,
+          "native_a_res": -15.541442098352988,
+          "constant_input_a_res": -15.541442098352988,
+          "absolute_error": 0.0,
+          "Hsieh_pure_laws": [
+            {
+              "component": "water",
+              "native_epsilon": 78.35530812232503,
+              "polynomial_epsilon": 78.35530812232503
+            },
+            {
+              "component": "methyldiethanolamine",
+              "native_epsilon": 22.3375200194245,
+              "polynomial_epsilon": 22.337520019424502
+            }
+          ]
+        },
+        {
+          "T_K": 333.15,
+          "water_sigma_A": 2.7888897533192636,
+          "k_water_MDEA": -0.155375625,
+          "k_water_CO2": 0.013755000000000002,
+          "native_a_res": -13.311754018738878,
+          "constant_input_a_res": -13.311754018738878,
+          "absolute_error": 0.0,
+          "Hsieh_pure_laws": [
+            {
+              "component": "water",
+              "native_epsilon": 66.81021025732502,
+              "polynomial_epsilon": 66.81021025732502
+            },
+            {
+              "component": "methyldiethanolamine",
+              "native_epsilon": 18.7495078105245,
+              "polynomial_epsilon": 18.7495078105245
+            }
+          ]
+        },
+        {
+          "T_K": 393.15,
+          "water_sigma_A": 2.7864651848209303,
+          "k_water_MDEA": -0.20206312499999998,
+          "k_water_CO2": 0.040935000000000006,
+          "native_a_res": -10.474015963883744,
+          "constant_input_a_res": -10.474015963883744,
+          "absolute_error": 0.0,
+          "Hsieh_pure_laws": [
+            {
+              "component": "water",
+              "native_epsilon": 51.17944291732505,
+              "polynomial_epsilon": 51.17944291732505
+            },
+            {
+              "component": "methyldiethanolamine",
+              "native_epsilon": 12.0957996781245,
+              "polynomial_epsilon": 12.0957996781245
+            }
+          ]
+        }
+      ],
+      "tolerance_absolute": 1e-12,
+      "method": "Native temperature laws versus independent Table 1 footnote/Eq.26 evaluation supplied as constants; all other Table 3 pairs admitted as printed constants"
+    },
+    "association": {
+      "status": "pass",
+      "site_ids": [
+        [
+          "water",
+          "a"
+        ],
+        [
+          "water",
+          "b"
+        ],
+        [
+          "methyldiethanolamine",
+          "a"
+        ],
+        [
+          "methyldiethanolamine",
+          "b"
+        ],
+        [
+          "carbon-dioxide",
+          "a"
+        ],
+        [
+          "carbon-dioxide",
+          "b"
+        ]
+      ],
+      "binary_checks": [
+        {
+          "binary": "MDEA-CO2",
+          "T_K": 333.15,
+          "rho_mol_m3": 1000.0,
+          "x": [
+            0,
+            0.9,
+            0.1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "CO2_site_fractions": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "binary": "water-CO2",
+          "T_K": 333.15,
+          "rho_mol_m3": 1000.0,
+          "x": [
+            0.9,
+            0,
+            0.1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "CO2_site_fractions": [
+            0.9869904051415042,
+            0.9869904051415042
+          ]
+        }
+      ],
+      "CO2_water_energy_K": 1212.8,
+      "explicit_cross_association_absolute_error": 0.0,
+      "tolerance_absolute": 1e-12,
+      "ion_sites": 0
+    },
+    "derivatives": {
+      "status": "pass",
+      "tolerance_relative": 1e-05,
+      "states": [
+        {
+          "state": "neutral",
+          "T_K": 333.15,
+          "rho_mol_m3": 30000.0,
+          "x": [
+            0.88,
+            0.1,
+            0.02,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "checks": [
+            {
+              "quantity": "da_res/dT",
+              "native": 0.03888830965745425,
+              "finite_difference": 0.038888309660478626,
+              "step": 0.001,
+              "relative_error": 7.777090083038729e-11,
+              "status": "pass"
+            },
+            {
+              "quantity": "dP/drho",
+              "native": 13665.358621681025,
+              "finite_difference": 13665.358592569828,
+              "step": 0.01,
+              "relative_error": 2.130291498758652e-09,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/water",
+              "direction": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "native": -9.901200399727893,
+              "finite_difference": -9.901200399209387,
+              "step": 1e-05,
+              "relative_error": 5.2367998826241546e-11,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/methyldiethanolamine",
+              "direction": [
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "native": -27.049826331143947,
+              "finite_difference": -27.049826260849837,
+              "step": 1e-05,
+              "relative_error": 2.598689929911302e-09,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/carbon-dioxide",
+              "direction": [
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "native": -3.4849063379208105,
+              "finite_difference": -3.4849063362152317,
+              "step": 1e-05,
+              "relative_error": 4.894188387893905e-10,
+              "status": "pass"
+            }
+          ]
+        },
+        {
+          "state": "charged",
+          "T_K": 333.15,
+          "rho_mol_m3": 30000.0,
+          "x": [
+            0.847,
+            0.1,
+            0.02,
+            0.015,
+            0.014,
+            0.001,
+            0.002,
+            0.001
+          ],
+          "checks": [
+            {
+              "quantity": "da_res/dT",
+              "native": 0.0557480256281815,
+              "finite_difference": 0.05574802562868797,
+              "step": 0.001,
+              "relative_error": 9.084955010507656e-12,
+              "status": "pass"
+            },
+            {
+              "quantity": "dP/drho",
+              "native": 13882.417315870633,
+              "finite_difference": 13882.417337596416,
+              "step": 0.01,
+              "relative_error": 1.5649856965893605e-09,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/water",
+              "direction": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "native": -9.830604613581432,
+              "finite_difference": -9.830604613192406,
+              "step": 1e-05,
+              "relative_error": 3.957290051204154e-11,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/methyldiethanolamine",
+              "direction": [
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "native": -26.302829163239164,
+              "finite_difference": -26.302829094149157,
+              "step": 1e-05,
+              "relative_error": 2.626713846431983e-09,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/carbon-dioxide",
+              "direction": [
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "native": -3.4068949728352194,
+              "finite_difference": -3.406894970936491,
+              "step": 1e-05,
+              "relative_error": 5.573193018193479e-10,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/protonated-methyldiethanolamine",
+              "direction": [
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ],
+              "native": -393.37513195545614,
+              "finite_difference": -393.3751319284084,
+              "step": 1e-05,
+              "relative_error": 6.875811031648027e-11,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/bicarbonate-anion",
+              "direction": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                1.0,
+                0.0
+              ],
+              "native": -316.6190632246549,
+              "finite_difference": -316.6190632008181,
+              "step": 1e-05,
+              "relative_error": 7.528533352285649e-11,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/carbonate-anion",
+              "direction": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                2.0,
+                0.0
+              ],
+              "native": -1108.0171433927926,
+              "finite_difference": -1108.017142692308,
+              "step": 1e-05,
+              "relative_error": 6.321965173583521e-10,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/proton",
+              "direction": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "native": -399.3016197895826,
+              "finite_difference": -399.3016197620491,
+              "step": 1e-05,
+              "relative_error": 6.895417570262907e-11,
+              "status": "pass"
+            },
+            {
+              "quantity": "mu_res_RT_direction/hydroxide-anion",
+              "direction": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0
+              ],
+              "native": -399.3016197895826,
+              "finite_difference": -399.3016197620491,
+              "step": 1e-05,
+              "relative_error": 6.895417570262907e-11,
+              "status": "pass"
+            }
+          ]
+        }
+      ],
+      "repeat_on_896": true
+    },
+    "water-dissociation": {
+      "status": "pass",
+      "ln_K_x": -40.26536023393261,
+      "ln_K_m": -32.23229024933365,
+      "pK_m": 13.998305794389593,
+      "expected": 14.0,
+      "tolerance": 0.005,
+      "delta_nu_solute": 2,
+      "ln_Mw_m0": -4.016534992299479
+    },
+    "MDEAH-dissociation": {
+      "status": "pass",
+      "ln_K_x": -23.705744760107244,
+      "ln_K_m": -19.689209767807764,
+      "pK_m": 8.550915155194517,
+      "expected": 8.551,
+      "tolerance": 0.0005,
+      "delta_nu_solute": 1,
+      "ln_Mw_m0": -4.016534992299479
+    },
+    "CO2-hydration": {
+      "status": "pass",
+      "ln_K_x": -18.658825483177367,
+      "ln_K_m": -14.642290490877887,
+      "pK_m": 6.359065962612722,
+      "expected": 6.359,
+      "tolerance": 0.0005,
+      "delta_nu_solute": 1,
+      "ln_Mw_m0": -4.016534992299479
+    },
+    "bicarbonate-dissociation": {
+      "status": "pass",
+      "ln_K_x": -27.80868301316974,
+      "ln_K_m": -23.79214802087026,
+      "pK_m": 10.332798598089328,
+      "expected": 10.333,
+      "tolerance": 0.0005,
+      "delta_nu_solute": 1,
+      "ln_Mw_m0": -4.016534992299479
+    },
+    "admission": {
+      "status": "pass",
+      "species": [
+        "water",
+        "methyldiethanolamine",
+        "carbon-dioxide",
+        "protonated-methyldiethanolamine",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "proton",
+        "hydroxide-anion"
+      ],
+      "reaction_count": 4,
+      "charge_rows": 0,
+      "has_ions": true,
+      "has_reaction": true,
+      "reference_basis": "RawMoleFractionInfiniteDilution",
+      "reference_pressure_pa": null,
+      "meaning": "System-pressure reference; native compile only, no solve",
+      "compiled_type": "CompiledSystem"
+    }
+  },
+  "pending_896": [
+    "Native dielectric values 58 and 72.5 (1e-12 absolute), density/mass independence, pure-solvent limits and zero-denominator refusal",
+    "Repeat neutral/charged native derivative checks with mole-fraction permittivity; qualify merged wheel by hash; repeat Born check"
+  ],
+  "reproduction_run": false,
+  "fitting": false
+}

@@ -1,0 +1,153 @@
+{
+  "pdfs": [
+    {
+      "source": "Bulow2021",
+      "zotero_parent_key": "B74UQB9E",
+      "pdf_attachment_key": "E48WQBPB",
+      "path": "/home/tnnrpolley21/Zotero/storage/E48WQBPB/B\u00fclow et al. - 2021 - Predicting vapor\u2212liquid equilibria for sour-gas absorption in aqueous mixtures of chemical and physi.pdf",
+      "sha256": "b4f9dda69075aa6137f58006cfef10492c45c7cb5d9fd48558e52430a4ae87bd",
+      "locator": "Eqs.1\u20134,12\u201326; Tables 1\u20133, pp.6328\u20136331"
+    },
+    {
+      "source": "Bulow2021-SI",
+      "zotero_parent_key": "B74UQB9E",
+      "pdf_attachment_key": "5KCVQBVL",
+      "path": "/home/tnnrpolley21/Zotero/storage/5KCVQBVL/ie1c00176_si_001 (1).pdf",
+      "sha256": "f8d7e1f796a7eb04458fcb848d98ec60b9fe3a9c6c1b4408c542014cf0abd1cb",
+      "locator": "Tables S1 and S3"
+    },
+    {
+      "source": "Austgen1991",
+      "zotero_parent_key": "NL4W5CA6",
+      "pdf_attachment_key": "UNTA6KIT",
+      "path": "/home/tnnrpolley21/Zotero/storage/UNTA6KIT/Austgen et al. - 1991 - Model of Vapor-Liquid Equilibria for Aqueous Acid Gas-Alkanolamine Systems. 2. Representation of H2S.pdf",
+      "sha256": "8c0a6a57e5bf9e28b1f9da8022d54290506fe04b4286b6494ef8a44fd924f8db",
+      "locator": "Table V p.547; hydronium form"
+    },
+    {
+      "source": "Hsieh2007",
+      "zotero_parent_key": "U3L9K37G",
+      "pdf_attachment_key": "8X653CVB",
+      "path": "/home/tnnrpolley21/Zotero/storage/8X653CVB/Hsieh et al. - 2007 - Dielectric constants of aqueous diisopropanolamine, diethanolamine, N-methyldiethanolamine, triethan.pdf",
+      "sha256": "3a5f95471866b71d4e702061ac1c150d5ae1dc88fc0c669426634507c9cd8cf9",
+      "locator": "Eq.3/Table 3 p.621"
+    },
+    {
+      "source": "Kamps-Maurer1996",
+      "zotero_parent_key": "THBMMB2G",
+      "pdf_attachment_key": "HRGBIYIW",
+      "path": "/home/tnnrpolley21/Zotero/storage/HRGBIYIW/P\u00e9rez-Salado Kamps and Maurer - 1996 - Dissociation Constant of N-Methyldiethanolamine in Aqueous Solution at Temperatures from 278 K to 36.pdf",
+      "sha256": "b1aa9fad5e7deaa05d27d988b2173add6bb2a6cc99d15c319c1df40ccc927ead",
+      "locator": "Eq.8 p.1508; Eq.12 p.1509, 278\u2013368 K"
+    },
+    {
+      "source": "Kuranov1996",
+      "zotero_parent_key": "9F6UM7M4",
+      "pdf_attachment_key": "QB5PV62N",
+      "path": "/home/tnnrpolley21/Zotero/storage/QB5PV62N/Kuranov et al. - 1996 - Solubility of Single Gases Carbon Dioxide and Hydrogen Sulfide in Aqueous Solutions of N-Methyldieth.pdf",
+      "sha256": "a86617a611e06608c8ce601ce6747f1bba9321c65b1fa657ef999d305618e1c9",
+      "locator": "Table 2 p.1960"
+    }
+  ],
+  "tables": [
+    {
+      "path": "data/reference/MDEA/Kuranov_1996_CO2_MDEA_total_pressure.csv",
+      "sha256": "45159aae9cc2ad8019dc9de482ec36ae4e5355ef84981cc15068bd43b7a18b29"
+    },
+    {
+      "path": "data/reference/MDEA/Hsieh_2007_MDEA_relative_permittivity.csv",
+      "sha256": "10729d420ba2a1a73bacb8a644eb956ad7aa9239d4983dfe50cc86b808bbbe70"
+    },
+    {
+      "path": "data/reference/MDEA/Hsieh2007_stage1.csv",
+      "sha256": "407a2bdadeb84bef358b1378425e5da6d38a3e0b3e62b2e601690f964218f1f7"
+    }
+  ],
+  "reaction_assignment": [
+    {
+      "name": "water-dissociation",
+      "stoichiometry": {
+        "water": -1,
+        "proton": 1,
+        "hydroxide-anion": 1
+      },
+      "c": [
+        132.899,
+        -13445.9,
+        -22.4773
+      ],
+      "si_row": "Ka,1",
+      "printed_reference": 1,
+      "delta_nu_solute": 2,
+      "pK_check": 14.0,
+      "rounding_tolerance": 0.005
+    },
+    {
+      "name": "MDEAH-dissociation",
+      "stoichiometry": {
+        "protonated-methyldiethanolamine": -1,
+        "methyldiethanolamine": 1,
+        "proton": 1
+      },
+      "c": [
+        -83.491,
+        -819.7,
+        10.9756
+      ],
+      "si_row": "Ka,5",
+      "printed_reference": 4,
+      "delta_nu_solute": 1,
+      "pK_check": 8.551,
+      "rounding_tolerance": 0.0005
+    },
+    {
+      "name": "CO2-hydration",
+      "stoichiometry": {
+        "carbon-dioxide": -1,
+        "water": -1,
+        "bicarbonate-anion": 1,
+        "proton": 1
+      },
+      "c": [
+        231.465,
+        -12092.1,
+        -36.7816
+      ],
+      "si_row": "Ka,2",
+      "printed_reference": 2,
+      "delta_nu_solute": 1,
+      "pK_check": 6.359,
+      "rounding_tolerance": 0.0005
+    },
+    {
+      "name": "bicarbonate-dissociation",
+      "stoichiometry": {
+        "bicarbonate-anion": -1,
+        "carbonate-anion": 1,
+        "proton": 1
+      },
+      "c": [
+        216.049,
+        -12431.7,
+        -35.4819
+      ],
+      "si_row": "Ka,3",
+      "printed_reference": 3,
+      "delta_nu_solute": 1,
+      "pK_check": 10.333,
+      "rounding_tolerance": 0.0005
+    }
+  ],
+  "si_errors": "SI S1 labels and reference numbers preserved above: Ka,2 is carbon hydration, not MDEA; Ka,3 bicarbonate; Ka,5 MDEA, not H2S. SI references 2 and 4 are also interchanged for carbon/MDEA.",
+  "excluded_si_row": {
+    "label": "Ka,4",
+    "c": [
+      214.582,
+      -12995.4,
+      -33.5471
+    ],
+    "printed_reference": 3,
+    "assignment": "H2S dissociation; excluded"
+  },
+  "evidence": "Austgen Table V identifies carbon and H2S; Kamps\u2013Maurer Eq.12 identifies MDEA after scale transfer. Edwards 1978 and Vahidi 2013 unread."
+}
