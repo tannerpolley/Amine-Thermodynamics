@@ -303,7 +303,7 @@ def main():
           r'Fitted diameters are shown to five significant figures; Table~\ref{supp-tab:supplement-fitted-parameters} gives eight. Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$; the water diameter law $\sigma_w(T)$, whose constant was fitted, and the sources of all fixed inputs are given in Section~\\ref{sec:s-parameters}. '
           r'Water and MEA each have one donor and one acceptor site, with Wolbach--Sandler MEA--water cross-association; double daggers mark the \ce{CO2} values, which apply only to its induced association with water. '
           r'The dielectric coefficients apply to the neutral species; the ion-region permittivity is $\varepsilon_{\mathrm{ion}}=8$. A dash marks an input the model does not use.',
-          ['Species', '$m$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$u/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
+          ['Species', r'$m^{\mathrm{seg}}$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$u/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
            r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}'], species_rows, 'l' + 'r'*10, sep=4)
     def pair(s, t, quantity=''):
         if charge[s] * charge[t] > 0:  # same-sign ions: dispersion excluded
@@ -529,6 +529,13 @@ def main():
         [r'$A,a^{\mathrm{res}}$',r'Extensive Helmholtz energy; residual Helmholtz energy divided by nRT'],
         [r'$\rho,Z,V$',r'Molar density; compressibility factor; phase volume'],
         [r'$\sigma_i,u_i/k_B$',r'Segment diameter; dispersion energy divided by Boltzmann constant'],
+        [r'$m_i^{\mathrm{seg}},\bar m$',r'Segment number; mole-fraction average segment number'],
+        [r'$d_i,d_i^{\mathrm{DH}}$',r'Hard-sphere packing diameter; Debye--H\"uckel diameter'],
+        [r'$\rho_N,\zeta_n,\eta$',r'Number density; packing moments; packing fraction'],
+        [r'$g_{ij}^{\mathrm{hs}},C_1,I_1,I_2$',r'Hard-sphere contact value; dispersion compressibility term and integrals'],
+        [r'$a_k(\bar m),b_k(\bar m)$',r'Dispersion-integral coefficients of Gross and Sadowski'],
+        [r'$X_A,\Delta^{AB}$',r'Fraction of molecules not bonded at site A; association strength'],
+        [r'$\kappa_{\mathrm D},\chi_i,\mathcal I$',r'Inverse Debye screening length; finite-size function; set of ions'],
         [r'$k_{ij},b_{ij}$',r'Binary interaction and its reciprocal-temperature slope (K)'],
         [r'$\kappa^{AB},\epsilon^{AB}/k_B$',r'Association volume and energy divided by Boltzmann constant'],
         [r'$d_i^{\mathrm{Born}},D_i$',r'Born diameter and outer solvation-shell diameter'],
@@ -536,6 +543,7 @@ def main():
         [r'$c_{\mathrm{shell}},c_{\mathrm{dielectric}}$',r'Solvation-shell and dielectric-saturation coefficients'],
         [r'$\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$',r'Bulk and ion-region relative permittivities'],
         [r'$e,\varepsilon_0,k_B,R$',r'Elementary charge; vacuum permittivity; Boltzmann and gas constants'],
+        [r'$N_{\mathrm A}$',r'Avogadro constant'],
         [r'$d_{V,i},d_{T,i},n_s$',r'Dielectric-volume and temperature coefficients; neutral-solvent amount'],
         [r'$\nu_{ri},K_r,K_{m,r},K_{x,r}$',r'Stoichiometric coefficient; reaction constant and its molality/mole-fraction forms'],
         [r'$A_r,B_r,C_r,D_r,\Delta_r$',r'Reaction-correlation coefficients and standard-state offset'],
