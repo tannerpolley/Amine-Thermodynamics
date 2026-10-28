@@ -39,7 +39,7 @@ There is no worktree environment and no source-checkout runtime import.
 Run, in order:
 
 1. `scripts/transcribe.py`, then `scripts/digitize_merkley.py` for the ten source tables.
-2. `scripts/prepare.py` for the association conversion and runtime receipt.
+2. `scripts/prepare.py` for the association conversion and installed-wheel identity check.
 3. `scripts/dielectric.py` to fit the two dielectric coefficients and finalize both start-1 documents.
 4. `scripts/source_checks.py` for the ideal-gas units and interim reaction-basis checks.
 5. `scripts/admission_probe.py`, then `scripts/probe_summary.py`.
