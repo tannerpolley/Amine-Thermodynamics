@@ -1,0 +1,14 @@
+from pathlib import Path
+import json
+an=Path(__file__).resolve().parents[1];rows=json.loads((an/'results/carson-phase-check.json').read_text());heat=json.loads((an/'results/carson-pressure-check.json').read_text())
+summary=[]
+for r in rows:
+ assert r['liquid']['success'] and r['liquid']['requested_tolerance_met'] and r['stability']['completed']
+ trials=[t for t in r['stability']['trials'] if t['resolved_descent']]
+ assert trials and all(t['split_checks'] and all(c['admitted']==1 for c in t['split_checks']) for t in trials)
+ t=min(trials,key=lambda t:t['quantities']['tpd_over_rt']);q=t['quantities']
+ summary.append(dict(variant=r['variant'],start=1,source_row=int(r['source_row']),alpha=r['alpha'],maximum_equilibrium_residual=max(map(abs,r['liquid']['residuals'])),tpd_over_RT=q['tpd_over_rt'],split_delta_G_over_RT=q['split_delta_g_over_rt'],split_error_estimate_over_RT=q['split_error_estimate_over_rt'],split_moiety_error_mol=max(c['moiety_error_mol'] for c in t['split_checks']),split_charge_error_mol=max(abs(c['charge_residual']) for c in t['split_checks']),resolved_descending_trials=len(trials)))
+endpoints=[dict(start=variant+str(i),endpoint=None,objective=None,identifiability=None,disposition='not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting') for variant,starts in [('A',range(1,5)),('B',range(1,4))] for i in starts]
+d=dict(issue=222,base_commit='4a197b9',disposition='Return to Design: phase-assumption failure',item_j='pass',verdicts={v:'Transfer not assessed; phase-assumption stop at start 1' for v in 'AB'},phase_results=summary,pressure_sensitivity=heat['rows'],seven_endpoints=endpoints,follow_up='Not run: no representative endpoints. Corrected Kamps excluded from the criterion; no MDEA outcome falsifies the MEA bicarbonate value.',stopping_point='Carson phase check before the joint optimizer; no outside-fit evaluation, weak-direction profile, Neumann sensitivity or follow-up refit.',claim_limits='Numerical verification of instability at declared start-1 vectors only, not physical validation, not proof that all seven starts or all admissible fitted vectors are unstable, and not an AARD pass/fail. No phase-restricted fit was run after the stop.',diagnosis='Exact largest-loading replay plus adjacent row 9 and lower-loading row 1 reproduce the resolved descending splits. Liquid closure converges and admitted split Gibbs changes exceed native estimated numerical errors by over five orders of magnitude. No bound, phase, parameter, tolerance or data change is authorized to remedy this within Build.',presentation='Notebook source complete; native refresh stops because snakemake is absent; HTML not regenerated.',review='Not independently reviewed; no manuscript promotion.')
+(an/'results/stage2-disposition.json').write_text(json.dumps(d,indent=2)+'\n')
+print(json.dumps(summary,indent=2))

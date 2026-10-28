@@ -76,3 +76,16 @@ unscored, with no extracted observations. The
 records observables, Sedighi's saturation procedure, gas basis and the printed
 loading/mole discrepancy. Source tables have one owner here and are not copied
 into the analysis directory. No outside-fit model predictions have been scored.
+
+## Issue 222 Merkley loading endpoints
+
+`Merkley1987_loading_points.csv` retains the twelve Fig. 4 loading points at
+20, 40 and 60 wt% MDEA (printed p.442, Zotero PDF `ED7IMI2E`). The absolute
+reading allowance is ±0.02 mol CO₂/mol MDEA, separate from measurement
+uncertainty, which the source does not report for loading points.
+`Merkley1987_loading_provenance.json` owns the source and table hashes and
+links the calibration, full-page image, inspected QA overlay and eighteen heat
+assignments retained under `analyses/mdea_mea_workflow/`. The 40 wt%, 388.71 K
+reading 0.360 agrees with the printed 0.35 within that allowance. The six
+156 kPa alternatives retain an endpoint rule pending model saturation
+calculations; no numerical alternative endpoint has been invented.

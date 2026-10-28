@@ -2,7 +2,7 @@
   "issue": 222,
   "base_commit": "4835dfd",
   "freeze_url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/222#issuecomment-6462775796",
-  "disposition": "Owner or Design decision needed before joint fitting",
+  "disposition": "Merkley heat-definition pause resolved by owner 2026-10-28; see stage2-disposition.json for current stopping point",
   "reason": "The fitted Merkley plateau slope has no declared model loading or loading interval. The existing MEA integral addition-enthalpy observation requires both equilibrium endpoints and a positive addition amount.",
   "source": {
     "pdf_attachment_key": "ED7IMI2E",
@@ -374,5 +374,6 @@
     "analyses/mdea_mea_workflow/inputs/variant-A.json": "c4c7b18a8f9f4f230368bbe3c8a89d8741eb967172a235aa693850a95ef5c7b5",
     "analyses/mdea_mea_workflow/inputs/variant-B.json": "59a408b45a2b571bcb0b4ab89b2f369b848826c39eb3e222366d9ac307a42d7e",
     "analyses/mdea_mea_workflow/inputs/variant-A-start-4.json": "db9d85746ce0298238df256d23f26bccf9ca1e6407d8b88431608250443aae53"
-  }
+  },
+  "resolution": "Integral addition heat from zero to Fig.4 alpha_LP at run T/P; half endpoint for flatness; 156 kPa endpoint min(alpha_LP, model saturation loading)."
 }

@@ -233,3 +233,55 @@ added. The numerical record includes the original and translated polynomial
 coefficients, complete input documents, state conditions and per-term outputs;
 `results/numerical-checks.json` links these checks. Table transcriptions were
 checked against rendered PDFs; no plotted-only observations were needed.
+
+## Stage-2 resumption, 2026-10-28
+
+Item (j) passes: all twelve Fig. 4 loading points have calibrated coordinates,
+±0.02 mol CO₂/mol MDEA reading allowance, a visually inspected overlay, and
+assignments to the twelve heat markers plus six alternative-pressure cases.
+The 40 wt%, 388.71 K value is 0.360 against the printed 0.35. Source values
+remain under `data/reference/MDEA/`; calibration and assignments are in
+`results/merkley-loading-points.json`. This resolves the earlier Merkley
+heat-definition pause; the historical proposals above do not supersede the
+owner's freeze and subsequent heat rulings.
+
+**Current disposition: return to Design for a phase-assumption failure.**
+The owner resolved Carson as integral heat from zero loading and declared
+101325 Pa as a model convention, with a 265000 Pa sensitivity at the
+largest loading and an explicit single-liquid stop. These decisions are in
+`inputs/stage2-owner-decisions.json`. At A1/B1 the largest-loading pressure
+changes are 0.143910% / 0.144992%, below the 0.5% limit. However, the MEA
+phase search finds admitted, charge-balanced descending splits for both
+variants. Exact replay, neighboring row 9 and low-loading row 1 reproduce
+that result. The low-loading check is at α = 0.08243368, below 0.2.
+
+At the largest loading, α = 0.24797645, the minimum tangent-plane distances
+/RT are −5.91197678 / −6.56409150 for A/B; admitted split ΔG/RT values are
+−2.78273124 / −3.94743777, against estimated errors 1.30e−6 / 1.39e−6.
+Liquid equilibrium residuals meet 1e−10; this is instability of converged
+stationary states, not a failed equilibrium solve. It is numerical evidence
+at starting vectors, not physical validation or proof that every admissible
+fitted vector is unstable. The phase assemblage at global equilibrium has
+not been determined.
+
+No optimizer ran; all seven endpoints, identifiability profiles, outside-fit
+statistics, Neumann sensitivity and follow-up refits remain unavailable.
+Neither variant has a transfer pass/fail verdict. No MDEA outcome falsifies
+the MEA bicarbonate value. Corrected Kamps remains outside the follow-up
+criterion; Xiao and Zhang remain unscored. No frozen choice, MEA record or
+manuscript was changed. Independent delivered review remains open.
+
+Reproduce the retained check with the pinned interpreter and wheel:
+
+```bash
+agent-heavy nice -n 10 /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I analyses/mdea_mea_workflow/scripts/carson_phase_check.py
+```
+
+It repeats the pressure check, then runs the exact, adjacent and lower-loading
+phase cases in six processes, one BLAS thread each, sized against free memory.
+`results/stage2-runtime.json` verifies all twelve installed wheel files.
+`results/carson-phase-check.json` owns the full native phase evidence;
+`results/stage2-disposition.json` owns the current verdicts and endpoint table.
+The notebook reads retained results without model calls. No subagent ran.
+
+Presentation refresh was attempted on this revision; it stops because `snakemake` is absent. The notebook source is complete, but its HTML view remains stale. The analysis-site section index was refreshed by the native command.
