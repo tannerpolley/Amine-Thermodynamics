@@ -1,0 +1,1611 @@
+{
+  "runtime": {
+    "wheel": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/build/engine-wheels/main-3e83e19ccc771b51d8ebc038931ab25192f4c5b5/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+    "wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
+    "installed_files_byte_identical": true,
+    "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+    "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+    "method_hashes": {
+      "analyses/mea_parameter_bundle/scripts/mea_association_volume.py": "cb6fcbf73812010095020b605282494b4f737a7e7751a535516ac668e02dd5d2",
+      "analyses/mea_parameter_bundle/scripts/fit_observations.py": "32de66e6d377b08e121cf5f138731fdbdc078aac20c98d1014e6e32d0fa04679",
+      "analyses/mea_parameter_bundle/scripts/fit_campaign.py": "d7415c8cd373a7d351af18c1c86f23c2547bf36e825fdb37e970edbbdff81e56"
+    }
+  },
+  "installed_files_byte_identical": true,
+  "regression_sha256": "0be33177fe14a92baa82086b30ddbe2a760d30455fc26a4e725dc3c7827f15c1",
+  "workers": 16,
+  "BLAS_threads_per_process": 1,
+  "fit_signature": "(parameters: 'Parameters', coordinates: 'Sequence[Coordinate]', observations: 'Sequence[Observation]', *, weights: 'Sequence[float] | None' = None, controls: 'FitControls | None' = None, thermochemistry: 'ThermochemistryRecord | None' = None, holds: 'Sequence[HydrationHold] | None' = None, checks: 'Sequence[CheckGroup] | None' = None, baseline: 'Parameters | None' = None, singular_vectors: 'bool | None' = None, starts: 'Sequence[Sequence[float]] | None' = None, shared_iterations: 'int | None' = None, shared_seconds: 'float | None' = None, minimax: 'MinimaxRequest | None' = None, uncertainty: 'MeasurementUncertainty | None' = None) -> 'FitResult | list[FitResult]'",
+  "addition_enthalpy_signature": "(parameters: 'Parameters', initial: 'Problem', final: 'Problem', feed: 'Mapping[str, float]', amount: 'float', T: 'float', P: 'float', *, phase: 'str', observed: 'float', form: 'str', scale: 'float | None' = None) -> 'Observation'",
+  "observation_members": [
+    "branch",
+    "composition",
+    "denominator_phase",
+    "denominator_species",
+    "feed_amount",
+    "final_problem",
+    "form",
+    "ion_indices",
+    "kind",
+    "mass_basis",
+    "molality",
+    "observed",
+    "phase",
+    "pressure",
+    "problem",
+    "reaction",
+    "reference_composition",
+    "scale",
+    "species",
+    "stoichiometry",
+    "temperature"
+  ],
+  "observation_kinds": [
+    "MeanIonicActivityCoefficient",
+    "OsmoticCoefficient",
+    "MixtureOsmoticCoefficient",
+    "SolvationGibbsEnergy",
+    "TransferGibbsEnergy",
+    "BulkRelativePermittivity",
+    "IsobaricHeatCapacity",
+    "EquilibriumIsobaricHeatCapacity",
+    "LogEquilibriumConstant",
+    "Density",
+    "PhaseDensity",
+    "EquilibriumPressure",
+    "EquilibriumTemperature",
+    "PhaseMoleFraction",
+    "PhaseFraction",
+    "PartialPressure",
+    "PhaseAmountRatio",
+    "AdditionEnthalpy"
+  ],
+  "rows": [
+    {
+      "scan": [
+        {
+          "alpha": 0.05,
+          "delta_pressure_Pa": -1101622.61400664,
+          "admitted": true
+        },
+        {
+          "alpha": 0.1,
+          "delta_pressure_Pa": -1101079.2715110362,
+          "admitted": true
+        },
+        {
+          "alpha": 0.15000000000000002,
+          "delta_pressure_Pa": -1100115.4816280561,
+          "admitted": true
+        },
+        {
+          "alpha": 0.2,
+          "delta_pressure_Pa": -1098612.5941966933,
+          "admitted": true
+        },
+        {
+          "alpha": 0.25,
+          "delta_pressure_Pa": -1096403.558597412,
+          "admitted": true
+        },
+        {
+          "alpha": 0.30000000000000004,
+          "delta_pressure_Pa": -1093261.4211291408,
+          "admitted": true
+        },
+        {
+          "alpha": 0.35000000000000003,
+          "delta_pressure_Pa": -1088880.2256645663,
+          "admitted": true
+        },
+        {
+          "alpha": 0.4,
+          "delta_pressure_Pa": -1082847.95599931,
+          "admitted": true
+        },
+        {
+          "alpha": 0.45,
+          "delta_pressure_Pa": -1074609.7280294835,
+          "admitted": true
+        },
+        {
+          "alpha": 0.5,
+          "delta_pressure_Pa": -1063419.3194208257,
+          "admitted": true
+        },
+        {
+          "alpha": 0.55,
+          "delta_pressure_Pa": -1048278.4793265723,
+          "admitted": true
+        },
+        {
+          "alpha": 0.6000000000000001,
+          "delta_pressure_Pa": -1027867.8485566997,
+          "admitted": true
+        },
+        {
+          "alpha": 0.65,
+          "delta_pressure_Pa": -1000483.4384639339,
+          "admitted": true
+        },
+        {
+          "alpha": 0.7000000000000001,
+          "delta_pressure_Pa": -964011.1151565511,
+          "admitted": true
+        },
+        {
+          "alpha": 0.75,
+          "delta_pressure_Pa": -915995.8858972644,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8,
+          "delta_pressure_Pa": -853874.2898882325,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8500000000000001,
+          "delta_pressure_Pa": -775396.126131952,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9,
+          "delta_pressure_Pa": -679138.5606844728,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9500000000000001,
+          "delta_pressure_Pa": -564881.0670664479,
+          "admitted": true
+        },
+        {
+          "alpha": 1.0,
+          "delta_pressure_Pa": -433627.05969926005,
+          "admitted": true
+        },
+        {
+          "alpha": 1.05,
+          "delta_pressure_Pa": -287271.05339254474,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1,
+          "delta_pressure_Pa": -128117.29025823274,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1500000000000001,
+          "delta_pressure_Pa": 41530.44612430455,
+          "admitted": true
+        },
+        {
+          "alpha": 1.2000000000000002,
+          "delta_pressure_Pa": 219612.7336542732,
+          "admitted": true
+        },
+        {
+          "alpha": 1.25,
+          "delta_pressure_Pa": 404408.95774731226,
+          "admitted": true
+        },
+        {
+          "alpha": 1.3,
+          "delta_pressure_Pa": 594539.277349323,
+          "admitted": true
+        },
+        {
+          "alpha": 1.35,
+          "delta_pressure_Pa": 788924.0615804619,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4000000000000001,
+          "delta_pressure_Pa": 986731.1905010724,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4500000000000002,
+          "delta_pressure_Pa": 1187325.7946376284,
+          "admitted": true
+        },
+        {
+          "alpha": 1.5,
+          "delta_pressure_Pa": 1390227.7523490475,
+          "admitted": true
+        }
+      ],
+      "brackets": [
+        [
+          1.1,
+          1.1500000000000001
+        ]
+      ],
+      "sign_changes": 1,
+      "nonunique": false,
+      "xtol": 1e-12,
+      "status": "Available",
+      "alpha_sat": 1.1380077117971499,
+      "pressure_residual_Pa": -6.030313670635223e-08,
+      "row": {
+        "source_key": "Merkley1987",
+        "pdf_attachment_key": "ED7IMI2E",
+        "source_locator": "Figure 3; PDF p.5 printed p.441",
+        "temperature_K": "333.15",
+        "MDEA_mass_percent": "20",
+        "heat_kJ_mol_CO2": "-53.3",
+        "digitization_uncertainty_kJ_mol_CO2": "0.3",
+        "source_relative_uncertainty": "0.05",
+        "heat_definition": "sub-saturation slope of integral heat per mol MDEA vs loading",
+        "series": "333.15K_20wt",
+        "x": "19.84789128531864",
+        "y": "-53.26695856540356",
+        "pixel_x": "288.0074906367041",
+        "pixel_y": "333.66104868913857",
+        "candidate_pressure_1_kPa": "156",
+        "candidate_pressure_2_kPa": "1121",
+        "pressure_ambiguity": "Figure 3 does not identify which of the two Table 1 pressures",
+        "proposed_pressure_kPa": "1121",
+        "pressure_rule_status": "owner-freeze proposal; low-temperature alternative retained"
+      },
+      "alpha_LP": 1.009,
+      "alpha_endpoint": 1.009,
+      "truncation_mol_CO2_per_mol_MDEA": 0.0,
+      "heat_status": "Available",
+      "heat_J_mol_CO2": -49830.171613889805,
+      "start": "A1"
+    },
+    {
+      "scan": [
+        {
+          "alpha": 0.05,
+          "delta_pressure_Pa": -1102845.4254620553,
+          "admitted": true
+        },
+        {
+          "alpha": 0.1,
+          "delta_pressure_Pa": -1102370.9314682886,
+          "admitted": true
+        },
+        {
+          "alpha": 0.15000000000000002,
+          "delta_pressure_Pa": -1101529.6450592673,
+          "admitted": true
+        },
+        {
+          "alpha": 0.2,
+          "delta_pressure_Pa": -1100160.435274752,
+          "admitted": true
+        },
+        {
+          "alpha": 0.25,
+          "delta_pressure_Pa": -1098019.3845962083,
+          "admitted": true
+        },
+        {
+          "alpha": 0.30000000000000004,
+          "delta_pressure_Pa": -1094746.45910113,
+          "admitted": true
+        },
+        {
+          "alpha": 0.35000000000000003,
+          "delta_pressure_Pa": -1089815.1020004798,
+          "admitted": true
+        },
+        {
+          "alpha": 0.4,
+          "delta_pressure_Pa": -1082462.954479395,
+          "admitted": true
+        },
+        {
+          "alpha": 0.45,
+          "delta_pressure_Pa": -1071605.7943466825,
+          "admitted": true
+        },
+        {
+          "alpha": 0.5,
+          "delta_pressure_Pa": -1055751.0156728488,
+          "admitted": true
+        },
+        {
+          "alpha": 0.55,
+          "delta_pressure_Pa": -1032957.3224779535,
+          "admitted": true
+        },
+        {
+          "alpha": 0.6000000000000001,
+          "delta_pressure_Pa": -1000929.6959413465,
+          "admitted": true
+        },
+        {
+          "alpha": 0.65,
+          "delta_pressure_Pa": -957351.50058721,
+          "admitted": true
+        },
+        {
+          "alpha": 0.7000000000000001,
+          "delta_pressure_Pa": -900453.3176131276,
+          "admitted": true
+        },
+        {
+          "alpha": 0.75,
+          "delta_pressure_Pa": -829587.3002477011,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8,
+          "delta_pressure_Pa": -745444.2091744337,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8500000000000001,
+          "delta_pressure_Pa": -649770.5652437324,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9,
+          "delta_pressure_Pa": -544813.241656966,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9500000000000001,
+          "delta_pressure_Pa": -432820.5258763727,
+          "admitted": true
+        },
+        {
+          "alpha": 1.0,
+          "delta_pressure_Pa": -315755.2978074497,
+          "admitted": true
+        },
+        {
+          "alpha": 1.05,
+          "delta_pressure_Pa": -195198.7146370049,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1,
+          "delta_pressure_Pa": -72363.61713358387,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1500000000000001,
+          "delta_pressure_Pa": 51848.125430699205,
+          "admitted": true
+        },
+        {
+          "alpha": 1.2000000000000002,
+          "delta_pressure_Pa": 176780.38284466928,
+          "admitted": true
+        },
+        {
+          "alpha": 1.25,
+          "delta_pressure_Pa": 301964.6099591069,
+          "admitted": true
+        },
+        {
+          "alpha": 1.3,
+          "delta_pressure_Pa": 427072.86521323887,
+          "admitted": true
+        },
+        {
+          "alpha": 1.35,
+          "delta_pressure_Pa": 551881.5746116627,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4000000000000001,
+          "delta_pressure_Pa": 676244.1911234998,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4500000000000002,
+          "delta_pressure_Pa": 800070.7566115225,
+          "admitted": true
+        },
+        {
+          "alpha": 1.5,
+          "delta_pressure_Pa": 923312.6621368506,
+          "admitted": true
+        }
+      ],
+      "brackets": [
+        [
+          1.1,
+          1.1500000000000001
+        ]
+      ],
+      "sign_changes": 1,
+      "nonunique": false,
+      "xtol": 1e-12,
+      "status": "Available",
+      "alpha_sat": 1.1291775798329564,
+      "pressure_residual_Pa": 7.241033017635345e-08,
+      "row": {
+        "source_key": "Merkley1987",
+        "pdf_attachment_key": "ED7IMI2E",
+        "source_locator": "Figure 3; PDF p.5 printed p.441",
+        "temperature_K": "333.15",
+        "MDEA_mass_percent": "40",
+        "heat_kJ_mol_CO2": "-55.4",
+        "digitization_uncertainty_kJ_mol_CO2": "0.3",
+        "source_relative_uncertainty": "0.05",
+        "heat_definition": "sub-saturation slope of integral heat per mol MDEA vs loading",
+        "series": "333.15K_40wt",
+        "x": "39.76523415574591",
+        "y": "-55.37495665504718",
+        "pixel_x": "417.96815286624206",
+        "pixel_y": "309.1380042462845",
+        "candidate_pressure_1_kPa": "156",
+        "candidate_pressure_2_kPa": "1121",
+        "pressure_ambiguity": "Figure 3 does not identify which of the two Table 1 pressures",
+        "proposed_pressure_kPa": "1121",
+        "pressure_rule_status": "owner-freeze proposal; low-temperature alternative retained"
+      },
+      "alpha_LP": 0.941,
+      "alpha_endpoint": 0.941,
+      "truncation_mol_CO2_per_mol_MDEA": 0.0,
+      "heat_status": "Available",
+      "heat_J_mol_CO2": -55985.264870480925,
+      "start": "A1"
+    },
+    {
+      "scan": [
+        {
+          "alpha": 0.05,
+          "delta_pressure_Pa": -948729.7009590539,
+          "admitted": true
+        },
+        {
+          "alpha": 0.1,
+          "delta_pressure_Pa": -932967.399490573,
+          "admitted": true
+        },
+        {
+          "alpha": 0.15000000000000002,
+          "delta_pressure_Pa": -906788.8432175681,
+          "admitted": true
+        },
+        {
+          "alpha": 0.2,
+          "delta_pressure_Pa": -868758.4032512329,
+          "admitted": true
+        },
+        {
+          "alpha": 0.25,
+          "delta_pressure_Pa": -817133.7011954172,
+          "admitted": true
+        },
+        {
+          "alpha": 0.30000000000000004,
+          "delta_pressure_Pa": -750087.4042855314,
+          "admitted": true
+        },
+        {
+          "alpha": 0.35000000000000003,
+          "delta_pressure_Pa": -665881.6024194078,
+          "admitted": true
+        },
+        {
+          "alpha": 0.4,
+          "delta_pressure_Pa": -563030.6248260768,
+          "admitted": true
+        },
+        {
+          "alpha": 0.45,
+          "delta_pressure_Pa": -440440.1704080757,
+          "admitted": true
+        },
+        {
+          "alpha": 0.5,
+          "delta_pressure_Pa": -297500.43110969814,
+          "admitted": true
+        },
+        {
+          "alpha": 0.55,
+          "delta_pressure_Pa": -134116.95128223533,
+          "admitted": true
+        },
+        {
+          "alpha": 0.6000000000000001,
+          "delta_pressure_Pa": 49322.24642191478,
+          "admitted": true
+        },
+        {
+          "alpha": 0.65,
+          "delta_pressure_Pa": 252029.47713829204,
+          "admitted": true
+        },
+        {
+          "alpha": 0.7000000000000001,
+          "delta_pressure_Pa": 472927.48617055337,
+          "admitted": true
+        },
+        {
+          "alpha": 0.75,
+          "delta_pressure_Pa": 710763.8814007028,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8,
+          "delta_pressure_Pa": 964212.9519134064,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8500000000000001,
+          "delta_pressure_Pa": 1231956.0031400672,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9,
+          "delta_pressure_Pa": 1512738.2606667574,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9500000000000001,
+          "delta_pressure_Pa": 1805404.7783863782,
+          "admitted": true
+        },
+        {
+          "alpha": 1.0,
+          "delta_pressure_Pa": 2108919.7384369085,
+          "admitted": true
+        },
+        {
+          "alpha": 1.05,
+          "delta_pressure_Pa": 2422373.808108331,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1,
+          "delta_pressure_Pa": 2744983.618113631,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1500000000000001,
+          "delta_pressure_Pa": 3076086.518804604,
+          "admitted": true
+        },
+        {
+          "alpha": 1.2000000000000002,
+          "delta_pressure_Pa": 3415132.8773603635,
+          "admitted": true
+        },
+        {
+          "alpha": 1.25,
+          "delta_pressure_Pa": 3761677.437060792,
+          "admitted": true
+        },
+        {
+          "alpha": 1.3,
+          "delta_pressure_Pa": 4115370.7014078777,
+          "admitted": true
+        },
+        {
+          "alpha": 1.35,
+          "delta_pressure_Pa": 4475950.912441132,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4000000000000001,
+          "delta_pressure_Pa": 4843236.9294321155,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4500000000000002,
+          "delta_pressure_Pa": 5217122.14584895,
+          "admitted": true
+        },
+        {
+          "alpha": 1.5,
+          "delta_pressure_Pa": 5597569.479541358,
+          "admitted": true
+        }
+      ],
+      "brackets": [
+        [
+          0.55,
+          0.6000000000000001
+        ]
+      ],
+      "sign_changes": 1,
+      "nonunique": false,
+      "xtol": 1e-12,
+      "status": "Available",
+      "alpha_sat": 0.5870699715096256,
+      "pressure_residual_Pa": 5.4016709327697754e-08,
+      "row": {
+        "source_key": "Merkley1987",
+        "pdf_attachment_key": "ED7IMI2E",
+        "source_locator": "Figure 3; PDF p.5 printed p.441",
+        "temperature_K": "388.71",
+        "MDEA_mass_percent": "20",
+        "heat_kJ_mol_CO2": "-59.2",
+        "digitization_uncertainty_kJ_mol_CO2": "0.3",
+        "source_relative_uncertainty": "0.05",
+        "heat_definition": "sub-saturation slope of integral heat per mol MDEA vs loading",
+        "series": "388.71K_20wt",
+        "x": "19.94710609297121",
+        "y": "-59.18008469204047",
+        "pixel_x": "288.65486725663715",
+        "pixel_y": "264.87168141592923",
+        "candidate_pressure_1_kPa": "1121",
+        "candidate_pressure_2_kPa": "",
+        "pressure_ambiguity": "Table 1 identifies only one pressure at this temperature",
+        "proposed_pressure_kPa": "1121",
+        "pressure_rule_status": "owner-freeze proposal; low-temperature alternative retained"
+      },
+      "alpha_LP": 0.587,
+      "alpha_endpoint": 0.587,
+      "truncation_mol_CO2_per_mol_MDEA": 0.0,
+      "heat_status": "Available",
+      "heat_J_mol_CO2": -61809.70242172101,
+      "start": "A1"
+    },
+    {
+      "scan": [
+        {
+          "alpha": 0.05,
+          "delta_pressure_Pa": -955302.7700511581,
+          "admitted": true
+        },
+        {
+          "alpha": 0.1,
+          "delta_pressure_Pa": -936079.5334635717,
+          "admitted": true
+        },
+        {
+          "alpha": 0.15000000000000002,
+          "delta_pressure_Pa": -902906.3281633315,
+          "admitted": true
+        },
+        {
+          "alpha": 0.2,
+          "delta_pressure_Pa": -852364.5781390205,
+          "admitted": true
+        },
+        {
+          "alpha": 0.25,
+          "delta_pressure_Pa": -780619.6608587101,
+          "admitted": true
+        },
+        {
+          "alpha": 0.30000000000000004,
+          "delta_pressure_Pa": -684061.2241664537,
+          "admitted": true
+        },
+        {
+          "alpha": 0.35000000000000003,
+          "delta_pressure_Pa": -559976.3757175044,
+          "admitted": true
+        },
+        {
+          "alpha": 0.4,
+          "delta_pressure_Pa": -407105.261516363,
+          "admitted": true
+        },
+        {
+          "alpha": 0.45,
+          "delta_pressure_Pa": -225869.10653238255,
+          "admitted": true
+        },
+        {
+          "alpha": 0.5,
+          "delta_pressure_Pa": -18194.202913622605,
+          "admitted": true
+        },
+        {
+          "alpha": 0.55,
+          "delta_pressure_Pa": 212952.05252710357,
+          "admitted": true
+        },
+        {
+          "alpha": 0.6000000000000001,
+          "delta_pressure_Pa": 464102.7669582162,
+          "admitted": true
+        },
+        {
+          "alpha": 0.65,
+          "delta_pressure_Pa": 731742.9354267153,
+          "admitted": true
+        },
+        {
+          "alpha": 0.7000000000000001,
+          "delta_pressure_Pa": 1012603.3615829493,
+          "admitted": true
+        },
+        {
+          "alpha": 0.75,
+          "delta_pressure_Pa": 1303808.0319380625,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8,
+          "delta_pressure_Pa": 1602917.968952139,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8500000000000001,
+          "delta_pressure_Pa": 1907914.98085204,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9,
+          "delta_pressure_Pa": 2217156.9876009966,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9500000000000001,
+          "delta_pressure_Pa": 2529324.2050702847,
+          "admitted": true
+        },
+        {
+          "alpha": 1.0,
+          "delta_pressure_Pa": 2843366.353371764,
+          "admitted": true
+        },
+        {
+          "alpha": 1.05,
+          "delta_pressure_Pa": 3158455.418582705,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1,
+          "delta_pressure_Pa": 3473945.3981008725,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1500000000000001,
+          "delta_pressure_Pa": 3789338.932735442,
+          "admitted": true
+        },
+        {
+          "alpha": 1.2000000000000002,
+          "delta_pressure_Pa": 4104260.0810394883,
+          "admitted": true
+        },
+        {
+          "alpha": 1.25,
+          "delta_pressure_Pa": 4418432.297322481,
+          "admitted": true
+        },
+        {
+          "alpha": 1.3,
+          "delta_pressure_Pa": 4731660.694055732,
+          "admitted": true
+        },
+        {
+          "alpha": 1.35,
+          "delta_pressure_Pa": 5043817.77532261,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4000000000000001,
+          "delta_pressure_Pa": 5354831.957910878,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4500000000000002,
+          "delta_pressure_Pa": 5664678.322038004,
+          "admitted": true
+        },
+        {
+          "alpha": 1.5,
+          "delta_pressure_Pa": 5973371.143497031,
+          "admitted": true
+        }
+      ],
+      "brackets": [
+        [
+          0.5,
+          0.55
+        ]
+      ],
+      "sign_changes": 1,
+      "nonunique": false,
+      "xtol": 1e-12,
+      "status": "Available",
+      "alpha_sat": 0.5041176675012337,
+      "pressure_residual_Pa": -1.0477378964424133e-08,
+      "row": {
+        "source_key": "Merkley1987",
+        "pdf_attachment_key": "ED7IMI2E",
+        "source_locator": "Figure 3; PDF p.5 printed p.441",
+        "temperature_K": "388.71",
+        "MDEA_mass_percent": "40",
+        "heat_kJ_mol_CO2": "-62.0",
+        "digitization_uncertainty_kJ_mol_CO2": "0.3",
+        "source_relative_uncertainty": "0.05",
+        "heat_definition": "sub-saturation slope of integral heat per mol MDEA vs loading",
+        "series": "388.71K_40wt",
+        "x": "39.85100042571307",
+        "y": "-62.00334288443172",
+        "pixel_x": "418.52777777777777",
+        "pixel_y": "232.02777777777774",
+        "candidate_pressure_1_kPa": "1121",
+        "candidate_pressure_2_kPa": "",
+        "pressure_ambiguity": "Table 1 identifies only one pressure at this temperature",
+        "proposed_pressure_kPa": "1121",
+        "pressure_rule_status": "owner-freeze proposal; low-temperature alternative retained"
+      },
+      "alpha_LP": 0.36,
+      "alpha_endpoint": 0.36,
+      "truncation_mol_CO2_per_mol_MDEA": 0.0,
+      "heat_status": "Available",
+      "heat_J_mol_CO2": -75206.61493915675,
+      "start": "A1"
+    },
+    {
+      "scan": [
+        {
+          "alpha": 0.05,
+          "delta_pressure_Pa": -1101623.2689844673,
+          "admitted": true
+        },
+        {
+          "alpha": 0.1,
+          "delta_pressure_Pa": -1101153.9961429772,
+          "admitted": true
+        },
+        {
+          "alpha": 0.15000000000000002,
+          "delta_pressure_Pa": -1100439.6206990695,
+          "admitted": true
+        },
+        {
+          "alpha": 0.2,
+          "delta_pressure_Pa": -1099478.6355151394,
+          "admitted": true
+        },
+        {
+          "alpha": 0.25,
+          "delta_pressure_Pa": -1098253.1300483062,
+          "admitted": true
+        },
+        {
+          "alpha": 0.30000000000000004,
+          "delta_pressure_Pa": -1096731.8142809833,
+          "admitted": true
+        },
+        {
+          "alpha": 0.35000000000000003,
+          "delta_pressure_Pa": -1094868.728640307,
+          "admitted": true
+        },
+        {
+          "alpha": 0.4,
+          "delta_pressure_Pa": -1092599.3539279434,
+          "admitted": true
+        },
+        {
+          "alpha": 0.45,
+          "delta_pressure_Pa": -1089833.8375897252,
+          "admitted": true
+        },
+        {
+          "alpha": 0.5,
+          "delta_pressure_Pa": -1086446.0071044683,
+          "admitted": true
+        },
+        {
+          "alpha": 0.55,
+          "delta_pressure_Pa": -1082255.5045095251,
+          "admitted": true
+        },
+        {
+          "alpha": 0.6000000000000001,
+          "delta_pressure_Pa": -1076997.9913039217,
+          "admitted": true
+        },
+        {
+          "alpha": 0.65,
+          "delta_pressure_Pa": -1070273.656832163,
+          "admitted": true
+        },
+        {
+          "alpha": 0.7000000000000001,
+          "delta_pressure_Pa": -1061454.4508755924,
+          "admitted": true
+        },
+        {
+          "alpha": 0.75,
+          "delta_pressure_Pa": -1049509.4123179065,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8,
+          "delta_pressure_Pa": -1032662.5698109021,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8500000000000001,
+          "delta_pressure_Pa": -1007713.4298050283,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9,
+          "delta_pressure_Pa": -968786.3528250746,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9500000000000001,
+          "delta_pressure_Pa": -905859.4979537482,
+          "admitted": true
+        },
+        {
+          "alpha": 1.0,
+          "delta_pressure_Pa": -806549.4531628417,
+          "admitted": true
+        },
+        {
+          "alpha": 1.05,
+          "delta_pressure_Pa": -665886.0423257872,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1,
+          "delta_pressure_Pa": -492224.06893465004,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1500000000000001,
+          "delta_pressure_Pa": -298010.37120278424,
+          "admitted": true
+        },
+        {
+          "alpha": 1.2000000000000002,
+          "delta_pressure_Pa": -92051.5732696564,
+          "admitted": true
+        },
+        {
+          "alpha": 1.25,
+          "delta_pressure_Pa": 120713.82709604362,
+          "admitted": true
+        },
+        {
+          "alpha": 1.3,
+          "delta_pressure_Pa": 337635.46321804216,
+          "admitted": true
+        },
+        {
+          "alpha": 1.35,
+          "delta_pressure_Pa": 557264.0935535352,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4000000000000001,
+          "delta_pressure_Pa": 778784.2446470216,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4500000000000002,
+          "delta_pressure_Pa": 1001729.4219864863,
+          "admitted": true
+        },
+        {
+          "alpha": 1.5,
+          "delta_pressure_Pa": 1225835.6808937318,
+          "admitted": true
+        }
+      ],
+      "brackets": [
+        [
+          1.2000000000000002,
+          1.25
+        ]
+      ],
+      "sign_changes": 1,
+      "nonunique": false,
+      "xtol": 1e-12,
+      "status": "Available",
+      "alpha_sat": 1.2217834013887836,
+      "pressure_residual_Pa": 1.0756775736808777e-07,
+      "row": {
+        "source_key": "Merkley1987",
+        "pdf_attachment_key": "ED7IMI2E",
+        "source_locator": "Figure 3; PDF p.5 printed p.441",
+        "temperature_K": "333.15",
+        "MDEA_mass_percent": "20",
+        "heat_kJ_mol_CO2": "-53.3",
+        "digitization_uncertainty_kJ_mol_CO2": "0.3",
+        "source_relative_uncertainty": "0.05",
+        "heat_definition": "sub-saturation slope of integral heat per mol MDEA vs loading",
+        "series": "333.15K_20wt",
+        "x": "19.84789128531864",
+        "y": "-53.26695856540356",
+        "pixel_x": "288.0074906367041",
+        "pixel_y": "333.66104868913857",
+        "candidate_pressure_1_kPa": "156",
+        "candidate_pressure_2_kPa": "1121",
+        "pressure_ambiguity": "Figure 3 does not identify which of the two Table 1 pressures",
+        "proposed_pressure_kPa": "1121",
+        "pressure_rule_status": "owner-freeze proposal; low-temperature alternative retained"
+      },
+      "alpha_LP": 1.009,
+      "alpha_endpoint": 1.009,
+      "truncation_mol_CO2_per_mol_MDEA": 0.0,
+      "heat_status": "Available",
+      "heat_J_mol_CO2": -56564.7127225711,
+      "start": "B1"
+    },
+    {
+      "scan": [
+        {
+          "alpha": 0.05,
+          "delta_pressure_Pa": -1102850.0245515492,
+          "admitted": true
+        },
+        {
+          "alpha": 0.1,
+          "delta_pressure_Pa": -1102474.315253361,
+          "admitted": true
+        },
+        {
+          "alpha": 0.15000000000000002,
+          "delta_pressure_Pa": -1101963.3436192803,
+          "admitted": true
+        },
+        {
+          "alpha": 0.2,
+          "delta_pressure_Pa": -1101329.2298176887,
+          "admitted": true
+        },
+        {
+          "alpha": 0.25,
+          "delta_pressure_Pa": -1100571.9844943648,
+          "admitted": true
+        },
+        {
+          "alpha": 0.30000000000000004,
+          "delta_pressure_Pa": -1099683.5130919223,
+          "admitted": true
+        },
+        {
+          "alpha": 0.35000000000000003,
+          "delta_pressure_Pa": -1098647.884139595,
+          "admitted": true
+        },
+        {
+          "alpha": 0.4,
+          "delta_pressure_Pa": -1097439.8990630526,
+          "admitted": true
+        },
+        {
+          "alpha": 0.45,
+          "delta_pressure_Pa": -1096022.0904422384,
+          "admitted": true
+        },
+        {
+          "alpha": 0.5,
+          "delta_pressure_Pa": -1094339.5476425472,
+          "admitted": true
+        },
+        {
+          "alpha": 0.55,
+          "delta_pressure_Pa": -1092311.18132007,
+          "admitted": true
+        },
+        {
+          "alpha": 0.6000000000000001,
+          "delta_pressure_Pa": -1089814.6303293393,
+          "admitted": true
+        },
+        {
+          "alpha": 0.65,
+          "delta_pressure_Pa": -1086659.053965531,
+          "admitted": true
+        },
+        {
+          "alpha": 0.7000000000000001,
+          "delta_pressure_Pa": -1082533.2629438883,
+          "admitted": true
+        },
+        {
+          "alpha": 0.75,
+          "delta_pressure_Pa": -1076899.778682806,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8,
+          "delta_pressure_Pa": -1068759.8665561485,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8500000000000001,
+          "delta_pressure_Pa": -1056081.6910998598,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9,
+          "delta_pressure_Pa": -1034291.0933514809,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9500000000000001,
+          "delta_pressure_Pa": -992465.4358735236,
+          "admitted": true
+        },
+        {
+          "alpha": 1.0,
+          "delta_pressure_Pa": -909426.3872194807,
+          "admitted": true
+        },
+        {
+          "alpha": 1.05,
+          "delta_pressure_Pa": -772099.3274887232,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1,
+          "delta_pressure_Pa": -598007.5770667493,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1500000000000001,
+          "delta_pressure_Pa": -407700.03318518575,
+          "admitted": true
+        },
+        {
+          "alpha": 1.2000000000000002,
+          "delta_pressure_Pa": -211013.80062252737,
+          "admitted": true
+        },
+        {
+          "alpha": 1.25,
+          "delta_pressure_Pa": -11999.670679181349,
+          "admitted": true
+        },
+        {
+          "alpha": 1.3,
+          "delta_pressure_Pa": 187571.0299631094,
+          "admitted": true
+        },
+        {
+          "alpha": 1.35,
+          "delta_pressure_Pa": 386860.04132848536,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4000000000000001,
+          "delta_pressure_Pa": 585450.0049804975,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4500000000000002,
+          "delta_pressure_Pa": 783131.9226572753,
+          "admitted": true
+        },
+        {
+          "alpha": 1.5,
+          "delta_pressure_Pa": 979808.4070409448,
+          "admitted": true
+        }
+      ],
+      "brackets": [
+        [
+          1.25,
+          1.3
+        ]
+      ],
+      "sign_changes": 1,
+      "nonunique": false,
+      "xtol": 1e-12,
+      "status": "Available",
+      "alpha_sat": 1.253007455362741,
+      "pressure_residual_Pa": 7.264316082000732e-08,
+      "row": {
+        "source_key": "Merkley1987",
+        "pdf_attachment_key": "ED7IMI2E",
+        "source_locator": "Figure 3; PDF p.5 printed p.441",
+        "temperature_K": "333.15",
+        "MDEA_mass_percent": "40",
+        "heat_kJ_mol_CO2": "-55.4",
+        "digitization_uncertainty_kJ_mol_CO2": "0.3",
+        "source_relative_uncertainty": "0.05",
+        "heat_definition": "sub-saturation slope of integral heat per mol MDEA vs loading",
+        "series": "333.15K_40wt",
+        "x": "39.76523415574591",
+        "y": "-55.37495665504718",
+        "pixel_x": "417.96815286624206",
+        "pixel_y": "309.1380042462845",
+        "candidate_pressure_1_kPa": "156",
+        "candidate_pressure_2_kPa": "1121",
+        "pressure_ambiguity": "Figure 3 does not identify which of the two Table 1 pressures",
+        "proposed_pressure_kPa": "1121",
+        "pressure_rule_status": "owner-freeze proposal; low-temperature alternative retained"
+      },
+      "alpha_LP": 0.941,
+      "alpha_endpoint": 0.941,
+      "truncation_mol_CO2_per_mol_MDEA": 0.0,
+      "heat_status": "Available",
+      "heat_J_mol_CO2": -70075.71103946032,
+      "start": "B1"
+    },
+    {
+      "scan": [
+        {
+          "alpha": 0.05,
+          "delta_pressure_Pa": -948669.825794124,
+          "admitted": true
+        },
+        {
+          "alpha": 0.1,
+          "delta_pressure_Pa": -934488.1735375671,
+          "admitted": true
+        },
+        {
+          "alpha": 0.15000000000000002,
+          "delta_pressure_Pa": -913360.9766962948,
+          "admitted": true
+        },
+        {
+          "alpha": 0.2,
+          "delta_pressure_Pa": -885448.3107237117,
+          "admitted": true
+        },
+        {
+          "alpha": 0.25,
+          "delta_pressure_Pa": -850515.4517947753,
+          "admitted": true
+        },
+        {
+          "alpha": 0.30000000000000004,
+          "delta_pressure_Pa": -808094.8304522409,
+          "admitted": true
+        },
+        {
+          "alpha": 0.35000000000000003,
+          "delta_pressure_Pa": -757539.7181286805,
+          "admitted": true
+        },
+        {
+          "alpha": 0.4,
+          "delta_pressure_Pa": -698046.1713704276,
+          "admitted": true
+        },
+        {
+          "alpha": 0.45,
+          "delta_pressure_Pa": -628665.7403502115,
+          "admitted": true
+        },
+        {
+          "alpha": 0.5,
+          "delta_pressure_Pa": -548319.1906306855,
+          "admitted": true
+        },
+        {
+          "alpha": 0.55,
+          "delta_pressure_Pa": -455817.9739784328,
+          "admitted": true
+        },
+        {
+          "alpha": 0.6000000000000001,
+          "delta_pressure_Pa": -349898.75607801764,
+          "admitted": true
+        },
+        {
+          "alpha": 0.65,
+          "delta_pressure_Pa": -229274.75600649707,
+          "admitted": true
+        },
+        {
+          "alpha": 0.7000000000000001,
+          "delta_pressure_Pa": -92704.86406127759,
+          "admitted": true
+        },
+        {
+          "alpha": 0.75,
+          "delta_pressure_Pa": 60922.95280411979,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8,
+          "delta_pressure_Pa": 232503.0352632585,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8500000000000001,
+          "delta_pressure_Pa": 422632.2348276805,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9,
+          "delta_pressure_Pa": 631554.7413354132,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9500000000000001,
+          "delta_pressure_Pa": 859144.0185026343,
+          "admitted": true
+        },
+        {
+          "alpha": 1.0,
+          "delta_pressure_Pa": 1104926.2327838507,
+          "admitted": true
+        },
+        {
+          "alpha": 1.05,
+          "delta_pressure_Pa": 1368139.6532342522,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1,
+          "delta_pressure_Pa": 1647816.8407580229,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1500000000000001,
+          "delta_pressure_Pa": 1942873.73453628,
+          "admitted": true
+        },
+        {
+          "alpha": 1.2000000000000002,
+          "delta_pressure_Pa": 2252191.9783849223,
+          "admitted": true
+        },
+        {
+          "alpha": 1.25,
+          "delta_pressure_Pa": 2574685.916855844,
+          "admitted": true
+        },
+        {
+          "alpha": 1.3,
+          "delta_pressure_Pa": 2909351.1072653993,
+          "admitted": true
+        },
+        {
+          "alpha": 1.35,
+          "delta_pressure_Pa": 3255295.2744645346,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4000000000000001,
+          "delta_pressure_Pa": 3611754.880447193,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4500000000000002,
+          "delta_pressure_Pa": 3978101.1864013644,
+          "admitted": true
+        },
+        {
+          "alpha": 1.5,
+          "delta_pressure_Pa": 4353839.428759243,
+          "admitted": true
+        }
+      ],
+      "brackets": [
+        [
+          0.7000000000000001,
+          0.75
+        ]
+      ],
+      "sign_changes": 1,
+      "nonunique": false,
+      "xtol": 1e-12,
+      "status": "Available",
+      "alpha_sat": 0.7308483093410753,
+      "pressure_residual_Pa": -2.1886080503463745e-08,
+      "row": {
+        "source_key": "Merkley1987",
+        "pdf_attachment_key": "ED7IMI2E",
+        "source_locator": "Figure 3; PDF p.5 printed p.441",
+        "temperature_K": "388.71",
+        "MDEA_mass_percent": "20",
+        "heat_kJ_mol_CO2": "-59.2",
+        "digitization_uncertainty_kJ_mol_CO2": "0.3",
+        "source_relative_uncertainty": "0.05",
+        "heat_definition": "sub-saturation slope of integral heat per mol MDEA vs loading",
+        "series": "388.71K_20wt",
+        "x": "19.94710609297121",
+        "y": "-59.18008469204047",
+        "pixel_x": "288.65486725663715",
+        "pixel_y": "264.87168141592923",
+        "candidate_pressure_1_kPa": "1121",
+        "candidate_pressure_2_kPa": "",
+        "pressure_ambiguity": "Table 1 identifies only one pressure at this temperature",
+        "proposed_pressure_kPa": "1121",
+        "pressure_rule_status": "owner-freeze proposal; low-temperature alternative retained"
+      },
+      "alpha_LP": 0.587,
+      "alpha_endpoint": 0.587,
+      "truncation_mol_CO2_per_mol_MDEA": 0.0,
+      "heat_status": "Available",
+      "heat_J_mol_CO2": -67821.0752656972,
+      "start": "B1"
+    },
+    {
+      "scan": [
+        {
+          "alpha": 0.05,
+          "delta_pressure_Pa": -954984.0014813659,
+          "admitted": true
+        },
+        {
+          "alpha": 0.1,
+          "delta_pressure_Pa": -938775.2259265492,
+          "admitted": true
+        },
+        {
+          "alpha": 0.15000000000000002,
+          "delta_pressure_Pa": -915954.8561761443,
+          "admitted": true
+        },
+        {
+          "alpha": 0.2,
+          "delta_pressure_Pa": -886885.5867692125,
+          "admitted": true
+        },
+        {
+          "alpha": 0.25,
+          "delta_pressure_Pa": -851450.5408483504,
+          "admitted": true
+        },
+        {
+          "alpha": 0.30000000000000004,
+          "delta_pressure_Pa": -809253.8269262714,
+          "admitted": true
+        },
+        {
+          "alpha": 0.35000000000000003,
+          "delta_pressure_Pa": -759677.4907148133,
+          "admitted": true
+        },
+        {
+          "alpha": 0.4,
+          "delta_pressure_Pa": -701898.2247731113,
+          "admitted": true
+        },
+        {
+          "alpha": 0.45,
+          "delta_pressure_Pa": -634891.8486342747,
+          "admitted": true
+        },
+        {
+          "alpha": 0.5,
+          "delta_pressure_Pa": -557438.4405057722,
+          "admitted": true
+        },
+        {
+          "alpha": 0.55,
+          "delta_pressure_Pa": -468137.71366661356,
+          "admitted": true
+        },
+        {
+          "alpha": 0.6000000000000001,
+          "delta_pressure_Pa": -365443.8001081409,
+          "admitted": true
+        },
+        {
+          "alpha": 0.65,
+          "delta_pressure_Pa": -247727.85283478152,
+          "admitted": true
+        },
+        {
+          "alpha": 0.7000000000000001,
+          "delta_pressure_Pa": -113373.62862080697,
+          "admitted": true
+        },
+        {
+          "alpha": 0.75,
+          "delta_pressure_Pa": 39096.101169085596,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8,
+          "delta_pressure_Pa": 210875.67717578565,
+          "admitted": true
+        },
+        {
+          "alpha": 0.8500000000000001,
+          "delta_pressure_Pa": 402740.38328964775,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9,
+          "delta_pressure_Pa": 614949.2907790507,
+          "admitted": true
+        },
+        {
+          "alpha": 0.9500000000000001,
+          "delta_pressure_Pa": 847213.1190776895,
+          "admitted": true
+        },
+        {
+          "alpha": 1.0,
+          "delta_pressure_Pa": 1098736.1625643075,
+          "admitted": true
+        },
+        {
+          "alpha": 1.05,
+          "delta_pressure_Pa": 1368320.0290452074,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1,
+          "delta_pressure_Pa": 1654501.6282268786,
+          "admitted": true
+        },
+        {
+          "alpha": 1.1500000000000001,
+          "delta_pressure_Pa": 1955694.6126183919,
+          "admitted": true
+        },
+        {
+          "alpha": 1.2000000000000002,
+          "delta_pressure_Pa": 2270310.8274754966,
+          "admitted": true
+        },
+        {
+          "alpha": 1.25,
+          "delta_pressure_Pa": 2596850.118069984,
+          "admitted": true
+        },
+        {
+          "alpha": 1.3,
+          "delta_pressure_Pa": 2933957.267876251,
+          "admitted": true
+        },
+        {
+          "alpha": 1.35,
+          "delta_pressure_Pa": 3280451.1818649927,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4000000000000001,
+          "delta_pressure_Pa": 3635333.7806963427,
+          "admitted": true
+        },
+        {
+          "alpha": 1.4500000000000002,
+          "delta_pressure_Pa": 3997785.813240948,
+          "admitted": true
+        },
+        {
+          "alpha": 1.5,
+          "delta_pressure_Pa": 4367155.346651258,
+          "admitted": true
+        }
+      ],
+      "brackets": [
+        [
+          0.7000000000000001,
+          0.75
+        ]
+      ],
+      "sign_changes": 1,
+      "nonunique": false,
+      "xtol": 1e-12,
+      "status": "Available",
+      "alpha_sat": 0.7377516445923529,
+      "pressure_residual_Pa": -2.2351741790771484e-08,
+      "row": {
+        "source_key": "Merkley1987",
+        "pdf_attachment_key": "ED7IMI2E",
+        "source_locator": "Figure 3; PDF p.5 printed p.441",
+        "temperature_K": "388.71",
+        "MDEA_mass_percent": "40",
+        "heat_kJ_mol_CO2": "-62.0",
+        "digitization_uncertainty_kJ_mol_CO2": "0.3",
+        "source_relative_uncertainty": "0.05",
+        "heat_definition": "sub-saturation slope of integral heat per mol MDEA vs loading",
+        "series": "388.71K_40wt",
+        "x": "39.85100042571307",
+        "y": "-62.00334288443172",
+        "pixel_x": "418.52777777777777",
+        "pixel_y": "232.02777777777774",
+        "candidate_pressure_1_kPa": "1121",
+        "candidate_pressure_2_kPa": "",
+        "pressure_ambiguity": "Table 1 identifies only one pressure at this temperature",
+        "proposed_pressure_kPa": "1121",
+        "pressure_rule_status": "owner-freeze proposal; low-temperature alternative retained"
+      },
+      "alpha_LP": 0.36,
+      "alpha_endpoint": 0.36,
+      "truncation_mol_CO2_per_mol_MDEA": 0.0,
+      "heat_status": "Available",
+      "heat_J_mol_CO2": -81489.71225680213,
+      "start": "B1"
+    }
+  ],
+  "free_feed_refusal": "TypeError: (): incompatible function arguments. The following argument types are supported:\n    1. (self, arg: collections.abc.Sequence[float], /) -> None\n\nInvoked with types: epcsaft._core.FeedSpec, list",
+  "conclusion": "Pinned native addition_enthalpy accepts fixed endpoint feeds and a fixed feed_amount. No saturation-capped observation or callback is exposed. Free CO2 feed is refused. The requested parameter-dependent cap cannot be passed to reg.fit through these declarations."
+}

@@ -1,0 +1,13 @@
+{
+  "packing_fraction_threshold": 0.1,
+  "dense_rule": "A resolved descending trial with trial-phase packing fraction >= 0.10 is a dense split, independent of declared trial kind.",
+  "gas_rule": "A resolved descending trial with packing fraction < 0.10 is gas evolution.",
+  "ambiguity_rule": "Stop for owner decision if a descending trial lies between 0.05 and 0.35; these delimit the separation supported by the retained diagnosis.",
+  "basis": "Issue 222 diagnosis-phase-search: gas max 0.02509233038155006; dense probes 0.40\u20130.46. Threshold declared before any new refit endpoint is computed or read.",
+  "declared_before_refit": true,
+  "base_commit": "6714b76",
+  "engine_issue": "tannerpolley/ePC-SAFT#904",
+  "zero_loading": "Carbon-free trial supports",
+  "rounding": "Report support-reconstruction-only failures; check each affected state with an ion-free trial; other unresolved trials block gate",
+  "selection": "Lowest cost among density-gate-passing endpoints per variant, retained before outside-fit statistics"
+}
