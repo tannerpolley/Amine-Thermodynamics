@@ -1,345 +1,264 @@
 {
   "issue": 222,
-  "base_commit": "4a197b9",
-  "disposition": "Return to Design: phase-assumption failure",
-  "item_j": "pass",
-  "verdicts": {
-    "A": "Transfer not assessed; phase-assumption stop at start 1",
-    "B": "Transfer not assessed; phase-assumption stop at start 1"
+  "base_commit": "d05701f720b9edf18ff76fd1471d52966f946b7f",
+  "item_k": {
+    "item_k": "pass",
+    "fit_converged": true,
+    "primary": [
+      -0.18178699467896325,
+      -75.5392333856162
+    ],
+    "secondary": [
+      -0.18178700296135544,
+      -75.53924198900174
+    ],
+    "singular_values": [
+      0.21248131881714344,
+      0.028869880181215713
+    ],
+    "AARD_percent": 0.49983125003179363,
+    "objective": 0.0012265413343831894,
+    "binary_searches": 1177,
+    "binary_liquid_witnesses": 0,
+    "binary_search_completed": 1177,
+    "binary_unresolved": 0,
+    "convex_hull_miscible": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "Carson_pass": 10,
+    "Carson_searches": 10,
+    "Kim_vapor_witnesses": 38,
+    "Kim_sign_mismatches": []
   },
-  "phase_results": [
-    {
-      "variant": "A",
-      "start": 1,
-      "source_row": 10,
-      "alpha": 0.2479764497870354,
-      "maximum_equilibrium_residual": 1.7053025658242404e-13,
-      "tpd_over_RT": -5.911976782316671,
-      "split_delta_G_over_RT": -2.78273123798499,
-      "split_error_estimate_over_RT": 1.2951304983605105e-06,
-      "split_moiety_error_mol": 0.0,
-      "split_charge_error_mol": 1.3010426069826053e-18,
-      "resolved_descending_trials": 4
-    },
-    {
-      "variant": "A",
-      "start": 1,
-      "source_row": 9,
-      "alpha": 0.2363834300334447,
-      "maximum_equilibrium_residual": 3.410605131648481e-13,
-      "tpd_over_RT": -5.917518912399203,
-      "split_delta_G_over_RT": -2.813453445691266,
-      "split_error_estimate_over_RT": 1.3418364388068413e-06,
-      "split_moiety_error_mol": 1.0842021724855041e-19,
-      "split_charge_error_mol": 4.336808689942018e-19,
-      "resolved_descending_trials": 4
-    },
-    {
-      "variant": "A",
-      "start": 1,
-      "source_row": 1,
-      "alpha": 0.08243367842662831,
-      "maximum_equilibrium_residual": 4.547473508864641e-13,
-      "tpd_over_RT": -5.960587144965402,
-      "split_delta_G_over_RT": -3.0932162979243003,
-      "split_error_estimate_over_RT": 2.6962849226070244e-08,
-      "split_moiety_error_mol": 1.387778780781446e-17,
-      "split_charge_error_mol": 2.168404344971009e-19,
-      "resolved_descending_trials": 4
-    },
-    {
-      "variant": "B",
-      "start": 1,
-      "source_row": 10,
-      "alpha": 0.2479764497870354,
-      "maximum_equilibrium_residual": 5.684341886080802e-14,
-      "tpd_over_RT": -6.564091504483386,
-      "split_delta_G_over_RT": -3.9474377703973005,
-      "split_error_estimate_over_RT": 1.3942152052775574e-06,
-      "split_moiety_error_mol": 0.0,
-      "split_charge_error_mol": 8.673617379884035e-19,
-      "resolved_descending_trials": 4
-    },
-    {
-      "variant": "B",
-      "start": 1,
-      "source_row": 9,
-      "alpha": 0.2363834300334447,
-      "maximum_equilibrium_residual": 2.7000623958883807e-13,
-      "tpd_over_RT": -6.566404119809135,
-      "split_delta_G_over_RT": -3.7825613873555994,
-      "split_error_estimate_over_RT": 1.5090817046402557e-06,
-      "split_moiety_error_mol": 3.388131789017201e-21,
-      "split_charge_error_mol": 0.0,
-      "resolved_descending_trials": 4
-    },
-    {
-      "variant": "B",
-      "start": 1,
-      "source_row": 1,
-      "alpha": 0.08243367842662831,
-      "maximum_equilibrium_residual": 2.2737367544323206e-13,
-      "tpd_over_RT": -6.472453347103752,
-      "split_delta_G_over_RT": -1.4647859821980092,
-      "split_error_estimate_over_RT": 3.463098618831837e-08,
-      "split_moiety_error_mol": 0.0,
-      "split_charge_error_mol": 0.0,
-      "resolved_descending_trials": 4
-    }
-  ],
-  "pressure_sensitivity": [
-    {
-      "variant": "A",
-      "start": "1",
-      "pressure_results": [
-        {
-          "P_Pa": 101325.0,
-          "prediction": {
-            "branch": null,
-            "convergence": {
-              "amplification": 0.0,
-              "contraction": null,
-              "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
-              "evaluations": 26,
-              "floor": 2.1259884570317339e-10,
-              "iterations": 13,
-              "residual": 4.425946701528396e-14,
-              "residual_over_criterion": 0.00044259467015283956,
-              "residual_over_floor": 0.00020818300715083946,
-              "stop": "converged"
-            },
-            "message": "SUCCESS: converged: residual 4.4259467015283959e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 2.1259884570317339e-10, amplification 0",
-            "requested_tolerance_met": true,
-            "residual": 3.3253287692096785,
-            "solver_options": [
-              {
-                "name": "ASSOCIATION_RESIDUAL",
-                "value": 2e-13,
-                "unit": "1 (mass action)",
-                "default": 2e-13
-              },
-              {
-                "name": "DENSITY_ROOT_RESIDUAL",
-                "value": 1e-12,
-                "unit": "1 (reduced pressure)",
-                "default": 1e-12
-              },
-              {
-                "name": "EQUILIBRIUM_ROW_RESIDUAL",
-                "value": 1e-10,
-                "unit": "1 (classified rows)",
-                "default": 1e-10
-              }
-            ],
-            "stable_root_count": null,
-            "status": "Available",
-            "unit": "J/mol",
-            "value": -40514.013692370965
-          }
-        },
-        {
-          "P_Pa": 265000.0,
-          "prediction": {
-            "branch": null,
-            "convergence": {
-              "amplification": 0.0,
-              "contraction": null,
-              "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
-              "evaluations": 26,
-              "floor": 2.1261488017429487e-10,
-              "iterations": 13,
-              "residual": 5.590345963567287e-14,
-              "residual_over_criterion": 0.0005590345963567287,
-              "residual_over_floor": 0.0002629329593010847,
-              "stop": "converged"
-            },
-            "message": "SUCCESS: converged: residual 5.5903459635672873e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 2.1261488017429487e-10, amplification 0",
-            "requested_tolerance_met": true,
-            "residual": 3.344763306273283,
-            "solver_options": [
-              {
-                "name": "ASSOCIATION_RESIDUAL",
-                "value": 2e-13,
-                "unit": "1 (mass action)",
-                "default": 2e-13
-              },
-              {
-                "name": "DENSITY_ROOT_RESIDUAL",
-                "value": 1e-12,
-                "unit": "1 (reduced pressure)",
-                "default": 1e-12
-              },
-              {
-                "name": "EQUILIBRIUM_ROW_RESIDUAL",
-                "value": 1e-10,
-                "unit": "1 (classified rows)",
-                "default": 1e-10
-              }
-            ],
-            "stable_root_count": null,
-            "status": "Available",
-            "unit": "J/mol",
-            "value": -40455.71008118015
-          }
-        }
-      ],
-      "relative_change": 0.0014390973857471012,
-      "pressure_check_pass": true
-    },
-    {
-      "variant": "B",
-      "start": "1",
-      "pressure_results": [
-        {
-          "P_Pa": 101325.0,
-          "prediction": {
-            "branch": null,
-            "convergence": {
-              "amplification": 0.0,
-              "contraction": null,
-              "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
-              "evaluations": 26,
-              "floor": 2.8345766223623987e-10,
-              "iterations": 13,
-              "residual": 2.7951449417903256e-14,
-              "residual_over_criterion": 0.00027951449417903257,
-              "residual_over_floor": 9.860890405074993e-05,
-              "stop": "converged"
-            },
-            "message": "SUCCESS: converged: residual 2.7951449417903256e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 2.8345766223623987e-10, amplification 0",
-            "requested_tolerance_met": true,
-            "residual": 1.9645612911067825,
-            "solver_options": [
-              {
-                "name": "ASSOCIATION_RESIDUAL",
-                "value": 2e-13,
-                "unit": "1 (mass action)",
-                "default": 2e-13
-              },
-              {
-                "name": "DENSITY_ROOT_RESIDUAL",
-                "value": 1e-12,
-                "unit": "1 (reduced pressure)",
-                "default": 1e-12
-              },
-              {
-                "name": "EQUILIBRIUM_ROW_RESIDUAL",
-                "value": 1e-10,
-                "unit": "1 (classified rows)",
-                "default": 1e-10
-              }
-            ],
-            "stable_root_count": null,
-            "status": "Available",
-            "unit": "J/mol",
-            "value": -44596.31612667965
-          }
-        },
-        {
-          "P_Pa": 265000.0,
-          "prediction": {
-            "branch": null,
-            "convergence": {
-              "amplification": 0.0,
-              "contraction": null,
-              "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
-              "evaluations": 26,
-              "floor": 2.8347904115145733e-10,
-              "iterations": 13,
-              "residual": 2.7951449430590853e-14,
-              "residual_over_criterion": 0.0002795144943059085,
-              "residual_over_floor": 9.86014673855798e-05,
-              "stop": "converged"
-            },
-            "message": "SUCCESS: converged: residual 2.7951449430590853e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 2.8347904115145733e-10, amplification 0",
-            "requested_tolerance_met": true,
-            "residual": 1.9861149965808338,
-            "solver_options": [
-              {
-                "name": "ASSOCIATION_RESIDUAL",
-                "value": 2e-13,
-                "unit": "1 (mass action)",
-                "default": 2e-13
-              },
-              {
-                "name": "DENSITY_ROOT_RESIDUAL",
-                "value": 1e-12,
-                "unit": "1 (reduced pressure)",
-                "default": 1e-12
-              },
-              {
-                "name": "EQUILIBRIUM_ROW_RESIDUAL",
-                "value": 1e-10,
-                "unit": "1 (classified rows)",
-                "default": 1e-10
-              }
-            ],
-            "stable_root_count": null,
-            "status": "Available",
-            "unit": "J/mol",
-            "value": -44531.6550102575
-          }
-        }
-      ],
-      "relative_change": 0.0014499205772620094,
-      "pressure_check_pass": true
-    }
-  ],
+  "disposition": "Return to Design: A1 endpoint on arbitrary bounds and Carson row-10 phase failure",
+  "verdicts": {
+    "A": "No transfer verdict: A1 converged on three arbitrary bounds; no representative selected",
+    "B": "Not assessed: stopped before B fits after A1 mandatory stop"
+  },
   "seven_endpoints": [
     {
       "start": "A1",
-      "endpoint": null,
-      "objective": null,
-      "identifiability": null,
-      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+      "endpoint": [
+        -0.17956067397569567,
+        -94.37490614927137,
+        0.5,
+        0.36021262112752206,
+        -143.77592360758646,
+        1.0,
+        6.497204237533406,
+        6.497204237533406,
+        5.717539729029397,
+        836.7789406657726,
+        2.0
+      ],
+      "objective": 2478.055957044427,
+      "identifiability": {
+        "status": "active_bound",
+        "rank": 9,
+        "singular_values": [
+          20.972088072383883,
+          12.866664928974513,
+          6.846578958054478,
+          4.020813218014467,
+          2.600658512026013,
+          0.44601330578361514,
+          0.22993815449953878,
+          0.1745183053982995,
+          0.015541226498482712
+        ],
+        "active_bounds": [
+          2,
+          5,
+          8
+        ],
+        "projected_gradient_norm": 0.0008352786719143523,
+        "right_vectors": [
+          0.9098939688599946,
+          0.33211574041496983,
+          0.23213701060988468,
+          -0.08772290300577783,
+          -0.012070473400315836,
+          -0.007016819485699909,
+          -0.0033926527494131517,
+          0.0016562090679482252,
+          -0.00012565513360112616,
+          -0.4135799938777813,
+          0.7119671409513493,
+          0.499466435507975,
+          -0.26311686184545796,
+          -0.05168185096772769,
+          -0.023504176596043348,
+          -0.010429142897997923,
+          0.004979581244788282,
+          -0.0003903784116777709,
+          0.0008187761397723008,
+          0.0016977816315062566,
+          -0.014930355775380016,
+          -0.059708058559691295,
+          -0.1384408746775344,
+          0.8702432520232414,
+          -0.4546624144235787,
+          -0.11177519632797128,
+          0.02253176170467952,
+          -0.018788454458690894,
+          -0.21649473177567247,
+          0.5586189626138418,
+          0.3525048034964421,
+          0.647103157152295,
+          0.23531469791748907,
+          0.15352538710887506,
+          0.13472741997664725,
+          -0.02500435921282121,
+          0.01656979356928815,
+          -0.557630566863634,
+          0.5797272833772346,
+          -0.3311113267566581,
+          -0.4840944404824244,
+          -0.0837717653145157,
+          -0.0007141828830561713,
+          0.038402965328581624,
+          -0.014653507047545025,
+          0.0002661343165785462,
+          -2.112877846967802e-05,
+          -0.0030113767908010658,
+          -0.009236038997404024,
+          -0.025633320301216175,
+          0.047676673677174625,
+          0.11867896962183633,
+          0.12382013931834271,
+          0.9836459214908911,
+          -0.020083687219825095,
+          0.1405634196930188,
+          0.15965410410177336,
+          0.8205460760079522,
+          -0.5294562871712575,
+          -0.023058423781469835,
+          0.007186105009532446,
+          -0.01143369584339992,
+          -0.0039056759935637906,
+          0.003571700260751021,
+          0.0714242858958225,
+          -0.1494450571337798,
+          -0.1047387683430855,
+          -0.20674407906058317,
+          0.378662284962035,
+          0.661803096744231,
+          0.5540094811457729,
+          -0.17476754649200413,
+          0.0003704854247698481,
+          0.010849917349178152,
+          -0.021250356475554164,
+          0.035544802528833054,
+          0.03468932843191733,
+          -0.18301475990224506,
+          -0.5634461646476752,
+          0.8034076420395444,
+          -0.023107570276111617
+        ]
+      },
+      "disposition": "Converged; return to Design: three active arbitrary bounds"
     },
     {
       "start": "A2",
       "endpoint": null,
       "objective": null,
       "identifiability": null,
-      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+      "disposition": "Duplicate of A1; not run"
     },
     {
       "start": "A3",
       "endpoint": null,
       "objective": null,
       "identifiability": null,
-      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+      "disposition": "Not run after mandatory A1 bound stop"
     },
     {
       "start": "A4",
       "endpoint": null,
       "objective": null,
       "identifiability": null,
-      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+      "disposition": "Not run after mandatory A1 bound stop"
     },
     {
       "start": "B1",
       "endpoint": null,
       "objective": null,
       "identifiability": null,
-      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+      "disposition": "Not run after mandatory A1 bound stop"
     },
     {
       "start": "B2",
       "endpoint": null,
       "objective": null,
       "identifiability": null,
-      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+      "disposition": "Duplicate of B1; not run"
     },
     {
       "start": "B3",
       "endpoint": null,
       "objective": null,
       "identifiability": null,
-      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+      "disposition": "Not run after mandatory A1 bound stop"
     }
   ],
-  "follow_up": "Not run: no representative endpoints. Corrected Kamps excluded from the criterion; no MDEA outcome falsifies the MEA bicarbonate value.",
-  "stopping_point": "Carson phase check before the joint optimizer; no outside-fit evaluation, weak-direction profile, Neumann sensitivity or follow-up refit.",
-  "claim_limits": "Numerical verification of instability at declared start-1 vectors only, not physical validation, not proof that all seven starts or all admissible fitted vectors are unstable, and not an AARD pass/fail. No phase-restricted fit was run after the stop.",
-  "diagnosis": "Exact largest-loading replay plus adjacent row 9 and lower-loading row 1 reproduce the resolved descending splits. Liquid closure converges and admitted split Gibbs changes exceed native estimated numerical errors by over five orders of magnitude. No bound, phase, parameter, tolerance or data change is authorized to remedy this within Build.",
-  "presentation": "Notebook source complete; native refresh stops because snakemake is absent; HTML not regenerated.",
-  "review": "Not independently reviewed; no manuscript promotion."
+  "active_bounds": [
+    {
+      "coordinate": "k(MDEAH+-CO2)",
+      "value": 0.5,
+      "side": "upper"
+    },
+    {
+      "coordinate": "k(MDEAH+-HCO3-)",
+      "value": 1.0,
+      "side": "upper"
+    },
+    {
+      "coordinate": "Born diameter",
+      "value": 2.0,
+      "unit": "angstrom",
+      "side": "lower"
+    }
+  ],
+  "follow_up": "Not run: no qualified representative endpoint. Corrected Kamps remains excluded from the two-AARD-percentage-point criterion. No MDEA outcome falsifies the MEA bicarbonate value.",
+  "outside_fit": "Not evaluated; Ermatchkov AARD unavailable for both variants, no pass/fail against 24.2 percent",
+  "Neumann_sensitivity": "Not run after mandatory bound stop",
+  "profiles": "Not run after mandatory bound stop; local singular values and right vectors retained at A1 start/endpoint",
+  "claim_limits": "Kim calibration and numerical verification only. A1 is a bound-constrained calibration endpoint, not an adopted parameter set, independent validation or transfer result. No absorber-use or manuscript claim. Xiao and Zhang remain unscored.",
+  "review": "Not independently reviewed or promoted.",
+  "replay": {
+    "rows": 280,
+    "maximum_relative_replay_error": 2.2113019527623325e-12,
+    "tolerance": 1e-08,
+    "workers": 32,
+    "available_memory_bytes": 23140700160,
+    "BLAS_threads_per_process": 1,
+    "endpoint_sha256": "c9bf2147f87814aa6392217d3533227a291380199520e5451f65cb5d284f08e8"
+  },
+  "endpoint_Carson": [
+    {
+      "source_row": "1",
+      "alpha": 0.08243367842662831,
+      "success": true,
+      "requested_tolerance_met": true,
+      "max_residual": 3.410605131648481e-13,
+      "completed": true,
+      "message": "no witness in the recorded trial set; unresolved trials 0",
+      "split": false,
+      "split_delta_g_over_rt": null
+    },
+    {
+      "source_row": "10",
+      "alpha": 0.2479764497870354,
+      "success": true,
+      "requested_tolerance_met": true,
+      "max_residual": 2.2737367544323206e-13,
+      "completed": true,
+      "message": "numerically resolved descending split with estimated uncertainty; unresolved trials 0",
+      "split": true,
+      "split_delta_g_over_rt": -0.041354845379828475
+    }
+  ]
 }
