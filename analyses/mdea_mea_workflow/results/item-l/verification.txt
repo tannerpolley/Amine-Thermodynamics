@@ -1,13 +1,19 @@
-2026-10-28, final evidence checks
-Pinned interpreter, -I, nice -n 10: 61 Kim observations; both endpoints usable;
-initialization agreement within 1e-4 and 1e-6 K^-1; scaled rank 2;
-no active bounds; Cp CSV error arithmetic correct; 30-50 wt% below 5%;
-60 wt% above 5%; gate-status Cp_298K false; no amended starts or Carson output.
-Final scientific replay: run.log; prescribed stop reproduced without exception.
-CSE prose checker: passed plugin-wide and scoped rules for README.md.
-The checker was invoked through runpy with its own script directory on sys.path
-because direct -I invocation could not resolve cse_hook_common.
-Figure: html_preview returned no console messages; labels, point positions,
-legend and 5% band visually inspected; shown through html_render.
-Git diff --check: passed.
-No independent delivered review performed. No joint fit, merge or push.
+2026-10-28 continuation from 2987259
+Pinned Engine 3e83e19c, wheel SHA-256 0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804.
+Installed Engine files verified byte-identical to the wheel by run.py.
+Command: nice -n 10 /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I analyses/mdea_mea_workflow/results/item-l/run.py --finish-gates
+32 process workers, BLAS/OpenMP 1 per process. No joint fit or pre-fit rerun.
+1177/1177 binary searches complete; no liquid witnesses or unresolved trials.
+171 vapor witnesses, including 38 Kim states; zero bubble-pressure sign mismatches.
+4/4 convex hulls miscible.
+10/10 Carson liquid solves meet tolerance and searches complete, zero unresolved.
+9/10 Carson searches pass. A4 row 10: two-liquid descent -0.13027733799026464, error estimate 2.6405663928255056e-8.
+Start documents compared against copies of item-(k) documents with only the declared linear pair substituted: all five equal.
+Both temperature_law_coefficient identities resolve in the pinned Engine for all five starts.
+Start and shared Neumann caloric hashes checked; A2/B2 duplicate identities checked.
+Criterion (3): retained Cp CSV filtered to 298.15 K and <=50 wt%, all errors <=5%; 60 wt% extrapolation preserved.
+Figure regenerated from retained CSV only; labels, gate-domain shading and points inspected.
+CSE prose checker passed for README; invoked by runpy with its script directory on sys.path under -I.
+Notebook site refresh failed: missing snakemake. Notebook source retained.
+Change accounting run against 2987259: 56 executable-file additions, 43 removals; two files.
+No independent delivered review performed. No parameter promotion, joint fit, merge or push.
