@@ -31,7 +31,7 @@ if __name__=='__main__':
         factor=(1+j.water(w)+alpha)/(.1191622+j.water(w)*.01801528+alpha*.0440095)/1000 if m['group']=='Cp' else 1.
         records.append(dict(group=m['group'],source_row=r['source_row'],temperature_K=float(r.get('temperature_K',298.15)),MDEA_mass_fraction=w,loading=alpha,observed=obs*factor,predicted=pred*factor,units='J/g/K' if m['group']=='Cp' else 'kg/m3',difference=(pred-obs)*factor,scaled_residual=(pred-obs)/scale,weighted_residual=fit['weighted_residuals'][i],cost=.5*fit['weighted_residuals'][i]**2))
     with (out/'a1-density-cp-residuals.csv').open('w') as f:
-        writer=csv.DictWriter(f,fieldnames=records[0]);writer.writeheader();writer.writerows(records)
+        writer=csv.DictWriter(f,fieldnames=records[0],lineterminator="\n");writer.writeheader();writer.writerows(records)
     indices=[i for i,m in enumerate(meta) if m['group']=='unloaded-density']
     available=next(int(s.split()[1])*1024 for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:'))
     workers=min(os.cpu_count(),len(indices),max(1,available//268435456))
