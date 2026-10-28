@@ -1,6 +1,6 @@
 {
   "variant": "A",
-  "status": "incomplete",
+  "status": "complete",
   "states": [
     {
       "name": "unloaded",
@@ -46,5 +46,17 @@
     }
   ],
   "admission_message": "Parameters.from_mapping and Mixture construction returned without exception",
-  "reason": "Parameter admission and both liquid evaluations succeeded. Full criterion remains incomplete because item (c) has no adopted MDEA ideal-gas record."
+  "unloaded_calorics": {
+    "ideal_h_J_mol": -229255.07906660208,
+    "ideal_Cp_J_mol_K": 40.35442949480622,
+    "total_h_J_mol": -272174.02412894554
+  },
+  "MDEA_ideal_at_anchor": {
+    "T_K": 313.15,
+    "h_J_mol": 0.0,
+    "s_J_mol_K": 0.0,
+    "Cp_J_mol_K": 167.5947357764028
+  },
+  "caloric_limit": "Full eight-species neutral thermochemistry admitted. Direct Mixture.state totals require all ionic ideal records, even at zero ionic fractions; reaction-completed ionic totals are deferred to item (g). MDEA ideal functions separately evaluated in native selected-component model.",
+  "reason": "Full parameter and MDEA ideal-gas admission succeeded in both liquid compositions; prescribed charged composition is not reactive equilibrium. Ionic reference completion remains conditional on item (g)."
 }

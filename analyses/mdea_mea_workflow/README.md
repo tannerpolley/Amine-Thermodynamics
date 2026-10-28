@@ -15,13 +15,14 @@ transcription hashes and remaining source gaps. No source observations change ro
 
 | Item | Disposition | Retained evidence and remaining criterion |
 |---|---|---|
-| (a) Ten transcriptions | Incomplete | Ten files, 338 observations in total: Hsieh 24; corrected Kamps 28; Jakobsen 8; Böttinger 58; Carson 40; Weiland Cp 39; Weiland density 44; Sobrino 24; Kim 61; Merkley 12. The loaded-density uncertainty is not established; no scale assigned. Merkley plateau values lack individual finite-loading/pressure coordinates. |
-| (b) Association volume | Incomplete | [Summary](results/kappa/summary.json): κ = 0.11800686; pressure AARD 1.34914%, saturated-liquid density AARD 0.00525150%, against the source model, not experiments. The 21 source-model saturation solves meet 10⁻¹⁰ residual tolerance. S1 describes the method but supplies no explicit MDEA AARD threshold; numerical conversion is retained without inventing that threshold. |
-| (c) Ideal gas | Incomplete | [PDF units check](results/ideal-gas-units-check.json): Eq. 26 in the PDF itself has the apparent missing-temperature factor. No dimensional interpretation or alternate cited polynomial has been adopted. No polynomial/anchor completion claimed. |
-| (d) Dielectric coefficients | Complete | [Summary](results/dielectric/summary.json): 0.8630669729 L/mol and 1121.773473 K; 30 measurements, AARD 3.86106%; native replay error 1.42 × 10⁻¹⁴. Above 328.15 K this is an extrapolation assumption. |
-| (e) Admission | Incomplete | [A](results/admission-A.json), [B](results/admission-B.json): both parameter documents admitted, both unloaded and loaded liquid states evaluated, all Helmholtz terms retained. Full caloric admission remains contingent on (c). No variant was refused. |
-| (f) CO₂ coordinate | Complete | [Probe summary](results/probe-summary.json), [A columns](results/probe-A-columns.csv), [B columns](results/probe-B-columns.csv). Both raw sensitivity norms favor MDEAH+–CO₂. Unit-column normalization removes the magnitude ranking, so both raw norms and normalized columns are retained explicitly. No joint coordinate was fitted or changed. |
-| (g) Original reaction basis | Blocked | [Interim comparison](results/reaction-basis-interim.json): Jakobsen Table 1 differs from Uyan Table 1 by −0.002679 ln K at 298.15 K; Uyan gives pKₘ = 8.54994. The unavailable Kamps–Maurer paper is still required. |
+| (a) Ten transcriptions | Retained; owner freeze pending | 338 observations; both density and Merkley retained. Explicit scale and pressure proposals below. Carson corrected to cumulative integral heat; printed numbers preserved. |
+| (b) Association volume | Complete, owner accepted | κ = 0.11800686; pressure AARD 1.34914%, density AARD 0.00525150%. Unconverted κ = 0.123858 gives 8.38332% and 0.0339482%, respectively. |
+| (c) Ideal gas | Complete | Cubic maximum deviation 0.022213% over 293–423 K; h = s = 0 at 313.15 K. Independent EOS comparison at 298.15 K differs by −14.79%; uncertainty unquantified. |
+| (d) Dielectric coefficients | Complete | 0.8630669729 L/mol, 1121.773473 K; AARD 3.86106%, cost 318.265. Alternative 0.28087913 L/mol, 2793.648 K; AARD 3.91286%, cost 328.265. MEA larger-volume convention selects the former, also lower cost. Start-1 densities, MDEA–water k = 0; mean deviations −8.1% at x=0.2, +4.7% at x=0.6, −3.4% pure. Absorber x≈0.04–0.13 lies below measured x≥0.2; at 393 K the minima differ by 1.87% at x=0.2 and 6.69% pure. |
+| (e) Admission | Complete for stage 1 | Both full parameter mappings and MDEA ideal-gas record admitted; unloaded and charged liquid terms retained; native neutral selection verifies caloric anchors. Ionic reference completion remains conditional on (g). |
+| (f) CO₂ coordinate | Complete, owner selected | k(MDEAH⁺–CO₂) selected, k(MDEA–CO₂)=0. Raw norms A 4.99072 vs 0.744984, B 9.42712 vs 0.0107344; both dimensionless k. |
+| (g) Original reaction basis | Blocked | Kamps–Maurer 1996 remains unavailable in Zotero; no writes authorized. |
+
 
 The ten transcriptions contain 338 observations (including twelve figure points),
 not 338 admissible fitting targets. Figure-point uncertainty and source
@@ -41,10 +42,10 @@ Run, in order:
 1. `scripts/transcribe.py`, then `scripts/digitize_merkley.py` for the ten source tables.
 2. `scripts/prepare.py` for the association conversion and installed-wheel identity check.
 3. `scripts/dielectric.py` to fit the two dielectric coefficients and finalize both start-1 documents.
-4. `scripts/source_checks.py` for the ideal-gas units and interim reaction-basis checks.
+4. `scripts/source_checks.py` for the ideal-gas cubic and interim reaction-basis checks; `scripts/source_arithmetic.py` for unconverted κ, Carson arithmetic and source-table hash updates.
 5. `scripts/admission_probe.py`, then `scripts/probe_summary.py`.
 6. `scripts/numerical_checks.py 0.001` for the centered derivative check, then `scripts/shared_reference_checks.py`.
-7. `scripts/retain_inputs.py` to verify identities and retain the source-table snapshots and input hashes.
+7. `scripts/retain_inputs.py` to verify identities and retain source identities and input hashes without duplicate tables.
 
 The digitizer uses the installed CSE XY helper, unchanged; its hash is in
 `inputs/merkley-calibration.json`. OpenCV 5.0.0.93 was installed only under
@@ -66,9 +67,53 @@ is invoked by the probe. The dielectric reduction follows
 reduction to least squares for two coefficients across the six Hsieh temperatures.
 The density and permittivity equations are replayed by the installed library.
 
-Before stage 2: resolve (a), (b), (c), (e), and (g), obtain delivered evidence
+Before stage 2: resolve (g), freeze the proposals for (a), obtain delivered evidence
 review, then obtain the owner's issue comment freezing roles, scales, weights,
 bounds and starts. The nine-coordinate fits, three starts per variant,
 outside-fit assessments, phase searches, identifiability profiles and
 sensitivity/control refits are all stage-2 work. Neither the MEA record nor
 the manuscript has been changed. No Zotero writes, push, or merge occurred.
+
+## Owner-freeze proposals
+
+These are proposed residual scales and state assignments, not source-reported
+standard uncertainties, and do not authorize stage 2.
+
+- **Loaded density:** propose uρ,j = **0.001 ρobs,j** (kg/m³), and uα,j =
+  **0.01 mol CO₂/mol MDEA**. Use sρ,j = √[uρ,j² + (gⱼ uα,j)²], with the
+  source-neighbor secant gⱼ, one-sided at endpoints, exactly as
+  `data_methods.tex`, Eq. density-scale. Weiland 1998 printed p.378 describes
+  hydrometer measurements and unloaded agreement within 0.1% of literature;
+  it gives neither loaded-density nor loading uncertainty. The 0.1% is a
+  proposed density scale borrowed from that comparison, not a measured loaded
+  uncertainty. The absolute loading scale 0.01 is an engineering allowance
+  for stock mixing and titration with no quantified source uncertainty.
+  Both values require owner freeze; retain all 44 rows and the declared
+  30–50 wt% fit / 60 wt% comparison roles.
+- **Merkley:** keep all 12 digitized markers and the owner's **5% scale**
+  (heat residual still uses the issue's larger-of-3-kJ/mol-and-5% rule).
+  Propose **1121 kPa at 288.71, 333.15 and 388.71 K**, **1466 kPa at
+  422.04 K**, choosing the common measured pressure for the first three
+  temperatures. At the first two temperatures retain **156 and 1121 kPa**
+  as candidates for every marker; Figure 3 gives no assignment, and repeat
+  runs differ up to 9%. The higher temperatures each have only one Table 1
+  pressure. The proposal is a calculation-state convention, not recovered
+  source identity; report a 156-kPa alternative calculation for the six
+  ambiguous markers in stage 2. Use the source's below-saturation plateau
+  heat; do not invent a finite loading. At 40 wt%, 422.04 K retain text
+  **−66 kJ/mol** beside digitized **−65.3 kJ/mol**, difference 0.7 kJ/mol.
+- **CO₂ bound:** recommend k(MDEAH⁺–CO₂) in **[−0.5, 0.5]**, matching the
+  declared ion–water bounds. This is a finite search bound, not a physical
+  confidence interval; the start-1 sensitivities provide no narrower bound.
+  A fitted endpoint at an arbitrary bound returns to Design under #222.
+
+The notebook is registered in the analysis site. The presentation refresh was
+attempted but stopped because `snakemake` is absent from this environment;
+the HTML has not been regenerated. Numerical checks and the requested prose
+checker pass. Independent delivered review remains an owner gate.
+
+Relative to 25d0d45, executable scripts add 105 lines and remove 19,
+including comments and blanks. The additions implement the accepted cubic,
+native caloric admission, alternative dielectric solution, pressure provenance
+and source arithmetic; the source-table copy loop is removed. Generated
+values, source tables and notebook changes are separate from that count.

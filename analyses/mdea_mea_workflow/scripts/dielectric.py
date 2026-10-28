@@ -34,6 +34,9 @@ def main():
   return 1+rho*((1-x)*.3777+x*v[0])*(((1-x)*1403+x*v[1])/T-1)
  fit=least_squares(lambda v:(predict(v)-y)/(.01*y),[.7,1000.],xtol=1e-12,ftol=1e-12,gtol=1e-12)
  assert fit.success,fit.message
+ alternative=least_squares(lambda v:(predict(v)-y)/(.01*y),[.28,2800.],xtol=1e-12,ftol=1e-12,gtol=1e-12)
+ assert alternative.success,alternative.message
+ assert fit.x[0]>alternative.x[0] and fit.cost<alternative.cost
  v=fit.x
  for variant,d in zip('AB',docs):
   for c in d['components']:
@@ -48,7 +51,16 @@ def main():
   r['native_replay']=native.state(r['T'],rho=r['rho_mol_L']*1000,x={p.M:r['x'],p.W:1-r['x']}).bulk_relative_permittivity
  assert max(abs(r['calculated']-r['native_replay']) for r in rows)<1e-10
  p.write('results/dielectric/rows.json',rows)
- p.write('results/dielectric/summary.json',dict(status='complete',dielectric_volume_L_mol=v[0],dielectric_temperature_K=v[1],n=len(rows),aard_percent=100*np.mean(abs(predict(v)/y-1)),max_abs_native_replay=max(abs(r['calculated']-r['native_replay']) for r in rows),source='Hsieh 2007 Tables 2 and 5',method='MEA fit_campaign.py stage5_study solvent law; 1% relative scales; least squares of two coefficients; neutral EOS densities at 101325 Pa (pressure assumption, not printed in Hsieh)',controls=dict(xtol=1e-12,ftol=1e-12,gtol=1e-12),extrapolation='Above 328.15 K coefficients are a model assumption, not measured evidence.'))
+ p.write('results/dielectric/summary.json',dict(status='complete',dielectric_volume_L_mol=v[0],dielectric_temperature_K=v[1],cost=fit.cost,alternative=dict(dielectric_volume_L_mol=alternative.x[0],dielectric_temperature_K=alternative.x[1],cost=alternative.cost,aard_percent=100*np.mean(abs(predict(alternative.x)/y-1))),selection_rule='MEA larger-volume convention, supplement.tex paragraph supplement-20; also lower cost here',mean_signed_percent_by_x={str(q):float(100*np.mean((predict(v)/y-1)[x==q])) for q in sorted(set(x))},density_basis='start-1 neutral densities, MDEA-water k=0',absorber_composition_limit='23-49 wt%, x about 0.04-0.13, below Hsieh minimum x=0.2',n=len(rows),aard_percent=100*np.mean(abs(predict(v)/y-1)),max_abs_native_replay=max(abs(r['calculated']-r['native_replay']) for r in rows),source='Hsieh 2007 Tables 2 and 5',method='MEA fit_campaign.py stage5_study solvent law; 1% relative scales; least squares of two coefficients; neutral EOS densities at 101325 Pa (pressure assumption, not printed in Hsieh)',controls=dict(xtol=1e-12,ftol=1e-12,gtol=1e-12),extrapolation='Above 328.15 K coefficients are a model assumption, not measured evidence.'))
+ summary=json.loads((p.OUT/'results/dielectric/summary.json').read_text())
+ comparisons=[]
+ for fraction in (.04,.13,.2,.4,.6,.8,1.):
+  density=native.state(393.,P=101325.,x={p.M:fraction,p.W:1-fraction},phase='liquid').molar_density/1000
+  def epsilon(coeff):
+   return 1+density*((1-fraction)*.3777+fraction*coeff[0])*(((1-fraction)*1403+fraction*coeff[1])/393.-1)
+  comparisons.append(dict(T_K=393.,x_MDEA=fraction,selected=epsilon(v),alternative=epsilon(alternative.x),difference_percent=100*(epsilon(alternative.x)/epsilon(v)-1)))
+ summary['comparison_393_K']=comparisons
+ p.write('results/dielectric/summary.json',summary)
  print(v,flush=True)
 
 if __name__=='__main__':main()

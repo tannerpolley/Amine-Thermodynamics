@@ -1,8 +1,6 @@
 ---
 title: "MDEA through the MEA formulation: stage-1 preparation"
 format: html
-execute:
-  enabled: false
 ---
 
 Stage 1 provides numerical preparation evidence for issue 222. It does not yet
@@ -28,13 +26,13 @@ native least-squares declarations give:
 | Saturated-liquid-density AARD against source model | 0.00525150% |
 | Largest saturation-equilibrium residual | 4.17 × 10⁻¹⁴ |
 
-The source reference uses the temperature-dependent association volume,
-with the same pure-component equation of state and four sites. The conversion
-cannot reproduce that function exactly with one constant. S1 gives a method,
-but no explicit MDEA AARD acceptance limit was found; item (b) remains
-incomplete against the literal completion criterion. These deviations are
-numerical model-to-model differences, not experimental validation.
-See [conversion evidence](results/kappa/summary.json).
+The owner accepted κ = 0.11800686, fixed to eight significant figures, in
+issue 222, “Stage-1 owner decisions” (2026-10-28); item (b) is complete.
+The unconverted κ = 0.123858 gives pressure AARD **8.38332%** and density
+AARD **0.0339482%** against the same source model (MEA unconverted comparison:
+2.80%). These are numerical model-to-model differences, not experimental validation.
+See [conversion evidence](results/kappa/summary.json) and
+[unconverted replay](results/kappa/unconverted-replay.json).
 
 Hsieh 2007 Table 2 contributes six pure-MDEA measurements; Table 5 contributes
 24 aqueous measurements at MDEA mole fractions 0.2–0.8 and 303.15–328.15 K.
@@ -44,8 +42,17 @@ pressure of 101325 Pa, the 30-point AARD is **3.86106149%**.
 Native replay differs by at most **1.42 × 10⁻¹⁴** in relative permittivity.
 Water coefficients remain fixed. The two coefficients use the MEA
 one-percent relative residual scales; no joint coordinate enters this fit.
+The second local minimum is **0.28087913 L/mol, 2793.648 K**, with cost
+**328.265** and AARD **3.91286%**, versus **318.265** and **3.86106%** for
+the selected solution. Selection follows the MEA larger-volume convention
+(`supplement.tex`, paragraph supplement-20), and also selects the lower cost here.
+At 393 K the two solutions differ by 1.87% at x = 0.2 and 6.69% for pure MDEA. Mean signed deviations
+are **−8.1% at x = 0.2**, **+4.7% at x = 0.6**, and **−3.4% for pure MDEA**.
+Densities are start-1 densities with MDEA–water k = 0. The absorber range
+about 23–49 wt% (x ≈ 0.04–0.13) is below Hsieh's lowest x = 0.2.
 Above 328.15 K the dielectric law is a model assumption.
-See [all dielectric rows](results/dielectric/rows.json).
+See [all dielectric rows](results/dielectric/rows.json) and
+[both minima and composition bias](results/dielectric/summary.json).
 
 ## Source transcriptions and physical bases
 
@@ -59,12 +66,12 @@ identifies each PDF, locator, units, basis, uncertainty, row count and hash.
 | Ermatchkov Table 6 | 28 | Corrected Kamps total pressures; not partial pressures |
 | Jakobsen A5 | 8 | PDF p.9, printed p.9902; loadNMR used; no rows excluded |
 | Böttinger MDEA Table 2 | 58 | All rows retained; amine sums and carbonate/bicarbonate signal preserved |
-| Carson Table 3 | 40 | Partial-molar heading; both repeated runs retained |
+| Carson Table 3 | 40 | Integral ΔH/n₁ from zero loading; both repeated runs retained |
 | Weiland 1997 Table 1 | 39 | 33 entries at 30–50 wt%, six at 60 wt% |
-| Weiland 1998 Table 1 | 44 | Loaded uncertainty remains unresolved; no residual scale assigned |
+| Weiland 1998 Table 1 | 44 | No reported loaded uncertainty; explicit scale proposal in README awaits owner freeze |
 | Sobrino Table 5 | 24 | Only the 0.1 MPa rows, six temperatures, four compositions |
 | Kim Table 8 | 61 | All printed series; only total bubble pressure may be scored later |
-| Merkley Figure 3 | 12 | Differential plateau slopes; individual finite-loading/pressure mapping unresolved |
+| Merkley Figure 3 | 12 | Plateau slopes; both low-temperature pressure candidates retained, proposed assignment awaits freeze |
 
 The Böttinger printed HCO₃⁻ column represents the bicarbonate/carbonate
 signal; the amine column represents MDEA/MDEAH⁺. Individual species are not
@@ -76,24 +83,51 @@ for all eight rows. These source imbalances are not numerical solver errors.
 
 ![All twelve extracted Merkley markers are overlaid on the original page. The digitization estimate is ±0.3 kJ/mol CO₂, separate from the paper's ±5% experimental accuracy.](results/merkley-overlay.png)
 
-Carson's second 30 wt% run prints 0.0180 mol where neighboring cumulative
-amounts suggest a transcription or source inconsistency. The printed value
-is retained. The source's interpretation and uncertainty are not repaired.
+Carson's printed “partial molar” column is cumulative ΔH/n₁ over sequential
+CO₂ additions, an integral from zero loading, not ∂ΔH/∂n₁ (procedure printed
+p.1289, PDF p.5). Of 40 rows, 27 agree with ΔH/n₁ within 0.03 kJ/mol.
+Rows 11–20 differ by up to 0.29 kJ/mol because n₁ has two significant figures;
+rows 32 and 34 differ by 0.03–0.04 kJ/mol. Row 38 prints 0.0180 mol, a source
+typo: −622.0 J ÷ (−48.59 × 1000 J/mol) = **0.012801 mol**. Printed values
+are preserved; [row arithmetic](results/carson-arithmetic.json) is separate.
+
+Merkley Table 1 lists both 156 and 1121 kPa at 288.71 and 333.15 K; runs
+differ by up to 9%, while Figure 3 assigns no pressure to each marker.
+Every marker retains candidate pressures and ambiguity. At 388.71 K Table 1
+lists only 1121 kPa, and at 422.04 K only 1466 kPa. The text on printed p.441
+gives **−66 kJ/mol** at 40 wt%, 422.04 K, versus digitized **−65.3 kJ/mol**
+(a 0.7 kJ/mol difference); neither value replaces the other. The 5% scale
+and the pressure proposal are in the [README](README.md#owner-freeze-proposals).
+
 Derks 2011 Table 1 specifies only “room temperature”; no numerical
 thermostat temperature is established, so those four states remain unscored.
 
 ## Ideal-gas units and reaction basis
 
-The PDF itself prints the right-hand side of Wangler Eq. 26 in the form
-usually associated with enthalpy divided by temperature, while its left-hand
-side is molar enthalpy. Its Table 3 does not supply the coefficient units.
-This is not a reading-copy omission that can be silently corrected.
-Differentiating the expression literally gives a heat capacity of
-2.49778–4.98100 J/mol/K over 293–423 K; multiplying it by temperature first
-gives 159.061–213.152 J/mol/K. These are competing interpretations, not an
-adopted caloric record. Item (c) remains incomplete: no cubic, 313.15 K
-anchors, or 0.5% reproduction claim is promoted.
-See [units check and grid](results/ideal-gas-units-check.json) and
+The owner adopted the restored factor T in Wangler Eq.26 (PDF G7ZTAJZS,
+printed p.18):
+
+$$H^{ig}/n=T[A_2+A_3(A_4/T)\coth(A_4/T)-A_5(A_6/T)\tanh(A_6/T)+A_1/T].$$
+
+The literal derivative gives only 2.498–4.981 J/mol/K, below the ideal-gas
+lower bound 5R/2 = **20.79 J/mol/K**. With T restored, the Table 3 coefficients
+give water **33.575 J/mol/K** (reference 33.58) and CO₂ **37.243 J/mol/K**
+(reference 37.1) at 298.15 K. The cubic fitted over 293–423 K is
+
+$$C_p^{ig}=91.8741258383-0.108076279455T+0.00164227867349T^2-1.67647752484\times10^{-6}T^3$$
+
+in J/mol/K, with T in K. Its maximum relative deviation is **0.022213%** on
+a 0.1 K grid, below 0.5%; h = s = 0 at 313.15 K. The
+[ideal-gas record](inputs/physical-ideal-gas-calorics.json) uses the MEA format.
+[Fit and check values](results/ideal-gas-polynomial.json) retain the full grid.
+At 298.15 K Wangler gives **161.218 J/mol/K**, versus **189.200 J/mol/K**
+from the independent EOS estimate of [Neumann et al. (2021)](https://doi.org/10.1007/s10765-021-02933-7),
+Eq.5 and Table 8 (author manuscript pp.10–11), a **−14.79%** difference.
+Their ideal part was initialized with Joback and adjusted to liquid Cp and
+sound-speed data; they report Joback deviations up to 27%, no measured
+ideal-gas Cp, and no reliable uncertainty for this property. This is an
+independent estimate comparison, not physical validation of Wangler.
+See [units check](results/ideal-gas-units-check.json) and
 [PDF equation](inputs/wangler-equation-26.png).
 
 Jakobsen 2005 Table 1 prints coefficients −83.4914, −819.7 and 10.9756;
@@ -112,13 +146,15 @@ mole fractions 0.95/0.05) and a charged liquid (water/MDEA/MDEAH⁺/HCO₃⁻
 0.94/0.04/0.01/0.01). These prescribed liquid compositions test capability;
 they are not reactive equilibrium predictions. Their dimensionless
 Helmholtz contributions are in [A](results/admission-A.json) and
-[B](results/admission-B.json). The full caloric admission criterion remains
-incomplete because the MDEA ideal-gas record is unresolved.
+[B](results/admission-B.json). The MDEA ideal-gas record is admitted in each full mapping; native neutral
+selection evaluates Cp and verifies h = s = 0 at 313.15 K at the standard
+ideal-gas density. Direct full-mixture caloric totals require ionic ideal
+records even at zero ionic fractions; reaction-completed ionic totals remain
+conditional on (g). This completes the MDEA caloric admission half of (e).
 
 The pressure-coordinate probe uses all twenty Kuranov rows above unit
-loading in the prescribed nominal isotherms through 393 K. Printed
-393 K temperatures reach 393.17 K; the exact printed temperatures are
-retained. Both columns are exact native derivatives of log total bubble
+loading: 13 at nominal 313 K, five at 333 K and two at 373 K; none at 393 K.
+Exact printed temperatures are retained. Both columns are exact native derivatives of log total bubble
 pressure, with all MDEA-specific interactions at zero and all other start-1
 values declared in the issue. The MDEA dissociation reference remains
 provisional pending item (g).
@@ -132,8 +168,9 @@ Both pre-normalization norms rank MDEAH⁺–CO₂ larger. Each normalized colum
 has norm one, so the magnitude ranking cannot be based on the normalized
 norms themselves. Both original and normalized columns are retained in
 [A](results/probe-A-columns.csv) and [B](results/probe-B-columns.csv).
-This supports the same coordinate in both variants under the raw-sensitivity
-interpretation; no coordinate declaration or frozen zero has been changed.
+The owner selected k(MDEAH⁺–CO₂) and fixed k(MDEA–CO₂) = 0.
+Raw norms compare directly because both coordinates are dimensionless k.
+Unit-column singular values describe column angles, not sensitivity magnitude.
 
 The [shared-only reference checks](results/shared-reference-checks.json) give identical
 water and CO₂ pressures, residual Helmholtz energies and residual enthalpies
@@ -148,8 +185,8 @@ state, not a phase-stability or identifiability qualification of a fit.
 
 ## Stage-2 gate
 
-Items (a), (b), (c), and (e) remain incomplete; (g) remains blocked. Items (d)
-and (f) provide retained preparation evidence. Independent delivered review
+Items (b)–(f) are complete for stage-1 preparation. Item (a) retains all
+source rows with explicit proposals awaiting owner freeze; (g) remains blocked. Independent delivered review
 and the owner's exact freeze comment are still required. Stage 2 must also
 retain every declared start, property prediction, failure, phase check,
 identifiability result and sensitivity/control comparison. Nothing here

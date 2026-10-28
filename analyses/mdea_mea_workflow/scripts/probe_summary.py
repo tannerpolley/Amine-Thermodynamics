@@ -17,6 +17,6 @@ for v in 'AB':
  np.savetxt(p.OUT/f'results/probe-{v}-columns.csv',np.column_stack((J,normalized)),delimiter=',',header='dlogP_dk_MDEA_CO2,dlogP_dk_MDEAH_CO2,normalized_MDEA_CO2,normalized_MDEAH_CO2',comments='')
 summary['same_ranking']=summary['A']['raw_larger_column']==summary['B']['raw_larger_column']
 summary['selected_for_stage2']=summary['A']['raw_larger_column'] if summary['same_ranking'] else None
-summary['interpretation_limit']='Issue wording does not define a ranking functional after unit-column normalization. Raw norms and unit columns are both retained; no fitted-coordinate declaration has been changed.'
+summary['interpretation_limit']='Owner decision 2026-10-28 selects k(MDEAH+-CO2), fixes k(MDEA-CO2)=0; raw norms compare two dimensionless k coordinates directly.'
 p.write('results/probe-summary.json',summary)
 print(json.dumps(summary,indent=2))

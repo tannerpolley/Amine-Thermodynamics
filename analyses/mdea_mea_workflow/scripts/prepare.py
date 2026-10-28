@@ -144,7 +144,7 @@ def kappa_conversion():
     k=float(format(fit.physical[0],'.8g'))
     rows=[dict(r,reference=ref) for ref in conversion.REFERENCES for r in [conversion.state(k,ref['T_K'])]]
     write('results/kappa/replay.json',rows)
-    summary=dict(kappa=k,unrounded=fit.physical[0],pressure_aard_percent=100*np.mean([abs(r['p_Pa']/r['reference']['p_Pa']-1) for r in rows]),density_aard_percent=100*np.mean([abs(r['rho_L_mol_m3']/r['reference']['rho_L_mol_m3']-1) for r in rows]),max_equilibrium_residual=max(abs(v) for line in (conversion.OUT/'solves.jsonl').read_text().splitlines() for v in json.loads(line)['result']['residuals']),status='incomplete',reason='Numerical source-model equivalence and eight-significant-figure value retained; S1 gives no explicit AARD acceptance tolerance for MDEA. No threshold invented.')
+    summary=dict(kappa=k,unrounded=fit.physical[0],pressure_aard_percent=100*np.mean([abs(r['p_Pa']/r['reference']['p_Pa']-1) for r in rows]),density_aard_percent=100*np.mean([abs(r['rho_L_mol_m3']/r['reference']['rho_L_mol_m3']-1) for r in rows]),max_equilibrium_residual=max(abs(v) for line in (conversion.OUT/'solves.jsonl').read_text().splitlines() for v in json.loads(line)['result']['residuals']),status='complete',reason='Owner accepted kappa=0.11800686 fixed to eight significant figures, issue 222 Stage-1 owner decisions 2026-10-28.')
     write('results/kappa/summary.json',summary)
     return k
 

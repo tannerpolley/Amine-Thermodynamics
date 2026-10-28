@@ -2,6 +2,23 @@
   "status": "complete",
   "dielectric_volume_L_mol": 0.8630669728921845,
   "dielectric_temperature_K": 1121.7734731422595,
+  "cost": 318.2651095121296,
+  "alternative": {
+    "dielectric_volume_L_mol": 0.28087912599459114,
+    "dielectric_temperature_K": 2793.6478619057334,
+    "cost": 328.26502599753553,
+    "aard_percent": 3.9128600295535354
+  },
+  "selection_rule": "MEA larger-volume convention, supplement.tex paragraph supplement-20; also lower cost here",
+  "mean_signed_percent_by_x": {
+    "0.2": -8.060636694690889,
+    "0.4": -0.08464670556953177,
+    "0.6": 4.670227003642447,
+    "0.8": 2.4256579935803324,
+    "1.0": -3.389169542995476
+  },
+  "density_basis": "start-1 neutral densities, MDEA-water k=0",
+  "absorber_composition_limit": "23-49 wt%, x about 0.04-0.13, below Hsieh minimum x=0.2",
   "n": 30,
   "aard_percent": 3.861061489608205,
   "max_abs_native_replay": 1.4210854715202004e-14,
@@ -12,5 +29,56 @@
     "ftol": 1e-12,
     "gtol": 1e-12
   },
-  "extrapolation": "Above 328.15 K coefficients are a model assumption, not measured evidence."
+  "extrapolation": "Above 328.15 K coefficients are a model assumption, not measured evidence.",
+  "comparison_393_K": [
+    {
+      "T_K": 393.0,
+      "x_MDEA": 0.04,
+      "selected": 44.47746427067601,
+      "alternative": 44.66834132967097,
+      "difference_percent": 0.4291545440480826
+    },
+    {
+      "T_K": 393.0,
+      "x_MDEA": 0.13,
+      "selected": 34.452014371744816,
+      "alternative": 34.8948895562993,
+      "difference_percent": 1.2854841513060933
+    },
+    {
+      "T_K": 393.0,
+      "x_MDEA": 0.2,
+      "selected": 29.79270012411847,
+      "alternative": 30.35006800374849,
+      "difference_percent": 1.8708202925816986
+    },
+    {
+      "T_K": 393.0,
+      "x_MDEA": 0.4,
+      "selected": 22.388299997887817,
+      "alternative": 23.12506610665495,
+      "difference_percent": 3.2908532976449356
+    },
+    {
+      "T_K": 393.0,
+      "x_MDEA": 0.6,
+      "selected": 18.474108166741356,
+      "alternative": 19.304495225831534,
+      "difference_percent": 4.494869530888157
+    },
+    {
+      "T_K": 393.0,
+      "x_MDEA": 0.8,
+      "selected": 15.899129244575418,
+      "alternative": 16.7899400184265,
+      "difference_percent": 5.602890322783027
+    },
+    {
+      "T_K": 393.0,
+      "x_MDEA": 1.0,
+      "selected": 13.974649813501767,
+      "alternative": 14.90933978974307,
+      "difference_percent": 6.688467966748202
+    }
+  ]
 }
