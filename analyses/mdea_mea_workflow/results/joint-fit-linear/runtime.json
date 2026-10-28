@@ -1,0 +1,56 @@
+{
+  "base_commit": "2b6cd44b648061765ccc7163c0992bebc47b3b5e",
+  "engine_commit": "3e83e19ccc771b51d8ebc038931ab25192f4c5b5",
+  "wheel": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/build/engine-wheels/main-3e83e19ccc771b51d8ebc038931ab25192f4c5b5/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl",
+  "wheel_sha256": "0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804",
+  "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "installed_files_byte_identical": true,
+  "python": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python",
+  "isolated": true,
+  "fixed_native_limits": {
+    "EQUILIBRIUM_MAX_ITERATIONS": 200.0,
+    "EQUILIBRIUM_RECOVERY_WORK": 512.0
+  },
+  "requested_limits": {
+    "EQUILIBRIUM_MAX_ITERATIONS": 400.0,
+    "EQUILIBRIUM_RECOVERY_WORK": 1024.0
+  },
+  "stability_options_fields": [
+    "declaration_budget",
+    "evaluate_supplied_trials",
+    "standard_uncertainty_over_rt",
+    "trial_budget",
+    "trials"
+  ],
+  "override_refusals": {
+    "EQUILIBRIUM_MAX_ITERATIONS": "EQUILIBRIUM_MAX_ITERATIONS is unknown or fixed",
+    "EQUILIBRIUM_RECOVERY_WORK": "EQUILIBRIUM_RECOVERY_WORK is unknown or fixed"
+  },
+  "retry_executed": false,
+  "retry_count": 0,
+  "gate_modified": true,
+  "stage2_executed": true,
+  "A4_disposition": "Excluded unqualified without retry by explicit owner amendment",
+  "reason": "Pinned Engine exposes neither iteration/recovery limits nor a selector for one generated seed in stability_test. Larger trial_budget changes the number of searches, not the per-trial work allowance.",
+  "source_locations": [
+    "engine/native/core/numerical_policy.hpp:396",
+    "engine/native/core/numerical_policy.hpp:407",
+    "engine/native/core/numerical_policy.hpp:495",
+    "engine/native/equilibrium/phase_stability.cpp:622"
+  ],
+  "source_inspection": "git show at exact pinned commit; no Engine source imported or modified",
+  "required_decision": "Authorize exclusion of A4 without retry, or retain requirement pending Engine capability change",
+  "claim_limits": "Capability inspection only; no new physical or numerical phase result.",
+  "task_decision": "Owner instructed recommended option while away: exclude A4 without retry; proceed from A1,A3,B1,B3",
+  "qualified_starts": [
+    "A1",
+    "A3",
+    "B1",
+    "B3"
+  ],
+  "execution": "nice -n 10 /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python -I; runpy.run_path(analyses/mdea_mea_workflow/scripts/fit_mdea.py, run_name=__main__)",
+  "controls_owner": "Existing fit_mdea.py; 40 iterations, 2100 seconds per fit; no change",
+  "linear_coordinates_owner": "results/item-l/declaration.json; both temperature_law_coefficient coordinates, bounds and scales reused",
+  "scope": "Only MDEA application fit declarations and retained evidence; frozen source rows/scales/weights and MEA values unchanged",
+  "independent_review": "Not performed; no subagents authorized"
+}

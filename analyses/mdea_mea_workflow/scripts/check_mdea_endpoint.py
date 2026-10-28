@@ -6,22 +6,30 @@ from pathlib import Path
 AN=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('joint',AN/'scripts/fit_mdea.py');j=importlib.util.module_from_spec(spec);spec.loader.exec_module(j)
 p,d=j.p,j.d
-OUT='results/joint-fit/A1'
+OUT='results/joint-fit-linear/A1'
 fit=json.loads((AN/OUT/'fit.json').read_text());decl=json.loads((AN/OUT/'declaration.json').read_text())
-doc=json.loads((AN/'inputs/amended-starts/A1.json').read_text())
+doc=json.loads((AN/'results/item-l/amended-starts/A1.json').read_text())
+pair=next(q for q in doc['pairs'] if {q['component_id_a'],q['component_id_b']}=={j.W,j.H})
+if not any(c['family']=='k_ij_reciprocal_temperature_slope' for c in pair['coefficients']):d.set_pair(doc,j.W,j.H,pair['coefficients'][0]['value']['magnitude'],0.)
 values=iter(fit['physical'])
 for coord in decl['coordinates']:
     for family,target,factor in coord['targets']:
         value=next(values)
-        block=next(c for c in doc['components'] if c['component_id']==target) if isinstance(target,str) else next(q for q in doc['pairs'] if {q['component_id_a'],q['component_id_b']}==set(target))
-        next(c for c in block['coefficients'] if c['family']==family)['value']['magnitude']=value
+        if family=='temperature_law_coefficient':
+            next(t['coefficient'] for q in doc['pairs'] for c in q['coefficients'] for t in c.get('temperature_law',{}).get('terms',[]) if t['coefficient']['identity']==target)['value']['magnitude']=value
+        else:
+            block=next(c for c in doc['components'] if c['component_id']==target) if isinstance(target,str) else next(q for q in doc['pairs'] if {q['component_id_a'],q['component_id_b']}==set(target))
+            next(c for c in block['coefficients'] if c['family']==family)['value']['magnitude']=value
 assert next(values,None) is None
-params=p.epcsaft.Parameters.from_mapping(doc);thermal=d.a.caloric_record(params);model=p.epcsaft.Mixture(params,thermochemistry=thermal)
+params=p.epcsaft.Parameters.from_mapping(doc)
+spec=importlib.util.spec_from_file_location('cp',AN/'scripts/diagnose_unloaded_cp.py');cp=importlib.util.module_from_spec(spec);spec.loader.exec_module(cp)
+thermal=cp.caloric(params,json.loads((AN/'results/diagnosis-unloaded-cp/summary.json').read_text())['neumann_cubic'])
+model=p.epcsaft.Mixture(params,thermochemistry=thermal)
 meta,items,weights=j.objective(params)
 
 def replay(i):
     prediction=j.reg.predict(model,items[i])
-    retained=dict(meta[i],prediction=p.shared._jsonable(prediction))
+    retained=dict(meta[i],prediction={key:p.shared._jsonable(getattr(prediction,key)) for key in ('value','unit','status','message','residual','requested_tolerance_met')})
     if prediction.status.name=='Available':retained['relative_replay_error']=abs(prediction.value-fit['predictions'][i])/max(abs(fit['predictions'][i]),1.)
     return retained
 
@@ -30,7 +38,7 @@ def carson(row_id):
     state=j.eq.solve_equilibrium(model,problem)
     d.f.s=types.SimpleNamespace(COMPONENT_IDS=d.SPECIES,_jsonable=p.shared._jsonable)
     report=d.f.stability(model,problem,state)
-    return dict(source_row=row_id,alpha=row['alpha'],success=state.success,requested_tolerance_met=state.requested_tolerance_met,max_residual=max(map(abs,state.residuals)),stability=report,**d.summary(report,list(params.component_ids)))
+    return dict(source_row=row_id,alpha=row['alpha'],success=state.success,requested_tolerance_met=state.requested_tolerance_met,max_residual=max(map(abs,state.residuals)),residuals=list(state.residuals),amounts=list(state.amounts),mole_fractions=list(state.mole_fractions),component_ids=list(params.component_ids),stability=report,**d.summary(report,list(params.component_ids)))
 
 if __name__=='__main__':
     p.write(f'{OUT}/endpoint.json',doc)

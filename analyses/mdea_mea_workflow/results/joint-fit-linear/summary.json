@@ -1,0 +1,230 @@
+{
+  "base_commit": "2b6cd44",
+  "decision": "Return to Design: A1 endpoint on four arbitrary bounds",
+  "A4": "Excluded without retry, by owner amendment after pinned-Engine capability inspection; prior unresolved row 1 does not establish instability",
+  "item_l_complete": true,
+  "qualified_starts": [
+    "A1",
+    "A3",
+    "B1",
+    "B3"
+  ],
+  "endpoints": [
+    {
+      "start": "A1",
+      "objective": 400.44801608493293,
+      "iterations": 13,
+      "rank": 9,
+      "disposition": "Converged; return to Design: four arbitrary bounds"
+    },
+    {
+      "start": "A2",
+      "objective": null,
+      "iterations": null,
+      "rank": null,
+      "disposition": "Duplicate of A1"
+    },
+    {
+      "start": "A3",
+      "objective": null,
+      "iterations": null,
+      "rank": null,
+      "disposition": "Not run after mandatory A1 bound stop"
+    },
+    {
+      "start": "A4",
+      "objective": null,
+      "iterations": null,
+      "rank": null,
+      "disposition": "Excluded unqualified without retry by owner amendment"
+    },
+    {
+      "start": "B1",
+      "objective": null,
+      "iterations": null,
+      "rank": null,
+      "disposition": "Not run after mandatory A1 bound stop"
+    },
+    {
+      "start": "B2",
+      "objective": null,
+      "iterations": null,
+      "rank": null,
+      "disposition": "Duplicate of B1"
+    },
+    {
+      "start": "B3",
+      "objective": null,
+      "iterations": null,
+      "rank": null,
+      "disposition": "Not run after mandatory A1 bound stop"
+    }
+  ],
+  "A1_coordinates": [
+    {
+      "coordinate": "k(MDEA-water) at 313.15 K",
+      "value": -0.20619179193840137,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "active_bound": false
+    },
+    {
+      "coordinate": "c1(MDEA-water), 1/K",
+      "value": 0.0014726044363215628,
+      "bounds": [
+        -0.01,
+        0.01
+      ],
+      "active_bound": false
+    },
+    {
+      "coordinate": "k(MDEAH+-CO2)",
+      "value": 0.5,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "active_bound": true
+    },
+    {
+      "coordinate": "k(MDEAH+-water) at 313.15 K",
+      "value": -0.5,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "active_bound": true
+    },
+    {
+      "coordinate": "reciprocal slope(MDEAH+-water), K",
+      "value": -89.92115799712107,
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "active_bound": false
+    },
+    {
+      "coordinate": "k(MDEAH+-HCO3-)",
+      "value": -1.0,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "active_bound": true
+    },
+    {
+      "coordinate": "sigma(MDEAH+), angstrom",
+      "value": 6.35776604150916,
+      "bounds": [
+        3.0,
+        7.0
+      ],
+      "active_bound": false
+    },
+    {
+      "coordinate": "u/k(MDEAH+), K",
+      "value": 180.13198855154178,
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "active_bound": false
+    },
+    {
+      "coordinate": "Born diameter(MDEAH+), angstrom",
+      "value": 7.0,
+      "bounds": [
+        2.0,
+        7.0
+      ],
+      "active_bound": true
+    }
+  ],
+  "initial_singular_values": [
+    106.14542481305045,
+    13.874689109814872,
+    3.899873963656716,
+    2.729378013561463,
+    1.889338868904798,
+    0.17553621965416147,
+    0.16815433366924457,
+    0.02910967035417175,
+    0.002640312300969802
+  ],
+  "endpoint_singular_values": [
+    106.51594155580219,
+    13.772104526496006,
+    10.133449971926824,
+    3.635497139514678,
+    2.2283520313152203,
+    0.24834470537771736,
+    0.23104076760813436,
+    0.018816719438289473,
+    0.0026144106631730284
+  ],
+  "group_costs": {
+    "Kuranov": 18.38811243446043,
+    "Jakobsen": 21.347121448896647,
+    "Carson": 23.55596899812727,
+    "Merkley": 4.595535525423398,
+    "Cp": 81.76175361510244,
+    "loaded-density": 1.119156780487846,
+    "unloaded-density": 249.62147089350105,
+    "Kim": 0.0588963889337848
+  },
+  "representatives": {
+    "A": null,
+    "B": null
+  },
+  "variant_verdicts": {
+    "A": "No transfer verdict: arbitrary-bound stop at A1",
+    "B": "Unassessed: mandatory stop before B1 and B3"
+  },
+  "primary_statistic": {
+    "Ermatchkov_88_AARD_percent": null,
+    "pass_bar_percent": 24.2,
+    "reason": "Outside-fit evaluation prohibited after endpoint stop"
+  },
+  "follow_up": "Not run. No qualified representative endpoints; no two-percentage-point margin or bicarbonate/cation-water correlation. Corrected Kamps excluded from criterion.",
+  "profiles": "Weak-direction profiles not run after mandatory bound stop; scaled singular values and vectors retained at A1 start and endpoint. Full rank alone does not establish parameter identifiability.",
+  "numerical_checks": {
+    "replay": {
+      "rows": 280,
+      "maximum_relative_replay_error": 2.3243805170174233e-12,
+      "tolerance": 1e-08,
+      "workers": 32,
+      "available_memory_bytes": 13557514240,
+      "BLAS_threads_per_process": 1,
+      "endpoint_sha256": "041cf12b48f367f37ed746a0592e26bffccdeef8e23c88b36587b75505a1c314"
+    },
+    "Carson": [
+      {
+        "source_row": "1",
+        "max_residual": 1.7053025658242404e-13,
+        "completed": true,
+        "message": "no witness in the recorded trial set; unresolved trials 0",
+        "split": false
+      },
+      {
+        "source_row": "10",
+        "max_residual": 1.1368683772161603e-13,
+        "completed": true,
+        "message": "no witness in the recorded trial set; unresolved trials 0",
+        "split": false
+      }
+    ],
+    "all_fitted_and_comparison_phase_states": "Not run after arbitrary-bound stop",
+    "balances": "Native defining-row residuals retained at Carson states; broader element/charge audit not performed after stop"
+  },
+  "outside_fit": "None evaluated; all declared subsets, other comparisons, Wangler sensitivity and follow-up refits remain blocked.",
+  "claim_limits": "Calibration and numerical verification only; no physical validation or transfer verdict. No MDEA outcome falsifies the MEA bicarbonate value. Xiao and Zhang remain unscored. Above 328.15 K the frozen MDEA dielectric coefficients remain a model assumption. No manuscript promotion or absorber-use claim.",
+  "independent_review": "Open; no subagents started",
+  "decisions": [
+    "Exclude A4 without retry under the owner away-mode amendment",
+    "Reuse item-(l) linear coefficient scales and bounds, Neumann calorics and existing 40-iteration/2100-second fit controls",
+    "Stop subsequent starts, profiles and outside-fit work at the first arbitrary-bound endpoint; retain fitted-row replay and Carson checks"
+  ]
+}

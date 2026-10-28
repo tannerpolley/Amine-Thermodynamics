@@ -26,9 +26,11 @@ def problem(T,P,nw,alpha,bubble=False):
 def coordinates(params,doc,variant):
     def comp(f):return next(c['value']['magnitude'] for q in doc['components'] if q['component_id']==H for c in q['coefficients'] if c['family']==f)
     def pair(a,b,f):return next(c['value']['magnitude'] for q in doc['pairs'] if {q['component_id_a'],q['component_id_b']}=={a,b} for c in q['coefficients'] if c['family']==f)
-    declarations=[]
-    for a,b,f,scale,bounds in [(M,W,'k_ij',.01,(-.5,.5)),(M,W,'k_ij_reciprocal_temperature_slope',10.,(-1000.,1000.)),
-        (H,C,'k_ij',.01,(-.5,.5)),(H,W,'k_ij',.01,(-.5,.5)),(H,W,'k_ij_reciprocal_temperature_slope',10.,(-1000.,1000.)),(H,'bicarbonate-anion','k_ij',.01,(-1.,1.))]:
+    law=json.loads((AN/'results/item-l/declaration.json').read_text())
+    terms=next(q for q in doc['pairs'] if {q['component_id_a'],q['component_id_b']}=={M,W})['coefficients'][0]['temperature_law']['terms']
+    declarations=[dict(targets=[('temperature_law_coefficient',term['coefficient']['identity'],1.)],origin=term['coefficient']['value']['magnitude'],scale=scale,bounds=bounds)
+        for term,scale,bounds in zip(terms,law['scales'],law['bounds'],strict=True)]
+    for a,b,f,scale,bounds in [(H,C,'k_ij',.01,(-.5,.5)),(H,W,'k_ij',.01,(-.5,.5)),(H,W,'k_ij_reciprocal_temperature_slope',10.,(-1000.,1000.)),(H,'bicarbonate-anion','k_ij',.01,(-1.,1.))]:
         declarations.append(dict(targets=[(f,(a,b),1.)],origin=pair(a,b,f),scale=scale,bounds=bounds))
     declarations += [dict(targets=[('segment_diameter',H,1.),('debye_huckel_diameter',H,1.)]+([('packing_diameter',H,.88)] if variant=='A' else []),origin=comp('segment_diameter'),scale=.1,bounds=(3.,7.) if variant=='A' else (3.,4.5)),
         dict(targets=[('dispersion_energy_over_k',H,1.)],origin=comp('dispersion_energy_over_k'),scale=10.,bounds=(50.,950.)),
@@ -78,39 +80,43 @@ def objective(params):
     return metadata,items,weights
 
 def run(label):
-    doc=json.loads((AN/f'inputs/amended-starts/{label}.json').read_text())
+    doc=json.loads((AN/f'results/item-l/amended-starts/{label}.json').read_text())
     # Declare zero slopes explicitly where the source start had only a constant.
     pair=next(q for q in doc['pairs'] if {q['component_id_a'],q['component_id_b']}=={W,H})
     if not any(c['family']=='k_ij_reciprocal_temperature_slope' for c in pair['coefficients']):d.set_pair(doc,W,H,pair['coefficients'][0]['value']['magnitude'],0.)
-    params=p.epcsaft.Parameters.from_mapping(doc);coords,declarations=coordinates(params,doc,label[0]);thermal=d.a.caloric_record(params)
+    params=p.epcsaft.Parameters.from_mapping(doc);coords,declarations=coordinates(params,doc,label[0])
+    spec=importlib.util.spec_from_file_location('cp',AN/'scripts/diagnose_unloaded_cp.py')
+    cp=importlib.util.module_from_spec(spec);spec.loader.exec_module(cp)
+    cubic=json.loads((AN/'results/diagnosis-unloaded-cp/summary.json').read_text())['neumann_cubic']
+    thermal=cp.caloric(params,cubic)
     meta,items,weights=objective(params)
-    p.write(f'results/joint-fit/{label}/declaration.json',dict(coordinates=declarations,observations=meta))
+    p.write(f'results/joint-fit-linear/{label}/declaration.json',dict(coordinates=declarations,observations=meta))
     initial=reg.differentiate(params,coords,items,optimizer=[0.]*9,thermochemistry=thermal)
-    p.write(f'results/joint-fit/{label}/initial-jacobian.json',initial)
+    p.write(f'results/joint-fit-linear/{label}/initial-jacobian.json',initial)
     jac=np.array(initial.residual_optimizer_gradient).reshape(-1,9)*np.sqrt(weights)[:,None]
     _,singular,right=np.linalg.svd(jac,full_matrices=False)
-    p.write(f'results/joint-fit/{label}/initial-identifiability.json',dict(singular_values=singular.tolist(),right_vectors=right.tolist(),rank=int(np.linalg.matrix_rank(jac)),column_scales=[r['scale'] for r in declarations],statuses=initial.statuses))
+    p.write(f'results/joint-fit-linear/{label}/initial-identifiability.json',dict(singular_values=singular.tolist(),right_vectors=right.tolist(),rank=int(np.linalg.matrix_rank(jac)),column_scales=[r['scale'] for r in declarations],statuses=initial.statuses))
     print(label,'initial derivative retained',flush=True)
     available=next(int(s.split()[1])*1024 for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:'))
     workers=min(os.cpu_count(),max(1,available//268435456),len(items))
     controls=dict(maximum_iterations=40,function_tolerance=1e-10,parameter_tolerance=1e-10,gradient_tolerance=1e-8,maximum_elapsed_time_seconds=2100.,workers=workers)
-    p.write(f'results/joint-fit/{label}/compute.json',dict(workers=workers,available_memory_bytes=available,BLAS_threads_per_process=1,controls=controls))
+    p.write(f'results/joint-fit-linear/{label}/compute.json',dict(workers=workers,available_memory_bytes=available,BLAS_threads_per_process=1,controls=controls))
     fitted=reg.fit(params,coords,items,weights=weights,thermochemistry=thermal,controls=reg.FitControls(**controls),singular_vectors=True)
     result={q:p.shared._jsonable(getattr(fitted,q)) for q in ('status','message','usable','initial_cost','final_cost','physical','optimizer','predictions','residuals','weighted_residuals','optimizer_jacobian','physical_jacobian','iterations','iteration_costs','iteration_seconds','trial_failures','residual_evaluations','jacobian_evaluations')}
     result['covariance']={q:p.shared._jsonable(getattr(fitted.covariance,q)) for q in ('status','rank','singular_values','active_bounds','projected_gradient_norm','right_vectors')}
     result['failures']=[dict(trial=f.trial,observation=f.observation,status=f.status.name,message=f.message,jacobian=f.jacobian) for f in fitted.failures]
     result['group_costs']={g:sum(.5*r*r for m,r in zip(meta,fitted.weighted_residuals) if m['group']==g) for g in dict.fromkeys(m['group'] for m in meta)}
-    p.write(f'results/joint-fit/{label}/fit.json',result)
+    p.write(f'results/joint-fit-linear/{label}/fit.json',result)
     print(label,result['status'],result['message'],result['final_cost'],flush=True)
     return result
 
 if __name__=='__main__':
     # Each native observation campaign is parallelized by row in the fit, never nested pools.
-    for label in ('A1','A3','A4','B1','B3'):
+    for label in ('A1','A3','B1','B3'):
         try:
             result=run(label)
             if not result['usable'] or result['covariance']['rank']<9 or result['covariance']['active_bounds']:break
         except Exception as e:
-            p.write(f'results/joint-fit/{label}/failure.json',dict(error=f'{type(e).__name__}: {e}'))
+            p.write(f'results/joint-fit-linear/{label}/failure.json',dict(error=f'{type(e).__name__}: {e}'))
             print(label,type(e).__name__,str(e),flush=True)
             break
