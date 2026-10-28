@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-28",
+  "authority": "Owner/orchestrator responses to native questions in this implementation task",
+  "decisions": [
+    {
+      "quantity": "Carson heat",
+      "definition": "MEA integral heat per mole of added CO2 from zero to the row cumulative loading",
+      "basis": "Source-fact correction; p.1289 cumulative arithmetic; retained stage-1 review"
+    },
+    {
+      "quantity": "Carson pressure",
+      "pressure_Pa": 101325,
+      "source_value": false,
+      "definition": "Declared model convention, not source-reported pressure",
+      "required_check": "Largest-loading Carson row also at 265000 Pa; stop if integral heat changes by more than 0.5 percent; do not put this check in objective; stop if any Carson state is not single-liquid at 101325 Pa"
+    }
+  ]
+}
