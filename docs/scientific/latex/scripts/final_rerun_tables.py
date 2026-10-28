@@ -472,6 +472,23 @@ def main():
           ['T (K)', 'Loading', 'P (kPa)', 'Seeds', r'$\Delta G/(RT)$ (mol)', r'Liquid 1 $x_w$', r'Liquid 2 $x_w$'],
           split_rows, 'rrrlrrr')
     OUTPUTS['supplement_phase_family.tex'] = OUTPUTS['supplement_phase_family.tex'].replace('tab:supplement-phase-family', 'tab:phase-splits')
+    # Main-text summary of the same 162-state grid: descent states and confirmed splits by temperature and pressure fraction.
+    fractions = ('0.5', '0.8', '0.95')
+    counts = {}
+    for r in paired['comparison'].values():
+        if int(r['resolved_trials']) > 0:
+            cell = counts.setdefault((r['temperature_K'], r['fraction']), [0, 0, []])
+            cell[0] += 1; cell[1] += r['index'] in by_state; cell[2].append(float(r['loading']))
+    assert sum(v[0] for v in counts.values()) == descent_states and sum(v[1] for v in counts.values()) == len(by_state)
+    assert not any(int(r['resolved_trials']) > 0 for r in paired['reported'].values())
+    temperatures = sorted({r['temperature_K'] for r in paired['comparison'].values()}, key=float)
+    loadings = len({r['loading'] for r in paired['comparison'].values()})
+    cell = lambda T, f: (lambda v: f"{v[0]} ({v[1]})" if v[0] else '0')(counts.get((T, f), [0, 0, []]))
+    summary_rows = [[num(T, 6), *(cell(T, f) for f in fractions), f"{sum(counts.get((T, f), [0])[0] for f in fractions)}/{loadings*len(fractions)}"] for T in temperatures]
+    summary_rows.append(['All', *(f"{sum(counts.get((T, f), [0, 0])[0] for T in temperatures)} ({sum(counts.get((T, f), [0, 0])[1] for T in temperatures)})" for f in fractions), f"{descent_states}/{len(paired['comparison'])}"])
+    low = min(min(v[2]) for (T, f), v in counts.items() if f == '0.5')
+    table('phase_search_summary.tex', f"Phase search of the wider-bound fit in nominal 30 wt% MEA: states with a resolved lower-Gibbs-energy arrangement out of {loadings} loadings ($\\alpha=10^{{-5}}$--0.6) at each temperature and pressure, with the number confirmed as two liquids in parentheses (Table~\\ref{{supp-tab:phase-splits}}). Pressures are fractions of $P^*$, the reported fit's bubble pressure at each temperature and loading, so every state is a liquid--vapor equilibrium and the search looks for an additional liquid. At $0.50P^*$ only loadings of {num(low)} and above are unstable; closer to $P^*$ the instability extends to lower loadings. The reported parameters show no resolved descent at any of the same {len(paired['reported'])} states. The grid is shown in Fig.~\\ref{{supp-fig:phase-grid}}.",
+          ['T (K)', '$0.50P^*$', '$0.80P^*$', '$0.95P^*$', 'Total'], summary_rows, 'lrrrr')
     species_states = [meta[r['id']] for r in fitted if r['quantity']=='PhaseMoleFraction' or r['group']=='restored species']
     fitted_density_states = [r for r in density if r['id'] in loaded_ids]
     pressure_states = [meta[r['id']] for r in fitted if r['quantity']=='PartialPressure']
