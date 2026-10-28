@@ -311,20 +311,27 @@ def main():
           r'Water and MEA each have one donor and one acceptor site, with Wolbach--Sandler MEA--water cross-association; double daggers mark the \ce{CO2} values, which apply only to its induced association with water. '
           r'The dielectric coefficients apply to the neutral species; the ion-region permittivity is $\varepsilon_{\mathrm{ion}}=8$. A dash marks an input the model does not use.',
           species_headings, species_rows(4), 'l' + 'r'*10, sep=4)
-    table('supplement_species_parameters.tex', r'Species parameters of main-text Table~3 to eight significant figures. Bold values were fitted; Table~3 marks the joint-fit, bound and \ce{CO2}--water values.', species_headings, species_rows(), 'l' + 'r'*10, sep=3)
+    table('supplement_species_parameters.tex', r'Main-text Table~3 to eight significant figures; bold values were fitted.', species_headings, species_rows(), 'l' + 'r'*10, sep=3)
     OUTPUTS['supplement_species_parameters.tex'] = re.sub(r'\\rlap\{\$\^\{[^}]*\}\$\}', '', OUTPUTS['supplement_species_parameters.tex'].replace(r'\small', r'\footnotesize', 1))  # eight-figure columns exceed the text width at \small
-    def pair(s, t, quantity=''):
+    def pair(s, t, quantity='', decimals=None):
         if charge[s] * charge[t] > 0:  # same-sign ions: dispersion excluded
             return '--'
         identity = next((i for i in [f'pair/{s}/{t}/k_ij', f'pair/{t}/{s}/k_ij'] if i in values), None)
-        return value(identity + quantity) if identity else '--'
-    matrix = lambda quantity, rows: [[symbol[s]] + [pair(s, t, quantity) if j > i else '' for j, t in enumerate(species) if j > 0] for i, s in enumerate(species) if s in rows]
-    slopes = [[r[0]] + [x.replace('--', '') for x in r[1:]] for r in matrix('/reciprocal_temperature_slope', species[:-1])]
-    slopes = [r for r in slopes if any(r[1:])]
+        return value(identity + quantity, '', decimals) if identity else '--'
+    matrix = lambda quantity, rows, decimals=None: [[symbol[s]] + [pair(s, t, quantity, decimals) if j > i else '' for j, t in enumerate(species) if j > 0] for i, s in enumerate(species) if s in rows]
+    def interaction_rows(decimals=None):
+        slopes = [[r[0]] + [x.replace('--', '') for x in r[1:]] for r in matrix('/reciprocal_temperature_slope', species[:-1], decimals)]
+        slopes = [r for r in slopes if any(r[1:])]
+        return [block(9, r'Interaction $k_{ij}(T_{\mathrm{ref}})$', True), *matrix('', species[:-1], decimals), block(9, r'Temperature slope $b_{ij}$ (K)'), *slopes]
+    interaction_headings = ['', *(symbol[s] for s in species[1:])]
     table('interaction_matrix.tex', r'Binary interactions of the reported fit, $k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b_{ij}(1/T-1/T_{\mathrm{ref}})$ with $T_{\mathrm{ref}}=313.15$ K, for the pair in each row and column. '
           r'Bold values were fitted: \ce{CO2}--water to Kiepe pressures (\cref{sec:results-co2-water}) and, marked with a dagger, in the joint fit (\cref{sec:results-joint}); an asterisk marks a joint-fit value at its bound. A dash marks two ions of the same charge sign, whose dispersion is excluded; a blank slope means a temperature-independent $k_{ij}$. '
-          r'The fixed ion interactions are model inputs rather than measured pair energies (Section~\\ref{sec:s-parameters}).',
-          ['', *(symbol[s] for s in species[1:])], [block(9, r'Interaction $k_{ij}(T_{\mathrm{ref}})$', True), *matrix('', species[:-1]), block(9, r'Temperature slope $b_{ij}$ (K)'), *slopes], 'l' + 'r'*8, sep=6)
+          r'The fixed ion interactions are model inputs rather than measured pair energies (Section~\\ref{sec:s-parameters}). Values are rounded to at most four decimal places; Table~\ref{supp-tab:supplement-interaction-matrix} gives them to eight significant figures.',
+          interaction_headings, interaction_rows(4), 'l' + 'r'*8, sep=6)
+    # Only rows that Table 4 rounds; its other entries are exact.
+    rounded_rows = [full for full, short in zip(interaction_rows(), interaction_rows(4)) if isinstance(full, str) or full != short]
+    table('supplement_interaction_matrix.tex', r'Rows of main-text Table~4 that it rounds, to eight significant figures; bold values were fitted.', interaction_headings, rounded_rows, 'l' + 'r'*8, sep=3)
+    OUTPUTS['supplement_interaction_matrix.tex'] = re.sub(r'\\rlap\{\$\^\{[^}]*\}\$\}', '', OUTPUTS['supplement_interaction_matrix.tex'].replace(r'\small', r'\footnotesize', 1))
     reaction_coordinates = {c['identity'] for c in fit['coordinates'] if c['identity'].startswith('reaction:')}
     assert coords.keys() == (shown & coords.keys()) | reaction_coordinates and len(reaction_coordinates) == 3
     uncertainty = a.load(a.E / 'conditional-uncertainty.json')
