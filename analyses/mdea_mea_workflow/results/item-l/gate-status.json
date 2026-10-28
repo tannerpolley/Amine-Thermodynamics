@@ -2,9 +2,22 @@
   "prefit": true,
   "Cp_298K": true,
   "binary": true,
-  "Carson": false,
-  "item_l_complete": false,
-  "stage2_ready": false,
+  "Carson": true,
+  "item_l_complete": true,
+  "stage2_ready": true,
   "independent_review_pending": true,
-  "reason": "Amended A4 row 1 has one unresolved tangent-plane trial; row 10 passes with no descending split. Item (l) remains incomplete. Stop before stage 2 and return the unresolved phase search for diagnosis; no physical phase failure is established."
+  "reason": "Owner amendment: exclude A4 without retry because pinned Engine limits are fixed; all retained item-(l) checks pass for A1, A3, B1 and B3. Stage-2 endpoint stops remain applicable.",
+  "qualified_distinct_starts": [
+    "A1",
+    "A3",
+    "B1",
+    "B3"
+  ],
+  "excluded_starts": {
+    "A4": "Unqualified: unresolved row-1 trial; excluded without retry by owner amendment in this task"
+  },
+  "duplicates": {
+    "A2": "A1",
+    "B2": "B1"
+  }
 }
