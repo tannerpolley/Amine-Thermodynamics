@@ -1,3 +1,24 @@
+# Amended A4: stage 2 blocked
+
+A4 now uses k(MDEAH+–water) = −0.2298 and slope zero. Both liquid solves
+meet 1e−10, and row 10 has no descending split with zero unresolved trials.
+Row 1 has one unresolved trial, so item (l) remains incomplete and stage 2
+was not run. This does not establish physical instability or a transfer verdict.
+
+The [notebook](../../notebook.qmd) owns the current interpretation and per-variant
+limits. [A4 summary](A4-amendment-summary.json), [search results](A4-amended-carson-search.json),
+[runtime](A4-amendment-runtime.json) and [endpoint inventory](A4-amendment-endpoints.csv)
+retain the new evidence. The pre-amendment A4 document is retained in Git at base `3a2eaab`;
+the ten-search file and phase summary below describe the earlier A4.
+The A4 SHA-256 is `37dc90fde1e8807dafb1e3b7e7d378ba711ec38da7f6d5291d34a46e549301c0`.
+No MDEA outcome falsifies the MEA bicarbonate value.
+
+The presentation-only refresh failed because `snakemake` is unavailable
+([error](A4-notebook-refresh.txt)); the notebook source is current and the
+HTML is stale. No independent review or manuscript promotion occurred.
+
+## Historical item-(l) result before the A4 amendment
+
 # Item (l): linear MDEA–water law with Neumann ideal-gas heat capacity
 
 **Return to Design: criterion (4) fails.** Criterion (2) passes all 1,177
