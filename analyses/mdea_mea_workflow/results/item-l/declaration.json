@@ -1,0 +1,32 @@
+{
+  "family": "temperature_law_coefficient",
+  "identities": [
+    "pair/mdea-water/k_ij/a0",
+    "pair/mdea-water/k_ij/a1"
+  ],
+  "scales": [
+    0.01,
+    0.001
+  ],
+  "bounds": [
+    [
+      -0.5,
+      0.5
+    ],
+    [
+      -0.01,
+      0.01
+    ]
+  ],
+  "slope_bound_basis": "Diagnostic computational bound; not a physical prior.",
+  "controls": {
+    "maximum_iterations": 100,
+    "function_tolerance": 1e-06,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08,
+    "maximum_elapsed_time_seconds": 60,
+    "workers": 32
+  },
+  "weight": 1,
+  "rows": 61
+}
