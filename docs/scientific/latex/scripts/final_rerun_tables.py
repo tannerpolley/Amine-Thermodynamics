@@ -280,31 +280,39 @@ def main():
                 'pair/carbon-dioxide/water/k_ij', 'pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope',
                 'component/monoethanolamine/dielectric_volume', 'component/monoethanolamine/dielectric_temperature'}
     shown = set()
-    def value(identity, mark=''):
+    def value(identity, mark='', decimals=None):
         if identity not in values:
             return '--'
         shown.add(identity)
-        digits = 5 if identity in coords and 'diameter' in identity else PARAMETER_DIGITS  # the supplement fitted-parameter table carries eight
-        return ('**' if identity in coords or identity in separate else '') + num(values[identity], digits) + ('†' if identity in coords else '') + ('*' if identity in at_bound else '') + mark
+        v = float(values[identity])
+        # Main-text Table 3 rounds to at most four decimal places; the supplement species table carries eight significant figures.
+        text = f'{v:.{decimals}f}' if decimals is not None and round(v, decimals) not in (v, 0) else num(v, PARAMETER_DIGITS)
+        return ('**' if identity in coords or identity in separate else '') + text + ('†' if identity in coords else '') + ('*' if identity in at_bound else '') + mark
     species = [n['component_id'] for n in document['components']]
     charge = {s: n.get('fixed', {}).get('charge_number', {}).get('value', {}).get('magnitude', 0) for s, n in zip(species, document['components'])}
     symbol = {**NAMES, 'water': r'\ce{H2O}'}
-    def association(s, quantity):
-        if s == 'carbon-dioxide':  # induced association with water only, marked ‡
-            return value(f'association/carbon-dioxide/a/water/b/{quantity}', '‡')
-        return value(f'association/{s}/a/{s}/b/{quantity}')
-    species_rows = [[symbol[s], value(f'component/{s}/segment_count'),
-                     r'$\boldsymbol{\sigma_w(T)}$' if s == 'water' else value(f'component/{s}/segment_diameter'),
-                     value(f'component/{s}/dispersion_energy_over_k'), association(s, 'energy_over_k'), association(s, 'volume'),
-                     f'${int(charge[s]):+d}$' if charge[s] else '0', value(f'component/{s}/born_diameter'), value(f'component/{s}/solvation_factor'),
-                     value(f'component/{s}/dielectric_volume'), value(f'component/{s}/dielectric_temperature')] for s in species]
+    def species_rows(decimals=None):
+        def v(identity, mark=''):
+            return value(identity, mark, decimals)
+        def association(s, quantity):
+            if s == 'carbon-dioxide':  # induced association with water only, marked ‡
+                return v(f'association/carbon-dioxide/a/water/b/{quantity}', '‡')
+            return v(f'association/{s}/a/{s}/b/{quantity}')
+        return [[symbol[s], v(f'component/{s}/segment_count'),
+                 r'$\boldsymbol{\sigma_w(T)}$' if s == 'water' else v(f'component/{s}/segment_diameter'),
+                 v(f'component/{s}/dispersion_energy_over_k'), association(s, 'energy_over_k'), association(s, 'volume'),
+                 f'${int(charge[s]):+d}$' if charge[s] else '0', v(f'component/{s}/born_diameter'), v(f'component/{s}/solvation_factor'),
+                 v(f'component/{s}/dielectric_volume'), v(f'component/{s}/dielectric_temperature')] for s in species]
+    species_headings = ['Species', r'$m^{\mathrm{seg}}$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$u/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
+                        r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}']
     table('species_parameters.tex', r'Species parameters of the reported fit. Bold values were fitted: water to IAPWS-95 (\cref{sec:results-water}), the MEA dielectric coefficients to permittivities (\cref{sec:results-permittivity}) and, marked with a dagger, in the joint fit (\cref{sec:results-joint}); an asterisk marks a joint-fit value at its bound. '
           r'The other joint-fit parameters are interactions in \cref{tab:interaction-matrix} and the R5 coefficient $A_5$ and R2 and R5 enthalpy shifts included in \cref{tab:reaction-equilibrium-constants}. '
-          r'Fitted diameters are shown to five significant figures; Table~\ref{supp-tab:supplement-fitted-parameters} gives eight. Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$; the water diameter law $\sigma_w(T)$, whose constant was fitted, and the sources of all fixed inputs are given in Section~\\ref{sec:s-parameters}. '
+          r'Values are rounded to at most four decimal places; Table~\ref{supp-tab:supplement-species-parameters} gives them to eight significant figures. Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$; the water diameter law $\sigma_w(T)$, whose constant was fitted, and the sources of all fixed inputs are given in Section~\\ref{sec:s-parameters}. '
           r'Water and MEA each have one donor and one acceptor site, with Wolbach--Sandler MEA--water cross-association; double daggers mark the \ce{CO2} values, which apply only to its induced association with water. '
           r'The dielectric coefficients apply to the neutral species; the ion-region permittivity is $\varepsilon_{\mathrm{ion}}=8$. A dash marks an input the model does not use.',
-          ['Species', r'$m^{\mathrm{seg}}$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$u/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
-           r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}'], species_rows, 'l' + 'r'*10, sep=4)
+          species_headings, species_rows(4), 'l' + 'r'*10, sep=4)
+    table('supplement_species_parameters.tex', r'Species parameters of main-text Table~3 to eight significant figures. Bold values were fitted; Table~3 marks the joint-fit, bound and \ce{CO2}--water values.', species_headings, species_rows(), 'l' + 'r'*10, sep=3)
+    OUTPUTS['supplement_species_parameters.tex'] = re.sub(r'\\rlap\{\$\^\{[^}]*\}\$\}', '', OUTPUTS['supplement_species_parameters.tex'].replace(r'\small', r'\footnotesize', 1))  # eight-figure columns exceed the text width at \small
     def pair(s, t, quantity=''):
         if charge[s] * charge[t] > 0:  # same-sign ions: dispersion excluded
             return '--'
